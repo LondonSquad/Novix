@@ -1,0 +1,19 @@
+#!/bin/bash
+branch_name=$(git symbolic-ref --short HEAD)
+
+# Allow special branch names
+if [[ "$branch_name" == "main" || "$branch_name" == "development" ]]; then
+    exit 0
+fi
+
+# Check pattern for other branches
+pattern="^(feature|refactor|component|fix|hotfix|release|chore|test)/[a-z0-9\-]+$"
+if [[ ! "$branch_name" =~ $pattern ]]; then
+echo ""
+echo "❌ Invalid branch name: '$branch_name'"
+echo "👉 Must match pattern: type/branch-name OR be 'main' or 'development'"
+echo "✅ Allowed types: feature, component, fix, hotfix, release, chore, test"
+echo "✅ Special branches: main, development"
+echo "📌 Example: feature/add-login-screen"
+exit 1
+fi
