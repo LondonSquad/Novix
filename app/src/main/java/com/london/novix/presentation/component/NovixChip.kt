@@ -19,56 +19,28 @@ import com.london.novix.presentation.designSystem.theme.NovixTheme
 import com.london.novix.presentation.designSystem.theme.ThemePreviews
 import com.london.novix.presentation.designSystem.theme.noRippleClickable
 
-enum class ChipVariant {
-    Default,
-    Variant2
-}
-
 @Composable
 fun NovixChip(
     text: String,
     modifier: Modifier = Modifier,
-    variant: ChipVariant = ChipVariant.Default,
     isSelected: Boolean = false,
     onClick: () -> Unit = {}
 ) {
     val colors = NovixTheme.colors
     val typography = NovixTheme.typography
 
-    val backgroundColor = when (variant) {
-        ChipVariant.Default -> if (isSelected) colors.secondary else colors.surface
-        ChipVariant.Variant2 -> colors.surface
-    }
-
-    val textColor = when (variant) {
-        ChipVariant.Default -> if (isSelected) colors.onPrimary else colors.body
-        ChipVariant.Variant2 -> colors.body
-    }
-
-    val shape = when (variant) {
-        ChipVariant.Default -> RoundedCornerShape(12.dp)
-        ChipVariant.Variant2 -> RoundedCornerShape(8.dp)
-    }
-
-    val verticalPadding = when (variant) {
-        ChipVariant.Default -> 8.dp
-        ChipVariant.Variant2 -> 8.dp
-    }
-
-    val horizontalPadding = when (variant) {
-        ChipVariant.Default -> 24.dp
-        ChipVariant.Variant2 -> 12.dp
-    }
+    val backgroundColor = if (isSelected) colors.secondary else colors.surface
+    val textColor = if (isSelected) colors.onPrimary else colors.body
+    val shape = if (isSelected) RoundedCornerShape(12.dp) else RoundedCornerShape(8.dp)
+    val verticalPadding = 8.dp
+    val horizontalPadding = if (isSelected) 24.dp else 12.dp
 
     Row(
         modifier = modifier
             .clip(shape)
             .background(backgroundColor)
             .noRippleClickable(onClick)
-            .padding(
-                horizontal = horizontalPadding,
-                vertical = verticalPadding
-            ),
+            .padding(horizontal = horizontalPadding, vertical = verticalPadding),
         horizontalArrangement = Arrangement.Center,
         verticalAlignment = Alignment.CenterVertically
     ) {
@@ -88,19 +60,18 @@ fun ScrollableChipGroup(
     chips: List<String>,
     modifier: Modifier = Modifier,
     selectedChip: String? = null,
-    onChipSelected: (String) -> Unit,
-    variant: ChipVariant = ChipVariant.Default
+    onChipSelected: (String) -> Unit
 ) {
     LazyRow(
         modifier = modifier,
         horizontalArrangement = Arrangement.spacedBy(8.dp)
     ) {
         items(chips.size) { index ->
+            val chipText = chips[index]
             NovixChip(
-                text = chips[index],
-                variant = variant,
-                isSelected = chips[index] == selectedChip,
-                onClick = { onChipSelected(chips[index]) }
+                text = chipText,
+                isSelected = chipText == selectedChip,
+                onClick = { onChipSelected(chipText) }
             )
         }
     }
@@ -110,15 +81,13 @@ fun ScrollableChipGroup(
 @Composable
 private fun ChipGroupPreview() {
     NovixTheme {
-        val categories = listOf("All", "Adventure", "Action", "Comedy", "Drama", "Sci-Fi", "Horror")
-
+        val categories = listOf("All", "Adventure", "Action", "Comedy", "Drama", "Horror")
         Column(
             modifier = Modifier
                 .background(NovixTheme.colors.surface)
                 .padding(16.dp),
             verticalArrangement = Arrangement.spacedBy(8.dp)
         ) {
-
             ScrollableChipGroup(
                 chips = categories,
                 selectedChip = "All",
