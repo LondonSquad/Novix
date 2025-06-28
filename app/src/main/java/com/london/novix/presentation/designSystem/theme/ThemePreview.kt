@@ -10,7 +10,7 @@ import androidx.compose.ui.tooling.preview.Preview
     uiMode = Configuration.UI_MODE_NIGHT_NO,
     showBackground = true,
     locale = "en",
-    device = "spec:width=360dp,height=640dp,dpi=480",
+    device = "spec:width=360dp,height=640dp,dpi=480"
 )
 
 // Medium phone (Pixel 6)
