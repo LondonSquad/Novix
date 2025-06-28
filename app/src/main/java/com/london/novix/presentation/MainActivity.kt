@@ -51,7 +51,7 @@ fun FakeScreen(modifier: Modifier = Modifier) {
             ) {
                 Text(
                     text = "Hello Novix!",
-                    style = NovixTheme.typography.headLineLarge
+                    style = NovixTheme.typography.headline.medium
                 )
                 Spacer(modifier = Modifier.height(16.dp))
                 Button(
@@ -64,6 +64,7 @@ fun FakeScreen(modifier: Modifier = Modifier) {
         }
     }
 }
+
 
 @ThemePreviews
 @Composable
