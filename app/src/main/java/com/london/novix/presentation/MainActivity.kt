@@ -4,6 +4,7 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -36,22 +37,27 @@ class MainActivity : ComponentActivity() {
 
 @Composable
 fun FakeScreen(modifier: Modifier = Modifier) {
-    Scaffold(containerColor = NovixTheme.colors.surface){ innerPadding ->
+    Scaffold(containerColor = NovixTheme.colors.surface) { innerPadding ->
         Box(
             modifier = modifier
                 .fillMaxSize()
                 .padding(innerPadding)
-                .padding(16.dp)
-            ,
+                .padding(16.dp),
             contentAlignment = Alignment.Center
         ) {
-            Column(horizontalAlignment = Alignment.CenterHorizontally) {
+            Column(
+                modifier = Modifier.padding(32.dp),
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
                 Text(
                     text = "Hello Novix!",
                     style = NovixTheme.typography.headLineLarge
                 )
                 Spacer(modifier = Modifier.height(16.dp))
-                Button(onClick = {}) {
+                Button(
+                    modifier = Modifier.background(NovixTheme.colors.primary),
+                    onClick = {}
+                ) {
                     Text(text = "Action")
                 }
             }
