@@ -23,10 +23,7 @@ import com.london.novix.presentation.designSystem.theme.ThemePreviews
 
 @Composable
 fun ActorItem(
-    modifier: Modifier = Modifier,
-    actorName: String,
-    characterName: String?,
-    image: Any
+    modifier: Modifier = Modifier, actorName: String, characterName: String?, imageRes: Any
 ) {
     Row(
         modifier = modifier
@@ -35,7 +32,7 @@ fun ActorItem(
         verticalAlignment = Alignment.CenterVertically
     ) {
         AsyncImage(
-            model = image,
+            model = imageRes,
             contentDescription = null,
             modifier = Modifier
                 .size(78.dp)
@@ -55,7 +52,7 @@ fun ActorItem(
                 .padding(start = 8.dp),
             verticalArrangement = if (characterName == null) Arrangement.Center
             else Arrangement.Top,
-            ) {
+        ) {
             Text(
                 text = actorName,
                 style = NovixTheme.typography.title.medium,
@@ -68,7 +65,7 @@ fun ActorItem(
                     modifier = Modifier.padding(bottom = 4.5.dp),
                     style = NovixTheme.typography.label.small,
                     color = NovixTheme.colors.hint,
-                    )
+                )
             }
         }
     }
@@ -76,11 +73,12 @@ fun ActorItem(
 
 @ThemePreviews
 @Composable
-private fun ActorsCardPreview() {
+private fun ActorItemPreview() {
     NovixTheme {
-        ActorItem(actorName = "Lee Jung-jae",
+        ActorItem(
+            actorName = "Lee Jung-jae",
             characterName = "Character name",
-            image = R.drawable.frame1597883073
+            imageRes = R.drawable.frame1597883073
         )
     }
 }
