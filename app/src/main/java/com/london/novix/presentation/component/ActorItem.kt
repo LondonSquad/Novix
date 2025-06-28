@@ -23,7 +23,10 @@ import com.london.novix.presentation.designSystem.theme.ThemePreviews
 
 @Composable
 fun ActorItem(
-    modifier: Modifier = Modifier, actorName: String, characterName: String?, imageRes: Any
+    actorName: String,
+    characterName: String?,
+    imageRes: Any,
+    modifier: Modifier = Modifier
 ) {
     Row(
         modifier = modifier
