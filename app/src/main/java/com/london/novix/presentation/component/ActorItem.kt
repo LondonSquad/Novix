@@ -24,8 +24,8 @@ import com.london.novix.presentation.designSystem.theme.ThemePreviews
 @Composable
 fun ActorItem(
     modifier: Modifier = Modifier,
-    title: String,
-    subtitle: String?,
+    actorName: String,
+    characterName: String?,
     image: Any
 ) {
     Row(
@@ -53,17 +53,17 @@ fun ActorItem(
                 .defaultMinSize(minHeight = 55.dp)
                 .border(width = 1.dp, color = NovixTheme.colors.stroke)
                 .padding(start = 8.dp),
-            verticalArrangement = if (subtitle == null) Arrangement.Center
+            verticalArrangement = if (characterName == null) Arrangement.Center
             else Arrangement.Top,
 
             ) {
             Text(
-                text = title,
+                text = actorName,
                 style = NovixTheme.typography.title.medium,
                 color = NovixTheme.colors.body,
-                modifier = Modifier.padding(top = if (subtitle == null) 0.dp else 4.dp)
+                modifier = Modifier.padding(top = if (characterName == null) 0.dp else 4.dp)
             )
-            subtitle?.let {
+            characterName?.let {
                 Text(
                     text = it,
                     modifier = Modifier.padding(bottom = 4.5.dp),
@@ -79,8 +79,8 @@ fun ActorItem(
 @Composable
 private fun ActorsCardPreview() {
     NovixTheme {
-        ActorItem(title = "Lee Jung-jae",
-            subtitle = "Character name",
+        ActorItem(actorName = "Lee Jung-jae",
+            characterName = "Character name",
             image = R.drawable.frame1597883073
         )
     }
