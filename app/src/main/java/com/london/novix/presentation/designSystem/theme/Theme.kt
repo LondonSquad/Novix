@@ -10,21 +10,16 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.composed
 import com.london.novix.presentation.designSystem.color.LightNovixColors
 import com.london.novix.presentation.designSystem.color.NovixColors
-import com.london.novix.presentation.designSystem.shape.NovixShapes
-import com.london.novix.presentation.designSystem.shape.NovixThemeShape
-import com.london.novix.presentation.designSystem.typography.NovixTextStyle
 import com.london.novix.presentation.designSystem.typography.NovixTypography
+import com.london.novix.presentation.designSystem.typography.NovixTypographySet
 
 
 object NovixTheme {
     val colors: NovixColors
         @Composable @ReadOnlyComposable get() = LocalNovixColors.current
 
-    val typography: NovixTypography
+    val typography: NovixTypographySet
         @Composable @ReadOnlyComposable get() = LocalNovixTypography.current
-
-    val shapes: NovixShapes
-        @Composable @ReadOnlyComposable get() = LocalNovixShape.current
 }
 
 @Composable
@@ -38,5 +33,4 @@ fun Modifier.noRippleClickable(onClick: () -> Unit): Modifier = composed {
 }
 
 val LocalNovixColors = staticCompositionLocalOf { LightNovixColors }
-val LocalNovixTypography = staticCompositionLocalOf { NovixTextStyle }
-val LocalNovixShape = staticCompositionLocalOf { NovixThemeShape }
+val LocalNovixTypography = staticCompositionLocalOf { NovixTypography }
