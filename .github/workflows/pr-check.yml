@@ -95,8 +95,8 @@ jobs:
             const comparison = await github.rest.repos.compareCommits({
               owner,
               repo,
-              base: pr.data.head.sha,
-              head: pr.data.base.sha
+              base: pr.data.base.sha,
+              head: pr.data.head.sha
             });
             
             if (comparison.data.behind_by > 0) {
