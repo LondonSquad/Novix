@@ -55,7 +55,6 @@ fun ActorItem(
                 .padding(start = 8.dp),
             verticalArrangement = if (characterName == null) Arrangement.Center
             else Arrangement.Top,
-
             ) {
             Text(
                 text = actorName,
