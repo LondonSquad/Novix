@@ -36,12 +36,13 @@ class MainActivity : ComponentActivity() {
 
 @Composable
 fun FakeScreen(modifier: Modifier = Modifier) {
-    Scaffold { innerPadding ->
+    Scaffold(containerColor = NovixTheme.colors.surface){ innerPadding ->
         Box(
             modifier = modifier
                 .fillMaxSize()
                 .padding(innerPadding)
-                .padding(16.dp),
+                .padding(16.dp)
+            ,
             contentAlignment = Alignment.Center
         ) {
             Column(horizontalAlignment = Alignment.CenterHorizontally) {
