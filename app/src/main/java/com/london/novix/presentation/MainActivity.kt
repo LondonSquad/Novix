@@ -4,14 +4,21 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.Button
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
 import com.london.novix.presentation.designSystem.theme.NovixTheme
+import com.london.novix.presentation.designSystem.theme.ThemePreviews
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -20,10 +27,7 @@ class MainActivity : ComponentActivity() {
         setContent {
             NovixTheme {
                 Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-                    Greeting(
-                        name = "Android",
-                        modifier = Modifier.padding(innerPadding)
-                    )
+                    FakeScreen(modifier = Modifier.padding(innerPadding))
                 }
             }
         }
@@ -31,17 +35,33 @@ class MainActivity : ComponentActivity() {
 }
 
 @Composable
-fun Greeting(name: String, modifier: Modifier = Modifier) {
-    Text(
-        text = "Hello $name!",
-        modifier = modifier
-    )
+fun FakeScreen(modifier: Modifier = Modifier) {
+    Scaffold { innerPadding ->
+        Box(
+            modifier = modifier
+                .fillMaxSize()
+                .padding(innerPadding)
+                .padding(16.dp),
+            contentAlignment = Alignment.Center
+        ) {
+            Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                Text(
+                    text = "Hello Novix!",
+                    style = NovixTheme.typography.headLineLarge
+                )
+                Spacer(modifier = Modifier.height(16.dp))
+                Button(onClick = {}) {
+                    Text(text = "Action")
+                }
+            }
+        }
+    }
 }
 
-@Preview(showBackground = true)
+@ThemePreviews
 @Composable
-fun GreetingPreview() {
+fun FakeScreenPreviews() {
     NovixTheme {
-        Greeting("Android")
+        FakeScreen()
     }
 }
