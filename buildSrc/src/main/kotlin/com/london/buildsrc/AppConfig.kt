@@ -1,4 +1,4 @@
-package com.london.buildscr
+package com.london.buildsrc
 
 import org.gradle.api.JavaVersion
 

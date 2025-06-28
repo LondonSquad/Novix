@@ -1,3 +1,17 @@
+import com.london.buildsrc.AppConfig
+import com.london.buildsrc.addAndroidCore
+import com.london.buildsrc.addAndroidTesting
+import com.london.buildsrc.addComposeUI
+import com.london.buildsrc.addDI
+import com.london.buildsrc.addDatabase
+import com.london.buildsrc.addDebugDependencies
+import com.london.buildsrc.addKotlinx
+import com.london.buildsrc.addNetworking
+import com.london.buildsrc.addStorage
+import com.london.buildsrc.addUIHelpers
+import com.london.buildsrc.addUnitTesting
+import com.london.buildsrc.configureGitHooks
+
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
@@ -7,22 +21,23 @@ plugins {
 }
 
 android {
-    namespace = "com.london.novix"
-    compileSdk = 35
+    namespace = AppConfig.APPLICATION_ID
+    compileSdk = AppConfig.Version.COMPILE_SDK
 
     defaultConfig {
-        applicationId = "com.london.novix"
-        minSdk = 26
-        targetSdk = 35
+        applicationId = AppConfig.APPLICATION_ID
+        minSdk = AppConfig.Version.MIN_SDK
+        targetSdk = AppConfig.Version.TARGET_SDK
         versionCode = 1
         versionName = "1.0"
 
-        testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+        testInstrumentationRunner = AppConfig.ANDROID_TEST_INSTRUMENTATION
     }
 
     buildTypes {
         release {
-            isMinifyEnabled = false
+            isMinifyEnabled = AppConfig.ENABLE_R8_FULL_MODE
+            isDebuggable = AppConfig.IS_RELEASE_MODE_DEBUGGABLE
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
@@ -30,123 +45,30 @@ android {
         }
     }
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_11
-        targetCompatibility = JavaVersion.VERSION_11
+        sourceCompatibility = AppConfig.Version.JVM
+        targetCompatibility = AppConfig.Version.JVM
     }
     kotlinOptions {
-        jvmTarget = "11"
+        jvmTarget = AppConfig.Version.JVM.toString()
     }
     buildFeatures {
         compose = true
     }
 }
 
+configureGitHooks()
+
 dependencies {
     addAndroidCore()
-    addCompose()
-    addDatabaseAndStorage()
-    addDependencyInjection()
+    addComposeUI()
+    addUIHelpers()
     addNetworking()
-    addImageLoading()
-    addUtilities()
-    addTesting()
+    addDatabase()
+    addStorage()
+    addDI()
+    addKotlinx()
+    addUnitTesting()
     addAndroidTesting()
-    addDebug()
+    addDebugDependencies()
 }
 
-fun DependencyHandlerScope.addAndroidCore() {
-    implementation(libs.androidx.core.ktx)
-    implementation(libs.androidx.lifecycle.runtime.ktx)
-    implementation(libs.androidx.activity.compose)
-    implementation(libs.androidx.splashscreen)
-}
-
-fun DependencyHandlerScope.addCompose() {
-    implementation(platform(libs.androidx.compose.bom))
-    implementation(libs.androidx.ui)
-    implementation(libs.androidx.ui.graphics)
-    implementation(libs.androidx.ui.tooling.preview)
-    implementation(libs.androidx.material3)
-    implementation(libs.androidx.navigation.compose)
-    implementation(libs.lottie.compose)
-}
-
-
-fun DependencyHandlerScope.addDatabaseAndStorage() {
-    implementation(libs.androidx.room.runtime)
-    implementation(libs.androidx.room.ktx)
-    implementation(libs.androidx.room.rxjava3)
-    implementation(libs.androidx.datastore.preferences)
-    implementation(libs.androidx.datastore.core)
-    ksp(libs.androidx.room.compiler)
-}
-
-fun DependencyHandlerScope.addDependencyInjection() {
-    implementation(libs.koin.android)
-    implementation(libs.koin.androidx.compose)
-    implementation(libs.koin.annotations)
-    ksp(libs.koin.ksp.compiler)
-}
-
-fun DependencyHandlerScope.addNetworking() {
-    implementation(libs.ktor.client.core)
-    implementation(libs.ktor.client.android)
-    implementation(libs.ktor.client.serialization)
-    implementation(libs.ktor.client.logging)
-}
-
-fun DependencyHandlerScope.addImageLoading() {
-    implementation(libs.coil.compose)
-}
-
-fun DependencyHandlerScope.addUtilities() {
-    implementation(libs.kotlinx.coroutines.android)
-    implementation(libs.kotlinx.datetime)
-    implementation(libs.remember.preference)
-}
-
-fun DependencyHandlerScope.addTesting() {
-    testImplementation(libs.junit)
-    testImplementation(libs.junit.jupiter)
-    testImplementation(libs.mockk)
-    testImplementation(libs.kotlinx.coroutines.test)
-    testImplementation(libs.truth)
-    testImplementation(kotlin("test"))
-}
-
-fun DependencyHandlerScope.addAndroidTesting() {
-    androidTestImplementation(libs.androidx.junit)
-    androidTestImplementation(libs.androidx.espresso.core)
-    androidTestImplementation(platform(libs.androidx.compose.bom))
-    androidTestImplementation(libs.androidx.ui.test.junit4)
-}
-
-fun DependencyHandlerScope.addDebug() {
-    debugImplementation(libs.androidx.ui.tooling)
-    debugImplementation(libs.androidx.ui.test.manifest)
-}
-
-// Git Hooks Setup
-tasks.register("installGitHooks") {
-    doLast {
-        installHook("commit-message", "commit-msg")
-        installHook("branch-naming", "pre-push")
-    }
-}
-
-fun installHook(sourceFile: String, targetFile: String) {
-    val source = file("../scripts/hooks/$sourceFile")
-    val target = file("../.git/hooks/$targetFile")
-
-    if (!target.exists() || target.readText() != source.readText()) {
-        target.writeText(source.readText())
-        target.setExecutable(true)
-        println("✅ $targetFile hook installed")
-    } else {
-        println("✅ $targetFile hook up to date")
-    }
-}
-
-gradle.projectsEvaluated {
-    tasks["build"].dependsOn("installGitHooks")
-}
