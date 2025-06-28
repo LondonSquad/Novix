@@ -1,5 +1,8 @@
 package com.london.novix.presentation.component
 
+import androidx.compose.animation.animateColorAsState
+import androidx.compose.animation.core.animateDpAsState
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -9,6 +12,7 @@ import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -29,18 +33,36 @@ fun NovixChip(
     val colors = NovixTheme.colors
     val typography = NovixTheme.typography
 
-    val backgroundColor = if (isSelected) colors.secondary else colors.surface
-    val textColor = if (isSelected) colors.onPrimary else colors.body
-    val shape = if (isSelected) RoundedCornerShape(12.dp) else RoundedCornerShape(8.dp)
-    val verticalPadding = 8.dp
-    val horizontalPadding = if (isSelected) 24.dp else 12.dp
+    val backgroundColor by animateColorAsState(
+        targetValue = if (isSelected) colors.secondary else colors.surface,
+        animationSpec = tween(durationMillis = 300),
+        label = "background_color"
+    )
+
+    val textColor by animateColorAsState(
+        targetValue = if (isSelected) colors.onPrimary else colors.body,
+        animationSpec = tween(durationMillis = 300),
+        label = "text_color"
+    )
+
+    val cornerRadius by animateDpAsState(
+        targetValue = if (isSelected) 12.dp else 8.dp,
+        animationSpec = tween(durationMillis = 300),
+        label = "corner_radius"
+    )
+
+    val horizontalPadding by animateDpAsState(
+        targetValue = if (isSelected) 24.dp else 12.dp,
+        animationSpec = tween(durationMillis = 300),
+        label = "horizontal_padding"
+    )
 
     Row(
         modifier = modifier
-            .clip(shape)
+            .clip(RoundedCornerShape(cornerRadius))
             .background(backgroundColor)
             .noRippleClickable(onClick)
-            .padding(horizontal = horizontalPadding, vertical = verticalPadding),
+            .padding(horizontal = horizontalPadding, vertical = 8.dp),
         horizontalArrangement = Arrangement.Center,
         verticalAlignment = Alignment.CenterVertically
     ) {
@@ -56,7 +78,7 @@ fun NovixChip(
 }
 
 @Composable
-fun ScrollableChipGroup(
+private fun ScrollableChipGroup(
     chips: List<String>,
     modifier: Modifier = Modifier,
     selectedChip: String? = null,
