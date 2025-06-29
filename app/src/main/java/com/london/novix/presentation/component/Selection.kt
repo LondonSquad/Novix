@@ -51,13 +51,14 @@ fun Selection(
             textAlign = TextAlign.Start,
             modifier = Modifier.weight(1f)
         )
-        if (subText != null) Text(
-            text = subText,
-            style = NovixTheme.typography.label.small,
-            color = NovixTheme.colors.hint,
-            textAlign = TextAlign.End,
-            modifier = Modifier.weight(1f)
-        )
+        subText?.let {
+            Text(
+                text = subText,
+                style = NovixTheme.typography.label.small,
+                color = NovixTheme.colors.hint,
+                textAlign = TextAlign.End,
+            )
+        }
     }
 }
 
