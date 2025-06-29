@@ -72,7 +72,7 @@ fun CategoryGrid(
     modifier: Modifier = Modifier
 ) {
     LazyVerticalGrid(
-        columns = GridCells.Fixed(2),
+        columns = GridCells.Adaptive(minSize = 150.dp),
         modifier = modifier
             .background(NovixTheme.colors.surface)
             .padding(horizontal = 16.dp, vertical = 12.dp),
