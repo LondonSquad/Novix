@@ -30,8 +30,7 @@ fun ActorItem(
 ) {
     Row(
         modifier = modifier
-            .fillMaxWidth()
-            .background(NovixTheme.colors.surface),
+            .fillMaxWidth(),
         verticalAlignment = Alignment.CenterVertically
     ) {
         AsyncImage(
