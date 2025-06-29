@@ -30,7 +30,6 @@ fun SnackBar(
 ) {
     Row(
         modifier = modifier
-            .width(328.dp)
             .background(color = NovixTheme.colors.surface)
             .border(
                 width = 1.dp,
@@ -41,10 +40,10 @@ fun SnackBar(
         verticalAlignment = Alignment.CenterVertically
     ) {
         Image(
+            modifier  = Modifier.padding(end = 8.dp),
             painter = painterResource(icon),
             contentDescription = contentDescription
         )
-        Spacer(modifier = Modifier.width(8.dp))
         Text(
             text = stringResource(title),
             style = NovixTheme.typography.body.medium,
