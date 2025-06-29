@@ -30,6 +30,7 @@ import androidx.compose.ui.tooling.preview.Preview
     locale = "en",
     device = "spec:width=800dp,height=1280dp,dpi=320"
 )
+
 @Preview(
     name = "DARK - Large",
     uiMode = Configuration.UI_MODE_NIGHT_YES,
