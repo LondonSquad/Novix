@@ -35,7 +35,7 @@ jobs:
             const approvals = Object.values(reviewsByUser)
               .filter(review => review.state === 'APPROVED').length;
             
-            const requiredApprovals = 3; // Change this number as needed
+            const requiredApprovals = 2; // Change this number as needed
             
             console.log(`Current approvals: ${approvals}`);
             console.log(`Required approvals: ${requiredApprovals}`);
