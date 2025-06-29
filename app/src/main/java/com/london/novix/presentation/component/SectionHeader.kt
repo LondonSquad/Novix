@@ -3,7 +3,6 @@ package com.london.novix.presentation.component
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -34,19 +33,18 @@ fun SectionHeader(
             color = NovixTheme.colors.title,
         )
         Row(
-            modifier = Modifier
-                .align(Alignment.CenterVertically)
-                .noRippleClickable(onClick),
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.spacedBy(4.dp),
+            modifier = Modifier.noRippleClickable(onClick),
         ) {
             Text(
                 text = stringResource(R.string.all),
                 style = NovixTheme.typography.label.medium,
                 color = NovixTheme.colors.primary,
-                modifier = Modifier.padding(end = 4.dp)
             )
             Icon(
-                painter = painterResource(id = R.drawable.icon_right_arrow),
-                contentDescription = "right arrow",
+                painter = painterResource(id = R.drawable.icon_arrow),
+                contentDescription = "arrow",
                 tint = NovixTheme.colors.primary
             )
         }
@@ -58,7 +56,7 @@ fun SectionHeader(
 fun SectionHeaderPreview() {
     NovixTheme {
         SectionHeader(
-            text = stringResource(R.string.new_arrival)
+            text = "New Arrival"
         )
     }
 }

@@ -1,5 +1,4 @@
 <resources>
-    <string name="app_name">Novix</string>
+    <string name="app_name" translatable="false">Novix</string>
     <string name="all">All</string>
-    <string name="new_arrival">New arrival</string>
 </resources>
