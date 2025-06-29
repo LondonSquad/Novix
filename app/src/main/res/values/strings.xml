@@ -1,4 +1,5 @@
 <resources>
-    <string name="app_name">Novix</string>
+    <string name="app_name" translatable="false">Novix</string>
+    <string name="all">All</string>
     <string name="actorImage">"actorImage"</string>
 </resources>
