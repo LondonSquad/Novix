@@ -6,14 +6,13 @@ import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.text.style.TextAlign
@@ -30,17 +29,15 @@ fun NovixChip(
     isSelected: Boolean = false,
     onClick: () -> Unit = {}
 ) {
-    val colors = NovixTheme.colors
-    val typography = NovixTheme.typography
 
     val backgroundColor by animateColorAsState(
-        targetValue = if (isSelected) colors.secondary else colors.surface,
+        targetValue = if (isSelected) NovixTheme.colors.secondary else NovixTheme.colors.surface,
         animationSpec = tween(durationMillis = 300),
         label = "background_color"
     )
 
     val textColor by animateColorAsState(
-        targetValue = if (isSelected) colors.onPrimary else colors.body,
+        targetValue = if (isSelected) NovixTheme.colors.onPrimary else NovixTheme.colors.body,
         animationSpec = tween(durationMillis = 300),
         label = "text_color"
     )
@@ -57,24 +54,19 @@ fun NovixChip(
         label = "horizontal_padding"
     )
 
-    Row(
+    Text(
+        text = text,
         modifier = modifier
             .clip(RoundedCornerShape(cornerRadius))
             .background(backgroundColor)
             .noRippleClickable(onClick)
             .padding(horizontal = horizontalPadding, vertical = 8.dp),
-        horizontalArrangement = Arrangement.Center,
-        verticalAlignment = Alignment.CenterVertically
-    ) {
-        Text(
-            text = text,
-            color = textColor,
-            maxLines = 1,
-            overflow = TextOverflow.Ellipsis,
-            textAlign = TextAlign.Center,
-            style = typography.label.medium
-        )
-    }
+        color = textColor,
+        maxLines = 1,
+        overflow = TextOverflow.Ellipsis,
+        textAlign = TextAlign.Center,
+        style = NovixTheme.typography.label.medium
+    )
 }
 
 @Composable
@@ -88,12 +80,11 @@ private fun ScrollableChipGroup(
         modifier = modifier,
         horizontalArrangement = Arrangement.spacedBy(8.dp)
     ) {
-        items(chips.size) { index ->
-            val chipText = chips[index]
+        items(chips) { chip ->
             NovixChip(
-                text = chipText,
-                isSelected = chipText == selectedChip,
-                onClick = { onChipSelected(chipText) }
+                text = chip,
+                isSelected = chip == selectedChip,
+                onClick = { onChipSelected(chip) }
             )
         }
     }
