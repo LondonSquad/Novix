@@ -44,7 +44,8 @@ private fun NovixCarousalDot(
     modifier: Modifier = Modifier
 ) {
     val dotTintColor by animateColorAsState(
-        targetValue = if (isSelected) NovixTheme.colors.primary else NovixTheme.colors.hint,
+        targetValue = if (isSelected) NovixTheme.colors.primary
+        else NovixTheme.colors.onPrimaryHint,
         animationSpec = tween(400)
     )
 
@@ -64,7 +65,7 @@ private fun NovixCarousalDot(
                 if (!isSelected)
                     Modifier.border(
                         width = 0.5.dp,
-                        color = NovixTheme.colors.onPrimaryHint,
+                        color = NovixTheme.colors.stroke,
                         shape = CircleShape
                     ) else Modifier
             )
