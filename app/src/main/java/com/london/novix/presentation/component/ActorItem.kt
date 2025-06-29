@@ -31,7 +31,7 @@ fun ActorItem(
     ) {
         AsyncImage(
             model = imageRes,
-            contentDescription = null,
+            contentDescription = "actorImage",
             modifier = Modifier
                 .size(78.dp)
                 .clip(
