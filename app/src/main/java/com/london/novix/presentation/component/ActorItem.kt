@@ -15,7 +15,8 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.drawBehind
-import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.graphics.drawscope.Stroke
+import androidx.compose.ui.graphics.Path
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import com.london.novix.R
@@ -36,13 +37,18 @@ fun ActorItem(
                 .size(78.dp)
                 .clip(
                     shape = RoundedCornerShape(
-                        topStart = 12.dp, topEnd = 12.dp, bottomStart = 12.dp
+                        topStart = 12.dp,
+                        topEnd = 12.dp,
+                        bottomStart = 12.dp
                     )
                 )
                 .border(
                     shape = RoundedCornerShape(
-                        topStart = 12.dp, topEnd = 12.dp, bottomStart = 12.dp
-                    ), width = 1.dp, color = NovixTheme.colors.stroke
+                        topStart = 12.dp,
+                        topEnd = 12.dp,
+                        bottomStart = 12.dp
+                    ), width = 1.dp,
+                    color = NovixTheme.colors.stroke
                 ),
         )
         val color = NovixTheme.colors.stroke
@@ -53,26 +59,36 @@ fun ActorItem(
                 .defaultMinSize(minHeight = 55.dp)
                 .drawBehind {
                     val strokeWidth = 1.dp.toPx()
-                    drawLine(
+                    val cornerRadius = 12.dp.toPx()
+
+                    val left = 0f
+                    val top = 0f
+                    val right = size.width
+                    val bottom = size.height
+
+                    val path =Path().apply {
+                        moveTo(left, top)
+
+                        lineTo(right - cornerRadius, top)
+                        quadraticTo(right, top, right, top + cornerRadius)
+
+                        lineTo(right, bottom - cornerRadius)
+                        quadraticTo(right, bottom, right - cornerRadius, bottom)
+
+                        lineTo(left, bottom - 1)
+                        quadraticTo(left, bottom, left + cornerRadius, bottom)
+                    }
+                    drawPath(
+                        path = path,
                         color = color,
-                        start = Offset(0f, 0f),
-                        end = Offset(size.width, 0f),
-                        strokeWidth = strokeWidth
-                    )
-                    drawLine(
-                        color = color,
-                        start = Offset(0f, size.height - 1),
-                        end = Offset(size.width, size.height),
-                        strokeWidth = strokeWidth
-                    )
-                    drawLine(
-                        color = color,
-                        start = Offset(size.width, 0f),
-                        end = Offset(size.width, size.height),
-                        strokeWidth = strokeWidth
+                        style = Stroke(width = strokeWidth)
                     )
                 }
-                .padding(start = 8.dp, top = 4.5.dp, bottom = 4.5.dp),
+                .padding(
+                    start = 8.dp,
+                    top = 4.5.dp,
+                    bottom = 4.5.dp
+                ),
             verticalArrangement = Arrangement.Center,
         ) {
             Text(
