@@ -30,7 +30,7 @@ fun ActorItem(
         modifier = modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically
     ) {
         AsyncImage(
-            model = "",
+            model = imageRes,
             contentDescription = null,
             modifier = Modifier
                 .size(78.dp)
