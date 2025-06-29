@@ -59,6 +59,10 @@ android {
 configureGitHooks()
 
 dependencies {
+    implementation(project(":domain"))
+    implementation(project(":data"))
+    implementation(project(":designSystem"))
+    implementation(project(":presentation"))
     addAndroidCore()
     addComposeUI()
     addUIHelpers()
