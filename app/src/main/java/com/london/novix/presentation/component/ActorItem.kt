@@ -27,7 +27,7 @@ fun ActorItem(
     actorName: String, characterName: String?, imageRes: Any, modifier: Modifier = Modifier
 ) {
     Row(
-        modifier = modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically
+        modifier = modifier, verticalAlignment = Alignment.CenterVertically
     ) {
         AsyncImage(
             model = imageRes,
