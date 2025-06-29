@@ -17,6 +17,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.graphics.Path
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import com.london.novix.R
@@ -99,12 +100,14 @@ fun ActorItem(
                 text = actorName,
                 style = NovixTheme.typography.title.medium,
                 color = NovixTheme.colors.body,
+                textAlign = TextAlign.Start
             )
             characterName?.let {
                 Text(
                     text = it,
                     style = NovixTheme.typography.label.small,
                     color = NovixTheme.colors.hint,
+                    textAlign = TextAlign.Start
                 )
             }
         }
