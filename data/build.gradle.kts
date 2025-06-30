@@ -7,7 +7,7 @@ plugins {
 }
 
 android {
-    namespace = AppConfig.APPLICATION_ID
+    namespace =  AppConfig.Namespace.DATA
     compileSdk = AppConfig.Version.COMPILE_SDK
 
     defaultConfig {
