@@ -1,19 +1,16 @@
 package com.london.novix.presentation.component
 
-import androidx.annotation.DrawableRes
-import androidx.annotation.StringRes
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
@@ -23,8 +20,8 @@ import com.london.novix.presentation.designSystem.theme.ThemePreviews
 
 @Composable
 fun SnackBar(
-    @StringRes title: Int,
-    @DrawableRes icon: Int,
+    title: String,
+    icon: Painter,
     modifier: Modifier = Modifier,
     contentDescription: String? = null
 ) {
@@ -40,12 +37,12 @@ fun SnackBar(
         verticalAlignment = Alignment.CenterVertically
     ) {
         Image(
-            modifier  = Modifier.padding(end = 8.dp),
-            painter = painterResource(icon),
+            modifier = Modifier.padding(end = 8.dp),
+            painter = icon,
             contentDescription = contentDescription
         )
         Text(
-            text = stringResource(title),
+            text = title,
             style = NovixTheme.typography.body.medium,
             color = NovixTheme.colors.title,
         )
@@ -57,8 +54,8 @@ fun SnackBar(
 private fun SuccessSnackBarPreview() {
     NovixTheme {
         SnackBar(
-            title = R.string.rate_submitted_successfully,
-            icon = R.drawable.ic_success
+            title = stringResource(R.string.rate_submitted_successfully),
+            icon = painterResource(R.drawable.ic_success)
         )
     }
 }
@@ -68,8 +65,8 @@ private fun SuccessSnackBarPreview() {
 private fun FailSnackBarPreview() {
     NovixTheme {
         SnackBar(
-            title = R.string.error_submitting_rate,
-            icon = R.drawable.ic_failed
+            title = stringResource(R.string.error_submitting_rate),
+            icon = painterResource(R.drawable.ic_failed)
         )
     }
 }
