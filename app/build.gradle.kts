@@ -1,5 +1,4 @@
 import com.london.buildsrc.AppConfig
-import com.london.buildsrc.configureGitHooks
 
 plugins {
     alias(libs.plugins.android.application)
@@ -45,13 +44,12 @@ android {
     }
 }
 
-configureGitHooks()
 
 dependencies {
     implementation(project(":domain"))
     implementation(project(":data"))
-    implementation(project(":designSystem"))
     implementation(project(":presentation"))
+    implementation(project(":designSystem"))
 
     implementation(libs.bundles.androidx.core)
     implementation(platform(libs.androidx.compose.bom))
@@ -71,7 +69,7 @@ dependencies {
 
     implementation(libs.bundles.coroutines)
 
-    implementation(libs.bundles.ui.utils)
+//    implementation(libs.bundles.ui.utils)
 
     testImplementation(libs.bundles.testing)
     androidTestImplementation(libs.bundles.android.testing)
