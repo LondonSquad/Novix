@@ -36,6 +36,7 @@ android {
 }
 
 dependencies {
+    implementation(libs.bundles.compose)
     implementation(libs.bundles.base.ui)
     implementation(libs.bundles.ui.utils)
     debugImplementation(libs.bundles.compose.debug)

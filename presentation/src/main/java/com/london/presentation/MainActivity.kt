@@ -1,4 +1,4 @@
-package com.london.novix.presentation
+package com.london.presentation
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity

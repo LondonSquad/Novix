@@ -3,6 +3,7 @@ import com.london.buildsrc.AppConfig
 plugins {
     alias(libs.plugins.android.library)
     alias(libs.plugins.kotlin.android)
+    alias(libs.plugins.kotlin.compose)
     alias(libs.plugins.ksp)
 }
 
@@ -37,6 +38,8 @@ android {
 
 dependencies {
     implementation(project(":domain"))
+    implementation(project(":designSystem"))
+    implementation(libs.bundles.compose)
     implementation(libs.bundles.base.ui)
     implementation(libs.bundles.coroutines)
     implementation(libs.bundles.koin)
