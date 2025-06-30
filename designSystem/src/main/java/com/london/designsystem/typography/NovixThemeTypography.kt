@@ -5,7 +5,7 @@ import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.sp
-import com.london.novix.R
+import com.london.designsystem.R
 
 val NovixFont = FontFamily(
     Font(R.font.ibm_plex_sans_arabic_thin, FontWeight.Thin),
