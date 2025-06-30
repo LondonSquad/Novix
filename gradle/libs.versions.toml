@@ -127,3 +127,93 @@ kotlin-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", versi
 ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }
 jetbrains-kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "jetbrainsKotlinJvm" }
 android-library = { id = "com.android.library", version.ref = "agp" }
+
+
+[bundles]
+
+androidx-core = [
+    "androidx-core-ktx",
+    "androidx-lifecycle-runtime-ktx",
+    "androidx-activity-compose"
+]
+
+compose = [
+    "androidx-compose-bom",
+    "androidx-ui",
+    "androidx-ui-graphics",
+    "androidx-ui-tooling-preview",
+    "androidx-material3",
+    "androidx-navigation-compose"
+]
+
+compose-debug = [
+    "androidx-ui-tooling",
+    "androidx-ui-test-manifest"
+]
+
+koin = [
+    "koin-android",
+    "koin-androidx-compose",
+    "koin-annotations"
+]
+
+koin-ksp = [
+    "koin-ksp-compiler"
+]
+
+datastore = [
+    "androidx-datastore-preferences",
+    "androidx-datastore-core"
+]
+
+room = [
+    "androidx-room-runtime",
+    "androidx-room-ktx"
+]
+
+room-ksp = [
+    "androidx-room-compiler"
+]
+
+ktor = [
+    "ktor-client-core",
+    "ktor-client-android",
+    "ktor-client-serialization",
+    "ktor-client-logging"
+]
+
+coroutines = [
+    "kotlinx-coroutines-android",
+    "kotlinx-datetime"
+]
+
+base-ui = [
+    "androidx-core-ktx",
+    "androidx-appcompat",
+    "material"
+]
+
+base-testing = [
+    "junit",
+    "androidx-junit",
+    "androidx-espresso-core"
+]
+
+ui-utils = [
+    "coil-compose",
+    "lottie-compose",
+    "remember-preference"
+]
+
+testing = [
+    "junit",
+    "mockk",
+    "truth"
+]
+
+android-testing = [
+    "androidx-junit",
+    "androidx-espresso-core",
+    "androidx-ui-test-junit4"
+]
+

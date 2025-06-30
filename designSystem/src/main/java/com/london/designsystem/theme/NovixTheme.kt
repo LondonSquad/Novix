@@ -1,11 +1,11 @@
-package com.london.novix.presentation.designSystem.theme
+package com.london.designsystem.theme
 
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
-import com.london.novix.presentation.designSystem.color.DarkNovixColors
-import com.london.novix.presentation.designSystem.color.LightNovixColors
-import com.london.novix.presentation.designSystem.typography.NovixTypography
+import com.london.designsystem.color.DarkNovixColors
+import com.london.designsystem.color.LightNovixColors
+import com.london.designsystem.typography.NovixTypography
 
 @Composable
 fun NovixTheme(

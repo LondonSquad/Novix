@@ -1,16 +1,4 @@
 import com.london.buildsrc.AppConfig
-import com.london.buildsrc.addAndroidCore
-import com.london.buildsrc.addAndroidTesting
-import com.london.buildsrc.addComposeUI
-import com.london.buildsrc.addDI
-import com.london.buildsrc.addDatabase
-import com.london.buildsrc.addDebugDependencies
-import com.london.buildsrc.addKotlinx
-import com.london.buildsrc.addNetworking
-import com.london.buildsrc.addStorage
-import com.london.buildsrc.addUIHelpers
-import com.london.buildsrc.addUnitTesting
-import com.london.buildsrc.configureGitHooks
 
 plugins {
     alias(libs.plugins.android.application)
@@ -56,23 +44,18 @@ android {
     }
 }
 
-configureGitHooks()
 
 dependencies {
     implementation(project(":domain"))
     implementation(project(":data"))
-    implementation(project(":designSystem"))
     implementation(project(":presentation"))
-    addAndroidCore()
-    addComposeUI()
-    addUIHelpers()
-    addNetworking()
-    addDatabase()
-    addStorage()
-    addDI()
-    addKotlinx()
-    addUnitTesting()
-    addAndroidTesting()
-    addDebugDependencies()
+    implementation(project(":designSystem"))
+    implementation(libs.bundles.base.ui)
+    implementation(libs.bundles.koin)
+    ksp(libs.bundles.koin.ksp)
+    debugImplementation(libs.bundles.compose.debug)
+    androidTestImplementation(libs.bundles.base.testing)
+    androidTestImplementation(libs.bundles.android.testing)
 }
+
 

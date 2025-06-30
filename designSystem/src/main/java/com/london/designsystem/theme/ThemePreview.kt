@@ -1,4 +1,4 @@
-package com.london.novix.presentation.designSystem.theme
+package com.london.designsystem.theme
 
 import android.content.res.Configuration
 import androidx.compose.ui.tooling.preview.Preview

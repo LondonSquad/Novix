@@ -1,4 +1,4 @@
-package com.london.novix.presentation.designSystem.theme
+package com.london.designsystem.theme
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
@@ -8,10 +8,10 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.staticCompositionLocalOf
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.composed
-import com.london.novix.presentation.designSystem.color.LightNovixColors
-import com.london.novix.presentation.designSystem.color.NovixColors
-import com.london.novix.presentation.designSystem.typography.NovixTypography
-import com.london.novix.presentation.designSystem.typography.NovixTypographySet
+import com.london.designsystem.color.LightNovixColors
+import com.london.designsystem.color.NovixColors
+import com.london.designsystem.typography.NovixTypography
+import com.london.designsystem.typography.NovixTypographySet
 
 
 object NovixTheme {
