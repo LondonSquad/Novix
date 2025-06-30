@@ -50,28 +50,11 @@ dependencies {
     implementation(project(":data"))
     implementation(project(":presentation"))
     implementation(project(":designSystem"))
-
-    implementation(libs.bundles.androidx.core)
-    implementation(platform(libs.androidx.compose.bom))
-    implementation(libs.bundles.compose)
-
-    debugImplementation(libs.bundles.compose.debug)
-
+    implementation(libs.bundles.base.ui)
     implementation(libs.bundles.koin)
     ksp(libs.bundles.koin.ksp)
-
-    implementation(libs.bundles.datastore)
-
-    implementation(libs.bundles.room)
-    ksp(libs.bundles.room.ksp)
-
-    implementation(libs.bundles.ktor)
-
-    implementation(libs.bundles.coroutines)
-
-//    implementation(libs.bundles.ui.utils)
-
-    testImplementation(libs.bundles.testing)
+    debugImplementation(libs.bundles.compose.debug)
+    androidTestImplementation(libs.bundles.base.testing)
     androidTestImplementation(libs.bundles.android.testing)
 }
 

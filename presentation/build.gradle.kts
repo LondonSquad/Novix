@@ -1,6 +1,9 @@
+import com.london.buildsrc.AppConfig
+
 plugins {
     alias(libs.plugins.android.library)
     alias(libs.plugins.kotlin.android)
+    alias(libs.plugins.ksp)
 }
 
 android {
@@ -24,21 +27,20 @@ android {
         }
     }
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_11
-        targetCompatibility = JavaVersion.VERSION_11
+        sourceCompatibility = AppConfig.Version.JVM
+        targetCompatibility = AppConfig.Version.JVM
     }
     kotlinOptions {
-        jvmTarget = "11"
+        jvmTarget = AppConfig.Version.JVM.toString()
     }
 }
 
 dependencies {
-
     implementation(project(":domain"))
-
-    implementation(libs.androidx.core.ktx)
-    implementation(libs.androidx.appcompat)
-    testImplementation(libs.junit)
-    androidTestImplementation(libs.androidx.junit)
-    androidTestImplementation(libs.androidx.espresso.core)
+    implementation(libs.bundles.base.ui)
+    implementation(libs.bundles.coroutines)
+    implementation(libs.bundles.koin)
+    ksp(libs.bundles.koin.ksp)
+    testImplementation(libs.bundles.testing)
+    androidTestImplementation(libs.bundles.android.testing)
 }

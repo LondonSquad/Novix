@@ -1,22 +1,25 @@
+import com.london.buildsrc.AppConfig
+
 plugins {
     alias(libs.plugins.android.library)
     alias(libs.plugins.kotlin.android)
+    alias(libs.plugins.ksp)
 }
 
 android {
-    namespace = "com.london.data"
-    compileSdk = 35
+    namespace = AppConfig.APPLICATION_ID
+    compileSdk = AppConfig.Version.COMPILE_SDK
 
     defaultConfig {
-        minSdk = 26
+        minSdk = AppConfig.Version.MIN_SDK
 
-        testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+        testInstrumentationRunner = AppConfig.ANDROID_TEST_INSTRUMENTATION
         consumerProguardFiles("consumer-rules.pro")
     }
 
     buildTypes {
         release {
-            isMinifyEnabled = false
+            isMinifyEnabled = AppConfig.ENABLE_R8_FULL_MODE
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
@@ -24,21 +27,23 @@ android {
         }
     }
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_11
-        targetCompatibility = JavaVersion.VERSION_11
+        sourceCompatibility = AppConfig.Version.JVM
+        targetCompatibility = AppConfig.Version.JVM
     }
     kotlinOptions {
-        jvmTarget = "11"
+        jvmTarget = AppConfig.Version.JVM.toString()
     }
 }
 
 dependencies {
-
     implementation(project(":domain"))
-    implementation(libs.androidx.core.ktx)
-    implementation(libs.androidx.appcompat)
-    implementation(libs.material)
-    testImplementation(libs.junit)
-    androidTestImplementation(libs.androidx.junit)
-    androidTestImplementation(libs.androidx.espresso.core)
+    implementation(libs.bundles.base.ui)
+    implementation(libs.bundles.coroutines)
+    implementation(libs.bundles.datastore)
+    implementation(libs.bundles.ktor)
+    implementation(libs.bundles.room)
+    ksp(libs.bundles.room.ksp)
+    implementation(libs.bundles.koin)
+    ksp(libs.bundles.koin.ksp)
+    testImplementation(libs.bundles.testing)
 }

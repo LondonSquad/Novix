@@ -187,6 +187,18 @@ coroutines = [
     "kotlinx-datetime"
 ]
 
+base-ui = [
+    "androidx-core-ktx",
+    "androidx-appcompat",
+    "material"
+]
+
+base-testing = [
+    "junit",
+    "androidx-junit",
+    "androidx-espresso-core"
+]
+
 ui-utils = [
     "coil-compose",
     "lottie-compose",
@@ -204,3 +216,4 @@ android-testing = [
     "androidx-espresso-core",
     "androidx-ui-test-junit4"
 ]
+
