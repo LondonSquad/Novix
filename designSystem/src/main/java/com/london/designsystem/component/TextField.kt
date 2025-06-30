@@ -14,6 +14,8 @@ import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.input.VisualTransformation
 import com.london.designsystem.R
+import com.london.designsystem.theme.NovixTheme
+import com.london.designsystem.theme.ThemePreviews
 
 @Composable
 fun NovixTextField(
@@ -49,20 +51,21 @@ fun NovixTextField(
         singleLine = singleLine,
         visualTransformation = visualTransformation,
         colors = OutlinedTextFieldDefaults.colors(
-            focusedBorderColor = Color(0xFFF77053),
-            unfocusedBorderColor = Color(0xFF3A3A3A),
-            focusedLabelColor = Color(0xFFF77053),
-            unfocusedLabelColor = Color(0xFFAAAAAA),
-            focusedTextColor = Color.White,
-            unfocusedTextColor = Color.White,
+            focusedBorderColor = NovixTheme.colors.primary,
+            unfocusedBorderColor = NovixTheme.colors.stroke,
+            focusedLabelColor = NovixTheme.colors.primary,
+            unfocusedLabelColor = NovixTheme.colors.hint,
+            focusedTextColor = NovixTheme.colors.body,
+            unfocusedTextColor = NovixTheme.colors.hint,
             focusedPlaceholderColor = Color.Gray,
             unfocusedPlaceholderColor = Color.Gray,
-            disabledTextColor = Color.Gray,
-            disabledBorderColor = Color(0xFF444444)
+            disabledTextColor =  NovixTheme.colors.hint,
+            disabledBorderColor = NovixTheme.colors.hint
         )
     )
 }
 
+@ThemePreviews
 @Composable
 fun SampleTextFieldPreview() {
     var text by remember { mutableStateOf("") }
@@ -72,6 +75,6 @@ fun SampleTextFieldPreview() {
         onValueChange = { text = it },
         label = "Title",
         placeholder = "value",
-        leadingIcon = painterResource(id = R.drawable.icon_arrow)
+        leadingIcon = painterResource(id = R.drawable.icon_user)
     )
 }
