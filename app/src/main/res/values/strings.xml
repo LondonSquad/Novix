@@ -1,7 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name" translatable="false">Novix</string>
-    <string name="all">All</string>
-    <string name="rate_submitted_successfully">Rate submitted successfully.</string>
-    <string name="error_submitting_rate">Some error happend</string>
-    <string name="actorImage">"actorImage"</string>
 </resources>
