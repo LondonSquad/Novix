@@ -4,8 +4,8 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -48,13 +48,15 @@ fun NovixTextField(
         enabled = enabled,
         singleLine = singleLine,
         visualTransformation = visualTransformation,
-        colors = TextFieldDefaults.outlinedTextFieldColors(
+        colors = OutlinedTextFieldDefaults.colors(
             focusedBorderColor = Color(0xFFF77053),
             unfocusedBorderColor = Color(0xFF3A3A3A),
             focusedLabelColor = Color(0xFFF77053),
             unfocusedLabelColor = Color(0xFFAAAAAA),
-            textColor = Color.White,
-            placeholderColor = Color.Gray,
+            focusedTextColor = Color.White,
+            unfocusedTextColor = Color.White,
+            focusedPlaceholderColor = Color.Gray,
+            unfocusedPlaceholderColor = Color.Gray,
             disabledTextColor = Color.Gray,
             disabledBorderColor = Color(0xFF444444)
         )
@@ -73,4 +75,3 @@ fun SampleTextFieldPreview() {
         leadingIcon = painterResource(id = R.drawable.icon_arrow)
     )
 }
-
