@@ -1,4 +1,4 @@
-package com.london.novix.presentation.component
+package com.london.designsystem.component
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -23,8 +23,8 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import com.london.novix.R
-import com.london.novix.presentation.designSystem.theme.NovixTheme
-import com.london.novix.presentation.designSystem.theme.ThemePreviews
+import com.london.designsystem.theme.NovixTheme
+import com.london.designsystem.theme.ThemePreviews
 
 
 @Composable

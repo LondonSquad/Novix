@@ -1,4 +1,4 @@
-package com.london.novix.presentation
+package com.london.presentation
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity
@@ -18,8 +18,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import com.london.novix.presentation.designSystem.theme.NovixTheme
-import com.london.novix.presentation.designSystem.theme.ThemePreviews
+import com.london.designsystem.theme.NovixTheme
+import com.london.designsystem.theme.ThemePreviews
+
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {

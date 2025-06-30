@@ -1,4 +1,4 @@
-package com.london.novix.presentation.designSystem.color
+package com.london.designsystem.color
 
 import androidx.compose.ui.graphics.Color
 
