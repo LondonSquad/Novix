@@ -26,7 +26,8 @@ fun SectionHeader(
     Row(
         horizontalArrangement = Arrangement.SpaceBetween,
         verticalAlignment = Alignment.CenterVertically,
-        modifier = modifier.fillMaxWidth()
+        modifier = modifier
+            .fillMaxWidth()
             .background(color = NovixTheme.colors.surface)
     ) {
         Text(
@@ -46,7 +47,7 @@ fun SectionHeader(
             )
             Icon(
                 painter = painterResource(id = R.drawable.icon_arrow),
-                contentDescription = "arrow",
+                contentDescription = stringResource(R.string.arrow),
                 tint = NovixTheme.colors.primary
             )
         }
