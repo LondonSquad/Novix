@@ -8,19 +8,19 @@ plugins {
 }
 
 android {
-    namespace = "com.london.presentation"
-    compileSdk = 35
+    namespace =  AppConfig.Namespace.PRESENTATION
+    compileSdk = AppConfig.Version.COMPILE_SDK
 
     defaultConfig {
-        minSdk = 26
+        minSdk = AppConfig.Version.MIN_SDK
 
-        testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+        testInstrumentationRunner =  AppConfig.ANDROID_TEST_INSTRUMENTATION
         consumerProguardFiles("consumer-rules.pro")
     }
 
     buildTypes {
         release {
-            isMinifyEnabled = false
+            isMinifyEnabled = AppConfig.ENABLE_R8_FULL_MODE
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
