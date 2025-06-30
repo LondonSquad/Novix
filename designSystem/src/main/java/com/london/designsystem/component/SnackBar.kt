@@ -1,11 +1,12 @@
 package com.london.designsystem.component
 
-import android.media.Image
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -40,7 +41,7 @@ fun SnackBar(
             painter = icon,
             contentDescription = contentDescription
         )
-        _root_ide_package_.org.w3c.dom.Text(
+        Text(
             text = title,
             style = NovixTheme.typography.body.medium,
             color = NovixTheme.colors.title,
