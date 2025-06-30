@@ -3,4 +3,5 @@
     <string name="all">All</string>
     <string name="rate_submitted_successfully">Rate submitted successfully.</string>
     <string name="error_submitting_rate">Some error happend</string>
+    <string name="actorImage">"actorImage"</string>
 </resources>

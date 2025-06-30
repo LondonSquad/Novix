@@ -3,4 +3,5 @@
     <string name="all">الجميع</string>
     <string name="rate_submitted_successfully">تم تسجيل التقييم بنجاح</string>
     <string name="error_submitting_rate">في حاجة غلط حصلت</string>
+    <string name="actorImage">"صوره الممثل"</string>
 </resources>

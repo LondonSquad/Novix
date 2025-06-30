@@ -21,4 +21,7 @@ dependencyResolutionManagement {
 
 rootProject.name = "Novix"
 include(":app")
- 
+include(":domain")
+include(":data")
+include(":presentation")
+include(":designSystem")
