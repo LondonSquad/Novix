@@ -34,7 +34,6 @@ android {
 
 dependencies {
 
-    implementation(project(":designSystem"))
     implementation(project(":domain"))
 
     implementation(libs.androidx.core.ktx)
