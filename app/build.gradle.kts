@@ -1,15 +1,4 @@
 import com.london.buildsrc.AppConfig
-import com.london.buildsrc.addAndroidCore
-import com.london.buildsrc.addAndroidTesting
-import com.london.buildsrc.addComposeUI
-import com.london.buildsrc.addDI
-import com.london.buildsrc.addDatabase
-import com.london.buildsrc.addDebugDependencies
-import com.london.buildsrc.addKotlinx
-import com.london.buildsrc.addNetworking
-import com.london.buildsrc.addStorage
-import com.london.buildsrc.addUIHelpers
-import com.london.buildsrc.addUnitTesting
 import com.london.buildsrc.configureGitHooks
 
 plugins {
@@ -63,16 +52,29 @@ dependencies {
     implementation(project(":data"))
     implementation(project(":designSystem"))
     implementation(project(":presentation"))
-    addAndroidCore()
-    addComposeUI()
-    addUIHelpers()
-    addNetworking()
-    addDatabase()
-    addStorage()
-    addDI()
-    addKotlinx()
-    addUnitTesting()
-    addAndroidTesting()
-    addDebugDependencies()
+
+    implementation(libs.bundles.androidx.core)
+    implementation(platform(libs.androidx.compose.bom))
+    implementation(libs.bundles.compose)
+
+    debugImplementation(libs.bundles.compose.debug)
+
+    implementation(libs.bundles.koin)
+    ksp(libs.bundles.koin.ksp)
+
+    implementation(libs.bundles.datastore)
+
+    implementation(libs.bundles.room)
+    ksp(libs.bundles.room.ksp)
+
+    implementation(libs.bundles.ktor)
+
+    implementation(libs.bundles.coroutines)
+
+    implementation(libs.bundles.ui.utils)
+
+    testImplementation(libs.bundles.testing)
+    androidTestImplementation(libs.bundles.android.testing)
 }
+
 
