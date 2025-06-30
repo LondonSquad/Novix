@@ -1,22 +1,15 @@
 package com.london.designsystem.component
 
+import androidx.compose.animation.animateColorAsState
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Shape
@@ -45,11 +38,13 @@ fun NovixTextField(
     shape: Shape = RoundedCornerShape(12.dp),
     visualTransformation: VisualTransformation = VisualTransformation.None,
 ) {
-    val currentTextStyle = getTextStyle(value, isFocused)
+    val currentTextStyle = getAnimatedTextStyle(value, isFocused)
 
-    Column(modifier = modifier
-        .fillMaxWidth()
-        .background(NovixTheme.colors.surface)) {
+    Column(
+        modifier = modifier
+            .fillMaxWidth()
+            .background(NovixTheme.colors.surface)
+    ) {
         label?.let {
             Text(
                 text = it,
@@ -66,7 +61,7 @@ fun NovixTextField(
             enabled = enabled,
             singleLine = singleLine,
             placeholder = placeholder,
-            currentTextStyle = currentTextStyle,
+            textStyle = currentTextStyle,
             leadingIcon = leadingIcon,
             trailingIcon = trailingIcon,
             shape = shape,
@@ -83,32 +78,33 @@ private fun NovixTextFieldContainer(
     enabled: Boolean,
     singleLine: Boolean,
     placeholder: String,
-    currentTextStyle: TextStyle,
+    textStyle: TextStyle,
     leadingIcon: Painter?,
     trailingIcon: Painter?,
     shape: Shape,
     visualTransformation: VisualTransformation
 ) {
+    val borderColor by animateColorAsState(
+        targetValue = if (isFocused) NovixTheme.colors.primary else NovixTheme.colors.stroke,
+        label = "Border Color"
+    )
+
     Row(
         modifier = Modifier
             .fillMaxWidth()
-            .border(
-                width = 1.dp,
-                color = if (isFocused) NovixTheme.colors.primary else NovixTheme.colors.stroke,
-                shape = shape
-            )
+            .border(1.dp, borderColor, shape)
             .background(NovixTheme.colors.surface)
-            .padding(all = 12.dp),
+            .padding(12.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {
-        leadingIcon?.let { LeadingIcon(it, isFocused) }
+        leadingIcon?.let { AnimatedLeadingIcon(it, isFocused) }
 
         BasicTextField(
             value = value,
             onValueChange = onValueChange,
             singleLine = singleLine,
             enabled = enabled,
-            textStyle = currentTextStyle,
+            textStyle = textStyle,
             visualTransformation = visualTransformation,
             decorationBox = { innerTextField ->
                 if (value.isEmpty()) {
@@ -119,16 +115,21 @@ private fun NovixTextFieldContainer(
             modifier = Modifier.weight(1f)
         )
 
-        trailingIcon?.let { TrailingIcon(it) }
+        trailingIcon?.let { StaticTrailingIcon(it) }
     }
 }
 
 @Composable
-private fun LeadingIcon(painter: Painter, isFocused: Boolean) {
+private fun AnimatedLeadingIcon(painter: Painter, isFocused: Boolean) {
+    val iconColor by animateColorAsState(
+        targetValue = if (isFocused) NovixTheme.colors.primary else NovixTheme.colors.hint,
+        label = "Leading Icon Color"
+    )
+
     Icon(
         painter = painter,
         contentDescription = null,
-        tint = if (isFocused) NovixTheme.colors.primary else NovixTheme.colors.hint,
+        tint = iconColor,
         modifier = Modifier
             .size(24.dp)
             .padding(end = 8.dp)
@@ -136,7 +137,7 @@ private fun LeadingIcon(painter: Painter, isFocused: Boolean) {
 }
 
 @Composable
-private fun TrailingIcon(painter: Painter) {
+private fun StaticTrailingIcon(painter: Painter) {
     Icon(
         painter = painter,
         contentDescription = null,
@@ -148,20 +149,26 @@ private fun TrailingIcon(painter: Painter) {
 }
 
 @Composable
-private fun PlaceholderText(placeholder: String) {
+private fun PlaceholderText(text: String) {
     Text(
-        text = placeholder,
+        text = text,
         color = NovixTheme.colors.hint,
         style = MaterialTheme.typography.bodyLarge
     )
 }
 
 @Composable
-private fun getTextStyle(value: String, isFocused: Boolean): TextStyle {
+private fun getAnimatedTextStyle(value: String, isFocused: Boolean): TextStyle {
+    val targetColor = when {
+        isFocused || value.isNotEmpty() -> NovixTheme.colors.body
+        else -> NovixTheme.colors.hint
+    }
+
+    val animatedColor by animateColorAsState(targetValue = targetColor, label = "Text Color")
+
     return when {
-        isFocused -> MaterialTheme.typography.bodyMedium.copy(color = NovixTheme.colors.body)
-        value.isNotEmpty() -> MaterialTheme.typography.bodyMedium.copy(color = NovixTheme.colors.body)
-        else -> MaterialTheme.typography.bodySmall.copy(color = NovixTheme.colors.hint)
+        isFocused || value.isNotEmpty() -> MaterialTheme.typography.bodyMedium.copy(color = animatedColor)
+        else -> MaterialTheme.typography.bodySmall.copy(color = animatedColor)
     }
 }
 
