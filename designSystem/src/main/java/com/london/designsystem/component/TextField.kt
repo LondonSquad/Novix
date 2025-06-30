@@ -153,7 +153,7 @@ private fun PlaceholderText(text: String) {
     Text(
         text = text,
         color = NovixTheme.colors.hint,
-        style = MaterialTheme.typography.bodyLarge
+        style = MaterialTheme.typography.bodySmall
     )
 }
 
