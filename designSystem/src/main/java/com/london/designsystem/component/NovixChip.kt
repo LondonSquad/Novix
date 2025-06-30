@@ -1,4 +1,4 @@
-package com.london.novix.presentation.component
+package com.london.designsystem.component
 
 import androidx.compose.animation.animateColorAsState
 import androidx.compose.animation.core.animateDpAsState
@@ -18,9 +18,9 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
-import com.london.novix.presentation.designSystem.theme.NovixTheme
-import com.london.novix.presentation.designSystem.theme.ThemePreviews
-import com.london.novix.presentation.designSystem.theme.noRippleClickable
+import com.london.designsystem.theme.NovixTheme
+import com.london.designsystem.theme.ThemePreviews
+import com.london.designsystem.theme.noRippleClickable
 
 @Composable
 fun NovixChip(

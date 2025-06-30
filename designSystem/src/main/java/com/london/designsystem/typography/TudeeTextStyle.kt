@@ -1,4 +1,4 @@
-package com.london.novix.presentation.designSystem.typography
+package com.london.designsystem.typography
 
 import androidx.compose.ui.text.TextStyle
 
