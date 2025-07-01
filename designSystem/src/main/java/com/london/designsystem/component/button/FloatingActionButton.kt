@@ -1,6 +1,5 @@
 package com.london.designsystem.component.button
 
-import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
@@ -26,7 +25,7 @@ fun FloatingActionButton(
         onClick = onClick,
         modifier = modifier
             .size(56.dp),
-        shape = RoundedCornerShape(10),
+        shape = RoundedCornerShape(12),
         colors = ButtonDefaults.buttonColors(
             containerColor = if (isDisabledIcon) NovixTheme.colors.disable else NovixTheme.colors.primary,
             contentColor = if (isDisabledIcon) NovixTheme.colors.onPrimaryHint else NovixTheme.colors.onPrimary
