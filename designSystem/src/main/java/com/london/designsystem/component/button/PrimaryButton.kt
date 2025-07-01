@@ -22,7 +22,7 @@ import com.london.designsystem.theme.ThemePreviews
 
 
 @Composable
-fun NormalPrimaryButton(
+fun PrimaryButton(
     text: String,
     hasIcon: Boolean,
     isLoading: Boolean,
@@ -72,7 +72,7 @@ fun NormalPrimaryButton(
 @Composable
 fun PreviewPrimaryNormal() {
     NovixTheme {
-        NormalPrimaryButton(
+        PrimaryButton(
             text = "Watch",
             onClick = {},
             isLoading = false,
@@ -86,7 +86,7 @@ fun PreviewPrimaryNormal() {
 @Composable
 fun PreviewPrimaryLoading() {
     NovixTheme {
-        NormalPrimaryButton(
+        PrimaryButton(
             text = "Watch",
             onClick = {},
             isLoading = true,
@@ -100,7 +100,7 @@ fun PreviewPrimaryLoading() {
 @Composable
 fun PreviewPrimaryDisable() {
     NovixTheme {
-        NormalPrimaryButton(
+        PrimaryButton(
             text = "Watch",
             onClick = {},
             isLoading = false,
@@ -114,7 +114,7 @@ fun PreviewPrimaryDisable() {
 @Composable
 fun PreviewPrimaryWithIcon() {
     NovixTheme {
-        NormalPrimaryButton(
+        PrimaryButton(
             text = "Watch",
             onClick = {},
             isLoading = false,

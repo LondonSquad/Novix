@@ -44,8 +44,7 @@ fun FloatingActionButton(
         if (isLoadingIcon) {
             LoadingLottieAnimation(
                 modifier = Modifier
-                    .size(20.dp)
-                    .padding(start = 8.dp),
+                    .size(24.dp),
                 tintColor = NovixTheme.colors.onPrimary
             )
         }
