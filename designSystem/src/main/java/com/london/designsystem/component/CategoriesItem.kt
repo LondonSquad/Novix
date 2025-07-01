@@ -2,7 +2,6 @@ package com.london.designsystem.component
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -25,12 +24,13 @@ import coil.compose.AsyncImage
 import com.london.designsystem.R
 import com.london.designsystem.theme.NovixTheme
 import com.london.designsystem.theme.ThemePreviews
+import com.london.designsystem.theme.noRippleClickable
 
 
 @Composable
 fun CategoriesItem(
-    text: String,
-    image: Any,
+    categoryName: String,
+    categoryImage: Any,
     onClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
@@ -44,18 +44,18 @@ fun CategoriesItem(
             .clip(shape = RoundedCornerShape(12.dp))
             .fillMaxWidth()
             .height(68.dp)
-            .clickable(onClick = onClick),
+            .noRippleClickable(onClick = onClick),
     ) {
         AsyncImage(
-            model = image,
+            model = categoryImage,
             placeholder = painterResource(R.drawable.frame1597883073),
             error = painterResource(R.drawable.frame1597883073),
-            contentDescription = null,
+            contentDescription = "category image",
             modifier = Modifier.fillMaxSize(),
             contentScale = Crop
         )
         Text(
-            text = text,
+            text = categoryName,
             style = NovixTheme.typography.label.large,
             color = NovixTheme.colors.onPrimary,
             modifier = Modifier.padding(top = 8.dp, start = 8.dp)
@@ -68,22 +68,23 @@ fun CategoriesItem(
 
 @Composable
 fun CategoryGrid(
-    categories: List<String>,
+    categories: List<CategoriesItem>,
+    onCategoryItemClick: (CategoriesItem) -> Unit,
     modifier: Modifier = Modifier
 ) {
     LazyVerticalGrid(
         columns = GridCells.Adaptive(minSize = 150.dp),
-        modifier = modifier
-            .background(NovixTheme.colors.surface)
-            .padding(horizontal = 16.dp, vertical = 12.dp),
+        modifier = modifier.background(NovixTheme.colors.surface),
         verticalArrangement = Arrangement.spacedBy(8.dp),
         horizontalArrangement = Arrangement.spacedBy(8.dp)
     ) {
         items(categories) { category ->
             CategoriesItem(
-                text = category,
-                image = R.drawable.frame1597883073,
-                onClick = { },
+                categoryName = category.categoryName,
+                categoryImage = category.categoryImage,
+                onClick = {
+                    onCategoryItemClick(category)
+                },
             )
         }
     }
@@ -92,14 +93,31 @@ fun CategoryGrid(
 @ThemePreviews
 @Composable
 private fun CategoryGridPreview() {
+
+    val categories = listOf(
+        CategoriesItem("Category 1", R.drawable.frame1597883073),
+        CategoriesItem("Category 2", R.drawable.frame1597883073),
+        CategoriesItem("Category 3", R.drawable.frame1597883073),
+        CategoriesItem("Category 4", R.drawable.frame1597883073),
+    )
     NovixTheme {
-        val categories = listOf("Documentary", "Adventure", "Action", "Comedy", "Drama", "Horror")
         Column(
-            modifier = Modifier.background(NovixTheme.colors.surface),
+            modifier = Modifier
+                .background(NovixTheme.colors.surface)
+                .padding(horizontal = 16.dp, vertical = 12.dp),
         ) {
             CategoryGrid(
                 categories = categories,
+                onCategoryItemClick = {
+                    // Handle category item click
+                }
             )
         }
     }
 }
+
+// Fake Data class to represent a category item
+data class CategoriesItem(
+    val categoryName: String,
+    val categoryImage: Any,
+)
