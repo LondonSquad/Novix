@@ -85,45 +85,11 @@ jobs:
           path: build/reports/kover/
 
       - name: Comment PR with Overall Coverage
-        uses: actions/github-script@v6
+        uses: mi-kas/kover-report@v1
         with:
-          script: |
-            const fs = require('fs');
-            
-            const reportPath = 'build/reports/kover/report.xml';
-            
-            try {
-              if (!fs.existsSync(reportPath)) {
-                console.log('❌ Coverage report not found');
-                return;
-              }
-            
-              const xml = fs.readFileSync(reportPath, 'utf8');
-              console.log('✅ Found coverage report');
-            
-              const lineCounterMatch = xml.match(/<counter type="LINE" missed="(\d+)" covered="(\d+)"\/>(?![\s\S]*<counter type="LINE")/);
-            
-              if (lineCounterMatch) {
-                const missed = parseInt(lineCounterMatch[1]);
-                const covered = parseInt(lineCounterMatch[2]);
-                const total = missed + covered;
-                const percentage = total > 0 ? ((covered / total) * 100).toFixed(1) : '100.0';
-            
-                const emoji = parseFloat(percentage) >= 80 ? '✅' : '❌';
-            
-                const comment = `### 📊 Code Coverage: ${percentage}% ${emoji}`;
-            
-                await github.rest.issues.createComment({
-                  issue_number: context.issue.number,
-                  owner: context.repo.owner,
-                  repo: context.repo.repo,
-                  body: comment
-                });
-            
-                console.log(`✅ Coverage: ${percentage}%`);
-              } else {
-                console.log('❌ Could not parse coverage data');
-              }
-            } catch (error) {
-              console.log('❌ Error reading coverage report:', error.message);
-            }
+          path: build/reports/kover/report.xml
+          token: ${{ secrets.GITHUB_TOKEN }}
+          min-coverage-overall: 80
+          min-coverage-changed-files: 80
+          update-comment: true
+          title: Code Coverage Summary
