@@ -1,4 +1,4 @@
-package com.london.novix.presentation.component
+package com.london.designsystem.component
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
