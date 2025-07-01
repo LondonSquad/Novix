@@ -220,6 +220,7 @@ ui-utils = [
 
 testing = [
     "junit",
+    "junit-jupiter",
     "mockk",
     "truth"
 ]
