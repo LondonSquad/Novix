@@ -1,6 +1,7 @@
 [versions]
 # Build Tools
 agp = "8.8.2"
+firebaseBom = "33.16.0"
 kotlin = "2.0.21"
 ksp = "2.0.21-1.0.27"
 
@@ -54,6 +55,12 @@ truth = "1.4.4"
 jetbrainsKotlinJvm = "2.0.21"
 appcompat = "1.6.1"
 material = "1.10.0"
+firebasePerf = "21.0.5"
+googleFirebaseFirebasePerf = "1.4.2"
+googleGmsGoogleServices = "4.4.3"
+firebaseCrashlytics = "19.4.4"
+googleFirebaseCrashlytics = "3.0.4"
+firebaseAnalytics = "22.5.0"
 
 
 [libraries]
@@ -85,6 +92,7 @@ androidx-datastore-preferences = { group = "androidx.datastore", name = "datasto
 androidx-datastore-core = { group = "androidx.datastore", name = "datastore-core", version.ref = "datastoreCore" }
 
 # Dependency Injection (Koin)
+firebase-bom = { module = "com.google.firebase:firebase-bom", version.ref = "firebaseBom" }
 koin-android = { group = "io.insert-koin", name = "koin-android", version.ref = "koinAndroid" }
 koin-androidx-compose = { group = "io.insert-koin", name = "koin-androidx-compose", version.ref = "koinAndroidxCompose" }
 koin-annotations = { group = "io.insert-koin", name = "koin-annotations", version.ref = "koinAnnotations" }
@@ -117,6 +125,9 @@ mockk = { group = "io.mockk", name = "mockk", version.ref = "mockk" }
 truth = { group = "com.google.truth", name = "truth", version.ref = "truth" }
 androidx-appcompat = { group = "androidx.appcompat", name = "appcompat", version.ref = "appcompat" }
 material = { group = "com.google.android.material", name = "material", version.ref = "material" }
+firebase-perf = { group = "com.google.firebase", name = "firebase-perf", version.ref = "firebasePerf" }
+firebase-crashlytics = { group = "com.google.firebase", name = "firebase-crashlytics", version.ref = "firebaseCrashlytics" }
+firebase-analytics = { group = "com.google.firebase", name = "firebase-analytics", version.ref = "firebaseAnalytics" }
 
 
 [plugins]
@@ -127,7 +138,9 @@ kotlin-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", versi
 ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }
 jetbrains-kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "jetbrainsKotlinJvm" }
 android-library = { id = "com.android.library", version.ref = "agp" }
-
+google-firebase-firebase-perf = { id = "com.google.firebase.firebase-perf", version.ref = "googleFirebaseFirebasePerf" }
+google-gms-google-services = { id = "com.google.gms.google-services", version.ref = "googleGmsGoogleServices" }
+google-firebase-crashlytics = { id = "com.google.firebase.crashlytics", version.ref = "googleFirebaseCrashlytics" }
 
 [bundles]
 
@@ -207,6 +220,7 @@ ui-utils = [
 
 testing = [
     "junit",
+    "junit-jupiter",
     "mockk",
     "truth"
 ]
@@ -216,4 +230,3 @@ android-testing = [
     "androidx-espresso-core",
     "androidx-ui-test-junit4"
 ]
-

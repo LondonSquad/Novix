@@ -6,6 +6,9 @@ plugins {
     alias(libs.plugins.kotlin.compose)
     alias(libs.plugins.kotlin.serialization)
     alias(libs.plugins.ksp)
+    alias(libs.plugins.google.firebase.firebase.perf)
+    alias(libs.plugins.google.gms.google.services)
+    alias(libs.plugins.google.firebase.crashlytics)
 }
 
 android {
@@ -56,6 +59,9 @@ dependencies {
     debugImplementation(libs.bundles.compose.debug)
     androidTestImplementation(libs.bundles.base.testing)
     androidTestImplementation(libs.bundles.android.testing)
+    implementation(libs.firebase.perf)
+    implementation(platform(libs.firebase.bom))
+    implementation(libs.firebase.crashlytics)
+    implementation(libs.firebase.analytics)
+    testImplementation(libs.bundles.testing)
 }
-
-
