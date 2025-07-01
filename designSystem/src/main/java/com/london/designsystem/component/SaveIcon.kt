@@ -1,4 +1,4 @@
-package com.london.novix.presentation.component
+package com.london.designsystem.component
 
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.spring
@@ -19,21 +19,19 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.scale
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.london.novix.R
-import com.london.novix.presentation.designSystem.color.IconBackgroundLight
-import com.london.novix.presentation.designSystem.color.StrokeDark
-import com.london.novix.presentation.designSystem.color.StrokeHighLight
-import com.london.novix.presentation.designSystem.theme.NovixTheme
-import com.london.novix.presentation.designSystem.theme.ThemePreviews
+import com.london.designsystem.R
+import com.london.designsystem.theme.NovixTheme
+import com.london.designsystem.theme.ThemePreviews
 
 @Composable
 fun SaveIcon(
     isSaved: Boolean,
     onSaveClick: () -> Unit,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    backgroundColor: Color = NovixTheme.colors.iconBackground
 ) {
     val animatedProgress by animateFloatAsState(
         targetValue = if (isSaved) 1f else 0f,
@@ -47,21 +45,22 @@ fun SaveIcon(
         onClick = onSaveClick,
         modifier = modifier
             .size(32.dp)
-            .background(IconBackgroundLight)
+            .background(color = backgroundColor)
             .border(
                 width = 1.dp,
-                color = StrokeDark,
+                color = NovixTheme.colors.stroke,
                 shape = RoundedCornerShape(8.dp)
             )
     ) {
         Box(
             contentAlignment = Alignment.Center,
-            modifier = Modifier.fillMaxSize()
-        ) {
+            modifier = Modifier.fillMaxSize(),
+
+            ) {
             Icon(
                 painter = painterResource(R.drawable.icon_remove),
                 contentDescription = "Not Save",
-                tint = StrokeHighLight,
+                tint = NovixTheme.colors.strokeHigh,
                 modifier = Modifier
                     .scale(1f - animatedProgress)
                     .alpha(1f - animatedProgress)
@@ -70,7 +69,7 @@ fun SaveIcon(
             Icon(
                 painter = painterResource(R.drawable.icon_save),
                 contentDescription = "Save",
-                tint = StrokeHighLight,
+                tint = NovixTheme.colors.strokeHigh,
                 modifier = Modifier
                     .scale(animatedProgress)
                     .alpha(animatedProgress)
@@ -79,8 +78,7 @@ fun SaveIcon(
     }
 }
 
-//@ThemePreviews
-@Preview
+@ThemePreviews
 @Composable
 fun SaveIconPreview() {
     NovixTheme {
