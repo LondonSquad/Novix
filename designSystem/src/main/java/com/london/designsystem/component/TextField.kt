@@ -32,7 +32,7 @@ import com.london.designsystem.theme.NovixTheme
 import com.london.designsystem.theme.ThemePreviews
 
 @Composable
-fun NovixTextField(
+fun TextField(
     value: String,
     onValueChange: (String) -> Unit,
     modifier: Modifier = Modifier,
@@ -116,7 +116,11 @@ private fun NovixTextFieldContainer(
             visualTransformation = visualTransformation,
             decorationBox = { innerTextField ->
                 if (value.isEmpty()) {
-                    PlaceholderText(placeholder)
+                    Text(
+                        text = placeholder,
+                        color = NovixTheme.colors.hint,
+                        style = MaterialTheme.typography.bodySmall
+                    )
                 }
                 innerTextField()
             },
@@ -157,15 +161,6 @@ private fun StaticTrailingIcon(painter: Painter) {
 }
 
 @Composable
-private fun PlaceholderText(text: String) {
-    Text(
-        text = text,
-        color = NovixTheme.colors.hint,
-        style = MaterialTheme.typography.bodySmall
-    )
-}
-
-@Composable
 private fun getAnimatedTextStyle(value: String, isFocused: Boolean): TextStyle {
     val targetColor = when {
         isFocused || value.isNotEmpty() -> NovixTheme.colors.body
@@ -185,7 +180,7 @@ private fun getAnimatedTextStyle(value: String, isFocused: Boolean): TextStyle {
 fun SampleTextFieldDefaultPreview() {
     NovixTheme {
         var text by remember { mutableStateOf("") }
-        NovixTextField(
+        TextField(
             value = text,
             onValueChange = { text = it },
             label = "Title",
@@ -200,7 +195,7 @@ fun SampleTextFieldDefaultPreview() {
 fun SampleTextFieldFocusPreview() {
     NovixTheme {
         var text by remember { mutableStateOf("Sample Text") }
-        NovixTextField(
+        TextField(
             value = text,
             onValueChange = { text = it },
             label = "Title",
@@ -216,7 +211,7 @@ fun SampleTextFieldFocusPreview() {
 fun SampleTextFieldWithoutIconPreview() {
     NovixTheme {
         var text by remember { mutableStateOf("") }
-        NovixTextField(
+        TextField(
             value = text,
             onValueChange = { text = it },
             label = "Title",
@@ -230,7 +225,7 @@ fun SampleTextFieldWithoutIconPreview() {
 fun SampleTextFieldWithoutTitlePreview() {
     NovixTheme {
         var text by remember { mutableStateOf("") }
-        NovixTextField(
+        TextField(
             value = text,
             onValueChange = { text = it },
             placeholder = "value"
@@ -243,7 +238,7 @@ fun SampleTextFieldWithoutTitlePreview() {
 fun SampleTextFieldWithoutHintPreview() {
     NovixTheme {
         var text by remember { mutableStateOf("") }
-        NovixTextField(
+        TextField(
             value = text,
             onValueChange = { text = it },
             label = "Title"
@@ -256,7 +251,7 @@ fun SampleTextFieldWithoutHintPreview() {
 fun SampleTextPasswordPreview() {
     NovixTheme {
         var text by remember { mutableStateOf("password123") }
-        NovixTextField(
+        TextField(
             value = text,
             onValueChange = { text = it },
             label = "Password",
