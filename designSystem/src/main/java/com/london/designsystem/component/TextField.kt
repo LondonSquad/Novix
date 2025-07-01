@@ -81,7 +81,6 @@ fun TextField(
 @Composable
 private fun NovixTextFieldContainer(
     value: String,
-    onValueChange: (String) -> Unit,
     isFocused: Boolean,
     enabled: Boolean,
     singleLine: Boolean,
@@ -90,7 +89,8 @@ private fun NovixTextFieldContainer(
     leadingIcon: Painter?,
     trailingIcon: Painter?,
     shape: Shape,
-    visualTransformation: VisualTransformation
+    visualTransformation: VisualTransformation,
+    onValueChange: (String) -> Unit,
 ) {
     val borderColor by animateColorAsState(
         targetValue = if (isFocused) NovixTheme.colors.primary else NovixTheme.colors.stroke,
@@ -140,7 +140,7 @@ private fun AnimatedLeadingIcon(painter: Painter, isFocused: Boolean) {
 
     Icon(
         painter = painter,
-        contentDescription = null,
+        contentDescription = "Leading Icon",
         tint = iconColor,
         modifier = Modifier
             .size(24.dp)
@@ -152,7 +152,7 @@ private fun AnimatedLeadingIcon(painter: Painter, isFocused: Boolean) {
 private fun StaticTrailingIcon(painter: Painter) {
     Icon(
         painter = painter,
-        contentDescription = null,
+        contentDescription = "Trailing Icon",
         tint = NovixTheme.colors.hint,
         modifier = Modifier
             .size(20.dp)
