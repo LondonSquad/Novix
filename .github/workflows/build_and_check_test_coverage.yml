@@ -49,12 +49,12 @@ jobs:
           distribution: temurin
           java-version: 17
 
+      - name: Setup Gradlew
+        run: chmod +x ./gradlew
+
       - name: Decode Firebase Config
         run: |
           echo "${{ secrets.GOOGLE_SERVICES_JSON }}" | base64 --decode > app/google-services.json
-
-      - name: Setup Gradlew
-        run: chmod +x ./gradlew
 
       - name: Generate Coverage Reports
         run: ./gradlew koverHtmlReport koverXmlReport
