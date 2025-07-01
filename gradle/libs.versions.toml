@@ -61,7 +61,7 @@ googleGmsGoogleServices = "4.4.3"
 firebaseCrashlytics = "19.4.4"
 googleFirebaseCrashlytics = "3.0.4"
 firebaseAnalytics = "22.5.0"
-
+kotlinxKover = "0.9.1"
 
 [libraries]
 # AndroidX Core
@@ -141,6 +141,7 @@ android-library = { id = "com.android.library", version.ref = "agp" }
 google-firebase-firebase-perf = { id = "com.google.firebase.firebase-perf", version.ref = "googleFirebaseFirebasePerf" }
 google-gms-google-services = { id = "com.google.gms.google-services", version.ref = "googleGmsGoogleServices" }
 google-firebase-crashlytics = { id = "com.google.firebase.crashlytics", version.ref = "googleFirebaseCrashlytics" }
+kotlinx-kover = { id = "org.jetbrains.kotlinx.kover", version.ref = "kotlinxKover" }
 
 [bundles]
 
