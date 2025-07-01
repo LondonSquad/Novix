@@ -12,6 +12,36 @@ plugins {
     alias(libs.plugins.google.firebase.firebase.perf) apply false
     alias(libs.plugins.google.gms.google.services) apply false
     alias(libs.plugins.google.firebase.crashlytics) apply false
+    alias(libs.plugins.kotlinx.kover) apply true
 }
 
+dependencies {
+    kover(project(":app"))
+    kover(project(":domain"))
+    kover(project(":data"))
+    kover(project(":presentation"))
+    kover(project(":designSystem"))
+}
+kover {
+    reports {
+        total {
+            filters {
+                includes {
+                    classes("*.domain.*")
+                    classes("**ViewModel")
+                    classes("**viewModel")
+                    classes("**viewmodel")
+                    classes("**Viewmodel")
+                }
+            }
+            verify {
+                rule {
+                    bound {
+                        minValue = 80
+                    }
+                }
+            }
+        }
+    }
+}
 configureGitHooks()
