@@ -21,6 +21,7 @@ val RedAccentLight = Color(0xFFF75662)
 val YellowAccentLight = Color(0xFFFFC74D)
 val GreenAccentLight = Color(0xFF19744D)
 val GreenVariantLight = Color(0xFFCFE5DC)
+val LinearGradientLight = Color(0x0D060800)
 
 val LightNovixColors = NovixColors(
     primary = PrimaryLight,

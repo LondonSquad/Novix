@@ -21,6 +21,8 @@ val RedAccentDark = Color(0xFFF75662)
 val YellowAccentDark = Color(0xFFCFC657)
 val GreenAccentDark = Color(0xFF19744D)
 val GreenVariantDark = Color(0xFF1D1F1E)
+val LinearGradientDark = Color(0x0D060800)
+
 
 val DarkNovixColors = NovixColors(
     primary = PrimaryDark,
