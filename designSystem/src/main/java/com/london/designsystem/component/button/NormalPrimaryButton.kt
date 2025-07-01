@@ -48,7 +48,7 @@ fun NormalPrimaryButton(
     ) {
         Text(
             text = text,
-            style = NovixTheme.typography.title.medium,
+            style = NovixTheme.typography.label.large,
             color = NovixTheme.colors.onPrimary,
             fontFamily = NovixFont,
             lineHeight = 24.sp,
