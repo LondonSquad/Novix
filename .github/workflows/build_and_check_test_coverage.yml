@@ -1,0 +1,125 @@
+name: Build And Test Coverage Checks
+
+on:
+  pull_request:
+    branches:
+      - develop
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pull-requests: write
+
+jobs:
+  build:
+    name: Build Application
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Install JDK
+        uses: actions/setup-java@v3
+        with:
+          distribution: temurin
+          java-version: 17
+
+      - name: Setup Gradlew
+        run: chmod +x ./gradlew
+
+      - name: Decode Firebase Config
+        run: |
+          echo "${{ secrets.GOOGLE_SERVICES_JSON }}" | base64 --decode > app/google-services.json
+
+      - name: Build with Gradle
+        run: ./gradlew build -x test -x koverVerify
+
+
+  test:
+    name: Test Coverage
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Install JDK
+        uses: actions/setup-java@v3
+        with:
+          distribution: temurin
+          java-version: 17
+
+      - name: Setup Gradlew
+        run: chmod +x ./gradlew
+
+      - name: Generate Coverage Reports
+        run: ./gradlew koverHtmlReport koverXmlReport
+
+      - name: Upload Coverage Report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: kover-coverage-report
+          path: build/reports/kover/report.xml
+
+      - name: Run Coverage Check
+        run: ./gradlew koverVerify
+
+  analyze-pr:
+    name: Analyze PR Code Coverage
+    needs: test
+    if: github.event_name == 'pull_request' && always()
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Download Kover Report
+        uses: actions/download-artifact@v4
+        with:
+          name: kover-coverage-report
+          path: build/reports/kover/
+
+      - name: Comment PR with Overall Coverage
+        uses: actions/github-script@v6
+        with:
+          script: |
+            const fs = require('fs');
+            
+            const reportPath = 'build/reports/kover/report.xml';
+            
+            try {
+              if (!fs.existsSync(reportPath)) {
+                console.log('❌ Coverage report not found');
+                return;
+              }
+            
+              const xml = fs.readFileSync(reportPath, 'utf8');
+              console.log('✅ Found coverage report');
+            
+              const lineCounterMatch = xml.match(/<counter type="LINE" missed="(\d+)" covered="(\d+)"\/>(?![\s\S]*<counter type="LINE")/);
+            
+              if (lineCounterMatch) {
+                const missed = parseInt(lineCounterMatch[1]);
+                const covered = parseInt(lineCounterMatch[2]);
+                const total = missed + covered;
+                const percentage = total > 0 ? ((covered / total) * 100).toFixed(1) : '100.0';
+            
+                const emoji = parseFloat(percentage) >= 80 ? '✅' : '❌';
+            
+                const comment = `### 📊 Code Coverage: ${percentage}% ${emoji}`;
+            
+                await github.rest.issues.createComment({
+                  issue_number: context.issue.number,
+                  owner: context.repo.owner,
+                  repo: context.repo.repo,
+                  body: comment
+                });
+            
+                console.log(`✅ Coverage: ${percentage}%`);
+              } else {
+                console.log('❌ Could not parse coverage data');
+              }
+            } catch (error) {
+              console.log('❌ Error reading coverage report:', error.message);
+            }
