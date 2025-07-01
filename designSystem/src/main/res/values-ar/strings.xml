@@ -6,4 +6,6 @@
     <string name="error_submitting_rate">هناك خطأ ما</string>
     <string name="appName">نوفيكس</string>
     <string name="explainTheNameOfApp">مشتق من نوفا، مُصمم من أجل الأفلام</string>
+    <string name="my_account">حسابي</string>
+
 </resources>

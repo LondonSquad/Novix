@@ -5,4 +5,5 @@
     <string name="explainTheNameOfApp">Born from Nova, Made for Flix.</string>
     <string name="rate_submitted_successfully">Rate submitted successfully.</string>
     <string name="error_submitting_rate">Some error happend</string>
+    <string name="my_account">My account</string>
 </resources>

@@ -28,7 +28,7 @@ import com.london.designsystem.theme.ThemePreviews
 @Composable
 fun TopBar(
     type: TopBarType = TopBarType.Default,
-    title: String = "My account",
+    title: String = stringResource(R.string.my_account),
     onBackClick: (() -> Unit),
     option1: (() -> Unit)? = null,
     option2: (() -> Unit)? = null
