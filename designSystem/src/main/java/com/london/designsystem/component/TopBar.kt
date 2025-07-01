@@ -18,25 +18,25 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import com.london.novix.R
-import com.london.novix.presentation.designSystem.theme.NovixTheme
+import com.london.designsystem.R
+import com.london.designsystem.theme.NovixTheme
+import com.london.designsystem.theme.ThemePreviews
 
 @Composable
 fun TopBar(
     type: TopBarType = TopBarType.Default,
     title: String = "My account",
-    onBackClick: (() -> Unit)?,
+    onBackClick: (() -> Unit),
     option1: (() -> Unit)? = null,
     option2: (() -> Unit)? = null
 ) {
     Row(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(horizontal = 16.dp, vertical = 12.dp),
+            .padding(horizontal = 16.dp, vertical = 8.dp),
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.SpaceBetween
     ) {
@@ -50,12 +50,12 @@ fun TopBar(
                     )
                     Column {
                         Text(
-                            text = "Novix",
+                            text = stringResource(R.string.appName),
                             style = NovixTheme.typography.title.medium,
                             color = NovixTheme.colors.body
                         )
                         Text(
-                            text = "Born from Nova, Made for Flix.",
+                            text = stringResource(R.string.explainTheNameOfApp),
                             style = NovixTheme.typography.label.small,
                             color = NovixTheme.colors.hint
                         )
@@ -65,7 +65,7 @@ fun TopBar(
 
             else -> {
                 if (type != TopBarType.WithoutBackArrow) {
-                    ButtonTopBar(icon = R.drawable.arrow_left, onClick = { onBackClick })
+                    ButtonTopBar(icon = R.drawable.arrow_left, onClick = onBackClick)
                 }
             }
         }
@@ -74,8 +74,10 @@ fun TopBar(
             Text(
                 text = title,
                 style = NovixTheme.typography.title.large,
-                color = NovixTheme.colors.body,
-                modifier = Modifier.weight(1f).padding(horizontal = 4.dp)
+                color = NovixTheme.colors.title,
+                modifier = Modifier
+                    .weight(1f)
+                    .padding(horizontal = 4.dp)
             )
         } else if (type == TopBarType.WithoutScreenTitle) {
             Spacer(modifier = Modifier.weight(1f))
@@ -106,7 +108,8 @@ fun TopBar(
 fun ButtonTopBar(icon: Int, onClick: () -> Unit) {
     IconButton(
         onClick = onClick,
-        modifier = Modifier.padding(end = 8.dp)
+        modifier = Modifier
+            .padding(end = 8.dp)
             .size(40.dp)
             .clip(RoundedCornerShape(12.dp))
             .background(NovixTheme.colors.iconBackgroundLow)
@@ -117,7 +120,7 @@ fun ButtonTopBar(icon: Int, onClick: () -> Unit) {
             )
     ) {
         Icon(
-            painter =  painterResource(icon),
+            painter = painterResource(icon),
             contentDescription = "Back",
             tint = NovixTheme.colors.title
         )
@@ -135,10 +138,7 @@ enum class TopBarType {
 
 
 @Composable
-@Preview(
-    showBackground = true,
-    name = "TopBar - Dark Theme",
-)
+@ThemePreviews
 fun TopBarPreview() {
     TopBar(
         type = TopBarType.WithTwoOptions,

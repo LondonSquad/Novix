@@ -1,4 +1,6 @@
 <resources>
     <string name="all">All</string>
     <string name="actorImage">"actorImage"</string>
+    <string name="appName">Novix</string>
+    <string name="explainTheNameOfApp">Born from Nova, Made for Flix.</string>
 </resources>
