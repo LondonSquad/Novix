@@ -17,6 +17,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.layout.ContentScale.Companion.Crop
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
@@ -30,7 +31,7 @@ import com.london.designsystem.theme.noRippleClickable
 @Composable
 fun CategoriesItem(
     categoryName: String,
-    categoryImage: Any,
+    categoryImage: Painter,
     onClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
@@ -68,8 +69,8 @@ fun CategoriesItem(
 
 @Composable
 fun CategoryGrid(
-    categories: List<CategoriesItem>,
-    onCategoryItemClick: (CategoriesItem) -> Unit,
+    categories: List<CategoryItem>,
+    onCategoryItemClick: (CategoryItem) -> Unit,
     modifier: Modifier = Modifier
 ) {
     LazyVerticalGrid(
@@ -95,10 +96,10 @@ fun CategoryGrid(
 private fun CategoryGridPreview() {
 
     val categories = listOf(
-        CategoriesItem("Category 1", R.drawable.frame1597883073),
-        CategoriesItem("Category 2", R.drawable.frame1597883073),
-        CategoriesItem("Category 3", R.drawable.frame1597883073),
-        CategoriesItem("Category 4", R.drawable.frame1597883073),
+        CategoryItem("Category 1", painterResource(R.drawable.frame1597883073)),
+        CategoryItem("Category 2", painterResource(R.drawable.frame1597883073)),
+        CategoryItem("Category 3", painterResource(R.drawable.frame1597883073)),
+        CategoryItem("Category 4", painterResource(R.drawable.frame1597883073)),
     )
     NovixTheme {
         Column(
@@ -117,7 +118,7 @@ private fun CategoryGridPreview() {
 }
 
 // Fake Data class to represent a category item
-data class CategoriesItem(
+data class CategoryItem(
     val categoryName: String,
-    val categoryImage: Any,
+    val categoryImage: Painter,
 )
