@@ -15,20 +15,21 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.london.designsystem.R
 import com.london.designsystem.theme.NovixTheme
 import com.london.designsystem.theme.ThemePreviews
+import com.london.designsystem.typography.NovixFont
 
 
 @Composable
 fun NormalPrimaryButton(
     text: String,
+    hasIcon: Boolean,
     isLoading: Boolean,
     isDisabled: Boolean,
-    hasIcon: Boolean,
     onClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
@@ -47,18 +48,23 @@ fun NormalPrimaryButton(
     ) {
         Text(
             text = text,
-            fontSize = 16.sp,
-            fontWeight = FontWeight.Medium
+            style = NovixTheme.typography.title.medium,
+            color = NovixTheme.colors.onPrimary,
+            fontFamily = NovixFont,
+            lineHeight = 24.sp,
+            textAlign = TextAlign.Center
         )
+
         if (isLoading) {
             Spacer(modifier = Modifier.width(8.dp))
-                LoadingLottieAnimation(
-                    modifier = Modifier
-                        .size(20.dp)
-                        .padding(start = 8.dp),
-                    tintColor = NovixTheme.colors.onPrimary
-                )
+            LoadingLottieAnimation(
+                modifier = Modifier
+                    .size(20.dp)
+                    .padding(start = 8.dp),
+                tintColor = NovixTheme.colors.onPrimary
+            )
         }
+
         if (hasIcon) {
             Spacer(modifier = Modifier.width(8.dp))
             Icon(
