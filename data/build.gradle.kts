@@ -46,4 +46,5 @@ dependencies {
     implementation(libs.bundles.koin)
     ksp(libs.bundles.koin.ksp)
     testImplementation(libs.bundles.testing)
+    androidTestImplementation(libs.bundles.android.testing)
 }
