@@ -96,27 +96,49 @@ fun OutlinedTextField(
         backgroundColor = backgroundColor,
         label = label,
         content = {
-            TextFieldInput(
+            BasicTextField(
                 value = value,
                 onValueChange = onValueChange,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .defaultMinSize(minWidth = 268.dp, minHeight = 48.dp)
+                    .background(backgroundColor),
                 enabled = enabled,
                 readOnly = readOnly,
-                textStyle = mergedTextStyle,
-                visualTransformation = currentVisualTransformation,
+                textStyle = textStyle,
+                visualTransformation = visualTransformation,
                 keyboardOptions = keyboardOptions,
                 keyboardActions = keyboardActions,
                 interactionSource = interactionSource,
                 singleLine = singleLine,
-                backgroundColor = backgroundColor,
-                placeholder = placeholder,
-                leadingIcon = leadingIcon,
-                trailingIcon = currentTrailingIcon,
-                supportingText = supportingText,
-                isError = isError,
-                contentPadding = contentPadding,
-                colors = colors,
-                shape = shape,
-                isFocused = isFocused
+                decorationBox = { innerTextField ->
+                    OutlinedTextFieldDefaults.DecorationBox(
+                        value = value.text,
+                        visualTransformation = visualTransformation,
+                        innerTextField = innerTextField,
+                        placeholder = placeholder,
+                        leadingIcon = null,
+                        trailingIcon = null,
+                        prefix = leadingIcon?.let { { AnimatedLeadingIcon(it, isFocused) } },
+                        suffix = trailingIcon,
+                        supportingText = supportingText,
+                        singleLine = singleLine,
+                        enabled = enabled,
+                        isError = isError,
+                        interactionSource = interactionSource,
+                        colors = colors,
+                        contentPadding = contentPadding,
+                        container = {
+                            OutlinedTextFieldDefaults.Container(
+                                enabled = enabled,
+                                isError = isError,
+                                interactionSource = interactionSource,
+                                colors = colors,
+                                shape = shape,
+                            )
+                        }
+                    )
+                }
             )
         }
     )
@@ -195,76 +217,6 @@ private fun TextFieldContainer(
         }
         content()
     }
-}
-
-@OptIn(ExperimentalMaterial3Api::class)
-@Composable
-private fun TextFieldInput(
-    value: TextFieldValue,
-    onValueChange: (TextFieldValue) -> Unit,
-    enabled: Boolean,
-    readOnly: Boolean,
-    textStyle: TextStyle,
-    visualTransformation: VisualTransformation,
-    keyboardOptions: KeyboardOptions,
-    keyboardActions: KeyboardActions,
-    interactionSource: MutableInteractionSource,
-    singleLine: Boolean,
-    backgroundColor: Color,
-    placeholder: @Composable (() -> Unit)?,
-    leadingIcon: Painter?,
-    trailingIcon: @Composable (() -> Unit)?,
-    supportingText: @Composable (() -> Unit)?,
-    isError: Boolean,
-    contentPadding: PaddingValues,
-    colors: TextFieldColors,
-    shape: Shape,
-    isFocused: Boolean
-) {
-    BasicTextField(
-        value = value,
-        onValueChange = onValueChange,
-        modifier = Modifier
-            .fillMaxWidth()
-            .defaultMinSize(minWidth = 268.dp, minHeight = 48.dp)
-            .background(backgroundColor),
-        enabled = enabled,
-        readOnly = readOnly,
-        textStyle = textStyle,
-        visualTransformation = visualTransformation,
-        keyboardOptions = keyboardOptions,
-        keyboardActions = keyboardActions,
-        interactionSource = interactionSource,
-        singleLine = singleLine,
-        decorationBox = { innerTextField ->
-            OutlinedTextFieldDefaults.DecorationBox(
-                value = value.text,
-                visualTransformation = visualTransformation,
-                innerTextField = innerTextField,
-                placeholder = placeholder,
-                leadingIcon = null,
-                trailingIcon = null,
-                prefix = leadingIcon?.let { { AnimatedLeadingIcon(it, isFocused) } },
-                suffix = trailingIcon,
-                supportingText = supportingText,
-                singleLine = singleLine,
-                enabled = enabled,
-                isError = isError,
-                interactionSource = interactionSource,
-                colors = colors,
-                contentPadding = contentPadding,
-                container = {
-                    OutlinedTextFieldDefaults.Container(
-                        enabled = enabled,
-                        isError = isError,
-                        interactionSource = interactionSource,
-                        colors = colors,
-                        shape = shape,
-                    )
-                }
-            )
-        }
-    )
 }
 
 @Composable
