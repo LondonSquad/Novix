@@ -237,13 +237,15 @@ private fun TextFieldInput(
         interactionSource = interactionSource,
         singleLine = singleLine,
         decorationBox = { innerTextField ->
-            TextFieldDecorationBox(
-                value = value,
+            OutlinedTextFieldDefaults.DecorationBox(
+                value = value.text,
                 visualTransformation = visualTransformation,
                 innerTextField = innerTextField,
                 placeholder = placeholder,
-                leadingIcon = leadingIcon,
-                trailingIcon = trailingIcon,
+                leadingIcon = null,
+                trailingIcon = null,
+                prefix = leadingIcon?.let { { AnimatedLeadingIcon(it, isFocused) } },
+                suffix = trailingIcon,
                 supportingText = supportingText,
                 singleLine = singleLine,
                 enabled = enabled,
@@ -251,55 +253,15 @@ private fun TextFieldInput(
                 interactionSource = interactionSource,
                 colors = colors,
                 contentPadding = contentPadding,
-                shape = shape,
-                isFocused = isFocused
-            )
-        }
-    )
-}
-
-@OptIn(ExperimentalMaterial3Api::class)
-@Composable
-private fun TextFieldDecorationBox(
-    value: TextFieldValue,
-    visualTransformation: VisualTransformation,
-    innerTextField: @Composable () -> Unit,
-    placeholder: @Composable (() -> Unit)?,
-    leadingIcon: Painter?,
-    trailingIcon: @Composable (() -> Unit)?,
-    supportingText: @Composable (() -> Unit)?,
-    singleLine: Boolean,
-    enabled: Boolean,
-    isError: Boolean,
-    interactionSource: MutableInteractionSource,
-    colors: TextFieldColors,
-    contentPadding: PaddingValues,
-    shape: Shape,
-    isFocused: Boolean
-) {
-    OutlinedTextFieldDefaults.DecorationBox(
-        value = value.text,
-        visualTransformation = visualTransformation,
-        innerTextField = innerTextField,
-        placeholder = placeholder,
-        leadingIcon = null,
-        trailingIcon = null,
-        prefix = leadingIcon?.let { { AnimatedLeadingIcon(it, isFocused) } },
-        suffix = trailingIcon,
-        supportingText = supportingText,
-        singleLine = singleLine,
-        enabled = enabled,
-        isError = isError,
-        interactionSource = interactionSource,
-        colors = colors,
-        contentPadding = contentPadding,
-        container = {
-            OutlinedTextFieldDefaults.Container(
-                enabled = enabled,
-                isError = isError,
-                interactionSource = interactionSource,
-                colors = colors,
-                shape = shape,
+                container = {
+                    OutlinedTextFieldDefaults.Container(
+                        enabled = enabled,
+                        isError = isError,
+                        interactionSource = interactionSource,
+                        colors = colors,
+                        shape = shape,
+                    )
+                }
             )
         }
     )
