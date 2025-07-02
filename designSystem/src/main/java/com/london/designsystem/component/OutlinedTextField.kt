@@ -358,29 +358,14 @@ private fun PasswordToggleIcon(
             modifier = Modifier.size(20.dp)
         )
     } else {
-        PasswordIconToggle(
-            passwordVisible = passwordVisible,
-            passwordVisibleIcon = passwordVisibleIcon,
-            passwordHiddenIcon = passwordHiddenIcon,
-            onToggle = onToggle
-        )
-    }
-}
-
-@Composable
-private fun PasswordIconToggle(
-    passwordVisible: Boolean,
-    passwordVisibleIcon: Painter,
-    passwordHiddenIcon: Painter,
-    onToggle: () -> Unit
-) {
-    IconButton(onClick = onToggle) {
-        Icon(
-            painter = if (passwordVisible) passwordVisibleIcon else passwordHiddenIcon,
-            contentDescription = if (passwordVisible) "Hide password" else "Show password",
-            tint = NovixTheme.colors.hint,
-            modifier = Modifier.size(20.dp)
-        )
+        IconButton(onClick = onToggle) {
+            Icon(
+                painter = if (passwordVisible) passwordVisibleIcon else passwordHiddenIcon,
+                contentDescription = if (passwordVisible) "Hide password" else "Show password",
+                tint = NovixTheme.colors.hint,
+                modifier = Modifier.size(20.dp)
+            )
+        }
     }
 }
 
