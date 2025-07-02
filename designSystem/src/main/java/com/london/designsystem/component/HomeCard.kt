@@ -9,10 +9,10 @@ import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.aspectRatio
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -52,8 +52,8 @@ fun HomeCard(
 
     Box(
         modifier = modifier
-            .height(210.dp)
-            .width(158.dp)
+            .fillMaxWidth()
+            .aspectRatio(158f / 210f)
             .clip(RoundedCornerShape(12.dp))
             .border(
                 width = 1.dp,
@@ -84,7 +84,7 @@ fun HomeCard(
 }
 
 @Composable
-fun CircularLoadingAnimation(
+private fun CircularLoadingAnimation(
     modifier: Modifier = Modifier,
     color: Color = NovixTheme.colors.secondary
 ) {
