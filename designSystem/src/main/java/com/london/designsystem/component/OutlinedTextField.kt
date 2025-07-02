@@ -105,7 +105,7 @@ fun OutlinedTextField(
                     .background(backgroundColor),
                 enabled = enabled,
                 readOnly = readOnly,
-                textStyle = textStyle,
+                textStyle = mergedTextStyle,
                 visualTransformation = currentVisualTransformation,
                 keyboardOptions = keyboardOptions,
                 keyboardActions = keyboardActions,
