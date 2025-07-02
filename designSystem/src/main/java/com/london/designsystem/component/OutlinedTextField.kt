@@ -294,32 +294,14 @@ private fun TextFieldDecorationBox(
         colors = colors,
         contentPadding = contentPadding,
         container = {
-            TextFieldContainer(
+            OutlinedTextFieldDefaults.Container(
                 enabled = enabled,
                 isError = isError,
                 interactionSource = interactionSource,
                 colors = colors,
-                shape = shape
+                shape = shape,
             )
         }
-    )
-}
-
-@OptIn(ExperimentalMaterial3Api::class)
-@Composable
-private fun TextFieldContainer(
-    enabled: Boolean,
-    isError: Boolean,
-    interactionSource: MutableInteractionSource,
-    colors: TextFieldColors,
-    shape: Shape
-) {
-    OutlinedTextFieldDefaults.Container(
-        enabled = enabled,
-        isError = isError,
-        interactionSource = interactionSource,
-        colors = colors,
-        shape = shape,
     )
 }
 
