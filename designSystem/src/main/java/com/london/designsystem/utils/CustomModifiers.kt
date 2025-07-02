@@ -8,13 +8,13 @@ import androidx.compose.ui.unit.Dp
 
 fun Modifier.topBorder(
     color: Color,
-    height: Dp,
+    width: Dp,
 ) = this.drawWithContent {
     drawContent()
     drawLine(
         color = color,
-        start = Offset(x = 0f, y = 0f),
-        end = Offset(x = size.width, y = 0f),
-        strokeWidth = height.toPx(),
+        start = Offset(x = 0f, y = width.toPx() / 2),
+        end = Offset(x = size.width, y = width.toPx() / 2),
+        strokeWidth = width.toPx(),
     )
 }
