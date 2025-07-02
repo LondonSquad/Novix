@@ -351,7 +351,12 @@ private fun PasswordToggleIcon(
     onToggle: () -> Unit
 ) {
     if (isPasswordEmpty) {
-        PasswordIconEmpty(passwordHiddenIcon)
+        Icon(
+            painter = passwordHiddenIcon,
+            contentDescription = "Password field empty",
+            tint = NovixTheme.colors.hint,
+            modifier = Modifier.size(20.dp)
+        )
     } else {
         PasswordIconToggle(
             passwordVisible = passwordVisible,
@@ -360,16 +365,6 @@ private fun PasswordToggleIcon(
             onToggle = onToggle
         )
     }
-}
-
-@Composable
-private fun PasswordIconEmpty(passwordHiddenIcon: Painter) {
-    Icon(
-        painter = passwordHiddenIcon,
-        contentDescription = "Password field empty",
-        tint = NovixTheme.colors.hint,
-        modifier = Modifier.size(20.dp)
-    )
 }
 
 @Composable
