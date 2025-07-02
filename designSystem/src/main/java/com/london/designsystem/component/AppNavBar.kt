@@ -6,9 +6,11 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.material3.Icon
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -17,6 +19,8 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.BlurredEdgeTreatment
+import androidx.compose.ui.draw.blur
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.unit.dp
@@ -48,9 +52,9 @@ fun NavBar(
     Row(
         modifier = modifier
             .fillMaxWidth()
-            .background(color = backgroundColor)
             .topBorder(borderColor, 1.dp)
-            .padding(/*horizontal = 32.dp, */vertical = 16.dp),
+            .background(color = backgroundColor)
+            .padding(vertical = 7.dp),
         horizontalArrangement = Arrangement.SpaceEvenly,
         verticalAlignment = Alignment.CenterVertically
     ) {
@@ -58,33 +62,56 @@ fun NavBar(
             val isSelected = currentSelectedRoute == item.route
 
             Box(
-                modifier = Modifier
-                    .size(42.dp)
-                    .clickable {
-                        if (isSelected.not()) {
-                            currentSelectedRoute = item.route
-                            onNavDestinationClicked(item.route)
-                        }
-                    },
+                modifier = Modifier.size(width = 60.dp, height = 56.dp),
                 contentAlignment = Alignment.Center
             ) {
-                Icon(
-                    painter = if (isSelected) item.selectedIcon else item.idleIcon,
-                    contentDescription = item.route,
-                    modifier = Modifier.size(24.dp),
-                    tint = if (isSelected) selectedIconColor else idleIconColor
-                )
 
                 if (isSelected) {
                     Icon(
                         modifier = Modifier
-                            .offset(y = 1.dp)
-                            .size(4.dp)
-                            .align(Alignment.BottomCenter),
-                        painter = R.drawable.ellipse_selected_dot.painter,
-                        tint = selectedIconColor,
-                        contentDescription = null
+                            .width(60.dp)
+                            .height(16.dp)
+                            .align(Alignment.BottomCenter)
+                            .blur(
+                                radius = 54.dp,
+                                edgeTreatment = BlurredEdgeTreatment.Unbounded
+                            ),
+                        painter = R.drawable.ellipse_blur_filled.painter,
+                        contentDescription = null,
+                        tint = selectedIconColor
                     )
+                }
+
+
+                Box(
+                    modifier = Modifier
+                        .size(42.dp)
+                        .clickable {
+                            if (!isSelected) {
+                                currentSelectedRoute = item.route
+                                onNavDestinationClicked(item.route)
+                            }
+                        },
+                    contentAlignment = Alignment.Center
+                ) {
+                    Icon(
+                        painter = if (isSelected) item.selectedIcon else item.idleIcon,
+                        contentDescription = item.route,
+                        modifier = Modifier.size(24.dp),
+                        tint = if (isSelected) selectedIconColor else idleIconColor
+                    )
+
+                    if (isSelected) {
+                        Icon(
+                            modifier = Modifier
+                                .offset(y = 1.dp)
+                                .size(4.dp)
+                                .align(Alignment.BottomCenter),
+                            painter = R.drawable.ellipse_selected_dot.painter,
+                            contentDescription = null,
+                            tint = selectedIconColor
+                        )
+                    }
                 }
             }
         }
