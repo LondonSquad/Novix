@@ -43,7 +43,7 @@ fun HomeCard(
     isSaved: Boolean = false,
     imageDescription: String? = null,
 ) {
-    var isLoading by remember { mutableStateOf(true) }
+    var isLoading by remember { mutableStateOf(false) }
     val imageRequest = ImageRequest.Builder(LocalContext.current)
         .data(imageUrl)
         .crossfade(true)
@@ -70,6 +70,7 @@ fun HomeCard(
             contentDescription = imageDescription,
             modifier = Modifier.matchParentSize(),
             contentScale = ContentScale.Crop,
+            onLoading = { isLoading = true },
             onSuccess = { isLoading = false },
             onError = { isLoading = false },
         )
