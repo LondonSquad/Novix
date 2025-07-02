@@ -1,7 +1,15 @@
 package com.london.designsystem.component
 
+import android.os.Build
+import androidx.compose.animation.Crossfade
+import androidx.compose.animation.animateContentSize
+import androidx.compose.animation.core.Spring
+import androidx.compose.animation.core.spring
+import androidx.compose.animation.core.tween
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
@@ -21,6 +29,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.BlurredEdgeTreatment
 import androidx.compose.ui.draw.blur
+import androidx.compose.ui.draw.scale
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.unit.dp
@@ -54,65 +63,108 @@ fun NavBar(
             .fillMaxWidth()
             .topBorder(borderColor, 1.dp)
             .background(color = backgroundColor)
-            .padding(vertical = 7.dp),
+            .padding(vertical = 9.dp),
         horizontalArrangement = Arrangement.SpaceEvenly,
         verticalAlignment = Alignment.CenterVertically
     ) {
         navDestinations.forEach { item ->
             val isSelected = currentSelectedRoute == item.route
 
-            Box(
-                modifier = Modifier.size(width = 60.dp, height = 56.dp),
-                contentAlignment = Alignment.Center
-            ) {
-
-                if (isSelected) {
-                    Icon(
-                        modifier = Modifier
-                            .width(60.dp)
-                            .height(16.dp)
-                            .align(Alignment.BottomCenter)
-                            .blur(
-                                radius = 54.dp,
-                                edgeTreatment = BlurredEdgeTreatment.Unbounded
-                            ),
-                        painter = R.drawable.ellipse_blur_filled.painter,
-                        contentDescription = null,
-                        tint = selectedIconColor
-                    )
-                }
-
-
-                Box(
-                    modifier = Modifier
-                        .size(42.dp)
-                        .clickable {
-                            if (!isSelected) {
-                                currentSelectedRoute = item.route
-                                onNavDestinationClicked(item.route)
-                            }
-                        },
-                    contentAlignment = Alignment.Center
-                ) {
-                    Icon(
-                        painter = if (isSelected) item.selectedIcon else item.idleIcon,
-                        contentDescription = item.route,
-                        modifier = Modifier.size(24.dp),
-                        tint = if (isSelected) selectedIconColor else idleIconColor
-                    )
-
-                    if (isSelected) {
-                        Icon(
-                            modifier = Modifier
-                                .offset(y = 1.dp)
-                                .size(4.dp)
-                                .align(Alignment.BottomCenter),
-                            painter = R.drawable.ellipse_selected_dot.painter,
-                            contentDescription = null,
-                            tint = selectedIconColor
-                        )
+            NavBarItem(
+                item = item,
+                isSelected = isSelected,
+                selectedIconColor = selectedIconColor,
+                idleIconColor = idleIconColor,
+                onClick = {
+                    if (!isSelected) {
+                        currentSelectedRoute = item.route
+                        onNavDestinationClicked(item.route)
                     }
                 }
+            )
+        }
+    }
+}
+
+@Composable
+private fun NavBarItem(
+    item: NavigationTab,
+    isSelected: Boolean,
+    selectedIconColor: Color,
+    idleIconColor: Color,
+    onClick: () -> Unit
+) {
+    Box(
+        modifier = Modifier.size(width = 60.dp, height = 56.dp),
+        contentAlignment = Alignment.Center
+    ) {
+
+        if (isSelected) {
+
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S)
+            {
+                Icon(
+                    modifier = Modifier
+                        .width(60.dp)
+                        .height(16.dp)
+                        .align(Alignment.BottomCenter)
+                        .blur(radius = 54.dp, edgeTreatment = BlurredEdgeTreatment.Unbounded),
+                    painter = R.drawable.ellipse_blur_filled.painter,
+                    contentDescription = null,
+                    tint = selectedIconColor
+                )
+            } else {
+                Image(
+                    modifier = Modifier
+                        .align(Alignment.BottomCenter)
+                        .scale(2f),
+                    painter = R.drawable.ellipse_19.painter,
+                    contentDescription = null
+                )
+            }
+
+        }
+
+        Box(
+            modifier = Modifier
+                .size(42.dp)
+                .clickable(
+                    indication = null,
+                    interactionSource = remember { MutableInteractionSource() }
+                ) { onClick() },
+            contentAlignment = Alignment.Center
+        ) {
+
+            Crossfade(
+                targetState = isSelected,
+                animationSpec = tween(300),
+                label = "iconCrossfade"
+            ) { selected ->
+                Icon(
+                    painter = if (selected) item.selectedIcon else item.idleIcon,
+                    contentDescription = item.route,
+                    modifier = Modifier
+                        .size(24.dp)
+                        .animateContentSize(
+                            animationSpec = spring(
+                                dampingRatio = Spring.DampingRatioMediumBouncy,
+                                stiffness = Spring.StiffnessLow
+                            )
+                        ),
+                    tint = if (selected) selectedIconColor else idleIconColor
+                )
+            }
+
+            if (isSelected) {
+                Icon(
+                    modifier = Modifier
+                        .offset(y = 1.dp)
+                        .size(4.dp)
+                        .align(Alignment.BottomCenter),
+                    painter = R.drawable.ellipse_selected_dot.painter,
+                    contentDescription = null,
+                    tint = selectedIconColor
+                )
             }
         }
     }
@@ -150,7 +202,7 @@ private fun NavBarPreview() {
                     route = "account"
                 )
             ),
-            currentRoute = "home",
+            currentRoute = "search",
             onNavDestinationClicked = {}
         )
     }
