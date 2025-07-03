@@ -17,10 +17,10 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.london.designsystem.R
 import com.london.designsystem.theme.NovixTheme
+import com.london.designsystem.theme.ThemePreviews
 
 @Composable
 fun TopBar(
@@ -66,7 +66,6 @@ fun TopBar(
     }
 }
 
-
 @Composable
 fun ButtonTopBar(icon: Int, onClick: () -> Unit) {
     IconButton(
@@ -90,9 +89,8 @@ fun ButtonTopBar(icon: Int, onClick: () -> Unit) {
     }
 }
 
-
 @Composable
-@Preview(showBackground = true)
+@ThemePreviews
 fun TopBarPreview() {
     TopBar(
         option1 = {},
