@@ -4,6 +4,7 @@
 *.txt
 *.json
 
+!lottie_loading.json
 .gradle
 .DS_Store
 .kotlin

@@ -4,6 +4,7 @@ plugins {
     alias(libs.plugins.android.library)
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose)
+    alias(libs.plugins.kotlinx.kover)
 }
 
 android {
@@ -42,4 +43,7 @@ dependencies {
     debugImplementation(libs.bundles.compose.debug)
     androidTestImplementation(libs.bundles.base.testing)
     testImplementation(libs.bundles.testing)
+
+    //lottie animation
+    implementation(libs.lottie.compose)
 }

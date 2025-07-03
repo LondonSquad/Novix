@@ -9,6 +9,8 @@ import androidx.compose.runtime.staticCompositionLocalOf
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.composed
 import com.london.designsystem.color.LightNovixColors
+import com.london.designsystem.color.LinearGradientDark
+import com.london.designsystem.color.LinearGradientLight
 import com.london.designsystem.color.NovixColors
 import com.london.designsystem.typography.NovixTypography
 import com.london.designsystem.typography.NovixTypographySet
@@ -34,3 +36,10 @@ fun Modifier.noRippleClickable(onClick: () -> Unit): Modifier = composed {
 
 val LocalNovixColors = staticCompositionLocalOf { LightNovixColors }
 val LocalNovixTypography = staticCompositionLocalOf { NovixTypography }
+
+val horizontalGradient = listOf(
+    LinearGradientLight.copy(alpha = 1f),
+    LinearGradientLight.copy(alpha = 0.8f),
+    LinearGradientLight.copy(alpha = 0.7f),
+    LinearGradientDark
+)
