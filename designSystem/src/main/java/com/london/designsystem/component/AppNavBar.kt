@@ -64,7 +64,7 @@ data class NavBarColors(
 fun NavBar(
     modifier: Modifier = Modifier,
     navDestinations: List<NavigationTab>,
-    currentRoute: String,
+    currentSelectedRoute: String,
     onNavDestinationClicked: (String) -> Unit,
     navBarColors: NavBarColors = NavBarColors(
         backgroundColor = NovixTheme.colors.surface,
@@ -73,8 +73,6 @@ fun NavBar(
         topBorderColor = NovixTheme.colors.stroke
     )
 ) {
-    var currentSelectedRoute by remember { mutableStateOf(currentRoute) }
-
     Row(
         modifier = modifier
             .fillMaxWidth()
@@ -85,19 +83,12 @@ fun NavBar(
         verticalAlignment = Alignment.CenterVertically
     ) {
         navDestinations.forEach { item ->
-            val isSelected = currentSelectedRoute == item.route
-
             NavBarItem(
                 item = item,
-                isSelected = isSelected,
+                isSelected = currentSelectedRoute == item.route,
                 selectedIconColor = navBarColors.selectedIconColor,
                 idleIconColor = navBarColors.idleIconColor,
-                onClick = {
-                    if (!isSelected) {
-                        currentSelectedRoute = item.route
-                        onNavDestinationClicked(item.route)
-                    }
-                }
+                onClick = { onNavDestinationClicked(item.route) }
             )
         }
     }
@@ -257,6 +248,8 @@ private fun AnimatedSelectionDot(
 @ThemePreviews
 @Composable
 private fun NavBarPreview() {
+    var currentSelectedRoute by remember { mutableStateOf("home") }
+
     NovixTheme {
         NavBar(
             navDestinations = listOf(
@@ -286,8 +279,12 @@ private fun NavBarPreview() {
                     route = "account"
                 )
             ),
-            currentRoute = "search",
-            onNavDestinationClicked = {}
+            currentSelectedRoute = currentSelectedRoute,
+            onNavDestinationClicked = { it ->
+                if (it != currentSelectedRoute) {
+                    currentSelectedRoute = it
+                }
+            }
         )
     }
 }
