@@ -3,6 +3,6 @@
     <string name="actorImage">"actorImage"</string>
     <string name="rate_submitted_successfully">Rate submitted successfully.</string>
     <string name="error_submitting_rate">Some error happend</string>
-    <string name="arrow">arrow</string>
+    <string name="arrow" translatable="false">arrow</string>
     <string name="new_arrival">New Arrival</string>
 </resources>
