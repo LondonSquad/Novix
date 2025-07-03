@@ -52,24 +52,34 @@ data class NavigationTab(
     val route: String
 )
 
+
+data class NavBarColors(
+    val backgroundColor: Color,
+    val selectedIconColor: Color,
+    val idleIconColor: Color,
+    val topBorderColor: Color
+)
+
 @Composable
 fun NavBar(
     modifier: Modifier = Modifier,
     navDestinations: List<NavigationTab>,
     currentRoute: String,
     onNavDestinationClicked: (String) -> Unit,
-    backgroundColor: Color = NovixTheme.colors.surface,
-    selectedIconColor: Color = NovixTheme.colors.primary,
-    idleIconColor: Color = NovixTheme.colors.hint,
-    borderColor: Color = NovixTheme.colors.stroke
+    navBarColors: NavBarColors = NavBarColors(
+        backgroundColor = NovixTheme.colors.surface,
+        selectedIconColor = NovixTheme.colors.primary,
+        idleIconColor = NovixTheme.colors.hint,
+        topBorderColor = NovixTheme.colors.stroke
+    )
 ) {
     var currentSelectedRoute by remember { mutableStateOf(currentRoute) }
 
     Row(
         modifier = modifier
             .fillMaxWidth()
-            .topBorder(borderColor, 1.dp)
-            .background(color = backgroundColor)
+            .topBorder(navBarColors.topBorderColor, 1.dp)
+            .background(color = navBarColors.backgroundColor)
             .padding(vertical = 7.dp),
         horizontalArrangement = Arrangement.SpaceEvenly,
         verticalAlignment = Alignment.CenterVertically
@@ -80,8 +90,8 @@ fun NavBar(
             NavBarItem(
                 item = item,
                 isSelected = isSelected,
-                selectedIconColor = selectedIconColor,
-                idleIconColor = idleIconColor,
+                selectedIconColor = navBarColors.selectedIconColor,
+                idleIconColor = navBarColors.idleIconColor,
                 onClick = {
                     if (!isSelected) {
                         currentSelectedRoute = item.route
@@ -105,94 +115,142 @@ private fun NavBarItem(
         modifier = Modifier.size(width = 60.dp, height = 56.dp),
         contentAlignment = Alignment.Center
     ) {
+        AnimatedBackgroundBlur(
+            isVisible = isSelected,
+            selectedIconColor = selectedIconColor
+        )
 
-        AnimatedVisibility(
-            visible = isSelected,
-            enter = slideInVertically(
-                animationSpec = tween(400, easing = FastOutSlowInEasing),
-                initialOffsetY = { it }
-            ),
-            exit = slideOutVertically(
-                animationSpec = tween(300, easing = FastOutLinearInEasing),
-                targetOffsetY = { it }
-            )
-        ) {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
-                Icon(
-                    modifier = Modifier
-                        .width(60.dp)
-                        .height(16.dp)
-                        .align(Alignment.BottomCenter)
-                        .blur(radius = 54.dp, edgeTreatment = BlurredEdgeTreatment.Unbounded),
-                    painter = R.drawable.ellipse_blur_filled.painter,
-                    contentDescription = null,
-                    tint = selectedIconColor
-                )
-            } else {
-                Image(
-                    modifier = Modifier
-                        .align(Alignment.BottomCenter)
-                        .scale(2f),
-                    painter = R.drawable.ellipse_19.painter,
-                    contentDescription = null
-                )
-            }
-        }
+        ClickableIconContainer(
+            item = item,
+            isSelected = isSelected,
+            selectedIconColor = selectedIconColor,
+            idleIconColor = idleIconColor,
+            onClick = onClick
+        )
+    }
+}
 
-        Box(
-            modifier = Modifier
-                .size(42.dp)
-                .clickable(
-                    indication = null,
-                    interactionSource = remember { MutableInteractionSource() }
-                ) { onClick() },
-            contentAlignment = Alignment.Center
-        ) {
-
-            Crossfade(
-                targetState = isSelected,
-                animationSpec = tween(300),
-                label = "iconCrossfade"
-            ) { selected ->
-                Icon(
-                    painter = if (selected) item.selectedIcon else item.idleIcon,
-                    contentDescription = item.route,
-                    modifier = Modifier
-                        .size(24.dp)
-                        .animateContentSize(
-                            animationSpec = spring(
-                                dampingRatio = Spring.DampingRatioMediumBouncy,
-                                stiffness = Spring.StiffnessLow
-                            )
-                        ),
-                    tint = if (selected) selectedIconColor else idleIconColor
-                )
-            }
-
-            AnimatedVisibility(
+@Composable
+private fun AnimatedBackgroundBlur(
+    isVisible: Boolean,
+    selectedIconColor: Color
+) {
+    AnimatedVisibility(
+        visible = isVisible,
+        enter = slideInVertically(
+            animationSpec = tween(400, easing = FastOutSlowInEasing),
+            initialOffsetY = { it }
+        ),
+        exit = slideOutVertically(
+            animationSpec = tween(300, easing = FastOutLinearInEasing),
+            targetOffsetY = { it }
+        )
+    ) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+            Icon(
                 modifier = Modifier
-                    .offset(y = 2.dp)
-                    .align(Alignment.BottomCenter),
-                visible = isSelected,
-                enter = slideInVertically(
-                    animationSpec = tween(450, easing = FastOutSlowInEasing),
-                    initialOffsetY = { it * 2 }
-                ) + fadeIn(),
-                exit = slideOutVertically(
-                    animationSpec = tween(250, easing = FastOutLinearInEasing),
-                    targetOffsetY = { it * 2 }
-                ) + fadeOut()
-            ) {
-                Icon(
-                    modifier = Modifier
-                        .size(4.dp)
-                        .align(Alignment.BottomCenter),
-                    painter = R.drawable.ellipse_selected_dot.painter,
-                    contentDescription = null,
-                    tint = selectedIconColor
-                )
-            }
+                    .width(60.dp)
+                    .height(16.dp)
+                    .blur(radius = 54.dp, edgeTreatment = BlurredEdgeTreatment.Unbounded),
+                painter = R.drawable.ellipse_blur_filled.painter,
+                contentDescription = null,
+                tint = selectedIconColor
+            )
+        } else {
+            Image(
+                modifier = Modifier.scale(2f),
+                painter = R.drawable.ellipse_19.painter,
+                contentDescription = null
+            )
         }
+    }
+}
+
+@Composable
+private fun ClickableIconContainer(
+    item: NavigationTab,
+    isSelected: Boolean,
+    selectedIconColor: Color,
+    idleIconColor: Color,
+    onClick: () -> Unit
+) {
+    Box(
+        modifier = Modifier
+            .size(42.dp)
+            .clickable(
+                indication = null,
+                interactionSource = remember { MutableInteractionSource() }
+            ) { onClick() },
+        contentAlignment = Alignment.Center
+    ) {
+        AnimatedNavIcon(
+            item = item,
+            isSelected = isSelected,
+            selectedIconColor = selectedIconColor,
+            idleIconColor = idleIconColor
+        )
+
+        AnimatedSelectionDot(
+            modifier = Modifier.align(Alignment.BottomCenter),
+            isVisible = isSelected,
+            selectedIconColor = selectedIconColor
+        )
+    }
+}
+
+@Composable
+private fun AnimatedNavIcon(
+    item: NavigationTab,
+    isSelected: Boolean,
+    selectedIconColor: Color,
+    idleIconColor: Color
+) {
+    Crossfade(
+        targetState = isSelected,
+        animationSpec = tween(300),
+        label = "iconCrossfade"
+    ) { selected ->
+        Icon(
+            painter = if (selected) item.selectedIcon else item.idleIcon,
+            contentDescription = item.route,
+            modifier = Modifier
+                .size(24.dp)
+                .animateContentSize(
+                    animationSpec = spring(
+                        dampingRatio = Spring.DampingRatioMediumBouncy,
+                        stiffness = Spring.StiffnessLow
+                    )
+                ),
+            tint = if (selected) selectedIconColor else idleIconColor
+        )
+    }
+}
+
+@Composable
+private fun AnimatedSelectionDot(
+    modifier: Modifier = Modifier,
+    isVisible: Boolean,
+    selectedIconColor: Color
+) {
+    AnimatedVisibility(
+        modifier = modifier
+            .offset(y = 2.dp),
+        visible = isVisible,
+        enter = slideInVertically(
+            animationSpec = tween(450, easing = FastOutSlowInEasing),
+            initialOffsetY = { it * 2 }
+        ) + fadeIn(),
+        exit = slideOutVertically(
+            animationSpec = tween(250, easing = FastOutLinearInEasing),
+            targetOffsetY = { it * 2 }
+        ) + fadeOut()
+    ) {
+        Icon(
+            modifier = Modifier.size(4.dp),
+            painter = R.drawable.ellipse_selected_dot.painter,
+            contentDescription = null,
+            tint = selectedIconColor
+        )
     }
 }
 
