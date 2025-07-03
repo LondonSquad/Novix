@@ -5,6 +5,7 @@ plugins {
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose)
     alias(libs.plugins.ksp)
+    alias(libs.plugins.kotlinx.kover)
 }
 
 android {
@@ -46,4 +47,8 @@ dependencies {
     ksp(libs.bundles.koin.ksp)
     testImplementation(libs.bundles.testing)
     androidTestImplementation(libs.bundles.android.testing)
+    implementation(libs.firebase.crashlytics)
+    implementation(libs.firebase.analytics)
+    implementation(libs.firebase.perf)
+    implementation(platform(libs.firebase.bom))
 }

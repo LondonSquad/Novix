@@ -2,7 +2,6 @@ package com.london.designsystem.color
 
 import androidx.compose.ui.graphics.Color
 
-
 val PrimaryLight = Color(0xFFF77053)
 val PrimaryVariantLight = Color(0xFFF9E8E5)
 val SecondaryLight = Color(0xFF80071F)
@@ -14,7 +13,7 @@ val SurfaceLight = Color(0xFFFCF9F5)
 val StrokeHighLight = Color(0xFFFFFFFF)
 val OnPrimaryLight = Color(0xDEFFFFFF)
 val OnPrimaryHintLight = Color(0x61FFFFFF)
-val IconBackgroundLight = Color(0xB2000000)
+val IconBackgroundLight = Color(0xB3000000)
 val IconBackgroundLowLight = Color(0x52FFFFFF)
 val BackgroundLowLight = Color(0x08FFFFFF)
 val DisableLight = Color(0xFFCCBFBC)
@@ -22,6 +21,7 @@ val RedAccentLight = Color(0xFFF75662)
 val YellowAccentLight = Color(0xFFFFC74D)
 val GreenAccentLight = Color(0xFF19744D)
 val GreenVariantLight = Color(0xFFCFE5DC)
+val LinearGradientLight = Color(0x0D060800)
 
 val LightNovixColors = NovixColors(
     primary = PrimaryLight,
