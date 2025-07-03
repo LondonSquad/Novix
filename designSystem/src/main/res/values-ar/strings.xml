@@ -4,4 +4,5 @@
     <string name="actorImage">"صوره الممثل"</string>
     <string name="rate_submitted_successfully">تم تسجيل التقييم بنجاح</string>
     <string name="error_submitting_rate">هناك خطأ ما</string>
+    <string name="new_arrival">وصل حديثاً</string>
 </resources>
