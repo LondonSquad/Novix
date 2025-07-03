@@ -1,11 +1,18 @@
 package com.london.designsystem.component
 
 import android.os.Build
+import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.Crossfade
 import androidx.compose.animation.animateContentSize
+import androidx.compose.animation.core.FastOutLinearInEasing
+import androidx.compose.animation.core.FastOutSlowInEasing
 import androidx.compose.animation.core.Spring
 import androidx.compose.animation.core.spring
 import androidx.compose.animation.core.tween
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
+import androidx.compose.animation.slideInVertically
+import androidx.compose.animation.slideOutVertically
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -63,7 +70,7 @@ fun NavBar(
             .fillMaxWidth()
             .topBorder(borderColor, 1.dp)
             .background(color = backgroundColor)
-            .padding(vertical = 9.dp),
+            .padding(vertical = 7.dp),
         horizontalArrangement = Arrangement.SpaceEvenly,
         verticalAlignment = Alignment.CenterVertically
     ) {
@@ -99,10 +106,18 @@ private fun NavBarItem(
         contentAlignment = Alignment.Center
     ) {
 
-        if (isSelected) {
-
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S)
-            {
+        AnimatedVisibility(
+            visible = isSelected,
+            enter = slideInVertically(
+                animationSpec = tween(400, easing = FastOutSlowInEasing),
+                initialOffsetY = { it }
+            ),
+            exit = slideOutVertically(
+                animationSpec = tween(300, easing = FastOutLinearInEasing),
+                targetOffsetY = { it }
+            )
+        ) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
                 Icon(
                     modifier = Modifier
                         .width(60.dp)
@@ -122,7 +137,6 @@ private fun NavBarItem(
                     contentDescription = null
                 )
             }
-
         }
 
         Box(
@@ -155,10 +169,22 @@ private fun NavBarItem(
                 )
             }
 
-            if (isSelected) {
+            AnimatedVisibility(
+                modifier = Modifier
+                    .offset(y = 2.dp)
+                    .align(Alignment.BottomCenter),
+                visible = isSelected,
+                enter = slideInVertically(
+                    animationSpec = tween(450, easing = FastOutSlowInEasing),
+                    initialOffsetY = { it * 2 }
+                ) + fadeIn(),
+                exit = slideOutVertically(
+                    animationSpec = tween(250, easing = FastOutLinearInEasing),
+                    targetOffsetY = { it * 2 }
+                ) + fadeOut()
+            ) {
                 Icon(
                     modifier = Modifier
-                        .offset(y = 1.dp)
                         .size(4.dp)
                         .align(Alignment.BottomCenter),
                     painter = R.drawable.ellipse_selected_dot.painter,
