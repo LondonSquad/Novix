@@ -159,7 +159,7 @@ private fun AnimatedBackgroundBlur(
         } else {
             Image(
                 modifier = Modifier.scale(2f),
-                painter = R.drawable.ellipse_19.painter,
+                painter = R.drawable.ellipse_pre_blurred.painter,
                 contentDescription = null
             )
         }
