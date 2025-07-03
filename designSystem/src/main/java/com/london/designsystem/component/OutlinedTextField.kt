@@ -69,8 +69,8 @@ fun OutlinedTextField(
     onPasswordVisibilityChange: () -> Unit = {},
     passwordVisibleIcon: Painter? = null,
     passwordHiddenIcon: Painter? = null,
+    isFocused: Boolean = false
 ) {
-    val isFocused by interactionSource.collectIsFocusedAsState()
     val mergedTextStyle = textStyle.merge(TextStyle(color = NovixTheme.colors.body))
     val isPasswordEmpty = value.text.isEmpty()
 
