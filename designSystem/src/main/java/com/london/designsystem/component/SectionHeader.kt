@@ -1,5 +1,6 @@
 package com.london.designsystem.component
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -19,34 +20,39 @@ import com.london.designsystem.theme.noRippleClickable
 @Composable
 fun SectionHeader(
     text: String,
+    hasGetAll: Boolean,
     modifier: Modifier = Modifier,
     onClick: () -> Unit = {}
 ) {
     Row(
         horizontalArrangement = Arrangement.SpaceBetween,
         verticalAlignment = Alignment.CenterVertically,
-        modifier = modifier.fillMaxWidth()
+        modifier = modifier
+            .fillMaxWidth()
+            .background(color = NovixTheme.colors.surface)
     ) {
         Text(
             text = text,
             style = NovixTheme.typography.headline.small,
             color = NovixTheme.colors.title,
         )
-        Row(
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.spacedBy(4.dp),
-            modifier = Modifier.noRippleClickable(onClick),
-        ) {
-            Text(
-                text = stringResource(R.string.all),
-                style = NovixTheme.typography.label.medium,
-                color = NovixTheme.colors.primary,
-            )
-            Icon(
-                painter = painterResource(id = R.drawable.icon_arrow),
-                contentDescription = "arrow",
-                tint = NovixTheme.colors.primary
-            )
+        if (hasGetAll) {
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.spacedBy(4.dp),
+                modifier = Modifier.noRippleClickable(onClick),
+            ) {
+                Text(
+                    text = stringResource(R.string.all),
+                    style = NovixTheme.typography.label.medium,
+                    color = NovixTheme.colors.primary,
+                )
+                Icon(
+                    painter = painterResource(id = R.drawable.icon_arrow),
+                    contentDescription = stringResource(R.string.arrow),
+                    tint = NovixTheme.colors.primary
+                )
+            }
         }
     }
 }
@@ -56,7 +62,8 @@ fun SectionHeader(
 fun SectionHeaderPreview() {
     NovixTheme {
         SectionHeader(
-            text = "New Arrival"
+            text = stringResource(R.string.new_arrival),
+            hasGetAll = true
         )
     }
 }
