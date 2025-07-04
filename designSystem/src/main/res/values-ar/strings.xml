@@ -5,4 +5,8 @@
     <string name="rate_submitted_successfully">تم تسجيل التقييم بنجاح</string>
     <string name="error_submitting_rate">هناك خطأ ما</string>
     <string name="new_arrival">وصل حديثاً</string>
+    <string name="appName">نوفيكس</string>
+    <string name="explainTheNameOfApp">مشتق من نوفا، مُصمم من أجل الأفلام</string>
+    <string name="my_account">حسابي</string>
+
 </resources>
