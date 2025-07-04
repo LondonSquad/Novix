@@ -44,6 +44,7 @@ import com.london.designsystem.theme.ThemePreviews
 fun OutlinedTextField(
     value: TextFieldValue,
     onValueChange: (TextFieldValue) -> Unit,
+    interactionSource: MutableInteractionSource,
     modifier: Modifier = Modifier,
     enabled: Boolean = true,
     readOnly: Boolean = false,
@@ -59,7 +60,6 @@ fun OutlinedTextField(
     keyboardOptions: KeyboardOptions = KeyboardOptions.Default,
     keyboardActions: KeyboardActions = KeyboardActions.Default,
     singleLine: Boolean = true,
-    interactionSource: MutableInteractionSource,
     shape: Shape = MaterialTheme.shapes.medium,
     colors: TextFieldColors = getDefaultTextFieldColors(),
     backgroundColor: Color = NovixTheme.colors.surface,
@@ -281,7 +281,7 @@ fun TextFieldDefaultPreview() {
                     style = NovixTheme.typography.body.small
                 )
             },
-            leadingIcon = painterResource(id = R.drawable.icon_user),
+            leadingIcon = painterResource(id = R.drawable.icon_account),
             interactionSource = interactionSource,
             modifier = Modifier.padding(16.dp)
         )
@@ -309,8 +309,8 @@ fun PasswordFieldEmptyPreview() {
             isPasswordField = true,
             passwordVisible = passwordVisible,
             onPasswordVisibilityChange = { passwordVisible = !passwordVisible },
-            passwordVisibleIcon = painterResource(id = R.drawable.icon_eye_open),
-            passwordHiddenIcon = painterResource(id = R.drawable.icon_eye_closed),
+            passwordVisibleIcon = painterResource(id = R.drawable.icon_show_password),
+            passwordHiddenIcon = painterResource(id = R.drawable.icon_hide_password),
             interactionSource = interactionSource,
             modifier = Modifier.padding(16.dp)
         )
@@ -338,8 +338,8 @@ fun PasswordFieldFilledPreview() {
             isPasswordField = true,
             passwordVisible = passwordVisible,
             onPasswordVisibilityChange = { passwordVisible = !passwordVisible },
-            passwordVisibleIcon = painterResource(id = R.drawable.icon_eye_open),
-            passwordHiddenIcon = painterResource(id = R.drawable.icon_eye_closed),
+            passwordVisibleIcon = painterResource(id = R.drawable.icon_show_password),
+            passwordHiddenIcon = painterResource(id = R.drawable.icon_hide_password),
             interactionSource = interactionSource,
             supportingText = {
                 Text(text = "Password must be at least 8 characters")
@@ -366,7 +366,7 @@ fun TextFieldErrorStatePreview() {
                     style = NovixTheme.typography.body.small
                 )
             },
-            leadingIcon = painterResource(id = R.drawable.icon_user),
+            leadingIcon = painterResource(id = R.drawable.icon_account),
             isError = true,
             interactionSource = interactionSource,
             supportingText = {
@@ -397,7 +397,7 @@ fun TextFieldDisabledPreview() {
                     style = NovixTheme.typography.body.small
                 )
             },
-            leadingIcon = painterResource(id = R.drawable.icon_user),
+            leadingIcon = painterResource(id = R.drawable.icon_account),
             enabled = false,
             interactionSource = interactionSource,
             modifier = Modifier.padding(16.dp)
@@ -421,7 +421,7 @@ fun TextFieldNoLabelPreview() {
                     style = NovixTheme.typography.body.small
                 )
             },
-            leadingIcon = painterResource(id = R.drawable.icon_user),
+            leadingIcon = painterResource(id = R.drawable.icon_account),
             interactionSource = interactionSource,
             modifier = Modifier.padding(16.dp)
         )
