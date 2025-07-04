@@ -53,7 +53,7 @@ fun OutlineButton(
             LoadingLottieAnimation(
                 modifier = Modifier
                     .size(24.dp),
-                tintColor = NovixTheme.colors.onPrimary
+                tintColor = NovixTheme.colors.primary
             )
         }
 
