@@ -24,13 +24,14 @@ import com.london.designsystem.theme.ThemePreviews
 
 @Composable
 fun TopBar(
+    modifier: Modifier = Modifier,
     title: String? = null,
     onBackClick: (() -> Unit)? = null,
     option1: (() -> Unit)? = null,
     option2: (() -> Unit)? = null
 ) {
     Row(
-        modifier = Modifier
+        modifier = modifier
             .fillMaxWidth()
             .padding(horizontal = 16.dp, vertical = 8.dp),
         verticalAlignment = Alignment.CenterVertically,
