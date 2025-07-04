@@ -35,15 +35,6 @@ jobs:
             gradle-cache-${{ runner.os }}-
             gradle-cache-
 
-      - name: Cache Build Outputs
-        uses: actions/cache@v4
-        with:
-          path: |
-            **/build/
-          key: build-cache-pr-${{ github.event.pull_request.number }}
-          restore-keys: |
-            build-cache-pr-
-
       - name: Setup Gradlew
         run: chmod +x ./gradlew
 
@@ -52,7 +43,7 @@ jobs:
           echo "${{ secrets.GOOGLE_SERVICES_JSON }}" | base64 --decode > app/google-services.json
 
       - name: Build with Gradle
-        run: ./gradlew build -x test -x koverVerify
+        run: ./gradlew -PversionCode=${{ github.run_number }} -PversionName="1.0.${{ github.run_number }}" build -x test -x koverVerify
 
 
   test:
@@ -79,15 +70,6 @@ jobs:
           restore-keys: |
             gradle-cache-${{ runner.os }}-
             gradle-cache-
-
-      - name: Cache Build Outputs
-        uses: actions/cache@v4
-        with:
-          path: |
-            **/build/
-          key: build-cache-pr-${{ github.event.pull_request.number }}
-          restore-keys: |
-            build-cache-pr-
 
       - name: Setup Gradlew
         run: chmod +x ./gradlew

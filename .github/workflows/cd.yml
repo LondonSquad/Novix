@@ -36,23 +36,23 @@ jobs:
         path: |
           ~/.gradle/caches
           ~/.gradle/wrapper
-        key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
+        key: gradle-cache-${{ hashFiles('**/gradle-wrapper.properties', '**/*.gradle*', '**/settings.gradle*') }}
+        restore-keys:
+          gradle-cache-${{ runner.os }}-
+          gradle-cache-
     
     # 5. Grant execute permission for gradlew
     - name: Grant execute permission for gradlew
       run: chmod +x gradlew
 
+    # 6. Decode google-services.json
     - name: Decode Firebase Config
       run: |
         echo "${{ secrets.GOOGLE_SERVICES_JSON }}" | base64 --decode > app/google-services.json
     
-    # 6. Build the app
+    # 7. Build the app
     - name: Build Debug APK
       run: ./gradlew assembleDebug
-    
-    # 7. Run Unit Tests (CI part)
-    - name: Run Unit Tests
-      run: ./gradlew testDebugUnitTest
     
     # 8. Deploy to Firebase App Distribution (CD part)
     - name: Deploy to Firebase App Distribution
@@ -63,6 +63,6 @@ jobs:
         groups: testers
         file: app/build/outputs/apk/debug/app-debug.apk
         releaseNotes: |
-          New update from GitHub Actions
+          New update from PR #${{ github.event.pull_request.number }}
           Commit: ${{ github.sha }}
           Branch: ${{ github.ref_name }}

@@ -20,8 +20,10 @@ android {
         applicationId = AppConfig.APPLICATION_ID
         minSdk = AppConfig.Version.MIN_SDK
         targetSdk = AppConfig.Version.TARGET_SDK
-        versionCode = 1
-        versionName = "1.0"
+
+        // Allows for setting the version code via a Gradle property for CD pipeline.
+        versionCode = (project.findProperty("versionCode") as? String)?.toInt() ?: 1
+        versionName = project.findProperty("versionName") as? String ?: "1.0"
 
         testInstrumentationRunner = AppConfig.ANDROID_TEST_INSTRUMENTATION
     }
