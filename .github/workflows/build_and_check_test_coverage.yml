@@ -30,8 +30,9 @@ jobs:
           path: |
             ~/.gradle/caches
             ~/.gradle/wrapper
-          key: gradle-cache-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
+          key: gradle-cache-${{ hashFiles('**/gradle-wrapper.properties', '**/*.gradle*', '**/settings.gradle*') }}
           restore-keys: |
+            gradle-cache-${{ runner.os }}-
             gradle-cache-
 
       - name: Cache Build Outputs
@@ -39,9 +40,9 @@ jobs:
         with:
           path: |
             **/build/
-          key: build-cache-${{ github.sha }}
+          key: build-cache-pr-${{ github.event.pull_request.number }}
           restore-keys: |
-            build-cache-
+            build-cache-pr-
 
       - name: Setup Gradlew
         run: chmod +x ./gradlew
@@ -74,8 +75,9 @@ jobs:
           path: |
             ~/.gradle/caches
             ~/.gradle/wrapper
-          key: gradle-cache-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
+          key: gradle-cache-${{ hashFiles('**/gradle-wrapper.properties', '**/*.gradle*', '**/settings.gradle*') }}
           restore-keys: |
+            gradle-cache-${{ runner.os }}-
             gradle-cache-
 
       - name: Cache Build Outputs
@@ -83,9 +85,9 @@ jobs:
         with:
           path: |
             **/build/
-          key: build-cache-${{ github.sha }}
+          key: build-cache-pr-${{ github.event.pull_request.number }}
           restore-keys: |
-            build-cache-
+            build-cache-pr-
 
       - name: Setup Gradlew
         run: chmod +x ./gradlew
