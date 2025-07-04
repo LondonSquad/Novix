@@ -35,15 +35,6 @@ jobs:
             gradle-cache-${{ runner.os }}-
             gradle-cache-
 
-      - name: Cache Build Outputs
-        uses: actions/cache@v4
-        with:
-          path: |
-            **/build/
-          key: build-cache-pr-${{ github.event.pull_request.number }}
-          restore-keys: |
-            build-cache-pr-
-
       - name: Setup Gradlew
         run: chmod +x ./gradlew
 
@@ -79,15 +70,6 @@ jobs:
           restore-keys: |
             gradle-cache-${{ runner.os }}-
             gradle-cache-
-
-      - name: Cache Build Outputs
-        uses: actions/cache@v4
-        with:
-          path: |
-            **/build/
-          key: build-cache-pr-${{ github.event.pull_request.number }}
-          restore-keys: |
-            build-cache-pr-
 
       - name: Setup Gradlew
         run: chmod +x ./gradlew
