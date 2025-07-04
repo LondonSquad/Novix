@@ -43,8 +43,8 @@ import com.london.designsystem.theme.ThemePreviews
 @Composable
 fun OutlinedTextField(
     value: TextFieldValue,
-    onValueChange: (TextFieldValue) -> Unit,
     interactionSource: MutableInteractionSource,
+    onValueChange: (TextFieldValue) -> Unit,
     modifier: Modifier = Modifier,
     enabled: Boolean = true,
     readOnly: Boolean = false,
