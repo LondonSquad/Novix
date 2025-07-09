@@ -2,6 +2,7 @@
 # Build Tools
 agp = "8.8.2"
 firebaseBom = "33.16.0"
+gson = "2.11.0"
 kotlin = "2.0.21"
 ksp = "2.0.21-1.0.27"
 
@@ -93,6 +94,7 @@ androidx-datastore-core = { group = "androidx.datastore", name = "datastore-core
 
 # Dependency Injection (Koin)
 firebase-bom = { module = "com.google.firebase:firebase-bom", version.ref = "firebaseBom" }
+gson = { module = "com.google.code.gson:gson", version.ref = "gson" }
 koin-android = { group = "io.insert-koin", name = "koin-android", version.ref = "koinAndroid" }
 koin-androidx-compose = { group = "io.insert-koin", name = "koin-androidx-compose", version.ref = "koinAndroidxCompose" }
 koin-annotations = { group = "io.insert-koin", name = "koin-annotations", version.ref = "koinAnnotations" }

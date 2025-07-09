@@ -1,0 +1,31 @@
+package com.london.data.datasource.local.dto
+
+import androidx.room.Entity
+import androidx.room.PrimaryKey
+
+@Entity(tableName = "search_movies_response")
+data class SearchMoviesResponse(
+    @PrimaryKey(autoGenerate = true) val id: Int = 0,
+    val date: Long,
+    val page: Int,
+    val results: List<SearchMoviesResponseDto>,
+    val totalPages: Int,
+    val totalResults: Int
+)
+
+data class SearchMoviesResponseDto(
+    val adult: Boolean,
+    val backdropPath: String?,
+    val genreIds: List<Int>,
+    val id: Int,
+    val originalLanguage: String,
+    val originalTitle: String,
+    val overview: String,
+    val popularity: Double,
+    val posterPath: String?,
+    val releaseDate: String,
+    val title: String,
+    val video: Boolean,
+    val voteAverage: Double,
+    val voteCount: Int
+)
