@@ -25,7 +25,7 @@ class SearchRemoteDataSourceImpl(private val ktorClient: HttpClient) : RemoteDat
                 parameters.append("include_adult", "false")
                 parameters.append("language", "en")
                 parameters.append("page", "1")
-                parameters.append("api_key", "150589259d5da28c67e1ffa2890204d1")
+                parameters.append("api_key", "YOUR_API_KEY")
             }
         }
         val responseBody = response.bodyAsText()
@@ -46,7 +46,7 @@ class SearchRemoteDataSourceImpl(private val ktorClient: HttpClient) : RemoteDat
                 parameters.append("include_adult", "false")
                 parameters.append("language", "en")
                 parameters.append("page", "1")
-                parameters.append("api_key", "150589259d5da28c67e1ffa2890204d1")
+                parameters.append("api_key", "YOUR_API_KEY")
             }
         }
         val responseBody = response.bodyAsText()
@@ -67,7 +67,7 @@ class SearchRemoteDataSourceImpl(private val ktorClient: HttpClient) : RemoteDat
                 parameters.append("include_adult", "false")
                 parameters.append("language", "en")
                 parameters.append("page", "1")
-                parameters.append("api_key", "150589259d5da28c67e1ffa2890204d1")
+                parameters.append("api_key", "YOUR_API_KEY")
             }
         }
         val responseBody = response.bodyAsText()
