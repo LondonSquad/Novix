@@ -21,8 +21,8 @@ import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
 import com.london.app.navigation.Screen.Account
 import com.london.app.navigation.Screen.Bookmarks
-import com.london.presentation.screens.myAccountScreen.AccountScreen
-import com.london.presentation.screens.myListScreen.BookmarksScreen
+import com.london.presentation.screens.accountScreen.AccountScreen
+import com.london.presentation.screens.bookmarksScreen.BookmarksScreen
 
 @Composable
 fun NovixApp() {

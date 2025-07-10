@@ -1,4 +1,4 @@
-package com.london.presentation.screens.myListScreen
+package com.london.presentation.screens.accountScreen
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
@@ -12,7 +12,7 @@ import androidx.compose.ui.unit.dp
 import com.london.designsystem.theme.NovixTheme
 
 @Composable
-fun BookmarksScreen(modifier: Modifier = Modifier) {
+fun AccountScreen(modifier: Modifier = Modifier) {
     Scaffold(containerColor = NovixTheme.colors.surface) { innerPadding ->
         Box(
             modifier = modifier
@@ -22,7 +22,7 @@ fun BookmarksScreen(modifier: Modifier = Modifier) {
             contentAlignment = Alignment.Center
         ) {
             Text(
-                text = "My List Screen",
+                text = "My Account Screen",
                 style = NovixTheme.typography.headline.medium
             )
         }

@@ -90,7 +90,7 @@ fun NavBar(
                 selectedIconColor = navBarColors.selectedIconColor,
                 idleIconColor = navBarColors.idleIconColor,
                 onClick = {
-                   onNavDestinationClicked(item.route)
+                    onNavDestinationClicked(item.route)
                 }
             )
         }
