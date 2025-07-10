@@ -49,7 +49,7 @@ rememberPreference = "1.1.1"
 # Testing
 junit = "4.13.2"
 junitVersion = "1.2.1"
-junitJupiter = "5.12.2"
+junitJupiter = "5.13.3"
 espressoCore = "3.6.1"
 mockk = "1.14.4"
 truth = "1.4.4"
@@ -63,6 +63,7 @@ firebaseCrashlytics = "19.4.4"
 googleFirebaseCrashlytics = "3.0.4"
 firebaseAnalytics = "22.5.0"
 kotlinxKover = "0.9.1"
+junitJupiterVersion = "5.13.3"
 
 [libraries]
 # AndroidX Core
@@ -114,6 +115,7 @@ kotlinx-datetime = { group = "org.jetbrains.kotlinx", name = "kotlinx-datetime",
 # UI Libraries
 coil-compose = { group = "io.coil-kt", name = "coil-compose", version.ref = "coilCompose" }
 lottie-compose = { group = "com.airbnb.android", name = "lottie-compose", version.ref = "lottieCompose" }
+mockk-android = { module = "io.mockk:mockk-android", version.ref = "mockk" }
 remember-preference = { group = "dev.burnoo", name = "compose-remember-preference", version.ref = "rememberPreference" }
 
 # Testing
@@ -123,13 +125,15 @@ androidx-junit = { group = "androidx.test.ext", name = "junit", version.ref = "j
 androidx-espresso-core = { group = "androidx.test.espresso", name = "espresso-core", version.ref = "espressoCore" }
 androidx-ui-test-junit4 = { group = "androidx.compose.ui", name = "ui-test-junit4", version.ref = "composeUi" }
 androidx-ui-test-manifest = { group = "androidx.compose.ui", name = "ui-test-manifest", version.ref = "composeUi" }
-mockk = { group = "io.mockk", name = "mockk", version.ref = "mockk" }
+mockk = { module = "io.mockk:mockk", version.ref = "mockk" }
 truth = { group = "com.google.truth", name = "truth", version.ref = "truth" }
 androidx-appcompat = { group = "androidx.appcompat", name = "appcompat", version.ref = "appcompat" }
 material = { group = "com.google.android.material", name = "material", version.ref = "material" }
 firebase-perf = { group = "com.google.firebase", name = "firebase-perf", version.ref = "firebasePerf" }
 firebase-crashlytics = { group = "com.google.firebase", name = "firebase-crashlytics", version.ref = "firebaseCrashlytics" }
 firebase-analytics = { group = "com.google.firebase", name = "firebase-analytics", version.ref = "firebaseAnalytics" }
+#noinspection SimilarGradleDependency
+jupiter-junit-jupiter = { group = "org.junit.jupiter", name = "junit-jupiter", version.ref = "junitJupiterVersion" }
 
 
 [plugins]

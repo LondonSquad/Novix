@@ -49,5 +49,6 @@ dependencies {
     ksp(libs.bundles.koin.ksp)
     testImplementation(libs.bundles.testing)
     androidTestImplementation(libs.bundles.android.testing)
-    implementation (libs.gson)
+    implementation(libs.gson)
+    testImplementation(libs.mockk)
 }
