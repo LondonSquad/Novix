@@ -67,4 +67,9 @@ dependencies {
     implementation(libs.firebase.crashlytics)
     implementation(libs.firebase.analytics)
     testImplementation(libs.bundles.testing)
+
+    implementation(libs.androidx.navigation.compose)
+    implementation (libs.koin.androidx.navigation)
+    implementation (libs.androidx.material)
+
 }

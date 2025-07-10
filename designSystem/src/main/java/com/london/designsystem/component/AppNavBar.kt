@@ -73,6 +73,7 @@ fun NavBar(
         topBorderColor = NovixTheme.colors.stroke
     )
 ) {
+
     Row(
         modifier = modifier
             .fillMaxWidth()
@@ -88,7 +89,9 @@ fun NavBar(
                 isSelected = currentSelectedRoute == item.route,
                 selectedIconColor = navBarColors.selectedIconColor,
                 idleIconColor = navBarColors.idleIconColor,
-                onClick = { onNavDestinationClicked(item.route) }
+                onClick = {
+                   onNavDestinationClicked(item.route)
+                }
             )
         }
     }
@@ -284,7 +287,7 @@ private fun NavBarPreview() {
                 if (it != currentSelectedRoute) {
                     currentSelectedRoute = it
                 }
-            }
+            },
         )
     }
 }
