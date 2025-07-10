@@ -45,11 +45,12 @@ class LocalDataSourceImpl(
     override fun getTvShows(): SearchTvShowsResponse =
         runCatching { searchTvShowDao.getAll() }.getOrElse { throw GetTvShowsAllExpansion() }
 
-    override fun getActors(): SearchActorsResponse=
+    override fun getActors(): SearchActorsResponse =
         runCatching { searchActorsDao.getAll() }.getOrElse { throw GetActorsAllExpansion() }
 
     override fun getMovieByDate(date: Long): SearchMoviesResponse =
-        runCatching { searchMoviesDao.getCurrentSearch(date) }.getOrElse { throw GetMovieByDateExpansion() }
+        runCatching { searchMoviesDao.getCurrentSearch(date) }
+            .getOrElse { throw GetMovieByDateExpansion() }
 
     override fun getTvShowByDate(date: Long): SearchTvShowsResponse =
         kotlin.runCatching { searchTvShowDao.getCurrentSearch(date) }
@@ -58,4 +59,16 @@ class LocalDataSourceImpl(
     override fun getActorByDate(date: Long): SearchActorsResponse =
         kotlin.runCatching { searchActorsDao.getCurrentSearch(date) }
             .getOrElse { throw GetActorByDateExpansion() }
+
+    override fun getActorByQuery(query: String): SearchActorsResponse =
+        runCatching { searchActorsDao.getSearchByQuery(query) }
+            .getOrElse { throw GetActorByQueryExpansion() }
+
+    override fun getTvShowByQuery(query: String): SearchTvShowsResponse =
+        runCatching { searchTvShowDao.getSearchByQuery(query) }
+            .getOrElse { throw GetTvShowByQueryExpansion() }
+
+    override fun getMovieByQuery(query: String): SearchMoviesResponse =
+        runCatching { searchMoviesDao.getSearchByQuery(query) }
+            .getOrElse { throw GetMovieByQueryExpansion() }
 }

@@ -3,6 +3,7 @@ package com.london.data.datasource.local.dao
 import androidx.room.Dao
 import androidx.room.Delete
 import androidx.room.Insert
+import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import androidx.room.Update
 import com.london.data.dto.search.SearchActorsResponse
@@ -10,7 +11,7 @@ import com.london.data.dto.search.SearchActorsResponse
 @Dao
 interface SearchActorsDao : SearchDao<SearchActorsResponse> {
 
-    @Insert
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
     override fun insert(search: SearchActorsResponse)
 
     @Update
@@ -24,4 +25,7 @@ interface SearchActorsDao : SearchDao<SearchActorsResponse> {
 
     @Query("SELECT * FROM search_actors_table WHERE date = :date")
     override fun getCurrentSearch(date: Long): SearchActorsResponse
+
+    @Query("SELECT * FROM search_actors_table WHERE `query` = :query")
+    override fun getSearchByQuery(query: String): SearchActorsResponse
 }

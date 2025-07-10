@@ -6,4 +6,5 @@ interface SearchDao<T> {
     fun delete(search: T)
     fun getAll(): T
     fun getCurrentSearch(date: Long): T
+    fun getSearchByQuery(query: String): T
 }

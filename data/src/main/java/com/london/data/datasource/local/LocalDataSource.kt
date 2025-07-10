@@ -21,4 +21,7 @@ interface LocalDataSource {
     fun getMovieByDate(date : Long) : SearchMoviesResponse
     fun getTvShowByDate(date : Long) : SearchTvShowsResponse
     fun getActorByDate(date : Long) : SearchActorsResponse
+    fun getActorByQuery(query : String) : SearchActorsResponse
+    fun getTvShowByQuery(query : String) : SearchTvShowsResponse
+    fun getMovieByQuery(query : String) : SearchMoviesResponse
 }

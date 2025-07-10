@@ -12,6 +12,8 @@ data class SearchTvShowsResponse(
     @PrimaryKey(autoGenerate = true) val id: Int = 0,
     @Transient
     val date: Long = System.currentTimeMillis(),
+    @Transient
+    val query: String = "",
     val page: Int,
     val results: List<SearchTvShowsResponseDto>,
     val total_pages: Int,
