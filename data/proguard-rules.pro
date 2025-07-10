@@ -18,21 +18,3 @@
 
 # If you keep the line number information, uncomment this to
 # hide the original source file name.
-#-renamesourcefileattribute SourceFile
-
-# Room database rules
--keep class androidx.room.** { *; }
--keep @androidx.room.Entity class * { *; }
--keep @androidx.room.Dao class * { *; }
--keep @androidx.room.Database class * { *; }
--keep class * extends androidx.room.RoomDatabase { *; }
-
-# Fix for StringConcatFactory error
--keep class java.lang.invoke.** { *; }
--dontwarn java.lang.invoke.**
-
-# Keep Room generated classes
--keep class **_Impl { *; }
-
-# SQLite classes
--keep class androidx.sqlite.** { *; }

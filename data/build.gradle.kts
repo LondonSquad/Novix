@@ -21,7 +21,7 @@ android {
 
     buildTypes {
         release {
-            isMinifyEnabled = AppConfig.ENABLE_R8_FULL_MODE
+            isMinifyEnabled = false
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
@@ -36,11 +36,6 @@ android {
         jvmTarget = AppConfig.Version.JVM.toString()
     }
 }
-
-ksp {
-    arg("room.schemaLocation", "$projectDir/schemas")
-}
-
 dependencies {
     implementation(project(":domain"))
     implementation(libs.bundles.base.ui)
