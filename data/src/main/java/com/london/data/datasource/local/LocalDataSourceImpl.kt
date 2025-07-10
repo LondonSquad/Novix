@@ -7,7 +7,6 @@ import com.london.data.datasource.local.dto.SearchActorsResponseLocal
 import com.london.data.datasource.local.dto.SearchMoviesResponseLocal
 import com.london.data.datasource.local.dto.SearchTvShowsResponseLocal
 
-
 class LocalDataSourceImpl(
     private val searchTvShowDao: SearchTvShowDao,
     private val searchMoviesDao: SearchMoviesDao,

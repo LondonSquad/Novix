@@ -45,9 +45,11 @@ open class GetByDateExpansion(message: String) : LocalDataSourceExpansion(messag
 class GetMovieByDateExpansion(message: String = GET_MOVIE_BY_DATE) : GetByDateExpansion(message)
 class GetTvShowByDateExpansion(message: String = GET_TV_SHOW_BY_DATE) : GetByDateExpansion(message)
 class GetActorByDateExpansion(message: String = GET_ACTOR_BY_DATE) : GetByDateExpansion(message)
-class GetActorByQueryExpansion(message: String = GET_ACTOR_BY_QUERY) : GetByDateExpansion(message)
-class GetMovieByQueryExpansion(message: String = GET_MOVIE_BY_QUERY) : GetByDateExpansion(message)
-class GetTvShowByQueryExpansion(message: String = GET_TV_SHOW_BY_QUERY) : GetByDateExpansion(message)
+
+open class GetByQueryExpansion(message: String) : LocalDataSourceExpansion(message)
+class GetActorByQueryExpansion(message: String = GET_ACTOR_BY_QUERY) : GetByQueryExpansion(message)
+class GetMovieByQueryExpansion(message: String = GET_MOVIE_BY_QUERY) : GetByQueryExpansion(message)
+class GetTvShowByQueryExpansion(message: String = GET_TV_SHOW_BY_QUERY) : GetByQueryExpansion(message)
 
 object LocalDataSourceMessages {
     const val INSERT_MOVIE = "Failed to insert movie into the local database."
