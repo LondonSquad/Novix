@@ -11,11 +11,11 @@ import com.london.data.datasource.local.dao.SearchActorsDao
 import com.london.data.datasource.local.dao.SearchMoviesDao
 import com.london.data.datasource.local.dao.SearchTvShowDao
 import com.london.data.datasource.local.dto.SearchActorsResponse
-import com.london.data.datasource.local.dto.SearchMoviesResponse
-import com.london.data.datasource.local.dto.SearchTvShowsResponse
+import com.london.data.datasource.local.dto.SearchMoviesResponseLocal
+import com.london.data.datasource.local.dto.SearchTvShowsResponseLocal
 
 @Database(
-    entities = [SearchTvShowsResponse::class, SearchMoviesResponse::class, SearchActorsResponse::class],
+    entities = [SearchTvShowsResponseLocal::class, SearchMoviesResponseLocal::class, SearchActorsResponse::class],
     version = 1
 )
 @TypeConverters(

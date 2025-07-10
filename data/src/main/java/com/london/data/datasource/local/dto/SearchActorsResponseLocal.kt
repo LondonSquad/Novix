@@ -8,12 +8,12 @@ data class SearchActorsResponse(
     @PrimaryKey(autoGenerate = true) val id: Int = 0,
     val date: Long,
     val page: Int,
-    val results: List<PersonDto>,
+    val results: List<PersonDtoLocal>,
     val totalPages: Int,
     val totalResults: Int
 )
 
-data class PersonDto(
+data class PersonDtoLocal(
     val adult: Boolean,
     val gender: Int,
     val id: Int,
@@ -22,10 +22,10 @@ data class PersonDto(
     val originalName: String,
     val popularity: Double,
     val profilePath: String?,
-    val knownFor: List<KnownForDto>
+    val knownFor: List<KnownForDtoLocal>
 )
 
-data class KnownForDto(
+data class KnownForDtoLocal(
     val adult: Boolean,
     val backdropPath: String?,
     val id: Int,

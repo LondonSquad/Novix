@@ -20,8 +20,8 @@ import com.london.data.datasource.local.dao.SearchActorsDao
 import com.london.data.datasource.local.dao.SearchMoviesDao
 import com.london.data.datasource.local.dao.SearchTvShowDao
 import com.london.data.datasource.local.dto.SearchActorsResponse
-import com.london.data.datasource.local.dto.SearchMoviesResponse
-import com.london.data.datasource.local.dto.SearchTvShowsResponse
+import com.london.data.datasource.local.dto.SearchMoviesResponseLocal
+import com.london.data.datasource.local.dto.SearchTvShowsResponseLocal
 import io.mockk.Runs
 import io.mockk.every
 import io.mockk.just
@@ -41,8 +41,8 @@ class LocalDataSourceImplTest {
     private lateinit var searchActorsDao: SearchActorsDao
     private lateinit var localDataSource: LocalDataSourceImpl
 
-    private val mockMoviesResponse = mockk<SearchMoviesResponse>()
-    private val mockTvShowsResponse = mockk<SearchTvShowsResponse>()
+    private val mockMoviesResponse = mockk<SearchMoviesResponseLocal>()
+    private val mockTvShowsResponse = mockk<SearchTvShowsResponseLocal>()
     private val mockActorsResponse = mockk<SearchActorsResponse>()
     private val testDate = 1234567890L
 

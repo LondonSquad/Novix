@@ -4,16 +4,16 @@ import androidx.room.Entity
 import androidx.room.PrimaryKey
 
 @Entity(tableName = "search_tv_shows_response")
-data class SearchTvShowsResponse(
+data class SearchTvShowsResponseLocal(
     @PrimaryKey(autoGenerate = true) val id: Int = 0,
     val date: Long,
     val page: Int,
-    val results: List<SearchTvShowsResponseDto>,
+    val results: List<SearchTvShowsResponseDtoLocal>,
     val totalPages: Int,
     val totalResults: Int
 )
 
-data class SearchTvShowsResponseDto(
+data class SearchTvShowsResponseDtoLocal(
     val adult: Boolean,
     val backdropPath: String,
     val genreIds: List<Int>,
