@@ -1,19 +1,10 @@
-package com.london.data.dto.search
+package com.london.data.datasource.remote.search
 
-import androidx.room.Entity
-import androidx.room.PrimaryKey
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
-import kotlinx.serialization.Transient
 
 @Serializable
-@Entity(tableName = "search_tv_shows_table")
 data class SearchTvShowsResponse(
-    @PrimaryKey(autoGenerate = true) val id: Int = 0,
-    @Transient
-    val date: Long = System.currentTimeMillis(),
-    @Transient
-    val query: String = "",
     val page: Int,
     val results: List<SearchTvShowsResponseDto>,
     @SerialName("total_pages")

@@ -1,75 +1,49 @@
-package com.london.data.dto.search
+package com.london.data.datasource.local.dto
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey
-import kotlinx.serialization.SerialName
-import kotlinx.serialization.Serializable
-import kotlinx.serialization.Transient
 
-@Serializable
 @Entity(tableName = "search_actors_table")
-data class SearchActorsResponse(
+data class SearchActorsResponseLocal(
     @PrimaryKey(autoGenerate = true) val id: Int = 0,
-    @Transient
     val date: Long = System.currentTimeMillis(),
-    @Transient
-    val query: String? = null,
+    val query: String,
     val page: Int,
-    val results: List<PersonDto>,
-    @SerialName("total_pages")
+    val results: List<PersonDtoLocal>,
     val totalPages: Int,
-    @SerialName("total_results")
     val totalResults: Int
 )
 
-@Serializable
-data class PersonDto(
+data class PersonDtoLocal(
     val adult: Boolean,
     val gender: Int,
     val id: Int,
-    @SerialName("known_for_department")
     val knownForDepartment: String,
     val name: String,
-    @SerialName("original_name")
     val originalName: String,
     val popularity: Double,
-    @SerialName("profile_path")
     val profilePath: String?,
-    @SerialName("known_for")
-    val knownFor: List<KnownForDto>
+    val knownFor: List<KnownForDtoLocal>
 )
 
-@Serializable
-data class KnownForDto(
+data class KnownForDtoLocal(
     val adult: Boolean,
-    @SerialName("backdrop_path")
     val backdropPath: String?,
     val id: Int,
     val title: String? = null,
-    @SerialName("original_title")
     val originalTitle: String? = null,
     val overview: String? = null,
-    @SerialName("poster_path")
     val posterPath: String? = null,
-    @SerialName("media_type")
     val mediaType: String,
-    @SerialName("original_language")
     val originalLanguage: String,
-    @SerialName("genre_ids")
     val genreIds: List<Int>,
     val popularity: Double,
-    @SerialName("release_date")
     val releaseDate: String? = null,
     val video: Boolean? = null,
-    @SerialName("vote_average")
     val voteAverage: Double,
-    @SerialName("vote_count")
     val voteCount: Int,
     val name: String? = null,
-    @SerialName("original_name")
     val originalName: String? = null,
-    @SerialName("first_air_date")
     val firstAirDate: String? = null,
-    @SerialName("origin_country")
     val originCountry: List<String>? = null
 )

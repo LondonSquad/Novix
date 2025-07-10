@@ -6,26 +6,26 @@ import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import androidx.room.Update
-import com.london.data.dto.search.SearchMoviesResponse
+import com.london.data.datasource.local.dto.SearchMoviesResponseLocal
 
 @Dao
-interface SearchMoviesDao : SearchDao<SearchMoviesResponse> {
+interface SearchMoviesDao : SearchDao<SearchMoviesResponseLocal> {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    override fun insert(search: SearchMoviesResponse)
+    override suspend fun insert(search: SearchMoviesResponseLocal)
 
     @Update
-    override fun update(search: SearchMoviesResponse)
+    override suspend fun update(search: SearchMoviesResponseLocal)
 
     @Delete
-    override fun delete(search: SearchMoviesResponse)
+    override suspend fun delete(search: SearchMoviesResponseLocal)
 
     @Query("SELECT * FROM search_movies_table")
-    override fun getAll(): SearchMoviesResponse
+    override suspend fun getAll(): SearchMoviesResponseLocal
 
     @Query("SELECT * FROM search_movies_table WHERE date = :date")
-    override fun getCurrentSearch(date: Long): SearchMoviesResponse
+    override suspend fun getCurrentSearch(date: Long): SearchMoviesResponseLocal
 
     @Query("SELECT * FROM search_movies_table WHERE `query` = :query")
-    override fun getSearchByQuery(query: String): SearchMoviesResponse
+    override suspend fun getSearchByQuery(query: String): SearchMoviesResponseLocal
 }

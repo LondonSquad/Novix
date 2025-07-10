@@ -2,30 +2,31 @@ package com.london.data.datasource.local.convertor
 
 import androidx.room.TypeConverter
 import com.google.gson.Gson
-import com.london.data.dto.search.KnownForDto
-import com.london.data.dto.search.PersonDto
+import com.london.data.datasource.local.dto.KnownForDtoLocal
+import com.london.data.datasource.local.dto.PersonDtoLocal
+
 
 class SearchActorsResponseConvertor {
 
     private val gson = Gson()
 
     @TypeConverter
-    fun fromPersonList(persons: List<PersonDto>): String {
+    fun fromPersonList(persons: List<PersonDtoLocal>): String {
         return gson.toJson(persons)
     }
 
     @TypeConverter
-    fun toPersonList(personsString: String): List<PersonDto> {
-        return gson.fromJson(personsString, Array<PersonDto>::class.java).toList()
+    fun toPersonList(personsString: String): List<PersonDtoLocal> {
+        return gson.fromJson(personsString, Array<PersonDtoLocal>::class.java).toList()
     }
 
     @TypeConverter
-    fun fromKnownForList(knownFor: List<KnownForDto>): String {
+    fun fromKnownForList(knownFor: List<KnownForDtoLocal>): String {
         return gson.toJson(knownFor)
     }
 
     @TypeConverter
-    fun toKnownForList(knownForString: String): List<KnownForDto> {
-        return gson.fromJson(knownForString, Array<KnownForDto>::class.java).toList()
+    fun toKnownForList(knownForString: String): List<KnownForDtoLocal> {
+        return gson.fromJson(knownForString, Array<KnownForDtoLocal>::class.java).toList()
     }
 }

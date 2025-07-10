@@ -1,10 +1,10 @@
 package com.london.data.datasource.local.dao
 
 interface SearchDao<T> {
-    fun insert(search: T)
-    fun update(search: T)
-    fun delete(search: T)
-    fun getAll(): T
-    fun getCurrentSearch(date: Long): T
-    fun getSearchByQuery(query: String): T
+    suspend fun insert(search: T)
+    suspend fun update(search: T)
+    suspend fun delete(search: T)
+    suspend fun getAll(): T
+    suspend fun getCurrentSearch(date: Long): T
+    suspend fun getSearchByQuery(query: String): T
 }

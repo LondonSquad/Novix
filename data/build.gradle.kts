@@ -50,4 +50,6 @@ dependencies {
     androidTestImplementation(libs.bundles.android.testing)
     implementation(libs.gson)
     testImplementation(libs.mockk)
+    testImplementation(libs.kotlinx.coroutines.test.v1102)
+    testImplementation(kotlin("test"))
 }

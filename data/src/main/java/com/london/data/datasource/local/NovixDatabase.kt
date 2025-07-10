@@ -10,12 +10,19 @@ import com.london.data.datasource.local.convertor.SearchTvShowsResponseConvertor
 import com.london.data.datasource.local.dao.SearchActorsDao
 import com.london.data.datasource.local.dao.SearchMoviesDao
 import com.london.data.datasource.local.dao.SearchTvShowDao
-import com.london.data.dto.search.SearchActorsResponse
-import com.london.data.dto.search.SearchMoviesResponse
-import com.london.data.dto.search.SearchTvShowsResponse
+import com.london.data.datasource.local.dto.SearchActorsResponseLocal
+import com.london.data.datasource.local.dto.SearchMoviesResponseLocal
+import com.london.data.datasource.local.dto.SearchTvShowsResponseLocal
+import com.london.data.datasource.remote.search.SearchActorsResponse
+import com.london.data.datasource.remote.search.SearchMoviesResponse
+import com.london.data.datasource.remote.search.SearchTvShowsResponse
 
 @Database(
-    entities = [SearchTvShowsResponse::class, SearchMoviesResponse::class, SearchActorsResponse::class],
+    entities = [
+        SearchTvShowsResponseLocal::class,
+        SearchMoviesResponseLocal::class,
+        SearchActorsResponseLocal::class
+    ],
     version = 1
 )
 @TypeConverters(

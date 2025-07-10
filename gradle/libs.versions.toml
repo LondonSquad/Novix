@@ -4,6 +4,7 @@ agp = "8.8.2"
 firebaseBom = "33.16.0"
 gson = "2.11.0"
 kotlin = "2.0.21"
+kotlinxCoroutinesTestVersion = "1.10.2"
 ksp = "2.0.21-1.0.27"
 
 # AndroidX Core
@@ -102,6 +103,7 @@ koin-annotations = { group = "io.insert-koin", name = "koin-annotations", versio
 koin-ksp-compiler = { group = "io.insert-koin", name = "koin-ksp-compiler", version.ref = "koinKspCompiler" }
 
 # Ktor Networking
+kotlinx-coroutines-test-v1102 = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-test", version.ref = "kotlinxCoroutinesTestVersion" }
 ktor-client-core = { group = "io.ktor", name = "ktor-client-core", version.ref = "ktor" }
 ktor-client-android = { group = "io.ktor", name = "ktor-client-okhttp", version.ref = "ktor" }
 ktor-client-serialization = { group = "io.ktor", name = "ktor-serialization-kotlinx-json", version.ref = "ktor" }
