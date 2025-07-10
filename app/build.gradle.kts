@@ -69,4 +69,5 @@ dependencies {
     testImplementation(libs.bundles.testing)
     implementation(libs.bundles.room)
     implementation(libs.bundles.koin)
+    ksp(libs.bundles.room.ksp)
 }
