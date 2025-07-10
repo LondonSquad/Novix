@@ -48,10 +48,10 @@ fun PrimaryButton(
     ) {
 
         if (hasLabel && text != null) {
-                Text(
-                    text = text,
-                    style = NovixTheme.typography.label.large,
-                )
+            Text(
+                text = text,
+                style = NovixTheme.typography.label.large,
+            )
         }
 
         if (isLoading) {
