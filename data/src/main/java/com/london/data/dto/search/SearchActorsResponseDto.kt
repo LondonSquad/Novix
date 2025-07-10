@@ -1,10 +1,19 @@
 package com.london.data.dto.search
 
+import androidx.room.Entity
+import androidx.room.PrimaryKey
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
+import kotlinx.serialization.Transient
 
 @Serializable
+@Entity(tableName = "search_actors_table")
 data class SearchActorsResponse(
+    @PrimaryKey(autoGenerate = true) val id: Int = 0,
+    @Transient
+    val date: Long = System.currentTimeMillis(),
+    @Transient
+    val query: String? = null,
     val page: Int,
     val results: List<PersonDto>,
     @SerialName("total_pages")

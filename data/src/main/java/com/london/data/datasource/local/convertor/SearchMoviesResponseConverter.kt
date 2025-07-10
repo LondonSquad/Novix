@@ -3,31 +3,31 @@ package com.london.data.datasource.local.convertor
 import androidx.room.TypeConverter
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
-import com.london.data.datasource.local.dto.SearchMoviesResponseLocal
-import com.london.data.datasource.local.dto.SearchMoviesResponseDtoLocal
+import com.london.data.dto.search.SearchMoviesResponse
+import com.london.data.dto.search.SearchMoviesResponseDto
 
 class SearchMoviesResponseConverter {
 
     private val gson = Gson()
 
     @TypeConverter
-    fun fromSearchMoviesResponse(value: SearchMoviesResponseLocal): String {
+    fun fromSearchMoviesResponse(value: SearchMoviesResponse): String {
         return gson.toJson(value)
     }
 
     @TypeConverter
-    fun toSearchMoviesResponse(json: String): SearchMoviesResponseLocal {
-        return gson.fromJson(json, SearchMoviesResponseLocal::class.java)
+    fun toSearchMoviesResponse(json: String): SearchMoviesResponse {
+        return gson.fromJson(json, SearchMoviesResponse::class.java)
     }
 
     @TypeConverter
-    fun fromSearchMoviesResponseDtoList(list: List<SearchMoviesResponseDtoLocal>): String {
+    fun fromSearchMoviesResponseDtoList(list: List<SearchMoviesResponseDto>): String {
         return gson.toJson(list)
     }
 
     @TypeConverter
-    fun toSearchMoviesResponseDtoList(json: String): List<SearchMoviesResponseDtoLocal> {
-        val type = object : TypeToken<List<SearchMoviesResponseDtoLocal>>() {}.type
+    fun toSearchMoviesResponseDtoList(json: String): List<SearchMoviesResponseDto> {
+        val type = object : TypeToken<List<SearchMoviesResponseDto>>() {}.type
         return gson.fromJson(json, type)
     }
 }

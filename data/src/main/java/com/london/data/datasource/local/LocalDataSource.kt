@@ -1,23 +1,24 @@
 package com.london.data.datasource.local
 
-import com.london.data.datasource.local.dto.SearchMoviesResponseLocal
-import com.london.data.datasource.local.dto.SearchTvShowsResponseLocal
-import com.london.data.datasource.local.dto.SearchActorsResponse
+import com.london.data.dto.search.SearchActorsResponse
+import com.london.data.dto.search.SearchMoviesResponse
+import com.london.data.dto.search.SearchTvShowsResponse
+
 
 interface LocalDataSource {
-    fun insertMovie(movie : SearchMoviesResponseLocal)
-    fun insertTvShow(tvShow : SearchTvShowsResponseLocal)
+    fun insertMovie(movie : SearchMoviesResponse)
+    fun insertTvShow(tvShow : SearchTvShowsResponse)
     fun insertActor(actor : SearchActorsResponse)
-    fun updateMovie(movie: SearchMoviesResponseLocal)
-    fun updateTvShow(tvShow: SearchTvShowsResponseLocal)
+    fun updateMovie(movie: SearchMoviesResponse)
+    fun updateTvShow(tvShow: SearchTvShowsResponse)
     fun updateActor(actor: SearchActorsResponse)
-    fun deleteMovie(movie: SearchMoviesResponseLocal)
-    fun deleteTvShow(tvShow: SearchTvShowsResponseLocal)
+    fun deleteMovie(movie: SearchMoviesResponse)
+    fun deleteTvShow(tvShow: SearchTvShowsResponse)
     fun deleteActor(actor: SearchActorsResponse)
-    fun getMovies() : SearchMoviesResponseLocal
-    fun getTvShows() : SearchTvShowsResponseLocal
+    fun getMovies() : SearchMoviesResponse
+    fun getTvShows() : SearchTvShowsResponse
     fun getActors() : SearchActorsResponse
-    fun getMovieByDate(date : Long) : SearchMoviesResponseLocal
-    fun getTvShowByDate(date : Long) : SearchTvShowsResponseLocal
+    fun getMovieByDate(date : Long) : SearchMoviesResponse
+    fun getTvShowByDate(date : Long) : SearchTvShowsResponse
     fun getActorByDate(date : Long) : SearchActorsResponse
 }

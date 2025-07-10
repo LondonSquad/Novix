@@ -5,22 +5,22 @@ import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.Query
 import androidx.room.Update
-import com.london.data.datasource.local.dto.SearchTvShowsResponseLocal
+import com.london.data.dto.search.SearchTvShowsResponse
 
 @Dao
-interface SearchTvShowDao : SearchDao<SearchTvShowsResponseLocal> {
+interface SearchTvShowDao : SearchDao<SearchTvShowsResponse> {
     @Insert
-    override fun insert(search: SearchTvShowsResponseLocal)
+    override fun insert(search: SearchTvShowsResponse)
 
     @Update
-    override fun update(search: SearchTvShowsResponseLocal)
+    override fun update(search: SearchTvShowsResponse)
 
     @Delete
-    override fun delete(search: SearchTvShowsResponseLocal)
+    override fun delete(search: SearchTvShowsResponse)
 
-    @Query("SELECT * FROM search_tv_shows_response")
-    override fun getAll(): SearchTvShowsResponseLocal
+    @Query("SELECT * FROM search_tv_shows_table")
+    override fun getAll(): SearchTvShowsResponse
 
-    @Query("SELECT * FROM search_tv_shows_response WHERE date = :date")
-    override fun getCurrentSearch(date: Long): SearchTvShowsResponseLocal
+    @Query("SELECT * FROM search_tv_shows_table WHERE date = :date")
+    override fun getCurrentSearch(date: Long): SearchTvShowsResponse
 }

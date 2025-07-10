@@ -1,10 +1,17 @@
 package com.london.data.dto.search
 
+import androidx.room.Entity
+import androidx.room.PrimaryKey
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
+import kotlinx.serialization.Transient
 
 @Serializable
+@Entity(tableName = "search_tv_shows_table")
 data class SearchTvShowsResponse(
+    @PrimaryKey(autoGenerate = true) val id: Int = 0,
+    @Transient
+    val date: Long = System.currentTimeMillis(),
     val page: Int,
     val results: List<SearchTvShowsResponseDto>,
     val total_pages: Int,
@@ -27,4 +34,4 @@ data class SearchTvShowsResponseDto(
     @SerialName("name") val name: String,
     @SerialName("vote_average") val vote_average: Int,
     @SerialName("vote_count") val vote_count: Int
-    )
+)

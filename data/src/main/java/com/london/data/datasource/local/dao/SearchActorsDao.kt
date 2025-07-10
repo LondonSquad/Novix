@@ -5,7 +5,7 @@ import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.Query
 import androidx.room.Update
-import com.london.data.datasource.local.dto.SearchActorsResponse
+import com.london.data.dto.search.SearchActorsResponse
 
 @Dao
 interface SearchActorsDao : SearchDao<SearchActorsResponse> {
@@ -19,9 +19,9 @@ interface SearchActorsDao : SearchDao<SearchActorsResponse> {
     @Delete
     override fun delete(search: SearchActorsResponse)
 
-    @Query("SELECT * FROM search_actors_response")
+    @Query("SELECT * FROM search_actors_table")
     override fun getAll(): SearchActorsResponse
 
-    @Query("SELECT * FROM search_actors_response WHERE date = :date")
+    @Query("SELECT * FROM search_actors_table WHERE date = :date")
     override fun getCurrentSearch(date: Long): SearchActorsResponse
 }
