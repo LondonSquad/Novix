@@ -5,10 +5,11 @@ plugins {
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.ksp)
     alias(libs.plugins.kotlinx.kover)
+    alias(libs.plugins.kotlin.serialization)
 }
 
 android {
-    namespace =  AppConfig.Namespace.DATA
+    namespace = AppConfig.Namespace.DATA
     compileSdk = AppConfig.Version.COMPILE_SDK
 
     defaultConfig {
