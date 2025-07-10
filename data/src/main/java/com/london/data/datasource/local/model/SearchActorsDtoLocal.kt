@@ -1,10 +1,10 @@
-package com.london.data.datasource.local.dto
+package com.london.data.datasource.local.model
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 
 @Entity(tableName = "search_actors_table")
-data class SearchActorsResponseLocal(
+data class SearchActorsLocal(
     @PrimaryKey(autoGenerate = true) val id: Int = 0,
     val date: Long = System.currentTimeMillis(),
     val query: String,

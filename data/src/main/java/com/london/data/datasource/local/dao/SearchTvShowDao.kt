@@ -6,25 +6,25 @@ import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import androidx.room.Update
-import com.london.data.datasource.local.dto.SearchTvShowsResponseLocal
+import com.london.data.datasource.local.model.SearchTvShowLocal
 
 @Dao
-interface SearchTvShowDao : SearchDao<SearchTvShowsResponseLocal> {
+interface SearchTvShowDao : SearchDao<SearchTvShowLocal> {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    override suspend fun insert(search: SearchTvShowsResponseLocal)
+    override suspend fun insert(search: SearchTvShowLocal)
 
     @Update
-    override suspend fun update(search: SearchTvShowsResponseLocal)
+    override suspend fun update(search: SearchTvShowLocal)
 
     @Delete
-    override suspend fun delete(search: SearchTvShowsResponseLocal)
+    override suspend fun delete(search: SearchTvShowLocal)
 
     @Query("SELECT * FROM search_tv_shows_table")
-    override suspend fun getAll(): SearchTvShowsResponseLocal
+    override suspend fun getAll(): SearchTvShowLocal
 
     @Query("SELECT * FROM search_tv_shows_table WHERE date = :date")
-    override suspend fun getCurrentSearch(date: Long): SearchTvShowsResponseLocal
+    override suspend fun getCurrentSearch(date: Long): SearchTvShowLocal
 
     @Query("SELECT * FROM search_tv_shows_table WHERE `query` = :query")
-    override suspend fun getSearchByQuery(query: String): SearchTvShowsResponseLocal
+    override suspend fun getSearchByQuery(query: String): SearchTvShowLocal
 }

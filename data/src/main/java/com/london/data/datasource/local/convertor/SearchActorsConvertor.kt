@@ -2,11 +2,11 @@ package com.london.data.datasource.local.convertor
 
 import androidx.room.TypeConverter
 import com.google.gson.Gson
-import com.london.data.datasource.local.dto.KnownForDtoLocal
-import com.london.data.datasource.local.dto.PersonDtoLocal
+import com.london.data.datasource.local.model.KnownForDtoLocal
+import com.london.data.datasource.local.model.PersonDtoLocal
 
 
-class SearchActorsResponseConvertor {
+class SearchActorsConvertor {
 
     private val gson = Gson()
 

@@ -22,9 +22,9 @@ import com.london.data.datasource.local.UpdateTvShowExpansion
 import com.london.data.datasource.local.dao.SearchActorsDao
 import com.london.data.datasource.local.dao.SearchMoviesDao
 import com.london.data.datasource.local.dao.SearchTvShowDao
-import com.london.data.datasource.local.dto.SearchActorsResponseLocal
-import com.london.data.datasource.local.dto.SearchMoviesResponseLocal
-import com.london.data.datasource.local.dto.SearchTvShowsResponseLocal
+import com.london.data.datasource.local.model.SearchActorsLocal
+import com.london.data.datasource.local.model.SearchMoviesLocal
+import com.london.data.datasource.local.model.SearchTvShowLocal
 import io.mockk.Runs
 import io.mockk.coEvery
 import io.mockk.coVerify
@@ -45,9 +45,9 @@ class LocalDataSourceImplTest {
     private lateinit var searchActorsDao: SearchActorsDao
     private lateinit var localDataSource: LocalDataSourceImpl
 
-    private val mockMoviesResponse = mockk<SearchMoviesResponseLocal>()
-    private val mockTvShowsResponse = mockk<SearchTvShowsResponseLocal>()
-    private val mockActorsResponse = mockk<SearchActorsResponseLocal>()
+    private val mockMoviesResponse = mockk<SearchMoviesLocal>()
+    private val mockTvShowsResponse = mockk<SearchTvShowLocal>()
+    private val mockActorsResponse = mockk<SearchActorsLocal>()
     private val testDate = 1234567890L
 
     @Before
