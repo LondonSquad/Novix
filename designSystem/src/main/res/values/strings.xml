@@ -8,4 +8,10 @@
     <string name="arrow" translatable="false">arrow</string>
     <string name="new_arrival">New Arrival</string>
     <string name="my_account">My account</string>
+    <string name="filter">Filter</string>
+    <string name="released_year">Released year</string>
+    <string name="genres">Genres</string>
+    <string name="apply">Apply</string>
+    <string name="imdb_rating">IMDb rating</string>
+    <string name="clear">Clear</string>
 </resources>
