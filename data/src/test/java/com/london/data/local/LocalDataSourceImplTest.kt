@@ -4,10 +4,13 @@ import com.london.data.datasource.local.DeleteActorExpansion
 import com.london.data.datasource.local.DeleteMovieExpansion
 import com.london.data.datasource.local.DeleteTvShowExpansion
 import com.london.data.datasource.local.GetActorByDateExpansion
+import com.london.data.datasource.local.GetActorByQueryExpansion
 import com.london.data.datasource.local.GetActorsAllExpansion
 import com.london.data.datasource.local.GetMovieByDateExpansion
+import com.london.data.datasource.local.GetMovieByQueryExpansion
 import com.london.data.datasource.local.GetMoviesAllExpansion
 import com.london.data.datasource.local.GetTvShowByDateExpansion
+import com.london.data.datasource.local.GetTvShowByQueryExpansion
 import com.london.data.datasource.local.GetTvShowsAllExpansion
 import com.london.data.datasource.local.InsertActorExpansion
 import com.london.data.datasource.local.InsertMovieExpansion
@@ -437,6 +440,89 @@ class LocalDataSourceImplTest {
             localDataSource.getActorByDate(testDate)
         }
         verify(exactly = 1) { searchActorsDao.getCurrentSearch(testDate) }
+    }
+    // endregion
+
+    // region GET BY QUERY TESTS
+    @Test
+    fun `getActorByQuery should return actor from dao successfully`() {
+        // Given
+        val testQuery = "test query"
+        every { searchActorsDao.getSearchByQuery(testQuery) } returns mockActorsResponse
+
+        // When
+        val result = localDataSource.getActorByQuery(testQuery)
+
+        // Then
+        assertEquals(mockActorsResponse, result)
+        verify(exactly = 1) { searchActorsDao.getSearchByQuery(testQuery) }
+    }
+
+    @Test
+    fun `getActorByQuery should throw GetActorByQueryExpansion when dao throws exception`() {
+        // Given
+        val testQuery = "test query"
+        every { searchActorsDao.getSearchByQuery(testQuery) } throws RuntimeException("Database error")
+
+        // When & Then
+        assertThrows(GetActorByQueryExpansion::class.java) {
+            localDataSource.getActorByQuery(testQuery)
+        }
+        verify(exactly = 1) { searchActorsDao.getSearchByQuery(testQuery) }
+    }
+
+    @Test
+    fun `getTvShowByQuery should return tv show from dao successfully`() {
+        // Given
+        val testQuery = "test query"
+        every { searchTvShowDao.getSearchByQuery(testQuery) } returns mockTvShowsResponse
+
+        // When
+        val result = localDataSource.getTvShowByQuery(testQuery)
+
+        // Then
+        assertEquals(mockTvShowsResponse, result)
+        verify(exactly = 1) { searchTvShowDao.getSearchByQuery(testQuery) }
+    }
+
+    @Test
+    fun `getTvShowByQuery should throw GetTvShowByQueryExpansion when dao throws exception`() {
+        // Given
+        val testQuery = "test query"
+        every { searchTvShowDao.getSearchByQuery(testQuery) } throws RuntimeException("Database error")
+
+        // When & Then
+        assertThrows(GetTvShowByQueryExpansion::class.java) {
+            localDataSource.getTvShowByQuery(testQuery)
+        }
+        verify(exactly = 1) { searchTvShowDao.getSearchByQuery(testQuery) }
+    }
+
+    @Test
+    fun `getMovieByQuery should return movie from dao successfully`() {
+        // Given
+        val testQuery = "test query"
+        every { searchMoviesDao.getSearchByQuery(testQuery) } returns mockMoviesResponse
+
+        // When
+        val result = localDataSource.getMovieByQuery(testQuery)
+
+        // Then
+        assertEquals(mockMoviesResponse, result)
+        verify(exactly = 1) { searchMoviesDao.getSearchByQuery(testQuery) }
+    }
+
+    @Test
+    fun `getMovieByQuery should throw GetMovieByQueryExpansion when dao throws exception`() {
+        // Given
+        val testQuery = "test query"
+        every { searchMoviesDao.getSearchByQuery(testQuery) } throws RuntimeException("Database error")
+
+        // When & Then
+        assertThrows(GetMovieByQueryExpansion::class.java) {
+            localDataSource.getMovieByQuery(testQuery)
+        }
+        verify(exactly = 1) { searchMoviesDao.getSearchByQuery(testQuery) }
     }
     // endregion
 }
