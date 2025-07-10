@@ -16,7 +16,9 @@ data class SearchTvShowsResponse(
     val query: String = "",
     val page: Int,
     val results: List<SearchTvShowsResponseDto>,
+    @SerialName("total_pages")
     val totalPages: Int,
+    @SerialName("total_results")
     val totalResults: Int
 )
 
