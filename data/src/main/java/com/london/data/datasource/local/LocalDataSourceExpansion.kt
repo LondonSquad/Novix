@@ -16,29 +16,29 @@ import com.london.data.datasource.local.LocalDataSourceMessages.UPDATE_ACTOR
 import com.london.data.datasource.local.LocalDataSourceMessages.UPDATE_MOVIE
 import com.london.data.datasource.local.LocalDataSourceMessages.UPDATE_TV_SHOW
 
-open class LocalDataSourceImplExpansion(message: String) : Exception(message)
+open class LocalDataSourceExpansion(message: String) : Exception(message)
 
-open class InsertExpansion(message: String) : LocalDataSourceImplExpansion(message)
+open class InsertExpansion(message: String) : LocalDataSourceExpansion(message)
 class InsertMovieExpansion(message: String = INSERT_MOVIE) : InsertExpansion(message)
 class InsertTvShowExpansion(message: String = INSERT_TV_SHOW) : InsertExpansion(message)
 class InsertActorExpansion(message: String = INSERT_ACTOR) : InsertExpansion(message)
 
-open class UpdateExpansion(message: String) : LocalDataSourceImplExpansion(message)
+open class UpdateExpansion(message: String) : LocalDataSourceExpansion(message)
 class UpdateMovieExpansion(message: String = UPDATE_MOVIE) : UpdateExpansion(message)
 class UpdateTvShowExpansion(message: String = UPDATE_TV_SHOW) : UpdateExpansion(message)
 class UpdateActorExpansion(message: String = UPDATE_ACTOR) : UpdateExpansion(message)
 
-open class DeleteExpansion(message: String) : LocalDataSourceImplExpansion(message)
+open class DeleteExpansion(message: String) : LocalDataSourceExpansion(message)
 class DeleteTvShowExpansion(message: String = DELETE_TV_SHOW) : DeleteExpansion(message)
 class DeleteMovieExpansion(message: String = DELETE_MOVIE) : DeleteExpansion(message)
 class DeleteActorExpansion(message: String = DELETE_ACTOR) : DeleteExpansion(message)
 
-open class GetAllExpansion(message: String) : LocalDataSourceImplExpansion(message)
+open class GetAllExpansion(message: String) : LocalDataSourceExpansion(message)
 class GetMoviesAllExpansion(message: String = GET_MOVIES) : GetAllExpansion(message)
 class GetTvShowsAllExpansion(message: String = GET_TV_SHOWS) : GetAllExpansion(message)
 class GetActorsAllExpansion(message: String = GET_ACTORS) : GetAllExpansion(message)
 
-open class GetByDateExpansion(message: String) : LocalDataSourceImplExpansion(message)
+open class GetByDateExpansion(message: String) : LocalDataSourceExpansion(message)
 class GetMovieByDateExpansion(message: String = GET_MOVIE_BY_DATE) : GetByDateExpansion(message)
 class GetTvShowByDateExpansion(message: String = GET_TV_SHOW_BY_DATE) : GetByDateExpansion(message)
 class GetActorByDateExpansion(message: String = GET_ACTOR_BY_DATE) : GetByDateExpansion(message)
