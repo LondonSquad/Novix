@@ -1,9 +1,9 @@
 package com.london.data.datasource.remote
 
 import android.util.Log
-import com.london.data.dto.search.SearchActorsResponse
-import com.london.data.dto.search.SearchMoviesResponse
-import com.london.data.dto.search.SearchTvShowsResponse
+import com.london.data.datasource.remote.search.SearchActorsResponse
+import com.london.data.datasource.remote.search.SearchMoviesResponse
+import com.london.data.datasource.remote.search.SearchTvShowsResponse
 import io.ktor.client.HttpClient
 import io.ktor.client.request.get
 import io.ktor.client.statement.bodyAsText
