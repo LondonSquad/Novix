@@ -1,5 +1,6 @@
 package com.london.data.repository
 
+import com.google.firebase.crashlytics.FirebaseCrashlytics
 import com.london.data.datasource.local.GetException
 import com.london.data.datasource.local.LocalDataSource
 import com.london.data.datasource.local.model.SearchActorsLocal
@@ -28,49 +29,82 @@ class SearchRepositoryImpl(
         name: String, language: String
     ): List<Movie> {
 
+        var result: List<Movie> = emptyList()
         val local = searchMovieService.getByQuery(query = name + language)
-        return try {
-            local?.results?.map { it.toMovieEntity() }
+        var remoteResponseToCache: SearchMoviesLocal? = null
+        try {
+            result = local
+                ?.results
+                ?.map { it.toMovieEntity() }
                 ?: remoteDataSource.searchForMovies()
                     .toLocal(query = name + language)
-                    .also {
-                        searchMovieService.insert(it)
-                    }
-                    .results.map { it.toMovieEntity() }
-        } catch (e: GetException) {
+                    .also { remoteResponseToCache = it }
+                    .results
+                    .map { it.toMovieEntity() }
+            searchMovieService.insert(remoteResponseToCache ?: return result)
+        } catch (_: GetException) {
             throw MovieSearchFailedException()
+        } catch (e: Exception) {
+            addExceptionToCrashlytics(e)
         }
+        return result
     }
 
     override suspend fun searchForTvShows(
         name: String, language: String
     ): List<TvShow> {
+
+        var result: List<TvShow> = emptyList()
+        val local = searchTvShowService.getByQuery(query = name + language)
+        var remoteResponseToCache: SearchTvShowLocal? = null
         try {
-            val local = searchTvShowService.getByQuery(query = name + language)
-            return local?.results?.map { it.toTvShowEntity() }
+            result = local
+                ?.results
+                ?.map { it.toTvShowEntity() }
                 ?: remoteDataSource.searchForTvShows()
                     .toLocal(query = name + language)
-                    .also {
-                        searchTvShowService.insert(it)
-                    }
-                    .results.map { it.toTvShowEntity() }
-        } catch (e: Exception) {
+                    .also { remoteResponseToCache = it }
+                    .results
+                    .map { it.toTvShowEntity() }
+            searchTvShowService.insert(remoteResponseToCache ?: return result)
+        } catch (_: GetException) {
             throw TvShowSearchFailedException()
+        } catch (e: Exception) {
+            addExceptionToCrashlytics(e)
         }
-
+        return result
     }
 
     override suspend fun searchForActors(
         name: String, language: String
     ): List<Actor> {
+
+        var result: List<Actor> = emptyList()
+        val local = searchActorService.getByQuery(query = name + language)
+        var remoteResponseToCache: SearchActorsLocal? = null
         try {
-            val local = searchActorService.getByQuery(query = name + language)
-            return local?.results?.map { it.toActorEntity() }
+            result = local
+                ?.results
+                ?.map { it.toActorEntity() }
                 ?: remoteDataSource.searchForActors()
                     .toLocal(query = name + language)
+                    .also { remoteResponseToCache = it }
                     .results.map { it.toActorEntity() }
-        } catch (e: Exception) {
+            searchActorService.insert(remoteResponseToCache ?: return result)
+        } catch (_: GetException) {
             throw ActorSearchFailedException()
+        } catch (e: Exception) {
+            addExceptionToCrashlytics(e)
+        }
+        return result
+    }
+
+    private fun addExceptionToCrashlytics(e: Exception) {
+        FirebaseCrashlytics.getInstance().apply {
+            setCustomKey("operation", "un_known_error")
+            setCustomKey("error_type", "{${e.javaClass.name}}")
+            setCustomKey("timestamp", System.currentTimeMillis())
+            recordException(e)
         }
     }
 }
