@@ -36,7 +36,6 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
-import com.london.designsystem.component.ActorItem
 import com.london.designsystem.component.EmptySearchComponent
 import com.london.designsystem.component.HomeCard
 import com.london.designsystem.component.NovixChip
@@ -46,8 +45,8 @@ import com.london.designsystem.component.TopBar
 import com.london.designsystem.component.button.PrimaryButton
 import com.london.designsystem.theme.NovixTheme
 import com.london.designsystem.theme.ThemePreviews
-import com.london.domain.entity.Actor
 import com.london.presentation.R
+import com.london.presentation.composables.ActorsLayout
 import com.london.presentation.composables.MoviesLayOut
 import com.london.presentation.composables.TvShowLayOut
 import com.london.presentation.utils.ResultOrEmpty
@@ -160,6 +159,8 @@ fun SearchScreenContent(
                                 onActorClick = { /* Handle actor click */ }
                             )
                         }
+                    )
+                }
                     )
                 }
 
