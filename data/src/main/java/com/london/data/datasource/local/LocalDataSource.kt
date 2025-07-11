@@ -1,26 +1,21 @@
 package com.london.data.datasource.local
 
-import com.london.data.datasource.local.model.SearchActorsLocal
-import com.london.data.datasource.local.model.SearchMoviesLocal
-import com.london.data.datasource.local.model.SearchTvShowLocal
+import java.security.MessageDigest
 
-interface LocalDataSource {
-    suspend fun insertMovie(movie : SearchMoviesLocal)
-    suspend fun insertTvShow(tvShow : SearchTvShowLocal)
-    suspend fun insertActor(actor : SearchActorsLocal)
-    suspend fun updateMovie(movie: SearchMoviesLocal)
-    suspend fun updateTvShow(tvShow: SearchTvShowLocal)
-    suspend fun updateActor(actor: SearchActorsLocal)
-    suspend fun deleteMovie(movie: SearchMoviesLocal)
-    suspend fun deleteTvShow(tvShow: SearchTvShowLocal)
-    suspend fun deleteActor(actor: SearchActorsLocal)
-    suspend fun getMovies() : List<SearchMoviesLocal>
-    suspend fun getTvShows() : List<SearchTvShowLocal>
-    suspend fun getActors() : List<SearchActorsLocal>
-    suspend fun getMovieByDate(date : Long) : SearchMoviesLocal
-    suspend fun getTvShowByDate(date : Long) : SearchTvShowLocal
-    suspend fun getActorByDate(date : Long) : SearchActorsLocal
-    suspend fun getActorByQuery(query : String) : SearchActorsLocal
-    suspend fun getTvShowByQuery(query : String) : SearchTvShowLocal
-    suspend fun getMovieByQuery(query : String) : SearchMoviesLocal
+interface LocalDataSource<T> {
+    suspend fun insert(item: T)
+    suspend fun update(item: T)
+    suspend fun delete(item: T)
+    suspend fun get(): List<T>
+    suspend fun getByDate(date: Long): T
+    suspend fun getByQuery(query: String): T
+
+    fun String.generateHash(): String = MessageDigest.getInstance("MD5").digest(toByteArray())
+        .joinToString("") { "%02x".format(it) }
+
+    fun isOneHourExpired(date: Long): Boolean {
+        val oneHourInMillis = 60 * 60 * 1000
+        val oneHourAgo = System.currentTimeMillis() - oneHourInMillis
+        return date < oneHourAgo
+    }
 }

@@ -1,0 +1,41 @@
+package com.london.data.datasource.local.localDataSourceImpl
+
+import com.london.data.datasource.local.LocalDataSource
+import com.london.data.datasource.local.dao.SearchMoviesDao
+import com.london.data.datasource.local.model.SearchMoviesLocal
+import com.london.data.datasource.util.executeDelete
+import com.london.data.datasource.util.executeGetAll
+import com.london.data.datasource.util.executeGetByDate
+import com.london.data.datasource.util.executeGetByQuery
+import com.london.data.datasource.util.executeInsert
+import com.london.data.datasource.util.executeUpdate
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+
+class MovieLocalDataSourceImpl(
+    private val searchMoviesDao: SearchMoviesDao
+) : LocalDataSource<SearchMoviesLocal> {
+    init {
+        CoroutineScope(Dispatchers.IO).launch {
+            searchMoviesDao.getAll().forEach {
+                if (isOneHourExpired(it.date)) searchMoviesDao.delete(it)
+
+            }
+        }
+    }
+
+    override suspend fun insert(item: SearchMoviesLocal) = searchMoviesDao.executeInsert(item)
+
+    override suspend fun update(item: SearchMoviesLocal) = searchMoviesDao.executeUpdate(item)
+
+    override suspend fun delete(item: SearchMoviesLocal) = searchMoviesDao.executeDelete(item)
+
+    override suspend fun get(): List<SearchMoviesLocal> = searchMoviesDao.executeGetAll()
+
+    override suspend fun getByDate(date: Long): SearchMoviesLocal =
+        searchMoviesDao.executeGetByDate(date)
+
+    override suspend fun getByQuery(query: String): SearchMoviesLocal =
+        searchMoviesDao.executeGetByQuery(query.generateHash())
+}
