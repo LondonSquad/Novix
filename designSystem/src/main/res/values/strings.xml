@@ -8,6 +8,8 @@
     <string name="arrow" translatable="false">arrow</string>
     <string name="new_arrival">New Arrival</string>
     <string name="my_account">My account</string>
+    <string name="start_exploring_msg">Start exploring! Search for your favorite movies, series and shows</string>
+    <string name="no_search_result_msg">No search result, please try with another keyword!</string>
     <string name="released_year">Released year</string>
     <string name="genres">Genres</string>
     <string name="imdb_rating">IMDb rating</string>

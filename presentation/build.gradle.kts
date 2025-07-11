@@ -51,4 +51,5 @@ dependencies {
     implementation(libs.firebase.analytics)
     implementation(libs.firebase.perf)
     implementation(platform(libs.firebase.bom))
+    implementation(libs.androidx.constraintlayout.compose)
 }

@@ -1,5 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <string name="search">بحث</string>
+    <string name="search_placeholder">ابحث...</string>
+    <string name="recent_viewed">شوهد مؤخرًا</string>
+    <string name="recent_search">عمليات البحث الأخيرة</string>
+    <string name="clear_all">مسح الكل</string>
+    <string name="clock">الساعة</string>
     <string name="filter">تصفية</string>
     <string name="released_year">سنة الإصدار</string>
     <string name="genres">الأنواع</string>
@@ -9,6 +15,8 @@
     <string name="drama">دراما</string>
     <string name="comedy">كوميديا</string>
     <string name="clear">مسح</string>
+    <string name="start_exploring_msg">ابدأ الاستكشاف! ابحث عن أفلامك ومسلسلاتك المفضلة</string>
+    <string name="no_search_result_msg">لا توجد نتائج، جرّب كلمة مفتاحية أخرى!</string>
     <string name="romance">رومانسي</string>
     <string name="crime">جريمة</string>
     <string name="apply">قبول</string>
