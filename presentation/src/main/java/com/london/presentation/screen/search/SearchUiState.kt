@@ -1,9 +1,9 @@
-package com.london.presentation.screens.search_screen
+package com.london.presentation.screen.search
 
 import androidx.compose.runtime.Composable
-import com.london.presentation.screens.search_screen.model.ActorUi
-import com.london.presentation.screens.search_screen.model.MovieUi
-import com.london.presentation.screens.search_screen.model.TvShowUi
+import com.london.presentation.screen.search.model.ActorUi
+import com.london.presentation.screen.search.model.MovieUi
+import com.london.presentation.screen.search.model.TvShowUi
 
 data class SearchUiState(
     var searchQuery: String = "",

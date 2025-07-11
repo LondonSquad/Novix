@@ -20,7 +20,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.london.designsystem.theme.NovixTheme
 import com.london.designsystem.theme.ThemePreviews
-import com.london.presentation.screens.search_screen.SearchScreen
+import com.london.presentation.screen.search.SearchScreen
 
 
 class MainActivity : ComponentActivity() {

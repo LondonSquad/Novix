@@ -1,4 +1,4 @@
-package com.london.presentation.screens.search_screen.model
+package com.london.presentation.screen.search.model
 
 data class ActorUi(
     val id: Int,

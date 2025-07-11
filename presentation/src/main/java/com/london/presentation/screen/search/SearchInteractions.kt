@@ -1,6 +1,6 @@
-package com.london.presentation.screens.search_screen
+package com.london.presentation.screen.search
 
-import com.london.presentation.screens.search_screen.model.MovieUi
+import com.london.presentation.screen.search.model.MovieUi
 
 interface SearchInteractions {
     fun onSearchQueryChange(query: String)

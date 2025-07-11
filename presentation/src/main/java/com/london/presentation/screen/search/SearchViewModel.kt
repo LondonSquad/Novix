@@ -1,8 +1,7 @@
-package com.london.presentation.screens.search_screen
+package com.london.presentation.screen.search
 
-import android.util.Log
 import androidx.lifecycle.ViewModel
-import com.london.presentation.screens.search_screen.model.MovieUi
+import com.london.presentation.screen.search.model.MovieUi
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
