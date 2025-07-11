@@ -48,7 +48,9 @@ class GetTvShowsUseCaseTest {
         const val NAME = "Tv Tv"
         const val LANGUAGE = "en-US"
         val TV_SHOW = TvShow(
-            id = 1, posterPicture = ""
+            id = 1,
+            name = NAME,
+            posterPicture = ""
         )
     }
 }
