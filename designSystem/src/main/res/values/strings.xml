@@ -4,14 +4,11 @@
     <string name="appName">Novix</string>
     <string name="explainTheNameOfApp">Born from Nova, Made for Flix.</string>
     <string name="rate_submitted_successfully">Rate submitted successfully.</string>
-    <string name="error_submitting_rate">Some error happend</string>
+    <string name="error_submitting_rate">Some error happened</string>
     <string name="arrow" translatable="false">arrow</string>
     <string name="new_arrival">New Arrival</string>
     <string name="my_account">My account</string>
-    <string name="filter">Filter</string>
     <string name="released_year">Released year</string>
     <string name="genres">Genres</string>
-    <string name="apply">Apply</string>
     <string name="imdb_rating">IMDb rating</string>
-    <string name="clear">Clear</string>
 </resources>

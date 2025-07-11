@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="filter">Filter</string>
+    <string name="released_year">Released Year</string>
+    <string name="genres">Genres</string>
+    <string name="imdb_rating">IMDB Rating</string>
+    <string name="action">Action</string>
+    <string name="apply">Apply</string>
+    <string name="clear">Clear</string>
+    <string name="drama">Drama</string>
+    <string name="comedy">Comedy</string>
+    <string name="sci_fi">Sci-Fi</string>
+    <string name="romance">Romance</string>
+    <string name="crime">Crime</string>
+    <string name="adventure">Adventure</string>
+    <string name="documentary">Documentary</string>
+
+</resources>

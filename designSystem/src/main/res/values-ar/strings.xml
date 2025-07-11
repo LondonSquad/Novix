@@ -8,11 +8,7 @@
     <string name="appName">نوفيكس</string>
     <string name="explainTheNameOfApp">مشتق من نوفا، مُصمم من أجل الأفلام</string>
     <string name="my_account">حسابي</string>
-    <string name="filter">تصفية</string>
     <string name="released_year">وقت الصدور</string>
     <string name="genres">اصناف</string>
-    <string name="apply">Apply</string>
     <string name="imdb_rating">IMDb rating</string>
-    <string name="clear">Clear</string>
-
 </resources>

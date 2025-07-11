@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="filter">تصفية</string>
+    <string name="released_year">سنة الإصدار</string>
+    <string name="genres">الأنواع</string>
+    <string name="imdb_rating">تقييم IMDB</string>
+    <string name="sci_fi">خيال علمي</string>
+    <string name="action">أكشن</string>
+    <string name="drama">دراما</string>
+    <string name="comedy">كوميديا</string>
+    <string name="clear">مسح</string>
+    <string name="romance">رومانسي</string>
+    <string name="crime">جريمة</string>
+    <string name="apply">قبول</string>
+    <string name="adventure">مغامرة</string>
+    <string name="documentary">وثائقي</string>
+</resources>

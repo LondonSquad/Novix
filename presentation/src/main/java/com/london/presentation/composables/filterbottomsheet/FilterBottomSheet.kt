@@ -1,4 +1,4 @@
-package com.london.designsystem.component.filterbottomsheet
+package com.london.presentation.composables.filterbottomsheet
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -16,29 +16,36 @@ import androidx.compose.material3.BottomSheetDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.ModalBottomSheet
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.london.designsystem.R
-import com.london.designsystem.component.NovixChip
+import com.london.designsystem.component.CustomReleasedYearSlider
+import com.london.designsystem.component.GenreChipGroup
+import com.london.designsystem.component.RatingBar
 import com.london.designsystem.theme.NovixTheme
-import com.london.designsystem.theme.ThemePreviews
+import com.london.presentation.R
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun FilterBottomSheet(
-    uiState: FilterBottomSheetUiState,
     modifier: Modifier = Modifier,
-    onCancel: () -> Unit = {},
-    onApply: () -> Unit = {},
     onDismissRequest: () -> Unit
 ) {
+    var uiState by remember { mutableStateOf(FilterBottomSheetUiState()) }
 
     ModalBottomSheet(
         onDismissRequest = onDismissRequest,
@@ -52,22 +59,46 @@ fun FilterBottomSheet(
         },
         containerColor = NovixTheme.colors.surface
     ) {
+
         FilterBottomSheetContent(
-            uiState = uiState,
-            onCancel = onCancel,
-            onApply = onApply,
-            modifier = modifier
+            modifier = modifier,
+            onDismissRequest = onDismissRequest,
+            onApply = { selectedGenre, imdbRating, yearRange ->
+                uiState = uiState.copy(
+                    selectedGenre = selectedGenre,
+                    imdbRating = imdbRating,
+                    yearRange = yearRange
+                )
+                onDismissRequest()
+            },
+            onClear = {
+                uiState = FilterBottomSheetUiState()
+            }
         )
     }
 }
 
 @Composable
 private fun FilterBottomSheetContent(
-    uiState: FilterBottomSheetUiState,
-    modifier: Modifier = Modifier,
-    onCancel: () -> Unit = {},
-    onApply: () -> Unit = {}
+    modifier: Modifier = Modifier, genres: List<String> = listOf(
+        stringResource(R.string.filter),
+        stringResource(R.string.action),
+        stringResource(R.string.drama),
+        stringResource(R.string.comedy),
+        stringResource(R.string.sci_fi),
+        stringResource(R.string.romance),
+        stringResource(R.string.crime),
+        stringResource(R.string.adventure),
+        stringResource(R.string.documentary),
+    ),
+    onDismissRequest: () -> Unit,
+    onApply: (selected: String?, imdbRating: Int, yearRange: ClosedFloatingPointRange<Float>) -> Unit,
+    onClear: () -> Unit
 ) {
+    var selected by rememberSaveable { mutableStateOf<String?>(null) }
+    var imdbRating by rememberSaveable { mutableIntStateOf(7) }
+    var yearRange by rememberSaveable { mutableStateOf(1980f..2025f) }
+
     Column(
         modifier = modifier
             .padding(
@@ -76,32 +107,37 @@ private fun FilterBottomSheetContent(
                 end = 16.dp
             )
     ) {
-
-        Row(Modifier.fillMaxWidth()) {
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(top = 8.dp, bottom = 24.dp),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
             Text(
                 text = stringResource(R.string.filter),
                 style = NovixTheme.typography.title.large,
                 color = NovixTheme.colors.title,
             )
 
-            Spacer(Modifier.fillMaxWidth(1f))
-
+            Spacer(modifier = Modifier.weight(1f))
 
             Box(
                 modifier = Modifier
+                    .size(32.dp)
+                    .clip(RoundedCornerShape(8.dp))
                     .border(
                         width = 1.dp,
                         color = NovixTheme.colors.stroke,
                         shape = RoundedCornerShape(8.dp)
                     )
-                    .clickable { onCancel() }
-                    .clip(RoundedCornerShape(8.dp))
-                    .size(32.dp),
+                    .clickable { onDismissRequest() },
                 contentAlignment = Alignment.Center
             ) {
                 Icon(
-                    painterResource(R.drawable.cancel),
-                    contentDescription = "cancel the bottom Sheet", modifier.padding(8.dp)
+                    painter = painterResource(com.london.designsystem.R.drawable.cancel),
+                    contentDescription = "Cancel the bottom sheet",
+                    modifier = Modifier.padding(6.dp),
+                    tint = NovixTheme.colors.title
                 )
             }
         }
@@ -110,28 +146,41 @@ private fun FilterBottomSheetContent(
             text = stringResource(R.string.released_year),
             style = NovixTheme.typography.title.small,
             color = NovixTheme.colors.title,
+            modifier = Modifier.padding(bottom = 16.dp)
         )
 
-        //todo release year animation picker
-
+        CustomReleasedYearSlider(
+            yearRange = yearRange,
+            onYearRangeChange = { yearRange = it },
+            minYear = 1950,
+            maxYear = 2030
+        )
 
         Text(
             text = stringResource(R.string.genres),
             style = NovixTheme.typography.title.small,
             color = NovixTheme.colors.title,
+            modifier = Modifier.padding(top = 16.dp, bottom = 8.dp)
         )
-        //todo without internet i don't know how to group them
-        NovixChip("Comedy")
 
+        GenreChipGroup(
+            genres = genres,
+            selectedGenre = selected,
+            onGenreSelected = { selected = it }
+        )
 
         Text(
             text = stringResource(R.string.imdb_rating),
             style = NovixTheme.typography.title.small,
             color = NovixTheme.colors.title,
+            modifier = Modifier.padding(top = 24.dp)
         )
 
-        //todo IMDb rating animation picker
-
+        RatingBar(
+            rating = imdbRating,
+            onRatingChanged = { imdbRating = it },
+            modifier = Modifier.padding(top = 8.dp)
+        )
 
         Column(
             Modifier
@@ -142,9 +191,15 @@ private fun FilterBottomSheetContent(
                 modifier = Modifier
                     .padding(top = 24.dp)
                     .fillMaxWidth()
-                    .background(NovixTheme.colors.primary)
-                    .clickable { onApply() }
                     .clip(RoundedCornerShape(8.dp))
+                    .background(NovixTheme.colors.primary)
+                    .clickable {
+                        onApply(
+                            selected,
+                            imdbRating,
+                            yearRange
+                        )
+                    }
                     .height(48.dp),
                 contentAlignment = Alignment.Center
             ) {
@@ -164,8 +219,8 @@ private fun FilterBottomSheetContent(
                         color = NovixTheme.colors.stroke,
                         shape = RoundedCornerShape(8.dp)
                     )
-                    .clickable { onApply() }
                     .clip(RoundedCornerShape(8.dp))
+                    .clickable { onClear() }
                     .height(48.dp),
                 contentAlignment = Alignment.Center
             ) {
@@ -179,18 +234,20 @@ private fun FilterBottomSheetContent(
     }
 }
 
-
-@ThemePreviews
+@Preview(showBackground = true)
 @Composable
-private fun PreviewTaskDetail() {
-    FilterBottomSheet(
-        uiState = FilterBottomSheetUiState(
-            timeSearchBetween = Pair(1, 3),
-            genres = listOf("", "", ""),
-            imdbRating = "3.4"
-        ),
-        onCancel = {},
-        onApply = {},
-        onDismissRequest = {},
-    )
+fun FilterBottomSheetContentPreview() {
+    NovixTheme {
+        Surface {
+            FilterBottomSheetContent(
+                onDismissRequest = {},
+                onApply = { selected, rating, range ->
+                    println("Apply clicked with genre=$selected, rating=$rating, yearRange=$range")
+                },
+                onClear = {
+                    println("Clear clicked")
+                }
+            )
+        }
+    }
 }
