@@ -1,7 +1,7 @@
 package com.london.data.repository
 
 import com.london.data.datasource.local.LocalDataSource
-import com.london.data.datasource.remote.RemoteDataSource
+import com.london.data.datasource.remote.search.RemoteDataSource
 
 class SearchRepositoryImpl(
     private val localDataSource : LocalDataSource,
