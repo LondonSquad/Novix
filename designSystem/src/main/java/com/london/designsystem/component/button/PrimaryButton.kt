@@ -14,7 +14,9 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.london.designsystem.R
 import com.london.designsystem.theme.NovixTheme
@@ -28,7 +30,9 @@ fun PrimaryButton(
     isLoading: Boolean,
     isDisabled: Boolean,
     onClick: () -> Unit,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    icon: Painter? = null,
+    iconSpacing: Dp = 0.dp
 ) {
     Button(
         onClick = onClick,
@@ -58,10 +62,12 @@ fun PrimaryButton(
             )
         }
 
-        if (hasIcon) {
-            Spacer(modifier = Modifier.width(8.dp))
+        if (hasIcon && icon != null) {
+            if (iconSpacing > 0.dp) {
+                Spacer(modifier = Modifier.width(iconSpacing))
+            }
             Icon(
-                painter = painterResource(id = R.drawable.icon_add),
+                painter = icon,
                 contentDescription = null
             )
         }
@@ -119,7 +125,8 @@ fun PreviewPrimaryWithIcon() {
             onClick = {},
             isLoading = false,
             isDisabled = false,
-            hasIcon = true
+            hasIcon = true,
+            icon = painterResource(id = R.drawable.icon_add),
         )
     }
 }
