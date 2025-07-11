@@ -87,25 +87,29 @@ fun CustomReleasedYearSlider(
                                 (startFraction * (LocalConfiguration.current.screenWidthDp - 32).dp.toPx()).toDp()
                             })
                             .height(8.dp)
-                            .background(Color(0xFFF2674A))
+                            .background(NovixTheme.colors.primary)
                     )
                 }
             },
             startThumb = {
                 Box(
                     modifier = Modifier
-                        .size(20.dp)
-                        .background(Color(0xFFF2674A), shape = CircleShape)
+                        .size(16.dp)
+                        .background(NovixTheme.colors.primary, shape = CircleShape)
                 )
             },
             endThumb = {
                 Box(
                     modifier = Modifier
-                        .size(20.dp)
-                        .background(Color(0xFFF2674A), shape = CircleShape)
+                        .size(16.dp)
+                        .background(NovixTheme.colors.primary, shape = CircleShape)
+                        .border(
+                            width = 1.dp,
+                            color = NovixTheme.colors.stroke,
+                            shape = RoundedCornerShape(100)
+                        )
                 )
             }
         )
     }
 }
-

@@ -6,7 +6,6 @@ import androidx.compose.animation.core.tween
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material3.Icon
 import androidx.compose.runtime.Composable
@@ -30,10 +29,9 @@ fun RatingBar(
         modifier = modifier,
         verticalAlignment = Alignment.CenterVertically
     ) {
-        Row(horizontalArrangement = Arrangement.spacedBy(4.dp)) {
+        Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
             for (i in 1..maxRating) {
                 val isFilled = i <= rating
-
                 val scale by animateFloatAsState(
                     targetValue = if (isFilled) 1.1f else 1.05f,
                     animationSpec = tween(
@@ -50,7 +48,7 @@ fun RatingBar(
                         painterResource(R.drawable.star_outline),
                     contentDescription = "Rate $i",
                     tint = NovixTheme.colors.yellowAccent,
-                    modifier = Modifier.padding(end = 8.dp)
+                    modifier = Modifier
                         .size(24.dp)
                         .graphicsLayer(
                             scaleX = scale,
@@ -62,4 +60,3 @@ fun RatingBar(
         }
     }
 }
-

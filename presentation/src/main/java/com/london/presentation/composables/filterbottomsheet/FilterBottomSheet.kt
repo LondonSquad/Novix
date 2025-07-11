@@ -1,6 +1,5 @@
 package com.london.presentation.composables.filterbottomsheet
 
-import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
@@ -8,7 +7,6 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -36,6 +34,8 @@ import androidx.compose.ui.unit.dp
 import com.london.designsystem.component.CustomReleasedYearSlider
 import com.london.designsystem.component.GenreChipGroup
 import com.london.designsystem.component.RatingBar
+import com.london.designsystem.component.button.OutlineButton
+import com.london.designsystem.component.button.PrimaryButton
 import com.london.designsystem.theme.NovixTheme
 import com.london.presentation.R
 
@@ -145,7 +145,7 @@ private fun FilterBottomSheetContent(
             text = stringResource(R.string.released_year),
             style = NovixTheme.typography.title.small,
             color = NovixTheme.colors.title,
-            modifier = Modifier.padding(bottom = 8.dp)
+            modifier = Modifier.padding(bottom = 4.dp)
         )
 
         CustomReleasedYearSlider(
@@ -186,54 +186,42 @@ private fun FilterBottomSheetContent(
                 .fillMaxWidth()
                 .align(Alignment.End)
         ) {
-            Box(
-                modifier = Modifier
-                    .padding(top = 24.dp)
-                    .fillMaxWidth()
-                    .clip(RoundedCornerShape(8.dp))
-                    .background(NovixTheme.colors.primary)
-                    .clickable {
-                        onApply(
-                            selected,
-                            imdbRating,
-                            yearRange
-                        )
-                    }
-                    .height(48.dp),
-                contentAlignment = Alignment.Center
-            ) {
-                Text(
-                    text = stringResource(R.string.apply),
-                    style = NovixTheme.typography.label.large,
-                    color = NovixTheme.colors.onPrimary,
-                )
-            }
-
-            Box(
-                modifier = Modifier
-                    .padding(top = 8.dp, bottom = 24.dp)
-                    .fillMaxWidth()
-                    .border(
-                        width = 1.dp,
-                        color = NovixTheme.colors.stroke,
-                        shape = RoundedCornerShape(8.dp)
+            PrimaryButton(
+                text = stringResource(R.string.apply),
+                hasLabel = true,
+                hasIcon = false,
+                isLoading = false,
+                isDisabled = false,
+                icon = null,
+                onClick = {
+                    onApply(
+                        selected,
+                        imdbRating,
+                        yearRange
                     )
-                    .clip(RoundedCornerShape(8.dp))
-                    .clickable { onClear() }
-                    .height(48.dp),
-                contentAlignment = Alignment.Center
-            ) {
-                Text(
-                    text = stringResource(R.string.clear),
-                    style = NovixTheme.typography.label.large,
-                    color = NovixTheme.colors.primary,
-                )
-            }
+                },
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(top = 24.dp)
+            )
+
+            OutlineButton(
+                text = stringResource(R.string.clear),
+                hasLabel = true,
+                icon = null,
+                hasIcon = false,
+                isLoading = false,
+                isDisabled = false,
+                onClick = { onClear() },
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(top = 8.dp, bottom = 24.dp)
+            )
         }
     }
 }
 
-@Preview(showBackground = true)
+@Preview
 @Composable
 fun FilterBottomSheetContentPreview() {
     NovixTheme {
