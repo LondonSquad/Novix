@@ -32,7 +32,6 @@ import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
-import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.london.designsystem.component.HomeCard
@@ -66,21 +65,107 @@ fun SearchScreen(
             title = stringResource(R.string.search),
         )
 
-        Row(
-            modifier = Modifier.padding(horizontal = 16.dp)
-        ) {
-            OutlinedTextField(
-                value = TextFieldValue(uiState.searchQuery),
-                onValueChange = { viewModel.onSearchQueryChange(it.text) },
-                placeholder = {
+        SearchBar(uiState, viewModel, interactionSource, keyboardController)
+
+        when {
+            uiState.searchQuery.text.isNotEmpty() && uiState.searchResults.isNotEmpty() -> {
+                SearchResultsList(uiState)
+            }
+
+            uiState.searchQuery.text.isNotEmpty() && uiState.searchResults.isEmpty() -> {
+                Column(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .padding(32.dp),
+                    verticalArrangement = Arrangement.Center,
+                    horizontalAlignment = Alignment.CenterHorizontally
+                ) {
                     Text(
-                        stringResource(R.string.search_placeholder),
-                        style = NovixTheme.typography.body.small,
-                        modifier = Modifier.padding(end = 4.dp)
+                        text = "TO DO: No search result",
+                        style = NovixTheme.typography.body.medium,
+                        color = NovixTheme.colors.hint
                     )
-                },
-                leadingIcon = painterResource(id = R.drawable.icon_search_normal),
-                trailingIcon = if (uiState.isSearching) {
+                }
+            }
+
+            uiState.searchQuery.text.isEmpty() -> {
+                if (uiState.recentViewed.isNotEmpty()) {
+                    SectionHeader(
+                        text = stringResource(R.string.recent_viewed),
+                        hasGetAll = true,
+                        hasIcon = false,
+                        getAllText = stringResource(R.string.clear_all),
+                        onClick = { viewModel.clearRecentViewed() },
+                        modifier = Modifier.padding(vertical = 12.dp, horizontal = 16.dp)
+                    )
+
+                    LazyRow(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .height(210.dp),
+                        horizontalArrangement = Arrangement.spacedBy(8.dp),
+                        contentPadding = PaddingValues(horizontal = 16.dp),
+                    ) {
+                        items(uiState.recentViewed) { imageUrl ->
+                            HomeCard(
+                                imageUrl = imageUrl,
+                                isSaved = false,
+                                onSaveClick = {}
+                            )
+                        }
+                    }
+                }
+
+                if (uiState.recentSearches.isNotEmpty()) {
+                    SectionHeader(
+                        text = stringResource(R.string.recent_search),
+                        hasGetAll = true,
+                        hasIcon = false,
+                        getAllText = stringResource(R.string.clear_all),
+                        onClick = { viewModel.clearRecentSearches() },
+                        modifier = Modifier.padding(vertical = 12.dp, horizontal = 16.dp)
+                    )
+
+                    LazyColumn(
+                        modifier = Modifier.padding(horizontal = 16.dp)
+                    ) {
+                        items(uiState.recentSearches) { search ->
+                            RecentSearchItem(
+                                search = search,
+                                onSearchClick = { viewModel.onRecentSearchClick(search) },
+                                onRemoveClick = { viewModel.removeRecentSearch(search) }
+                            )
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
+@Composable
+private fun SearchBar(
+    uiState: SearchUiState,
+    viewModel: SearchViewModel,
+    interactionSource: MutableInteractionSource,
+    keyboardController: androidx.compose.ui.platform.SoftwareKeyboardController?
+) {
+    Row(
+        modifier = Modifier.padding(horizontal = 16.dp)
+    ) {
+        OutlinedTextField(
+            value = uiState.searchQuery,
+            onValueChange = { viewModel.onSearchQueryChange(it) },
+            placeholder = {
+                Text(
+                    stringResource(R.string.search_placeholder),
+                    style = NovixTheme.typography.body.small,
+                    modifier = Modifier.padding(end = 4.dp)
+                )
+            },
+            leadingIcon = painterResource(id = R.drawable.icon_search_normal),
+            trailingIcon = when {
+                uiState.isSearching -> {
                     {
                         CircularProgressIndicator(
                             modifier = Modifier.size(20.dp),
@@ -88,7 +173,9 @@ fun SearchScreen(
                             color = NovixTheme.colors.primary
                         )
                     }
-                } else if (uiState.searchQuery.isNotEmpty()) {
+                }
+
+                uiState.searchQuery.text.isNotEmpty() -> {
                     {
                         Icon(
                             painter = painterResource(id = R.drawable.icon_remove_filled),
@@ -99,102 +186,55 @@ fun SearchScreen(
                                 .clickable { viewModel.clearSearch() }
                         )
                     }
-                } else null,
-                keyboardOptions = KeyboardOptions(
-                    imeAction = ImeAction.Search
-                ),
-                keyboardActions = KeyboardActions(
-                    onSearch = {
-                        viewModel.onSearchSubmit()
-                        keyboardController?.hide()
-                    }
-                ),
-                interactionSource = interactionSource,
-                modifier = Modifier
-                    .weight(1f)
-                    .padding(end = 8.dp)
-            )
-
-            PrimaryButton(
-                text = "",
-                onClick = {},
-                isLoading = false,
-                isDisabled = false,
-                hasIcon = true,
-                icon = R.drawable.icon_filter,
-                hasLabel = false,
-                modifier = Modifier.width(52.dp)
-            )
-        }
-
-        if (uiState.searchQuery.isNotEmpty() && uiState.searchResults.isNotEmpty()) {
-            SectionHeader(
-                text = "Search Results",
-                hasGetAll = false,
-                hasIcon = false,
-                modifier = Modifier.padding(vertical = 12.dp, horizontal = 16.dp)
-            )
-
-            LazyColumn(
-                modifier = Modifier.padding(horizontal = 16.dp)
-            ) {
-                items(uiState.searchResults) { result ->
-                    SearchResultItem(
-                        result = result,
-                        onItemClick = { /* Handle item click */ }
-                    )
                 }
-            }
-        } else if (uiState.searchQuery.isEmpty()) {
-            if (uiState.recentViewed.isNotEmpty()) {
-                SectionHeader(
-                    text = stringResource(R.string.recent_viewed),
-                    hasGetAll = true,
-                    hasIcon = false,
-                    getAllText = stringResource(R.string.clear_all),
-                    onClick = { viewModel.clearRecentViewed() },
-                    modifier = Modifier.padding(vertical = 12.dp, horizontal = 16.dp)
-                )
 
-                LazyRow(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .height(210.dp),
-                    horizontalArrangement = Arrangement.spacedBy(8.dp),
-                    contentPadding = PaddingValues(horizontal = 16.dp),
-                ) {
-                    items(uiState.recentViewed) { imageUrl ->
-                        HomeCard(
-                            imageUrl = imageUrl,
-                            isSaved = false,
-                            onSaveClick = {}
-                        )
-                    }
+                else -> null
+            },
+            keyboardOptions = KeyboardOptions(
+                imeAction = ImeAction.Search
+            ),
+            keyboardActions = KeyboardActions(
+                onSearch = {
+                    viewModel.onSearchSubmit()
+                    keyboardController?.hide()
                 }
-            }
+            ),
+            interactionSource = interactionSource,
+            modifier = Modifier
+                .weight(1f)
+                .padding(end = 8.dp)
+        )
 
-            if (uiState.recentSearches.isNotEmpty()) {
-                SectionHeader(
-                    text = stringResource(R.string.recent_search),
-                    hasGetAll = true,
-                    hasIcon = false,
-                    getAllText = stringResource(R.string.clear_all),
-                    onClick = { viewModel.clearRecentSearches() },
-                    modifier = Modifier.padding(vertical = 12.dp, horizontal = 16.dp)
-                )
+        PrimaryButton(
+            text = "",
+            onClick = {},
+            isLoading = false,
+            isDisabled = false,
+            hasIcon = true,
+            icon = R.drawable.icon_filter,
+            hasLabel = false,
+            modifier = Modifier.width(52.dp)
+        )
+    }
+}
 
-                LazyColumn(
-                    modifier = Modifier.padding(horizontal = 16.dp)
-                ) {
-                    items(uiState.recentSearches) { search ->
-                        RecentSearchItem(
-                            search = search,
-                            onSearchClick = { viewModel.onRecentSearchClick(search) },
-                            onRemoveClick = { viewModel.removeRecentSearch(search) }
-                        )
-                    }
-                }
-            }
+@Composable
+private fun SearchResultsList(uiState: SearchUiState) {
+    SectionHeader(
+        text = stringResource(R.string.recent_search),
+        hasGetAll = false,
+        hasIcon = false,
+        modifier = Modifier.padding(vertical = 12.dp, horizontal = 16.dp)
+    )
+
+    LazyColumn(
+        modifier = Modifier.padding(horizontal = 16.dp)
+    ) {
+        items(uiState.searchResults) { result ->
+            SearchResultItem(
+                result = result,
+                onItemClick = { /* Handle item click */ }
+            )
         }
     }
 }
@@ -276,9 +316,9 @@ private fun RecentSearchItem(
     }
 }
 
-
 @ThemePreviews
 @Composable
 fun SearchScreenPreview() {
     SearchScreen()
 }
+
