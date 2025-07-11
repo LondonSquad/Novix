@@ -157,20 +157,6 @@ class SearchRemoteDataSourceImplTest {
         assertEquals("Acting", result.results[0].knownForDepartment)
     }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
     @Test
     fun `searchForMovies should verify correct URL parameters are passed`() = runTest {
         // Given
@@ -278,11 +264,6 @@ class SearchRemoteDataSourceImplTest {
             })
         }
     }
-
-
-
-
-
 
     @Test
     fun `searchForMovies should handle empty results correctly`() = runTest {
@@ -405,12 +386,6 @@ class SearchRemoteDataSourceImplTest {
         assertEquals("Toy Story", result.results[0].knownFor[1].title)
     }
 }
-
-
-
-
-
-
 
 private fun createMoviesResponse(): String {
     return """
