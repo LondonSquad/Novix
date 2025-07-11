@@ -280,13 +280,14 @@ class LocalDataSourceImplTest {
     @Test
     fun `getMovies should return movies from dao successfully`() = runTest {
         // Given
-        coEvery { searchMoviesDao.getAll() } returns mockMoviesResponse
+        val mockMoviesList = listOf(mockMoviesResponse)
+        coEvery { searchMoviesDao.getAll() } returns mockMoviesList
 
         // When
         val result = localDataSource.getMovies()
 
         // Then
-        assertEquals(mockMoviesResponse, result)
+        assertEquals(mockMoviesList, result)
         coVerify(exactly = 1) { searchMoviesDao.getAll() }
     }
 
@@ -305,15 +306,17 @@ class LocalDataSourceImplTest {
     @Test
     fun `getTvShows should return tv shows from dao successfully`() = runTest {
         // Given
-        coEvery { searchTvShowDao.getAll() } returns mockTvShowsResponse
+        val mockTvShowsList = listOf(mockTvShowsResponse)
+        coEvery { searchTvShowDao.getAll() } returns mockTvShowsList
 
         // When
         val result = localDataSource.getTvShows()
 
         // Then
-        assertEquals(mockTvShowsResponse, result)
+        assertEquals(mockTvShowsList, result)
         coVerify(exactly = 1) { searchTvShowDao.getAll() }
     }
+
 
     @Test
     fun `getTvShows should throw GetException when dao throws exception`() = runTest {
@@ -330,13 +333,14 @@ class LocalDataSourceImplTest {
     @Test
     fun `getActors should return actors from dao successfully`() = runTest {
         // Given
-        coEvery { searchActorsDao.getAll() } returns mockActorsResponse
+        val mockActorsList = listOf(mockActorsResponse)
+        coEvery { searchActorsDao.getAll() } returns mockActorsList
 
         // When
         val result = localDataSource.getActors()
 
         // Then
-        assertEquals(mockActorsResponse, result)
+        assertEquals(mockActorsList, result)
         coVerify(exactly = 1) { searchActorsDao.getAll() }
     }
 
