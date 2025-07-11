@@ -16,9 +16,6 @@ import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
-import androidx.compose.foundation.lazy.grid.GridCells
-import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
-import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.text.KeyboardActions
@@ -32,9 +29,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
-import androidx.compose.ui.platform.LocalWindowInfo
 import androidx.compose.ui.platform.SoftwareKeyboardController
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -52,9 +47,9 @@ import com.london.designsystem.component.button.PrimaryButton
 import com.london.designsystem.theme.NovixTheme
 import com.london.designsystem.theme.ThemePreviews
 import com.london.domain.entity.Actor
-import com.london.domain.entity.TvShow
 import com.london.presentation.R
 import com.london.presentation.composables.MoviesLayOut
+import com.london.presentation.composables.TvShowLayOut
 import com.london.presentation.utils.ResultOrEmpty
 import org.koin.androidx.compose.koinViewModel
 
@@ -267,40 +262,6 @@ private fun SearchChipsRow(
             isSelected = selected == SearchCategory.Actors,
             onClick = { onSelect(SearchCategory.Actors) }
         )
-    }
-}
-
-
-@Composable
-fun TvShowLayOut(
-    tvShowUis: List<TvShow>,
-    onSaveClick: (TvShow) -> Unit,
-    isTvShowSaved: (TvShow) -> Boolean,
-    onTvShowClick: (TvShow) -> Unit
-) {
-    val screenWidth = LocalWindowInfo.current.containerSize.width
-    val itemWidthPx = with(LocalDensity.current) { 158.dp.toPx() }
-    val screenPaddingPx = with(LocalDensity.current) { 32.dp.toPx() }
-    val columns = ((screenWidth - screenPaddingPx) / itemWidthPx).toInt().coerceAtLeast(2)
-
-    LazyVerticalGrid(
-        columns = GridCells.Fixed(columns),
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(horizontal = 16.dp),
-
-        horizontalArrangement = Arrangement.spacedBy(12.dp),
-        verticalArrangement = Arrangement.spacedBy(12.dp)
-    ) {
-        items(tvShowUis) { tvShow ->
-            HomeCard(
-                imageUrl = tvShow.posterPicture,
-                onSaveClick = { onSaveClick(tvShow) },
-                isSaved = isTvShowSaved(tvShow),
-                imageDescription = tvShow.name,
-                modifier = Modifier.clickable { onTvShowClick(tvShow) }
-            )
-        }
     }
 }
 
