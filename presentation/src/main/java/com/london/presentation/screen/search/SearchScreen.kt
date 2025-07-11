@@ -150,18 +150,11 @@ fun SearchScreenContent(
             }
         } else {
             if (state.recentSearches.isNotEmpty() && state.recentViewed.isNotEmpty()) {
-                RecentSearchesSection(
-                    recentSearches = state.recentSearches,
-                    onClearAll = interactionListener::clearRecentSearches,
-                    onSearchClick = interactionListener::onRecentSearchClick,
-                    onRemoveClick = interactionListener::removeRecentSearch
-                )
-
                 RecentViewedSection(
                     recentViewed = state.recentViewed,
                     onClearAll = { viewModel.clearRecentViewed() }
                 )
-            } else if (state.recentSearches.isNotEmpty()) {
+
                 RecentSearchesSection(
                     recentSearches = state.recentSearches,
                     onClearAll = interactionListener::clearRecentSearches,
@@ -172,6 +165,13 @@ fun SearchScreenContent(
                 RecentViewedSection(
                     recentViewed = state.recentViewed,
                     onClearAll = { viewModel.clearRecentViewed() }
+                )
+            } else if (state.recentSearches.isNotEmpty()) {
+                RecentSearchesSection(
+                    recentSearches = state.recentSearches,
+                    onClearAll = interactionListener::clearRecentSearches,
+                    onSearchClick = interactionListener::onRecentSearchClick,
+                    onRemoveClick = interactionListener::removeRecentSearch
                 )
             } else {
                 NoSearchBeforeLayOut(modifier = Modifier.fillMaxSize())
