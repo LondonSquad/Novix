@@ -23,6 +23,7 @@ import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -472,40 +473,50 @@ private fun RecentSearchItem(
     search: String,
     onSearchClick: () -> Unit,
     onRemoveClick: () -> Unit,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    showDivider: Boolean = true
 ) {
-    Row(
-        modifier = modifier
-            .fillMaxWidth()
-            .clickable { onSearchClick() }
-            .padding(vertical = 8.dp),
-        verticalAlignment = Alignment.CenterVertically
-    ) {
-        Icon(
-            painter = painterResource(id = R.drawable.icon_clock),
-            contentDescription = stringResource(R.string.clock),
-            tint = NovixTheme.colors.hint,
+    Column(modifier = modifier) {
+        Row(
             modifier = Modifier
-                .padding(top = 2.dp, bottom = 2.dp, end = 8.dp)
-                .size(20.dp)
-        )
-        Text(
-            text = search,
-            style = NovixTheme.typography.body.medium,
-            color = NovixTheme.colors.title,
-            modifier = Modifier
-                .padding(end = 4.dp)
-                .weight(1f)
-        )
-        Icon(
-            painter = painterResource(id = R.drawable.icon_remove_filled),
-            contentDescription = stringResource(com.london.presentation.R.string.clear),
-            tint = NovixTheme.colors.hint,
-            modifier = Modifier
-                .padding(vertical = 4.dp)
-                .size(16.dp)
-                .clickable { onRemoveClick() }
-        )
+                .fillMaxWidth()
+                .clickable { onSearchClick() }
+                .padding(vertical = 8.dp, horizontal = 12.dp),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Icon(
+                painter = painterResource(id = R.drawable.icon_clock),
+                contentDescription = stringResource(R.string.clock),
+                tint = NovixTheme.colors.hint,
+                modifier = Modifier
+                    .padding(end = 8.dp)
+                    .size(20.dp)
+            )
+            Text(
+                text = search,
+                style = NovixTheme.typography.body.medium,
+                color = NovixTheme.colors.title,
+                modifier = Modifier
+                    .padding(end = 4.dp)
+                    .weight(1f)
+            )
+            Icon(
+                painter = painterResource(id = R.drawable.icon_remove_filled),
+                contentDescription = stringResource(com.london.presentation.R.string.clear),
+                tint = NovixTheme.colors.hint,
+                modifier = Modifier
+                    .size(16.dp)
+                    .clickable { onRemoveClick() }
+            )
+        }
+
+        if (showDivider) {
+            HorizontalDivider(
+                color = NovixTheme.colors.stroke,
+                thickness = 1.dp,
+                modifier = Modifier.padding(horizontal = 11.5.dp)
+            )
+        }
     }
 }
 
