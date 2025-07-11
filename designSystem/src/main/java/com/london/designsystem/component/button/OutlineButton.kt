@@ -1,11 +1,11 @@
 package com.london.designsystem.component.button
 
 import androidx.annotation.DrawableRes
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.defaultMinSize
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -21,9 +21,8 @@ import com.london.designsystem.R
 import com.london.designsystem.theme.NovixTheme
 import com.london.designsystem.theme.ThemePreviews
 
-
 @Composable
-fun PrimaryButton(
+fun OutlineButton(
     text: String?,
     hasLabel: Boolean,
     @DrawableRes icon: Int?,
@@ -37,16 +36,16 @@ fun PrimaryButton(
         onClick = onClick,
         modifier = modifier
             .height(48.dp)
-            .defaultMinSize(minWidth = 52.dp),
+            .defaultMinSize(minWidth = 79.dp)
+            .border(1.dp, color = NovixTheme.colors.stroke),
         shape = RoundedCornerShape(12.dp),
         colors = ButtonDefaults.buttonColors(
-            containerColor = if (isDisabled) NovixTheme.colors.disable else NovixTheme.colors.primary,
-            contentColor = if (isDisabled) NovixTheme.colors.onPrimaryHint else NovixTheme.colors.onPrimary
+            containerColor = NovixTheme.colors.surface,
+            contentColor = if (isDisabled) NovixTheme.colors.disable else NovixTheme.colors.primary
         ),
         contentPadding = PaddingValues(horizontal = 16.dp, vertical = 8.dp),
         elevation = ButtonDefaults.buttonElevation(defaultElevation = 2.dp)
     ) {
-
         if (hasLabel && text != null) {
             Text(
                 text = text,
@@ -58,9 +57,8 @@ fun PrimaryButton(
             Spacer(modifier = Modifier.width(8.dp))
             LoadingLottieAnimation(
                 modifier = Modifier
-                    .size(20.dp)
-                    .padding(start = 8.dp),
-                tintColor = NovixTheme.colors.onPrimary
+                    .size(24.dp),
+                tintColor = NovixTheme.colors.primary
             )
         }
 
@@ -78,9 +76,9 @@ fun PrimaryButton(
 
 @ThemePreviews
 @Composable
-fun PreviewPrimaryNormal() {
+fun PreviewNormalOutlineButton() {
     NovixTheme {
-        PrimaryButton(
+        OutlineButton(
             text = "Watch",
             onClick = {},
             isLoading = false,
@@ -94,9 +92,9 @@ fun PreviewPrimaryNormal() {
 
 @ThemePreviews
 @Composable
-fun PreviewPrimaryLoading() {
+fun PreviewLoadingOutlineButton() {
     NovixTheme {
-        PrimaryButton(
+        OutlineButton(
             text = "Watch",
             onClick = {},
             isLoading = true,
@@ -110,9 +108,9 @@ fun PreviewPrimaryLoading() {
 
 @ThemePreviews
 @Composable
-fun PreviewPrimaryDisable() {
+fun PreviewDisabledPrimaryDisable() {
     NovixTheme {
-        PrimaryButton(
+        OutlineButton(
             text = "Watch",
             onClick = {},
             isLoading = false,
@@ -126,9 +124,9 @@ fun PreviewPrimaryDisable() {
 
 @ThemePreviews
 @Composable
-fun PreviewPrimaryWithTextAndIcon() {
+fun PreviewOutlinePrimaryWithIcon() {
     NovixTheme {
-        PrimaryButton(
+        OutlineButton(
             text = "Watch",
             onClick = {},
             isLoading = false,
@@ -142,7 +140,7 @@ fun PreviewPrimaryWithTextAndIcon() {
 
 @ThemePreviews
 @Composable
-fun PreviewPrimaryWithIcon() {
+fun PreviewPrimaryWithIconOnly() {
     NovixTheme {
         PrimaryButton(
             text = "",
