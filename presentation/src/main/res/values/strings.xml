@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="search">Search</string>
+    <string name="search_placeholder">Search...</string>
+    <string name="recent_viewed">Recent Viewed</string>
+    <string name="recent_search">Recent Search</string>
+    <string name="clear_all">Clear all</string>
+    <string name="clock">Clock</string>
+    <string name="clear">Clear</string>
+</resources>
