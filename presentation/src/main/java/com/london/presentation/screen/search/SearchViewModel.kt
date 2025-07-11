@@ -1,5 +1,6 @@
 package com.london.presentation.screen.search
 
+import androidx.compose.ui.text.input.TextFieldValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -27,9 +28,10 @@ class SearchViewModel : ViewModel() {
     )
     val uiState: StateFlow<SearchUiState> = _uiState.asStateFlow()
 
-    fun onSearchQueryChange(query: String) {
-        _uiState.value = _uiState.value.copy(searchQuery = query)
+    fun onSearchQueryChange(newValue: TextFieldValue) {
+        _uiState.value = _uiState.value.copy(searchQuery = newValue)
 
+        val query = newValue.text
         if (query.isNotEmpty() && query.length >= 2) {
             performSearch(query)
         } else {
@@ -41,7 +43,7 @@ class SearchViewModel : ViewModel() {
     }
 
     fun onSearchSubmit() {
-        val query = _uiState.value.searchQuery.trim()
+        val query = _uiState.value.searchQuery.text.trim()
         if (query.isNotEmpty()) {
             addToRecentSearches(query)
             performSearch(query)
@@ -114,13 +116,13 @@ class SearchViewModel : ViewModel() {
     }
 
     fun onRecentSearchClick(search: String) {
-        _uiState.value = _uiState.value.copy(searchQuery = search)
+        _uiState.value = _uiState.value.copy(searchQuery = TextFieldValue(search))
         performSearch(search)
     }
 
     fun clearSearch() {
         _uiState.value = _uiState.value.copy(
-            searchQuery = "",
+            searchQuery = TextFieldValue(""),
             searchResults = emptyList(),
             isSearching = false
         )
