@@ -54,7 +54,7 @@ fun FilterBottomSheet(
         ),
         dragHandle = {
             BottomSheetDefaults.DragHandle(
-                modifier = Modifier.background(NovixTheme.colors.body),
+                color = NovixTheme.colors.body,
             )
         },
         containerColor = NovixTheme.colors.surface
@@ -97,12 +97,11 @@ private fun FilterBottomSheetContent(
 ) {
     var selected by rememberSaveable { mutableStateOf<String?>(null) }
     var imdbRating by rememberSaveable { mutableIntStateOf(7) }
-    var yearRange by rememberSaveable { mutableStateOf(1980f..2025f) }
+    var yearRange by remember { mutableStateOf(1980f..2025f) }
 
     Column(
         modifier = modifier
             .padding(
-                bottom = 24.dp,
                 start = 16.dp,
                 end = 16.dp
             )
@@ -146,7 +145,7 @@ private fun FilterBottomSheetContent(
             text = stringResource(R.string.released_year),
             style = NovixTheme.typography.title.small,
             color = NovixTheme.colors.title,
-            modifier = Modifier.padding(bottom = 16.dp)
+            modifier = Modifier.padding(bottom = 8.dp)
         )
 
         CustomReleasedYearSlider(

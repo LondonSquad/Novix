@@ -3,7 +3,7 @@
     <string name="filter">Filter</string>
     <string name="released_year">Released Year</string>
     <string name="genres">Genres</string>
-    <string name="imdb_rating">IMDB Rating</string>
+    <string name="imdb_rating">IMDb rating</string>
     <string name="action">Action</string>
     <string name="apply">Apply</string>
     <string name="clear">Clear</string>

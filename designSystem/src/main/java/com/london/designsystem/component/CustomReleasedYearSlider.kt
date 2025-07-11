@@ -42,8 +42,16 @@ fun CustomReleasedYearSlider(
                 .padding(top = 8.dp),
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
-            Text(text = minYear.toString(), color = Color.Gray)
-            Text(text = maxYear.toString(), color = Color.Gray)
+            Text(
+                text = minYear.toString(),
+                color = NovixTheme.colors.body,
+                style = NovixTheme.typography.label.small
+            )
+            Text(
+                text = maxYear.toString(),
+                color = NovixTheme.colors.body,
+                style = NovixTheme.typography.label.small
+            )
         }
 
         RangeSlider(
@@ -59,7 +67,7 @@ fun CustomReleasedYearSlider(
                         .background(NovixTheme.colors.surface)
                         .border(
                             width = 1.dp,
-                            color = NovixTheme.colors.stroke, // light gray border
+                            color = NovixTheme.colors.stroke,
                             shape = RoundedCornerShape(50)
                         )
                 )

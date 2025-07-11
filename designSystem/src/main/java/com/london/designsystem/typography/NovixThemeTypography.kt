@@ -40,22 +40,22 @@ val NovixTypography = NovixTypographySet(
     ),
     title = TextStyleGroup(
         small = TextStyle(
-            fontSize = 20.sp,
+            fontSize = 16.sp,
             fontWeight = FontWeight.SemiBold,
             fontFamily = NovixFont,
-            lineHeight = 30.sp
+            lineHeight = 16.sp
         ),
         medium = TextStyle(
-            fontSize = 16.sp,
+            fontSize = 18.sp,
             fontWeight = FontWeight.Medium,
             fontFamily = NovixFont,
-            lineHeight = 24.sp
+            lineHeight = 18.sp
         ),
         large = TextStyle(
             fontSize = 20.sp,
             fontWeight = FontWeight.Medium,
             fontFamily = NovixFont,
-            lineHeight = 30.sp
+            lineHeight = 20.sp
         )
     ),
     body = TextStyleGroup(
