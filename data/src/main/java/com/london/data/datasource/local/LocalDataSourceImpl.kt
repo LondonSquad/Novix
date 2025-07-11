@@ -1,23 +1,19 @@
 package com.london.data.datasource.local
 
 import com.london.data.datasource.local.dao.SearchActorsDao
-import com.london.data.datasource.local.dao.SearchDaoHandlerImpl
 import com.london.data.datasource.local.dao.SearchMoviesDao
 import com.london.data.datasource.local.dao.SearchTvShowDao
 import com.london.data.datasource.local.model.SearchActorsLocal
 import com.london.data.datasource.local.model.SearchMoviesLocal
 import com.london.data.datasource.local.model.SearchTvShowLocal
-import kotlinx.serialization.SerialName
-import kotlinx.serialization.Serializable
 
 class LocalDataSourceImpl(
     private val searchTvShowDao: SearchTvShowDao,
     private val searchMoviesDao: SearchMoviesDao,
     private val searchActorsDao: SearchActorsDao
 ) : LocalDataSource {
-private val test = SearchDaoHandlerImpl(searchMoviesDao)
     override suspend fun insertMovie(movie: SearchMoviesLocal) =
-       test.insert(movie){InsertMovieExpansion()}
+       runOrThrow({ searchMoviesDao.insert(movie) }, ::InsertMovieExpansion)
 
     override suspend fun insertTvShow(tvShow: SearchTvShowLocal) =
         runOrThrow({ searchTvShowDao.insert(tvShow) }, ::InsertTvShowExpansion)
