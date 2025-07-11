@@ -67,4 +67,7 @@ dependencies {
     implementation(libs.firebase.crashlytics)
     implementation(libs.firebase.analytics)
     testImplementation(libs.bundles.testing)
+    implementation(libs.bundles.room)
+    implementation(libs.bundles.koin)
+    ksp(libs.bundles.room.ksp)
 }
