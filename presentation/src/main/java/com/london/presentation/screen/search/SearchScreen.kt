@@ -24,6 +24,7 @@ import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
@@ -37,8 +38,6 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
-import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import androidx.lifecycle.viewmodel.compose.viewModel
 import com.london.designsystem.R
 import com.london.designsystem.component.EmptySearchComponent
 import com.london.designsystem.component.HomeCard
@@ -49,22 +48,21 @@ import com.london.designsystem.component.TopBar
 import com.london.designsystem.component.button.PrimaryButton
 import com.london.designsystem.theme.NovixTheme
 import com.london.designsystem.theme.ThemePreviews
-import com.london.presentation.screen.search.model.MovieUi
-import com.london.presentation.screen.search.model.TvShowUi
-
+import com.london.domain.entity.Movie
+import com.london.domain.entity.TvShow
+import org.koin.androidx.compose.koinViewModel
 
 @SuppressLint("ViewModelConstructorInComposable")
 @Composable
 fun SearchScreen(
-    viewModel: SearchViewModel = viewModel()
+    viewModel: SearchViewModel = koinViewModel()
 ) {
-    val state by viewModel.uiState.collectAsStateWithLifecycle()
+    val state by viewModel.uiState.collectAsState()
     val keyboardController = LocalSoftwareKeyboardController.current
 
     SearchScreenContent(
         state = state,
         interactionListener = viewModel,
-        isMovieSaved = { viewModel.isMovieSaved(it) },
         keyboardController = keyboardController,
         viewModel = viewModel
     )
@@ -75,7 +73,6 @@ fun SearchScreenContent(
     state: SearchUiState,
     interactionListener: SearchInteractions,
     viewModel: SearchViewModel,
-    isMovieSaved: (MovieUi) -> Boolean,
     keyboardController: SoftwareKeyboardController?,
 ) {
     val interactionSource = remember { MutableInteractionSource() }
@@ -95,10 +92,10 @@ fun SearchScreenContent(
         )
 
         SearchBar(
-            state,
-            viewModel,
-            interactionSource,
-            keyboardController,
+            uiState = state,
+            viewModel = viewModel,
+            interactionSource = interactionSource,
+            keyboardController = keyboardController,
             modifier = Modifier.padding(bottom = 12.dp)
         )
 
@@ -116,8 +113,8 @@ fun SearchScreenContent(
                     } else {
                         MoviesLayOut(
                             movieUis = state.movieResults,
-                            onSaveMovie = interactionListener::onSavedMovieClick,
-                            isMovieSaved = isMovieSaved
+                            onSaveClick = { /* Handle save click */ },
+                            isMovieSaved = { false }
                         )
                     }
                 }
@@ -128,6 +125,8 @@ fun SearchScreenContent(
                     } else {
                         TvShowLayOut(
                             tvShowUis = state.tvShowUiResults,
+                            onSaveClick = { /* Handle save click */ },
+                            isTvShowSaved = { false }
                         )
                     }
                 }
@@ -199,7 +198,9 @@ fun SearchChipsRow(
 
 @Composable
 fun TvShowLayOut(
-    tvShowUis: List<TvShowUi>,
+    tvShowUis: List<TvShow>,
+    onSaveClick: (TvShow) -> Unit,
+    isTvShowSaved: (TvShow) -> Boolean
 ) {
     val screenWidth = LocalWindowInfo.current.containerSize.width
     val itemWidthPx = with(LocalDensity.current) { 158.dp.toPx() }
@@ -212,12 +213,12 @@ fun TvShowLayOut(
         horizontalArrangement = Arrangement.spacedBy(12.dp),
         verticalArrangement = Arrangement.spacedBy(12.dp)
     ) {
-        items(tvShowUis) { movie ->
+        items(tvShowUis) { tvShow ->
             HomeCard(
-                imageUrl = movie.posterUrl,
-                onSaveClick = {  },
-                isSaved = false,
-                imageDescription = movie.title,
+                imageUrl = tvShow.posterPicture,
+                onSaveClick = { onSaveClick(tvShow) },
+                isSaved = isTvShowSaved(tvShow),
+                imageDescription = tvShow.name,
             )
         }
     }
@@ -225,9 +226,9 @@ fun TvShowLayOut(
 
 @Composable
 fun MoviesLayOut(
-    movieUis: List<MovieUi>,
-    onSaveMovie: (MovieUi) -> Unit,
-    isMovieSaved: (MovieUi) -> Boolean
+    movieUis: List<Movie>,
+    onSaveClick: (Movie) -> Unit,
+    isMovieSaved: (Movie) -> Boolean
 ) {
     val screenWidth = LocalWindowInfo.current.containerSize.width
     val itemWidthPx = with(LocalDensity.current) { 158.dp.toPx() }
@@ -242,10 +243,10 @@ fun MoviesLayOut(
     ) {
         items(movieUis) { movie ->
             HomeCard(
-                imageUrl = movie.posterUrl,
-                onSaveClick = { onSaveMovie(movie) },
+                imageUrl = movie.posterPicture,
+                onSaveClick = { onSaveClick(movie) },
                 isSaved = isMovieSaved(movie),
-                imageDescription = movie.title,
+                imageDescription = movie.name,
             )
         }
     }
@@ -290,7 +291,6 @@ fun NoSearchResultLayOut(
         )
     }
 }
-
 
 @Composable
 private fun SearchBar(

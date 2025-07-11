@@ -2,6 +2,9 @@ package com.london.presentation.screen.search
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.text.input.TextFieldValue
+import com.london.domain.entity.Actor
+import com.london.domain.entity.Movie
+import com.london.domain.entity.TvShow
 import com.london.presentation.screen.search.model.ActorUi
 import com.london.presentation.screen.search.model.MovieUi
 import com.london.presentation.screen.search.model.TvShowUi
@@ -14,9 +17,9 @@ data class SearchUiState(
     val isSearchHistoryExpanded: Boolean = false,
     val isMovieSaved: (MovieUi) -> Boolean = { false },
     val searchHistory: List<String> = emptyList(),
-    val actorUiResults: List<ActorUi> = DummyData.dummyActorsList,
-    val movieResults: List<MovieUi> = DummyData.dummyMoviesList,
-    val tvShowUiResults: List<TvShowUi> = DummyData.dummyTvShowsList,
+    val actorUiResults: List<Actor> = emptyList(),
+    val movieResults: List<Movie> = emptyList(),
+    val tvShowUiResults: List<TvShow> = emptyList(),
     val savedMovies: Set<Int> = emptySet(),
     val savedTvShows: Set<Int> = emptySet(),
     val selectedCategory: SearchCategory = SearchCategory.Movies,
@@ -40,7 +43,7 @@ object DummyData {
         MovieUi(
             id = 2,
             title = "The Dark Knight",
-            posterUrl = "https://www.google.com/url?sa=i&url=https%3A%2F%2Fencrypted-tbn3.gstatic.com%2Fimages%3Fq%3Dtbn%3AANd9GcQkUywIUXDjHSQJIaNHYVs08osgBpF5Ot-xmB_omyEZeeRP9Xug&psig=AOvVaw3wEbftfPGLsk7OTe20N4np&ust=1752323246254000&source=images&cd=vfe&opi=89978449&ved=0CBAQjRxqFwoTCNCChPfmtI4DFQAAAAAdAAAAABAE",
+            posterUrl = "https://encrypted-tbn3.gstatic.com/images?q=tbn:ANd9GcQkUywIUXDjHSQJIaNHYVs08osgBpF5Ot-xmB_omyEZeeRP9Xug",
             isSaved = false
         ),
         MovieUi(
@@ -52,7 +55,7 @@ object DummyData {
         MovieUi(
             id = 4,
             title = "Dune",
-            posterUrl = "https://www.google.com/url?sa=i&url=https%3A%2F%2Fencrypted-tbn2.gstatic.com%2Fimages%3Fq%3Dtbn%3AANd9GcTzGMepFMvymqy06LF-NsSpgYxeujNWwbXto-bc868K2bl8-zu6&psig=AOvVaw1wUr0YHiRlDCcfaE54gXib&ust=1752323304176000&source=images&cd=vfe&opi=89978449&ved=0CBAQjRxqFwoTCIjtvpLntI4DFQAAAAAdAAAAABAE",
+            posterUrl = "https://encrypted-tbn2.gstatic.com/images?q=tbn:ANd9GcTzGMepFMvymqy06LF-NsSpgYxeujNWwbXto-bc868K2bl8-zu6",
             isSaved = false
         ),
         MovieUi(
@@ -72,12 +75,12 @@ object DummyData {
         TvShowUi(
             id = 2,
             title = "Game of Thrones",
-            posterUrl = "https://www.google.com/url?sa=i&url=https%3A%2F%2Fencrypted-tbn0.gstatic.com%2Fimages%3Fq%3Dtbn%3AANd9GcS_C1zvb87cxPL28JSRzOFw1SAHMMKARQ2fswLBb6L17zy-f9h7&psig=AOvVaw0g92hp3wVTkHgZsu8VwcWE&ust=1752323370945000&source=images&cd=vfe&opi=89978449&ved=0CBAQjRxqFwoTCPD1sbLntI4DFQAAAAAdAAAAABAE",
+            posterUrl = "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS_C1zvb87cxPL28JSRzOFw1SAHMMKARQ2fswLBb6L17zy-f9h7",
         ),
         TvShowUi(
             id = 3,
             title = "The Office",
-            posterUrl = "https://www.google.com/url?sa=i&url=https%3A%2F%2Fencrypted-tbn1.gstatic.com%2Fimages%3Fq%3Dtbn%3AANd9GcT1rLm86VJA7Tcf4ZjWQE6FrXCh9lvUu3RzeNIEDH2YqD3ta8BG&psig=AOvVaw1PDk53tugwxyA40JsQLbW6&ust=1752323390435000&source=images&cd=vfe&opi=89978449&ved=0CBAQjRxqFwoTCIif2rvntI4DFQAAAAAdAAAAABAE",
+            posterUrl = "https://encrypted-tbn1.gstatic.com/images?q=tbn:ANd9GcT1rLm86VJA7Tcf4ZjWQE6FrXCh9lvUu3RzeNIEDH2YqD3ta8BG",
         )
     )
 
