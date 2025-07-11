@@ -21,7 +21,7 @@ android {
 
     buildTypes {
         release {
-            isMinifyEnabled = AppConfig.ENABLE_R8_FULL_MODE
+            isMinifyEnabled = AppConfig.IS_RELEASE_MODE_DEBUGGABLE
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
