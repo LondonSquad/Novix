@@ -40,6 +40,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
+import com.london.designsystem.component.ActorItem
 import com.london.designsystem.component.EmptySearchComponent
 import com.london.designsystem.component.HomeCard
 import com.london.designsystem.component.NovixChip
@@ -474,7 +475,7 @@ private fun RecentSearchItem(
     ) {
         Icon(
             painter = painterResource(id = R.drawable.icon_clock),
-            contentDescription = stringResource(com.london.presentation.R.string.clock),
+            contentDescription = stringResource(R.string.clock),
             tint = NovixTheme.colors.hint,
             modifier = Modifier
                 .size(20.dp)
