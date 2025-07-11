@@ -36,6 +36,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
+import com.london.designsystem.component.ActorItem
 import com.london.designsystem.component.EmptySearchComponent
 import com.london.designsystem.component.HomeCard
 import com.london.designsystem.component.NovixChip
@@ -45,6 +46,7 @@ import com.london.designsystem.component.TopBar
 import com.london.designsystem.component.button.PrimaryButton
 import com.london.designsystem.theme.NovixTheme
 import com.london.designsystem.theme.ThemePreviews
+import com.london.domain.entity.Actor
 import com.london.presentation.R
 import com.london.presentation.composables.ActorsLayout
 import com.london.presentation.composables.MoviesLayOut
@@ -104,7 +106,9 @@ fun SearchScreenContent(
                 ResultOrEmpty(
                     items = state.recentSearches,
                     otherItems = state.recentViewed,
-                    emptyContent = { NoSearchBeforeLayOut(modifier = Modifier.fillMaxSize()) },
+                    emptyContent = {
+                        NoSearchBeforeLayOut(modifier = Modifier.fillMaxSize())
+                    },
                     content = {
                         RecentSectionLayout(
                             state = state,
@@ -120,11 +124,14 @@ fun SearchScreenContent(
                     onSelect = interactionListener::onCategorySelected,
                     modifier = Modifier.padding(bottom = 12.dp)
                 )
+
                 when (state.selectedCategory) {
                     SearchCategory.Movies ->
                         ResultOrEmpty(
                             items = state.movieResults,
-                            emptyContent = { NoSearchResultLayOut(modifier = Modifier.fillMaxSize()) },
+                            emptyContent = {
+                                NoSearchResultLayOut(modifier = Modifier.fillMaxSize())
+                            },
                             content = {
                                 MoviesLayOut(
                                     movieUis = state.movieResults,
@@ -136,34 +143,36 @@ fun SearchScreenContent(
                             }
                         )
 
-                    SearchCategory.TvShows -> ResultOrEmpty(
-                        items = state.tvShowUiResults,
-                        emptyContent = { NoSearchResultLayOut(modifier = Modifier.fillMaxSize()) },
-                        content = {
-                            TvShowLayOut(
-                                tvShowUis = state.tvShowUiResults,
-                                onSaveClick = { /* Handle save click */ },
-                                isTvShowSaved = { false },
-                                onTvShowClick = { viewModel.addToRecentViewed(it.posterPicture) }
-                            )
-                        }
-                    )
+                    SearchCategory.TvShows ->
+                        ResultOrEmpty(
+                            items = state.tvShowUiResults,
+                            emptyContent = {
+                                NoSearchResultLayOut(modifier = Modifier.fillMaxSize())
+                            },
+                            content = {
+                                TvShowLayOut(
+                                    tvShowUis = state.tvShowUiResults,
+                                    onSaveClick = { /* Handle save click */ },
+                                    isTvShowSaved = { false },
+                                    onTvShowClick = { viewModel.addToRecentViewed(it.posterPicture) }
+                                )
+                            }
+                        )
 
-
-                    SearchCategory.Actors -> ResultOrEmpty(
-                        items = state.actorUiResults,
-                        emptyContent = { NoSearchResultLayOut(modifier = Modifier.fillMaxSize()) },
-                        content = {
-                            ActorsLayout(
-                                actorsUis = state.actorUiResults,
-                                onActorClick = { /* Handle actor click */ }
-                            )
-                        }
-                    )
+                    SearchCategory.Actors ->
+                        ResultOrEmpty(
+                            items = state.actorUiResults,
+                            emptyContent = {
+                                NoSearchResultLayOut(modifier = Modifier.fillMaxSize())
+                            },
+                            content = {
+                                ActorsLayout(
+                                    actorsUis = state.actorUiResults,
+                                    onActorClick = { /* Handle actor click */ }
+                                )
+                            }
+                        )
                 }
-                    )
-                }
-
             }
         )
     }
