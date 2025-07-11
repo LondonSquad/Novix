@@ -1,6 +1,7 @@
 [versions]
 # Build Tools
 agp = "8.8.2"
+constraintlayoutCompose = "1.1.1"
 firebaseBom = "33.16.0"
 gson = "2.11.0"
 kotlin = "2.0.21"
@@ -71,6 +72,7 @@ junitJupiterVersion = "5.13.3"
 
 [libraries]
 # AndroidX Core
+androidx-constraintlayout-compose = { module = "androidx.constraintlayout:constraintlayout-compose", version.ref = "constraintlayoutCompose" }
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
 androidx-lifecycle-runtime-ktx = { group = "androidx.lifecycle", name = "lifecycle-runtime-ktx", version.ref = "lifecycleRuntimeKtx" }
 androidx-activity-compose = { group = "androidx.activity", name = "activity-compose", version.ref = "activityCompose" }

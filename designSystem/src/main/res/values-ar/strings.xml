@@ -8,5 +8,6 @@
     <string name="appName">نوفيكس</string>
     <string name="explainTheNameOfApp">مشتق من نوفا، مُصمم من أجل الأفلام</string>
     <string name="my_account">حسابي</string>
-
+    <string name="start_exploring_msg">ابدأ الاستكشاف! ابحث عن أفلامك ومسلسلاتك المفضلة</string>
+    <string name="no_search_result_msg">لا توجد نتائج، جرّب كلمة مفتاحية أخرى!</string>
 </resources>
