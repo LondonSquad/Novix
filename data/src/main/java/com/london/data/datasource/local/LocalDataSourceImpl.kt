@@ -1,6 +1,7 @@
 package com.london.data.datasource.local
 
 import com.london.data.datasource.local.dao.SearchActorsDao
+import com.london.data.datasource.local.dao.SearchDao
 import com.london.data.datasource.local.dao.SearchMoviesDao
 import com.london.data.datasource.local.dao.SearchTvShowDao
 import com.london.data.datasource.local.model.SearchActorsLocal
@@ -12,6 +13,7 @@ import com.london.data.datasource.util.executeGetByDate
 import com.london.data.datasource.util.executeGetByQuery
 import com.london.data.datasource.util.executeInsert
 import com.london.data.datasource.util.executeUpdate
+import java.security.MessageDigest
 
 class LocalDataSourceImpl(
     private val searchTvShowDao: SearchTvShowDao,
@@ -60,12 +62,39 @@ class LocalDataSourceImpl(
     override suspend fun getActorByDate(date: Long): SearchActorsLocal =
         searchActorsDao.executeGetByDate(date)
 
-    override suspend fun getActorByQuery(query: String): SearchActorsLocal =
-        searchActorsDao.executeGetByQuery(query)
+    override suspend fun getActorByQuery(query: String): SearchActorsLocal {
+        searchActorsDao.executeGetAll().forEach {
+            searchActorsDao.deleteIfOneHourExpired(it, it.date)
+        }
+        return searchActorsDao.executeGetByQuery(query)
+    }
 
-    override suspend fun getTvShowByQuery(query: String): SearchTvShowLocal =
-        searchTvShowDao.executeGetByQuery(query)
 
-    override suspend fun getMovieByQuery(query: String): SearchMoviesLocal =
-        searchMoviesDao.executeGetByQuery(query)
+    override suspend fun getTvShowByQuery(query: String): SearchTvShowLocal {
+        searchTvShowDao.executeGetAll().forEach {
+            searchTvShowDao.deleteIfOneHourExpired(it, it.date)
+        }
+        return searchTvShowDao.executeGetByQuery(query.generateHash())
+    }
+
+    override suspend fun getMovieByQuery(query: String): SearchMoviesLocal {
+        searchMoviesDao.executeGetAll().forEach {
+            searchMoviesDao.deleteIfOneHourExpired(it, it.date)
+        }
+        return searchMoviesDao.executeGetByQuery(query.generateHash())
+    }
+}
+
+
+fun String.generateHash(): String =
+    MessageDigest.getInstance("MD5").digest(toByteArray()).joinToString("") { "%02x".format(it) }
+
+
+suspend fun <T> SearchDao<T>.deleteIfOneHourExpired(
+    item: T, date: Long
+) {
+    val oneHourAgo = System.currentTimeMillis() - (3600000)
+    if (date < oneHourAgo) {
+        delete(item)
+    }
 }
