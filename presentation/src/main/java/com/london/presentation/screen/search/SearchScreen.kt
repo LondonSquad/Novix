@@ -6,6 +6,7 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -39,6 +40,7 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
 import com.london.designsystem.R
+import com.london.designsystem.component.ActorItem
 import com.london.designsystem.component.EmptySearchComponent
 import com.london.designsystem.component.HomeCard
 import com.london.designsystem.component.NovixChip
@@ -48,6 +50,7 @@ import com.london.designsystem.component.TopBar
 import com.london.designsystem.component.button.PrimaryButton
 import com.london.designsystem.theme.NovixTheme
 import com.london.designsystem.theme.ThemePreviews
+import com.london.domain.entity.Actor
 import com.london.domain.entity.Movie
 import com.london.domain.entity.TvShow
 import org.koin.androidx.compose.koinViewModel
@@ -135,7 +138,10 @@ fun SearchScreenContent(
                     if (state.actorUiResults.isEmpty()) {
                         NoSearchResultLayOut(modifier = Modifier.fillMaxSize())
                     } else {
-                        // Todo
+                        ActorsLayOut(
+                            actorsUis = state.actorUiResults,
+                            onActorClick = { actor -> /* TODO: Actor Details Screen */ }
+                        )
                     }
                 }
             }
@@ -252,6 +258,27 @@ fun MoviesLayOut(
     }
 }
 
+@Composable
+private fun ActorsLayOut(
+    actorsUis: List<Actor>,
+    onActorClick: (Actor) -> Unit,
+    modifier: Modifier = Modifier
+) {
+    LazyColumn(
+        modifier = modifier.fillMaxWidth(),
+        contentPadding = PaddingValues(horizontal = 16.dp),
+        verticalArrangement = Arrangement.spacedBy(12.dp)
+    ) {
+        items(actorsUis) { actor ->
+            ActorItem(
+                modifier = Modifier.clickable(onClick = { onActorClick(actor) }),
+                actorName = actor.name,
+                characterName = null,
+                imageRes = actor.profilePicture
+            )
+        }
+    }
+}
 
 @Composable
 fun NoSearchBeforeLayOut(
