@@ -66,7 +66,7 @@ class LocalDataSourceImpl(
         searchActorsDao.executeGetAll().forEach {
             searchActorsDao.deleteIfOneHourExpired(it, it.date)
         }
-        return searchActorsDao.executeGetByQuery(query)
+        return searchActorsDao.executeGetByQuery(query.generateHash())
     }
 
 
