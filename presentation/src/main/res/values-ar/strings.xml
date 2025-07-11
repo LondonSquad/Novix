@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="search">بحث</string>
+    <string name="search_placeholder">ابحث...</string>
+    <string name="recent_viewed">شوهد مؤخرًا</string>
+    <string name="recent_search">عمليات البحث الأخيرة</string>
+    <string name="clear_all">مسح الكل</string>
+    <string name="clock">الساعة</string>
+    <string name="clear">مسح</string>
+</resources>

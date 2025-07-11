@@ -1,12 +1,13 @@
 package com.london.presentation.screen.search
 
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.text.input.TextFieldValue
 import com.london.presentation.screen.search.model.ActorUi
 import com.london.presentation.screen.search.model.MovieUi
 import com.london.presentation.screen.search.model.TvShowUi
 
 data class SearchUiState(
-    var searchQuery: String = "",
+    var searchQuery: TextFieldValue = TextFieldValue(""),
     val showNoSearchBefore: Boolean = false,
     val showNoSearchResults: Boolean = false,
     var showFilterBottomSheet: Boolean = false,
@@ -17,7 +18,9 @@ data class SearchUiState(
     val movieResults: List<MovieUi> = DummyData.dummyMoviesList,
     val tvShowUiResults: List<TvShowUi> = DummyData.dummyTvShowsList,
     val savedMovies: Set<Int> = emptySet(),
-    val selectedCategory: SearchCategory = SearchCategory.Movies
+    val selectedCategory: SearchCategory = SearchCategory.Movies,
+    val recentViewed: List<String> = emptyList(),
+    val recentSearches: List<String> = emptyList(),
 )
 
 data class CategoryContent<T>(

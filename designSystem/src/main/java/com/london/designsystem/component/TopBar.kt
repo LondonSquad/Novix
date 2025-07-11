@@ -5,8 +5,8 @@ import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.defaultMinSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Icon
@@ -17,7 +17,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.london.designsystem.R
 import com.london.designsystem.theme.NovixTheme
@@ -34,7 +33,7 @@ fun TopBar(
     Row(
         modifier = modifier
             .fillMaxWidth()
-            .defaultMinSize(minHeight = 56.dp),
+            .padding(vertical = 13.dp),
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.SpaceBetween
     ) {
@@ -46,8 +45,9 @@ fun TopBar(
                 text = title,
                 style = NovixTheme.typography.title.large,
                 color = NovixTheme.colors.title,
-                modifier = Modifier,
-                textAlign = TextAlign.Start
+                modifier = Modifier
+                    .weight(1f)
+                    .padding(horizontal = 4.dp)
             )
         }
 
@@ -72,6 +72,7 @@ fun ButtonTopBar(icon: Int, onClick: () -> Unit) {
     IconButton(
         onClick = onClick,
         modifier = Modifier
+            .padding(end = 8.dp)
             .size(40.dp)
             .clip(RoundedCornerShape(12.dp))
             .background(NovixTheme.colors.iconBackgroundLow)
@@ -93,6 +94,7 @@ fun ButtonTopBar(icon: Int, onClick: () -> Unit) {
 @ThemePreviews
 fun TopBarPreview() {
     TopBar(
-        title = "Search"
+        option1 = {},
+        option2 = {}
     )
 }
