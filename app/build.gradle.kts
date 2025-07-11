@@ -30,7 +30,7 @@ android {
 
     buildTypes {
         release {
-            isMinifyEnabled = AppConfig.ENABLE_R8_FULL_MODE
+            isMinifyEnabled = AppConfig.IS_RELEASE_MODE_DEBUGGABLE
             isDebuggable = AppConfig.IS_RELEASE_MODE_DEBUGGABLE
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
@@ -67,4 +67,11 @@ dependencies {
     implementation(libs.firebase.crashlytics)
     implementation(libs.firebase.analytics)
     testImplementation(libs.bundles.testing)
+    implementation(libs.androidx.navigation.compose)
+    implementation (libs.koin.androidx.navigation)
+    implementation (libs.androidx.material)
+    implementation(libs.bundles.room)
+    implementation(libs.bundles.koin)
+    ksp(libs.bundles.room.ksp)
+
 }
