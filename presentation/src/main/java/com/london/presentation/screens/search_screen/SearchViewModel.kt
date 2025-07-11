@@ -1,5 +1,6 @@
 package com.london.presentation.screens.search_screen
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import com.london.presentation.screens.search_screen.model.MovieUi
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -15,7 +16,9 @@ class SearchViewModel : ViewModel(), SearchInteractions {
     fun isMovieSaved(movie: MovieUi) = _uiState.value.savedMovies.contains(movie.id)
 
     override fun onSearchQueryChange(query: String) {
-        TODO("Not yet implemented")
+        _uiState.update {
+            it.copy(searchQuery = query)
+        }
     }
 
     override fun onSearchFilterClick() {
@@ -23,7 +26,9 @@ class SearchViewModel : ViewModel(), SearchInteractions {
     }
 
     override fun onCategorySelected(category: SearchCategory) {
-        TODO("Not yet implemented")
+        _uiState.update {
+            it.copy(selectedCategory = category)
+        }
     }
 
     override fun onSavedMovieClick(movie: MovieUi) {

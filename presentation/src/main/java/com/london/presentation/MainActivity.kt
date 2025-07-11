@@ -20,6 +20,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.london.designsystem.theme.NovixTheme
 import com.london.designsystem.theme.ThemePreviews
+import com.london.presentation.screens.search_screen.SearchScreen
 
 
 class MainActivity : ComponentActivity() {
@@ -29,7 +30,8 @@ class MainActivity : ComponentActivity() {
         setContent {
             NovixTheme {
                 Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-                    FakeScreen(modifier = Modifier.padding(innerPadding))
+                    SearchScreen(modifier = Modifier.padding(innerPadding))
+//                    FakeScreen(modifier = Modifier.padding(innerPadding))
                 }
             }
         }

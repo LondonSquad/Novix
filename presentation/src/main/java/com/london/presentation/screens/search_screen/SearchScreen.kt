@@ -1,5 +1,6 @@
 package com.london.presentation.screens.search_screen
 
+import android.annotation.SuppressLint
 import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
@@ -7,12 +8,12 @@ import androidx.compose.animation.togetherWith
 import androidx.compose.foundation.background
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.defaultMinSize
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
@@ -31,7 +32,9 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.london.designsystem.R
 import com.london.designsystem.component.EmptySearchComponent
 import com.london.designsystem.component.HomeCard
@@ -41,13 +44,15 @@ import com.london.designsystem.component.button.PrimaryButton
 import com.london.designsystem.theme.NovixTheme
 import com.london.designsystem.theme.ThemePreviews
 import com.london.presentation.screens.search_screen.model.MovieUi
-import org.koin.androidx.compose.koinViewModel
 
+@SuppressLint("ViewModelConstructorInComposable")
 @Composable
 fun SearchScreen(
     modifier: Modifier = Modifier,
-    viewModel: SearchViewModel = koinViewModel()
 ) {
+
+    val viewModel: SearchViewModel = viewModel()
+
     val state by viewModel.uiState.collectAsStateWithLifecycle()
 
     SearchScreenContent(
@@ -63,13 +68,14 @@ fun SearchScreenContent(
     interactionListener: SearchInteractions,
     isMovieSaved: (MovieUi) -> Boolean
 ) {
-    var searchQuery by remember { mutableStateOf(state.searchQuery) }
-    var textFieldValue by remember { mutableStateOf(TextFieldValue(searchQuery)) }
+    var textFieldValue by remember { mutableStateOf(TextFieldValue(state.searchQuery)) }
     val interactionSource = remember { MutableInteractionSource() }
-    val results = when (state.selectedCategory) {
-        SearchCategory.Movies -> state.movieResults
-        SearchCategory.TvShows -> state.tvShowUiResults
-        SearchCategory.Actors -> state.actorUiResults
+    val results = remember {
+        when (state.selectedCategory) {
+            SearchCategory.Movies -> state.movieResults
+            SearchCategory.TvShows -> state.tvShowUiResults
+            SearchCategory.Actors -> state.actorUiResults
+        }
     }
 
     Column(
@@ -92,7 +98,7 @@ fun SearchScreenContent(
                 value = textFieldValue,
                 onValueChange = {
                     textFieldValue = it
-                    state.searchQuery = it.text
+                    interactionListener.onSearchQueryChange(it.text)
                 },
                 modifier = Modifier
                     .weight(1f)
@@ -113,60 +119,62 @@ fun SearchScreenContent(
             )
         }
 
-        when {
-            state.searchQuery.isEmpty() && state.searchHistory.isEmpty() -> {
-                NoSearchBeforeLayOut(modifier = Modifier.weight(1f))
-                return@Column
-            }
 
-            state.searchQuery.isEmpty() && state.searchHistory.isNotEmpty() -> {
-                TODO("SearchHistoryScreen()")
-            }
+        if (state.searchQuery.isEmpty() && state.searchHistory.isEmpty()) {
+            NoSearchBeforeLayOut(modifier = Modifier.fillMaxSize())
+            return
+        }
+
+
+        // Handle search history case if needed
+        if (state.searchQuery.isEmpty() && state.searchHistory.isNotEmpty()) {
+            // Add your search history UI here
         }
 
         SearchChipsRow(
             selected = state.selectedCategory,
-            onSelect = { interactionListener.onCategorySelected(it) },
+            onSelect = { searchCategory ->
+                interactionListener.onCategorySelected(searchCategory)
+            },
             modifier = Modifier.padding(bottom = 12.dp)
         )
 
-        AnimatedContent(
-            targetState = Pair(state.selectedCategory, results.isEmpty()),
-            label = "CategorySearchContentTransition",
-            transitionSpec = { fadeIn() togetherWith fadeOut() }
-        ) { (category, isEmpty) ->
-            if (isEmpty) {
-                NoSearchResultLayOut(
-                    modifier = Modifier.fillMaxSize()
-                )
-                return@AnimatedContent
+        when (state.selectedCategory) {
+            SearchCategory.Movies -> {
+                if (state.movieResults.isEmpty()) {
+                    NoSearchResultLayOut(modifier = Modifier.fillMaxSize())
+                } else {
+                    MoviesLayOut(
+                        movieUis = state.movieResults,
+                        onSaveMovie = { interactionListener.onSavedMovieClick(it) },
+                        isMovieSaved = isMovieSaved,
+                    )
+                }
             }
-            when (category) {
-                SearchCategory.Movies -> CategoryContent(
-                    items = state.movieResults,
-                    content = { movies ->
-                        MoviesLayOut(
-                            movieUis = movies,
-                            onSaveMovie = { interactionListener.onSavedMovieClick(it) },
-                            isMovieSaved = isMovieSaved
-                        )
-                    }
-                )
 
-                SearchCategory.TvShows -> CategoryContent(
-                    items = state.tvShowUiResults,
-                    content = { tvShows -> TODO("TvShowsLayOut()") }
+            SearchCategory.TvShows -> {
+                // Just show placeholder for now
+                Text(
+                    text = "TV Shows - Coming Soon",
+                    style = NovixTheme.typography.body.medium,
+                    color = NovixTheme.colors.title,
+                    modifier = Modifier.padding(16.dp)
                 )
+            }
 
-                SearchCategory.Actors -> CategoryContent(
-                    items = state.actorUiResults,
-                    content = { actors -> TODO("ActorsLayOut()") }
+            SearchCategory.Actors -> {
+                // Just show placeholder for now
+                Text(
+                    text = "Actors - Coming Soon",
+                    style = NovixTheme.typography.body.medium,
+                    color = NovixTheme.colors.title,
+                    modifier = Modifier.padding(16.dp)
                 )
             }
         }
 
         if (state.showFilterBottomSheet) {
-            TODO("FilterBottomSheet()")
+
         }
     }
 }
@@ -244,7 +252,7 @@ fun MoviesLayOut(
                 imageUrl = movie.posterUrl,
                 onSaveClick = { onSaveMovie(movie) },
                 isSaved = isMovieSaved(movie),
-                imageDescription = movie.title
+                imageDescription = movie.title,
             )
         }
     }
@@ -255,14 +263,17 @@ fun MoviesLayOut(
 fun NoSearchBeforeLayOut(
     modifier: Modifier = Modifier
 ) {
-    Box(
-        modifier = modifier
-            .fillMaxWidth(),
-        contentAlignment = Alignment.Center
-    ) {
+    ConstraintLayout(modifier = modifier) {
+        val (emptySearch) = createRefs()
         EmptySearchComponent(
             text = "Start exploring! Search for your favorite movies, series and shows",
             image = R.drawable.img_explore,
+            modifier = Modifier.constrainAs(emptySearch) {
+                top.linkTo(parent.top)
+                bottom.linkTo(parent.bottom)
+                start.linkTo(parent.start)
+                end.linkTo(parent.end)
+            }
         )
     }
 }
@@ -271,14 +282,18 @@ fun NoSearchBeforeLayOut(
 fun NoSearchResultLayOut(
     modifier: Modifier = Modifier
 ) {
-    Box(
-        modifier = modifier
-            .fillMaxWidth(),
-        contentAlignment = Alignment.Center
-    ) {
+    ConstraintLayout(modifier = modifier) {
+        val (emptySearch) = createRefs()
+
         EmptySearchComponent(
             text = "No search result, please try with another keyword!",
             image = R.drawable.img_no_search_result,
+            modifier = Modifier.constrainAs(emptySearch) {
+                top.linkTo(parent.top)
+                bottom.linkTo(parent.bottom)
+                start.linkTo(parent.start)
+                end.linkTo(parent.end)
+            }
         )
     }
 }
@@ -287,5 +302,6 @@ fun NoSearchResultLayOut(
 @Composable
 fun SearchPrev() {
     NovixTheme {
+        SearchScreen()
     }
 }
