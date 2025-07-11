@@ -84,14 +84,14 @@ fun SearchScreenContent(
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .background(color = NovixTheme.colors.surface)
-            .padding(horizontal = 16.dp),
+            .background(color = NovixTheme.colors.surface),
         verticalArrangement = Arrangement.Top
     ) {
         TopBar(
             modifier = Modifier
                 .statusBarsPadding()
-                .height(56.dp),
+                .height(56.dp)
+                .padding(horizontal = 16.dp),
             title = stringResource(R.string.search),
         )
 
@@ -100,7 +100,7 @@ fun SearchScreenContent(
             viewModel = viewModel,
             interactionSource = interactionSource,
             keyboardController = keyboardController,
-            modifier = Modifier.padding(bottom = 12.dp)
+            modifier = Modifier.padding(start = 16.dp, end = 16.dp, bottom = 12.dp)
         )
 
         if (state.searchQuery.text.isNotEmpty()) {
@@ -187,7 +187,9 @@ fun SearchChipsRow(
     modifier: Modifier = Modifier
 ) {
     Row(
-        modifier = modifier.fillMaxWidth(),
+        modifier = modifier
+            .fillMaxWidth()
+            .padding(horizontal = 16.dp),
         horizontalArrangement = Arrangement.Start
     ) {
         NovixChip(
@@ -222,7 +224,10 @@ fun TvShowLayOut(
 
     LazyVerticalGrid(
         columns = GridCells.Fixed(columns),
-        modifier = Modifier.fillMaxSize(),
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(horizontal = 16.dp),
+
         horizontalArrangement = Arrangement.spacedBy(12.dp),
         verticalArrangement = Arrangement.spacedBy(12.dp)
     ) {
@@ -252,7 +257,10 @@ fun MoviesLayOut(
 
     LazyVerticalGrid(
         columns = GridCells.Fixed(columns),
-        modifier = Modifier.fillMaxSize(),
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(horizontal = 16.dp),
+
         horizontalArrangement = Arrangement.spacedBy(12.dp),
         verticalArrangement = Arrangement.spacedBy(12.dp)
     ) {
@@ -396,37 +404,6 @@ private fun SearchBar(
 }
 
 @Composable
-fun RecentSearchesSection(
-    recentSearches: List<String>,
-    onClearAll: () -> Unit,
-    onSearchClick: (String) -> Unit,
-    onRemoveClick: (String) -> Unit
-) {
-    Column {
-        SectionHeader(
-            text = stringResource(R.string.recent_search),
-            hasGetAll = true,
-            hasIcon = false,
-            getAllText = stringResource(R.string.clear_all),
-            onClick = onClearAll,
-            modifier = Modifier.padding(vertical = 12.dp)
-        )
-
-        LazyColumn(
-            modifier = Modifier.padding(horizontal = 16.dp)
-        ) {
-            items(recentSearches) { search ->
-                RecentSearchItem(
-                    search = search,
-                    onSearchClick = { onSearchClick(search) },
-                    onRemoveClick = { onRemoveClick(search) }
-                )
-            }
-        }
-    }
-}
-
-@Composable
 fun RecentViewedSection(
     recentViewed: List<String>,
     onClearAll: () -> Unit
@@ -453,6 +430,37 @@ fun RecentViewedSection(
                     imageUrl = imageUrl,
                     isSaved = false,
                     onSaveClick = {}
+                )
+            }
+        }
+    }
+}
+
+@Composable
+fun RecentSearchesSection(
+    recentSearches: List<String>,
+    onClearAll: () -> Unit,
+    onSearchClick: (String) -> Unit,
+    onRemoveClick: (String) -> Unit
+) {
+    Column {
+        SectionHeader(
+            text = stringResource(R.string.recent_search),
+            hasGetAll = true,
+            hasIcon = false,
+            getAllText = stringResource(R.string.clear_all),
+            onClick = onClearAll,
+            modifier = Modifier.padding(vertical = 12.dp, horizontal = 16.dp)
+        )
+
+        LazyColumn(
+            modifier = Modifier.padding(horizontal = 16.dp)
+        ) {
+            items(recentSearches) { search ->
+                RecentSearchItem(
+                    search = search,
+                    onSearchClick = { onSearchClick(search) },
+                    onRemoveClick = { onRemoveClick(search) }
                 )
             }
         }
