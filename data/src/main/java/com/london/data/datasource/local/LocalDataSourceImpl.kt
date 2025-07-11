@@ -13,61 +13,53 @@ class LocalDataSourceImpl(
     private val searchActorsDao: SearchActorsDao
 ) : LocalDataSource {
     override suspend fun insertMovie(movie: SearchMoviesLocal) =
-       runOrThrow({ searchMoviesDao.insert(movie) }, ::InsertMovieExpansion)
+        searchMoviesDao.executeInsert(movie)
 
     override suspend fun insertTvShow(tvShow: SearchTvShowLocal) =
-        runOrThrow({ searchTvShowDao.insert(tvShow) }, ::InsertTvShowExpansion)
+        searchTvShowDao.executeInsert(tvShow)
 
     override suspend fun insertActor(actor: SearchActorsLocal) =
-        runOrThrow({ searchActorsDao.insert(actor) }, ::InsertActorExpansion)
+        searchActorsDao.executeInsert(actor)
 
     override suspend fun updateMovie(movie: SearchMoviesLocal) =
-        runOrThrow({ searchMoviesDao.update(movie) }, ::UpdateMovieExpansion)
+        searchMoviesDao.executeUpdate(movie)
 
     override suspend fun updateTvShow(tvShow: SearchTvShowLocal) =
-        runOrThrow({ searchTvShowDao.update(tvShow) }, ::UpdateTvShowExpansion)
+        searchTvShowDao.executeUpdate(tvShow)
 
     override suspend fun updateActor(actor: SearchActorsLocal) =
-        runOrThrow({ searchActorsDao.update(actor) }, ::UpdateActorExpansion)
+        searchActorsDao.executeUpdate(actor)
 
     override suspend fun deleteMovie(movie: SearchMoviesLocal) =
-        runOrThrow({ searchMoviesDao.delete(movie) }, ::DeleteMovieExpansion)
+        searchMoviesDao.executeDelete(movie)
 
     override suspend fun deleteTvShow(tvShow: SearchTvShowLocal) =
-        runOrThrow({ searchTvShowDao.delete(tvShow) }, ::DeleteTvShowExpansion)
+        searchTvShowDao.executeDelete(tvShow)
 
     override suspend fun deleteActor(actor: SearchActorsLocal) =
-        runOrThrow({ searchActorsDao.delete(actor) }, ::DeleteActorExpansion)
+        searchActorsDao.executeDelete(actor)
 
-    override suspend fun getMovies(): SearchMoviesLocal =
-        runOrThrow({ searchMoviesDao.getAll() }, ::GetMoviesAllExpansion)
+    override suspend fun getMovies(): SearchMoviesLocal = searchMoviesDao.executeGetAll()
 
-    override suspend fun getTvShows(): SearchTvShowLocal =
-        runOrThrow({ searchTvShowDao.getAll() }, ::GetTvShowsAllExpansion)
+    override suspend fun getTvShows(): SearchTvShowLocal = searchTvShowDao.executeGetAll()
 
-    override suspend fun getActors(): SearchActorsLocal =
-        runOrThrow({ searchActorsDao.getAll() }, ::GetActorsAllExpansion)
+    override suspend fun getActors(): SearchActorsLocal = searchActorsDao.executeGetAll()
 
     override suspend fun getMovieByDate(date: Long): SearchMoviesLocal =
-        runOrThrow({ searchMoviesDao.getCurrentSearch(date) }, ::GetMovieByDateExpansion)
+        searchMoviesDao.executeGetByDate(date)
 
     override suspend fun getTvShowByDate(date: Long): SearchTvShowLocal =
-        runOrThrow({ searchTvShowDao.getCurrentSearch(date) }, ::GetTvShowByDateExpansion)
+        searchTvShowDao.executeGetByDate(date)
 
     override suspend fun getActorByDate(date: Long): SearchActorsLocal =
-        runOrThrow({ searchActorsDao.getCurrentSearch(date) }, ::GetActorByDateExpansion)
+        searchActorsDao.executeGetByDate(date)
 
     override suspend fun getActorByQuery(query: String): SearchActorsLocal =
-        runOrThrow({ searchActorsDao.getSearchByQuery(query) }, ::GetActorByQueryExpansion)
+        searchActorsDao.executeGetByQuery(query)
 
     override suspend fun getTvShowByQuery(query: String): SearchTvShowLocal =
-        runOrThrow({ searchTvShowDao.getSearchByQuery(query) }, ::GetTvShowByQueryExpansion)
+        searchTvShowDao.executeGetByQuery(query)
 
     override suspend fun getMovieByQuery(query: String): SearchMoviesLocal =
-        runOrThrow({ searchMoviesDao.getSearchByQuery(query) }, ::GetMovieByQueryExpansion)
+        searchMoviesDao.executeGetByQuery(query)
 }
-
-suspend inline fun <T> runOrThrow(
-    crossinline block: suspend () -> T,
-    crossinline error: () -> Throwable
-): T = runCatching { block() }.getOrElse { throw error() }

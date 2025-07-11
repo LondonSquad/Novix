@@ -23,7 +23,7 @@ interface SearchTvShowDao : SearchDao<SearchTvShowLocal> {
     override suspend fun getAll(): SearchTvShowLocal
 
     @Query("SELECT * FROM search_tv_shows_table WHERE date = :date")
-    override suspend fun getCurrentSearch(date: Long): SearchTvShowLocal
+    override suspend fun getCurrentSearchByDate(date: Long): SearchTvShowLocal
 
     @Query("SELECT * FROM search_tv_shows_table WHERE `query` = :query")
     override suspend fun getSearchByQuery(query: String): SearchTvShowLocal

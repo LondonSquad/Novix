@@ -24,7 +24,7 @@ interface SearchMoviesDao : SearchDao<SearchMoviesLocal> {
     override suspend fun getAll(): SearchMoviesLocal
 
     @Query("SELECT * FROM search_movies_table WHERE date = :date")
-    override suspend fun getCurrentSearch(date: Long): SearchMoviesLocal
+    override suspend fun getCurrentSearchByDate(date: Long): SearchMoviesLocal
 
     @Query("SELECT * FROM search_movies_table WHERE `query` = :query")
     override suspend fun getSearchByQuery(query: String): SearchMoviesLocal

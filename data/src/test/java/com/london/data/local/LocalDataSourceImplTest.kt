@@ -1,24 +1,10 @@
 package com.london.data.local
 
-import com.london.data.datasource.local.DeleteActorExpansion
-import com.london.data.datasource.local.DeleteMovieExpansion
-import com.london.data.datasource.local.DeleteTvShowExpansion
-import com.london.data.datasource.local.GetActorByDateExpansion
-import com.london.data.datasource.local.GetActorByQueryExpansion
-import com.london.data.datasource.local.GetActorsAllExpansion
-import com.london.data.datasource.local.GetMovieByDateExpansion
-import com.london.data.datasource.local.GetMovieByQueryExpansion
-import com.london.data.datasource.local.GetMoviesAllExpansion
-import com.london.data.datasource.local.GetTvShowByDateExpansion
-import com.london.data.datasource.local.GetTvShowByQueryExpansion
-import com.london.data.datasource.local.GetTvShowsAllExpansion
-import com.london.data.datasource.local.InsertActorExpansion
-import com.london.data.datasource.local.InsertMovieExpansion
-import com.london.data.datasource.local.InsertTvShowExpansion
+import com.london.data.datasource.local.DeleteException
+import com.london.data.datasource.local.GetException
+import com.london.data.datasource.local.InsertException
 import com.london.data.datasource.local.LocalDataSourceImpl
-import com.london.data.datasource.local.UpdateActorExpansion
-import com.london.data.datasource.local.UpdateMovieExpansion
-import com.london.data.datasource.local.UpdateTvShowExpansion
+import com.london.data.datasource.local.UpdateException
 import com.london.data.datasource.local.dao.SearchActorsDao
 import com.london.data.datasource.local.dao.SearchMoviesDao
 import com.london.data.datasource.local.dao.SearchTvShowDao
@@ -82,12 +68,12 @@ class LocalDataSourceImplTest {
     }
 
     @Test
-    fun `insertMovie should throw InsertMovieExpansion when dao throws exception`() = runTest {
+    fun `insertMovie should throw InsertException when dao throws exception`() = runTest {
         // Given
         coEvery { searchMoviesDao.insert(mockMoviesResponse) } throws RuntimeException("Database error")
 
         // When & Then
-        assertFailsWith<InsertMovieExpansion> {
+        assertFailsWith<InsertException> {
             localDataSource.insertMovie(mockMoviesResponse)
         }
         coVerify(exactly = 1) { searchMoviesDao.insert(mockMoviesResponse) }
@@ -106,12 +92,12 @@ class LocalDataSourceImplTest {
     }
 
     @Test
-    fun `insertTvShow should throw InsertTvShowExpansion when dao throws exception`() = runTest {
+    fun `insertTvShow should throw InsertException when dao throws exception`() = runTest {
         // Given
         coEvery { searchTvShowDao.insert(mockTvShowsResponse) } throws RuntimeException("Database error")
 
         // When & Then
-        assertFailsWith<InsertTvShowExpansion> {
+        assertFailsWith<InsertException> {
             localDataSource.insertTvShow(mockTvShowsResponse)
         }
         coVerify(exactly = 1) { searchTvShowDao.insert(mockTvShowsResponse) }
@@ -130,12 +116,12 @@ class LocalDataSourceImplTest {
     }
 
     @Test
-    fun `insertActor should throw InsertActorExpansion when dao throws exception`() = runTest {
+    fun `insertActor should throw InsertException when dao throws exception`() = runTest {
         // Given
         coEvery { searchActorsDao.insert(mockActorsResponse) } throws RuntimeException("Database error")
 
         // When & Then
-        assertFailsWith<InsertActorExpansion> {
+        assertFailsWith<InsertException> {
             localDataSource.insertActor(mockActorsResponse)
         }
         coVerify(exactly = 1) { searchActorsDao.insert(mockActorsResponse) }
@@ -156,12 +142,12 @@ class LocalDataSourceImplTest {
     }
 
     @Test
-    fun `updateMovie should throw UpdateMovieExpansion when dao throws exception`() = runTest {
+    fun `updateMovie should throw UpdateException when dao throws exception`() = runTest {
         // Given
         coEvery { searchMoviesDao.update(mockMoviesResponse) } throws RuntimeException("Database error")
 
         // When & Then
-        assertFailsWith<UpdateMovieExpansion> {
+        assertFailsWith<UpdateException> {
             localDataSource.updateMovie(mockMoviesResponse)
         }
         coVerify(exactly = 1) { searchMoviesDao.update(mockMoviesResponse) }
@@ -180,12 +166,12 @@ class LocalDataSourceImplTest {
     }
 
     @Test
-    fun `updateTvShow should throw UpdateTvShowExpansion when dao throws exception`() = runTest {
+    fun `updateTvShow should throw UpdateException when dao throws exception`() = runTest {
         // Given
         coEvery { searchTvShowDao.update(mockTvShowsResponse) } throws RuntimeException("Database error")
 
         // When & Then
-        assertFailsWith<UpdateTvShowExpansion> {
+        assertFailsWith<UpdateException> {
             localDataSource.updateTvShow(mockTvShowsResponse)
         }
         coVerify(exactly = 1) { searchTvShowDao.update(mockTvShowsResponse) }
@@ -204,12 +190,12 @@ class LocalDataSourceImplTest {
     }
 
     @Test
-    fun `updateActor should throw UpdateActorExpansion when dao throws exception`() = runTest {
+    fun `updateActor should throw UpdateException when dao throws exception`() = runTest {
         // Given
         coEvery { searchActorsDao.update(mockActorsResponse) } throws RuntimeException("Database error")
 
         // When & Then
-        assertFailsWith<UpdateActorExpansion> {
+        assertFailsWith<UpdateException> {
             localDataSource.updateActor(mockActorsResponse)
         }
         coVerify(exactly = 1) { searchActorsDao.update(mockActorsResponse) }
@@ -230,12 +216,12 @@ class LocalDataSourceImplTest {
     }
 
     @Test
-    fun `deleteMovie should throw DeleteMovieExpansion when dao throws exception`() = runTest {
+    fun `deleteMovie should throw DeleteException when dao throws exception`() = runTest {
         // Given
         coEvery { searchMoviesDao.delete(mockMoviesResponse) } throws RuntimeException("Database error")
 
         // When & Then
-        assertFailsWith<DeleteMovieExpansion> {
+        assertFailsWith<DeleteException> {
             localDataSource.deleteMovie(mockMoviesResponse)
         }
         coVerify(exactly = 1) { searchMoviesDao.delete(mockMoviesResponse) }
@@ -254,12 +240,12 @@ class LocalDataSourceImplTest {
     }
 
     @Test
-    fun `deleteTvShow should throw DeleteTvShowExpansion when dao throws exception`() = runTest {
+    fun `deleteTvShow should throw DeleteException when dao throws exception`() = runTest {
         // Given
         coEvery { searchTvShowDao.delete(mockTvShowsResponse) } throws RuntimeException("Database error")
 
         // When & Then
-        assertFailsWith<DeleteTvShowExpansion> {
+        assertFailsWith<DeleteException> {
             localDataSource.deleteTvShow(mockTvShowsResponse)
         }
         coVerify(exactly = 1) { searchTvShowDao.delete(mockTvShowsResponse) }
@@ -278,12 +264,12 @@ class LocalDataSourceImplTest {
     }
 
     @Test
-    fun `deleteActor should throw DeleteActorExpansion when dao throws exception`() = runTest {
+    fun `deleteActor should throw DeleteException when dao throws exception`() = runTest {
         // Given
         coEvery { searchActorsDao.delete(mockActorsResponse) } throws RuntimeException("Database error")
 
         // When & Then
-        assertFailsWith<DeleteActorExpansion> {
+        assertFailsWith<DeleteException> {
             localDataSource.deleteActor(mockActorsResponse)
         }
         coVerify(exactly = 1) { searchActorsDao.delete(mockActorsResponse) }
@@ -305,12 +291,12 @@ class LocalDataSourceImplTest {
     }
 
     @Test
-    fun `getMovies should throw GetMoviesAllExpansion when dao throws exception`() = runTest {
+    fun `getMovies should throw GetException when dao throws exception`() = runTest {
         // Given
         coEvery { searchMoviesDao.getAll() } throws RuntimeException("Database error")
 
         // When & Then
-        assertFailsWith<GetMoviesAllExpansion> {
+        assertFailsWith<GetException> {
             localDataSource.getMovies()
         }
         coVerify(exactly = 1) { searchMoviesDao.getAll() }
@@ -330,12 +316,12 @@ class LocalDataSourceImplTest {
     }
 
     @Test
-    fun `getTvShows should throw GetTvShowsAllExpansion when dao throws exception`() = runTest {
+    fun `getTvShows should throw GetException when dao throws exception`() = runTest {
         // Given
         coEvery { searchTvShowDao.getAll() } throws RuntimeException("Database error")
 
         // When & Then
-        assertFailsWith<GetTvShowsAllExpansion> {
+        assertFailsWith<GetException> {
             localDataSource.getTvShows()
         }
         coVerify(exactly = 1) { searchTvShowDao.getAll() }
@@ -355,12 +341,12 @@ class LocalDataSourceImplTest {
     }
 
     @Test
-    fun `getActors should throw GetActorsAllExpansion when dao throws exception`() = runTest {
+    fun `getActors should throw GetException when dao throws exception`() = runTest {
         // Given
         coEvery { searchActorsDao.getAll() } throws RuntimeException("Database error")
 
         // When & Then
-        assertFailsWith<GetActorsAllExpansion> {
+        assertFailsWith<GetException> {
             localDataSource.getActors()
         }
         coVerify(exactly = 1) { searchActorsDao.getAll() }
@@ -371,76 +357,76 @@ class LocalDataSourceImplTest {
     @Test
     fun `getMovieByDate should return movie from dao successfully`() = runTest {
         // Given
-        coEvery { searchMoviesDao.getCurrentSearch(testDate) } returns mockMoviesResponse
+        coEvery { searchMoviesDao.getCurrentSearchByDate(testDate) } returns mockMoviesResponse
 
         // When
         val result = localDataSource.getMovieByDate(testDate)
 
         // Then
         assertEquals(mockMoviesResponse, result)
-        coVerify(exactly = 1) { searchMoviesDao.getCurrentSearch(testDate) }
+        coVerify(exactly = 1) { searchMoviesDao.getCurrentSearchByDate(testDate) }
     }
 
     @Test
-    fun `getMovieByDate should throw GetMovieByDateExpansion when dao throws exception`() = runTest {
+    fun `getMovieByDate should throw GetException when dao throws exception`() = runTest {
         // Given
-        coEvery { searchMoviesDao.getCurrentSearch(testDate) } throws RuntimeException("Database error")
+        coEvery { searchMoviesDao.getCurrentSearchByDate(testDate) } throws RuntimeException("Database error")
 
         // When & Then
-        assertFailsWith<GetMovieByDateExpansion> {
+        assertFailsWith<GetException> {
             localDataSource.getMovieByDate(testDate)
         }
-        coVerify(exactly = 1) { searchMoviesDao.getCurrentSearch(testDate) }
+        coVerify(exactly = 1) { searchMoviesDao.getCurrentSearchByDate(testDate) }
     }
 
     @Test
     fun `getTvShowByDate should return tv show from dao successfully`() = runTest {
         // Given
-        coEvery { searchTvShowDao.getCurrentSearch(testDate) } returns mockTvShowsResponse
+        coEvery { searchTvShowDao.getCurrentSearchByDate(testDate) } returns mockTvShowsResponse
 
         // When
         val result = localDataSource.getTvShowByDate(testDate)
 
         // Then
         assertEquals(mockTvShowsResponse, result)
-        coVerify(exactly = 1) { searchTvShowDao.getCurrentSearch(testDate) }
+        coVerify(exactly = 1) { searchTvShowDao.getCurrentSearchByDate(testDate) }
     }
 
     @Test
-    fun `getTvShowByDate should throw GetTvShowByDateExpansion when dao throws exception`() = runTest {
+    fun `getTvShowByDate should throw GetException when dao throws exception`() = runTest {
         // Given
-        coEvery { searchTvShowDao.getCurrentSearch(testDate) } throws RuntimeException("Database error")
+        coEvery { searchTvShowDao.getCurrentSearchByDate(testDate) } throws RuntimeException("Database error")
 
         // When & Then
-        assertFailsWith<GetTvShowByDateExpansion> {
+        assertFailsWith<GetException> {
             localDataSource.getTvShowByDate(testDate)
         }
-        coVerify(exactly = 1) { searchTvShowDao.getCurrentSearch(testDate) }
+        coVerify(exactly = 1) { searchTvShowDao.getCurrentSearchByDate(testDate) }
     }
 
     @Test
     fun `getActorByDate should return actor from dao successfully`() = runTest {
         // Given
-        coEvery { searchActorsDao.getCurrentSearch(testDate) } returns mockActorsResponse
+        coEvery { searchActorsDao.getCurrentSearchByDate(testDate) } returns mockActorsResponse
 
         // When
         val result = localDataSource.getActorByDate(testDate)
 
         // Then
         assertEquals(mockActorsResponse, result)
-        coVerify(exactly = 1) { searchActorsDao.getCurrentSearch(testDate) }
+        coVerify(exactly = 1) { searchActorsDao.getCurrentSearchByDate(testDate) }
     }
 
     @Test
-    fun `getActorByDate should throw GetActorByDateExpansion when dao throws exception`() = runTest {
+    fun `getActorByDate should throw GetException when dao throws exception`() = runTest {
         // Given
-        coEvery { searchActorsDao.getCurrentSearch(testDate) } throws RuntimeException("Database error")
+        coEvery { searchActorsDao.getCurrentSearchByDate(testDate) } throws RuntimeException("Database error")
 
         // When & Then
-        assertFailsWith<GetActorByDateExpansion> {
+        assertFailsWith<GetException> {
             localDataSource.getActorByDate(testDate)
         }
-        coVerify(exactly = 1) { searchActorsDao.getCurrentSearch(testDate) }
+        coVerify(exactly = 1) { searchActorsDao.getCurrentSearchByDate(testDate) }
     }
     // endregion
 
@@ -460,13 +446,13 @@ class LocalDataSourceImplTest {
     }
 
     @Test
-    fun `getActorByQuery should throw GetActorByQueryExpansion when dao throws exception`() = runTest {
+    fun `getActorByQuery should throw GetException when dao throws exception`() = runTest {
         // Given
         val testQuery = "test query"
         coEvery { searchActorsDao.getSearchByQuery(testQuery) } throws RuntimeException("Database error")
 
         // When & Then
-        assertFailsWith<GetActorByQueryExpansion> {
+        assertFailsWith<GetException> {
             localDataSource.getActorByQuery(testQuery)
         }
         coVerify(exactly = 1) { searchActorsDao.getSearchByQuery(testQuery) }
@@ -487,13 +473,13 @@ class LocalDataSourceImplTest {
     }
 
     @Test
-    fun `getTvShowByQuery should throw GetTvShowByQueryExpansion when dao throws exception`() = runTest {
+    fun `getTvShowByQuery should throw GetException when dao throws exception`() = runTest {
         // Given
         val testQuery = "test query"
         coEvery { searchTvShowDao.getSearchByQuery(testQuery) } throws RuntimeException("Database error")
 
         // When & Then
-        assertFailsWith<GetTvShowByQueryExpansion> {
+        assertFailsWith<GetException> {
             localDataSource.getTvShowByQuery(testQuery)
         }
         coVerify(exactly = 1) { searchTvShowDao.getSearchByQuery(testQuery) }
@@ -514,13 +500,13 @@ class LocalDataSourceImplTest {
     }
 
     @Test
-    fun `getMovieByQuery should throw GetMovieByQueryExpansion when dao throws exception`() = runTest {
+    fun `getMovieByQuery should throw GetException when dao throws exception`() = runTest {
         // Given
         val testQuery = "test query"
         coEvery { searchMoviesDao.getSearchByQuery(testQuery) } throws RuntimeException("Database error")
 
         // When & Then
-        assertFailsWith<GetMovieByQueryExpansion> {
+        assertFailsWith<GetException> {
             localDataSource.getMovieByQuery(testQuery) // this is a suspending call
         }
 
