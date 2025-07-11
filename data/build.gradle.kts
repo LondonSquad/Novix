@@ -48,7 +48,7 @@ dependencies {
     implementation(libs.bundles.base.ui)
     implementation(libs.bundles.coroutines)
     implementation(libs.bundles.datastore)
-    implementation(libs.bundles.ktor)
+    api(libs.bundles.ktor)
     implementation(libs.bundles.room)
     ksp(libs.bundles.room.ksp)
     implementation(libs.bundles.koin)
@@ -59,4 +59,5 @@ dependencies {
     testImplementation(libs.mockk)
     testImplementation(libs.kotlinx.coroutines.test.v1102)
     testImplementation(kotlin("test"))
+    implementation(libs.bundles.http)
 }
