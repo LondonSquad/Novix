@@ -52,9 +52,10 @@ import com.london.designsystem.component.button.PrimaryButton
 import com.london.designsystem.theme.NovixTheme
 import com.london.designsystem.theme.ThemePreviews
 import com.london.domain.entity.Actor
-import com.london.domain.entity.Movie
 import com.london.domain.entity.TvShow
 import com.london.presentation.R
+import com.london.presentation.composables.MoviesLayOut
+import com.london.presentation.utils.ResultOrEmpty
 import org.koin.androidx.compose.koinViewModel
 
 @Composable
@@ -103,239 +104,71 @@ fun SearchScreenContent(
             modifier = Modifier.padding(start = 16.dp, end = 16.dp, bottom = 12.dp)
         )
 
-        if (state.searchQuery.text.isNotEmpty()) {
-            SearchChipsRow(
-                selected = state.selectedCategory,
-                onSelect = interactionListener::onCategorySelected,
-                modifier = Modifier.padding(bottom = 12.dp)
-            )
-
-            when (state.selectedCategory) {
-                SearchCategory.Movies -> {
-                    if (state.movieResults.isEmpty()) {
-                        NoSearchResultLayOut(modifier = Modifier.fillMaxSize())
-                    } else {
-                        MoviesLayOut(
-                            movieUis = state.movieResults,
-                            onSaveClick = { /* Handle save click */ },
-                            isMovieSaved = { false },
-                            onMovieClick = { viewModel.addToRecentViewed(it.posterPicture) }
+        ResultOrEmpty(
+            items = state.searchQuery.text.toList(),
+            emptyContent = {
+                ResultOrEmpty(
+                    items = state.recentSearches,
+                    otherItems = state.recentViewed,
+                    emptyContent = { NoSearchBeforeLayOut(modifier = Modifier.fillMaxSize()) },
+                    content = {
+                        RecentSearchLayOut(
+                            state = state,
+                            interactionListener = interactionListener,
+                            viewModel = viewModel
                         )
                     }
-                }
-
-                SearchCategory.TvShows -> {
-                    if (state.tvShowUiResults.isEmpty()) {
-                        NoSearchResultLayOut(modifier = Modifier.fillMaxSize())
-                    } else {
-                        TvShowLayOut(
-                            tvShowUis = state.tvShowUiResults,
-                            onSaveClick = { /* Handle save click */ },
-                            isTvShowSaved = { false },
-                            onTvShowClick = { viewModel.addToRecentViewed(it.posterPicture) }
+                )
+            },
+            content = {
+                SearchChipsRow(
+                    selected = state.selectedCategory,
+                    onSelect = interactionListener::onCategorySelected,
+                    modifier = Modifier.padding(bottom = 12.dp)
+                )
+                when (state.selectedCategory) {
+                    SearchCategory.Movies -> {
+                        ResultOrEmpty(
+                            items = state.movieResults,
+                            emptyContent = { NoSearchResultLayOut(modifier = Modifier.fillMaxSize()) },
+                            content = {
+                                MoviesLayOut(
+                                    movieUis = state.movieResults,
+                                    onSaveClick = { /* Handle save click */ },
+                                    isMovieSaved = { false },
+                                    onMovieClick = { viewModel.addToRecentViewed(it.posterPicture) },
+                                    modifier = Modifier.padding(horizontal = 16.dp)
+                                )
+                            }
                         )
                     }
-                }
 
-                SearchCategory.Actors -> {
-                    if (state.actorUiResults.isEmpty()) {
-                        NoSearchResultLayOut(modifier = Modifier.fillMaxSize())
-                    } else {
-                        ActorsLayOut(
-                            actorsUis = state.actorUiResults,
-                            onActorClick = { actor -> /* TODO: Actor Details Screen */ }
+                    SearchCategory.TvShows -> ResultOrEmpty(
+                        items = state.tvShowUiResults,
+                        emptyContent = { NoSearchResultLayOut(modifier = Modifier.fillMaxSize()) },
+                        content = {
+                            TvShowLayOut(
+                                tvShowUis = state.tvShowUiResults,
+                                onSaveClick = { /* Handle save click */ },
+                                isTvShowSaved = { false },
+                                onTvShowClick = { viewModel.addToRecentViewed(it.posterPicture) }
+                            )
+                        }
+                    )
+
+
+                    SearchCategory.Actors -> ResultOrEmpty(
+                        items = state.actorUiResults,
+                        emptyContent = { NoSearchResultLayOut(modifier = Modifier.fillMaxSize()) },
+                        content = {
+                            ActorsLayout(
+                                actorsUis = state.actorUiResults,
+                                onActorClick = { /* Handle actor click */ }
+                            )
+                        }
                         )
                     }
-                }
-            }
-        } else {
-            if (state.recentSearches.isNotEmpty() && state.recentViewed.isNotEmpty()) {
-                RecentViewedSection(
-                    recentViewed = state.recentViewed,
-                    onClearAll = { viewModel.clearRecentViewed() }
-                )
 
-                RecentSearchesSection(
-                    recentSearches = state.recentSearches,
-                    onClearAll = interactionListener::clearRecentSearches,
-                    onSearchClick = interactionListener::onRecentSearchClick,
-                    onRemoveClick = interactionListener::removeRecentSearch
-                )
-            } else if (state.recentViewed.isNotEmpty()) {
-                RecentViewedSection(
-                    recentViewed = state.recentViewed,
-                    onClearAll = { viewModel.clearRecentViewed() }
-                )
-            } else if (state.recentSearches.isNotEmpty()) {
-                RecentSearchesSection(
-                    recentSearches = state.recentSearches,
-                    onClearAll = interactionListener::clearRecentSearches,
-                    onSearchClick = interactionListener::onRecentSearchClick,
-                    onRemoveClick = interactionListener::removeRecentSearch
-                )
-            } else {
-                NoSearchBeforeLayOut(
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .padding(horizontal = 16.dp)
-                )
-            }
-        }
-    }
-}
-
-@Composable
-fun SearchChipsRow(
-    selected: SearchCategory,
-    onSelect: (SearchCategory) -> Unit,
-    modifier: Modifier = Modifier
-) {
-    Row(
-        modifier = modifier
-            .fillMaxWidth()
-            .padding(horizontal = 16.dp),
-        horizontalArrangement = Arrangement.Start
-    ) {
-        NovixChip(
-            text = SearchCategory.Movies.title,
-            isSelected = selected == SearchCategory.Movies,
-            onClick = { onSelect(SearchCategory.Movies) }
-        )
-        NovixChip(
-            text = SearchCategory.TvShows.title,
-            isSelected = selected == SearchCategory.TvShows,
-            onClick = { onSelect(SearchCategory.TvShows) }
-        )
-        NovixChip(
-            text = SearchCategory.Actors.title,
-            isSelected = selected == SearchCategory.Actors,
-            onClick = { onSelect(SearchCategory.Actors) }
-        )
-    }
-}
-
-@Composable
-fun TvShowLayOut(
-    tvShowUis: List<TvShow>,
-    onSaveClick: (TvShow) -> Unit,
-    isTvShowSaved: (TvShow) -> Boolean,
-    onTvShowClick: (TvShow) -> Unit
-) {
-    val screenWidth = LocalWindowInfo.current.containerSize.width
-    val itemWidthPx = with(LocalDensity.current) { 158.dp.toPx() }
-    val screenPaddingPx = with(LocalDensity.current) { 32.dp.toPx() }
-    val columns = ((screenWidth - screenPaddingPx) / itemWidthPx).toInt().coerceAtLeast(2)
-
-    LazyVerticalGrid(
-        columns = GridCells.Fixed(columns),
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(horizontal = 16.dp),
-
-        horizontalArrangement = Arrangement.spacedBy(12.dp),
-        verticalArrangement = Arrangement.spacedBy(12.dp)
-    ) {
-        items(tvShowUis) { tvShow ->
-            HomeCard(
-                imageUrl = tvShow.posterPicture,
-                onSaveClick = { onSaveClick(tvShow) },
-                isSaved = isTvShowSaved(tvShow),
-                imageDescription = tvShow.name,
-                modifier = Modifier.clickable { onTvShowClick(tvShow) }
-            )
-        }
-    }
-}
-
-@Composable
-fun MoviesLayOut(
-    movieUis: List<Movie>,
-    onSaveClick: (Movie) -> Unit,
-    isMovieSaved: (Movie) -> Boolean,
-    onMovieClick: (Movie) -> Unit
-) {
-    val screenWidth = LocalWindowInfo.current.containerSize.width
-    val itemWidthPx = with(LocalDensity.current) { 158.dp.toPx() }
-    val screenPaddingPx = with(LocalDensity.current) { 32.dp.toPx() }
-    val columns = ((screenWidth - screenPaddingPx) / itemWidthPx).toInt().coerceAtLeast(2)
-
-    LazyVerticalGrid(
-        columns = GridCells.Fixed(columns),
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(horizontal = 16.dp),
-
-        horizontalArrangement = Arrangement.spacedBy(12.dp),
-        verticalArrangement = Arrangement.spacedBy(12.dp)
-    ) {
-        items(movieUis) { movie ->
-            HomeCard(
-                imageUrl = movie.posterPicture,
-                onSaveClick = { onSaveClick(movie) },
-                isSaved = isMovieSaved(movie),
-                imageDescription = movie.name,
-                modifier = Modifier.clickable { onMovieClick(movie) }
-            )
-        }
-    }
-}
-
-@Composable
-private fun ActorsLayOut(
-    actorsUis: List<Actor>,
-    onActorClick: (Actor) -> Unit,
-    modifier: Modifier = Modifier
-) {
-    LazyColumn(
-        modifier = modifier.fillMaxWidth(),
-        contentPadding = PaddingValues(horizontal = 16.dp),
-        verticalArrangement = Arrangement.spacedBy(12.dp)
-    ) {
-        items(actorsUis) { actor ->
-            ActorItem(
-                modifier = Modifier.clickable(onClick = { onActorClick(actor) }),
-                actorName = actor.name,
-                characterName = null,
-                imageRes = actor.profilePicture
-            )
-        }
-    }
-}
-
-@Composable
-fun NoSearchBeforeLayOut(
-    modifier: Modifier = Modifier
-) {
-    ConstraintLayout(modifier = modifier) {
-        val (emptySearch) = createRefs()
-        EmptySearchComponent(
-            text = stringResource(R.string.start_exploring_msg),
-            image = R.drawable.img_explore,
-            modifier = Modifier.constrainAs(emptySearch) {
-                top.linkTo(parent.top)
-                bottom.linkTo(parent.bottom)
-                start.linkTo(parent.start)
-                end.linkTo(parent.end)
-            }
-        )
-    }
-}
-
-@Composable
-fun NoSearchResultLayOut(
-    modifier: Modifier = Modifier
-) {
-    ConstraintLayout(modifier = modifier) {
-        val (emptySearch) = createRefs()
-
-        EmptySearchComponent(
-            text = stringResource(R.string.no_search_result_msg),
-            image = R.drawable.img_no_search_result,
-            modifier = Modifier.constrainAs(emptySearch) {
-                top.linkTo(parent.top)
-                bottom.linkTo(parent.bottom)
-                start.linkTo(parent.start)
-                end.linkTo(parent.end)
             }
         )
     }
@@ -396,7 +229,7 @@ private fun SearchBar(
 
         PrimaryButton(
             text = "",
-            onClick = {},
+            onClick = { TODO("filter bottom sheet") },
             isLoading = false,
             isDisabled = false,
             hasIcon = true,
@@ -405,6 +238,110 @@ private fun SearchBar(
             modifier = Modifier.width(52.dp)
         )
     }
+}
+
+@Composable
+private fun SearchChipsRow(
+    selected: SearchCategory,
+    onSelect: (SearchCategory) -> Unit,
+    modifier: Modifier = Modifier
+) {
+    Row(
+        modifier = modifier
+            .fillMaxWidth()
+            .padding(horizontal = 16.dp),
+        horizontalArrangement = Arrangement.Start
+    ) {
+        NovixChip(
+            text = SearchCategory.Movies.title,
+            isSelected = selected == SearchCategory.Movies,
+            onClick = { onSelect(SearchCategory.Movies) }
+        )
+        NovixChip(
+            text = SearchCategory.TvShows.title,
+            isSelected = selected == SearchCategory.TvShows,
+            onClick = { onSelect(SearchCategory.TvShows) }
+        )
+        NovixChip(
+            text = SearchCategory.Actors.title,
+            isSelected = selected == SearchCategory.Actors,
+            onClick = { onSelect(SearchCategory.Actors) }
+        )
+    }
+}
+
+
+@Composable
+fun TvShowLayOut(
+    tvShowUis: List<TvShow>,
+    onSaveClick: (TvShow) -> Unit,
+    isTvShowSaved: (TvShow) -> Boolean,
+    onTvShowClick: (TvShow) -> Unit
+) {
+    val screenWidth = LocalWindowInfo.current.containerSize.width
+    val itemWidthPx = with(LocalDensity.current) { 158.dp.toPx() }
+    val screenPaddingPx = with(LocalDensity.current) { 32.dp.toPx() }
+    val columns = ((screenWidth - screenPaddingPx) / itemWidthPx).toInt().coerceAtLeast(2)
+
+    LazyVerticalGrid(
+        columns = GridCells.Fixed(columns),
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(horizontal = 16.dp),
+
+        horizontalArrangement = Arrangement.spacedBy(12.dp),
+        verticalArrangement = Arrangement.spacedBy(12.dp)
+    ) {
+        items(tvShowUis) { tvShow ->
+            HomeCard(
+                imageUrl = tvShow.posterPicture,
+                onSaveClick = { onSaveClick(tvShow) },
+                isSaved = isTvShowSaved(tvShow),
+                imageDescription = tvShow.name,
+                modifier = Modifier.clickable { onTvShowClick(tvShow) }
+            )
+        }
+    }
+}
+
+@Composable
+private fun ActorsLayout(
+    actorsUis: List<Actor>,
+    onActorClick: (Actor) -> Unit,
+    modifier: Modifier = Modifier
+) {
+    LazyColumn(
+        modifier = modifier.fillMaxWidth(),
+        contentPadding = PaddingValues(horizontal = 16.dp),
+        verticalArrangement = Arrangement.spacedBy(12.dp)
+    ) {
+        items(actorsUis) { actor ->
+            ActorItem(
+                modifier = Modifier.clickable(onClick = { onActorClick(actor) }),
+                actorName = actor.name,
+                characterName = null,
+                imageRes = actor.profilePicture
+            )
+        }
+    }
+}
+
+@Composable
+private fun RecentSearchLayOut(
+    state: SearchUiState,
+    interactionListener: SearchInteractions,
+    viewModel: SearchViewModel
+) {
+    RecentSearchesSection(
+        recentSearches = state.recentSearches,
+        onClearAll = interactionListener::clearRecentSearches,
+        onSearchClick = interactionListener::onRecentSearchClick,
+        onRemoveClick = interactionListener::removeRecentSearch
+    )
+    RecentViewedSection(
+        recentViewed = state.recentViewed,
+        onClearAll = { viewModel.clearRecentViewed() }
+    )
 }
 
 @Composable
@@ -515,6 +452,45 @@ private fun RecentSearchItem(
             color = NovixTheme.colors.stroke,
             thickness = 1.dp,
             modifier = Modifier.padding(horizontal = 7.5.dp)
+        )
+    }
+}
+
+@Composable
+private fun NoSearchBeforeLayOut(
+    modifier: Modifier = Modifier
+) {
+    ConstraintLayout(modifier = modifier) {
+        val (emptySearch) = createRefs()
+        EmptySearchComponent(
+            text = stringResource(R.string.start_exploring_msg),
+            image = R.drawable.img_explore,
+            modifier = Modifier.constrainAs(emptySearch) {
+                top.linkTo(parent.top)
+                bottom.linkTo(parent.bottom)
+                start.linkTo(parent.start)
+                end.linkTo(parent.end)
+            }
+        )
+    }
+}
+
+@Composable
+private fun NoSearchResultLayOut(
+    modifier: Modifier = Modifier
+) {
+    ConstraintLayout(modifier = modifier) {
+        val (emptySearch) = createRefs()
+
+        EmptySearchComponent(
+            text = stringResource(R.string.no_search_result_msg),
+            image = R.drawable.img_no_search_result,
+            modifier = Modifier.constrainAs(emptySearch) {
+                top.linkTo(parent.top)
+                bottom.linkTo(parent.bottom)
+                start.linkTo(parent.start)
+                end.linkTo(parent.end)
+            }
         )
     }
 }
