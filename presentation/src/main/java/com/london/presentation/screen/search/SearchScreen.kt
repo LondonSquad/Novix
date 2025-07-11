@@ -21,6 +21,7 @@ import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.HorizontalDivider
@@ -175,7 +176,11 @@ fun SearchScreenContent(
                     onRemoveClick = interactionListener::removeRecentSearch
                 )
             } else {
-                NoSearchBeforeLayOut(modifier = Modifier.fillMaxSize())
+                NoSearchBeforeLayOut(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .padding(horizontal = 16.dp)
+                )
             }
         }
     }
@@ -409,30 +414,28 @@ fun RecentViewedSection(
     recentViewed: List<String>,
     onClearAll: () -> Unit
 ) {
-    Column {
-        SectionHeader(
-            text = stringResource(R.string.recent_viewed),
-            hasGetAll = true,
-            hasIcon = false,
-            getAllText = stringResource(R.string.clear_all),
-            onClick = onClearAll,
-            modifier = Modifier.padding(vertical = 12.dp, horizontal = 16.dp)
-        )
+    SectionHeader(
+        text = stringResource(R.string.recent_viewed),
+        hasGetAll = true,
+        hasIcon = false,
+        getAllText = stringResource(R.string.clear_all),
+        onClick = onClearAll,
+        modifier = Modifier.padding(vertical = 12.dp, horizontal = 16.dp)
+    )
 
-        LazyRow(
-            modifier = Modifier
-                .fillMaxWidth()
-                .height(210.dp),
-            horizontalArrangement = Arrangement.spacedBy(8.dp),
-            contentPadding = PaddingValues(horizontal = 16.dp),
-        ) {
-            items(recentViewed) { imageUrl ->
-                HomeCard(
-                    imageUrl = imageUrl,
-                    isSaved = false,
-                    onSaveClick = {}
-                )
-            }
+    LazyRow(
+        modifier = Modifier
+            .fillMaxWidth()
+            .height(210.dp),
+        horizontalArrangement = Arrangement.spacedBy(8.dp),
+        contentPadding = PaddingValues(horizontal = 16.dp),
+    ) {
+        items(recentViewed) { imageUrl ->
+            HomeCard(
+                imageUrl = imageUrl,
+                isSaved = false,
+                onSaveClick = {}
+            )
         }
     }
 }
@@ -444,26 +447,26 @@ fun RecentSearchesSection(
     onSearchClick: (String) -> Unit,
     onRemoveClick: (String) -> Unit
 ) {
-    Column {
-        SectionHeader(
-            text = stringResource(R.string.recent_search),
-            hasGetAll = true,
-            hasIcon = false,
-            getAllText = stringResource(R.string.clear_all),
-            onClick = onClearAll,
-            modifier = Modifier.padding(vertical = 12.dp, horizontal = 16.dp)
-        )
+    SectionHeader(
+        text = stringResource(R.string.recent_search),
+        hasGetAll = true,
+        hasIcon = false,
+        getAllText = stringResource(R.string.clear_all),
+        onClick = onClearAll,
+        modifier = Modifier.padding(vertical = 12.dp, horizontal = 16.dp)
+    )
 
-        LazyColumn(
-            modifier = Modifier.padding(horizontal = 16.dp)
-        ) {
-            items(recentSearches) { search ->
-                RecentSearchItem(
-                    search = search,
-                    onSearchClick = { onSearchClick(search) },
-                    onRemoveClick = { onRemoveClick(search) }
-                )
-            }
+    LazyColumn(
+        modifier = Modifier.padding(horizontal = 16.dp)
+    ) {
+        itemsIndexed(recentSearches) { index, search ->
+            val isLastItem = index == recentSearches.lastIndex
+            RecentSearchItem(
+                search = search,
+                onSearchClick = { onSearchClick(search) },
+                onRemoveClick = { onRemoveClick(search) },
+                showDivider = !isLastItem
+            )
         }
     }
 }
@@ -476,47 +479,45 @@ private fun RecentSearchItem(
     modifier: Modifier = Modifier,
     showDivider: Boolean = true
 ) {
-    Column(modifier = modifier) {
-        Row(
+    Row(
+        modifier = modifier
+            .fillMaxWidth()
+            .clickable { onSearchClick() }
+            .padding(vertical = 8.dp),
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        Icon(
+            painter = painterResource(id = R.drawable.icon_clock),
+            contentDescription = stringResource(R.string.clock),
+            tint = NovixTheme.colors.hint,
             modifier = Modifier
-                .fillMaxWidth()
-                .clickable { onSearchClick() }
-                .padding(vertical = 8.dp, horizontal = 12.dp),
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            Icon(
-                painter = painterResource(id = R.drawable.icon_clock),
-                contentDescription = stringResource(R.string.clock),
-                tint = NovixTheme.colors.hint,
-                modifier = Modifier
-                    .padding(end = 8.dp)
-                    .size(20.dp)
-            )
-            Text(
-                text = search,
-                style = NovixTheme.typography.body.medium,
-                color = NovixTheme.colors.title,
-                modifier = Modifier
-                    .padding(end = 4.dp)
-                    .weight(1f)
-            )
-            Icon(
-                painter = painterResource(id = R.drawable.icon_remove_filled),
-                contentDescription = stringResource(com.london.presentation.R.string.clear),
-                tint = NovixTheme.colors.hint,
-                modifier = Modifier
-                    .size(16.dp)
-                    .clickable { onRemoveClick() }
-            )
-        }
+                .padding(end = 8.dp)
+                .size(20.dp)
+        )
+        Text(
+            text = search,
+            style = NovixTheme.typography.body.medium,
+            color = NovixTheme.colors.title,
+            modifier = Modifier
+                .padding(end = 4.dp)
+                .weight(1f)
+        )
+        Icon(
+            painter = painterResource(id = R.drawable.icon_remove_filled),
+            contentDescription = stringResource(R.string.clear),
+            tint = NovixTheme.colors.hint,
+            modifier = Modifier
+                .size(16.dp)
+                .clickable { onRemoveClick() }
+        )
+    }
 
-        if (showDivider) {
-            HorizontalDivider(
-                color = NovixTheme.colors.stroke,
-                thickness = 1.dp,
-                modifier = Modifier.padding(horizontal = 11.5.dp)
-            )
-        }
+    if (showDivider) {
+        HorizontalDivider(
+            color = NovixTheme.colors.stroke,
+            thickness = 1.dp,
+            modifier = Modifier.padding(horizontal = 7.5.dp)
+        )
     }
 }
 
