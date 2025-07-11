@@ -6,6 +6,7 @@ import com.london.data.datasource.local.dao.SearchTvShowDao
 import com.london.data.datasource.local.model.SearchActorsLocal
 import com.london.data.datasource.local.model.SearchMoviesLocal
 import com.london.data.datasource.local.model.SearchTvShowLocal
+import com.london.data.datasource.util.checkIfOneHourExpired
 import com.london.data.datasource.util.deleteIfOneHourExpired
 import com.london.data.datasource.util.executeDelete
 import com.london.data.datasource.util.executeGetAll
@@ -31,13 +32,13 @@ class LocalDataSourceImpl(
 
     private suspend fun cleanExpiredCache() {
         searchActorsDao.executeGetAll().forEach {
-            searchActorsDao.deleteIfOneHourExpired(it, it.date)
+            if (checkIfOneHourExpired(it.date))searchActorsDao.executeDelete(it)
         }
         searchTvShowDao.executeGetAll().forEach {
-            searchTvShowDao.deleteIfOneHourExpired(it, it.date)
+            if (checkIfOneHourExpired(it.date))searchTvShowDao.executeDelete(it)
         }
         searchMoviesDao.executeGetAll().forEach {
-            searchMoviesDao.deleteIfOneHourExpired(it, it.date)
+            if (checkIfOneHourExpired(it.date))searchMoviesDao.executeDelete(it)
         }
     }
 

@@ -54,11 +54,8 @@ suspend inline fun <T> runOrThrow(
     crossinline block: suspend () -> T, crossinline error: () -> Throwable
 ): T = runCatching { block() }.getOrElse { throw error() }
 
-suspend fun <T> SearchDao<T>.deleteIfOneHourExpired(
-    item: T, date: Long
-) {
+
+fun checkIfOneHourExpired(date: Long): Boolean {
     val oneHourAgo = System.currentTimeMillis() - (3600000)
-    if (date < oneHourAgo) {
-        delete(item)
-    }
+    return date < oneHourAgo
 }
