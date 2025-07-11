@@ -1,4 +1,6 @@
+
 import com.london.buildsrc.AppConfig
+import com.london.buildsrc.getKey
 
 plugins {
     alias(libs.plugins.android.library)
@@ -17,6 +19,12 @@ android {
 
         testInstrumentationRunner = AppConfig.ANDROID_TEST_INSTRUMENTATION
         consumerProguardFiles("consumer-rules.pro")
+
+        buildConfigField("String", "API_KEY", getKey("api_key"))
+    }
+
+    buildFeatures{
+        buildConfig = true
     }
 
     buildTypes {
