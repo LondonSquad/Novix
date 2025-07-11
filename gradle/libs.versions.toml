@@ -68,6 +68,7 @@ googleFirebaseCrashlytics = "3.0.4"
 firebaseAnalytics = "22.5.0"
 kotlinxKover = "0.9.1"
 junitJupiterVersion = "5.13.3"
+firebaseCrashlyticsKtx = "19.4.4"
 
 [libraries]
 # AndroidX Core
@@ -141,6 +142,7 @@ firebase-crashlytics = { group = "com.google.firebase", name = "firebase-crashly
 firebase-analytics = { group = "com.google.firebase", name = "firebase-analytics", version.ref = "firebaseAnalytics" }
 #noinspection SimilarGradleDependency
 jupiter-junit-jupiter = { group = "org.junit.jupiter", name = "junit-jupiter", version.ref = "junitJupiterVersion" }
+firebase-crashlytics-ktx = { group = "com.google.firebase", name = "firebase-crashlytics-ktx", version.ref = "firebaseCrashlyticsKtx" }
 
 
 [plugins]

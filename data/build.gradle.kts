@@ -51,4 +51,5 @@ dependencies {
     testImplementation(libs.mockk)
     testImplementation(libs.kotlinx.coroutines.test.v1102)
     testImplementation(kotlin("test"))
+    implementation(libs.firebase.crashlytics)
 }
