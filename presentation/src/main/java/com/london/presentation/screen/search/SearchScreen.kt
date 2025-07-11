@@ -6,6 +6,7 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -15,6 +16,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
@@ -38,7 +40,6 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
-import com.london.designsystem.R
 import com.london.designsystem.component.EmptySearchComponent
 import com.london.designsystem.component.HomeCard
 import com.london.designsystem.component.NovixChip
@@ -50,6 +51,7 @@ import com.london.designsystem.theme.NovixTheme
 import com.london.designsystem.theme.ThemePreviews
 import com.london.domain.entity.Movie
 import com.london.domain.entity.TvShow
+import com.london.presentation.R
 import org.koin.androidx.compose.koinViewModel
 
 @SuppressLint("ViewModelConstructorInComposable")
@@ -114,7 +116,8 @@ fun SearchScreenContent(
                         MoviesLayOut(
                             movieUis = state.movieResults,
                             onSaveClick = { /* Handle save click */ },
-                            isMovieSaved = { false }
+                            isMovieSaved = { false },
+                            onMovieClick = { viewModel.addToRecentViewed(it.posterPicture) }
                         )
                     }
                 }
@@ -126,7 +129,8 @@ fun SearchScreenContent(
                         TvShowLayOut(
                             tvShowUis = state.tvShowUiResults,
                             onSaveClick = { /* Handle save click */ },
-                            isTvShowSaved = { false }
+                            isTvShowSaved = { false },
+                            onTvShowClick = { viewModel.addToRecentViewed(it.posterPicture) }
                         )
                     }
                 }
@@ -140,27 +144,30 @@ fun SearchScreenContent(
                 }
             }
         } else {
-            if (state.recentSearches.isNotEmpty()) {
-                SectionHeader(
-                    text = stringResource(com.london.presentation.R.string.recent_search),
-                    hasGetAll = true,
-                    hasIcon = false,
-                    getAllText = stringResource(com.london.presentation.R.string.clear_all),
-                    onClick = interactionListener::clearRecentSearches,
-                    modifier = Modifier.padding(vertical = 12.dp)
+            if (state.recentSearches.isNotEmpty() && state.recentViewed.isNotEmpty()) {
+                RecentSearchesSection(
+                    recentSearches = state.recentSearches,
+                    onClearAll = interactionListener::clearRecentSearches,
+                    onSearchClick = interactionListener::onRecentSearchClick,
+                    onRemoveClick = interactionListener::removeRecentSearch
                 )
 
-                LazyColumn(
-                    modifier = Modifier.padding(horizontal = 16.dp)
-                ) {
-                    items(state.recentSearches) { search ->
-                        RecentSearchItem(
-                            search = search,
-                            onSearchClick = { interactionListener.onRecentSearchClick(search) },
-                            onRemoveClick = { interactionListener.removeRecentSearch(search) }
-                        )
-                    }
-                }
+                RecentViewedSection(
+                    recentViewed = state.recentViewed,
+                    onClearAll = { viewModel.clearRecentViewed() }
+                )
+            } else if (state.recentSearches.isNotEmpty()) {
+                RecentSearchesSection(
+                    recentSearches = state.recentSearches,
+                    onClearAll = interactionListener::clearRecentSearches,
+                    onSearchClick = interactionListener::onRecentSearchClick,
+                    onRemoveClick = interactionListener::removeRecentSearch
+                )
+            } else if (state.recentViewed.isNotEmpty()) {
+                RecentViewedSection(
+                    recentViewed = state.recentViewed,
+                    onClearAll = { viewModel.clearRecentViewed() }
+                )
             } else {
                 NoSearchBeforeLayOut(modifier = Modifier.fillMaxSize())
             }
@@ -200,7 +207,8 @@ fun SearchChipsRow(
 fun TvShowLayOut(
     tvShowUis: List<TvShow>,
     onSaveClick: (TvShow) -> Unit,
-    isTvShowSaved: (TvShow) -> Boolean
+    isTvShowSaved: (TvShow) -> Boolean,
+    onTvShowClick: (TvShow) -> Unit
 ) {
     val screenWidth = LocalWindowInfo.current.containerSize.width
     val itemWidthPx = with(LocalDensity.current) { 158.dp.toPx() }
@@ -219,6 +227,7 @@ fun TvShowLayOut(
                 onSaveClick = { onSaveClick(tvShow) },
                 isSaved = isTvShowSaved(tvShow),
                 imageDescription = tvShow.name,
+                modifier = Modifier.clickable { onTvShowClick(tvShow) }
             )
         }
     }
@@ -228,7 +237,8 @@ fun TvShowLayOut(
 fun MoviesLayOut(
     movieUis: List<Movie>,
     onSaveClick: (Movie) -> Unit,
-    isMovieSaved: (Movie) -> Boolean
+    isMovieSaved: (Movie) -> Boolean,
+    onMovieClick: (Movie) -> Unit
 ) {
     val screenWidth = LocalWindowInfo.current.containerSize.width
     val itemWidthPx = with(LocalDensity.current) { 158.dp.toPx() }
@@ -247,6 +257,7 @@ fun MoviesLayOut(
                 onSaveClick = { onSaveClick(movie) },
                 isSaved = isMovieSaved(movie),
                 imageDescription = movie.name,
+                modifier = Modifier.clickable { onMovieClick(movie) }
             )
         }
     }
@@ -260,7 +271,7 @@ fun NoSearchBeforeLayOut(
     ConstraintLayout(modifier = modifier) {
         val (emptySearch) = createRefs()
         EmptySearchComponent(
-            text = "Start exploring! Search for your favorite movies, series and shows",
+            text = stringResource(R.string.start_exploring_msg),
             image = R.drawable.img_explore,
             modifier = Modifier.constrainAs(emptySearch) {
                 top.linkTo(parent.top)
@@ -280,7 +291,7 @@ fun NoSearchResultLayOut(
         val (emptySearch) = createRefs()
 
         EmptySearchComponent(
-            text = "No search result, please try with another keyword!",
+            text = stringResource(R.string.no_search_result_msg),
             image = R.drawable.img_no_search_result,
             modifier = Modifier.constrainAs(emptySearch) {
                 top.linkTo(parent.top)
@@ -313,12 +324,12 @@ private fun SearchBar(
                     modifier = Modifier.padding(end = 4.dp)
                 )
             },
-            leadingIcon = painterResource(id = com.london.presentation.R.drawable.icon_search_normal),
+            leadingIcon = painterResource(id = R.drawable.icon_search_normal),
             trailingIcon = when {
                 uiState.searchQuery.text.isNotEmpty() -> {
                     {
                         Icon(
-                            painter = painterResource(id = com.london.presentation.R.drawable.icon_remove_filled),
+                            painter = painterResource(id = R.drawable.icon_remove_filled),
                             contentDescription = stringResource(com.london.presentation.R.string.clear),
                             tint = NovixTheme.colors.hint,
                             modifier = Modifier
@@ -351,10 +362,74 @@ private fun SearchBar(
             isLoading = false,
             isDisabled = false,
             hasIcon = true,
-            icon = com.london.presentation.R.drawable.icon_filter,
+            icon = R.drawable.icon_filter,
             hasLabel = false,
             modifier = Modifier.width(52.dp)
         )
+    }
+}
+
+@Composable
+fun RecentSearchesSection(
+    recentSearches: List<String>,
+    onClearAll: () -> Unit,
+    onSearchClick: (String) -> Unit,
+    onRemoveClick: (String) -> Unit
+) {
+    Column {
+        SectionHeader(
+            text = stringResource(R.string.recent_search),
+            hasGetAll = true,
+            hasIcon = false,
+            getAllText = stringResource(R.string.clear_all),
+            onClick = onClearAll,
+            modifier = Modifier.padding(vertical = 12.dp)
+        )
+
+        LazyColumn(
+            modifier = Modifier.padding(horizontal = 16.dp)
+        ) {
+            items(recentSearches) { search ->
+                RecentSearchItem(
+                    search = search,
+                    onSearchClick = { onSearchClick(search) },
+                    onRemoveClick = { onRemoveClick(search) }
+                )
+            }
+        }
+    }
+}
+
+@Composable
+fun RecentViewedSection(
+    recentViewed: List<String>,
+    onClearAll: () -> Unit
+) {
+    Column {
+        SectionHeader(
+            text = stringResource(R.string.recent_viewed),
+            hasGetAll = true,
+            hasIcon = false,
+            getAllText = stringResource(R.string.clear_all),
+            onClick = onClearAll,
+            modifier = Modifier.padding(vertical = 12.dp, horizontal = 16.dp)
+        )
+
+        LazyRow(
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(210.dp),
+            horizontalArrangement = Arrangement.spacedBy(8.dp),
+            contentPadding = PaddingValues(horizontal = 16.dp),
+        ) {
+            items(recentViewed) { imageUrl ->
+                HomeCard(
+                    imageUrl = imageUrl,
+                    isSaved = false,
+                    onSaveClick = {}
+                )
+            }
+        }
     }
 }
 
@@ -373,7 +448,7 @@ private fun RecentSearchItem(
         verticalAlignment = Alignment.CenterVertically
     ) {
         Icon(
-            painter = painterResource(id = com.london.presentation.R.drawable.icon_clock),
+            painter = painterResource(id = R.drawable.icon_clock),
             contentDescription = stringResource(com.london.presentation.R.string.clock),
             tint = NovixTheme.colors.hint,
             modifier = Modifier
@@ -389,7 +464,7 @@ private fun RecentSearchItem(
                 .padding(end = 4.dp)
         )
         Icon(
-            painter = painterResource(id = com.london.presentation.R.drawable.icon_remove_filled),
+            painter = painterResource(id = R.drawable.icon_remove_filled),
             contentDescription = stringResource(com.london.presentation.R.string.clear),
             tint = NovixTheme.colors.hint,
             modifier = Modifier
