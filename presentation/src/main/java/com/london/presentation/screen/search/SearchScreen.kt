@@ -36,7 +36,6 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
-import com.london.designsystem.component.ActorItem
 import com.london.designsystem.component.EmptySearchComponent
 import com.london.designsystem.component.HomeCard
 import com.london.designsystem.component.NovixChip
@@ -46,7 +45,6 @@ import com.london.designsystem.component.TopBar
 import com.london.designsystem.component.button.PrimaryButton
 import com.london.designsystem.theme.NovixTheme
 import com.london.designsystem.theme.ThemePreviews
-import com.london.domain.entity.Actor
 import com.london.presentation.R
 import com.london.presentation.composables.ActorsLayout
 import com.london.presentation.composables.MoviesLayOut
@@ -271,28 +269,6 @@ private fun SearchChipsRow(
             isSelected = selected == SearchCategory.Actors,
             onClick = { onSelect(SearchCategory.Actors) }
         )
-    }
-}
-
-@Composable
-private fun ActorsLayout(
-    actorsUis: List<Actor>,
-    onActorClick: (Actor) -> Unit,
-    modifier: Modifier = Modifier
-) {
-    LazyColumn(
-        modifier = modifier.fillMaxWidth(),
-        contentPadding = PaddingValues(horizontal = 16.dp),
-        verticalArrangement = Arrangement.spacedBy(12.dp)
-    ) {
-        items(actorsUis) { actor ->
-            ActorItem(
-                modifier = Modifier.clickable(onClick = { onActorClick(actor) }),
-                actorName = actor.name,
-                characterName = null,
-                imageRes = actor.profilePicture
-            )
-        }
     }
 }
 
