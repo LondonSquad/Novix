@@ -3,6 +3,7 @@ package com.london.designsystem.component
 import androidx.compose.animation.animateColorAsState
 import androidx.compose.foundation.background
 import androidx.compose.foundation.interaction.MutableInteractionSource
+import androidx.compose.foundation.interaction.collectIsFocusedAsState
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.defaultMinSize
@@ -27,6 +28,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Shape
+import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
@@ -67,9 +69,9 @@ fun OutlinedTextField(
     passwordVisible: Boolean = false,
     onPasswordVisibilityChange: () -> Unit = {},
     passwordVisibleIcon: Painter? = null,
-    passwordHiddenIcon: Painter? = null,
-    isFocused: Boolean = false
+    passwordHiddenIcon: Painter? = null
 ) {
+    val isFocused by interactionSource.collectIsFocusedAsState()
     val mergedTextStyle = textStyle.merge(TextStyle(color = NovixTheme.colors.body))
     val isPasswordEmpty = value.text.isEmpty()
 
@@ -110,10 +112,11 @@ fun OutlinedTextField(
                 keyboardActions = keyboardActions,
                 interactionSource = interactionSource,
                 singleLine = singleLine,
+                cursorBrush = SolidColor(NovixTheme.colors.primary),
                 decorationBox = { innerTextField ->
                     OutlinedTextFieldDefaults.DecorationBox(
-                        value = value.text,
-                        visualTransformation = visualTransformation,
+                        value = value.toString(),
+                        visualTransformation = currentVisualTransformation,
                         innerTextField = innerTextField,
                         placeholder = placeholder,
                         leadingIcon = null,
@@ -152,6 +155,11 @@ private fun getDefaultTextFieldColors(): TextFieldColors {
         unfocusedTextColor = NovixTheme.colors.body,
         focusedPlaceholderColor = NovixTheme.colors.hint,
         unfocusedPlaceholderColor = NovixTheme.colors.hint,
+        cursorColor = NovixTheme.colors.primary,
+        selectionColors = androidx.compose.foundation.text.selection.TextSelectionColors(
+            handleColor = NovixTheme.colors.primary,
+            backgroundColor = NovixTheme.colors.primary.copy(alpha = 0.4f)
+        )
     )
 }
 
