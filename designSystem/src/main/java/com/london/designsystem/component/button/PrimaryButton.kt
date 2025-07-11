@@ -1,5 +1,6 @@
 package com.london.designsystem.component.button
 
+import androidx.annotation.DrawableRes
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.defaultMinSize
@@ -25,20 +26,20 @@ import com.london.designsystem.theme.ThemePreviews
 
 @Composable
 fun PrimaryButton(
-    text: String,
+    text: String?,
+    hasLabel: Boolean,
+    @DrawableRes icon: Int?,
     hasIcon: Boolean,
     isLoading: Boolean,
     isDisabled: Boolean,
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
-    icon: Painter? = null,
-    iconSpacing: Dp = 0.dp
 ) {
     Button(
         onClick = onClick,
         modifier = modifier
             .height(48.dp)
-            .defaultMinSize(minWidth = 79.dp),
+            .defaultMinSize(minWidth = 52.dp),
         shape = RoundedCornerShape(12.dp),
         colors = ButtonDefaults.buttonColors(
             containerColor = if (isDisabled) NovixTheme.colors.disable else NovixTheme.colors.primary,
@@ -47,10 +48,13 @@ fun PrimaryButton(
         contentPadding = PaddingValues(horizontal = 16.dp, vertical = 8.dp),
         elevation = ButtonDefaults.buttonElevation(defaultElevation = 2.dp)
     ) {
-        Text(
-            text = text,
-            style = NovixTheme.typography.label.large,
-        )
+
+        if (hasLabel && text != null) {
+            Text(
+                text = text,
+                style = NovixTheme.typography.label.large,
+            )
+        }
 
         if (isLoading) {
             Spacer(modifier = Modifier.width(8.dp))
@@ -63,11 +67,11 @@ fun PrimaryButton(
         }
 
         if (hasIcon && icon != null) {
-            if (iconSpacing > 0.dp) {
-                Spacer(modifier = Modifier.width(iconSpacing))
+            if (hasLabel && text != null) {
+                Spacer(modifier = Modifier.width(8.dp))
             }
             Icon(
-                painter = icon,
+                painter = painterResource(icon),
                 contentDescription = null
             )
         }
@@ -83,7 +87,9 @@ fun PreviewPrimaryNormal() {
             onClick = {},
             isLoading = false,
             isDisabled = false,
-            hasIcon = false
+            hasIcon = false,
+            hasLabel = true,
+            icon = R.drawable.icon_add
         )
     }
 }
@@ -97,7 +103,9 @@ fun PreviewPrimaryLoading() {
             onClick = {},
             isLoading = true,
             isDisabled = false,
-            hasIcon = false
+            hasIcon = false,
+            hasLabel = true,
+            icon = null
         )
     }
 }
@@ -111,7 +119,25 @@ fun PreviewPrimaryDisable() {
             onClick = {},
             isLoading = false,
             isDisabled = true,
-            hasIcon = false
+            hasIcon = false,
+            hasLabel = true,
+            icon = null
+        )
+    }
+}
+
+@ThemePreviews
+@Composable
+fun PreviewPrimaryWithTextAndIcon() {
+    NovixTheme {
+        PrimaryButton(
+            text = "Watch",
+            onClick = {},
+            isLoading = false,
+            isDisabled = false,
+            hasIcon = true,
+            hasLabel = true,
+            icon = R.drawable.icon_add
         )
     }
 }
@@ -121,12 +147,14 @@ fun PreviewPrimaryDisable() {
 fun PreviewPrimaryWithIcon() {
     NovixTheme {
         PrimaryButton(
-            text = "Watch",
+            text = "",
             onClick = {},
             isLoading = false,
             isDisabled = false,
             hasIcon = true,
-            icon = painterResource(id = R.drawable.icon_add),
+            hasLabel = false,
+            icon = R.drawable.icon_add
+
         )
     }
 }
