@@ -12,8 +12,8 @@ fun Exception.passArgToMessage(
     vararg args: Any,
 ) = this::class.createInstance(args::class.java.name) { it.matches(String::class) }
 
-fun List<KParameter>.matches(vararg args: KClass<*>, expectedCount: Int = 1): Boolean =
-    size == expectedCount && zip(args).all { (parameter, argument) ->
+fun List<KParameter>.matches(vararg args: KClass<*>): Boolean =
+    size == args.size && zip(args).all { (parameter, argument) ->
         parameter.type.classifier == argument
     }
 
