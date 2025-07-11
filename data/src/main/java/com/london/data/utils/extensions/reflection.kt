@@ -1,0 +1,19 @@
+package com.london.data.utils.extensions
+
+import kotlin.reflect.KClass
+import kotlin.reflect.KParameter
+
+
+fun Exception.passArgToMessage(
+    vararg args: Any,
+) = this::class.createInstance(args::class.java.name) { it.matches(String::class) }
+
+fun List<KParameter>.matches(vararg args: KClass<*>, expectedCount: Int = 1): Boolean =
+    size == expectedCount && zip(args).all { (parameter, argument) ->
+        parameter.type.classifier == argument
+    }
+
+fun <T : Any> KClass<T>.createInstance(
+    vararg args: Any,
+    predicate: (List<KParameter>) -> Boolean = { true }
+): T = constructors.first { predicate(it.parameters) }.call(*args)

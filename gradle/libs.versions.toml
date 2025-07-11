@@ -1,11 +1,11 @@
 [versions]
 # Build Tools
-agp = "8.8.2"
+agp = "8.11.0"
 firebaseBom = "33.16.0"
 gson = "2.11.0"
-kotlin = "2.0.21"
+kotlin = "2.1.21"
 kotlinxCoroutinesTestVersion = "1.10.2"
-ksp = "2.0.21-1.0.27"
+ksp = "2.1.21-2.0.1"
 
 # AndroidX Core
 coreKtx = "1.16.0"
@@ -134,6 +134,8 @@ material = { group = "com.google.android.material", name = "material", version.r
 firebase-perf = { group = "com.google.firebase", name = "firebase-perf", version.ref = "firebasePerf" }
 firebase-crashlytics = { group = "com.google.firebase", name = "firebase-crashlytics", version.ref = "firebaseCrashlytics" }
 firebase-analytics = { group = "com.google.firebase", name = "firebase-analytics", version.ref = "firebaseAnalytics" }
+kotlin-reflect = { module = "org.jetbrains.kotlin:kotlin-reflect", version.ref = "kotlin" }
+
 #noinspection SimilarGradleDependency
 jupiter-junit-jupiter = { group = "org.junit.jupiter", name = "junit-jupiter", version.ref = "junitJupiterVersion" }
 

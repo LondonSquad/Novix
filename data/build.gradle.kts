@@ -49,6 +49,7 @@ dependencies {
     testImplementation(libs.bundles.testing)
     androidTestImplementation(libs.bundles.android.testing)
     implementation(libs.gson)
+    implementation(libs.kotlin.reflect)
     testImplementation(libs.mockk)
     testImplementation(libs.kotlinx.coroutines.test.v1102)
     testImplementation(kotlin("test"))
