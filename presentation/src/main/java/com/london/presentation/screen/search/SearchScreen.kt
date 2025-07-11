@@ -486,24 +486,25 @@ private fun RecentSearchItem(
             contentDescription = stringResource(R.string.clock),
             tint = NovixTheme.colors.hint,
             modifier = Modifier
-                .size(20.dp)
                 .padding(top = 2.dp, bottom = 2.dp, end = 8.dp)
+                .size(20.dp)
         )
         Text(
             text = search,
             style = NovixTheme.typography.body.medium,
             color = NovixTheme.colors.title,
             modifier = Modifier
-                .weight(1f)
                 .padding(end = 4.dp)
+                .weight(1f)
         )
         Icon(
             painter = painterResource(id = R.drawable.icon_remove_filled),
             contentDescription = stringResource(com.london.presentation.R.string.clear),
             tint = NovixTheme.colors.hint,
             modifier = Modifier
-                .clickable { onRemoveClick() }
                 .padding(vertical = 4.dp)
+                .size(16.dp)
+                .clickable { onRemoveClick() }
         )
     }
 }
