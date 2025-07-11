@@ -68,7 +68,7 @@ fun CustomReleasedYearSlider(
                         .border(
                             width = 1.dp,
                             color = NovixTheme.colors.stroke,
-                            shape = RoundedCornerShape(50)
+                            shape = RoundedCornerShape(100)
                         )
                 )
                 val startFraction = (yearRange.start - minYear) / (maxYear - minYear)
