@@ -107,7 +107,7 @@ fun SearchScreenContent(
                     otherItems = state.recentViewed,
                     emptyContent = { NoSearchBeforeLayOut(modifier = Modifier.fillMaxSize()) },
                     content = {
-                        RecentSearchLayOut(
+                        RecentSectionLayout(
                             state = state,
                             interactionListener = interactionListener,
                             viewModel = viewModel
@@ -122,7 +122,7 @@ fun SearchScreenContent(
                     modifier = Modifier.padding(bottom = 12.dp)
                 )
                 when (state.selectedCategory) {
-                    SearchCategory.Movies -> {
+                    SearchCategory.Movies ->
                         ResultOrEmpty(
                             items = state.movieResults,
                             emptyContent = { NoSearchResultLayOut(modifier = Modifier.fillMaxSize()) },
@@ -136,7 +136,6 @@ fun SearchScreenContent(
                                 )
                             }
                         )
-                    }
 
                     SearchCategory.TvShows -> ResultOrEmpty(
                         items = state.tvShowUiResults,
@@ -161,8 +160,8 @@ fun SearchScreenContent(
                                 onActorClick = { /* Handle actor click */ }
                             )
                         }
-                        )
-                    }
+                    )
+                }
 
             }
         )
@@ -288,81 +287,58 @@ private fun ActorsLayout(
 }
 
 @Composable
-private fun RecentSearchLayOut(
+fun RecentSectionLayout(
     state: SearchUiState,
     interactionListener: SearchInteractions,
     viewModel: SearchViewModel
 ) {
-    RecentSearchesSection(
-        recentSearches = state.recentSearches,
-        onClearAll = interactionListener::clearRecentSearches,
-        onSearchClick = interactionListener::onRecentSearchClick,
-        onRemoveClick = interactionListener::removeRecentSearch
-    )
-    RecentViewedSection(
-        recentViewed = state.recentViewed,
-        onClearAll = { viewModel.clearRecentViewed() }
-    )
-}
+    if (state.recentViewed.isNotEmpty()) {
+        SectionHeader(
+            text = stringResource(R.string.recent_viewed),
+            hasGetAll = true,
+            hasIcon = false,
+            getAllText = stringResource(R.string.clear_all),
+            onClick = viewModel::clearRecentViewed,
+            modifier = Modifier.padding(vertical = 12.dp, horizontal = 16.dp)
+        )
 
-@Composable
-fun RecentViewedSection(
-    recentViewed: List<String>,
-    onClearAll: () -> Unit
-) {
-    SectionHeader(
-        text = stringResource(R.string.recent_viewed),
-        hasGetAll = true,
-        hasIcon = false,
-        getAllText = stringResource(R.string.clear_all),
-        onClick = onClearAll,
-        modifier = Modifier.padding(vertical = 12.dp, horizontal = 16.dp)
-    )
-
-    LazyRow(
-        modifier = Modifier
-            .fillMaxWidth()
-            .height(210.dp),
-        horizontalArrangement = Arrangement.spacedBy(8.dp),
-        contentPadding = PaddingValues(horizontal = 16.dp),
-    ) {
-        items(recentViewed) { imageUrl ->
-            HomeCard(
-                imageUrl = imageUrl,
-                isSaved = false,
-                onSaveClick = {}
-            )
+        LazyRow(
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(210.dp),
+            horizontalArrangement = Arrangement.spacedBy(8.dp),
+            contentPadding = PaddingValues(horizontal = 16.dp)
+        ) {
+            items(state.recentViewed) {
+                HomeCard(
+                    imageUrl = it,
+                    isSaved = false,
+                    onSaveClick = {}
+                )
+            }
         }
     }
-}
 
-@Composable
-fun RecentSearchesSection(
-    recentSearches: List<String>,
-    onClearAll: () -> Unit,
-    onSearchClick: (String) -> Unit,
-    onRemoveClick: (String) -> Unit
-) {
-    SectionHeader(
-        text = stringResource(R.string.recent_search),
-        hasGetAll = true,
-        hasIcon = false,
-        getAllText = stringResource(R.string.clear_all),
-        onClick = onClearAll,
-        modifier = Modifier.padding(vertical = 12.dp, horizontal = 16.dp)
-    )
+    if (state.recentSearches.isNotEmpty()) {
+        SectionHeader(
+            text = stringResource(R.string.recent_search),
+            hasGetAll = true,
+            hasIcon = false,
+            getAllText = stringResource(R.string.clear_all),
+            onClick = interactionListener::clearRecentSearches,
+            modifier = Modifier.padding(vertical = 12.dp, horizontal = 16.dp)
+        )
 
-    LazyColumn(
-        modifier = Modifier.padding(horizontal = 16.dp)
-    ) {
-        itemsIndexed(recentSearches) { index, search ->
-            val isLastItem = index == recentSearches.lastIndex
-            RecentSearchItem(
-                search = search,
-                onSearchClick = { onSearchClick(search) },
-                onRemoveClick = { onRemoveClick(search) },
-                showDivider = !isLastItem
-            )
+        LazyColumn(modifier = Modifier.padding(horizontal = 16.dp)) {
+            itemsIndexed(state.recentSearches) { index, search ->
+                val isLastItem = index == state.recentSearches.lastIndex
+                RecentSearchItem(
+                    search = search,
+                    onSearchClick = { interactionListener.onRecentSearchClick(search) },
+                    onRemoveClick = { interactionListener.removeRecentSearch(search) },
+                    showDivider = !isLastItem
+                )
+            }
         }
     }
 }
