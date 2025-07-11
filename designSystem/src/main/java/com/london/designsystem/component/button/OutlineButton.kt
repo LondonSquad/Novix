@@ -1,5 +1,6 @@
 package com.london.designsystem.component.button
 
+import androidx.annotation.DrawableRes
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
@@ -22,7 +23,9 @@ import com.london.designsystem.theme.ThemePreviews
 
 @Composable
 fun OutlineButton(
-    text: String,
+    text: String?,
+    hasLabel: Boolean,
+    @DrawableRes icon: Int?,
     hasIcon: Boolean,
     isLoading: Boolean,
     isDisabled: Boolean,
@@ -43,10 +46,12 @@ fun OutlineButton(
         contentPadding = PaddingValues(horizontal = 16.dp, vertical = 8.dp),
         elevation = ButtonDefaults.buttonElevation(defaultElevation = 2.dp)
     ) {
-        Text(
-            text = text,
-            style = NovixTheme.typography.label.large,
-        )
+        if (hasLabel && text != null) {
+            Text(
+                text = text,
+                style = NovixTheme.typography.label.large,
+            )
+        }
 
         if (isLoading) {
             Spacer(modifier = Modifier.width(8.dp))
@@ -57,10 +62,12 @@ fun OutlineButton(
             )
         }
 
-        if (hasIcon) {
-            Spacer(modifier = Modifier.width(8.dp))
+        if (hasIcon && icon != null) {
+            if (hasLabel && text != null) {
+                Spacer(modifier = Modifier.width(8.dp))
+            }
             Icon(
-                painter = painterResource(id = R.drawable.icon_add),
+                painter = painterResource(icon),
                 contentDescription = null
             )
         }
@@ -76,7 +83,9 @@ fun PreviewNormalOutlineButton() {
             onClick = {},
             isLoading = false,
             isDisabled = false,
-            hasIcon = false
+            hasIcon = false,
+            hasLabel = true,
+            icon = R.drawable.icon_add
         )
     }
 }
@@ -90,7 +99,9 @@ fun PreviewLoadingOutlineButton() {
             onClick = {},
             isLoading = true,
             isDisabled = false,
-            hasIcon = false
+            hasIcon = false,
+            hasLabel = true,
+            icon = null
         )
     }
 }
@@ -104,21 +115,42 @@ fun PreviewDisabledPrimaryDisable() {
             onClick = {},
             isLoading = false,
             isDisabled = true,
-            hasIcon = false
+            hasIcon = false,
+            hasLabel = true,
+            icon = null
         )
     }
 }
 
 @ThemePreviews
 @Composable
-fun PreviewWithIconPrimaryWithIcon() {
+fun PreviewOutlinePrimaryWithIcon() {
     NovixTheme {
         OutlineButton(
             text = "Watch",
             onClick = {},
             isLoading = false,
             isDisabled = false,
-            hasIcon = true
+            hasIcon = true,
+            hasLabel = true,
+            icon = R.drawable.icon_add
+        )
+    }
+}
+
+@ThemePreviews
+@Composable
+fun PreviewPrimaryWithIconOnly() {
+    NovixTheme {
+        PrimaryButton(
+            text = "",
+            onClick = {},
+            isLoading = false,
+            isDisabled = false,
+            hasIcon = true,
+            hasLabel = false,
+            icon = R.drawable.icon_add
+
         )
     }
 }
