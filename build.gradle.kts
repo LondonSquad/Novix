@@ -33,7 +33,7 @@ kover {
                     classes("**viewmodel")
                     classes("**Viewmodel")
                     classes("**LocalDataSourceImpl")
-                    classes("**DummySearchRepositoryImpl")
+                    classes("**SearchRepositoryImpl")
                 }
             }
             verify {
