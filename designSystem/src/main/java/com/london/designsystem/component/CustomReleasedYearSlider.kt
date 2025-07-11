@@ -63,7 +63,7 @@ fun CustomReleasedYearSlider(
                     modifier = Modifier
                         .fillMaxWidth()
                         .height(8.dp)
-                        .clip(RoundedCornerShape(50))
+                        .clip(RoundedCornerShape(100))
                         .background(NovixTheme.colors.surface)
                         .border(
                             width = 1.dp,
