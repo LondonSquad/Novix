@@ -273,7 +273,7 @@ private fun SearchChipsRow(
 }
 
 @Composable
-fun RecentSectionLayout(
+private fun RecentSectionLayout(
     state: SearchUiState,
     interactionListener: SearchInteractions,
     viewModel: SearchViewModel
