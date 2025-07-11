@@ -8,7 +8,7 @@ interface LocalDataSource<T> {
     suspend fun delete(item: T)
     suspend fun get(): List<T>
     suspend fun getByDate(date: Long): T
-    suspend fun getByQuery(query: String): T
+    suspend fun getByQuery(query: String): T?
 
     fun String.generateHash(): String = MessageDigest.getInstance("MD5").digest(toByteArray())
         .joinToString("") { "%02x".format(it) }
