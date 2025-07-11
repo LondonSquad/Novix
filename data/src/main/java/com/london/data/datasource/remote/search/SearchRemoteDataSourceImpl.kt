@@ -1,6 +1,5 @@
 package com.london.data.datasource.remote.search
 
-import android.util.Log
 import com.london.data.BuildConfig
 import com.london.data.datasource.remote.search.model.ApiSearch
 import com.london.data.datasource.remote.search.model.SearchActorRemote
@@ -36,7 +35,6 @@ class SearchRemoteDataSourceImpl(private val ktorClient: HttpClient) : RemoteDat
             }
         }
         val responseBody = response.bodyAsText()
-        Log.d("TAG", "search: $responseBody")
         return json.decodeFromString(responseBody)
     }
 
@@ -62,7 +60,6 @@ class SearchRemoteDataSourceImpl(private val ktorClient: HttpClient) : RemoteDat
             }
         }
         val responseBody = response.bodyAsText()
-        Log.d("TAG", "search: $responseBody")
         return json.decodeFromString(responseBody)
     }
 
@@ -88,7 +85,6 @@ class SearchRemoteDataSourceImpl(private val ktorClient: HttpClient) : RemoteDat
             }
         }
         val responseBody = response.bodyAsText()
-        Log.d("TAG", "search: $responseBody")
         return json.decodeFromString(responseBody)
     }
 }
