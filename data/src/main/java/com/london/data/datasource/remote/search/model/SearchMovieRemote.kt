@@ -17,8 +17,6 @@ data class SearchMovieRemote(
     val originalLanguage: String? = null,
     @SerialName("original_title")
     val originalTitle: String? = null,
-    @SerialName("overview")
-    val overview: String? = null,
     @SerialName("popularity")
     val popularity: Float,
     @SerialName("poster_path")
