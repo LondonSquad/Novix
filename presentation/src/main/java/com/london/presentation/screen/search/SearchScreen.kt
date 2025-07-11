@@ -49,6 +49,7 @@ import com.london.designsystem.component.TopBar
 import com.london.designsystem.component.button.PrimaryButton
 import com.london.designsystem.theme.NovixTheme
 import com.london.designsystem.theme.ThemePreviews
+import com.london.domain.entity.Actor
 import com.london.domain.entity.Movie
 import com.london.domain.entity.TvShow
 import com.london.presentation.R
@@ -139,7 +140,10 @@ fun SearchScreenContent(
                     if (state.actorUiResults.isEmpty()) {
                         NoSearchResultLayOut(modifier = Modifier.fillMaxSize())
                     } else {
-                        // Todo
+                        ActorsLayOut(
+                            actorsUis = state.actorUiResults,
+                            onActorClick = { actor -> /* TODO: Actor Details Screen */ }
+                        )
                     }
                 }
             }
@@ -263,6 +267,27 @@ fun MoviesLayOut(
     }
 }
 
+@Composable
+private fun ActorsLayOut(
+    actorsUis: List<Actor>,
+    onActorClick: (Actor) -> Unit,
+    modifier: Modifier = Modifier
+) {
+    LazyColumn(
+        modifier = modifier.fillMaxWidth(),
+        contentPadding = PaddingValues(horizontal = 16.dp),
+        verticalArrangement = Arrangement.spacedBy(12.dp)
+    ) {
+        items(actorsUis) { actor ->
+            ActorItem(
+                modifier = Modifier.clickable(onClick = { onActorClick(actor) }),
+                actorName = actor.name,
+                characterName = null,
+                imageRes = actor.profilePicture
+            )
+        }
+    }
+}
 
 @Composable
 fun NoSearchBeforeLayOut(
