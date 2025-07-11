@@ -44,7 +44,7 @@ class LocalDataSourceImpl(
 private suspend fun <T : Any> SearchDao<T>.execute(
     input: Any?,
     block: suspend () -> T,
-    exception: Exception,
+    exception: BaseException,
 ) = runOrThrow(
     block = { block() },
     onFailure = { exception.passArgToMessage(input ?: this) }
@@ -54,7 +54,7 @@ private suspend fun <T : Any> SearchDao<T>.execute(
 private suspend fun <T : Any> SearchDao<T>.execute(
     input: T,
     block: suspend (T) -> Unit,
-    exception: Exception,
+    exception: BaseException,
 ) = runOrThrow(
     block = { block(input) },
     onFailure = { exception.passArgToMessage(input) }
