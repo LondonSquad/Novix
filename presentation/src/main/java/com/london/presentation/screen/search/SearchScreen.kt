@@ -1,6 +1,5 @@
 package com.london.presentation.screen.search
 
-import android.annotation.SuppressLint
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
@@ -58,7 +57,6 @@ import com.london.domain.entity.TvShow
 import com.london.presentation.R
 import org.koin.androidx.compose.koinViewModel
 
-@SuppressLint("ViewModelConstructorInComposable")
 @Composable
 fun SearchScreen(
     viewModel: SearchViewModel = koinViewModel()
