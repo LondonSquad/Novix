@@ -13,6 +13,8 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.foundation.text.selection.LocalTextSelectionColors
+import androidx.compose.foundation.text.selection.TextSelectionColors
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -21,6 +23,7 @@ import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextFieldColors
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -97,53 +100,61 @@ fun OutlinedTextField(
         backgroundColor = backgroundColor,
         label = label,
         content = {
-            BasicTextField(
-                value = value,
-                onValueChange = onValueChange,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .defaultMinSize(minWidth = 268.dp, minHeight = 48.dp)
-                    .background(backgroundColor),
-                enabled = enabled,
-                readOnly = readOnly,
-                textStyle = mergedTextStyle,
-                visualTransformation = currentVisualTransformation,
-                keyboardOptions = keyboardOptions,
-                keyboardActions = keyboardActions,
-                interactionSource = interactionSource,
-                singleLine = singleLine,
-                cursorBrush = SolidColor(NovixTheme.colors.primary),
-                decorationBox = { innerTextField ->
-                    OutlinedTextFieldDefaults.DecorationBox(
-                        value = value.toString(),
-                        visualTransformation = currentVisualTransformation,
-                        innerTextField = innerTextField,
-                        placeholder = placeholder,
-                        leadingIcon = null,
-                        trailingIcon = null,
-                        prefix = leadingIcon?.let { { AnimatedLeadingIcon(it, isFocused) } },
-                        suffix = currentTrailingIcon,
-                        supportingText = supportingText,
-                        singleLine = singleLine,
-                        enabled = enabled,
-                        isError = isError,
-                        interactionSource = interactionSource,
-                        colors = colors,
-                        contentPadding = contentPadding,
-                        container = {
-                            OutlinedTextFieldDefaults.Container(
-                                enabled = enabled,
-                                isError = isError,
-                                interactionSource = interactionSource,
-                                colors = colors,
-                                shape = shape,
-                            )
-                        }
-                    )
-                }
-            )
+            CompositionLocalProvider(
+                LocalTextSelectionColors provides TextSelectionColors(
+                    handleColor = NovixTheme.colors.primary,
+                    backgroundColor = NovixTheme.colors.primary.copy(alpha = 0.3f)
+                )
+            ) {
+                BasicTextField(
+                    value = value,
+                    onValueChange = onValueChange,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .defaultMinSize(minWidth = 268.dp, minHeight = 48.dp)
+                        .background(backgroundColor),
+                    enabled = enabled,
+                    readOnly = readOnly,
+                    textStyle = mergedTextStyle,
+                    visualTransformation = currentVisualTransformation,
+                    keyboardOptions = keyboardOptions,
+                    keyboardActions = keyboardActions,
+                    interactionSource = interactionSource,
+                    singleLine = singleLine,
+                    cursorBrush = SolidColor(NovixTheme.colors.primary),
+                    decorationBox = { innerTextField ->
+                        OutlinedTextFieldDefaults.DecorationBox(
+                            value = value.text,
+                            visualTransformation = currentVisualTransformation,
+                            innerTextField = innerTextField,
+                            placeholder = placeholder,
+                            leadingIcon = null,
+                            trailingIcon = null,
+                            prefix = leadingIcon?.let { { AnimatedLeadingIcon(it, isFocused) } },
+                            suffix = currentTrailingIcon,
+                            supportingText = supportingText,
+                            singleLine = singleLine,
+                            enabled = enabled,
+                            isError = isError,
+                            interactionSource = interactionSource,
+                            colors = colors,
+                            contentPadding = contentPadding,
+                            container = {
+                                OutlinedTextFieldDefaults.Container(
+                                    enabled = enabled,
+                                    isError = isError,
+                                    interactionSource = interactionSource,
+                                    colors = colors,
+                                    shape = shape,
+                                )
+                            }
+                        )
+                    }
+                )
+            }
         }
     )
+
 }
 
 @Composable
