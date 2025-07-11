@@ -1,8 +1,8 @@
 package com.london.data.datasource.remote
 
-import com.london.data.dto.search.SearchActorsResponse
-import com.london.data.dto.search.SearchMoviesResponse
-import com.london.data.dto.search.SearchTvShowsResponse
+import com.london.data.datasource.remote.search.SearchActorsResponse
+import com.london.data.datasource.remote.search.SearchMoviesResponse
+import com.london.data.datasource.remote.search.SearchTvShowsResponse
 
 interface RemoteDataSource {
     suspend fun searchForMovies(): SearchMoviesResponse
