@@ -231,7 +231,7 @@ private fun SearchBar(
 
         PrimaryButton(
             text = "",
-            onClick = { TODO("filter bottom sheet") },
+            onClick = { },
             isLoading = false,
             isDisabled = false,
             hasIcon = true,
