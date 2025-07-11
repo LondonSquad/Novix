@@ -92,7 +92,7 @@ fun SearchScreenContent(
             modifier = Modifier
                 .statusBarsPadding()
                 .height(56.dp),
-            title = stringResource(com.london.presentation.R.string.search),
+            title = stringResource(R.string.search),
         )
 
         SearchBar(
@@ -345,7 +345,7 @@ private fun SearchBar(
             onValueChange = { viewModel.onSearchQueryChange(it) },
             placeholder = {
                 Text(
-                    stringResource(com.london.presentation.R.string.search_placeholder),
+                    stringResource(R.string.search_placeholder),
                     style = NovixTheme.typography.body.small,
                     modifier = Modifier.padding(end = 4.dp)
                 )
@@ -356,7 +356,7 @@ private fun SearchBar(
                     {
                         Icon(
                             painter = painterResource(id = R.drawable.icon_remove_filled),
-                            contentDescription = stringResource(com.london.presentation.R.string.clear),
+                            contentDescription = stringResource(R.string.clear),
                             tint = NovixTheme.colors.hint,
                             modifier = Modifier
                                 .size(20.dp)
