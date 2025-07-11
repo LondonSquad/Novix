@@ -30,22 +30,22 @@ fun NovixApp() {
     val navBackStackEntry by navController.currentBackStackEntryAsState()
     val currentDestination = navBackStackEntry?.destination
 
-    val currentRoute = when {
-        currentDestination?.hasRoute<Home>() == true -> "home"
-        currentDestination?.hasRoute<Search>() == true -> "search"
-        currentDestination?.hasRoute<Categories>() == true -> "categories"
-        currentDestination?.hasRoute<Bookmarks>() == true -> "bookmarks"
-        currentDestination?.hasRoute<Account>() == true -> "account"
-        else -> "home"
+    val currentScreen = when {
+        currentDestination?.hasRoute<Home>() == true -> Home
+        currentDestination?.hasRoute<Search>() == true -> Search
+        currentDestination?.hasRoute<Categories>() == true -> Categories
+        currentDestination?.hasRoute<Bookmarks>() == true -> Bookmarks
+        currentDestination?.hasRoute<Account>() == true -> Account
+        else -> Home
     }
 
     Scaffold(
         bottomBar = {
             NavBar(
                 navDestinations = NavigationHelper.getNavigationTabs(),
-                currentSelectedRoute = currentRoute,
-                onNavDestinationClicked = { route ->
-                    navigateToBottomBarDestination(navController, route)
+                currentSelectedDestination = currentScreen,
+                onNavDestinationClicked = { destination ->
+                    navigateToBottomBarDestination(navController, destination)
                 }
             )
         }
@@ -76,17 +76,8 @@ fun NovixApp() {
 
 private fun navigateToBottomBarDestination(
     navController: NavHostController,
-    route: String
+    destination: Screen
 ) {
-    val destination = when (route) {
-        "home" -> Home
-        "search" -> Search
-        "categories" -> Categories
-        "bookmarks" -> Bookmarks
-        "account" -> Account
-        else -> Home
-    }
-
     navController.navigate(destination) {
         popUpTo(navController.graph.findStartDestination().id) {
             saveState = true

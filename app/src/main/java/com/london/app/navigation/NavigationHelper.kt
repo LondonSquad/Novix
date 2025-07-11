@@ -9,34 +9,32 @@ import com.london.designsystem.utils.painter
 class NavigationHelper {
     companion object {
         @Composable
-        fun getNavigationTabs(
-
-        ): List<NavigationTab> {
+        fun getNavigationTabs(): List<NavigationTab<Screen>> {
             return listOf(
                 NavigationTab(
                     idleIcon = painterResource(R.drawable.icon_home),
                     selectedIcon = painterResource(R.drawable.icon_home_filled),
-                    route = "home"
+                    destination = Screen.Home,
                 ),
                 NavigationTab(
                     idleIcon = painterResource(R.drawable.icon_search),
                     selectedIcon = painterResource(R.drawable.icon_search_filled),
-                    route = "search"
+                    destination = Screen.Search,
                 ),
                 NavigationTab(
                     idleIcon = painterResource(R.drawable.icon_masks),
                     selectedIcon = painterResource(R.drawable.icon_masks_filled),
-                    route = "categories"
+                    destination = Screen.Categories,
                 ),
                 NavigationTab(
                     idleIcon = painterResource(R.drawable.icon_bookmark),
                     selectedIcon = painterResource(R.drawable.icon_bookmark_filled),
-                    route = "bookmarks"
+                    destination = Screen.Bookmarks,
                 ),
                 NavigationTab(
                     idleIcon = painterResource(R.drawable.icon_user),
                     selectedIcon = painterResource(R.drawable.icon_user_filled),
-                    route = "account"
+                    destination = Screen.Account,
                 )
             )
         }
