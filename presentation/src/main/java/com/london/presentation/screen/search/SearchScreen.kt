@@ -6,9 +6,7 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.defaultMinSize
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -17,32 +15,26 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.platform.LocalWindowInfo
+import androidx.compose.ui.platform.SoftwareKeyboardController
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
-import androidx.compose.ui.text.input.TextFieldValue
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -53,25 +45,28 @@ import com.london.designsystem.component.HomeCard
 import com.london.designsystem.component.NovixChip
 import com.london.designsystem.component.OutlinedTextField
 import com.london.designsystem.component.SectionHeader
+import com.london.designsystem.component.TopBar
 import com.london.designsystem.component.button.PrimaryButton
 import com.london.designsystem.theme.NovixTheme
 import com.london.designsystem.theme.ThemePreviews
 import com.london.presentation.screen.search.model.MovieUi
+import com.london.presentation.screen.search.model.TvShowUi
+
 
 @SuppressLint("ViewModelConstructorInComposable")
 @Composable
 fun SearchScreen(
-    modifier: Modifier = Modifier,
     viewModel: SearchViewModel = viewModel()
 ) {
-    val uiState by viewModel.uiState.collectAsState()
     val state by viewModel.uiState.collectAsStateWithLifecycle()
     val keyboardController = LocalSoftwareKeyboardController.current
 
     SearchScreenContent(
         state = state,
         interactionListener = viewModel,
-        isMovieSaved = { viewModel.isMovieSaved(it) }
+        isMovieSaved = { viewModel.isMovieSaved(it) },
+        keyboardController = keyboardController,
+        viewModel = viewModel
     )
 }
 
@@ -79,17 +74,11 @@ fun SearchScreen(
 fun SearchScreenContent(
     state: SearchUiState,
     interactionListener: SearchInteractions,
-    isMovieSaved: (MovieUi) -> Boolean
+    viewModel: SearchViewModel,
+    isMovieSaved: (MovieUi) -> Boolean,
+    keyboardController: SoftwareKeyboardController?,
 ) {
-    var textFieldValue by remember { mutableStateOf(state.searchQuery) }
     val interactionSource = remember { MutableInteractionSource() }
-    val results = remember {
-        when (state.selectedCategory) {
-            SearchCategory.Movies -> state.movieResults
-            SearchCategory.TvShows -> state.tvShowUiResults
-            SearchCategory.Actors -> state.actorUiResults
-        }
-    }
 
     Column(
         modifier = Modifier
@@ -98,165 +87,85 @@ fun SearchScreenContent(
             .padding(horizontal = 16.dp),
         verticalArrangement = Arrangement.Top
     ) {
-//        TopBar(
-//            modifier = Modifier
-//                .statusBarsPadding()
-//                .height(56.dp)
-//                .padding(horizontal = 16.dp),
-//            title = stringResource(com.london.presentation.R.string.search),
-//        )
+        TopBar(
+            modifier = Modifier
+                .statusBarsPadding()
+                .height(56.dp),
+            title = stringResource(com.london.presentation.R.string.search),
+        )
 
-//        SearchBar(uiState, viewModel, interactionSource, keyboardController)
-
-        SearchTopBar(title = "Search")
-
-        if (state.searchQuery.text.isEmpty() && state.searchHistory.isEmpty()) {
-            NoSearchBeforeLayOut(modifier = Modifier.fillMaxSize())
-            return
-        }
-
-
-        // Handle search history case if needed
-        if (state.searchQuery.text.isEmpty() && state.searchHistory.isNotEmpty()) {
-            when {
-                state.searchQuery.text.isNotEmpty() -> {
-                    Column(
-                        modifier = Modifier
-                            .fillMaxSize()
-                            .padding(32.dp),
-                        verticalArrangement = Arrangement.Center,
-                        horizontalAlignment = Alignment.CenterHorizontally
-                    ) {
-                        Text(
-                            text = "TO DO: No search result",
-                            style = NovixTheme.typography.body.medium,
-                            color = NovixTheme.colors.hint
-                        )
-                    }
-                }
-
-                state.searchQuery.text.isEmpty() -> {
-                    if (state.recentViewed.isNotEmpty()) {
-                        SectionHeader(
-                            text = stringResource(com.london.presentation.R.string.recent_viewed),
-                            hasGetAll = true,
-                            hasIcon = false,
-                            getAllText = stringResource(com.london.presentation.R.string.clear_all),
-                            onClick = { viewModel.clearRecentViewed() },
-                            modifier = Modifier.padding(vertical = 12.dp, horizontal = 16.dp)
-                        )
-
-                        LazyRow(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .height(210.dp),
-                            horizontalArrangement = Arrangement.spacedBy(8.dp),
-                            contentPadding = PaddingValues(horizontal = 16.dp),
-                        ) {
-                            items(state.recentViewed) { imageUrl ->
-                                HomeCard(
-                                    imageUrl = imageUrl,
-                                    isSaved = false,
-                                    onSaveClick = {}
-                                )
-                            }
-                        }
-                    }
-
-                    if (state.recentSearches.isNotEmpty()) {
-                        SectionHeader(
-                            text = stringResource(com.london.presentation.R.string.recent_search),
-                            hasGetAll = true,
-                            hasIcon = false,
-                            getAllText = stringResource(com.london.presentation.R.string.clear_all),
-                            onClick = { viewModel.clearRecentSearches() },
-                            modifier = Modifier.padding(vertical = 12.dp, horizontal = 16.dp)
-                        )
-
-                        LazyColumn(
-                            modifier = Modifier.padding(horizontal = 16.dp)
-                        ) {
-                            items(state.recentSearches) { search ->
-                                RecentSearchItem(
-                                    search = search,
-                                    onSearchClick = { viewModel.onRecentSearchClick(search) },
-                                    onRemoveClick = { viewModel.removeRecentSearch(search) }
-                                )
-                            }
-                        }
-                    }
-                }
-            }
-        }
-
-        SearchChipsRow(
-            selected = state.selectedCategory,
-            onSelect = { searchCategory ->
-                interactionListener.onCategorySelected(searchCategory)
-            },
+        SearchBar(
+            state,
+            viewModel,
+            interactionSource,
+            keyboardController,
             modifier = Modifier.padding(bottom = 12.dp)
         )
 
-        when (state.selectedCategory) {
-            SearchCategory.Movies -> {
-                if (state.movieResults.isEmpty()) {
-                    NoSearchResultLayOut(modifier = Modifier.fillMaxSize())
-                } else {
-                    MoviesLayOut(
-                        movieUis = state.movieResults,
-                        onSaveMovie = { interactionListener.onSavedMovieClick(it) },
-                        isMovieSaved = isMovieSaved,
-                    )
+        if (state.searchQuery.text.isNotEmpty()) {
+            SearchChipsRow(
+                selected = state.selectedCategory,
+                onSelect = interactionListener::onCategorySelected,
+                modifier = Modifier.padding(bottom = 12.dp)
+            )
+
+            when (state.selectedCategory) {
+                SearchCategory.Movies -> {
+                    if (state.movieResults.isEmpty()) {
+                        NoSearchResultLayOut(modifier = Modifier.fillMaxSize())
+                    } else {
+                        MoviesLayOut(
+                            movieUis = state.movieResults,
+                            onSaveMovie = interactionListener::onSavedMovieClick,
+                            isMovieSaved = isMovieSaved
+                        )
+                    }
+                }
+
+                SearchCategory.TvShows -> {
+                    if (state.tvShowUiResults.isEmpty()) {
+                        NoSearchResultLayOut(modifier = Modifier.fillMaxSize())
+                    } else {
+                        TvShowLayOut(
+                            tvShowUis = state.tvShowUiResults,
+                        )
+                    }
+                }
+
+                SearchCategory.Actors -> {
+                    if (state.actorUiResults.isEmpty()) {
+                        NoSearchResultLayOut(modifier = Modifier.fillMaxSize())
+                    } else {
+                        // Todo
+                    }
                 }
             }
-
-            SearchCategory.TvShows -> {
-                // Just show placeholder for now
-                Text(
-                    text = "TV Shows - Coming Soon",
-                    style = NovixTheme.typography.body.medium,
-                    color = NovixTheme.colors.title,
-                    modifier = Modifier.padding(16.dp)
+        } else {
+            if (state.recentSearches.isNotEmpty()) {
+                SectionHeader(
+                    text = stringResource(com.london.presentation.R.string.recent_search),
+                    hasGetAll = true,
+                    hasIcon = false,
+                    getAllText = stringResource(com.london.presentation.R.string.clear_all),
+                    onClick = interactionListener::clearRecentSearches,
+                    modifier = Modifier.padding(vertical = 12.dp)
                 )
-            }
 
-            SearchCategory.Actors -> {
-                // Just show placeholder for now
-                Text(
-                    text = "Actors - Coming Soon",
-                    style = NovixTheme.typography.body.medium,
-                    color = NovixTheme.colors.title,
-                    modifier = Modifier.padding(16.dp)
-                )
+                LazyColumn(
+                    modifier = Modifier.padding(horizontal = 16.dp)
+                ) {
+                    items(state.recentSearches) { search ->
+                        RecentSearchItem(
+                            search = search,
+                            onSearchClick = { interactionListener.onRecentSearchClick(search) },
+                            onRemoveClick = { interactionListener.removeRecentSearch(search) }
+                        )
+                    }
+                }
+            } else {
+                NoSearchBeforeLayOut(modifier = Modifier.fillMaxSize())
             }
         }
-
-        if (state.showFilterBottomSheet) {
-
-        }
-    }
-}
-
-@Composable
-fun SearchTopBar(
-    modifier: Modifier = Modifier,
-    title: String
-) {
-    Row(
-        modifier = modifier
-            .fillMaxWidth()
-            .defaultMinSize(minHeight = 56.dp),
-        verticalAlignment = Alignment.CenterVertically,
-        horizontalArrangement = Arrangement.Start
-    ) {
-
-        Text(
-            text = title,
-            style = NovixTheme.typography.title.large,
-            color = NovixTheme.colors.title,
-            modifier = Modifier,
-            textAlign = TextAlign.Start
-        )
     }
 }
 
@@ -285,6 +194,32 @@ fun SearchChipsRow(
             isSelected = selected == SearchCategory.Actors,
             onClick = { onSelect(SearchCategory.Actors) }
         )
+    }
+}
+
+@Composable
+fun TvShowLayOut(
+    tvShowUis: List<TvShowUi>,
+) {
+    val screenWidth = LocalWindowInfo.current.containerSize.width
+    val itemWidthPx = with(LocalDensity.current) { 158.dp.toPx() }
+    val screenPaddingPx = with(LocalDensity.current) { 32.dp.toPx() }
+    val columns = ((screenWidth - screenPaddingPx) / itemWidthPx).toInt().coerceAtLeast(2)
+
+    LazyVerticalGrid(
+        columns = GridCells.Fixed(columns),
+        modifier = Modifier.fillMaxSize(),
+        horizontalArrangement = Arrangement.spacedBy(12.dp),
+        verticalArrangement = Arrangement.spacedBy(12.dp)
+    ) {
+        items(tvShowUis) { movie ->
+            HomeCard(
+                imageUrl = movie.posterUrl,
+                onSaveClick = {  },
+                isSaved = false,
+                imageDescription = movie.title,
+            )
+        }
     }
 }
 
@@ -362,10 +297,11 @@ private fun SearchBar(
     uiState: SearchUiState,
     viewModel: SearchViewModel,
     interactionSource: MutableInteractionSource,
-    keyboardController: androidx.compose.ui.platform.SoftwareKeyboardController?
+    keyboardController: SoftwareKeyboardController?,
+    modifier: Modifier = Modifier
 ) {
     Row(
-        modifier = Modifier.padding(horizontal = 16.dp)
+        modifier = modifier
     ) {
         OutlinedTextField(
             value = uiState.searchQuery,
@@ -400,6 +336,7 @@ private fun SearchBar(
             keyboardActions = KeyboardActions(
                 onSearch = {
                     keyboardController?.hide()
+                    viewModel.addToRecentSearches(uiState.searchQuery.text)
                 }
             ),
             interactionSource = interactionSource,

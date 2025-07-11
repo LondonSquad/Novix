@@ -2,13 +2,12 @@ package com.london.presentation.screen.search
 
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
 import com.london.presentation.screen.search.model.MovieUi
+import com.london.presentation.screen.search.model.TvShowUi
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
-import kotlinx.coroutines.launch
 
 class SearchViewModel : ViewModel(), SearchInteractions {
 
@@ -18,18 +17,64 @@ class SearchViewModel : ViewModel(), SearchInteractions {
     fun isMovieSaved(movie: MovieUi) = _uiState.value.savedMovies.contains(movie.id)
 
     override fun onSearchQueryChange(newValue: TextFieldValue) {
-        _uiState.update {
-            it.copy(searchQuery = newValue)
-        }
-    }
-
-    override fun onSearchFilterClick() {
-        TODO("Not yet implemented")
+        _uiState.update { it.copy(searchQuery = newValue) }
+        onSearchFilterClick(newValue.text, _uiState.value.selectedCategory)
     }
 
     override fun onCategorySelected(category: SearchCategory) {
-        _uiState.update {
-            it.copy(selectedCategory = category)
+        _uiState.update { it.copy(selectedCategory = category) }
+        onSearchFilterClick(_uiState.value.searchQuery.text, category)
+    }
+
+    override fun onSearchFilterClick(query: String, category: SearchCategory) {
+        val trimmedQuery = query.trim().lowercase()
+
+        _uiState.update { currentState ->
+            when (category) {
+                SearchCategory.Movies -> {
+                    val filteredMovies = if (trimmedQuery.isNotEmpty()) {
+                        DummyData.dummyMoviesList.map {
+                            it.copy(isSaved = currentState.savedMovies.contains(it.id))
+                        }.filter {
+                            it.title.lowercase().contains(trimmedQuery)
+                        }
+                    } else emptyList()
+
+                    currentState.copy(
+                        movieResults = filteredMovies,
+                        actorUiResults = emptyList(),
+                        tvShowUiResults = emptyList()
+                    )
+                }
+
+                SearchCategory.Actors -> {
+                    val filteredActors = if (trimmedQuery.isNotEmpty()) {
+                        DummyData.dummyActorsList.filter {
+                            it.name.lowercase().contains(trimmedQuery)
+                        }
+                    } else emptyList()
+
+                    currentState.copy(
+                        actorUiResults = filteredActors,
+                        movieResults = emptyList(),
+                        tvShowUiResults = emptyList()
+                    )
+                }
+
+                SearchCategory.TvShows -> {
+                    val filteredShows = if (trimmedQuery.isNotEmpty()) {
+                        DummyData.dummyTvShowsList.filter {
+                            it.title.lowercase().contains(trimmedQuery)
+                        }
+                    } else emptyList()
+
+                    currentState.copy(
+                        tvShowUiResults = filteredShows,
+                        actorUiResults = emptyList(),
+                        movieResults = emptyList()
+                    )
+                }
+            }
         }
     }
 
@@ -54,7 +99,7 @@ class SearchViewModel : ViewModel(), SearchInteractions {
     }
 
 
-    private fun addToRecentSearches(query: String) {
+    fun addToRecentSearches(query: String) {
         val currentSearches = _uiState.value.recentSearches.toMutableList()
 
         currentSearches.remove(query)
@@ -67,26 +112,32 @@ class SearchViewModel : ViewModel(), SearchInteractions {
         _uiState.value = _uiState.value.copy(recentSearches = currentSearches)
     }
 
-    fun clearRecentViewed() {
-        _uiState.value = _uiState.value.copy(recentViewed = emptyList())
+    override fun clearRecentViewed() {
+        _uiState.update { it.copy(recentViewed = emptyList()) }
     }
 
-    fun clearRecentSearches() {
-        _uiState.value = _uiState.value.copy(recentSearches = emptyList())
+    override fun clearRecentSearches() {
+        _uiState.update { it.copy(recentSearches = emptyList()) }
     }
 
-    fun removeRecentSearch(search: String) {
+    override fun removeRecentSearch(search: String) {
         val updatedSearches = _uiState.value.recentSearches.filter { it != search }
-        _uiState.value = _uiState.value.copy(recentSearches = updatedSearches)
+        _uiState.update { it.copy(recentSearches = updatedSearches) }
     }
 
-    fun onRecentSearchClick(search: String) {
-        _uiState.value = _uiState.value.copy(searchQuery = TextFieldValue(search))
+    override fun onRecentSearchClick(search: String) {
+        _uiState.update { it.copy(searchQuery = TextFieldValue(search)) }
+        onSearchFilterClick(search, _uiState.value.selectedCategory)
     }
 
     fun clearSearch() {
-        _uiState.value = _uiState.value.copy(
-            searchQuery = TextFieldValue(""),
-        )
+        _uiState.update {
+            it.copy(
+                searchQuery = TextFieldValue(""),
+                movieResults = emptyList(),
+                tvShowUiResults = emptyList(),
+                actorUiResults = emptyList()
+            )
+        }
     }
 }
