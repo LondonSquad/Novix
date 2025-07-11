@@ -6,6 +6,12 @@ import com.london.data.datasource.local.dao.SearchTvShowDao
 import com.london.data.datasource.local.model.SearchActorsLocal
 import com.london.data.datasource.local.model.SearchMoviesLocal
 import com.london.data.datasource.local.model.SearchTvShowLocal
+import com.london.data.datasource.util.executeDelete
+import com.london.data.datasource.util.executeGetAll
+import com.london.data.datasource.util.executeGetByDate
+import com.london.data.datasource.util.executeGetByQuery
+import com.london.data.datasource.util.executeInsert
+import com.london.data.datasource.util.executeUpdate
 
 class LocalDataSourceImpl(
     private val searchTvShowDao: SearchTvShowDao,
@@ -39,11 +45,11 @@ class LocalDataSourceImpl(
     override suspend fun deleteActor(actor: SearchActorsLocal) =
         searchActorsDao.executeDelete(actor)
 
-    override suspend fun getMovies(): SearchMoviesLocal = searchMoviesDao.executeGetAll()
+    override suspend fun getMovies(): List<SearchMoviesLocal> = searchMoviesDao.executeGetAll()
 
-    override suspend fun getTvShows(): SearchTvShowLocal = searchTvShowDao.executeGetAll()
+    override suspend fun getTvShows(): List<SearchTvShowLocal> = searchTvShowDao.executeGetAll()
 
-    override suspend fun getActors(): SearchActorsLocal = searchActorsDao.executeGetAll()
+    override suspend fun getActors(): List<SearchActorsLocal> = searchActorsDao.executeGetAll()
 
     override suspend fun getMovieByDate(date: Long): SearchMoviesLocal =
         searchMoviesDao.executeGetByDate(date)

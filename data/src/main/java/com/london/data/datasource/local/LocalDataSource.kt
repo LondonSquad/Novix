@@ -14,9 +14,9 @@ interface LocalDataSource {
     suspend fun deleteMovie(movie: SearchMoviesLocal)
     suspend fun deleteTvShow(tvShow: SearchTvShowLocal)
     suspend fun deleteActor(actor: SearchActorsLocal)
-    suspend fun getMovies() : SearchMoviesLocal
-    suspend fun getTvShows() : SearchTvShowLocal
-    suspend fun getActors() : SearchActorsLocal
+    suspend fun getMovies() : List<SearchMoviesLocal>
+    suspend fun getTvShows() : List<SearchTvShowLocal>
+    suspend fun getActors() : List<SearchActorsLocal>
     suspend fun getMovieByDate(date : Long) : SearchMoviesLocal
     suspend fun getTvShowByDate(date : Long) : SearchTvShowLocal
     suspend fun getActorByDate(date : Long) : SearchActorsLocal

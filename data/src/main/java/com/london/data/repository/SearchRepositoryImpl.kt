@@ -1,4 +1,4 @@
-package com.london.data.repo
+package com.london.data.repository
 
 import com.london.data.datasource.local.LocalDataSource
 import com.london.data.datasource.remote.RemoteDataSource
