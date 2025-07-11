@@ -214,7 +214,8 @@ ktor = [
 
 coroutines = [
     "kotlinx-coroutines-android",
-    "kotlinx-datetime"
+    "kotlinx-datetime",
+    "kotlinx-coroutines-test"
 ]
 
 base-ui = [
