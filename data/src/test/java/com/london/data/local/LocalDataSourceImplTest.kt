@@ -11,6 +11,7 @@ import com.london.data.datasource.local.dao.SearchTvShowDao
 import com.london.data.datasource.local.model.SearchActorsLocal
 import com.london.data.datasource.local.model.SearchMoviesLocal
 import com.london.data.datasource.local.model.SearchTvShowLocal
+import com.london.data.datasource.util.generateHash
 import io.mockk.Runs
 import io.mockk.coEvery
 import io.mockk.coVerify
@@ -38,9 +39,9 @@ class LocalDataSourceImplTest {
 
     @Before
     fun setup() {
-        searchTvShowDao = mockk()
-        searchMoviesDao = mockk()
-        searchActorsDao = mockk()
+        searchTvShowDao = mockk(relaxed = true)
+        searchMoviesDao = mockk(relaxed = true)
+        searchActorsDao = mockk(relaxed = true)
 
         localDataSource = LocalDataSourceImpl(
             searchTvShowDao = searchTvShowDao,
@@ -288,7 +289,7 @@ class LocalDataSourceImplTest {
 
         // Then
         assertEquals(mockMoviesList, result)
-        coVerify(exactly = 1) { searchMoviesDao.getAll() }
+        coVerify(exactly = 2) { searchMoviesDao.getAll() }
     }
 
     @Test
@@ -300,7 +301,7 @@ class LocalDataSourceImplTest {
         assertFailsWith<GetException> {
             localDataSource.getMovies()
         }
-        coVerify(exactly = 1) { searchMoviesDao.getAll() }
+        coVerify(exactly = 2) { searchMoviesDao.getAll() }
     }
 
     @Test
@@ -314,7 +315,7 @@ class LocalDataSourceImplTest {
 
         // Then
         assertEquals(mockTvShowsList, result)
-        coVerify(exactly = 1) { searchTvShowDao.getAll() }
+        coVerify(exactly = 2) { searchTvShowDao.getAll() }
     }
 
 
@@ -327,7 +328,7 @@ class LocalDataSourceImplTest {
         assertFailsWith<GetException> {
             localDataSource.getTvShows()
         }
-        coVerify(exactly = 1) { searchTvShowDao.getAll() }
+        coVerify(exactly = 2) { searchTvShowDao.getAll() }
     }
 
     @Test
@@ -341,7 +342,7 @@ class LocalDataSourceImplTest {
 
         // Then
         assertEquals(mockActorsList, result)
-        coVerify(exactly = 1) { searchActorsDao.getAll() }
+        coVerify(exactly = 2) { searchActorsDao.getAll() }
     }
 
     @Test
@@ -353,7 +354,7 @@ class LocalDataSourceImplTest {
         assertFailsWith<GetException> {
             localDataSource.getActors()
         }
-        coVerify(exactly = 1) { searchActorsDao.getAll() }
+        coVerify(exactly = 2) { searchActorsDao.getAll() }
     }
     // endregion
 
@@ -439,82 +440,88 @@ class LocalDataSourceImplTest {
     fun `getActorByQuery should return actor from dao successfully`() = runTest {
         // Given
         val testQuery = "test query"
-        coEvery { searchActorsDao.getSearchByQuery(testQuery) } returns mockActorsResponse
+        coEvery { searchActorsDao.getSearchByQuery(testQuery.generateHash()) } returns mockActorsResponse
 
         // When
         val result = localDataSource.getActorByQuery(testQuery)
 
         // Then
         assertEquals(mockActorsResponse, result)
-        coVerify(exactly = 1) { searchActorsDao.getSearchByQuery(testQuery) }
+        coVerify(exactly = 1) { searchActorsDao.getSearchByQuery(testQuery.generateHash()) }
     }
 
     @Test
     fun `getActorByQuery should throw GetException when dao throws exception`() = runTest {
         // Given
         val testQuery = "test query"
-        coEvery { searchActorsDao.getSearchByQuery(testQuery) } throws RuntimeException("Database error")
+        coEvery { searchActorsDao.getSearchByQuery(testQuery.generateHash()) } throws RuntimeException(
+            "Database error"
+        )
 
         // When & Then
         assertFailsWith<GetException> {
             localDataSource.getActorByQuery(testQuery)
         }
-        coVerify(exactly = 1) { searchActorsDao.getSearchByQuery(testQuery) }
+        coVerify(exactly = 1) { searchActorsDao.getSearchByQuery(testQuery.generateHash()) }
     }
 
     @Test
     fun `getTvShowByQuery should return tv show from dao successfully`() = runTest {
         // Given
         val testQuery = "test query"
-        coEvery { searchTvShowDao.getSearchByQuery(testQuery) } returns mockTvShowsResponse
+        coEvery { searchTvShowDao.getSearchByQuery(testQuery.generateHash()) } returns mockTvShowsResponse
 
         // When
         val result = localDataSource.getTvShowByQuery(testQuery)
 
         // Then
         assertEquals(mockTvShowsResponse, result)
-        coVerify(exactly = 1) { searchTvShowDao.getSearchByQuery(testQuery) }
+        coVerify(exactly = 1) { searchTvShowDao.getSearchByQuery(testQuery.generateHash()) }
     }
 
     @Test
     fun `getTvShowByQuery should throw GetException when dao throws exception`() = runTest {
         // Given
         val testQuery = "test query"
-        coEvery { searchTvShowDao.getSearchByQuery(testQuery) } throws RuntimeException("Database error")
+        coEvery { searchTvShowDao.getSearchByQuery(testQuery.generateHash()) } throws RuntimeException(
+            "Database error"
+        )
 
         // When & Then
         assertFailsWith<GetException> {
             localDataSource.getTvShowByQuery(testQuery)
         }
-        coVerify(exactly = 1) { searchTvShowDao.getSearchByQuery(testQuery) }
+        coVerify(exactly = 1) { searchTvShowDao.getSearchByQuery(testQuery.generateHash()) }
     }
 
     @Test
     fun `getMovieByQuery should return movie from dao successfully`() = runTest {
         // Given
         val testQuery = "test query"
-        coEvery { searchMoviesDao.getSearchByQuery(testQuery) } returns mockMoviesResponse
+        coEvery { searchMoviesDao.getSearchByQuery(testQuery.generateHash()) } returns mockMoviesResponse
 
         // When
         val result = localDataSource.getMovieByQuery(testQuery)
 
         // Then
         assertEquals(mockMoviesResponse, result)
-        coVerify(exactly = 1) { searchMoviesDao.getSearchByQuery(testQuery) }
+        coVerify(exactly = 1) { searchMoviesDao.getSearchByQuery(testQuery.generateHash()) }
     }
 
     @Test
     fun `getMovieByQuery should throw GetException when dao throws exception`() = runTest {
         // Given
         val testQuery = "test query"
-        coEvery { searchMoviesDao.getSearchByQuery(testQuery) } throws RuntimeException("Database error")
+        coEvery { searchMoviesDao.getSearchByQuery(testQuery.generateHash()) } throws RuntimeException(
+            "Database error"
+        )
 
         // When & Then
         assertFailsWith<GetException> {
             localDataSource.getMovieByQuery(testQuery) // this is a suspending call
         }
 
-        coVerify(exactly = 1) { searchMoviesDao.getSearchByQuery(testQuery) }
+        coVerify(exactly = 1) { searchMoviesDao.getSearchByQuery(testQuery.generateHash()) }
     }
     // endregion
 }
