@@ -146,6 +146,20 @@ class SearchViewModel(
         _uiState.update { it.copy(recentSearches = currentSearches) }
     }
 
+    fun addToRecentViewed(imageUrl: String) {
+        if (imageUrl.isBlank()) return
+
+        val currentViewed = _uiState.value.recentViewed.toMutableList()
+        currentViewed.remove(imageUrl)
+        currentViewed.add(0, imageUrl)
+
+        if (currentViewed.size > 10) {
+            currentViewed.removeAt(currentViewed.size - 1)
+        }
+
+        _uiState.update { it.copy(recentViewed = currentViewed) }
+    }
+
     override fun clearRecentViewed() {
         _uiState.update { it.copy(recentViewed = emptyList()) }
     }
