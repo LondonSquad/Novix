@@ -119,7 +119,8 @@ fun SearchScreen(
                 isLoading = false,
                 isDisabled = false,
                 hasIcon = true,
-                icon = painterResource(id = R.drawable.icon_filter),
+                icon = R.drawable.icon_filter,
+                hasLabel = false,
                 modifier = Modifier.width(52.dp)
             )
         }
