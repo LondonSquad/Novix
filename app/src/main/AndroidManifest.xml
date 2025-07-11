@@ -14,7 +14,7 @@
         android:theme="@style/Theme.Novix"
         tools:targetApi="31">
         <activity
-            android:name="com.london.presentation.MainActivity"
+            android:name="com.london.app.MainActivity"
             android:exported="true"
             android:label="@string/app_name"
             android:theme="@style/Theme.Novix">
