@@ -18,7 +18,7 @@ data class SearchMovieRemote(
     @SerialName("original_title")
     val originalTitle: String? = null,
     @SerialName("popularity")
-    val popularity: Float,
+    val popularity: Double,
     @SerialName("poster_path")
     val posterPath: String? = null,
     @SerialName("release_date")
@@ -28,7 +28,7 @@ data class SearchMovieRemote(
     @SerialName("video")
     val video: Boolean,
     @SerialName("vote_average")
-    val voteAverage: Float,
+    val voteAverage: Double,
     @SerialName("vote_count")
     val voteCount: Int
 )
