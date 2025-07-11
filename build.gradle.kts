@@ -32,6 +32,8 @@ kover {
                     classes("**viewModel")
                     classes("**viewmodel")
                     classes("**Viewmodel")
+                    classes("**LocalDataSourceImpl")
+                    classes("**DummySearchRepositoryImpl")
                 }
             }
             verify {

@@ -21,10 +21,9 @@ android {
 
     buildTypes {
         release {
-            isMinifyEnabled = AppConfig.ENABLE_R8_FULL_MODE
+            isMinifyEnabled = false
             proguardFiles(
-                getDefaultProguardFile("proguard-android-optimize.txt"),
-                "proguard-rules.pro"
+                getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro"
             )
         }
     }
@@ -36,7 +35,6 @@ android {
         jvmTarget = AppConfig.Version.JVM.toString()
     }
 }
-
 dependencies {
     implementation(project(":domain"))
     implementation(libs.bundles.base.ui)
@@ -49,4 +47,8 @@ dependencies {
     ksp(libs.bundles.koin.ksp)
     testImplementation(libs.bundles.testing)
     androidTestImplementation(libs.bundles.android.testing)
+    implementation(libs.gson)
+    testImplementation(libs.mockk)
+    testImplementation(libs.kotlinx.coroutines.test.v1102)
+    testImplementation(kotlin("test"))
 }

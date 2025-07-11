@@ -68,8 +68,14 @@ dependencies {
     implementation(libs.firebase.analytics)
     testImplementation(libs.bundles.testing)
 
+
     implementation(libs.androidx.navigation.compose)
     implementation (libs.koin.androidx.navigation)
     implementation (libs.androidx.material)
+
+
+    implementation(libs.bundles.room)
+    implementation(libs.bundles.koin)
+    ksp(libs.bundles.room.ksp)
 
 }

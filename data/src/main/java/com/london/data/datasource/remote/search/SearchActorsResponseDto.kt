@@ -1,4 +1,4 @@
-package com.london.data.dto.search
+package com.london.data.datasource.remote.search
 
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
