@@ -10,7 +10,7 @@ on:
 # Ensure that only the latest commit is tested for PRs
 concurrency:
   group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.sha }}
-  cancel-in-progress: true
+  cancel-in-progress: false
 
 jobs:
   update_pr_metrics:
