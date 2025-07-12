@@ -13,7 +13,7 @@ fun PersonDtoLocal.toActorEntity(): Actor {
     return Actor(
         id = this.id,
         name = this.name,
-        profilePicture = this.profilePath ?: ""
+        profilePicture = "https://image.tmdb.org/t/p/w500${this.profilePath}"
     )
 }
 

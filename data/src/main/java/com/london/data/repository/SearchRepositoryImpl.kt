@@ -1,5 +1,6 @@
 package com.london.data.repository
 
+import android.util.Log
 import com.london.data.datasource.local.GetException
 import com.london.data.datasource.local.LocalDataSource
 import com.london.data.datasource.local.model.SearchActorsLocal
@@ -32,6 +33,7 @@ class SearchRepositoryImpl(
 
         var result: List<Movie> = emptyList()
         var remoteResponseToCache: SearchMoviesLocal? = null
+
         try {
             val local = searchMovieService.getByQuery(query = name + language)
             result = local
@@ -60,14 +62,10 @@ class SearchRepositoryImpl(
         name: String, language: String
     ): List<TvShow> {
 
-        var result: List<TvShow> = emptyList()
-        var remoteResponseToCache: SearchTvShowLocal? = null
+        var localResults: List<TvShow> = emptyList()
+        var remoteResponseToCache: SearchTvShowLocal?
         try {
-            val local = searchTvShowService.getByQuery(query = name + language)
-            result = local
-                ?.results
-                ?.map { it.toTvShowEntity() }
-                ?: remoteDataSource.searchForTvShows(
+             localResults = remoteDataSource.searchForTvShows(
                     query = name,
                     language = language,
                     includeAdult = false,
@@ -77,13 +75,14 @@ class SearchRepositoryImpl(
                     .also { remoteResponseToCache = it }
                     .results
                     .map { it.toTvShowEntity() }
-            searchTvShowService.insert(remoteResponseToCache ?: return result)
+
+            searchTvShowService.insert(remoteResponseToCache ?: return localResults)
         } catch (_: GetException) {
             throw TvShowSearchFailedException()
         } catch (e: Exception) {
             addExceptionToCrashlytics(e)
         }
-        return result
+        return localResults
     }
 
     override suspend fun searchForActors(
@@ -91,13 +90,9 @@ class SearchRepositoryImpl(
     ): List<Actor> {
 
         var result: List<Actor> = emptyList()
-        var remoteResponseToCache: SearchActorsLocal? = null
+        var remoteResponseToCache: SearchActorsLocal?
         try {
-            val local = searchActorService.getByQuery(query = name + language)
-            result = local
-                ?.results
-                ?.map { it.toActorEntity() }
-                ?: remoteDataSource.searchForActors(
+            result = remoteDataSource.searchForActors(
                     query = name,
                     language = language,
                     includeAdult = false,

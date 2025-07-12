@@ -7,8 +7,13 @@ import com.london.domain.entity.Actor
 import com.london.domain.entity.Movie
 import com.london.domain.entity.TvShow
 import com.london.domain.repository.SearchRepository
+import com.london.domain.usecase.GetActorsUseCase
+import com.london.domain.usecase.GetMoviesUseCase
+import com.london.domain.usecase.GetTvShowsUseCase
 import com.london.presentation.screen.search.model.MovieUi
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -18,7 +23,9 @@ import org.koin.android.annotation.KoinViewModel
 
 @KoinViewModel
 class SearchViewModel(
-    private val searchRepository: SearchRepository
+    private val getActorsUseCase: GetActorsUseCase,
+    private val getTvShowsUseCase: GetTvShowsUseCase,
+    private val getMoviesUseCase: GetMoviesUseCase
 ) : ViewModel(), SearchInteractions {
 
     private val _uiState = MutableStateFlow(SearchUiState())
@@ -28,15 +35,17 @@ class SearchViewModel(
     private var allTvShows: List<TvShow> = emptyList()
     private var allActors: List<Actor> = emptyList()
 
+    private var searchJob: Job? = null
+
     init {
         loadInitialAllData()
     }
 
     private fun loadInitialAllData() {
         viewModelScope.launch(Dispatchers.IO) {
-            allMovies = searchRepository.searchForMovies("", "en")
-            allTvShows = searchRepository.searchForTvShows("", "en")
-            allActors = searchRepository.searchForActors("", "en")
+            allMovies = getMoviesUseCase("g", "en-US")
+            allTvShows = getTvShowsUseCase("g", "en-US")
+            allActors = getActorsUseCase("g", "en-US")
 
             _uiState.update {
                 it.copy(
@@ -50,16 +59,31 @@ class SearchViewModel(
 
     override fun onSearchQueryChange(newValue: TextFieldValue) {
         _uiState.update { it.copy(searchQuery = newValue) }
-        performSearch(newValue.text, _uiState.value.selectedCategory)
+
+        searchJob?.cancel()
+
+        searchJob = viewModelScope.launch {
+            delay(300)
+            performSearch(newValue.text, _uiState.value.selectedCategory)
+        }
     }
 
     override fun onCategorySelected(category: SearchCategory) {
         _uiState.update { it.copy(selectedCategory = category) }
-        performSearch(_uiState.value.searchQuery.text, category)
+
+        searchJob?.cancel()
+
+        searchJob = viewModelScope.launch {
+            performSearch(_uiState.value.searchQuery.text, category)
+        }
     }
 
     override fun onSearchFilterClick(query: String, category: SearchCategory) {
-        performSearch(query, category)
+        searchJob?.cancel()
+
+        searchJob = viewModelScope.launch {
+            performSearch(query, category)
+        }
     }
 
     private fun performSearch(query: String, category: SearchCategory) {
@@ -67,53 +91,73 @@ class SearchViewModel(
 
         if (trimmedQuery.isEmpty()) {
             _uiState.update { currentState ->
-                currentState.copy(
-                    movieResults = emptyList(),
-                    tvShowUiResults = emptyList(),
-                    actorUiResults = emptyList()
-                )
+                when (category) {
+                    SearchCategory.Movies -> currentState.copy(
+                        movieResults = allMovies,
+                        tvShowUiResults = emptyList(),
+                        actorUiResults = emptyList()
+                    )
+                    SearchCategory.Actors -> currentState.copy(
+                        actorUiResults = allActors,
+                        movieResults = emptyList(),
+                        tvShowUiResults = emptyList()
+                    )
+                    SearchCategory.TvShows -> currentState.copy(
+                        tvShowUiResults = allTvShows,
+                        actorUiResults = emptyList(),
+                        movieResults = emptyList()
+                    )
+                }
             }
             return
         }
 
-        filterDataByQuery(trimmedQuery, category)
+        searchWithApi(trimmedQuery, category)
     }
 
-    private fun filterDataByQuery(query: String, category: SearchCategory) {
-        val queryLower = query.lowercase()
-
-        _uiState.update { currentState ->
-            when (category) {
-                SearchCategory.Movies -> {
-                    val filteredMovies = allMovies.filter {
-                        it.name.lowercase().contains(queryLower)
+    private fun searchWithApi(query: String, category: SearchCategory) {
+        viewModelScope.launch(Dispatchers.IO) {
+            try {
+                when (category) {
+                    SearchCategory.Movies -> {
+                        val searchResults = getMoviesUseCase(query, "en-US")
+                        _uiState.update { currentState ->
+                            currentState.copy(
+                                movieResults = searchResults,
+                                actorUiResults = emptyList(),
+                                tvShowUiResults = emptyList()
+                            )
+                        }
                     }
-                    currentState.copy(
-                        movieResults = filteredMovies,
-                        actorUiResults = emptyList(),
-                        tvShowUiResults = emptyList()
-                    )
+
+                    SearchCategory.Actors -> {
+                        val searchResults = getActorsUseCase(query, "en-US")
+                        _uiState.update { currentState ->
+                            currentState.copy(
+                                actorUiResults = searchResults,
+                                movieResults = emptyList(),
+                                tvShowUiResults = emptyList()
+                            )
+                        }
+                    }
+
+                    SearchCategory.TvShows -> {
+                        val searchResults = getTvShowsUseCase(query, "en-US")
+                        _uiState.update { currentState ->
+                            currentState.copy(
+                                tvShowUiResults = searchResults,
+                                actorUiResults = emptyList(),
+                                movieResults = emptyList()
+                            )
+                        }
+                    }
                 }
-
-                SearchCategory.Actors -> {
-                    val filteredActors = allActors.filter {
-                        it.name.lowercase().contains(queryLower)
-                    }
+            } catch (e: Exception) {
+                _uiState.update { currentState ->
                     currentState.copy(
-                        actorUiResults = filteredActors,
                         movieResults = emptyList(),
-                        tvShowUiResults = emptyList()
-                    )
-                }
-
-                SearchCategory.TvShows -> {
-                    val filteredShows = allTvShows.filter {
-                        it.name.lowercase().contains(queryLower)
-                    }
-                    currentState.copy(
-                        tvShowUiResults = filteredShows,
-                        actorUiResults = emptyList(),
-                        movieResults = emptyList()
+                        tvShowUiResults = emptyList(),
+                        actorUiResults = emptyList()
                     )
                 }
             }
@@ -175,17 +219,29 @@ class SearchViewModel(
 
     override fun onRecentSearchClick(search: String) {
         _uiState.update { it.copy(searchQuery = TextFieldValue(search)) }
-        performSearch(search, _uiState.value.selectedCategory)
+
+        searchJob?.cancel()
+
+        searchJob = viewModelScope.launch {
+            performSearch(search, _uiState.value.selectedCategory)
+        }
     }
 
     fun clearSearch() {
+        searchJob?.cancel()
+
         _uiState.update {
             it.copy(
                 searchQuery = TextFieldValue(""),
-                movieResults = emptyList(),
-                tvShowUiResults = emptyList(),
-                actorUiResults = emptyList()
+                movieResults = allMovies,
+                tvShowUiResults = allTvShows,
+                actorUiResults = allActors
             )
         }
+    }
+
+    override fun onCleared() {
+        super.onCleared()
+        searchJob?.cancel()
     }
 }
