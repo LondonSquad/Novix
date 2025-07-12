@@ -66,11 +66,11 @@ fun FilterBottomSheet(
             onDismissRequest = onDismissRequest,
             onApply = { selectedGenre, imdbRating, yearRange ->
                if (selectedGenre != null) {
-                   viewModel.applyFilterBottomSheet(selectedGenre, imdbRating, yearRange)
+                   viewModel.onApplyFilter(selectedGenre, imdbRating, yearRange)
                }
                 onDismissRequest()
             },
-            onClear = { viewModel.clearFilterBottomSheet() }
+            onClear = { viewModel.onClearFilter() }
         )
     }
 }

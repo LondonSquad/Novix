@@ -31,8 +31,8 @@ class SearchViewModel(
     private val _uiState = MutableStateFlow(SearchUiState())
     val uiState: StateFlow<SearchUiState> = _uiState.asStateFlow()
 
-    private val _uiSFilterState = MutableStateFlow(FilterBottomSheetUiState())
-    var uiFilterState: StateFlow<SearchUiState> = _uiState.asStateFlow()
+    private val _filterUiState = MutableStateFlow(FilterBottomSheetUiState())
+    var filterUiState: StateFlow<SearchUiState> = _uiState.asStateFlow()
 
     private var allMovies: List<Movie> = emptyList()
     private var allTvShows: List<TvShow> = emptyList()
@@ -225,12 +225,12 @@ class SearchViewModel(
         }
     }
 
-    fun applyFilterBottomSheet(
+    fun onApplyFilter(
         selectedGenre: String,
         imdbRating: Int,
         yearRange: ClosedFloatingPointRange<Float>
     ) {
-        _uiSFilterState.update {
+        _filterUiState.update {
             it.copy(
                 selectedGenre = selectedGenre,
                 imdbRating = imdbRating,
@@ -239,8 +239,8 @@ class SearchViewModel(
         }
     }
 
-    fun clearFilterBottomSheet() {
-        _uiSFilterState.update {
+    fun onClearFilter() {
+        _filterUiState.update {
             it.copy(
                 selectedGenre = null,
                 imdbRating = 7,
