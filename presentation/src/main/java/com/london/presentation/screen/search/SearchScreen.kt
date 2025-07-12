@@ -255,17 +255,17 @@ private fun SearchChipsRow(
         horizontalArrangement = Arrangement.Start
     ) {
         NovixChip(
-            text = SearchCategory.Movies.title,
+            text = stringResource(SearchCategory.Movies.title),
             isSelected = selected == SearchCategory.Movies,
             onClick = { onSelect(SearchCategory.Movies) }
         )
         NovixChip(
-            text = SearchCategory.TvShows.title,
+            text = stringResource(SearchCategory.TvShows.title),
             isSelected = selected == SearchCategory.TvShows,
             onClick = { onSelect(SearchCategory.TvShows) }
         )
         NovixChip(
-            text = SearchCategory.Actors.title,
+            text = stringResource(SearchCategory.Actors.title),
             isSelected = selected == SearchCategory.Actors,
             onClick = { onSelect(SearchCategory.Actors) }
         )
