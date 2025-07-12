@@ -2,7 +2,6 @@ package com.london.designsystem.component
 
 import android.view.View
 import androidx.compose.foundation.border
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.defaultMinSize
@@ -18,6 +17,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.graphics.Path
 import androidx.compose.ui.graphics.drawscope.Stroke
+import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.text.style.TextAlign
@@ -36,9 +36,10 @@ fun ActorItem(
 ) {
     val config = LocalConfiguration.current
     val isRtl = config.layoutDirection == View.LAYOUT_DIRECTION_RTL
+
     Row(
         modifier = modifier,
-        verticalAlignment = Alignment.CenterVertically,
+        verticalAlignment = Alignment.Bottom,
     ) {
         if (isRtl) {
             ActorImage(
@@ -74,8 +75,8 @@ private fun ActorImage(
     val imageShape = RoundedCornerShape(
         topStart = 12.dp,
         topEnd = 12.dp,
-        bottomStart = if (isRtl) 12.dp else 0.dp,
-        bottomEnd = if (isRtl) 0.dp else 12.dp
+        bottomStart = if (isRtl) 0.dp else 12.dp,
+        bottomEnd = if (isRtl) 12.dp else 0.dp
     )
 
     AsyncImage(
@@ -83,6 +84,7 @@ private fun ActorImage(
         contentDescription = "actorImage",
         modifier = Modifier
             .size(78.dp)
+            .graphicsLayer { scaleX = if (isRtl) -1f else 1f }
             .clip(imageShape)
             .border(
                 shape = imageShape,
@@ -104,7 +106,8 @@ private fun TextSection(
 
     Column(
         modifier = modifier
-            .defaultMinSize(minHeight = 78.dp)
+            .fillMaxWidth()
+            .defaultMinSize(minHeight = 55.dp)
             .drawBehind {
                 val strokeWidth = 1.dp.toPx()
                 val cornerRadius = 12.dp.toPx()
@@ -143,13 +146,13 @@ private fun TextSection(
                 horizontal = 12.dp,
                 vertical = 8.dp
             ),
-        verticalArrangement = Arrangement.Center
+        horizontalAlignment = Alignment.CenterHorizontally,
     ) {
         Text(
             text = actorName,
             style = NovixTheme.typography.title.medium,
             color = NovixTheme.colors.body,
-            textAlign = if (LocalConfiguration.current.layoutDirection == View.LAYOUT_DIRECTION_RTL) TextAlign.Start else TextAlign.End,
+            textAlign = if (isRtl) TextAlign.Start else TextAlign.Start,
             modifier = Modifier.fillMaxWidth()
         )
 
