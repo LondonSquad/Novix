@@ -3,6 +3,7 @@ package com.london.designsystem.component
 import androidx.compose.animation.animateColorAsState
 import androidx.compose.foundation.background
 import androidx.compose.foundation.interaction.MutableInteractionSource
+import androidx.compose.foundation.interaction.collectIsFocusedAsState
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.defaultMinSize
@@ -12,6 +13,8 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.foundation.text.selection.LocalTextSelectionColors
+import androidx.compose.foundation.text.selection.TextSelectionColors
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -20,6 +23,7 @@ import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextFieldColors
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -27,6 +31,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Shape
+import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
@@ -67,9 +72,9 @@ fun OutlinedTextField(
     passwordVisible: Boolean = false,
     onPasswordVisibilityChange: () -> Unit = {},
     passwordVisibleIcon: Painter? = null,
-    passwordHiddenIcon: Painter? = null,
-    isFocused: Boolean = false
+    passwordHiddenIcon: Painter? = null
 ) {
+    val isFocused by interactionSource.collectIsFocusedAsState()
     val mergedTextStyle = textStyle.merge(TextStyle(color = NovixTheme.colors.body))
     val isPasswordEmpty = value.text.isEmpty()
 
@@ -95,52 +100,61 @@ fun OutlinedTextField(
         backgroundColor = backgroundColor,
         label = label,
         content = {
-            BasicTextField(
-                value = value,
-                onValueChange = onValueChange,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .defaultMinSize(minWidth = 268.dp, minHeight = 48.dp)
-                    .background(backgroundColor),
-                enabled = enabled,
-                readOnly = readOnly,
-                textStyle = mergedTextStyle,
-                visualTransformation = currentVisualTransformation,
-                keyboardOptions = keyboardOptions,
-                keyboardActions = keyboardActions,
-                interactionSource = interactionSource,
-                singleLine = singleLine,
-                decorationBox = { innerTextField ->
-                    OutlinedTextFieldDefaults.DecorationBox(
-                        value = value.text,
-                        visualTransformation = visualTransformation,
-                        innerTextField = innerTextField,
-                        placeholder = placeholder,
-                        leadingIcon = null,
-                        trailingIcon = null,
-                        prefix = leadingIcon?.let { { AnimatedLeadingIcon(it, isFocused) } },
-                        suffix = currentTrailingIcon,
-                        supportingText = supportingText,
-                        singleLine = singleLine,
-                        enabled = enabled,
-                        isError = isError,
-                        interactionSource = interactionSource,
-                        colors = colors,
-                        contentPadding = contentPadding,
-                        container = {
-                            OutlinedTextFieldDefaults.Container(
-                                enabled = enabled,
-                                isError = isError,
-                                interactionSource = interactionSource,
-                                colors = colors,
-                                shape = shape,
-                            )
-                        }
-                    )
-                }
-            )
+            CompositionLocalProvider(
+                LocalTextSelectionColors provides TextSelectionColors(
+                    handleColor = NovixTheme.colors.primary,
+                    backgroundColor = NovixTheme.colors.primary.copy(alpha = 0.3f)
+                )
+            ) {
+                BasicTextField(
+                    value = value,
+                    onValueChange = onValueChange,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .defaultMinSize(minWidth = 268.dp, minHeight = 48.dp)
+                        .background(backgroundColor),
+                    enabled = enabled,
+                    readOnly = readOnly,
+                    textStyle = mergedTextStyle,
+                    visualTransformation = currentVisualTransformation,
+                    keyboardOptions = keyboardOptions,
+                    keyboardActions = keyboardActions,
+                    interactionSource = interactionSource,
+                    singleLine = singleLine,
+                    cursorBrush = SolidColor(NovixTheme.colors.primary),
+                    decorationBox = { innerTextField ->
+                        OutlinedTextFieldDefaults.DecorationBox(
+                            value = value.text,
+                            visualTransformation = currentVisualTransformation,
+                            innerTextField = innerTextField,
+                            placeholder = placeholder,
+                            leadingIcon = null,
+                            trailingIcon = null,
+                            prefix = leadingIcon?.let { { AnimatedLeadingIcon(it, isFocused) } },
+                            suffix = currentTrailingIcon,
+                            supportingText = supportingText,
+                            singleLine = singleLine,
+                            enabled = enabled,
+                            isError = isError,
+                            interactionSource = interactionSource,
+                            colors = colors,
+                            contentPadding = contentPadding,
+                            container = {
+                                OutlinedTextFieldDefaults.Container(
+                                    enabled = enabled,
+                                    isError = isError,
+                                    interactionSource = interactionSource,
+                                    colors = colors,
+                                    shape = shape,
+                                )
+                            }
+                        )
+                    }
+                )
+            }
         }
     )
+
 }
 
 @Composable
@@ -152,6 +166,11 @@ private fun getDefaultTextFieldColors(): TextFieldColors {
         unfocusedTextColor = NovixTheme.colors.body,
         focusedPlaceholderColor = NovixTheme.colors.hint,
         unfocusedPlaceholderColor = NovixTheme.colors.hint,
+        cursorColor = NovixTheme.colors.primary,
+        selectionColors = androidx.compose.foundation.text.selection.TextSelectionColors(
+            handleColor = NovixTheme.colors.primary,
+            backgroundColor = NovixTheme.colors.primary.copy(alpha = 0.4f)
+        )
     )
 }
 

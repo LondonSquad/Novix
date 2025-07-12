@@ -51,14 +51,14 @@ fun SaveIcon(
                 shape = RoundedCornerShape(8.dp)
             )
             .padding(6.dp)
-            .noRippleClickable{
+            .noRippleClickable {
                 onSaveClick()
             }
     ) {
         Icon(
             painter = painterResource(R.drawable.icon_remove),
             contentDescription = "Not Save",
-            tint = NovixTheme.colors.strokeHigh,
+            tint = NovixTheme.colors.onPrimary,
             modifier = Modifier
                 .scale(1f - animatedProgress)
                 .alpha(1f - animatedProgress)
@@ -67,7 +67,7 @@ fun SaveIcon(
         Icon(
             painter = painterResource(R.drawable.icon_save),
             contentDescription = "Save",
-            tint = NovixTheme.colors.strokeHigh,
+            tint = NovixTheme.colors.onPrimary,
             modifier = Modifier
                 .scale(animatedProgress)
                 .alpha(animatedProgress)
