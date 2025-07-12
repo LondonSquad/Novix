@@ -63,9 +63,13 @@ class SearchRepositoryImpl(
     ): List<TvShow> {
 
         var localResults: List<TvShow> = emptyList()
-        var remoteResponseToCache: SearchTvShowLocal?
+        var remoteResponseToCache: SearchTvShowLocal? = null
         try {
-             localResults = remoteDataSource.searchForTvShows(
+            val local = searchTvShowService.getByQuery(query = name + language)
+            localResults = local
+                ?.results
+                ?.map { it.toTvShowEntity() }
+                ?: remoteDataSource.searchForTvShows(
                     query = name,
                     language = language,
                     includeAdult = false,
@@ -90,9 +94,13 @@ class SearchRepositoryImpl(
     ): List<Actor> {
 
         var result: List<Actor> = emptyList()
-        var remoteResponseToCache: SearchActorsLocal?
+        var remoteResponseToCache: SearchActorsLocal? = null
         try {
-            result = remoteDataSource.searchForActors(
+            val local = searchActorService.getByQuery(query = name + language)
+            result = local
+                ?.results
+                ?.map { it.toActorEntity() }
+                ?: remoteDataSource.searchForActors(
                     query = name,
                     language = language,
                     includeAdult = false,
