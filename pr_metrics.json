@@ -38,9 +38,18 @@
       "id": 68463985,
       "url": "https://github.com/Al-Taie"
     },
-    "approvals": [],
-    "first_approved_at": null,
-    "time_to_first_approval_minutes": null,
+    "approvals": [
+      {
+        "reviewer": {
+          "login": "abdo-essam",
+          "id": 92235360,
+          "url": "https://github.com/abdo-essam"
+        },
+        "submitted_at": "2025-07-12T23:54:26Z"
+      }
+    ],
+    "first_approved_at": "2025-07-12T23:54:26Z",
+    "time_to_first_approval_minutes": 32.18333333333333,
     "required_approvals_met_at": null,
     "time_to_required_approvals_minutes": null,
     "closed_at": null,
