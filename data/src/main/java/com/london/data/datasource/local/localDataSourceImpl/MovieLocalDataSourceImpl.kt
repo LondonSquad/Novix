@@ -36,6 +36,11 @@ class MovieLocalDataSourceImpl(
     override suspend fun getByDate(date: Long): SearchMoviesLocal =
         searchMoviesDao.executeGetByDate(date)
 
-    override suspend fun getByQuery(query: String): SearchMoviesLocal =
-        searchMoviesDao.executeGetByQuery(query.generateHash())
+    override suspend fun getByQuery(query: String): SearchMoviesLocal? {
+        return try {
+            searchMoviesDao.executeGetByQuery(query.generateHash())
+        } catch (_: Exception) {
+            null
+        }
+    }
 }

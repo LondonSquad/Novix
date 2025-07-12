@@ -35,6 +35,11 @@ class ActorLocalDataSourceImpl(
     override suspend fun getByDate(date: Long): SearchActorsLocal =
         searchActorsDao.executeGetByDate(date)
 
-    override suspend fun getByQuery(query: String): SearchActorsLocal =
-        searchActorsDao.executeGetByQuery(query.generateHash())
+    override suspend fun getByQuery(query: String): SearchActorsLocal?{
+        return try {
+            searchActorsDao.executeGetByQuery(query.generateHash())
+        } catch (_: Exception) {
+            null
+        }
+    }
 }

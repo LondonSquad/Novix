@@ -10,15 +10,16 @@ import com.london.data.datasource.util.FirebaseCrashReporter
 import com.london.data.repository.SearchRepositoryImpl
 import com.london.domain.repository.SearchRepository
 import org.koin.core.annotation.Module
+import org.koin.core.annotation.Named
 import org.koin.core.annotation.Single
 
 @Module
 class RepositoryModule {
     @Single
     fun provideSearchRepository(
-        tvShowLocalDataSource: LocalDataSource<SearchTvShowLocal>,
-        actorLocalDataSource: LocalDataSource<SearchActorsLocal>,
-        movieLocalDataSource: LocalDataSource<SearchMoviesLocal>,
+        @Named("tvShow") tvShowLocalDataSource: LocalDataSource<SearchTvShowLocal>,
+        @Named("actor") actorLocalDataSource: LocalDataSource<SearchActorsLocal>,
+        @Named("movie") movieLocalDataSource: LocalDataSource<SearchMoviesLocal>,
         remoteDataSource: RemoteDataSource,
         crashReporter: CrashReporter
     ): SearchRepository {
