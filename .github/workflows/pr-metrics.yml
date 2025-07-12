@@ -14,7 +14,6 @@ concurrency:
 
 jobs:
   update_pr_metrics:
-    if: github.event.pull_request || github.event.pull_request_review
     runs-on: ubuntu-latest
     permissions:
       contents: write
@@ -238,7 +237,7 @@ jobs:
                 '
                 map(if .pr_number == ($pr_number | tonumber) then
                   .closed_at = $closed_at
-                  | (if ($merged_at | length > 0) then
+                  | (if ($merged_at != null and $merged_at != "") then
                       .merged_at = $merged_at
                       | .merged_by = {login: $merged_by_login, id: ($merged_by_id | tonumber), url: $merged_by_html_url}
                       | .status = "merged"
