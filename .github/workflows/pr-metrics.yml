@@ -103,12 +103,15 @@ jobs:
           REQUIRED_APPROVALS=${{ env.REQUIRED_APPROVALS }}
 
           echo "--- DEBUG: Update pr_metrics.json Step ---"
-          echo "Checking if $PR_FILE exists..."
+          echo "Checking if $PR_FILE exists and is valid..."
           if [ ! -f "$PR_FILE" ]; then
-            echo "File $PR_FILE does not exist. Creating with empty array."
-            echo "[]" > "$PR_FILE"
+          echo "File $PR_FILE does not exist. Creating with empty array."
+          echo "[]" > "$PR_FILE"
+          elif [ ! -s "$PR_FILE" ]; then
+          echo "File $PR_FILE is empty. Initializing with empty array."
+          echo "[]" > "$PR_FILE"
           else
-            echo "File $PR_FILE exists."
+          echo "File $PR_FILE exists and has content."
           fi
 
           echo "Content of $PR_FILE before jq:"
