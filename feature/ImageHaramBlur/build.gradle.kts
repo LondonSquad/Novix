@@ -1,6 +1,10 @@
+import com.london.buildsrc.AppConfig
+
 plugins {
     alias(libs.plugins.android.library)
     alias(libs.plugins.kotlin.android)
+    alias(libs.plugins.kotlin.compose)
+    alias(libs.plugins.kotlinx.kover)
 }
 
 android {
@@ -24,11 +28,18 @@ android {
         }
     }
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_11
-        targetCompatibility = JavaVersion.VERSION_11
+        sourceCompatibility = AppConfig.Version.JVM
+        targetCompatibility = AppConfig.Version.JVM
     }
     kotlinOptions {
-        jvmTarget = "11"
+        jvmTarget = AppConfig.Version.JVM.toString()
+    }
+    buildFeatures {
+        compose = true
+    }
+
+    aaptOptions {
+        noCompress("tflite")
     }
 }
 

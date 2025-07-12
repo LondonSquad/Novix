@@ -25,5 +25,6 @@ object AppConfig {
         const val PRESENTATION = "$APPLICATION_ID_GROUP.presentation"
         const val DATA = "$APPLICATION_ID_GROUP.data"
         const val DOMAIN = "$APPLICATION_ID_GROUP.domain"
+        const val FEATURE_IMAGE_HARAM_BLUR = "$APPLICATION_ID_GROUP.feature.imageharamblur"
     }
 }
