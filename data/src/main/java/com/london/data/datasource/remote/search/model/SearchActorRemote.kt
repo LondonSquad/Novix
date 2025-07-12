@@ -57,4 +57,12 @@ data class KnownFor(
     val voteAverage: Double,
     @SerialName("vote_count")
     val voteCount: Int,
+    @SerialName("name")
+    val name: String? = null,
+    @SerialName("original_name")
+    val originalName: String? = null,
+    @SerialName("first_air_date")
+    val firstAirDate: String? = null,
+    @SerialName("origin_country")
+    val originCountry: List<String>? = null
 )

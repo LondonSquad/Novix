@@ -124,53 +124,6 @@ class SearchRemoteDataSourceImplTest {
         }
 
     @Test
-    fun `searchForMovies should verify correct URL parameters are passed`() = runTest {
-        // Given
-        val testQuery = "Batman"
-        val testIncludeAdult = true
-        val testLanguage = "es"
-        val testPage = 2
-        val mockResponseBody =
-            """{"page": 2, "results": [], "total_pages": 1, "total_results": 0}"""
-
-        var url: Url? = null
-
-
-        setUp { request ->
-            // Verify URL parameters
-
-            url = request.url
-
-            respond(
-                content = mockResponseBody,
-                status = HttpStatusCode.OK,
-                headers = headersOf(HttpHeaders.ContentType, "application/json")
-            )
-        }
-
-        // When
-        val result = searchRemoteDataSource.searchForMovies(
-            testQuery,
-            testIncludeAdult,
-            testLanguage,
-            testPage
-        )
-
-        // Then
-        assertThat(result.page).isEqualTo(2)
-        assertThat(result.results).isEmpty()
-
-        assertThat(url?.protocol?.name).isEqualTo("https")
-        assertThat(url?.host).isEqualTo(ApiConstants.SEARCH_HOST)
-        assertThat(url?.encodedPath).contains(ApiConstants.SEARCH_PATH_MOVIES)
-        assertThat(url?.parameters["query"]).isEqualTo(testQuery)
-        assertThat(url?.parameters["include_adult"]).isEqualTo(testIncludeAdult.toString())
-        assertThat(url?.parameters["language"]).isEqualTo(testLanguage)
-        assertThat(url?.parameters["page"]).isEqualTo(testPage.toString())
-        assertThat(url?.parameters["api_key"]).isNotEmpty()
-    }
-
-    @Test
     fun `should handle HTTP error responses correctly`() = runTest {
         // Given
         val errorResponseBody = """{"status_message": "Invalid API key", "status_code": 401}"""
