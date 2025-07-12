@@ -38,15 +38,16 @@ import com.london.designsystem.component.button.OutlineButton
 import com.london.designsystem.component.button.PrimaryButton
 import com.london.designsystem.theme.NovixTheme
 import com.london.presentation.R
+import com.london.presentation.screen.search.SearchViewModel
+import org.koin.androidx.compose.koinViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun FilterBottomSheet(
     modifier: Modifier = Modifier,
+    viewModel: SearchViewModel = koinViewModel(),
     onDismissRequest: () -> Unit
 ) {
-    var uiState by remember { mutableStateOf(FilterBottomSheetUiState()) }
-
     ModalBottomSheet(
         onDismissRequest = onDismissRequest,
         sheetState = rememberModalBottomSheetState(
@@ -64,16 +65,12 @@ fun FilterBottomSheet(
             modifier = modifier,
             onDismissRequest = onDismissRequest,
             onApply = { selectedGenre, imdbRating, yearRange ->
-                uiState = uiState.copy(
-                    selectedGenre = selectedGenre,
-                    imdbRating = imdbRating,
-                    yearRange = yearRange
-                )
+               if (selectedGenre != null) {
+                   viewModel.applyFilterBottomSheet(selectedGenre, imdbRating, yearRange)
+               }
                 onDismissRequest()
             },
-            onClear = {
-                uiState = FilterBottomSheetUiState()
-            }
+            onClear = { viewModel.clearFilterBottomSheet() }
         )
     }
 }

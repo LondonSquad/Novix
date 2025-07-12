@@ -9,6 +9,7 @@ import com.london.domain.entity.TvShow
 import com.london.domain.usecase.GetActorsUseCase
 import com.london.domain.usecase.GetMoviesUseCase
 import com.london.domain.usecase.GetTvShowsUseCase
+import com.london.presentation.composables.filterbottomsheet.FilterBottomSheetUiState
 import com.london.presentation.screen.search.model.MovieUi
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
@@ -29,6 +30,9 @@ class SearchViewModel(
 
     private val _uiState = MutableStateFlow(SearchUiState())
     val uiState: StateFlow<SearchUiState> = _uiState.asStateFlow()
+
+    private val _uiSFilterState = MutableStateFlow(FilterBottomSheetUiState())
+    var uiFilterState: StateFlow<SearchUiState> = _uiState.asStateFlow()
 
     private var allMovies: List<Movie> = emptyList()
     private var allTvShows: List<TvShow> = emptyList()
@@ -217,6 +221,30 @@ class SearchViewModel(
                 movieResults = allMovies,
                 tvShowUiResults = allTvShows,
                 actorUiResults = allActors
+            )
+        }
+    }
+
+    fun applyFilterBottomSheet(
+        selectedGenre: String,
+        imdbRating: Int,
+        yearRange: ClosedFloatingPointRange<Float>
+    ) {
+        _uiSFilterState.update {
+            it.copy(
+                selectedGenre = selectedGenre,
+                imdbRating = imdbRating,
+                yearRange = yearRange
+            )
+        }
+    }
+
+    fun clearFilterBottomSheet() {
+        _uiSFilterState.update {
+            it.copy(
+                selectedGenre = null,
+                imdbRating = 7,
+                yearRange = 1980f..2025f
             )
         }
     }
