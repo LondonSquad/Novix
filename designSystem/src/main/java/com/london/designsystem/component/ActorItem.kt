@@ -1,5 +1,6 @@
 package com.london.designsystem.component
 
+import android.view.View
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -15,9 +16,10 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.drawBehind
-import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.graphics.Path
+import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
@@ -32,86 +34,133 @@ fun ActorItem(
     imageRes: Any,
     modifier: Modifier = Modifier
 ) {
+    val config = LocalConfiguration.current
+    val isRtl = config.layoutDirection == View.LAYOUT_DIRECTION_RTL
     Row(
         modifier = modifier,
-        verticalAlignment = Alignment.CenterVertically
+        verticalAlignment = Alignment.CenterVertically,
     ) {
-        AsyncImage(
-            model = imageRes,
-            contentDescription = "actorImage",
-            modifier = Modifier
-                .size(78.dp)
-                .clip(
-                    shape = RoundedCornerShape(
-                        topStart = 12.dp,
-                        topEnd = 12.dp,
-                        bottomStart = 12.dp
-                    )
-                )
-                .border(
-                    shape = RoundedCornerShape(
-                        topStart = 12.dp,
-                        topEnd = 12.dp,
-                        bottomStart = 12.dp
-                    ), width = 1.dp,
-                    color = NovixTheme.colors.stroke
-                ),
-            contentScale = ContentScale.Crop
-        )
-        val color = NovixTheme.colors.stroke
-        Column(
-            modifier = Modifier
-                .align(Alignment.Bottom)
-                .fillMaxWidth()
-                .defaultMinSize(minHeight = 55.dp)
-                .drawBehind {
-                    val strokeWidth = 1.dp.toPx()
-                    val cornerRadius = 12.dp.toPx()
+        if (isRtl) {
+            ActorImage(
+                imageRes = imageRes,
+                isRtl = true
+            )
+            TextSection(
+                actorName = actorName,
+                characterName = characterName,
+                isRtl = true,
+                modifier = Modifier.weight(1f)
+            )
+        } else {
+            ActorImage(
+                imageRes = imageRes,
+                isRtl = false
+            )
+            TextSection(
+                actorName = actorName,
+                characterName = characterName,
+                isRtl = false,
+                modifier = Modifier.weight(1f)
+            )
+        }
+    }
+}
 
-                    val left = 0f
-                    val top = 0f
-                    val right = size.width
-                    val bottom = size.height
+@Composable
+private fun ActorImage(
+    imageRes: Any,
+    isRtl: Boolean
+) {
+    val imageShape = RoundedCornerShape(
+        topStart = 12.dp,
+        topEnd = 12.dp,
+        bottomStart = if (isRtl) 12.dp else 0.dp,
+        bottomEnd = if (isRtl) 0.dp else 12.dp
+    )
 
-                    val path =Path().apply {
+    AsyncImage(
+        model = imageRes,
+        contentDescription = "actorImage",
+        modifier = Modifier
+            .size(78.dp)
+            .clip(imageShape)
+            .border(
+                shape = imageShape,
+                width = 1.dp,
+                color = NovixTheme.colors.stroke
+            ),
+        contentScale = ContentScale.Crop
+    )
+}
+
+@Composable
+private fun TextSection(
+    actorName: String,
+    characterName: String?,
+    isRtl: Boolean,
+    modifier: Modifier = Modifier
+) {
+    val color = NovixTheme.colors.stroke
+
+    Column(
+        modifier = modifier
+            .defaultMinSize(minHeight = 78.dp)
+            .drawBehind {
+                val strokeWidth = 1.dp.toPx()
+                val cornerRadius = 12.dp.toPx()
+
+                val left = 0f
+                val top = 0f
+                val right = size.width
+                val bottom = size.height
+
+                val path = Path().apply {
+                    if (isRtl) {
+                        moveTo(right, top)
+                        lineTo(left + cornerRadius, top)
+                        quadraticTo(left, top, left, top + cornerRadius)
+                        lineTo(left, bottom - cornerRadius)
+                        quadraticTo(left, bottom, left + cornerRadius, bottom)
+                        lineTo(right, bottom)
+
+                    } else {
+
                         moveTo(left, top)
-
                         lineTo(right - cornerRadius, top)
                         quadraticTo(right, top, right, top + cornerRadius)
-
                         lineTo(right, bottom - cornerRadius)
                         quadraticTo(right, bottom, right - cornerRadius, bottom)
-
-                        lineTo(left, bottom - 1)
-                        quadraticTo(left, bottom, left + cornerRadius, bottom)
+                        lineTo(left, bottom)
                     }
-                    drawPath(
-                        path = path,
-                        color = color,
-                        style = Stroke(width = strokeWidth)
-                    )
                 }
-                .padding(
-                    start = 8.dp,
-                    top = 4.5.dp,
-                    bottom = 4.5.dp
-                ),
-            verticalArrangement = Arrangement.Center,
-        ) {
-            Text(
-                text = actorName,
-                style = NovixTheme.typography.title.medium,
-                color = NovixTheme.colors.body,
-                textAlign = TextAlign.Start
-            )
-            characterName?.let {
-                Text(
-                    text = it,
-                    style = NovixTheme.typography.label.small,
-                    color = NovixTheme.colors.hint,
-                    textAlign = TextAlign.Start
+                drawPath(
+                    path = path,
+                    color = color,
+                    style = Stroke(width = strokeWidth)
                 )
             }
+            .padding(
+                horizontal = 12.dp,
+                vertical = 8.dp
+            ),
+        verticalArrangement = Arrangement.Center
+    ) {
+        Text(
+            text = actorName,
+            style = NovixTheme.typography.title.medium,
+            color = NovixTheme.colors.body,
+            textAlign = if (LocalConfiguration.current.layoutDirection == View.LAYOUT_DIRECTION_RTL) TextAlign.Start else TextAlign.End,
+            modifier = Modifier.fillMaxWidth()
+        )
+
+        characterName?.let {
+            Text(
+                text = it,
+                style = NovixTheme.typography.label.small,
+                color = NovixTheme.colors.hint,
+                textAlign = if (isRtl) TextAlign.End else TextAlign.Start,
+                modifier = Modifier.fillMaxWidth()
+            )
         }
     }
 }
