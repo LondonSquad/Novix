@@ -23,6 +23,7 @@ jobs:
         with:
           app-id: ${{ vars.APP_ID }}
           private-key: ${{ secrets.APP_PRIVATE_KEY }}
+
       - name: Checkout repository
         uses: actions/checkout@v4
         with:
@@ -37,41 +38,52 @@ jobs:
       - name: Prepare JSON data
         id: prepare_data
         run: |
-          PR_NUMBER=${{ github.event.pull_request.number || github.event.pull_request_review.pull_request.number }}
-          PR_URL="${{ github.event.pull_request.html_url || github.event.pull_request_review.pull_request.html_url }}"
-          PR_TITLE="${{ github.event.pull_request.title || github.event.pull_request_review.pull_request.title }}"
-          PR_CREATED_AT="${{ github.event.pull_request.created_at || github.event.pull_request_review.pull_request.created_at }}"
-          PR_HEAD_REF="${{ github.event.pull_request.head.ref || github.event.pull_request_review.pull_request.head.ref }}"
-          PR_BASE_REF="${{ github.event.pull_request.base.ref || github.event.pull_request_review.pull_request.base.ref }}"
-          PR_USER_LOGIN="${{ github.event.pull_request.user.login || github.event.pull_request_review.pull_request.user.login }}"
-          PR_USER_ID="${{ github.event.pull_request.user.id || github.event.pull_request_review.pull_request.user.id }}"
-          PR_USER_HTML_URL="${{ github.event.pull_request.user.html_url || github.event.pull_request_review.pull_request.user.html_url }}"
+          EVENT_NAME="${{ github.event_name }}"
+
+          if [[ "$EVENT_NAME" == "pull_request_review" ]]; then
+            PR_NUMBER="${{ github.event.pull_request_review.number }}"
+            PR_URL="${{ github.event.pull_request_review.html_url }}"
+            PR_TITLE="${{ github.event.pull_request_review.title }}"
+            PR_CREATED_AT="${{ github.event.pull_request_review.created_at }}"
+            PR_HEAD_REF="${{ github.event.pull_request_review.head.ref }}"
+            PR_BASE_REF="${{ github.event.pull_request_review.base.ref }}"
+            PR_USER_LOGIN="${{ github.event.pull_request_review.user.login }}"
+            PR_USER_ID="${{ github.event.pull_request_review.user.id }}"
+            PR_USER_HTML_URL="${{ github.event.pull_request_review.user.html_url }}"
+          else
+            PR_NUMBER="${{ github.event.pull_request.number }}"
+            PR_URL="${{ github.event.pull_request.html_url }}"
+            PR_TITLE="${{ github.event.pull_request.title }}"
+            PR_CREATED_AT="${{ github.event.pull_request.created_at }}"
+            PR_HEAD_REF="${{ github.event.pull_request.head.ref }}"
+            PR_BASE_REF="${{ github.event.pull_request.base.ref }}"
+            PR_USER_LOGIN="${{ github.event.pull_request.user.login }}"
+            PR_USER_ID="${{ github.event.pull_request.user.id }}"
+            PR_USER_HTML_URL="${{ github.event.pull_request.user.html_url }}"
+          fi
 
           WEEK_NUMBER=$(date -d "${PR_CREATED_AT}" +%G-W%V)
 
-          echo "PR_NUMBER=$PR_NUMBER" >> $GITHUB_OUTPUT
-          echo "PR_URL=$PR_URL" >> $GITHUB_OUTPUT
-          echo "PR_TITLE=$PR_TITLE" >> $GITHUB_OUTPUT
-          echo "PR_CREATED_AT=$PR_CREATED_AT" >> $GITHUB_OUTPUT
-          echo "PR_HEAD_REF=$PR_HEAD_REF" >> $GITHUB_OUTPUT
-          echo "PR_BASE_REF=$PR_BASE_REF" >> $GITHUB_OUTPUT
-          echo "PR_USER_LOGIN=$PR_USER_LOGIN" >> $GITHUB_OUTPUT
-          echo "PR_USER_ID=$PR_USER_ID" >> $GITHUB_OUTPUT
-          echo "PR_USER_HTML_URL=$PR_USER_HTML_URL" >> $GITHUB_OUTPUT
-          echo "WEEK_NUMBER=$WEEK_NUMBER" >> $GITHUB_OUTPUT
+          {
+            echo "PR_NUMBER=$PR_NUMBER"
+            echo "PR_URL=$PR_URL"
+            echo "PR_TITLE=$PR_TITLE"
+            echo "PR_CREATED_AT=$PR_CREATED_AT"
+            echo "PR_HEAD_REF=$PR_HEAD_REF"
+            echo "PR_BASE_REF=$PR_BASE_REF"
+            echo "PR_USER_LOGIN=$PR_USER_LOGIN"
+            echo "PR_USER_ID=$PR_USER_ID"
+            echo "PR_USER_HTML_URL=$PR_USER_HTML_URL"
+            echo "WEEK_NUMBER=$WEEK_NUMBER"
+          } >> $GITHUB_OUTPUT
 
-          if [[ "${{ github.event_name }}" == "pull_request_review" && "${{ github.event.review.state }}" == "approved" ]]; then
-            REVIEWER_LOGIN="${{ github.event.review.user.login }}"
-            REVIEWER_ID="${{ github.event.review.user.id }}"
-            REVIEWER_HTML_URL="${{ github.event.review.user.html_url }}"
-            APPROVAL_SUBMITTED_AT="${{ github.event.review.submitted_at }}"
-
-            echo "REVIEWER_LOGIN=$REVIEWER_LOGIN" >> $GITHUB_OUTPUT
-            echo "REVIEWER_ID=$REVIEWER_ID" >> $GITHUB_OUTPUT
-            echo "REVIEWER_HTML_URL=$REVIEWER_HTML_URL" >> $GITHUB_OUTPUT
-            echo "APPROVAL_SUBMITTED_AT=$APPROVAL_SUBMITTED_AT" >> $GITHUB_OUTPUT
+          if [[ "$EVENT_NAME" == "pull_request_review" && "${{ github.event.review.state }}" == "approved" ]]; then
+            echo "REVIEWER_LOGIN=${{ github.event.review.user.login }}" >> $GITHUB_OUTPUT
+            echo "REVIEWER_ID=${{ github.event.review.user.id }}" >> $GITHUB_OUTPUT
+            echo "REVIEWER_HTML_URL=${{ github.event.review.user.html_url }}" >> $GITHUB_OUTPUT
+            echo "APPROVAL_SUBMITTED_AT=${{ github.event.review.submitted_at }}" >> $GITHUB_OUTPUT
             echo "EVENT_TYPE=approval" >> $GITHUB_OUTPUT
-          elif [[ "${{ github.event_name }}" == "pull_request" ]]; then
+          elif [[ "$EVENT_NAME" == "pull_request" ]]; then
             echo "PR_ACTION=${{ github.event.action }}" >> $GITHUB_OUTPUT
             echo "PR_CLOSED_AT=${{ github.event.pull_request.closed_at }}" >> $GITHUB_OUTPUT
             echo "PR_MERGED_AT=${{ github.event.pull_request.merged_at }}" >> $GITHUB_OUTPUT
@@ -83,7 +95,7 @@ jobs:
 
       - name: Update pr_metrics.json
         run: |
-          PR_FILE="pr_metrics.json" # Adjust path if pr_metrics.json is in a subdirectory
+          PR_FILE="pr_metrics.json"
           REQUIRED_APPROVALS=${{ env.REQUIRED_APPROVALS }}
 
           echo "--- DEBUG: Update pr_metrics.json Step ---"
@@ -101,7 +113,7 @@ jobs:
           JQ_DATA=$(cat "$PR_FILE")
 
           EVENT_TYPE="${{ steps.prepare_data.outputs.EVENT_TYPE }}"
-          PR_NUMBER_JQ=${{ steps.prepare_data.outputs.PR_NUMBER }}
+          PR_NUMBER_JQ="${{ steps.prepare_data.outputs.PR_NUMBER }}"
 
           echo "PR_NUMBER_JQ: $PR_NUMBER_JQ"
           echo "EVENT_TYPE: $EVENT_TYPE"
@@ -121,13 +133,11 @@ jobs:
               --argjson required_approvals "$REQUIRED_APPROVALS" \
               '
               map(if .pr_number == ($pr_number | tonumber) then
-                .approvals += [
-                  {
-                    reviewer: {login: $reviewer_login, id: ($reviewer_id | tonumber), url: $reviewer_html_url},
-                    submitted_at: $approval_submitted_at
-                  }
-                ]
-                | unique_by(.approvals[].reviewer.id)
+                .approvals += [{
+                  reviewer: {login: $reviewer_login, id: ($reviewer_id | tonumber), url: $reviewer_html_url},
+                  submitted_at: $approval_submitted_at
+                }]
+                | .approvals |= unique_by(.reviewer.id)
                 | .approvals |= sort_by(.submitted_at)
                 | (if .first_approved_at == null then
                      (
@@ -136,9 +146,7 @@ jobs:
                          ((strptime("%Y-%m-%dT%H:%M:%SZ") | mktime) - ($opened_at | strptime("%Y-%m-%dT%H:%M:%SZ") | mktime)) / 60
                        )
                      )
-                   else .
-                   end
-                )
+                   else . end)
                 | (if (.approvals | length) >= $required_approvals then
                      (
                        .required_approvals_met_at = (.approvals | .[($required_approvals - 1)].submitted_at)
@@ -149,10 +157,9 @@ jobs:
                      )
                    else
                      (if .status == "approved_required" or .status == "merged" or .status == "closed" then . else .status = "pending_approval" end)
-                   end
-                )
+                   end)
               else . end)
-            ' || empty)
+              ' || true)
           elif [[ "$EVENT_TYPE" == "pr_lifecycle" ]]; then
             PR_ACTION="${{ steps.prepare_data.outputs.PR_ACTION }}"
             echo "Processing 'pr_lifecycle' event with action: $PR_ACTION"
@@ -205,19 +212,12 @@ jobs:
                 --arg pr_number "$PR_NUMBER_JQ" \
                 --argjson new_pr_data "$NEW_PR_DATA" \
                 '
-                . as $original |
-                reduce .[] as $item (
-                  false;
-                  if $item.pr_number == ($pr_number | tonumber) then true else . end
-                ) as $found_pr |
-                if $found_pr then
-                  map(if .pr_number == ($pr_number | tonumber) then
-                    if $new_pr_data.status == "reopened" then $new_pr_data else . end
-                  else . end)
+                if any(.[]; .pr_number == ($pr_number | tonumber)) then
+                  map(if .pr_number == ($pr_number | tonumber) then $new_pr_data else . end)
                 else
                   . + [$new_pr_data]
                 end
-                ' || empty)
+                ' || true)
               echo "UPDATED_JQ_DATA after 'opened' logic:"
               echo "$UPDATED_JQ_DATA"
 
@@ -225,11 +225,11 @@ jobs:
               echo "Action is 'closed'."
               UPDATED_JQ_DATA=$(echo "$JQ_DATA" | jq \
                 --arg pr_number "$PR_NUMBER_JQ" \
-                --arg closed_at "$PR_CLOSED_AT" \
-                --arg merged_at "$PR_MERGED_AT" \
-                --arg merged_by_login "$PR_MERGED_BY_LOGIN" \
-                --arg merged_by_id "$PR_MERGED_BY_ID" \
-                --arg merged_by_html_url "$PR_MERGED_BY_HTML_URL" \
+                --arg closed_at "${{ steps.prepare_data.outputs.PR_CLOSED_AT }}" \
+                --arg merged_at "${{ steps.prepare_data.outputs.PR_MERGED_AT }}" \
+                --arg merged_by_login "${{ steps.prepare_data.outputs.PR_MERGED_BY_LOGIN }}" \
+                --arg merged_by_id "${{ steps.prepare_data.outputs.PR_MERGED_BY_ID }}" \
+                --arg merged_by_html_url "${{ steps.prepare_data.outputs.PR_MERGED_BY_HTML_URL }}" \
                 '
                 map(if .pr_number == ($pr_number | tonumber) then
                   .closed_at = $closed_at
@@ -239,10 +239,9 @@ jobs:
                       | .status = "merged"
                     else
                       .status = "closed"
-                    end
-                  )
+                    end)
                 else . end)
-              ' || empty)
+                ' || true)
             elif [[ "$PR_ACTION" == "reopened" ]]; then
               echo "Action is 'reopened'."
               UPDATED_JQ_DATA=$(echo "$JQ_DATA" | jq \
@@ -254,7 +253,7 @@ jobs:
                   | .merged_at = null
                   | .merged_by = null
                 else . end)
-              ' || empty)
+                ' || true)
             fi
           fi
 
