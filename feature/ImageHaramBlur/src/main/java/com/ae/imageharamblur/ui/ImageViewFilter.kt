@@ -39,6 +39,7 @@ fun ImageViewFilter(
 
     var shouldBlur by remember(model) { mutableStateOf(false) }
     var isProcessing by remember(model) { mutableStateOf(false) }
+    var showImage by remember(model) { mutableStateOf(!enableModeration) }
 
     val processor = remember(enableModeration) {
         if (enableModeration) {
@@ -59,54 +60,57 @@ fun ImageViewFilter(
                 .crossfade(true)
                 .allowHardware(false)
                 .memoryCachePolicy(CachePolicy.ENABLED)
-                .listener(
-                    onSuccess = { _, result ->
-                        if (enableModeration && processor != null && !isProcessing) {
-                            isProcessing = true
-                            scope.launch {
-                                try {
-                                    result.drawable.toBitmap()?.let { bitmap ->
-                                        val processingResult = withContext(Dispatchers.Default) {
-                                            processor.processImage(
-                                                bitmap = bitmap,
-                                                detectFemales = true,
-                                                detectMales = false,
-                                                useContentDetection = true,
-                                                strictMode = false
-                                            )
-                                        }
-                                        shouldBlur = processingResult.shouldModerate
-                                        onModerationResult?.invoke(
-                                            processingResult.shouldModerate,
-                                            processingResult.reason
-                                        )
-                                    }
-                                } catch (e: Exception) {
-                                    e.printStackTrace()
-                                } finally {
-                                    isProcessing = false
-                                }
-                            }
-                        }
-                    }
-                )
                 .build(),
             contentDescription = contentDescription,
             contentScale = contentScale,
             placeholder = placeholder,
             error = error,
             onLoading = onLoading,
-            onSuccess = onSuccess,
+            onSuccess = { state ->
+                onSuccess?.invoke(state)
+
+                if (enableModeration && processor != null && !isProcessing) {
+                    isProcessing = true
+                    scope.launch {
+                        try {
+                            val bitmap = state.result.drawable.toBitmap()
+                            if (bitmap != null) {
+                                val processingResult = withContext(Dispatchers.Default) {
+                                    processor.processImage(
+                                        bitmap = bitmap,
+                                        detectFemales = true,
+                                        detectMales = false,
+                                        useContentDetection = true,
+                                        strictMode = false
+                                    )
+                                }
+                                shouldBlur = processingResult.shouldModerate
+                                showImage = true
+                                onModerationResult?.invoke(
+                                    processingResult.shouldModerate,
+                                    processingResult.reason
+                                )
+                            } else {
+                                showImage = true
+                            }
+
+                        } catch (e: Exception) {
+                            e.printStackTrace()
+                            showImage = true
+                            isProcessing = false
+                        }
+                    }
+                } else {
+                    showImage = true
+                }
+            },
             onError = onError,
             modifier = Modifier
                 .fillMaxSize()
                 .then(
-                    if (shouldBlur) {
-                        Modifier.blur(radius = blurStrength.dp)
-                    } else {
-                        Modifier
-                    }
-                )
+                    if (shouldBlur) Modifier.blur(radius = blurStrength.dp) else Modifier
+                ),
+            alpha = if (showImage) 1f else 0f
         )
     }
 }
