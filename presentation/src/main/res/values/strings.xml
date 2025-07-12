@@ -22,5 +22,7 @@
     <string name="crime">Crime</string>
     <string name="adventure">Adventure</string>
     <string name="documentary">Documentary</string>
-
+    <string name="Movies">Movies</string>
+    <string name="TV_Shows">"TV Shows"</string>
+    <string name="Actors">"Actors"</string>
 </resources>

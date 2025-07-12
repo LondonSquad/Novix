@@ -22,4 +22,7 @@
     <string name="apply">قبول</string>
     <string name="adventure">مغامرة</string>
     <string name="documentary">وثائقي</string>
+    <string name="Movies">افلام</string>
+    <string name="TV_Shows">"مسلسلات"</string>
+    <string name="Actors">"ممثلين"</string>
 </resources>
