@@ -97,13 +97,19 @@ jobs:
           echo "--- DEBUG: Update pr_metrics.json Step ---"
           echo "Checking if $PR_FILE exists and is valid..."
           if [ ! -f "$PR_FILE" ]; then
-          echo "File $PR_FILE does not exist. Creating with empty array."
-          echo "[]" > "$PR_FILE"
+            echo "File $PR_FILE does not exist. Creating with empty array."
+            echo "[]" > "$PR_FILE"
           elif [ ! -s "$PR_FILE" ]; then
-          echo "File $PR_FILE is empty. Initializing with empty array."
-          echo "[]" > "$PR_FILE"
+            echo "File $PR_FILE is empty. Initializing with empty array."
+            echo "[]" > "$PR_FILE"
           else
-          echo "File $PR_FILE exists and has content."
+            # Ensure the file contains valid JSON
+            if ! jq -e . >/dev/null 2>&1 < "$PR_FILE"; then
+              echo "File $PR_FILE contains invalid JSON. Initializing with empty array."
+              echo "[]" > "$PR_FILE"
+            else
+              echo "File $PR_FILE exists and has content."
+            fi
           fi
 
           echo "Content of $PR_FILE before jq:"
@@ -116,80 +122,87 @@ jobs:
 
           echo "PR_NUMBER_JQ: $PR_NUMBER_JQ"
           echo "EVENT_TYPE: $EVENT_TYPE"
-          
+
           UPDATED_JQ_DATA=""
 
           if [[ "$EVENT_TYPE" == "approval" ]]; then
             echo "Processing 'approval' event."
             echo "Reviewer: ${{ steps.prepare_data.outputs.REVIEWER_LOGIN }}, Submitted At: ${{ steps.prepare_data.outputs.APPROVAL_SUBMITTED_AT }}"
+
+            # Note the changes in the jq script below
             UPDATED_JQ_DATA=$(echo "$JQ_DATA" | jq \
               --arg pr_number "$PR_NUMBER_JQ" \
               --arg reviewer_login "${{ steps.prepare_data.outputs.REVIEWER_LOGIN }}" \
-              --arg reviewer_id "${{ steps.prepare_data.outputs.REVIEWER_ID }}" \
+              --argjson reviewer_id "${{ steps.prepare_data.outputs.REVIEWER_ID }}" \
               --arg reviewer_html_url "${{ steps.prepare_data.outputs.REVIEWER_HTML_URL }}" \
               --arg approval_submitted_at "${{ steps.prepare_data.outputs.APPROVAL_SUBMITTED_AT }}" \
-              --arg opened_at "${{ steps.prepare_data.outputs.PR_CREATED_AT }}" \
               --argjson required_approvals "$REQUIRED_APPROVALS" \
               '
-              map(if .pr_number == ($pr_number | tonumber) then
-                .approvals += [{
-                  reviewer: {login: $reviewer_login, id: ($reviewer_id | tonumber), url: $reviewer_html_url},
-                  submitted_at: $approval_submitted_at
-                }]
-                | .approvals |= unique_by(.reviewer.id)
-                | .approvals |= sort_by(.submitted_at)
-                | (if .first_approved_at == null then
-                     (
-                       .first_approved_at = $approval_submitted_at
-                     | .time_to_first_approval_minutes = (
-                         ((strptime("%Y-%m-%dT%H:%M:%SZ") | mktime) - ($opened_at | strptime("%Y-%m-%dT%H:%M:%SZ") | mktime)) / 60
+              # Define a function for time parsing to avoid repetition
+              def parse_time(ts):
+                (ts | strptime("%Y-%m-%dT%H:%M:%SZ") | mktime);
+
+              map(
+                if .pr_number == ($pr_number | tonumber) then
+                  # Add the new approval
+                  .approvals += [{
+                    reviewer: {login: $reviewer_login, id: $reviewer_id, url: $reviewer_html_url},
+                    submitted_at: $approval_submitted_at
+                  }]
+                  # Ensure approvals are unique by reviewer and sorted by time
+                  | .approvals |= (unique_by(.reviewer.id) | sort_by(.submitted_at))
+                  # --- FIX 1: CALCULATE TIME TO FIRST APPROVAL ---
+                  # Check if first approval is not set yet
+                  | (if .first_approved_at == null then
+                       (
+                         # Set the first approval timestamp
+                         .first_approved_at = $approval_submitted_at
+                         # Calculate the time difference using the new timestamp and the existing .opened_at
+                       | .time_to_first_approval_minutes = ((parse_time($approval_submitted_at) - parse_time(.opened_at)) / 60)
                        )
-                     )
-                   else . end)
-                | (if (.approvals | length) >= $required_approvals then
-                     (
-                       .required_approvals_met_at = (.approvals | .[($required_approvals - 1)].submitted_at)
-                     | .time_to_required_approvals_minutes = (
-                         ((.required_approvals_met_at | strptime("%Y-%m-%dT%H:%M:%SZ") | mktime) - ($opened_at | strptime("%Y-%m-%dT%H:%M:%SZ") | mktime)) / 60
+                     else . end)
+                  # --- FIX 2: CALCULATE TIME TO REQUIRED APPROVALS ---
+                  # Check if required approvals are met
+                  | (if (.approvals | length) >= $required_approvals then
+                       (
+                         # The time met is the timestamp of the Nth approval (where N = required_approvals)
+                         .required_approvals_met_at = (.approvals | .[($required_approvals - 1)].submitted_at)
+                         # Calculate the time difference
+                       | .time_to_required_approvals_minutes = ((parse_time(.required_approvals_met_at) - parse_time(.opened_at)) / 60)
+                       | .status = "approved_required"
                        )
-                     | .status = "approved_required"
-                     )
-                   else
-                     (if .status == "approved_required" or .status == "merged" or .status == "closed" then . else .status = "pending_approval" end)
-                   end)
-              else . end)
-              ' || true)
+                     else
+                       # If not met, keep existing status unless it should be pending
+                       (if .status == "approved_required" or .status == "merged" or .status == "closed" then . else .status = "pending_approval" end)
+                     end)
+                else . end # End of the main if statement
+              ) # End of map
+              ' )
           elif [[ "$EVENT_TYPE" == "pr_lifecycle" ]]; then
             PR_ACTION="${{ steps.prepare_data.outputs.PR_ACTION }}"
             echo "Processing 'pr_lifecycle' event with action: $PR_ACTION"
-            PR_CLOSED_AT="${{ steps.prepare_data.outputs.PR_CLOSED_AT }}"
-            PR_MERGED_AT="${{ steps.prepare_data.outputs.PR_MERGED_AT }}"
-            PR_MERGED_BY_LOGIN="${{ steps.prepare_data.outputs.PR_MERGED_BY_LOGIN }}"
-            PR_MERGED_BY_ID="${{ steps.prepare_data.outputs.PR_MERGED_BY_ID }}"
-            PR_MERGED_BY_HTML_URL="${{ steps.prepare_data.outputs.PR_MERGED_BY_HTML_URL }}"
-
 
             if [[ "$PR_ACTION" == "opened" ]]; then
               echo "Action is 'opened'. Generating NEW_PR_DATA."
               NEW_PR_DATA=$(jq -n \
-                --arg pr_number "$PR_NUMBER_JQ" \
+                --argjson pr_number "$PR_NUMBER_JQ" \
                 --arg url "${{ steps.prepare_data.outputs.PR_URL }}" \
                 --arg title "${{ steps.prepare_data.outputs.PR_TITLE }}" \
                 --arg opened_at "${{ steps.prepare_data.outputs.PR_CREATED_AT }}" \
                 --arg head_ref "${{ steps.prepare_data.outputs.PR_HEAD_REF }}" \
                 --arg base_ref "${{ steps.prepare_data.outputs.PR_BASE_REF }}" \
                 --arg creator_login "${{ steps.prepare_data.outputs.PR_USER_LOGIN }}" \
-                --arg creator_id "${{ steps.prepare_data.outputs.PR_USER_ID }}" \
+                --argjson creator_id "${{ steps.prepare_data.outputs.PR_USER_ID }}" \
                 --arg creator_html_url "${{ steps.prepare_data.outputs.PR_USER_HTML_URL }}" \
                 --arg week "${{ steps.prepare_data.outputs.WEEK_NUMBER }}" \
                 '{
-                  "pr_number": ($pr_number | tonumber),
+                  "pr_number": $pr_number,
                   "url": $url,
                   "title": $title,
                   "opened_at": $opened_at,
                   "head_ref": $head_ref,
                   "base_ref": $base_ref,
-                  "creator": { "login": $creator_login, "id": ($creator_id | tonumber), "url": $creator_html_url },
+                  "creator": { "login": $creator_login, "id": $creator_id, "url": $creator_html_url },
                   "approvals": [],
                   "first_approved_at": null,
                   "time_to_first_approval_minutes": null,
@@ -201,68 +214,60 @@ jobs:
                   "week": $week,
                   "status": "pending_approval"
                 }')
-              echo "NEW_PR_DATA generated:"
-              echo "$NEW_PR_DATA"
-
-              echo "JQ_DATA before update for opened PR:"
-              echo "$JQ_DATA"
-
               UPDATED_JQ_DATA=$(echo "$JQ_DATA" | jq \
-                --arg pr_number "$PR_NUMBER_JQ" \
+                --argjson pr_number "$PR_NUMBER_JQ" \
                 --argjson new_pr_data "$NEW_PR_DATA" \
                 '
-                if any(.[]; .pr_number == ($pr_number | tonumber)) then
-                  map(if .pr_number == ($pr_number | tonumber) then $new_pr_data else . end)
+                if any(.[]; .pr_number == $pr_number) then
+                  map(if .pr_number == $pr_number then $new_pr_data else . end)
                 else
                   . + [$new_pr_data]
                 end
-                ' || true)
-              echo "UPDATED_JQ_DATA after 'opened' logic:"
-              echo "$UPDATED_JQ_DATA"
+                ')
 
             elif [[ "$PR_ACTION" == "closed" ]]; then
               echo "Action is 'closed'."
               UPDATED_JQ_DATA=$(echo "$JQ_DATA" | jq \
-                --arg pr_number "$PR_NUMBER_JQ" \
+                --argjson pr_number "$PR_NUMBER_JQ" \
                 --arg closed_at "${{ steps.prepare_data.outputs.PR_CLOSED_AT }}" \
                 --arg merged_at "${{ steps.prepare_data.outputs.PR_MERGED_AT }}" \
                 --arg merged_by_login "${{ steps.prepare_data.outputs.PR_MERGED_BY_LOGIN }}" \
-                --arg merged_by_id "${{ steps.prepare_data.outputs.PR_MERGED_BY_ID }}" \
+                --argjson merged_by_id "${{ steps.prepare_data.outputs.PR_MERGED_BY_ID }}" \
                 --arg merged_by_html_url "${{ steps.prepare_data.outputs.PR_MERGED_BY_HTML_URL }}" \
                 '
-                map(if .pr_number == ($pr_number | tonumber) then
+                map(if .pr_number == $pr_number then
                   .closed_at = $closed_at
                   | (if ($merged_at != null and $merged_at != "") then
                       .merged_at = $merged_at
-                      | .merged_by = {login: $merged_by_login, id: ($merged_by_id | tonumber), url: $merged_by_html_url}
+                      | .merged_by = {login: $merged_by_login, id: $merged_by_id, url: $merged_by_html_url}
                       | .status = "merged"
                     else
                       .status = "closed"
                     end)
                 else . end)
-                ' || true)
-            elif [[ "$PR_ACTION" == "reopened" ]]; then
+                ')
+            elif [[ "$PR_ACTION" == "reopened" ]];then
               echo "Action is 'reopened'."
               UPDATED_JQ_DATA=$(echo "$JQ_DATA" | jq \
-                --arg pr_number "$PR_NUMBER_JQ" \
+                --argjson pr_number "$PR_NUMBER_JQ" \
                 '
-                map(if .pr_number == ($pr_number | tonumber) then
+                map(if .pr_number == $pr_number then
                   .status = "reopened"
                   | .closed_at = null
                   | .merged_at = null
                   | .merged_by = null
                 else . end)
-                ' || true)
+                ')
             fi
           fi
 
-          echo "Final check before writing to file:"
-          if [ -n "$UPDATED_JQ_DATA" ]; then
-            echo "UPDATED_JQ_DATA is NOT empty. Writing to $PR_FILE."
+          # Error check before writing
+          if jq -e . >/dev/null 2>&1 <<< "$UPDATED_JQ_DATA"; then
+            echo "UPDATED_JQ_DATA is valid JSON. Writing to $PR_FILE."
             echo "$UPDATED_JQ_DATA" > "$PR_FILE"
           else
-            echo "UPDATED_JQ_DATA IS EMPTY. No write performed."
-            echo "Current file content (if any):"
+            echo "UPDATED_JQ_DATA IS EMPTY OR INVALID. No write performed."
+            echo "Current file content remains:"
             cat "$PR_FILE"
           fi
           echo "--- END DEBUG ---"
