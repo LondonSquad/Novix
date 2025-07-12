@@ -11,7 +11,7 @@ import com.london.domain.entity.TvShow
 fun SearchTvShowDtoLocal.toTvShowEntity(): TvShow {
     return TvShow(
         id = this.id,
-        posterPicture = this.posterPath,
+        posterPicture = "https://image.tmdb.org/t/p/w500${this.posterPath}",
         name = this.name
     )
 }

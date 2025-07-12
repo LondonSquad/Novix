@@ -29,6 +29,7 @@ import kotlinx.coroutines.test.runTest
 import org.junit.Before
 import org.junit.Test
 import org.junit.jupiter.api.assertThrows
+import org.koin.core.annotation.Named
 
 
 class SearchRepositoryImplTest {
@@ -195,7 +196,7 @@ class SearchRepositoryImplTest {
             Movie(
                 id = 1,
                 name = "",
-                posterPicture = ""
+                posterPicture = "https://image.tmdb.org/t/p/w500"
             )
         )
 
@@ -203,7 +204,7 @@ class SearchRepositoryImplTest {
             TvShow(
                 id = 2,
                 name = "",
-                posterPicture = ""
+                posterPicture = "https://image.tmdb.org/t/p/w500"
             )
         )
 
@@ -211,7 +212,7 @@ class SearchRepositoryImplTest {
             Actor(
                 id = 3,
                 name = "Tom Holland",
-                profilePicture = ""
+                profilePicture = "https://image.tmdb.org/t/p/w500"
             )
         )
 
@@ -228,7 +229,7 @@ class SearchRepositoryImplTest {
                     originalTitle = "",
                     overview = "",
                     popularity = 0.0,
-                    posterPath = "",
+                    posterPath = "", // Empty path results in just the base URL
                     releaseDate = "",
                     title = "",
                     video = false,
@@ -254,7 +255,7 @@ class SearchRepositoryImplTest {
                     originalName = "",
                     overview = "",
                     popularity = 0.0,
-                    posterPath = "",
+                    posterPath = "", // Empty path results in just the base URL
                     firstAirDate = "",
                     name = "",
                     voteAverage = 0.0,
@@ -277,7 +278,7 @@ class SearchRepositoryImplTest {
                     name = "Tom Holland",
                     originalName = "Tom Holland",
                     popularity = 0.0,
-                    profilePath = "",
+                    profilePath = "", // Empty path - mapper will add base URL
                     knownFor = emptyList()
                 )
             ),

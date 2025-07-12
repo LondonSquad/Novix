@@ -14,6 +14,7 @@ import com.london.data.datasource.local.model.SearchActorsLocal
 import com.london.data.datasource.local.model.SearchMoviesLocal
 import com.london.data.datasource.local.model.SearchTvShowLocal
 import org.koin.core.annotation.Module
+import org.koin.core.annotation.Named
 import org.koin.core.annotation.Single
 
 @Module
@@ -39,6 +40,7 @@ class DatabaseModule {
     }
 
     @Single
+    @Named("tvShow")
     fun provideTvShowLocalDataSource(
         searchTvShowDao: SearchTvShowDao,
     ): LocalDataSource<SearchTvShowLocal> {
@@ -48,6 +50,7 @@ class DatabaseModule {
     }
 
     @Single
+    @Named("movie")
     fun provideMovieLocalDataSource(
         searchMoviesDao: SearchMoviesDao,
     ): LocalDataSource<SearchMoviesLocal> {
@@ -57,6 +60,7 @@ class DatabaseModule {
     }
 
     @Single
+    @Named("actor")
     fun provideActorLocalDataSource(
         searchActorsDao: SearchActorsDao,
     ): LocalDataSource<SearchActorsLocal> {

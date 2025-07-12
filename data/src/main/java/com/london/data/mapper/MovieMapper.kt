@@ -10,8 +10,8 @@ import com.london.domain.entity.Movie
 fun SearchMovieDtoLocal.toMovieEntity(): Movie {
     return Movie(
         id = this.id,
-        posterPicture = this.posterPath ?: "",
-        name = this.title ?: "",
+        posterPicture = "https://image.tmdb.org/t/p/w500${this.posterPath}",
+        name = this.title,
     )
 
 }

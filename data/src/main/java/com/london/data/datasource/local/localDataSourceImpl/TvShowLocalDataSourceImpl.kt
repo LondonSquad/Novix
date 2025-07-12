@@ -34,6 +34,11 @@ class TvShowLocalDataSourceImpl(
 
     override suspend fun getByDate(date: Long) = searchTvShowDao.executeGetByDate(date)
 
-    override suspend fun getByQuery(query: String): SearchTvShowLocal =
-        searchTvShowDao.executeGetByQuery(query.generateHash())
+    override suspend fun getByQuery(query: String): SearchTvShowLocal? {
+        return try {
+            searchTvShowDao.executeGetByQuery(query.generateHash())
+        } catch (_: Exception) {
+            null
+        }
+    }
 }

@@ -1,5 +1,6 @@
 package com.london.data.repository
 
+import android.util.Log
 import com.london.data.datasource.local.GetException
 import com.london.data.datasource.local.LocalDataSource
 import com.london.data.datasource.local.model.SearchActorsLocal
@@ -32,6 +33,7 @@ class SearchRepositoryImpl(
 
         var result: List<Movie> = emptyList()
         var remoteResponseToCache: SearchMoviesLocal? = null
+
         try {
             val local = searchMovieService.getByQuery(query = name + language)
             result = local
@@ -60,11 +62,11 @@ class SearchRepositoryImpl(
         name: String, language: String
     ): List<TvShow> {
 
-        var result: List<TvShow> = emptyList()
+        var localResults: List<TvShow> = emptyList()
         var remoteResponseToCache: SearchTvShowLocal? = null
         try {
             val local = searchTvShowService.getByQuery(query = name + language)
-            result = local
+            localResults = local
                 ?.results
                 ?.map { it.toTvShowEntity() }
                 ?: remoteDataSource.searchForTvShows(
@@ -77,13 +79,14 @@ class SearchRepositoryImpl(
                     .also { remoteResponseToCache = it }
                     .results
                     .map { it.toTvShowEntity() }
-            searchTvShowService.insert(remoteResponseToCache ?: return result)
+
+            searchTvShowService.insert(remoteResponseToCache ?: return localResults)
         } catch (_: GetException) {
             throw TvShowSearchFailedException()
         } catch (e: Exception) {
             addExceptionToCrashlytics(e)
         }
-        return result
+        return localResults
     }
 
     override suspend fun searchForActors(
