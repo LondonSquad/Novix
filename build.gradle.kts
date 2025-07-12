@@ -28,10 +28,6 @@ kover {
             filters {
                 includes {
                     classes("*.domain.*")
-                    classes("**ViewModel")
-                    classes("**viewModel")
-                    classes("**viewmodel")
-                    classes("**Viewmodel")
                     classes("**LocalDataSourceImpl")
                     classes("**SearchRepositoryImpl")
                 }

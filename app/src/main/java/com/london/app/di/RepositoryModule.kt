@@ -5,6 +5,8 @@ import com.london.data.datasource.local.model.SearchActorsLocal
 import com.london.data.datasource.local.model.SearchMoviesLocal
 import com.london.data.datasource.local.model.SearchTvShowLocal
 import com.london.data.datasource.remote.RemoteDataSource
+import com.london.data.datasource.util.CrashReporter
+import com.london.data.datasource.util.FirebaseCrashReporter
 import com.london.data.repository.SearchRepositoryImpl
 import com.london.domain.repository.SearchRepository
 import org.koin.core.annotation.Module
@@ -18,12 +20,16 @@ class RepositoryModule {
         searchActorService: LocalDataSource<SearchActorsLocal>,
         searchMovieService: LocalDataSource<SearchMoviesLocal>,
         remoteDataSource: RemoteDataSource,
+        crashReporter: CrashReporter
     ): SearchRepository {
         return SearchRepositoryImpl(
             searchTvShowService = searchTvShowService,
             searchActorService = searchActorService,
             searchMovieService = searchMovieService,
-            remoteDataSource = remoteDataSource
+            remoteDataSource = remoteDataSource,
+            crashReporter = crashReporter
         )
     }
+    @Single
+    fun provideCrashReporter(): CrashReporter = FirebaseCrashReporter()
 }
