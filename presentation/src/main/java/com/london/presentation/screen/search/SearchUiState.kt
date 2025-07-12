@@ -1,0 +1,31 @@
+package com.london.presentation.screen.search
+
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.text.input.TextFieldValue
+import com.london.domain.entity.Actor
+import com.london.domain.entity.Movie
+import com.london.domain.entity.TvShow
+import com.london.presentation.screen.search.model.MovieUi
+
+data class SearchUiState(
+    var searchQuery: TextFieldValue = TextFieldValue(""),
+    val showNoSearchBefore: Boolean = false,
+    val showNoSearchResults: Boolean = false,
+    var showFilterBottomSheet: Boolean = false,
+    val isSearchHistoryExpanded: Boolean = false,
+    val isMovieSaved: (MovieUi) -> Boolean = { false },
+    val searchHistory: List<String> = emptyList(),
+    val actorUiResults: List<Actor> = emptyList(),
+    val movieResults: List<Movie> = emptyList(),
+    val tvShowUiResults: List<TvShow> = emptyList(),
+    val savedMovies: Set<Int> = emptySet(),
+    val savedTvShows: Set<Int> = emptySet(),
+    val selectedCategory: SearchCategory = SearchCategory.Movies,
+    val recentViewed: List<String> = emptyList(),
+    val recentSearches: List<String> = emptyList(),
+)
+
+data class CategoryContent<T>(
+    val items: List<T>,
+    val content: @Composable (List<T>) -> Unit
+)

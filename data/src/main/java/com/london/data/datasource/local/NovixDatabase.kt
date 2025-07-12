@@ -20,7 +20,8 @@ import com.london.data.datasource.local.model.SearchTvShowLocal
         SearchMoviesLocal::class,
         SearchActorsLocal::class
     ],
-    version = 1
+    version = 1,
+    exportSchema = false
 )
 @TypeConverters(
     SearchActorsConvertor::class,

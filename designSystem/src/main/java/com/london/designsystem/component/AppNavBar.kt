@@ -39,6 +39,7 @@ import androidx.compose.ui.draw.blur
 import androidx.compose.ui.draw.scale
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.painter.Painter
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import com.london.designsystem.R
 import com.london.designsystem.theme.NovixTheme
@@ -46,10 +47,10 @@ import com.london.designsystem.theme.ThemePreviews
 import com.london.designsystem.utils.painter
 import com.london.designsystem.utils.topBorder
 
-data class NavigationTab(
+data class NavigationTab<T>(
     val idleIcon: Painter,
     val selectedIcon: Painter,
-    val route: String
+    val destination: T,
 )
 
 
@@ -61,11 +62,11 @@ data class NavBarColors(
 )
 
 @Composable
-fun NavBar(
+fun <T> NavBar(
     modifier: Modifier = Modifier,
-    navDestinations: List<NavigationTab>,
-    currentSelectedRoute: String,
-    onNavDestinationClicked: (String) -> Unit,
+    navDestinations: List<NavigationTab<T>>,
+    currentSelectedDestination: T,
+    onNavDestinationClicked: (T) -> Unit,
     navBarColors: NavBarColors = NavBarColors(
         backgroundColor = NovixTheme.colors.surface,
         selectedIconColor = NovixTheme.colors.primary,
@@ -73,6 +74,7 @@ fun NavBar(
         topBorderColor = NovixTheme.colors.stroke
     )
 ) {
+
     Row(
         modifier = modifier
             .fillMaxWidth()
@@ -85,18 +87,20 @@ fun NavBar(
         navDestinations.forEach { item ->
             NavBarItem(
                 item = item,
-                isSelected = currentSelectedRoute == item.route,
+                isSelected = currentSelectedDestination == item.destination,
                 selectedIconColor = navBarColors.selectedIconColor,
                 idleIconColor = navBarColors.idleIconColor,
-                onClick = { onNavDestinationClicked(item.route) }
+                onClick = {
+                    onNavDestinationClicked(item.destination)
+                }
             )
         }
     }
 }
 
 @Composable
-private fun NavBarItem(
-    item: NavigationTab,
+private fun <T> NavBarItem(
+    item: NavigationTab<T>,
     isSelected: Boolean,
     selectedIconColor: Color,
     idleIconColor: Color,
@@ -143,14 +147,14 @@ private fun AnimatedBackgroundBlur(
                     .width(60.dp)
                     .height(16.dp)
                     .blur(radius = 54.dp, edgeTreatment = BlurredEdgeTreatment.Unbounded),
-                painter = R.drawable.ellipse_blur_filled.painter,
+                painter = painterResource(R.drawable.ellipse_blur_filled),
                 contentDescription = null,
                 tint = selectedIconColor
             )
         } else {
             Image(
                 modifier = Modifier.scale(2f),
-                painter = R.drawable.ellipse_pre_blurred.painter,
+                painter = painterResource(R.drawable.ellipse_pre_blurred),
                 contentDescription = null
             )
         }
@@ -158,8 +162,8 @@ private fun AnimatedBackgroundBlur(
 }
 
 @Composable
-private fun ClickableIconContainer(
-    item: NavigationTab,
+private fun <T> ClickableIconContainer(
+    item: NavigationTab<T>,
     isSelected: Boolean,
     selectedIconColor: Color,
     idleIconColor: Color,
@@ -190,8 +194,8 @@ private fun ClickableIconContainer(
 }
 
 @Composable
-private fun AnimatedNavIcon(
-    item: NavigationTab,
+private fun <T> AnimatedNavIcon(
+    item: NavigationTab<T>,
     isSelected: Boolean,
     selectedIconColor: Color,
     idleIconColor: Color
@@ -203,7 +207,6 @@ private fun AnimatedNavIcon(
     ) { selected ->
         Icon(
             painter = if (selected) item.selectedIcon else item.idleIcon,
-            contentDescription = item.route,
             modifier = Modifier
                 .size(24.dp)
                 .animateContentSize(
@@ -212,6 +215,7 @@ private fun AnimatedNavIcon(
                         stiffness = Spring.StiffnessLow
                     )
                 ),
+            contentDescription = null,
             tint = if (selected) selectedIconColor else idleIconColor
         )
     }
@@ -238,7 +242,7 @@ private fun AnimatedSelectionDot(
     ) {
         Icon(
             modifier = Modifier.size(4.dp),
-            painter = R.drawable.ellipse_selected_dot.painter,
+            painter = painterResource(R.drawable.ellipse_selected_dot),
             contentDescription = null,
             tint = selectedIconColor
         )
@@ -248,7 +252,9 @@ private fun AnimatedSelectionDot(
 @ThemePreviews
 @Composable
 private fun NavBarPreview() {
-    var currentSelectedRoute by remember { mutableStateOf("home") }
+    data class MockDestination(val name: String)
+
+    var currentSelectedDestination by remember { mutableStateOf(MockDestination("home")) }
 
     NovixTheme {
         NavBar(
@@ -256,35 +262,35 @@ private fun NavBarPreview() {
                 NavigationTab(
                     idleIcon = R.drawable.icon_home.painter,
                     selectedIcon = R.drawable.icon_home_filled.painter,
-                    route = "home"
+                    destination = MockDestination("home"),
                 ),
                 NavigationTab(
                     idleIcon = R.drawable.icon_search.painter,
                     selectedIcon = R.drawable.icon_search_filled.painter,
-                    route = "search"
+                    destination = MockDestination("search"),
                 ),
                 NavigationTab(
                     idleIcon = R.drawable.icon_masks.painter,
                     selectedIcon = R.drawable.icon_masks_filled.painter,
-                    route = "categories"
+                    destination = MockDestination("categories"),
                 ),
                 NavigationTab(
                     idleIcon = R.drawable.icon_bookmark.painter,
                     selectedIcon = R.drawable.icon_bookmark_filled.painter,
-                    route = "bookmarks"
+                    destination = MockDestination("bookmarks"),
                 ),
                 NavigationTab(
                     idleIcon = R.drawable.icon_user.painter,
                     selectedIcon = R.drawable.icon_user_filled.painter,
-                    route = "account"
+                    destination = MockDestination("account"),
                 )
             ),
-            currentSelectedRoute = currentSelectedRoute,
-            onNavDestinationClicked = { it ->
-                if (it != currentSelectedRoute) {
-                    currentSelectedRoute = it
+            currentSelectedDestination = currentSelectedDestination,
+            onNavDestinationClicked = { destination ->
+                if (destination != currentSelectedDestination) {
+                    currentSelectedDestination = destination
                 }
-            }
+            },
         )
     }
 }

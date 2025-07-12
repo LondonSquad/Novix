@@ -17,6 +17,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.graphics.Path
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
@@ -55,6 +56,7 @@ fun ActorItem(
                     ), width = 1.dp,
                     color = NovixTheme.colors.stroke
                 ),
+            contentScale = ContentScale.Crop
         )
         val color = NovixTheme.colors.stroke
         Column(
