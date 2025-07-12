@@ -23,10 +23,10 @@ data class SearchTvShowDtoLocal(
     val originalLanguage: String,
     val originalName: String,
     val overview: String,
-    val popularity: Int,
+    val popularity: Double,
     val posterPath: String,
     val firstAirDate: String,
     val name: String,
-    val voteAverage: Int,
+    val voteAverage: Double,
     val voteCount: Int
 )

@@ -1,7 +1,10 @@
 package com.london.presentation.screen.search
 
-enum class SearchCategory(val title: String) {
-    Movies("Movies"),
-    TvShows("TV Shows"),
-    Actors("Actors")
+import androidx.annotation.StringRes
+import com.london.presentation.R
+
+enum class SearchCategory(@StringRes val title: Int) {
+    Movies(R.string.Movies),
+    TvShows(R.string.TV_Shows),
+    Actors(R.string.Actors)
 }

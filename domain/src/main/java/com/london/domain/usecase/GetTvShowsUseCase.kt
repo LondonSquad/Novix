@@ -1,6 +1,6 @@
 package com.london.domain.usecase
 
-import com.london.domain.repo.SearchRepository
+import com.london.domain.repository.SearchRepository
 
 class GetTvShowsUseCase(
     private val repository: SearchRepository

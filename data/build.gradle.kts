@@ -1,4 +1,5 @@
 import com.london.buildsrc.AppConfig
+import com.london.buildsrc.getKey
 
 plugins {
     alias(libs.plugins.android.library)
@@ -17,6 +18,12 @@ android {
 
         testInstrumentationRunner = AppConfig.ANDROID_TEST_INSTRUMENTATION
         consumerProguardFiles("consumer-rules.pro")
+
+        buildConfigField("String", "API_KEY", getKey("api_key"))
+    }
+
+    buildFeatures{
+        buildConfig = true
     }
 
     buildTypes {
@@ -35,20 +42,32 @@ android {
         jvmTarget = AppConfig.Version.JVM.toString()
     }
 }
+
 dependencies {
     implementation(project(":domain"))
     implementation(libs.bundles.base.ui)
     implementation(libs.bundles.coroutines)
     implementation(libs.bundles.datastore)
-    implementation(libs.bundles.ktor)
+    api(libs.bundles.ktor)
     implementation(libs.bundles.room)
     ksp(libs.bundles.room.ksp)
     implementation(libs.bundles.koin)
     ksp(libs.bundles.koin.ksp)
-    testImplementation(libs.bundles.testing)
-    androidTestImplementation(libs.bundles.android.testing)
     implementation(libs.gson)
+
+    implementation(libs.firebase.crashlytics)
+
+    //Testing
     testImplementation(libs.mockk)
+    testImplementation(libs.kotlinx.coroutines.test)
+    testImplementation (libs.truth)
+
+    // Test dependencies - properly scoped
+    testImplementation(libs.bundles.testing)
+    testImplementation(libs.bundles.ktor.testing)
     testImplementation(libs.kotlinx.coroutines.test.v1102)
     testImplementation(kotlin("test"))
+
+    // Android test dependencies
+    androidTestImplementation(libs.bundles.android.testing)
 }

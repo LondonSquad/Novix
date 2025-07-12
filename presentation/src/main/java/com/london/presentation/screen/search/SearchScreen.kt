@@ -4,6 +4,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
@@ -29,6 +30,10 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.blur
+import androidx.compose.ui.draw.drawWithContent
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.Path
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.platform.SoftwareKeyboardController
 import androidx.compose.ui.res.painterResource
@@ -76,77 +81,80 @@ fun SearchScreenContent(
 ) {
     val interactionSource = remember { MutableInteractionSource() }
 
-    Column(
+    Box(
         modifier = Modifier
             .fillMaxSize()
-            .background(color = NovixTheme.colors.surface),
-        verticalArrangement = Arrangement.Top
+            .background(
+                color = NovixTheme.colors.surface
+            )
     ) {
-        TopBar(
+
+        TriangleBlurredShape()
+
+        Column(
             modifier = Modifier
-                .statusBarsPadding()
-                .height(56.dp)
-                .padding(horizontal = 16.dp),
-            title = stringResource(R.string.search),
+                .fillMaxSize(),
+            verticalArrangement = Arrangement.Top
         )
+        {
+            TopBar(
+                modifier = Modifier
+                    .statusBarsPadding()
+                    .height(56.dp)
+                    .padding(horizontal = 16.dp),
+                title = stringResource(R.string.search),
+            )
 
-        SearchBar(
-            uiState = state,
-            viewModel = viewModel,
-            interactionSource = interactionSource,
-            keyboardController = keyboardController,
-            modifier = Modifier.padding(start = 16.dp, end = 16.dp, bottom = 12.dp)
-        )
+            SearchBar(
+                uiState = state,
+                viewModel = viewModel,
+                interactionSource = interactionSource,
+                keyboardController = keyboardController,
+                modifier = Modifier.padding(start = 16.dp, end = 16.dp, bottom = 12.dp)
+            )
 
-        ResultOrEmpty(
-            items = state.searchQuery.text.toList(),
-            emptyContent = {
-                ResultOrEmpty(
-                    items = state.recentSearches,
-                    otherItems = state.recentViewed,
-                    emptyContent = {
-                        NoSearchBeforeLayOut(modifier = Modifier.fillMaxSize())
-                    },
-                    content = {
-                        RecentSectionLayout(
-                            state = state,
-                            interactionListener = interactionListener,
-                            viewModel = viewModel
-                        )
-                    }
-                )
-            },
-            content = {
-                SearchChipsRow(
-                    selected = state.selectedCategory,
-                    onSelect = interactionListener::onCategorySelected,
-                    modifier = Modifier.padding(bottom = 12.dp)
-                )
+            ResultOrEmpty(
+                items = state.searchQuery.text.toList(),
+                emptyContent = {
+                    ResultOrEmpty(
+                        items = state.recentSearches,
+                        otherItems = state.recentViewed,
+                        emptyContent = { NoSearchBeforeLayOut(modifier = Modifier.fillMaxSize()) },
+                        content = {
+                            RecentSearchLayOut(
+                                state = state,
+                                interactionListener = interactionListener,
+                                viewModel = viewModel
+                            )
+                        }
+                    )
+                },
+                content = {
+                    SearchChipsRow(
+                        selected = state.selectedCategory,
+                        onSelect = interactionListener::onCategorySelected,
+                        modifier = Modifier.padding(bottom = 12.dp)
+                    )
+                    when (state.selectedCategory) {
+                        SearchCategory.Movies -> {
+                            ResultOrEmpty(
+                                items = state.movieResults,
+                                emptyContent = { NoSearchResultLayOut(modifier = Modifier.fillMaxSize()) },
+                                content = {
+                                    MoviesLayOut(
+                                        movieUis = state.movieResults,
+                                        onSaveClick = { /* Handle save click */ },
+                                        isMovieSaved = { false },
+                                        onMovieClick = { viewModel.addToRecentViewed(it.posterPicture) },
+                                        modifier = Modifier.padding(horizontal = 16.dp)
+                                    )
+                                }
+                            )
+                        }
 
-                when (state.selectedCategory) {
-                    SearchCategory.Movies ->
-                        ResultOrEmpty(
-                            items = state.movieResults,
-                            emptyContent = {
-                                NoSearchResultLayOut(modifier = Modifier.fillMaxSize())
-                            },
-                            content = {
-                                MoviesLayOut(
-                                    movieUis = state.movieResults,
-                                    onSaveClick = { /* Handle save click */ },
-                                    isMovieSaved = { false },
-                                    onMovieClick = { viewModel.addToRecentViewed(it.posterPicture) },
-                                    modifier = Modifier.padding(horizontal = 16.dp)
-                                )
-                            }
-                        )
-
-                    SearchCategory.TvShows ->
-                        ResultOrEmpty(
+                        SearchCategory.TvShows -> ResultOrEmpty(
                             items = state.tvShowUiResults,
-                            emptyContent = {
-                                NoSearchResultLayOut(modifier = Modifier.fillMaxSize())
-                            },
+                            emptyContent = { NoSearchResultLayOut(modifier = Modifier.fillMaxSize()) },
                             content = {
                                 TvShowLayOut(
                                     tvShowUis = state.tvShowUiResults,
@@ -157,12 +165,10 @@ fun SearchScreenContent(
                             }
                         )
 
-                    SearchCategory.Actors ->
-                        ResultOrEmpty(
+
+                        SearchCategory.Actors -> ResultOrEmpty(
                             items = state.actorUiResults,
-                            emptyContent = {
-                                NoSearchResultLayOut(modifier = Modifier.fillMaxSize())
-                            },
+                            emptyContent = { NoSearchResultLayOut(modifier = Modifier.fillMaxSize()) },
                             content = {
                                 ActorsLayout(
                                     actorsUis = state.actorUiResults,
@@ -170,10 +176,34 @@ fun SearchScreenContent(
                                 )
                             }
                         )
+                    }
                 }
-            }
-        )
+            )
+        }
     }
+}
+
+@Composable
+private fun TriangleBlurredShape() {
+    val triangleBackgroundColor: Color = NovixTheme.colors.primary.copy(alpha = 0.08f)
+    Box(
+        modifier = Modifier
+            .fillMaxSize()
+            .blur(150.dp)
+            .drawWithContent {
+                val path = Path().apply {
+                    moveTo(0f, 0f)
+                    lineTo(size.width * 0.7f, 0f)
+                    lineTo(0f, size.height * 0.25f)
+                    close()
+                }
+                drawPath(
+                    path,
+                    color = triangleBackgroundColor,
+                )
+                drawContent()
+            }
+    )
 }
 
 @Composable
@@ -255,17 +285,17 @@ private fun SearchChipsRow(
         horizontalArrangement = Arrangement.Start
     ) {
         NovixChip(
-            text = SearchCategory.Movies.title,
+            text = stringResource(SearchCategory.Movies.title),
             isSelected = selected == SearchCategory.Movies,
             onClick = { onSelect(SearchCategory.Movies) }
         )
         NovixChip(
-            text = SearchCategory.TvShows.title,
+            text = stringResource(SearchCategory.TvShows.title),
             isSelected = selected == SearchCategory.TvShows,
             onClick = { onSelect(SearchCategory.TvShows) }
         )
         NovixChip(
-            text = SearchCategory.Actors.title,
+            text = stringResource(SearchCategory.Actors.title),
             isSelected = selected == SearchCategory.Actors,
             onClick = { onSelect(SearchCategory.Actors) }
         )
@@ -273,58 +303,81 @@ private fun SearchChipsRow(
 }
 
 @Composable
-private fun RecentSectionLayout(
+private fun RecentSearchLayOut(
     state: SearchUiState,
     interactionListener: SearchInteractions,
     viewModel: SearchViewModel
 ) {
-    if (state.recentViewed.isNotEmpty()) {
-        SectionHeader(
-            text = stringResource(R.string.recent_viewed),
-            hasGetAll = true,
-            hasIcon = false,
-            getAllText = stringResource(R.string.clear_all),
-            onClick = viewModel::clearRecentViewed,
-            modifier = Modifier.padding(vertical = 12.dp, horizontal = 16.dp)
-        )
+    RecentSearchesSection(
+        recentSearches = state.recentSearches,
+        onClearAll = interactionListener::clearRecentSearches,
+        onSearchClick = interactionListener::onRecentSearchClick,
+        onRemoveClick = interactionListener::removeRecentSearch
+    )
+    RecentViewedSection(
+        recentViewed = state.recentViewed,
+        onClearAll = { viewModel.clearRecentViewed() }
+    )
+}
 
-        LazyRow(
-            modifier = Modifier
-                .fillMaxWidth()
-                .height(210.dp),
-            horizontalArrangement = Arrangement.spacedBy(8.dp),
-            contentPadding = PaddingValues(horizontal = 16.dp)
-        ) {
-            items(state.recentViewed) {
-                HomeCard(
-                    imageUrl = it,
-                    isSaved = false,
-                    onSaveClick = {}
-                )
-            }
+@Composable
+fun RecentViewedSection(
+    recentViewed: List<String>,
+    onClearAll: () -> Unit
+) {
+    SectionHeader(
+        text = stringResource(R.string.recent_viewed),
+        hasGetAll = true,
+        hasIcon = false,
+        getAllText = stringResource(R.string.clear_all),
+        onClick = onClearAll,
+        modifier = Modifier.padding(vertical = 12.dp, horizontal = 16.dp)
+    )
+
+    LazyRow(
+        modifier = Modifier
+            .fillMaxWidth()
+            .height(210.dp),
+        horizontalArrangement = Arrangement.spacedBy(8.dp),
+        contentPadding = PaddingValues(horizontal = 16.dp),
+    ) {
+        items(recentViewed) { imageUrl ->
+            HomeCard(
+                imageUrl = imageUrl,
+                isSaved = false,
+                onSaveClick = {}
+            )
         }
     }
+}
 
-    if (state.recentSearches.isNotEmpty()) {
-        SectionHeader(
-            text = stringResource(R.string.recent_search),
-            hasGetAll = true,
-            hasIcon = false,
-            getAllText = stringResource(R.string.clear_all),
-            onClick = interactionListener::clearRecentSearches,
-            modifier = Modifier.padding(vertical = 12.dp, horizontal = 16.dp)
-        )
+@Composable
+fun RecentSearchesSection(
+    recentSearches: List<String>,
+    onClearAll: () -> Unit,
+    onSearchClick: (String) -> Unit,
+    onRemoveClick: (String) -> Unit
+) {
+    SectionHeader(
+        text = stringResource(R.string.recent_search),
+        hasGetAll = true,
+        hasIcon = false,
+        getAllText = stringResource(R.string.clear_all),
+        onClick = onClearAll,
+        modifier = Modifier.padding(vertical = 12.dp, horizontal = 16.dp)
+    )
 
-        LazyColumn(modifier = Modifier.padding(horizontal = 16.dp)) {
-            itemsIndexed(state.recentSearches) { index, search ->
-                val isLastItem = index == state.recentSearches.lastIndex
-                RecentSearchItem(
-                    search = search,
-                    onSearchClick = { interactionListener.onRecentSearchClick(search) },
-                    onRemoveClick = { interactionListener.removeRecentSearch(search) },
-                    showDivider = !isLastItem
-                )
-            }
+    LazyColumn(
+        modifier = Modifier.padding(horizontal = 16.dp)
+    ) {
+        itemsIndexed(recentSearches) { index, search ->
+            val isLastItem = index == recentSearches.lastIndex
+            RecentSearchItem(
+                search = search,
+                onSearchClick = { onSearchClick(search) },
+                onRemoveClick = { onRemoveClick(search) },
+                showDivider = !isLastItem
+            )
         }
     }
 }
