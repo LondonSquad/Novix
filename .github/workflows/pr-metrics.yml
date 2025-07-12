@@ -85,18 +85,31 @@ jobs:
           PR_FILE="pr_metrics.json" # Adjust path if pr_metrics.json is in a subdirectory
           REQUIRED_APPROVALS=${{ env.REQUIRED_APPROVALS }}
 
+          echo "--- DEBUG: Update pr_metrics.json Step ---"
+          echo "Checking if $PR_FILE exists..."
           if [ ! -f "$PR_FILE" ]; then
+            echo "File $PR_FILE does not exist. Creating with empty array."
             echo "[]" > "$PR_FILE"
+          else
+            echo "File $PR_FILE exists."
           fi
+
+          echo "Content of $PR_FILE before jq:"
+          cat "$PR_FILE"
 
           JQ_DATA=$(cat "$PR_FILE")
 
           EVENT_TYPE="${{ steps.prepare_data.outputs.EVENT_TYPE }}"
           PR_NUMBER_JQ=${{ steps.prepare_data.outputs.PR_NUMBER }}
 
+          echo "PR_NUMBER_JQ: $PR_NUMBER_JQ"
+          echo "EVENT_TYPE: $EVENT_TYPE"
+          
           UPDATED_JQ_DATA=""
 
           if [[ "$EVENT_TYPE" == "approval" ]]; then
+            echo "Processing 'approval' event."
+            echo "Reviewer: ${{ steps.prepare_data.outputs.REVIEWER_LOGIN }}, Submitted At: ${{ steps.prepare_data.outputs.APPROVAL_SUBMITTED_AT }}"
             UPDATED_JQ_DATA=$(echo "$JQ_DATA" | jq \
               --arg pr_number "$PR_NUMBER_JQ" \
               --arg reviewer_login "${{ steps.prepare_data.outputs.REVIEWER_LOGIN }}" \
@@ -141,6 +154,7 @@ jobs:
             ')
           elif [[ "$EVENT_TYPE" == "pr_lifecycle" ]]; then
             PR_ACTION="${{ steps.prepare_data.outputs.PR_ACTION }}"
+            echo "Processing 'pr_lifecycle' event with action: $PR_ACTION"
             PR_CLOSED_AT="${{ steps.prepare_data.outputs.PR_CLOSED_AT }}"
             PR_MERGED_AT="${{ steps.prepare_data.outputs.PR_MERGED_AT }}"
             PR_MERGED_BY_LOGIN="${{ steps.prepare_data.outputs.PR_MERGED_BY_LOGIN }}"
@@ -149,6 +163,7 @@ jobs:
 
 
             if [[ "$PR_ACTION" == "opened" ]]; then
+              echo "Action is 'opened'. Generating NEW_PR_DATA."
               NEW_PR_DATA=$(jq -n \
                 --arg pr_number "$PR_NUMBER_JQ" \
                 --arg url "${{ steps.prepare_data.outputs.PR_URL }}" \
@@ -179,6 +194,11 @@ jobs:
                   "week": $week,
                   "status": "pending_approval"
                 }')
+              echo "NEW_PR_DATA generated:"
+              echo "$NEW_PR_DATA"
+
+              echo "JQ_DATA before update for opened PR:"
+              echo "$JQ_DATA"
 
               UPDATED_JQ_DATA=$(echo "$JQ_DATA" | jq \
                 --arg pr_number "$PR_NUMBER_JQ" \
@@ -198,7 +218,11 @@ jobs:
                 end
                 '
               )
+              echo "UPDATED_JQ_DATA after 'opened' logic:"
+              echo "$UPDATED_JQ_DATA"
+
             elif [[ "$PR_ACTION" == "closed" ]]; then
+              echo "Action is 'closed'."
               UPDATED_JQ_DATA=$(echo "$JQ_DATA" | jq \
                 --arg pr_number "$PR_NUMBER_JQ" \
                 --arg closed_at "$PR_CLOSED_AT" \
@@ -220,6 +244,7 @@ jobs:
                 else . end)
               ')
             elif [[ "$PR_ACTION" == "reopened" ]]; then
+              echo "Action is 'reopened'."
               UPDATED_JQ_DATA=$(echo "$JQ_DATA" | jq \
                 --arg pr_number "$PR_NUMBER_JQ" \
                 '
@@ -233,11 +258,16 @@ jobs:
             fi
           fi
 
+          echo "Final check before writing to file:"
           if [ -n "$UPDATED_JQ_DATA" ]; then
+            echo "UPDATED_JQ_DATA is NOT empty. Writing to $PR_FILE."
             echo "$UPDATED_JQ_DATA" > "$PR_FILE"
           else
-            echo "No relevant data update for PR #$PR_NUMBER_JQ from event type $EVENT_TYPE and action ${{ steps.prepare_data.outputs.PR_ACTION }}"
+            echo "UPDATED_JQ_DATA IS EMPTY. No write performed."
+            echo "Current file content (if any):"
+            cat "$PR_FILE"
           fi
+          echo "--- END DEBUG ---"
 
       - name: Commit and push changes
         uses: stefanzweifel/git-auto-commit-action@v5
