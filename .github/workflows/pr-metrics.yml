@@ -1,4 +1,4 @@
-name: PR Metrics Updater
+name: PR Metrics Dashboard Updater
 
 on:
   pull_request:
@@ -16,10 +16,16 @@ jobs:
       REQUIRED_APPROVALS: 2
 
     steps:
+      - uses: actions/create-github-app-token@v2
+        id: app-token
+        with:
+          app-id: ${{ vars.APP_ID }}
+          private-key: ${{ secrets.APP_PRIVATE_KEY }}
       - name: Checkout repository
         uses: actions/checkout@v4
         with:
-          ref: ${{ github.ref }}
+          token: ${{ steps.app-token.outputs.token }}
+          ref: develop
 
       - name: Set up Node.js
         uses: actions/setup-node@v4
@@ -29,7 +35,6 @@ jobs:
       - name: Prepare JSON data
         id: prepare_data
         run: |
-          # --- Common PR data ---
           PR_NUMBER=${{ github.event.pull_request.number || github.event.pull_request_review.pull_request.number }}
           PR_URL="${{ github.event.pull_request.html_url || github.event.pull_request_review.pull_request.html_url }}"
           PR_TITLE="${{ github.event.pull_request.title || github.event.pull_request_review.pull_request.title }}"
@@ -40,14 +45,7 @@ jobs:
           PR_USER_ID="${{ github.event.pull_request.user.id || github.event.pull_request_review.pull_request.user.id }}"
           PR_USER_HTML_URL="${{ github.event.pull_request.user.html_url || github.event.pull_request_review.pull_request.user.html_url }}"
 
-          # Calculate ISO week number from PR_CREATED_AT
-          # Use date command for robust week calculation (e.g., 2025-07-01T10:00:00Z -> 2025-W27)
-          # Ensure PR_CREATED_AT is not empty before processing
-          if [ -n "$PR_CREATED_AT" ]; then
-            WEEK_NUMBER=$(date -d "$PR_CREATED_AT" +%G-W%V)
-          else
-            WEEK_NUMBER="unknown-week" # Fallback if created_at is unexpectedly empty
-          fi
+          WEEK_NUMBER=$(date -d "${PR_CREATED_AT}" +%G-W%V)
 
           echo "PR_NUMBER=$PR_NUMBER" >> $GITHUB_OUTPUT
           echo "PR_URL=$PR_URL" >> $GITHUB_OUTPUT
@@ -58,9 +56,8 @@ jobs:
           echo "PR_USER_LOGIN=$PR_USER_LOGIN" >> $GITHUB_OUTPUT
           echo "PR_USER_ID=$PR_USER_ID" >> $GITHUB_OUTPUT
           echo "PR_USER_HTML_URL=$PR_USER_HTML_URL" >> $GITHUB_OUTPUT
-          echo "WEEK_NUMBER=$WEEK_NUMBER" >> $GITHUB_OUTPUT # Add week number to output
+          echo "WEEK_NUMBER=$WEEK_NUMBER" >> $GITHUB_OUTPUT
 
-          # --- Handle Approval Data ---
           if [[ "${{ github.event_name }}" == "pull_request_review" && "${{ github.event.review.state }}" == "approved" ]]; then
             REVIEWER_LOGIN="${{ github.event.review.user.login }}"
             REVIEWER_ID="${{ github.event.review.user.id }}"
@@ -84,45 +81,52 @@ jobs:
 
       - name: Update pr_metrics.json
         run: |
-          PR_FILE="pr_metrics.json"
+          PR_FILE="pr_metrics.json" # Adjust path if pr_metrics.json is in a subdirectory
           REQUIRED_APPROVALS=${{ env.REQUIRED_APPROVALS }}
 
+          echo "--- DEBUG: Update pr_metrics.json Step ---"
+          echo "Checking if $PR_FILE exists..."
           if [ ! -f "$PR_FILE" ]; then
+            echo "File $PR_FILE does not exist. Creating with empty array."
             echo "[]" > "$PR_FILE"
+          else
+            echo "File $PR_FILE exists."
           fi
+
+          echo "Content of $PR_FILE before jq:"
+          cat "$PR_FILE"
 
           JQ_DATA=$(cat "$PR_FILE")
 
           EVENT_TYPE="${{ steps.prepare_data.outputs.EVENT_TYPE }}"
           PR_NUMBER_JQ=${{ steps.prepare_data.outputs.PR_NUMBER }}
-          PR_CREATED_AT_JQ="${{ steps.prepare_data.outputs.PR_CREATED_AT }}" # Use this for time calculations
-          WEEK_NUMBER_JQ="${{ steps.prepare_data.outputs.WEEK_NUMBER }}" # Use the calculated week number
 
+          echo "PR_NUMBER_JQ: $PR_NUMBER_JQ"
+          echo "EVENT_TYPE: $EVENT_TYPE"
+          
           UPDATED_JQ_DATA=""
 
           if [[ "$EVENT_TYPE" == "approval" ]]; then
+            echo "Processing 'approval' event."
+            echo "Reviewer: ${{ steps.prepare_data.outputs.REVIEWER_LOGIN }}, Submitted At: ${{ steps.prepare_data.outputs.APPROVAL_SUBMITTED_AT }}"
             UPDATED_JQ_DATA=$(echo "$JQ_DATA" | jq \
               --arg pr_number "$PR_NUMBER_JQ" \
               --arg reviewer_login "${{ steps.prepare_data.outputs.REVIEWER_LOGIN }}" \
               --arg reviewer_id "${{ steps.prepare_data.outputs.REVIEWER_ID }}" \
               --arg reviewer_html_url "${{ steps.prepare_data.outputs.REVIEWER_HTML_URL }}" \
               --arg approval_submitted_at "${{ steps.prepare_data.outputs.APPROVAL_SUBMITTED_AT }}" \
-              --arg opened_at "$PR_CREATED_AT_JQ" \
+              --arg opened_at "${{ steps.prepare_data.outputs.PR_CREATED_AT }}" \
               --argjson required_approvals "$REQUIRED_APPROVALS" \
               '
               map(if .pr_number == ($pr_number | tonumber) then
-                # Add approval to the array if not already present by reviewer ID
                 .approvals += [
                   {
                     reviewer: {login: $reviewer_login, id: ($reviewer_id | tonumber), url: $reviewer_html_url},
                     submitted_at: $approval_submitted_at
                   }
                 ]
-                | unique_by(.approvals[].reviewer.id) # Ensure unique approvals by reviewer ID
-                # Always re-sort approvals by submitted_at to ensure latest is at the end (or relevant for Nth approval)
+                | unique_by(.approvals[].reviewer.id)
                 | .approvals |= sort_by(.submitted_at)
-
-                # Calculate first_approved_at and time_to_first_approval_minutes
                 | (if .first_approved_at == null then
                      (
                        .first_approved_at = $approval_submitted_at
@@ -133,12 +137,8 @@ jobs:
                    else .
                    end
                 )
-
-                # Check if required approvals are met
                 | (if (.approvals | length) >= $required_approvals then
                      (
-                       # Set required_approvals_met_at to the submitted_at of the Nth approval (N = required_approvals)
-                       # Since approvals are sorted by submitted_at, the Nth element (index N-1) is the one that met the criteria
                        .required_approvals_met_at = (.approvals | .[($required_approvals - 1)].submitted_at)
                      | .time_to_required_approvals_minutes = (
                          ((.required_approvals_met_at | strptime("%Y-%m-%dT%H:%M:%SZ") | mktime) - ($opened_at | strptime("%Y-%m-%dT%H:%M:%SZ") | mktime)) / 60
@@ -146,14 +146,14 @@ jobs:
                      | .status = "approved_required"
                      )
                    else
-                     # If not enough approvals, ensure status is not "approved_required"
-                     (if .status == "approved_required" then . else .status = "pending_approval" end)
+                     (if .status == "approved_required" or .status == "merged" or .status == "closed" then . else .status = "pending_approval" end)
                    end
                 )
               else . end)
             ')
           elif [[ "$EVENT_TYPE" == "pr_lifecycle" ]]; then
             PR_ACTION="${{ steps.prepare_data.outputs.PR_ACTION }}"
+            echo "Processing 'pr_lifecycle' event with action: $PR_ACTION"
             PR_CLOSED_AT="${{ steps.prepare_data.outputs.PR_CLOSED_AT }}"
             PR_MERGED_AT="${{ steps.prepare_data.outputs.PR_MERGED_AT }}"
             PR_MERGED_BY_LOGIN="${{ steps.prepare_data.outputs.PR_MERGED_BY_LOGIN }}"
@@ -162,17 +162,18 @@ jobs:
 
 
             if [[ "$PR_ACTION" == "opened" ]]; then
+              echo "Action is 'opened'. Generating NEW_PR_DATA."
               NEW_PR_DATA=$(jq -n \
                 --arg pr_number "$PR_NUMBER_JQ" \
                 --arg url "${{ steps.prepare_data.outputs.PR_URL }}" \
                 --arg title "${{ steps.prepare_data.outputs.PR_TITLE }}" \
-                --arg opened_at "$PR_CREATED_AT_JQ" \
+                --arg opened_at "${{ steps.prepare_data.outputs.PR_CREATED_AT }}" \
                 --arg head_ref "${{ steps.prepare_data.outputs.PR_HEAD_REF }}" \
                 --arg base_ref "${{ steps.prepare_data.outputs.PR_BASE_REF }}" \
                 --arg creator_login "${{ steps.prepare_data.outputs.PR_USER_LOGIN }}" \
                 --arg creator_id "${{ steps.prepare_data.outputs.PR_USER_ID }}" \
                 --arg creator_html_url "${{ steps.prepare_data.outputs.PR_USER_HTML_URL }}" \
-                --arg week "$WEEK_NUMBER_JQ" \
+                --arg week "${{ steps.prepare_data.outputs.WEEK_NUMBER }}" \
                 '{
                   "pr_number": ($pr_number | tonumber),
                   "url": $url,
@@ -189,29 +190,38 @@ jobs:
                   "closed_at": null,
                   "merged_at": null,
                   "merged_by": null,
-                  "week": $week, # Correctly add the calculated week
-                  "status": "pending_approval" # Initial status for new PRs
+                  "week": $week,
+                  "status": "pending_approval"
                 }')
+              echo "NEW_PR_DATA generated:"
+              echo "$NEW_PR_DATA"
+
+              echo "JQ_DATA before update for opened PR:"
+              echo "$JQ_DATA"
 
               UPDATED_JQ_DATA=$(echo "$JQ_DATA" | jq \
                 --arg pr_number "$PR_NUMBER_JQ" \
                 --argjson new_pr_data "$NEW_PR_DATA" \
                 '
-                # Check if PR exists, if so, update it, otherwise add it.
-                # This handles both initial open and re-open scenarios more robustly.
                 . as $original |
-                if any(.pr_number == ($pr_number | tonumber)) then
+                reduce .[] as $item (
+                  false;
+                  if $item.pr_number == ($pr_number | tonumber) then true else . end
+                ) as $found_pr |
+                if $found_pr then
                   map(if .pr_number == ($pr_number | tonumber) then
-                    # If PR already exists, update it with new data (e.g., if re-opened)
-                    # Preserve existing approvals if any, unless explicitly cleared by re-open
-                    . + $new_pr_data | .approvals = (.approvals + $new_pr_data.approvals | unique_by(.reviewer.id) | sort_by(.submitted_at))
+                    if $new_pr_data.status == "reopened" then $new_pr_data else . end
                   else . end)
                 else
                   . + [$new_pr_data]
                 end
                 '
               )
+              echo "UPDATED_JQ_DATA after 'opened' logic:"
+              echo "$UPDATED_JQ_DATA"
+
             elif [[ "$PR_ACTION" == "closed" ]]; then
+              echo "Action is 'closed'."
               UPDATED_JQ_DATA=$(echo "$JQ_DATA" | jq \
                 --arg pr_number "$PR_NUMBER_JQ" \
                 --arg closed_at "$PR_CLOSED_AT" \
@@ -233,33 +243,33 @@ jobs:
                 else . end)
               ')
             elif [[ "$PR_ACTION" == "reopened" ]]; then
+              echo "Action is 'reopened'."
               UPDATED_JQ_DATA=$(echo "$JQ_DATA" | jq \
                 --arg pr_number "$PR_NUMBER_JQ" \
                 '
                 map(if .pr_number == ($pr_number | tonumber) then
-                  .status = "pending_approval" # Reset status to pending upon reopen
+                  .status = "reopened"
                   | .closed_at = null
                   | .merged_at = null
                   | .merged_by = null
-                  # Optionally, clear approval related timestamps if you want to re-evaluate approvals from scratch
-                  # .first_approved_at = null
-                  # | .time_to_first_approval_minutes = null
-                  # | .required_approvals_met_at = null
-                  # | .time_to_required_approvals_minutes = null
-                  # | .approvals = [] # Uncomment this if you want to clear all previous approvals on reopen
                 else . end)
               ')
-            fi # End of PR_ACTION checks
-          fi # End of EVENT_TYPE checks
+            fi
+          fi
 
+          echo "Final check before writing to file:"
           if [ -n "$UPDATED_JQ_DATA" ]; then
+            echo "UPDATED_JQ_DATA is NOT empty. Writing to $PR_FILE."
             echo "$UPDATED_JQ_DATA" > "$PR_FILE"
           else
-            echo "No relevant update for PR #$PR_NUMBER_JQ from event type $EVENT_TYPE and action ${{ steps.prepare_data.outputs.PR_ACTION }}"
-            cat "$PR_FILE" >&2 # Output current content for debug
+            echo "UPDATED_JQ_DATA IS EMPTY. No write performed."
+            echo "Current file content (if any):"
+            cat "$PR_FILE"
           fi
+          echo "--- END DEBUG ---"
 
       - name: Commit and push changes
         uses: stefanzweifel/git-auto-commit-action@v5
         with:
-          commit_message: "📊 Update PR metrics dashboard data (Required Approvals)"
+          commit_message: "📊 Update PR metrics data"
+          branch: develop
