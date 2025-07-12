@@ -1,6 +1,5 @@
 package com.ae.imageharamblur.ui
 
-import android.util.Log
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.*
@@ -78,7 +77,6 @@ fun ImageViewFilter(
                     isProcessing = true
                     scope.launch {
                         try {
-                            // Add a check for drawable validity
                             val drawable = state.result.drawable
                             if (drawable.intrinsicWidth > 0 && drawable.intrinsicHeight > 0) {
                                 val bitmap = drawable.toBitmap()
@@ -105,7 +103,6 @@ fun ImageViewFilter(
                                 showImage = true
                             }
                         } catch (e: Exception) {
-                            Log.e("Moderation", "Failed during moderation", e)
                         } finally {
                             isProcessing = false
                         }
