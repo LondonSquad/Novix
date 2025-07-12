@@ -6,7 +6,6 @@ import androidx.lifecycle.viewModelScope
 import com.london.domain.entity.Actor
 import com.london.domain.entity.Movie
 import com.london.domain.entity.TvShow
-import com.london.domain.repository.SearchRepository
 import com.london.domain.usecase.GetActorsUseCase
 import com.london.domain.usecase.GetMoviesUseCase
 import com.london.domain.usecase.GetTvShowsUseCase
@@ -36,26 +35,6 @@ class SearchViewModel(
     private var allActors: List<Actor> = emptyList()
 
     private var searchJob: Job? = null
-
-    init {
-        loadInitialAllData()
-    }
-
-    private fun loadInitialAllData() {
-        viewModelScope.launch(Dispatchers.IO) {
-            allMovies = getMoviesUseCase("g", "en-US")
-            allTvShows = getTvShowsUseCase("g", "en-US")
-            allActors = getActorsUseCase("g", "en-US")
-
-            _uiState.update {
-                it.copy(
-                    movieResults = allMovies,
-                    tvShowUiResults = allTvShows,
-                    actorUiResults = allActors
-                )
-            }
-        }
-    }
 
     override fun onSearchQueryChange(newValue: TextFieldValue) {
         _uiState.update { it.copy(searchQuery = newValue) }
@@ -97,11 +76,13 @@ class SearchViewModel(
                         tvShowUiResults = emptyList(),
                         actorUiResults = emptyList()
                     )
+
                     SearchCategory.Actors -> currentState.copy(
                         actorUiResults = allActors,
                         movieResults = emptyList(),
                         tvShowUiResults = emptyList()
                     )
+
                     SearchCategory.TvShows -> currentState.copy(
                         tvShowUiResults = allTvShows,
                         actorUiResults = emptyList(),
