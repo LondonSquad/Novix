@@ -1,10 +1,15 @@
 package com.ae.imageharamblur.ui
 
+import android.graphics.Bitmap
+import android.graphics.Color
+import android.os.Build
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.blur
+import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
@@ -14,6 +19,7 @@ import coil.compose.AsyncImagePainter
 import coil.request.CachePolicy
 import coil.request.ImageRequest
 import com.ae.imageharamblur.ImageModerationProcessor
+import com.ae.imageharamblur.utils.blurBitmap
 import com.ae.imageharamblur.utils.toBitmap
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -26,7 +32,7 @@ fun ImageViewFilter(
     modifier: Modifier = Modifier,
     contentScale: ContentScale = ContentScale.Fit,
     enableModeration: Boolean = true,
-    blurStrength: Float = 20f,
+    blurStrength: Float = 80f,
     placeholder: Painter? = null,
     error: Painter? = null,
     onLoading: ((AsyncImagePainter.State.Loading) -> Unit)? = null,
@@ -40,6 +46,7 @@ fun ImageViewFilter(
     var shouldBlur by remember(model) { mutableStateOf(false) }
     var isProcessing by remember(model) { mutableStateOf(false) }
     var showImage by remember(model) { mutableStateOf(!enableModeration) }
+    var blurredBitmap by remember(model) { mutableStateOf<Bitmap?>(null) }
 
     val processor = remember(enableModeration) {
         if (enableModeration) {
@@ -55,72 +62,93 @@ fun ImageViewFilter(
         }
     }
 
-
     Box(modifier = modifier) {
-        AsyncImage(
-            model = ImageRequest.Builder(context)
-                .data(model)
-                .crossfade(enableModeration.not())
-                .allowHardware(false)
-                .memoryCachePolicy(CachePolicy.ENABLED)
-                .diskCachePolicy(CachePolicy.ENABLED)
-                .build(),
-            contentDescription = contentDescription,
-            contentScale = contentScale,
-            placeholder = placeholder,
-            error = error,
-            onLoading = onLoading,
-            onSuccess = { state ->
-                onSuccess?.invoke(state)
+        if (shouldBlur && Build.VERSION.SDK_INT < Build.VERSION_CODES.S && blurredBitmap != null) {
+            Image(
+                bitmap = blurredBitmap!!.asImageBitmap(),
+                contentDescription = contentDescription,
+                contentScale = contentScale,
+                modifier = Modifier.fillMaxSize(),
+                alpha = if (showImage) 1f else 0f
+            )
+        } else {
+            AsyncImage(
+                model = ImageRequest.Builder(context)
+                    .data(model)
+                    .crossfade(enableModeration.not())
+                    .allowHardware(false)
+                    .memoryCachePolicy(CachePolicy.ENABLED)
+                    .diskCachePolicy(CachePolicy.ENABLED)
+                    .build(),
+                contentDescription = contentDescription,
+                contentScale = contentScale,
+                placeholder = placeholder,
+                error = error,
+                onLoading = onLoading,
+                onSuccess = { state ->
+                    onSuccess?.invoke(state)
 
-                if (enableModeration && processor != null && !isProcessing) {
-                    isProcessing = true
-                    scope.launch {
-                        try {
-                            val drawable = state.result.drawable
-                            if (drawable.intrinsicWidth > 0 && drawable.intrinsicHeight > 0) {
-                                val bitmap = drawable.toBitmap()
-                                if (bitmap != null && !bitmap.isRecycled) {
-                                    val processingResult = withContext(Dispatchers.Default) {
-                                        processor.processImage(
-                                            bitmap = bitmap,
-                                            detectFemales = true,
-                                            detectMales = false,
-                                            useContentDetection = true,
-                                            strictMode = false
+                    if (enableModeration && processor != null && !isProcessing) {
+                        isProcessing = true
+                        scope.launch {
+                            try {
+                                val drawable = state.result.drawable
+                                if (drawable.intrinsicWidth > 0 && drawable.intrinsicHeight > 0) {
+                                    val bitmap = drawable.toBitmap()
+                                    if (bitmap != null && !bitmap.isRecycled) {
+                                        val processingResult = withContext(Dispatchers.Default) {
+                                            processor.processImage(
+                                                bitmap = bitmap,
+                                                detectFemales = true,
+                                                detectMales = false,
+                                                useContentDetection = true,
+                                                strictMode = false
+                                            )
+                                        }
+                                        shouldBlur = processingResult.shouldModerate
+
+                                        if (shouldBlur && Build.VERSION.SDK_INT < Build.VERSION_CODES.S) {
+                                            blurredBitmap = withContext(Dispatchers.Default) {
+                                                blurBitmap(bitmap, blurStrength.toInt())
+                                            }
+                                        }
+
+                                        showImage = true
+                                        onModerationResult?.invoke(
+                                            processingResult.shouldModerate,
+                                            processingResult.reason
                                         )
+                                    } else {
+                                        showImage = true
                                     }
-                                    shouldBlur = processingResult.shouldModerate
-                                    showImage = true
-                                    onModerationResult?.invoke(
-                                        processingResult.shouldModerate,
-                                        processingResult.reason
-                                    )
                                 } else {
                                     showImage = true
                                 }
-                            } else {
+                            } catch (_: Exception) {
                                 showImage = true
+                            } finally {
+                                isProcessing = false
                             }
-                        } catch (e: Exception) {
-                        } finally {
-                            isProcessing = false
                         }
+                    } else {
+                        showImage = true
                     }
-                } else {
+                },
+                onError = { state ->
+                    onError?.invoke(state)
                     showImage = true
-                }
-            },
-            onError = { state ->
-                onError?.invoke(state)
-                showImage = true
-            },
-            modifier = Modifier
-                .fillMaxSize()
-                .then(
-                    if (shouldBlur) Modifier.blur(radius = blurStrength.dp) else Modifier
-                ),
-            alpha = if (showImage) 1f else 0f
-        )
+                },
+                modifier = Modifier
+                    .fillMaxSize()
+                    .then(
+                        if (shouldBlur && Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+                            Modifier.blur(radius = blurStrength.dp)
+                        } else {
+                            Modifier
+                        }
+                    ),
+                alpha = if (showImage) 1f else 0f
+            )
+        }
     }
 }
