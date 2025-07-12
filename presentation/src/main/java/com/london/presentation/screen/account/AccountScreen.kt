@@ -1,4 +1,4 @@
-package com.london.presentation.screens.categoriesScreen
+package com.london.presentation.screen.account
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
@@ -12,9 +12,7 @@ import androidx.compose.ui.unit.dp
 import com.london.designsystem.theme.NovixTheme
 
 @Composable
-fun CategoriesScreen(
-    modifier: Modifier = Modifier
-) {
+fun AccountScreen(modifier: Modifier = Modifier) {
     Scaffold(containerColor = NovixTheme.colors.surface) { innerPadding ->
         Box(
             modifier = modifier
@@ -24,7 +22,7 @@ fun CategoriesScreen(
             contentAlignment = Alignment.Center
         ) {
             Text(
-                text = "Categories Screen",
+                text = "My Account Screen",
                 style = NovixTheme.typography.headline.medium
             )
         }

@@ -1,4 +1,4 @@
-package com.london.presentation.screens.homeScreen
+package com.london.presentation.screen.category
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
@@ -12,7 +12,9 @@ import androidx.compose.ui.unit.dp
 import com.london.designsystem.theme.NovixTheme
 
 @Composable
-fun HomeScreen(modifier: Modifier = Modifier) {
+fun CategoriesScreen(
+    modifier: Modifier = Modifier
+) {
     Scaffold(containerColor = NovixTheme.colors.surface) { innerPadding ->
         Box(
             modifier = modifier
@@ -22,7 +24,7 @@ fun HomeScreen(modifier: Modifier = Modifier) {
             contentAlignment = Alignment.Center
         ) {
             Text(
-                text = "Home Screen",
+                text = "Categories Screen",
                 style = NovixTheme.typography.headline.medium
             )
         }

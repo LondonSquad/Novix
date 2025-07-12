@@ -19,10 +19,10 @@ import com.london.app.navigation.Screen.Home
 import com.london.app.navigation.Screen.Search
 import com.london.designsystem.component.NavBar
 import com.london.presentation.screen.search.SearchScreen
-import com.london.presentation.screens.accountScreen.AccountScreen
-import com.london.presentation.screens.bookmarksScreen.BookmarksScreen
-import com.london.presentation.screens.categoriesScreen.CategoriesScreen
-import com.london.presentation.screens.homeScreen.HomeScreen
+import com.london.presentation.screen.account.AccountScreen
+import com.london.presentation.screen.bookmark.BookmarksScreen
+import com.london.presentation.screen.category.CategoriesScreen
+import com.london.presentation.screen.home.HomeScreen
 
 @Composable
 fun NovixApp() {

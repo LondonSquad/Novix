@@ -441,7 +441,9 @@ private fun NoSearchBeforeLayOut(
         EmptySearchComponent(
             text = stringResource(R.string.start_exploring_msg),
             image = R.drawable.img_explore,
-            modifier = Modifier.constrainAs(emptySearch) {
+            modifier = Modifier
+                .padding(horizontal = 16.dp)
+                .constrainAs(emptySearch) {
                 top.linkTo(parent.top)
                 bottom.linkTo(parent.bottom)
                 start.linkTo(parent.start)
