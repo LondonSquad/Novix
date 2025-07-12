@@ -1,12 +1,12 @@
 package com.london.data.repository
 
-import com.google.firebase.crashlytics.FirebaseCrashlytics
 import com.london.data.datasource.local.GetException
 import com.london.data.datasource.local.LocalDataSource
 import com.london.data.datasource.local.model.SearchActorsLocal
 import com.london.data.datasource.local.model.SearchMoviesLocal
 import com.london.data.datasource.local.model.SearchTvShowLocal
 import com.london.data.datasource.remote.RemoteDataSource
+import com.london.data.datasource.util.CrashReporter
 import com.london.data.mapper.toActorEntity
 import com.london.data.mapper.toLocal
 import com.london.data.mapper.toMovieEntity
@@ -23,16 +23,17 @@ class SearchRepositoryImpl(
     private val searchTvShowService: LocalDataSource<SearchTvShowLocal>,
     private val searchActorService: LocalDataSource<SearchActorsLocal>,
     private val searchMovieService: LocalDataSource<SearchMoviesLocal>,
-    private val remoteDataSource: RemoteDataSource
+    private val remoteDataSource: RemoteDataSource,
+    private val crashReporter: CrashReporter
 ) : SearchRepository {
     override suspend fun searchForMovies(
         name: String, language: String
     ): List<Movie> {
 
         var result: List<Movie> = emptyList()
-        val local = searchMovieService.getByQuery(query = name + language)
         var remoteResponseToCache: SearchMoviesLocal? = null
         try {
+            val local = searchMovieService.getByQuery(query = name + language)
             result = local
                 ?.results
                 ?.map { it.toMovieEntity() }
@@ -55,9 +56,9 @@ class SearchRepositoryImpl(
     ): List<TvShow> {
 
         var result: List<TvShow> = emptyList()
-        val local = searchTvShowService.getByQuery(query = name + language)
         var remoteResponseToCache: SearchTvShowLocal? = null
         try {
+            val local = searchTvShowService.getByQuery(query = name + language)
             result = local
                 ?.results
                 ?.map { it.toTvShowEntity() }
@@ -80,9 +81,9 @@ class SearchRepositoryImpl(
     ): List<Actor> {
 
         var result: List<Actor> = emptyList()
-        val local = searchActorService.getByQuery(query = name + language)
         var remoteResponseToCache: SearchActorsLocal? = null
         try {
+            val local = searchActorService.getByQuery(query = name + language)
             result = local
                 ?.results
                 ?.map { it.toActorEntity() }
@@ -100,11 +101,6 @@ class SearchRepositoryImpl(
     }
 
     private fun addExceptionToCrashlytics(e: Exception) {
-        FirebaseCrashlytics.getInstance().apply {
-            setCustomKey("operation", "un_known_error")
-            setCustomKey("error_type", "{${e.javaClass.name}}")
-            setCustomKey("timestamp", System.currentTimeMillis())
-            recordException(e)
-        }
+        crashReporter.logException(e)
     }
 }
