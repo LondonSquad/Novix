@@ -68,7 +68,6 @@ firebaseCrashlytics = "19.4.4"
 googleFirebaseCrashlytics = "3.0.4"
 firebaseAnalytics = "22.5.0"
 kotlinxKover = "0.9.1"
-junitJupiterVersion = "5.13.3"
 firebaseCrashlyticsKtx = "19.4.4"
 
 [libraries]
@@ -116,6 +115,8 @@ ktor-client-core = { group = "io.ktor", name = "ktor-client-core", version.ref =
 ktor-client-android = { group = "io.ktor", name = "ktor-client-okhttp", version.ref = "ktor" }
 ktor-client-serialization = { group = "io.ktor", name = "ktor-serialization-kotlinx-json", version.ref = "ktor" }
 ktor-client-logging = { group = "io.ktor", name = "ktor-client-logging", version.ref = "ktor" }
+ktor-client-mock = { group = "io.ktor", name = "ktor-client-mock", version.ref = "ktor" }
+ktor-client-content-negotiation = { group = "io.ktor", name = "ktor-client-content-negotiation", version.ref = "ktor" }
 
 # Coroutines & Date/Time
 kotlinx-coroutines-android = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-android", version.ref = "kotlinxCoroutinesAndroid" }
@@ -143,7 +144,7 @@ firebase-perf = { group = "com.google.firebase", name = "firebase-perf", version
 firebase-crashlytics = { group = "com.google.firebase", name = "firebase-crashlytics", version.ref = "firebaseCrashlytics" }
 firebase-analytics = { group = "com.google.firebase", name = "firebase-analytics", version.ref = "firebaseAnalytics" }
 #noinspection SimilarGradleDependency
-jupiter-junit-jupiter = { group = "org.junit.jupiter", name = "junit-jupiter", version.ref = "junitJupiterVersion" }
+mockk-agent-jvm = { module = "io.mockk:mockk-agent-jvm", version.ref = "mockk" }
 firebase-crashlytics-ktx = { group = "com.google.firebase", name = "firebase-crashlytics-ktx", version.ref = "firebaseCrashlyticsKtx" }
 
 
@@ -210,7 +211,12 @@ ktor = [
     "ktor-client-core",
     "ktor-client-android",
     "ktor-client-serialization",
-    "ktor-client-logging"
+    "ktor-client-logging",
+    "ktor-client-content-negotiation"
+]
+
+ktor-testing = [
+    "ktor-client-mock"
 ]
 
 coroutines = [
@@ -241,7 +247,8 @@ testing = [
     "junit",
     "junit-jupiter",
     "mockk",
-    "truth"
+    "truth",
+    "mockk-agent-jvm"
 ]
 
 android-testing = [

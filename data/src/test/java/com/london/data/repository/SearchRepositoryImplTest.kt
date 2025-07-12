@@ -9,13 +9,11 @@ import com.london.data.datasource.local.model.SearchMovieDtoLocal
 import com.london.data.datasource.local.model.SearchMoviesLocal
 import com.london.data.datasource.local.model.SearchTvShowDtoLocal
 import com.london.data.datasource.local.model.SearchTvShowLocal
-import com.london.data.datasource.remote.RemoteDataSource
-import com.london.data.datasource.remote.search.PersonDto
-import com.london.data.datasource.remote.search.SearchActorsResponse
-import com.london.data.datasource.remote.search.SearchMoviesResponse
-import com.london.data.datasource.remote.search.SearchMoviesResponseDto
-import com.london.data.datasource.remote.search.SearchTvShowsResponse
-import com.london.data.datasource.remote.search.SearchTvShowsResponseDto
+import com.london.data.datasource.remote.search.RemoteDataSource
+import com.london.data.datasource.remote.search.model.ApiSearch
+import com.london.data.datasource.remote.search.model.SearchActorRemote
+import com.london.data.datasource.remote.search.model.SearchMovieRemote
+import com.london.data.datasource.remote.search.model.SearchTvShowRemote
 import com.london.data.datasource.util.CrashReporter
 import com.london.data.datasource.util.FirebaseCrashReporter
 import com.london.domain.ActorSearchFailedException
@@ -66,7 +64,7 @@ class SearchRepositoryImplTest {
     @Test
     fun `searchForMovies should return data from remote and cache it if local is null`() = runTest {
         coEvery { searchMovieService.getByQuery(NAME + LANG) } returns null
-        coEvery { remoteDataSource.searchForMovies() } returns SearchMoviesRemoteMock
+        coEvery { remoteDataSource.searchForMovies(any(), any(), any(), any()) } returns SearchMoviesRemoteMock
         val result = repository.searchForMovies(NAME, LANG)
         assertThat(result).isEqualTo(MovieList)
         coVerify { searchMovieService.insert(any()) }
@@ -92,7 +90,7 @@ class SearchRepositoryImplTest {
     fun `searchForTvShows should return data from remote and cache it if local is null`() =
         runTest {
             coEvery { searchTvShowService.getByQuery(NAME + LANG) } returns null
-            coEvery { remoteDataSource.searchForTvShows() } returns SearchTvShowRemoteMock
+            coEvery { remoteDataSource.searchForTvShows(any(), any(), any(), any()) } returns SearchTvShowRemoteMock
             val result = repository.searchForTvShows(NAME, LANG)
             assertThat(result).isEqualTo(TvShowList)
             coVerify { searchTvShowService.insert(any()) }
@@ -117,7 +115,7 @@ class SearchRepositoryImplTest {
     @Test
     fun `searchForActors should return data from remote and cache it if local is null`() = runTest {
         coEvery { searchActorService.getByQuery(NAME + LANG) } returns null
-        coEvery { remoteDataSource.searchForActors() } returns SearchActorsRemoteMock
+        coEvery { remoteDataSource.searchForActors(any(), any(), any(), any()) } returns SearchActorsRemoteMock
         val result = repository.searchForActors(NAME, LANG)
         assertThat(result).isEqualTo(ActorList)
         coVerify { searchActorService.insert(any()) }
@@ -229,12 +227,12 @@ class SearchRepositoryImplTest {
                     originalLanguage = "en",
                     originalTitle = "",
                     overview = "",
-                    popularity = 0,
+                    popularity = 0.0,
                     posterPath = "",
                     releaseDate = "",
                     title = "",
                     video = false,
-                    voteAverage = 0,
+                    voteAverage = 0.0,
                     voteCount = 0
                 )
             ),
@@ -255,11 +253,11 @@ class SearchRepositoryImplTest {
                     originalLanguage = "en",
                     originalName = "",
                     overview = "",
-                    popularity = 0,
+                    popularity = 0.0,
                     posterPath = "",
                     firstAirDate = "",
                     name = "",
-                    voteAverage = 0,
+                    voteAverage = 0.0,
                     voteCount = 0
                 )
             ),
@@ -288,10 +286,10 @@ class SearchRepositoryImplTest {
         )
 
         // ========== Remote Mocks ==========
-        val SearchMoviesRemoteMock = SearchMoviesResponse(
+        val SearchMoviesRemoteMock = ApiSearch(
             page = 1,
             results = listOf(
-                SearchMoviesResponseDto(
+                SearchMovieRemote(
                     adult = false,
                     backdropPath = null,
                     genreIds = emptyList(),
@@ -299,12 +297,12 @@ class SearchRepositoryImplTest {
                     originalLanguage = "en",
                     originalTitle = "",
                     overview = "",
-                    popularity = 0,
+                    popularity = 0.0,
                     posterPath = "",
                     releaseDate = "",
                     title = "",
                     video = false,
-                    voteAverage = 0,
+                    voteAverage = 0.0,
                     voteCount = 0
                 )
             ),
@@ -312,10 +310,10 @@ class SearchRepositoryImplTest {
             totalResults = 1
         )
 
-        val SearchTvShowRemoteMock = SearchTvShowsResponse(
+        val SearchTvShowRemoteMock = ApiSearch(
             page = 1,
             results = listOf(
-                SearchTvShowsResponseDto(
+                SearchTvShowRemote(
                     adult = false,
                     backdropPath = "",
                     genreIds = emptyList(),
@@ -324,11 +322,11 @@ class SearchRepositoryImplTest {
                     originalLanguage = "en",
                     originalName = "",
                     overview = "",
-                    popularity = 0,
+                    popularity = 0.0,
                     posterPath = "",
                     firstAirDate = "",
                     name = "",
-                    voteAverage = 0,
+                    voteAverage = 0.0,
                     voteCount = 0
                 )
             ),
@@ -336,10 +334,10 @@ class SearchRepositoryImplTest {
             totalResults = 1
         )
 
-        val SearchActorsRemoteMock = SearchActorsResponse(
+        val SearchActorsRemoteMock = ApiSearch(
             page = 1,
             results = listOf(
-                PersonDto(
+                SearchActorRemote(
                     adult = false,
                     gender = 2,
                     id = 3,

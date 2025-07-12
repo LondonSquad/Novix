@@ -5,7 +5,7 @@ import com.london.data.datasource.local.LocalDataSource
 import com.london.data.datasource.local.model.SearchActorsLocal
 import com.london.data.datasource.local.model.SearchMoviesLocal
 import com.london.data.datasource.local.model.SearchTvShowLocal
-import com.london.data.datasource.remote.RemoteDataSource
+import com.london.data.datasource.remote.search.RemoteDataSource
 import com.london.data.datasource.util.CrashReporter
 import com.london.data.mapper.toActorEntity
 import com.london.data.mapper.toLocal
@@ -37,7 +37,12 @@ class SearchRepositoryImpl(
             result = local
                 ?.results
                 ?.map { it.toMovieEntity() }
-                ?: remoteDataSource.searchForMovies()
+                ?: remoteDataSource.searchForMovies(
+                    query = name,
+                    language = language,
+                    includeAdult = false,
+                    page = 1,
+                )
                     .toLocal(query = name + language)
                     .also { remoteResponseToCache = it }
                     .results
@@ -62,7 +67,12 @@ class SearchRepositoryImpl(
             result = local
                 ?.results
                 ?.map { it.toTvShowEntity() }
-                ?: remoteDataSource.searchForTvShows()
+                ?: remoteDataSource.searchForTvShows(
+                    query = name,
+                    language = language,
+                    includeAdult = false,
+                    page = 1,
+                )
                     .toLocal(query = name + language)
                     .also { remoteResponseToCache = it }
                     .results
@@ -87,7 +97,12 @@ class SearchRepositoryImpl(
             result = local
                 ?.results
                 ?.map { it.toActorEntity() }
-                ?: remoteDataSource.searchForActors()
+                ?: remoteDataSource.searchForActors(
+                    query = name,
+                    language = language,
+                    includeAdult = false,
+                    page = 1,
+                )
                     .toLocal(query = name + language)
                     .also { remoteResponseToCache = it }
                     .results.map { it.toActorEntity() }
