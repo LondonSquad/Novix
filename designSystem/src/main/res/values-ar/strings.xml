@@ -10,4 +10,7 @@
     <string name="my_account">حسابي</string>
     <string name="start_exploring_msg">ابدأ الاستكشاف! ابحث عن أفلامك ومسلسلاتك المفضلة</string>
     <string name="no_search_result_msg">لا توجد نتائج، جرّب كلمة مفتاحية أخرى!</string>
+    <string name="released_year">وقت الصدور</string>
+    <string name="genres">اصناف</string>
+    <string name="imdb_rating">IMDb rating</string>
 </resources>

@@ -5,9 +5,7 @@ import androidx.compose.ui.text.input.TextFieldValue
 import com.london.domain.entity.Actor
 import com.london.domain.entity.Movie
 import com.london.domain.entity.TvShow
-import com.london.presentation.screen.search.model.ActorUi
 import com.london.presentation.screen.search.model.MovieUi
-import com.london.presentation.screen.search.model.TvShowUi
 
 data class SearchUiState(
     var searchQuery: TextFieldValue = TextFieldValue(""),
