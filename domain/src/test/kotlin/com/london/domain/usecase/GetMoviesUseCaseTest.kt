@@ -3,7 +3,7 @@ package com.london.domain.usecase
 import com.google.common.truth.Truth.assertThat
 import com.london.domain.MovieSearchFailedException
 import com.london.domain.entity.Movie
-import com.london.domain.repo.SearchRepository
+import com.london.domain.repository.SearchRepository
 import io.mockk.coEvery
 import io.mockk.mockk
 import kotlinx.coroutines.test.runTest
@@ -46,7 +46,7 @@ class GetMoviesUseCaseTest {
         const val NAME = "Movie"
         const val LANGUAGE = "en-US"
         val movie = Movie(
-            id = 1, posterPicture = ""
+            id = 1, posterPicture = "", name = "Movie"
         )
     }
 }

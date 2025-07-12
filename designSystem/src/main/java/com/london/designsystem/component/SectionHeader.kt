@@ -21,7 +21,9 @@ import com.london.designsystem.theme.noRippleClickable
 fun SectionHeader(
     text: String,
     hasGetAll: Boolean,
+    hasIcon: Boolean,
     modifier: Modifier = Modifier,
+    getAllText: String = stringResource(R.string.all),
     onClick: () -> Unit = {}
 ) {
     Row(
@@ -43,15 +45,17 @@ fun SectionHeader(
                 modifier = Modifier.noRippleClickable(onClick),
             ) {
                 Text(
-                    text = stringResource(R.string.all),
+                    text = getAllText,
                     style = NovixTheme.typography.label.medium,
                     color = NovixTheme.colors.primary,
                 )
-                Icon(
-                    painter = painterResource(id = R.drawable.icon_arrow),
-                    contentDescription = stringResource(R.string.arrow),
-                    tint = NovixTheme.colors.primary
-                )
+                if (hasIcon) {
+                    Icon(
+                        painter = painterResource(id = R.drawable.icon_arrow),
+                        contentDescription = stringResource(R.string.arrow),
+                        tint = NovixTheme.colors.primary
+                    )
+                }
             }
         }
     }
@@ -63,7 +67,8 @@ fun SectionHeaderPreview() {
     NovixTheme {
         SectionHeader(
             text = stringResource(R.string.new_arrival),
-            hasGetAll = true
+            hasGetAll = true,
+            hasIcon = true
         )
     }
 }

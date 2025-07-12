@@ -1,4 +1,4 @@
-package com.london.domain.repo
+package com.london.domain.repository
 
 import com.london.domain.entity.Actor
 import com.london.domain.entity.Movie

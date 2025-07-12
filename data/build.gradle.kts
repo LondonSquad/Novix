@@ -55,6 +55,13 @@ dependencies {
     ksp(libs.bundles.koin.ksp)
     implementation(libs.gson)
 
+    implementation(libs.firebase.crashlytics)
+
+    //Testing
+    testImplementation(libs.mockk)
+    testImplementation(libs.kotlinx.coroutines.test)
+    testImplementation (libs.truth)
+
     // Test dependencies - properly scoped
     testImplementation(libs.bundles.testing)
     testImplementation(libs.bundles.ktor.testing)

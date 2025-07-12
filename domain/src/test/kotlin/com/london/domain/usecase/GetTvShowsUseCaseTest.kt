@@ -3,7 +3,7 @@ package com.london.domain.usecase
 import com.google.common.truth.Truth.assertThat
 import com.london.domain.TvShowSearchFailedException
 import com.london.domain.entity.TvShow
-import com.london.domain.repo.SearchRepository
+import com.london.domain.repository.SearchRepository
 import io.mockk.coEvery
 import io.mockk.mockk
 import kotlinx.coroutines.test.runTest
@@ -48,7 +48,7 @@ class GetTvShowsUseCaseTest {
         const val NAME = "Tv Tv"
         const val LANGUAGE = "en-US"
         val TV_SHOW = TvShow(
-            id = 1, posterPicture = ""
+            id = 1, posterPicture = "", name = "Tv Tv"
         )
     }
 }

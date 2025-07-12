@@ -1,6 +1,7 @@
 [versions]
 # Build Tools
 agp = "8.8.2"
+constraintlayoutCompose = "1.1.1"
 firebaseBom = "33.16.0"
 gson = "2.11.0"
 kotlin = "2.0.21"
@@ -67,9 +68,11 @@ firebaseCrashlytics = "19.4.4"
 googleFirebaseCrashlytics = "3.0.4"
 firebaseAnalytics = "22.5.0"
 kotlinxKover = "0.9.1"
+firebaseCrashlyticsKtx = "19.4.4"
 
 [libraries]
 # AndroidX Core
+androidx-constraintlayout-compose = { module = "androidx.constraintlayout:constraintlayout-compose", version.ref = "constraintlayoutCompose" }
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
 androidx-lifecycle-runtime-ktx = { group = "androidx.lifecycle", name = "lifecycle-runtime-ktx", version.ref = "lifecycleRuntimeKtx" }
 androidx-activity-compose = { group = "androidx.activity", name = "activity-compose", version.ref = "activityCompose" }
@@ -140,7 +143,10 @@ material = { group = "com.google.android.material", name = "material", version.r
 firebase-perf = { group = "com.google.firebase", name = "firebase-perf", version.ref = "firebasePerf" }
 firebase-crashlytics = { group = "com.google.firebase", name = "firebase-crashlytics", version.ref = "firebaseCrashlytics" }
 firebase-analytics = { group = "com.google.firebase", name = "firebase-analytics", version.ref = "firebaseAnalytics" }
+#noinspection SimilarGradleDependency
 mockk-agent-jvm = { module = "io.mockk:mockk-agent-jvm", version.ref = "mockk" }
+firebase-crashlytics-ktx = { group = "com.google.firebase", name = "firebase-crashlytics-ktx", version.ref = "firebaseCrashlyticsKtx" }
+
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
