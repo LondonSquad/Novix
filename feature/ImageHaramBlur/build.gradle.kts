@@ -40,6 +40,11 @@ android {
     aaptOptions {
         noCompress("tflite")
     }
+
+    lint {
+        disable += "CoroutineCreationDuringComposition"
+    }
+
 }
 
 dependencies {
