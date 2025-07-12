@@ -3,7 +3,7 @@ package com.london.domain.usecase
 import com.google.common.truth.Truth.assertThat
 import com.london.domain.ActorSearchFailedException
 import com.london.domain.entity.Actor
-import com.london.domain.repo.SearchRepository
+import com.london.domain.repository.SearchRepository
 import io.mockk.coEvery
 import io.mockk.mockk
 import kotlinx.coroutines.test.runTest
