@@ -369,7 +369,7 @@
             });
         };
 
-        fetch("pr_metrics.json")
+        fetch("https://raw.githubusercontent.com/LondonSquad/Novix/refs/heads/develop/pr_metrics.json")
             .then((response) => {
                 if (!response.ok) {
                     console.error(`HTTP error! status: ${response.status}. Using sample data.`);
