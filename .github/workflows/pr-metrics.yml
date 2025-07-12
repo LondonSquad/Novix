@@ -84,7 +84,7 @@ jobs:
 
       - name: Update pr_metrics.json
         run: |
-          PR_FILE="metrics/pr_metrics.json"
+          PR_FILE="pr_metrics.json"
           REQUIRED_APPROVALS=${{ env.REQUIRED_APPROVALS }}
 
           if [ ! -f "$PR_FILE" ]; then
