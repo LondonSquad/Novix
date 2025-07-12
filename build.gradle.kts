@@ -21,7 +21,6 @@ dependencies {
     kover(project(":data"))
     kover(project(":presentation"))
     kover(project(":designSystem"))
-    kover(project(":feature:ImageHaramBlur"))
 }
 kover {
     reports {
