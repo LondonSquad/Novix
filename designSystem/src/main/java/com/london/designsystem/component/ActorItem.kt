@@ -152,7 +152,7 @@ private fun TextSection(
             text = actorName,
             style = NovixTheme.typography.title.medium,
             color = NovixTheme.colors.body,
-            textAlign = if (isRtl) TextAlign.Start else TextAlign.Start,
+            textAlign = TextAlign.Start,
             modifier = Modifier.fillMaxWidth()
         )
 
@@ -161,7 +161,7 @@ private fun TextSection(
                 text = it,
                 style = NovixTheme.typography.label.small,
                 color = NovixTheme.colors.hint,
-                textAlign = if (isRtl) TextAlign.End else TextAlign.Start,
+                textAlign = TextAlign.Start,
                 modifier = Modifier.fillMaxWidth()
             )
         }
