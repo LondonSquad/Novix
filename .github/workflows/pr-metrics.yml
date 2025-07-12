@@ -14,6 +14,10 @@ concurrency:
 
 jobs:
   update_pr_metrics:
+    if: |
+      github.event_name == 'pull_request' ||
+      github.event_name == 'pull_request_review' ||
+      github.event_name == 'workflow_dispatch'
     runs-on: ubuntu-latest
     permissions:
       contents: write
@@ -44,27 +48,15 @@ jobs:
         run: |
           EVENT_NAME="${{ github.event_name }}"
 
-          if [[ "$EVENT_NAME" == "pull_request_review" ]]; then
-            PR_NUMBER="${{ github.event.pull_request_review.number }}"
-            PR_URL="${{ github.event.pull_request_review.html_url }}"
-            PR_TITLE="${{ github.event.pull_request_review.title }}"
-            PR_CREATED_AT="${{ github.event.pull_request_review.created_at }}"
-            PR_HEAD_REF="${{ github.event.pull_request_review.head.ref }}"
-            PR_BASE_REF="${{ github.event.pull_request_review.base.ref }}"
-            PR_USER_LOGIN="${{ github.event.pull_request_review.user.login }}"
-            PR_USER_ID="${{ github.event.pull_request_review.user.id }}"
-            PR_USER_HTML_URL="${{ github.event.pull_request_review.user.html_url }}"
-          else
-            PR_NUMBER="${{ github.event.pull_request.number }}"
-            PR_URL="${{ github.event.pull_request.html_url }}"
-            PR_TITLE="${{ github.event.pull_request.title }}"
-            PR_CREATED_AT="${{ github.event.pull_request.created_at }}"
-            PR_HEAD_REF="${{ github.event.pull_request.head.ref }}"
-            PR_BASE_REF="${{ github.event.pull_request.base.ref }}"
-            PR_USER_LOGIN="${{ github.event.pull_request.user.login }}"
-            PR_USER_ID="${{ github.event.pull_request.user.id }}"
-            PR_USER_HTML_URL="${{ github.event.pull_request.user.html_url }}"
-          fi
+          PR_NUMBER="${{ github.event.pull_request.number }}"
+          PR_URL="${{ github.event.pull_request.html_url }}"
+          PR_TITLE="${{ github.event.pull_request.title }}"
+          PR_CREATED_AT="${{ github.event.pull_request.created_at }}"
+          PR_HEAD_REF="${{ github.event.pull_request.head.ref }}"
+          PR_BASE_REF="${{ github.event.pull_request.base.ref }}"
+          PR_USER_LOGIN="${{ github.event.pull_request.user.login }}"
+          PR_USER_ID="${{ github.event.pull_request.user.id }}"
+          PR_USER_HTML_URL="${{ github.event.pull_request.user.html_url }}"
 
           WEEK_NUMBER=$(date -d "${PR_CREATED_AT}" +%G-W%V)
 
