@@ -1,13 +1,15 @@
-name: PR Metrics Dashboard Updater
+name: PR Metrics Updater
 
 on:
   pull_request:
     types: [opened, closed, reopened, synchronize]
   pull_request_review:
     types: [submitted, dismissed]
+  workflow_dispatch:
 
 jobs:
   update_pr_metrics:
+    if: github.event.pull_request || github.event.pull_request_review
     runs-on: ubuntu-latest
     permissions:
       contents: write
