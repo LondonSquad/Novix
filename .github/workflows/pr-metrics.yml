@@ -1,13 +1,15 @@
-name: PR Metrics Dashboard Updater
+name: PR Metrics Updater
 
 on:
   pull_request:
     types: [opened, closed, reopened, synchronize]
   pull_request_review:
     types: [submitted, dismissed]
+  workflow_dispatch:
 
 jobs:
   update_pr_metrics:
+    if: github.event.pull_request || github.event.pull_request_review
     runs-on: ubuntu-latest
     permissions:
       contents: write
@@ -150,7 +152,7 @@ jobs:
                    end
                 )
               else . end)
-            ')
+            ' || empty)
           elif [[ "$EVENT_TYPE" == "pr_lifecycle" ]]; then
             PR_ACTION="${{ steps.prepare_data.outputs.PR_ACTION }}"
             echo "Processing 'pr_lifecycle' event with action: $PR_ACTION"
@@ -215,8 +217,7 @@ jobs:
                 else
                   . + [$new_pr_data]
                 end
-                '
-              )
+                ' || empty)
               echo "UPDATED_JQ_DATA after 'opened' logic:"
               echo "$UPDATED_JQ_DATA"
 
@@ -241,7 +242,7 @@ jobs:
                     end
                   )
                 else . end)
-              ')
+              ' || empty)
             elif [[ "$PR_ACTION" == "reopened" ]]; then
               echo "Action is 'reopened'."
               UPDATED_JQ_DATA=$(echo "$JQ_DATA" | jq \
@@ -253,7 +254,7 @@ jobs:
                   | .merged_at = null
                   | .merged_by = null
                 else . end)
-              ')
+              ' || empty)
             fi
           fi
 
