@@ -1,4 +1,3 @@
-
 import com.london.buildsrc.AppConfig
 import com.london.buildsrc.getKey
 
@@ -43,6 +42,7 @@ android {
         jvmTarget = AppConfig.Version.JVM.toString()
     }
 }
+
 dependencies {
     implementation(project(":domain"))
     implementation(libs.bundles.base.ui)
@@ -53,11 +53,14 @@ dependencies {
     ksp(libs.bundles.room.ksp)
     implementation(libs.bundles.koin)
     ksp(libs.bundles.koin.ksp)
-    testImplementation(libs.bundles.testing)
-    androidTestImplementation(libs.bundles.android.testing)
     implementation(libs.gson)
-    testImplementation(libs.mockk)
+
+    // Test dependencies - properly scoped
+    testImplementation(libs.bundles.testing)
+    testImplementation(libs.bundles.ktor.testing)
     testImplementation(libs.kotlinx.coroutines.test.v1102)
     testImplementation(kotlin("test"))
-    implementation(libs.bundles.http)
+
+    // Android test dependencies
+    androidTestImplementation(libs.bundles.android.testing)
 }

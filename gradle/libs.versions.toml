@@ -67,7 +67,6 @@ firebaseCrashlytics = "19.4.4"
 googleFirebaseCrashlytics = "3.0.4"
 firebaseAnalytics = "22.5.0"
 kotlinxKover = "0.9.1"
-junitJupiterVersion = "5.13.3"
 
 [libraries]
 # AndroidX Core
@@ -141,8 +140,6 @@ material = { group = "com.google.android.material", name = "material", version.r
 firebase-perf = { group = "com.google.firebase", name = "firebase-perf", version.ref = "firebasePerf" }
 firebase-crashlytics = { group = "com.google.firebase", name = "firebase-crashlytics", version.ref = "firebaseCrashlytics" }
 firebase-analytics = { group = "com.google.firebase", name = "firebase-analytics", version.ref = "firebaseAnalytics" }
-#noinspection SimilarGradleDependency
-jupiter-junit-jupiter = { group = "org.junit.jupiter", name = "junit-jupiter", version.ref = "junitJupiterVersion" }
 mockk-agent-jvm = { module = "io.mockk:mockk-agent-jvm", version.ref = "mockk" }
 
 [plugins]
@@ -209,8 +206,11 @@ ktor = [
     "ktor-client-android",
     "ktor-client-serialization",
     "ktor-client-logging",
-    "ktor-client-mock",
     "ktor-client-content-negotiation"
+]
+
+ktor-testing = [
+    "ktor-client-mock"
 ]
 
 coroutines = [
@@ -242,15 +242,7 @@ testing = [
     "junit-jupiter",
     "mockk",
     "truth",
-    "mockk-agent-jvm",
-]
-
-http = [
-    "ktor-client-mock",
-    "ktor-client-content-negotiation",
-    "mockk",
-    "truth",
-    "kotlinx-coroutines-test-v1102"
+    "mockk-agent-jvm"
 ]
 
 android-testing = [
