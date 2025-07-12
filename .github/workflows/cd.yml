@@ -5,6 +5,11 @@ on:
     types: [closed] # This specifies the action runs when a pull request is closed.
     branches: [ develop ] # This specifies the action runs only for PRs targeting the 'develop' branch.
 
+# Ensure that only the latest commit is tested for PRs
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.sha }}
+  cancel-in-progress: true
+
 jobs:
   build-and-deploy:
     # This 'if' condition ensures the job only runs if the pull request was actually merged.
