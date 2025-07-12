@@ -8,7 +8,7 @@ import kotlinx.coroutines.withContext
 
 @Stable
 internal suspend fun blurBitmap(input: Bitmap, radius: Int): Bitmap =
-    withContext(Dispatchers.Unconfined) {
+    withContext(Dispatchers.Default) {
         val w = input.width
         val h = input.height
         val pixels = IntArray(w * h)
