@@ -61,7 +61,7 @@ fun ImageViewFilter(
         AsyncImage(
             model = ImageRequest.Builder(context)
                 .data(model)
-                .crossfade(true)
+                .crossfade(enableModeration.not())
                 .allowHardware(false)
                 .memoryCachePolicy(CachePolicy.ENABLED)
                 .diskCachePolicy(CachePolicy.ENABLED)
@@ -116,7 +116,7 @@ fun ImageViewFilter(
             },
             onError = { state ->
                 onError?.invoke(state)
-                showImage = true // Ensure image shows even on error
+                showImage = true
             },
             modifier = Modifier
                 .fillMaxSize()
