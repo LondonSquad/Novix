@@ -11,9 +11,10 @@ fun SearchMovieDtoLocal.toMovieEntity(): Movie {
     return this.posterPath?.let {
         Movie(
             id = this.id,
-            posterPicture = it
+            posterPicture = it,
+            name = this.title,
         )
-    } ?: Movie(id = this.id, posterPicture = "")
+    } ?: Movie(id = this.id, posterPicture = "", name = this.title)
 }
 
 fun SearchMoviesResponse.toLocal(query: String): SearchMoviesLocal {

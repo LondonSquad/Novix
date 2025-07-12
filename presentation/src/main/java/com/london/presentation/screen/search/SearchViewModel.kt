@@ -6,7 +6,7 @@ import androidx.lifecycle.viewModelScope
 import com.london.domain.entity.Actor
 import com.london.domain.entity.Movie
 import com.london.domain.entity.TvShow
-import com.london.domain.repo.SearchRepository
+import com.london.domain.repository.SearchRepository
 import com.london.presentation.screen.search.model.MovieUi
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow

@@ -10,7 +10,8 @@ import com.london.domain.entity.TvShow
 fun SearchTvShowDtoLocal.toTvShowEntity():TvShow{
     return TvShow(
             id = this.id,
-            posterPicture = this.backdropPath
+            posterPicture = this.backdropPath,
+            name = this.name
         )
 }
 

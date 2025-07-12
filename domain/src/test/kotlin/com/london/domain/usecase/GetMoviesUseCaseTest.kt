@@ -46,7 +46,7 @@ class GetMoviesUseCaseTest {
         const val NAME = "Movie"
         const val LANGUAGE = "en-US"
         val movie = Movie(
-            id = 1, posterPicture = ""
+            id = 1, posterPicture = "", name = "Movie"
         )
     }
 }
