@@ -53,3 +53,9 @@ suspend fun <T : Any> SearchDao<T>.executeGetByDate(
 suspend inline fun <T> runOrThrow(
     crossinline block: suspend () -> T, crossinline error: () -> Throwable
 ): T = runCatching { block() }.getOrElse { throw error() }
+
+
+fun checkIfOneHourExpired(date: Long): Boolean {
+    val oneHourAgo = System.currentTimeMillis() - (3600000)
+    return date < oneHourAgo
+}
