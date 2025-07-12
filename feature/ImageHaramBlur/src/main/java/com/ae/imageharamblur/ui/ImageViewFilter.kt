@@ -1,5 +1,6 @@
 package com.ae.imageharamblur.ui
 
+import android.util.Log
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.*
@@ -49,9 +50,12 @@ fun ImageViewFilter(
 
     DisposableEffect(processor) {
         onDispose {
-            processor?.cleanup()
+            scope.launch {
+                processor?.cleanup()
+            }
         }
     }
+
 
     Box(modifier = modifier) {
         AsyncImage(
@@ -60,6 +64,7 @@ fun ImageViewFilter(
                 .crossfade(true)
                 .allowHardware(false)
                 .memoryCachePolicy(CachePolicy.ENABLED)
+                .diskCachePolicy(CachePolicy.ENABLED)
                 .build(),
             contentDescription = contentDescription,
             contentScale = contentScale,
@@ -73,30 +78,35 @@ fun ImageViewFilter(
                     isProcessing = true
                     scope.launch {
                         try {
-                            val bitmap = state.result.drawable.toBitmap()
-                            if (bitmap != null) {
-                                val processingResult = withContext(Dispatchers.Default) {
-                                    processor.processImage(
-                                        bitmap = bitmap,
-                                        detectFemales = true,
-                                        detectMales = false,
-                                        useContentDetection = true,
-                                        strictMode = false
+                            // Add a check for drawable validity
+                            val drawable = state.result.drawable
+                            if (drawable.intrinsicWidth > 0 && drawable.intrinsicHeight > 0) {
+                                val bitmap = drawable.toBitmap()
+                                if (bitmap != null && !bitmap.isRecycled) {
+                                    val processingResult = withContext(Dispatchers.Default) {
+                                        processor.processImage(
+                                            bitmap = bitmap,
+                                            detectFemales = true,
+                                            detectMales = false,
+                                            useContentDetection = true,
+                                            strictMode = false
+                                        )
+                                    }
+                                    shouldBlur = processingResult.shouldModerate
+                                    showImage = true
+                                    onModerationResult?.invoke(
+                                        processingResult.shouldModerate,
+                                        processingResult.reason
                                     )
+                                } else {
+                                    showImage = true
                                 }
-                                shouldBlur = processingResult.shouldModerate
-                                showImage = true
-                                onModerationResult?.invoke(
-                                    processingResult.shouldModerate,
-                                    processingResult.reason
-                                )
                             } else {
                                 showImage = true
                             }
-
                         } catch (e: Exception) {
-                            e.printStackTrace()
-                            showImage = true
+                            Log.e("Moderation", "Failed during moderation", e)
+                        } finally {
                             isProcessing = false
                         }
                     }
@@ -104,7 +114,10 @@ fun ImageViewFilter(
                     showImage = true
                 }
             },
-            onError = onError,
+            onError = { state ->
+                onError?.invoke(state)
+                showImage = true // Ensure image shows even on error
+            },
             modifier = Modifier
                 .fillMaxSize()
                 .then(
