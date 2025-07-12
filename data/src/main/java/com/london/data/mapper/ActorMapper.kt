@@ -3,9 +3,9 @@ package com.london.data.mapper
 import com.london.data.datasource.local.model.KnownForDtoLocal
 import com.london.data.datasource.local.model.PersonDtoLocal
 import com.london.data.datasource.local.model.SearchActorsLocal
-import com.london.data.datasource.remote.search.KnownForDto
-import com.london.data.datasource.remote.search.PersonDto
-import com.london.data.datasource.remote.search.SearchActorsResponse
+import com.london.data.datasource.remote.search.model.ApiSearch
+import com.london.data.datasource.remote.search.model.KnownFor
+import com.london.data.datasource.remote.search.model.SearchActorRemote
 import com.london.data.datasource.util.generateHash
 import com.london.domain.entity.Actor
 
@@ -16,9 +16,10 @@ fun PersonDtoLocal.toActorEntity(): Actor {
         profilePicture = this.profilePath ?: ""
     )
 }
-fun SearchActorsResponse.toLocal(query: String): SearchActorsLocal{
+
+fun ApiSearch<SearchActorRemote>.toLocal(query: String): SearchActorsLocal {
     return SearchActorsLocal(
-        date = this.page.toLong(),
+        date = System.currentTimeMillis(),
         query = query.generateHash(),
         page = this.page,
         results = this.results.map { it.toLocal() },
@@ -27,21 +28,21 @@ fun SearchActorsResponse.toLocal(query: String): SearchActorsLocal{
     )
 }
 
-fun PersonDto.toLocal(): PersonDtoLocal {
+fun SearchActorRemote.toLocal(): PersonDtoLocal {
     return PersonDtoLocal(
         adult = this.adult,
         gender = this.gender,
         id = this.id,
-        knownForDepartment = this.knownForDepartment,
-        name = this.name,
-        originalName = this.originalName,
+        knownForDepartment = this.knownForDepartment ?: "",
+        name = this.name ?: "",
+        originalName = this.originalName ?: "",
         popularity = this.popularity,
         profilePath = this.profilePath,
         knownFor = this.knownFor.map { it.toKnownForDtoLocal() }
     )
 }
 
-fun KnownForDto.toKnownForDtoLocal(): KnownForDtoLocal {
+fun KnownFor.toKnownForDtoLocal(): KnownForDtoLocal {
     return KnownForDtoLocal(
         adult = this.adult,
         backdropPath = this.backdropPath,
@@ -50,8 +51,8 @@ fun KnownForDto.toKnownForDtoLocal(): KnownForDtoLocal {
         originalTitle = this.originalTitle,
         overview = this.overview,
         posterPath = this.posterPath,
-        mediaType = this.mediaType,
-        originalLanguage = this.originalLanguage,
+        mediaType = this.mediaType ?: "",
+        originalLanguage = this.originalLanguage ?: "",
         genreIds = this.genreIds,
         popularity = this.popularity,
         releaseDate = this.releaseDate,

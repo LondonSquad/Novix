@@ -22,11 +22,11 @@ data class SearchMovieDtoLocal(
     val originalLanguage: String,
     val originalTitle: String,
     val overview: String,
-    val popularity: Int,
+    val popularity: Double,
     val posterPath: String?,
     val releaseDate: String,
     val title: String,
     val video: Boolean,
-    val voteAverage: Int,
+    val voteAverage: Double,
     val voteCount: Int
 )

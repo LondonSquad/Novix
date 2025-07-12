@@ -39,24 +39,25 @@ class DatabaseModule {
     }
 
     @Single
-    fun provideLocalDataSource(
+    fun provideTvShowLocalDataSource(
         searchTvShowDao: SearchTvShowDao,
     ): LocalDataSource<SearchTvShowLocal> {
         return TvShowLocalDataSourceImpl(
             searchTvShowDao = searchTvShowDao,
-            )
+        )
     }
 
     @Single
-    fun provideLocalDataSource(
+    fun provideMovieLocalDataSource(
         searchMoviesDao: SearchMoviesDao,
     ): LocalDataSource<SearchMoviesLocal> {
         return MovieLocalDataSourceImpl(
             searchMoviesDao = searchMoviesDao,
         )
     }
+
     @Single
-    fun provideLocalDataSource(
+    fun provideActorLocalDataSource(
         searchActorsDao: SearchActorsDao,
     ): LocalDataSource<SearchActorsLocal> {
         return ActorLocalDataSourceImpl(

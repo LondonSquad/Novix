@@ -1,4 +1,4 @@
-package com.london.data.datasource.remote
+package com.london.data.datasource.remote.search
 
 object ApiConstants {
     const val SEARCH_HOST = "api.themoviedb.org"
