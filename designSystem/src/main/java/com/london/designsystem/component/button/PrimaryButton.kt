@@ -22,8 +22,8 @@ import androidx.compose.ui.graphics.BlendMode
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Paint
 import androidx.compose.ui.graphics.drawscope.drawIntoCanvas
-import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.london.designsystem.R
 import com.london.designsystem.theme.NovixTheme
@@ -38,7 +38,7 @@ fun PrimaryButton(
     hasIcon: Boolean,
     isLoading: Boolean,
     isDisabled: Boolean,
-    onClick:  () -> Unit,
+    onClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     Button(
@@ -99,8 +99,6 @@ private fun Modifier.insetShadow(
             this.blendMode = BlendMode.SrcOver
         }
 
-        val pxOffsetX = offsetX.toPx()
-        val pxOffsetY = offsetY.toPx()
         val pxBlurRadius = blurRadius.toPx()
         val pxCornerRadius = cornerRadius.toPx()
 
