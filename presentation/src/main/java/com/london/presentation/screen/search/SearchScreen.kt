@@ -27,7 +27,9 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.blur
@@ -54,6 +56,7 @@ import com.london.presentation.R
 import com.london.presentation.composables.ActorsLayout
 import com.london.presentation.composables.MoviesLayOut
 import com.london.presentation.composables.TvShowLayOut
+import com.london.presentation.composables.filterbottomsheet.FilterBottomSheet
 import com.london.presentation.utils.ResultOrEmpty
 import org.koin.androidx.compose.koinViewModel
 
@@ -80,6 +83,7 @@ fun SearchScreenContent(
     keyboardController: SoftwareKeyboardController?,
 ) {
     val interactionSource = remember { MutableInteractionSource() }
+    var showFilterBottomSheet by remember { mutableStateOf(false) }
 
     Box(
         modifier = Modifier
@@ -110,8 +114,10 @@ fun SearchScreenContent(
                 viewModel = viewModel,
                 interactionSource = interactionSource,
                 keyboardController = keyboardController,
+                onFilterClick = { showFilterBottomSheet = true },
                 modifier = Modifier.padding(start = 16.dp, end = 16.dp, bottom = 12.dp)
             )
+
 
             ResultOrEmpty(
                 items = state.searchQuery.text.toList(),
@@ -180,6 +186,11 @@ fun SearchScreenContent(
                 }
             )
         }
+        if (showFilterBottomSheet) {
+            FilterBottomSheet(
+                onDismissRequest = { showFilterBottomSheet = false }
+            )
+        }
     }
 }
 
@@ -212,6 +223,7 @@ private fun SearchBar(
     viewModel: SearchViewModel,
     interactionSource: MutableInteractionSource,
     keyboardController: SoftwareKeyboardController?,
+    onFilterClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
     Row(
@@ -261,7 +273,7 @@ private fun SearchBar(
 
         PrimaryButton(
             text = "",
-            onClick = { },
+            onClick = onFilterClick,
             isLoading = false,
             isDisabled = false,
             hasIcon = true,
@@ -269,6 +281,7 @@ private fun SearchBar(
             hasLabel = false,
             modifier = Modifier.width(52.dp)
         )
+
     }
 }
 
@@ -444,11 +457,11 @@ private fun NoSearchBeforeLayOut(
             modifier = Modifier
                 .padding(horizontal = 16.dp)
                 .constrainAs(emptySearch) {
-                top.linkTo(parent.top)
-                bottom.linkTo(parent.bottom)
-                start.linkTo(parent.start)
-                end.linkTo(parent.end)
-            }
+                    top.linkTo(parent.top)
+                    bottom.linkTo(parent.bottom)
+                    start.linkTo(parent.start)
+                    end.linkTo(parent.end)
+                }
         )
     }
 }
