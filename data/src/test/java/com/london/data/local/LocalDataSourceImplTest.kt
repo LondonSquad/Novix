@@ -3,14 +3,18 @@ package com.london.data.local
 import com.london.data.datasource.local.DeleteException
 import com.london.data.datasource.local.GetException
 import com.london.data.datasource.local.InsertException
-import com.london.data.datasource.local.LocalDataSourceImpl
 import com.london.data.datasource.local.UpdateException
 import com.london.data.datasource.local.dao.SearchActorsDao
 import com.london.data.datasource.local.dao.SearchMoviesDao
 import com.london.data.datasource.local.dao.SearchTvShowDao
+import com.london.data.datasource.local.localDataSourceImpl.ActorLocalDataSourceImpl
+import com.london.data.datasource.local.localDataSourceImpl.MovieLocalDataSourceImpl
+import com.london.data.datasource.local.localDataSourceImpl.TvShowLocalDataSourceImpl
 import com.london.data.datasource.local.model.SearchActorsLocal
 import com.london.data.datasource.local.model.SearchMoviesLocal
 import com.london.data.datasource.local.model.SearchTvShowLocal
+import com.london.data.datasource.util.executeGetByQuery
+import com.london.data.datasource.util.generateHash
 import io.mockk.Runs
 import io.mockk.coEvery
 import io.mockk.coVerify
@@ -22,6 +26,7 @@ import org.junit.After
 import org.junit.Assert.assertEquals
 import org.junit.Before
 import org.junit.Test
+import org.junit.jupiter.api.assertNull
 import kotlin.test.assertFailsWith
 
 class LocalDataSourceImplTest {
@@ -29,7 +34,10 @@ class LocalDataSourceImplTest {
     private lateinit var searchTvShowDao: SearchTvShowDao
     private lateinit var searchMoviesDao: SearchMoviesDao
     private lateinit var searchActorsDao: SearchActorsDao
-    private lateinit var localDataSource: LocalDataSourceImpl
+
+    private lateinit var actorLocalDataSource: ActorLocalDataSourceImpl
+    private lateinit var movieLocalDataSource: MovieLocalDataSourceImpl
+    private lateinit var tvShowLocalDataSource: TvShowLocalDataSourceImpl
 
     private val mockMoviesResponse = mockk<SearchMoviesLocal>()
     private val mockTvShowsResponse = mockk<SearchTvShowLocal>()
@@ -38,15 +46,13 @@ class LocalDataSourceImplTest {
 
     @Before
     fun setup() {
-        searchTvShowDao = mockk()
-        searchMoviesDao = mockk()
-        searchActorsDao = mockk()
+        searchTvShowDao = mockk(relaxed = true)
+        searchMoviesDao = mockk(relaxed = true)
+        searchActorsDao = mockk(relaxed = true)
 
-        localDataSource = LocalDataSourceImpl(
-            searchTvShowDao = searchTvShowDao,
-            searchMoviesDao = searchMoviesDao,
-            searchActorsDao = searchActorsDao
-        )
+        actorLocalDataSource = ActorLocalDataSourceImpl(searchActorsDao)
+        movieLocalDataSource = MovieLocalDataSourceImpl(searchMoviesDao)
+        tvShowLocalDataSource = TvShowLocalDataSourceImpl(searchTvShowDao)
     }
 
     @After
@@ -61,7 +67,7 @@ class LocalDataSourceImplTest {
         coEvery { searchMoviesDao.insert(mockMoviesResponse) } just Runs
 
         // When
-        localDataSource.insertMovie(mockMoviesResponse)
+        movieLocalDataSource.insert(mockMoviesResponse)
 
         // Then
         coVerify(exactly = 1) { searchMoviesDao.insert(mockMoviesResponse) }
@@ -74,7 +80,7 @@ class LocalDataSourceImplTest {
 
         // When & Then
         assertFailsWith<InsertException> {
-            localDataSource.insertMovie(mockMoviesResponse)
+            movieLocalDataSource.insert(mockMoviesResponse)
         }
         coVerify(exactly = 1) { searchMoviesDao.insert(mockMoviesResponse) }
     }
@@ -85,7 +91,7 @@ class LocalDataSourceImplTest {
         coEvery { searchTvShowDao.insert(mockTvShowsResponse) } just Runs
 
         // When
-        localDataSource.insertTvShow(mockTvShowsResponse)
+        tvShowLocalDataSource.insert(mockTvShowsResponse)
 
         // Then
         coVerify(exactly = 1) { searchTvShowDao.insert(mockTvShowsResponse) }
@@ -98,7 +104,7 @@ class LocalDataSourceImplTest {
 
         // When & Then
         assertFailsWith<InsertException> {
-            localDataSource.insertTvShow(mockTvShowsResponse)
+            tvShowLocalDataSource.insert(mockTvShowsResponse)
         }
         coVerify(exactly = 1) { searchTvShowDao.insert(mockTvShowsResponse) }
     }
@@ -109,7 +115,7 @@ class LocalDataSourceImplTest {
         coEvery { searchActorsDao.insert(mockActorsResponse) } just Runs
 
         // When
-        localDataSource.insertActor(mockActorsResponse)
+        actorLocalDataSource.insert(mockActorsResponse)
 
         // Then
         coVerify(exactly = 1) { searchActorsDao.insert(mockActorsResponse) }
@@ -122,7 +128,7 @@ class LocalDataSourceImplTest {
 
         // When & Then
         assertFailsWith<InsertException> {
-            localDataSource.insertActor(mockActorsResponse)
+            actorLocalDataSource.insert(mockActorsResponse)
         }
         coVerify(exactly = 1) { searchActorsDao.insert(mockActorsResponse) }
     }
@@ -135,7 +141,7 @@ class LocalDataSourceImplTest {
         coEvery { searchMoviesDao.update(mockMoviesResponse) } just Runs
 
         // When
-        localDataSource.updateMovie(mockMoviesResponse)
+        movieLocalDataSource.update(mockMoviesResponse)
 
         // Then
         coVerify(exactly = 1) { searchMoviesDao.update(mockMoviesResponse) }
@@ -148,7 +154,7 @@ class LocalDataSourceImplTest {
 
         // When & Then
         assertFailsWith<UpdateException> {
-            localDataSource.updateMovie(mockMoviesResponse)
+            movieLocalDataSource.update(mockMoviesResponse)
         }
         coVerify(exactly = 1) { searchMoviesDao.update(mockMoviesResponse) }
     }
@@ -159,7 +165,7 @@ class LocalDataSourceImplTest {
         coEvery { searchTvShowDao.update(mockTvShowsResponse) } just Runs
 
         // When
-        localDataSource.updateTvShow(mockTvShowsResponse)
+        tvShowLocalDataSource.update(mockTvShowsResponse)
 
         // Then
         coVerify(exactly = 1) { searchTvShowDao.update(mockTvShowsResponse) }
@@ -172,7 +178,7 @@ class LocalDataSourceImplTest {
 
         // When & Then
         assertFailsWith<UpdateException> {
-            localDataSource.updateTvShow(mockTvShowsResponse)
+            tvShowLocalDataSource.update(mockTvShowsResponse)
         }
         coVerify(exactly = 1) { searchTvShowDao.update(mockTvShowsResponse) }
     }
@@ -183,7 +189,7 @@ class LocalDataSourceImplTest {
         coEvery { searchActorsDao.update(mockActorsResponse) } just Runs
 
         // When
-        localDataSource.updateActor(mockActorsResponse)
+        actorLocalDataSource.update(mockActorsResponse)
 
         // Then
         coVerify(exactly = 1) { searchActorsDao.update(mockActorsResponse) }
@@ -196,7 +202,7 @@ class LocalDataSourceImplTest {
 
         // When & Then
         assertFailsWith<UpdateException> {
-            localDataSource.updateActor(mockActorsResponse)
+            actorLocalDataSource.update(mockActorsResponse)
         }
         coVerify(exactly = 1) { searchActorsDao.update(mockActorsResponse) }
     }
@@ -209,7 +215,7 @@ class LocalDataSourceImplTest {
         coEvery { searchMoviesDao.delete(mockMoviesResponse) } just Runs
 
         // When
-        localDataSource.deleteMovie(mockMoviesResponse)
+        movieLocalDataSource.delete(mockMoviesResponse)
 
         // Then
         coVerify(exactly = 1) { searchMoviesDao.delete(mockMoviesResponse) }
@@ -222,7 +228,7 @@ class LocalDataSourceImplTest {
 
         // When & Then
         assertFailsWith<DeleteException> {
-            localDataSource.deleteMovie(mockMoviesResponse)
+            movieLocalDataSource.delete(mockMoviesResponse)
         }
         coVerify(exactly = 1) { searchMoviesDao.delete(mockMoviesResponse) }
     }
@@ -233,7 +239,7 @@ class LocalDataSourceImplTest {
         coEvery { searchTvShowDao.delete(mockTvShowsResponse) } just Runs
 
         // When
-        localDataSource.deleteTvShow(mockTvShowsResponse)
+        tvShowLocalDataSource.delete(mockTvShowsResponse)
 
         // Then
         coVerify(exactly = 1) { searchTvShowDao.delete(mockTvShowsResponse) }
@@ -246,7 +252,7 @@ class LocalDataSourceImplTest {
 
         // When & Then
         assertFailsWith<DeleteException> {
-            localDataSource.deleteTvShow(mockTvShowsResponse)
+            tvShowLocalDataSource.delete(mockTvShowsResponse)
         }
         coVerify(exactly = 1) { searchTvShowDao.delete(mockTvShowsResponse) }
     }
@@ -257,7 +263,7 @@ class LocalDataSourceImplTest {
         coEvery { searchActorsDao.delete(mockActorsResponse) } just Runs
 
         // When
-        localDataSource.deleteActor(mockActorsResponse)
+        actorLocalDataSource.delete(mockActorsResponse)
 
         // Then
         coVerify(exactly = 1) { searchActorsDao.delete(mockActorsResponse) }
@@ -270,7 +276,7 @@ class LocalDataSourceImplTest {
 
         // When & Then
         assertFailsWith<DeleteException> {
-            localDataSource.deleteActor(mockActorsResponse)
+            actorLocalDataSource.delete(mockActorsResponse)
         }
         coVerify(exactly = 1) { searchActorsDao.delete(mockActorsResponse) }
     }
@@ -284,11 +290,11 @@ class LocalDataSourceImplTest {
         coEvery { searchMoviesDao.getAll() } returns mockMoviesList
 
         // When
-        val result = localDataSource.getMovies()
+        val result = movieLocalDataSource.get()
 
         // Then
         assertEquals(mockMoviesList, result)
-        coVerify(exactly = 1) { searchMoviesDao.getAll() }
+        coVerify(exactly = 2) { searchMoviesDao.getAll() }
     }
 
     @Test
@@ -298,9 +304,9 @@ class LocalDataSourceImplTest {
 
         // When & Then
         assertFailsWith<GetException> {
-            localDataSource.getMovies()
+            movieLocalDataSource.get()
         }
-        coVerify(exactly = 1) { searchMoviesDao.getAll() }
+        coVerify(exactly = 2) { searchMoviesDao.getAll() }
     }
 
     @Test
@@ -310,11 +316,11 @@ class LocalDataSourceImplTest {
         coEvery { searchTvShowDao.getAll() } returns mockTvShowsList
 
         // When
-        val result = localDataSource.getTvShows()
+        val result = tvShowLocalDataSource.get()
 
         // Then
         assertEquals(mockTvShowsList, result)
-        coVerify(exactly = 1) { searchTvShowDao.getAll() }
+        coVerify(exactly = 2) { searchTvShowDao.getAll() }
     }
 
 
@@ -325,9 +331,9 @@ class LocalDataSourceImplTest {
 
         // When & Then
         assertFailsWith<GetException> {
-            localDataSource.getTvShows()
+            tvShowLocalDataSource.get()
         }
-        coVerify(exactly = 1) { searchTvShowDao.getAll() }
+        coVerify(exactly = 2) { searchTvShowDao.getAll() }
     }
 
     @Test
@@ -337,11 +343,11 @@ class LocalDataSourceImplTest {
         coEvery { searchActorsDao.getAll() } returns mockActorsList
 
         // When
-        val result = localDataSource.getActors()
+        val result = actorLocalDataSource.get()
 
         // Then
         assertEquals(mockActorsList, result)
-        coVerify(exactly = 1) { searchActorsDao.getAll() }
+        coVerify(exactly = 2) { searchActorsDao.getAll() }
     }
 
     @Test
@@ -351,9 +357,9 @@ class LocalDataSourceImplTest {
 
         // When & Then
         assertFailsWith<GetException> {
-            localDataSource.getActors()
+            actorLocalDataSource.get()
         }
-        coVerify(exactly = 1) { searchActorsDao.getAll() }
+        coVerify(exactly = 2) { searchActorsDao.getAll() }
     }
     // endregion
 
@@ -364,7 +370,7 @@ class LocalDataSourceImplTest {
         coEvery { searchMoviesDao.getCurrentSearchByDate(testDate) } returns mockMoviesResponse
 
         // When
-        val result = localDataSource.getMovieByDate(testDate)
+        val result = movieLocalDataSource.getByDate(testDate)
 
         // Then
         assertEquals(mockMoviesResponse, result)
@@ -378,7 +384,7 @@ class LocalDataSourceImplTest {
 
         // When & Then
         assertFailsWith<GetException> {
-            localDataSource.getMovieByDate(testDate)
+            movieLocalDataSource.getByDate(testDate)
         }
         coVerify(exactly = 1) { searchMoviesDao.getCurrentSearchByDate(testDate) }
     }
@@ -389,7 +395,7 @@ class LocalDataSourceImplTest {
         coEvery { searchTvShowDao.getCurrentSearchByDate(testDate) } returns mockTvShowsResponse
 
         // When
-        val result = localDataSource.getTvShowByDate(testDate)
+        val result = tvShowLocalDataSource.getByDate(testDate)
 
         // Then
         assertEquals(mockTvShowsResponse, result)
@@ -403,7 +409,7 @@ class LocalDataSourceImplTest {
 
         // When & Then
         assertFailsWith<GetException> {
-            localDataSource.getTvShowByDate(testDate)
+            tvShowLocalDataSource.getByDate(testDate)
         }
         coVerify(exactly = 1) { searchTvShowDao.getCurrentSearchByDate(testDate) }
     }
@@ -414,7 +420,7 @@ class LocalDataSourceImplTest {
         coEvery { searchActorsDao.getCurrentSearchByDate(testDate) } returns mockActorsResponse
 
         // When
-        val result = localDataSource.getActorByDate(testDate)
+        val result = actorLocalDataSource.getByDate(testDate)
 
         // Then
         assertEquals(mockActorsResponse, result)
@@ -428,7 +434,7 @@ class LocalDataSourceImplTest {
 
         // When & Then
         assertFailsWith<GetException> {
-            localDataSource.getActorByDate(testDate)
+            actorLocalDataSource.getByDate(testDate)
         }
         coVerify(exactly = 1) { searchActorsDao.getCurrentSearchByDate(testDate) }
     }
@@ -439,82 +445,92 @@ class LocalDataSourceImplTest {
     fun `getActorByQuery should return actor from dao successfully`() = runTest {
         // Given
         val testQuery = "test query"
-        coEvery { searchActorsDao.getSearchByQuery(testQuery) } returns mockActorsResponse
+        coEvery { searchActorsDao.getSearchByQuery(testQuery.generateHash()) } returns mockActorsResponse
 
         // When
-        val result = localDataSource.getActorByQuery(testQuery)
+        val result = actorLocalDataSource.getByQuery(testQuery)
 
         // Then
         assertEquals(mockActorsResponse, result)
-        coVerify(exactly = 1) { searchActorsDao.getSearchByQuery(testQuery) }
+        coVerify(exactly = 1) { searchActorsDao.getSearchByQuery(testQuery.generateHash()) }
     }
 
     @Test
-    fun `getActorByQuery should throw GetException when dao throws exception`() = runTest {
+    fun `getActorByQuery should return null when dao throws exception`() = runTest {
         // Given
         val testQuery = "test query"
-        coEvery { searchActorsDao.getSearchByQuery(testQuery) } throws RuntimeException("Database error")
+        coEvery { searchActorsDao.executeGetByQuery(testQuery.generateHash()) } throws RuntimeException(
+            "Database error"
+        )
 
-        // When & Then
-        assertFailsWith<GetException> {
-            localDataSource.getActorByQuery(testQuery)
-        }
-        coVerify(exactly = 1) { searchActorsDao.getSearchByQuery(testQuery) }
+        // When
+        val result = actorLocalDataSource.getByQuery(testQuery)
+
+        // Then
+        assertNull(result)
+        coVerify(exactly = 1) { searchActorsDao.executeGetByQuery(testQuery.generateHash()) }
     }
 
     @Test
     fun `getTvShowByQuery should return tv show from dao successfully`() = runTest {
         // Given
         val testQuery = "test query"
-        coEvery { searchTvShowDao.getSearchByQuery(testQuery) } returns mockTvShowsResponse
+        coEvery { searchTvShowDao.getSearchByQuery(testQuery.generateHash()) } returns mockTvShowsResponse
 
         // When
-        val result = localDataSource.getTvShowByQuery(testQuery)
+        val result = tvShowLocalDataSource.getByQuery(testQuery)
 
         // Then
         assertEquals(mockTvShowsResponse, result)
-        coVerify(exactly = 1) { searchTvShowDao.getSearchByQuery(testQuery) }
+        coVerify(exactly = 1) { searchTvShowDao.getSearchByQuery(testQuery.generateHash()) }
     }
 
     @Test
-    fun `getTvShowByQuery should throw GetException when dao throws exception`() = runTest {
+    fun `getTvShowByQuery should return null when dao throws exception`() = runTest {
         // Given
         val testQuery = "test query"
-        coEvery { searchTvShowDao.getSearchByQuery(testQuery) } throws RuntimeException("Database error")
+        coEvery { searchTvShowDao.executeGetByQuery(testQuery.generateHash()) } throws RuntimeException(
+            "Database error"
+        )
 
-        // When & Then
-        assertFailsWith<GetException> {
-            localDataSource.getTvShowByQuery(testQuery)
-        }
-        coVerify(exactly = 1) { searchTvShowDao.getSearchByQuery(testQuery) }
+        // When
+        val result = tvShowLocalDataSource.getByQuery(testQuery)
+
+        // Then
+        assertNull(result)
+        coVerify(exactly = 1) { searchTvShowDao.executeGetByQuery(testQuery.generateHash()) }
     }
 
     @Test
     fun `getMovieByQuery should return movie from dao successfully`() = runTest {
         // Given
         val testQuery = "test query"
-        coEvery { searchMoviesDao.getSearchByQuery(testQuery) } returns mockMoviesResponse
+        coEvery { searchMoviesDao.getSearchByQuery(testQuery.generateHash()) } returns mockMoviesResponse
 
         // When
-        val result = localDataSource.getMovieByQuery(testQuery)
+        val result = movieLocalDataSource.getByQuery(testQuery)
 
         // Then
         assertEquals(mockMoviesResponse, result)
-        coVerify(exactly = 1) { searchMoviesDao.getSearchByQuery(testQuery) }
+        coVerify(exactly = 1) { searchMoviesDao.getSearchByQuery(testQuery.generateHash()) }
     }
 
     @Test
-    fun `getMovieByQuery should throw GetException when dao throws exception`() = runTest {
+    fun `getMovieByQuery should return null when dao throws exception`() = runTest {
         // Given
         val testQuery = "test query"
-        coEvery { searchMoviesDao.getSearchByQuery(testQuery) } throws RuntimeException("Database error")
+        coEvery { searchMoviesDao.getSearchByQuery(testQuery.generateHash()) } throws RuntimeException(
+            "Database error"
+        )
 
-        // When & Then
-        assertFailsWith<GetException> {
-            localDataSource.getMovieByQuery(testQuery) // this is a suspending call
+        // When
+        val result = movieLocalDataSource.getByQuery(testQuery)
+
+        // Then
+        assertNull(result)
+        coVerify(exactly = 1) {
+            searchMoviesDao.getSearchByQuery(testQuery.generateHash())
         }
-
-        coVerify(exactly = 1) { searchMoviesDao.getSearchByQuery(testQuery) }
+        // endregion
     }
-    // endregion
 }
