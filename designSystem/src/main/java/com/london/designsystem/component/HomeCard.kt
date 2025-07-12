@@ -64,9 +64,7 @@ fun HomeCard(
             contentDescription = imageDescription,
             modifier = Modifier.matchParentSize(),
             contentScale = ContentScale.Crop,
-            onLoading = { isLoading = true },
-            onSuccess = { isLoading = false },
-            onError = { isLoading = false },
+            onLoadingStateChange = { isLoading = it },
             error = painterResource(R.drawable.img_error)
         )
         SaveIcon(
