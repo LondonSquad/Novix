@@ -58,7 +58,7 @@ jobs:
     
     # 8. Build the app
     - name: Build Debug APK
-      run: ./gradlew assembleDebug
+      run: ./gradlew -PversionCode=${{ github.run_number }} -PversionName="1.0.${{ github.run_number }}" assembleDebug
     
     # 9. Deploy to Firebase App Distribution (CD part)
     - name: Deploy to Firebase App Distribution
