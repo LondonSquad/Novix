@@ -1,5 +1,7 @@
 package com.london.designsystem.component.button
 
+import android.annotation.SuppressLint
+import android.graphics.BlurMaskFilter
 import androidx.annotation.DrawableRes
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
@@ -15,6 +17,11 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.drawWithCache
+import androidx.compose.ui.graphics.BlendMode
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.Paint
+import androidx.compose.ui.graphics.drawscope.drawIntoCanvas
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.Dp
@@ -39,7 +46,8 @@ fun PrimaryButton(
         onClick = onClick,
         modifier = modifier
             .height(48.dp)
-            .defaultMinSize(minWidth = 52.dp),
+            .defaultMinSize(minWidth = 52.dp)
+            .insetShadow(),
         shape = RoundedCornerShape(12.dp),
         colors = ButtonDefaults.buttonColors(
             containerColor = if (isDisabled) NovixTheme.colors.disable else NovixTheme.colors.primary,
@@ -77,6 +85,46 @@ fun PrimaryButton(
         }
     }
 }
+
+@SuppressLint("SuspiciousModifierThen")
+private fun Modifier.insetShadow(
+    color: Color = Color(0x1F0D0608),
+    offsetX: Dp = 2.dp,
+    offsetY: Dp = 4.dp,
+    blurRadius: Dp = 12.dp,
+    cornerRadius: Dp = 12.dp
+) = this.then(
+    drawWithCache {
+        val paint = Paint().apply {
+            this.color = color
+            this.blendMode = BlendMode.SrcOver
+        }
+
+        val pxOffsetX = offsetX.toPx()
+        val pxOffsetY = offsetY.toPx()
+        val pxBlurRadius = blurRadius.toPx()
+        val pxCornerRadius = cornerRadius.toPx()
+
+        onDrawWithContent {
+            drawContent()
+            drawIntoCanvas { canvas ->
+                canvas.drawRoundRect(
+                    left = 0f,
+                    top = 0f,
+                    right = size.width,
+                    bottom = size.height,
+                    radiusX = pxCornerRadius,
+                    radiusY = pxCornerRadius,
+                    paint = paint.apply {
+                        asFrameworkPaint().apply {
+                            maskFilter = BlurMaskFilter(pxBlurRadius, BlurMaskFilter.Blur.NORMAL)
+                        }
+                    }
+                )
+            }
+        }
+    }
+)
 
 @ThemePreviews
 @Composable
