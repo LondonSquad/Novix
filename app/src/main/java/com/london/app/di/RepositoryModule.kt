@@ -1,14 +1,35 @@
 package com.london.app.di
 
-import com.london.data.repo.DummySearchRepositoryImpl
-import com.london.domain.repo.SearchRepository
+import com.london.data.datasource.local.LocalDataSource
+import com.london.data.datasource.local.model.SearchActorsLocal
+import com.london.data.datasource.local.model.SearchMoviesLocal
+import com.london.data.datasource.local.model.SearchTvShowLocal
+import com.london.data.datasource.remote.RemoteDataSource
+import com.london.data.datasource.util.CrashReporter
+import com.london.data.datasource.util.FirebaseCrashReporter
+import com.london.data.repository.SearchRepositoryImpl
+import com.london.domain.repository.SearchRepository
 import org.koin.core.annotation.Module
 import org.koin.core.annotation.Single
 
 @Module
 class RepositoryModule {
     @Single
-    fun provideSearchRepository(): SearchRepository {
-        return DummySearchRepositoryImpl()
+    fun provideSearchRepository(
+        searchTvShowService: LocalDataSource<SearchTvShowLocal>,
+        searchActorService: LocalDataSource<SearchActorsLocal>,
+        searchMovieService: LocalDataSource<SearchMoviesLocal>,
+        remoteDataSource: RemoteDataSource,
+        crashReporter: CrashReporter
+    ): SearchRepository {
+        return SearchRepositoryImpl(
+            searchTvShowService = searchTvShowService,
+            searchActorService = searchActorService,
+            searchMovieService = searchMovieService,
+            remoteDataSource = remoteDataSource,
+            crashReporter = crashReporter
+        )
     }
+    @Single
+    fun provideCrashReporter(): CrashReporter = FirebaseCrashReporter()
 }
