@@ -17,12 +17,11 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.graphics.Path
 import androidx.compose.ui.graphics.drawscope.Stroke
-import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import coil.compose.AsyncImage
+import com.ae.imageharamblur.ui.ImageViewFilter
 import com.london.designsystem.R
 import com.london.designsystem.theme.NovixTheme
 import com.london.designsystem.theme.ThemePreviews
@@ -79,16 +78,15 @@ private fun ActorImage(
         bottomEnd = if (isRtl) 12.dp else 0.dp
     )
 
-    AsyncImage(
+    ImageViewFilter(
         model = imageRes,
         contentDescription = "actorImage",
         modifier = Modifier
             .size(78.dp)
-            .graphicsLayer { scaleX = if (isRtl) -1f else 1f }
-            .clip(imageShape)
+            .clip(shape = imageShape)
             .border(
-                shape = imageShape,
                 width = 1.dp,
+                shape = imageShape,
                 color = NovixTheme.colors.stroke
             ),
         contentScale = ContentScale.Crop
@@ -127,7 +125,6 @@ private fun TextSection(
                         lineTo(right, bottom)
 
                     } else {
-
                         moveTo(left, top)
                         lineTo(right - cornerRadius, top)
                         quadraticTo(right, top, right, top + cornerRadius)

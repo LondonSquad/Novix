@@ -46,6 +46,14 @@ kotlinxCoroutinesAndroid = "1.10.2"
 kotlinxCoroutinesTest = "1.8.1"
 kotlinxDatetime = "0.6.0"
 
+# TensorFlow Lite
+tensorflowLiteSupport = "0.5.0"
+tensorflowLite = "2.17.0"
+
+# ML Kit
+faceDetection = "16.1.7"
+
+
 # UI Libraries
 coilCompose = "2.7.0"
 lottieCompose = "4.0.0"
@@ -128,6 +136,14 @@ coil-compose = { group = "io.coil-kt", name = "coil-compose", version.ref = "coi
 lottie-compose = { group = "com.airbnb.android", name = "lottie-compose", version.ref = "lottieCompose" }
 mockk-android = { module = "io.mockk:mockk-android", version.ref = "mockk" }
 remember-preference = { group = "dev.burnoo", name = "compose-remember-preference", version.ref = "rememberPreference" }
+
+# tensorflow Lite
+tensorflow-lite-support = { module = "org.tensorflow:tensorflow-lite-support", version.ref = "tensorflowLiteSupport" }
+tensorflow-lite = { module = "org.tensorflow:tensorflow-lite", version.ref = "tensorflowLite" }
+
+# ML Kit
+face-detection = { module = "com.google.mlkit:face-detection", version.ref = "faceDetection" }
+
 
 # Testing
 junit = { group = "junit", name = "junit", version.ref = "junit" }
