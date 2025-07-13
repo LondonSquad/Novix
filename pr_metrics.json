@@ -19,16 +19,24 @@
           "url": "https://github.com/marwanqashwa"
         },
         "submitted_at": "2025-07-13T15:36:46Z"
+      },
+      {
+        "reviewer": {
+          "id": 102248144,
+          "login": "BassantM",
+          "url": "https://github.com/BassantM"
+        },
+        "submitted_at": "2025-07-13T15:51:10Z"
       }
     ],
     "first_approved_at": "2025-07-13T15:36:46Z",
     "time_to_first_approval_minutes": 27.516666666666666,
-    "required_approvals_met_at": null,
-    "time_to_required_approvals_minutes": null,
+    "required_approvals_met_at": "2025-07-13T15:51:10Z",
+    "time_to_required_approvals_minutes": 41.916666666666664,
     "closed_at": null,
     "merged_at": null,
     "merged_by": null,
     "week": "2025-W28",
-    "status": "pending"
+    "status": "approved"
   }
 ]
