@@ -1,6 +1,5 @@
 package com.london.designsystem.component
 
-import android.view.View
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -15,11 +14,13 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.drawBehind
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Path
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.platform.LocalConfiguration
+import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import com.ae.imageharamblur.ui.ImageViewFilter
 import com.london.designsystem.R
@@ -33,44 +34,22 @@ fun ActorItem(
     imageRes: Any,
     modifier: Modifier = Modifier
 ) {
-    val config = LocalConfiguration.current
-    val isRtl = config.layoutDirection == View.LAYOUT_DIRECTION_RTL
-
     Row(
         modifier = modifier,
         verticalAlignment = Alignment.Bottom,
     ) {
-        if (isRtl) {
-            ActorImage(
-                imageRes = imageRes,
-                isRtl = true
-            )
-            TextSection(
-                actorName = actorName,
-                characterName = characterName,
-                isRtl = true,
-                modifier = Modifier.weight(1f)
-            )
-        } else {
-            ActorImage(
-                imageRes = imageRes,
-                isRtl = false
-            )
-            TextSection(
-                actorName = actorName,
-                characterName = characterName,
-                isRtl = false,
-                modifier = Modifier.weight(1f)
-            )
-        }
+        ActorImage(imageRes = imageRes)
+        TextSection(
+            actorName = actorName,
+            characterName = characterName,
+            modifier = Modifier.weight(1f)
+        )
     }
 }
 
 @Composable
-private fun ActorImage(
-    imageRes: Any,
-    isRtl: Boolean
-) {
+private fun ActorImage(imageRes: Any) {
+    val isRtl = isRtlLayout()
     val imageShape = RoundedCornerShape(
         topStart = 12.dp,
         topEnd = 12.dp,
@@ -93,52 +72,63 @@ private fun ActorImage(
     )
 }
 
+
+@Composable
+fun isRtlLayout(): Boolean = LocalLayoutDirection.current == LayoutDirection.Rtl
+
+
+@Composable
+fun Modifier.customBorder(
+    color: Color,
+    isRtl: Boolean = isRtlLayout()
+): Modifier = this.drawBehind {
+    val strokeWidth = 1.dp.toPx()
+    val cornerRadius = 12.dp.toPx()
+
+    val left = 0f
+    val top = 0f
+    val right = size.width
+    val bottom = size.height
+
+    val path = Path().apply {
+        if (isRtl) {
+            moveTo(right, top)
+            lineTo(left + cornerRadius, top)
+            quadraticTo(left, top, left, top + cornerRadius)
+            lineTo(left, bottom - cornerRadius)
+            quadraticTo(left, bottom, left + cornerRadius, bottom)
+            lineTo(right, bottom)
+
+        } else {
+            moveTo(left, top)
+            lineTo(right - cornerRadius, top)
+            quadraticTo(right, top, right, top + cornerRadius)
+            lineTo(right, bottom - cornerRadius)
+            quadraticTo(right, bottom, right - cornerRadius, bottom)
+            lineTo(left, bottom)
+        }
+    }
+    drawPath(
+        path = path,
+        color = color,
+        style = Stroke(width = strokeWidth)
+    )
+}
+
+
 @Composable
 private fun TextSection(
     actorName: String,
     characterName: String?,
-    isRtl: Boolean,
     modifier: Modifier = Modifier
 ) {
     val color = NovixTheme.colors.stroke
-
+    val isRtl = isRtlLayout()
     Column(
         modifier = modifier
             .fillMaxWidth()
             .defaultMinSize(minHeight = 55.dp)
-            .drawBehind {
-                val strokeWidth = 1.dp.toPx()
-                val cornerRadius = 12.dp.toPx()
-
-                val left = 0f
-                val top = 0f
-                val right = size.width
-                val bottom = size.height
-
-                val path = Path().apply {
-                    if (isRtl) {
-                        moveTo(right, top)
-                        lineTo(left + cornerRadius, top)
-                        quadraticTo(left, top, left, top + cornerRadius)
-                        lineTo(left, bottom - cornerRadius)
-                        quadraticTo(left, bottom, left + cornerRadius, bottom)
-                        lineTo(right, bottom)
-
-                    } else {
-                        moveTo(left, top)
-                        lineTo(right - cornerRadius, top)
-                        quadraticTo(right, top, right, top + cornerRadius)
-                        lineTo(right, bottom - cornerRadius)
-                        quadraticTo(right, bottom, right - cornerRadius, bottom)
-                        lineTo(left, bottom)
-                    }
-                }
-                drawPath(
-                    path = path,
-                    color = color,
-                    style = Stroke(width = strokeWidth)
-                )
-            }
+            .customBorder(color = color, isRtl = isRtl)
             .padding(
                 horizontal = 12.dp,
                 vertical = 8.dp
@@ -172,7 +162,8 @@ private fun ActorItemPreview() {
         ActorItem(
             actorName = "Lee Jung-jae",
             characterName = "Character name",
-            imageRes = R.drawable.frame1597883073
+            imageRes = R.drawable.frame1597883073,
+            modifier = Modifier.padding(16.dp)
         )
     }
 }
