@@ -87,7 +87,7 @@
             text-transform: capitalize;
         }
 
-        .status-pending_approval {
+        .status-pending {
             background-color: #fef3c7;
             color: #92400e;
         }
@@ -285,7 +285,7 @@
                 const prsInWeek = prsByWeek[week];
                 const mergedCount = prsInWeek.filter((pr) => pr.status === "merged").length;
                 const closedCount = prsInWeek.filter((pr) => pr.status === "closed").length;
-                const pendingCount = prsInWeek.filter((pr) => pr.status === "pending_approval" || pr.status === "reopened").length;
+                const pendingCount = prsInWeek.filter((pr) => pr.status === "pending" || pr.status === "reopened").length;
                 const approvedRequiredCount = prsInWeek.filter((pr) => pr.status === "approved").length;
 
                 const weekGroup = document.createElement("div");
