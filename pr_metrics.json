@@ -50,5 +50,28 @@
     },
     "week": "2025-W28",
     "status": "merged"
+  },
+  {
+    "pr_number": 91,
+    "url": "https://github.com/LondonSquad/Novix/pull/91",
+    "title": "add initial structure for details screens",
+    "opened_at": "2025-07-13T21:17:42Z",
+    "head_ref": "screen-details-structure",
+    "base_ref": "develop",
+    "creator": {
+      "login": "karimdeabes",
+      "id": 81706918,
+      "url": "https://github.com/karimdeabes"
+    },
+    "approvals": [],
+    "first_approved_at": null,
+    "time_to_first_approval_minutes": null,
+    "required_approvals_met_at": null,
+    "time_to_required_approvals_minutes": null,
+    "closed_at": null,
+    "merged_at": null,
+    "merged_by": null,
+    "week": "2025-W28",
+    "status": "pending"
   }
 ]
