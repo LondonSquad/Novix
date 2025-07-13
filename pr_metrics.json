@@ -41,10 +41,14 @@
     "time_to_first_approval_minutes": 71.35,
     "required_approvals_met_at": "2025-07-13T16:33:04Z",
     "time_to_required_approvals_minutes": 83.81666666666666,
-    "closed_at": null,
-    "merged_at": null,
-    "merged_by": null,
+    "closed_at": "2025-07-13T17:07:49Z",
+    "merged_at": "2025-07-13T17:07:49Z",
+    "merged_by": {
+      "login": "hassanwasfy",
+      "id": 64452659,
+      "url": "https://github.com/hassanwasfy"
+    },
     "week": "2025-W28",
-    "status": "approved"
+    "status": "merged"
   }
 ]
