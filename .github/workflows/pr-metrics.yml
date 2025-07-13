@@ -169,11 +169,11 @@ jobs:
                          .required_approvals_met_at = (.approvals | .[($required_approvals - 1)].submitted_at)
                          # Calculate the time difference
                        | .time_to_required_approvals_minutes = ((parse_time(.required_approvals_met_at) - parse_time(.opened_at)) / 60)
-                       | .status = "approved_required"
+                       | .status = "approved"
                        )
                      else
                        # If not met, keep existing status unless it should be pending
-                       (if .status == "approved_required" or .status == "merged" or .status == "closed" then . else .status = "pending_approval" end)
+                       (if .status == "approved" or .status == "merged" or .status == "closed" then . else .status = "pending_approval" end)
                      end)
                 else . end # End of the main if statement
               ) # End of map
