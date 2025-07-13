@@ -67,7 +67,7 @@ fun OutlinedTextField(
     singleLine: Boolean = true,
     shape: Shape = MaterialTheme.shapes.medium,
     colors: TextFieldColors = getDefaultTextFieldColors(),
-    backgroundColor: Color = NovixTheme.colors.surface,
+    backgroundColor: Color = Color.Transparent,
     isPasswordField: Boolean = false,
     passwordVisible: Boolean = false,
     onPasswordVisibilityChange: () -> Unit = {},
@@ -167,7 +167,7 @@ private fun getDefaultTextFieldColors(): TextFieldColors {
         focusedPlaceholderColor = NovixTheme.colors.hint,
         unfocusedPlaceholderColor = NovixTheme.colors.hint,
         cursorColor = NovixTheme.colors.primary,
-        selectionColors = androidx.compose.foundation.text.selection.TextSelectionColors(
+        selectionColors = TextSelectionColors(
             handleColor = NovixTheme.colors.primary,
             backgroundColor = NovixTheme.colors.primary.copy(alpha = 0.4f)
         )

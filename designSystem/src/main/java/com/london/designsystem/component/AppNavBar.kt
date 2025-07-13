@@ -146,7 +146,7 @@ private fun AnimatedBackgroundBlur(
                 modifier = Modifier
                     .width(60.dp)
                     .height(16.dp)
-                    .blur(radius = 54.dp, edgeTreatment = BlurredEdgeTreatment.Unbounded),
+                    .blur(radius = 62.dp, edgeTreatment = BlurredEdgeTreatment.Unbounded),
                 painter = painterResource(R.drawable.ellipse_blur_filled),
                 contentDescription = null,
                 tint = selectedIconColor

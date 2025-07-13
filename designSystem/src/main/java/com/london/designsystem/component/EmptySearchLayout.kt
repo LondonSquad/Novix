@@ -3,14 +3,12 @@ package com.london.designsystem.component
 import androidx.annotation.DrawableRes
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Arrangement.Center
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.size
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Alignment.Companion.CenterHorizontally
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
@@ -23,12 +21,11 @@ import com.london.designsystem.theme.NovixTheme
 import com.london.designsystem.theme.ThemePreviews
 
 @Composable
-fun EmptySearchComponent(
+fun EmptySearchLayout(
     text: String,
     @DrawableRes image: Int,
     modifier: Modifier = Modifier
 ) {
-
     Column(
         modifier = modifier
             .fillMaxWidth()
@@ -42,7 +39,7 @@ fun EmptySearchComponent(
             modifier = Modifier
                 .size(128.dp)
                 .align(CenterHorizontally),
-            contentScale = ContentScale.FillHeight
+            contentScale = ContentScale.Fit
         )
         Text(
             text = text,
@@ -52,7 +49,6 @@ fun EmptySearchComponent(
             modifier = Modifier.fillMaxWidth()
         )
     }
-
 }
 
 
@@ -60,9 +56,9 @@ fun EmptySearchComponent(
 @Composable
 private fun EmptySearchComponentPreview() {
     NovixTheme {
-        EmptySearchComponent(
+        EmptySearchLayout(
             text = stringResource(R.string.start_exploring_msg),
-            image = R.drawable.img_explore,
+            image = R.drawable.imge_explore,
         )
     }
 }
@@ -71,7 +67,7 @@ private fun EmptySearchComponentPreview() {
 @Composable
 private fun EmptySearchComponentNoResultPreview() {
     NovixTheme {
-        EmptySearchComponent(
+        EmptySearchLayout(
             text = stringResource(R.string.no_search_result_msg),
             image = R.drawable.img_no_search_result,
         )
