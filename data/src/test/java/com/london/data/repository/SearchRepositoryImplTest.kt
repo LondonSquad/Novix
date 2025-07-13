@@ -196,7 +196,10 @@ class SearchRepositoryImplTest {
             Movie(
                 id = 1,
                 name = "",
-                posterPicture = "https://image.tmdb.org/t/p/w500"
+                posterPicture = "https://image.tmdb.org/t/p/w500",
+                releaseYear = 2020,
+                rating = 8,
+                genreIds = listOf()
             )
         )
 
@@ -204,7 +207,10 @@ class SearchRepositoryImplTest {
             TvShow(
                 id = 2,
                 name = "",
-                posterPicture = "https://image.tmdb.org/t/p/w500"
+                posterPicture = "https://image.tmdb.org/t/p/w500",
+                releaseYear = 2020,
+                rating = 10,
+                genres = listOf()
             )
         )
 
@@ -229,11 +235,11 @@ class SearchRepositoryImplTest {
                     originalTitle = "",
                     overview = "",
                     popularity = 0.0,
-                    posterPath = "", // Empty path results in just the base URL
-                    releaseDate = "",
+                    posterPath = "",
+                    releaseDate = "2020-06-15",
                     title = "",
                     video = false,
-                    voteAverage = 0.0,
+                    voteAverage = 8.0,
                     voteCount = 0
                 )
             ),
@@ -255,10 +261,10 @@ class SearchRepositoryImplTest {
                     originalName = "",
                     overview = "",
                     popularity = 0.0,
-                    posterPath = "", // Empty path results in just the base URL
-                    firstAirDate = "",
+                    posterPath = "",
+                    firstAirDate = "2020-07-20",
                     name = "",
-                    voteAverage = 0.0,
+                    voteAverage = 10.0,
                     voteCount = 0
                 )
             ),
@@ -278,7 +284,7 @@ class SearchRepositoryImplTest {
                     name = "Tom Holland",
                     originalName = "Tom Holland",
                     popularity = 0.0,
-                    profilePath = "", // Empty path - mapper will add base URL
+                    profilePath = "",
                     knownFor = emptyList()
                 )
             ),
@@ -286,7 +292,6 @@ class SearchRepositoryImplTest {
             totalResults = 1
         )
 
-        // ========== Remote Mocks ==========
         val SearchMoviesRemoteMock = ApiSearch(
             page = 1,
             results = listOf(
@@ -300,10 +305,10 @@ class SearchRepositoryImplTest {
                     overview = "",
                     popularity = 0.0,
                     posterPath = "",
-                    releaseDate = "",
+                    releaseDate = "2020-06-15",
                     title = "",
                     video = false,
-                    voteAverage = 0.0,
+                    voteAverage = 8.0,
                     voteCount = 0
                 )
             ),
@@ -325,9 +330,9 @@ class SearchRepositoryImplTest {
                     overview = "",
                     popularity = 0.0,
                     posterPath = "",
-                    firstAirDate = "",
+                    firstAirDate = "2020-07-20",
                     name = "",
-                    voteAverage = 0.0,
+                    voteAverage = 10.0,
                     voteCount = 0
                 )
             ),
@@ -354,4 +359,5 @@ class SearchRepositoryImplTest {
             totalResults = 1
         )
     }
+
 }
