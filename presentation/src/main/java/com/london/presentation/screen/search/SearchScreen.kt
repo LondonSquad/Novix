@@ -95,6 +95,7 @@ fun SearchScreenContent(
         Column(
             modifier = Modifier
                 .fillMaxSize()
+                .padding(bottom = 16.dp)
                 .background(NovixTheme.colors.surface),
             verticalArrangement = Arrangement.Top
         )
