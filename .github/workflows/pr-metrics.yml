@@ -125,9 +125,10 @@ jobs:
             PR_HEAD_SHA=$(gh api "repos/${{ github.repository }}/pulls/$PR_NUMBER_JQ" --jq '.head.sha')
             echo "Current PR HEAD SHA: $PR_HEAD_SHA"
 
-            CURRENT_APPROVALS_JSON=$(gh api "repos/${{ github.repository }}/pulls/$PR_NUMBER_JQ/reviews" \
-              --jq --arg current_head_sha "$PR_HEAD_SHA" '
-                map(select(.state == "APPROVED" and .commit_id == $current_head_sha))
+            CURRENT_APPROVALS_JSON=$(gh api \
+              "repos/${{ github.repository }}/pulls/$PR_NUMBER_JQ/reviews" \
+              --jq '
+                map(select(.state == "APPROVED" and .commit_id == "'"$PR_HEAD_SHA"'"))
                 | group_by(.user.id)
                 | map(sort_by(.submitted_at) | .[-1])
                 | map({
