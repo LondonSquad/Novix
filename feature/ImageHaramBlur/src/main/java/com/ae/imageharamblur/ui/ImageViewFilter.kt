@@ -1,5 +1,6 @@
 package com.ae.imageharamblur.ui
 
+import android.R
 import android.graphics.Bitmap
 import android.os.Build
 import android.util.Log
@@ -17,13 +18,14 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.blur
 import androidx.compose.ui.graphics.asImageBitmap
-import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalInspectionMode
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
-import coil.compose.AsyncImage
+import coil.compose.AsyncImagePainter
+import coil.compose.SubcomposeAsyncImage
+import coil.compose.SubcomposeAsyncImageScope
 import coil.request.CachePolicy
 import coil.request.ImageRequest
 import com.ae.imageharamblur.ImageModerationProcessor
@@ -41,8 +43,8 @@ fun ImageViewFilter(
     contentScale: ContentScale = ContentScale.Fit,
     enableModeration: Boolean = true,
     blurStrength: Float = 80f,
-    placeholder: Painter? = null,
-    error: Painter? = null,
+    loadingContent: @Composable SubcomposeAsyncImageScope.(AsyncImagePainter.State.Loading) -> Unit,
+    errorContent: @Composable SubcomposeAsyncImageScope.(AsyncImagePainter.State.Error) -> Unit,
     onModerationResult: ((Boolean, String?) -> Unit)? = null,
     onLoadingStateChange: ((Boolean) -> Unit)? = null
 ) {
@@ -70,7 +72,7 @@ fun ImageViewFilter(
     }
 
     Box(modifier = modifier) {
-        AsyncImage(
+        SubcomposeAsyncImage(
             model = ImageRequest.Builder(context)
                 .data(model)
                 .crossfade(false)
@@ -80,12 +82,12 @@ fun ImageViewFilter(
                 .build(),
             contentDescription = contentDescription,
             contentScale = contentScale,
-            placeholder = placeholder,
-            error = error,
-            onLoading = { state ->
+            loading = loadingContent,
+            error = errorContent,
+            onLoading = { state: AsyncImagePainter.State.Loading ->
                 onLoadingStateChange?.invoke(true)
             },
-            onSuccess = { state ->
+            onSuccess = { state: AsyncImagePainter.State.Success ->
 
                 if (enableModeration && processor != null && !isProcessing) {
                     isProcessing = true
@@ -132,7 +134,7 @@ fun ImageViewFilter(
                     onLoadingStateChange?.invoke(false)
                 }
             },
-            onError = { state ->
+            onError = {
                 onLoadingStateChange?.invoke(false)
             },
             modifier = Modifier
@@ -143,9 +145,7 @@ fun ImageViewFilter(
                             Modifier.blur(radius = blurStrength.dp)
                         } else Modifier
                     } else Modifier
-                ),
-            alpha = if (showImage) 1f else 0f
-
+                )
         )
 
         if (shouldBlur && Build.VERSION.SDK_INT < Build.VERSION_CODES.S && blurredBitmap != null) {
@@ -162,7 +162,7 @@ fun ImageViewFilter(
 @Composable
 private fun PreviewImage() {
     Image(
-        painter = painterResource(android.R.drawable.star_on),
+        painter = painterResource(R.drawable.star_on),
         contentDescription = "Preview Image",
         contentScale = ContentScale.FillBounds,
         modifier = Modifier.size(64.dp)

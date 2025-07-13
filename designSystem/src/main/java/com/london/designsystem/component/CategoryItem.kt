@@ -19,11 +19,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.layout.ContentScale.Companion.Crop
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import com.ae.imageharamblur.ui.ImageViewFilter
-import com.london.designsystem.R
+import com.london.designsystem.component.button.ErrorImage
 import com.london.designsystem.theme.NovixTheme
 import com.london.designsystem.theme.ThemePreviews
 import com.london.designsystem.theme.horizontalGradient
@@ -51,11 +50,11 @@ fun CategoriesItem(
     ) {
         ImageViewFilter(
             model = categoryImage,
-            placeholder = painterResource(R.drawable.frame1597883073),
-            error = painterResource(R.drawable.frame1597883073),
+            errorContent = { ErrorImage() },
             contentDescription = "Image of ${categoryName.joinToString()}",
             modifier = Modifier.fillMaxSize(),
-            contentScale = Crop
+            contentScale = Crop,
+            loadingContent = { CircularLoading(modifier = Modifier.align(androidx.compose.ui.Alignment.Center)) },
         )
         Box(
             modifier = Modifier

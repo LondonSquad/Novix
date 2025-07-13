@@ -24,6 +24,7 @@ import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import com.ae.imageharamblur.ui.ImageViewFilter
 import com.london.designsystem.R
+import com.london.designsystem.component.button.ErrorImage
 import com.london.designsystem.theme.NovixTheme
 import com.london.designsystem.theme.ThemePreviews
 
@@ -68,14 +69,14 @@ private fun ActorImage(imageRes: Any) {
                 shape = imageShape,
                 color = NovixTheme.colors.stroke
             ),
-        contentScale = ContentScale.Crop
+        contentScale = ContentScale.Crop,
+        loadingContent = { CircularLoading(modifier = Modifier.align(Alignment.Center)) },
+        errorContent = { ErrorImage() },
     )
 }
 
-
 @Composable
 fun isRtlLayout(): Boolean = LocalLayoutDirection.current == LayoutDirection.Rtl
-
 
 @Composable
 fun Modifier.customBorder(
@@ -114,7 +115,6 @@ fun Modifier.customBorder(
         style = Stroke(width = strokeWidth)
     )
 }
-
 
 @Composable
 private fun TextSection(
