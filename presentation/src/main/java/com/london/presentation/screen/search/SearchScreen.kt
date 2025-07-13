@@ -123,10 +123,13 @@ fun SearchScreenContent(
                     ResultOrEmpty(
                         items = state.recentSearches,
                         otherItems = state.recentViewed,
-                        emptyContent = { NoEarlierSearchLayout(
-                            modifier = Modifier.fillMaxSize()
-                                .background(NovixTheme.colors.surface)
-                        ) },
+                        emptyContent = {
+                            NoEarlierSearchLayout(
+                                modifier = Modifier
+                                    .fillMaxSize()
+                                    .background(NovixTheme.colors.surface)
+                            )
+                        },
                         content = {
                             RecentSearchLayOut(
                                 state = state,
@@ -322,15 +325,16 @@ private fun RecentSearchLayOut(
     interactionListener: SearchInteractions,
     viewModel: SearchViewModel
 ) {
+    RecentViewedSection(
+        recentViewed = state.recentViewed,
+        onClearAll = { viewModel.clearRecentViewed() }
+    )
+
     RecentSearchesSection(
         recentSearches = state.recentSearches,
         onClearAll = interactionListener::clearRecentSearches,
         onSearchClick = interactionListener::onRecentSearchClick,
         onRemoveClick = interactionListener::removeRecentSearch
-    )
-    RecentViewedSection(
-        recentViewed = state.recentViewed,
-        onClearAll = { viewModel.clearRecentViewed() }
     )
 }
 
@@ -452,10 +456,11 @@ private fun RecentSearchItem(
 private fun NoEarlierSearchLayout(
     modifier: Modifier = Modifier
 ) {
-        EmptySearchLayout(
-            text = stringResource(R.string.start_exploring_msg),
-            image = R.drawable.imge_explore,
-            modifier = modifier.padding(horizontal = 16.dp))
+    EmptySearchLayout(
+        text = stringResource(R.string.start_exploring_msg),
+        image = R.drawable.imge_explore,
+        modifier = modifier.padding(horizontal = 16.dp)
+    )
 }
 
 
@@ -463,12 +468,12 @@ private fun NoEarlierSearchLayout(
 private fun NoSearchResultLayOut(
     modifier: Modifier = Modifier
 ) {
-        EmptySearchLayout(
-            text = stringResource(R.string.no_search_result_msg),
-            image = R.drawable.img_no_search_result,
-            modifier = modifier
-                .padding(horizontal = 16.dp)
-        )
+    EmptySearchLayout(
+        text = stringResource(R.string.no_search_result_msg),
+        image = R.drawable.img_no_search_result,
+        modifier = modifier
+            .padding(horizontal = 16.dp)
+    )
 }
 
 @ThemePreviews
