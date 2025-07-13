@@ -41,9 +41,9 @@ class SearchViewModel(
     private var allTvShows: List<TvShow> = emptyList()
     private var allActors: List<Actor> = emptyList()
 
-    private var originalMovieResults: List<Movie> = emptyList()
-    private var originalTvShowResults: List<TvShow> = emptyList()
-    private var originalActorResults: List<Actor> = emptyList()
+    private var filteredMovieResults: List<Movie> = emptyList()
+    private var filteredTvShowResults: List<TvShow> = emptyList()
+    private var filteredActorResults: List<Actor> = emptyList()
 
     private var searchJob: Job? = null
 
@@ -84,9 +84,9 @@ class SearchViewModel(
         updateAvailableGenres(category)
 
         if (trimmedQuery.isEmpty()) {
-            originalMovieResults = allMovies
-            originalTvShowResults = allTvShows
-            originalActorResults = allActors
+            filteredMovieResults = allMovies
+            filteredTvShowResults = allTvShows
+            filteredActorResults = allActors
 
             _uiState.update { currentState ->
                 when (category) {
@@ -119,7 +119,7 @@ class SearchViewModel(
                 when (category) {
                     SearchCategory.Movies -> {
                         val searchResults = getMoviesUseCase(query, "en-US")
-                        originalMovieResults = searchResults
+                        filteredMovieResults = searchResults
 
                         val filteredResults = applyMovieFilters(searchResults)
 
@@ -134,7 +134,7 @@ class SearchViewModel(
 
                     SearchCategory.Actors -> {
                         val searchResults = getActorsUseCase(query, "en-US")
-                        originalActorResults = searchResults
+                        filteredActorResults = searchResults
 
                         _uiState.update { currentState ->
                             currentState.copy(
@@ -147,7 +147,7 @@ class SearchViewModel(
 
                     SearchCategory.TvShows -> {
                         val searchResults = getTvShowsUseCase(query, "en-US")
-                        originalTvShowResults = searchResults
+                        filteredTvShowResults = searchResults
 
                         val filteredResults = applyTvShowFilters(searchResults)
 
@@ -311,7 +311,7 @@ class SearchViewModel(
         _uiState.update { currentState ->
             when (currentState.selectedCategory) {
                 SearchCategory.Movies -> {
-                    val filteredMovies = applyMovieFilters(originalMovieResults)
+                    val filteredMovies = applyMovieFilters(filteredMovieResults)
                     currentState.copy(
                         movieResults = filteredMovies,
                         tvShowUiResults = emptyList(),
@@ -320,7 +320,7 @@ class SearchViewModel(
                 }
 
                 SearchCategory.TvShows -> {
-                    val filteredTvShows = applyTvShowFilters(originalTvShowResults)
+                    val filteredTvShows = applyTvShowFilters(filteredTvShowResults)
                     currentState.copy(
                         tvShowUiResults = filteredTvShows,
                         movieResults = emptyList(),
@@ -329,9 +329,8 @@ class SearchViewModel(
                 }
 
                 SearchCategory.Actors -> {
-                    // Actors typically don't have filters like rating and year
                     currentState.copy(
-                        actorUiResults = originalActorResults,
+                        actorUiResults = filteredActorResults,
                         movieResults = emptyList(),
                         tvShowUiResults = emptyList()
                     )
@@ -353,7 +352,7 @@ class SearchViewModel(
             when (currentState.selectedCategory) {
                 SearchCategory.Movies -> {
                     currentState.copy(
-                        movieResults = originalMovieResults,
+                        movieResults = filteredMovieResults,
                         tvShowUiResults = emptyList(),
                         actorUiResults = emptyList()
                     )
@@ -361,7 +360,7 @@ class SearchViewModel(
 
                 SearchCategory.TvShows -> {
                     currentState.copy(
-                        tvShowUiResults = originalTvShowResults,
+                        tvShowUiResults = filteredTvShowResults,
                         movieResults = emptyList(),
                         actorUiResults = emptyList()
                     )
@@ -369,7 +368,7 @@ class SearchViewModel(
 
                 SearchCategory.Actors -> {
                     currentState.copy(
-                        actorUiResults = originalActorResults,
+                        actorUiResults = filteredActorResults,
                         movieResults = emptyList(),
                         tvShowUiResults = emptyList()
                     )
