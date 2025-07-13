@@ -22,7 +22,7 @@ import androidx.compose.ui.layout.ContentScale.Companion.Crop
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
-import coil.compose.AsyncImage
+import com.ae.imageharamblur.ui.ImageViewFilter
 import com.london.designsystem.R
 import com.london.designsystem.theme.NovixTheme
 import com.london.designsystem.theme.ThemePreviews
@@ -49,7 +49,7 @@ fun CategoriesItem(
             .height(68.dp)
             .noRippleClickable(onClick = onClick),
     ) {
-        AsyncImage(
+        ImageViewFilter(
             model = categoryImage,
             placeholder = painterResource(R.drawable.frame1597883073),
             error = painterResource(R.drawable.frame1597883073),

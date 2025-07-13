@@ -27,12 +27,9 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
-import coil.compose.AsyncImage
-import coil.request.CachePolicy
-import coil.request.ImageRequest
+import com.ae.imageharamblur.ui.ImageViewFilter
 import com.london.designsystem.R
 import com.london.designsystem.theme.NovixTheme
 import com.london.designsystem.theme.ThemePreviews
@@ -46,11 +43,6 @@ fun HomeCard(
     imageDescription: String? = null,
 ) {
     var isLoading by remember { mutableStateOf(false) }
-    val imageRequest = ImageRequest.Builder(LocalContext.current)
-        .data(imageUrl)
-        .crossfade(true)
-        .memoryCachePolicy(CachePolicy.ENABLED)
-        .build()
 
     Box(
         modifier = modifier
@@ -67,14 +59,12 @@ fun HomeCard(
         if (isLoading) {
             CircularLoadingAnimation(modifier = Modifier.align(Alignment.Center))
         }
-        AsyncImage(
-            model = imageRequest,
+        ImageViewFilter(
+            model = imageUrl,
             contentDescription = imageDescription,
             modifier = Modifier.matchParentSize(),
             contentScale = ContentScale.Crop,
-            onLoading = { isLoading = true },
-            onSuccess = { isLoading = false },
-            onError = { isLoading = false },
+            onLoadingStateChange = { isLoading = it },
             error = painterResource(R.drawable.img_error)
         )
         SaveIcon(

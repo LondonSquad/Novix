@@ -20,7 +20,7 @@ import androidx.compose.ui.graphics.Path
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import coil.compose.AsyncImage
+import com.ae.imageharamblur.ui.ImageViewFilter
 import com.london.designsystem.R
 import com.london.designsystem.theme.NovixTheme
 import com.london.designsystem.theme.ThemePreviews
@@ -36,7 +36,7 @@ fun ActorItem(
         modifier = modifier,
         verticalAlignment = Alignment.CenterVertically
     ) {
-        AsyncImage(
+        ImageViewFilter(
             model = imageRes,
             contentDescription = "actorImage",
             modifier = Modifier
@@ -73,7 +73,7 @@ fun ActorItem(
                     val right = size.width
                     val bottom = size.height
 
-                    val path =Path().apply {
+                    val path = Path().apply {
                         moveTo(left, top)
 
                         lineTo(right - cornerRadius, top)
