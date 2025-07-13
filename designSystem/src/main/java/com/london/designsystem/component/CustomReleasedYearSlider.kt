@@ -35,7 +35,6 @@ fun CustomReleasedYearSlider(
 ) {
 
     Column(modifier = modifier) {
-
         Row(
             modifier = Modifier
                 .fillMaxWidth()
@@ -43,12 +42,12 @@ fun CustomReleasedYearSlider(
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
             Text(
-                text = minYear.toString(),
+                text = yearRange.start.toInt().toString(),
                 color = NovixTheme.colors.body,
                 style = NovixTheme.typography.label.small
             )
             Text(
-                text = maxYear.toString(),
+                text = yearRange.endInclusive.toInt().toString(),
                 color = NovixTheme.colors.body,
                 style = NovixTheme.typography.label.small
             )

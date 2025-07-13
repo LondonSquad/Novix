@@ -12,8 +12,11 @@ fun SearchMovieDtoLocal.toMovieEntity(): Movie {
         id = this.id,
         posterPicture = "https://image.tmdb.org/t/p/w500${this.posterPath}",
         name = this.title,
+        releaseYear = if (this.releaseDate.isNotEmpty())
+            this.releaseDate.split("-")[0].toInt() else 0,
+        rating = this.voteAverage.toInt(),
+        genreIds = this.genreIds,
     )
-
 }
 
 fun ApiSearch<SearchMovieRemote>.toLocal(query: String): SearchMoviesLocal {
@@ -38,8 +41,8 @@ fun SearchMovieRemote.toMovieLocalDto(): SearchMovieDtoLocal {
         overview = this.overview ?: "",
         popularity = this.popularity,
         posterPath = this.posterPath,
-        releaseDate = this.releaseDate?:"",
-        title = this.title?:"",
+        releaseDate = this.releaseDate ?: "",
+        title = this.title ?: "",
         video = this.video,
         voteAverage = this.voteAverage,
         voteCount = this.voteCount

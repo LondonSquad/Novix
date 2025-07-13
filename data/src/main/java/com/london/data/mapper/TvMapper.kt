@@ -12,7 +12,11 @@ fun SearchTvShowDtoLocal.toTvShowEntity(): TvShow {
     return TvShow(
         id = this.id,
         posterPicture = "https://image.tmdb.org/t/p/w500${this.posterPath}",
-        name = this.name
+        name = this.name,
+        releaseYear = if (this.firstAirDate.isNotEmpty())
+            this.firstAirDate.split("-")[0].toInt() else 0,
+        rating = this.voteAverage.toInt(),
+        genres = this.genreIds,
     )
 }
 
