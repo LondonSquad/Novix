@@ -277,3 +277,5 @@ jobs:
         with:
           commit_message: "📊 Update PR metrics data"
           branch: develop
+          commit_user_name: "London Bot"
+          commit_user_email: "${{ vars.APP_ID }}+london-bot[bot]@users.noreply.github.com"
