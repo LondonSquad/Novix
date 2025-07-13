@@ -41,25 +41,25 @@
     "approvals": [
       {
         "reviewer": {
-          "login": "BassantM",
           "id": 102248144,
+          "login": "BassantM",
           "url": "https://github.com/BassantM"
         },
-        "submitted_at": "2025-07-12T23:59:13Z"
+        "submitted_at": "2025-07-12T23:54:19Z"
       },
       {
         "reviewer": {
-          "login": "Abdulrahman1890",
-          "id": 76666355,
-          "url": "https://github.com/Abdulrahman1890"
+          "id": 92235360,
+          "login": "abdo-essam",
+          "url": "https://github.com/abdo-essam"
         },
-        "submitted_at": "2025-07-13T00:30:03Z"
+        "submitted_at": "2025-07-12T23:54:26Z"
       }
     ],
-    "first_approved_at": "2025-07-12T23:59:13Z",
-    "time_to_first_approval_minutes": 36.96666666666667,
-    "required_approvals_met_at": "2025-07-13T00:30:03Z",
-    "time_to_required_approvals_minutes": 67.8,
+    "first_approved_at": "2025-07-12T23:54:19Z",
+    "time_to_first_approval_minutes": 32.06666666666667,
+    "required_approvals_met_at": "2025-07-12T23:54:26Z",
+    "time_to_required_approvals_minutes": 32.18333333333333,
     "closed_at": null,
     "merged_at": null,
     "merged_by": null,
