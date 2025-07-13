@@ -41,14 +41,6 @@
     "approvals": [
       {
         "reviewer": {
-          "login": "abdo-essam",
-          "id": 92235360,
-          "url": "https://github.com/abdo-essam"
-        },
-        "submitted_at": "2025-07-12T23:54:26Z"
-      },
-      {
-        "reviewer": {
           "login": "BassantM",
           "id": 102248144,
           "url": "https://github.com/BassantM"
@@ -56,14 +48,14 @@
         "submitted_at": "2025-07-12T23:59:13Z"
       }
     ],
-    "first_approved_at": "2025-07-12T23:54:26Z",
-    "time_to_first_approval_minutes": 32.18333333333333,
-    "required_approvals_met_at": "2025-07-12T23:59:13Z",
-    "time_to_required_approvals_minutes": 36.96666666666667,
+    "first_approved_at": "2025-07-12T23:59:13Z",
+    "time_to_first_approval_minutes": 36.96666666666667,
+    "required_approvals_met_at": null,
+    "time_to_required_approvals_minutes": null,
     "closed_at": null,
     "merged_at": null,
     "merged_by": null,
     "week": "2025-W28",
-    "status": "approved"
+    "status": "pending_approval"
   }
 ]
