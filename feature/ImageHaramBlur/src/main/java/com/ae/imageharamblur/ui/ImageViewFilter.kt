@@ -6,6 +6,7 @@ import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.size
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.getValue
@@ -19,6 +20,8 @@ import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalInspectionMode
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import coil.request.CachePolicy
@@ -43,6 +46,7 @@ fun ImageViewFilter(
     onModerationResult: ((Boolean, String?) -> Unit)? = null,
     onLoadingStateChange: ((Boolean) -> Unit)? = null
 ) {
+    if (LocalInspectionMode.current) return PreviewImage()
     val context = LocalContext.current
     val scope = rememberCoroutineScope()
 
@@ -153,4 +157,14 @@ fun ImageViewFilter(
             )
         }
     }
+}
+
+@Composable
+private fun PreviewImage() {
+    Image(
+        painter = painterResource(android.R.drawable.star_on),
+        contentDescription = "Preview Image",
+        contentScale = ContentScale.FillBounds,
+        modifier = Modifier.size(64.dp)
+    )
 }

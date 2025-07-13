@@ -6,6 +6,7 @@ import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
@@ -77,7 +78,8 @@ private fun ScrollableChipGroup(
     onChipSelected: (String) -> Unit
 ) {
     LazyRow(
-        modifier = modifier,
+        modifier = modifier
+            .height(37.dp),
         horizontalArrangement = Arrangement.spacedBy(8.dp)
     ) {
         items(chips) { chip ->

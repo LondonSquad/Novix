@@ -45,7 +45,7 @@ jobs:
         uses: actions/checkout@v4
         with:
           token: ${{ steps.app-token.outputs.token }}
-          ref: develop
+          ref: metrics
 
       - name: Determine Update Type
         id: prepare_data
@@ -246,6 +246,6 @@ jobs:
         uses: stefanzweifel/git-auto-commit-action@v5
         with:
           commit_message: "📊 Update PR metrics data"
-          branch: develop
+          branch: metrics
           commit_user_name: "london-bot[bot]"
           commit_user_email: "${{ vars.APP_ID }}+london-bot[bot]@users.noreply.github.com"
