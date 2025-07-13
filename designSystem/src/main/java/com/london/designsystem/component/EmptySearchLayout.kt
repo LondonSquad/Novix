@@ -21,12 +21,11 @@ import com.london.designsystem.theme.NovixTheme
 import com.london.designsystem.theme.ThemePreviews
 
 @Composable
-fun EmptySearchComponent(
+fun EmptySearchLayout(
     text: String,
     @DrawableRes image: Int,
     modifier: Modifier = Modifier
 ) {
-
     Column(
         modifier = modifier
             .fillMaxWidth()
@@ -40,7 +39,7 @@ fun EmptySearchComponent(
             modifier = Modifier
                 .size(128.dp)
                 .align(CenterHorizontally),
-            contentScale = ContentScale.FillHeight
+            contentScale = ContentScale.Fit
         )
         Text(
             text = text,
@@ -50,7 +49,6 @@ fun EmptySearchComponent(
             modifier = Modifier.fillMaxWidth()
         )
     }
-
 }
 
 
@@ -58,7 +56,7 @@ fun EmptySearchComponent(
 @Composable
 private fun EmptySearchComponentPreview() {
     NovixTheme {
-        EmptySearchComponent(
+        EmptySearchLayout(
             text = stringResource(R.string.start_exploring_msg),
             image = R.drawable.imge_explore,
         )
@@ -69,7 +67,7 @@ private fun EmptySearchComponentPreview() {
 @Composable
 private fun EmptySearchComponentNoResultPreview() {
     NovixTheme {
-        EmptySearchComponent(
+        EmptySearchLayout(
             text = stringResource(R.string.no_search_result_msg),
             image = R.drawable.img_no_search_result,
         )

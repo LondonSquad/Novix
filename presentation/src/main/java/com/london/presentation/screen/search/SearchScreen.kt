@@ -42,8 +42,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.dp
-import androidx.constraintlayout.compose.ConstraintLayout
-import com.london.designsystem.component.EmptySearchComponent
+import com.london.designsystem.component.EmptySearchLayout
 import com.london.designsystem.component.HomeCard
 import com.london.designsystem.component.NovixChip
 import com.london.designsystem.component.OutlinedTextField
@@ -88,16 +87,15 @@ fun SearchScreenContent(
     Box(
         modifier = Modifier
             .fillMaxSize()
-            .background(
-                color = NovixTheme.colors.surface
-            )
+            .background(color = NovixTheme.colors.surface)
     ) {
 
         TriangleBlurredShape()
 
         Column(
             modifier = Modifier
-                .fillMaxSize(),
+                .fillMaxSize()
+                .background(NovixTheme.colors.surface),
             verticalArrangement = Arrangement.Top
         )
         {
@@ -125,7 +123,10 @@ fun SearchScreenContent(
                     ResultOrEmpty(
                         items = state.recentSearches,
                         otherItems = state.recentViewed,
-                        emptyContent = { NoSearchBeforeLayOut(modifier = Modifier.fillMaxSize()) },
+                        emptyContent = { NoEarlierSearchLayout(
+                            modifier = Modifier.fillMaxSize()
+                                .background(NovixTheme.colors.surface)
+                        ) },
                         content = {
                             RecentSearchLayOut(
                                 state = state,
@@ -381,7 +382,9 @@ fun RecentSearchesSection(
     )
 
     LazyColumn(
-        modifier = Modifier.padding(horizontal = 16.dp)
+        modifier = Modifier
+            .background(NovixTheme.colors.surface)
+            .padding(horizontal = 16.dp)
     ) {
         itemsIndexed(recentSearches) { index, search ->
             val isLastItem = index == recentSearches.lastIndex
@@ -446,44 +449,26 @@ private fun RecentSearchItem(
 }
 
 @Composable
-private fun NoSearchBeforeLayOut(
+private fun NoEarlierSearchLayout(
     modifier: Modifier = Modifier
 ) {
-    ConstraintLayout(modifier = modifier) {
-        val (emptySearch) = createRefs()
-        EmptySearchComponent(
+        EmptySearchLayout(
             text = stringResource(R.string.start_exploring_msg),
-            image = R.drawable.img_explore,
-            modifier = Modifier
-                .padding(horizontal = 16.dp)
-                .constrainAs(emptySearch) {
-                    top.linkTo(parent.top)
-                    bottom.linkTo(parent.bottom)
-                    start.linkTo(parent.start)
-                    end.linkTo(parent.end)
-                }
-        )
-    }
+            image = R.drawable.imge_explore,
+            modifier = modifier.padding(horizontal = 16.dp))
 }
+
 
 @Composable
 private fun NoSearchResultLayOut(
     modifier: Modifier = Modifier
 ) {
-    ConstraintLayout(modifier = modifier) {
-        val (emptySearch) = createRefs()
-
-        EmptySearchComponent(
+        EmptySearchLayout(
             text = stringResource(R.string.no_search_result_msg),
             image = R.drawable.img_no_search_result,
-            modifier = Modifier.constrainAs(emptySearch) {
-                top.linkTo(parent.top)
-                bottom.linkTo(parent.bottom)
-                start.linkTo(parent.start)
-                end.linkTo(parent.end)
-            }
+            modifier = modifier
+                .padding(horizontal = 16.dp)
         )
-    }
 }
 
 @ThemePreviews
