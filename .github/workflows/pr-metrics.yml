@@ -7,9 +7,25 @@ on:
     types: [submitted, dismissed]
   workflow_dispatch:
 
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.sha }}
+  cancel-in-progress: true
+
 jobs:
   update_pr_metrics:
-    if: github.event.pull_request || github.event.pull_request_review
+    if: |
+      github.event_name == 'workflow_dispatch' ||
+      github.event_name == 'pull_request_review' ||
+      (
+        github.event_name == 'pull_request' &&
+        (
+          github.event.action == 'opened' ||
+          github.event.action == 'closed' ||
+          github.event.action == 'reopened' ||
+          github.event.action == 'synchronize'
+        )
+      )
+
     runs-on: ubuntu-latest
     permissions:
       contents: write
@@ -18,7 +34,8 @@ jobs:
       REQUIRED_APPROVALS: 2
 
     steps:
-      - uses: actions/create-github-app-token@v2
+      - name: Create GitHub App Token
+        uses: actions/create-github-app-token@v2
         id: app-token
         with:
           app-id: ${{ vars.APP_ID }}
@@ -30,241 +47,198 @@ jobs:
           token: ${{ steps.app-token.outputs.token }}
           ref: develop
 
-      - name: Set up Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: '20'
-
-      - name: Prepare JSON data
+      - name: Determine Update Type
         id: prepare_data
         run: |
           EVENT_NAME="${{ github.event_name }}"
+          PR_ACTION="${{ github.event.action }}"
+          
+          # This output will drive the logic in the next step.
+          UPDATE_TYPE=""
 
-          if [[ "$EVENT_NAME" == "pull_request_review" ]]; then
-            PR_NUMBER="${{ github.event.pull_request_review.number }}"
-            PR_URL="${{ github.event.pull_request_review.html_url }}"
-            PR_TITLE="${{ github.event.pull_request_review.title }}"
-            PR_CREATED_AT="${{ github.event.pull_request_review.created_at }}"
-            PR_HEAD_REF="${{ github.event.pull_request_review.head.ref }}"
-            PR_BASE_REF="${{ github.event.pull_request_review.base.ref }}"
-            PR_USER_LOGIN="${{ github.event.pull_request_review.user.login }}"
-            PR_USER_ID="${{ github.event.pull_request_review.user.id }}"
-            PR_USER_HTML_URL="${{ github.event.pull_request_review.user.html_url }}"
-          else
-            PR_NUMBER="${{ github.event.pull_request.number }}"
-            PR_URL="${{ github.event.pull_request.html_url }}"
-            PR_TITLE="${{ github.event.pull_request.title }}"
-            PR_CREATED_AT="${{ github.event.pull_request.created_at }}"
-            PR_HEAD_REF="${{ github.event.pull_request.head.ref }}"
-            PR_BASE_REF="${{ github.event.pull_request.base.ref }}"
-            PR_USER_LOGIN="${{ github.event.pull_request.user.login }}"
-            PR_USER_ID="${{ github.event.pull_request.user.id }}"
-            PR_USER_HTML_URL="${{ github.event.pull_request.user.html_url }}"
+          if [[ "$PR_ACTION" == "opened" ]]; then
+            UPDATE_TYPE="PR_OPENED"
+          elif [[ "$PR_ACTION" == "closed" ]]; then
+            UPDATE_TYPE="PR_CLOSED"
+          elif [[ "$PR_ACTION" == "reopened" ]]; then
+            UPDATE_TYPE="PR_REOPENED"
+          elif \
+            [[ "$PR_ACTION" == "synchronize" ]] || \
+            [[ "$PR_ACTION" == "dismissed" ]] || \
+            [[ "$PR_ACTION" == "submitted" && "${{ github.event.review.state }}" == "approved" ]]; then
+            # Any of these events mean the approval state may have changed.
+            # We will refetch the entire state from the API.
+            UPDATE_TYPE="APPROVALS_CHANGE"
           fi
-
-          WEEK_NUMBER=$(date -d "${PR_CREATED_AT}" +%G-W%V)
-
-          {
-            echo "PR_NUMBER=$PR_NUMBER"
-            echo "PR_URL=$PR_URL"
-            echo "PR_TITLE=$PR_TITLE"
-            echo "PR_CREATED_AT=$PR_CREATED_AT"
-            echo "PR_HEAD_REF=$PR_HEAD_REF"
-            echo "PR_BASE_REF=$PR_BASE_REF"
-            echo "PR_USER_LOGIN=$PR_USER_LOGIN"
-            echo "PR_USER_ID=$PR_USER_ID"
-            echo "PR_USER_HTML_URL=$PR_USER_HTML_URL"
-            echo "WEEK_NUMBER=$WEEK_NUMBER"
-          } >> $GITHUB_OUTPUT
-
-          if [[ "$EVENT_NAME" == "pull_request_review" && "${{ github.event.review.state }}" == "approved" ]]; then
-            echo "REVIEWER_LOGIN=${{ github.event.review.user.login }}" >> $GITHUB_OUTPUT
-            echo "REVIEWER_ID=${{ github.event.review.user.id }}" >> $GITHUB_OUTPUT
-            echo "REVIEWER_HTML_URL=${{ github.event.review.user.html_url }}" >> $GITHUB_OUTPUT
-            echo "APPROVAL_SUBMITTED_AT=${{ github.event.review.submitted_at }}" >> $GITHUB_OUTPUT
-            echo "EVENT_TYPE=approval" >> $GITHUB_OUTPUT
-          elif [[ "$EVENT_NAME" == "pull_request" ]]; then
-            echo "PR_ACTION=${{ github.event.action }}" >> $GITHUB_OUTPUT
-            echo "PR_CLOSED_AT=${{ github.event.pull_request.closed_at }}" >> $GITHUB_OUTPUT
-            echo "PR_MERGED_AT=${{ github.event.pull_request.merged_at }}" >> $GITHUB_OUTPUT
-            echo "PR_MERGED_BY_LOGIN=${{ github.event.pull_request.merged_by.login }}" >> $GITHUB_OUTPUT
-            echo "PR_MERGED_BY_ID=${{ github.event.pull_request.merged_by.id }}" >> $GITHUB_OUTPUT
-            echo "PR_MERGED_BY_HTML_URL=${{ github.event.pull_request.merged_by.html_url }}" >> $GITHUB_OUTPUT
-            echo "EVENT_TYPE=pr_lifecycle" >> $GITHUB_OUTPUT
-          fi
+          
+          echo "UPDATE_TYPE=$UPDATE_TYPE" >> $GITHUB_OUTPUT
+          echo "PR_NUMBER=${{ github.event.pull_request.number }}" >> $GITHUB_OUTPUT
 
       - name: Update pr_metrics.json
+        env:
+          GH_TOKEN: ${{ steps.app-token.outputs.token }}
         run: |
           PR_FILE="pr_metrics.json"
-          REQUIRED_APPROVALS=${{ env.REQUIRED_APPROVALS }}
-
-          echo "--- DEBUG: Update pr_metrics.json Step ---"
-          echo "Checking if $PR_FILE exists..."
-          if [ ! -f "$PR_FILE" ]; then
-            echo "File $PR_FILE does not exist. Creating with empty array."
-            echo "[]" > "$PR_FILE"
-          else
-            echo "File $PR_FILE exists."
-          fi
-
-          echo "Content of $PR_FILE before jq:"
-          cat "$PR_FILE"
-
-          JQ_DATA=$(cat "$PR_FILE")
-
-          EVENT_TYPE="${{ steps.prepare_data.outputs.EVENT_TYPE }}"
+          UPDATE_TYPE="${{ steps.prepare_data.outputs.UPDATE_TYPE }}"
           PR_NUMBER_JQ="${{ steps.prepare_data.outputs.PR_NUMBER }}"
 
-          echo "PR_NUMBER_JQ: $PR_NUMBER_JQ"
-          echo "EVENT_TYPE: $EVENT_TYPE"
+          if [[ -z "$UPDATE_TYPE" ]]; then
+            echo "Event did not require an update. Exiting."
+            exit 0
+          fi
+
+          echo "--- Updating metrics for PR #${PR_NUMBER_JQ} ---"
+          echo "Update Type: $UPDATE_TYPE"
+
+          # Ensure the JSON file exists and is valid, creating it if necessary
+          if [ ! -f "$PR_FILE" ] || [ ! -s "$PR_FILE" ] || ! jq -e . >/dev/null 2>&1 < "$PR_FILE"; then
+            echo "File $PR_FILE is missing, empty, or invalid. Initializing with empty array."
+            echo "[]" > "$PR_FILE"
+          fi
           
+          JQ_DATA=$(cat "$PR_FILE")
           UPDATED_JQ_DATA=""
 
-          if [[ "$EVENT_TYPE" == "approval" ]]; then
-            echo "Processing 'approval' event."
-            echo "Reviewer: ${{ steps.prepare_data.outputs.REVIEWER_LOGIN }}, Submitted At: ${{ steps.prepare_data.outputs.APPROVAL_SUBMITTED_AT }}"
+          # This reusable jq function recalculates all metrics based on the current .approvals array.
+          # It is the core of our logic, ensuring data is always consistent.
+          JQ_RECALCULATE_FUNCTION='
+            # Recalculates all approval-based metrics and status for a PR object.
+            def recalculate_approval_metrics($required_approvals):
+              # Helper to safely parse ISO 8601 timestamps to Unix epoch seconds.
+              def parse_time(ts):
+                (if ts then (ts | strptime("%Y-%m-%dT%H:%M:%SZ") | mktime) else null end);
+
+              # Ensure approvals are sorted by time to correctly identify the first and Nth approval.
+              .approvals |= sort_by(.submitted_at)
+
+              # Recalculate first approval metrics.
+              | .first_approved_at = (if (.approvals | length > 0) then .approvals[0].submitted_at else null end)
+              | .time_to_first_approval_minutes = (if .first_approved_at then ((parse_time(.first_approved_at) - parse_time(.opened_at)) / 60) else null end)
+
+              # Recalculate required approvals metrics.
+              | .required_approvals_met_at = (if (.approvals | length) >= $required_approvals then .approvals[$required_approvals - 1].submitted_at else null end)
+              | .time_to_required_approvals_minutes = (if .required_approvals_met_at then ((parse_time(.required_approvals_met_at) - parse_time(.opened_at)) / 60) else null end)
+
+              # Recalculate the PR status, but do not overwrite a final state like "merged" or "closed".
+              | .status = (
+                  if .status == "merged" or .status == "closed" then .status 
+                  elif .required_approvals_met_at != null then "approved"
+                  else "pending"
+                  end
+                );
+          '
+
+          if [[ "$UPDATE_TYPE" == "APPROVALS_CHANGE" ]]; then
+            echo "Fetching current approval state from GitHub API to ensure accuracy..."
+          
+            PR_HEAD_SHA=$(gh api "repos/${{ github.repository }}/pulls/$PR_NUMBER_JQ" --jq '.head.sha')
+            echo "Current PR HEAD SHA: $PR_HEAD_SHA"
+
+            CURRENT_APPROVALS_JSON=$(gh api \
+              "repos/${{ github.repository }}/pulls/$PR_NUMBER_JQ/reviews" \
+              --jq '
+                map(select(.state == "APPROVED" and .commit_id == "'"$PR_HEAD_SHA"'"))
+                | group_by(.user.id)
+                | map(sort_by(.submitted_at) | .[-1])
+                | map({
+                    reviewer: {login: .user.login, id: .user.id, url: .user.html_url},
+                    submitted_at: .submitted_at
+                  })
+              ')
+          
+            echo "VALID approvals from API: $CURRENT_APPROVALS_JSON"
+
             UPDATED_JQ_DATA=$(echo "$JQ_DATA" | jq \
-              --arg pr_number "$PR_NUMBER_JQ" \
-              --arg reviewer_login "${{ steps.prepare_data.outputs.REVIEWER_LOGIN }}" \
-              --arg reviewer_id "${{ steps.prepare_data.outputs.REVIEWER_ID }}" \
-              --arg reviewer_html_url "${{ steps.prepare_data.outputs.REVIEWER_HTML_URL }}" \
-              --arg approval_submitted_at "${{ steps.prepare_data.outputs.APPROVAL_SUBMITTED_AT }}" \
-              --arg opened_at "${{ steps.prepare_data.outputs.PR_CREATED_AT }}" \
+              --argjson pr_number "$PR_NUMBER_JQ" \
+              --argjson current_approvals "$CURRENT_APPROVALS_JSON" \
               --argjson required_approvals "$REQUIRED_APPROVALS" \
+              "$JQ_RECALCULATE_FUNCTION
+               map(if .pr_number == \$pr_number then
+                   # Overwrite the approvals array with the fresh, VALID list from the API.
+                   .approvals = \$current_approvals
+                   # Then recalculate all metrics based on this new truth.
+                   | recalculate_approval_metrics(\$required_approvals)
+                 else . end)")
+
+          elif [[ "$UPDATE_TYPE" == "PR_OPENED" ]]; then
+            WEEK_NUMBER=$(date -d "${{ github.event.pull_request.created_at }}" +%G-W%V)
+          
+            NEW_PR_DATA=$(jq -n \
+              --argjson pr_number "$PR_NUMBER_JQ" \
+              --arg url "${{ github.event.pull_request.html_url }}" \
+              --arg title "${{ github.event.pull_request.title }}" \
+              --arg opened_at "${{ github.event.pull_request.created_at }}" \
+              --arg head_ref "${{ github.event.pull_request.head.ref }}" \
+              --arg base_ref "${{ github.event.pull_request.base.ref }}" \
+              --arg creator_login "${{ github.event.pull_request.user.login }}" \
+              --argjson creator_id "${{ github.event.pull_request.user.id }}" \
+              --arg creator_html_url "${{ github.event.pull_request.user.html_url }}" \
+              --arg week "$WEEK_NUMBER" \
               '
-              map(if .pr_number == ($pr_number | tonumber) then
-                .approvals += [{
-                  reviewer: {login: $reviewer_login, id: ($reviewer_id | tonumber), url: $reviewer_html_url},
-                  submitted_at: $approval_submitted_at
-                }]
-                | .approvals |= unique_by(.reviewer.id)
-                | .approvals |= sort_by(.submitted_at)
-                | (if .first_approved_at == null then
-                     (
-                       .first_approved_at = $approval_submitted_at
-                     | .time_to_first_approval_minutes = (
-                         ((strptime("%Y-%m-%dT%H:%M:%SZ") | mktime) - ($opened_at | strptime("%Y-%m-%dT%H:%M:%SZ") | mktime)) / 60
-                       )
-                     )
-                   else . end)
-                | (if (.approvals | length) >= $required_approvals then
-                     (
-                       .required_approvals_met_at = (.approvals | .[($required_approvals - 1)].submitted_at)
-                     | .time_to_required_approvals_minutes = (
-                         ((.required_approvals_met_at | strptime("%Y-%m-%dT%H:%M:%SZ") | mktime) - ($opened_at | strptime("%Y-%m-%dT%H:%M:%SZ") | mktime)) / 60
-                       )
-                     | .status = "approved_required"
-                     )
-                   else
-                     (if .status == "approved_required" or .status == "merged" or .status == "closed" then . else .status = "pending_approval" end)
-                   end)
-              else . end)
-              ' || true)
-          elif [[ "$EVENT_TYPE" == "pr_lifecycle" ]]; then
-            PR_ACTION="${{ steps.prepare_data.outputs.PR_ACTION }}"
-            echo "Processing 'pr_lifecycle' event with action: $PR_ACTION"
-            PR_CLOSED_AT="${{ steps.prepare_data.outputs.PR_CLOSED_AT }}"
-            PR_MERGED_AT="${{ steps.prepare_data.outputs.PR_MERGED_AT }}"
-            PR_MERGED_BY_LOGIN="${{ steps.prepare_data.outputs.PR_MERGED_BY_LOGIN }}"
-            PR_MERGED_BY_ID="${{ steps.prepare_data.outputs.PR_MERGED_BY_ID }}"
-            PR_MERGED_BY_HTML_URL="${{ steps.prepare_data.outputs.PR_MERGED_BY_HTML_URL }}"
+              {
+                "pr_number": $pr_number,
+                "url": $url,
+                "title": $title,
+                "opened_at": $opened_at,
+                "head_ref": $head_ref,
+                "base_ref": $base_ref,
+                "creator": {
+                  "login": $creator_login,
+                  "id": $creator_id,
+                  "url": $creator_html_url
+                },
+                "approvals": [],
+                "first_approved_at": null,
+                "time_to_first_approval_minutes": null,
+                "required_approvals_met_at": null,
+                "time_to_required_approvals_minutes": null,
+                "closed_at": null,
+                "merged_at": null,
+                "merged_by": null,
+                "week": $week,
+                "status": "pending"
+              }
+              ')
+            UPDATED_JQ_DATA=$(echo "$JQ_DATA" | jq --argjson pr_number "$PR_NUMBER_JQ" --argjson new_pr_data "$NEW_PR_DATA" 'if any(.[]; .pr_number == $pr_number) then . else . + [$new_pr_data] end')
 
-
-            if [[ "$PR_ACTION" == "opened" ]]; then
-              echo "Action is 'opened'. Generating NEW_PR_DATA."
-              NEW_PR_DATA=$(jq -n \
-                --arg pr_number "$PR_NUMBER_JQ" \
-                --arg url "${{ steps.prepare_data.outputs.PR_URL }}" \
-                --arg title "${{ steps.prepare_data.outputs.PR_TITLE }}" \
-                --arg opened_at "${{ steps.prepare_data.outputs.PR_CREATED_AT }}" \
-                --arg head_ref "${{ steps.prepare_data.outputs.PR_HEAD_REF }}" \
-                --arg base_ref "${{ steps.prepare_data.outputs.PR_BASE_REF }}" \
-                --arg creator_login "${{ steps.prepare_data.outputs.PR_USER_LOGIN }}" \
-                --arg creator_id "${{ steps.prepare_data.outputs.PR_USER_ID }}" \
-                --arg creator_html_url "${{ steps.prepare_data.outputs.PR_USER_HTML_URL }}" \
-                --arg week "${{ steps.prepare_data.outputs.WEEK_NUMBER }}" \
-                '{
-                  "pr_number": ($pr_number | tonumber),
-                  "url": $url,
-                  "title": $title,
-                  "opened_at": $opened_at,
-                  "head_ref": $head_ref,
-                  "base_ref": $base_ref,
-                  "creator": { "login": $creator_login, "id": ($creator_id | tonumber), "url": $creator_html_url },
-                  "approvals": [],
-                  "first_approved_at": null,
-                  "time_to_first_approval_minutes": null,
-                  "required_approvals_met_at": null,
-                  "time_to_required_approvals_minutes": null,
-                  "closed_at": null,
-                  "merged_at": null,
-                  "merged_by": null,
-                  "week": $week,
-                  "status": "pending_approval"
-                }')
-              echo "NEW_PR_DATA generated:"
-              echo "$NEW_PR_DATA"
-
-              echo "JQ_DATA before update for opened PR:"
-              echo "$JQ_DATA"
-
-              UPDATED_JQ_DATA=$(echo "$JQ_DATA" | jq \
-                --arg pr_number "$PR_NUMBER_JQ" \
-                --argjson new_pr_data "$NEW_PR_DATA" \
-                '
-                if any(.[]; .pr_number == ($pr_number | tonumber)) then
-                  map(if .pr_number == ($pr_number | tonumber) then $new_pr_data else . end)
-                else
-                  . + [$new_pr_data]
-                end
-                ' || true)
-              echo "UPDATED_JQ_DATA after 'opened' logic:"
-              echo "$UPDATED_JQ_DATA"
-
-            elif [[ "$PR_ACTION" == "closed" ]]; then
-              echo "Action is 'closed'."
-              UPDATED_JQ_DATA=$(echo "$JQ_DATA" | jq \
-                --arg pr_number "$PR_NUMBER_JQ" \
-                --arg closed_at "${{ steps.prepare_data.outputs.PR_CLOSED_AT }}" \
-                --arg merged_at "${{ steps.prepare_data.outputs.PR_MERGED_AT }}" \
-                --arg merged_by_login "${{ steps.prepare_data.outputs.PR_MERGED_BY_LOGIN }}" \
-                --arg merged_by_id "${{ steps.prepare_data.outputs.PR_MERGED_BY_ID }}" \
-                --arg merged_by_html_url "${{ steps.prepare_data.outputs.PR_MERGED_BY_HTML_URL }}" \
-                '
-                map(if .pr_number == ($pr_number | tonumber) then
-                  .closed_at = $closed_at
-                  | (if ($merged_at | length > 0) then
+          elif [[ "$UPDATE_TYPE" == "PR_CLOSED" ]]; then
+            UPDATED_JQ_DATA=$(echo "$JQ_DATA" | jq \
+              --argjson pr_number "$PR_NUMBER_JQ" \
+              --arg closed_at "${{ github.event.pull_request.closed_at }}" \
+              --arg merged_at "${{ github.event.pull_request.merged_at }}" \
+              --arg merged_by_login "${{ github.event.pull_request.merged_by.login }}" \
+              --argjson merged_by_id "${{ github.event.pull_request.merged_by.id }}" \
+              --arg merged_by_html_url "${{ github.event.pull_request.merged_by.html_url }}" \
+              'map(if .pr_number == $pr_number then
+                 .closed_at = $closed_at
+                 | (if ($merged_at != null and $merged_at != "") then
                       .merged_at = $merged_at
-                      | .merged_by = {login: $merged_by_login, id: ($merged_by_id | tonumber), url: $merged_by_html_url}
+                      | .merged_by = {login: $merged_by_login, id: $merged_by_id, url: $merged_by_html_url}
                       | .status = "merged"
                     else
                       .status = "closed"
                     end)
-                else . end)
-                ' || true)
-            elif [[ "$PR_ACTION" == "reopened" ]]; then
-              echo "Action is 'reopened'."
-              UPDATED_JQ_DATA=$(echo "$JQ_DATA" | jq \
-                --arg pr_number "$PR_NUMBER_JQ" \
-                '
-                map(if .pr_number == ($pr_number | tonumber) then
-                  .status = "reopened"
-                  | .closed_at = null
-                  | .merged_at = null
-                  | .merged_by = null
-                else . end)
-                ' || true)
-            fi
+               else . end)')
+
+          elif [[ "$UPDATE_TYPE" == "PR_REOPENED" ]]; then
+            UPDATED_JQ_DATA=$(echo "$JQ_DATA" | jq \
+              --argjson pr_number "$PR_NUMBER_JQ" \
+              --argjson required_approvals "$REQUIRED_APPROVALS" \
+              "$JQ_RECALCULATE_FUNCTION
+               map(if .pr_number == \$pr_number then
+                   # Reset terminal state fields and let the recalculate function determine the new status.
+                   .closed_at = null
+                   | .merged_at = null
+                   | .merged_by = null
+                   | recalculate_approval_metrics(\$required_approvals)
+                 else . end)")
           fi
 
-          echo "Final check before writing to file:"
-          if [ -n "$UPDATED_JQ_DATA" ]; then
-            echo "UPDATED_JQ_DATA is NOT empty. Writing to $PR_FILE."
+          if jq -e . >/dev/null 2>&1 <<< "$UPDATED_JQ_DATA"; then
+            echo "Update successful. Writing new data to $PR_FILE."
             echo "$UPDATED_JQ_DATA" > "$PR_FILE"
           else
-            echo "UPDATED_JQ_DATA IS EMPTY. No write performed."
-            echo "Current file content (if any):"
-            cat "$PR_FILE"
+            echo "Generated data was empty or invalid. No changes were written."
           fi
           echo "--- END DEBUG ---"
 
@@ -273,3 +247,5 @@ jobs:
         with:
           commit_message: "📊 Update PR metrics data"
           branch: develop
+          commit_user_name: "london-bot[bot]"
+          commit_user_email: "${{ vars.APP_ID }}+london-bot[bot]@users.noreply.github.com"
