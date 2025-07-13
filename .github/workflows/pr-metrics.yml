@@ -14,9 +14,18 @@ concurrency:
 jobs:
   update_pr_metrics:
     if: |
-      github.event_name == 'pull_request' ||
+      github.event_name == 'workflow_dispatch' ||
       github.event_name == 'pull_request_review' ||
-      github.event_name == 'workflow_dispatch'
+      (
+        github.event_name == 'pull_request' &&
+        (
+          github.event.action == 'opened' ||
+          github.event.action == 'closed' ||
+          github.event.action == 'reopened' ||
+          github.event.action == 'synchronize'
+        )
+      )
+
     runs-on: ubuntu-latest
     permissions:
       contents: write
