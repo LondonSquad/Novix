@@ -34,7 +34,6 @@
         .week-summary {
             background-color: #f9fafb;
             padding: 1.25rem 1.5rem;
-            margin-bottom: 1.5rem;
             cursor: pointer;
             display: flex;
             justify-content: space-between;
@@ -43,7 +42,13 @@
             font-size: 1.25rem;
             color: #374151;
             border-bottom: 1px solid #e5e7eb;
+            gap: 1rem; /* ADDED for better spacing */
         }
+
+        .week-summary > span {
+            flex-grow: 1;
+        }
+
 
         .week-summary:hover {
             background-color: #f3f4f6;
@@ -119,6 +124,7 @@
 
         .arrow-icon {
             transition: transform 0.3s ease-in-out;
+            flex-shrink: 0;
         }
 
         .arrow-icon.rotated {
@@ -129,8 +135,7 @@
             display: flex;
             justify-content: space-around;
             align-items: center;
-            margin-left: 1.5rem;
-            margin-right: 1.5rem;
+            margin-bottom: 1.0rem;
             padding: 0.75rem 1.5rem;
             background-color: #f0f4f8;
             border: 1px solid #e2e8f0;
@@ -138,8 +143,7 @@
             font-size: 0.95rem;
             font-weight: 500;
             color: #4a5568;
-            border-radius: 0.75rem;
-
+            border-radius: 0 0 0.75rem 0.75rem;
             box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.05);
         }
 
@@ -220,6 +224,35 @@
             gap: 1rem;
             color: #4b5563;
         }
+
+        /*
+         * ===============================================
+         *         MOBILE RESPONSIVENESS FIX
+         * ===============================================
+         */
+        @media (max-width: 768px) {
+            body {
+                padding: 1rem; /* Reduce body padding on mobile */
+            }
+            .container {
+                padding: 1rem; /* Reduce container padding on mobile */
+            }
+            .week-summary {
+                font-size: 1.1rem; /* Slightly smaller font for the title */
+            }
+            .week-summary-stats-bar {
+                margin-bottom: 0.25rem;
+                flex-direction: column; /* Stack the stats vertically */
+                align-items: flex-start; /* Align stats to the left */
+                gap: 0.5rem; /* Add space between the stacked stats */
+                padding: 1rem; /* Adjust padding for a better vertical look */
+            }
+
+            .pr-card {
+                /* The grid layout in the JS is already responsive, but we can adjust padding */
+                padding: 1rem;
+            }
+        }
     </style>
 </head>
 <body class="bg-gray-100 p-8">
@@ -279,7 +312,11 @@
 
             const sortedWeeks = Object.keys(prsByWeek).sort();
 
-            dashboardContent.innerHTML = "";
+            // Clear previous content but keep the loading/error elements for potential reuse
+            const elementsToKeep = [loadingIndicator, errorMessage];
+            dashboardContent.innerHTML = '';
+            elementsToKeep.forEach(el => dashboardContent.appendChild(el));
+
 
             sortedWeeks.forEach((week) => {
                 const prsInWeek = prsByWeek[week];
@@ -294,22 +331,23 @@
                 const weekSummary = document.createElement("div");
                 weekSummary.classList.add("week-summary");
 
+                // Note: The JavaScript `innerHTML` is unchanged. The CSS handles the layout.
                 weekSummary.innerHTML = `
-                <span>${week} (${prsInWeek.length} PRs)</span>
-                <svg class="arrow-icon w-6 h-6 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
-                </svg>
-            `;
+                    <span>${week} (${prsInWeek.length} PRs)</span>
+                    <svg class="arrow-icon w-6 h-6 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+                    </svg>
+                `;
                 weekGroup.appendChild(weekSummary);
 
                 const weekSummaryStatsBar = document.createElement("div");
                 weekSummaryStatsBar.classList.add("week-summary-stats-bar");
                 weekSummaryStatsBar.innerHTML = `
-                <span><span class="dot dot-merged"></span> Merged: ${mergedCount}</span>
-                <span><span class="dot dot-closed"></span> Closed: ${closedCount}</span>
-                <span><span class="dot dot-pending"></span> Pending: ${pendingCount}</span>
-                <span><span class="dot dot-approved"></span> Approved: ${approvedRequiredCount}</span>
-            `;
+                    <span><span class="dot dot-merged"></span> Merged: ${mergedCount}</span>
+                    <span><span class="dot dot-closed"></span> Closed: ${closedCount}</span>
+                    <span><span class="dot dot-pending"></span> Pending: ${pendingCount}</span>
+                    <span><span class="dot dot-approved"></span> Approved: ${approvedRequiredCount}</span>
+                `;
                 weekGroup.appendChild(weekSummaryStatsBar);
 
                 const weekContent = document.createElement("div");
@@ -324,37 +362,37 @@
                     const statusClass = `status-${pr.status ? pr.status.toLowerCase().replace(/[^a-z0-9]/g, "_") : "unknown"}`;
 
                     prCard.innerHTML = `
-                    <div class="col-span-full md:col-span-1">
-                        <h3 class="text-lg font-semibold text-blue-700 mb-1">
-                            <a href="${pr.url}" target="_blank" class="hover:underline">PR #${pr.pr_number}: ${pr.title}</a>
-                        </h3>
-                        <p class="text-sm text-gray-600">Opened by: <a href="${pr.creator.url}" target="_blank" class="text-blue-500 hover:underline">${pr.creator.login}</a> on ${formatDate(pr.opened_at)}</p>
-                        <span class="status-badge ${statusClass}">${pr.status || "Unknown"}</span>
-                    </div>
-                    <div>
-                        <h4 class="font-medium text-gray-700 mb-1">Approvals (${pr.approvals ? pr.approvals.length : 0})</h4>
-                        <ul class="list-disc list-inside text-sm text-gray-600">
-                            ${
-                                pr.approvals && pr.approvals.length > 0
-                                    ? pr.approvals.map((a) => `<li><a href="${a.reviewer.url}" target="_blank" class="text-blue-500 hover:underline">${a.reviewer.login}</a> at ${formatDate(a.submitted_at)}</li>`).join("")
-                                    : "<li>No approvals yet.</li>"
-                            }
-                        </ul>
-                    </div>
-                    <div>
-                        <h4 class="font-medium text-gray-700 mb-2">Metrics</h4>
-                        <p class="text-sm text-gray-600 mb-2"><span class="font-semibold">First Approved:</span> ${formatDate(pr.first_approved_at)} (${
-                        pr.time_to_first_approval_minutes !== null ? `${pr.time_to_first_approval_minutes.toFixed(0)} min` : "N/A"
-                    })</p>
-                        <p class="text-sm text-gray-600 mb-2"><span class="font-semibold">Required Approvals Met:</span> ${formatDate(pr.required_approvals_met_at)} (${
-                        pr.time_to_required_approvals_minutes !== null ? `${pr.time_to_required_approvals_minutes.toFixed(0)} min` : "N/A"
-                    })</p>
-                        <p class="text-sm text-gray-600 mb-2"><span class="font-semibold">Closed At:</span> ${formatDate(pr.closed_at)}</p>
-                        <p class="text-sm text-gray-600"><span class="font-semibold">Merged At:</span> ${formatDate(pr.merged_at)} ${
-                        pr.merged_by ? `by <a href="${pr.merged_by.url}" target="_blank" class="text-blue-500 hover:underline">${pr.merged_by.login}</a>` : ""
-                    }</p>
-                    </div>
-                `;
+                        <div class="col-span-full md:col-span-1">
+                            <h3 class="text-lg font-semibold text-blue-700 mb-1">
+                                <a href="${pr.url}" target="_blank" class="hover:underline">PR #${pr.pr_number}: ${pr.title}</a>
+                            </h3>
+                            <p class="text-sm text-gray-600">Opened by: <a href="${pr.creator.url}" target="_blank" class="text-blue-500 hover:underline">${pr.creator.login}</a> on ${formatDate(pr.opened_at)}</p>
+                            <span class="status-badge ${statusClass}">${pr.status || "Unknown"}</span>
+                        </div>
+                        <div>
+                            <h4 class="font-medium text-gray-700 mb-1">Approvals (${pr.approvals ? pr.approvals.length : 0})</h4>
+                            <ul class="list-disc list-inside text-sm text-gray-600">
+                                ${
+                                    pr.approvals && pr.approvals.length > 0
+                                        ? pr.approvals.map((a) => `<li><a href="${a.reviewer.url}" target="_blank" class="text-blue-500 hover:underline">${a.reviewer.login}</a> at ${formatDate(a.submitted_at)}</li>`).join("")
+                                        : "<li>No approvals yet.</li>"
+                                }
+                            </ul>
+                        </div>
+                        <div>
+                            <h4 class="font-medium text-gray-700 mb-2">Metrics</h4>
+                            <p class="text-sm text-gray-600 mb-2"><span class="font-semibold">First Approved:</span> ${formatDate(pr.first_approved_at)} (${
+                            pr.time_to_first_approval_minutes !== null ? `${pr.time_to_first_approval_minutes.toFixed(0)} min` : "N/A"
+                        })</p>
+                            <p class="text-sm text-gray-600 mb-2"><span class="font-semibold">Required Approvals Met:</span> ${formatDate(pr.required_approvals_met_at)} (${
+                            pr.time_to_required_approvals_minutes !== null ? `${pr.time_to_required_approvals_minutes.toFixed(0)} min` : "N/A"
+                        })</p>
+                            <p class="text-sm text-gray-600 mb-2"><span class="font-semibold">Closed At:</span> ${formatDate(pr.closed_at)}</p>
+                            <p class="text-sm text-gray-600"><span class="font-semibold">Merged At:</span> ${formatDate(pr.merged_at)} ${
+                            pr.merged_by ? `by <a href="${pr.merged_by.url}" target="_blank" class="text-blue-500 hover:underline">${pr.merged_by.login}</a>` : ""
+                        }</p>
+                        </div>
+                    `;
                     weekContent.appendChild(prCard);
                 });
 
@@ -369,7 +407,7 @@
             });
         };
 
-        fetch("https://raw.githubusercontent.com/LondonSquad/Novix/refs/heads/develop/pr_metrics.json")
+        fetch("https://raw.githubusercontent.com/LondonSquad/Novix/refs/heads/metrics/pr_metrics.json")
             .then((response) => {
                 if (!response.ok) {
                     console.error(`HTTP error! status: ${response.status}. Using sample data.`);
