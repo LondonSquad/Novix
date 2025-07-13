@@ -38,15 +38,32 @@
       "id": 68463985,
       "url": "https://github.com/Al-Taie"
     },
-    "approvals": [],
-    "first_approved_at": null,
-    "time_to_first_approval_minutes": null,
-    "required_approvals_met_at": null,
-    "time_to_required_approvals_minutes": null,
+    "approvals": [
+      {
+        "reviewer": {
+          "id": 92235360,
+          "login": "abdo-essam",
+          "url": "https://github.com/abdo-essam"
+        },
+        "submitted_at": "2025-07-13T01:38:24Z"
+      },
+      {
+        "reviewer": {
+          "id": 102248144,
+          "login": "BassantM",
+          "url": "https://github.com/BassantM"
+        },
+        "submitted_at": "2025-07-13T01:38:25Z"
+      }
+    ],
+    "first_approved_at": "2025-07-13T01:38:24Z",
+    "time_to_first_approval_minutes": 136.15,
+    "required_approvals_met_at": "2025-07-13T01:38:25Z",
+    "time_to_required_approvals_minutes": 136.16666666666666,
     "closed_at": null,
     "merged_at": null,
     "merged_by": null,
     "week": "2025-W28",
-    "status": "pending"
+    "status": "approved"
   }
 ]
