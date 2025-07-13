@@ -92,7 +92,7 @@
             color: #92400e;
         }
 
-        .status-approved_required {
+        .status-approved {
             background-color: #d1fae5;
             color: #065f46;
         }
@@ -286,7 +286,7 @@
                 const mergedCount = prsInWeek.filter((pr) => pr.status === "merged").length;
                 const closedCount = prsInWeek.filter((pr) => pr.status === "closed").length;
                 const pendingCount = prsInWeek.filter((pr) => pr.status === "pending_approval" || pr.status === "reopened").length;
-                const approvedRequiredCount = prsInWeek.filter((pr) => pr.status === "approved_required").length;
+                const approvedRequiredCount = prsInWeek.filter((pr) => pr.status === "approved").length;
 
                 const weekGroup = document.createElement("div");
                 weekGroup.classList.add("week-group");
