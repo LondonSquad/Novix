@@ -1,5 +1,93 @@
 [
   {
+    "pr_number": 83,
+    "url": "https://github.com/LondonSquad/Novix/pull/83",
+    "title": "refactor: UI",
+    "opened_at": "2025-07-12T18:27:15Z",
+    "head_ref": "refactor/outline-button-border",
+    "base_ref": "develop",
+    "creator": {
+      "id": 102248144,
+      "login": "BassantM",
+      "url": "https://github.com/BassantM"
+    },
+    "approvals": [
+      {
+        "reviewer": {
+          "id": 68463985,
+          "login": "Al-Taie",
+          "url": "https://github.com/Al-Taie"
+        },
+        "submitted_at": "2025-07-13T18:03:26Z"
+      },
+      {
+        "reviewer": {
+          "id": 92235360,
+          "login": "abdo-essam",
+          "url": "https://github.com/abdo-essam"
+        },
+        "submitted_at": "2025-07-13T18:05:26Z"
+      }
+    ],
+    "first_approved_at": "2025-07-13T18:03:00Z",
+    "time_to_first_approval_minutes": 1415,
+    "required_approvals_met_at": "2025-07-13T18:05:26Z",
+    "time_to_required_approvals_minutes": 1417,
+    "closed_at": "2025-07-13T18:10:00Z",
+    "merged_at": "2025-07-13T18:10:00Z",
+    "merged_by": {
+      "id": 102248144,
+      "login": "BassantM",
+      "url": "https://github.com/BassantM"
+    },
+    "week": "2025-W28",
+    "status": "merged"
+  },
+  {
+    "pr_number": 84,
+    "url": "https://github.com/LondonSquad/Novix/pull/84",
+    "title": "feature: Blur",
+    "opened_at": "2025-07-12T22:43:00Z",
+    "head_ref": "feature/blur",
+    "base_ref": "develop",
+    "creator": {
+      "id": 92235360,
+      "login": "abdo-essam",
+      "url": "https://github.com/abdo-essam"
+    },
+    "approvals": [
+      {
+        "reviewer": {
+          "id": 102248144,
+          "login": "BassantM",
+          "url": "https://github.com/BassantM"
+        },
+        "submitted_at": "2025-07-13T18:03:26Z"
+      },
+      {
+        "reviewer": {
+          "id": 68463985,
+          "login": "Al-Taie",
+          "url": "https://github.com/Al-Taie"
+        },
+        "submitted_at": "2025-07-13T18:03:26Z"
+      }
+    ],
+    "first_approved_at": "2025-07-13T04:48:00Z",
+    "time_to_first_approval_minutes": 365,
+    "required_approvals_met_at": "2025-07-13T04:58:00Z",
+    "time_to_required_approvals_minutes": 375,
+    "closed_at": "2025-07-13T04:58:00Z",
+    "merged_at": "2025-07-13T04:58:00Z",
+    "merged_by": {
+      "id": 102248144,
+      "login": "BassantM",
+      "url": "https://github.com/BassantM"
+    },
+    "week": "2025-W28",
+    "status": "merged"
+  },
+  {
     "pr_number": 90,
     "url": "https://github.com/LondonSquad/Novix/pull/90",
     "title": "feat: Implement filter functionality for search results",
