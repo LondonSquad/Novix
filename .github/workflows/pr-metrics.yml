@@ -202,18 +202,20 @@ jobs:
             UPDATED_JQ_DATA=$(echo "$JQ_DATA" | jq --argjson pr_number "$PR_NUMBER_JQ" --argjson new_pr_data "$NEW_PR_DATA" 'if any(.[]; .pr_number == $pr_number) then . else . + [$new_pr_data] end')
 
           elif [[ "$UPDATE_TYPE" == "PR_CLOSED" ]]; then
+            # FIX: Pass the entire 'merged_by' object as a JSON string.
+            # This is robust against null values when a PR is closed without merging.
+            MERGED_BY_JSON='${{ toJSON(github.event.pull_request.merged_by) }}'
+          
             UPDATED_JQ_DATA=$(echo "$JQ_DATA" | jq \
               --argjson pr_number "$PR_NUMBER_JQ" \
               --arg closed_at "${{ github.event.pull_request.closed_at }}" \
               --arg merged_at "${{ github.event.pull_request.merged_at }}" \
-              --arg merged_by_login "${{ github.event.pull_request.merged_by.login }}" \
-              --argjson merged_by_id "${{ github.event.pull_request.merged_by.id }}" \
-              --arg merged_by_html_url "${{ github.event.pull_request.merged_by.html_url }}" \
+              --argjson merged_by "$MERGED_BY_JSON" \
               'map(if .pr_number == $pr_number then
                  .closed_at = $closed_at
                  | (if ($merged_at != null and $merged_at != "") then
                       .merged_at = $merged_at
-                      | .merged_by = {login: $merged_by_login, id: $merged_by_id, url: $merged_by_html_url}
+                      | .merged_by = {login: $merged_by.login, id: $merged_by.id, url: $merged_by.html_url}
                       | .status = "merged"
                     else
                       .status = "closed"
@@ -236,7 +238,7 @@ jobs:
 
           if jq -e . >/dev/null 2>&1 <<< "$UPDATED_JQ_DATA"; then
             echo "Update successful. Writing new data to $PR_FILE."
-            echo "$UPDATED_JQ_DATA" > "$PR_FILE"
+            echo "$UPDATED_JQ_DATA" | jq '.' > "$PR_FILE" # Using jq '.' to pretty-print the final output
           else
             echo "Generated data was empty or invalid. No changes were written."
           fi
