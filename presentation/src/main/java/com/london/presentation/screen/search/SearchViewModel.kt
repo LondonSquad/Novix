@@ -202,6 +202,7 @@ class SearchViewModel(
     }
 
     override fun addToRecentViewed(imageUrl: String) {
+        // (important) make the recent data in the database
         if (imageUrl.isBlank()) return
 
         val currentViewed = _uiState.value.recentViewed.toMutableList()
