@@ -186,5 +186,28 @@
     },
     "week": "2025-W29",
     "status": "merged"
+  },
+  {
+    "pr_number": 93,
+    "url": "https://github.com/LondonSquad/Novix/pull/93",
+    "title": "refactor: Simplify search logic in SearchViewModel",
+    "opened_at": "2025-07-14T07:55:21Z",
+    "head_ref": "refactor/search",
+    "base_ref": "develop",
+    "creator": {
+      "login": "ahmeddsamii",
+      "id": 154278495,
+      "url": "https://github.com/ahmeddsamii"
+    },
+    "approvals": [],
+    "first_approved_at": null,
+    "time_to_first_approval_minutes": null,
+    "required_approvals_met_at": null,
+    "time_to_required_approvals_minutes": null,
+    "closed_at": null,
+    "merged_at": null,
+    "merged_by": null,
+    "week": "2025-W29",
+    "status": "pending"
   }
 ]
