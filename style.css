@@ -121,6 +121,17 @@ html.dark .pr-row-details { background-color: #111827; }
 .stats-item { display: flex; align-items: center; gap: 0.5rem; }
 .stats-item .added { color: #22c55e; font-weight: 600; }
 .stats-item .removed { color: #ef4444; font-weight: 600; }
+.stats-item .changed {
+color: rgb(15 170 233 / var(--tw-bg-opacity, 1)); font-weight: 600;
+  /* Aligns items horizontally */
+  display: inline-flex;
+
+  /* Aligns items vertically in the middle */
+  align-items: center;
+
+  /* Adds a small space between the icon and the number */
+  gap: 0.25rem; /* 4px if your base font-size is 16px */
+ }
 .metric-item { display: flex; align-items: flex-start; gap: 0.75rem; }
 .metric-item svg { width: 1.25rem; height: 1.25rem; color: var(--text-secondary); margin-top: 2px; flex-shrink: 0; }
 
