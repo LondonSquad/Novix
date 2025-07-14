@@ -9,12 +9,14 @@ class MoviesByCategoryViewModel : ViewModel(), MoviesByCategoryInteractions {
     private val _uiState = MutableStateFlow(MoviesByCategoryUiState())
     val uiState: StateFlow<MoviesByCategoryUiState> = _uiState.asStateFlow()
     override fun onMovieClick(movieId: Int) {
-
+        //navigate to movie details
     }
 
     override fun onBackClick() {
+        //navigate back
     }
 
     override fun onSavedClick(movieId: Int) {
+        //save movie
     }
 }
