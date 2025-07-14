@@ -523,5 +523,151 @@
       "deletions": 0,
       "changed_files": 1
     }
+  },
+  {
+    "pr_number": 98,
+    "url": "https://github.com/LondonSquad/Novix/pull/98",
+    "title": "Feature/actor top picks details screen",
+    "opened_at": "2025-07-14T19:41:00Z",
+    "head_ref": "feature/actor-top-picks-details-screen",
+    "base_ref": "develop",
+    "creator": {
+      "login": "Abdulrahman1890",
+      "id": 76666355,
+      "url": "https://github.com/Abdulrahman1890"
+    },
+    "approvals": [],
+    "first_approved_at": null,
+    "time_to_first_approval_minutes": null,
+    "required_approvals_met_at": null,
+    "time_to_required_approvals_minutes": null,
+    "closed_at": "2025-07-14T20:12:00Z",
+    "merged_at": null,
+    "merged_by": null,
+    "week": "2025-W29",
+    "status": "merged",
+    "diff_stats": {
+      "additions": 1205,
+      "deletions": 29,
+      "changed_files": 38
+    }
+  },
+  {
+    "pr_number": 99,
+    "url": "https://github.com/LondonSquad/Novix/pull/99",
+    "title": "feature: setup Movies By Category Screen implement ui",
+    "opened_at": "2025-07-14T21:25:00Z",
+    "head_ref": "feature/movies-by-category-screen",
+    "base_ref": "develop",
+    "creator": {
+      "id": 100484790,
+      "login": "marwanqashwa",
+      "url": "https://github.com/marwanqashwa"
+    },
+    "approvals": [
+      {
+        "reviewer": {
+          "id": 76666355,
+          "login": "Abdulrahman1890",
+          "url": "https://github.com/Abdulrahman1890"
+        },
+        "submitted_at": "2025-07-13T23:14:00Z"
+      },
+      {
+        "reviewer": {
+          "id": 117874933,
+          "login": "AsmaaKhaledGomaa",
+          "url": "https://github.com/AsmaaKhaledGomaa"
+        },
+        "submitted_at": "2025-07-13T22:34:00Z"
+      }
+    ],
+    "first_approved_at": "2025-07-13T23:14:00Z",
+    "time_to_first_approval_minutes": 109,
+    "required_approvals_met_at": "2025-07-13T23:34:00Z",
+    "time_to_required_approvals_minutes": 129,
+    "closed_at": "2025-07-14T23:14:00Z",
+    "merged_at": "2025-07-14T23:14:00Z",
+    "merged_by": {
+      "id": 100484790,
+      "login": "marwanqashwa",
+      "url": "https://github.com/marwanqashwa"
+    },
+    "week": "2025-W29",
+    "status": "merged",
+    "diff_stats": {
+      "additions": 184,
+      "deletions": 0,
+      "changed_files": 38
+    }
+  },
+  {
+    "pr_number": 100,
+    "url": "https://github.com/LondonSquad/Novix/pull/100",
+    "title": "Feature/actor top picks details screen",
+    "opened_at": "2025-07-14T21:53:00Z",
+    "head_ref": "feature/actor-top-picks-details-screen",
+    "base_ref": "develop",
+    "creator": {
+      "login": "Abdulrahman1890",
+      "id": 76666355,
+      "url": "https://github.com/Abdulrahman1890"
+    },
+    "approvals": [],
+    "first_approved_at": null,
+    "time_to_first_approval_minutes": null,
+    "required_approvals_met_at": null,
+    "time_to_required_approvals_minutes": null,
+    "closed_at": "2025-07-14T21:54:00Z",
+    "merged_at": null,
+    "merged_by": null,
+    "week": "2025-W29",
+    "status": "merged",
+    "diff_stats": {
+      "additions": 1205,
+      "deletions": 29,
+      "changed_files": 38
+    }
+  },
+  {
+    "pr_number": 101,
+    "url": "https://github.com/LondonSquad/Novix/pull/101",
+    "title": "Feature/tv shows details screen",
+    "opened_at": "2025-07-14T22:03:00Z",
+    "head_ref": "feature/tv-shows-details-screen",
+    "base_ref": "develop",
+    "creator": null,
+    "approvals": [
+      {
+        "reviewer": {
+          "id": 76666355,
+          "login": "Abdulrahman1890",
+          "url": "https://github.com/Abdulrahman1890"
+        },
+        "submitted_at": "2025-07-13T23:46:00Z"
+      },
+      {
+        "reviewer": {
+          "id": 117874933,
+          "login": "AsmaaKhaledGomaa",
+          "url": "https://github.com/AsmaaKhaledGomaa"
+        },
+        "submitted_at": "2025-07-13T23:47:00Z"
+      }
+    ],
+    "first_approved_at": "2025-07-13T23:46:00Z",
+    "time_to_first_approval_minutes": 103,
+    "required_approvals_met_at": "2025-07-13T23:47:00Z",
+    "time_to_required_approvals_minutes": 104,
+    "closed_at": "2025-07-14T23:50:00Z",
+    "merged_at": "2025-07-14T23:50:00Z",
+    "merged_by": null,
+    "week": "2025-W29",
+    "status": "merged",
+    "diff_stats": {
+      "additions": 1824,
+      "deletions": 32,
+      "changed_files": 43
+    }
   }
 ]
