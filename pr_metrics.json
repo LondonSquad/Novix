@@ -358,5 +358,28 @@
     "merged_by": null,
     "week": "2025-W29",
     "status": "approved"
+  },
+  {
+    "pr_number": 96,
+    "url": "https://github.com/LondonSquad/Novix/pull/96",
+    "title": "fix: refactor padding between components",
+    "opened_at": "2025-07-14T14:56:02Z",
+    "head_ref": "hotfix/refactor-top-bar",
+    "base_ref": "develop",
+    "creator": {
+      "login": "Abdulrahman1890",
+      "id": 76666355,
+      "url": "https://github.com/Abdulrahman1890"
+    },
+    "approvals": [],
+    "first_approved_at": null,
+    "time_to_first_approval_minutes": null,
+    "required_approvals_met_at": null,
+    "time_to_required_approvals_minutes": null,
+    "closed_at": null,
+    "merged_at": null,
+    "merged_by": null,
+    "week": "2025-W29",
+    "status": "pending"
   }
 ]
