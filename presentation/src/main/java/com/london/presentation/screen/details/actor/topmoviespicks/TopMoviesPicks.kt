@@ -17,6 +17,7 @@ fun TopMoviesPicks(
     )
 }
 
+
 @ThemePreviews
 @Composable
 fun TopMoviesPicksPreview() {

@@ -38,6 +38,7 @@ fun TopPicksDetails(
     }
 }
 
+
 @Composable
 fun TopPicksDetailsContent() {
     LazyVerticalGrid(
