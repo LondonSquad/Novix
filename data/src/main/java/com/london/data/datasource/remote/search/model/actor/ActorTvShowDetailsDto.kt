@@ -2,7 +2,7 @@ package com.london.data.datasource.remote.search.model.actor
 
 import kotlinx.serialization.SerialName
 
-data class ActorTvShowDetails(
+data class ActorTvShowDetailsDto(
     @SerialName("cast")
     val cast: List<TvShowCast>,
     @SerialName("crew")
