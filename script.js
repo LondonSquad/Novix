@@ -120,8 +120,8 @@ document.addEventListener("DOMContentLoaded", () => {
                         </div>
                         <div class="pr-status-badge status-${pr.status}">${pr.status}</div>
                         <div class="stats-item">
-                            <span class="added">+${pr.additions || 0}</span>
-                            <span class="removed">-${pr.deletions || 0}</span>
+                            <span class="added">+${pr.diff_stats.additions || 0}</span>
+                            <span class="removed">-${pr.diff_stats.deletions || 0}</span>
                         </div>
                         <div class="pr-details-toggle">
                             <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>

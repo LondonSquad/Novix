@@ -41,7 +41,12 @@
       "url": "https://github.com/BassantM"
     },
     "week": "2025-W28",
-    "status": "merged"
+    "status": "merged",
+    "diff_stats": {
+      "additions": 224,
+      "deletions": 134,
+      "changed_files": 20
+    }
   },
   {
     "pr_number": 84,
@@ -85,7 +90,12 @@
       "url": "https://github.com/BassantM"
     },
     "week": "2025-W28",
-    "status": "merged"
+    "status": "merged",
+    "diff_stats": {
+      "additions": 846,
+      "deletions": 20,
+      "changed_files": 23
+    }
   },
   {
     "pr_number": 90,
@@ -137,7 +147,12 @@
       "url": "https://github.com/hassanwasfy"
     },
     "week": "2025-W28",
-    "status": "merged"
+    "status": "merged",
+    "diff_stats": {
+      "additions": 465,
+      "deletions": 99,
+      "changed_files": 15
+    }
   },
   {
     "pr_number": 91,
@@ -221,7 +236,12 @@
       "url": "https://github.com/Aseel-AbuKmail"
     },
     "week": "2025-W28",
-    "status": "merged"
+    "status": "merged",
+    "diff_stats": {
+      "additions": 3,
+      "deletions": 0,
+      "changed_files": 3
+    }
   },
   {
     "pr_number": 92,
@@ -273,7 +293,12 @@
       "url": "https://github.com/Aseel-AbuKmail"
     },
     "week": "2025-W29",
-    "status": "merged"
+    "status": "merged",
+    "diff_stats": {
+      "additions": 4,
+      "deletions": 4,
+      "changed_files": 2
+    }
   },
   {
     "pr_number": 93,
@@ -317,7 +342,12 @@
       "url": "https://github.com/ahmeddsamii"
     },
     "week": "2025-W29",
-    "status": "merged"
+    "status": "merged",
+    "diff_stats": {
+      "additions": 99,
+      "deletions": 170,
+      "changed_files": 2
+    }
   },
   {
     "pr_number": 95,
@@ -369,7 +399,12 @@
       "url": "https://github.com/Mostafa-alsaygh"
     },
     "week": "2025-W29",
-    "status": "merged"
+    "status": "merged",
+    "diff_stats": {
+      "additions": 22,
+      "deletions": 7,
+      "changed_files": 1
+    }
   },
   {
     "pr_number": 96,
@@ -417,6 +452,11 @@
     "merged_at": null,
     "merged_by": null,
     "week": "2025-W29",
-    "status": "closed"
+    "status": "closed",
+    "diff_stats": {
+      "additions": 16,
+      "deletions": 10,
+      "changed_files": 1
+    }
   }
 ]
