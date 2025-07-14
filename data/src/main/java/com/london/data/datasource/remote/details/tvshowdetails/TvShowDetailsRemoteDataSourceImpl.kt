@@ -4,7 +4,7 @@ import android.util.Log
 import com.london.data.BuildConfig
 import com.london.data.datasource.device.DeviceConfigurationDataSource
 import com.london.data.datasource.remote.ApiConstants
-import com.london.data.datasource.remote.cast.model.CastRemoteResponse
+import com.london.data.datasource.remote.details.tvshowdetails.model.TvShowCastRemoteResponse
 import com.london.data.datasource.remote.details.tvshowdetails.model.TvShowDetailsRemoteResponse
 import com.london.data.datasource.remote.details.tvshowdetails.model.TvShowImagesRemoteResponse
 import io.ktor.client.HttpClient
@@ -39,7 +39,7 @@ class TvShowDetailsRemoteDataSourceImpl(
         return json.decodeFromString(responseBody)
     }
 
-    override suspend fun getCastsByTvShowId(tvShowId: Int): CastRemoteResponse {
+    override suspend fun getCastsByTvShowId(tvShowId: Int): TvShowCastRemoteResponse {
         val json = Json {
             ignoreUnknownKeys = true
         }
