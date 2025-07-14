@@ -458,5 +458,70 @@
       "deletions": 10,
       "changed_files": 1
     }
+  },
+  {
+    "pr_number": 97,
+    "url": "https://github.com/LondonSquad/Novix/pull/97",
+    "title": "fix: refactor arrow direction",
+    "opened_at": "2025-07-14T15:29:23Z",
+    "head_ref": "hotfix/refactor-top-bar",
+    "base_ref": "develop",
+    "creator": {
+      "login": "Abdulrahman1890",
+      "id": 76666355,
+      "url": "https://github.com/Abdulrahman1890"
+    },
+    "approvals": [
+      {
+        "reviewer": {
+          "id": 102248144,
+          "login": "BassantM",
+          "url": "https://github.com/BassantM"
+        },
+        "submitted_at": "2025-07-14T15:29:50Z"
+      },
+      {
+        "reviewer": {
+          "id": 106277855,
+          "login": "Mostafa-alsaygh",
+          "url": "https://github.com/Mostafa-alsaygh"
+        },
+        "submitted_at": "2025-07-14T15:34:39Z"
+      },
+      {
+        "reviewer": {
+          "id": 117874933,
+          "login": "AsmaaKhaledGomaa",
+          "url": "https://github.com/AsmaaKhaledGomaa"
+        },
+        "submitted_at": "2025-07-14T15:36:43Z"
+      },
+      {
+        "reviewer": {
+          "id": 189210092,
+          "login": "Aseel-AbuKmail",
+          "url": "https://github.com/Aseel-AbuKmail"
+        },
+        "submitted_at": "2025-07-14T15:39:28Z"
+      }
+    ],
+    "first_approved_at": "2025-07-14T15:29:50Z",
+    "time_to_first_approval_minutes": 0.45,
+    "required_approvals_met_at": "2025-07-14T15:34:39Z",
+    "time_to_required_approvals_minutes": 5.266666666666667,
+    "closed_at": "2025-07-14T15:43:09Z",
+    "merged_at": "2025-07-14T15:43:08Z",
+    "merged_by": {
+      "login": "Abdulrahman1890",
+      "id": 76666355,
+      "url": "https://github.com/Abdulrahman1890"
+    },
+    "week": "2025-W29",
+    "status": "merged",
+    "diff_stats": {
+      "additions": 1,
+      "deletions": 0,
+      "changed_files": 1
+    }
   }
 ]
