@@ -2,6 +2,7 @@ package com.london.data.datasource.remote.details.tvshowdetails
 
 import android.util.Log
 import com.london.data.BuildConfig
+import com.london.data.datasource.device.DeviceConfigurationDataSource
 import com.london.data.datasource.remote.ApiConstants
 import com.london.data.datasource.remote.cast.model.CastRemoteResponse
 import com.london.data.datasource.remote.details.tvshowdetails.model.TvShowDetailsRemoteResponse
@@ -13,11 +14,13 @@ import io.ktor.http.URLProtocol
 import io.ktor.http.path
 import kotlinx.serialization.json.Json
 
-class TvShowDetailsRemoteDataSourceImpl(private val ktorClient: HttpClient) :
+class TvShowDetailsRemoteDataSourceImpl(
+    private val ktorClient: HttpClient,
+    private val deviceConfigurationDataSource: DeviceConfigurationDataSource
+) :
     TvShowDetailsRemoteDataSource {
     override suspend fun getTvShowDetailsById(
         tvShowId: Int,
-        language: String,
     ): TvShowDetailsRemoteResponse {
         val json = Json {
             ignoreUnknownKeys = true
@@ -27,10 +30,11 @@ class TvShowDetailsRemoteDataSourceImpl(private val ktorClient: HttpClient) :
                 protocol = URLProtocol.Companion.HTTPS
                 host = ApiConstants.HOST
                 path(ApiConstants.getTvShowDetailsPath(tvShowId))
-                parameters.append("language", language)
+                parameters.append("language", deviceConfigurationDataSource.getCurrentLanguage())
                 parameters.append("api_key", BuildConfig.API_KEY)
             }
         }
+        Log.d("TAG", "getTvShowDetailsById: ${deviceConfigurationDataSource.getCurrentLanguage()}")
         val responseBody = response.bodyAsText()
         return json.decodeFromString(responseBody)
     }

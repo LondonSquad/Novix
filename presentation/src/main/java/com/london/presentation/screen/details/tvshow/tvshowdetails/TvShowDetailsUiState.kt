@@ -12,7 +12,7 @@ import com.london.domain.entity.TvShowSeasonEntity
 import com.london.domain.entity.TvShowSpokenLanguageEntity
 
 data class TvShowDetailsUiState(
-    val tvImages: List<String>? = listOf(),
+    val tvImages: List<ImageItemEntity>? = listOf(),
     val adult: Boolean = false,
     val cast: CastEntity? = null,
     val backdropPath: String? = "",

@@ -18,7 +18,7 @@ class TvShowDetailsViewModel(
     private val getTvShowDetails: GetTvShowDetails,
     private val getCastById: GetCastById,
     private val getTvShowImages: GetImagesById,
-    savedStateHandle: SavedStateHandle
+    savedStateHandle: SavedStateHandle,
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow(TvShowDetailsUiState())
@@ -40,7 +40,7 @@ class TvShowDetailsViewModel(
             val images = getTvShowImages(tvShowId)
 
             _uiState.update {
-                it.copy(tvImages = listOf(images.backdrops[0].filePath))
+                it.copy(tvImages = images.backdrops)
             }
         }
     }
@@ -55,7 +55,43 @@ class TvShowDetailsViewModel(
 
     private fun getTvShowDetailsData() {
         viewModelScope.launch {
-            getTvShowDetails(tvShowId, "en-US")
+            _uiState.update {
+                val tvShowDetails = getTvShowDetails(tvShowId)
+                it.copy(
+                    adult = tvShowDetails.adult,
+                    backdropPath = tvShowDetails.backdropPath,
+                    createdBy = tvShowDetails.createdBy,
+                    episodeRunTime = tvShowDetails.episodeRunTime,
+                    firstAirDate = tvShowDetails.firstAirDate,
+                    tvShowGenres = tvShowDetails.tvShowGenres,
+                    homepage = tvShowDetails.homepage,
+                    id = tvShowDetails.id,
+                    inProduction = tvShowDetails.inProduction,
+                    languages = tvShowDetails.languages,
+                    lastAirDate = tvShowDetails.lastAirDate,
+                    lastTvShowEpisodeToAir = tvShowDetails.lastTvShowEpisodeToAir,
+                    name = tvShowDetails.name,
+                    nextTvShowEpisodeToAir = tvShowDetails.nextTvShowEpisodeToAir,
+                    tvShowNetworks = tvShowDetails.tvShowNetworks,
+                    numberOfEpisodes = tvShowDetails.numberOfEpisodes,
+                    numberOfSeasons = tvShowDetails.numberOfSeasons,
+                    originCountry = tvShowDetails.originCountry,
+                    originalLanguage = tvShowDetails.originalLanguage,
+                    originalName = tvShowDetails.originalName,
+                    overview = tvShowDetails.overview,
+                    popularity = tvShowDetails.popularity,
+                    posterPath = tvShowDetails.posterPath,
+                    productionCompanies = tvShowDetails.productionCompanies,
+                    productionCountries = tvShowDetails.productionCountries,
+                    tvShowSeasons = tvShowDetails.tvShowSeasons,
+                    tvShowSpokenLanguages = tvShowDetails.tvShowSpokenLanguageEntities,
+                    status = tvShowDetails.status,
+                    tagline = tvShowDetails.tagline,
+                    type = tvShowDetails.type,
+                    voteAverage = tvShowDetails.voteAverage,
+                    voteCount = tvShowDetails.voteCount,
+                )
+            }
         }
     }
 }

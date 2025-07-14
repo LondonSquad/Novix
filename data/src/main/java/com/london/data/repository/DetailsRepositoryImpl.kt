@@ -17,12 +17,10 @@ class DetailsRepositoryImpl(
 ) : DetailsRepository {
     override suspend fun getTvShowDetailsById(
         tvShowId: Int,
-        language: String
     ): TvShowDetailsEntity {
         return runCatching {
             tvShowDetailsRemoteDataSource.getTvShowDetailsById(
                 tvShowId = tvShowId,
-                language = language
             ).toEntity()
         }.getOrElse {
             throw TvShowDetailsSearchFailedException()
