@@ -1,6 +1,8 @@
 package com.london.domain.entity
 
 data class ActorTvShowDetails(
+    val id: Int,
+    val name: String,
     val adult: Boolean,
     val backdropPath: String,
     val character: String,
@@ -9,8 +11,6 @@ data class ActorTvShowDetails(
     val firstAirDate: String,
     val firstCreditAirDate: String,
     val genreIds: List<Int>,
-    val id: Int,
-    val name: String,
     val originCountry: List<String>,
     val originalLanguage: String,
     val originalName: String,
