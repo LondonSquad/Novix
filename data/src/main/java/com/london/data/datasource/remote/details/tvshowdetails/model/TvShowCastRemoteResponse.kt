@@ -1,10 +1,10 @@
-package com.london.data.datasource.remote.cast.model
+package com.london.data.datasource.remote.details.tvshowdetails.model
 
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class CastRemoteResponse(
+data class TvShowCastRemoteResponse(
     @SerialName("cast")
     val cast: List<CastMember>,
     @SerialName("crew")

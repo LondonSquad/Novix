@@ -1,13 +1,13 @@
 package com.london.data.mapper.tvshowdetails
 
-import com.london.data.datasource.remote.cast.model.CastMember
-import com.london.data.datasource.remote.cast.model.CastRemoteResponse
-import com.london.data.datasource.remote.cast.model.CrewMember
+import com.london.data.datasource.remote.details.tvshowdetails.model.CastMember
+import com.london.data.datasource.remote.details.tvshowdetails.model.TvShowCastRemoteResponse
+import com.london.data.datasource.remote.details.tvshowdetails.model.CrewMember
 import com.london.domain.entity.tvshowdetails.CastEntity
 import com.london.domain.entity.tvshowdetails.CastMemberEntity
 import com.london.domain.entity.tvshowdetails.CrewMemberEntity
 
-fun CastRemoteResponse.toCastEntity(): CastEntity {
+fun TvShowCastRemoteResponse.toCastEntity(): CastEntity {
     return CastEntity(
         cast = this.cast.map { it.toCastMember() },
         crew = this.crew.map { it.toCrewMember() },
