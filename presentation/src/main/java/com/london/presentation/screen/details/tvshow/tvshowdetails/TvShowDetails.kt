@@ -261,7 +261,7 @@ fun TvShowDate(
         horizontalArrangement = Arrangement.spacedBy(4.dp)
     ) {
         Icon(
-            imageVector = ImageVector.vectorResource(com.london.presentation.R.drawable.icon_calender),
+            imageVector = ImageVector.vectorResource(R.drawable.icon_calender),
             contentDescription = "Calender icon",
             tint = NovixTheme.colors.body,
             modifier = Modifier.size(12.dp)
