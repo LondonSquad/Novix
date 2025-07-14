@@ -636,7 +636,11 @@
     "opened_at": "2025-07-14T22:03:00Z",
     "head_ref": "feature/tv-shows-details-screen",
     "base_ref": "develop",
-    "creator": null,
+    "creator": {
+      "login": "ahmeddsamii",
+      "id": 154278495,
+      "url": "https://github.com/ahmeddsamii"
+    },
     "approvals": [
       {
         "reviewer": {
@@ -661,7 +665,11 @@
     "time_to_required_approvals_minutes": 104,
     "closed_at": "2025-07-14T23:50:00Z",
     "merged_at": "2025-07-14T23:50:00Z",
-    "merged_by": null,
+    "merged_by": {
+      "login": "ahmeddsamii",
+      "id": 154278495,
+      "url": "https://github.com/ahmeddsamii"
+    },
     "week": "2025-W29",
     "status": "merged",
     "diff_stats": {
