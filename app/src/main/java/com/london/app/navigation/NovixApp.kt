@@ -41,7 +41,6 @@ fun NovixApp() {
         else -> Home
     }
 
-    // Show bottom navigation only for main screens
     val showBottomNav = currentDestination?.hasRoute<TvShowDetails>() != true
 
     Scaffold(
