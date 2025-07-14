@@ -12,4 +12,16 @@ interface SearchInteractions {
     fun clearRecentSearches()
     fun removeRecentSearch(search: String)
     fun onRecentSearchClick(search: String)
+    fun addToRecentSearches(query: String)
+    fun addToRecentViewed(imageUrl: String)
+    fun clearSearch()
+    fun onApplyFilter(
+        selectedGenres: List<Int>,
+        minimumRating: Int,
+        releaseYearRange: ClosedFloatingPointRange<Float>
+    )
+    fun onClearFilter()
+    fun onReleaseYearRangeChange(range: ClosedFloatingPointRange<Float>)
+    fun onGenreSelectedChange(selectedGenres: List<Int>)
+    fun onRatingChanged(selectedRating: Int)
 }
