@@ -61,7 +61,8 @@ import org.koin.androidx.compose.koinViewModel
 
 @Composable
 fun SearchScreen(
-    viewModel: SearchViewModel = koinViewModel()
+    viewModel: SearchViewModel = koinViewModel(),
+    onNavigateToTvShowDetails: (Int) -> Unit = { }
 ) {
     val state by viewModel.uiState.collectAsState()
     val keyboardController = LocalSoftwareKeyboardController.current
@@ -70,7 +71,8 @@ fun SearchScreen(
         state = state,
         interactionListener = viewModel,
         keyboardController = keyboardController,
-        viewModel = viewModel
+        viewModel = viewModel,
+        onNavigateToTvShowDetails = onNavigateToTvShowDetails
     )
 }
 
@@ -80,6 +82,7 @@ fun SearchScreenContent(
     interactionListener: SearchInteractions,
     viewModel: SearchViewModel,
     keyboardController: SoftwareKeyboardController?,
+    onNavigateToTvShowDetails: (Int) -> Unit
 ) {
     val interactionSource = remember { MutableInteractionSource() }
     var showFilterBottomSheet by remember { mutableStateOf(false) }
@@ -171,7 +174,10 @@ fun SearchScreenContent(
                                     tvShowUis = state.tvShowUiResults,
                                     onSaveClick = { /* Handle save click */ },
                                     isTvShowSaved = { false },
-                                    onTvShowClick = { viewModel.addToRecentViewed(it.posterPicture) }
+                                    onTvShowClick = {
+                                        viewModel.addToRecentViewed(it.posterPicture)
+                                        onNavigateToTvShowDetails(it.id)
+                                    }
                                 )
                             }
                         )

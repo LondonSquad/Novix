@@ -1,6 +1,5 @@
 package com.london.data.repository
 
-import android.util.Log
 import com.london.data.datasource.local.GetException
 import com.london.data.datasource.local.LocalDataSource
 import com.london.data.datasource.local.model.SearchActorsLocal
