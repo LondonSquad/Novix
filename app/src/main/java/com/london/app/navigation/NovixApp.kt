@@ -88,7 +88,6 @@ fun NovixApp() {
                     )
                 }
                 TvShowsDetailsScreen(
-                    tvShowId = tvShowDetails?.tvShowId ?: 0,
                     onBackClick = {
                         navController.navigateUp()
                     }

@@ -7,4 +7,8 @@ object ApiConstants {
     const val SEARCH_PATH_ACTORS = "3/search/person"
 
     fun getTvShowDetailsPath(tvShowId: Int) = "3/tv/$tvShowId"
+
+    fun getCastTvShowPath(tvShowId: Int) = "3/tv/$tvShowId/credits"
+
+    fun getImagesTvShowPath(tvShowId: Int) = "3/tv/$tvShowId/images"
 }

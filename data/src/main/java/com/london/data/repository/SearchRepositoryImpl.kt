@@ -1,16 +1,13 @@
 package com.london.data.repository
 
-import android.util.Log
 import com.london.data.datasource.local.GetException
 import com.london.data.datasource.local.LocalDataSource
 import com.london.data.datasource.local.model.SearchActorsLocal
 import com.london.data.datasource.local.model.SearchMoviesLocal
 import com.london.data.datasource.local.model.SearchTvShowLocal
-import com.london.data.datasource.remote.details.tvshowdetails.model.DetailsRemoteDataSource
 import com.london.data.datasource.remote.search.RemoteDataSource
 import com.london.data.datasource.util.CrashReporter
 import com.london.data.mapper.toActorEntity
-import com.london.data.mapper.toEntity
 import com.london.data.mapper.toLocal
 import com.london.data.mapper.toMovieEntity
 import com.london.data.mapper.toTvShowEntity
@@ -20,7 +17,6 @@ import com.london.domain.TvShowSearchFailedException
 import com.london.domain.entity.Actor
 import com.london.domain.entity.Movie
 import com.london.domain.entity.TvShow
-import com.london.domain.entity.TvShowDetailsEntity
 import com.london.domain.repository.SearchRepository
 
 class SearchRepositoryImpl(
@@ -28,7 +24,6 @@ class SearchRepositoryImpl(
     private val searchActorService: LocalDataSource<SearchActorsLocal>,
     private val searchMovieService: LocalDataSource<SearchMoviesLocal>,
     private val remoteDataSource: RemoteDataSource,
-    private val detailsRemoteDataSource: DetailsRemoteDataSource,
     private val crashReporter: CrashReporter
 ) : SearchRepository {
     override suspend fun searchForMovies(
@@ -120,18 +115,6 @@ class SearchRepositoryImpl(
             addExceptionToCrashlytics(e)
         }
         return result
-    }
-
-    override suspend fun getTvSeriesDetailsById(
-        tvShowId: Int,
-        language: String
-    ): TvShowDetailsEntity {
-        return run {
-            detailsRemoteDataSource.getTvSeriesDetailsById(
-                tvShowId = tvShowId,
-                language = language
-            ).toEntity()
-        }
     }
 
     private fun addExceptionToCrashlytics(e: Exception) {

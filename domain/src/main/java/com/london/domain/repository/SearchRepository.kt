@@ -9,5 +9,4 @@ interface SearchRepository {
     suspend fun searchForMovies(name: String, language: String): List<Movie>
     suspend fun searchForTvShows(name: String, language: String): List<TvShow>
     suspend fun searchForActors(name: String, language: String): List<Actor>
-    suspend fun getTvSeriesDetailsById(tvShowId: Int, language: String): TvShowDetailsEntity
 }

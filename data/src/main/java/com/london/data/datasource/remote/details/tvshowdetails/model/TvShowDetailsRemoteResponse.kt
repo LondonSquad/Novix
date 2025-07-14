@@ -15,7 +15,7 @@ data class TvShowDetailsRemoteResponse(
     val episodeRunTime: List<Int>,
     @SerialName("first_air_date")
     val firstAirDate: String,
-    @SerialName("tvShowGenres")
+    @SerialName("genres")
     val tvShowGenres: List<TvShowGenre>,
     @SerialName("homepage")
     val homepage: String,
@@ -23,7 +23,7 @@ data class TvShowDetailsRemoteResponse(
     val id: Int,
     @SerialName("in_production")
     val inProduction: Boolean,
-    @SerialName("language")
+    @SerialName("languages")
     val languages: List<String>,
     @SerialName("last_air_date")
     val lastAirDate: String,
@@ -33,7 +33,7 @@ data class TvShowDetailsRemoteResponse(
     val name: String,
     @SerialName("next_episode_to_air")
     val nextTvShowEpisodeToAir: TvShowEpisode?,
-    @SerialName("tvShowNetworks")
+    @SerialName("networks")
     val tvShowNetworks: List<TvShowNetwork>,
     @SerialName("number_of_episodes")
     val numberOfEpisodes: Int,
@@ -55,7 +55,7 @@ data class TvShowDetailsRemoteResponse(
     val productionCompanies: List<TvShowProductionCompany>,
     @SerialName("production_countries")
     val productionCountries: List<TvShowProductionCountry>,
-    @SerialName("tvShowSeasons")
+    @SerialName("seasons")
     val tvShowSeasons: List<TvShowSeason>,
     @SerialName("spoken_languages")
     val tvShowSpokenLanguages: List<TvShowSpokenLanguage>,
