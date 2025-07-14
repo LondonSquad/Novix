@@ -17,12 +17,14 @@ import com.london.app.navigation.Screen.Bookmarks
 import com.london.app.navigation.Screen.Categories
 import com.london.app.navigation.Screen.Home
 import com.london.app.navigation.Screen.Search
+import com.london.app.navigation.Screen.TvShowDetails
 import com.london.designsystem.component.NavBar
 import com.london.presentation.screen.search.SearchScreen
 import com.london.presentation.screen.account.AccountScreen
 import com.london.presentation.screen.bookmark.BookmarksScreen
 import com.london.presentation.screen.category.CategoriesScreen
 import com.london.presentation.screen.home.HomeScreen
+import com.london.presentation.screen.details.tvshow.tvshowdetails.TvShowsDetailsScreen
 
 @Composable
 fun NovixApp() {
@@ -39,15 +41,20 @@ fun NovixApp() {
         else -> Home
     }
 
+    // Show bottom navigation only for main screens
+    val showBottomNav = currentDestination?.hasRoute<TvShowDetails>() != true
+
     Scaffold(
         bottomBar = {
-            NavBar(
-                navDestinations = NavigationHelper.getNavigationTabs(),
-                currentSelectedDestination = currentScreen,
-                onNavDestinationClicked = { destination ->
-                    navigateToBottomBarDestination(navController, destination)
-                }
-            )
+            if (showBottomNav) {
+                NavBar(
+                    navDestinations = NavigationHelper.getNavigationTabs(),
+                    currentSelectedDestination = currentScreen,
+                    onNavDestinationClicked = { destination ->
+                        navigateToBottomBarDestination(navController, destination)
+                    }
+                )
+            }
         }
     ) { innerPadding ->
         NavHost(
@@ -59,7 +66,11 @@ fun NovixApp() {
                 HomeScreen()
             }
             composable<Search> {
-                SearchScreen()
+                SearchScreen(
+                    onNavigateToTvShowDetails = { tvShowId ->
+                        navController.navigate(TvShowDetails(tvShowId))
+                    }
+                )
             }
             composable<Categories> {
                 CategoriesScreen()
@@ -69,6 +80,19 @@ fun NovixApp() {
             }
             composable<Account> {
                 AccountScreen()
+            }
+            composable<TvShowDetails> { backStackEntry ->
+                val tvShowDetails = backStackEntry.arguments?.let {
+                    TvShowDetails(
+                        tvShowId = it.getInt("tvShowId"),
+                    )
+                }
+                TvShowsDetailsScreen(
+                    tvShowId = tvShowDetails?.tvShowId ?: 0,
+                    onBackClick = {
+                        navController.navigateUp()
+                    }
+                )
             }
         }
     }
