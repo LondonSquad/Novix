@@ -41,7 +41,7 @@ private fun MoviesByCategoryContent(
     modifier: Modifier = Modifier
 ) {
     LazyVerticalGrid(
-        columns = GridCells.Adaptive(158.dp),
+        columns = GridCells.Fixed(2),
         contentPadding = PaddingValues(top = 12.dp, bottom = 18.dp),
         horizontalArrangement = Arrangement.spacedBy(12.dp),
         verticalArrangement = Arrangement.spacedBy(12.dp),
