@@ -318,5 +318,28 @@
     },
     "week": "2025-W29",
     "status": "merged"
+  },
+  {
+    "pr_number": 95,
+    "url": "https://github.com/LondonSquad/Novix/pull/95",
+    "title": "Refactor: manage  state and dismissal",
+    "opened_at": "2025-07-14T14:40:49Z",
+    "head_ref": "feature/closing-animation-filter-bottom-sheet",
+    "base_ref": "develop",
+    "creator": {
+      "login": "Mostafa-alsaygh",
+      "id": 106277855,
+      "url": "https://github.com/Mostafa-alsaygh"
+    },
+    "approvals": [],
+    "first_approved_at": null,
+    "time_to_first_approval_minutes": null,
+    "required_approvals_met_at": null,
+    "time_to_required_approvals_minutes": null,
+    "closed_at": null,
+    "merged_at": null,
+    "merged_by": null,
+    "week": "2025-W29",
+    "status": "pending"
   }
 ]
