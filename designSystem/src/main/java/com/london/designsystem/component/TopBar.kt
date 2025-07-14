@@ -4,7 +4,6 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -33,7 +32,7 @@ fun TopBar(
     Row(
         modifier = modifier
             .fillMaxWidth()
-            .padding(vertical = 13.dp),
+            .padding(vertical = 8.dp),
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.SpaceBetween
     ) {
@@ -46,19 +45,21 @@ fun TopBar(
                 style = NovixTheme.typography.title.large,
                 color = NovixTheme.colors.title,
                 modifier = Modifier
+                    .padding(horizontal = 12.dp)
                     .weight(1f)
-                    .padding(horizontal = 4.dp)
             )
         }
-
-        Spacer(modifier = Modifier.weight(1f))
 
         Row(
             horizontalArrangement = Arrangement.spacedBy(8.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
             option1?.let {
-                ButtonTopBar(R.drawable.add_icon, onClick = it)
+                ButtonTopBar(
+                    R.drawable.add_icon,
+                    onClick = it,
+                    modifier = Modifier.padding(end = 8.dp)
+                )
             }
             option2?.let {
                 ButtonTopBar(R.drawable.pencil_edit, onClick = it)
@@ -68,11 +69,14 @@ fun TopBar(
 }
 
 @Composable
-fun ButtonTopBar(icon: Int, onClick: () -> Unit) {
+fun ButtonTopBar(
+    icon: Int,
+    onClick: () -> Unit,
+    modifier: Modifier = Modifier
+) {
     IconButton(
         onClick = onClick,
-        modifier = Modifier
-            .padding(end = 8.dp)
+        modifier = modifier
             .size(40.dp)
             .clip(RoundedCornerShape(12.dp))
             .background(NovixTheme.colors.iconBackgroundLow)
@@ -94,6 +98,8 @@ fun ButtonTopBar(icon: Int, onClick: () -> Unit) {
 @ThemePreviews
 fun TopBarPreview() {
     TopBar(
+        onBackClick = {},
+        title = "Top movies picks",
         option1 = {},
         option2 = {}
     )
