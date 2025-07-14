@@ -89,12 +89,19 @@ html.dark .pr-table-header { background-color: #374151; }
 .pr-author-cell { display: flex; align-items: center; gap: 0.75rem; }
 .pr-author-cell .avatar { width: 2.5rem; height: 2.5rem; border-radius: 50%; }
 .pr-status-badge { padding: 0.25rem 0.75rem; font-size: 0.75rem; font-weight: 600; text-transform: capitalize; border-radius: 9999px; text-align: center; }
-.status-merged { background-color: #bfdbfe; color: #1e40af; }
+
+/* -- NEW STATUS COLORS -- */
+.status-merged { background-color: #e0e7ff; color: #3730a3; }
 .status-closed { background-color: #fee2e2; color: #991b1b; }
-.status-pending, .status-reopened, .status-approved { background-color: #fef3c7; color: #92400e; }
+.status-pending, .status-reopened { background-color: #fef3c7; color: #92400e; }
+.status-approved { background-color: #dcfce7; color: #166534; }
+
 html.dark .status-merged { background-color: #3730a3; color: #e0e7ff; }
 html.dark .status-closed { background-color: #9f1239; color: #fecaca; }
-html.dark .status-pending, html.dark .status-reopened, html.dark .status-approved { background-color: #b45309; color: #fef3c7; }
+html.dark .status-pending, html.dark .status-reopened { background-color: #78350f; color: #fef3c7; }
+html.dark .status-approved { background-color: #14532d; color: #dcfce7; }
+/* -- END NEW STATUS COLORS -- */
+
 .pr-details-toggle { color: var(--text-secondary); transition: transform 0.3s; }
 .pr-row.details-expanded .pr-details-toggle { transform: rotate(180deg); color: var(--primary-color); }
 

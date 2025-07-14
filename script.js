@@ -80,15 +80,17 @@ document.addEventListener("DOMContentLoaded", () => {
         let prListHtml = '';
 
         sortedPrs.forEach(pr => {
-            let simpleStatus = pr.status;
-            if (simpleStatus === 'approved' || simpleStatus === 'reopened') simpleStatus = 'pending';
-            
+            let filterStatus = pr.status;
+            if (pr.status === 'approved' || pr.status === 'reopened') {
+                filterStatus = 'pending'; // For filtering, 'approved' is still a 'pending' state
+            }
+
             const sortedApprovals = (pr.approvals || []).sort((a,b) => new Date(a.submitted_at) - new Date(b.submitted_at));
             const firstApproval = sortedApprovals[0];
             const secondApproval = sortedApprovals[1];
-            
-            const timeBetweenApprovals = firstApproval && secondApproval 
-                ? (new Date(secondApproval.submitted_at) - new Date(firstApproval.submitted_at)) / 60000 
+
+            const timeBetweenApprovals = firstApproval && secondApproval
+                ? (new Date(secondApproval.submitted_at) - new Date(firstApproval.submitted_at)) / 60000
                 : null;
 
             const approversHtml = (sortedApprovals.length > 0)
@@ -98,7 +100,7 @@ document.addEventListener("DOMContentLoaded", () => {
                         <span class="font-medium text-sm">${a.reviewer.login}</span>
                     </div>`).join('')
                 : '<span class="text-sm text-secondary">No approvals yet.</span>';
-            
+
             let timelineItems = [{ status: 'created', date: pr.opened_at, text: 'Created' }];
             if (firstApproval) timelineItems.push({ status: 'approved', date: firstApproval.submitted_at, text: '1st Approval' });
             if (secondApproval) timelineItems.push({ status: 'approved', date: secondApproval.submitted_at, text: '2nd Approval' });
@@ -106,7 +108,7 @@ document.addEventListener("DOMContentLoaded", () => {
             timelineItems.sort((a,b) => new Date(a.date) - new Date(b.date));
 
             prListHtml += `
-                <div class="pr-row" data-status="${simpleStatus}" data-text="${pr.title.toLowerCase()} #${pr.pr_number}">
+                <div class="pr-row" data-status="${filterStatus}" data-text="${pr.title.toLowerCase()} #${pr.pr_number}">
                     <div class="pr-row-main">
                         <div class="pr-info-cell">
                             <div class="pr-title"><a href="${pr.url}" target="_blank">#${pr.pr_number} ${pr.title}</a></div>
@@ -116,7 +118,7 @@ document.addEventListener("DOMContentLoaded", () => {
                             <img src="https://github.com/${pr.creator.login}.png" alt="${pr.creator.login}" class="avatar"/>
                             <span class="text-secondary">${pr.creator.login}</span>
                         </div>
-                        <div class="pr-status-badge status-${simpleStatus}">${pr.status}</div>
+                        <div class="pr-status-badge status-${pr.status}">${pr.status}</div>
                         <div class="stats-item">
                             <span class="added">+${pr.additions || 0}</span>
                             <span class="removed">-${pr.deletions || 0}</span>
@@ -165,7 +167,7 @@ document.addEventListener("DOMContentLoaded", () => {
                     </div>
                 </div>`;
         });
-        
+
         prMetricsContainer.innerHTML = `<div class="pr-table-wrapper">
             <div class="pr-table-header"><span>Pull Request</span><span>Author</span><span>Status</span><span>Diff</span><span></span></div>
             ${prListHtml}</div>`;
@@ -173,7 +175,7 @@ document.addEventListener("DOMContentLoaded", () => {
         prMetricsContainer.querySelectorAll('.pr-row-main').forEach(row => {
             row.addEventListener('click', () => row.parentElement.classList.toggle('details-expanded'));
         });
-        
+
         const applyFilters = () => {
             const activeStatus = filterButtonsContainer.querySelector('.filter-btn.active').dataset.status;
             const searchText = searchInput.value.toLowerCase();
@@ -215,7 +217,7 @@ document.addEventListener("DOMContentLoaded", () => {
         document.getElementById('kpi-avg-approval-time').textContent = formatDuration(approvalTimes.length ? approvalTimes.reduce((a, b) => a + b, 0) / approvalTimes.length : 0);
         const lifespans = mergedPRs.map(pr => (new Date(pr.merged_at) - new Date(pr.opened_at)) / 60000).filter(t => t > 0);
         document.getElementById('kpi-avg-lifespan').textContent = formatDuration(lifespans.length ? lifespans.reduce((a, b) => a + b, 0) / lifespans.length : 0);
-        
+
         const sevenDaysAgo = new Date(Date.now() - 7 * 24 * 60 * 60 * 1000);
         const recentPRs = data.filter(pr => new Date(pr.opened_at) > sevenDaysAgo);
         const recentActivity = recentPRs.reduce((acc, pr) => {
@@ -238,7 +240,6 @@ document.addEventListener("DOMContentLoaded", () => {
         const fastestReviewerData = Object.entries(recentReviews).map(([user, times]) => ({user, avg: times.reduce((a,b)=>a+b,0)/times.length})).sort((a,b) => a.avg - b.avg)[0];
         document.getElementById('fastest-reviewer-card').innerHTML = fastestReviewerData ? `<div class="kpi-icon bg-teal-500"><svg viewBox="0 0 24 24" fill="currentColor"><path fill-rule="evenodd" d="M12.963 2.286a.75.75 0 0 0-1.071 1.052A32.11 32.11 0 0 1 12 11.897a.75.75 0 0 1-1.5 0 33.61 33.61 0 0 0-1.433-8.56A.75.75 0 0 0 7.963 2.286 33.337 33.337 0 0 0 3 11.25a.75.75 0 0 0 1.5 0c0-1.88.243-3.727.712-5.522A31.838 31.838 0 0 1 12 21.75c2.784 0 5.488-.344 8.088-.98a.75.75 0 0 0-.21-1.474c-1.92.44-3.926.654-5.978.654-3.776 0-7.398-1.026-10.68-2.852A31.838 31.838 0 0 1 2.288 5.728a.75.75 0 0 0-1.052-1.07C.4 5.478 0 6.474 0 7.5c0 1.573.493 3.091 1.369 4.417.876 1.326 2.087 2.41 3.533 3.193a.75.75 0 0 0 .937-.587c.106-.49.227-.978.362-1.463a.75.75 0 0 0-.584-.863 15.65 15.65 0 0 1-1.123-.424c.2-.55.43-1.096.683-1.636.76 1.11 1.835 1.99 3.167 2.61a.75.75 0 0 0 .93-.593c.08-.39.15-.783.21-1.179a.75.75 0 0 0-.55-.838c-.375-.123-.74-.25-1.091-.383.612-.953 1.08-2.01 1.38-3.155a.75.75 0 0 0-.68-.82 14.89 14.89 0 0 1-1.28-.21C9.69 6.27 11.27 3.5 12.963 2.286Z" clip-rule="evenodd"></path></svg></div><div class="overflow-hidden"><div class="kpi-value"><img src="https://github.com/${fastestReviewerData.user}.png" class="avatar"/> <span class="truncate">${fastestReviewerData.user}</span></div><div class="kpi-label">Fastest Reviewer (${formatDuration(fastestReviewerData.avg)} avg)</div></div>` : `<div class="p-4 text-center">No recent reviews.</div>`;
 
-        // --- CORRECTED: Contribution Chart Logic ---
         const contributions = data.reduce((acc, pr) => {
             const creator = pr.creator.login;
             acc[creator] = acc[creator] || { o: 0, m: 0 };
@@ -251,14 +252,13 @@ document.addEventListener("DOMContentLoaded", () => {
             }
             return acc;
         }, {});
-        
+
         const chartLabels = Object.keys(contributions).sort();
         const openedData = chartLabels.map(label => contributions[label].o);
         const mergedData = chartLabels.map(label => contributions[label].m);
-        // --- END CORRECTION ---
 
         const reviewers = data.flatMap(pr => pr.approvals || []).reduce((acc, a) => {(acc[a.reviewer.login]=(acc[a.reviewer.login]||0)+1); return acc;}, {});
-        
+
         const collaborationSummary = data.reduce((acc, pr) => {
             const creator = pr.creator.login;
             (pr.approvals || []).forEach(approval => {
@@ -279,7 +279,7 @@ document.addEventListener("DOMContentLoaded", () => {
             .slice(0, 10);
 
         document.getElementById('collaboration-list').innerHTML = sortedCollaborators.map(item => {
-            const collaboratorAvatars = Array.from(item.collaborators).slice(0, 5).map(c => 
+            const collaboratorAvatars = Array.from(item.collaborators).slice(0, 5).map(c =>
                 `<a href="https://github.com/${c}" target="_blank" title="${c}"><img src="https://github.com/${c}.png" class="collaborator-avatar"></a>`
             ).join('');
 
@@ -295,7 +295,7 @@ document.addEventListener("DOMContentLoaded", () => {
                         <span class="collaboration-count">${item.totalReviews} total reviews</span>
                     </li>`;
         }).join('') || '<li>No collaboration data available.</li>';
-        
+
         const getOrCreateTooltip = (chart) => {
             let el = document.querySelector('.chart-tooltip');
             if (!el) { el = document.createElement('div'); el.className = 'chart-tooltip'; document.body.appendChild(el); }
@@ -317,11 +317,11 @@ document.addEventListener("DOMContentLoaded", () => {
 
         if (contributionsChart) contributionsChart.destroy();
         contributionsChart = new Chart(document.getElementById('contributionsChart').getContext('2d'), { type: 'bar', data: { labels: chartLabels, datasets: [ { label: 'Opened', data: openedData, backgroundColor: 'rgba(79, 70, 229, 0.7)'}, { label: 'Merged', data: mergedData, backgroundColor: 'rgba(16, 185, 129, 0.7)'} ] }, options: { responsive: true, maintainAspectRatio: false, scales: { x: { stacked: true }, y: { stacked: true, beginAtZero: true } }, plugins: { legend: { position: 'bottom' }, tooltip: { enabled: false, external: externalTooltipHandler }}}});
-        
+
         const sortedReviewers = Object.entries(reviewers).sort((a, b) => b[1] - a[1]);
         if (reviewersChart) reviewersChart.destroy();
         reviewersChart = new Chart(document.getElementById('reviewersChart').getContext('2d'), { type: 'bar', data: { labels: sortedReviewers.map(r => r[0]), datasets: [{ label: 'Approvals Given', data: sortedReviewers.map(r => r[1]), backgroundColor: 'rgba(2, 132, 199, 0.7)' }] }, options: { indexAxis: 'y', responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false }, tooltip: { enabled: false, external: externalTooltipHandler }}}});
-        
+
         applyTheme(localStorage.getItem('theme') || 'light');
     };
 
@@ -338,16 +338,17 @@ document.addEventListener("DOMContentLoaded", () => {
                 </div>
             </div>`).join('') + `<div class="feedback-summary">${data.summary}</div>`;
     };
-    
+
     // --- MAIN DATA FETCHING & INITIALIZATION ---
     const main = async () => {
         const savedTheme = localStorage.getItem('theme') || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
         applyTheme(savedTheme);
+        var baseUrl = "https://raw.githubusercontent.com/LondonSquad/Novix/refs/heads/metrics/"
 
         try {
             const [prResponse, feedbackResponse] = await Promise.all([
-                fetch("https://raw.githubusercontent.com/LondonSquad/Novix/refs/heads/metrics/pr_metrics.json").then(res => res.ok ? res.json() : Promise.reject(res)),
-                fetch("https://raw.githubusercontent.com/LondonSquad/Novix/refs/heads/metrics/feedbacks.json").then(res => res.ok ? res.json() : Promise.reject(res))
+                fetch(baseUrl + "pr_metrics.json").then(res => res.ok ? res.json() : Promise.reject(res)),
+                fetch(baseUrl + "feedbacks.json").then(res => res.ok ? res.json() : Promise.reject(res))
             ]);
             statusArea.style.display = 'none';
             contentArea.classList.remove("hidden");
