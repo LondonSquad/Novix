@@ -45,8 +45,9 @@ jobs:
         uses: actions/checkout@v4
         with:
           token: ${{ steps.app-token.outputs.token }}
-          ref: metrics
+          ref: develop
 
+      # UPDATED: This step is now more descriptive and handles 'reopened' as a full refresh.
       - name: Determine Update Type
         id: prepare_data
         run: |
@@ -60,20 +61,21 @@ jobs:
             UPDATE_TYPE="PR_OPENED"
           elif [[ "$PR_ACTION" == "closed" ]]; then
             UPDATE_TYPE="PR_CLOSED"
-          elif [[ "$PR_ACTION" == "reopened" ]]; then
-            UPDATE_TYPE="PR_REOPENED"
           elif \
+            [[ "$PR_ACTION" == "reopened" ]] || \
             [[ "$PR_ACTION" == "synchronize" ]] || \
             [[ "$PR_ACTION" == "dismissed" ]] || \
             [[ "$PR_ACTION" == "submitted" && "${{ github.event.review.state }}" == "approved" ]]; then
-            # Any of these events mean the approval state may have changed.
-            # We will refetch the entire state from the API.
-            UPDATE_TYPE="APPROVALS_CHANGE"
+            # Any of these events mean the PR's state (diff, approvals) may have changed.
+            # We will refetch the approval state from the API and update stats from the event payload.
+            UPDATE_TYPE="PR_STATE_REFRESH"
           fi
           
           echo "UPDATE_TYPE=$UPDATE_TYPE" >> $GITHUB_OUTPUT
           echo "PR_NUMBER=${{ github.event.pull_request.number }}" >> $GITHUB_OUTPUT
+          echo "PR_ACTION=$PR_ACTION" >> $GITHUB_OUTPUT
 
+      # UPDATED: This step now handles diff_stats and uses the new 'PR_STATE_REFRESH' type.
       - name: Update pr_metrics.json
         env:
           GH_TOKEN: ${{ steps.app-token.outputs.token }}
@@ -81,6 +83,7 @@ jobs:
           PR_FILE="pr_metrics.json"
           UPDATE_TYPE="${{ steps.prepare_data.outputs.UPDATE_TYPE }}"
           PR_NUMBER_JQ="${{ steps.prepare_data.outputs.PR_NUMBER }}"
+          PR_ACTION="${{ steps.prepare_data.outputs.PR_ACTION }}"
 
           if [[ -z "$UPDATE_TYPE" ]]; then
             echo "Event did not require an update. Exiting."
@@ -99,8 +102,6 @@ jobs:
           JQ_DATA=$(cat "$PR_FILE")
           UPDATED_JQ_DATA=""
 
-          # This reusable jq function recalculates all metrics based on the current .approvals array.
-          # It is the core of our logic, ensuring data is always consistent.
           JQ_RECALCULATE_FUNCTION='
             # Recalculates all approval-based metrics and status for a PR object.
             def recalculate_approval_metrics($required_approvals):
@@ -128,8 +129,8 @@ jobs:
                 );
           '
 
-          if [[ "$UPDATE_TYPE" == "APPROVALS_CHANGE" ]]; then
-            echo "Fetching current approval state from GitHub API to ensure accuracy..."
+          if [[ "$UPDATE_TYPE" == "PR_STATE_REFRESH" ]]; then
+            echo "Fetching current approval state from GitHub API and updating diff stats..."
           
             PR_HEAD_SHA=$(gh api "repos/${{ github.repository }}/pulls/$PR_NUMBER_JQ" --jq '.head.sha')
             echo "Current PR HEAD SHA: $PR_HEAD_SHA"
@@ -150,12 +151,26 @@ jobs:
 
             UPDATED_JQ_DATA=$(echo "$JQ_DATA" | jq \
               --argjson pr_number "$PR_NUMBER_JQ" \
+              --arg pr_action "$PR_ACTION" \
+              --argjson additions ${{ github.event.pull_request.additions }} \
+              --argjson deletions ${{ github.event.pull_request.deletions }} \
+              --argjson changed_files ${{ github.event.pull_request.changed_files }} \
               --argjson current_approvals "$CURRENT_APPROVALS_JSON" \
               --argjson required_approvals "$REQUIRED_APPROVALS" \
               "$JQ_RECALCULATE_FUNCTION
                map(if .pr_number == \$pr_number then
+                   # If the PR was reopened, clear the terminal state fields first.
+                   (if \$pr_action == "reopened" then
+                       .closed_at = null
+                       | .merged_at = null
+                       | .merged_by = null
+                    else . end)
+                   # Update diff stats from the current event payload.
+                   | .diff_stats.additions = \$additions
+                   | .diff_stats.deletions = \$deletions
+                   | .diff_stats.changed_files = \$changed_files
                    # Overwrite the approvals array with the fresh, VALID list from the API.
-                   .approvals = \$current_approvals
+                   | .approvals = \$current_approvals
                    # Then recalculate all metrics based on this new truth.
                    | recalculate_approval_metrics(\$required_approvals)
                  else . end)")
@@ -163,6 +178,7 @@ jobs:
           elif [[ "$UPDATE_TYPE" == "PR_OPENED" ]]; then
             WEEK_NUMBER=$(date -d "${{ github.event.pull_request.created_at }}" +%G-W%V)
           
+            # UPDATED: Add diff_stats to the new PR object
             NEW_PR_DATA=$(jq -n \
               --argjson pr_number "$PR_NUMBER_JQ" \
               --arg url "${{ github.event.pull_request.html_url }}" \
@@ -173,6 +189,9 @@ jobs:
               --arg creator_login "${{ github.event.pull_request.user.login }}" \
               --argjson creator_id "${{ github.event.pull_request.user.id }}" \
               --arg creator_html_url "${{ github.event.pull_request.user.html_url }}" \
+              --argjson additions ${{ github.event.pull_request.additions }} \
+              --argjson deletions ${{ github.event.pull_request.deletions }} \
+              --argjson changed_files ${{ github.event.pull_request.changed_files }} \
               --arg week "$WEEK_NUMBER" \
               '
               {
@@ -182,11 +201,7 @@ jobs:
                 "opened_at": $opened_at,
                 "head_ref": $head_ref,
                 "base_ref": $base_ref,
-                "creator": {
-                  "login": $creator_login,
-                  "id": $creator_id,
-                  "url": $creator_html_url
-                },
+                "creator": { "login": $creator_login, "id": $creator_id, "url": $creator_html_url },
                 "approvals": [],
                 "first_approved_at": null,
                 "time_to_first_approval_minutes": null,
@@ -196,14 +211,17 @@ jobs:
                 "merged_at": null,
                 "merged_by": null,
                 "week": $week,
-                "status": "pending"
+                "status": "pending",
+                "diff_stats": {
+                  "additions": $additions,
+                  "deletions": $deletions,
+                  "changed_files": $changed_files
+                }
               }
               ')
             UPDATED_JQ_DATA=$(echo "$JQ_DATA" | jq --argjson pr_number "$PR_NUMBER_JQ" --argjson new_pr_data "$NEW_PR_DATA" 'if any(.[]; .pr_number == $pr_number) then . else . + [$new_pr_data] end')
 
           elif [[ "$UPDATE_TYPE" == "PR_CLOSED" ]]; then
-            # FIX: Pass the entire 'merged_by' object as a JSON string.
-            # This is robust against null values when a PR is closed without merging.
             MERGED_BY_JSON='${{ toJSON(github.event.pull_request.merged_by) }}'
           
             UPDATED_JQ_DATA=$(echo "$JQ_DATA" | jq \
@@ -221,24 +239,12 @@ jobs:
                       .status = "closed"
                     end)
                else . end)')
-
-          elif [[ "$UPDATE_TYPE" == "PR_REOPENED" ]]; then
-            UPDATED_JQ_DATA=$(echo "$JQ_DATA" | jq \
-              --argjson pr_number "$PR_NUMBER_JQ" \
-              --argjson required_approvals "$REQUIRED_APPROVALS" \
-              "$JQ_RECALCULATE_FUNCTION
-               map(if .pr_number == \$pr_number then
-                   # Reset terminal state fields and let the recalculate function determine the new status.
-                   .closed_at = null
-                   | .merged_at = null
-                   | .merged_by = null
-                   | recalculate_approval_metrics(\$required_approvals)
-                 else . end)")
           fi
 
           if jq -e . >/dev/null 2>&1 <<< "$UPDATED_JQ_DATA"; then
             echo "Update successful. Writing new data to $PR_FILE."
-            echo "$UPDATED_JQ_DATA" | jq '.' > "$PR_FILE" # Using jq '.' to pretty-print the final output
+            # Pretty-print the JSON output to the file for better readability
+            echo "$UPDATED_JQ_DATA" | jq '.' > "$PR_FILE"
           else
             echo "Generated data was empty or invalid. No changes were written."
           fi
@@ -248,6 +254,6 @@ jobs:
         uses: stefanzweifel/git-auto-commit-action@v5
         with:
           commit_message: "📊 Update PR metrics data"
-          branch: metrics
+          branch: develop
           commit_user_name: "london-bot[bot]"
           commit_user_email: "${{ vars.APP_ID }}+london-bot[bot]@users.noreply.github.com"
