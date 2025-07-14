@@ -9,14 +9,14 @@ class TopMoviesPicksViewModel : ViewModel(), TopMoviesPicksInteractions {
     private val _uiState = MutableStateFlow(TopMoviesPicksUiState())
     val uiState: StateFlow<TopMoviesPicksUiState> = _uiState.asStateFlow()
     override fun onMovieClick(movieId: Int) {
-        //navigate to movie details
+        // TODO(navigate to movie details)
     }
 
     override fun onBackClick() {
-        //navigate back
+        // TODO(navigate back)
     }
 
     override fun onSavedClick(movieId: Int) {
-        //save movie
+        // TODO(save movie)
     }
 }
