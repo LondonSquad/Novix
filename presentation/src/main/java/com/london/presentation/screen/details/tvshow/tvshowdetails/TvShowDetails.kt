@@ -237,7 +237,7 @@ fun Seasons(uiState: TvShowDetailsUiState) {
         horizontalArrangement = Arrangement.spacedBy(4.dp)
     ) {
         Icon(
-            imageVector = ImageVector.vectorResource(com.london.presentation.R.drawable.icon_tv),
+            imageVector = ImageVector.vectorResource(R.drawable.icon_tv),
             contentDescription = "Tv icon",
             tint = NovixTheme.colors.body,
             modifier = Modifier.size(12.dp)
