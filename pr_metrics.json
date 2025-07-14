@@ -528,7 +528,7 @@
     "pr_number": 98,
     "url": "https://github.com/LondonSquad/Novix/pull/98",
     "title": "Feature/actor top picks details screen",
-    "opened_at": "2025-07-14T19:41:00Z",
+    "opened_at": "2025-07-14T16:41:00Z",
     "head_ref": "feature/actor-top-picks-details-screen",
     "base_ref": "develop",
     "creator": {
@@ -541,7 +541,7 @@
     "time_to_first_approval_minutes": null,
     "required_approvals_met_at": null,
     "time_to_required_approvals_minutes": null,
-    "closed_at": "2025-07-14T20:12:00Z",
+    "closed_at": "2025-07-14T17:12:00Z",
     "merged_at": null,
     "merged_by": null,
     "week": "2025-W29",
@@ -556,7 +556,7 @@
     "pr_number": 99,
     "url": "https://github.com/LondonSquad/Novix/pull/99",
     "title": "feature: setup Movies By Category Screen implement ui",
-    "opened_at": "2025-07-14T21:25:00Z",
+    "opened_at": "2025-07-14T18:25:00Z",
     "head_ref": "feature/movies-by-category-screen",
     "base_ref": "develop",
     "creator": {
@@ -567,27 +567,27 @@
     "approvals": [
       {
         "reviewer": {
-          "id": 76666355,
-          "login": "Abdulrahman1890",
-          "url": "https://github.com/Abdulrahman1890"
-        },
-        "submitted_at": "2025-07-13T23:14:00Z"
-      },
-      {
-        "reviewer": {
           "id": 117874933,
           "login": "AsmaaKhaledGomaa",
           "url": "https://github.com/AsmaaKhaledGomaa"
         },
-        "submitted_at": "2025-07-13T22:34:00Z"
+        "submitted_at": "2025-07-13T19:34:00Z"
+      },
+      {
+        "reviewer": {
+          "id": 76666355,
+          "login": "Abdulrahman1890",
+          "url": "https://github.com/Abdulrahman1890"
+        },
+        "submitted_at": "2025-07-13T20:14:00Z"
       }
     ],
-    "first_approved_at": "2025-07-13T23:14:00Z",
+    "first_approved_at": "2025-07-13T20:14:00Z",
     "time_to_first_approval_minutes": 109,
     "required_approvals_met_at": "2025-07-13T23:34:00Z",
     "time_to_required_approvals_minutes": 129,
-    "closed_at": "2025-07-14T23:14:00Z",
-    "merged_at": "2025-07-14T23:14:00Z",
+    "closed_at": "2025-07-14T20:14:00Z",
+    "merged_at": "2025-07-14T20:14:00Z",
     "merged_by": {
       "id": 100484790,
       "login": "marwanqashwa",
@@ -605,7 +605,7 @@
     "pr_number": 100,
     "url": "https://github.com/LondonSquad/Novix/pull/100",
     "title": "Feature/actor top picks details screen",
-    "opened_at": "2025-07-14T21:53:00Z",
+    "opened_at": "2025-07-14T18:53:00Z",
     "head_ref": "feature/actor-top-picks-details-screen",
     "base_ref": "develop",
     "creator": {
@@ -618,7 +618,7 @@
     "time_to_first_approval_minutes": null,
     "required_approvals_met_at": null,
     "time_to_required_approvals_minutes": null,
-    "closed_at": "2025-07-14T21:54:00Z",
+    "closed_at": "2025-07-14T18:54:00Z",
     "merged_at": null,
     "merged_by": null,
     "week": "2025-W29",
@@ -633,7 +633,7 @@
     "pr_number": 101,
     "url": "https://github.com/LondonSquad/Novix/pull/101",
     "title": "Feature/tv shows details screen",
-    "opened_at": "2025-07-14T22:03:00Z",
+    "opened_at": "2025-07-14T19:03:00Z",
     "head_ref": "feature/tv-shows-details-screen",
     "base_ref": "develop",
     "creator": {
@@ -648,7 +648,7 @@
           "login": "Abdulrahman1890",
           "url": "https://github.com/Abdulrahman1890"
         },
-        "submitted_at": "2025-07-13T23:46:00Z"
+        "submitted_at": "2025-07-13T20:46:00Z"
       },
       {
         "reviewer": {
@@ -656,15 +656,15 @@
           "login": "AsmaaKhaledGomaa",
           "url": "https://github.com/AsmaaKhaledGomaa"
         },
-        "submitted_at": "2025-07-13T23:47:00Z"
+        "submitted_at": "2025-07-13T20:47:00Z"
       }
     ],
-    "first_approved_at": "2025-07-13T23:46:00Z",
+    "first_approved_at": "2025-07-13T20:46:00Z",
     "time_to_first_approval_minutes": 103,
-    "required_approvals_met_at": "2025-07-13T23:47:00Z",
+    "required_approvals_met_at": "2025-07-13T20:47:00Z",
     "time_to_required_approvals_minutes": 104,
-    "closed_at": "2025-07-14T23:50:00Z",
-    "merged_at": "2025-07-14T23:50:00Z",
+    "closed_at": "2025-07-14T20:50:00Z",
+    "merged_at": "2025-07-14T20:50:00Z",
     "merged_by": {
       "login": "ahmeddsamii",
       "id": 154278495,
