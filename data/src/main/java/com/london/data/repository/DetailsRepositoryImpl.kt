@@ -1,15 +1,15 @@
 package com.london.data.repository
 
 import com.london.data.datasource.remote.details.tvshowdetails.TvShowDetailsRemoteDataSource
-import com.london.data.mapper.TvShowImagesMapper.toEntity
-import com.london.data.mapper.toCastEntity
-import com.london.data.mapper.toEntity
+import com.london.data.mapper.tvshowdetails.TvShowImagesMapper.toEntity
+import com.london.data.mapper.tvshowdetails.toCastEntity
+import com.london.data.mapper.tvshowdetails.toEntity
 import com.london.domain.GetCastByIdFailedException
 import com.london.domain.GetImagesByIdFailedException
 import com.london.domain.TvShowDetailsSearchFailedException
-import com.london.domain.entity.CastEntity
-import com.london.domain.entity.TvShowDetailsEntity
-import com.london.domain.entity.TvShowImagesEntity
+import com.london.domain.entity.tvshowdetails.CastEntity
+import com.london.domain.entity.tvshowdetails.TvShowDetailsEntity
+import com.london.domain.entity.tvshowdetails.TvShowImagesEntity
 import com.london.domain.repository.DetailsRepository
 
 class DetailsRepositoryImpl(

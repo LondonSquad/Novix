@@ -1,8 +1,8 @@
 package com.london.domain.repository
 
-import com.london.domain.entity.CastEntity
-import com.london.domain.entity.TvShowDetailsEntity
-import com.london.domain.entity.TvShowImagesEntity
+import com.london.domain.entity.tvshowdetails.CastEntity
+import com.london.domain.entity.tvshowdetails.TvShowDetailsEntity
+import com.london.domain.entity.tvshowdetails.TvShowImagesEntity
 
 interface DetailsRepository {
     suspend fun getTvShowDetailsById(tvShowId: Int): TvShowDetailsEntity

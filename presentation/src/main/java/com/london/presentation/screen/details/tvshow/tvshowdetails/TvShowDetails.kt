@@ -43,7 +43,7 @@ import com.london.designsystem.R
 import com.london.designsystem.component.RatingBar
 import com.london.designsystem.component.SaveIcon
 import com.london.designsystem.theme.NovixTheme
-import com.london.domain.entity.ImageItemEntity
+import com.london.domain.entity.tvshowdetails.ImageItemEntity
 import org.koin.androidx.compose.koinViewModel
 
 

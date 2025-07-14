@@ -1,7 +1,15 @@
-package com.london.data.mapper
+package com.london.data.mapper.tvshowdetails
 
 import com.london.data.datasource.remote.details.tvshowdetails.model.*
-import com.london.domain.entity.*
+import com.london.domain.entity.tvshowdetails.TvShowCreatorEntity
+import com.london.domain.entity.tvshowdetails.TvShowDetailsEntity
+import com.london.domain.entity.tvshowdetails.TvShowEpisodeEntity
+import com.london.domain.entity.tvshowdetails.TvShowGenreEntity
+import com.london.domain.entity.tvshowdetails.TvShowNetworkEntity
+import com.london.domain.entity.tvshowdetails.TvShowProductionCompanyEntity
+import com.london.domain.entity.tvshowdetails.TvShowProductionCountryEntity
+import com.london.domain.entity.tvshowdetails.TvShowSeasonEntity
+import com.london.domain.entity.tvshowdetails.TvShowSpokenLanguageEntity
 
 fun TvShowDetailsRemoteResponse.toEntity() = TvShowDetailsEntity(
     adult = this.adult,

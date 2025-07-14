@@ -1,11 +1,11 @@
-package com.london.data.mapper
+package com.london.data.mapper.tvshowdetails
 
 import com.london.data.datasource.remote.cast.model.CastMember
 import com.london.data.datasource.remote.cast.model.CastRemoteResponse
 import com.london.data.datasource.remote.cast.model.CrewMember
-import com.london.domain.entity.CastEntity
-import com.london.domain.entity.CastMemberEntity
-import com.london.domain.entity.CrewMemberEntity
+import com.london.domain.entity.tvshowdetails.CastEntity
+import com.london.domain.entity.tvshowdetails.CastMemberEntity
+import com.london.domain.entity.tvshowdetails.CrewMemberEntity
 
 fun CastRemoteResponse.toCastEntity(): CastEntity {
     return CastEntity(

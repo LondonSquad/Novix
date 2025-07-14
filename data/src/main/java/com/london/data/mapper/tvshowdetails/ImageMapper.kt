@@ -1,9 +1,9 @@
-package com.london.data.mapper
+package com.london.data.mapper.tvshowdetails
 
 import com.london.data.datasource.remote.details.tvshowdetails.model.ImageItem
 import com.london.data.datasource.remote.details.tvshowdetails.model.TvShowImagesRemoteResponse
-import com.london.domain.entity.ImageItemEntity
-import com.london.domain.entity.TvShowImagesEntity
+import com.london.domain.entity.tvshowdetails.ImageItemEntity
+import com.london.domain.entity.tvshowdetails.TvShowImagesEntity
 
 object TvShowImagesMapper {
 

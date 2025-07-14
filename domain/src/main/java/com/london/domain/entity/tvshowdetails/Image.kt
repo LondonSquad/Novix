@@ -1,4 +1,4 @@
-package com.london.domain.entity
+package com.london.domain.entity.tvshowdetails
 
 data class TvShowImagesEntity(
     val backdrops: List<ImageItemEntity>,
