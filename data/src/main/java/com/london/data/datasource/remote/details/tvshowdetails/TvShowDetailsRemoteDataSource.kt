@@ -7,7 +7,6 @@ import com.london.data.datasource.remote.details.tvshowdetails.model.TvShowImage
 interface TvShowDetailsRemoteDataSource {
     suspend fun getTvShowDetailsById(
         tvShowId: Int,
-        language: String,
     ): TvShowDetailsRemoteResponse
 
     suspend fun getCastsByTvShowId(tvShowId: Int): CastRemoteResponse
