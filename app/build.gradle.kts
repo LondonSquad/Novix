@@ -27,9 +27,18 @@ android {
         versionName = project.findProperty("versionName") as? String ?: "1.0"
 
         testInstrumentationRunner = AppConfig.ANDROID_TEST_INSTRUMENTATION
+
+        ndk {
+            abiFilters += listOf("armeabi-v7a", "arm64-v8a")
+        }
     }
 
     buildTypes {
+        debug {
+            ndk {
+                abiFilters += listOf("armeabi-v7a", "arm64-v8a", "x86", "x86_64")
+            }
+        }
         release {
             isMinifyEnabled = AppConfig.ENABLE_R8_FULL_MODE
             isShrinkResources = AppConfig.ENABLE_R8_FULL_MODE
@@ -37,6 +46,10 @@ android {
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
             )
+
+            ndk {
+                abiFilters += listOf("armeabi-v7a", "arm64-v8a")
+            }
         }
     }
     compileOptions {
@@ -69,8 +82,8 @@ dependencies {
     implementation(libs.firebase.analytics)
     testImplementation(libs.bundles.testing)
     implementation(libs.androidx.navigation.compose)
-    implementation (libs.koin.androidx.navigation)
-    implementation (libs.androidx.material)
+    implementation(libs.koin.androidx.navigation)
+    implementation(libs.androidx.material)
     implementation(libs.bundles.room)
     implementation(libs.bundles.koin)
     ksp(libs.bundles.room.ksp)
