@@ -14,6 +14,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
@@ -60,6 +61,7 @@ fun SaveIcon(
             contentDescription = "Not Save",
             tint = NovixTheme.colors.onPrimary,
             modifier = Modifier
+                .align(Alignment.Center)
                 .scale(1f - animatedProgress)
                 .alpha(1f - animatedProgress)
         )
