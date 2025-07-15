@@ -7,6 +7,9 @@ import com.london.data.mapper.tvshowdetails.toEntity
 import com.london.domain.GetCastByIdFailedException
 import com.london.domain.GetImagesByIdFailedException
 import com.london.domain.TvShowDetailsSearchFailedException
+import com.london.domain.entity.ActorDetails
+import com.london.domain.entity.ActorMovieDetails
+import com.london.domain.entity.ActorTvShowDetails
 import com.london.domain.entity.tvshowdetails.CastEntity
 import com.london.domain.entity.tvshowdetails.TvShowDetailsEntity
 import com.london.domain.entity.tvshowdetails.TvShowImagesEntity
@@ -41,5 +44,17 @@ class DetailsRepositoryImpl(
         }.getOrElse {
             throw GetImagesByIdFailedException()
         }
+    }
+
+    override suspend fun getActorDetailsById(actorId: Int): ActorDetails {
+        TODO("Not yet implemented")
+    }
+
+    override suspend fun getActorMovieById(actorId: Int): List<ActorMovieDetails> {
+        TODO("Not yet implemented")
+    }
+
+    override suspend fun getActorTvShowById(actorId: Int): List<ActorTvShowDetails> {
+        TODO("Not yet implemented")
     }
 }
