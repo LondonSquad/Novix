@@ -36,6 +36,11 @@ jobs:
           app-id: ${{ vars.APP_ID }}
           private-key: ${{ secrets.APP_PRIVATE_KEY }}
 
+      - name: Configure Git
+        run: |
+          git config --global user.name "London Bot"
+          git config --global user.email "220529784+london-bot[bot]@users.noreply.github.com"
+
       - uses: chinthakagodawita/autoupdate@v1.7.0
         id: autoupdate
         env:
@@ -489,5 +494,5 @@ jobs:
         with:
           commit_message: "📊 Update PR metrics data"
           branch: metrics
-          commit_user_name: "london-bot[bot]"
-          commit_user_email: "${{ vars.APP_ID }}+london-bot[bot]@users.noreply.github.com"
+          commit_user_name: "London Bot"
+          commit_user_email: "220529784+london-bot[bot]@users.noreply.github.com"
