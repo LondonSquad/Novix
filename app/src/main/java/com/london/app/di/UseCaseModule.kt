@@ -4,6 +4,7 @@ import com.london.domain.repository.DetailsRepository
 import com.london.domain.repository.SearchRepository
 import com.london.domain.usecase.GetActorsUseCase
 import com.london.domain.usecase.GetCastById
+import com.london.domain.usecase.GetEpisodesByTvShowSeason
 import com.london.domain.usecase.GetImagesById
 import com.london.domain.usecase.GetMoviesUseCase
 import com.london.domain.usecase.GetTvShowDetails
@@ -30,4 +31,8 @@ class UseCaseModule {
 
     @Single
     fun provideGetImagesById(repository: DetailsRepository) = GetImagesById(repository)
+
+    @Single
+    fun provideGetEpisodesByTvShowSeason(repository: DetailsRepository) =
+        GetEpisodesByTvShowSeason(repository)
 }

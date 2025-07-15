@@ -4,11 +4,13 @@ import com.london.data.datasource.remote.details.tvshowdetails.TvShowDetailsRemo
 import com.london.data.mapper.tvshowdetails.TvShowImagesMapper.toEntity
 import com.london.data.mapper.tvshowdetails.toCastEntity
 import com.london.data.mapper.tvshowdetails.toEntity
+import com.london.data.mapper.tvshowdetails.toTvShowEpisodesEntity
 import com.london.domain.GetCastByIdFailedException
 import com.london.domain.GetImagesByIdFailedException
 import com.london.domain.TvShowDetailsSearchFailedException
 import com.london.domain.entity.tvshowdetails.CastEntity
 import com.london.domain.entity.tvshowdetails.TvShowDetailsEntity
+import com.london.domain.entity.tvshowdetails.TvShowEpisodesEntity
 import com.london.domain.entity.tvshowdetails.TvShowImagesEntity
 import com.london.domain.repository.DetailsRepository
 
@@ -40,6 +42,20 @@ class DetailsRepositoryImpl(
             tvShowDetailsRemoteDataSource.getTvShowImagesById(tvShowId).toEntity()
         }.getOrElse {
             throw GetImagesByIdFailedException()
+        }
+    }
+
+    override suspend fun getTvShowEpisodesBySeason(
+        tvShowId: Int,
+        seasonNumber: Int
+    ): TvShowEpisodesEntity {
+        return runCatching {
+            tvShowDetailsRemoteDataSource.getTvShowEpisodesBySeason(
+                tvShowId = tvShowId,
+                seasonNumber = seasonNumber
+            ).toTvShowEpisodesEntity()
+        }.getOrElse {
+            throw it
         }
     }
 }
