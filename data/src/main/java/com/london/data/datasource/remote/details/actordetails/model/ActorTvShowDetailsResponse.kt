@@ -2,11 +2,11 @@ package com.london.data.datasource.remote.details.actordetails.model
 
 import kotlinx.serialization.SerialName
 
-data class ActorTvShowDetailsDto(
+data class ActorTvShowDetailsResponse(
     @SerialName("cast")
     val cast: List<ActorTvShowCastMember>,
     @SerialName("crew")
-    val crew: List<TvShowCrew>,
+    val crew: List<TvShowCrewMember>,
     @SerialName("id")
     val id: Int
 )
@@ -50,7 +50,7 @@ data class ActorTvShowCastMember(
     val voteCount: Int
 )
 
-data class TvShowCrew(
+data class TvShowCrewMember(
     @SerialName("adult")
     val adult: Boolean,
     @SerialName("backdrop_path")
