@@ -677,5 +677,42 @@
       "deletions": 32,
       "changed_files": 43
     }
+  },
+  {
+    "pr_number": 106,
+    "url": "https://github.com/LondonSquad/Novix/pull/106",
+    "title": "feature/blur",
+    "opened_at": "2025-07-15T04:49:06Z",
+    "head_ref": "feature/blur",
+    "base_ref": "develop",
+    "creator": {
+      "login": "abdo-essam",
+      "id": 92235360,
+      "url": "https://github.com/abdo-essam"
+    },
+    "approvals": [
+      {
+        "reviewer": {
+          "id": 154278495,
+          "login": "ahmeddsamii",
+          "url": "https://github.com/ahmeddsamii"
+        },
+        "submitted_at": "2025-07-15T05:18:42Z"
+      }
+    ],
+    "first_approved_at": "2025-07-15T05:18:42Z",
+    "time_to_first_approval_minutes": 29.6,
+    "required_approvals_met_at": null,
+    "time_to_required_approvals_minutes": null,
+    "closed_at": null,
+    "merged_at": null,
+    "merged_by": null,
+    "week": "2025-W29",
+    "status": "pending",
+    "diff_stats": {
+      "additions": 587,
+      "deletions": 298,
+      "changed_files": 15
+    }
   }
 ]
