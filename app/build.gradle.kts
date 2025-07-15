@@ -21,21 +21,35 @@ android {
         minSdk = AppConfig.Version.MIN_SDK
         targetSdk = AppConfig.Version.TARGET_SDK
 
+
         // Allows for setting the version code via a Gradle property for CD pipeline.
         versionCode = (project.findProperty("versionCode") as? String)?.toInt() ?: 1
         versionName = project.findProperty("versionName") as? String ?: "1.0"
 
         testInstrumentationRunner = AppConfig.ANDROID_TEST_INSTRUMENTATION
+
+        ndk {
+            abiFilters += listOf("armeabi-v7a", "arm64-v8a")
+        }
     }
 
     buildTypes {
+        debug {
+            ndk {
+                abiFilters += listOf("armeabi-v7a", "arm64-v8a", "x86", "x86_64")
+            }
+        }
         release {
-            isMinifyEnabled = AppConfig.IS_RELEASE_MODE_DEBUGGABLE
-            isDebuggable = AppConfig.IS_RELEASE_MODE_DEBUGGABLE
+            isMinifyEnabled = AppConfig.ENABLE_R8_FULL_MODE
+            isShrinkResources = AppConfig.ENABLE_R8_FULL_MODE
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
             )
+
+            ndk {
+                abiFilters += listOf("armeabi-v7a", "arm64-v8a")
+            }
         }
     }
     compileOptions {
@@ -68,8 +82,8 @@ dependencies {
     implementation(libs.firebase.analytics)
     testImplementation(libs.bundles.testing)
     implementation(libs.androidx.navigation.compose)
-    implementation (libs.koin.androidx.navigation)
-    implementation (libs.androidx.material)
+    implementation(libs.koin.androidx.navigation)
+    implementation(libs.androidx.material)
     implementation(libs.bundles.room)
     implementation(libs.bundles.koin)
     ksp(libs.bundles.room.ksp)
