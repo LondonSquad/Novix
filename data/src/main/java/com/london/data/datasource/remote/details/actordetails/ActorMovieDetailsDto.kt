@@ -1,17 +1,17 @@
-package com.london.data.datasource.remote.search.model.actor
+package com.london.data.datasource.remote.details.actordetails
 
 import kotlinx.serialization.SerialName
 
 data class ActorMovieDetailsDto(
     @SerialName("cast")
-    val cast: List<MovieCastDto>,
+    val cast: List<ActorMovieCastMember>,
     @SerialName("crew")
     val crew: List<MovieCrewDto>,
     @SerialName("id")
     val id: Int
 )
 
-data class MovieCastDto(
+data class ActorMovieCastMember(
     @SerialName("adult")
     val adult: Boolean,
     @SerialName("backdrop_path")

@@ -1,6 +1,6 @@
 package com.london.data.mapper.tvshowdetails
 
-import com.london.data.datasource.remote.details.tvshowdetails.model.CastMember
+import com.london.data.datasource.remote.details.tvshowdetails.model.TvShowCastMember
 import com.london.data.datasource.remote.details.tvshowdetails.model.TvShowCastRemoteResponse
 import com.london.data.datasource.remote.details.tvshowdetails.model.CrewMember
 import com.london.domain.entity.tvshowdetails.CastEntity
@@ -15,7 +15,7 @@ fun TvShowCastRemoteResponse.toCastEntity(): CastEntity {
     )
 }
 
-fun CastMember.toCastMember(): CastMemberEntity {
+fun TvShowCastMember.toCastMember(): CastMemberEntity {
     return CastMemberEntity(
         adult = this.adult,
         gender = this.gender,

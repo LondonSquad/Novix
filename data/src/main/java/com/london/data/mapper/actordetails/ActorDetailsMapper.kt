@@ -1,6 +1,6 @@
 package com.london.data.mapper.actordetails
 
-import com.london.data.datasource.remote.search.model.actor.ActorDetailsDto
+import com.london.data.datasource.remote.actordetails.ActorDetailsDto
 import com.london.domain.entity.ActorDetails
 
 fun ActorDetailsDto.toEntity():ActorDetails{

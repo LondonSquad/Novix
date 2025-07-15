@@ -6,7 +6,7 @@ import kotlinx.serialization.Serializable
 @Serializable
 data class TvShowCastRemoteResponse(
     @SerialName("cast")
-    val cast: List<CastMember>,
+    val cast: List<TvShowCastMember>,
     @SerialName("crew")
     val crew: List<CrewMember>,
     @SerialName("id")
@@ -14,7 +14,7 @@ data class TvShowCastRemoteResponse(
 )
 
 @Serializable
-data class CastMember(
+data class TvShowCastMember(
     @SerialName("adult")
     val adult: Boolean,
     @SerialName("gender")

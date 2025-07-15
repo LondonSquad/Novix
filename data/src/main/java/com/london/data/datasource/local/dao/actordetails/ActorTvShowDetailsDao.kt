@@ -1,4 +1,0 @@
-package com.london.data.datasource.local.dao.actordetails
-
-interface ActorTvShowDetailsDao {
-}

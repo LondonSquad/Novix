@@ -1,4 +1,4 @@
-package com.london.data.datasource.remote.search.model.actor
+package com.london.data.datasource.remote.details.actordetails
 
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
