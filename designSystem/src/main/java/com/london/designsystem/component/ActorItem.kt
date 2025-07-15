@@ -1,6 +1,7 @@
 package com.london.designsystem.component
 
 import androidx.compose.foundation.border
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.defaultMinSize
@@ -58,21 +59,23 @@ private fun ActorImage(imageRes: Any) {
         bottomEnd = if (isRtl) 12.dp else 0.dp
     )
 
-    ImageViewFilter(
-        model = imageRes,
-        contentDescription = "actorImage",
-        modifier = Modifier
-            .size(78.dp)
-            .clip(shape = imageShape)
-            .border(
-                width = 1.dp,
-                shape = imageShape,
-                color = NovixTheme.colors.stroke
-            ),
-        contentScale = ContentScale.Crop,
-        loadingContent = { CircularLoading(modifier = Modifier.align(Alignment.Center)) },
-        errorContent = { ErrorImage() },
-    )
+    Box {
+        ImageViewFilter(
+            model = imageRes,
+            contentDescription = "actorImage",
+            modifier = Modifier
+                .size(78.dp)
+                .clip(shape = imageShape)
+                .border(
+                    width = 1.dp,
+                    shape = imageShape,
+                    color = NovixTheme.colors.stroke
+                ),
+            contentScale = ContentScale.Crop,
+            loadingContent = { CircularLoading(modifier = Modifier.align(Alignment.Center)) },
+            errorContent = { ErrorImage() },
+        )
+    }
 }
 
 @Composable

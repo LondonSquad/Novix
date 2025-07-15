@@ -34,14 +34,15 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.zIndex
 import com.ae.imageharamblur.ui.ImageViewFilter
 import com.london.designsystem.R
+import com.london.designsystem.component.CircularLoading
 import com.london.designsystem.component.RatingBar
 import com.london.designsystem.component.SaveIcon
+import com.london.designsystem.component.button.ErrorImage
 import com.london.designsystem.theme.NovixTheme
 import com.london.domain.entity.tvshowdetails.ImageItemEntity
 import org.koin.androidx.compose.koinViewModel
@@ -359,8 +360,9 @@ fun CustomBackDropImagePager(
                 .height(252.dp),
             contentScale = ContentScale.FillBounds,
             model = images[pageIndex].filePath,
-            placeholder = painterResource(R.drawable.img_error),
             contentDescription = "TV Show Image ${pageIndex + 1}",
+            errorContent = { ErrorImage() },
+            loadingContent = { CircularLoading(modifier = Modifier) }
         )
     }
 }

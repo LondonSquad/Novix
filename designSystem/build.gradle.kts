@@ -48,6 +48,6 @@ dependencies {
     androidTestImplementation(libs.bundles.base.testing)
     testImplementation(libs.bundles.testing)
 
-    //lottie animation
+    // lottie animation
     implementation(libs.lottie.compose)
 }
