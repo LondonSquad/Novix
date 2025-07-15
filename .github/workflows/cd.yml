@@ -1,79 +1,84 @@
-name: Android CI/CD with Firebase
+name: Android CI/CD with Firebase (Release)
 
 on:
   pull_request:
-    types: [closed] # This specifies the action runs when a pull request is closed.
-    branches: [ develop ] # This specifies the action runs only for PRs targeting the 'develop' branch.
+    types: [closed]
+    branches: [ develop ]
 
-# Ensure that only the latest commit is tested for PRs
 concurrency:
   group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.sha }}
   cancel-in-progress: true
 
 jobs:
   build-and-deploy:
-    # This 'if' condition ensures the job only runs if the pull request was actually merged.
     if: github.event.pull_request.merged == true
     runs-on: ubuntu-latest
-    
+
     steps:
-    # 1. Checkout code
-    - name: Checkout code
-      uses: actions/checkout@v4
-    
-    # 2. Set up Java
-    - name: Set up JDK 17
-      uses: actions/setup-java@v4
-      with:
-        java-version: '17'
-        distribution: 'temurin'
-    
-    # 3. Set up Android SDK
-    # This step is essential to download and configure the Android SDK.
-    - name: Setup Android SDK
-      uses: android-actions/setup-android@v3
-    
-    # 4. Cache Gradle packages
-    # Caching speeds up your builds by reusing downloaded libraries.
-    - name: Cache Gradle packages
-      uses: actions/cache@v4
-      with:
-        path: |
-          ~/.gradle/caches
-          ~/.gradle/wrapper
-        key: gradle-cache-${{ hashFiles('**/gradle-wrapper.properties', '**/*.gradle*', '**/settings.gradle*', '**/libs.versions.toml') }}
-        restore-keys: |
-          gradle-cache-${{ runner.os }}-
-          gradle-cache-
-    
-    # 5. Grant execute permission for gradlew
-    - name: Grant execute permission for gradlew
-      run: chmod +x gradlew
+      # 1. Checkout code
+      - name: Checkout code
+        uses: actions/checkout@v4
 
-    # 6. Create local.properties with API key
-    - name: Create local.properties
-      run: |
-        echo "sdk.dir=$ANDROID_SDK_ROOT" > local.properties
-        echo "api_key=\"${{ secrets.TMDB_API_KEY }}\"" >> local.properties
+      # 2. Set up Java
+      - name: Set up JDK 17
+        uses: actions/setup-java@v4
+        with:
+          java-version: '17'
+          distribution: 'temurin'
 
-    # 7. Decode google-services.json
-    - name: Decode Firebase Config
-      run: |
-        echo "${{ secrets.GOOGLE_SERVICES_JSON }}" | base64 --decode > app/google-services.json
-    
-    # 8. Build the app
-    - name: Build Debug APK
-      run: ./gradlew -PversionCode=${{ github.run_number }} -PversionName="1.0.${{ github.run_number }}" assembleDebug
-    
-    # 9. Deploy to Firebase App Distribution (CD part)
-    - name: Deploy to Firebase App Distribution
-      uses: wzieba/Firebase-Distribution-Github-Action@v1
-      with:
-        appId: ${{ secrets.FIREBASE_APP_ID }}
-        serviceCredentialsFileContent: ${{ secrets.CREDENTIAL_FILE_CONTENT }}
-        groups: testers
-        file: app/build/outputs/apk/debug/app-debug.apk
-        releaseNotes: |
-          New update from PR #${{ github.event.pull_request.number }}
-          Commit: ${{ github.sha }}
-          Branch: ${{ github.ref_name }}
+      # 3. Set up Android SDK
+      - name: Setup Android SDK
+        uses: android-actions/setup-android@v3
+
+      # 4. Cache Gradle packages
+      - name: Cache Gradle packages
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.gradle/caches
+            ~/.gradle/wrapper
+          key: gradle-cache-${{ hashFiles('**/gradle-wrapper.properties', '**/*.gradle*', '**/settings.gradle*', '**/libs.versions.toml') }}
+          restore-keys: |
+            gradle-cache-${{ runner.os }}-
+            gradle-cache-
+
+      # 5. Grant execute permission for gradlew
+      - name: Grant execute permission for gradlew
+        run: chmod +x gradlew
+
+      # 6. Create local.properties with SDK and API key
+      - name: Create local.properties
+        run: |
+          echo "sdk.dir=$ANDROID_SDK_ROOT" > local.properties
+          echo "api_key=\"${{ secrets.TMDB_API_KEY }}\"" >> local.properties
+
+      # 7. Decode google-services.json
+      - name: Decode Firebase Config
+        run: |
+          echo "${{ secrets.GOOGLE_SERVICES_JSON }}" | base64 --decode > app/google-services.json
+
+      # 8. Decode Keystore for signing release
+      - name: Decode Keystore
+        run: echo "${{ secrets.KEYSTORE_BASE64 }}" | base64 --decode > release.keystore
+
+      # 9. Build Release APK (signed + optimized)
+      - name: Build Release APK
+        env:
+          KEYSTORE_PATH: release.keystore
+          KEYSTORE_PASSWORD: ${{ secrets.KEYSTORE_PASSWORD }}
+          KEY_ALIAS: ${{ secrets.KEY_ALIAS }}
+          KEY_PASSWORD: ${{ secrets.KEY_PASSWORD }}
+        run: ./gradlew -PversionCode=${{ github.run_number }} -PversionName="1.0.${{ github.run_number }}" assembleRelease
+
+      # 10. Deploy to Firebase App Distribution
+      - name: Deploy to Firebase App Distribution
+        uses: wzieba/Firebase-Distribution-Github-Action@v1
+        with:
+          appId: ${{ secrets.FIREBASE_APP_ID }}
+          serviceCredentialsFileContent: ${{ secrets.CREDENTIAL_FILE_CONTENT }}
+          groups: testers
+          file: app/build/outputs/apk/release/app-release.apk
+          releaseNotes: |
+            New release from PR #${{ github.event.pull_request.number }}
+            Commit: ${{ github.sha }}
+            Branch: ${{ github.ref_name }}

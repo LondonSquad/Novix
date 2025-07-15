@@ -1,0 +1,2 @@
+-keep class com.london.data.** { *; }
+-keep interface com.london.data.** { *; }
