@@ -45,7 +45,6 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.layout.layout
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.style.TextOverflow
@@ -55,8 +54,10 @@ import com.ae.imageharamblur.ui.ImageViewFilter
 import com.london.designsystem.R
 import com.london.designsystem.component.ActorItem
 import com.london.designsystem.component.NovixCarousalRow
+import com.london.designsystem.component.CircularLoading
 import com.london.designsystem.component.RatingBar
 import com.london.designsystem.component.SaveIcon
+import com.london.designsystem.component.button.ErrorImage
 import com.london.designsystem.theme.NovixTheme
 import com.london.domain.entity.tvshowdetails.CastMemberEntity
 import com.london.domain.entity.tvshowdetails.ImageItemEntity
@@ -195,9 +196,9 @@ fun CustomBackDropImagePager(
                     .height(252.dp),
                 contentScale = ContentScale.FillBounds,
                 model = images[pageIndex].filePath,
-                placeholder = painterResource(R.drawable.img_error),
-                contentDescription = "${stringResource(R.string.tv_show_image)} ${pageIndex + 1}",
-            )
+                contentDescription = "TV Show Image ${pageIndex + 1}",
+                errorContent = { ErrorImage() },
+                loadingContent = { CircularLoading(modifier = Modifier) })
         }
 
         val dotsStates = List(images.size) { index ->
@@ -484,6 +485,7 @@ fun OverviewSection(
         }
     }
 }
+
 
 @Composable
 fun CastSection(

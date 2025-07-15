@@ -1,6 +1,7 @@
 package com.london.designsystem.component
 
 import androidx.compose.foundation.border
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.defaultMinSize
@@ -24,6 +25,7 @@ import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import com.ae.imageharamblur.ui.ImageViewFilter
 import com.london.designsystem.R
+import com.london.designsystem.component.button.ErrorImage
 import com.london.designsystem.theme.NovixTheme
 import com.london.designsystem.theme.ThemePreviews
 
@@ -57,25 +59,27 @@ private fun ActorImage(imageRes: Any) {
         bottomEnd = if (isRtl) 12.dp else 0.dp
     )
 
-    ImageViewFilter(
-        model = imageRes,
-        contentDescription = "actorImage",
-        modifier = Modifier
-            .size(78.dp)
-            .clip(shape = imageShape)
-            .border(
-                width = 1.dp,
-                shape = imageShape,
-                color = NovixTheme.colors.stroke
-            ),
-        contentScale = ContentScale.Crop
-    )
+    Box {
+        ImageViewFilter(
+            model = imageRes,
+            contentDescription = "actorImage",
+            modifier = Modifier
+                .size(78.dp)
+                .clip(shape = imageShape)
+                .border(
+                    width = 1.dp,
+                    shape = imageShape,
+                    color = NovixTheme.colors.stroke
+                ),
+            contentScale = ContentScale.Crop,
+            loadingContent = { CircularLoading(modifier = Modifier.align(Alignment.Center)) },
+            errorContent = { ErrorImage() },
+        )
+    }
 }
-
 
 @Composable
 fun isRtlLayout(): Boolean = LocalLayoutDirection.current == LayoutDirection.Rtl
-
 
 @Composable
 fun Modifier.customBorder(
@@ -114,7 +118,6 @@ fun Modifier.customBorder(
         style = Stroke(width = strokeWidth)
     )
 }
-
 
 @Composable
 private fun TextSection(
