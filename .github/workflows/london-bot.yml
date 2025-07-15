@@ -315,6 +315,19 @@ jobs:
               | .status = (if .status == "merged" or .status == "closed" then .status elif .required_approvals_met_at != null then "approved" else "pending" end);
           '
           
+          # Check if we have valid diff stats values
+          HAS_VALID_DIFF_STATS=false
+          if [[ -n "$PR_ADDITIONS" && -n "$PR_DELETIONS" && -n "$PR_CHANGED_FILES" ]]; then
+            if [[ "$PR_ADDITIONS" =~ ^[0-9]+$ && "$PR_DELETIONS" =~ ^[0-9]+$ && "$PR_CHANGED_FILES" =~ ^[0-9]+$ ]]; then
+              HAS_VALID_DIFF_STATS=true
+              echo "Debug: Valid diff stats - ADDITIONS=$PR_ADDITIONS, DELETIONS=$PR_DELETIONS, CHANGED_FILES=$PR_CHANGED_FILES"
+            else
+              echo "Debug: Invalid diff stats values (not numeric) - skipping diff stats update"
+            fi
+          else
+            echo "Debug: Missing diff stats values - skipping diff stats update"
+          fi
+
           if [[ "$UPDATE_TYPE" == "PR_STATE_REFRESH" ]]; then
             echo "Fetching current approval state from GitHub API..."
             PR_HEAD_SHA=$(gh api "repos/${{ github.repository }}/pulls/$PR_NUMBER" --jq '.head.sha')
@@ -333,32 +346,62 @@ jobs:
             echo "VALID approvals from API: $CURRENT_APPROVALS_JSON"
           
             # Only update diff stats if we have valid values from the PR event
-            UPDATE_DIFF_STATS=""
-            if [[ -n "$PR_ADDITIONS" && -n "$PR_DELETIONS" && -n "$PR_CHANGED_FILES" ]]; then
-              UPDATE_DIFF_STATS="| .diff_stats.additions = \$additions
-                                | .diff_stats.deletions = \$deletions
-                                | .diff_stats.changed_files = \$changed_files"
+            if [[ "$HAS_VALID_DIFF_STATS" == "true" ]]; then
+              echo "Updating diff stats for PR #$PR_NUMBER"
+              UPDATED_JQ_DATA=$(echo "$JQ_DATA" | jq \
+                --argjson pr_number "$PR_NUMBER" \
+                --arg pr_action "$PR_ACTION" \
+                --arg reopen_action "reopened" \
+                --argjson additions "$PR_ADDITIONS" \
+                --argjson deletions "$PR_DELETIONS" \
+                --argjson changed_files "$PR_CHANGED_FILES" \
+                --argjson current_approvals "$CURRENT_APPROVALS_JSON" \
+                --argjson required_approvals "$REQUIRED_APPROVALS" \
+                "$JQ_RECALCULATE_FUNCTION
+                 map(if .pr_number == \$pr_number then
+                     (if \$pr_action == \$reopen_action then .closed_at = null | .merged_at = null | .merged_by = null else . end)
+                     | .diff_stats.additions = \$additions
+                     | .diff_stats.deletions = \$deletions
+                     | .diff_stats.changed_files = \$changed_files
+                     | .approvals = \$current_approvals
+                     | recalculate_approval_metrics(\$required_approvals)
+                   else . end)")
+            else
+              echo "Skipping diff stats update, only updating approvals for PR #$PR_NUMBER"
+              UPDATED_JQ_DATA=$(echo "$JQ_DATA" | jq \
+                --argjson pr_number "$PR_NUMBER" \
+                --arg pr_action "$PR_ACTION" \
+                --arg reopen_action "reopened" \
+                --argjson current_approvals "$CURRENT_APPROVALS_JSON" \
+                --argjson required_approvals "$REQUIRED_APPROVALS" \
+                "$JQ_RECALCULATE_FUNCTION
+                 map(if .pr_number == \$pr_number then
+                     (if \$pr_action == \$reopen_action then .closed_at = null | .merged_at = null | .merged_by = null else . end)
+                     | .approvals = \$current_approvals
+                     | recalculate_approval_metrics(\$required_approvals)
+                   else . end)")
             fi
-          
-            UPDATED_JQ_DATA=$(echo "$JQ_DATA" | jq \
-              --argjson pr_number "$PR_NUMBER" \
-              --arg pr_action "$PR_ACTION" \
-              --arg reopen_action "reopened" \
-              --argjson additions "$PR_ADDITIONS" \
-              --argjson deletions "$PR_DELETIONS" \
-              --argjson changed_files "$PR_CHANGED_FILES" \
-              --argjson current_approvals "$CURRENT_APPROVALS_JSON" \
-              --argjson required_approvals "$REQUIRED_APPROVALS" \
-              "$JQ_RECALCULATE_FUNCTION
-               map(if .pr_number == \$pr_number then
-                   (if \$pr_action == \$reopen_action then .closed_at = null | .merged_at = null | .merged_by = null else . end)
-                   $UPDATE_DIFF_STATS
-                   | .approvals = \$current_approvals
-                   | recalculate_approval_metrics(\$required_approvals)
-                 else . end)")
 
           elif [[ "$UPDATE_TYPE" == "PR_OPENED" ]]; then
             WEEK_NUMBER=$(date -d "$PR_CREATED_AT" +%G-W%V)
+          
+            # For new PRs, we need valid diff stats or default to 0
+            SAFE_ADDITIONS=${PR_ADDITIONS:-0}
+            SAFE_DELETIONS=${PR_DELETIONS:-0}
+            SAFE_CHANGED_FILES=${PR_CHANGED_FILES:-0}
+          
+            # Validate that values are numeric for new PRs
+            if ! [[ "$SAFE_ADDITIONS" =~ ^[0-9]+$ ]]; then
+              SAFE_ADDITIONS=0
+            fi
+            if ! [[ "$SAFE_DELETIONS" =~ ^[0-9]+$ ]]; then
+              SAFE_DELETIONS=0
+            fi
+            if ! [[ "$SAFE_CHANGED_FILES" =~ ^[0-9]+$ ]]; then
+              SAFE_CHANGED_FILES=0
+            fi
+          
+            echo "Debug: New PR - ADDITIONS=$SAFE_ADDITIONS, DELETIONS=$SAFE_DELETIONS, CHANGED_FILES=$SAFE_CHANGED_FILES"
           
             NEW_PR_DATA=$(jq -n \
               --argjson pr_number "$PR_NUMBER" \
@@ -370,9 +413,9 @@ jobs:
               --arg creator_login "$PR_CREATOR_LOGIN" \
               --argjson creator_id "$PR_CREATOR_ID" \
               --arg creator_html_url "$PR_CREATOR_URL" \
-              --argjson additions "$PR_ADDITIONS" \
-              --argjson deletions "$PR_DELETIONS" \
-              --argjson changed_files "$PR_CHANGED_FILES" \
+              --argjson additions "$SAFE_ADDITIONS" \
+              --argjson deletions "$SAFE_DELETIONS" \
+              --argjson changed_files "$SAFE_CHANGED_FILES" \
               --arg week "$WEEK_NUMBER" \
               '
               {
