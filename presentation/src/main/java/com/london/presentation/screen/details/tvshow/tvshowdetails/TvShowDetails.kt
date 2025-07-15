@@ -164,7 +164,6 @@ fun TvShowsDetailScreenContent(
     }
 }
 
-// region CarousalSlider
 @Composable
 fun CustomBackDropImagePager(
     modifier: Modifier = Modifier,
@@ -226,9 +225,7 @@ fun CustomBackDropImagePager(
         )
     }
 }
-//endregion
 
-// region Topbar
 @Composable
 fun TvShowScreenTopBar(
     modifier: Modifier = Modifier,
@@ -263,9 +260,7 @@ fun TvShowScreenTopBar(
     }
 
 }
-// endregion
 
-// region HeaderDetailsCard
 @Composable
 fun HeaderDetailsCard(
     modifier: Modifier = Modifier,
@@ -449,9 +444,7 @@ fun TvShowRating(
         )
     }
 }
-// endregion
 
-//region OverviewSection
 @Composable
 fun OverviewSection(
     modifier: Modifier = Modifier,
@@ -491,9 +484,7 @@ fun OverviewSection(
         }
     }
 }
-//endregion
 
-// region CastSection
 @Composable
 fun CastSection(
     modifier: Modifier = Modifier,
@@ -523,4 +514,3 @@ fun CastSection(
         }
     }
 }
-// endregion
