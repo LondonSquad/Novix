@@ -11,4 +11,7 @@ object ApiConstants {
     fun getCastTvShowPath(tvShowId: Int) = "3/tv/$tvShowId/aggregate_credits"
 
     fun getImagesTvShowPath(tvShowId: Int) = "3/tv/$tvShowId/images"
+
+    fun getTvShowEpisodeBySeasonPath(tvShowId: Int, seasonNumber: Int) =
+        "3/tv/$tvShowId/season/$seasonNumber"
 }
