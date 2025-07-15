@@ -52,6 +52,7 @@ import com.london.designsystem.component.SaveIcon
 import com.london.designsystem.component.button.ErrorImage
 import com.london.designsystem.theme.NovixTheme
 import com.london.domain.entity.tvshowdetails.ImageItemEntity
+import com.london.presentation.utils.toLocalizedNumbers
 import org.koin.androidx.compose.koinViewModel
 
 
@@ -136,7 +137,6 @@ fun TvShowsDetailScreenContent(
     }
 }
 
-// region CarousalSlider
 @Composable
 fun CustomBackDropImagePager(
     modifier: Modifier = Modifier,
@@ -199,9 +199,7 @@ fun CustomBackDropImagePager(
         )
     }
 }
-//endregion
 
-// region Topbar
 @Composable
 fun TvShowScreenTopBar(
     modifier: Modifier = Modifier,
@@ -237,9 +235,7 @@ fun TvShowScreenTopBar(
     }
 
 }
-// endregion
 
-// region HeaderDetailsCard
 @Composable
 fun HeaderDetailsCard(
     modifier: Modifier = Modifier,
@@ -423,9 +419,7 @@ fun TvShowRating(
         )
     }
 }
-// endregion
 
-//region OverviewSection
 @Composable
 fun OverviewSection(
     modifier: Modifier = Modifier,
