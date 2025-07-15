@@ -15,12 +15,12 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import com.london.presentation.R
 import com.london.designsystem.component.HomeCard
 import com.london.designsystem.component.TopBar
 import com.london.designsystem.theme.NovixTheme
 import com.london.designsystem.theme.ThemePreviews
 import com.london.domain.entity.Movie
+import com.london.presentation.R
 import org.koin.androidx.compose.koinViewModel
 
 @Composable
@@ -63,7 +63,7 @@ private fun TopMoviesPicksContent(
             HomeCard(
                 imageUrl = movie.posterPicture,
                 isSaved = false,
-                onSaveClick = { interactions.onSavedClick(movie.id) })
+                onSaveClick = { interactions.onSaveMovie(movie.id) })
         }
     }
 }
@@ -143,7 +143,7 @@ fun TopMoviesPicksPreview() {
         interactions = object : TopMoviesPicksInteractions {
             override fun onMovieClick(movieId: Int) {}
             override fun onBackClick() {}
-            override fun onSavedClick(movieId: Int) {}
+            override fun onSaveMovie(movieId: Int) {}
         }
     )
 }

@@ -16,7 +16,7 @@ class TopMoviesPicksViewModel : ViewModel(), TopMoviesPicksInteractions {
         // TODO(navigate back)
     }
 
-    override fun onSavedClick(movieId: Int) {
+    override fun onSaveMovie(movieId: Int) {
         // TODO(save movie)
     }
 }
