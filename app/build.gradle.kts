@@ -6,9 +6,9 @@ plugins {
     alias(libs.plugins.kotlin.compose)
     alias(libs.plugins.kotlin.serialization)
     alias(libs.plugins.ksp)
-    //alias(libs.plugins.google.firebase.firebase.perf)
-    //alias(libs.plugins.google.gms.google.services)
-    //alias(libs.plugins.google.firebase.crashlytics)
+    alias(libs.plugins.google.firebase.firebase.perf)
+    alias(libs.plugins.google.gms.google.services)
+    alias(libs.plugins.google.firebase.crashlytics)
     alias(libs.plugins.kotlinx.kover)
 }
 
