@@ -13,4 +13,6 @@
     <string name="released_year">Released year</string>
     <string name="genres">Genres</string>
     <string name="imdb_rating">IMDb rating</string>
+    <string name="view_review">View review</string>
+    <string name="seasons">Seasons</string>
 </resources>
