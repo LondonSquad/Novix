@@ -961,5 +961,33 @@
       "deletions": 0,
       "changed_files": 0
     }
+  },
+  {
+    "pr_number": 109,
+    "url": "https://github.com/LondonSquad/Novix/pull/109",
+    "title": "feat: add Top tv shows picks screen ui",
+    "opened_at": "2025-07-15T12:56:12Z",
+    "head_ref": "feature/top-tv-shows-picks",
+    "base_ref": "develop",
+    "creator": {
+      "login": "Abdulrahman1890",
+      "id": 76666355,
+      "url": "https://github.com/Abdulrahman1890"
+    },
+    "approvals": [],
+    "first_approved_at": null,
+    "time_to_first_approval_minutes": null,
+    "required_approvals_met_at": null,
+    "time_to_required_approvals_minutes": null,
+    "closed_at": null,
+    "merged_at": null,
+    "merged_by": null,
+    "week": "2025-W29",
+    "status": "pending",
+    "diff_stats": {
+      "additions": 187,
+      "deletions": 0,
+      "changed_files": 6
+    }
   }
 ]
