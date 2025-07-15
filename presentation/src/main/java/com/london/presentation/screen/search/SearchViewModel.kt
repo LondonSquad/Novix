@@ -5,8 +5,11 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.london.domain.entity.Movie
 import com.london.domain.entity.TvShow
+import com.london.domain.usecase.AddToRecentSearchUseCase
+import com.london.domain.usecase.ClearRecentSearchUseCase
 import com.london.domain.usecase.GetActorsUseCase
 import com.london.domain.usecase.GetMoviesUseCase
+import com.london.domain.usecase.GetRecentSearchUseCase
 import com.london.domain.usecase.GetTvShowsUseCase
 import com.london.presentation.composables.filterbottomsheet.FilterBottomSheetUiState
 import com.london.presentation.composables.filterbottomsheet.availableMovieGenres
@@ -28,7 +31,10 @@ import org.koin.android.annotation.KoinViewModel
 class SearchViewModel(
     private val getActorsUseCase: GetActorsUseCase,
     private val getTvShowsUseCase: GetTvShowsUseCase,
-    private val getMoviesUseCase: GetMoviesUseCase
+    private val getMoviesUseCase: GetMoviesUseCase,
+    private val addToRecentSearchUseCase: AddToRecentSearchUseCase,
+    private val getRecentSearchUseCase: GetRecentSearchUseCase,
+    private val clearRecentSearchUseCase: ClearRecentSearchUseCase
 ) : ViewModel(), SearchInteractions {
 
     private val _uiState = MutableStateFlow(SearchUiState())
@@ -156,8 +162,10 @@ class SearchViewModel(
     private fun applyMovieFilters(movies: List<Movie>): List<Movie> {
         val filterState = _filterUiState.value
         return movies.filter { movie ->
-            val matchesGenres = filterState.selectedGenres.isEmpty() ||
-                    movie.genreIds.any { genre -> filterState.selectedGenres.contains(genre) }
+            val matchesGenres =
+                filterState.selectedGenres.isEmpty() || movie.genreIds.any { genre ->
+                    filterState.selectedGenres.contains(genre)
+                }
 
             val matchesRating = movie.rating >= filterState.imdbRating
 
@@ -171,8 +179,9 @@ class SearchViewModel(
     private fun applyTvShowFilters(tvShows: List<TvShow>): List<TvShow> {
         val filterState = _filterUiState.value
         return tvShows.filter { tvShow ->
-            val matchesGenres = filterState.selectedGenres.isEmpty() ||
-                    tvShow.genres.any { genre -> filterState.selectedGenres.contains(genre) }
+            val matchesGenres = filterState.selectedGenres.isEmpty() || tvShow.genres.any { genre ->
+                filterState.selectedGenres.contains(genre)
+            }
 
             val matchesRating = tvShow.rating >= filterState.imdbRating
 
@@ -198,15 +207,10 @@ class SearchViewModel(
     override fun addToRecentSearches(query: String) {
         if (query.isBlank()) return
 
-        val currentSearches = _uiState.value.recentSearches.toMutableList()
-        currentSearches.remove(query)
-        currentSearches.add(0, query)
-
-        if (currentSearches.size > 10) {
-            currentSearches.removeAt(currentSearches.size - 1)
+        viewModelScope.launch {
+            addToRecentSearchUseCase.invoke(query)
+            _uiState.update { it.copy(recentSearches = getRecentSearchUseCase.invoke()) }
         }
-
-        _uiState.update { it.copy(recentSearches = currentSearches) }
     }
 
     override fun addToRecentViewed(imageUrl: String) {
@@ -230,6 +234,9 @@ class SearchViewModel(
 
     override fun clearRecentSearches() {
         _uiState.update { it.copy(recentSearches = emptyList()) }
+        viewModelScope.launch {
+            clearRecentSearchUseCase.invoke()
+        }
     }
 
     override fun removeRecentSearch(search: String) {
@@ -296,9 +303,7 @@ class SearchViewModel(
     override fun onClearFilter() {
         _filterUiState.update {
             it.copy(
-                selectedGenres = emptyList(),
-                imdbRating = 0,
-                releaseYearRange = 1950f..2030f
+                selectedGenres = emptyList(), imdbRating = 0, releaseYearRange = 1950f..2030f
             )
         }
 

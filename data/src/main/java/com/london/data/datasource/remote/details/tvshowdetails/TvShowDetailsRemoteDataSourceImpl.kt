@@ -49,6 +49,7 @@ class TvShowDetailsRemoteDataSourceImpl(
                 host = ApiConstants.HOST
                 path(ApiConstants.getCastTvShowPath(tvShowId))
                 parameters.append("api_key", BuildConfig.API_KEY)
+                parameters.append("language", deviceConfigurationDataSource.getCurrentLanguage())
             }
         }
         val responseBody = response.bodyAsText()
