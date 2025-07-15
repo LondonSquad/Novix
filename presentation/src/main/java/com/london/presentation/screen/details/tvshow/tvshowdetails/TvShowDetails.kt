@@ -49,6 +49,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.layout.layout
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.style.TextOverflow
@@ -612,7 +613,6 @@ fun EpisodeRow(
         modifier = Modifier.padding(top = 8.dp, bottom = 12.dp)
     )
 
-
     uiState.tvShowEpisodes.forEach { episode ->
         Row(
             modifier = modifier,
@@ -620,16 +620,16 @@ fun EpisodeRow(
             horizontalArrangement = Arrangement.spacedBy(12.dp)
         ) {
             ImageViewFilter(
-                model = if (episode.stillPath != null)
-                    episode.stillPath else painterResource(R.drawable.img_error),
+                model = episode.stillPath,
                 contentDescription = stringResource(R.string.s),
                 contentScale = ContentScale.FillBounds,
-                placeholder = painterResource(R.drawable.img_error),
-                error = painterResource(R.drawable.img_error),
                 modifier = Modifier
                     .clip(RoundedCornerShape(12.dp))
                     .height(78.dp)
-                    .weight(0.35f)
+                    .weight(0.35f),
+                loadingContent = { CircularLoading() },
+                errorContent = { ErrorImage() },
+
             )
 
             Column(

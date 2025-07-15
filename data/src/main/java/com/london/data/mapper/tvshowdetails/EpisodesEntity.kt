@@ -1,9 +1,9 @@
 package com.london.data.mapper.tvshowdetails
 
-import com.london.data.datasource.remote.details.tvshowdetails.model.TvShowEpisodesRemoteResponse
-import com.london.data.datasource.remote.details.tvshowdetails.model.TvShowEpisodeBySeason
-import com.london.data.datasource.remote.details.tvshowdetails.model.EpisodeCrewMember
-import com.london.data.datasource.remote.details.tvshowdetails.model.EpisodeGuestStar
+import com.london.data.datasource.remote.details.tvshowdetails.model.tvshowepisode.TvShowEpisodesRemoteResponse
+import com.london.data.datasource.remote.details.tvshowdetails.model.tvshowepisode.TvShowEpisodeBySeason
+import com.london.data.datasource.remote.details.tvshowdetails.model.tvshowepisode.EpisodeCrewMember
+import com.london.data.datasource.remote.details.tvshowdetails.model.tvshowepisode.EpisodeGuestStar
 import com.london.domain.entity.tvshowdetails.TvShowEpisodesEntity
 import com.london.domain.entity.tvshowdetails.TvShowEpisodeBySeasonEntity
 import com.london.domain.entity.tvshowdetails.EpisodeCrewMemberEntity

@@ -6,7 +6,7 @@ import com.london.data.datasource.device.DeviceConfigurationDataSource
 import com.london.data.datasource.remote.ApiConstants
 import com.london.data.datasource.remote.details.tvshowdetails.model.TvShowCastRemoteResponse
 import com.london.data.datasource.remote.details.tvshowdetails.model.TvShowDetailsRemoteResponse
-import com.london.data.datasource.remote.details.tvshowdetails.model.TvShowEpisodesRemoteResponse
+import com.london.data.datasource.remote.details.tvshowdetails.model.tvshowepisode.TvShowEpisodesRemoteResponse
 import com.london.data.datasource.remote.details.tvshowdetails.model.TvShowImagesRemoteResponse
 import io.ktor.client.HttpClient
 import io.ktor.client.request.get
