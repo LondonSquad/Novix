@@ -679,6 +679,168 @@
     }
   },
   {
+    "pr_number": 102,
+    "url": "https://github.com/LondonSquad/Novix/pull/102",
+    "title": "Feature/actor top picks details screen",
+    "opened_at": "2025-07-14T20:56:48Z",
+    "head_ref": "feature/actor-top-picks-details-screen",
+    "base_ref": "develop",
+    "creator": {
+      "login": "Abdulrahman1890",
+      "id": 76666355,
+      "url": "https://github.com/Abdulrahman1890"
+    },
+    "approvals": [],
+    "first_approved_at": null,
+    "time_to_first_approval_minutes": null,
+    "required_approvals_met_at": null,
+    "time_to_required_approvals_minutes": null,
+    "closed_at": "2025-07-14T20:57:00Z",
+    "merged_at": null,
+    "merged_by": null,
+    "week": "2025-W29",
+    "status": "closed",
+    "diff_stats": {
+      "additions": 461,
+      "deletions": 0,
+      "changed_files": 12
+    }
+  },
+  {
+    "pr_number": 103,
+    "url": "https://github.com/LondonSquad/Novix/pull/103",
+    "title": "feat: add Top Movies Picks screen ui",
+    "opened_at": "2025-07-14T21:08:00Z",
+    "head_ref": "feature/top-movies-picks",
+    "base_ref": "develop",
+    "creator": {
+      "login": "Abdulrahman1890",
+      "id": 76666355,
+      "url": "https://github.com/Abdulrahman1890"
+    },
+    "approvals": [],
+    "first_approved_at": null,
+    "time_to_first_approval_minutes": null,
+    "required_approvals_met_at": null,
+    "time_to_required_approvals_minutes": null,
+    "closed_at": "2025-07-14T21:10:00Z",
+    "merged_at": null,
+    "merged_by": null,
+    "week": "2025-W29",
+    "status": "closed",
+    "diff_stats": {
+      "additions": 67,
+      "deletions": 0,
+      "changed_files": 3
+    }
+  },
+  {
+    "pr_number": 104,
+    "url": "https://github.com/LondonSquad/Novix/pull/104",
+    "title": "Refactor: Rename CastRemoteResponse to TvShowCastRemoteResponse",
+    "opened_at": "2025-07-14T21:25:00Z",
+    "head_ref": "feature/tv-shows-details-screen",
+    "base_ref": "develop",
+    "creator": {
+      "login": "ahmeddsamii",
+      "id": 154278495,
+      "url": "https://github.com/ahmeddsamii"
+    },
+    "approvals": [
+      {
+        "reviewer": {
+          "id": 76666355,
+          "login": "Abdulrahman1890",
+          "url": "https://github.com/Abdulrahman1890"
+        },
+        "submitted_at": "2025-07-14T21:26:00Z"
+      },
+      {
+        "reviewer": {
+          "id": 106277855,
+          "login": "Mostafa-alsaygh",
+          "url": "https://github.com/Mostafa-alsaygh"
+        },
+        "submitted_at": "2025-07-14T21:30:00Z"
+      },
+      {
+        "reviewer": {
+          "id": 100484790,
+          "login": "marwanqashwa",
+          "url": "https://github.com/marwanqashwa"
+        },
+        "submitted_at": "2025-07-14T21:31:00Z"
+      }
+    ],
+    "first_approved_at": "2025-07-14T21:26:00Z",
+    "time_to_first_approval_minutes": 1,
+    "required_approvals_met_at": "2025-07-14T21:30:00Z",
+    "time_to_required_approvals_minutes": 5,
+    "closed_at": "2025-07-14T21:33:00Z",
+    "merged_at": "2025-07-14T21:33:00Z",
+    "merged_by": {
+      "login": "ahmeddsamii",
+      "id": 154278495,
+      "url": "https://github.com/ahmeddsamii"
+    },
+    "week": "2025-W29",
+    "status": "merged",
+    "diff_stats": {
+      "additions": 10,
+      "deletions": 10,
+      "changed_files": 4
+    }
+  },
+  {
+    "pr_number": 105,
+    "url": "https://github.com/LondonSquad/Novix/pull/105",
+    "title": "feat: add Top Movies Picks screen ui",
+    "opened_at": "2025-07-14T21:55:00Z",
+    "head_ref": "feature/top-movies-picks",
+    "base_ref": "develop",
+    "creator": {
+      "login": "Abdulrahman1890",
+      "id": 76666355,
+      "url": "https://github.com/Abdulrahman1890"
+    },
+    "approvals": [
+      {
+        "reviewer": {
+          "id": 43588217,
+          "login": "yusufnasserdev",
+          "url": "https://github.com/yusufnasserdev"
+        },
+        "submitted_at": "2025-07-15T00:18:00Z"
+      },
+      {
+        "reviewer": {
+          "id": 100484790,
+          "login": "marwanqashwa",
+          "url": "https://github.com/marwanqashwa"
+        },
+        "submitted_at": "2025-07-15T01:38:00Z"
+      }
+    ],
+    "first_approved_at": "2025-07-15T00:18:00Z",
+    "time_to_first_approval_minutes": 143,
+    "required_approvals_met_at": "2025-07-15T01:38:00Z",
+    "time_to_required_approvals_minutes": 223,
+    "closed_at": "2025-07-15T03:16:00Z",
+    "merged_at": "2025-07-15T03:16:00Z",
+    "merged_by": {
+      "login": "Abdulrahman1890",
+      "id": 76666355,
+      "url": "https://github.com/Abdulrahman1890"
+    },
+    "week": "2025-W29",
+    "status": "merged",
+    "diff_stats": {
+      "additions": 187,
+      "deletions": 0,
+      "changed_files": 6
+    }
+  },
+  {
     "pr_number": 106,
     "url": "https://github.com/LondonSquad/Novix/pull/106",
     "title": "feature/blur",
@@ -741,34 +903,6 @@
       "additions": 81,
       "deletions": 58,
       "changed_files": 2
-    }
-  },
-  {
-    "pr_number": 102,
-    "url": "https://github.com/LondonSquad/Novix/pull/102",
-    "title": "Feature/actor top picks details screen",
-    "opened_at": "2025-07-14T20:56:48Z",
-    "head_ref": "feature/actor-top-picks-details-screen",
-    "base_ref": "develop",
-    "creator": {
-      "login": "Abdulrahman1890",
-      "id": 76666355,
-      "url": "https://github.com/Abdulrahman1890"
-    },
-    "approvals": [],
-    "first_approved_at": null,
-    "time_to_first_approval_minutes": null,
-    "required_approvals_met_at": null,
-    "time_to_required_approvals_minutes": null,
-    "closed_at": "2025-07-15T07:21:23Z",
-    "merged_at": null,
-    "merged_by": null,
-    "week": "2025-W29",
-    "status": "closed",
-    "diff_stats": {
-      "additions": 461,
-      "deletions": 0,
-      "changed_files": 12
     }
   }
 ]
