@@ -66,4 +66,8 @@ dependencies {
     // Coroutines
     implementation(libs.kotlinx.coroutines.android)
 
+
+    // Firebase ML Model downloader
+    implementation(libs.firebase.ml.modeldownloader)
+
 }

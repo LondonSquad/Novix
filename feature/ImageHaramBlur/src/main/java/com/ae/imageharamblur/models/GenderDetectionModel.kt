@@ -1,6 +1,5 @@
 package com.ae.imageharamblur.models
 
-
 import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.Canvas
@@ -11,9 +10,13 @@ import org.tensorflow.lite.support.common.ops.NormalizeOp
 import org.tensorflow.lite.support.image.ImageProcessor
 import org.tensorflow.lite.support.image.TensorImage
 import org.tensorflow.lite.support.image.ops.ResizeOp
+import java.io.File
+import java.io.FileInputStream
+import java.nio.MappedByteBuffer
+import java.nio.channels.FileChannel
 import kotlin.math.exp
 
-internal class GenderDetectionModel(context: Context) {
+internal class GenderDetectionModel {
     private val interpreter: Interpreter
     private val imageProcessor: ImageProcessor
 
@@ -26,14 +29,37 @@ internal class GenderDetectionModel(context: Context) {
         private const val MALE_INDEX = 1
     }
 
-    init {
+    // Constructor for local asset file (fallback)
+    constructor(context: Context) {
         val modelBuffer = FileUtil.loadMappedFile(context, MODEL_FILE)
+        this.interpreter = createInterpreter(modelBuffer)
+        this.imageProcessor = createImageProcessor()
+    }
+
+    // Constructor for downloaded file
+    constructor(modelFile: File) {
+        val modelBuffer = loadModelFile(modelFile)
+        this.interpreter = createInterpreter(modelBuffer)
+        this.imageProcessor = createImageProcessor()
+    }
+
+    private fun loadModelFile(file: File): MappedByteBuffer {
+        val fileInputStream = FileInputStream(file)
+        val fileChannel = fileInputStream.channel
+        val startOffset = 0L
+        val declaredLength = fileChannel.size()
+        return fileChannel.map(FileChannel.MapMode.READ_ONLY, startOffset, declaredLength)
+    }
+
+    private fun createInterpreter(modelBuffer: MappedByteBuffer): Interpreter {
         val options = Interpreter.Options().apply {
             setNumThreads(4)
         }
-        interpreter = Interpreter(modelBuffer, options)
+        return Interpreter(modelBuffer, options)
+    }
 
-        imageProcessor = ImageProcessor.Builder()
+    private fun createImageProcessor(): ImageProcessor {
+        return ImageProcessor.Builder()
             .add(ResizeOp(INPUT_SIZE, INPUT_SIZE, ResizeOp.ResizeMethod.BILINEAR))
             .add(NormalizeOp(IMAGE_MEAN, IMAGE_STD))
             .build()
