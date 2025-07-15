@@ -21,9 +21,7 @@ jobs:
   autoupdate:
     if: (github.event_name == 'pull_request')
     name: Auto Update
-    runs-on:
-      group: Default
-      labels: github-runner
+    runs-on: ubuntu-latest
 
     permissions:
       contents: write
@@ -39,6 +37,7 @@ jobs:
           private-key: ${{ secrets.APP_PRIVATE_KEY }}
 
       - uses: chinthakagodawita/autoupdate@v1.7.0
+        id: autoupdate
         env:
           GITHUB_TOKEN: ${{ steps.app-token.outputs.token }}
           DRY_RUN: "false"
