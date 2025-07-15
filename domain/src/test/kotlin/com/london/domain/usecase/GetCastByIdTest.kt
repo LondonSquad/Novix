@@ -4,7 +4,7 @@ import com.google.common.truth.Truth.assertThat
 import com.london.domain.GetCastByIdFailedException
 import com.london.domain.entity.tvshowdetails.CastEntity
 import com.london.domain.entity.tvshowdetails.CastMemberEntity
-import com.london.domain.entity.tvshowdetails.CrewMemberEntity
+import com.london.domain.entity.tvshowdetails.RoleEntity
 import com.london.domain.repository.DetailsRepository
 import io.mockk.coEvery
 import io.mockk.mockk
@@ -37,7 +37,7 @@ class GetCastByIdTest {
     fun `should throw exception when repository throws exception`() = runTest {
         //given
         coEvery { detailsRepository.getCastTvShowById(TV_SHOW_ID) } throws GetCastByIdFailedException()
-        //when //then
+        //when & then
         assertThrows<GetCastByIdFailedException> {
             getCastById(TV_SHOW_ID)
         }
@@ -56,8 +56,14 @@ class GetCastByIdTest {
                     originalName = "John Doe",
                     popularity = 85.5,
                     profilePath = "/profile1.jpg",
-                    character = "Main Character",
-                    creditId = "credit1",
+                    roles = listOf(
+                        RoleEntity(
+                            creditId = "credit1",
+                            character = "Main Character",
+                            episodeCount = 24
+                        )
+                    ),
+                    totalEpisodeCount = 24,
                     order = 0
                 ),
                 CastMemberEntity(
@@ -69,37 +75,15 @@ class GetCastByIdTest {
                     originalName = "Jane Smith",
                     popularity = 78.2,
                     profilePath = "/profile2.jpg",
-                    character = "Supporting Character",
-                    creditId = "credit2",
+                    roles = listOf(
+                        RoleEntity(
+                            creditId = "credit2",
+                            character = "Supporting Character",
+                            episodeCount = 18
+                        )
+                    ),
+                    totalEpisodeCount = 18,
                     order = 1
-                )
-            ),
-            crew = listOf(
-                CrewMemberEntity(
-                    adult = false,
-                    gender = 1,
-                    id = 3,
-                    knownForDepartment = "Directing",
-                    name = "Director Name",
-                    originalName = "Director Name",
-                    popularity = 92.3,
-                    profilePath = "/director.jpg",
-                    creditId = "credit3",
-                    department = "Directing",
-                    job = "Director"
-                ),
-                CrewMemberEntity(
-                    adult = false,
-                    gender = 2,
-                    id = 4,
-                    knownForDepartment = "Writing",
-                    name = "Writer Name",
-                    originalName = "Writer Name",
-                    popularity = 65.8,
-                    profilePath = null,
-                    creditId = "credit4",
-                    department = "Writing",
-                    job = "Writer"
                 )
             ),
             id = TV_SHOW_ID

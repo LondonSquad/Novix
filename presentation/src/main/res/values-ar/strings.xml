@@ -42,4 +42,6 @@
     <string name="Movies">افلام</string>
     <string name="TV_Shows">"مسلسلات"</string>
     <string name="Actors">"ممثلين"</string>
+    <string name="top_movies_picks">أفضل الأفلام المختارة</string>
+    <string name="top_tv_shows_picks">أفضل اختيارات البرامج التلفزيونية</string>
 </resources>

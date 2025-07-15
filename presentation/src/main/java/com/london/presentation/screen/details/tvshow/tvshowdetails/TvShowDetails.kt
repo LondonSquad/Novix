@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.FlowRow
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.asPaddingValues
@@ -14,10 +15,15 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.heightIn
-import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.statusBars
+import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.widthIn
+import androidx.compose.foundation.layout.wrapContentHeight
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.rememberScrollState
@@ -29,21 +35,32 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.layout.layout
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.zIndex
 import com.ae.imageharamblur.ui.ImageViewFilter
 import com.london.designsystem.R
+import com.london.designsystem.component.ActorItem
+import com.london.designsystem.component.NovixCarousalRow
 import com.london.designsystem.component.RatingBar
 import com.london.designsystem.component.SaveIcon
 import com.london.designsystem.theme.NovixTheme
+import com.london.domain.entity.tvshowdetails.CastMemberEntity
 import com.london.domain.entity.tvshowdetails.ImageItemEntity
+import com.london.presentation.utils.toLocalizedNumbers
 import org.koin.androidx.compose.koinViewModel
 
 
@@ -83,34 +100,129 @@ fun TvShowsDetailScreenContent(
             onBackClick = onBackClick
         )
 
-        Column(
+        LazyColumn(
             modifier = Modifier
-                .fillMaxSize()
-                .verticalScroll(rememberScrollState())
+                .fillMaxSize(),
+            contentPadding = PaddingValues(bottom = 80.dp)
         ) {
-            val images = uiState.tvImages
-            if (!images.isNullOrEmpty()) {
-                CustomBackDropImagePager(
-                    images = images
+            item {
+                val images = uiState.tvImages
+                if (!images.isNullOrEmpty()) {
+                    CustomBackDropImagePager(
+                        images = images
+                    )
+                }
+            }
+
+            item {
+
+                HeaderDetailsCard(
+                    uiState = uiState,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .layout { measurable, constraints ->
+                            val placeable = measurable.measure(constraints)
+
+                            val yOffsetPx = with(this) { 44.dp.roundToPx() }
+                            val adjustedHeight = (placeable.height - yOffsetPx).coerceAtLeast(0)
+
+                            layout(placeable.width, adjustedHeight) {
+                                placeable.placeRelative(0, -yOffsetPx)
+                            }
+                        }
+                        .padding(start = 16.dp, end = 16.dp)
+                        .heightIn(min = 158.dp)
+                        .border(
+                            width = 1.dp,
+                            color = NovixTheme.colors.stroke,
+                            shape = RoundedCornerShape(16.dp)
+                        )
+                        .clip(RoundedCornerShape(16.dp))
+                        .background(NovixTheme.colors.surface)
                 )
             }
-            HeaderDetailsCard(
-                uiState = uiState,
+
+            item {
+                OverviewSection(
+                    uiState = uiState,
+                    modifier = Modifier.padding(
+                        top = 16.dp,
+                        start = 16.dp,
+                        end = 16.dp
+                    )
+                )
+            }
+
+            item {
+                CastSection(
+                    modifier = Modifier.padding(top = 16.dp),
+                    castMembers = uiState.cast?.cast ?: emptyList()
+                )
+
+            }
+        }
+    }
+}
+
+@Composable
+fun CustomBackDropImagePager(
+    modifier: Modifier = Modifier,
+    images: List<ImageItemEntity>
+) {
+    Box(
+        modifier = modifier
+            .fillMaxWidth()
+            .height(252.dp)
+            .clip(
+                shape = RoundedCornerShape(
+                    bottomStart = 12.dp,
+                    bottomEnd = 12.dp
+                )
+            )
+    ) {
+        val pagerState = rememberPagerState(
+            initialPage = 0,
+            pageCount = { images.size }
+        )
+
+        HorizontalPager(
+            modifier = Modifier.align(Alignment.Center),
+            state = pagerState,
+        ) { pageIndex ->
+            ImageViewFilter(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .offset(y = (-44).dp)
-                    .padding(start = 16.dp, end = 16.dp)
-                    .heightIn(min = 158.dp)
-                    .border(
-                        width = 1.dp,
-                        color = NovixTheme.colors.stroke,
-                        shape = RoundedCornerShape(16.dp)
-                    )
-                    .clip(RoundedCornerShape(16.dp))
-                    .background(NovixTheme.colors.surface)
+                    .height(252.dp),
+                contentScale = ContentScale.FillBounds,
+                model = images[pageIndex].filePath,
+                placeholder = painterResource(R.drawable.img_error),
+                contentDescription = "${stringResource(R.string.tv_show_image)} ${pageIndex + 1}",
             )
         }
 
+        val dotsStates = List(images.size) { index ->
+            index == pagerState.currentPage
+        }
+
+        NovixCarousalRow(
+            dotsStates = dotsStates,
+            modifier = Modifier
+                .padding(bottom = 48.dp)
+                .height(16.dp)
+                .clip(RoundedCornerShape(8.dp))
+                .background(
+                    color = NovixTheme.colors.iconBackgroundLow,
+                    shape = RoundedCornerShape(8.dp)
+                )
+                .border(
+                    width = 1.dp,
+                    color = NovixTheme.colors.stroke,
+                    shape = RoundedCornerShape(8.dp)
+                )
+                .padding(horizontal = 12.dp, vertical = 4.dp)
+                .align(Alignment.BottomCenter)
+
+        )
     }
 }
 
@@ -142,20 +254,11 @@ fun TvShowScreenTopBar(
         SaveIcon(
             isSaved = false,
             onSaveClick = { },
-            backgroundColor = NovixTheme.colors.iconBackgroundLow
+            backgroundColor = NovixTheme.colors.iconBackgroundLow,
+            modifier = Modifier.size(40.dp)
         )
-
     }
 
-}
-
-@Composable
-fun ViewReviewText() {
-    Text(
-        text = "View reviews",
-        style = NovixTheme.typography.title.medium,
-        color = NovixTheme.colors.primary,
-    )
 }
 
 @Composable
@@ -173,7 +276,6 @@ fun HeaderDetailsCard(
             color = NovixTheme.colors.title,
             style = NovixTheme.typography.title.medium,
             modifier = Modifier
-                .height(56.dp)
                 .padding(start = 12.dp, top = 12.dp, bottom = 8.dp)
         )
 
@@ -192,110 +294,6 @@ fun HeaderDetailsCard(
 
             ViewReviewText()
         }
-    }
-}
-
-@Composable
-fun TvShowBasicDetails(
-    modifier: Modifier = Modifier,
-    uiState: TvShowDetailsUiState
-) {
-    Row(
-        modifier = modifier,
-        verticalAlignment = Alignment.CenterVertically,
-        horizontalArrangement = Arrangement.spacedBy(4.dp)
-    ) {
-        TvShowRating(uiState = uiState)
-
-        Box(
-            modifier = Modifier
-                .padding(horizontal = 8.dp)
-                .size(3.dp)
-                .clip(CircleShape)
-                .background(NovixTheme.colors.hint)
-        )
-
-        TvShowDate(uiState)
-
-        Box(
-            modifier = Modifier
-                .padding(horizontal = 8.dp)
-                .size(3.dp)
-                .clip(CircleShape)
-                .background(NovixTheme.colors.hint)
-        )
-
-        Seasons(uiState)
-    }
-}
-
-@Composable
-fun Seasons(uiState: TvShowDetailsUiState) {
-
-    Row(
-        verticalAlignment = Alignment.CenterVertically,
-        horizontalArrangement = Arrangement.spacedBy(4.dp)
-    ) {
-        Icon(
-            imageVector = ImageVector.vectorResource(R.drawable.icon_tv),
-            contentDescription = "Tv icon",
-            tint = NovixTheme.colors.body,
-            modifier = Modifier.size(12.dp)
-        )
-
-        Text(
-            text = "${uiState.numberOfSeasons} Seasons",
-            style = NovixTheme.typography.label.small,
-            color = NovixTheme.colors.title,
-        )
-    }
-}
-
-@Composable
-fun TvShowDate(
-    uiState: TvShowDetailsUiState
-) {
-
-    Row(
-        verticalAlignment = Alignment.CenterVertically,
-        horizontalArrangement = Arrangement.spacedBy(4.dp)
-    ) {
-        Icon(
-            imageVector = ImageVector.vectorResource(R.drawable.icon_calender),
-            contentDescription = "Calender icon",
-            tint = NovixTheme.colors.body,
-            modifier = Modifier.size(12.dp)
-        )
-
-        Text(
-            text = uiState.firstAirDate,
-            style = NovixTheme.typography.label.small,
-            color = NovixTheme.colors.title
-        )
-    }
-}
-
-@Composable
-fun TvShowRating(
-    modifier: Modifier = Modifier,
-    uiState: TvShowDetailsUiState
-) {
-    Row(
-        verticalAlignment = Alignment.CenterVertically,
-        horizontalArrangement = Arrangement.spacedBy(4.dp)
-    ) {
-        RatingBar(
-            modifier = modifier.size(12.dp),
-            rating = uiState.voteAverage.toInt(),
-            onRatingChanged = {},
-            maxRating = 1
-        )
-
-        Text(
-            text = uiState.voteAverage.toString(),
-            style = NovixTheme.typography.label.small,
-            color = NovixTheme.colors.title
-        )
     }
 }
 
@@ -333,34 +331,186 @@ fun GenreNames(
     }
 }
 
+
 @Composable
-fun CustomBackDropImagePager(
+fun TvShowBasicDetails(
     modifier: Modifier = Modifier,
-    images: List<ImageItemEntity>
+    uiState: TvShowDetailsUiState
 ) {
-    HorizontalPager(
-        modifier = modifier
-            .fillMaxWidth()
-            .height(252.dp)
-            .clip(
-                shape = RoundedCornerShape(
-                    bottomStart = 12.dp,
-                    bottomEnd = 12.dp
-                )
-            ),
-        state = rememberPagerState(
-            initialPage = 0,
-            pageCount = { images.size }
-        ),
-    ) { pageIndex ->
-        ImageViewFilter(
+    Row(
+        modifier = modifier,
+        verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.spacedBy(4.dp)
+    ) {
+        TvShowRating(uiState = uiState)
+
+        Box(
             modifier = Modifier
-                .fillMaxWidth()
-                .height(252.dp),
-            contentScale = ContentScale.FillBounds,
-            model = images[pageIndex].filePath,
-            placeholder = painterResource(R.drawable.img_error),
-            contentDescription = "TV Show Image ${pageIndex + 1}",
+                .padding(horizontal = 8.dp)
+                .size(3.dp)
+                .clip(CircleShape)
+                .background(NovixTheme.colors.hint)
         )
+
+        TvShowDate(uiState)
+
+        Box(
+            modifier = Modifier
+                .padding(horizontal = 8.dp)
+                .size(3.dp)
+                .clip(CircleShape)
+                .background(NovixTheme.colors.hint)
+        )
+
+        Seasons(uiState)
+    }
+}
+
+@Composable
+fun ViewReviewText() {
+    Text(
+        text = stringResource(R.string.view_review),
+        style = NovixTheme.typography.title.medium,
+        color = NovixTheme.colors.primary,
+    )
+}
+
+@Composable
+fun Seasons(uiState: TvShowDetailsUiState) {
+
+    Row(
+        verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.spacedBy(4.dp)
+    ) {
+        Icon(
+            imageVector = ImageVector.vectorResource(R.drawable.icon_tv),
+            contentDescription = "Tv icon",
+            tint = NovixTheme.colors.body,
+            modifier = Modifier.size(12.dp)
+        )
+
+        Text(
+            text = "${uiState.numberOfSeasons.toLocalizedNumbers()} ${stringResource(R.string.seasons)}",
+            style = NovixTheme.typography.label.small,
+            color = NovixTheme.colors.title,
+        )
+    }
+}
+
+@Composable
+fun TvShowDate(
+    uiState: TvShowDetailsUiState
+) {
+
+    Row(
+        verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.spacedBy(4.dp)
+    ) {
+        Icon(
+            imageVector = ImageVector.vectorResource(R.drawable.icon_calender),
+            contentDescription = "Calender icon",
+            tint = NovixTheme.colors.body,
+            modifier = Modifier.size(12.dp)
+        )
+
+        Text(
+            text = uiState.firstAirDate.toLocalizedNumbers(),
+            style = NovixTheme.typography.label.small,
+            color = NovixTheme.colors.title
+        )
+    }
+}
+
+@Composable
+fun TvShowRating(
+    modifier: Modifier = Modifier,
+    uiState: TvShowDetailsUiState
+) {
+    Row(
+        verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.spacedBy(4.dp)
+    ) {
+        RatingBar(
+            modifier = modifier.size(12.dp),
+            rating = uiState.voteAverage.toInt(),
+            onRatingChanged = {},
+            maxRating = 1
+        )
+
+        Text(
+            text = uiState.voteAverage.toString().toLocalizedNumbers(),
+            style = NovixTheme.typography.label.small,
+            color = NovixTheme.colors.title
+        )
+    }
+}
+
+@Composable
+fun OverviewSection(
+    modifier: Modifier = Modifier,
+    uiState: TvShowDetailsUiState
+) {
+    var maxLines by rememberSaveable { mutableIntStateOf(4) }
+    var isTextCollapsed by rememberSaveable { mutableStateOf(false) }
+    Column(
+        modifier = modifier
+    ) {
+        Text(
+            text = stringResource(R.string.overview),
+            style = NovixTheme.typography.title.medium,
+            color = NovixTheme.colors.title
+        )
+
+        Column {
+            Text(
+                text = uiState.overview,
+                style = NovixTheme.typography.body.small,
+                color = NovixTheme.colors.body,
+                maxLines = maxLines,
+                overflow = TextOverflow.Ellipsis
+            )
+
+            Text(
+                text = if (isTextCollapsed)
+                    stringResource(R.string.read_less) else stringResource(R.string.read_more),
+                style = NovixTheme.typography.body.small,
+                color = NovixTheme.colors.primary,
+                modifier = Modifier
+                    .clickable {
+                        maxLines = if (maxLines == 4) Int.MAX_VALUE else 4
+                        isTextCollapsed = !isTextCollapsed
+                    }
+            )
+        }
+    }
+}
+
+@Composable
+fun CastSection(
+    modifier: Modifier = Modifier,
+    castMembers: List<CastMemberEntity>,
+) {
+
+    Column(modifier = modifier) {
+        Text(
+            text = stringResource(R.string.cast),
+            style = NovixTheme.typography.title.medium,
+            color = NovixTheme.colors.title,
+            modifier = Modifier.padding(start = 16.dp, bottom = 9.dp)
+        )
+
+        LazyRow(
+            contentPadding = PaddingValues(horizontal = 16.dp),
+            horizontalArrangement = Arrangement.spacedBy(12.dp)
+        ) {
+            items(castMembers) { member ->
+                ActorItem(
+                    actorName = member.name,
+                    characterName = "${member.roles[0].character} - ${member.roles[0].episodeCount}",
+                    imageRes = member.profilePath ?: "",
+                    modifier = Modifier.widthIn(296.dp)
+                )
+            }
+        }
     }
 }

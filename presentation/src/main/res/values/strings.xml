@@ -42,4 +42,6 @@
     <string name="Movies">Movies</string>
     <string name="TV_Shows">"TV Shows"</string>
     <string name="Actors">"Actors"</string>
+    <string name="top_movies_picks">Top movies picks</string>
+    <string name="top_tv_shows_picks">Top tv shows picks</string>
 </resources>
