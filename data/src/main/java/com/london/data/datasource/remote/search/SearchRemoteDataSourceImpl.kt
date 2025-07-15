@@ -2,9 +2,9 @@ package com.london.data.datasource.remote.search
 
 import com.london.data.BuildConfig
 import com.london.data.datasource.remote.ApiConstants
-import com.london.data.datasource.remote.details.actordetails.ActorDetailsDto
-import com.london.data.datasource.remote.details.actordetails.ActorMovieDetailsDto
-import com.london.data.datasource.remote.details.actordetails.ActorTvShowDetailsDto
+import com.london.data.datasource.remote.details.actordetails.model.ActorDetailsDto
+import com.london.data.datasource.remote.details.actordetails.model.ActorMovieDetailsDto
+import com.london.data.datasource.remote.details.actordetails.model.ActorTvShowDetailsDto
 import com.london.data.datasource.remote.search.model.ApiSearch
 import com.london.data.datasource.remote.search.model.SearchActorRemote
 import com.london.data.datasource.remote.search.model.SearchMovieRemote
