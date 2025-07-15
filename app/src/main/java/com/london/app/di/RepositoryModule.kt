@@ -6,13 +6,16 @@ import com.london.data.datasource.local.model.SearchMoviesLocal
 import com.london.data.datasource.local.model.SearchTvShowLocal
 import com.london.data.datasource.local.recentsearch.RecentSearchDataSource
 import com.london.data.datasource.remote.details.tvshowdetails.TvShowDetailsRemoteDataSource
+import com.london.data.datasource.remote.moviedetails.MovieDetailsRemoteDataSource
 import com.london.data.datasource.remote.search.RemoteDataSource
 import com.london.data.datasource.util.CrashReporter
 import com.london.data.datasource.util.FirebaseCrashReporter
 import com.london.data.repository.DetailsRepositoryImpl
+import com.london.data.repository.MovieDetailsImpl
 import com.london.data.repository.RecentRepositoryImpl
 import com.london.data.repository.SearchRepositoryImpl
 import com.london.domain.repository.DetailsRepository
+import com.london.domain.repository.MovieDetailsRepository
 import com.london.domain.repository.RecentRepository
 import com.london.domain.repository.SearchRepository
 import org.koin.core.annotation.Module
@@ -52,4 +55,10 @@ class RepositoryModule {
 
     @Single
     fun provideCrashReporter(): CrashReporter = FirebaseCrashReporter()
+
+    @Single
+    fun provideMovieDetailsRepository(
+        movieDetailsRemoteDataSource: MovieDetailsRemoteDataSource,
+    ): MovieDetailsRepository =
+        MovieDetailsImpl(movieDetailsRemoteDataSource)
 }
