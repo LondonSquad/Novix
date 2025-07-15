@@ -29,14 +29,12 @@ internal class GenderDetectionModel {
         private const val MALE_INDEX = 1
     }
 
-    // Constructor for local asset file (fallback)
     constructor(context: Context) {
         val modelBuffer = FileUtil.loadMappedFile(context, MODEL_FILE)
         this.interpreter = createInterpreter(modelBuffer)
         this.imageProcessor = createImageProcessor()
     }
 
-    // Constructor for downloaded file
     constructor(modelFile: File) {
         val modelBuffer = loadModelFile(modelFile)
         this.interpreter = createInterpreter(modelBuffer)

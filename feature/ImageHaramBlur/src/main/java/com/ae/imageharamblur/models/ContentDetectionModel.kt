@@ -29,7 +29,6 @@ internal class ContentDetectionModel {
         SEXY(4)
     }
 
-    // Constructor for local asset file (fallback)
     constructor(context: Context) {
         val modelBuffer = FileUtil.loadMappedFile(context, "nsfw_model.tflite")
         this.interpreter = createInterpreter(modelBuffer)
@@ -41,7 +40,6 @@ internal class ContentDetectionModel {
         this.imageProcessor = createImageProcessor()
     }
 
-    // Constructor for downloaded file
     constructor(modelFile: File) {
         val modelBuffer = loadModelFile(modelFile)
         this.interpreter = createInterpreter(modelBuffer)

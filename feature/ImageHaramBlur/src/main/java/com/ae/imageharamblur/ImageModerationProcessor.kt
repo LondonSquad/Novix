@@ -11,11 +11,18 @@ import com.ae.imageharamblur.models.ModelDownloadManager
 import kotlinx.coroutines.*
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
+import kotlinx.coroutines.flow.StateFlow
 
 class ImageModerationProcessor(private val context: Context) {
 
     private val faceDetector = FaceDetector()
-    private val modelDownloadManager = ModelDownloadManager(context)
+
+    // Expose model download manager so presentation layer can observe state
+    val modelDownloadManager = ModelDownloadManager(context)
+
+    // Expose download state for convenience
+    val downloadState: StateFlow<ModelDownloadManager.ModelDownloadState>
+        get() = modelDownloadManager.downloadState
 
     private var genderModel: GenderDetectionModel? = null
     private var contentModel: ContentDetectionModel? = null
@@ -24,36 +31,15 @@ class ImageModerationProcessor(private val context: Context) {
     private val mutex = Mutex()
     private var activeJob: Job? = null
 
-    companion object {
-        const val DEFAULT_CONTENT_THRESHOLD = 0.3f
-        private const val DEFAULT_GENDER_CONFIDENCE_THRESHOLD = 0.5f
-        private const val FACE_CROP_PADDING = 0.15f
+
+
+    // Make this public so presentation layer can trigger download
+    suspend fun downloadModels(wifiOnly: Boolean = true) {
+        modelDownloadManager.downloadModelsIfNeeded(wifiOnly)
     }
 
-    data class ProcessingResult(
-        val shouldModerate: Boolean,
-        val reason: String? = null,
-        val details: DetectionDetails? = null
-    )
-
-    data class DetectionDetails(
-        val facesDetected: Int = 0,
-        val femalesDetected: Int = 0,
-        val malesDetected: Int = 0,
-        val contentScore: Float = 0f,
-        val isInappropriate: Boolean = false,
-        val faceRegions: List<FaceInfo> = emptyList()
-    )
-
-    data class FaceInfo(
-        val boundingBox: Rect,
-        val gender: Gender,
-        val confidence: Float
-    )
-
-    enum class Gender {
-        MALE, FEMALE, UNCERTAIN
-    }
+    // Check if models are ready without triggering download
+    fun areModelsReady(): Boolean = modelDownloadManager.areModelsReady()
 
     // Initialize models asynchronously
     private suspend fun ensureModelsLoaded() {
@@ -63,7 +49,7 @@ class ImageModerationProcessor(private val context: Context) {
             if (modelsInitialized) return
 
             try {
-                // Try to download models
+                // Try to use downloaded models
                 val modelFiles = modelDownloadManager.downloadModelsIfNeeded()
                 genderModel = GenderDetectionModel(modelFiles.genderModelFile)
                 contentModel = ContentDetectionModel(modelFiles.nsfwModelFile)
@@ -85,7 +71,7 @@ class ImageModerationProcessor(private val context: Context) {
         useContentDetection: Boolean = true,
         strictMode: Boolean = false
     ): ProcessingResult = withContext(Dispatchers.Default) {
-        // Ensure models are loaded before processing
+
         ensureModelsLoaded()
 
         mutex.withLock {
@@ -211,5 +197,36 @@ class ImageModerationProcessor(private val context: Context) {
         genderModel?.close()
         contentModel?.close()
         Log.d("ImageModerationProcessor", "cleanup completed")
+    }
+
+    companion object {
+        const val DEFAULT_CONTENT_THRESHOLD = 0.3f
+        private const val DEFAULT_GENDER_CONFIDENCE_THRESHOLD = 0.5f
+        private const val FACE_CROP_PADDING = 0.15f
+    }
+
+    data class ProcessingResult(
+        val shouldModerate: Boolean,
+        val reason: String? = null,
+        val details: DetectionDetails? = null
+    )
+
+    data class DetectionDetails(
+        val facesDetected: Int = 0,
+        val femalesDetected: Int = 0,
+        val malesDetected: Int = 0,
+        val contentScore: Float = 0f,
+        val isInappropriate: Boolean = false,
+        val faceRegions: List<FaceInfo> = emptyList()
+    )
+
+    data class FaceInfo(
+        val boundingBox: Rect,
+        val gender: Gender,
+        val confidence: Float
+    )
+
+    enum class Gender {
+        MALE, FEMALE, UNCERTAIN
     }
 }
