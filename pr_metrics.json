@@ -880,9 +880,9 @@
     "week": "2025-W29",
     "status": "approved",
     "diff_stats": {
-      "additions": 0,
-      "deletions": 0,
-      "changed_files": 0
+      "additions": 587,
+      "deletions": 313,
+      "changed_files": 15
     }
   },
   {
@@ -925,9 +925,9 @@
     "week": "2025-W29",
     "status": "approved",
     "diff_stats": {
-      "additions": 0,
-      "deletions": 0,
-      "changed_files": 0
+      "additions": 81,
+      "deletions": 58,
+      "changed_files": 2
     }
   },
   {
@@ -974,9 +974,9 @@
     "week": "2025-W29",
     "status": "merged",
     "diff_stats": {
-      "additions": 0,
-      "deletions": 0,
-      "changed_files": 0
+      "additions": 355,
+      "deletions": 89,
+      "changed_files": 8
     }
   },
   {
@@ -1019,9 +1019,9 @@
     "week": "2025-W29",
     "status": "approved",
     "diff_stats": {
-      "additions": 0,
+      "additions": 187,
       "deletions": 0,
-      "changed_files": 0
+      "changed_files": 6
     }
   }
 ]
