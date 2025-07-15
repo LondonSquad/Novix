@@ -1,6 +1,10 @@
 name: London Bot
 
 on:
+  push:
+    branches:
+      - develop
+
   pull_request:
     types: [opened, closed, reopened, synchronize]
   pull_request_review:
@@ -19,7 +23,11 @@ concurrency:
 
 jobs:
   autoupdate:
-    if: (github.event_name == 'pull_request')
+    # Run on push to 'develop' OR pull_request events
+    if: |
+      github.event_name == 'push' ||
+      github.event_name == 'pull_request'
+
     name: Auto Update
     runs-on: ubuntu-latest
 
