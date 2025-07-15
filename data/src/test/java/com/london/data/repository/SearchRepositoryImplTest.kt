@@ -9,8 +9,8 @@ import com.london.data.datasource.local.model.SearchMovieDtoLocal
 import com.london.data.datasource.local.model.SearchMoviesLocal
 import com.london.data.datasource.local.model.SearchTvShowDtoLocal
 import com.london.data.datasource.local.model.SearchTvShowLocal
-import com.london.data.datasource.remote.search.SearchRemoteDataSource
 import com.london.data.datasource.remote.ApiResponse
+import com.london.data.datasource.remote.search.SearchRemoteDataSource
 import com.london.data.datasource.remote.search.model.SearchActorRemote
 import com.london.data.datasource.remote.search.model.SearchMovieRemote
 import com.london.data.datasource.remote.search.model.SearchTvShowRemote
@@ -57,7 +57,7 @@ class SearchRepositoryImplTest {
     @Test
     fun `searchForMovies should return data from local if available`() = runTest {
         coEvery { searchMovieService.getByQuery(NAME + LANG) } returns SearchMoviesLocalMock
-        val result = repository.searchForMovies(NAME, LANG)
+        val result = repository.searchForMovies(NAME, LANG, 1)
         assertThat(result).isEqualTo(MovieList)
     }
 
@@ -65,7 +65,7 @@ class SearchRepositoryImplTest {
     fun `searchForMovies should return data from remote and cache it if local is null`() = runTest {
         coEvery { searchMovieService.getByQuery(NAME + LANG) } returns null
         coEvery { searchRemoteDataSource.searchForMovies(any(), any(), any(), any()) } returns SearchMoviesRemoteMock
-        val result = repository.searchForMovies(NAME, LANG)
+        val result = repository.searchForMovies(NAME, LANG, 1)
         assertThat(result).isEqualTo(MovieList)
         coVerify { searchMovieService.insert(any()) }
     }
@@ -75,14 +75,14 @@ class SearchRepositoryImplTest {
         runTest {
             coEvery { searchMovieService.getByQuery(any()) } throws GetException("")
             assertThrows<MovieSearchFailedException> {
-                repository.searchForMovies(NAME, LANG)
+                repository.searchForMovies(NAME, LANG, 1)
             }
         }
 
     @Test
     fun `searchForTvShows should return data from local if available`() = runTest {
         coEvery { searchTvShowService.getByQuery(NAME + LANG) } returns SearchTvShowLocalMock
-        val result = repository.searchForTvShows(NAME, LANG)
+        val result = repository.searchForTvShows(NAME, LANG, 1)
         assertThat(result).isEqualTo(TvShowList)
     }
 
@@ -91,7 +91,7 @@ class SearchRepositoryImplTest {
         runTest {
             coEvery { searchTvShowService.getByQuery(NAME + LANG) } returns null
             coEvery { searchRemoteDataSource.searchForTvShows(any(), any(), any(), any()) } returns SearchTvShowRemoteMock
-            val result = repository.searchForTvShows(NAME, LANG)
+            val result = repository.searchForTvShows(NAME, LANG, 1)
             assertThat(result).isEqualTo(TvShowList)
             coVerify { searchTvShowService.insert(any()) }
         }
@@ -101,14 +101,14 @@ class SearchRepositoryImplTest {
         runTest {
             coEvery { searchTvShowService.getByQuery(any()) } throws GetException("")
             assertThrows<TvShowSearchFailedException> {
-                repository.searchForTvShows(NAME, LANG)
+                repository.searchForTvShows(NAME, LANG, 1)
             }
         }
 
     @Test
     fun `searchForActors should return data from local if available`() = runTest {
         coEvery { searchActorService.getByQuery(NAME + LANG) } returns SearchActorsLocalMock
-        val result = repository.searchForActors(NAME, LANG)
+        val result = repository.searchForActors(NAME, LANG, 1)
         assertThat(result).isEqualTo(ActorList)
     }
 
@@ -116,7 +116,7 @@ class SearchRepositoryImplTest {
     fun `searchForActors should return data from remote and cache it if local is null`() = runTest {
         coEvery { searchActorService.getByQuery(NAME + LANG) } returns null
         coEvery { searchRemoteDataSource.searchForActors(any(), any(), any(), any()) } returns SearchActorsRemoteMock
-        val result = repository.searchForActors(NAME, LANG)
+        val result = repository.searchForActors(NAME, LANG, 1)
         assertThat(result).isEqualTo(ActorList)
         coVerify { searchActorService.insert(any()) }
     }
@@ -126,7 +126,7 @@ class SearchRepositoryImplTest {
         runTest {
             coEvery { searchActorService.getByQuery(any()) } throws GetException("")
             assertThrows<ActorSearchFailedException> {
-                repository.searchForActors(NAME, LANG)
+                repository.searchForActors(NAME, LANG, 1)
             }
         }
 
@@ -144,7 +144,7 @@ class SearchRepositoryImplTest {
         val exception = Exception("Unknown error")
         coEvery { searchActorService.getByQuery(any()) } throws exception
 
-        repository.searchForActors(NAME, LANG)
+        repository.searchForActors(NAME, LANG, 1)
 
         coVerify { crashReporter.logException(exception) }
     }
@@ -163,7 +163,7 @@ class SearchRepositoryImplTest {
         val exception = Exception("Unknown error")
         coEvery { searchMovieService.getByQuery(any()) } throws exception
 
-        repository.searchForMovies(NAME, LANG)
+        repository.searchForMovies(NAME, LANG, 1)
 
         coVerify { crashReporter.logException(exception) }
     }
@@ -181,7 +181,7 @@ class SearchRepositoryImplTest {
         val exception = Exception("Unknown error")
         coEvery { searchTvShowService.getByQuery(any()) } throws exception
 
-        repository.searchForTvShows(NAME, LANG)
+        repository.searchForTvShows(NAME, LANG, 1)
 
         coVerify { crashReporter.logException(exception) }
     }
