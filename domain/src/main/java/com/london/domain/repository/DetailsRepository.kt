@@ -13,7 +13,7 @@ interface DetailsRepository {
     suspend fun getCastTvShowById(tvShowId: Int): TvShowCastEntity
     suspend fun getImagesTvShowById(tvShowId: Int): TvShowImagesEntity
     suspend fun getActorDetailsById(actorId: Int): ActorDetails
-    suspend fun getActorMovieById(actorId: Int): ActorMovieDetails
-    suspend fun getActorTvShowById(actorId: Int): ActorTvShowDetails
+    suspend fun getActorMoviePicksById(actorId: Int): ActorMovieDetails
+    suspend fun getActorTvShowPicksById(actorId: Int): ActorTvShowDetails
     suspend fun getActorImagesById(actorId: Int): ActorImageDetails
 }

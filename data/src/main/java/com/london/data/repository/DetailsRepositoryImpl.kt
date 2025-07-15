@@ -59,7 +59,7 @@ class DetailsRepositoryImpl(
         }
     }
 
-    override suspend fun getActorMovieById(actorId: Int): ActorMovieDetails {
+    override suspend fun getActorMoviePicksById(actorId: Int): ActorMovieDetails {
         return runCatching {
             actorDetailsRemoteDataSource.getActorMovieById(actorId).toEntity()
         }.getOrElse {
@@ -67,7 +67,7 @@ class DetailsRepositoryImpl(
         }
     }
 
-    override suspend fun getActorTvShowById(actorId: Int): ActorTvShowDetails {
+    override suspend fun getActorTvShowPicksById(actorId: Int): ActorTvShowDetails {
         return runCatching {
             actorDetailsRemoteDataSource.getActorTvShowById(actorId).toEntity()
         }.getOrElse {
