@@ -1,12 +1,22 @@
 package com.london.data.mapper.actordetails
 
 import com.london.data.datasource.remote.details.actordetails.model.ActorTvShowCastMember
+import com.london.data.datasource.remote.details.actordetails.model.ActorTvShowCrewMember
+import com.london.data.datasource.remote.details.actordetails.model.ActorTvShowDetailsResponse
+import com.london.domain.entity.actordetails.ActorTvShowCastMemberEntity
+import com.london.domain.entity.actordetails.ActorTvShowCrewMemberEntity
 import com.london.domain.entity.actordetails.ActorTvShowDetails
 
-fun ActorTvShowCastMember.toEntity(): ActorTvShowDetails {
+fun ActorTvShowDetailsResponse.toEntity(): ActorTvShowDetails {
     return ActorTvShowDetails(
         id = this.id,
-        name = this.name,
+        cast = this.cast.map { it.toEntity() },
+        crew = this.crew.map { it.toEntity() }
+    )
+}
+
+fun ActorTvShowCastMember.toEntity(): ActorTvShowCastMemberEntity {
+    return ActorTvShowCastMemberEntity(
         adult = this.adult,
         backdropPath = this.backdropPath,
         character = this.character,
@@ -15,6 +25,32 @@ fun ActorTvShowCastMember.toEntity(): ActorTvShowDetails {
         firstAirDate = this.firstAirDate,
         firstCreditAirDate = this.firstCreditAirDate,
         genreIds = this.genreIds,
+        id = this.id,
+        name = this.name,
+        originCountry = this.originCountry,
+        originalLanguage = this.originalLanguage,
+        originalName = this.originalName,
+        overview = this.overview,
+        popularity = this.popularity,
+        posterPath = this.posterPath,
+        voteAverage = this.voteAverage,
+        voteCount = this.voteCount
+    )
+}
+
+fun ActorTvShowCrewMember.toEntity(): ActorTvShowCrewMemberEntity{
+    return ActorTvShowCrewMemberEntity(
+        adult = this.adult,
+        backdropPath = this.backdropPath,
+        creditId = this.creditId,
+        department = this.department,
+        episodeCount = this.episodeCount,
+        firstAirDate = this.firstAirDate,
+        firstCreditAirDate = this.firstCreditAirDate,
+        genreIds = this.genreIds,
+        id = this.id,
+        job = this.job,
+        name = this.name,
         originCountry = this.originCountry,
         originalLanguage = this.originalLanguage,
         originalName = this.originalName,

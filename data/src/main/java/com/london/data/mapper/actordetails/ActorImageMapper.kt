@@ -1,19 +1,19 @@
 package com.london.data.mapper.actordetails
 
+import com.london.data.datasource.remote.details.actordetails.model.ActorImageResponse
 import com.london.data.datasource.remote.details.actordetails.model.ProfileDto
-import com.london.data.datasource.remote.details.actordetails.model.ProfilesResponseDto
-import com.london.domain.entity.actordetails.ProfileDetails
-import com.london.domain.entity.actordetails.ProfilesResponseDetails
+import com.london.domain.entity.actordetails.ActorImageDetails
+import com.london.domain.entity.actordetails.ImageDetails
 
-fun ProfilesResponseDto.toEntity(): ProfilesResponseDetails {
-    return ProfilesResponseDetails(
+fun ActorImageResponse.toEntity(): ActorImageDetails {
+    return ActorImageDetails(
     id = this.id,
     profiles = this.profiles.map { it.toEntity() }
     )
 }
 
-fun ProfileDto.toEntity(): ProfileDetails {
-    return ProfileDetails(
+fun ProfileDto.toEntity(): ImageDetails {
+    return ImageDetails(
         aspectRatio = this.aspectRatio,
         height = this.height,
         iso = this.iso,

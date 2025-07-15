@@ -3,20 +3,20 @@ package com.london.data.mapper.tvshowdetails
 import com.london.data.datasource.remote.details.tvshowdetails.model.TvShowCastMember
 import com.london.data.datasource.remote.details.tvshowdetails.model.TvShowCastRemoteResponse
 import com.london.data.datasource.remote.details.tvshowdetails.model.CrewMember
-import com.london.domain.entity.tvshowdetails.CastEntity
-import com.london.domain.entity.tvshowdetails.CastMemberEntity
-import com.london.domain.entity.tvshowdetails.CrewMemberEntity
+import com.london.domain.entity.tvshowdetails.TvShowCastEntity
+import com.london.domain.entity.tvshowdetails.TvShowCastMemberEntity
+import com.london.domain.entity.tvshowdetails.TvShowCrewMemberEntity
 
-fun TvShowCastRemoteResponse.toCastEntity(): CastEntity {
-    return CastEntity(
+fun TvShowCastRemoteResponse.toCastEntity(): TvShowCastEntity {
+    return TvShowCastEntity(
         cast = this.cast.map { it.toCastMember() },
         crew = this.crew.map { it.toCrewMember() },
         id = this.id
     )
 }
 
-fun TvShowCastMember.toCastMember(): CastMemberEntity {
-    return CastMemberEntity(
+fun TvShowCastMember.toCastMember(): TvShowCastMemberEntity {
+    return TvShowCastMemberEntity(
         adult = this.adult,
         gender = this.gender,
         id = this.id,
@@ -31,8 +31,8 @@ fun TvShowCastMember.toCastMember(): CastMemberEntity {
     )
 }
 
-fun CrewMember.toCrewMember(): CrewMemberEntity {
-    return CrewMemberEntity(
+fun CrewMember.toCrewMember(): TvShowCrewMemberEntity {
+    return TvShowCrewMemberEntity(
         adult = this.adult,
         gender = this.gender,
         id = this.id,

@@ -2,7 +2,7 @@ package com.london.data.datasource.remote.details.actordetails.model
 
 import kotlinx.serialization.SerialName
 
-data class ProfilesResponseDto(
+data class ActorImageResponse(
     @SerialName("id")
     val id: Int,
     @SerialName("profiles")

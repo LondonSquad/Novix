@@ -1,12 +1,12 @@
 package com.london.domain.entity.tvshowdetails
 
-data class CastEntity(
-    val cast: List<CastMemberEntity>,
-    val crew: List<CrewMemberEntity>,
+data class TvShowCastEntity(
+    val cast: List<TvShowCastMemberEntity>,
+    val crew: List<TvShowCrewMemberEntity>,
     val id: Int
 )
 
-data class CastMemberEntity(
+data class TvShowCastMemberEntity(
     val adult: Boolean,
     val gender: Int,
     val id: Int,
@@ -20,7 +20,7 @@ data class CastMemberEntity(
     val order: Int
 )
 
-data class CrewMemberEntity(
+data class TvShowCrewMemberEntity(
     val adult: Boolean,
     val gender: Int,
     val id: Int,

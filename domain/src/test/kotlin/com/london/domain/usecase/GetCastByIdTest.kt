@@ -2,9 +2,9 @@ package com.london.domain.usecase
 
 import com.google.common.truth.Truth.assertThat
 import com.london.domain.GetCastByIdFailedException
-import com.london.domain.entity.tvshowdetails.CastEntity
-import com.london.domain.entity.tvshowdetails.CastMemberEntity
-import com.london.domain.entity.tvshowdetails.CrewMemberEntity
+import com.london.domain.entity.tvshowdetails.TvShowCastEntity
+import com.london.domain.entity.tvshowdetails.TvShowCastMemberEntity
+import com.london.domain.entity.tvshowdetails.TvShowCrewMemberEntity
 import com.london.domain.repository.DetailsRepository
 import io.mockk.coEvery
 import io.mockk.mockk
@@ -45,9 +45,9 @@ class GetCastByIdTest {
 
     private companion object {
         const val TV_SHOW_ID = 12345
-        val mockCast = CastEntity(
+        val mockCast = TvShowCastEntity(
             cast = listOf(
-                CastMemberEntity(
+                TvShowCastMemberEntity(
                     adult = false,
                     gender = 1,
                     id = 1,
@@ -60,7 +60,7 @@ class GetCastByIdTest {
                     creditId = "credit1",
                     order = 0
                 ),
-                CastMemberEntity(
+                TvShowCastMemberEntity(
                     adult = false,
                     gender = 2,
                     id = 2,
@@ -75,7 +75,7 @@ class GetCastByIdTest {
                 )
             ),
             crew = listOf(
-                CrewMemberEntity(
+                TvShowCrewMemberEntity(
                     adult = false,
                     gender = 1,
                     id = 3,
@@ -88,7 +88,7 @@ class GetCastByIdTest {
                     department = "Directing",
                     job = "Director"
                 ),
-                CrewMemberEntity(
+                TvShowCrewMemberEntity(
                     adult = false,
                     gender = 2,
                     id = 4,

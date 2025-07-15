@@ -1,11 +1,11 @@
 package com.london.domain.entity.actordetails
 
-data class ProfilesResponseDetails(
+data class ActorImageDetails(
     val id: Int,
-    val profiles: List<ProfileDetails>
+    val profiles: List<ImageDetails>
 )
 
-data class ProfileDetails(
+data class ImageDetails(
     val aspectRatio: Double,
     val height: Int,
     val iso: String?,

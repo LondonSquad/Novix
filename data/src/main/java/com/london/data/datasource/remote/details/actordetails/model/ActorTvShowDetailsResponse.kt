@@ -6,7 +6,7 @@ data class ActorTvShowDetailsResponse(
     @SerialName("cast")
     val cast: List<ActorTvShowCastMember>,
     @SerialName("crew")
-    val crew: List<TvShowCrewMember>,
+    val crew: List<ActorTvShowCrewMember>,
     @SerialName("id")
     val id: Int
 )
@@ -50,7 +50,7 @@ data class ActorTvShowCastMember(
     val voteCount: Int
 )
 
-data class TvShowCrewMember(
+data class ActorTvShowCrewMember(
     @SerialName("adult")
     val adult: Boolean,
     @SerialName("backdrop_path")

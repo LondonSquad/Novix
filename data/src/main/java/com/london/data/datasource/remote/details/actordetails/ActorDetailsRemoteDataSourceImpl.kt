@@ -5,6 +5,7 @@ import com.london.data.BuildConfig
 import com.london.data.datasource.device.DeviceConfigurationDataSource
 import com.london.data.datasource.remote.ApiConstants
 import com.london.data.datasource.remote.details.actordetails.model.ActorDetailsRemoteResponse
+import com.london.data.datasource.remote.details.actordetails.model.ActorImageResponse
 import com.london.data.datasource.remote.details.actordetails.model.ActorMovieDetailsResponse
 import com.london.data.datasource.remote.details.actordetails.model.ActorTvShowDetailsResponse
 import io.ktor.client.HttpClient
@@ -82,7 +83,7 @@ class ActorDetailsRemoteDataSourceImpl(
         return json.decodeFromString(responseBody)
     }
 
-    override suspend fun getActorImagePath(actorId: Int): String {
+    override suspend fun getActorImagePath(actorId: Int): ActorImageResponse {
         val json = Json {
             ignoreUnknownKeys = true
         }

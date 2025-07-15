@@ -4,6 +4,7 @@ import com.london.data.datasource.local.LocalDataSource
 import com.london.data.datasource.local.model.SearchActorsLocal
 import com.london.data.datasource.local.model.SearchMoviesLocal
 import com.london.data.datasource.local.model.SearchTvShowLocal
+import com.london.data.datasource.remote.details.actordetails.ActorDetailsRemoteDataSource
 import com.london.data.datasource.remote.details.tvshowdetails.TvShowDetailsRemoteDataSource
 import com.london.data.datasource.remote.search.RemoteDataSource
 import com.london.data.datasource.util.CrashReporter
@@ -36,8 +37,11 @@ class RepositoryModule {
     }
 
     @Single
-    fun provideDetailsRepository(tvShowDetailsRemoteDataSource: TvShowDetailsRemoteDataSource): DetailsRepository {
-        return DetailsRepositoryImpl(tvShowDetailsRemoteDataSource)
+    fun provideDetailsRepository(
+        tvShowDetailsRemoteDataSource: TvShowDetailsRemoteDataSource,
+        actorDetailsRemoteDataSource: ActorDetailsRemoteDataSource
+    ): DetailsRepository {
+        return DetailsRepositoryImpl(tvShowDetailsRemoteDataSource, actorDetailsRemoteDataSource)
     }
 
     @Single
