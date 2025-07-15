@@ -1,6 +1,10 @@
-name: PR Metrics Updater
+name: London Bot
 
 on:
+  push:
+    branches:
+      - develop
+
   pull_request:
     types: [opened, closed, reopened, synchronize]
   pull_request_review:
@@ -18,7 +22,52 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
+  autoupdate:
+    # Run on push to 'develop' OR pull_request events
+    if: |
+      github.event_name == 'push' ||
+      github.event_name == 'pull_request'
+
+    name: Auto Update
+    runs-on: ubuntu-latest
+
+    permissions:
+      contents: write
+      pull-requests: write
+      repository-projects: write
+
+    steps:
+      - name: Create GitHub App Token
+        uses: actions/create-github-app-token@v2
+        id: app-token
+        with:
+          app-id: ${{ vars.APP_ID }}
+          private-key: ${{ secrets.APP_PRIVATE_KEY }}
+
+      - name: Configure Git
+        run: |
+          git config --global user.name "London Bot"
+          git config --global user.email "220529784+london-bot[bot]@users.noreply.github.com"
+
+      - uses: chinthakagodawita/autoupdate@v1.7.0
+        id: autoupdate
+        env:
+          GITHUB_TOKEN: ${{ steps.app-token.outputs.token }}
+          DRY_RUN: "false"
+          PR_FILTER: "protected"
+          MERGE_MSG: "Branch was auto-updated."
+          RETRY_COUNT: "5"
+          RETRY_SLEEP: "300"
+          MERGE_CONFLICT_ACTION: "ignore"
+
+      - run: echo 'Merge conflicts found!'
+        if: ${{ steps.autoupdate.outputs.conflicted }}
+
+      - run: echo 'No merge conflicts'
+        if: ${{ !steps.autoupdate.outputs.conflicted }}
+
   update_pr_metrics:
+    name: Update Metrics
     if: |
       github.event_name == 'workflow_dispatch' ||
       github.event_name == 'pull_request_review' ||
@@ -244,11 +293,10 @@ jobs:
           # For PR_CLOSED
           PR_CLOSED_AT: ${{ github.event.pull_request.closed_at }}
           PR_MERGED_AT: ${{ github.event.pull_request.merged_at }}
-          MERGED_BY_JSON: ${{ toJSON(github.event.pull_request.merged_by) }}
           # For all events with diff stats
-          PR_ADDITIONS: ${{ github.event.pull_request.additions || 0 }}
-          PR_DELETIONS: ${{ github.event.pull_request.deletions || 0 }}
-          PR_CHANGED_FILES: ${{ github.event.pull_request.changed_files || 0 }}
+          PR_ADDITIONS: ${{ github.event.pull_request.additions }}
+          PR_DELETIONS: ${{ github.event.pull_request.deletions }}
+          PR_CHANGED_FILES: ${{ github.event.pull_request.changed_files }}
         run: |
           PR_FILE="pr_metrics.json"
           UPDATE_TYPE="${{ steps.prepare_data.outputs.UPDATE_TYPE }}"
@@ -280,44 +328,93 @@ jobs:
               | .status = (if .status == "merged" or .status == "closed" then .status elif .required_approvals_met_at != null then "approved" else "pending" end);
           '
           
+          # Check if we have valid diff stats values
+          HAS_VALID_DIFF_STATS=false
+          if [[ -n "$PR_ADDITIONS" && -n "$PR_DELETIONS" && -n "$PR_CHANGED_FILES" ]]; then
+            if [[ "$PR_ADDITIONS" =~ ^[0-9]+$ && "$PR_DELETIONS" =~ ^[0-9]+$ && "$PR_CHANGED_FILES" =~ ^[0-9]+$ ]]; then
+              HAS_VALID_DIFF_STATS=true
+              echo "Debug: Valid diff stats - ADDITIONS=$PR_ADDITIONS, DELETIONS=$PR_DELETIONS, CHANGED_FILES=$PR_CHANGED_FILES"
+            else
+              echo "Debug: Invalid diff stats values (not numeric) - skipping diff stats update"
+            fi
+          else
+            echo "Debug: Missing diff stats values - skipping diff stats update"
+          fi
+
           if [[ "$UPDATE_TYPE" == "PR_STATE_REFRESH" ]]; then
-            echo "Fetching current approval state from GitHub API and updating diff stats..."
+            echo "Fetching current approval state from GitHub API..."
             PR_HEAD_SHA=$(gh api "repos/${{ github.repository }}/pulls/$PR_NUMBER" --jq '.head.sha')
             CURRENT_APPROVALS_JSON=$(gh api "repos/${{ github.repository }}/pulls/$PR_NUMBER/reviews" \
             --jq '[.[] | select(.state == "APPROVED" and .commit_id == "'"$PR_HEAD_SHA"'")] |
             group_by(.user.id) | map(sort_by(.submitted_at) | .[-1]) |
             map({
-          reviewer: {
-            login: .user.login,
-            id: .user.id,
-            url: .user.html_url
-          },
-          submitted_at: .submitted_at
-          })'
-          )
-          echo "VALID approvals from API: $CURRENT_APPROVALS_JSON"
-
-            UPDATED_JQ_DATA=$(echo "$JQ_DATA" | jq \
-              --argjson pr_number "$PR_NUMBER" \
-              --arg pr_action "$PR_ACTION" \
-              --arg reopen_action "reopened" \
-              --argjson additions "$PR_ADDITIONS" \
-              --argjson deletions "$PR_DELETIONS" \
-              --argjson changed_files "$PR_CHANGED_FILES" \
-              --argjson current_approvals "$CURRENT_APPROVALS_JSON" \
-              --argjson required_approvals "$REQUIRED_APPROVALS" \
-              "$JQ_RECALCULATE_FUNCTION
-               map(if .pr_number == \$pr_number then
-                   (if \$pr_action == \$reopen_action then .closed_at = null | .merged_at = null | .merged_by = null else . end)
-                   | .diff_stats.additions = \$additions
-                   | .diff_stats.deletions = \$deletions
-                   | .diff_stats.changed_files = \$changed_files
-                   | .approvals = \$current_approvals
-                   | recalculate_approval_metrics(\$required_approvals)
-                 else . end)")
+              reviewer: {
+                login: .user.login,
+                id: .user.id,
+                url: .user.html_url
+              },
+              submitted_at: .submitted_at
+            })'
+            )
+            echo "VALID approvals from API: $CURRENT_APPROVALS_JSON"
+          
+            # Only update diff stats if we have valid values from the PR event
+            if [[ "$HAS_VALID_DIFF_STATS" == "true" ]]; then
+              echo "Updating diff stats for PR #$PR_NUMBER"
+              UPDATED_JQ_DATA=$(echo "$JQ_DATA" | jq \
+                --argjson pr_number "$PR_NUMBER" \
+                --arg pr_action "$PR_ACTION" \
+                --arg reopen_action "reopened" \
+                --argjson additions "$PR_ADDITIONS" \
+                --argjson deletions "$PR_DELETIONS" \
+                --argjson changed_files "$PR_CHANGED_FILES" \
+                --argjson current_approvals "$CURRENT_APPROVALS_JSON" \
+                --argjson required_approvals "$REQUIRED_APPROVALS" \
+                "$JQ_RECALCULATE_FUNCTION
+                 map(if .pr_number == \$pr_number then
+                     (if \$pr_action == \$reopen_action then .closed_at = null | .merged_at = null | .merged_by = null else . end)
+                     | .diff_stats.additions = \$additions
+                     | .diff_stats.deletions = \$deletions
+                     | .diff_stats.changed_files = \$changed_files
+                     | .approvals = \$current_approvals
+                     | recalculate_approval_metrics(\$required_approvals)
+                   else . end)")
+            else
+              echo "Skipping diff stats update, only updating approvals for PR #$PR_NUMBER"
+              UPDATED_JQ_DATA=$(echo "$JQ_DATA" | jq \
+                --argjson pr_number "$PR_NUMBER" \
+                --arg pr_action "$PR_ACTION" \
+                --arg reopen_action "reopened" \
+                --argjson current_approvals "$CURRENT_APPROVALS_JSON" \
+                --argjson required_approvals "$REQUIRED_APPROVALS" \
+                "$JQ_RECALCULATE_FUNCTION
+                 map(if .pr_number == \$pr_number then
+                     (if \$pr_action == \$reopen_action then .closed_at = null | .merged_at = null | .merged_by = null else . end)
+                     | .approvals = \$current_approvals
+                     | recalculate_approval_metrics(\$required_approvals)
+                   else . end)")
+            fi
 
           elif [[ "$UPDATE_TYPE" == "PR_OPENED" ]]; then
             WEEK_NUMBER=$(date -d "$PR_CREATED_AT" +%G-W%V)
+          
+            # For new PRs, we need valid diff stats or default to 0
+            SAFE_ADDITIONS=${PR_ADDITIONS:-0}
+            SAFE_DELETIONS=${PR_DELETIONS:-0}
+            SAFE_CHANGED_FILES=${PR_CHANGED_FILES:-0}
+          
+            # Validate that values are numeric for new PRs
+            if ! [[ "$SAFE_ADDITIONS" =~ ^[0-9]+$ ]]; then
+              SAFE_ADDITIONS=0
+            fi
+            if ! [[ "$SAFE_DELETIONS" =~ ^[0-9]+$ ]]; then
+              SAFE_DELETIONS=0
+            fi
+            if ! [[ "$SAFE_CHANGED_FILES" =~ ^[0-9]+$ ]]; then
+              SAFE_CHANGED_FILES=0
+            fi
+          
+            echo "Debug: New PR - ADDITIONS=$SAFE_ADDITIONS, DELETIONS=$SAFE_DELETIONS, CHANGED_FILES=$SAFE_CHANGED_FILES"
           
             NEW_PR_DATA=$(jq -n \
               --argjson pr_number "$PR_NUMBER" \
@@ -329,9 +426,9 @@ jobs:
               --arg creator_login "$PR_CREATOR_LOGIN" \
               --argjson creator_id "$PR_CREATOR_ID" \
               --arg creator_html_url "$PR_CREATOR_URL" \
-              --argjson additions "$PR_ADDITIONS" \
-              --argjson deletions "$PR_DELETIONS" \
-              --argjson changed_files "$PR_CHANGED_FILES" \
+              --argjson additions "$SAFE_ADDITIONS" \
+              --argjson deletions "$SAFE_DELETIONS" \
+              --argjson changed_files "$SAFE_CHANGED_FILES" \
               --arg week "$WEEK_NUMBER" \
               '
               {
@@ -366,16 +463,22 @@ jobs:
             UPDATED_JQ_DATA=$(echo "$JQ_DATA" | jq --argjson pr_number "$PR_NUMBER" --argjson new_pr_data "$NEW_PR_DATA" 'if any(.[]; .pr_number == $pr_number) then . else . + [$new_pr_data] end')
 
           elif [[ "$UPDATE_TYPE" == "PR_CLOSED" ]]; then
+            # Only get merged_by data if the PR was actually merged
+            MERGED_BY_JSON="null"
+            if [[ -n "$PR_MERGED_AT" && "$PR_MERGED_AT" != "null" ]]; then
+              MERGED_BY_JSON=$(gh api "repos/${{ github.repository }}/pulls/$PR_NUMBER" --jq '.merged_by // null')
+            fi
+          
             UPDATED_JQ_DATA=$(echo "$JQ_DATA" | jq \
               --argjson pr_number "$PR_NUMBER" \
               --arg closed_at "$PR_CLOSED_AT" \
               --arg merged_at "$PR_MERGED_AT" \
-              --argjson merged_by "$MERGED_BY_JSON" \
+              --argjson merged_by "$(if [[ "$MERGED_BY_JSON" != "null" ]]; then echo "$MERGED_BY_JSON"; else echo 'null'; fi)" \
               'map(if .pr_number == $pr_number then
                  .closed_at = $closed_at
                  | (if ($merged_at != null and $merged_at != "") then
                       .merged_at = $merged_at
-                      | .merged_by = {login: $merged_by.login, id: $merged_by.id, url: $merged_by.html_url}
+                      | .merged_by = (if $merged_by != null then {login: $merged_by.login, id: $merged_by.id, url: $merged_by.html_url} else null end)
                       | .status = "merged"
                     else
                       .status = "closed"
@@ -388,6 +491,9 @@ jobs:
             echo "$UPDATED_JQ_DATA" | jq '.' > "$PR_FILE"
           else
             echo "Generated data was empty or invalid. No changes were written."
+            echo "Data that failed validation:"
+            echo "$UPDATED_JQ_DATA"
+            exit 1
           fi
           echo "--- END DEBUG ---"
 
@@ -396,5 +502,5 @@ jobs:
         with:
           commit_message: "📊 Update PR metrics data"
           branch: metrics
-          commit_user_name: "london-bot[bot]"
-          commit_user_email: "${{ vars.APP_ID }}+london-bot[bot]@users.noreply.github.com"
+          commit_user_name: "London Bot"
+          commit_user_email: "220529784+london-bot[bot]@users.noreply.github.com"
