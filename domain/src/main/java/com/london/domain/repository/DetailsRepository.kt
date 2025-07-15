@@ -2,7 +2,7 @@ package com.london.domain.repository
 
 import com.london.domain.entity.tvshowdetails.CastEntity
 import com.london.domain.entity.tvshowdetails.TvShowDetailsEntity
-import com.london.domain.entity.tvshowdetails.TvShowEpisodesEntity
+import com.london.domain.entity.tvshowdetails.episode.TvShowEpisodesEntity
 import com.london.domain.entity.tvshowdetails.TvShowImagesEntity
 
 interface DetailsRepository {

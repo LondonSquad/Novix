@@ -4,9 +4,9 @@ import com.london.data.datasource.remote.details.tvshowdetails.model.tvshowepiso
 import com.london.data.datasource.remote.details.tvshowdetails.model.tvshowepisode.TvShowEpisodeBySeason
 import com.london.data.datasource.remote.details.tvshowdetails.model.tvshowepisode.EpisodeCrewMember
 import com.london.data.datasource.remote.details.tvshowdetails.model.tvshowepisode.EpisodeGuestStar
-import com.london.domain.entity.tvshowdetails.TvShowEpisodesEntity
-import com.london.domain.entity.tvshowdetails.TvShowEpisodeBySeasonEntity
-import com.london.domain.entity.tvshowdetails.EpisodeCrewMemberEntity
+import com.london.domain.entity.tvshowdetails.episode.TvShowEpisodesEntity
+import com.london.domain.entity.tvshowdetails.episode.TvShowEpisodeBySeasonEntity
+import com.london.domain.entity.tvshowdetails.episode.EpisodeCrewMemberEntity
 import com.london.domain.entity.tvshowdetails.EpisodeGuestStarEntity
 
 fun TvShowEpisodesRemoteResponse.toTvShowEpisodesEntity(): TvShowEpisodesEntity {

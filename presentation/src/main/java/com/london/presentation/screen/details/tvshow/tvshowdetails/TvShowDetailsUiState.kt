@@ -3,9 +3,9 @@ package com.london.presentation.screen.details.tvshow.tvshowdetails
 import com.london.domain.entity.tvshowdetails.CastEntity
 import com.london.domain.entity.tvshowdetails.ImageItemEntity
 import com.london.domain.entity.tvshowdetails.TvShowCreatorEntity
-import com.london.domain.entity.tvshowdetails.TvShowEpisodeBySeasonEntity
+import com.london.domain.entity.tvshowdetails.episode.TvShowEpisodeBySeasonEntity
 import com.london.domain.entity.tvshowdetails.TvShowEpisodeEntity
-import com.london.domain.entity.tvshowdetails.TvShowEpisodesEntity
+import com.london.domain.entity.tvshowdetails.episode.TvShowEpisodesEntity
 import com.london.domain.entity.tvshowdetails.TvShowGenreEntity
 import com.london.domain.entity.tvshowdetails.TvShowNetworkEntity
 import com.london.domain.entity.tvshowdetails.TvShowProductionCompanyEntity
