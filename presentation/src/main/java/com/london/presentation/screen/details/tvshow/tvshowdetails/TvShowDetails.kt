@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.FlowRow
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.asPaddingValues
@@ -17,6 +18,12 @@ import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.statusBars
+import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.widthIn
+import androidx.compose.foundation.layout.wrapContentHeight
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.rememberScrollState
@@ -45,12 +52,14 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.zIndex
 import com.ae.imageharamblur.ui.ImageViewFilter
 import com.london.designsystem.R
+import com.london.designsystem.component.ActorItem
 import com.london.designsystem.component.NovixCarousalRow
 import com.london.designsystem.component.CircularLoading
 import com.london.designsystem.component.RatingBar
 import com.london.designsystem.component.SaveIcon
 import com.london.designsystem.component.button.ErrorImage
 import com.london.designsystem.theme.NovixTheme
+import com.london.domain.entity.tvshowdetails.CastMemberEntity
 import com.london.domain.entity.tvshowdetails.ImageItemEntity
 import com.london.presentation.utils.toLocalizedNumbers
 import org.koin.androidx.compose.koinViewModel
@@ -92,48 +101,67 @@ fun TvShowsDetailScreenContent(
             onBackClick = onBackClick
         )
 
-        Column(
+        LazyColumn(
             modifier = Modifier
-                .fillMaxSize()
-                .verticalScroll(rememberScrollState())
+                .fillMaxSize(),
+            contentPadding = PaddingValues(bottom = 80.dp)
         ) {
-            val images = uiState.tvImages
-            if (!images.isNullOrEmpty()) {
-                CustomBackDropImagePager(
-                    images = images
+            item {
+                val images = uiState.tvImages
+                if (!images.isNullOrEmpty()) {
+                    CustomBackDropImagePager(
+                        images = images
+                    )
+                }
+            }
+
+            item {
+
+                HeaderDetailsCard(
+                    uiState = uiState,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .layout { measurable, constraints ->
+                            val placeable = measurable.measure(constraints)
+
+                            val yOffsetPx = with(this) { 44.dp.roundToPx() }
+                            val adjustedHeight = (placeable.height - yOffsetPx).coerceAtLeast(0)
+
+                            layout(placeable.width, adjustedHeight) {
+                                placeable.placeRelative(0, -yOffsetPx)
+                            }
+                        }
+                        .padding(start = 16.dp, end = 16.dp)
+                        .heightIn(min = 158.dp)
+                        .border(
+                            width = 1.dp,
+                            color = NovixTheme.colors.stroke,
+                            shape = RoundedCornerShape(16.dp)
+                        )
+                        .clip(RoundedCornerShape(16.dp))
+                        .background(NovixTheme.colors.surface)
                 )
             }
-            HeaderDetailsCard(
-                uiState = uiState,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .layout { measurable, constraints ->
-                        val placeable = measurable.measure(constraints)
-                        layout(placeable.width, placeable.height - 44) {
-                            placeable.placeRelative(0, -44)
-                        }
-                    }
-                    .padding(start = 16.dp, end = 16.dp)
-                    .heightIn(min = 158.dp)
-                    .border(
-                        width = 1.dp,
-                        color = NovixTheme.colors.stroke,
-                        shape = RoundedCornerShape(16.dp)
+
+            item {
+                OverviewSection(
+                    uiState = uiState,
+                    modifier = Modifier.padding(
+                        top = 16.dp,
+                        start = 16.dp,
+                        end = 16.dp
                     )
-                    .clip(RoundedCornerShape(16.dp))
-                    .background(NovixTheme.colors.surface)
-            )
-
-            OverviewSection(
-                uiState = uiState,
-                modifier = Modifier.padding(
-                    top = 16.dp,
-                    start = 16.dp,
-                    end = 16.dp
                 )
-            )
-        }
+            }
 
+            item {
+                CastSection(
+                    modifier = Modifier.padding(top = 16.dp),
+                    castMembers = uiState.cast?.cast ?: emptyList()
+                )
+
+            }
+        }
     }
 }
 
@@ -142,7 +170,6 @@ fun CustomBackDropImagePager(
     modifier: Modifier = Modifier,
     images: List<ImageItemEntity>
 ) {
-
     Box(
         modifier = modifier
             .fillMaxWidth()
@@ -231,7 +258,6 @@ fun TvShowScreenTopBar(
             backgroundColor = NovixTheme.colors.iconBackgroundLow,
             modifier = Modifier.size(40.dp)
         )
-
     }
 
 }
@@ -452,10 +478,41 @@ fun OverviewSection(
                 color = NovixTheme.colors.primary,
                 modifier = Modifier
                     .clickable {
-                        maxLines = Int.MAX_VALUE
+                        maxLines = if (maxLines == 4) Int.MAX_VALUE else 4
                         isTextCollapsed = !isTextCollapsed
                     }
             )
+        }
+    }
+}
+
+
+@Composable
+fun CastSection(
+    modifier: Modifier = Modifier,
+    castMembers: List<CastMemberEntity>,
+) {
+
+    Column(modifier = modifier) {
+        Text(
+            text = stringResource(R.string.cast),
+            style = NovixTheme.typography.title.medium,
+            color = NovixTheme.colors.title,
+            modifier = Modifier.padding(start = 16.dp, bottom = 9.dp)
+        )
+
+        LazyRow(
+            contentPadding = PaddingValues(horizontal = 16.dp),
+            horizontalArrangement = Arrangement.spacedBy(12.dp)
+        ) {
+            items(castMembers) { member ->
+                ActorItem(
+                    actorName = member.name,
+                    characterName = "${member.roles[0].character} - ${member.roles[0].episodeCount}",
+                    imageRes = member.profilePath ?: "",
+                    modifier = Modifier.widthIn(296.dp)
+                )
+            }
         }
     }
 }

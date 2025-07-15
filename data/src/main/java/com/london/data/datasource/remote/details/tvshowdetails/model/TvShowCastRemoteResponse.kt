@@ -7,10 +7,8 @@ import kotlinx.serialization.Serializable
 data class TvShowCastRemoteResponse(
     @SerialName("cast")
     val cast: List<CastMember>,
-    @SerialName("crew")
-    val crew: List<CrewMember>,
     @SerialName("id")
-    val id: Int
+    val id: Int? = null
 )
 
 @Serializable
@@ -31,12 +29,22 @@ data class CastMember(
     val popularity: Double,
     @SerialName("profile_path")
     val profilePath: String?,
-    @SerialName("character")
-    val character: String,
-    @SerialName("credit_id")
-    val creditId: String,
+    @SerialName("roles")
+    val roles: List<Role>,
+    @SerialName("total_episode_count")
+    val totalEpisodeCount: Int,
     @SerialName("order")
     val order: Int
+)
+
+@Serializable
+data class Role(
+    @SerialName("credit_id")
+    val creditId: String,
+    @SerialName("character")
+    val character: String,
+    @SerialName("episode_count")
+    val episodeCount: Int
 )
 
 @Serializable

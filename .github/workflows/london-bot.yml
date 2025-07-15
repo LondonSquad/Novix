@@ -1,4 +1,4 @@
-name: PR Metrics Updater
+name: London Bot
 
 on:
   pull_request:
@@ -18,7 +18,44 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
+  autoupdate:
+    if: (github.event_name == 'pull_request')
+    name: Auto Update
+    runs-on:
+      group: Default
+      labels: github-runner
+
+    permissions:
+      contents: write
+      pull-requests: write
+      repository-projects: write
+
+    steps:
+      - name: Create GitHub App Token
+        uses: actions/create-github-app-token@v2
+        id: app-token
+        with:
+          app-id: ${{ vars.APP_ID }}
+          private-key: ${{ secrets.APP_PRIVATE_KEY }}
+
+      - uses: chinthakagodawita/autoupdate@v1.7.0
+        env:
+          GITHUB_TOKEN: ${{ steps.app-token.outputs.token }}
+          DRY_RUN: "false"
+          PR_FILTER: "protected"
+          MERGE_MSG: "Branch was auto-updated."
+          RETRY_COUNT: "5"
+          RETRY_SLEEP: "300"
+          MERGE_CONFLICT_ACTION: "ignore"
+
+      - run: echo 'Merge conflicts found!'
+        if: ${{ steps.autoupdate.outputs.conflicted }}
+
+      - run: echo 'No merge conflicts'
+        if: ${{ !steps.autoupdate.outputs.conflicted }}
+
   update_pr_metrics:
+    name: Update Metrics
     if: |
       github.event_name == 'workflow_dispatch' ||
       github.event_name == 'pull_request_review' ||
@@ -244,11 +281,10 @@ jobs:
           # For PR_CLOSED
           PR_CLOSED_AT: ${{ github.event.pull_request.closed_at }}
           PR_MERGED_AT: ${{ github.event.pull_request.merged_at }}
-          MERGED_BY_JSON: ${{ toJSON(github.event.pull_request.merged_by) }}
           # For all events with diff stats
-          PR_ADDITIONS: ${{ github.event.pull_request.additions || 0 }}
-          PR_DELETIONS: ${{ github.event.pull_request.deletions || 0 }}
-          PR_CHANGED_FILES: ${{ github.event.pull_request.changed_files || 0 }}
+          PR_ADDITIONS: ${{ github.event.pull_request.additions }}
+          PR_DELETIONS: ${{ github.event.pull_request.deletions }}
+          PR_CHANGED_FILES: ${{ github.event.pull_request.changed_files }}
         run: |
           PR_FILE="pr_metrics.json"
           UPDATE_TYPE="${{ steps.prepare_data.outputs.UPDATE_TYPE }}"
@@ -281,22 +317,30 @@ jobs:
           '
           
           if [[ "$UPDATE_TYPE" == "PR_STATE_REFRESH" ]]; then
-            echo "Fetching current approval state from GitHub API and updating diff stats..."
+            echo "Fetching current approval state from GitHub API..."
             PR_HEAD_SHA=$(gh api "repos/${{ github.repository }}/pulls/$PR_NUMBER" --jq '.head.sha')
             CURRENT_APPROVALS_JSON=$(gh api "repos/${{ github.repository }}/pulls/$PR_NUMBER/reviews" \
             --jq '[.[] | select(.state == "APPROVED" and .commit_id == "'"$PR_HEAD_SHA"'")] |
             group_by(.user.id) | map(sort_by(.submitted_at) | .[-1]) |
             map({
-          reviewer: {
-            login: .user.login,
-            id: .user.id,
-            url: .user.html_url
-          },
-          submitted_at: .submitted_at
-          })'
-          )
-          echo "VALID approvals from API: $CURRENT_APPROVALS_JSON"
-
+              reviewer: {
+                login: .user.login,
+                id: .user.id,
+                url: .user.html_url
+              },
+              submitted_at: .submitted_at
+            })'
+            )
+            echo "VALID approvals from API: $CURRENT_APPROVALS_JSON"
+          
+            # Only update diff stats if we have valid values from the PR event
+            UPDATE_DIFF_STATS=""
+            if [[ -n "$PR_ADDITIONS" && -n "$PR_DELETIONS" && -n "$PR_CHANGED_FILES" ]]; then
+              UPDATE_DIFF_STATS="| .diff_stats.additions = \$additions
+                                | .diff_stats.deletions = \$deletions
+                                | .diff_stats.changed_files = \$changed_files"
+            fi
+          
             UPDATED_JQ_DATA=$(echo "$JQ_DATA" | jq \
               --argjson pr_number "$PR_NUMBER" \
               --arg pr_action "$PR_ACTION" \
@@ -309,9 +353,7 @@ jobs:
               "$JQ_RECALCULATE_FUNCTION
                map(if .pr_number == \$pr_number then
                    (if \$pr_action == \$reopen_action then .closed_at = null | .merged_at = null | .merged_by = null else . end)
-                   | .diff_stats.additions = \$additions
-                   | .diff_stats.deletions = \$deletions
-                   | .diff_stats.changed_files = \$changed_files
+                   $UPDATE_DIFF_STATS
                    | .approvals = \$current_approvals
                    | recalculate_approval_metrics(\$required_approvals)
                  else . end)")
@@ -366,6 +408,12 @@ jobs:
             UPDATED_JQ_DATA=$(echo "$JQ_DATA" | jq --argjson pr_number "$PR_NUMBER" --argjson new_pr_data "$NEW_PR_DATA" 'if any(.[]; .pr_number == $pr_number) then . else . + [$new_pr_data] end')
 
           elif [[ "$UPDATE_TYPE" == "PR_CLOSED" ]]; then
+            # Only get merged_by data if the PR was actually merged
+            MERGED_BY_JSON="null"
+            if [[ -n "$PR_MERGED_AT" && "$PR_MERGED_AT" != "null" ]]; then
+              MERGED_BY_JSON=$(gh api "repos/${{ github.repository }}/pulls/$PR_NUMBER" --jq '.merged_by')
+            fi
+          
             UPDATED_JQ_DATA=$(echo "$JQ_DATA" | jq \
               --argjson pr_number "$PR_NUMBER" \
               --arg closed_at "$PR_CLOSED_AT" \
@@ -375,7 +423,7 @@ jobs:
                  .closed_at = $closed_at
                  | (if ($merged_at != null and $merged_at != "") then
                       .merged_at = $merged_at
-                      | .merged_by = {login: $merged_by.login, id: $merged_by.id, url: $merged_by.html_url}
+                      | .merged_by = (if $merged_by != null then {login: $merged_by.login, id: $merged_by.id, url: $merged_by.html_url} else null end)
                       | .status = "merged"
                     else
                       .status = "closed"
@@ -388,6 +436,9 @@ jobs:
             echo "$UPDATED_JQ_DATA" | jq '.' > "$PR_FILE"
           else
             echo "Generated data was empty or invalid. No changes were written."
+            echo "Data that failed validation:"
+            echo "$UPDATED_JQ_DATA"
+            exit 1
           fi
           echo "--- END DEBUG ---"
 
