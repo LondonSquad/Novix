@@ -40,7 +40,7 @@ class TvShowDetailsViewModel(
             val images = getTvShowImages(tvShowId)
 
             _uiState.update {
-                it.copy(tvImages = images.backdrops)
+                it.copy(tvImages = images)
             }
         }
     }
