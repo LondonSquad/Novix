@@ -20,6 +20,7 @@ import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -34,8 +35,8 @@ import com.london.designsystem.component.button.OutlineButton
 import com.london.designsystem.component.button.PrimaryButton
 import com.london.designsystem.theme.NovixTheme
 import com.london.presentation.R
-import com.london.presentation.screen.search.SearchCategory
 import com.london.presentation.screen.search.SearchViewModel
+import kotlinx.coroutines.launch
 import org.koin.androidx.compose.koinViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -47,11 +48,17 @@ fun FilterBottomSheet(
 ) {
     val filterUiState by viewModel.filterUiState.collectAsState()
 
+    val sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
+    val scope = rememberCoroutineScope()
+
     ModalBottomSheet(
-        onDismissRequest = onDismissRequest,
-        sheetState = rememberModalBottomSheetState(
-            skipPartiallyExpanded = true
-        ),
+        onDismissRequest = {
+            scope.launch {
+                sheetState.hide()
+                onDismissRequest()
+            }
+        },
+        sheetState = sheetState,
         dragHandle = {
             BottomSheetDefaults.DragHandle(
                 color = NovixTheme.colors.body,
@@ -61,10 +68,18 @@ fun FilterBottomSheet(
     ) {
         FilterBottomSheetContent(
             modifier = modifier,
-            onDismissRequest = onDismissRequest,
+            onDismissRequest = {
+                scope.launch {
+                    sheetState.hide()
+                    onDismissRequest()
+                }
+            },
             onApplyFilters = { selectedGenres, minimumRating, releaseYearRange ->
                 viewModel.onApplyFilter(selectedGenres, minimumRating, releaseYearRange)
-                onDismissRequest()
+                scope.launch {
+                    sheetState.hide()
+                    onDismissRequest()
+                }
             },
             onClearFilters = { viewModel.onClearFilter() },
             availableGenres = filterUiState.availableGenresWithNames,
