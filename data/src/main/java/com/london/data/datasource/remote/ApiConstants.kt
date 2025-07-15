@@ -8,7 +8,7 @@ object ApiConstants {
 
     fun getTvShowDetailsPath(tvShowId: Int) = "3/tv/$tvShowId"
 
-    fun getCastTvShowPath(tvShowId: Int) = "3/tv/$tvShowId/credits"
+    fun getCastTvShowPath(tvShowId: Int) = "3/tv/$tvShowId/aggregate_credits"
 
     fun getImagesTvShowPath(tvShowId: Int) = "3/tv/$tvShowId/images"
 }
