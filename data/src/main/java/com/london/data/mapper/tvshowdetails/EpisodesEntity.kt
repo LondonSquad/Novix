@@ -7,7 +7,7 @@ import com.london.data.datasource.remote.details.tvshowdetails.model.tvshowepiso
 import com.london.domain.entity.tvshowdetails.episode.TvShowEpisodesEntity
 import com.london.domain.entity.tvshowdetails.episode.TvShowEpisodeBySeasonEntity
 import com.london.domain.entity.tvshowdetails.episode.EpisodeCrewMemberEntity
-import com.london.domain.entity.tvshowdetails.EpisodeGuestStarEntity
+import com.london.domain.entity.tvshowdetails.episode.EpisodeGuestStarEntity
 
 fun TvShowEpisodesRemoteResponse.toTvShowEpisodesEntity(): TvShowEpisodesEntity {
     return TvShowEpisodesEntity(
