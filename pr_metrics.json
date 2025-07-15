@@ -1141,5 +1141,33 @@
       "deletions": 17,
       "changed_files": 20
     }
+  },
+  {
+    "pr_number": 112,
+    "url": "https://github.com/LondonSquad/Novix/pull/112",
+    "title": "enhancement/release-config-optimizations",
+    "opened_at": "2025-07-15T21:28:19Z",
+    "head_ref": "enhancement/release-config-optimizations",
+    "base_ref": "develop",
+    "creator": {
+      "login": "abdo-essam",
+      "id": 92235360,
+      "url": "https://github.com/abdo-essam"
+    },
+    "approvals": [],
+    "first_approved_at": null,
+    "time_to_first_approval_minutes": null,
+    "required_approvals_met_at": null,
+    "time_to_required_approvals_minutes": null,
+    "closed_at": null,
+    "merged_at": null,
+    "merged_by": null,
+    "week": "2025-W29",
+    "status": "pending",
+    "diff_stats": {
+      "additions": 113,
+      "deletions": 95,
+      "changed_files": 11
+    }
   }
 ]
