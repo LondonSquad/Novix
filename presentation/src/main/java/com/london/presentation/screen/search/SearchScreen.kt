@@ -158,7 +158,7 @@ fun SearchScreenContent(
                                 emptyContent = { NoSearchResultLayOut(modifier = Modifier.fillMaxSize()) },
                                 content = {
                                     MoviesLayOut(
-                                        movieUis = moviesLazyList.itemSnapshotList.items,
+                                        movieUis = moviesLazyList,
                                         onSaveClick = { /* Handle save click */ },
                                         isMovieSaved = { false },
                                         onMovieClick = { viewModel.addToRecentViewed(it.posterPicture) },
@@ -175,7 +175,7 @@ fun SearchScreenContent(
                                 emptyContent = { NoSearchResultLayOut(modifier = Modifier.fillMaxSize()) },
                                 content = {
                                     TvShowLayOut(
-                                        tvShowUis = tvShowsLazyList.itemSnapshotList.items,
+                                        tvShowUis = tvShowsLazyList,
                                         onSaveClick = { /* Handle save click */ },
                                         isTvShowSaved = { false },
                                         onTvShowClick = {
@@ -195,7 +195,7 @@ fun SearchScreenContent(
                                 emptyContent = { NoSearchResultLayOut(modifier = Modifier.fillMaxSize()) },
                                 content = {
                                     ActorsLayout(
-                                        actorsUis = actorsLazyList.itemSnapshotList.items,
+                                        actorsUis = actorsLazyList,
                                         onActorClick = { /* Handle actor click */ }
                                     )
                                 }
