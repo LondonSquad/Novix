@@ -105,8 +105,9 @@ fun SearchScreenContent(
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .background(NovixTheme.colors.surface),
-            verticalArrangement = Arrangement.Top
+                .background(NovixTheme.colors.surface)
+                .padding(bottom = 16.dp),
+            verticalArrangement = Arrangement.Top,
         )
         {
             TopBar(
