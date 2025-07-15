@@ -16,9 +16,7 @@ import kotlinx.coroutines.flow.StateFlow
 class ImageModerationProcessor(private val context: Context) {
 
     private val faceDetector = FaceDetector()
-
     val modelDownloadManager = ModelDownloadManager(context)
-
     val downloadState: StateFlow<ModelDownloadManager.ModelDownloadState>
         get() = modelDownloadManager.downloadState
 
@@ -28,8 +26,6 @@ class ImageModerationProcessor(private val context: Context) {
 
     private val mutex = Mutex()
     private var activeJob: Job? = null
-
-
 
     suspend fun downloadModels(wifiOnly: Boolean = true) {
         modelDownloadManager.downloadModelsIfNeeded(wifiOnly)
@@ -44,14 +40,12 @@ class ImageModerationProcessor(private val context: Context) {
             if (modelsInitialized) return
 
             try {
-                // Try to use downloaded models
                 val modelFiles = modelDownloadManager.downloadModelsIfNeeded()
                 genderModel = GenderDetectionModel(modelFiles.genderModelFile)
                 contentModel = ContentDetectionModel(modelFiles.nsfwModelFile)
                 modelsInitialized = true
             } catch (e: Exception) {
                 Log.e("ImageModerationProcessor", "Failed to download models, using local assets", e)
-                // Fallback to local assets
                 genderModel = GenderDetectionModel(context)
                 contentModel = ContentDetectionModel(context)
                 modelsInitialized = true
@@ -68,7 +62,6 @@ class ImageModerationProcessor(private val context: Context) {
     ): ProcessingResult = withContext(Dispatchers.Default) {
 
         ensureModelsLoaded()
-
         mutex.withLock {
             activeJob = coroutineContext[Job]
         }

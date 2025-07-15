@@ -17,7 +17,6 @@ import androidx.core.content.edit
 
 class ModelDownloadManager(context: Context) {
 
-
     private val prefs = context.getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE)
     private val modelDownloader = FirebaseModelDownloader.getInstance()
 
