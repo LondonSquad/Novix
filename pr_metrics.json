@@ -1023,5 +1023,66 @@
       "deletions": 0,
       "changed_files": 6
     }
+  },
+  {
+    "pr_number": 110,
+    "url": "https://github.com/LondonSquad/Novix/pull/110",
+    "title": "Feature/tv shows details screen",
+    "opened_at": "2025-07-15T13:40:37Z",
+    "head_ref": "feature/tv-shows-details-screen",
+    "base_ref": "develop",
+    "creator": {
+      "login": "ahmeddsamii",
+      "id": 154278495,
+      "url": "https://github.com/ahmeddsamii"
+    },
+    "approvals": [
+      {
+        "reviewer": {
+          "id": 117874933,
+          "login": "AsmaaKhaledGomaa",
+          "url": "https://github.com/AsmaaKhaledGomaa"
+        },
+        "submitted_at": "2025-07-15T14:01:01Z"
+      },
+      {
+        "reviewer": {
+          "id": 76666355,
+          "login": "Abdulrahman1890",
+          "url": "https://github.com/Abdulrahman1890"
+        },
+        "submitted_at": "2025-07-15T14:05:28Z"
+      },
+      {
+        "reviewer": {
+          "id": 102248144,
+          "login": "BassantM",
+          "url": "https://github.com/BassantM"
+        },
+        "submitted_at": "2025-07-15T14:12:51Z"
+      },
+      {
+        "reviewer": {
+          "id": 100484790,
+          "login": "marwanqashwa",
+          "url": "https://github.com/marwanqashwa"
+        },
+        "submitted_at": "2025-07-15T14:13:57Z"
+      }
+    ],
+    "first_approved_at": "2025-07-15T14:01:01Z",
+    "time_to_first_approval_minutes": 20.4,
+    "required_approvals_met_at": "2025-07-15T14:05:28Z",
+    "time_to_required_approvals_minutes": 24.85,
+    "closed_at": null,
+    "merged_at": null,
+    "merged_by": null,
+    "week": "2025-W29",
+    "status": "approved",
+    "diff_stats": {
+      "additions": 162,
+      "deletions": 99,
+      "changed_files": 10
+    }
   }
 ]
