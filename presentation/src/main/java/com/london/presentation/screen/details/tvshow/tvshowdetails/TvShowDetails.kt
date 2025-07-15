@@ -14,11 +14,9 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.heightIn
-import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.statusBars
-import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.rememberScrollState
@@ -32,7 +30,6 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
@@ -41,7 +38,6 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.layout.layout
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.style.TextOverflow
@@ -50,8 +46,10 @@ import androidx.compose.ui.zIndex
 import com.ae.imageharamblur.ui.ImageViewFilter
 import com.london.designsystem.R
 import com.london.designsystem.component.NovixCarousalRow
+import com.london.designsystem.component.CircularLoading
 import com.london.designsystem.component.RatingBar
 import com.london.designsystem.component.SaveIcon
+import com.london.designsystem.component.button.ErrorImage
 import com.london.designsystem.theme.NovixTheme
 import com.london.domain.entity.tvshowdetails.ImageItemEntity
 import com.london.presentation.utils.toLocalizedNumbers
@@ -139,7 +137,6 @@ fun TvShowsDetailScreenContent(
     }
 }
 
-// region CarousalSlider
 @Composable
 fun CustomBackDropImagePager(
     modifier: Modifier = Modifier,
@@ -172,9 +169,9 @@ fun CustomBackDropImagePager(
                     .height(252.dp),
                 contentScale = ContentScale.FillBounds,
                 model = images[pageIndex].filePath,
-                placeholder = painterResource(R.drawable.img_error),
-                contentDescription = "${stringResource(R.string.tv_show_image)} ${pageIndex + 1}",
-            )
+                contentDescription = "TV Show Image ${pageIndex + 1}",
+                errorContent = { ErrorImage() },
+                loadingContent = { CircularLoading(modifier = Modifier) })
         }
 
         val dotsStates = List(images.size) { index ->
@@ -202,9 +199,7 @@ fun CustomBackDropImagePager(
         )
     }
 }
-//endregion
 
-// region Topbar
 @Composable
 fun TvShowScreenTopBar(
     modifier: Modifier = Modifier,
@@ -240,9 +235,7 @@ fun TvShowScreenTopBar(
     }
 
 }
-// endregion
 
-// region HeaderDetailsCard
 @Composable
 fun HeaderDetailsCard(
     modifier: Modifier = Modifier,
@@ -426,9 +419,7 @@ fun TvShowRating(
         )
     }
 }
-// endregion
 
-//region OverviewSection
 @Composable
 fun OverviewSection(
     modifier: Modifier = Modifier,
@@ -468,4 +459,3 @@ fun OverviewSection(
         }
     }
 }
-//endregion
