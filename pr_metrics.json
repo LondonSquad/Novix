@@ -1186,18 +1186,9 @@
       "id": 81706918,
       "url": "https://github.com/karimdeabes"
     },
-    "approvals": [
-      {
-        "reviewer": {
-          "id": 117874933,
-          "login": "AsmaaKhaledGomaa",
-          "url": "https://github.com/AsmaaKhaledGomaa"
-        },
-        "submitted_at": "2025-07-15T23:16:31Z"
-      }
-    ],
-    "first_approved_at": "2025-07-15T23:16:31Z",
-    "time_to_first_approval_minutes": 61.766666666666666,
+    "approvals": [],
+    "first_approved_at": null,
+    "time_to_first_approval_minutes": null,
     "required_approvals_met_at": null,
     "time_to_required_approvals_minutes": null,
     "closed_at": null,
@@ -1206,9 +1197,9 @@
     "week": "2025-W29",
     "status": "pending",
     "diff_stats": {
-      "additions": 511,
-      "deletions": 333,
-      "changed_files": 30
+      "additions": 512,
+      "deletions": 330,
+      "changed_files": 29
     }
   },
   {
