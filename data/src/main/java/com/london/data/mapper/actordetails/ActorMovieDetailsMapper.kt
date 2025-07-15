@@ -1,9 +1,9 @@
 package com.london.data.mapper.actordetails
 
-import com.london.data.datasource.remote.actordetails.MovieCastDto
+import com.london.data.datasource.remote.details.actordetails.ActorMovieCastMember
 import com.london.domain.entity.ActorMovieDetails
 
-fun MovieCastDto.toEntity(): ActorMovieDetails {
+fun ActorMovieCastMember.toEntity(): ActorMovieDetails {
     return ActorMovieDetails(
         id = this.id,
         adult = this.adult,
