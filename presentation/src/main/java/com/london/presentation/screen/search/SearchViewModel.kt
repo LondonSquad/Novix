@@ -47,7 +47,7 @@ class SearchViewModel(
     private val _filterUiState = MutableStateFlow(FilterBottomSheetUiState())
     var filterUiState: StateFlow<FilterBottomSheetUiState> = _filterUiState.asStateFlow()
 
-    private val _searchQuery = MutableStateFlow(_uiState.value.searchQuery.text)
+    private val _searchQuery = MutableStateFlow("")
 
     init {
         viewModelScope.launch {
@@ -290,6 +290,7 @@ class SearchViewModel(
                 actorsFlow = flow {}
             )
         }
+        _searchQuery.value = ""
     }
 
     private fun updateAvailableGenres(searchCategory: SearchCategory) {
