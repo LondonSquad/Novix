@@ -411,14 +411,14 @@ jobs:
             # Only get merged_by data if the PR was actually merged
             MERGED_BY_JSON="null"
             if [[ -n "$PR_MERGED_AT" && "$PR_MERGED_AT" != "null" ]]; then
-              MERGED_BY_JSON=$(gh api "repos/${{ github.repository }}/pulls/$PR_NUMBER" --jq '.merged_by')
+              MERGED_BY_JSON=$(gh api "repos/${{ github.repository }}/pulls/$PR_NUMBER" --jq '.merged_by // null')
             fi
           
             UPDATED_JQ_DATA=$(echo "$JQ_DATA" | jq \
               --argjson pr_number "$PR_NUMBER" \
               --arg closed_at "$PR_CLOSED_AT" \
               --arg merged_at "$PR_MERGED_AT" \
-              --argjson merged_by "$MERGED_BY_JSON" \
+              --argjson merged_by "$(if [[ "$MERGED_BY_JSON" != "null" ]]; then echo "$MERGED_BY_JSON"; else echo 'null'; fi)" \
               'map(if .pr_number == $pr_number then
                  .closed_at = $closed_at
                  | (if ($merged_at != null and $merged_at != "") then
