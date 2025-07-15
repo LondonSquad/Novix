@@ -917,9 +917,18 @@
       "id": 154278495,
       "url": "https://github.com/ahmeddsamii"
     },
-    "approvals": [],
-    "first_approved_at": null,
-    "time_to_first_approval_minutes": null,
+    "approvals": [
+      {
+        "reviewer": {
+          "id": 106277855,
+          "login": "Mostafa-alsaygh",
+          "url": "https://github.com/Mostafa-alsaygh"
+        },
+        "submitted_at": "2025-07-15T09:44:03Z"
+      }
+    ],
+    "first_approved_at": "2025-07-15T09:44:03Z",
+    "time_to_first_approval_minutes": 44.7,
     "required_approvals_met_at": null,
     "time_to_required_approvals_minutes": null,
     "closed_at": null,
@@ -928,9 +937,9 @@
     "week": "2025-W29",
     "status": "pending",
     "diff_stats": {
-      "additions": 294,
-      "deletions": 98,
-      "changed_files": 8
+      "additions": 0,
+      "deletions": 0,
+      "changed_files": 0
     }
   }
 ]
