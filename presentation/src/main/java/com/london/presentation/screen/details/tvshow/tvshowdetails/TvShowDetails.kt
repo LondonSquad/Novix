@@ -30,14 +30,21 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.layout.layout
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.zIndex
 import com.ae.imageharamblur.ui.ImageViewFilter
@@ -102,7 +109,12 @@ fun TvShowsDetailScreenContent(
                 uiState = uiState,
                 modifier = Modifier
                     .fillMaxWidth()
-                    .offset(y = (-44).dp)
+                    .layout { measurable, constraints ->
+                        val placeable = measurable.measure(constraints)
+                        layout(placeable.width, placeable.height - 44) {
+                            placeable.placeRelative(0, -44)
+                        }
+                    }
                     .padding(start = 16.dp, end = 16.dp)
                     .heightIn(min = 158.dp)
                     .border(
@@ -112,6 +124,15 @@ fun TvShowsDetailScreenContent(
                     )
                     .clip(RoundedCornerShape(16.dp))
                     .background(NovixTheme.colors.surface)
+            )
+
+            OverviewSection(
+                uiState = uiState,
+                modifier = Modifier.padding(
+                    top = 16.dp,
+                    start = 16.dp,
+                    end = 16.dp
+                )
             )
         }
 
@@ -135,7 +156,7 @@ fun CustomBackDropImagePager(
                     bottomEnd = 12.dp
                 )
             )
-    ){
+    ) {
         val pagerState = rememberPagerState(
             initialPage = 0,
             pageCount = { images.size }
@@ -152,7 +173,7 @@ fun CustomBackDropImagePager(
                 contentScale = ContentScale.FillBounds,
                 model = images[pageIndex].filePath,
                 placeholder = painterResource(R.drawable.img_error),
-                contentDescription = "TV Show Image ${pageIndex + 1}",
+                contentDescription = "${stringResource(R.string.tv_show_image)} ${pageIndex + 1}",
             )
         }
 
@@ -407,3 +428,44 @@ fun TvShowRating(
 }
 // endregion
 
+//region OverviewSection
+@Composable
+fun OverviewSection(
+    modifier: Modifier = Modifier,
+    uiState: TvShowDetailsUiState
+) {
+    var maxLines by rememberSaveable { mutableIntStateOf(4) }
+    var isTextCollapsed by rememberSaveable { mutableStateOf(false) }
+    Column(
+        modifier = modifier
+    ) {
+        Text(
+            text = stringResource(R.string.overview),
+            style = NovixTheme.typography.title.medium,
+            color = NovixTheme.colors.title
+        )
+
+        Column {
+            Text(
+                text = uiState.overview,
+                style = NovixTheme.typography.body.small,
+                color = NovixTheme.colors.body,
+                maxLines = maxLines,
+                overflow = TextOverflow.Ellipsis
+            )
+
+            Text(
+                text = if (isTextCollapsed)
+                    stringResource(R.string.read_less) else stringResource(R.string.read_more),
+                style = NovixTheme.typography.body.small,
+                color = NovixTheme.colors.primary,
+                modifier = Modifier
+                    .clickable {
+                        maxLines = Int.MAX_VALUE
+                        isTextCollapsed = !isTextCollapsed
+                    }
+            )
+        }
+    }
+}
+//endregion
