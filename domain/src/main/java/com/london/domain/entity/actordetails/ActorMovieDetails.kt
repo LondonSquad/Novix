@@ -1,4 +1,4 @@
-package com.london.domain.entity
+package com.london.domain.entity.actordetails
 
 data class ActorMovieDetails(
     val id: Int,
