@@ -3,16 +3,17 @@ package com.london.presentation.screen.search
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.london.domain.entity.Actor
 import com.london.domain.entity.Movie
 import com.london.domain.entity.TvShow
 import com.london.domain.usecase.GetActorsUseCase
 import com.london.domain.usecase.GetMoviesUseCase
 import com.london.domain.usecase.GetTvShowsUseCase
 import com.london.presentation.composables.filterbottomsheet.FilterBottomSheetUiState
+import com.london.presentation.composables.filterbottomsheet.availableMovieGenres
+import com.london.presentation.composables.filterbottomsheet.availableTvGenres
 import com.london.presentation.screen.search.model.MovieUi
+import com.london.presentation.utils.convertGenreCodeToString
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -32,20 +33,12 @@ class SearchViewModel(
     val uiState: StateFlow<SearchUiState> = _uiState.asStateFlow()
 
     private val _filterUiState = MutableStateFlow(FilterBottomSheetUiState())
-    var filterUiState: StateFlow<SearchUiState> = _uiState.asStateFlow()
-
-    private var allMovies: List<Movie> = emptyList()
-    private var allTvShows: List<TvShow> = emptyList()
-    private var allActors: List<Actor> = emptyList()
-
-    private var searchJob: Job? = null
+    var filterUiState: StateFlow<FilterBottomSheetUiState> = _filterUiState.asStateFlow()
 
     override fun onSearchQueryChange(newValue: TextFieldValue) {
         _uiState.update { it.copy(searchQuery = newValue) }
 
-        searchJob?.cancel()
-
-        searchJob = viewModelScope.launch {
+        viewModelScope.launch {
             delay(300)
             performSearch(newValue.text, _uiState.value.selectedCategory)
         }
@@ -54,17 +47,15 @@ class SearchViewModel(
     override fun onCategorySelected(category: SearchCategory) {
         _uiState.update { it.copy(selectedCategory = category) }
 
-        searchJob?.cancel()
+        updateAvailableGenres(category)
 
-        searchJob = viewModelScope.launch {
+        viewModelScope.launch {
             performSearch(_uiState.value.searchQuery.text, category)
         }
     }
 
     override fun onSearchFilterClick(query: String, category: SearchCategory) {
-        searchJob?.cancel()
-
-        searchJob = viewModelScope.launch {
+        viewModelScope.launch {
             performSearch(query, category)
         }
     }
@@ -72,80 +63,115 @@ class SearchViewModel(
     private fun performSearch(query: String, category: SearchCategory) {
         val trimmedQuery = query.trim()
 
+        updateAvailableGenres(category)
+
         if (trimmedQuery.isEmpty()) {
-            _uiState.update { currentState ->
-                when (category) {
-                    SearchCategory.Movies -> currentState.copy(
-                        movieResults = allMovies,
-                        tvShowUiResults = emptyList(),
-                        actorUiResults = emptyList()
-                    )
-
-                    SearchCategory.Actors -> currentState.copy(
-                        actorUiResults = allActors,
-                        movieResults = emptyList(),
-                        tvShowUiResults = emptyList()
-                    )
-
-                    SearchCategory.TvShows -> currentState.copy(
-                        tvShowUiResults = allTvShows,
-                        actorUiResults = emptyList(),
-                        movieResults = emptyList()
-                    )
-                }
-            }
+            clearSearchResults()
             return
         }
 
         searchWithApi(trimmedQuery, category)
     }
 
+    private fun clearSearchResults() {
+        _uiState.update { currentState ->
+            currentState.copy(
+                movieResults = emptyList(),
+                tvShowUiResults = emptyList(),
+                actorUiResults = emptyList()
+            )
+        }
+    }
+
     private fun searchWithApi(query: String, category: SearchCategory) {
         viewModelScope.launch(Dispatchers.IO) {
             try {
                 when (category) {
-                    SearchCategory.Movies -> {
-                        val searchResults = getMoviesUseCase(query, "en-US")
-                        _uiState.update { currentState ->
-                            currentState.copy(
-                                movieResults = searchResults,
-                                actorUiResults = emptyList(),
-                                tvShowUiResults = emptyList()
-                            )
-                        }
-                    }
-
-                    SearchCategory.Actors -> {
-                        val searchResults = getActorsUseCase(query, "en-US")
-                        _uiState.update { currentState ->
-                            currentState.copy(
-                                actorUiResults = searchResults,
-                                movieResults = emptyList(),
-                                tvShowUiResults = emptyList()
-                            )
-                        }
-                    }
-
-                    SearchCategory.TvShows -> {
-                        val searchResults = getTvShowsUseCase(query, "en-US")
-                        _uiState.update { currentState ->
-                            currentState.copy(
-                                tvShowUiResults = searchResults,
-                                actorUiResults = emptyList(),
-                                movieResults = emptyList()
-                            )
-                        }
-                    }
+                    SearchCategory.Movies -> searchMovies(query)
+                    SearchCategory.Actors -> searchActors(query)
+                    SearchCategory.TvShows -> searchTvShows(query)
                 }
             } catch (e: Exception) {
-                _uiState.update { currentState ->
-                    currentState.copy(
-                        movieResults = emptyList(),
-                        tvShowUiResults = emptyList(),
-                        actorUiResults = emptyList()
-                    )
-                }
+                clearAllSearchResults()
             }
+        }
+    }
+
+    private suspend fun searchMovies(query: String) {
+        val searchResults = getMoviesUseCase(query, "en-US")
+        val filteredResults = applyMovieFilters(searchResults)
+
+        _uiState.update { currentState ->
+            currentState.copy(
+                movieResults = filteredResults,
+                actorUiResults = emptyList(),
+                tvShowUiResults = emptyList()
+            )
+        }
+    }
+
+    private suspend fun searchActors(query: String) {
+        val searchResults = getActorsUseCase(query, "en-US")
+
+        _uiState.update { currentState ->
+            currentState.copy(
+                actorUiResults = searchResults,
+                movieResults = emptyList(),
+                tvShowUiResults = emptyList()
+            )
+        }
+    }
+
+    private suspend fun searchTvShows(query: String) {
+        val searchResults = getTvShowsUseCase(query, "en-US")
+        val filteredResults = applyTvShowFilters(searchResults)
+
+        _uiState.update { currentState ->
+            currentState.copy(
+                tvShowUiResults = filteredResults,
+                actorUiResults = emptyList(),
+                movieResults = emptyList()
+            )
+        }
+    }
+
+    private fun clearAllSearchResults() {
+        _uiState.update { currentState ->
+            currentState.copy(
+                movieResults = emptyList(),
+                tvShowUiResults = emptyList(),
+                actorUiResults = emptyList()
+            )
+        }
+    }
+
+    private fun applyMovieFilters(movies: List<Movie>): List<Movie> {
+        val filterState = _filterUiState.value
+        return movies.filter { movie ->
+            val matchesGenres = filterState.selectedGenres.isEmpty() ||
+                    movie.genreIds.any { genre -> filterState.selectedGenres.contains(genre) }
+
+            val matchesRating = movie.rating >= filterState.imdbRating
+
+            val matchesYear =
+                movie.releaseYear in filterState.releaseYearRange.start.toInt()..filterState.releaseYearRange.endInclusive.toInt()
+
+            matchesGenres && matchesRating && matchesYear
+        }
+    }
+
+    private fun applyTvShowFilters(tvShows: List<TvShow>): List<TvShow> {
+        val filterState = _filterUiState.value
+        return tvShows.filter { tvShow ->
+            val matchesGenres = filterState.selectedGenres.isEmpty() ||
+                    tvShow.genres.any { genre -> filterState.selectedGenres.contains(genre) }
+
+            val matchesRating = tvShow.rating >= filterState.imdbRating
+
+            val matchesYear =
+                tvShow.releaseYear in filterState.releaseYearRange.start.toInt()..filterState.releaseYearRange.endInclusive.toInt()
+
+            matchesGenres && matchesRating && matchesYear
         }
     }
 
@@ -161,7 +187,7 @@ class SearchViewModel(
         }
     }
 
-    fun addToRecentSearches(query: String) {
+    override fun addToRecentSearches(query: String) {
         if (query.isBlank()) return
 
         val currentSearches = _uiState.value.recentSearches.toMutableList()
@@ -175,7 +201,8 @@ class SearchViewModel(
         _uiState.update { it.copy(recentSearches = currentSearches) }
     }
 
-    fun addToRecentViewed(imageUrl: String) {
+    override fun addToRecentViewed(imageUrl: String) {
+        // (important) make the recent data in the database
         if (imageUrl.isBlank()) return
 
         val currentViewed = _uiState.value.recentViewed.toMutableList()
@@ -205,52 +232,82 @@ class SearchViewModel(
     override fun onRecentSearchClick(search: String) {
         _uiState.update { it.copy(searchQuery = TextFieldValue(search)) }
 
-        searchJob?.cancel()
-
-        searchJob = viewModelScope.launch {
+        viewModelScope.launch {
             performSearch(search, _uiState.value.selectedCategory)
         }
     }
 
-    fun clearSearch() {
-        searchJob?.cancel()
-
+    override fun clearSearch() {
         _uiState.update {
             it.copy(
                 searchQuery = TextFieldValue(""),
-                movieResults = allMovies,
-                tvShowUiResults = allTvShows,
-                actorUiResults = allActors
+                movieResults = emptyList(),
+                tvShowUiResults = emptyList(),
+                actorUiResults = emptyList()
             )
         }
     }
 
-    fun onApplyFilter(
-        selectedGenre: String,
-        imdbRating: Int,
-        yearRange: ClosedFloatingPointRange<Float>
+    private fun updateAvailableGenres(searchCategory: SearchCategory) {
+        val availableGenres = when (searchCategory) {
+            SearchCategory.Movies -> availableMovieGenres
+            SearchCategory.TvShows -> availableTvGenres
+            SearchCategory.Actors -> emptyList()
+        }
+
+        val availableGenresWithNames = availableGenres.map { genreId ->
+            genreId to convertGenreCodeToString(genreId, searchCategory)
+        }
+
+        _filterUiState.update {
+            it.copy(
+                availableGenres = availableGenres,
+                availableGenresWithNames = availableGenresWithNames
+            )
+        }
+    }
+
+    override fun onApplyFilter(
+        selectedGenres: List<Int>,
+        minimumRating: Int,
+        releaseYearRange: ClosedFloatingPointRange<Float>
     ) {
         _filterUiState.update {
             it.copy(
-                selectedGenre = selectedGenre,
-                imdbRating = imdbRating,
-                yearRange = yearRange
+                selectedGenres = selectedGenres,
+                imdbRating = minimumRating,
+                releaseYearRange = releaseYearRange
             )
+        }
+
+        viewModelScope.launch {
+            performSearch(_uiState.value.searchQuery.text, _uiState.value.selectedCategory)
         }
     }
 
-    fun onClearFilter() {
+    override fun onClearFilter() {
         _filterUiState.update {
             it.copy(
-                selectedGenre = null,
-                imdbRating = 7,
-                yearRange = 1980f..2025f
+                selectedGenres = emptyList(),
+                imdbRating = 0,
+                releaseYearRange = 1950f..2030f
             )
+        }
+
+        viewModelScope.launch {
+            performSearch(_uiState.value.searchQuery.text, _uiState.value.selectedCategory)
         }
     }
 
-    override fun onCleared() {
-        super.onCleared()
-        searchJob?.cancel()
+    override fun onReleaseYearRangeChange(range: ClosedFloatingPointRange<Float>) {
+        _filterUiState.update { it.copy(releaseYearRange = range) }
+    }
+
+    override fun onGenreSelectedChange(selectedGenres: List<Int>) {
+        _filterUiState.update { it.copy(selectedGenres = selectedGenres) }
+    }
+
+    override fun onRatingChanged(selectedRating: Int) {
+        _filterUiState.update { it.copy(imdbRating = selectedRating) }
     }
 }

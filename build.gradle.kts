@@ -31,6 +31,9 @@ kover {
                     classes("**LocalDataSourceImpl")
                     classes("**SearchRepositoryImpl")
                 }
+                excludes{
+                    classes("*.Exceptions.*")
+                }
             }
             verify {
                 rule {

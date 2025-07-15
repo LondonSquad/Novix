@@ -1,7 +1,6 @@
 package com.london.data.remote
 
 import com.google.common.truth.Truth.assertThat
-import com.london.data.datasource.remote.search.ApiConstants
 import com.london.data.datasource.remote.search.SearchRemoteDataSourceImpl
 import com.london.data.datasource.remote.search.model.ApiSearch
 import com.london.data.datasource.remote.search.model.SearchActorRemote
@@ -16,7 +15,6 @@ import io.ktor.client.request.HttpRequestData
 import io.ktor.client.request.HttpResponseData
 import io.ktor.http.HttpHeaders
 import io.ktor.http.HttpStatusCode
-import io.ktor.http.Url
 import io.ktor.http.headersOf
 import io.ktor.serialization.kotlinx.json.json
 import kotlinx.coroutines.test.runTest

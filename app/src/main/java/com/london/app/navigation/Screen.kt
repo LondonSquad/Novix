@@ -18,4 +18,9 @@ sealed interface Screen {
 
     @Serializable
     object Account : Screen
+
+    @Serializable
+    data class TvShowDetails(
+        val tvShowId: Int,
+    ) : Screen
 }
