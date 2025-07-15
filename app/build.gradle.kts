@@ -21,6 +21,7 @@ android {
         minSdk = AppConfig.Version.MIN_SDK
         targetSdk = AppConfig.Version.TARGET_SDK
 
+
         // Allows for setting the version code via a Gradle property for CD pipeline.
         versionCode = (project.findProperty("versionCode") as? String)?.toInt() ?: 1
         versionName = project.findProperty("versionName") as? String ?: "1.0"
@@ -30,8 +31,7 @@ android {
 
     buildTypes {
         release {
-            isMinifyEnabled = AppConfig.IS_RELEASE_MODE_DEBUGGABLE
-            isDebuggable = AppConfig.IS_RELEASE_MODE_DEBUGGABLE
+            isMinifyEnabled = AppConfig.ENABLE_R8_FULL_MODE
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
