@@ -17,10 +17,8 @@ class ImageModerationProcessor(private val context: Context) {
 
     private val faceDetector = FaceDetector()
 
-    // Expose model download manager so presentation layer can observe state
     val modelDownloadManager = ModelDownloadManager(context)
 
-    // Expose download state for convenience
     val downloadState: StateFlow<ModelDownloadManager.ModelDownloadState>
         get() = modelDownloadManager.downloadState
 
@@ -33,15 +31,12 @@ class ImageModerationProcessor(private val context: Context) {
 
 
 
-    // Make this public so presentation layer can trigger download
     suspend fun downloadModels(wifiOnly: Boolean = true) {
         modelDownloadManager.downloadModelsIfNeeded(wifiOnly)
     }
 
-    // Check if models are ready without triggering download
     fun areModelsReady(): Boolean = modelDownloadManager.areModelsReady()
 
-    // Initialize models asynchronously
     private suspend fun ensureModelsLoaded() {
         if (modelsInitialized) return
 

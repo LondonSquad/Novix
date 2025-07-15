@@ -17,12 +17,6 @@ import androidx.core.content.edit
 
 class ModelDownloadManager(context: Context) {
 
-    companion object {
-        private const val TAG = "ModelDownloadManager"
-        private const val NSFW_MODEL_NAME = "nsfw_model"
-        private const val GENDER_MODEL_NAME = "gender_class_model"
-        private const val PREF_NAME = "model_download_prefs"
-    }
 
     private val prefs = context.getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE)
     private val modelDownloader = FirebaseModelDownloader.getInstance()
@@ -146,5 +140,13 @@ class ModelDownloadManager(context: Context) {
         path?.let {
             prefs.edit { putString(key, it) }
         }
+    }
+
+
+    companion object {
+        private const val TAG = "ModelDownloadManager"
+        private const val NSFW_MODEL_NAME = "nsfw_model"
+        private const val GENDER_MODEL_NAME = "gender_class_model"
+        private const val PREF_NAME = "model_download_prefs"
     }
 }
