@@ -1,12 +1,16 @@
 package com.london.app.di
 
 import com.london.domain.repository.DetailsRepository
+import com.london.domain.repository.RecentRepository
 import com.london.domain.repository.SearchRepository
+import com.london.domain.usecase.AddToRecentSearchUseCase
+import com.london.domain.usecase.ClearRecentSearchUseCase
 import com.london.domain.usecase.GetActorsUseCase
 import com.london.domain.usecase.GetCastById
 import com.london.domain.usecase.GetEpisodesByTvShowSeason
 import com.london.domain.usecase.GetImagesById
 import com.london.domain.usecase.GetMoviesUseCase
+import com.london.domain.usecase.GetRecentSearchUseCase
 import com.london.domain.usecase.GetTvShowDetails
 import com.london.domain.usecase.GetTvShowsUseCase
 import org.koin.core.annotation.Module
@@ -31,6 +35,18 @@ class UseCaseModule {
 
     @Single
     fun provideGetImagesById(repository: DetailsRepository) = GetImagesById(repository)
+
+    @Single
+    fun provideGetRecentSearchUseCase(repository: RecentRepository) =
+        GetRecentSearchUseCase(repository)
+
+    @Single
+    fun provideAddToRecentSearchUseCase(repository: RecentRepository) =
+        AddToRecentSearchUseCase(repository)
+
+    @Single
+    fun provideClearRecentSearchUseCase(repository: RecentRepository) =
+        ClearRecentSearchUseCase(repository)
 
     @Single
     fun provideGetEpisodesByTvShowSeason(repository: DetailsRepository) =
