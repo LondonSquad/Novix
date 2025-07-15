@@ -152,12 +152,13 @@ fun SearchScreenContent(
                     )
                     when (state.selectedCategory) {
                         SearchCategory.Movies -> {
+                            val moviesLazyList = state.moviesFlow.collectAsLazyPagingItems()
                             ResultOrEmpty(
-                                items = state.movieResults,
+                                items = moviesLazyList.itemSnapshotList.items,
                                 emptyContent = { NoSearchResultLayOut(modifier = Modifier.fillMaxSize()) },
                                 content = {
                                     MoviesLayOut(
-                                        movieUis = state.movieResults,
+                                        movieUis = moviesLazyList.itemSnapshotList.items,
                                         onSaveClick = { /* Handle save click */ },
                                         isMovieSaved = { false },
                                         onMovieClick = { viewModel.addToRecentViewed(it.posterPicture) },
@@ -167,21 +168,24 @@ fun SearchScreenContent(
                             )
                         }
 
-                        SearchCategory.TvShows -> ResultOrEmpty(
-                            items = state.tvShowUiResults,
-                            emptyContent = { NoSearchResultLayOut(modifier = Modifier.fillMaxSize()) },
-                            content = {
-                                TvShowLayOut(
-                                    tvShowUis = state.tvShowUiResults,
-                                    onSaveClick = { /* Handle save click */ },
-                                    isTvShowSaved = { false },
-                                    onTvShowClick = {
-                                        viewModel.addToRecentViewed(it.posterPicture)
-                                        onNavigateToTvShowDetails(it.id)
-                                    }
-                                )
-                            }
-                        )
+                        SearchCategory.TvShows -> {
+                            val tvShowsLazyList = state.tvShowsFlow.collectAsLazyPagingItems()
+                            ResultOrEmpty(
+                                items = tvShowsLazyList.itemSnapshotList.items,
+                                emptyContent = { NoSearchResultLayOut(modifier = Modifier.fillMaxSize()) },
+                                content = {
+                                    TvShowLayOut(
+                                        tvShowUis = tvShowsLazyList.itemSnapshotList.items,
+                                        onSaveClick = { /* Handle save click */ },
+                                        isTvShowSaved = { false },
+                                        onTvShowClick = {
+                                            viewModel.addToRecentViewed(it.posterPicture)
+                                            onNavigateToTvShowDetails(it.id)
+                                        }
+                                    )
+                                }
+                            )
+                        }
 
 
                         SearchCategory.Actors -> {
@@ -264,7 +268,10 @@ private fun SearchBar(
                             tint = NovixTheme.colors.hint,
                             modifier = Modifier
                                 .size(20.dp)
-                                .clickable { viewModel.clearSearch() }
+                                .clickable(
+                                    interactionSource = remember { MutableInteractionSource() },
+                                    indication = null
+                                ) { viewModel.clearSearch() }
                         )
                     }
                 }
