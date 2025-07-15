@@ -20,15 +20,6 @@ internal class GenderDetectionModel {
     private val interpreter: Interpreter
     private val imageProcessor: ImageProcessor
 
-    companion object {
-        private const val MODEL_FILE = "gender_class_model.tflite"
-        private const val INPUT_SIZE = 224
-        private const val IMAGE_MEAN = 127.5f
-        private const val IMAGE_STD = 127.5f
-        private const val FEMALE_INDEX = 0
-        private const val MALE_INDEX = 1
-    }
-
     constructor(context: Context) {
         val modelBuffer = FileUtil.loadMappedFile(context, MODEL_FILE)
         this.interpreter = createInterpreter(modelBuffer)
@@ -103,6 +94,16 @@ internal class GenderDetectionModel {
     fun close() {
         interpreter.close()
     }
+
+    companion object {
+        private const val MODEL_FILE = "gender_class_model.tflite"
+        private const val INPUT_SIZE = 224
+        private const val IMAGE_MEAN = 127.5f
+        private const val IMAGE_STD = 127.5f
+        private const val FEMALE_INDEX = 0
+        private const val MALE_INDEX = 1
+    }
+
 }
 
 internal data class GenderResult(

@@ -21,14 +21,6 @@ internal class ContentDetectionModel {
     private val inputImageWidth: Int
     private val inputImageHeight: Int
 
-    enum class Category(val index: Int) {
-        DRAWING(0),
-        HENTAI(1),
-        NEUTRAL(2),
-        PORN(3),
-        SEXY(4)
-    }
-
     constructor(context: Context) {
         val modelBuffer = FileUtil.loadMappedFile(context, "nsfw_model.tflite")
         this.interpreter = createInterpreter(modelBuffer)
@@ -112,6 +104,14 @@ internal class ContentDetectionModel {
 
     fun close() {
         interpreter.close()
+    }
+
+    enum class Category(val index: Int) {
+        DRAWING(0),
+        HENTAI(1),
+        NEUTRAL(2),
+        PORN(3),
+        SEXY(4)
     }
 }
 

@@ -24,21 +24,6 @@ class ModelDownloadManager(context: Context) {
     private val _downloadState = MutableStateFlow(ModelDownloadState())
     val downloadState: StateFlow<ModelDownloadState> = _downloadState.asStateFlow()
 
-    data class ModelDownloadState(
-        val isDownloading: Boolean = false,
-        val nsfwModelReady: Boolean = false,
-        val genderModelReady: Boolean = false,
-        val downloadProgress: Float = 0f,
-        val error: String? = null,
-        val currentDownloadingModel: String? = null,
-        val totalSizeMB: Float = 29.0f
-    )
-
-    data class ModelFiles(
-        val nsfwModelFile: File,
-        val genderModelFile: File
-    )
-
     init {
         checkExistingModels()
     }
@@ -149,4 +134,19 @@ class ModelDownloadManager(context: Context) {
         private const val GENDER_MODEL_NAME = "gender_class_model"
         private const val PREF_NAME = "model_download_prefs"
     }
+
+    data class ModelDownloadState(
+        val isDownloading: Boolean = false,
+        val nsfwModelReady: Boolean = false,
+        val genderModelReady: Boolean = false,
+        val downloadProgress: Float = 0f,
+        val error: String? = null,
+        val currentDownloadingModel: String? = null,
+        val totalSizeMB: Float = 29.0f
+    )
+
+    data class ModelFiles(
+        val nsfwModelFile: File,
+        val genderModelFile: File
+    )
 }
