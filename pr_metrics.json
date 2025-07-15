@@ -714,5 +714,33 @@
       "deletions": 298,
       "changed_files": 15
     }
+  },
+  {
+    "pr_number": 107,
+    "url": "https://github.com/LondonSquad/Novix/pull/107",
+    "title": "Enhance SearchBar animation & fix BottomBar edge-to-edge layout",
+    "opened_at": "2025-07-15T07:12:26Z",
+    "head_ref": "fix/feature-search-ui",
+    "base_ref": "develop",
+    "creator": {
+      "login": "AsmaaKhaledGomaa",
+      "id": 117874933,
+      "url": "https://github.com/AsmaaKhaledGomaa"
+    },
+    "approvals": [],
+    "first_approved_at": null,
+    "time_to_first_approval_minutes": null,
+    "required_approvals_met_at": null,
+    "time_to_required_approvals_minutes": null,
+    "closed_at": null,
+    "merged_at": null,
+    "merged_by": null,
+    "week": "2025-W29",
+    "status": "pending",
+    "diff_stats": {
+      "additions": 81,
+      "deletions": 58,
+      "changed_files": 2
+    }
   }
 ]
