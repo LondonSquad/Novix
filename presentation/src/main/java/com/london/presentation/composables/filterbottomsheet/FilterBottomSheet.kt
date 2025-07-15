@@ -18,12 +18,9 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableIntStateOf
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.saveable.rememberSaveable
-import androidx.compose.runtime.setValue
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -39,6 +36,7 @@ import com.london.designsystem.component.button.PrimaryButton
 import com.london.designsystem.theme.NovixTheme
 import com.london.presentation.R
 import com.london.presentation.screen.search.SearchViewModel
+import kotlinx.coroutines.launch
 import org.koin.androidx.compose.koinViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -48,11 +46,19 @@ fun FilterBottomSheet(
     viewModel: SearchViewModel = koinViewModel(),
     onDismissRequest: () -> Unit
 ) {
+    val filterUiState by viewModel.filterUiState.collectAsState()
+
+    val sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
+    val scope = rememberCoroutineScope()
+
     ModalBottomSheet(
-        onDismissRequest = onDismissRequest,
-        sheetState = rememberModalBottomSheetState(
-            skipPartiallyExpanded = true
-        ),
+        onDismissRequest = {
+            scope.launch {
+                sheetState.hide()
+                onDismissRequest()
+            }
+        },
+        sheetState = sheetState,
         dragHandle = {
             BottomSheetDefaults.DragHandle(
                 color = NovixTheme.colors.body,
@@ -60,42 +66,51 @@ fun FilterBottomSheet(
         },
         containerColor = NovixTheme.colors.surface
     ) {
-
         FilterBottomSheetContent(
             modifier = modifier,
-            onDismissRequest = onDismissRequest,
-            onApply = { selectedGenre, imdbRating, yearRange ->
-               if (selectedGenre != null) {
-                   viewModel.onApplyFilter(selectedGenre, imdbRating, yearRange)
-               }
-                onDismissRequest()
+            onDismissRequest = {
+                scope.launch {
+                    sheetState.hide()
+                    onDismissRequest()
+                }
             },
-            onClear = { viewModel.onClearFilter() }
+            onApplyFilters = { selectedGenres, minimumRating, releaseYearRange ->
+                viewModel.onApplyFilter(selectedGenres, minimumRating, releaseYearRange)
+                scope.launch {
+                    sheetState.hide()
+                    onDismissRequest()
+                }
+            },
+            onClearFilters = { viewModel.onClearFilter() },
+            availableGenres = filterUiState.availableGenresWithNames,
+            selectedGenres = filterUiState.selectedGenres,
+            imdbRating = filterUiState.imdbRating,
+            releaseYearRange = filterUiState.releaseYearRange,
+            onReleaseYearRangeChange = viewModel::onReleaseYearRangeChange,
+            onGenreSelectedChange = viewModel::onGenreSelectedChange,
+            onRatingChanged = viewModel::onRatingChanged,
         )
     }
 }
 
 @Composable
 private fun FilterBottomSheetContent(
-    modifier: Modifier = Modifier, genres: List<String> = listOf(
-        stringResource(R.string.filter),
-        stringResource(R.string.action),
-        stringResource(R.string.drama),
-        stringResource(R.string.comedy),
-        stringResource(R.string.sci_fi),
-        stringResource(R.string.romance),
-        stringResource(R.string.crime),
-        stringResource(R.string.adventure),
-        stringResource(R.string.documentary),
-    ),
+    modifier: Modifier = Modifier,
+    availableGenres: List<Pair<Int, Int>>,
     onDismissRequest: () -> Unit,
-    onApply: (selected: String?, imdbRating: Int, yearRange: ClosedFloatingPointRange<Float>) -> Unit,
-    onClear: () -> Unit
+    onApplyFilters: (
+        selectedGenres: List<Int>,
+        minimumRating: Int,
+        releaseYearRange: ClosedFloatingPointRange<Float>
+    ) -> Unit,
+    onClearFilters: () -> Unit,
+    selectedGenres: List<Int>,
+    imdbRating: Int,
+    releaseYearRange: ClosedFloatingPointRange<Float>,
+    onReleaseYearRangeChange: (ClosedFloatingPointRange<Float>) -> Unit,
+    onGenreSelectedChange: (List<Int>) -> Unit,
+    onRatingChanged: (Int) -> Unit,
 ) {
-    var selected by rememberSaveable { mutableStateOf<String?>(null) }
-    var imdbRating by rememberSaveable { mutableIntStateOf(7) }
-    var yearRange by remember { mutableStateOf(1980f..2025f) }
-
     Column(
         modifier = modifier
             .padding(
@@ -131,7 +146,7 @@ private fun FilterBottomSheetContent(
             ) {
                 Icon(
                     painter = painterResource(com.london.designsystem.R.drawable.cancel),
-                    contentDescription = "Cancel the bottom sheet",
+                    contentDescription = "Close filter",
                     modifier = Modifier.padding(6.dp),
                     tint = NovixTheme.colors.title
                 )
@@ -146,8 +161,8 @@ private fun FilterBottomSheetContent(
         )
 
         CustomReleasedYearSlider(
-            yearRange = yearRange,
-            onYearRangeChange = { yearRange = it },
+            yearRange = releaseYearRange,
+            onYearRangeChange = onReleaseYearRangeChange,
             minYear = 1950,
             maxYear = 2030
         )
@@ -160,9 +175,9 @@ private fun FilterBottomSheetContent(
         )
 
         GenreChipGroup(
-            genres = genres,
-            selectedGenre = selected,
-            onGenreSelected = { selected = it }
+            availableGenres = availableGenres,
+            selectedGenres = selectedGenres,
+            onGenreSelectionChanged = onGenreSelectedChange
         )
 
         Text(
@@ -174,7 +189,7 @@ private fun FilterBottomSheetContent(
 
         RatingBar(
             rating = imdbRating,
-            onRatingChanged = { imdbRating = it },
+            onRatingChanged = onRatingChanged,
             modifier = Modifier.padding(top = 8.dp)
         )
 
@@ -182,6 +197,7 @@ private fun FilterBottomSheetContent(
             Modifier
                 .fillMaxWidth()
                 .align(Alignment.End)
+                .padding(top = 24.dp)
         ) {
             PrimaryButton(
                 text = stringResource(R.string.apply),
@@ -191,15 +207,14 @@ private fun FilterBottomSheetContent(
                 isDisabled = false,
                 icon = null,
                 onClick = {
-                    onApply(
-                        selected,
+                    onApplyFilters(
+                        selectedGenres,
                         imdbRating,
-                        yearRange
+                        releaseYearRange
                     )
                 },
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(top = 24.dp)
             )
 
             OutlineButton(
@@ -209,10 +224,12 @@ private fun FilterBottomSheetContent(
                 hasIcon = false,
                 isLoading = false,
                 isDisabled = false,
-                onClick = { onClear() },
+                onClick = {
+                    onClearFilters()
+                },
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(top = 8.dp, bottom = 24.dp)
+                    .padding(top = 8.dp)
             )
         }
     }
@@ -225,12 +242,24 @@ fun FilterBottomSheetContentPreview() {
         Surface {
             FilterBottomSheetContent(
                 onDismissRequest = {},
-                onApply = { selected, rating, range ->
-                    println("Apply clicked with genre=$selected, rating=$rating, yearRange=$range")
+                onApplyFilters = { selectedGenres, rating, range ->
+                    println("Apply filters clicked with genres=$selectedGenres, rating=$rating, yearRange=$range")
                 },
-                onClear = {
-                    println("Clear clicked")
-                }
+                onClearFilters = {
+                    println("Clear filters clicked")
+                },
+                availableGenres = listOf(
+                    28 to R.string.action,
+                    12 to R.string.action,
+                    16 to R.string.action,
+                    35 to R.string.action
+                ),
+                selectedGenres = listOf(),
+                imdbRating = 0,
+                releaseYearRange = 1950f..2030f,
+                onReleaseYearRangeChange = {},
+                onGenreSelectedChange = { },
+                onRatingChanged = {},
             )
         }
     }

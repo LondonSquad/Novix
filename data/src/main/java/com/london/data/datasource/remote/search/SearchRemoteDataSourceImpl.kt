@@ -1,7 +1,7 @@
 package com.london.data.datasource.remote.search
 
-import android.util.Log
 import com.london.data.BuildConfig
+import com.london.data.datasource.remote.ApiConstants
 import com.london.data.datasource.remote.search.model.ApiSearch
 import com.london.data.datasource.remote.search.model.SearchActorRemote
 import com.london.data.datasource.remote.search.model.SearchMovieRemote
@@ -26,7 +26,7 @@ class SearchRemoteDataSourceImpl(private val ktorClient: HttpClient) : RemoteDat
         val response = ktorClient.get {
             url {
                 protocol = URLProtocol.Companion.HTTPS
-                host = ApiConstants.SEARCH_HOST
+                host = ApiConstants.HOST
                 path(ApiConstants.SEARCH_PATH_MOVIES)
                 parameters.append("query", query)
                 parameters.append("include_adult", includeAdult.toString())
@@ -51,7 +51,7 @@ class SearchRemoteDataSourceImpl(private val ktorClient: HttpClient) : RemoteDat
         val response = ktorClient.get {
             url {
                 protocol = URLProtocol.Companion.HTTPS
-                host = ApiConstants.SEARCH_HOST
+                host = ApiConstants.HOST
                 path(ApiConstants.SEARCH_PATH_TVS)
                 parameters.append("query", query)
                 parameters.append("include_adult", includeAdult.toString())
@@ -76,7 +76,7 @@ class SearchRemoteDataSourceImpl(private val ktorClient: HttpClient) : RemoteDat
         val response = ktorClient.get {
             url {
                 protocol = URLProtocol.Companion.HTTPS
-                host = ApiConstants.SEARCH_HOST
+                host = ApiConstants.HOST
                 path(ApiConstants.SEARCH_PATH_ACTORS)
                 parameters.append("query", query)
                 parameters.append("include_adult", includeAdult.toString())

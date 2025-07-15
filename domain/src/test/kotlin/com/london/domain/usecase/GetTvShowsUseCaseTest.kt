@@ -36,7 +36,12 @@ class GetTvShowsUseCaseTest {
     @Test
     fun `should throw an exception when repository throws an exception`() = runTest {
         //given
-        coEvery { searchRepository.searchForTvShows(NAME, LANGUAGE) } throws TvShowSearchFailedException()
+        coEvery {
+            searchRepository.searchForTvShows(
+                NAME,
+                LANGUAGE
+            )
+        } throws TvShowSearchFailedException()
         //when //then
         assertThrows<TvShowSearchFailedException> {
             getTvShowsUseCase(NAME, LANGUAGE)
@@ -50,7 +55,10 @@ class GetTvShowsUseCaseTest {
         val TV_SHOW = TvShow(
             id = 1,
             name = NAME,
-            posterPicture = ""
+            posterPicture = "",
+            releaseYear = 2024,
+            rating = 8,
+            genres = listOf(1, 2, 3)
         )
     }
 }

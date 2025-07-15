@@ -22,7 +22,26 @@
     <string name="apply">قبول</string>
     <string name="adventure">مغامرة</string>
     <string name="documentary">وثائقي</string>
+    <string name="animation">أنمي</string>
+    <string name="family">عائلي</string>
+    <string name="fantasy">فانتازيا</string>
+    <string name="history">تاريخي</string>
+    <string name="horror">رعب</string>
+    <string name="music">موسيقى</string>
+    <string name="mystery">غموض</string>
+    <string name="kids">اطفال</string>
+    <string name="news">اخبار</string>
+    <string name="reality">واقعي</string>
+    <string name="soap">صابون</string>
+    <string name="talk">حديث</string>
+    <string name="tv_movie">فيلم تلفزيوني</string>
+    <string name="thriller">إثارة</string>
+    <string name="war">حرب</string>
+    <string name="western">غربي</string>
+    <string name="unknown">غير معروف</string>
     <string name="Movies">افلام</string>
     <string name="TV_Shows">"مسلسلات"</string>
     <string name="Actors">"ممثلين"</string>
+    <string name="top_movies_picks">أفضل الأفلام المختارة</string>
+    <string name="top_tv_shows_picks">أفضل اختيارات البرامج التلفزيونية</string>
 </resources>

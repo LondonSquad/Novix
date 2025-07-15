@@ -48,7 +48,10 @@ class GetMoviesUseCaseTest {
         val movie = Movie(
             id = 1,
             name = NAME,
-            posterPicture = ""
+            posterPicture = "",
+            releaseYear = 2024,
+            rating = 8,
+            genreIds = listOf(1, 2, 3)
         )
     }
 }
