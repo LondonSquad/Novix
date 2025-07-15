@@ -77,7 +77,7 @@ class GetImagesByIdTest {
     fun `should throw exception when repository throws exception`() = runTest {
         // Given
         coEvery { detailsRepository.getImagesTvShowById(TV_SHOW_ID) } throws GetImagesByIdFailedException()
-        // When // Then
+        // When & Then
         assertThrows<GetImagesByIdFailedException> {
             getImagesById(TV_SHOW_ID)
         }
