@@ -1,12 +1,12 @@
 [versions]
 # Build Tools
-agp = "8.8.2"
+agp = "8.11.0"
 constraintlayoutCompose = "1.1.1"
 firebaseBom = "33.16.0"
 gson = "2.11.0"
-kotlin = "2.0.21"
+kotlin = "2.1.21"
 kotlinxCoroutinesTestVersion = "1.10.2"
-ksp = "2.0.21-1.0.27"
+ksp = "2.1.21-2.0.1"
 
 # AndroidX Core
 coreKtx = "1.16.0"
@@ -35,11 +35,11 @@ datastoreCore = "1.1.7"
 # Dependency Injection (Koin)
 koinAndroid = "4.1.0"
 koinAndroidxCompose = "4.1.0"
-koinAnnotations = "1.4.0"
-koinKspCompiler = "1.4.0"
+koinAnnotations = "2.1.0"
+koinKspCompiler = "2.1.0"
 
 # Ktor Networking
-ktor = "2.3.13"
+ktor = "3.2.1"
 
 # Coroutines & Date/Time
 kotlinxCoroutinesAndroid = "1.10.2"
@@ -66,7 +66,7 @@ junitJupiter = "5.13.3"
 espressoCore = "3.6.1"
 mockk = "1.14.4"
 truth = "1.4.4"
-jetbrainsKotlinJvm = "2.0.21"
+jetbrainsKotlinJvm = "2.1.21"
 appcompat = "1.6.1"
 material = "1.10.0"
 firebasePerf = "21.0.5"

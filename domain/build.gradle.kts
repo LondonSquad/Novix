@@ -22,5 +22,6 @@ dependencies {
     api(libs.bundles.coroutines)
     api(libs.koin.annotations)
     ksp(libs.koin.ksp.compiler)
+    implementation("androidx.paging:paging-common-ktx:3.3.6")
     testImplementation(libs.bundles.testing)
 }

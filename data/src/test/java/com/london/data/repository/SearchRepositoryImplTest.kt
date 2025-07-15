@@ -9,8 +9,8 @@ import com.london.data.datasource.local.model.SearchMovieDtoLocal
 import com.london.data.datasource.local.model.SearchMoviesLocal
 import com.london.data.datasource.local.model.SearchTvShowDtoLocal
 import com.london.data.datasource.local.model.SearchTvShowLocal
-import com.london.data.datasource.remote.search.RemoteDataSource
-import com.london.data.datasource.remote.search.model.ApiSearch
+import com.london.data.datasource.remote.search.SearchRemoteDataSource
+import com.london.data.datasource.remote.ApiResponse
 import com.london.data.datasource.remote.search.model.SearchActorRemote
 import com.london.data.datasource.remote.search.model.SearchMovieRemote
 import com.london.data.datasource.remote.search.model.SearchTvShowRemote
@@ -29,7 +29,6 @@ import kotlinx.coroutines.test.runTest
 import org.junit.Before
 import org.junit.Test
 import org.junit.jupiter.api.assertThrows
-import org.koin.core.annotation.Named
 
 
 class SearchRepositoryImplTest {
@@ -37,7 +36,7 @@ class SearchRepositoryImplTest {
     private lateinit var searchMovieService: LocalDataSource<SearchMoviesLocal>
     private lateinit var searchTvShowService: LocalDataSource<SearchTvShowLocal>
     private lateinit var searchActorService: LocalDataSource<SearchActorsLocal>
-    private lateinit var remoteDataSource: RemoteDataSource
+    private lateinit var searchRemoteDataSource: SearchRemoteDataSource
     private lateinit var repository: SearchRepositoryImpl
 
     @Before
@@ -45,12 +44,12 @@ class SearchRepositoryImplTest {
         searchTvShowService = mockk(relaxed = true)
         searchActorService = mockk(relaxed = true)
         searchMovieService = mockk(relaxed = true)
-        remoteDataSource = mockk(relaxed = true)
+        searchRemoteDataSource = mockk(relaxed = true)
         repository = SearchRepositoryImpl(
-            searchTvShowService = searchTvShowService,
-            searchActorService = searchActorService,
-            searchMovieService = searchMovieService,
-            remoteDataSource = remoteDataSource,
+            localTvShowDataSource = searchTvShowService,
+            localActorDataSource = searchActorService,
+            localMovieDataSource = searchMovieService,
+            remoteDataSource = searchRemoteDataSource,
             crashReporter = FirebaseCrashReporter()
         )
     }
@@ -65,7 +64,7 @@ class SearchRepositoryImplTest {
     @Test
     fun `searchForMovies should return data from remote and cache it if local is null`() = runTest {
         coEvery { searchMovieService.getByQuery(NAME + LANG) } returns null
-        coEvery { remoteDataSource.searchForMovies(any(), any(), any(), any()) } returns SearchMoviesRemoteMock
+        coEvery { searchRemoteDataSource.searchForMovies(any(), any(), any(), any()) } returns SearchMoviesRemoteMock
         val result = repository.searchForMovies(NAME, LANG)
         assertThat(result).isEqualTo(MovieList)
         coVerify { searchMovieService.insert(any()) }
@@ -91,7 +90,7 @@ class SearchRepositoryImplTest {
     fun `searchForTvShows should return data from remote and cache it if local is null`() =
         runTest {
             coEvery { searchTvShowService.getByQuery(NAME + LANG) } returns null
-            coEvery { remoteDataSource.searchForTvShows(any(), any(), any(), any()) } returns SearchTvShowRemoteMock
+            coEvery { searchRemoteDataSource.searchForTvShows(any(), any(), any(), any()) } returns SearchTvShowRemoteMock
             val result = repository.searchForTvShows(NAME, LANG)
             assertThat(result).isEqualTo(TvShowList)
             coVerify { searchTvShowService.insert(any()) }
@@ -116,7 +115,7 @@ class SearchRepositoryImplTest {
     @Test
     fun `searchForActors should return data from remote and cache it if local is null`() = runTest {
         coEvery { searchActorService.getByQuery(NAME + LANG) } returns null
-        coEvery { remoteDataSource.searchForActors(any(), any(), any(), any()) } returns SearchActorsRemoteMock
+        coEvery { searchRemoteDataSource.searchForActors(any(), any(), any(), any()) } returns SearchActorsRemoteMock
         val result = repository.searchForActors(NAME, LANG)
         assertThat(result).isEqualTo(ActorList)
         coVerify { searchActorService.insert(any()) }
@@ -138,7 +137,7 @@ class SearchRepositoryImplTest {
             searchTvShowService,
             searchActorService,
             searchMovieService,
-            remoteDataSource,
+            searchRemoteDataSource,
             crashReporter
         )
 
@@ -157,7 +156,7 @@ class SearchRepositoryImplTest {
             searchTvShowService,
             searchActorService,
             searchMovieService,
-            remoteDataSource,
+            searchRemoteDataSource,
             crashReporter
         )
 
@@ -175,7 +174,7 @@ class SearchRepositoryImplTest {
             searchTvShowService,
             searchActorService,
             searchMovieService,
-            remoteDataSource,
+            searchRemoteDataSource,
             crashReporter
         )
 
@@ -292,9 +291,9 @@ class SearchRepositoryImplTest {
             totalResults = 1
         )
 
-        val SearchMoviesRemoteMock = ApiSearch(
-            page = 1,
-            results = listOf(
+        val SearchMoviesRemoteMock = ApiResponse(
+            currentPage = 1,
+            items = listOf(
                 SearchMovieRemote(
                     adult = false,
                     backdropPath = null,
@@ -313,12 +312,12 @@ class SearchRepositoryImplTest {
                 )
             ),
             totalPages = 1,
-            totalResults = 1
+            totalItems = 1
         )
 
-        val SearchTvShowRemoteMock = ApiSearch(
-            page = 1,
-            results = listOf(
+        val SearchTvShowRemoteMock = ApiResponse(
+            currentPage = 1,
+            items = listOf(
                 SearchTvShowRemote(
                     adult = false,
                     backdropPath = "",
@@ -337,12 +336,12 @@ class SearchRepositoryImplTest {
                 )
             ),
             totalPages = 1,
-            totalResults = 1
+            totalItems = 1
         )
 
-        val SearchActorsRemoteMock = ApiSearch(
-            page = 1,
-            results = listOf(
+        val SearchActorsRemoteMock = ApiResponse(
+            currentPage = 1,
+            items = listOf(
                 SearchActorRemote(
                     adult = false,
                     gender = 2,
@@ -356,7 +355,7 @@ class SearchRepositoryImplTest {
                 )
             ),
             totalPages = 1,
-            totalResults = 1
+            totalItems = 1
         )
     }
 

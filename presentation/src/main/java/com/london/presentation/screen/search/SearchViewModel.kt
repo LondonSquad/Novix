@@ -11,6 +11,7 @@ import com.london.domain.usecase.GetTvShowsUseCase
 import com.london.presentation.composables.filterbottomsheet.FilterBottomSheetUiState
 import com.london.presentation.composables.filterbottomsheet.availableMovieGenres
 import com.london.presentation.composables.filterbottomsheet.availableTvGenres
+import com.london.presentation.screen.base.createPagingSourceFlow
 import com.london.presentation.screen.search.model.MovieUi
 import com.london.presentation.utils.convertGenreCodeToString
 import kotlinx.coroutines.Dispatchers
@@ -18,6 +19,7 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import org.koin.android.annotation.KoinViewModel
@@ -78,7 +80,7 @@ class SearchViewModel(
             currentState.copy(
                 movieResults = emptyList(),
                 tvShowUiResults = emptyList(),
-                actorUiResults = emptyList()
+                actorsFlow = flow {}
             )
         }
     }
@@ -98,24 +100,30 @@ class SearchViewModel(
     }
 
     private suspend fun searchMovies(query: String) {
-        val searchResults = getMoviesUseCase(query, "en-US")
-        val filteredResults = applyMovieFilters(searchResults)
+        val searchResults = getMoviesUseCase(query, "en-US", 0)
+        val filteredResults = applyMovieFilters(searchResults.items)
 
         _uiState.update { currentState ->
             currentState.copy(
                 movieResults = filteredResults,
-                actorUiResults = emptyList(),
+                actorsFlow = flow {},
                 tvShowUiResults = emptyList()
             )
         }
     }
 
-    private suspend fun searchActors(query: String) {
-        val searchResults = getActorsUseCase(query, "en-US")
+    private fun searchActors(query: String) {
+        val actorsFlow = createPagingSourceFlow { pageNumber ->
+            getActorsUseCase(
+                name = query,
+                language = "en-US",
+                pageNumber = pageNumber
+            )
+        }
 
         _uiState.update { currentState ->
             currentState.copy(
-                actorUiResults = searchResults,
+                actorsFlow = actorsFlow,
                 movieResults = emptyList(),
                 tvShowUiResults = emptyList()
             )
@@ -123,13 +131,13 @@ class SearchViewModel(
     }
 
     private suspend fun searchTvShows(query: String) {
-        val searchResults = getTvShowsUseCase(query, "en-US")
-        val filteredResults = applyTvShowFilters(searchResults)
+        val searchResults = getTvShowsUseCase(query, "en-US", 0)
+        val filteredResults = applyTvShowFilters(searchResults.items)
 
         _uiState.update { currentState ->
             currentState.copy(
                 tvShowUiResults = filteredResults,
-                actorUiResults = emptyList(),
+                actorsFlow = flow {},
                 movieResults = emptyList()
             )
         }
@@ -140,7 +148,7 @@ class SearchViewModel(
             currentState.copy(
                 movieResults = emptyList(),
                 tvShowUiResults = emptyList(),
-                actorUiResults = emptyList()
+                actorsFlow = flow {}
             )
         }
     }
@@ -243,7 +251,7 @@ class SearchViewModel(
                 searchQuery = TextFieldValue(""),
                 movieResults = emptyList(),
                 tvShowUiResults = emptyList(),
-                actorUiResults = emptyList()
+                actorsFlow = flow {}
             )
         }
     }

@@ -6,9 +6,9 @@ plugins {
     alias(libs.plugins.kotlin.compose)
     alias(libs.plugins.kotlin.serialization)
     alias(libs.plugins.ksp)
-    alias(libs.plugins.google.firebase.firebase.perf)
-    alias(libs.plugins.google.gms.google.services)
-    alias(libs.plugins.google.firebase.crashlytics)
+    //alias(libs.plugins.google.firebase.firebase.perf)
+    //alias(libs.plugins.google.gms.google.services)
+    //alias(libs.plugins.google.firebase.crashlytics)
     alias(libs.plugins.kotlinx.kover)
 }
 
@@ -30,8 +30,8 @@ android {
 
     buildTypes {
         release {
-            isMinifyEnabled = AppConfig.IS_RELEASE_MODE_DEBUGGABLE
-            isDebuggable = AppConfig.IS_RELEASE_MODE_DEBUGGABLE
+            isMinifyEnabled = AppConfig.ENABLE_R8_FULL_MODE
+            isShrinkResources = AppConfig.ENABLE_R8_FULL_MODE
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"

@@ -45,6 +45,8 @@ dependencies {
     implementation(libs.bundles.coroutines)
     implementation(libs.bundles.koin)
     ksp(libs.bundles.koin.ksp)
+    implementation("androidx.paging:paging-runtime:3.3.6")
+    implementation("androidx.paging:paging-compose:3.4.0-alpha01")
     testImplementation(libs.bundles.testing)
     androidTestImplementation(libs.bundles.android.testing)
     implementation(libs.firebase.crashlytics)

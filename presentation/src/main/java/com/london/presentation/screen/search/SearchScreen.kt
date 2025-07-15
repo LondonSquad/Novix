@@ -42,6 +42,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.dp
+import androidx.paging.compose.collectAsLazyPagingItems
 import com.london.designsystem.component.EmptySearchLayout
 import com.london.designsystem.component.HomeCard
 import com.london.designsystem.component.NovixChip
@@ -183,16 +184,19 @@ fun SearchScreenContent(
                         )
 
 
-                        SearchCategory.Actors -> ResultOrEmpty(
-                            items = state.actorUiResults,
-                            emptyContent = { NoSearchResultLayOut(modifier = Modifier.fillMaxSize()) },
-                            content = {
-                                ActorsLayout(
-                                    actorsUis = state.actorUiResults,
-                                    onActorClick = { /* Handle actor click */ }
-                                )
-                            }
-                        )
+                        SearchCategory.Actors -> {
+                            val actorsLazyList = state.actorsFlow.collectAsLazyPagingItems()
+                            ResultOrEmpty(
+                                items = actorsLazyList.itemSnapshotList.items,
+                                emptyContent = { NoSearchResultLayOut(modifier = Modifier.fillMaxSize()) },
+                                content = {
+                                    ActorsLayout(
+                                        actorsUis = actorsLazyList.itemSnapshotList.items,
+                                        onActorClick = { /* Handle actor click */ }
+                                    )
+                                }
+                            )
+                        }
                     }
                 }
             )

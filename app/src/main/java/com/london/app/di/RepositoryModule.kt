@@ -5,7 +5,7 @@ import com.london.data.datasource.local.model.SearchActorsLocal
 import com.london.data.datasource.local.model.SearchMoviesLocal
 import com.london.data.datasource.local.model.SearchTvShowLocal
 import com.london.data.datasource.remote.details.tvshowdetails.TvShowDetailsRemoteDataSource
-import com.london.data.datasource.remote.search.RemoteDataSource
+import com.london.data.datasource.remote.search.SearchRemoteDataSource
 import com.london.data.datasource.util.CrashReporter
 import com.london.data.datasource.util.FirebaseCrashReporter
 import com.london.data.repository.DetailsRepositoryImpl
@@ -23,14 +23,14 @@ class RepositoryModule {
         @Named("tvShow") tvShowLocalDataSource: LocalDataSource<SearchTvShowLocal>,
         @Named("actor") actorLocalDataSource: LocalDataSource<SearchActorsLocal>,
         @Named("movie") movieLocalDataSource: LocalDataSource<SearchMoviesLocal>,
-        remoteDataSource: RemoteDataSource,
+        searchRemoteDataSource: SearchRemoteDataSource,
         crashReporter: CrashReporter
     ): SearchRepository {
         return SearchRepositoryImpl(
-            searchTvShowService = tvShowLocalDataSource,
-            searchActorService = actorLocalDataSource,
-            searchMovieService = movieLocalDataSource,
-            remoteDataSource = remoteDataSource,
+            localTvShowDataSource = tvShowLocalDataSource,
+            localActorDataSource = actorLocalDataSource,
+            localMovieDataSource = movieLocalDataSource,
+            remoteDataSource = searchRemoteDataSource,
             crashReporter = crashReporter
         )
     }
