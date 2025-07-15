@@ -4,7 +4,7 @@ import org.gradle.api.JavaVersion
 
 object AppConfig {
     const val ENABLE_R8_FULL_MODE: Boolean = true
-    const val IS_RELEASE_MODE_DEBUGGABLE: Boolean = false
+    const val ENABLE_R8_FOR_LIBRARIES: Boolean = false
 
     object Version {
         const val MIN_SDK = 26
