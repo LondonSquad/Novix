@@ -1,4 +1,4 @@
-name: PR Metrics Updater
+name: London Bot
 
 on:
   pull_request:
@@ -18,7 +18,44 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
+  autoupdate:
+    if: (github.event_name == 'pull_request')
+    name: Auto Update
+    runs-on:
+      group: Default
+      labels: github-runner
+
+    permissions:
+      contents: write
+      pull-requests: write
+      repository-projects: write
+
+    steps:
+      - name: Create GitHub App Token
+        uses: actions/create-github-app-token@v2
+        id: app-token
+        with:
+          app-id: ${{ vars.APP_ID }}
+          private-key: ${{ secrets.APP_PRIVATE_KEY }}
+
+      - uses: chinthakagodawita/autoupdate@v1.7.0
+        env:
+          GITHUB_TOKEN: ${{ steps.app-token.outputs.token }}
+          DRY_RUN: "false"
+          PR_FILTER: "protected"
+          MERGE_MSG: "Branch was auto-updated."
+          RETRY_COUNT: "5"
+          RETRY_SLEEP: "300"
+          MERGE_CONFLICT_ACTION: "ignore"
+
+      - run: echo 'Merge conflicts found!'
+        if: ${{ steps.autoupdate.outputs.conflicted }}
+
+      - run: echo 'No merge conflicts'
+        if: ${{ !steps.autoupdate.outputs.conflicted }}
+
   update_pr_metrics:
+    name: Update Metrics
     if: |
       github.event_name == 'workflow_dispatch' ||
       github.event_name == 'pull_request_review' ||
