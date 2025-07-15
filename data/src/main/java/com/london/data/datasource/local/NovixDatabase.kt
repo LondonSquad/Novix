@@ -10,6 +10,8 @@ import com.london.data.datasource.local.convertor.SearchTvShowConvertor
 import com.london.data.datasource.local.dao.SearchActorsDao
 import com.london.data.datasource.local.dao.SearchMoviesDao
 import com.london.data.datasource.local.dao.SearchTvShowDao
+import com.london.data.datasource.local.dao.recentsearch.RecentSearchDao
+import com.london.data.datasource.local.model.RecentSearch
 import com.london.data.datasource.local.model.SearchActorsLocal
 import com.london.data.datasource.local.model.SearchMoviesLocal
 import com.london.data.datasource.local.model.SearchTvShowLocal
@@ -18,7 +20,8 @@ import com.london.data.datasource.local.model.SearchTvShowLocal
     entities = [
         SearchTvShowLocal::class,
         SearchMoviesLocal::class,
-        SearchActorsLocal::class
+        SearchActorsLocal::class,
+        RecentSearch::class
     ],
     version = 1,
     exportSchema = false
@@ -33,4 +36,5 @@ abstract class NovixDatabase : RoomDatabase() {
     abstract fun searchTvShowDao(): SearchTvShowDao
     abstract fun searchMoviesDao(): SearchMoviesDao
     abstract fun searchActorsDao(): SearchActorsDao
+    abstract fun recentSearchDao(): RecentSearchDao
 }
