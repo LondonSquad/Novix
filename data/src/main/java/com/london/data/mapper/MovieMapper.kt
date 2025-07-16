@@ -2,7 +2,7 @@ package com.london.data.mapper
 
 import com.london.data.datasource.local.model.SearchMovieDtoLocal
 import com.london.data.datasource.local.model.SearchMoviesLocal
-import com.london.data.datasource.remote.search.model.ApiSearch
+import com.london.data.datasource.remote.ApiResponse
 import com.london.data.datasource.remote.search.model.SearchMovieRemote
 import com.london.data.datasource.util.generateHash
 import com.london.domain.entity.Movie
@@ -19,14 +19,14 @@ fun SearchMovieDtoLocal.toMovieEntity(): Movie {
     )
 }
 
-fun ApiSearch<SearchMovieRemote>.toLocal(query: String): SearchMoviesLocal {
+fun ApiResponse<SearchMovieRemote>.toLocal(query: String): SearchMoviesLocal {
     return SearchMoviesLocal(
         date = System.currentTimeMillis(),
         query = query.generateHash(),
-        page = this.page,
-        results = this.results.map { it.toMovieLocalDto() },
+        page = this.currentPage,
+        results = this.items.map { it.toMovieLocalDto() },
         totalPages = this.totalPages,
-        totalResults = this.totalResults
+        totalResults = this.totalItems
     )
 }
 
