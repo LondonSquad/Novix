@@ -1,0 +1,24 @@
+package com.london.data.datasource.local.dao
+
+import androidx.room.Dao
+import androidx.room.Insert
+import androidx.room.OnConflictStrategy
+import androidx.room.Query
+import androidx.room.Update
+import com.london.data.datasource.local.model.GenreInterestEntity
+
+@Dao
+interface GenreInterestDao {
+
+    @Query("SELECT * FROM genre_interest WHERE genreType = :genreType ORDER BY count DESC")
+    suspend fun getGenresByInterest(genreType: String): List<GenreInterestEntity>
+
+    @Query("SELECT * FROM genre_interest WHERE genreId = :genreId AND genreType = :genreType LIMIT 1")
+    suspend fun getGenreInterest(genreId: Int, genreType: String): GenreInterestEntity?
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun insertGenreInterest(genreInterest: GenreInterestEntity)
+
+    @Update
+    suspend fun updateGenreInterest(genreInterest: GenreInterestEntity)
+}

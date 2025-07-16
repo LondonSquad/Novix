@@ -1,6 +1,7 @@
 package com.london.app.di
 
 import com.london.data.datasource.local.LocalDataSource
+import com.london.data.datasource.local.dao.GenreInterestDao
 import com.london.data.datasource.local.model.SearchActorsLocal
 import com.london.data.datasource.local.model.SearchMoviesLocal
 import com.london.data.datasource.local.model.SearchTvShowLocal
@@ -29,6 +30,7 @@ class RepositoryModule {
         @Named("tvShow") tvShowLocalDataSource: LocalDataSource<SearchTvShowLocal>,
         @Named("actor") actorLocalDataSource: LocalDataSource<SearchActorsLocal>,
         @Named("movie") movieLocalDataSource: LocalDataSource<SearchMoviesLocal>,
+        genreInterestDao: GenreInterestDao,
         remoteDataSource: RemoteDataSource,
         crashReporter: CrashReporter
     ): SearchRepository {
@@ -36,6 +38,7 @@ class RepositoryModule {
             searchTvShowService = tvShowLocalDataSource,
             searchActorService = actorLocalDataSource,
             searchMovieService = movieLocalDataSource,
+            genreInterestDao = genreInterestDao,
             remoteDataSource = remoteDataSource,
             crashReporter = crashReporter
         )

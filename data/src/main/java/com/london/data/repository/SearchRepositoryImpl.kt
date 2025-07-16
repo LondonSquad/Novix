@@ -2,6 +2,8 @@ package com.london.data.repository
 
 import com.london.data.datasource.local.GetException
 import com.london.data.datasource.local.LocalDataSource
+import com.london.data.datasource.local.dao.GenreInterestDao
+import com.london.data.datasource.local.model.GenreInterestEntity
 import com.london.data.datasource.local.model.SearchActorsLocal
 import com.london.data.datasource.local.model.SearchMoviesLocal
 import com.london.data.datasource.local.model.SearchTvShowLocal
@@ -23,6 +25,7 @@ class SearchRepositoryImpl(
     private val searchTvShowService: LocalDataSource<SearchTvShowLocal>,
     private val searchActorService: LocalDataSource<SearchActorsLocal>,
     private val searchMovieService: LocalDataSource<SearchMoviesLocal>,
+    private val genreInterestDao: GenreInterestDao,
     private val remoteDataSource: RemoteDataSource,
     private val crashReporter: CrashReporter
 ) : SearchRepository {
@@ -115,6 +118,33 @@ class SearchRepositoryImpl(
             addExceptionToCrashlytics(e)
         }
         return result
+    }
+
+    override suspend fun incrementGenreInterest(genreId: Int, genreType: String) {
+        try {
+            val current = genreInterestDao.getGenreInterest(genreId, genreType)
+            if (current == null) {
+                genreInterestDao.insertGenreInterest(
+                    GenreInterestEntity(genreId = genreId, genreType = genreType, count = 1)
+                )
+            } else {
+                genreInterestDao.updateGenreInterest(
+                    current.copy(count = current.count + 1)
+                )
+            }
+        } catch (e: Exception) {
+            crashReporter.logException(e)
+        }
+    }
+
+    override suspend fun getGenreInterestCounts(genreType: String): List<Pair<Int, Int>> {
+        return try {
+            genreInterestDao.getGenresByInterest(genreType)
+                .map { entity -> entity.genreId to entity.count }
+        } catch (e: Exception) {
+            crashReporter.logException(e)
+            emptyList()
+        }
     }
 
     private fun addExceptionToCrashlytics(e: Exception) {

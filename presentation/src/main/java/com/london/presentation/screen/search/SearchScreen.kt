@@ -7,7 +7,6 @@ import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.SizeTransform
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
-import androidx.compose.animation.fadeOut
 import androidx.compose.animation.togetherWith
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -172,7 +171,10 @@ fun SearchScreenContent(
                                         movieUis = state.movieResults,
                                         onSaveClick = { /* Handle save click */ },
                                         isMovieSaved = { false },
-                                        onMovieClick = { viewModel.addToRecentViewed(it.posterPicture) },
+                                        onMovieClick = {
+                                            viewModel.addToRecentViewed(it.posterPicture)
+                                            viewModel.onClickMovie(it.id)
+                                        },
                                         modifier = Modifier.padding(horizontal = 16.dp)
                                     )
                                 }
@@ -189,6 +191,7 @@ fun SearchScreenContent(
                                     isTvShowSaved = { false },
                                     onTvShowClick = {
                                         viewModel.addToRecentViewed(it.posterPicture)
+                                        viewModel.incrementGenreInterest(it.id, "tv")
                                         onNavigateToTvShowDetails(it.id)
                                     }
                                 )

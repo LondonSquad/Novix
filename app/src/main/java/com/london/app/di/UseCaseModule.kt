@@ -8,12 +8,14 @@ import com.london.domain.usecase.AddToRecentSearchUseCase
 import com.london.domain.usecase.ClearRecentSearchUseCase
 import com.london.domain.usecase.GetActorsUseCase
 import com.london.domain.usecase.GetCastById
+import com.london.domain.usecase.GetGenreInterestCountsUseCase
 import com.london.domain.usecase.GetImagesById
 import com.london.domain.usecase.GetMovieCastUseCase
 import com.london.domain.usecase.GetMoviesUseCase
 import com.london.domain.usecase.GetRecentSearchUseCase
 import com.london.domain.usecase.GetTvShowDetails
 import com.london.domain.usecase.GetTvShowsUseCase
+import com.london.domain.usecase.IncrementGenreInterestUseCase
 import org.koin.core.annotation.Module
 import org.koin.core.annotation.Single
 
@@ -27,6 +29,14 @@ class UseCaseModule {
 
     @Single
     fun provideGetTvShowsUseCase(repository: SearchRepository) = GetTvShowsUseCase(repository)
+
+    @Single
+    fun provideGetGenreInterestCountsUseCase(repository: SearchRepository) =
+        GetGenreInterestCountsUseCase(repository)
+
+    @Single
+    fun provideIncrementGenreInterestUseCase(repository: SearchRepository) =
+        IncrementGenreInterestUseCase(repository)
 
     @Single
     fun provideGetTvShowDetails(repository: DetailsRepository) = GetTvShowDetails(repository)
@@ -54,6 +64,6 @@ class UseCaseModule {
     fun provideMovieCastUseCase(
         movieDetailsRepository: MovieDetailsRepository
     ): GetMovieCastUseCase =
-         GetMovieCastUseCase(movieDetailsRepository)
+        GetMovieCastUseCase(movieDetailsRepository)
 
 }

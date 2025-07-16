@@ -14,6 +14,7 @@ interface SearchInteractions {
     fun onRecentSearchClick(search: String)
     fun addToRecentSearches(query: String)
     fun addToRecentViewed(imageUrl: String)
+    fun onClickMovie(id : Int)
     fun clearSearch()
     fun onApplyFilter(
         selectedGenres: List<Int>,
