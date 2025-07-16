@@ -27,7 +27,7 @@ kover {
         total {
             filters {
                 includes {
-                    classes("*.domain.usecae.*")
+                    classes("**.*UseCase")
                     classes("**.*ActorLocalDataSourceImpl")
                     classes("**.*MovieLocalDataSourceImpl")
                     classes("**.*TvShowLocalDataSourceImpl")
