@@ -161,7 +161,10 @@ fun SearchScreenContent(
                                         movieUis = moviesLazyList,
                                         onSaveClick = { /* Handle save click */ },
                                         isMovieSaved = { false },
-                                        onMovieClick = { viewModel.addToRecentViewed(it.posterPicture) },
+                                        onMovieClick = {
+                                            viewModel.addToRecentViewed(it.posterPicture)
+                                            viewModel.onClickMovie(it.genreIds)
+                                        },
                                         modifier = Modifier.padding(horizontal = 16.dp)
                                     )
                                 }
@@ -180,13 +183,15 @@ fun SearchScreenContent(
                                         isTvShowSaved = { false },
                                         onTvShowClick = {
                                             viewModel.addToRecentViewed(it.posterPicture)
+                                            it.genres.forEach { genreId ->
+                                                viewModel.incrementGenreInterest(genreId, "tv")
+                                            }
                                             onNavigateToTvShowDetails(it.id)
                                         }
                                     )
                                 }
                             )
                         }
-
 
                         SearchCategory.Actors -> {
                             val actorsLazyList = state.actorsFlow.collectAsLazyPagingItems()

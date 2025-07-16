@@ -4,6 +4,7 @@ import android.content.Context
 import com.london.data.datasource.local.DatabaseProvider
 import com.london.data.datasource.local.LocalDataSource
 import com.london.data.datasource.local.NovixDatabase
+import com.london.data.datasource.local.dao.GenreInterestDao
 import com.london.data.datasource.local.dao.SearchActorsDao
 import com.london.data.datasource.local.dao.SearchMoviesDao
 import com.london.data.datasource.local.dao.SearchTvShowDao
@@ -46,6 +47,11 @@ class DatabaseModule {
 
     fun provideRecentSearchDao(database: NovixDatabase): RecentSearchDao {
         return database.recentSearchDao()
+    }
+
+    @Single
+    fun provideGenreInterestDao(database: NovixDatabase): GenreInterestDao {
+        return database.genreInterestDao()
     }
 
     @Single
