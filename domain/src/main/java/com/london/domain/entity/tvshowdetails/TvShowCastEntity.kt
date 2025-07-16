@@ -2,8 +2,7 @@ package com.london.domain.entity.tvshowdetails
 
 data class TvShowCastEntity(
     val cast: List<TvShowCastMemberEntity>,
-    val crew: List<TvShowCrewMemberEntity>,
-    val id: Int
+    val id: Int?
 )
 
 data class TvShowCastMemberEntity(
@@ -15,12 +14,12 @@ data class TvShowCastMemberEntity(
     val originalName: String,
     val popularity: Double,
     val profilePath: String?,
-    val roles: List<RoleEntity>,
+    val roles: List<TvShowRoleEntity>,
     val totalEpisodeCount: Int,
     val order: Int
 )
 
-data class RoleEntity(
+data class TvShowRoleEntity(
     val creditId: String,
     val character: String,
     val episodeCount: Int

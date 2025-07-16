@@ -4,10 +4,10 @@ import com.london.data.datasource.remote.details.tvshowdetails.model.CrewMember
 import com.london.data.datasource.remote.details.tvshowdetails.model.Role
 import com.london.data.datasource.remote.details.tvshowdetails.model.TvShowCastMember
 import com.london.data.datasource.remote.details.tvshowdetails.model.TvShowCastRemoteResponse
-import com.london.domain.entity.tvshowdetails.RoleEntity
 import com.london.domain.entity.tvshowdetails.TvShowCastEntity
 import com.london.domain.entity.tvshowdetails.TvShowCastMemberEntity
 import com.london.domain.entity.tvshowdetails.TvShowCrewMemberEntity
+import com.london.domain.entity.tvshowdetails.TvShowRoleEntity
 
 fun TvShowCastRemoteResponse.toCastEntity(): TvShowCastEntity {
     return TvShowCastEntity(
@@ -32,8 +32,8 @@ fun TvShowCastMember.toCastMember(): TvShowCastMemberEntity {
     )
 }
 
-fun Role.toRoleEntity(): RoleEntity {
-    return RoleEntity(
+fun Role.toRoleEntity(): TvShowRoleEntity {
+    return TvShowRoleEntity(
         creditId = this.creditId,
         character = this.character,
         episodeCount = this.episodeCount
