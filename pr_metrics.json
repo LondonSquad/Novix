@@ -1981,8 +1981,8 @@
     "week": "2025-W29",
     "status": "pending",
     "diff_stats": {
-      "additions": 350,
-      "deletions": 162,
+      "additions": 352,
+      "deletions": 161,
       "changed_files": 28
     }
   }
