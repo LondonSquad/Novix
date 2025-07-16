@@ -10,12 +10,13 @@ import org.junit.jupiter.api.Test
 class GetActorDetailsByIdUseCaseTest {
     lateinit var repository: ActorRepository
     lateinit var useCase: GetActorDetailsByIdUseCase
+
     @BeforeEach
     fun setUp() {
         repository = mockk()
         useCase = GetActorDetailsByIdUseCase(repository)
     }
-    
+
     @Test
     fun `should call the repository get actor details by id`() = runTest {
         //given
@@ -23,7 +24,7 @@ class GetActorDetailsByIdUseCaseTest {
         //when
         useCase.invoke(1)
         //then
-        repository.getActorDetailsById(1)
+        coEvery { repository.getActorDetailsById(1) }
     }
 
 }

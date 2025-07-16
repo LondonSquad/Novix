@@ -7,7 +7,7 @@ import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 
-class GetActorMoviePicksByIdUseCaseTest{
+class GetActorMoviePicksByIdUseCaseTest {
     lateinit var repository: ActorRepository
     lateinit var useCase: GetActorMoviePicksByIdUseCase
 
@@ -16,7 +16,7 @@ class GetActorMoviePicksByIdUseCaseTest{
         repository = mockk()
         useCase = GetActorMoviePicksByIdUseCase(repository)
     }
-    
+
     @Test
     fun `should call the repository get actor movie picks by id`() = runTest {
         //given
@@ -24,7 +24,7 @@ class GetActorMoviePicksByIdUseCaseTest{
         //when
         useCase.invoke(1)
         //then
-        repository.getActorMoviePicksById(1)
+        coEvery { repository.getActorMoviePicksById(1) }
     }
-    
+
 }

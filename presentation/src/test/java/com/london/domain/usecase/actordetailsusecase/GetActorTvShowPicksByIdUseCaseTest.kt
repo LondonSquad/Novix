@@ -16,7 +16,7 @@ class GetActorTvShowPicksByIdUseCaseTest {
         repository = mockk()
         useCase = GetActorTvShowPicksByIdUseCase(repository)
     }
-    
+
     @Test
     fun `should call the repository get actor tv show picks by id`() = runTest {
         //given
@@ -24,6 +24,6 @@ class GetActorTvShowPicksByIdUseCaseTest {
         //when
         useCase.invoke(1)
         //then
-        repository.getActorTvShowPicksById(1)
+        coEvery { repository.getActorTvShowPicksById(1) }
     }
 }

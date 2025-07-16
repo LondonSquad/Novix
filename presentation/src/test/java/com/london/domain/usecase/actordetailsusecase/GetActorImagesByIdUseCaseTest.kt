@@ -16,7 +16,7 @@ class GetActorImagesByIdUseCaseTest {
         repository = mockk()
         useCase = GetActorImagesByIdUseCase(repository)
     }
-    
+
     @Test
     fun `should call the repository get actor images by id`() = runTest {
         //given
@@ -24,6 +24,6 @@ class GetActorImagesByIdUseCaseTest {
         //when
         useCase.invoke(1)
         //then
-        repository.getActorImagesById(1)
+        coEvery { repository.getActorImagesById(1) }
     }
 }
