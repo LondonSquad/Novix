@@ -52,7 +52,7 @@ jobs:
           echo "${{ secrets.GOOGLE_SERVICES_JSON }}" | base64 --decode > app/google-services.json
 
       - name: Build Release APK
-        run: ./gradlew -PversionCode=${{ github.run_number }} -PversionName="1.0.${{ github.run_number }}" bundleRelease
+        run: ./gradlew -PversionCode=${{ github.run_number }} -PversionName="1.0.${{ github.run_number }}" assembleRelease
 
       - name: Deploy to Firebase App Distribution
         uses: wzieba/Firebase-Distribution-Github-Action@v1
@@ -60,7 +60,7 @@ jobs:
           appId: ${{ secrets.FIREBASE_APP_ID }}
           serviceCredentialsFileContent: ${{ secrets.ACCOUNT_SERVICE_JSON }}
           groups: testers
-          file: app/release/app-release.apk
+          file: app/build/outputs/apk/release/app-release.apk
           releaseNotes: |
             New update from PR #${{ github.event.pull_request.number }}
             Commit: ${{ github.sha }}
