@@ -142,8 +142,7 @@ jobs:
           GH_TOKEN: ${{ steps.app-token.outputs.token }}
         run: |
           PR_FILE="pr_metrics.json"
-          DEFAULT_DAYS_TO_CHECK=1
-          BACKFILL_DAYS="${{ steps.prepare_data.outputs.BACKFILL_DAYS || $DEFAULT_DAYS_TO_CHECK }}"
+          BACKFILL_DAYS="${{ steps.prepare_data.outputs.BACKFILL_DAYS || 1 }}"
 
           echo "--- Backfilling existing PRs (looking back $BACKFILL_DAYS days) ---"
 
