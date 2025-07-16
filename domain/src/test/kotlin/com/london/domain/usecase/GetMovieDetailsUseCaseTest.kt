@@ -10,11 +10,11 @@ import com.london.domain.entity.moviedatails.Genre
 import com.london.domain.entity.moviedatails.MovieDetails
 import com.london.domain.entity.moviedatails.SimilarMovie
 import io.mockk.coEvery
+import org.junit.jupiter.api.assertThrows
 import io.mockk.mockk
 import kotlinx.coroutines.test.runTest
-import org.junit.jupiter.api.BeforeEach
-import org.junit.jupiter.api.Test
-import org.junit.jupiter.api.assertThrows
+import org.junit.Before
+import org.junit.Test
 
 class GetMovieDetailsUseCaseTest {
 
@@ -24,7 +24,7 @@ class GetMovieDetailsUseCaseTest {
     private lateinit var getMovieCastUseCase: GetMovieCastUseCase
     private lateinit var getSimilarMoviesUseCase: GetSimilarMoviesUseCase
 
-    @BeforeEach
+    @Before
     fun setUp() {
         getMovieById = mockk()
         getMovieImagesUseCase = mockk()
