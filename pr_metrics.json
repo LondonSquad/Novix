@@ -1633,9 +1633,9 @@
     "week": "2025-W29",
     "status": "pending",
     "diff_stats": {
-      "additions": 1020,
-      "deletions": 84,
-      "changed_files": 52
+      "additions": 1034,
+      "deletions": 101,
+      "changed_files": 53
     }
   },
   {
