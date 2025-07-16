@@ -2,6 +2,7 @@ package com.london.data.datasource.remote.details.moviedetails
 
 import android.util.Log
 import com.london.data.BuildConfig
+import com.london.data.datasource.remote.ApiConstants
 import io.ktor.client.HttpClient
 import io.ktor.client.request.get
 import io.ktor.client.statement.bodyAsText
@@ -20,7 +21,7 @@ suspend inline fun <reified T> fetchData(
         val response = ktorClient.get {
             url {
                 protocol = URLProtocol.HTTPS
-                host = ApiConstantsMovieDetails.HOST
+                host = ApiConstants.HOST
                 path(path)
                 parameters.append("language", "en-US")
                 parameters.append("api_key", BuildConfig.API_KEY)

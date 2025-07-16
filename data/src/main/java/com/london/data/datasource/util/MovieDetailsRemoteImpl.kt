@@ -1,6 +1,6 @@
 package com.london.data.datasource.util
 
-import com.london.data.datasource.remote.details.moviedetails.ApiConstantsMovieDetails
+import com.london.data.datasource.remote.ApiConstants
 import com.london.data.datasource.remote.details.moviedetails.MovieDetailsRemote
 import com.london.data.datasource.remote.details.moviedetails.fetchData
 import com.london.data.datasource.remote.details.moviedetails.model.MovieDetailsResponse
@@ -17,7 +17,7 @@ class MovieDetailsRemoteImpl(
     override suspend fun getMovieDetails(movieId: Int): MovieDetailsResponse =
         runOrThrow(block = {
             fetchData(
-                path = "${ApiConstantsMovieDetails.MOVIE_DETAILS_PATH}/$movieId",
+                path = "${ApiConstants.MOVIE_DETAILS_PATH}/$movieId",
                 tag = "getMovieDetails",
                 ktorClient = ktorClient
             )
@@ -26,7 +26,7 @@ class MovieDetailsRemoteImpl(
     override suspend fun getSimilarMovies(movieId: Int): SimilarMoviesResponse =
         runOrThrow(block = {
             fetchData(
-                path = "${ApiConstantsMovieDetails.MOVIE_DETAILS_PATH}/$movieId/similar",
+                path = "${ApiConstants.MOVIE_DETAILS_PATH}/$movieId/similar",
                 tag = "getSimilarMovieRemotes",
                 ktorClient = ktorClient
             )
@@ -35,7 +35,7 @@ class MovieDetailsRemoteImpl(
     override suspend fun getMovieCast(movieId: Int): MovieCastResponse = runOrThrow(
         block = {
             fetchData(
-                path = "${ApiConstantsMovieDetails.MOVIE_DETAILS_PATH}/$movieId/credits",
+                path = "${ApiConstants.MOVIE_DETAILS_PATH}/$movieId/credits",
                 tag = "getActorDetails",
                 ktorClient = ktorClient
             )
@@ -45,7 +45,7 @@ class MovieDetailsRemoteImpl(
     override suspend fun getMovieImages(movieId: Int): MovieImagesResponse = runOrThrow(
         block = {
             fetchData(
-                path = "${ApiConstantsMovieDetails.MOVIE_DETAILS_PATH}/$movieId/images",
+                path = "${ApiConstants.MOVIE_DETAILS_PATH}/$movieId/images",
                 tag = "getMovieImages",
                 ktorClient = ktorClient
             )
