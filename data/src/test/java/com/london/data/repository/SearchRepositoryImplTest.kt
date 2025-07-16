@@ -2,6 +2,7 @@ package com.london.data.repository
 
 import com.google.common.truth.Truth.assertThat
 import com.london.data.datasource.local.LocalDataSource
+import com.london.data.datasource.local.dao.GenreInterestDao
 import com.london.data.datasource.local.model.PersonDtoLocal
 import com.london.data.datasource.local.model.SearchActorsLocal
 import com.london.data.datasource.local.model.SearchMovieDtoLocal
@@ -34,6 +35,7 @@ class SearchRepositoryImplTest {
     private lateinit var searchActorService: LocalDataSource<SearchActorsLocal>
     private lateinit var searchRemoteDataSource: SearchRemoteDataSource
     private lateinit var mockCrashReporter: CrashReporter
+    private lateinit var genreInterestDao: GenreInterestDao
     private lateinit var repository: SearchRepositoryImpl
 
     @Before
@@ -43,12 +45,14 @@ class SearchRepositoryImplTest {
         searchMovieService = mockk(relaxed = true)
         searchRemoteDataSource = mockk(relaxed = true)
         mockCrashReporter = mockk<CrashReporter>(relaxed = true)
+        genreInterestDao = mockk<GenreInterestDao>(relaxed = true)
         repository = SearchRepositoryImpl(
             localTvShowDataSource = searchTvShowService,
             localActorDataSource = searchActorService,
             localMovieDataSource = searchMovieService,
             remoteDataSource = searchRemoteDataSource,
-            crashReporter = mockCrashReporter
+            crashReporter = mockCrashReporter,
+            genreInterestDao = genreInterestDao
         )
 
     }
@@ -93,7 +97,14 @@ class SearchRepositoryImplTest {
     @Test
     fun `searchForMovies should return data from remote and cache it if local is null`() = runTest {
         coEvery { searchMovieService.getByQuery(NAME + LANG) } returns null
-        coEvery { searchRemoteDataSource.searchForMovies(any(), any(), any(), any()) } returns SearchMoviesRemoteMock
+        coEvery {
+            searchRemoteDataSource.searchForMovies(
+                any(),
+                any(),
+                any(),
+                any()
+            )
+        } returns SearchMoviesRemoteMock
         val result = repository.searchForMovies(NAME, LANG, 1)
         assertThat(result).isEqualTo(MovieList)
         coVerify { searchMovieService.insert(any()) }
@@ -113,28 +124,30 @@ class SearchRepositoryImplTest {
     }
 
     @Test
-    fun `fetchAndSync reports to crashReporter when networkBlock throws and cache is null`() = runTest {
-        val networkException = RuntimeException("Network failed")
+    fun `fetchAndSync reports to crashReporter when networkBlock throws and cache is null`() =
+        runTest {
+            val networkException = RuntimeException("Network failed")
 
-        testFetchAndSyncScenario(
-            cacheBlockAction = { null },
-            networkBlockAction = { throw networkException },
-            expectedException = networkException
-        )
-    }
+            testFetchAndSyncScenario(
+                cacheBlockAction = { null },
+                networkBlockAction = { throw networkException },
+                expectedException = networkException
+            )
+        }
 
     @Test
-    fun `fetchAndSync reports to crashReporter when syncBlock throws and cache is null`() = runTest {
-        val syncException = RuntimeException("Sync failed")
-        val networkData = "Network Data"
+    fun `fetchAndSync reports to crashReporter when syncBlock throws and cache is null`() =
+        runTest {
+            val syncException = RuntimeException("Sync failed")
+            val networkData = "Network Data"
 
-        testFetchAndSyncScenario(
-            cacheBlockAction = { null },
-            networkBlockAction = { networkData },
-            syncBlockAction = { throw syncException },
-            expectedException = syncException
-        )
-    }
+            testFetchAndSyncScenario(
+                cacheBlockAction = { null },
+                networkBlockAction = { networkData },
+                syncBlockAction = { throw syncException },
+                expectedException = syncException
+            )
+        }
 
     @Test
     fun `fetchAndSync reports to crashReporter when syncBlock throws and cache threw`() = runTest {
@@ -160,8 +173,9 @@ class SearchRepositoryImplTest {
             searchTvShowService,
             searchActorService,
             searchMovieService,
+            genreInterestDao,
             searchRemoteDataSource,
-            mockCrashReporter
+            mockCrashReporter,
         )
 
 
@@ -220,7 +234,14 @@ class SearchRepositoryImplTest {
     @Test
     fun `searchForActors should return data from remote and cache it if local is null`() = runTest {
         coEvery { searchActorService.getByQuery(NAME + LANG) } returns null
-        coEvery { searchRemoteDataSource.searchForActors(any(), any(), any(), any()) } returns SearchActorsRemoteMock
+        coEvery {
+            searchRemoteDataSource.searchForActors(
+                any(),
+                any(),
+                any(),
+                any()
+            )
+        } returns SearchActorsRemoteMock
         val result = repository.searchForActors(NAME, LANG, 1)
         assertThat(result).isEqualTo(ActorList)
         coVerify { searchActorService.insert(any()) }
