@@ -23,8 +23,10 @@ sealed interface Screen {
     data class TvShowDetails(
         val tvShowId: Int,
     ) : Screen
+
+    @Serializable
+    data class MovieDetails(
+        val movieId: Int,
+    ) : Screen
+
 }
-@Serializable
-data class MovieDetails(
-    val movieId: Int,
-) : Screen

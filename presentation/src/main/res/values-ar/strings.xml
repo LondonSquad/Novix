@@ -53,5 +53,8 @@
     <string name="calendar">التقويم</string>
     <string name="separator">فاصل</string>
     <string name="dot">نقطة</string>
+    <string name="read_more">اقرأ المزيد</string>
+    <string name="read_less">اقرأ أقل</string>
+    <string name="cast">طاقم العمل</string>
 
 </resources>

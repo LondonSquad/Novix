@@ -90,7 +90,9 @@ fun MovieDetailsScreen(
     when {
         state.isLoading -> {
             Box(
-                modifier = Modifier.fillMaxSize().background(NovixTheme.colors.surface),
+                modifier = Modifier
+                    .fillMaxSize()
+                    .background(NovixTheme.colors.surface),
                 contentAlignment = Alignment.Center,
             ) {
                 CircularLoading()
@@ -115,7 +117,11 @@ fun MovieDetailsContent(
     onPreviewClick: (Int) -> Unit
 ) {
 
-    Box(modifier = Modifier.fillMaxSize().background(NovixTheme.colors.surface)) {
+    Box(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(NovixTheme.colors.surface)
+    ) {
         Column(
             modifier = Modifier
                 .fillMaxSize()
@@ -194,7 +200,7 @@ fun MovieDetailsContent(
                 state.movieOverview, state.expanded, onExpandClick
             )
             Text(
-                "Cast",
+                stringResource(com.london.presentation.R.string.cast),
                 style = NovixTheme.typography.title.medium,
                 color = NovixTheme.colors.title,
                 modifier = Modifier.padding(start = 16.dp)
@@ -272,7 +278,7 @@ fun MovieDetailsContent(
 }
 
 @Composable
-fun RatingAndMetaRow(
+private fun RatingAndMetaRow(
     rate: String,
     time: String,
     date: String,
@@ -308,7 +314,7 @@ fun RatingAndMetaRow(
 }
 
 @Composable
-fun IconWithText(
+private fun IconWithText(
     icon: Int, contentDesc: String, tint: Color, text: String, textColor: Color
 ) {
     Icon(
@@ -320,7 +326,7 @@ fun IconWithText(
 }
 
 @Composable
-fun GenreRow(genres: List<String>) {
+private fun GenreRow(genres: List<String>) {
     Row(
         horizontalArrangement = Arrangement.spacedBy(8.dp),
         verticalAlignment = Alignment.CenterVertically
@@ -339,7 +345,7 @@ fun GenreRow(genres: List<String>) {
 }
 
 @Composable
-fun Dot(modifier: Modifier = Modifier) {
+private fun Dot(modifier: Modifier = Modifier) {
     Icon(
         painter = painterResource(drawable.ellipse_2),
         contentDescription = stringResource(dot),
@@ -349,7 +355,7 @@ fun Dot(modifier: Modifier = Modifier) {
 }
 
 @Composable
-fun MovieDetailsImage(
+private fun MovieDetailsImage(
     images: List<Any>,
     onSaveClick: () -> Unit,
     modifier: Modifier = Modifier,
@@ -416,7 +422,7 @@ fun MovieDetailsImage(
 }
 
 @Composable
-fun ConditionalText(
+private fun ConditionalText(
     text: String,
     expandedState: Boolean,
     onExpandedChange: () -> Unit
@@ -438,11 +444,11 @@ fun ConditionalText(
                 !showReadMoreButtonState -> append(text)
                 !expandedState -> {
                     append(truncatedText)
-                    withStyle(actionStyle) { append(" Read more") }
+                    withStyle(actionStyle) { append(stringResource(R.string.read_more)) }
                 }
                 else -> {
                     append(text)
-                    withStyle(actionStyle) { append(" Read less") }
+                    withStyle(actionStyle) { append(stringResource(R.string.read_less)) }
                 }
             }
         },
@@ -474,7 +480,7 @@ fun ConditionalText(
 }
 @Preview(showBackground = true)
 @Composable
-fun MovieDetailsPreview() {
+private fun MovieDetailsPreview() {
     val fakeState = MovieDetailsUiState(
         movieImage = listOf(
             "https://image.tmdb.org/t/p/w500/rktDFPbfHfUbArZ6OOOKsXcv0Bm.jpg",

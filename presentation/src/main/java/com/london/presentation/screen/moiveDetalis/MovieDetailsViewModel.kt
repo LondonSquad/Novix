@@ -11,8 +11,8 @@ import org.koin.android.annotation.KoinViewModel
 
 @KoinViewModel
 class MovieDetailsViewModel(
-private val getMovieDetailsUseCase: GetMovieDetailsUseCase
-) : ViewModel() , MovieDetailsIntersection {
+    private val getMovieDetailsUseCase: GetMovieDetailsUseCase
+) : ViewModel(), MovieDetailsIntersection {
 
     private val _uiState = MutableStateFlow(MovieDetailsUiState())
     val uiState: StateFlow<MovieDetailsUiState> = _uiState
@@ -38,7 +38,7 @@ private val getMovieDetailsUseCase: GetMovieDetailsUseCase
     private fun startImageCarousel() {
         viewModelScope.launch {
             while (true) {
-                delay(4000)
+                delay(DEALEY_MOVIE_IMAGE_TIME)
 
                 val currentState = _uiState.value
                 val images = currentState.movieImage
@@ -54,8 +54,7 @@ private val getMovieDetailsUseCase: GetMovieDetailsUseCase
                 val newIndex = currentIndex + newDirection
 
                 _uiState.value = currentState.copy(
-                    currentImageIndex = newIndex,
-                    imageSlideDirection = newDirection
+                    currentImageIndex = newIndex, imageSlideDirection = newDirection
                 )
             }
         }
@@ -67,5 +66,9 @@ private val getMovieDetailsUseCase: GetMovieDetailsUseCase
 
     override fun onExpandClick() {
         _uiState.value = _uiState.value.copy(expanded = !_uiState.value.expanded)
+    }
+
+    companion object {
+        const val DEALEY_MOVIE_IMAGE_TIME = 4000L
     }
 }

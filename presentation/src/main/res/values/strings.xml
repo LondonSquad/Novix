@@ -53,4 +53,7 @@
     <string name="calendar">calendar</string>
     <string name="separator">separator</string>
     <string name="dot">dot</string>
+    <string name="read_more">" Read more"</string>
+    <string name="read_less">" Read less"</string>
+    <string name="cast">Cast</string>
 </resources>

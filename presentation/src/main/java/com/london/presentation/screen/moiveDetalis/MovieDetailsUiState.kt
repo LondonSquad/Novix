@@ -1,4 +1,5 @@
 package com.london.presentation.screen.moiveDetalis
+
 data class MovieDetailsUiState(
     val movieId: Int = 0,
     val movieImage: List<Any> = listOf(),
@@ -18,6 +19,7 @@ data class MovieDetailsUiState(
     val expanded: Boolean = false,
     val isLoading: Boolean = true,
 )
+
 data class ActorUIState(
     val name: String,
     val avatarUrl: String,

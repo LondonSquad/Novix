@@ -19,6 +19,7 @@ import com.london.app.navigation.Screen.Account
 import com.london.app.navigation.Screen.Bookmarks
 import com.london.app.navigation.Screen.Categories
 import com.london.app.navigation.Screen.Home
+import com.london.app.navigation.Screen.MovieDetails
 import com.london.app.navigation.Screen.Search
 import com.london.app.navigation.Screen.TvShowDetails
 import com.london.designsystem.component.NavBar
