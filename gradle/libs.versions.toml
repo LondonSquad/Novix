@@ -16,6 +16,8 @@ activityCompose = "1.10.1"
 # Splash Screen
 materialVersion = "1.8.3"
 navigationComposeVersion = "2.9.1"
+pagingCompose = "3.4.0-alpha01"
+pagingRuntime = "3.3.6"
 splashScreen = "1.0.1"
 
 # Compose
@@ -87,6 +89,9 @@ androidx-activity-compose = { group = "androidx.activity", name = "activity-comp
 
 # Splash Screen
 androidx-material = { module = "androidx.compose.material:material", version.ref = "materialVersion" }
+androidx-paging-common = { module = "androidx.paging:paging-common", version.ref = "pagingRuntime" }
+androidx-paging-compose = { module = "androidx.paging:paging-compose", version.ref = "pagingCompose" }
+androidx-paging-runtime = { module = "androidx.paging:paging-runtime", version.ref = "pagingRuntime" }
 androidx-splashscreen = { group = "androidx.core", name = "core-splashscreen", version.ref = "splashScreen" }
 
 # Compose
