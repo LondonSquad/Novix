@@ -18,7 +18,6 @@ import com.london.domain.entity.PagedFetchResponse
 import com.london.domain.entity.TvShow
 import com.london.domain.repository.SearchRepository
 
-
 class SearchRepositoryImpl(
     private val localTvShowDataSource: LocalDataSource<SearchTvShowLocal>,
     private val localActorDataSource: LocalDataSource<SearchActorsLocal>,
@@ -46,7 +45,7 @@ class SearchRepositoryImpl(
         language: String,
         pageNumber: Int
     ): PagedFetchResponse<Movie> = fetchAndSync(
-        cacheBlock = { localMovieDataSource.getByQuery(query = name + language) },
+        cacheBlock = { localMovieDataSource.getByQueryAndPage(query = name + language, page = pageNumber) },
         networkBlock = {
             remoteDataSource.searchForMovies(
                 query = name,
@@ -71,7 +70,7 @@ class SearchRepositoryImpl(
         language: String,
         pageNumber: Int
     ): PagedFetchResponse<TvShow> = fetchAndSync(
-        cacheBlock = { localTvShowDataSource.getByQuery(query = name + language) },
+        cacheBlock = { localTvShowDataSource.getByQueryAndPage(query = name + language, page = pageNumber) },
         networkBlock = {
             remoteDataSource.searchForTvShows(
                 query = name,
@@ -96,7 +95,7 @@ class SearchRepositoryImpl(
         language: String,
         pageNumber: Int
     ): PagedFetchResponse<Actor> = fetchAndSync(
-        cacheBlock = { localActorDataSource.getByQuery(query = name + language) },
+        cacheBlock = { localActorDataSource.getByQueryAndPage(query = name + language, page = pageNumber) },
         networkBlock = {
             remoteDataSource.searchForActors(
                 query = name,
@@ -143,7 +142,4 @@ class SearchRepositoryImpl(
         }
     }
 
-    private fun addExceptionToCrashlytics(e: Exception) {
-        crashReporter.logException(e)
-    }
 }
