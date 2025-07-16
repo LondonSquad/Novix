@@ -231,10 +231,6 @@ class SearchRepositoryImplTest {
 
     @Test
     fun `searchForActors should return data from remote and cache it if local is null`() = runTest {
-        coEvery { searchActorService.getByQuery(NAME + LANG) } returns null
-        coEvery { searchRemoteDataSource.searchForActors(any(), any(), any(), any())
-        } returns SearchActorsRemoteMock
-        val result = repository.searchForActors(NAME, LANG, 1)
         coEvery { searchActorService.getByQueryAndPage(NAME + LANG, PAGE_NUMBER) } returns null
         coEvery { searchRemoteDataSource.searchForActors(any(), any(), any(), any()) } returns SearchActorsRemoteMock
         val result = repository.searchForActors(NAME, LANG, PAGE_NUMBER)

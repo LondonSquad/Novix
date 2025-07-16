@@ -18,7 +18,6 @@ import com.london.domain.entity.PagedFetchResponse
 import com.london.domain.entity.TvShow
 import com.london.domain.repository.SearchRepository
 
-
 class SearchRepositoryImpl(
     private val localTvShowDataSource: LocalDataSource<SearchTvShowLocal>,
     private val localActorDataSource: LocalDataSource<SearchActorsLocal>,
@@ -116,6 +115,7 @@ class SearchRepositoryImpl(
         )
     }
 
+    // THIS FUN HAVE TO BE IN SPECIF REPOSITORY FOR SCALABILITY
     override suspend fun incrementGenreInterest(genreId: Int, mediaType: String) {
         try {
             val current = genreInterestDao.getGenreInterest(genreId, mediaType)
@@ -133,6 +133,7 @@ class SearchRepositoryImpl(
         }
     }
 
+    // THIS FUN HAVE TO BE IN SPECIF REPOSITORY FOR SCALABILITY
     override suspend fun getGenreInterestCounts(mediaType: String): List<Pair<Int, Int>> {
         return try {
             genreInterestDao.getGenresByInterest(mediaType)
