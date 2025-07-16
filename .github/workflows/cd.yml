@@ -4,6 +4,7 @@ on:
   pull_request:
     types: [closed]
     branches: [develop]
+  workflow_dispatch: # Enable Manual Execution
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.sha }}
@@ -50,14 +51,14 @@ jobs:
         run: |
           echo "${{ secrets.GOOGLE_SERVICES_JSON }}" | base64 --decode > app/google-services.json
 
-      - name: Build Release Bundle
+      - name: Build Release APK
         run: ./gradlew -PversionCode=${{ github.run_number }} -PversionName="1.0.${{ github.run_number }}" bundleRelease
 
       - name: Deploy to Firebase App Distribution
         uses: wzieba/Firebase-Distribution-Github-Action@v1
         with:
           appId: ${{ secrets.FIREBASE_APP_ID }}
-          serviceCredentialsFileContent: echo "${{ secrets.ACCOUNT_SERVICE_JSON }}" | base64 --decode
+          serviceCredentialsFileContent: ${{ secrets.ACCOUNT_SERVICE_JSON }}
           groups: testers
           file: app/release/app-release.apk
           releaseNotes: |
