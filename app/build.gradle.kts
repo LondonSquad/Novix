@@ -1,4 +1,5 @@
 import com.london.buildsrc.AppConfig
+import com.london.buildsrc.getKey
 
 plugins {
     alias(libs.plugins.android.application)
@@ -30,6 +31,15 @@ android {
 
         ndk {
             abiFilters += listOf("armeabi-v7a", "arm64-v8a")
+        }
+    }
+
+    signingConfigs {
+        create("release"){
+            keyAlias = getKey("keyAlias")
+            keyPassword = getKey("keyPassword")
+            storeFile = file(getKey("storeFile"))
+            storePassword = getKey("storePassword")
         }
     }
 
