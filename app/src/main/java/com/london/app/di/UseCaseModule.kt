@@ -7,6 +7,7 @@ import com.london.domain.usecase.AddToRecentSearchUseCase
 import com.london.domain.usecase.ClearRecentSearchUseCase
 import com.london.domain.usecase.GetActorsUseCase
 import com.london.domain.usecase.GetCastById
+import com.london.domain.usecase.GetEpisodesByTvShowSeason
 import com.london.domain.usecase.GetImagesById
 import com.london.domain.usecase.GetMoviesUseCase
 import com.london.domain.usecase.GetRecentSearchUseCase
@@ -46,4 +47,8 @@ class UseCaseModule {
     @Single
     fun provideClearRecentSearchUseCase(repository: RecentRepository) =
         ClearRecentSearchUseCase(repository)
+
+    @Single
+    fun provideGetEpisodesByTvShowSeason(repository: DetailsRepository) =
+        GetEpisodesByTvShowSeason(repository)
 }

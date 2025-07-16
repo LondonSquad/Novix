@@ -3,6 +3,12 @@ package com.london.presentation.screen.search
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.animation.fadeOut
+import androidx.compose.animation.AnimatedContent
+import androidx.compose.animation.SizeTransform
+import androidx.compose.animation.core.tween
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
+import androidx.compose.animation.togetherWith
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
@@ -11,6 +17,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -103,9 +110,9 @@ fun SearchScreenContent(
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(bottom = 16.dp)
-                .background(NovixTheme.colors.surface),
-            verticalArrangement = Arrangement.Top
+                .background(NovixTheme.colors.surface)
+                .padding(bottom = 16.dp),
+            verticalArrangement = Arrangement.Top,
         )
         {
             TopBar(
@@ -122,9 +129,10 @@ fun SearchScreenContent(
                 interactionSource = interactionSource,
                 keyboardController = keyboardController,
                 onFilterClick = { showFilterBottomSheet = true },
-                modifier = Modifier.padding(start = 16.dp, end = 16.dp, bottom = 12.dp)
+                modifier = Modifier
+                    .padding(start = 16.dp, end = 16.dp, bottom = 12.dp)
+                    .fillMaxWidth()
             )
-
 
             ResultOrEmpty(
                 items = state.searchQuery.text.toList(),
@@ -187,7 +195,6 @@ fun SearchScreenContent(
                             }
                         )
 
-
                         SearchCategory.Actors -> ResultOrEmpty(
                             items = state.actorUiResults,
                             emptyContent = { NoSearchResultLayOut(modifier = Modifier.fillMaxSize()) },
@@ -242,62 +249,73 @@ private fun SearchBar(
     onFilterClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
-    Row(
+    AnimatedContent(
+        targetState = uiState.selectedCategory,
+        transitionSpec = {
+            fadeIn(animationSpec = tween(200)) togetherWith
+                    fadeOut(animationSpec = tween(200)) using
+                    SizeTransform(clip = false)
+        },
         modifier = modifier
-    ) {
-        OutlinedTextField(
-            value = uiState.searchQuery,
-            onValueChange = { viewModel.onSearchQueryChange(it) },
-            placeholder = {
-                Text(
-                    stringResource(R.string.search_placeholder),
-                    style = NovixTheme.typography.body.small,
-                    modifier = Modifier.padding(end = 4.dp)
-                )
-            },
-            leadingIcon = painterResource(id = R.drawable.icon_search_normal),
-            trailingIcon = when {
-                uiState.searchQuery.text.isNotEmpty() -> {
-                    {
-                        Icon(
-                            painter = painterResource(id = R.drawable.icon_remove_filled),
-                            contentDescription = stringResource(R.string.clear),
-                            tint = NovixTheme.colors.hint,
-                            modifier = Modifier
-                                .size(20.dp)
-                                .clickable { viewModel.clearSearch() }
-                        )
+    ) { category ->
+        Row(
+            modifier = Modifier.fillMaxWidth()
+        ) {
+            OutlinedTextField(
+                value = uiState.searchQuery,
+                onValueChange = { viewModel.onSearchQueryChange(it) },
+                placeholder = {
+                    Text(
+                        stringResource(R.string.search_placeholder),
+                        style = NovixTheme.typography.body.small,
+                        modifier = Modifier.padding(end = 4.dp)
+                    )
+                },
+                leadingIcon = painterResource(id = R.drawable.icon_search_normal),
+                trailingIcon = when {
+                    uiState.searchQuery.text.isNotEmpty() -> {
+                        {
+                            Icon(
+                                painter = painterResource(id = R.drawable.icon_remove_filled),
+                                contentDescription = stringResource(R.string.clear),
+                                tint = NovixTheme.colors.hint,
+                                modifier = Modifier
+                                    .size(20.dp)
+                                    .clickable { viewModel.clearSearch() }
+                            )
+                        }
                     }
-                }
 
-                else -> null
-            },
-            keyboardOptions = KeyboardOptions(
-                imeAction = ImeAction.Search
-            ),
-            keyboardActions = KeyboardActions(
-                onSearch = {
-                    keyboardController?.hide()
-                    viewModel.addToRecentSearches(uiState.searchQuery.text)
-                }
-            ),
-            interactionSource = interactionSource,
-            modifier = Modifier
-                .weight(1f)
-                .padding(end = 8.dp)
-        )
+                    else -> null
+                },
+                keyboardOptions = KeyboardOptions(
+                    imeAction = ImeAction.Search
+                ),
+                keyboardActions = KeyboardActions(
+                    onSearch = {
+                        keyboardController?.hide()
+                        viewModel.addToRecentSearches(uiState.searchQuery.text)
+                    }
+                ),
+                interactionSource = interactionSource,
+                modifier = Modifier.weight(1f)
+            )
 
-        PrimaryButton(
-            text = "",
-            onClick = onFilterClick,
-            isLoading = false,
-            isDisabled = false,
-            hasIcon = true,
-            icon = R.drawable.icon_filter,
-            hasLabel = false,
-            modifier = Modifier.width(52.dp)
-        )
-
+            if (category != SearchCategory.Actors) {
+                Spacer(modifier = Modifier.width(8.dp))
+                PrimaryButton(
+                    text = "",
+                    onClick = onFilterClick,
+                    isLoading = false,
+                    isDisabled = false,
+                    hasIcon = true,
+                    icon = R.drawable.icon_filter,
+                    hasLabel = false,
+                    modifier = Modifier
+                        .width(52.dp)
+                )
+            }
+        }
     }
 }
 

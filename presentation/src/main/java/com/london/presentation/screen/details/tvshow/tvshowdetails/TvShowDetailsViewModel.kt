@@ -5,6 +5,7 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.london.domain.usecase.GetCastById
+import com.london.domain.usecase.GetEpisodesByTvShowSeason
 import com.london.domain.usecase.GetImagesById
 import com.london.domain.usecase.GetTvShowDetails
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -18,6 +19,7 @@ class TvShowDetailsViewModel(
     private val getTvShowDetails: GetTvShowDetails,
     private val getCastById: GetCastById,
     private val getTvShowImages: GetImagesById,
+    private val getEpisodesByTvShowSeason: GetEpisodesByTvShowSeason,
     savedStateHandle: SavedStateHandle,
 ) : ViewModel() {
 
@@ -32,6 +34,19 @@ class TvShowDetailsViewModel(
             getTvShowDetailsData()
             getCastData()
             getImagesData()
+            getEpisodesBySeasons()
+        }
+    }
+
+    fun getEpisodesBySeasons(seasonNumber: Int = 1) {
+        viewModelScope.launch {
+            _uiState.update {
+                it.copy(
+                    tvShowEpisodes =
+                        getEpisodesByTvShowSeason(tvShowId, seasonNumber).episodes,
+                    tvShowEpisodeCountBySeason = getEpisodesByTvShowSeason(tvShowId,seasonNumber),
+                )
+            }
         }
     }
 
