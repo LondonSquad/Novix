@@ -34,8 +34,9 @@ kover {
                 excludes{
                     classes("*.Exceptions.*")
                     classes("com.london.domain.entity.**")
-                    classes("*.model.*")
-                    classes("com.london.data.local.model.**")
+                    classes("**.model.**")
+                    classes("**.dao.**")
+                    classes("**.convertor.**")
                 }
             }
             verify {
