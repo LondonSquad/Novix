@@ -1768,5 +1768,33 @@
       "deletions": 28,
       "changed_files": 21
     }
+  },
+  {
+    "pr_number": 126,
+    "url": "https://github.com/LondonSquad/Novix/pull/126",
+    "title": "Test: Exclude domain entities from coverage reports",
+    "opened_at": "2025-07-16T10:31:03Z",
+    "head_ref": "fix/test-coverage",
+    "base_ref": "develop",
+    "creator": {
+      "login": "ahmeddsamii",
+      "id": 154278495,
+      "url": "https://github.com/ahmeddsamii"
+    },
+    "approvals": [],
+    "first_approved_at": null,
+    "time_to_first_approval_minutes": null,
+    "required_approvals_met_at": null,
+    "time_to_required_approvals_minutes": null,
+    "closed_at": null,
+    "merged_at": null,
+    "merged_by": null,
+    "week": "2025-W29",
+    "status": "pending",
+    "diff_stats": {
+      "additions": 1,
+      "deletions": 0,
+      "changed_files": 1
+    }
   }
 ]
