@@ -7,9 +7,11 @@ import com.london.data.datasource.local.convertor.CommonConverter
 import com.london.data.datasource.local.convertor.SearchActorsConvertor
 import com.london.data.datasource.local.convertor.SearchMoviesConverter
 import com.london.data.datasource.local.convertor.SearchTvShowConvertor
+import com.london.data.datasource.local.dao.GenreInterestDao
 import com.london.data.datasource.local.dao.SearchActorsDao
 import com.london.data.datasource.local.dao.SearchMoviesDao
 import com.london.data.datasource.local.dao.SearchTvShowDao
+import com.london.data.datasource.local.model.GenreInterestEntity
 import com.london.data.datasource.local.dao.recentsearch.RecentSearchDao
 import com.london.data.datasource.local.model.RecentSearch
 import com.london.data.datasource.local.model.SearchActorsLocal
@@ -21,7 +23,8 @@ import com.london.data.datasource.local.model.SearchTvShowLocal
         SearchTvShowLocal::class,
         SearchMoviesLocal::class,
         SearchActorsLocal::class,
-        RecentSearch::class
+        RecentSearch::class,
+        GenreInterestEntity::class
     ],
     version = 1,
     exportSchema = false
@@ -30,11 +33,12 @@ import com.london.data.datasource.local.model.SearchTvShowLocal
     SearchActorsConvertor::class,
     SearchMoviesConverter::class,
     SearchTvShowConvertor::class,
-    CommonConverter::class
+    CommonConverter::class,
 )
 abstract class NovixDatabase : RoomDatabase() {
     abstract fun searchTvShowDao(): SearchTvShowDao
     abstract fun searchMoviesDao(): SearchMoviesDao
     abstract fun searchActorsDao(): SearchActorsDao
     abstract fun recentSearchDao(): RecentSearchDao
+    abstract fun genreInterestDao(): GenreInterestDao
 }
