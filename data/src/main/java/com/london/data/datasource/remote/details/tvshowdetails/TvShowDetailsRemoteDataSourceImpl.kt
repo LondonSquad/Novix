@@ -6,8 +6,9 @@ import com.london.data.datasource.device.DeviceConfigurationDataSource
 import com.london.data.datasource.remote.ApiConstants
 import com.london.data.datasource.remote.details.tvshowdetails.model.TvShowCastRemoteResponse
 import com.london.data.datasource.remote.details.tvshowdetails.model.TvShowDetailsRemoteResponse
-import com.london.data.datasource.remote.details.tvshowdetails.model.tvshowepisode.TvShowEpisodesRemoteResponse
 import com.london.data.datasource.remote.details.tvshowdetails.model.TvShowImagesRemoteResponse
+import com.london.data.datasource.remote.details.tvshowdetails.model.tvshowepisode.TvShowEpisode
+import com.london.data.datasource.remote.details.tvshowdetails.model.tvshowepisode.TvShowEpisodesRemoteResponse
 import io.ktor.client.HttpClient
 import io.ktor.client.request.get
 import io.ktor.client.statement.bodyAsText
@@ -92,6 +93,33 @@ class TvShowDetailsRemoteDataSourceImpl(
         val responseBody = response.bodyAsText()
 
         Log.d("TAG", "getTvShowImagesById: $responseBody")
+        return json.decodeFromString(responseBody)
+    }
+
+    override suspend fun getEpisodeDetailsByPosition(
+        tvShowId: Int,
+        seasonNumber: Int,
+        episodeNumber: Int
+    ): TvShowEpisode {
+        val json = Json {
+            ignoreUnknownKeys = true
+        }
+        val response = ktorClient.get {
+            url {
+                protocol = URLProtocol.Companion.HTTPS
+                host = ApiConstants.HOST
+                path(
+                    ApiConstants.getTvShowEpisodeByEpisodePath(
+                        tvShowId,
+                        seasonNumber,
+                        episodeNumber
+                    )
+                )
+                parameters.append("language", deviceConfigurationDataSource.getCurrentLanguage())
+                parameters.append("api_key", BuildConfig.API_KEY)
+            }
+        }
+        val responseBody = response.bodyAsText()
         return json.decodeFromString(responseBody)
     }
 }
