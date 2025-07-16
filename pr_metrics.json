@@ -1634,8 +1634,8 @@
     "status": "pending",
     "diff_stats": {
       "additions": 1016,
-      "deletions": 62,
-      "changed_files": 50
+      "deletions": 69,
+      "changed_files": 51
     }
   }
 ]
