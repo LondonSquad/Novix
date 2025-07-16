@@ -1,4 +1,4 @@
-package com.london.domain.usecase.actordetailsusecase
+package com.london.domain.usecase
 
 import com.london.domain.repository.ActorRepository
 

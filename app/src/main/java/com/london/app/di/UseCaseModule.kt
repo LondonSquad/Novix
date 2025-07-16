@@ -7,6 +7,10 @@ import com.london.domain.repository.RecentRepository
 import com.london.domain.repository.SearchRepository
 import com.london.domain.usecase.AddToRecentSearchUseCase
 import com.london.domain.usecase.ClearRecentSearchUseCase
+import com.london.domain.usecase.GetActorDetailsByIdUseCase
+import com.london.domain.usecase.GetActorImagesByIdUseCase
+import com.london.domain.usecase.GetActorMoviePicksByIdUseCase
+import com.london.domain.usecase.GetActorTvShowPicksByIdUseCase
 import com.london.domain.usecase.GetActorsUseCase
 import com.london.domain.usecase.GetCastById
 import com.london.domain.usecase.GetEpisodesByTvShowSeason
@@ -20,10 +24,6 @@ import com.london.domain.usecase.GetRecentSearchUseCase
 import com.london.domain.usecase.GetSimilarMoviesUseCase
 import com.london.domain.usecase.GetTvShowDetails
 import com.london.domain.usecase.GetTvShowsUseCase
-import com.london.domain.usecase.actordetailsusecase.GetActorDetailsByIdUseCase
-import com.london.domain.usecase.actordetailsusecase.GetActorImagesByIdUseCase
-import com.london.domain.usecase.actordetailsusecase.GetActorMoviePicksByIdUseCase
-import com.london.domain.usecase.actordetailsusecase.GetActorTvShowPicksByIdUseCase
 import org.koin.core.annotation.Module
 import org.koin.core.annotation.Single
 
