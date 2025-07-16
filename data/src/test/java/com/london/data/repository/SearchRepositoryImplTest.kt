@@ -2,6 +2,7 @@ package com.london.data.repository
 
 import com.google.common.truth.Truth.assertThat
 import com.london.data.datasource.local.LocalDataSource
+import com.london.data.datasource.local.dao.GenreInterestDao
 import com.london.data.datasource.local.model.PersonDtoLocal
 import com.london.data.datasource.local.model.SearchActorsLocal
 import com.london.data.datasource.local.model.SearchMovieDtoLocal
@@ -34,6 +35,7 @@ class SearchRepositoryImplTest {
     private lateinit var searchActorService: LocalDataSource<SearchActorsLocal>
     private lateinit var searchRemoteDataSource: SearchRemoteDataSource
     private lateinit var mockCrashReporter: CrashReporter
+    private lateinit var genreInterestDao: GenreInterestDao
     private lateinit var repository: SearchRepositoryImpl
 
     @Before
@@ -43,12 +45,14 @@ class SearchRepositoryImplTest {
         searchMovieService = mockk(relaxed = true)
         searchRemoteDataSource = mockk(relaxed = true)
         mockCrashReporter = mockk<CrashReporter>(relaxed = true)
+        genreInterestDao = mockk<GenreInterestDao>(relaxed = true)
         repository = SearchRepositoryImpl(
             localTvShowDataSource = searchTvShowService,
             localActorDataSource = searchActorService,
             localMovieDataSource = searchMovieService,
             remoteDataSource = searchRemoteDataSource,
-            crashReporter = mockCrashReporter
+            crashReporter = mockCrashReporter,
+            genreInterestDao = genreInterestDao
         )
 
     }
@@ -167,6 +171,7 @@ class SearchRepositoryImplTest {
             searchTvShowService,
             searchActorService,
             searchMovieService,
+            genreInterestDao,
             searchRemoteDataSource,
             mockCrashReporter
         )
@@ -226,6 +231,10 @@ class SearchRepositoryImplTest {
 
     @Test
     fun `searchForActors should return data from remote and cache it if local is null`() = runTest {
+        coEvery { searchActorService.getByQuery(NAME + LANG) } returns null
+        coEvery { searchRemoteDataSource.searchForActors(any(), any(), any(), any())
+        } returns SearchActorsRemoteMock
+        val result = repository.searchForActors(NAME, LANG, 1)
         coEvery { searchActorService.getByQueryAndPage(NAME + LANG, PAGE_NUMBER) } returns null
         coEvery { searchRemoteDataSource.searchForActors(any(), any(), any(), any()) } returns SearchActorsRemoteMock
         val result = repository.searchForActors(NAME, LANG, PAGE_NUMBER)
@@ -258,7 +267,7 @@ class SearchRepositoryImplTest {
             PAGE_NUMBER,
             listOf(
                 Movie(
-                    id = PAGE_NUMBER,
+                    id = 1,
                     name = "",
                     posterPicture = "https://image.tmdb.org/t/p/w500",
                     releaseYear = 2020,
@@ -266,8 +275,8 @@ class SearchRepositoryImplTest {
                     genreIds = listOf(),
                 )
             ),
-            totalItems = PAGE_NUMBER,
-            totalPages = PAGE_NUMBER
+            totalItems = 1,
+            totalPages = 1
         )
 
         val TvShowList = PagedFetchResponse<TvShow>(
@@ -282,8 +291,8 @@ class SearchRepositoryImplTest {
                     genres = listOf(),
                 )
             ),
-            totalItems = PAGE_NUMBER,
-            totalPages = PAGE_NUMBER
+            totalItems = 1,
+            totalPages = 1
         )
 
         val ActorList = PagedFetchResponse<Actor>(
@@ -295,8 +304,8 @@ class SearchRepositoryImplTest {
                     profilePicture = "https://image.tmdb.org/t/p/w500"
                 )
             ),
-            totalItems = PAGE_NUMBER,
-            totalPages = PAGE_NUMBER
+            totalItems = 1,
+            totalPages = 1
         )
 
         val SearchMoviesLocalMock = SearchMoviesLocal(
@@ -307,21 +316,21 @@ class SearchRepositoryImplTest {
                     adult = false,
                     backdropPath = null,
                     genreIds = emptyList(),
-                    id = PAGE_NUMBER,
+                    id = 1,
                     originalLanguage = "en",
                     originalTitle = "",
                     overview = "",
                     popularity = 0.0,
                     posterPath = "",
-                    releaseDate = "2020-06-PAGE_NUMBER5",
+                    releaseDate = "2020-06-15",
                     title = "",
                     video = false,
                     voteAverage = 8.0,
                     voteCount = 0
                 )
             ),
-            totalPages = PAGE_NUMBER,
-            totalResults = PAGE_NUMBER
+            totalPages = 1,
+            totalResults = 1
         )
 
         val SearchActorsLocalMock = SearchActorsLocal(
@@ -340,8 +349,8 @@ class SearchRepositoryImplTest {
                     knownFor = emptyList()
                 )
             ),
-            totalPages = PAGE_NUMBER,
-            totalResults = PAGE_NUMBER
+            totalPages = 1,
+            totalResults = 1
         )
 
         val SearchMoviesRemoteMock = ApiResponse(
@@ -351,21 +360,21 @@ class SearchRepositoryImplTest {
                     adult = false,
                     backdropPath = null,
                     genreIds = emptyList(),
-                    id = PAGE_NUMBER,
+                    id = 1,
                     originalLanguage = "en",
                     originalTitle = "",
                     overview = "",
                     popularity = 0.0,
                     posterPath = "",
-                    releaseDate = "2020-06-PAGE_NUMBER5",
+                    releaseDate = "2020-06-15",
                     title = "",
                     video = false,
                     voteAverage = 8.0,
                     voteCount = 0
                 )
             ),
-            totalPages = PAGE_NUMBER,
-            totalItems = PAGE_NUMBER
+            totalPages = 1,
+            totalItems = 1
         )
 
         val SearchTvShowRemoteMock = ApiResponse(
@@ -388,8 +397,8 @@ class SearchRepositoryImplTest {
                     voteCount = 0
                 )
             ),
-            totalPages = PAGE_NUMBER,
-            totalItems = PAGE_NUMBER
+            totalPages = 1,
+            totalItems = 1
         )
 
         val SearchActorsRemoteMock = ApiResponse(
@@ -407,8 +416,8 @@ class SearchRepositoryImplTest {
                     knownFor = emptyList()
                 )
             ),
-            totalPages = PAGE_NUMBER,
-            totalItems = PAGE_NUMBER
+            totalPages = 1,
+            totalItems = 1
         )
     }
 }
