@@ -16,17 +16,22 @@ import com.london.domain.usecase.IncrementGenreInterestUseCase
 import com.london.presentation.composables.filterbottomsheet.FilterBottomSheetUiState
 import com.london.presentation.composables.filterbottomsheet.availableMovieGenres
 import com.london.presentation.composables.filterbottomsheet.availableTvGenres
+import com.london.presentation.screen.base.createPagingSourceFlow
 import com.london.presentation.screen.search.model.MovieUi
 import com.london.presentation.utils.convertGenreCodeToString
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.delay
+import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.debounce
+import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import org.koin.android.annotation.KoinViewModel
 
+@OptIn(FlowPreview::class)
 @KoinViewModel
 class SearchViewModel(
     private val getActorsUseCase: GetActorsUseCase,
@@ -45,14 +50,26 @@ class SearchViewModel(
     private val _filterUiState = MutableStateFlow(FilterBottomSheetUiState())
     var filterUiState: StateFlow<FilterBottomSheetUiState> = _filterUiState.asStateFlow()
 
-    override fun onSearchQueryChange(newValue: TextFieldValue) {
-        _uiState.update { it.copy(searchQuery = newValue) }
+    private val _searchQuery = MutableStateFlow("")
 
+    init {
         viewModelScope.launch {
-            delay(300)
-            performSearch(newValue.text, _uiState.value.selectedCategory)
+            _searchQuery
+                .debounce(500)
+                .collectLatest { query ->
+                    performSearch(
+                        query = query,
+                        category = _uiState.value.selectedCategory
+                    )
+                }
         }
     }
+
+    override fun onSearchQueryChange(newValue: TextFieldValue) {
+        _uiState.update { it.copy(searchQuery = newValue) }
+        _searchQuery.value = newValue.text
+    }
+
 
     override fun onCategorySelected(category: SearchCategory) {
         _uiState.update { it.copy(selectedCategory = category) }
@@ -209,9 +226,9 @@ class SearchViewModel(
     private fun clearSearchResults() {
         _uiState.update { currentState ->
             currentState.copy(
-                movieResults = emptyList(),
-                tvShowUiResults = emptyList(),
-                actorUiResults = emptyList()
+                actorsFlow = flow {},
+                moviesFlow = flow {},
+                tvShowsFlow = flow {}
             )
         }
     }
@@ -230,40 +247,58 @@ class SearchViewModel(
         }
     }
 
-    private suspend fun searchMovies(query: String) {
-        val searchResults = getMoviesUseCase(query, "en-US")
-        val filteredResults = applyMovieFilters(searchResults)
+    private fun searchMovies(query: String) {
+        val moviesFlow = createPagingSourceFlow { pageNumber ->
+            val movies = getMoviesUseCase(
+                name = query,
+                language = "en-US",
+                pageNumber = pageNumber
+            )
+            movies.copy(items = applyMovieFilters(movies.items))
+        }
 
         _uiState.update { currentState ->
             currentState.copy(
-                movieResults = filteredResults,
-                actorUiResults = emptyList(),
-                tvShowUiResults = emptyList()
+                moviesFlow = moviesFlow,
+                actorsFlow = flow {},
             )
         }
     }
 
-    private suspend fun searchActors(query: String) {
-        val searchResults = getActorsUseCase(query, "en-US")
+
+    private fun searchActors(query: String) {
+        val actorsFlow = createPagingSourceFlow { pageNumber ->
+            getActorsUseCase(
+                name = query,
+                language = "en-US",
+                pageNumber = pageNumber
+            )
+        }
 
         _uiState.update { currentState ->
             currentState.copy(
-                actorUiResults = searchResults,
-                movieResults = emptyList(),
-                tvShowUiResults = emptyList()
+                actorsFlow = actorsFlow,
+                moviesFlow = flow {},
+                tvShowsFlow = flow {}
             )
         }
     }
 
-    private suspend fun searchTvShows(query: String) {
-        val searchResults = getTvShowsUseCase(query, "en-US")
-        val filteredResults = applyTvShowFilters(searchResults)
+    private fun searchTvShows(query: String) {
+        val tvShowsFlow = createPagingSourceFlow { pageNumber ->
+            val tvShows = getTvShowsUseCase(
+                name = query,
+                language = "en-US",
+                pageNumber = pageNumber
+            )
+            tvShows.copy(items = applyTvShowFilters(tvShows.items))
+        }
 
         _uiState.update { currentState ->
             currentState.copy(
-                tvShowUiResults = filteredResults,
-                actorUiResults = emptyList(),
-                movieResults = emptyList()
+                tvShowsFlow = tvShowsFlow,
+                actorsFlow = flow {},
+                moviesFlow = flow {}
             )
         }
     }
@@ -272,9 +307,9 @@ class SearchViewModel(
     private fun clearAllSearchResults() {
         _uiState.update { currentState ->
             currentState.copy(
-                movieResults = emptyList(),
-                tvShowUiResults = emptyList(),
-                actorUiResults = emptyList()
+                moviesFlow = flow {},
+                tvShowsFlow = flow {},
+                actorsFlow = flow {}
             )
         }
     }
@@ -332,6 +367,65 @@ class SearchViewModel(
         }
     }
 
+    override fun addToRecentSearches(query: String) {
+        if (query.isBlank()) return
+
+        viewModelScope.launch {
+            addToRecentSearchUseCase.invoke(query)
+            _uiState.update { it.copy(recentSearches = getRecentSearchUseCase.invoke()) }
+        }
+    }
+
+    override fun addToRecentViewed(imageUrl: String) {
+        // (important) make the recent data in the database
+        if (imageUrl.isBlank()) return
+
+        val currentViewed = _uiState.value.recentViewed.toMutableList()
+        currentViewed.remove(imageUrl)
+        currentViewed.add(0, imageUrl)
+
+        if (currentViewed.size > 10) {
+            currentViewed.removeAt(currentViewed.size - 1)
+        }
+
+        _uiState.update { it.copy(recentViewed = currentViewed) }
+    }
+
+    override fun clearRecentViewed() {
+        _uiState.update { it.copy(recentViewed = emptyList()) }
+    }
+
+    override fun clearRecentSearches() {
+        _uiState.update { it.copy(recentSearches = emptyList()) }
+        viewModelScope.launch {
+            clearRecentSearchUseCase.invoke()
+        }
+    }
+
+    override fun removeRecentSearch(search: String) {
+        val updatedSearches = _uiState.value.recentSearches.filter { it != search }
+        _uiState.update { it.copy(recentSearches = updatedSearches) }
+    }
+
+    override fun onRecentSearchClick(search: String) {
+        _uiState.update { it.copy(searchQuery = TextFieldValue(search)) }
+
+        viewModelScope.launch {
+            performSearch(search, _uiState.value.selectedCategory)
+        }
+    }
+
+    override fun clearSearch() {
+        _uiState.update {
+            it.copy(
+                searchQuery = TextFieldValue(""),
+                moviesFlow = flow {},
+                tvShowsFlow = flow {},
+                actorsFlow = flow {}
+            )
+        }
+        _searchQuery.value = ""
+    }
 
     private fun updateAvailableGenres(searchCategory: SearchCategory) {
         val availableGenres = when (searchCategory) {

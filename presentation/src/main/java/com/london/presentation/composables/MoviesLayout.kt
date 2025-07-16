@@ -5,18 +5,18 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
-import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalWindowInfo
 import androidx.compose.ui.unit.dp
+import androidx.paging.compose.LazyPagingItems
 import com.london.designsystem.component.HomeCard
 import com.london.domain.entity.Movie
 
 @Composable
 fun MoviesLayOut(
-    movieUis: List<Movie>,
+    movieUis: LazyPagingItems<Movie>,
     onSaveClick: (Movie) -> Unit,
     isMovieSaved: (Movie) -> Boolean,
     onMovieClick: (Movie) -> Unit,
@@ -33,14 +33,17 @@ fun MoviesLayOut(
         horizontalArrangement = Arrangement.spacedBy(12.dp),
         verticalArrangement = Arrangement.spacedBy(12.dp)
     ) {
-        items(movieUis) { movie ->
-            HomeCard(
-                imageUrl = movie.posterPicture,
-                onSaveClick = { onSaveClick(movie) },
-                isSaved = isMovieSaved(movie),
-                imageDescription = movie.name,
-                modifier = Modifier.clickable { onMovieClick(movie) }
-            )
+        items(movieUis.itemCount) { index ->
+            val movie = movieUis[index]
+            if (movie != null) {
+                HomeCard(
+                    imageUrl = movie.posterPicture,
+                    onSaveClick = { onSaveClick(movie) },
+                    isSaved = isMovieSaved(movie),
+                    imageDescription = movie.name,
+                    modifier = Modifier.clickable { onMovieClick(movie) }
+                )
+            }
         }
     }
 }

@@ -1,16 +1,16 @@
-package com.london.data.datasource.remote.search.model
+package com.london.data.datasource.remote
 
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class ApiSearch<T>(
+data class ApiResponse<T>(
     @SerialName("page")
-    val page: Int,
+    val currentPage: Int,
     @SerialName("results")
-    val results: List<T>,
+    val items: List<T>,
     @SerialName("total_pages")
     val totalPages: Int,
     @SerialName("total_results")
-    val totalResults: Int
+    val totalItems: Int
 )

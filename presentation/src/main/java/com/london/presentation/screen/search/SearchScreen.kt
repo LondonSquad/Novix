@@ -16,7 +16,6 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -50,8 +49,8 @@ import androidx.compose.ui.platform.SoftwareKeyboardController
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
-import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import androidx.paging.compose.collectAsLazyPagingItems
 import com.london.designsystem.component.EmptySearchLayout
 import com.london.designsystem.component.HomeCard
 import com.london.designsystem.component.NovixChip
@@ -86,7 +85,6 @@ fun SearchScreen(
     )
 }
 
-@OptIn(ExperimentalAnimationApi::class)
 @Composable
 fun SearchScreenContent(
     state: SearchUiState,
@@ -109,9 +107,9 @@ fun SearchScreenContent(
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .background(NovixTheme.colors.surface)
-                .padding(bottom = 16.dp),
-            verticalArrangement = Arrangement.Top,
+                .padding(bottom = 16.dp)
+                .background(NovixTheme.colors.surface),
+            verticalArrangement = Arrangement.Top
         )
         {
             TopBar(
@@ -128,10 +126,9 @@ fun SearchScreenContent(
                 interactionSource = interactionSource,
                 keyboardController = keyboardController,
                 onFilterClick = { showFilterBottomSheet = true },
-                modifier = Modifier
-                    .padding(start = 16.dp, end = 16.dp, bottom = 12.dp)
-                    .fillMaxWidth()
+                modifier = Modifier.padding(start = 16.dp, end = 16.dp, bottom = 12.dp)
             )
+
 
             ResultOrEmpty(
                 items = state.searchQuery.text.toList(),
@@ -163,12 +160,13 @@ fun SearchScreenContent(
                     )
                     when (state.selectedCategory) {
                         SearchCategory.Movies -> {
+                            val moviesLazyList = state.moviesFlow.collectAsLazyPagingItems()
                             ResultOrEmpty(
-                                items = state.movieResults,
+                                items = moviesLazyList.itemSnapshotList.items,
                                 emptyContent = { NoSearchResultLayOut(modifier = Modifier.fillMaxSize()) },
                                 content = {
                                     MoviesLayOut(
-                                        movieUis = state.movieResults,
+                                        movieUis = moviesLazyList,
                                         onSaveClick = { /* Handle save click */ },
                                         isMovieSaved = { false },
                                         onMovieClick = {
@@ -181,33 +179,39 @@ fun SearchScreenContent(
                             )
                         }
 
-                        SearchCategory.TvShows -> ResultOrEmpty(
-                            items = state.tvShowUiResults,
-                            emptyContent = { NoSearchResultLayOut(modifier = Modifier.fillMaxSize()) },
-                            content = {
-                                TvShowLayOut(
-                                    tvShowUis = state.tvShowUiResults,
-                                    onSaveClick = { /* Handle save click */ },
-                                    isTvShowSaved = { false },
-                                    onTvShowClick = {
-                                        viewModel.addToRecentViewed(it.posterPicture)
-                                        viewModel.incrementGenreInterest(it.id, "tv")
+                        SearchCategory.TvShows -> {
+                            val tvShowsLazyList = state.tvShowsFlow.collectAsLazyPagingItems()
+                            ResultOrEmpty(
+                                items = tvShowsLazyList.itemSnapshotList.items,
+                                emptyContent = { NoSearchResultLayOut(modifier = Modifier.fillMaxSize()) },
+                                content = {
+                                    TvShowLayOut(
+                                        tvShowUis = tvShowsLazyList,
+                                        onSaveClick = { /* Handle save click */ },
+                                        isTvShowSaved = { false },
+                                        onTvShowClick = {
+                                            viewModel.addToRecentViewed(it.posterPicture)
+                                            viewModel.incrementGenreInterest(it.id, "tv")
                                         onNavigateToTvShowDetails(it.id)
                                     }
                                 )
                             }
-                        )
+                        )}
 
-                        SearchCategory.Actors -> ResultOrEmpty(
-                            items = state.actorUiResults,
-                            emptyContent = { NoSearchResultLayOut(modifier = Modifier.fillMaxSize()) },
-                            content = {
-                                ActorsLayout(
-                                    actorsUis = state.actorUiResults,
-                                    onActorClick = { /* Handle actor click */ }
-                                )
-                            }
-                        )
+
+                        SearchCategory.Actors -> {
+                            val actorsLazyList = state.actorsFlow.collectAsLazyPagingItems()
+                            ResultOrEmpty(
+                                items = actorsLazyList.itemSnapshotList.items,
+                                emptyContent = { NoSearchResultLayOut(modifier = Modifier.fillMaxSize()) },
+                                content = {
+                                    ActorsLayout(
+                                        actorsUis = actorsLazyList,
+                                        onActorClick = { /* Handle actor click */ }
+                                    )
+                                }
+                            )
+                        }
                     }
                 }
             )
@@ -252,73 +256,65 @@ private fun SearchBar(
     onFilterClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
-    AnimatedContent(
-        targetState = uiState.selectedCategory,
-        transitionSpec = {
-            fadeIn(animationSpec = tween(200)) togetherWith
-                    fadeOut(animationSpec = tween(200)) using
-                    SizeTransform(clip = false)
-        },
+    Row(
         modifier = modifier
-    ) { category ->
-        Row(
-            modifier = Modifier.fillMaxWidth()
-        ) {
-            OutlinedTextField(
-                value = uiState.searchQuery,
-                onValueChange = { viewModel.onSearchQueryChange(it) },
-                placeholder = {
-                    Text(
-                        stringResource(R.string.search_placeholder),
-                        style = NovixTheme.typography.body.small,
-                        modifier = Modifier.padding(end = 4.dp)
-                    )
-                },
-                leadingIcon = painterResource(id = R.drawable.icon_search_normal),
-                trailingIcon = when {
-                    uiState.searchQuery.text.isNotEmpty() -> {
-                        {
-                            Icon(
-                                painter = painterResource(id = R.drawable.icon_remove_filled),
-                                contentDescription = stringResource(R.string.clear),
-                                tint = NovixTheme.colors.hint,
-                                modifier = Modifier
-                                    .size(20.dp)
-                                    .clickable { viewModel.clearSearch() }
-                            )
-                        }
-                    }
-
-                    else -> null
-                },
-                keyboardOptions = KeyboardOptions(
-                    imeAction = ImeAction.Search
-                ),
-                keyboardActions = KeyboardActions(
-                    onSearch = {
-                        keyboardController?.hide()
-                        viewModel.addToRecentSearches(uiState.searchQuery.text)
-                    }
-                ),
-                interactionSource = interactionSource,
-                modifier = Modifier.weight(1f)
-            )
-
-            if (category != SearchCategory.Actors) {
-                Spacer(modifier = Modifier.width(8.dp))
-                PrimaryButton(
-                    text = "",
-                    onClick = onFilterClick,
-                    isLoading = false,
-                    isDisabled = false,
-                    hasIcon = true,
-                    icon = R.drawable.icon_filter,
-                    hasLabel = false,
-                    modifier = Modifier
-                        .width(52.dp)
+    ) {
+        OutlinedTextField(
+            value = uiState.searchQuery,
+            onValueChange = { viewModel.onSearchQueryChange(it) },
+            placeholder = {
+                Text(
+                    stringResource(R.string.search_placeholder),
+                    style = NovixTheme.typography.body.small,
+                    modifier = Modifier.padding(end = 4.dp)
                 )
-            }
-        }
+            },
+            leadingIcon = painterResource(id = R.drawable.icon_search_normal),
+            trailingIcon = when {
+                uiState.searchQuery.text.isNotEmpty() -> {
+                    {
+                        Icon(
+                            painter = painterResource(id = R.drawable.icon_remove_filled),
+                            contentDescription = stringResource(R.string.clear),
+                            tint = NovixTheme.colors.hint,
+                            modifier = Modifier
+                                .size(20.dp)
+                                .clickable(
+                                    interactionSource = remember { MutableInteractionSource() },
+                                    indication = null
+                                ) { viewModel.clearSearch() }
+                        )
+                    }
+                }
+
+                else -> null
+            },
+            keyboardOptions = KeyboardOptions(
+                imeAction = ImeAction.Search
+            ),
+            keyboardActions = KeyboardActions(
+                onSearch = {
+                    keyboardController?.hide()
+                    viewModel.addToRecentSearches(uiState.searchQuery.text)
+                }
+            ),
+            interactionSource = interactionSource,
+            modifier = Modifier
+                .weight(1f)
+                .padding(end = 8.dp)
+        )
+
+        PrimaryButton(
+            text = "",
+            onClick = onFilterClick,
+            isLoading = false,
+            isDisabled = false,
+            hasIcon = true,
+            icon = R.drawable.icon_filter,
+            hasLabel = false,
+            modifier = Modifier.width(52.dp)
+        )
+
     }
 }
 
@@ -358,33 +354,18 @@ private fun RecentSearchLayOut(
     interactionListener: SearchInteractions,
     viewModel: SearchViewModel
 ) {
-    AnimatedVisibility(
-        visible = state.recentViewed.isNotEmpty(),
-        exit = fadeOut()
-    ) {
-        Column {
-            RecentViewedSection(
-                recentViewed = state.recentViewed,
-                onClearAll = { viewModel.clearRecentViewed() }
-            )
-        }
-    }
+    RecentViewedSection(
+        recentViewed = state.recentViewed,
+        onClearAll = { viewModel.clearRecentViewed() }
+    )
 
-    AnimatedVisibility(
-        visible = state.recentSearches.isNotEmpty(),
-        exit = fadeOut()
-    ) {
-        Column {
-            RecentSearchesSection(
-                recentSearches = state.recentSearches,
-                onClearAll = interactionListener::clearRecentSearches,
-                onSearchClick = interactionListener::onRecentSearchClick,
-                onRemoveClick = interactionListener::removeRecentSearch
-            )
-        }
-    }
+    RecentSearchesSection(
+        recentSearches = state.recentSearches,
+        onClearAll = interactionListener::clearRecentSearches,
+        onSearchClick = interactionListener::onRecentSearchClick,
+        onRemoveClick = interactionListener::removeRecentSearch
+    )
 }
-
 
 @Composable
 fun RecentViewedSection(
@@ -477,8 +458,6 @@ private fun RecentSearchItem(
             text = search,
             style = NovixTheme.typography.body.medium,
             color = NovixTheme.colors.title,
-            overflow = TextOverflow.Ellipsis,
-            maxLines = 1,
             modifier = Modifier
                 .padding(end = 4.dp)
                 .weight(1f)
