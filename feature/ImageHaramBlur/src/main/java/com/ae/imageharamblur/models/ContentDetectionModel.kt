@@ -10,37 +10,57 @@ import org.tensorflow.lite.support.image.ImageProcessor
 import org.tensorflow.lite.support.image.TensorImage
 import org.tensorflow.lite.support.image.ops.ResizeOp
 import org.tensorflow.lite.support.tensorbuffer.TensorBuffer
+import java.io.File
+import java.io.FileInputStream
+import java.nio.MappedByteBuffer
+import java.nio.channels.FileChannel
 
-internal class ContentDetectionModel(context: Context) {
+internal class ContentDetectionModel {
     private val interpreter: Interpreter
     private val imageProcessor: ImageProcessor
     private val inputImageWidth: Int
     private val inputImageHeight: Int
 
-    enum class Category(val index: Int) {
-        DRAWING(0),
-        HENTAI(1),
-        NEUTRAL(2),
-        PORN(3),
-        SEXY(4)
+    constructor(context: Context) {
+        val modelBuffer = FileUtil.loadMappedFile(context, "nsfw_model.tflite")
+        this.interpreter = createInterpreter(modelBuffer)
+
+        val inputTensor = interpreter.getInputTensor(0)
+        val inputShape = inputTensor.shape()
+        this.inputImageHeight = inputShape[1]
+        this.inputImageWidth = inputShape[2]
+        this.imageProcessor = createImageProcessor()
     }
 
-    init {
-        val modelBuffer = FileUtil.loadMappedFile(context, "nsfw_model.tflite")
+    constructor(modelFile: File) {
+        val modelBuffer = loadModelFile(modelFile)
+        this.interpreter = createInterpreter(modelBuffer)
+
+        val inputTensor = interpreter.getInputTensor(0)
+        val inputShape = inputTensor.shape()
+        this.inputImageHeight = inputShape[1]
+        this.inputImageWidth = inputShape[2]
+        this.imageProcessor = createImageProcessor()
+    }
+
+    private fun loadModelFile(file: File): MappedByteBuffer {
+        val fileInputStream = FileInputStream(file)
+        val fileChannel = fileInputStream.channel
+        val startOffset = 0L
+        val declaredLength = fileChannel.size()
+        return fileChannel.map(FileChannel.MapMode.READ_ONLY, startOffset, declaredLength)
+    }
+
+    private fun createInterpreter(modelBuffer: MappedByteBuffer): Interpreter {
         val options = Interpreter.Options().apply {
             numThreads = 4
             useNNAPI = false
         }
+        return Interpreter(modelBuffer, options)
+    }
 
-        interpreter = Interpreter(modelBuffer, options)
-
-        val inputTensor = interpreter.getInputTensor(0)
-        val inputShape = inputTensor.shape()
-
-        inputImageHeight = inputShape[1]
-        inputImageWidth = inputShape[2]
-
-        imageProcessor = ImageProcessor.Builder()
+    private fun createImageProcessor(): ImageProcessor {
+        return ImageProcessor.Builder()
             .add(ResizeOp(inputImageHeight, inputImageWidth, ResizeOp.ResizeMethod.BILINEAR))
             .add(NormalizeOp(0f, 255f))
             .build()
@@ -73,7 +93,7 @@ internal class ContentDetectionModel(context: Context) {
                 score = inappropriateScore,
                 categoryScores = results
             )
-        } catch (e: Exception) {
+        } catch (_: Exception) {
             ContentResult(
                 isInappropriate = false,
                 score = 0f,
@@ -84,6 +104,14 @@ internal class ContentDetectionModel(context: Context) {
 
     fun close() {
         interpreter.close()
+    }
+
+    enum class Category(val index: Int) {
+        DRAWING(0),
+        HENTAI(1),
+        NEUTRAL(2),
+        PORN(3),
+        SEXY(4)
     }
 }
 

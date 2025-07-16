@@ -6,10 +6,14 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.BottomSheetDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
@@ -66,30 +70,38 @@ fun FilterBottomSheet(
         },
         containerColor = NovixTheme.colors.surface
     ) {
-        FilterBottomSheetContent(
-            modifier = modifier,
-            onDismissRequest = {
-                scope.launch {
-                    sheetState.hide()
-                    onDismissRequest()
-                }
-            },
-            onApplyFilters = { selectedGenres, minimumRating, releaseYearRange ->
-                viewModel.onApplyFilter(selectedGenres, minimumRating, releaseYearRange)
-                scope.launch {
-                    sheetState.hide()
-                    onDismissRequest()
-                }
-            },
-            onClearFilters = { viewModel.onClearFilter() },
-            availableGenres = filterUiState.availableGenresWithNames,
-            selectedGenres = filterUiState.selectedGenres,
-            imdbRating = filterUiState.imdbRating,
-            releaseYearRange = filterUiState.releaseYearRange,
-            onReleaseYearRangeChange = viewModel::onReleaseYearRangeChange,
-            onGenreSelectedChange = viewModel::onGenreSelectedChange,
-            onRatingChanged = viewModel::onRatingChanged,
-        )
+
+        Box(
+            modifier = Modifier
+                .fillMaxWidth()
+                .fillMaxHeight(0.75f)
+        ) {
+            FilterBottomSheetContent(
+                modifier = modifier
+                    .fillMaxSize(),
+                onDismissRequest = {
+                    scope.launch {
+                        sheetState.hide()
+                        onDismissRequest()
+                    }
+                },
+                onApplyFilters = { selectedGenres, minimumRating, releaseYearRange ->
+                    viewModel.onApplyFilter(selectedGenres, minimumRating, releaseYearRange)
+                    scope.launch {
+                        sheetState.hide()
+                        onDismissRequest()
+                    }
+                },
+                onClearFilters = { viewModel.onClearFilter() },
+                availableGenres = filterUiState.availableGenresWithNames,
+                selectedGenres = filterUiState.selectedGenres,
+                imdbRating = filterUiState.imdbRating,
+                releaseYearRange = filterUiState.releaseYearRange,
+                onReleaseYearRangeChange = viewModel::onReleaseYearRangeChange,
+                onGenreSelectedChange = viewModel::onGenreSelectedChange,
+                onRatingChanged = viewModel::onRatingChanged,
+            )
+        }
     }
 }
 
@@ -113,6 +125,7 @@ private fun FilterBottomSheetContent(
 ) {
     Column(
         modifier = modifier
+            .verticalScroll(rememberScrollState())
             .padding(
                 start = 16.dp,
                 end = 16.dp
