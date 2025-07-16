@@ -87,5 +87,4 @@ dependencies {
     implementation(libs.bundles.room)
     implementation(libs.bundles.koin)
     ksp(libs.bundles.room.ksp)
-
 }
