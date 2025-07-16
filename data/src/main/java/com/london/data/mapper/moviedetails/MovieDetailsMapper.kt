@@ -34,6 +34,6 @@ fun SimilarMovieRemote.toSimilarMovie(): SimilarMovie {
     return SimilarMovie(
         image = "https://image.tmdb.org/t/p/w500" + (this.posterPath ?: ""),
         isSaved = false,
-        movieId = this.id
+        id = this.id
     )
 }
