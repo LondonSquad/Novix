@@ -14,7 +14,7 @@ data class SearchTvShowRemote(
     @SerialName("id")
     val id: Int,
     @SerialName("origin_country")
-    val originCountry: List<String>,
+    val originCountry: List<String>? = null,
     @SerialName("original_language")
     val originalLanguage: String? = null,
     @SerialName("original_name")

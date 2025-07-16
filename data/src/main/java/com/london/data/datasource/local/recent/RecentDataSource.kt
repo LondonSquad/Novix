@@ -1,5 +1,9 @@
 package com.london.data.datasource.local.recent
 
+import com.london.domain.KoverIgnore
+
+
+@KoverIgnore
 interface RecentDataSource<T> {
     suspend fun insert(item: T)
     suspend fun clearOlderThanTen()

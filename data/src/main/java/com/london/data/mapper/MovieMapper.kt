@@ -5,6 +5,7 @@ import com.london.data.datasource.local.model.SearchMoviesLocal
 import com.london.data.datasource.remote.ApiResponse
 import com.london.data.datasource.remote.search.model.SearchMovieRemote
 import com.london.data.datasource.util.generateHash
+import com.london.domain.KoverIgnore
 import com.london.domain.entity.Movie
 
 fun SearchMovieDtoLocal.toMovieEntity(): Movie {
@@ -30,6 +31,7 @@ fun ApiResponse<SearchMovieRemote>.toLocal(query: String): SearchMoviesLocal {
     )
 }
 
+@KoverIgnore
 fun SearchMovieRemote.toMovieLocalDto(): SearchMovieDtoLocal {
     return SearchMovieDtoLocal(
         adult = this.adult,

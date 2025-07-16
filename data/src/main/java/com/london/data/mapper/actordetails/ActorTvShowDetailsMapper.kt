@@ -1,8 +1,10 @@
+@file:KoverIgnore
 package com.london.data.mapper.actordetails
 
 import com.london.data.datasource.remote.details.actordetails.model.actortvshowdetails.ActorTvShowCastMember
 import com.london.data.datasource.remote.details.actordetails.model.actortvshowdetails.ActorTvShowCrewMember
 import com.london.data.datasource.remote.details.actordetails.model.actortvshowdetails.ActorTvShowDetailsResponse
+import com.london.domain.KoverIgnore
 import com.london.domain.entity.actordetails.actortvshow.ActorTvShowCastMemberEntity
 import com.london.domain.entity.actordetails.actortvshow.ActorTvShowCrewMemberEntity
 import com.london.domain.entity.actordetails.actortvshow.ActorTvShowDetails
