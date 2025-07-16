@@ -39,7 +39,7 @@ class MovieDetailsRepoImpl(
         )
 
     override suspend fun getMovieImagesById(id: Int): List<String> =
-        runOrThrow(
+        runOrThrow<List<String>>(
             block = {
                 val images = movieDetailsRemote.getMovieImages(id)
                 when {
