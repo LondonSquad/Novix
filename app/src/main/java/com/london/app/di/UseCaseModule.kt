@@ -56,18 +56,5 @@ class UseCaseModule {
     @Single
     fun provideGetEpisodesByTvShowSeason(repository: DetailsRepository) =
         GetEpisodesByTvShowSeason(repository)
-    @Single
-    fun provideGetMovieDetailsUseCase(
-        getMovieById: GetMovieById,
-        getMovieImagesUseCase: GetMovieImagesUseCase,
-        getMovieCastUseCase: GetMovieCastUseCase,
-        getSimilarMoviesUseCase: GetSimilarMoviesUseCase
-    ): GetMovieDetailsUseCase {
-        return GetMovieDetailsUseCase(
-            getMovieById,
-            getMovieImagesUseCase,
-            getMovieCastUseCase,
-            getSimilarMoviesUseCase
-        )
-    }
+
 }
