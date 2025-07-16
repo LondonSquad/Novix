@@ -19,7 +19,7 @@ class MovieDetailsRepoImpl(
 ) : MovieDetailsRepository {
 
     override suspend fun getMovieById(id: Int): MovieDetails =
-        runOrThrow(
+        runOrThrow<MovieDetails>(
             block = {
                 val movieDetailsRemote = movieDetailsRemote.getMovieDetails(id)
                 movieDetailsRemote.toEntity(
@@ -30,7 +30,7 @@ class MovieDetailsRepoImpl(
         )
 
     override suspend fun getSimilarMoviesById(id: Int): List<SimilarMovie> =
-        runOrThrow(
+        runOrThrow<List<SimilarMovie>>(
             block = {
                 val similarMoviesRemote = movieDetailsRemote.getSimilarMovies(id)
                 similarMoviesRemote.similarMovieRemotes.map { it.toSimilarMovie() }
@@ -53,7 +53,7 @@ class MovieDetailsRepoImpl(
         )
 
     override suspend fun getMovieCastById(id: Int): List<Actor> =
-        runOrThrow(
+        runOrThrow<List<Actor>>(
             block = {
                 val movieCast = movieDetailsRemote.getMovieCast(id)
                 movieCast.actorRemote.map { it.toEntity() }
