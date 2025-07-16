@@ -11,7 +11,7 @@ fun MovieDetailsResponse.toEntity(
     similarMovies: List<SimilarMovie> = emptyList(),
     genres: List<Genre> = emptyList(),
     actors: List<Actor> = emptyList(),
-    movieImages: List<Any> = emptyList(),
+    movieImages: List<String> = emptyList(),
     movieDuration: String = ""
 ): MovieDetails {
     return MovieDetails(

@@ -81,7 +81,7 @@ fun MovieDetailsScreen(
     movieId: Int,
     viewModel: MovieDetailsViewModel = koinViewModel(),
     onBackClick: () -> Unit = {},
-    onPreviewClick: (Int) -> Unit ={}
+    onPreviewClick: (Int) -> Unit = {}
 ) {
     val state by viewModel.uiState.collectAsState()
     LaunchedEffect(movieId) {
@@ -98,6 +98,7 @@ fun MovieDetailsScreen(
                 CircularLoading()
             }
         }
+
         else -> {
             MovieDetailsContent(
                 state,
@@ -134,7 +135,9 @@ fun MovieDetailsContent(
             ) {
                 MovieDetailsImage(
                     isSaved = state.isSaved,
-                    onSaveClick = {},
+                    onSaveClick = {
+                        //TODO("Not yet implemented")
+                    },
                     images = state.movieImage,
                     currentImageIndex = state.currentImageIndex,
                     direction = state.imageSlideDirection,
@@ -185,7 +188,8 @@ fun MovieDetailsContent(
                             color = NovixTheme.colors.primary,
                             modifier = Modifier.noRippleClickable {
                                 onPreviewClick(state.movieId)
-                            })
+                            }
+                        )
                     }
                 }
             }
@@ -210,7 +214,7 @@ fun MovieDetailsContent(
                     .fillMaxWidth()
                     .height(100.dp),
                 horizontalArrangement = Arrangement.spacedBy(12.dp),
-                contentPadding = PaddingValues(vertical = 8.dp , horizontal = 16.dp),
+                contentPadding = PaddingValues(vertical = 8.dp, horizontal = 16.dp),
                 rows = GridCells.Fixed(1),
             ) {
                 items(state.genres) { actor ->
@@ -240,7 +244,12 @@ fun MovieDetailsContent(
             ) {
                 items(state.similarMovies) { movie ->
                     HomeCard(
-                        imageUrl = movie.image, isSaved = movie.isSaved, onSaveClick = {})
+                        imageUrl = movie.image,
+                        isSaved = movie.isSaved,
+                        onSaveClick = {
+                            //TODO("Not yet implemented")
+                        }
+                    )
                 }
             }
         }
@@ -265,7 +274,9 @@ fun MovieDetailsContent(
             }
             PrimaryButton(
                 text = stringResource(play_trailer),
-                onClick = {},
+                onClick = {
+                    //TODO("Not yet implemented")
+                },
                 hasLabel = true,
                 hasIcon = false,
                 isLoading = false,
@@ -315,13 +326,21 @@ private fun RatingAndMetaRow(
 
 @Composable
 private fun IconWithText(
-    icon: Int, contentDesc: String, tint: Color, text: String, textColor: Color
+    icon: Int,
+    contentDesc: String,
+    tint: Color,
+    text: String,
+    textColor: Color
 ) {
     Icon(
-        painter = painterResource(icon), contentDescription = contentDesc, tint = tint
+        painter = painterResource(icon),
+        contentDescription = contentDesc,
+        tint = tint
     )
     Text(
-        text, style = NovixTheme.typography.label.small, color = textColor
+        text,
+        style = NovixTheme.typography.label.small,
+        color = textColor
     )
 }
 
@@ -369,9 +388,8 @@ private fun MovieDetailsImage(
     Box(
         modifier = modifier
             .fillMaxWidth()
-            .aspectRatio(160f / 100f)
-            .clip(RoundedCornerShape(12.dp))
-           , contentAlignment = Alignment.Center
+            .aspectRatio(8f / 5f)
+            .clip(RoundedCornerShape(12.dp)), contentAlignment = Alignment.Center
     ) {
         images.forEachIndexed { index, image ->
             AnimatedVisibility(
@@ -446,6 +464,7 @@ private fun ConditionalText(
                     append(truncatedText)
                     withStyle(actionStyle) { append(stringResource(R.string.read_more)) }
                 }
+
                 else -> {
                     append(text)
                     withStyle(actionStyle) { append(stringResource(R.string.read_less)) }
@@ -478,6 +497,7 @@ private fun ConditionalText(
             }
     )
 }
+
 @Preview(showBackground = true)
 @Composable
 private fun MovieDetailsPreview() {

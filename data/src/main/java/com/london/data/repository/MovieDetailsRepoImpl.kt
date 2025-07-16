@@ -24,6 +24,8 @@ class MovieDetailsRepoImpl(
                 val movieDetailsRemote = movieDetailsRemote.getMovieDetails(id)
                 movieDetailsRemote.toEntity(
                     genres = movieDetailsRemote.genreRemote.map { it.toGenre() },
+                    movieImages = movieDetailsRemote.backdropPath?.let { listOf("https://image.tmdb.org/t/p/w500$it") }
+                        ?: emptyList()
                 )
             },
             error = { cause -> GetMovieDetailsException(cause) }
