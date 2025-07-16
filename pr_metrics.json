@@ -1677,11 +1677,15 @@
     "time_to_first_approval_minutes": 76.38333333333334,
     "required_approvals_met_at": null,
     "time_to_required_approvals_minutes": null,
-    "closed_at": null,
-    "merged_at": null,
-    "merged_by": null,
+    "closed_at": "2025-07-16T10:12:54Z",
+    "merged_at": "2025-07-16T10:12:54Z",
+    "merged_by": {
+      "login": "abdelrhman1002",
+      "id": 180463542,
+      "url": "https://github.com/abdelrhman1002"
+    },
     "week": "2025-W29",
-    "status": "pending",
+    "status": "merged",
     "diff_stats": {
       "additions": 192,
       "deletions": 70,
