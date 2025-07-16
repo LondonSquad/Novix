@@ -173,9 +173,9 @@ class SearchViewModel(
         _uiState.update {
             it.copy(
                 searchQuery = TextFieldValue(""),
-                movieResults = emptyList(),
-                tvShowUiResults = emptyList(),
-                actorUiResults = emptyList()
+                actorsFlow = flow {},
+                moviesFlow = flow {},
+                tvShowsFlow = flow {}
             )
         }
     }
@@ -367,65 +367,6 @@ class SearchViewModel(
         }
     }
 
-    override fun addToRecentSearches(query: String) {
-        if (query.isBlank()) return
-
-        viewModelScope.launch {
-            addToRecentSearchUseCase.invoke(query)
-            _uiState.update { it.copy(recentSearches = getRecentSearchUseCase.invoke()) }
-        }
-    }
-
-    override fun addToRecentViewed(imageUrl: String) {
-        // (important) make the recent data in the database
-        if (imageUrl.isBlank()) return
-
-        val currentViewed = _uiState.value.recentViewed.toMutableList()
-        currentViewed.remove(imageUrl)
-        currentViewed.add(0, imageUrl)
-
-        if (currentViewed.size > 10) {
-            currentViewed.removeAt(currentViewed.size - 1)
-        }
-
-        _uiState.update { it.copy(recentViewed = currentViewed) }
-    }
-
-    override fun clearRecentViewed() {
-        _uiState.update { it.copy(recentViewed = emptyList()) }
-    }
-
-    override fun clearRecentSearches() {
-        _uiState.update { it.copy(recentSearches = emptyList()) }
-        viewModelScope.launch {
-            clearRecentSearchUseCase.invoke()
-        }
-    }
-
-    override fun removeRecentSearch(search: String) {
-        val updatedSearches = _uiState.value.recentSearches.filter { it != search }
-        _uiState.update { it.copy(recentSearches = updatedSearches) }
-    }
-
-    override fun onRecentSearchClick(search: String) {
-        _uiState.update { it.copy(searchQuery = TextFieldValue(search)) }
-
-        viewModelScope.launch {
-            performSearch(search, _uiState.value.selectedCategory)
-        }
-    }
-
-    override fun clearSearch() {
-        _uiState.update {
-            it.copy(
-                searchQuery = TextFieldValue(""),
-                moviesFlow = flow {},
-                tvShowsFlow = flow {},
-                actorsFlow = flow {}
-            )
-        }
-        _searchQuery.value = ""
-    }
 
     private fun updateAvailableGenres(searchCategory: SearchCategory) {
         val availableGenres = when (searchCategory) {
