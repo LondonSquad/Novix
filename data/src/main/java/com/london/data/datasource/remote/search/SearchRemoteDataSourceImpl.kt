@@ -2,9 +2,6 @@ package com.london.data.datasource.remote.search
 
 import com.london.data.BuildConfig
 import com.london.data.datasource.remote.ApiConstants
-import com.london.data.datasource.remote.details.actordetails.model.ActorDetailsRemoteResponse
-import com.london.data.datasource.remote.details.actordetails.model.ActorMovieDetailsResponse
-import com.london.data.datasource.remote.details.actordetails.model.ActorTvShowDetailsResponse
 import com.london.data.datasource.remote.search.model.ApiSearch
 import com.london.data.datasource.remote.search.model.SearchActorRemote
 import com.london.data.datasource.remote.search.model.SearchMovieRemote
@@ -90,17 +87,5 @@ class SearchRemoteDataSourceImpl(private val ktorClient: HttpClient) : RemoteDat
         }
         val responseBody = response.bodyAsText()
         return json.decodeFromString(responseBody)
-    }
-
-    override suspend fun getActorDetails(actorId: Int): ActorDetailsRemoteResponse {
-        TODO("Not yet implemented")
-    }
-
-    override suspend fun getActorMovies(actorId: Int): ActorMovieDetailsResponse {
-        TODO("Not yet implemented")
-    }
-
-    override suspend fun getActorTvShows(actorId: Int): ActorTvShowDetailsResponse {
-        TODO("Not yet implemented")
     }
 }

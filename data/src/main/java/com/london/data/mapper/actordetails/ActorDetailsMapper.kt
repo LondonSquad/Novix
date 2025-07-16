@@ -1,9 +1,9 @@
 package com.london.data.mapper.actordetails
 
-import com.london.data.datasource.remote.details.actordetails.model.ActorDetailsRemoteResponse
+import com.london.data.datasource.remote.details.actordetails.model.ActorDetailsResponse
 import com.london.domain.entity.actordetails.ActorDetails
 
-fun ActorDetailsRemoteResponse.toEntity():ActorDetails{
+fun ActorDetailsResponse.toEntity():ActorDetails{
     return ActorDetails(
         id = this.id,
         name = this.name,

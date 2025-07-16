@@ -1,8 +1,5 @@
 package com.london.data.datasource.remote.search
 
-import com.london.data.datasource.remote.details.actordetails.model.ActorDetailsRemoteResponse
-import com.london.data.datasource.remote.details.actordetails.model.ActorMovieDetailsResponse
-import com.london.data.datasource.remote.details.actordetails.model.ActorTvShowDetailsResponse
 import com.london.data.datasource.remote.search.model.ApiSearch
 import com.london.data.datasource.remote.search.model.SearchActorRemote
 import com.london.data.datasource.remote.search.model.SearchMovieRemote
@@ -15,7 +12,5 @@ interface RemoteDataSource {
     : ApiSearch<SearchTvShowRemote>
     suspend fun searchForActors(query: String, includeAdult: Boolean, language: String, page: Int)
     : ApiSearch<SearchActorRemote>
-    suspend fun getActorDetails(actorId: Int): ActorDetailsRemoteResponse
-    suspend fun getActorMovies(actorId: Int): ActorMovieDetailsResponse
-    suspend fun getActorTvShows(actorId: Int): ActorTvShowDetailsResponse
+
 }

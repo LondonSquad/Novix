@@ -9,8 +9,10 @@ import com.london.data.datasource.remote.details.tvshowdetails.TvShowDetailsRemo
 import com.london.data.datasource.remote.search.RemoteDataSource
 import com.london.data.datasource.util.CrashReporter
 import com.london.data.datasource.util.FirebaseCrashReporter
+import com.london.data.repository.ActorRepositoryImpl
 import com.london.data.repository.DetailsRepositoryImpl
 import com.london.data.repository.SearchRepositoryImpl
+import com.london.domain.repository.ActorRepository
 import com.london.domain.repository.DetailsRepository
 import com.london.domain.repository.SearchRepository
 import org.koin.core.annotation.Module
@@ -39,9 +41,15 @@ class RepositoryModule {
     @Single
     fun provideDetailsRepository(
         tvShowDetailsRemoteDataSource: TvShowDetailsRemoteDataSource,
-        actorDetailsRemoteDataSource: ActorDetailsRemoteDataSource
     ): DetailsRepository {
-        return DetailsRepositoryImpl(tvShowDetailsRemoteDataSource, actorDetailsRemoteDataSource)
+        return DetailsRepositoryImpl(tvShowDetailsRemoteDataSource)
+    }
+
+    @Single
+    fun provideActorRepository(
+        actorDetailsRemoteDataSource: ActorDetailsRemoteDataSource,
+    ): ActorRepository {
+        return ActorRepositoryImpl(actorDetailsRemoteDataSource)
     }
 
     @Single

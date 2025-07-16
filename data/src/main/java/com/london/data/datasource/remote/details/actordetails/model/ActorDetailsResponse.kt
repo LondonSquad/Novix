@@ -4,7 +4,7 @@ import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class ActorDetailsRemoteResponse(
+data class ActorDetailsResponse(
     @SerialName("adult")
     val adult: Boolean,
 

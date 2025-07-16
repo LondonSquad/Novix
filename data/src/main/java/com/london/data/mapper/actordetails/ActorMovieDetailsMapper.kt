@@ -1,11 +1,11 @@
 package com.london.data.mapper.actordetails
 
-import com.london.data.datasource.remote.details.actordetails.model.ActorMovieCastMember
-import com.london.data.datasource.remote.details.actordetails.model.ActorMovieDetailsResponse
-import com.london.data.datasource.remote.details.actordetails.model.MovieCrewMember
-import com.london.domain.entity.actordetails.ActorMovieCastMemberEntity
-import com.london.domain.entity.actordetails.ActorMovieCrewMemberEntity
-import com.london.domain.entity.actordetails.ActorMovieDetails
+import com.london.data.datasource.remote.details.actordetails.model.actormoviedetails.ActorMovieCastMember
+import com.london.data.datasource.remote.details.actordetails.model.actormoviedetails.ActorMovieDetailsResponse
+import com.london.data.datasource.remote.details.actordetails.model.actormoviedetails.MovieCrewMember
+import com.london.domain.entity.actordetails.actormovie.ActorMovieCastMemberEntity
+import com.london.domain.entity.actordetails.actormovie.ActorMovieCrewMemberEntity
+import com.london.domain.entity.actordetails.actormovie.ActorMovieDetails
 
 fun ActorMovieDetailsResponse.toEntity(): ActorMovieDetails {
     return ActorMovieDetails(

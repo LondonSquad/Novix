@@ -1,9 +1,4 @@
-package com.london.domain.entity.actordetails
-
-data class ActorImageDetails(
-    val id: Int,
-    val profiles: List<ImageDetails>
-)
+package com.london.domain.entity.actordetails.actorimage
 
 data class ImageDetails(
     val aspectRatio: Double,

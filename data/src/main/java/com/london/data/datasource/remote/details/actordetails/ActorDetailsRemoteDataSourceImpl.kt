@@ -4,10 +4,10 @@ import android.util.Log
 import com.london.data.BuildConfig
 import com.london.data.datasource.device.DeviceConfigurationDataSource
 import com.london.data.datasource.remote.ApiConstants
-import com.london.data.datasource.remote.details.actordetails.model.ActorDetailsRemoteResponse
-import com.london.data.datasource.remote.details.actordetails.model.ActorImageResponse
-import com.london.data.datasource.remote.details.actordetails.model.ActorMovieDetailsResponse
-import com.london.data.datasource.remote.details.actordetails.model.ActorTvShowDetailsResponse
+import com.london.data.datasource.remote.details.actordetails.model.ActorDetailsResponse
+import com.london.data.datasource.remote.details.actordetails.model.actorimage.ActorImageResponse
+import com.london.data.datasource.remote.details.actordetails.model.actormoviedetails.ActorMovieDetailsResponse
+import com.london.data.datasource.remote.details.actordetails.model.actortvshowdetails.ActorTvShowDetailsResponse
 import io.ktor.client.HttpClient
 import io.ktor.client.request.get
 import io.ktor.client.statement.bodyAsText
@@ -22,7 +22,7 @@ class ActorDetailsRemoteDataSourceImpl(
     ActorDetailsRemoteDataSource {
     override suspend fun getActorDetailsById(
         actorId: Int
-    ): ActorDetailsRemoteResponse {
+    ): ActorDetailsResponse {
         val json = Json {
             ignoreUnknownKeys = true
         }
