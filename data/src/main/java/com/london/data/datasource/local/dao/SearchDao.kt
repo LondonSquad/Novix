@@ -7,4 +7,5 @@ interface SearchDao<T> {
     suspend fun getAll(): List<T>
     suspend fun getCurrentSearchByDate(date: Long): T
     suspend fun getSearchByQuery(query: String): T
+    suspend fun getSearchByQueryAndPage(query: String, page: Int): T
 }

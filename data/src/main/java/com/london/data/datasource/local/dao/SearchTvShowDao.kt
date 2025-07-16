@@ -27,4 +27,7 @@ interface SearchTvShowDao : SearchDao<SearchTvShowLocal> {
 
     @Query("SELECT * FROM search_tv_shows_table WHERE `query` = :query")
     override suspend fun getSearchByQuery(query: String): SearchTvShowLocal
+
+    @Query("SELECT * FROM search_tv_shows_table WHERE `query` = :query AND page = :page")
+    override suspend fun getSearchByQueryAndPage(query: String, page: Int): SearchTvShowLocal
 }
