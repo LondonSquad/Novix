@@ -3,6 +3,7 @@ package com.london.domain.usecase
 import com.google.common.truth.Truth.assertThat
 import com.london.domain.ActorSearchFailedException
 import com.london.domain.entity.Actor
+import com.london.domain.entity.PagedFetchResponse
 import com.london.domain.repository.SearchRepository
 import io.mockk.coEvery
 import io.mockk.mockk
@@ -22,27 +23,28 @@ class GetActorsUseCaseTest {
     }
 
     @Test
-    fun `should return a list of actors when repository return a list of actors`() = runTest {
+    fun `should return PagedFetchResponse when SearchRepository returns PagedFetchResponse`() = runTest {
         //given
-        coEvery { searchRepository.searchForActors(NAME, LANGUAGE) } returns listOf(Actor)
+        coEvery { searchRepository.searchForActors(NAME, LANGUAGE, PAGE_NUMBER) } returns pagedFetchResponse
         //when
-        val result = getActorsUseCase(NAME, LANGUAGE)
+        val result = getActorsUseCase(NAME, LANGUAGE, PAGE_NUMBER)
         //then
-        assertThat(result).isEqualTo(listOf(Actor))
+        assertThat(result).isEqualTo(pagedFetchResponse)
     }
 
     @Test
-    fun `should throw an exception when repository throws an exception`() = runTest {
+    fun `should throw ActorSearchFailedException when SearchRepository throws ActorSearchFailedException`() = runTest {
         //given
         coEvery {
             searchRepository.searchForActors(
                 NAME,
-                LANGUAGE
+                LANGUAGE,
+                PAGE_NUMBER
             )
         } throws ActorSearchFailedException()
         //when //then
         assertThrows<ActorSearchFailedException> {
-            getActorsUseCase(NAME, LANGUAGE)
+            getActorsUseCase(NAME, LANGUAGE, PAGE_NUMBER)
         }
     }
 
@@ -50,8 +52,15 @@ class GetActorsUseCaseTest {
     private companion object {
         const val NAME = "Tom"
         const val LANGUAGE = "en-US"
-        val Actor = Actor(
+        const val PAGE_NUMBER = 1
+        val ACTOR = Actor(
             id = 1, name = "Tom Holland", profilePicture = ""
+        )
+        val pagedFetchResponse = PagedFetchResponse(
+            currentPage = 1,
+            items = listOf(ACTOR),
+            totalPages = 1,
+            totalItems = 1
         )
     }
 }

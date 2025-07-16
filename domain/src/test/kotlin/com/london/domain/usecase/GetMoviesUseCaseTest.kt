@@ -3,6 +3,7 @@ package com.london.domain.usecase
 import com.google.common.truth.Truth.assertThat
 import com.london.domain.MovieSearchFailedException
 import com.london.domain.entity.Movie
+import com.london.domain.entity.PagedFetchResponse
 import com.london.domain.repository.SearchRepository
 import io.mockk.coEvery
 import io.mockk.mockk
@@ -22,22 +23,22 @@ class GetMoviesUseCaseTest {
     }
 
     @Test
-    fun `should return a list of movies when repository return a list of actors`() = runTest {
+    fun `should return a paged fetch response of movies when repository successfully fetches movies`() = runTest {
         //given
-        coEvery { searchRepository.searchForMovies(NAME, LANGUAGE) } returns listOf(movie)
+        coEvery { searchRepository.searchForMovies(NAME, LANGUAGE, PAGE_NUMBER) } returns pagedFetchResponse
         //when
-        val result = getMoviesUseCase(NAME, LANGUAGE)
+        val result = getMoviesUseCase(NAME, LANGUAGE, PAGE_NUMBER)
         //then
-        assertThat(result).isEqualTo(listOf(movie))
+        assertThat(result).isEqualTo(pagedFetchResponse)
     }
 
     @Test
-    fun `should throw an exception when repository throws an exception`() = runTest {
+    fun `should throw MovieSearchFailedException when repository throws an exception during movie search`() = runTest {
         //given
-        coEvery { searchRepository.searchForMovies(NAME, LANGUAGE) } throws MovieSearchFailedException()
+        coEvery { searchRepository.searchForMovies(NAME, LANGUAGE, PAGE_NUMBER) } throws MovieSearchFailedException()
         //when //then
         assertThrows<MovieSearchFailedException> {
-            getMoviesUseCase(NAME, LANGUAGE)
+            getMoviesUseCase(NAME, LANGUAGE, PAGE_NUMBER)
         }
     }
 
@@ -45,6 +46,7 @@ class GetMoviesUseCaseTest {
     private companion object {
         const val NAME = "Movie"
         const val LANGUAGE = "en-US"
+        const val PAGE_NUMBER = 1
         val movie = Movie(
             id = 1,
             name = NAME,
@@ -52,6 +54,12 @@ class GetMoviesUseCaseTest {
             releaseYear = 2024,
             rating = 8,
             genreIds = listOf(1, 2, 3)
+        )
+        val pagedFetchResponse = PagedFetchResponse(
+            currentPage = 1,
+            items = listOf(movie),
+            totalPages = 1,
+            totalItems = 1
         )
     }
 }

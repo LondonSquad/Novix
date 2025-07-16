@@ -2,10 +2,13 @@ package com.london.presentation.screen.search
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.text.input.TextFieldValue
+import androidx.paging.PagingData
 import com.london.domain.entity.Actor
 import com.london.domain.entity.Movie
 import com.london.domain.entity.TvShow
 import com.london.presentation.screen.search.model.MovieUi
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flow
 
 data class SearchUiState(
     var searchQuery: TextFieldValue = TextFieldValue(""),
@@ -15,9 +18,9 @@ data class SearchUiState(
     val isSearchHistoryExpanded: Boolean = false,
     val isMovieSaved: (MovieUi) -> Boolean = { false },
     val searchHistory: List<String> = emptyList(),
-    val actorUiResults: List<Actor> = emptyList(),
-    val movieResults: List<Movie> = emptyList(),
-    val tvShowUiResults: List<TvShow> = emptyList(),
+    val actorsFlow: Flow<PagingData<Actor>> = flow {},
+    val moviesFlow: Flow<PagingData<Movie>> = flow {},
+    val tvShowsFlow: Flow<PagingData<TvShow>> = flow {},
     val savedMovies: Set<Int> = emptySet(),
     val savedTvShows: Set<Int> = emptySet(),
     val selectedCategory: SearchCategory = SearchCategory.Movies,
