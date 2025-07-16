@@ -2,8 +2,8 @@ package com.london.domain.usecase
 
 import com.london.domain.repository.MovieDetailsRepository
 
-class GetMovieCastUseCase(
+class GetMovieImagesUseCase (
     private val movieDetailsRepository: MovieDetailsRepository
-) {
-    suspend fun invoke(movieId: Int) = movieDetailsRepository.getMovieCastById(movieId)
+){
+    suspend fun invoke(movieId: Int) = movieDetailsRepository.getMovieImagesById(movieId)
 }
