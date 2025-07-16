@@ -4,7 +4,7 @@ import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class TvShowEpisode(
+data class TvShowEpisodeResponse(
     @SerialName("air_date")
     val airDate: String?,
     @SerialName("episode_number")
