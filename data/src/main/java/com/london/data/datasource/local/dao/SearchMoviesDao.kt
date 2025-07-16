@@ -28,4 +28,7 @@ interface SearchMoviesDao : SearchDao<SearchMoviesLocal> {
 
     @Query("SELECT * FROM search_movies_table WHERE `query` = :query")
     override suspend fun getSearchByQuery(query: String): SearchMoviesLocal
+
+    @Query("SELECT * FROM search_movies_table WHERE `query` = :query AND page = :page")
+    override suspend fun getSearchByQueryAndPage(query: String, page: Int): SearchMoviesLocal
 }
