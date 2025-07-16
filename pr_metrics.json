@@ -1637,5 +1637,33 @@
       "deletions": 84,
       "changed_files": 52
     }
+  },
+  {
+    "pr_number": 123,
+    "url": "https://github.com/LondonSquad/Novix/pull/123",
+    "title": "fix/ repeated the first page while scrolling in the search screen",
+    "opened_at": "2025-07-16T08:44:39Z",
+    "head_ref": "feature/pagination-integration",
+    "base_ref": "develop",
+    "creator": {
+      "login": "karimdeabes",
+      "id": 81706918,
+      "url": "https://github.com/karimdeabes"
+    },
+    "approvals": [],
+    "first_approved_at": null,
+    "time_to_first_approval_minutes": null,
+    "required_approvals_met_at": null,
+    "time_to_required_approvals_minutes": null,
+    "closed_at": null,
+    "merged_at": null,
+    "merged_by": null,
+    "week": "2025-W29",
+    "status": "pending",
+    "diff_stats": {
+      "additions": 129,
+      "deletions": 57,
+      "changed_files": 13
+    }
   }
 ]
