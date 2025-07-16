@@ -1,5 +1,6 @@
 package com.london.app.di
 
+import com.london.domain.repository.ActorRepository
 import com.london.domain.repository.DetailsRepository
 import com.london.domain.repository.MovieDetailsRepository
 import com.london.domain.repository.RecentRepository
@@ -15,6 +16,10 @@ import com.london.domain.usecase.GetMoviesUseCase
 import com.london.domain.usecase.GetRecentSearchUseCase
 import com.london.domain.usecase.GetTvShowDetails
 import com.london.domain.usecase.GetTvShowsUseCase
+import com.london.domain.usecase.actordetailsusecase.GetActorDetailsById
+import com.london.domain.usecase.actordetailsusecase.GetActorImagesById
+import com.london.domain.usecase.actordetailsusecase.GetActorMoviePicksById
+import com.london.domain.usecase.actordetailsusecase.GetActorTvShowPicksById
 import org.koin.core.annotation.Module
 import org.koin.core.annotation.Single
 
@@ -59,5 +64,25 @@ class UseCaseModule {
         movieDetailsRepository: MovieDetailsRepository
     ): GetMovieCastUseCase =
         GetMovieCastUseCase(movieDetailsRepository)
+
+    @Single
+    fun provideGetActorDetailsById(
+        actorRepository: ActorRepository
+    ): GetActorDetailsById = GetActorDetailsById(actorRepository)
+    
+    @Single
+    fun provideGetActorImageById(
+        actorRepository: ActorRepository
+    ): GetActorImagesById = GetActorImagesById(actorRepository)
+    
+    @Single
+    fun provideGetActorMoviePicksById(
+        actorRepository: ActorRepository
+    ): GetActorMoviePicksById = GetActorMoviePicksById(actorRepository)
+
+    @Single
+    fun provideGetActorTvShowPicksById(
+        actorRepository: ActorRepository
+    ): GetActorTvShowPicksById = GetActorTvShowPicksById(actorRepository)
 
 }
