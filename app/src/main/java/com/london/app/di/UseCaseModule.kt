@@ -1,7 +1,6 @@
 package com.london.app.di
 
 import com.london.domain.repository.DetailsRepository
-import com.london.domain.repository.MovieDetailsRepository
 import com.london.domain.repository.RecentRepository
 import com.london.domain.repository.SearchRepository
 import com.london.domain.usecase.AddToRecentSearchUseCase
@@ -71,29 +70,4 @@ class UseCaseModule {
             getSimilarMoviesUseCase
         )
     }
-
-    @Single
-    fun provideGetMovieByIdUseCase(
-        movieDetailsRepository: MovieDetailsRepository
-    ): GetMovieById {
-        return GetMovieById(movieDetailsRepository)
-    }
-
-    @Single
-    fun provideGetMovieDetailsUseCase(
-        movieDetailsRepository: MovieDetailsRepository
-    ): GetMovieImagesUseCase {
-        return GetMovieImagesUseCase(movieDetailsRepository)
-    }
-
-    @Single
-    fun provideMovieCastUseCase(
-        movieDetailsRepository: MovieDetailsRepository
-    ): GetMovieCastUseCase =
-         GetMovieCastUseCase(movieDetailsRepository)
-
-    @Single
-    fun provideSimilarMoviesUseCase(
-        movieDetailsRepository: MovieDetailsRepository
-    ): GetSimilarMoviesUseCase = GetSimilarMoviesUseCase(movieDetailsRepository)
 }
