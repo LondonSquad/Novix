@@ -1,6 +1,15 @@
 package com.london.data.mapper.tvshowdetails
 
-import com.london.data.datasource.remote.details.tvshowdetails.model.*
+import com.london.data.datasource.remote.details.tvshowdetails.model.TvShowCreator
+import com.london.data.datasource.remote.details.tvshowdetails.model.TvShowDetailsRemoteResponse
+import com.london.data.datasource.remote.details.tvshowdetails.model.TvShowEpisode
+import com.london.data.datasource.remote.details.tvshowdetails.model.TvShowGenre
+import com.london.data.datasource.remote.details.tvshowdetails.model.TvShowNetwork
+import com.london.data.datasource.remote.details.tvshowdetails.model.TvShowProductionCompany
+import com.london.data.datasource.remote.details.tvshowdetails.model.TvShowProductionCountry
+import com.london.data.datasource.remote.details.tvshowdetails.model.TvShowSeason
+import com.london.data.datasource.remote.details.tvshowdetails.model.TvShowSpokenLanguage
+import com.london.domain.KoverIgnore
 import com.london.domain.entity.tvshowdetails.TvShowCreatorEntity
 import com.london.domain.entity.tvshowdetails.TvShowDetailsEntity
 import com.london.domain.entity.tvshowdetails.TvShowEpisodeEntity
@@ -90,11 +99,13 @@ fun TvShowProductionCompany.toEntity() = TvShowProductionCompanyEntity(
     originCountry = this.originCountry
 )
 
+@KoverIgnore
 fun TvShowProductionCountry.toEntity() = TvShowProductionCountryEntity(
     iso31661 = this.iso31661,
     name = this.name
 )
 
+@KoverIgnore
 fun TvShowSeason.toEntity() = TvShowSeasonEntity(
     airDate = this.airDate,
     episodeCount = this.episodeCount,
@@ -106,6 +117,7 @@ fun TvShowSeason.toEntity() = TvShowSeasonEntity(
     voteAverage = this.voteAverage
 )
 
+@KoverIgnore
 fun TvShowSpokenLanguage.toEntity() = TvShowSpokenLanguageEntity(
     englishName = this.englishName,
     iso6391 = this.iso6391,

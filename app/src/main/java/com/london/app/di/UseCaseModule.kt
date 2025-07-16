@@ -58,15 +58,15 @@ class UseCaseModule {
     fun provideGetImagesById(repository: DetailsRepository) = GetImagesById(repository)
 
     @Single
-    fun provideGetRecentSearchUseCase(repository: RecentRepository) =
+    fun provideGetRecentSearchUseCase(repository: RecentRepository<String>) =
         GetRecentSearchUseCase(repository)
 
     @Single
-    fun provideAddToRecentSearchUseCase(repository: RecentRepository) =
+    fun provideAddToRecentSearchUseCase(repository: RecentRepository<String>) =
         AddToRecentSearchUseCase(repository)
 
     @Single
-    fun provideClearRecentSearchUseCase(repository: RecentRepository) =
+    fun provideClearRecentSearchUseCase(repository: RecentRepository<String>) =
         ClearRecentSearchUseCase(repository)
 
     @Single

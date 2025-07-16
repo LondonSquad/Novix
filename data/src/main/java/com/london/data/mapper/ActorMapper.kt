@@ -7,6 +7,7 @@ import com.london.data.datasource.remote.ApiResponse
 import com.london.data.datasource.remote.search.model.KnownFor
 import com.london.data.datasource.remote.search.model.SearchActorRemote
 import com.london.data.datasource.util.generateHash
+import com.london.domain.KoverIgnore
 import com.london.domain.entity.Actor
 
 fun PersonDtoLocal.toActorEntity(): Actor {
@@ -28,6 +29,7 @@ fun ApiResponse<SearchActorRemote>.toLocal(query: String): SearchActorsLocal {
     )
 }
 
+@KoverIgnore
 fun SearchActorRemote.toLocal(): PersonDtoLocal {
     return PersonDtoLocal(
         adult = this.adult,
@@ -42,6 +44,7 @@ fun SearchActorRemote.toLocal(): PersonDtoLocal {
     )
 }
 
+@KoverIgnore
 fun KnownFor.toKnownForDtoLocal(): KnownForDtoLocal {
     return KnownForDtoLocal(
         adult = this.adult,

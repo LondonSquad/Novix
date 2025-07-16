@@ -1,11 +1,14 @@
+@file:KoverIgnore
 package com.london.data.mapper.actordetails
 
 import com.london.data.datasource.remote.details.actordetails.model.actormoviedetails.ActorMovieCastMember
 import com.london.data.datasource.remote.details.actordetails.model.actormoviedetails.ActorMovieDetailsResponse
 import com.london.data.datasource.remote.details.actordetails.model.actormoviedetails.MovieCrewMember
+import com.london.domain.KoverIgnore
 import com.london.domain.entity.actordetails.actormovie.ActorMovieCastMemberEntity
 import com.london.domain.entity.actordetails.actormovie.ActorMovieCrewMemberEntity
 import com.london.domain.entity.actordetails.actormovie.ActorMovieDetails
+
 
 fun ActorMovieDetailsResponse.toEntity(): ActorMovieDetails {
     return ActorMovieDetails(
@@ -14,6 +17,7 @@ fun ActorMovieDetailsResponse.toEntity(): ActorMovieDetails {
         crew = this.crew.map { it.toEntity() }
     )
 }
+
 fun ActorMovieCastMember.toEntity(): ActorMovieCastMemberEntity {
     return ActorMovieCastMemberEntity(
         adult = this.adult,
@@ -35,6 +39,7 @@ fun ActorMovieCastMember.toEntity(): ActorMovieCastMemberEntity {
         voteCount = this.voteCount
     )
 }
+
 fun MovieCrewMember.toEntity(): ActorMovieCrewMemberEntity {
     return ActorMovieCrewMemberEntity(
         adult = this.adult,

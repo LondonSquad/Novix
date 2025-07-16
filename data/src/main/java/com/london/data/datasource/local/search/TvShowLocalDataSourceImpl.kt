@@ -1,4 +1,4 @@
-package com.london.data.datasource.local.localDataSourceImpl
+package com.london.data.datasource.local.search
 
 import com.london.data.datasource.local.LocalDataSource
 import com.london.data.datasource.local.dao.SearchTvShowDao

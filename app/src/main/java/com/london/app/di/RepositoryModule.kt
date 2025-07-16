@@ -2,10 +2,11 @@ package com.london.app.di
 
 import com.london.data.datasource.local.LocalDataSource
 import com.london.data.datasource.local.dao.GenreInterestDao
+import com.london.data.datasource.local.model.recent.RecentSearchLocal
 import com.london.data.datasource.local.model.SearchActorsLocal
 import com.london.data.datasource.local.model.SearchMoviesLocal
 import com.london.data.datasource.local.model.SearchTvShowLocal
-import com.london.data.datasource.local.recentsearch.RecentSearchDataSource
+import com.london.data.datasource.local.recent.RecentDataSource
 import com.london.data.datasource.remote.details.actordetails.ActorDetailsRemoteDataSource
 import com.london.data.datasource.remote.details.moviedetails.MovieDetailsRemote
 import com.london.data.datasource.remote.details.moviedetails.model.MovieDetailsRemoteImpl
@@ -16,8 +17,8 @@ import com.london.data.datasource.util.FirebaseCrashReporter
 import com.london.data.repository.ActorRepositoryImpl
 import com.london.data.repository.DetailsRepositoryImpl
 import com.london.data.repository.MovieDetailsRepoImpl
-import com.london.data.repository.RecentRepositoryImpl
 import com.london.data.repository.SearchRepositoryImpl
+import com.london.data.repository.recent.RecentSearchRepositoryImpl
 import com.london.domain.repository.ActorRepository
 import com.london.domain.repository.DetailsRepository
 import com.london.domain.repository.MovieDetailsRepository
@@ -57,10 +58,10 @@ class RepositoryModule {
     }
 
     @Single
-    fun provideRecentRepository(
-        recentSearchDataSource: RecentSearchDataSource
-    ): RecentRepository {
-        return RecentRepositoryImpl(recentSearchDataSource)
+    fun provideRecentSearchRepository(
+        recentSearchLocalDataSource: RecentDataSource<RecentSearchLocal>
+    ): RecentRepository<String> {
+        return RecentSearchRepositoryImpl(recentSearchLocalDataSource)
     }
 
     @Single
@@ -76,10 +77,10 @@ class RepositoryModule {
     @Single
     fun provideMovieDetailsRemote(
         ktorClient: HttpClient
-        ) : MovieDetailsRemote = MovieDetailsRemoteImpl(ktorClient)
+    ): MovieDetailsRemote = MovieDetailsRemoteImpl(ktorClient)
 
     @Single
     fun provideMovieDetailsRepository(
         movieDetailsRemote: MovieDetailsRemote
-    ) : MovieDetailsRepository = MovieDetailsRepoImpl(movieDetailsRemote)
+    ): MovieDetailsRepository = MovieDetailsRepoImpl(movieDetailsRemote)
 }

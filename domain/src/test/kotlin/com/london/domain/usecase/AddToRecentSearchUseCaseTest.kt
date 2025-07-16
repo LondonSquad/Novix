@@ -11,23 +11,23 @@ import org.junit.Before
 import org.junit.Test
 
 class AddToRecentSearchUseCaseTest {
-    lateinit var recentRepository: RecentRepository
+    lateinit var recentSearchRepository: RecentRepository<String>
     lateinit var addToRecentSearchUseCase: AddToRecentSearchUseCase
 
     @Before
     fun setUp() {
-        recentRepository = mockk()
-        addToRecentSearchUseCase = AddToRecentSearchUseCase(recentRepository)
+        recentSearchRepository = mockk()
+        addToRecentSearchUseCase = AddToRecentSearchUseCase(recentSearchRepository)
     }
 
     @Test
     fun `should call the repository add to recent search`() = runTest {
         //given
-        coEvery { recentRepository.insert("name") } just Runs
+        coEvery { recentSearchRepository.insert("name") } just Runs
         //when
         addToRecentSearchUseCase.invoke("name")
         //then
-        coVerify(exactly = 1) { recentRepository.insert("name") }
+        coVerify(exactly = 1) { recentSearchRepository.insert("name") }
     }
 
 }

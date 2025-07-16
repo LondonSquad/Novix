@@ -7,9 +7,9 @@ import com.london.data.datasource.local.UpdateException
 import com.london.data.datasource.local.dao.SearchActorsDao
 import com.london.data.datasource.local.dao.SearchMoviesDao
 import com.london.data.datasource.local.dao.SearchTvShowDao
-import com.london.data.datasource.local.localDataSourceImpl.ActorLocalDataSourceImpl
-import com.london.data.datasource.local.localDataSourceImpl.MovieLocalDataSourceImpl
-import com.london.data.datasource.local.localDataSourceImpl.TvShowLocalDataSourceImpl
+import com.london.data.datasource.local.search.ActorLocalDataSourceImpl
+import com.london.data.datasource.local.search.MovieLocalDataSourceImpl
+import com.london.data.datasource.local.search.TvShowLocalDataSourceImpl
 import com.london.data.datasource.local.model.SearchActorsLocal
 import com.london.data.datasource.local.model.SearchMoviesLocal
 import com.london.data.datasource.local.model.SearchTvShowLocal

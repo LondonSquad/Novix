@@ -1,12 +1,13 @@
-package com.london.data.datasource.local.recentsearch
+package com.london.data.datasource.local.recent
 
-import com.london.data.datasource.local.dao.recentsearch.RecentSearchDao
-import com.london.data.datasource.local.model.RecentSearch
+import com.london.data.datasource.local.dao.recent.search.RecentSearchDao
+import com.london.data.datasource.local.model.recent.RecentSearchLocal
+
 
 class RecentSearchDataSourceImpl(
     private val recentSearchDao: RecentSearchDao
-) : RecentSearchDataSource {
-    override suspend fun insert(item: RecentSearch) {
+) : RecentDataSource<RecentSearchLocal> {
+    override suspend fun insert(item: RecentSearchLocal) {
         runCatching {
             recentSearchDao.insert(item)
         }
@@ -18,15 +19,15 @@ class RecentSearchDataSourceImpl(
         }
     }
 
-    override suspend fun getAll(): List<RecentSearch> = runCatching {
+    override suspend fun getAll(): List<RecentSearchLocal> = runCatching {
         recentSearchDao.getAll()
     }.getOrDefault(emptyList())
 
-    override suspend fun getRecentTen(): List<RecentSearch> = runCatching {
+    override suspend fun getRecentTen(): List<RecentSearchLocal> = runCatching {
         recentSearchDao.getRecentTen()
     }.getOrDefault(emptyList())
 
-    override suspend fun insertAndKeepLastTen(item: RecentSearch) {
+    override suspend fun insertAndKeepLastTen(item: RecentSearchLocal) {
         runCatching {
             recentSearchDao.insertAndKeepLastTen(item)
         }
