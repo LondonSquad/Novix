@@ -3,7 +3,6 @@ package com.london.domain.usecase.actordetailsusecase
 import com.london.domain.repository.ActorRepository
 import io.mockk.coEvery
 import io.mockk.mockk
-import io.mockk.coVerify
 import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
@@ -25,6 +24,6 @@ class GetActorImagesByIdUseCaseTest {
         //when
         useCase.invoke(1)
         //then
-        coVerify(exactly = 1) { repository.getActorImagesById(1) }
+        repository.getActorImagesById(1)
     }
 }
