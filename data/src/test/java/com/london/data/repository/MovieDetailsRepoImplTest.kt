@@ -1,31 +1,41 @@
 package com.london.data.repository
 
-import com.london.data.datasource.remote.moviedetails.GetMovieCastException
-import com.london.data.datasource.remote.moviedetails.GetMovieDetailsException
-import com.london.data.datasource.remote.moviedetails.GetMovieImagesException
-import com.london.data.datasource.remote.moviedetails.GetSimilarMoviesException
-import com.london.data.datasource.remote.moviedetails.MovieDetailsRemoteDataSource
-import com.london.data.datasource.remote.moviedetails.model.*
+import com.london.data.datasource.remote.details.moviedetails.GetMovieCastException
+import com.london.data.datasource.remote.details.moviedetails.GetMovieDetailsException
+import com.london.data.datasource.remote.details.moviedetails.GetMovieImagesException
+import com.london.data.datasource.remote.details.moviedetails.GetSimilarMoviesException
+import com.london.data.datasource.remote.details.moviedetails.model.CollectionDetails
+import com.london.data.datasource.remote.details.moviedetails.model.GenreRemote
+import com.london.data.datasource.remote.details.moviedetails.model.MovieDetailsResponse
+import com.london.data.datasource.remote.details.moviedetails.model.ProductionCompanyRemote
+import com.london.data.datasource.remote.details.moviedetails.model.ProductionCountryRemote
+import com.london.data.datasource.remote.details.moviedetails.model.SpokenLanguageRemote
+import com.london.data.datasource.remote.details.moviedetails.model.moviecast.MovieActor
+import com.london.data.datasource.remote.details.moviedetails.model.moviecast.MovieCastResponse
+import com.london.data.datasource.remote.details.moviedetails.model.movieimages.MovieImagesResponse
+import com.london.data.datasource.remote.details.moviedetails.model.movieimages.Poster
+import com.london.data.datasource.remote.details.moviedetails.model.similarmovies.SimilarMovieRemote
+import com.london.data.datasource.remote.details.moviedetails.model.similarmovies.SimilarMoviesResponse
 import io.mockk.coEvery
 import io.mockk.mockk
 import kotlinx.coroutines.test.runTest
 import org.junit.Before
-import org.junit.jupiter.api.Assertions.*
+import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.assertThrows
 import kotlin.test.Test
 
-class MovieDetailsImplTest {
+class MovieDetailsRepoImplTest {
 
-    private lateinit var remoteDataSource: MovieDetailsRemoteDataSource
-    private lateinit var repository: MovieDetailsImpl
+    private lateinit var remoteDataSource: com.london.data.datasource.remote.details.moviedetails.MovieDetailsRemote
+    private lateinit var repository: MovieDetailsRepoImpl
 
     @Before
     fun setup() {
         remoteDataSource = mockk(relaxed = true)
-        repository = MovieDetailsImpl(remoteDataSource)
+        repository = MovieDetailsRepoImpl(remoteDataSource)
     }
 
-    private fun fakeMovieDetailsRemote() = MovieDetailsRemote(
+    private fun fakeMovieDetailsRemote() = MovieDetailsResponse(
         adult = false,
         backdropPath = "/b.jpg",
         belongsToCollection = CollectionDetails(1, "Coll"),
@@ -63,7 +73,7 @@ class MovieDetailsImplTest {
         voteCount = 100
     )
 
-    private fun fakeSimilarMoviesRemote() = SimilarMovies(
+    private fun fakeSimilarMoviesRemote() = SimilarMoviesResponse(
         page = 1,
         totalPages = 1,
         totalResults = 2,
@@ -103,7 +113,7 @@ class MovieDetailsImplTest {
         )
     )
 
-    private fun fakeMovieImagesRemote() = MovieImages(
+    private fun fakeMovieImagesRemote() = MovieImagesResponse(
         backdrops = emptyList(),
         id = 123,
         logos = emptyList(),
@@ -129,10 +139,10 @@ class MovieDetailsImplTest {
         )
     )
 
-    private fun fakeMovieCastRemote() = MovieCastRemote(
+    private fun fakeMovieCastRemote() = MovieCastResponse(
         id = 123,
         actorRemote = listOf(
-            ActorRemote(
+            MovieActor(
                 adult = false,
                 gender = 2,
                 id = 1,
@@ -146,7 +156,7 @@ class MovieDetailsImplTest {
                 creditId = "abcd",
                 order = 0
             ),
-            ActorRemote(
+            MovieActor(
                 adult = false,
                 gender = 2,
                 id = 2,
@@ -168,7 +178,7 @@ class MovieDetailsImplTest {
     fun `getMovieUsingId should map remote data correctly`() = runTest {
         coEvery { remoteDataSource.getMovieDetails(123) } returns fakeMovieDetailsRemote()
 
-        val result = repository.getMovieUsingId(123)
+        val result = repository.getMovieById(123)
 
         assertEquals("Inception", result.movieName)
         assertEquals(2, result.genres.size)
@@ -179,7 +189,7 @@ class MovieDetailsImplTest {
     fun `getSimilarMovies should map similar movies correctly`() = runTest {
         coEvery { remoteDataSource.getSimilarMovies(123) } returns fakeSimilarMoviesRemote()
 
-        val result = repository.getSimilarMoviesUsingId(123)
+        val result = repository.getSimilarMoviesById(123)
 
         assertEquals(2, result.size)
     }
@@ -188,7 +198,7 @@ class MovieDetailsImplTest {
     fun `getMovieImages should return poster file paths`() = runTest {
         coEvery { remoteDataSource.getMovieImages(123) } returns fakeMovieImagesRemote()
 
-        val result = repository.getMovieImagesUsingId(123)
+        val result = repository.getMovieImagesById(123)
 
         assertEquals(listOf("/img1.jpg", "/img2.jpg"), result)
     }
@@ -197,7 +207,7 @@ class MovieDetailsImplTest {
     fun `getMovieCast should return actor list with names and characters`() = runTest {
         coEvery { remoteDataSource.getMovieCast(123) } returns fakeMovieCastRemote()
 
-        val result = repository.getMovieCastUsingId(123)
+        val result = repository.getMovieCastById(123)
 
         assertEquals(2, result.size)
         assertEquals("Leonardo DiCaprio", result[0].name)
@@ -211,7 +221,7 @@ class MovieDetailsImplTest {
         coEvery { remoteDataSource.getMovieDetails(123) } throws RuntimeException("Network error")
 
         val ex = assertThrows<GetMovieDetailsException> {
-                repository.getMovieUsingId(123)
+                repository.getMovieById(123)
 
         }
         assertEquals("Failed to fetch movie details", ex.message)
@@ -222,7 +232,7 @@ class MovieDetailsImplTest {
         coEvery { remoteDataSource.getSimilarMovies(123) } throws RuntimeException("API failed")
 
         val ex = assertThrows<GetSimilarMoviesException> {
-                repository.getSimilarMoviesUsingId(123)
+                repository.getSimilarMoviesById(123)
 
         }
         assertEquals("Failed to fetch similar movies", ex.message)
@@ -233,7 +243,7 @@ class MovieDetailsImplTest {
         coEvery { remoteDataSource.getMovieImages(123) } throws RuntimeException("Server error")
 
         val ex = assertThrows<GetMovieImagesException> {
-                repository.getMovieImagesUsingId(123)
+                repository.getMovieImagesById(123)
 
         }
         assertEquals("Failed to fetch movie images", ex.message)
@@ -241,10 +251,10 @@ class MovieDetailsImplTest {
 
     @Test
     fun `getMovieCast should propagate GetMovieCastException`() = runTest {
-        coEvery { remoteDataSource.getMovieCast(123) } throws RuntimeException("ActorRemote API down")
+        coEvery { remoteDataSource.getMovieCast(123) } throws RuntimeException("MovieActor API down")
 
         val ex = assertThrows<GetMovieCastException> {
-            repository.getMovieCastUsingId(123)
+            repository.getMovieCastById(123)
         }
         assertEquals("Failed to fetch movie actorRemote", ex.message)
     }

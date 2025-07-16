@@ -1,4 +1,4 @@
-package com.london.data.datasource.remote.moviedetails
+package com.london.data.datasource.remote.details.moviedetails
 
 import android.util.Log
 import com.london.data.BuildConfig

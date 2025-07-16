@@ -5,8 +5,8 @@ import com.london.domain.entity.moviedatails.MovieDetails
 import com.london.domain.entity.moviedatails.SimilarMovie
 
 interface MovieDetailsRepository {
-    suspend fun getMovieUsingId(id: Int): MovieDetails
-    suspend fun getSimilarMoviesUsingId(id: Int): List<SimilarMovie>
-    suspend fun getMovieImagesUsingId(id: Int): List<String>
-    suspend fun getMovieCastUsingId(id: Int): List<Actor>
+    suspend fun getMovieById(id: Int): MovieDetails
+    suspend fun getSimilarMoviesById(id: Int): List<SimilarMovie>
+    suspend fun getMovieImagesById(id: Int): List<String>
+    suspend fun getMovieCastById(id: Int): List<Actor>
 }

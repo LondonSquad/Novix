@@ -1,4 +1,4 @@
-package com.london.data.datasource.remote.moviedetails
+package com.london.data.datasource.remote.details.moviedetails
 
 object ApiConstantsMovieDetails {
     const val HOST = "api.themoviedb.org"

@@ -2,10 +2,11 @@ package com.london.data.datasource.remote.moviedetails
 
 import android.util.Log
 import com.google.common.truth.Truth.assertThat
-import com.london.data.datasource.remote.moviedetails.model.MovieCastRemote
-import com.london.data.datasource.remote.moviedetails.model.MovieDetailsRemote
-import com.london.data.datasource.remote.moviedetails.model.MovieImages
-import com.london.data.datasource.remote.moviedetails.model.SimilarMovies
+import com.london.data.datasource.remote.details.moviedetails.model.MovieDetailsResponse
+import com.london.data.datasource.remote.details.moviedetails.model.moviecast.MovieCastResponse
+import com.london.data.datasource.remote.details.moviedetails.model.moviecast.MovieImages
+import com.london.data.datasource.remote.details.moviedetails.model.similarmovies.SimilarMoviesResponse
+import com.london.data.datasource.util.MovieDetailsRemoteImpl
 import io.ktor.client.HttpClient
 import io.ktor.client.engine.mock.MockEngine
 import io.ktor.client.engine.mock.MockRequestHandleScope
@@ -25,7 +26,7 @@ import org.junit.Before
 import org.junit.Test
 import org.junit.jupiter.api.assertThrows
 
-class MovieDetailsRemoteImplTest {
+class MovieDetailsResponseImplTest {
 
     private lateinit var httpClient: HttpClient
     private lateinit var remote: MovieDetailsRemoteImpl
@@ -55,7 +56,7 @@ class MovieDetailsRemoteImplTest {
     fun `getMovieDetails should return MovieDetailsRemote when API call is successful`() = runTest {
         // Given
         val mockResponseBody = createMovieDetailsResponse()
-        val expectedResponse = json.decodeFromString<MovieDetailsRemote>(mockResponseBody)
+        val expectedResponse = json.decodeFromString<MovieDetailsResponse>(mockResponseBody)
 
         setUp { _ ->
             respond(
@@ -101,7 +102,7 @@ class MovieDetailsRemoteImplTest {
     fun `getSimilarMovies should return SimilarMovies when API call is successful`() = runTest {
         // Given
         val mockResponseBody = createSimilarMoviesResponse()
-        val expectedResponse = json.decodeFromString<SimilarMovies>(mockResponseBody)
+        val expectedResponse = json.decodeFromString<SimilarMoviesResponse>(mockResponseBody)
 
         setUp { _ ->
             respond(
@@ -147,7 +148,7 @@ class MovieDetailsRemoteImplTest {
     fun `getMovieCast should return MovieCastRemote when API call is successful`() = runTest {
         // Given
         val mockResponseBody = createMovieCastResponse()
-        val expectedResponse = json.decodeFromString<MovieCastRemote>(mockResponseBody)
+        val expectedResponse = json.decodeFromString<MovieCastResponse>(mockResponseBody)
 
         setUp { _ ->
             respond(

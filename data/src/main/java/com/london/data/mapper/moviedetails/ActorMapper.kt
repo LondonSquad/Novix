@@ -1,9 +1,10 @@
 package com.london.data.mapper.moviedetails
 
-import com.london.data.datasource.remote.moviedetails.model.ActorRemote
+import com.london.data.datasource.remote.details.moviedetails.model.moviecast.MovieActor
 import com.london.domain.entity.Actor
 
-fun ActorRemote.toActor(): Actor {
+
+fun MovieActor.toEntity(): Actor {
     return Actor(
         id = this.id,
         name = this.originalName ,

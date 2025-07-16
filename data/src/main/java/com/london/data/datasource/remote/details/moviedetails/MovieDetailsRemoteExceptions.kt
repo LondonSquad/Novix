@@ -1,4 +1,4 @@
-package com.london.data.datasource.remote.moviedetails
+package com.london.data.datasource.remote.details.moviedetails
 
 class GetMovieDetailsException(cause: Throwable) : Exception("Failed to fetch movie details", cause)
 class GetSimilarMoviesException(cause: Throwable) : Exception("Failed to fetch similar movies", cause)

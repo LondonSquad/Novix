@@ -41,7 +41,7 @@ class GetMovieByIdTest {
             Actor(2, "Joseph Gordon-Levitt", "Arthur", "/jgl.jpg")
         ),
         similarMovies = listOf(
-            SimilarMovie("/interstellar.jpg", true), SimilarMovie("/tenet.jpg", false)
+            SimilarMovie("/interstellar.jpg", true , 1), SimilarMovie("/tenet.jpg", false , 1)
         ),
         movieHaveTrailer = true
     )
@@ -51,7 +51,7 @@ class GetMovieByIdTest {
         // Given
         val movieId = 123
         val expectedMovie = fakeMovieDetailsDomain()
-        coEvery { movieRepository.getMovieUsingId(movieId) } returns expectedMovie
+        coEvery { movieRepository.getMovieById(movieId) } returns expectedMovie
 
         // When
         val result = getMovieById(movieId)
@@ -73,7 +73,7 @@ class GetMovieByIdTest {
         assertEquals(2, result.movieImage.size)
         assertTrue(result.movieHaveTrailer)
 
-        coVerify(exactly = 1) { movieRepository.getMovieUsingId(movieId) }
+        coVerify(exactly = 1) { movieRepository.getMovieById(movieId) }
     }
 
     @Test
@@ -81,7 +81,7 @@ class GetMovieByIdTest {
         // Given
         val movieId = 123
         val expectedException = Exception("Failed to fetch movie details")
-        coEvery { movieRepository.getMovieUsingId(movieId) } throws expectedException
+        coEvery { movieRepository.getMovieById(movieId) } throws expectedException
 
         // When & Then
         val exception = assertThrows<Exception> {
@@ -89,7 +89,7 @@ class GetMovieByIdTest {
         }
 
         assertEquals("Failed to fetch movie details", exception.message)
-        coVerify(exactly = 1) { movieRepository.getMovieUsingId(movieId) }
+        coVerify(exactly = 1) { movieRepository.getMovieById(movieId) }
     }
 
     @Test
@@ -97,7 +97,7 @@ class GetMovieByIdTest {
         // Given
         val movieId = 456
         val expectedMovie = fakeMovieDetailsDomain().copy(movieId = movieId, movieName = "Tenet")
-        coEvery { movieRepository.getMovieUsingId(movieId) } returns expectedMovie
+        coEvery { movieRepository.getMovieById(movieId) } returns expectedMovie
 
         // When
         val result = getMovieById(movieId)
@@ -105,7 +105,7 @@ class GetMovieByIdTest {
         // Then
         assertEquals(456, result.movieId)
         assertEquals("Tenet", result.movieName)
-        coVerify(exactly = 1) { movieRepository.getMovieUsingId(movieId) }
+        coVerify(exactly = 1) { movieRepository.getMovieById(movieId) }
     }
 
     @Test
@@ -115,7 +115,7 @@ class GetMovieByIdTest {
         val movieWithNoGenres = fakeMovieDetailsDomain().copy(
             movieId = movieId, genres = emptyList()
         )
-        coEvery { movieRepository.getMovieUsingId(movieId) } returns movieWithNoGenres
+        coEvery { movieRepository.getMovieById(movieId) } returns movieWithNoGenres
 
         // When
         val result = getMovieById(movieId)
@@ -124,7 +124,7 @@ class GetMovieByIdTest {
         assertEquals(movieId, result.movieId)
         assertTrue(result.genres.isEmpty())
         assertEquals(0, result.genres.size)
-        coVerify(exactly = 1) { movieRepository.getMovieUsingId(movieId) }
+        coVerify(exactly = 1) { movieRepository.getMovieById(movieId) }
     }
 
     @Test
@@ -134,7 +134,7 @@ class GetMovieByIdTest {
         val movieWithEmptyImages = fakeMovieDetailsDomain().copy(
             movieId = movieId, movieImage = emptyList()
         )
-        coEvery { movieRepository.getMovieUsingId(movieId) } returns movieWithEmptyImages
+        coEvery { movieRepository.getMovieById(movieId) } returns movieWithEmptyImages
 
         // When
         val result = getMovieById(movieId)
@@ -143,7 +143,7 @@ class GetMovieByIdTest {
         assertEquals(movieId, result.movieId)
         assertTrue(result.movieImage.isEmpty())
         assertEquals(0, result.movieImage.size)
-        coVerify(exactly = 1) { movieRepository.getMovieUsingId(movieId) }
+        coVerify(exactly = 1) { movieRepository.getMovieById(movieId) }
     }
 
     @Test
@@ -153,7 +153,7 @@ class GetMovieByIdTest {
         val movieWithZeroDuration = fakeMovieDetailsDomain().copy(
             movieId = movieId, movieDuration = "0"
         )
-        coEvery { movieRepository.getMovieUsingId(movieId) } returns movieWithZeroDuration
+        coEvery { movieRepository.getMovieById(movieId) } returns movieWithZeroDuration
 
         // When
         val result = getMovieById(movieId)
@@ -161,7 +161,7 @@ class GetMovieByIdTest {
         // Then
         assertEquals(movieId, result.movieId)
         assertEquals("0", result.movieDuration)
-        coVerify(exactly = 1) { movieRepository.getMovieUsingId(movieId) }
+        coVerify(exactly = 1) { movieRepository.getMovieById(movieId) }
     }
 
     @Test
@@ -171,7 +171,7 @@ class GetMovieByIdTest {
         val movieWithNoActors = fakeMovieDetailsDomain().copy(
             movieId = movieId, actors = emptyList()
         )
-        coEvery { movieRepository.getMovieUsingId(movieId) } returns movieWithNoActors
+        coEvery { movieRepository.getMovieById(movieId) } returns movieWithNoActors
 
         // When
         val result = getMovieById(movieId)
@@ -180,7 +180,7 @@ class GetMovieByIdTest {
         assertEquals(movieId, result.movieId)
         assertTrue(result.actors.isEmpty())
         assertEquals(0, result.actors.size)
-        coVerify(exactly = 1) { movieRepository.getMovieUsingId(movieId) }
+        coVerify(exactly = 1) { movieRepository.getMovieById(movieId) }
     }
 
     @Test
@@ -190,7 +190,7 @@ class GetMovieByIdTest {
         val movieWithNoSimilar = fakeMovieDetailsDomain().copy(
             movieId = movieId, similarMovies = emptyList()
         )
-        coEvery { movieRepository.getMovieUsingId(movieId) } returns movieWithNoSimilar
+        coEvery { movieRepository.getMovieById(movieId) } returns movieWithNoSimilar
 
         // When
         val result = getMovieById(movieId)
@@ -199,7 +199,7 @@ class GetMovieByIdTest {
         assertEquals(movieId, result.movieId)
         assertTrue(result.similarMovies.isEmpty())
         assertEquals(0, result.similarMovies.size)
-        coVerify(exactly = 1) { movieRepository.getMovieUsingId(movieId) }
+        coVerify(exactly = 1) { movieRepository.getMovieById(movieId) }
     }
 
     @Test
@@ -209,7 +209,7 @@ class GetMovieByIdTest {
         val movieWithoutTrailer = fakeMovieDetailsDomain().copy(
             movieId = movieId, movieHaveTrailer = false
         )
-        coEvery { movieRepository.getMovieUsingId(movieId) } returns movieWithoutTrailer
+        coEvery { movieRepository.getMovieById(movieId) } returns movieWithoutTrailer
 
         // When
         val result = getMovieById(movieId)
@@ -217,7 +217,7 @@ class GetMovieByIdTest {
         // Then
         assertEquals(movieId, result.movieId)
         assertFalse(result.movieHaveTrailer)
-        coVerify(exactly = 1) { movieRepository.getMovieUsingId(movieId) }
+        coVerify(exactly = 1) { movieRepository.getMovieById(movieId) }
     }
 
     @Test
@@ -225,7 +225,7 @@ class GetMovieByIdTest {
         // Given
         val movieId = 555
         val runtimeException = RuntimeException("Network error")
-        coEvery { movieRepository.getMovieUsingId(movieId) } throws runtimeException
+        coEvery { movieRepository.getMovieById(movieId) } throws runtimeException
 
         // When & Then
         val exception = assertThrows<RuntimeException> {
@@ -233,7 +233,7 @@ class GetMovieByIdTest {
         }
 
         assertEquals("Network error", exception.message)
-        coVerify(exactly = 1) { movieRepository.getMovieUsingId(movieId) }
+        coVerify(exactly = 1) { movieRepository.getMovieById(movieId) }
     }
 
     @Test
@@ -241,12 +241,12 @@ class GetMovieByIdTest {
         // Given
         val movieId = 666
         val expectedMovie = fakeMovieDetailsDomain().copy(movieId = movieId)
-        coEvery { movieRepository.getMovieUsingId(movieId) } returns expectedMovie
+        coEvery { movieRepository.getMovieById(movieId) } returns expectedMovie
 
         // When
         getMovieById(movieId)
 
         // Then
-        coVerify(exactly = 1) { movieRepository.getMovieUsingId(movieId) }
+        coVerify(exactly = 1) { movieRepository.getMovieById(movieId) }
     }
 }

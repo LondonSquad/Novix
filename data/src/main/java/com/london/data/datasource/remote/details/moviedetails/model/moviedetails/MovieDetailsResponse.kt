@@ -1,9 +1,9 @@
-package com.london.data.datasource.remote.moviedetails.model
+package com.london.data.datasource.remote.details.moviedetails.model.moviedetails
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class MovieDetailsRemote(
+data class MovieDetailsResponse(
     val adult: Boolean,
     @SerialName("backdrop_path")
     val backdropPath: String?,
@@ -11,7 +11,7 @@ data class MovieDetailsRemote(
     val belongsToCollection: CollectionDetails?,
     val budget: Int,
     @SerialName("genres")
-    val genreRemotes: List<GenreRemote>,
+    val genreRemotes: List<Genre>,
     val homepage: String,
     val id: Int,
     @SerialName("imdb_id")
@@ -27,15 +27,15 @@ data class MovieDetailsRemote(
     @SerialName("poster_path")
     val posterPath: String?,
     @SerialName("production_companies")
-    val productionCompanies: List<ProductionCompanyRemote>,
+    val productionCompanies: List<ProductionCompany>,
     @SerialName("production_countries")
-    val productionCountries: List<ProductionCountryRemote>,
+    val productionCountries: List<ProductionCountry>,
     @SerialName("release_date")
     val releaseDate: String?,
     val revenue: Long,
     val runtime: Int,
     @SerialName("spoken_languages")
-    val spokenLanguageRemotes: List<SpokenLanguageRemote>,
+    val spokenLanguages: List<SpokenLanguage>,
     val status: String,
     val tagline: String,
     val title: String,
@@ -44,42 +44,4 @@ data class MovieDetailsRemote(
     val voteAverage: Double,
     @SerialName("vote_count")
     val voteCount: Int
-)
-
-@Serializable
-data class CollectionDetails(
-    val id: Int,
-    val name: String
-)
-
-@Serializable
-data class SpokenLanguageRemote(
-    @SerialName("english_name")
-    val englishName: String,
-    @SerialName("iso_639_1")
-    val iso6391: String,
-    val name: String
-)
-
-@Serializable
-data class ProductionCountryRemote(
-    @SerialName("iso_3166_1")
-    val iso31661: String,
-    val name: String
-)
-
-@Serializable
-data class ProductionCompanyRemote(
-    val id: Int,
-    @SerialName("logo_path")
-    val logoPath: String?,
-    val name: String,
-    @SerialName("origin_country")
-    val originCountry: String
-)
-
-@Serializable
-data class GenreRemote(
-    val id: Int,
-    val name: String
 )

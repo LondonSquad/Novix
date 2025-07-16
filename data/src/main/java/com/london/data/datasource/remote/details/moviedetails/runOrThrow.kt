@@ -1,6 +1,6 @@
-package com.london.data.datasource.remote.moviedetails
+package com.london.data.datasource.remote.details.moviedetails
 
-suspend inline fun <T> runOrThrowHandler(
+suspend inline fun <T> runOrThrow(
     crossinline block: suspend () -> T,
     crossinline error: (Throwable) -> Throwable
 ): T = runCatching {

@@ -6,12 +6,12 @@ import com.london.data.datasource.local.model.SearchMoviesLocal
 import com.london.data.datasource.local.model.SearchTvShowLocal
 import com.london.data.datasource.local.recentsearch.RecentSearchDataSource
 import com.london.data.datasource.remote.details.tvshowdetails.TvShowDetailsRemoteDataSource
-import com.london.data.datasource.remote.moviedetails.MovieDetailsRemoteDataSource
+import com.london.data.datasource.remote.details.moviedetails.MovieDetailsRemote
 import com.london.data.datasource.remote.search.RemoteDataSource
 import com.london.data.datasource.util.CrashReporter
 import com.london.data.datasource.util.FirebaseCrashReporter
 import com.london.data.repository.DetailsRepositoryImpl
-import com.london.data.repository.MovieDetailsImpl
+import com.london.data.repository.MovieDetailsRepoImpl
 import com.london.data.repository.RecentRepositoryImpl
 import com.london.data.repository.SearchRepositoryImpl
 import com.london.domain.repository.DetailsRepository
@@ -58,7 +58,7 @@ class RepositoryModule {
 
     @Single
     fun provideMovieDetailsRepository(
-        movieDetailsRemoteDataSource: MovieDetailsRemoteDataSource,
+        movieDetailsRemote: MovieDetailsRemote,
     ): MovieDetailsRepository =
-        MovieDetailsImpl(movieDetailsRemoteDataSource)
+        MovieDetailsRepoImpl(movieDetailsRemote)
 }

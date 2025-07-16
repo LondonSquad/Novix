@@ -4,8 +4,8 @@ import android.util.Log
 import com.london.data.datasource.device.DeviceConfigurationDataSource
 import com.london.data.datasource.remote.details.tvshowdetails.TvShowDetailsRemoteDataSource
 import com.london.data.datasource.remote.details.tvshowdetails.TvShowDetailsRemoteDataSourceImpl
-import com.london.data.datasource.remote.moviedetails.MovieDetailsRemoteDataSource
-import com.london.data.datasource.remote.moviedetails.MovieDetailsRemoteImpl
+import com.london.data.datasource.remote.details.moviedetails.MovieDetailsRemote
+import com.london.data.datasource.util.MovieDetailsRemoteImpl
 import com.london.data.datasource.remote.search.RemoteDataSource
 import com.london.data.datasource.remote.search.SearchRemoteDataSourceImpl
 import io.ktor.client.HttpClient
@@ -45,7 +45,7 @@ class DataSourceModule {
     }
 
     @Single
-    fun provideMovieRemoteDataSource(ktorClient: HttpClient): MovieDetailsRemoteDataSource =
+    fun provideMovieRemoteDataSource(ktorClient: HttpClient): MovieDetailsRemote =
         MovieDetailsRemoteImpl(ktorClient)
 
 }

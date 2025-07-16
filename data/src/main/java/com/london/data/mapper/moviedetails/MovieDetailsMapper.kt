@@ -1,13 +1,13 @@
 package com.london.data.mapper.moviedetails
 
-import com.london.data.datasource.remote.moviedetails.model.MovieDetailsRemote
-import com.london.data.datasource.remote.moviedetails.model.SimilarMovieRemote
+import com.london.data.datasource.remote.details.moviedetails.model.MovieDetailsResponse
+import com.london.data.datasource.remote.details.moviedetails.model.similarmovies.SimilarMovieRemote
 import com.london.domain.entity.Actor
 import com.london.domain.entity.moviedatails.Genre
 import com.london.domain.entity.moviedatails.MovieDetails
 import com.london.domain.entity.moviedatails.SimilarMovie
 
-fun MovieDetailsRemote.fromRemoteToDomain(
+fun MovieDetailsResponse.toEntity(
     similarMovies: List<SimilarMovie> = emptyList(),
     genres: List<Genre> = emptyList(),
     actors: List<Actor> = emptyList(),
@@ -34,5 +34,6 @@ fun SimilarMovieRemote.toSimilarMovie(): SimilarMovie {
     return SimilarMovie(
         image = "https://image.tmdb.org/t/p/w500" + (this.posterPath ?: ""),
         isSaved = false,
+        movieId = this.id
     )
 }
