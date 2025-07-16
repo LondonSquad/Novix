@@ -28,11 +28,14 @@ kover {
             filters {
                 includes {
                     classes("**.*UseCase")
-                    classes("**.*ActorLocalDataSourceImpl")
-                    classes("**.*MovieLocalDataSourceImpl")
-                    classes("**.*TvShowLocalDataSourceImpl")
-                    classes("**.*RecentSearchDataSourceImpl")
+                    classes("**ActorLocalDataSourceImpl")
+                    classes("**MovieLocalDataSourceImpl")
+                    classes("**TvShowLocalDataSourceImpl")
+                    classes("**RecentSearchDataSourceImpl")
                     classes("**.*RepositoryImpl")
+                }
+                excludes {
+                    classes("**.KoinDef*")
                 }
             }
             verify {
