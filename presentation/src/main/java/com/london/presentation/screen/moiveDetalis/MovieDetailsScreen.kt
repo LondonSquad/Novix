@@ -115,7 +115,7 @@ fun MovieDetailsContent(
     onPreviewClick: (Int) -> Unit
 ) {
 
-    Box(modifier = Modifier.fillMaxSize().background(NovixTheme.colors.surface).padding(top = 16.dp)) {
+    Box(modifier = Modifier.fillMaxSize().background(NovixTheme.colors.surface)) {
         Column(
             modifier = Modifier
                 .fillMaxSize()
