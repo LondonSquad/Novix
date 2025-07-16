@@ -1434,5 +1434,33 @@
       "deletions": 36,
       "changed_files": 2
     }
+  },
+  {
+    "pr_number": 118,
+    "url": "https://github.com/LondonSquad/Novix/pull/118",
+    "title": "Feature/pagination integration",
+    "opened_at": "2025-07-16T04:31:59Z",
+    "head_ref": "feature/pagination-integration",
+    "base_ref": "develop",
+    "creator": {
+      "login": "karimdeabes",
+      "id": 81706918,
+      "url": "https://github.com/karimdeabes"
+    },
+    "approvals": [],
+    "first_approved_at": null,
+    "time_to_first_approval_minutes": null,
+    "required_approvals_met_at": null,
+    "time_to_required_approvals_minutes": null,
+    "closed_at": null,
+    "merged_at": null,
+    "merged_by": null,
+    "week": "2025-W29",
+    "status": "pending",
+    "diff_stats": {
+      "additions": 726,
+      "deletions": 562,
+      "changed_files": 27
+    }
   }
 ]
