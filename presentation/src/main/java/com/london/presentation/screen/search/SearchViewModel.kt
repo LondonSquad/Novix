@@ -121,9 +121,9 @@ class SearchViewModel(
     }
 
     private fun searchMovies(query: String) {
-        val moviesFlow = createPagingSourceFlow { pageNumber ->
+        val moviesFlow = createPagingSourceFlow(query) { currentQuery, pageNumber ->
             val movies = getMoviesUseCase(
-                name = query,
+                name = currentQuery,
                 language = "en-US",
                 pageNumber = pageNumber
             )
@@ -134,18 +134,20 @@ class SearchViewModel(
             currentState.copy(
                 moviesFlow = moviesFlow,
                 actorsFlow = flow {},
+                tvShowsFlow = flow {}
             )
         }
     }
 
 
     private fun searchActors(query: String) {
-        val actorsFlow = createPagingSourceFlow { pageNumber ->
-            getActorsUseCase(
-                name = query,
+        val actorsFlow = createPagingSourceFlow(query) { currentQuery, pageNumber ->
+            val actors = getActorsUseCase(
+                name = currentQuery,
                 language = "en-US",
                 pageNumber = pageNumber
             )
+            actors.copy(items = actors.items)
         }
 
         _uiState.update { currentState ->
@@ -158,9 +160,10 @@ class SearchViewModel(
     }
 
     private fun searchTvShows(query: String) {
-        val tvShowsFlow = createPagingSourceFlow { pageNumber ->
+
+        val tvShowsFlow = createPagingSourceFlow(query) { currentQuery, pageNumber ->
             val tvShows = getTvShowsUseCase(
-                name = query,
+                name = currentQuery,
                 language = "en-US",
                 pageNumber = pageNumber
             )

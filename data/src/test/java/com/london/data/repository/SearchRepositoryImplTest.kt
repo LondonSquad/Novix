@@ -77,7 +77,7 @@ class SearchRepositoryImplTest {
 
 
         if (crashReporterToUse != null) {
-            coVerify(exactly = 1) { crashReporterToUse.logException(expectedLoggedException) }
+            coVerify(exactly = PAGE_NUMBER) { crashReporterToUse.logException(expectedLoggedException) }
         } else {
             coVerify(exactly = 0) { mockCrashReporter.logException(any()) }
         }
@@ -85,16 +85,23 @@ class SearchRepositoryImplTest {
 
     @Test
     fun `searchForMovies should return data from local if available`() = runTest {
-        coEvery { searchMovieService.getByQuery(NAME + LANG) } returns SearchMoviesLocalMock
-        val result = repository.searchForMovies(NAME, LANG, 1)
+        coEvery { searchMovieService.getByQueryAndPage(NAME + LANG, PAGE_NUMBER) } returns SearchMoviesLocalMock
+        val result = repository.searchForMovies(NAME, LANG, PAGE_NUMBER)
         assertThat(result).isEqualTo(MovieList)
     }
 
     @Test
     fun `searchForMovies should return data from remote and cache it if local is null`() = runTest {
-        coEvery { searchMovieService.getByQuery(NAME + LANG) } returns null
-        coEvery { searchRemoteDataSource.searchForMovies(any(), any(), any(), any()) } returns SearchMoviesRemoteMock
-        val result = repository.searchForMovies(NAME, LANG, 1)
+        coEvery { searchMovieService.getByQueryAndPage(NAME + LANG, PAGE_NUMBER) } returns null
+        coEvery {
+            searchRemoteDataSource.searchForMovies(
+                any(),
+                any(),
+                any(),
+                any()
+            )
+        } returns SearchMoviesRemoteMock
+        val result = repository.searchForMovies(NAME, LANG, PAGE_NUMBER)
         assertThat(result).isEqualTo(MovieList)
         coVerify { searchMovieService.insert(any()) }
     }
@@ -180,7 +187,7 @@ class SearchRepositoryImplTest {
     @Test
     fun `searchForTvShows should return data from remote and cache it if local is null`() =
         runTest {
-            coEvery { searchTvShowService.getByQuery(NAME + LANG) } returns null
+            coEvery { searchTvShowService.getByQueryAndPage(NAME + LANG, PAGE_NUMBER) } returns null
             coEvery {
                 searchRemoteDataSource.searchForTvShows(
                     any(),
@@ -189,7 +196,7 @@ class SearchRepositoryImplTest {
                     any()
                 )
             } returns SearchTvShowRemoteMock
-            val result = repository.searchForTvShows(NAME, LANG, 1)
+            val result = repository.searchForTvShows(NAME, LANG, PAGE_NUMBER)
             assertThat(result).isEqualTo(TvShowList)
             coVerify { searchTvShowService.insert(any()) }
         }
@@ -206,22 +213,22 @@ class SearchRepositoryImplTest {
                 )
             } throws Exception()
             assertThrows<Exception> {
-                repository.searchForTvShows(NAME, LANG, 1)
+                repository.searchForTvShows(NAME, LANG, PAGE_NUMBER)
             }
         }
 
     @Test
     fun `searchForActors should return data from local if available`() = runTest {
-        coEvery { searchActorService.getByQuery(NAME + LANG) } returns SearchActorsLocalMock
-        val result = repository.searchForActors(NAME, LANG, 1)
+        coEvery { searchActorService.getByQueryAndPage(NAME + LANG, PAGE_NUMBER) } returns SearchActorsLocalMock
+        val result = repository.searchForActors(NAME, LANG, PAGE_NUMBER)
         assertThat(result).isEqualTo(ActorList)
     }
 
     @Test
     fun `searchForActors should return data from remote and cache it if local is null`() = runTest {
-        coEvery { searchActorService.getByQuery(NAME + LANG) } returns null
+        coEvery { searchActorService.getByQueryAndPage(NAME + LANG, PAGE_NUMBER) } returns null
         coEvery { searchRemoteDataSource.searchForActors(any(), any(), any(), any()) } returns SearchActorsRemoteMock
-        val result = repository.searchForActors(NAME, LANG, 1)
+        val result = repository.searchForActors(NAME, LANG, PAGE_NUMBER)
         assertThat(result).isEqualTo(ActorList)
         coVerify { searchActorService.insert(any()) }
     }
@@ -238,19 +245,20 @@ class SearchRepositoryImplTest {
                 )
             } throws Exception()
             assertThrows<Exception> {
-                repository.searchForActors(NAME, LANG, 1)
+                repository.searchForActors(NAME, LANG, PAGE_NUMBER)
             }
         }
 
     private companion object {
         const val NAME = "Tom"
         const val LANG = "en-US"
+        const val PAGE_NUMBER = 1
 
         val MovieList = PagedFetchResponse<Movie>(
-            1,
+            PAGE_NUMBER,
             listOf(
                 Movie(
-                    id = 1,
+                    id = PAGE_NUMBER,
                     name = "",
                     posterPicture = "https://image.tmdb.org/t/p/w500",
                     releaseYear = 2020,
@@ -258,12 +266,12 @@ class SearchRepositoryImplTest {
                     genreIds = listOf(),
                 )
             ),
-            totalItems = 1,
-            totalPages = 1
+            totalItems = PAGE_NUMBER,
+            totalPages = PAGE_NUMBER
         )
 
         val TvShowList = PagedFetchResponse<TvShow>(
-            1,
+            PAGE_NUMBER,
             listOf(
                 TvShow(
                     id = 2,
@@ -274,12 +282,12 @@ class SearchRepositoryImplTest {
                     genres = listOf(),
                 )
             ),
-            totalItems = 1,
-            totalPages = 1
+            totalItems = PAGE_NUMBER,
+            totalPages = PAGE_NUMBER
         )
 
         val ActorList = PagedFetchResponse<Actor>(
-            1,
+            PAGE_NUMBER,
             listOf(
                 Actor(
                     id = 3,
@@ -287,38 +295,38 @@ class SearchRepositoryImplTest {
                     profilePicture = "https://image.tmdb.org/t/p/w500"
                 )
             ),
-            totalItems = 1,
-            totalPages = 1
+            totalItems = PAGE_NUMBER,
+            totalPages = PAGE_NUMBER
         )
 
         val SearchMoviesLocalMock = SearchMoviesLocal(
             query = NAME + LANG,
-            page = 1,
+            page = PAGE_NUMBER,
             results = listOf(
                 SearchMovieDtoLocal(
                     adult = false,
                     backdropPath = null,
                     genreIds = emptyList(),
-                    id = 1,
+                    id = PAGE_NUMBER,
                     originalLanguage = "en",
                     originalTitle = "",
                     overview = "",
                     popularity = 0.0,
                     posterPath = "",
-                    releaseDate = "2020-06-15",
+                    releaseDate = "2020-06-PAGE_NUMBER5",
                     title = "",
                     video = false,
                     voteAverage = 8.0,
                     voteCount = 0
                 )
             ),
-            totalPages = 1,
-            totalResults = 1
+            totalPages = PAGE_NUMBER,
+            totalResults = PAGE_NUMBER
         )
 
         val SearchActorsLocalMock = SearchActorsLocal(
             query = NAME + LANG,
-            page = 1,
+            page = PAGE_NUMBER,
             results = listOf(
                 PersonDtoLocal(
                     adult = false,
@@ -332,36 +340,36 @@ class SearchRepositoryImplTest {
                     knownFor = emptyList()
                 )
             ),
-            totalPages = 1,
-            totalResults = 1
+            totalPages = PAGE_NUMBER,
+            totalResults = PAGE_NUMBER
         )
 
         val SearchMoviesRemoteMock = ApiResponse(
-            currentPage = 1,
+            currentPage = PAGE_NUMBER,
             items = listOf(
                 SearchMovieRemote(
                     adult = false,
                     backdropPath = null,
                     genreIds = emptyList(),
-                    id = 1,
+                    id = PAGE_NUMBER,
                     originalLanguage = "en",
                     originalTitle = "",
                     overview = "",
                     popularity = 0.0,
                     posterPath = "",
-                    releaseDate = "2020-06-15",
+                    releaseDate = "2020-06-PAGE_NUMBER5",
                     title = "",
                     video = false,
                     voteAverage = 8.0,
                     voteCount = 0
                 )
             ),
-            totalPages = 1,
-            totalItems = 1
+            totalPages = PAGE_NUMBER,
+            totalItems = PAGE_NUMBER
         )
 
         val SearchTvShowRemoteMock = ApiResponse(
-            currentPage = 1,
+            currentPage = PAGE_NUMBER,
             items = listOf(
                 SearchTvShowRemote(
                     adult = false,
@@ -380,12 +388,12 @@ class SearchRepositoryImplTest {
                     voteCount = 0
                 )
             ),
-            totalPages = 1,
-            totalItems = 1
+            totalPages = PAGE_NUMBER,
+            totalItems = PAGE_NUMBER
         )
 
         val SearchActorsRemoteMock = ApiResponse(
-            currentPage = 1,
+            currentPage = PAGE_NUMBER,
             items = listOf(
                 SearchActorRemote(
                     adult = false,
@@ -399,8 +407,8 @@ class SearchRepositoryImplTest {
                     knownFor = emptyList()
                 )
             ),
-            totalPages = 1,
-            totalItems = 1
+            totalPages = PAGE_NUMBER,
+            totalItems = PAGE_NUMBER
         )
     }
 }

@@ -42,6 +42,15 @@ suspend fun <T : Any> SearchDao<T>.executeGetByQuery(
     )
 })
 
+suspend fun <T : Any> SearchDao<T>.executeGetByQueryAndPage(
+    input: String, page: Int, errorMessage: String? = null
+) = runOrThrow(block = { getSearchByQueryAndPage(input, page) }, error = {
+    GetException(
+        errorMessage ?: "Failed to get ${input::class.simpleName} from the local database."
+    )
+})
+
+
 suspend fun <T : Any> SearchDao<T>.executeGetByDate(
     input: Long, errorMessage: String? = null
 ) = runOrThrow(block = { getCurrentSearchByDate(input) }, error = {
