@@ -112,6 +112,7 @@ class UseCaseModule {
         actorRepository: ActorRepository
     ): GetActorTvShowPicksByIdUseCase = GetActorTvShowPicksByIdUseCase(actorRepository)
 
+    @Single
     fun provideSimilarMoviesUseCase(
         movieDetailsRepository: MovieDetailsRepository
     ): GetSimilarMoviesUseCase = GetSimilarMoviesUseCase(movieDetailsRepository)
