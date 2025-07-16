@@ -58,7 +58,6 @@ fun ImageViewFilter(
             val request = ImageRequest.Builder(context)
                 .data(model)
                 .allowHardware(false)
-                .build()
                 .memoryCachePolicy(CachePolicy.ENABLED)
                 .diskCachePolicy(CachePolicy.ENABLED)
                 .build()
