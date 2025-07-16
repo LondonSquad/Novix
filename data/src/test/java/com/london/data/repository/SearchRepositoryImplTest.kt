@@ -3,6 +3,7 @@ package com.london.data.repository
 import com.google.common.truth.Truth.assertThat
 import com.london.data.datasource.local.LocalDataSource
 import com.london.data.datasource.local.dao.GenreInterestDao
+import com.london.data.datasource.local.model.GenreInterestEntity
 import com.london.data.datasource.local.model.PersonDtoLocal
 import com.london.data.datasource.local.model.SearchActorsLocal
 import com.london.data.datasource.local.model.SearchMovieDtoLocal
@@ -253,6 +254,75 @@ class SearchRepositoryImplTest {
                 repository.searchForActors(NAME, LANG, PAGE_NUMBER)
             }
         }
+
+    @Test
+    fun `incrementGenreInterest should insert when no existing record`() = runTest {
+        val genreId = 10
+        val mediaType = "movie"
+
+        coEvery { genreInterestDao.getGenreInterest(genreId, mediaType) } returns null
+
+        repository.incrementGenreInterest(genreId, mediaType)
+
+        coVerify {
+            genreInterestDao.insertGenreInterest(match {
+                it.genreId == genreId && it.mediaType == mediaType && it.count == 1
+            })
+        }
+    }
+
+    @Test
+    fun `incrementGenreInterest should update when record exists`() = runTest {
+        val genreId = 20
+        val mediaType = "tv"
+        val existing = GenreInterestEntity(genreId, mediaType, count = 5)
+        coEvery { genreInterestDao.getGenreInterest(genreId, mediaType) } returns existing
+        repository.incrementGenreInterest(genreId, mediaType)
+        coVerify {
+            genreInterestDao.updateGenreInterest(match {
+                it.genreId == genreId && it.mediaType == mediaType && it.count == existing.count + 1
+            })
+        }
+    }
+
+    @Test
+    fun `getGenreInterestCounts should map dao entities to pairs`() = runTest {
+        val mediaType = "movie"
+        val entities = listOf(
+            GenreInterestEntity(1, mediaType, 3),
+            GenreInterestEntity(2, mediaType, 7)
+        )
+        coEvery { genreInterestDao.getGenresByInterest(mediaType) } returns entities
+        val result = repository.getGenreInterestCounts(mediaType)
+        assertThat(result).containsExactly((1 to 3), (2 to 7))
+    }
+
+    @Test
+    fun `getGenreInterestCounts should log exception and return empty list on error`() = runTest {
+        val mediaType = "tv"
+        val exception = RuntimeException("DB error")
+
+        coEvery { genreInterestDao.getGenresByInterest(mediaType) } throws exception
+
+        val result = repository.getGenreInterestCounts(mediaType)
+        assertThat(result).isEmpty()
+
+        coVerify { mockCrashReporter.logException(exception) }
+    }
+
+    @Test
+    fun `incrementGenreInterest should log exception on dao error`() = runTest {
+        val genreId = 99
+        val mediaType = "movie"
+        val exception = RuntimeException("DAO failure")
+
+        coEvery { genreInterestDao.getGenreInterest(genreId, mediaType) } throws exception
+
+        repository.incrementGenreInterest(genreId, mediaType)
+
+        coVerify { mockCrashReporter.logException(exception) }
+    }
+
 
     private companion object {
         const val NAME = "Tom"

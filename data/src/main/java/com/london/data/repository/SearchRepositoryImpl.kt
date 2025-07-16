@@ -115,7 +115,6 @@ class SearchRepositoryImpl(
         )
     }
 
-    // THIS FUN HAVE TO BE IN SPECIF REPOSITORY FOR SCALABILITY
     override suspend fun incrementGenreInterest(genreId: Int, mediaType: String) {
         try {
             val current = genreInterestDao.getGenreInterest(genreId, mediaType)
@@ -133,7 +132,6 @@ class SearchRepositoryImpl(
         }
     }
 
-    // THIS FUN HAVE TO BE IN SPECIF REPOSITORY FOR SCALABILITY
     override suspend fun getGenreInterestCounts(mediaType: String): List<Pair<Int, Int>> {
         return try {
             genreInterestDao.getGenresByInterest(mediaType)
@@ -144,7 +142,4 @@ class SearchRepositoryImpl(
         }
     }
 
-    private fun addExceptionToCrashlytics(e: Exception) {
-        crashReporter.logException(e)
-    }
 }
