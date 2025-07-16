@@ -44,4 +44,14 @@
     <string name="Actors">"ممثلين"</string>
     <string name="top_movies_picks">أفضل الأفلام المختارة</string>
     <string name="top_tv_shows_picks">أفضل اختيارات البرامج التلفزيونية</string>
+    <string name="view_reviews">View reviews</string>
+    <string name="overview">Overview</string>
+    <string name="more_like_this">More like this</string>
+    <string name="play_trailer">Play trailer</string>
+    <string name="star">star</string>
+    <string name="time_icon">time_icon</string>
+    <string name="calendar">calendar</string>
+    <string name="separator">separator</string>
+    <string name="dot">dot</string>
+
 </resources>

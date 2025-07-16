@@ -1,5 +1,6 @@
 package com.london.app.navigation
 
+import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
@@ -27,6 +28,7 @@ import com.london.presentation.screen.bookmark.BookmarksScreen
 import com.london.presentation.screen.category.CategoriesScreen
 import com.london.presentation.screen.details.tvshow.tvshowdetails.TvShowsDetailsScreen
 import com.london.presentation.screen.home.HomeScreen
+import com.london.presentation.screen.moiveDetalis.MovieDetailsScreen
 import com.london.presentation.screen.search.SearchScreen
 
 @Composable
@@ -45,10 +47,11 @@ fun NovixApp() {
     }
 
     val showBottomNav = currentDestination?.hasRoute<TvShowDetails>() != true
-
+    val showMovieDetails = currentDestination?.hasRoute<MovieDetails>() != true
+    Log.d("test", "NovixApp: $showMovieDetails")
     Scaffold(
         bottomBar = {
-            if (showBottomNav) {
+            if (showBottomNav && showMovieDetails) {
                 NavBar(
                     modifier = Modifier
                         .background(NovixTheme.colors.surface)
@@ -74,6 +77,9 @@ fun NovixApp() {
                 SearchScreen(
                     onNavigateToTvShowDetails = { tvShowId ->
                         navController.navigate(TvShowDetails(tvShowId))
+                    },
+                    onNavigateToMovieDetails = { movieId ->
+                        navController.navigate(MovieDetails(movieId))
                     }
                 )
             }
@@ -97,6 +103,15 @@ fun NovixApp() {
                         navController.navigateUp()
                     }
                 )
+            }
+            composable<MovieDetails> { backStackEntry ->
+                val movieDetails = backStackEntry.arguments?.let {
+                    MovieDetailsScreen(
+                        movieId = it.getInt("movieId"),
+                        onBackClick = { navController.navigateUp() },
+
+                    )
+                }
             }
         }
     }
