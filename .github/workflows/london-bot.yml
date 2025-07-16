@@ -270,8 +270,22 @@ jobs:
               } | recalculate_approval_metrics($required_approvals)
               ')
 
-            # Add to metrics
-            JQ_DATA=$(echo "$JQ_DATA" | jq --argjson new_pr_data "$NEW_PR_DATA" '. + [$new_pr_data]')
+            # Insert the PR in the correct position (sorted by PR number)
+            JQ_DATA=$(echo "$JQ_DATA" | jq \
+            --argjson new_pr "$NEW_PR_DATA" \
+            'sort_by(.pr_number) | 
+               reduce .[] as $item ([]; 
+                 if ($new_pr.pr_number < $item.pr_number) and (. | any(.pr_number == $new_pr.pr_number) | not) then 
+                   . + [$new_pr, $item] 
+                 else 
+                   . + [$item] 
+                 end) | 
+               if any(.pr_number == $new_pr.pr_number) | not then 
+                 . + [$new_pr] 
+               else 
+                 . 
+               end | sort_by(.pr_number)')
+            
             echo "Added PR #$pr_number to metrics with status: $PR_STATUS"
           done
 
