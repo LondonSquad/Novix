@@ -1455,12 +1455,20 @@
           "url": "https://github.com/ahmeddsamii"
         },
         "submitted_at": "2025-07-16T06:05:40Z"
+      },
+      {
+        "reviewer": {
+          "id": 102248144,
+          "login": "BassantM",
+          "url": "https://github.com/BassantM"
+        },
+        "submitted_at": "2025-07-16T06:15:49Z"
       }
     ],
     "first_approved_at": "2025-07-16T06:05:40Z",
     "time_to_first_approval_minutes": 93.68333333333334,
-    "required_approvals_met_at": null,
-    "time_to_required_approvals_minutes": null,
+    "required_approvals_met_at": "2025-07-16T06:15:49Z",
+    "time_to_required_approvals_minutes": 103.83333333333333,
     "closed_at": "2025-07-16T06:15:50Z",
     "merged_at": "2025-07-16T06:15:50Z",
     "merged_by": {
