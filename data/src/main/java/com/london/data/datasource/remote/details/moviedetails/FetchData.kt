@@ -10,7 +10,7 @@ import io.ktor.http.URLProtocol
 import io.ktor.http.path
 import kotlinx.serialization.json.Json
 
-val json = Json
+val json = Json{ignoreUnknownKeys = true}
 
 suspend inline fun <reified T> fetchData(
     path: String,
