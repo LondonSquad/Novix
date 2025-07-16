@@ -1579,6 +1579,34 @@
     }
   },
   {
+    "pr_number": 121,
+    "url": "https://github.com/LondonSquad/Novix/pull/121",
+    "title": "feat: implement genre-based search result sorting",
+    "opened_at": "2025-07-16T06:12:58Z",
+    "head_ref": "feature/sorting-based-user-activities",
+    "base_ref": "develop",
+    "creator": {
+      "login": "Mostafa-alsaygh",
+      "id": 106277855,
+      "url": "https://github.com/Mostafa-alsaygh"
+    },
+    "approvals": [],
+    "first_approved_at": null,
+    "time_to_first_approval_minutes": null,
+    "required_approvals_met_at": null,
+    "time_to_required_approvals_minutes": null,
+    "closed_at": null,
+    "merged_at": null,
+    "merged_by": null,
+    "week": "2025-W29",
+    "status": "pending",
+    "diff_stats": {
+      "additions": 288,
+      "deletions": 130,
+      "changed_files": 13
+    }
+  },
+  {
     "pr_number": 122,
     "url": "https://github.com/LondonSquad/Novix/pull/122",
     "title": "Feature/actor details dto",
