@@ -74,21 +74,6 @@ class UseCaseModule {
         GetEpisodesByTvShowSeason(repository)
 
     @Single
-    fun provideGetMovieDetailsUseCase(
-        getMovieById: GetMovieById,
-        getMovieImagesUseCase: GetMovieImagesUseCase,
-        getMovieCastUseCase: GetMovieCastUseCase,
-        getSimilarMoviesUseCase: GetSimilarMoviesUseCase
-    ): GetMovieDetailsUseCase {
-        return GetMovieDetailsUseCase(
-            getMovieById,
-            getMovieImagesUseCase,
-            getMovieCastUseCase,
-            getSimilarMoviesUseCase
-        )
-    }
-
-    @Single
     fun provideGetMovieByIdUseCase(
         movieDetailsRepository: MovieDetailsRepository
     ): GetMovieById {
@@ -105,19 +90,18 @@ class UseCaseModule {
     @Single
     fun provideMovieCastUseCase(
         movieDetailsRepository: MovieDetailsRepository
-    ): GetMovieCastUseCase =
-        GetMovieCastUseCase(movieDetailsRepository)
+    ): GetMovieCastUseCase = GetMovieCastUseCase(movieDetailsRepository)
 
     @Single
     fun provideGetActorDetailsById(
         actorRepository: ActorRepository
     ): GetActorDetailsByIdUseCase = GetActorDetailsByIdUseCase(actorRepository)
-    
+
     @Single
     fun provideGetActorImageById(
         actorRepository: ActorRepository
     ): GetActorImagesByIdUseCase = GetActorImagesByIdUseCase(actorRepository)
-    
+
     @Single
     fun provideGetActorMoviePicksById(
         actorRepository: ActorRepository
@@ -128,8 +112,24 @@ class UseCaseModule {
         actorRepository: ActorRepository
     ): GetActorTvShowPicksByIdUseCase = GetActorTvShowPicksByIdUseCase(actorRepository)
 
+    @Single
     fun provideSimilarMoviesUseCase(
         movieDetailsRepository: MovieDetailsRepository
     ): GetSimilarMoviesUseCase = GetSimilarMoviesUseCase(movieDetailsRepository)
+
+    @Single
+    fun provideGetMovieDetailsUseCase(
+        getMovieById: GetMovieById,
+        getMovieImagesUseCase: GetMovieImagesUseCase,
+        getMovieCastUseCase: GetMovieCastUseCase,
+        getSimilarMoviesUseCase: GetSimilarMoviesUseCase
+    ): GetMovieDetailsUseCase {
+        return GetMovieDetailsUseCase(
+            getMovieById,
+            getMovieImagesUseCase,
+            getMovieCastUseCase,
+            getSimilarMoviesUseCase
+        )
+    }
 
 }

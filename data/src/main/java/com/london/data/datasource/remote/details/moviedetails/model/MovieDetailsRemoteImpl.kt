@@ -1,4 +1,4 @@
-package com.london.data.datasource.util
+package com.london.data.datasource.remote.details.moviedetails.model
 
 import com.london.data.datasource.remote.ApiConstants
 import com.london.data.datasource.remote.details.moviedetails.MovieDetailsRemote

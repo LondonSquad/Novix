@@ -44,4 +44,17 @@
     <string name="Actors">"ممثلين"</string>
     <string name="top_movies_picks">أفضل الأفلام المختارة</string>
     <string name="top_tv_shows_picks">أفضل اختيارات البرامج التلفزيونية</string>
+    <string name="view_reviews">عرض المراجعات</string>
+    <string name="overview">نظرة عامة</string>
+    <string name="more_like_this">المزيد مثل هذا</string>
+    <string name="play_trailer">تشغيل الإعلان</string>
+    <string name="star">نجمة</string>
+    <string name="time_icon">أيقونة الوقت</string>
+    <string name="calendar">التقويم</string>
+    <string name="separator">فاصل</string>
+    <string name="dot">نقطة</string>
+    <string name="read_more">اقرأ المزيد</string>
+    <string name="read_less">اقرأ أقل</string>
+    <string name="cast">طاقم العمل</string>
+
 </resources>
