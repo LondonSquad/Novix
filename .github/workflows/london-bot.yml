@@ -178,7 +178,7 @@ jobs:
           fi
 
           JQ_DATA=$(cat "$PR_FILE")
-
+   
           # Process each missing PR
           for pr_number in $MISSING_PRS; do
             echo "Processing PR #$pr_number..."
@@ -186,55 +186,50 @@ jobs:
             # Fetch PR details
             PR_DATA=$(gh api "repos/${{ github.repository }}/pulls/$pr_number")
 
-            # Extract PR information
-            PR_URL=$(echo "$PR_DATA" | jq -r '.html_url')
-            PR_TITLE=$(echo "$PR_DATA" | jq -r '.title')
-            PR_CREATED_AT=$(echo "$PR_DATA" | jq -r '.created_at')
-            PR_HEAD_REF=$(echo "$PR_DATA" | jq -r '.head.ref')
-            PR_BASE_REF=$(echo "$PR_DATA" | jq -r '.base.ref')
-            PR_CREATOR_LOGIN=$(echo "$PR_DATA" | jq -r '.user.login')
-            PR_CREATOR_ID=$(echo "$PR_DATA" | jq -r '.user.id')
-            PR_CREATOR_URL=$(echo "$PR_DATA" | jq -r '.user.html_url')
-            PR_ADDITIONS=$(echo "$PR_DATA" | jq -r '.additions // 0')
-            PR_DELETIONS=$(echo "$PR_DATA" | jq -r '.deletions // 0')
-            PR_CHANGED_FILES=$(echo "$PR_DATA" | jq -r '.changed_files // 0')
-            PR_HEAD_SHA=$(echo "$PR_DATA" | jq -r '.head.sha')
+            # Extract all needed PR information
+            PR_CLOSED_AT=$(echo "$PR_DATA" | jq -r '.closed_at // empty')
+            PR_MERGED_AT=$(echo "$PR_DATA" | jq -r '.merged_at // empty')
+            PR_MERGED_BY=$(echo "$PR_DATA" | jq '.merged_by | if . != null then {login: .login, id: .id, url: .html_url} else null end')
 
-            WEEK_NUMBER=$(date -d "$PR_CREATED_AT" +%G-W%V)
-
-            # Get current approvals
-            CURRENT_APPROVALS_JSON=$(gh api "repos/${{ github.repository }}/pulls/$pr_number/reviews" \
-              --jq '[.[] | select(.state == "APPROVED" and .commit_id == "'"$PR_HEAD_SHA"'")] |
-              group_by(.user.id) | map(sort_by(.submitted_at) | .[-1]) |
-              map({
-                reviewer: {
-                  login: .user.login,
-                  id: .user.id,
-                  url: .user.html_url
-                },
-                submitted_at: .submitted_at
-              })')
-
-            echo "Adding PR #$pr_number to metrics..."
-
-            # Create new PR entry
-            # In the "Backfill Existing PRs" step, modify the NEW_PR_DATA creation:
+            # Determine status
+            PR_STATUS="pending"
+            if [[ -n "$PR_MERGED_AT" && "$PR_MERGED_AT" != "null" ]]; then
+              PR_STATUS="merged"
+            elif [[ -n "$PR_CLOSED_AT" && "$PR_CLOSED_AT" != "null" ]]; then
+              PR_STATUS="closed"
+            fi
+          
+            # Create new PR entry with all data
             NEW_PR_DATA=$(jq -n \
               --argjson pr_number "$pr_number" \
-              --arg url "$PR_URL" \
-              --arg title "$PR_TITLE" \
-              --arg opened_at "$PR_CREATED_AT" \
-              --arg head_ref "$PR_HEAD_REF" \
-              --arg base_ref "$PR_BASE_REF" \
-              --arg creator_login "$PR_CREATOR_LOGIN" \
-              --argjson creator_id "$PR_CREATOR_ID" \
-              --arg creator_html_url "$PR_CREATOR_URL" \
-              --argjson additions "$PR_ADDITIONS" \
-              --argjson deletions "$PR_DELETIONS" \
-              --argjson changed_files "$PR_CHANGED_FILES" \
-              --arg week "$WEEK_NUMBER" \
-              --argjson current_approvals "$CURRENT_APPROVALS_JSON" \
+              --arg url "$(echo "$PR_DATA" | jq -r '.html_url')" \
+              --arg title "$(echo "$PR_DATA" | jq -r '.title')" \
+              --arg opened_at "$(echo "$PR_DATA" | jq -r '.created_at')" \
+              --arg head_ref "$(echo "$PR_DATA" | jq -r '.head.ref')" \
+              --arg base_ref "$(echo "$PR_DATA" | jq -r '.base.ref')" \
+              --arg creator_login "$(echo "$PR_DATA" | jq -r '.user.login')" \
+              --argjson creator_id "$(echo "$PR_DATA" | jq -r '.user.id')" \
+              --arg creator_html_url "$(echo "$PR_DATA" | jq -r '.user.html_url')" \
+              --argjson additions "$(echo "$PR_DATA" | jq -r '.additions // 0')" \
+              --argjson deletions "$(echo "$PR_DATA" | jq -r '.deletions // 0')" \
+              --argjson changed_files "$(echo "$PR_DATA" | jq -r '.changed_files // 0')" \
+              --arg week "$(date -d "$(echo "$PR_DATA" | jq -r '.created_at')" +%G-W%V)" \
+              --argjson current_approvals "$(gh api "repos/${{ github.repository }}/pulls/$pr_number/reviews" \
+                --jq '[.[] | select(.state == "APPROVED" and .commit_id == "'$(echo "$PR_DATA" | jq -r '.head.sha')'")] |
+                group_by(.user.id) | map(sort_by(.submitted_at) | .[-1]) |
+                map({
+                  reviewer: {
+                    login: .user.login,
+                    id: .user.id,
+                    url: .user.html_url
+                  },
+                  submitted_at: .submitted_at
+                })')" \
               --argjson required_approvals "$REQUIRED_APPROVALS" \
+              --arg closed_at "$PR_CLOSED_AT" \
+              --arg merged_at "$PR_MERGED_AT" \
+              --argjson merged_by "$PR_MERGED_BY" \
+              --arg status "$PR_STATUS" \
               '
               def recalculate_approval_metrics($required_approvals):
                 def parse_time(ts): (if ts then (ts | strptime("%Y-%m-%dT%H:%M:%SZ") | mktime) else null end);
@@ -243,7 +238,7 @@ jobs:
                 | .time_to_first_approval_minutes = (if .first_approved_at then ((parse_time(.first_approved_at) - parse_time(.opened_at)) / 60) else null end)
                 | .required_approvals_met_at = (if (.approvals | length) >= $required_approvals then .approvals[$required_approvals - 1].submitted_at else null end)
                 | .time_to_required_approvals_minutes = (if .required_approvals_met_at then ((parse_time(.required_approvals_met_at) - parse_time(.opened_at)) / 60) else null end)
-                | .status = (if .merged_at != null then "merged" elif .closed_at != null then "closed" elif .required_approvals_met_at != null then "approved" else "pending" end);
+                | .status = (if .status == "merged" or .status == "closed" then .status elif .required_approvals_met_at != null then "approved" else "pending" end);
 
               {
                 "pr_number": $pr_number,
@@ -266,7 +261,7 @@ jobs:
                 "merged_at": (if $merged_at != "" then $merged_at else null end),
                 "merged_by": $merged_by,
                 "week": $week,
-                "status": (if $merged_at != "" then "merged" elif $closed_at != "" then "closed" else "pending" end),
+                "status": $status,
                 "diff_stats": {
                   "additions": $additions,
                   "deletions": $deletions,
@@ -277,6 +272,7 @@ jobs:
 
             # Add to metrics
             JQ_DATA=$(echo "$JQ_DATA" | jq --argjson new_pr_data "$NEW_PR_DATA" '. + [$new_pr_data]')
+            echo "Added PR #$pr_number to metrics with status: $PR_STATUS"
           done
 
           # Write updated data
