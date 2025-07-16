@@ -3,7 +3,7 @@ package com.london.data.mapper
 import com.london.data.datasource.local.model.KnownForDtoLocal
 import com.london.data.datasource.local.model.PersonDtoLocal
 import com.london.data.datasource.local.model.SearchActorsLocal
-import com.london.data.datasource.remote.search.model.ApiSearch
+import com.london.data.datasource.remote.ApiResponse
 import com.london.data.datasource.remote.search.model.KnownFor
 import com.london.data.datasource.remote.search.model.SearchActorRemote
 import com.london.data.datasource.util.generateHash
@@ -17,14 +17,14 @@ fun PersonDtoLocal.toActorEntity(): Actor {
     )
 }
 
-fun ApiSearch<SearchActorRemote>.toLocal(query: String): SearchActorsLocal {
+fun ApiResponse<SearchActorRemote>.toLocal(query: String): SearchActorsLocal {
     return SearchActorsLocal(
         date = System.currentTimeMillis(),
         query = query.generateHash(),
-        page = this.page,
-        results = this.results.map { it.toLocal() },
+        page = this.currentPage,
+        results = this.items.map { it.toLocal() },
         totalPages = this.totalPages,
-        totalResults = this.totalResults
+        totalResults = this.totalItems
     )
 }
 
