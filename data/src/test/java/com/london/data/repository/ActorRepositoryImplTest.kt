@@ -1,0 +1,141 @@
+package com.london.data.repository
+
+import com.google.common.truth.Truth.assertThat
+import com.london.data.datasource.remote.details.actordetails.ActorDetailsRemoteDataSource
+import com.london.data.datasource.remote.details.actordetails.model.ActorDetailsResponse
+import com.london.data.datasource.remote.details.actordetails.model.actorimage.ActorImageResponse
+import com.london.data.datasource.remote.details.actordetails.model.actormoviedetails.ActorMovieDetailsResponse
+import com.london.data.datasource.remote.details.actordetails.model.actortvshowdetails.ActorTvShowDetailsResponse
+import com.london.data.mapper.actordetails.toEntity
+import com.london.domain.ActorDetailsSearchFailedException
+import com.london.domain.GetCastByIdFailedException
+import com.london.domain.GetImagesByIdFailedException
+import com.london.domain.repository.ActorRepository
+import io.mockk.coEvery
+import io.mockk.mockk
+import kotlinx.coroutines.test.runTest
+import org.junit.Before
+import org.junit.Test
+import org.junit.jupiter.api.assertThrows
+
+class ActorRepositoryImplTest {
+
+    private lateinit var remoteDataSource: ActorDetailsRemoteDataSource
+    private lateinit var repository: ActorRepository
+
+    @Before
+    fun setUp() {
+        remoteDataSource = mockk(relaxed = true)
+        repository = ActorRepositoryImpl(remoteDataSource)
+    }
+
+    @Test
+    fun `getActorDetailsById returns expected result`() = runTest {
+        coEvery { remoteDataSource.getActorDetailsById(ACTOR_ID) } returns ActorDetailsRemoteMock
+
+        val result = repository.getActorDetailsById(ACTOR_ID)
+
+        assertThat(result).isEqualTo(ActorDetailsRemoteMock.toEntity())
+    }
+
+    @Test
+    fun `getActorDetailsById throws ActorDetailsSearchFailedException on failure`() = runTest {
+        coEvery { remoteDataSource.getActorDetailsById(ACTOR_ID) } throws RuntimeException()
+
+        assertThrows<ActorDetailsSearchFailedException> {
+            repository.getActorDetailsById(ACTOR_ID)
+        }
+    }
+
+    @Test
+    fun `getActorMoviePicksById returns expected result`() = runTest {
+        coEvery { remoteDataSource.getActorMovieById(ACTOR_ID) } returns ActorMovieDetailsRemoteMock
+
+        val result = repository.getActorMoviePicksById(ACTOR_ID)
+
+        assertThat(result).isEqualTo(ActorMovieDetailsRemoteMock.toEntity())
+    }
+
+    @Test
+    fun `getActorMoviePicksById throws GetCastByIdFailedException on failure`() = runTest {
+        coEvery { remoteDataSource.getActorMovieById(ACTOR_ID) } throws RuntimeException()
+
+        assertThrows<GetCastByIdFailedException> {
+            repository.getActorMoviePicksById(ACTOR_ID)
+        }
+    }
+
+    @Test
+    fun `getActorTvShowPicksById returns expected result`() = runTest {
+        coEvery { remoteDataSource.getActorTvShowById(ACTOR_ID) } returns ActorTvShowDetailsRemoteMock
+
+        val result = repository.getActorTvShowPicksById(ACTOR_ID)
+
+        assertThat(result).isEqualTo(ActorTvShowDetailsRemoteMock.toEntity())
+    }
+
+    @Test
+    fun `getActorTvShowPicksById throws GetCastByIdFailedException on failure`() = runTest {
+        coEvery { remoteDataSource.getActorTvShowById(ACTOR_ID) } throws RuntimeException()
+
+        assertThrows<GetCastByIdFailedException> {
+            repository.getActorTvShowPicksById(ACTOR_ID)
+        }
+    }
+
+    @Test
+    fun `getActorImagesById returns expected result`() = runTest {
+        coEvery { remoteDataSource.getActorImagePath(ACTOR_ID) } returns ActorImageResponseMock
+
+        val result = repository.getActorImagesById(ACTOR_ID)
+
+        assertThat(result).isEqualTo(ActorImageResponseMock.toEntity())
+    }
+
+    @Test
+    fun `getActorImagesById throws GetImagesByIdFailedException on failure`() = runTest {
+        coEvery { remoteDataSource.getActorImagePath(ACTOR_ID) } throws RuntimeException()
+
+        assertThrows<GetImagesByIdFailedException> {
+            repository.getActorImagesById(ACTOR_ID)
+        }
+    }
+
+    private companion object {
+        const val ACTOR_ID = 123
+
+        val ActorDetailsRemoteMock = ActorDetailsResponse(
+            id = ACTOR_ID,
+            name = "John Doe",
+            gender = 2,
+            adult = false,
+            birthday = "1980-01-01",
+            deathDay = null,
+            placeOfBirth = "London",
+            biography = "An amazing actor",
+            alsoKnownAs = listOf("JD", "Johnny D"),
+            homePage = "https://john-doe.com",
+            imdbId = "nm1234567",
+            knownForDepartment = "Acting",
+            popularity = 99.9,
+            profilePath = "/profile.jpg"
+        )
+
+        val ActorMovieDetailsRemoteMock = ActorMovieDetailsResponse(
+            id = ACTOR_ID,
+            cast = emptyList(),
+            crew = emptyList()
+        )
+
+        val ActorTvShowDetailsRemoteMock = ActorTvShowDetailsResponse(
+            id = ACTOR_ID,
+            cast = emptyList(),
+            crew = emptyList()
+        )
+
+        val ActorImageResponseMock = ActorImageResponse(
+            id = ACTOR_ID,
+            profiles = emptyList()
+        )
+    }
+}
