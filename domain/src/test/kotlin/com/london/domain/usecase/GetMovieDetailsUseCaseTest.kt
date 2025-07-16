@@ -51,7 +51,7 @@ class GetMovieDetailsUseCaseTest {
         assertThat(result).isEqualTo(
             MovieDetails(
                 movieId = baseMovie.movieId,
-                movieImage = fakeImages,
+                movieImage = baseMovie.movieImage,
                 movieName = baseMovie.movieName,
                 movieRating = baseMovie.movieRating,
                 movieDuration = baseMovie.movieDuration,
