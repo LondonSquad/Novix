@@ -1,5 +1,7 @@
 package com.london.domain.usecase
 
+import com.google.common.truth.Truth.assertThat
+import com.london.domain.GetCastByIdFailedException
 import com.london.domain.entity.Actor
 import com.london.domain.repository.MovieDetailsRepository
 import io.mockk.coEvery
@@ -8,7 +10,6 @@ import io.mockk.mockk
 import kotlinx.coroutines.test.runTest
 import org.junit.Before
 import org.junit.Test
-import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.assertThrows
 
 class GetMovieCastUseCaseTest {
@@ -18,119 +19,96 @@ class GetMovieCastUseCaseTest {
 
     @Before
     fun setup() {
-        movieRepository = mockk(relaxed = true)
+        movieRepository = mockk()
         getMovieCastUseCase = GetMovieCastUseCase(movieRepository)
     }
 
-    private fun fakeCast() = listOf(
-        Actor(
-            id = 1, name = "Leonardo DiCaprio", characterName = "Cobb", profilePicture = "/leo.jpg"
-        ), Actor(
-            id = 2,
-            name = "Joseph Gordon-Levitt",
-            characterName = "Arthur",
-            profilePicture = "/jgl.jpg"
+    @Test
+    fun `should return cast when repository returns cast`() = runTest {
+        // given
+        coEvery { movieRepository.getMovieCastById(MOVIE_ID) } returns actorMockCast
+
+        // when
+        val result = getMovieCastUseCase.invoke(MOVIE_ID)
+
+        // then
+        assertThat(result).isEqualTo(actorMockCast)
+    }
+
+    @Test
+    fun `should throw exception when repository throws exception`() = runTest {
+        // given
+        coEvery { movieRepository.getMovieCastById(MOVIE_ID) } throws GetCastByIdFailedException()
+
+        // when & then
+        assertThrows<GetCastByIdFailedException> {
+            getMovieCastUseCase.invoke(MOVIE_ID)
+        }
+        coVerify(exactly = 1) { movieRepository.getMovieCastById(MOVIE_ID) }
+    }
+
+    @Test
+    fun `should return empty list when repository returns empty list`() = runTest {
+        // given
+        coEvery { movieRepository.getMovieCastById(MOVIE_ID) } returns emptyList()
+
+        // when
+        val result = getMovieCastUseCase.invoke(MOVIE_ID)
+
+        // then
+        assertThat(result).isEmpty()
+        coVerify(exactly = 1) { movieRepository.getMovieCastById(MOVIE_ID) }
+    }
+
+
+    @Test
+    fun `should call repository with correct movie ID`() = runTest {
+        // given
+        val customId = 999
+        coEvery { movieRepository.getMovieCastById(customId) } returns emptyList()
+
+        // when
+        getMovieCastUseCase.invoke(customId)
+
+        // then
+        coVerify(exactly = 1) { movieRepository.getMovieCastById(customId) }
+    }
+
+    @Test
+    fun `should return different results for different movie IDs`() = runTest {
+        // given
+        val actorCast = listOf(
+            Actor(id = 3, name = "Tom Hardy", characterName = "Eames", profilePicture = "/hardy.jpg")
         )
-    )
 
-    @Test
-    fun `should return cast successfully`() = runTest {
-        // Given
-        val movieId = 123
-        val expectedCast = fakeCast()
-        coEvery { movieRepository.getMovieCastById(movieId) } returns expectedCast
+        coEvery { movieRepository.getMovieCastById(123) } returns actorMockCast
+        coEvery { movieRepository.getMovieCastById(456) } returns actorCast
 
-        // When
-        val result = getMovieCastUseCase(movieId)
+        // when
+        val result1 = getMovieCastUseCase.invoke(123)
+        val result2 = getMovieCastUseCase.invoke(456)
 
-        // Then
-        assertNotNull(result)
-        assertEquals(2, result.size)
-        assertEquals("Leonardo DiCaprio", result[0].name)
-        assertEquals("Cobb", result[0].characterName)
-        assertEquals("/leo.jpg", result[0].profilePicture)
-        assertEquals("Joseph Gordon-Levitt", result[1].name)
-
-        coVerify(exactly = 1) { movieRepository.getMovieCastById(movieId) }
+        // then
+        assertThat(result1).hasSize(2)
+        assertThat(result2).containsExactlyElementsIn(actorCast)
     }
 
-    @Test
-    fun `should return empty list when repository returns no cast`() = runTest {
-        // Given
-        val movieId = 456
-        coEvery { movieRepository.getMovieCastById(movieId) } returns emptyList()
+    private companion object {
+        const val MOVIE_ID = 123
 
-        // When
-        val result = getMovieCastUseCase(movieId)
-
-        // Then
-        assertTrue(result.isEmpty())
-        assertEquals(0, result.size)
-        coVerify(exactly = 1) { movieRepository.getMovieCastById(movieId) }
-    }
-
-    @Test
-    fun `should propagate Exception when repository fails`() = runTest {
-        // Given
-        val movieId = 789
-        val expectedException = Exception("Failed to fetch cast")
-        coEvery { movieRepository.getMovieCastById(movieId) } throws expectedException
-
-        // When & Then
-        val exception = assertThrows<Exception> {
-            getMovieCastUseCase(movieId)
-        }
-        assertEquals("Failed to fetch cast", exception.message)
-        coVerify(exactly = 1) { movieRepository.getMovieCastById(movieId) }
-    }
-
-    @Test
-    fun `should handle RuntimeException and propagate`() = runTest {
-        // Given
-        val movieId = 999
-        val runtimeException = RuntimeException("Network error")
-        coEvery { movieRepository.getMovieCastById(movieId) } throws runtimeException
-
-        // When & Then
-        val exception = assertThrows<RuntimeException> {
-            getMovieCastUseCase(movieId)
-        }
-        assertEquals("Network error", exception.message)
-        coVerify(exactly = 1) { movieRepository.getMovieCastById(movieId) }
-    }
-
-    @Test
-    fun `should work with different movie IDs`() = runTest {
-        // Given
-        val movieId = 111
-        val expectedCast = listOf(
+        val actorMockCast = listOf(
             Actor(
-                id = 3, name = "Tom Hardy", characterName = "Eames", profilePicture = "/hardy.jpg"
+                id = 1,
+                name = "Leonardo DiCaprio",
+                characterName = "Cobb",
+                profilePicture = "/leo.jpg"
+            ),
+            Actor(
+                id = 2,
+                name = "Joseph Gordon-Levitt",
+                characterName = "Arthur",
+                profilePicture = "/jgl.jpg"
             )
         )
-        coEvery { movieRepository.getMovieCastById(movieId) } returns expectedCast
-
-        // When
-        val result = getMovieCastUseCase(movieId)
-
-        // Then
-        assertEquals(1, result.size)
-        assertEquals("Tom Hardy", result[0].name)
-        assertEquals("Eames", result[0].characterName)
-        coVerify(exactly = 1) { movieRepository.getMovieCastById(movieId) }
-    }
-
-    @Test
-    fun `should not call repository multiple times for same invocation`() = runTest {
-        // Given
-        val movieId = 222
-        val expectedCast = fakeCast()
-        coEvery { movieRepository.getMovieCastById(movieId) } returns expectedCast
-
-        // When
-        getMovieCastUseCase(movieId)
-
-        // Then
-        coVerify(exactly = 1) { movieRepository.getMovieCastById(movieId) }
     }
 }
