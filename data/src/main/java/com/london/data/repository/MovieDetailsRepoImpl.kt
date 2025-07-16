@@ -23,7 +23,7 @@ class MovieDetailsRepoImpl(
             block = {
                 val movieDetailsRemote = movieDetailsRemote.getMovieDetails(id)
                 movieDetailsRemote.toEntity(
-                    genres = movieDetailsRemote.genreRemotes.map { it.toGenre() },
+                    genres = movieDetailsRemote.genreRemote.map { it.toGenre() },
                 )
             },
             error = { cause -> GetMovieDetailsException(cause) }

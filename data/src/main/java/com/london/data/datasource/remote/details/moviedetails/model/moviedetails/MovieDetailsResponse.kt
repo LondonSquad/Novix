@@ -11,7 +11,7 @@ data class MovieDetailsResponse(
     val belongsToCollection: CollectionDetails?,
     val budget: Int,
     @SerialName("genres")
-    val genreRemotes: List<Genre>,
+    val genreRemote: List<GenreRemote>,
     val homepage: String,
     val id: Int,
     @SerialName("imdb_id")

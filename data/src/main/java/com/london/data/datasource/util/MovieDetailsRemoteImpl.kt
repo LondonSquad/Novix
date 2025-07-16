@@ -3,8 +3,8 @@ package com.london.data.datasource.util
 import com.london.data.datasource.remote.ApiConstants
 import com.london.data.datasource.remote.details.moviedetails.MovieDetailsRemote
 import com.london.data.datasource.remote.details.moviedetails.fetchData
-import com.london.data.datasource.remote.details.moviedetails.model.MovieDetailsResponse
 import com.london.data.datasource.remote.details.moviedetails.model.moviecast.MovieCastResponse
+import com.london.data.datasource.remote.details.moviedetails.model.moviedetails.MovieDetailsResponse
 import com.london.data.datasource.remote.details.moviedetails.model.movieimages.MovieImagesResponse
 import com.london.data.datasource.remote.details.moviedetails.model.similarmovies.SimilarMoviesResponse
 import com.london.data.datasource.remote.details.moviedetails.runOrThrow

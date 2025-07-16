@@ -1,5 +1,4 @@
 package com.london.data.datasource.remote.details.moviedetails.model.moviedetails
-import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable

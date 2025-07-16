@@ -1,6 +1,6 @@
 package com.london.data.mapper.moviedetails
 
-import com.london.data.datasource.remote.details.moviedetails.model.MovieDetailsResponse
+import com.london.data.datasource.remote.details.moviedetails.model.moviedetails.MovieDetailsResponse
 import com.london.data.datasource.remote.details.moviedetails.model.similarmovies.SimilarMovieRemote
 import com.london.domain.entity.Actor
 import com.london.domain.entity.moviedatails.Genre
