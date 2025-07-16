@@ -6,6 +6,7 @@ class ActorSearchFailedException(message: String = "Failed to search for actors.
 
 class TvShowDetailsSearchFailedException(message: String = "Failed to get TV show details.") : Exception(message)
 
+class ActorDetailsSearchFailedException(message: String = "Failed to get actor details.") : Exception(message)
 class GetCastByIdFailedException(message: String = "Failed to get cast") : Exception(message)
 class GetImagesByIdFailedException(message: String = "Failed to get cast") : Exception(message)
 
