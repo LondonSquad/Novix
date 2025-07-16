@@ -2,10 +2,15 @@ package com.london.domain.repository
 
 import com.london.domain.entity.tvshowdetails.TvShowCastEntity
 import com.london.domain.entity.tvshowdetails.TvShowDetailsEntity
+import com.london.domain.entity.tvshowdetails.episode.TvShowEpisodesEntity
 import com.london.domain.entity.tvshowdetails.TvShowImagesEntity
 
 interface DetailsRepository {
     suspend fun getTvShowDetailsById(tvShowId: Int): TvShowDetailsEntity
     suspend fun getCastTvShowById(tvShowId: Int): TvShowCastEntity
     suspend fun getImagesTvShowById(tvShowId: Int): TvShowImagesEntity
+    suspend fun getTvShowEpisodesBySeason(
+        tvShowId: Int,
+        seasonNumber: Int,
+    ): TvShowEpisodesEntity
 }

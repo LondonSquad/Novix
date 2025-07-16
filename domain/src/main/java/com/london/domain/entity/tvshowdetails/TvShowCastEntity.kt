@@ -15,9 +15,15 @@ data class TvShowCastMemberEntity(
     val originalName: String,
     val popularity: Double,
     val profilePath: String?,
-    val character: String,
-    val creditId: String,
+    val roles: List<RoleEntity>,
+    val totalEpisodeCount: Int,
     val order: Int
+)
+
+data class RoleEntity(
+    val creditId: String,
+    val character: String,
+    val episodeCount: Int
 )
 
 data class TvShowCrewMemberEntity(

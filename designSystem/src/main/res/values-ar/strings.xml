@@ -19,4 +19,8 @@
     <string name="read_more">أقرأ المزيد</string>
     <string name="overview">ملخص</string>
     <string name="tv_show_image">صورة مسلسل</string>
+    <string name="cast">طاقم العمل</string>
+    <string name="s">م</string>
+    <string name="m">د</string>
+    <string name="episodes">الحلقات</string>
 </resources>

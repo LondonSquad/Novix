@@ -1,8 +1,10 @@
 package com.london.data.mapper.tvshowdetails
 
+import com.london.data.datasource.remote.details.tvshowdetails.model.CrewMember
+import com.london.data.datasource.remote.details.tvshowdetails.model.Role
 import com.london.data.datasource.remote.details.tvshowdetails.model.TvShowCastMember
 import com.london.data.datasource.remote.details.tvshowdetails.model.TvShowCastRemoteResponse
-import com.london.data.datasource.remote.details.tvshowdetails.model.CrewMember
+import com.london.domain.entity.tvshowdetails.RoleEntity
 import com.london.domain.entity.tvshowdetails.TvShowCastEntity
 import com.london.domain.entity.tvshowdetails.TvShowCastMemberEntity
 import com.london.domain.entity.tvshowdetails.TvShowCrewMemberEntity
@@ -10,7 +12,6 @@ import com.london.domain.entity.tvshowdetails.TvShowCrewMemberEntity
 fun TvShowCastRemoteResponse.toCastEntity(): TvShowCastEntity {
     return TvShowCastEntity(
         cast = this.cast.map { it.toCastMember() },
-        crew = this.crew.map { it.toCrewMember() },
         id = this.id
     )
 }
@@ -24,10 +25,18 @@ fun TvShowCastMember.toCastMember(): TvShowCastMemberEntity {
         name = this.name,
         originalName = this.originalName,
         popularity = this.popularity,
-        profilePath = "https://image.tmdb.org/t/p/w500${this.profilePath}",
-        character = this.character,
-        creditId = this.creditId,
+        profilePath = this.profilePath?.let { "https://image.tmdb.org/t/p/w500$it" },
+        roles = this.roles.map { it.toRoleEntity() },
+        totalEpisodeCount = this.totalEpisodeCount,
         order = this.order
+    )
+}
+
+fun Role.toRoleEntity(): RoleEntity {
+    return RoleEntity(
+        creditId = this.creditId,
+        character = this.character,
+        episodeCount = this.episodeCount
     )
 }
 
@@ -40,7 +49,7 @@ fun CrewMember.toCrewMember(): TvShowCrewMemberEntity {
         name = this.name,
         originalName = this.originalName,
         popularity = this.popularity,
-        profilePath = "https://image.tmdb.org/t/p/w500${this.profilePath}",
+        profilePath = this.profilePath?.let { "https://image.tmdb.org/t/p/w500$it" },
         creditId = this.creditId,
         department = this.department,
         job = this.job

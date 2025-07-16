@@ -2,6 +2,7 @@ package com.london.domain.usecase
 
 import com.google.common.truth.Truth.assertThat
 import com.london.domain.GetCastByIdFailedException
+import com.london.domain.entity.tvshowdetails.RoleEntity
 import com.london.domain.entity.tvshowdetails.TvShowCastEntity
 import com.london.domain.entity.tvshowdetails.TvShowCastMemberEntity
 import com.london.domain.entity.tvshowdetails.TvShowCrewMemberEntity
@@ -37,7 +38,7 @@ class GetCastByIdTest {
     fun `should throw exception when repository throws exception`() = runTest {
         //given
         coEvery { detailsRepository.getCastTvShowById(TV_SHOW_ID) } throws GetCastByIdFailedException()
-        //when //then
+        //when & then
         assertThrows<GetCastByIdFailedException> {
             getCastById(TV_SHOW_ID)
         }
@@ -56,8 +57,14 @@ class GetCastByIdTest {
                     originalName = "John Doe",
                     popularity = 85.5,
                     profilePath = "/profile1.jpg",
-                    character = "Main Character",
-                    creditId = "credit1",
+                    roles = listOf(
+                        RoleEntity(
+                            creditId = "credit1",
+                            character = "Main Character",
+                            episodeCount = 24
+                        )
+                    ),
+                    totalEpisodeCount = 24,
                     order = 0
                 ),
                 TvShowCastMemberEntity(
@@ -69,8 +76,14 @@ class GetCastByIdTest {
                     originalName = "Jane Smith",
                     popularity = 78.2,
                     profilePath = "/profile2.jpg",
-                    character = "Supporting Character",
-                    creditId = "credit2",
+                    roles = listOf(
+                        RoleEntity(
+                            creditId = "credit2",
+                            character = "Supporting Character",
+                            episodeCount = 18
+                        )
+                    ),
+                    totalEpisodeCount = 18,
                     order = 1
                 )
             ),
