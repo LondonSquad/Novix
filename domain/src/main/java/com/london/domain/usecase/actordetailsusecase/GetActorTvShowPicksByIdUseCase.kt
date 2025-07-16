@@ -2,8 +2,8 @@ package com.london.domain.usecase.actordetailsusecase
 
 import com.london.domain.repository.ActorRepository
 
-class GetActorMoviePicksById(
+class GetActorTvShowPicksByIdUseCase(
     private val repository: ActorRepository
 ) {
-    suspend fun invoke(actorId: Int) = repository.getActorMoviePicksById(actorId)
+    suspend fun invoke(actorId: Int) = repository.getActorTvShowPicksById(actorId)
 }

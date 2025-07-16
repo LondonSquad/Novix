@@ -16,10 +16,10 @@ import com.london.domain.usecase.GetMoviesUseCase
 import com.london.domain.usecase.GetRecentSearchUseCase
 import com.london.domain.usecase.GetTvShowDetails
 import com.london.domain.usecase.GetTvShowsUseCase
-import com.london.domain.usecase.actordetailsusecase.GetActorDetailsById
-import com.london.domain.usecase.actordetailsusecase.GetActorImagesById
-import com.london.domain.usecase.actordetailsusecase.GetActorMoviePicksById
-import com.london.domain.usecase.actordetailsusecase.GetActorTvShowPicksById
+import com.london.domain.usecase.actordetailsusecase.GetActorDetailsByIdUseCase
+import com.london.domain.usecase.actordetailsusecase.GetActorImagesByIdUseCase
+import com.london.domain.usecase.actordetailsusecase.GetActorMoviePicksByIdUseCase
+import com.london.domain.usecase.actordetailsusecase.GetActorTvShowPicksByIdUseCase
 import org.koin.core.annotation.Module
 import org.koin.core.annotation.Single
 
@@ -68,21 +68,21 @@ class UseCaseModule {
     @Single
     fun provideGetActorDetailsById(
         actorRepository: ActorRepository
-    ): GetActorDetailsById = GetActorDetailsById(actorRepository)
+    ): GetActorDetailsByIdUseCase = GetActorDetailsByIdUseCase(actorRepository)
     
     @Single
     fun provideGetActorImageById(
         actorRepository: ActorRepository
-    ): GetActorImagesById = GetActorImagesById(actorRepository)
+    ): GetActorImagesByIdUseCase = GetActorImagesByIdUseCase(actorRepository)
     
     @Single
     fun provideGetActorMoviePicksById(
         actorRepository: ActorRepository
-    ): GetActorMoviePicksById = GetActorMoviePicksById(actorRepository)
+    ): GetActorMoviePicksByIdUseCase = GetActorMoviePicksByIdUseCase(actorRepository)
 
     @Single
     fun provideGetActorTvShowPicksById(
         actorRepository: ActorRepository
-    ): GetActorTvShowPicksById = GetActorTvShowPicksById(actorRepository)
+    ): GetActorTvShowPicksByIdUseCase = GetActorTvShowPicksByIdUseCase(actorRepository)
 
 }
