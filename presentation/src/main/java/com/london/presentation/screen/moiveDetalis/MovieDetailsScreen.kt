@@ -115,9 +115,8 @@ fun MovieDetailsContent(
     onBackClick: () -> Unit,
     onPreviewClick: (Int) -> Unit
 ) {
-    Log.d("tag", "MovieDetails: $state")
 
-    Box(modifier = Modifier.fillMaxSize().background(NovixTheme.colors.surface).padding(vertical = 16.dp)) {
+    Box(modifier = Modifier.fillMaxSize().background(NovixTheme.colors.surface).padding(top = 16.dp)) {
         Column(
             modifier = Modifier
                 .fillMaxSize()
