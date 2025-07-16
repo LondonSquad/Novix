@@ -2,7 +2,6 @@ package com.london.domain.usecase
 
 import com.google.common.truth.Truth.assertThat
 import com.london.domain.GetMovieCastFailedException
-import com.london.domain.GetSimilarMoviesFailedException
 import com.london.domain.entity.moviedatails.SimilarMovie
 import com.london.domain.repository.MovieDetailsRepository
 import io.mockk.coEvery
@@ -30,7 +29,7 @@ class GetSimilarMoviesUseCaseTest {
         coEvery { movieDetailsRepository.getSimilarMoviesById(MOVIE_ID) } returns similarMovieMockList
 
         // when
-        val result = getSimilarMoviesUseCase(MOVIE_ID)
+        val result = getSimilarMoviesUseCase.invoke(MOVIE_ID)
 
         // then
         assertThat(result).isEqualTo(similarMovieMockList)
@@ -43,7 +42,7 @@ class GetSimilarMoviesUseCaseTest {
         coEvery { movieDetailsRepository.getSimilarMoviesById(MOVIE_ID) } returns emptyList()
 
         // when
-        val result = getSimilarMoviesUseCase(MOVIE_ID)
+        val result = getSimilarMoviesUseCase.invoke(MOVIE_ID)
 
         // then
         assertThat(result).isEmpty()
@@ -58,7 +57,7 @@ class GetSimilarMoviesUseCaseTest {
 
             // when & then
             assertThrows<GetMovieCastFailedException> {
-                getSimilarMoviesUseCase(MOVIE_ID)
+                getSimilarMoviesUseCase.invoke(MOVIE_ID)
             }
             coVerify(exactly = 1) { movieDetailsRepository.getSimilarMoviesById(MOVIE_ID) }
         }
@@ -71,7 +70,7 @@ class GetSimilarMoviesUseCaseTest {
         coEvery { movieDetailsRepository.getSimilarMoviesById(customId) } returns emptyList()
 
         // when
-        getSimilarMoviesUseCase(customId)
+        getSimilarMoviesUseCase.invoke(customId)
 
         // then
         coVerify(exactly = 1) { movieDetailsRepository.getSimilarMoviesById(customId) }
@@ -94,8 +93,8 @@ class GetSimilarMoviesUseCaseTest {
         coEvery { movieDetailsRepository.getSimilarMoviesById(secondId) } returns secondMovieList
 
         // when
-        val resultForFirstId = getSimilarMoviesUseCase(firstId)
-        val resultForSecondId = getSimilarMoviesUseCase(secondId)
+        val resultForFirstId = getSimilarMoviesUseCase.invoke(firstId)
+        val resultForSecondId = getSimilarMoviesUseCase.invoke(secondId)
 
         // then
         assertThat(resultForFirstId).containsExactlyElementsIn(firstMovieList)

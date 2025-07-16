@@ -25,7 +25,7 @@ class GetMovieImagesUseCaseTest {
         // given
         coEvery { movieDetailsRepository.getMovieImagesById(MOVIE_ID) } returns movieMockImages
         // when
-        val result = getMovieImageUseCase(MOVIE_ID)
+        val result = getMovieImageUseCase.invoke(MOVIE_ID)
         // then
         assertThat(result).isEqualTo(movieMockImages)
     }
@@ -35,7 +35,7 @@ class GetMovieImagesUseCaseTest {
         // given
         coEvery { movieDetailsRepository.getMovieImagesById(MOVIE_ID) } returns emptyList()
         // when
-        val result = getMovieImageUseCase(MOVIE_ID)
+        val result = getMovieImageUseCase.invoke(MOVIE_ID)
         // then
         assertThat(result).isEmpty()
     }
@@ -47,7 +47,7 @@ class GetMovieImagesUseCaseTest {
 
         // when & then
         assertThrows<GetMovieImagesFailedException> {
-            getMovieImageUseCase(MOVIE_ID)
+            getMovieImageUseCase.invoke(MOVIE_ID)
         }
     }
 
@@ -56,7 +56,7 @@ class GetMovieImagesUseCaseTest {
         // given
         coEvery { movieDetailsRepository.getMovieImagesById(MOVIE_ID) } returns movieMockImages
         // when
-        val result = getMovieImageUseCase(MOVIE_ID)
+        val result = getMovieImageUseCase.invoke(MOVIE_ID)
         // then
         assertThat(result).hasSize(10)
     }

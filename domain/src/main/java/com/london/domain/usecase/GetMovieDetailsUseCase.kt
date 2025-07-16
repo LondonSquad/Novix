@@ -10,10 +10,10 @@ class GetMovieDetailsUseCase(
     private val getSimilarMoviesUseCase: GetSimilarMoviesUseCase
 ) {
     suspend operator fun invoke(movieId: Int): MovieDetails {
-        val getMovieById = getMovieById(movieId)
-        val movieImages = getMovieImagesUseCase(movieId)
-        val movieCast = getMovieCastUseCase(movieId)
-        val similarMovies = getSimilarMoviesUseCase(movieId)
+        val getMovieById = getMovieById.invoke(movieId)
+        val movieImages = getMovieImagesUseCase.invoke(movieId)
+        val movieCast = getMovieCastUseCase.invoke(movieId)
+        val similarMovies = getSimilarMoviesUseCase.invoke(movieId)
         return MovieDetails(
             movieId = getMovieById.movieId,
             movieImage = movieImages,

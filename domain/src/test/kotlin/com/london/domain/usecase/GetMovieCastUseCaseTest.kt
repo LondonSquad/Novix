@@ -29,7 +29,7 @@ class GetMovieCastUseCaseTest {
         coEvery { movieRepository.getMovieCastById(MOVIE_ID) } returns actorMockCast
 
         // when
-        val result = getMovieCastUseCase(MOVIE_ID)
+        val result = getMovieCastUseCase.invoke(MOVIE_ID)
 
         // then
         assertThat(result).isEqualTo(actorMockCast)
@@ -42,7 +42,7 @@ class GetMovieCastUseCaseTest {
 
         // when & then
         assertThrows<GetCastByIdFailedException> {
-            getMovieCastUseCase(MOVIE_ID)
+            getMovieCastUseCase.invoke(MOVIE_ID)
         }
         coVerify(exactly = 1) { movieRepository.getMovieCastById(MOVIE_ID) }
     }
@@ -53,7 +53,7 @@ class GetMovieCastUseCaseTest {
         coEvery { movieRepository.getMovieCastById(MOVIE_ID) } returns emptyList()
 
         // when
-        val result = getMovieCastUseCase(MOVIE_ID)
+        val result = getMovieCastUseCase.invoke(MOVIE_ID)
 
         // then
         assertThat(result).isEmpty()
@@ -68,7 +68,7 @@ class GetMovieCastUseCaseTest {
         coEvery { movieRepository.getMovieCastById(customId) } returns emptyList()
 
         // when
-        getMovieCastUseCase(customId)
+        getMovieCastUseCase.invoke(customId)
 
         // then
         coVerify(exactly = 1) { movieRepository.getMovieCastById(customId) }
@@ -85,8 +85,8 @@ class GetMovieCastUseCaseTest {
         coEvery { movieRepository.getMovieCastById(456) } returns actorCast
 
         // when
-        val result1 = getMovieCastUseCase(123)
-        val result2 = getMovieCastUseCase(456)
+        val result1 = getMovieCastUseCase.invoke(123)
+        val result2 = getMovieCastUseCase.invoke(456)
 
         // then
         assertThat(result1).hasSize(2)

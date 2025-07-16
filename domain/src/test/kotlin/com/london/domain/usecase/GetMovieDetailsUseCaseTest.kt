@@ -10,11 +10,11 @@ import com.london.domain.entity.moviedatails.Genre
 import com.london.domain.entity.moviedatails.MovieDetails
 import com.london.domain.entity.moviedatails.SimilarMovie
 import io.mockk.coEvery
-import org.junit.jupiter.api.assertThrows
 import io.mockk.mockk
 import kotlinx.coroutines.test.runTest
 import org.junit.Before
 import org.junit.Test
+import org.junit.jupiter.api.assertThrows
 
 class GetMovieDetailsUseCaseTest {
 
@@ -39,10 +39,10 @@ class GetMovieDetailsUseCaseTest {
     @Test
     fun `should combine all movie details correctly`() = runTest {
         // given
-        coEvery { getMovieById(MOVIE_ID) } returns baseMovie
-        coEvery { getMovieImagesUseCase(MOVIE_ID) } returns fakeImages
-        coEvery { getMovieCastUseCase(MOVIE_ID) } returns fakeCast
-        coEvery { getSimilarMoviesUseCase(MOVIE_ID) } returns fakeSimilarMovies
+        coEvery { getMovieById.invoke(MOVIE_ID) } returns baseMovie
+        coEvery { getMovieImagesUseCase.invoke(MOVIE_ID) } returns fakeImages
+        coEvery { getMovieCastUseCase.invoke(MOVIE_ID) } returns fakeCast
+        coEvery { getSimilarMoviesUseCase.invoke(MOVIE_ID) } returns fakeSimilarMovies
 
         // when
         val result = getMovieDetailsUseCase(MOVIE_ID)
@@ -68,7 +68,7 @@ class GetMovieDetailsUseCaseTest {
     @Test
     fun `should throw exception when getMovieById fails`() = runTest {
         //Given
-        coEvery { getMovieById(MOVIE_ID) } throws GetMovieDetailsFailedException()
+        coEvery { getMovieById.invoke(MOVIE_ID) } throws GetMovieDetailsFailedException()
 
         //When&Then
         assertThrows<GetMovieDetailsFailedException> {
@@ -79,8 +79,8 @@ class GetMovieDetailsUseCaseTest {
     @Test
     fun `should throw GetMovieImagesFailedException when getMovieImagesUseCase fails`() = runTest {
         //Given
-        coEvery { getMovieById(MOVIE_ID) } returns baseMovie
-        coEvery { getMovieImagesUseCase(MOVIE_ID) } throws GetMovieImagesFailedException()
+        coEvery { getMovieById.invoke(MOVIE_ID) } returns baseMovie
+        coEvery { getMovieImagesUseCase.invoke(MOVIE_ID) } throws GetMovieImagesFailedException()
 
         //When&Then
         assertThrows<GetMovieImagesFailedException> {
@@ -91,9 +91,9 @@ class GetMovieDetailsUseCaseTest {
     @Test
     fun `should throw exception when getMovieCastUseCase fails`() = runTest {
         //Given
-        coEvery { getMovieById(MOVIE_ID) } returns baseMovie
-        coEvery { getMovieImagesUseCase(MOVIE_ID) } returns fakeImages
-        coEvery { getMovieCastUseCase(MOVIE_ID) } throws GetCastByIdFailedException()
+        coEvery { getMovieById.invoke(MOVIE_ID) } returns baseMovie
+        coEvery { getMovieImagesUseCase.invoke(MOVIE_ID) } returns fakeImages
+        coEvery { getMovieCastUseCase.invoke(MOVIE_ID) } throws GetCastByIdFailedException()
 
         assertThrows<GetCastByIdFailedException> {
             getMovieDetailsUseCase(MOVIE_ID)
@@ -102,10 +102,10 @@ class GetMovieDetailsUseCaseTest {
 
     @Test
     fun `should throw exception when getSimilarMoviesUseCase fails`() = runTest {
-        coEvery { getMovieById(MOVIE_ID) } returns baseMovie
-        coEvery { getMovieImagesUseCase(MOVIE_ID) } returns fakeImages
-        coEvery { getMovieCastUseCase(MOVIE_ID) } returns fakeCast
-        coEvery { getSimilarMoviesUseCase(MOVIE_ID) } throws GetSimilarMoviesFailedException()
+        coEvery { getMovieById.invoke(MOVIE_ID) } returns baseMovie
+        coEvery { getMovieImagesUseCase.invoke(MOVIE_ID) } returns fakeImages
+        coEvery { getMovieCastUseCase.invoke(MOVIE_ID) } returns fakeCast
+        coEvery { getSimilarMoviesUseCase.invoke(MOVIE_ID) } throws GetSimilarMoviesFailedException()
 
         assertThrows<GetSimilarMoviesFailedException> {
             getMovieDetailsUseCase(MOVIE_ID)
