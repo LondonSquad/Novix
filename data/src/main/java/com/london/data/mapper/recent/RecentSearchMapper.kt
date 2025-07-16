@@ -1,12 +1,12 @@
 package com.london.data.mapper.recent
 
-import com.london.data.datasource.local.model.RecentSearch
+import com.london.data.datasource.local.model.recent.RecentSearchLocal
 
-fun RecentSearch.toStringQuery(): String{
+fun RecentSearchLocal.toStringQuery(): String{
     return this.query
 }
 
-fun String.toRecentSearch(): RecentSearch= RecentSearch(
+fun String.toRecentSearch(): RecentSearchLocal= RecentSearchLocal(
     query = this,
     date = System.currentTimeMillis(),
 )

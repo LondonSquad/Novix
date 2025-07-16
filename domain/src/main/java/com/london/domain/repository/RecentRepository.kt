@@ -1,7 +1,7 @@
 package com.london.domain.repository
 
-interface RecentRepository {
-    suspend fun insert(item: String)
-    suspend fun getAll(): List<String>
+interface RecentRepository<T> {
+    suspend fun insert(item: T)
+    suspend fun getAll(): List<T>
     suspend fun clearAll()
 }
