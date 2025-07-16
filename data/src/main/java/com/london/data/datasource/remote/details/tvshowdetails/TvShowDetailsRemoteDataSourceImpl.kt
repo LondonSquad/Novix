@@ -7,7 +7,7 @@ import com.london.data.datasource.remote.ApiConstants
 import com.london.data.datasource.remote.details.tvshowdetails.model.TvShowCastRemoteResponse
 import com.london.data.datasource.remote.details.tvshowdetails.model.TvShowDetailsRemoteResponse
 import com.london.data.datasource.remote.details.tvshowdetails.model.TvShowImagesRemoteResponse
-import com.london.data.datasource.remote.details.tvshowdetails.model.tvshowepisode.TvShowEpisode
+import com.london.data.datasource.remote.details.tvshowdetails.model.tvshowepisode.TvShowEpisodeResponse
 import com.london.data.datasource.remote.details.tvshowdetails.model.tvshowepisode.TvShowEpisodesRemoteResponse
 import io.ktor.client.HttpClient
 import io.ktor.client.request.get
@@ -100,7 +100,7 @@ class TvShowDetailsRemoteDataSourceImpl(
         tvShowId: Int,
         seasonNumber: Int,
         episodeNumber: Int
-    ): TvShowEpisode {
+    ): TvShowEpisodeResponse {
         val json = Json {
             ignoreUnknownKeys = true
         }

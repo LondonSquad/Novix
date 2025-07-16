@@ -3,7 +3,7 @@ package com.london.data.datasource.remote.details.tvshowdetails
 import com.london.data.datasource.remote.details.tvshowdetails.model.TvShowCastRemoteResponse
 import com.london.data.datasource.remote.details.tvshowdetails.model.TvShowDetailsRemoteResponse
 import com.london.data.datasource.remote.details.tvshowdetails.model.TvShowImagesRemoteResponse
-import com.london.data.datasource.remote.details.tvshowdetails.model.tvshowepisode.TvShowEpisode
+import com.london.data.datasource.remote.details.tvshowdetails.model.tvshowepisode.TvShowEpisodeResponse
 import com.london.data.datasource.remote.details.tvshowdetails.model.tvshowepisode.TvShowEpisodesRemoteResponse
 
 interface TvShowDetailsRemoteDataSource {
@@ -24,5 +24,5 @@ interface TvShowDetailsRemoteDataSource {
         tvShowId: Int,
         seasonNumber: Int,
         episodeNumber: Int
-    ): TvShowEpisode
+    ): TvShowEpisodeResponse
 }
