@@ -57,9 +57,9 @@ jobs:
         uses: wzieba/Firebase-Distribution-Github-Action@v1
         with:
           appId: ${{ secrets.FIREBASE_APP_ID }}
-          serviceCredentialsFileContent: ${{ secrets.CREDENTIAL_FILE_CONTENT }}
+          serviceCredentialsFileContent: echo "${{ secrets.ACCOUNT_SERVICE_JSON }}" | base64 --decode
           groups: testers
-          file: app/build/outputs/bundle/release/app-release.aab
+          file: app/release/app-release.apk
           releaseNotes: |
             New update from PR #${{ github.event.pull_request.number }}
             Commit: ${{ github.sha }}
