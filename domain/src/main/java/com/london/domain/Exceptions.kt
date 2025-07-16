@@ -8,3 +8,9 @@ class TvShowDetailsSearchFailedException(message: String = "Failed to get TV sho
 
 class GetCastByIdFailedException(message: String = "Failed to get cast") : Exception(message)
 class GetImagesByIdFailedException(message: String = "Failed to get cast") : Exception(message)
+
+class GetSimilarMoviesFailedException(message: String = "Failed to get similar movies") : Exception(message)
+class GetMovieByIdFailedException(message: String = "Failed to get movie") : Exception(message)
+class GetMovieImagesFailedException(message: String = "Failed to get movie images") : Exception(message)
+class GetMovieCastFailedException(message: String = "Failed to get movie cast") : Exception(message)
+class GetMovieDetailsFailedException(message: String = "Failed to get movie details") : Exception(message)
