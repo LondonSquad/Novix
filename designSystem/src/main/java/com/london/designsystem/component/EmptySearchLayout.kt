@@ -13,12 +13,9 @@ import androidx.compose.ui.Alignment.Companion.CenterHorizontally
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import com.london.designsystem.R
 import com.london.designsystem.theme.NovixTheme
-import com.london.designsystem.theme.ThemePreviews
 
 @Composable
 fun EmptySearchLayout(
@@ -47,29 +44,6 @@ fun EmptySearchLayout(
             color = NovixTheme.colors.body,
             textAlign = TextAlign.Center,
             modifier = Modifier.fillMaxWidth()
-        )
-    }
-}
-
-
-@ThemePreviews
-@Composable
-private fun EmptySearchComponentPreview() {
-    NovixTheme {
-        EmptySearchLayout(
-            text = stringResource(R.string.start_exploring_msg),
-            image = R.drawable.imge_explore,
-        )
-    }
-}
-
-@ThemePreviews
-@Composable
-private fun EmptySearchComponentNoResultPreview() {
-    NovixTheme {
-        EmptySearchLayout(
-            text = stringResource(R.string.no_search_result_msg),
-            image = R.drawable.img_no_search_result,
         )
     }
 }
