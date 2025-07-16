@@ -27,16 +27,12 @@ kover {
         total {
             filters {
                 includes {
-                    classes("*.domain.*")
-                    classes("**LocalDataSourceImpl")
-                    classes("**SearchRepositoryImpl")
-                }
-                excludes{
-                    classes("*.Exceptions.*")
-                    classes("com.london.domain.entity.**")
-                    classes("**.model.**")
-                    classes("**.dao.**")
-                    classes("**.convertor.**")
+                    classes("*.domain.usecae.*")
+                    classes("**.*ActorLocalDataSourceImpl")
+                    classes("**.*MovieLocalDataSourceImpl")
+                    classes("**.*TvShowLocalDataSourceImpl")
+                    classes("**.*RecentSearchDataSourceImpl")
+                    classes("**.*RepositoryImpl")
                 }
             }
             verify {
