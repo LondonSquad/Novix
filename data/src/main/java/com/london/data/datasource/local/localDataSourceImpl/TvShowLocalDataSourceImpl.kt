@@ -7,6 +7,7 @@ import com.london.data.datasource.util.executeDelete
 import com.london.data.datasource.util.executeGetAll
 import com.london.data.datasource.util.executeGetByDate
 import com.london.data.datasource.util.executeGetByQuery
+import com.london.data.datasource.util.executeGetByQueryAndPage
 import com.london.data.datasource.util.executeInsert
 import com.london.data.datasource.util.executeUpdate
 import kotlinx.coroutines.CoroutineScope
@@ -37,6 +38,14 @@ class TvShowLocalDataSourceImpl(
     override suspend fun getByQuery(query: String): SearchTvShowLocal? {
         return try {
             searchTvShowDao.executeGetByQuery(query.generateHash())
+        } catch (_: Exception) {
+            null
+        }
+    }
+
+    override suspend fun getByQueryAndPage(query: String, page: Int): SearchTvShowLocal? {
+        return try {
+            searchTvShowDao.executeGetByQueryAndPage(query.generateHash(), page)
         } catch (_: Exception) {
             null
         }
