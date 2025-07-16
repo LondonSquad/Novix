@@ -1,43 +1,41 @@
 package com.london.data.repository
 
 import com.google.common.truth.Truth.assertThat
-import com.london.data.datasource.local.GetException
 import com.london.data.datasource.local.LocalDataSource
+import com.london.data.datasource.local.dao.GenreInterestDao
 import com.london.data.datasource.local.model.PersonDtoLocal
 import com.london.data.datasource.local.model.SearchActorsLocal
 import com.london.data.datasource.local.model.SearchMovieDtoLocal
 import com.london.data.datasource.local.model.SearchMoviesLocal
-import com.london.data.datasource.local.model.SearchTvShowDtoLocal
 import com.london.data.datasource.local.model.SearchTvShowLocal
-import com.london.data.datasource.remote.search.RemoteDataSource
-import com.london.data.datasource.remote.search.model.ApiSearch
+import com.london.data.datasource.remote.ApiResponse
+import com.london.data.datasource.remote.search.SearchRemoteDataSource
 import com.london.data.datasource.remote.search.model.SearchActorRemote
 import com.london.data.datasource.remote.search.model.SearchMovieRemote
 import com.london.data.datasource.remote.search.model.SearchTvShowRemote
 import com.london.data.datasource.util.CrashReporter
-import com.london.data.datasource.util.FirebaseCrashReporter
-import com.london.domain.ActorSearchFailedException
-import com.london.domain.MovieSearchFailedException
-import com.london.domain.TvShowSearchFailedException
 import com.london.domain.entity.Actor
 import com.london.domain.entity.Movie
+import com.london.domain.entity.PagedFetchResponse
 import com.london.domain.entity.TvShow
 import io.mockk.coEvery
 import io.mockk.coVerify
+import io.mockk.impl.annotations.MockK
 import io.mockk.mockk
 import kotlinx.coroutines.test.runTest
 import org.junit.Before
 import org.junit.Test
 import org.junit.jupiter.api.assertThrows
-import org.koin.core.annotation.Named
-
 
 class SearchRepositoryImplTest {
 
+    @MockK(relaxed = true)
     private lateinit var searchMovieService: LocalDataSource<SearchMoviesLocal>
     private lateinit var searchTvShowService: LocalDataSource<SearchTvShowLocal>
     private lateinit var searchActorService: LocalDataSource<SearchActorsLocal>
-    private lateinit var remoteDataSource: RemoteDataSource
+    private lateinit var searchRemoteDataSource: SearchRemoteDataSource
+    private lateinit var mockCrashReporter: CrashReporter
+    private lateinit var genreInterestDao: GenreInterestDao
     private lateinit var repository: SearchRepositoryImpl
 
     @Before
@@ -45,54 +43,167 @@ class SearchRepositoryImplTest {
         searchTvShowService = mockk(relaxed = true)
         searchActorService = mockk(relaxed = true)
         searchMovieService = mockk(relaxed = true)
-        remoteDataSource = mockk(relaxed = true)
+        searchRemoteDataSource = mockk(relaxed = true)
+        mockCrashReporter = mockk<CrashReporter>(relaxed = true)
+        genreInterestDao = mockk<GenreInterestDao>(relaxed = true)
         repository = SearchRepositoryImpl(
-            searchTvShowService = searchTvShowService,
-            searchActorService = searchActorService,
-            searchMovieService = searchMovieService,
-            remoteDataSource = remoteDataSource,
-            crashReporter = FirebaseCrashReporter()
+            localTvShowDataSource = searchTvShowService,
+            localActorDataSource = searchActorService,
+            localMovieDataSource = searchMovieService,
+            remoteDataSource = searchRemoteDataSource,
+            crashReporter = mockCrashReporter,
+            genreInterestDao = genreInterestDao
         )
+
+    }
+
+    private suspend fun <T> testFetchAndSyncScenario(
+        cacheBlockAction: suspend () -> T?,
+        networkBlockAction: suspend () -> T,
+        syncBlockAction: suspend (T) -> Unit = { /* Default no-op */ },
+        expectedException: Exception,
+        expectedLoggedException: Exception = expectedException,
+        crashReporterToUse: CrashReporter? = mockCrashReporter
+    ) {
+        val actualException = assertThrows<RuntimeException>(
+            expectedException::class.java.simpleName
+        ) {
+            repository.fetchAndSync(
+                cacheBlockAction,
+                networkBlockAction,
+                syncBlockAction,
+                crashReporterToUse
+            )
+        }
+
+        assertThat(actualException).isInstanceOf(expectedException::class.java)
+        assertThat(actualException.message).isEqualTo(expectedException.message)
+
+
+        if (crashReporterToUse != null) {
+            coVerify(exactly = 1) { crashReporterToUse.logException(expectedLoggedException) }
+        } else {
+            coVerify(exactly = 0) { mockCrashReporter.logException(any()) }
+        }
     }
 
     @Test
     fun `searchForMovies should return data from local if available`() = runTest {
         coEvery { searchMovieService.getByQuery(NAME + LANG) } returns SearchMoviesLocalMock
-        val result = repository.searchForMovies(NAME, LANG)
+        val result = repository.searchForMovies(NAME, LANG, 1)
         assertThat(result).isEqualTo(MovieList)
     }
 
     @Test
     fun `searchForMovies should return data from remote and cache it if local is null`() = runTest {
         coEvery { searchMovieService.getByQuery(NAME + LANG) } returns null
-        coEvery { remoteDataSource.searchForMovies(any(), any(), any(), any()) } returns SearchMoviesRemoteMock
-        val result = repository.searchForMovies(NAME, LANG)
+        coEvery {
+            searchRemoteDataSource.searchForMovies(
+                any(),
+                any(),
+                any(),
+                any()
+            )
+        } returns SearchMoviesRemoteMock
+        val result = repository.searchForMovies(NAME, LANG, 1)
         assertThat(result).isEqualTo(MovieList)
         coVerify { searchMovieService.insert(any()) }
     }
 
+
     @Test
-    fun `searchForMovies should throw MovieSearchFailedException when GetException is thrown`() =
+    fun `fetchAndSync reports to crashReporter when cacheBlock and networkBlock throw`() = runTest {
+        val cacheException = RuntimeException("Cache failed")
+        val networkException = RuntimeException("Network failed")
+
+        testFetchAndSyncScenario(
+            cacheBlockAction = { throw cacheException },
+            networkBlockAction = { throw networkException },
+            expectedException = networkException
+        )
+    }
+
+    @Test
+    fun `fetchAndSync reports to crashReporter when networkBlock throws and cache is null`() =
         runTest {
-            coEvery { searchMovieService.getByQuery(any()) } throws GetException("")
-            assertThrows<MovieSearchFailedException> {
-                repository.searchForMovies(NAME, LANG)
-            }
+            val networkException = RuntimeException("Network failed")
+
+            testFetchAndSyncScenario(
+                cacheBlockAction = { null },
+                networkBlockAction = { throw networkException },
+                expectedException = networkException
+            )
         }
 
     @Test
-    fun `searchForTvShows should return data from local if available`() = runTest {
-        coEvery { searchTvShowService.getByQuery(NAME + LANG) } returns SearchTvShowLocalMock
-        val result = repository.searchForTvShows(NAME, LANG)
-        assertThat(result).isEqualTo(TvShowList)
+    fun `fetchAndSync reports to crashReporter when syncBlock throws and cache is null`() =
+        runTest {
+            val syncException = RuntimeException("Sync failed")
+            val networkData = "Network Data"
+
+            testFetchAndSyncScenario(
+                cacheBlockAction = { null },
+                networkBlockAction = { networkData },
+                syncBlockAction = { throw syncException },
+                expectedException = syncException
+            )
+        }
+
+    @Test
+    fun `fetchAndSync reports to crashReporter when syncBlock throws and cache threw`() = runTest {
+        val cacheException = RuntimeException("Cache failed")
+        val syncException = RuntimeException("Sync failed")
+        val networkData = "Network Data"
+
+        testFetchAndSyncScenario(
+            cacheBlockAction = { throw cacheException },
+            networkBlockAction = { networkData },
+            syncBlockAction = { throw syncException },
+            expectedException = syncException
+        )
+    }
+
+    @Test
+    fun `fetchAndSync does not report if crashReporter is null and error occurs`() = runTest {
+        val cacheException = RuntimeException("Cache failed")
+        val networkException = RuntimeException("Network failed")
+
+        // Need to create a repository instance with a null crash reporter for this specific test
+        val repositoryWithNullCrashReporter = SearchRepositoryImpl(
+            searchTvShowService,
+            searchActorService,
+            searchMovieService,
+            genreInterestDao,
+            searchRemoteDataSource,
+            mockCrashReporter,
+        )
+
+
+        val actualException = assertThrows<RuntimeException> {
+            repositoryWithNullCrashReporter.fetchAndSync(
+                cacheBlock = { throw cacheException },
+                networkBlock = { throw networkException },
+                syncBlock = { /* Do nothing */ },
+                crashReporter = null
+            )
+        }
+        assertThat(actualException).isEqualTo(networkException)
+        coVerify(exactly = 0) { mockCrashReporter.logException(any()) }
     }
 
     @Test
     fun `searchForTvShows should return data from remote and cache it if local is null`() =
         runTest {
             coEvery { searchTvShowService.getByQuery(NAME + LANG) } returns null
-            coEvery { remoteDataSource.searchForTvShows(any(), any(), any(), any()) } returns SearchTvShowRemoteMock
-            val result = repository.searchForTvShows(NAME, LANG)
+            coEvery {
+                searchRemoteDataSource.searchForTvShows(
+                    any(),
+                    any(),
+                    any(),
+                    any()
+                )
+            } returns SearchTvShowRemoteMock
+            val result = repository.searchForTvShows(NAME, LANG, 1)
             assertThat(result).isEqualTo(TvShowList)
             coVerify { searchTvShowService.insert(any()) }
         }
@@ -100,24 +211,38 @@ class SearchRepositoryImplTest {
     @Test
     fun `searchForTvShows should throw TvShowSearchFailedException when GetException is thrown`() =
         runTest {
-            coEvery { searchTvShowService.getByQuery(any()) } throws GetException("")
-            assertThrows<TvShowSearchFailedException> {
-                repository.searchForTvShows(NAME, LANG)
+            coEvery {
+                searchRemoteDataSource.searchForTvShows(
+                    any(),
+                    any(),
+                    any(),
+                    any()
+                )
+            } throws Exception()
+            assertThrows<Exception> {
+                repository.searchForTvShows(NAME, LANG, 1)
             }
         }
 
     @Test
     fun `searchForActors should return data from local if available`() = runTest {
         coEvery { searchActorService.getByQuery(NAME + LANG) } returns SearchActorsLocalMock
-        val result = repository.searchForActors(NAME, LANG)
+        val result = repository.searchForActors(NAME, LANG, 1)
         assertThat(result).isEqualTo(ActorList)
     }
 
     @Test
     fun `searchForActors should return data from remote and cache it if local is null`() = runTest {
         coEvery { searchActorService.getByQuery(NAME + LANG) } returns null
-        coEvery { remoteDataSource.searchForActors(any(), any(), any(), any()) } returns SearchActorsRemoteMock
-        val result = repository.searchForActors(NAME, LANG)
+        coEvery {
+            searchRemoteDataSource.searchForActors(
+                any(),
+                any(),
+                any(),
+                any()
+            )
+        } returns SearchActorsRemoteMock
+        val result = repository.searchForActors(NAME, LANG, 1)
         assertThat(result).isEqualTo(ActorList)
         coVerify { searchActorService.insert(any()) }
     }
@@ -125,101 +250,66 @@ class SearchRepositoryImplTest {
     @Test
     fun `searchForActors should throw ActorSearchFailedException when GetException is thrown`() =
         runTest {
-            coEvery { searchActorService.getByQuery(any()) } throws GetException("")
-            assertThrows<ActorSearchFailedException> {
-                repository.searchForActors(NAME, LANG)
+            coEvery {
+                searchRemoteDataSource.searchForActors(
+                    any(),
+                    any(),
+                    any(),
+                    any()
+                )
+            } throws Exception()
+            assertThrows<Exception> {
+                repository.searchForActors(NAME, LANG, 1)
             }
         }
-
-    @Test
-    fun `when search for actors should log unknown exceptions to crash reporter`() = runTest {
-        val crashReporter = mockk<CrashReporter>(relaxed = true)
-        repository = SearchRepositoryImpl(
-            searchTvShowService,
-            searchActorService,
-            searchMovieService,
-            remoteDataSource,
-            crashReporter
-        )
-
-        val exception = Exception("Unknown error")
-        coEvery { searchActorService.getByQuery(any()) } throws exception
-
-        repository.searchForActors(NAME, LANG)
-
-        coVerify { crashReporter.logException(exception) }
-    }
-
-    @Test
-    fun `when search for movies should log unknown exceptions to crash reporter`() = runTest {
-        val crashReporter = mockk<CrashReporter>(relaxed = true)
-        repository = SearchRepositoryImpl(
-            searchTvShowService,
-            searchActorService,
-            searchMovieService,
-            remoteDataSource,
-            crashReporter
-        )
-
-        val exception = Exception("Unknown error")
-        coEvery { searchMovieService.getByQuery(any()) } throws exception
-
-        repository.searchForMovies(NAME, LANG)
-
-        coVerify { crashReporter.logException(exception) }
-    }
-    @Test
-    fun `search for tv shows should log unknown exceptions to crash reporter`() = runTest {
-        val crashReporter = mockk<CrashReporter>(relaxed = true)
-        repository = SearchRepositoryImpl(
-            searchTvShowService,
-            searchActorService,
-            searchMovieService,
-            remoteDataSource,
-            crashReporter
-        )
-
-        val exception = Exception("Unknown error")
-        coEvery { searchTvShowService.getByQuery(any()) } throws exception
-
-        repository.searchForTvShows(NAME, LANG)
-
-        coVerify { crashReporter.logException(exception) }
-    }
-
 
     private companion object {
         const val NAME = "Tom"
         const val LANG = "en-US"
 
-        val MovieList = listOf(
-            Movie(
-                id = 1,
-                name = "",
-                posterPicture = "https://image.tmdb.org/t/p/w500",
-                releaseYear = 2020,
-                rating = 8,
-                genreIds = listOf()
-            )
+        val MovieList = PagedFetchResponse<Movie>(
+            1,
+            listOf(
+                Movie(
+                    id = 1,
+                    name = "",
+                    posterPicture = "https://image.tmdb.org/t/p/w500",
+                    releaseYear = 2020,
+                    rating = 8,
+                    genreIds = listOf(),
+                )
+            ),
+            totalItems = 1,
+            totalPages = 1
         )
 
-        val TvShowList = listOf(
-            TvShow(
-                id = 2,
-                name = "",
-                posterPicture = "https://image.tmdb.org/t/p/w500",
-                releaseYear = 2020,
-                rating = 10,
-                genres = listOf()
-            )
+        val TvShowList = PagedFetchResponse<TvShow>(
+            1,
+            listOf(
+                TvShow(
+                    id = 2,
+                    name = "",
+                    posterPicture = "https://image.tmdb.org/t/p/w500",
+                    releaseYear = 2020,
+                    rating = 10,
+                    genres = listOf(),
+                )
+            ),
+            totalItems = 1,
+            totalPages = 1
         )
 
-        val ActorList = listOf(
-            Actor(
-                id = 3,
-                name = "Tom Holland",
-                profilePicture = "https://image.tmdb.org/t/p/w500"
-            )
+        val ActorList = PagedFetchResponse<Actor>(
+            1,
+            listOf(
+                Actor(
+                    id = 3,
+                    name = "Tom Holland",
+                    profilePicture = "https://image.tmdb.org/t/p/w500"
+                )
+            ),
+            totalItems = 1,
+            totalPages = 1
         )
 
         val SearchMoviesLocalMock = SearchMoviesLocal(
@@ -247,31 +337,6 @@ class SearchRepositoryImplTest {
             totalResults = 1
         )
 
-        val SearchTvShowLocalMock = SearchTvShowLocal(
-            query = NAME + LANG,
-            page = 1,
-            results = listOf(
-                SearchTvShowDtoLocal(
-                    adult = false,
-                    backdropPath = "",
-                    genreIds = emptyList(),
-                    id = 2,
-                    originCountry = emptyList(),
-                    originalLanguage = "en",
-                    originalName = "",
-                    overview = "",
-                    popularity = 0.0,
-                    posterPath = "",
-                    firstAirDate = "2020-07-20",
-                    name = "",
-                    voteAverage = 10.0,
-                    voteCount = 0
-                )
-            ),
-            totalPages = 1,
-            totalResults = 1
-        )
-
         val SearchActorsLocalMock = SearchActorsLocal(
             query = NAME + LANG,
             page = 1,
@@ -292,9 +357,9 @@ class SearchRepositoryImplTest {
             totalResults = 1
         )
 
-        val SearchMoviesRemoteMock = ApiSearch(
-            page = 1,
-            results = listOf(
+        val SearchMoviesRemoteMock = ApiResponse(
+            currentPage = 1,
+            items = listOf(
                 SearchMovieRemote(
                     adult = false,
                     backdropPath = null,
@@ -313,12 +378,12 @@ class SearchRepositoryImplTest {
                 )
             ),
             totalPages = 1,
-            totalResults = 1
+            totalItems = 1
         )
 
-        val SearchTvShowRemoteMock = ApiSearch(
-            page = 1,
-            results = listOf(
+        val SearchTvShowRemoteMock = ApiResponse(
+            currentPage = 1,
+            items = listOf(
                 SearchTvShowRemote(
                     adult = false,
                     backdropPath = "",
@@ -337,12 +402,12 @@ class SearchRepositoryImplTest {
                 )
             ),
             totalPages = 1,
-            totalResults = 1
+            totalItems = 1
         )
 
-        val SearchActorsRemoteMock = ApiSearch(
-            page = 1,
-            results = listOf(
+        val SearchActorsRemoteMock = ApiResponse(
+            currentPage = 1,
+            items = listOf(
                 SearchActorRemote(
                     adult = false,
                     gender = 2,
@@ -356,8 +421,7 @@ class SearchRepositoryImplTest {
                 )
             ),
             totalPages = 1,
-            totalResults = 1
+            totalItems = 1
         )
     }
-
 }

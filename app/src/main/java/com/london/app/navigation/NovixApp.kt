@@ -1,5 +1,7 @@
 package com.london.app.navigation
 
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.Scaffold
 import androidx.compose.runtime.Composable
@@ -19,12 +21,13 @@ import com.london.app.navigation.Screen.Home
 import com.london.app.navigation.Screen.Search
 import com.london.app.navigation.Screen.TvShowDetails
 import com.london.designsystem.component.NavBar
-import com.london.presentation.screen.search.SearchScreen
+import com.london.designsystem.theme.NovixTheme
 import com.london.presentation.screen.account.AccountScreen
 import com.london.presentation.screen.bookmark.BookmarksScreen
 import com.london.presentation.screen.category.CategoriesScreen
-import com.london.presentation.screen.home.HomeScreen
 import com.london.presentation.screen.details.tvshow.tvshowdetails.TvShowsDetailsScreen
+import com.london.presentation.screen.home.HomeScreen
+import com.london.presentation.screen.search.SearchScreen
 
 @Composable
 fun NovixApp() {
@@ -47,6 +50,9 @@ fun NovixApp() {
         bottomBar = {
             if (showBottomNav) {
                 NavBar(
+                    modifier = Modifier
+                        .background(NovixTheme.colors.surface)
+                        .navigationBarsPadding(),
                     navDestinations = NavigationHelper.getNavigationTabs(),
                     currentSelectedDestination = currentScreen,
                     onNavDestinationClicked = { destination ->

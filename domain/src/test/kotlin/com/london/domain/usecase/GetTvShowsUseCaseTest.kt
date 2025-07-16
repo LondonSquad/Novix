@@ -2,6 +2,7 @@ package com.london.domain.usecase
 
 import com.google.common.truth.Truth.assertThat
 import com.london.domain.TvShowSearchFailedException
+import com.london.domain.entity.PagedFetchResponse
 import com.london.domain.entity.TvShow
 import com.london.domain.repository.SearchRepository
 import io.mockk.coEvery
@@ -22,36 +23,50 @@ class GetTvShowsUseCaseTest {
         getTvShowsUseCase = GetTvShowsUseCase(searchRepository)
     }
 
-
     @Test
-    fun `should return a list of tv shows when repository return a list of actors`() = runTest {
-        //given
-        coEvery { searchRepository.searchForTvShows(NAME, LANGUAGE) } returns listOf(TV_SHOW)
-        //when
-        val result = getTvShowsUseCase(NAME, LANGUAGE)
-        //then
-        assertThat(result).isEqualTo(listOf(TV_SHOW))
-    }
-
-    @Test
-    fun `should throw an exception when repository throws an exception`() = runTest {
+    fun `should return paged fetch response when repository returns paged fetch response`() = runTest {
         //given
         coEvery {
             searchRepository.searchForTvShows(
                 NAME,
-                LANGUAGE
+                LANGUAGE,
+                PAGE_NUMBER
+            )
+        } returns pagedFetchResponse
+        //when
+        val result = getTvShowsUseCase(
+            NAME,
+            LANGUAGE,
+            PAGE_NUMBER
+        )
+        //then
+        assertThat(result).isEqualTo(pagedFetchResponse)
+    }
+
+    @Test
+    fun `should throw TvShowSearchFailedException when repository throws TvShowSearchFailedException`() = runTest {
+        //given
+        coEvery {
+            searchRepository.searchForTvShows(
+                NAME,
+                LANGUAGE,
+                PAGE_NUMBER
             )
         } throws TvShowSearchFailedException()
         //when //then
         assertThrows<TvShowSearchFailedException> {
-            getTvShowsUseCase(NAME, LANGUAGE)
+            getTvShowsUseCase(
+                NAME,
+                LANGUAGE,
+                PAGE_NUMBER
+            )
         }
     }
-
 
     private companion object {
         const val NAME = "Tv Tv"
         const val LANGUAGE = "en-US"
+        const val PAGE_NUMBER = 1
         val TV_SHOW = TvShow(
             id = 1,
             name = NAME,
@@ -59,6 +74,12 @@ class GetTvShowsUseCaseTest {
             releaseYear = 2024,
             rating = 8,
             genres = listOf(1, 2, 3)
+        )
+        val pagedFetchResponse = PagedFetchResponse(
+            currentPage = 1,
+            items = listOf(TV_SHOW),
+            totalPages = 1,
+            totalItems = 1
         )
     }
 }

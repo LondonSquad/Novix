@@ -5,10 +5,15 @@ object ApiConstants {
     const val SEARCH_PATH_MOVIES = "3/search/movie"
     const val SEARCH_PATH_TVS = "3/search/tv"
     const val SEARCH_PATH_ACTORS = "3/search/person"
+    const val MOVIE_DETAILS_PATH = "3/movie"
+
 
     fun getTvShowDetailsPath(tvShowId: Int) = "3/tv/$tvShowId"
 
-    fun getCastTvShowPath(tvShowId: Int) = "3/tv/$tvShowId/credits"
+    fun getCastTvShowPath(tvShowId: Int) = "3/tv/$tvShowId/aggregate_credits"
 
     fun getImagesTvShowPath(tvShowId: Int) = "3/tv/$tvShowId/images"
+
+    fun getTvShowEpisodeBySeasonPath(tvShowId: Int, seasonNumber: Int) =
+        "3/tv/$tvShowId/season/$seasonNumber"
 }

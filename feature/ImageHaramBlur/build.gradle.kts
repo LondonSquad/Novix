@@ -39,7 +39,10 @@ android {
 
     lint {
         disable += "CoroutineCreationDuringComposition"
+        disable += "StateFlowValueCalledInComposition"
+
     }
+
 
 }
 

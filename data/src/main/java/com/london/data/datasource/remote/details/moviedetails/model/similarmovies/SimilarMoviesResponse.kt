@@ -1,14 +1,13 @@
-package com.london.data.datasource.remote.search.model
+package com.london.data.datasource.remote.details.moviedetails.model.similarmovies
 
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class ApiSearch<T>(
-    @SerialName("page")
+data class SimilarMoviesResponse(
     val page: Int,
     @SerialName("results")
-    val results: List<T>,
+    val similarMovieRemotes: List<SimilarMovieRemote>,
     @SerialName("total_pages")
     val totalPages: Int,
     @SerialName("total_results")
