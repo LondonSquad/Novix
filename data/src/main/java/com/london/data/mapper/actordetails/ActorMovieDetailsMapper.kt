@@ -14,10 +14,11 @@ fun ActorMovieDetailsResponse.toEntity(): ActorMovieDetails {
         crew = this.crew.map { it.toEntity() }
     )
 }
+
 fun ActorMovieCastMember.toEntity(): ActorMovieCastMemberEntity {
     return ActorMovieCastMemberEntity(
         adult = this.adult,
-        backdropPath = this.backdropPath,
+        backdropPath = "https://image.tmdb.org/t/p/w500${this.backdropPath}",
         character = this.character,
         creditId = this.creditId,
         genreIds = this.genreIds,
@@ -27,7 +28,7 @@ fun ActorMovieCastMember.toEntity(): ActorMovieCastMemberEntity {
         originalTitle = this.originalTitle,
         overview = this.overview,
         popularity = this.popularity,
-        posterPath = this.posterPath,
+        posterPath = this.posterPath.let{"https://image.tmdb.org/t/p/w500${it}"},
         releaseDate = this.releaseDate,
         title = this.title,
         video = this.video,
@@ -38,7 +39,7 @@ fun ActorMovieCastMember.toEntity(): ActorMovieCastMemberEntity {
 fun MovieCrewMember.toEntity(): ActorMovieCrewMemberEntity {
     return ActorMovieCrewMemberEntity(
         adult = this.adult,
-        backdropPath = this.backdropPath,
+        backdropPath = "https://image.tmdb.org/t/p/w500${this.backdropPath}",
         creditId = this.creditId,
         department = this.department,
         genreIds = this.genreIds,
@@ -48,7 +49,7 @@ fun MovieCrewMember.toEntity(): ActorMovieCrewMemberEntity {
         originalTitle = this.originalTitle,
         overview = this.overview,
         popularity = this.popularity,
-        posterPath = this.posterPath,
+        posterPath = "https://image.tmdb.org/t/p/w500${this.posterPath}",
         releaseDate = this.releaseDate,
         title = this.title,
         video = this.video,

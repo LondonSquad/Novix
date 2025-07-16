@@ -1,4 +1,4 @@
-package com.london.app.navigation
+package com.london.presentation.navigation
 
 import kotlinx.serialization.Serializable
 
@@ -22,5 +22,10 @@ sealed interface Screen {
     @Serializable
     data class TvShowDetails(
         val tvShowId: Int,
+    ) : Screen
+
+    @Serializable
+    data class TopMoviesPicksDetails(
+        val actorId: Int,
     ) : Screen
 }

@@ -1,7 +1,9 @@
 package com.london.data.datasource.remote.details.actordetails.model.actormoviedetails
 
 import kotlinx.serialization.SerialName
+import kotlinx.serialization.Serializable
 
+@Serializable
 data class MovieCrewMember(
     @SerialName("adult")
     val adult: Boolean,

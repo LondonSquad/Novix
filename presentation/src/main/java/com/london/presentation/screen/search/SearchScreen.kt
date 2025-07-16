@@ -63,7 +63,8 @@ import org.koin.androidx.compose.koinViewModel
 @Composable
 fun SearchScreen(
     viewModel: SearchViewModel = koinViewModel(),
-    onNavigateToTvShowDetails: (Int) -> Unit = { }
+    onNavigateToTvShowDetails: (Int) -> Unit = { },
+    onNavigateToActorDetails: (Int) -> Unit = { }
 ) {
     val state by viewModel.uiState.collectAsState()
     val keyboardController = LocalSoftwareKeyboardController.current
@@ -73,7 +74,8 @@ fun SearchScreen(
         interactionListener = viewModel,
         keyboardController = keyboardController,
         viewModel = viewModel,
-        onNavigateToTvShowDetails = onNavigateToTvShowDetails
+        onNavigateToTvShowDetails = onNavigateToTvShowDetails,
+        onNavigateToActorDetails = onNavigateToActorDetails
     )
 }
 
@@ -83,7 +85,8 @@ fun SearchScreenContent(
     interactionListener: SearchInteractions,
     viewModel: SearchViewModel,
     keyboardController: SoftwareKeyboardController?,
-    onNavigateToTvShowDetails: (Int) -> Unit
+    onNavigateToTvShowDetails: (Int) -> Unit,
+    onNavigateToActorDetails: (Int) -> Unit,
 ) {
     val interactionSource = remember { MutableInteractionSource() }
     var showFilterBottomSheet by remember { mutableStateOf(false) }
@@ -201,7 +204,9 @@ fun SearchScreenContent(
                                 content = {
                                     ActorsLayout(
                                         actorsUis = actorsLazyList,
-                                        onActorClick = { /* Handle actor click */ }
+                                        onActorClick = {
+                                            onNavigateToActorDetails(it.id)
+                                        }
                                     )
                                 }
                             )
@@ -446,6 +451,7 @@ private fun RecentSearchItem(
             tint = NovixTheme.colors.hint,
             modifier = Modifier
                 .padding(end = 8.dp)
+                .size(20.dp)
                 .size(20.dp)
         )
         Text(

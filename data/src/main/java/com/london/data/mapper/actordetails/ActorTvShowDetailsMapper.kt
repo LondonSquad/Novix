@@ -18,7 +18,7 @@ fun ActorTvShowDetailsResponse.toEntity(): ActorTvShowDetails {
 fun ActorTvShowCastMember.toEntity(): ActorTvShowCastMemberEntity {
     return ActorTvShowCastMemberEntity(
         adult = this.adult,
-        backdropPath = this.backdropPath,
+        backdropPath = "https://image.tmdb.org/t/p/w500${this.backdropPath}",
         character = this.character,
         creditId = this.creditId,
         episodeCount = this.episodeCount,
@@ -32,7 +32,7 @@ fun ActorTvShowCastMember.toEntity(): ActorTvShowCastMemberEntity {
         originalName = this.originalName,
         overview = this.overview,
         popularity = this.popularity,
-        posterPath = this.posterPath,
+        posterPath = "https://image.tmdb.org/t/p/w500${this.posterPath}",
         voteAverage = this.voteAverage,
         voteCount = this.voteCount
     )
@@ -41,7 +41,7 @@ fun ActorTvShowCastMember.toEntity(): ActorTvShowCastMemberEntity {
 fun ActorTvShowCrewMember.toEntity(): ActorTvShowCrewMemberEntity{
     return ActorTvShowCrewMemberEntity(
         adult = this.adult,
-        backdropPath = this.backdropPath,
+        backdropPath = "https://image.tmdb.org/t/p/w500${this.backdropPath}",
         creditId = this.creditId,
         department = this.department,
         episodeCount = this.episodeCount,
@@ -56,7 +56,7 @@ fun ActorTvShowCrewMember.toEntity(): ActorTvShowCrewMemberEntity{
         originalName = this.originalName,
         overview = this.overview,
         popularity = this.popularity,
-        posterPath = this.posterPath,
+        posterPath = "https://image.tmdb.org/t/p/w500${this.posterPath}",
         voteAverage = this.voteAverage,
         voteCount = this.voteCount
     )

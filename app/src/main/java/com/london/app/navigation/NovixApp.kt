@@ -14,17 +14,20 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
-import com.london.app.navigation.Screen.Account
-import com.london.app.navigation.Screen.Bookmarks
-import com.london.app.navigation.Screen.Categories
-import com.london.app.navigation.Screen.Home
-import com.london.app.navigation.Screen.Search
-import com.london.app.navigation.Screen.TvShowDetails
+import com.london.presentation.navigation.Screen.Account
+import com.london.presentation.navigation.Screen.Bookmarks
+import com.london.presentation.navigation.Screen.Categories
+import com.london.presentation.navigation.Screen.Home
+import com.london.presentation.navigation.Screen.Search
+import com.london.presentation.navigation.Screen.TopMoviesPicksDetails
+import com.london.presentation.navigation.Screen.TvShowDetails
 import com.london.designsystem.component.NavBar
 import com.london.designsystem.theme.NovixTheme
+import com.london.presentation.navigation.Screen
 import com.london.presentation.screen.account.AccountScreen
 import com.london.presentation.screen.bookmark.BookmarksScreen
 import com.london.presentation.screen.category.CategoriesScreen
+import com.london.presentation.screen.details.actordetails.topmoviespicks.TopMoviesPicksScreen
 import com.london.presentation.screen.details.tvshow.tvshowdetails.TvShowsDetailsScreen
 import com.london.presentation.screen.home.HomeScreen
 import com.london.presentation.screen.search.SearchScreen
@@ -74,6 +77,9 @@ fun NovixApp() {
                 SearchScreen(
                     onNavigateToTvShowDetails = { tvShowId ->
                         navController.navigate(TvShowDetails(tvShowId))
+                    },
+                    onNavigateToActorDetails = { actorId ->
+                        navController.navigate(TopMoviesPicksDetails(actorId))
                     }
                 )
             }
@@ -97,6 +103,15 @@ fun NovixApp() {
                         navController.navigateUp()
                     }
                 )
+            }
+
+            composable<TopMoviesPicksDetails> { backStackEntry ->
+                val topMoviesPicksDetails = backStackEntry.arguments?.let {
+                    TopMoviesPicksDetails(
+                        actorId = it.getInt("actorId"),
+                    )
+                }
+                TopMoviesPicksScreen()
             }
         }
     }
