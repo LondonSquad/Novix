@@ -1364,5 +1364,54 @@
       "deletions": 3,
       "changed_files": 42
     }
+  },
+  {
+    "pr_number": 117,
+    "url": "https://github.com/LondonSquad/Novix/pull/117",
+    "title": "fix: refactor clear all in recent viewed and recent search appearance problem",
+    "opened_at": "2025-07-16T01:49:58Z",
+    "head_ref": "hotfix/ui-refactor",
+    "base_ref": "develop",
+    "creator": {
+      "login": "Abdulrahman1890",
+      "id": 76666355,
+      "url": "https://github.com/Abdulrahman1890"
+    },
+    "approvals": [
+      {
+        "reviewer": {
+          "id": 102248144,
+          "login": "BassantM",
+          "url": "https://github.com/BassantM"
+        },
+        "submitted_at": "2025-07-16T01:55:33Z"
+      },
+      {
+        "reviewer": {
+          "id": 100484790,
+          "login": "marwanqashwa",
+          "url": "https://github.com/marwanqashwa"
+        },
+        "submitted_at": "2025-07-16T02:00:54Z"
+      }
+    ],
+    "first_approved_at": "2025-07-16T01:55:33Z",
+    "time_to_first_approval_minutes": 5.583333333333333,
+    "required_approvals_met_at": "2025-07-16T02:00:54Z",
+    "time_to_required_approvals_minutes": 10.933333333333334,
+    "closed_at": "2025-07-16T02:02:24Z",
+    "merged_at": "2025-07-16T02:02:24Z",
+    "merged_by": {
+      "login": "Abdulrahman1890",
+      "id": 76666355,
+      "url": "https://github.com/Abdulrahman1890"
+    },
+    "week": "2025-W29",
+    "status": "merged",
+    "diff_stats": {
+      "additions": 32,
+      "deletions": 36,
+      "changed_files": 2
+    }
   }
 ]
