@@ -1,11 +1,16 @@
 package com.london.app.di
 
+import com.london.domain.repository.ActorRepository
 import com.london.domain.repository.DetailsRepository
 import com.london.domain.repository.MovieDetailsRepository
 import com.london.domain.repository.RecentRepository
 import com.london.domain.repository.SearchRepository
 import com.london.domain.usecase.AddToRecentSearchUseCase
 import com.london.domain.usecase.ClearRecentSearchUseCase
+import com.london.domain.usecase.GetActorDetailsByIdUseCase
+import com.london.domain.usecase.GetActorImagesByIdUseCase
+import com.london.domain.usecase.GetActorMoviePicksByIdUseCase
+import com.london.domain.usecase.GetActorTvShowPicksByIdUseCase
 import com.london.domain.usecase.GetActorsUseCase
 import com.london.domain.usecase.GetCastById
 import com.london.domain.usecase.GetEpisodesByTvShowSeason
@@ -88,6 +93,25 @@ class UseCaseModule {
     ): GetMovieCastUseCase = GetMovieCastUseCase(movieDetailsRepository)
 
     @Single
+    fun provideGetActorDetailsById(
+        actorRepository: ActorRepository
+    ): GetActorDetailsByIdUseCase = GetActorDetailsByIdUseCase(actorRepository)
+
+    @Single
+    fun provideGetActorImageById(
+        actorRepository: ActorRepository
+    ): GetActorImagesByIdUseCase = GetActorImagesByIdUseCase(actorRepository)
+
+    @Single
+    fun provideGetActorMoviePicksById(
+        actorRepository: ActorRepository
+    ): GetActorMoviePicksByIdUseCase = GetActorMoviePicksByIdUseCase(actorRepository)
+
+    @Single
+    fun provideGetActorTvShowPicksById(
+        actorRepository: ActorRepository
+    ): GetActorTvShowPicksByIdUseCase = GetActorTvShowPicksByIdUseCase(actorRepository)
+
     fun provideSimilarMoviesUseCase(
         movieDetailsRepository: MovieDetailsRepository
     ): GetSimilarMoviesUseCase = GetSimilarMoviesUseCase(movieDetailsRepository)
@@ -106,4 +130,5 @@ class UseCaseModule {
             getSimilarMoviesUseCase
         )
     }
+
 }

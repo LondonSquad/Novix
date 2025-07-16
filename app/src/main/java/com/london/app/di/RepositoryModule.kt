@@ -7,15 +7,18 @@ import com.london.data.datasource.local.model.SearchMoviesLocal
 import com.london.data.datasource.local.model.SearchTvShowLocal
 import com.london.data.datasource.local.recentsearch.RecentSearchDataSource
 import com.london.data.datasource.remote.details.moviedetails.MovieDetailsRemote
+import com.london.data.datasource.remote.details.actordetails.ActorDetailsRemoteDataSource
 import com.london.data.datasource.remote.details.tvshowdetails.TvShowDetailsRemoteDataSource
 import com.london.data.datasource.remote.search.SearchRemoteDataSource
 import com.london.data.datasource.util.CrashReporter
 import com.london.data.datasource.util.FirebaseCrashReporter
 import com.london.data.datasource.util.MovieDetailsRemoteImpl
+import com.london.data.repository.ActorRepositoryImpl
 import com.london.data.repository.DetailsRepositoryImpl
 import com.london.data.repository.MovieDetailsRepoImpl
 import com.london.data.repository.RecentRepositoryImpl
 import com.london.data.repository.SearchRepositoryImpl
+import com.london.domain.repository.ActorRepository
 import com.london.domain.repository.DetailsRepository
 import com.london.domain.repository.MovieDetailsRepository
 import com.london.domain.repository.RecentRepository
@@ -47,7 +50,9 @@ class RepositoryModule {
     }
 
     @Single
-    fun provideDetailsRepository(tvShowDetailsRemoteDataSource: TvShowDetailsRemoteDataSource): DetailsRepository {
+    fun provideDetailsRepository(
+        tvShowDetailsRemoteDataSource: TvShowDetailsRemoteDataSource,
+    ): DetailsRepository {
         return DetailsRepositoryImpl(tvShowDetailsRemoteDataSource)
     }
 
@@ -56,6 +61,13 @@ class RepositoryModule {
         recentSearchDataSource: RecentSearchDataSource
     ): RecentRepository {
         return RecentRepositoryImpl(recentSearchDataSource)
+    }
+
+    @Single
+    fun provideActorRepository(
+        actorDetailsRemoteDataSource: ActorDetailsRemoteDataSource,
+    ): ActorRepository {
+        return ActorRepositoryImpl(actorDetailsRemoteDataSource)
     }
 
     @Single
