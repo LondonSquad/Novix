@@ -1695,5 +1695,33 @@
       "deletions": 67,
       "changed_files": 13
     }
+  },
+  {
+    "pr_number": 124,
+    "url": "https://github.com/LondonSquad/Novix/pull/124",
+    "title": "fix: bottom sheet content and rating bar click issue",
+    "opened_at": "2025-07-16T09:39:20Z",
+    "head_ref": "refactor/filter-buttom-sheet",
+    "base_ref": "develop",
+    "creator": {
+      "login": "Mostafa-alsaygh",
+      "id": 106277855,
+      "url": "https://github.com/Mostafa-alsaygh"
+    },
+    "approvals": [],
+    "first_approved_at": null,
+    "time_to_first_approval_minutes": null,
+    "required_approvals_met_at": null,
+    "time_to_required_approvals_minutes": null,
+    "closed_at": null,
+    "merged_at": null,
+    "merged_by": null,
+    "week": "2025-W29",
+    "status": "pending",
+    "diff_stats": {
+      "additions": 44,
+      "deletions": 25,
+      "changed_files": 2
+    }
   }
 ]
