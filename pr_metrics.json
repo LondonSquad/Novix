@@ -1723,5 +1723,33 @@
       "deletions": 25,
       "changed_files": 2
     }
+  },
+  {
+    "pr_number": 125,
+    "url": "https://github.com/LondonSquad/Novix/pull/125",
+    "title": "feat: add MovieDetailsScreen and ViewModel",
+    "opened_at": "2025-07-16T09:39:27Z",
+    "head_ref": "feature/movie-details-screen",
+    "base_ref": "develop",
+    "creator": {
+      "login": "abdelrhman1002",
+      "id": 180463542,
+      "url": "https://github.com/abdelrhman1002"
+    },
+    "approvals": [],
+    "first_approved_at": null,
+    "time_to_first_approval_minutes": null,
+    "required_approvals_met_at": null,
+    "time_to_required_approvals_minutes": null,
+    "closed_at": null,
+    "merged_at": null,
+    "merged_by": null,
+    "week": "2025-W29",
+    "status": "pending",
+    "diff_stats": {
+      "additions": 911,
+      "deletions": 24,
+      "changed_files": 20
+    }
   }
 ]
