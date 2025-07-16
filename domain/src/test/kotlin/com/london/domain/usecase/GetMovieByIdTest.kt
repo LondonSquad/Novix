@@ -41,7 +41,7 @@ class GetMovieByIdTest {
             Actor(2, "Joseph Gordon-Levitt", "Arthur", "/jgl.jpg")
         ),
         similarMovies = listOf(
-            SimilarMovie("/interstellar.jpg", true , 1), SimilarMovie("/tenet.jpg", false , 1)
+            SimilarMovie(image = "/interstellar.jpg", isSaved =  true , id =  1), SimilarMovie(image = "/tenet.jpg", isSaved = false , id =  1)
         ),
         movieHaveTrailer = true
     )
