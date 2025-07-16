@@ -1,5 +1,8 @@
 package com.london.presentation.screen.search
 
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.ExperimentalAnimationApi
+import androidx.compose.animation.fadeOut
 import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.SizeTransform
 import androidx.compose.animation.core.tween
@@ -48,6 +51,7 @@ import androidx.compose.ui.platform.SoftwareKeyboardController
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import com.london.designsystem.component.EmptySearchLayout
 import com.london.designsystem.component.HomeCard
@@ -83,6 +87,7 @@ fun SearchScreen(
     )
 }
 
+@OptIn(ExperimentalAnimationApi::class)
 @Composable
 fun SearchScreenContent(
     state: SearchUiState,
@@ -350,18 +355,33 @@ private fun RecentSearchLayOut(
     interactionListener: SearchInteractions,
     viewModel: SearchViewModel
 ) {
-    RecentViewedSection(
-        recentViewed = state.recentViewed,
-        onClearAll = { viewModel.clearRecentViewed() }
-    )
+    AnimatedVisibility(
+        visible = state.recentViewed.isNotEmpty(),
+        exit = fadeOut()
+    ) {
+        Column {
+            RecentViewedSection(
+                recentViewed = state.recentViewed,
+                onClearAll = { viewModel.clearRecentViewed() }
+            )
+        }
+    }
 
-    RecentSearchesSection(
-        recentSearches = state.recentSearches,
-        onClearAll = interactionListener::clearRecentSearches,
-        onSearchClick = interactionListener::onRecentSearchClick,
-        onRemoveClick = interactionListener::removeRecentSearch
-    )
+    AnimatedVisibility(
+        visible = state.recentSearches.isNotEmpty(),
+        exit = fadeOut()
+    ) {
+        Column {
+            RecentSearchesSection(
+                recentSearches = state.recentSearches,
+                onClearAll = interactionListener::clearRecentSearches,
+                onSearchClick = interactionListener::onRecentSearchClick,
+                onRemoveClick = interactionListener::removeRecentSearch
+            )
+        }
+    }
 }
+
 
 @Composable
 fun RecentViewedSection(
@@ -454,6 +474,8 @@ private fun RecentSearchItem(
             text = search,
             style = NovixTheme.typography.body.medium,
             color = NovixTheme.colors.title,
+            overflow = TextOverflow.Ellipsis,
+            maxLines = 1,
             modifier = Modifier
                 .padding(end = 4.dp)
                 .weight(1f)
