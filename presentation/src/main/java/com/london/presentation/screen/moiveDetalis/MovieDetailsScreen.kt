@@ -1,6 +1,5 @@
 package com.london.presentation.screen.moiveDetalis
 
-import android.util.Log
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.slideInHorizontally
@@ -366,9 +365,7 @@ fun MovieDetailsImage(
             .fillMaxWidth()
             .aspectRatio(160f / 100f)
             .clip(RoundedCornerShape(12.dp))
-            .border(
-                width = 1.dp, color = NovixTheme.colors.stroke, shape = RoundedCornerShape(12.dp)
-            ), contentAlignment = Alignment.Center
+           , contentAlignment = Alignment.Center
     ) {
         images.forEachIndexed { index, image ->
             AnimatedVisibility(
