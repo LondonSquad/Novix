@@ -1,13 +1,5 @@
 package com.london.presentation.screen.search
 
-import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.animation.ExperimentalAnimationApi
-import androidx.compose.animation.fadeOut
-import androidx.compose.animation.AnimatedContent
-import androidx.compose.animation.SizeTransform
-import androidx.compose.animation.core.tween
-import androidx.compose.animation.fadeIn
-import androidx.compose.animation.togetherWith
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
@@ -171,7 +163,7 @@ fun SearchScreenContent(
                                         isMovieSaved = { false },
                                         onMovieClick = {
                                             viewModel.addToRecentViewed(it.posterPicture)
-                                            viewModel.onClickMovie(it.id)
+                                            viewModel.onClickMovie(it.genreIds)
                                         },
                                         modifier = Modifier.padding(horizontal = 16.dp)
                                     )
@@ -191,13 +183,15 @@ fun SearchScreenContent(
                                         isTvShowSaved = { false },
                                         onTvShowClick = {
                                             viewModel.addToRecentViewed(it.posterPicture)
-                                            viewModel.incrementGenreInterest(it.id, "tv")
-                                        onNavigateToTvShowDetails(it.id)
-                                    }
-                                )
-                            }
-                        )}
-
+                                            it.genres.forEach { genreId ->
+                                                viewModel.incrementGenreInterest(genreId, "tv")
+                                            }
+                                            onNavigateToTvShowDetails(it.id)
+                                        }
+                                    )
+                                }
+                            )
+                        }
 
                         SearchCategory.Actors -> {
                             val actorsLazyList = state.actorsFlow.collectAsLazyPagingItems()

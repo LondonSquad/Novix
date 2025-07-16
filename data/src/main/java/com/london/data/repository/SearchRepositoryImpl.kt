@@ -116,12 +116,12 @@ class SearchRepositoryImpl(
         )
     }
 
-    override suspend fun incrementGenreInterest(genreId: Int, genreType: String) {
+    override suspend fun incrementGenreInterest(genreId: Int, mediaType: String) {
         try {
-            val current = genreInterestDao.getGenreInterest(genreId, genreType)
+            val current = genreInterestDao.getGenreInterest(genreId, mediaType)
             if (current == null) {
                 genreInterestDao.insertGenreInterest(
-                    GenreInterestEntity(genreId = genreId, genreType = genreType, count = 1)
+                    GenreInterestEntity(genreId = genreId, mediaType = mediaType, count = 1)
                 )
             } else {
                 genreInterestDao.updateGenreInterest(
@@ -133,9 +133,9 @@ class SearchRepositoryImpl(
         }
     }
 
-    override suspend fun getGenreInterestCounts(genreType: String): List<Pair<Int, Int>> {
+    override suspend fun getGenreInterestCounts(mediaType: String): List<Pair<Int, Int>> {
         return try {
-            genreInterestDao.getGenresByInterest(genreType)
+            genreInterestDao.getGenresByInterest(mediaType)
                 .map { entity -> entity.genreId to entity.count }
         } catch (e: Exception) {
             crashReporter.logException(e)

@@ -141,8 +141,11 @@ class SearchViewModel(
         _uiState.update { it.copy(recentViewed = currentViewed) }
     }
 
-    override fun onClickMovie(id :Int) {
-        incrementGenreInterest(id, "tv")
+    override fun onClickMovie(genresListId :List<Int>) {
+        genresListId.forEach { genreId ->
+            incrementGenreInterest(genreId, "tv")
+        }
+
     }
 
     override fun clearRecentViewed() {
@@ -204,9 +207,9 @@ class SearchViewModel(
         _filterUiState.update { it.copy(imdbRating = selectedRating) }
     }
 
-    fun incrementGenreInterest(genreId: Int, genreType: String) {
+    fun incrementGenreInterest(genreId: Int, mediaType: String) {
         viewModelScope.launch {
-            incrementGenreInterestUseCase(genreId, genreType)
+            incrementGenreInterestUseCase.invoke(genreId, mediaType)
         }
     }
 
@@ -316,7 +319,7 @@ class SearchViewModel(
 
     private suspend fun applyMovieFilters(movies: List<Movie>): List<Movie> {
         val filterState = _filterUiState.value
-        val interests = getGenreInterestCountsUseCase("movie")
+        val interests = getGenreInterestCountsUseCase.invoke("movie")
         val interestMap = interests.associate { it.first to it.second }
 
         val movieFiltered = movies.filter { movie ->
@@ -343,7 +346,7 @@ class SearchViewModel(
     private suspend fun applyTvShowFilters(tvShows: List<TvShow>): List<TvShow> {
         val filterState = _filterUiState.value
 
-        val interests = getGenreInterestCountsUseCase("tv")
+        val interests = getGenreInterestCountsUseCase.invoke("tv")
         val interestMap = interests.associate { it.first to it.second }
 
         val tvShowsFiltered = tvShows.filter { tvShow ->

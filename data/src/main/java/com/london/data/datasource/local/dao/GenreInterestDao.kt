@@ -10,11 +10,11 @@ import com.london.data.datasource.local.model.GenreInterestEntity
 @Dao
 interface GenreInterestDao {
 
-    @Query("SELECT * FROM genre_interest WHERE genreType = :genreType ORDER BY count DESC")
-    suspend fun getGenresByInterest(genreType: String): List<GenreInterestEntity>
+    @Query("SELECT * FROM genre_interest WHERE mediaType = :mediaType ORDER BY count DESC")
+    suspend fun getGenresByInterest(mediaType: String): List<GenreInterestEntity>
 
-    @Query("SELECT * FROM genre_interest WHERE genreId = :genreId AND genreType = :genreType LIMIT 1")
-    suspend fun getGenreInterest(genreId: Int, genreType: String): GenreInterestEntity?
+    @Query("SELECT * FROM genre_interest WHERE genreId = :genreId AND mediaType = :mediaType LIMIT 1")
+    suspend fun getGenreInterest(genreId: Int, mediaType: String): GenreInterestEntity?
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertGenreInterest(genreInterest: GenreInterestEntity)

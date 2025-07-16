@@ -7,7 +7,6 @@ import androidx.room.PrimaryKey
 data class GenreInterestEntity(
     @PrimaryKey(autoGenerate = false)
     val genreId: Int,
-    val genreType: String,
+    val mediaType: String,
     val count: Int
 )
-
