@@ -8,10 +8,15 @@ import com.london.domain.usecase.AddToRecentSearchUseCase
 import com.london.domain.usecase.ClearRecentSearchUseCase
 import com.london.domain.usecase.GetActorsUseCase
 import com.london.domain.usecase.GetCastById
+import com.london.domain.usecase.GetEpisodesByTvShowSeason
 import com.london.domain.usecase.GetImagesById
+import com.london.domain.usecase.GetMovieById
 import com.london.domain.usecase.GetMovieCastUseCase
+import com.london.domain.usecase.GetMovieDetailsUseCase
+import com.london.domain.usecase.GetMovieImagesUseCase
 import com.london.domain.usecase.GetMoviesUseCase
 import com.london.domain.usecase.GetRecentSearchUseCase
+import com.london.domain.usecase.GetSimilarMoviesUseCase
 import com.london.domain.usecase.GetTvShowDetails
 import com.london.domain.usecase.GetTvShowsUseCase
 import org.koin.core.annotation.Module
@@ -49,6 +54,37 @@ class UseCaseModule {
     fun provideClearRecentSearchUseCase(repository: RecentRepository) =
         ClearRecentSearchUseCase(repository)
 
+    @Single
+    fun provideGetEpisodesByTvShowSeason(repository: DetailsRepository) =
+        GetEpisodesByTvShowSeason(repository)
+    @Single
+    fun provideGetMovieDetailsUseCase(
+        getMovieById: GetMovieById,
+        getMovieImagesUseCase: GetMovieImagesUseCase,
+        getMovieCastUseCase: GetMovieCastUseCase,
+        getSimilarMoviesUseCase: GetSimilarMoviesUseCase
+    ): GetMovieDetailsUseCase {
+        return GetMovieDetailsUseCase(
+            getMovieById,
+            getMovieImagesUseCase,
+            getMovieCastUseCase,
+            getSimilarMoviesUseCase
+        )
+    }
+
+    @Single
+    fun provideGetMovieByIdUseCase(
+        movieDetailsRepository: MovieDetailsRepository
+    ): GetMovieById {
+        return GetMovieById(movieDetailsRepository)
+    }
+
+    @Single
+    fun provideGetMovieDetailsUseCase(
+        movieDetailsRepository: MovieDetailsRepository
+    ): GetMovieImagesUseCase {
+        return GetMovieImagesUseCase(movieDetailsRepository)
+    }
 
     @Single
     fun provideMovieCastUseCase(
@@ -56,4 +92,8 @@ class UseCaseModule {
     ): GetMovieCastUseCase =
          GetMovieCastUseCase(movieDetailsRepository)
 
+    @Single
+    fun provideSimilarMoviesUseCase(
+        movieDetailsRepository: MovieDetailsRepository
+    ): GetSimilarMoviesUseCase = GetSimilarMoviesUseCase(movieDetailsRepository)
 }
