@@ -28,4 +28,8 @@ interface SearchActorsDao : SearchDao<SearchActorsLocal> {
 
     @Query("SELECT * FROM search_actors_table WHERE `query` = :query")
     override suspend fun getSearchByQuery(query: String): SearchActorsLocal
+
+    @Query("SELECT * FROM search_actors_table WHERE `query` = :query AND page = :page")
+    override suspend fun getSearchByQueryAndPage(query: String, page: Int): SearchActorsLocal
+
 }

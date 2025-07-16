@@ -7,6 +7,7 @@ import com.london.data.datasource.util.executeDelete
 import com.london.data.datasource.util.executeGetAll
 import com.london.data.datasource.util.executeGetByDate
 import com.london.data.datasource.util.executeGetByQuery
+import com.london.data.datasource.util.executeGetByQueryAndPage
 import com.london.data.datasource.util.executeInsert
 import com.london.data.datasource.util.executeUpdate
 import kotlinx.coroutines.CoroutineScope
@@ -43,4 +44,14 @@ class MovieLocalDataSourceImpl(
             null
         }
     }
+
+    override suspend fun getByQueryAndPage(query: String, page: Int): SearchMoviesLocal? {
+        return try {
+            searchMoviesDao.executeGetByQueryAndPage(query.generateHash(), page)
+        } catch (_: Exception) {
+            null
+        }
+
+    }
+
 }

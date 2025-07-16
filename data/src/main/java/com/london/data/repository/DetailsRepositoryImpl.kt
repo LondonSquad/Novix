@@ -8,14 +8,14 @@ import com.london.data.mapper.tvshowdetails.toTvShowEpisodesEntity
 import com.london.domain.GetCastByIdFailedException
 import com.london.domain.GetImagesByIdFailedException
 import com.london.domain.TvShowDetailsSearchFailedException
-import com.london.domain.entity.tvshowdetails.CastEntity
+import com.london.domain.entity.tvshowdetails.TvShowCastEntity
 import com.london.domain.entity.tvshowdetails.TvShowDetailsEntity
 import com.london.domain.entity.tvshowdetails.episode.TvShowEpisodesEntity
 import com.london.domain.entity.tvshowdetails.TvShowImagesEntity
 import com.london.domain.repository.DetailsRepository
 
 class DetailsRepositoryImpl(
-    private val tvShowDetailsRemoteDataSource: TvShowDetailsRemoteDataSource
+    private val tvShowDetailsRemoteDataSource: TvShowDetailsRemoteDataSource,
 ) : DetailsRepository {
     override suspend fun getTvShowDetailsById(
         tvShowId: Int,
@@ -29,7 +29,7 @@ class DetailsRepositoryImpl(
         }
     }
 
-    override suspend fun getCastTvShowById(tvShowId: Int): CastEntity {
+    override suspend fun getCastTvShowById(tvShowId: Int): TvShowCastEntity {
         return runCatching {
             tvShowDetailsRemoteDataSource.getCastsByTvShowId(tvShowId).toCastEntity()
         }.getOrElse {
