@@ -4,14 +4,15 @@ import com.london.data.datasource.remote.details.moviedetails.GetMovieCastExcept
 import com.london.data.datasource.remote.details.moviedetails.GetMovieDetailsException
 import com.london.data.datasource.remote.details.moviedetails.GetMovieImagesException
 import com.london.data.datasource.remote.details.moviedetails.GetSimilarMoviesException
-import com.london.data.datasource.remote.details.moviedetails.model.CollectionDetails
-import com.london.data.datasource.remote.details.moviedetails.model.GenreRemote
-import com.london.data.datasource.remote.details.moviedetails.model.MovieDetailsResponse
-import com.london.data.datasource.remote.details.moviedetails.model.ProductionCompanyRemote
-import com.london.data.datasource.remote.details.moviedetails.model.ProductionCountryRemote
-import com.london.data.datasource.remote.details.moviedetails.model.SpokenLanguageRemote
+import com.london.data.datasource.remote.details.moviedetails.MovieDetailsRemote
 import com.london.data.datasource.remote.details.moviedetails.model.moviecast.MovieActor
 import com.london.data.datasource.remote.details.moviedetails.model.moviecast.MovieCastResponse
+import com.london.data.datasource.remote.details.moviedetails.model.moviedetails.CollectionDetails
+import com.london.data.datasource.remote.details.moviedetails.model.moviedetails.GenreRemote
+import com.london.data.datasource.remote.details.moviedetails.model.moviedetails.MovieDetailsResponse
+import com.london.data.datasource.remote.details.moviedetails.model.moviedetails.ProductionCompany
+import com.london.data.datasource.remote.details.moviedetails.model.moviedetails.ProductionCountry
+import com.london.data.datasource.remote.details.moviedetails.model.moviedetails.SpokenLanguage
 import com.london.data.datasource.remote.details.moviedetails.model.movieimages.MovieImagesResponse
 import com.london.data.datasource.remote.details.moviedetails.model.movieimages.Poster
 import com.london.data.datasource.remote.details.moviedetails.model.similarmovies.SimilarMovieRemote
@@ -26,7 +27,7 @@ import kotlin.test.Test
 
 class MovieDetailsRepoImplTest {
 
-    private lateinit var remoteDataSource: com.london.data.datasource.remote.details.moviedetails.MovieDetailsRemote
+    private lateinit var remoteDataSource: MovieDetailsRemote
     private lateinit var repository: MovieDetailsRepoImpl
 
     @Before
@@ -40,7 +41,7 @@ class MovieDetailsRepoImplTest {
         backdropPath = "/b.jpg",
         belongsToCollection = CollectionDetails(1, "Coll"),
         budget = 1,
-        genreRemotes = listOf(
+        genreRemote = listOf(
             GenreRemote(1, "Sci-Fi"),
             GenreRemote(2, "Thriller")
         ),
@@ -54,23 +55,23 @@ class MovieDetailsRepoImplTest {
         popularity = 1.0,
         posterPath = "/p.jpg",
         productionCompanies = listOf(
-            ProductionCompanyRemote(1, null, "WB", "US")
+            ProductionCompany(1, null, "WB", "US")
         ),
         productionCountries = listOf(
-            ProductionCountryRemote("US", "USA")
+            ProductionCountry("US", "USA")
         ),
         releaseDate = "2010-07-16",
         revenue = 1,
         runtime = 148,
-        spokenLanguageRemotes = listOf(
-            SpokenLanguageRemote("English", "en", "English")
-        ),
         status = "Released",
         tagline = "Mind crime",
         title = "Inception",
         video = false,
         voteAverage = 8.8,
-        voteCount = 100
+        voteCount = 100,
+        spokenLanguages = listOf(
+            SpokenLanguage("English", "en", "English")
+        ),
     )
 
     private fun fakeSimilarMoviesRemote() = SimilarMoviesResponse(

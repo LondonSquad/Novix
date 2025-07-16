@@ -3,7 +3,7 @@ package com.london.data.datasource.remote.details.moviedetails.model.moviedetail
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class Genre(
+data class GenreRemote(
     val id: Int,
     val name: String
 )

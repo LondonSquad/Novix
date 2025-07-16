@@ -2,9 +2,9 @@ package com.london.data.datasource.remote.moviedetails
 
 import android.util.Log
 import com.google.common.truth.Truth.assertThat
-import com.london.data.datasource.remote.details.moviedetails.model.MovieDetailsResponse
 import com.london.data.datasource.remote.details.moviedetails.model.moviecast.MovieCastResponse
 import com.london.data.datasource.remote.details.moviedetails.model.moviecast.MovieImages
+import com.london.data.datasource.remote.details.moviedetails.model.moviedetails.MovieDetailsResponse
 import com.london.data.datasource.remote.details.moviedetails.model.similarmovies.SimilarMoviesResponse
 import com.london.data.datasource.util.MovieDetailsRemoteImpl
 import io.ktor.client.HttpClient
