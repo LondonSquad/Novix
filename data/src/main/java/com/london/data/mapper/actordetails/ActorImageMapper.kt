@@ -19,7 +19,7 @@ fun ProfileDto.toEntity(): ImageDetails {
         aspectRatio = this.aspectRatio,
         height = this.height,
         iso = this.iso,
-        filePath = this.filePath,
+        filePath = "https://image.tmdb.org/t/p/w500${this.filePath}",
         voteAverage = this.voteAverage,
         voteCount = this.voteCount,
         width = this.width
