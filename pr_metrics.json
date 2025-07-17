@@ -2377,16 +2377,33 @@
       "id": 106277855,
       "url": "https://github.com/Mostafa-alsaygh"
     },
-    "approvals": [],
-    "first_approved_at": null,
-    "time_to_first_approval_minutes": null,
-    "required_approvals_met_at": null,
-    "time_to_required_approvals_minutes": null,
+    "approvals": [
+      {
+        "reviewer": {
+          "id": 117874933,
+          "login": "AsmaaKhaledGomaa",
+          "url": "https://github.com/AsmaaKhaledGomaa"
+        },
+        "submitted_at": "2025-07-17T15:47:46Z"
+      },
+      {
+        "reviewer": {
+          "id": 154278495,
+          "login": "ahmeddsamii",
+          "url": "https://github.com/ahmeddsamii"
+        },
+        "submitted_at": "2025-07-17T15:47:47Z"
+      }
+    ],
+    "first_approved_at": "2025-07-17T15:47:46Z",
+    "time_to_first_approval_minutes": 43.3,
+    "required_approvals_met_at": "2025-07-17T15:47:47Z",
+    "time_to_required_approvals_minutes": 43.31666666666667,
     "closed_at": null,
     "merged_at": null,
     "merged_by": null,
     "week": "2025-W29",
-    "status": "pending",
+    "status": "approved",
     "diff_stats": {
       "additions": 298,
       "deletions": 224,
