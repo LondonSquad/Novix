@@ -3,57 +3,60 @@ package com.london.data.mapper.actordetails
 import com.london.data.datasource.remote.details.actordetails.model.actormoviedetails.ActorMovieCastMember
 import com.london.data.datasource.remote.details.actordetails.model.actormoviedetails.ActorMovieDetailsResponse
 import com.london.data.datasource.remote.details.actordetails.model.actormoviedetails.MovieCrewMember
+import com.london.data.utils.isTrue
+import com.london.data.utils.orZero
 import com.london.domain.entity.actordetails.actormovie.ActorMovieCastMemberEntity
 import com.london.domain.entity.actordetails.actormovie.ActorMovieCrewMemberEntity
 import com.london.domain.entity.actordetails.actormovie.ActorMovieDetails
 
 fun ActorMovieDetailsResponse.toEntity(): ActorMovieDetails {
     return ActorMovieDetails(
-        id = this.id,
-        cast = this.cast.map { it.toEntity() },
-        crew = this.crew.map { it.toEntity() }
+        id = id.orZero(),
+        cast = cast?.map { it.toEntity() }.orEmpty(),
+        crew = crew?.map { it.toEntity() }.orEmpty()
     )
 }
 
 fun ActorMovieCastMember.toEntity(): ActorMovieCastMemberEntity {
     return ActorMovieCastMemberEntity(
-        adult = this.adult,
-        backdropPath = "https://image.tmdb.org/t/p/w500${this.backdropPath}",
-        character = this.character,
-        creditId = this.creditId,
-        genreIds = this.genreIds,
-        id = this.id,
-        order = this.order,
-        originalLanguage = this.originalLanguage,
-        originalTitle = this.originalTitle,
-        overview = this.overview,
-        popularity = this.popularity,
-        posterPath = this.posterPath.let{"https://image.tmdb.org/t/p/w500${it}"},
-        releaseDate = this.releaseDate,
-        title = this.title,
-        video = this.video,
-        voteAverage = this.voteAverage,
-        voteCount = this.voteCount
+        adult = adult.isTrue,
+        backdropPath = "https://image.tmdb.org/t/p/w500${backdropPath}",
+        character = character.orEmpty(),
+        creditId = creditId.orEmpty(),
+        genreIds = genreIds.orEmpty(),
+        id = id.orZero(),
+        order = order.orZero(),
+        originalLanguage = originalLanguage.orEmpty(),
+        originalTitle = originalTitle.orEmpty(),
+        overview = overview.orEmpty(),
+        popularity = popularity.orZero(),
+        posterPath = posterPath.let { "https://image.tmdb.org/t/p/w500${it}" },
+        releaseDate = releaseDate.orEmpty(),
+        title = title.orEmpty(),
+        video = video.isTrue,
+        voteAverage = voteAverage.orZero(),
+        voteCount = voteCount.orZero()
     )
 }
+
 fun MovieCrewMember.toEntity(): ActorMovieCrewMemberEntity {
     return ActorMovieCrewMemberEntity(
-        adult = this.adult,
-        backdropPath = "https://image.tmdb.org/t/p/w500${this.backdropPath}",
-        creditId = this.creditId,
-        department = this.department,
-        genreIds = this.genreIds,
-        id = this.id,
-        job = this.job,
-        originalLanguage = this.originalLanguage,
-        originalTitle = this.originalTitle,
-        overview = this.overview,
-        popularity = this.popularity,
-        posterPath = "https://image.tmdb.org/t/p/w500${this.posterPath}",
-        releaseDate = this.releaseDate,
-        title = this.title,
-        video = this.video,
-        voteAverage = this.voteAverage,
-        voteCount = this.voteCount
+        adult = adult.isTrue,
+        backdropPath = "https://image.tmdb.org/t/p/w500${backdropPath}",
+        creditId = creditId.orEmpty(),
+        department = department.orEmpty(),
+        genreIds = genreIds.orEmpty(),
+        id = id.orZero(),
+        job = job.orEmpty(),
+        originalLanguage = originalLanguage.orEmpty(),
+        originalTitle = originalTitle.orEmpty(),
+        overview = overview.orEmpty(),
+        popularity = popularity.orZero(),
+        posterPath = "https://image.tmdb.org/t/p/w500${posterPath}",
+        releaseDate = releaseDate.orEmpty(),
+        title = title.orEmpty(),
+        video = video.isTrue,
+        voteAverage = voteAverage.orZero(),
+        voteCount = voteCount.orZero()
     )
 }
