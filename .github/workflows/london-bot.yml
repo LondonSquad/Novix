@@ -7,8 +7,16 @@ on:
 
   pull_request:
     types: [opened, closed, reopened, synchronize]
+
   pull_request_review:
     types: [submitted, dismissed]
+
+  issue_comment:
+    types: [ created ]
+
+  pull_request_review_comment:
+    types: [ created ]
+
   workflow_dispatch:
     inputs:
       backfill_days:
@@ -72,14 +80,25 @@ jobs:
       - run: echo 'No merge conflicts'
         if: ${{ !steps.autoupdate.outputs.conflicted }}
 
-      - name: Add PR comment for Autoupdate
+      - name: Find Autoupdate PR Comment
+        if: always() && github.event.pull_request.number
+        uses: peter-evans/find-comment@v3
+        id: fc_autoupdate
+        with:
+          issue-number: ${{ github.event.pull_request.number }}
+          comment-author: 'london-bot[bot]'
+          body-includes: '<!-- london-bot-autoupdate-comment -->' # Unique ID for this comment type
+
+      - name: Add or Update PR comment for Autoupdate
         if: always() && github.event.pull_request.number
         uses: peter-evans/create-or-update-comment@v4
         with:
           token: ${{ steps.app-token.outputs.token }}
           issue-number: ${{ github.event.pull_request.number }}
+          comment-id: ${{ steps.fc_autoupdate.outputs.comment-id }} # Use the found comment ID
           edit-mode: replace
           body: |
+            <!-- london-bot-autoupdate-comment -->
             **[London Bot] Auto-update Status**
 
             ${{ steps.autoupdate.outputs.conflicted == 'true' && '❌ **Merge conflict detected!** Branch could not be automatically updated from `develop`.' || '' }}
@@ -513,7 +532,20 @@ jobs:
           commit_user_name: "London Bot"
           commit_user_email: "220529784+london-bot[bot]@users.noreply.github.com"
 
-      - name: Add PR comment for Metrics Update
+      - name: Find Metrics PR Comment
+        if: |
+          always() &&
+          github.event.pull_request.number &&
+          steps.prepare_data.outputs.UPDATE_TYPE != '' &&
+          steps.prepare_data.outputs.UPDATE_TYPE != 'BACKFILL_EXISTING_PRS'
+        uses: peter-evans/find-comment@v3
+        id: fc_metrics
+        with:
+          issue-number: ${{ github.event.pull_request.number }}
+          comment-author: 'london-bot[bot]'
+          body-includes: '<!-- london-bot-metrics-comment -->' # Unique ID for this comment type
+
+      - name: Add or Update PR comment for Metrics
         if: |
           always() &&
           github.event.pull_request.number &&
@@ -523,9 +555,53 @@ jobs:
         with:
           token: ${{ steps.app-token.outputs.token }}
           issue-number: ${{ github.event.pull_request.number }}
+          comment-id: ${{ steps.fc_metrics.outputs.comment-id }} # Use the found comment ID
           edit-mode: replace
           body: |
+            <!-- london-bot-metrics-comment -->
             **[London Bot] Metrics Update Status**
 
             ${{ job.status == 'success' && format('📊 PR metrics successfully updated for event: `{0}`.', steps.prepare_data.outputs.PR_ACTION) || '' }}
             ${{ job.status == 'failure' && '❌ An error occurred while updating PR metrics.' || '' }}
+
+
+  # --- NEW JOB TO REACT TO COMMENTS ---
+  react_to_comment:
+    name: React to Reviewer Comments
+    runs-on: ubuntu-latest
+    permissions:
+      pull-requests: write
+
+    # This 'if' condition is very important:
+    # 1. It ensures the comment is on a Pull Request.
+    # 2. It prevents the bot from reacting to its own comments.
+    if: |
+      github.event.issue.pull_request &&
+      github.event.comment.user.login != 'london-bot[bot]'
+
+    steps:
+      - name: Create GitHub App Token
+        uses: actions/create-github-app-token@v2
+        id: app-token
+        with:
+          app-id: ${{ vars.APP_ID }}
+          private-key: ${{ secrets.APP_PRIVATE_KEY }}
+
+      - name: Add 'Eyes' Reaction to Comment
+        uses: peter-evans/add-reaction@v3
+        with:
+          token: ${{ steps.app-token.outputs.token }}
+          comment-id: ${{ github.event.comment.id }}
+          content: 'eyes'
+
+      # --- NEW STEP TO ADD HEART REACTION ---
+      - name: Add Heart Reaction for Approval
+        if: |
+          github.event_name == 'pull_request_review' &&
+          github.event.action == 'submitted' &&
+          github.event.review.state == 'approved'
+        uses: peter-evans/add-reaction@v3
+        with:
+          token: ${{ steps.app-token.outputs.token }}
+          review-id: ${{ github.event.review.id }}
+          content: 'heart'
