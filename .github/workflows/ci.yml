@@ -124,7 +124,8 @@ jobs:
       - name: Comment PR with Overall Coverage
         uses: mi-kas/kover-report@v1
         with:
-          path: build/reports/kover/report.xml
+          path: |
+            ${{ github.workspace }}/Novix/build/reports/kover/report.xml
           token: ${{ secrets.GITHUB_TOKEN }}
           min-coverage-overall: 80
           min-coverage-changed-files: 80
