@@ -28,16 +28,11 @@ android {
 
         testInstrumentationRunner = AppConfig.ANDROID_TEST_INSTRUMENTATION
 
-        ndk {
-            abiFilters += listOf("armeabi-v7a", "arm64-v8a")
-        }
+
     }
 
     buildTypes {
         debug {
-            ndk {
-                abiFilters += listOf("armeabi-v7a", "arm64-v8a", "x86", "x86_64")
-            }
         }
         release {
             isMinifyEnabled = AppConfig.ENABLE_R8_FULL_MODE
@@ -47,9 +42,12 @@ android {
                 "proguard-rules.pro"
             )
 
-            ndk {
-                abiFilters += listOf("armeabi-v7a", "arm64-v8a")
+            splits {
+                abi {
+                    isEnable = true
+                }
             }
+
         }
     }
     compileOptions {
