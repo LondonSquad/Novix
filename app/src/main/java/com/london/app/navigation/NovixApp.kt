@@ -108,6 +108,9 @@ fun NovixApp() {
                 TvShowsDetailsScreen(
                     onBackClick = {
                         navController.navigateUp()
+                    },
+                    onNavigateToEpisodeDetails = { tvShowId, episodeNumber, seasonNumber ->
+                        navController.navigate(Screen.EpisodeDetails(tvShowId, episodeNumber, seasonNumber))
                     }
                 )
             }

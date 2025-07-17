@@ -59,6 +59,7 @@ import com.london.designsystem.component.button.ErrorImage
 import com.london.designsystem.theme.NovixTheme
 import com.london.domain.entity.tvshowdetails.ImageItemEntity
 import com.london.domain.entity.tvshowdetails.TvShowCastMemberEntity
+import com.london.presentation.utils.Listen
 import com.london.presentation.utils.toLocalizedNumbers
 import org.koin.androidx.compose.koinViewModel
 
@@ -66,13 +67,29 @@ import org.koin.androidx.compose.koinViewModel
 @Composable
 fun TvShowsDetailsScreen(
     viewModel: TvShowDetailsViewModel = koinViewModel(),
-    onBackClick: () -> Unit = {}
+    onBackClick: () -> Unit = {},
+    onNavigateToEpisodeDetails: (tvShowId: Int, episodeNumber: Int, seasonNumber: Int) -> Unit
 ) {
     val uiState by viewModel.uiState.collectAsState()
+    val effect by viewModel.effect.collectAsState(null)
+
     TvShowsDetailScreenContent(
         uiState = uiState,
         onBackClick = onBackClick
     )
+
+    effect?.Listen { currentEffect ->
+        when (currentEffect) {
+            is TvShowDetailsEffect.OnNavigateToEpisodeDetails -> {
+                onNavigateToEpisodeDetails(
+                    currentEffect.tvShowId,
+                    currentEffect.episodeNumber,
+                    currentEffect.seasonNumber
+                )
+            }
+        }
+    }
+
 }
 
 @Composable
