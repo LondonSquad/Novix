@@ -5,6 +5,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.GridItemSpan
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
@@ -52,6 +53,7 @@ private fun TopMoviesPicksContent(
         item(
             span = { GridItemSpan(maxLineSpan) }) {
             TopBar(
+                modifier = Modifier.statusBarsPadding(),
                 title = stringResource(R.string.top_movies_picks),
                 onBackClick = interactions::onBackClick
             )
