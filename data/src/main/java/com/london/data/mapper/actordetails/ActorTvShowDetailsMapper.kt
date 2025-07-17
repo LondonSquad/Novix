@@ -22,7 +22,7 @@ fun ActorTvShowDetailsResponse.toEntity(): ActorTvShowDetails {
 fun ActorTvShowCastMember.toEntity(): ActorTvShowCastMemberEntity {
     return ActorTvShowCastMemberEntity(
         adult = this.adult.isTrue,
-        backdropPath = "https://image.tmdb.org/t/p/w500${this.backdropPath}",
+        backdropUrl = "https://image.tmdb.org/t/p/w500${this.backdropPath}",
         character = this.character.orEmpty(),
         creditId = this.creditId.orEmpty(),
         episodeCount = this.episodeCount.orZero(),
@@ -36,7 +36,7 @@ fun ActorTvShowCastMember.toEntity(): ActorTvShowCastMemberEntity {
         originalName = this.originalName.orEmpty(),
         overview = this.overview.orEmpty(),
         popularity = this.popularity.orZero(),
-        posterPath = "https://image.tmdb.org/t/p/w500${this.posterPath}",
+        posterUrl = "https://image.tmdb.org/t/p/w500${this.posterPath}",
         voteAverage = this.voteAverage.orZero(),
         voteCount = this.voteCount.orZero()
     )
