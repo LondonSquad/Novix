@@ -54,12 +54,12 @@ fun NovixApp() {
     val showMovieDetails = currentDestination?.hasRoute<MovieDetails>() != true
     Log.d("test", "NovixApp: $showMovieDetails")
     Scaffold(
+        modifier = Modifier
+            .fillMaxSize()
+            .systemBarsPadding(),
         bottomBar = {
             if (showBottomNav && showMovieDetails) {
                 NavBar(
-                    modifier = Modifier
-                        .background(NovixTheme.colors.surface)
-                        .navigationBarsPadding(),
                     navDestinations = NavigationHelper.getNavigationTabs(),
                     currentSelectedDestination = currentScreen,
                     onNavDestinationClicked = { destination ->
