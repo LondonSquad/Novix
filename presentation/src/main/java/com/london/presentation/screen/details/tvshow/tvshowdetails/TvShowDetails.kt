@@ -632,7 +632,7 @@ fun EpisodeRow(
                     viewModel.onEpisodeClick(
                         episode.showId,
                         episode.episodeNumber,
-                        episode.seasonNumber
+                        episode.seasonNumber,
                     )
                 },
             verticalAlignment = Alignment.CenterVertically,

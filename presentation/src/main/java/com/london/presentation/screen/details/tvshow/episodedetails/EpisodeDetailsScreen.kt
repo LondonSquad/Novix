@@ -6,6 +6,7 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.WindowInsets
@@ -21,6 +22,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
@@ -47,6 +49,7 @@ import com.ae.imageharamblur.ui.ImageViewFilter
 import com.london.designsystem.component.ActorItem
 import com.london.designsystem.component.CircularLoading
 import com.london.designsystem.component.NovixCarousalRow
+import com.london.designsystem.component.RatingBar
 import com.london.designsystem.component.SaveIcon
 import com.london.designsystem.component.button.ErrorImage
 import com.london.designsystem.theme.NovixTheme
@@ -54,6 +57,11 @@ import com.london.domain.entity.Actor
 import com.london.domain.entity.tvshowdetails.ImageItemEntity
 import com.london.domain.entity.tvshowdetails.episode.TvShowEpisodeByIdEntity
 import com.london.presentation.R
+import com.london.presentation.screen.details.tvshow.tvshowdetails.Seasons
+import com.london.presentation.screen.details.tvshow.tvshowdetails.TvShowDate
+import com.london.presentation.screen.details.tvshow.tvshowdetails.TvShowDetailsUiState
+import com.london.presentation.screen.details.tvshow.tvshowdetails.TvShowRating
+import com.london.presentation.utils.toLocalizedNumbers
 import org.koin.androidx.compose.koinViewModel
 import com.london.designsystem.R as Res
 
@@ -146,8 +154,8 @@ fun EpisodeDetailsScreenContent(
             }
 
             // Guests of honor section
-            val guestStars = uiState.tvShowEpisode.guestStars
-            if (!guestStars.isEmpty()) {
+            val guestStars = uiState.guestStars
+            if (guestStars.isNotEmpty()) {
                 item {
                     Text(
                         text = stringResource(R.string.guests_of_honor),
@@ -161,7 +169,6 @@ fun EpisodeDetailsScreenContent(
 
                 items(
                     items = guestStars,
-                    key = { member -> member.id }
                 ) { member ->
                     ActorItem(
                         actorName = member.name,
@@ -284,11 +291,167 @@ fun HeaderDetailsCard(
         verticalArrangement = Arrangement.SpaceBetween
     ) {
         Text(
-            text = uiState.tvShowEpisode.name,
+            text = uiState.name,
             color = NovixTheme.colors.title,
             style = NovixTheme.typography.title.medium,
             modifier = Modifier
                 .padding(start = 12.dp, top = 12.dp, bottom = 8.dp)
+        )
+
+        Column(
+            verticalArrangement = Arrangement.spacedBy(8.dp),
+            modifier = Modifier.padding(start = 12.dp, bottom = 12.dp)
+        ) {
+            GenreNames(
+                uiState = uiState,
+                modifier = Modifier.fillMaxWidth()
+            )
+            TvShowBasicDetails(
+                modifier = Modifier,
+                uiState = uiState
+            )
+//
+//            ViewReviewText()
+        }
+    }
+}
+
+@Composable
+fun TvShowBasicDetails(
+    modifier: Modifier = Modifier,
+    uiState: EpisodeDetailsUiState
+) {
+    Row(
+        modifier = modifier,
+        verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.spacedBy(4.dp)
+    ) {
+        TvShowRating(uiState = uiState)
+
+        Box(
+            modifier = Modifier
+                .padding(horizontal = 8.dp)
+                .size(3.dp)
+                .clip(CircleShape)
+                .background(NovixTheme.colors.hint)
+        )
+
+        TvShowDate(uiState)
+
+        Box(
+            modifier = Modifier
+                .padding(horizontal = 8.dp)
+                .size(3.dp)
+                .clip(CircleShape)
+                .background(NovixTheme.colors.hint)
+        )
+
+        Seasons(uiState)
+    }
+}
+
+
+@Composable
+fun TvShowRating(
+    modifier: Modifier = Modifier,
+    uiState: EpisodeDetailsUiState
+) {
+    Row(
+        verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.spacedBy(4.dp)
+    ) {
+        RatingBar(
+            modifier = modifier.size(12.dp),
+            rating = 1,
+            onRatingChanged = {},
+            maxRating = 1
+        )
+
+        Text(
+            text = uiState.voteAverage.toLocalizedNumbers(),
+            style = NovixTheme.typography.label.small,
+            color = NovixTheme.colors.title
+        )
+    }
+}
+
+@Composable
+fun TvShowDate(
+    uiState: EpisodeDetailsUiState
+) {
+
+    Row(
+        verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.spacedBy(4.dp)
+    ) {
+        Icon(
+            imageVector = ImageVector.vectorResource(com.london.designsystem.R.drawable.icon_calender),
+            contentDescription = "Calender icon",
+            tint = NovixTheme.colors.body,
+            modifier = Modifier.size(12.dp)
+        )
+
+        Text(
+            text = uiState.airDate.toLocalizedNumbers(),
+            style = NovixTheme.typography.label.small,
+            color = NovixTheme.colors.title
+        )
+    }
+}
+
+
+@Composable
+fun GenreNames(
+    modifier: Modifier = Modifier,
+    uiState: EpisodeDetailsUiState
+) {
+    FlowRow(
+        modifier = modifier
+    ) {
+        Row(
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            uiState.episodeGenres.forEachIndexed { index, genre ->
+                Text(
+                    text = genre,
+                    style = NovixTheme.typography.label.small,
+                    color = NovixTheme.colors.body,
+                    modifier = Modifier.padding(end = 8.dp)
+                )
+
+                if (index != uiState.episodeGenres.lastIndex)
+                    Box(
+                        modifier = Modifier
+                            .padding(end = 8.dp)
+                            .size(3.dp)
+                            .clip(CircleShape)
+                            .background(NovixTheme.colors.hint)
+                    )
+            }
+
+        }
+
+    }
+}
+
+@Composable
+fun Seasons(uiState: EpisodeDetailsUiState) {
+
+    Row(
+        verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.spacedBy(4.dp)
+    ) {
+        Icon(
+            imageVector = ImageVector.vectorResource(com.london.designsystem.R.drawable.icon_tv),
+            contentDescription = "Tv icon",
+            tint = NovixTheme.colors.body,
+            modifier = Modifier.size(12.dp)
+        )
+
+        Text(
+            text = "${stringResource(com.london.designsystem.R.string.s)} ${uiState.seasonNumber.toLocalizedNumbers()}",
+            style = NovixTheme.typography.label.small,
+            color = NovixTheme.colors.title,
         )
     }
 }
@@ -311,7 +474,7 @@ fun OverviewSection(
 
         Column {
             Text(
-                text = uiState.tvShowEpisode.overview,
+                text = uiState.overview,
                 style = NovixTheme.typography.body.small,
                 color = NovixTheme.colors.body,
                 maxLines = maxLines,
@@ -359,33 +522,6 @@ fun EpisodeDetailsScreenPreview() {
                         voteCount = 120
                     )
                 ),
-                tvShowEpisode = TvShowEpisodeByIdEntity(
-                    id = 1,
-                    name = "The One Where Monica Gets a Roommate",
-                    overview = "Monica and the gang introduce Rachel to the real world after she leaves her fiancé at the altar. This is a longer overview to test the read more/less functionality in the UI. It should show how the text expands and collapses when the user taps the read more button.",
-                    airDate = "1994-09-22",
-                    episodeNumber = 1,
-                    seasonNumber = 1,
-                    episodeTypes = "Standard",
-                    tvShowId = 1399,
-                    stillPath = "/sample-still.jpg",
-                    voteAverage = 8.5,
-                    voteCount = 1250,
-                    guestStars = listOf(
-                        Actor(
-                            id = 1,
-                            name = "Jane Doe",
-                            characterName = "Guest Character 1",
-                            profilePicture = "https://image.tmdb.org/t/p/w185/sample-profile1.jpg"
-                        ),
-                        Actor(
-                            id = 2,
-                            name = "John Smith",
-                            characterName = "Guest Character 2",
-                            profilePicture = "https://image.tmdb.org/t/p/w185/sample-profile2.jpg"
-                        )
-                    )
-                )
             ),
             onBackClick = {}
         )

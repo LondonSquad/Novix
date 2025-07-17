@@ -34,6 +34,8 @@ import com.london.presentation.screen.details.tvshow.tvshowdetails.TvShowsDetail
 import com.london.presentation.screen.home.HomeScreen
 import com.london.presentation.screen.moiveDetalis.MovieDetailsScreen
 import com.london.presentation.screen.search.SearchScreen
+import com.london.presentation.screen.details.tvshow.episodedetails.EpisodeDetailsScreen
+import com.london.presentation.navigation.Screen.EpisodeDetails
 
 @Composable
 fun NovixApp() {
@@ -131,6 +133,10 @@ fun NovixApp() {
 
                         )
                 }
+            }
+
+            composable<EpisodeDetails> {
+                EpisodeDetailsScreen()
             }
         }
     }

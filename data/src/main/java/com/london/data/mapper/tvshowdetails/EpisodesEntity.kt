@@ -58,7 +58,7 @@ fun EpisodeCrewMember.toEpisodeCrewMemberEntity(): EpisodeCrewMemberEntity {
         name = name,
         originalName = originalName,
         popularity = popularity,
-        profilePath = profilePath
+        profilePath = profilePath.asImageUrlOrEmpty()
     )
 }
 
@@ -75,7 +75,7 @@ fun EpisodeGuestStar.toEpisodeGuestStarEntity(): EpisodeGuestStarEntity {
         name = name,
         originalName = originalName,
         popularity = popularity,
-        profilePath = profilePath
+        profilePath = profilePath.asImageUrlOrEmpty()
     )
 }
 
@@ -101,7 +101,7 @@ fun EpisodeGuestStar.toActorEntity(): Actor {
     return Actor(
         id = this.id,
         name = this.name,
-        profilePicture = this.profilePath ?: "",
+        profilePicture = this.profilePath.asImageUrlOrEmpty(),
         characterName = this.character
     )
 }
