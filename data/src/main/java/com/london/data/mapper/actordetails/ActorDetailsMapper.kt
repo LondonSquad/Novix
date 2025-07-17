@@ -21,7 +21,7 @@ fun ActorDetailsResponse.toEntity():ActorDetails{
         imdbId = this.imdbId.orEmpty(),
         knownForDepartment = this.knownForDepartment.orEmpty(),
         popularity = this.popularity.orZero(),
-        profilePath = "https://image.tmdb.org/t/p/w500${this.profilePath}"
+        profileUrl = "https://image.tmdb.org/t/p/w500${this.profilePath}"
     )
 }
 
