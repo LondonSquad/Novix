@@ -3,32 +3,53 @@ package com.ae.imageharamblur.models
 import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.Canvas
+import android.util.Log
 import androidx.core.graphics.createBitmap
+import org.tensorflow.lite.DataType
 import org.tensorflow.lite.Interpreter
 import org.tensorflow.lite.support.common.FileUtil
 import org.tensorflow.lite.support.common.ops.NormalizeOp
 import org.tensorflow.lite.support.image.ImageProcessor
 import org.tensorflow.lite.support.image.TensorImage
 import org.tensorflow.lite.support.image.ops.ResizeOp
+import org.tensorflow.lite.support.tensorbuffer.TensorBuffer
 import java.io.File
 import java.io.FileInputStream
 import java.nio.MappedByteBuffer
 import java.nio.channels.FileChannel
-import kotlin.math.exp
-
 internal class GenderDetectionModel {
     private val interpreter: Interpreter
     private val imageProcessor: ImageProcessor
+    private val inputSize: Int
+    private val inputDataType: DataType
 
     constructor(context: Context) {
         val modelBuffer = FileUtil.loadMappedFile(context, MODEL_FILE)
         this.interpreter = createInterpreter(modelBuffer)
+
+        // Get input tensor info
+        val inputTensor = interpreter.getInputTensor(0)
+        val inputShape = inputTensor.shape()
+        this.inputSize = if (inputShape.size >= 3) inputShape[1] else INPUT_SIZE
+        this.inputDataType = inputTensor.dataType()
+
+        Log.d("GenderModel", "Input shape: ${inputShape.contentToString()}, dataType: $inputDataType, size: $inputSize")
+
         this.imageProcessor = createImageProcessor()
     }
 
     constructor(modelFile: File) {
         val modelBuffer = loadModelFile(modelFile)
         this.interpreter = createInterpreter(modelBuffer)
+
+        // Get input tensor info
+        val inputTensor = interpreter.getInputTensor(0)
+        val inputShape = inputTensor.shape()
+        this.inputSize = if (inputShape.size >= 3) inputShape[1] else INPUT_SIZE
+        this.inputDataType = inputTensor.dataType()
+
+        Log.d("GenderModel", "Input shape: ${inputShape.contentToString()}, dataType: $inputDataType, size: $inputSize")
+
         this.imageProcessor = createImageProcessor()
     }
 
@@ -48,36 +69,104 @@ internal class GenderDetectionModel {
     }
 
     private fun createImageProcessor(): ImageProcessor {
-        return ImageProcessor.Builder()
-            .add(ResizeOp(INPUT_SIZE, INPUT_SIZE, ResizeOp.ResizeMethod.BILINEAR))
-            .add(NormalizeOp(IMAGE_MEAN, IMAGE_STD))
-            .build()
+        val builder = ImageProcessor.Builder()
+            .add(ResizeOp(inputSize, inputSize, ResizeOp.ResizeMethod.BILINEAR))
+
+        // Add normalization based on data type
+        when (inputDataType) {
+            DataType.UINT8 -> {
+                // For quantized models (uint8), typically scale to [0,1]
+                builder.add(NormalizeOp(0f, 1f))
+            }
+            DataType.FLOAT32 -> {
+                // For float models, use the original normalization
+                builder.add(NormalizeOp(IMAGE_MEAN, IMAGE_STD))
+            }
+            else -> {
+                // Default normalization
+                builder.add(NormalizeOp(0f, 255f))
+            }
+        }
+
+        return builder.build()
     }
 
     fun detectGender(faceBitmap: Bitmap): GenderResult {
-        val rgbBitmap = ensureRgbBitmap(faceBitmap)
-        val tensorImage = imageProcessor.process(TensorImage.fromBitmap(rgbBitmap))
-        val output = Array(1) { FloatArray(2) }
+        return try {
+            val rgbBitmap = ensureRgbBitmap(faceBitmap)
 
-        interpreter.run(tensorImage.buffer, output)
+            // Create TensorImage with proper type
+            val tensorImage = TensorImage(inputDataType)
+            tensorImage.load(rgbBitmap)
 
-        val femaleProbability = output[0][FEMALE_INDEX]
-        val maleProbability = output[0][MALE_INDEX]
+            // Process the image
+            val processedImage = imageProcessor.process(tensorImage)
 
-        val expFemale = exp(femaleProbability.toDouble())
-        val expMale = exp(maleProbability.toDouble())
-        val sumExp = expFemale + expMale
+            // Get output tensor info
+            val outputTensor = interpreter.getOutputTensor(0)
+            val outputShape = outputTensor.shape()
+            val outputDataType = outputTensor.dataType()
 
-        val normalizedFemaleProbability = (expFemale / sumExp).toFloat()
-        val normalizedMaleProbability = (expMale / sumExp).toFloat()
+            // Create output buffer
+            val outputBuffer = TensorBuffer.createFixedSize(outputShape, outputDataType)
 
-        val isFemale = normalizedFemaleProbability > normalizedMaleProbability
-        val confidence = if (isFemale) normalizedFemaleProbability else normalizedMaleProbability
+            // Run inference
+            interpreter.run(processedImage.buffer, outputBuffer.buffer.rewind())
 
-        return GenderResult(
-            isFemale = isFemale,
-            confidence = confidence
-        )
+            // Process output based on data type
+            val (femaleProbability, maleProbability) = when (outputDataType) {
+                DataType.FLOAT32 -> {
+                    val floatArray = outputBuffer.floatArray
+                    if (floatArray.size >= 2) {
+                        floatArray[FEMALE_INDEX] to floatArray[MALE_INDEX]
+                    } else {
+                        Log.e("GenderModel", "Unexpected output size: ${floatArray.size}")
+                        0.5f to 0.5f
+                    }
+                }
+                DataType.UINT8 -> {
+                    val byteArray = ByteArray(outputBuffer.buffer.remaining())
+                    outputBuffer.buffer.get(byteArray)
+                    if (byteArray.size >= 2) {
+                        // Convert byte values to float (0-255 range to 0-1)
+                        val femaleProb = (byteArray[FEMALE_INDEX].toInt() and 0xFF) / 255f
+                        val maleProb = (byteArray[MALE_INDEX].toInt() and 0xFF) / 255f
+                        femaleProb to maleProb
+                    } else {
+                        Log.e("GenderModel", "Unexpected output size: ${byteArray.size}")
+                        0.5f to 0.5f
+                    }
+                }
+                else -> {
+                    Log.e("GenderModel", "Unsupported output data type: $outputDataType")
+                    0.5f to 0.5f
+                }
+            }
+
+            // Apply softmax normalization
+            val maxProb = maxOf(femaleProbability, maleProbability)
+            val expFemale = kotlin.math.exp(femaleProbability - maxProb)
+            val expMale = kotlin.math.exp(maleProbability - maxProb)
+            val sumExp = expFemale + expMale
+
+            val normalizedFemaleProbability = (expFemale / sumExp).toFloat()
+            val normalizedMaleProbability = (expMale / sumExp).toFloat()
+
+            val isFemale = normalizedFemaleProbability > normalizedMaleProbability
+            val confidence = if (isFemale) normalizedFemaleProbability else normalizedMaleProbability
+
+            GenderResult(
+                isFemale = isFemale,
+                confidence = confidence
+            )
+        } catch (e: Exception) {
+            Log.e("GenderModel", "Error detecting gender", e)
+            // Return uncertain result on error
+            GenderResult(
+                isFemale = false,
+                confidence = 0.5f
+            )
+        }
     }
 
     private fun ensureRgbBitmap(bitmap: Bitmap): Bitmap {
@@ -103,7 +192,6 @@ internal class GenderDetectionModel {
         private const val FEMALE_INDEX = 0
         private const val MALE_INDEX = 1
     }
-
 }
 
 internal data class GenderResult(

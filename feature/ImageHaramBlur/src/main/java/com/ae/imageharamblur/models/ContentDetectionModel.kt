@@ -2,7 +2,9 @@ package com.ae.imageharamblur.models
 
 import android.content.Context
 import android.graphics.Bitmap
+import android.util.Log
 import com.ae.imageharamblur.ImageModerationProcessor
+import org.tensorflow.lite.DataType
 import org.tensorflow.lite.Interpreter
 import org.tensorflow.lite.support.common.FileUtil
 import org.tensorflow.lite.support.common.ops.NormalizeOp
@@ -20,6 +22,7 @@ internal class ContentDetectionModel {
     private val imageProcessor: ImageProcessor
     private val inputImageWidth: Int
     private val inputImageHeight: Int
+    private val inputDataType: DataType
 
     constructor(context: Context) {
         val modelBuffer = FileUtil.loadMappedFile(context, "nsfw_model.tflite")
@@ -29,6 +32,10 @@ internal class ContentDetectionModel {
         val inputShape = inputTensor.shape()
         this.inputImageHeight = inputShape[1]
         this.inputImageWidth = inputShape[2]
+        this.inputDataType = inputTensor.dataType()
+
+        Log.d("ContentModel", "Input shape: ${inputShape.contentToString()}, dataType: $inputDataType")
+
         this.imageProcessor = createImageProcessor()
     }
 
@@ -40,6 +47,10 @@ internal class ContentDetectionModel {
         val inputShape = inputTensor.shape()
         this.inputImageHeight = inputShape[1]
         this.inputImageWidth = inputShape[2]
+        this.inputDataType = inputTensor.dataType()
+
+        Log.d("ContentModel", "Input shape: ${inputShape.contentToString()}, dataType: $inputDataType")
+
         this.imageProcessor = createImageProcessor()
     }
 
@@ -60,22 +71,59 @@ internal class ContentDetectionModel {
     }
 
     private fun createImageProcessor(): ImageProcessor {
-        return ImageProcessor.Builder()
+        val builder = ImageProcessor.Builder()
             .add(ResizeOp(inputImageHeight, inputImageWidth, ResizeOp.ResizeMethod.BILINEAR))
-            .add(NormalizeOp(0f, 255f))
-            .build()
+
+        // Add normalization based on data type
+        when (inputDataType) {
+            DataType.UINT8 -> {
+                // For quantized models (uint8), typically no normalization or scale to [0,1]
+                builder.add(NormalizeOp(0f, 1f))
+            }
+            DataType.FLOAT32 -> {
+                // For float models
+                builder.add(NormalizeOp(0f, 255f))
+            }
+            else -> {
+                // Default normalization
+                builder.add(NormalizeOp(0f, 255f))
+            }
+        }
+
+        return builder.build()
     }
 
     fun detectContent(bitmap: Bitmap): ContentResult {
         return try {
-            val tensorImage = imageProcessor.process(TensorImage.fromBitmap(bitmap))
-            val outputShape = interpreter.getOutputTensor(0).shape()
-            val outputDataType = interpreter.getOutputTensor(0).dataType()
+            // Create TensorImage with proper type
+            val tensorImage = TensorImage(inputDataType)
+            tensorImage.load(bitmap)
+
+            // Process the image
+            val processedImage = imageProcessor.process(tensorImage)
+
+            // Get output tensor info
+            val outputTensor = interpreter.getOutputTensor(0)
+            val outputShape = outputTensor.shape()
+            val outputDataType = outputTensor.dataType()
+
             val outputBuffer = TensorBuffer.createFixedSize(outputShape, outputDataType)
 
-            interpreter.run(tensorImage.buffer, outputBuffer.buffer.rewind())
+            // Run inference
+            interpreter.run(processedImage.buffer, outputBuffer.buffer.rewind())
 
-            val probabilities = outputBuffer.floatArray
+            // Convert output to float array based on data type
+            val probabilities = when (outputDataType) {
+                DataType.FLOAT32 -> outputBuffer.floatArray
+                DataType.UINT8 -> {
+                    // Convert uint8 to float probabilities
+                    val byteArray = ByteArray(outputBuffer.buffer.remaining())
+                    outputBuffer.buffer.get(byteArray)
+                    byteArray.map { (it.toInt() and 0xFF) / 255f }.toFloatArray()
+                }
+                else -> outputBuffer.floatArray
+            }
+
             val results = mutableMapOf<Category, Float>()
 
             Category.entries.forEach { category ->
@@ -93,7 +141,8 @@ internal class ContentDetectionModel {
                 score = inappropriateScore,
                 categoryScores = results
             )
-        } catch (_: Exception) {
+        } catch (e: Exception) {
+            Log.e("ContentDetectionModel", "Error detecting content", e)
             ContentResult(
                 isInappropriate = false,
                 score = 0f,

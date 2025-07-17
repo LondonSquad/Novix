@@ -1,5 +1,6 @@
 package com.ae.imageharamblur.ui
 
+import android.util.Log
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
@@ -103,14 +104,17 @@ fun ImageViewFilter(
     ) {
         when {
             isLoading -> {
+                Log.d("ImageViewFilter", "Showing loading content")
                 loadingContent()
             }
 
             errorState != null -> {
+                Log.d("ImageViewFilter", "Showing error: $errorState")
                 errorContent(errorState)
             }
 
             moderationState != null && moderationState!!.isModerated -> {
+                Log.d("ImageViewFilter", "Showing moderated image: shouldBlur=${moderationState!!.shouldBlur}, hasBitmap=${moderationState!!.originalBitmap != null}")
                 ModeratedImage(
                     state = moderationState!!,
                     contentDescription = contentDescription,
@@ -118,6 +122,10 @@ fun ImageViewFilter(
                     blurStrength = blurStrength,
                     modifier = Modifier.fillMaxSize()
                 )
+            }
+
+            else -> {
+                Log.d("ImageViewFilter", "No content to show - moderationState: $moderationState")
             }
         }
     }
