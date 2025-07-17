@@ -50,6 +50,10 @@ class TvShowDetailsViewModel(
         }
     }
 
+    fun onExpandClick() {
+        _uiState.value = _uiState.value.copy(expanded = !_uiState.value.expanded)
+    }
+
     private fun getImagesData() {
         viewModelScope.launch {
             val images = getTvShowImages(tvShowId)

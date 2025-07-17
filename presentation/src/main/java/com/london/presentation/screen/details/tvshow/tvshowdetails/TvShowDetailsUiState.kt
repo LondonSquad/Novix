@@ -1,17 +1,17 @@
 package com.london.presentation.screen.details.tvshow.tvshowdetails
 
-import com.london.domain.entity.tvshowdetails.TvShowCastEntity
 import com.london.domain.entity.tvshowdetails.ImageItemEntity
+import com.london.domain.entity.tvshowdetails.TvShowCastEntity
 import com.london.domain.entity.tvshowdetails.TvShowCreatorEntity
-import com.london.domain.entity.tvshowdetails.episode.TvShowEpisodeBySeasonEntity
 import com.london.domain.entity.tvshowdetails.TvShowEpisodeEntity
-import com.london.domain.entity.tvshowdetails.episode.TvShowEpisodesEntity
 import com.london.domain.entity.tvshowdetails.TvShowGenreEntity
 import com.london.domain.entity.tvshowdetails.TvShowNetworkEntity
 import com.london.domain.entity.tvshowdetails.TvShowProductionCompanyEntity
 import com.london.domain.entity.tvshowdetails.TvShowProductionCountryEntity
 import com.london.domain.entity.tvshowdetails.TvShowSeasonEntity
 import com.london.domain.entity.tvshowdetails.TvShowSpokenLanguageEntity
+import com.london.domain.entity.tvshowdetails.episode.TvShowEpisodeBySeasonEntity
+import com.london.domain.entity.tvshowdetails.episode.TvShowEpisodesEntity
 
 data class TvShowDetailsUiState(
     val tvImages: List<ImageItemEntity>? = listOf(),
@@ -49,5 +49,6 @@ data class TvShowDetailsUiState(
     val tagline: String = "",
     val type: String = "",
     val voteAverage: Double = 0.0,
-    val voteCount: Int = 0
+    val voteCount: Int = 0,
+    val expanded: Boolean = false,
 )

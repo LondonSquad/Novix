@@ -1,4 +1,4 @@
-package com.london.presentation.screen.moiveDetalis
+package com.london.presentation.screen.details.movieDetalis
 
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.tween
@@ -6,8 +6,6 @@ import androidx.compose.animation.slideInHorizontally
 import androidx.compose.animation.slideOutHorizontally
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
-import androidx.compose.foundation.clickable
-import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -39,7 +37,6 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -47,9 +44,6 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.SpanStyle
-import androidx.compose.ui.text.buildAnnotatedString
-import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.times
@@ -74,6 +68,7 @@ import com.london.presentation.R.string.separator
 import com.london.presentation.R.string.star
 import com.london.presentation.R.string.time_icon
 import com.london.presentation.R.string.view_reviews
+import com.london.presentation.composables.ConditionalText
 import org.koin.androidx.compose.koinViewModel
 
 @Composable
@@ -193,21 +188,24 @@ fun MovieDetailsContent(
                     }
                 }
             }
-            Text(
-                stringResource(overview),
-                style = NovixTheme.typography.label.large,
-                color = NovixTheme.colors.title,
-                modifier = Modifier.padding(start = 16.dp, top = 16.dp)
+            if (state.movieOverview.isNotBlank()) {
+                Text(
+                    text = stringResource(overview),
+                    style = NovixTheme.typography.title.medium,
+                    color = NovixTheme.colors.title,
+                    modifier = Modifier.padding(start = 16.dp, top = 16.dp, bottom = 4.dp)
+                )
 
-            )
-            ConditionalText(
-                state.movieOverview, state.expanded, onExpandClick
-            )
+                ConditionalText(
+                    state.movieOverview, state.expanded, onExpandClick
+                )
+            }
+
             Text(
                 stringResource(com.london.presentation.R.string.cast),
                 style = NovixTheme.typography.title.medium,
                 color = NovixTheme.colors.title,
-                modifier = Modifier.padding(start = 16.dp)
+                modifier = Modifier.padding(start = 16.dp, top = 16.dp)
             )
             LazyHorizontalGrid(
                 modifier = Modifier
@@ -437,65 +435,6 @@ private fun MovieDetailsImage(
                 .align(Alignment.TopStart)
         )
     }
-}
-
-@Composable
-private fun ConditionalText(
-    text: String,
-    expandedState: Boolean,
-    onExpandedChange: () -> Unit
-) {
-    val minimumLineLength = 3
-    var showReadMoreButtonState by remember { mutableStateOf(false) }
-    var truncatedText by remember { mutableStateOf("") }
-
-    val textStyle = NovixTheme.typography.body.small.copy(color = NovixTheme.colors.body)
-    val actionStyle = SpanStyle(
-        color = NovixTheme.colors.primary,
-        fontSize = NovixTheme.typography.label.medium.fontSize,
-        fontWeight = NovixTheme.typography.label.medium.fontWeight
-    )
-
-    Text(
-        text = buildAnnotatedString {
-            when {
-                !showReadMoreButtonState -> append(text)
-                !expandedState -> {
-                    append(truncatedText)
-                    withStyle(actionStyle) { append(stringResource(R.string.read_more)) }
-                }
-
-                else -> {
-                    append(text)
-                    withStyle(actionStyle) { append(stringResource(R.string.read_less)) }
-                }
-            }
-        },
-        style = textStyle,
-        maxLines = if (expandedState || !showReadMoreButtonState) Int.MAX_VALUE else minimumLineLength,
-        onTextLayout = { textLayoutResult ->
-            if (!showReadMoreButtonState && textLayoutResult.lineCount > minimumLineLength) {
-                val lastVisibleLineEndIndex = textLayoutResult.getLineEnd(minimumLineLength - 1)
-                val readMoreLength = 15
-                var truncateIndex = maxOf(0, lastVisibleLineEndIndex - readMoreLength)
-
-                while (truncateIndex > 0 && text[truncateIndex] != ' ') {
-                    truncateIndex--
-                }
-
-                truncatedText = text.substring(0, truncateIndex).trim()
-                showReadMoreButtonState = true
-            }
-        },
-        modifier = Modifier
-            .padding(horizontal = 16.dp, vertical = 4.dp)
-            .clickable(
-                interactionSource = remember { MutableInteractionSource() },
-                indication = null
-            ) {
-                if (showReadMoreButtonState) onExpandedChange()
-            }
-    )
 }
 
 @Preview(showBackground = true)
