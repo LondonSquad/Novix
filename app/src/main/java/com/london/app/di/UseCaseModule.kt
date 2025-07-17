@@ -58,35 +58,20 @@ class UseCaseModule {
     fun provideGetImagesById(repository: DetailsRepository) = GetImagesById(repository)
 
     @Single
-    fun provideGetRecentSearchUseCase(repository: RecentRepository) =
+    fun provideGetRecentSearchUseCase(repository: RecentRepository<String>) =
         GetRecentSearchUseCase(repository)
 
     @Single
-    fun provideAddToRecentSearchUseCase(repository: RecentRepository) =
+    fun provideAddToRecentSearchUseCase(repository: RecentRepository<String>) =
         AddToRecentSearchUseCase(repository)
 
     @Single
-    fun provideClearRecentSearchUseCase(repository: RecentRepository) =
+    fun provideClearRecentSearchUseCase(repository: RecentRepository<String>) =
         ClearRecentSearchUseCase(repository)
 
     @Single
     fun provideGetEpisodesByTvShowSeason(repository: DetailsRepository) =
         GetEpisodesByTvShowSeason(repository)
-
-    @Single
-    fun provideGetMovieDetailsUseCase(
-        getMovieById: GetMovieById,
-        getMovieImagesUseCase: GetMovieImagesUseCase,
-        getMovieCastUseCase: GetMovieCastUseCase,
-        getSimilarMoviesUseCase: GetSimilarMoviesUseCase
-    ): GetMovieDetailsUseCase {
-        return GetMovieDetailsUseCase(
-            getMovieById,
-            getMovieImagesUseCase,
-            getMovieCastUseCase,
-            getSimilarMoviesUseCase
-        )
-    }
 
     @Single
     fun provideGetMovieByIdUseCase(
@@ -105,19 +90,18 @@ class UseCaseModule {
     @Single
     fun provideMovieCastUseCase(
         movieDetailsRepository: MovieDetailsRepository
-    ): GetMovieCastUseCase =
-        GetMovieCastUseCase(movieDetailsRepository)
+    ): GetMovieCastUseCase = GetMovieCastUseCase(movieDetailsRepository)
 
     @Single
     fun provideGetActorDetailsById(
         actorRepository: ActorRepository
     ): GetActorDetailsByIdUseCase = GetActorDetailsByIdUseCase(actorRepository)
-    
+
     @Single
     fun provideGetActorImageById(
         actorRepository: ActorRepository
     ): GetActorImagesByIdUseCase = GetActorImagesByIdUseCase(actorRepository)
-    
+
     @Single
     fun provideGetActorMoviePicksById(
         actorRepository: ActorRepository
@@ -132,5 +116,20 @@ class UseCaseModule {
     fun provideSimilarMoviesUseCase(
         movieDetailsRepository: MovieDetailsRepository
     ): GetSimilarMoviesUseCase = GetSimilarMoviesUseCase(movieDetailsRepository)
+
+    @Single
+    fun provideGetMovieDetailsUseCase(
+        getMovieById: GetMovieById,
+        getMovieImagesUseCase: GetMovieImagesUseCase,
+        getMovieCastUseCase: GetMovieCastUseCase,
+        getSimilarMoviesUseCase: GetSimilarMoviesUseCase
+    ): GetMovieDetailsUseCase {
+        return GetMovieDetailsUseCase(
+            getMovieById,
+            getMovieImagesUseCase,
+            getMovieCastUseCase,
+            getSimilarMoviesUseCase
+        )
+    }
 
 }

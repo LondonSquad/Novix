@@ -1,4 +1,6 @@
+import com.google.firebase.crashlytics.buildtools.gradle.CrashlyticsExtension
 import com.london.buildsrc.AppConfig
+import com.london.buildsrc.getKey
 
 plugins {
     alias(libs.plugins.android.application)
@@ -33,6 +35,15 @@ android {
         }
     }
 
+    signingConfigs {
+        create("release"){
+            keyAlias = getKey("keyAlias")
+            keyPassword = getKey("keyPassword")
+            storeFile = file(getKey("storeFile"))
+            storePassword = getKey("storePassword")
+        }
+    }
+
     buildTypes {
         debug {
             ndk {
@@ -42,16 +53,23 @@ android {
         release {
             isMinifyEnabled = AppConfig.ENABLE_R8_FULL_MODE
             isShrinkResources = AppConfig.ENABLE_R8_FULL_MODE
+            signingConfig = signingConfigs.getByName("release")
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
             )
+            ndk.debugSymbolLevel = "FULL"
+
+            configure<CrashlyticsExtension> {
+                mappingFileUploadEnabled = AppConfig.ENABLE_R8_FULL_MODE
+            }
 
             ndk {
                 abiFilters += listOf("armeabi-v7a", "arm64-v8a")
             }
         }
     }
+
     compileOptions {
         sourceCompatibility = AppConfig.Version.JVM
         targetCompatibility = AppConfig.Version.JVM

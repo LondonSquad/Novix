@@ -1,10 +1,10 @@
-package com.london.data.datasource.local.model
+package com.london.data.datasource.local.model.recent
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 
 @Entity(tableName = "recent_search_table")
-data class RecentSearch(
+data class RecentSearchLocal(
     @PrimaryKey(autoGenerate = true)
     val id: Int=0,
     val query: String,

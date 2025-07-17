@@ -1,7 +1,9 @@
+@file:KoverIgnore
 package com.london.data.mapper.actordetails
 
 import com.london.data.datasource.remote.details.actordetails.model.actorimage.ActorImageResponse
 import com.london.data.datasource.remote.details.actordetails.model.actorimage.ProfileDto
+import com.london.domain.KoverIgnore
 import com.london.domain.entity.actordetails.actorimage.ActorImageDetails
 import com.london.domain.entity.actordetails.actorimage.ImageDetails
 

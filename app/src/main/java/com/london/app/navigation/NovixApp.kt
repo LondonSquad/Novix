@@ -1,5 +1,6 @@
 package com.london.app.navigation
 
+import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
@@ -18,6 +19,7 @@ import com.london.presentation.navigation.Screen.Account
 import com.london.presentation.navigation.Screen.Bookmarks
 import com.london.presentation.navigation.Screen.Categories
 import com.london.presentation.navigation.Screen.Home
+import com.london.app.navigation.Screen.MovieDetails
 import com.london.presentation.navigation.Screen.Search
 import com.london.presentation.navigation.Screen.TopMoviesPicksDetails
 import com.london.presentation.navigation.Screen.TvShowDetails
@@ -30,6 +32,7 @@ import com.london.presentation.screen.category.CategoriesScreen
 import com.london.presentation.screen.details.actordetails.topmoviespicks.TopMoviesPicksScreen
 import com.london.presentation.screen.details.tvshow.tvshowdetails.TvShowsDetailsScreen
 import com.london.presentation.screen.home.HomeScreen
+import com.london.presentation.screen.moiveDetalis.MovieDetailsScreen
 import com.london.presentation.screen.search.SearchScreen
 
 @Composable
@@ -48,10 +51,11 @@ fun NovixApp() {
     }
 
     val showBottomNav = currentDestination?.hasRoute<TvShowDetails>() != true
-
+    val showMovieDetails = currentDestination?.hasRoute<MovieDetails>() != true
+    Log.d("test", "NovixApp: $showMovieDetails")
     Scaffold(
         bottomBar = {
-            if (showBottomNav) {
+            if (showBottomNav && showMovieDetails) {
                 NavBar(
                     modifier = Modifier
                         .background(NovixTheme.colors.surface)
@@ -80,6 +84,9 @@ fun NovixApp() {
                     },
                     onNavigateToActorDetails = { actorId ->
                         navController.navigate(TopMoviesPicksDetails(actorId))
+                    },
+                    onNavigateToMovieDetails = { movieId ->
+                        navController.navigate(MovieDetails(movieId))
                     }
                 )
             }
@@ -112,6 +119,15 @@ fun NovixApp() {
                     )
                 }
                 TopMoviesPicksScreen()
+            }
+            composable<MovieDetails> { backStackEntry ->
+                val movieDetails = backStackEntry.arguments?.let {
+                    MovieDetailsScreen(
+                        movieId = it.getInt("movieId"),
+                        onBackClick = { navController.navigateUp() },
+
+                    )
+                }
             }
         }
     }

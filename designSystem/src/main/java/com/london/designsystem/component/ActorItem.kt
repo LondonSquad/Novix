@@ -152,7 +152,7 @@ private fun TextSection(
                 style = NovixTheme.typography.label.small,
                 color = NovixTheme.colors.hint,
                 textAlign = TextAlign.Start,
-                modifier = Modifier.fillMaxWidth()
+                modifier = Modifier.fillMaxWidth().align(Alignment.Start)
             )
         }
     }

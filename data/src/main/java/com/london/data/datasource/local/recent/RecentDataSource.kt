@@ -1,6 +1,10 @@
-package com.london.data.datasource.local.dao.recentsearch
+package com.london.data.datasource.local.recent
 
-interface RecentDao<T> {
+import com.london.domain.KoverIgnore
+
+
+@KoverIgnore
+interface RecentDataSource<T> {
     suspend fun insert(item: T)
     suspend fun clearOlderThanTen()
     suspend fun getAll(): List<T>

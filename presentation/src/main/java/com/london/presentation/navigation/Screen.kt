@@ -25,6 +25,12 @@ sealed interface Screen {
     ) : Screen
 
     @Serializable
+    data class MovieDetails(
+        val movieId: Int,
+    ) : Screen
+
+
+    @Serializable
     data class TopMoviesPicksDetails(
         val actorId: Int,
     ) : Screen

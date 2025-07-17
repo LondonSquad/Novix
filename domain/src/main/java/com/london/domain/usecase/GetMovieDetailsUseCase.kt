@@ -16,7 +16,7 @@ class GetMovieDetailsUseCase(
         val similarMovies = getSimilarMoviesUseCase.invoke(movieId)
         return MovieDetails(
             movieId = getMovieById.movieId,
-            movieImage = movieImages,
+            movieImage = getMovieById.movieImage,
             movieName = getMovieById.movieName,
             movieRating =getMovieById.movieRating,
             movieDuration = getMovieById.movieDuration,
