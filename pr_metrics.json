@@ -2108,41 +2108,16 @@
       "id": 180463542,
       "url": "https://github.com/abdelrhman1002"
     },
-    "approvals": [
-      {
-        "reviewer": {
-          "id": 154278495,
-          "login": "ahmeddsamii",
-          "url": "https://github.com/ahmeddsamii"
-        },
-        "submitted_at": "2025-07-17T10:42:57Z"
-      },
-      {
-        "reviewer": {
-          "id": 81706918,
-          "login": "karimdeabes",
-          "url": "https://github.com/karimdeabes"
-        },
-        "submitted_at": "2025-07-17T10:43:14Z"
-      },
-      {
-        "reviewer": {
-          "id": 106277855,
-          "login": "Mostafa-alsaygh",
-          "url": "https://github.com/Mostafa-alsaygh"
-        },
-        "submitted_at": "2025-07-17T10:48:56Z"
-      }
-    ],
-    "first_approved_at": "2025-07-17T10:42:57Z",
-    "time_to_first_approval_minutes": 366.45,
-    "required_approvals_met_at": "2025-07-17T10:43:14Z",
-    "time_to_required_approvals_minutes": 366.73333333333335,
+    "approvals": [],
+    "first_approved_at": null,
+    "time_to_first_approval_minutes": null,
+    "required_approvals_met_at": null,
+    "time_to_required_approvals_minutes": null,
     "closed_at": null,
     "merged_at": null,
     "merged_by": null,
     "week": "2025-W29",
-    "status": "approved",
+    "status": "pending",
     "diff_stats": {
       "additions": 775,
       "deletions": 760,
