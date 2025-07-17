@@ -17,6 +17,7 @@ import com.london.data.datasource.remote.details.moviedetails.model.movieimages.
 import com.london.data.datasource.remote.details.moviedetails.model.movieimages.Poster
 import com.london.data.datasource.remote.details.moviedetails.model.similarmovies.SimilarMovieRemote
 import com.london.data.datasource.remote.details.moviedetails.model.similarmovies.SimilarMoviesResponse
+import com.london.data.utils.asImageUrlOrEmpty
 import io.mockk.coEvery
 import io.mockk.mockk
 import kotlinx.coroutines.test.runTest
@@ -201,7 +202,10 @@ class MovieDetailsRepoImplTest {
 
         val result = repository.getMovieImagesById(123)
 
-        assertEquals(listOf("/img1.jpg", "/img2.jpg"), result)
+        assertEquals(
+            listOf("/img1.jpg".asImageUrlOrEmpty(), "/img2.jpg".asImageUrlOrEmpty()),
+            result
+        )
     }
 
     @Test

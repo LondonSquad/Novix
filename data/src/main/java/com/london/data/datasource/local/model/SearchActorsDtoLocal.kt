@@ -22,7 +22,7 @@ data class PersonDtoLocal(
     val name: String,
     val originalName: String,
     val popularity: Double,
-    val profilePath: String?,
+    val profileUrl: String?,
     val knownFor: List<KnownForDtoLocal>
 )
 
@@ -33,7 +33,7 @@ data class KnownForDtoLocal(
     val title: String? = null,
     val originalTitle: String? = null,
     val overview: String? = null,
-    val posterPath: String? = null,
+    val posterUrl: String? = null,
     val mediaType: String,
     val originalLanguage: String,
     val genreIds: List<Int>,

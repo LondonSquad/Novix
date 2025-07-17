@@ -1,75 +1,59 @@
 package com.london.data.datasource.remote.search
 
-import android.util.Log
-import com.london.data.BuildConfig
 import com.london.data.datasource.remote.ApiConstants
 import com.london.data.datasource.remote.ApiResponse
 import com.london.data.datasource.remote.search.model.SearchActorRemote
 import com.london.data.datasource.remote.search.model.SearchMovieRemote
 import com.london.data.datasource.remote.search.model.SearchTvShowRemote
+import com.london.data.utils.get
 import io.ktor.client.HttpClient
-import io.ktor.client.call.body
-import io.ktor.client.request.get
-import io.ktor.client.statement.bodyAsText
-import io.ktor.http.path
 
+class SearchRemoteDataSourceImpl(
+    private val ktorClient: HttpClient
+) : SearchRemoteDataSource {
 
-class SearchRemoteDataSourceImpl(private val ktorClient: HttpClient) : SearchRemoteDataSource {
     override suspend fun searchForMovies(
         query: String,
         includeAdult: Boolean,
         language: String,
         pageNumber: Int
-    ): ApiResponse<SearchMovieRemote> {
-        val response = ktorClient.get {
-            url {
-                path(ApiConstants.SEARCH_PATH_MOVIES)
-                parameters.append("query", query)
-                parameters.append("include_adult", includeAdult.toString())
-                parameters.append("language", language)
-                parameters.append("page", pageNumber.toString())
-                parameters.append("api_key", BuildConfig.API_KEY)
-            }
-        }
-        Log.d("test", "searchForMovies: ${response.bodyAsText()}")
-        return response.body()
-    }
+    ): ApiResponse<SearchMovieRemote> =
+        ktorClient.get(
+            path = ApiConstants.SEARCH_PATH_MOVIES,
+            params = buildSearchParams(query, includeAdult, language, pageNumber)
+        )
 
     override suspend fun searchForTvShows(
         query: String,
         includeAdult: Boolean,
         language: String,
         pageNumber: Int
-    ): ApiResponse<SearchTvShowRemote> {
-        val response = ktorClient.get {
-            url {
-                path(ApiConstants.SEARCH_PATH_TVS)
-                parameters.append("query", query)
-                parameters.append("include_adult", includeAdult.toString())
-                parameters.append("language", language)
-                parameters.append("page", pageNumber.toString())
-                parameters.append("api_key", BuildConfig.API_KEY)
-            }
-        }
-        return response.body()
-    }
+    ): ApiResponse<SearchTvShowRemote> =
+        ktorClient.get(
+            path = ApiConstants.SEARCH_PATH_TVS,
+            params = buildSearchParams(query, includeAdult, language, pageNumber)
+        )
 
     override suspend fun searchForActors(
         query: String,
         includeAdult: Boolean,
         language: String,
         pageNumber: Int
-    ): ApiResponse<SearchActorRemote> {
-        val response = ktorClient.get {
-            url {
-                path(ApiConstants.SEARCH_PATH_ACTORS)
-                parameters.append("query", query)
-                parameters.append("include_adult", includeAdult.toString())
-                parameters.append("language", language)
-                parameters.append("page", pageNumber.toString())
-                parameters.append("api_key", BuildConfig.API_KEY)
-            }
-        }
-        return response.body()
-    }
+    ): ApiResponse<SearchActorRemote> =
+        ktorClient.get(
+            path = ApiConstants.SEARCH_PATH_ACTORS,
+            params = buildSearchParams(query, includeAdult, language, pageNumber)
+        )
 }
+
+private fun buildSearchParams(
+    query: String,
+    includeAdult: Boolean,
+    language: String,
+    pageNumber: Int
+): Map<String, String> = mapOf(
+    "query" to query,
+    "include_adult" to includeAdult.toString(),
+    "language" to language,
+    "page" to pageNumber.toString()
+)
