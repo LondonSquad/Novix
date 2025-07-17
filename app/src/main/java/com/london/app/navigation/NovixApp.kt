@@ -30,9 +30,9 @@ import com.london.presentation.screen.account.AccountScreen
 import com.london.presentation.screen.bookmark.BookmarksScreen
 import com.london.presentation.screen.category.CategoriesScreen
 import com.london.presentation.screen.details.actordetails.topmoviespicks.TopMoviesPicksScreen
+import com.london.presentation.screen.details.movieDetalis.MovieDetailsScreen
 import com.london.presentation.screen.details.tvshow.tvshowdetails.TvShowsDetailsScreen
 import com.london.presentation.screen.home.HomeScreen
-import com.london.presentation.screen.moiveDetalis.MovieDetailsScreen
 import com.london.presentation.screen.search.SearchScreen
 
 @Composable

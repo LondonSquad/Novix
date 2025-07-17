@@ -22,25 +22,25 @@ fun ButtonIcon(
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
     iconRes: Int,
-    backgroundColor: Color = NovixTheme.colors.iconBackground
+    backgroundColor: Color = NovixTheme.colors.iconBackground,
 ) {
     Box(
         modifier = modifier
             .size(32.dp)
-            .clip(RoundedCornerShape(12.dp))
-            .background(color = backgroundColor)
             .border(
                 width = 1.dp, color = NovixTheme.colors.stroke, shape = RoundedCornerShape(8.dp)
             )
+            .clip(RoundedCornerShape(12.dp))
+            .background(color = backgroundColor)
             .padding(6.dp)
-            .noRippleClickable (
+            .noRippleClickable(
                 onClick
             ), contentAlignment = Alignment.Center
     ) {
         Icon(
             painter = painterResource(iconRes),
             contentDescription = "icon",
-            tint = NovixTheme.colors.onPrimary,
+            tint = NovixTheme.colors.title,
             modifier = Modifier
         )
     }
