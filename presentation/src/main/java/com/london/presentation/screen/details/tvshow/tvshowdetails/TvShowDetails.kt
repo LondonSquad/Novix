@@ -514,6 +514,7 @@ fun TvShowDate(
     uiState: TvShowDetailsUiState
 ) {
 
+    if (uiState.firstAirDate.isEmpty() || uiState.firstAirDate.isBlank()) return
     Row(
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.spacedBy(4.dp)
