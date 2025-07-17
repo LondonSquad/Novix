@@ -2214,17 +2214,33 @@
           "url": "https://github.com/abdelrhman1002"
         },
         "submitted_at": "2025-07-17T12:32:08Z"
+      },
+      {
+        "reviewer": {
+          "id": 106277855,
+          "login": "Mostafa-alsaygh",
+          "url": "https://github.com/Mostafa-alsaygh"
+        },
+        "submitted_at": "2025-07-17T12:34:52Z"
+      },
+      {
+        "reviewer": {
+          "id": 81706918,
+          "login": "karimdeabes",
+          "url": "https://github.com/karimdeabes"
+        },
+        "submitted_at": "2025-07-17T12:35:05Z"
       }
     ],
     "first_approved_at": "2025-07-17T12:32:08Z",
     "time_to_first_approval_minutes": 252.73333333333332,
-    "required_approvals_met_at": null,
-    "time_to_required_approvals_minutes": null,
+    "required_approvals_met_at": "2025-07-17T12:34:52Z",
+    "time_to_required_approvals_minutes": 255.46666666666667,
     "closed_at": null,
     "merged_at": null,
     "merged_by": null,
     "week": "2025-W29",
-    "status": "pending",
+    "status": "approved",
     "diff_stats": {
       "additions": 918,
       "deletions": 622,
