@@ -33,12 +33,10 @@ class ModelDownloadManager(private val context: Context) {
     }
 
     private fun checkExistingModels() {
-        // First check if models exist in assets
         val assetsNsfwExists = tryAssetsModel("nsfw_model.tflite")
         val assetsGenderExists = tryAssetsModel("gender_class_model.tflite")
 
         if (assetsNsfwExists && assetsGenderExists) {
-            Log.d(TAG, "Both models found in assets")
             _downloadState.value = _downloadState.value.copy(
                 nsfwModelReady = true,
                 genderModelReady = true,
@@ -47,7 +45,6 @@ class ModelDownloadManager(private val context: Context) {
             return
         }
 
-        // Then check for downloaded models
         val nsfwModelPath = prefs.getString("nsfw_model_path", null)
         val genderModelPath = prefs.getString("gender_model_path", null)
 
@@ -91,7 +88,6 @@ class ModelDownloadManager(private val context: Context) {
     }
 
     suspend fun downloadModelsIfNeeded(wifiOnly: Boolean = true): ModelFiles {
-        // First, try to use models from assets
         val nsfwAssetFile = copyAssetToFile("nsfw_model.tflite")
         val genderAssetFile = copyAssetToFile("gender_class_model.tflite")
 
@@ -108,19 +104,9 @@ class ModelDownloadManager(private val context: Context) {
             )
         }
 
-        // Check if we already have downloaded models
         if (_downloadState.value.nsfwModelReady && _downloadState.value.genderModelReady) {
-            val nsfwPath = if (nsfwAssetFile != null) {
-                nsfwAssetFile
-            } else {
-                prefs.getString("nsfw_model_path", null)?.let { File(it) }
-            }
-
-            val genderPath = if (genderAssetFile != null) {
-                genderAssetFile
-            } else {
-                prefs.getString("gender_model_path", null)?.let { File(it) }
-            }
+            val nsfwPath = nsfwAssetFile ?: prefs.getString("nsfw_model_path", null)?.let { File(it) }
+            val genderPath = genderAssetFile ?: prefs.getString("gender_model_path", null)?.let { File(it) }
 
             if (nsfwPath != null && genderPath != null) {
                 return ModelFiles(
@@ -130,8 +116,6 @@ class ModelDownloadManager(private val context: Context) {
             }
         }
 
-        // If assets are not available, proceed with download
-        Log.d(TAG, "Models not found in assets, attempting to download")
         _downloadState.value = _downloadState.value.copy(
             isDownloading = true,
             error = null,
@@ -146,7 +130,6 @@ class ModelDownloadManager(private val context: Context) {
             }
             val conditions = conditionsBuilder.build()
 
-            // Download NSFW model if needed
             val nsfwModel = if (nsfwAssetFile == null) {
                 _downloadState.value = _downloadState.value.copy(
                     currentDownloadingModel = "NSFW Detection Model"
@@ -161,7 +144,6 @@ class ModelDownloadManager(private val context: Context) {
             } else {
                 nsfwAssetFile
             }
-            // Download Gender model if needed
             val genderModel = if (genderAssetFile == null) {
                 _downloadState.value = _downloadState.value.copy(
                     currentDownloadingModel = "Gender Classification Model"
@@ -191,7 +173,6 @@ class ModelDownloadManager(private val context: Context) {
                 currentDownloadingModel = null
             )
 
-            // If download fails but we have assets, use them
             if (nsfwAssetFile != null && genderAssetFile != null) {
                 Log.w(TAG, "Download failed, falling back to asset models")
                 return ModelFiles(

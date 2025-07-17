@@ -104,17 +104,14 @@ fun ImageViewFilter(
     ) {
         when {
             isLoading -> {
-                Log.d("ImageViewFilter", "Showing loading content")
                 loadingContent()
             }
 
             errorState != null -> {
-                Log.d("ImageViewFilter", "Showing error: $errorState")
                 errorContent(errorState)
             }
 
             moderationState != null && moderationState!!.isModerated -> {
-                Log.d("ImageViewFilter", "Showing moderated image: shouldBlur=${moderationState!!.shouldBlur}, hasBitmap=${moderationState!!.originalBitmap != null}")
                 ModeratedImage(
                     state = moderationState!!,
                     contentDescription = contentDescription,

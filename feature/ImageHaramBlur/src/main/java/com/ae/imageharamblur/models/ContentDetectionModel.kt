@@ -33,9 +33,6 @@ internal class ContentDetectionModel {
         this.inputImageHeight = inputShape[1]
         this.inputImageWidth = inputShape[2]
         this.inputDataType = inputTensor.dataType()
-
-        Log.d("ContentModel", "Input shape: ${inputShape.contentToString()}, dataType: $inputDataType")
-
         this.imageProcessor = createImageProcessor()
     }
 
@@ -48,9 +45,6 @@ internal class ContentDetectionModel {
         this.inputImageHeight = inputShape[1]
         this.inputImageWidth = inputShape[2]
         this.inputDataType = inputTensor.dataType()
-
-        Log.d("ContentModel", "Input shape: ${inputShape.contentToString()}, dataType: $inputDataType")
-
         this.imageProcessor = createImageProcessor()
     }
 
@@ -74,18 +68,14 @@ internal class ContentDetectionModel {
         val builder = ImageProcessor.Builder()
             .add(ResizeOp(inputImageHeight, inputImageWidth, ResizeOp.ResizeMethod.BILINEAR))
 
-        // Add normalization based on data type
         when (inputDataType) {
             DataType.UINT8 -> {
-                // For quantized models (uint8), typically no normalization or scale to [0,1]
                 builder.add(NormalizeOp(0f, 1f))
             }
             DataType.FLOAT32 -> {
-                // For float models
                 builder.add(NormalizeOp(0f, 255f))
             }
             else -> {
-                // Default normalization
                 builder.add(NormalizeOp(0f, 255f))
             }
         }
@@ -95,28 +85,22 @@ internal class ContentDetectionModel {
 
     fun detectContent(bitmap: Bitmap): ContentResult {
         return try {
-            // Create TensorImage with proper type
             val tensorImage = TensorImage(inputDataType)
             tensorImage.load(bitmap)
 
-            // Process the image
             val processedImage = imageProcessor.process(tensorImage)
 
-            // Get output tensor info
             val outputTensor = interpreter.getOutputTensor(0)
             val outputShape = outputTensor.shape()
             val outputDataType = outputTensor.dataType()
 
             val outputBuffer = TensorBuffer.createFixedSize(outputShape, outputDataType)
 
-            // Run inference
             interpreter.run(processedImage.buffer, outputBuffer.buffer.rewind())
 
-            // Convert output to float array based on data type
             val probabilities = when (outputDataType) {
                 DataType.FLOAT32 -> outputBuffer.floatArray
                 DataType.UINT8 -> {
-                    // Convert uint8 to float probabilities
                     val byteArray = ByteArray(outputBuffer.buffer.remaining())
                     outputBuffer.buffer.get(byteArray)
                     byteArray.map { (it.toInt() and 0xFF) / 255f }.toFloatArray()
