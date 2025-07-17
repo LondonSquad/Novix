@@ -5,22 +5,22 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class MovieActor(
-    val adult: Boolean,
-    val gender: Int,
+    val adult: Boolean?,
+    val gender: Int?,
     @SerialName("id")
-    val id: Int,
+    val id: Int?,
     @SerialName("known_for_department")
-    val knownForDepartment: String,
-    val name: String,
+    val knownForDepartment: String?,
+    val name: String?,
     @SerialName("original_name")
-    val originalName: String,
-    val popularity: Double,
+    val originalName: String?,
+    val popularity: Double?,
     @SerialName("profile_path")
-    val profilePath: String? = null,
+    val profilePath: String?,
     @SerialName("cast_id")
-    val castId: Int,
-    val character: String,
+    val castId: Int?,
+    val character: String?,
     @SerialName("credit_id")
-    val creditId: String,
-    val order: Int
+    val creditId: String?,
+    val order: Int?,
 )

@@ -6,6 +6,7 @@ plugins {
     alias(libs.plugins.kotlin.compose)
     alias(libs.plugins.ksp)
     alias(libs.plugins.kotlinx.kover)
+    alias(libs.plugins.kotlin.serialization)
 }
 
 android {
@@ -58,4 +59,10 @@ dependencies {
     implementation(libs.firebase.perf)
     implementation(platform(libs.firebase.bom))
     implementation(libs.androidx.constraintlayout.compose)
+}
+
+ksp {
+    arg("KOIN_CONFIG_CHECK", "true")
+    arg("KOIN_DEFAULT_MODULE", "false")
+    arg("KOIN_USE_COMPOSE_VIEWMODEL", "true")
 }

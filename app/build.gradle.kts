@@ -1,4 +1,6 @@
+import com.google.firebase.crashlytics.buildtools.gradle.CrashlyticsExtension
 import com.london.buildsrc.AppConfig
+import com.london.buildsrc.getKey
 
 plugins {
     alias(libs.plugins.android.application)
@@ -31,16 +33,31 @@ android {
 
     }
 
+    signingConfigs {
+        create("release"){
+            keyAlias = getKey("keyAlias")
+            keyPassword = getKey("keyPassword")
+            storeFile = file(getKey("storeFile"))
+            storePassword = getKey("storePassword")
+        }
+    }
+
     buildTypes {
         debug {
         }
         release {
             isMinifyEnabled = AppConfig.ENABLE_R8_FULL_MODE
             isShrinkResources = AppConfig.ENABLE_R8_FULL_MODE
+            signingConfig = signingConfigs.getByName("release")
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
             )
+            ndk.debugSymbolLevel = "FULL"
+
+            configure<CrashlyticsExtension> {
+                mappingFileUploadEnabled = AppConfig.ENABLE_R8_FULL_MODE
+            }
 
             splits {
                 abi {
@@ -50,6 +67,7 @@ android {
 
         }
     }
+
     compileOptions {
         sourceCompatibility = AppConfig.Version.JVM
         targetCompatibility = AppConfig.Version.JVM
@@ -69,7 +87,6 @@ dependencies {
     implementation(project(":presentation"))
     implementation(project(":designSystem"))
     implementation(libs.bundles.base.ui)
-    implementation(libs.bundles.koin)
     ksp(libs.bundles.koin.ksp)
     debugImplementation(libs.bundles.compose.debug)
     androidTestImplementation(libs.bundles.base.testing)
@@ -85,4 +102,10 @@ dependencies {
     implementation(libs.bundles.room)
     implementation(libs.bundles.koin)
     ksp(libs.bundles.room.ksp)
+}
+
+ksp {
+    arg("KOIN_CONFIG_CHECK", "true")
+    arg("KOIN_DEFAULT_MODULE", "false")
+    arg("KOIN_USE_COMPOSE_VIEWMODEL", "true")
 }

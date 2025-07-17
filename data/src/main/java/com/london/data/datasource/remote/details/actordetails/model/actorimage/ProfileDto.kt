@@ -1,7 +1,9 @@
 package com.london.data.datasource.remote.details.actordetails.model.actorimage
 
 import kotlinx.serialization.SerialName
+import kotlinx.serialization.Serializable
 
+@Serializable
 data class ProfileDto(
     @SerialName("aspect_ratio")
     val aspectRatio: Double,

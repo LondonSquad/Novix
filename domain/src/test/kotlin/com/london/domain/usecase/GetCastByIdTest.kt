@@ -55,7 +55,7 @@ class GetCastByIdTest {
                     name = "John Doe",
                     originalName = "John Doe",
                     popularity = 85.5,
-                    profilePath = "/profile1.jpg",
+                    profileUrl = "/profile1.jpg",
                     roles = listOf(
                         TvShowRoleEntity(
                             creditId = "credit1",
@@ -74,7 +74,7 @@ class GetCastByIdTest {
                     name = "Jane Smith",
                     originalName = "Jane Smith",
                     popularity = 78.2,
-                    profilePath = "/profile2.jpg",
+                    profileUrl = "/profile2.jpg",
                     roles = listOf(
                         TvShowRoleEntity(
                             creditId = "credit2",

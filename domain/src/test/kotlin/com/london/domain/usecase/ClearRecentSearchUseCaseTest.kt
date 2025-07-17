@@ -11,22 +11,22 @@ import org.junit.Before
 import org.junit.Test
 
 class ClearRecentSearchUseCaseTest {
-    lateinit var recentRepository: RecentRepository
+    lateinit var recentSearchRepository: RecentRepository<String>
     lateinit var clearRecentSearchUseCase: ClearRecentSearchUseCase
 
     @Before
     fun setUp() {
-        recentRepository = mockk()
-        clearRecentSearchUseCase = ClearRecentSearchUseCase(recentRepository)
+        recentSearchRepository = mockk()
+        clearRecentSearchUseCase = ClearRecentSearchUseCase(recentSearchRepository)
     }
 
     @Test
     fun `should call the repository clear all`() = runTest {
         //given
-        coEvery { recentRepository.clearAll() } just Runs
+        coEvery { recentSearchRepository.clearAll() } just Runs
         //when
         clearRecentSearchUseCase.invoke()
         //then
-        coVerify(exactly = 1) { recentRepository.clearAll() }
+        coVerify(exactly = 1) { recentSearchRepository.clearAll() }
     }
 }

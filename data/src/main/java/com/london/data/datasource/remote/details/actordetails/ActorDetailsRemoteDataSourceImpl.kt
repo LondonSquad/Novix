@@ -1,105 +1,29 @@
 package com.london.data.datasource.remote.details.actordetails
 
-import android.util.Log
-import com.london.data.BuildConfig
-import com.london.data.datasource.device.DeviceConfigurationDataSource
 import com.london.data.datasource.remote.ApiConstants
 import com.london.data.datasource.remote.details.actordetails.model.ActorDetailsResponse
 import com.london.data.datasource.remote.details.actordetails.model.actorimage.ActorImageResponse
 import com.london.data.datasource.remote.details.actordetails.model.actormoviedetails.ActorMovieDetailsResponse
 import com.london.data.datasource.remote.details.actordetails.model.actortvshowdetails.ActorTvShowDetailsResponse
+import com.london.data.utils.get
 import io.ktor.client.HttpClient
-import io.ktor.client.request.get
-import io.ktor.client.statement.bodyAsText
-import io.ktor.http.URLProtocol
-import io.ktor.http.path
-import kotlinx.serialization.json.Json
+import org.koin.core.annotation.Single
 
+
+@Single
 class ActorDetailsRemoteDataSourceImpl(
     private val ktorClient: HttpClient,
-    private val deviceConfigurationDataSource: DeviceConfigurationDataSource
-) :
-    ActorDetailsRemoteDataSource {
-    override suspend fun getActorDetailsById(
-        actorId: Int
-    ): ActorDetailsResponse {
-        val json = Json {
-            ignoreUnknownKeys = true
-        }
-        val response = ktorClient.get {
-            url {
-                protocol = URLProtocol.Companion.HTTPS
-                host = ApiConstants.HOST
-                path(ApiConstants.getActorDetailsPath(actorId))
-                parameters.append("language", deviceConfigurationDataSource.getCurrentLanguage())
-                parameters.append("api_key", BuildConfig.API_KEY)
-            }
-        }
+) : ActorDetailsRemoteDataSource {
 
-        val responseBody = response.bodyAsText()
-        Log.d("ActorDetails", "Response body: $responseBody")
+    override suspend fun getActorDetailsById(actorId: Int): ActorDetailsResponse =
+        ktorClient.get(path = ApiConstants.getActorDetailsPath(actorId))
 
-        return json.decodeFromString(responseBody)
-    }
+    override suspend fun getActorMovieById(actorId: Int): ActorMovieDetailsResponse =
+        ktorClient.get(path = ApiConstants.getActorMoviesPath(actorId))
 
-    override suspend fun getActorMovieById(actorId: Int): ActorMovieDetailsResponse {
-        val json = Json {
-            ignoreUnknownKeys = true
-        }
-        val response = ktorClient.get {
-            url {
-                protocol = URLProtocol.Companion.HTTPS
-                host = ApiConstants.HOST
-                path(ApiConstants.getActorMoviesPath(actorId))
-                parameters.append("language", deviceConfigurationDataSource.getCurrentLanguage())
-                parameters.append("api_key", BuildConfig.API_KEY)
-            }
-        }
+    override suspend fun getActorTvShowById(actorId: Int): ActorTvShowDetailsResponse =
+        ktorClient.get(path = ApiConstants.getActorTvShowsPath(actorId))
 
-        val responseBody = response.bodyAsText()
-        Log.d("ActorDetails", "Response body: $responseBody")
-
-        return json.decodeFromString(responseBody)
-    }
-
-    override suspend fun getActorTvShowById(actorId: Int): ActorTvShowDetailsResponse {
-
-        val json = Json {
-            ignoreUnknownKeys = true
-        }
-        val response = ktorClient.get {
-            url {
-                protocol = URLProtocol.Companion.HTTPS
-                host = ApiConstants.HOST
-                path(ApiConstants.getActorTvShowsPath(actorId))
-                parameters.append("language", deviceConfigurationDataSource.getCurrentLanguage())
-                parameters.append("api_key", BuildConfig.API_KEY)
-            }
-        }
-
-        val responseBody = response.bodyAsText()
-        Log.d("ActorDetails", "Response body: $responseBody")
-
-        return json.decodeFromString(responseBody)
-    }
-
-    override suspend fun getActorImagePath(actorId: Int): ActorImageResponse {
-        val json = Json {
-            ignoreUnknownKeys = true
-        }
-        val response = ktorClient.get {
-            url {
-                protocol = URLProtocol.Companion.HTTPS
-                host = ApiConstants.HOST
-                path(ApiConstants.getActorImagePath(actorId))
-                parameters.append("language", deviceConfigurationDataSource.getCurrentLanguage())
-                parameters.append("api_key", BuildConfig.API_KEY)
-            }
-        }
-
-        val responseBody = response.bodyAsText()
-        Log.d("ActorDetails", "Response body: $responseBody")
-
-        return json.decodeFromString(responseBody)
-    }
+    override suspend fun getActorImagePath(actorId: Int): ActorImageResponse =
+        ktorClient.get(path = ApiConstants.getActorImagePath(actorId))
 }

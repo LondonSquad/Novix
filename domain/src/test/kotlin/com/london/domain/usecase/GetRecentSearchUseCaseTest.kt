@@ -9,18 +9,18 @@ import org.junit.Before
 import org.junit.Test
 
 class GetRecentSearchUseCaseTest {
-    lateinit var recentRepository: RecentRepository
+    lateinit var recentSearchRepository: RecentRepository<String>
     lateinit var getRecentSearchUseCase: GetRecentSearchUseCase
     @Before
     fun setUp() {
-        recentRepository = mockk()
-        getRecentSearchUseCase = GetRecentSearchUseCase(recentRepository)
+        recentSearchRepository = mockk()
+        getRecentSearchUseCase = GetRecentSearchUseCase(recentSearchRepository)
     }
 
     @Test
     fun `should return a list of string when repository return a list of string`() = runTest {
         //given
-        coEvery { recentRepository.getAll() } returns listOf("aa","bb")
+        coEvery { recentSearchRepository.getAll() } returns listOf("aa","bb")
         //when
         val result = getRecentSearchUseCase.invoke()
         //then

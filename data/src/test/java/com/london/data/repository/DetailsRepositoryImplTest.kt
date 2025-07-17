@@ -2,49 +2,51 @@ package com.london.data.repository
 
 import com.google.common.truth.Truth.assertThat
 import com.london.data.datasource.remote.details.tvshowdetails.TvShowDetailsRemoteDataSource
-import com.london.data.datasource.remote.details.tvshowdetails.model.TvShowDetailsRemoteResponse
-import com.london.data.datasource.remote.details.tvshowdetails.model.TvShowCastRemoteResponse
-import com.london.data.datasource.remote.details.tvshowdetails.model.TvShowImagesRemoteResponse
-import com.london.data.datasource.remote.details.tvshowdetails.model.tvshowepisode.TvShowEpisodesRemoteResponse
-import com.london.data.datasource.remote.details.tvshowdetails.model.TvShowCastMember
-import com.london.data.datasource.remote.details.tvshowdetails.model.Role
 import com.london.data.datasource.remote.details.tvshowdetails.model.ImageItem
+import com.london.data.datasource.remote.details.tvshowdetails.model.Role
+import com.london.data.datasource.remote.details.tvshowdetails.model.TvShowCastMember
+import com.london.data.datasource.remote.details.tvshowdetails.model.TvShowCastRemoteResponse
 import com.london.data.datasource.remote.details.tvshowdetails.model.TvShowCreator
+import com.london.data.datasource.remote.details.tvshowdetails.model.TvShowDetailsRemoteResponse
 import com.london.data.datasource.remote.details.tvshowdetails.model.TvShowEpisode
 import com.london.data.datasource.remote.details.tvshowdetails.model.TvShowGenre
+import com.london.data.datasource.remote.details.tvshowdetails.model.TvShowImagesRemoteResponse
 import com.london.data.datasource.remote.details.tvshowdetails.model.TvShowNetwork
-import com.london.data.datasource.remote.details.tvshowdetails.model.TvShowSeason
 import com.london.data.datasource.remote.details.tvshowdetails.model.TvShowProductionCompany
 import com.london.data.datasource.remote.details.tvshowdetails.model.TvShowProductionCountry
+import com.london.data.datasource.remote.details.tvshowdetails.model.TvShowSeason
 import com.london.data.datasource.remote.details.tvshowdetails.model.TvShowSpokenLanguage
-import com.london.data.datasource.remote.details.tvshowdetails.model.tvshowepisode.TvShowEpisodeBySeason
 import com.london.data.datasource.remote.details.tvshowdetails.model.tvshowepisode.EpisodeCrewMember
 import com.london.data.datasource.remote.details.tvshowdetails.model.tvshowepisode.EpisodeGuestStar
+import com.london.data.datasource.remote.details.tvshowdetails.model.tvshowepisode.TvShowEpisodeBySeason
+import com.london.data.datasource.remote.details.tvshowdetails.model.tvshowepisode.TvShowEpisodesRemoteResponse
 import com.london.data.mapper.tvshowdetails.TvShowImagesMapper.toEntity
 import com.london.data.mapper.tvshowdetails.toCastEntity
 import com.london.data.mapper.tvshowdetails.toEntity
 import com.london.data.mapper.tvshowdetails.toTvShowEpisodesEntity
+import com.london.data.utils.asImageUrlOrEmpty
+import com.london.data.utils.orZero
 import com.london.domain.GetCastByIdFailedException
 import com.london.domain.GetImagesByIdFailedException
 import com.london.domain.TvShowDetailsSearchFailedException
-import com.london.domain.entity.tvshowdetails.TvShowDetailsEntity
-import com.london.domain.entity.tvshowdetails.TvShowCastEntity
-import com.london.domain.entity.tvshowdetails.TvShowImagesEntity
-import com.london.domain.entity.tvshowdetails.episode.TvShowEpisodesEntity
-import com.london.domain.entity.tvshowdetails.TvShowCastMemberEntity
-import com.london.domain.entity.tvshowdetails.TvShowRoleEntity
 import com.london.domain.entity.tvshowdetails.ImageItemEntity
+import com.london.domain.entity.tvshowdetails.TvShowCastEntity
+import com.london.domain.entity.tvshowdetails.TvShowCastMemberEntity
 import com.london.domain.entity.tvshowdetails.TvShowCreatorEntity
+import com.london.domain.entity.tvshowdetails.TvShowDetailsEntity
+import com.london.domain.entity.tvshowdetails.TvShowEpisodeEntity
 import com.london.domain.entity.tvshowdetails.TvShowGenreEntity
+import com.london.domain.entity.tvshowdetails.TvShowImagesEntity
 import com.london.domain.entity.tvshowdetails.TvShowNetworkEntity
-import com.london.domain.entity.tvshowdetails.TvShowSeasonEntity
 import com.london.domain.entity.tvshowdetails.TvShowProductionCompanyEntity
 import com.london.domain.entity.tvshowdetails.TvShowProductionCountryEntity
+import com.london.domain.entity.tvshowdetails.TvShowRoleEntity
+import com.london.domain.entity.tvshowdetails.TvShowSeasonEntity
 import com.london.domain.entity.tvshowdetails.TvShowSpokenLanguageEntity
-import com.london.domain.entity.tvshowdetails.TvShowEpisodeEntity
 import com.london.domain.entity.tvshowdetails.episode.EpisodeCrewMemberEntity
 import com.london.domain.entity.tvshowdetails.episode.EpisodeGuestStarEntity
 import com.london.domain.entity.tvshowdetails.episode.TvShowEpisodeBySeasonEntity
+import com.london.domain.entity.tvshowdetails.episode.TvShowEpisodesEntity
 import io.mockk.coEvery
 import io.mockk.mockk
 import kotlinx.coroutines.test.runTest
@@ -180,13 +182,13 @@ class DetailsRepositoryImplTest {
                 id = 1,
                 name = "Episode 1",
                 overview = "Episode overview",
-                voteAverage = 8.5,
+                voteAverage = 8.5.orZero(),
                 voteCount = 100,
                 airDate = "2020-01-01",
                 episodeNumber = 1,
                 episodeType = "standard",
                 productionCode = "101",
-                runtime = 45,
+                runtime = 45.orZero(),
                 seasonNumber = 1,
                 showId = TV_SHOW_ID,
                 stillPath = "/still.jpg"
@@ -207,7 +209,7 @@ class DetailsRepositoryImplTest {
             originalLanguage = "en",
             originalName = "Test TV Show Original",
             overview = "Test overview",
-            popularity = 85.5,
+            popularity = 85.5.orZero(),
             posterPath = "https://image.tmdb.org/t/p/w500/poster1.jpg",
             productionCompanies = listOf(
                 TvShowProductionCompany(
@@ -232,7 +234,7 @@ class DetailsRepositoryImplTest {
                     overview = "Season overview",
                     posterPath = "/season.jpg",
                     seasonNumber = 1,
-                    voteAverage = 8.0
+                    voteAverage = 8.0.orZero()
                 )
             ),
             tvShowSpokenLanguages = listOf(
@@ -245,13 +247,13 @@ class DetailsRepositoryImplTest {
             status = "Returning Series",
             tagline = "Test tagline",
             type = "Scripted",
-            voteAverage = 8.5,
+            voteAverage = 8.5.orZero(),
             voteCount = 1000
         )
 
         val TvShowDetailsEntityMock = TvShowDetailsEntity(
             adult = false,
-            backdropPath = "https://image.tmdb.org/t/p/w500/backdrop.jpg",
+            backdropUrl = "https://image.tmdb.org/t/p/w500/backdrop.jpg",
             createdBy = listOf(
                 TvShowCreatorEntity(
                     id = 1,
@@ -259,7 +261,7 @@ class DetailsRepositoryImplTest {
                     name = "Creator Name",
                     originalName = "Creator Original Name",
                     gender = 1,
-                    profilePath = "/profile.jpg"
+                    profileUrl = "/profile.jpg"
                 )
             ),
             episodeRunTime = listOf(45, 50),
@@ -282,7 +284,7 @@ class DetailsRepositoryImplTest {
                 episodeNumber = 1,
                 episodeType = "standard",
                 productionCode = "101",
-                runtime = 45,
+                runtime = 45.orZero(),
                 seasonNumber = 1,
                 showId = TV_SHOW_ID,
                 stillPath = "/still.jpg"
@@ -292,7 +294,7 @@ class DetailsRepositoryImplTest {
             tvShowNetworks = listOf(
                 TvShowNetworkEntity(
                     id = 1,
-                    logoPath = "/network.jpg",
+                    logoUrl = "/network.jpg".asImageUrlOrEmpty(),
                     name = "Network Name",
                     originCountry = "US"
                 )
@@ -303,12 +305,12 @@ class DetailsRepositoryImplTest {
             originalLanguage = "en",
             originalName = "Test TV Show Original",
             overview = "Test overview",
-            popularity = 85.5,
-            posterPath = "/poster.jpg",
+            popularity = 85.5.orZero(),
+            posterUrl = "/poster.jpg",
             productionCompanies = listOf(
                 TvShowProductionCompanyEntity(
                     id = 1,
-                    logoPath = "/company.jpg",
+                    logoUrl = "/company.jpg",
                     name = "Production Company",
                     originCountry = "US"
                 )
@@ -326,7 +328,7 @@ class DetailsRepositoryImplTest {
                     id = 1,
                     name = "Season 1",
                     overview = "Season overview",
-                    posterPath = "/season.jpg",
+                    posterUrl = "/season.jpg",
                     seasonNumber = 1,
                     voteAverage = 8.0
                 )
@@ -380,7 +382,7 @@ class DetailsRepositoryImplTest {
                     name = "Actor Name",
                     originalName = "Actor Original Name",
                     popularity = 75.5,
-                    profilePath = "/actor.jpg",
+                    profileUrl = "/actor.jpg",
                     roles = listOf(
                         TvShowRoleEntity(
                             creditId = "role1",
@@ -438,7 +440,7 @@ class DetailsRepositoryImplTest {
                     aspectRatio = 1.78,
                     height = 1080,
                     iso6391 = "en",
-                    filePath = "https://image.tmdb.org/t/p/w500/backdrop1.jpg", // Match remote mock
+                    fileUrl = "https://image.tmdb.org/t/p/w500/backdrop1.jpg",
                     voteAverage = 8.0,
                     voteCount = 50,
                     width = 1920
@@ -450,7 +452,7 @@ class DetailsRepositoryImplTest {
                     aspectRatio = 1.0,
                     height = 500,
                     iso6391 = null,
-                    filePath = "https://image.tmdb.org/t/p/w500/logo1.jpg", // Fixed from /logo1.jpg
+                    fileUrl = "https://image.tmdb.org/t/p/w500/logo1.jpg",
                     voteAverage = 7.5,
                     voteCount = 25,
                     width = 500
@@ -461,7 +463,7 @@ class DetailsRepositoryImplTest {
                     aspectRatio = 0.67,
                     height = 750,
                     iso6391 = "en",
-                    filePath = "https://image.tmdb.org/t/p/w500/poster1.jpg", // Fixed from /poster1.jpg
+                    fileUrl = "https://image.tmdb.org/t/p/w500/poster1.jpg",
                     voteAverage = 9.0,
                     voteCount = 100,
                     width = 500
@@ -537,7 +539,7 @@ class DetailsRepositoryImplTest {
                     runtime = 45,
                     seasonNumber = 1,
                     showId = TV_SHOW_ID,
-                    stillPath = "/still.jpg",
+                    stillUrl = "/still.jpg",
                     voteAverage = 8.5,
                     voteCount = 100,
                     crew = listOf(

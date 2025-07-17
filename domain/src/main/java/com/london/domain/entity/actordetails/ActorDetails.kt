@@ -1,5 +1,9 @@
 package com.london.domain.entity.actordetails
 
+import com.london.domain.KoverIgnore
+
+
+@KoverIgnore
 data class ActorDetails(
     val id: Int,
     val name: String,
@@ -14,5 +18,5 @@ data class ActorDetails(
     val imdbId: String,
     val knownForDepartment: String,
     val popularity: Double,
-    val profilePath: String
+    val profileUrl: String
 )
