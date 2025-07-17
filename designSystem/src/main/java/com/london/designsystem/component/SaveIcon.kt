@@ -33,7 +33,6 @@ fun SaveIcon(
     onSaveClick: () -> Unit,
     modifier: Modifier = Modifier,
     backgroundColor: Color = NovixTheme.colors.iconBackground,
-    tint: Color = NovixTheme.colors.onPrimary,
 ) {
     val animatedProgress by animateFloatAsState(
         targetValue = if (isSaved) 1f else 0f,
@@ -60,7 +59,7 @@ fun SaveIcon(
         Icon(
             painter = painterResource(R.drawable.icon_remove),
             contentDescription = "Not Save",
-            tint = tint,
+            tint = NovixTheme.colors.title,
             modifier = Modifier
                 .align(Alignment.Center)
                 .scale(1f - animatedProgress)
@@ -70,7 +69,7 @@ fun SaveIcon(
         Icon(
             painter = painterResource(R.drawable.icon_save),
             contentDescription = "Save",
-            tint = tint,
+            tint = NovixTheme.colors.title,
             modifier = Modifier
                 .scale(animatedProgress)
                 .alpha(animatedProgress)
