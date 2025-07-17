@@ -7,13 +7,11 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.BottomSheetDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
@@ -77,8 +75,7 @@ fun FilterBottomSheet(
                 .fillMaxHeight(0.75f)
         ) {
             FilterBottomSheetContent(
-                modifier = modifier
-                    .fillMaxSize(),
+                modifier = modifier,
                 onDismissRequest = {
                     scope.launch {
                         sheetState.hide()
@@ -123,127 +120,135 @@ private fun FilterBottomSheetContent(
     onGenreSelectedChange: (List<Int>) -> Unit,
     onRatingChanged: (Int) -> Unit,
 ) {
-    Column(
+    LazyColumn(
         modifier = modifier
-            .verticalScroll(rememberScrollState())
             .padding(
                 start = 16.dp,
                 end = 16.dp
             )
     ) {
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(top = 8.dp, bottom = 24.dp),
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            Text(
-                text = stringResource(R.string.filter),
-                style = NovixTheme.typography.title.large,
-                color = NovixTheme.colors.title,
-            )
-
-            Spacer(modifier = Modifier.weight(1f))
-
-            Box(
+        item {
+            Row(
                 modifier = Modifier
-                    .size(32.dp)
-                    .clip(RoundedCornerShape(8.dp))
-                    .border(
-                        width = 1.dp,
-                        color = NovixTheme.colors.stroke,
-                        shape = RoundedCornerShape(8.dp)
-                    )
-                    .clickable { onDismissRequest() },
-                contentAlignment = Alignment.Center
+                    .fillMaxWidth()
+                    .padding(top = 8.dp, bottom = 24.dp),
+                verticalAlignment = Alignment.CenterVertically
             ) {
-                Icon(
-                    painter = painterResource(com.london.designsystem.R.drawable.cancel),
-                    contentDescription = "Close filter",
-                    modifier = Modifier.padding(6.dp),
-                    tint = NovixTheme.colors.title
+                Text(
+                    text = stringResource(R.string.filter),
+                    style = NovixTheme.typography.title.large,
+                    color = NovixTheme.colors.title,
                 )
+
+                Spacer(modifier = Modifier.weight(1f))
+
+                Box(
+                    modifier = Modifier
+                        .size(32.dp)
+                        .clip(RoundedCornerShape(8.dp))
+                        .border(
+                            width = 1.dp,
+                            color = NovixTheme.colors.stroke,
+                            shape = RoundedCornerShape(8.dp)
+                        )
+                        .clickable { onDismissRequest() },
+                    contentAlignment = Alignment.Center
+                ) {
+                    Icon(
+                        painter = painterResource(com.london.designsystem.R.drawable.cancel),
+                        contentDescription = "Close filter",
+                        modifier = Modifier.padding(6.dp),
+                        tint = NovixTheme.colors.title
+                    )
+                }
             }
         }
-
-        Text(
-            text = stringResource(R.string.released_year),
-            style = NovixTheme.typography.title.small,
-            color = NovixTheme.colors.title,
-            modifier = Modifier.padding(bottom = 4.dp)
-        )
-
-        CustomReleasedYearSlider(
-            yearRange = releaseYearRange,
-            onYearRangeChange = onReleaseYearRangeChange,
-            minYear = 1950,
-            maxYear = 2030
-        )
-
-        Text(
-            text = stringResource(R.string.genres),
-            style = NovixTheme.typography.title.small,
-            color = NovixTheme.colors.title,
-            modifier = Modifier.padding(top = 16.dp, bottom = 8.dp)
-        )
-
-        GenreChipGroup(
-            availableGenres = availableGenres,
-            selectedGenres = selectedGenres,
-            onGenreSelectionChanged = onGenreSelectedChange
-        )
-
-        Text(
-            text = stringResource(R.string.imdb_rating),
-            style = NovixTheme.typography.title.small,
-            color = NovixTheme.colors.title,
-            modifier = Modifier.padding(top = 24.dp)
-        )
-
-        RatingBar(
-            rating = imdbRating,
-            onRatingChanged = onRatingChanged,
-            modifier = Modifier.padding(top = 8.dp)
-        )
-
-        Column(
-            Modifier
-                .fillMaxWidth()
-                .align(Alignment.End)
-                .padding(top = 24.dp)
-        ) {
-            PrimaryButton(
-                text = stringResource(R.string.apply),
-                hasLabel = true,
-                hasIcon = false,
-                isLoading = false,
-                isDisabled = false,
-                icon = null,
-                onClick = {
-                    onApplyFilters(
-                        selectedGenres,
-                        imdbRating,
-                        releaseYearRange
-                    )
-                },
-                modifier = Modifier
-                    .fillMaxWidth()
+        item {
+            Text(
+                text = stringResource(R.string.released_year),
+                style = NovixTheme.typography.title.small,
+                color = NovixTheme.colors.title,
+                modifier = Modifier.padding(bottom = 4.dp)
             )
+        }
 
-            OutlineButton(
-                text = stringResource(R.string.clear),
-                hasLabel = true,
-                icon = null,
-                hasIcon = false,
-                isLoading = false,
-                isDisabled = false,
-                onClick = {
-                    onClearFilters()
-                },
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(top = 8.dp)
+        item {
+            CustomReleasedYearSlider(
+                yearRange = releaseYearRange,
+                onYearRangeChange = onReleaseYearRangeChange,
+                minYear = 1950,
+                maxYear = 2030
             )
+        }
+        item {
+            Text(
+                text = stringResource(R.string.genres),
+                style = NovixTheme.typography.title.small,
+                color = NovixTheme.colors.title,
+                modifier = Modifier.padding(top = 16.dp, bottom = 8.dp)
+            )
+        }
+        item {
+            GenreChipGroup(
+                availableGenres = availableGenres,
+                selectedGenres = selectedGenres,
+                onGenreSelectionChanged = onGenreSelectedChange
+            )
+        }
+        item {
+            Text(
+                text = stringResource(R.string.imdb_rating),
+                style = NovixTheme.typography.title.small,
+                color = NovixTheme.colors.title,
+                modifier = Modifier.padding(top = 24.dp)
+            )
+        }
+        item {
+            RatingBar(
+                rating = imdbRating,
+                onRatingChanged = onRatingChanged,
+                modifier = Modifier.padding(top = 8.dp)
+            )
+        }
+        item {
+            Column(
+                Modifier
+                    .fillMaxWidth()
+                    .padding(top = 24.dp)
+            ) {
+                PrimaryButton(
+                    text = stringResource(R.string.apply),
+                    hasLabel = true,
+                    hasIcon = false,
+                    isLoading = false,
+                    isDisabled = false,
+                    icon = null,
+                    onClick = {
+                        onApplyFilters(
+                            selectedGenres,
+                            imdbRating,
+                            releaseYearRange
+                        )
+                    },
+                    modifier = Modifier
+                        .fillMaxWidth()
+                )
+
+                OutlineButton(
+                    text = stringResource(R.string.clear),
+                    hasLabel = true,
+                    icon = null,
+                    hasIcon = false,
+                    isLoading = false,
+                    isDisabled = false,
+                    onClick = {
+                        onClearFilters()
+                    },
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(top = 8.dp)
+                )
+            }
         }
     }
 }
