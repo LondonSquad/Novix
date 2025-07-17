@@ -63,6 +63,7 @@ import org.koin.androidx.compose.koinViewModel
 @Composable
 fun SearchScreen(
     viewModel: SearchViewModel = koinViewModel(),
+    onNavigateToActorDetails: (Int) -> Unit = { },
     onNavigateToTvShowDetails: (Int) -> Unit = { },
     onNavigateToMovieDetails: (Int) -> Unit = { }
 ) {
@@ -75,6 +76,7 @@ fun SearchScreen(
         keyboardController = keyboardController,
         viewModel = viewModel,
         onNavigateToTvShowDetails = onNavigateToTvShowDetails,
+        onNavigateToActorDetails = onNavigateToActorDetails,
         onNavigateToMovieDetails = onNavigateToMovieDetails
     )
 }
@@ -85,6 +87,7 @@ fun SearchScreenContent(
     interactionListener: SearchInteractions,
     viewModel: SearchViewModel,
     keyboardController: SoftwareKeyboardController?,
+    onNavigateToActorDetails: (Int) -> Unit,
     onNavigateToTvShowDetails: (Int) -> Unit,
     onNavigateToMovieDetails: (Int) -> Unit,
 ) {
@@ -206,7 +209,9 @@ fun SearchScreenContent(
                                 content = {
                                     ActorsLayout(
                                         actorsUis = actorsLazyList,
-                                        onActorClick = { /* Handle actor click */ }
+                                        onActorClick = {
+                                            onNavigateToActorDetails(it.id)
+                                        }
                                     )
                                 }
                             )
@@ -451,6 +456,7 @@ private fun RecentSearchItem(
             tint = NovixTheme.colors.hint,
             modifier = Modifier
                 .padding(end = 8.dp)
+                .size(20.dp)
                 .size(20.dp)
         )
         Text(

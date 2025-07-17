@@ -3,7 +3,7 @@ package com.london.domain.entity.moviedatails
 import com.london.domain.entity.Actor
 
 data class MovieDetails(
-   val movieId: Int,
+    val movieId: Int,
     val movieImage: List<Any>,
     val movieName: String,
     val movieRating: String,
