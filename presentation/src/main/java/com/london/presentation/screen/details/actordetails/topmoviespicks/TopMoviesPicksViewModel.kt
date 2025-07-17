@@ -25,7 +25,7 @@ class TopMoviesPicksViewModel(
     private val _uiState = MutableStateFlow(TopMoviesPicksUiState())
     val uiState: StateFlow<TopMoviesPicksUiState> = _uiState.asStateFlow()
 
-    private val actorId: Int = savedStateHandle.toRoute<Screen.TopMoviesPicksDetails>().actorId
+    private val actorId: Int = savedStateHandle.toRoute<Screen.ActorTopMoviesPicksDetails>().actorId
 
     init {
         if (actorId != 0) {
