@@ -35,7 +35,6 @@ class DataBaseModule {
         return database.searchActorsDao()
     }
 
-
     @Single
     fun provideGenreInterestDao(database: NovixDatabase): GenreInterestDao {
         return database.genreInterestDao()

@@ -107,10 +107,8 @@ fun SearchScreenContent(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(bottom = 16.dp)
-                .background(NovixTheme.colors.surface),
-            verticalArrangement = Arrangement.Top
-        )
-        {
+                .background(NovixTheme.colors.surface), verticalArrangement = Arrangement.Top
+        ) {
             TopBar(
                 modifier = Modifier
                     .statusBarsPadding()
@@ -211,8 +209,8 @@ fun SearchScreenContent(
                             )
                         }
                     }
-                }
-            )
+
+            })
         }
         if (showFilterBottomSheet) {
             FilterBottomSheet(
@@ -314,9 +312,7 @@ private fun SearchBar(
 
 @Composable
 private fun SearchChipsRow(
-    selected: SearchCategory,
-    onSelect: (SearchCategory) -> Unit,
-    modifier: Modifier = Modifier
+    selected: SearchCategory, onSelect: (SearchCategory) -> Unit, modifier: Modifier = Modifier
 ) {
     Row(
         modifier = modifier
@@ -341,14 +337,10 @@ private fun SearchChipsRow(
 
 @Composable
 private fun RecentSearchLayOut(
-    state: SearchUiState,
-    interactionListener: SearchInteractions,
-    viewModel: SearchViewModel
+    state: SearchUiState, interactionListener: SearchInteractions, viewModel: SearchViewModel
 ) {
     RecentViewedSection(
-        recentViewed = state.recentViewed,
-        onClearAll = { viewModel.clearRecentViewed() }
-    )
+        recentViewed = state.recentViewed, onClearAll = { viewModel.clearRecentViewed() })
 
     RecentSearchesSection(
         recentSearches = state.recentSearches,
@@ -360,8 +352,7 @@ private fun RecentSearchLayOut(
 
 @Composable
 fun RecentViewedSection(
-    recentViewed: List<String>,
-    onClearAll: () -> Unit
+    recentViewed: List<RecentViewed>, onClearAll: () -> Unit
 ) {
     SectionHeader(
         text = stringResource(R.string.recent_viewed),
@@ -379,12 +370,9 @@ fun RecentViewedSection(
         horizontalArrangement = Arrangement.spacedBy(8.dp),
         contentPadding = PaddingValues(horizontal = 16.dp),
     ) {
-        items(recentViewed) { imageUrl ->
+        items(recentViewed) { item ->
             HomeCard(
-                imageUrl = imageUrl,
-                isSaved = false,
-                onSaveClick = {}
-            )
+                imageUrl = item.imageUrl, isSaved = false, onSaveClick = {})
         }
     }
 }
@@ -430,20 +418,17 @@ private fun RecentSearchItem(
     modifier: Modifier = Modifier,
     showDivider: Boolean = true
 ) {
-    Row(
-        modifier = modifier
-            .fillMaxWidth()
-            .clickable { onSearchClick() }
-            .padding(vertical = 8.dp),
-        verticalAlignment = Alignment.CenterVertically
-    ) {
+    Row(modifier = modifier
+        .fillMaxWidth()
+        .clickable { onSearchClick() }
+        .padding(vertical = 8.dp),
+        verticalAlignment = Alignment.CenterVertically) {
         Icon(
             painter = painterResource(id = R.drawable.icon_clock),
             contentDescription = stringResource(R.string.clock),
             tint = NovixTheme.colors.hint,
             modifier = Modifier
                 .padding(end = 8.dp)
-                .size(20.dp)
                 .size(20.dp)
         )
         Text(
@@ -460,8 +445,7 @@ private fun RecentSearchItem(
             tint = NovixTheme.colors.hint,
             modifier = Modifier
                 .size(16.dp)
-                .clickable { onRemoveClick() }
-        )
+                .clickable { onRemoveClick() })
     }
 
     if (showDivider) {
@@ -492,8 +476,7 @@ private fun NoSearchResultLayOut(
     EmptySearchLayout(
         text = stringResource(R.string.no_search_result_msg),
         image = R.drawable.img_no_search_result,
-        modifier = modifier
-            .padding(horizontal = 16.dp)
+        modifier = modifier.padding(horizontal = 16.dp)
     )
 }
 

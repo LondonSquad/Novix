@@ -1,6 +1,7 @@
 package com.london.data.datasource.remote.details.tvshowdetails
 
 import com.london.data.BuildConfig
+import com.london.data.datasource.device.DeviceConfigurationDataSource
 import com.london.data.datasource.remote.ApiConstants
 import com.london.data.datasource.remote.details.tvshowdetails.model.TvShowCastRemoteResponse
 import com.london.data.datasource.remote.details.tvshowdetails.model.TvShowDetailsRemoteResponse
@@ -10,12 +11,12 @@ import io.ktor.client.HttpClient
 import io.ktor.client.call.body
 import io.ktor.client.request.get
 import io.ktor.http.path
-import kotlinx.serialization.json.Json
 import org.koin.core.annotation.Single
 
 @Single
 class TvShowDetailsRemoteDataSourceImpl(
     private val ktorClient: HttpClient,
+    deviceConfigurationDataSource: DeviceConfigurationDataSource,
 ) : TvShowDetailsRemoteDataSource {
     override suspend fun getTvShowDetailsById(
         tvShowId: Int,
