@@ -2543,5 +2543,33 @@
       "deletions": 224,
       "changed_files": 11
     }
+  },
+  {
+    "pr_number": 142,
+    "url": "https://github.com/LondonSquad/Novix/pull/142",
+    "title": "Refactor: Standardize icon tint and conditionally show sections in MovieDetailsScreen",
+    "opened_at": "2025-07-17T16:21:23Z",
+    "head_ref": "fix/move-details-screen",
+    "base_ref": "develop",
+    "creator": {
+      "login": "Mostafa-alsaygh",
+      "id": 106277855,
+      "url": "https://github.com/Mostafa-alsaygh"
+    },
+    "approvals": [],
+    "first_approved_at": null,
+    "time_to_first_approval_minutes": null,
+    "required_approvals_met_at": null,
+    "time_to_required_approvals_minutes": null,
+    "closed_at": null,
+    "merged_at": null,
+    "merged_by": null,
+    "week": "2025-W29",
+    "status": "pending",
+    "diff_stats": {
+      "additions": 58,
+      "deletions": 61,
+      "changed_files": 3
+    }
   }
 ]
