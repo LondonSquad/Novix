@@ -2327,5 +2327,33 @@
       "deletions": 1602,
       "changed_files": 137
     }
+  },
+  {
+    "pr_number": 140,
+    "url": "https://github.com/LondonSquad/Novix/pull/140",
+    "title": "fix: hide filter button for actors category",
+    "opened_at": "2025-07-17T14:57:41Z",
+    "head_ref": "fix/search-filter-button",
+    "base_ref": "develop",
+    "creator": {
+      "login": "karimdeabes",
+      "id": 81706918,
+      "url": "https://github.com/karimdeabes"
+    },
+    "approvals": [],
+    "first_approved_at": null,
+    "time_to_first_approval_minutes": null,
+    "required_approvals_met_at": null,
+    "time_to_required_approvals_minutes": null,
+    "closed_at": null,
+    "merged_at": null,
+    "merged_by": null,
+    "week": "2025-W29",
+    "status": "pending",
+    "diff_stats": {
+      "additions": 85,
+      "deletions": 56,
+      "changed_files": 3
+    }
   }
 ]
