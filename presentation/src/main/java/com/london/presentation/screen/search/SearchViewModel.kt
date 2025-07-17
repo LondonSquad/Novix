@@ -144,12 +144,10 @@ class SearchViewModel(
     }
 
     override fun addToRecentViewed(item: RecentViewed) {
-        // (important) make the recent data in the database
-
         viewModelScope.launch {
             addToRecentViewedUseCase.invoke(item)
-            _uiState.update {
-                it.copy(
+            _uiState.update { state ->
+                state.copy(
                     recentViewed = getRecentViewedUseCase.invoke()
                         .sortedByDescending { it.viewDate })
             }
