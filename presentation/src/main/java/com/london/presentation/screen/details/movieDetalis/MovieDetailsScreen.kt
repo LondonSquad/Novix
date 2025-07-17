@@ -122,7 +122,6 @@ fun MovieDetailsContent(
             lazyState.firstVisibleItemIndex > 0 || lazyState.firstVisibleItemScrollOffset > 500
         }
     }
-    val iconTint = if (isScrolledFarEnough.value) NovixTheme.colors.title else Color.White
 
     Box(
         modifier = Modifier
@@ -153,7 +152,6 @@ fun MovieDetailsContent(
                     .size(40.dp)
                     .clip(RoundedCornerShape(16))
                     .align(Alignment.TopEnd),
-                tint = iconTint
             )
 
             ButtonIcon(
@@ -165,7 +163,6 @@ fun MovieDetailsContent(
                     .size(40.dp)
                     .clip(RoundedCornerShape(16))
                     .align(Alignment.TopStart),
-                tint = iconTint
             )
         }
 
@@ -260,65 +257,67 @@ fun MovieDetailsContent(
                 }
             }
 
-            item {
-                Text(
-                    text = stringResource(com.london.presentation.R.string.cast),
-                    style = NovixTheme.typography.title.medium,
-                    color = NovixTheme.colors.title,
-                    modifier = Modifier.padding(start = 16.dp, top = 16.dp)
-                )
-            }
+            if (state.genres.isNotEmpty()) {
+                item {
+                    Text(
+                        text = stringResource(com.london.presentation.R.string.cast),
+                        style = NovixTheme.typography.title.medium,
+                        color = NovixTheme.colors.title,
+                        modifier = Modifier.padding(start = 16.dp, top = 16.dp)
+                    )
 
-            item {
-                LazyHorizontalGrid(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .height(100.dp),
-                    rows = GridCells.Fixed(1),
-                    horizontalArrangement = Arrangement.spacedBy(12.dp),
-                    contentPadding = PaddingValues(vertical = 8.dp, horizontal = 16.dp)
-                ) {
-                    items(state.genres) { actor ->
-                        ActorItem(
-                            actorName = actor.name,
-                            characterName = actor.characterName,
-                            imageRes = actor.avatarUrl,
-                            modifier = Modifier.defaultMinSize(minWidth = 375.dp)
-                        )
+                    LazyHorizontalGrid(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .height(100.dp),
+                        rows = GridCells.Fixed(1),
+                        horizontalArrangement = Arrangement.spacedBy(12.dp),
+                        contentPadding = PaddingValues(vertical = 8.dp, horizontal = 16.dp)
+                    ) {
+                        items(state.genres) { actor ->
+                            ActorItem(
+                                actorName = actor.name,
+                                characterName = actor.characterName,
+                                imageRes = actor.avatarUrl,
+                                modifier = Modifier.defaultMinSize(minWidth = 375.dp)
+                            )
+                        }
                     }
                 }
             }
 
-            item {
-                Text(
-                    text = stringResource(more_like_this),
-                    style = NovixTheme.typography.title.medium,
-                    color = NovixTheme.colors.title,
-                    modifier = Modifier.padding(start = 16.dp, top = 16.dp)
-                )
-            }
+            if (state.similarMovies.isNotEmpty()) {
+                item {
+                    Text(
+                        text = stringResource(more_like_this),
+                        style = NovixTheme.typography.title.medium,
+                        color = NovixTheme.colors.title,
+                        modifier = Modifier.padding(start = 16.dp, top = 16.dp)
+                    )
+                }
 
-            items(state.similarMovies.chunked(2)) { rowItems ->
-                Row(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(horizontal = 16.dp)
-                        .padding(top = 12.dp),
-                    horizontalArrangement = Arrangement.spacedBy(12.dp)
-                ) {
-                    rowItems.forEach { movie ->
-                        HomeCard(
-                            imageUrl = movie.image,
-                            isSaved = movie.isSaved,
-                            onSaveClick = {
-                                // TODO
-                            },
-                            modifier = Modifier
-                                .weight(1f)
-                        )
-                    }
-                    if (rowItems.size == 1) {
-                        Spacer(modifier = Modifier.weight(1f)) // fill empty space if odd item count
+                items(state.similarMovies.chunked(2)) { rowItems ->
+                    Row(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(horizontal = 16.dp)
+                            .padding(top = 12.dp),
+                        horizontalArrangement = Arrangement.spacedBy(12.dp)
+                    ) {
+                        rowItems.forEach { movie ->
+                            HomeCard(
+                                imageUrl = movie.image,
+                                isSaved = movie.isSaved,
+                                onSaveClick = {
+                                    // TODO
+                                },
+                                modifier = Modifier
+                                    .weight(1f)
+                            )
+                        }
+                        if (rowItems.size == 1) {
+                            Spacer(modifier = Modifier.weight(1f)) // fill empty space if odd item count
+                        }
                     }
                 }
             }
