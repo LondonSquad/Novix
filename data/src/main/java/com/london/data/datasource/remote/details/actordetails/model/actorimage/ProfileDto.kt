@@ -6,17 +6,17 @@ import kotlinx.serialization.Serializable
 @Serializable
 data class ProfileDto(
     @SerialName("aspect_ratio")
-    val aspectRatio: Double,
+    val aspectRatio: Double?,
     @SerialName("height")
-    val height: Int,
+    val height: Int?,
     @SerialName("iso_639_1")
     val iso: String?,
     @SerialName("file_path")
-    val filePath: String,
+    val filePath: String?,
     @SerialName("vote_average")
-    val voteAverage: Double,
+    val voteAverage: Double?,
     @SerialName("vote_count")
-    val voteCount: Int,
+    val voteCount: Int?,
     @SerialName("width")
-    val width: Int
+    val width: Int?,
 )

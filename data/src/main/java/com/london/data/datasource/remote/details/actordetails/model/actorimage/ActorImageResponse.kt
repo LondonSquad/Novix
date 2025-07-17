@@ -6,7 +6,7 @@ import kotlinx.serialization.Serializable
 @Serializable
 data class ActorImageResponse(
     @SerialName("id")
-    val id: Int,
+    val id: Int?,
     @SerialName("profiles")
-    val profiles: List<ProfileDto>
+    val profiles: List<ProfileDto>?
 )

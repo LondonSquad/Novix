@@ -1,4 +1,4 @@
-package com.london.presentation.screen.moiveDetalis
+package com.london.presentation.screen.details.movieDetalis
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
