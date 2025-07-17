@@ -56,6 +56,7 @@ class ImageModerationController(
 
             if (!enableModeration || processor == null) {
                 val newState = ImageModerationState(
+                    isProcessing = false,
                     isModerated = true,
                     shouldBlur = false,
                     originalBitmap = bitmap
@@ -78,6 +79,7 @@ class ImageModerationController(
             } else null
 
             val newState = ImageModerationState(
+                isProcessing = false,
                 isModerated = true,
                 shouldBlur = result.shouldModerate,
                 moderationReason = result.reason,
