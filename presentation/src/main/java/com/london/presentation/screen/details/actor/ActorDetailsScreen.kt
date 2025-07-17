@@ -7,16 +7,13 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.WindowInsets
-import androidx.compose.foundation.layout.asPaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.statusBars
-import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
@@ -35,15 +32,12 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
-import androidx.compose.ui.zIndex
 import com.ae.imageharamblur.ui.ImageViewFilter
 import com.london.designsystem.component.CircularLoading
-import com.london.designsystem.component.NovixCarousalRow
+import com.london.designsystem.component.TopBar
 import com.london.designsystem.component.button.ErrorImage
 import com.london.designsystem.theme.NovixTheme
 import com.london.presentation.R
-import com.london.presentation.screen.details.tvshow.tvshowdetails.TvShowScreenTopBar
 import org.koin.androidx.compose.koinViewModel
 
 @Composable
@@ -74,15 +68,11 @@ fun ActorScreenContent(
             .background(NovixTheme.colors.surface)
     ) {
 
-        TvShowScreenTopBar(
+        TopBar(
+            onBackClick = onBackClick,
             modifier = Modifier
-                .fillMaxWidth()
-                .padding(
-                    start = 16.dp,
-                    end = 16.dp,
-                    top = WindowInsets.statusBars.asPaddingValues().calculateTopPadding() + 12.dp
-                )
-                .zIndex(1f), onBackClick = onBackClick
+                .statusBarsPadding()
+                .padding(start = 16.dp)
         )
 
         LazyColumn(
@@ -141,26 +131,6 @@ private fun CustomBackDropImage(
                 errorContent = { ErrorImage() },
                 loadingContent = { CircularLoading(modifier = Modifier) })
         }
-
-        val dotsStates = List(images.size) { index ->
-            index == pagerState.currentPage
-        }
-
-        NovixCarousalRow(
-            dotsStates = dotsStates,
-            modifier = Modifier
-                .padding(bottom = 48.dp)
-                .height(16.dp)
-                .clip(RoundedCornerShape(8.dp))
-                .background(
-                    color = NovixTheme.colors.iconBackgroundLow, shape = RoundedCornerShape(8.dp)
-                )
-                .border(
-                    width = 1.dp, color = NovixTheme.colors.stroke, shape = RoundedCornerShape(8.dp)
-                )
-                .padding(horizontal = 12.dp, vertical = 4.dp)
-                .align(Alignment.BottomCenter)
-        )
     }
 }
 
@@ -170,9 +140,9 @@ private fun ActorInfoSection(
 ) {
     Column(
         modifier = modifier
-            .width(328.dp)
+            .fillMaxWidth()
             .heightIn(min = 132.dp)
-            .padding(12.dp)
+            .padding(16.dp)
             .background(NovixTheme.colors.surface)
             .border(
                 width = 1.dp,
@@ -186,27 +156,33 @@ private fun ActorInfoSection(
             text = "Tom Hanks\n",
             style = NovixTheme.typography.title.medium,
             color = NovixTheme.colors.title,
-            lineHeight = 28.sp,
-            modifier = Modifier.padding(horizontal = 12.dp)
+            modifier = Modifier.padding(start = 12.dp, end = 12.dp, top = 12.dp)
         )
         Row(
-            modifier = Modifier.padding(horizontal = 12.dp)
+            modifier = Modifier.padding(horizontal = 12.dp),
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.spacedBy(8.dp)
         ) {
             Text(
                 text = "Acting",
                 style = NovixTheme.typography.label.small,
                 color = NovixTheme.colors.body,
-                lineHeight = 18.sp,
-                modifier = Modifier.alignByBaseline()
             )
             Icon(
                 painter = painterResource(R.drawable.image_dot),
                 contentDescription = stringResource(R.string.imagr_dot),
                 tint = NovixTheme.colors.body,
+                modifier = Modifier.size(3.dp)
             )
             TextWithIcon(
                 icon = painterResource(R.drawable.icon_location),
                 text = "Santa Cruz del Norte, Cuba"
+            )
+            Icon(
+                painter = painterResource(R.drawable.image_dot),
+                contentDescription = stringResource(R.string.imagr_dot),
+                tint = NovixTheme.colors.body,
+                modifier = Modifier.size(3.dp)
             )
         }
     }
@@ -220,7 +196,7 @@ private fun TextWithIcon(
     Row(
         modifier = Modifier,
         verticalAlignment = Alignment.CenterVertically,
-        horizontalArrangement = Arrangement.spacedBy(3.dp)
+        horizontalArrangement = Arrangement.spacedBy(4.dp)
     ) {
         Icon(
             painter = icon,
@@ -232,8 +208,6 @@ private fun TextWithIcon(
             text = text,
             style = NovixTheme.typography.label.small,
             color = NovixTheme.colors.body,
-            modifier = Modifier.alignByBaseline(),
-            lineHeight = 18.sp
         )
     }
 }

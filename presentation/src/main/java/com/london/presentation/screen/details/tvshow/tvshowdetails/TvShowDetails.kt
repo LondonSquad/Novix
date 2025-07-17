@@ -248,6 +248,7 @@ fun TvShowScreenTopBar(
             tint = NovixTheme.colors.title,
             modifier = Modifier
                 .size(40.dp)
+                .border(width = 1.dp, color = NovixTheme.colors.stroke)
                 .clip(RoundedCornerShape(12.dp))
                 .clickable(onClick = onBackClick)
                 .background(
