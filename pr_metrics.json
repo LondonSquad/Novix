@@ -2123,5 +2123,33 @@
       "deletions": 611,
       "changed_files": 41
     }
+  },
+  {
+    "pr_number": 134,
+    "url": "https://github.com/LondonSquad/Novix/pull/134",
+    "title": "Refactor: Move API key configuration to local.properties",
+    "opened_at": "2025-07-17T08:08:05Z",
+    "head_ref": "hotfix/api-call",
+    "base_ref": "develop",
+    "creator": {
+      "login": "ahmeddsamii",
+      "id": 154278495,
+      "url": "https://github.com/ahmeddsamii"
+    },
+    "approvals": [],
+    "first_approved_at": null,
+    "time_to_first_approval_minutes": null,
+    "required_approvals_met_at": null,
+    "time_to_required_approvals_minutes": null,
+    "closed_at": null,
+    "merged_at": null,
+    "merged_by": null,
+    "week": "2025-W29",
+    "status": "pending",
+    "diff_stats": {
+      "additions": 1,
+      "deletions": 4,
+      "changed_files": 2
+    }
   }
 ]
