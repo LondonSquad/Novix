@@ -12,8 +12,9 @@ import io.ktor.client.statement.bodyAsText
 import io.ktor.http.URLProtocol
 import io.ktor.http.path
 import kotlinx.serialization.json.Json
+import org.koin.core.annotation.Single
 
-
+@Single
 class SearchRemoteDataSourceImpl(private val ktorClient: HttpClient) : SearchRemoteDataSource {
     override suspend fun searchForMovies(
         query: String,

@@ -14,7 +14,9 @@ import io.ktor.client.statement.bodyAsText
 import io.ktor.http.URLProtocol
 import io.ktor.http.path
 import kotlinx.serialization.json.Json
+import org.koin.core.annotation.Single
 
+@Single
 class ActorDetailsRemoteDataSourceImpl(
     private val ktorClient: HttpClient,
     private val deviceConfigurationDataSource: DeviceConfigurationDataSource

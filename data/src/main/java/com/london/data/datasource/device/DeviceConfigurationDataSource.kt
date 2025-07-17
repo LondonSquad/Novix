@@ -1,7 +1,9 @@
 package com.london.data.datasource.device
 
 import android.content.Context
+import org.koin.core.annotation.Single
 
+@Single
 class DeviceConfigurationDataSource(
     private val context: Context
 ) {
