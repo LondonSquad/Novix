@@ -13,22 +13,14 @@ class ActorDetailsRemoteDataSourceImpl(
 ) : ActorDetailsRemoteDataSource {
 
     override suspend fun getActorDetailsById(actorId: Int): ActorDetailsResponse =
-        ktorClient.get(
-            path = ApiConstants.getActorDetailsPath(actorId)
-        )
+        ktorClient.get(path = ApiConstants.getActorDetailsPath(actorId))
 
     override suspend fun getActorMovieById(actorId: Int): ActorMovieDetailsResponse =
-        ktorClient.get(
-            path = ApiConstants.getActorMoviesPath(actorId)
-        )
+        ktorClient.get(path = ApiConstants.getActorMoviesPath(actorId))
 
     override suspend fun getActorTvShowById(actorId: Int): ActorTvShowDetailsResponse =
-        ktorClient.get(
-            path = ApiConstants.getActorTvShowsPath(actorId)
-        )
+        ktorClient.get(path = ApiConstants.getActorTvShowsPath(actorId))
 
     override suspend fun getActorImagePath(actorId: Int): ActorImageResponse =
-        ktorClient.get(
-            path = ApiConstants.getActorImagePath(actorId)
-        )
+        ktorClient.get(path = ApiConstants.getActorImagePath(actorId))
 }
