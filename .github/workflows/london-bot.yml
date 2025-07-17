@@ -588,7 +588,7 @@ jobs:
         with:
           token: ${{ steps.app-token.outputs.token }}
           comment-id: ${{ github.event.comment.id }}
-          content: eyes
+          reactions: eyes
 
   react_to_opened_pr:
     name: React with Fire to New PR
@@ -608,8 +608,8 @@ jobs:
         uses: peter-evans/create-or-update-comment@v4
         with:
           token: ${{ steps.app-token.outputs.token }}
-          content: fire
           issue-number: ${{ github.event.pull_request.number }}
+          reactions: fire
 
   react_to_approval:
     name: React to PR Review Approvals with Heart
@@ -633,4 +633,5 @@ jobs:
         with:
           token: ${{ steps.app-token.outputs.token }}
           comment-id: ${{ github.event.review.id }}
-          content: heart
+          reactions: heart
+
