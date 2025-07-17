@@ -2746,5 +2746,33 @@
       "deletions": 1,
       "changed_files": 2
     }
+  },
+  {
+    "pr_number": 148,
+    "url": "https://github.com/LondonSquad/Novix/pull/148",
+    "title": "Fix: Apply navigationBarsPadding to MovieDetailsScreen",
+    "opened_at": "2025-07-17T19:36:35Z",
+    "head_ref": "fix/movie-details-screen",
+    "base_ref": "develop",
+    "creator": {
+      "login": "Mostafa-alsaygh",
+      "id": 106277855,
+      "url": "https://github.com/Mostafa-alsaygh"
+    },
+    "approvals": [],
+    "first_approved_at": null,
+    "time_to_first_approval_minutes": null,
+    "required_approvals_met_at": null,
+    "time_to_required_approvals_minutes": null,
+    "closed_at": null,
+    "merged_at": null,
+    "merged_by": null,
+    "week": "2025-W29",
+    "status": "pending",
+    "diff_stats": {
+      "additions": 7,
+      "deletions": 6,
+      "changed_files": 1
+    }
   }
 ]
