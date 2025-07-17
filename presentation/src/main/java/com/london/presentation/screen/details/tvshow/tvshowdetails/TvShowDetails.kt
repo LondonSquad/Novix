@@ -50,7 +50,6 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.layout.layout
-import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.unit.dp
@@ -81,7 +80,8 @@ fun TvShowsDetailsScreen(
     val uiState by viewModel.uiState.collectAsState()
     TvShowsDetailScreenContent(
         uiState = uiState,
-        onBackClick = onBackClick
+        onBackClick = onBackClick,
+        interactionListener = viewModel
     )
 }
 
@@ -89,7 +89,8 @@ fun TvShowsDetailsScreen(
 fun TvShowsDetailScreenContent(
     modifier: Modifier = Modifier,
     uiState: TvShowDetailsUiState,
-    onBackClick: () -> Unit
+    onBackClick: () -> Unit,
+    interactionListener: TvShowDetailsInteractionListener
 ) {
     val lazyListState = rememberLazyListState()
 
@@ -153,7 +154,9 @@ fun TvShowsDetailScreenContent(
                             shape = RoundedCornerShape(16.dp)
                         )
                         .clip(RoundedCornerShape(16.dp))
-                        .background(NovixTheme.colors.surface)
+                        .background(NovixTheme.colors.surface),
+                    onReviewClick = { interactionListener.onClickViewReviewsListener(uiState.id) },
+                    tvShowId = uiState.id
                 )
             }
 
@@ -364,7 +367,9 @@ fun TvShowScreenTopBar(
 @Composable
 fun HeaderDetailsCard(
     modifier: Modifier = Modifier,
-    uiState: TvShowDetailsUiState
+    uiState: TvShowDetailsUiState,
+    onReviewClick: (tvShowId: Int) -> Unit,
+    tvShowId: Int
 ) {
 
     Column(
@@ -392,7 +397,10 @@ fun HeaderDetailsCard(
                 uiState = uiState
             )
 
-            ViewReviewText()
+            ViewReviewText(
+                onReviewClick = { onReviewClick(tvShowId) },
+                tvShowId = tvShowId
+            )
         }
     }
 }
@@ -467,11 +475,15 @@ fun TvShowBasicDetails(
 }
 
 @Composable
-fun ViewReviewText() {
+fun ViewReviewText(
+    onReviewClick: (tvShowId: Int) -> Unit,
+    tvShowId: Int,
+) {
     Text(
         text = stringResource(R.string.view_review),
         style = NovixTheme.typography.title.medium,
         color = NovixTheme.colors.primary,
+        modifier = Modifier.clickable { onReviewClick(tvShowId) }
     )
 }
 
@@ -575,7 +587,6 @@ fun CastSection(
     }
 }
 
-
 @Composable
 fun SeasonDetailsSection(
     modifier: Modifier = Modifier,
@@ -628,7 +639,7 @@ fun SeasonEpisodesDetails(
                     .padding(end = 20.dp)
                     .clickable {
                         selectedSeasonIndex = index
-                        viewModel.getEpisodesBySeasons(index + 1)
+                        viewModel.initializeEpisodesBySeasons(index + 1)
                     }
                     .then(
                         if (isSelected)
