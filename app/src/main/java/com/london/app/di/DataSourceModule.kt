@@ -18,6 +18,7 @@ import io.ktor.client.plugins.logging.LogLevel
 import io.ktor.client.plugins.logging.Logger
 import io.ktor.client.plugins.logging.Logging
 import io.ktor.client.request.header
+import io.ktor.http.parameters
 import io.ktor.serialization.kotlinx.json.json
 import kotlinx.serialization.json.Json
 import org.koin.core.annotation.Module
@@ -58,6 +59,9 @@ class DataSourceModule {
         }
         defaultRequest {
             url(urlString = BuildConfig.BASE_URL)
+            parameters {
+                append("api_key", BuildConfig.API_KEY)
+            }
             header(
                 key = "language",
                 value = context.resources.configuration.locales[0].language

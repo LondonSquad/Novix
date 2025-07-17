@@ -1,6 +1,5 @@
 package com.london.data.datasource.remote.details.moviedetails
 
-import com.london.data.BuildConfig
 import io.ktor.client.HttpClient
 import io.ktor.client.call.body
 import io.ktor.client.request.get
@@ -14,7 +13,6 @@ suspend inline fun <reified T> fetchData(
         val response = ktorClient.get {
             url {
                 path(path)
-                parameters.append("api_key", BuildConfig.API_KEY)
             }
         }
         response.body<T>()

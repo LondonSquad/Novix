@@ -1,6 +1,5 @@
 package com.london.data.datasource.remote.details.tvshowdetails
 
-import com.london.data.BuildConfig
 import com.london.data.datasource.remote.ApiConstants
 import com.london.data.datasource.remote.details.tvshowdetails.model.TvShowCastRemoteResponse
 import com.london.data.datasource.remote.details.tvshowdetails.model.TvShowDetailsRemoteResponse
@@ -20,7 +19,6 @@ class TvShowDetailsRemoteDataSourceImpl(
         val response = ktorClient.get {
             url {
                 path(ApiConstants.getTvShowDetailsPath(tvShowId))
-                parameters.append("api_key", BuildConfig.API_KEY)
             }
         }
         return response.body()
@@ -33,7 +31,6 @@ class TvShowDetailsRemoteDataSourceImpl(
         val response = ktorClient.get {
             url {
                 path(ApiConstants.getTvShowEpisodeBySeasonPath(tvShowId, seasonNumber))
-                parameters.append("api_key", BuildConfig.API_KEY)
             }
         }
         return response.body()
@@ -43,7 +40,6 @@ class TvShowDetailsRemoteDataSourceImpl(
         val response = ktorClient.get {
             url {
                 path(ApiConstants.getCastTvShowPath(tvShowId))
-                parameters.append("api_key", BuildConfig.API_KEY)
             }
         }
         return response.body()
@@ -53,7 +49,6 @@ class TvShowDetailsRemoteDataSourceImpl(
         val response = ktorClient.get {
             url {
                 path(ApiConstants.getImagesTvShowPath(tvShowId))
-                parameters.append("api_key", BuildConfig.API_KEY)
             }
         }
         return response.body()

@@ -1,6 +1,5 @@
 package com.london.data.datasource.remote.search
 
-import com.london.data.BuildConfig
 import com.london.data.datasource.remote.ApiConstants
 import com.london.data.datasource.remote.ApiResponse
 import com.london.data.datasource.remote.search.model.SearchActorRemote
@@ -26,7 +25,6 @@ class SearchRemoteDataSourceImpl(private val ktorClient: HttpClient) : SearchRem
                 parameters.append("include_adult", includeAdult.toString())
                 parameters.append("language", language)
                 parameters.append("page", pageNumber.toString())
-                parameters.append("api_key", BuildConfig.API_KEY)
             }
         }
         return response.body()
@@ -45,7 +43,6 @@ class SearchRemoteDataSourceImpl(private val ktorClient: HttpClient) : SearchRem
                 parameters.append("include_adult", includeAdult.toString())
                 parameters.append("language", language)
                 parameters.append("page", pageNumber.toString())
-                parameters.append("api_key", BuildConfig.API_KEY)
             }
         }
         return response.body()
@@ -64,7 +61,6 @@ class SearchRemoteDataSourceImpl(private val ktorClient: HttpClient) : SearchRem
                 parameters.append("include_adult", includeAdult.toString())
                 parameters.append("language", language)
                 parameters.append("page", pageNumber.toString())
-                parameters.append("api_key", BuildConfig.API_KEY)
             }
         }
         return response.body()
