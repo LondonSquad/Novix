@@ -24,6 +24,7 @@ import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.shape.CircleShape
@@ -32,14 +33,17 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.layout.layout
@@ -56,6 +60,7 @@ import com.london.designsystem.component.NovixCarousalRow
 import com.london.designsystem.component.RatingBar
 import com.london.designsystem.component.SaveIcon
 import com.london.designsystem.component.button.ErrorImage
+import com.london.designsystem.component.button.PrimaryButton
 import com.london.designsystem.theme.NovixTheme
 import com.london.domain.entity.tvshowdetails.ImageItemEntity
 import com.london.domain.entity.tvshowdetails.TvShowCastMemberEntity
@@ -163,10 +168,46 @@ fun TvShowsDetailScreenContent(
             item {
                 SeasonDetailsSection(
                     uiState = uiState,
-                    modifier = Modifier.padding(start = 16.dp)
+                    modifier = Modifier.padding(horizontal = 16.dp)
                 )
             }
         }
+        FooterSection(
+            modifier = Modifier.align(Alignment.BottomCenter)
+        )
+    }
+}
+
+@Composable
+fun FooterSection(modifier: Modifier = Modifier) {
+    Row(
+        modifier = modifier
+            .fillMaxWidth()
+            .padding(horizontal = 16.dp, vertical = 24.dp),
+        horizontalArrangement = Arrangement.spacedBy(8.dp),
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        PrimaryButton(
+            text = "",
+            hasLabel = false,
+            icon = com.london.presentation.R.drawable.movie_button_star,
+            hasIcon = true,
+            isLoading = false,
+            isDisabled = false,
+            onClick = {},
+            modifier = Modifier
+        )
+
+        PrimaryButton(
+            text = stringResource(com.london.presentation.R.string.play_trailer),
+            hasLabel = true,
+            hasIcon = false,
+            isLoading = false,
+            isDisabled = false,
+            onClick = {},
+            icon = null,
+            modifier = Modifier.weight(1f)
+        )
     }
 }
 
@@ -522,7 +563,6 @@ fun CastSection(
 }
 
 
-// region SeasonDetailsSection
 @Composable
 fun SeasonDetailsSection(
     modifier: Modifier = Modifier,
@@ -534,7 +574,7 @@ fun SeasonDetailsSection(
             .wrapContentHeight(),
     ) {
         Text(
-            text = stringResource(R.string.seasons),
+            text = stringResource(R.string.season),
             style = NovixTheme.typography.title.medium,
             color = NovixTheme.colors.title,
             modifier = Modifier.padding(top = 16.dp, bottom = 12.dp)
@@ -572,6 +612,7 @@ fun SeasonEpisodesDetails(
                 style = NovixTheme.typography.label.medium,
                 color = if (isSelected) NovixTheme.colors.onPrimary else NovixTheme.colors.body,
                 modifier = Modifier
+                    .padding(end = 20.dp)
                     .clickable {
                         selectedSeasonIndex = index
                         viewModel.getEpisodesBySeasons(index + 1)
@@ -656,15 +697,17 @@ fun EpisodeRow(
                             .background(NovixTheme.colors.hint)
                     )
 
-                    EpisodeDate(episode.runtime.toString().toLocalizedNumbers())
+                    if (episode.runtime != null){
+                        EpisodeDate(episode.runtime.toString().toLocalizedNumbers() )
 
-                    Box(
-                        modifier = Modifier
-                            .padding(horizontal = 8.dp)
-                            .size(3.dp)
-                            .clip(CircleShape)
-                            .background(NovixTheme.colors.hint)
-                    )
+                        Box(
+                            modifier = Modifier
+                                .padding(horizontal = 8.dp)
+                                .size(3.dp)
+                                .clip(CircleShape)
+                                .background(NovixTheme.colors.hint)
+                        )
+                    }
 
                     Text(
                         text = episode.airDate.toLocalizedNumbers(),
@@ -705,24 +748,25 @@ fun EpisodeRating(
 
 @Composable
 fun EpisodeDate(
-    durationTime: String
+    durationTime: String?
 ) {
     Row(
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.spacedBy(4.dp)
     ) {
-        Icon(
-            imageVector = ImageVector.vectorResource(R.drawable.tv_show_episode_clock),
-            contentDescription = "Calender icon",
-            tint = NovixTheme.colors.hint,
-            modifier = Modifier.size(12.dp)
-        )
+        if (durationTime != null) {
+            Icon(
+                imageVector = ImageVector.vectorResource(R.drawable.tv_show_episode_clock),
+                contentDescription = "Calender icon",
+                tint = NovixTheme.colors.hint,
+                modifier = Modifier.size(12.dp)
+            )
 
-        Text(
-            text = "$durationTime${stringResource(R.string.m)}",
-            style = NovixTheme.typography.label.small,
-            color = NovixTheme.colors.hint
-        )
+            Text(
+                text = "$durationTime${stringResource(R.string.m)}",
+                style = NovixTheme.typography.label.small,
+                color = NovixTheme.colors.hint
+            )
+        }
     }
 }
-// endregion
