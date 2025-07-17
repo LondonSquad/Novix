@@ -1,8 +1,8 @@
-package com.london.presentation.screen.moiveDetalis
+package com.london.presentation.screen.details.movieDetalis
 
-import com.london.domain.entity.moviedatails.MovieDetails
 import com.london.domain.entity.Actor
 import com.london.domain.entity.moviedatails.Genre
+import com.london.domain.entity.moviedatails.MovieDetails
 import com.london.domain.entity.moviedatails.SimilarMovie
 
 fun mapToUiState(
