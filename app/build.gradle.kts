@@ -30,9 +30,7 @@ android {
 
         testInstrumentationRunner = AppConfig.ANDROID_TEST_INSTRUMENTATION
 
-        ndk {
-            abiFilters += listOf("armeabi-v7a", "arm64-v8a")
-        }
+
     }
 
     signingConfigs {
@@ -46,9 +44,6 @@ android {
 
     buildTypes {
         debug {
-            ndk {
-                abiFilters += listOf("armeabi-v7a", "arm64-v8a", "x86", "x86_64")
-            }
         }
         release {
             isMinifyEnabled = AppConfig.ENABLE_R8_FULL_MODE
@@ -64,9 +59,12 @@ android {
                 mappingFileUploadEnabled = AppConfig.ENABLE_R8_FULL_MODE
             }
 
-            ndk {
-                abiFilters += listOf("armeabi-v7a", "arm64-v8a")
+            splits {
+                abi {
+                    isEnable = true
+                }
             }
+
         }
     }
 
