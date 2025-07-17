@@ -2206,9 +2206,18 @@
       "id": 100484790,
       "url": "https://github.com/marwanqashwa"
     },
-    "approvals": [],
-    "first_approved_at": null,
-    "time_to_first_approval_minutes": null,
+    "approvals": [
+      {
+        "reviewer": {
+          "id": 180463542,
+          "login": "abdelrhman1002",
+          "url": "https://github.com/abdelrhman1002"
+        },
+        "submitted_at": "2025-07-17T12:32:08Z"
+      }
+    ],
+    "first_approved_at": "2025-07-17T12:32:08Z",
+    "time_to_first_approval_minutes": 252.73333333333332,
     "required_approvals_met_at": null,
     "time_to_required_approvals_minutes": null,
     "closed_at": null,
