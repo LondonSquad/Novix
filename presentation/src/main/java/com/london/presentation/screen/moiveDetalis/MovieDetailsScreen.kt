@@ -440,12 +440,12 @@ private fun MovieDetailsImage(
 }
 
 @Composable
-private fun ConditionalText(
+fun ConditionalText(
     text: String,
     expandedState: Boolean,
     onExpandedChange: () -> Unit
 ) {
-    val minimumLineLength = 3
+    val minimumLineLength = 4
     var showReadMoreButtonState by remember { mutableStateOf(false) }
     var truncatedText by remember { mutableStateOf("") }
 
@@ -462,11 +462,13 @@ private fun ConditionalText(
                 !showReadMoreButtonState -> append(text)
                 !expandedState -> {
                     append(truncatedText)
+                    withStyle(actionStyle) {append(" ")}
                     withStyle(actionStyle) { append(stringResource(R.string.read_more)) }
                 }
 
                 else -> {
                     append(text)
+                    withStyle(actionStyle) {append(" ")}
                     withStyle(actionStyle) { append(stringResource(R.string.read_less)) }
                 }
             }

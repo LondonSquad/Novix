@@ -1,5 +1,8 @@
 package com.london.presentation.screen.details.tvshow.tvshowdetails
 
+import androidx.compose.animation.core.FastOutSlowInEasing
+import androidx.compose.animation.core.animateFloatAsState
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -32,6 +35,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
@@ -43,13 +47,12 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.layout.layout
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
-import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.zIndex
 import com.ae.imageharamblur.ui.ImageViewFilter
@@ -64,7 +67,9 @@ import com.london.designsystem.component.button.PrimaryButton
 import com.london.designsystem.theme.NovixTheme
 import com.london.domain.entity.tvshowdetails.ImageItemEntity
 import com.london.domain.entity.tvshowdetails.TvShowCastMemberEntity
+import com.london.presentation.screen.moiveDetalis.ConditionalText
 import com.london.presentation.utils.toLocalizedNumbers
+import kotlinx.coroutines.delay
 import org.koin.androidx.compose.koinViewModel
 
 
@@ -86,25 +91,32 @@ fun TvShowsDetailScreenContent(
     uiState: TvShowDetailsUiState,
     onBackClick: () -> Unit
 ) {
+    val lazyListState = rememberLazyListState()
+
+    val shouldShowBackground by remember {
+        derivedStateOf {
+            lazyListState.firstVisibleItemScrollOffset > 40f ||
+                    lazyListState.firstVisibleItemIndex > 0
+        }
+    }
+
+    val backgroundAlpha by animateFloatAsState(
+        targetValue = if (shouldShowBackground) 1f else 0f,
+        animationSpec = tween(
+            durationMillis = 400,
+            easing = FastOutSlowInEasing
+        ),
+        label = "background_alpha"
+    )
+
     Box(
         modifier = modifier
             .fillMaxSize()
             .background(NovixTheme.colors.surface)
     ) {
 
-        TvShowScreenTopBar(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(
-                    start = 16.dp,
-                    end = 16.dp,
-                    top = WindowInsets.statusBars.asPaddingValues().calculateTopPadding() + 12.dp
-                )
-                .zIndex(1f),
-            onBackClick = onBackClick
-        )
-
         LazyColumn(
+            state = lazyListState,
             modifier = Modifier
                 .fillMaxSize(),
             contentPadding = PaddingValues(bottom = 80.dp)
@@ -119,7 +131,6 @@ fun TvShowsDetailScreenContent(
             }
 
             item {
-
                 HeaderDetailsCard(
                     uiState = uiState,
                     modifier = Modifier
@@ -147,14 +158,22 @@ fun TvShowsDetailScreenContent(
             }
 
             item {
-                OverviewSection(
-                    uiState = uiState,
-                    modifier = Modifier.padding(
-                        top = 16.dp,
-                        start = 16.dp,
-                        end = 16.dp
-                    )
+                Text(
+                    text = stringResource(R.string.overview),
+                    style = NovixTheme.typography.title.medium,
+                    color = NovixTheme.colors.title,
+                    modifier = Modifier.padding(top = 16.dp, start = 16.dp, end = 16.dp)
                 )
+            }
+
+            item {
+                var isExpanded by remember { mutableStateOf(false) }
+                ConditionalText(
+                    text = uiState.overview,
+                    expandedState = isExpanded,
+                ) {
+                    isExpanded = !isExpanded
+                }
             }
 
             item {
@@ -162,7 +181,6 @@ fun TvShowsDetailScreenContent(
                     modifier = Modifier.padding(top = 16.dp),
                     castMembers = uiState.cast?.cast ?: emptyList()
                 )
-
             }
 
             item {
@@ -172,6 +190,32 @@ fun TvShowsDetailScreenContent(
                 )
             }
         }
+
+        Box(
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(
+                    WindowInsets.statusBars.asPaddingValues().calculateTopPadding() +
+                            64.dp
+                )
+                .background(
+                    NovixTheme.colors.surface.copy(alpha = backgroundAlpha)
+                )
+                .zIndex(0.5f)
+        )
+
+        TvShowScreenTopBar(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(
+                    start = 16.dp,
+                    end = 16.dp,
+                    top = WindowInsets.statusBars.asPaddingValues().calculateTopPadding() + 12.dp
+                )
+                .zIndex(1f),
+            onBackClick = onBackClick,
+        )
+
         FooterSection(
             modifier = Modifier.align(Alignment.BottomCenter)
         )
@@ -232,6 +276,16 @@ fun CustomBackDropImagePager(
             pageCount = { images.size }
         )
 
+        LaunchedEffect(Unit) {
+            if (images.size > 1) {
+                while (true) {
+                    delay(4000)
+                    val nextPage = (pagerState.currentPage + 1) % images.size
+                    pagerState.animateScrollToPage(nextPage)
+                }
+            }
+        }
+
         HorizontalPager(
             modifier = Modifier.align(Alignment.Center),
             state = pagerState,
@@ -268,7 +322,6 @@ fun CustomBackDropImagePager(
                 )
                 .padding(horizontal = 12.dp, vertical = 4.dp)
                 .align(Alignment.BottomCenter)
-
         )
     }
 }
@@ -276,7 +329,7 @@ fun CustomBackDropImagePager(
 @Composable
 fun TvShowScreenTopBar(
     modifier: Modifier = Modifier,
-    onBackClick: () -> Unit
+    onBackClick: () -> Unit,
 ) {
     Row(
         modifier = modifier,
@@ -305,8 +358,8 @@ fun TvShowScreenTopBar(
             modifier = Modifier.size(40.dp)
         )
     }
-
 }
+
 
 @Composable
 fun HeaderDetailsCard(
@@ -493,46 +546,6 @@ fun TvShowRating(
 }
 
 @Composable
-fun OverviewSection(
-    modifier: Modifier = Modifier,
-    uiState: TvShowDetailsUiState
-) {
-    var maxLines by rememberSaveable { mutableIntStateOf(4) }
-    var isTextCollapsed by rememberSaveable { mutableStateOf(false) }
-    Column(
-        modifier = modifier
-    ) {
-        Text(
-            text = stringResource(R.string.overview),
-            style = NovixTheme.typography.title.medium,
-            color = NovixTheme.colors.title
-        )
-
-        Column {
-            Text(
-                text = uiState.overview,
-                style = NovixTheme.typography.body.small,
-                color = NovixTheme.colors.body,
-                maxLines = maxLines,
-                overflow = TextOverflow.Ellipsis
-            )
-
-            Text(
-                text = if (isTextCollapsed)
-                    stringResource(R.string.read_less) else stringResource(R.string.read_more),
-                style = NovixTheme.typography.body.small,
-                color = NovixTheme.colors.primary,
-                modifier = Modifier
-                    .clickable {
-                        maxLines = if (maxLines == 4) Int.MAX_VALUE else 4
-                        isTextCollapsed = !isTextCollapsed
-                    }
-            )
-        }
-    }
-}
-
-@Composable
 fun CastSection(
     modifier: Modifier = Modifier,
     castMembers: List<TvShowCastMemberEntity>,
@@ -697,8 +710,8 @@ fun EpisodeRow(
                             .background(NovixTheme.colors.hint)
                     )
 
-                    if (episode.runtime != null){
-                        EpisodeDate(episode.runtime.toString().toLocalizedNumbers() )
+                    if (episode.runtime != null) {
+                        EpisodeDate(episode.runtime.toString().toLocalizedNumbers())
 
                         Box(
                             modifier = Modifier
@@ -709,11 +722,12 @@ fun EpisodeRow(
                         )
                     }
 
-                    Text(
-                        text = episode.airDate.toLocalizedNumbers(),
-                        style = NovixTheme.typography.label.small,
-                        color = NovixTheme.colors.hint
-                    )
+                    if (episode.airDate != null)
+                        Text(
+                            text = episode.airDate.toLocalizedNumbers(),
+                            style = NovixTheme.typography.label.small,
+                            color = NovixTheme.colors.hint
+                        )
                 }
             }
         }
