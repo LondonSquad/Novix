@@ -2172,5 +2172,33 @@
       "deletions": 4,
       "changed_files": 2
     }
+  },
+  {
+    "pr_number": 135,
+    "url": "https://github.com/LondonSquad/Novix/pull/135",
+    "title": "Feature/recent viewed",
+    "opened_at": "2025-07-17T08:19:24Z",
+    "head_ref": "feature/recent-viewed",
+    "base_ref": "develop",
+    "creator": {
+      "login": "marwanqashwa",
+      "id": 100484790,
+      "url": "https://github.com/marwanqashwa"
+    },
+    "approvals": [],
+    "first_approved_at": null,
+    "time_to_first_approval_minutes": null,
+    "required_approvals_met_at": null,
+    "time_to_required_approvals_minutes": null,
+    "closed_at": null,
+    "merged_at": null,
+    "merged_by": null,
+    "week": "2025-W29",
+    "status": "pending",
+    "diff_stats": {
+      "additions": 743,
+      "deletions": 632,
+      "changed_files": 69
+    }
   }
 ]
