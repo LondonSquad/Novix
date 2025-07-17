@@ -1,6 +1,7 @@
 package com.london.presentation.screen.search
 
 import androidx.compose.ui.text.input.TextFieldValue
+import com.london.domain.entity.recent.RecentViewed
 import com.london.presentation.screen.search.model.MovieUi
 
 interface SearchInteractions {
@@ -13,7 +14,7 @@ interface SearchInteractions {
     fun removeRecentSearch(search: String)
     fun onRecentSearchClick(search: String)
     fun addToRecentSearches(query: String)
-    fun addToRecentViewed(imageUrl: String)
+    fun addToRecentViewed(item: RecentViewed)
     fun onClickMovie(genresListId : List<Int>)
     fun clearSearch()
     fun onApplyFilter(

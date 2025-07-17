@@ -74,7 +74,7 @@ class TvShowDetailsViewModel(
                 val tvShowDetails = getTvShowDetails(tvShowId)
                 it.copy(
                     adult = tvShowDetails.adult,
-                    backdropPath = tvShowDetails.backdropPath,
+                    backdropPath = tvShowDetails.backdropUrl,
                     createdBy = tvShowDetails.createdBy,
                     episodeRunTime = tvShowDetails.episodeRunTime,
                     firstAirDate = tvShowDetails.firstAirDate,
@@ -95,7 +95,7 @@ class TvShowDetailsViewModel(
                     originalName = tvShowDetails.originalName,
                     overview = tvShowDetails.overview,
                     popularity = tvShowDetails.popularity,
-                    posterPath = tvShowDetails.posterPath,
+                    posterPath = tvShowDetails.posterUrl,
                     productionCompanies = tvShowDetails.productionCompanies,
                     productionCountries = tvShowDetails.productionCountries,
                     tvShowSeasons = tvShowDetails.tvShowSeasons,

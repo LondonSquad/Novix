@@ -90,7 +90,7 @@ class GetImagesByIdTest {
             aspectRatio = 1.78,
             height = 1080,
             iso6391 = "en",
-            filePath = "/backdrop1.jpg",
+            fileUrl = "/backdrop1.jpg",
             voteAverage = 8.5,
             voteCount = 100,
             width = 1920
@@ -104,7 +104,7 @@ class GetImagesByIdTest {
                     aspectRatio = 1.0,
                     height = 500,
                     iso6391 = null,
-                    filePath = "/logo1.jpg",
+                    fileUrl = "/logo1.jpg",
                     voteAverage = 7.8,
                     voteCount = 50,
                     width = 500
@@ -115,7 +115,7 @@ class GetImagesByIdTest {
                     aspectRatio = 0.67,
                     height = 1500,
                     iso6391 = "en",
-                    filePath = "/poster1.jpg",
+                    fileUrl = "/poster1.jpg",
                     voteAverage = 9.0,
                     voteCount = 200,
                     width = 1000
@@ -131,7 +131,7 @@ class GetImagesByIdTest {
                     aspectRatio = 1.0,
                     height = 500,
                     iso6391 = null,
-                    filePath = "/logo1.jpg",
+                    fileUrl = "/logo1.jpg",
                     voteAverage = 7.8,
                     voteCount = 50,
                     width = 500
@@ -142,7 +142,7 @@ class GetImagesByIdTest {
                     aspectRatio = 0.67,
                     height = 1500,
                     iso6391 = "en",
-                    filePath = "/poster1.jpg",
+                    fileUrl = "/poster1.jpg",
                     voteAverage = 9.0,
                     voteCount = 200,
                     width = 1000
@@ -158,7 +158,7 @@ class GetImagesByIdTest {
                     aspectRatio = 1.0,
                     height = 500,
                     iso6391 = null,
-                    filePath = "/logo1.jpg",
+                    fileUrl = "/logo1.jpg",
                     voteAverage = 7.8,
                     voteCount = 50,
                     width = 500
@@ -180,7 +180,7 @@ class GetImagesByIdTest {
                     aspectRatio = 1.78,
                     height = 1080,
                     iso6391 = "en",
-                    filePath = "/backdrop$index.jpg",
+                    fileUrl = "/backdrop$index.jpg",
                     voteAverage = 8.5,
                     voteCount = 100,
                     width = 1920

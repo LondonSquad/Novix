@@ -45,7 +45,7 @@ jobs:
       - name: Create local.properties
         run: |
           echo "sdk.dir=$ANDROID_SDK_ROOT" > local.properties
-          echo "api_key=\"${{ secrets.TMDB_API_KEY }}\"" >> local.properties
+          echo "API_KEY=\"${{ secrets.TMDB_API_KEY }}\"" >> local.properties
 
       - name: Decode Firebase Config
         run: |

@@ -5,12 +5,16 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.london.domain.entity.Movie
 import com.london.domain.entity.TvShow
+import com.london.domain.entity.recent.RecentViewed
 import com.london.domain.usecase.AddToRecentSearchUseCase
+import com.london.domain.usecase.AddToRecentViewedUseCase
 import com.london.domain.usecase.ClearRecentSearchUseCase
+import com.london.domain.usecase.ClearRecentViewedUseCase
 import com.london.domain.usecase.GetActorsUseCase
 import com.london.domain.usecase.GetGenreInterestCountsUseCase
 import com.london.domain.usecase.GetMoviesUseCase
 import com.london.domain.usecase.GetRecentSearchUseCase
+import com.london.domain.usecase.GetRecentViewedUseCase
 import com.london.domain.usecase.GetTvShowsUseCase
 import com.london.domain.usecase.IncrementGenreInterestUseCase
 import com.london.presentation.composables.filterbottomsheet.FilterBottomSheetUiState
@@ -30,18 +34,33 @@ import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import org.koin.android.annotation.KoinViewModel
+import org.koin.core.annotation.Provided
 
 @OptIn(FlowPreview::class)
 @KoinViewModel
 class SearchViewModel(
+    @Provided
     private val getActorsUseCase: GetActorsUseCase,
+    @Provided
     private val getTvShowsUseCase: GetTvShowsUseCase,
+    @Provided
     private val getMoviesUseCase: GetMoviesUseCase,
+    @Provided
     private val addToRecentSearchUseCase: AddToRecentSearchUseCase,
+    @Provided
     private val getRecentSearchUseCase: GetRecentSearchUseCase,
+    @Provided
     private val clearRecentSearchUseCase: ClearRecentSearchUseCase,
+    @Provided
     private val getGenreInterestCountsUseCase: GetGenreInterestCountsUseCase,
+    @Provided
     private val incrementGenreInterestUseCase: IncrementGenreInterestUseCase,
+    @Provided
+    private val getRecentViewedUseCase: GetRecentViewedUseCase,
+    @Provided
+    private val addToRecentViewedUseCase: AddToRecentViewedUseCase,
+    @Provided
+    private val clearRecentViewedUseCase: ClearRecentViewedUseCase,
 ) : ViewModel(), SearchInteractions {
 
     private val _uiState = MutableStateFlow(SearchUiState())
@@ -54,14 +73,11 @@ class SearchViewModel(
 
     init {
         viewModelScope.launch {
-            _searchQuery
-                .debounce(500)
-                .collectLatest { query ->
-                    performSearch(
-                        query = query,
-                        category = _uiState.value.selectedCategory
-                    )
-                }
+            _searchQuery.debounce(500).collectLatest { query ->
+                performSearch(
+                    query = query, category = _uiState.value.selectedCategory
+                )
+            }
         }
     }
 
@@ -117,31 +133,28 @@ class SearchViewModel(
         }
     }
 
+    private var lastQuery = ""
     override fun addToRecentSearches(query: String) {
-        if (query.isBlank()) return
-
+        if (query.isBlank()|| query == lastQuery) return
+        lastQuery = query
         viewModelScope.launch {
             addToRecentSearchUseCase.invoke(query)
             _uiState.update { it.copy(recentSearches = getRecentSearchUseCase.invoke()) }
         }
     }
 
-    override fun addToRecentViewed(imageUrl: String) {
-        // (important) make the recent data in the database
-        if (imageUrl.isBlank()) return
-
-        val currentViewed = _uiState.value.recentViewed.toMutableList()
-        currentViewed.remove(imageUrl)
-        currentViewed.add(0, imageUrl)
-
-        if (currentViewed.size > 10) {
-            currentViewed.removeAt(currentViewed.size - 1)
+    override fun addToRecentViewed(item: RecentViewed) {
+        viewModelScope.launch {
+            addToRecentViewedUseCase.invoke(item)
+            _uiState.update { state ->
+                state.copy(
+                    recentViewed = getRecentViewedUseCase.invoke()
+                        .sortedByDescending { it.viewDate })
+            }
         }
-
-        _uiState.update { it.copy(recentViewed = currentViewed) }
     }
 
-    override fun onClickMovie(genresListId :List<Int>) {
+    override fun onClickMovie(genresListId: List<Int>) {
         genresListId.forEach { genreId ->
             incrementGenreInterest(genreId, "tv")
         }
@@ -150,6 +163,9 @@ class SearchViewModel(
 
     override fun clearRecentViewed() {
         _uiState.update { it.copy(recentViewed = emptyList()) }
+        viewModelScope.launch {
+            clearRecentViewedUseCase.invoke()
+        }
     }
 
     override fun clearRecentSearches() {
@@ -178,8 +194,7 @@ class SearchViewModel(
                 searchQuery = TextFieldValue(""),
                 actorsFlow = flow {},
                 moviesFlow = flow {},
-                tvShowsFlow = flow {}
-            )
+                tvShowsFlow = flow {})
         }
     }
 
@@ -228,11 +243,7 @@ class SearchViewModel(
 
     private fun clearSearchResults() {
         _uiState.update { currentState ->
-            currentState.copy(
-                actorsFlow = flow {},
-                moviesFlow = flow {},
-                tvShowsFlow = flow {}
-            )
+            currentState.copy(actorsFlow = flow {}, moviesFlow = flow {}, tvShowsFlow = flow {})
         }
     }
 
@@ -253,19 +264,13 @@ class SearchViewModel(
     private fun searchMovies(query: String) {
         val moviesFlow = createPagingSourceFlow(query) { currentQuery, pageNumber ->
             val movies = getMoviesUseCase(
-                name = currentQuery,
-                language = "en-US",
-                pageNumber = pageNumber
+                name = currentQuery, language = "en-US", pageNumber = pageNumber
             )
             movies.copy(items = applyMovieFilters(movies.items))
         }
 
         _uiState.update { currentState ->
-            currentState.copy(
-                moviesFlow = moviesFlow,
-                actorsFlow = flow {},
-                tvShowsFlow = flow {}
-            )
+            currentState.copy(moviesFlow = moviesFlow, actorsFlow = flow {}, tvShowsFlow = flow {})
         }
     }
 
@@ -273,19 +278,13 @@ class SearchViewModel(
     private fun searchActors(query: String) {
         val actorsFlow = createPagingSourceFlow(query) { currentQuery, pageNumber ->
             val actors = getActorsUseCase(
-                name = currentQuery,
-                language = "en-US",
-                pageNumber = pageNumber
+                name = currentQuery, language = "en-US", pageNumber = pageNumber
             )
             actors.copy(items = actors.items)
         }
 
         _uiState.update { currentState ->
-            currentState.copy(
-                actorsFlow = actorsFlow,
-                moviesFlow = flow {},
-                tvShowsFlow = flow {}
-            )
+            currentState.copy(actorsFlow = actorsFlow, moviesFlow = flow {}, tvShowsFlow = flow {})
         }
     }
 
@@ -293,30 +292,20 @@ class SearchViewModel(
 
         val tvShowsFlow = createPagingSourceFlow(query) { currentQuery, pageNumber ->
             val tvShows = getTvShowsUseCase(
-                name = currentQuery,
-                language = "en-US",
-                pageNumber = pageNumber
+                name = currentQuery, language = "en-US", pageNumber = pageNumber
             )
             tvShows.copy(items = applyTvShowFilters(tvShows.items))
         }
 
         _uiState.update { currentState ->
-            currentState.copy(
-                tvShowsFlow = tvShowsFlow,
-                actorsFlow = flow {},
-                moviesFlow = flow {}
-            )
+            currentState.copy(tvShowsFlow = tvShowsFlow, actorsFlow = flow {}, moviesFlow = flow {})
         }
     }
 
 
     private fun clearAllSearchResults() {
         _uiState.update { currentState ->
-            currentState.copy(
-                moviesFlow = flow {},
-                tvShowsFlow = flow {},
-                actorsFlow = flow {}
-            )
+            currentState.copy(moviesFlow = flow {}, tvShowsFlow = flow {}, actorsFlow = flow {})
         }
     }
 
@@ -353,15 +342,14 @@ class SearchViewModel(
         val interestMap = interests.associate { it.first to it.second }
 
         val tvShowsFiltered = tvShows.filter { tvShow ->
-            val matchesGenres = filterState.selectedGenres.isEmpty() ||
-                    tvShow.genres.any { genre ->
-                        filterState.selectedGenres.contains(genre)
-                    }
+            val matchesGenres = filterState.selectedGenres.isEmpty() || tvShow.genres.any { genre ->
+                filterState.selectedGenres.contains(genre)
+            }
 
             val matchesRating = tvShow.rating >= filterState.imdbRating
 
-            val matchesYear = tvShow.releaseYear in
-                    filterState.releaseYearRange.start.toInt()..filterState.releaseYearRange.endInclusive.toInt()
+            val matchesYear =
+                tvShow.releaseYear in filterState.releaseYearRange.start.toInt()..filterState.releaseYearRange.endInclusive.toInt()
 
             matchesGenres && matchesRating && matchesYear
         }

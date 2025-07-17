@@ -23,4 +23,12 @@ dependencies {
     api(libs.koin.annotations)
     ksp(libs.koin.ksp.compiler)
     testImplementation(libs.bundles.testing)
+    api(libs.koin.core)
+    ksp(libs.bundles.koin.ksp)
+}
+
+ksp {
+    arg("KOIN_CONFIG_CHECK", "true")
+    arg("KOIN_DEFAULT_MODULE", "false")
+    arg("KOIN_USE_COMPOSE_VIEWMODEL", "true")
 }

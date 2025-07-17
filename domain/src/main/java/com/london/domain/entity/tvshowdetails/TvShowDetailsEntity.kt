@@ -2,7 +2,7 @@ package com.london.domain.entity.tvshowdetails
 
 data class TvShowDetailsEntity(
     val adult: Boolean,
-    val backdropPath: String?,
+    val backdropUrl: String?,
     val createdBy: List<TvShowCreatorEntity>,
     val episodeRunTime: List<Int>,
     val firstAirDate: String,
@@ -23,7 +23,7 @@ data class TvShowDetailsEntity(
     val originalName: String,
     val overview: String,
     val popularity: Double,
-    val posterPath: String?,
+    val posterUrl: String?,
     val productionCompanies: List<TvShowProductionCompanyEntity>,
     val productionCountries: List<TvShowProductionCountryEntity>,
     val tvShowSeasons: List<TvShowSeasonEntity>,
@@ -41,7 +41,7 @@ data class TvShowCreatorEntity(
     val name: String,
     val originalName: String,
     val gender: Int,
-    val profilePath: String?
+    val profileUrl: String?
 )
 
 data class TvShowGenreEntity(
@@ -67,14 +67,14 @@ data class TvShowEpisodeEntity(
 
 data class TvShowNetworkEntity(
     val id: Int,
-    val logoPath: String?,
+    val logoUrl: String?,
     val name: String,
     val originCountry: String
 )
 
 data class TvShowProductionCompanyEntity(
     val id: Int,
-    val logoPath: String?,
+    val logoUrl: String?,
     val name: String,
     val originCountry: String
 )
@@ -90,7 +90,7 @@ data class TvShowSeasonEntity(
     val id: Int,
     val name: String,
     val overview: String,
-    val posterPath: String?,
+    val posterUrl: String?,
     val seasonNumber: Int,
     val voteAverage: Double
 )
