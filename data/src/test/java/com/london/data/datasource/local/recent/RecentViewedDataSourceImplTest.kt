@@ -24,82 +24,58 @@ class RecentViewedDataSourceImplTest {
     }
 
     @Test
-    fun `insert should call insert on dao`() = runTest {
-        // given
+    fun `when insert is called should delegate to DAO`() = runTest {
         coEvery { recentViewedDao.insert(Mock_Recent_Viewed_Local) } just Runs
-        // when
         dataSource.insert(Mock_Recent_Viewed_Local)
-        // then
         coVerify(exactly = 1) { recentViewedDao.insert(Mock_Recent_Viewed_Local) }
     }
 
     @Test
-    fun `clearOlderThanTen should call clearOlderThanTen on dao`() = runTest {
-        // given
+    fun `when clearOlderThanTen is called should delegate to DAO`() = runTest {
         coEvery { recentViewedDao.clearOlderThanTen() } just Runs
-        // when
         dataSource.clearOlderThanTen()
-        // then
         coVerify(exactly = 1) { recentViewedDao.clearOlderThanTen() }
     }
 
     @Test
-    fun `getAll should return dao getAll result`() = runTest {
-        // given
+    fun `when getAll is called should return result from DAO`() = runTest {
         coEvery { recentViewedDao.getAll() } returns listOf(Mock_Recent_Viewed_Local)
-        // when
         val result = dataSource.getAll()
-        // then
         assertThat(result).isEqualTo(listOf(Mock_Recent_Viewed_Local))
     }
 
     @Test
-    fun `getAll should return empty list when getAll throws`() = runTest {
-        // given
+    fun `when getAll throws should return empty list`() = runTest {
         coEvery { recentViewedDao.getAll() } throws Exception()
-        // when
         val result = dataSource.getAll()
-        // then
         assertThat(result).isEmpty()
     }
 
     @Test
-    fun `getRecentTen should return dao getRecentTen result`() = runTest {
-        // given
+    fun `when getRecentTen is called should return result from DAO`() = runTest {
         coEvery { recentViewedDao.getRecentTen() } returns listOf(Mock_Recent_Viewed_Local)
-        // when
         val result = dataSource.getRecentTen()
-        // then
         assertThat(result).isEqualTo(listOf(Mock_Recent_Viewed_Local))
     }
 
     @Test
-    fun `getRecentTen should return empty list when getRecentTen throws`() = runTest {
-        // given
+    fun `when getRecentTen throws should return empty list`() = runTest {
         coEvery { recentViewedDao.getRecentTen() } throws Exception()
-        // when
         val result = dataSource.getRecentTen()
-        // then
         assertThat(result).isEmpty()
     }
 
     @Test
-    fun `insertAndKeepLastTen should call insertAndKeepLastTen on dao`() = runTest {
-        // given
+    fun `when insertAndKeepLastTen is called should delegate to DAO`() = runTest {
         coEvery { recentViewedDao.insertAndKeepLastTen(Mock_Recent_Viewed_Local) } just Runs
-        // when
         dataSource.insertAndKeepLastTen(Mock_Recent_Viewed_Local)
-        // then
         coVerify(exactly = 1) { recentViewedDao.insertAndKeepLastTen(Mock_Recent_Viewed_Local) }
     }
 
     @Test
-    fun `clearAll should call clearAll on dao`() = runTest {
-        // given
+    fun `when clearAll is called should delegate to DAO`() = runTest {
         coEvery { recentViewedDao.clearAll() } just Runs
-        // when
         dataSource.clearAll()
-        // then
         coVerify(exactly = 1) { recentViewedDao.clearAll() }
     }
 
