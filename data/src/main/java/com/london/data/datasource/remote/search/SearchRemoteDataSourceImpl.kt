@@ -7,7 +7,9 @@ import com.london.data.datasource.remote.search.model.SearchMovieRemote
 import com.london.data.datasource.remote.search.model.SearchTvShowRemote
 import com.london.data.utils.get
 import io.ktor.client.HttpClient
+import org.koin.core.annotation.Single
 
+@Single
 class SearchRemoteDataSourceImpl(
     private val ktorClient: HttpClient
 ) : SearchRemoteDataSource {
