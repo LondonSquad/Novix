@@ -14,4 +14,5 @@ data class TvShowEpisodeByIdEntity(
     val voteAverage: Double,
     val voteCount: Int,
     val guestStars: List<Actor>,
+    val id: Int,
     )
