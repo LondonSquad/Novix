@@ -1,4 +1,4 @@
-package com.london.presentation.screen.moiveDetalis
+package com.london.presentation.screen.details.movieDetalis
 
 data class MovieDetailsUiState(
     val movieId: Int = 0,

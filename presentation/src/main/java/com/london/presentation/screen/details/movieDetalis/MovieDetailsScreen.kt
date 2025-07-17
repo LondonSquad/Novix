@@ -1,4 +1,4 @@
-package com.london.presentation.screen.moiveDetalis
+package com.london.presentation.screen.details.movieDetalis
 
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.tween
@@ -6,14 +6,14 @@ import androidx.compose.animation.slideInHorizontally
 import androidx.compose.animation.slideOutHorizontally
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
-import androidx.compose.foundation.clickable
-import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.asPaddingValues
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.defaultMinSize
 import androidx.compose.foundation.layout.fillMaxSize
@@ -22,24 +22,25 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.navigationBars
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.statusBars
 import androidx.compose.foundation.layout.windowInsetsPadding
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyHorizontalGrid
-import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
-import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -47,12 +48,9 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.SpanStyle
-import androidx.compose.ui.text.buildAnnotatedString
-import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.times
+import androidx.compose.ui.zIndex
 import com.london.designsystem.R
 import com.london.designsystem.component.ActorItem
 import com.london.designsystem.component.ButtonIcon
@@ -74,6 +72,7 @@ import com.london.presentation.R.string.separator
 import com.london.presentation.R.string.star
 import com.london.presentation.R.string.time_icon
 import com.london.presentation.R.string.view_reviews
+import com.london.presentation.composables.ConditionalText
 import org.koin.androidx.compose.koinViewModel
 
 @Composable
@@ -117,142 +116,214 @@ fun MovieDetailsContent(
     onBackClick: () -> Unit,
     onPreviewClick: (Int) -> Unit
 ) {
+    val lazyState = rememberLazyListState()
+    val isScrolledFarEnough = remember {
+        derivedStateOf {
+            lazyState.firstVisibleItemIndex > 0 || lazyState.firstVisibleItemScrollOffset > 500
+        }
+    }
+    val iconTint = if (isScrolledFarEnough.value) NovixTheme.colors.title else Color.White
 
     Box(
         modifier = Modifier
             .fillMaxSize()
             .background(NovixTheme.colors.surface)
     ) {
-        Column(
+
+        Box(
             modifier = Modifier
-                .fillMaxSize()
-                .verticalScroll(rememberScrollState()),
+                .fillMaxWidth()
+                .align(Alignment.TopCenter)
+                .zIndex(1.0f)
+                .background(if (isScrolledFarEnough.value) NovixTheme.colors.surface else Color.Transparent)
+                .padding(
+                    top = WindowInsets.statusBars.asPaddingValues().calculateTopPadding()
+                ),
+            contentAlignment = Alignment.Center
         ) {
-            Box(
+
+            SaveIcon(
+                isSaved = state.isSaved,
+                onSaveClick = {
+                    // TODO
+                },
+                backgroundColor = NovixTheme.colors.iconBackgroundLow,
                 modifier = Modifier
-                    .fillMaxWidth()
-                    .defaultMinSize(minHeight = 370.dp)
-            ) {
-                MovieDetailsImage(
-                    isSaved = state.isSaved,
-                    onSaveClick = {
-                        //TODO("Not yet implemented")
-                    },
-                    images = state.movieImage,
-                    currentImageIndex = state.currentImageIndex,
-                    direction = state.imageSlideDirection,
-                    onBackClick = onBackClick
-                )
-                Column(
+                    .padding(horizontal = 16.dp, vertical = 8.dp)
+                    .size(40.dp)
+                    .clip(RoundedCornerShape(16))
+                    .align(Alignment.TopEnd),
+                tint = iconTint
+            )
+
+            ButtonIcon(
+                onClick = onBackClick,
+                iconRes = R.drawable.arrow_left,
+                backgroundColor = NovixTheme.colors.iconBackgroundLow,
+                modifier = Modifier
+                    .padding(horizontal = 16.dp, vertical = 8.dp)
+                    .size(40.dp)
+                    .clip(RoundedCornerShape(16))
+                    .align(Alignment.TopStart),
+                tint = iconTint
+            )
+        }
+
+        LazyColumn(
+            modifier = Modifier.fillMaxSize(),
+            contentPadding = PaddingValues(bottom = 100.dp),
+            state = lazyState
+        ) {
+            item {
+                Box(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .align(Alignment.BottomCenter),
-                    verticalArrangement = Arrangement.spacedBy(4.dp),
-                    horizontalAlignment = Alignment.CenterHorizontally
+                        .defaultMinSize(minHeight = 370.dp)
+
                 ) {
-                    NovixCarousalRow(
-                        dotsStates = List(state.movieImage.size) { index -> index == state.currentImageIndex },
-                        modifier = Modifier
-                            .clip(RoundedCornerShape(12.dp))
-                            .background(NovixTheme.colors.iconBackgroundLow)
-                            .border(1.dp, NovixTheme.colors.stroke, RoundedCornerShape(12.dp))
-                            .padding(horizontal = 12.dp, vertical = 4.dp)
+                    MovieDetailsImage(
+                        images = state.movieImage,
+                        currentImageIndex = state.currentImageIndex,
+                        direction = state.imageSlideDirection,
                     )
 
                     Column(
                         modifier = Modifier
                             .fillMaxWidth()
-                            .defaultMinSize(minHeight = 158.dp)
-                            .padding(horizontal = 16.dp)
-                            .clip(RoundedCornerShape(12.dp))
-                            .background(NovixTheme.colors.surface)
-                            .border(1.dp, NovixTheme.colors.stroke, RoundedCornerShape(12.dp))
-                            .padding(12.dp), verticalArrangement = Arrangement.spacedBy(8.dp)
+                            .align(Alignment.BottomCenter),
+                        verticalArrangement = Arrangement.spacedBy(4.dp),
+                        horizontalAlignment = Alignment.CenterHorizontally
                     ) {
+                        NovixCarousalRow(
+                            dotsStates = List(state.movieImage.size) { index ->
+                                index == state.currentImageIndex
+                            },
+                            modifier = Modifier
+                                .clip(RoundedCornerShape(12.dp))
+                                .background(NovixTheme.colors.iconBackgroundLow)
+                                .border(1.dp, NovixTheme.colors.stroke, RoundedCornerShape(12.dp))
+                                .padding(horizontal = 12.dp, vertical = 4.dp)
+                        )
 
-                        Text(
-                            state.movieName,
-                            style = NovixTheme.typography.title.medium,
-                            color = NovixTheme.colors.title,
-                            modifier = Modifier.defaultMinSize(minHeight = 56.dp)
-                        )
-                        GenreRow(state.movieGenres)
-                        RatingAndMetaRow(
-                            rate = state.movieRating,
-                            time = state.movieDuration,
-                            date = state.releaseDate
-                        )
-                        Text(
-                            stringResource(view_reviews),
-                            style = NovixTheme.typography.label.medium,
-                            color = NovixTheme.colors.primary,
-                            modifier = Modifier.noRippleClickable {
-                                onPreviewClick(state.movieId)
-                            }
+                        Column(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .defaultMinSize(minHeight = 158.dp)
+                                .padding(horizontal = 16.dp)
+                                .clip(RoundedCornerShape(12.dp))
+                                .background(NovixTheme.colors.surface)
+                                .border(1.dp, NovixTheme.colors.stroke, RoundedCornerShape(12.dp))
+                                .padding(12.dp),
+                            verticalArrangement = Arrangement.spacedBy(8.dp)
+                        ) {
+                            Text(
+                                text = state.movieName,
+                                style = NovixTheme.typography.title.medium,
+                                color = NovixTheme.colors.title,
+                                modifier = Modifier.defaultMinSize(minHeight = 56.dp)
+                            )
+                            GenreRow(state.movieGenres)
+                            RatingAndMetaRow(
+                                rate = state.movieRating,
+                                time = state.movieDuration,
+                                date = state.releaseDate
+                            )
+                            Text(
+                                text = stringResource(view_reviews),
+                                style = NovixTheme.typography.label.medium,
+                                color = NovixTheme.colors.primary,
+                                modifier = Modifier.noRippleClickable {
+                                    onPreviewClick(state.movieId)
+                                }
+                            )
+                        }
+                    }
+                }
+            }
+
+            if (state.movieOverview.isNotBlank()) {
+                item {
+                    Text(
+                        text = stringResource(overview),
+                        style = NovixTheme.typography.title.medium,
+                        color = NovixTheme.colors.title,
+                        modifier = Modifier.padding(start = 16.dp, top = 16.dp, bottom = 4.dp)
+                    )
+                }
+
+                item {
+                    ConditionalText(
+                        state.movieOverview,
+                        state.expanded,
+                        onExpandClick
+                    )
+                }
+            }
+
+            item {
+                Text(
+                    text = stringResource(com.london.presentation.R.string.cast),
+                    style = NovixTheme.typography.title.medium,
+                    color = NovixTheme.colors.title,
+                    modifier = Modifier.padding(start = 16.dp, top = 16.dp)
+                )
+            }
+
+            item {
+                LazyHorizontalGrid(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(100.dp),
+                    rows = GridCells.Fixed(1),
+                    horizontalArrangement = Arrangement.spacedBy(12.dp),
+                    contentPadding = PaddingValues(vertical = 8.dp, horizontal = 16.dp)
+                ) {
+                    items(state.genres) { actor ->
+                        ActorItem(
+                            actorName = actor.name,
+                            characterName = actor.characterName,
+                            imageRes = actor.avatarUrl,
+                            modifier = Modifier.defaultMinSize(minWidth = 375.dp)
                         )
                     }
                 }
             }
-            Text(
-                stringResource(overview),
-                style = NovixTheme.typography.label.large,
-                color = NovixTheme.colors.title,
-                modifier = Modifier.padding(start = 16.dp, top = 16.dp)
 
-            )
-            ConditionalText(
-                state.movieOverview, state.expanded, onExpandClick
-            )
-            Text(
-                stringResource(com.london.presentation.R.string.cast),
-                style = NovixTheme.typography.title.medium,
-                color = NovixTheme.colors.title,
-                modifier = Modifier.padding(start = 16.dp)
-            )
-            LazyHorizontalGrid(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(100.dp),
-                horizontalArrangement = Arrangement.spacedBy(12.dp),
-                contentPadding = PaddingValues(vertical = 8.dp, horizontal = 16.dp),
-                rows = GridCells.Fixed(1),
-            ) {
-                items(state.genres) { actor ->
-                    ActorItem(
-                        actorName = actor.name,
-                        characterName = actor.characterName,
-                        imageRes = actor.avatarUrl,
-                        modifier = Modifier.defaultMinSize(minWidth = 375.dp)
-                    )
-                }
+            item {
+                Text(
+                    text = stringResource(more_like_this),
+                    style = NovixTheme.typography.title.medium,
+                    color = NovixTheme.colors.title,
+                    modifier = Modifier.padding(start = 16.dp, top = 16.dp)
+                )
             }
 
-            Text(
-                stringResource(more_like_this),
-                style = NovixTheme.typography.title.medium,
-                color = NovixTheme.colors.title,
-                modifier = Modifier.padding(start = 16.dp, top = 16.dp)
-            )
-            LazyVerticalGrid(
-                columns = GridCells.Fixed(2),
-                modifier = Modifier
-                    .padding(horizontal = 16.dp)
-                    .height((state.similarMovies.size / 2 + state.similarMovies.size % 2) * 220.dp),
-                horizontalArrangement = Arrangement.spacedBy(12.dp),
-                verticalArrangement = Arrangement.spacedBy(12.dp),
-                userScrollEnabled = false,
-            ) {
-                items(state.similarMovies) { movie ->
-                    HomeCard(
-                        imageUrl = movie.image,
-                        isSaved = movie.isSaved,
-                        onSaveClick = {
-                            //TODO("Not yet implemented")
-                        }
-                    )
+            items(state.similarMovies.chunked(2)) { rowItems ->
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = 16.dp)
+                        .padding(top = 12.dp),
+                    horizontalArrangement = Arrangement.spacedBy(12.dp)
+                ) {
+                    rowItems.forEach { movie ->
+                        HomeCard(
+                            imageUrl = movie.image,
+                            isSaved = movie.isSaved,
+                            onSaveClick = {
+                                // TODO
+                            },
+                            modifier = Modifier
+                                .weight(1f)
+                        )
+                    }
+                    if (rowItems.size == 1) {
+                        Spacer(modifier = Modifier.weight(1f)) // fill empty space if odd item count
+                    }
                 }
             }
         }
+
         Row(
             modifier = Modifier
                 .fillMaxWidth()
@@ -261,7 +332,7 @@ fun MovieDetailsContent(
                 .windowInsetsPadding(WindowInsets.navigationBars),
             horizontalArrangement = Arrangement.spacedBy(8.dp)
         ) {
-            if (state.movieHaveTrailer.not()) {
+            if (!state.movieHaveTrailer) {
                 PrimaryButton(
                     text = null,
                     onClick = {},
@@ -272,21 +343,23 @@ fun MovieDetailsContent(
                     isDisabled = false,
                 )
             }
+
             PrimaryButton(
                 text = stringResource(play_trailer),
                 onClick = {
-                    //TODO("Not yet implemented")
+                    // TODO
                 },
                 hasLabel = true,
                 hasIcon = false,
                 isLoading = false,
-                isDisabled = state.movieHaveTrailer.not(),
+                isDisabled = !state.movieHaveTrailer,
                 icon = null,
                 modifier = Modifier.weight(1f)
             )
         }
     }
 }
+
 
 @Composable
 private fun RatingAndMetaRow(
@@ -376,14 +449,11 @@ private fun Dot(modifier: Modifier = Modifier) {
 @Composable
 private fun MovieDetailsImage(
     images: List<Any>,
-    onSaveClick: () -> Unit,
     modifier: Modifier = Modifier,
-    isSaved: Boolean = false,
     imageDescription: String? = null,
     loadingState: MutableState<Boolean> = remember { mutableStateOf(false) },
     currentImageIndex: Int,
     direction: Int,
-    onBackClick: () -> Unit
 ) {
     Box(
         modifier = modifier
@@ -414,88 +484,7 @@ private fun MovieDetailsImage(
                 )
             }
         }
-
-        SaveIcon(
-            isSaved = isSaved,
-            onSaveClick = onSaveClick,
-            backgroundColor = NovixTheme.colors.iconBackgroundLow,
-            modifier = Modifier
-                .padding(16.dp)
-                .size(40.dp)
-                .clip(RoundedCornerShape(16))
-                .align(Alignment.TopEnd)
-        )
-
-        ButtonIcon(
-            onClick = onBackClick,
-            iconRes = R.drawable.arrow_left,
-            backgroundColor = NovixTheme.colors.iconBackgroundLow,
-            modifier = Modifier
-                .padding(16.dp)
-                .size(40.dp)
-                .clip(RoundedCornerShape(16))
-                .align(Alignment.TopStart)
-        )
     }
-}
-
-@Composable
-private fun ConditionalText(
-    text: String,
-    expandedState: Boolean,
-    onExpandedChange: () -> Unit
-) {
-    val minimumLineLength = 3
-    var showReadMoreButtonState by remember { mutableStateOf(false) }
-    var truncatedText by remember { mutableStateOf("") }
-
-    val textStyle = NovixTheme.typography.body.small.copy(color = NovixTheme.colors.body)
-    val actionStyle = SpanStyle(
-        color = NovixTheme.colors.primary,
-        fontSize = NovixTheme.typography.label.medium.fontSize,
-        fontWeight = NovixTheme.typography.label.medium.fontWeight
-    )
-
-    Text(
-        text = buildAnnotatedString {
-            when {
-                !showReadMoreButtonState -> append(text)
-                !expandedState -> {
-                    append(truncatedText)
-                    withStyle(actionStyle) { append(stringResource(R.string.read_more)) }
-                }
-
-                else -> {
-                    append(text)
-                    withStyle(actionStyle) { append(stringResource(R.string.read_less)) }
-                }
-            }
-        },
-        style = textStyle,
-        maxLines = if (expandedState || !showReadMoreButtonState) Int.MAX_VALUE else minimumLineLength,
-        onTextLayout = { textLayoutResult ->
-            if (!showReadMoreButtonState && textLayoutResult.lineCount > minimumLineLength) {
-                val lastVisibleLineEndIndex = textLayoutResult.getLineEnd(minimumLineLength - 1)
-                val readMoreLength = 15
-                var truncateIndex = maxOf(0, lastVisibleLineEndIndex - readMoreLength)
-
-                while (truncateIndex > 0 && text[truncateIndex] != ' ') {
-                    truncateIndex--
-                }
-
-                truncatedText = text.substring(0, truncateIndex).trim()
-                showReadMoreButtonState = true
-            }
-        },
-        modifier = Modifier
-            .padding(horizontal = 16.dp, vertical = 4.dp)
-            .clickable(
-                interactionSource = remember { MutableInteractionSource() },
-                indication = null
-            ) {
-                if (showReadMoreButtonState) onExpandedChange()
-            }
-    )
 }
 
 @Preview(showBackground = true)
