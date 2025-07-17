@@ -1,11 +1,11 @@
 @file:KoverIgnore
-
 package com.london.data.mapper.actordetails
 
 import com.london.data.datasource.remote.details.actordetails.model.actortvshowdetails.ActorTvShowCastMember
 import com.london.data.datasource.remote.details.actordetails.model.actortvshowdetails.ActorTvShowCrewMember
 import com.london.data.datasource.remote.details.actordetails.model.actortvshowdetails.ActorTvShowDetailsResponse
-import com.london.data.utils.asImageUrlOrEmpty
+import com.london.data.utils.isTrue
+import com.london.data.utils.orZero
 import com.london.domain.KoverIgnore
 import com.london.domain.entity.actordetails.actortvshow.ActorTvShowCastMemberEntity
 import com.london.domain.entity.actordetails.actortvshow.ActorTvShowCrewMemberEntity
@@ -13,55 +13,55 @@ import com.london.domain.entity.actordetails.actortvshow.ActorTvShowDetails
 
 fun ActorTvShowDetailsResponse.toEntity(): ActorTvShowDetails {
     return ActorTvShowDetails(
-        id = id,
-        cast = cast.map { it.toEntity() },
-        crew = crew.map { it.toEntity() }
+        id = this.id.orZero(),
+        cast = this.cast?.map { it.toEntity() }.orEmpty(),
+        crew = this.crew?.map { it.toEntity() }.orEmpty()
     )
 }
 
 fun ActorTvShowCastMember.toEntity(): ActorTvShowCastMemberEntity {
     return ActorTvShowCastMemberEntity(
-        adult = adult,
-        backdropUrl = backdropPath.asImageUrlOrEmpty(),
-        character = character,
-        creditId = creditId,
-        episodeCount = episodeCount,
-        firstAirDate = firstAirDate,
-        firstCreditAirDate = firstCreditAirDate,
-        genreIds = genreIds,
-        id = id,
-        name = name,
-        originCountry = originCountry,
-        originalLanguage = originalLanguage,
-        originalName = originalName,
-        overview = overview,
-        popularity = popularity,
-        posterUrl = posterPath.asImageUrlOrEmpty(),
-        voteAverage = voteAverage,
-        voteCount = voteCount
+        adult = this.adult.isTrue,
+        backdropUrl = "https://image.tmdb.org/t/p/w500${this.backdropPath}",
+        character = this.character.orEmpty(),
+        creditId = this.creditId.orEmpty(),
+        episodeCount = this.episodeCount.orZero(),
+        firstAirDate = this.firstAirDate.orEmpty(),
+        firstCreditAirDate = this.firstCreditAirDate.orEmpty(),
+        genreIds = this.genreIds.orEmpty(),
+        id = this.id.orZero(),
+        name = this.name.orEmpty(),
+        originCountry = this.originCountry.orEmpty(),
+        originalLanguage = this.originalLanguage.orEmpty(),
+        originalName = this.originalName.orEmpty(),
+        overview = this.overview.orEmpty(),
+        popularity = this.popularity.orZero(),
+        posterUrl = "https://image.tmdb.org/t/p/w500${this.posterPath}",
+        voteAverage = this.voteAverage.orZero(),
+        voteCount = this.voteCount.orZero()
     )
 }
 
-fun ActorTvShowCrewMember.toEntity(): ActorTvShowCrewMemberEntity {
+fun ActorTvShowCrewMember.toEntity(): ActorTvShowCrewMemberEntity{
     return ActorTvShowCrewMemberEntity(
-        adult = adult,
-        backdropPath = backdropPath.asImageUrlOrEmpty(),
-        creditId = creditId,
-        department = department,
-        episodeCount = episodeCount,
-        firstAirDate = firstAirDate,
-        firstCreditAirDate = firstCreditAirDate,
-        genreIds = genreIds,
-        id = id,
-        job = job,
-        name = name,
-        originCountry = originCountry,
-        originalLanguage = originalLanguage,
-        originalName = originalName,
-        overview = overview,
-        popularity = popularity,
-        posterPath = backdropPath.asImageUrlOrEmpty(),
-        voteAverage = voteAverage,
-        voteCount = voteCount
+        adult = this.adult.isTrue,
+        backdropPath = "https://image.tmdb.org/t/p/w500${this.backdropPath}",
+        creditId = this.creditId.orEmpty(),
+        department = this.department.orEmpty(),
+        episodeCount = this.episodeCount.orZero(),
+        firstAirDate = this.firstAirDate.orEmpty(),
+        firstCreditAirDate = this.firstCreditAirDate.orEmpty(),
+        genreIds = this.genreIds.orEmpty(),
+        id = this.id.orZero(),
+        job = this.job.orEmpty(),
+        name = this.name.orEmpty(),
+        originCountry = this.originCountry.orEmpty(),
+        originalLanguage = this.originalLanguage.orEmpty(),
+        originalName = this.originalName.orEmpty(),
+        overview = this.overview.orEmpty(),
+        popularity = this.popularity.orZero(),
+        posterPath = "https://image.tmdb.org/t/p/w500${this.posterPath}",
+        voteAverage = this.voteAverage.orZero(),
+        voteCount = this.voteCount.orZero()
     )
 }

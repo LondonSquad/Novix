@@ -122,7 +122,6 @@ fun MovieDetailsContent(
             lazyState.firstVisibleItemIndex > 0 || lazyState.firstVisibleItemScrollOffset > 500
         }
     }
-    val iconTint = if (isScrolledFarEnough.value) NovixTheme.colors.title else Color.White
 
     Box(
         modifier = Modifier
@@ -153,7 +152,6 @@ fun MovieDetailsContent(
                     .size(40.dp)
                     .clip(RoundedCornerShape(16))
                     .align(Alignment.TopEnd),
-                tint = iconTint
             )
 
             ButtonIcon(
@@ -165,7 +163,6 @@ fun MovieDetailsContent(
                     .size(40.dp)
                     .clip(RoundedCornerShape(16))
                     .align(Alignment.TopStart),
-                tint = iconTint
             )
         }
 
@@ -260,65 +257,67 @@ fun MovieDetailsContent(
                 }
             }
 
-            item {
-                Text(
-                    text = stringResource(com.london.presentation.R.string.cast),
-                    style = NovixTheme.typography.title.medium,
-                    color = NovixTheme.colors.title,
-                    modifier = Modifier.padding(start = 16.dp, top = 16.dp)
-                )
-            }
+            if (state.actors.isNotEmpty()) {
+                item {
+                    Text(
+                        text = stringResource(com.london.presentation.R.string.cast),
+                        style = NovixTheme.typography.title.medium,
+                        color = NovixTheme.colors.title,
+                        modifier = Modifier.padding(start = 16.dp, top = 16.dp)
+                    )
 
-            item {
-                LazyHorizontalGrid(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .height(100.dp),
-                    rows = GridCells.Fixed(1),
-                    horizontalArrangement = Arrangement.spacedBy(12.dp),
-                    contentPadding = PaddingValues(vertical = 8.dp, horizontal = 16.dp)
-                ) {
-                    items(state.genres) { actor ->
-                        ActorItem(
-                            actorName = actor.name,
-                            characterName = actor.characterName,
-                            imageRes = actor.avatarUrl,
-                            modifier = Modifier.defaultMinSize(minWidth = 375.dp)
-                        )
+                    LazyHorizontalGrid(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .height(100.dp),
+                        rows = GridCells.Fixed(1),
+                        horizontalArrangement = Arrangement.spacedBy(12.dp),
+                        contentPadding = PaddingValues(vertical = 8.dp, horizontal = 16.dp)
+                    ) {
+                        items(state.actors) { actor ->
+                            ActorItem(
+                                actorName = actor.name,
+                                characterName = actor.characterName,
+                                imageRes = actor.avatarUrl,
+                                modifier = Modifier.defaultMinSize(minWidth = 296.dp)
+                            )
+                        }
                     }
                 }
             }
 
-            item {
-                Text(
-                    text = stringResource(more_like_this),
-                    style = NovixTheme.typography.title.medium,
-                    color = NovixTheme.colors.title,
-                    modifier = Modifier.padding(start = 16.dp, top = 16.dp)
-                )
-            }
+            if (state.similarMovies.isNotEmpty()) {
+                item {
+                    Text(
+                        text = stringResource(more_like_this),
+                        style = NovixTheme.typography.title.medium,
+                        color = NovixTheme.colors.title,
+                        modifier = Modifier.padding(start = 16.dp, top = 16.dp)
+                    )
+                }
 
-            items(state.similarMovies.chunked(2)) { rowItems ->
-                Row(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(horizontal = 16.dp)
-                        .padding(top = 12.dp),
-                    horizontalArrangement = Arrangement.spacedBy(12.dp)
-                ) {
-                    rowItems.forEach { movie ->
-                        HomeCard(
-                            imageUrl = movie.image,
-                            isSaved = movie.isSaved,
-                            onSaveClick = {
-                                // TODO
-                            },
-                            modifier = Modifier
-                                .weight(1f)
-                        )
-                    }
-                    if (rowItems.size == 1) {
-                        Spacer(modifier = Modifier.weight(1f)) // fill empty space if odd item count
+                items(state.similarMovies.chunked(2)) { rowItems ->
+                    Row(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(horizontal = 16.dp)
+                            .padding(top = 12.dp),
+                        horizontalArrangement = Arrangement.spacedBy(12.dp)
+                    ) {
+                        rowItems.forEach { movie ->
+                            HomeCard(
+                                imageUrl = movie.image,
+                                isSaved = movie.isSaved,
+                                onSaveClick = {
+                                    // TODO
+                                },
+                                modifier = Modifier
+                                    .weight(1f)
+                            )
+                        }
+                        if (rowItems.size == 1) {
+                            Spacer(modifier = Modifier.weight(1f)) // fill empty space if odd item count
+                        }
                     }
                 }
             }
@@ -360,40 +359,56 @@ fun MovieDetailsContent(
     }
 }
 
-
 @Composable
 private fun RatingAndMetaRow(
-    rate: String,
-    time: String,
-    date: String,
+    rate: String?,
+    time: String?,
+    date: String?,
 ) {
     Row(
         horizontalArrangement = Arrangement.spacedBy(4.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {
-        IconWithText(
-            icon = drawable.star,
-            contentDesc = stringResource(star),
-            tint = NovixTheme.colors.yellowAccent,
-            text = rate,
-            textColor = NovixTheme.colors.title
-        )
-        Dot()
-        IconWithText(
-            icon = drawable.time_04,
-            contentDesc = stringResource(time_icon),
-            tint = NovixTheme.colors.body,
-            text = time,
-            textColor = NovixTheme.colors.body
-        )
-        Dot()
-        IconWithText(
-            icon = drawable.calendar_03,
-            contentDesc = stringResource(calendar),
-            tint = NovixTheme.colors.body,
-            text = date,
-            textColor = NovixTheme.colors.body
-        )
+        if (!rate.isNullOrBlank()) {
+            IconWithText(
+                icon = drawable.star,
+                contentDesc = stringResource(star),
+                tint = NovixTheme.colors.yellowAccent,
+                text = rate,
+                textColor = NovixTheme.colors.title
+            )
+        }
+
+        if (!rate.isNullOrBlank() && !time.isNullOrBlank()) {
+            Dot()
+        }
+
+        if (!time.isNullOrBlank()) {
+            IconWithText(
+                icon = drawable.time_04,
+                contentDesc = stringResource(time_icon),
+                tint = NovixTheme.colors.body,
+                text = time,
+                textColor = NovixTheme.colors.body
+            )
+        }
+
+        if (
+            (!time.isNullOrBlank() && !date.isNullOrBlank()) ||
+            (rate.isNullOrBlank() && !time.isNullOrBlank() && !date.isNullOrBlank())
+        ) {
+            Dot()
+        }
+
+        if (!date.isNullOrBlank()) {
+            IconWithText(
+                icon = drawable.calendar_03,
+                contentDesc = stringResource(calendar),
+                tint = NovixTheme.colors.body,
+                text = date,
+                textColor = NovixTheme.colors.body
+            )
+        }
     }
 }
 
@@ -504,7 +519,7 @@ private fun MovieDetailsPreview() {
         movieDuration = "2h 22m",
         releaseDate = "1994-09-22",
         movieOverview = "It is a 1994 American drama film, considered one of the greatest films in cinematic history. It revolves around Andy Dufresne, a banker wrongfully convicted of the murder of his wife and",
-        genres = listOf(
+        actors = listOf(
             ActorUIState(
                 "Tim Robbins",
                 characterName = "Andy Dufresne",
