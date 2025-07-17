@@ -41,10 +41,11 @@ kover {
                 excludes {
                     annotatedBy("com.london.domain.KoverIgnore")
                     packages(
-                        "org.koin.ksp.generated",
-                        "com.london.data.datasource.remote",
+                        "org.koin.ksp.generated.**",
+                        "com.london.data.datasource.remote.**"
                     )
                     classes("**.*RemoteDataSourceImpl")
+                    classes("**RemoteDataSourceImpl")
                 }
             }
             verify {
