@@ -5,7 +5,6 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.toRoute
-import com.london.domain.usecase.GetActorDetailsByIdUseCase
 import com.london.domain.usecase.GetActorMoviePicksByIdUseCase
 import com.london.presentation.navigation.Screen
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -17,7 +16,6 @@ import org.koin.android.annotation.KoinViewModel
 
 @KoinViewModel
 class TopMoviesPicksViewModel(
-    private val getActorDetailsUseCase: GetActorDetailsByIdUseCase,
     private val getActorMoviePicksById: GetActorMoviePicksByIdUseCase,
     savedStateHandle: SavedStateHandle,
 ) : ViewModel(), TopMoviesPicksInteractions {
