@@ -2722,17 +2722,25 @@
           "url": "https://github.com/karimdeabes"
         },
         "submitted_at": "2025-07-17T22:32:16Z"
+      },
+      {
+        "reviewer": {
+          "id": 92235360,
+          "login": "abdo-essam",
+          "url": "https://github.com/abdo-essam"
+        },
+        "submitted_at": "2025-07-17T22:34:12Z"
       }
     ],
     "first_approved_at": "2025-07-17T22:32:16Z",
     "time_to_first_approval_minutes": 313.01666666666665,
-    "required_approvals_met_at": null,
-    "time_to_required_approvals_minutes": null,
+    "required_approvals_met_at": "2025-07-17T22:34:12Z",
+    "time_to_required_approvals_minutes": 314.95,
     "closed_at": null,
     "merged_at": null,
     "merged_by": null,
     "week": "2025-W29",
-    "status": "pending",
+    "status": "approved",
     "diff_stats": {
       "additions": 36,
       "deletions": 37,
