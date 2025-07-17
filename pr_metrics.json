@@ -2629,18 +2629,9 @@
       "id": 102248144,
       "url": "https://github.com/BassantM"
     },
-    "approvals": [
-      {
-        "reviewer": {
-          "id": 106277855,
-          "login": "Mostafa-alsaygh",
-          "url": "https://github.com/Mostafa-alsaygh"
-        },
-        "submitted_at": "2025-07-17T16:30:33Z"
-      }
-    ],
-    "first_approved_at": "2025-07-17T16:30:33Z",
-    "time_to_first_approval_minutes": 7.816666666666666,
+    "approvals": [],
+    "first_approved_at": null,
+    "time_to_first_approval_minutes": null,
     "required_approvals_met_at": null,
     "time_to_required_approvals_minutes": null,
     "closed_at": null,
