@@ -584,7 +584,7 @@ jobs:
           private-key: ${{ secrets.APP_PRIVATE_KEY }}
 
       - name: Add 'Eyes' Reaction
-        uses: peter-evans/add-reaction@v3
+        uses: peter-evans/create-or-update-comment@v4
         with:
           token: ${{ steps.app-token.outputs.token }}
           comment-id: ${{ github.event.comment.id }}
@@ -605,7 +605,7 @@ jobs:
           private-key: ${{ secrets.APP_PRIVATE_KEY }}
 
       - name: Add Fire Reaction to PR
-        uses: peter-evans/add-reaction@v3
+        uses: peter-evans/create-or-update-comment@v4
         with:
           token: ${{ steps.app-token.outputs.token }}
           content: fire
@@ -629,7 +629,7 @@ jobs:
           private-key: ${{ secrets.APP_PRIVATE_KEY }}
 
       - name: Add Heart Reaction to Review Comment
-        uses: peter-evans/add-reaction@v3
+        uses: peter-evans/create-or-update-comment@v4
         with:
           token: ${{ steps.app-token.outputs.token }}
           comment-id: ${{ github.event.review.id }}
