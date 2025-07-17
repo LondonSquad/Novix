@@ -2355,5 +2355,33 @@
       "deletions": 56,
       "changed_files": 3
     }
+  },
+  {
+    "pr_number": 141,
+    "url": "https://github.com/LondonSquad/Novix/pull/141",
+    "title": "fix/details-screens",
+    "opened_at": "2025-07-17T15:04:28Z",
+    "head_ref": "fix/details-screens",
+    "base_ref": "develop",
+    "creator": {
+      "login": "Mostafa-alsaygh",
+      "id": 106277855,
+      "url": "https://github.com/Mostafa-alsaygh"
+    },
+    "approvals": [],
+    "first_approved_at": null,
+    "time_to_first_approval_minutes": null,
+    "required_approvals_met_at": null,
+    "time_to_required_approvals_minutes": null,
+    "closed_at": null,
+    "merged_at": null,
+    "merged_by": null,
+    "week": "2025-W29",
+    "status": "pending",
+    "diff_stats": {
+      "additions": 312,
+      "deletions": 274,
+      "changed_files": 12
+    }
   }
 ]
