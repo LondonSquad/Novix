@@ -4,16 +4,21 @@ on:
   pull_request:
     types: [closed]
     branches: [develop]
-  workflow_dispatch: # Enable Manual Execution
+  workflow_dispatch:
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.sha }}
   cancel-in-progress: true
 
 jobs:
-  build-and-deploy:
-    if: (github.event.pull_request.merged == true || github.event_name == 'workflow_dispatch')
+  build:
+    if: github.event.pull_request.merged == true || github.event_name == 'workflow_dispatch'
     runs-on: ubuntu-latest
+    outputs:
+      pr_title: ${{ steps.set-pr-metadata.outputs.title }}
+      pr_number: ${{ steps.set-pr-metadata.outputs.number }}
+      ref_name: ${{ steps.set-pr-metadata.outputs.ref }}
+      sha: ${{ steps.set-pr-metadata.outputs.sha }}
 
     steps:
       - name: Checkout code
@@ -51,17 +56,47 @@ jobs:
         run: |
           echo "${{ secrets.GOOGLE_SERVICES_JSON }}" | base64 --decode > app/google-services.json
 
-      - name: Build Release APK
+      - name: Set PR metadata as outputs
+        id: set-pr-metadata
+        run: |
+          echo "title=${{ github.event.pull_request.title || 'Manual Dispatch' }}" >> "$GITHUB_OUTPUT"
+          echo "number=${{ github.event.pull_request.number || 'manual' }}" >> "$GITHUB_OUTPUT"
+          echo "ref=${{ github.ref_name }}" >> "$GITHUB_OUTPUT"
+          echo "sha=${{ github.sha }}" >> "$GITHUB_OUTPUT"
+
+      - name: Build ABI-split Release APKs
         run: ./gradlew -PversionCode=${{ github.run_number }} -PversionName="1.0.${{ github.run_number }}" assembleRelease
 
-      - name: Deploy to Firebase App Distribution
+      - name: Upload APKs as artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: apk-artifacts
+          path: app/build/outputs/apk/release/*-release.apk
+
+  upload-to-firebase:
+    needs: build
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        abi: [armeabi-v7a, arm64-v8a, x86, x86_64]
+
+    steps:
+      - name: Download built APKs
+        uses: actions/download-artifact@v4
+        with:
+          name: apk-artifacts
+          path: apks
+
+      - name: Upload ${{ matrix.abi }} APK to Firebase
         uses: wzieba/Firebase-Distribution-Github-Action@v1
         with:
           appId: ${{ secrets.FIREBASE_APP_ID }}
           serviceCredentialsFileContent: ${{ secrets.ACCOUNT_SERVICE_JSON }}
           groups: testers
-          file: app/build/outputs/apk/release/app-release.apk
+          file: apks/app-${{ matrix.abi }}-release.apk
           releaseNotes: |
-            New update from PR #${{ github.event.pull_request.number }}
-            Commit: ${{ github.sha }}
-            Branch: ${{ github.ref_name }}
+            📦 *Split APK Build*
+            🔧 ABI: `${{ matrix.abi }}`
+            🆕 PR #${{ needs.build.outputs.pr_number }}: ${{ needs.build.outputs.pr_title }}
+            🔀 Branch: `${{ needs.build.outputs.ref_name }}`
+            🔖 Commit: `${{ needs.build.outputs.sha }}`
