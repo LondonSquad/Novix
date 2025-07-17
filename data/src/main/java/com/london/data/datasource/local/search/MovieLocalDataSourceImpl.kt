@@ -13,7 +13,11 @@ import com.london.data.datasource.util.executeUpdate
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import org.koin.core.annotation.Named
+import org.koin.core.annotation.Single
 
+@Single
+@Named("movieLocalDataSource")
 class MovieLocalDataSourceImpl(
     private val searchMoviesDao: SearchMoviesDao
 ) : LocalDataSource<SearchMoviesLocal> {

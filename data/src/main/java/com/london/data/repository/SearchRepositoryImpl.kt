@@ -17,10 +17,20 @@ import com.london.domain.entity.Movie
 import com.london.domain.entity.PagedFetchResponse
 import com.london.domain.entity.TvShow
 import com.london.domain.repository.SearchRepository
+import org.koin.core.annotation.Named
+import org.koin.core.annotation.Provided
+import org.koin.core.annotation.Single
 
+@Single
 class SearchRepositoryImpl(
+    @Provided
+    @Named("tvShowLocalDataSource")
     private val localTvShowDataSource: LocalDataSource<SearchTvShowLocal>,
+    @Provided
+    @Named("actorLocalDataSource")
     private val localActorDataSource: LocalDataSource<SearchActorsLocal>,
+    @Provided
+    @Named("movieLocalDataSource")
     private val localMovieDataSource: LocalDataSource<SearchMoviesLocal>,
     private val genreInterestDao: GenreInterestDao,
     private val remoteDataSource: SearchRemoteDataSource,
@@ -45,7 +55,12 @@ class SearchRepositoryImpl(
         language: String,
         pageNumber: Int
     ): PagedFetchResponse<Movie> = fetchAndSync(
-        cacheBlock = { localMovieDataSource.getByQueryAndPage(query = name + language, page = pageNumber) },
+        cacheBlock = {
+            localMovieDataSource.getByQueryAndPage(
+                query = name + language,
+                page = pageNumber
+            )
+        },
         networkBlock = {
             remoteDataSource.searchForMovies(
                 query = name,
@@ -70,7 +85,12 @@ class SearchRepositoryImpl(
         language: String,
         pageNumber: Int
     ): PagedFetchResponse<TvShow> = fetchAndSync(
-        cacheBlock = { localTvShowDataSource.getByQueryAndPage(query = name + language, page = pageNumber) },
+        cacheBlock = {
+            localTvShowDataSource.getByQueryAndPage(
+                query = name + language,
+                page = pageNumber
+            )
+        },
         networkBlock = {
             remoteDataSource.searchForTvShows(
                 query = name,
@@ -95,7 +115,12 @@ class SearchRepositoryImpl(
         language: String,
         pageNumber: Int
     ): PagedFetchResponse<Actor> = fetchAndSync(
-        cacheBlock = { localActorDataSource.getByQueryAndPage(query = name + language, page = pageNumber) },
+        cacheBlock = {
+            localActorDataSource.getByQueryAndPage(
+                query = name + language,
+                page = pageNumber
+            )
+        },
         networkBlock = {
             remoteDataSource.searchForActors(
                 query = name,

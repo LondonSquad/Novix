@@ -7,7 +7,10 @@ import com.london.data.datasource.remote.details.actordetails.model.actormoviede
 import com.london.data.datasource.remote.details.actordetails.model.actortvshowdetails.ActorTvShowDetailsResponse
 import com.london.data.utils.get
 import io.ktor.client.HttpClient
+import org.koin.core.annotation.Single
 
+
+@Single
 class ActorDetailsRemoteDataSourceImpl(
     private val ktorClient: HttpClient,
 ) : ActorDetailsRemoteDataSource {

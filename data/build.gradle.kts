@@ -74,3 +74,8 @@ dependencies {
     // Android test dependencies
     androidTestImplementation(libs.bundles.android.testing)
 }
+ksp {
+    arg("KOIN_CONFIG_CHECK", "true")
+    arg("KOIN_DEFAULT_MODULE", "false")
+    arg("KOIN_USE_COMPOSE_VIEWMODEL", "true")
+}
