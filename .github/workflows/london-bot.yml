@@ -72,20 +72,30 @@ jobs:
       - run: echo 'No merge conflicts'
         if: ${{ !steps.autoupdate.outputs.conflicted }}
 
-      - name: Add PR comment for Autoupdate
+      - name: Find Autoupdate PR Comment
+        if: always() && github.event.pull_request.number
+        uses: peter-evans/find-comment@v3
+        id: fc_autoupdate
+        with:
+          issue-number: ${{ github.event.pull_request.number }}
+          comment-author: 'london-bot[bot]'
+          body-includes: '<!-- london-bot-autoupdate-comment -->' # Unique ID for this comment type
+
+      - name: Add or Update PR comment for Autoupdate
         if: always() && github.event.pull_request.number
         uses: peter-evans/create-or-update-comment@v4
         with:
           token: ${{ steps.app-token.outputs.token }}
           issue-number: ${{ github.event.pull_request.number }}
-          edit-mode: replace
+          comment-id: ${{ steps.fc_autoupdate.outputs.comment-id }} # Use the found comment ID
+          edit-mode: update
           body: |
+            <!-- london-bot-autoupdate-comment -->
             **[London Bot] Auto-update Status**
 
             ${{ steps.autoupdate.outputs.conflicted == 'true' && '❌ **Merge conflict detected!** Branch could not be automatically updated from `develop`.' || '' }}
             ${{ steps.autoupdate.outputs.conflicted != 'true' && steps.autoupdate.outcome == 'success' && '✅ Branch successfully updated from `develop`.' || '' }}
             ${{ steps.autoupdate.outcome == 'failure' && '🚨 An error occurred during the auto-update process.' || '' }}
-
   update_pr_metrics:
     name: Update Metrics
     if: |
@@ -513,7 +523,20 @@ jobs:
           commit_user_name: "London Bot"
           commit_user_email: "220529784+london-bot[bot]@users.noreply.github.com"
 
-      - name: Add PR comment for Metrics Update
+      - name: Find Metrics PR Comment
+        if: |
+          always() &&
+          github.event.pull_request.number &&
+          steps.prepare_data.outputs.UPDATE_TYPE != '' &&
+          steps.prepare_data.outputs.UPDATE_TYPE != 'BACKFILL_EXISTING_PRS'
+        uses: peter-evans/find-comment@v3
+        id: fc_metrics
+        with:
+          issue-number: ${{ github.event.pull_request.number }}
+          comment-author: 'london-bot[bot]'
+          body-includes: '<!-- london-bot-metrics-comment -->' # Unique ID for this comment type
+
+      - name: Add or Update PR comment for Metrics
         if: |
           always() &&
           github.event.pull_request.number &&
@@ -523,8 +546,10 @@ jobs:
         with:
           token: ${{ steps.app-token.outputs.token }}
           issue-number: ${{ github.event.pull_request.number }}
-          edit-mode: replace
+          comment-id: ${{ steps.fc_metrics.outputs.comment-id }} # Use the found comment ID
+          edit-mode: update # Use 'update' mode
           body: |
+            <!-- london-bot-metrics-comment -->
             **[London Bot] Metrics Update Status**
 
             ${{ job.status == 'success' && format('📊 PR metrics successfully updated for event: `{0}`.', steps.prepare_data.outputs.PR_ACTION) || '' }}
