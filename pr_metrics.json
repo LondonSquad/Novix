@@ -2295,5 +2295,33 @@
       "deletions": 8,
       "changed_files": 1
     }
+  },
+  {
+    "pr_number": 139,
+    "url": "https://github.com/LondonSquad/Novix/pull/139",
+    "title": "Feature/update actor details screen",
+    "opened_at": "2025-07-17T14:47:19Z",
+    "head_ref": "feature/update-actor-details-screen",
+    "base_ref": "develop",
+    "creator": {
+      "login": "Abdulrahman1890",
+      "id": 76666355,
+      "url": "https://github.com/Abdulrahman1890"
+    },
+    "approvals": [],
+    "first_approved_at": null,
+    "time_to_first_approval_minutes": null,
+    "required_approvals_met_at": null,
+    "time_to_required_approvals_minutes": null,
+    "closed_at": null,
+    "merged_at": null,
+    "merged_by": null,
+    "week": "2025-W29",
+    "status": "pending",
+    "diff_stats": {
+      "additions": 338,
+      "deletions": 13,
+      "changed_files": 12
+    }
   }
 ]
