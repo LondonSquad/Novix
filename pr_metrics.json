@@ -2210,18 +2210,9 @@
       "id": 100484790,
       "url": "https://github.com/marwanqashwa"
     },
-    "approvals": [
-      {
-        "reviewer": {
-          "id": 117874933,
-          "login": "AsmaaKhaledGomaa",
-          "url": "https://github.com/AsmaaKhaledGomaa"
-        },
-        "submitted_at": "2025-07-17T09:41:46Z"
-      }
-    ],
-    "first_approved_at": "2025-07-17T09:41:46Z",
-    "time_to_first_approval_minutes": 82.36666666666666,
+    "approvals": [],
+    "first_approved_at": null,
+    "time_to_first_approval_minutes": null,
     "required_approvals_met_at": null,
     "time_to_required_approvals_minutes": null,
     "closed_at": null,
