@@ -74,6 +74,7 @@ class SearchViewModel(
     init {
         viewModelScope.launch {
             _uiState.update { it.copy(recentViewed = getRecentViewedUseCase.invoke()) }
+            _uiState.update { it.copy(recentSearches = getRecentSearchUseCase.invoke()) }
             _searchQuery.debounce(500).collectLatest { query ->
                 performSearch(
                     query = query, category = _uiState.value.selectedCategory
