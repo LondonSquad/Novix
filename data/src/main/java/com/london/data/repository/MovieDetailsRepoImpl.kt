@@ -24,7 +24,7 @@ class MovieDetailsRepoImpl(
             block = {
                 val movieDetailsRemote = movieDetailsRemote.getMovieDetails(id)
                 movieDetailsRemote.toEntity(
-                    genres = movieDetailsRemote.genreRemote.map { it.toGenre() },
+                    genres = movieDetailsRemote.genreRemote?.map { it.toGenre() } ?: emptyList(),
                     movieImages = movieDetailsRemote.backdropPath?.let { listOf("https://image.tmdb.org/t/p/w500$it") }
                         ?: emptyList()
                 )
@@ -59,7 +59,7 @@ class MovieDetailsRepoImpl(
         runOrThrow(
             block = {
                 val movieCast = movieDetailsRemote.getMovieCast(id)
-                movieCast.actorRemote.map { it.toEntity() }
+                movieCast.actorRemote?.map { it.toEntity() } ?: emptyList()
             },
             error = { cause -> GetMovieCastException(cause) }
         )

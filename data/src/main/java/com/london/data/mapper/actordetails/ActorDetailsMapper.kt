@@ -20,7 +20,7 @@ fun ActorDetailsResponse.toEntity():ActorDetails{
         imdbId = this.imdbId,
         knownForDepartment = this.knownForDepartment,
         popularity = this.popularity,
-        profilePath = this.profilePath
+        profilePath = "https://image.tmdb.org/t/p/w500${this.profilePath}"
     )
 }
 
