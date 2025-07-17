@@ -11,12 +11,11 @@ on:
     types: [submitted, dismissed]
   workflow_dispatch:
     inputs:
-      inputs:
-        backfill_days:
-          description: 'Number of days to look back for PRs'
-          required: false
-          default: 1
-          type: number
+      backfill_days:
+        description: 'Number of days to look back for PRs'
+        required: false
+        default: 1
+        type: number
 
       backfill_existing_prs:
         description: 'Backfill existing open PRs not in metrics'
