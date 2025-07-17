@@ -339,9 +339,12 @@ private fun SearchChipsRow(
 private fun RecentSearchLayOut(
     state: SearchUiState, interactionListener: SearchInteractions, viewModel: SearchViewModel
 ) {
+    if (state.recentViewed.isNotEmpty())
     RecentViewedSection(
-        recentViewed = state.recentViewed, onClearAll = { viewModel.clearRecentViewed() })
+        recentViewed = state.recentViewed,
+        onClearAll = { viewModel.clearRecentViewed() })
 
+    if (state.recentSearches.isNotEmpty())
     RecentSearchesSection(
         recentSearches = state.recentSearches,
         onClearAll = interactionListener::clearRecentSearches,
