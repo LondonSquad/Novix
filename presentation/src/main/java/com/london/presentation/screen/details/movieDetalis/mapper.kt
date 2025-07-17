@@ -1,8 +1,8 @@
-package com.london.presentation.screen.moiveDetalis
+package com.london.presentation.screen.details.movieDetalis
 
-import com.london.domain.entity.moviedatails.MovieDetails
 import com.london.domain.entity.Actor
 import com.london.domain.entity.moviedatails.Genre
+import com.london.domain.entity.moviedatails.MovieDetails
 import com.london.domain.entity.moviedatails.SimilarMovie
 
 fun mapToUiState(
@@ -18,7 +18,7 @@ fun mapToUiState(
         movieDuration = movieDetails.movieDuration,
         releaseDate = movieDetails.releaseDate,
         movieOverview = movieDetails.movieOverview,
-        genres = mapActorsToUiState(movieDetails.actors),
+        actors = mapActorsToUiState(movieDetails.actors),
         similarMovies = mapSimilarMoviesToUiState(movieDetails.similarMovies),
         movieHaveTrailer = movieDetails.movieHaveTrailer,
         isRated = currentUiState.isRated,
