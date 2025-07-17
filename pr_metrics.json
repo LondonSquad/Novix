@@ -2791,5 +2791,33 @@
       "deletions": 6,
       "changed_files": 1
     }
+  },
+  {
+    "pr_number": 153,
+    "url": "https://github.com/LondonSquad/Novix/pull/153",
+    "title": "ci: Enhance CI workflow to support multi-APK builds and output PR metadata",
+    "opened_at": "2025-07-17T20:40:20Z",
+    "head_ref": "enhancement/update-cd-multi-apks",
+    "base_ref": "develop",
+    "creator": {
+      "login": "abdo-essam",
+      "id": 92235360,
+      "url": "https://github.com/abdo-essam"
+    },
+    "approvals": [],
+    "first_approved_at": null,
+    "time_to_first_approval_minutes": null,
+    "required_approvals_met_at": null,
+    "time_to_required_approvals_minutes": null,
+    "closed_at": null,
+    "merged_at": null,
+    "merged_by": null,
+    "week": "2025-W29",
+    "status": "pending",
+    "diff_stats": {
+      "additions": 44,
+      "deletions": 9,
+      "changed_files": 1
+    }
   }
 ]
