@@ -242,7 +242,7 @@ fun CustomBackDropImagePager(
                     .fillMaxWidth()
                     .height(252.dp),
                 contentScale = ContentScale.FillBounds,
-                model = images[pageIndex].filePath,
+                model = images[pageIndex].fileUrl,
                 contentDescription = "TV Show Image ${pageIndex + 1}",
                 errorContent = { ErrorImage() },
                 loadingContent = { CircularLoading(modifier = Modifier) })
@@ -341,7 +341,7 @@ fun EpisodeDetailsScreenPreview() {
             uiState = EpisodeDetailsUiState(
                 tvImages = listOf(
                     ImageItemEntity(
-                        filePath = "https://tse3.mm.bing.net/th/id/OIP.U_VJuupQohwnzXcKMztqWgHaEo?rs=1&pid=ImgDetMain&o=7&rm=3",
+                        fileUrl = "https://tse3.mm.bing.net/th/id/OIP.U_VJuupQohwnzXcKMztqWgHaEo?rs=1&pid=ImgDetMain&o=7&rm=3",
                         aspectRatio = 1.78,
                         height = 720,
                         width = 1280,
@@ -350,7 +350,7 @@ fun EpisodeDetailsScreenPreview() {
                         voteCount = 150
                     ),
                     ImageItemEntity(
-                        filePath = "https://image.tmdb.org/t/p/w500/sample2.jpg",
+                        fileUrl = "https://image.tmdb.org/t/p/w500/sample2.jpg",
                         aspectRatio = 1.78,
                         height = 720,
                         width = 1280,
