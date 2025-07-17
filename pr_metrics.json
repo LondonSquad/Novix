@@ -2881,5 +2881,33 @@
       "deletions": 81,
       "changed_files": 8
     }
+  },
+  {
+    "pr_number": 162,
+    "url": "https://github.com/LondonSquad/Novix/pull/162",
+    "title": "Feature/get movie by category",
+    "opened_at": "2025-07-17T21:19:30Z",
+    "head_ref": "feature/get-movie-by-category",
+    "base_ref": "develop",
+    "creator": {
+      "login": "marwanqashwa",
+      "id": 100484790,
+      "url": "https://github.com/marwanqashwa"
+    },
+    "approvals": [],
+    "first_approved_at": null,
+    "time_to_first_approval_minutes": null,
+    "required_approvals_met_at": null,
+    "time_to_required_approvals_minutes": null,
+    "closed_at": null,
+    "merged_at": null,
+    "merged_by": null,
+    "week": "2025-W29",
+    "status": "pending",
+    "diff_stats": {
+      "additions": 334,
+      "deletions": 159,
+      "changed_files": 13
+    }
   }
 ]
