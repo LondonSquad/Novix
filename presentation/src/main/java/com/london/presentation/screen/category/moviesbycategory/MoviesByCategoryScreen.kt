@@ -1,6 +1,7 @@
 package com.london.presentation.screen.category.moviesbycategory
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
@@ -28,11 +29,18 @@ import org.koin.androidx.compose.koinViewModel
 
 @Composable
 fun MoviesByCategoryScreen(
-    modifier: Modifier = Modifier, viewModel: MoviesByCategoryViewModel = koinViewModel()
+    modifier: Modifier = Modifier,
+    viewModel: MoviesByCategoryViewModel = koinViewModel(),
+    onNavigateToMovieDetails: (Int) -> Unit,
+    onBackClick: () -> Unit
 ) {
     val state by viewModel.uiState.collectAsState()
     MoviesByCategoryContent(
-        state = state, interactions = viewModel, modifier = modifier
+        state = state,
+        interactions = viewModel,
+        modifier = modifier,
+        onNavigateToMovieDetails = onNavigateToMovieDetails,
+        onBackClick = onBackClick
     )
 }
 
@@ -40,6 +48,8 @@ fun MoviesByCategoryScreen(
 private fun MoviesByCategoryContent(
     state: MoviesByCategoryUiState,
     interactions: MoviesByCategoryInteractions,
+    onNavigateToMovieDetails: (Int) -> Unit,
+    onBackClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
 
@@ -61,7 +71,7 @@ private fun MoviesByCategoryContent(
                     convertGenreCodeToString(
                         genreId = state.categoryId, searchCategory = SearchCategory.Movies
                     )
-                ), onBackClick = interactions::onBackClick
+                ), onBackClick = onBackClick
             )
         }
         items(moviesLazyList.itemCount) { index ->
@@ -69,7 +79,9 @@ private fun MoviesByCategoryContent(
             if (movie != null) HomeCard(
                 imageUrl = movie.posterPicture,
                 isSaved = false,
-                onSaveClick = { interactions.onSavedClick(movie.id) })
+                onSaveClick = { interactions.onSavedClick(movie.id) },
+                modifier = Modifier.clickable { onNavigateToMovieDetails(movie.id) }
+            )
         }
     }
 }
@@ -79,74 +91,73 @@ private fun MoviesByCategoryContent(
 private fun MoviesByCategoryContentPreview() {
     MoviesByCategoryContent(
         state = MoviesByCategoryUiState(
-        movies = flow<PagingData<Movie>> {
-            Movie(
-                id = 1,
-                name = "",
-                posterPicture = "",
-                releaseYear = 1,
-                rating = 3,
-                genreIds = listOf()
-            )
-            Movie(
-                id = 1,
-                name = "",
-                posterPicture = "",
-                releaseYear = 1,
-                rating = 3,
-                genreIds = listOf()
-            )
-            Movie(
-                id = 1,
-                name = "",
-                posterPicture = "",
-                releaseYear = 1,
-                rating = 3,
-                genreIds = listOf()
-            )
-            Movie(
-                id = 1,
-                name = "",
-                posterPicture = "",
-                releaseYear = 1,
-                rating = 3,
-                genreIds = listOf()
-            )
-            Movie(
-                id = 1,
-                name = "",
-                posterPicture = "",
-                releaseYear = 1,
-                rating = 3,
-                genreIds = listOf()
-            )
-            Movie(
-                id = 1,
-                name = "",
-                posterPicture = "",
-                releaseYear = 1,
-                rating = 3,
-                genreIds = listOf()
-            )
-            Movie(
-                id = 1,
-                name = "",
-                posterPicture = "",
-                releaseYear = 1,
-                rating = 3,
-                genreIds = listOf()
-            )
-            Movie(
-                id = 1,
-                name = "",
-                posterPicture = "",
-                releaseYear = 1,
-                rating = 3,
-                genreIds = listOf()
-            )
-        }), interactions = object : MoviesByCategoryInteractions {
-        override fun onMovieClick(movieId: Int) {}
-        override fun onBackClick() {}
-        override fun onSavedClick(movieId: Int) {}
-    })
+            movies = flow<PagingData<Movie>> {
+                Movie(
+                    id = 1,
+                    name = "",
+                    posterPicture = "",
+                    releaseYear = 1,
+                    rating = 3,
+                    genreIds = listOf()
+                )
+                Movie(
+                    id = 1,
+                    name = "",
+                    posterPicture = "",
+                    releaseYear = 1,
+                    rating = 3,
+                    genreIds = listOf()
+                )
+                Movie(
+                    id = 1,
+                    name = "",
+                    posterPicture = "",
+                    releaseYear = 1,
+                    rating = 3,
+                    genreIds = listOf()
+                )
+                Movie(
+                    id = 1,
+                    name = "",
+                    posterPicture = "",
+                    releaseYear = 1,
+                    rating = 3,
+                    genreIds = listOf()
+                )
+                Movie(
+                    id = 1,
+                    name = "",
+                    posterPicture = "",
+                    releaseYear = 1,
+                    rating = 3,
+                    genreIds = listOf()
+                )
+                Movie(
+                    id = 1,
+                    name = "",
+                    posterPicture = "",
+                    releaseYear = 1,
+                    rating = 3,
+                    genreIds = listOf()
+                )
+                Movie(
+                    id = 1,
+                    name = "",
+                    posterPicture = "",
+                    releaseYear = 1,
+                    rating = 3,
+                    genreIds = listOf()
+                )
+                Movie(
+                    id = 1,
+                    name = "",
+                    posterPicture = "",
+                    releaseYear = 1,
+                    rating = 3,
+                    genreIds = listOf()
+                )
+            }), interactions = object : MoviesByCategoryInteractions {
+            override fun onSavedClick(movieId: Int) {}
+        }, {}, {}
+    )
 }

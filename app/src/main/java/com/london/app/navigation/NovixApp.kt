@@ -30,6 +30,7 @@ import com.london.presentation.navigation.Screen.TvShowDetails
 import com.london.presentation.screen.account.AccountScreen
 import com.london.presentation.screen.bookmark.BookmarksScreen
 import com.london.presentation.screen.category.CategoriesScreen
+import com.london.presentation.screen.category.moviesbycategory.MoviesByCategoryScreen
 import com.london.presentation.screen.details.actordetails.topmoviespicks.TopMoviesPicksScreen
 import com.london.presentation.screen.details.movieDetalis.MovieDetailsScreen
 import com.london.presentation.screen.details.tvshow.tvshowdetails.TvShowsDetailsScreen
@@ -131,11 +132,14 @@ fun NovixApp() {
                 }
             }
             composable<MoviesByCategory> {
-                val moviesByCategory = it.arguments?.let {
-                    MoviesByCategory(
-                        categoryId = it.getInt("categoryId"),
-                    )
-                }
+                MoviesByCategoryScreen(
+                    onNavigateToMovieDetails = { movieId ->
+                        navController.navigate(MovieDetails(movieId))
+                    },
+                    onBackClick = {
+                        navController.navigateUp()
+                    },
+                )
             }
         }
     }

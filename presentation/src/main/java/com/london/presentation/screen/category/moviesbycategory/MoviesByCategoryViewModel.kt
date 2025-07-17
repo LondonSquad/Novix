@@ -1,9 +1,11 @@
 package com.london.presentation.screen.category.moviesbycategory
 
+import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.london.domain.entity.Movie
 import com.london.domain.usecase.GetMoviesByCategoryUseCase
+import com.london.presentation.navigation.arguments.MoviesByCategoryArgs
 import com.london.presentation.screen.base.createPagingSourceFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -15,20 +17,20 @@ import org.koin.core.annotation.Provided
 
 @KoinViewModel
 class MoviesByCategoryViewModel(
-    @Provided private val getMoviesByCategoryUseCase: GetMoviesByCategoryUseCase
+    @Provided
+    private val getMoviesByCategoryUseCase: GetMoviesByCategoryUseCase,
+    savedStateHandle: SavedStateHandle
 ) : ViewModel(), MoviesByCategoryInteractions {
     private val _uiState = MutableStateFlow(MoviesByCategoryUiState())
     val uiState: StateFlow<MoviesByCategoryUiState> = _uiState.asStateFlow()
 
     init {
+        val args = MoviesByCategoryArgs(savedStateHandle)
         viewModelScope.launch {
-            initializeMovies(27)
+            initializeMovies(args.categoryId)
         }
     }
 
-    override fun onMovieClick(movieId: Int) {
-        //navigate to movie details
-    }
 
     private fun initializeMovies(categoryId: Int) {
         _uiState.update {
@@ -45,10 +47,6 @@ class MoviesByCategoryViewModel(
                 movies = moviesFlow,
             )
         }
-    }
-
-    override fun onBackClick() {
-        //navigate back
     }
 
     override fun onSavedClick(movieId: Int) {
