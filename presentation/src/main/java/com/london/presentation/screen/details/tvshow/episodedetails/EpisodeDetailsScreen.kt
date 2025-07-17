@@ -40,6 +40,7 @@ import androidx.compose.ui.layout.layout
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.zIndex
 import com.ae.imageharamblur.ui.ImageViewFilter
@@ -49,7 +50,9 @@ import com.london.designsystem.component.NovixCarousalRow
 import com.london.designsystem.component.SaveIcon
 import com.london.designsystem.component.button.ErrorImage
 import com.london.designsystem.theme.NovixTheme
+import com.london.domain.entity.Actor
 import com.london.domain.entity.tvshowdetails.ImageItemEntity
+import com.london.domain.entity.tvshowdetails.episode.TvShowEpisodeByIdEntity
 import com.london.presentation.R
 import org.koin.androidx.compose.koinViewModel
 import com.london.designsystem.R as Res
@@ -327,5 +330,64 @@ fun OverviewSection(
                     }
             )
         }
+    }
+}
+
+@Preview(showBackground = true)
+@Composable
+fun EpisodeDetailsScreenPreview() {
+    NovixTheme {
+        EpisodeDetailsScreenContent(
+            uiState = EpisodeDetailsUiState(
+                tvImages = listOf(
+                    ImageItemEntity(
+                        filePath = "https://tse3.mm.bing.net/th/id/OIP.U_VJuupQohwnzXcKMztqWgHaEo?rs=1&pid=ImgDetMain&o=7&rm=3",
+                        aspectRatio = 1.78,
+                        height = 720,
+                        width = 1280,
+                        iso6391 = "en",
+                        voteAverage = 8.5,
+                        voteCount = 150
+                    ),
+                    ImageItemEntity(
+                        filePath = "https://image.tmdb.org/t/p/w500/sample2.jpg",
+                        aspectRatio = 1.78,
+                        height = 720,
+                        width = 1280,
+                        iso6391 = "en",
+                        voteAverage = 7.8,
+                        voteCount = 120
+                    )
+                ),
+                tvShowEpisode = TvShowEpisodeByIdEntity(
+                    id = 1,
+                    name = "The One Where Monica Gets a Roommate",
+                    overview = "Monica and the gang introduce Rachel to the real world after she leaves her fiancé at the altar. This is a longer overview to test the read more/less functionality in the UI. It should show how the text expands and collapses when the user taps the read more button.",
+                    airDate = "1994-09-22",
+                    episodeNumber = 1,
+                    seasonNumber = 1,
+                    episodeTypes = "Standard",
+                    tvShowId = 1399,
+                    stillPath = "/sample-still.jpg",
+                    voteAverage = 8.5,
+                    voteCount = 1250,
+                    guestStars = listOf(
+                        Actor(
+                            id = 1,
+                            name = "Jane Doe",
+                            characterName = "Guest Character 1",
+                            profilePicture = "https://image.tmdb.org/t/p/w185/sample-profile1.jpg"
+                        ),
+                        Actor(
+                            id = 2,
+                            name = "John Smith",
+                            characterName = "Guest Character 2",
+                            profilePicture = "https://image.tmdb.org/t/p/w185/sample-profile2.jpg"
+                        )
+                    )
+                )
+            ),
+            onBackClick = {}
+        )
     }
 }

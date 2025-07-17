@@ -135,4 +135,8 @@ class UseCaseModule {
     @Single
     fun provideGetEpisodeByTvShowId(repository: DetailsRepository) =
         GetEpisodesByTvShowSeason(repository)
+
+    @Single
+    fun provideGetTvShowImages(repository: DetailsRepository) =
+        GetImagesById(repository)
 }

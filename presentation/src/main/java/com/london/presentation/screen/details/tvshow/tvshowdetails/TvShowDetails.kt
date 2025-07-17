@@ -546,7 +546,8 @@ fun SeasonDetailsSection(
         )
 
         EpisodeRow(
-            uiState = uiState
+            uiState = uiState,
+            modifier = Modifier.fillMaxWidth()
         )
     }
 }
@@ -595,7 +596,8 @@ fun SeasonEpisodesDetails(
 @Composable
 fun EpisodeRow(
     modifier: Modifier = Modifier,
-    uiState: TvShowDetailsUiState
+    uiState: TvShowDetailsUiState,
+    viewModel: TvShowDetailsViewModel = koinViewModel()
 ) {
     Text(
         text = "${
@@ -608,7 +610,14 @@ fun EpisodeRow(
 
     uiState.tvShowEpisodes.forEach { episode ->
         Row(
-            modifier = modifier,
+            modifier = modifier
+                .clickable {
+                    viewModel.onEpisodeClick(
+                        episode.showId,
+                        episode.episodeNumber,
+                        episode.seasonNumber
+                    )
+                },
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.spacedBy(12.dp)
         ) {
