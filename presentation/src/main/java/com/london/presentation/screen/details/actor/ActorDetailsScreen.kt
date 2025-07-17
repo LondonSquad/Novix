@@ -1,10 +1,13 @@
 package com.london.presentation.screen.details.actor
 
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
@@ -15,6 +18,9 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.grid.GridCells
+import androidx.compose.foundation.lazy.grid.LazyHorizontalGrid
+import androidx.compose.foundation.lazy.grid.itemsIndexed
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -23,6 +29,10 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -30,10 +40,13 @@ import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.ae.imageharamblur.ui.ImageViewFilter
 import com.london.designsystem.component.CircularLoading
+import com.london.designsystem.component.HomeCard
+import com.london.designsystem.component.SectionHeader
 import com.london.designsystem.component.TopBar
 import com.london.designsystem.component.button.ErrorImage
 import com.london.designsystem.theme.NovixTheme
@@ -95,6 +108,127 @@ fun ActorScreenContent(
             item {
                 ActorInfoSection()
             }
+            item {
+                Overview(
+                    modifier = Modifier.padding(16.dp)
+                )
+            }
+            item{
+                SectionHeader(
+                    text = "Gallery",
+                    hasGetAll = true,
+                    hasIcon = true,
+                    modifier = Modifier
+                        .padding(top = 16.dp, bottom = 12.dp)
+                        .padding(horizontal = 16.dp)
+                )
+            }
+            item {
+                ActorGallery()
+            }
+            item{
+                SectionHeader(
+                    text = "Top movies picks",
+                    hasGetAll = true,
+                    hasIcon = true,
+                    modifier = Modifier
+                        .padding(top = 16.dp, bottom = 12.dp)
+                        .padding(horizontal = 16.dp)
+                )
+            }
+            item {
+                TopMoviesPicksList()
+            }
+            item{
+                SectionHeader(
+                    text = "Top tv shows picks",
+                    hasGetAll = true,
+                    hasIcon = true,
+                    modifier = Modifier
+                        .padding(top = 16.dp, bottom = 12.dp)
+                        .padding(horizontal = 16.dp)
+                )
+            }
+            item {
+                TopTvShowsPicksList()
+            }
+        }
+    }
+}
+
+@Composable
+fun TopMoviesPicksList() {
+    LazyHorizontalGrid(
+        rows = GridCells.Adaptive(minSize = 128.dp),
+        modifier = Modifier
+            .padding(horizontal = 16.dp)
+            .height(210.dp),
+        horizontalArrangement = Arrangement.spacedBy(8.dp),
+    ) {
+        items(10) {
+            HomeCard(
+                imageUrl = "https://image.tmdb.org/t/p/w500/ajNaPmXVVMJFg9GWmu6MJzTaXdV.jpg",
+                isSaved = false,
+                onSaveClick = {
+                    //TODO("Not yet implemented")
+                }
+            )
+        }
+    }
+}
+
+@Composable
+fun TopTvShowsPicksList() {
+    LazyHorizontalGrid(
+        rows = GridCells.Adaptive(minSize = 128.dp),
+        modifier = Modifier
+            .padding(horizontal = 16.dp)
+            .height(210.dp),
+        horizontalArrangement = Arrangement.spacedBy(8.dp),
+    ) {
+        items(10) {
+            HomeCard(
+                imageUrl = "https://image.tmdb.org/t/p/w500/ajNaPmXVVMJFg9GWmu6MJzTaXdV.jpg",
+                isSaved = false,
+                onSaveClick = {
+                    //TODO("Not yet implemented")
+                }
+            )
+        }
+    }
+}
+
+@Composable
+fun ActorGallery() {
+    val images = listOf(
+        R.drawable.actor_image,
+        R.drawable.actor_image,
+        R.drawable.actor_image,
+        R.drawable.actor_image,
+        R.drawable.actor_image,
+        R.drawable.actor_image,
+    )
+
+    LazyHorizontalGrid(
+        rows = GridCells.Adaptive(minSize = 88.dp),
+        horizontalArrangement = Arrangement.spacedBy(8.dp),
+        contentPadding = PaddingValues(horizontal = 16.dp),
+        modifier = Modifier.height(88.dp)
+    ) {
+        itemsIndexed(images) { _, imageRes ->
+            Image(
+                painter = painterResource(id = imageRes),
+                contentDescription = null,
+                contentScale = ContentScale.FillBounds,
+                modifier = Modifier
+                    .size(88.dp)
+                    .border(
+                        shape = RoundedCornerShape(12.dp),
+                        width = 1.dp,
+                        color = NovixTheme.colors.stroke
+                    )
+                    .clip(RoundedCornerShape(12.dp))
+            )
         }
     }
 }
@@ -151,42 +285,90 @@ private fun ActorInfoSection(
             )
             .clip(RoundedCornerShape(16.dp)),
         verticalArrangement = Arrangement.spacedBy(8.dp)
-    )  {
-        Text(
-            text = "Tom Hanks\n",
-            style = NovixTheme.typography.title.medium,
-            color = NovixTheme.colors.title,
-            modifier = Modifier.padding(start = 12.dp, end = 12.dp, top = 12.dp)
-        )
-        Row(
-            modifier = Modifier.padding(horizontal = 12.dp),
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.spacedBy(8.dp)
+    ) {
+        Column(
+            verticalArrangement = Arrangement.Center,
+            modifier = Modifier.padding(12.dp),
         ) {
             Text(
-                text = "Acting",
-                style = NovixTheme.typography.label.small,
-                color = NovixTheme.colors.body,
+                text = "Tom Hanks\n",
+                style = NovixTheme.typography.title.medium,
+                color = NovixTheme.colors.title,
             )
-            Icon(
-                painter = painterResource(R.drawable.image_dot),
-                contentDescription = stringResource(R.string.imagr_dot),
-                tint = NovixTheme.colors.body,
-                modifier = Modifier.size(3.dp)
-            )
-            TextWithIcon(
-                icon = painterResource(R.drawable.icon_location),
-                text = "Santa Cruz del Norte, Cuba"
-            )
-            Icon(
-                painter = painterResource(R.drawable.image_dot),
-                contentDescription = stringResource(R.string.imagr_dot),
-                tint = NovixTheme.colors.body,
-                modifier = Modifier.size(3.dp)
-            )
+            FlowRow(
+                verticalArrangement = Arrangement.Center,
+                horizontalArrangement = Arrangement.spacedBy(8.dp)
+            ) {
+                Text(
+                    text = "Acting",
+                    style = NovixTheme.typography.label.small,
+                    color = NovixTheme.colors.body,
+                )
+                Icon(
+                    painter = painterResource(R.drawable.image_dot),
+                    contentDescription = stringResource(R.string.imagr_dot),
+                    tint = NovixTheme.colors.body,
+                    modifier = Modifier.size(3.dp).align(alignment = Alignment.CenterVertically)
+                )
+                TextWithIcon(
+                    icon = painterResource(R.drawable.icon_location),
+                    text = "Santa Cruz del Norte, Cuba"
+                )
+                Icon(
+                    painter = painterResource(R.drawable.image_dot),
+                    contentDescription = stringResource(R.string.imagr_dot),
+                    tint = NovixTheme.colors.body,
+                    modifier = Modifier.size(3.dp).align(alignment = Alignment.CenterVertically)
+                )
+                TextWithIcon(
+                    icon = painterResource(R.drawable.birthday_cake),
+                    text = "1988-04-30  -  2012-30-03"
+                )
+            }
         }
     }
 }
+
+@Composable
+private fun Overview(
+    modifier: Modifier
+){
+
+    var maxLines by rememberSaveable { mutableIntStateOf(4) }
+    var isTextCollapsed by rememberSaveable { mutableStateOf(false) }
+    Column(
+        modifier = modifier
+    ) {
+    Text(
+        text = stringResource(R.string.biography),
+        style = NovixTheme.typography.title.medium,
+        color = NovixTheme.colors.title
+    )
+
+    Column {
+        Text(
+            text = "Matthew Paige Damon is an American actor, film producer, and screenwriter. He was ranked among Forbes most bankable stars in 2007 and, in 2010, was one of the highest-grossing ",
+            style = NovixTheme.typography.body.small,
+            color = NovixTheme.colors.body,
+            maxLines = maxLines,
+            overflow = TextOverflow.Ellipsis
+        )
+
+        Text(
+            text = if (isTextCollapsed)
+                stringResource(com.london.designsystem.R.string.read_less) else stringResource(com.london.designsystem.R.string.read_more),
+            style = NovixTheme.typography.body.small,
+            color = NovixTheme.colors.primary,
+            modifier = Modifier
+                .clickable {
+                    maxLines = if (maxLines == 4) Int.MAX_VALUE else 4
+                    isTextCollapsed = !isTextCollapsed
+                }
+        )
+    }
+    }
+}
+
 
 @Composable
 private fun TextWithIcon(
