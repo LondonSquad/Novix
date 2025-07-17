@@ -257,7 +257,7 @@ fun MovieDetailsContent(
                 }
             }
 
-            if (state.genres.isNotEmpty()) {
+            if (state.actors.isNotEmpty()) {
                 item {
                     Text(
                         text = stringResource(com.london.presentation.R.string.cast),
@@ -274,12 +274,12 @@ fun MovieDetailsContent(
                         horizontalArrangement = Arrangement.spacedBy(12.dp),
                         contentPadding = PaddingValues(vertical = 8.dp, horizontal = 16.dp)
                     ) {
-                        items(state.genres) { actor ->
+                        items(state.actors) { actor ->
                             ActorItem(
                                 actorName = actor.name,
                                 characterName = actor.characterName,
                                 imageRes = actor.avatarUrl,
-                                modifier = Modifier.defaultMinSize(minWidth = 375.dp)
+                                modifier = Modifier.defaultMinSize(minWidth = 296.dp)
                             )
                         }
                     }
@@ -503,7 +503,7 @@ private fun MovieDetailsPreview() {
         movieDuration = "2h 22m",
         releaseDate = "1994-09-22",
         movieOverview = "It is a 1994 American drama film, considered one of the greatest films in cinematic history. It revolves around Andy Dufresne, a banker wrongfully convicted of the murder of his wife and",
-        genres = listOf(
+        actors = listOf(
             ActorUIState(
                 "Tim Robbins",
                 characterName = "Andy Dufresne",
