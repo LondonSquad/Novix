@@ -14,11 +14,12 @@ import com.london.domain.entity.Actor
 import com.london.domain.entity.moviedatails.MovieDetails
 import com.london.domain.entity.moviedatails.SimilarMovie
 import com.london.domain.repository.MovieDetailsRepository
+import org.koin.core.annotation.Single
 
+@Single
 class MovieDetailsRepoImpl(
     private val movieDetailsRemote: MovieDetailsRemote,
 ) : MovieDetailsRepository {
-
     override suspend fun getMovieById(id: Int): MovieDetails =
         runOrThrow(
             block = {

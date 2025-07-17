@@ -36,10 +36,10 @@ datastorePreferences = "1.1.7"
 datastoreCore = "1.1.7"
 
 # Dependency Injection (Koin)
-koinAndroid = "4.1.0"
+koin = "4.1.0"
 koinAndroidxCompose = "4.1.0"
-koinAnnotations = "1.4.0"
-koinKspCompiler = "1.4.0"
+koinAnnotations = "2.1.0"
+koinKspCompiler = "2.1.0"
 
 # Ktor Networking
 ktor = "2.3.13"
@@ -118,9 +118,10 @@ androidx-datastore-core = { group = "androidx.datastore", name = "datastore-core
 firebase-bom = { module = "com.google.firebase:firebase-bom", version.ref = "firebaseBom" }
 firebase-ml-modeldownloader = { module = "com.google.firebase:firebase-ml-modeldownloader", version.ref = "firebaseMlModeldownloader" }
 gson = { module = "com.google.code.gson:gson", version.ref = "gson" }
-koin-android = { group = "io.insert-koin", name = "koin-android", version.ref = "koinAndroid" }
+koin-android = { group = "io.insert-koin", name = "koin-android", version.ref = "koin" }
+koin-core = { group = "io.insert-koin", name = "koin-core", version.ref = "koin" }
 koin-androidx-compose = { group = "io.insert-koin", name = "koin-androidx-compose", version.ref = "koinAndroidxCompose" }
-koin-androidx-navigation = { module = "io.insert-koin:koin-androidx-navigation", version.ref = "koinAndroid" }
+koin-androidx-navigation = { module = "io.insert-koin:koin-androidx-navigation", version.ref = "koin" }
 koin-annotations = { group = "io.insert-koin", name = "koin-annotations", version.ref = "koinAnnotations" }
 koin-ksp-compiler = { group = "io.insert-koin", name = "koin-ksp-compiler", version.ref = "koinKspCompiler" }
 
@@ -207,9 +208,10 @@ compose-debug = [
 ]
 
 koin = [
+    "koin-core",
     "koin-android",
+    "koin-annotations",
     "koin-androidx-compose",
-    "koin-annotations"
 ]
 
 koin-ksp = [
