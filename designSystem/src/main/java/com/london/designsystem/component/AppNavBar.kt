@@ -80,7 +80,7 @@ fun <T> NavBar(
             .fillMaxWidth()
             .topBorder(navBarColors.topBorderColor, 1.dp)
             .background(color = navBarColors.backgroundColor)
-            .padding(horizontal = 24.dp),
+            .padding(vertical = 7.dp),
         horizontalArrangement = Arrangement.SpaceEvenly,
         verticalAlignment = Alignment.CenterVertically
     ) {
