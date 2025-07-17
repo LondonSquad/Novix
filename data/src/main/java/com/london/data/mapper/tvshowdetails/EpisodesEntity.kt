@@ -84,8 +84,8 @@ fun TvShowEpisodeResponse.toTvShowEpisodeEntity(): TvShowEpisodeByIdEntity {
         stillPath = this.stillPath,
         voteAverage = this.voteAverage,
         voteCount = this.voteCount,
-        guestStars = this.guestStars.map { it.toActorEntity() }
-
+        guestStars = this.guestStars.map { it.toActorEntity() },
+        id = this.id
     )
 }
 
