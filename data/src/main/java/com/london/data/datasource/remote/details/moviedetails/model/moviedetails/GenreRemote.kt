@@ -4,6 +4,6 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class GenreRemote(
-    val id: Int,
-    val name: String
+    val id: Int?,
+    val name: String?
 )
