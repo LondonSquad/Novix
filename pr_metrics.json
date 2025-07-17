@@ -2714,9 +2714,18 @@
       "id": 100484790,
       "url": "https://github.com/marwanqashwa"
     },
-    "approvals": [],
-    "first_approved_at": null,
-    "time_to_first_approval_minutes": null,
+    "approvals": [
+      {
+        "reviewer": {
+          "id": 81706918,
+          "login": "karimdeabes",
+          "url": "https://github.com/karimdeabes"
+        },
+        "submitted_at": "2025-07-17T22:32:16Z"
+      }
+    ],
+    "first_approved_at": "2025-07-17T22:32:16Z",
+    "time_to_first_approval_minutes": 313.01666666666665,
     "required_approvals_met_at": null,
     "time_to_required_approvals_minutes": null,
     "closed_at": null,
