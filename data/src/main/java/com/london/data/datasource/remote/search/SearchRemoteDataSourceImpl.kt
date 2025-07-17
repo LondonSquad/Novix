@@ -1,6 +1,5 @@
 package com.london.data.datasource.remote.search
 
-import android.util.Log
 import com.london.data.BuildConfig
 import com.london.data.datasource.remote.ApiConstants
 import com.london.data.datasource.remote.ApiResponse
@@ -10,7 +9,6 @@ import com.london.data.datasource.remote.search.model.SearchTvShowRemote
 import io.ktor.client.HttpClient
 import io.ktor.client.call.body
 import io.ktor.client.request.get
-import io.ktor.client.statement.bodyAsText
 import io.ktor.http.path
 
 
@@ -31,7 +29,6 @@ class SearchRemoteDataSourceImpl(private val ktorClient: HttpClient) : SearchRem
                 parameters.append("api_key", BuildConfig.API_KEY)
             }
         }
-        Log.d("test", "searchForMovies: ${response.bodyAsText()}")
         return response.body()
     }
 

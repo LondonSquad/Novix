@@ -9,6 +9,7 @@ import com.london.data.datasource.remote.details.moviedetails.runOrThrow
 import com.london.data.mapper.moviedetails.toEntity
 import com.london.data.mapper.moviedetails.toGenre
 import com.london.data.mapper.moviedetails.toSimilarMovie
+import com.london.data.utils.asImageUrlOrEmpty
 import com.london.domain.entity.Actor
 import com.london.domain.entity.moviedatails.MovieDetails
 import com.london.domain.entity.moviedatails.SimilarMovie
@@ -24,8 +25,7 @@ class MovieDetailsRepoImpl(
                 val movieDetailsRemote = movieDetailsRemote.getMovieDetails(id)
                 movieDetailsRemote.toEntity(
                     genres = movieDetailsRemote.genreRemote?.map { it.toGenre() } ?: emptyList(),
-                    movieImages = movieDetailsRemote.backdropPath?.let { listOf("https://image.tmdb.org/t/p/w500$it") }
-                        ?: emptyList()
+                    movieImages = getMovieImagesById(id)
                 )
             },
             error = { cause -> GetMovieDetailsException(cause) }
@@ -45,9 +45,9 @@ class MovieDetailsRepoImpl(
             block = {
                 val images = movieDetailsRemote.getMovieImages(id)
                 when {
-                    images.backdrops.isNotEmpty() -> images.backdrops.map { it.filePath }
-                    images.posters.isNotEmpty() -> images.posters.map { it.filePath }
-                    images.logos.isNotEmpty() -> images.logos.map { it.filePath }
+                    images.backdrops.isNotEmpty() -> images.backdrops.map { it.filePath.asImageUrlOrEmpty() }
+                    images.posters.isNotEmpty() -> images.posters.map { it.filePath.asImageUrlOrEmpty() }
+                    images.logos.isNotEmpty() -> images.logos.map { it.filePath.asImageUrlOrEmpty() }
                     else -> emptyList()
                 }.take(IMAGE_LIMIT)
             },

@@ -1,30 +1,24 @@
 package com.london.data.datasource.remote.details.moviedetails
 
-import android.util.Log
+import com.london.data.BuildConfig
 import io.ktor.client.HttpClient
+import io.ktor.client.call.body
 import io.ktor.client.request.get
-import io.ktor.client.statement.bodyAsText
 import io.ktor.http.path
-import kotlinx.serialization.json.Json
-
-val json = Json{ignoreUnknownKeys = true}
 
 suspend inline fun <reified T> fetchData(
     path: String,
-    tag: String,
     ktorClient: HttpClient
 ): T {
     return runCatching {
         val response = ktorClient.get {
             url {
                 path(path)
+                parameters.append("api_key", BuildConfig.API_KEY)
             }
         }
-        val responseBody = response.bodyAsText()
-        Log.d("MovieDetailsRemoteImpl", "$tag response: $responseBody")
-        json.decodeFromString<T>(responseBody)
+        response.body<T>()
     }.getOrElse { exception ->
-        Log.e("MovieDetailsRemoteImpl", "Error in $tag", exception)
         throw exception
     }
 }

@@ -3,6 +3,7 @@ package com.london.data.mapper.tvshowdetails
 
 import com.london.data.datasource.remote.details.tvshowdetails.model.ImageItem
 import com.london.data.datasource.remote.details.tvshowdetails.model.TvShowImagesRemoteResponse
+import com.london.data.utils.asImageUrlOrEmpty
 import com.london.domain.KoverIgnore
 import com.london.domain.entity.tvshowdetails.ImageItemEntity
 import com.london.domain.entity.tvshowdetails.TvShowImagesEntity
@@ -23,7 +24,7 @@ object TvShowImagesMapper {
             aspectRatio = aspectRatio,
             height = height,
             iso6391 = iso6391,
-            filePath = "https://image.tmdb.org/t/p/w500${this.filePath}",
+            filePath = filePath.asImageUrlOrEmpty(),
             voteAverage = voteAverage,
             voteCount = voteCount,
             width = width

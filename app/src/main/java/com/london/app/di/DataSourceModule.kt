@@ -62,6 +62,10 @@ class DataSourceModule {
                 key = "language",
                 value = context.resources.configuration.locales[0].language
             )
+            header(
+                key = "Authorization",
+                value = "Bearer ${BuildConfig.AUTHORIZATION_KEY}"
+            )
         }
         install(Logging) {
             logger = object : Logger {
