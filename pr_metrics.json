@@ -2840,5 +2840,33 @@
       "deletions": 9,
       "changed_files": 1
     }
+  },
+  {
+    "pr_number": 159,
+    "url": "https://github.com/LondonSquad/Novix/pull/159",
+    "title": "enhancement/app-size-reduction",
+    "opened_at": "2025-07-17T21:00:42Z",
+    "head_ref": "enhancement/app-size-reduction",
+    "base_ref": "develop",
+    "creator": {
+      "login": "abdo-essam",
+      "id": 92235360,
+      "url": "https://github.com/abdo-essam"
+    },
+    "approvals": [],
+    "first_approved_at": null,
+    "time_to_first_approval_minutes": null,
+    "required_approvals_met_at": null,
+    "time_to_required_approvals_minutes": null,
+    "closed_at": null,
+    "merged_at": null,
+    "merged_by": null,
+    "week": "2025-W29",
+    "status": "pending",
+    "diff_stats": {
+      "additions": 263,
+      "deletions": 81,
+      "changed_files": 8
+    }
   }
 ]
