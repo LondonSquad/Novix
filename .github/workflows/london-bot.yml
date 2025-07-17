@@ -590,27 +590,6 @@ jobs:
           comment-id: ${{ github.event.comment.id }}
           reactions: eyes
 
-  react_to_opened_pr:
-    name: React with Fire to New PR
-    runs-on: ubuntu-latest
-    permissions:
-      pull-requests: write
-
-    steps:
-      - name: Create GitHub App Token
-        uses: actions/create-github-app-token@v2
-        id: app-token
-        with:
-          app-id: ${{ vars.APP_ID }}
-          private-key: ${{ secrets.APP_PRIVATE_KEY }}
-
-      - name: Add Fire Reaction to PR
-        uses: peter-evans/create-or-update-comment@v4
-        with:
-          token: ${{ steps.app-token.outputs.token }}
-          issue-number: ${{ github.event.pull_request.number }}
-          reactions: fire
-
   react_to_approval:
     name: React to PR Review Approvals with Heart
     runs-on: ubuntu-latest
@@ -634,4 +613,3 @@ jobs:
           token: ${{ steps.app-token.outputs.token }}
           comment-id: ${{ github.event.review.id }}
           reactions: heart
-
