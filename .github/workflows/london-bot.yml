@@ -11,12 +11,11 @@ on:
     types: [submitted, dismissed]
   workflow_dispatch:
     inputs:
-      inputs:
-        backfill_days:
-          description: 'Number of days to look back for PRs'
-          required: false
-          default: 1
-          type: number
+      backfill_days:
+        description: 'Number of days to look back for PRs'
+        required: false
+        default: 1
+        type: number
 
       backfill_existing_prs:
         description: 'Backfill existing open PRs not in metrics'
@@ -73,6 +72,19 @@ jobs:
       - run: echo 'No merge conflicts'
         if: ${{ !steps.autoupdate.outputs.conflicted }}
 
+      - name: Add PR comment for Autoupdate
+        if: always() && github.event.pull_request.number
+        uses: peter-evans/create-or-update-comment@v4
+        with:
+          token: ${{ steps.app-token.outputs.token }}
+          issue-number: ${{ github.event.pull_request.number }}
+          body: |
+            **[London Bot] Auto-update Status**
+
+            ${{ steps.autoupdate.outputs.conflicted == 'true' && '❌ **Merge conflict detected!** Branch could not be automatically updated from `develop`.' || '' }}
+            ${{ steps.autoupdate.outputs.conflicted != 'true' && steps.autoupdate.outcome == 'success' && '✅ Branch successfully updated from `develop`.' || '' }}
+            ${{ steps.autoupdate.outcome == 'failure' && '🚨 An error occurred during the auto-update process.' || '' }}
+
   update_pr_metrics:
     name: Update Metrics
     if: |
@@ -91,7 +103,7 @@ jobs:
     runs-on: ubuntu-latest
     permissions:
       contents: write
-      pull-requests: read
+      pull-requests: write
     env:
       REQUIRED_APPROVALS: 2
 
@@ -142,9 +154,10 @@ jobs:
           GH_TOKEN: ${{ steps.app-token.outputs.token }}
         run: |
           PR_FILE="pr_metrics.json"
-          BACKFILL_DAYS="${{ steps.prepare_data.outputs.BACKFILL_DAYS || 1 }}"
+          BACKFILL_DAYS="${{ github.event.inputs.backfill_days }}"
 
-          echo "--- Backfilling existing PRs (looking back $BACKFILL_DAYS days) ---"
+          echo "--- Backfilling PRs (looking back $BACKFILL_DAYS days) ---"
+          echo "--- This will add new PRs and update existing ones in the time window. ---"
 
           # Initialize file if needed
           if [ ! -f "$PR_FILE" ] || [ ! -s "$PR_FILE" ] || ! jq -e . >/dev/null 2>&1 < "$PR_FILE"; then
@@ -152,38 +165,25 @@ jobs:
             echo "[]" > "$PR_FILE"
           fi
 
-          # Get existing PR numbers from metrics file
-          EXISTING_PRS=$(jq -r '.[].pr_number' "$PR_FILE" | tr '\n' ' ')
-          echo "Existing PRs in metrics: $EXISTING_PRS"
-
-          # Fetch all recent PRs from GitHub API (open and closed)
-          ALL_PRS=$(gh api "repos/${{ github.repository }}/pulls?state=all" \
+          # Fetch all recent PRs from GitHub API (open and closed) that were created in the backfill window
+          PRS_TO_PROCESS=$(gh api "repos/${{ github.repository }}/pulls?state=all" \
             --paginate \
             --jq '.[] | select(.created_at > "'$(date -d "$BACKFILL_DAYS days ago" +%Y-%m-%d)'") | .number' | tr '\n' ' ')
-          echo "All recent PRs (last $BACKFILL_DAYS days): $ALL_PRS"
 
-          # Find missing PRs
-          MISSING_PRS=""
-          for pr in $ALL_PRS; do
-            if [[ ! " $EXISTING_PRS " =~ " $pr " ]]; then
-              MISSING_PRS="$MISSING_PRS $pr"
-            fi
-          done
-
-          echo "Missing PRs to backfill: $MISSING_PRS"
-
-          if [[ -z "$MISSING_PRS" ]]; then
-            echo "No missing PRs found. All recent PRs are already in metrics."
+          if [[ -z "$PRS_TO_PROCESS" ]]; then
+            echo "No recent PRs found in the last $BACKFILL_DAYS days to process."
             exit 0
           fi
+          
+          echo "PRs to process (add or update): $PRS_TO_PROCESS"
 
           JQ_DATA=$(cat "$PR_FILE")
-   
-          # Process each missing PR
-          for pr_number in $MISSING_PRS; do
+
+          # Process each PR
+          for pr_number in $PRS_TO_PROCESS; do
             echo "Processing PR #$pr_number..."
 
-            # Fetch PR details
+            # Fetch PR details from the API
             PR_DATA=$(gh api "repos/${{ github.repository }}/pulls/$pr_number")
 
             # Extract all needed PR information
@@ -270,28 +270,24 @@ jobs:
               } | recalculate_approval_metrics($required_approvals)
               ')
 
-            # Insert the PR in the correct position (sorted by PR number)
+            # Update the main JSON data: add if new, or replace if existing
             JQ_DATA=$(echo "$JQ_DATA" | jq \
-            --argjson new_pr "$NEW_PR_DATA" \
-            'sort_by(.pr_number) | 
-               reduce .[] as $item ([]; 
-                 if ($new_pr.pr_number < $item.pr_number) and (. | any(.pr_number == $new_pr.pr_number) | not) then 
-                   . + [$new_pr, $item] 
-                 else 
-                   . + [$item] 
-                 end) | 
-               if any(.pr_number == $new_pr.pr_number) | not then 
-                 . + [$new_pr] 
-               else 
-                 . 
-               end | sort_by(.pr_number)')
-            
-            echo "Added PR #$pr_number to metrics with status: $PR_STATUS"
+              --argjson pr_number "$pr_number" \
+              --argjson new_pr_data "$NEW_PR_DATA" \
+              '
+              if any(.[]; .pr_number == $pr_number) then
+                map(if .pr_number == $pr_number then $new_pr_data else . end)
+              else
+                . + [$new_pr_data]
+              end
+              ')
+          
+            echo "Updated/added metrics for PR #$pr_number"
           done
 
-          # Write updated data
-          echo "$JQ_DATA" | jq '.' > "$PR_FILE"
-          echo "Backfill completed. Added $(echo $MISSING_PRS | wc -w) PRs from the last $BACKFILL_DAYS days."
+          # Write updated data, sorted by PR number
+          echo "$JQ_DATA" | jq 'sort_by(.pr_number)' > "$PR_FILE"
+          echo "Backfill completed. Processed $(echo $PRS_TO_PROCESS | wc -w) PRs from the last $BACKFILL_DAYS days."
 
       - name: Update pr_metrics.json
         if: steps.prepare_data.outputs.UPDATE_TYPE != 'BACKFILL_EXISTING_PRS'
@@ -309,9 +305,6 @@ jobs:
           PR_CREATOR_LOGIN: ${{ github.event.pull_request.user.login }}
           PR_CREATOR_ID: ${{ github.event.pull_request.user.id }}
           PR_CREATOR_URL: ${{ github.event.pull_request.user.html_url }}
-          # For PR_CLOSED
-          PR_CLOSED_AT: ${{ github.event.pull_request.closed_at }}
-          PR_MERGED_AT: ${{ github.event.pull_request.merged_at }}
           # For all events with diff stats
           PR_ADDITIONS: ${{ github.event.pull_request.additions }}
           PR_DELETIONS: ${{ github.event.pull_request.deletions }}
@@ -423,15 +416,9 @@ jobs:
             SAFE_CHANGED_FILES=${PR_CHANGED_FILES:-0}
           
             # Validate that values are numeric for new PRs
-            if ! [[ "$SAFE_ADDITIONS" =~ ^[0-9]+$ ]]; then
-              SAFE_ADDITIONS=0
-            fi
-            if ! [[ "$SAFE_DELETIONS" =~ ^[0-9]+$ ]]; then
-              SAFE_DELETIONS=0
-            fi
-            if ! [[ "$SAFE_CHANGED_FILES" =~ ^[0-9]+$ ]]; then
-              SAFE_CHANGED_FILES=0
-            fi
+            if ! [[ "$SAFE_ADDITIONS" =~ ^[0-9]+$ ]]; then SAFE_ADDITIONS=0; fi
+            if ! [[ "$SAFE_DELETIONS" =~ ^[0-9]+$ ]]; then SAFE_DELETIONS=0; fi
+            if ! [[ "$SAFE_CHANGED_FILES" =~ ^[0-9]+$ ]]; then SAFE_CHANGED_FILES=0; fi
           
             echo "Debug: New PR - ADDITIONS=$SAFE_ADDITIONS, DELETIONS=$SAFE_DELETIONS, CHANGED_FILES=$SAFE_CHANGED_FILES"
           
@@ -482,17 +469,18 @@ jobs:
             UPDATED_JQ_DATA=$(echo "$JQ_DATA" | jq --argjson pr_number "$PR_NUMBER" --argjson new_pr_data "$NEW_PR_DATA" 'if any(.[]; .pr_number == $pr_number) then . else . + [$new_pr_data] end')
 
           elif [[ "$UPDATE_TYPE" == "PR_CLOSED" ]]; then
-            # Only get merged_by data if the PR was actually merged
-            MERGED_BY_JSON="null"
-            if [[ -n "$PR_MERGED_AT" && "$PR_MERGED_AT" != "null" ]]; then
-              MERGED_BY_JSON=$(gh api "repos/${{ github.repository }}/pulls/$PR_NUMBER" --jq '.merged_by // null')
-            fi
+            echo "Fetching definitive PR data from API for close/merge event."
+            PR_DATA_API=$(gh api "repos/${{ github.repository }}/pulls/$PR_NUMBER")
           
+            PR_CLOSED_AT_API=$(echo "$PR_DATA_API" | jq -r '.closed_at')
+            PR_MERGED_AT_API=$(echo "$PR_DATA_API" | jq -r '.merged_at // empty')
+            MERGED_BY_JSON=$(echo "$PR_DATA_API" | jq '.merged_by // null')
+
             UPDATED_JQ_DATA=$(echo "$JQ_DATA" | jq \
               --argjson pr_number "$PR_NUMBER" \
-              --arg closed_at "$PR_CLOSED_AT" \
-              --arg merged_at "$PR_MERGED_AT" \
-              --argjson merged_by "$(if [[ "$MERGED_BY_JSON" != "null" ]]; then echo "$MERGED_BY_JSON"; else echo 'null'; fi)" \
+              --arg closed_at "$PR_CLOSED_AT_API" \
+              --arg merged_at "$PR_MERGED_AT_API" \
+              --argjson merged_by "$MERGED_BY_JSON" \
               'map(if .pr_number == $pr_number then
                  .closed_at = $closed_at
                  | (if ($merged_at != null and $merged_at != "") then
@@ -523,3 +511,19 @@ jobs:
           branch: metrics
           commit_user_name: "London Bot"
           commit_user_email: "220529784+london-bot[bot]@users.noreply.github.com"
+
+      - name: Add PR comment for Metrics Update
+        if: |
+          always() &&
+          github.event.pull_request.number &&
+          steps.prepare_data.outputs.UPDATE_TYPE != '' &&
+          steps.prepare_data.outputs.UPDATE_TYPE != 'BACKFILL_EXISTING_PRS'
+        uses: peter-evans/create-or-update-comment@v4
+        with:
+          token: ${{ steps.app-token.outputs.token }}
+          issue-number: ${{ github.event.pull_request.number }}
+          body: |
+            **[London Bot] Metrics Update Status**
+
+            ${{ job.status == 'success' && format('📊 PR metrics successfully updated for event: `{0}`.', steps.prepare_data.outputs.PR_ACTION) || '' }}
+            ${{ job.status == 'failure' && '❌ An error occurred while updating PR metrics.' || '' }}
