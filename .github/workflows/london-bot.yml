@@ -12,10 +12,10 @@ on:
     types: [submitted, dismissed]
 
   issue_comment:
-    types: [ created ]
+    types: [created]
 
   pull_request_review_comment:
-    types: [ created ]
+    types: [created]
 
   workflow_dispatch:
     inputs:
@@ -567,17 +567,13 @@ jobs:
 
   # --- NEW JOB TO REACT TO COMMENTS ---
   react_to_comment:
-    name: React to Reviewer Comments
+    name: React to PR Comments with Eyes
     runs-on: ubuntu-latest
-    permissions:
-      pull-requests: write
-
-    # This 'if' condition is very important:
-    # 1. It ensures the comment is on a Pull Request.
-    # 2. It prevents the bot from reacting to its own comments.
     if: |
       github.event.issue.pull_request &&
       github.event.comment.user.login != 'london-bot[bot]'
+    permissions:
+      pull-requests: write
 
     steps:
       - name: Create GitHub App Token
@@ -587,21 +583,54 @@ jobs:
           app-id: ${{ vars.APP_ID }}
           private-key: ${{ secrets.APP_PRIVATE_KEY }}
 
-      - name: Add 'Eyes' Reaction to Comment
+      - name: Add 'Eyes' Reaction
         uses: peter-evans/add-reaction@v3
         with:
           token: ${{ steps.app-token.outputs.token }}
           comment-id: ${{ github.event.comment.id }}
-          content: 'eyes'
+          content: eyes
 
-      # --- NEW STEP TO ADD HEART REACTION ---
-      - name: Add Heart Reaction for Approval
-        if: |
-          github.event_name == 'pull_request_review' &&
-          github.event.action == 'submitted' &&
-          github.event.review.state == 'approved'
+  react_to_opened_pr:
+    name: React with Fire to New PR
+    runs-on: ubuntu-latest
+    permissions:
+      pull-requests: write
+
+    steps:
+      - name: Create GitHub App Token
+        uses: actions/create-github-app-token@v2
+        id: app-token
+        with:
+          app-id: ${{ vars.APP_ID }}
+          private-key: ${{ secrets.APP_PRIVATE_KEY }}
+
+      - name: Add Fire Reaction to PR
         uses: peter-evans/add-reaction@v3
         with:
           token: ${{ steps.app-token.outputs.token }}
-          review-id: ${{ github.event.review.id }}
-          content: 'heart'
+          content: fire
+          issue-number: ${{ github.event.pull_request.number }}
+
+  react_to_approval:
+    name: React to PR Review Approvals with Heart
+    runs-on: ubuntu-latest
+    if: |
+      github.event.review.state == 'approved' &&
+      github.event.review.user.login != 'london-bot[bot]'
+    permissions:
+      pull-requests: write
+
+    steps:
+      - name: Create GitHub App Token
+        uses: actions/create-github-app-token@v2
+        id: app-token
+        with:
+          app-id: ${{ vars.APP_ID }}
+          private-key: ${{ secrets.APP_PRIVATE_KEY }}
+
+      - name: Add Heart Reaction to Review Comment
+        uses: peter-evans/add-reaction@v3
+        with:
+          token: ${{ steps.app-token.outputs.token }}
+          comment-id: ${{ github.event.review.id }}
+          content: heart
