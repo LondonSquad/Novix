@@ -2108,33 +2108,16 @@
       "id": 180463542,
       "url": "https://github.com/abdelrhman1002"
     },
-    "approvals": [
-      {
-        "reviewer": {
-          "id": 154278495,
-          "login": "ahmeddsamii",
-          "url": "https://github.com/ahmeddsamii"
-        },
-        "submitted_at": "2025-07-17T09:58:43Z"
-      },
-      {
-        "reviewer": {
-          "id": 81706918,
-          "login": "karimdeabes",
-          "url": "https://github.com/karimdeabes"
-        },
-        "submitted_at": "2025-07-17T09:59:15Z"
-      }
-    ],
-    "first_approved_at": "2025-07-17T09:58:43Z",
-    "time_to_first_approval_minutes": 322.21666666666664,
-    "required_approvals_met_at": "2025-07-17T09:59:15Z",
-    "time_to_required_approvals_minutes": 322.75,
+    "approvals": [],
+    "first_approved_at": null,
+    "time_to_first_approval_minutes": null,
+    "required_approvals_met_at": null,
+    "time_to_required_approvals_minutes": null,
     "closed_at": null,
     "merged_at": null,
     "merged_by": null,
     "week": "2025-W29",
-    "status": "approved",
+    "status": "pending",
     "diff_stats": {
       "additions": 770,
       "deletions": 733,
