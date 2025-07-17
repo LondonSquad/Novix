@@ -1949,7 +1949,24 @@
       "id": 92235360,
       "url": "https://github.com/abdo-essam"
     },
-    "approvals": [],
+    "approvals": [
+      {
+        "reviewer": {
+          "id": 154278495,
+          "login": "ahmeddsamii",
+          "url": "https://github.com/ahmeddsamii"
+        },
+        "submitted_at": "2025-07-16T12:54:17Z"
+      },
+      {
+        "reviewer": {
+          "id": 100484790,
+          "login": "marwanqashwa",
+          "url": "https://github.com/marwanqashwa"
+        },
+        "submitted_at": "2025-07-16T12:54:49Z"
+      }
+    ],
     "first_approved_at": null,
     "time_to_first_approval_minutes": null,
     "required_approvals_met_at": null,
