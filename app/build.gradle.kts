@@ -1,4 +1,6 @@
+import com.google.firebase.crashlytics.buildtools.gradle.CrashlyticsExtension
 import com.london.buildsrc.AppConfig
+import com.london.buildsrc.getKey
 
 plugins {
     alias(libs.plugins.android.application)
@@ -21,23 +23,53 @@ android {
         minSdk = AppConfig.Version.MIN_SDK
         targetSdk = AppConfig.Version.TARGET_SDK
 
+
         // Allows for setting the version code via a Gradle property for CD pipeline.
         versionCode = (project.findProperty("versionCode") as? String)?.toInt() ?: 1
         versionName = project.findProperty("versionName") as? String ?: "1.0"
 
         testInstrumentationRunner = AppConfig.ANDROID_TEST_INSTRUMENTATION
+
+        ndk {
+            abiFilters += listOf("armeabi-v7a", "arm64-v8a")
+        }
+    }
+
+    signingConfigs {
+        create("release"){
+            keyAlias = getKey("keyAlias")
+            keyPassword = getKey("keyPassword")
+            storeFile = file(getKey("storeFile"))
+            storePassword = getKey("storePassword")
+        }
     }
 
     buildTypes {
+        debug {
+            ndk {
+                abiFilters += listOf("armeabi-v7a", "arm64-v8a", "x86", "x86_64")
+            }
+        }
         release {
-            isMinifyEnabled = AppConfig.IS_RELEASE_MODE_DEBUGGABLE
-            isDebuggable = AppConfig.IS_RELEASE_MODE_DEBUGGABLE
+            isMinifyEnabled = AppConfig.ENABLE_R8_FULL_MODE
+            isShrinkResources = AppConfig.ENABLE_R8_FULL_MODE
+            signingConfig = signingConfigs.getByName("release")
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
             )
+            ndk.debugSymbolLevel = "FULL"
+
+            configure<CrashlyticsExtension> {
+                mappingFileUploadEnabled = AppConfig.ENABLE_R8_FULL_MODE
+            }
+
+            ndk {
+                abiFilters += listOf("armeabi-v7a", "arm64-v8a")
+            }
         }
     }
+
     compileOptions {
         sourceCompatibility = AppConfig.Version.JVM
         targetCompatibility = AppConfig.Version.JVM
@@ -57,7 +89,6 @@ dependencies {
     implementation(project(":presentation"))
     implementation(project(":designSystem"))
     implementation(libs.bundles.base.ui)
-    implementation(libs.bundles.koin)
     ksp(libs.bundles.koin.ksp)
     debugImplementation(libs.bundles.compose.debug)
     androidTestImplementation(libs.bundles.base.testing)
@@ -68,10 +99,15 @@ dependencies {
     implementation(libs.firebase.analytics)
     testImplementation(libs.bundles.testing)
     implementation(libs.androidx.navigation.compose)
-    implementation (libs.koin.androidx.navigation)
-    implementation (libs.androidx.material)
+    implementation(libs.koin.androidx.navigation)
+    implementation(libs.androidx.material)
     implementation(libs.bundles.room)
     implementation(libs.bundles.koin)
     ksp(libs.bundles.room.ksp)
+}
 
+ksp {
+    arg("KOIN_CONFIG_CHECK", "true")
+    arg("KOIN_DEFAULT_MODULE", "false")
+    arg("KOIN_USE_COMPOSE_VIEWMODEL", "true")
 }

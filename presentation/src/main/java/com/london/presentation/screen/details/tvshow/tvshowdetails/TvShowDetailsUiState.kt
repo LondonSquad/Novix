@@ -1,9 +1,11 @@
 package com.london.presentation.screen.details.tvshow.tvshowdetails
 
-import com.london.domain.entity.tvshowdetails.CastEntity
+import com.london.domain.entity.tvshowdetails.TvShowCastEntity
 import com.london.domain.entity.tvshowdetails.ImageItemEntity
 import com.london.domain.entity.tvshowdetails.TvShowCreatorEntity
+import com.london.domain.entity.tvshowdetails.episode.TvShowEpisodeBySeasonEntity
 import com.london.domain.entity.tvshowdetails.TvShowEpisodeEntity
+import com.london.domain.entity.tvshowdetails.episode.TvShowEpisodesEntity
 import com.london.domain.entity.tvshowdetails.TvShowGenreEntity
 import com.london.domain.entity.tvshowdetails.TvShowNetworkEntity
 import com.london.domain.entity.tvshowdetails.TvShowProductionCompanyEntity
@@ -13,8 +15,10 @@ import com.london.domain.entity.tvshowdetails.TvShowSpokenLanguageEntity
 
 data class TvShowDetailsUiState(
     val tvImages: List<ImageItemEntity>? = listOf(),
+    val tvShowEpisodes: List<TvShowEpisodeBySeasonEntity> = listOf(),
+    val tvShowEpisodeCountBySeason: TvShowEpisodesEntity? = null,
     val adult: Boolean = false,
-    val cast: CastEntity? = null,
+    val cast: TvShowCastEntity? = null,
     val backdropPath: String? = "",
     val createdBy: List<TvShowCreatorEntity> = listOf(),
     val episodeRunTime: List<Int> = listOf(),

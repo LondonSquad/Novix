@@ -6,15 +6,13 @@ import kotlinx.serialization.Serializable
 @Serializable
 data class TvShowCastRemoteResponse(
     @SerialName("cast")
-    val cast: List<CastMember>,
-    @SerialName("crew")
-    val crew: List<CrewMember>,
+    val cast: List<TvShowCastMember>,
     @SerialName("id")
-    val id: Int
+    val id: Int? = null
 )
 
 @Serializable
-data class CastMember(
+data class TvShowCastMember(
     @SerialName("adult")
     val adult: Boolean,
     @SerialName("gender")
@@ -31,36 +29,20 @@ data class CastMember(
     val popularity: Double,
     @SerialName("profile_path")
     val profilePath: String?,
-    @SerialName("character")
-    val character: String,
-    @SerialName("credit_id")
-    val creditId: String,
+    @SerialName("roles")
+    val roles: List<Role>,
+    @SerialName("total_episode_count")
+    val totalEpisodeCount: Int,
     @SerialName("order")
     val order: Int
 )
 
 @Serializable
-data class CrewMember(
-    @SerialName("adult")
-    val adult: Boolean,
-    @SerialName("gender")
-    val gender: Int,
-    @SerialName("id")
-    val id: Int,
-    @SerialName("known_for_department")
-    val knownForDepartment: String,
-    @SerialName("name")
-    val name: String,
-    @SerialName("original_name")
-    val originalName: String,
-    @SerialName("popularity")
-    val popularity: Double,
-    @SerialName("profile_path")
-    val profilePath: String?,
+data class Role(
     @SerialName("credit_id")
     val creditId: String,
-    @SerialName("department")
-    val department: String,
-    @SerialName("job")
-    val job: String
+    @SerialName("character")
+    val character: String,
+    @SerialName("episode_count")
+    val episodeCount: Int
 )

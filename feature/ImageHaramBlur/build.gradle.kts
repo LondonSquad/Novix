@@ -19,7 +19,7 @@ android {
 
     buildTypes {
         release {
-            isMinifyEnabled = false
+            isMinifyEnabled = AppConfig.ENABLE_R8_FOR_LIBRARIES
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
@@ -37,13 +37,12 @@ android {
         compose = true
     }
 
-    aaptOptions {
-        noCompress("tflite")
-    }
-
     lint {
         disable += "CoroutineCreationDuringComposition"
+        disable += "StateFlowValueCalledInComposition"
+        disable += "FlowOperatorInvokedInComposition"
     }
+
 
 }
 
@@ -69,5 +68,9 @@ dependencies {
 
     // Coroutines
     implementation(libs.kotlinx.coroutines.android)
+
+
+    // Firebase ML Model downloader
+    implementation(libs.firebase.ml.modeldownloader)
 
 }

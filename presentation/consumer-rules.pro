@@ -1,0 +1,2 @@
+-keep class com.london.presentation.** { *; }
+-keep class **ViewModel { *; }

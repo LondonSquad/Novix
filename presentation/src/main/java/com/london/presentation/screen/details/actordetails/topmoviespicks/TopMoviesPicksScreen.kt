@@ -5,10 +5,10 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.GridItemSpan
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
-import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -18,8 +18,6 @@ import androidx.compose.ui.unit.dp
 import com.london.designsystem.component.HomeCard
 import com.london.designsystem.component.TopBar
 import com.london.designsystem.theme.NovixTheme
-import com.london.designsystem.theme.ThemePreviews
-import com.london.domain.entity.Movie
 import com.london.presentation.R
 import org.koin.androidx.compose.koinViewModel
 
@@ -32,7 +30,7 @@ fun TopMoviesPicksScreen(
     TopMoviesPicksContent(
         state = state,
         interactions = viewModel,
-        modifier = modifier
+        modifier = modifier,
     )
 }
 
@@ -40,7 +38,7 @@ fun TopMoviesPicksScreen(
 private fun TopMoviesPicksContent(
     state: TopMoviesPicksUiState,
     interactions: TopMoviesPicksInteractions,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
 ) {
     LazyVerticalGrid(
         columns = GridCells.Fixed(2),
@@ -55,95 +53,18 @@ private fun TopMoviesPicksContent(
         item(
             span = { GridItemSpan(maxLineSpan) }) {
             TopBar(
+                modifier = Modifier.statusBarsPadding(),
                 title = stringResource(R.string.top_movies_picks),
                 onBackClick = interactions::onBackClick
             )
         }
-        items(state.movies) { movie ->
+        items(state.movieDetails.cast.size) { index ->
+            val movie = state.movieDetails.cast[index]
             HomeCard(
-                imageUrl = movie.posterPicture,
+                imageUrl = movie.posterUrl,
                 isSaved = false,
-                onSaveClick = { interactions.onSaveMovie(movie.id) })
+                onSaveClick = { interactions.onSaveMovie(movie.id) }
+            )
         }
     }
-}
-
-@ThemePreviews
-@Composable
-fun TopMoviesPicksPreview() {
-    TopMoviesPicksContent(
-        state = TopMoviesPicksUiState(
-            movies = listOf(
-                Movie(
-                    id = 1,
-                    name = "",
-                    posterPicture = "https://image.tmdb.org/t/p/w500//8Gxv8gSFCU0XGDykEGv7zR1n2ua.jpg",
-                    releaseYear = 1,
-                    rating = 3,
-                    genreIds = listOf()
-                ),
-                Movie(
-                    id = 1,
-                    name = "",
-                    posterPicture = "https://image.tmdb.org/t/p/w500//8Gxv8gSFCU0XGDykEGv7zR1n2ua.jpg",
-                    releaseYear = 1,
-                    rating = 3,
-                    genreIds = listOf()
-                ),
-                Movie(
-                    id = 1,
-                    name = "",
-                    posterPicture = "https://image.tmdb.org/t/p/w500//8Gxv8gSFCU0XGDykEGv7zR1n2ua.jpg",
-                    releaseYear = 1,
-                    rating = 3,
-                    genreIds = listOf()
-                ),
-                Movie(
-                    id = 1,
-                    name = "",
-                    posterPicture = "https://image.tmdb.org/t/p/w500//8Gxv8gSFCU0XGDykEGv7zR1n2ua.jpg",
-                    releaseYear = 1,
-                    rating = 3,
-                    genreIds = listOf()
-                ),
-                Movie(
-                    id = 1,
-                    name = "",
-                    posterPicture = "https://image.tmdb.org/t/p/w500//8Gxv8gSFCU0XGDykEGv7zR1n2ua.jpg",
-                    releaseYear = 1,
-                    rating = 3,
-                    genreIds = listOf()
-                ),
-                Movie(
-                    id = 1,
-                    name = "",
-                    posterPicture = "https://image.tmdb.org/t/p/w500//8Gxv8gSFCU0XGDykEGv7zR1n2ua.jpg",
-                    releaseYear = 1,
-                    rating = 3,
-                    genreIds = listOf()
-                ),
-                Movie(
-                    id = 1,
-                    name = "",
-                    posterPicture = "https://image.tmdb.org/t/p/w500//8Gxv8gSFCU0XGDykEGv7zR1n2ua.jpg",
-                    releaseYear = 1,
-                    rating = 3,
-                    genreIds = listOf()
-                ),
-                Movie(
-                    id = 1,
-                    name = "",
-                    posterPicture = "https://image.tmdb.org/t/p/w500//8Gxv8gSFCU0XGDykEGv7zR1n2ua.jpg",
-                    releaseYear = 1,
-                    rating = 3,
-                    genreIds = listOf()
-                ),
-            )
-        ),
-        interactions = object : TopMoviesPicksInteractions {
-            override fun onMovieClick(movieId: Int) {}
-            override fun onBackClick() {}
-            override fun onSaveMovie(movieId: Int) {}
-        }
-    )
 }

@@ -5,10 +5,10 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import androidx.paging.compose.LazyPagingItems
 import com.london.designsystem.component.ActorItem
 import com.london.designsystem.theme.NovixTheme
 import com.london.designsystem.theme.ThemePreviews
@@ -16,7 +16,7 @@ import com.london.domain.entity.Actor
 
 @Composable
 fun ActorsLayout(
-    actorsUis: List<Actor>,
+    actorsUis: LazyPagingItems<Actor>,
     onActorClick: (Actor) -> Unit,
     modifier: Modifier = Modifier
 ) {
@@ -25,13 +25,16 @@ fun ActorsLayout(
         contentPadding = PaddingValues(horizontal = 16.dp),
         verticalArrangement = Arrangement.spacedBy(12.dp)
     ) {
-        items(actorsUis) { actor ->
-            ActorItem(
-                modifier = Modifier.clickable(onClick = { onActorClick(actor) }),
-                actorName = actor.name,
-                characterName = null,
-                imageRes = actor.profilePicture
-            )
+        items(actorsUis.itemCount) { index ->
+            val actor = actorsUis[index]
+            if (actor != null) {
+                ActorItem(
+                    modifier = Modifier.clickable(onClick = { onActorClick(actor) }),
+                    actorName = actor.name,
+                    characterName = null,
+                    imageRes = actor.profilePicture
+                )
+            }
         }
     }
 }
@@ -40,15 +43,5 @@ fun ActorsLayout(
 @Composable
 fun ActorsLayoutPreviews() {
     NovixTheme {
-        ActorsLayout(
-            actorsUis = listOf(
-                Actor(1, "Tom Hanks", ""),
-                Actor(2, "Robert Downey Jr.", ""),
-                Actor(3, "Ahmed Helmy", ""),
-                Actor(4, "Matt Damon", ""),
-                Actor(5, "Will Smith", "")
-            ),
-            onActorClick = {}
-        )
     }
 }

@@ -1,48 +1,43 @@
 package com.london.data.mapper.tvshowdetails
 
-import com.london.data.datasource.remote.details.tvshowdetails.model.CastMember
+import com.london.data.datasource.remote.details.tvshowdetails.model.Role
+import com.london.data.datasource.remote.details.tvshowdetails.model.TvShowCastMember
 import com.london.data.datasource.remote.details.tvshowdetails.model.TvShowCastRemoteResponse
-import com.london.data.datasource.remote.details.tvshowdetails.model.CrewMember
-import com.london.domain.entity.tvshowdetails.CastEntity
-import com.london.domain.entity.tvshowdetails.CastMemberEntity
-import com.london.domain.entity.tvshowdetails.CrewMemberEntity
+import com.london.data.utils.asImageUrlOrEmpty
+import com.london.domain.KoverIgnore
+import com.london.domain.entity.tvshowdetails.TvShowCastEntity
+import com.london.domain.entity.tvshowdetails.TvShowCastMemberEntity
+import com.london.domain.entity.tvshowdetails.TvShowRoleEntity
 
-fun TvShowCastRemoteResponse.toCastEntity(): CastEntity {
-    return CastEntity(
-        cast = this.cast.map { it.toCastMember() },
-        crew = this.crew.map { it.toCrewMember() },
-        id = this.id
+@KoverIgnore
+fun TvShowCastRemoteResponse.toCastEntity(): TvShowCastEntity {
+    return TvShowCastEntity(
+        cast = cast.map { it.toCastMember() },
+        id = id
     )
 }
 
-fun CastMember.toCastMember(): CastMemberEntity {
-    return CastMemberEntity(
-        adult = this.adult,
-        gender = this.gender,
-        id = this.id,
-        knownForDepartment = this.knownForDepartment,
-        name = this.name,
-        originalName = this.originalName,
-        popularity = this.popularity,
-        profilePath = "https://image.tmdb.org/t/p/w500${this.profilePath}",
-        character = this.character,
-        creditId = this.creditId,
-        order = this.order
+fun TvShowCastMember.toCastMember(): TvShowCastMemberEntity {
+    return TvShowCastMemberEntity(
+        adult = adult,
+        gender = gender,
+        id = id,
+        knownForDepartment = knownForDepartment,
+        name = name,
+        originalName = originalName,
+        popularity = popularity,
+        profileUrl = profilePath.asImageUrlOrEmpty(),
+        roles = roles.map { it.toRoleEntity() },
+        totalEpisodeCount = totalEpisodeCount,
+        order = order
     )
 }
 
-fun CrewMember.toCrewMember(): CrewMemberEntity {
-    return CrewMemberEntity(
-        adult = this.adult,
-        gender = this.gender,
-        id = this.id,
-        knownForDepartment = this.knownForDepartment,
-        name = this.name,
-        originalName = this.originalName,
-        popularity = this.popularity,
-        profilePath = "https://image.tmdb.org/t/p/w500${this.profilePath}",
-        creditId = this.creditId,
-        department = this.department,
-        job = this.job
+@KoverIgnore
+fun Role.toRoleEntity(): TvShowRoleEntity {
+    return TvShowRoleEntity(
+        creditId = creditId,
+        character = character,
+        episodeCount = episodeCount
     )
 }

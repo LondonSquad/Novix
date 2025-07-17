@@ -6,6 +6,7 @@ plugins {
     alias(libs.plugins.kotlin.compose)
     alias(libs.plugins.ksp)
     alias(libs.plugins.kotlinx.kover)
+    alias(libs.plugins.kotlin.serialization)
 }
 
 android {
@@ -21,7 +22,7 @@ android {
 
     buildTypes {
         release {
-            isMinifyEnabled = AppConfig.ENABLE_R8_FULL_MODE
+            isMinifyEnabled = AppConfig.ENABLE_R8_FOR_LIBRARIES
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
@@ -44,6 +45,12 @@ dependencies {
     implementation(libs.bundles.base.ui)
     implementation(libs.bundles.coroutines)
     implementation(libs.bundles.koin)
+
+    // paging 3
+    implementation(libs.androidx.paging.runtime)
+    implementation(libs.androidx.paging.compose)
+    testImplementation(libs.androidx.paging.common)
+
     ksp(libs.bundles.koin.ksp)
     testImplementation(libs.bundles.testing)
     androidTestImplementation(libs.bundles.android.testing)
@@ -52,4 +59,10 @@ dependencies {
     implementation(libs.firebase.perf)
     implementation(platform(libs.firebase.bom))
     implementation(libs.androidx.constraintlayout.compose)
+}
+
+ksp {
+    arg("KOIN_CONFIG_CHECK", "true")
+    arg("KOIN_DEFAULT_MODULE", "false")
+    arg("KOIN_USE_COMPOSE_VIEWMODEL", "true")
 }

@@ -2,50 +2,51 @@ package com.london.data.mapper
 
 import com.london.data.datasource.local.model.SearchTvShowDtoLocal
 import com.london.data.datasource.local.model.SearchTvShowLocal
-import com.london.data.datasource.remote.search.model.ApiSearch
-import com.london.data.datasource.remote.search.model.SearchMovieRemote
+import com.london.data.datasource.remote.ApiResponse
 import com.london.data.datasource.remote.search.model.SearchTvShowRemote
 import com.london.data.datasource.util.generateHash
+import com.london.data.utils.asImageUrlOrEmpty
+import com.london.domain.KoverIgnore
 import com.london.domain.entity.TvShow
 
 fun SearchTvShowDtoLocal.toTvShowEntity(): TvShow {
     return TvShow(
-        id = this.id,
-        posterPicture = "https://image.tmdb.org/t/p/w500${this.posterPath}",
-        name = this.name,
-        releaseYear = if (this.firstAirDate.isNotEmpty())
-            this.firstAirDate.split("-")[0].toInt() else 0,
-        rating = this.voteAverage.toInt(),
-        genres = this.genreIds,
+        id = id,
+        posterPicture = posterPath.asImageUrlOrEmpty(),
+        name = name,
+        releaseYear = if (firstAirDate.isNotEmpty()) firstAirDate.split("-")[0].toInt() else 0,
+        rating = voteAverage.toInt(),
+        genres = genreIds,
     )
 }
 
-fun ApiSearch<SearchTvShowRemote>.toLocal(query: String): SearchTvShowLocal {
+fun ApiResponse<SearchTvShowRemote>.toLocal(query: String): SearchTvShowLocal {
     return SearchTvShowLocal(
         date = System.currentTimeMillis(),
         query = query.generateHash(),
-        page = this.page,
-        results = this.results.map { it.toLocalDto() },
-        totalPages = this.totalPages,
-        totalResults = this.totalResults
+        page = currentPage,
+        results = items.map { it.toLocalDto() },
+        totalPages = totalPages,
+        totalResults = totalItems
     )
 }
 
+@KoverIgnore
 fun SearchTvShowRemote.toLocalDto(): SearchTvShowDtoLocal {
     return SearchTvShowDtoLocal(
-        adult = this.adult,
-        backdropPath = this.backdropPath ?: "",
-        genreIds = this.genreIds,
-        id = this.id,
-        originCountry = this.originCountry ?: emptyList(),
-        originalLanguage = this.originalLanguage ?: "",
-        originalName = this.originalName ?: "",
-        overview = this.overview ?: "",
-        popularity = this.popularity,
-        posterPath = this.posterPath ?: "",
-        firstAirDate = this.firstAirDate ?: "",
-        name = this.name ?: "",
-        voteAverage = this.voteAverage,
-        voteCount = this.voteCount
+        adult = adult,
+        backdropUrl = backdropPath.orEmpty(),
+        genreIds = genreIds,
+        id = id,
+        originCountry = originCountry ?: emptyList(),
+        originalLanguage = originalLanguage.orEmpty(),
+        originalName = originalName.orEmpty(),
+        overview = overview.orEmpty(),
+        popularity = popularity,
+        posterPath = posterPath.orEmpty(),
+        firstAirDate = firstAirDate.orEmpty(),
+        name = name.orEmpty(),
+        voteAverage = voteAverage,
+        voteCount = voteCount
     )
 }

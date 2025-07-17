@@ -1,9 +1,15 @@
 package com.london.domain.usecase
 
+import com.london.domain.KoverIgnore
 import com.london.domain.entity.tvshowdetails.ImageItemEntity
 import com.london.domain.repository.DetailsRepository
+import org.koin.core.annotation.Provided
+import org.koin.core.annotation.Single
 
+@Single
+@KoverIgnore
 class GetImagesById(
+    @Provided
     private val detailsRepository: DetailsRepository
 ) {
     suspend operator fun invoke(tvShowId: Int): List<ImageItemEntity> {

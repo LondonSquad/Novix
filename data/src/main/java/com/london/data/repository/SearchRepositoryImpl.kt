@@ -1,123 +1,170 @@
 package com.london.data.repository
 
-import com.london.data.datasource.local.GetException
 import com.london.data.datasource.local.LocalDataSource
+import com.london.data.datasource.local.dao.GenreInterestDao
+import com.london.data.datasource.local.model.GenreInterestEntity
 import com.london.data.datasource.local.model.SearchActorsLocal
 import com.london.data.datasource.local.model.SearchMoviesLocal
 import com.london.data.datasource.local.model.SearchTvShowLocal
-import com.london.data.datasource.remote.search.RemoteDataSource
+import com.london.data.datasource.remote.search.SearchRemoteDataSource
 import com.london.data.datasource.util.CrashReporter
 import com.london.data.mapper.toActorEntity
 import com.london.data.mapper.toLocal
 import com.london.data.mapper.toMovieEntity
 import com.london.data.mapper.toTvShowEntity
-import com.london.domain.ActorSearchFailedException
-import com.london.domain.MovieSearchFailedException
-import com.london.domain.TvShowSearchFailedException
 import com.london.domain.entity.Actor
 import com.london.domain.entity.Movie
+import com.london.domain.entity.PagedFetchResponse
 import com.london.domain.entity.TvShow
 import com.london.domain.repository.SearchRepository
+import org.koin.core.annotation.Named
+import org.koin.core.annotation.Provided
+import org.koin.core.annotation.Single
 
+@Single
 class SearchRepositoryImpl(
-    private val searchTvShowService: LocalDataSource<SearchTvShowLocal>,
-    private val searchActorService: LocalDataSource<SearchActorsLocal>,
-    private val searchMovieService: LocalDataSource<SearchMoviesLocal>,
-    private val remoteDataSource: RemoteDataSource,
+    @Provided
+    @Named("tvShowLocalDataSource")
+    private val localTvShowDataSource: LocalDataSource<SearchTvShowLocal>,
+    @Provided
+    @Named("actorLocalDataSource")
+    private val localActorDataSource: LocalDataSource<SearchActorsLocal>,
+    @Provided
+    @Named("movieLocalDataSource")
+    private val localMovieDataSource: LocalDataSource<SearchMoviesLocal>,
+    private val genreInterestDao: GenreInterestDao,
+    private val remoteDataSource: SearchRemoteDataSource,
     private val crashReporter: CrashReporter
 ) : SearchRepository {
+
+    suspend fun <T> Result<T?>.getNotNullOrElse(elseBlock: suspend () -> T): Result<T> =
+        runCatching { getOrElse { elseBlock() } ?: elseBlock() }
+
+    suspend fun <T> fetchAndSync(
+        cacheBlock: suspend () -> T?,
+        networkBlock: suspend () -> T,
+        syncBlock: suspend (T) -> Unit,
+        crashReporter: CrashReporter?
+    ): T = runCatching { cacheBlock() }
+        .getNotNullOrElse { networkBlock().also { syncBlock(it) } }
+        .onFailure { crashReporter?.logException(it) }
+        .getOrThrow()
+
     override suspend fun searchForMovies(
-        name: String, language: String
-    ): List<Movie> {
-
-        var result: List<Movie> = emptyList()
-        var remoteResponseToCache: SearchMoviesLocal? = null
-
-        try {
-            val local = searchMovieService.getByQuery(query = name + language)
-            result = local
-                ?.results
-                ?.map { it.toMovieEntity() }
-                ?: remoteDataSource.searchForMovies(
-                    query = name,
-                    language = language,
-                    includeAdult = false,
-                    page = 1,
-                )
-                    .toLocal(query = name + language)
-                    .also { remoteResponseToCache = it }
-                    .results
-                    .map { it.toMovieEntity() }
-            searchMovieService.insert(remoteResponseToCache ?: return result)
-        } catch (_: GetException) {
-            throw MovieSearchFailedException()
-        } catch (e: Exception) {
-            addExceptionToCrashlytics(e)
-        }
-        return result
+        name: String,
+        language: String,
+        pageNumber: Int
+    ): PagedFetchResponse<Movie> = fetchAndSync(
+        cacheBlock = {
+            localMovieDataSource.getByQueryAndPage(
+                query = name + language,
+                page = pageNumber
+            )
+        },
+        networkBlock = {
+            remoteDataSource.searchForMovies(
+                query = name,
+                language = language,
+                includeAdult = false,
+                pageNumber = pageNumber,
+            ).toLocal(query = name + language)
+        },
+        syncBlock = { localMovieDataSource.insert(it) },
+        crashReporter = crashReporter
+    ).run {
+        PagedFetchResponse(
+            currentPage = page,
+            items = results.map { it.toMovieEntity() },
+            totalPages = totalPages,
+            totalItems = totalResults
+        )
     }
 
     override suspend fun searchForTvShows(
-        name: String, language: String
-    ): List<TvShow> {
-
-        var localResults: List<TvShow> = emptyList()
-        var remoteResponseToCache: SearchTvShowLocal? = null
-        try {
-            val local = searchTvShowService.getByQuery(query = name + language)
-            localResults = local
-                ?.results
-                ?.map { it.toTvShowEntity() }
-                ?: remoteDataSource.searchForTvShows(
-                    query = name,
-                    language = language,
-                    includeAdult = false,
-                    page = 1,
-                )
-                    .toLocal(query = name + language)
-                    .also { remoteResponseToCache = it }
-                    .results
-                    .map { it.toTvShowEntity() }
-
-            searchTvShowService.insert(remoteResponseToCache ?: return localResults)
-        } catch (_: GetException) {
-            throw TvShowSearchFailedException()
-        } catch (e: Exception) {
-            addExceptionToCrashlytics(e)
-        }
-        return localResults
+        name: String,
+        language: String,
+        pageNumber: Int
+    ): PagedFetchResponse<TvShow> = fetchAndSync(
+        cacheBlock = {
+            localTvShowDataSource.getByQueryAndPage(
+                query = name + language,
+                page = pageNumber
+            )
+        },
+        networkBlock = {
+            remoteDataSource.searchForTvShows(
+                query = name,
+                language = language,
+                includeAdult = false,
+                pageNumber = pageNumber,
+            ).toLocal(query = name + language)
+        },
+        syncBlock = { localTvShowDataSource.insert(it) },
+        crashReporter = crashReporter
+    ).run {
+        PagedFetchResponse(
+            currentPage = page,
+            items = results.map { it.toTvShowEntity() },
+            totalPages = totalPages,
+            totalItems = totalResults
+        )
     }
 
     override suspend fun searchForActors(
-        name: String, language: String
-    ): List<Actor> {
+        name: String,
+        language: String,
+        pageNumber: Int
+    ): PagedFetchResponse<Actor> = fetchAndSync(
+        cacheBlock = {
+            localActorDataSource.getByQueryAndPage(
+                query = name + language,
+                page = pageNumber
+            )
+        },
+        networkBlock = {
+            remoteDataSource.searchForActors(
+                query = name,
+                language = language,
+                includeAdult = false,
+                pageNumber = pageNumber,
+            ).toLocal(query = name + language)
+        },
+        syncBlock = { localActorDataSource.insert(it) },
+        crashReporter = crashReporter
+    ).run {
+        PagedFetchResponse(
+            currentPage = page,
+            items = results.map { it.toActorEntity() },
+            totalPages = totalPages,
+            totalItems = totalResults
+        )
+    }
 
-        var result: List<Actor> = emptyList()
-        var remoteResponseToCache: SearchActorsLocal? = null
+    override suspend fun incrementGenreInterest(genreId: Int, mediaType: String) {
         try {
-            val local = searchActorService.getByQuery(query = name + language)
-            result = local
-                ?.results
-                ?.map { it.toActorEntity() }
-                ?: remoteDataSource.searchForActors(
-                    query = name,
-                    language = language,
-                    includeAdult = false,
-                    page = 1,
+            val current = genreInterestDao.getGenreInterest(genreId, mediaType)
+            if (current == null) {
+                genreInterestDao.insertGenreInterest(
+                    GenreInterestEntity(genreId = genreId, mediaType = mediaType, count = 1)
                 )
-                    .toLocal(query = name + language)
-                    .also { remoteResponseToCache = it }
-                    .results.map { it.toActorEntity() }
-            searchActorService.insert(remoteResponseToCache ?: return result)
-        } catch (_: GetException) {
-            throw ActorSearchFailedException()
+            } else {
+                genreInterestDao.updateGenreInterest(
+                    current.copy(count = current.count + 1)
+                )
+            }
         } catch (e: Exception) {
-            addExceptionToCrashlytics(e)
+            crashReporter.logException(e)
         }
-        return result
     }
 
-    private fun addExceptionToCrashlytics(e: Exception) {
-        crashReporter.logException(e)
+    override suspend fun getGenreInterestCounts(mediaType: String): List<Pair<Int, Int>> {
+        return try {
+            genreInterestDao.getGenresByInterest(mediaType)
+                .map { entity -> entity.genreId to entity.count }
+        } catch (e: Exception) {
+            crashReporter.logException(e)
+            emptyList()
+        }
     }
+
 }
