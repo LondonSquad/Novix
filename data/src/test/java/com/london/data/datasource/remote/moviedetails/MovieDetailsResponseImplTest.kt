@@ -2,7 +2,7 @@ package com.london.data.datasource.remote.moviedetails
 
 import android.util.Log
 import com.google.common.truth.Truth.assertThat
-import com.london.data.datasource.remote.details.moviedetails.model.MovieDetailsRemoteImpl
+import com.london.data.datasource.remote.details.moviedetails.MovieDetailsRemoteImpl
 import com.london.data.datasource.remote.details.moviedetails.model.moviecast.MovieCastResponse
 import com.london.data.datasource.remote.details.moviedetails.model.moviecast.MovieImages
 import com.london.data.datasource.remote.details.moviedetails.model.moviedetails.MovieDetailsResponse
@@ -163,15 +163,15 @@ class MovieDetailsResponseImplTest {
 
         // Then
         assertThat(result.id).isEqualTo(expectedResponse.id)
-        assertThat(result.actorRemote.size).isEqualTo(expectedResponse.actorRemote.size)
-        assertThat(result.crew.size).isEqualTo(expectedResponse.crew.size)
-        if (result.actorRemote.isNotEmpty()) {
-            assertThat(result.actorRemote[0].name).isEqualTo("Leonardo DiCaprio")
-            assertThat(result.actorRemote[0].character).isEqualTo("Cobb")
+        assertThat(result.actorRemote?.size).isEqualTo(expectedResponse.actorRemote?.size)
+        assertThat(result.crew?.size).isEqualTo(expectedResponse.crew?.size)
+        if (result.actorRemote?.isNotEmpty() == true) {
+            assertThat(result.actorRemote!![0].name).isEqualTo("Leonardo DiCaprio")
+            assertThat(result.actorRemote!![0].character).isEqualTo("Cobb")
         }
-        if (result.crew.isNotEmpty()) {
-            assertThat(result.crew[0].name).isEqualTo("Christopher Nolan")
-            assertThat(result.crew[0].job).isEqualTo("Director")
+        if (result.crew?.isNotEmpty() == true) {
+            assertThat(result.crew!![0].name).isEqualTo("Christopher Nolan")
+            assertThat(result.crew!![0].job).isEqualTo("Director")
         }
     }
 
@@ -213,9 +213,9 @@ class MovieDetailsResponseImplTest {
 
         // Then
         assertThat(result.id).isEqualTo(expectedResponse.id)
-        assertThat(result.backdrops.size).isEqualTo(expectedResponse.backdrops.size)
-        assertThat(result.posters.size).isEqualTo(expectedResponse.posters.size)
-        assertThat(result.logos.size).isEqualTo(expectedResponse.logos.size)
+        assertThat(result.backdrops.size).isEqualTo(expectedResponse.backdrops?.size)
+        assertThat(result.posters.size).isEqualTo(expectedResponse.posters?.size)
+        assertThat(result.logos.size).isEqualTo(expectedResponse.logos?.size)
     }
 
     @Test

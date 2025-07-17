@@ -25,84 +25,78 @@ class RecentSearchDataSourceImplTest {
     }
 
     @Test
-    fun `insert should call insert on dao`() = runTest {
-        // given
+    fun `when inserting search item should call dao insert`() = runTest {
         coEvery { recentSearchDao.insert(Mock_Recent_Search_Local) } just Runs
-        // when
+
         dataSource.insert(Mock_Recent_Search_Local)
-        // then
+
         coVerify(exactly = 1) { recentSearchDao.insert(Mock_Recent_Search_Local) }
     }
 
     @Test
-    fun `clearOlderThanTen should call clearOlderThanTen on dao`() = runTest {
-        // given
+    fun `when clearing older items should call dao clearOlderThanTen`() = runTest {
         coEvery { recentSearchDao.clearOlderThanTen() } just Runs
-        // when
+
         dataSource.clearOlderThanTen()
-        // then
+
         coVerify(exactly = 1) { recentSearchDao.clearOlderThanTen() }
     }
 
     @Test
-    fun `getAll should return dao getAll result`() = runTest {
-        // given
+    fun `when getting all searches should return dao result`() = runTest {
         coEvery { recentSearchDao.getAll() } returns listOf(Mock_Recent_Search_Local)
-        // when
+
         val result = dataSource.getAll()
-        // then
+
         assertThat(result).isEqualTo(listOf(Mock_Recent_Search_Local))
     }
 
     @Test
-    fun `getAll should return empty list when getAll throws`() = runTest {
-        // given
+    fun `when getting all searches and dao throws should return empty list`() = runTest {
         coEvery { recentSearchDao.getAll() } throws Exception()
-        // when
+
         val result = dataSource.getAll()
-        // then
+
         assertThat(result).isEmpty()
     }
 
     @Test
-    fun `getRecentTen should return dao getRecentTen result`() = runTest {
-        // given
+    fun `when getting recent 10 searches should return dao result`() = runTest {
         coEvery { recentSearchDao.getRecentTen() } returns listOf(Mock_Recent_Search_Local)
-        // when
+
         val result = dataSource.getRecentTen()
-        // then
+
         assertThat(result).isEqualTo(listOf(Mock_Recent_Search_Local))
     }
 
     @Test
-    fun `getRecentTen should return empty list when getRecentTen throws`() = runTest {
-        // given
+    fun `when getting recent 10 searches and dao throws should return empty list`() = runTest {
         coEvery { recentSearchDao.getRecentTen() } throws Exception()
-        // when
+
         val result = dataSource.getRecentTen()
-        // then
+
         assertThat(result).isEmpty()
     }
 
     @Test
-    fun `insertAndKeepLastTen should call insertAndKeepLastTen on dao`() = runTest {
-        // given
+    fun `when inserting and keeping last 10 searches should call dao insertAndKeepLastTen`() =
+        runTest {
         coEvery { recentSearchDao.insertAndKeepLastTen(Mock_Recent_Search_Local) } just Runs
-        // when
-        dataSource.insertAndKeepLastTen(Mock_Recent_Search_Local)
-        // then
-        coVerify(exactly = 1) { recentSearchDao.insertAndKeepLastTen(Mock_Recent_Search_Local) }
+
+            dataSource.insertAndKeepLastTen(Mock_Recent_Search_Local)
+
+            coVerify(exactly = 1) { recentSearchDao.insertAndKeepLastTen(Mock_Recent_Search_Local) }
     }
 
     @Test
-    fun `clearAll should call clearAll on dao`() = runTest {
-        // given
+    fun `when clearing all searches should call dao clearAll`() = runTest {
         coEvery { recentSearchDao.clearAll() } just Runs
-        // when
+
         dataSource.clearAll()
-        // then
+
         coVerify(exactly = 1) { recentSearchDao.clearAll() }
     }
+
 
     companion object {
         val Mock_Recent_Search_Local = mockk<RecentSearchLocal>()

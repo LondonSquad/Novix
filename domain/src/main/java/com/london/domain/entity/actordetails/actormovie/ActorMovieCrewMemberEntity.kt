@@ -2,7 +2,7 @@ package com.london.domain.entity.actordetails.actormovie
 
 data class ActorMovieCrewMemberEntity(
     val adult: Boolean,
-    val backdropPath: String,
+    val backdropUrl: String,
     val creditId: String,
     val department: String,
     val genreIds: List<Int>,
@@ -12,7 +12,7 @@ data class ActorMovieCrewMemberEntity(
     val originalTitle: String,
     val overview: String,
     val popularity: Double,
-    val posterPath: String,
+    val posterUrl: String,
     val releaseDate: String,
     val title: String,
     val video: Boolean,

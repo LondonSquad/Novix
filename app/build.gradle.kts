@@ -89,7 +89,6 @@ dependencies {
     implementation(project(":presentation"))
     implementation(project(":designSystem"))
     implementation(libs.bundles.base.ui)
-    implementation(libs.bundles.koin)
     ksp(libs.bundles.koin.ksp)
     debugImplementation(libs.bundles.compose.debug)
     androidTestImplementation(libs.bundles.base.testing)
@@ -105,4 +104,10 @@ dependencies {
     implementation(libs.bundles.room)
     implementation(libs.bundles.koin)
     ksp(libs.bundles.room.ksp)
+}
+
+ksp {
+    arg("KOIN_CONFIG_CHECK", "true")
+    arg("KOIN_DEFAULT_MODULE", "false")
+    arg("KOIN_USE_COMPOSE_VIEWMODEL", "true")
 }

@@ -2,7 +2,15 @@ package com.london.domain.usecase
 
 import com.google.common.truth.Truth.assertThat
 import com.london.domain.TvShowDetailsSearchFailedException
-import com.london.domain.entity.tvshowdetails.*
+import com.london.domain.entity.tvshowdetails.TvShowCreatorEntity
+import com.london.domain.entity.tvshowdetails.TvShowDetailsEntity
+import com.london.domain.entity.tvshowdetails.TvShowEpisodeEntity
+import com.london.domain.entity.tvshowdetails.TvShowGenreEntity
+import com.london.domain.entity.tvshowdetails.TvShowNetworkEntity
+import com.london.domain.entity.tvshowdetails.TvShowProductionCompanyEntity
+import com.london.domain.entity.tvshowdetails.TvShowProductionCountryEntity
+import com.london.domain.entity.tvshowdetails.TvShowSeasonEntity
+import com.london.domain.entity.tvshowdetails.TvShowSpokenLanguageEntity
 import com.london.domain.repository.DetailsRepository
 import io.mockk.coEvery
 import io.mockk.mockk
@@ -45,7 +53,7 @@ class GetTvShowDetailsTest {
         const val TV_SHOW_ID = 12345
         val mockTvShowDetails = TvShowDetailsEntity(
             adult = false,
-            backdropPath = "/backdrop.jpg",
+            backdropUrl = "/backdrop.jpg",
             createdBy = listOf(
                 TvShowCreatorEntity(
                     id = 1,
@@ -53,7 +61,7 @@ class GetTvShowDetailsTest {
                     name = "Creator Name",
                     originalName = "Creator Name",
                     gender = 1,
-                    profilePath = "/profile.jpg"
+                    profileUrl = "/profile.jpg"
                 )
             ),
             episodeRunTime = listOf(45),
@@ -84,7 +92,7 @@ class GetTvShowDetailsTest {
             tvShowNetworks = listOf(
                 TvShowNetworkEntity(
                     id = 1,
-                    logoPath = "/network.jpg",
+                    logoUrl = "/network.jpg",
                     name = "Network",
                     originCountry = "US"
                 )
@@ -96,11 +104,11 @@ class GetTvShowDetailsTest {
             originalName = "Test Show",
             overview = "A test show overview",
             popularity = 85.5,
-            posterPath = "/poster.jpg",
+            posterUrl = "/poster.jpg",
             productionCompanies = listOf(
                 TvShowProductionCompanyEntity(
                     id = 1,
-                    logoPath = "/company.jpg",
+                    logoUrl = "/company.jpg",
                     name = "Production Company",
                     originCountry = "US"
                 )
@@ -118,7 +126,7 @@ class GetTvShowDetailsTest {
                     id = 1,
                     name = "Season 1",
                     overview = "Season 1 overview",
-                    posterPath = "/season1.jpg",
+                    posterUrl = "/season1.jpg",
                     seasonNumber = 1,
                     voteAverage = 8.0
                 )
