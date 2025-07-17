@@ -15,17 +15,17 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import com.london.designsystem.component.NavBar
+import com.london.designsystem.theme.NovixTheme
+import com.london.presentation.navigation.Screen
 import com.london.presentation.navigation.Screen.Account
 import com.london.presentation.navigation.Screen.Bookmarks
 import com.london.presentation.navigation.Screen.Categories
 import com.london.presentation.navigation.Screen.Home
-import com.london.app.navigation.Screen.MovieDetails
+import com.london.presentation.navigation.Screen.MovieDetails
 import com.london.presentation.navigation.Screen.Search
 import com.london.presentation.navigation.Screen.TopMoviesPicksDetails
 import com.london.presentation.navigation.Screen.TvShowDetails
-import com.london.designsystem.component.NavBar
-import com.london.designsystem.theme.NovixTheme
-import com.london.presentation.navigation.Screen
 import com.london.presentation.screen.account.AccountScreen
 import com.london.presentation.screen.bookmark.BookmarksScreen
 import com.london.presentation.screen.category.CategoriesScreen
@@ -126,7 +126,7 @@ fun NovixApp() {
                         movieId = it.getInt("movieId"),
                         onBackClick = { navController.navigateUp() },
 
-                    )
+                        )
                 }
             }
         }

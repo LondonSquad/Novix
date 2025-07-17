@@ -15,9 +15,6 @@ import com.london.data.datasource.local.dao.SearchTvShowDao
 import com.london.data.datasource.local.dao.recent.search.RecentSearchDao
 import com.london.data.datasource.local.dao.recent.viewed.RecentViewedDao
 import com.london.data.datasource.local.model.GenreInterestEntity
-import com.london.data.datasource.local.dao.recentsearch.RecentSearchDao
-import com.london.data.datasource.local.model.GenreInterestEntity
-import com.london.data.datasource.local.model.RecentSearch
 import com.london.data.datasource.local.model.SearchActorsLocal
 import com.london.data.datasource.local.model.SearchMoviesLocal
 import com.london.data.datasource.local.model.SearchTvShowLocal
