@@ -78,6 +78,7 @@ jobs:
         with:
           token: ${{ steps.app-token.outputs.token }}
           issue-number: ${{ github.event.pull_request.number }}
+          edit-mode: replace
           body: |
             **[London Bot] Auto-update Status**
 
@@ -522,6 +523,7 @@ jobs:
         with:
           token: ${{ steps.app-token.outputs.token }}
           issue-number: ${{ github.event.pull_request.number }}
+          edit-mode: replace
           body: |
             **[London Bot] Metrics Update Status**
 
