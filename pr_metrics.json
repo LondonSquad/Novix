@@ -2640,5 +2640,33 @@
       "deletions": 143,
       "changed_files": 9
     }
+  },
+  {
+    "pr_number": 146,
+    "url": "https://github.com/LondonSquad/Novix/pull/146",
+    "title": "fix: update Actor DTOs for null safety",
+    "opened_at": "2025-07-17T17:17:28Z",
+    "head_ref": "fix/actor-details-dto",
+    "base_ref": "develop",
+    "creator": {
+      "login": "BassantM",
+      "id": 102248144,
+      "url": "https://github.com/BassantM"
+    },
+    "approvals": [],
+    "first_approved_at": null,
+    "time_to_first_approval_minutes": null,
+    "required_approvals_met_at": null,
+    "time_to_required_approvals_minutes": null,
+    "closed_at": null,
+    "merged_at": null,
+    "merged_by": null,
+    "week": "2025-W29",
+    "status": "pending",
+    "diff_stats": {
+      "additions": 133,
+      "deletions": 143,
+      "changed_files": 9
+    }
   }
 ]
