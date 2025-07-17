@@ -5,7 +5,6 @@ import io.ktor.client.HttpClient
 import io.ktor.client.call.body
 import io.ktor.client.request.get
 import io.ktor.http.URLBuilder
-import io.ktor.http.parameters
 import io.ktor.http.path
 
 fun Int?.orZero() = this ?: 0
@@ -26,10 +25,8 @@ suspend inline fun <reified T> HttpClient.get(
 ): T = get {
     url {
         path(path)
-        parameters {
-            params.forEach { key, value ->
-                append(key, value)
-            }
+        params.forEach { key, value ->
+            parameters.append(key, value)
         }
         block(this)
     }

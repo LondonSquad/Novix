@@ -513,7 +513,7 @@ fun CastSection(
                 ActorItem(
                     actorName = member.name,
                     characterName = "${member.roles[0].character} - ${member.roles[0].episodeCount}",
-                    imageRes = member.profileUrl ?: "",
+                    imageRes = member.profileUrl.orEmpty(),
                     modifier = Modifier.widthIn(296.dp)
                 )
             }
