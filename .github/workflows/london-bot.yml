@@ -155,7 +155,7 @@ jobs:
           GH_TOKEN: ${{ steps.app-token.outputs.token }}
         run: |
           PR_FILE="pr_metrics.json"
-          BACKFILL_DAYS="${{ github.event.inputs.backfill_days || 1 }}"
+          BACKFILL_DAYS="${{ github.event.inputs.backfill_days }}"
 
           echo "--- Backfilling PRs (looking back $BACKFILL_DAYS days) ---"
           echo "--- This will add new PRs and update existing ones in the time window. ---"
