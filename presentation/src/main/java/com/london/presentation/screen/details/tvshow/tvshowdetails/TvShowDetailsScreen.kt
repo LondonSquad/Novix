@@ -62,6 +62,7 @@ import com.london.presentation.composables.ConditionalText
 import com.london.presentation.utils.toLocalizedNumbers
 import org.koin.androidx.compose.koinViewModel
 
+
 @Composable
 fun TvShowsDetailsScreen(
     viewModel: TvShowDetailsViewModel = koinViewModel(),
@@ -147,7 +148,7 @@ fun TvShowsDetailScreenContent(
                         text = stringResource(overview),
                         style = NovixTheme.typography.label.large,
                         color = NovixTheme.colors.title,
-                        modifier = Modifier.padding(start = 16.dp, top = 16.dp, bottom = 4.dp)
+                        modifier = Modifier.padding(start = 16.dp, top = 16.dp)
                     )
 
                     ConditionalText(
