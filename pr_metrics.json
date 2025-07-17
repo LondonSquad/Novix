@@ -2144,17 +2144,25 @@
           "url": "https://github.com/marwanqashwa"
         },
         "submitted_at": "2025-07-17T08:08:32Z"
+      },
+      {
+        "reviewer": {
+          "id": 189210092,
+          "login": "Aseel-AbuKmail",
+          "url": "https://github.com/Aseel-AbuKmail"
+        },
+        "submitted_at": "2025-07-17T08:10:34Z"
       }
     ],
     "first_approved_at": "2025-07-17T08:08:32Z",
     "time_to_first_approval_minutes": 0.45,
-    "required_approvals_met_at": null,
-    "time_to_required_approvals_minutes": null,
+    "required_approvals_met_at": "2025-07-17T08:10:34Z",
+    "time_to_required_approvals_minutes": 2.4833333333333334,
     "closed_at": null,
     "merged_at": null,
     "merged_by": null,
     "week": "2025-W29",
-    "status": "pending",
+    "status": "approved",
     "diff_stats": {
       "additions": 1,
       "deletions": 4,
