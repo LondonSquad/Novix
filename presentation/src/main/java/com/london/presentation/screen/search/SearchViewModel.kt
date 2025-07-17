@@ -89,7 +89,12 @@ class SearchViewModel(
 
 
     override fun onCategorySelected(category: SearchCategory) {
-        _uiState.update { it.copy(selectedCategory = category) }
+        _uiState.update {
+            it.copy(
+                selectedCategory = category,
+                showFilterButton = category != SearchCategory.Actors
+            )
+        }
 
         updateAvailableGenres(category)
 
