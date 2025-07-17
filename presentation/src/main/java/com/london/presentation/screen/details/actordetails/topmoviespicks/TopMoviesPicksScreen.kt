@@ -61,7 +61,7 @@ private fun TopMoviesPicksContent(
         items(state.movieDetails.cast.size) { index ->
             val movie = state.movieDetails.cast[index]
             HomeCard(
-                imageUrl = movie.posterPath,
+                imageUrl = movie.posterUrl,
                 isSaved = false,
                 onSaveClick = { interactions.onSaveMovie(movie.id) }
             )

@@ -22,6 +22,7 @@ android {
         buildConfigField("String", "API_KEY", getKey("API_KEY"))
         buildConfigField("String", "IMAGE_URL", getKey("IMAGE_URL"))
         buildConfigField("String", "BASE_URL", getKey("BASE_URL"))
+        buildConfigField("String", "AUTHORIZATION_KEY", getKey("AUTHORIZATION_KEY"))
     }
 
     buildFeatures{
