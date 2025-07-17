@@ -2006,5 +2006,33 @@
       "deletions": 177,
       "changed_files": 49
     }
+  },
+  {
+    "pr_number": 130,
+    "url": "https://github.com/LondonSquad/Novix/pull/130",
+    "title": "hotfix: solve bottom sheet crash",
+    "opened_at": "2025-07-17T01:40:58Z",
+    "head_ref": "hotfix/bottom-sheet-crash",
+    "base_ref": "develop",
+    "creator": {
+      "login": "BassantM",
+      "id": 102248144,
+      "url": "https://github.com/BassantM"
+    },
+    "approvals": [],
+    "first_approved_at": null,
+    "time_to_first_approval_minutes": null,
+    "required_approvals_met_at": null,
+    "time_to_required_approvals_minutes": null,
+    "closed_at": null,
+    "merged_at": null,
+    "merged_by": null,
+    "week": "2025-W29",
+    "status": "pending",
+    "diff_stats": {
+      "additions": 1,
+      "deletions": 3,
+      "changed_files": 1
+    }
   }
 ]
