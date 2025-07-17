@@ -1949,24 +1949,7 @@
       "id": 92235360,
       "url": "https://github.com/abdo-essam"
     },
-    "approvals": [
-      {
-        "reviewer": {
-          "id": 154278495,
-          "login": "ahmeddsamii",
-          "url": "https://github.com/ahmeddsamii"
-        },
-        "submitted_at": "2025-07-16T12:54:17Z"
-      },
-      {
-        "reviewer": {
-          "id": 100484790,
-          "login": "marwanqashwa",
-          "url": "https://github.com/marwanqashwa"
-        },
-        "submitted_at": "2025-07-16T12:54:49Z"
-      }
-    ],
+    "approvals": [],
     "first_approved_at": null,
     "time_to_first_approval_minutes": null,
     "required_approvals_met_at": null,
@@ -2571,7 +2554,7 @@
   {
     "pr_number": 142,
     "url": "https://github.com/LondonSquad/Novix/pull/142",
-    "title": "Refactor: Standardize icon tint and conditionally show sections in MovieDetailsScreen issue #26",
+    "title": "Refactor: Standardize icon tint and conditionally show sections in MovieDetailsScreen, issue #26",
     "opened_at": "2025-07-17T16:21:23Z",
     "head_ref": "fix/move-details-screen",
     "base_ref": "develop",
@@ -2643,6 +2626,66 @@
       "additions": 133,
       "deletions": 143,
       "changed_files": 9
+    }
+  },
+  {
+    "pr_number": 144,
+    "url": "https://github.com/LondonSquad/Novix/pull/144",
+    "title": "Feature/actor details screen update",
+    "opened_at": "2025-07-17T17:04:02Z",
+    "head_ref": "feature/actor-details-screen-update",
+    "base_ref": "feature/update-actor-details-screen",
+    "creator": {
+      "login": "Abdulrahman1890",
+      "id": 76666355,
+      "url": "https://github.com/Abdulrahman1890"
+    },
+    "approvals": [],
+    "first_approved_at": null,
+    "time_to_first_approval_minutes": null,
+    "required_approvals_met_at": null,
+    "time_to_required_approvals_minutes": null,
+    "closed_at": "2025-07-17T17:09:51Z",
+    "merged_at": "2025-07-17T17:09:51Z",
+    "merged_by": {
+      "login": "Abdulrahman1890",
+      "id": 76666355,
+      "url": "https://github.com/Abdulrahman1890"
+    },
+    "week": "2025-W29",
+    "status": "merged",
+    "diff_stats": {
+      "additions": 239,
+      "deletions": 30,
+      "changed_files": 8
+    }
+  },
+  {
+    "pr_number": 145,
+    "url": "https://github.com/LondonSquad/Novix/pull/145",
+    "title": "feature/update-actor-details-screen",
+    "opened_at": "2025-07-17T17:16:27Z",
+    "head_ref": "feature/update-actor-details-screen",
+    "base_ref": "feature/actor-details-screen",
+    "creator": {
+      "login": "Abdulrahman1890",
+      "id": 76666355,
+      "url": "https://github.com/Abdulrahman1890"
+    },
+    "approvals": [],
+    "first_approved_at": null,
+    "time_to_first_approval_minutes": null,
+    "required_approvals_met_at": null,
+    "time_to_required_approvals_minutes": null,
+    "closed_at": "2025-07-17T17:18:38Z",
+    "merged_at": null,
+    "merged_by": null,
+    "week": "2025-W29",
+    "status": "closed",
+    "diff_stats": {
+      "additions": 2117,
+      "deletions": 1621,
+      "changed_files": 144
     }
   },
   {
@@ -2785,11 +2828,15 @@
     "time_to_first_approval_minutes": 36.36666666666667,
     "required_approvals_met_at": "2025-07-17T20:13:00Z",
     "time_to_required_approvals_minutes": 36.416666666666664,
-    "closed_at": null,
-    "merged_at": null,
-    "merged_by": null,
+    "closed_at": "2025-07-17T20:12:58Z",
+    "merged_at": "2025-07-17T20:12:58Z",
+    "merged_by": {
+      "login": "Mostafa-alsaygh",
+      "id": 106277855,
+      "url": "https://github.com/Mostafa-alsaygh"
+    },
     "week": "2025-W29",
-    "status": "approved",
+    "status": "merged",
     "diff_stats": {
       "additions": 7,
       "deletions": 6,
@@ -2799,7 +2846,7 @@
   {
     "pr_number": 153,
     "url": "https://github.com/LondonSquad/Novix/pull/153",
-    "title": "ci: Enhance CI workflow to support multi-APK builds and output PR metadata",
+    "title": "cd: Enhance CD workflow to support multi-APK builds and output PR metadata",
     "opened_at": "2025-07-17T20:40:20Z",
     "head_ref": "enhancement/update-cd-multi-apks",
     "base_ref": "develop",
@@ -2846,6 +2893,63 @@
     }
   },
   {
+    "pr_number": 157,
+    "url": "https://github.com/LondonSquad/Novix/pull/157",
+    "title": "Fix/refactor tv show details screen",
+    "opened_at": "2025-07-17T20:56:35Z",
+    "head_ref": "fix/refactor-tv-show-details-screen",
+    "base_ref": "develop",
+    "creator": {
+      "login": "ahmeddsamii",
+      "id": 154278495,
+      "url": "https://github.com/ahmeddsamii"
+    },
+    "approvals": [
+      {
+        "reviewer": {
+          "id": 76666355,
+          "login": "Abdulrahman1890",
+          "url": "https://github.com/Abdulrahman1890"
+        },
+        "submitted_at": "2025-07-17T21:08:06Z"
+      },
+      {
+        "reviewer": {
+          "id": 106277855,
+          "login": "Mostafa-alsaygh",
+          "url": "https://github.com/Mostafa-alsaygh"
+        },
+        "submitted_at": "2025-07-17T21:08:10Z"
+      },
+      {
+        "reviewer": {
+          "id": 100484790,
+          "login": "marwanqashwa",
+          "url": "https://github.com/marwanqashwa"
+        },
+        "submitted_at": "2025-07-17T21:08:15Z"
+      }
+    ],
+    "first_approved_at": "2025-07-17T21:08:06Z",
+    "time_to_first_approval_minutes": 11.516666666666667,
+    "required_approvals_met_at": "2025-07-17T21:08:10Z",
+    "time_to_required_approvals_minutes": 11.583333333333334,
+    "closed_at": "2025-07-17T22:04:13Z",
+    "merged_at": "2025-07-17T22:04:13Z",
+    "merged_by": {
+      "login": "marwanqashwa",
+      "id": 100484790,
+      "url": "https://github.com/marwanqashwa"
+    },
+    "week": "2025-W29",
+    "status": "merged",
+    "diff_stats": {
+      "additions": 200,
+      "deletions": 116,
+      "changed_files": 6
+    }
+  },
+  {
     "pr_number": 159,
     "url": "https://github.com/LondonSquad/Novix/pull/159",
     "title": "enhancement/app-size-reduction",
@@ -2865,12 +2969,20 @@
           "url": "https://github.com/ahmeddsamii"
         },
         "submitted_at": "2025-07-17T21:14:19Z"
+      },
+      {
+        "reviewer": {
+          "id": 81706918,
+          "login": "karimdeabes",
+          "url": "https://github.com/karimdeabes"
+        },
+        "submitted_at": "2025-07-17T21:17:42Z"
       }
     ],
     "first_approved_at": "2025-07-17T21:14:19Z",
     "time_to_first_approval_minutes": 13.616666666666667,
-    "required_approvals_met_at": null,
-    "time_to_required_approvals_minutes": null,
+    "required_approvals_met_at": "2025-07-17T21:17:42Z",
+    "time_to_required_approvals_minutes": 17,
     "closed_at": "2025-07-17T21:17:43Z",
     "merged_at": "2025-07-17T21:17:43Z",
     "merged_by": {
