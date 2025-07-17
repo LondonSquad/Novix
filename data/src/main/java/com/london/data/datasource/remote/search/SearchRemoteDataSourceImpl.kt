@@ -46,8 +46,29 @@ class SearchRemoteDataSourceImpl(
             path = ApiConstants.SEARCH_PATH_ACTORS,
             params = buildSearchParams(query, includeAdult, language, pageNumber)
         )
+
+    override suspend fun getMoviesByCategory(
+        categoryId: Int,
+        language: String,
+        pageNumber: Int,
+        includeAdult: Boolean
+    ): ApiResponse<SearchMovieRemote> = ktorClient.get(
+        path = ApiConstants.SEARCH_BY_CATEGORY_PATH,
+        params = buildDiscoverParams(categoryId, pageNumber, language, includeAdult)
+    )
 }
 
+private fun buildDiscoverParams(
+    genreId: Int,
+    pageNumber: Int = 1,
+    language: String = "en-US",
+    includeAdult: Boolean = false
+): Map<String, String> = mapOf(
+    "with_genres" to genreId.toString(),
+    "page" to pageNumber.toString(),
+    "language" to language,
+    "include_adult" to includeAdult.toString()
+)
 private fun buildSearchParams(
     query: String,
     includeAdult: Boolean,

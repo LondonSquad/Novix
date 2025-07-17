@@ -23,6 +23,7 @@ import com.london.presentation.navigation.Screen.Bookmarks
 import com.london.presentation.navigation.Screen.Categories
 import com.london.presentation.navigation.Screen.Home
 import com.london.presentation.navigation.Screen.MovieDetails
+import com.london.presentation.navigation.Screen.MoviesByCategory
 import com.london.presentation.navigation.Screen.Search
 import com.london.presentation.navigation.Screen.TopMoviesPicksDetails
 import com.london.presentation.navigation.Screen.TvShowDetails
@@ -127,6 +128,13 @@ fun NovixApp() {
                         onBackClick = { navController.navigateUp() },
 
                         )
+                }
+            }
+            composable<MoviesByCategory> {
+                val moviesByCategory = it.arguments?.let {
+                    MoviesByCategory(
+                        categoryId = it.getInt("categoryId"),
+                    )
                 }
             }
         }
