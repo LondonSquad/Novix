@@ -1,25 +1,26 @@
 package com.london.data.mapper.actordetails
 
 import com.london.data.datasource.remote.details.actordetails.model.ActorDetailsResponse
+import com.london.data.utils.orZero
 import com.london.domain.KoverIgnore
 import com.london.domain.entity.actordetails.ActorDetails
 
 @KoverIgnore
 fun ActorDetailsResponse.toEntity():ActorDetails{
     return ActorDetails(
-        id = this.id,
-        name = this.name,
-        gender = this.gender,
+        id = this.id.orZero(),
+        name = this.name.orEmpty(),
+        gender = this.gender.orZero(),
         adult = this.adult,
-        birthday = this.birthday,
+        birthday = this.birthday.orEmpty(),
         deathDay = this.deathDay,
-        placeOfBirth = this.placeOfBirth,
-        biography = this.biography,
+        placeOfBirth = this.placeOfBirth.orEmpty(),
+        biography = this.biography.orEmpty(),
         alsoKnownAs = this.alsoKnownAs,
         homePage = this.homePage,
-        imdbId = this.imdbId,
-        knownForDepartment = this.knownForDepartment,
-        popularity = this.popularity,
+        imdbId = this.imdbId.orEmpty(),
+        knownForDepartment = this.knownForDepartment.orEmpty(),
+        popularity = this.popularity.orZero(),
         profilePath = "https://image.tmdb.org/t/p/w500${this.profilePath}"
     )
 }
