@@ -18,7 +18,7 @@ fun mapToUiState(
         movieDuration = movieDetails.movieDuration,
         releaseDate = movieDetails.releaseDate,
         movieOverview = movieDetails.movieOverview,
-        genres = mapActorsToUiState(movieDetails.actors),
+        actors = mapActorsToUiState(movieDetails.actors),
         similarMovies = mapSimilarMoviesToUiState(movieDetails.similarMovies),
         movieHaveTrailer = movieDetails.movieHaveTrailer,
         isRated = currentUiState.isRated,
