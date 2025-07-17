@@ -48,7 +48,6 @@ import com.london.designsystem.component.CircularLoading
 import com.london.designsystem.component.HomeCard
 import com.london.designsystem.component.SectionHeader
 import com.london.designsystem.component.TopBar
-import com.london.designsystem.component.TopBar
 import com.london.designsystem.component.button.ErrorImage
 import com.london.designsystem.theme.NovixTheme
 import com.london.presentation.R
@@ -82,28 +81,31 @@ fun ActorScreenContent(
             .background(NovixTheme.colors.surface)
     ) {
 
-        TopBar(
-            onBackClick = onBackClick,
-            modifier = Modifier
-                .statusBarsPadding()
-                .padding(start = 16.dp)
-        )
 
         LazyColumn(
             modifier = Modifier.fillMaxSize(), contentPadding = PaddingValues(bottom = 80.dp)
         ) {
             item {
-//                val images = uiState.actorImageDetails
-                CustomBackDropImage(
-                    images = listOf(
-                        painterResource(R.drawable.actor_image),
-                        painterResource(R.drawable.actor_image),
-                        painterResource(R.drawable.actor_image),
-                        painterResource(R.drawable.actor_image),
-                        painterResource(R.drawable.actor_image),
-                        painterResource(R.drawable.actor_image),
+                Box {
+
+                    TopBar(
+                        onBackClick = onBackClick,
+                        modifier = Modifier
+                            .statusBarsPadding()
+                            .padding(start = 16.dp)
                     )
-                )
+//                val images = uiState.actorImageDetails
+                    CustomBackDropImage(
+                        images = listOf(
+                            painterResource(R.drawable.actor_image),
+                            painterResource(R.drawable.actor_image),
+                            painterResource(R.drawable.actor_image),
+                            painterResource(R.drawable.actor_image),
+                            painterResource(R.drawable.actor_image),
+                            painterResource(R.drawable.actor_image),
+                        )
+                    )
+                }
             }
 
             item {
@@ -114,7 +116,7 @@ fun ActorScreenContent(
                     modifier = Modifier.padding(16.dp)
                 )
             }
-            item{
+            item {
                 SectionHeader(
                     text = stringResource(R.string.gallery),
                     hasGetAll = true,
@@ -127,7 +129,7 @@ fun ActorScreenContent(
             item {
                 ActorGallery()
             }
-            item{
+            item {
                 SectionHeader(
                     text = stringResource(R.string.top_movies_picks),
                     hasGetAll = true,
@@ -140,7 +142,7 @@ fun ActorScreenContent(
             item {
                 TopMoviesPicksList()
             }
-            item{
+            item {
                 SectionHeader(
                     text = stringResource(R.string.top_tv_shows_picks),
                     hasGetAll = true,
@@ -274,18 +276,18 @@ private fun ActorInfoSection(
     modifier: Modifier = Modifier
 ) {
     Column(
+        verticalArrangement = Arrangement.spacedBy(8.dp),
         modifier = modifier
             .fillMaxWidth()
             .heightIn(min = 132.dp)
             .padding(16.dp)
-            .background(NovixTheme.colors.surface)
+            .clip(RoundedCornerShape(16.dp))
             .border(
                 width = 1.dp,
                 color = NovixTheme.colors.stroke,
                 shape = RoundedCornerShape(16.dp)
             )
-            .clip(RoundedCornerShape(16.dp)),
-        verticalArrangement = Arrangement.spacedBy(8.dp)
+            .background(NovixTheme.colors.surface),
     ) {
         Column(
             verticalArrangement = Arrangement.Center,
@@ -337,40 +339,42 @@ private fun ActorInfoSection(
 @Composable
 private fun Overview(
     modifier: Modifier
-){
+) {
 
     var maxLines by rememberSaveable { mutableIntStateOf(4) }
     var isTextCollapsed by rememberSaveable { mutableStateOf(false) }
     Column(
         modifier = modifier
     ) {
-    Text(
-        text = stringResource(R.string.biography),
-        style = NovixTheme.typography.title.medium,
-        color = NovixTheme.colors.title
-    )
-
-    Column {
         Text(
-            text = "Matthew Paige Damon is an American actor, film producer, and screenwriter. He was ranked among Forbes most bankable stars in 2007 and, in 2010, was one of the highest-grossing ",
-            style = NovixTheme.typography.body.small,
-            color = NovixTheme.colors.body,
-            maxLines = maxLines,
-            overflow = TextOverflow.Ellipsis
+            text = stringResource(R.string.biography),
+            style = NovixTheme.typography.title.medium,
+            color = NovixTheme.colors.title
         )
 
-        Text(
-            text = if (isTextCollapsed)
-                stringResource(com.london.designsystem.R.string.read_less) else stringResource(com.london.designsystem.R.string.read_more),
-            style = NovixTheme.typography.body.small,
-            color = NovixTheme.colors.primary,
-            modifier = Modifier
-                .clickable {
-                    maxLines = if (maxLines == 4) Int.MAX_VALUE else 4
-                    isTextCollapsed = !isTextCollapsed
-                }
-        )
-    }
+        Column {
+            Text(
+                text = "Matthew Paige Damon is an American actor, film producer, and screenwriter. He was ranked among Forbes most bankable stars in 2007 and, in 2010, was one of the highest-grossing ",
+                style = NovixTheme.typography.body.small,
+                color = NovixTheme.colors.body,
+                maxLines = maxLines,
+                overflow = TextOverflow.Ellipsis
+            )
+
+            Text(
+                text = if (isTextCollapsed)
+                    stringResource(com.london.designsystem.R.string.read_less) else stringResource(
+                    com.london.designsystem.R.string.read_more
+                ),
+                style = NovixTheme.typography.body.small,
+                color = NovixTheme.colors.primary,
+                modifier = Modifier
+                    .clickable {
+                        maxLines = if (maxLines == 4) Int.MAX_VALUE else 4
+                        isTextCollapsed = !isTextCollapsed
+                    }
+            )
+        }
     }
 }
 
