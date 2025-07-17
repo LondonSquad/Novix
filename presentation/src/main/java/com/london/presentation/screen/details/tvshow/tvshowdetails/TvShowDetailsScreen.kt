@@ -34,6 +34,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
@@ -44,6 +45,7 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.layout.layout
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.zIndex
 import com.ae.imageharamblur.ui.ImageViewFilter
@@ -57,8 +59,6 @@ import com.london.designsystem.component.button.ErrorImage
 import com.london.designsystem.theme.NovixTheme
 import com.london.domain.entity.tvshowdetails.ImageItemEntity
 import com.london.domain.entity.tvshowdetails.TvShowCastMemberEntity
-import com.london.presentation.R.string.overview
-import com.london.presentation.composables.ConditionalText
 import com.london.presentation.utils.toLocalizedNumbers
 import org.koin.androidx.compose.koinViewModel
 
@@ -70,7 +70,7 @@ fun TvShowsDetailsScreen(
 ) {
     val uiState by viewModel.uiState.collectAsState()
     TvShowsDetailScreenContent(
-        uiState = uiState, onExpandClick = viewModel::onExpandClick,
+        uiState = uiState,
         onBackClick = onBackClick
     )
 }
@@ -79,7 +79,6 @@ fun TvShowsDetailsScreen(
 fun TvShowsDetailScreenContent(
     modifier: Modifier = Modifier,
     uiState: TvShowDetailsUiState,
-    onExpandClick: () -> Unit,
     onBackClick: () -> Unit
 ) {
     Box(
@@ -143,18 +142,14 @@ fun TvShowsDetailScreenContent(
             }
 
             item {
-                if (uiState.overview.isNotBlank()) {
-                    Text(
-                        text = stringResource(overview),
-                        style = NovixTheme.typography.label.large,
-                        color = NovixTheme.colors.title,
-                        modifier = Modifier.padding(start = 16.dp, top = 16.dp)
+                OverviewSection(
+                    uiState = uiState,
+                    modifier = Modifier.padding(
+                        top = 16.dp,
+                        start = 16.dp,
+                        end = 16.dp
                     )
-
-                    ConditionalText(
-                        uiState.overview, uiState.expanded, onExpandClick
-                    )
-                }
+                )
             }
 
             item {
@@ -453,6 +448,46 @@ fun TvShowRating(
             style = NovixTheme.typography.label.small,
             color = NovixTheme.colors.title
         )
+    }
+}
+
+@Composable
+fun OverviewSection(
+    modifier: Modifier = Modifier,
+    uiState: TvShowDetailsUiState
+) {
+    var maxLines by rememberSaveable { mutableIntStateOf(4) }
+    var isTextCollapsed by rememberSaveable { mutableStateOf(false) }
+    Column(
+        modifier = modifier
+    ) {
+        Text(
+            text = stringResource(R.string.overview),
+            style = NovixTheme.typography.title.medium,
+            color = NovixTheme.colors.title
+        )
+
+        Column {
+            Text(
+                text = uiState.overview,
+                style = NovixTheme.typography.body.small,
+                color = NovixTheme.colors.body,
+                maxLines = maxLines,
+                overflow = TextOverflow.Ellipsis
+            )
+
+            Text(
+                text = if (isTextCollapsed)
+                    stringResource(R.string.read_less) else stringResource(R.string.read_more),
+                style = NovixTheme.typography.body.small,
+                color = NovixTheme.colors.primary,
+                modifier = Modifier
+                    .clickable {
+                        maxLines = if (maxLines == 4) Int.MAX_VALUE else 4
+                        isTextCollapsed = !isTextCollapsed
+                    }
+            )
+        }
     }
 }
 
