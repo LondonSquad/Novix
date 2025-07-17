@@ -1,4 +1,4 @@
-package com.london.presentation.screen.moiveDetalis
+package com.london.presentation.screen.details.movieDetalis
 
 interface MovieDetailsIntersection {
     fun onSavedClick()
