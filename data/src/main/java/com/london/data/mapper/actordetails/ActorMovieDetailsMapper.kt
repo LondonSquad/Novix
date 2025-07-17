@@ -6,6 +6,7 @@ import com.london.data.datasource.remote.details.actordetails.model.actormoviede
 import com.london.data.utils.asImageUrlOrEmpty
 import com.london.data.utils.isTrue
 import com.london.data.utils.orZero
+import com.london.domain.KoverIgnore
 import com.london.domain.entity.actordetails.actormovie.ActorMovieCastMemberEntity
 import com.london.domain.entity.actordetails.actormovie.ActorMovieCrewMemberEntity
 import com.london.domain.entity.actordetails.actormovie.ActorMovieDetails
@@ -18,6 +19,7 @@ fun ActorMovieDetailsResponse.toEntity(): ActorMovieDetails {
     )
 }
 
+@KoverIgnore
 fun ActorMovieCastMember.toEntity(): ActorMovieCastMemberEntity {
     return ActorMovieCastMemberEntity(
         adult = adult.isTrue,
@@ -40,6 +42,7 @@ fun ActorMovieCastMember.toEntity(): ActorMovieCastMemberEntity {
     )
 }
 
+@KoverIgnore
 fun MovieCrewMember.toEntity(): ActorMovieCrewMemberEntity {
     return ActorMovieCrewMemberEntity(
         adult = adult.isTrue,

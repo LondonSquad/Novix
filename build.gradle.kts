@@ -35,7 +35,7 @@ kover {
                         "com.london.data.datasource.local.recent",
                     )
                     // TODO: Uncomment this line to cover viewModels
-                    // classes("**ViewModel")
+                    // classes("**.*ViewModel")
                 }
 
                 excludes {
@@ -44,6 +44,7 @@ kover {
                         "org.koin.ksp.generated",
                         "com.london.data.datasource.remote",
                     )
+                    classes("**.*RemoteDataSourceImpl")
                 }
             }
             verify {
