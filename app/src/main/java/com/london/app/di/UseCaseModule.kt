@@ -60,4 +60,7 @@ class UseCaseModule {
     ): GetMovieCastUseCase =
         GetMovieCastUseCase(movieDetailsRepository)
 
+    @Single
+    fun provideGetEpisodeByTvShowId(repository: DetailsRepository) =
+        GetEpisodesByTvShowSeason(repository)
 }
