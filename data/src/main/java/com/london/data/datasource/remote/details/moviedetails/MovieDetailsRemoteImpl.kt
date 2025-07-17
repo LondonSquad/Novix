@@ -7,7 +7,9 @@ import com.london.data.datasource.remote.details.moviedetails.model.movieimages.
 import com.london.data.datasource.remote.details.moviedetails.model.similarmovies.SimilarMoviesResponse
 import com.london.data.utils.get
 import io.ktor.client.HttpClient
+import org.koin.core.annotation.Single
 
+@Single
 class MovieDetailsRemoteImpl(
     private val ktorClient: HttpClient,
 ) : MovieDetailsRemote {

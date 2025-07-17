@@ -9,6 +9,6 @@ import androidx.room.Entity
 data class RecentViewedLocal(
     val id : Int,
     val imageUrl : String,
-    val type : MediaType,
+    val type : MediaTypeLocal,
     val viewDate : Long,
 )

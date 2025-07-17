@@ -1,16 +1,8 @@
-package com.london.app.di
+package com.london.data.di
 
 import android.content.Context
 import android.util.Log
 import com.london.data.BuildConfig
-import com.london.data.datasource.remote.details.actordetails.ActorDetailsRemoteDataSource
-import com.london.data.datasource.remote.details.actordetails.ActorDetailsRemoteDataSourceImpl
-import com.london.data.datasource.remote.details.moviedetails.MovieDetailsRemote
-import com.london.data.datasource.remote.details.moviedetails.MovieDetailsRemoteImpl
-import com.london.data.datasource.remote.details.tvshowdetails.TvShowDetailsRemoteDataSource
-import com.london.data.datasource.remote.details.tvshowdetails.TvShowDetailsRemoteDataSourceImpl
-import com.london.data.datasource.remote.search.SearchRemoteDataSource
-import com.london.data.datasource.remote.search.SearchRemoteDataSourceImpl
 import io.ktor.client.HttpClient
 import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
 import io.ktor.client.plugins.defaultRequest
@@ -24,26 +16,7 @@ import org.koin.core.annotation.Module
 import org.koin.core.annotation.Single
 
 @Module
-class DataSourceModule {
-    @Single
-    fun provideRemoteDataSource(ktorClient: HttpClient): SearchRemoteDataSource {
-        return SearchRemoteDataSourceImpl(ktorClient)
-    }
-
-    @Single
-    fun provideTvShowDetailsRemoteDataSource(
-        ktorClient: HttpClient,
-    ): TvShowDetailsRemoteDataSource {
-        return TvShowDetailsRemoteDataSourceImpl(ktorClient)
-    }
-
-    @Single
-    fun provideActorDetailsRemoteDataSource(
-        ktorClient: HttpClient,
-    ): ActorDetailsRemoteDataSource {
-        return ActorDetailsRemoteDataSourceImpl(ktorClient)
-    }
-
+class NetworkModule {
     @Single
     fun provideKtorClient(
         context: Context
@@ -78,9 +51,4 @@ class DataSourceModule {
             level = LogLevel.ALL
         }
     }
-
-    @Single
-    fun provideMovieRemoteDataSource(ktorClient: HttpClient): MovieDetailsRemote =
-        MovieDetailsRemoteImpl(ktorClient)
-
 }

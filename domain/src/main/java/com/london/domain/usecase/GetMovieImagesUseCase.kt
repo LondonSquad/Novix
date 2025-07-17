@@ -1,9 +1,13 @@
 package com.london.domain.usecase
 
 import com.london.domain.repository.MovieDetailsRepository
+import org.koin.core.annotation.Provided
+import org.koin.core.annotation.Single
 
-class GetMovieImagesUseCase (
+@Single
+class GetMovieImagesUseCase(
+    @Provided
     private val movieDetailsRepository: MovieDetailsRepository
-){
+) {
     suspend fun invoke(movieId: Int) = movieDetailsRepository.getMovieImagesById(movieId)
 }

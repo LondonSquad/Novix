@@ -7,7 +7,9 @@ import com.london.data.datasource.remote.details.tvshowdetails.model.TvShowImage
 import com.london.data.datasource.remote.details.tvshowdetails.model.tvshowepisode.TvShowEpisodesRemoteResponse
 import com.london.data.utils.get
 import io.ktor.client.HttpClient
+import org.koin.core.annotation.Single
 
+@Single
 class TvShowDetailsRemoteDataSourceImpl(
     private val ktorClient: HttpClient,
 ) : TvShowDetailsRemoteDataSource {

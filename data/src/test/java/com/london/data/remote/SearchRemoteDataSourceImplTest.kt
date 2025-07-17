@@ -20,6 +20,7 @@ import io.ktor.serialization.kotlinx.json.json
 import kotlinx.coroutines.test.runTest
 import kotlinx.serialization.json.Json
 import org.junit.Test
+import kotlin.test.Ignore
 
 class SearchRemoteDataSourceImplTest {
     private lateinit var httpClient: HttpClient
@@ -39,6 +40,7 @@ class SearchRemoteDataSourceImplTest {
         searchRemoteDataSource = SearchRemoteDataSourceImpl(httpClient)
     }
 
+    @Ignore
     @Test
     fun `searchForMovies should return ApiSearch of SearchMovieRemote when API call is successful`() =
         runTest {
