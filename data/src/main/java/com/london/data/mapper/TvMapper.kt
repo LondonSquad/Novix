@@ -35,7 +35,7 @@ fun ApiResponse<SearchTvShowRemote>.toLocal(query: String): SearchTvShowLocal {
 fun SearchTvShowRemote.toLocalDto(): SearchTvShowDtoLocal {
     return SearchTvShowDtoLocal(
         adult = adult,
-        backdropPath = backdropPath.orEmpty(),
+        backdropUrl = backdropPath.orEmpty(),
         genreIds = genreIds,
         id = id,
         originCountry = originCountry ?: emptyList(),

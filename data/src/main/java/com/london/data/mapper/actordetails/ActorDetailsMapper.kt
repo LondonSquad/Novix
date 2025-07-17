@@ -21,6 +21,6 @@ fun ActorDetailsResponse.toEntity(): ActorDetails {
         imdbId = imdbId,
         knownForDepartment = knownForDepartment,
         popularity = popularity,
-        profilePath = profilePath.asImageUrlOrEmpty()
+        profileUrl = profilePath.asImageUrlOrEmpty()
     )
 }

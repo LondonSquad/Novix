@@ -21,5 +21,5 @@ class MovieDetailsRemoteImpl(
         ktorClient.get(ApiConstants.getMovieCastPath(movieId))
 
     override suspend fun getMovieImages(movieId: Int): MovieImagesResponse =
-        ktorClient.get(ApiConstants.getMovieDetailsPath(movieId))
+        ktorClient.get(ApiConstants.getMovieImagesPath(movieId))
 }

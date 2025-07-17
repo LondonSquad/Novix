@@ -24,7 +24,7 @@ object TvShowImagesMapper {
             aspectRatio = aspectRatio,
             height = height,
             iso6391 = iso6391,
-            filePath = filePath.asImageUrlOrEmpty(),
+            fileUrl = filePath.asImageUrlOrEmpty(),
             voteAverage = voteAverage,
             voteCount = voteCount,
             width = width

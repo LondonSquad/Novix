@@ -33,7 +33,7 @@ fun TvShowEpisodeBySeason.toTvShowEpisodeBySeasonEntity(): TvShowEpisodeBySeason
         runtime = runtime,
         seasonNumber = seasonNumber,
         showId = showId,
-        stillPath = stillPath.asImageUrlOrEmpty(),
+        stillUrl = stillPath.asImageUrlOrEmpty(),
         voteAverage = voteAverage,
         voteCount = voteCount,
         crew = crew.map { it.toEpisodeCrewMemberEntity() },

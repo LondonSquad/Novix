@@ -21,7 +21,7 @@ fun ActorMovieDetailsResponse.toEntity(): ActorMovieDetails {
 fun ActorMovieCastMember.toEntity(): ActorMovieCastMemberEntity {
     return ActorMovieCastMemberEntity(
         adult = adult.isTrue,
-        backdropPath = backdropPath.asImageUrlOrEmpty(),
+        backdropUrl = backdropPath.asImageUrlOrEmpty(),
         character = character.orEmpty(),
         creditId = creditId.orEmpty(),
         genreIds = genreIds.orEmpty(),
@@ -31,7 +31,7 @@ fun ActorMovieCastMember.toEntity(): ActorMovieCastMemberEntity {
         originalTitle = originalTitle.orEmpty(),
         overview = overview.orEmpty(),
         popularity = popularity.orZero(),
-        posterPath = posterPath.asImageUrlOrEmpty(),
+        posterUrl = posterPath.asImageUrlOrEmpty(),
         releaseDate = releaseDate.orEmpty(),
         title = title.orEmpty(),
         video = video.isTrue,
@@ -43,7 +43,7 @@ fun ActorMovieCastMember.toEntity(): ActorMovieCastMemberEntity {
 fun MovieCrewMember.toEntity(): ActorMovieCrewMemberEntity {
     return ActorMovieCrewMemberEntity(
         adult = adult.isTrue,
-        backdropPath = backdropPath.asImageUrlOrEmpty(),
+        backdropUrl = backdropPath.asImageUrlOrEmpty(),
         creditId = creditId.orEmpty(),
         department = department.orEmpty(),
         genreIds = genreIds.orEmpty(),
@@ -53,7 +53,7 @@ fun MovieCrewMember.toEntity(): ActorMovieCrewMemberEntity {
         originalTitle = originalTitle.orEmpty(),
         overview = overview.orEmpty(),
         popularity = popularity.orZero(),
-        posterPath = posterPath.asImageUrlOrEmpty(),
+        posterUrl = posterPath.asImageUrlOrEmpty(),
         releaseDate = releaseDate.orEmpty(),
         title = title.orEmpty(),
         video = video.isTrue,

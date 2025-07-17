@@ -19,7 +19,7 @@ fun ProfileDto.toEntity(): ImageDetails {
         aspectRatio = aspectRatio,
         height = height,
         iso = iso,
-        filePath = filePath.asImageUrlOrEmpty(),
+        fileUrl = filePath.asImageUrlOrEmpty(),
         voteAverage = voteAverage,
         voteCount = voteCount,
         width = width

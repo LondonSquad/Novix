@@ -1,6 +1,5 @@
 package com.london.data.mapper.tvshowdetails
 
-import com.london.data.datasource.remote.details.tvshowdetails.model.CrewMember
 import com.london.data.datasource.remote.details.tvshowdetails.model.Role
 import com.london.data.datasource.remote.details.tvshowdetails.model.TvShowCastMember
 import com.london.data.datasource.remote.details.tvshowdetails.model.TvShowCastRemoteResponse
@@ -8,7 +7,6 @@ import com.london.data.utils.asImageUrlOrEmpty
 import com.london.domain.KoverIgnore
 import com.london.domain.entity.tvshowdetails.TvShowCastEntity
 import com.london.domain.entity.tvshowdetails.TvShowCastMemberEntity
-import com.london.domain.entity.tvshowdetails.TvShowCrewMemberEntity
 import com.london.domain.entity.tvshowdetails.TvShowRoleEntity
 
 @KoverIgnore
@@ -28,7 +26,7 @@ fun TvShowCastMember.toCastMember(): TvShowCastMemberEntity {
         name = name,
         originalName = originalName,
         popularity = popularity,
-        profilePath = profilePath?.let { "https://image.tmdb.org/t/p/w500$it" },
+        profileUrl = profilePath.asImageUrlOrEmpty(),
         roles = roles.map { it.toRoleEntity() },
         totalEpisodeCount = totalEpisodeCount,
         order = order
@@ -41,21 +39,5 @@ fun Role.toRoleEntity(): TvShowRoleEntity {
         creditId = creditId,
         character = character,
         episodeCount = episodeCount
-    )
-}
-
-fun CrewMember.toCrewMember(): TvShowCrewMemberEntity {
-    return TvShowCrewMemberEntity(
-        adult = adult,
-        gender = gender,
-        id = id,
-        knownForDepartment = knownForDepartment,
-        name = name,
-        originalName = originalName,
-        popularity = popularity,
-        profilePath = profilePath.asImageUrlOrEmpty(),
-        creditId = creditId,
-        department = department,
-        job = job
     )
 }

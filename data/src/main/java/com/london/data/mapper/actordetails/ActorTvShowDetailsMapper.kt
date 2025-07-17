@@ -22,7 +22,7 @@ fun ActorTvShowDetailsResponse.toEntity(): ActorTvShowDetails {
 fun ActorTvShowCastMember.toEntity(): ActorTvShowCastMemberEntity {
     return ActorTvShowCastMemberEntity(
         adult = adult,
-        backdropPath = backdropPath.asImageUrlOrEmpty(),
+        backdropUrl = backdropPath.asImageUrlOrEmpty(),
         character = character,
         creditId = creditId,
         episodeCount = episodeCount,
@@ -36,7 +36,7 @@ fun ActorTvShowCastMember.toEntity(): ActorTvShowCastMemberEntity {
         originalName = originalName,
         overview = overview,
         popularity = popularity,
-        posterPath = posterPath.asImageUrlOrEmpty(),
+        posterUrl = posterPath.asImageUrlOrEmpty(),
         voteAverage = voteAverage,
         voteCount = voteCount
     )

@@ -15,7 +15,7 @@ fun PersonDtoLocal.toActorEntity(): Actor {
     return Actor(
         id = id,
         name = name,
-        profilePicture = profilePath.asImageUrlOrEmpty()
+        profilePicture = profileUrl.asImageUrlOrEmpty()
     )
 }
 
@@ -40,7 +40,7 @@ fun SearchActorRemote.toLocal(): PersonDtoLocal {
         name = name.orEmpty(),
         originalName = originalName.orEmpty(),
         popularity = popularity,
-        profilePath = profilePath,
+        profileUrl = profilePath,
         knownFor = knownFor.map { it.toKnownForDtoLocal() }
     )
 }
@@ -54,7 +54,7 @@ fun KnownFor.toKnownForDtoLocal(): KnownForDtoLocal {
         title = title,
         originalTitle = originalTitle,
         overview = overview,
-        posterPath = posterPath,
+        posterUrl = posterPath,
         mediaType = mediaType.orEmpty(),
         originalLanguage = originalLanguage.orEmpty(),
         genreIds = genreIds,

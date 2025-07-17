@@ -23,7 +23,7 @@ import com.london.domain.entity.tvshowdetails.TvShowSpokenLanguageEntity
 
 fun TvShowDetailsRemoteResponse.toEntity() = TvShowDetailsEntity(
     adult = adult,
-    backdropPath = backdropPath.asImageUrlOrEmpty(),
+    backdropUrl = backdropPath.asImageUrlOrEmpty(),
     createdBy = createdBy.map { it.toEntity() },
     episodeRunTime = episodeRunTime,
     firstAirDate = firstAirDate,
@@ -44,7 +44,7 @@ fun TvShowDetailsRemoteResponse.toEntity() = TvShowDetailsEntity(
     originalName = originalName,
     overview = overview,
     popularity = popularity,
-    posterPath = posterPath.asImageUrlOrEmpty(),
+    posterUrl = posterPath.asImageUrlOrEmpty(),
     productionCompanies = productionCompanies.map { it.toEntity() },
     productionCountries = productionCountries.map { it.toEntity() },
     tvShowSeasons = tvShowSeasons.map { it.toEntity() },
@@ -62,7 +62,7 @@ fun TvShowCreator.toEntity() = TvShowCreatorEntity(
     name = name,
     originalName = originalName,
     gender = gender,
-    profilePath = profilePath.asImageUrlOrEmpty()
+    profileUrl = profilePath.asImageUrlOrEmpty()
 )
 
 fun TvShowGenre.toEntity() = TvShowGenreEntity(
@@ -88,14 +88,14 @@ fun TvShowEpisode.toEntity() = TvShowEpisodeEntity(
 
 fun TvShowNetwork.toEntity() = TvShowNetworkEntity(
     id = id,
-    logoPath = logoPath.asImageUrlOrEmpty(),
+    logoUrl = logoPath.asImageUrlOrEmpty(),
     name = name,
     originCountry = originCountry
 )
 
 fun TvShowProductionCompany.toEntity() = TvShowProductionCompanyEntity(
     id = id,
-    logoPath = logoPath.asImageUrlOrEmpty(),
+    logoUrl = logoPath.asImageUrlOrEmpty(),
     name = name,
     originCountry = originCountry
 )
@@ -113,7 +113,7 @@ fun TvShowSeason.toEntity() = TvShowSeasonEntity(
     id = id,
     name = name,
     overview = overview,
-    posterPath = posterPath,
+    posterUrl = posterPath,
     seasonNumber = seasonNumber,
     voteAverage = voteAverage
 )

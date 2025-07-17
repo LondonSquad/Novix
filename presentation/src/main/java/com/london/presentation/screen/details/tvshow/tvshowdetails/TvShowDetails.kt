@@ -200,7 +200,7 @@ fun CustomBackDropImagePager(
                     .fillMaxWidth()
                     .height(252.dp),
                 contentScale = ContentScale.FillBounds,
-                model = images[pageIndex].filePath,
+                model = images[pageIndex].fileUrl,
                 contentDescription = "TV Show Image ${pageIndex + 1}",
                 errorContent = { ErrorImage() },
                 loadingContent = { CircularLoading(modifier = Modifier) })
@@ -513,7 +513,7 @@ fun CastSection(
                 ActorItem(
                     actorName = member.name,
                     characterName = "${member.roles[0].character} - ${member.roles[0].episodeCount}",
-                    imageRes = member.profilePath ?: "",
+                    imageRes = member.profileUrl ?: "",
                     modifier = Modifier.widthIn(296.dp)
                 )
             }
@@ -613,7 +613,7 @@ fun EpisodeRow(
             horizontalArrangement = Arrangement.spacedBy(12.dp)
         ) {
             ImageViewFilter(
-                model = episode.stillPath,
+                model = episode.stillUrl,
                 contentDescription = stringResource(R.string.s),
                 contentScale = ContentScale.FillBounds,
                 modifier = Modifier
