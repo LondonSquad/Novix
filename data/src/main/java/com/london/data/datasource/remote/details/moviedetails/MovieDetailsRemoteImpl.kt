@@ -5,29 +5,21 @@ import com.london.data.datasource.remote.details.moviedetails.model.moviecast.Mo
 import com.london.data.datasource.remote.details.moviedetails.model.moviedetails.MovieDetailsResponse
 import com.london.data.datasource.remote.details.moviedetails.model.movieimages.MovieImagesResponse
 import com.london.data.datasource.remote.details.moviedetails.model.similarmovies.SimilarMoviesResponse
+import com.london.data.utils.get
 import io.ktor.client.HttpClient
 
 class MovieDetailsRemoteImpl(
     private val ktorClient: HttpClient,
 ) : MovieDetailsRemote {
+    override suspend fun getMovieDetails(movieId: Int): MovieDetailsResponse =
+        ktorClient.get(ApiConstants.getMovieDetailsPath(movieId))
 
-    override suspend fun getMovieDetails(movieId: Int): MovieDetailsResponse = fetchData(
-        path = "${ApiConstants.MOVIE_DETAILS_PATH}/$movieId",
-        ktorClient = ktorClient
-    )
+    override suspend fun getSimilarMovies(movieId: Int): SimilarMoviesResponse =
+        ktorClient.get(ApiConstants.getSimilarMoviesPath(movieId))
 
-    override suspend fun getSimilarMovies(movieId: Int): SimilarMoviesResponse = fetchData(
-        path = "${ApiConstants.MOVIE_DETAILS_PATH}/$movieId/similar",
-        ktorClient = ktorClient
-    )
+    override suspend fun getMovieCast(movieId: Int): MovieCastResponse =
+        ktorClient.get(ApiConstants.getMovieCastPath(movieId))
 
-    override suspend fun getMovieCast(movieId: Int): MovieCastResponse = fetchData(
-        path = "${ApiConstants.MOVIE_DETAILS_PATH}/$movieId/credits",
-        ktorClient = ktorClient
-    )
-
-    override suspend fun getMovieImages(movieId: Int): MovieImagesResponse = fetchData(
-        path = "${ApiConstants.MOVIE_DETAILS_PATH}/$movieId/images",
-        ktorClient = ktorClient
-    )
+    override suspend fun getMovieImages(movieId: Int): MovieImagesResponse =
+        ktorClient.get(ApiConstants.getMovieDetailsPath(movieId))
 }

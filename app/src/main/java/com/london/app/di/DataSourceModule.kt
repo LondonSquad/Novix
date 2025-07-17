@@ -81,7 +81,6 @@ class DataSourceModule {
         }
     }
 
-
     @Single
     fun provideMovieRemoteDataSource(ktorClient: HttpClient): MovieDetailsRemote =
         MovieDetailsRemoteImpl(ktorClient)
