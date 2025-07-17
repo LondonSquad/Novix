@@ -1,7 +1,7 @@
 package com.london.designsystem.component.button
 
 import androidx.annotation.DrawableRes
-import androidx.compose.foundation.border
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.defaultMinSize
@@ -15,7 +15,6 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import com.london.designsystem.R
@@ -34,17 +33,17 @@ fun OutlineButton(
     modifier: Modifier = Modifier
 ) {
     Button(
-        modifier = modifier
-            .height(48.dp)
-            .defaultMinSize(minWidth = 79.dp)
-            .clip(RoundedCornerShape(12.dp))
-            .border(1.dp, color = NovixTheme.colors.stroke),
         onClick = onClick,
+        shape = RoundedCornerShape(12.dp),
+        border = BorderStroke(1.dp, NovixTheme.colors.stroke),
         colors = ButtonDefaults.buttonColors(
             containerColor = NovixTheme.colors.surface,
             contentColor = if (isDisabled) NovixTheme.colors.disable else NovixTheme.colors.primary
         ),
         contentPadding = PaddingValues(horizontal = 16.dp, vertical = 8.dp),
+        modifier = modifier
+            .height(48.dp)
+            .defaultMinSize(minWidth = 78.dp)
     ) {
         if (hasLabel && text != null) {
             Text(
@@ -61,7 +60,6 @@ fun OutlineButton(
                 tintColor = NovixTheme.colors.primary
             )
         }
-
         if (hasIcon && icon != null) {
             if (hasLabel && text != null) {
                 Spacer(modifier = Modifier.width(8.dp))

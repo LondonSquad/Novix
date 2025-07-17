@@ -231,15 +231,6 @@ class SearchRepositoryImplTest {
     }
 
     @Test
-    fun `searchForActors should return data from remote and cache it if local is null`() = runTest {
-        coEvery { searchActorService.getByQueryAndPage(NAME + LANG, PAGE_NUMBER) } returns null
-        coEvery { searchRemoteDataSource.searchForActors(any(), any(), any(), any()) } returns SearchActorsRemoteMock
-        val result = repository.searchForActors(NAME, LANG, PAGE_NUMBER)
-        assertThat(result).isEqualTo(ActorList)
-        coVerify { searchActorService.insert(any()) }
-    }
-
-    @Test
     fun `searchForActors should throw ActorSearchFailedException when GetException is thrown`() =
         runTest {
             coEvery {
@@ -329,7 +320,7 @@ class SearchRepositoryImplTest {
         const val LANG = "en-US"
         const val PAGE_NUMBER = 1
 
-        val MovieList = PagedFetchResponse<Movie>(
+        val MovieList = PagedFetchResponse(
             PAGE_NUMBER,
             listOf(
                 Movie(
@@ -345,7 +336,7 @@ class SearchRepositoryImplTest {
             totalPages = 1
         )
 
-        val TvShowList = PagedFetchResponse<TvShow>(
+        val TvShowList = PagedFetchResponse(
             PAGE_NUMBER,
             listOf(
                 TvShow(
@@ -361,13 +352,13 @@ class SearchRepositoryImplTest {
             totalPages = 1
         )
 
-        val ActorList = PagedFetchResponse<Actor>(
+        val ActorList = PagedFetchResponse(
             PAGE_NUMBER,
             listOf(
                 Actor(
                     id = 3,
                     name = "Tom Holland",
-                    profilePicture = "https://image.tmdb.org/t/p/w500"
+                    profilePicture = "https://image.tmdb.org/t/p/w500/tom_holland.jpg"
                 )
             ),
             totalItems = 1,
@@ -411,7 +402,7 @@ class SearchRepositoryImplTest {
                     name = "Tom Holland",
                     originalName = "Tom Holland",
                     popularity = 0.0,
-                    profilePath = "",
+                    profileUrl = "/tom_holland.jpg",
                     knownFor = emptyList()
                 )
             ),

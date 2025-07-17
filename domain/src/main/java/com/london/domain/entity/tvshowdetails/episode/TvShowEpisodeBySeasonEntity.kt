@@ -11,7 +11,7 @@ data class TvShowEpisodeBySeasonEntity(
     val runtime: Int?,
     val seasonNumber: Int,
     val showId: Int,
-    val stillPath: String?,
+    val stillUrl: String?,
     val voteAverage: Double,
     val voteCount: Int,
     val crew: List<EpisodeCrewMemberEntity>,

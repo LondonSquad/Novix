@@ -7,14 +7,15 @@ import com.london.data.datasource.remote.ApiResponse
 import com.london.data.datasource.remote.search.model.KnownFor
 import com.london.data.datasource.remote.search.model.SearchActorRemote
 import com.london.data.datasource.util.generateHash
+import com.london.data.utils.asImageUrlOrEmpty
 import com.london.domain.KoverIgnore
 import com.london.domain.entity.Actor
 
 fun PersonDtoLocal.toActorEntity(): Actor {
     return Actor(
-        id = this.id,
-        name = this.name,
-        profilePicture = "https://image.tmdb.org/t/p/w500${this.profilePath}"
+        id = id,
+        name = name,
+        profilePicture = profileUrl.asImageUrlOrEmpty()
     )
 }
 
@@ -22,49 +23,49 @@ fun ApiResponse<SearchActorRemote>.toLocal(query: String): SearchActorsLocal {
     return SearchActorsLocal(
         date = System.currentTimeMillis(),
         query = query.generateHash(),
-        page = this.currentPage,
-        results = this.items.map { it.toLocal() },
-        totalPages = this.totalPages,
-        totalResults = this.totalItems
+        page = currentPage,
+        results = items.map { it.toLocal() },
+        totalPages = totalPages,
+        totalResults = totalItems
     )
 }
 
 @KoverIgnore
 fun SearchActorRemote.toLocal(): PersonDtoLocal {
     return PersonDtoLocal(
-        adult = this.adult,
-        gender = this.gender,
-        id = this.id,
-        knownForDepartment = this.knownForDepartment ?: "",
-        name = this.name ?: "",
-        originalName = this.originalName ?: "",
-        popularity = this.popularity,
-        profilePath = this.profilePath,
-        knownFor = this.knownFor.map { it.toKnownForDtoLocal() }
+        adult = adult,
+        gender = gender,
+        id = id,
+        knownForDepartment = knownForDepartment.orEmpty(),
+        name = name.orEmpty(),
+        originalName = originalName.orEmpty(),
+        popularity = popularity,
+        profileUrl = profilePath,
+        knownFor = knownFor.map { it.toKnownForDtoLocal() }
     )
 }
 
 @KoverIgnore
 fun KnownFor.toKnownForDtoLocal(): KnownForDtoLocal {
     return KnownForDtoLocal(
-        adult = this.adult,
-        backdropPath = this.backdropPath,
-        id = this.id,
-        title = this.title,
-        originalTitle = this.originalTitle,
-        overview = this.overview,
-        posterPath = this.posterPath,
-        mediaType = this.mediaType ?: "",
-        originalLanguage = this.originalLanguage ?: "",
-        genreIds = this.genreIds,
-        popularity = this.popularity,
-        releaseDate = this.releaseDate,
-        video = this.video,
-        voteAverage = this.voteAverage,
-        voteCount = this.voteCount,
-        name = this.name,
-        originalName = this.originalName,
-        firstAirDate = this.firstAirDate,
-        originCountry = this.originCountry
+        adult = adult,
+        backdropPath = backdropPath,
+        id = id,
+        title = title,
+        originalTitle = originalTitle,
+        overview = overview,
+        posterUrl = posterPath,
+        mediaType = mediaType.orEmpty(),
+        originalLanguage = originalLanguage.orEmpty(),
+        genreIds = genreIds,
+        popularity = popularity,
+        releaseDate = releaseDate,
+        video = video,
+        voteAverage = voteAverage,
+        voteCount = voteCount,
+        name = name,
+        originalName = originalName,
+        firstAirDate = firstAirDate,
+        originCountry = originCountry
     )
 }

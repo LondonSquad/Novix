@@ -5,8 +5,8 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class MovieCastResponse(
-    val id: Int,
+    val id: Int?,
     @SerialName("cast")
-    val actorRemote: List<MovieActor>,
-    val crew: List<Crew>
+    val actorRemote: List<MovieActor>?,
+    val crew: List<Crew>?
 )

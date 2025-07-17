@@ -3,6 +3,7 @@ package com.london.data.mapper.actordetails
 import com.london.data.datasource.remote.details.actordetails.model.actormoviedetails.ActorMovieCastMember
 import com.london.data.datasource.remote.details.actordetails.model.actormoviedetails.ActorMovieDetailsResponse
 import com.london.data.datasource.remote.details.actordetails.model.actormoviedetails.MovieCrewMember
+import com.london.data.utils.asImageUrlOrEmpty
 import com.london.data.utils.isTrue
 import com.london.data.utils.orZero
 import com.london.domain.KoverIgnore
@@ -18,10 +19,11 @@ fun ActorMovieDetailsResponse.toEntity(): ActorMovieDetails {
     )
 }
 
+@KoverIgnore
 fun ActorMovieCastMember.toEntity(): ActorMovieCastMemberEntity {
     return ActorMovieCastMemberEntity(
         adult = adult.isTrue,
-        backdropPath = "https://image.tmdb.org/t/p/w500${backdropPath}",
+        backdropUrl = backdropPath.asImageUrlOrEmpty(),
         character = character.orEmpty(),
         creditId = creditId.orEmpty(),
         genreIds = genreIds.orEmpty(),
@@ -31,7 +33,7 @@ fun ActorMovieCastMember.toEntity(): ActorMovieCastMemberEntity {
         originalTitle = originalTitle.orEmpty(),
         overview = overview.orEmpty(),
         popularity = popularity.orZero(),
-        posterPath = posterPath.let { "https://image.tmdb.org/t/p/w500${it}" },
+        posterUrl = posterPath.asImageUrlOrEmpty(),
         releaseDate = releaseDate.orEmpty(),
         title = title.orEmpty(),
         video = video.isTrue,
@@ -40,10 +42,11 @@ fun ActorMovieCastMember.toEntity(): ActorMovieCastMemberEntity {
     )
 }
 
+@KoverIgnore
 fun MovieCrewMember.toEntity(): ActorMovieCrewMemberEntity {
     return ActorMovieCrewMemberEntity(
         adult = adult.isTrue,
-        backdropPath = "https://image.tmdb.org/t/p/w500${backdropPath}",
+        backdropUrl = backdropPath.asImageUrlOrEmpty(),
         creditId = creditId.orEmpty(),
         department = department.orEmpty(),
         genreIds = genreIds.orEmpty(),
@@ -53,7 +56,7 @@ fun MovieCrewMember.toEntity(): ActorMovieCrewMemberEntity {
         originalTitle = originalTitle.orEmpty(),
         overview = overview.orEmpty(),
         popularity = popularity.orZero(),
-        posterPath = "https://image.tmdb.org/t/p/w500${posterPath}",
+        posterUrl = posterPath.asImageUrlOrEmpty(),
         releaseDate = releaseDate.orEmpty(),
         title = title.orEmpty(),
         video = video.isTrue,

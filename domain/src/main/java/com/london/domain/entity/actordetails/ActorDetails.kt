@@ -18,5 +18,5 @@ data class ActorDetails(
     val imdbId: String,
     val knownForDepartment: String,
     val popularity: Double,
-    val profilePath: String
+    val profileUrl: String
 )

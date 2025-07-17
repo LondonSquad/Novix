@@ -13,7 +13,7 @@ data class TvShowCastMemberEntity(
     val name: String,
     val originalName: String,
     val popularity: Double,
-    val profilePath: String?,
+    val profileUrl: String?,
     val roles: List<TvShowRoleEntity>,
     val totalEpisodeCount: Int,
     val order: Int
@@ -33,7 +33,7 @@ data class TvShowCrewMemberEntity(
     val name: String,
     val originalName: String,
     val popularity: Double,
-    val profilePath: String?,
+    val profileUrl: String?,
     val creditId: String,
     val department: String,
     val job: String

@@ -16,7 +16,7 @@ data class SearchTvShowLocal(
 
 data class SearchTvShowDtoLocal(
     val adult: Boolean,
-    val backdropPath: String,
+    val backdropUrl: String,
     val genreIds: List<Int>,
     val id: Int,
     val originCountry: List<String>,

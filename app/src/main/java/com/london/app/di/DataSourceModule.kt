@@ -6,7 +6,7 @@ import com.london.data.BuildConfig
 import com.london.data.datasource.remote.details.actordetails.ActorDetailsRemoteDataSource
 import com.london.data.datasource.remote.details.actordetails.ActorDetailsRemoteDataSourceImpl
 import com.london.data.datasource.remote.details.moviedetails.MovieDetailsRemote
-import com.london.data.datasource.remote.details.moviedetails.model.MovieDetailsRemoteImpl
+import com.london.data.datasource.remote.details.moviedetails.MovieDetailsRemoteImpl
 import com.london.data.datasource.remote.details.tvshowdetails.TvShowDetailsRemoteDataSource
 import com.london.data.datasource.remote.details.tvshowdetails.TvShowDetailsRemoteDataSourceImpl
 import com.london.data.datasource.remote.search.SearchRemoteDataSource
@@ -58,9 +58,15 @@ class DataSourceModule {
         }
         defaultRequest {
             url(urlString = BuildConfig.BASE_URL)
+            url.parameters.append("api_key", BuildConfig.API_KEY)
+
             header(
                 key = "language",
                 value = context.resources.configuration.locales[0].language
+            )
+            header(
+                key = "Authorization",
+                value = "Bearer ${BuildConfig.AUTHORIZATION_KEY}"
             )
         }
         install(Logging) {
@@ -72,7 +78,6 @@ class DataSourceModule {
             level = LogLevel.ALL
         }
     }
-
 
     @Single
     fun provideMovieRemoteDataSource(ktorClient: HttpClient): MovieDetailsRemote =
