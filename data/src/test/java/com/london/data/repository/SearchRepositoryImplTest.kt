@@ -89,9 +89,9 @@ class SearchRepositoryImplTest {
     }
 
     @Test
-    fun `searchForMovies should return data from local if available`() = runTest {
-        coEvery { searchMovieService.getByQueryAndPage(NAME + LANG, PAGE_NUMBER) } returns SearchMoviesLocalMock
-        val result = repository.searchForMovies(NAME, LANG, PAGE_NUMBER)
+    fun `searchForMoviesByID should return data from Remote if available`() = runTest {
+        coEvery { searchRemoteDataSource.getMoviesByCategory(1 ,LANG, PAGE_NUMBER) } returns SearchMoviesRemoteMock
+        val result = repository.searchForMoviesByCategory(1, LANG, PAGE_NUMBER)
         assertThat(result).isEqualTo(MovieList)
     }
 
@@ -111,6 +111,12 @@ class SearchRepositoryImplTest {
         coVerify { searchMovieService.insert(any()) }
     }
 
+    @Test
+    fun `searchForMovies should return data from local if available`() = runTest {
+        coEvery { searchMovieService.getByQueryAndPage(NAME + LANG, PAGE_NUMBER) } returns SearchMoviesLocalMock
+        val result = repository.searchForMovies(NAME, LANG, PAGE_NUMBER)
+        assertThat(result).isEqualTo(MovieList)
+    }
 
     @Test
     fun `fetchAndSync reports to crashReporter when cacheBlock and networkBlock throw`() = runTest {
