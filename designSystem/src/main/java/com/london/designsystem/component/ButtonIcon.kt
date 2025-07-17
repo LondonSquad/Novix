@@ -23,7 +23,6 @@ fun ButtonIcon(
     modifier: Modifier = Modifier,
     iconRes: Int,
     backgroundColor: Color = NovixTheme.colors.iconBackground,
-    tint: Color = NovixTheme.colors.onPrimary
 ) {
     Box(
         modifier = modifier
@@ -41,7 +40,7 @@ fun ButtonIcon(
         Icon(
             painter = painterResource(iconRes),
             contentDescription = "icon",
-            tint = tint,
+            tint = NovixTheme.colors.title,
             modifier = Modifier
         )
     }

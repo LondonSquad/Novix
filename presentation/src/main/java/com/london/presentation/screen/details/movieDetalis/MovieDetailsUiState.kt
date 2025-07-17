@@ -9,7 +9,7 @@ data class MovieDetailsUiState(
     val movieDuration: String = "",
     val releaseDate: String = "",
     val movieOverview: String = "",
-    val genres: List<ActorUIState> = listOf(),
+    val actors: List<ActorUIState> = listOf(),
     val similarMovies: List<SimilarMovieUIState> = listOf(),
     val movieHaveTrailer: Boolean = false,
     val isRated: Boolean = false,
