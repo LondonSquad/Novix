@@ -115,7 +115,7 @@ fun ActorScreenContent(
             }
             item{
                 SectionHeader(
-                    text = "Gallery",
+                    text = stringResource(R.string.gallery),
                     hasGetAll = true,
                     hasIcon = true,
                     modifier = Modifier
@@ -128,7 +128,7 @@ fun ActorScreenContent(
             }
             item{
                 SectionHeader(
-                    text = "Top movies picks",
+                    text = stringResource(R.string.top_movies_picks),
                     hasGetAll = true,
                     hasIcon = true,
                     modifier = Modifier
@@ -141,7 +141,7 @@ fun ActorScreenContent(
             }
             item{
                 SectionHeader(
-                    text = "Top tv shows picks",
+                    text = stringResource(R.string.top_tv_shows_picks),
                     hasGetAll = true,
                     hasIcon = true,
                     modifier = Modifier
@@ -308,7 +308,9 @@ private fun ActorInfoSection(
                     painter = painterResource(R.drawable.image_dot),
                     contentDescription = stringResource(R.string.imagr_dot),
                     tint = NovixTheme.colors.body,
-                    modifier = Modifier.size(3.dp).align(alignment = Alignment.CenterVertically)
+                    modifier = Modifier
+                        .size(3.dp)
+                        .align(alignment = Alignment.CenterVertically)
                 )
                 TextWithIcon(
                     icon = painterResource(R.drawable.icon_location),
@@ -318,7 +320,9 @@ private fun ActorInfoSection(
                     painter = painterResource(R.drawable.image_dot),
                     contentDescription = stringResource(R.string.imagr_dot),
                     tint = NovixTheme.colors.body,
-                    modifier = Modifier.size(3.dp).align(alignment = Alignment.CenterVertically)
+                    modifier = Modifier
+                        .size(3.dp)
+                        .align(alignment = Alignment.CenterVertically)
                 )
                 TextWithIcon(
                     icon = painterResource(R.drawable.birthday_cake),
