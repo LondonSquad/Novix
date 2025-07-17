@@ -1,8 +1,6 @@
-package com.london.data.datasource.remote.details.moviedetails.model
+package com.london.data.datasource.remote.details.moviedetails
 
 import com.london.data.datasource.remote.ApiConstants
-import com.london.data.datasource.remote.details.moviedetails.MovieDetailsRemote
-import com.london.data.datasource.remote.details.moviedetails.fetchData
 import com.london.data.datasource.remote.details.moviedetails.model.moviecast.MovieCastResponse
 import com.london.data.datasource.remote.details.moviedetails.model.moviedetails.MovieDetailsResponse
 import com.london.data.datasource.remote.details.moviedetails.model.movieimages.MovieImagesResponse

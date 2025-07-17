@@ -2,14 +2,14 @@ package com.london.app.di
 
 import com.london.data.datasource.local.LocalDataSource
 import com.london.data.datasource.local.dao.GenreInterestDao
-import com.london.data.datasource.local.model.recent.RecentSearchLocal
 import com.london.data.datasource.local.model.SearchActorsLocal
 import com.london.data.datasource.local.model.SearchMoviesLocal
 import com.london.data.datasource.local.model.SearchTvShowLocal
+import com.london.data.datasource.local.model.recent.RecentSearchLocal
 import com.london.data.datasource.local.recent.RecentDataSource
 import com.london.data.datasource.remote.details.actordetails.ActorDetailsRemoteDataSource
 import com.london.data.datasource.remote.details.moviedetails.MovieDetailsRemote
-import com.london.data.datasource.remote.details.moviedetails.model.MovieDetailsRemoteImpl
+import com.london.data.datasource.remote.details.moviedetails.MovieDetailsRemoteImpl
 import com.london.data.datasource.remote.details.tvshowdetails.TvShowDetailsRemoteDataSource
 import com.london.data.datasource.remote.search.SearchRemoteDataSource
 import com.london.data.datasource.util.CrashReporter
