@@ -115,8 +115,7 @@ fun SearchScreenContent(
             modifier = Modifier
                 .fillMaxSize()
                 .background(NovixTheme.colors.surface)
-                .padding(bottom = 16.dp),
-            verticalArrangement = Arrangement.Top
+                .padding(bottom = 16.dp), verticalArrangement = Arrangement.Top
         ) {
             TopBar(
                 modifier = Modifier
@@ -204,22 +203,19 @@ fun SearchScreenContent(
                             })
                     }
 
-                        SearchCategory.Actors -> {
-                            val actorsLazyList = state.actorsFlow.collectAsLazyPagingItems()
-                            ResultOrEmpty(
-                                items = actorsLazyList.itemSnapshotList.items,
-                                emptyContent = { NoSearchResultLayOut(modifier = Modifier.fillMaxSize()) },
-                                content = {
-                                    ActorsLayout(
-                                        actorsUis = actorsLazyList,
-                                        onActorClick = {
-                                            onNavigateToActorDetails(it.id)
-                                        }
-                                    )
-                                }
-                            )
-                        }
+                    SearchCategory.Actors -> {
+                        val actorsLazyList = state.actorsFlow.collectAsLazyPagingItems()
+                        ResultOrEmpty(
+                            items = actorsLazyList.itemSnapshotList.items,
+                            emptyContent = { NoSearchResultLayOut(modifier = Modifier.fillMaxSize()) },
+                            content = {
+                                ActorsLayout(
+                                    actorsUis = actorsLazyList, onActorClick = {
+                                        onNavigateToActorDetails(it.id)
+                                    })
+                            })
                     }
+                }
 
             })
         }
@@ -249,8 +245,7 @@ private fun TriangleBlurredShape() {
                     color = triangleBackgroundColor,
                 )
                 drawContent()
-            }
-    )
+            })
 }
 
 @Composable
@@ -263,12 +258,11 @@ private fun SearchBar(
     modifier: Modifier = Modifier
 ) {
     AnimatedContent(
-        targetState = uiState.showFilterButton,
-        transitionSpec = {
-            (fadeIn(animationSpec = tween(0)) + scaleIn(initialScale = 0.98f)) togetherWith
-                    (fadeOut(animationSpec = tween(0)) + scaleOut(targetScale = 0.98f))
-        },
-        modifier = modifier
+        targetState = uiState.showFilterButton, transitionSpec = {
+            (fadeIn(animationSpec = tween(0)) + scaleIn(initialScale = 0.98f)) togetherWith (fadeOut(
+                animationSpec = tween(0)
+            ) + scaleOut(targetScale = 0.98f))
+        }, modifier = modifier
     ) { showFilterButton ->
         Row(
             modifier = Modifier.fillMaxWidth()
@@ -311,8 +305,7 @@ private fun SearchBar(
                         viewModel.addToRecentSearches(uiState.searchQuery.text)
                     }),
                 interactionSource = interactionSource,
-                modifier = Modifier
-                    .weight(1f)
+                modifier = Modifier.weight(1f)
             )
 
             if (showFilterButton) {
@@ -325,8 +318,7 @@ private fun SearchBar(
                     hasIcon = true,
                     icon = R.drawable.icon_filter,
                     hasLabel = false,
-                    modifier = Modifier
-                        .width(52.dp)
+                    modifier = Modifier.width(52.dp)
                 )
             }
         }
@@ -362,18 +354,20 @@ private fun SearchChipsRow(
 private fun RecentSearchLayOut(
     state: SearchUiState, interactionListener: SearchInteractions, viewModel: SearchViewModel
 ) {
-    if (state.recentViewed.isNotEmpty())
-    RecentViewedSection(
-        recentViewed = state.recentViewed,
-        onClearAll = { viewModel.clearRecentViewed() })
+    if (state.recentViewed.isNotEmpty()) {
+        RecentViewedSection(
+            recentViewed = state.recentViewed,
+            onClearAll =  viewModel::clearRecentViewed)
+    }
 
-    if (state.recentSearches.isNotEmpty())
-    RecentSearchesSection(
-        recentSearches = state.recentSearches,
-        onClearAll = interactionListener::clearRecentSearches,
-        onSearchClick = interactionListener::onRecentSearchClick,
-        onRemoveClick = interactionListener::removeRecentSearch
-    )
+    if (state.recentSearches.isNotEmpty()) {
+        RecentSearchesSection(
+            recentSearches = state.recentSearches,
+            onClearAll = interactionListener::clearRecentSearches,
+            onSearchClick = interactionListener::onRecentSearchClick,
+            onRemoveClick = interactionListener::removeRecentSearch
+        )
+    }
 }
 
 @Composable
