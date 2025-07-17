@@ -359,40 +359,56 @@ fun MovieDetailsContent(
     }
 }
 
-
 @Composable
 private fun RatingAndMetaRow(
-    rate: String,
-    time: String,
-    date: String,
+    rate: String?,
+    time: String?,
+    date: String?,
 ) {
     Row(
         horizontalArrangement = Arrangement.spacedBy(4.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {
-        IconWithText(
-            icon = drawable.star,
-            contentDesc = stringResource(star),
-            tint = NovixTheme.colors.yellowAccent,
-            text = rate,
-            textColor = NovixTheme.colors.title
-        )
-        Dot()
-        IconWithText(
-            icon = drawable.time_04,
-            contentDesc = stringResource(time_icon),
-            tint = NovixTheme.colors.body,
-            text = time,
-            textColor = NovixTheme.colors.body
-        )
-        Dot()
-        IconWithText(
-            icon = drawable.calendar_03,
-            contentDesc = stringResource(calendar),
-            tint = NovixTheme.colors.body,
-            text = date,
-            textColor = NovixTheme.colors.body
-        )
+        if (!rate.isNullOrBlank()) {
+            IconWithText(
+                icon = drawable.star,
+                contentDesc = stringResource(star),
+                tint = NovixTheme.colors.yellowAccent,
+                text = rate,
+                textColor = NovixTheme.colors.title
+            )
+        }
+
+        if (!rate.isNullOrBlank() && !time.isNullOrBlank()) {
+            Dot()
+        }
+
+        if (!time.isNullOrBlank()) {
+            IconWithText(
+                icon = drawable.time_04,
+                contentDesc = stringResource(time_icon),
+                tint = NovixTheme.colors.body,
+                text = time,
+                textColor = NovixTheme.colors.body
+            )
+        }
+
+        if (
+            (!time.isNullOrBlank() && !date.isNullOrBlank()) ||
+            (rate.isNullOrBlank() && !time.isNullOrBlank() && !date.isNullOrBlank())
+        ) {
+            Dot()
+        }
+
+        if (!date.isNullOrBlank()) {
+            IconWithText(
+                icon = drawable.calendar_03,
+                contentDesc = stringResource(calendar),
+                tint = NovixTheme.colors.body,
+                text = date,
+                textColor = NovixTheme.colors.body
+            )
+        }
     }
 }
 
