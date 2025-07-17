@@ -54,7 +54,13 @@ fun RatingBar(
                             scaleX = scale,
                             scaleY = scale
                         )
-                        .clickable { onRatingChanged(i) }
+                        .clickable(
+                            interactionSource = null,
+                            indication = null
+                        )
+                        {
+                            onRatingChanged(i)
+                        }
                 )
             }
         }

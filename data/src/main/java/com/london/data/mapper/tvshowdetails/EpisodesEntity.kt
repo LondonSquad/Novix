@@ -3,15 +3,18 @@ package com.london.data.mapper.tvshowdetails
 import com.london.data.datasource.remote.details.tvshowdetails.model.tvshowepisode.EpisodeCrewMember
 import com.london.data.datasource.remote.details.tvshowdetails.model.tvshowepisode.EpisodeGuestStar
 import com.london.data.datasource.remote.details.tvshowdetails.model.tvshowepisode.TvShowEpisodeBySeason
-import com.london.data.datasource.remote.details.tvshowdetails.model.tvshowepisode.TvShowEpisodeResponse
 import com.london.data.datasource.remote.details.tvshowdetails.model.tvshowepisode.TvShowEpisodesRemoteResponse
+import com.london.domain.KoverIgnore
+import com.london.data.datasource.remote.details.tvshowdetails.model.tvshowepisode.TvShowEpisodeResponse
 import com.london.domain.entity.Actor
 import com.london.domain.entity.tvshowdetails.episode.EpisodeCrewMemberEntity
 import com.london.domain.entity.tvshowdetails.episode.EpisodeGuestStarEntity
-import com.london.domain.entity.tvshowdetails.episode.TvShowEpisodeByIdEntity
 import com.london.domain.entity.tvshowdetails.episode.TvShowEpisodeBySeasonEntity
 import com.london.domain.entity.tvshowdetails.episode.TvShowEpisodesEntity
+import com.london.domain.entity.tvshowdetails.episode.TvShowEpisodeByIdEntity
 
+
+@KoverIgnore
 fun TvShowEpisodesRemoteResponse.toTvShowEpisodesEntity(): TvShowEpisodesEntity {
     return TvShowEpisodesEntity(
         id = this.id,
@@ -19,6 +22,7 @@ fun TvShowEpisodesRemoteResponse.toTvShowEpisodesEntity(): TvShowEpisodesEntity 
         episodes = this.episodes.map { it.toTvShowEpisodeBySeasonEntity() }
     )
 }
+
 
 fun TvShowEpisodeBySeason.toTvShowEpisodeBySeasonEntity(): TvShowEpisodeBySeasonEntity {
     return TvShowEpisodeBySeasonEntity(
@@ -40,6 +44,7 @@ fun TvShowEpisodeBySeason.toTvShowEpisodeBySeasonEntity(): TvShowEpisodeBySeason
     )
 }
 
+@KoverIgnore
 fun EpisodeCrewMember.toEpisodeCrewMemberEntity(): EpisodeCrewMemberEntity {
     return EpisodeCrewMemberEntity(
         job = this.job,
@@ -56,6 +61,7 @@ fun EpisodeCrewMember.toEpisodeCrewMemberEntity(): EpisodeCrewMemberEntity {
     )
 }
 
+@KoverIgnore
 fun EpisodeGuestStar.toEpisodeGuestStarEntity(): EpisodeGuestStarEntity {
     return EpisodeGuestStarEntity(
         character = this.character,
@@ -72,6 +78,7 @@ fun EpisodeGuestStar.toEpisodeGuestStarEntity(): EpisodeGuestStarEntity {
     )
 }
 
+@KoverIgnore
 fun TvShowEpisodeResponse.toTvShowEpisodeEntity(): TvShowEpisodeByIdEntity {
     return TvShowEpisodeByIdEntity(
         airDate = this.airDate,

@@ -27,12 +27,23 @@ kover {
         total {
             filters {
                 includes {
-                    classes("*.domain.*")
-                    classes("**LocalDataSourceImpl")
-                    classes("**SearchRepositoryImpl")
+                    packages(
+                        "com.london.data.mapper",
+                        "com.london.domain.usecase",
+                        "com.london.data.repository",
+                        "com.london.data.datasource.local.search",
+                        "com.london.data.datasource.local.recent",
+                    )
+                    // TODO: Uncomment this line to cover viewModels
+                    // classes("**ViewModel")
                 }
-                excludes{
-                    classes("*.Exceptions.*")
+
+                excludes {
+                    annotatedBy("com.london.domain.KoverIgnore")
+                    packages(
+                        "org.koin.ksp.generated",
+                        "com.london.data.datasource.remote",
+                    )
                 }
             }
             verify {

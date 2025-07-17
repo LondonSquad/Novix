@@ -1,6 +1,8 @@
 package com.london.data.repository
 
 import com.london.data.datasource.local.LocalDataSource
+import com.london.data.datasource.local.dao.GenreInterestDao
+import com.london.data.datasource.local.model.GenreInterestEntity
 import com.london.data.datasource.local.model.SearchActorsLocal
 import com.london.data.datasource.local.model.SearchMoviesLocal
 import com.london.data.datasource.local.model.SearchTvShowLocal
@@ -16,11 +18,11 @@ import com.london.domain.entity.PagedFetchResponse
 import com.london.domain.entity.TvShow
 import com.london.domain.repository.SearchRepository
 
-
 class SearchRepositoryImpl(
     private val localTvShowDataSource: LocalDataSource<SearchTvShowLocal>,
     private val localActorDataSource: LocalDataSource<SearchActorsLocal>,
     private val localMovieDataSource: LocalDataSource<SearchMoviesLocal>,
+    private val genreInterestDao: GenreInterestDao,
     private val remoteDataSource: SearchRemoteDataSource,
     private val crashReporter: CrashReporter
 ) : SearchRepository {
@@ -43,7 +45,7 @@ class SearchRepositoryImpl(
         language: String,
         pageNumber: Int
     ): PagedFetchResponse<Movie> = fetchAndSync(
-        cacheBlock = { localMovieDataSource.getByQuery(query = name + language) },
+        cacheBlock = { localMovieDataSource.getByQueryAndPage(query = name + language, page = pageNumber) },
         networkBlock = {
             remoteDataSource.searchForMovies(
                 query = name,
@@ -68,7 +70,7 @@ class SearchRepositoryImpl(
         language: String,
         pageNumber: Int
     ): PagedFetchResponse<TvShow> = fetchAndSync(
-        cacheBlock = { localTvShowDataSource.getByQuery(query = name + language) },
+        cacheBlock = { localTvShowDataSource.getByQueryAndPage(query = name + language, page = pageNumber) },
         networkBlock = {
             remoteDataSource.searchForTvShows(
                 query = name,
@@ -93,7 +95,7 @@ class SearchRepositoryImpl(
         language: String,
         pageNumber: Int
     ): PagedFetchResponse<Actor> = fetchAndSync(
-        cacheBlock = { localActorDataSource.getByQuery(query = name + language) },
+        cacheBlock = { localActorDataSource.getByQueryAndPage(query = name + language, page = pageNumber) },
         networkBlock = {
             remoteDataSource.searchForActors(
                 query = name,
@@ -112,4 +114,32 @@ class SearchRepositoryImpl(
             totalItems = totalResults
         )
     }
+
+    override suspend fun incrementGenreInterest(genreId: Int, mediaType: String) {
+        try {
+            val current = genreInterestDao.getGenreInterest(genreId, mediaType)
+            if (current == null) {
+                genreInterestDao.insertGenreInterest(
+                    GenreInterestEntity(genreId = genreId, mediaType = mediaType, count = 1)
+                )
+            } else {
+                genreInterestDao.updateGenreInterest(
+                    current.copy(count = current.count + 1)
+                )
+            }
+        } catch (e: Exception) {
+            crashReporter.logException(e)
+        }
+    }
+
+    override suspend fun getGenreInterestCounts(mediaType: String): List<Pair<Int, Int>> {
+        return try {
+            genreInterestDao.getGenresByInterest(mediaType)
+                .map { entity -> entity.genreId to entity.count }
+        } catch (e: Exception) {
+            crashReporter.logException(e)
+            emptyList()
+        }
+    }
+
 }

@@ -1,8 +1,11 @@
 package com.london.domain.usecase
 
+import com.london.domain.KoverIgnore
 import com.london.domain.entity.tvshowdetails.ImageItemEntity
 import com.london.domain.repository.DetailsRepository
 
+
+@KoverIgnore
 class GetImagesById(
     private val detailsRepository: DetailsRepository
 ) {

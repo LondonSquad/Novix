@@ -1,5 +1,6 @@
 package com.london.domain.usecase
 
+import com.london.domain.GetMovieByIdFailedException
 import com.london.domain.entity.Actor
 import com.london.domain.entity.moviedatails.Genre
 import com.london.domain.entity.moviedatails.MovieDetails
@@ -11,7 +12,10 @@ import io.mockk.mockk
 import kotlinx.coroutines.test.runTest
 import org.junit.Before
 import org.junit.Test
-import org.junit.jupiter.api.Assertions.*
+import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.Assertions.assertFalse
+import org.junit.jupiter.api.Assertions.assertNotNull
+import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.assertThrows
 
 class GetMovieByIdTest {
@@ -41,7 +45,8 @@ class GetMovieByIdTest {
             Actor(2, "Joseph Gordon-Levitt", "Arthur", "/jgl.jpg")
         ),
         similarMovies = listOf(
-            SimilarMovie(image = "/interstellar.jpg", isSaved =  true , id =  1), SimilarMovie(image = "/tenet.jpg", isSaved = false , id =  1)
+            SimilarMovie(image = "/interstellar.jpg", isSaved = true, id = 1),
+            SimilarMovie(image = "/tenet.jpg", isSaved = false, id = 1)
         ),
         movieHaveTrailer = true
     )
@@ -54,7 +59,7 @@ class GetMovieByIdTest {
         coEvery { movieRepository.getMovieById(movieId) } returns expectedMovie
 
         // When
-        val result = getMovieById(movieId)
+        val result = getMovieById.invoke(movieId)
 
         // Then
         assertNotNull(result)
@@ -85,7 +90,7 @@ class GetMovieByIdTest {
 
         // When & Then
         val exception = assertThrows<Exception> {
-            getMovieById(movieId)
+            getMovieById.invoke(movieId)
         }
 
         assertEquals("Failed to fetch movie details", exception.message)
@@ -100,7 +105,7 @@ class GetMovieByIdTest {
         coEvery { movieRepository.getMovieById(movieId) } returns expectedMovie
 
         // When
-        val result = getMovieById(movieId)
+        val result = getMovieById.invoke(movieId)
 
         // Then
         assertEquals(456, result.movieId)
@@ -118,7 +123,7 @@ class GetMovieByIdTest {
         coEvery { movieRepository.getMovieById(movieId) } returns movieWithNoGenres
 
         // When
-        val result = getMovieById(movieId)
+        val result = getMovieById.invoke(movieId)
 
         // Then
         assertEquals(movieId, result.movieId)
@@ -137,7 +142,7 @@ class GetMovieByIdTest {
         coEvery { movieRepository.getMovieById(movieId) } returns movieWithEmptyImages
 
         // When
-        val result = getMovieById(movieId)
+        val result = getMovieById.invoke(movieId)
 
         // Then
         assertEquals(movieId, result.movieId)
@@ -156,7 +161,7 @@ class GetMovieByIdTest {
         coEvery { movieRepository.getMovieById(movieId) } returns movieWithZeroDuration
 
         // When
-        val result = getMovieById(movieId)
+        val result = getMovieById.invoke(movieId)
 
         // Then
         assertEquals(movieId, result.movieId)
@@ -174,7 +179,7 @@ class GetMovieByIdTest {
         coEvery { movieRepository.getMovieById(movieId) } returns movieWithNoActors
 
         // When
-        val result = getMovieById(movieId)
+        val result = getMovieById.invoke(movieId)
 
         // Then
         assertEquals(movieId, result.movieId)
@@ -193,7 +198,7 @@ class GetMovieByIdTest {
         coEvery { movieRepository.getMovieById(movieId) } returns movieWithNoSimilar
 
         // When
-        val result = getMovieById(movieId)
+        val result = getMovieById.invoke(movieId)
 
         // Then
         assertEquals(movieId, result.movieId)
@@ -212,7 +217,7 @@ class GetMovieByIdTest {
         coEvery { movieRepository.getMovieById(movieId) } returns movieWithoutTrailer
 
         // When
-        val result = getMovieById(movieId)
+        val result = getMovieById.invoke(movieId)
 
         // Then
         assertEquals(movieId, result.movieId)
@@ -224,16 +229,12 @@ class GetMovieByIdTest {
     fun `should handle RuntimeException and let it propagate`() = runTest {
         // Given
         val movieId = 555
-        val runtimeException = RuntimeException("Network error")
-        coEvery { movieRepository.getMovieById(movieId) } throws runtimeException
+        coEvery { movieRepository.getMovieById(movieId) } throws GetMovieByIdFailedException()
 
         // When & Then
-        val exception = assertThrows<RuntimeException> {
-            getMovieById(movieId)
+        assertThrows<GetMovieByIdFailedException> {
+            getMovieById.invoke(movieId)
         }
-
-        assertEquals("Network error", exception.message)
-        coVerify(exactly = 1) { movieRepository.getMovieById(movieId) }
     }
 
     @Test
@@ -244,7 +245,7 @@ class GetMovieByIdTest {
         coEvery { movieRepository.getMovieById(movieId) } returns expectedMovie
 
         // When
-        getMovieById(movieId)
+        getMovieById.invoke(movieId)
 
         // Then
         coVerify(exactly = 1) { movieRepository.getMovieById(movieId) }

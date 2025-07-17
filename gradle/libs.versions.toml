@@ -3,6 +3,7 @@
 agp = "8.8.2"
 constraintlayoutCompose = "1.1.1"
 firebaseBom = "33.16.0"
+firebaseMlModeldownloader = "25.0.1"
 gson = "2.11.0"
 kotlin = "2.0.21"
 kotlinxCoroutinesTestVersion = "1.10.2"
@@ -115,6 +116,7 @@ androidx-datastore-core = { group = "androidx.datastore", name = "datastore-core
 
 # Dependency Injection (Koin)
 firebase-bom = { module = "com.google.firebase:firebase-bom", version.ref = "firebaseBom" }
+firebase-ml-modeldownloader = { module = "com.google.firebase:firebase-ml-modeldownloader", version.ref = "firebaseMlModeldownloader" }
 gson = { module = "com.google.code.gson:gson", version.ref = "gson" }
 koin-android = { group = "io.insert-koin", name = "koin-android", version.ref = "koinAndroid" }
 koin-androidx-compose = { group = "io.insert-koin", name = "koin-androidx-compose", version.ref = "koinAndroidxCompose" }

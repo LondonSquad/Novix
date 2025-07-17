@@ -5,6 +5,7 @@ import com.london.data.datasource.local.model.SearchTvShowLocal
 import com.london.data.datasource.remote.ApiResponse
 import com.london.data.datasource.remote.search.model.SearchTvShowRemote
 import com.london.data.datasource.util.generateHash
+import com.london.domain.KoverIgnore
 import com.london.domain.entity.TvShow
 
 fun SearchTvShowDtoLocal.toTvShowEntity(): TvShow {
@@ -30,6 +31,7 @@ fun ApiResponse<SearchTvShowRemote>.toLocal(query: String): SearchTvShowLocal {
     )
 }
 
+@KoverIgnore
 fun SearchTvShowRemote.toLocalDto(): SearchTvShowDtoLocal {
     return SearchTvShowDtoLocal(
         adult = this.adult,

@@ -4,18 +4,20 @@ import android.content.Context
 import com.london.data.datasource.local.DatabaseProvider
 import com.london.data.datasource.local.LocalDataSource
 import com.london.data.datasource.local.NovixDatabase
+import com.london.data.datasource.local.dao.GenreInterestDao
 import com.london.data.datasource.local.dao.SearchActorsDao
 import com.london.data.datasource.local.dao.SearchMoviesDao
 import com.london.data.datasource.local.dao.SearchTvShowDao
-import com.london.data.datasource.local.dao.recentsearch.RecentSearchDao
-import com.london.data.datasource.local.localDataSourceImpl.ActorLocalDataSourceImpl
-import com.london.data.datasource.local.localDataSourceImpl.MovieLocalDataSourceImpl
-import com.london.data.datasource.local.localDataSourceImpl.TvShowLocalDataSourceImpl
+import com.london.data.datasource.local.dao.recent.search.RecentSearchDao
+import com.london.data.datasource.local.search.ActorLocalDataSourceImpl
+import com.london.data.datasource.local.search.MovieLocalDataSourceImpl
+import com.london.data.datasource.local.search.TvShowLocalDataSourceImpl
 import com.london.data.datasource.local.model.SearchActorsLocal
 import com.london.data.datasource.local.model.SearchMoviesLocal
 import com.london.data.datasource.local.model.SearchTvShowLocal
-import com.london.data.datasource.local.recentsearch.RecentSearchDataSource
-import com.london.data.datasource.local.recentsearch.RecentSearchDataSourceImpl
+import com.london.data.datasource.local.model.recent.RecentSearchLocal
+import com.london.data.datasource.local.recent.RecentDataSource
+import com.london.data.datasource.local.recent.RecentSearchDataSourceImpl
 import org.koin.core.annotation.Module
 import org.koin.core.annotation.Named
 import org.koin.core.annotation.Single
@@ -45,6 +47,16 @@ class DatabaseModule {
     @Single
 
     fun provideRecentSearchDao(database: NovixDatabase): RecentSearchDao {
+        return database.recentSearchDao()
+    }
+
+    @Single
+    fun provideGenreInterestDao(database: NovixDatabase): GenreInterestDao {
+        return database.genreInterestDao()
+    }
+
+    @Single
+    fun provideRecentViewedDao(database: NovixDatabase): RecentSearchDao {
         return database.recentSearchDao()
     }
 
@@ -81,7 +93,7 @@ class DatabaseModule {
     @Single
     fun provideRecentSearchDataSource(
         recentSearchDao: RecentSearchDao,
-    ): RecentSearchDataSource {
+    ): RecentDataSource<RecentSearchLocal> {
         return RecentSearchDataSourceImpl(
             recentSearchDao = recentSearchDao,
         )
