@@ -57,6 +57,7 @@ import com.london.domain.entity.Actor
 import com.london.domain.entity.tvshowdetails.ImageItemEntity
 import com.london.domain.entity.tvshowdetails.episode.TvShowEpisodeByIdEntity
 import com.london.presentation.R
+import com.london.presentation.composables.ConditionalText
 import com.london.presentation.screen.details.tvshow.tvshowdetails.Seasons
 import com.london.presentation.screen.details.tvshow.tvshowdetails.TvShowDate
 import com.london.presentation.screen.details.tvshow.tvshowdetails.TvShowDetailsUiState
@@ -461,7 +462,6 @@ fun OverviewSection(
     modifier: Modifier = Modifier,
     uiState: EpisodeDetailsUiState
 ) {
-    var maxLines by rememberSaveable { mutableIntStateOf(4) }
     var isTextCollapsed by rememberSaveable { mutableStateOf(false) }
     Column(
         modifier = modifier
@@ -472,27 +472,10 @@ fun OverviewSection(
             color = NovixTheme.colors.title
         )
 
-        Column {
-            Text(
-                text = uiState.overview,
-                style = NovixTheme.typography.body.small,
-                color = NovixTheme.colors.body,
-                maxLines = maxLines,
-                overflow = TextOverflow.Ellipsis
-            )
-
-            Text(
-                text = if (isTextCollapsed)
-                    stringResource(Res.string.read_less) else stringResource(Res.string.read_more),
-                style = NovixTheme.typography.body.small,
-                color = NovixTheme.colors.primary,
-                modifier = Modifier
-                    .clickable {
-                        maxLines = if (maxLines == 4) Int.MAX_VALUE else 4
-                        isTextCollapsed = !isTextCollapsed
-                    }
-            )
-        }
+        ConditionalText(
+            text = uiState.overview,
+            expandedState = isTextCollapsed
+        ) { isTextCollapsed = !isTextCollapsed }
     }
 }
 

@@ -16,7 +16,6 @@ class MainActivity : ComponentActivity() {
         setContent {
             NovixTheme {
                 NovixApp()
-//                EpisodeDetailsScreen()
             }
         }
     }

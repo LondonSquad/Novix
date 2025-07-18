@@ -21,9 +21,4 @@ data class EpisodeDetailsUiState(
     val guestStars:List<Actor> = listOf(),
     val id: Int = 0,
     val backdropPath: String? = "",
-) {
-//    val hasEpisodeData: Boolean get() = tvShowEpisode.id != 0 && tvShowEpisode.name.isNotEmpty()
-//    val hasImages: Boolean get() = !tvImages.isNullOrEmpty()
-//    val hasGuestStars: Boolean get() = tvShowEpisode.guestStars.isNotEmpty()
-//    val hasOverview: Boolean get() = tvShowEpisode.overview.isNotEmpty()
-}
+)
