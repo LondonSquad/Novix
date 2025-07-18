@@ -3112,5 +3112,33 @@
       "deletions": 5,
       "changed_files": 2
     }
+  },
+  {
+    "pr_number": 170,
+    "url": "https://github.com/LondonSquad/Novix/pull/170",
+    "title": "Fix: correct nav bar horizontal padding",
+    "opened_at": "2025-07-18T02:02:08Z",
+    "head_ref": "hotfix/nav-bar-padding",
+    "base_ref": "develop",
+    "creator": {
+      "login": "yusufnasserdev",
+      "id": 43588217,
+      "url": "https://github.com/yusufnasserdev"
+    },
+    "approvals": [],
+    "first_approved_at": null,
+    "time_to_first_approval_minutes": null,
+    "required_approvals_met_at": null,
+    "time_to_required_approvals_minutes": null,
+    "closed_at": null,
+    "merged_at": null,
+    "merged_by": null,
+    "week": "2025-W29",
+    "status": "pending",
+    "diff_stats": {
+      "additions": 2,
+      "deletions": 3,
+      "changed_files": 1
+    }
   }
 ]
