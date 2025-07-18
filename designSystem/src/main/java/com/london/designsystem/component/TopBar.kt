@@ -38,7 +38,7 @@ fun TopBar(
         horizontalArrangement = Arrangement.SpaceBetween
     ) {
 
-        onBackClick?.let { ButtonTopBar(icon = R.drawable.arrow_left, onClick = {}) }
+        onBackClick?.let { ButtonTopBar(icon = R.drawable.arrow_left, onClick = onBackClick ) }
 
         title?.let {
             Text(

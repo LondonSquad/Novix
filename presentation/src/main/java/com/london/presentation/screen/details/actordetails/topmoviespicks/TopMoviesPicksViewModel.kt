@@ -6,7 +6,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.toRoute
 import com.london.domain.usecase.GetActorMoviePicksByIdUseCase
-import com.london.presentation.navigation.Screen
+import com.london.presentation.navigation.arguments.TopMoviesArgs
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -23,10 +23,10 @@ class TopMoviesPicksViewModel(
     private val _uiState = MutableStateFlow(TopMoviesPicksUiState())
     val uiState: StateFlow<TopMoviesPicksUiState> = _uiState.asStateFlow()
 
-    private val actorId: Int = savedStateHandle.toRoute<Screen.TopMoviesPicksDetails>().actorId
+    private val args by lazy { TopMoviesArgs(savedStateHandle) }
 
     init {
-        if (actorId != 0) {
+        if (args.actorId != 0) {
             getActorMoviePicksData()
         }
     }
@@ -37,24 +37,15 @@ class TopMoviesPicksViewModel(
                 _uiState.update {
                     it.copy(
                         id = it.id,
-                        movieDetails = getActorMoviePicksById.invoke(actorId),
+                        movieDetails = getActorMoviePicksById.invoke(args.actorId),
                         isSaved = it.isSaved,
                         backdropPath = it.backdropPath,
-                        numberOfMovies = it.numberOfMovies
                     )
                 }
             } catch (e: Exception){
                 Log.d("TAG", "getActorMoviePicksData: $e")
             }
         }
-    }
-
-    override fun onMovieClick(movieId: Int) {
-        // TODO(navigate to movie details)
-    }
-
-    override fun onBackClick() {
-        // TODO(navigate back)
     }
 
     override fun onSaveMovie(movieId: Int) {
