@@ -19,6 +19,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.scale
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import com.london.designsystem.R
@@ -31,6 +32,7 @@ fun SaveIcon(
     isSaved: Boolean,
     onSaveClick: () -> Unit,
     modifier: Modifier = Modifier,
+    backgroundColor: Color = NovixTheme.colors.iconBackground,
 ) {
     val animatedProgress by animateFloatAsState(
         targetValue = if (isSaved) 1f else 0f,
@@ -43,7 +45,7 @@ fun SaveIcon(
         modifier = modifier
             .size(32.dp)
             .clip(RoundedCornerShape(8.dp))
-            .background(color = NovixTheme.colors.iconBackground)
+            .background(color = backgroundColor)
             .border(
                 width = 1.dp,
                 color = NovixTheme.colors.stroke,

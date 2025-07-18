@@ -151,6 +151,7 @@ fun MovieDetailsContent(
                     .size(40.dp)
                     .clip(RoundedCornerShape(16))
                     .align(Alignment.TopEnd),
+                backgroundColor = NovixTheme.colors.iconBackgroundLow
             )
 
             ButtonIcon(
