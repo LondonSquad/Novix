@@ -74,7 +74,7 @@ fun ButtonTopBar(icon: Int, onClick: () -> Unit) {
         onClick = onClick,
         modifier = Modifier
             .size(40.dp)
-            .border(width = 1.dp, color = NovixTheme.colors.stroke)
+            .border(width = 1.dp, shape = RoundedCornerShape(12.dp), color = NovixTheme.colors.stroke)
             .clip(RoundedCornerShape(12.dp))
             .clickable(onClick = onClick)
             .background(
