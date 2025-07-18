@@ -3618,5 +3618,33 @@
       "deletions": 12,
       "changed_files": 1
     }
+  },
+  {
+    "pr_number": 189,
+    "url": "https://github.com/LondonSquad/Novix/pull/189",
+    "title": "Hotfix/navigate to get by category",
+    "opened_at": "2025-07-18T17:55:19Z",
+    "head_ref": "hotfix/navigate-to-get-by-category",
+    "base_ref": "develop",
+    "creator": {
+      "login": "marwanqashwa",
+      "id": 100484790,
+      "url": "https://github.com/marwanqashwa"
+    },
+    "approvals": [],
+    "first_approved_at": null,
+    "time_to_first_approval_minutes": null,
+    "required_approvals_met_at": null,
+    "time_to_required_approvals_minutes": null,
+    "closed_at": null,
+    "merged_at": null,
+    "merged_by": null,
+    "week": "2025-W29",
+    "status": "pending",
+    "diff_stats": {
+      "additions": 122,
+      "deletions": 36,
+      "changed_files": 8
+    }
   }
 ]
