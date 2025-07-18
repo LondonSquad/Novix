@@ -6,10 +6,14 @@ import com.london.data.datasource.remote.details.tvshowdetails.model.tvshowepiso
 import com.london.data.datasource.remote.details.tvshowdetails.model.tvshowepisode.TvShowEpisodesRemoteResponse
 import com.london.data.utils.asImageUrlOrEmpty
 import com.london.domain.KoverIgnore
+import com.london.data.datasource.remote.details.tvshowdetails.model.tvshowepisode.TvShowEpisodeResponse
+import com.london.domain.entity.Actor
 import com.london.domain.entity.tvshowdetails.episode.EpisodeCrewMemberEntity
 import com.london.domain.entity.tvshowdetails.episode.EpisodeGuestStarEntity
 import com.london.domain.entity.tvshowdetails.episode.TvShowEpisodeBySeasonEntity
 import com.london.domain.entity.tvshowdetails.episode.TvShowEpisodesEntity
+import com.london.domain.entity.tvshowdetails.episode.TvShowEpisodeByIdEntity
+
 
 @KoverIgnore
 fun TvShowEpisodesRemoteResponse.toTvShowEpisodesEntity(): TvShowEpisodesEntity {
@@ -54,7 +58,7 @@ fun EpisodeCrewMember.toEpisodeCrewMemberEntity(): EpisodeCrewMemberEntity {
         name = name,
         originalName = originalName,
         popularity = popularity,
-        profilePath = profilePath
+        profilePath = profilePath.asImageUrlOrEmpty()
     )
 }
 
@@ -71,6 +75,33 @@ fun EpisodeGuestStar.toEpisodeGuestStarEntity(): EpisodeGuestStarEntity {
         name = name,
         originalName = originalName,
         popularity = popularity,
-        profilePath = profilePath
+        profilePath = profilePath.asImageUrlOrEmpty()
+    )
+}
+
+@KoverIgnore
+fun TvShowEpisodeResponse.toTvShowEpisodeEntity(): TvShowEpisodeByIdEntity {
+    return TvShowEpisodeByIdEntity(
+        airDate = this.airDate,
+        episodeNumber = this.episodeNumber,
+        seasonNumber = this.seasonNumber,
+        episodeTypes = this.episodeType,
+        tvShowId = this.id,
+        name = this.name,
+        overview = this.overview,
+        stillPath = this.stillPath,
+        voteAverage = this.voteAverage,
+        voteCount = this.voteCount,
+        guestStars = this.guestStars.map { it.toActorEntity() },
+        id = this.id
+    )
+}
+
+fun EpisodeGuestStar.toActorEntity(): Actor {
+    return Actor(
+        id = this.id,
+        name = this.name,
+        profilePicture = this.profilePath.asImageUrlOrEmpty(),
+        characterName = this.character
     )
 }

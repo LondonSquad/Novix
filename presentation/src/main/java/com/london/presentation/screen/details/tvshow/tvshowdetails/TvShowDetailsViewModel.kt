@@ -7,11 +7,18 @@ import com.london.domain.usecase.GetCastById
 import com.london.domain.usecase.GetEpisodesByTvShowSeason
 import com.london.domain.usecase.GetImagesById
 import com.london.domain.usecase.GetTvShowDetails
+import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import org.koin.android.annotation.KoinViewModel
+
+sealed interface TvShowDetailsEffect{
+    data class OnNavigateToEpisodeDetails(val tvShowId: Int, val episodeNumber: Int, val seasonNumber: Int): TvShowDetailsEffect
+}
+
 
 @KoinViewModel
 class TvShowDetailsViewModel(
@@ -25,7 +32,10 @@ class TvShowDetailsViewModel(
     private val _uiState = MutableStateFlow(TvShowDetailsUiState())
     val uiState = _uiState.asStateFlow()
 
-    val tvShowId: Int = savedStateHandle.get<Int>("tvShowId") ?: 0
+    private val _effect = MutableSharedFlow<TvShowDetailsEffect>()
+    val effect = _effect.asSharedFlow()
+
+    private val tvShowId: Int = savedStateHandle.get<Int>("tvShowId") ?: 0
 
     init {
         if (tvShowId != 0) {
@@ -105,6 +115,12 @@ class TvShowDetailsViewModel(
                     voteCount = tvShowDetails.voteCount,
                 )
             }
+        }
+    }
+
+    fun onEpisodeClick(tvShowId: Int, episodeNumber: Int, seasonNumber: Int){
+        viewModelScope.launch {
+            _effect.emit(TvShowDetailsEffect.OnNavigateToEpisodeDetails(tvShowId, episodeNumber, seasonNumber))
         }
     }
 

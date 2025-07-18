@@ -4,6 +4,7 @@ import com.london.data.datasource.remote.details.tvshowdetails.TvShowDetailsRemo
 import com.london.data.mapper.tvshowdetails.TvShowImagesMapper.toEntity
 import com.london.data.mapper.tvshowdetails.toCastEntity
 import com.london.data.mapper.tvshowdetails.toEntity
+import com.london.data.mapper.tvshowdetails.toTvShowEpisodeEntity
 import com.london.data.mapper.tvshowdetails.toTvShowEpisodesEntity
 import com.london.domain.GetCastByIdFailedException
 import com.london.domain.GetImagesByIdFailedException
@@ -11,6 +12,7 @@ import com.london.domain.TvShowDetailsSearchFailedException
 import com.london.domain.entity.tvshowdetails.TvShowCastEntity
 import com.london.domain.entity.tvshowdetails.TvShowDetailsEntity
 import com.london.domain.entity.tvshowdetails.TvShowImagesEntity
+import com.london.domain.entity.tvshowdetails.episode.TvShowEpisodeByIdEntity
 import com.london.domain.entity.tvshowdetails.episode.TvShowEpisodesEntity
 import com.london.domain.repository.DetailsRepository
 import org.koin.core.annotation.Single
@@ -56,6 +58,22 @@ class DetailsRepositoryImpl(
                 tvShowId = tvShowId,
                 seasonNumber = seasonNumber
             ).toTvShowEpisodesEntity()
+        }.getOrElse {
+            throw it
+        }
+    }
+
+    override suspend fun getTvShowEpisodeByPosition(
+        tvShowId: Int,
+        seasonNumber: Int,
+        episodeNumber: Int
+    ): TvShowEpisodeByIdEntity {
+        return runCatching {
+            tvShowDetailsRemoteDataSource.getEpisodeDetailsByPosition(
+                tvShowId = tvShowId,
+                seasonNumber = seasonNumber,
+                episodeNumber = episodeNumber
+            ).toTvShowEpisodeEntity()
         }.getOrElse {
             throw it
         }
