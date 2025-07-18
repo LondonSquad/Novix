@@ -29,7 +29,6 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
@@ -41,7 +40,6 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.layout.layout
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
-import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.zIndex
@@ -51,17 +49,12 @@ import com.london.designsystem.component.CircularLoading
 import com.london.designsystem.component.NovixCarousalRow
 import com.london.designsystem.component.RatingBar
 import com.london.designsystem.component.SaveIcon
+import com.london.designsystem.component.UnSuitableEye
 import com.london.designsystem.component.button.ErrorImage
 import com.london.designsystem.theme.NovixTheme
-import com.london.domain.entity.Actor
 import com.london.domain.entity.tvshowdetails.ImageItemEntity
-import com.london.domain.entity.tvshowdetails.episode.TvShowEpisodeByIdEntity
 import com.london.presentation.R
 import com.london.presentation.composables.ConditionalText
-import com.london.presentation.screen.details.tvshow.tvshowdetails.Seasons
-import com.london.presentation.screen.details.tvshow.tvshowdetails.TvShowDate
-import com.london.presentation.screen.details.tvshow.tvshowdetails.TvShowDetailsUiState
-import com.london.presentation.screen.details.tvshow.tvshowdetails.TvShowRating
 import com.london.presentation.utils.toLocalizedNumbers
 import org.koin.androidx.compose.koinViewModel
 import com.london.designsystem.R as Res
@@ -253,7 +246,9 @@ fun CustomBackDropImagePager(
                 model = images[pageIndex].fileUrl,
                 contentDescription = "TV Show Image ${pageIndex + 1}",
                 errorContent = { ErrorImage() },
-                loadingContent = { CircularLoading(modifier = Modifier) })
+                loadingContent = { CircularLoading(modifier = Modifier) },
+                moderatedContent = { UnSuitableEye() }
+            )
         }
 
         val dotsStates = List(images.size) { index ->

@@ -75,6 +75,7 @@ private fun ActorImage(imageRes: Any) {
             contentScale = ContentScale.Crop,
             loadingContent = { CircularLoading(modifier = Modifier.align(Alignment.Center)) },
             errorContent = { ErrorImage() },
+            moderatedContent = { UnSuitableEye(isSmallPicture = true) }
         )
     }
 }

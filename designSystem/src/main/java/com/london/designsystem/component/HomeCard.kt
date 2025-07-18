@@ -46,7 +46,7 @@ fun HomeCard(
             contentScale = ContentScale.Crop,
             errorContent = { ErrorImage() },
             loadingContent = { CircularLoading(modifier = Modifier.align(Alignment.Center)) },
-
+            moderatedContent = { UnSuitableEye() }
         )
         SaveIcon(
             isSaved = isSaved,
