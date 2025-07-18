@@ -3638,5 +3638,33 @@
       "deletions": 36,
       "changed_files": 8
     }
+  },
+  {
+    "pr_number": 190,
+    "url": "https://github.com/LondonSquad/Novix/pull/190",
+    "title": "Refactor: Extract FooterSection to a reusable composable",
+    "opened_at": "2025-07-18T18:18:09Z",
+    "head_ref": "fix/movie-and-tv-details-screen",
+    "base_ref": "develop",
+    "creator": {
+      "login": "Mostafa-alsaygh",
+      "id": 106277855,
+      "url": "https://github.com/Mostafa-alsaygh"
+    },
+    "approvals": [],
+    "first_approved_at": null,
+    "time_to_first_approval_minutes": null,
+    "required_approvals_met_at": null,
+    "time_to_required_approvals_minutes": null,
+    "closed_at": null,
+    "merged_at": null,
+    "merged_by": null,
+    "week": "2025-W29",
+    "status": "pending",
+    "diff_stats": {
+      "additions": 95,
+      "deletions": 74,
+      "changed_files": 5
+    }
   }
 ]
