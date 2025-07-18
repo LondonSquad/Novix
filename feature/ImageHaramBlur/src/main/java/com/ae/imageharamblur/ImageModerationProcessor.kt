@@ -4,7 +4,7 @@ import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.Rect
 import android.util.Log
-import com.ae.imageharamblur.detection.FaceDetector
+import com.ae.imageharamblur.faceDetection.FaceDetector
 import com.ae.imageharamblur.models.ContentDetectionModel
 import com.ae.imageharamblur.models.GenderDetectionModel
 import com.ae.imageharamblur.models.ModelDownloadManager

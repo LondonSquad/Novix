@@ -1,10 +1,9 @@
-package com.ae.imageharamblur.detection
+package com.ae.imageharamblur.faceDetection
 
 import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.Rect
 import android.graphics.RectF
-import android.util.Log
 import org.tensorflow.lite.Interpreter
 import org.tensorflow.lite.support.common.FileUtil
 import org.tensorflow.lite.support.image.ImageProcessor
@@ -14,6 +13,7 @@ import java.nio.ByteBuffer
 import java.nio.ByteOrder
 import kotlin.math.max
 import kotlin.math.min
+import androidx.core.graphics.scale
 
 class FaceDetector(private val context: Context) {
 
@@ -21,24 +21,16 @@ class FaceDetector(private val context: Context) {
     private val imageProcessor: ImageProcessor
 
     init {
-        Log.d(TAG, "FaceDetector initializing...")
         loadModel()
-
-        // Create image processor with normalization
         imageProcessor = ImageProcessor.Builder()
             .add(ResizeOp(INPUT_SIZE, INPUT_SIZE, ResizeOp.ResizeMethod.BILINEAR))
-            .add(NormalizeOp(127.5f, 127.5f)) // Normalize to [-1, 1]
+            .add(NormalizeOp(127.5f, 127.5f))
             .build()
-
-        Log.d(TAG, "FaceDetector initialized with input size: $INPUT_SIZE")
     }
 
     private fun loadModel() {
         try {
-            Log.d(TAG, "Loading model: $MODEL_FILE")
             val modelBuffer = FileUtil.loadMappedFile(context, MODEL_FILE)
-            Log.d(TAG, "Model file loaded, size: ${modelBuffer.capacity()} bytes")
-
             val options = Interpreter.Options().apply {
                 setNumThreads(4)
             }
@@ -46,46 +38,23 @@ class FaceDetector(private val context: Context) {
             interpreter?.close()
             interpreter = Interpreter(modelBuffer, options)
 
-            // Log model details
-            interpreter?.let { interp ->
-                Log.d(TAG, "Model input count: ${interp.inputTensorCount}")
-                Log.d(TAG, "Model output count: ${interp.outputTensorCount}")
-
-                for (i in 0 until interp.inputTensorCount) {
-                    val tensor = interp.getInputTensor(i)
-                    Log.d(TAG, "Input $i: shape=${tensor.shape().contentToString()}, dataType=${tensor.dataType()}")
-                }
-
-                for (i in 0 until interp.outputTensorCount) {
-                    val tensor = interp.getOutputTensor(i)
-                    Log.d(TAG, "Output $i: shape=${tensor.shape().contentToString()}, dataType=${tensor.dataType()}")
-                }
-            }
-
-            Log.d(TAG, "Model loaded successfully")
-        } catch (e: Exception) {
-            Log.e(TAG, "Error loading model", e)
-        }
+        } catch (e: Exception) {}
     }
 
     fun detectFaces(bitmap: Bitmap): List<DetectedFace> {
-        Log.d(TAG, "detectFaces called with bitmap: ${bitmap.width}x${bitmap.height}")
 
         val interpreter = this.interpreter
         if (interpreter == null) {
-            Log.e(TAG, "Interpreter is null, returning empty list")
             return emptyList()
         }
 
         try {
-            // Scale bitmap to model input size
-            val scaledBitmap = Bitmap.createScaledBitmap(bitmap, INPUT_SIZE, INPUT_SIZE, true)
+            val scaledBitmap = bitmap.scale(INPUT_SIZE, INPUT_SIZE)
 
-            // Allocate input buffer
-            val inputBuffer = ByteBuffer.allocateDirect(1 * INPUT_SIZE * INPUT_SIZE * NUM_CHANNELS * 4)
+            val inputBuffer =
+                ByteBuffer.allocateDirect(1 * INPUT_SIZE * INPUT_SIZE * NUM_CHANNELS * 4)
             inputBuffer.order(ByteOrder.nativeOrder())
 
-            // Convert bitmap to float array
             val pixels = IntArray(INPUT_SIZE * INPUT_SIZE)
             scaledBitmap.getPixels(pixels, 0, INPUT_SIZE, 0, 0, INPUT_SIZE, INPUT_SIZE)
 
@@ -94,16 +63,13 @@ class FaceDetector(private val context: Context) {
                 val g = (pixel shr 8 and 0xFF)
                 val b = (pixel and 0xFF)
 
-                // Normalize pixel values to [-1, 1]
                 inputBuffer.putFloat((r - 127.5f) / 127.5f)
                 inputBuffer.putFloat((g - 127.5f) / 127.5f)
                 inputBuffer.putFloat((b - 127.5f) / 127.5f)
             }
 
             inputBuffer.rewind()
-            Log.d(TAG, "Input buffer prepared: ${inputBuffer.remaining()} bytes")
 
-            // Prepare outputs - matching model's actual output shape
             val regressionOutput = Array(1) { Array(NUM_ANCHORS) { FloatArray(16) } }
             val classificationOutput = Array(1) { Array(NUM_ANCHORS) { FloatArray(1) } }
 
@@ -112,8 +78,6 @@ class FaceDetector(private val context: Context) {
                 1 to classificationOutput
             )
 
-            // Run inference
-            Log.d(TAG, "Running inference...")
             val startTime = System.currentTimeMillis()
 
             interpreter.runForMultipleInputsOutputs(
@@ -122,9 +86,7 @@ class FaceDetector(private val context: Context) {
             )
 
             val inferenceTime = System.currentTimeMillis() - startTime
-            Log.d(TAG, "Inference completed in ${inferenceTime}ms")
 
-            // Check output values
             var maxScore = 0f
             var scoreAboveThreshold = 0
             for (i in 0 until NUM_ANCHORS) {
@@ -132,8 +94,6 @@ class FaceDetector(private val context: Context) {
                 if (score > maxScore) maxScore = score
                 if (score > CONFIDENCE_THRESHOLD) scoreAboveThreshold++
             }
-            Log.d(TAG, "Max confidence score: $maxScore")
-            Log.d(TAG, "Anchors with score > $CONFIDENCE_THRESHOLD: $scoreAboveThreshold")
 
             // Post-process results
             val detections = postProcessResults(
@@ -143,11 +103,9 @@ class FaceDetector(private val context: Context) {
                 bitmap.height
             )
 
-            Log.d(TAG, "Post-processing complete. Detected ${detections.size} faces")
             return detections
 
         } catch (e: Exception) {
-            Log.e(TAG, "Error during detection", e)
             e.printStackTrace()
             return emptyList()
         }
@@ -159,12 +117,8 @@ class FaceDetector(private val context: Context) {
         imageWidth: Int,
         imageHeight: Int
     ): List<DetectedFace> {
-        Log.d(TAG, "postProcessResults: imageSize=${imageWidth}x${imageHeight}")
-
         val detections = mutableListOf<DetectedFace>()
         val anchors = generateAnchors()
-
-        Log.d(TAG, "Generated ${anchors.size} anchors")
 
         for (i in regression.indices) {
             val score = sigmoid(classification[i][0])
@@ -173,7 +127,6 @@ class FaceDetector(private val context: Context) {
                 val anchor = anchors[i]
                 val box = decodeBox(regression[i], anchor)
 
-                // Convert normalized coordinates to pixel coordinates
                 val rect = Rect(
                     (box.left * imageWidth).toInt().coerceIn(0, imageWidth),
                     (box.top * imageHeight).toInt().coerceIn(0, imageHeight),
@@ -181,27 +134,18 @@ class FaceDetector(private val context: Context) {
                     (box.bottom * imageHeight).toInt().coerceIn(0, imageHeight)
                 )
 
-                // Validate rect
-                if (rect.width() > 10 && rect.height() > 10) { // Minimum face size
+                if (rect.width() > 10 && rect.height() > 10) {
                     detections.add(
                         DetectedFace(
                             boundingBox = rect,
                             confidence = score
                         )
                     )
-                    Log.d(TAG, "Added detection: rect=$rect, confidence=$score")
-                } else {
-                    Log.w(TAG, "Skipped small/invalid rect: $rect")
                 }
             }
         }
 
-        Log.d(TAG, "Before NMS: ${detections.size} detections")
-
-        // Apply Non-Maximum Suppression
         val nmsResult = nonMaximumSuppression(detections)
-
-        Log.d(TAG, "After NMS: ${nmsResult.size} detections")
 
         return nmsResult
     }
@@ -221,8 +165,6 @@ class FaceDetector(private val context: Context) {
             val gridSize = INPUT_SIZE / stride
             val anchorCount = anchorCounts[layerId]
 
-            Log.v(TAG, "Layer $layerId: stride=$stride, gridSize=$gridSize, anchorsPerCell=$anchorCount")
-
             for (gridY in 0 until gridSize) {
                 for (gridX in 0 until gridSize) {
                     for (n in 0 until anchorCount) {
@@ -236,9 +178,6 @@ class FaceDetector(private val context: Context) {
             }
         }
 
-        Log.d(TAG, "Generated $totalAnchors anchors (expected: $NUM_ANCHORS)")
-
-        // Make sure we have exactly 896 anchors
         return anchors.take(NUM_ANCHORS)
     }
 
@@ -263,8 +202,6 @@ class FaceDetector(private val context: Context) {
     ): List<DetectedFace> {
         if (detections.isEmpty()) return emptyList()
 
-        Log.d(TAG, "NMS: processing ${detections.size} detections with IoU threshold $iouThreshold")
-
         val sorted = detections.sortedByDescending { it.confidence }
         val selected = mutableListOf<DetectedFace>()
 
@@ -274,7 +211,6 @@ class FaceDetector(private val context: Context) {
             for (selectedDetection in selected) {
                 val iou = calculateIoU(detection.boundingBox, selectedDetection.boundingBox)
                 if (iou > iouThreshold) {
-                    Log.v(TAG, "NMS: Suppressing detection with IoU=$iou")
                     shouldSelect = false
                     break
                 }
@@ -282,7 +218,6 @@ class FaceDetector(private val context: Context) {
 
             if (shouldSelect) {
                 selected.add(detection)
-                Log.d(TAG, "NMS: Selected detection with confidence=${detection.confidence}")
             }
         }
 
@@ -309,7 +244,6 @@ class FaceDetector(private val context: Context) {
     private fun sigmoid(x: Float): Float = 1f / (1f + kotlin.math.exp(-x))
 
     fun close() {
-        Log.d(TAG, "Closing FaceDetector...")
         interpreter?.close()
         interpreter = null
     }
@@ -328,7 +262,6 @@ class FaceDetector(private val context: Context) {
 
 
     companion object {
-        private const val TAG = "FaceDetector"
         private const val CONFIDENCE_THRESHOLD = 0.5f
         private const val MODEL_FILE = "face_detection_back.tflite"
         private const val INPUT_SIZE = 256
