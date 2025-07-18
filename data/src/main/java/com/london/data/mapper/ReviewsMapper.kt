@@ -31,5 +31,5 @@ fun AuthorDetailsResponse.toAuthorDetails(): AuthorDetails =
         name = this.authorName.orEmpty(),
         username = this.authorUsername.orEmpty(),
         profileUrl = authorPictureUrl ?: "",
-        rating = this.rating ?: 0f
+        rating = this.rating ?: 0.0
     )

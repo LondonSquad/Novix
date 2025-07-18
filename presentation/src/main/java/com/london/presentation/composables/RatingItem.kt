@@ -14,7 +14,7 @@ import com.london.designsystem.theme.NovixTheme
 @Composable
 fun RatingItem(
     modifier: Modifier = Modifier,
-    voteAverage: String
+    rating: String
 ) {
     Row(
         modifier = modifier,
@@ -29,7 +29,7 @@ fun RatingItem(
         )
 
         Text(
-            text = voteAverage,
+            text = rating,
             style = NovixTheme.typography.label.small,
             color = NovixTheme.colors.title
         )

@@ -30,5 +30,5 @@ data class AuthorDetailsResponse(
     @SerialName("avatar_path")
     val authorPictureUrl: String?,
     @SerialName("rating")
-    val rating: Float?
+    val rating: Double?
 )

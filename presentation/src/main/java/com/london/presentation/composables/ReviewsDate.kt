@@ -13,14 +13,17 @@ import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.unit.dp
 import com.london.designsystem.R
 import com.london.designsystem.theme.NovixTheme
+import com.london.presentation.utils.toLocalizedNumbers
 
 @Composable
-fun TvShowDate(
+fun ReviewsDate(
     date: String,
     modifier: Modifier = Modifier,
 ) {
 
+    if (date.isEmpty() || date.isBlank()) return
     Row(
+        modifier = modifier,
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.spacedBy(4.dp)
     ) {
@@ -32,7 +35,7 @@ fun TvShowDate(
         )
 
         Text(
-            text = date,
+            text = date.toLocalizedNumbers(),
             style = NovixTheme.typography.label.small,
             color = NovixTheme.colors.title
         )

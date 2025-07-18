@@ -168,6 +168,23 @@ fun NovixApp() {
                 )
             }
 
+            composable<MovieDetails>(
+                exitTransition = { fadeOut(tween(500)) },
+                popEnterTransition = { fadeIn(tween(500)) },
+                enterTransition = { fadeIn(tween(500)) },
+                popExitTransition = { fadeOut(tween(500)) },
+            ) {
+                MovieDetailsScreen(
+                    onBackClick = { navController.navigateUp() },
+                    onGenreClick = {
+                        navController.navigate(MoviesByCategory(it))
+                    },
+                    onNavigateToPreviews = { movieId, mediaType ->
+                        navController.navigate(Reviews(movieId, mediaType))
+                    }
+                )
+            }
+
             composable<TopTvShowsPicksDetails>(
                 exitTransition = { fadeOut(tween(500)) },
                 popEnterTransition = { fadeIn(tween(500)) },
@@ -194,23 +211,6 @@ fun NovixApp() {
                 )
             }
 
-            composable<MovieDetails>(
-                exitTransition = { fadeOut(tween(500)) },
-                popEnterTransition = { fadeIn(tween(500)) },
-                enterTransition = { fadeIn(tween(500)) },
-                popExitTransition = { fadeOut(tween(500)) },
-            ) {
-                MovieDetailsScreen(
-                    movieId = it.getInt("movieId"),
-                    onBackClick = { navController.navigateUp() },
-                    onGenreClick = {
-                        navController.navigate(MoviesByCategory(it))
-                    },
-                    onNavigateToPreviews = { movieId, mediaType ->
-                        navController.navigate(Reviews(movieId, mediaType))
-                    }
-                )
-            }
 
             composable<Reviews> { backStackEntry ->
                 val reviews = backStackEntry.arguments?.let {

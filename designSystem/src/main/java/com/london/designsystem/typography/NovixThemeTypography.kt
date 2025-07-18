@@ -43,19 +43,19 @@ val NovixTypography = NovixTypographySet(
             fontSize = 16.sp,
             fontWeight = FontWeight.SemiBold,
             fontFamily = NovixFont,
-            lineHeight = 16.sp
+            lineHeight = 24.sp
         ),
         medium = TextStyle(
             fontSize = 18.sp,
             fontWeight = FontWeight.Medium,
             fontFamily = NovixFont,
-            lineHeight = 18.sp
+            lineHeight = 28.sp
         ),
         large = TextStyle(
             fontSize = 20.sp,
             fontWeight = FontWeight.Medium,
             fontFamily = NovixFont,
-            lineHeight = 20.sp
+            lineHeight = 30.sp
         )
     ),
     body = TextStyleGroup(

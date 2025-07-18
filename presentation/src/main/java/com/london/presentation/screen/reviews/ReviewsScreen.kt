@@ -1,41 +1,54 @@
 package com.london.presentation.screen.reviews
 
+import androidx.compose.animation.core.FastOutSlowInEasing
+import androidx.compose.animation.core.animateFloatAsState
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.asPaddingValues
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.statusBars
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.zIndex
 import androidx.paging.compose.collectAsLazyPagingItems
 import com.ae.imageharamblur.ui.ImageViewFilter
 import com.london.designsystem.component.CircularLoading
-import com.london.designsystem.component.TopBar
 import com.london.designsystem.component.button.ErrorImage
 import com.london.designsystem.theme.NovixTheme
+import com.london.presentation.R
+import com.london.presentation.composables.ConditionalText
 import com.london.presentation.composables.RatingItem
-import com.london.presentation.composables.ReadMoreText
-import com.london.presentation.composables.TvShowDate
+import com.london.presentation.composables.ReviewsDate
+import com.london.presentation.screen.details.tvshow.tvshowdetails.TvShowScreenTopBar
 import org.koin.androidx.compose.koinViewModel
 
 @Composable
@@ -58,6 +71,23 @@ fun ReviewsScreenContent(
     onBackClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
+    val lazyListState = rememberLazyListState()
+
+    val shouldShowBackground by remember {
+        derivedStateOf {
+            lazyListState.firstVisibleItemScrollOffset > 40f ||
+                    lazyListState.firstVisibleItemIndex > 0
+        }
+    }
+
+    val backgroundAlpha by animateFloatAsState(
+        targetValue = if (shouldShowBackground) 1f else 0f,
+        animationSpec = tween(
+            durationMillis = 400,
+            easing = FastOutSlowInEasing
+        ),
+        label = "background_alpha"
+    )
 
     Box(
         modifier = Modifier
@@ -65,23 +95,15 @@ fun ReviewsScreenContent(
             .background(NovixTheme.colors.surface)
 
     ) {
-        val reviewsList = uiState.reviews.collectAsLazyPagingItems()
 
-        TopBar(
-            modifier = modifier
-                .padding(
-                    start = 16.dp,
-                    end = 16.dp,
-                    top = WindowInsets.statusBars.asPaddingValues().calculateTopPadding() + 12.dp
-                ),
-            title = "Reviews",
-            onBackClick = onBackClick
-        )
+        val reviewsList = uiState.reviews.collectAsLazyPagingItems()
 
         LazyColumn(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(top = 100.dp)
+                .padding(top = 120.dp),
+            verticalArrangement = Arrangement.spacedBy(18.dp),
+            contentPadding = PaddingValues(16.dp)
         ) {
             items(reviewsList.itemCount) { index ->
                 val review = reviewsList[index]
@@ -92,10 +114,36 @@ fun ReviewsScreenContent(
                         authorUserName = review.authorDetails.username,
                         rating = review.authorDetails.rating.toString(),
                         content = review.content,
-                        date = review.createdAt
+                        date = review.createdAt.substringBefore("T")
                     )
             }
         }
+
+
+        Box(
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(
+                    WindowInsets.statusBars.asPaddingValues().calculateTopPadding() +
+                            64.dp
+                )
+                .background(
+                    NovixTheme.colors.surface.copy(alpha = backgroundAlpha)
+                )
+                .zIndex(0.5f)
+        )
+
+        TvShowScreenTopBar(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(
+                    start = 16.dp,
+                    end = 16.dp,
+                    top = WindowInsets.statusBars.asPaddingValues().calculateTopPadding() + 12.dp
+                )
+                .zIndex(1f),
+            onBackClick = onBackClick,
+        )
     }
 }
 
@@ -109,10 +157,18 @@ fun ReviewItem(
     date: String,
     modifier: Modifier = Modifier
 ) {
+    var isExpanded by remember { mutableStateOf(false) }
+
     Column(
         modifier = modifier
             .fillMaxWidth()
             .wrapContentHeight()
+            .clip(RoundedCornerShape(12.dp))
+            .border(
+                width = 1.dp,
+                color = NovixTheme.colors.stroke,
+                shape = RoundedCornerShape(12.dp)
+            )
             .background(NovixTheme.colors.surface)
             .padding(12.dp)
     ) {
@@ -123,15 +179,16 @@ fun ReviewItem(
             rating = rating
         )
 
-        ReadMoreText(
-            content = content,
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(vertical = 12.dp),
-            maxLines = 5
-        )
+        ConditionalText(
+            text = content,
+            expandedState = isExpanded,
+            modifier = Modifier.padding(top = 12.dp),
+            minimumLineLength = 5,
+        ) {
+            isExpanded = !isExpanded
+        }
 
-        TvShowDate(date, modifier = Modifier.padding(top = 12.dp))
+        ReviewsDate(date, modifier = Modifier.padding(top = 12.dp))
     }
 }
 
@@ -161,7 +218,7 @@ fun ReviewHeader(
         ) {
 
             RatingItem(
-                voteAverage = rating,
+                rating = rating,
                 modifier = Modifier.align(Alignment.TopEnd)
             )
         }
@@ -175,25 +232,31 @@ fun AuthorItem(
     authorUserName: String,
     modifier: Modifier = Modifier
 ) {
-    ImageViewFilter(
-        model = profileUrl,
-        contentDescription = "",
-        modifier = Modifier
+    Box(
+        modifier = modifier
             .size(48.dp)
-            .clip(RoundedCornerShape(8.dp))
+            .clip(RoundedCornerShape(12.dp))
             .border(
                 width = 1.dp,
-                shape = RoundedCornerShape(8.dp),
-                color = NovixTheme.colors.stroke
+                color = NovixTheme.colors.stroke,
+                shape = RoundedCornerShape(12.dp)
             ),
-        contentScale = ContentScale.Crop,
-        loadingContent = { CircularLoading() },
-        errorContent = { ErrorImage() },
-    )
+        contentAlignment = Alignment.Center
+    ) {
+        ImageViewFilter(
+            model = profileUrl,
+            contentDescription = stringResource(R.string.author_profile),
+            modifier = Modifier,
+            contentScale = ContentScale.Crop,
+            loadingContent = { CircularLoading() },
+            errorContent = { ErrorImage() },
+        )
+    }
 
     Column(
         modifier = modifier
-            .fillMaxHeight(),
+            .fillMaxHeight()
+            .padding(start = 8.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
         Text(

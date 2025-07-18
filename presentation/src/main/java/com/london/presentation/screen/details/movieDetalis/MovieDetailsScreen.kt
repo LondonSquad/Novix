@@ -78,9 +78,8 @@ import org.koin.androidx.compose.koinViewModel
 fun MovieDetailsScreen(
     viewModel: MovieDetailsViewModel = koinViewModel(),
     onBackClick: () -> Unit = {},
-    onPreviewClick: (Int) -> Unit = {},
-    onGenreClick: (Int) -> Unit = {},
-    onNavigateToPreviews: (movieId: Int, mediaType: Int) -> Unit
+    onNavigateToPreviews: (movieId: Int, mediaType: Int) -> Unit,
+    onGenreClick: (Int) -> Unit = {}
 ) {
     val state by viewModel.uiState.collectAsState()
     when {
@@ -100,9 +99,8 @@ fun MovieDetailsScreen(
                 state,
                 viewModel::onExpandClick,
                 onBackClick,
-                onPreviewClick = onPreviewClick,
+                onViewReviewsClick = onNavigateToPreviews,
                 onGenreClick = onGenreClick,
-                onPreviewClick = onNavigateToPreviews
             )
         }
     }
@@ -113,7 +111,7 @@ fun MovieDetailsContent(
     state: MovieDetailsUiState,
     onExpandClick: () -> Unit,
     onBackClick: () -> Unit,
-    onPreviewClick: (movieId: Int, mediaType: Int) -> Unit,
+    onViewReviewsClick: (movieId: Int, mediaType: Int) -> Unit,
     onGenreClick: (Int) -> Unit
 ) {
     val lazyState = rememberLazyListState()
@@ -232,7 +230,7 @@ fun MovieDetailsContent(
                                 style = NovixTheme.typography.label.medium,
                                 color = NovixTheme.colors.primary,
                                 modifier = Modifier.noRippleClickable {
-                                    onPreviewClick(state.movieId, MediaType.Movie.mediaNum)
+                                    onViewReviewsClick(state.movieId, MediaType.Movie.mediaNum)
                                 }
                             )
                         }
@@ -254,7 +252,8 @@ fun MovieDetailsContent(
                     ConditionalText(
                         state.movieOverview,
                         state.expanded,
-                        onExpandClick
+                        modifier = Modifier.padding(horizontal = 16.dp, vertical = 4.dp),
+                        onExpandedChange = onExpandClick
                     )
                 }
             }

@@ -7,7 +7,6 @@ import com.london.domain.entity.tvshowdetails.TvShowDetailsEntity
 import com.london.domain.entity.tvshowdetails.TvShowImagesEntity
 import com.london.domain.entity.tvshowdetails.episode.TvShowEpisodeByIdEntity
 import com.london.domain.entity.tvshowdetails.episode.TvShowEpisodesEntity
-import com.london.domain.entity.tvshowdetails.episode.TvShowEpisodesEntity
 
 interface DetailsRepository {
     suspend fun getTvShowDetailsById(tvShowId: Int): TvShowDetailsEntity

@@ -66,10 +66,10 @@ import com.london.designsystem.theme.NovixTheme
 import com.london.domain.entity.tvshowdetails.ImageItemEntity
 import com.london.domain.entity.tvshowdetails.TvShowCastMemberEntity
 import com.london.presentation.composables.ConditionalText
-import com.london.presentation.screen.reviews.MediaType
-import com.london.presentation.utils.offsetLayout
 import com.london.presentation.composables.FooterSection
+import com.london.presentation.screen.reviews.MediaType
 import com.london.presentation.utils.Listen
+import com.london.presentation.utils.offsetLayout
 import com.london.presentation.utils.toLocalizedNumbers
 import kotlinx.coroutines.delay
 import org.koin.androidx.compose.koinViewModel
@@ -88,8 +88,7 @@ fun TvShowsDetailsScreen(
     TvShowsDetailScreenContent(
         uiState = uiState,
         onBackClick = onBackClick,
-        interactionListener = viewModel,
-        onNavigateToReviews = onNavigateToReviews
+        onViewReviewsClick = onNavigateToReviews
     )
 
     effect?.Listen { currentEffect ->
@@ -111,8 +110,7 @@ fun TvShowsDetailScreenContent(
     modifier: Modifier = Modifier,
     uiState: TvShowDetailsUiState,
     onBackClick: () -> Unit,
-    interactionListener: TvShowDetailsInteractionListener,
-    onNavigateToReviews: (tvShowId: Int, mediaType: Int) -> Unit
+    onViewReviewsClick: (tvShowId: Int, mediaType: Int) -> Unit
 ) {
     val lazyListState = rememberLazyListState()
 
@@ -168,7 +166,7 @@ fun TvShowsDetailScreenContent(
                         )
                         .clip(RoundedCornerShape(16.dp))
                         .background(NovixTheme.colors.surface),
-                    onReviewClick = { onNavigateToReviews(uiState.id, MediaType.TvShow.mediaNum) },
+                    onReviewClick = { onViewReviewsClick(uiState.id, MediaType.TvShow.mediaNum) },
                     tvShowId = uiState.id
                 )
             }
@@ -187,6 +185,7 @@ fun TvShowsDetailScreenContent(
                 ConditionalText(
                     text = uiState.overview,
                     expandedState = isExpanded,
+                    modifier = Modifier.padding(horizontal = 16.dp, vertical = 4.dp)
                 ) {
                     isExpanded = !isExpanded
                 }
