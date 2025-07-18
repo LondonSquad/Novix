@@ -2414,20 +2414,41 @@
       "id": 189210092,
       "url": "https://github.com/Aseel-AbuKmail"
     },
-    "approvals": [],
-    "first_approved_at": null,
-    "time_to_first_approval_minutes": null,
-    "required_approvals_met_at": null,
-    "time_to_required_approvals_minutes": null,
-    "closed_at": null,
-    "merged_at": null,
-    "merged_by": null,
+    "approvals": [
+      {
+        "reviewer": {
+          "id": 117874933,
+          "login": "AsmaaKhaledGomaa",
+          "url": "https://github.com/AsmaaKhaledGomaa"
+        },
+        "submitted_at": "2025-07-18T08:26:53Z"
+      },
+      {
+        "reviewer": {
+          "id": 180463542,
+          "login": "abdelrhman1002",
+          "url": "https://github.com/abdelrhman1002"
+        },
+        "submitted_at": "2025-07-18T08:33:53Z"
+      }
+    ],
+    "first_approved_at": "2025-07-18T08:26:53Z",
+    "time_to_first_approval_minutes": 1244.7333333333333,
+    "required_approvals_met_at": "2025-07-18T08:33:53Z",
+    "time_to_required_approvals_minutes": 1251.7333333333333,
+    "closed_at": "2025-07-18T08:34:06Z",
+    "merged_at": "2025-07-18T08:34:05Z",
+    "merged_by": {
+      "login": "ahmeddsamii",
+      "id": 154278495,
+      "url": "https://github.com/ahmeddsamii"
+    },
     "week": "2025-W29",
-    "status": "pending",
+    "status": "merged",
     "diff_stats": {
-      "additions": 906,
-      "deletions": 19,
-      "changed_files": 22
+      "additions": 883,
+      "deletions": 21,
+      "changed_files": 23
     }
   },
   {
@@ -3027,16 +3048,37 @@
       "id": 100484790,
       "url": "https://github.com/marwanqashwa"
     },
-    "approvals": [],
-    "first_approved_at": null,
-    "time_to_first_approval_minutes": null,
-    "required_approvals_met_at": null,
-    "time_to_required_approvals_minutes": null,
-    "closed_at": null,
-    "merged_at": null,
-    "merged_by": null,
+    "approvals": [
+      {
+        "reviewer": {
+          "id": 76666355,
+          "login": "Abdulrahman1890",
+          "url": "https://github.com/Abdulrahman1890"
+        },
+        "submitted_at": "2025-07-17T23:19:55Z"
+      },
+      {
+        "reviewer": {
+          "id": 81706918,
+          "login": "karimdeabes",
+          "url": "https://github.com/karimdeabes"
+        },
+        "submitted_at": "2025-07-17T23:27:39Z"
+      }
+    ],
+    "first_approved_at": "2025-07-17T23:19:55Z",
+    "time_to_first_approval_minutes": 120.41666666666667,
+    "required_approvals_met_at": "2025-07-17T23:27:39Z",
+    "time_to_required_approvals_minutes": 128.15,
+    "closed_at": "2025-07-17T23:27:54Z",
+    "merged_at": "2025-07-17T23:27:54Z",
+    "merged_by": {
+      "login": "marwanqashwa",
+      "id": 100484790,
+      "url": "https://github.com/marwanqashwa"
+    },
     "week": "2025-W29",
-    "status": "pending",
+    "status": "merged",
     "diff_stats": {
       "additions": 301,
       "deletions": 109,
@@ -3090,6 +3132,283 @@
       "additions": 6,
       "deletions": 5,
       "changed_files": 2
+    }
+  },
+  {
+    "pr_number": 170,
+    "url": "https://github.com/LondonSquad/Novix/pull/170",
+    "title": "Fix: correct nav bar horizontal padding",
+    "opened_at": "2025-07-18T02:02:08Z",
+    "head_ref": "hotfix/nav-bar-padding",
+    "base_ref": "develop",
+    "creator": {
+      "login": "yusufnasserdev",
+      "id": 43588217,
+      "url": "https://github.com/yusufnasserdev"
+    },
+    "approvals": [
+      {
+        "reviewer": {
+          "id": 100484790,
+          "login": "marwanqashwa",
+          "url": "https://github.com/marwanqashwa"
+        },
+        "submitted_at": "2025-07-18T02:22:59Z"
+      },
+      {
+        "reviewer": {
+          "id": 76666355,
+          "login": "Abdulrahman1890",
+          "url": "https://github.com/Abdulrahman1890"
+        },
+        "submitted_at": "2025-07-18T02:37:42Z"
+      }
+    ],
+    "first_approved_at": "2025-07-18T02:22:59Z",
+    "time_to_first_approval_minutes": 20.85,
+    "required_approvals_met_at": "2025-07-18T02:37:42Z",
+    "time_to_required_approvals_minutes": 35.56666666666667,
+    "closed_at": "2025-07-18T02:41:25Z",
+    "merged_at": "2025-07-18T02:41:25Z",
+    "merged_by": {
+      "login": "yusufnasserdev",
+      "id": 43588217,
+      "url": "https://github.com/yusufnasserdev"
+    },
+    "week": "2025-W29",
+    "status": "merged",
+    "diff_stats": {
+      "additions": 2,
+      "deletions": 3,
+      "changed_files": 1
+    }
+  },
+  {
+    "pr_number": 171,
+    "url": "https://github.com/LondonSquad/Novix/pull/171",
+    "title": "Feature/top tv shows view model",
+    "opened_at": "2025-07-18T02:22:02Z",
+    "head_ref": "feature/top-tv-shows-view-model",
+    "base_ref": "develop",
+    "creator": {
+      "login": "Abdulrahman1890",
+      "id": 76666355,
+      "url": "https://github.com/Abdulrahman1890"
+    },
+    "approvals": [
+      {
+        "reviewer": {
+          "id": 102248144,
+          "login": "BassantM",
+          "url": "https://github.com/BassantM"
+        },
+        "submitted_at": "2025-07-18T04:23:06Z"
+      },
+      {
+        "reviewer": {
+          "id": 117874933,
+          "login": "AsmaaKhaledGomaa",
+          "url": "https://github.com/AsmaaKhaledGomaa"
+        },
+        "submitted_at": "2025-07-18T04:26:05Z"
+      }
+    ],
+    "first_approved_at": "2025-07-18T04:23:06Z",
+    "time_to_first_approval_minutes": 121.06666666666666,
+    "required_approvals_met_at": "2025-07-18T04:26:05Z",
+    "time_to_required_approvals_minutes": 124.05,
+    "closed_at": "2025-07-18T04:32:43Z",
+    "merged_at": "2025-07-18T04:32:43Z",
+    "merged_by": {
+      "login": "Abdulrahman1890",
+      "id": 76666355,
+      "url": "https://github.com/Abdulrahman1890"
+    },
+    "week": "2025-W29",
+    "status": "merged",
+    "diff_stats": {
+      "additions": 136,
+      "deletions": 155,
+      "changed_files": 13
+    }
+  },
+  {
+    "pr_number": 172,
+    "url": "https://github.com/LondonSquad/Novix/pull/172",
+    "title": "Fix/top movies picks view model",
+    "opened_at": "2025-07-18T03:04:53Z",
+    "head_ref": "fix/top-movies-picks-view-model",
+    "base_ref": "develop",
+    "creator": {
+      "login": "Abdulrahman1890",
+      "id": 76666355,
+      "url": "https://github.com/Abdulrahman1890"
+    },
+    "approvals": [
+      {
+        "reviewer": {
+          "id": 102248144,
+          "login": "BassantM",
+          "url": "https://github.com/BassantM"
+        },
+        "submitted_at": "2025-07-18T04:01:55Z"
+      },
+      {
+        "reviewer": {
+          "id": 81706918,
+          "login": "karimdeabes",
+          "url": "https://github.com/karimdeabes"
+        },
+        "submitted_at": "2025-07-18T04:05:24Z"
+      }
+    ],
+    "first_approved_at": "2025-07-18T04:01:55Z",
+    "time_to_first_approval_minutes": 57.03333333333333,
+    "required_approvals_met_at": "2025-07-18T04:05:24Z",
+    "time_to_required_approvals_minutes": 60.516666666666666,
+    "closed_at": "2025-07-18T04:12:32Z",
+    "merged_at": "2025-07-18T04:12:32Z",
+    "merged_by": {
+      "login": "BassantM",
+      "id": 102248144,
+      "url": "https://github.com/BassantM"
+    },
+    "week": "2025-W29",
+    "status": "merged",
+    "diff_stats": {
+      "additions": 36,
+      "deletions": 27,
+      "changed_files": 6
+    }
+  },
+  {
+    "pr_number": 175,
+    "url": "https://github.com/LondonSquad/Novix/pull/175",
+    "title": "feat: Display eye icon for inappropriate images",
+    "opened_at": "2025-07-18T09:33:59Z",
+    "head_ref": "hotfix/add-unsuitable-eye-on-image",
+    "base_ref": "develop",
+    "creator": {
+      "login": "ahmeddsamii",
+      "id": 154278495,
+      "url": "https://github.com/ahmeddsamii"
+    },
+    "approvals": [
+      {
+        "reviewer": {
+          "id": 43588217,
+          "login": "yusufnasserdev",
+          "url": "https://github.com/yusufnasserdev"
+        },
+        "submitted_at": "2025-07-18T10:39:17Z"
+      },
+      {
+        "reviewer": {
+          "id": 117874933,
+          "login": "AsmaaKhaledGomaa",
+          "url": "https://github.com/AsmaaKhaledGomaa"
+        },
+        "submitted_at": "2025-07-18T10:39:26Z"
+      },
+      {
+        "reviewer": {
+          "id": 106277855,
+          "login": "Mostafa-alsaygh",
+          "url": "https://github.com/Mostafa-alsaygh"
+        },
+        "submitted_at": "2025-07-18T10:47:09Z"
+      }
+    ],
+    "first_approved_at": "2025-07-18T10:39:17Z",
+    "time_to_first_approval_minutes": 65.3,
+    "required_approvals_met_at": "2025-07-18T10:39:26Z",
+    "time_to_required_approvals_minutes": 65.45,
+    "closed_at": "2025-07-18T10:39:49Z",
+    "merged_at": "2025-07-18T10:39:49Z",
+    "merged_by": {
+      "login": "yusufnasserdev",
+      "id": 43588217,
+      "url": "https://github.com/yusufnasserdev"
+    },
+    "week": "2025-W29",
+    "status": "merged",
+    "diff_stats": {
+      "additions": 86,
+      "deletions": 19,
+      "changed_files": 15
+    }
+  },
+  {
+    "pr_number": 176,
+    "url": "https://github.com/LondonSquad/Novix/pull/176",
+    "title": "Feature Actor details gallery screen",
+    "opened_at": "2025-07-18T10:09:06Z",
+    "head_ref": "feature/actor-details-gallery-screen",
+    "base_ref": "feature/actor-details-screen",
+    "creator": {
+      "login": "AsmaaKhaledGomaa",
+      "id": 117874933,
+      "url": "https://github.com/AsmaaKhaledGomaa"
+    },
+    "approvals": [
+      {
+        "reviewer": {
+          "id": 106277855,
+          "login": "Mostafa-alsaygh",
+          "url": "https://github.com/Mostafa-alsaygh"
+        },
+        "submitted_at": "2025-07-18T10:48:19Z"
+      },
+      {
+        "reviewer": {
+          "id": 76666355,
+          "login": "Abdulrahman1890",
+          "url": "https://github.com/Abdulrahman1890"
+        },
+        "submitted_at": "2025-07-18T10:57:54Z"
+      }
+    ],
+    "first_approved_at": "2025-07-18T10:48:19Z",
+    "time_to_first_approval_minutes": 39.21666666666667,
+    "required_approvals_met_at": "2025-07-18T10:57:54Z",
+    "time_to_required_approvals_minutes": 48.8,
+    "closed_at": null,
+    "merged_at": null,
+    "merged_by": null,
+    "week": "2025-W29",
+    "status": "approved",
+    "diff_stats": {
+      "additions": 160,
+      "deletions": 2,
+      "changed_files": 9
+    }
+  },
+  {
+    "pr_number": 182,
+    "url": "https://github.com/LondonSquad/Novix/pull/182",
+    "title": "Refactor: Pass language parameter in API calls for details screens",
+    "opened_at": "2025-07-18T13:23:35Z",
+    "head_ref": "feature/add-localization",
+    "base_ref": "develop",
+    "creator": {
+      "login": "ahmeddsamii",
+      "id": 154278495,
+      "url": "https://github.com/ahmeddsamii"
+    },
+    "approvals": [],
+    "first_approved_at": null,
+    "time_to_first_approval_minutes": null,
+    "required_approvals_met_at": null,
+    "time_to_required_approvals_minutes": null,
+    "closed_at": null,
+    "merged_at": null,
+    "merged_by": null,
+    "week": "2025-W29",
+    "status": "pending",
+    "diff_stats": {
+      "additions": 57,
+      "deletions": 14,
+      "changed_files": 4
     }
   }
 ]
