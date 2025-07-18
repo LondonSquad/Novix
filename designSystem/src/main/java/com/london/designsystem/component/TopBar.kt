@@ -87,7 +87,6 @@ fun ButtonTopBar(icon: Int, onClick: () -> Unit) {
             painter = painterResource(icon),
             contentDescription = "Back",
             tint = NovixTheme.colors.title,
-            modifier = Modifier .clickable(onClick = onClick)
         )
     }
 }

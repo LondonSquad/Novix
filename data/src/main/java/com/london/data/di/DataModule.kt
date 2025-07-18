@@ -5,4 +5,4 @@ import org.koin.core.annotation.Module
 
 @Module(includes =[DataBaseModule::class, NetworkModule::class] )
 @ComponentScan("com.london.data.**")
-class DataModule{}
+class DataModule
