@@ -2,6 +2,7 @@ package com.london.designsystem.component
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -38,7 +39,7 @@ fun TopBar(
         horizontalArrangement = Arrangement.SpaceBetween
     ) {
 
-        onBackClick?.let { ButtonTopBar(icon = R.drawable.arrow_left, onClick = {}) }
+        onBackClick?.let { ButtonTopBar(icon = R.drawable.arrow_left, onClick = onBackClick) }
 
         title?.let {
             Text(
@@ -85,7 +86,8 @@ fun ButtonTopBar(icon: Int, onClick: () -> Unit) {
         Icon(
             painter = painterResource(icon),
             contentDescription = "Back",
-            tint = NovixTheme.colors.title
+            tint = NovixTheme.colors.title,
+            modifier = Modifier .clickable(onClick = onClick)
         )
     }
 }

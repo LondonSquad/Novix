@@ -57,6 +57,7 @@ class ActorDetailsViewModel(
                     actorPlaceOfBirth = actorDetails.placeOfBirth,
                     actorBiography = actorDetails.biography,
                     knownForDepartment = actorDetails.knownForDepartment,
+                    actorId = actorDetails.id
                 )
             }
         }

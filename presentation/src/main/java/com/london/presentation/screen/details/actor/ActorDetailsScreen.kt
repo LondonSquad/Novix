@@ -114,11 +114,10 @@ fun ActorScreenContent(
                     if (listOf(
                             actorName,
                             actorBirthday,
-                            actorDeathDay,
                             actorPlaceOfBirth,
                             knownForDepartment
                         )
-                            .all { !it.isNullOrBlank() }
+                            .all { it.isNotBlank() }
                     ) {
                         ActorInfoSection(
                             job = knownForDepartment,
@@ -149,7 +148,8 @@ fun ActorScreenContent(
                         hasIcon = true,
                         modifier = Modifier
                             .padding(top = 16.dp, bottom = 12.dp)
-                            .padding(horizontal = 16.dp)
+                            .padding(horizontal = 16.dp),
+                        onClick = { onNavigateToGallery(uiState.actorId) }
                     )
                     ActorGallery(images = uiState.actorImageDetails)
                 }
@@ -165,7 +165,7 @@ fun ActorScreenContent(
                         modifier = Modifier
                             .padding(top = 16.dp, bottom = 12.dp)
                             .padding(horizontal = 16.dp),
-                        onNavigate = onNavigateToMoviePicks
+                        onClick = { onNavigateToMoviePicks(uiState.actorId) }
                     )
                     TopMoviesPicksList(movie = movieCast)
                 }
@@ -179,7 +179,8 @@ fun ActorScreenContent(
                         hasIcon = true,
                         modifier = Modifier
                             .padding(top = 16.dp, bottom = 12.dp)
-                            .padding(horizontal = 16.dp)
+                            .padding(horizontal = 16.dp),
+                        onClick = {onNavigateToTvShowPicks(uiState.actorId)}
                     )
                     TopTvShowsPicksList(tvShow = tvShows)
                 }

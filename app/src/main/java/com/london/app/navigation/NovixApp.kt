@@ -142,9 +142,7 @@ fun NovixApp() {
                     onNavigateToMoviePicks = { actorId->
                         navController.navigate(ActorTopMoviesPicksDetails(actorId))
                     },
-                    onBackClick = {
-                        navController.navigateUp()
-                    }
+                    onBackClick = { navController.navigateUp() }
                 )
             }
         }

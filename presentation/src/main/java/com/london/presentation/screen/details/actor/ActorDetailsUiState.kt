@@ -10,6 +10,7 @@ data class ActorDetailsUiState(
     val actorImageDetails: List<ImageDetails>? = null,
     val actorMovieDetails: ActorMovieDetails? = null,
     val actorTvShowDetails: ActorTvShowDetails? = null,
+    val actorId: Int = 0,
     val actorName: String ="",
     val actorBirthday: String = "",
     val actorDeathDay: String? = null,
