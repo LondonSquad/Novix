@@ -47,7 +47,7 @@ android {
 }
 
 dependencies {
-    implementation(project(":domain"))
+    implementation(projects.domain)
     implementation(libs.bundles.base.ui)
     implementation(libs.bundles.coroutines)
     implementation(libs.bundles.datastore)

@@ -27,3 +27,46 @@ fun Any?.toLocalizedNumbers(): String {
     }
 }
 
+fun convertDate(input: String): String {
+    val parts = input.split("-")
+    val day = parts[2]
+    val month = parts[1]
+    val year = parts[0]
+
+    val currentLang = Locale.getDefault().language
+
+    val monthName = when (currentLang) {
+        "ar" -> when (month) {
+            "01" -> "يناير"
+            "02" -> "فبراير"
+            "03" -> "مارس"
+            "04" -> "أبريل"
+            "05" -> "مايو"
+            "06" -> "يونيو"
+            "07" -> "يوليو"
+            "08" -> "أغسطس"
+            "09" -> "سبتمبر"
+            "10" -> "أكتوبر"
+            "11" -> "نوفمبر"
+            "12" -> "ديسمبر"
+            else -> "غير معروف"
+        }
+        else -> when (month) {
+            "01" -> "Jan"
+            "02" -> "Feb"
+            "03" -> "Mar"
+            "04" -> "Apr"
+            "05" -> "May"
+            "06" -> "Jun"
+            "07" -> "Jul"
+            "08" -> "Aug"
+            "09" -> "Sep"
+            "10" -> "Oct"
+            "11" -> "Nov"
+            "12" -> "Dec"
+            else -> "Invalid"
+        }
+    }
+
+    return "$day $monthName $year".toLocalizedNumbers()
+}

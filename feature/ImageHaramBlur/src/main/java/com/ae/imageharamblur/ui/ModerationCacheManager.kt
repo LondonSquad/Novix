@@ -9,9 +9,8 @@ object ModerationCacheManager {
     private val cache = LruCache<String, ImageModerationState>(CACHE_SIZE)
     private val _cacheUpdates = MutableStateFlow(0)
 
-    fun get(key: String): ImageModerationState? {
-        return cache[key]
-    }
+    fun get(key: String): ImageModerationState? = cache[key]
+
 
     fun put(key: String, state: ImageModerationState) {
         cache.put(key, state)

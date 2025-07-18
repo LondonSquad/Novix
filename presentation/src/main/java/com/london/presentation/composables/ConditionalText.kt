@@ -24,7 +24,7 @@ fun ConditionalText(
     expandedState: Boolean,
     onExpandedChange: () -> Unit
 ) {
-    val minimumLineLength = 3
+    val minimumLineLength = 4
     var showReadMoreButtonState by remember { mutableStateOf(false) }
     var truncatedText by remember { mutableStateOf("") }
 
@@ -41,11 +41,12 @@ fun ConditionalText(
                 !showReadMoreButtonState -> append(text)
                 !expandedState -> {
                     append(truncatedText)
+                    append("  ")
                     withStyle(actionStyle) { append(stringResource(R.string.read_more)) }
                 }
-
                 else -> {
                     append(text)
+                    append("  ")
                     withStyle(actionStyle) { append(stringResource(R.string.read_less)) }
                 }
             }

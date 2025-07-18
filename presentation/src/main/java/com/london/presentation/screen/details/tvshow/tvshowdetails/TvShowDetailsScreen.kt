@@ -49,7 +49,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.layout.layout
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.unit.dp
@@ -61,13 +60,16 @@ import com.london.designsystem.component.CircularLoading
 import com.london.designsystem.component.NovixCarousalRow
 import com.london.designsystem.component.RatingBar
 import com.london.designsystem.component.SaveIcon
+import com.london.designsystem.component.UnSuitableEye
 import com.london.designsystem.component.button.ErrorImage
-import com.london.designsystem.component.button.PrimaryButton
 import com.london.designsystem.theme.NovixTheme
 import com.london.domain.entity.tvshowdetails.ImageItemEntity
 import com.london.domain.entity.tvshowdetails.TvShowCastMemberEntity
 import com.london.presentation.composables.ConditionalText
 import com.london.presentation.screen.reviews.MediaType
+import com.london.presentation.utils.offsetLayout
+import com.london.presentation.composables.FooterSection
+import com.london.presentation.utils.Listen
 import com.london.presentation.utils.toLocalizedNumbers
 import kotlinx.coroutines.delay
 import org.koin.androidx.compose.koinViewModel
@@ -77,14 +79,31 @@ import org.koin.androidx.compose.koinViewModel
 fun TvShowsDetailsScreen(
     viewModel: TvShowDetailsViewModel = koinViewModel(),
     onBackClick: () -> Unit = {},
+    onNavigateToEpisodeDetails: (tvShowId: Int, episodeNumber: Int, seasonNumber: Int) -> Unit,
     onNavigateToReviews: (tvShowId: Int, mediaType: Int) -> Unit
 ) {
     val uiState by viewModel.uiState.collectAsState()
+    val effect by viewModel.effect.collectAsState(null)
+
     TvShowsDetailScreenContent(
         uiState = uiState,
         onBackClick = onBackClick,
+        interactionListener = viewModel,
         onNavigateToReviews = onNavigateToReviews
     )
+
+    effect?.Listen { currentEffect ->
+        when (currentEffect) {
+            is TvShowDetailsEffect.OnNavigateToEpisodeDetails -> {
+                onNavigateToEpisodeDetails(
+                    currentEffect.tvShowId,
+                    currentEffect.episodeNumber,
+                    currentEffect.seasonNumber
+                )
+            }
+        }
+    }
+
 }
 
 @Composable
@@ -92,6 +111,7 @@ fun TvShowsDetailScreenContent(
     modifier: Modifier = Modifier,
     uiState: TvShowDetailsUiState,
     onBackClick: () -> Unit,
+    interactionListener: TvShowDetailsInteractionListener,
     onNavigateToReviews: (tvShowId: Int, mediaType: Int) -> Unit
 ) {
     val lazyListState = rememberLazyListState()
@@ -138,16 +158,7 @@ fun TvShowsDetailScreenContent(
                     uiState = uiState,
                     modifier = Modifier
                         .fillMaxWidth()
-                        .layout { measurable, constraints ->
-                            val placeable = measurable.measure(constraints)
-
-                            val yOffsetPx = with(this) { 44.dp.roundToPx() }
-                            val adjustedHeight = (placeable.height - yOffsetPx).coerceAtLeast(0)
-
-                            layout(placeable.width, adjustedHeight) {
-                                placeable.placeRelative(0, -yOffsetPx)
-                            }
-                        }
+                        .offsetLayout()
                         .padding(start = 16.dp, end = 16.dp)
                         .heightIn(min = 158.dp)
                         .border(
@@ -222,40 +233,14 @@ fun TvShowsDetailScreenContent(
         )
 
         FooterSection(
-            modifier = Modifier.align(Alignment.BottomCenter)
-        )
-    }
-}
-
-@Composable
-fun FooterSection(modifier: Modifier = Modifier) {
-    Row(
-        modifier = modifier
-            .fillMaxWidth()
-            .padding(horizontal = 16.dp, vertical = 24.dp),
-        horizontalArrangement = Arrangement.spacedBy(8.dp),
-        verticalAlignment = Alignment.CenterVertically
-    ) {
-        PrimaryButton(
-            text = "",
-            hasLabel = false,
-            icon = com.london.presentation.R.drawable.movie_button_star,
-            hasIcon = true,
-            isLoading = false,
-            isDisabled = false,
-            onClick = {},
-            modifier = Modifier
-        )
-
-        PrimaryButton(
-            text = stringResource(com.london.presentation.R.string.play_trailer),
-            hasLabel = true,
-            hasIcon = false,
-            isLoading = false,
-            isDisabled = false,
-            onClick = {},
-            icon = null,
-            modifier = Modifier.weight(1f)
+            haveTrailer = uiState.haveTrailer,
+            modifier = Modifier.align(Alignment.BottomCenter),
+            onPlayClick = {
+                // TODO play trailer onclick handler
+            },
+            onStarClick = {
+                // TODO save favorite onclick handler
+            }
         )
     }
 }
@@ -303,7 +288,9 @@ fun CustomBackDropImagePager(
                 model = images[pageIndex].fileUrl,
                 contentDescription = "TV Show Image ${pageIndex + 1}",
                 errorContent = { ErrorImage() },
-                loadingContent = { CircularLoading(modifier = Modifier) })
+                loadingContent = { CircularLoading(modifier = Modifier) },
+                moderatedContent = { UnSuitableEye() }
+            )
         }
 
         val dotsStates = List(images.size) { index ->
@@ -347,6 +334,7 @@ fun TvShowScreenTopBar(
             tint = NovixTheme.colors.title,
             modifier = Modifier
                 .size(40.dp)
+                .border(width = 1.dp, color = NovixTheme.colors.stroke)
                 .clip(RoundedCornerShape(12.dp))
                 .clickable(onClick = onBackClick)
                 .background(
@@ -613,7 +601,8 @@ fun SeasonDetailsSection(
         )
 
         EpisodeRow(
-            uiState = uiState
+            uiState = uiState,
+            modifier = Modifier.fillMaxWidth()
         )
     }
 }
@@ -663,7 +652,8 @@ fun SeasonEpisodesDetails(
 @Composable
 fun EpisodeRow(
     modifier: Modifier = Modifier,
-    uiState: TvShowDetailsUiState
+    uiState: TvShowDetailsUiState,
+    viewModel: TvShowDetailsViewModel = koinViewModel()
 ) {
     Text(
         text = "${
@@ -676,7 +666,14 @@ fun EpisodeRow(
 
     uiState.tvShowEpisodes.forEach { episode ->
         Row(
-            modifier = modifier,
+            modifier = modifier
+                .clickable {
+                    viewModel.onEpisodeClick(
+                        episode.showId,
+                        episode.episodeNumber,
+                        episode.seasonNumber,
+                    )
+                },
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.spacedBy(12.dp)
         ) {
@@ -690,8 +687,8 @@ fun EpisodeRow(
                     .weight(0.35f),
                 loadingContent = { CircularLoading() },
                 errorContent = { ErrorImage() },
-
-                )
+                moderatedContent = { UnSuitableEye() }
+            )
 
             Column(
                 verticalArrangement = Arrangement.spacedBy(2.dp),

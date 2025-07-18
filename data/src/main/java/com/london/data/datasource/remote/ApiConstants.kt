@@ -12,7 +12,11 @@ object ApiConstants {
     fun getImagesTvShowPath(tvShowId: Int) = "3/tv/$tvShowId/images"
     fun getTvShowEpisodeBySeasonPath(tvShowId: Int, seasonNumber: Int) =
         "3/tv/$tvShowId/season/$seasonNumber"
-
+    fun getTvShowEpisodeByEpisodePath(
+        tvShowId: Int,
+        seasonNumber: Int,
+        episodeNumber: Int
+    ) = "3/tv/$tvShowId/season/$seasonNumber/episode/$episodeNumber"
     fun getActorDetailsPath(actorId: Int) = "3/person/$actorId"
     fun getActorMoviesPath(actorId: Int) = "3/person/$actorId/movie_credits"
     fun getActorTvShowsPath(actorId: Int) = "3/person/$actorId/tv_credits"

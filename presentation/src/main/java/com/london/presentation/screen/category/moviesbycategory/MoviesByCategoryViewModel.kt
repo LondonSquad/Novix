@@ -17,15 +17,14 @@ import org.koin.core.annotation.Provided
 
 @KoinViewModel
 class MoviesByCategoryViewModel(
-    @Provided
-    private val getMoviesByCategoryUseCase: GetMoviesByCategoryUseCase,
+    @Provided private val getMoviesByCategoryUseCase: GetMoviesByCategoryUseCase,
     savedStateHandle: SavedStateHandle
 ) : ViewModel(), MoviesByCategoryInteractions {
     private val _uiState = MutableStateFlow(MoviesByCategoryUiState())
     val uiState: StateFlow<MoviesByCategoryUiState> = _uiState.asStateFlow()
+    val args by lazy { MoviesByCategoryArgs(savedStateHandle) }
 
     init {
-        val args = MoviesByCategoryArgs(savedStateHandle)
         viewModelScope.launch {
             initializeMovies(args.categoryId)
         }
@@ -33,23 +32,34 @@ class MoviesByCategoryViewModel(
 
 
     private fun initializeMovies(categoryId: Int) {
-        _uiState.update {
-            it.copy(categoryId = categoryId)
+        runCatching {
+            _uiState.update {
+                it.copy(categoryId = categoryId)
+            }
+            val moviesFlow = createPagingSourceFlow<Movie>(query = "") { currentQuery, pageNumber ->
+                val movies = getMoviesByCategoryUseCase(
+                    categoryId = categoryId,
+                    language = "en-US",
+                    pageNumber = pageNumber
+                )
+                movies.copy(items = movies.items)
+            }
+            _uiState.update {
+                it.copy(
+                    movies = moviesFlow,
+                )
+            }
+        }.onFailure { e ->
+            _uiState.update {
+                it.copy(
+                    error = e.message,
+                )
+            }
         }
-        val moviesFlow = createPagingSourceFlow<Movie>(query = "") { currentQuery, pageNumber ->
-            val movies = getMoviesByCategoryUseCase(
-                categoryId = categoryId, language = "en-US", pageNumber = pageNumber
-            )
-            movies.copy(items = movies.items)
-        }
-        _uiState.update {
-            it.copy(
-                movies = moviesFlow,
-            )
-        }
+
     }
 
     override fun onSavedClick(movieId: Int) {
-        //save movie
+        //toDo() save movie
     }
 }
