@@ -59,7 +59,7 @@ fun SaveIcon(
         Icon(
             painter = painterResource(R.drawable.icon_remove),
             contentDescription = "Not Save",
-            tint = NovixTheme.colors.title,
+            tint = NovixTheme.colors.onPrimary,
             modifier = Modifier
                 .align(Alignment.Center)
                 .scale(1f - animatedProgress)
@@ -69,7 +69,7 @@ fun SaveIcon(
         Icon(
             painter = painterResource(R.drawable.icon_save),
             contentDescription = "Save",
-            tint = NovixTheme.colors.title,
+            tint = NovixTheme.colors.onPrimary,
             modifier = Modifier
                 .scale(animatedProgress)
                 .alpha(animatedProgress)
