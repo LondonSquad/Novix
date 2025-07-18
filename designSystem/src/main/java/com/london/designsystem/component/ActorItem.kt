@@ -1,13 +1,15 @@
 package com.london.designsystem.component
 
 import androidx.compose.foundation.border
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.defaultMinSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -38,7 +40,7 @@ fun ActorItem(
     modifier: Modifier = Modifier
 ) {
     Row(
-        modifier = modifier,
+        modifier = modifier.width(296.dp),
         verticalAlignment = Alignment.Bottom,
     ) {
         ActorImage(imageRes = imageRes)
@@ -132,13 +134,13 @@ private fun TextSection(
     Column(
         modifier = modifier
             .fillMaxWidth()
-            .defaultMinSize(minHeight = 55.dp)
+            .height( 55.dp)
             .customBorder(color = color, isRtl = isRtl)
             .padding(
                 horizontal = 12.dp,
-                vertical = 8.dp
             ),
         horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.Center
     ) {
         Text(
             text = actorName,
