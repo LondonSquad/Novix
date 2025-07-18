@@ -40,6 +40,7 @@ import com.london.presentation.screen.details.movieDetalis.MovieDetailsScreen
 import com.london.presentation.screen.details.tvshow.tvshowdetails.TvShowsDetailsScreen
 import com.london.presentation.screen.home.HomeScreen
 import com.london.presentation.screen.search.SearchScreen
+import com.london.presentation.screen.details.actordetails.gallery.ActorGalleryScreen
 
 @Composable
 fun NovixApp() {
@@ -179,9 +180,19 @@ fun NovixApp() {
                         }, onNavigateToTvShowPicks = { actorId ->
                             navController.navigate(TopTvShowsPicksDetails(actorId))
                         },
+                        onNavigateToGallery = { actorId ->
+                            navController.navigate(Screen.ActorGallery(actorId))
+                        },
                         onBackClick = { navController.navigateUp() }
                     )
                 }
+            }
+            composable<Screen.ActorGallery> { backStackEntry ->
+                val actorId = backStackEntry.arguments?.getInt("actorId") ?: 0
+                ActorGalleryScreen(
+                    actorId = actorId,
+                    onBackClick = { navController.navigate(Screen.ActorDetails(actorId)) }
+                )
             }
         }
     }
