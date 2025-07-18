@@ -13,7 +13,7 @@ fun mapToUiState(
         movieId = movieDetails.movieId,
         movieImage = movieDetails.movieImage,
         movieName = movieDetails.movieName,
-        movieGenres = extractGenreNames(movieDetails.genres),
+        movieGenres = movieDetails.genres,
         movieRating = movieDetails.movieRating,
         movieDuration = movieDetails.movieDuration,
         releaseDate = movieDetails.releaseDate,
