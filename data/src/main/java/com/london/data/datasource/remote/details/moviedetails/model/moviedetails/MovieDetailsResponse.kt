@@ -6,16 +6,16 @@ import kotlinx.serialization.Serializable
 data class MovieDetailsResponse(
     val adult: Boolean?,
     @SerialName("backdrop_path")
-    val backdropPath: String,
+    val backdropPath: String?,
     @SerialName("belongs_to_collection")
-    val belongsToCollection: CollectionDetails,
+    val belongsToCollection: CollectionDetails?,
     val budget: Int?,
     @SerialName("genres")
     val genreRemote: List<GenreRemote>?,
     val homepage: String?,
     val id: Int?,
     @SerialName("imdb_id")
-    val imdbId: String,
+    val imdbId: String?,
     @SerialName("origin_country")
     val originCountry: List<String>?,
     @SerialName("original_language")
@@ -25,13 +25,13 @@ data class MovieDetailsResponse(
     val overview: String?,
     val popularity: Double?,
     @SerialName("poster_path")
-    val posterPath: String,
+    val posterPath: String?,
     @SerialName("production_companies")
     val productionCompanies: List<ProductionCompany>?,
     @SerialName("production_countries")
     val productionCountries: List<ProductionCountry>?,
     @SerialName("release_date")
-    val releaseDate: String,
+    val releaseDate: String?,
     val revenue: Long?,
     val runtime: Int?,
     @SerialName("spoken_languages")
