@@ -34,6 +34,7 @@ import com.london.presentation.screen.bookmark.BookmarksScreen
 import com.london.presentation.screen.category.CategoriesScreen
 import com.london.presentation.screen.category.moviesbycategory.MoviesByCategoryScreen
 import com.london.presentation.screen.details.actor.ActorDetailsScreen
+import com.london.presentation.screen.details.actordetails.topmoviespicks.TopMoviesPicksScreen
 import com.london.presentation.screen.details.actordetails.toptvshowspicks.TopTvShowsPicksScreen
 import com.london.presentation.screen.details.movieDetalis.MovieDetailsScreen
 import com.london.presentation.screen.details.tvshow.tvshowdetails.TvShowsDetailsScreen
@@ -127,6 +128,21 @@ fun NovixApp() {
                     onBackClick = {
                         navController.navigateUp()
                     },
+                    onTvShowClick = { tvShowId ->
+                        navController.navigate(TvShowDetails(tvShowId))
+                    }
+                )
+            }
+            composable<ActorTopMoviesPicksDetails> { backStackEntry ->
+                val topMoviePicksDetails = backStackEntry.arguments?.let {
+                    ActorTopMoviesPicksDetails(
+                        actorId = it.getInt("actorId"),
+                    )
+                }
+                TopMoviesPicksScreen(
+                    onBackClick = {
+                        navController.navigateUp()
+                    },
                     onMovieClick = { movieId ->
                         navController.navigate(MovieDetails(movieId))
                     }
@@ -138,7 +154,7 @@ fun NovixApp() {
                     MovieDetailsScreen(
                         movieId = it.getInt("movieId"),
                         onBackClick = { navController.navigateUp() },
-                        )
+                    )
                 }
             }
             composable<MoviesByCategory> {
@@ -157,13 +173,15 @@ fun NovixApp() {
                     ActorDetails(
                         actorId = it.getInt("actorId"),
                     )
+                    ActorDetailsScreen(
+                        onNavigateToMoviePicks = { actorId ->
+                            navController.navigate(ActorTopMoviesPicksDetails(actorId))
+                        }, onNavigateToTvShowPicks = { actorId ->
+                            navController.navigate(TopTvShowsPicksDetails(actorId))
+                        },
+                        onBackClick = { navController.navigateUp() }
+                    )
                 }
-                ActorDetailsScreen(
-                    onNavigateToMoviePicks = { actorId->
-                        navController.navigate(ActorTopMoviesPicksDetails(actorId))
-                    },
-                    onBackClick = { navController.navigateUp() }
-                )
             }
         }
     }

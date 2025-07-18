@@ -9,13 +9,15 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.asPaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.statusBarsPadding
+import androidx.compose.foundation.layout.statusBars
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.grid.GridCells
@@ -43,6 +45,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.zIndex
 import com.ae.imageharamblur.ui.ImageViewFilter
 import com.london.designsystem.component.CircularLoading
 import com.london.designsystem.component.HomeCard
@@ -60,18 +63,19 @@ import org.koin.androidx.compose.koinViewModel
 
 @Composable
 fun ActorDetailsScreen(
-    modifier: Modifier = Modifier,
-    onBackClick: () -> Unit = {},
-    onNavigateToGallery: (Int) -> Unit = { },
-    onNavigateToMoviePicks: (Int) -> Unit = { },
-    onNavigateToTvShowPicks: (Int) -> Unit = { },
+    onBackClick: () -> Unit,
+    onNavigateToMoviePicks: (Int) -> Unit,
+    onNavigateToGallery: (Int) -> Unit ={},
+    onNavigateToTvShowPicks: (Int) -> Unit,
     viewModel: ActorDetailsViewModel = koinViewModel(),
 ) {
     val uiState by viewModel.uiState.collectAsState()
     ActorScreenContent(
         uiState = uiState,
         onBackClick = onBackClick,
-        onNavigateToMoviePicks = onNavigateToMoviePicks
+        onNavigateToMoviePicks = onNavigateToMoviePicks,
+        onNavigateToTvShowPicks =onNavigateToTvShowPicks,
+        onNavigateToGallery = onNavigateToGallery
     )
 }
 
@@ -79,9 +83,9 @@ fun ActorDetailsScreen(
 fun ActorScreenContent(
     modifier: Modifier = Modifier,
     uiState: ActorDetailsUiState,
-    onNavigateToGallery: (Int) -> Unit = { },
-    onNavigateToMoviePicks: (Int) -> Unit = { },
-    onNavigateToTvShowPicks: (Int) -> Unit = { },
+    onNavigateToGallery: (Int) -> Unit,
+    onNavigateToMoviePicks: (Int) -> Unit,
+    onNavigateToTvShowPicks: (Int) -> Unit,
     onBackClick: () -> Unit
 ) {
     Box(
@@ -95,12 +99,6 @@ fun ActorScreenContent(
         ) {
             item {
                 Box {
-                    TopBar(
-                        onBackClick = onBackClick,
-                        modifier = Modifier
-                            .statusBarsPadding()
-                            .padding(start = 16.dp)
-                    )
                     uiState.actorImageDetails?.let {
                         CustomBackDropImage(
                             images = it,
@@ -187,6 +185,16 @@ fun ActorScreenContent(
             }
 
         }
+
+        TopBar(
+            onBackClick = onBackClick,
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(
+                    start = 16.dp,
+                    top = WindowInsets.statusBars.asPaddingValues().calculateTopPadding()
+                ).zIndex(1f))
+
     }
 }
 
