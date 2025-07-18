@@ -3382,5 +3382,33 @@
       "deletions": 2,
       "changed_files": 9
     }
+  },
+  {
+    "pr_number": 182,
+    "url": "https://github.com/LondonSquad/Novix/pull/182",
+    "title": "Refactor: Pass language parameter in API calls for details screens",
+    "opened_at": "2025-07-18T13:23:35Z",
+    "head_ref": "feature/add-localization",
+    "base_ref": "develop",
+    "creator": {
+      "login": "ahmeddsamii",
+      "id": 154278495,
+      "url": "https://github.com/ahmeddsamii"
+    },
+    "approvals": [],
+    "first_approved_at": null,
+    "time_to_first_approval_minutes": null,
+    "required_approvals_met_at": null,
+    "time_to_required_approvals_minutes": null,
+    "closed_at": null,
+    "merged_at": null,
+    "merged_by": null,
+    "week": "2025-W29",
+    "status": "pending",
+    "diff_stats": {
+      "additions": 57,
+      "deletions": 14,
+      "changed_files": 4
+    }
   }
 ]
