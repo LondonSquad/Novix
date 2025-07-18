@@ -41,7 +41,7 @@ private fun mapActorsToUiState(actors: List<Actor>): List<ActorUIState> {
 private fun mapSimilarMoviesToUiState(similarMovies: List<SimilarMovie>): List<SimilarMovieUIState> {
     return similarMovies.map { movie ->
         SimilarMovieUIState(
-            image = movie.image, isSaved = movie.isSaved
+            image = movie.image, isSaved = movie.isSaved, id = movie.id
         )
     }
 }

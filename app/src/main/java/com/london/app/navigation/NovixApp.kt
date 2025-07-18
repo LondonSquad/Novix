@@ -199,7 +199,9 @@ fun NovixApp() {
                     onBackClick = { navController.navigateUp() },
                     onGenreClick = {
                         navController.navigate(MoviesByCategory(it))
-                    }
+                    },
+                    onNavigateToMovie = { movieId->
+                        navController.navigate(MovieDetails(movieId))},
                 )
             }
 

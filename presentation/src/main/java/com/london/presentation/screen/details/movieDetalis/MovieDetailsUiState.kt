@@ -31,4 +31,5 @@ data class ActorUIState(
 data class SimilarMovieUIState(
     val image: String,
     val isSaved: Boolean,
+    val id: Int
 )
