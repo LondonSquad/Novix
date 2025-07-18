@@ -24,7 +24,7 @@ fun SectionHeader(
     hasIcon: Boolean,
     modifier: Modifier = Modifier,
     getAllText: String = stringResource(R.string.all),
-    onClick: () -> Unit = {}
+    onClick: () -> Unit = {},
 ) {
     Row(
         horizontalArrangement = Arrangement.SpaceBetween,

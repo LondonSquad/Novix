@@ -2,7 +2,9 @@ package com.london.designsystem.component
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -47,7 +49,7 @@ fun TopBar(
                 color = NovixTheme.colors.title,
                 modifier = Modifier
                     .weight(1f)
-                    .padding(horizontal = 4.dp)
+                    .padding(horizontal = 12.dp)
             )
         }
 
@@ -69,23 +71,22 @@ fun TopBar(
 
 @Composable
 fun ButtonTopBar(icon: Int, onClick: () -> Unit) {
-    IconButton(
-        onClick = onClick,
+    Box(
         modifier = Modifier
-            .padding(end = 8.dp)
             .size(40.dp)
+            .border(width = 1.dp, shape = RoundedCornerShape(12.dp), color = NovixTheme.colors.stroke)
             .clip(RoundedCornerShape(12.dp))
-            .background(NovixTheme.colors.iconBackgroundLow)
-            .border(
-                width = 1.dp,
-                color = NovixTheme.colors.stroke,
+            .background(
+                color = NovixTheme.colors.iconBackgroundLow,
                 shape = RoundedCornerShape(12.dp)
             )
+            .clickable(onClick = onClick),
+        contentAlignment = Alignment.Center
     ) {
         Icon(
             painter = painterResource(icon),
             contentDescription = "Back",
-            tint = NovixTheme.colors.title
+            tint = NovixTheme.colors.title,
         )
     }
 }
