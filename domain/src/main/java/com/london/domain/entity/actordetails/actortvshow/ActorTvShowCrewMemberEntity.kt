@@ -2,7 +2,7 @@ package com.london.domain.entity.actordetails.actortvshow
 
 data class ActorTvShowCrewMemberEntity(
     val adult: Boolean,
-    val backdropPath: String,
+    val backdropUrl: String,
     val creditId: String,
     val department: String,
     val episodeCount: Int,
@@ -17,7 +17,7 @@ data class ActorTvShowCrewMemberEntity(
     val originalName: String,
     val overview: String,
     val popularity: Double,
-    val posterPath: String,
+    val posterUrl: String,
     val voteAverage: Double,
     val voteCount: Int
 )

@@ -147,7 +147,8 @@ fun MovieDetailsContent(
                 },
                 backgroundColor = NovixTheme.colors.iconBackgroundLow,
                 modifier = Modifier
-                    .padding(horizontal = 16.dp, vertical = 8.dp)
+                    .padding(horizontal = 16.dp)
+                    .padding(top = 20.dp, bottom = 8.dp)
                     .size(40.dp)
                     .clip(RoundedCornerShape(16))
                     .align(Alignment.TopEnd),
@@ -158,9 +159,9 @@ fun MovieDetailsContent(
                 iconRes = R.drawable.arrow_left,
                 backgroundColor = NovixTheme.colors.iconBackgroundLow,
                 modifier = Modifier
-                    .padding(horizontal = 16.dp, vertical = 8.dp)
+                    .padding(horizontal = 16.dp)
+                    .padding(top = 20.dp, bottom = 8.dp)
                     .size(40.dp)
-                    .clip(RoundedCornerShape(16))
                     .align(Alignment.TopStart),
             )
         }
@@ -380,7 +381,7 @@ private fun RatingAndMetaRow(
             )
         }
 
-        if (!rate.isNullOrBlank() && !time.isNullOrBlank()) {
+        if (!time.isNullOrBlank() || !date.isNullOrBlank()) {
             Dot()
         }
 

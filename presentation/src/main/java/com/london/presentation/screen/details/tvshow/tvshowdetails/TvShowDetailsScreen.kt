@@ -1,5 +1,8 @@
 package com.london.presentation.screen.details.tvshow.tvshowdetails
 
+import androidx.compose.animation.core.FastOutSlowInEasing
+import androidx.compose.animation.core.animateFloatAsState
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -24,6 +27,7 @@ import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.shape.CircleShape
@@ -31,10 +35,13 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
@@ -45,7 +52,6 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.layout.layout
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
-import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.zIndex
 import com.ae.imageharamblur.ui.ImageViewFilter
@@ -56,11 +62,14 @@ import com.london.designsystem.component.NovixCarousalRow
 import com.london.designsystem.component.RatingBar
 import com.london.designsystem.component.SaveIcon
 import com.london.designsystem.component.button.ErrorImage
+import com.london.designsystem.component.button.PrimaryButton
 import com.london.designsystem.theme.NovixTheme
 import com.london.domain.entity.tvshowdetails.ImageItemEntity
 import com.london.domain.entity.tvshowdetails.TvShowCastMemberEntity
 import com.london.presentation.utils.Listen
+import com.london.presentation.composables.ConditionalText
 import com.london.presentation.utils.toLocalizedNumbers
+import kotlinx.coroutines.delay
 import org.koin.androidx.compose.koinViewModel
 
 
@@ -75,7 +84,8 @@ fun TvShowsDetailsScreen(
 
     TvShowsDetailScreenContent(
         uiState = uiState,
-        onBackClick = onBackClick
+        onBackClick = onBackClick,
+        interactionListener = viewModel
     )
 
     effect?.Listen { currentEffect ->
@@ -96,27 +106,35 @@ fun TvShowsDetailsScreen(
 fun TvShowsDetailScreenContent(
     modifier: Modifier = Modifier,
     uiState: TvShowDetailsUiState,
-    onBackClick: () -> Unit
+    onBackClick: () -> Unit,
+    interactionListener: TvShowDetailsInteractionListener
 ) {
+    val lazyListState = rememberLazyListState()
+
+    val shouldShowBackground by remember {
+        derivedStateOf {
+            lazyListState.firstVisibleItemScrollOffset > 40f ||
+                    lazyListState.firstVisibleItemIndex > 0
+        }
+    }
+
+    val backgroundAlpha by animateFloatAsState(
+        targetValue = if (shouldShowBackground) 1f else 0f,
+        animationSpec = tween(
+            durationMillis = 400,
+            easing = FastOutSlowInEasing
+        ),
+        label = "background_alpha"
+    )
+
     Box(
         modifier = modifier
             .fillMaxSize()
             .background(NovixTheme.colors.surface)
     ) {
 
-        TvShowScreenTopBar(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(
-                    start = 16.dp,
-                    end = 16.dp,
-                    top = WindowInsets.statusBars.asPaddingValues().calculateTopPadding() + 12.dp
-                )
-                .zIndex(1f),
-            onBackClick = onBackClick
-        )
-
         LazyColumn(
+            state = lazyListState,
             modifier = Modifier
                 .fillMaxSize(),
             contentPadding = PaddingValues(bottom = 80.dp)
@@ -131,7 +149,6 @@ fun TvShowsDetailScreenContent(
             }
 
             item {
-
                 HeaderDetailsCard(
                     uiState = uiState,
                     modifier = Modifier
@@ -154,19 +171,29 @@ fun TvShowsDetailScreenContent(
                             shape = RoundedCornerShape(16.dp)
                         )
                         .clip(RoundedCornerShape(16.dp))
-                        .background(NovixTheme.colors.surface)
+                        .background(NovixTheme.colors.surface),
+                    onReviewClick = { interactionListener.onClickViewReviewsListener(uiState.id) },
+                    tvShowId = uiState.id
                 )
             }
 
             item {
-                OverviewSection(
-                    uiState = uiState,
-                    modifier = Modifier.padding(
-                        top = 16.dp,
-                        start = 16.dp,
-                        end = 16.dp
-                    )
+                Text(
+                    text = stringResource(R.string.overview),
+                    style = NovixTheme.typography.title.medium,
+                    color = NovixTheme.colors.title,
+                    modifier = Modifier.padding(top = 16.dp, start = 16.dp, end = 16.dp)
                 )
+            }
+
+            item {
+                var isExpanded by remember { mutableStateOf(false) }
+                ConditionalText(
+                    text = uiState.overview,
+                    expandedState = isExpanded,
+                ) {
+                    isExpanded = !isExpanded
+                }
             }
 
             item {
@@ -174,16 +201,77 @@ fun TvShowsDetailScreenContent(
                     modifier = Modifier.padding(top = 16.dp),
                     castMembers = uiState.cast?.cast ?: emptyList()
                 )
-
             }
 
             item {
                 SeasonDetailsSection(
                     uiState = uiState,
-                    modifier = Modifier.padding(start = 16.dp)
+                    modifier = Modifier.padding(horizontal = 16.dp)
                 )
             }
         }
+
+        Box(
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(
+                    WindowInsets.statusBars.asPaddingValues().calculateTopPadding() +
+                            64.dp
+                )
+                .background(
+                    NovixTheme.colors.surface.copy(alpha = backgroundAlpha)
+                )
+                .zIndex(0.5f)
+        )
+
+        TvShowScreenTopBar(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(
+                    start = 16.dp,
+                    end = 16.dp,
+                    top = WindowInsets.statusBars.asPaddingValues().calculateTopPadding() + 12.dp
+                )
+                .zIndex(1f),
+            onBackClick = onBackClick,
+        )
+
+        FooterSection(
+            modifier = Modifier.align(Alignment.BottomCenter)
+        )
+    }
+}
+
+@Composable
+fun FooterSection(modifier: Modifier = Modifier) {
+    Row(
+        modifier = modifier
+            .fillMaxWidth()
+            .padding(horizontal = 16.dp, vertical = 24.dp),
+        horizontalArrangement = Arrangement.spacedBy(8.dp),
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        PrimaryButton(
+            text = "",
+            hasLabel = false,
+            icon = com.london.presentation.R.drawable.movie_button_star,
+            hasIcon = true,
+            isLoading = false,
+            isDisabled = false,
+            onClick = {},
+            modifier = Modifier
+        )
+
+        PrimaryButton(
+            text = stringResource(com.london.presentation.R.string.play_trailer),
+            hasLabel = true,
+            hasIcon = false,
+            isLoading = false,
+            isDisabled = false,
+            onClick = {},
+            icon = null,
+            modifier = Modifier.weight(1f)
+        )
     }
 }
 
@@ -207,6 +295,16 @@ fun CustomBackDropImagePager(
             initialPage = 0,
             pageCount = { images.size }
         )
+
+        LaunchedEffect(Unit) {
+            if (images.size > 1) {
+                while (true) {
+                    delay(4000)
+                    val nextPage = (pagerState.currentPage + 1) % images.size
+                    pagerState.animateScrollToPage(nextPage)
+                }
+            }
+        }
 
         HorizontalPager(
             modifier = Modifier.align(Alignment.Center),
@@ -244,7 +342,6 @@ fun CustomBackDropImagePager(
                 )
                 .padding(horizontal = 12.dp, vertical = 4.dp)
                 .align(Alignment.BottomCenter)
-
         )
     }
 }
@@ -252,7 +349,7 @@ fun CustomBackDropImagePager(
 @Composable
 fun TvShowScreenTopBar(
     modifier: Modifier = Modifier,
-    onBackClick: () -> Unit
+    onBackClick: () -> Unit,
 ) {
     Row(
         modifier = modifier,
@@ -281,13 +378,15 @@ fun TvShowScreenTopBar(
             modifier = Modifier.size(40.dp)
         )
     }
-
 }
+
 
 @Composable
 fun HeaderDetailsCard(
     modifier: Modifier = Modifier,
-    uiState: TvShowDetailsUiState
+    uiState: TvShowDetailsUiState,
+    onReviewClick: (tvShowId: Int) -> Unit,
+    tvShowId: Int
 ) {
 
     Column(
@@ -315,7 +414,10 @@ fun HeaderDetailsCard(
                 uiState = uiState
             )
 
-            ViewReviewText()
+            ViewReviewText(
+                onReviewClick = { onReviewClick(tvShowId) },
+                tvShowId = tvShowId
+            )
         }
     }
 }
@@ -390,11 +492,15 @@ fun TvShowBasicDetails(
 }
 
 @Composable
-fun ViewReviewText() {
+fun ViewReviewText(
+    onReviewClick: (tvShowId: Int) -> Unit,
+    tvShowId: Int,
+) {
     Text(
         text = stringResource(R.string.view_review),
         style = NovixTheme.typography.title.medium,
         color = NovixTheme.colors.primary,
+        modifier = Modifier.clickable { onReviewClick(tvShowId) }
     )
 }
 
@@ -425,6 +531,7 @@ fun TvShowDate(
     uiState: TvShowDetailsUiState
 ) {
 
+    if (uiState.firstAirDate.isEmpty() || uiState.firstAirDate.isBlank()) return
     Row(
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.spacedBy(4.dp)
@@ -469,46 +576,6 @@ fun TvShowRating(
 }
 
 @Composable
-fun OverviewSection(
-    modifier: Modifier = Modifier,
-    uiState: TvShowDetailsUiState
-) {
-    var maxLines by rememberSaveable { mutableIntStateOf(4) }
-    var isTextCollapsed by rememberSaveable { mutableStateOf(false) }
-    Column(
-        modifier = modifier
-    ) {
-        Text(
-            text = stringResource(R.string.overview),
-            style = NovixTheme.typography.title.medium,
-            color = NovixTheme.colors.title
-        )
-
-        Column {
-            Text(
-                text = uiState.overview,
-                style = NovixTheme.typography.body.small,
-                color = NovixTheme.colors.body,
-                maxLines = maxLines,
-                overflow = TextOverflow.Ellipsis
-            )
-
-            Text(
-                text = if (isTextCollapsed)
-                    stringResource(R.string.read_less) else stringResource(R.string.read_more),
-                style = NovixTheme.typography.body.small,
-                color = NovixTheme.colors.primary,
-                modifier = Modifier
-                    .clickable {
-                        maxLines = if (maxLines == 4) Int.MAX_VALUE else 4
-                        isTextCollapsed = !isTextCollapsed
-                    }
-            )
-        }
-    }
-}
-
-@Composable
 fun CastSection(
     modifier: Modifier = Modifier,
     castMembers: List<TvShowCastMemberEntity>,
@@ -538,8 +605,6 @@ fun CastSection(
     }
 }
 
-
-// region SeasonDetailsSection
 @Composable
 fun SeasonDetailsSection(
     modifier: Modifier = Modifier,
@@ -551,7 +616,7 @@ fun SeasonDetailsSection(
             .wrapContentHeight(),
     ) {
         Text(
-            text = stringResource(R.string.seasons),
+            text = stringResource(R.string.season),
             style = NovixTheme.typography.title.medium,
             color = NovixTheme.colors.title,
             modifier = Modifier.padding(top = 16.dp, bottom = 12.dp)
@@ -590,9 +655,10 @@ fun SeasonEpisodesDetails(
                 style = NovixTheme.typography.label.medium,
                 color = if (isSelected) NovixTheme.colors.onPrimary else NovixTheme.colors.body,
                 modifier = Modifier
+                    .padding(end = 20.dp)
                     .clickable {
                         selectedSeasonIndex = index
-                        viewModel.getEpisodesBySeasons(index + 1)
+                        viewModel.initializeEpisodesBySeasons(index + 1)
                     }
                     .then(
                         if (isSelected)
@@ -682,21 +748,24 @@ fun EpisodeRow(
                             .background(NovixTheme.colors.hint)
                     )
 
-                    EpisodeDate(episode.runtime.toString().toLocalizedNumbers())
+                    if (episode.runtime != null) {
+                        EpisodeDate(episode.runtime.toString().toLocalizedNumbers())
 
-                    Box(
-                        modifier = Modifier
-                            .padding(horizontal = 8.dp)
-                            .size(3.dp)
-                            .clip(CircleShape)
-                            .background(NovixTheme.colors.hint)
-                    )
+                        Box(
+                            modifier = Modifier
+                                .padding(horizontal = 8.dp)
+                                .size(3.dp)
+                                .clip(CircleShape)
+                                .background(NovixTheme.colors.hint)
+                        )
+                    }
 
-                    Text(
-                        text = episode.airDate.toLocalizedNumbers(),
-                        style = NovixTheme.typography.label.small,
-                        color = NovixTheme.colors.hint
-                    )
+                    if (episode.airDate != null)
+                        Text(
+                            text = episode.airDate.toLocalizedNumbers(),
+                            style = NovixTheme.typography.label.small,
+                            color = NovixTheme.colors.hint
+                        )
                 }
             }
         }
@@ -731,24 +800,25 @@ fun EpisodeRating(
 
 @Composable
 fun EpisodeDate(
-    durationTime: String
+    durationTime: String?
 ) {
     Row(
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.spacedBy(4.dp)
     ) {
-        Icon(
-            imageVector = ImageVector.vectorResource(R.drawable.tv_show_episode_clock),
-            contentDescription = "Calender icon",
-            tint = NovixTheme.colors.hint,
-            modifier = Modifier.size(12.dp)
-        )
+        if (durationTime != null) {
+            Icon(
+                imageVector = ImageVector.vectorResource(R.drawable.tv_show_episode_clock),
+                contentDescription = "Calender icon",
+                tint = NovixTheme.colors.hint,
+                modifier = Modifier.size(12.dp)
+            )
 
-        Text(
-            text = "$durationTime${stringResource(R.string.m)}",
-            style = NovixTheme.typography.label.small,
-            color = NovixTheme.colors.hint
-        )
+            Text(
+                text = "$durationTime${stringResource(R.string.m)}",
+                style = NovixTheme.typography.label.small,
+                color = NovixTheme.colors.hint
+            )
+        }
     }
 }
-// endregion
