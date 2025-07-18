@@ -1,5 +1,7 @@
 package com.ae.imageharamblur.ui
 
+import android.content.Context
+import android.graphics.drawable.Drawable
 import android.util.Log
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
@@ -25,67 +27,40 @@ fun ImageViewFilter(
     contentDescription: String?,
     modifier: Modifier = Modifier,
     contentScale: ContentScale = ContentScale.Fit,
-    enableModeration: Boolean = true,
-    blurStrength: Float = 60f,
-    detectFemales: Boolean = true,
-    detectMales: Boolean = false,
-    useContentDetection: Boolean = true,
-    strictMode: Boolean = false,
+    config: ImageFilterConfig = ImageFilterConfig(),
     loadingContent: @Composable () -> Unit,
     errorContent: @Composable (String?) -> Unit,
     onModerationResult: ((Boolean, String?) -> Unit)? = null,
     onLoadingStateChange: ((Boolean) -> Unit)? = null,
-    moderatedContent: @Composable () -> Unit = {}
+    moderatedContent: @Composable () -> Unit = @Composable {}
 ) {
     val context = LocalContext.current
-
-    val imageKey = remember(model) {
-        when (model) {
-            is String -> model
-            is Int -> model.toString()
-            else -> model.hashCode().toString()
-        }
-    }
+    val imageKey = generateImageKey(model)
 
     var moderationState by remember { mutableStateOf<ImageModerationState?>(null) }
     var errorState by remember { mutableStateOf<String?>(null) }
     var isLoading by remember { mutableStateOf(true) }
 
-    LaunchedEffect(model, enableModeration) {
+    LaunchedEffect(model, config.enableModeration) {
         onLoadingStateChange?.invoke(true)
         isLoading = true
         errorState = null
 
         try {
-            val request = ImageRequest.Builder(context)
-                .data(model)
-                .allowHardware(false)
-                .memoryCachePolicy(CachePolicy.ENABLED)
-                .diskCachePolicy(CachePolicy.ENABLED)
-                .build()
+            val drawable = loadImageDrawable(context, model)
 
-            val result = withContext(Dispatchers.IO) {
-                Coil.imageLoader(context).execute(request)
-            }
-
-            val drawable = result.drawable
             if (drawable == null) {
-                throw IllegalStateException("Failed to load image for moderation.")
+                errorState = "Failed to load image for moderation."
+                isLoading = false
+                onLoadingStateChange?.invoke(false)
+                return@LaunchedEffect
             }
 
-            val controller = ImageModerationController(
+            val state = processImageModeration(
                 context = context,
-                cacheKey = imageKey,
-                enableModeration = enableModeration,
-                blurStrength = blurStrength
-            )
-
-            val state = controller.processImage(
+                imageKey = imageKey,
                 drawable = drawable,
-                detectFemales = detectFemales,
-                detectMales = detectMales,
-                useContentDetection = useContentDetection,
-                strictMode = strictMode
+                config = config
             )
 
             moderationState = state
@@ -104,20 +79,14 @@ fun ImageViewFilter(
         contentAlignment = Alignment.Center
     ) {
         when {
-            isLoading -> {
-                loadingContent()
-            }
-
-            errorState != null -> {
-                errorContent(errorState)
-            }
-
+            isLoading -> loadingContent()
+            errorState != null -> errorContent(errorState)
             moderationState != null && moderationState!!.isModerated -> {
                 ModeratedImage(
                     state = moderationState!!,
                     contentDescription = contentDescription,
                     contentScale = contentScale,
-                    blurStrength = blurStrength,
+                    blurStrength = config.blurStrength,
                     modifier = Modifier.fillMaxSize()
                 )
 
@@ -126,9 +95,77 @@ fun ImageViewFilter(
                 }
             }
 
-            else -> {
-                Log.d("ImageViewFilter", "No content to show - moderationState: $moderationState")
-            }
+            else -> Log.d(
+                "ImageViewFilter",
+                "No content to show - moderationState: $moderationState"
+            )
         }
     }
 }
+
+data class ImageFilterConfig(
+    val enableModeration: Boolean = true,
+    val blurStrength: Float = 80f,
+    val detectFemales: Boolean = true,
+    val detectMales: Boolean = false,
+    val useContentDetection: Boolean = true,
+    val strictMode: Boolean = false
+)
+
+
+private fun generateImageKey(model: Any?): String = when (model) {
+    is String -> model
+    is Int -> model.toString()
+    else -> model.hashCode().toString()
+}
+
+private suspend fun loadImageDrawable(
+    context: Context,
+    model: Any?
+): Drawable? = withContext(Dispatchers.IO) {
+    val request = ImageRequest.Builder(context)
+        .data(model)
+        .allowHardware(false)
+        .memoryCachePolicy(CachePolicy.ENABLED)
+        .diskCachePolicy(CachePolicy.ENABLED)
+        .build()
+
+    try {
+        Coil.imageLoader(context).execute(request).drawable
+    } catch (e: Exception) {
+        Log.e("ImageViewFilter", "Failed to load image", e)
+        null
+    }
+}
+
+private suspend fun processImageModeration(
+    context: Context,
+    imageKey: String,
+    drawable: Drawable,
+    config: ImageFilterConfig
+): ImageModerationState {
+    val controller = createModerationController(
+        context = context,
+        imageKey = imageKey,
+        config = config
+    )
+
+    return controller.processImage(
+        drawable = drawable,
+        detectFemales = config.detectFemales,
+        detectMales = config.detectMales,
+        useContentDetection = config.useContentDetection,
+        strictMode = config.strictMode
+    )
+}
+
+private fun createModerationController(
+    context: Context,
+    imageKey: String,
+    config: ImageFilterConfig
+): ImageModerationController = ImageModerationController(
+    context = context,
+    cacheKey = imageKey,
+    enableModeration = config.enableModeration,
+    blurStrength = config.blurStrength
+)

@@ -29,17 +29,21 @@ class ModelDownloadManager(private val context: Context) {
     }
 
     fun areModelsReady(): Boolean {
-        return _downloadState.value.nsfwModelReady && _downloadState.value.genderModelReady
+        return _downloadState.value.nsfwModelReady &&
+                _downloadState.value.genderModelReady &&
+                _downloadState.value.faceDetectionModelReady
     }
 
     private fun checkExistingModels() {
         val assetsNsfwExists = tryAssetsModel("nsfw_model.tflite")
         val assetsGenderExists = tryAssetsModel("gender_class_model.tflite")
+        val assetsFaceDetectionExists = tryAssetsModel("face_detection_back.tflite")
 
-        if (assetsNsfwExists && assetsGenderExists) {
+        if (assetsNsfwExists && assetsGenderExists && assetsFaceDetectionExists) {
             _downloadState.value = _downloadState.value.copy(
                 nsfwModelReady = true,
                 genderModelReady = true,
+                faceDetectionModelReady = true,
                 usingLocalAssets = true
             )
             return
@@ -47,14 +51,17 @@ class ModelDownloadManager(private val context: Context) {
 
         val nsfwModelPath = prefs.getString("nsfw_model_path", null)
         val genderModelPath = prefs.getString("gender_model_path", null)
+        val faceDetectionModelPath = prefs.getString("face_detection_model_path", null)
 
         val nsfwReady = nsfwModelPath?.let { File(it).exists() } == true
         val genderReady = genderModelPath?.let { File(it).exists() } == true
+        val faceDetectionReady = faceDetectionModelPath?.let { File(it).exists() } == true
 
         _downloadState.value = _downloadState.value.copy(
             nsfwModelReady = nsfwReady || assetsNsfwExists,
             genderModelReady = genderReady || assetsGenderExists,
-            usingLocalAssets = assetsNsfwExists || assetsGenderExists
+            faceDetectionModelReady = faceDetectionReady || assetsFaceDetectionExists,
+            usingLocalAssets = assetsNsfwExists || assetsGenderExists || assetsFaceDetectionExists
         )
     }
 
@@ -72,6 +79,7 @@ class ModelDownloadManager(private val context: Context) {
         return try {
             val cacheFile = File(context.cacheDir, assetFileName)
             if (cacheFile.exists() && cacheFile.length() > 0) {
+                Log.d(TAG, "Using cached asset file: $assetFileName (${cacheFile.length()} bytes)")
                 return cacheFile
             }
 
@@ -80,6 +88,7 @@ class ModelDownloadManager(private val context: Context) {
                     inputStream.copyTo(outputStream)
                 }
             }
+            Log.d(TAG, "Copied asset to cache: $assetFileName (${cacheFile.length()} bytes)")
             cacheFile
         } catch (e: Exception) {
             Log.e(TAG, "Failed to copy asset $assetFileName", e)
@@ -90,28 +99,36 @@ class ModelDownloadManager(private val context: Context) {
     suspend fun downloadModelsIfNeeded(wifiOnly: Boolean = true): ModelFiles {
         val nsfwAssetFile = copyAssetToFile("nsfw_model.tflite")
         val genderAssetFile = copyAssetToFile("gender_class_model.tflite")
+        val faceDetectionAssetFile = copyAssetToFile("face_detection_back.tflite")
 
-        if (nsfwAssetFile != null && genderAssetFile != null) {
-            Log.d(TAG, "Using models from assets")
+        if (nsfwAssetFile != null && genderAssetFile != null && faceDetectionAssetFile != null) {
+            Log.d(TAG, "Using all models from assets")
             _downloadState.value = _downloadState.value.copy(
                 nsfwModelReady = true,
                 genderModelReady = true,
+                faceDetectionModelReady = true,
                 usingLocalAssets = true
             )
             return ModelFiles(
                 nsfwModelFile = nsfwAssetFile,
-                genderModelFile = genderAssetFile
+                genderModelFile = genderAssetFile,
+                faceDetectionModelFile = faceDetectionAssetFile
             )
         }
 
-        if (_downloadState.value.nsfwModelReady && _downloadState.value.genderModelReady) {
+        if (_downloadState.value.nsfwModelReady &&
+            _downloadState.value.genderModelReady &&
+            _downloadState.value.faceDetectionModelReady) {
+
             val nsfwPath = nsfwAssetFile ?: prefs.getString("nsfw_model_path", null)?.let { File(it) }
             val genderPath = genderAssetFile ?: prefs.getString("gender_model_path", null)?.let { File(it) }
+            val faceDetectionPath = faceDetectionAssetFile ?: prefs.getString("face_detection_model_path", null)?.let { File(it) }
 
-            if (nsfwPath != null && genderPath != null) {
+            if (nsfwPath != null && genderPath != null && faceDetectionPath != null) {
                 return ModelFiles(
                     nsfwModelFile = nsfwPath,
-                    genderModelFile = genderPath
+                    genderModelFile = genderPath,
+                    faceDetectionModelFile = faceDetectionPath
                 )
             }
         }
@@ -130,6 +147,7 @@ class ModelDownloadManager(private val context: Context) {
             }
             val conditions = conditionsBuilder.build()
 
+            // Download NSFW model
             val nsfwModel = if (nsfwAssetFile == null) {
                 _downloadState.value = _downloadState.value.copy(
                     currentDownloadingModel = "NSFW Detection Model"
@@ -138,12 +156,14 @@ class ModelDownloadManager(private val context: Context) {
                 saveModelPath("nsfw_model_path", model.file?.path)
                 _downloadState.value = _downloadState.value.copy(
                     nsfwModelReady = true,
-                    downloadProgress = 0.5f
+                    downloadProgress = 0.33f
                 )
                 model.file!!
             } else {
                 nsfwAssetFile
             }
+
+            // Download Gender model
             val genderModel = if (genderAssetFile == null) {
                 _downloadState.value = _downloadState.value.copy(
                     currentDownloadingModel = "Gender Classification Model"
@@ -152,18 +172,41 @@ class ModelDownloadManager(private val context: Context) {
                 saveModelPath("gender_model_path", model.file?.path)
                 _downloadState.value = _downloadState.value.copy(
                     genderModelReady = true,
-                    downloadProgress = 1.0f,
-                    isDownloading = false,
-                    currentDownloadingModel = null
+                    downloadProgress = 0.66f
                 )
                 model.file!!
             } else {
                 genderAssetFile
             }
 
+            // Download Face Detection model
+            val faceDetectionModel = if (faceDetectionAssetFile == null) {
+                _downloadState.value = _downloadState.value.copy(
+                    currentDownloadingModel = "Face Detection Model"
+                )
+                val model = downloadModel(FACE_DETECTION_MODEL_NAME, conditions)
+                saveModelPath("face_detection_model_path", model.file?.path)
+                _downloadState.value = _downloadState.value.copy(
+                    faceDetectionModelReady = true,
+                    downloadProgress = 1.0f,
+                    isDownloading = false,
+                    currentDownloadingModel = null
+                )
+                model.file!!
+            } else {
+                _downloadState.value = _downloadState.value.copy(
+                    faceDetectionModelReady = true,
+                    downloadProgress = 1.0f,
+                    isDownloading = false,
+                    currentDownloadingModel = null
+                )
+                faceDetectionAssetFile
+            }
+
             return ModelFiles(
                 nsfwModelFile = nsfwModel,
-                genderModelFile = genderModel
+                genderModelFile = genderModel,
+                faceDetectionModelFile = faceDetectionModel
             )
         } catch (e: Exception) {
             Log.e(TAG, "Error downloading models", e)
@@ -173,11 +216,21 @@ class ModelDownloadManager(private val context: Context) {
                 currentDownloadingModel = null
             )
 
+            // Fallback to any available asset models
             if (nsfwAssetFile != null && genderAssetFile != null) {
-                Log.w(TAG, "Download failed, falling back to asset models")
+                Log.w(TAG, "Download failed, falling back to asset models (face detection might be unavailable)")
+
+                // Try to use a default face detection model or create a dummy file
+                val fallbackFaceDetection = faceDetectionAssetFile ?: File(context.cacheDir, "face_detection_fallback.tflite").apply {
+                    if (!exists()) {
+                        Log.w(TAG, "Face detection model not available, face detection will not work")
+                    }
+                }
+
                 return ModelFiles(
                     nsfwModelFile = nsfwAssetFile,
-                    genderModelFile = genderAssetFile
+                    genderModelFile = genderAssetFile,
+                    faceDetectionModelFile = fallbackFaceDetection
                 )
             }
 
@@ -211,6 +264,7 @@ class ModelDownloadManager(private val context: Context) {
         private const val TAG = "ModelDownloadManager"
         private const val NSFW_MODEL_NAME = "nsfw_model"
         private const val GENDER_MODEL_NAME = "gender_class_model"
+        private const val FACE_DETECTION_MODEL_NAME = "face_detection_back"
         private const val PREF_NAME = "model_download_prefs"
     }
 
@@ -218,15 +272,17 @@ class ModelDownloadManager(private val context: Context) {
         val isDownloading: Boolean = false,
         val nsfwModelReady: Boolean = false,
         val genderModelReady: Boolean = false,
+        val faceDetectionModelReady: Boolean = false,
         val downloadProgress: Float = 0f,
         val error: String? = null,
         val currentDownloadingModel: String? = null,
-        val totalSizeMB: Float = 29.0f,
+        val totalSizeMB: Float = 29.3f,
         val usingLocalAssets: Boolean = false
     )
 
     data class ModelFiles(
         val nsfwModelFile: File,
-        val genderModelFile: File
+        val genderModelFile: File,
+        val faceDetectionModelFile: File
     )
 }
