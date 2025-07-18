@@ -44,6 +44,8 @@
     <string name="Actors">"ممثلين"</string>
     <string name="top_movies_picks">أفضل الأفلام المختارة</string>
     <string name="top_tv_shows_picks">أفضل اختيارات البرامج التلفزيونية</string>
+    <string name="episode">الحلقة</string>
+    <string name="guests_of_honor">ضيوف الشرف</string>
     <string name="view_reviews">عرض المراجعات</string>
     <string name="overview">نظرة عامة</string>
     <string name="more_like_this">المزيد مثل هذا</string>
@@ -58,5 +60,6 @@
     <string name="cast">طاقم العمل</string>
     <string name="biography">السيرة</string>
     <string name="gallery">المعرض</string>
+    <string name="imagr_dot">نقطه</string>
     <string name="actor_photos">صور الممثلين</string>"
 </resources>
