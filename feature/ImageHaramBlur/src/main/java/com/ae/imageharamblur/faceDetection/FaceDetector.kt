@@ -78,14 +78,12 @@ class FaceDetector(private val context: Context) {
                 1 to classificationOutput
             )
 
-            val startTime = System.currentTimeMillis()
+            System.currentTimeMillis()
 
             interpreter.runForMultipleInputsOutputs(
                 arrayOf(inputBuffer),
                 outputs
             )
-
-            val inferenceTime = System.currentTimeMillis() - startTime
 
             var maxScore = 0f
             var scoreAboveThreshold = 0
