@@ -25,13 +25,13 @@ import com.london.presentation.navigation.Screen.Home
 import com.london.presentation.navigation.Screen.MovieDetails
 import com.london.presentation.navigation.Screen.MoviesByCategory
 import com.london.presentation.navigation.Screen.Search
-import com.london.presentation.navigation.Screen.TopMoviesPicksDetails
+import com.london.presentation.navigation.Screen.TopTvShowsPicksDetails
 import com.london.presentation.navigation.Screen.TvShowDetails
 import com.london.presentation.screen.account.AccountScreen
 import com.london.presentation.screen.bookmark.BookmarksScreen
 import com.london.presentation.screen.category.CategoriesScreen
 import com.london.presentation.screen.category.moviesbycategory.MoviesByCategoryScreen
-import com.london.presentation.screen.details.actordetails.topmoviespicks.TopMoviesPicksScreen
+import com.london.presentation.screen.details.actordetails.toptvshowspicks.TopTvShowsPicksScreen
 import com.london.presentation.screen.details.movieDetalis.MovieDetailsScreen
 import com.london.presentation.screen.details.tvshow.tvshowdetails.TvShowsDetailsScreen
 import com.london.presentation.screen.home.HomeScreen
@@ -85,7 +85,7 @@ fun NovixApp() {
                         navController.navigate(TvShowDetails(tvShowId))
                     },
                     onNavigateToActorDetails = { actorId ->
-                        navController.navigate(TopMoviesPicksDetails(actorId))
+                        navController.navigate(TopTvShowsPicksDetails(actorId))
                     },
                     onNavigateToMovieDetails = { movieId ->
                         navController.navigate(MovieDetails(movieId))
@@ -114,13 +114,13 @@ fun NovixApp() {
                 )
             }
 
-            composable<TopMoviesPicksDetails> { backStackEntry ->
-                val topMoviesPicksDetails = backStackEntry.arguments?.let {
-                    TopMoviesPicksDetails(
+            composable<TopTvShowsPicksDetails> { backStackEntry ->
+                val topTvShowsPicksDetails = backStackEntry.arguments?.let {
+                    TopTvShowsPicksDetails(
                         actorId = it.getInt("actorId"),
                     )
                 }
-                TopMoviesPicksScreen(
+                TopTvShowsPicksScreen(
                     onBackClick = {
                         navController.navigateUp()
                     },
@@ -129,12 +129,12 @@ fun NovixApp() {
                     }
                 )
             }
+
             composable<MovieDetails> { backStackEntry ->
                 val movieDetails = backStackEntry.arguments?.let {
                     MovieDetailsScreen(
                         movieId = it.getInt("movieId"),
                         onBackClick = { navController.navigateUp() },
-
                         )
                 }
             }
