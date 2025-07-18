@@ -26,4 +26,9 @@ object AppConfig {
         const val DATA = "$APPLICATION_ID_GROUP.data"
         const val DOMAIN = "$APPLICATION_ID_GROUP.domain"
     }
+
+    val freeCompilerArgs = listOf(
+        "-opt-in=androidx.compose.material3.ExperimentalMaterial3Api",
+        "-opt-in=androidx.compose.foundation.layout.ExperimentalLayoutApi",
+    )
 }

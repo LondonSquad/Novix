@@ -1,4 +1,8 @@
+@file:Suppress("OPT_IN_USAGE")
+
+import com.london.buildsrc.AppConfig
 import com.london.buildsrc.configureGitHooks
+import org.jetbrains.kotlin.gradle.dsl.KotlinAndroidProjectExtension
 
 // Top-level build file where you can add configuration options common to all sub-projects/modules.
 plugins {
@@ -15,12 +19,22 @@ plugins {
     alias(libs.plugins.kotlinx.kover) apply true
 }
 
+subprojects {
+    plugins.withId("org.jetbrains.kotlin.android") {
+        extensions.configure<KotlinAndroidProjectExtension> {
+            compilerOptions {
+                freeCompilerArgs.addAll(AppConfig.freeCompilerArgs)
+            }
+        }
+    }
+}
+
 dependencies {
-    kover(project(":app"))
-    kover(project(":domain"))
-    kover(project(":data"))
-    kover(project(":presentation"))
-    kover(project(":designSystem"))
+    kover(projects.app)
+    kover(projects.domain)
+    kover(projects.data)
+    kover(projects.presentation)
+    kover(projects.designSystem)
 }
 kover {
     reports {

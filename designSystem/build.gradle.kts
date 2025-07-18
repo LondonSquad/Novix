@@ -39,7 +39,7 @@ android {
 dependencies {
 
     // feature module for image blur
-    api(project(":feature:ImageHaramBlur"))
+    api(projects.feature.imageHaramBlur)
 
     implementation(libs.bundles.compose)
     implementation(libs.bundles.base.ui)
