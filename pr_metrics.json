@@ -3308,5 +3308,33 @@
       "deletions": 19,
       "changed_files": 15
     }
+  },
+  {
+    "pr_number": 176,
+    "url": "https://github.com/LondonSquad/Novix/pull/176",
+    "title": "Feature Actor details gallery screen",
+    "opened_at": "2025-07-18T10:09:06Z",
+    "head_ref": "feature/actor-details-gallery-screen",
+    "base_ref": "feature/actor-details-screen",
+    "creator": {
+      "login": "AsmaaKhaledGomaa",
+      "id": 117874933,
+      "url": "https://github.com/AsmaaKhaledGomaa"
+    },
+    "approvals": [],
+    "first_approved_at": null,
+    "time_to_first_approval_minutes": null,
+    "required_approvals_met_at": null,
+    "time_to_required_approvals_minutes": null,
+    "closed_at": null,
+    "merged_at": null,
+    "merged_by": null,
+    "week": "2025-W29",
+    "status": "pending",
+    "diff_stats": {
+      "additions": 160,
+      "deletions": 2,
+      "changed_files": 9
+    }
   }
 ]
