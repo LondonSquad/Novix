@@ -36,6 +36,8 @@ import com.london.presentation.screen.details.movieDetalis.MovieDetailsScreen
 import com.london.presentation.screen.details.tvshow.tvshowdetails.TvShowsDetailsScreen
 import com.london.presentation.screen.home.HomeScreen
 import com.london.presentation.screen.search.SearchScreen
+import com.london.presentation.screen.details.tvshow.episodedetails.EpisodeDetailsScreen
+import com.london.presentation.navigation.Screen.EpisodeDetails
 
 @Composable
 fun NovixApp() {
@@ -110,6 +112,9 @@ fun NovixApp() {
                 TvShowsDetailsScreen(
                     onBackClick = {
                         navController.navigateUp()
+                    },
+                    onNavigateToEpisodeDetails = { tvShowId, episodeNumber, seasonNumber ->
+                        navController.navigate(Screen.EpisodeDetails(tvShowId, episodeNumber, seasonNumber))
                     }
                 )
             }
@@ -147,6 +152,10 @@ fun NovixApp() {
                         navController.navigateUp()
                     },
                 )
+            }
+
+            composable<EpisodeDetails> {
+                EpisodeDetailsScreen()
             }
         }
     }

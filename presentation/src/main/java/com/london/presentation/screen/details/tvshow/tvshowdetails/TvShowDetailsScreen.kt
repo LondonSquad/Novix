@@ -61,11 +61,13 @@ import com.london.designsystem.component.CircularLoading
 import com.london.designsystem.component.NovixCarousalRow
 import com.london.designsystem.component.RatingBar
 import com.london.designsystem.component.SaveIcon
+import com.london.designsystem.component.UnSuitableEye
 import com.london.designsystem.component.button.ErrorImage
 import com.london.designsystem.component.button.PrimaryButton
 import com.london.designsystem.theme.NovixTheme
 import com.london.domain.entity.tvshowdetails.ImageItemEntity
 import com.london.domain.entity.tvshowdetails.TvShowCastMemberEntity
+import com.london.presentation.utils.Listen
 import com.london.presentation.composables.ConditionalText
 import com.london.presentation.utils.toLocalizedNumbers
 import kotlinx.coroutines.delay
@@ -75,14 +77,30 @@ import org.koin.androidx.compose.koinViewModel
 @Composable
 fun TvShowsDetailsScreen(
     viewModel: TvShowDetailsViewModel = koinViewModel(),
-    onBackClick: () -> Unit = {}
+    onBackClick: () -> Unit = {},
+    onNavigateToEpisodeDetails: (tvShowId: Int, episodeNumber: Int, seasonNumber: Int) -> Unit
 ) {
     val uiState by viewModel.uiState.collectAsState()
+    val effect by viewModel.effect.collectAsState(null)
+
     TvShowsDetailScreenContent(
         uiState = uiState,
         onBackClick = onBackClick,
         interactionListener = viewModel
     )
+
+    effect?.Listen { currentEffect ->
+        when (currentEffect) {
+            is TvShowDetailsEffect.OnNavigateToEpisodeDetails -> {
+                onNavigateToEpisodeDetails(
+                    currentEffect.tvShowId,
+                    currentEffect.episodeNumber,
+                    currentEffect.seasonNumber
+                )
+            }
+        }
+    }
+
 }
 
 @Composable
@@ -301,7 +319,9 @@ fun CustomBackDropImagePager(
                 model = images[pageIndex].fileUrl,
                 contentDescription = "TV Show Image ${pageIndex + 1}",
                 errorContent = { ErrorImage() },
-                loadingContent = { CircularLoading(modifier = Modifier) })
+                loadingContent = { CircularLoading(modifier = Modifier) },
+                moderatedContent = { UnSuitableEye() }
+            )
         }
 
         val dotsStates = List(images.size) { index ->
@@ -611,7 +631,8 @@ fun SeasonDetailsSection(
         )
 
         EpisodeRow(
-            uiState = uiState
+            uiState = uiState,
+            modifier = Modifier.fillMaxWidth()
         )
     }
 }
@@ -661,7 +682,8 @@ fun SeasonEpisodesDetails(
 @Composable
 fun EpisodeRow(
     modifier: Modifier = Modifier,
-    uiState: TvShowDetailsUiState
+    uiState: TvShowDetailsUiState,
+    viewModel: TvShowDetailsViewModel = koinViewModel()
 ) {
     Text(
         text = "${
@@ -674,7 +696,14 @@ fun EpisodeRow(
 
     uiState.tvShowEpisodes.forEach { episode ->
         Row(
-            modifier = modifier,
+            modifier = modifier
+                .clickable {
+                    viewModel.onEpisodeClick(
+                        episode.showId,
+                        episode.episodeNumber,
+                        episode.seasonNumber,
+                    )
+                },
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.spacedBy(12.dp)
         ) {
@@ -688,7 +717,7 @@ fun EpisodeRow(
                     .weight(0.35f),
                 loadingContent = { CircularLoading() },
                 errorContent = { ErrorImage() },
-
+                moderatedContent = { UnSuitableEye() }
                 )
 
             Column(

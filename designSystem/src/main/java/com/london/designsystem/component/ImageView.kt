@@ -26,6 +26,9 @@ fun ImageView(
         contentScale = contentScale,
         onLoadingStateChange = onLoadingStateChange,
         loadingContent = loadingContent,
-        errorContent = errorContent ,
+        errorContent = errorContent,
+        moderatedContent = {
+            UnSuitableEye()
+        }
     )
 }

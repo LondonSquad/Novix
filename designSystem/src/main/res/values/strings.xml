@@ -24,4 +24,6 @@
     <string name="m">m</string>
     <string name="episodes">Episodes</string>
     <string name="season">Season</string>
+    <string name="unsuitable_eye_icon">Unsuitable Eye Icon</string>
+    <string name="unsuitable_eye_content">Unsuitable image</string>
 </resources>
