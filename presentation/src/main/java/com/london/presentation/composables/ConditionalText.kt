@@ -24,7 +24,7 @@ fun ConditionalText(
     expandedState: Boolean,
     onExpandedChange: () -> Unit
 ) {
-    val minimumLineLength = 3
+    val minimumLineLength = 4
     var showReadMoreButtonState by remember { mutableStateOf(false) }
     var truncatedText by remember { mutableStateOf("") }
 
