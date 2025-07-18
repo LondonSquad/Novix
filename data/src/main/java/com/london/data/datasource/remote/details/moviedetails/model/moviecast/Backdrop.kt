@@ -9,7 +9,7 @@ data class Backdrop(
     val aspectRatio: Double?,
     val height: Int?,
     @SerialName("iso_639_1")
-    val iso6391: String??,
+    val iso6391: String?,
     @SerialName("file_path")
     val filePath: String?,
     @SerialName("vote_average")
