@@ -459,7 +459,8 @@ private fun MovieDetailsImage(
         modifier = modifier
             .fillMaxWidth()
             .aspectRatio(8f / 5f)
-            .clip(RoundedCornerShape(12.dp)), contentAlignment = Alignment.Center
+            .clip(RoundedCornerShape(12.dp)),
+        contentAlignment = Alignment.Center
     ) {
         images.forEachIndexed { index, image ->
             AnimatedVisibility(
