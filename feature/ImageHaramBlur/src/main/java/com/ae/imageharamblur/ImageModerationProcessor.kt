@@ -12,6 +12,7 @@ import kotlinx.coroutines.*
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
 import kotlinx.coroutines.flow.StateFlow
+import com.ae.imageharamblur.faceDetection.DetectedFace
 
 class ImageModerationProcessor(private val context: Context) {
 
@@ -244,7 +245,7 @@ class ImageModerationProcessor(private val context: Context) {
         }
     }
 
-    private fun cropFace(bitmap: Bitmap, face: FaceDetector.DetectedFace): Bitmap {
+    private fun cropFace(bitmap: Bitmap, face: DetectedFace): Bitmap {
         val rect = face.boundingBox
         val padding = (rect.width() * FACE_CROP_PADDING).toInt()
 
