@@ -57,7 +57,6 @@ import com.london.designsystem.component.HomeCard
 import com.london.designsystem.component.ImageView
 import com.london.designsystem.component.NovixCarousalRow
 import com.london.designsystem.component.SaveIcon
-import com.london.designsystem.component.button.PrimaryButton
 import com.london.designsystem.theme.NovixTheme
 import com.london.designsystem.theme.noRippleClickable
 import com.london.domain.entity.moviedatails.Genre
@@ -66,12 +65,12 @@ import com.london.presentation.R.string.calendar
 import com.london.presentation.R.string.dot
 import com.london.presentation.R.string.more_like_this
 import com.london.presentation.R.string.overview
-import com.london.presentation.R.string.play_trailer
 import com.london.presentation.R.string.separator
 import com.london.presentation.R.string.star
 import com.london.presentation.R.string.time_icon
 import com.london.presentation.R.string.view_reviews
 import com.london.presentation.composables.ConditionalText
+import com.london.presentation.composables.FooterSection
 import org.koin.androidx.compose.koinViewModel
 
 @Composable
@@ -323,40 +322,16 @@ fun MovieDetailsContent(
             }
         }
 
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(horizontal = if (state.movieHaveTrailer) 16.dp else 24.dp)
-                .padding(bottom = 24.dp)
-                .navigationBarsPadding()
-                .align(Alignment.BottomCenter),
-            horizontalArrangement = Arrangement.spacedBy(8.dp)
-        ) {
-            if (!state.movieHaveTrailer) {
-                PrimaryButton(
-                    text = null,
-                    onClick = {},
-                    hasLabel = false,
-                    icon = drawable.movie_button_star,
-                    hasIcon = true,
-                    isLoading = false,
-                    isDisabled = false,
-                )
+        FooterSection(
+            haveTrailer = state.movieHaveTrailer,
+            modifier = Modifier.align(Alignment.BottomCenter),
+            onPlayClick = {
+                // TODO play trailer onclick handler
+            },
+            onStarClick = {
+                // TODO save favorite onclick handler
             }
-
-            PrimaryButton(
-                text = stringResource(play_trailer),
-                onClick = {
-                    // TODO
-                },
-                hasLabel = true,
-                hasIcon = false,
-                isLoading = false,
-                isDisabled = !state.movieHaveTrailer,
-                icon = null,
-                modifier = Modifier.weight(1f)
-            )
-        }
+        )
     }
 }
 
