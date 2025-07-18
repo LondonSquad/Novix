@@ -82,10 +82,10 @@ android {
 
 
 dependencies {
-    implementation(project(":domain"))
-    implementation(project(":data"))
-    implementation(project(":presentation"))
-    implementation(project(":designSystem"))
+    implementation(projects.domain)
+    implementation(projects.data)
+    implementation(projects.presentation)
+    implementation(projects.designSystem)
     implementation(libs.bundles.base.ui)
     ksp(libs.bundles.koin.ksp)
     debugImplementation(libs.bundles.compose.debug)
