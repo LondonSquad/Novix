@@ -28,7 +28,7 @@ fun ButtonIcon(
         modifier = modifier
             .size(32.dp)
             .border(
-                width = 1.dp, color = NovixTheme.colors.stroke, shape = RoundedCornerShape(8.dp)
+                width = 1.dp, color = NovixTheme.colors.stroke, shape = RoundedCornerShape(12.dp)
             )
             .clip(RoundedCornerShape(12.dp))
             .background(color = backgroundColor)

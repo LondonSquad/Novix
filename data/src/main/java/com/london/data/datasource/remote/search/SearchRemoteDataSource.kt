@@ -26,4 +26,11 @@ interface SearchRemoteDataSource {
         language: String,
         pageNumber: Int
     ): ApiResponse<SearchActorRemote>
+
+    suspend fun getMoviesByCategory(
+        categoryId: Int,
+        language: String,
+        pageNumber: Int,
+        includeAdult: Boolean = false
+    ): ApiResponse<SearchMovieRemote>
 }

@@ -23,12 +23,14 @@ import com.london.presentation.navigation.Screen.Bookmarks
 import com.london.presentation.navigation.Screen.Categories
 import com.london.presentation.navigation.Screen.Home
 import com.london.presentation.navigation.Screen.MovieDetails
+import com.london.presentation.navigation.Screen.MoviesByCategory
 import com.london.presentation.navigation.Screen.Search
 import com.london.presentation.navigation.Screen.TopTvShowsPicksDetails
 import com.london.presentation.navigation.Screen.TvShowDetails
 import com.london.presentation.screen.account.AccountScreen
 import com.london.presentation.screen.bookmark.BookmarksScreen
 import com.london.presentation.screen.category.CategoriesScreen
+import com.london.presentation.screen.category.moviesbycategory.MoviesByCategoryScreen
 import com.london.presentation.screen.details.actordetails.toptvshowspicks.TopTvShowsPicksScreen
 import com.london.presentation.screen.details.movieDetalis.MovieDetailsScreen
 import com.london.presentation.screen.details.tvshow.tvshowdetails.TvShowsDetailsScreen
@@ -129,6 +131,16 @@ fun NovixApp() {
 
                         )
                 }
+            }
+            composable<MoviesByCategory> {
+                MoviesByCategoryScreen(
+                    onNavigateToMovieDetails = { movieId ->
+                        navController.navigate(MovieDetails(movieId))
+                    },
+                    onBackClick = {
+                        navController.navigateUp()
+                    },
+                )
             }
         }
     }

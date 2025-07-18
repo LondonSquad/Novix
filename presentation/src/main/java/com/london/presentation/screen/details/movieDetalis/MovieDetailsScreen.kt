@@ -19,11 +19,10 @@ import androidx.compose.foundation.layout.defaultMinSize
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.navigationBars
+import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.statusBars
-import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyHorizontalGrid
@@ -148,7 +147,8 @@ fun MovieDetailsContent(
                 },
                 backgroundColor = NovixTheme.colors.iconBackgroundLow,
                 modifier = Modifier
-                    .padding(horizontal = 16.dp, vertical = 8.dp)
+                    .padding(horizontal = 16.dp)
+                    .padding(top = 20.dp, bottom = 8.dp)
                     .size(40.dp)
                     .clip(RoundedCornerShape(16))
                     .align(Alignment.TopEnd),
@@ -159,16 +159,17 @@ fun MovieDetailsContent(
                 iconRes = R.drawable.arrow_left,
                 backgroundColor = NovixTheme.colors.iconBackgroundLow,
                 modifier = Modifier
-                    .padding(horizontal = 16.dp, vertical = 8.dp)
+                    .padding(horizontal = 16.dp)
+                    .padding(top = 20.dp, bottom = 8.dp)
                     .size(40.dp)
-                    .clip(RoundedCornerShape(16))
                     .align(Alignment.TopStart),
             )
         }
 
         LazyColumn(
-            modifier = Modifier.fillMaxSize(),
-            contentPadding = PaddingValues(bottom = 100.dp),
+            modifier = Modifier
+                .fillMaxSize()
+                .navigationBarsPadding(),
             state = lazyState
         ) {
             item {
@@ -327,8 +328,9 @@ fun MovieDetailsContent(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(horizontal = if (state.movieHaveTrailer) 16.dp else 24.dp)
-                .align(Alignment.BottomCenter)
-                .windowInsetsPadding(WindowInsets.navigationBars),
+                .padding(bottom = 24.dp)
+                .navigationBarsPadding()
+                .align(Alignment.BottomCenter),
             horizontalArrangement = Arrangement.spacedBy(8.dp)
         ) {
             if (!state.movieHaveTrailer) {
@@ -379,7 +381,7 @@ private fun RatingAndMetaRow(
             )
         }
 
-        if (!rate.isNullOrBlank() && !time.isNullOrBlank()) {
+        if (!time.isNullOrBlank() || !date.isNullOrBlank()) {
             Dot()
         }
 

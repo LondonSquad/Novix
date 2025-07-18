@@ -1,6 +1,5 @@
 package com.london.presentation.screen.details.tvshow.tvshowdetails
 
-import android.util.Log
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -21,24 +20,23 @@ class TvShowDetailsViewModel(
     private val getTvShowImages: GetImagesById,
     private val getEpisodesByTvShowSeason: GetEpisodesByTvShowSeason,
     savedStateHandle: SavedStateHandle,
-) : ViewModel() {
+) : ViewModel(), TvShowDetailsInteractionListener {
 
     private val _uiState = MutableStateFlow(TvShowDetailsUiState())
     val uiState = _uiState.asStateFlow()
 
-    private val tvShowId: Int = savedStateHandle.get<Int>("tvShowId") ?: 0
+    val tvShowId: Int = savedStateHandle.get<Int>("tvShowId") ?: 0
 
     init {
-        Log.d("TAG", ":$tvShowId ")
         if (tvShowId != 0) {
-            getTvShowDetailsData()
-            getCastData()
-            getImagesData()
-            getEpisodesBySeasons()
+            initializeGetTvShowDetailsData()
+            initializeGetCastData()
+            initializeGetImagesData()
+            initializeEpisodesBySeasons()
         }
     }
 
-    fun getEpisodesBySeasons(seasonNumber: Int = 1) {
+    fun initializeEpisodesBySeasons(seasonNumber: Int = 1) {
         viewModelScope.launch {
             _uiState.update {
                 it.copy(
@@ -50,7 +48,7 @@ class TvShowDetailsViewModel(
         }
     }
 
-    private fun getImagesData() {
+    private fun initializeGetImagesData() {
         viewModelScope.launch {
             val images = getTvShowImages(tvShowId)
 
@@ -60,7 +58,7 @@ class TvShowDetailsViewModel(
         }
     }
 
-    private fun getCastData() {
+    private fun initializeGetCastData() {
         viewModelScope.launch {
             _uiState.update {
                 it.copy(cast = getCastById(tvShowId))
@@ -68,7 +66,7 @@ class TvShowDetailsViewModel(
         }
     }
 
-    private fun getTvShowDetailsData() {
+    private fun initializeGetTvShowDetailsData() {
         viewModelScope.launch {
             _uiState.update {
                 val tvShowDetails = getTvShowDetails(tvShowId)
@@ -108,5 +106,9 @@ class TvShowDetailsViewModel(
                 )
             }
         }
+    }
+
+    override fun onClickViewReviewsListener(tvShowId: Int) {
+        // TODO (should navigate to reviews screen)
     }
 }
