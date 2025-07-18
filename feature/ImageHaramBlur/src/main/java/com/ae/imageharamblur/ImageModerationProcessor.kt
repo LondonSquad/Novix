@@ -15,7 +15,7 @@ import kotlinx.coroutines.flow.StateFlow
 
 class ImageModerationProcessor(private val context: Context) {
 
-    private val faceDetector = FaceDetector()
+    private val faceDetector = FaceDetector(context)
     val modelDownloadManager = ModelDownloadManager(context)
     val downloadState: StateFlow<ModelDownloadManager.ModelDownloadState>
         get() = modelDownloadManager.downloadState

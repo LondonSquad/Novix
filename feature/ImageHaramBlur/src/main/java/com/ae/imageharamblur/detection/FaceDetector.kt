@@ -1,42 +1,32 @@
 package com.ae.imageharamblur.detection
 
-
 import android.graphics.Bitmap
 import android.graphics.Rect
-import com.google.mlkit.vision.common.InputImage
-import com.google.mlkit.vision.face.FaceDetection
-import com.google.mlkit.vision.face.FaceDetectorOptions
-import kotlinx.coroutines.suspendCancellableCoroutine
-import kotlin.coroutines.resume
-import kotlin.coroutines.resumeWithException
+import android.content.Context
+import android.util.Log
 
-internal class FaceDetector {
-    private val options = FaceDetectorOptions.Builder()
-        .setPerformanceMode(FaceDetectorOptions.PERFORMANCE_MODE_ACCURATE)
-        .setClassificationMode(FaceDetectorOptions.CLASSIFICATION_MODE_NONE)
-        .setLandmarkMode(FaceDetectorOptions.LANDMARK_MODE_NONE)
-        .setMinFaceSize(0.1f)
-        .build()
+internal class FaceDetector(context: Context) {
 
-    private val detector = FaceDetection.getClient(options)
+    private val blazeFaceDetector = BlazeFaceDetector(context)
 
-    suspend fun detectFaces(bitmap: Bitmap): List<DetectedFace> = suspendCancellableCoroutine { cont ->
-        val image = InputImage.fromBitmap(bitmap, 0)
+    fun detectFaces(bitmap: Bitmap): List<DetectedFace> {
+        return try {
+            val blazeFaceResults = blazeFaceDetector.detectFaces(bitmap)
 
-        detector.process(image)
-            .addOnSuccessListener { faces ->
-                val results = faces.map { face ->
-                    DetectedFace(face.boundingBox)
-                }
-                cont.resume(results)
+            // Convert BlazeFace results to FaceDetector.DetectedFace
+            blazeFaceResults.map { blazeFace ->
+                DetectedFace(
+                    boundingBox = blazeFace.boundingBox
+                )
             }
-            .addOnFailureListener { exception ->
-                cont.resumeWithException(exception)
-            }
+        } catch (e: Exception) {
+            Log.e("FaceDetector", "Error detecting faces", e)
+            emptyList()
+        }
     }
 
     fun close() {
-        detector.close()
+        blazeFaceDetector.close()
     }
 
     data class DetectedFace(val boundingBox: Rect)

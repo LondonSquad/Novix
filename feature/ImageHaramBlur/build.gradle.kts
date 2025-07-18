@@ -43,7 +43,6 @@ android {
         disable += "FlowOperatorInvokedInComposition"
     }
 
-
 }
 
 dependencies {
@@ -55,7 +54,6 @@ dependencies {
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
 
-
     // TensorFlow Lite
     implementation(libs.tensorflow.lite.support)
     implementation(libs.tensorflow.lite)
@@ -63,12 +61,8 @@ dependencies {
     // Coil
     implementation(libs.coil.compose)
 
-    // ML Kit Face Detection
-    implementation(libs.face.detection)
-
     // Coroutines
     implementation(libs.kotlinx.coroutines.android)
-
 
     // Firebase ML Model downloader
     implementation(libs.firebase.ml.modeldownloader)
