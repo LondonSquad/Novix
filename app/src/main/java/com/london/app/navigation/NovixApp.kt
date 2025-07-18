@@ -120,7 +120,14 @@ fun NovixApp() {
                         actorId = it.getInt("actorId"),
                     )
                 }
-                TopTvShowsPicksScreen()
+                TopTvShowsPicksScreen(
+                    onBackClick = {
+                        navController.navigateUp()
+                    },
+                    onMovieClick = { movieId ->
+                        navController.navigate(MovieDetails(movieId))
+                    }
+                )
             }
 
             composable<MovieDetails> { backStackEntry ->
@@ -128,7 +135,6 @@ fun NovixApp() {
                     MovieDetailsScreen(
                         movieId = it.getInt("movieId"),
                         onBackClick = { navController.navigateUp() },
-
                         )
                 }
             }

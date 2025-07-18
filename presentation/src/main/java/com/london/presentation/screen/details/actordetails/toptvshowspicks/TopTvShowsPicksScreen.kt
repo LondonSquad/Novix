@@ -1,6 +1,7 @@
 package com.london.presentation.screen.details.actordetails.toptvshowspicks
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
@@ -9,6 +10,7 @@ import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.GridItemSpan
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
+import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -24,13 +26,17 @@ import org.koin.androidx.compose.koinViewModel
 @Composable
 fun TopTvShowsPicksScreen(
     modifier: Modifier = Modifier,
-    viewModel: TopTvShowsPicksViewModel = koinViewModel()
+    viewModel: TopTvShowsPicksViewModel = koinViewModel(),
+    onMovieClick: (movieId: Int) -> Unit = {},
+    onBackClick: () -> Unit
 ) {
     val state by viewModel.uiState.collectAsState()
     TopTvShowsPicksContent(
         state = state,
         interactions = viewModel,
-        modifier = modifier
+        modifier = modifier,
+        onBackClick = onBackClick,
+        onMovieClick = onMovieClick,
     )
 }
 
@@ -38,7 +44,9 @@ fun TopTvShowsPicksScreen(
 private fun TopTvShowsPicksContent(
     state: TopTvShowsPicksUiState,
     interactions: TopTvShowsPicksInteractions,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    onBackClick: () -> Unit,
+    onMovieClick: (movieId: Int) -> Unit = {},
 ) {
     LazyVerticalGrid(
         columns = GridCells.Fixed(2),
@@ -55,15 +63,15 @@ private fun TopTvShowsPicksContent(
             TopBar(
                 modifier = Modifier.statusBarsPadding(),
                 title = stringResource(R.string.top_tv_shows_picks),
-                onBackClick = interactions::onBackClick
+                onBackClick = onBackClick
             )
         }
-        items(state.movieDetails.cast.size) { index ->
-            val movie = state.movieDetails.cast[index]
+        items(state.tvShowDetails.cast) { item ->
             HomeCard(
-                imageUrl = movie.posterUrl,
+                imageUrl = item.posterUrl,
                 isSaved = false,
-                onSaveClick = { interactions.onSaveMovie(movie.id) }
+                onSaveClick = { interactions.onSaveMovie(item.id) },
+                modifier = Modifier.clickable{ onMovieClick(item.id) }
             )
         }
     }

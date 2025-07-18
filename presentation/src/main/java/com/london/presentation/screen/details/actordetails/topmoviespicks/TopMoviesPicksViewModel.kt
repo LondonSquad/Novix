@@ -33,7 +33,6 @@ class TopMoviesPicksViewModel(
 
     private fun getActorMoviePicksData() {
         viewModelScope.launch {
-            Log.d("AAA","getActorMoviePicksData: ${getActorMoviePicksById.invoke(actorId)}")
             try {
                 _uiState.update {
                     it.copy(
