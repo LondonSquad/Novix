@@ -3,22 +3,19 @@ package com.ae.imageharamblur
 import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.Rect
-import android.util.Log
-import com.ae.imageharamblur.detection.FaceDetector
+import com.ae.imageharamblur.faceDetection.FaceDetector
 import com.ae.imageharamblur.models.ContentDetectionModel
 import com.ae.imageharamblur.models.GenderDetectionModel
 import com.ae.imageharamblur.models.ModelDownloadManager
 import kotlinx.coroutines.*
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
-import kotlinx.coroutines.flow.StateFlow
+import com.ae.imageharamblur.faceDetection.DetectedFace
 
 class ImageModerationProcessor(private val context: Context) {
 
-    private val faceDetector = FaceDetector()
-    val modelDownloadManager = ModelDownloadManager(context)
-    val downloadState: StateFlow<ModelDownloadManager.ModelDownloadState>
-        get() = modelDownloadManager.downloadState
+    private val faceDetector = FaceDetector(context)
+    private val modelDownloadManager = ModelDownloadManager(context)
 
     private var genderModel: GenderDetectionModel? = null
     private var contentModel: ContentDetectionModel? = null
@@ -26,12 +23,6 @@ class ImageModerationProcessor(private val context: Context) {
 
     private val mutex = Mutex()
     private var activeJob: Job? = null
-
-    suspend fun downloadModels(wifiOnly: Boolean = true) {
-        modelDownloadManager.downloadModelsIfNeeded(wifiOnly)
-    }
-
-    fun areModelsReady(): Boolean = modelDownloadManager.areModelsReady()
 
     private suspend fun ensureModelsLoaded() {
         if (modelsInitialized) return
@@ -45,7 +36,6 @@ class ImageModerationProcessor(private val context: Context) {
                 contentModel = ContentDetectionModel(modelFiles.nsfwModelFile)
                 modelsInitialized = true
             } catch (e: Exception) {
-                Log.e("ImageModerationProcessor", "Failed to download models, using local assets", e)
                 genderModel = GenderDetectionModel(context)
                 contentModel = ContentDetectionModel(context)
                 modelsInitialized = true
@@ -60,17 +50,17 @@ class ImageModerationProcessor(private val context: Context) {
         useContentDetection: Boolean = true,
         strictMode: Boolean = false
     ): ProcessingResult = withContext(Dispatchers.Default) {
-
         ensureModelsLoaded()
+
         mutex.withLock {
             activeJob = coroutineContext[Job]
         }
 
         try {
             val contentDeferred = async {
-                if (useContentDetection && contentModel != null) {
+                if (useContentDetection && contentModel != null)
                     contentModel!!.detectContent(bitmap)
-                } else null
+                else null
             }
 
             val facesDeferred = async {
@@ -81,50 +71,55 @@ class ImageModerationProcessor(private val context: Context) {
             val faces = facesDeferred.await()
             val faceInfoList = mutableListOf<FaceInfo>()
 
-            if (contentResult != null && contentResult.isInappropriate) {
+            if (contentResult != null && contentResult.isInappropriate)
                 return@withContext ProcessingResult(
                     shouldModerate = true,
                     reason = "Inappropriate content detected",
-                    details = DetectionDetails(
+                    details = ProcessingDetails(
                         contentScore = contentResult.score,
                         isInappropriate = true,
                         faceRegions = faceInfoList
                     )
                 )
-            }
 
             var femaleCount = 0
             var maleCount = 0
             var uncertainCount = 0
 
-            for (face in faces) {
-                val faceBitmap = cropFace(bitmap, face)
-                val genderResult = genderModel?.detectGender(faceBitmap)
+            faces.forEach { face ->
+                try {
+                    val faceBitmap = cropFace(bitmap, face)
+                    val genderResult = genderModel?.detectGender(faceBitmap)
 
-                if (genderResult != null) {
-                    val gender = when {
-                        genderResult.confidence < DEFAULT_GENDER_CONFIDENCE_THRESHOLD -> {
-                            uncertainCount++
-                            if (strictMode) femaleCount++
-                            Gender.UNCERTAIN
-                        }
-                        genderResult.isFemale -> {
-                            femaleCount++
-                            Gender.FEMALE
-                        }
-                        else -> {
-                            maleCount++
-                            Gender.MALE
-                        }
-                    }
+                    genderResult?.let { result ->
+                        val gender = when {
+                            result.confidence < DEFAULT_GENDER_CONFIDENCE_THRESHOLD -> {
+                                uncertainCount++
+                                if (strictMode) femaleCount++
+                                Gender.UNCERTAIN
+                            }
 
-                    faceInfoList.add(
-                        FaceInfo(
-                            boundingBox = face.boundingBox,
-                            gender = gender,
-                            confidence = genderResult.confidence
+                            result.isFemale -> {
+                                femaleCount++
+                                Gender.FEMALE
+                            }
+
+                            else -> {
+                                maleCount++
+                                Gender.MALE
+                            }
+                        }
+
+                        faceInfoList.add(
+                            FaceInfo(
+                                boundingBox = face.boundingBox,
+                                gender = gender,
+                                confidence = result.confidence
+                            )
                         )
-                    )
+                    }
+                } catch (_: Exception) {
+                    // Skip this face
                 }
             }
 
@@ -136,16 +131,16 @@ class ImageModerationProcessor(private val context: Context) {
             }
 
             val reason = when {
-                shouldModerate && femaleCount > 0 -> "Detected $femaleCount female face(s)"
-                shouldModerate && maleCount > 0 -> "Detected $maleCount male face(s)"
-                shouldModerate && strictMode -> "Uncertain detection in strict mode"
+                femaleCount > 0 && detectFemales -> "Detected $femaleCount female face(s)"
+                maleCount > 0 && detectMales -> "Detected $maleCount male face(s)"
+                uncertainCount > 0 && strictMode -> "Uncertain detection in strict mode"
                 else -> null
             }
 
             ProcessingResult(
                 shouldModerate = shouldModerate,
                 reason = reason,
-                details = DetectionDetails(
+                details = ProcessingDetails(
                     facesDetected = faces.size,
                     femalesDetected = femaleCount,
                     malesDetected = maleCount,
@@ -161,14 +156,12 @@ class ImageModerationProcessor(private val context: Context) {
         }
     }
 
-    private fun cropFace(bitmap: Bitmap, face: FaceDetector.DetectedFace): Bitmap {
+    private fun cropFace(bitmap: Bitmap, face: DetectedFace): Bitmap {
         val rect = face.boundingBox
-        val padding = (rect.width() * FACE_CROP_PADDING).toInt()
-
-        val left = (rect.left - padding).coerceAtLeast(0)
-        val top = (rect.top - padding).coerceAtLeast(0)
-        val right = (rect.right + padding).coerceAtMost(bitmap.width)
-        val bottom = (rect.bottom + padding).coerceAtMost(bitmap.height)
+        val left = (rect.left).coerceAtLeast(0)
+        val top = (rect.top).coerceAtLeast(0)
+        val right = (rect.right).coerceAtMost(bitmap.width)
+        val bottom = (rect.bottom).coerceAtMost(bitmap.height)
 
         val width = right - left
         val height = bottom - top
@@ -176,30 +169,24 @@ class ImageModerationProcessor(private val context: Context) {
         return Bitmap.createBitmap(bitmap, left, top, width, height)
     }
 
-    suspend fun cleanup() {
-        Log.d("ImageModerationProcessor", "cleanup called, waiting for active moderation to complete")
-        mutex.withLock {
-            activeJob?.cancelAndJoin()
+    fun close() {
+        runBlocking {
+            mutex.withLock {
+                activeJob?.cancelAndJoin()
+            }
         }
         faceDetector.close()
         genderModel?.close()
         contentModel?.close()
-        Log.d("ImageModerationProcessor", "cleanup completed")
-    }
-
-    companion object {
-        const val DEFAULT_CONTENT_THRESHOLD = 0.3f
-        private const val DEFAULT_GENDER_CONFIDENCE_THRESHOLD = 0.5f
-        private const val FACE_CROP_PADDING = 0.15f
     }
 
     data class ProcessingResult(
         val shouldModerate: Boolean,
         val reason: String? = null,
-        val details: DetectionDetails? = null
+        val details: ProcessingDetails? = null
     )
 
-    data class DetectionDetails(
+    data class ProcessingDetails(
         val facesDetected: Int = 0,
         val femalesDetected: Int = 0,
         val malesDetected: Int = 0,
@@ -216,5 +203,11 @@ class ImageModerationProcessor(private val context: Context) {
 
     enum class Gender {
         MALE, FEMALE, UNCERTAIN
+    }
+
+    companion object {
+        const val DEFAULT_CONTENT_THRESHOLD = 0.3f
+        private const val DEFAULT_GENDER_CONFIDENCE_THRESHOLD = 0.5f
+        private const val FACE_CROP_PADDING = 0.15f
     }
 }

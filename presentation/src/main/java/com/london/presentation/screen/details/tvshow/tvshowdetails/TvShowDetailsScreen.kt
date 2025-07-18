@@ -63,12 +63,12 @@ import com.london.designsystem.component.RatingBar
 import com.london.designsystem.component.SaveIcon
 import com.london.designsystem.component.UnSuitableEye
 import com.london.designsystem.component.button.ErrorImage
-import com.london.designsystem.component.button.PrimaryButton
 import com.london.designsystem.theme.NovixTheme
 import com.london.domain.entity.tvshowdetails.ImageItemEntity
 import com.london.domain.entity.tvshowdetails.TvShowCastMemberEntity
-import com.london.presentation.utils.Listen
 import com.london.presentation.composables.ConditionalText
+import com.london.presentation.composables.FooterSection
+import com.london.presentation.utils.Listen
 import com.london.presentation.utils.toLocalizedNumbers
 import kotlinx.coroutines.delay
 import org.koin.androidx.compose.koinViewModel
@@ -238,40 +238,14 @@ fun TvShowsDetailScreenContent(
         )
 
         FooterSection(
-            modifier = Modifier.align(Alignment.BottomCenter)
-        )
-    }
-}
-
-@Composable
-fun FooterSection(modifier: Modifier = Modifier) {
-    Row(
-        modifier = modifier
-            .fillMaxWidth()
-            .padding(horizontal = 16.dp, vertical = 24.dp),
-        horizontalArrangement = Arrangement.spacedBy(8.dp),
-        verticalAlignment = Alignment.CenterVertically
-    ) {
-        PrimaryButton(
-            text = "",
-            hasLabel = false,
-            icon = com.london.presentation.R.drawable.movie_button_star,
-            hasIcon = true,
-            isLoading = false,
-            isDisabled = false,
-            onClick = {},
-            modifier = Modifier
-        )
-
-        PrimaryButton(
-            text = stringResource(com.london.presentation.R.string.play_trailer),
-            hasLabel = true,
-            hasIcon = false,
-            isLoading = false,
-            isDisabled = false,
-            onClick = {},
-            icon = null,
-            modifier = Modifier.weight(1f)
+            haveTrailer = uiState.haveTrailer,
+            modifier = Modifier.align(Alignment.BottomCenter),
+            onPlayClick = {
+                // TODO play trailer onclick handler
+            },
+            onStarClick = {
+                // TODO save favorite onclick handler
+            }
         )
     }
 }
@@ -718,7 +692,7 @@ fun EpisodeRow(
                 loadingContent = { CircularLoading() },
                 errorContent = { ErrorImage() },
                 moderatedContent = { UnSuitableEye() }
-                )
+            )
 
             Column(
                 verticalArrangement = Arrangement.spacedBy(2.dp),
