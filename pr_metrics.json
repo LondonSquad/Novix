@@ -3838,5 +3838,33 @@
       "deletions": 93,
       "changed_files": 3
     }
+  },
+  {
+    "pr_number": 195,
+    "url": "https://github.com/LondonSquad/Novix/pull/195",
+    "title": "fix: bottom filter bar",
+    "opened_at": "2025-07-18T19:37:23Z",
+    "head_ref": "hotfix/refactor-issues",
+    "base_ref": "develop",
+    "creator": {
+      "login": "Abdulrahman1890",
+      "id": 76666355,
+      "url": "https://github.com/Abdulrahman1890"
+    },
+    "approvals": [],
+    "first_approved_at": null,
+    "time_to_first_approval_minutes": null,
+    "required_approvals_met_at": null,
+    "time_to_required_approvals_minutes": null,
+    "closed_at": null,
+    "merged_at": null,
+    "merged_by": null,
+    "week": "2025-W29",
+    "status": "pending",
+    "diff_stats": {
+      "additions": 67,
+      "deletions": 57,
+      "changed_files": 3
+    }
   }
 ]
