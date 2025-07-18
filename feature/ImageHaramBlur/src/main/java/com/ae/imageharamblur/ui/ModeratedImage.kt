@@ -1,5 +1,6 @@
 package com.ae.imageharamblur.ui
 
+import android.graphics.Bitmap
 import android.os.Build
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.fillMaxSize
@@ -9,6 +10,8 @@ import androidx.compose.ui.draw.blur
 import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.dp
+
+private val isAndroid12OrAbove = Build.VERSION.SDK_INT >= Build.VERSION_CODES.S
 
 @Composable
 fun ModeratedImage(
@@ -20,24 +23,92 @@ fun ModeratedImage(
 ) {
     if (!state.isModerated || state.originalBitmap == null) return
 
-    val imageModifier = if (state.shouldBlur && Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
-        Modifier
-            .fillMaxSize()
-            .blur(radius = blurStrength.dp)
-    } else {
-        Modifier.fillMaxSize()
+    when {
+        state.shouldBlur -> BlurredImage(
+            state = state,
+            contentDescription = contentDescription,
+            modifier = modifier,
+            contentScale = contentScale,
+            blurStrength = blurStrength
+        )
+        else -> NormalImage(
+            bitmap = state.originalBitmap,
+            contentDescription = contentDescription,
+            modifier = modifier,
+            contentScale = contentScale
+        )
     }
+}
 
-    val bitmapToShow = if (state.shouldBlur && Build.VERSION.SDK_INT < Build.VERSION_CODES.S) {
-        state.blurredBitmap ?: state.originalBitmap
-    } else {
-        state.originalBitmap
+@Composable
+private fun BlurredImage(
+    state: ImageModerationState,
+    contentDescription: String?,
+    modifier: Modifier,
+    contentScale: ContentScale,
+    blurStrength: Float
+) {
+    when {
+        isAndroid12OrAbove -> NativeBlurImage(
+            bitmap = state.originalBitmap!!,
+            contentDescription = contentDescription,
+            modifier = modifier,
+            contentScale = contentScale,
+            blurStrength = blurStrength
+        )
+        else -> PreProcessedBlurImage(
+            bitmap = state.blurredBitmap ?: state.originalBitmap!!,
+            contentDescription = contentDescription,
+            modifier = modifier,
+            contentScale = contentScale
+        )
     }
+}
 
+@Composable
+private fun NativeBlurImage(
+    bitmap: Bitmap,
+    contentDescription: String?,
+    modifier: Modifier,
+    contentScale: ContentScale,
+    blurStrength: Float
+) {
     Image(
-        bitmap = bitmapToShow.asImageBitmap(),
+        bitmap = bitmap.asImageBitmap(),
         contentDescription = contentDescription,
         contentScale = contentScale,
-        modifier = modifier.then(imageModifier)
+        modifier = modifier
+            .fillMaxSize()
+            .blur(radius = blurStrength.dp)
+    )
+}
+
+@Composable
+private fun PreProcessedBlurImage(
+    bitmap: Bitmap,
+    contentDescription: String?,
+    modifier: Modifier,
+    contentScale: ContentScale
+) {
+    Image(
+        bitmap = bitmap.asImageBitmap(),
+        contentDescription = contentDescription,
+        contentScale = contentScale,
+        modifier = modifier.fillMaxSize()
+    )
+}
+
+@Composable
+private fun NormalImage(
+    bitmap: Bitmap,
+    contentDescription: String?,
+    modifier: Modifier,
+    contentScale: ContentScale
+) {
+    Image(
+        bitmap = bitmap.asImageBitmap(),
+        contentDescription = contentDescription,
+        contentScale = contentScale,
+        modifier = modifier.fillMaxSize()
     )
 }
