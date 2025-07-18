@@ -78,7 +78,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        abi: [armeabi-v7a, arm64-v8a, x86, x86_64]
+        abi: [x86_64, x86, arm64-v8a, armeabi-v7a]
 
     steps:
       - name: Download built APKs
@@ -95,8 +95,8 @@ jobs:
           groups: testers
           file: apks/app-${{ matrix.abi }}-release.apk
           releaseNotes: |
-            📦 *Split APK Build*
-            🔧 ABI: `${{ matrix.abi }}`
+            📦 Split APK Build
+            🔧 ABI: ${{ matrix.abi }}
             🆕 PR #${{ needs.build.outputs.pr_number }}: ${{ needs.build.outputs.pr_title }}
-            🔀 Branch: `${{ needs.build.outputs.ref_name }}`
-            🔖 Commit: `${{ needs.build.outputs.sha }}`
+            🔀 Branch: ${{ needs.build.outputs.ref_name }}
+            🔖 Commit: ${{ needs.build.outputs.sha }}
