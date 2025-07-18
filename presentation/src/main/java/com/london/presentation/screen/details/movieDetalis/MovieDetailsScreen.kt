@@ -27,7 +27,7 @@ import androidx.compose.foundation.layout.statusBars
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyHorizontalGrid
-import androidx.compose.foundation.lazy.grid.items
+import androidx.compose.foundation.lazy.grid.itemsIndexed
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -79,7 +79,8 @@ fun MovieDetailsScreen(
     onBackClick: () -> Unit = {},
     onPreviewClick: (Int) -> Unit = {},
     onGenreClick: (Int) -> Unit = {},
-    onNavigateToMovie: (Int)-> Unit
+    onNavigateToMovie: (Int) -> Unit,
+    onNavigateToActor: (Int) -> Unit
 ) {
     val state by viewModel.uiState.collectAsState()
     when {
@@ -101,7 +102,8 @@ fun MovieDetailsScreen(
                 onBackClick,
                 onPreviewClick = onPreviewClick,
                 onGenreClick = onGenreClick,
-            onNavigateToMovie = onNavigateToMovie
+                onNavigateToMovie = onNavigateToMovie,
+                onNavigateToActor = onNavigateToActor
             )
         }
     }
@@ -114,7 +116,8 @@ fun MovieDetailsContent(
     onBackClick: () -> Unit,
     onPreviewClick: (Int) -> Unit,
     onGenreClick: (Int) -> Unit,
-    onNavigateToMovie: (Int)-> Unit,
+    onNavigateToMovie: (Int) -> Unit,
+    onNavigateToActor: (Int) -> Unit
 ) {
     val lazyState = rememberLazyListState()
     val isScrolledFarEnough = remember {
@@ -276,12 +279,14 @@ fun MovieDetailsContent(
                         horizontalArrangement = Arrangement.spacedBy(12.dp),
                         contentPadding = PaddingValues(vertical = 8.dp, horizontal = 16.dp)
                     ) {
-                        items(state.actors) { actor ->
+                        itemsIndexed(state.actors) {index, actor ->
                             ActorItem(
                                 actorName = actor.name,
                                 characterName = actor.characterName,
                                 imageRes = actor.avatarUrl,
-                                modifier = Modifier.defaultMinSize(minWidth = 296.dp)
+                                modifier = Modifier
+                                    .defaultMinSize(minWidth = 296.dp)
+                                    .clickable { onNavigateToActor(state.actors[index].actorId) }
                             )
                         }
                     }
@@ -306,7 +311,7 @@ fun MovieDetailsContent(
                             .padding(top = 12.dp),
                         horizontalArrangement = Arrangement.spacedBy(12.dp)
                     ) {
-                        rowItems.forEachIndexed { index,movie ->
+                        rowItems.forEachIndexed { index, movie ->
                             HomeCard(
                                 imageUrl = movie.image,
                                 isSaved = movie.isSaved,
@@ -315,7 +320,7 @@ fun MovieDetailsContent(
                                 },
                                 modifier = Modifier
                                     .weight(1f)
-                                    .clickable { onNavigateToMovie(state.similarMovies[index].id) }
+                                    .clickable { onNavigateToMovie(state.similarMovies[index].movieId) }
                             )
                         }
                         if (rowItems.size == 1) {

@@ -26,10 +26,11 @@ data class ActorUIState(
     val name: String,
     val avatarUrl: String,
     val characterName: String,
+    val actorId: Int
 )
 
 data class SimilarMovieUIState(
     val image: String,
     val isSaved: Boolean,
-    val id: Int
+    val movieId: Int,
 )
