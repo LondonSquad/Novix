@@ -1,5 +1,6 @@
 package com.london.data.datasource.remote.details.tvshowdetails
 
+import com.london.data.datasource.device.DeviceConfigurationDataSource
 import com.london.data.datasource.remote.ApiConstants
 import com.london.data.datasource.remote.details.tvshowdetails.model.TvShowCastRemoteResponse
 import com.london.data.datasource.remote.details.tvshowdetails.model.TvShowDetailsRemoteResponse
@@ -13,22 +14,35 @@ import org.koin.core.annotation.Single
 @Single
 class TvShowDetailsRemoteDataSourceImpl(
     private val ktorClient: HttpClient,
+    private val deviceConfigurationDataSource: DeviceConfigurationDataSource
 ) : TvShowDetailsRemoteDataSource {
 
     override suspend fun getTvShowDetailsById(tvShowId: Int): TvShowDetailsRemoteResponse =
-        ktorClient.get(path = ApiConstants.getTvShowDetailsPath(tvShowId))
+        ktorClient.get(
+            path = ApiConstants.getTvShowDetailsPath(tvShowId),
+            params = mapOf("language" to deviceConfigurationDataSource.getCurrentLanguage())
+        )
 
     override suspend fun getTvShowEpisodesBySeason(
         tvShowId: Int,
         seasonNumber: Int
     ): TvShowEpisodesRemoteResponse =
-        ktorClient.get(path = ApiConstants.getTvShowEpisodeBySeasonPath(tvShowId, seasonNumber))
+        ktorClient.get(
+            path = ApiConstants.getTvShowEpisodeBySeasonPath(tvShowId, seasonNumber),
+            params = mapOf("language" to deviceConfigurationDataSource.getCurrentLanguage())
+        )
 
     override suspend fun getCastsByTvShowId(tvShowId: Int): TvShowCastRemoteResponse =
-        ktorClient.get(path = ApiConstants.getCastTvShowPath(tvShowId))
+        ktorClient.get(
+            path = ApiConstants.getCastTvShowPath(tvShowId),
+            params = mapOf("language" to deviceConfigurationDataSource.getCurrentLanguage())
+        )
 
     override suspend fun getTvShowImagesById(tvShowId: Int): TvShowImagesRemoteResponse =
-        ktorClient.get(path = ApiConstants.getImagesTvShowPath(tvShowId))
+        ktorClient.get(
+            path = ApiConstants.getImagesTvShowPath(tvShowId),
+            params = mapOf("language" to deviceConfigurationDataSource.getCurrentLanguage())
+        )
 
     override suspend fun getEpisodeDetailsByPosition(
         tvShowId: Int,
@@ -39,6 +53,7 @@ class TvShowDetailsRemoteDataSourceImpl(
             tvShowId,
             seasonNumber,
             episodeNumber
-        )
+        ),
+        params = mapOf("language" to deviceConfigurationDataSource.getCurrentLanguage())
     )
 }
