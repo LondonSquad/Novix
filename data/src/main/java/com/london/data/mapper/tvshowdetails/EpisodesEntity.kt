@@ -1,3 +1,4 @@
+@file:KoverIgnore
 package com.london.data.mapper.tvshowdetails
 
 import com.london.data.datasource.remote.details.tvshowdetails.model.tvshowepisode.EpisodeCrewMember

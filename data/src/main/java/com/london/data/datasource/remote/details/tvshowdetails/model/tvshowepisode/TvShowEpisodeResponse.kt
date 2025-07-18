@@ -1,8 +1,10 @@
 package com.london.data.datasource.remote.details.tvshowdetails.model.tvshowepisode
 
+import com.london.domain.KoverIgnore
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
+@KoverIgnore
 @Serializable
 data class TvShowEpisodeResponse(
     @SerialName("air_date")
