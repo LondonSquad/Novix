@@ -61,6 +61,7 @@ import com.london.designsystem.component.CircularLoading
 import com.london.designsystem.component.NovixCarousalRow
 import com.london.designsystem.component.RatingBar
 import com.london.designsystem.component.SaveIcon
+import com.london.designsystem.component.UnSuitableEye
 import com.london.designsystem.component.button.ErrorImage
 import com.london.designsystem.component.button.PrimaryButton
 import com.london.designsystem.theme.NovixTheme
@@ -318,7 +319,9 @@ fun CustomBackDropImagePager(
                 model = images[pageIndex].fileUrl,
                 contentDescription = "TV Show Image ${pageIndex + 1}",
                 errorContent = { ErrorImage() },
-                loadingContent = { CircularLoading(modifier = Modifier) })
+                loadingContent = { CircularLoading(modifier = Modifier) },
+                moderatedContent = { UnSuitableEye() }
+            )
         }
 
         val dotsStates = List(images.size) { index ->
@@ -714,7 +717,7 @@ fun EpisodeRow(
                     .weight(0.35f),
                 loadingContent = { CircularLoading() },
                 errorContent = { ErrorImage() },
-
+                moderatedContent = { UnSuitableEye() }
                 )
 
             Column(

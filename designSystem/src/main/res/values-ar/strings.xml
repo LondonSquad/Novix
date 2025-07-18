@@ -24,4 +24,6 @@
     <string name="m">د</string>
     <string name="episodes">الحلقات</string>
     <string name="season">موسم</string>
+    <string name="unsuitable_eye_icon">ايقونه محتوي غير لائق</string>
+    <string name="unsuitable_eye_content">صوره غير مناسبه</string>
 </resources>
