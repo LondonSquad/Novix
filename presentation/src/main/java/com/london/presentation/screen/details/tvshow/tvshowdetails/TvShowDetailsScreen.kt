@@ -248,7 +248,7 @@ fun FooterSection(modifier: Modifier = Modifier) {
     Row(
         modifier = modifier
             .fillMaxWidth()
-            .padding(horizontal = 16.dp, vertical = 24.dp),
+            .padding(horizontal = 24.dp, vertical = 24.dp),
         horizontalArrangement = Arrangement.spacedBy(8.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {
@@ -377,8 +377,8 @@ fun TvShowScreenTopBar(
         SaveIcon(
             isSaved = false,
             onSaveClick = { },
-            modifier = Modifier.size(40.dp),
-            backgroundColor = NovixTheme.colors.iconBackgroundLow
+            backgroundColor = NovixTheme.colors.iconBackgroundLow,
+            modifier = Modifier.size(40.dp)
         )
     }
 }
@@ -765,7 +765,7 @@ fun EpisodeRow(
 
                     if (episode.airDate != null)
                         Text(
-                            text = episode.airDate.toLocalizedNumbers(),
+                            text = convertDate(episode.airDate.toString()) ,
                             style = NovixTheme.typography.label.small,
                             color = NovixTheme.colors.hint
                         )
