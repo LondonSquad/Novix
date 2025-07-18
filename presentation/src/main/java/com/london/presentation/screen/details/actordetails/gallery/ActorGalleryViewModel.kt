@@ -46,6 +46,5 @@ class ActorGalleryViewModel(
         }
     }
 
-    // Required by ActorGalleryInteractions, even if left empty
     override fun onBackClick() { }
 }

@@ -31,10 +31,8 @@ import org.koin.androidx.compose.koinViewModel
 
 @Composable
 fun ActorGalleryScreen(
-    actorId: Int,
     onBackClick: () -> Unit,
-    viewModel: ActorGalleryViewModel = koinViewModel(),
-    interactions: ActorGalleryInteractions = viewModel
+    viewModel: ActorGalleryViewModel = koinViewModel()
 ) {
     val uiState by viewModel.uiState.collectAsState()
 
@@ -48,7 +46,7 @@ fun ActorGalleryScreen(
         TopBar(
             modifier = Modifier.padding(bottom = 5.dp),
             title = stringResource(R.string.gallery),
-            onBackClick = interactions::onBackClick
+            onBackClick = onBackClick
         )
         Box(modifier = Modifier.weight(1f)) {
             if (uiState.isLoading) {

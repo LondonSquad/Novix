@@ -190,7 +190,6 @@ fun NovixApp() {
             composable<Screen.ActorGallery> { backStackEntry ->
                 val actorId = backStackEntry.arguments?.getInt("actorId") ?: 0
                 ActorGalleryScreen(
-                    actorId = actorId,
                     onBackClick = { navController.navigate(Screen.ActorDetails(actorId)) }
                 )
             }
