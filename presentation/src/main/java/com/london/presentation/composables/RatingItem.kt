@@ -14,7 +14,6 @@ import com.london.designsystem.theme.NovixTheme
 @Composable
 fun RatingItem(
     modifier: Modifier = Modifier,
-    rating: Int,
     voteAverage: String
 ) {
     Row(
@@ -24,7 +23,7 @@ fun RatingItem(
     ) {
         RatingBar(
             modifier = Modifier.size(12.dp),
-            rating = rating,
+            rating = 1,
             onRatingChanged = {},
             maxRating = 1
         )

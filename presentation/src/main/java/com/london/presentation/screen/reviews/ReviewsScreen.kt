@@ -161,7 +161,6 @@ fun ReviewHeader(
         ) {
 
             RatingItem(
-                rating = rating.toInt(),
                 voteAverage = rating,
                 modifier = Modifier.align(Alignment.TopEnd)
             )

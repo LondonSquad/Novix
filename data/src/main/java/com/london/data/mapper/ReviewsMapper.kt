@@ -11,7 +11,7 @@ fun ApiResponse<ReviewResponse>.toReviewEntity(): PagedFetchResponse<ReviewEntit
     PagedFetchResponse(
         items = this.items.map { it.toReviewEntity() },
         currentPage = this.currentPage,
-        totalPages = this.totalPages,
+        totalPages = if (totalPages!= 0) this.totalPages else 1,
         totalItems = this.totalItems
     )
 
@@ -31,5 +31,5 @@ fun AuthorDetailsResponse.toAuthorDetails(): AuthorDetails =
         name = this.authorName.orEmpty(),
         username = this.authorUsername.orEmpty(),
         profileUrl = authorPictureUrl ?: "",
-        rating = this.rating ?: 0
+        rating = this.rating ?: 0f
     )
