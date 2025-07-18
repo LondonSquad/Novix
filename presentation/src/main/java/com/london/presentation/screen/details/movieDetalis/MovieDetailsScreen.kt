@@ -279,14 +279,14 @@ fun MovieDetailsContent(
                         horizontalArrangement = Arrangement.spacedBy(12.dp),
                         contentPadding = PaddingValues(vertical = 8.dp, horizontal = 16.dp)
                     ) {
-                        itemsIndexed(state.actors) {index, actor ->
+                        itemsIndexed(state.actors) {_, actor ->
                             ActorItem(
                                 actorName = actor.name,
                                 characterName = actor.characterName,
                                 imageRes = actor.avatarUrl,
                                 modifier = Modifier
                                     .defaultMinSize(minWidth = 296.dp)
-                                    .clickable { onNavigateToActor(state.actors[index].actorId) }
+                                    .clickable { onNavigateToActor(actor.actorId) }
                             )
                         }
                     }
