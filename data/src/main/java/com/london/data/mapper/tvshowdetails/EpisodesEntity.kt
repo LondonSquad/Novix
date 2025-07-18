@@ -3,16 +3,16 @@ package com.london.data.mapper.tvshowdetails
 import com.london.data.datasource.remote.details.tvshowdetails.model.tvshowepisode.EpisodeCrewMember
 import com.london.data.datasource.remote.details.tvshowdetails.model.tvshowepisode.EpisodeGuestStar
 import com.london.data.datasource.remote.details.tvshowdetails.model.tvshowepisode.TvShowEpisodeBySeason
+import com.london.data.datasource.remote.details.tvshowdetails.model.tvshowepisode.TvShowEpisodeResponse
 import com.london.data.datasource.remote.details.tvshowdetails.model.tvshowepisode.TvShowEpisodesRemoteResponse
 import com.london.data.utils.asImageUrlOrEmpty
 import com.london.domain.KoverIgnore
-import com.london.data.datasource.remote.details.tvshowdetails.model.tvshowepisode.TvShowEpisodeResponse
 import com.london.domain.entity.Actor
 import com.london.domain.entity.tvshowdetails.episode.EpisodeCrewMemberEntity
 import com.london.domain.entity.tvshowdetails.episode.EpisodeGuestStarEntity
+import com.london.domain.entity.tvshowdetails.episode.TvShowEpisodeByIdEntity
 import com.london.domain.entity.tvshowdetails.episode.TvShowEpisodeBySeasonEntity
 import com.london.domain.entity.tvshowdetails.episode.TvShowEpisodesEntity
-import com.london.domain.entity.tvshowdetails.episode.TvShowEpisodeByIdEntity
 
 
 @KoverIgnore
@@ -83,17 +83,17 @@ fun EpisodeGuestStar.toEpisodeGuestStarEntity(): EpisodeGuestStarEntity {
 fun TvShowEpisodeResponse.toTvShowEpisodeEntity(): TvShowEpisodeByIdEntity {
     return TvShowEpisodeByIdEntity(
         airDate = this.airDate,
-        episodeNumber = this.episodeNumber,
-        seasonNumber = this.seasonNumber,
-        episodeTypes = this.episodeType,
-        tvShowId = this.id,
-        name = this.name,
-        overview = this.overview,
-        stillPath = this.stillPath,
-        voteAverage = this.voteAverage,
-        voteCount = this.voteCount,
-        guestStars = this.guestStars.map { it.toActorEntity() },
-        id = this.id
+        episodeNumber = this.episodeNumber?:0,
+        seasonNumber = this.seasonNumber?:0,
+        episodeTypes = this.episodeType?:"",
+        tvShowId = this.id?:0,
+        name = this.name?:"",
+        overview = this.overview?:"",
+        stillPath = this.stillPath?:"",
+        voteAverage = this.voteAverage?:0.0,
+        voteCount = this.voteCount?:0,
+        guestStars = this.guestStars?.map { it.toActorEntity() } ?: emptyList(),
+        id = this.id?:0
     )
 }
 
