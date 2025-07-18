@@ -4,6 +4,7 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.toRoute
+import com.london.domain.GetCastByIdFailedException
 import com.london.domain.usecase.GetActorDetailsByIdUseCase
 import com.london.domain.usecase.GetActorImagesByIdUseCase
 import com.london.domain.usecase.GetActorMoviePicksByIdUseCase
@@ -38,9 +39,9 @@ class ActorDetailsViewModel(
     private fun getActorImage() {
         viewModelScope.launch {
             _uiState.update {
-                it.copy(
-                    actorImageDetails = getActorImagesByIdUseCase.invoke(actorId)
-                )
+                    it.copy(
+                        actorImageDetails = getActorImagesByIdUseCase.invoke(actorId)
+                    )
             }
         }
     }
@@ -63,20 +64,25 @@ class ActorDetailsViewModel(
 
     private fun getActorMovieDetails() {
         viewModelScope.launch {
-            _uiState.update {
-                it.copy(
-                    actorMovieDetails = getActorMoviePicksByIdUseCase.invoke(actorId)
-                )
+            try {
+                _uiState.update {
+                    it.copy(
+                        actorMovieDetails = getActorMoviePicksByIdUseCase.invoke(actorId)
+                    )
+                }
+            } catch (e: GetCastByIdFailedException) {
+                _uiState.update { it.copy(tvShowError = true) }
             }
         }
     }
 
     private fun getActorTvShowDetails() {
         viewModelScope.launch {
-            _uiState.update {
-                it.copy(
-                    actorTvShowDetails = getActorTvShowPicksByIdUseCase.invoke(actorId)
-                )
+            try {
+                val tvShows = getActorTvShowPicksByIdUseCase.invoke(actorId)
+                _uiState.update { it.copy(actorTvShowDetails = tvShows, tvShowError = false) }
+            } catch (e: GetCastByIdFailedException) {
+                _uiState.update { it.copy(tvShowError = true) }
             }
         }
     }

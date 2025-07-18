@@ -8,12 +8,14 @@ import com.london.domain.entity.actordetails.actortvshow.ActorTvShowDetails
 data class ActorDetailsUiState(
     val actorDetails: ActorDetails = ActorDetails(),
     val actorImageDetails: List<ImageDetails>? = null,
-    val actorMovieDetails: ActorMovieDetails = ActorMovieDetails(),
-    val actorTvShowDetails: ActorTvShowDetails = ActorTvShowDetails(),
+    val actorMovieDetails: ActorMovieDetails? = null,
+    val actorTvShowDetails: ActorTvShowDetails? = null,
     val actorName: String ="",
     val actorBirthday: String = "",
     val actorDeathDay: String? = null,
     val actorPlaceOfBirth: String = "",
     val actorBiography: String = "",
     val knownForDepartment: String = "",
-    )
+    val movieError: Boolean = false,
+    val tvShowError: Boolean = false,
+)

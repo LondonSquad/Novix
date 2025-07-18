@@ -142,7 +142,7 @@ fun ActorScreenContent(
             }
 
             item {
-                if (uiState.actorImageDetails.isNullOrEmpty()) {
+                if (!uiState.actorImageDetails.isNullOrEmpty()) {
                     SectionHeader(
                         text = stringResource(R.string.gallery),
                         hasGetAll = true,
@@ -151,38 +151,40 @@ fun ActorScreenContent(
                             .padding(top = 16.dp, bottom = 12.dp)
                             .padding(horizontal = 16.dp)
                     )
-                    uiState.actorImageDetails?.let { ActorGallery(images = it) }
+                    ActorGallery(images = uiState.actorImageDetails)
                 }
             }
 
 
             item {
-                SectionHeader(
-                    text = stringResource(R.string.top_movies_picks),
-                    hasGetAll = true,
-                    hasIcon = true,
-                    modifier = Modifier
-                        .padding(top = 16.dp, bottom = 12.dp)
-                        .padding(horizontal = 16.dp),
-                    onNavigate = onNavigateToMoviePicks
-                )
+                uiState.actorMovieDetails?.cast?.takeIf { it.isNotEmpty() }?.let { movieCast ->
+                    SectionHeader(
+                        text = stringResource(R.string.top_movies_picks),
+                        hasGetAll = true,
+                        hasIcon = true,
+                        modifier = Modifier
+                            .padding(top = 16.dp, bottom = 12.dp)
+                            .padding(horizontal = 16.dp),
+                        onNavigate = onNavigateToMoviePicks
+                    )
+                    TopMoviesPicksList(movie = movieCast)
+                }
             }
-            item {
-                TopMoviesPicksList(movie = uiState.actorMovieDetails.cast)
+
+            uiState.actorTvShowDetails?.cast?.takeIf { it.isNotEmpty() }?.let { tvShows ->
+                item {
+                    SectionHeader(
+                        text = stringResource(R.string.top_tv_shows_picks),
+                        hasGetAll = true,
+                        hasIcon = true,
+                        modifier = Modifier
+                            .padding(top = 16.dp, bottom = 12.dp)
+                            .padding(horizontal = 16.dp)
+                    )
+                    TopTvShowsPicksList(tvShow = tvShows)
+                }
             }
-            item {
-                SectionHeader(
-                    text = stringResource(R.string.top_tv_shows_picks),
-                    hasGetAll = true,
-                    hasIcon = true,
-                    modifier = Modifier
-                        .padding(top = 16.dp, bottom = 12.dp)
-                        .padding(horizontal = 16.dp)
-                )
-            }
-            item {
-                TopTvShowsPicksList(tvShow = uiState.actorTvShowDetails.cast)
-            }
+
         }
     }
 }
@@ -238,22 +240,22 @@ fun ActorGallery(images: List<ImageDetails>) {
         contentPadding = PaddingValues(horizontal = 16.dp),
         modifier = Modifier.height(88.dp)
     ) {
-            itemsIndexed(images) { _, imageDetails ->
-                ImageViewFilter(
-                    model = imageDetails.fileUrl,
-                    contentDescription = null,
-                    contentScale = ContentScale.FillBounds,
-                    modifier = Modifier
-                        .size(88.dp)
-                        .border(
-                            shape = RoundedCornerShape(12.dp),
-                            width = 1.dp,
-                            color = NovixTheme.colors.stroke
-                        )
-                        .clip(RoundedCornerShape(12.dp)),
-                    errorContent = { ErrorImage() },
-                    loadingContent = { CircularLoading(modifier = Modifier.size(24.dp)) }
-                )
+        itemsIndexed(images) { _, imageDetails ->
+            ImageViewFilter(
+                model = imageDetails.fileUrl,
+                contentDescription = null,
+                contentScale = ContentScale.FillBounds,
+                modifier = Modifier
+                    .size(88.dp)
+                    .border(
+                        shape = RoundedCornerShape(12.dp),
+                        width = 1.dp,
+                        color = NovixTheme.colors.stroke
+                    )
+                    .clip(RoundedCornerShape(12.dp)),
+                errorContent = { ErrorImage() },
+                loadingContent = { CircularLoading(modifier = Modifier.size(24.dp)) }
+            )
         }
     }
 }
