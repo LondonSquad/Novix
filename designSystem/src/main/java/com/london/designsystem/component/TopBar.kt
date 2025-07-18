@@ -2,7 +2,6 @@ package com.london.designsystem.component
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -48,7 +47,7 @@ fun TopBar(
                 color = NovixTheme.colors.title,
                 modifier = Modifier
                     .weight(1f)
-                    .padding(horizontal = 4.dp)
+                    .padding(horizontal = 12.dp)
             )
         }
 
@@ -87,7 +86,6 @@ fun ButtonTopBar(icon: Int, onClick: () -> Unit) {
             painter = painterResource(icon),
             contentDescription = "Back",
             tint = NovixTheme.colors.title,
-            modifier = Modifier .clickable(onClick = onClick)
         )
     }
 }
