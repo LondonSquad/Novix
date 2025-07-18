@@ -6,10 +6,11 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.BottomSheetDefaults
@@ -26,6 +27,7 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
@@ -53,6 +55,9 @@ fun FilterBottomSheet(
     val sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
     val scope = rememberCoroutineScope()
 
+    val configuration = LocalConfiguration.current
+    val screenHeightDp = configuration.screenHeightDp
+
     ModalBottomSheet(
         onDismissRequest = {
             scope.launch {
@@ -72,7 +77,9 @@ fun FilterBottomSheet(
         Box(
             modifier = Modifier
                 .fillMaxWidth()
-                .fillMaxHeight(0.75f)
+                .wrapContentHeight()
+                .heightIn(max = (screenHeightDp * 0.75f).dp)
+                .padding(bottom = 24.dp)
         ) {
             FilterBottomSheetContent(
                 modifier = modifier,
@@ -121,11 +128,7 @@ private fun FilterBottomSheetContent(
     onRatingChanged: (Int) -> Unit,
 ) {
     LazyColumn(
-        modifier = modifier
-            .padding(
-                start = 16.dp,
-                end = 16.dp
-            )
+        modifier = modifier.padding(horizontal = 16.dp)
     ) {
         item {
             Row(

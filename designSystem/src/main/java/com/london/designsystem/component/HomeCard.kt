@@ -50,7 +50,7 @@ fun HomeCard(
         )
         SaveIcon(
             isSaved = isSaved,
-            onSaveClick = { onSaveClick() },
+            onSaveClick = onSaveClick,
             modifier = Modifier
                 .padding(8.dp)
                 .align(Alignment.TopStart)

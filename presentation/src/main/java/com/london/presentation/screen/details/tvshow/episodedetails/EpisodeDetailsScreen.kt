@@ -62,7 +62,7 @@ import com.london.designsystem.R as Res
 @Composable
 fun EpisodeDetailsScreen(
     viewModel: EpisodeDetailsViewModel = koinViewModel(),
-    onBackClick: () -> Unit = {}
+    onBackClick: () -> Unit
 ) {
     val uiState by viewModel.uiState.collectAsState()
     EpisodeDetailsScreenContent(

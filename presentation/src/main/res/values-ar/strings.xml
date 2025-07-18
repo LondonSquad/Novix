@@ -58,5 +58,8 @@
     <string name="read_more">اقرأ المزيد</string>
     <string name="read_less">اقرأ أقل</string>
     <string name="cast">طاقم العمل</string>
-
+    <string name="biography">السيرة</string>
+    <string name="gallery">المعرض</string>
+    <string name="imagr_dot">نقطه</string>
+    <string name="actor_photos">صور الممثلين</string>"
 </resources>

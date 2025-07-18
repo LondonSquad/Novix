@@ -22,6 +22,8 @@ import com.london.designsystem.component.NavBar
 import com.london.designsystem.theme.NovixTheme
 import com.london.presentation.navigation.Screen
 import com.london.presentation.navigation.Screen.Account
+import com.london.presentation.navigation.Screen.ActorDetails
+import com.london.presentation.navigation.Screen.ActorTopMoviesPicksDetails
 import com.london.presentation.navigation.Screen.Bookmarks
 import com.london.presentation.navigation.Screen.Categories
 import com.london.presentation.navigation.Screen.EpisodeDetails
@@ -35,12 +37,16 @@ import com.london.presentation.screen.account.AccountScreen
 import com.london.presentation.screen.bookmark.BookmarksScreen
 import com.london.presentation.screen.category.CategoriesScreen
 import com.london.presentation.screen.category.moviesbycategory.MoviesByCategoryScreen
+import com.london.presentation.screen.details.actor.ActorDetailsScreen
+import com.london.presentation.screen.details.actordetails.gallery.ActorGalleryScreen
+import com.london.presentation.screen.details.actordetails.topmoviespicks.TopMoviesPicksScreen
 import com.london.presentation.screen.details.actordetails.toptvshowspicks.TopTvShowsPicksScreen
 import com.london.presentation.screen.details.movieDetalis.MovieDetailsScreen
 import com.london.presentation.screen.details.tvshow.episodedetails.EpisodeDetailsScreen
 import com.london.presentation.screen.details.tvshow.tvshowdetails.TvShowsDetailsScreen
 import com.london.presentation.screen.home.HomeScreen
 import com.london.presentation.screen.search.SearchScreen
+
 
 @Composable
 fun NovixApp() {
@@ -93,13 +99,17 @@ fun NovixApp() {
                 enterTransition = { fadeIn(tween(500)) },
                 popExitTransition = { fadeOut(tween(500)) },
             ) {
-                SearchScreen(onNavigateToTvShowDetails = { tvShowId ->
-                    navController.navigate(TvShowDetails(tvShowId))
-                }, onNavigateToActorDetails = { actorId ->
-                    navController.navigate(TopTvShowsPicksDetails(actorId))
-                }, onNavigateToMovieDetails = { movieId ->
-                    navController.navigate(MovieDetails(movieId))
-                })
+                SearchScreen(
+                    onNavigateToTvShowDetails = { tvShowId ->
+                        navController.navigate(TvShowDetails(tvShowId))
+                    },
+                    onNavigateToActorDetails = { actorId ->
+                        navController.navigate(ActorDetails(actorId))
+                    },
+                    onNavigateToMovieDetails = { movieId ->
+                        navController.navigate(MovieDetails(movieId))
+                    }
+                )
             }
             composable<Categories>(
                 exitTransition = { fadeOut(tween(500)) },
@@ -187,20 +197,48 @@ fun NovixApp() {
                 )
             }
 
+            composable<ActorDetails> { backStackEntry ->
+                val actorDetails = backStackEntry.arguments?.let {
+                    ActorDetails(
+                        actorId = it.getInt("actorId"),
+                    )
+                    ActorDetailsScreen(
+                        onNavigateToMoviePicks = { actorId ->
+                            navController.navigate(ActorTopMoviesPicksDetails(actorId))
+                        }, onNavigateToTvShowPicks = { actorId ->
+                            navController.navigate(TopTvShowsPicksDetails(actorId))
+                        },
+                        onNavigateToGallery = { actorId ->
+                            navController.navigate(Screen.ActorGallery(actorId))
+                        },
+                        onBackClick = { navController.navigateUp() }
+                    )
+                }
+            }
+
             composable<EpisodeDetails>(
                 exitTransition = { fadeOut(tween(500)) },
                 popEnterTransition = { fadeIn(tween(500)) },
                 enterTransition = { fadeIn(tween(500)) },
                 popExitTransition = { fadeOut(tween(500)) },
             ) {
-                EpisodeDetailsScreen()
+                EpisodeDetailsScreen(
+                    onBackClick = { navController.popBackStack() }
+                )
+            }
+            composable<Screen.ActorGallery> { backStackEntry ->
+                val actorId = backStackEntry.arguments?.getInt("actorId") ?: 0
+                ActorGalleryScreen(
+                    onBackClick = { navController.popBackStack() }
+                )
             }
         }
     }
 }
 
 private fun navigateToBottomBarDestination(
-    navController: NavHostController, destination: Screen
+    navController: NavHostController,
+    destination: Screen
 ) {
     navController.navigate(destination) {
         popUpTo(navController.graph.findStartDestination().id) {
