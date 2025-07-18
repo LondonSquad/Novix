@@ -6,7 +6,6 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
@@ -36,7 +35,6 @@ fun FooterSection(
                     startY = 0f,
                     endY = Float.POSITIVE_INFINITY
                 ),
-                shape = RoundedCornerShape(topStart = 12.dp, topEnd = 12.dp)
             )
             .padding(horizontal = if (haveTrailer) 16.dp else 24.dp)
             .padding(bottom = 24.dp)
