@@ -53,10 +53,6 @@ kotlinxDatetime = "0.6.0"
 tensorflowLiteSupport = "0.5.0"
 tensorflowLite = "2.17.0"
 
-# ML Kit
-faceDetection = "16.1.7"
-
-
 # UI Libraries
 coilCompose = "2.7.0"
 lottieCompose = "4.0.0"
@@ -148,10 +144,6 @@ remember-preference = { group = "dev.burnoo", name = "compose-remember-preferenc
 # tensorflow Lite
 tensorflow-lite-support = { module = "org.tensorflow:tensorflow-lite-support", version.ref = "tensorflowLiteSupport" }
 tensorflow-lite = { module = "org.tensorflow:tensorflow-lite", version.ref = "tensorflowLite" }
-
-# ML Kit
-face-detection = { module = "com.google.mlkit:face-detection", version.ref = "faceDetection" }
-
 
 # Testing
 junit = { group = "junit", name = "junit", version.ref = "junit" }
