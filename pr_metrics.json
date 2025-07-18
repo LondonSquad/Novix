@@ -3777,5 +3777,33 @@
       "deletions": 7,
       "changed_files": 1
     }
+  },
+  {
+    "pr_number": 194,
+    "url": "https://github.com/LondonSquad/Novix/pull/194",
+    "title": "Hotfix/enhance navigation",
+    "opened_at": "2025-07-18T19:18:16Z",
+    "head_ref": "hotfix/enhance-navigation",
+    "base_ref": "develop",
+    "creator": {
+      "login": "marwanqashwa",
+      "id": 100484790,
+      "url": "https://github.com/marwanqashwa"
+    },
+    "approvals": [],
+    "first_approved_at": null,
+    "time_to_first_approval_minutes": null,
+    "required_approvals_met_at": null,
+    "time_to_required_approvals_minutes": null,
+    "closed_at": null,
+    "merged_at": null,
+    "merged_by": null,
+    "week": "2025-W29",
+    "status": "pending",
+    "diff_stats": {
+      "additions": 83,
+      "deletions": 93,
+      "changed_files": 3
+    }
   }
 ]
