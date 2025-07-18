@@ -50,4 +50,5 @@ data class TvShowDetailsUiState(
     val type: String = "",
     val voteAverage: Double = 0.0,
     val voteCount: Int = 0,
+    val haveTrailer: Boolean = false,
 )
