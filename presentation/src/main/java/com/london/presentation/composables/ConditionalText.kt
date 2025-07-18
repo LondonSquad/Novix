@@ -40,13 +40,13 @@ fun ConditionalText(
             when {
                 !showReadMoreButtonState -> append(text)
                 !expandedState -> {
-                    append("  ")
                     append(truncatedText)
+                    append("  ")
                     withStyle(actionStyle) { append(stringResource(R.string.read_more)) }
                 }
                 else -> {
-                    append("  ")
                     append(text)
+                    append("  ")
                     withStyle(actionStyle) { append(stringResource(R.string.read_less)) }
                 }
             }
