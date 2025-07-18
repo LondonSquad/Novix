@@ -19,6 +19,7 @@ import com.london.designsystem.component.NavBar
 import com.london.designsystem.theme.NovixTheme
 import com.london.presentation.navigation.Screen
 import com.london.presentation.navigation.Screen.Account
+import com.london.presentation.navigation.Screen.ActorDetails
 import com.london.presentation.navigation.Screen.ActorTopMoviesPicksDetails
 import com.london.presentation.navigation.Screen.Bookmarks
 import com.london.presentation.navigation.Screen.Categories
@@ -84,7 +85,7 @@ fun NovixApp() {
                         navController.navigate(TvShowDetails(tvShowId))
                     },
                     onNavigateToActorDetails = { actorId ->
-                        navController.navigate(Screen.ActorDetails(actorId))
+                        navController.navigate(ActorDetails(actorId))
                     },
                     onNavigateToMovieDetails = { movieId ->
                         navController.navigate(MovieDetails(movieId))
@@ -131,15 +132,15 @@ fun NovixApp() {
                 }
             }
 
-            composable<Screen.ActorDetails> { backStackEntry ->
+            composable<ActorDetails> { backStackEntry ->
                 val actorDetails = backStackEntry.arguments?.let {
-                    Screen.ActorDetails(
+                    ActorDetails(
                         actorId = it.getInt("actorId"),
                     )
                 }
                 ActorDetailsScreen(
-                    onNavigateToMoviePicks = { actorId ->
-                        navController.navigate(Screen.ActorTopMoviesPicksDetails(actorId))
+                    onNavigateToMoviePicks = { actorId->
+                        navController.navigate(ActorTopMoviesPicksDetails(actorId))
                     },
                     onBackClick = {
                         navController.navigateUp()

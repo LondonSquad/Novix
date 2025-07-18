@@ -5,6 +5,9 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.toRoute
 import com.london.domain.usecase.GetActorDetailsByIdUseCase
+import com.london.domain.usecase.GetActorImagesByIdUseCase
+import com.london.domain.usecase.GetActorMoviePicksByIdUseCase
+import com.london.domain.usecase.GetActorTvShowPicksByIdUseCase
 import com.london.presentation.navigation.Screen
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -15,6 +18,9 @@ import org.koin.android.annotation.KoinViewModel
 @KoinViewModel
 class ActorDetailsViewModel(
     private val getActorDetailsByIdUseCase: GetActorDetailsByIdUseCase,
+    private val getActorImagesByIdUseCase: GetActorImagesByIdUseCase,
+    private val getActorMoviePicksByIdUseCase: GetActorMoviePicksByIdUseCase,
+    private val getActorTvShowPicksByIdUseCase: GetActorTvShowPicksByIdUseCase,
     savedStateHandle: SavedStateHandle,
 ) : ViewModel() {
     private val _uiState = MutableStateFlow(ActorDetailsUiState())
@@ -23,15 +29,53 @@ class ActorDetailsViewModel(
     private val actorId: Int = savedStateHandle.toRoute<Screen.ActorDetails>().actorId
 
     init {
-        updateActorImage()
+        getActorImage()
+        getActorDetails()
+        getActorMovieDetails()
+        getActorTvShowDetails()
     }
 
-    private fun updateActorImage() {
+    private fun getActorImage() {
         viewModelScope.launch {
-            val actorDetails = getActorDetailsByIdUseCase.invoke(actorId)
             _uiState.update {
                 it.copy(
-                    actorDetails = actorDetails
+                    actorImageDetails = getActorImagesByIdUseCase.invoke(actorId)
+                )
+            }
+        }
+    }
+
+    private fun getActorDetails() {
+        viewModelScope.launch {
+            _uiState.update {
+                val actorDetails = getActorDetailsByIdUseCase.invoke(actorId)
+                it.copy(
+                    actorName = actorDetails.name,
+                    actorBirthday = actorDetails.birthday,
+                    actorDeathDay = actorDetails.deathDay,
+                    actorPlaceOfBirth = actorDetails.placeOfBirth,
+                    actorBiography = actorDetails.biography,
+                    knownForDepartment = actorDetails.knownForDepartment,
+                )
+            }
+        }
+    }
+
+    private fun getActorMovieDetails() {
+        viewModelScope.launch {
+            _uiState.update {
+                it.copy(
+                    actorMovieDetails = getActorMoviePicksByIdUseCase.invoke(actorId)
+                )
+            }
+        }
+    }
+
+    private fun getActorTvShowDetails() {
+        viewModelScope.launch {
+            _uiState.update {
+                it.copy(
+                    actorTvShowDetails = getActorTvShowPicksByIdUseCase.invoke(actorId)
                 )
             }
         }

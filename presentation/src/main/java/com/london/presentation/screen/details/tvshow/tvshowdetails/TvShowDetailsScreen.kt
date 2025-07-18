@@ -49,7 +49,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.layout.layout
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.unit.dp
@@ -67,6 +66,7 @@ import com.london.designsystem.theme.NovixTheme
 import com.london.domain.entity.tvshowdetails.ImageItemEntity
 import com.london.domain.entity.tvshowdetails.TvShowCastMemberEntity
 import com.london.presentation.composables.ConditionalText
+import com.london.presentation.utils.offsetLayout
 import com.london.presentation.utils.toLocalizedNumbers
 import kotlinx.coroutines.delay
 import org.koin.androidx.compose.koinViewModel
@@ -136,16 +136,7 @@ fun TvShowsDetailScreenContent(
                     uiState = uiState,
                     modifier = Modifier
                         .fillMaxWidth()
-                        .layout { measurable, constraints ->
-                            val placeable = measurable.measure(constraints)
-
-                            val yOffsetPx = with(this) { 44.dp.roundToPx() }
-                            val adjustedHeight = (placeable.height - yOffsetPx).coerceAtLeast(0)
-
-                            layout(placeable.width, adjustedHeight) {
-                                placeable.placeRelative(0, -yOffsetPx)
-                            }
-                        }
+                        .offsetLayout()
                         .padding(start = 16.dp, end = 16.dp)
                         .heightIn(min = 158.dp)
                         .border(

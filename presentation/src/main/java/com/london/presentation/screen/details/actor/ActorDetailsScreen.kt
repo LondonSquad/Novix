@@ -1,6 +1,5 @@
 package com.london.presentation.screen.details.actor
 
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -18,15 +17,17 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyHorizontalGrid
-import androidx.compose.foundation.lazy.grid.itemsIndexed
+import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
@@ -41,7 +42,6 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.ae.imageharamblur.ui.ImageViewFilter
 import com.london.designsystem.component.CircularLoading
@@ -50,7 +50,12 @@ import com.london.designsystem.component.SectionHeader
 import com.london.designsystem.component.TopBar
 import com.london.designsystem.component.button.ErrorImage
 import com.london.designsystem.theme.NovixTheme
+import com.london.domain.entity.actordetails.actorimage.ImageDetails
+import com.london.domain.entity.actordetails.actormovie.ActorMovieCastMemberEntity
+import com.london.domain.entity.actordetails.actortvshow.ActorTvShowCastMemberEntity
 import com.london.presentation.R
+import com.london.presentation.utils.offsetLayout
+import kotlinx.coroutines.delay
 import org.koin.androidx.compose.koinViewModel
 
 @Composable
@@ -64,15 +69,19 @@ fun ActorDetailsScreen(
 ) {
     val uiState by viewModel.uiState.collectAsState()
     ActorScreenContent(
-//        uiState = uiState,
-        onBackClick = onBackClick
+        uiState = uiState,
+        onBackClick = onBackClick,
+        onNavigateToMoviePicks = onNavigateToMoviePicks
     )
 }
 
 @Composable
 fun ActorScreenContent(
     modifier: Modifier = Modifier,
-//    uiState: ActorDetailsUiState,
+    uiState: ActorDetailsUiState,
+    onNavigateToGallery: (Int) -> Unit = { },
+    onNavigateToMoviePicks: (Int) -> Unit = { },
+    onNavigateToTvShowPicks: (Int) -> Unit = { },
     onBackClick: () -> Unit
 ) {
     Box(
@@ -80,55 +89,73 @@ fun ActorScreenContent(
             .fillMaxSize()
             .background(NovixTheme.colors.surface)
     ) {
-
-
         LazyColumn(
-            modifier = Modifier.fillMaxSize(), contentPadding = PaddingValues(bottom = 80.dp)
+            modifier = Modifier.fillMaxSize(),
+            contentPadding = PaddingValues(bottom = 80.dp)
         ) {
             item {
                 Box {
-
                     TopBar(
                         onBackClick = onBackClick,
                         modifier = Modifier
                             .statusBarsPadding()
                             .padding(start = 16.dp)
                     )
-//                val images = uiState.actorImageDetails
-                    CustomBackDropImage(
-                        images = listOf(
-                            painterResource(R.drawable.actor_image),
-                            painterResource(R.drawable.actor_image),
-                            painterResource(R.drawable.actor_image),
-                            painterResource(R.drawable.actor_image),
-                            painterResource(R.drawable.actor_image),
-                            painterResource(R.drawable.actor_image),
+                    uiState.actorImageDetails?.let {
+                        CustomBackDropImage(
+                            images = it,
                         )
+                    }
+                }
+            }
+
+            item {
+                with(uiState) {
+                    if (listOf(
+                            actorName,
+                            actorBirthday,
+                            actorDeathDay,
+                            actorPlaceOfBirth,
+                            knownForDepartment
+                        )
+                            .all { !it.isNullOrBlank() }
+                    ) {
+                        ActorInfoSection(
+                            job = knownForDepartment,
+                            name = actorName,
+                            birthday = actorBirthday,
+                            deathDay = actorDeathDay ?: "",
+                            placeOfBirth = actorPlaceOfBirth,
+                            modifier = Modifier.offsetLayout()
+                        )
+                    }
+                }
+            }
+
+            item {
+                if (uiState.actorBiography.isNotBlank()) {
+                    Overview(
+                        modifier = Modifier.padding(16.dp),
+                        biography = uiState.actorBiography
                     )
                 }
             }
 
             item {
-                ActorInfoSection()
+                if (uiState.actorImageDetails.isNullOrEmpty()) {
+                    SectionHeader(
+                        text = stringResource(R.string.gallery),
+                        hasGetAll = true,
+                        hasIcon = true,
+                        modifier = Modifier
+                            .padding(top = 16.dp, bottom = 12.dp)
+                            .padding(horizontal = 16.dp)
+                    )
+                    uiState.actorImageDetails?.let { ActorGallery(images = it) }
+                }
             }
-            item {
-                Overview(
-                    modifier = Modifier.padding(16.dp)
-                )
-            }
-            item {
-                SectionHeader(
-                    text = stringResource(R.string.gallery),
-                    hasGetAll = true,
-                    hasIcon = true,
-                    modifier = Modifier
-                        .padding(top = 16.dp, bottom = 12.dp)
-                        .padding(horizontal = 16.dp)
-                )
-            }
-            item {
-                ActorGallery()
-            }
+
+
             item {
                 SectionHeader(
                     text = stringResource(R.string.top_movies_picks),
@@ -136,11 +163,12 @@ fun ActorScreenContent(
                     hasIcon = true,
                     modifier = Modifier
                         .padding(top = 16.dp, bottom = 12.dp)
-                        .padding(horizontal = 16.dp)
+                        .padding(horizontal = 16.dp),
+                    onNavigate = onNavigateToMoviePicks
                 )
             }
             item {
-                TopMoviesPicksList()
+                TopMoviesPicksList(movie = uiState.actorMovieDetails.cast)
             }
             item {
                 SectionHeader(
@@ -153,14 +181,16 @@ fun ActorScreenContent(
                 )
             }
             item {
-                TopTvShowsPicksList()
+                TopTvShowsPicksList(tvShow = uiState.actorTvShowDetails.cast)
             }
         }
     }
 }
 
 @Composable
-fun TopMoviesPicksList() {
+fun TopMoviesPicksList(
+    movie: List<ActorMovieCastMemberEntity>
+) {
     LazyHorizontalGrid(
         rows = GridCells.Adaptive(minSize = 128.dp),
         modifier = Modifier
@@ -168,20 +198,21 @@ fun TopMoviesPicksList() {
             .height(210.dp),
         horizontalArrangement = Arrangement.spacedBy(8.dp),
     ) {
-        items(10) {
+        items(movie.size) { index ->
             HomeCard(
-                imageUrl = "https://image.tmdb.org/t/p/w500/ajNaPmXVVMJFg9GWmu6MJzTaXdV.jpg",
+                imageUrl = movie[index].posterUrl,
                 isSaved = false,
                 onSaveClick = {
                     //TODO("Not yet implemented")
-                }
-            )
+                })
         }
     }
 }
 
 @Composable
-fun TopTvShowsPicksList() {
+fun TopTvShowsPicksList(
+    tvShow: List<ActorTvShowCastMemberEntity>
+) {
     LazyHorizontalGrid(
         rows = GridCells.Adaptive(minSize = 128.dp),
         modifier = Modifier
@@ -189,56 +220,48 @@ fun TopTvShowsPicksList() {
             .height(210.dp),
         horizontalArrangement = Arrangement.spacedBy(8.dp),
     ) {
-        items(10) {
+        items(tvShow.size) { index ->
             HomeCard(
-                imageUrl = "https://image.tmdb.org/t/p/w500/ajNaPmXVVMJFg9GWmu6MJzTaXdV.jpg",
+                imageUrl = tvShow[index].posterUrl,
                 isSaved = false,
                 onSaveClick = {
                     //TODO("Not yet implemented")
-                }
-            )
+                })
         }
     }
 }
 
 @Composable
-fun ActorGallery() {
-    val images = listOf(
-        R.drawable.actor_image,
-        R.drawable.actor_image,
-        R.drawable.actor_image,
-        R.drawable.actor_image,
-        R.drawable.actor_image,
-        R.drawable.actor_image,
-    )
-
-    LazyHorizontalGrid(
-        rows = GridCells.Adaptive(minSize = 88.dp),
+fun ActorGallery(images: List<ImageDetails>) {
+    LazyRow(
         horizontalArrangement = Arrangement.spacedBy(8.dp),
         contentPadding = PaddingValues(horizontal = 16.dp),
         modifier = Modifier.height(88.dp)
     ) {
-        itemsIndexed(images) { _, imageRes ->
-            Image(
-                painter = painterResource(id = imageRes),
-                contentDescription = null,
-                contentScale = ContentScale.FillBounds,
-                modifier = Modifier
-                    .size(88.dp)
-                    .border(
-                        shape = RoundedCornerShape(12.dp),
-                        width = 1.dp,
-                        color = NovixTheme.colors.stroke
-                    )
-                    .clip(RoundedCornerShape(12.dp))
-            )
+            itemsIndexed(images) { _, imageDetails ->
+                ImageViewFilter(
+                    model = imageDetails.fileUrl,
+                    contentDescription = null,
+                    contentScale = ContentScale.FillBounds,
+                    modifier = Modifier
+                        .size(88.dp)
+                        .border(
+                            shape = RoundedCornerShape(12.dp),
+                            width = 1.dp,
+                            color = NovixTheme.colors.stroke
+                        )
+                        .clip(RoundedCornerShape(12.dp)),
+                    errorContent = { ErrorImage() },
+                    loadingContent = { CircularLoading(modifier = Modifier.size(24.dp)) }
+                )
         }
     }
 }
 
 @Composable
 private fun CustomBackDropImage(
-    modifier: Modifier = Modifier, images: List<Painter>
+    images: List<ImageDetails>,
+    modifier: Modifier = Modifier
 ) {
     Box(
         modifier = modifier
@@ -250,29 +273,46 @@ private fun CustomBackDropImage(
                 )
             )
     ) {
-        val pagerState = rememberPagerState(
-            initialPage = 0, pageCount = { images.size })
+        if (images.isNotEmpty()) {
+            val pagerState = rememberPagerState(
+                initialPage = 0, pageCount = { images.size })
 
-        HorizontalPager(
-            modifier = Modifier.align(Alignment.Center),
-            state = pagerState,
-        ) { pageIndex ->
-            ImageViewFilter(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(252.dp),
-                contentScale = ContentScale.FillBounds,
-                model = images,
-//                model = images[pageIndex].filePath,
-                contentDescription = "TV Show Image ${pageIndex + 1}",
-                errorContent = { ErrorImage() },
-                loadingContent = { CircularLoading(modifier = Modifier) })
+
+            LaunchedEffect(pagerState) {
+                if (images.size > 1) {
+                    while (true) {
+                        delay(4000)
+                        val nextPage = (pagerState.currentPage + 1) % images.size
+                        pagerState.animateScrollToPage(nextPage)
+                    }
+                }
+            }
+
+            HorizontalPager(
+                modifier = Modifier.align(Alignment.Center),
+                state = pagerState,
+            ) { pageIndex ->
+                ImageViewFilter(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(252.dp),
+                    contentScale = ContentScale.FillBounds,
+                    model = images[pageIndex].fileUrl,
+                    contentDescription = "Actor Image ${pageIndex + 1}",
+                    errorContent = { ErrorImage() },
+                    loadingContent = { CircularLoading(modifier = Modifier) })
+            }
         }
     }
 }
 
 @Composable
 private fun ActorInfoSection(
+    job: String,
+    name: String,
+    birthday: String,
+    deathDay: String?,
+    placeOfBirth: String,
     modifier: Modifier = Modifier
 ) {
     Column(
@@ -283,62 +323,58 @@ private fun ActorInfoSection(
             .padding(16.dp)
             .clip(RoundedCornerShape(16.dp))
             .border(
-                width = 1.dp,
-                color = NovixTheme.colors.stroke,
-                shape = RoundedCornerShape(16.dp)
+                width = 1.dp, color = NovixTheme.colors.stroke, shape = RoundedCornerShape(16.dp)
             )
             .background(NovixTheme.colors.surface),
     ) {
-        Column(
+        Text(
+            text = "${name}\n",
+            style = NovixTheme.typography.title.medium,
+            color = NovixTheme.colors.title,
+            modifier = Modifier.padding(start = 12.dp, end = 12.dp, top = 12.dp)
+        )
+        FlowRow(
+            modifier = Modifier.padding(horizontal = 12.dp),
             verticalArrangement = Arrangement.Center,
-            modifier = Modifier.padding(12.dp),
+            horizontalArrangement = Arrangement.spacedBy(8.dp)
         ) {
             Text(
-                text = "Tom Hanks\n",
-                style = NovixTheme.typography.title.medium,
-                color = NovixTheme.colors.title,
+                text = job,
+                style = NovixTheme.typography.label.small,
+                color = NovixTheme.colors.body,
             )
-            FlowRow(
-                verticalArrangement = Arrangement.Center,
-                horizontalArrangement = Arrangement.spacedBy(8.dp)
-            ) {
-                Text(
-                    text = "Acting",
-                    style = NovixTheme.typography.label.small,
-                    color = NovixTheme.colors.body,
-                )
-                Icon(
-                    painter = painterResource(R.drawable.image_dot),
-                    contentDescription = stringResource(R.string.imagr_dot),
-                    tint = NovixTheme.colors.body,
-                    modifier = Modifier
-                        .size(3.dp)
-                        .align(alignment = Alignment.CenterVertically)
-                )
-                TextWithIcon(
-                    icon = painterResource(R.drawable.icon_location),
-                    text = "Santa Cruz del Norte, Cuba"
-                )
-                Icon(
-                    painter = painterResource(R.drawable.image_dot),
-                    contentDescription = stringResource(R.string.imagr_dot),
-                    tint = NovixTheme.colors.body,
-                    modifier = Modifier
-                        .size(3.dp)
-                        .align(alignment = Alignment.CenterVertically)
-                )
-                TextWithIcon(
-                    icon = painterResource(R.drawable.birthday_cake),
-                    text = "1988-04-30  -  2012-30-03"
-                )
-            }
+            Icon(
+                painter = painterResource(R.drawable.image_dot),
+                contentDescription = stringResource(R.string.imagr_dot),
+                tint = NovixTheme.colors.body,
+                modifier = Modifier
+                    .size(3.dp)
+                    .align(alignment = Alignment.CenterVertically)
+            )
+            TextWithIcon(
+                icon = painterResource(R.drawable.icon_location), text = placeOfBirth
+            )
+            Icon(
+                painter = painterResource(R.drawable.image_dot),
+                contentDescription = stringResource(R.string.imagr_dot),
+                tint = NovixTheme.colors.body,
+                modifier = Modifier
+                    .size(3.dp)
+                    .align(alignment = Alignment.CenterVertically)
+            )
+            TextWithIcon(
+                icon = painterResource(R.drawable.birthday_cake),
+                text = if (deathDay != "") "$birthday  -  $deathDay" else birthday
+            )
+
         }
     }
 }
 
 @Composable
 private fun Overview(
-    modifier: Modifier
+    modifier: Modifier,
+    biography: String?
 ) {
 
     var maxLines by rememberSaveable { mutableIntStateOf(4) }
@@ -353,27 +389,26 @@ private fun Overview(
         )
 
         Column {
-            Text(
-                text = "Matthew Paige Damon is an American actor, film producer, and screenwriter. He was ranked among Forbes most bankable stars in 2007 and, in 2010, was one of the highest-grossing ",
-                style = NovixTheme.typography.body.small,
-                color = NovixTheme.colors.body,
-                maxLines = maxLines,
-                overflow = TextOverflow.Ellipsis
-            )
+            biography?.let {
+                Text(
+                    text = it,
+                    style = NovixTheme.typography.body.small,
+                    color = NovixTheme.colors.body,
+                    maxLines = maxLines,
+                    overflow = TextOverflow.Ellipsis
+                )
+            }
 
             Text(
-                text = if (isTextCollapsed)
-                    stringResource(com.london.designsystem.R.string.read_less) else stringResource(
+                text = if (isTextCollapsed) stringResource(com.london.designsystem.R.string.read_less) else stringResource(
                     com.london.designsystem.R.string.read_more
                 ),
                 style = NovixTheme.typography.body.small,
                 color = NovixTheme.colors.primary,
-                modifier = Modifier
-                    .clickable {
-                        maxLines = if (maxLines == 4) Int.MAX_VALUE else 4
-                        isTextCollapsed = !isTextCollapsed
-                    }
-            )
+                modifier = Modifier.clickable {
+                    maxLines = if (maxLines == 4) Int.MAX_VALUE else 4
+                    isTextCollapsed = !isTextCollapsed
+                })
         }
     }
 }
@@ -381,8 +416,7 @@ private fun Overview(
 
 @Composable
 private fun TextWithIcon(
-    text: String,
-    icon: Painter
+    text: String, icon: Painter
 ) {
     Row(
         modifier = Modifier,
@@ -401,11 +435,5 @@ private fun TextWithIcon(
             color = NovixTheme.colors.body,
         )
     }
-}
-
-@Preview
-@Composable
-fun ActorDetailsScreenPreview() {
-    ActorDetailsScreen()
 }
 
