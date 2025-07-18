@@ -3,6 +3,7 @@ package com.london.data.mapper.actordetails
 
 import com.london.data.datasource.remote.details.actordetails.model.actorimage.ActorImageResponse
 import com.london.data.datasource.remote.details.actordetails.model.actorimage.ProfileDto
+import com.london.data.utils.asImageUrlOrEmpty
 import com.london.data.utils.orZero
 import com.london.domain.KoverIgnore
 import com.london.domain.entity.actordetails.actorimage.ActorImageDetails
@@ -20,7 +21,7 @@ fun ProfileDto.toEntity(): ImageDetails {
         aspectRatio = this.aspectRatio.orZero(),
         height = this.height.orZero(),
         iso = this.iso,
-        fileUrl = "https://image.tmdb.org/t/p/w500${this.filePath}",
+        fileUrl = filePath.asImageUrlOrEmpty(),
         voteAverage = this.voteAverage.orZero(),
         voteCount = this.voteCount.orZero(),
         width = this.width.orZero()
