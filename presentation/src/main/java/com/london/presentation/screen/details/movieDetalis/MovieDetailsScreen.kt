@@ -218,7 +218,7 @@ fun MovieDetailsContent(
                                 color = NovixTheme.colors.title,
                                 modifier = Modifier.defaultMinSize(minHeight = 56.dp)
                             )
-                            GenreRow(state.movieGenres,onGenreClick)
+                            GenreRow(state.movieGenres, onGenreClick)
                             RatingAndMetaRow(
                                 rate = state.movieRating,
                                 time = state.movieDuration,
@@ -360,11 +360,12 @@ private fun RatingAndMetaRow(
         }
 
         if (!time.isNullOrBlank()) {
+            val timeInt = time.toInt()
             IconWithText(
                 icon = drawable.time_04,
                 contentDesc = stringResource(time_icon),
                 tint = NovixTheme.colors.body,
-                text = time,
+                text = "${timeInt / 60}h ${timeInt % 60}m",
                 textColor = NovixTheme.colors.body
             )
         }
@@ -499,7 +500,7 @@ private fun MovieDetailsPreview() {
 
         ),
         movieName = "The Shawshank Redemption",
-        movieGenres = listOf( Genre(1,"")),
+        movieGenres = listOf(Genre(1, "")),
         movieRating = "9.9",
         movieDuration = "2h 22m",
         releaseDate = "1994-09-22",
@@ -527,6 +528,6 @@ private fun MovieDetailsPreview() {
     )
 
     NovixTheme {
-        MovieDetailsContent(state = fakeState, {}, {}, {},{})
+        MovieDetailsContent(state = fakeState, {}, {}, {}, {})
     }
 }
