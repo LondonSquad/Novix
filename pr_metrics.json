@@ -3444,18 +3444,9 @@
       "id": 100484790,
       "url": "https://github.com/marwanqashwa"
     },
-    "approvals": [
-      {
-        "reviewer": {
-          "id": 76666355,
-          "login": "Abdulrahman1890",
-          "url": "https://github.com/Abdulrahman1890"
-        },
-        "submitted_at": "2025-07-18T15:36:59Z"
-      }
-    ],
-    "first_approved_at": "2025-07-18T15:36:59Z",
-    "time_to_first_approval_minutes": 54.483333333333334,
+    "approvals": [],
+    "first_approved_at": null,
+    "time_to_first_approval_minutes": null,
     "required_approvals_met_at": null,
     "time_to_required_approvals_minutes": null,
     "closed_at": null,
@@ -3464,8 +3455,8 @@
     "week": "2025-W29",
     "status": "pending",
     "diff_stats": {
-      "additions": 74,
-      "deletions": 30,
+      "additions": 75,
+      "deletions": 31,
       "changed_files": 5
     }
   }
