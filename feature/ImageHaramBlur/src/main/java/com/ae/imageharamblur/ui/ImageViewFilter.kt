@@ -34,7 +34,8 @@ fun ImageViewFilter(
     loadingContent: @Composable () -> Unit,
     errorContent: @Composable (String?) -> Unit,
     onModerationResult: ((Boolean, String?) -> Unit)? = null,
-    onLoadingStateChange: ((Boolean) -> Unit)? = null
+    onLoadingStateChange: ((Boolean) -> Unit)? = null,
+    moderatedContent: @Composable () -> Unit = {}
 ) {
     val context = LocalContext.current
 
@@ -119,6 +120,10 @@ fun ImageViewFilter(
                     blurStrength = blurStrength,
                     modifier = Modifier.fillMaxSize()
                 )
+
+                if (moderationState!!.shouldBlur) {
+                    moderatedContent()
+                }
             }
 
             else -> {
