@@ -246,18 +246,12 @@ class FaceDetector(private val context: Context) {
         interpreter = null
     }
 
-    data class DetectedFace(
-        val boundingBox: Rect,
-        val confidence: Float
-    )
-
     private data class Anchor(
         val x: Float,
         val y: Float,
         val width: Float,
         val height: Float
     )
-
 
     companion object {
         private const val CONFIDENCE_THRESHOLD = 0.5f
