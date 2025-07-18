@@ -145,7 +145,6 @@ fun MovieDetailsContent(
                 onSaveClick = {
                     // TODO
                 },
-                backgroundColor = NovixTheme.colors.iconBackgroundLow,
                 modifier = Modifier
                     .padding(horizontal = 16.dp)
                     .padding(top = 20.dp, bottom = 8.dp)
