@@ -55,4 +55,9 @@ sealed interface Screen {
         val seasonNumber: Int,
         val episodeNumber: Int,
     ) : Screen
+
+    @Serializable
+    data class ActorGallery(
+        val actorId: Int,
+    ) : Screen
 }
