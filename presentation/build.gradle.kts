@@ -39,8 +39,8 @@ android {
 }
 
 dependencies {
-    implementation(project(":domain"))
-    implementation(project(":designSystem"))
+    implementation(projects.domain)
+    implementation(projects.designSystem)
     implementation(libs.bundles.compose)
     implementation(libs.bundles.base.ui)
     implementation(libs.bundles.coroutines)

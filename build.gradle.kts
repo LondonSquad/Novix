@@ -30,11 +30,11 @@ subprojects {
 }
 
 dependencies {
-    kover(project(":app"))
-    kover(project(":domain"))
-    kover(project(":data"))
-    kover(project(":presentation"))
-    kover(project(":designSystem"))
+    kover(projects.app)
+    kover(projects.domain)
+    kover(projects.data)
+    kover(projects.presentation)
+    kover(projects.designSystem)
 }
 kover {
     reports {
