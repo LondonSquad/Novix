@@ -1,7 +1,6 @@
 package com.london.presentation.screen.details.actordetails.topmoviespicks
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
@@ -10,7 +9,6 @@ import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.GridItemSpan
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
-import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -26,17 +24,13 @@ import org.koin.androidx.compose.koinViewModel
 @Composable
 fun TopMoviesPicksScreen(
     modifier: Modifier = Modifier,
-    viewModel: TopMoviesPicksViewModel = koinViewModel(),
-    onMovieClick: (Int) -> Unit,
-    onBackClick: () -> Unit,
+    viewModel: TopMoviesPicksViewModel = koinViewModel()
 ) {
     val state by viewModel.uiState.collectAsState()
     TopMoviesPicksContent(
         state = state,
         interactions = viewModel,
         modifier = modifier,
-        onMovieClick = onMovieClick,
-        onBackClick = onBackClick
     )
 }
 
@@ -45,8 +39,6 @@ private fun TopMoviesPicksContent(
     state: TopMoviesPicksUiState,
     interactions: TopMoviesPicksInteractions,
     modifier: Modifier = Modifier,
-    onMovieClick: (Int) -> Unit,
-    onBackClick: () -> Unit,
 ) {
     LazyVerticalGrid(
         columns = GridCells.Fixed(2),
@@ -63,15 +55,15 @@ private fun TopMoviesPicksContent(
             TopBar(
                 modifier = Modifier.statusBarsPadding(),
                 title = stringResource(R.string.top_movies_picks),
-                onBackClick = onBackClick
+                onBackClick = interactions::onBackClick
             )
         }
-        items(state.movieDetails.cast) { item ->
+        items(state.movieDetails.cast.size) { index ->
+            val movie = state.movieDetails.cast[index]
             HomeCard(
-                imageUrl = item.posterUrl,
+                imageUrl = movie.posterUrl,
                 isSaved = false,
-                onSaveClick = { interactions.onSaveMovie(item.id) },
-                modifier = Modifier.clickable{ onMovieClick(item.id) }
+                onSaveClick = { interactions.onSaveMovie(movie.id) }
             )
         }
     }

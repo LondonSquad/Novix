@@ -7,4 +7,5 @@ data class TopMoviesPicksUiState(
     val isSaved: Boolean = false,
     val backdropPath: String = "",
     val id: Int = 0,
+    val numberOfMovies: Int = 0,
 )
