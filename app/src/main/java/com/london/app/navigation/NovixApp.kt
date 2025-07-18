@@ -130,13 +130,9 @@ fun NovixApp() {
                 popEnterTransition = { fadeIn(tween(500)) },
                 enterTransition = { fadeIn(tween(500)) },
                 popExitTransition = { fadeOut(tween(500)) },
-            ) { backStackEntry ->
-                backStackEntry.arguments?.let {
-                    TvShowDetails(
-                        tvShowId = it.getInt("tvShowId"),
-                    )
-                }
-                TvShowsDetailsScreen(onBackClick = {
+            ) {
+                TvShowsDetailsScreen(
+                    onBackClick = {
                     navController.navigateUp()
                 }, onNavigateToEpisodeDetails = { tvShowId, episodeNumber, seasonNumber ->
                     navController.navigate(
