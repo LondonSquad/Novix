@@ -2,6 +2,7 @@ package com.london.designsystem.component
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -72,15 +73,15 @@ fun ButtonTopBar(icon: Int, onClick: () -> Unit) {
     IconButton(
         onClick = onClick,
         modifier = Modifier
-            .padding(end = 8.dp)
             .size(40.dp)
+            .border(width = 1.dp, color = NovixTheme.colors.stroke)
             .clip(RoundedCornerShape(12.dp))
-            .background(NovixTheme.colors.iconBackgroundLow)
-            .border(
-                width = 1.dp,
-                color = NovixTheme.colors.stroke,
+            .clickable(onClick = onClick)
+            .background(
+                color = NovixTheme.colors.iconBackgroundLow,
                 shape = RoundedCornerShape(12.dp)
             )
+            .padding(10.dp)
     ) {
         Icon(
             painter = painterResource(icon),
