@@ -144,13 +144,13 @@ fun MovieDetailsContent(
                 onSaveClick = {
                     // TODO
                 },
-                backgroundColor = NovixTheme.colors.iconBackgroundLow,
                 modifier = Modifier
                     .padding(horizontal = 16.dp)
                     .padding(top = 20.dp, bottom = 8.dp)
                     .size(40.dp)
                     .clip(RoundedCornerShape(16))
                     .align(Alignment.TopEnd),
+                backgroundColor = NovixTheme.colors.iconBackgroundLow
             )
 
             ButtonIcon(

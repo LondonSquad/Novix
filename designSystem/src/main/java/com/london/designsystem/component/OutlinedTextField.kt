@@ -130,7 +130,7 @@ fun OutlinedTextField(
                             placeholder = placeholder,
                             leadingIcon = null,
                             trailingIcon = null,
-                            prefix = leadingIcon?.let { { AnimatedLeadingIcon(it, isFocused) } },
+                            prefix = leadingIcon?.let { { AnimatedLeadingIcon(painter = it, isFocused = isFocused) } },
                             suffix = currentTrailingIcon,
                             supportingText = supportingText,
                             singleLine = singleLine,
@@ -239,8 +239,9 @@ private fun TextFieldContainer(
 
 @Composable
 private fun AnimatedLeadingIcon(
+    modifier: Modifier = Modifier,
     painter: Painter,
-    isFocused: Boolean
+    isFocused: Boolean,
 ) {
     val iconColor by animateColorAsState(
         targetValue = if (isFocused) NovixTheme.colors.primary else NovixTheme.colors.hint,
@@ -251,10 +252,12 @@ private fun AnimatedLeadingIcon(
         contentDescription = "Leading Icon",
         tint = iconColor,
         modifier = Modifier
-            .size(24.dp)
             .padding(end = 8.dp)
+            .size(24.dp)
+
     )
 }
+
 
 @Composable
 private fun PasswordToggleIcon(
