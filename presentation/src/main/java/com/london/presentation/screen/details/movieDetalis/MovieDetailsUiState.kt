@@ -1,10 +1,12 @@
 package com.london.presentation.screen.details.movieDetalis
 
+import com.london.domain.entity.moviedatails.Genre
+
 data class MovieDetailsUiState(
     val movieId: Int = 0,
     val movieImage: List<Any> = listOf(),
     val movieName: String = "",
-    val movieGenres: List<String> = listOf(),
+    val movieGenres: List<Genre> = listOf(),
     val movieRating: String = "",
     val movieDuration: String = "",
     val releaseDate: String = "",

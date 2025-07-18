@@ -25,7 +25,7 @@ class MoviesByCategoryViewModel(
     val uiState: StateFlow<MoviesByCategoryUiState> = _uiState.asStateFlow()
 
     init {
-        val args = MoviesByCategoryArgs(savedStateHandle)
+        val args by lazy { MoviesByCategoryArgs(savedStateHandle) }
         viewModelScope.launch {
             initializeMovies(args.categoryId)
         }
