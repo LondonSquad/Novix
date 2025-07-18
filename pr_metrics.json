@@ -3140,5 +3140,33 @@
       "deletions": 3,
       "changed_files": 1
     }
+  },
+  {
+    "pr_number": 171,
+    "url": "https://github.com/LondonSquad/Novix/pull/171",
+    "title": "Feature/top tv shows view model",
+    "opened_at": "2025-07-18T02:22:02Z",
+    "head_ref": "feature/top-tv-shows-view-model",
+    "base_ref": "develop",
+    "creator": {
+      "login": "Abdulrahman1890",
+      "id": 76666355,
+      "url": "https://github.com/Abdulrahman1890"
+    },
+    "approvals": [],
+    "first_approved_at": null,
+    "time_to_first_approval_minutes": null,
+    "required_approvals_met_at": null,
+    "time_to_required_approvals_minutes": null,
+    "closed_at": null,
+    "merged_at": null,
+    "merged_by": null,
+    "week": "2025-W29",
+    "status": "pending",
+    "diff_stats": {
+      "additions": 142,
+      "deletions": 158,
+      "changed_files": 13
+    }
   }
 ]
