@@ -5,6 +5,6 @@ import androidx.navigation.toRoute
 import com.london.presentation.navigation.Screen
 
 class TopMoviesArgs(savedStateHandle: SavedStateHandle) {
-    private val route = savedStateHandle.toRoute<Screen.TopMoviesPicksDetails>()
+    private val route = savedStateHandle.toRoute<Screen.ActorTopMoviesPicksDetails>()
     val actorId = route.actorId
 }
