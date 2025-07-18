@@ -37,6 +37,7 @@ import com.london.presentation.screen.bookmark.BookmarksScreen
 import com.london.presentation.screen.category.CategoriesScreen
 import com.london.presentation.screen.category.moviesbycategory.MoviesByCategoryScreen
 import com.london.presentation.screen.details.actor.ActorDetailsScreen
+import com.london.presentation.screen.details.actordetails.gallery.ActorGalleryScreen
 import com.london.presentation.screen.details.actordetails.topmoviespicks.TopMoviesPicksScreen
 import com.london.presentation.screen.details.actordetails.toptvshowspicks.TopTvShowsPicksScreen
 import com.london.presentation.screen.details.movieDetalis.MovieDetailsScreen
@@ -44,9 +45,6 @@ import com.london.presentation.screen.details.tvshow.episodedetails.EpisodeDetai
 import com.london.presentation.screen.details.tvshow.tvshowdetails.TvShowsDetailsScreen
 import com.london.presentation.screen.home.HomeScreen
 import com.london.presentation.screen.search.SearchScreen
-import com.london.presentation.screen.details.tvshow.episodedetails.EpisodeDetailsScreen
-import com.london.presentation.navigation.Screen.EpisodeDetails
-import com.london.presentation.screen.details.actordetails.gallery.ActorGalleryScreen
 
 
 @Composable
@@ -249,7 +247,9 @@ fun NovixApp() {
                 enterTransition = { EnterTransition.None },
                 popExitTransition = { ExitTransition.None },
             ) {
-                EpisodeDetailsScreen()
+                EpisodeDetailsScreen(
+                    onBackClick = { navController.popBackStack() }
+                )
             }
             composable<Screen.ActorGallery> { backStackEntry ->
                 val actorId = backStackEntry.arguments?.getInt("actorId") ?: 0
