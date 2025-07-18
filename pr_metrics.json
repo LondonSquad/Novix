@@ -3710,5 +3710,33 @@
       "deletions": 4,
       "changed_files": 1
     }
+  },
+  {
+    "pr_number": 192,
+    "url": "https://github.com/LondonSquad/Novix/pull/192",
+    "title": "Refactor: Improve FilterBottomSheet responsiveness",
+    "opened_at": "2025-07-18T18:56:26Z",
+    "head_ref": "fix/filter-bottom-sheet-height",
+    "base_ref": "develop",
+    "creator": {
+      "login": "AsmaaKhaledGomaa",
+      "id": 117874933,
+      "url": "https://github.com/AsmaaKhaledGomaa"
+    },
+    "approvals": [],
+    "first_approved_at": null,
+    "time_to_first_approval_minutes": null,
+    "required_approvals_met_at": null,
+    "time_to_required_approvals_minutes": null,
+    "closed_at": null,
+    "merged_at": null,
+    "merged_by": null,
+    "week": "2025-W29",
+    "status": "pending",
+    "diff_stats": {
+      "additions": 10,
+      "deletions": 7,
+      "changed_files": 1
+    }
   }
 ]
