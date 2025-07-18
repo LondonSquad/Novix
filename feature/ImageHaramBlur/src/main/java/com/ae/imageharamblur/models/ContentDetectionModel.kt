@@ -2,7 +2,6 @@ package com.ae.imageharamblur.models
 
 import android.content.Context
 import android.graphics.Bitmap
-import android.util.Log
 import com.ae.imageharamblur.ImageModerationProcessor
 import org.tensorflow.lite.DataType
 import org.tensorflow.lite.Interpreter
@@ -18,14 +17,17 @@ import java.nio.MappedByteBuffer
 import java.nio.channels.FileChannel
 
 internal class ContentDetectionModel {
+
     private val interpreter: Interpreter
     private val imageProcessor: ImageProcessor
     private val inputImageWidth: Int
     private val inputImageHeight: Int
     private val inputDataType: DataType
+    private val outputSize: Int
 
     constructor(context: Context) {
-        val modelBuffer = FileUtil.loadMappedFile(context, "nsfw_model.tflite")
+        val modelBuffer = FileUtil.loadMappedFile(context, MODEL_FILE)
+
         this.interpreter = createInterpreter(modelBuffer)
 
         val inputTensor = interpreter.getInputTensor(0)
@@ -33,11 +35,18 @@ internal class ContentDetectionModel {
         this.inputImageHeight = inputShape[1]
         this.inputImageWidth = inputShape[2]
         this.inputDataType = inputTensor.dataType()
+
+        val outputTensor = interpreter.getOutputTensor(0)
+        val outputShape = outputTensor.shape()
+        this.outputSize = outputShape[outputShape.size - 1]
+
         this.imageProcessor = createImageProcessor()
+
     }
 
     constructor(modelFile: File) {
         val modelBuffer = loadModelFile(modelFile)
+
         this.interpreter = createInterpreter(modelBuffer)
 
         val inputTensor = interpreter.getInputTensor(0)
@@ -45,7 +54,13 @@ internal class ContentDetectionModel {
         this.inputImageHeight = inputShape[1]
         this.inputImageWidth = inputShape[2]
         this.inputDataType = inputTensor.dataType()
+
+        val outputTensor = interpreter.getOutputTensor(0)
+        val outputShape = outputTensor.shape()
+        this.outputSize = outputShape[outputShape.size - 1]
+
         this.imageProcessor = createImageProcessor()
+
     }
 
     private fun loadModelFile(file: File): MappedByteBuffer {
@@ -65,12 +80,13 @@ internal class ContentDetectionModel {
     }
 
     private fun createImageProcessor(): ImageProcessor {
+
         val builder = ImageProcessor.Builder()
             .add(ResizeOp(inputImageHeight, inputImageWidth, ResizeOp.ResizeMethod.BILINEAR))
 
         when (inputDataType) {
             DataType.UINT8 -> {
-                builder.add(NormalizeOp(0f, 1f))
+                // Don't add normalization for UINT8
             }
             DataType.FLOAT32 -> {
                 builder.add(NormalizeOp(0f, 255f))
@@ -84,6 +100,7 @@ internal class ContentDetectionModel {
     }
 
     fun detectContent(bitmap: Bitmap): ContentResult {
+
         return try {
             val tensorImage = TensorImage(inputDataType)
             tensorImage.load(bitmap)
@@ -93,40 +110,73 @@ internal class ContentDetectionModel {
             val outputTensor = interpreter.getOutputTensor(0)
             val outputShape = outputTensor.shape()
             val outputDataType = outputTensor.dataType()
-
             val outputBuffer = TensorBuffer.createFixedSize(outputShape, outputDataType)
 
             interpreter.run(processedImage.buffer, outputBuffer.buffer.rewind())
 
+            outputBuffer.buffer.rewind()
+
             val probabilities = when (outputDataType) {
-                DataType.FLOAT32 -> outputBuffer.floatArray
+                DataType.FLOAT32 -> {
+                    val floatArray = FloatArray(outputSize)
+                    outputBuffer.buffer.asFloatBuffer().get(floatArray)
+                    floatArray
+                }
                 DataType.UINT8 -> {
-                    val byteArray = ByteArray(outputBuffer.buffer.remaining())
+                    val byteArray = ByteArray(outputSize)
                     outputBuffer.buffer.get(byteArray)
-                    byteArray.map { (it.toInt() and 0xFF) / 255f }.toFloatArray()
+                    val floatArray = byteArray.map { (it.toInt() and 0xFF) / 255f }.toFloatArray()
+                    floatArray
                 }
-                else -> outputBuffer.floatArray
-            }
-
-            val results = mutableMapOf<Category, Float>()
-
-            Category.entries.forEach { category ->
-                if (category.index < probabilities.size) {
-                    results[category] = probabilities[category.index]
+                else -> {
+                    FloatArray(outputSize)
                 }
             }
 
-            val inappropriateScore = (results[Category.PORN] ?: 0f) +
-                    (results[Category.SEXY] ?: 0f) +
-                    (results[Category.HENTAI] ?: 0f)
+            val isInappropriate: Boolean
+            val score: Float
+            val categoryScores = mutableMapOf<Category, Float>()
+
+            if (outputSize == 2) {
+                val safeProb = probabilities[0]
+                val unsafeProb = probabilities[1]
+
+                score = unsafeProb
+                isInappropriate = unsafeProb > ImageModerationProcessor.DEFAULT_CONTENT_THRESHOLD
+
+                categoryScores[Category.NEUTRAL] = safeProb
+                categoryScores[Category.PORN] = unsafeProb * 0.5f
+                categoryScores[Category.SEXY] = unsafeProb * 0.3f
+                categoryScores[Category.HENTAI] = unsafeProb * 0.2f
+                categoryScores[Category.DRAWING] = 0f
+
+            } else if (outputSize >= 5) {
+                Category.entries.forEach { category ->
+                    if (category.index < probabilities.size) {
+                        val prob = probabilities[category.index]
+                        categoryScores[category] = prob
+                    }
+                }
+
+                val pornScore = categoryScores[Category.PORN] ?: 0f
+                val sexyScore = categoryScores[Category.SEXY] ?: 0f
+                val hentaiScore = categoryScores[Category.HENTAI] ?: 0f
+
+                score = pornScore + sexyScore + hentaiScore
+                isInappropriate = score > ImageModerationProcessor.DEFAULT_CONTENT_THRESHOLD
+
+            } else {
+                score = 0f
+                isInappropriate = false
+            }
 
             ContentResult(
-                isInappropriate = inappropriateScore > ImageModerationProcessor.DEFAULT_CONTENT_THRESHOLD,
-                score = inappropriateScore,
-                categoryScores = results
+                isInappropriate = isInappropriate,
+                score = score,
+                categoryScores = categoryScores
             )
         } catch (e: Exception) {
-            Log.e("ContentDetectionModel", "Error detecting content", e)
+            e.printStackTrace()
             ContentResult(
                 isInappropriate = false,
                 score = 0f,
@@ -146,10 +196,18 @@ internal class ContentDetectionModel {
         PORN(3),
         SEXY(4)
     }
+
+    companion object {
+        private const val MODEL_FILE = "nsfw_model.tflite"
+    }
 }
 
 internal data class ContentResult(
     val isInappropriate: Boolean,
     val score: Float,
     val categoryScores: Map<ContentDetectionModel.Category, Float>
-)
+) {
+    override fun toString(): String {
+        return "ContentResult(isInappropriate=$isInappropriate, score=$score, categories=$categoryScores)"
+    }
+}
