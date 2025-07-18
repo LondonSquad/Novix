@@ -3470,5 +3470,33 @@
       "deletions": 16,
       "changed_files": 5
     }
+  },
+  {
+    "pr_number": 186,
+    "url": "https://github.com/LondonSquad/Novix/pull/186",
+    "title": "enhancement/replace-face-detection-model",
+    "opened_at": "2025-07-18T16:46:27Z",
+    "head_ref": "enhancement/replace-face-detection-model",
+    "base_ref": "develop",
+    "creator": {
+      "login": "abdo-essam",
+      "id": 92235360,
+      "url": "https://github.com/abdo-essam"
+    },
+    "approvals": [],
+    "first_approved_at": null,
+    "time_to_first_approval_minutes": null,
+    "required_approvals_met_at": null,
+    "time_to_required_approvals_minutes": null,
+    "closed_at": null,
+    "merged_at": null,
+    "merged_by": null,
+    "week": "2025-W29",
+    "status": "pending",
+    "diff_stats": {
+      "additions": 677,
+      "deletions": 272,
+      "changed_files": 13
+    }
   }
 ]
