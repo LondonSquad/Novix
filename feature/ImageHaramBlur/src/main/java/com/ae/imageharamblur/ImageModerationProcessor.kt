@@ -158,12 +158,10 @@ class ImageModerationProcessor(private val context: Context) {
 
     private fun cropFace(bitmap: Bitmap, face: DetectedFace): Bitmap {
         val rect = face.boundingBox
-        val padding = (rect.width() * FACE_CROP_PADDING).toInt()
-
-        val left = (rect.left - padding).coerceAtLeast(0)
-        val top = (rect.top - padding).coerceAtLeast(0)
-        val right = (rect.right + padding).coerceAtMost(bitmap.width)
-        val bottom = (rect.bottom + padding).coerceAtMost(bitmap.height)
+        val left = (rect.left).coerceAtLeast(0)
+        val top = (rect.top).coerceAtLeast(0)
+        val right = (rect.right).coerceAtMost(bitmap.width)
+        val bottom = (rect.bottom).coerceAtMost(bitmap.height)
 
         val width = right - left
         val height = bottom - top
