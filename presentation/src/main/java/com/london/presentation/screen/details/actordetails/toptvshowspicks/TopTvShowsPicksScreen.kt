@@ -27,7 +27,7 @@ import org.koin.androidx.compose.koinViewModel
 fun TopTvShowsPicksScreen(
     modifier: Modifier = Modifier,
     viewModel: TopTvShowsPicksViewModel = koinViewModel(),
-    onMovieClick: (movieId: Int) -> Unit = {},
+    onTvShowClick: (movieId: Int) -> Unit,
     onBackClick: () -> Unit
 ) {
     val state by viewModel.uiState.collectAsState()
@@ -36,7 +36,7 @@ fun TopTvShowsPicksScreen(
         interactions = viewModel,
         modifier = modifier,
         onBackClick = onBackClick,
-        onMovieClick = onMovieClick,
+        onTvShowClick = onTvShowClick,
     )
 }
 
@@ -46,7 +46,7 @@ private fun TopTvShowsPicksContent(
     interactions: TopTvShowsPicksInteractions,
     modifier: Modifier = Modifier,
     onBackClick: () -> Unit,
-    onMovieClick: (movieId: Int) -> Unit = {},
+    onTvShowClick: (movieId: Int) -> Unit,
 ) {
     LazyVerticalGrid(
         columns = GridCells.Fixed(2),
@@ -66,12 +66,12 @@ private fun TopTvShowsPicksContent(
                 onBackClick = onBackClick
             )
         }
-        items(state.tvShowDetails.cast) { item ->
+        items(state.tvShowDetails.cast) { tvShow ->
             HomeCard(
-                imageUrl = item.posterUrl,
+                imageUrl = tvShow.posterUrl,
                 isSaved = false,
-                onSaveClick = { interactions.onSaveMovie(item.id) },
-                modifier = Modifier.clickable{ onMovieClick(item.id) }
+                onSaveClick = { interactions.onSaveMovie(tvShow.id) },
+                modifier = Modifier.clickable{ onTvShowClick(tvShow.id) }
             )
         }
     }

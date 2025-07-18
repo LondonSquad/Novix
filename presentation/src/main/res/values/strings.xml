@@ -58,4 +58,8 @@
     <string name="read_more">" Read more"</string>
     <string name="read_less">" Read less"</string>
     <string name="cast">Cast</string>
+    <string name="imagr_dot">dot</string>
+    <string name="biography">Biography</string>
+    <string name="gallery">Gallery</string>
+    <string name="actor_photos">Actor Photos</string>
 </resources>
