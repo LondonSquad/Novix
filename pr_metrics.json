@@ -3878,5 +3878,33 @@
       "deletions": 57,
       "changed_files": 3
     }
+  },
+  {
+    "pr_number": 196,
+    "url": "https://github.com/LondonSquad/Novix/pull/196",
+    "title": "Fix: Address nullability and display issues in movie details",
+    "opened_at": "2025-07-18T20:08:06Z",
+    "head_ref": "fix/no-time-duration-movie",
+    "base_ref": "develop",
+    "creator": {
+      "login": "Mostafa-alsaygh",
+      "id": 106277855,
+      "url": "https://github.com/Mostafa-alsaygh"
+    },
+    "approvals": [],
+    "first_approved_at": null,
+    "time_to_first_approval_minutes": null,
+    "required_approvals_met_at": null,
+    "time_to_required_approvals_minutes": null,
+    "closed_at": null,
+    "merged_at": null,
+    "merged_by": null,
+    "week": "2025-W29",
+    "status": "pending",
+    "diff_stats": {
+      "additions": 13,
+      "deletions": 11,
+      "changed_files": 4
+    }
   }
 ]
