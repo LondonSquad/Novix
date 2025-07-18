@@ -14,12 +14,6 @@ import com.ae.imageharamblur.faceDetection.DetectedFace
 
 class ImageModerationProcessor(private val context: Context) {
 
-    companion object {
-        const val DEFAULT_CONTENT_THRESHOLD = 0.3f
-        private const val DEFAULT_GENDER_CONFIDENCE_THRESHOLD = 0.5f
-        private const val FACE_CROP_PADDING = 0.15f
-    }
-
     private val faceDetector = FaceDetector(context)
     private val modelDownloadManager = ModelDownloadManager(context)
 
@@ -211,5 +205,11 @@ class ImageModerationProcessor(private val context: Context) {
 
     enum class Gender {
         MALE, FEMALE, UNCERTAIN
+    }
+
+    companion object {
+        const val DEFAULT_CONTENT_THRESHOLD = 0.3f
+        private const val DEFAULT_GENDER_CONFIDENCE_THRESHOLD = 0.5f
+        private const val FACE_CROP_PADDING = 0.15f
     }
 }
