@@ -72,6 +72,7 @@ import com.london.presentation.R.string.star
 import com.london.presentation.R.string.time_icon
 import com.london.presentation.R.string.view_reviews
 import com.london.presentation.composables.ConditionalText
+import com.london.presentation.screen.reviews.MediaType
 import org.koin.androidx.compose.koinViewModel
 
 @Composable
@@ -79,7 +80,7 @@ fun MovieDetailsScreen(
     movieId: Int,
     viewModel: MovieDetailsViewModel = koinViewModel(),
     onBackClick: () -> Unit = {},
-    onPreviewClick: (Int) -> Unit = {}
+    onNavigateToPreviews: (movieId: Int, mediaType: Int) -> Unit
 ) {
     val state by viewModel.uiState.collectAsState()
     LaunchedEffect(movieId) {
@@ -102,7 +103,7 @@ fun MovieDetailsScreen(
                 state,
                 viewModel::onExpandClick,
                 onBackClick,
-                onPreviewClick = onPreviewClick
+                onPreviewClick = onNavigateToPreviews
             )
         }
     }
@@ -113,7 +114,7 @@ fun MovieDetailsContent(
     state: MovieDetailsUiState,
     onExpandClick: () -> Unit,
     onBackClick: () -> Unit,
-    onPreviewClick: (Int) -> Unit
+    onPreviewClick: (movieId: Int, mediaType: Int) -> Unit
 ) {
     val lazyState = rememberLazyListState()
     val isScrolledFarEnough = remember {
@@ -231,7 +232,7 @@ fun MovieDetailsContent(
                                 style = NovixTheme.typography.label.medium,
                                 color = NovixTheme.colors.primary,
                                 modifier = Modifier.noRippleClickable {
-                                    onPreviewClick(state.movieId)
+                                    onPreviewClick(state.movieId, MediaType.Movie.mediaNum)
                                 }
                             )
                         }
@@ -544,6 +545,6 @@ private fun MovieDetailsPreview() {
     )
 
     NovixTheme {
-        MovieDetailsContent(state = fakeState, {}, {}, {})
+
     }
 }

@@ -24,6 +24,7 @@ import com.london.presentation.navigation.Screen.Categories
 import com.london.presentation.navigation.Screen.Home
 import com.london.presentation.navigation.Screen.MovieDetails
 import com.london.presentation.navigation.Screen.MoviesByCategory
+import com.london.presentation.navigation.Screen.Reviews
 import com.london.presentation.navigation.Screen.Search
 import com.london.presentation.navigation.Screen.TopTvShowsPicksDetails
 import com.london.presentation.navigation.Screen.TvShowDetails
@@ -35,6 +36,7 @@ import com.london.presentation.screen.details.actordetails.toptvshowspicks.TopTv
 import com.london.presentation.screen.details.movieDetalis.MovieDetailsScreen
 import com.london.presentation.screen.details.tvshow.tvshowdetails.TvShowsDetailsScreen
 import com.london.presentation.screen.home.HomeScreen
+import com.london.presentation.screen.reviews.ReviewsScreen
 import com.london.presentation.screen.search.SearchScreen
 
 @Composable
@@ -110,6 +112,9 @@ fun NovixApp() {
                 TvShowsDetailsScreen(
                     onBackClick = {
                         navController.navigateUp()
+                    },
+                    onNavigateToReviews = { tvShowId, mediaType ->
+                        navController.navigate(Reviews(tvShowId, mediaType))
                     }
                 )
             }
@@ -135,8 +140,27 @@ fun NovixApp() {
                     MovieDetailsScreen(
                         movieId = it.getInt("movieId"),
                         onBackClick = { navController.navigateUp() },
-                        )
+                        onNavigateToPreviews = { movieId, mediaType ->
+                            navController.navigate(Reviews(movieId, mediaType))
+                        }
+
+                    )
                 }
+            }
+
+            composable<Reviews> { backStackEntry ->
+                val reviews = backStackEntry.arguments?.let {
+                    Reviews(
+                        mediaId = it.getInt("mediaId"),
+                        mediaType = it.getInt("mediaType")
+                    )
+                }
+
+                ReviewsScreen(
+                    onBackClick = {
+                        navController.navigateUp()
+                    }
+                )
             }
             composable<MoviesByCategory> {
                 MoviesByCategoryScreen(

@@ -20,7 +20,7 @@ class TvShowDetailsViewModel(
     private val getTvShowImages: GetImagesById,
     private val getEpisodesByTvShowSeason: GetEpisodesByTvShowSeason,
     savedStateHandle: SavedStateHandle,
-) : ViewModel(), TvShowDetailsInteractionListener {
+) : ViewModel() {
 
     private val _uiState = MutableStateFlow(TvShowDetailsUiState())
     val uiState = _uiState.asStateFlow()
@@ -106,9 +106,5 @@ class TvShowDetailsViewModel(
                 )
             }
         }
-    }
-
-    override fun onClickViewReviewsListener(tvShowId: Int) {
-        // TODO (should navigate to reviews screen)
     }
 }

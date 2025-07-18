@@ -2,8 +2,8 @@ package com.london.data.datasource.remote.details.tvshowdetails
 
 import com.london.data.datasource.remote.details.tvshowdetails.model.TvShowCastRemoteResponse
 import com.london.data.datasource.remote.details.tvshowdetails.model.TvShowDetailsRemoteResponse
-import com.london.data.datasource.remote.details.tvshowdetails.model.tvshowepisode.TvShowEpisodesRemoteResponse
 import com.london.data.datasource.remote.details.tvshowdetails.model.TvShowImagesRemoteResponse
+import com.london.data.datasource.remote.details.tvshowdetails.model.tvshowepisode.TvShowEpisodesRemoteResponse
 
 interface TvShowDetailsRemoteDataSource {
     suspend fun getTvShowDetailsById(

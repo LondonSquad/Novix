@@ -357,7 +357,8 @@ private fun RecentSearchLayOut(
     if (state.recentViewed.isNotEmpty()) {
         RecentViewedSection(
             recentViewed = state.recentViewed,
-            onClearAll =  viewModel::clearRecentViewed)
+            onClearAll = viewModel::clearRecentViewed
+        )
     }
 
     if (state.recentSearches.isNotEmpty()) {
@@ -438,10 +439,11 @@ private fun RecentSearchItem(
     modifier: Modifier = Modifier,
     showDivider: Boolean = true
 ) {
-    Row(modifier = modifier
-        .fillMaxWidth()
-        .clickable { onSearchClick() }
-        .padding(vertical = 8.dp),
+    Row(
+        modifier = modifier
+            .fillMaxWidth()
+            .clickable { onSearchClick() }
+            .padding(vertical = 8.dp),
         verticalAlignment = Alignment.CenterVertically) {
         Icon(
             painter = painterResource(id = R.drawable.icon_clock),

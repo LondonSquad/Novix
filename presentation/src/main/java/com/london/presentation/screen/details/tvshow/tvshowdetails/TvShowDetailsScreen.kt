@@ -67,6 +67,7 @@ import com.london.designsystem.theme.NovixTheme
 import com.london.domain.entity.tvshowdetails.ImageItemEntity
 import com.london.domain.entity.tvshowdetails.TvShowCastMemberEntity
 import com.london.presentation.composables.ConditionalText
+import com.london.presentation.screen.reviews.MediaType
 import com.london.presentation.utils.toLocalizedNumbers
 import kotlinx.coroutines.delay
 import org.koin.androidx.compose.koinViewModel
@@ -75,13 +76,14 @@ import org.koin.androidx.compose.koinViewModel
 @Composable
 fun TvShowsDetailsScreen(
     viewModel: TvShowDetailsViewModel = koinViewModel(),
-    onBackClick: () -> Unit = {}
+    onBackClick: () -> Unit = {},
+    onNavigateToReviews: (tvShowId: Int, mediaType: Int) -> Unit
 ) {
     val uiState by viewModel.uiState.collectAsState()
     TvShowsDetailScreenContent(
         uiState = uiState,
         onBackClick = onBackClick,
-        interactionListener = viewModel
+        onNavigateToReviews = onNavigateToReviews
     )
 }
 
@@ -90,7 +92,7 @@ fun TvShowsDetailScreenContent(
     modifier: Modifier = Modifier,
     uiState: TvShowDetailsUiState,
     onBackClick: () -> Unit,
-    interactionListener: TvShowDetailsInteractionListener
+    onNavigateToReviews: (tvShowId: Int, mediaType: Int) -> Unit
 ) {
     val lazyListState = rememberLazyListState()
 
@@ -155,7 +157,7 @@ fun TvShowsDetailScreenContent(
                         )
                         .clip(RoundedCornerShape(16.dp))
                         .background(NovixTheme.colors.surface),
-                    onReviewClick = { interactionListener.onClickViewReviewsListener(uiState.id) },
+                    onReviewClick = { onNavigateToReviews(uiState.id, MediaType.TvShow.mediaNum) },
                     tvShowId = uiState.id
                 )
             }
