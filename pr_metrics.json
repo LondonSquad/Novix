@@ -3964,5 +3964,33 @@
       "deletions": 11,
       "changed_files": 4
     }
+  },
+  {
+    "pr_number": 206,
+    "url": "https://github.com/LondonSquad/Novix/pull/206",
+    "title": "feat: add footer section to episode details",
+    "opened_at": "2025-07-18T21:18:26Z",
+    "head_ref": "feature/add-button-tv-shows-episode-details-screen",
+    "base_ref": "develop",
+    "creator": {
+      "login": "Aseel-AbuKmail",
+      "id": 189210092,
+      "url": "https://github.com/Aseel-AbuKmail"
+    },
+    "approvals": [],
+    "first_approved_at": null,
+    "time_to_first_approval_minutes": null,
+    "required_approvals_met_at": null,
+    "time_to_required_approvals_minutes": null,
+    "closed_at": null,
+    "merged_at": null,
+    "merged_by": null,
+    "week": "2025-W29",
+    "status": "pending",
+    "diff_stats": {
+      "additions": 16,
+      "deletions": 2,
+      "changed_files": 2
+    }
   }
 ]
