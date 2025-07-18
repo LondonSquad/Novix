@@ -3419,5 +3419,33 @@
       "deletions": 15,
       "changed_files": 5
     }
+  },
+  {
+    "pr_number": 184,
+    "url": "https://github.com/LondonSquad/Novix/pull/184",
+    "title": "fix: response null crash",
+    "opened_at": "2025-07-18T14:42:30Z",
+    "head_ref": "hotfix/tv-show-crash",
+    "base_ref": "develop",
+    "creator": {
+      "login": "marwanqashwa",
+      "id": 100484790,
+      "url": "https://github.com/marwanqashwa"
+    },
+    "approvals": [],
+    "first_approved_at": null,
+    "time_to_first_approval_minutes": null,
+    "required_approvals_met_at": null,
+    "time_to_required_approvals_minutes": null,
+    "closed_at": null,
+    "merged_at": null,
+    "merged_by": null,
+    "week": "2025-W29",
+    "status": "pending",
+    "diff_stats": {
+      "additions": 27,
+      "deletions": 27,
+      "changed_files": 2
+    }
   }
 ]
