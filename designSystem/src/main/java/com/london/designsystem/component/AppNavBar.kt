@@ -79,8 +79,7 @@ fun <T> NavBar(
         modifier = modifier
             .fillMaxWidth()
             .topBorder(navBarColors.topBorderColor, 1.dp)
-            .background(color = navBarColors.backgroundColor)
-            .padding(horizontal = 24.dp),
+            .background(color = navBarColors.backgroundColor),
         horizontalArrangement = Arrangement.SpaceEvenly,
         verticalAlignment = Alignment.CenterVertically
     ) {
