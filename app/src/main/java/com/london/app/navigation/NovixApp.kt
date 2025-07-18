@@ -152,7 +152,13 @@ fun NovixApp() {
                         navController.navigateUp()
                     },
                     onNavigateToEpisodeDetails = { tvShowId, episodeNumber, seasonNumber ->
-                        navController.navigate(Screen.EpisodeDetails(tvShowId, episodeNumber, seasonNumber))
+                        navController.navigate(
+                            Screen.EpisodeDetails(
+                                tvShowId,
+                                episodeNumber,
+                                seasonNumber
+                            )
+                        )
                     }
                 )
             }
@@ -198,13 +204,13 @@ fun NovixApp() {
                 popEnterTransition = { EnterTransition.None },
                 enterTransition = { EnterTransition.None },
                 popExitTransition = { ExitTransition.None },
-            ) { backStackEntry ->
-                val movieDetails = backStackEntry.arguments?.let {
-                    MovieDetailsScreen(
-                        movieId = it.getInt("movieId"),
-                        onBackClick = { navController.navigateUp() },
-                    )
-                }
+            ) {
+                MovieDetailsScreen(
+                    onBackClick = { navController.navigateUp() },
+                    onGenreClick = {
+                        navController.navigate(MoviesByCategory(it))
+                    }
+                )
             }
             composable<MoviesByCategory>(
                 exitTransition = { ExitTransition.None },

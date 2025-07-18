@@ -33,7 +33,6 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.derivedStateOf
@@ -61,6 +60,7 @@ import com.london.designsystem.component.SaveIcon
 import com.london.designsystem.component.button.PrimaryButton
 import com.london.designsystem.theme.NovixTheme
 import com.london.designsystem.theme.noRippleClickable
+import com.london.domain.entity.moviedatails.Genre
 import com.london.presentation.R.drawable
 import com.london.presentation.R.string.calendar
 import com.london.presentation.R.string.dot
@@ -76,15 +76,12 @@ import org.koin.androidx.compose.koinViewModel
 
 @Composable
 fun MovieDetailsScreen(
-    movieId: Int,
     viewModel: MovieDetailsViewModel = koinViewModel(),
     onBackClick: () -> Unit = {},
-    onPreviewClick: (Int) -> Unit = {}
+    onPreviewClick: (Int) -> Unit = {},
+    onGenreClick: (Int) -> Unit = {}
 ) {
     val state by viewModel.uiState.collectAsState()
-    LaunchedEffect(movieId) {
-        viewModel.loadMovieDetails(movieId)
-    }
     when {
         state.isLoading -> {
             Box(
@@ -102,7 +99,8 @@ fun MovieDetailsScreen(
                 state,
                 viewModel::onExpandClick,
                 onBackClick,
-                onPreviewClick = onPreviewClick
+                onPreviewClick = onPreviewClick,
+                onGenreClick = onGenreClick
             )
         }
     }
@@ -113,7 +111,8 @@ fun MovieDetailsContent(
     state: MovieDetailsUiState,
     onExpandClick: () -> Unit,
     onBackClick: () -> Unit,
-    onPreviewClick: (Int) -> Unit
+    onPreviewClick: (Int) -> Unit,
+    onGenreClick: (Int) -> Unit
 ) {
     val lazyState = rememberLazyListState()
     val isScrolledFarEnough = remember {
@@ -220,7 +219,7 @@ fun MovieDetailsContent(
                                 color = NovixTheme.colors.title,
                                 modifier = Modifier.defaultMinSize(minHeight = 56.dp)
                             )
-                            GenreRow(state.movieGenres)
+                            GenreRow(state.movieGenres,onGenreClick)
                             RatingAndMetaRow(
                                 rate = state.movieRating,
                                 time = state.movieDuration,
@@ -435,14 +434,22 @@ private fun IconWithText(
 }
 
 @Composable
-private fun GenreRow(genres: List<String>) {
+private fun GenreRow(
+    genres: List<Genre>,
+    onGenreClick: (Int) -> Unit
+) {
     Row(
         horizontalArrangement = Arrangement.spacedBy(8.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {
         genres.forEachIndexed { index, genre ->
             Text(
-                genre, style = NovixTheme.typography.label.small, color = NovixTheme.colors.body
+                genre.name,
+                style = NovixTheme.typography.label.small,
+                color = NovixTheme.colors.body,
+                modifier = Modifier.noRippleClickable {
+                    onGenreClick(genre.id)
+                }
             )
             if (index != genres.lastIndex) Icon(
                 painter = painterResource(drawable.ellipse_2),
@@ -516,7 +523,7 @@ private fun MovieDetailsPreview() {
 
         ),
         movieName = "The Shawshank Redemption",
-        movieGenres = listOf("Drama", "Crime", "Classic"),
+        movieGenres = listOf( Genre(1,"")),
         movieRating = "9.9",
         movieDuration = "2h 22m",
         releaseDate = "1994-09-22",
@@ -544,6 +551,6 @@ private fun MovieDetailsPreview() {
     )
 
     NovixTheme {
-        MovieDetailsContent(state = fakeState, {}, {}, {})
+        MovieDetailsContent(state = fakeState, {}, {}, {},{})
     }
 }
