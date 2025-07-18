@@ -1,5 +1,6 @@
 package com.london.data.datasource.remote.details.actordetails
 
+import com.london.data.datasource.device.DeviceConfigurationDataSource
 import com.london.data.datasource.remote.ApiConstants
 import com.london.data.datasource.remote.details.actordetails.model.ActorDetailsResponse
 import com.london.data.datasource.remote.details.actordetails.model.actorimage.ActorImageResponse
@@ -13,17 +14,30 @@ import org.koin.core.annotation.Single
 @Single
 class ActorDetailsRemoteDataSourceImpl(
     private val ktorClient: HttpClient,
+    private val deviceConfigurationDataSource: DeviceConfigurationDataSource
 ) : ActorDetailsRemoteDataSource {
 
     override suspend fun getActorDetailsById(actorId: Int): ActorDetailsResponse =
-        ktorClient.get(path = ApiConstants.getActorDetailsPath(actorId))
+        ktorClient.get(
+            path = ApiConstants.getActorDetailsPath(actorId),
+            params = mapOf("language" to deviceConfigurationDataSource.getCurrentLanguage())
+        )
 
     override suspend fun getActorMovieById(actorId: Int): ActorMovieDetailsResponse =
-        ktorClient.get(path = ApiConstants.getActorMoviesPath(actorId))
+        ktorClient.get(
+            path = ApiConstants.getActorMoviesPath(actorId),
+            params = mapOf("language" to deviceConfigurationDataSource.getCurrentLanguage())
+        )
 
     override suspend fun getActorTvShowById(actorId: Int): ActorTvShowDetailsResponse =
-        ktorClient.get(path = ApiConstants.getActorTvShowsPath(actorId))
+        ktorClient.get(
+            path = ApiConstants.getActorTvShowsPath(actorId),
+            params = mapOf("language" to deviceConfigurationDataSource.getCurrentLanguage())
+        )
 
     override suspend fun getActorImagePath(actorId: Int): ActorImageResponse =
-        ktorClient.get(path = ApiConstants.getActorImagePath(actorId))
+        ktorClient.get(
+            path = ApiConstants.getActorImagePath(actorId),
+            params = mapOf("language" to deviceConfigurationDataSource.getCurrentLanguage())
+        )
 }

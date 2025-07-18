@@ -2,6 +2,7 @@ package com.london.data.datasource.remote.moviedetails
 
 import android.util.Log
 import com.google.common.truth.Truth.assertThat
+import com.london.data.datasource.device.DeviceConfigurationDataSource
 import com.london.data.datasource.remote.details.moviedetails.MovieDetailsRemoteImpl
 import com.london.data.datasource.remote.details.moviedetails.model.moviecast.MovieCastResponse
 import com.london.data.datasource.remote.details.moviedetails.model.moviecast.MovieImages
@@ -19,6 +20,7 @@ import io.ktor.http.HttpStatusCode
 import io.ktor.http.headersOf
 import io.ktor.serialization.kotlinx.json.json
 import io.mockk.every
+import io.mockk.mockk
 import io.mockk.mockkStatic
 import kotlinx.coroutines.test.runTest
 import kotlinx.serialization.json.Json
@@ -30,6 +32,7 @@ class MovieDetailsResponseImplTest {
 
     private lateinit var httpClient: HttpClient
     private lateinit var remote: MovieDetailsRemoteImpl
+    private lateinit var deviceConfigurationDataSource: DeviceConfigurationDataSource
 
     private val json = Json { ignoreUnknownKeys = true }
 
@@ -38,6 +41,7 @@ class MovieDetailsResponseImplTest {
         mockkStatic(Log::class)
         every { Log.d(any(), any()) } returns 0
         every { Log.e(any(), any(), any()) } returns 0
+        deviceConfigurationDataSource = mockk(relaxed = true)
     }
 
     private fun setUp(handler: suspend MockRequestHandleScope.(HttpRequestData) -> HttpResponseData) {
@@ -49,7 +53,7 @@ class MovieDetailsResponseImplTest {
                 json(json)
             }
         }
-        remote = MovieDetailsRemoteImpl(httpClient)
+        remote = MovieDetailsRemoteImpl(httpClient, deviceConfigurationDataSource)
     }
 
     @Test
