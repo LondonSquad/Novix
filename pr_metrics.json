@@ -3455,18 +3455,9 @@
       "id": 81706918,
       "url": "https://github.com/karimdeabes"
     },
-    "approvals": [
-      {
-        "reviewer": {
-          "id": 106277855,
-          "login": "Mostafa-alsaygh",
-          "url": "https://github.com/Mostafa-alsaygh"
-        },
-        "submitted_at": "2025-07-18T16:47:03Z"
-      }
-    ],
-    "first_approved_at": "2025-07-18T16:47:03Z",
-    "time_to_first_approval_minutes": 9.283333333333333,
+    "approvals": [],
+    "first_approved_at": null,
+    "time_to_first_approval_minutes": null,
     "required_approvals_met_at": null,
     "time_to_required_approvals_minutes": null,
     "closed_at": null,
