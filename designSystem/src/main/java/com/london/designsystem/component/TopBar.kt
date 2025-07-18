@@ -48,7 +48,7 @@ fun TopBar(
                 color = NovixTheme.colors.title,
                 modifier = Modifier
                     .weight(1f)
-                    .padding(horizontal = 4.dp)
+                    .padding(horizontal = 12.dp)
             )
         }
 
