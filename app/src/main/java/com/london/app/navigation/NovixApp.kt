@@ -202,6 +202,8 @@ fun NovixApp() {
                     },
                     onNavigateToMovie = { movieId->
                         navController.navigate(MovieDetails(movieId))},
+                    onNavigateToActor = { actorId->
+                        navController.navigate(Screen.ActorDetails(actorId))},
                 )
             }
 
