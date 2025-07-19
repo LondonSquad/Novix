@@ -33,20 +33,20 @@ import com.london.presentation.navigation.Screen.Reviews
 import com.london.presentation.navigation.Screen.Search
 import com.london.presentation.navigation.Screen.TopTvShowsPicksDetails
 import com.london.presentation.navigation.Screen.TvShowDetails
-import com.london.presentation.screen.account.AccountScreen
-import com.london.presentation.screen.bookmark.BookmarksScreen
-import com.london.presentation.screen.category.CategoriesScreen
-import com.london.presentation.screen.category.moviesbycategory.MoviesByCategoryScreen
-import com.london.presentation.screen.details.actor.ActorDetailsScreen
-import com.london.presentation.screen.details.actordetails.gallery.ActorGalleryScreen
-import com.london.presentation.screen.details.actordetails.topmoviespicks.TopMoviesPicksScreen
-import com.london.presentation.screen.details.actordetails.toptvshowspicks.TopTvShowsPicksScreen
-import com.london.presentation.screen.details.movieDetalis.MovieDetailsScreen
-import com.london.presentation.screen.details.tvshow.episodedetails.EpisodeDetailsScreen
-import com.london.presentation.screen.details.tvshow.tvshowdetails.TvShowsDetailsScreen
-import com.london.presentation.screen.home.HomeScreen
-import com.london.presentation.screen.reviews.ReviewsScreen
-import com.london.presentation.screen.search.SearchScreen
+import com.london.presentation.features.account.AccountScreen
+import com.london.presentation.features.bookmark.BookmarksScreen
+import com.london.presentation.features.category.CategoriesScreen
+import com.london.presentation.features.category.moviesbycategory.MoviesByCategoryScreen
+import com.london.presentation.features.details.actor.ActorDetailsScreen
+import com.london.presentation.features.details.actordetails.gallery.ActorGalleryScreen
+import com.london.presentation.features.details.actordetails.topmoviespicks.TopMoviesPicksScreen
+import com.london.presentation.features.details.actordetails.toptvshowspicks.TopTvShowsPicksScreen
+import com.london.presentation.features.details.movieDetalis.MovieDetailsScreen
+import com.london.presentation.features.details.tvshow.episodedetails.EpisodeDetailsScreen
+import com.london.presentation.features.details.tvshow.tvshowdetails.TvShowsDetailsScreen
+import com.london.presentation.features.home.HomeScreen
+import com.london.presentation.features.reviews.ReviewsScreen
+import com.london.presentation.features.search.SearchScreen
 
 
 @Composable
@@ -232,8 +232,9 @@ fun NovixApp() {
                 }
 
                 ReviewsScreen(
-                    onBackClick = {
-                        navController.navigateUp()
+                    onNavigateBack = navController::navigateUp,
+                    onNavigateToReviewDetails = { reviewId ->
+                        // navController.navigate(ReviewDetails(reviewId))
                     }
                 )
             }

@@ -40,7 +40,7 @@ import com.london.designsystem.component.button.OutlineButton
 import com.london.designsystem.component.button.PrimaryButton
 import com.london.designsystem.theme.NovixTheme
 import com.london.presentation.R
-import com.london.presentation.screen.search.SearchViewModel
+import com.london.presentation.features.search.SearchViewModel
 import kotlinx.coroutines.launch
 import org.koin.androidx.compose.koinViewModel
 
