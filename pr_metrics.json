@@ -5148,5 +5148,33 @@
       "deletions": 34,
       "changed_files": 3
     }
+  },
+  {
+    "pr_number": 237,
+    "url": "https://github.com/LondonSquad/Novix/pull/237",
+    "title": "Refactor: Improve EpisodeDetailsScreen with dynamic top bar and UI en…",
+    "opened_at": "2025-07-19T10:39:13Z",
+    "head_ref": "fix/tvshow-image-view",
+    "base_ref": "develop",
+    "creator": {
+      "login": "Aseel-AbuKmail",
+      "id": 189210092,
+      "url": "https://github.com/Aseel-AbuKmail"
+    },
+    "approvals": [],
+    "first_approved_at": null,
+    "time_to_first_approval_minutes": null,
+    "required_approvals_met_at": null,
+    "time_to_required_approvals_minutes": null,
+    "closed_at": null,
+    "merged_at": null,
+    "merged_by": null,
+    "week": "2025-W29",
+    "status": "pending",
+    "diff_stats": {
+      "additions": 155,
+      "deletions": 118,
+      "changed_files": 3
+    }
   }
 ]
