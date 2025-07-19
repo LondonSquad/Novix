@@ -56,6 +56,7 @@ import com.london.designsystem.component.TopBar
 import com.london.designsystem.component.button.PrimaryButton
 import com.london.designsystem.theme.NovixTheme
 import com.london.designsystem.theme.ThemePreviews
+import com.london.domain.entity.recent.MediaType
 import com.london.domain.entity.recent.RecentViewed
 import com.london.presentation.R
 import com.london.presentation.composables.ActorsLayout
@@ -149,7 +150,9 @@ fun SearchScreenContent(
                         RecentSearchLayOut(
                             state = state,
                             interactionListener = interactionListener,
-                            viewModel = viewModel
+                            viewModel = viewModel,
+                            onNavigateToTvShowDetails = onNavigateToTvShowDetails,
+                            onNavigateToMovieDetails = onNavigateToMovieDetails
                         )
                     })
             }, content = {
@@ -171,9 +174,8 @@ fun SearchScreenContent(
                                     isMovieSaved = { false },
                                     onMovieClick = {
                                         viewModel.addToRecentViewed(it.toRecentViewed())
-                                        onNavigateToMovieDetails(it.id)
                                         viewModel.onClickMovie(it.genreIds)
-
+                                        onNavigateToMovieDetails(it.id)
                                     },
                                     modifier = Modifier.padding(horizontal = 16.dp)
                                 )
@@ -327,12 +329,18 @@ private fun SearchChipsRow(
 
 @Composable
 private fun RecentSearchLayOut(
-    state: SearchUiState, interactionListener: SearchInteractions, viewModel: SearchViewModel
+    state: SearchUiState,
+    interactionListener: SearchInteractions,
+    viewModel: SearchViewModel,
+    onNavigateToTvShowDetails: (Int) -> Unit,
+    onNavigateToMovieDetails: (Int) -> Unit
 ) {
     if (state.recentViewed.isNotEmpty()) {
         RecentViewedSection(
             recentViewed = state.recentViewed,
-            onClearAll = viewModel::clearRecentViewed
+            onClearAll = viewModel::clearRecentViewed,
+            onNavigateToTvShowDetails = onNavigateToTvShowDetails,
+            onNavigateToMovieDetails = onNavigateToMovieDetails
         )
     }
 
@@ -348,7 +356,10 @@ private fun RecentSearchLayOut(
 
 @Composable
 fun RecentViewedSection(
-    recentViewed: List<RecentViewed>, onClearAll: () -> Unit
+    recentViewed: List<RecentViewed>,
+    onClearAll: () -> Unit,
+    onNavigateToTvShowDetails: (Int) -> Unit,
+    onNavigateToMovieDetails: (Int) -> Unit,
 ) {
     SectionHeader(
         text = stringResource(R.string.recent_viewed),
@@ -368,7 +379,16 @@ fun RecentViewedSection(
     ) {
         items(recentViewed) { item ->
             HomeCard(
-                imageUrl = item.imageUrl, isSaved = false, onSaveClick = {})
+                imageUrl = item.imageUrl,
+                isSaved = false,
+                onSaveClick = { },
+                modifier = Modifier.clickable{
+                    when (item.type) {
+                        MediaType.Movie -> onNavigateToMovieDetails(item.id)
+                        MediaType.TvShow -> onNavigateToTvShowDetails(item.id)
+                    }
+                }
+            )
         }
     }
 }
@@ -414,11 +434,10 @@ private fun RecentSearchItem(
     modifier: Modifier = Modifier,
     showDivider: Boolean = true
 ) {
-    Row(
-        modifier = modifier
-            .fillMaxWidth()
-            .clickable { onSearchClick() }
-            .padding(vertical = 8.dp),
+    Row(modifier = modifier
+        .fillMaxWidth()
+        .clickable { onSearchClick() }
+        .padding(vertical = 8.dp),
         verticalAlignment = Alignment.CenterVertically) {
         Icon(
             painter = painterResource(id = R.drawable.icon_clock),

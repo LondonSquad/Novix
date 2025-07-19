@@ -55,6 +55,7 @@ import com.london.designsystem.theme.NovixTheme
 import com.london.domain.entity.tvshowdetails.ImageItemEntity
 import com.london.presentation.R
 import com.london.presentation.composables.ConditionalText
+import com.london.presentation.composables.FooterSection
 import com.london.presentation.utils.toLocalizedNumbers
 import org.koin.androidx.compose.koinViewModel
 import com.london.designsystem.R as Res
@@ -173,6 +174,20 @@ fun EpisodeDetailsScreenContent(
                             .padding(horizontal = 16.dp, vertical = 6.dp)
                     )
                 }
+            }
+
+            // Button
+            item {
+                FooterSection(
+                    haveTrailer = uiState.haveTrailer,
+                    modifier = Modifier.align(Alignment.BottomCenter),
+                    onPlayClick = {
+                        // TODO play trailer onclick handler
+                    },
+                    onStarClick = {
+                        // TODO save favorite onclick handler
+                    }
+                )
             }
         }
     }
