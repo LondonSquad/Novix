@@ -6,7 +6,6 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -34,7 +33,7 @@ fun TopBar(
     Row(
         modifier = modifier
             .fillMaxWidth()
-            .padding(vertical = 13.dp),
+            .padding(vertical = 8.dp),
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.SpaceBetween
     ) {
@@ -46,13 +45,12 @@ fun TopBar(
                 text = title,
                 style = NovixTheme.typography.title.large,
                 color = NovixTheme.colors.title,
+                maxLines = 1,
                 modifier = Modifier
                     .weight(1f)
                     .padding(horizontal = 12.dp)
             )
         }
-
-        Spacer(modifier = Modifier.weight(1f))
 
         Row(
             horizontalArrangement = Arrangement.spacedBy(8.dp),
