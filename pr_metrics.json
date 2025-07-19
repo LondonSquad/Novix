@@ -4168,5 +4168,33 @@
       "deletions": 6,
       "changed_files": 2
     }
+  },
+  {
+    "pr_number": 216,
+    "url": "https://github.com/LondonSquad/Novix/pull/216",
+    "title": "Hotfix/recent view click",
+    "opened_at": "2025-07-19T00:16:12Z",
+    "head_ref": "hotfix/recent-view-click",
+    "base_ref": "develop",
+    "creator": {
+      "login": "Abdulrahman1890",
+      "id": 76666355,
+      "url": "https://github.com/Abdulrahman1890"
+    },
+    "approvals": [],
+    "first_approved_at": null,
+    "time_to_first_approval_minutes": null,
+    "required_approvals_met_at": null,
+    "time_to_required_approvals_minutes": null,
+    "closed_at": null,
+    "merged_at": null,
+    "merged_by": null,
+    "week": "2025-W29",
+    "status": "pending",
+    "diff_stats": {
+      "additions": 75,
+      "deletions": 54,
+      "changed_files": 6
+    }
   }
 ]
