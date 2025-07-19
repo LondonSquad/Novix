@@ -11,4 +11,5 @@ interface RecentDataSource<T> {
     suspend fun getRecentTen(): List<T>
     suspend fun insertAndKeepLastTen(item: T)
     suspend fun clearAll()
+    suspend fun delete(item: T)
 }
