@@ -20,9 +20,9 @@ import com.london.domain.entity.tvshowdetails.episode.TvShowEpisodesEntity
 @KoverIgnore
 fun TvShowEpisodesRemoteResponse.toTvShowEpisodesEntity(): TvShowEpisodesEntity {
     return TvShowEpisodesEntity(
-        id = id,
+        id = id.orEmpty(),
         airDate = airDate,
-        episodes = episodes.map { it.toTvShowEpisodeBySeasonEntity() }
+        episodes = episodes?.map { it.toTvShowEpisodeBySeasonEntity() }.orEmpty()
     )
 }
 
@@ -30,20 +30,20 @@ fun TvShowEpisodesRemoteResponse.toTvShowEpisodesEntity(): TvShowEpisodesEntity 
 fun TvShowEpisodeBySeason.toTvShowEpisodeBySeasonEntity(): TvShowEpisodeBySeasonEntity {
     return TvShowEpisodeBySeasonEntity(
         airDate = airDate,
-        episodeNumber = episodeNumber,
-        episodeType = episodeType,
-        id = id,
-        name = name,
-        overview = overview,
-        productionCode = productionCode,
+        episodeNumber = episodeNumber.orZero(),
+        episodeType = episodeType.orEmpty(),
+        id = id.orZero(),
+        name = name.orEmpty(),
+        overview = overview.orEmpty(),
+        productionCode = productionCode.orEmpty(),
         runtime = runtime,
-        seasonNumber = seasonNumber,
-        showId = showId,
+        seasonNumber = seasonNumber.orZero(),
+        showId = showId.orZero(),
         stillUrl = stillPath.asImageUrlOrEmpty(),
-        voteAverage = voteAverage,
-        voteCount = voteCount,
-        crew = crew.map { it.toEpisodeCrewMemberEntity() },
-        episodeGuestStars = episodeGuestStars.map { it.toEpisodeGuestStarEntity() }
+        voteAverage = voteAverage.orZero(),
+        voteCount = voteCount.orZero(),
+        crew = crew?.map { it.toEpisodeCrewMemberEntity() }.orEmpty(),
+        episodeGuestStars = episodeGuestStars?.map { it.toEpisodeGuestStarEntity() }.orEmpty()
     )
 }
 

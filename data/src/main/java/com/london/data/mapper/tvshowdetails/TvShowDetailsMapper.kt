@@ -10,6 +10,8 @@ import com.london.data.datasource.remote.details.tvshowdetails.model.TvShowProdu
 import com.london.data.datasource.remote.details.tvshowdetails.model.TvShowSeason
 import com.london.data.datasource.remote.details.tvshowdetails.model.TvShowSpokenLanguage
 import com.london.data.utils.asImageUrlOrEmpty
+import com.london.data.utils.isTrue
+import com.london.data.utils.orZero
 import com.london.domain.KoverIgnore
 import com.london.domain.entity.tvshowdetails.TvShowCreatorEntity
 import com.london.domain.entity.tvshowdetails.TvShowDetailsEntity
@@ -22,105 +24,105 @@ import com.london.domain.entity.tvshowdetails.TvShowSeasonEntity
 import com.london.domain.entity.tvshowdetails.TvShowSpokenLanguageEntity
 
 fun TvShowDetailsRemoteResponse.toEntity() = TvShowDetailsEntity(
-    adult = adult,
+    adult = adult.isTrue,
     backdropUrl = backdropPath.asImageUrlOrEmpty(),
-    createdBy = createdBy.map { it.toEntity() },
-    episodeRunTime = episodeRunTime,
-    firstAirDate = firstAirDate,
-    tvShowGenres = tvShowGenres.map { it.toEntity() },
-    homepage = homepage,
-    id = id,
-    inProduction = inProduction,
-    languages = languages,
-    lastAirDate = lastAirDate,
+    createdBy = createdBy?.map { it.toEntity() }.orEmpty(),
+    episodeRunTime = episodeRunTime.orEmpty(),
+    firstAirDate = firstAirDate.orEmpty(),
+    tvShowGenres = tvShowGenres?.map { it.toEntity() }.orEmpty(),
+    homepage = homepage.orEmpty(),
+    id = id.orZero(),
+    inProduction = inProduction.isTrue,
+    languages = languages.orEmpty(),
+    lastAirDate = lastAirDate.orEmpty(),
     lastTvShowEpisodeToAir = lastTvShowEpisodeToAir?.toEntity(),
-    name = name,
+    name = name.orEmpty(),
     nextTvShowEpisodeToAir = nextTvShowEpisodeToAir?.toEntity(),
-    tvShowNetworks = tvShowNetworks.map { it.toEntity() },
-    numberOfEpisodes = numberOfEpisodes,
-    numberOfSeasons = numberOfSeasons,
-    originCountry = originCountry,
-    originalLanguage = originalLanguage,
-    originalName = originalName,
-    overview = overview,
-    popularity = popularity,
+    tvShowNetworks = tvShowNetworks?.map { it.toEntity() }.orEmpty(),
+    numberOfEpisodes = numberOfEpisodes.orZero(),
+    numberOfSeasons = numberOfSeasons.orZero(),
+    originCountry = originCountry.orEmpty(),
+    originalLanguage = originalLanguage.orEmpty(),
+    originalName = originalName.orEmpty(),
+    overview = overview.orEmpty(),
+    popularity = popularity.orZero(),
     posterUrl = posterPath.asImageUrlOrEmpty(),
-    productionCompanies = productionCompanies.map { it.toEntity() },
-    productionCountries = productionCountries.map { it.toEntity() },
-    tvShowSeasons = tvShowSeasons.map { it.toEntity() },
-    tvShowSpokenLanguageEntities = tvShowSpokenLanguages.map { it.toEntity() },
-    status = status,
-    tagline = tagline,
-    type = type,
-    voteAverage = voteAverage,
-    voteCount = voteCount
+    productionCompanies = productionCompanies?.map { it.toEntity() }.orEmpty(),
+    productionCountries = productionCountries?.map { it.toEntity() }.orEmpty(),
+    tvShowSeasons = tvShowSeasons?.map { it.toEntity() }.orEmpty(),
+    tvShowSpokenLanguageEntities = tvShowSpokenLanguages?.map { it.toEntity() }.orEmpty(),
+    status = status.orEmpty(),
+    tagline = tagline.orEmpty(),
+    type = type.orEmpty(),
+    voteAverage = voteAverage.orZero(),
+    voteCount = voteCount.orZero()
 )
 
 fun TvShowCreator.toEntity() = TvShowCreatorEntity(
-    id = id,
-    creditId = creditId,
-    name = name,
-    originalName = originalName,
-    gender = gender,
+    id = id.orZero(),
+    creditId = creditId.orEmpty(),
+    name = name.orEmpty(),
+    originalName = originalName.orEmpty(),
+    gender = gender.orZero(),
     profileUrl = profilePath.asImageUrlOrEmpty()
 )
 
 fun TvShowGenre.toEntity() = TvShowGenreEntity(
-    id = id,
-    name = name
+    id = id.orZero(),
+    name = name.orEmpty()
 )
 
 fun TvShowEpisode.toEntity() = TvShowEpisodeEntity(
-    id = id,
-    name = name,
-    overview = overview,
-    voteAverage = voteAverage,
-    voteCount = voteCount,
-    airDate = airDate,
-    episodeNumber = episodeNumber,
-    episodeType = episodeType,
-    productionCode = productionCode,
-    runtime = runtime,
-    seasonNumber = seasonNumber,
-    showId = showId,
+    id = id.orZero(),
+    name = name.orEmpty(),
+    overview = overview.orEmpty(),
+    voteAverage = voteAverage.orZero(),
+    voteCount = voteCount.orZero(),
+    airDate = airDate.orEmpty(),
+    episodeNumber = episodeNumber.orZero(),
+    episodeType = episodeType.orEmpty(),
+    productionCode = productionCode.orEmpty(),
+    runtime = runtime.orZero(),
+    seasonNumber = seasonNumber.orZero(),
+    showId = showId.orZero(),
     stillPath = stillPath
 )
 
 fun TvShowNetwork.toEntity() = TvShowNetworkEntity(
-    id = id,
+    id = id.orZero(),
     logoUrl = logoPath.asImageUrlOrEmpty(),
-    name = name,
-    originCountry = originCountry
+    name = name.orEmpty(),
+    originCountry = originCountry.orEmpty()
 )
 
 fun TvShowProductionCompany.toEntity() = TvShowProductionCompanyEntity(
-    id = id,
+    id = id.orZero(),
     logoUrl = logoPath.asImageUrlOrEmpty(),
-    name = name,
-    originCountry = originCountry
+    name = name.orEmpty(),
+    originCountry = originCountry.orEmpty()
 )
 
 @KoverIgnore
 fun TvShowProductionCountry.toEntity() = TvShowProductionCountryEntity(
-    iso31661 = iso31661,
-    name = name
+    iso31661 = iso31661.orEmpty(),
+    name = name.orEmpty()
 )
 
 @KoverIgnore
 fun TvShowSeason.toEntity() = TvShowSeasonEntity(
     airDate = airDate,
-    episodeCount = episodeCount,
-    id = id,
-    name = name,
-    overview = overview,
+    episodeCount = episodeCount.orZero(),
+    id = id.orZero(),
+    name = name.orEmpty(),
+    overview = overview.orEmpty(),
     posterUrl = posterPath,
-    seasonNumber = seasonNumber,
-    voteAverage = voteAverage
+    seasonNumber = seasonNumber.orZero(),
+    voteAverage = voteAverage.orZero()
 )
 
 @KoverIgnore
 fun TvShowSpokenLanguage.toEntity() = TvShowSpokenLanguageEntity(
-    englishName = englishName,
-    iso6391 = iso6391,
-    name = name
+    englishName = englishName.orEmpty(),
+    iso6391 = iso6391.orEmpty(),
+    name = name.orEmpty()
 )

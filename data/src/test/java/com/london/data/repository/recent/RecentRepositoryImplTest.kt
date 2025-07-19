@@ -2,13 +2,11 @@ package com.london.data.repository.recent
 
 import com.london.data.datasource.local.model.recent.RecentSearchLocal
 import com.london.data.datasource.local.recent.RecentDataSource
-import com.london.data.mapper.recent.toEntity
 import com.london.domain.entity.recent.RecentSearch
 import com.london.domain.repository.RecentRepository
 import io.mockk.Runs
 import io.mockk.coEvery
 import io.mockk.coVerify
-import io.mockk.every
 import io.mockk.just
 import io.mockk.mockk
 import kotlinx.coroutines.test.runTest
@@ -56,6 +54,20 @@ class RecentRepositoryImplTest {
         // then
         coVerify(exactly = 1) {
             recentSearchLocalDataSource.insertAndKeepLastTen(ofType<RecentSearchLocal>())
+        }
+    }
+
+    @Test
+    fun `should call delete on data source with mapped RecentSearchLocal`() = runTest {
+        // given
+        coEvery { recentSearchLocalDataSource.delete(any()) } just Runs
+
+        // when
+        recentSearchRepository.delete(RecentSearch(1, "name", 1))
+
+        // then
+        coVerify(exactly = 1) {
+            recentSearchLocalDataSource.delete(ofType<RecentSearchLocal>())
         }
     }
 }

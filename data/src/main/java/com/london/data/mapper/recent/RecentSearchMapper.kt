@@ -1,18 +1,19 @@
 @file:KoverIgnore
+
 package com.london.data.mapper.recent
 
 import com.london.data.datasource.local.model.recent.RecentSearchLocal
 import com.london.domain.KoverIgnore
 import com.london.domain.entity.recent.RecentSearch
 
-fun RecentSearchLocal.toEntity(): RecentSearch=RecentSearch(
-    id = this.id,
-    query = this.query,
-    timestamp = this.date
+fun RecentSearchLocal.toEntity(): RecentSearch = RecentSearch(
+    id = id,
+    query = query,
+    timestamp = date
 )
 
-fun RecentSearch.toRecentSearch(): RecentSearchLocal= RecentSearchLocal(
-    query = this.query,
+fun RecentSearch.toRecentSearch(): RecentSearchLocal = RecentSearchLocal(
+    query = query,
     date = System.currentTimeMillis(),
-    id = this.id
+    id = id
 )
