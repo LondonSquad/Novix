@@ -32,9 +32,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -43,7 +42,6 @@ import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.zIndex
 import com.ae.imageharamblur.ui.ImageViewFilter
@@ -57,6 +55,7 @@ import com.london.domain.entity.actordetails.actorimage.ImageDetails
 import com.london.domain.entity.actordetails.actormovie.ActorMovieCastMemberEntity
 import com.london.domain.entity.actordetails.actortvshow.ActorTvShowCastMemberEntity
 import com.london.presentation.R
+import com.london.presentation.composables.ConditionalText
 import com.london.presentation.utils.offsetLayout
 import kotlinx.coroutines.delay
 import org.koin.androidx.compose.koinViewModel
@@ -137,10 +136,22 @@ fun ActorScreenContent(
 
             item {
                 if (uiState.actorBiography.isNotBlank()) {
-                    Overview(
-                        modifier = Modifier.padding(16.dp),
-                        biography = uiState.actorBiography
+
+                    Text(
+                        text = stringResource(R.string.biography),
+                        style = NovixTheme.typography.title.medium,
+                        color = NovixTheme.colors.title,
+                        modifier = Modifier.padding(start = 16.dp)
                     )
+                    var isExpanded by remember { mutableStateOf(false) }
+                    ConditionalText(
+                        text = uiState.actorBiography,
+                        expandedState = isExpanded,
+                        modifier = Modifier.padding(horizontal = 16.dp, vertical = 4.dp)
+                    ) {
+                        isExpanded = !isExpanded
+                    }
+
                 }
             }
 
@@ -403,47 +414,6 @@ private fun ActorInfoSection(
     }
 }
 
-@Composable
-private fun Overview(
-    modifier: Modifier,
-    biography: String?
-) {
-
-    var maxLines by rememberSaveable { mutableIntStateOf(4) }
-    var isTextCollapsed by rememberSaveable { mutableStateOf(false) }
-    Column(
-        modifier = modifier
-    ) {
-        Text(
-            text = stringResource(R.string.biography),
-            style = NovixTheme.typography.title.medium,
-            color = NovixTheme.colors.title
-        )
-
-        Column {
-            biography?.let {
-                Text(
-                    text = it,
-                    style = NovixTheme.typography.body.small,
-                    color = NovixTheme.colors.body,
-                    maxLines = maxLines,
-                    overflow = TextOverflow.Ellipsis
-                )
-            }
-
-            Text(
-                text = if (isTextCollapsed) stringResource(com.london.designsystem.R.string.read_less) else stringResource(
-                    com.london.designsystem.R.string.read_more
-                ),
-                style = NovixTheme.typography.body.small,
-                color = NovixTheme.colors.primary,
-                modifier = Modifier.clickable {
-                    maxLines = if (maxLines == 4) Int.MAX_VALUE else 4
-                    isTextCollapsed = !isTextCollapsed
-                })
-        }
-    }
-}
 
 
 @Composable
