@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.asPaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
@@ -106,7 +107,7 @@ fun ActorScreenContent(
                 Box {
                     uiState.actorImageDetails?.let {
                         CustomBackDropImage(
-                            images = it,
+                            images = it, modifier.padding(bottom = 16.dp)
                         )
                     }
                 }
@@ -144,6 +145,7 @@ fun ActorScreenContent(
                         modifier = Modifier.padding(start = 16.dp)
                     )
                     var isExpanded by remember { mutableStateOf(false) }
+
                     ConditionalText(
                         text = uiState.actorBiography,
                         expandedState = isExpanded,
@@ -169,7 +171,6 @@ fun ActorScreenContent(
                     ActorGallery(images = uiState.actorImageDetails)
                 }
             }
-
 
             item {
                 uiState.actorMovieDetails?.cast?.takeIf { it.isNotEmpty() }?.let { movieCast ->
@@ -202,7 +203,8 @@ fun ActorScreenContent(
                     )
                     TopTvShowsPicksList(
                         tvShow = tvShows,
-                        onNavigateToTvShowPicks = onNavigateToTvShowScreen)
+                        onNavigateToTvShowPicks = onNavigateToTvShowScreen
+                    )
                 }
             }
 
@@ -312,7 +314,8 @@ private fun CustomBackDropImage(
                 shape = RoundedCornerShape(
                     bottomStart = 12.dp, bottomEnd = 12.dp
                 )
-            )
+            ),
+        contentAlignment = Alignment.Center
     ) {
         if (images.isNotEmpty()) {
             val pagerState = rememberPagerState(
@@ -343,6 +346,8 @@ private fun CustomBackDropImage(
                     errorContent = { ErrorImage() },
                     loadingContent = { CircularLoading(modifier = Modifier) })
             }
+        } else {
+            ErrorImage()
         }
     }
 }

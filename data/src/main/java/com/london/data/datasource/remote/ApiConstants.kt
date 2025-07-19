@@ -31,4 +31,6 @@ object ApiConstants {
 
     fun getMovieReviewsPath(movieId: Int) = "3/movie/$movieId/reviews"
     fun getTvShowReviewsPath(tvShowId: Int) = "3/tv/$tvShowId/reviews"
+
+    fun getTvShowVideosPath(tvShowId: Int) = "3/tv/$tvShowId/videos"
 }
