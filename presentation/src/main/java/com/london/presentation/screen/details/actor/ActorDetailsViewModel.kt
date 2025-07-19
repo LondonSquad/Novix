@@ -66,9 +66,11 @@ class ActorDetailsViewModel(
     private fun getActorMovieDetails() {
         viewModelScope.launch {
             try {
+                val movieDetails = getActorMoviePicksByIdUseCase.invoke(actorId)
                 _uiState.update {
                     it.copy(
-                        actorMovieDetails = getActorMoviePicksByIdUseCase.invoke(actorId)
+                        actorMovieDetails = movieDetails,
+                        movieId = movieDetails.id
                     )
                 }
             } catch (e: GetCastByIdFailedException) {
@@ -81,7 +83,11 @@ class ActorDetailsViewModel(
         viewModelScope.launch {
             try {
                 val tvShows = getActorTvShowPicksByIdUseCase.invoke(actorId)
-                _uiState.update { it.copy(actorTvShowDetails = tvShows, tvShowError = false) }
+                _uiState.update { it.copy(
+                    actorTvShowDetails = tvShows,
+                    tvShowError = false,
+                    tvShowId = tvShows.id
+                ) }
             } catch (e: GetCastByIdFailedException) {
                 _uiState.update { it.copy(tvShowError = true) }
             }

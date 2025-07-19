@@ -67,6 +67,8 @@ fun ActorDetailsScreen(
     onNavigateToMoviePicks: (Int) -> Unit,
     onNavigateToGallery: (Int) -> Unit,
     onNavigateToTvShowPicks: (Int) -> Unit,
+    onNavigateToMovieScreen: (Int) -> Unit,
+    onNavigateToTvShowScreen: (Int) -> Unit,
     viewModel: ActorDetailsViewModel = koinViewModel(),
 ) {
     val uiState by viewModel.uiState.collectAsState()
@@ -74,8 +76,10 @@ fun ActorDetailsScreen(
         uiState = uiState,
         onBackClick = onBackClick,
         onNavigateToMoviePicks = onNavigateToMoviePicks,
-        onNavigateToTvShowPicks =onNavigateToTvShowPicks,
-        onNavigateToGallery = onNavigateToGallery
+        onNavigateToTvShowPicks = onNavigateToTvShowPicks,
+        onNavigateToGallery = onNavigateToGallery,
+        onNavigateToMovieScreen = onNavigateToMovieScreen,
+        onNavigateToTvShowScreen = onNavigateToTvShowScreen,
     )
 }
 
@@ -86,6 +90,8 @@ fun ActorScreenContent(
     onNavigateToGallery: (Int) -> Unit,
     onNavigateToMoviePicks: (Int) -> Unit,
     onNavigateToTvShowPicks: (Int) -> Unit,
+    onNavigateToMovieScreen: (Int) -> Unit,
+    onNavigateToTvShowScreen: (Int) -> Unit,
     onBackClick: () -> Unit
 ) {
     Box(
@@ -145,7 +151,7 @@ fun ActorScreenContent(
                         hasGetAll = true,
                         hasIcon = true,
                         modifier = Modifier
-                            .padding( bottom = 12.dp)
+                            .padding(bottom = 12.dp)
                             .padding(horizontal = 16.dp),
                         onClick = { onNavigateToGallery(uiState.actorId) }
                     )
@@ -165,7 +171,10 @@ fun ActorScreenContent(
                             .padding(horizontal = 16.dp),
                         onClick = { onNavigateToMoviePicks(uiState.actorId) }
                     )
-                    TopMoviesPicksList(movie = movieCast)
+                    TopMoviesPicksList(
+                        movie = movieCast,
+                        onNavigateToTvShowPicks = onNavigateToMovieScreen
+                    )
                 }
             }
 
@@ -178,9 +187,11 @@ fun ActorScreenContent(
                         modifier = Modifier
                             .padding(top = 16.dp, bottom = 12.dp)
                             .padding(horizontal = 16.dp),
-                        onClick = {onNavigateToTvShowPicks(uiState.actorId)}
+                        onClick = { onNavigateToTvShowPicks(uiState.actorId) }
                     )
-                    TopTvShowsPicksList(tvShow = tvShows)
+                    TopTvShowsPicksList(
+                        tvShow = tvShows,
+                        onNavigateToTvShowPicks = onNavigateToTvShowScreen)
                 }
             }
 
@@ -193,14 +204,17 @@ fun ActorScreenContent(
                 .padding(
                     start = 16.dp,
                     top = WindowInsets.statusBars.asPaddingValues().calculateTopPadding()
-                ).zIndex(1f))
+                )
+                .zIndex(1f)
+        )
 
     }
 }
 
 @Composable
 fun TopMoviesPicksList(
-    movie: List<ActorMovieCastMemberEntity>
+    movie: List<ActorMovieCastMemberEntity>,
+    onNavigateToTvShowPicks: (Int) -> Unit
 ) {
     LazyHorizontalGrid(
         rows = GridCells.Adaptive(minSize = 128.dp),
@@ -215,6 +229,9 @@ fun TopMoviesPicksList(
                 isSaved = false,
                 onSaveClick = {
                     //TODO("Not yet implemented")
+                },
+                modifier = Modifier.clickable {
+                    onNavigateToTvShowPicks(movie[index].id)
                 })
         }
     }
@@ -222,7 +239,8 @@ fun TopMoviesPicksList(
 
 @Composable
 fun TopTvShowsPicksList(
-    tvShow: List<ActorTvShowCastMemberEntity>
+    tvShow: List<ActorTvShowCastMemberEntity>,
+    onNavigateToTvShowPicks: (Int) -> Unit
 ) {
     LazyHorizontalGrid(
         rows = GridCells.Adaptive(minSize = 128.dp),
@@ -237,7 +255,8 @@ fun TopTvShowsPicksList(
                 isSaved = false,
                 onSaveClick = {
                     //TODO("Not yet implemented")
-                })
+                },
+                modifier = Modifier.clickable { onNavigateToTvShowPicks(tvShow[index].id) })
         }
     }
 }
@@ -345,7 +364,8 @@ private fun ActorInfoSection(
             modifier = Modifier.padding(start = 12.dp, end = 12.dp, top = 12.dp)
         )
         FlowRow(
-            modifier = Modifier.padding(horizontal = 12.dp)
+            modifier = Modifier
+                .padding(horizontal = 12.dp)
                 .padding(bottom = 12.dp),
             verticalArrangement = Arrangement.Center,
             horizontalArrangement = Arrangement.spacedBy(8.dp)
