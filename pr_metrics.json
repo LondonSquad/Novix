@@ -4661,18 +4661,9 @@
       "id": 100484790,
       "url": "https://github.com/marwanqashwa"
     },
-    "approvals": [
-      {
-        "reviewer": {
-          "id": 106277855,
-          "login": "Mostafa-alsaygh",
-          "url": "https://github.com/Mostafa-alsaygh"
-        },
-        "submitted_at": "2025-07-19T01:57:56Z"
-      }
-    ],
-    "first_approved_at": "2025-07-19T01:57:56Z",
-    "time_to_first_approval_minutes": 18.766666666666666,
+    "approvals": [],
+    "first_approved_at": null,
+    "time_to_first_approval_minutes": null,
     "required_approvals_met_at": null,
     "time_to_required_approvals_minutes": null,
     "closed_at": null,
@@ -4681,8 +4672,8 @@
     "week": "2025-W29",
     "status": "pending",
     "diff_stats": {
-      "additions": 160,
-      "deletions": 45,
+      "additions": 162,
+      "deletions": 48,
       "changed_files": 22
     }
   }
