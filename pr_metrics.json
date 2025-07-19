@@ -5089,11 +5089,11 @@
     "time_to_first_approval_minutes": 52.983333333333334,
     "required_approvals_met_at": "2025-07-19T07:06:17Z",
     "time_to_required_approvals_minutes": 69.8,
-    "closed_at": null,
+    "closed_at": "2025-07-19T07:08:53Z",
     "merged_at": null,
     "merged_by": null,
     "week": "2025-W29",
-    "status": "approved",
+    "status": "closed",
     "diff_stats": {
       "additions": 8,
       "deletions": 24,
