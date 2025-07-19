@@ -30,7 +30,6 @@ class RecentRepositoryImplTest {
         // given
         val fakeEntity = RecentSearchLocal(1,"name",1)
         coEvery { recentSearchLocalDataSource.getAll() } returns listOf(fakeEntity)
-        every { fakeEntity.toEntity() } returns RecentSearch(1,"name",1)
 
         // when
         val result = recentSearchRepository.getAll()
