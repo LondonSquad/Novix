@@ -11,7 +11,7 @@ data class ActorDetailsUiState(
     val actorMovieDetails: ActorMovieDetails? = null,
     val actorTvShowDetails: ActorTvShowDetails? = null,
     val actorId: Int = 0,
-    val actorName: String ="",
+    val actorName: String = "",
     val actorBirthday: String = "",
     val actorDeathDay: String? = null,
     val actorPlaceOfBirth: String = "",
@@ -19,4 +19,6 @@ data class ActorDetailsUiState(
     val knownForDepartment: String = "",
     val movieError: Boolean = false,
     val tvShowError: Boolean = false,
+    val tvShowId: Int = 1,
+    val movieId: Int = 1,
 )
