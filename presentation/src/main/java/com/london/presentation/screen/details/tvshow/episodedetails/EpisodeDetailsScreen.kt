@@ -5,7 +5,6 @@ import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -43,7 +42,6 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.zIndex
 import com.london.designsystem.component.ActorItem
-import com.london.designsystem.component.SaveIcon
 import com.london.designsystem.theme.NovixTheme
 import com.london.domain.entity.tvshowdetails.ImageItemEntity
 import com.london.presentation.R
@@ -206,41 +204,6 @@ fun EpisodeDetailsScreenContent(
             onStarClick = {
                 // TODO save favorite onclick handler
             }
-        )
-    }
-}
-
-@Composable
-fun TvShowScreenTopBar(
-    modifier: Modifier = Modifier,
-    onBackClick: () -> Unit
-) {
-    Row(
-        modifier = modifier,
-        verticalAlignment = Alignment.CenterVertically,
-        horizontalArrangement = Arrangement.SpaceBetween
-    ) {
-        Icon(
-            imageVector = ImageVector.vectorResource(Res.drawable.arrow_left),
-            contentDescription = "back button",
-            tint = NovixTheme.colors.title,
-            modifier = Modifier
-                .size(40.dp)
-                .clip(RoundedCornerShape(12.dp))
-                .clickable(onClick = onBackClick)
-                .background(
-                    color = NovixTheme.colors.iconBackgroundLow,
-                    shape = RoundedCornerShape(12.dp)
-                )
-                .padding(10.dp)
-        )
-
-        SaveIcon(
-            isSaved = false,
-            onSaveClick = { },
-            modifier = Modifier.size(40.dp),
-            backgroundColor = NovixTheme.colors.iconBackgroundLow,
-            roundCorner = 12
         )
     }
 }
