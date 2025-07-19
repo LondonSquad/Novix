@@ -65,7 +65,7 @@ import org.koin.androidx.compose.koinViewModel
 fun ActorDetailsScreen(
     onBackClick: () -> Unit,
     onNavigateToMoviePicks: (Int) -> Unit,
-    onNavigateToGallery: (Int) -> Unit ={},
+    onNavigateToGallery: (Int) -> Unit,
     onNavigateToTvShowPicks: (Int) -> Unit,
     viewModel: ActorDetailsViewModel = koinViewModel(),
 ) {
