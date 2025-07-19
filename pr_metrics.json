@@ -3276,9 +3276,66 @@
     "week": "2025-W29",
     "status": "merged",
     "diff_stats": {
-      "additions": 36,
-      "deletions": 27,
-      "changed_files": 6
+      "additions": 37,
+      "deletions": 28,
+      "changed_files": 7
+    }
+  },
+  {
+    "pr_number": 173,
+    "url": "https://github.com/LondonSquad/Novix/pull/173",
+    "title": "feature/actor-details-screen",
+    "opened_at": "2025-07-18T03:09:42Z",
+    "head_ref": "feature/actor-details-screen",
+    "base_ref": "develop",
+    "creator": {
+      "login": "BassantM",
+      "id": 102248144,
+      "url": "https://github.com/BassantM"
+    },
+    "approvals": [
+      {
+        "reviewer": {
+          "id": 100484790,
+          "login": "marwanqashwa",
+          "url": "https://github.com/marwanqashwa"
+        },
+        "submitted_at": "2025-07-18T19:34:06Z"
+      },
+      {
+        "reviewer": {
+          "id": 106277855,
+          "login": "Mostafa-alsaygh",
+          "url": "https://github.com/Mostafa-alsaygh"
+        },
+        "submitted_at": "2025-07-18T19:38:00Z"
+      },
+      {
+        "reviewer": {
+          "id": 154278495,
+          "login": "ahmeddsamii",
+          "url": "https://github.com/ahmeddsamii"
+        },
+        "submitted_at": "2025-07-18T19:39:08Z"
+      }
+    ],
+    "first_approved_at": "2025-07-18T19:34:06Z",
+    "time_to_first_approval_minutes": 984.4,
+    "required_approvals_met_at": "2025-07-18T19:38:00Z",
+    "time_to_required_approvals_minutes": 988.3,
+    "closed_at": "2025-07-18T19:45:14Z",
+    "merged_at": "2025-07-18T19:45:14Z",
+    "merged_by": {
+      "login": "Al-Taie",
+      "id": 68463985,
+      "url": "https://github.com/Al-Taie"
+    },
+    "week": "2025-W29",
+    "status": "merged",
+    "diff_stats": {
+      "additions": 926,
+      "deletions": 79,
+      "changed_files": 29
     }
   },
   {
@@ -3355,11 +3412,15 @@
     "time_to_first_approval_minutes": null,
     "required_approvals_met_at": null,
     "time_to_required_approvals_minutes": null,
-    "closed_at": null,
-    "merged_at": null,
-    "merged_by": null,
+    "closed_at": "2025-07-18T16:08:22Z",
+    "merged_at": "2025-07-18T16:08:22Z",
+    "merged_by": {
+      "login": "AsmaaKhaledGomaa",
+      "id": 117874933,
+      "url": "https://github.com/AsmaaKhaledGomaa"
+    },
     "week": "2025-W29",
-    "status": "pending",
+    "status": "merged",
     "diff_stats": {
       "additions": 162,
       "deletions": 5,
@@ -3614,12 +3675,20 @@
           "url": "https://github.com/Mostafa-alsaygh"
         },
         "submitted_at": "2025-07-18T17:05:22Z"
+      },
+      {
+        "reviewer": {
+          "id": 81706918,
+          "login": "karimdeabes",
+          "url": "https://github.com/karimdeabes"
+        },
+        "submitted_at": "2025-07-18T18:18:42Z"
       }
     ],
     "first_approved_at": "2025-07-18T17:05:22Z",
     "time_to_first_approval_minutes": 1.5333333333333334,
-    "required_approvals_met_at": null,
-    "time_to_required_approvals_minutes": null,
+    "required_approvals_met_at": "2025-07-18T18:18:42Z",
+    "time_to_required_approvals_minutes": 74.86666666666666,
     "closed_at": "2025-07-18T18:18:44Z",
     "merged_at": "2025-07-18T18:18:44Z",
     "merged_by": {
@@ -3655,12 +3724,20 @@
           "url": "https://github.com/Abdulrahman1890"
         },
         "submitted_at": "2025-07-18T18:59:33Z"
+      },
+      {
+        "reviewer": {
+          "id": 102248144,
+          "login": "BassantM",
+          "url": "https://github.com/BassantM"
+        },
+        "submitted_at": "2025-07-18T19:02:33Z"
       }
     ],
     "first_approved_at": "2025-07-18T18:59:33Z",
     "time_to_first_approval_minutes": 64.23333333333333,
-    "required_approvals_met_at": null,
-    "time_to_required_approvals_minutes": null,
+    "required_approvals_met_at": "2025-07-18T19:02:33Z",
+    "time_to_required_approvals_minutes": 67.23333333333333,
     "closed_at": "2025-07-18T19:02:35Z",
     "merged_at": "2025-07-18T19:02:35Z",
     "merged_by": {
@@ -4046,12 +4123,20 @@
           "url": "https://github.com/marwanqashwa"
         },
         "submitted_at": "2025-07-19T00:00:00Z"
+      },
+      {
+        "reviewer": {
+          "id": 106277855,
+          "login": "Mostafa-alsaygh",
+          "url": "https://github.com/Mostafa-alsaygh"
+        },
+        "submitted_at": "2025-07-19T00:10:36Z"
       }
     ],
     "first_approved_at": "2025-07-19T00:00:00Z",
     "time_to_first_approval_minutes": 129.53333333333333,
-    "required_approvals_met_at": null,
-    "time_to_required_approvals_minutes": null,
+    "required_approvals_met_at": "2025-07-19T00:10:36Z",
+    "time_to_required_approvals_minutes": 140.13333333333333,
     "closed_at": "2025-07-19T00:10:48Z",
     "merged_at": "2025-07-19T00:10:48Z",
     "merged_by": {
@@ -4158,15 +4243,68 @@
     "time_to_first_approval_minutes": 6.316666666666666,
     "required_approvals_met_at": "2025-07-19T00:12:42Z",
     "time_to_required_approvals_minutes": 7.633333333333334,
-    "closed_at": null,
-    "merged_at": null,
-    "merged_by": null,
+    "closed_at": "2025-07-19T00:12:51Z",
+    "merged_at": "2025-07-19T00:12:51Z",
+    "merged_by": {
+      "login": "Al-Taie",
+      "id": 68463985,
+      "url": "https://github.com/Al-Taie"
+    },
     "week": "2025-W29",
-    "status": "approved",
+    "status": "merged",
     "diff_stats": {
       "additions": 7,
       "deletions": 6,
       "changed_files": 2
+    }
+  },
+  {
+    "pr_number": 215,
+    "url": "https://github.com/LondonSquad/Novix/pull/215",
+    "title": "Refactor: Create shared DetailsScreenTopBar composable",
+    "opened_at": "2025-07-19T00:15:16Z",
+    "head_ref": "fix/top-bar-details-screen",
+    "base_ref": "develop",
+    "creator": {
+      "login": "Mostafa-alsaygh",
+      "id": 106277855,
+      "url": "https://github.com/Mostafa-alsaygh"
+    },
+    "approvals": [
+      {
+        "reviewer": {
+          "id": 81706918,
+          "login": "karimdeabes",
+          "url": "https://github.com/karimdeabes"
+        },
+        "submitted_at": "2025-07-19T01:30:59Z"
+      },
+      {
+        "reviewer": {
+          "id": 117874933,
+          "login": "AsmaaKhaledGomaa",
+          "url": "https://github.com/AsmaaKhaledGomaa"
+        },
+        "submitted_at": "2025-07-19T01:35:25Z"
+      }
+    ],
+    "first_approved_at": "2025-07-19T01:30:59Z",
+    "time_to_first_approval_minutes": 75.71666666666667,
+    "required_approvals_met_at": "2025-07-19T01:35:25Z",
+    "time_to_required_approvals_minutes": 80.15,
+    "closed_at": "2025-07-19T01:37:03Z",
+    "merged_at": "2025-07-19T01:37:03Z",
+    "merged_by": {
+      "login": "Al-Taie",
+      "id": 68463985,
+      "url": "https://github.com/Al-Taie"
+    },
+    "week": "2025-W29",
+    "status": "merged",
+    "diff_stats": {
+      "additions": 111,
+      "deletions": 120,
+      "changed_files": 6
     }
   },
   {
@@ -4379,6 +4517,51 @@
       "additions": 48,
       "deletions": 14,
       "changed_files": 4
+    }
+  },
+  {
+    "pr_number": 223,
+    "url": "https://github.com/LondonSquad/Novix/pull/223",
+    "title": "fix: icon no data on search appears",
+    "opened_at": "2025-07-19T01:12:35Z",
+    "head_ref": "hotfix/glitch-between-screens",
+    "base_ref": "develop",
+    "creator": {
+      "login": "Abdulrahman1890",
+      "id": 76666355,
+      "url": "https://github.com/Abdulrahman1890"
+    },
+    "approvals": [
+      {
+        "reviewer": {
+          "id": 117874933,
+          "login": "AsmaaKhaledGomaa",
+          "url": "https://github.com/AsmaaKhaledGomaa"
+        },
+        "submitted_at": "2025-07-19T01:17:45Z"
+      },
+      {
+        "reviewer": {
+          "id": 106277855,
+          "login": "Mostafa-alsaygh",
+          "url": "https://github.com/Mostafa-alsaygh"
+        },
+        "submitted_at": "2025-07-19T01:37:52Z"
+      }
+    ],
+    "first_approved_at": "2025-07-19T01:17:45Z",
+    "time_to_first_approval_minutes": 5.166666666666667,
+    "required_approvals_met_at": "2025-07-19T01:37:52Z",
+    "time_to_required_approvals_minutes": 25.283333333333335,
+    "closed_at": null,
+    "merged_at": null,
+    "merged_by": null,
+    "week": "2025-W29",
+    "status": "approved",
+    "diff_stats": {
+      "additions": 26,
+      "deletions": 10,
+      "changed_files": 1
     }
   },
   {
