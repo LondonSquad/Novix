@@ -66,6 +66,7 @@ import com.london.presentation.composables.DetailsScreenTopBar
 import com.london.presentation.composables.FooterSection
 import com.london.presentation.screen.reviews.MediaType
 import com.london.presentation.utils.Listen
+import com.london.presentation.utils.convertDate
 import com.london.presentation.utils.offsetLayout
 import com.london.presentation.utils.toLocalizedNumbers
 import kotlinx.coroutines.delay
@@ -682,7 +683,7 @@ fun EpisodeRow(
 
                     if (episode.airDate != null)
                         Text(
-                            text = episode.airDate.toLocalizedNumbers(),
+                            text = convertDate(episode.airDate.toString()),
                             style = NovixTheme.typography.label.small,
                             color = NovixTheme.colors.hint
                         )
