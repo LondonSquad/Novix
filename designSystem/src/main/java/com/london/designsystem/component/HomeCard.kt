@@ -53,7 +53,9 @@ fun HomeCard(
             onSaveClick = onSaveClick,
             modifier = Modifier
                 .padding(8.dp)
-                .align(Alignment.TopStart)
+                .align(Alignment.TopStart),
+            iconTint = NovixTheme.colors.onPrimary,
+
         )
     }
 }
