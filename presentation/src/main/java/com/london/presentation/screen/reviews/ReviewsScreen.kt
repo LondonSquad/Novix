@@ -100,7 +100,9 @@ fun ReviewsScreenContent(
 
         val reviewsList = uiState.reviews.collectAsLazyPagingItems()
         if (reviewsList.itemSnapshotList.isEmpty())
-            EmptyReviews()
+            EmptyReviews(
+                modifier = Modifier.fillMaxSize()
+            )
         else {
             LazyColumn(
                 modifier = Modifier
