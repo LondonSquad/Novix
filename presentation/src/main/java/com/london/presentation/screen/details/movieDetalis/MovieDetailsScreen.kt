@@ -1,8 +1,8 @@
 package com.london.presentation.screen.details.movieDetalis
 
 import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.animation.core.FastOutSlowInEasing
-import androidx.compose.animation.core.animateFloatAsState
+import com.london.presentation.composables.DetailsScreenTopBar
+import com.london.presentation.screen.reviews.MediaType
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.slideInHorizontally
 import androidx.compose.animation.slideOutHorizontally
@@ -15,6 +15,8 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.asPaddingValues
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.defaultMinSize
 import androidx.compose.foundation.layout.fillMaxSize
@@ -22,6 +24,8 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.statusBars
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyHorizontalGrid
@@ -47,11 +51,14 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.zIndex
+import com.london.designsystem.R
 import com.london.designsystem.component.ActorItem
+import com.london.designsystem.component.ButtonIcon
 import com.london.designsystem.component.CircularLoading
 import com.london.designsystem.component.HomeCard
 import com.london.designsystem.component.ImageView
 import com.london.designsystem.component.NovixCarousalRow
+import com.london.designsystem.component.SaveIcon
 import com.london.designsystem.theme.NovixTheme
 import com.london.designsystem.theme.noRippleClickable
 import com.london.domain.entity.moviedatails.Genre
@@ -65,7 +72,6 @@ import com.london.presentation.R.string.star
 import com.london.presentation.R.string.time_icon
 import com.london.presentation.R.string.view_reviews
 import com.london.presentation.composables.ConditionalText
-import com.london.presentation.composables.DetailsScreenTopBar
 import com.london.presentation.composables.FooterSection
 import org.koin.androidx.compose.koinViewModel
 
@@ -73,10 +79,10 @@ import org.koin.androidx.compose.koinViewModel
 fun MovieDetailsScreen(
     viewModel: MovieDetailsViewModel = koinViewModel(),
     onBackClick: () -> Unit = {},
-    onPreviewClick: (Int) -> Unit = {},
     onGenreClick: (Int) -> Unit = {},
     onNavigateToMovie: (Int) -> Unit,
-    onNavigateToActor: (Int) -> Unit
+    onNavigateToActor: (Int) -> Unit,
+    onNavigateToReviews: (Int, Int) -> Unit,
 ) {
     val state by viewModel.uiState.collectAsState()
     when {
@@ -96,7 +102,7 @@ fun MovieDetailsScreen(
                 state,
                 viewModel::onExpandClick,
                 onBackClick,
-                onPreviewClick = onPreviewClick,
+                onViewReviewsClick = onNavigateToReviews,
                 onGenreClick = onGenreClick,
                 onNavigateToMovie = onNavigateToMovie,
                 onNavigateToActor = onNavigateToActor
@@ -110,7 +116,7 @@ fun MovieDetailsContent(
     state: MovieDetailsUiState,
     onExpandClick: () -> Unit,
     onBackClick: () -> Unit,
-    onPreviewClick: (Int) -> Unit,
+    onViewReviewsClick: (movieId: Int, mediaType: Int) -> Unit,
     onGenreClick: (Int) -> Unit,
     onNavigateToMovie: (Int) -> Unit,
     onNavigateToActor: (Int) -> Unit
@@ -214,7 +220,7 @@ fun MovieDetailsContent(
                                 style = NovixTheme.typography.label.medium,
                                 color = NovixTheme.colors.primary,
                                 modifier = Modifier.noRippleClickable {
-                                    onPreviewClick(state.movieId)
+                                    onViewReviewsClick(state.movieId, MediaType.Movie.mediaNum)
                                 }
                             )
                         }
@@ -236,7 +242,8 @@ fun MovieDetailsContent(
                     ConditionalText(
                         state.movieOverview,
                         state.expanded,
-                        onExpandClick
+                        modifier = Modifier.padding(horizontal = 16.dp, vertical = 4.dp),
+                        onExpandedChange = onExpandClick
                     )
                 }
             }

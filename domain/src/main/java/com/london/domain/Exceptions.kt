@@ -15,3 +15,5 @@ class GetMovieByIdFailedException(message: String = "Failed to get movie") : Exc
 class GetMovieImagesFailedException(message: String = "Failed to get movie images") : Exception(message)
 class GetMovieCastFailedException(message: String = "Failed to get movie cast") : Exception(message)
 class GetMovieDetailsFailedException(message: String = "Failed to get movie details") : Exception(message)
+
+class GetReviewsFailedException(message: String = "Failed to get reviews") : Exception(message)
