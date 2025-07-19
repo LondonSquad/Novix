@@ -13,14 +13,17 @@ data class MovieDetailsUiState(
     val movieOverview: String = "",
     val actors: List<ActorUIState> = listOf(),
     val similarMovies: List<SimilarMovieUIState> = listOf(),
-    val movieHaveTrailer: Boolean = false,
     val isRated: Boolean = false,
     val isSaved: Boolean = false,
     val currentImageIndex: Int = 0,
     val imageSlideDirection: Int = 1,
     val expanded: Boolean = false,
     val isLoading: Boolean = true,
-)
+    val movieVideo: String = ""
+){
+    val movieHaveTrailer: Boolean
+        get() = movieVideo.isNotEmpty()
+}
 
 data class ActorUIState(
     val name: String,

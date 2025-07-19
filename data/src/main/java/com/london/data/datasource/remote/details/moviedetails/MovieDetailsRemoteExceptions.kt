@@ -4,3 +4,5 @@ class GetMovieDetailsException(cause: Throwable) : Exception("Failed to fetch mo
 class GetSimilarMoviesException(cause: Throwable) : Exception("Failed to fetch similar movies", cause)
 class GetMovieCastException(cause: Throwable) : Exception("Failed to fetch movie actorRemote", cause)
 class GetMovieImagesException(cause: Throwable) : Exception("Failed to fetch movie images", cause)
+
+class GetMovieVideosFailedException(cause: Throwable) : Exception("Failed to fetch movie videos", cause)
