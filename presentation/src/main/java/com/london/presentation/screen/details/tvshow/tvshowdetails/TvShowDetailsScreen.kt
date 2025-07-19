@@ -131,8 +131,6 @@ fun TvShowsDetailScreenContent(
             .fillMaxSize()
             .background(NovixTheme.colors.surface)
     ) {
-
-
         DetailsScreenTopBar(
             modifier = Modifier
                 .fillMaxWidth()
@@ -147,7 +145,7 @@ fun TvShowsDetailScreenContent(
             state = lazyListState,
             modifier = Modifier
                 .fillMaxSize(),
-            contentPadding = PaddingValues(bottom = 80.dp)
+            contentPadding = PaddingValues(bottom = 16.dp)
         ) {
             item {
                 val images = uiState.tvImages
