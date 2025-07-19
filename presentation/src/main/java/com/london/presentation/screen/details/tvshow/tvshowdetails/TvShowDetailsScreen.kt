@@ -50,6 +50,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.zIndex
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.ae.imageharamblur.ui.ImageViewFilter
 import com.london.designsystem.R
 import com.london.designsystem.component.ActorItem
@@ -81,21 +82,8 @@ fun TvShowsDetailsScreen(
     onNavigateToReviews: (tvShowId: Int, mediaType: Int) -> Unit,
     onNavigateToCast: (Int) -> Unit
 ) {
-    val uiState by viewModel.uiState.collectAsState()
+    val uiState by viewModel.state.collectAsStateWithLifecycle()
     val effect by viewModel.effect.collectAsState(null)
-
-    BuildScreen(
-        isLoading = uiState.isLoading,
-        isError = false,
-        content = {
-            TvShowsDetailScreenContent(
-                uiState = uiState,
-                onBackClick = onBackClick,
-                onViewReviewsClick = onNavigateToReviews,
-                onNavigateToCast = onNavigateToCast
-            )
-        }
-    )
 
     effect?.Listen { currentEffect ->
         when (currentEffect) {
@@ -106,17 +94,33 @@ fun TvShowsDetailsScreen(
                     currentEffect.seasonNumber
                 )
             }
+
+            TvShowDetailsEffect.NavigateBack -> onBackClick()
+            is TvShowDetailsEffect.NavigateToCast -> onNavigateToCast(currentEffect.tvShowId)
+            is TvShowDetailsEffect.NavigateToReviews -> onNavigateToReviews(
+                currentEffect.tvShowId,
+                MediaType.TvShow.mediaNum
+            )
         }
     }
+
+    BuildScreen(
+        isLoading = uiState.isLoading,
+        isError = false,
+        content = {
+            TvShowsDetailScreenContent(
+                uiState = uiState,
+                tvShowDetailsContract = viewModel
+            )
+        }
+    )
 }
 
 @Composable
 fun TvShowsDetailScreenContent(
     modifier: Modifier = Modifier,
     uiState: TvShowDetailsUiState,
-    onBackClick: () -> Unit,
-    onNavigateToCast: (Int) -> Unit,
-    onViewReviewsClick: (tvShowId: Int, mediaType: Int) -> Unit
+    tvShowDetailsContract: TvShowDetailsContract
 ) {
     val uriHandler = LocalUriHandler.current
     val lazyListState = rememberLazyListState()
@@ -150,7 +154,7 @@ fun TvShowsDetailScreenContent(
                 .align(Alignment.TopCenter),
             isSaved = uiState.isSaved,
             backgroundAlpha = backgroundAlpha,
-            onBackClick = onBackClick,
+            onBackClick = tvShowDetailsContract::onBackClicked,
         )
 
         LazyColumn(
@@ -181,7 +185,12 @@ fun TvShowsDetailScreenContent(
                         )
                         .clip(RoundedCornerShape(16.dp))
                         .background(NovixTheme.colors.surface),
-                    onReviewClick = { onViewReviewsClick(uiState.id, MediaType.TvShow.mediaNum) },
+                    onReviewClick = {
+                        tvShowDetailsContract.onReviewsClicked(
+                            uiState.id,
+                            MediaType.TvShow.mediaNum
+                        )
+                    },
                     tvShowId = uiState.id,
                     rating = uiState.voteAverage.toString(),
                     date = uiState.firstAirDate,
@@ -213,7 +222,7 @@ fun TvShowsDetailScreenContent(
                 CastSection(
                     modifier = Modifier.padding(top = 16.dp),
                     castMembers = uiState.cast?.cast ?: emptyList(),
-                    onNavigateToCast = onNavigateToCast
+                    onNavigateToCast = tvShowDetailsContract::onCastClicked
                 )
             }
 
