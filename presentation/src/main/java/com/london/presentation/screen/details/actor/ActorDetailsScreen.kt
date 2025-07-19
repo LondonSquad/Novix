@@ -95,7 +95,7 @@ fun ActorScreenContent(
     ) {
         LazyColumn(
             modifier = Modifier.fillMaxSize(),
-            contentPadding = PaddingValues(bottom = 80.dp)
+            contentPadding = PaddingValues(bottom = 16.dp)
         ) {
             item {
                 Box {
@@ -145,7 +145,7 @@ fun ActorScreenContent(
                         hasGetAll = true,
                         hasIcon = true,
                         modifier = Modifier
-                            .padding(top = 16.dp, bottom = 12.dp)
+                            .padding( bottom = 12.dp)
                             .padding(horizontal = 16.dp),
                         onClick = { onNavigateToGallery(uiState.actorId) }
                     )
@@ -205,9 +205,9 @@ fun TopMoviesPicksList(
     LazyHorizontalGrid(
         rows = GridCells.Adaptive(minSize = 128.dp),
         modifier = Modifier
-            .padding(horizontal = 16.dp)
             .height(210.dp),
         horizontalArrangement = Arrangement.spacedBy(8.dp),
+        contentPadding = PaddingValues(horizontal = 16.dp)
     ) {
         items(movie.size) { index ->
             HomeCard(
@@ -227,9 +227,9 @@ fun TopTvShowsPicksList(
     LazyHorizontalGrid(
         rows = GridCells.Adaptive(minSize = 128.dp),
         modifier = Modifier
-            .padding(horizontal = 16.dp)
             .height(210.dp),
         horizontalArrangement = Arrangement.spacedBy(8.dp),
+        contentPadding = PaddingValues(horizontal = 16.dp)
     ) {
         items(tvShow.size) { index ->
             HomeCard(
@@ -345,7 +345,8 @@ private fun ActorInfoSection(
             modifier = Modifier.padding(start = 12.dp, end = 12.dp, top = 12.dp)
         )
         FlowRow(
-            modifier = Modifier.padding(horizontal = 12.dp),
+            modifier = Modifier.padding(horizontal = 12.dp)
+                .padding(bottom = 12.dp),
             verticalArrangement = Arrangement.Center,
             horizontalArrangement = Arrangement.spacedBy(8.dp)
         ) {
