@@ -5204,5 +5204,33 @@
       "deletions": 567,
       "changed_files": 75
     }
+  },
+  {
+    "pr_number": 239,
+    "url": "https://github.com/LondonSquad/Novix/pull/239",
+    "title": "feature/ add base viewModel",
+    "opened_at": "2025-07-19T22:28:21Z",
+    "head_ref": "fix/solve-all-issues",
+    "base_ref": "develop",
+    "creator": {
+      "login": "ahmeddsamii",
+      "id": 154278495,
+      "url": "https://github.com/ahmeddsamii"
+    },
+    "approvals": [],
+    "first_approved_at": null,
+    "time_to_first_approval_minutes": null,
+    "required_approvals_met_at": null,
+    "time_to_required_approvals_minutes": null,
+    "closed_at": null,
+    "merged_at": null,
+    "merged_by": null,
+    "week": "2025-W29",
+    "status": "pending",
+    "diff_stats": {
+      "additions": 1621,
+      "deletions": 1126,
+      "changed_files": 66
+    }
   }
 ]
