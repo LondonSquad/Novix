@@ -5054,5 +5054,33 @@
       "deletions": 58,
       "changed_files": 11
     }
+  },
+  {
+    "pr_number": 235,
+    "url": "https://github.com/LondonSquad/Novix/pull/235",
+    "title": "fix: replace season selection Text with NovixChip component in TvShowDetailsScreen",
+    "opened_at": "2025-07-19T05:56:29Z",
+    "head_ref": "hotfix/tvshow-details-chip-animation",
+    "base_ref": "develop",
+    "creator": {
+      "login": "abdo-essam",
+      "id": 92235360,
+      "url": "https://github.com/abdo-essam"
+    },
+    "approvals": [],
+    "first_approved_at": null,
+    "time_to_first_approval_minutes": null,
+    "required_approvals_met_at": null,
+    "time_to_required_approvals_minutes": null,
+    "closed_at": null,
+    "merged_at": null,
+    "merged_by": null,
+    "week": "2025-W29",
+    "status": "pending",
+    "diff_stats": {
+      "additions": 7,
+      "deletions": 22,
+      "changed_files": 1
+    }
   }
 ]
