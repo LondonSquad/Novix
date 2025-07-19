@@ -56,6 +56,7 @@ import com.london.designsystem.R
 import com.london.designsystem.component.ActorItem
 import com.london.designsystem.component.CircularLoading
 import com.london.designsystem.component.NovixCarousalRow
+import com.london.designsystem.component.NovixChip
 import com.london.designsystem.component.RatingBar
 import com.london.designsystem.component.UnSuitableEye
 import com.london.designsystem.component.button.ErrorImage
@@ -581,29 +582,13 @@ fun SeasonEpisodesDetails(
         verticalAlignment = Alignment.CenterVertically,
     ) {
         items(uiState.numberOfSeasons) { index ->
-            val isSelected = index == selectedSeasonIndex
-
-            Text(
+            NovixChip(
                 text = "${stringResource(R.string.s)}${(index + 1).toLocalizedNumbers()}",
-                style = NovixTheme.typography.label.medium,
-                color = if (isSelected) NovixTheme.colors.onPrimary else NovixTheme.colors.body,
-                modifier = Modifier
-                    .padding(end = 20.dp)
-                    .clickable {
-                        selectedSeasonIndex = index
-                        viewModel.initializeEpisodesBySeasons(index + 1)
-                    }
-                    .then(
-                        if (isSelected)
-                            Modifier
-                                .background(
-                                    color = NovixTheme.colors.secondary,
-                                    shape = RoundedCornerShape(12.dp)
-                                )
-                                .padding(horizontal = 24.dp, vertical = 8.dp)
-                        else
-                            Modifier
-                    )
+                isSelected = index == selectedSeasonIndex,
+                onClick = {
+                    selectedSeasonIndex = index
+                    viewModel.initializeEpisodesBySeasons(index + 1)
+                }
             )
         }
     }
