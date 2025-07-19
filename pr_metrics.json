@@ -5067,18 +5067,9 @@
       "id": 92235360,
       "url": "https://github.com/abdo-essam"
     },
-    "approvals": [
-      {
-        "reviewer": {
-          "id": 100484790,
-          "login": "marwanqashwa",
-          "url": "https://github.com/marwanqashwa"
-        },
-        "submitted_at": "2025-07-19T06:40:50Z"
-      }
-    ],
-    "first_approved_at": "2025-07-19T06:40:50Z",
-    "time_to_first_approval_minutes": 44.35,
+    "approvals": [],
+    "first_approved_at": null,
+    "time_to_first_approval_minutes": null,
     "required_approvals_met_at": null,
     "time_to_required_approvals_minutes": null,
     "closed_at": null,
@@ -5088,8 +5079,8 @@
     "status": "pending",
     "diff_stats": {
       "additions": 8,
-      "deletions": 23,
-      "changed_files": 2
+      "deletions": 24,
+      "changed_files": 3
     }
   }
 ]
