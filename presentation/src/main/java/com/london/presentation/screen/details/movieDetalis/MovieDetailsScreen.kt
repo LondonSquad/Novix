@@ -53,6 +53,7 @@ import com.london.designsystem.component.CircularLoading
 import com.london.designsystem.component.HomeCard
 import com.london.designsystem.component.ImageView
 import com.london.designsystem.component.NovixCarousalRow
+import com.london.designsystem.component.button.ErrorImage
 import com.london.designsystem.theme.NovixTheme
 import com.london.designsystem.theme.noRippleClickable
 import com.london.domain.entity.moviedatails.Genre
@@ -456,28 +457,32 @@ private fun MovieDetailsImage(
             .clip(RoundedCornerShape(12.dp)),
         contentAlignment = Alignment.Center
     ) {
-        images.forEachIndexed { index, image ->
-            AnimatedVisibility(
-                visible = currentImageIndex == index,
-                enter = slideInHorizontally(
-                    initialOffsetX = { if (direction > 0) it else -it },
-                    animationSpec = tween(durationMillis = 1000)
-                ),
-                exit = slideOutHorizontally(
-                    targetOffsetX = { if (direction > 0) -it else it },
-                    animationSpec = tween(durationMillis = 1000)
-                ),
-            ) {
-                ImageView(
-                    model = image,
-                    contentDescription = imageDescription,
-                    contentScale = ContentScale.Crop,
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .clip(RoundedCornerShape(12.dp)),
-                    onLoadingStateChange = { loadingState.value = it },
-                )
+        if (images.isNotEmpty()) {
+            images.forEachIndexed { index, image ->
+                AnimatedVisibility(
+                    visible = currentImageIndex == index,
+                    enter = slideInHorizontally(
+                        initialOffsetX = { if (direction > 0) it else -it },
+                        animationSpec = tween(durationMillis = 1000)
+                    ),
+                    exit = slideOutHorizontally(
+                        targetOffsetX = { if (direction > 0) -it else it },
+                        animationSpec = tween(durationMillis = 1000)
+                    ),
+                ) {
+                    ImageView(
+                        model = image,
+                        contentDescription = imageDescription,
+                        contentScale = ContentScale.Crop,
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .clip(RoundedCornerShape(12.dp)),
+                        onLoadingStateChange = { loadingState.value = it },
+                    )
+                }
             }
+        } else {
+            ErrorImage()
         }
     }
 }
