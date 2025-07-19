@@ -1,9 +1,9 @@
-package com.london.presentation.screen.base
+package com.london.presentation.features.base
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.london.presentation.screen.base.ErrorState
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.CoroutineStart
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.Flow
@@ -87,9 +87,8 @@ abstract class BaseViewModel<S, E : Any>(initState: S) : ViewModel() {
         onCompleted()
     }
 
-    protected fun updateState(notifyEffect: E? = null, updater: S.() -> S) {
+    protected fun updateState(updater: S.() -> S) {
         _state.update(updater)
-        emitEffect(notifyEffect ?: return)
     }
 
     protected fun emitEffect(newEffect: E) {
@@ -106,22 +105,6 @@ abstract class BaseViewModel<S, E : Any>(initState: S) : ViewModel() {
             if (compareAndSet(prevValue, nextValue))
                 return
         }
-    }
-
-    protected fun <R> ViewModel.launchCatching(
-        context: CoroutineContext = EmptyCoroutineContext,
-        start: CoroutineStart = CoroutineStart.DEFAULT,
-        onSuccess: (value: R) -> Unit = {},
-        onFailure: (errorState: ErrorState) -> Unit = {},
-        onCompleted: () -> Unit = {},
-        block: suspend CoroutineScope.() -> R,
-    ): Job = viewModelScope.launch(context = context, start = start) {
-        runCatching {
-            block()
-        }.onFailure(Timber::e)
-            .onFailure { mapExceptionToErrorState(throwable = it, onError = onFailure) }
-            .onSuccess(onSuccess)
-        onCompleted()
     }
 
     private suspend fun mapExceptionToErrorState(
