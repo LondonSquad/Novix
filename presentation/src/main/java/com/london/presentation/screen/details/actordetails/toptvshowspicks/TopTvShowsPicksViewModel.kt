@@ -3,14 +3,13 @@ package com.london.presentation.screen.details.actordetails.toptvshowspicks
 import android.util.Log
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
 import com.london.domain.usecase.GetActorTvShowPicksByIdUseCase
 import com.london.presentation.navigation.arguments.TopTvShowsArgs
+import com.london.presentation.utils.launchCatching
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
-import kotlinx.coroutines.launch
 import org.koin.android.annotation.KoinViewModel
 
 @KoinViewModel
@@ -31,7 +30,7 @@ class TopTvShowsPicksViewModel(
     }
 
     private fun getActorTvShowsPicksData() {
-        viewModelScope.launch {
+        launchCatching {
             try {
                 _uiState.update {
                     it.copy(

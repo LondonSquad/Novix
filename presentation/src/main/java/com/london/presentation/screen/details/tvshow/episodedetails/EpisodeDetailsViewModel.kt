@@ -3,19 +3,15 @@ package com.london.presentation.screen.details.tvshow.episodedetails
 import android.util.Log
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
-import com.london.domain.entity.Actor
-import com.london.domain.entity.tvshowdetails.episode.TvShowEpisodeByIdEntity
 import com.london.domain.usecase.GetEpisodeByTvShowId
 import com.london.domain.usecase.GetImagesById
 import com.london.domain.usecase.GetTvShowDetails
 import com.london.presentation.navigation.arguments.EpisodeDetailsArgs
+import com.london.presentation.utils.launchCatching
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
-import kotlinx.coroutines.launch
 import org.koin.android.annotation.KoinViewModel
-import kotlin.math.log
 
 @KoinViewModel
 class EpisodeDetailsViewModel(
@@ -31,7 +27,7 @@ class EpisodeDetailsViewModel(
     val uiState = _uiState.asStateFlow()
 
     init {
-        viewModelScope.launch {
+        launchCatching {
             Log.d("TAG", ":${getTvShowImages(args.tvShowId)} ")
         }
         getEpisodeByTvShowId()
@@ -39,7 +35,7 @@ class EpisodeDetailsViewModel(
     }
 
     private fun getEpisodeByTvShowId() {
-        viewModelScope.launch {
+        launchCatching {
             _uiState.update { uiState ->
                 val episode = getEpisodeByTvShowIdUseCase(
                     args.tvShowId, args.seasonNumber, args.episodeNumber
@@ -66,7 +62,7 @@ class EpisodeDetailsViewModel(
     }
 
     private fun getImagesData() {
-        viewModelScope.launch {
+        launchCatching {
             val images = getTvShowImages(args.tvShowId)
             val episode = getEpisodeByTvShowIdUseCase(
                 args.tvShowId, args.seasonNumber, args.episodeNumber

@@ -2,17 +2,16 @@ package com.london.presentation.screen.details.actor
 
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
 import com.london.domain.GetCastByIdFailedException
 import com.london.domain.usecase.GetActorDetailsByIdUseCase
 import com.london.domain.usecase.GetActorImagesByIdUseCase
 import com.london.domain.usecase.GetActorMoviePicksByIdUseCase
 import com.london.domain.usecase.GetActorTvShowPicksByIdUseCase
 import com.london.presentation.navigation.arguments.ActorDetailsArgs
+import com.london.presentation.utils.launchCatching
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
-import kotlinx.coroutines.launch
 import org.koin.android.annotation.KoinViewModel
 
 @KoinViewModel
@@ -37,7 +36,7 @@ class ActorDetailsViewModel(
     }
 
     private fun getActorImage() {
-        viewModelScope.launch {
+        launchCatching {
             _uiState.update {
                     it.copy(
                         actorImageDetails = getActorImagesByIdUseCase.invoke(actorId)
@@ -47,7 +46,7 @@ class ActorDetailsViewModel(
     }
 
     private fun getActorDetails() {
-        viewModelScope.launch {
+        launchCatching {
             _uiState.update {
                 val actorDetails = getActorDetailsByIdUseCase.invoke(actorId)
                 it.copy(
@@ -64,7 +63,7 @@ class ActorDetailsViewModel(
     }
 
     private fun getActorMovieDetails() {
-        viewModelScope.launch {
+        launchCatching {
             try {
                 val movieDetails = getActorMoviePicksByIdUseCase.invoke(actorId)
                 _uiState.update {
@@ -80,7 +79,7 @@ class ActorDetailsViewModel(
     }
 
     private fun getActorTvShowDetails() {
-        viewModelScope.launch {
+        launchCatching {
             try {
                 val tvShows = getActorTvShowPicksByIdUseCase.invoke(actorId)
                 _uiState.update { it.copy(

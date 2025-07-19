@@ -2,16 +2,15 @@ package com.london.presentation.screen.category.moviesbycategory
 
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
 import com.london.domain.entity.Movie
 import com.london.domain.usecase.GetMoviesByCategoryUseCase
 import com.london.presentation.navigation.arguments.MoviesByCategoryArgs
 import com.london.presentation.screen.base.createPagingSourceFlow
+import com.london.presentation.utils.launchCatching
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
-import kotlinx.coroutines.launch
 import org.koin.android.annotation.KoinViewModel
 import org.koin.core.annotation.Provided
 
@@ -25,7 +24,7 @@ class MoviesByCategoryViewModel(
     val args by lazy { MoviesByCategoryArgs(savedStateHandle) }
 
     init {
-        viewModelScope.launch {
+        launchCatching {
             initializeMovies(args.categoryId)
         }
     }
