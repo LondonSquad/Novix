@@ -46,6 +46,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.layout.onGloballyPositioned
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
@@ -56,6 +58,7 @@ import com.london.designsystem.R
 import com.london.designsystem.component.ActorItem
 import com.london.designsystem.component.CircularLoading
 import com.london.designsystem.component.NovixCarousalRow
+import com.london.designsystem.component.NovixChip
 import com.london.designsystem.component.RatingBar
 import com.london.designsystem.component.UnSuitableEye
 import com.london.designsystem.component.button.ErrorImage
@@ -89,7 +92,7 @@ fun TvShowsDetailsScreen(
         uiState = uiState,
         onBackClick = onBackClick,
         onViewReviewsClick = onNavigateToReviews,
-        onNavigateToCast= onNavigateToCast
+        onNavigateToCast = onNavigateToCast
     )
 
     effect?.Listen { currentEffect ->
@@ -114,8 +117,9 @@ fun TvShowsDetailScreenContent(
     onViewReviewsClick: (tvShowId: Int, mediaType: Int) -> Unit
 ) {
     val uriHandler = LocalUriHandler.current
-
     val lazyListState = rememberLazyListState()
+    var footerHeight by remember { mutableStateOf(0.dp) }
+    val density = LocalDensity.current
 
     val shouldShowBackground by remember {
         derivedStateOf {
@@ -152,7 +156,7 @@ fun TvShowsDetailScreenContent(
             state = lazyListState,
             modifier = Modifier
                 .fillMaxSize(),
-            contentPadding = PaddingValues(bottom = 16.dp)
+            contentPadding = PaddingValues(bottom = footerHeight + 16.dp)
         ) {
             item {
                 val images = uiState.tvImages
@@ -205,7 +209,7 @@ fun TvShowsDetailScreenContent(
                 CastSection(
                     modifier = Modifier.padding(top = 16.dp),
                     castMembers = uiState.cast?.cast ?: emptyList(),
-                    onNavigateToCast =onNavigateToCast
+                    onNavigateToCast = onNavigateToCast
                 )
             }
 
@@ -219,7 +223,11 @@ fun TvShowsDetailScreenContent(
 
         FooterSection(
             haveTrailer = uiState.movieHaveTrailer,
-            modifier = Modifier.align(Alignment.BottomCenter),
+            modifier = Modifier
+                .align(Alignment.BottomCenter)
+                .onGloballyPositioned { coordinates ->
+                    footerHeight = with(density) { coordinates.size.height.toDp() }
+                },
             onPlayClick = {
                 uriHandler.openUrl(uiState.videoProvider)
             },
@@ -248,8 +256,15 @@ fun CustomBackDropImagePager(
                     .padding(bottom = 48.dp)
                     .height(16.dp)
                     .clip(RoundedCornerShape(8.dp))
-                    .background(color = NovixTheme.colors.iconBackgroundLow, shape = RoundedCornerShape(8.dp))
-                    .border(width = 1.dp, color = NovixTheme.colors.stroke, shape = RoundedCornerShape(8.dp))
+                    .background(
+                        color = NovixTheme.colors.iconBackgroundLow,
+                        shape = RoundedCornerShape(8.dp)
+                    )
+                    .border(
+                        width = 1.dp,
+                        color = NovixTheme.colors.stroke,
+                        shape = RoundedCornerShape(8.dp)
+                    )
                     .padding(horizontal = 12.dp, vertical = 4.dp)
                     .align(Alignment.BottomCenter)
             )
@@ -304,8 +319,15 @@ fun CustomBackDropImagePager(
                     .padding(bottom = 48.dp)
                     .height(16.dp)
                     .clip(RoundedCornerShape(8.dp))
-                    .background(color = NovixTheme.colors.iconBackgroundLow, shape = RoundedCornerShape(8.dp))
-                    .border(width = 1.dp, color = NovixTheme.colors.stroke, shape = RoundedCornerShape(8.dp))
+                    .background(
+                        color = NovixTheme.colors.iconBackgroundLow,
+                        shape = RoundedCornerShape(8.dp)
+                    )
+                    .border(
+                        width = 1.dp,
+                        color = NovixTheme.colors.stroke,
+                        shape = RoundedCornerShape(8.dp)
+                    )
                     .padding(horizontal = 12.dp, vertical = 4.dp)
                     .align(Alignment.BottomCenter)
             )
@@ -531,7 +553,9 @@ fun CastSection(
                     actorName = member.name,
                     characterName = "${member.roles[0].character} - ${member.roles[0].episodeCount}",
                     imageRes = member.profileUrl.orEmpty(),
-                    modifier = Modifier.widthIn(296.dp).clickable { onNavigateToCast(member.id) }
+                    modifier = Modifier
+                        .widthIn(296.dp)
+                        .clickable { onNavigateToCast(member.id) }
                 )
             }
         }
@@ -581,29 +605,13 @@ fun SeasonEpisodesDetails(
         verticalAlignment = Alignment.CenterVertically,
     ) {
         items(uiState.numberOfSeasons) { index ->
-            val isSelected = index == selectedSeasonIndex
-
-            Text(
+            NovixChip(
                 text = "${stringResource(R.string.s)}${(index + 1).toLocalizedNumbers()}",
-                style = NovixTheme.typography.label.medium,
-                color = if (isSelected) NovixTheme.colors.onPrimary else NovixTheme.colors.body,
-                modifier = Modifier
-                    .padding(end = 20.dp)
-                    .clickable {
-                        selectedSeasonIndex = index
-                        viewModel.initializeEpisodesBySeasons(index + 1)
-                    }
-                    .then(
-                        if (isSelected)
-                            Modifier
-                                .background(
-                                    color = NovixTheme.colors.secondary,
-                                    shape = RoundedCornerShape(12.dp)
-                                )
-                                .padding(horizontal = 24.dp, vertical = 8.dp)
-                        else
-                            Modifier
-                    )
+                isSelected = index == selectedSeasonIndex,
+                onClick = {
+                    selectedSeasonIndex = index
+                    viewModel.initializeEpisodesBySeasons(index + 1)
+                }
             )
         }
     }

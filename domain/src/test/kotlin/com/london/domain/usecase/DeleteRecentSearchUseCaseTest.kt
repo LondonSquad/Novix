@@ -25,7 +25,7 @@ class DeleteRecentSearchUseCaseTest {
     fun `should call the repository delete from recent search`() = runTest {
         //given
         val recentSearch = RecentSearch(1,"name",1)
-        coEvery { recentSearchRepository.insert(recentSearch) } just Runs
+        coEvery { recentSearchRepository.delete(recentSearch) } just Runs
         //when
         deleteRecentSearchUseCase.invoke(recentSearch)
         //then
