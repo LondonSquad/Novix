@@ -52,7 +52,7 @@ fun FilterBottomSheet(
     viewModel: SearchViewModel = koinViewModel(),
     onDismissRequest: () -> Unit
 ) {
-    val filterUiState by viewModel.filterUiState.collectAsState()
+    val filterUiState by viewModel.state.collectAsState()
 
     val sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
     val scope = rememberCoroutineScope()
