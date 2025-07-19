@@ -2,8 +2,6 @@ package com.london.presentation.screen.details.tvshow.episodedetails
 
 import com.london.domain.entity.Actor
 import com.london.domain.entity.tvshowdetails.ImageItemEntity
-import com.london.domain.entity.tvshowdetails.TvShowGenreEntity
-import com.london.domain.entity.tvshowdetails.episode.TvShowEpisodeByIdEntity
 
 data class EpisodeDetailsUiState(
     val tvImages: List<ImageItemEntity>? = listOf(),
@@ -21,4 +19,5 @@ data class EpisodeDetailsUiState(
     val guestStars:List<Actor> = listOf(),
     val id: Int = 0,
     val backdropPath: String? = "",
+    val haveTrailer: Boolean = false,
 )
