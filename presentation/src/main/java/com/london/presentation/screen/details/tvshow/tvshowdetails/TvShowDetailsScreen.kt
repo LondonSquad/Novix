@@ -79,7 +79,8 @@ fun TvShowsDetailsScreen(
     viewModel: TvShowDetailsViewModel = koinViewModel(),
     onBackClick: () -> Unit = {},
     onNavigateToEpisodeDetails: (tvShowId: Int, episodeNumber: Int, seasonNumber: Int) -> Unit,
-    onNavigateToReviews: (tvShowId: Int, mediaType: Int) -> Unit
+    onNavigateToReviews: (tvShowId: Int, mediaType: Int) -> Unit,
+    onNavigateToCast: (Int) -> Unit
 ) {
     val uiState by viewModel.uiState.collectAsState()
     val effect by viewModel.effect.collectAsState(null)
@@ -87,7 +88,8 @@ fun TvShowsDetailsScreen(
     TvShowsDetailScreenContent(
         uiState = uiState,
         onBackClick = onBackClick,
-        onViewReviewsClick = onNavigateToReviews
+        onViewReviewsClick = onNavigateToReviews,
+        onNavigateToCast= onNavigateToCast
     )
 
     effect?.Listen { currentEffect ->
@@ -108,6 +110,7 @@ fun TvShowsDetailScreenContent(
     modifier: Modifier = Modifier,
     uiState: TvShowDetailsUiState,
     onBackClick: () -> Unit,
+    onNavigateToCast: (Int) -> Unit,
     onViewReviewsClick: (tvShowId: Int, mediaType: Int) -> Unit
 ) {
     val uriHandler = LocalUriHandler.current
@@ -201,7 +204,8 @@ fun TvShowsDetailScreenContent(
             item {
                 CastSection(
                     modifier = Modifier.padding(top = 16.dp),
-                    castMembers = uiState.cast?.cast ?: emptyList()
+                    castMembers = uiState.cast?.cast ?: emptyList(),
+                    onNavigateToCast =onNavigateToCast
                 )
             }
 
@@ -507,6 +511,7 @@ fun TvShowRating(
 fun CastSection(
     modifier: Modifier = Modifier,
     castMembers: List<TvShowCastMemberEntity>,
+    onNavigateToCast: (Int) -> Unit
 ) {
 
     Column(modifier = modifier) {
@@ -526,7 +531,7 @@ fun CastSection(
                     actorName = member.name,
                     characterName = "${member.roles[0].character} - ${member.roles[0].episodeCount}",
                     imageRes = member.profileUrl.orEmpty(),
-                    modifier = Modifier.widthIn(296.dp)
+                    modifier = Modifier.widthIn(296.dp).clickable { onNavigateToCast(member.id) }
                 )
             }
         }
