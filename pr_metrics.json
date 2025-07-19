@@ -4245,5 +4245,33 @@
       "deletions": 99,
       "changed_files": 41
     }
+  },
+  {
+    "pr_number": 219,
+    "url": "https://github.com/LondonSquad/Novix/pull/219",
+    "title": "Hotfix/top bar align",
+    "opened_at": "2025-07-19T00:40:46Z",
+    "head_ref": "hotfix/top-bar-align",
+    "base_ref": "develop",
+    "creator": {
+      "login": "Abdulrahman1890",
+      "id": 76666355,
+      "url": "https://github.com/Abdulrahman1890"
+    },
+    "approvals": [],
+    "first_approved_at": null,
+    "time_to_first_approval_minutes": null,
+    "required_approvals_met_at": null,
+    "time_to_required_approvals_minutes": null,
+    "closed_at": null,
+    "merged_at": null,
+    "merged_by": null,
+    "week": "2025-W29",
+    "status": "pending",
+    "diff_stats": {
+      "additions": 2,
+      "deletions": 5,
+      "changed_files": 1
+    }
   }
 ]
