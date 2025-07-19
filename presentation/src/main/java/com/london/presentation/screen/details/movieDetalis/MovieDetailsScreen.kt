@@ -6,6 +6,7 @@ import androidx.compose.animation.slideInHorizontally
 import androidx.compose.animation.slideOutHorizontally
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -26,7 +27,7 @@ import androidx.compose.foundation.layout.statusBars
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyHorizontalGrid
-import androidx.compose.foundation.lazy.grid.items
+import androidx.compose.foundation.lazy.grid.itemsIndexed
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -46,7 +47,6 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.zIndex
 import com.london.designsystem.R
@@ -78,7 +78,9 @@ fun MovieDetailsScreen(
     viewModel: MovieDetailsViewModel = koinViewModel(),
     onBackClick: () -> Unit = {},
     onPreviewClick: (Int) -> Unit = {},
-    onGenreClick: (Int) -> Unit = {}
+    onGenreClick: (Int) -> Unit = {},
+    onNavigateToMovie: (Int) -> Unit,
+    onNavigateToActor: (Int) -> Unit
 ) {
     val state by viewModel.uiState.collectAsState()
     when {
@@ -99,7 +101,9 @@ fun MovieDetailsScreen(
                 viewModel::onExpandClick,
                 onBackClick,
                 onPreviewClick = onPreviewClick,
-                onGenreClick = onGenreClick
+                onGenreClick = onGenreClick,
+                onNavigateToMovie = onNavigateToMovie,
+                onNavigateToActor = onNavigateToActor
             )
         }
     }
@@ -111,7 +115,9 @@ fun MovieDetailsContent(
     onExpandClick: () -> Unit,
     onBackClick: () -> Unit,
     onPreviewClick: (Int) -> Unit,
-    onGenreClick: (Int) -> Unit
+    onGenreClick: (Int) -> Unit,
+    onNavigateToMovie: (Int) -> Unit,
+    onNavigateToActor: (Int) -> Unit
 ) {
     val lazyState = rememberLazyListState()
     val isScrolledFarEnough = remember {
@@ -273,12 +279,14 @@ fun MovieDetailsContent(
                         horizontalArrangement = Arrangement.spacedBy(12.dp),
                         contentPadding = PaddingValues(vertical = 8.dp, horizontal = 16.dp)
                     ) {
-                        items(state.actors) { actor ->
+                        itemsIndexed(state.actors) {_, actor ->
                             ActorItem(
                                 actorName = actor.name,
                                 characterName = actor.characterName,
                                 imageRes = actor.avatarUrl,
-                                modifier = Modifier.defaultMinSize(minWidth = 296.dp)
+                                modifier = Modifier
+                                    .defaultMinSize(minWidth = 296.dp)
+                                    .clickable { onNavigateToActor(actor.actorId) }
                             )
                         }
                     }
@@ -303,7 +311,7 @@ fun MovieDetailsContent(
                             .padding(top = 12.dp),
                         horizontalArrangement = Arrangement.spacedBy(12.dp)
                     ) {
-                        rowItems.forEach { movie ->
+                        rowItems.forEachIndexed { index, movie ->
                             HomeCard(
                                 imageUrl = movie.image,
                                 isSaved = movie.isSaved,
@@ -312,6 +320,7 @@ fun MovieDetailsContent(
                                 },
                                 modifier = Modifier
                                     .weight(1f)
+                                    .clickable { onNavigateToMovie(state.similarMovies[index].movieId) }
                             )
                         }
                         if (rowItems.size == 1) {
@@ -485,49 +494,5 @@ private fun MovieDetailsImage(
                 )
             }
         }
-    }
-}
-
-@Preview(showBackground = true)
-@Composable
-private fun MovieDetailsPreview() {
-    val fakeState = MovieDetailsUiState(
-        movieImage = listOf(
-            "https://image.tmdb.org/t/p/w500/rktDFPbfHfUbArZ6OOOKsXcv0Bm.jpg",
-            "https://image.tmdb.org/t/p/w500/rktDFPbfHfUbArZ6OOOKsXcv0Bm.jpg",
-            "https://image.tmdb.org/t/p/w500/rktDFPbfHfUbArZ6OOOKsXcv0Bm.jpg",
-            "https://image.tmdb.org/t/p/w500/rktDFPbfHfUbArZ6OOOKsXcv0Bm.jpg"
-
-        ),
-        movieName = "The Shawshank Redemption",
-        movieGenres = listOf(Genre(1, "")),
-        movieRating = "9.9",
-        movieDuration = "2h 22m",
-        releaseDate = "1994-09-22",
-        movieOverview = "It is a 1994 American drama film, considered one of the greatest films in cinematic history. It revolves around Andy Dufresne, a banker wrongfully convicted of the murder of his wife and",
-        actors = listOf(
-            ActorUIState(
-                "Tim Robbins",
-                characterName = "Andy Dufresne",
-                avatarUrl = "https://image.tmdb.org/t/p/w500/rktDFPbfHfUbArZ6OOOKsXcv0Bm.jpg"
-            ), ActorUIState(
-                "Morgan Freeman",
-                characterName = "Red",
-                avatarUrl = "https://image.tmdb.org/t/p/w500/rktDFPbfHfUbArZ6OOOKsXcv0Bm.jpg"
-            )
-        ),
-        similarMovies = listOf(
-            SimilarMovieUIState(
-                "https://image.tmdb.org/t/p/w500/rktDFPbfHfUbArZ6OOOKsXcv0Bm.jpg", false
-            ), SimilarMovieUIState(
-                "https://image.tmdb.org/t/p/w500/rktDFPbfHfUbArZ6OOOKsXcv0Bm.jpg", true
-            )
-        ),
-        isRated = true,
-        movieHaveTrailer = true
-    )
-
-    NovixTheme {
-        MovieDetailsContent(state = fakeState, {}, {}, {}, {})
     }
 }
