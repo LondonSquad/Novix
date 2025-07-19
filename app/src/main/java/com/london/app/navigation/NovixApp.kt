@@ -30,7 +30,6 @@ import com.london.presentation.navigation.Screen.Home
 import com.london.presentation.navigation.Screen.MovieDetails
 import com.london.presentation.navigation.Screen.MoviesByCategory
 import com.london.presentation.navigation.Screen.Reviews
-import com.london.presentation.navigation.Screen.Reviews
 import com.london.presentation.navigation.Screen.Search
 import com.london.presentation.navigation.Screen.TopTvShowsPicksDetails
 import com.london.presentation.navigation.Screen.TvShowDetails
@@ -46,7 +45,6 @@ import com.london.presentation.screen.details.movieDetalis.MovieDetailsScreen
 import com.london.presentation.screen.details.tvshow.episodedetails.EpisodeDetailsScreen
 import com.london.presentation.screen.details.tvshow.tvshowdetails.TvShowsDetailsScreen
 import com.london.presentation.screen.home.HomeScreen
-import com.london.presentation.screen.reviews.ReviewsScreen
 import com.london.presentation.screen.reviews.ReviewsScreen
 import com.london.presentation.screen.search.SearchScreen
 
@@ -70,6 +68,7 @@ fun NovixApp() {
     val showMovieDetails = currentDestination?.hasRoute<MovieDetails>() != true
     Log.d("test", "NovixApp: $showMovieDetails")
     Scaffold(
+        backgroundColor = NovixTheme.colors.surface,
         bottomBar = {
             if (showBottomNav && showMovieDetails) {
                 NavBar(
@@ -203,11 +202,19 @@ fun NovixApp() {
                 popExitTransition = { fadeOut(tween(500)) },
             ) {
                 MovieDetailsScreen(
-                    onBackClick = { navController.navigateUp() },
-                    onGenreClick = {
-                        navController.navigate(MoviesByCategory(it))
+                    onBackClick = {
+                        navController.navigateUp()
                     },
-                    onNavigateToPreviews = { movieId, mediaType ->
+                    onGenreClick = { genreId ->
+                        navController.navigate(MoviesByCategory(genreId))
+                    },
+                    onNavigateToMovie = { movieId ->
+                        navController.navigate(MovieDetails(movieId))
+                    },
+                    onNavigateToActor = { actorId ->
+                        navController.navigate(Screen.ActorDetails(actorId))
+                    },
+                    onNavigateToReviews = { movieId, mediaType ->
                         navController.navigate(Reviews(movieId, mediaType))
                     }
                 )

@@ -33,6 +33,7 @@ fun SaveIcon(
     onSaveClick: () -> Unit,
     modifier: Modifier = Modifier,
     backgroundColor: Color = NovixTheme.colors.iconBackground,
+    roundCorner: Int = 8
 ) {
     val animatedProgress by animateFloatAsState(
         targetValue = if (isSaved) 1f else 0f,
@@ -44,12 +45,12 @@ fun SaveIcon(
     Box(
         modifier = modifier
             .size(32.dp)
-            .clip(RoundedCornerShape(8.dp))
+            .clip(RoundedCornerShape(roundCorner.dp))
             .background(color = backgroundColor)
             .border(
                 width = 1.dp,
                 color = NovixTheme.colors.stroke,
-                shape = RoundedCornerShape(8.dp)
+                shape = RoundedCornerShape(roundCorner.dp)
             )
             .padding(6.dp)
             .noRippleClickable {

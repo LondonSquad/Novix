@@ -41,6 +41,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.zIndex
 import androidx.paging.compose.collectAsLazyPagingItems
 import com.ae.imageharamblur.ui.ImageViewFilter
+import com.london.designsystem.component.ButtonIcon
 import com.london.designsystem.component.CircularLoading
 import com.london.designsystem.component.button.ErrorImage
 import com.london.designsystem.theme.NovixTheme
@@ -48,7 +49,6 @@ import com.london.presentation.R
 import com.london.presentation.composables.ConditionalText
 import com.london.presentation.composables.RatingItem
 import com.london.presentation.composables.ReviewsDate
-import com.london.presentation.screen.details.tvshow.tvshowdetails.TvShowScreenTopBar
 import org.koin.androidx.compose.koinViewModel
 
 @Composable
@@ -61,7 +61,6 @@ fun ReviewsScreen(
     ReviewsScreenContent(
         uiState = uiState,
         onBackClick = onBackClick,
-        modifier = Modifier
     )
 }
 
@@ -69,7 +68,6 @@ fun ReviewsScreen(
 fun ReviewsScreenContent(
     uiState: ReviewsUiState,
     onBackClick: () -> Unit,
-    modifier: Modifier = Modifier,
 ) {
     val lazyListState = rememberLazyListState()
 
@@ -119,7 +117,6 @@ fun ReviewsScreenContent(
             }
         }
 
-
         Box(
             modifier = Modifier
                 .fillMaxWidth()
@@ -133,16 +130,42 @@ fun ReviewsScreenContent(
                 .zIndex(0.5f)
         )
 
-        TvShowScreenTopBar(
+        ReviewTopBar(
             modifier = Modifier
-                .fillMaxWidth()
                 .padding(
                     start = 16.dp,
                     end = 16.dp,
-                    top = WindowInsets.statusBars.asPaddingValues().calculateTopPadding() + 12.dp
+                    top = 12.dp
                 )
-                .zIndex(1f),
-            onBackClick = onBackClick,
+                .align(Alignment.TopCenter),
+            onBackClick = onBackClick
+        )
+    }
+}
+
+@Composable
+fun ReviewTopBar(
+    modifier: Modifier,
+    onBackClick: () -> Unit
+) {
+    Box(
+        modifier = modifier
+            .fillMaxWidth()
+            .zIndex(1.0f)
+            .background(NovixTheme.colors.surface)
+            .padding(
+                top = WindowInsets.statusBars.asPaddingValues().calculateTopPadding()
+            ),
+        contentAlignment = Alignment.Center
+    ) {
+
+        ButtonIcon(
+            onClick = onBackClick,
+            iconRes = com.london.designsystem.R.drawable.arrow_left,
+            backgroundColor = NovixTheme.colors.iconBackgroundLow,
+            modifier = Modifier
+                .size(40.dp)
+                .align(Alignment.TopStart),
         )
     }
 }

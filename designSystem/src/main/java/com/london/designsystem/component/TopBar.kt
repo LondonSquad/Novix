@@ -12,7 +12,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -74,11 +73,14 @@ fun ButtonTopBar(icon: Int, onClick: () -> Unit) {
     Box(
         modifier = Modifier
             .size(40.dp)
-            .border(width = 1.dp, shape = RoundedCornerShape(12.dp), color = NovixTheme.colors.stroke)
             .clip(RoundedCornerShape(12.dp))
+            .border(
+                width = 1.dp,
+                shape = RoundedCornerShape(12.dp),
+                color = NovixTheme.colors.stroke
+            )
             .background(
-                color = NovixTheme.colors.iconBackgroundLow,
-                shape = RoundedCornerShape(12.dp)
+                color = NovixTheme.colors.iconBackgroundLow
             )
             .clickable(onClick = onClick),
         contentAlignment = Alignment.Center

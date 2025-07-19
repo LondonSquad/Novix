@@ -333,8 +333,12 @@ fun TvShowScreenTopBar(
             tint = NovixTheme.colors.title,
             modifier = Modifier
                 .size(40.dp)
-                .border(width = 1.dp, color = NovixTheme.colors.stroke)
                 .clip(RoundedCornerShape(12.dp))
+                .border(
+                    width = 1.dp,
+                    color = NovixTheme.colors.stroke,
+                    shape = RoundedCornerShape(12.dp)
+                )
                 .clickable(onClick = onBackClick)
                 .background(
                     color = NovixTheme.colors.iconBackgroundLow,
@@ -347,7 +351,8 @@ fun TvShowScreenTopBar(
             isSaved = false,
             onSaveClick = { },
             backgroundColor = NovixTheme.colors.iconBackgroundLow,
-            modifier = Modifier.size(40.dp)
+            modifier = Modifier.size(40.dp),
+            roundCorner = 12
         )
     }
 }

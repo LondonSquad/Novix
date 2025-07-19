@@ -81,6 +81,7 @@ fun MovieDetailsScreen(
     onGenreClick: (Int) -> Unit = {},
     onNavigateToMovie: (Int) -> Unit,
     onNavigateToActor: (Int) -> Unit,
+    onNavigateToReviews: (Int, Int) -> Unit,
 ) {
     val state by viewModel.uiState.collectAsState()
     when {
@@ -100,7 +101,7 @@ fun MovieDetailsScreen(
                 state,
                 viewModel::onExpandClick,
                 onBackClick,
-                onViewReviewsClick = onNavigateToActor,
+                onViewReviewsClick = onNavigateToReviews,
                 onGenreClick = onGenreClick,
                 onNavigateToMovie = onNavigateToMovie,
                 onNavigateToActor = onNavigateToActor
@@ -155,7 +156,8 @@ fun MovieDetailsContent(
                     .size(40.dp)
                     .clip(RoundedCornerShape(16))
                     .align(Alignment.TopEnd),
-                backgroundColor = NovixTheme.colors.iconBackgroundLow
+                backgroundColor = NovixTheme.colors.iconBackgroundLow,
+                roundCorner = 12
             )
 
             ButtonIcon(
