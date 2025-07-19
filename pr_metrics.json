@@ -4070,5 +4070,33 @@
       "deletions": 56,
       "changed_files": 5
     }
+  },
+  {
+    "pr_number": 214,
+    "url": "https://github.com/LondonSquad/Novix/pull/214",
+    "title": "fix: some issues in actor details",
+    "opened_at": "2025-07-19T00:05:04Z",
+    "head_ref": "hotfix/actor-details-cutting",
+    "base_ref": "develop",
+    "creator": {
+      "login": "marwanqashwa",
+      "id": 100484790,
+      "url": "https://github.com/marwanqashwa"
+    },
+    "approvals": [],
+    "first_approved_at": null,
+    "time_to_first_approval_minutes": null,
+    "required_approvals_met_at": null,
+    "time_to_required_approvals_minutes": null,
+    "closed_at": null,
+    "merged_at": null,
+    "merged_by": null,
+    "week": "2025-W29",
+    "status": "pending",
+    "diff_stats": {
+      "additions": 7,
+      "deletions": 6,
+      "changed_files": 2
+    }
   }
 ]
