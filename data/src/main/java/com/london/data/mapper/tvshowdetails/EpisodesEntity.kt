@@ -101,9 +101,9 @@ fun TvShowEpisodeResponse.toTvShowEpisodeEntity(): TvShowEpisodeByIdEntity {
 
 fun EpisodeGuestStar.toActorEntity(): Actor {
     return Actor(
-        id = this.id,
-        name = this.name,
+        id = this.id.orZero(),
+        name = this.name.orEmpty(),
         profilePicture = this.profilePath.asImageUrlOrEmpty(),
-        characterName = this.character
+        characterName = this.character.orEmpty()
     )
 }

@@ -1,15 +1,15 @@
 package com.london.domain.entity.tvshowdetails.episode
 
 data class EpisodeCrewMemberEntity(
-    val job: String,
-    val department: String,
-    val creditId: String,
-    val adult: Boolean,
-    val gender: Int,
-    val id: Int,
-    val knownForDepartment: String,
-    val name: String,
-    val originalName: String,
-    val popularity: Double,
-    val profilePath: String?
+    val job: String? = null,
+    val department: String? = null,
+    val creditId: String? = null,
+    val adult: Boolean? = null,
+    val gender: Int? = null,
+    val id: Int? = null,
+    val knownForDepartment: String? = null,
+    val name: String? = null,
+    val originalName: String? = null,
+    val popularity: Double? = null,
+    val profilePath: String? = null
 )
