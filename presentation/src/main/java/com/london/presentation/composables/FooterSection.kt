@@ -41,7 +41,6 @@ fun FooterSection(
             .navigationBarsPadding(),
         horizontalArrangement = Arrangement.spacedBy(8.dp)
     ) {
-        if (!haveTrailer) {
             PrimaryButton(
                 text = null,
                 onClick = { onStarClick() },
@@ -50,7 +49,7 @@ fun FooterSection(
                 hasIcon = true,
                 isLoading = false,
             )
-        }
+
 
         PrimaryButton(
             text = stringResource(R.string.play_trailer),
