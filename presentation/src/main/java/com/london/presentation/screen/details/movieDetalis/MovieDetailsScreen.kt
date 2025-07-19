@@ -54,8 +54,6 @@ import com.london.designsystem.component.HomeCard
 import com.london.designsystem.component.ImageView
 import com.london.designsystem.component.NovixCarousalRow
 import com.london.designsystem.component.button.ErrorImage
-import com.london.designsystem.component.SaveIcon
-import com.london.designsystem.component.button.ErrorImage
 import com.london.designsystem.theme.NovixTheme
 import com.london.designsystem.theme.noRippleClickable
 import com.london.domain.entity.moviedatails.Genre
