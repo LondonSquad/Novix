@@ -1,5 +1,6 @@
 package com.london.domain.usecase
 
+import com.london.domain.entity.recent.RecentSearch
 import com.london.domain.repository.RecentRepository
 import io.mockk.Runs
 import io.mockk.coEvery
@@ -11,7 +12,7 @@ import org.junit.Before
 import org.junit.Test
 
 class AddToRecentSearchUseCaseTest {
-    lateinit var recentSearchRepository: RecentRepository<String>
+    lateinit var recentSearchRepository: RecentRepository<RecentSearch>
     lateinit var addToRecentSearchUseCase: AddToRecentSearchUseCase
 
     @Before
@@ -23,11 +24,13 @@ class AddToRecentSearchUseCaseTest {
     @Test
     fun `should call the repository add to recent search`() = runTest {
         //given
-        coEvery { recentSearchRepository.insert("name") } just Runs
+        val recentSearch = RecentSearch(1,"name",1)
+        coEvery { recentSearchRepository.insert(recentSearch) } just Runs
         //when
-        addToRecentSearchUseCase.invoke("name")
+        addToRecentSearchUseCase.invoke(recentSearch)
         //then
-        coVerify(exactly = 1) { recentSearchRepository.insert("name") }
+        coVerify(exactly = 1) { recentSearchRepository.insert(recentSearch) }
     }
+
 
 }

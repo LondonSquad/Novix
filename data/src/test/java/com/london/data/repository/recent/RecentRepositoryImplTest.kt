@@ -2,7 +2,8 @@ package com.london.data.repository.recent
 
 import com.london.data.datasource.local.model.recent.RecentSearchLocal
 import com.london.data.datasource.local.recent.RecentDataSource
-import com.london.data.mapper.recent.toStringQuery
+import com.london.data.mapper.recent.toEntity
+import com.london.domain.entity.recent.RecentSearch
 import com.london.domain.repository.RecentRepository
 import io.mockk.Runs
 import io.mockk.coEvery
@@ -16,7 +17,7 @@ import org.junit.Test
 
 class RecentRepositoryImplTest {
     lateinit var recentSearchLocalDataSource: RecentDataSource<RecentSearchLocal>
-    lateinit var recentSearchRepository: RecentRepository<String>
+    lateinit var recentSearchRepository: RecentRepository<RecentSearch>
     @Before
     fun setUp() {
         recentSearchLocalDataSource = mockk()
@@ -27,13 +28,14 @@ class RecentRepositoryImplTest {
     @Test
     fun `should map data source results to string list when getAll is called`() = runTest {
         // given
-        val fakeEntity = mockk<RecentSearchLocal>()
+        val fakeEntity = RecentSearchLocal(1,"name",1)
         coEvery { recentSearchLocalDataSource.getAll() } returns listOf(fakeEntity)
-        every { fakeEntity.toStringQuery() } returns "query"
+        every { fakeEntity.toEntity() } returns RecentSearch(1,"name",1)
+
         // when
         val result = recentSearchRepository.getAll()
         // then
-        assert(result == listOf("query"))
+        assert(result == listOf(RecentSearch(1,"name",1)))
     }
 
     @Test
@@ -51,7 +53,7 @@ class RecentRepositoryImplTest {
         // given
         coEvery { recentSearchLocalDataSource.insertAndKeepLastTen(any()) } just Runs
         // when
-        recentSearchRepository.insert("query")
+        recentSearchRepository.insert(RecentSearch(1,"name",1))
         // then
         coVerify(exactly = 1) {
             recentSearchLocalDataSource.insertAndKeepLastTen(ofType<RecentSearchLocal>())
