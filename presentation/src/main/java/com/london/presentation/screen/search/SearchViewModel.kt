@@ -2,7 +2,6 @@ package com.london.presentation.screen.search
 
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
 import com.london.domain.entity.Movie
 import com.london.domain.entity.TvShow
 import com.london.domain.entity.recent.RecentSearch
@@ -25,7 +24,7 @@ import com.london.presentation.composables.filterbottomsheet.availableTvGenres
 import com.london.presentation.screen.base.createPagingSourceFlow
 import com.london.presentation.screen.search.model.MovieUi
 import com.london.presentation.utils.convertGenreCodeToString
-import kotlinx.coroutines.Dispatchers
+import com.london.presentation.utils.launchCatching
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -34,7 +33,6 @@ import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.debounce
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.update
-import kotlinx.coroutines.launch
 import org.koin.android.annotation.KoinViewModel
 import org.koin.core.annotation.Provided
 
@@ -76,7 +74,7 @@ class SearchViewModel(
     private val _searchQuery = MutableStateFlow("")
 
     init {
-        viewModelScope.launch {
+        launchCatching {
             _uiState.update { it.copy(recentViewed = getRecentViewedUseCase.invoke().reversed()) }
             _uiState.update { it.copy(recentSearches = getRecentSearchUseCase.invoke()) }
             _searchQuery.debounce(500).collectLatest { query ->
@@ -103,13 +101,13 @@ class SearchViewModel(
 
         updateAvailableGenres(category)
 
-        viewModelScope.launch {
+        launchCatching {
             performSearch(_uiState.value.searchQuery.text, category)
         }
     }
 
     override fun onSearchFilterClick(query: String, category: SearchCategory) {
-        viewModelScope.launch {
+        launchCatching {
             performSearch(query, category)
         }
     }
@@ -127,7 +125,7 @@ class SearchViewModel(
             )
         }
 
-        viewModelScope.launch {
+        launchCatching {
             performSearch(_uiState.value.searchQuery.text, _uiState.value.selectedCategory)
         }
     }
@@ -147,7 +145,7 @@ class SearchViewModel(
     override fun addToRecentSearches(item: RecentSearch) {
         if (item.query.isBlank()||item.query==_uiState.value.lastSearch) return
         _uiState.update { it.copy(lastSearch = item.query) }
-        viewModelScope.launch {
+        launchCatching {
             addToRecentSearchUseCase.invoke(item)
             _uiState.update {
                 it.copy(
@@ -158,7 +156,7 @@ class SearchViewModel(
     }
 
     override fun addToRecentViewed(item: RecentViewed) {
-        viewModelScope.launch {
+        launchCatching {
             addToRecentViewedUseCase.invoke(item)
             _uiState.update { state ->
                 state.copy(
@@ -176,14 +174,14 @@ class SearchViewModel(
 
     override fun clearRecentViewed() {
         _uiState.update { it.copy(recentViewed = emptyList()) }
-        viewModelScope.launch {
+        launchCatching {
             clearRecentViewedUseCase.invoke()
         }
     }
 
     override fun clearRecentSearches() {
         _uiState.update { it.copy(recentSearches = emptyList()) }
-        viewModelScope.launch {
+        launchCatching {
             clearRecentSearchUseCase.invoke()
         }
     }
@@ -191,7 +189,7 @@ class SearchViewModel(
     override fun removeRecentSearch(search: RecentSearch) {
         val updatedSearches = _uiState.value.recentSearches.filter { it != search }
         _uiState.update { it.copy(recentSearches = updatedSearches) }
-        viewModelScope.launch {
+        launchCatching {
             deleteRecentSearchUseCase.invoke(search)
         }
     }
@@ -199,7 +197,7 @@ class SearchViewModel(
     override fun onRecentSearchClick(search: String) {
         _uiState.update { it.copy(searchQuery = TextFieldValue(search)) }
 
-        viewModelScope.launch {
+        launchCatching {
             performSearch(search, _uiState.value.selectedCategory)
         }
     }
@@ -221,7 +219,7 @@ class SearchViewModel(
             )
         }
 
-        viewModelScope.launch {
+        launchCatching {
             performSearch(_uiState.value.searchQuery.text, _uiState.value.selectedCategory)
         }
     }
@@ -239,7 +237,7 @@ class SearchViewModel(
     }
 
     fun incrementGenreInterest(genreId: Int, mediaType: String) {
-        viewModelScope.launch {
+        launchCatching {
             incrementGenreInterestUseCase.invoke(genreId, mediaType)
         }
     }
@@ -264,7 +262,7 @@ class SearchViewModel(
     }
 
     private fun searchWithApi(query: String, category: SearchCategory) {
-        viewModelScope.launch(Dispatchers.IO) {
+        launchCatching {
             try {
                 when (category) {
                     SearchCategory.Movies -> searchMovies(query)

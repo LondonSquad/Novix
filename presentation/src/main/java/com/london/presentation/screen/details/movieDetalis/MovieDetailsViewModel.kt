@@ -2,14 +2,13 @@ package com.london.presentation.screen.details.movieDetalis
 
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
 import com.london.domain.usecase.GetMovieDetailsUseCase
 import com.london.domain.usecase.GetMovieVideoUseCase
 import com.london.presentation.navigation.arguments.MovieDetailsArgs
+import com.london.presentation.utils.launchCatching
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.launch
 import org.koin.android.annotation.KoinViewModel
 
 @KoinViewModel
@@ -29,7 +28,7 @@ class MovieDetailsViewModel(
     }
 
     private fun loadMovieDetails(movieId: Int) {
-        viewModelScope.launch {
+        launchCatching {
             _uiState.value = _uiState.value.copy(
                 isLoading = true
             )
@@ -45,7 +44,7 @@ class MovieDetailsViewModel(
 
 
     private fun startImageCarousel() {
-        viewModelScope.launch {
+        launchCatching {
             while (true) {
                 delay(DEALEY_MOVIE_IMAGE_TIME)
 

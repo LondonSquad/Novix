@@ -2,12 +2,11 @@ package com.london.presentation.screen.details.actordetails.gallery
 
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
 import com.london.domain.usecase.GetActorImagesByIdUseCase
+import com.london.presentation.utils.launchCatching
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.launch
 import org.koin.android.annotation.KoinViewModel
 
 @KoinViewModel
@@ -26,7 +25,7 @@ class ActorGalleryViewModel(
     }
 
     private fun loadImages(actorId: Int) {
-        viewModelScope.launch {
+        launchCatching {
             _uiState.value = _uiState.value.copy(isLoading = true, error = null)
             try {
                 val imageDetails = getActorImagesByIdUseCase.invoke(actorId)

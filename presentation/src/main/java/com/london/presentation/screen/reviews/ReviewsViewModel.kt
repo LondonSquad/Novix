@@ -2,17 +2,15 @@ package com.london.presentation.screen.reviews
 
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
 import com.london.domain.entity.review.ReviewEntity
 import com.london.domain.usecase.reviews.GetMovieReviewsUseCase
 import com.london.domain.usecase.reviews.GetTvShowReviewsUseCase
 import com.london.presentation.navigation.arguments.ReviewsScreenArgs
 import com.london.presentation.screen.base.createPagingSourceFlow
-import kotlinx.coroutines.Dispatchers
+import com.london.presentation.utils.launchCatching
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
-import kotlinx.coroutines.launch
 import org.koin.android.annotation.KoinViewModel
 
 @KoinViewModel
@@ -30,7 +28,7 @@ class ReviewsViewModel(
     }
 
     fun initializeReviews(mediaType: Int, mediaId: Int) {
-        viewModelScope.launch(Dispatchers.IO) {
+        launchCatching {
             _uiState.update {
                 it.copy(
                     reviews = createPagingSourceFlow<ReviewEntity>("") { _, pageNumber ->
