@@ -37,20 +37,23 @@ fun PrimaryButton(
     @DrawableRes icon: Int?,
     hasIcon: Boolean,
     isLoading: Boolean,
-    isDisabled: Boolean,
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
+    enabled: Boolean = true,
 ) {
     Button(
         onClick = onClick,
+        enabled = enabled,
         modifier = modifier
             .height(48.dp)
             .defaultMinSize(minWidth = 52.dp)
             .insetShadow(),
         shape = RoundedCornerShape(12.dp),
         colors = ButtonDefaults.buttonColors(
-            containerColor = if (isDisabled) NovixTheme.colors.disable else NovixTheme.colors.primary,
-            contentColor = if (isDisabled) NovixTheme.colors.onPrimaryHint else NovixTheme.colors.onPrimary
+            containerColor = NovixTheme.colors.primary,
+            contentColor = NovixTheme.colors.onPrimary,
+            disabledContainerColor = NovixTheme.colors.disable,
+            disabledContentColor = NovixTheme.colors.onPrimaryHint
         ),
         contentPadding = PaddingValues(horizontal = 16.dp, vertical = 8.dp),
         elevation = ButtonDefaults.buttonElevation(defaultElevation = 2.dp)
@@ -131,7 +134,7 @@ fun PreviewPrimaryNormal() {
             text = "Watch",
             onClick = {},
             isLoading = false,
-            isDisabled = false,
+            enabled = false,
             hasIcon = false,
             hasLabel = true,
             icon = R.drawable.icon_add
@@ -147,7 +150,7 @@ fun PreviewPrimaryLoading() {
             text = "Watch",
             onClick = {},
             isLoading = true,
-            isDisabled = false,
+            enabled = false,
             hasIcon = false,
             hasLabel = true,
             icon = null
@@ -163,7 +166,7 @@ fun PreviewPrimaryDisable() {
             text = "Watch",
             onClick = {},
             isLoading = false,
-            isDisabled = true,
+            enabled = true,
             hasIcon = false,
             hasLabel = true,
             icon = null
@@ -179,7 +182,7 @@ fun PreviewPrimaryWithTextAndIcon() {
             text = "Watch",
             onClick = {},
             isLoading = false,
-            isDisabled = false,
+            enabled = false,
             hasIcon = true,
             hasLabel = true,
             icon = R.drawable.icon_add
@@ -195,7 +198,7 @@ fun PreviewPrimaryWithIcon() {
             text = "",
             onClick = {},
             isLoading = false,
-            isDisabled = false,
+            enabled = false,
             hasIcon = true,
             hasLabel = false,
             icon = R.drawable.icon_add
