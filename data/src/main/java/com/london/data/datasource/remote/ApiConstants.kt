@@ -26,4 +26,7 @@ object ApiConstants {
     fun getSimilarMoviesPath(movieId: Int) = "$MOVIE_DETAILS_PATH/$movieId/similar"
     fun getMovieCastPath(movieId: Int) = "$MOVIE_DETAILS_PATH/$movieId/credits"
     fun getMovieImagesPath(movieId: Int) = "$MOVIE_DETAILS_PATH/$movieId/images"
+
+    fun getMovieReviewsPath(movieId: Int) = "3/movie/$movieId/reviews"
+    fun getTvShowReviewsPath(tvShowId: Int) = "3/tv/$tvShowId/reviews"
 }

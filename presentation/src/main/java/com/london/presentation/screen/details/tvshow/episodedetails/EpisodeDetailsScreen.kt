@@ -222,7 +222,8 @@ fun TvShowScreenTopBar(
             isSaved = false,
             onSaveClick = { },
             modifier = Modifier.size(40.dp),
-            backgroundColor = NovixTheme.colors.iconBackgroundLow
+            backgroundColor = NovixTheme.colors.iconBackgroundLow,
+            roundCorner = 12
         )
     }
 }

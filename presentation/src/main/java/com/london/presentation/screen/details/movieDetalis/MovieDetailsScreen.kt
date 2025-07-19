@@ -71,16 +71,17 @@ import com.london.presentation.R.string.time_icon
 import com.london.presentation.R.string.view_reviews
 import com.london.presentation.composables.ConditionalText
 import com.london.presentation.composables.FooterSection
+import com.london.presentation.screen.reviews.MediaType
 import org.koin.androidx.compose.koinViewModel
 
 @Composable
 fun MovieDetailsScreen(
     viewModel: MovieDetailsViewModel = koinViewModel(),
     onBackClick: () -> Unit = {},
-    onPreviewClick: (Int) -> Unit = {},
     onGenreClick: (Int) -> Unit = {},
     onNavigateToMovie: (Int) -> Unit,
-    onNavigateToActor: (Int) -> Unit
+    onNavigateToActor: (Int) -> Unit,
+    onNavigateToReviews: (Int, Int) -> Unit,
 ) {
     val state by viewModel.uiState.collectAsState()
     when {
@@ -100,7 +101,7 @@ fun MovieDetailsScreen(
                 state,
                 viewModel::onExpandClick,
                 onBackClick,
-                onPreviewClick = onPreviewClick,
+                onViewReviewsClick = onNavigateToReviews,
                 onGenreClick = onGenreClick,
                 onNavigateToMovie = onNavigateToMovie,
                 onNavigateToActor = onNavigateToActor
@@ -114,7 +115,7 @@ fun MovieDetailsContent(
     state: MovieDetailsUiState,
     onExpandClick: () -> Unit,
     onBackClick: () -> Unit,
-    onPreviewClick: (Int) -> Unit,
+    onViewReviewsClick: (movieId: Int, mediaType: Int) -> Unit,
     onGenreClick: (Int) -> Unit,
     onNavigateToMovie: (Int) -> Unit,
     onNavigateToActor: (Int) -> Unit
@@ -155,7 +156,8 @@ fun MovieDetailsContent(
                     .size(40.dp)
                     .clip(RoundedCornerShape(16))
                     .align(Alignment.TopEnd),
-                backgroundColor = NovixTheme.colors.iconBackgroundLow
+                backgroundColor = NovixTheme.colors.iconBackgroundLow,
+                roundCorner = 12
             )
 
             ButtonIcon(
@@ -235,7 +237,7 @@ fun MovieDetailsContent(
                                 style = NovixTheme.typography.label.medium,
                                 color = NovixTheme.colors.primary,
                                 modifier = Modifier.noRippleClickable {
-                                    onPreviewClick(state.movieId)
+                                    onViewReviewsClick(state.movieId, MediaType.Movie.mediaNum)
                                 }
                             )
                         }
@@ -257,7 +259,8 @@ fun MovieDetailsContent(
                     ConditionalText(
                         state.movieOverview,
                         state.expanded,
-                        onExpandClick
+                        modifier = Modifier.padding(horizontal = 16.dp, vertical = 4.dp),
+                        onExpandedChange = onExpandClick
                     )
                 }
             }

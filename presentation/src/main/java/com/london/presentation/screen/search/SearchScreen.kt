@@ -40,10 +40,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.blur
-import androidx.compose.ui.draw.drawWithContent
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.Path
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.platform.SoftwareKeyboardController
 import androidx.compose.ui.res.painterResource
@@ -65,6 +61,7 @@ import com.london.domain.entity.recent.RecentViewed
 import com.london.presentation.R
 import com.london.presentation.composables.ActorsLayout
 import com.london.presentation.composables.MoviesLayOut
+import com.london.presentation.composables.TriangleBlurredShape
 import com.london.presentation.composables.TvShowLayOut
 import com.london.presentation.composables.filterbottomsheet.FilterBottomSheet
 import com.london.presentation.utils.ResultOrEmpty
@@ -226,28 +223,6 @@ fun SearchScreenContent(
                 onDismissRequest = { showFilterBottomSheet = false })
         }
     }
-}
-
-@Composable
-private fun TriangleBlurredShape() {
-    val triangleBackgroundColor: Color = NovixTheme.colors.primary.copy(alpha = 0.08f)
-    Box(
-        modifier = Modifier
-            .fillMaxSize()
-            .blur(150.dp)
-            .drawWithContent {
-                val path = Path().apply {
-                    moveTo(0f, 0f)
-                    lineTo(size.width * 0.7f, 0f)
-                    lineTo(0f, size.height * 0.25f)
-                    close()
-                }
-                drawPath(
-                    path,
-                    color = triangleBackgroundColor,
-                )
-                drawContent()
-            })
 }
 
 @Composable

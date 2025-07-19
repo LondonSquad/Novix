@@ -67,6 +67,7 @@ import com.london.domain.entity.tvshowdetails.ImageItemEntity
 import com.london.domain.entity.tvshowdetails.TvShowCastMemberEntity
 import com.london.presentation.composables.ConditionalText
 import com.london.presentation.composables.FooterSection
+import com.london.presentation.screen.reviews.MediaType
 import com.london.presentation.utils.Listen
 import com.london.presentation.utils.offsetLayout
 import com.london.presentation.utils.toLocalizedNumbers
@@ -78,7 +79,8 @@ import org.koin.androidx.compose.koinViewModel
 fun TvShowsDetailsScreen(
     viewModel: TvShowDetailsViewModel = koinViewModel(),
     onBackClick: () -> Unit = {},
-    onNavigateToEpisodeDetails: (tvShowId: Int, episodeNumber: Int, seasonNumber: Int) -> Unit
+    onNavigateToEpisodeDetails: (tvShowId: Int, episodeNumber: Int, seasonNumber: Int) -> Unit,
+    onNavigateToReviews: (tvShowId: Int, mediaType: Int) -> Unit
 ) {
     val uiState by viewModel.uiState.collectAsState()
     val effect by viewModel.effect.collectAsState(null)
@@ -86,7 +88,7 @@ fun TvShowsDetailsScreen(
     TvShowsDetailScreenContent(
         uiState = uiState,
         onBackClick = onBackClick,
-        interactionListener = viewModel
+        onViewReviewsClick = onNavigateToReviews
     )
 
     effect?.Listen { currentEffect ->
@@ -108,7 +110,7 @@ fun TvShowsDetailScreenContent(
     modifier: Modifier = Modifier,
     uiState: TvShowDetailsUiState,
     onBackClick: () -> Unit,
-    interactionListener: TvShowDetailsInteractionListener
+    onViewReviewsClick: (tvShowId: Int, mediaType: Int) -> Unit
 ) {
     val lazyListState = rememberLazyListState()
 
@@ -164,7 +166,7 @@ fun TvShowsDetailScreenContent(
                         )
                         .clip(RoundedCornerShape(16.dp))
                         .background(NovixTheme.colors.surface),
-                    onReviewClick = { interactionListener.onClickViewReviewsListener(uiState.id) },
+                    onReviewClick = { onViewReviewsClick(uiState.id, MediaType.TvShow.mediaNum) },
                     tvShowId = uiState.id
                 )
             }
@@ -183,6 +185,7 @@ fun TvShowsDetailScreenContent(
                 ConditionalText(
                     text = uiState.overview,
                     expandedState = isExpanded,
+                    modifier = Modifier.padding(horizontal = 16.dp, vertical = 4.dp)
                 ) {
                     isExpanded = !isExpanded
                 }
@@ -330,8 +333,12 @@ fun TvShowScreenTopBar(
             tint = NovixTheme.colors.title,
             modifier = Modifier
                 .size(40.dp)
-                .border(width = 1.dp, color = NovixTheme.colors.stroke)
                 .clip(RoundedCornerShape(12.dp))
+                .border(
+                    width = 1.dp,
+                    color = NovixTheme.colors.stroke,
+                    shape = RoundedCornerShape(12.dp)
+                )
                 .clickable(onClick = onBackClick)
                 .background(
                     color = NovixTheme.colors.iconBackgroundLow,
@@ -344,7 +351,8 @@ fun TvShowScreenTopBar(
             isSaved = false,
             onSaveClick = { },
             backgroundColor = NovixTheme.colors.iconBackgroundLow,
-            modifier = Modifier.size(40.dp)
+            modifier = Modifier.size(40.dp),
+            roundCorner = 12
         )
     }
 }
