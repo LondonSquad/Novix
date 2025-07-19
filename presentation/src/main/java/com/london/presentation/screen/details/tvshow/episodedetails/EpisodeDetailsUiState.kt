@@ -5,6 +5,7 @@ import com.london.domain.entity.tvshowdetails.ImageItemEntity
 
 data class EpisodeDetailsUiState(
     val tvImages: List<ImageItemEntity>? = listOf(),
+    val isLoading: Boolean = true,
     val episodeGenres: List<String> = listOf(),
     val airDate: String = "",
     val episodeNumber: Int = 0,
@@ -20,4 +21,5 @@ data class EpisodeDetailsUiState(
     val id: Int = 0,
     val backdropPath: String? = "",
     val haveTrailer: Boolean = false,
+    val isSaved: Boolean = false
 )

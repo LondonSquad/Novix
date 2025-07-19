@@ -25,14 +25,11 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
-import androidx.compose.foundation.pager.HorizontalPager
-import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
@@ -57,24 +54,23 @@ import com.ae.imageharamblur.ui.ImageViewFilter
 import com.london.designsystem.R
 import com.london.designsystem.component.ActorItem
 import com.london.designsystem.component.CircularLoading
-import com.london.designsystem.component.NovixCarousalRow
 import com.london.designsystem.component.NovixChip
-import com.london.designsystem.component.RatingBar
 import com.london.designsystem.component.UnSuitableEye
 import com.london.designsystem.component.button.ErrorImage
 import com.london.designsystem.theme.NovixTheme
-import com.london.domain.entity.tvshowdetails.ImageItemEntity
 import com.london.domain.entity.tvshowdetails.TvShowCastMemberEntity
 import com.london.presentation.composables.ConditionalText
+import com.london.presentation.composables.CustomBackDropImagePager
 import com.london.presentation.composables.DetailsScreenTopBar
 import com.london.presentation.composables.FooterSection
+import com.london.presentation.composables.RatingItem
+import com.london.presentation.screen.BuildScreen
 import com.london.presentation.screen.reviews.MediaType
 import com.london.presentation.utils.Listen
 import com.london.presentation.utils.convertDate
 import com.london.presentation.utils.offsetLayout
 import com.london.presentation.utils.openUrl
 import com.london.presentation.utils.toLocalizedNumbers
-import kotlinx.coroutines.delay
 import org.koin.androidx.compose.koinViewModel
 
 @Composable
@@ -88,11 +84,17 @@ fun TvShowsDetailsScreen(
     val uiState by viewModel.uiState.collectAsState()
     val effect by viewModel.effect.collectAsState(null)
 
-    TvShowsDetailScreenContent(
-        uiState = uiState,
-        onBackClick = onBackClick,
-        onViewReviewsClick = onNavigateToReviews,
-        onNavigateToCast = onNavigateToCast
+    BuildScreen(
+        isLoading = uiState.isLoading,
+        isError = false,
+        content = {
+            TvShowsDetailScreenContent(
+                uiState = uiState,
+                onBackClick = onBackClick,
+                onViewReviewsClick = onNavigateToReviews,
+                onNavigateToCast = onNavigateToCast
+            )
+        }
     )
 
     effect?.Listen { currentEffect ->
@@ -134,7 +136,6 @@ fun TvShowsDetailScreenContent(
             durationMillis = 400,
             easing = FastOutSlowInEasing
         ),
-        label = "background_alpha"
     )
 
     Box(
@@ -161,7 +162,7 @@ fun TvShowsDetailScreenContent(
             item {
                 val images = uiState.tvImages
                 CustomBackDropImagePager(
-                    images = images ?: emptyList()
+                    images = images?.map { it.fileUrl } ?: emptyList()
                 )
             }
 
@@ -181,7 +182,10 @@ fun TvShowsDetailScreenContent(
                         .clip(RoundedCornerShape(16.dp))
                         .background(NovixTheme.colors.surface),
                     onReviewClick = { onViewReviewsClick(uiState.id, MediaType.TvShow.mediaNum) },
-                    tvShowId = uiState.id
+                    tvShowId = uiState.id,
+                    rating = uiState.voteAverage.toString(),
+                    date = uiState.firstAirDate,
+                    numberOfSeasons = uiState.numberOfSeasons
                 )
             }
 
@@ -238,109 +242,16 @@ fun TvShowsDetailScreenContent(
     }
 }
 
-@Composable
-fun CustomBackDropImagePager(
-    modifier: Modifier = Modifier,
-    images: List<ImageItemEntity>
-) {
-    if (images.isEmpty()) {
-        Box(
-            modifier = modifier
-                .fillMaxWidth()
-                .height(252.dp)
-                .background(NovixTheme.colors.surface)
-        ) {
-            NovixCarousalRow(
-                dotsStates = listOf(false),
-                modifier = Modifier
-                    .padding(bottom = 48.dp)
-                    .height(16.dp)
-                    .clip(RoundedCornerShape(8.dp))
-                    .background(
-                        color = NovixTheme.colors.iconBackgroundLow,
-                        shape = RoundedCornerShape(8.dp)
-                    )
-                    .border(
-                        width = 1.dp,
-                        color = NovixTheme.colors.stroke,
-                        shape = RoundedCornerShape(8.dp)
-                    )
-                    .padding(horizontal = 12.dp, vertical = 4.dp)
-                    .align(Alignment.BottomCenter)
-            )
-        }
-    } else {
-        Box(
-            modifier = modifier
-                .fillMaxWidth()
-                .height(252.dp)
-                .clip(
-                    shape = RoundedCornerShape(
-                        bottomStart = 12.dp,
-                        bottomEnd = 12.dp
-                    )
-                )
-        ) {
-            val pagerState = rememberPagerState(
-                initialPage = 0,
-                pageCount = { images.size }
-            )
-
-            LaunchedEffect(Unit) {
-                if (images.size > 1) {
-                    while (true) {
-                        delay(4000)
-                        val nextPage = (pagerState.currentPage + 1) % images.size
-                        pagerState.animateScrollToPage(nextPage)
-                    }
-                }
-            }
-
-            HorizontalPager(
-                modifier = Modifier.align(Alignment.Center),
-                state = pagerState,
-            ) { pageIndex ->
-                ImageViewFilter(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .height(252.dp),
-                    contentScale = ContentScale.FillBounds,
-                    model = images[pageIndex].fileUrl,
-                    contentDescription = "TV Show Image ${pageIndex + 1}",
-                    errorContent = { ErrorImage() },
-                    loadingContent = { CircularLoading(modifier = Modifier) },
-                    moderatedContent = { UnSuitableEye() }
-                )
-            }
-
-            NovixCarousalRow(
-                dotsStates = List(images.size) { index -> index == pagerState.currentPage },
-                modifier = Modifier
-                    .padding(bottom = 48.dp)
-                    .height(16.dp)
-                    .clip(RoundedCornerShape(8.dp))
-                    .background(
-                        color = NovixTheme.colors.iconBackgroundLow,
-                        shape = RoundedCornerShape(8.dp)
-                    )
-                    .border(
-                        width = 1.dp,
-                        color = NovixTheme.colors.stroke,
-                        shape = RoundedCornerShape(8.dp)
-                    )
-                    .padding(horizontal = 12.dp, vertical = 4.dp)
-                    .align(Alignment.BottomCenter)
-            )
-        }
-    }
-}
 
 @Composable
 fun HeaderDetailsCard(
     modifier: Modifier = Modifier,
     uiState: TvShowDetailsUiState,
     onReviewClick: (tvShowId: Int) -> Unit,
-    tvShowId: Int
+    tvShowId: Int,
+    rating: String,
+    date: String,
+    numberOfSeasons: Int
 ) {
 
     Column(
@@ -365,7 +276,9 @@ fun HeaderDetailsCard(
             )
             TvShowBasicDetails(
                 modifier = Modifier,
-                uiState = uiState
+                rating = rating,
+                date = date,
+                numberOfSeasons = numberOfSeasons,
             )
 
             ViewReviewText(
@@ -414,14 +327,19 @@ fun GenreNames(
 @Composable
 fun TvShowBasicDetails(
     modifier: Modifier = Modifier,
-    uiState: TvShowDetailsUiState
+    rating: String,
+    date: String,
+    numberOfSeasons: Int
 ) {
     Row(
         modifier = modifier,
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.spacedBy(4.dp)
     ) {
-        TvShowRating(uiState = uiState)
+        RatingItem(
+            modifier = Modifier,
+            rating = rating
+        )
 
         Box(
             modifier = Modifier
@@ -431,7 +349,7 @@ fun TvShowBasicDetails(
                 .background(NovixTheme.colors.hint)
         )
 
-        TvShowDate(uiState)
+        TvShowDate(date)
 
         Box(
             modifier = Modifier
@@ -441,7 +359,7 @@ fun TvShowBasicDetails(
                 .background(NovixTheme.colors.hint)
         )
 
-        Seasons(uiState)
+        Seasons(numberOfSeasons)
     }
 }
 
@@ -459,7 +377,9 @@ fun ViewReviewText(
 }
 
 @Composable
-fun Seasons(uiState: TvShowDetailsUiState) {
+fun Seasons(
+    numberOfSeasons: Int
+) {
 
     Row(
         verticalAlignment = Alignment.CenterVertically,
@@ -473,19 +393,19 @@ fun Seasons(uiState: TvShowDetailsUiState) {
         )
 
         Text(
-            text = "${uiState.numberOfSeasons.toLocalizedNumbers()} ${stringResource(R.string.seasons)}",
+            text = "${numberOfSeasons.toLocalizedNumbers()} ${stringResource(R.string.seasons)}",
             style = NovixTheme.typography.label.small,
-            color = NovixTheme.colors.title,
+            color = NovixTheme.colors.body,
         )
     }
 }
 
 @Composable
 fun TvShowDate(
-    uiState: TvShowDetailsUiState
+    date: String
 ) {
 
-    if (uiState.firstAirDate.isEmpty() || uiState.firstAirDate.isBlank()) return
+    if (date.isEmpty() || date.isBlank()) return
     Row(
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.spacedBy(4.dp)
@@ -498,33 +418,9 @@ fun TvShowDate(
         )
 
         Text(
-            text = uiState.firstAirDate.toLocalizedNumbers(),
+            text = date.toLocalizedNumbers(),
             style = NovixTheme.typography.label.small,
-            color = NovixTheme.colors.title
-        )
-    }
-}
-
-@Composable
-fun TvShowRating(
-    modifier: Modifier = Modifier,
-    uiState: TvShowDetailsUiState
-) {
-    Row(
-        verticalAlignment = Alignment.CenterVertically,
-        horizontalArrangement = Arrangement.spacedBy(4.dp)
-    ) {
-        RatingBar(
-            modifier = modifier.size(12.dp),
-            rating = uiState.voteAverage.toInt(),
-            onRatingChanged = {},
-            maxRating = 1
-        )
-
-        Text(
-            text = uiState.voteAverage.toString().toLocalizedNumbers(),
-            style = NovixTheme.typography.label.small,
-            color = NovixTheme.colors.title
+            color = NovixTheme.colors.body
         )
     }
 }
@@ -679,7 +575,7 @@ fun EpisodeRow(
                     verticalAlignment = Alignment.CenterVertically,
                     horizontalArrangement = Arrangement.spacedBy(4.dp)
                 ) {
-                    EpisodeRating(rating = episode.voteAverage.toString())
+                    RatingItem(rating = episode.voteAverage.toLocalizedNumbers())
 
                     Box(
                         modifier = Modifier
@@ -690,7 +586,7 @@ fun EpisodeRow(
                     )
 
                     if (episode.runtime != null) {
-                        EpisodeDate(episode.runtime.toString().toLocalizedNumbers())
+                        EpisodeDuration(episode.runtime.toString().toLocalizedNumbers())
 
                         Box(
                             modifier = Modifier
@@ -703,7 +599,7 @@ fun EpisodeRow(
 
                     if (episode.airDate != null)
                         Text(
-                            text = convertDate(episode.airDate.toString()),
+                            text = convertDate(episode.airDate.toString().toLocalizedNumbers()),
                             style = NovixTheme.typography.label.small,
                             color = NovixTheme.colors.hint
                         )
@@ -716,31 +612,7 @@ fun EpisodeRow(
 }
 
 @Composable
-fun EpisodeRating(
-    modifier: Modifier = Modifier,
-    rating: String,
-) {
-    Row(
-        verticalAlignment = Alignment.CenterVertically,
-        horizontalArrangement = Arrangement.spacedBy(4.dp)
-    ) {
-        RatingBar(
-            modifier = modifier.size(12.dp),
-            rating = 1,
-            onRatingChanged = {},
-            maxRating = 1
-        )
-
-        Text(
-            text = rating,
-            style = NovixTheme.typography.label.small,
-            color = NovixTheme.colors.hint
-        )
-    }
-}
-
-@Composable
-fun EpisodeDate(
+fun EpisodeDuration(
     durationTime: String?
 ) {
     Row(

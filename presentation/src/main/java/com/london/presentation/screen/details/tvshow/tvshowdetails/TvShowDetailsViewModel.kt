@@ -16,10 +16,13 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import org.koin.android.annotation.KoinViewModel
 
-sealed interface TvShowDetailsEffect{
-    data class OnNavigateToEpisodeDetails(val tvShowId: Int, val episodeNumber: Int, val seasonNumber: Int): TvShowDetailsEffect
+sealed interface TvShowDetailsEffect {
+    data class OnNavigateToEpisodeDetails(
+        val tvShowId: Int,
+        val episodeNumber: Int,
+        val seasonNumber: Int
+    ) : TvShowDetailsEffect
 }
-
 
 @KoinViewModel
 class TvShowDetailsViewModel(
@@ -36,9 +39,10 @@ class TvShowDetailsViewModel(
 
     private val _effect = MutableSharedFlow<TvShowDetailsEffect>()
     val effect = _effect.asSharedFlow()
-    val args by lazy { TvShowDetailsArgs(savedStateHandle)}
+    val args by lazy { TvShowDetailsArgs(savedStateHandle) }
 
     private val tvShowId: Int = args.tvShowId
+
     init {
         if (tvShowId != 0) {
             initializeGetTvShowDetailsData()
@@ -52,10 +56,12 @@ class TvShowDetailsViewModel(
         launchCatching {
             _uiState.update {
                 it.copy(
+                    isLoading = false,
                     tvShowEpisodes =
                         getEpisodesByTvShowSeason(tvShowId, seasonNumber).episodes,
-                    tvShowEpisodeCountBySeason = getEpisodesByTvShowSeason(tvShowId,seasonNumber),
-                    videoProvider = getTvShowVideoProvider.invoke(tvShowId).firstOrNull()?.videoUrl.orEmpty()
+                    tvShowEpisodeCountBySeason = getEpisodesByTvShowSeason(tvShowId, seasonNumber),
+                    videoProvider = getTvShowVideoProvider.invoke(tvShowId)
+                        .firstOrNull()?.videoUrl.orEmpty()
                 )
             }
         }
@@ -66,7 +72,10 @@ class TvShowDetailsViewModel(
             val images = getTvShowImages(tvShowId)
 
             _uiState.update {
-                it.copy(tvImages = images)
+                it.copy(
+                    tvImages = images,
+                    isLoading = false,
+                )
             }
         }
     }
@@ -74,7 +83,10 @@ class TvShowDetailsViewModel(
     private fun initializeGetCastData() {
         launchCatching {
             _uiState.update {
-                it.copy(cast = getCastById(tvShowId))
+                it.copy(
+                    cast = getCastById(tvShowId),
+                    isLoading = false,
+                )
             }
         }
     }
@@ -84,6 +96,7 @@ class TvShowDetailsViewModel(
             _uiState.update {
                 val tvShowDetails = getTvShowDetails(tvShowId)
                 it.copy(
+                    isLoading = false,
                     adult = tvShowDetails.adult,
                     backdropPath = tvShowDetails.backdropUrl,
                     createdBy = tvShowDetails.createdBy,
@@ -121,9 +134,15 @@ class TvShowDetailsViewModel(
         }
     }
 
-    fun onEpisodeClick(tvShowId: Int, episodeNumber: Int, seasonNumber: Int){
+    fun onEpisodeClick(tvShowId: Int, episodeNumber: Int, seasonNumber: Int) {
         launchCatching {
-            _effect.emit(TvShowDetailsEffect.OnNavigateToEpisodeDetails(tvShowId, episodeNumber, seasonNumber))
+            _effect.emit(
+                TvShowDetailsEffect.OnNavigateToEpisodeDetails(
+                    tvShowId,
+                    episodeNumber,
+                    seasonNumber
+                )
+            )
         }
     }
 }

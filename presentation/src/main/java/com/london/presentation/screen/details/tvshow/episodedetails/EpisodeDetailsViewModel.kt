@@ -27,51 +27,35 @@ class EpisodeDetailsViewModel(
     val uiState = _uiState.asStateFlow()
 
     init {
-        launchCatching {
-            Log.d("TAG", ":${getTvShowImages(args.tvShowId)} ")
-        }
-        getEpisodeByTvShowId()
-        getImagesData()
+        loadEpisodeDetails()
     }
 
-    private fun getEpisodeByTvShowId() {
+    private fun loadEpisodeDetails() {
         launchCatching {
-            _uiState.update { uiState ->
-                val episode = getEpisodeByTvShowIdUseCase(
-                    args.tvShowId, args.seasonNumber, args.episodeNumber
-                )
-                uiState.copy(
+            val episode = getEpisodeByTvShowIdUseCase(
+                args.tvShowId, args.seasonNumber, args.episodeNumber
+            )
+            val images = getTvShowImages(args.tvShowId)
+            val tvShowDetails = getTvShowDetails(args.tvShowId)
+
+            _uiState.update {
+                EpisodeDetailsUiState(
                     tvShowId = args.tvShowId,
+                    isLoading = false,
                     episodeNumber = args.episodeNumber,
                     seasonNumber = args.seasonNumber,
-                    tvImages = listOf(),
-                    episodeGenres = getTvShowDetails(args.tvShowId).tvShowGenres.map { it.name },
+                    tvImages = images,
+                    episodeGenres = tvShowDetails.tvShowGenres.map { it.name },
                     airDate = episode.airDate ?: "",
                     episodeTypes = episode.episodeTypes,
                     name = episode.name,
                     overview = episode.overview,
-                    stillPath = episode.stillPath?: "",
+                    stillPath = episode.stillPath ?: "",
                     voteAverage = episode.voteAverage,
                     voteCount = episode.voteCount,
                     guestStars = episode.guestStars,
                     id = 0,
                     backdropPath = "",
-                )
-            }
-        }
-    }
-
-    private fun getImagesData() {
-        launchCatching {
-            val images = getTvShowImages(args.tvShowId)
-            val episode = getEpisodeByTvShowIdUseCase(
-                args.tvShowId, args.seasonNumber, args.episodeNumber
-            )
-
-            _uiState.update {
-                it.copy(
-                    tvImages = images,
-                    guestStars = episode.guestStars
                 )
             }
         }

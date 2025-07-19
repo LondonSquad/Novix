@@ -1,0 +1,44 @@
+package com.london.presentation.screen
+
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.Text
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.unit.dp
+import com.london.designsystem.R
+import com.london.designsystem.theme.NovixTheme
+
+@Composable
+fun NetworkErrorScreen() {
+    Column(
+        modifier = Modifier.fillMaxSize(),
+        verticalArrangement = Arrangement.Center,
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+        Image(
+            painter = painterResource(id = R.drawable.image_no_internet),
+            contentDescription = stringResource(R.string.no_internet),
+            modifier = Modifier.padding(bottom = 16.dp)
+        )
+
+        Text(
+            text = stringResource(R.string.you_are_offline),
+            style = NovixTheme.typography.title.medium,
+            color = NovixTheme.colors.title,
+            modifier = Modifier.padding(bottom = 8.dp)
+        )
+
+        Text(
+            text = stringResource(R.string.check_your_connection),
+            style = NovixTheme.typography.title.medium,
+            color = NovixTheme.colors.title,
+        )
+    }
+}

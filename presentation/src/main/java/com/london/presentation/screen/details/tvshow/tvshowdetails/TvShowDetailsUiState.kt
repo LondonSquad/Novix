@@ -14,6 +14,8 @@ import com.london.domain.entity.tvshowdetails.episode.TvShowEpisodeBySeasonEntit
 import com.london.domain.entity.tvshowdetails.episode.TvShowEpisodesEntity
 
 data class TvShowDetailsUiState(
+    val isLoading: Boolean = true,
+    val isError: Boolean = false,
     val tvImages: List<ImageItemEntity>? = listOf(),
     val tvShowEpisodes: List<TvShowEpisodeBySeasonEntity> = listOf(),
     val tvShowEpisodeCountBySeason: TvShowEpisodesEntity? = null,

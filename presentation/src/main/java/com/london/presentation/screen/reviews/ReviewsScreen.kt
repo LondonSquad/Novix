@@ -232,8 +232,7 @@ fun ReviewHeader(
     modifier: Modifier = Modifier
 ) {
     Row(
-        modifier = modifier,
-        verticalAlignment = Alignment.CenterVertically,
+        modifier = modifier.fillMaxWidth(),
         horizontalArrangement = Arrangement.SpaceBetween
     ) {
 
@@ -243,16 +242,12 @@ fun ReviewHeader(
             authorUserName = authorUserName
         )
 
-        Box(
-            modifier = Modifier
-                .fillMaxWidth()
-        ) {
 
-            RatingItem(
-                rating = rating,
-                modifier = Modifier.align(Alignment.TopEnd)
-            )
-        }
+        RatingItem(
+            rating = rating,
+            modifier = Modifier
+        )
+
     }
 }
 
@@ -263,50 +258,51 @@ fun AuthorItem(
     authorUserName: String,
     modifier: Modifier = Modifier
 ) {
-    Box(
-        modifier = modifier
-            .size(48.dp)
-            .clip(RoundedCornerShape(12.dp))
-            .border(
-                width = 1.dp,
-                color = NovixTheme.colors.stroke,
-                shape = RoundedCornerShape(12.dp)
-            ),
-        contentAlignment = Alignment.Center
-    ) {
-        ImageViewFilter(
-            model = profileUrl,
-            contentDescription = stringResource(R.string.author_profile),
-            modifier = Modifier,
-            contentScale = ContentScale.Crop,
-            loadingContent = { CircularLoading() },
-            errorContent = { ErrorImage() },
-        )
-    }
+    Row {
+        Box(
+            modifier = modifier
+                .size(48.dp)
+                .clip(RoundedCornerShape(12.dp))
+                .border(
+                    width = 1.dp,
+                    color = NovixTheme.colors.stroke,
+                    shape = RoundedCornerShape(12.dp)
+                ),
+            contentAlignment = Alignment.Center
+        ) {
+            ImageViewFilter(
+                model = profileUrl,
+                contentDescription = stringResource(R.string.author_profile),
+                modifier = Modifier,
+                contentScale = ContentScale.Crop,
+                loadingContent = { CircularLoading() },
+                errorContent = { ErrorImage() },
+            )
+        }
+        Column(
+            modifier = modifier
+                .fillMaxHeight()
+                .padding(start = 8.dp),
+            horizontalAlignment = CenterHorizontally,
+        ) {
+            Text(
+                text = authorName,
+                style = NovixTheme.typography.title.medium,
+                color = NovixTheme.colors.title,
+                textAlign = TextAlign.Start,
+                modifier = Modifier
+            )
 
-    Column(
-        modifier = modifier
-            .fillMaxHeight()
-            .padding(start = 8.dp),
-        horizontalAlignment = CenterHorizontally,
-    ) {
-        Text(
-            text = authorName,
-            style = NovixTheme.typography.title.medium,
-            color = NovixTheme.colors.title,
-            textAlign = TextAlign.Start,
-            modifier = Modifier.fillMaxWidth()
-        )
+            Text(
+                text = authorUserName,
+                style = NovixTheme.typography.label.small,
+                color = NovixTheme.colors.hint,
+                textAlign = TextAlign.Start,
+                modifier = Modifier
 
-        Text(
-            text = authorUserName,
-            style = NovixTheme.typography.label.small,
-            color = NovixTheme.colors.hint,
-            textAlign = TextAlign.Start,
-            modifier = Modifier
-                .fillMaxWidth()
-                .align(Alignment.Start)
-        )
+                    .align(Alignment.Start)
+            )
+        }
     }
 }
 

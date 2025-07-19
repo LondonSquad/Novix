@@ -37,8 +37,7 @@ fun FooterSection(
                 ),
             )
             .padding(horizontal = if (haveTrailer) 16.dp else 24.dp)
-            .padding(bottom = 24.dp)
-            .navigationBarsPadding(),
+            .padding(bottom = 24.dp),
         horizontalArrangement = Arrangement.spacedBy(8.dp)
     ) {
             PrimaryButton(

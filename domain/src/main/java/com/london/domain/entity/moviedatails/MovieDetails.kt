@@ -4,7 +4,7 @@ import com.london.domain.entity.Actor
 
 data class MovieDetails(
     val movieId: Int,
-    val movieImage: List<Any>,
+    val movieImage: List<String>,
     val movieName: String,
     val movieRating: String,
     val movieDuration: String,

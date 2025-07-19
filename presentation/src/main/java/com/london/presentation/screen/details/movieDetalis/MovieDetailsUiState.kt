@@ -4,7 +4,7 @@ import com.london.domain.entity.moviedatails.Genre
 
 data class MovieDetailsUiState(
     val movieId: Int = 0,
-    val movieImage: List<Any> = listOf(),
+    val movieImage: List<String> = listOf(),
     val movieName: String = "",
     val movieGenres: List<Genre> = listOf(),
     val movieRating: String = "",
