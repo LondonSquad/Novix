@@ -60,4 +60,10 @@ sealed interface Screen {
     data class ActorGallery(
         val actorId: Int,
     ) : Screen
+
+    @Serializable
+    data class Reviews(
+        val mediaId: Int,
+        val mediaType: Int
+    ) : Screen
 }

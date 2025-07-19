@@ -29,6 +29,7 @@ import com.london.presentation.navigation.Screen.EpisodeDetails
 import com.london.presentation.navigation.Screen.Home
 import com.london.presentation.navigation.Screen.MovieDetails
 import com.london.presentation.navigation.Screen.MoviesByCategory
+import com.london.presentation.navigation.Screen.Reviews
 import com.london.presentation.navigation.Screen.Search
 import com.london.presentation.navigation.Screen.TopTvShowsPicksDetails
 import com.london.presentation.navigation.Screen.TvShowDetails
@@ -44,6 +45,7 @@ import com.london.presentation.screen.details.movieDetalis.MovieDetailsScreen
 import com.london.presentation.screen.details.tvshow.episodedetails.EpisodeDetailsScreen
 import com.london.presentation.screen.details.tvshow.tvshowdetails.TvShowsDetailsScreen
 import com.london.presentation.screen.home.HomeScreen
+import com.london.presentation.screen.reviews.ReviewsScreen
 import com.london.presentation.screen.search.SearchScreen
 
 
@@ -160,6 +162,9 @@ fun NovixApp() {
                                 seasonNumber
                             )
                         )
+                    },
+                    onNavigateToReviews = { tvShowId, mediaType ->
+                        navController.navigate(Reviews(tvShowId, mediaType))
                     }
                 )
             }
@@ -197,14 +202,36 @@ fun NovixApp() {
                 popExitTransition = { fadeOut(tween(500)) },
             ) {
                 MovieDetailsScreen(
-                    onBackClick = { navController.navigateUp() },
-                    onGenreClick = {
-                        navController.navigate(MoviesByCategory(it))
+                    onBackClick = {
+                        navController.navigateUp()
                     },
-                    onNavigateToMovie = { movieId->
-                        navController.navigate(MovieDetails(movieId))},
-                    onNavigateToActor = { actorId->
-                        navController.navigate(Screen.ActorDetails(actorId))},
+                    onGenreClick = { genreId ->
+                        navController.navigate(MoviesByCategory(genreId))
+                    },
+                    onNavigateToMovie = { movieId ->
+                        navController.navigate(MovieDetails(movieId))
+                    },
+                    onNavigateToActor = { actorId ->
+                        navController.navigate(Screen.ActorDetails(actorId))
+                    },
+                    onNavigateToReviews = { movieId, mediaType ->
+                        navController.navigate(Reviews(movieId, mediaType))
+                    }
+                )
+            }
+
+            composable<Reviews> { backStackEntry ->
+                val reviews = backStackEntry.arguments?.let {
+                    Reviews(
+                        mediaId = it.getInt("mediaId"),
+                        mediaType = it.getInt("mediaType")
+                    )
+                }
+
+                ReviewsScreen(
+                    onBackClick = {
+                        navController.navigateUp()
+                    }
                 )
             }
 

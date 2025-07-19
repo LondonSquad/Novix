@@ -62,4 +62,6 @@
     <string name="gallery">المعرض</string>
     <string name="imagr_dot">نقطه</string>
     <string name="actor_photos">صور الممثلين</string>"
+    <string name="author_profile">Author profile</string>
+
 </resources>
