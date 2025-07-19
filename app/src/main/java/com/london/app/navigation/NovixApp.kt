@@ -66,6 +66,7 @@ fun NovixApp() {
     val showMovieDetails = currentDestination?.hasRoute<MovieDetails>() != true
     Log.d("test", "NovixApp: $showMovieDetails")
     Scaffold(
+        backgroundColor = NovixTheme.colors.surface,
         bottomBar = {
             if (showBottomNav && showMovieDetails) {
                 NavBar(
