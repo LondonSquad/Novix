@@ -4217,5 +4217,33 @@
       "deletions": 54,
       "changed_files": 6
     }
+  },
+  {
+    "pr_number": 218,
+    "url": "https://github.com/LondonSquad/Novix/pull/218",
+    "title": "Feature/reviews screen with navigation",
+    "opened_at": "2025-07-19T00:38:44Z",
+    "head_ref": "feature/reviews-screen-with-navigation",
+    "base_ref": "develop",
+    "creator": {
+      "login": "karimdeabes",
+      "id": 81706918,
+      "url": "https://github.com/karimdeabes"
+    },
+    "approvals": [],
+    "first_approved_at": null,
+    "time_to_first_approval_minutes": null,
+    "required_approvals_met_at": null,
+    "time_to_required_approvals_minutes": null,
+    "closed_at": null,
+    "merged_at": null,
+    "merged_by": null,
+    "week": "2025-W29",
+    "status": "pending",
+    "diff_stats": {
+      "additions": 884,
+      "deletions": 99,
+      "changed_files": 41
+    }
   }
 ]
