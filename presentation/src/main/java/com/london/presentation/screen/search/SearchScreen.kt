@@ -46,6 +46,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.dp
+import androidx.paging.LoadState
 import androidx.paging.compose.collectAsLazyPagingItems
 import com.london.designsystem.component.EmptySearchLayout
 import com.london.designsystem.component.HomeCard
@@ -112,8 +113,7 @@ fun SearchScreenContent(
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .background(NovixTheme.colors.surface)
-                , verticalArrangement = Arrangement.Top
+                .background(NovixTheme.colors.surface), verticalArrangement = Arrangement.Top
         ) {
             TopBar(
                 modifier = Modifier
@@ -164,9 +164,14 @@ fun SearchScreenContent(
                 when (state.selectedCategory) {
                     SearchCategory.Movies -> {
                         val moviesLazyList = state.moviesFlow.collectAsLazyPagingItems()
+                        val isLoading = moviesLazyList.loadState.refresh is LoadState.Loading
                         ResultOrEmpty(
                             items = moviesLazyList.itemSnapshotList.items,
-                            emptyContent = { NoSearchResultLayOut(modifier = Modifier.fillMaxSize()) },
+                            emptyContent = {
+                                if (!isLoading) {
+                                    NoSearchResultLayOut(modifier = Modifier.fillMaxSize())
+                                }
+                            },
                             content = {
                                 MoviesLayOut(
                                     movieUis = moviesLazyList,
@@ -184,9 +189,14 @@ fun SearchScreenContent(
 
                     SearchCategory.TvShows -> {
                         val tvShowsLazyList = state.tvShowsFlow.collectAsLazyPagingItems()
+                        val isLoading = tvShowsLazyList.loadState.refresh is LoadState.Loading
                         ResultOrEmpty(
                             items = tvShowsLazyList.itemSnapshotList.items,
-                            emptyContent = { NoSearchResultLayOut(modifier = Modifier.fillMaxSize()) },
+                            emptyContent = {
+                                if (!isLoading) {
+                                    NoSearchResultLayOut(modifier = Modifier.fillMaxSize())
+                                }
+                            },
                             content = {
                                 TvShowLayOut(
                                     tvShowUis = tvShowsLazyList,
@@ -204,9 +214,14 @@ fun SearchScreenContent(
 
                     SearchCategory.Actors -> {
                         val actorsLazyList = state.actorsFlow.collectAsLazyPagingItems()
+                        val isLoading = actorsLazyList.loadState.refresh is LoadState.Loading
                         ResultOrEmpty(
                             items = actorsLazyList.itemSnapshotList.items,
-                            emptyContent = { NoSearchResultLayOut(modifier = Modifier.fillMaxSize()) },
+                            emptyContent = {
+                                if (!isLoading) {
+                                    NoSearchResultLayOut(modifier = Modifier.fillMaxSize())
+                                }
+                            },
                             content = {
                                 ActorsLayout(
                                     actorsUis = actorsLazyList, onActorClick = {
@@ -381,7 +396,7 @@ fun RecentViewedSection(
                 imageUrl = item.imageUrl,
                 isSaved = false,
                 onSaveClick = { },
-                modifier = Modifier.clickable{
+                modifier = Modifier.clickable {
                     when (item.type) {
                         MediaType.Movie -> onNavigateToMovieDetails(item.id)
                         MediaType.TvShow -> onNavigateToTvShowDetails(item.id)
@@ -433,10 +448,11 @@ private fun RecentSearchItem(
     modifier: Modifier = Modifier,
     showDivider: Boolean = true
 ) {
-    Row(modifier = modifier
-        .fillMaxWidth()
-        .clickable { onSearchClick() }
-        .padding(vertical = 8.dp),
+    Row(
+        modifier = modifier
+            .fillMaxWidth()
+            .clickable { onSearchClick() }
+            .padding(vertical = 8.dp),
         verticalAlignment = Alignment.CenterVertically) {
         Icon(
             painter = painterResource(id = R.drawable.icon_clock),
