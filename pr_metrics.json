@@ -4592,17 +4592,25 @@
           "url": "https://github.com/Mostafa-alsaygh"
         },
         "submitted_at": "2025-07-19T01:45:41Z"
+      },
+      {
+        "reviewer": {
+          "id": 189210092,
+          "login": "Aseel-AbuKmail",
+          "url": "https://github.com/Aseel-AbuKmail"
+        },
+        "submitted_at": "2025-07-19T01:46:34Z"
       }
     ],
     "first_approved_at": "2025-07-19T01:45:41Z",
     "time_to_first_approval_minutes": 31.133333333333333,
-    "required_approvals_met_at": null,
-    "time_to_required_approvals_minutes": null,
+    "required_approvals_met_at": "2025-07-19T01:46:34Z",
+    "time_to_required_approvals_minutes": 32.016666666666666,
     "closed_at": null,
     "merged_at": null,
     "merged_by": null,
     "week": "2025-W29",
-    "status": "pending",
+    "status": "approved",
     "diff_stats": {
       "additions": 207,
       "deletions": 30,
