@@ -56,7 +56,8 @@ kover {
                     annotatedBy("com.london.domain.KoverIgnore")
                     packages(
                         "org.koin.ksp.generated.**",
-                        "com.london.data.datasource.remote.**"
+                        "com.london.data.datasource.remote.**",
+                        "com.london.data.di"
                     )
                     classes("**.*RemoteDataSourceImpl")
                     classes("**RemoteDataSourceImpl")
