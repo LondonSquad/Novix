@@ -4344,17 +4344,25 @@
           "url": "https://github.com/marwanqashwa"
         },
         "submitted_at": "2025-07-19T01:08:50Z"
+      },
+      {
+        "reviewer": {
+          "id": 68463985,
+          "login": "Al-Taie",
+          "url": "https://github.com/Al-Taie"
+        },
+        "submitted_at": "2025-07-19T01:11:57Z"
       }
     ],
     "first_approved_at": "2025-07-19T01:08:50Z",
     "time_to_first_approval_minutes": 12.666666666666666,
-    "required_approvals_met_at": null,
-    "time_to_required_approvals_minutes": null,
+    "required_approvals_met_at": "2025-07-19T01:11:57Z",
+    "time_to_required_approvals_minutes": 15.783333333333333,
     "closed_at": null,
     "merged_at": null,
     "merged_by": null,
     "week": "2025-W29",
-    "status": "pending",
+    "status": "approved",
     "diff_stats": {
       "additions": 48,
       "deletions": 14,
