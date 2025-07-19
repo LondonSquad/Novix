@@ -2,15 +2,15 @@ package com.london.designsystem.component
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -33,25 +33,24 @@ fun TopBar(
     Row(
         modifier = modifier
             .fillMaxWidth()
-            .padding(vertical = 13.dp),
+            .padding(vertical = 8.dp),
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.SpaceBetween
     ) {
 
-        onBackClick?.let { ButtonTopBar(icon = R.drawable.arrow_left, onClick = {}) }
+        onBackClick?.let { ButtonTopBar(icon = R.drawable.arrow_left, onClick = it) }
 
         title?.let {
             Text(
                 text = title,
                 style = NovixTheme.typography.title.large,
                 color = NovixTheme.colors.title,
+                maxLines = 1,
                 modifier = Modifier
                     .weight(1f)
-                    .padding(horizontal = 4.dp)
+                    .padding(horizontal = 12.dp)
             )
         }
-
-        Spacer(modifier = Modifier.weight(1f))
 
         Row(
             horizontalArrangement = Arrangement.spacedBy(8.dp),
@@ -69,23 +68,25 @@ fun TopBar(
 
 @Composable
 fun ButtonTopBar(icon: Int, onClick: () -> Unit) {
-    IconButton(
-        onClick = onClick,
+    Box(
         modifier = Modifier
-            .padding(end = 8.dp)
             .size(40.dp)
             .clip(RoundedCornerShape(12.dp))
-            .background(NovixTheme.colors.iconBackgroundLow)
             .border(
                 width = 1.dp,
-                color = NovixTheme.colors.stroke,
-                shape = RoundedCornerShape(12.dp)
+                shape = RoundedCornerShape(12.dp),
+                color = NovixTheme.colors.stroke
             )
+            .background(
+                color = NovixTheme.colors.iconBackgroundLow
+            )
+            .clickable(onClick = onClick),
+        contentAlignment = Alignment.Center
     ) {
         Icon(
             painter = painterResource(icon),
             contentDescription = "Back",
-            tint = NovixTheme.colors.title
+            tint = NovixTheme.colors.title,
         )
     }
 }

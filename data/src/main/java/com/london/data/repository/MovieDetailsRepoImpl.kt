@@ -26,7 +26,8 @@ class MovieDetailsRepoImpl(
                 val movieDetailsRemote = movieDetailsRemote.getMovieDetails(id)
                 movieDetailsRemote.toEntity(
                     genres = movieDetailsRemote.genreRemote?.map { it.toGenre() } ?: emptyList(),
-                    movieImages = getMovieImagesById(id)
+                    movieImages = getMovieImagesById(id),
+                    movieDuration = movieDetailsRemote.runtime.toString(),
                 )
             },
             error = { cause -> GetMovieDetailsException(cause) }

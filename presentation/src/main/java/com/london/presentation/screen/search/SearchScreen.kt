@@ -40,16 +40,13 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.blur
-import androidx.compose.ui.draw.drawWithContent
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.Path
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.platform.SoftwareKeyboardController
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.dp
+import androidx.paging.LoadState
 import androidx.paging.compose.collectAsLazyPagingItems
 import com.london.designsystem.component.EmptySearchLayout
 import com.london.designsystem.component.HomeCard
@@ -60,10 +57,13 @@ import com.london.designsystem.component.TopBar
 import com.london.designsystem.component.button.PrimaryButton
 import com.london.designsystem.theme.NovixTheme
 import com.london.designsystem.theme.ThemePreviews
+import com.london.domain.entity.recent.MediaType
+import com.london.domain.entity.recent.RecentSearch
 import com.london.domain.entity.recent.RecentViewed
 import com.london.presentation.R
 import com.london.presentation.composables.ActorsLayout
 import com.london.presentation.composables.MoviesLayOut
+import com.london.presentation.composables.TriangleBlurredShape
 import com.london.presentation.composables.TvShowLayOut
 import com.london.presentation.composables.filterbottomsheet.FilterBottomSheet
 import com.london.presentation.utils.ResultOrEmpty
@@ -114,8 +114,7 @@ fun SearchScreenContent(
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .background(NovixTheme.colors.surface)
-                .padding(bottom = 16.dp), verticalArrangement = Arrangement.Top
+                .background(NovixTheme.colors.surface), verticalArrangement = Arrangement.Top
         ) {
             TopBar(
                 modifier = Modifier
@@ -152,7 +151,9 @@ fun SearchScreenContent(
                         RecentSearchLayOut(
                             state = state,
                             interactionListener = interactionListener,
-                            viewModel = viewModel
+                            viewModel = viewModel,
+                            onNavigateToTvShowDetails = onNavigateToTvShowDetails,
+                            onNavigateToMovieDetails = onNavigateToMovieDetails
                         )
                     })
             }, content = {
@@ -164,9 +165,14 @@ fun SearchScreenContent(
                 when (state.selectedCategory) {
                     SearchCategory.Movies -> {
                         val moviesLazyList = state.moviesFlow.collectAsLazyPagingItems()
+                        val isLoading = moviesLazyList.loadState.refresh is LoadState.Loading
                         ResultOrEmpty(
                             items = moviesLazyList.itemSnapshotList.items,
-                            emptyContent = { NoSearchResultLayOut(modifier = Modifier.fillMaxSize()) },
+                            emptyContent = {
+                                if (!isLoading) {
+                                    NoSearchResultLayOut(modifier = Modifier.fillMaxSize())
+                                }
+                            },
                             content = {
                                 MoviesLayOut(
                                     movieUis = moviesLazyList,
@@ -174,9 +180,8 @@ fun SearchScreenContent(
                                     isMovieSaved = { false },
                                     onMovieClick = {
                                         viewModel.addToRecentViewed(it.toRecentViewed())
-                                        onNavigateToMovieDetails(it.id)
                                         viewModel.onClickMovie(it.genreIds)
-
+                                        onNavigateToMovieDetails(it.id)
                                     },
                                     modifier = Modifier.padding(horizontal = 16.dp)
                                 )
@@ -185,9 +190,14 @@ fun SearchScreenContent(
 
                     SearchCategory.TvShows -> {
                         val tvShowsLazyList = state.tvShowsFlow.collectAsLazyPagingItems()
+                        val isLoading = tvShowsLazyList.loadState.refresh is LoadState.Loading
                         ResultOrEmpty(
                             items = tvShowsLazyList.itemSnapshotList.items,
-                            emptyContent = { NoSearchResultLayOut(modifier = Modifier.fillMaxSize()) },
+                            emptyContent = {
+                                if (!isLoading) {
+                                    NoSearchResultLayOut(modifier = Modifier.fillMaxSize())
+                                }
+                            },
                             content = {
                                 TvShowLayOut(
                                     tvShowUis = tvShowsLazyList,
@@ -205,9 +215,14 @@ fun SearchScreenContent(
 
                     SearchCategory.Actors -> {
                         val actorsLazyList = state.actorsFlow.collectAsLazyPagingItems()
+                        val isLoading = actorsLazyList.loadState.refresh is LoadState.Loading
                         ResultOrEmpty(
                             items = actorsLazyList.itemSnapshotList.items,
-                            emptyContent = { NoSearchResultLayOut(modifier = Modifier.fillMaxSize()) },
+                            emptyContent = {
+                                if (!isLoading) {
+                                    NoSearchResultLayOut(modifier = Modifier.fillMaxSize())
+                                }
+                            },
                             content = {
                                 ActorsLayout(
                                     actorsUis = actorsLazyList, onActorClick = {
@@ -224,28 +239,6 @@ fun SearchScreenContent(
                 onDismissRequest = { showFilterBottomSheet = false })
         }
     }
-}
-
-@Composable
-private fun TriangleBlurredShape() {
-    val triangleBackgroundColor: Color = NovixTheme.colors.primary.copy(alpha = 0.08f)
-    Box(
-        modifier = Modifier
-            .fillMaxSize()
-            .blur(150.dp)
-            .drawWithContent {
-                val path = Path().apply {
-                    moveTo(0f, 0f)
-                    lineTo(size.width * 0.7f, 0f)
-                    lineTo(0f, size.height * 0.25f)
-                    close()
-                }
-                drawPath(
-                    path,
-                    color = triangleBackgroundColor,
-                )
-                drawContent()
-            })
 }
 
 @Composable
@@ -302,7 +295,13 @@ private fun SearchBar(
                 keyboardActions = KeyboardActions(
                     onSearch = {
                         keyboardController?.hide()
-                        viewModel.addToRecentSearches(uiState.searchQuery.text)
+                        viewModel.addToRecentSearches(
+                            RecentSearch(
+                                query = uiState.searchQuery.text,
+                                timestamp = System.currentTimeMillis(),
+                                id = 0
+                            )
+                        )
                     }),
                 interactionSource = interactionSource,
                 modifier = Modifier.weight(1f)
@@ -314,7 +313,6 @@ private fun SearchBar(
                     text = "",
                     onClick = onFilterClick,
                     isLoading = false,
-                    isDisabled = false,
                     hasIcon = true,
                     icon = R.drawable.icon_filter,
                     hasLabel = false,
@@ -352,12 +350,19 @@ private fun SearchChipsRow(
 
 @Composable
 private fun RecentSearchLayOut(
-    state: SearchUiState, interactionListener: SearchInteractions, viewModel: SearchViewModel
+    state: SearchUiState,
+    interactionListener: SearchInteractions,
+    viewModel: SearchViewModel,
+    onNavigateToTvShowDetails: (Int) -> Unit,
+    onNavigateToMovieDetails: (Int) -> Unit
 ) {
     if (state.recentViewed.isNotEmpty()) {
         RecentViewedSection(
             recentViewed = state.recentViewed,
-            onClearAll =  viewModel::clearRecentViewed)
+            onClearAll = viewModel::clearRecentViewed,
+            onNavigateToTvShowDetails = onNavigateToTvShowDetails,
+            onNavigateToMovieDetails = onNavigateToMovieDetails
+        )
     }
 
     if (state.recentSearches.isNotEmpty()) {
@@ -372,7 +377,10 @@ private fun RecentSearchLayOut(
 
 @Composable
 fun RecentViewedSection(
-    recentViewed: List<RecentViewed>, onClearAll: () -> Unit
+    recentViewed: List<RecentViewed>,
+    onClearAll: () -> Unit,
+    onNavigateToTvShowDetails: (Int) -> Unit,
+    onNavigateToMovieDetails: (Int) -> Unit,
 ) {
     SectionHeader(
         text = stringResource(R.string.recent_viewed),
@@ -392,17 +400,26 @@ fun RecentViewedSection(
     ) {
         items(recentViewed) { item ->
             HomeCard(
-                imageUrl = item.imageUrl, isSaved = false, onSaveClick = {})
+                imageUrl = item.imageUrl,
+                isSaved = false,
+                onSaveClick = { },
+                modifier = Modifier.clickable {
+                    when (item.type) {
+                        MediaType.Movie -> onNavigateToMovieDetails(item.id)
+                        MediaType.TvShow -> onNavigateToTvShowDetails(item.id)
+                    }
+                }
+            )
         }
     }
 }
 
 @Composable
 fun RecentSearchesSection(
-    recentSearches: List<String>,
+    recentSearches: List<RecentSearch>,
     onClearAll: () -> Unit,
     onSearchClick: (String) -> Unit,
-    onRemoveClick: (String) -> Unit
+    onRemoveClick: (RecentSearch) -> Unit
 ) {
     SectionHeader(
         text = stringResource(R.string.recent_search),
@@ -421,8 +438,8 @@ fun RecentSearchesSection(
         itemsIndexed(recentSearches) { index, search ->
             val isLastItem = index == recentSearches.lastIndex
             RecentSearchItem(
-                search = search,
-                onSearchClick = { onSearchClick(search) },
+                search = search.query,
+                onSearchClick = { onSearchClick(search.query) },
                 onRemoveClick = { onRemoveClick(search) },
                 showDivider = !isLastItem
             )
@@ -438,10 +455,11 @@ private fun RecentSearchItem(
     modifier: Modifier = Modifier,
     showDivider: Boolean = true
 ) {
-    Row(modifier = modifier
-        .fillMaxWidth()
-        .clickable { onSearchClick() }
-        .padding(vertical = 8.dp),
+    Row(
+        modifier = modifier
+            .fillMaxWidth()
+            .clickable { onSearchClick() }
+            .padding(vertical = 8.dp),
         verticalAlignment = Alignment.CenterVertically) {
         Icon(
             painter = painterResource(id = R.drawable.icon_clock),

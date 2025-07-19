@@ -2,16 +2,24 @@ package com.london.presentation.screen.details.tvshow.tvshowdetails
 
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
 import com.london.domain.usecase.GetCastById
 import com.london.domain.usecase.GetEpisodesByTvShowSeason
 import com.london.domain.usecase.GetImagesById
 import com.london.domain.usecase.GetTvShowDetails
+import com.london.domain.usecase.GetTvShowVideoProvider
+import com.london.presentation.navigation.arguments.TvShowDetailsArgs
+import com.london.presentation.utils.launchCatching
+import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
-import kotlinx.coroutines.launch
 import org.koin.android.annotation.KoinViewModel
+
+sealed interface TvShowDetailsEffect{
+    data class OnNavigateToEpisodeDetails(val tvShowId: Int, val episodeNumber: Int, val seasonNumber: Int): TvShowDetailsEffect
+}
+
 
 @KoinViewModel
 class TvShowDetailsViewModel(
@@ -19,14 +27,18 @@ class TvShowDetailsViewModel(
     private val getCastById: GetCastById,
     private val getTvShowImages: GetImagesById,
     private val getEpisodesByTvShowSeason: GetEpisodesByTvShowSeason,
+    private val getTvShowVideoProvider: GetTvShowVideoProvider,
     savedStateHandle: SavedStateHandle,
-) : ViewModel(), TvShowDetailsInteractionListener {
+) : ViewModel() {
 
     private val _uiState = MutableStateFlow(TvShowDetailsUiState())
     val uiState = _uiState.asStateFlow()
 
-    val tvShowId: Int = savedStateHandle.get<Int>("tvShowId") ?: 0
+    private val _effect = MutableSharedFlow<TvShowDetailsEffect>()
+    val effect = _effect.asSharedFlow()
+    val args by lazy { TvShowDetailsArgs(savedStateHandle)}
 
+    private val tvShowId: Int = args.tvShowId
     init {
         if (tvShowId != 0) {
             initializeGetTvShowDetailsData()
@@ -37,19 +49,20 @@ class TvShowDetailsViewModel(
     }
 
     fun initializeEpisodesBySeasons(seasonNumber: Int = 1) {
-        viewModelScope.launch {
+        launchCatching {
             _uiState.update {
                 it.copy(
                     tvShowEpisodes =
                         getEpisodesByTvShowSeason(tvShowId, seasonNumber).episodes,
                     tvShowEpisodeCountBySeason = getEpisodesByTvShowSeason(tvShowId,seasonNumber),
+                    videoProvider = getTvShowVideoProvider.invoke(tvShowId).firstOrNull()?.videoUrl.orEmpty()
                 )
             }
         }
     }
 
     private fun initializeGetImagesData() {
-        viewModelScope.launch {
+        launchCatching {
             val images = getTvShowImages(tvShowId)
 
             _uiState.update {
@@ -59,7 +72,7 @@ class TvShowDetailsViewModel(
     }
 
     private fun initializeGetCastData() {
-        viewModelScope.launch {
+        launchCatching {
             _uiState.update {
                 it.copy(cast = getCastById(tvShowId))
             }
@@ -67,7 +80,7 @@ class TvShowDetailsViewModel(
     }
 
     private fun initializeGetTvShowDetailsData() {
-        viewModelScope.launch {
+        launchCatching {
             _uiState.update {
                 val tvShowDetails = getTvShowDetails(tvShowId)
                 it.copy(
@@ -108,7 +121,9 @@ class TvShowDetailsViewModel(
         }
     }
 
-    override fun onClickViewReviewsListener(tvShowId: Int) {
-        // TODO (should navigate to reviews screen)
+    fun onEpisodeClick(tvShowId: Int, episodeNumber: Int, seasonNumber: Int){
+        launchCatching {
+            _effect.emit(TvShowDetailsEffect.OnNavigateToEpisodeDetails(tvShowId, episodeNumber, seasonNumber))
+        }
     }
 }

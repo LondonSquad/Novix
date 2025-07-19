@@ -1,10 +1,12 @@
 package com.london.presentation.screen.details.actordetails.toptvshowspicks
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.GridItemSpan
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
@@ -18,21 +20,23 @@ import androidx.compose.ui.unit.dp
 import com.london.designsystem.component.HomeCard
 import com.london.designsystem.component.TopBar
 import com.london.designsystem.theme.NovixTheme
-import com.london.designsystem.theme.ThemePreviews
-import com.london.domain.entity.Movie
 import com.london.presentation.R
 import org.koin.androidx.compose.koinViewModel
 
 @Composable
 fun TopTvShowsPicksScreen(
     modifier: Modifier = Modifier,
-    viewModel: TopTvShowsPicksViewModel = koinViewModel()
+    viewModel: TopTvShowsPicksViewModel = koinViewModel(),
+    onTvShowClick: (movieId: Int) -> Unit,
+    onBackClick: () -> Unit
 ) {
     val state by viewModel.uiState.collectAsState()
     TopTvShowsPicksContent(
         state = state,
         interactions = viewModel,
-        modifier = modifier
+        modifier = modifier,
+        onBackClick = onBackClick,
+        onTvShowClick = onTvShowClick,
     )
 }
 
@@ -40,7 +44,9 @@ fun TopTvShowsPicksScreen(
 private fun TopTvShowsPicksContent(
     state: TopTvShowsPicksUiState,
     interactions: TopTvShowsPicksInteractions,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    onBackClick: () -> Unit,
+    onTvShowClick: (movieId: Int) -> Unit,
 ) {
     LazyVerticalGrid(
         columns = GridCells.Fixed(2),
@@ -55,95 +61,18 @@ private fun TopTvShowsPicksContent(
         item(
             span = { GridItemSpan(maxLineSpan) }) {
             TopBar(
+                modifier = Modifier.statusBarsPadding(),
                 title = stringResource(R.string.top_tv_shows_picks),
-                onBackClick = interactions::onBackClick
+                onBackClick = onBackClick
             )
         }
-        items(state.movies) { movie ->
+        items(state.tvShowDetails.cast) { tvShow ->
             HomeCard(
-                imageUrl = movie.posterPicture,
+                imageUrl = tvShow.posterUrl,
                 isSaved = false,
-                onSaveClick = { interactions.onSaveMovie(movie.id) })
+                onSaveClick = { interactions.onSaveMovie(tvShow.id) },
+                modifier = Modifier.clickable{ onTvShowClick(tvShow.id) }
+            )
         }
     }
-}
-
-@ThemePreviews
-@Composable
-fun TopTvShowsPicksPreview() {
-    TopTvShowsPicksContent(
-        state = TopTvShowsPicksUiState(
-            movies = listOf(
-                Movie(
-                    id = 1,
-                    name = "",
-                    posterPicture = "https://image.tmdb.org/t/p/w500//8Gxv8gSFCU0XGDykEGv7zR1n2ua.jpg",
-                    releaseYear = 1,
-                    rating = 3,
-                    genreIds = listOf()
-                ),
-                Movie(
-                    id = 1,
-                    name = "",
-                    posterPicture = "https://image.tmdb.org/t/p/w500//8Gxv8gSFCU0XGDykEGv7zR1n2ua.jpg",
-                    releaseYear = 1,
-                    rating = 3,
-                    genreIds = listOf()
-                ),
-                Movie(
-                    id = 1,
-                    name = "",
-                    posterPicture = "https://image.tmdb.org/t/p/w500//8Gxv8gSFCU0XGDykEGv7zR1n2ua.jpg",
-                    releaseYear = 1,
-                    rating = 3,
-                    genreIds = listOf()
-                ),
-                Movie(
-                    id = 1,
-                    name = "",
-                    posterPicture = "https://image.tmdb.org/t/p/w500//8Gxv8gSFCU0XGDykEGv7zR1n2ua.jpg",
-                    releaseYear = 1,
-                    rating = 3,
-                    genreIds = listOf()
-                ),
-                Movie(
-                    id = 1,
-                    name = "",
-                    posterPicture = "https://image.tmdb.org/t/p/w500//8Gxv8gSFCU0XGDykEGv7zR1n2ua.jpg",
-                    releaseYear = 1,
-                    rating = 3,
-                    genreIds = listOf()
-                ),
-                Movie(
-                    id = 1,
-                    name = "",
-                    posterPicture = "https://image.tmdb.org/t/p/w500//8Gxv8gSFCU0XGDykEGv7zR1n2ua.jpg",
-                    releaseYear = 1,
-                    rating = 3,
-                    genreIds = listOf()
-                ),
-                Movie(
-                    id = 1,
-                    name = "",
-                    posterPicture = "https://image.tmdb.org/t/p/w500//8Gxv8gSFCU0XGDykEGv7zR1n2ua.jpg",
-                    releaseYear = 1,
-                    rating = 3,
-                    genreIds = listOf()
-                ),
-                Movie(
-                    id = 1,
-                    name = "",
-                    posterPicture = "https://image.tmdb.org/t/p/w500//8Gxv8gSFCU0XGDykEGv7zR1n2ua.jpg",
-                    releaseYear = 1,
-                    rating = 3,
-                    genreIds = listOf()
-                ),
-            )
-        ),
-        interactions = object : TopTvShowsPicksInteractions {
-            override fun onMovieClick(movieId: Int) {}
-            override fun onBackClick() {}
-            override fun onSaveMovie(movieId: Int) {}
-        }
-    )
 }

@@ -46,14 +46,16 @@ fun HomeCard(
             contentScale = ContentScale.Crop,
             errorContent = { ErrorImage() },
             loadingContent = { CircularLoading(modifier = Modifier.align(Alignment.Center)) },
-
+            moderatedContent = { UnSuitableEye() }
         )
         SaveIcon(
             isSaved = isSaved,
-            onSaveClick = { onSaveClick() },
+            onSaveClick = onSaveClick,
             modifier = Modifier
                 .padding(8.dp)
-                .align(Alignment.TopStart)
+                .align(Alignment.TopStart),
+            iconTint = NovixTheme.colors.onPrimary,
+
         )
     }
 }

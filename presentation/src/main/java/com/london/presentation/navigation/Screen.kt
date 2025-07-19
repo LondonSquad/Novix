@@ -29,9 +29,41 @@ sealed interface Screen {
         val movieId: Int,
     ) : Screen
 
+    @Serializable
+    data class ActorDetails(
+        val actorId: Int,
+    ) : Screen
 
     @Serializable
-    data class TopMoviesPicksDetails(
+    data class ActorTopMoviesPicksDetails(
         val actorId: Int,
+    ) : Screen
+
+    @Serializable
+    data class TopTvShowsPicksDetails(
+        val actorId: Int,
+    ) : Screen
+
+    @Serializable
+    data class MoviesByCategory(
+        val categoryId: Int,
+    )
+
+    @Serializable
+    data class EpisodeDetails(
+        val tvShowId: Int,
+        val seasonNumber: Int,
+        val episodeNumber: Int,
+    ) : Screen
+
+    @Serializable
+    data class ActorGallery(
+        val actorId: Int,
+    ) : Screen
+
+    @Serializable
+    data class Reviews(
+        val mediaId: Int,
+        val mediaType: Int
     ) : Screen
 }

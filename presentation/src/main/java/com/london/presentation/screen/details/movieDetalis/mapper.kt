@@ -13,14 +13,13 @@ fun mapToUiState(
         movieId = movieDetails.movieId,
         movieImage = movieDetails.movieImage,
         movieName = movieDetails.movieName,
-        movieGenres = extractGenreNames(movieDetails.genres),
+        movieGenres = movieDetails.genres,
         movieRating = movieDetails.movieRating,
         movieDuration = movieDetails.movieDuration,
         releaseDate = movieDetails.releaseDate,
         movieOverview = movieDetails.movieOverview,
         actors = mapActorsToUiState(movieDetails.actors),
         similarMovies = mapSimilarMoviesToUiState(movieDetails.similarMovies),
-        movieHaveTrailer = movieDetails.movieHaveTrailer,
         isRated = currentUiState.isRated,
         isSaved = currentUiState.isSaved
     )
@@ -33,7 +32,10 @@ private fun extractGenreNames(actors: List<Genre>): List<String> {
 private fun mapActorsToUiState(actors: List<Actor>): List<ActorUIState> {
     return actors.map { actor ->
         ActorUIState(
-            name = actor.name, avatarUrl = actor.profilePicture, characterName = actor.characterName
+            name = actor.name,
+            avatarUrl = actor.profilePicture,
+            characterName = actor.characterName,
+            actorId = actor.id
         )
     }
 }
@@ -41,7 +43,9 @@ private fun mapActorsToUiState(actors: List<Actor>): List<ActorUIState> {
 private fun mapSimilarMoviesToUiState(similarMovies: List<SimilarMovie>): List<SimilarMovieUIState> {
     return similarMovies.map { movie ->
         SimilarMovieUIState(
-            image = movie.image, isSaved = movie.isSaved
+            image = movie.image,
+            isSaved = movie.isSaved,
+             movieId = movie.id
         )
     }
 }

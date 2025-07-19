@@ -1,5 +1,6 @@
 package com.london.domain.usecase
 
+import com.london.domain.entity.recent.RecentSearch
 import com.london.domain.repository.RecentRepository
 import io.mockk.Runs
 import io.mockk.coEvery
@@ -11,7 +12,7 @@ import org.junit.Before
 import org.junit.Test
 
 class ClearRecentSearchUseCaseTest {
-    lateinit var recentSearchRepository: RecentRepository<String>
+    lateinit var recentSearchRepository: RecentRepository<RecentSearch>
     lateinit var clearRecentSearchUseCase: ClearRecentSearchUseCase
 
     @Before

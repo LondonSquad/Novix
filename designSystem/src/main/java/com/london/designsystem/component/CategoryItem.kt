@@ -55,6 +55,7 @@ fun CategoriesItem(
             modifier = Modifier.fillMaxSize(),
             contentScale = Crop,
             loadingContent = { CircularLoading(modifier = Modifier.align(androidx.compose.ui.Alignment.Center)) },
+            moderatedContent = { UnSuitableEye() }
         )
         Box(
             modifier = Modifier

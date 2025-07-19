@@ -1,19 +1,20 @@
 package com.london.presentation.screen.details.movieDetalis
 
 import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.core.FastOutSlowInEasing
+import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.slideInHorizontally
 import androidx.compose.animation.slideOutHorizontally
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.WindowInsets
-import androidx.compose.foundation.layout.asPaddingValues
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.defaultMinSize
 import androidx.compose.foundation.layout.fillMaxSize
@@ -21,19 +22,16 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.statusBars
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyHorizontalGrid
-import androidx.compose.foundation.lazy.grid.items
+import androidx.compose.foundation.lazy.grid.itemsIndexed
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.derivedStateOf
@@ -45,46 +43,46 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.zIndex
-import com.london.designsystem.R
 import com.london.designsystem.component.ActorItem
-import com.london.designsystem.component.ButtonIcon
 import com.london.designsystem.component.CircularLoading
 import com.london.designsystem.component.HomeCard
 import com.london.designsystem.component.ImageView
 import com.london.designsystem.component.NovixCarousalRow
-import com.london.designsystem.component.SaveIcon
-import com.london.designsystem.component.button.PrimaryButton
+import com.london.designsystem.component.button.ErrorImage
 import com.london.designsystem.theme.NovixTheme
 import com.london.designsystem.theme.noRippleClickable
+import com.london.domain.entity.moviedatails.Genre
 import com.london.presentation.R.drawable
 import com.london.presentation.R.string.calendar
 import com.london.presentation.R.string.dot
 import com.london.presentation.R.string.more_like_this
 import com.london.presentation.R.string.overview
-import com.london.presentation.R.string.play_trailer
 import com.london.presentation.R.string.separator
 import com.london.presentation.R.string.star
 import com.london.presentation.R.string.time_icon
 import com.london.presentation.R.string.view_reviews
 import com.london.presentation.composables.ConditionalText
+import com.london.presentation.composables.DetailsScreenTopBar
+import com.london.presentation.composables.FooterSection
+import com.london.presentation.screen.reviews.MediaType
+import com.london.presentation.utils.openUrl
 import org.koin.androidx.compose.koinViewModel
 
 @Composable
 fun MovieDetailsScreen(
-    movieId: Int,
     viewModel: MovieDetailsViewModel = koinViewModel(),
     onBackClick: () -> Unit = {},
-    onPreviewClick: (Int) -> Unit = {}
+    onGenreClick: (Int) -> Unit = {},
+    onNavigateToMovie: (Int) -> Unit,
+    onNavigateToActor: (Int) -> Unit,
+    onNavigateToReviews: (Int, Int) -> Unit,
 ) {
     val state by viewModel.uiState.collectAsState()
-    LaunchedEffect(movieId) {
-        viewModel.loadMovieDetails(movieId)
-    }
     when {
         state.isLoading -> {
             Box(
@@ -102,7 +100,10 @@ fun MovieDetailsScreen(
                 state,
                 viewModel::onExpandClick,
                 onBackClick,
-                onPreviewClick = onPreviewClick
+                onViewReviewsClick = onNavigateToReviews,
+                onGenreClick = onGenreClick,
+                onNavigateToMovie = onNavigateToMovie,
+                onNavigateToActor = onNavigateToActor
             )
         }
     }
@@ -113,14 +114,30 @@ fun MovieDetailsContent(
     state: MovieDetailsUiState,
     onExpandClick: () -> Unit,
     onBackClick: () -> Unit,
-    onPreviewClick: (Int) -> Unit
+    onViewReviewsClick: (movieId: Int, mediaType: Int) -> Unit,
+    onGenreClick: (Int) -> Unit,
+    onNavigateToMovie: (Int) -> Unit,
+    onNavigateToActor: (Int) -> Unit
 ) {
+    val uriHandler = LocalUriHandler.current
+
     val lazyState = rememberLazyListState()
-    val isScrolledFarEnough = remember {
+
+    val shouldShowBackground by remember {
         derivedStateOf {
-            lazyState.firstVisibleItemIndex > 0 || lazyState.firstVisibleItemScrollOffset > 500
+            lazyState.firstVisibleItemScrollOffset > 40f ||
+                    lazyState.firstVisibleItemIndex > 0
         }
     }
+
+    val backgroundAlpha by animateFloatAsState(
+        targetValue = if (shouldShowBackground) 1f else 0f,
+        animationSpec = tween(
+            durationMillis = 400,
+            easing = FastOutSlowInEasing
+        ),
+        label = "background_alpha"
+    )
 
     Box(
         modifier = Modifier
@@ -128,43 +145,15 @@ fun MovieDetailsContent(
             .background(NovixTheme.colors.surface)
     ) {
 
-        Box(
+        DetailsScreenTopBar(
             modifier = Modifier
                 .fillMaxWidth()
-                .align(Alignment.TopCenter)
-                .zIndex(1.0f)
-                .background(if (isScrolledFarEnough.value) NovixTheme.colors.surface else Color.Transparent)
-                .padding(
-                    top = WindowInsets.statusBars.asPaddingValues().calculateTopPadding()
-                ),
-            contentAlignment = Alignment.Center
-        ) {
-
-            SaveIcon(
-                isSaved = state.isSaved,
-                onSaveClick = {
-                    // TODO
-                },
-                backgroundColor = NovixTheme.colors.iconBackgroundLow,
-                modifier = Modifier
-                    .padding(horizontal = 16.dp)
-                    .padding(top = 20.dp, bottom = 8.dp)
-                    .size(40.dp)
-                    .clip(RoundedCornerShape(16))
-                    .align(Alignment.TopEnd),
-            )
-
-            ButtonIcon(
-                onClick = onBackClick,
-                iconRes = R.drawable.arrow_left,
-                backgroundColor = NovixTheme.colors.iconBackgroundLow,
-                modifier = Modifier
-                    .padding(horizontal = 16.dp)
-                    .padding(top = 20.dp, bottom = 8.dp)
-                    .size(40.dp)
-                    .align(Alignment.TopStart),
-            )
-        }
+                .zIndex(1f)
+                .align(Alignment.TopCenter),
+            isSaved = state.isSaved,
+            backgroundAlpha = backgroundAlpha,
+            onBackClick = onBackClick,
+        )
 
         LazyColumn(
             modifier = Modifier
@@ -220,7 +209,7 @@ fun MovieDetailsContent(
                                 color = NovixTheme.colors.title,
                                 modifier = Modifier.defaultMinSize(minHeight = 56.dp)
                             )
-                            GenreRow(state.movieGenres)
+                            GenreRow(state.movieGenres, onGenreClick)
                             RatingAndMetaRow(
                                 rate = state.movieRating,
                                 time = state.movieDuration,
@@ -231,7 +220,7 @@ fun MovieDetailsContent(
                                 style = NovixTheme.typography.label.medium,
                                 color = NovixTheme.colors.primary,
                                 modifier = Modifier.noRippleClickable {
-                                    onPreviewClick(state.movieId)
+                                    onViewReviewsClick(state.movieId, MediaType.Movie.mediaNum)
                                 }
                             )
                         }
@@ -253,7 +242,8 @@ fun MovieDetailsContent(
                     ConditionalText(
                         state.movieOverview,
                         state.expanded,
-                        onExpandClick
+                        modifier = Modifier.padding(horizontal = 16.dp, vertical = 4.dp),
+                        onExpandedChange = onExpandClick
                     )
                 }
             }
@@ -275,12 +265,14 @@ fun MovieDetailsContent(
                         horizontalArrangement = Arrangement.spacedBy(12.dp),
                         contentPadding = PaddingValues(vertical = 8.dp, horizontal = 16.dp)
                     ) {
-                        items(state.actors) { actor ->
+                        itemsIndexed(state.actors) { _, actor ->
                             ActorItem(
                                 actorName = actor.name,
                                 characterName = actor.characterName,
                                 imageRes = actor.avatarUrl,
-                                modifier = Modifier.defaultMinSize(minWidth = 296.dp)
+                                modifier = Modifier
+                                    .defaultMinSize(minWidth = 296.dp)
+                                    .clickable { onNavigateToActor(actor.actorId) }
                             )
                         }
                     }
@@ -305,7 +297,7 @@ fun MovieDetailsContent(
                             .padding(top = 12.dp),
                         horizontalArrangement = Arrangement.spacedBy(12.dp)
                     ) {
-                        rowItems.forEach { movie ->
+                        rowItems.forEachIndexed { index, movie ->
                             HomeCard(
                                 imageUrl = movie.image,
                                 isSaved = movie.isSaved,
@@ -314,6 +306,7 @@ fun MovieDetailsContent(
                                 },
                                 modifier = Modifier
                                     .weight(1f)
+                                    .clickable { onNavigateToMovie(state.similarMovies[index].movieId) }
                             )
                         }
                         if (rowItems.size == 1) {
@@ -324,40 +317,16 @@ fun MovieDetailsContent(
             }
         }
 
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(horizontal = if (state.movieHaveTrailer) 16.dp else 24.dp)
-                .padding(bottom = 24.dp)
-                .navigationBarsPadding()
-                .align(Alignment.BottomCenter),
-            horizontalArrangement = Arrangement.spacedBy(8.dp)
-        ) {
-            if (!state.movieHaveTrailer) {
-                PrimaryButton(
-                    text = null,
-                    onClick = {},
-                    hasLabel = false,
-                    icon = drawable.movie_button_star,
-                    hasIcon = true,
-                    isLoading = false,
-                    isDisabled = false,
-                )
+        FooterSection(
+            haveTrailer = state.movieHaveTrailer,
+            modifier = Modifier.align(Alignment.BottomCenter),
+            onPlayClick = {
+                uriHandler.openUrl(state.movieVideo)
+            },
+            onStarClick = {
+                // TODO save favorite onclick handler
             }
-
-            PrimaryButton(
-                text = stringResource(play_trailer),
-                onClick = {
-                    // TODO
-                },
-                hasLabel = true,
-                hasIcon = false,
-                isLoading = false,
-                isDisabled = !state.movieHaveTrailer,
-                icon = null,
-                modifier = Modifier.weight(1f)
-            )
-        }
+        )
     }
 }
 
@@ -386,11 +355,12 @@ private fun RatingAndMetaRow(
         }
 
         if (!time.isNullOrBlank()) {
+            val timeInt = time.toInt()
             IconWithText(
                 icon = drawable.time_04,
                 contentDesc = stringResource(time_icon),
                 tint = NovixTheme.colors.body,
-                text = time,
+                text = "${timeInt / 60}h ${timeInt % 60}m",
                 textColor = NovixTheme.colors.body
             )
         }
@@ -435,14 +405,22 @@ private fun IconWithText(
 }
 
 @Composable
-private fun GenreRow(genres: List<String>) {
+private fun GenreRow(
+    genres: List<Genre>,
+    onGenreClick: (Int) -> Unit
+) {
     Row(
         horizontalArrangement = Arrangement.spacedBy(8.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {
         genres.forEachIndexed { index, genre ->
             Text(
-                genre, style = NovixTheme.typography.label.small, color = NovixTheme.colors.body
+                genre.name,
+                style = NovixTheme.typography.label.small,
+                color = NovixTheme.colors.body,
+                modifier = Modifier.noRippleClickable {
+                    onGenreClick(genre.id)
+                }
             )
             if (index != genres.lastIndex) Icon(
                 painter = painterResource(drawable.ellipse_2),
@@ -476,74 +454,35 @@ private fun MovieDetailsImage(
         modifier = modifier
             .fillMaxWidth()
             .aspectRatio(8f / 5f)
-            .clip(RoundedCornerShape(12.dp)), contentAlignment = Alignment.Center
+            .clip(RoundedCornerShape(12.dp)),
+        contentAlignment = Alignment.Center
     ) {
-        images.forEachIndexed { index, image ->
-            AnimatedVisibility(
-                visible = currentImageIndex == index,
-                enter = slideInHorizontally(
-                    initialOffsetX = { if (direction > 0) it else -it },
-                    animationSpec = tween(durationMillis = 1000)
-                ),
-                exit = slideOutHorizontally(
-                    targetOffsetX = { if (direction > 0) -it else it },
-                    animationSpec = tween(durationMillis = 1000)
-                ),
-            ) {
-                ImageView(
-                    model = image,
-                    contentDescription = imageDescription,
-                    contentScale = ContentScale.Crop,
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .clip(RoundedCornerShape(12.dp)),
-                    onLoadingStateChange = { loadingState.value = it },
-                )
+        if (images.isNotEmpty()) {
+            images.forEachIndexed { index, image ->
+                AnimatedVisibility(
+                    visible = currentImageIndex == index,
+                    enter = slideInHorizontally(
+                        initialOffsetX = { if (direction > 0) it else -it },
+                        animationSpec = tween(durationMillis = 1000)
+                    ),
+                    exit = slideOutHorizontally(
+                        targetOffsetX = { if (direction > 0) -it else it },
+                        animationSpec = tween(durationMillis = 1000)
+                    ),
+                ) {
+                    ImageView(
+                        model = image,
+                        contentDescription = imageDescription,
+                        contentScale = ContentScale.Crop,
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .clip(RoundedCornerShape(12.dp)),
+                        onLoadingStateChange = { loadingState.value = it },
+                    errorContent = { ErrorImage() })
+                }
             }
+        } else {
+            ErrorImage()
         }
-    }
-}
-
-@Preview(showBackground = true)
-@Composable
-private fun MovieDetailsPreview() {
-    val fakeState = MovieDetailsUiState(
-        movieImage = listOf(
-            "https://image.tmdb.org/t/p/w500/rktDFPbfHfUbArZ6OOOKsXcv0Bm.jpg",
-            "https://image.tmdb.org/t/p/w500/rktDFPbfHfUbArZ6OOOKsXcv0Bm.jpg",
-            "https://image.tmdb.org/t/p/w500/rktDFPbfHfUbArZ6OOOKsXcv0Bm.jpg",
-            "https://image.tmdb.org/t/p/w500/rktDFPbfHfUbArZ6OOOKsXcv0Bm.jpg"
-
-        ),
-        movieName = "The Shawshank Redemption",
-        movieGenres = listOf("Drama", "Crime", "Classic"),
-        movieRating = "9.9",
-        movieDuration = "2h 22m",
-        releaseDate = "1994-09-22",
-        movieOverview = "It is a 1994 American drama film, considered one of the greatest films in cinematic history. It revolves around Andy Dufresne, a banker wrongfully convicted of the murder of his wife and",
-        actors = listOf(
-            ActorUIState(
-                "Tim Robbins",
-                characterName = "Andy Dufresne",
-                avatarUrl = "https://image.tmdb.org/t/p/w500/rktDFPbfHfUbArZ6OOOKsXcv0Bm.jpg"
-            ), ActorUIState(
-                "Morgan Freeman",
-                characterName = "Red",
-                avatarUrl = "https://image.tmdb.org/t/p/w500/rktDFPbfHfUbArZ6OOOKsXcv0Bm.jpg"
-            )
-        ),
-        similarMovies = listOf(
-            SimilarMovieUIState(
-                "https://image.tmdb.org/t/p/w500/rktDFPbfHfUbArZ6OOOKsXcv0Bm.jpg", false
-            ), SimilarMovieUIState(
-                "https://image.tmdb.org/t/p/w500/rktDFPbfHfUbArZ6OOOKsXcv0Bm.jpg", true
-            )
-        ),
-        isRated = true,
-        movieHaveTrailer = true
-    )
-
-    NovixTheme {
-        MovieDetailsContent(state = fakeState, {}, {}, {})
     }
 }

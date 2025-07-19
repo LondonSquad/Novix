@@ -1,6 +1,7 @@
 package com.london.data.mapper.actordetails
 
 import com.london.data.datasource.remote.details.actordetails.model.ActorDetailsResponse
+import com.london.data.utils.asImageUrlOrEmpty
 import com.london.data.utils.orZero
 import com.london.domain.KoverIgnore
 import com.london.domain.entity.actordetails.ActorDetails
@@ -21,7 +22,7 @@ fun ActorDetailsResponse.toEntity():ActorDetails{
         imdbId = this.imdbId.orEmpty(),
         knownForDepartment = this.knownForDepartment.orEmpty(),
         popularity = this.popularity.orZero(),
-        profileUrl = "https://image.tmdb.org/t/p/w500${this.profilePath}"
+        profileUrl = profilePath.asImageUrlOrEmpty()
     )
 }
 

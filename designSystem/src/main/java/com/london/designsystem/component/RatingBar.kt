@@ -6,6 +6,8 @@ import androidx.compose.animation.core.tween
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material3.Icon
 import androidx.compose.runtime.Composable
@@ -26,43 +28,44 @@ fun RatingBar(
     maxRating: Int = 10
 ) {
     Row(
-        modifier = modifier,
-        verticalAlignment = Alignment.CenterVertically
+        modifier = modifier
+            .fillMaxWidth()
+            .padding(vertical = 8.dp),
+        verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.SpaceEvenly
     ) {
-        Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-            for (i in 1..maxRating) {
-                val isFilled = i <= rating
-                val scale by animateFloatAsState(
-                    targetValue = if (isFilled) 1.1f else 1.05f,
-                    animationSpec = tween(
-                        durationMillis = 250,
-                        easing = FastOutSlowInEasing
-                    ),
-                    label = "scale"
-                )
+        for (i in 1..maxRating) {
+            val isFilled = i <= rating
+            val scale by animateFloatAsState(
+                targetValue = if (isFilled) 1.1f else 1.05f,
+                animationSpec = tween(
+                    durationMillis = 250,
+                    easing = FastOutSlowInEasing
+                ),
+                label = "scale"
+            )
 
-                Icon(
-                    painter = if (isFilled)
-                        painterResource(R.drawable.star_filled)
-                    else
-                        painterResource(R.drawable.star_outline),
-                    contentDescription = "Rate $i",
-                    tint = NovixTheme.colors.yellowAccent,
-                    modifier = Modifier
-                        .size(24.dp)
-                        .graphicsLayer(
-                            scaleX = scale,
-                            scaleY = scale
-                        )
-                        .clickable(
-                            interactionSource = null,
-                            indication = null
-                        )
-                        {
-                            onRatingChanged(i)
-                        }
-                )
-            }
+            Icon(
+                painter = if (isFilled)
+                    painterResource(R.drawable.star_filled)
+                else
+                    painterResource(R.drawable.star_outline),
+                contentDescription = "Rate $i",
+                tint = NovixTheme.colors.yellowAccent,
+                modifier = Modifier
+                    .size(24.dp)
+                    .graphicsLayer(
+                        scaleX = scale,
+                        scaleY = scale
+                    )
+                    .clickable(
+                        interactionSource = null,
+                        indication = null
+                    )
+                    {
+                        onRatingChanged(i)
+                    }
+            )
         }
     }
 }
