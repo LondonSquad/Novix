@@ -3,9 +3,11 @@ package com.london.presentation.screen.reviews
 import androidx.compose.animation.core.FastOutSlowInEasing
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Arrangement.Center
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -32,9 +34,11 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.Alignment.Companion.CenterHorizontally
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -95,51 +99,54 @@ fun ReviewsScreenContent(
     ) {
 
         val reviewsList = uiState.reviews.collectAsLazyPagingItems()
-
-        LazyColumn(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(top = 120.dp),
-            verticalArrangement = Arrangement.spacedBy(18.dp),
-            contentPadding = PaddingValues(16.dp)
-        ) {
-            items(reviewsList.itemCount) { index ->
-                val review = reviewsList[index]
-                if (review != null)
-                    ReviewItem(
-                        profileUrl = review.authorDetails.profileUrl,
-                        authorName = review.authorDetails.name,
-                        authorUserName = review.authorDetails.username,
-                        rating = review.authorDetails.rating.toString(),
-                        content = review.content,
-                        date = review.createdAt.substringBefore("T")
-                    )
+        if (reviewsList.itemSnapshotList.isEmpty())
+            EmptyReviews()
+        else {
+            LazyColumn(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(top = 120.dp),
+                verticalArrangement = Arrangement.spacedBy(18.dp),
+                contentPadding = PaddingValues(16.dp)
+            ) {
+                items(reviewsList.itemCount) { index ->
+                    val review = reviewsList[index]
+                    if (review != null)
+                        ReviewItem(
+                            profileUrl = review.authorDetails.profileUrl,
+                            authorName = review.authorDetails.name,
+                            authorUserName = review.authorDetails.username,
+                            rating = review.authorDetails.rating.toString(),
+                            content = review.content,
+                            date = review.createdAt.substringBefore("T")
+                        )
+                }
             }
+
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(
+                        WindowInsets.statusBars.asPaddingValues().calculateTopPadding() +
+                                64.dp
+                    )
+                    .background(
+                        NovixTheme.colors.surface.copy(alpha = backgroundAlpha)
+                    )
+                    .zIndex(0.5f)
+            )
+
+            ReviewTopBar(
+                modifier = Modifier
+                    .padding(
+                        start = 16.dp,
+                        end = 16.dp,
+                        top = 12.dp
+                    )
+                    .align(Alignment.TopCenter),
+                onBackClick = onBackClick
+            )
         }
-
-        Box(
-            modifier = Modifier
-                .fillMaxWidth()
-                .height(
-                    WindowInsets.statusBars.asPaddingValues().calculateTopPadding() +
-                            64.dp
-                )
-                .background(
-                    NovixTheme.colors.surface.copy(alpha = backgroundAlpha)
-                )
-                .zIndex(0.5f)
-        )
-
-        ReviewTopBar(
-            modifier = Modifier
-                .padding(
-                    start = 16.dp,
-                    end = 16.dp,
-                    top = 12.dp
-                )
-                .align(Alignment.TopCenter),
-            onBackClick = onBackClick
-        )
     }
 }
 
@@ -280,7 +287,7 @@ fun AuthorItem(
         modifier = modifier
             .fillMaxHeight()
             .padding(start = 8.dp),
-        horizontalAlignment = Alignment.CenterHorizontally,
+        horizontalAlignment = CenterHorizontally,
     ) {
         Text(
             text = authorName,
@@ -298,6 +305,36 @@ fun AuthorItem(
             modifier = Modifier
                 .fillMaxWidth()
                 .align(Alignment.Start)
+        )
+    }
+}
+
+@Composable
+fun EmptyReviews(
+    modifier: Modifier = Modifier,
+    text: String = "there is no review"
+) {
+    Column(
+        modifier = modifier
+            .fillMaxWidth()
+            .background(NovixTheme.colors.surface),
+        horizontalAlignment = CenterHorizontally,
+        verticalArrangement = Center
+    ) {
+        Image(
+            painter = painterResource(id = R.drawable.img),
+            contentDescription = "Search Icon",
+            modifier = Modifier
+                .size(128.dp)
+                .align(CenterHorizontally),
+            contentScale = ContentScale.Fit
+        )
+        Text(
+            text = text,
+            style = NovixTheme.typography.body.small,
+            color = NovixTheme.colors.body,
+            textAlign = TextAlign.Center,
+            modifier = Modifier.fillMaxWidth()
         )
     }
 }
