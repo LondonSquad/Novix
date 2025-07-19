@@ -20,6 +20,7 @@ import com.london.data.datasource.remote.details.tvshowdetails.model.tvshowepiso
 import com.london.data.datasource.remote.details.tvshowdetails.model.tvshowepisode.EpisodeGuestStar
 import com.london.data.datasource.remote.details.tvshowdetails.model.tvshowepisode.TvShowEpisodeBySeason
 import com.london.data.datasource.remote.details.tvshowdetails.model.tvshowepisode.TvShowEpisodesRemoteResponse
+import com.london.data.datasource.remote.reviews.ReviewsRemoteDataSource
 import com.london.data.mapper.tvshowdetails.TvShowImagesMapper.toEntity
 import com.london.data.mapper.tvshowdetails.toCastEntity
 import com.london.data.mapper.tvshowdetails.toEntity
@@ -58,11 +59,16 @@ class DetailsRepositoryImplTest {
 
     private lateinit var tvShowDetailsRemoteDataSource: TvShowDetailsRemoteDataSource
     private lateinit var repository: DetailsRepositoryImpl
+    private lateinit var reviewsRemoteDataSource: ReviewsRemoteDataSource
 
     @Before
     fun setUp() {
         tvShowDetailsRemoteDataSource = mockk(relaxed = true)
-        repository = DetailsRepositoryImpl(tvShowDetailsRemoteDataSource)
+        reviewsRemoteDataSource = mockk(relaxed = true)
+        repository = DetailsRepositoryImpl(
+            tvShowDetailsRemoteDataSource,
+            reviewsRemoteDataSource = reviewsRemoteDataSource
+        )
     }
 
     @Test

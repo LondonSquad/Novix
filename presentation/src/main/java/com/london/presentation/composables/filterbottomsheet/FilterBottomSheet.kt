@@ -1,5 +1,6 @@
 package com.london.presentation.composables.filterbottomsheet
 
+import android.annotation.SuppressLint
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
@@ -43,6 +44,7 @@ import com.london.presentation.screen.search.SearchViewModel
 import kotlinx.coroutines.launch
 import org.koin.androidx.compose.koinViewModel
 
+@SuppressLint("ConfigurationScreenWidthHeight")
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun FilterBottomSheet(
@@ -224,7 +226,6 @@ private fun FilterBottomSheetContent(
                     hasLabel = true,
                     hasIcon = false,
                     isLoading = false,
-                    isDisabled = false,
                     icon = null,
                     onClick = {
                         onApplyFilters(
@@ -243,7 +244,6 @@ private fun FilterBottomSheetContent(
                     icon = null,
                     hasIcon = false,
                     isLoading = false,
-                    isDisabled = false,
                     onClick = {
                         onClearFilters()
                     },
