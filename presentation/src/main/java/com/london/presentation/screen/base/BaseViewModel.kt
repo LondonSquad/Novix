@@ -24,8 +24,8 @@ abstract class BaseViewModel<S, E : Any>(initState: S) : ViewModel() {
     private val _state = MutableStateFlow(initState)
     open val state = _state.asStateFlow()
 
-    private val _event = MutableSharedFlow<E?>()
-    open val event = _event.asSharedFlow()
+    private val _effect = MutableSharedFlow<E?>()
+    open val effect = _effect.asSharedFlow()
 
     protected fun <T> tryToExecute(
         block: suspend () -> T,
@@ -94,7 +94,7 @@ abstract class BaseViewModel<S, E : Any>(initState: S) : ViewModel() {
 
     protected fun emitEvent(newEvent: E) {
         viewModelScope.launch(Dispatchers.IO) {
-            _event.emit(newEvent)
+            _effect.emit(newEvent)
             Timber.i("Event -> ${newEvent::class.simpleName}")
         }
     }
