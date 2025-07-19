@@ -5022,5 +5022,33 @@
       "deletions": 43,
       "changed_files": 7
     }
+  },
+  {
+    "pr_number": 234,
+    "url": "https://github.com/LondonSquad/Novix/pull/234",
+    "title": "fix: handle ex",
+    "opened_at": "2025-07-19T03:22:11Z",
+    "head_ref": "hotfix/handle-ex",
+    "base_ref": "develop",
+    "creator": {
+      "login": "marwanqashwa",
+      "id": 100484790,
+      "url": "https://github.com/marwanqashwa"
+    },
+    "approvals": [],
+    "first_approved_at": null,
+    "time_to_first_approval_minutes": null,
+    "required_approvals_met_at": null,
+    "time_to_required_approvals_minutes": null,
+    "closed_at": null,
+    "merged_at": null,
+    "merged_by": null,
+    "week": "2025-W29",
+    "status": "pending",
+    "diff_stats": {
+      "additions": 50,
+      "deletions": 58,
+      "changed_files": 11
+    }
   }
 ]
