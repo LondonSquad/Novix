@@ -50,8 +50,8 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.zIndex
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.london.designsystem.component.ActorItem
-import com.london.designsystem.component.CircularLoading
 import com.london.designsystem.component.HomeCard
 import com.london.designsystem.component.ImageView
 import com.london.designsystem.component.button.ErrorImage
@@ -71,7 +71,11 @@ import com.london.presentation.composables.ConditionalText
 import com.london.presentation.composables.CustomBackDropImagePager
 import com.london.presentation.composables.DetailsScreenTopBar
 import com.london.presentation.composables.FooterSection
+import com.london.presentation.screen.BuildScreen
+import com.london.presentation.screen.LoadingScreen
+import com.london.presentation.screen.NetworkErrorScreen
 import com.london.presentation.screen.reviews.MediaType
+import com.london.presentation.utils.Listen
 import com.london.presentation.utils.offsetLayout
 import com.london.presentation.utils.openUrl
 import org.koin.androidx.compose.koinViewModel
@@ -85,28 +89,29 @@ fun MovieDetailsScreen(
     onNavigateToActor: (Int) -> Unit,
     onNavigateToReviews: (Int, Int) -> Unit,
 ) {
-    val state by viewModel.uiState.collectAsState()
-    when {
-        state.isLoading -> {
-            Box(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .background(NovixTheme.colors.surface),
-                contentAlignment = Alignment.Center,
-            ) {
-                CircularLoading()
-            }
-        }
+    val state by viewModel.state.collectAsStateWithLifecycle()
+    val effect by viewModel.effect.collectAsState(null)
 
-        else -> {
-            MovieDetailsContent(
-                state,
-                viewModel::onExpandClick,
-                onBackClick,
-                onViewReviewsClick = onNavigateToReviews,
-                onGenreClick = onGenreClick,
-                onNavigateToMovie = onNavigateToMovie,
-                onNavigateToActor = onNavigateToActor
+    effect?.Listen { currentEffect ->
+        when (currentEffect) {
+            is MovieDetailsEffect.ActorNavigation -> onNavigateToActor(currentEffect.actorId)
+            MovieDetailsEffect.BackNavigation -> onBackClick()
+            is MovieDetailsEffect.GenreNavigation -> onGenreClick(currentEffect.genreId)
+            is MovieDetailsEffect.MovieNavigation -> onNavigateToMovie(currentEffect.movieId)
+            is MovieDetailsEffect.ReviewsNavigation -> onNavigateToReviews(
+                currentEffect.movieId,
+                currentEffect.mediaNumber
+            )
+        }
+    }
+
+    BuildScreen {
+        when {
+            state.isLoading -> LoadingScreen()
+            state.error != null -> NetworkErrorScreen()
+            else -> MovieDetailsContent(
+                state = state,
+                movieDetailsContract = viewModel
             )
         }
     }
@@ -115,12 +120,7 @@ fun MovieDetailsScreen(
 @Composable
 fun MovieDetailsContent(
     state: MovieDetailsUiState,
-    onExpandClick: () -> Unit,
-    onBackClick: () -> Unit,
-    onViewReviewsClick: (movieId: Int, mediaType: Int) -> Unit,
-    onGenreClick: (Int) -> Unit,
-    onNavigateToMovie: (Int) -> Unit,
-    onNavigateToActor: (Int) -> Unit
+    movieDetailsContract: MovieDetailsContract
 ) {
     val uriHandler = LocalUriHandler.current
 
@@ -157,7 +157,7 @@ fun MovieDetailsContent(
                 .align(Alignment.TopCenter),
             isSaved = state.isSaved,
             backgroundAlpha = backgroundAlpha,
-            onBackClick = onBackClick,
+            onBackClick = movieDetailsContract::onBackClick,
         )
 
         LazyColumn(
@@ -208,7 +208,7 @@ fun MovieDetailsContent(
                                 color = NovixTheme.colors.title,
                                 modifier = Modifier.defaultMinSize(minHeight = 56.dp)
                             )
-                            GenreRow(state.movieGenres, onGenreClick)
+                            GenreRow(state.movieGenres, movieDetailsContract::onGenreClick)
                             RatingAndMetaRow(
                                 rate = state.movieRating,
                                 time = state.movieDuration,
@@ -219,7 +219,10 @@ fun MovieDetailsContent(
                                 style = NovixTheme.typography.label.medium,
                                 color = NovixTheme.colors.primary,
                                 modifier = Modifier.noRippleClickable {
-                                    onViewReviewsClick(state.movieId, MediaType.Movie.mediaNum)
+                                    movieDetailsContract.onReviewsClick(
+                                        state.movieId,
+                                        MediaType.Movie.mediaNum
+                                    )
                                 }
                             )
                         }
@@ -242,7 +245,7 @@ fun MovieDetailsContent(
                         state.movieOverview,
                         state.expanded,
                         modifier = Modifier.padding(horizontal = 16.dp, vertical = 4.dp),
-                        onExpandedChange = onExpandClick
+                        onExpandedChange = movieDetailsContract::onExpandClick
                     )
                 }
             }
@@ -271,7 +274,11 @@ fun MovieDetailsContent(
                                 imageRes = actor.avatarUrl,
                                 modifier = Modifier
                                     .defaultMinSize(minWidth = 296.dp)
-                                    .clickable { onNavigateToActor(actor.actorId) }
+                                    .clickable {
+                                        movieDetailsContract.onActorClick(
+                                            actor.actorId
+                                        )
+                                    }
                             )
                         }
                     }
@@ -305,11 +312,15 @@ fun MovieDetailsContent(
                                 },
                                 modifier = Modifier
                                     .weight(1f)
-                                    .clickable { onNavigateToMovie(state.similarMovies[index].movieId) }
+                                    .clickable {
+                                        movieDetailsContract.onMovieClick(
+                                            state.similarMovies[index].movieId
+                                        )
+                                    }
                             )
                         }
                         if (rowItems.size == 1) {
-                            Spacer(modifier = Modifier.weight(1f)) // fill empty space if odd item count
+                            Spacer(modifier = Modifier.weight(1f))
                         }
                     }
                 }
