@@ -43,6 +43,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.zIndex
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.paging.compose.collectAsLazyPagingItems
 import com.ae.imageharamblur.ui.ImageViewFilter
 import com.london.designsystem.component.ButtonIcon
@@ -53,6 +54,10 @@ import com.london.presentation.R
 import com.london.presentation.composables.ConditionalText
 import com.london.presentation.composables.RatingItem
 import com.london.presentation.composables.ReviewsDate
+import com.london.presentation.screen.BuildScreen
+import com.london.presentation.screen.LoadingScreen
+import com.london.presentation.screen.NetworkErrorScreen
+import com.london.presentation.utils.Listen
 import org.koin.androidx.compose.koinViewModel
 
 @Composable
@@ -60,18 +65,27 @@ fun ReviewsScreen(
     viewModel: ReviewsViewModel = koinViewModel(),
     onBackClick: () -> Unit = {},
 ) {
-    val uiState by viewModel.uiState.collectAsState()
+    val uiState by viewModel.state.collectAsStateWithLifecycle()
+    val effect by viewModel.effect.collectAsState(initial = null)
 
-    ReviewsScreenContent(
-        uiState = uiState,
-        onBackClick = onBackClick,
-    )
+    effect?.Listen { onBackClick() }
+
+    BuildScreen {
+        when {
+            uiState.isLoading -> LoadingScreen()
+            uiState.error != null -> NetworkErrorScreen()
+            else -> ReviewsScreenContent(
+                uiState = uiState,
+                reviewContract = viewModel,
+            )
+        }
+    }
 }
 
 @Composable
 fun ReviewsScreenContent(
     uiState: ReviewsUiState,
-    onBackClick: () -> Unit,
+    reviewContract: ReviewContract
 ) {
     val lazyListState = rememberLazyListState()
 
@@ -145,7 +159,7 @@ fun ReviewsScreenContent(
                     top = 12.dp
                 )
                 .align(Alignment.TopCenter),
-            onBackClick = onBackClick
+            onBackClick = reviewContract::onBackClicked
         )
     }
 }
