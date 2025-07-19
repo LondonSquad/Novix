@@ -1,6 +1,7 @@
 package com.london.data.datasource.local.dao.recent.search
 
 import androidx.room.Dao
+import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
@@ -30,4 +31,7 @@ interface RecentSearchDao : RecentDao<RecentSearchLocal> {
         insert(item)
         clearOlderThanTen()
     }
+    @Delete
+    suspend fun delete(item: RecentSearchLocal)
+
 }

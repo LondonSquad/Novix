@@ -44,4 +44,8 @@ class RecentViewedDataSourceImpl(
             recentViewedDao.clearAll()
         }
     }
+
+    override suspend fun delete(item: RecentViewedLocal) {
+        //TODO("Not yet implemented")
+    }
 }
