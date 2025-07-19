@@ -100,9 +100,7 @@ fun ReviewsScreenContent(
 
         val reviewsList = uiState.reviews.collectAsLazyPagingItems()
         if (reviewsList.itemSnapshotList.isEmpty())
-            EmptyReviews(
-                modifier = Modifier.fillMaxSize()
-            )
+            EmptyReviews(modifier = Modifier.align(Alignment.Center))
         else {
             LazyColumn(
                 modifier = Modifier
@@ -124,33 +122,34 @@ fun ReviewsScreenContent(
                         )
                 }
             }
-
-            Box(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(
-                        WindowInsets.statusBars.asPaddingValues().calculateTopPadding() +
-                                64.dp
-                    )
-                    .background(
-                        NovixTheme.colors.surface.copy(alpha = backgroundAlpha)
-                    )
-                    .zIndex(0.5f)
-            )
-
-            ReviewTopBar(
-                modifier = Modifier
-                    .padding(
-                        start = 16.dp,
-                        end = 16.dp,
-                        top = 12.dp
-                    )
-                    .align(Alignment.TopCenter),
-                onBackClick = onBackClick
-            )
         }
+
+        Box(
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(
+                    WindowInsets.statusBars.asPaddingValues().calculateTopPadding() +
+                            64.dp
+                )
+                .background(
+                    NovixTheme.colors.surface.copy(alpha = backgroundAlpha)
+                )
+                .zIndex(0.5f)
+        )
+
+        ReviewTopBar(
+            modifier = Modifier
+                .padding(
+                    start = 16.dp,
+                    end = 16.dp,
+                    top = 12.dp
+                )
+                .align(Alignment.TopCenter),
+            onBackClick = onBackClick
+        )
     }
 }
+
 
 @Composable
 fun ReviewTopBar(
