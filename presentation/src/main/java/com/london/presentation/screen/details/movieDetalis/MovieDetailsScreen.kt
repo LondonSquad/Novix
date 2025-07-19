@@ -1,6 +1,8 @@
 package com.london.presentation.screen.details.movieDetalis
 
 import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.core.FastOutSlowInEasing
+import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.slideInHorizontally
 import androidx.compose.animation.slideOutHorizontally
@@ -13,8 +15,6 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.WindowInsets
-import androidx.compose.foundation.layout.asPaddingValues
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.defaultMinSize
 import androidx.compose.foundation.layout.fillMaxSize
@@ -22,8 +22,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.statusBars
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyHorizontalGrid
@@ -49,14 +47,11 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.zIndex
-import com.london.designsystem.R
 import com.london.designsystem.component.ActorItem
-import com.london.designsystem.component.ButtonIcon
 import com.london.designsystem.component.CircularLoading
 import com.london.designsystem.component.HomeCard
 import com.london.designsystem.component.ImageView
 import com.london.designsystem.component.NovixCarousalRow
-import com.london.designsystem.component.SaveIcon
 import com.london.designsystem.theme.NovixTheme
 import com.london.designsystem.theme.noRippleClickable
 import com.london.domain.entity.moviedatails.Genre
@@ -70,6 +65,7 @@ import com.london.presentation.R.string.star
 import com.london.presentation.R.string.time_icon
 import com.london.presentation.R.string.view_reviews
 import com.london.presentation.composables.ConditionalText
+import com.london.presentation.composables.DetailsScreenTopBar
 import com.london.presentation.composables.FooterSection
 import com.london.presentation.screen.reviews.MediaType
 import org.koin.androidx.compose.koinViewModel
@@ -121,11 +117,22 @@ fun MovieDetailsContent(
     onNavigateToActor: (Int) -> Unit
 ) {
     val lazyState = rememberLazyListState()
-    val isScrolledFarEnough = remember {
+
+    val shouldShowBackground by remember {
         derivedStateOf {
-            lazyState.firstVisibleItemIndex > 0 || lazyState.firstVisibleItemScrollOffset > 500
+            lazyState.firstVisibleItemScrollOffset > 40f ||
+                    lazyState.firstVisibleItemIndex > 0
         }
     }
+
+    val backgroundAlpha by animateFloatAsState(
+        targetValue = if (shouldShowBackground) 1f else 0f,
+        animationSpec = tween(
+            durationMillis = 400,
+            easing = FastOutSlowInEasing
+        ),
+        label = "background_alpha"
+    )
 
     Box(
         modifier = Modifier
@@ -133,44 +140,15 @@ fun MovieDetailsContent(
             .background(NovixTheme.colors.surface)
     ) {
 
-        Box(
+        DetailsScreenTopBar(
             modifier = Modifier
                 .fillMaxWidth()
-                .align(Alignment.TopCenter)
-                .zIndex(1.0f)
-                .background(if (isScrolledFarEnough.value) NovixTheme.colors.surface else Color.Transparent)
-                .padding(
-                    top = WindowInsets.statusBars.asPaddingValues().calculateTopPadding()
-                ),
-            contentAlignment = Alignment.Center
-        ) {
-
-            SaveIcon(
-                isSaved = state.isSaved,
-                onSaveClick = {
-                    // TODO
-                },
-                modifier = Modifier
-                    .padding(horizontal = 16.dp)
-                    .padding(top = 20.dp, bottom = 8.dp)
-                    .size(40.dp)
-                    .clip(RoundedCornerShape(16))
-                    .align(Alignment.TopEnd),
-                backgroundColor = NovixTheme.colors.iconBackgroundLow,
-                roundCorner = 12
-            )
-
-            ButtonIcon(
-                onClick = onBackClick,
-                iconRes = R.drawable.arrow_left,
-                backgroundColor = NovixTheme.colors.iconBackgroundLow,
-                modifier = Modifier
-                    .padding(horizontal = 16.dp)
-                    .padding(top = 20.dp, bottom = 8.dp)
-                    .size(40.dp)
-                    .align(Alignment.TopStart),
-            )
-        }
+                .zIndex(1f)
+                .align(Alignment.TopCenter),
+            isSaved = state.isSaved,
+            backgroundAlpha = backgroundAlpha,
+            onBackClick = onBackClick,
+        )
 
         LazyColumn(
             modifier = Modifier
@@ -282,7 +260,7 @@ fun MovieDetailsContent(
                         horizontalArrangement = Arrangement.spacedBy(12.dp),
                         contentPadding = PaddingValues(vertical = 8.dp, horizontal = 16.dp)
                     ) {
-                        itemsIndexed(state.actors) {_, actor ->
+                        itemsIndexed(state.actors) { _, actor ->
                             ActorItem(
                                 actorName = actor.name,
                                 characterName = actor.characterName,
