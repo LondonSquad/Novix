@@ -77,7 +77,7 @@ class SearchViewModel(
 
     init {
         viewModelScope.launch {
-            _uiState.update { it.copy(recentViewed = getRecentViewedUseCase.invoke()) }
+            _uiState.update { it.copy(recentViewed = getRecentViewedUseCase.invoke().reversed()) }
             _uiState.update { it.copy(recentSearches = getRecentSearchUseCase.invoke()) }
             _searchQuery.debounce(500).collectLatest { query ->
                 performSearch(
@@ -162,8 +162,7 @@ class SearchViewModel(
             addToRecentViewedUseCase.invoke(item)
             _uiState.update { state ->
                 state.copy(
-                    recentViewed = getRecentViewedUseCase.invoke()
-                        .sortedByDescending { it.viewDate })
+                    recentViewed = getRecentViewedUseCase.invoke().reversed())
             }
         }
     }
