@@ -57,6 +57,7 @@ import com.london.designsystem.component.HomeCard
 import com.london.designsystem.component.ImageView
 import com.london.designsystem.component.NovixCarousalRow
 import com.london.designsystem.component.SaveIcon
+import com.london.designsystem.component.button.ErrorImage
 import com.london.designsystem.theme.NovixTheme
 import com.london.designsystem.theme.noRippleClickable
 import com.london.domain.entity.moviedatails.Genre
@@ -474,6 +475,7 @@ private fun MovieDetailsImage(
             .clip(RoundedCornerShape(12.dp)),
         contentAlignment = Alignment.Center
     ) {
+
         images.forEachIndexed { index, image ->
             AnimatedVisibility(
                 visible = currentImageIndex == index,
@@ -494,6 +496,7 @@ private fun MovieDetailsImage(
                         .fillMaxSize()
                         .clip(RoundedCornerShape(12.dp)),
                     onLoadingStateChange = { loadingState.value = it },
+                    errorContent = { ErrorImage() }
                 )
             }
         }
