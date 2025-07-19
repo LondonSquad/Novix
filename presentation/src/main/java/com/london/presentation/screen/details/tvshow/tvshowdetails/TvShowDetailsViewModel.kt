@@ -7,6 +7,7 @@ import com.london.domain.usecase.GetCastById
 import com.london.domain.usecase.GetEpisodesByTvShowSeason
 import com.london.domain.usecase.GetImagesById
 import com.london.domain.usecase.GetTvShowDetails
+import com.london.domain.usecase.GetTvShowVideoProvider
 import com.london.presentation.navigation.arguments.TvShowDetailsArgs
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -27,6 +28,7 @@ class TvShowDetailsViewModel(
     private val getCastById: GetCastById,
     private val getTvShowImages: GetImagesById,
     private val getEpisodesByTvShowSeason: GetEpisodesByTvShowSeason,
+    private val getTvShowVideoProvider: GetTvShowVideoProvider,
     savedStateHandle: SavedStateHandle,
 ) : ViewModel() {
 
@@ -54,6 +56,7 @@ class TvShowDetailsViewModel(
                     tvShowEpisodes =
                         getEpisodesByTvShowSeason(tvShowId, seasonNumber).episodes,
                     tvShowEpisodeCountBySeason = getEpisodesByTvShowSeason(tvShowId,seasonNumber),
+                    videoProvider = getTvShowVideoProvider.invoke(tvShowId).firstOrNull()?.videoUrl.orEmpty()
                 )
             }
         }

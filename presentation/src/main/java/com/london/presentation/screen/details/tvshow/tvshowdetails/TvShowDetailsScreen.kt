@@ -46,6 +46,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.unit.dp
@@ -66,7 +67,9 @@ import com.london.presentation.composables.DetailsScreenTopBar
 import com.london.presentation.composables.FooterSection
 import com.london.presentation.screen.reviews.MediaType
 import com.london.presentation.utils.Listen
+import com.london.presentation.utils.convertDate
 import com.london.presentation.utils.offsetLayout
+import com.london.presentation.utils.openUrl
 import com.london.presentation.utils.toLocalizedNumbers
 import kotlinx.coroutines.delay
 import org.koin.androidx.compose.koinViewModel
@@ -107,6 +110,8 @@ fun TvShowsDetailScreenContent(
     onBackClick: () -> Unit,
     onViewReviewsClick: (tvShowId: Int, mediaType: Int) -> Unit
 ) {
+    val uriHandler = LocalUriHandler.current
+
     val lazyListState = rememberLazyListState()
 
     val shouldShowBackground by remember {
@@ -130,8 +135,6 @@ fun TvShowsDetailScreenContent(
             .fillMaxSize()
             .background(NovixTheme.colors.surface)
     ) {
-
-
         DetailsScreenTopBar(
             modifier = Modifier
                 .fillMaxWidth()
@@ -146,15 +149,13 @@ fun TvShowsDetailScreenContent(
             state = lazyListState,
             modifier = Modifier
                 .fillMaxSize(),
-            contentPadding = PaddingValues(bottom = 80.dp)
+            contentPadding = PaddingValues(bottom = 16.dp)
         ) {
             item {
                 val images = uiState.tvImages
-                if (!images.isNullOrEmpty()) {
-                    CustomBackDropImagePager(
-                        images = images
-                    )
-                }
+                CustomBackDropImagePager(
+                    images = images ?: emptyList()
+                )
             }
 
             item {
@@ -212,14 +213,11 @@ fun TvShowsDetailScreenContent(
             }
         }
 
-
-
-
         FooterSection(
-            haveTrailer = uiState.haveTrailer,
+            haveTrailer = uiState.movieHaveTrailer,
             modifier = Modifier.align(Alignment.BottomCenter),
             onPlayClick = {
-                // TODO play trailer onclick handler
+                uriHandler.openUrl(uiState.videoProvider)
             },
             onStarClick = {
                 // TODO save favorite onclick handler
@@ -233,71 +231,81 @@ fun CustomBackDropImagePager(
     modifier: Modifier = Modifier,
     images: List<ImageItemEntity>
 ) {
-    Box(
-        modifier = modifier
-            .fillMaxWidth()
-            .height(252.dp)
-            .clip(
-                shape = RoundedCornerShape(
-                    bottomStart = 12.dp,
-                    bottomEnd = 12.dp
-                )
+    if (images.isEmpty()) {
+        Box(
+            modifier = modifier
+                .fillMaxWidth()
+                .height(252.dp)
+                .background(NovixTheme.colors.surface)
+        ) {
+            NovixCarousalRow(
+                dotsStates = listOf(false),
+                modifier = Modifier
+                    .padding(bottom = 48.dp)
+                    .height(16.dp)
+                    .clip(RoundedCornerShape(8.dp))
+                    .background(color = NovixTheme.colors.iconBackgroundLow, shape = RoundedCornerShape(8.dp))
+                    .border(width = 1.dp, color = NovixTheme.colors.stroke, shape = RoundedCornerShape(8.dp))
+                    .padding(horizontal = 12.dp, vertical = 4.dp)
+                    .align(Alignment.BottomCenter)
             )
-    ) {
-        val pagerState = rememberPagerState(
-            initialPage = 0,
-            pageCount = { images.size }
-        )
+        }
+    } else {
+        Box(
+            modifier = modifier
+                .fillMaxWidth()
+                .height(252.dp)
+                .clip(
+                    shape = RoundedCornerShape(
+                        bottomStart = 12.dp,
+                        bottomEnd = 12.dp
+                    )
+                )
+        ) {
+            val pagerState = rememberPagerState(
+                initialPage = 0,
+                pageCount = { images.size }
+            )
 
-        LaunchedEffect(Unit) {
-            if (images.size > 1) {
-                while (true) {
-                    delay(4000)
-                    val nextPage = (pagerState.currentPage + 1) % images.size
-                    pagerState.animateScrollToPage(nextPage)
+            LaunchedEffect(Unit) {
+                if (images.size > 1) {
+                    while (true) {
+                        delay(4000)
+                        val nextPage = (pagerState.currentPage + 1) % images.size
+                        pagerState.animateScrollToPage(nextPage)
+                    }
                 }
             }
-        }
 
-        HorizontalPager(
-            modifier = Modifier.align(Alignment.Center),
-            state = pagerState,
-        ) { pageIndex ->
-            ImageViewFilter(
+            HorizontalPager(
+                modifier = Modifier.align(Alignment.Center),
+                state = pagerState,
+            ) { pageIndex ->
+                ImageViewFilter(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(252.dp),
+                    contentScale = ContentScale.FillBounds,
+                    model = images[pageIndex].fileUrl,
+                    contentDescription = "TV Show Image ${pageIndex + 1}",
+                    errorContent = { ErrorImage() },
+                    loadingContent = { CircularLoading(modifier = Modifier) },
+                    moderatedContent = { UnSuitableEye() }
+                )
+            }
+
+            NovixCarousalRow(
+                dotsStates = List(images.size) { index -> index == pagerState.currentPage },
                 modifier = Modifier
-                    .fillMaxWidth()
-                    .height(252.dp),
-                contentScale = ContentScale.FillBounds,
-                model = images[pageIndex].fileUrl,
-                contentDescription = "TV Show Image ${pageIndex + 1}",
-                errorContent = { ErrorImage() },
-                loadingContent = { CircularLoading(modifier = Modifier) },
-                moderatedContent = { UnSuitableEye() }
+                    .padding(bottom = 48.dp)
+                    .height(16.dp)
+                    .clip(RoundedCornerShape(8.dp))
+                    .background(color = NovixTheme.colors.iconBackgroundLow, shape = RoundedCornerShape(8.dp))
+                    .border(width = 1.dp, color = NovixTheme.colors.stroke, shape = RoundedCornerShape(8.dp))
+                    .padding(horizontal = 12.dp, vertical = 4.dp)
+                    .align(Alignment.BottomCenter)
             )
         }
-
-        val dotsStates = List(images.size) { index ->
-            index == pagerState.currentPage
-        }
-
-        NovixCarousalRow(
-            dotsStates = dotsStates,
-            modifier = Modifier
-                .padding(bottom = 48.dp)
-                .height(16.dp)
-                .clip(RoundedCornerShape(8.dp))
-                .background(
-                    color = NovixTheme.colors.iconBackgroundLow,
-                    shape = RoundedCornerShape(8.dp)
-                )
-                .border(
-                    width = 1.dp,
-                    color = NovixTheme.colors.stroke,
-                    shape = RoundedCornerShape(8.dp)
-                )
-                .padding(horizontal = 12.dp, vertical = 4.dp)
-                .align(Alignment.BottomCenter)
-        )
     }
 }
 
@@ -682,7 +690,7 @@ fun EpisodeRow(
 
                     if (episode.airDate != null)
                         Text(
-                            text = episode.airDate.toLocalizedNumbers(),
+                            text = convertDate(episode.airDate.toString()),
                             style = NovixTheme.typography.label.small,
                             color = NovixTheme.colors.hint
                         )
