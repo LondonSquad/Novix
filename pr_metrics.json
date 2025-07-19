@@ -4732,5 +4732,33 @@
       "deletions": 21,
       "changed_files": 1
     }
+  },
+  {
+    "pr_number": 228,
+    "url": "https://github.com/LondonSquad/Novix/pull/228",
+    "title": "fix: handle empty image list in tv show details pager",
+    "opened_at": "2025-07-19T02:18:23Z",
+    "head_ref": "hotfix/tvshow-top-image",
+    "base_ref": "develop",
+    "creator": {
+      "login": "karimdeabes",
+      "id": 81706918,
+      "url": "https://github.com/karimdeabes"
+    },
+    "approvals": [],
+    "first_approved_at": null,
+    "time_to_first_approval_minutes": null,
+    "required_approvals_met_at": null,
+    "time_to_required_approvals_minutes": null,
+    "closed_at": null,
+    "merged_at": null,
+    "merged_by": null,
+    "week": "2025-W29",
+    "status": "pending",
+    "diff_stats": {
+      "additions": 69,
+      "deletions": 61,
+      "changed_files": 1
+    }
   }
 ]
