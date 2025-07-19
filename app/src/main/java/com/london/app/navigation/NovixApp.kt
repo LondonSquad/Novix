@@ -234,6 +234,12 @@ fun NovixApp() {
                     onNavigateToGallery = { actorId ->
                         navController.navigate(Screen.ActorGallery(actorId))
                     },
+                    onNavigateToMovieScreen = { movieId->
+                        navController.navigate(MovieDetails(movieId))
+                    },
+                    onNavigateToTvShowScreen = {tvShowId->
+                        navController.navigate(TvShowDetails(tvShowId))
+                    },
                     onBackClick = { navController.navigateUp() }
                 )
             }
