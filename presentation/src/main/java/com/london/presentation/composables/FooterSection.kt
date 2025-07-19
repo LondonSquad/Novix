@@ -49,7 +49,6 @@ fun FooterSection(
                 icon = drawable.movie_button_star,
                 hasIcon = true,
                 isLoading = false,
-                isDisabled = false,
             )
         }
 
@@ -61,7 +60,7 @@ fun FooterSection(
             hasLabel = true,
             hasIcon = false,
             isLoading = false,
-            isDisabled = !haveTrailer,
+            enabled = haveTrailer,
             icon = null,
             modifier = Modifier.weight(1f)
         )

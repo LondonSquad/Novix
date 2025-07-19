@@ -4,6 +4,7 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.london.domain.usecase.GetMovieDetailsUseCase
+import com.london.domain.usecase.GetMovieVideoUseCase
 import com.london.presentation.navigation.arguments.MovieDetailsArgs
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -14,27 +15,30 @@ import org.koin.android.annotation.KoinViewModel
 @KoinViewModel
 class MovieDetailsViewModel(
     private val getMovieDetailsUseCase: GetMovieDetailsUseCase,
+    private val getMovieVideosUseCase: GetMovieVideoUseCase,
     savedStateHandle: SavedStateHandle
 ) : ViewModel(), MovieDetailsIntersection {
 
     private val _uiState = MutableStateFlow(MovieDetailsUiState())
     val uiState: StateFlow<MovieDetailsUiState> = _uiState
 
-    val args by lazy { MovieDetailsArgs(savedStateHandle)}
+    private val args by lazy { MovieDetailsArgs(savedStateHandle)}
     init {
         loadMovieDetails(args.movieId)
         startImageCarousel()
     }
 
-    fun loadMovieDetails(movieId: Int) {
+    private fun loadMovieDetails(movieId: Int) {
         viewModelScope.launch {
             _uiState.value = _uiState.value.copy(
                 isLoading = true
             )
             val movieDetails = getMovieDetailsUseCase(movieId)
+            val movieVideos = getMovieVideosUseCase.invoke(movieId)
 
             _uiState.value = movieDetails.toUiState(_uiState.value).copy(
-                isLoading = false
+                isLoading = false,
+                movieVideo = movieVideos.firstOrNull()?.videoUrl.orEmpty()
             )
         }
     }

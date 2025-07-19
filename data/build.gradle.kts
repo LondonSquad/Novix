@@ -23,6 +23,7 @@ android {
         buildConfigField("String", "IMAGE_URL", getKey("IMAGE_URL"))
         buildConfigField("String", "BASE_URL", getKey("BASE_URL"))
         buildConfigField("String", "AUTHORIZATION_KEY", getKey("AUTHORIZATION_KEY"))
+        buildConfigField("String", "YOUTUBE_URL", getKey("YOUTUBE_URL"))
     }
 
     buildFeatures{
