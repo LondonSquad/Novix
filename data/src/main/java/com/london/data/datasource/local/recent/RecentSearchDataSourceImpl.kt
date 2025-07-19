@@ -44,4 +44,9 @@ class RecentSearchDataSourceImpl(
             recentSearchDao.clearAll()
         }
     }
+   override suspend fun delete(item: RecentSearchLocal) {
+        runCatching {
+            recentSearchDao.delete(item)
+        }
+    }
 }

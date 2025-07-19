@@ -6,6 +6,7 @@ import androidx.paging.PagingData
 import com.london.domain.entity.Actor
 import com.london.domain.entity.Movie
 import com.london.domain.entity.TvShow
+import com.london.domain.entity.recent.RecentSearch
 import com.london.domain.entity.recent.RecentViewed
 import com.london.presentation.screen.search.model.MovieUi
 import kotlinx.coroutines.flow.Flow
@@ -27,7 +28,7 @@ data class SearchUiState(
     val savedTvShows: Set<Int> = emptySet(),
     val selectedCategory: SearchCategory = SearchCategory.Movies,
     val recentViewed: List<RecentViewed> = emptyList(),
-    val recentSearches: List<String> = emptyList(),
+    val recentSearches: List<RecentSearch> = emptyList(),
 )
 
 data class CategoryContent<T>(

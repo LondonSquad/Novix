@@ -57,6 +57,7 @@ import com.london.designsystem.component.button.PrimaryButton
 import com.london.designsystem.theme.NovixTheme
 import com.london.designsystem.theme.ThemePreviews
 import com.london.domain.entity.recent.MediaType
+import com.london.domain.entity.recent.RecentSearch
 import com.london.domain.entity.recent.RecentViewed
 import com.london.presentation.R
 import com.london.presentation.composables.ActorsLayout
@@ -279,7 +280,13 @@ private fun SearchBar(
                 keyboardActions = KeyboardActions(
                     onSearch = {
                         keyboardController?.hide()
-                        viewModel.addToRecentSearches(uiState.searchQuery.text)
+                        viewModel.addToRecentSearches(
+                            RecentSearch(
+                                query = uiState.searchQuery.text,
+                                timestamp = System.currentTimeMillis(),
+                                id = 0
+                            )
+                        )
                     }),
                 interactionSource = interactionSource,
                 modifier = Modifier.weight(1f)
@@ -395,10 +402,10 @@ fun RecentViewedSection(
 
 @Composable
 fun RecentSearchesSection(
-    recentSearches: List<String>,
+    recentSearches: List<RecentSearch>,
     onClearAll: () -> Unit,
     onSearchClick: (String) -> Unit,
-    onRemoveClick: (String) -> Unit
+    onRemoveClick: (RecentSearch) -> Unit
 ) {
     SectionHeader(
         text = stringResource(R.string.recent_search),
@@ -417,8 +424,8 @@ fun RecentSearchesSection(
         itemsIndexed(recentSearches) { index, search ->
             val isLastItem = index == recentSearches.lastIndex
             RecentSearchItem(
-                search = search,
-                onSearchClick = { onSearchClick(search) },
+                search = search.query,
+                onSearchClick = { onSearchClick(search.query) },
                 onRemoveClick = { onRemoveClick(search) },
                 showDivider = !isLastItem
             )

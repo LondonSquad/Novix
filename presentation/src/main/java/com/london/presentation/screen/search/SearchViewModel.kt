@@ -5,11 +5,13 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.london.domain.entity.Movie
 import com.london.domain.entity.TvShow
+import com.london.domain.entity.recent.RecentSearch
 import com.london.domain.entity.recent.RecentViewed
 import com.london.domain.usecase.AddToRecentSearchUseCase
 import com.london.domain.usecase.AddToRecentViewedUseCase
 import com.london.domain.usecase.ClearRecentSearchUseCase
 import com.london.domain.usecase.ClearRecentViewedUseCase
+import com.london.domain.usecase.DeleteRecentSearchUseCase
 import com.london.domain.usecase.GetActorsUseCase
 import com.london.domain.usecase.GetGenreInterestCountsUseCase
 import com.london.domain.usecase.GetMoviesUseCase
@@ -61,6 +63,8 @@ class SearchViewModel(
     private val addToRecentViewedUseCase: AddToRecentViewedUseCase,
     @Provided
     private val clearRecentViewedUseCase: ClearRecentViewedUseCase,
+    @Provided
+    private val deleteRecentSearchUseCase: DeleteRecentSearchUseCase
 ) : ViewModel(), SearchInteractions {
 
     private val _uiState = MutableStateFlow(SearchUiState())
@@ -140,13 +144,17 @@ class SearchViewModel(
         }
     }
 
-    private var lastQuery = ""
-    override fun addToRecentSearches(query: String) {
-        if (query.isBlank()|| query == lastQuery) return
-        lastQuery = query
+    var lastSearch: String=""
+    override fun addToRecentSearches(item: RecentSearch) {
+        if (item.query.isBlank()||item.query==lastSearch) return
+        lastSearch=item.query
         viewModelScope.launch {
-            addToRecentSearchUseCase.invoke(query)
-            _uiState.update { it.copy(recentSearches = getRecentSearchUseCase.invoke()) }
+            addToRecentSearchUseCase.invoke(item)
+            _uiState.update {
+                it.copy(
+                    recentSearches = getRecentSearchUseCase.invoke().reversed()
+                )
+            }
         }
     }
 
@@ -182,9 +190,12 @@ class SearchViewModel(
         }
     }
 
-    override fun removeRecentSearch(search: String) {
+    override fun removeRecentSearch(search: RecentSearch) {
         val updatedSearches = _uiState.value.recentSearches.filter { it != search }
         _uiState.update { it.copy(recentSearches = updatedSearches) }
+        viewModelScope.launch {
+            deleteRecentSearchUseCase.invoke(search)
+        }
     }
 
     override fun onRecentSearchClick(search: String) {

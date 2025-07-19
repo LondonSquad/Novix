@@ -11,23 +11,25 @@ import kotlinx.coroutines.test.runTest
 import org.junit.Before
 import org.junit.Test
 
-class ClearRecentSearchUseCaseTest {
+class DeleteRecentSearchUseCaseTest {
     lateinit var recentSearchRepository: RecentRepository<RecentSearch>
-    lateinit var clearRecentSearchUseCase: ClearRecentSearchUseCase
+    lateinit var deleteRecentSearchUseCase: DeleteRecentSearchUseCase
 
     @Before
     fun setUp() {
         recentSearchRepository = mockk()
-        clearRecentSearchUseCase = ClearRecentSearchUseCase(recentSearchRepository)
+        deleteRecentSearchUseCase = DeleteRecentSearchUseCase(recentSearchRepository)
     }
 
     @Test
-    fun `should call the repository clear all`() = runTest {
+    fun `should call the repository delete from recent search`() = runTest {
         //given
-        coEvery { recentSearchRepository.clearAll() } just Runs
+        val recentSearch = RecentSearch(1,"name",1)
+        coEvery { recentSearchRepository.insert(recentSearch) } just Runs
         //when
-        clearRecentSearchUseCase.invoke()
+        deleteRecentSearchUseCase.invoke(recentSearch)
         //then
-        coVerify(exactly = 1) { recentSearchRepository.clearAll() }
+        coVerify(exactly = 1) { recentSearchRepository.insert(recentSearch) }
     }
+
 }
