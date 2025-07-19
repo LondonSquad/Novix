@@ -33,7 +33,10 @@ private fun extractGenreNames(actors: List<Genre>): List<String> {
 private fun mapActorsToUiState(actors: List<Actor>): List<ActorUIState> {
     return actors.map { actor ->
         ActorUIState(
-            name = actor.name, avatarUrl = actor.profilePicture, characterName = actor.characterName
+            name = actor.name,
+            avatarUrl = actor.profilePicture,
+            characterName = actor.characterName,
+            actorId = actor.id
         )
     }
 }
@@ -41,7 +44,9 @@ private fun mapActorsToUiState(actors: List<Actor>): List<ActorUIState> {
 private fun mapSimilarMoviesToUiState(similarMovies: List<SimilarMovie>): List<SimilarMovieUIState> {
     return similarMovies.map { movie ->
         SimilarMovieUIState(
-            image = movie.image, isSaved = movie.isSaved
+            image = movie.image,
+            isSaved = movie.isSaved,
+             movieId = movie.id
         )
     }
 }
