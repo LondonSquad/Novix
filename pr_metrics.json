@@ -5099,5 +5099,33 @@
       "deletions": 24,
       "changed_files": 3
     }
+  },
+  {
+    "pr_number": 236,
+    "url": "https://github.com/LondonSquad/Novix/pull/236",
+    "title": "hotfix/update-tvshow-details",
+    "opened_at": "2025-07-19T07:10:40Z",
+    "head_ref": "hotfix/update-tvshow-details",
+    "base_ref": "develop",
+    "creator": {
+      "login": "abdo-essam",
+      "id": 92235360,
+      "url": "https://github.com/abdo-essam"
+    },
+    "approvals": [],
+    "first_approved_at": null,
+    "time_to_first_approval_minutes": null,
+    "required_approvals_met_at": null,
+    "time_to_required_approvals_minutes": null,
+    "closed_at": null,
+    "merged_at": null,
+    "merged_by": null,
+    "week": "2025-W29",
+    "status": "pending",
+    "diff_stats": {
+      "additions": 41,
+      "deletions": 34,
+      "changed_files": 3
+    }
   }
 ]
