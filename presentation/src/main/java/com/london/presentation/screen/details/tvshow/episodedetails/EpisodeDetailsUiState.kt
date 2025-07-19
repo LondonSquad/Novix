@@ -16,8 +16,13 @@ data class EpisodeDetailsUiState(
     val stillPath: String = "",
     val voteAverage: Double = 0.0,
     val voteCount: Int = 0,
-    val guestStars:List<Actor> = listOf(),
+    val guestStars: List<Actor> = listOf(),
     val id: Int = 0,
     val backdropPath: String? = "",
     val haveTrailer: Boolean = false,
-)
+    val videoProvider: String = "",
+    val isSaved: Boolean = false,
+    ){
+    val tvShowHaveTrailer: Boolean
+        get() = videoProvider.isNotEmpty()
+}

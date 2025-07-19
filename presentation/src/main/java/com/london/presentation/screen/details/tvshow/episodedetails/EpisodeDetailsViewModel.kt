@@ -1,11 +1,11 @@
 package com.london.presentation.screen.details.tvshow.episodedetails
 
-import android.util.Log
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import com.london.domain.usecase.GetEpisodeByTvShowId
 import com.london.domain.usecase.GetImagesById
 import com.london.domain.usecase.GetTvShowDetails
+import com.london.domain.usecase.GetTvShowVideoProvider
 import com.london.presentation.navigation.arguments.EpisodeDetailsArgs
 import com.london.presentation.utils.launchCatching
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -18,6 +18,7 @@ class EpisodeDetailsViewModel(
     private val getTvShowImages: GetImagesById,
     private val getEpisodeByTvShowIdUseCase: GetEpisodeByTvShowId,
     private val getTvShowDetails: GetTvShowDetails,
+    private val getTvShowVideoProvider: GetTvShowVideoProvider,
     savedStateHandle: SavedStateHandle,
 ) : ViewModel() {
 
@@ -26,15 +27,19 @@ class EpisodeDetailsViewModel(
     private val _uiState = MutableStateFlow(EpisodeDetailsUiState())
     val uiState = _uiState.asStateFlow()
 
+    private val tvShowId: Int = args.tvShowId
     init {
-        launchCatching {
-            Log.d("TAG", ":${getTvShowImages(args.tvShowId)} ")
+        if (tvShowId != 0) {
+            getEpisodeByTvShowId()
+            getImagesData()
         }
-        getEpisodeByTvShowId()
-        getImagesData()
     }
 
-    private fun getEpisodeByTvShowId() {
+    private fun getEpisodeByTvShowId(
+        tvShowId: Int = 1,
+        episodeNumber: Int = 1,
+        seasonNumber: Int = 1
+    ) {
         launchCatching {
             _uiState.update { uiState ->
                 val episode = getEpisodeByTvShowIdUseCase(
@@ -50,12 +55,15 @@ class EpisodeDetailsViewModel(
                     episodeTypes = episode.episodeTypes,
                     name = episode.name,
                     overview = episode.overview,
-                    stillPath = episode.stillPath?: "",
+                    stillPath = episode.stillPath ?: "",
                     voteAverage = episode.voteAverage,
                     voteCount = episode.voteCount,
                     guestStars = episode.guestStars,
                     id = 0,
                     backdropPath = "",
+                    haveTrailer = false,
+                    videoProvider = getTvShowVideoProvider.invoke(tvShowId)
+                        .firstOrNull()?.videoUrl.orEmpty()
                 )
             }
         }
