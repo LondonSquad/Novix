@@ -26,6 +26,6 @@ class GetRecentSearchUseCaseTest {
         //when
         val result = getRecentSearchUseCase.invoke()
         //then
-        assertThat(result).isEqualTo(listOf("aa","bb"))
+        assertThat(result).isEqualTo(listOf(recentSearch))
     }
 }

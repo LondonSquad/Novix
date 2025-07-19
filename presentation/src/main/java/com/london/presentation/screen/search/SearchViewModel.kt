@@ -144,10 +144,9 @@ class SearchViewModel(
         }
     }
 
-    var lastSearch: String=""
     override fun addToRecentSearches(item: RecentSearch) {
-        if (item.query.isBlank()||item.query==lastSearch) return
-        lastSearch=item.query
+        if (item.query.isBlank()||item.query==_uiState.value.lastSearch) return
+        _uiState.update { it.copy(lastSearch = item.query) }
         viewModelScope.launch {
             addToRecentSearchUseCase.invoke(item)
             _uiState.update {

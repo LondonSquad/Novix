@@ -29,7 +29,7 @@ class DeleteRecentSearchUseCaseTest {
         //when
         deleteRecentSearchUseCase.invoke(recentSearch)
         //then
-        coVerify(exactly = 1) { recentSearchRepository.insert(recentSearch) }
+        coVerify(exactly = 1) { recentSearchRepository.delete(recentSearch) }
     }
 
 }

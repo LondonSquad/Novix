@@ -29,6 +29,7 @@ data class SearchUiState(
     val selectedCategory: SearchCategory = SearchCategory.Movies,
     val recentViewed: List<RecentViewed> = emptyList(),
     val recentSearches: List<RecentSearch> = emptyList(),
+    val lastSearch: String=""
 )
 
 data class CategoryContent<T>(
