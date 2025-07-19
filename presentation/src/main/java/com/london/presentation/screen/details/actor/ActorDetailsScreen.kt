@@ -2,7 +2,6 @@ package com.london.presentation.screen.details.actor
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -32,9 +31,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -43,7 +41,6 @@ import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.zIndex
 import com.ae.imageharamblur.ui.ImageViewFilter
@@ -57,6 +54,7 @@ import com.london.domain.entity.actordetails.actorimage.ImageDetails
 import com.london.domain.entity.actordetails.actormovie.ActorMovieCastMemberEntity
 import com.london.domain.entity.actordetails.actortvshow.ActorTvShowCastMemberEntity
 import com.london.presentation.R
+import com.london.presentation.composables.ConditionalText
 import com.london.presentation.utils.offsetLayout
 import kotlinx.coroutines.delay
 import org.koin.androidx.compose.koinViewModel
@@ -74,7 +72,7 @@ fun ActorDetailsScreen(
         uiState = uiState,
         onBackClick = onBackClick,
         onNavigateToMoviePicks = onNavigateToMoviePicks,
-        onNavigateToTvShowPicks =onNavigateToTvShowPicks,
+        onNavigateToTvShowPicks = onNavigateToTvShowPicks,
         onNavigateToGallery = onNavigateToGallery
     )
 }
@@ -131,10 +129,22 @@ fun ActorScreenContent(
 
             item {
                 if (uiState.actorBiography.isNotBlank()) {
-                    Overview(
-                        modifier = Modifier.padding(16.dp),
-                        biography = uiState.actorBiography
+
+                    Text(
+                        text = stringResource(R.string.biography),
+                        style = NovixTheme.typography.title.medium,
+                        color = NovixTheme.colors.title,
+                        modifier = Modifier.padding(start = 16.dp)
                     )
+                    var isExpanded by remember { mutableStateOf(false) }
+                    ConditionalText(
+                        text = uiState.actorBiography,
+                        expandedState = isExpanded,
+                        modifier = Modifier.padding(horizontal = 16.dp, vertical = 4.dp)
+                    ) {
+                        isExpanded = !isExpanded
+                    }
+
                 }
             }
 
@@ -145,7 +155,7 @@ fun ActorScreenContent(
                         hasGetAll = true,
                         hasIcon = true,
                         modifier = Modifier
-                            .padding( bottom = 12.dp)
+                            .padding(bottom = 12.dp)
                             .padding(horizontal = 16.dp),
                         onClick = { onNavigateToGallery(uiState.actorId) }
                     )
@@ -178,7 +188,7 @@ fun ActorScreenContent(
                         modifier = Modifier
                             .padding(top = 16.dp, bottom = 12.dp)
                             .padding(horizontal = 16.dp),
-                        onClick = {onNavigateToTvShowPicks(uiState.actorId)}
+                        onClick = { onNavigateToTvShowPicks(uiState.actorId) }
                     )
                     TopTvShowsPicksList(tvShow = tvShows)
                 }
@@ -193,7 +203,9 @@ fun ActorScreenContent(
                 .padding(
                     start = 16.dp,
                     top = WindowInsets.statusBars.asPaddingValues().calculateTopPadding()
-                ).zIndex(1f))
+                )
+                .zIndex(1f)
+        )
 
     }
 }
@@ -345,7 +357,8 @@ private fun ActorInfoSection(
             modifier = Modifier.padding(start = 12.dp, end = 12.dp, top = 12.dp)
         )
         FlowRow(
-            modifier = Modifier.padding(horizontal = 12.dp)
+            modifier = Modifier
+                .padding(horizontal = 12.dp)
                 .padding(bottom = 12.dp),
             verticalArrangement = Arrangement.Center,
             horizontalArrangement = Arrangement.spacedBy(8.dp)
@@ -383,47 +396,6 @@ private fun ActorInfoSection(
     }
 }
 
-@Composable
-private fun Overview(
-    modifier: Modifier,
-    biography: String?
-) {
-
-    var maxLines by rememberSaveable { mutableIntStateOf(4) }
-    var isTextCollapsed by rememberSaveable { mutableStateOf(false) }
-    Column(
-        modifier = modifier
-    ) {
-        Text(
-            text = stringResource(R.string.biography),
-            style = NovixTheme.typography.title.medium,
-            color = NovixTheme.colors.title
-        )
-
-        Column {
-            biography?.let {
-                Text(
-                    text = it,
-                    style = NovixTheme.typography.body.small,
-                    color = NovixTheme.colors.body,
-                    maxLines = maxLines,
-                    overflow = TextOverflow.Ellipsis
-                )
-            }
-
-            Text(
-                text = if (isTextCollapsed) stringResource(com.london.designsystem.R.string.read_less) else stringResource(
-                    com.london.designsystem.R.string.read_more
-                ),
-                style = NovixTheme.typography.body.small,
-                color = NovixTheme.colors.primary,
-                modifier = Modifier.clickable {
-                    maxLines = if (maxLines == 4) Int.MAX_VALUE else 4
-                    isTextCollapsed = !isTextCollapsed
-                })
-        }
-    }
-}
 
 
 @Composable
