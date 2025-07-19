@@ -25,7 +25,6 @@ class MovieLocalDataSourceImpl(
         CoroutineScope(Dispatchers.IO).launch {
             searchMoviesDao.getAll().forEach {
                 if (isOneHourExpired(it.date)) searchMoviesDao.delete(it)
-
             }
         }
     }
