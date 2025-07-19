@@ -46,6 +46,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.unit.dp
@@ -67,6 +68,7 @@ import com.london.presentation.composables.FooterSection
 import com.london.presentation.screen.reviews.MediaType
 import com.london.presentation.utils.Listen
 import com.london.presentation.utils.offsetLayout
+import com.london.presentation.utils.openUrl
 import com.london.presentation.utils.toLocalizedNumbers
 import kotlinx.coroutines.delay
 import org.koin.androidx.compose.koinViewModel
@@ -107,6 +109,8 @@ fun TvShowsDetailScreenContent(
     onBackClick: () -> Unit,
     onViewReviewsClick: (tvShowId: Int, mediaType: Int) -> Unit
 ) {
+    val uriHandler = LocalUriHandler.current
+
     val lazyListState = rememberLazyListState()
 
     val shouldShowBackground by remember {
@@ -210,14 +214,11 @@ fun TvShowsDetailScreenContent(
             }
         }
 
-
-
-
         FooterSection(
-            haveTrailer = uiState.haveTrailer,
+            haveTrailer = uiState.movieHaveTrailer,
             modifier = Modifier.align(Alignment.BottomCenter),
             onPlayClick = {
-                // TODO play trailer onclick handler
+                uriHandler.openUrl(uiState.videoProvider)
             },
             onStarClick = {
                 // TODO save favorite onclick handler
