@@ -139,7 +139,6 @@ fun MovieDetailsContent(
             .background(NovixTheme.colors.surface)
     ) {
 
-
         DetailsScreenTopBar(
             modifier = Modifier
                 .fillMaxWidth()
@@ -259,7 +258,7 @@ fun MovieDetailsContent(
                         horizontalArrangement = Arrangement.spacedBy(12.dp),
                         contentPadding = PaddingValues(vertical = 8.dp, horizontal = 16.dp)
                     ) {
-                        itemsIndexed(state.actors) {_, actor ->
+                        itemsIndexed(state.actors) { _, actor ->
                             ActorItem(
                                 actorName = actor.name,
                                 characterName = actor.characterName,
