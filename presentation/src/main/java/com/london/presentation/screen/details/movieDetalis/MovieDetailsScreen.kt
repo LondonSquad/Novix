@@ -43,6 +43,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
@@ -68,6 +69,7 @@ import com.london.presentation.composables.ConditionalText
 import com.london.presentation.composables.DetailsScreenTopBar
 import com.london.presentation.composables.FooterSection
 import com.london.presentation.screen.reviews.MediaType
+import com.london.presentation.utils.openUrl
 import org.koin.androidx.compose.koinViewModel
 
 @Composable
@@ -116,6 +118,8 @@ fun MovieDetailsContent(
     onNavigateToMovie: (Int) -> Unit,
     onNavigateToActor: (Int) -> Unit
 ) {
+    val uriHandler = LocalUriHandler.current
+
     val lazyState = rememberLazyListState()
 
     val shouldShowBackground by remember {
@@ -316,7 +320,7 @@ fun MovieDetailsContent(
             haveTrailer = state.movieHaveTrailer,
             modifier = Modifier.align(Alignment.BottomCenter),
             onPlayClick = {
-                // TODO play trailer onclick handler
+                uriHandler.openUrl(state.movieVideo)
             },
             onStarClick = {
                 // TODO save favorite onclick handler

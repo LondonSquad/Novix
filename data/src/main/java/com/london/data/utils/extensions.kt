@@ -31,3 +31,5 @@ suspend inline fun <reified T> HttpClient.get(
         block(this)
     }
 }.body()
+
+fun String?.asYoutubeUrlOrEmpty() : String = this?.let { BuildConfig.YOUTUBE_URL + it }.orEmpty()

@@ -20,7 +20,6 @@ fun mapToUiState(
         movieOverview = movieDetails.movieOverview,
         actors = mapActorsToUiState(movieDetails.actors),
         similarMovies = mapSimilarMoviesToUiState(movieDetails.similarMovies),
-        movieHaveTrailer = movieDetails.movieHaveTrailer,
         isRated = currentUiState.isRated,
         isSaved = currentUiState.isSaved
     )

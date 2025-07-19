@@ -28,17 +28,19 @@ fun OutlineButton(
     @DrawableRes icon: Int?,
     hasIcon: Boolean,
     isLoading: Boolean,
-    isDisabled: Boolean,
-    onClick: () -> Unit,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    enabled: Boolean = true,
+    onClick: () -> Unit
 ) {
     Button(
         onClick = onClick,
+        enabled = enabled,
         shape = RoundedCornerShape(12.dp),
         border = BorderStroke(1.dp, NovixTheme.colors.stroke),
         colors = ButtonDefaults.buttonColors(
             containerColor = NovixTheme.colors.surface,
-            contentColor = if (isDisabled) NovixTheme.colors.disable else NovixTheme.colors.primary
+            contentColor = NovixTheme.colors.primary,
+            disabledContentColor = NovixTheme.colors.disable
         ),
         contentPadding = PaddingValues(horizontal = 16.dp, vertical = 8.dp),
         modifier = modifier
@@ -80,7 +82,6 @@ fun PreviewNormalOutlineButton() {
             text = "Watch",
             onClick = {},
             isLoading = false,
-            isDisabled = false,
             hasIcon = false,
             hasLabel = true,
             icon = R.drawable.icon_add
@@ -96,7 +97,6 @@ fun PreviewLoadingOutlineButton() {
             text = "Watch",
             onClick = {},
             isLoading = true,
-            isDisabled = false,
             hasIcon = false,
             hasLabel = true,
             icon = null
@@ -112,7 +112,7 @@ fun PreviewDisabledPrimaryDisable() {
             text = "Watch",
             onClick = {},
             isLoading = false,
-            isDisabled = true,
+            enabled = false,
             hasIcon = false,
             hasLabel = true,
             icon = null
@@ -128,7 +128,6 @@ fun PreviewOutlinePrimaryWithIcon() {
             text = "Watch",
             onClick = {},
             isLoading = false,
-            isDisabled = false,
             hasIcon = true,
             hasLabel = true,
             icon = R.drawable.icon_add
@@ -144,7 +143,6 @@ fun PreviewPrimaryWithIconOnly() {
             text = "",
             onClick = {},
             isLoading = false,
-            isDisabled = false,
             hasIcon = true,
             hasLabel = false,
             icon = R.drawable.icon_add

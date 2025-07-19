@@ -306,7 +306,6 @@ private fun SearchBar(
                     text = "",
                     onClick = onFilterClick,
                     isLoading = false,
-                    isDisabled = false,
                     hasIcon = true,
                     icon = R.drawable.icon_filter,
                     hasLabel = false,
