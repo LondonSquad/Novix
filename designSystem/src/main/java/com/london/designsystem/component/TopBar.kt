@@ -38,7 +38,7 @@ fun TopBar(
         horizontalArrangement = Arrangement.SpaceBetween
     ) {
 
-        onBackClick?.let { ButtonTopBar(icon = R.drawable.arrow_left, onClick = onBackClick ) }
+        onBackClick?.let { ButtonTopBar(icon = R.drawable.arrow_left, onClick = it) }
 
         title?.let {
             Text(
@@ -71,11 +71,14 @@ fun ButtonTopBar(icon: Int, onClick: () -> Unit) {
     Box(
         modifier = Modifier
             .size(40.dp)
-            .border(width = 1.dp, shape = RoundedCornerShape(12.dp), color = NovixTheme.colors.stroke)
             .clip(RoundedCornerShape(12.dp))
+            .border(
+                width = 1.dp,
+                shape = RoundedCornerShape(12.dp),
+                color = NovixTheme.colors.stroke
+            )
             .background(
-                color = NovixTheme.colors.iconBackgroundLow,
-                shape = RoundedCornerShape(12.dp)
+                color = NovixTheme.colors.iconBackgroundLow
             )
             .clickable(onClick = onClick),
         contentAlignment = Alignment.Center
