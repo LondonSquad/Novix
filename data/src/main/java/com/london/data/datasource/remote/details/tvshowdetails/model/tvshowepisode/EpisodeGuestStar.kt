@@ -6,25 +6,25 @@ import kotlinx.serialization.Serializable
 @Serializable
 data class EpisodeGuestStar(
     @SerialName("character")
-    val character: String,
+    val character: String? = null,
     @SerialName("credit_id")
-    val creditId: String,
+    val creditId: String? = null,
     @SerialName("order")
-    val order: Int,
+    val order: Int? = null,
     @SerialName("adult")
-    val adult: Boolean,
+    val adult: Boolean? = null,
     @SerialName("gender")
-    val gender: Int,
+    val gender: Int? = null,
     @SerialName("id")
-    val id: Int,
+    val id: Int? = null,
     @SerialName("known_for_department")
-    val knownForDepartment: String,
+    val knownForDepartment: String? = null,
     @SerialName("name")
-    val name: String,
+    val name: String? = null,
     @SerialName("original_name")
-    val originalName: String,
+    val originalName: String? = null,
     @SerialName("popularity")
-    val popularity: Double,
+    val popularity: Double? = null,
     @SerialName("profile_path")
-    val profilePath: String?
+    val profilePath: String? = null
 )
