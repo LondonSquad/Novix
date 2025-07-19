@@ -4336,9 +4336,18 @@
       "id": 102248144,
       "url": "https://github.com/BassantM"
     },
-    "approvals": [],
-    "first_approved_at": null,
-    "time_to_first_approval_minutes": null,
+    "approvals": [
+      {
+        "reviewer": {
+          "id": 100484790,
+          "login": "marwanqashwa",
+          "url": "https://github.com/marwanqashwa"
+        },
+        "submitted_at": "2025-07-19T01:08:50Z"
+      }
+    ],
+    "first_approved_at": "2025-07-19T01:08:50Z",
+    "time_to_first_approval_minutes": 12.666666666666666,
     "required_approvals_met_at": null,
     "time_to_required_approvals_minutes": null,
     "closed_at": null,
