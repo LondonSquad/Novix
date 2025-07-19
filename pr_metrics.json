@@ -4380,5 +4380,33 @@
       "deletions": 14,
       "changed_files": 4
     }
+  },
+  {
+    "pr_number": 224,
+    "url": "https://github.com/LondonSquad/Novix/pull/224",
+    "title": "Implement movie video fetching functionality",
+    "opened_at": "2025-07-19T01:14:33Z",
+    "head_ref": "feature/movie-details-video",
+    "base_ref": "develop",
+    "creator": {
+      "login": "abdelrhman1002",
+      "id": 180463542,
+      "url": "https://github.com/abdelrhman1002"
+    },
+    "approvals": [],
+    "first_approved_at": null,
+    "time_to_first_approval_minutes": null,
+    "required_approvals_met_at": null,
+    "time_to_required_approvals_minutes": null,
+    "closed_at": null,
+    "merged_at": null,
+    "merged_by": null,
+    "week": "2025-W29",
+    "status": "pending",
+    "diff_stats": {
+      "additions": 203,
+      "deletions": 29,
+      "changed_files": 24
+    }
   }
 ]
