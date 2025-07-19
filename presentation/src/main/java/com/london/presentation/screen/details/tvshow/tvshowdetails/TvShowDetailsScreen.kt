@@ -13,15 +13,12 @@ import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.WindowInsets
-import androidx.compose.foundation.layout.asPaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.statusBars
 import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.lazy.LazyColumn
@@ -59,16 +56,16 @@ import com.london.designsystem.component.ActorItem
 import com.london.designsystem.component.CircularLoading
 import com.london.designsystem.component.NovixCarousalRow
 import com.london.designsystem.component.RatingBar
-import com.london.designsystem.component.SaveIcon
 import com.london.designsystem.component.UnSuitableEye
 import com.london.designsystem.component.button.ErrorImage
 import com.london.designsystem.theme.NovixTheme
 import com.london.domain.entity.tvshowdetails.ImageItemEntity
 import com.london.domain.entity.tvshowdetails.TvShowCastMemberEntity
 import com.london.presentation.composables.ConditionalText
-import com.london.presentation.utils.offsetLayout
+import com.london.presentation.composables.DetailsScreenTopBar
 import com.london.presentation.composables.FooterSection
 import com.london.presentation.utils.Listen
+import com.london.presentation.utils.offsetLayout
 import com.london.presentation.utils.toLocalizedNumbers
 import kotlinx.coroutines.delay
 import org.koin.androidx.compose.koinViewModel
@@ -110,12 +107,12 @@ fun TvShowsDetailScreenContent(
     onBackClick: () -> Unit,
     interactionListener: TvShowDetailsInteractionListener
 ) {
-    val lazyListState = rememberLazyListState()
+    val lazyState = rememberLazyListState()
 
     val shouldShowBackground by remember {
         derivedStateOf {
-            lazyListState.firstVisibleItemScrollOffset > 40f ||
-                    lazyListState.firstVisibleItemIndex > 0
+            lazyState.firstVisibleItemScrollOffset > 40f ||
+                    lazyState.firstVisibleItemIndex > 0
         }
     }
 
@@ -134,8 +131,19 @@ fun TvShowsDetailScreenContent(
             .background(NovixTheme.colors.surface)
     ) {
 
+
+        DetailsScreenTopBar(
+            modifier = Modifier
+                .fillMaxWidth()
+                .zIndex(1f)
+                .align(Alignment.TopCenter),
+            isSaved = uiState.isSaved,
+            backgroundAlpha = backgroundAlpha,
+            onBackClick = onBackClick,
+        )
+
         LazyColumn(
-            state = lazyListState,
+            state = lazyState,
             modifier = Modifier
                 .fillMaxSize(),
             contentPadding = PaddingValues(bottom = 80.dp)
@@ -203,30 +211,8 @@ fun TvShowsDetailScreenContent(
             }
         }
 
-        Box(
-            modifier = Modifier
-                .fillMaxWidth()
-                .height(
-                    WindowInsets.statusBars.asPaddingValues().calculateTopPadding() +
-                            64.dp
-                )
-                .background(
-                    NovixTheme.colors.surface.copy(alpha = backgroundAlpha)
-                )
-                .zIndex(0.5f)
-        )
 
-        TvShowScreenTopBar(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(
-                    start = 16.dp,
-                    end = 16.dp,
-                    top = WindowInsets.statusBars.asPaddingValues().calculateTopPadding() + 12.dp
-                )
-                .zIndex(1f),
-            onBackClick = onBackClick,
-        )
+
 
         FooterSection(
             haveTrailer = uiState.haveTrailer,
@@ -313,42 +299,6 @@ fun CustomBackDropImagePager(
         )
     }
 }
-
-@Composable
-fun TvShowScreenTopBar(
-    modifier: Modifier = Modifier,
-    onBackClick: () -> Unit,
-) {
-    Row(
-        modifier = modifier,
-        verticalAlignment = Alignment.CenterVertically,
-        horizontalArrangement = Arrangement.SpaceBetween
-    ) {
-        Icon(
-            imageVector = ImageVector.vectorResource(R.drawable.arrow_left),
-            contentDescription = "back button",
-            tint = NovixTheme.colors.title,
-            modifier = Modifier
-                .size(40.dp)
-                .border(width = 1.dp, color = NovixTheme.colors.stroke)
-                .clip(RoundedCornerShape(12.dp))
-                .clickable(onClick = onBackClick)
-                .background(
-                    color = NovixTheme.colors.iconBackgroundLow,
-                    shape = RoundedCornerShape(12.dp)
-                )
-                .padding(10.dp)
-        )
-
-        SaveIcon(
-            isSaved = false,
-            onSaveClick = { },
-            backgroundColor = NovixTheme.colors.iconBackgroundLow,
-            modifier = Modifier.size(40.dp)
-        )
-    }
-}
-
 
 @Composable
 fun HeaderDetailsCard(

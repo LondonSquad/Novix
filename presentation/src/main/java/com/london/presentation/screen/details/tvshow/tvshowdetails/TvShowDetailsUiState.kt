@@ -26,6 +26,7 @@ data class TvShowDetailsUiState(
     val tvShowGenres: List<TvShowGenreEntity> = listOf(),
     val homepage: String = "",
     val id: Int = 0,
+    val isSaved: Boolean = false,
     val inProduction: Boolean = false,
     val languages: List<String> = listOf(),
     val lastAirDate: String = "",
