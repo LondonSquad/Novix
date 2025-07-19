@@ -87,15 +87,15 @@ abstract class BaseViewModel<S, E : Any>(initState: S) : ViewModel() {
         onCompleted()
     }
 
-    protected fun updateState(notifyEvent: E? = null, updater: S.() -> S) {
+    protected fun updateState(notifyEffect: E? = null, updater: S.() -> S) {
         _state.update(updater)
-        emitEvent(notifyEvent ?: return)
+        emitEffect(notifyEffect ?: return)
     }
 
-    protected fun emitEvent(newEvent: E) {
+    protected fun emitEffect(newEffect: E) {
         viewModelScope.launch(Dispatchers.IO) {
-            _effect.emit(newEvent)
-            Timber.i("Event -> ${newEvent::class.simpleName}")
+            _effect.emit(newEffect)
+            Timber.i("Effect -> ${newEffect::class.simpleName}")
         }
     }
 
