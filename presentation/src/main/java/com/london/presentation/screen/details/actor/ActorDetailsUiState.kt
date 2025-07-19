@@ -21,4 +21,5 @@ data class ActorDetailsUiState(
     val tvShowError: Boolean = false,
     val tvShowId: Int = 1,
     val movieId: Int = 1,
+    val expanded: Boolean = false
 )

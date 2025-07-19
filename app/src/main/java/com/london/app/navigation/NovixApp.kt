@@ -166,6 +166,9 @@ fun NovixApp() {
                     onNavigateToReviews = { tvShowId, mediaType ->
                         navController.navigate(Reviews(tvShowId, mediaType))
                     }
+                    , onNavigateToCast = { actorId->
+                        navController.navigate(Screen.ActorDetails(actorId))
+                    }
                 )
             }
 
