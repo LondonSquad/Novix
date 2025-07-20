@@ -26,8 +26,6 @@ import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.Icon
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
@@ -48,7 +46,9 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.ae.imageharamblur.ui.ImageViewFilter
 import com.london.designsystem.component.CircularLoading
 import com.london.designsystem.component.HomeCard
+import com.london.designsystem.component.Icon
 import com.london.designsystem.component.SectionHeader
+import com.london.designsystem.component.Text
 import com.london.designsystem.component.TopBar
 import com.london.designsystem.component.button.ErrorImage
 import com.london.designsystem.theme.NovixTheme

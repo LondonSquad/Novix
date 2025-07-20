@@ -29,9 +29,6 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.material3.HorizontalDivider
-import androidx.compose.material3.Icon
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -51,9 +48,11 @@ import androidx.paging.LoadState
 import androidx.paging.compose.collectAsLazyPagingItems
 import com.london.designsystem.component.EmptySearchLayout
 import com.london.designsystem.component.HomeCard
+import com.london.designsystem.component.Icon
 import com.london.designsystem.component.NovixChip
 import com.london.designsystem.component.OutlinedTextField
 import com.london.designsystem.component.SectionHeader
+import com.london.designsystem.component.Text
 import com.london.designsystem.component.TopBar
 import com.london.designsystem.component.button.PrimaryButton
 import com.london.designsystem.theme.NovixTheme
@@ -492,10 +491,12 @@ private fun RecentSearchItem(
     }
 
     if (showDivider) {
-        HorizontalDivider(
-            color = NovixTheme.colors.stroke,
-            thickness = 1.dp,
-            modifier = Modifier.padding(horizontal = 7.5.dp)
+        Box(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 7.5.dp)
+                .height(1.dp)
+                .background(NovixTheme.colors.stroke)
         )
     }
 }
