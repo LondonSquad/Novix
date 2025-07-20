@@ -38,6 +38,6 @@ fun SimilarMovieRemote.toSimilarMovie(): SimilarMovie {
     return SimilarMovie(
         image = posterPath.asImageUrlOrEmpty(),
         isSaved = false,
-        id = id
+        id = id.orZero()
     )
 }

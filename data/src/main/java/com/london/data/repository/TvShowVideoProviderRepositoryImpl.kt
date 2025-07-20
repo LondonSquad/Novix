@@ -9,10 +9,10 @@ import org.koin.core.annotation.Single
 @Single
 class TvShowVideoProviderRepositoryImpl(
     private val tvShowVideoProviderRemote: TvShowVideoProviderRemote
-): TvShowVideoProviderRepository {
+) : TvShowVideoProviderRepository {
     override suspend fun getTvShowVideos(tvShowId: Int): List<TvShowVideo> {
-        return tvShowVideoProviderRemote.getTvShowVideos(tvShowId).tvShow.map {
+        return tvShowVideoProviderRemote.getTvShowVideos(tvShowId).tvShow?.map {
             it.toTvShowVideo()
-        }
+        }.orEmpty()
     }
 }

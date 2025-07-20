@@ -2,9 +2,10 @@ package com.london.data.datasource.local.convertor
 
 import androidx.room.TypeConverter
 import com.google.gson.Gson
-import com.google.gson.reflect.TypeToken
 import com.london.data.datasource.local.model.SearchMovieDtoLocal
 import com.london.data.datasource.local.model.SearchMoviesLocal
+import com.london.data.datasource.local.utils.fromJsonList
+import com.london.data.datasource.local.utils.fromJsonObject
 
 class SearchMoviesConverter {
 
@@ -16,18 +17,15 @@ class SearchMoviesConverter {
     }
 
     @TypeConverter
-    fun toSearchMoviesResponse(json: String): SearchMoviesLocal {
-        return gson.fromJson(json, SearchMoviesLocal::class.java)
-    }
+    fun toSearchMoviesResponse(json: String): SearchMoviesLocal = gson.fromJsonObject(json)
+
 
     @TypeConverter
-    fun fromSearchMoviesResponseDtoList(list: List<SearchMovieDtoLocal>): String {
-        return gson.toJson(list)
-    }
+    fun fromSearchMoviesResponseDtoList(list: List<SearchMovieDtoLocal>): String = gson.toJson(list)
+
 
     @TypeConverter
-    fun toSearchMoviesResponseDtoList(json: String): List<SearchMovieDtoLocal> {
-        val type = object : TypeToken<List<SearchMovieDtoLocal>>() {}.type
-        return gson.fromJson(json, type)
-    }
+    fun toSearchMoviesResponseDtoList(json: String): List<SearchMovieDtoLocal> =
+        gson.fromJsonList(json)
+
 }

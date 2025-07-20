@@ -6,15 +6,15 @@ import kotlinx.serialization.Serializable
 @Serializable
 data class Logo(
     @SerialName("aspect_ratio")
-    val aspectRatio: Double = 0.0,
+    val aspectRatio: Double?,
     @SerialName("file_path")
-    val filePath: String,
-    val height: Int = 0,
+    val filePath: String?,
+    val height: Int?,
     @SerialName("iso_639_1")
-    val iso6391: String? = null,
+    val iso6391: String?,
     @SerialName("vote_average")
-    val voteAverage: Double = 0.0,
+    val voteAverage: Double?,
     @SerialName("vote_count")
-    val voteCount: Int = 0,
-    val width: Int = 0
+    val voteCount: Int?,
+    val width: Int?
 )

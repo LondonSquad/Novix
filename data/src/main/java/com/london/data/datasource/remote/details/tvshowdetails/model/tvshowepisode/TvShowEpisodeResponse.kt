@@ -8,31 +8,31 @@ import kotlinx.serialization.Serializable
 @Serializable
 data class TvShowEpisodeResponse(
     @SerialName("air_date")
-    val airDate: String?=null,
+    val airDate: String?,
     @SerialName("episode_number")
-    val episodeNumber: Int?=null,
+    val episodeNumber: Int?,
     @SerialName("episode_type")
-    val episodeType: String?=null,
+    val episodeType: String?,
     @SerialName("id")
-    val id: Int?=null,
+    val id: Int?,
     @SerialName("name")
-    val name: String?=null,
+    val name: String?,
     @SerialName("overview")
-    val overview: String?=null,
+    val overview: String?,
     @SerialName("production_code")
-    val productionCode: String?=null,
+    val productionCode: String?,
     @SerialName("runtime")
-    val runtime: Int?=null,
+    val runtime: Int?,
     @SerialName("season_number")
-    val seasonNumber: Int?=null,
+    val seasonNumber: Int?,
     @SerialName("still_path")
-    val stillPath: String?=null,
+    val stillPath: String?,
     @SerialName("vote_average")
-    val voteAverage: Double?=null,
+    val voteAverage: Double?,
     @SerialName("vote_count")
-    val voteCount: Int?=null,
+    val voteCount: Int?,
     @SerialName("crew")
-    val crew: List<EpisodeCrewMember>?=null,
+    val crew: List<EpisodeCrewMember>?,
     @SerialName("guest_stars")
-    val guestStars: List<EpisodeGuestStar>?=null,
+    val guestStars: List<EpisodeGuestStar>?,
 )

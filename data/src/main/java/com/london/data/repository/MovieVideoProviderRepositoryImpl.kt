@@ -13,12 +13,8 @@ class MovieVideoProviderRepositoryImpl(
     private val movieVideoProviderRemote: MovieVideoProviderRemote,
 ) : MovieVideoProviderRepository {
     override suspend fun getMovieVideos(movieId: Int): List<MovieVideo> =
-        runOrThrow(
-            block = {
-                movieVideoProviderRemote.getMovieVideos(movieId).movies?.map { movieVideoRemote ->
-                    movieVideoRemote.toMovie()
-                }.orEmpty()
-            },
-            error = { cause -> GetMovieVideosFailedException(cause) }
-        )
+        movieVideoProviderRemote.getMovieVideos(movieId).movies?.map { movieVideoRemote ->
+            movieVideoRemote.toMovie()
+        }.orEmpty()
+
 }
