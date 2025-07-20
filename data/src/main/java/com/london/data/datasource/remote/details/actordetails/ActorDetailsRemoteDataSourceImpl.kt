@@ -6,8 +6,6 @@ import com.london.data.datasource.remote.details.actordetails.model.actorimage.A
 import com.london.data.datasource.remote.details.actordetails.model.actormoviedetails.ActorMovieDetailsResponse
 import com.london.data.datasource.remote.details.actordetails.model.actortvshowdetails.ActorTvShowDetailsResponse
 import org.koin.core.annotation.Single
-
-
 @Single
 class ActorDetailsRemoteDataSourceImpl(
     private val actorDetailsApiService: ActorDetailsApiService,
