@@ -4,6 +4,7 @@ import android.content.Context
 import android.util.Log
 import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory
 import com.london.data.BuildConfig
+import com.london.data.datasource.device.DeviceConfigurationDataSource
 import com.london.data.datasource.remote.details.actordetails.api.ActorDetailsApiService
 import com.london.data.datasource.remote.details.moviedetails.api.MovieDetailsApiService
 import com.london.data.datasource.remote.details.tvshowdetails.api.TvShowDetailsApiService
@@ -51,13 +52,15 @@ class NetworkModule {
             val originalRequest = chain.request()
             val originalUrl = originalRequest.url
 
+            val deviceLanguage = DeviceConfigurationDataSource(context).getCurrentLanguage()
+
             val newUrl = originalUrl.newBuilder()
                 .addQueryParameter("api_key", BuildConfig.API_KEY)
+                .addQueryParameter("language", deviceLanguage)
                 .build()
 
             val newRequest = originalRequest.newBuilder()
                 .url(newUrl)
-                .addHeader("language", context.resources.configuration.locales[0].language)
                 .addHeader("Authorization", "Bearer ${BuildConfig.AUTHORIZATION_KEY}")
                 .build()
 
