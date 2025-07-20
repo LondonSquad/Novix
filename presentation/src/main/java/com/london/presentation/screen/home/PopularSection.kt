@@ -1,5 +1,6 @@
 package com.london.presentation.screen.home
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -45,8 +46,8 @@ fun PopularSection(
     modifier: Modifier = Modifier,
     pagerState: PagerState,
     images: List<String>,
-    onSaveClick: () -> Unit = {},
-    onCardClick: () -> Unit = {},
+    onSaveClick: () -> Unit,
+    onCardClick: () -> Unit,
 ) {
     val density = LocalDensity.current
     val screenWidth = with(density) {
@@ -91,10 +92,10 @@ fun PopularSection(
                         )
 
                         transformOrigin = TransformOrigin(TRANSFORM_ORIGIN_X, TRANSFORM_ORIGIN_Y)
-                    },
-                onCardClick = onCardClick,
+                    }.clickable { onCardClick() },
                 imageUrl = images[page],
                 onSaveClick = { onSaveClick() },
+                hasSaveIcon = pagerState.currentPage == page
             )
         }
 
