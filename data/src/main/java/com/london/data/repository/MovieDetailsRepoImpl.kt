@@ -12,7 +12,6 @@ import com.london.domain.entity.moviedatails.SimilarMovie
 import com.london.domain.repository.MovieDetailsRepository
 import org.koin.core.annotation.Single
 
-private const val IMAGE_LIMIT = 10
 
 @Single
 class MovieDetailsRepoImpl(
@@ -46,5 +45,9 @@ class MovieDetailsRepoImpl(
     override suspend fun getMovieCastById(id: Int): List<Actor> {
         val movieCast = movieDetailsRemote.getMovieCast(id)
         return movieCast.actorRemote?.map { it.toEntity() } ?: emptyList()
+    }
+
+    companion object {
+        private const val IMAGE_LIMIT = 10
     }
 }

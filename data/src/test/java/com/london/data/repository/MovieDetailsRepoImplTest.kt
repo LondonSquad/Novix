@@ -14,6 +14,10 @@ import com.london.data.datasource.remote.details.moviedetails.model.movieimages.
 import com.london.data.datasource.remote.details.moviedetails.model.similarmovies.SimilarMovieRemote
 import com.london.data.datasource.remote.details.moviedetails.model.similarmovies.SimilarMoviesResponse
 import com.london.data.utils.asImageUrlOrEmpty
+import com.london.domain.GetMovieCastFailedException
+import com.london.domain.GetMovieDetailsFailedException
+import com.london.domain.GetMovieImagesFailedException
+import com.london.domain.GetSimilarMoviesFailedException
 import io.mockk.coEvery
 import io.mockk.mockk
 import kotlinx.coroutines.test.runTest
@@ -218,10 +222,10 @@ class MovieDetailsRepoImplTest {
 
 
     @Test
-    fun `getMovieUsingId should propagate GetMovieDetailsException`() = runTest {
-        coEvery { remoteDataSource.getMovieDetails(123) } throws RuntimeException("Network error")
+    fun `getMovieUsingId should propagate GetMovieDetailsFailedException`() = runTest {
+        coEvery { remoteDataSource.getMovieDetails(123) } throws GetMovieDetailsFailedException("Network error")
 
-        val ex = assertThrows<RuntimeException> {
+        val ex = assertThrows<GetMovieDetailsFailedException> {
                 repository.getMovieById(123)
 
         }
@@ -229,10 +233,10 @@ class MovieDetailsRepoImplTest {
     }
 
     @Test
-    fun `getSimilarMovies should propagate GetSimilarMoviesException`() = runTest {
-        coEvery { remoteDataSource.getSimilarMovies(123) } throws RuntimeException("API failed")
+    fun `getSimilarMovies should propagate GetSimilarMoviesFailedException`() = runTest {
+        coEvery { remoteDataSource.getSimilarMovies(123) } throws GetSimilarMoviesFailedException("API failed")
 
-        val ex = assertThrows<RuntimeException> {
+        val ex = assertThrows<GetSimilarMoviesFailedException> {
                 repository.getSimilarMoviesById(123)
 
         }
@@ -240,10 +244,10 @@ class MovieDetailsRepoImplTest {
     }
 
     @Test
-    fun `getMovieImages should propagate GetMovieImagesException`() = runTest {
-        coEvery { remoteDataSource.getMovieImages(123) } throws RuntimeException("Server error")
+    fun `getMovieImages should propagate GetMovieImagesFailedException`() = runTest {
+        coEvery { remoteDataSource.getMovieImages(123) } throws GetMovieImagesFailedException("Server error")
 
-        val ex = assertThrows<RuntimeException> {
+        val ex = assertThrows<GetMovieImagesFailedException> {
                 repository.getMovieImagesById(123)
 
         }
@@ -251,10 +255,10 @@ class MovieDetailsRepoImplTest {
     }
 
     @Test
-    fun `getMovieCast should propagate GetMovieCastException`() = runTest {
-        coEvery { remoteDataSource.getMovieCast(123) } throws RuntimeException("MovieActor API down")
+    fun `getMovieCast should propagate GetMovieCastFailedException`() = runTest {
+        coEvery { remoteDataSource.getMovieCast(123) } throws GetMovieCastFailedException("MovieActor API down")
 
-        val ex = assertThrows<RuntimeException> {
+        val ex = assertThrows<GetMovieCastFailedException> {
             repository.getMovieCastById(123)
         }
         assertEquals("MovieActor API down", ex.message)

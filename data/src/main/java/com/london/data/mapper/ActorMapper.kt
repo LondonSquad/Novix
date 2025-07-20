@@ -1,5 +1,5 @@
+@file:KoverIgnore
 package com.london.data.mapper
-
 import com.london.data.datasource.local.model.KnownForDtoLocal
 import com.london.data.datasource.local.model.PersonDtoLocal
 import com.london.data.datasource.local.model.SearchActorsLocal
@@ -32,7 +32,6 @@ fun ApiResponse<SearchActorRemote>.toLocal(query: String): SearchActorsLocal {
     )
 }
 
-@KoverIgnore
 fun SearchActorRemote.toLocal(): PersonDtoLocal {
     return PersonDtoLocal(
         adult = adult.isTrue,
@@ -47,7 +46,6 @@ fun SearchActorRemote.toLocal(): PersonDtoLocal {
     )
 }
 
-@KoverIgnore
 fun KnownFor.toKnownForDtoLocal(): KnownForDtoLocal {
     return KnownForDtoLocal(
         adult = adult.isTrue,
