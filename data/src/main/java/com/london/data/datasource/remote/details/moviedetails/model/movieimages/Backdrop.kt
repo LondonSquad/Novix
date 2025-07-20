@@ -16,5 +16,5 @@ data class Backdrop(
     val voteAverage: Double?,
     @SerialName("vote_count")
     val voteCount: Int?,
-    val width: Int,
+    val width: Int?,
 )
