@@ -1,9 +1,10 @@
 package com.london.presentation.screen.home
 
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.PagerState
@@ -19,6 +20,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.util.lerp
 import com.london.designsystem.component.HomeCard
+import com.london.designsystem.component.NovixCarousalRow
 import kotlin.math.abs
 
 private const val CARD_WIDTH_DP = 244
@@ -53,44 +55,55 @@ fun PopularSection(
     val cardWidth = CARD_WIDTH_DP.dp
     val horizontalPadding = (screenWidth - cardWidth) / 2
 
-    HorizontalPager(
-        state = pagerState,
-        modifier = modifier,
-        pageSpacing = PAGE_SPACING_DP.dp,
-        contentPadding = PaddingValues(horizontal = horizontalPadding)
-    ) { page ->
-        HomeCard(
-            modifier = Modifier
-                .fillMaxWidth()
-                .size(CARD_WIDTH_DP.dp)
-                .wrapContentSize(Alignment.Center)
-                .padding(
-                    horizontal = if (page == pagerState.currentPage)
-                        CARD_HORIZONTAL_PADDING_DP.dp else 0.dp
-                )
-                .graphicsLayer {
-                    val pageOffset =
-                        (pagerState.currentPage - page) + pagerState.currentPageOffsetFraction
-
-                    rotationZ = lerp(
-                        start = ROTATION_PREVIOUS_DEGREES,
-                        stop = ROTATION_NEXT_DEGREES,
-                        fraction = (pageOffset + ROTATION_OFFSET_ADJUSTMENT) * ROTATION_FRACTION_MULTIPLIER
+    Column(
+        modifier = modifier.fillMaxWidth(),
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.spacedBy(8.dp)
+    ) {
+        HorizontalPager(
+            state = pagerState,
+            modifier = modifier,
+            pageSpacing = PAGE_SPACING_DP.dp,
+            contentPadding = PaddingValues(horizontal = horizontalPadding)
+        ) { page ->
+            HomeCard(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .wrapContentSize(Alignment.Center)
+                    .padding(
+                        horizontal = if (page == pagerState.currentPage)
+                            CARD_HORIZONTAL_PADDING_DP.dp else 0.dp
                     )
+                    .graphicsLayer {
+                        val pageOffset =
+                            (pagerState.currentPage - page) + pagerState.currentPageOffsetFraction
 
-                    scaleY = lerp(
-                        start = SCALE_CURRENT,
-                        stop = SCALE_SIDE_CARDS,
-                        fraction = abs(pageOffset).coerceIn(SCALE_MIN_FRACTION, SCALE_MAX_FRACTION)
-                    )
+                        rotationZ = lerp(
+                            start = ROTATION_PREVIOUS_DEGREES,
+                            stop = ROTATION_NEXT_DEGREES,
+                            fraction = (pageOffset + ROTATION_OFFSET_ADJUSTMENT) * ROTATION_FRACTION_MULTIPLIER
+                        )
 
-                    transformOrigin = TransformOrigin(TRANSFORM_ORIGIN_X, TRANSFORM_ORIGIN_Y)
-                },
-            onCardClick = onCardClick,
-            imageUrl = images[page],
-            onSaveClick = { onSaveClick() },
+                        scaleY = lerp(
+                            start = SCALE_CURRENT,
+                            stop = SCALE_SIDE_CARDS,
+                            fraction = abs(pageOffset).coerceIn(SCALE_MIN_FRACTION, SCALE_MAX_FRACTION)
+                        )
+
+                        transformOrigin = TransformOrigin(TRANSFORM_ORIGIN_X, TRANSFORM_ORIGIN_Y)
+                    },
+                onCardClick = onCardClick,
+                imageUrl = images[page],
+                onSaveClick = { onSaveClick() },
+            )
+        }
+
+        NovixCarousalRow(
+            dotsStates = List(images.size) { index -> index == pagerState.currentPage },
         )
+
     }
+
 }
 
 @Preview
