@@ -1,7 +1,5 @@
 package com.london.data.repository
 
-import com.london.data.datasource.remote.details.moviedetails.GetMovieVideosFailedException
-import com.london.data.datasource.remote.details.moviedetails.runOrThrow
 import com.london.data.datasource.remote.details.videoprovider.movie.MovieVideoProviderRemote
 import com.london.data.mapper.videoprovider.movie.toMovie
 import com.london.domain.entity.videoprovider.MovieVideo
@@ -16,5 +14,4 @@ class MovieVideoProviderRepositoryImpl(
         movieVideoProviderRemote.getMovieVideos(movieId).movies?.map { movieVideoRemote ->
             movieVideoRemote.toMovie()
         }.orEmpty()
-
 }
