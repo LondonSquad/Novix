@@ -52,7 +52,6 @@ dependencies {
     implementation(libs.bundles.base.ui)
     implementation(libs.bundles.coroutines)
     implementation(libs.bundles.datastore)
-    api(libs.bundles.ktor)
     implementation(libs.bundles.room)
     ksp(libs.bundles.room.ksp)
     implementation(libs.bundles.koin)
@@ -68,12 +67,14 @@ dependencies {
 
     // Test dependencies - properly scoped
     testImplementation(libs.bundles.testing)
-    testImplementation(libs.bundles.ktor.testing)
     testImplementation(libs.kotlinx.coroutines.test.v1102)
     testImplementation(kotlin("test"))
 
     // Android test dependencies
     androidTestImplementation(libs.bundles.android.testing)
+
+    // Retrofit
+    implementation(libs.bundles.retrofit)
 }
 ksp {
     arg("KOIN_CONFIG_CHECK", "true")
