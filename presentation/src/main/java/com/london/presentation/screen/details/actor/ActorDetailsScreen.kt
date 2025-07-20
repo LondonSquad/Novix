@@ -78,7 +78,7 @@ fun ActorDetailsScreen(
     effect?.Listen { currentEffect ->
         when (currentEffect) {
             is ActorEffectUiState.NavigationBack -> onBackClick()
-            is ActorEffectUiState.NavigateToGallery -> onNavigateToGallery(uiState.actorId)
+            is ActorEffectUiState.NavigateToGallery -> onNavigateToGallery(currentEffect.actorId)
             is ActorEffectUiState.NavigateToMovieScreen -> {
                 onNavigateToMovieScreen(currentEffect.movieId)
             }

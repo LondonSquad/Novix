@@ -28,11 +28,11 @@ class ActorGalleryViewModel(
             },
             onStart = { updateState { copy(isLoading = true) } },
             onSuccess = { imageDetails ->
-                ActorGalleryUiState(
-                    images = imageDetails.map { it.fileUrl },
-                    isLoading = false,
-                    error = null
-                )
+                updateState {
+                    copy(
+                        images = imageDetails.map { it.fileUrl }
+                    )
+                }
             },
             onError = { errorState ->
                 updateState { copy(error = errorState) }
