@@ -1,49 +1,48 @@
 package com.london.presentation.screen.details.actordetails.gallery
 
 import androidx.lifecycle.SavedStateHandle
-import androidx.lifecycle.ViewModel
 import com.london.domain.usecase.GetActorImagesByIdUseCase
-import com.london.presentation.utils.launchCatching
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.asStateFlow
+import com.london.presentation.navigation.Screen
+import com.london.presentation.navigation.getArgs
+import com.london.presentation.screen.base.BaseViewModel
 import org.koin.android.annotation.KoinViewModel
 
 @KoinViewModel
 class ActorGalleryViewModel(
     private val getActorImagesByIdUseCase: GetActorImagesByIdUseCase,
     savedStateHandle: SavedStateHandle
-) : ViewModel(), ActorGalleryInteractions {
+) : BaseViewModel<ActorGalleryUiState, ActorGalleryEffectUiState>(ActorGalleryUiState()),
+    ActorGalleryContract {
 
-    private val _uiState = MutableStateFlow(ActorGalleryUiState())
-    val uiState: StateFlow<ActorGalleryUiState> = _uiState.asStateFlow()
-
-    private val actorId: Int = savedStateHandle.get<Int>("actorId") ?: 0
+    private val args = savedStateHandle.getArgs<Screen.ActorGallery>()
+    private val actorId = args?.actorId ?: 0
 
     init {
         loadImages(actorId)
     }
 
     private fun loadImages(actorId: Int) {
-        launchCatching {
-            _uiState.value = _uiState.value.copy(isLoading = true, error = null)
-            try {
-                val imageDetails = getActorImagesByIdUseCase.invoke(actorId)
-                val imageUrls = imageDetails.map { it.fileUrl }
-                _uiState.value = ActorGalleryUiState(
-                    images = imageUrls,
-                    isLoading = false,
-                    error = null
-                )
-            } catch (e: Exception) {
-                _uiState.value = ActorGalleryUiState(
-                    images = emptyList(),
-                    isLoading = false,
-                    error = e.message
-                )
-            }
-        }
+        tryToExecute(
+            block = {
+                getActorImagesByIdUseCase.invoke(actorId)
+            },
+            onStart = { updateState { copy(isLoading = true) } },
+            onSuccess = { imageDetails ->
+                updateState {
+                    copy(
+                        images = imageDetails.map { it.fileUrl }
+                    )
+                }
+            },
+            onError = { errorState ->
+                updateState { copy(error = errorState) }
+            },
+            onCompleted = { updateState { copy(isLoading = false) } },
+            checkSuccess = { actorId != 0 },
+        )
     }
 
-    override fun onBackClick() { }
+    override fun onBackClick() {
+        emitEffect(ActorGalleryEffectUiState.NavigationBack)
+    }
 }

@@ -20,7 +20,6 @@ import androidx.compose.foundation.layout.defaultMinSize
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.grid.GridCells
@@ -38,21 +37,23 @@ import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.layout.onGloballyPositioned
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.zIndex
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.london.designsystem.component.ActorItem
-import com.london.designsystem.component.CircularLoading
 import com.london.designsystem.component.HomeCard
 import com.london.designsystem.component.ImageView
-import com.london.designsystem.component.NovixCarousalRow
 import com.london.designsystem.component.button.ErrorImage
 import com.london.designsystem.theme.NovixTheme
 import com.london.designsystem.theme.noRippleClickable
@@ -67,9 +68,15 @@ import com.london.presentation.R.string.star
 import com.london.presentation.R.string.time_icon
 import com.london.presentation.R.string.view_reviews
 import com.london.presentation.composables.ConditionalText
+import com.london.presentation.composables.CustomBackDropImagePager
 import com.london.presentation.composables.DetailsScreenTopBar
 import com.london.presentation.composables.FooterSection
+import com.london.presentation.screen.BuildScreen
+import com.london.presentation.screen.LoadingScreen
+import com.london.presentation.screen.NetworkErrorScreen
 import com.london.presentation.screen.reviews.MediaType
+import com.london.presentation.utils.Listen
+import com.london.presentation.utils.offsetLayout
 import com.london.presentation.utils.openUrl
 import org.koin.androidx.compose.koinViewModel
 
@@ -82,28 +89,29 @@ fun MovieDetailsScreen(
     onNavigateToActor: (Int) -> Unit,
     onNavigateToReviews: (Int, Int) -> Unit,
 ) {
-    val state by viewModel.uiState.collectAsState()
-    when {
-        state.isLoading -> {
-            Box(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .background(NovixTheme.colors.surface),
-                contentAlignment = Alignment.Center,
-            ) {
-                CircularLoading()
-            }
-        }
+    val state by viewModel.state.collectAsStateWithLifecycle()
+    val effect by viewModel.effect.collectAsState(null)
 
-        else -> {
-            MovieDetailsContent(
-                state,
-                viewModel::onExpandClick,
-                onBackClick,
-                onViewReviewsClick = onNavigateToReviews,
-                onGenreClick = onGenreClick,
-                onNavigateToMovie = onNavigateToMovie,
-                onNavigateToActor = onNavigateToActor
+    effect?.Listen { currentEffect ->
+        when (currentEffect) {
+            is MovieDetailsEffect.ActorNavigation -> onNavigateToActor(currentEffect.actorId)
+            MovieDetailsEffect.BackNavigation -> onBackClick()
+            is MovieDetailsEffect.GenreNavigation -> onGenreClick(currentEffect.genreId)
+            is MovieDetailsEffect.MovieNavigation -> onNavigateToMovie(currentEffect.movieId)
+            is MovieDetailsEffect.ReviewsNavigation -> onNavigateToReviews(
+                currentEffect.movieId,
+                currentEffect.mediaNumber
+            )
+        }
+    }
+
+    BuildScreen {
+        when {
+            state.isLoading -> LoadingScreen()
+            state.error != null -> NetworkErrorScreen()
+            else -> MovieDetailsContent(
+                state = state,
+                movieDetailsContract = viewModel
             )
         }
     }
@@ -112,16 +120,13 @@ fun MovieDetailsScreen(
 @Composable
 fun MovieDetailsContent(
     state: MovieDetailsUiState,
-    onExpandClick: () -> Unit,
-    onBackClick: () -> Unit,
-    onViewReviewsClick: (movieId: Int, mediaType: Int) -> Unit,
-    onGenreClick: (Int) -> Unit,
-    onNavigateToMovie: (Int) -> Unit,
-    onNavigateToActor: (Int) -> Unit
+    movieDetailsContract: MovieDetailsContract
 ) {
     val uriHandler = LocalUriHandler.current
 
     val lazyState = rememberLazyListState()
+    var footerHeight by remember { mutableStateOf(0.dp) }
+    val density = LocalDensity.current
 
     val shouldShowBackground by remember {
         derivedStateOf {
@@ -152,13 +157,13 @@ fun MovieDetailsContent(
                 .align(Alignment.TopCenter),
             isSaved = state.isSaved,
             backgroundAlpha = backgroundAlpha,
-            onBackClick = onBackClick,
+            onBackClick = movieDetailsContract::onBackClick,
         )
 
         LazyColumn(
             modifier = Modifier
-                .fillMaxSize()
-                .navigationBarsPadding(),
+                .fillMaxSize(),
+            contentPadding = PaddingValues(bottom = 16.dp + footerHeight),
             state = lazyState
         ) {
             item {
@@ -181,19 +186,13 @@ fun MovieDetailsContent(
                         verticalArrangement = Arrangement.spacedBy(4.dp),
                         horizontalAlignment = Alignment.CenterHorizontally
                     ) {
-                        NovixCarousalRow(
-                            dotsStates = List(state.movieImage.size) { index ->
-                                index == state.currentImageIndex
-                            },
-                            modifier = Modifier
-                                .clip(RoundedCornerShape(12.dp))
-                                .background(NovixTheme.colors.iconBackgroundLow)
-                                .border(1.dp, NovixTheme.colors.stroke, RoundedCornerShape(12.dp))
-                                .padding(horizontal = 12.dp, vertical = 4.dp)
+                        CustomBackDropImagePager(
+                            images = state.movieImage
                         )
 
                         Column(
                             modifier = Modifier
+                                .offsetLayout()
                                 .fillMaxWidth()
                                 .defaultMinSize(minHeight = 158.dp)
                                 .padding(horizontal = 16.dp)
@@ -209,7 +208,7 @@ fun MovieDetailsContent(
                                 color = NovixTheme.colors.title,
                                 modifier = Modifier.defaultMinSize(minHeight = 56.dp)
                             )
-                            GenreRow(state.movieGenres, onGenreClick)
+                            GenreRow(state.movieGenres, movieDetailsContract::onGenreClick)
                             RatingAndMetaRow(
                                 rate = state.movieRating,
                                 time = state.movieDuration,
@@ -220,7 +219,10 @@ fun MovieDetailsContent(
                                 style = NovixTheme.typography.label.medium,
                                 color = NovixTheme.colors.primary,
                                 modifier = Modifier.noRippleClickable {
-                                    onViewReviewsClick(state.movieId, MediaType.Movie.mediaNum)
+                                    movieDetailsContract.onReviewsClick(
+                                        state.movieId,
+                                        MediaType.Movie.mediaNum
+                                    )
                                 }
                             )
                         }
@@ -243,7 +245,7 @@ fun MovieDetailsContent(
                         state.movieOverview,
                         state.expanded,
                         modifier = Modifier.padding(horizontal = 16.dp, vertical = 4.dp),
-                        onExpandedChange = onExpandClick
+                        onExpandedChange = movieDetailsContract::onExpandClick
                     )
                 }
             }
@@ -272,7 +274,11 @@ fun MovieDetailsContent(
                                 imageRes = actor.avatarUrl,
                                 modifier = Modifier
                                     .defaultMinSize(minWidth = 296.dp)
-                                    .clickable { onNavigateToActor(actor.actorId) }
+                                    .clickable {
+                                        movieDetailsContract.onActorClick(
+                                            actor.actorId
+                                        )
+                                    }
                             )
                         }
                     }
@@ -297,7 +303,7 @@ fun MovieDetailsContent(
                             .padding(top = 12.dp),
                         horizontalArrangement = Arrangement.spacedBy(12.dp)
                     ) {
-                        rowItems.forEachIndexed { index, movie ->
+                        rowItems.forEachIndexed { _, movie ->
                             HomeCard(
                                 imageUrl = movie.image,
                                 isSaved = movie.isSaved,
@@ -306,11 +312,13 @@ fun MovieDetailsContent(
                                 },
                                 modifier = Modifier
                                     .weight(1f)
-                                    .clickable { onNavigateToMovie(state.similarMovies[index].movieId) }
+                                    .clickable {
+                                        movieDetailsContract.onMovieClick(movie.movieId)
+                                    }
                             )
                         }
                         if (rowItems.size == 1) {
-                            Spacer(modifier = Modifier.weight(1f)) // fill empty space if odd item count
+                            Spacer(modifier = Modifier.weight(1f))
                         }
                     }
                 }
@@ -319,7 +327,11 @@ fun MovieDetailsContent(
 
         FooterSection(
             haveTrailer = state.movieHaveTrailer,
-            modifier = Modifier.align(Alignment.BottomCenter),
+            modifier = Modifier
+                .onGloballyPositioned { coordinates ->
+                    footerHeight = with(density) { coordinates.size.height.toDp() }
+                }
+                .align(Alignment.BottomCenter),
             onPlayClick = {
                 uriHandler.openUrl(state.movieVideo)
             },
@@ -478,7 +490,7 @@ private fun MovieDetailsImage(
                             .fillMaxSize()
                             .clip(RoundedCornerShape(12.dp)),
                         onLoadingStateChange = { loadingState.value = it },
-                    errorContent = { ErrorImage() })
+                        errorContent = { ErrorImage() })
                 }
             }
         } else {

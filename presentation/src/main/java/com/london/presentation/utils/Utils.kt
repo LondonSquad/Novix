@@ -78,3 +78,6 @@ fun convertDate(input: String): String {
 
     return "$day $monthName $year".toLocalizedNumbers()
 }
+fun String?.getValueOf(key: String): String? {
+    return this
+}

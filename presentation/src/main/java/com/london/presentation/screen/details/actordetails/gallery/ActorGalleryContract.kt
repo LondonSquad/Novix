@@ -1,5 +1,5 @@
 package com.london.presentation.screen.details.actordetails.gallery
 
-interface ActorGalleryInteractions {
+interface ActorGalleryContract {
     fun onBackClick()
 }

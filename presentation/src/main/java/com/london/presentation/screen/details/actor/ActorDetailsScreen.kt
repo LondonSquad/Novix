@@ -9,7 +9,6 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.asPaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
@@ -45,6 +44,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.zIndex
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.ae.imageharamblur.ui.ImageViewFilter
 import com.london.designsystem.component.CircularLoading
 import com.london.designsystem.component.HomeCard
@@ -57,6 +57,7 @@ import com.london.domain.entity.actordetails.actormovie.ActorMovieCastMemberEnti
 import com.london.domain.entity.actordetails.actortvshow.ActorTvShowCastMemberEntity
 import com.london.presentation.R
 import com.london.presentation.composables.ConditionalText
+import com.london.presentation.utils.Listen
 import com.london.presentation.utils.offsetLayout
 import kotlinx.coroutines.delay
 import org.koin.androidx.compose.koinViewModel
@@ -71,15 +72,29 @@ fun ActorDetailsScreen(
     onNavigateToTvShowScreen: (Int) -> Unit,
     viewModel: ActorDetailsViewModel = koinViewModel(),
 ) {
-    val uiState by viewModel.uiState.collectAsState()
+    val uiState by viewModel.state.collectAsStateWithLifecycle()
+    val effect by viewModel.effect.collectAsState(null)
+
+    effect?.Listen { currentEffect ->
+        when (currentEffect) {
+            is ActorEffectUiState.NavigationBack -> onBackClick()
+            is ActorEffectUiState.NavigateToGallery -> onNavigateToGallery(currentEffect.actorId)
+            is ActorEffectUiState.NavigateToMovieScreen -> {
+                onNavigateToMovieScreen(currentEffect.movieId)
+            }
+            is ActorEffectUiState.NavigateToTvShowPicks ->
+                onNavigateToTvShowPicks(
+                    uiState.actorId
+                )
+
+            is ActorEffectUiState.NavigateToTvShowScreen -> onNavigateToTvShowScreen(currentEffect.tvShowId)
+            is ActorEffectUiState.NavigateToMoviePicks -> onNavigateToMoviePicks(uiState.actorId)
+        }
+    }
+
     ActorScreenContent(
         uiState = uiState,
-        onBackClick = onBackClick,
-        onNavigateToMoviePicks = onNavigateToMoviePicks,
-        onNavigateToTvShowPicks = onNavigateToTvShowPicks,
-        onNavigateToGallery = onNavigateToGallery,
-        onNavigateToMovieScreen = onNavigateToMovieScreen,
-        onNavigateToTvShowScreen = onNavigateToTvShowScreen,
+        actorDetailsContract = viewModel
     )
 }
 
@@ -87,12 +102,7 @@ fun ActorDetailsScreen(
 fun ActorScreenContent(
     modifier: Modifier = Modifier,
     uiState: ActorDetailsUiState,
-    onNavigateToGallery: (Int) -> Unit,
-    onNavigateToMoviePicks: (Int) -> Unit,
-    onNavigateToTvShowPicks: (Int) -> Unit,
-    onNavigateToMovieScreen: (Int) -> Unit,
-    onNavigateToTvShowScreen: (Int) -> Unit,
-    onBackClick: () -> Unit
+    actorDetailsContract: ActorDetailsContract,
 ) {
     Box(
         modifier = modifier
@@ -166,7 +176,7 @@ fun ActorScreenContent(
                         modifier = Modifier
                             .padding(bottom = 12.dp)
                             .padding(horizontal = 16.dp),
-                        onClick = { onNavigateToGallery(uiState.actorId) }
+                        onClick = { actorDetailsContract.onGalleryClick(uiState.actorId) }
                     )
                     ActorGallery(images = uiState.actorImageDetails)
                 }
@@ -181,11 +191,12 @@ fun ActorScreenContent(
                         modifier = Modifier
                             .padding(top = 16.dp, bottom = 12.dp)
                             .padding(horizontal = 16.dp),
-                        onClick = { onNavigateToMoviePicks(uiState.actorId) }
+                        onClick = { actorDetailsContract.onMoviePicksClick(uiState.actorId) }
                     )
                     TopMoviesPicksList(
                         movie = movieCast,
-                        onNavigateToTvShowPicks = onNavigateToMovieScreen
+                        onNavigateToMoviePicks = actorDetailsContract::onMovieScreenClick
+
                     )
                 }
             }
@@ -199,11 +210,11 @@ fun ActorScreenContent(
                         modifier = Modifier
                             .padding(top = 16.dp, bottom = 12.dp)
                             .padding(horizontal = 16.dp),
-                        onClick = { onNavigateToTvShowPicks(uiState.actorId) }
+                        onClick = { actorDetailsContract.onTvShowPicksClick(uiState.actorId) }
                     )
                     TopTvShowsPicksList(
                         tvShow = tvShows,
-                        onNavigateToTvShowPicks = onNavigateToTvShowScreen
+                        onNavigateToTvShowPicks = actorDetailsContract::onTvShowScreenClick
                     )
                 }
             }
@@ -211,7 +222,7 @@ fun ActorScreenContent(
         }
 
         TopBar(
-            onBackClick = onBackClick,
+            onBackClick = actorDetailsContract::onNavigateBack,
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(
@@ -227,7 +238,7 @@ fun ActorScreenContent(
 @Composable
 fun TopMoviesPicksList(
     movie: List<ActorMovieCastMemberEntity>,
-    onNavigateToTvShowPicks: (Int) -> Unit
+    onNavigateToMoviePicks: (Int) -> Unit
 ) {
     LazyHorizontalGrid(
         rows = GridCells.Adaptive(minSize = 128.dp),
@@ -244,7 +255,7 @@ fun TopMoviesPicksList(
                     //TODO("Not yet implemented")
                 },
                 modifier = Modifier.clickable {
-                    onNavigateToTvShowPicks(movie[index].id)
+                    onNavigateToMoviePicks(movie[index].id)
                 })
         }
     }
@@ -418,7 +429,6 @@ private fun ActorInfoSection(
         }
     }
 }
-
 
 
 @Composable
