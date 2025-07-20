@@ -17,7 +17,6 @@ import com.london.data.datasource.util.executeGetByQuery
 import com.london.data.datasource.util.executeGetByQueryAndPage
 import com.london.data.datasource.util.generateHash
 import io.mockk.Runs
-import io.mockk.clearMocks
 import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.every
@@ -544,7 +543,7 @@ class LocalDataSourceImplTest {
         val expiredItem = mockk<SearchTvShowLocal> {
             every { date } returns currentTime - expiredTime
         }
-       
+
         coEvery { searchTvShowDao.getAll() } returns listOf(expiredItem)
         coEvery { searchTvShowDao.delete(expiredItem) } just Runs
 
@@ -563,7 +562,6 @@ class LocalDataSourceImplTest {
         val expiredItem = mockk<SearchMoviesLocal> {
             every { date } returns currentTime - 4000000
         }
-        clearMocks(searchMoviesDao)
         coEvery { searchMoviesDao.getAll() } returns listOf(expiredItem)
         coEvery { searchMoviesDao.delete(expiredItem) } just Runs
 
@@ -582,7 +580,6 @@ class LocalDataSourceImplTest {
         val expiredItem = mockk<SearchActorsLocal> {
             every { date } returns currentTime - 4000000
         }
-        clearMocks(searchActorsDao)
         coEvery { searchActorsDao.getAll() } returns listOf(expiredItem)
         coEvery { searchActorsDao.delete(expiredItem) } just Runs
 
