@@ -11,6 +11,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.london.designsystem.R
 import com.london.designsystem.theme.NovixTheme
@@ -18,7 +19,9 @@ import com.london.designsystem.theme.NovixTheme
 @Composable
 fun NetworkErrorScreen() {
     Column(
-        modifier = Modifier.fillMaxSize(),
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(horizontal = 16.dp), // Added horizontal padding
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
@@ -32,6 +35,7 @@ fun NetworkErrorScreen() {
             text = stringResource(R.string.you_are_offline),
             style = NovixTheme.typography.title.medium,
             color = NovixTheme.colors.title,
+            textAlign = TextAlign.Center,
             modifier = Modifier.padding(bottom = 8.dp)
         )
 
@@ -39,6 +43,8 @@ fun NetworkErrorScreen() {
             text = stringResource(R.string.check_your_connection),
             style = NovixTheme.typography.title.medium,
             color = NovixTheme.colors.title,
+            textAlign = TextAlign.Center
         )
     }
 }
+
