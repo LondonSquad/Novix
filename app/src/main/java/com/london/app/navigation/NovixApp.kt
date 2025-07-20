@@ -223,14 +223,7 @@ fun NovixApp() {
                 )
             }
 
-            composable<Reviews> { backStackEntry ->
-                val reviews = backStackEntry.arguments?.let {
-                    Reviews(
-                        mediaId = it.getInt("mediaId"),
-                        mediaType = it.getInt("mediaType")
-                    )
-                }
-
+            composable<Reviews> {
                 ReviewsScreen(
                     onBackClick = {
                         navController.navigateUp()

@@ -15,6 +15,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.ae.imageharamblur.ui.ImageViewFilter
 import com.london.designsystem.component.CircularLoading
@@ -22,7 +23,10 @@ import com.london.designsystem.component.NovixCarousalRow
 import com.london.designsystem.component.UnSuitableEye
 import com.london.designsystem.component.button.ErrorImage
 import com.london.designsystem.theme.NovixTheme
+import com.london.presentation.R
+import kotlinx.coroutines.currentCoroutineContext
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.isActive
 
 @Composable
 fun CustomBackDropImagePager(
@@ -74,7 +78,7 @@ fun CustomBackDropImagePager(
 
             LaunchedEffect(Unit) {
                 if (images.size > 1) {
-                    while (true) {
+                    while (currentCoroutineContext().isActive) {
                         delay(4000)
                         val nextPage = (pagerState.currentPage + 1) % images.size
                         pagerState.animateScrollToPage(nextPage)
@@ -92,7 +96,7 @@ fun CustomBackDropImagePager(
                         .height(252.dp),
                     contentScale = ContentScale.FillBounds,
                     model = images[pageIndex],
-                    contentDescription = "TV Show Image ${pageIndex + 1}",
+                    contentDescription = "${stringResource(R.string.tv_show_image)} ${pageIndex + 1}",
                     errorContent = { ErrorImage() },
                     loadingContent = { CircularLoading(modifier = Modifier) },
                     moderatedContent = { UnSuitableEye() }
