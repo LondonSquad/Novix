@@ -57,7 +57,6 @@ dependencies {
     implementation(libs.bundles.koin)
     ksp(libs.bundles.koin.ksp)
     implementation(libs.gson)
-
     implementation(libs.firebase.crashlytics)
 
     //Testing
@@ -67,7 +66,6 @@ dependencies {
 
     // Test dependencies - properly scoped
     testImplementation(libs.bundles.testing)
-    testImplementation(libs.kotlinx.coroutines.test.v1102)
     testImplementation(kotlin("test"))
 
     // Android test dependencies
@@ -75,6 +73,9 @@ dependencies {
 
     // Retrofit
     implementation(libs.bundles.retrofit)
+    implementation(libs.retrofit2.kotlinx.serialization.converter)
+    implementation(libs.kotlinx.serialization.json)
+
 }
 ksp {
     arg("KOIN_CONFIG_CHECK", "true")

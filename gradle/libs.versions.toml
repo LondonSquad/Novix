@@ -9,6 +9,10 @@ kotlin = "2.0.21"
 kotlinxCoroutinesTestVersion = "1.10.2"
 ksp = "2.0.21-1.0.27"
 
+# Add Retrofit versions
+retrofit = "3.0.0"
+okhttp = "4.12.0"
+
 # AndroidX Core
 coreKtx = "1.16.0"
 lifecycleRuntimeKtx = "2.9.2"
@@ -19,6 +23,7 @@ materialVersion = "1.8.3"
 navigationComposeVersion = "2.9.1"
 pagingCompose = "3.4.0-alpha01"
 pagingRuntime = "3.3.6"
+retrofit2KotlinxSerializationConverter = "0.8.0"
 splashScreen = "1.0.1"
 
 # Compose
@@ -41,11 +46,6 @@ koinAndroidxCompose = "4.1.0"
 koinAnnotations = "2.1.0"
 koinKspCompiler = "2.1.0"
 
-# Retrofit Networking
-retrofit = "3.0.0"
-
-# OKHTTP
-okhttp = "4.12.0"
 
 # Coroutines & Date/Time
 kotlinxCoroutinesAndroid = "1.10.2"
@@ -124,15 +124,6 @@ koin-androidx-navigation = { module = "io.insert-koin:koin-androidx-navigation",
 koin-annotations = { group = "io.insert-koin", name = "koin-annotations", version.ref = "koinAnnotations" }
 koin-ksp-compiler = { group = "io.insert-koin", name = "koin-ksp-compiler", version.ref = "koinKspCompiler" }
 
-# retrofit Networking
-kotlinx-coroutines-test-v1102 = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-test", version.ref = "kotlinxCoroutinesTestVersion" }
-retrofit-core = { group = "com.squareup.retrofit2", name = "retrofit", version.ref = "retrofit" }
-retrofit-converter-gson = { group = "com.squareup.retrofit2", name = "converter-gson", version.ref = "retrofit" }
-
-# OKHTTP
-okhttp-core = { group = "com.squareup.okhttp3", name = "okhttp", version.ref = "okhttp" }
-okhttp-logging = { group = "com.squareup.okhttp3", name = "logging-interceptor", version.ref = "okhttp" }
-
 # Coroutines & Date/Time
 kotlinx-coroutines-android = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-android", version.ref = "kotlinxCoroutinesAndroid" }
 kotlinx-coroutines-test = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-test", version.ref = "kotlinxCoroutinesTest" }
@@ -140,11 +131,13 @@ kotlinx-datetime = { group = "org.jetbrains.kotlinx", name = "kotlinx-datetime",
 
 # UI Libraries
 coil-compose = { group = "io.coil-kt", name = "coil-compose", version.ref = "coilCompose" }
+kotlinx-serialization-json = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version.ref = "kotlinxCoroutinesTest" }
 lottie-compose = { group = "com.airbnb.android", name = "lottie-compose", version.ref = "lottieCompose" }
 mockk-android = { module = "io.mockk:mockk-android", version.ref = "mockk" }
 remember-preference = { group = "dev.burnoo", name = "compose-remember-preference", version.ref = "rememberPreference" }
 
 # tensorflow Lite
+retrofit2-kotlinx-serialization-converter = { module = "com.jakewharton.retrofit:retrofit2-kotlinx-serialization-converter", version.ref = "retrofit2KotlinxSerializationConverter" }
 tensorflow-lite-support = { module = "org.tensorflow:tensorflow-lite-support", version.ref = "tensorflowLiteSupport" }
 tensorflow-lite = { module = "org.tensorflow:tensorflow-lite", version.ref = "tensorflowLite" }
 
@@ -165,6 +158,12 @@ firebase-analytics = { group = "com.google.firebase", name = "firebase-analytics
 #noinspection SimilarGradleDependency
 mockk-agent-jvm = { module = "io.mockk:mockk-agent-jvm", version.ref = "mockk" }
 firebase-crashlytics-ktx = { group = "com.google.firebase", name = "firebase-crashlytics-ktx", version.ref = "firebaseCrashlyticsKtx" }
+
+# Add Retrofit libraries
+retrofit-core = { group = "com.squareup.retrofit2", name = "retrofit", version.ref = "retrofit" }
+retrofit-converter-gson = { group = "com.squareup.retrofit2", name = "converter-gson", version.ref = "retrofit" }
+okhttp-core = { group = "com.squareup.okhttp3", name = "okhttp", version.ref = "okhttp" }
+okhttp-logging = { group = "com.squareup.okhttp3", name = "logging-interceptor", version.ref = "okhttp" }
 
 
 [plugins]
@@ -227,12 +226,6 @@ room-ksp = [
     "androidx-room-compiler"
 ]
 
-retrofit = [
-    "retrofit-core",
-    "retrofit-converter-gson",
-    "okhttp-core",
-    "okhttp-logging"
-]
 
 coroutines = [
     "kotlinx-coroutines-android",
@@ -270,4 +263,11 @@ android-testing = [
     "androidx-junit",
     "androidx-espresso-core",
     "androidx-ui-test-junit4"
+]
+
+retrofit = [
+    "retrofit-core",
+    "retrofit-converter-gson",
+    "okhttp-core",
+    "okhttp-logging"
 ]

@@ -2,6 +2,7 @@ package com.london.data.di
 
 import android.content.Context
 import android.util.Log
+import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory
 import com.london.data.BuildConfig
 import com.london.data.datasource.remote.details.actordetails.api.ActorDetailsApiService
 import com.london.data.datasource.remote.details.moviedetails.api.MovieDetailsApiService
@@ -10,17 +11,28 @@ import com.london.data.datasource.remote.reviews.api.ReviewsApiService
 import com.london.data.datasource.remote.search.SearchRemoteDataSource
 import com.london.data.datasource.remote.search.SearchRemoteDataSourceImpl
 import com.london.data.datasource.remote.search.api.SearchApiService
+import kotlinx.serialization.json.Json
 import okhttp3.Interceptor
+import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import org.koin.core.annotation.Module
 import org.koin.core.annotation.Single
 import retrofit2.Retrofit
-import retrofit2.converter.gson.GsonConverterFactory
 import java.util.concurrent.TimeUnit
 
 @Module
 class NetworkModule {
+
+    @Single
+    fun provideJson(): Json {
+        return Json {
+            ignoreUnknownKeys = true
+            isLenient = true
+            prettyPrint = BuildConfig.DEBUG
+            encodeDefaults = true
+        }
+    }
 
     @Single
     fun provideHttpLoggingInterceptor(): HttpLoggingInterceptor {
@@ -70,11 +82,16 @@ class NetworkModule {
     }
 
     @Single
-    fun provideRetrofit(okHttpClient: OkHttpClient): Retrofit {
+    fun provideRetrofit(okHttpClient: OkHttpClient,
+                        json: Json
+
+    ): Retrofit {
         return Retrofit.Builder()
             .baseUrl(BuildConfig.BASE_URL)
             .client(okHttpClient)
-            .addConverterFactory(GsonConverterFactory.create())
+            .addConverterFactory(
+                json.asConverterFactory(contentType = "application/json".toMediaType())
+            )
             .build()
     }
 
