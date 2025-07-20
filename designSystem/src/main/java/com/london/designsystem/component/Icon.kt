@@ -1,6 +1,5 @@
 package com.london.designsystem.component
 
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -13,7 +12,6 @@ fun Icon(
     contentDescription: String?,
     modifier: Modifier = Modifier
 ) {
-    MaterialTheme.shapes.medium
     androidx.compose.material3.Icon(
         painter = painter,
         tint = tint,
