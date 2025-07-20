@@ -5311,5 +5311,33 @@
       "deletions": 1,
       "changed_files": 2
     }
+  },
+  {
+    "pr_number": 246,
+    "url": "https://github.com/LondonSquad/Novix/pull/246",
+    "title": "fix: remove material 3",
+    "opened_at": "2025-07-20T20:59:51Z",
+    "head_ref": "hotfix/remove-material-from-presentation",
+    "base_ref": "develop",
+    "creator": {
+      "login": "marwanqashwa",
+      "id": 100484790,
+      "url": "https://github.com/marwanqashwa"
+    },
+    "approvals": [],
+    "first_approved_at": null,
+    "time_to_first_approval_minutes": null,
+    "required_approvals_met_at": null,
+    "time_to_required_approvals_minutes": null,
+    "closed_at": null,
+    "merged_at": null,
+    "merged_by": null,
+    "week": "2025-W29",
+    "status": "pending",
+    "diff_stats": {
+      "additions": 271,
+      "deletions": 77,
+      "changed_files": 23
+    }
   }
 ]
