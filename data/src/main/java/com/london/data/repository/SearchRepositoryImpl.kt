@@ -55,7 +55,6 @@ class SearchRepositoryImpl(
     }, networkBlock = {
         remoteDataSource.searchForMovies(
             query = name,
-            language = language,
             includeAdult = false,
             pageNumber = pageNumber,
         ).toLocal(query = name + language)
@@ -79,7 +78,6 @@ class SearchRepositoryImpl(
     }, networkBlock = {
         remoteDataSource.searchForTvShows(
             query = name,
-            language = language,
             includeAdult = false,
             pageNumber = pageNumber,
         ).toLocal(query = name + language)
@@ -103,7 +101,6 @@ class SearchRepositoryImpl(
     }, networkBlock = {
         remoteDataSource.searchForActors(
             query = name,
-            language = language,
             includeAdult = false,
             pageNumber = pageNumber,
         ).toLocal(query = name + language)
@@ -123,7 +120,6 @@ class SearchRepositoryImpl(
         networkBlock = {
             remoteDataSource.getMoviesByCategory(
                 categoryId = categoryId,
-                language = language,
                 pageNumber = pageNumber,
             ).toLocal(query = "")
         }).run {

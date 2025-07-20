@@ -14,7 +14,6 @@ interface SearchApiService {
     suspend fun searchMovies(
         @Query("query") query: String,
         @Query("include_adult") includeAdult: Boolean,
-        @Query("language") language: String,
         @Query("page") page: Int
     ): ApiResponse<SearchMovieRemote>
 
@@ -22,7 +21,6 @@ interface SearchApiService {
     suspend fun searchTvShows(
         @Query("query") query: String,
         @Query("include_adult") includeAdult: Boolean,
-        @Query("language") language: String,
         @Query("page") page: Int
     ): ApiResponse<SearchTvShowRemote>
 
@@ -30,14 +28,12 @@ interface SearchApiService {
     suspend fun searchActors(
         @Query("query") query: String,
         @Query("include_adult") includeAdult: Boolean,
-        @Query("language") language: String,
         @Query("page") page: Int
     ): ApiResponse<SearchActorRemote>
 
     @GET(ApiConstants.SEARCH_BY_CATEGORY_PATH)
     suspend fun getMoviesByCategory(
         @Query("with_genres") genreId: Int,
-        @Query("language") language: String,
         @Query("page") page: Int,
         @Query("include_adult") includeAdult: Boolean
     ): ApiResponse<SearchMovieRemote>

@@ -19,50 +19,42 @@ class SearchRemoteDataSourceImpl(
     override suspend fun searchForMovies(
         query: String,
         includeAdult: Boolean,
-        language: String,
         pageNumber: Int
     ): ApiResponse<SearchMovieRemote> =
         searchApiService.searchMovies(
             query = query,
             includeAdult = includeAdult,
-            language = language,
             page = pageNumber
         )
 
     override suspend fun searchForTvShows(
         query: String,
         includeAdult: Boolean,
-        language: String,
         pageNumber: Int
     ): ApiResponse<SearchTvShowRemote> =
         searchApiService.searchTvShows(
             query = query,
             includeAdult = includeAdult,
-            language = language,
             page = pageNumber
         )
 
     override suspend fun searchForActors(
         query: String,
         includeAdult: Boolean,
-        language: String,
         pageNumber: Int
     ): ApiResponse<SearchActorRemote> =
         searchApiService.searchActors(
             query = query,
             includeAdult = includeAdult,
-            language = language,
             page = pageNumber
         )
 
     override suspend fun getMoviesByCategory(
         categoryId: Int,
-        language: String,
         pageNumber: Int,
         includeAdult: Boolean
     ): ApiResponse<SearchMovieRemote> = searchApiService.getMoviesByCategory(
         genreId = categoryId,
-        language = language,
         page = pageNumber,
         includeAdult = includeAdult
     )
