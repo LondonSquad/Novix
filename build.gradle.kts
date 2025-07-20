@@ -57,7 +57,7 @@ kover {
                     packages(
                         "org.koin.ksp.generated.**",
                         "com.london.data.datasource.remote.**",
-                        "com.london.data.di.**"
+                        "com.london.data.di"
                     )
                     classes("**.*RemoteDataSourceImpl")
                     classes("**RemoteDataSourceImpl")
