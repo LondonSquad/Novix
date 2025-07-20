@@ -20,10 +20,11 @@ import com.london.designsystem.theme.ThemePreviews
 @Composable
 fun HomeCard(
     imageUrl: Any,
-    onSaveClick: () -> Unit,
     modifier: Modifier = Modifier,
     isSaved: Boolean = false,
+    hasSaveIcon: Boolean = true,
     imageDescription: String? = null,
+    onSaveClick: () -> Unit,
 ) {
 
     Box(
@@ -48,15 +49,15 @@ fun HomeCard(
             loadingContent = { CircularLoading(modifier = Modifier.align(Alignment.Center)) },
             moderatedContent = { UnSuitableEye() }
         )
-        SaveIcon(
-            isSaved = isSaved,
-            onSaveClick = onSaveClick,
-            modifier = Modifier
-                .padding(8.dp)
-                .align(Alignment.TopStart),
-            iconTint = NovixTheme.colors.onPrimary,
-
-        )
+        if (hasSaveIcon)
+            SaveIcon(
+                isSaved = isSaved,
+                onSaveClick = onSaveClick,
+                modifier = Modifier
+                    .padding(8.dp)
+                    .align(Alignment.TopStart),
+                iconTint = NovixTheme.colors.onPrimary,
+            )
     }
 }
 
