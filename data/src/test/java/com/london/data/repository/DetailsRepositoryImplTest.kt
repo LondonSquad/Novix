@@ -1,6 +1,7 @@
 package com.london.data.repository
 
 import com.google.common.truth.Truth.assertThat
+import com.london.data.datasource.remote.ApiResponse
 import com.london.data.datasource.remote.details.tvshowdetails.TvShowDetailsRemoteDataSource
 import com.london.data.datasource.remote.details.tvshowdetails.model.ImageItem
 import com.london.data.datasource.remote.details.tvshowdetails.model.Role
@@ -21,6 +22,10 @@ import com.london.data.datasource.remote.details.tvshowdetails.model.tvshowepiso
 import com.london.data.datasource.remote.details.tvshowdetails.model.tvshowepisode.TvShowEpisodeBySeason
 import com.london.data.datasource.remote.details.tvshowdetails.model.tvshowepisode.TvShowEpisodesRemoteResponse
 import com.london.data.datasource.remote.reviews.ReviewsRemoteDataSource
+import com.london.data.datasource.remote.reviews.model.AuthorDetailsResponse
+import com.london.data.datasource.remote.reviews.model.ReviewResponse
+import com.london.data.mapper.toAuthorDetails
+import com.london.data.mapper.toReviewEntity
 import com.london.data.mapper.tvshowdetails.TvShowImagesMapper.toEntity
 import com.london.data.mapper.tvshowdetails.toCastEntity
 import com.london.data.mapper.tvshowdetails.toEntity
@@ -30,6 +35,8 @@ import com.london.data.utils.orZero
 import com.london.domain.GetCastByIdFailedException
 import com.london.domain.GetImagesByIdFailedException
 import com.london.domain.TvShowDetailsSearchFailedException
+import com.london.domain.entity.PagedFetchResponse
+import com.london.domain.entity.review.ReviewEntity
 import com.london.domain.entity.tvshowdetails.ImageItemEntity
 import com.london.domain.entity.tvshowdetails.TvShowCastEntity
 import com.london.domain.entity.tvshowdetails.TvShowCastMemberEntity
@@ -156,10 +163,133 @@ class DetailsRepositoryImplTest {
         assertThat(actualException).isEqualTo(networkException)
     }
 
+    @Test
+    fun `getTvShowEpisodeByPosition should throw original exception when remote call fails`() =
+        runTest {
+            val networkException = RuntimeException("Network error")
+            coEvery {
+                tvShowDetailsRemoteDataSource.getEpisodeDetailsByPosition(
+                    TV_SHOW_ID, SEASON_NUMBER, EPISODE_NUMBER
+                )
+            } throws networkException
+
+            val actualException = assertThrows<RuntimeException> {
+                repository.getTvShowEpisodeByPosition(TV_SHOW_ID, SEASON_NUMBER, EPISODE_NUMBER)
+            }
+
+            assertThat(actualException).isEqualTo(networkException)
+        }
+
+    @Test
+    fun `getMovieReviews should return paged reviews when remote succeeds`() = runTest {
+        // Given
+        val fakeRemoteResponse = ApiResponse(
+            currentPage = 1,
+            items = listOf(
+                ReviewResponse(
+                    id = "review1",
+                    author = "Author 1",
+                    content = "This is review 1",
+                    createdAt = "2024-01-01",
+                    updatedAt = "2024-01-02",
+                    authorDetailsResponse = AuthorDetailsResponse(
+                        authorName = "John Doe",
+                        authorUsername = "johndoe",
+                        authorPictureUrl = "https://image.tmdb.org/t/p/w500/profile.jpg",
+                        rating = 4.5
+                    ),
+                    url = "https://example.com/review1"
+                )
+            ),
+            totalPages = 1,
+            totalItems = 1
+        )
+        coEvery { reviewsRemoteDataSource.getMovieReviews(MOVIE_ID, PAGE_NUMBER) }
+            .returns(fakeRemoteResponse)
+
+        // When
+        val result: PagedFetchResponse<ReviewEntity> =
+            repository.getMovieReviews(MOVIE_ID, PAGE_NUMBER)
+
+        //Then
+        assertThat(result.items.first().authorDetails).isEqualTo(fakeRemoteResponse.items.first().authorDetailsResponse.toAuthorDetails())
+    }
+
+    @Test
+    fun `getMovieReviews should throw when remote fails`() = runTest {
+        //Given
+        coEvery { reviewsRemoteDataSource.getMovieReviews(MOVIE_ID, PAGE_NUMBER) }
+            .throws(RuntimeException("Network error"))
+
+        // When && Then
+        val exception = assertThrows<RuntimeException> {
+            repository.getMovieReviews(MOVIE_ID, PAGE_NUMBER)
+        }
+        assertThat(exception.message).contains("Network error")
+    }
+
+    @Test
+    fun `getMovieReviews should return empty when remote has no results`() = runTest {
+        //Given
+        val fakeEmptyResponse = ApiResponse(
+            currentPage = 1,
+            items = emptyList<ReviewResponse>(),
+            totalPages = 0,
+            totalItems = 0
+        )
+
+        coEvery { reviewsRemoteDataSource.getMovieReviews(MOVIE_ID, PAGE_NUMBER) }
+            .returns(fakeEmptyResponse)
+
+        // When
+        val result = repository.getMovieReviews(MOVIE_ID, PAGE_NUMBER)
+
+        // Then
+        assertThat(result.items).isEmpty()
+    }
+
+    @Test
+    fun `getTvShowReviews should return mapped reviews when remote succeeds`() = runTest {
+        // Arrange
+        val fakeRemoteResponse = ApiResponse(
+            currentPage = 1,
+            items = listOf(
+                ReviewResponse(
+                    id = "review1",
+                    author = "Author 1",
+                    content = "This is review 1",
+                    createdAt = "2024-01-01",
+                    updatedAt = "2024-01-02",
+                    authorDetailsResponse = AuthorDetailsResponse(
+                        authorName = "John Doe",
+                        authorUsername = "johndoe",
+                        authorPictureUrl = "/profile.jpg",
+                        rating = 4.5
+                    ),
+                    url = "https://example.com/review1"
+                )
+            ),
+            totalPages = 1,
+            totalItems = 1
+        )
+
+        coEvery { reviewsRemoteDataSource.getTvShowReviews(TV_SHOW_ID, PAGE_NUMBER) }
+            .returns(fakeRemoteResponse)
+
+        val result = repository.getTvShowReviews(TV_SHOW_ID, PAGE_NUMBER)
+
+        val expected = fakeRemoteResponse.toReviewEntity()
+
+        // Then
+        assertThat(result).isEqualTo(expected)
+    }
 
     private companion object {
         const val TV_SHOW_ID = 1
         const val SEASON_NUMBER = 1
+        const val EPISODE_NUMBER = 2
+        const val MOVIE_ID = 99
+        const val PAGE_NUMBER = 1
 
         val TvShowDetailsRemoteMock = TvShowDetailsRemoteResponse(
             adult = false,

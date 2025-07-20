@@ -4,7 +4,6 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -37,8 +36,7 @@ fun FooterSection(
                 ),
             )
             .padding(horizontal = if (haveTrailer) 16.dp else 24.dp)
-            .padding(bottom = 24.dp)
-            .navigationBarsPadding(),
+            .padding(bottom = 24.dp),
         horizontalArrangement = Arrangement.spacedBy(8.dp)
     ) {
             PrimaryButton(

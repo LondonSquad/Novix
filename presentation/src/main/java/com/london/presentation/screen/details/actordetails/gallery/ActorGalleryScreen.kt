@@ -21,12 +21,18 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.ae.imageharamblur.ui.ImageViewFilter
 import com.london.designsystem.component.CircularLoading
 import com.london.designsystem.component.TopBar
 import com.london.designsystem.component.button.ErrorImage
 import com.london.designsystem.theme.NovixTheme
 import com.london.presentation.R
+import com.london.presentation.screen.BuildScreen
+import com.london.presentation.screen.LoadingScreen
+import com.london.presentation.screen.NetworkErrorScreen
+import com.london.presentation.screen.base.ErrorState
+import com.london.presentation.utils.Listen
 import org.koin.androidx.compose.koinViewModel
 
 @Composable
@@ -34,10 +40,31 @@ fun ActorGalleryScreen(
     onBackClick: () -> Unit,
     viewModel: ActorGalleryViewModel = koinViewModel()
 ) {
-    val uiState by viewModel.uiState.collectAsState()
+    val uiState by viewModel.state.collectAsStateWithLifecycle()
+    val effect by viewModel.effect.collectAsState(null)
 
+    effect.Listen<ActorGalleryEffectUiState> { onBackClick() }
+
+    BuildScreen {
+        when {
+            uiState.isLoading -> LoadingScreen()
+            uiState.error == ErrorState.NoInternet -> NetworkErrorScreen()
+            else -> Content(
+                actorGalleryContract = viewModel,
+                uiState = uiState
+            )
+        }
+    }
+}
+
+@Composable
+private fun Content(
+    modifier: Modifier = Modifier,
+    actorGalleryContract: ActorGalleryContract,
+    uiState: ActorGalleryUiState
+) {
     Column(
-        modifier = Modifier
+        modifier = modifier
             .fillMaxSize()
             .background(NovixTheme.colors.surface)
             .statusBarsPadding()
@@ -46,7 +73,7 @@ fun ActorGalleryScreen(
         TopBar(
             modifier = Modifier.padding(bottom = 5.dp),
             title = stringResource(R.string.gallery),
-            onBackClick = onBackClick
+            onBackClick = actorGalleryContract::onBackClick
         )
         Box(modifier = Modifier.weight(1f)) {
             if (uiState.isLoading) {

@@ -1,4 +1,5 @@
 @file:KoverIgnore
+
 package com.london.data.mapper.recent
 
 import com.london.data.datasource.local.model.recent.MediaTypeLocal
@@ -8,11 +9,11 @@ import com.london.domain.entity.recent.MediaType
 import com.london.domain.entity.recent.RecentViewed
 
 fun RecentViewedLocal.toEntity(): RecentViewed = RecentViewed(
-    id = this.id, imageUrl = this.imageUrl, type = this.type.toEntity(), viewDate = this.viewDate
+    id = id, imageUrl = imageUrl, type = type.toEntity(), viewDate = viewDate
 )
 
 fun RecentViewed.toLocal(): RecentViewedLocal = RecentViewedLocal(
-    id = this.id, imageUrl = this.imageUrl, type = this.type.toLocal(), viewDate = this.viewDate
+    id = id, imageUrl = imageUrl, type = type.toLocal(), viewDate = viewDate
 )
 
 fun MediaTypeLocal.toEntity(): MediaType =

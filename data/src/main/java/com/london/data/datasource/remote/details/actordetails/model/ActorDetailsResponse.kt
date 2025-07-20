@@ -6,19 +6,19 @@ import kotlinx.serialization.Serializable
 @Serializable
 data class ActorDetailsResponse(
     @SerialName("adult")
-    val adult: Boolean,
+    val adult: Boolean?,
     @SerialName("also_known_as")
-    val alsoKnownAs: List<String>,
+    val alsoKnownAs: List<String>?,
     @SerialName("biography")
     val biography: String?,
     @SerialName("birthday")
     val birthday: String?,
     @SerialName("deathday")
-    val deathDay: String? = null,
+    val deathDay: String?,
     @SerialName("gender")
     val gender: Int?,
     @SerialName("homepage")
-    val homePage: String? = null,
+    val homePage: String?,
     @SerialName("id")
     val id: Int?,
     @SerialName("imdb_id")

@@ -1,7 +1,7 @@
 package com.london.data.datasource.local.search
 
 import com.london.data.datasource.local.LocalDataSource
-import com.london.data.datasource.local.dao.SearchTvShowDao
+import com.london.data.datasource.local.dao.search.SearchTvShowDao
 import com.london.data.datasource.local.model.SearchTvShowLocal
 import com.london.data.datasource.util.executeDelete
 import com.london.data.datasource.util.executeGetAll

@@ -43,6 +43,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.zIndex
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.paging.compose.collectAsLazyPagingItems
 import com.ae.imageharamblur.ui.ImageViewFilter
 import com.london.designsystem.component.ButtonIcon
@@ -53,6 +54,10 @@ import com.london.presentation.R
 import com.london.presentation.composables.ConditionalText
 import com.london.presentation.composables.RatingItem
 import com.london.presentation.composables.ReviewsDate
+import com.london.presentation.screen.BuildScreen
+import com.london.presentation.screen.LoadingScreen
+import com.london.presentation.screen.NetworkErrorScreen
+import com.london.presentation.utils.Listen
 import org.koin.androidx.compose.koinViewModel
 
 @Composable
@@ -60,18 +65,27 @@ fun ReviewsScreen(
     viewModel: ReviewsViewModel = koinViewModel(),
     onBackClick: () -> Unit = {},
 ) {
-    val uiState by viewModel.uiState.collectAsState()
+    val uiState by viewModel.state.collectAsStateWithLifecycle()
+    val effect by viewModel.effect.collectAsState(initial = null)
 
-    ReviewsScreenContent(
-        uiState = uiState,
-        onBackClick = onBackClick,
-    )
+    effect?.Listen { onBackClick() }
+
+    BuildScreen {
+        when {
+            uiState.isLoading -> LoadingScreen()
+            uiState.error != null -> NetworkErrorScreen()
+            else -> ReviewsScreenContent(
+                uiState = uiState,
+                reviewContract = viewModel,
+            )
+        }
+    }
 }
 
 @Composable
 fun ReviewsScreenContent(
     uiState: ReviewsUiState,
-    onBackClick: () -> Unit,
+    reviewContract: ReviewContract
 ) {
     val lazyListState = rememberLazyListState()
 
@@ -145,7 +159,7 @@ fun ReviewsScreenContent(
                     top = 12.dp
                 )
                 .align(Alignment.TopCenter),
-            onBackClick = onBackClick
+            onBackClick = reviewContract::onBackClicked
         )
     }
 }
@@ -232,8 +246,7 @@ fun ReviewHeader(
     modifier: Modifier = Modifier
 ) {
     Row(
-        modifier = modifier,
-        verticalAlignment = Alignment.CenterVertically,
+        modifier = modifier.fillMaxWidth(),
         horizontalArrangement = Arrangement.SpaceBetween
     ) {
 
@@ -243,16 +256,12 @@ fun ReviewHeader(
             authorUserName = authorUserName
         )
 
-        Box(
-            modifier = Modifier
-                .fillMaxWidth()
-        ) {
 
-            RatingItem(
-                rating = rating,
-                modifier = Modifier.align(Alignment.TopEnd)
-            )
-        }
+        RatingItem(
+            rating = rating,
+            modifier = Modifier
+        )
+
     }
 }
 
@@ -263,50 +272,51 @@ fun AuthorItem(
     authorUserName: String,
     modifier: Modifier = Modifier
 ) {
-    Box(
-        modifier = modifier
-            .size(48.dp)
-            .clip(RoundedCornerShape(12.dp))
-            .border(
-                width = 1.dp,
-                color = NovixTheme.colors.stroke,
-                shape = RoundedCornerShape(12.dp)
-            ),
-        contentAlignment = Alignment.Center
-    ) {
-        ImageViewFilter(
-            model = profileUrl,
-            contentDescription = stringResource(R.string.author_profile),
-            modifier = Modifier,
-            contentScale = ContentScale.Crop,
-            loadingContent = { CircularLoading() },
-            errorContent = { ErrorImage() },
-        )
-    }
+    Row {
+        Box(
+            modifier = modifier
+                .size(48.dp)
+                .clip(RoundedCornerShape(12.dp))
+                .border(
+                    width = 1.dp,
+                    color = NovixTheme.colors.stroke,
+                    shape = RoundedCornerShape(12.dp)
+                ),
+            contentAlignment = Alignment.Center
+        ) {
+            ImageViewFilter(
+                model = profileUrl,
+                contentDescription = stringResource(R.string.author_profile),
+                modifier = Modifier,
+                contentScale = ContentScale.Crop,
+                loadingContent = { CircularLoading() },
+                errorContent = { ErrorImage() },
+            )
+        }
+        Column(
+            modifier = modifier
+                .fillMaxHeight()
+                .padding(start = 8.dp),
+            horizontalAlignment = CenterHorizontally,
+        ) {
+            Text(
+                text = authorName,
+                style = NovixTheme.typography.title.medium,
+                color = NovixTheme.colors.title,
+                textAlign = TextAlign.Start,
+                modifier = Modifier
+            )
 
-    Column(
-        modifier = modifier
-            .fillMaxHeight()
-            .padding(start = 8.dp),
-        horizontalAlignment = CenterHorizontally,
-    ) {
-        Text(
-            text = authorName,
-            style = NovixTheme.typography.title.medium,
-            color = NovixTheme.colors.title,
-            textAlign = TextAlign.Start,
-            modifier = Modifier.fillMaxWidth()
-        )
+            Text(
+                text = authorUserName,
+                style = NovixTheme.typography.label.small,
+                color = NovixTheme.colors.hint,
+                textAlign = TextAlign.Start,
+                modifier = Modifier
 
-        Text(
-            text = authorUserName,
-            style = NovixTheme.typography.label.small,
-            color = NovixTheme.colors.hint,
-            textAlign = TextAlign.Start,
-            modifier = Modifier
-                .fillMaxWidth()
-                .align(Alignment.Start)
-        )
+                    .align(Alignment.Start)
+            )
+        }
     }
 }
 

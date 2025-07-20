@@ -1,5 +1,5 @@
+@file:KoverIgnore
 package com.london.data.mapper
-
 import com.london.data.datasource.local.model.KnownForDtoLocal
 import com.london.data.datasource.local.model.PersonDtoLocal
 import com.london.data.datasource.local.model.SearchActorsLocal
@@ -8,6 +8,8 @@ import com.london.data.datasource.remote.search.model.KnownFor
 import com.london.data.datasource.remote.search.model.SearchActorRemote
 import com.london.data.datasource.util.generateHash
 import com.london.data.utils.asImageUrlOrEmpty
+import com.london.data.utils.isTrue
+import com.london.data.utils.orZero
 import com.london.domain.KoverIgnore
 import com.london.domain.entity.Actor
 
@@ -30,39 +32,37 @@ fun ApiResponse<SearchActorRemote>.toLocal(query: String): SearchActorsLocal {
     )
 }
 
-@KoverIgnore
 fun SearchActorRemote.toLocal(): PersonDtoLocal {
     return PersonDtoLocal(
-        adult = adult,
-        gender = gender,
-        id = id,
+        adult = adult.isTrue,
+        gender = gender.orZero(),
+        id = id.orZero(),
         knownForDepartment = knownForDepartment.orEmpty(),
         name = name.orEmpty(),
         originalName = originalName.orEmpty(),
-        popularity = popularity,
+        popularity = popularity.orZero(),
         profileUrl = profilePath,
-        knownFor = knownFor.map { it.toKnownForDtoLocal() }
+        knownFor = knownFor?.map { it.toKnownForDtoLocal() }.orEmpty()
     )
 }
 
-@KoverIgnore
 fun KnownFor.toKnownForDtoLocal(): KnownForDtoLocal {
     return KnownForDtoLocal(
-        adult = adult,
+        adult = adult.isTrue,
         backdropPath = backdropPath,
-        id = id,
+        id = id.orZero(),
         title = title,
         originalTitle = originalTitle,
         overview = overview,
-        posterUrl = posterPath,
+        posterUrl = posterPath.asImageUrlOrEmpty(),
         mediaType = mediaType.orEmpty(),
         originalLanguage = originalLanguage.orEmpty(),
-        genreIds = genreIds,
-        popularity = popularity,
+        genreIds = genreIds.orEmpty(),
+        popularity = popularity.orZero(),
         releaseDate = releaseDate,
         video = video,
-        voteAverage = voteAverage,
-        voteCount = voteCount,
+        voteAverage = voteAverage.orZero(),
+        voteCount = voteCount.orZero(),
         name = name,
         originalName = originalName,
         firstAirDate = firstAirDate,

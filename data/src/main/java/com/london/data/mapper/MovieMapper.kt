@@ -6,6 +6,8 @@ import com.london.data.datasource.remote.ApiResponse
 import com.london.data.datasource.remote.search.model.SearchMovieRemote
 import com.london.data.datasource.util.generateHash
 import com.london.data.utils.asImageUrlOrEmpty
+import com.london.data.utils.isTrue
+import com.london.data.utils.orZero
 import com.london.domain.KoverIgnore
 import com.london.domain.entity.Movie
 
@@ -35,19 +37,19 @@ fun ApiResponse<SearchMovieRemote>.toLocal(query: String): SearchMoviesLocal {
 @KoverIgnore
 fun SearchMovieRemote.toMovieLocalDto(): SearchMovieDtoLocal {
     return SearchMovieDtoLocal(
-        adult = adult,
+        adult = adult.isTrue,
         backdropPath = backdropPath,
-        genreIds = genreIds,
-        id = id,
+        genreIds = genreIds.orEmpty(),
+        id = id.orZero(),
         originalLanguage = originalLanguage.orEmpty(),
         originalTitle = originalTitle.orEmpty(),
         overview = overview.orEmpty(),
-        popularity = popularity,
+        popularity = popularity.orZero(),
         posterPath = posterPath,
         releaseDate = releaseDate.orEmpty(),
         title = title.orEmpty(),
-        video = video,
-        voteAverage = voteAverage,
-        voteCount = voteCount
+        video = video.isTrue,
+        voteAverage = voteAverage.orZero(),
+        voteCount = voteCount.orZero()
     )
 }

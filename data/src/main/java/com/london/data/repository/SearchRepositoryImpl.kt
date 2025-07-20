@@ -1,7 +1,7 @@
 package com.london.data.repository
 
 import com.london.data.datasource.local.LocalDataSource
-import com.london.data.datasource.local.dao.GenreInterestDao
+import com.london.data.datasource.local.dao.search.GenreInterestDao
 import com.london.data.datasource.local.model.GenreInterestEntity
 import com.london.data.datasource.local.model.SearchActorsLocal
 import com.london.data.datasource.local.model.SearchMoviesLocal
