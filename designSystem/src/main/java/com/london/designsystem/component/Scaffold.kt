@@ -33,6 +33,5 @@ fun Scaffold(
         contentColor = contentColor,
         contentWindowInsets = contentWindowInsets,
         content = content,
-
     )
 }

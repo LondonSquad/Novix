@@ -52,7 +52,7 @@ fun FilterBottomSheet(
 
     val scope = rememberCoroutineScope()
 
-    var sheetState = remember { true }
+    var isSheetHidden = remember { true }
 
     val configuration = LocalConfiguration.current
     val screenHeightDp = configuration.screenHeightDp
@@ -60,7 +60,7 @@ fun FilterBottomSheet(
     ModalBottomSheet(
         onDismissRequest = {
             scope.launch {
-                sheetState=false
+                isSheetHidden=false
                 onDismissRequest()
             }
         },
@@ -78,14 +78,14 @@ fun FilterBottomSheet(
                 modifier = modifier,
                 onDismissRequest = {
                     scope.launch {
-                        sheetState=false
+                        isSheetHidden=false
                         onDismissRequest()
                     }
                 },
                 onApplyFilters = { selectedGenres, minimumRating, releaseYearRange ->
                     viewModel.onApplyFilter(selectedGenres, minimumRating, releaseYearRange)
                     scope.launch {
-                        sheetState=false
+                        isSheetHidden=false
                         onDismissRequest()
                     }
                 },
