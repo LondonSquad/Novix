@@ -1,16 +1,11 @@
 package com.london.presentation.screen.category.moviesbycategory
 
 import androidx.lifecycle.SavedStateHandle
-import androidx.lifecycle.ViewModel
-import com.london.domain.entity.Movie
 import com.london.domain.usecase.GetMoviesByCategoryUseCase
-import com.london.presentation.navigation.arguments.MoviesByCategoryArgs
+import com.london.presentation.features.base.BaseViewModel
+import com.london.presentation.navigation.Screen
+import com.london.presentation.navigation.getArgs
 import com.london.presentation.screen.base.createPagingSourceFlow
-import com.london.presentation.utils.launchCatching
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.update
 import org.koin.android.annotation.KoinViewModel
 import org.koin.core.annotation.Provided
 
@@ -18,47 +13,57 @@ import org.koin.core.annotation.Provided
 class MoviesByCategoryViewModel(
     @Provided private val getMoviesByCategoryUseCase: GetMoviesByCategoryUseCase,
     savedStateHandle: SavedStateHandle
-) : ViewModel(), MoviesByCategoryInteractions {
-    private val _uiState = MutableStateFlow(MoviesByCategoryUiState())
-    val uiState: StateFlow<MoviesByCategoryUiState> = _uiState.asStateFlow()
-    val args by lazy { MoviesByCategoryArgs(savedStateHandle) }
+) : BaseViewModel<MoviesByCategoryUiState, MoviesByCategoryEffect>(MoviesByCategoryUiState()),
+    MoviesByCategoryContract {
+
+    private val args = savedStateHandle.getArgs<Screen.MoviesByCategory>()
+    private val categoryId = args?.categoryId ?: 0
 
     init {
-        launchCatching {
-            initializeMovies(args.categoryId)
-        }
+        initializeMovies(categoryId)
     }
 
 
     private fun initializeMovies(categoryId: Int) {
-        runCatching {
-            _uiState.update {
-                it.copy(categoryId = categoryId)
-            }
-            val moviesFlow = createPagingSourceFlow<Movie>(query = "") { currentQuery, pageNumber ->
-                val movies = getMoviesByCategoryUseCase(
-                    categoryId = categoryId,
-                    language = "en-US",
-                    pageNumber = pageNumber
-                )
-                movies.copy(items = movies.items)
-            }
-            _uiState.update {
-                it.copy(
-                    movies = moviesFlow,
-                )
-            }
-        }.onFailure { e ->
-            _uiState.update {
-                it.copy(
-                    error = e.message,
-                )
-            }
-        }
-
+        tryToExecute(
+            block = {
+                val moviesFlow = createPagingSourceFlow(query = "") { _, pageNumber ->
+                    val movies = getMoviesByCategoryUseCase(
+                        categoryId = categoryId,
+                        language = "en-US",
+                        pageNumber = pageNumber
+                    )
+                    movies.copy(items = movies.items)
+                }
+                moviesFlow
+            },
+            onStart = {
+                updateState { copy(categoryId = categoryId, isLoading = true) }
+            },
+            onSuccess = { moviesFlow ->
+                updateState {
+                    copy(movies = moviesFlow)
+                }
+            },
+            onError = { errorState ->
+                updateState {
+                    copy(error = errorState)
+                }
+            },
+            onCompleted = { updateState { copy(isLoading = false) } },
+            checkSuccess = { categoryId != 0 }
+        )
     }
 
     override fun onSavedClick(movieId: Int) {
         //toDo() save movie
+    }
+
+    override fun onMovieClick(movieId: Int) {
+        emitEffect(MoviesByCategoryEffect.NavigateToMovieDetails(movieId = movieId))
+    }
+
+    override fun onBackClick() {
+        emitEffect(MoviesByCategoryEffect.NavigateBack)
     }
 }

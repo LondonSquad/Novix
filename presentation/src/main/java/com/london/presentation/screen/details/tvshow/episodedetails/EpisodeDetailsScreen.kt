@@ -38,12 +38,11 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.layout
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.zIndex
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.london.designsystem.component.ActorItem
 import com.london.designsystem.theme.NovixTheme
-import com.london.domain.entity.tvshowdetails.ImageItemEntity
 import com.london.presentation.R
 import com.london.presentation.composables.ConditionalText
 import com.london.presentation.composables.CustomBackDropImagePager
@@ -51,6 +50,7 @@ import com.london.presentation.composables.DetailsScreenTopBar
 import com.london.presentation.composables.FooterSection
 import com.london.presentation.composables.RatingItem
 import com.london.presentation.screen.BuildScreen
+import com.london.presentation.utils.Listen
 import com.london.presentation.utils.toLocalizedNumbers
 import org.koin.androidx.compose.koinViewModel
 import com.london.designsystem.R as Res
@@ -60,7 +60,10 @@ fun EpisodeDetailsScreen(
     viewModel: EpisodeDetailsViewModel = koinViewModel(),
     onBackClick: () -> Unit
 ) {
-    val uiState by viewModel.uiState.collectAsState()
+    val uiState by viewModel.state.collectAsStateWithLifecycle()
+    val effect by viewModel.effect.collectAsState(null)
+
+    effect?.Listen { onBackClick()}
 
     BuildScreen(
         isLoading = uiState.isLoading,
@@ -68,7 +71,7 @@ fun EpisodeDetailsScreen(
         content = {
             EpisodeDetailsScreenContent(
                 uiState = uiState,
-                onBackClick = onBackClick
+                episodeDetailsContract = viewModel
             )
         }
     )
@@ -78,7 +81,7 @@ fun EpisodeDetailsScreen(
 fun EpisodeDetailsScreenContent(
     modifier: Modifier = Modifier,
     uiState: EpisodeDetailsUiState,
-    onBackClick: () -> Unit
+    episodeDetailsContract: EpisodeDetailsContract
 ) {
 
     val lazyListState = rememberLazyListState()
@@ -110,7 +113,7 @@ fun EpisodeDetailsScreenContent(
                 .align(Alignment.TopCenter),
             isSaved = uiState.isSaved,
             backgroundAlpha = backgroundAlpha,
-            onBackClick = onBackClick,
+            onBackClick = episodeDetailsContract::onBackClicked,
         )
 
         LazyColumn(
@@ -379,37 +382,5 @@ fun OverviewSection(
             text = uiState.overview,
             expandedState = isTextCollapsed
         ) { isTextCollapsed = !isTextCollapsed }
-    }
-}
-
-@Preview(showBackground = true)
-@Composable
-fun EpisodeDetailsScreenPreview() {
-    NovixTheme {
-        EpisodeDetailsScreenContent(
-            uiState = EpisodeDetailsUiState(
-                tvImages = listOf(
-                    ImageItemEntity(
-                        fileUrl = "https://tse3.mm.bing.net/th/id/OIP.U_VJuupQohwnzXcKMztqWgHaEo?rs=1&pid=ImgDetMain&o=7&rm=3",
-                        aspectRatio = 1.78,
-                        height = 720,
-                        width = 1280,
-                        iso6391 = "en",
-                        voteAverage = 8.5,
-                        voteCount = 150
-                    ),
-                    ImageItemEntity(
-                        fileUrl = "https://image.tmdb.org/t/p/w500/sample2.jpg",
-                        aspectRatio = 1.78,
-                        height = 720,
-                        width = 1280,
-                        iso6391 = "en",
-                        voteAverage = 7.8,
-                        voteCount = 120
-                    )
-                ),
-            ),
-            onBackClick = {}
-        )
     }
 }

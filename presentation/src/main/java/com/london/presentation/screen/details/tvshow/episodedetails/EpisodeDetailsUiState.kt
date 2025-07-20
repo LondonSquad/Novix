@@ -2,10 +2,12 @@ package com.london.presentation.screen.details.tvshow.episodedetails
 
 import com.london.domain.entity.Actor
 import com.london.domain.entity.tvshowdetails.ImageItemEntity
+import com.london.presentation.screen.base.ErrorState
 
 data class EpisodeDetailsUiState(
     val tvImages: List<ImageItemEntity>? = listOf(),
     val isLoading: Boolean = true,
+    val error: ErrorState? = null,
     val episodeGenres: List<String> = listOf(),
     val airDate: String = "",
     val episodeNumber: Int = 0,

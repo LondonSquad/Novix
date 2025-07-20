@@ -1,54 +1,58 @@
 package com.london.presentation.screen.details.actordetails.toptvshowspicks
 
-import android.util.Log
 import androidx.lifecycle.SavedStateHandle
-import androidx.lifecycle.ViewModel
 import com.london.domain.usecase.GetActorTvShowPicksByIdUseCase
-import com.london.presentation.navigation.arguments.TopTvShowsArgs
-import com.london.presentation.utils.launchCatching
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.update
+import com.london.presentation.features.base.BaseViewModel
+import com.london.presentation.navigation.Screen
+import com.london.presentation.navigation.getArgs
 import org.koin.android.annotation.KoinViewModel
 
 @KoinViewModel
 class TopTvShowsPicksViewModel(
     private val getActorTvShowPicksById: GetActorTvShowPicksByIdUseCase,
     savedStateHandle: SavedStateHandle,
-) : ViewModel(), TopTvShowsPicksInteractions {
+) : BaseViewModel<TopTvShowsPicksUiState, TopTvShowsPicksEffect>(
+    TopTvShowsPicksUiState()
+), TopTvShowsPicksContract {
 
-    private val _uiState = MutableStateFlow(TopTvShowsPicksUiState())
-    val uiState: StateFlow<TopTvShowsPicksUiState> = _uiState.asStateFlow()
-
-    private val args by lazy { TopTvShowsArgs(savedStateHandle) }
+    private val args = savedStateHandle.getArgs<Screen.TopTvShowsPicksDetails>()
+    private val actorId = args?.actorId ?: 0
 
     init {
-        if (args.actorId != 0) {
-            getActorTvShowsPicksData()
-        }
+        getActorTvShowsPicksData()
+
     }
 
     private fun getActorTvShowsPicksData() {
-        launchCatching {
-            try {
-                _uiState.update {
-                    it.copy(
-                        id = it.id,
-                        tvShowDetails = getActorTvShowPicksById.invoke(args.actorId),
-                        isSaved = it.isSaved,
-                        backdropPath = it.backdropPath,
-                    )
+        tryToExecute(
+            block = {
+                getActorTvShowPicksById.invoke(actorId)
+            },
+            onStart = { updateState { copy(isLoading = true) } },
+            onSuccess = { tvShowDetails ->
+                updateState {
+                    copy(tvShowDetails = tvShowDetails)
                 }
-            } catch (e: Exception) {
-                Log.d("TAG", "getActorTvShowsPicksData: $e")
-            }
-        }
+            },
+            onError = { errorState ->
+                updateState {
+                    copy(error = errorState)
+                }
+            },
+            onCompleted = { updateState { copy(isLoading = false) } },
+            checkSuccess = { actorId != 0 }
+        )
     }
 
     override fun onSaveMovie(movieId: Int) {
-        _uiState.update {
-            it.copy(isSaved = !it.isSaved)
-        }
+        updateState { copy(isSaved = !this.isSaved) }
+    }
+
+    override fun onBackClicked() {
+        emitEffect(TopTvShowsPicksEffect.BackNavigation)
+    }
+
+    override fun onTvShowClicked(tvShowId: Int) {
+        emitEffect(TopTvShowsPicksEffect.TvShowNavigation(tvShowId))
     }
 }
