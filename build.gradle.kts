@@ -60,7 +60,7 @@ kover {
                     )
                     classes("**.*RemoteDataSourceImpl")
                     classes("**RemoteDataSourceImpl")
-                    classes("**.*DataBaseModule")
+                    classes("*di.*")
                 }
             }
             verify {
