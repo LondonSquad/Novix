@@ -63,4 +63,16 @@
     <string name="gallery">Gallery</string>
     <string name="actor_photos">Actor Photos</string>
     <string name="author_profile">Author profile</string>
+    <string name="first_onboarding_title">Discover best movies and series</string>
+    <string name="first_onboarding_description">Browse the latest releases, trends, and content tailored to your taste — all in one place.</string>
+    <string name="second_onboarding_title">Search easily… and watch to your taste</string>
+    <string name="second_onboarding_description">Use smart search and filters to find exactly what you love — action, drama, crime, anime and more!</string>
+    <string name="third_onboarding_title">Rate, save, and create your own lists.</string>
+    <string name="third_onboarding_description">Rate movies, track your viewing history, and easily save your favorite lists.</string>
+    <string name="welcome_title">Welcome to Novix</string>
+    <string name="welcome_description">Discover the world’s greatest movies and series. Search, watch, and save your favorites all in one place.</string>
+    <string name="skip">Skip</string>
+    <string name="login">Login</string>
+    <string name="continue_as_guest">Continue as guest</string>
+
 </resources>

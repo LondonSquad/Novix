@@ -63,5 +63,15 @@
     <string name="imagr_dot">نقطه</string>
     <string name="actor_photos">صور الممثلين</string>"
     <string name="author_profile">Author profile</string>
-
+    <string name="first_onboarding_title">اكتشف أفضل الأفلام والمسلسلات</string>
+    <string name="first_onboarding_description">تصفح أحدث الإصدارات والاتجاهات والمحتوى المناسب لذوقك — كل ذلك في مكان واحد.</string>
+    <string name="second_onboarding_title">ابحث بسهولة… وشاهد ما تحب</string>
+    <string name="second_onboarding_description">استخدم البحث الذكي والفلاتر للوصول إلى ما تحبه بالضبط — أكشن، دراما، جريمة، أنمي والمزيد!</string>
+    <string name="third_onboarding_title">قيّم، احفظ، وأنشئ قوائمك الخاصة</string>
+    <string name="third_onboarding_description">قيّم الأفلام، تابع سجل مشاهداتك، واحفظ قوائمك المفضلة بكل سهولة.</string>
+    <string name="welcome_title">مرحبًا بك في Novix</string>
+    <string name="welcome_description">اكتشف أعظم الأفلام والمسلسلات في العالم. ابحث، شاهد، واحفظ مفضلاتك كلها في مكان واحد.</string>
+    <string name="skip">تخطي</string>
+    <string name="login">تسجيل دخول</string>
+    <string name="continue_as_guest">الاستمرار كضيف</string>
 </resources>
