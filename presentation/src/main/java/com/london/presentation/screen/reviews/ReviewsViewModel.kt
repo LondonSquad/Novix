@@ -3,9 +3,9 @@ package com.london.presentation.screen.reviews
 import androidx.lifecycle.SavedStateHandle
 import com.london.domain.usecase.reviews.GetMovieReviewsUseCase
 import com.london.domain.usecase.reviews.GetTvShowReviewsUseCase
-import com.london.presentation.features.base.BaseViewModel
 import com.london.presentation.navigation.Screen
 import com.london.presentation.navigation.getArgs
+import com.london.presentation.screen.base.BaseViewModel
 import com.london.presentation.screen.base.createPagingSourceFlow
 import org.koin.android.annotation.KoinViewModel
 

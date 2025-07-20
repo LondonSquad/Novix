@@ -1,15 +1,7 @@
-package com.london.presentation.features.base
+package com.london.presentation.screen.base
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.london.presentation.screen.base.ConnectionException
-import com.london.presentation.screen.base.EmptyBodyException
-import com.london.presentation.screen.base.ErrorState
-import com.london.presentation.screen.base.HttpStatus
-import com.london.presentation.screen.base.InternetDisconnectedException
-import com.london.presentation.screen.base.ResponseException
-import com.london.presentation.screen.base.UnAuthorizedException
-import com.london.presentation.screen.base.ValidationException
 import com.london.presentation.utils.getValueOf
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers

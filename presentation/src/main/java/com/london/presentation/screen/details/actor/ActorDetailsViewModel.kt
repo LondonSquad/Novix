@@ -5,9 +5,9 @@ import com.london.domain.usecase.GetActorDetailsByIdUseCase
 import com.london.domain.usecase.GetActorImagesByIdUseCase
 import com.london.domain.usecase.GetActorMoviePicksByIdUseCase
 import com.london.domain.usecase.GetActorTvShowPicksByIdUseCase
-import com.london.presentation.features.base.BaseViewModel
 import com.london.presentation.navigation.Screen
 import com.london.presentation.navigation.getArgs
+import com.london.presentation.screen.base.BaseViewModel
 import org.koin.android.annotation.KoinViewModel
 
 @KoinViewModel

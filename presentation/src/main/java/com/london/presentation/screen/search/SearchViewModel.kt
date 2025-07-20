@@ -17,7 +17,7 @@ import com.london.domain.usecase.GetRecentSearchUseCase
 import com.london.domain.usecase.GetRecentViewedUseCase
 import com.london.domain.usecase.GetTvShowsUseCase
 import com.london.domain.usecase.IncrementGenreInterestUseCase
-import com.london.presentation.features.base.BaseViewModel
+import com.london.presentation.screen.base.BaseViewModel
 import com.london.presentation.screen.base.createPagingSourceFlow
 import com.london.presentation.screen.search.model.MovieUi
 import com.london.presentation.utils.convertGenreCodeToString

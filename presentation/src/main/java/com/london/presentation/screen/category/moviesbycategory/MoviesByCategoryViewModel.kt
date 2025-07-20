@@ -2,9 +2,9 @@ package com.london.presentation.screen.category.moviesbycategory
 
 import androidx.lifecycle.SavedStateHandle
 import com.london.domain.usecase.GetMoviesByCategoryUseCase
-import com.london.presentation.features.base.BaseViewModel
 import com.london.presentation.navigation.Screen
 import com.london.presentation.navigation.getArgs
+import com.london.presentation.screen.base.BaseViewModel
 import com.london.presentation.screen.base.createPagingSourceFlow
 import org.koin.android.annotation.KoinViewModel
 import org.koin.core.annotation.Provided
