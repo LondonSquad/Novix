@@ -13,9 +13,9 @@ class TvShowDetailsRemoteDataSourceImpl(
     private val tvShowDetailsApiService: TvShowDetailsApiService,
 ) : TvShowDetailsRemoteDataSource {
 
-    override suspend fun getTvShowDetailsById(tvShowId: Int): TvShowDetailsRemoteResponse =
+    override suspend fun getTvShowDetailsById(id: Int): TvShowDetailsRemoteResponse =
         tvShowDetailsApiService.getTvShowDetails(
-            tvShowId = tvShowId
+            tvShowId = id
         )
 
     override suspend fun getTvShowEpisodesBySeason(
@@ -27,14 +27,14 @@ class TvShowDetailsRemoteDataSourceImpl(
             seasonNumber = seasonNumber
         )
 
-    override suspend fun getCastsByTvShowId(tvShowId: Int): TvShowCastRemoteResponse =
+    override suspend fun getCastsByTvShowId(id: Int): TvShowCastRemoteResponse =
         tvShowDetailsApiService.getTvShowCast(
-            tvShowId = tvShowId
+            tvShowId = id
         )
 
-    override suspend fun getTvShowImagesById(tvShowId: Int): TvShowImagesRemoteResponse =
+    override suspend fun getTvShowImagesById(id: Int): TvShowImagesRemoteResponse =
         tvShowDetailsApiService.getTvShowImages(
-            tvShowId = tvShowId
+            tvShowId = id
         )
 
     override suspend fun getEpisodeDetailsByPosition(
