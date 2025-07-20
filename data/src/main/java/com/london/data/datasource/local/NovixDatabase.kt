@@ -8,12 +8,12 @@ import com.london.data.datasource.local.convertor.RecentViewedConverter
 import com.london.data.datasource.local.convertor.SearchActorsConvertor
 import com.london.data.datasource.local.convertor.SearchMoviesConverter
 import com.london.data.datasource.local.convertor.SearchTvShowConvertor
-import com.london.data.datasource.local.dao.GenreInterestDao
-import com.london.data.datasource.local.dao.SearchActorsDao
-import com.london.data.datasource.local.dao.SearchMoviesDao
-import com.london.data.datasource.local.dao.SearchTvShowDao
 import com.london.data.datasource.local.dao.recent.search.RecentSearchDao
 import com.london.data.datasource.local.dao.recent.viewed.RecentViewedDao
+import com.london.data.datasource.local.dao.search.GenreInterestDao
+import com.london.data.datasource.local.dao.search.SearchActorsDao
+import com.london.data.datasource.local.dao.search.SearchMoviesDao
+import com.london.data.datasource.local.dao.search.SearchTvShowDao
 import com.london.data.datasource.local.model.GenreInterestEntity
 import com.london.data.datasource.local.model.SearchActorsLocal
 import com.london.data.datasource.local.model.SearchMoviesLocal

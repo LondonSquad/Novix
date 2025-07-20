@@ -7,9 +7,9 @@ import com.london.domain.entity.Actor
 
 fun MovieActor.toEntity(): Actor {
     return Actor(
-        id = this.id.orZero(),
-        name = this.originalName.orEmpty(),
+        id = id.orZero(),
+        name = originalName.orEmpty(),
         profilePicture = profilePath.asImageUrlOrEmpty(),
-        characterName = this.character.orEmpty(),
+        characterName = character.orEmpty(),
     )
 }

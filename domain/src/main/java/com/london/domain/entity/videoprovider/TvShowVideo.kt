@@ -1,6 +1,6 @@
 package com.london.domain.entity.videoprovider
 
-class TvShowVideo (
+data class TvShowVideo(
     val id: String,
     val iso31661: String,
     val iso6391: String,
