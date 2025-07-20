@@ -99,14 +99,6 @@ class NetworkModule {
     fun provideSearchApiService(retrofit: Retrofit): SearchApiService {
         return retrofit.create(SearchApiService::class.java)
     }
-
-    @Single
-    fun provideSearchRemoteDataSource(
-        searchApiService: SearchApiService
-    ): SearchRemoteDataSource {
-        return SearchRemoteDataSourceImpl(searchApiService)
-    }
-
     @Single
     fun provideMovieDetailsApiService(retrofit: Retrofit): MovieDetailsApiService =
         retrofit.create(MovieDetailsApiService::class.java)
