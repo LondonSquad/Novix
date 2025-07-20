@@ -14,30 +14,30 @@ class ActorDetailsRemoteDataSourceImpl(
 ) : ActorDetailsRemoteDataSource {
 
     override suspend fun getActorDetailsById(
-        actorId: Int
+        id: Int
     ): ActorDetailsResponse =
         actorDetailsApiService.getActorDetails(
-            actorId = actorId
+            actorId = id
         )
 
     override suspend fun getActorMovieById(
-        actorId: Int
+        id: Int
     ): ActorMovieDetailsResponse =
         actorDetailsApiService.getActorMovies(
-            actorId =actorId
+            actorId = id
         )
 
     override suspend fun getActorTvShowById(
-        actorId: Int
+        id: Int
     ): ActorTvShowDetailsResponse =
         actorDetailsApiService.getActorTvShows(
-            actorId = actorId
+            actorId = id
         )
 
     override suspend fun getActorImagePath(
-        actorId: Int
+        id: Int
     ): ActorImageResponse =
         actorDetailsApiService.getActorImages(
-            actorId =actorId
+            actorId = id
         )
 }
