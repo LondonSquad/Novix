@@ -12,8 +12,12 @@ import com.london.domain.entity.tvshowdetails.TvShowSeasonEntity
 import com.london.domain.entity.tvshowdetails.TvShowSpokenLanguageEntity
 import com.london.domain.entity.tvshowdetails.episode.TvShowEpisodeBySeasonEntity
 import com.london.domain.entity.tvshowdetails.episode.TvShowEpisodesEntity
+import com.london.presentation.screen.base.ErrorState
 
 data class TvShowDetailsUiState(
+    val isLoading: Boolean = false,
+    val isError: Boolean = false,
+    val error: ErrorState? = null,
     val tvImages: List<ImageItemEntity>? = listOf(),
     val tvShowEpisodes: List<TvShowEpisodeBySeasonEntity> = listOf(),
     val tvShowEpisodeCountBySeason: TvShowEpisodesEntity? = null,

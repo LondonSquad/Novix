@@ -1,10 +1,11 @@
 package com.london.presentation.screen.details.movieDetalis
 
 import com.london.domain.entity.moviedatails.Genre
+import com.london.presentation.screen.base.ErrorState
 
 data class MovieDetailsUiState(
     val movieId: Int = 0,
-    val movieImage: List<Any> = listOf(),
+    val movieImage: List<String> = listOf(),
     val movieName: String = "",
     val movieGenres: List<Genre> = listOf(),
     val movieRating: String = "",
@@ -19,6 +20,7 @@ data class MovieDetailsUiState(
     val imageSlideDirection: Int = 1,
     val expanded: Boolean = false,
     val isLoading: Boolean = true,
+    val error: ErrorState? = null,
     val movieVideo: String = ""
 ){
     val movieHaveTrailer: Boolean

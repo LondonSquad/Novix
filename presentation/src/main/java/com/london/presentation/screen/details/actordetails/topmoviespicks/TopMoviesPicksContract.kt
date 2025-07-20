@@ -1,5 +1,6 @@
 package com.london.presentation.screen.details.actordetails.topmoviespicks
 
-interface TopMoviesPicksInteractions {
+interface TopMoviesPicksContract {
     fun onSaveMovie(movieId: Int)
+    fun onClickBack()
 }

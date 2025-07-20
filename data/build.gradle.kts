@@ -76,6 +76,8 @@ dependencies {
     implementation(libs.retrofit2.kotlinx.serialization.converter)
     implementation(libs.kotlinx.serialization.json)
 
+
+    implementation(libs.timber)
 }
 ksp {
     arg("KOIN_CONFIG_CHECK", "true")
