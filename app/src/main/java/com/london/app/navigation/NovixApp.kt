@@ -5,8 +5,10 @@ import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.navigationBars
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.systemBarsPadding
 import androidx.compose.material.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -72,9 +74,7 @@ fun NovixApp() {
         bottomBar = {
             if (showBottomNav && showMovieDetails) {
                 NavBar(
-                    modifier = Modifier
-                        .background(NovixTheme.colors.surface)
-                        .navigationBarsPadding(),
+                    modifier = Modifier.navigationBarsPadding(),
                     navDestinations = NavigationHelper.getNavigationTabs(),
                     currentSelectedDestination = currentScreen,
                     onNavDestinationClicked = { destination ->
