@@ -44,9 +44,9 @@ private const val SCALE_MAX_FRACTION = 1f
 fun PopularSection(
     modifier: Modifier = Modifier,
     pagerState: PagerState,
+    images: List<String>,
     onSaveClick: () -> Unit = {},
     onCardClick: () -> Unit = {},
-    images: List<String>
 ) {
     val density = LocalDensity.current
     val screenWidth = with(density) {

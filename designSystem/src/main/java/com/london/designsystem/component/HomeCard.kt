@@ -21,11 +21,11 @@ import com.london.designsystem.theme.ThemePreviews
 @Composable
 fun HomeCard(
     imageUrl: Any,
-    onSaveClick: () -> Unit,
     modifier: Modifier = Modifier,
     isSaved: Boolean = false,
-    onCardClick: () -> Unit = {},
     imageDescription: String? = null,
+    onCardClick: () -> Unit = {},
+    onSaveClick: () -> Unit,
 ) {
 
     Box(
