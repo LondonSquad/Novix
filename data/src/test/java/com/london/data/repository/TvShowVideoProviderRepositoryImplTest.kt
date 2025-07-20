@@ -104,19 +104,6 @@ class TvShowVideoProviderRepositoryImplTest {
 
     private fun fakeNullTvShowVideosResponse() = TvShowVideoResponse(
         id = 999,
-        tvShow = listOf(
-            TvShowVideoRemote(
-                id = null,
-                iso31661 = null,
-                iso6391 = null,
-                key = null,
-                name = null,
-                official = null,
-                publishedAt = null,
-                site = null,
-                size = null,
-                type = null
-            )
-        )
+        tvShow = null
     )
 }

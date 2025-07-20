@@ -7,7 +7,7 @@ import kotlinx.serialization.Serializable
 data class TvShowVideoResponse(
     val id: Int,
     @SerialName("results")
-    val tvShow: List<TvShowVideoRemote>
+    val tvShow: List<TvShowVideoRemote>?
 )
 
 @Serializable
