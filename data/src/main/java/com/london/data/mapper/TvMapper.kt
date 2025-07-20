@@ -6,6 +6,8 @@ import com.london.data.datasource.remote.ApiResponse
 import com.london.data.datasource.remote.search.model.SearchTvShowRemote
 import com.london.data.datasource.util.generateHash
 import com.london.data.utils.asImageUrlOrEmpty
+import com.london.data.utils.isTrue
+import com.london.data.utils.orZero
 import com.london.domain.KoverIgnore
 import com.london.domain.entity.TvShow
 
@@ -34,19 +36,19 @@ fun ApiResponse<SearchTvShowRemote>.toLocal(query: String): SearchTvShowLocal {
 @KoverIgnore
 fun SearchTvShowRemote.toLocalDto(): SearchTvShowDtoLocal {
     return SearchTvShowDtoLocal(
-        adult = adult,
+        adult = adult.isTrue,
         backdropUrl = backdropPath.orEmpty(),
-        genreIds = genreIds,
-        id = id,
-        originCountry = originCountry ?: emptyList(),
+        genreIds = genreIds.orEmpty(),
+        id = id.orZero(),
+        originCountry = originCountry.orEmpty(),
         originalLanguage = originalLanguage.orEmpty(),
         originalName = originalName.orEmpty(),
         overview = overview.orEmpty(),
-        popularity = popularity,
+        popularity = popularity.orZero(),
         posterPath = posterPath.orEmpty(),
         firstAirDate = firstAirDate.orEmpty(),
         name = name.orEmpty(),
-        voteAverage = voteAverage,
+        voteAverage = voteAverage.orZero(),
         voteCount = voteCount
     )
 }

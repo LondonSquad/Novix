@@ -5,11 +5,11 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class SimilarMoviesResponse(
-    val page: Int,
+    val page: Int?,
     @SerialName("results")
-    val similarMovieRemotes: List<SimilarMovieRemote>,
+    val similarMovieRemotes: List<SimilarMovieRemote>?,
     @SerialName("total_pages")
-    val totalPages: Int,
+    val totalPages: Int?,
     @SerialName("total_results")
-    val totalResults: Int
+    val totalResults: Int?
 )

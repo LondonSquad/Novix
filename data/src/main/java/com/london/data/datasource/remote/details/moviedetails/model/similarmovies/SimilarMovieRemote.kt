@@ -6,31 +6,31 @@ import kotlinx.serialization.Serializable
 @Serializable
 data class SimilarMovieRemote(
     @SerialName("adult")
-    val adult: Boolean,
+    val adult: Boolean?,
     @SerialName("backdrop_path")
     val backdropPath: String?,
     @SerialName("genre_ids")
-    val genreIds: List<Int>,
+    val genreIds: List<Int>?,
     @SerialName("id")
-    val id: Int,
+    val id: Int?,
     @SerialName("original_language")
-    val originalLanguage: String,
+    val originalLanguage: String?,
     @SerialName("original_title")
-    val originalTitle: String,
+    val originalTitle: String?,
     @SerialName("overview")
-    val overview: String,
+    val overview: String?,
     @SerialName("popularity")
-    val popularity: Double,
+    val popularity: Double?,
     @SerialName("poster_path")
     val posterPath: String?,
     @SerialName("release_date")
-    val releaseDate: String,
+    val releaseDate: String?,
     @SerialName("title")
-    val title: String,
+    val title: String?,
     @SerialName("video")
-    val video: Boolean,
+    val video: Boolean?,
     @SerialName("vote_average")
-    val voteAverage: Double,
+    val voteAverage: Double?,
     @SerialName("vote_count")
-    val voteCount: Int
+    val voteCount: Int?
 )
