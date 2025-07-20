@@ -96,7 +96,7 @@ fun LoginScreen() {
                 modifier = Modifier.padding(bottom = 26.dp)
             )
             PrimaryButton(
-                text = "Login",
+                text = stringResource(R.string.login),
                 hasLabel = true,
                 hasIcon = false,
                 isLoading = false,
@@ -120,13 +120,13 @@ fun LoginScreen() {
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Text(
-                    "Don't have an account?",
+                    stringResource(R.string.don_t_have_an_account),
                     style = NovixTheme.typography.body.small,
                     color = NovixTheme.colors.body,
                     modifier = Modifier.padding(end = 4.dp)
                 )
                 Text(
-                    "Create account",
+                    stringResource(R.string.create_account),
                     style = NovixTheme.typography.label.medium,
                     color = NovixTheme.colors.primary,
                 )
