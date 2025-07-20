@@ -4718,12 +4718,28 @@
           "url": "https://github.com/Mostafa-alsaygh"
         },
         "submitted_at": "2025-07-19T02:22:14Z"
+      },
+      {
+        "reviewer": {
+          "id": 76666355,
+          "login": "Abdulrahman1890",
+          "url": "https://github.com/Abdulrahman1890"
+        },
+        "submitted_at": "2025-07-19T02:23:57Z"
+      },
+      {
+        "reviewer": {
+          "id": 117874933,
+          "login": "AsmaaKhaledGomaa",
+          "url": "https://github.com/AsmaaKhaledGomaa"
+        },
+        "submitted_at": "2025-07-19T02:24:01Z"
       }
     ],
     "first_approved_at": "2025-07-19T02:22:14Z",
     "time_to_first_approval_minutes": 4.883333333333334,
-    "required_approvals_met_at": null,
-    "time_to_required_approvals_minutes": null,
+    "required_approvals_met_at": "2025-07-19T02:23:57Z",
+    "time_to_required_approvals_minutes": 6.6,
     "closed_at": "2025-07-19T02:24:10Z",
     "merged_at": "2025-07-19T02:24:10Z",
     "merged_by": {
@@ -4849,11 +4865,28 @@
       "id": 100484790,
       "url": "https://github.com/marwanqashwa"
     },
-    "approvals": [],
-    "first_approved_at": null,
-    "time_to_first_approval_minutes": null,
-    "required_approvals_met_at": null,
-    "time_to_required_approvals_minutes": null,
+    "approvals": [
+      {
+        "reviewer": {
+          "id": 117874933,
+          "login": "AsmaaKhaledGomaa",
+          "url": "https://github.com/AsmaaKhaledGomaa"
+        },
+        "submitted_at": "2025-07-19T02:41:59Z"
+      },
+      {
+        "reviewer": {
+          "id": 76666355,
+          "login": "Abdulrahman1890",
+          "url": "https://github.com/Abdulrahman1890"
+        },
+        "submitted_at": "2025-07-19T02:42:15Z"
+      }
+    ],
+    "first_approved_at": "2025-07-19T02:41:59Z",
+    "time_to_first_approval_minutes": 10.583333333333334,
+    "required_approvals_met_at": "2025-07-19T02:42:15Z",
+    "time_to_required_approvals_minutes": 10.85,
     "closed_at": "2025-07-19T02:42:35Z",
     "merged_at": "2025-07-19T02:42:35Z",
     "merged_by": {
@@ -4946,11 +4979,44 @@
       "id": 102248144,
       "url": "https://github.com/BassantM"
     },
-    "approvals": [],
-    "first_approved_at": null,
-    "time_to_first_approval_minutes": null,
-    "required_approvals_met_at": null,
-    "time_to_required_approvals_minutes": null,
+    "approvals": [
+      {
+        "reviewer": {
+          "id": 117874933,
+          "login": "AsmaaKhaledGomaa",
+          "url": "https://github.com/AsmaaKhaledGomaa"
+        },
+        "submitted_at": "2025-07-19T02:53:00Z"
+      },
+      {
+        "reviewer": {
+          "id": 100484790,
+          "login": "marwanqashwa",
+          "url": "https://github.com/marwanqashwa"
+        },
+        "submitted_at": "2025-07-19T02:53:05Z"
+      },
+      {
+        "reviewer": {
+          "id": 76666355,
+          "login": "Abdulrahman1890",
+          "url": "https://github.com/Abdulrahman1890"
+        },
+        "submitted_at": "2025-07-19T02:53:08Z"
+      },
+      {
+        "reviewer": {
+          "id": 106277855,
+          "login": "Mostafa-alsaygh",
+          "url": "https://github.com/Mostafa-alsaygh"
+        },
+        "submitted_at": "2025-07-19T02:53:11Z"
+      }
+    ],
+    "first_approved_at": "2025-07-19T02:53:00Z",
+    "time_to_first_approval_minutes": 0.48333333333333334,
+    "required_approvals_met_at": "2025-07-19T02:53:05Z",
+    "time_to_required_approvals_minutes": 0.5666666666666667,
     "closed_at": "2025-07-19T02:53:15Z",
     "merged_at": "2025-07-19T02:53:15Z",
     "merged_by": {
@@ -5024,6 +5090,71 @@
     }
   },
   {
+    "pr_number": 233,
+    "url": "https://github.com/LondonSquad/Novix/pull/233",
+    "title": "fix/image-view",
+    "opened_at": "2025-07-19T03:04:40Z",
+    "head_ref": "fix/image-view",
+    "base_ref": "develop",
+    "creator": {
+      "login": "karimdeabes",
+      "id": 81706918,
+      "url": "https://github.com/karimdeabes"
+    },
+    "approvals": [
+      {
+        "reviewer": {
+          "id": 100484790,
+          "login": "marwanqashwa",
+          "url": "https://github.com/marwanqashwa"
+        },
+        "submitted_at": "2025-07-19T03:08:58Z"
+      },
+      {
+        "reviewer": {
+          "id": 76666355,
+          "login": "Abdulrahman1890",
+          "url": "https://github.com/Abdulrahman1890"
+        },
+        "submitted_at": "2025-07-19T03:09:05Z"
+      },
+      {
+        "reviewer": {
+          "id": 106277855,
+          "login": "Mostafa-alsaygh",
+          "url": "https://github.com/Mostafa-alsaygh"
+        },
+        "submitted_at": "2025-07-19T03:09:07Z"
+      },
+      {
+        "reviewer": {
+          "id": 102248144,
+          "login": "BassantM",
+          "url": "https://github.com/BassantM"
+        },
+        "submitted_at": "2025-07-19T03:09:13Z"
+      }
+    ],
+    "first_approved_at": "2025-07-19T03:08:58Z",
+    "time_to_first_approval_minutes": 4.3,
+    "required_approvals_met_at": "2025-07-19T03:09:05Z",
+    "time_to_required_approvals_minutes": 4.416666666666667,
+    "closed_at": "2025-07-19T03:09:12Z",
+    "merged_at": "2025-07-19T03:09:12Z",
+    "merged_by": {
+      "login": "Al-Taie",
+      "id": 68463985,
+      "url": "https://github.com/Al-Taie"
+    },
+    "week": "2025-W29",
+    "status": "merged",
+    "diff_stats": {
+      "additions": 25,
+      "deletions": 24,
+      "changed_files": 1
+    }
+  },
+  {
     "pr_number": 234,
     "url": "https://github.com/LondonSquad/Novix/pull/234",
     "title": "fix: handle ex",
@@ -5035,11 +5166,52 @@
       "id": 100484790,
       "url": "https://github.com/marwanqashwa"
     },
-    "approvals": [],
-    "first_approved_at": null,
-    "time_to_first_approval_minutes": null,
-    "required_approvals_met_at": null,
-    "time_to_required_approvals_minutes": null,
+    "approvals": [
+      {
+        "reviewer": {
+          "id": 180463542,
+          "login": "abdelrhman1002",
+          "url": "https://github.com/abdelrhman1002"
+        },
+        "submitted_at": "2025-07-19T03:22:54Z"
+      },
+      {
+        "reviewer": {
+          "id": 76666355,
+          "login": "Abdulrahman1890",
+          "url": "https://github.com/Abdulrahman1890"
+        },
+        "submitted_at": "2025-07-19T03:22:59Z"
+      },
+      {
+        "reviewer": {
+          "id": 106277855,
+          "login": "Mostafa-alsaygh",
+          "url": "https://github.com/Mostafa-alsaygh"
+        },
+        "submitted_at": "2025-07-19T03:22:59Z"
+      },
+      {
+        "reviewer": {
+          "id": 102248144,
+          "login": "BassantM",
+          "url": "https://github.com/BassantM"
+        },
+        "submitted_at": "2025-07-19T03:23:03Z"
+      },
+      {
+        "reviewer": {
+          "id": 117874933,
+          "login": "AsmaaKhaledGomaa",
+          "url": "https://github.com/AsmaaKhaledGomaa"
+        },
+        "submitted_at": "2025-07-19T03:23:05Z"
+      }
+    ],
+    "first_approved_at": "2025-07-19T03:22:54Z",
+    "time_to_first_approval_minutes": 0.7166666666666667,
+    "required_approvals_met_at": "2025-07-19T03:22:59Z",
+    "time_to_required_approvals_minutes": 0.8,
     "closed_at": "2025-07-19T03:23:06Z",
     "merged_at": "2025-07-19T03:23:06Z",
     "merged_by": {
@@ -5197,12 +5369,20 @@
           "url": "https://github.com/ahmeddsamii"
         },
         "submitted_at": "2025-07-20T15:14:27Z"
+      },
+      {
+        "reviewer": {
+          "id": 102248144,
+          "login": "BassantM",
+          "url": "https://github.com/BassantM"
+        },
+        "submitted_at": "2025-07-20T16:11:10Z"
       }
     ],
     "first_approved_at": "2025-07-20T15:14:27Z",
     "time_to_first_approval_minutes": 1500.6166666666666,
-    "required_approvals_met_at": null,
-    "time_to_required_approvals_minutes": null,
+    "required_approvals_met_at": "2025-07-20T16:11:10Z",
+    "time_to_required_approvals_minutes": 1557.3333333333333,
     "closed_at": "2025-07-20T16:11:11Z",
     "merged_at": "2025-07-20T16:11:11Z",
     "merged_by": {
@@ -5270,9 +5450,37 @@
     "week": "2025-W29",
     "status": "merged",
     "diff_stats": {
-      "additions": 1899,
+      "additions": 1905,
       "deletions": 1362,
       "changed_files": 88
+    }
+  },
+  {
+    "pr_number": 240,
+    "url": "https://github.com/LondonSquad/Novix/pull/240",
+    "title": "Refactor/replace ktor to retrofit",
+    "opened_at": "2025-07-20T16:47:58Z",
+    "head_ref": "refactor/replace-ktor-to-retrofit",
+    "base_ref": "develop",
+    "creator": {
+      "login": "abdo-essam",
+      "id": 92235360,
+      "url": "https://github.com/abdo-essam"
+    },
+    "approvals": [],
+    "first_approved_at": null,
+    "time_to_first_approval_minutes": null,
+    "required_approvals_met_at": null,
+    "time_to_required_approvals_minutes": null,
+    "closed_at": null,
+    "merged_at": null,
+    "merged_by": null,
+    "week": "2025-W29",
+    "status": "pending",
+    "diff_stats": {
+      "additions": 518,
+      "deletions": 1063,
+      "changed_files": 52
     }
   },
   {
