@@ -2,10 +2,19 @@ package com.london.presentation.features.base
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.london.presentation.screen.base.ConnectionException
+import com.london.presentation.screen.base.EmptyBodyException
 import com.london.presentation.screen.base.ErrorState
+import com.london.presentation.screen.base.HttpStatus
+import com.london.presentation.screen.base.InternetDisconnectedException
+import com.london.presentation.screen.base.ResponseException
+import com.london.presentation.screen.base.UnAuthorizedException
+import com.london.presentation.screen.base.ValidationException
+import com.london.presentation.utils.getValueOf
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
+import kotlinx.coroutines.TimeoutCancellationException
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -17,6 +26,10 @@ import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.takeWhile
 import kotlinx.coroutines.launch
 import timber.log.Timber
+import java.net.ConnectException
+import java.net.SocketTimeoutException
+import java.net.UnknownHostException
+import java.util.concurrent.TimeoutException
 import kotlin.coroutines.CoroutineContext
 import kotlin.coroutines.EmptyCoroutineContext
 
@@ -111,9 +124,34 @@ abstract class BaseViewModel<S, E : Any>(initState: S) : ViewModel() {
         throwable: Throwable,
         onError: suspend (ErrorState) -> Unit,
     ) {
-        when (throwable) {
-            // Handle exceptions
-            else -> ErrorState.RequestFailed(throwable.message)
+        Timber.e(throwable)
+        val message = throwable.message.getValueOf("message")
+
+        val exception = when (throwable) {
+            is ConnectException -> ConnectionException()
+            is SocketTimeoutException,
+            is TimeoutCancellationException -> TimeoutException()
+
+            is UnknownHostException -> InternetDisconnectedException()
+            else -> throwable
+        }
+
+        when (exception) {
+            is UnAuthorizedException -> ErrorState.UnAuthorized
+            is ConnectionException -> ErrorState.NoInternet
+            is InternetDisconnectedException -> ErrorState.NoInternet
+            is EmptyBodyException -> ErrorState.EmptyBody
+            is TimeoutException -> ErrorState.Timeout
+            is ValidationException -> ErrorState.Validation
+            is ResponseException -> {
+                when (exception.code) {
+                    HttpStatus.SC_UNAUTHORIZED -> ErrorState.UnAuthorized
+                    HttpStatus.SC_TOO_MANY_REQUESTS -> ErrorState.RequestFailed("Too many requests")
+                    else -> ErrorState.RequestFailed(exception.message)
+                }
+            }
+
+            else -> ErrorState.RequestFailed(message).also { Timber.e(throwable) }
         }.also { errorState ->
             Timber.e(errorState.toString())
         }.let { onError(it) }

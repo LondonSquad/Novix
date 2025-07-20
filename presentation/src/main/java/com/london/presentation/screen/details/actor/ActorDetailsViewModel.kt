@@ -8,7 +8,6 @@ import com.london.domain.usecase.GetActorTvShowPicksByIdUseCase
 import com.london.presentation.features.base.BaseViewModel
 import com.london.presentation.navigation.Screen
 import com.london.presentation.navigation.getArgs
-import com.london.presentation.screen.base.ErrorState
 import org.koin.android.annotation.KoinViewModel
 
 @KoinViewModel
@@ -38,11 +37,8 @@ class ActorDetailsViewModel(
             },
             onStart = { updateState { copy(isLoading = true) } },
             onSuccess = { images -> updateState { copy(actorImageDetails = images) } },
-            onError = { error ->
-                when (error) {
-                    ErrorState.NoInternet -> updateState { copy(error = error) }
-                    is ErrorState.RequestFailed -> updateState { copy(error = error) }
-                }
+            onError = { errorState ->
+                updateState { copy(error = errorState) }
             },
             onCompleted = { updateState { copy(isLoading = false) } },
         )
@@ -68,11 +64,8 @@ class ActorDetailsViewModel(
                     )
                 }
             },
-            onError = { error ->
-                when (error) {
-                    ErrorState.NoInternet -> updateState { copy(error = error) }
-                    is ErrorState.RequestFailed -> updateState { copy(error = error) }
-                }
+            onError = { errorState ->
+                updateState { copy(error = errorState) }
             },
             onCompleted = { updateState { copy(isLoading = false) } },
         )
@@ -92,11 +85,8 @@ class ActorDetailsViewModel(
                     )
                 }
             },
-            onError = { error ->
-                when (error) {
-                    ErrorState.NoInternet -> updateState { copy(error = error) }
-                    is ErrorState.RequestFailed -> updateState { copy(error = error) }
-                }
+            onError = { errorState ->
+                updateState { copy(error = errorState) }
             },
             onCompleted = { updateState { copy(isLoading = false) } },
         )
@@ -117,11 +107,8 @@ class ActorDetailsViewModel(
                     )
                 }
             },
-            onError = { error ->
-                when (error) {
-                    ErrorState.NoInternet -> updateState { copy(error = error) }
-                    is ErrorState.RequestFailed -> updateState { copy(error = error) }
-                }
+            onError = { errorState ->
+                updateState { copy(error = errorState) }
             },
             onCompleted = { updateState { copy(isLoading = false) } },
             checkSuccess = { actorId != null },
