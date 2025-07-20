@@ -1,6 +1,7 @@
 package com.london.designsystem.component
 
 import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -23,6 +24,7 @@ fun HomeCard(
     onSaveClick: () -> Unit,
     modifier: Modifier = Modifier,
     isSaved: Boolean = false,
+    onCardClick: () -> Unit = {},
     imageDescription: String? = null,
 ) {
 
@@ -30,6 +32,7 @@ fun HomeCard(
         modifier = modifier
             .fillMaxWidth()
             .aspectRatio(158f / 210f)
+            .clickable { onCardClick() }
             .clip(RoundedCornerShape(12.dp))
             .border(
                 width = 1.dp,
