@@ -11,6 +11,7 @@ import com.london.data.datasource.remote.details.tvshowdetails.api.TvShowDetails
 import com.london.data.datasource.remote.reviews.api.ReviewsApiService
 import com.london.data.datasource.remote.search.api.SearchApiService
 import kotlinx.serialization.json.Json
+import okhttp3.Cache
 import okhttp3.Interceptor
 import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.OkHttpClient
@@ -18,6 +19,7 @@ import okhttp3.logging.HttpLoggingInterceptor
 import org.koin.core.annotation.Module
 import org.koin.core.annotation.Single
 import retrofit2.Retrofit
+import java.io.File
 import java.util.concurrent.TimeUnit
 
 @Module
@@ -71,11 +73,18 @@ class NetworkModule {
     @Single
     fun provideOkHttpClient(
         loggingInterceptor: HttpLoggingInterceptor,
-        apiInterceptor: Interceptor
+        apiInterceptor: Interceptor,
+        context: Context
     ): OkHttpClient {
+        val cacheSize = 10L * 1024 * 1024
+        val cache = Cache(
+            directory = File(context.cacheDir, "http_cache"),
+            maxSize = cacheSize
+        )
         return OkHttpClient.Builder()
             .addInterceptor(apiInterceptor)
             .addInterceptor(loggingInterceptor)
+            .cache(cache)
             .connectTimeout(30, TimeUnit.SECONDS)
             .readTimeout(30, TimeUnit.SECONDS)
             .writeTimeout(30, TimeUnit.SECONDS)
