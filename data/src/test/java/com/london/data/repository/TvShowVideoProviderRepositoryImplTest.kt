@@ -2,10 +2,11 @@ package com.london.data.repository
 
 import com.google.common.truth.Truth.assertThat
 import com.london.data.datasource.remote.details.videoprovider.tvshow.TvShowVideoProviderRemote
-import com.london.data.datasource.remote.details.videoprovider.tvshow.TvShowVideoRemote
-import com.london.data.datasource.remote.details.videoprovider.tvshow.TvShowVideoResponse
+import com.london.data.datasource.remote.details.videoprovider.tvshow.model.TvShowVideoRemote
+import com.london.data.datasource.remote.details.videoprovider.tvshow.model.TvShowVideoResponse
 import com.london.data.mapper.videoprovider.tvshow.toTvShowVideo
 import com.london.domain.entity.videoprovider.TvShowVideo
+
 import io.mockk.coEvery
 import io.mockk.mockk
 import kotlinx.coroutines.test.runTest
@@ -103,6 +104,19 @@ class TvShowVideoProviderRepositoryImplTest {
 
     private fun fakeNullTvShowVideosResponse() = TvShowVideoResponse(
         id = 999,
-        tvShow = null
+        tvShow = listOf(
+            TvShowVideoRemote(
+                id = null,
+                iso31661 = null,
+                iso6391 = null,
+                key = null,
+                name = null,
+                official = null,
+                publishedAt = null,
+                site = null,
+                size = null,
+                type = null
+            )
+        )
     )
 }
