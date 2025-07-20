@@ -63,5 +63,7 @@
     <string name="imagr_dot">نقطه</string>
     <string name="actor_photos">صور الممثلين</string>"
     <string name="author_profile">Author profile</string>
+    <string name="login_to_your_account">Login to your account</string>
+    <string name="user_name">User name</string>
 
 </resources>

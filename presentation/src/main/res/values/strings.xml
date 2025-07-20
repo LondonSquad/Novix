@@ -63,4 +63,6 @@
     <string name="gallery">Gallery</string>
     <string name="actor_photos">Actor Photos</string>
     <string name="author_profile">Author profile</string>
+    <string name="login_to_your_account">Login to your account</string>
+    <string name="user_name">User name</string>
 </resources>
