@@ -1,7 +1,6 @@
 package com.london.presentation.screen.details.movieDetalis
 
 import com.london.domain.entity.Actor
-import com.london.domain.entity.moviedatails.Genre
 import com.london.domain.entity.moviedatails.MovieDetails
 import com.london.domain.entity.moviedatails.SimilarMovie
 
@@ -23,10 +22,6 @@ fun mapToUiState(
         isRated = currentUiState.isRated,
         isSaved = currentUiState.isSaved
     )
-}
-
-private fun extractGenreNames(actors: List<Genre>): List<String> {
-    return actors.map { it.name }
 }
 
 private fun mapActorsToUiState(actors: List<Actor>): List<ActorUIState> {

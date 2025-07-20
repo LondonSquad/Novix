@@ -46,6 +46,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.paging.LoadState
 import androidx.paging.compose.collectAsLazyPagingItems
 import com.london.designsystem.component.EmptySearchLayout
@@ -66,6 +67,7 @@ import com.london.presentation.composables.MoviesLayOut
 import com.london.presentation.composables.TriangleBlurredShape
 import com.london.presentation.composables.TvShowLayOut
 import com.london.presentation.composables.filterbottomsheet.FilterBottomSheet
+import com.london.presentation.utils.Listen
 import com.london.presentation.utils.ResultOrEmpty
 import org.koin.androidx.compose.koinViewModel
 
@@ -76,17 +78,23 @@ fun SearchScreen(
     onNavigateToTvShowDetails: (Int) -> Unit = { },
     onNavigateToMovieDetails: (Int) -> Unit = { }
 ) {
-    val state by viewModel.uiState.collectAsState()
+    val state by viewModel.state.collectAsStateWithLifecycle()
+    val effect by viewModel.effect.collectAsState(initial = null)
     val keyboardController = LocalSoftwareKeyboardController.current
+
+    effect?.Listen { currentEffect ->
+        when (currentEffect) {
+            is SearchEffect.ActorNavigation -> onNavigateToActorDetails(currentEffect.actorId)
+            is SearchEffect.MovieNavigation -> onNavigateToMovieDetails(currentEffect.movieId)
+            is SearchEffect.TvNavigation -> onNavigateToTvShowDetails(currentEffect.tvId)
+        }
+    }
 
     SearchScreenContent(
         state = state,
         interactionListener = viewModel,
         keyboardController = keyboardController,
         viewModel = viewModel,
-        onNavigateToTvShowDetails = onNavigateToTvShowDetails,
-        onNavigateToActorDetails = onNavigateToActorDetails,
-        onNavigateToMovieDetails = onNavigateToMovieDetails
     )
 }
 
@@ -96,9 +104,6 @@ fun SearchScreenContent(
     interactionListener: SearchInteractions,
     viewModel: SearchViewModel,
     keyboardController: SoftwareKeyboardController?,
-    onNavigateToActorDetails: (Int) -> Unit,
-    onNavigateToTvShowDetails: (Int) -> Unit,
-    onNavigateToMovieDetails: (Int) -> Unit,
 ) {
     val interactionSource = remember { MutableInteractionSource() }
     var showFilterBottomSheet by remember { mutableStateOf(false) }
@@ -152,8 +157,8 @@ fun SearchScreenContent(
                             state = state,
                             interactionListener = interactionListener,
                             viewModel = viewModel,
-                            onNavigateToTvShowDetails = onNavigateToTvShowDetails,
-                            onNavigateToMovieDetails = onNavigateToMovieDetails
+                            onNavigateToTvShowDetails = interactionListener::onTvShowClick,
+                            onNavigateToMovieDetails = interactionListener::onMovieClick
                         )
                     })
             }, content = {
@@ -181,7 +186,7 @@ fun SearchScreenContent(
                                     onMovieClick = {
                                         viewModel.addToRecentViewed(it.toRecentViewed())
                                         viewModel.onClickMovie(it.genreIds)
-                                        onNavigateToMovieDetails(it.id)
+                                        interactionListener.onMovieClick(it.id)
                                     },
                                     modifier = Modifier.padding(horizontal = 16.dp)
                                 )
@@ -208,7 +213,7 @@ fun SearchScreenContent(
                                         it.genres.forEach { genreId ->
                                             viewModel.incrementGenreInterest(genreId, "tv")
                                         }
-                                        onNavigateToTvShowDetails(it.id)
+                                        viewModel.onTvShowClick(it.id)
                                     })
                             })
                     }
@@ -226,7 +231,7 @@ fun SearchScreenContent(
                             content = {
                                 ActorsLayout(
                                     actorsUis = actorsLazyList, onActorClick = {
-                                        onNavigateToActorDetails(it.id)
+                                        interactionListener.onActorClick(it.id)
                                     })
                             })
                     }

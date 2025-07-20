@@ -1,4 +1,5 @@
 @file:KoverIgnore
+
 package com.london.data.mapper.tvshowdetails
 
 import com.london.data.datasource.remote.details.tvshowdetails.model.tvshowepisode.EpisodeCrewMember
@@ -20,9 +21,9 @@ import com.london.domain.entity.tvshowdetails.episode.TvShowEpisodesEntity
 @KoverIgnore
 fun TvShowEpisodesRemoteResponse.toTvShowEpisodesEntity(): TvShowEpisodesEntity {
     return TvShowEpisodesEntity(
-        id = id,
+        id = id.orEmpty(),
         airDate = airDate,
-        episodes = episodes.map { it.toTvShowEpisodeBySeasonEntity() }
+        episodes = episodes?.map { it.toTvShowEpisodeBySeasonEntity() }.orEmpty()
     )
 }
 
@@ -30,20 +31,20 @@ fun TvShowEpisodesRemoteResponse.toTvShowEpisodesEntity(): TvShowEpisodesEntity 
 fun TvShowEpisodeBySeason.toTvShowEpisodeBySeasonEntity(): TvShowEpisodeBySeasonEntity {
     return TvShowEpisodeBySeasonEntity(
         airDate = airDate,
-        episodeNumber = episodeNumber,
-        episodeType = episodeType,
-        id = id,
-        name = name,
-        overview = overview,
-        productionCode = productionCode,
+        episodeNumber = episodeNumber.orZero(),
+        episodeType = episodeType.orEmpty(),
+        id = id.orZero(),
+        name = name.orEmpty(),
+        overview = overview.orEmpty(),
+        productionCode = productionCode.orEmpty(),
         runtime = runtime,
-        seasonNumber = seasonNumber,
-        showId = showId,
+        seasonNumber = seasonNumber.orZero(),
+        showId = showId.orZero(),
         stillUrl = stillPath.asImageUrlOrEmpty(),
-        voteAverage = voteAverage,
-        voteCount = voteCount,
-        crew = crew.map { it.toEpisodeCrewMemberEntity() },
-        episodeGuestStars = episodeGuestStars.map { it.toEpisodeGuestStarEntity() }
+        voteAverage = voteAverage.orZero(),
+        voteCount = voteCount.orZero(),
+        crew = crew?.map { it.toEpisodeCrewMemberEntity() }.orEmpty(),
+        episodeGuestStars = episodeGuestStars?.map { it.toEpisodeGuestStarEntity() }.orEmpty()
     )
 }
 
@@ -84,26 +85,26 @@ fun EpisodeGuestStar.toEpisodeGuestStarEntity(): EpisodeGuestStarEntity {
 @KoverIgnore
 fun TvShowEpisodeResponse.toTvShowEpisodeEntity(): TvShowEpisodeByIdEntity {
     return TvShowEpisodeByIdEntity(
-        airDate = this.airDate,
-        episodeNumber = this.episodeNumber.orZero(),
-        seasonNumber = this.seasonNumber.orZero(),
-        episodeTypes = this.episodeType.orEmpty(),
-        tvShowId = this.id.orZero(),
-        name = this.name.orEmpty(),
-        overview = this.overview.orEmpty(),
-        stillPath = this.stillPath.orEmpty(),
-        voteAverage = this.voteAverage.orZero(),
-        voteCount = this.voteCount.orZero(),
-        guestStars = this.guestStars?.map { it.toActorEntity() }.orEmpty(),
-        id = this.id.orZero()
+        airDate = airDate,
+        episodeNumber = episodeNumber.orZero(),
+        seasonNumber = seasonNumber.orZero(),
+        episodeTypes = episodeType.orEmpty(),
+        tvShowId = id.orZero(),
+        name = name.orEmpty(),
+        overview = overview.orEmpty(),
+        stillPath = stillPath.orEmpty(),
+        voteAverage = voteAverage.orZero(),
+        voteCount = voteCount.orZero(),
+        guestStars = guestStars?.map { it.toActorEntity() }.orEmpty(),
+        id = id.orZero()
     )
 }
 
 fun EpisodeGuestStar.toActorEntity(): Actor {
     return Actor(
-        id = this.id.orZero(),
-        name = this.name.orEmpty(),
-        profilePicture = this.profilePath.asImageUrlOrEmpty(),
-        characterName = this.character.orEmpty()
+        id = id.orZero(),
+        name = name.orEmpty(),
+        profilePicture = profilePath.asImageUrlOrEmpty(),
+        characterName = character.orEmpty()
     )
 }

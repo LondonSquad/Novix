@@ -62,7 +62,8 @@
     <string name="gallery">المعرض</string>
     <string name="imagr_dot">نقطه</string>
     <string name="actor_photos">صور الممثلين</string>"
-    <string name="author_profile">Author profile</string>
+    <string name="author_profile">صورة الممثل</string>
+    <string name="tv_show_image">صور مسلسلات</string>
     <string name="login_to_your_account">Login to your account</string>
     <string name="user_name">User name</string>
 

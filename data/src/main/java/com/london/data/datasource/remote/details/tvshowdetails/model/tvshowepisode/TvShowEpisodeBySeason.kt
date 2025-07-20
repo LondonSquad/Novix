@@ -8,31 +8,31 @@ data class TvShowEpisodeBySeason(
     @SerialName("air_date")
     val airDate: String?,
     @SerialName("episode_number")
-    val episodeNumber: Int,
+    val episodeNumber: Int?,
     @SerialName("episode_type")
-    val episodeType: String,
+    val episodeType: String?,
     @SerialName("id")
-    val id: Int,
+    val id: Int?,
     @SerialName("name")
-    val name: String,
+    val name: String?,
     @SerialName("overview")
-    val overview: String,
+    val overview: String?,
     @SerialName("production_code")
-    val productionCode: String,
+    val productionCode: String?,
     @SerialName("runtime")
     val runtime: Int?,
     @SerialName("season_number")
-    val seasonNumber: Int,
+    val seasonNumber: Int?,
     @SerialName("show_id")
-    val showId: Int,
+    val showId: Int?,
     @SerialName("still_path")
     val stillPath: String?,
     @SerialName("vote_average")
-    val voteAverage: Double,
+    val voteAverage: Double?,
     @SerialName("vote_count")
-    val voteCount: Int,
+    val voteCount: Int?,
     @SerialName("crew")
-    val crew: List<EpisodeCrewMember>,
+    val crew: List<EpisodeCrewMember>?,
     @SerialName("guest_stars")
-    val episodeGuestStars: List<EpisodeGuestStar>
+    val episodeGuestStars: List<EpisodeGuestStar>?
 )

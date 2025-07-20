@@ -2,7 +2,7 @@ package com.london.data.repository
 
 import com.google.common.truth.Truth.assertThat
 import com.london.data.datasource.local.LocalDataSource
-import com.london.data.datasource.local.dao.GenreInterestDao
+import com.london.data.datasource.local.dao.search.GenreInterestDao
 import com.london.data.datasource.local.model.GenreInterestEntity
 import com.london.data.datasource.local.model.PersonDtoLocal
 import com.london.data.datasource.local.model.SearchActorsLocal
@@ -433,7 +433,11 @@ class SearchRepositoryImplTest {
                     title = "",
                     video = false,
                     voteAverage = 8.0,
-                    voteCount = 0
+                    voteCount = 0,
+                    originCountry = listOf(""),
+                    originalName = "",
+                    firstAirDate = "",
+                    name = "",
                 )
             ),
             totalPages = 1,

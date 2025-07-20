@@ -74,6 +74,8 @@ dependencies {
 
     // Android test dependencies
     androidTestImplementation(libs.bundles.android.testing)
+
+    implementation(libs.timber)
 }
 ksp {
     arg("KOIN_CONFIG_CHECK", "true")

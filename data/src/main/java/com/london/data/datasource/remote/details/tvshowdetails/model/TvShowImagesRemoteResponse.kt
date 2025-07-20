@@ -6,13 +6,13 @@ import kotlinx.serialization.Serializable
 @Serializable
 data class TvShowImagesRemoteResponse(
     @SerialName("backdrops")
-    val backdrops: List<ImageItem>,
+    val backdrops: List<ImageItem>?,
     @SerialName("id")
-    val id: Int,
+    val id: Int?,
     @SerialName("logos")
-    val logos: List<ImageItem>,
+    val logos: List<ImageItem>?,
     @SerialName("posters")
-    val posters: List<ImageItem>
+    val posters: List<ImageItem>?
 )
 
 @Serializable

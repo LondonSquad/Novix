@@ -17,10 +17,12 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.london.designsystem.component.HomeCard
 import com.london.designsystem.component.TopBar
 import com.london.designsystem.theme.NovixTheme
 import com.london.presentation.R
+import com.london.presentation.utils.Listen
 import org.koin.androidx.compose.koinViewModel
 
 @Composable
@@ -30,23 +32,29 @@ fun TopMoviesPicksScreen(
     onMovieClick: (Int) -> Unit,
     onBackClick: () -> Unit,
 ) {
-    val state by viewModel.uiState.collectAsState()
+    val uiState by viewModel.state.collectAsStateWithLifecycle()
+    val effects by viewModel.effect.collectAsState(null)
+
+    effects?.Listen { currentEffect ->
+        when (currentEffect) {
+            TopMoviesPicksEffectUiState.NavigateBack -> onBackClick()
+            is TopMoviesPicksEffectUiState.NavigationToMovieDetails ->
+                onMovieClick(currentEffect.movieId)
+        }
+    }
+
     TopMoviesPicksContent(
-        state = state,
-        interactions = viewModel,
+        state = uiState,
+        topMoviesPicksContract = viewModel,
         modifier = modifier,
-        onMovieClick = onMovieClick,
-        onBackClick = onBackClick
     )
 }
 
 @Composable
 private fun TopMoviesPicksContent(
     state: TopMoviesPicksUiState,
-    interactions: TopMoviesPicksInteractions,
+    topMoviesPicksContract: TopMoviesPicksContract,
     modifier: Modifier = Modifier,
-    onMovieClick: (Int) -> Unit,
-    onBackClick: () -> Unit,
 ) {
     LazyVerticalGrid(
         columns = GridCells.Fixed(2),
@@ -63,15 +71,15 @@ private fun TopMoviesPicksContent(
             TopBar(
                 modifier = Modifier.statusBarsPadding(),
                 title = stringResource(R.string.top_movies_picks),
-                onBackClick = onBackClick
+                onBackClick = topMoviesPicksContract::onClickBack
             )
         }
         items(state.movieDetails.cast) { item ->
             HomeCard(
                 imageUrl = item.posterUrl,
                 isSaved = false,
-                onSaveClick = { interactions.onSaveMovie(item.id) },
-                modifier = Modifier.clickable{ onMovieClick(item.id) }
+                onSaveClick = { topMoviesPicksContract.onSaveMovie(item.id) },
+                modifier = Modifier.clickable { topMoviesPicksContract.onSaveMovie(item.id) }
             )
         }
     }

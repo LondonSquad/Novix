@@ -3,6 +3,8 @@ package com.london.data.mapper
 import com.london.data.datasource.remote.ApiResponse
 import com.london.data.datasource.remote.reviews.model.AuthorDetailsResponse
 import com.london.data.datasource.remote.reviews.model.ReviewResponse
+import com.london.data.utils.asImageUrlOrEmpty
+import com.london.data.utils.orZero
 import com.london.domain.entity.PagedFetchResponse
 import com.london.domain.entity.review.AuthorDetails
 import com.london.domain.entity.review.ReviewEntity
@@ -23,13 +25,13 @@ fun ReviewResponse.toReviewEntity(): ReviewEntity =
         createdAt = createdAt.orEmpty(),
         id = id.orEmpty(),
         updatedAt = updatedAt.orEmpty(),
-        url = url.orEmpty()
+        url = url.asImageUrlOrEmpty()
     )
 
 fun AuthorDetailsResponse.toAuthorDetails(): AuthorDetails =
     AuthorDetails(
         name = this.authorName.orEmpty(),
         username = this.authorUsername.orEmpty(),
-        profileUrl = authorPictureUrl ?: "",
-        rating = this.rating ?: 0.0
+        profileUrl = authorPictureUrl.asImageUrlOrEmpty(),
+        rating = this.rating.orZero()
     )
