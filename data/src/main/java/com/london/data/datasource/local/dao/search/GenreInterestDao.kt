@@ -1,4 +1,4 @@
-package com.london.data.datasource.local.dao
+package com.london.data.datasource.local.dao.search
 
 import androidx.room.Dao
 import androidx.room.Insert

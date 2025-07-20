@@ -4,20 +4,22 @@ import com.london.data.datasource.local.DeleteException
 import com.london.data.datasource.local.GetException
 import com.london.data.datasource.local.InsertException
 import com.london.data.datasource.local.UpdateException
-import com.london.data.datasource.local.dao.SearchActorsDao
-import com.london.data.datasource.local.dao.SearchMoviesDao
-import com.london.data.datasource.local.dao.SearchTvShowDao
-import com.london.data.datasource.local.search.ActorLocalDataSourceImpl
-import com.london.data.datasource.local.search.MovieLocalDataSourceImpl
-import com.london.data.datasource.local.search.TvShowLocalDataSourceImpl
+import com.london.data.datasource.local.dao.search.SearchActorsDao
+import com.london.data.datasource.local.dao.search.SearchMoviesDao
+import com.london.data.datasource.local.dao.search.SearchTvShowDao
 import com.london.data.datasource.local.model.SearchActorsLocal
 import com.london.data.datasource.local.model.SearchMoviesLocal
 import com.london.data.datasource.local.model.SearchTvShowLocal
+import com.london.data.datasource.local.search.ActorLocalDataSourceImpl
+import com.london.data.datasource.local.search.MovieLocalDataSourceImpl
+import com.london.data.datasource.local.search.TvShowLocalDataSourceImpl
 import com.london.data.datasource.util.executeGetByQuery
+import com.london.data.datasource.util.executeGetByQueryAndPage
 import com.london.data.datasource.util.generateHash
 import io.mockk.Runs
 import io.mockk.coEvery
 import io.mockk.coVerify
+import io.mockk.every
 import io.mockk.just
 import io.mockk.mockk
 import io.mockk.unmockkAll
@@ -531,6 +533,124 @@ class LocalDataSourceImplTest {
         coVerify(exactly = 1) {
             searchMoviesDao.getSearchByQuery(testQuery.generateHash())
         }
-        // endregion
+    }
+
+    @Test
+    fun `init should clean up expired TV shows`() = runTest {
+        // Given
+        val currentTime = System.currentTimeMillis()
+        val expiredTime = 4000000
+        val expiredItem = mockk<SearchTvShowLocal> {
+            every { date } returns currentTime - expiredTime
+        }
+
+        coEvery { searchTvShowDao.getAll() } returns listOf(expiredItem)
+        coEvery { searchTvShowDao.delete(expiredItem) } just Runs
+
+        // When
+        tvShowLocalDataSource = TvShowLocalDataSourceImpl(searchTvShowDao)
+
+        // Then
+        coVerify(exactly = 1) { searchTvShowDao.delete(expiredItem) }
+    }
+
+    @Test
+    fun `init should clean up expired movie`() = runTest {
+        // Given
+        val currentTime = System.currentTimeMillis()
+
+        val expiredItem = mockk<SearchMoviesLocal> {
+            every { date } returns currentTime - 4000000
+        }
+        coEvery { searchMoviesDao.getAll() } returns listOf(expiredItem)
+        coEvery { searchMoviesDao.delete(expiredItem) } just Runs
+
+        // When
+        movieLocalDataSource = MovieLocalDataSourceImpl(searchMoviesDao)
+
+        // Then
+        coVerify(exactly = 1) { searchMoviesDao.delete(expiredItem) }
+    }
+
+    @Test
+    fun `init should clean up expired Actors`() = runTest {
+        // Given
+        val currentTime = System.currentTimeMillis()
+
+        val expiredItem = mockk<SearchActorsLocal> {
+            every { date } returns currentTime - 4000000
+        }
+        coEvery { searchActorsDao.getAll() } returns listOf(expiredItem)
+        coEvery { searchActorsDao.delete(expiredItem) } just Runs
+
+        // When
+        actorLocalDataSource = ActorLocalDataSourceImpl(searchActorsDao)
+
+        // Then
+        coVerify(exactly = 1) { searchActorsDao.delete(expiredItem) }
+    }
+
+    @Test
+    fun `getActorByQueryAndPage should return null when dao throws exception`() = runTest {
+        // Given
+        val testQuery = "test query"
+        val testPage = 1
+        coEvery {
+            searchActorsDao.executeGetByQueryAndPage(
+                testQuery.generateHash(),
+                testPage
+            )
+        } throws RuntimeException(
+            "Database error"
+        )
+
+        // When
+        val result = actorLocalDataSource.getByQueryAndPage(testQuery, testPage)
+
+        // Then
+        assertNull(result)
+        coVerify(exactly = 1) {
+            searchActorsDao.executeGetByQueryAndPage(
+                testQuery.generateHash(),
+                testPage
+            )
+        }
+    }
+
+    @Test
+    fun `getByQueryAndPage for TV shows returns null when database throws exception`() = runTest {
+        // Given
+        coEvery { searchTvShowDao.executeGetByQueryAndPage(any(), any()) } throws RuntimeException()
+
+        // When
+        val result = tvShowLocalDataSource.getByQueryAndPage("query", 1)
+
+        // Then
+        assertNull(result)
+    }
+
+
+    @Test
+    fun `getByQueryAndPage for actors returns null when database throws exception`() = runTest {
+        // Given
+        coEvery { searchActorsDao.executeGetByQueryAndPage(any(), any()) } throws RuntimeException()
+
+        // When
+        val result = actorLocalDataSource.getByQueryAndPage("query", 1)
+
+        // Then
+        assertNull(result)
+    }
+
+    @Test
+    fun `getByQueryAndPage for movies returns null when database throws exception`() = runTest {
+        // Given
+        coEvery { searchMoviesDao.executeGetByQueryAndPage(any(), any()) } throws RuntimeException()
+
+        // When
+        val result = movieLocalDataSource.getByQueryAndPage("query", 1)
+
+        // Then
+        assertNull(result)
     }
 }

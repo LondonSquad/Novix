@@ -58,6 +58,17 @@ class RecentViewedRepositoryImplTest {
         }
     }
 
+    @Test
+    fun `delete should call delete with mapped RecentViewedLocal`() = runTest {
+        // given
+        coEvery { recentViewedLocalDataSource.delete(any()) } just Runs
+        // when
+        recentViewedRepository.delete(entity)
+        // then
+        coVerify(exactly = 1) {
+            recentViewedLocalDataSource.delete(local)
+        }
+    }
     companion object {
         val entity = RecentViewed(
             id = 1, imageUrl = "", type = MediaType.Movie, viewDate = 1234567L

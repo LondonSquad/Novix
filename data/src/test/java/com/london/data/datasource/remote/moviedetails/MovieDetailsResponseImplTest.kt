@@ -121,11 +121,13 @@ class MovieDetailsResponseImplTest {
 
         // Then
         assertThat(result.page).isEqualTo(expectedResponse.page)
-        assertThat(result.similarMovieRemotes.size).isEqualTo(expectedResponse.similarMovieRemotes.size)
+        assertThat(result.similarMovieRemotes?.size).isEqualTo(expectedResponse.similarMovieRemotes?.size)
         assertThat(result.totalPages).isEqualTo(expectedResponse.totalPages)
         assertThat(result.totalResults).isEqualTo(expectedResponse.totalResults)
-        if (result.similarMovieRemotes.isNotEmpty()) {
-            assertThat(result.similarMovieRemotes[0].title).isEqualTo("The Matrix")
+        if (!result.similarMovieRemotes.isNullOrEmpty()) {
+            result.similarMovieRemotes?.let { similarMovies ->
+                assertThat(similarMovies[0].title).isEqualTo("The Matrix")
+            }
         }
     }
 
@@ -217,9 +219,9 @@ class MovieDetailsResponseImplTest {
 
         // Then
         assertThat(result.id).isEqualTo(expectedResponse.id)
-        assertThat(result.backdrops.size).isEqualTo(expectedResponse.backdrops?.size)
-        assertThat(result.posters.size).isEqualTo(expectedResponse.posters?.size)
-        assertThat(result.logos.size).isEqualTo(expectedResponse.logos?.size)
+        assertThat(result.backdrops?.size).isEqualTo(expectedResponse.backdrops?.size)
+        assertThat(result.posters?.size).isEqualTo(expectedResponse.posters?.size)
+        assertThat(result.logos?.size).isEqualTo(expectedResponse.logos?.size)
     }
 
     @Test
