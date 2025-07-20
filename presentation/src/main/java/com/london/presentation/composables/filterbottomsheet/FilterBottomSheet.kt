@@ -64,9 +64,9 @@ fun FilterBottomSheet(
                 onDismissRequest()
             }
         },
-        containerColor = NovixTheme.colors.surface
+        containerColor = NovixTheme.colors.surface,
+        skipPartiallyExpanded=isSheetHidden
     ) {
-
         Box(
             modifier = Modifier
                 .fillMaxWidth()
