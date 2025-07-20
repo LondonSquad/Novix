@@ -303,7 +303,7 @@ fun MovieDetailsContent(
                             .padding(top = 12.dp),
                         horizontalArrangement = Arrangement.spacedBy(12.dp)
                     ) {
-                        rowItems.forEachIndexed { index, movie ->
+                        rowItems.forEachIndexed { _, movie ->
                             HomeCard(
                                 imageUrl = movie.image,
                                 isSaved = movie.isSaved,
@@ -313,9 +313,7 @@ fun MovieDetailsContent(
                                 modifier = Modifier
                                     .weight(1f)
                                     .clickable {
-                                        movieDetailsContract.onMovieClick(
-                                            state.similarMovies[index].movieId
-                                        )
+                                        movieDetailsContract.onMovieClick(movie.movieId)
                                     }
                             )
                         }
