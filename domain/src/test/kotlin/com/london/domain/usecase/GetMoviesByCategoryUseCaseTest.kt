@@ -45,7 +45,6 @@ class GetMoviesByCategoryUseCaseTest {
 
     private companion object {
         const val CATEGORY_ID = 1
-        const val LANGUAGE = "en-US"
         const val PAGE_NUMBER = 1
         val movie = Movie(
             id = 1,
