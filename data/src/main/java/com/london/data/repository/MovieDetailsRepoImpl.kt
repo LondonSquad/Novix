@@ -4,7 +4,7 @@ import com.london.data.datasource.remote.details.moviedetails.GetMovieCastExcept
 import com.london.data.datasource.remote.details.moviedetails.GetMovieDetailsException
 import com.london.data.datasource.remote.details.moviedetails.GetMovieImagesException
 import com.london.data.datasource.remote.details.moviedetails.GetSimilarMoviesException
-import com.london.data.datasource.remote.details.moviedetails.MovieDetailsRemote
+import com.london.data.datasource.remote.details.moviedetails.MovieDetailsRemoteDataSource
 import com.london.data.datasource.remote.details.moviedetails.runOrThrow
 import com.london.data.mapper.moviedetails.toEntity
 import com.london.data.mapper.moviedetails.toGenre
@@ -18,12 +18,12 @@ import org.koin.core.annotation.Single
 
 @Single
 class MovieDetailsRepoImpl(
-    private val movieDetailsRemote: MovieDetailsRemote,
+    private val movieDetailsRemoteDataSource: MovieDetailsRemoteDataSource,
 ) : MovieDetailsRepository {
     override suspend fun getMovieById(id: Int): MovieDetails =
         runOrThrow(
             block = {
-                val movieDetailsRemote = movieDetailsRemote.getMovieDetails(id)
+                val movieDetailsRemote = movieDetailsRemoteDataSource.getMovieDetails(id)
                 movieDetailsRemote.toEntity(
                     genres = movieDetailsRemote.genreRemote?.map { it.toGenre() } ?: emptyList(),
                     movieImages = getMovieImagesById(id),
@@ -36,7 +36,7 @@ class MovieDetailsRepoImpl(
     override suspend fun getSimilarMoviesById(id: Int): List<SimilarMovie> =
         runOrThrow(
             block = {
-                val similarMoviesRemote = movieDetailsRemote.getSimilarMovies(id)
+                val similarMoviesRemote = movieDetailsRemoteDataSource.getSimilarMovies(id)
                 similarMoviesRemote.similarMovieRemotes.map { it.toSimilarMovie() }
             },
             error = { cause -> GetSimilarMoviesException(cause) }
@@ -45,7 +45,7 @@ class MovieDetailsRepoImpl(
     override suspend fun getMovieImagesById(id: Int): List<String> =
         runOrThrow(
             block = {
-                val images = movieDetailsRemote.getMovieImages(id)
+                val images = movieDetailsRemoteDataSource.getMovieImages(id)
                 when {
                     images.backdrops.isNotEmpty() -> images.backdrops.map { it.filePath.asImageUrlOrEmpty() }
                     images.posters.isNotEmpty() -> images.posters.map { it.filePath.asImageUrlOrEmpty() }
@@ -59,7 +59,7 @@ class MovieDetailsRepoImpl(
     override suspend fun getMovieCastById(id: Int): List<Actor> =
         runOrThrow(
             block = {
-                val movieCast = movieDetailsRemote.getMovieCast(id)
+                val movieCast = movieDetailsRemoteDataSource.getMovieCast(id)
                 movieCast.actorRemote?.map { it.toEntity() } ?: emptyList()
             },
             error = { cause -> GetMovieCastException(cause) }

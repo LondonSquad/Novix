@@ -3,52 +3,107 @@ package com.london.data.di
 import android.content.Context
 import android.util.Log
 import com.london.data.BuildConfig
-import io.ktor.client.HttpClient
-import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
-import io.ktor.client.plugins.defaultRequest
-import io.ktor.client.plugins.logging.LogLevel
-import io.ktor.client.plugins.logging.Logger
-import io.ktor.client.plugins.logging.Logging
-import io.ktor.client.request.header
-import io.ktor.serialization.kotlinx.json.json
-import kotlinx.serialization.json.Json
+import com.london.data.datasource.remote.details.actordetails.api.ActorDetailsApiService
+import com.london.data.datasource.remote.details.moviedetails.api.MovieDetailsApiService
+import com.london.data.datasource.remote.details.tvshowdetails.api.TvShowDetailsApiService
+import com.london.data.datasource.remote.reviews.api.ReviewsApiService
+import com.london.data.datasource.remote.search.SearchRemoteDataSource
+import com.london.data.datasource.remote.search.SearchRemoteDataSourceImpl
+import com.london.data.datasource.remote.search.api.SearchApiService
+import okhttp3.Interceptor
+import okhttp3.OkHttpClient
+import okhttp3.logging.HttpLoggingInterceptor
 import org.koin.core.annotation.Module
 import org.koin.core.annotation.Single
+import retrofit2.Retrofit
+import retrofit2.converter.gson.GsonConverterFactory
+import java.util.concurrent.TimeUnit
 
 @Module
 class NetworkModule {
-    @Single
-    fun provideKtorClient(
-        context: Context
-    ): HttpClient = HttpClient {
-        install(ContentNegotiation) {
-            json(
-                Json {
-                    ignoreUnknownKeys = true
-                    isLenient = true
-                }
-            )
-        }
-        defaultRequest {
-            url(urlString = BuildConfig.BASE_URL)
-            url.parameters.append("api_key", BuildConfig.API_KEY)
 
-            header(
-                key = "language",
-                value = context.resources.configuration.locales[0].language
-            )
-            header(
-                key = "Authorization",
-                value = "Bearer ${BuildConfig.AUTHORIZATION_KEY}"
-            )
-        }
-        install(Logging) {
-            logger = object : Logger {
-                override fun log(message: String) {
-                    Log.i("DEBUGGING", message)
-                }
+    @Single
+    fun provideHttpLoggingInterceptor(): HttpLoggingInterceptor {
+        return HttpLoggingInterceptor { message ->
+            Log.i("DEBUGGING", message)
+        }.apply {
+            level = if (BuildConfig.DEBUG) {
+                HttpLoggingInterceptor.Level.BODY
+            } else {
+                HttpLoggingInterceptor.Level.NONE
             }
-            level = LogLevel.ALL
         }
     }
+
+    @Single
+    fun provideApiInterceptor(context: Context): Interceptor {
+        return Interceptor { chain ->
+            val originalRequest = chain.request()
+            val originalUrl = originalRequest.url
+
+            val newUrl = originalUrl.newBuilder()
+                .addQueryParameter("api_key", BuildConfig.API_KEY)
+                .build()
+
+            val newRequest = originalRequest.newBuilder()
+                .url(newUrl)
+                .addHeader("language", context.resources.configuration.locales[0].language)
+                .addHeader("Authorization", "Bearer ${BuildConfig.AUTHORIZATION_KEY}")
+                .build()
+
+            chain.proceed(newRequest)
+        }
+    }
+
+    @Single
+    fun provideOkHttpClient(
+        loggingInterceptor: HttpLoggingInterceptor,
+        apiInterceptor: Interceptor
+    ): OkHttpClient {
+        return OkHttpClient.Builder()
+            .addInterceptor(apiInterceptor)
+            .addInterceptor(loggingInterceptor)
+            .connectTimeout(30, TimeUnit.SECONDS)
+            .readTimeout(30, TimeUnit.SECONDS)
+            .writeTimeout(30, TimeUnit.SECONDS)
+            .build()
+    }
+
+    @Single
+    fun provideRetrofit(okHttpClient: OkHttpClient): Retrofit {
+        return Retrofit.Builder()
+            .baseUrl(BuildConfig.BASE_URL)
+            .client(okHttpClient)
+            .addConverterFactory(GsonConverterFactory.create())
+            .build()
+    }
+
+    @Single
+    fun provideSearchApiService(retrofit: Retrofit): SearchApiService {
+        return retrofit.create(SearchApiService::class.java)
+    }
+
+    @Single
+    fun provideSearchRemoteDataSource(
+        searchApiService: SearchApiService
+    ): SearchRemoteDataSource {
+        return SearchRemoteDataSourceImpl(searchApiService)
+    }
+
+    @Single
+    fun provideMovieDetailsApiService(retrofit: Retrofit): MovieDetailsApiService =
+        retrofit.create(MovieDetailsApiService::class.java)
+
+    @Single
+    fun provideTvShowDetailsApiService(retrofit: Retrofit): TvShowDetailsApiService =
+        retrofit.create(TvShowDetailsApiService::class.java)
+
+    @Single
+    fun provideActorDetailsApiService(retrofit: Retrofit): ActorDetailsApiService =
+        retrofit.create(ActorDetailsApiService::class.java)
+
+    @Single
+    fun provideReviewsApiService(retrofit: Retrofit): ReviewsApiService =
+        retrofit.create(ReviewsApiService::class.java)
+
 }
