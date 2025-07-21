@@ -11,7 +11,7 @@ import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
-import androidx.compose.material3.MaterialTheme
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -93,7 +93,7 @@ private fun Content(
                             contentDescription = stringResource(R.string.actor_photos),
                             modifier = Modifier
                                 .size(width = 104.dp, height = 101.dp)
-                                .clip(MaterialTheme.shapes.medium),
+                                .clip(RoundedCornerShape(4.dp)),
                             contentScale = ContentScale.Crop,
                             loadingContent = { CircularLoading() },
                             errorContent = { ErrorImage() }

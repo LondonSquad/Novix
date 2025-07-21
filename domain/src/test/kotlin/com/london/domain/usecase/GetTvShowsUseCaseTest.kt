@@ -29,14 +29,12 @@ class GetTvShowsUseCaseTest {
         coEvery {
             searchRepository.searchForTvShows(
                 NAME,
-                LANGUAGE,
                 PAGE_NUMBER
             )
         } returns pagedFetchResponse
         //when
         val result = getTvShowsUseCase(
             NAME,
-            LANGUAGE,
             PAGE_NUMBER
         )
         //then
@@ -49,7 +47,6 @@ class GetTvShowsUseCaseTest {
         coEvery {
             searchRepository.searchForTvShows(
                 NAME,
-                LANGUAGE,
                 PAGE_NUMBER
             )
         } throws TvShowSearchFailedException()
@@ -57,7 +54,6 @@ class GetTvShowsUseCaseTest {
         assertThrows<TvShowSearchFailedException> {
             getTvShowsUseCase(
                 NAME,
-                LANGUAGE,
                 PAGE_NUMBER
             )
         }
@@ -65,7 +61,6 @@ class GetTvShowsUseCaseTest {
 
     private companion object {
         const val NAME = "Tv Tv"
-        const val LANGUAGE = "en-US"
         const val PAGE_NUMBER = 1
         val TV_SHOW = TvShow(
             id = 1,

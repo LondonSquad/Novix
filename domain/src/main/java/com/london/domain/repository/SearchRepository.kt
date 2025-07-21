@@ -9,25 +9,21 @@ import com.london.domain.entity.TvShow
 interface SearchRepository {
     suspend fun searchForMovies(
         name: String,
-        language: String,
         pageNumber: Int
     ): PagedFetchResponse<Movie>
 
     suspend fun searchForTvShows(
         name: String,
-        language: String,
         pageNumber: Int
     ): PagedFetchResponse<TvShow>
 
     suspend fun searchForActors(
         name: String,
-        language: String,
         pageNumber: Int
     ): PagedFetchResponse<Actor>
 
     suspend fun searchForMoviesByCategory(
         categoryId: Int,
-        language: String,
         pageNumber: Int
     ): PagedFetchResponse<Movie>
 

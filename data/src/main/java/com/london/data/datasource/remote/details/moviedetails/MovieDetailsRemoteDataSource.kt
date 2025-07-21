@@ -5,7 +5,7 @@ import com.london.data.datasource.remote.details.moviedetails.model.moviedetails
 import com.london.data.datasource.remote.details.moviedetails.model.movieimages.MovieImagesResponse
 import com.london.data.datasource.remote.details.moviedetails.model.similarmovies.SimilarMoviesResponse
 
-interface MovieDetailsRemote {
+interface MovieDetailsRemoteDataSource {
     suspend fun getMovieDetails(movieId: Int): MovieDetailsResponse
     suspend fun getSimilarMovies(movieId: Int): SimilarMoviesResponse
     suspend fun getMovieCast(movieId: Int): MovieCastResponse

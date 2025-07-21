@@ -1,43 +1,41 @@
 package com.london.data.datasource.remote.details.actordetails
 
-import com.london.data.datasource.device.DeviceConfigurationDataSource
-import com.london.data.datasource.remote.ApiConstants
+import com.london.data.datasource.remote.details.actordetails.api.ActorDetailsApiService
 import com.london.data.datasource.remote.details.actordetails.model.ActorDetailsResponse
 import com.london.data.datasource.remote.details.actordetails.model.actorimage.ActorImageResponse
 import com.london.data.datasource.remote.details.actordetails.model.actormoviedetails.ActorMovieDetailsResponse
 import com.london.data.datasource.remote.details.actordetails.model.actortvshowdetails.ActorTvShowDetailsResponse
-import com.london.data.utils.get
-import io.ktor.client.HttpClient
 import org.koin.core.annotation.Single
-
-
 @Single
 class ActorDetailsRemoteDataSourceImpl(
-    private val ktorClient: HttpClient,
-    private val deviceConfigurationDataSource: DeviceConfigurationDataSource
+    private val actorDetailsApiService: ActorDetailsApiService,
 ) : ActorDetailsRemoteDataSource {
 
-    override suspend fun getActorDetailsById(actorId: Int): ActorDetailsResponse =
-        ktorClient.get(
-            path = ApiConstants.getActorDetailsPath(actorId),
-            params = mapOf("language" to deviceConfigurationDataSource.getCurrentLanguage())
+    override suspend fun getActorDetailsById(
+        id: Int
+    ): ActorDetailsResponse =
+        actorDetailsApiService.getActorDetails(
+            actorId = id
         )
 
-    override suspend fun getActorMovieById(actorId: Int): ActorMovieDetailsResponse =
-        ktorClient.get(
-            path = ApiConstants.getActorMoviesPath(actorId),
-            params = mapOf("language" to deviceConfigurationDataSource.getCurrentLanguage())
+    override suspend fun getActorMovieById(
+        id: Int
+    ): ActorMovieDetailsResponse =
+        actorDetailsApiService.getActorMovies(
+            actorId = id
         )
 
-    override suspend fun getActorTvShowById(actorId: Int): ActorTvShowDetailsResponse =
-        ktorClient.get(
-            path = ApiConstants.getActorTvShowsPath(actorId),
-            params = mapOf("language" to deviceConfigurationDataSource.getCurrentLanguage())
+    override suspend fun getActorTvShowById(
+        id: Int
+    ): ActorTvShowDetailsResponse =
+        actorDetailsApiService.getActorTvShows(
+            actorId = id
         )
 
-    override suspend fun getActorImagePath(actorId: Int): ActorImageResponse =
-        ktorClient.get(
-            path = ApiConstants.getActorImagePath(actorId),
-            params = mapOf("language" to deviceConfigurationDataSource.getCurrentLanguage())
+    override suspend fun getActorImagePath(
+        id: Int
+    ): ActorImageResponse =
+        actorDetailsApiService.getActorImages(
+            actorId = id
         )
 }

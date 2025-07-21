@@ -2,18 +2,6 @@ package com.london.data.utils
 
 import com.google.common.truth.Truth.assertThat
 import com.london.data.BuildConfig
-import io.ktor.client.HttpClient
-import io.ktor.client.engine.mock.MockEngine
-import io.ktor.client.engine.mock.respond
-import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
-import io.ktor.http.ContentType
-import io.ktor.http.HttpHeaders
-import io.ktor.http.HttpStatusCode
-import io.ktor.http.encodedPath
-import io.ktor.http.headersOf
-import io.ktor.serialization.kotlinx.json.json
-import kotlinx.coroutines.test.runTest
-import kotlinx.serialization.Serializable
 import org.junit.Test
 
 class ExtensionsKtTest {
@@ -50,71 +38,6 @@ class ExtensionsKtTest {
     fun `asImageUrlOrEmpty returns empty string for null`() {
         val original: String? = null
         assertThat(original.asImageUrlOrEmpty()).isEmpty()
-    }
-
-    @Serializable
-    data class TestResponse(val message: String)
-
-    @Test
-    fun `HttpClient get applies extra URL block`() = runTest {
-        val jsonResponse = """{"message":"With custom block"}"""
-
-        val mockEngine = MockEngine { request ->
-            assertThat(request.url.host).isEqualTo("example.com")
-            assertThat(request.url.encodedPath).isEqualTo("/custom/path")
-
-            respond(
-                content = jsonResponse,
-                status = HttpStatusCode.OK,
-                headers = headersOf(
-                    HttpHeaders.ContentType,
-                    ContentType.Application.Json.toString()
-                )
-            )
-        }
-
-        val client = HttpClient(mockEngine) {
-            install(ContentNegotiation) { json() }
-        }
-
-        val result: TestResponse = client.get(
-            path = "ignored",
-        ) {
-            host = "example.com"
-            encodedPath = "/custom/path"
-        }
-
-        assertThat(result.message).isEqualTo("With custom block")
-    }
-
-    @Test
-    fun `HttpClient get returns parsed body with correct params`() = runTest {
-        val jsonResponse = """{"message":"Hello World!"}"""
-        val expected = TestResponse("Hello World!")
-
-        val mockEngine = MockEngine { request ->
-            assertThat(request.url.encodedPath).isEqualTo("/api/test")
-
-            respond(
-                content = jsonResponse,
-                status = HttpStatusCode.OK,
-                headers = headersOf(
-                    HttpHeaders.ContentType,
-                    ContentType.Application.Json.toString()
-                )
-            )
-        }
-
-        val client = HttpClient(mockEngine) {
-            install(ContentNegotiation) { json() }
-        }
-
-        val result: TestResponse = client.get(
-            path = "api/test",
-            params = mapOf("id" to "123", "param" to "value")
-        )
-
-        assertThat(result).isEqualTo(expected)
     }
 
     @Test
