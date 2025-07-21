@@ -13,7 +13,6 @@ import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
@@ -27,26 +26,34 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.material3.TextButton
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.draw.clip
 import com.london.designsystem.component.button.OutlineButton
 import com.london.designsystem.component.button.PrimaryButton
 import com.london.designsystem.theme.NovixTheme
 import com.london.designsystem.theme.ThemePreviews
 import com.london.presentation.R
-import kotlinx.coroutines.launch
+import com.london.presentation.screen.onboarding.data.OnboardingPage
+import com.london.presentation.screen.onboarding.data.onboardingPages
+import org.koin.androidx.compose.koinViewModel
 
 @Composable
 fun OnboardingScreen(
     onNext: () -> Unit,
     onSkip: () -> Unit
 ) {
+    val viewModel: OnboardingViewModel = koinViewModel()
     val pagerState = rememberPagerState(
         pageCount = { onboardingPages.size },
         initialPage = 0
     )
-    val scope = rememberCoroutineScope()
+
     val isLastPage = pagerState.currentPage == onboardingPages.lastIndex
     val isFirstPage = pagerState.currentPage == 0
+
+    LaunchedEffect(pagerState.currentPage) {
+        viewModel.onPageChanged(pagerState.currentPage)
+    }
 
     Box(
         modifier = Modifier
@@ -55,7 +62,10 @@ fun OnboardingScreen(
     ) {
         if (!isLastPage) {
             TextButton(
-                onClick = {},
+                onClick = {
+                    viewModel.onboardingFinished()
+                    onSkip()
+                },
                 modifier = Modifier
                     .align(Alignment.TopStart)
                     .padding(16.dp)
@@ -94,17 +104,14 @@ fun OnboardingScreen(
                 OnboardingNavigationButtons(
                     isFirstPage = isFirstPage,
                     onPrevious = {
-                        scope.launch {
-                            pagerState.animateScrollToPage(pagerState.currentPage - 1)
-                        }
+                        viewModel.scrollPrevious(pagerState)
                     },
                     onNext = {
-                        scope.launch {
-                            if (isLastPage) {
-                                onNext()
-                            } else {
-                                pagerState.animateScrollToPage(pagerState.currentPage + 1)
-                            }
+                        if (isLastPage) {
+                            viewModel.onboardingFinished()
+                            onNext()
+                        } else {
+                            viewModel.scrollNext(pagerState)
                         }
                     }
                 )
@@ -223,7 +230,7 @@ fun OnboardingNavigationButtons(
 
 @ThemePreviews
 @Composable
-fun OnboardingPreview(modifier: Modifier = Modifier) {
+fun OnboardingPreview() {
     OnboardingScreen(
         onNext = {}, onSkip = {}
     )

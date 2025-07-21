@@ -21,8 +21,8 @@ import com.london.presentation.R
 
 @Composable
 fun WelcomeScreen(
-    onContinueClicked: () -> Unit,
     onLoginClicked: () -> Unit,
+    onContinueClicked: () -> Unit,
 ) {
     Column(modifier = Modifier.fillMaxSize()) {
         Box(

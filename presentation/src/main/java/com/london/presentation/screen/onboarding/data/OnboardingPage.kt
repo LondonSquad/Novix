@@ -1,4 +1,4 @@
-package com.london.presentation.screen.onboarding
+package com.london.presentation.screen.onboarding.data
 
 import com.london.presentation.R
 import androidx.annotation.StringRes

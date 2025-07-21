@@ -45,6 +45,9 @@ import com.london.presentation.screen.details.movieDetalis.MovieDetailsScreen
 import com.london.presentation.screen.details.tvshow.episodedetails.EpisodeDetailsScreen
 import com.london.presentation.screen.details.tvshow.tvshowdetails.TvShowsDetailsScreen
 import com.london.presentation.screen.home.HomeScreen
+import com.london.presentation.screen.onboarding.OnboardingRoute
+import com.london.presentation.screen.onboarding.OnboardingScreen
+import com.london.presentation.screen.onboarding.WelcomeScreen
 import com.london.presentation.screen.reviews.ReviewsScreen
 import com.london.presentation.screen.search.SearchScreen
 
@@ -165,8 +168,7 @@ fun NovixApp() {
                     },
                     onNavigateToReviews = { tvShowId, mediaType ->
                         navController.navigate(Reviews(tvShowId, mediaType))
-                    }
-                    , onNavigateToCast = { actorId->
+                    }, onNavigateToCast = { actorId ->
                         navController.navigate(Screen.ActorDetails(actorId))
                     }
                 )
@@ -264,10 +266,10 @@ fun NovixApp() {
                     onNavigateToGallery = { actorId ->
                         navController.navigate(Screen.ActorGallery(actorId))
                     },
-                    onNavigateToMovieScreen = { movieId->
+                    onNavigateToMovieScreen = { movieId ->
                         navController.navigate(MovieDetails(movieId))
                     },
-                    onNavigateToTvShowScreen = {tvShowId->
+                    onNavigateToTvShowScreen = { tvShowId ->
                         navController.navigate(TvShowDetails(tvShowId))
                     },
                     onBackClick = { navController.navigateUp() }
@@ -287,6 +289,28 @@ fun NovixApp() {
             composable<Screen.ActorGallery> {
                 ActorGalleryScreen(
                     onBackClick = { navController.popBackStack() }
+                )
+            }
+
+            composable<Screen.OnboardingPager> {
+                OnboardingRoute(
+                    onCompleted = {
+                        navController.navigate(Screen.Welcome)
+                    },
+                    onSkip = {
+                        navController.navigate(Screen.Welcome)
+                    }
+                )
+            }
+
+            composable<Screen.Welcome> {
+                WelcomeScreen(
+                    onLoginClicked = {
+
+                    },
+                    onContinueClicked = {
+                        navController.navigate(Screen.Home)
+                    }
                 )
             }
         }
