@@ -47,7 +47,7 @@ fun FooterSection(
     ) {
         PrimaryButton(
             text = null,
-            onClick = { onStarClick() },
+            onClick = onStarClick,
             hasLabel = false,
             icon = drawable.movie_button_star,
             hasIcon = true,
