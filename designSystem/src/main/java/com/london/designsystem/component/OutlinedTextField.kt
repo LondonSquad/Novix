@@ -66,7 +66,6 @@ fun OutlinedTextField(
     keyboardActions: KeyboardActions = KeyboardActions.Default,
     singleLine: Boolean = true,
     shape: Shape = MaterialTheme.shapes.medium,
-    colors: TextFieldColors = getDefaultTextFieldColors(),
     backgroundColor: Color = Color.Transparent,
     isPasswordField: Boolean = false,
     passwordVisible: Boolean = false,
@@ -137,14 +136,14 @@ fun OutlinedTextField(
                             enabled = enabled,
                             isError = isError,
                             interactionSource = interactionSource,
-                            colors = colors,
+                            colors = getDefaultTextFieldColors(),
                             contentPadding = contentPadding,
                             container = {
                                 OutlinedTextFieldDefaults.Container(
                                     enabled = enabled,
                                     isError = isError,
                                     interactionSource = interactionSource,
-                                    colors = colors,
+                                    colors = getDefaultTextFieldColors(),
                                     shape = shape,
                                 )
                             }
