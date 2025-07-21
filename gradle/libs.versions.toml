@@ -194,10 +194,8 @@ compose = [
     "androidx-ui",
     "androidx-ui-graphics",
     "androidx-ui-tooling-preview",
-    "androidx-material3",
     "androidx-navigation-compose"
 ]
-
 compose-debug = [
     "androidx-ui-tooling",
     "androidx-ui-test-manifest"
