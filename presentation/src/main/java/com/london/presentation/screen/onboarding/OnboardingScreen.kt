@@ -2,6 +2,7 @@ package com.london.presentation.screen.onboarding
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -11,7 +12,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -25,9 +25,9 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentWidth
-import androidx.compose.material3.TextButton
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.draw.clip
+import com.london.designsystem.component.Text
 import com.london.designsystem.component.button.OutlineButton
 import com.london.designsystem.component.button.PrimaryButton
 import com.london.designsystem.theme.NovixTheme
@@ -61,61 +61,58 @@ fun OnboardingScreen(
             .background(NovixTheme.colors.surface)
     ) {
         if (!isLastPage) {
-            TextButton(
-                onClick = {
-                    viewModel.onboardingFinished()
-                    onSkip()
-                },
+            Text(
                 modifier = Modifier
                     .align(Alignment.TopStart)
                     .padding(16.dp)
-            ) {
-                Text(
-                    text = stringResource(R.string.skip),
-                    style = NovixTheme.typography.label.medium,
-                    color = NovixTheme.colors.primary
-                )
-            }
-        }
-        Column(
-            modifier = Modifier
-                .fillMaxSize()
-        ) {
-            HorizontalPager(
-                state = pagerState,
-                modifier = Modifier.weight(1f)
-            ) { page ->
-                OnboardingPageContent(onboardingPages[page])
-            }
-
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(vertical = 16.dp, horizontal = 16.dp),
-                horizontalArrangement = Arrangement.SpaceBetween,
-            ) {
-                OnboardingIndicatorBar(
-                    modifier = Modifier
-                        .padding(vertical = 16.dp),
-                    activeStep = pagerState.currentPage,
-                    totalSteps = onboardingPages.size
-                )
-
-                OnboardingNavigationButtons(
-                    isFirstPage = isFirstPage,
-                    onPrevious = {
-                        viewModel.scrollPrevious(pagerState)
+                    .clickable {
+                        viewModel.onboardingFinished()
+                        onSkip()
                     },
-                    onNext = {
-                        if (isLastPage) {
-                            viewModel.onboardingFinished()
-                            onNext()
-                        } else {
-                            viewModel.scrollNext(pagerState)
-                        }
+                text = stringResource(R.string.skip),
+                style = NovixTheme.typography.label.medium,
+                color = NovixTheme.colors.primary
+            )
+        }
+    }
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+    ) {
+        HorizontalPager(
+            state = pagerState,
+            modifier = Modifier.weight(1f)
+        ) { page ->
+            OnboardingPageContent(onboardingPages[page])
+        }
+
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(vertical = 16.dp, horizontal = 16.dp),
+            horizontalArrangement = Arrangement.SpaceBetween,
+        ) {
+            OnboardingIndicatorBar(
+                modifier = Modifier
+                    .padding(vertical = 16.dp),
+                activeStep = pagerState.currentPage,
+                totalSteps = onboardingPages.size
+            )
+
+            OnboardingNavigationButtons(
+                isFirstPage = isFirstPage,
+                onPrevious = {
+                    viewModel.scrollPrevious(pagerState)
+                },
+                onNext = {
+                    if (isLastPage) {
+                        viewModel.onboardingFinished()
+                        onNext()
+                    } else {
+                        viewModel.scrollNext(pagerState)
                     }
-                )
-            }
+                }
+            )
         }
     }
 }

@@ -19,6 +19,7 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.london.designsystem.component.NavBar
 import com.london.designsystem.theme.NovixTheme
+import com.london.domain.AppPreferencesService
 import com.london.presentation.navigation.Screen
 import com.london.presentation.navigation.Screen.Account
 import com.london.presentation.navigation.Screen.ActorTopMoviesPicksDetails
@@ -45,13 +46,12 @@ import com.london.presentation.screen.details.tvshow.episodedetails.EpisodeDetai
 import com.london.presentation.screen.details.tvshow.tvshowdetails.TvShowsDetailsScreen
 import com.london.presentation.screen.home.HomeScreen
 import com.london.presentation.screen.onboarding.OnboardingRoute
-import com.london.presentation.screen.onboarding.OnboardingScreen
 import com.london.presentation.screen.onboarding.WelcomeScreen
 import com.london.presentation.screen.reviews.ReviewsScreen
 import com.london.presentation.screen.search.SearchScreen
 
 @Composable
-fun NovixApp() {
+fun NovixApp(appPreferencesService: AppPreferencesService) {
     val navController = rememberNavController()
     val navBackStackEntry by navController.currentBackStackEntryAsState()
     val currentDestination = navBackStackEntry?.destination
@@ -70,6 +70,13 @@ fun NovixApp() {
             currentDestination?.hasRoute<EpisodeDetails>() != true &&
             currentDestination?.hasRoute<Reviews>() != true
 
+
+    val isOnboardingShown = appPreferencesService.hasOnboardingBeenShown
+    val startDestination = if (isOnboardingShown) {
+        Screen.Home
+    } else {
+        Screen.OnboardingPager
+    }
     Scaffold(
         backgroundColor = NovixTheme.colors.surface,
         bottomBar = {
@@ -89,7 +96,7 @@ fun NovixApp() {
     ) { innerPadding ->
         NavHost(
             navController = navController,
-            startDestination = Home,
+            startDestination = startDestination,
             modifier = Modifier.padding(innerPadding)
         ) {
             composable<Home>(
