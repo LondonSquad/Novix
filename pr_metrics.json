@@ -5467,16 +5467,33 @@
       "id": 92235360,
       "url": "https://github.com/abdo-essam"
     },
-    "approvals": [],
-    "first_approved_at": null,
-    "time_to_first_approval_minutes": null,
-    "required_approvals_met_at": null,
-    "time_to_required_approvals_minutes": null,
+    "approvals": [
+      {
+        "reviewer": {
+          "id": 154278495,
+          "login": "ahmeddsamii",
+          "url": "https://github.com/ahmeddsamii"
+        },
+        "submitted_at": "2025-07-21T08:05:11Z"
+      },
+      {
+        "reviewer": {
+          "id": 81706918,
+          "login": "karimdeabes",
+          "url": "https://github.com/karimdeabes"
+        },
+        "submitted_at": "2025-07-21T08:05:21Z"
+      }
+    ],
+    "first_approved_at": "2025-07-21T08:05:11Z",
+    "time_to_first_approval_minutes": 917.2166666666667,
+    "required_approvals_met_at": "2025-07-21T08:05:21Z",
+    "time_to_required_approvals_minutes": 917.3833333333333,
     "closed_at": null,
     "merged_at": null,
     "merged_by": null,
     "week": "2025-W29",
-    "status": "pending",
+    "status": "approved",
     "diff_stats": {
       "additions": 518,
       "deletions": 1063,
