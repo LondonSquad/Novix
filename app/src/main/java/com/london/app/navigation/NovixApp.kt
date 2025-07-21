@@ -70,6 +70,7 @@ fun NovixApp() {
     val showBottomNav = currentDestination?.hasRoute<TvShowDetails>() != true &&
             currentDestination?.hasRoute<MovieDetails>() != true &&
             currentDestination?.hasRoute<EpisodeDetails>() != true &&
+            currentDestination?.hasRoute<ActorDetails>() != true &&
             currentDestination?.hasRoute<Reviews>() != true
 
     Scaffold(
