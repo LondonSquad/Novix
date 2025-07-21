@@ -5567,5 +5567,33 @@
       "deletions": 79,
       "changed_files": 23
     }
+  },
+  {
+    "pr_number": 247,
+    "url": "https://github.com/LondonSquad/Novix/pull/247",
+    "title": "feature/login-screen-ui",
+    "opened_at": "2025-07-21T00:01:36Z",
+    "head_ref": "feature/login-screen-ui",
+    "base_ref": "develop",
+    "creator": {
+      "login": "abdelrhman1002",
+      "id": 180463542,
+      "url": "https://github.com/abdelrhman1002"
+    },
+    "approvals": [],
+    "first_approved_at": null,
+    "time_to_first_approval_minutes": null,
+    "required_approvals_met_at": null,
+    "time_to_required_approvals_minutes": null,
+    "closed_at": null,
+    "merged_at": null,
+    "merged_by": null,
+    "week": "2025-W30",
+    "status": "pending",
+    "diff_stats": {
+      "additions": 258,
+      "deletions": 1,
+      "changed_files": 6
+    }
   }
 ]
