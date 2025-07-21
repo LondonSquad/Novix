@@ -3,6 +3,7 @@ package com.london.presentation.screen.login
 import android.annotation.SuppressLint
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -31,9 +32,34 @@ import com.london.designsystem.component.button.PrimaryButton
 import com.london.designsystem.theme.NovixTheme
 import com.london.presentation.R
 
-@SuppressLint("UnrememberedMutableInteractionSource")
 @Composable
 fun LoginScreen() {
+    val username = TextFieldValue()
+    val password = TextFieldValue()
+    val isLoginEnabled = username.text.isNotEmpty() && password.text.isNotEmpty()
+
+    LoginScreenContent(
+        username = username,
+        onUsernameChange = {},
+        password = password,
+        onPasswordChange = {},
+        onLoginClick = {},
+        onForgotPasswordClick = {},
+        isLoginEnabled = isLoginEnabled,
+    )
+}
+
+@SuppressLint("UnrememberedMutableInteractionSource")
+@Composable
+fun LoginScreenContent(
+    username: TextFieldValue,
+    onUsernameChange: (TextFieldValue) -> Unit,
+    password: TextFieldValue,
+    onPasswordChange: (TextFieldValue) -> Unit,
+    onLoginClick: () -> Unit,
+    onForgotPasswordClick: () -> Unit,
+    isLoginEnabled: Boolean,
+) {
     Box(
         modifier = Modifier
             .fillMaxSize()
@@ -41,7 +67,7 @@ fun LoginScreen() {
     ) {
         Image(
             painter = painterResource(R.drawable.polygon1),
-            contentDescription = null,
+            contentDescription = stringResource(R.string.app_icon),
             modifier = Modifier
                 .align(Alignment.TopStart)
                 .offset(y = (-60).dp, x = (-20).dp)
@@ -51,13 +77,12 @@ fun LoginScreen() {
             modifier = Modifier
                 .fillMaxSize()
                 .padding(16.dp),
-            verticalArrangement = Arrangement.spacedBy(8.dp),
         ) {
-            TopBar(title = "Login", onBackClick = {})
+            TopBar(title = stringResource(R.string.login), onBackClick = {})
             Icon(
                 painter = painterResource(id = R.drawable.novix_icon),
-                contentDescription = null,
-                tint = Color.Unspecified,
+                contentDescription = stringResource(R.string.app_icon),
+                tint = Color.Transparent,
                 modifier = Modifier
                     .size(64.dp)
                     .padding(top = 4.dp, bottom = 8.dp)
@@ -71,46 +96,46 @@ fun LoginScreen() {
                 stringResource(R.string.user_name),
                 style = NovixTheme.typography.title.small,
                 color = NovixTheme.colors.title,
-                modifier = Modifier.padding(top = 32.dp)
+                modifier = Modifier.padding(top = 40.dp)
             )
             OutlinedTextField(
-                value = TextFieldValue(),
+                value = username,
                 interactionSource = MutableInteractionSource(),
-                onValueChange = {},
+                onValueChange = onUsernameChange,
                 leadingIcon = painterResource(com.london.designsystem.R.drawable.icon_user),
             )
             Text(
-                "Password",
+                stringResource(R.string.password),
                 style = NovixTheme.typography.title.small,
                 color = NovixTheme.colors.title,
-                modifier = Modifier.padding(top = 8.dp)
+                modifier = Modifier.padding(top = 16.dp)
             )
             OutlinedTextField(
-                value = TextFieldValue(),
+                value = password,
                 interactionSource = MutableInteractionSource(),
-                onValueChange = {},
+                onValueChange = onPasswordChange,
                 leadingIcon = painterResource(R.drawable.lock_key),
                 isPasswordField = true,
                 passwordVisibleIcon = painterResource(id = com.london.designsystem.R.drawable.icon_show_password),
                 passwordHiddenIcon = painterResource(id = com.london.designsystem.R.drawable.icon_hide_password),
-                modifier = Modifier.padding(bottom = 26.dp)
+                modifier = Modifier.padding(bottom = 32.dp)
             )
             PrimaryButton(
                 text = stringResource(R.string.login),
                 hasLabel = true,
                 hasIcon = false,
                 isLoading = false,
-                onClick = {},
+                onClick = onLoginClick,
                 icon = null,
-                enabled = false,
+                enabled = isLoginEnabled,
                 modifier = Modifier.fillMaxWidth()
             )
             Text(
-                "Forgot Password?",
+                stringResource(R.string.forgot_password),
                 style = NovixTheme.typography.label.medium,
                 color = NovixTheme.colors.primary,
                 modifier = Modifier
-                    .padding(top = 4.dp)
+                    .padding(top = 12.dp)
                     .align(Alignment.CenterHorizontally)
             )
             Spacer(modifier = Modifier.weight(1f))
@@ -123,8 +148,9 @@ fun LoginScreen() {
                     stringResource(R.string.don_t_have_an_account),
                     style = NovixTheme.typography.body.small,
                     color = NovixTheme.colors.body,
-                    modifier = Modifier.padding(end = 4.dp)
-                )
+                    modifier = Modifier
+                        .padding(end = 4.dp)
+                        .clickable { onForgotPasswordClick() })
                 Text(
                     stringResource(R.string.create_account),
                     style = NovixTheme.typography.label.medium,
@@ -133,13 +159,11 @@ fun LoginScreen() {
             }
         }
     }
-
-
 }
 
 @Preview
 @Composable
-private fun LoginScreenPreview() {
+private fun Preview() {
     NovixTheme {
         LoginScreen()
     }
