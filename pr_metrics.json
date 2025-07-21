@@ -5664,5 +5664,33 @@
       "deletions": 0,
       "changed_files": 7
     }
+  },
+  {
+    "pr_number": 250,
+    "url": "https://github.com/LondonSquad/Novix/pull/250",
+    "title": "Fix Nav bar padding & edge2edge integration",
+    "opened_at": "2025-07-21T03:27:04Z",
+    "head_ref": "fix/edge2edge",
+    "base_ref": "develop",
+    "creator": {
+      "login": "yusufnasserdev",
+      "id": 43588217,
+      "url": "https://github.com/yusufnasserdev"
+    },
+    "approvals": [],
+    "first_approved_at": null,
+    "time_to_first_approval_minutes": null,
+    "required_approvals_met_at": null,
+    "time_to_required_approvals_minutes": null,
+    "closed_at": null,
+    "merged_at": null,
+    "merged_by": null,
+    "week": "2025-W30",
+    "status": "pending",
+    "diff_stats": {
+      "additions": 45,
+      "deletions": 20,
+      "changed_files": 4
+    }
   }
 ]
