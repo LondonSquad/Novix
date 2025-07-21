@@ -10,10 +10,9 @@ class GetMoviesByCategoryUseCase(
     private val repository: SearchRepository
 ) {
     suspend operator fun invoke(
-        categoryId: Int, language: String, pageNumber: Int
+        categoryId: Int, pageNumber: Int
     ) = repository.searchForMoviesByCategory(
         categoryId = categoryId,
-        language = language,
         pageNumber = pageNumber
     )
 }

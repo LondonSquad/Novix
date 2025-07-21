@@ -11,11 +11,9 @@ class GetActorsUseCase(
 ) {
     suspend operator fun invoke(
         name: String,
-        language: String,
         pageNumber: Int
     ) = repository.searchForActors(
         name = name,
-        language = language,
         pageNumber = pageNumber
     )
 }

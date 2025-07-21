@@ -6,13 +6,13 @@ import kotlinx.serialization.Serializable
 @Serializable
 data class SearchMovieRemote(
     @SerialName("adult")
-    val adult: Boolean,
+    val adult: Boolean? = null,
     @SerialName("backdrop_path")
     val backdropPath: String? = null,
     @SerialName("genre_ids")
-    val genreIds: List<Int>,
+    val genreIds: List<Int>? = null,
     @SerialName("id")
-    val id: Int,
+    val id: Int? = null,
     @SerialName("original_language")
     val originalLanguage: String? = null,
     @SerialName("original_title")
@@ -20,7 +20,7 @@ data class SearchMovieRemote(
     @SerialName("overview")
     val overview: String? = null,
     @SerialName("popularity")
-    val popularity: Double,
+    val popularity: Double? = null,
     @SerialName("poster_path")
     val posterPath: String? = null,
     @SerialName("release_date")
@@ -28,11 +28,11 @@ data class SearchMovieRemote(
     @SerialName("title")
     val title: String? = null,
     @SerialName("video")
-    val video: Boolean,
+    val video: Boolean? = null,
     @SerialName("vote_average")
-    val voteAverage: Double,
+    val voteAverage: Double? = null,
     @SerialName("vote_count")
-    val voteCount: Int,
+    val voteCount: Int? = null,
     @SerialName("origin_country")
     val originCountry: List<String>? = null,
     @SerialName("original_name")

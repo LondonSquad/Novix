@@ -1,6 +1,5 @@
 package com.london.app.navigation
 
-import android.util.Log
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
@@ -51,7 +50,6 @@ import com.london.presentation.screen.onboarding.WelcomeScreen
 import com.london.presentation.screen.reviews.ReviewsScreen
 import com.london.presentation.screen.search.SearchScreen
 
-
 @Composable
 fun NovixApp() {
     val navController = rememberNavController()
@@ -67,13 +65,15 @@ fun NovixApp() {
         else -> Home
     }
 
-    val showBottomNav = currentDestination?.hasRoute<TvShowDetails>() != true
-    val showMovieDetails = currentDestination?.hasRoute<MovieDetails>() != true
-    Log.d("test", "NovixApp: $showMovieDetails")
+    val showBottomNav = currentDestination?.hasRoute<TvShowDetails>() != true &&
+            currentDestination?.hasRoute<MovieDetails>() != true &&
+            currentDestination?.hasRoute<EpisodeDetails>() != true &&
+            currentDestination?.hasRoute<Reviews>() != true
+
     Scaffold(
         backgroundColor = NovixTheme.colors.surface,
         bottomBar = {
-            if (showBottomNav && showMovieDetails) {
+            if (showBottomNav) {
                 NavBar(
                     modifier = Modifier
                         .background(NovixTheme.colors.surface)
@@ -161,8 +161,8 @@ fun NovixApp() {
                         navController.navigate(
                             EpisodeDetails(
                                 tvShowId,
-                                episodeNumber,
-                                seasonNumber
+                                seasonNumber,
+                                episodeNumber
                             )
                         )
                     },
@@ -225,14 +225,7 @@ fun NovixApp() {
                 )
             }
 
-            composable<Reviews> { backStackEntry ->
-                val reviews = backStackEntry.arguments?.let {
-                    Reviews(
-                        mediaId = it.getInt("mediaId"),
-                        mediaType = it.getInt("mediaType")
-                    )
-                }
-
+            composable<Reviews> {
                 ReviewsScreen(
                     onBackClick = {
                         navController.navigateUp()

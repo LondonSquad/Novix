@@ -6,9 +6,9 @@ import kotlinx.serialization.Serializable
 @Serializable
 data class TvShowEpisodesRemoteResponse(
     @SerialName("_id")
-    val id: String,
+    val id: String?,
     @SerialName("air_date")
     val airDate: String?,
     @SerialName("episodes")
-    val episodes: List<TvShowEpisodeBySeason>
+    val episodes: List<TvShowEpisodeBySeason>?
 )

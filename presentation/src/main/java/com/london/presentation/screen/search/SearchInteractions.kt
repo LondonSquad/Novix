@@ -27,4 +27,7 @@ interface SearchInteractions {
     fun onReleaseYearRangeChange(range: ClosedFloatingPointRange<Float>)
     fun onGenreSelectedChange(selectedGenres: List<Int>)
     fun onRatingChanged(selectedRating: Int)
+    fun onMovieClick(movieId: Int)
+    fun onActorClick(actorId: Int)
+    fun onTvShowClick(tvShowId: Int)
 }

@@ -1,6 +1,6 @@
 package com.london.data.mapper.videoprovider.tvshow
 
-import com.london.data.datasource.remote.details.videoprovider.tvshow.TvShowVideoRemote
+import com.london.data.datasource.remote.details.videoprovider.tvshow.model.TvShowVideoRemote
 import com.london.data.utils.asYoutubeUrlOrEmpty
 import com.london.data.utils.isTrue
 import com.london.data.utils.orZero
@@ -10,7 +10,7 @@ fun TvShowVideoRemote.toTvShowVideo(): TvShowVideo {
     return TvShowVideo(
         id = id.orEmpty(),
         iso31661 = iso31661.orEmpty(),
-        iso6391 = iso31661.orEmpty(),
+        iso6391 = iso6391.orEmpty(),
         videoUrl = key.asYoutubeUrlOrEmpty(),
         name = name.orEmpty(),
         official = official.isTrue,
@@ -24,7 +24,7 @@ fun TvShowVideoRemote.toTvShowVideo(): TvShowVideo {
 fun TvShowVideo.TvShowVideoRemote(): TvShowVideoRemote {
     return TvShowVideoRemote(
         id = id,
-        iso31661 = iso6391,
+        iso31661 = iso31661,
         iso6391 = iso6391,
         key = videoUrl,
         name = name,

@@ -6,25 +6,25 @@ import kotlinx.serialization.Serializable
 @Serializable
 data class EpisodeCrewMember(
     @SerialName("job")
-    val job: String? = null,
+    val job: String?,
     @SerialName("department")
-    val department: String? = null,
+    val department: String?,
     @SerialName("credit_id")
-    val creditId: String? = null,
+    val creditId: String?,
     @SerialName("adult")
-    val adult: Boolean? = null,
+    val adult: Boolean?,
     @SerialName("gender")
-    val gender: Int? = null,
+    val gender: Int?,
     @SerialName("id")
-    val id: Int? = null,
+    val id: Int?,
     @SerialName("known_for_department")
-    val knownForDepartment: String? = null,
+    val knownForDepartment: String?,
     @SerialName("name")
-    val name: String? = null,
+    val name: String?,
     @SerialName("original_name")
-    val originalName: String? = null,
+    val originalName: String?,
     @SerialName("popularity")
-    val popularity: Double? = null,
+    val popularity: Double?,
     @SerialName("profile_path")
-    val profilePath: String? = null
+    val profilePath: String?
 )

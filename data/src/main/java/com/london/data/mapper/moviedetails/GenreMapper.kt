@@ -8,7 +8,7 @@ import com.london.domain.entity.moviedatails.Genre
 @KoverIgnore
 fun GenreRemote.toGenre(): Genre {
     return Genre(
-        id = this.id.orZero(),
-        name = this.name.orEmpty()
+        id = id.orZero(),
+        name = name.orEmpty()
     )
 }

@@ -1,10 +1,6 @@
 package com.london.data.repository
 
-import com.london.data.datasource.remote.details.moviedetails.GetMovieCastException
-import com.london.data.datasource.remote.details.moviedetails.GetMovieDetailsException
-import com.london.data.datasource.remote.details.moviedetails.GetMovieImagesException
-import com.london.data.datasource.remote.details.moviedetails.GetSimilarMoviesException
-import com.london.data.datasource.remote.details.moviedetails.MovieDetailsRemote
+import com.london.data.datasource.remote.details.moviedetails.MovieDetailsRemoteDataSource
 import com.london.data.datasource.remote.details.moviedetails.model.moviecast.MovieActor
 import com.london.data.datasource.remote.details.moviedetails.model.moviecast.MovieCastResponse
 import com.london.data.datasource.remote.details.moviedetails.model.moviedetails.CollectionDetails
@@ -18,6 +14,10 @@ import com.london.data.datasource.remote.details.moviedetails.model.movieimages.
 import com.london.data.datasource.remote.details.moviedetails.model.similarmovies.SimilarMovieRemote
 import com.london.data.datasource.remote.details.moviedetails.model.similarmovies.SimilarMoviesResponse
 import com.london.data.utils.asImageUrlOrEmpty
+import com.london.domain.GetMovieCastFailedException
+import com.london.domain.GetMovieDetailsFailedException
+import com.london.domain.GetMovieImagesFailedException
+import com.london.domain.GetSimilarMoviesFailedException
 import io.mockk.coEvery
 import io.mockk.mockk
 import kotlinx.coroutines.test.runTest
@@ -28,7 +28,7 @@ import kotlin.test.Test
 
 class MovieDetailsRepoImplTest {
 
-    private lateinit var remoteDataSource: MovieDetailsRemote
+    private lateinit var remoteDataSource: MovieDetailsRemoteDataSource
     private lateinit var repository: MovieDetailsRepoImpl
 
     @Before
@@ -222,45 +222,45 @@ class MovieDetailsRepoImplTest {
 
 
     @Test
-    fun `getMovieUsingId should propagate GetMovieDetailsException`() = runTest {
-        coEvery { remoteDataSource.getMovieDetails(123) } throws RuntimeException("Network error")
+    fun `getMovieUsingId should propagate GetMovieDetailsFailedException`() = runTest {
+        coEvery { remoteDataSource.getMovieDetails(123) } throws GetMovieDetailsFailedException("Network error")
 
-        val ex = assertThrows<GetMovieDetailsException> {
+        val ex = assertThrows<GetMovieDetailsFailedException> {
                 repository.getMovieById(123)
 
         }
-        assertEquals("Failed to fetch movie details", ex.message)
+        assertEquals("Network error", ex.message)
     }
 
     @Test
-    fun `getSimilarMovies should propagate GetSimilarMoviesException`() = runTest {
-        coEvery { remoteDataSource.getSimilarMovies(123) } throws RuntimeException("API failed")
+    fun `getSimilarMovies should propagate GetSimilarMoviesFailedException`() = runTest {
+        coEvery { remoteDataSource.getSimilarMovies(123) } throws GetSimilarMoviesFailedException("API failed")
 
-        val ex = assertThrows<GetSimilarMoviesException> {
+        val ex = assertThrows<GetSimilarMoviesFailedException> {
                 repository.getSimilarMoviesById(123)
 
         }
-        assertEquals("Failed to fetch similar movies", ex.message)
+        assertEquals("API failed", ex.message)
     }
 
     @Test
-    fun `getMovieImages should propagate GetMovieImagesException`() = runTest {
-        coEvery { remoteDataSource.getMovieImages(123) } throws RuntimeException("Server error")
+    fun `getMovieImages should propagate GetMovieImagesFailedException`() = runTest {
+        coEvery { remoteDataSource.getMovieImages(123) } throws GetMovieImagesFailedException("Server error")
 
-        val ex = assertThrows<GetMovieImagesException> {
+        val ex = assertThrows<GetMovieImagesFailedException> {
                 repository.getMovieImagesById(123)
 
         }
-        assertEquals("Failed to fetch movie images", ex.message)
+        assertEquals("Server error", ex.message)
     }
 
     @Test
-    fun `getMovieCast should propagate GetMovieCastException`() = runTest {
-        coEvery { remoteDataSource.getMovieCast(123) } throws RuntimeException("MovieActor API down")
+    fun `getMovieCast should propagate GetMovieCastFailedException`() = runTest {
+        coEvery { remoteDataSource.getMovieCast(123) } throws GetMovieCastFailedException("MovieActor API down")
 
-        val ex = assertThrows<GetMovieCastException> {
+        val ex = assertThrows<GetMovieCastFailedException> {
             repository.getMovieCastById(123)
         }
-        assertEquals("Failed to fetch movie actorRemote", ex.message)
+        assertEquals("MovieActor API down", ex.message)
     }
 }

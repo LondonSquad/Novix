@@ -1,7 +1,7 @@
 package com.london.data.repository
 
 import com.london.data.datasource.local.LocalDataSource
-import com.london.data.datasource.local.dao.GenreInterestDao
+import com.london.data.datasource.local.dao.search.GenreInterestDao
 import com.london.data.datasource.local.model.GenreInterestEntity
 import com.london.data.datasource.local.model.SearchActorsLocal
 import com.london.data.datasource.local.model.SearchMoviesLocal
@@ -46,19 +46,18 @@ class SearchRepositoryImpl(
         }.onFailure { crashReporter?.logException(it) }.getOrThrow()
 
     override suspend fun searchForMovies(
-        name: String, language: String, pageNumber: Int
+        name: String, pageNumber: Int
     ): PagedFetchResponse<Movie> = fetchAndSync(
         cacheBlock = {
         localMovieDataSource.getByQueryAndPage(
-            query = name + language, page = pageNumber
+            query = name, page = pageNumber
         )
     }, networkBlock = {
         remoteDataSource.searchForMovies(
             query = name,
-            language = language,
             includeAdult = false,
             pageNumber = pageNumber,
-        ).toLocal(query = name + language)
+        ).toLocal(query = name)
     }, syncBlock = { localMovieDataSource.insert(it) }, crashReporter = crashReporter
     ).run {
         PagedFetchResponse(
@@ -70,19 +69,18 @@ class SearchRepositoryImpl(
     }
 
     override suspend fun searchForTvShows(
-        name: String, language: String, pageNumber: Int
+        name: String, pageNumber: Int
     ): PagedFetchResponse<TvShow> = fetchAndSync(
         cacheBlock = {
         localTvShowDataSource.getByQueryAndPage(
-            query = name + language, page = pageNumber
+            query = name, page = pageNumber
         )
     }, networkBlock = {
         remoteDataSource.searchForTvShows(
             query = name,
-            language = language,
             includeAdult = false,
             pageNumber = pageNumber,
-        ).toLocal(query = name + language)
+        ).toLocal(query = name)
     }, syncBlock = { localTvShowDataSource.insert(it) }, crashReporter = crashReporter
     ).run {
         PagedFetchResponse(
@@ -94,19 +92,18 @@ class SearchRepositoryImpl(
     }
 
     override suspend fun searchForActors(
-        name: String, language: String, pageNumber: Int
+        name: String, pageNumber: Int
     ): PagedFetchResponse<Actor> = fetchAndSync(
         cacheBlock = {
         localActorDataSource.getByQueryAndPage(
-            query = name + language, page = pageNumber
+            query = name, page = pageNumber
         )
     }, networkBlock = {
         remoteDataSource.searchForActors(
             query = name,
-            language = language,
             includeAdult = false,
             pageNumber = pageNumber,
-        ).toLocal(query = name + language)
+        ).toLocal(query = name)
     }, syncBlock = { localActorDataSource.insert(it) }, crashReporter = crashReporter
     ).run {
         PagedFetchResponse(
@@ -118,12 +115,11 @@ class SearchRepositoryImpl(
     }
 
     override suspend fun searchForMoviesByCategory(
-        categoryId: Int, language: String, pageNumber: Int
+        categoryId: Int, pageNumber: Int
     ): PagedFetchResponse<Movie> = fetchAndSync(
         networkBlock = {
             remoteDataSource.getMoviesByCategory(
                 categoryId = categoryId,
-                language = language,
                 pageNumber = pageNumber,
             ).toLocal(query = "")
         }).run {

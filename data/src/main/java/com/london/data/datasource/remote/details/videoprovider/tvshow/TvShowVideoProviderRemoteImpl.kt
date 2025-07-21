@@ -1,19 +1,16 @@
 package com.london.data.datasource.remote.details.videoprovider.tvshow
 
-import com.london.data.datasource.device.DeviceConfigurationDataSource
-import com.london.data.datasource.remote.ApiConstants
-import com.london.data.utils.get
-import io.ktor.client.HttpClient
+import com.london.data.datasource.remote.details.tvshowdetails.api.TvShowDetailsApiService
+import com.london.data.datasource.remote.details.videoprovider.tvshow.TvShowVideoProviderRemote
+import com.london.data.datasource.remote.details.videoprovider.tvshow.model.TvShowVideoResponse
 import org.koin.core.annotation.Single
 
 @Single
 class TvShowVideoProviderRemoteImpl(
-    private val ktorClient: HttpClient,
-    private val deviceConfigurationDataSource: DeviceConfigurationDataSource
+    private val tvShowDetailsApiService: TvShowDetailsApiService,
 ) : TvShowVideoProviderRemote {
     override suspend fun getTvShowVideos(tvShowId: Int): TvShowVideoResponse =
-        ktorClient.get(
-           path =  ApiConstants.getTvShowVideosPath(tvShowId),
-            params = mapOf("language" to deviceConfigurationDataSource.getCurrentLanguage())
+        tvShowDetailsApiService.getTvShowVideos(
+            tvShowId = tvShowId
         )
 }

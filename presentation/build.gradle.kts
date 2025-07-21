@@ -59,6 +59,7 @@ dependencies {
     implementation(libs.firebase.perf)
     implementation(platform(libs.firebase.bom))
     implementation(libs.androidx.constraintlayout.compose)
+    implementation(libs.timber)
 
     implementation(libs.remember.preference)
 }
