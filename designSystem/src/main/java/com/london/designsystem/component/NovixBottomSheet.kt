@@ -4,9 +4,12 @@ import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.material3.BottomSheetDefaults
 import androidx.compose.material3.ModalBottomSheetDefaults
+import androidx.compose.material3.SheetState
+import androidx.compose.material3.SheetValue
 import androidx.compose.material3.contentColorFor
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Shape
@@ -14,25 +17,42 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.london.designsystem.theme.NovixTheme
 
+class NovixBottomSheetState(val sheetState: SheetState) {
+    suspend fun show() = sheetState.show()
+    suspend fun hide() = sheetState.hide()
+    val isVisible: Boolean get() = sheetState.isVisible
+    val currentValue: SheetValue get() = sheetState.currentValue
+    val targetValue: SheetValue get() = sheetState.targetValue
+    val hasExpanded: Boolean get() = sheetState.hasExpandedState
+    val hasPartiallyExpanded: Boolean get() = sheetState.hasPartiallyExpandedState
+}
+
 @Composable
-fun ModalBottomSheet(
+fun rememberNovixModalBottomSheetState(
+    skipPartiallyExpanded: Boolean = true
+): NovixBottomSheetState {
+    val sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = skipPartiallyExpanded)
+    return remember { NovixBottomSheetState(sheetState) }
+}
+
+@Composable
+fun NovixBottomSheet(
     onDismissRequest: () -> Unit,
+    state: NovixBottomSheetState,
     modifier: Modifier = Modifier,
     sheetMaxWidth: Dp = BottomSheetDefaults.SheetMaxWidth,
     shape: Shape = BottomSheetDefaults.ExpandedShape,
     containerColor: Color = BottomSheetDefaults.ContainerColor,
     contentColor: Color = contentColorFor(containerColor),
     tonalElevation: Dp = 0.dp,
-    skipPartiallyExpanded: Boolean = true,
     scrimColor: Color = BottomSheetDefaults.ScrimColor,
     contentWindowInsets: @Composable () -> WindowInsets = { BottomSheetDefaults.windowInsets },
     content: @Composable ColumnScope.() -> Unit,
 ) {
-    val sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = skipPartiallyExpanded)
     androidx.compose.material3.ModalBottomSheet(
         onDismissRequest = onDismissRequest,
         modifier = modifier,
-        sheetState = sheetState,
+        sheetState = state.sheetState,
         sheetMaxWidth = sheetMaxWidth,
         shape = shape,
         containerColor = containerColor,
@@ -45,7 +65,7 @@ fun ModalBottomSheet(
             )
         },
         contentWindowInsets = contentWindowInsets,
-        properties =ModalBottomSheetDefaults.properties,
+        properties = ModalBottomSheetDefaults.properties,
         content = content,
     )
 }
