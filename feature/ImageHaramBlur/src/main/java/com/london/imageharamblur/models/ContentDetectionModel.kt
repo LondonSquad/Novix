@@ -1,8 +1,8 @@
-package com.ae.imageharamblur.models
+package com.london.imageharamblur.models
 
 import android.content.Context
 import android.graphics.Bitmap
-import com.ae.imageharamblur.ImageModerationProcessor
+import com.london.imageharamblur.ImageModerationProcessor
 import org.tensorflow.lite.DataType
 import org.tensorflow.lite.Interpreter
 import org.tensorflow.lite.support.common.FileUtil

@@ -1,4 +1,4 @@
-package com.ae.imageharamblur.faceDetection
+package com.london.imageharamblur.faceDetection
 
 import android.content.Context
 import android.graphics.Bitmap

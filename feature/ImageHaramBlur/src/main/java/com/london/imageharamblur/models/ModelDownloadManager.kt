@@ -1,4 +1,4 @@
-package com.ae.imageharamblur.models
+package com.london.imageharamblur.models
 
 import android.content.Context
 import android.util.Log
