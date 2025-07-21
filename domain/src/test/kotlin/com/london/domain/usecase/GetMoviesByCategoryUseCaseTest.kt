@@ -25,9 +25,9 @@ class GetMoviesByCategoryUseCaseTest {
     @Test
     fun `should return a paged fetch response of movies when repository successfully fetches movies`() = runTest {
         //given
-        coEvery { searchRepository.searchForMoviesByCategory(CATEGORY_ID, LANGUAGE, PAGE_NUMBER) } returns pagedFetchResponse
+        coEvery { searchRepository.searchForMoviesByCategory(CATEGORY_ID, PAGE_NUMBER) } returns pagedFetchResponse
         //when
-        val result = getMoviesUseCase(CATEGORY_ID, LANGUAGE, PAGE_NUMBER)
+        val result = getMoviesUseCase(CATEGORY_ID, PAGE_NUMBER)
         //then
         assertThat(result).isEqualTo(pagedFetchResponse)
     }
@@ -35,17 +35,16 @@ class GetMoviesByCategoryUseCaseTest {
     @Test
     fun `should throw MovieSearchFailedException when repository throws an exception during movie search`() = runTest {
         //given
-        coEvery { searchRepository.searchForMoviesByCategory(CATEGORY_ID, LANGUAGE, PAGE_NUMBER) } throws MovieSearchFailedException()
+        coEvery { searchRepository.searchForMoviesByCategory(CATEGORY_ID, PAGE_NUMBER) } throws MovieSearchFailedException()
         //when //then
         assertThrows<MovieSearchFailedException> {
-            getMoviesUseCase(CATEGORY_ID, LANGUAGE, PAGE_NUMBER)
+            getMoviesUseCase(CATEGORY_ID, PAGE_NUMBER)
         }
     }
 
 
     private companion object {
         const val CATEGORY_ID = 1
-        const val LANGUAGE = "en-US"
         const val PAGE_NUMBER = 1
         val movie = Movie(
             id = 1,

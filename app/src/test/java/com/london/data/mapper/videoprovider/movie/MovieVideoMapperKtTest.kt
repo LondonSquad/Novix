@@ -1,7 +1,7 @@
 package com.london.data.mapper.videoprovider.movie
 
 import com.google.common.truth.Truth.assertThat
-import com.london.data.datasource.remote.details.videoprovider.movie.model.MovieVideoRemote
+import com.london.data.datasource.remote.details.videoprovider.movie.model.MovieVideoRemoteResponse
 import com.london.domain.entity.videoprovider.MovieVideo
 import org.junit.Test
 
@@ -16,7 +16,7 @@ class MovieVideoMapperKtTest {
 
         // Then
         assertThat(remoteVideo).isEqualTo(
-            MovieVideoRemote(
+            MovieVideoRemoteResponse(
                 id = "vid123",
                 iso31661 = "US",
                 iso6391 = "en",
@@ -56,7 +56,7 @@ class MovieVideoMapperKtTest {
         )
     }
 
-    private fun fakeMovieVideoRemote() = MovieVideoRemote(
+    private fun fakeMovieVideoRemote() = MovieVideoRemoteResponse(
         id = "vid123",
         iso31661 = "US",
         iso6391 = "en",
