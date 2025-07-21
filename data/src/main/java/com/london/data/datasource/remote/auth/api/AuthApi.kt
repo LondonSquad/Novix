@@ -1,11 +1,10 @@
-package com.london.data.datasource.remote.auth
+package com.london.data.datasource.remote.auth.api
 
-import com.london.data.datasource.remote.auth.model.CreateSessionRequest
+import com.london.data.datasource.remote.auth.model.CreateSessionWithLoginRequest
+import com.london.data.datasource.remote.auth.model.CreateSessionWithLoginResponse
 import com.london.data.datasource.remote.auth.model.DeleteSessionResponse
 import com.london.data.datasource.remote.auth.model.GuestSessionResponse
-import com.london.data.datasource.remote.auth.model.LoginResponse
 import com.london.data.datasource.remote.auth.model.RequestTokenResponse
-import com.london.data.datasource.remote.auth.model.SessionResponse
 import retrofit2.http.Body
 import retrofit2.http.DELETE
 import retrofit2.http.GET
@@ -16,10 +15,7 @@ interface AuthApi {
     suspend fun getRequestToken(): RequestTokenResponse
 
     @POST("authentication/token/validate_with_login")
-    suspend fun loginSession(@Body body: LoginResponse): RequestTokenResponse
-
-    @POST("3/authentication/session/new")
-    suspend fun createSession(@Body body: CreateSessionRequest): SessionResponse
+    suspend fun validateWithLogin(@Body request: CreateSessionWithLoginRequest): CreateSessionWithLoginResponse
 
     @GET("authentication/guest_session/new")
     suspend fun createGuestSession(): GuestSessionResponse

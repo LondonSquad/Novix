@@ -4,11 +4,12 @@ import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class LoginResponse(
+data class CreateSessionWithLoginResponse(
     @SerialName("success")
     val success: Boolean?,
     @SerialName("expires_at")
-    val expiresAt: String?,
-    @SerialName("request_token")
-    val requestToken: String?
+    val expiresAt: String?
 )
+
+
+
