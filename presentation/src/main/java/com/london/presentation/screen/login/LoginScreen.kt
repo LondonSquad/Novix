@@ -44,7 +44,7 @@ fun LoginScreen() {
             contentDescription = null,
             modifier = Modifier
                 .align(Alignment.TopStart)
-                .offset(y = (-100).dp, x = (-20).dp)
+                .offset(y = (-60).dp, x = (-20).dp)
         )
 
         Column(
