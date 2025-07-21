@@ -44,7 +44,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.zIndex
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.paging.compose.collectAsLazyPagingItems
-import com.ae.imageharamblur.ui.ImageViewFilter
+import com.london.imageharamblur.ui.ImageViewFilter
 import com.london.designsystem.component.ButtonIcon
 import com.london.designsystem.component.CircularLoading
 import com.london.designsystem.component.Text
