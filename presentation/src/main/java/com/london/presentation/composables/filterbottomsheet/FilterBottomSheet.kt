@@ -3,10 +3,10 @@ package com.london.presentation.composables.filterbottomsheet
 import android.annotation.SuppressLint
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
@@ -15,9 +15,7 @@ import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -30,74 +28,86 @@ import androidx.compose.ui.unit.dp
 import com.london.designsystem.component.CustomReleasedYearSlider
 import com.london.designsystem.component.GenreChipGroup
 import com.london.designsystem.component.Icon
-import com.london.designsystem.component.ModalBottomSheet
+import com.london.designsystem.component.NovixBottomSheet
+import com.london.designsystem.component.NovixBottomSheetState
 import com.london.designsystem.component.RatingBar
 import com.london.designsystem.component.Text
 import com.london.designsystem.component.button.OutlineButton
 import com.london.designsystem.component.button.PrimaryButton
+import com.london.designsystem.component.rememberNovixModalBottomSheetState
 import com.london.designsystem.theme.NovixTheme
 import com.london.presentation.R
+import com.london.presentation.screen.search.SearchInteractions
 import com.london.presentation.screen.search.SearchViewModel
 import kotlinx.coroutines.launch
 import org.koin.androidx.compose.koinViewModel
+
+data class FilterState(
+    val availableGenres: List<Pair<Int, Int>>,
+    val selectedGenres: List<Int>,
+    val minimumImdbRating: Int,
+    val isSheetVisible: Boolean,
+    val releaseYearRange: ClosedFloatingPointRange<Float>
+)
 
 @SuppressLint("ConfigurationScreenWidthHeight")
 @Composable
 fun FilterBottomSheet(
     modifier: Modifier = Modifier,
-    viewModel: SearchViewModel = koinViewModel(),
-    onDismissRequest: () -> Unit
+    filterInteractions: SearchInteractions,
+    sheetState: NovixBottomSheetState = rememberNovixModalBottomSheetState(),
+    filterState: FilterState,
 ) {
-    val filterUiState by viewModel.state.collectAsState()
+    val coroutineScope = rememberCoroutineScope()
 
-    val scope = rememberCoroutineScope()
+    LaunchedEffect(filterState.isSheetVisible) {
+        if (filterState.isSheetVisible) {
+            coroutineScope.launch { sheetState.show() }
+        }
+    }
 
-    var isSheetHidden = remember { true }
-
-    val configuration = LocalConfiguration.current
-    val screenHeightDp = configuration.screenHeightDp
-
-    ModalBottomSheet(
-        onDismissRequest = {
-            scope.launch {
-                isSheetHidden=false
-                onDismissRequest()
-            }
-        },
-        containerColor = NovixTheme.colors.surface,
-        skipPartiallyExpanded=isSheetHidden
-    ) {
-        Box(
-            modifier = Modifier
-                .fillMaxWidth()
-                .wrapContentHeight()
-                .heightIn(max = (screenHeightDp * 0.75f).dp)
-                .padding(bottom = 24.dp)
+    if (filterState.isSheetVisible) {
+        NovixBottomSheet(
+            onDismissRequest = filterInteractions::onFilterSheetDismiss,
+            containerColor = NovixTheme.colors.surface,
+            state = sheetState
         ) {
-            FilterBottomSheetContent(
-                modifier = modifier,
-                onDismissRequest = {
-                    scope.launch {
-                        isSheetHidden=false
-                        onDismissRequest()
-                    }
-                },
-                onApplyFilters = { selectedGenres, minimumRating, releaseYearRange ->
-                    viewModel.onApplyFilter(selectedGenres, minimumRating, releaseYearRange)
-                    scope.launch {
-                        isSheetHidden=false
-                        onDismissRequest()
-                    }
-                },
-                onClearFilters = { viewModel.onClearFilter() },
-                availableGenres = filterUiState.availableGenresWithNames,
-                selectedGenres = filterUiState.selectedGenres,
-                imdbRating = filterUiState.imdbRating,
-                releaseYearRange = filterUiState.releaseYearRange,
-                onReleaseYearRangeChange = viewModel::onReleaseYearRangeChange,
-                onGenreSelectedChange = viewModel::onGenreSelectedChange,
-                onRatingChanged = viewModel::onRatingChanged,
-            )
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .wrapContentHeight()
+                    .heightIn(max = (LocalConfiguration.current.screenHeightDp * 0.75f).dp)
+                    .padding(bottom = 24.dp)
+            ) {
+                FilterBottomSheetContent(
+                    modifier = modifier,
+                    filterInteractions = filterInteractions,
+                    filterUiState = filterState,
+                    onCloseClicked = {
+                        coroutineScope.launch {
+                            sheetState.hide()
+                        }.invokeOnCompletion {
+                            if (!sheetState.isVisible) {
+                                filterInteractions.onFilterSheetDismiss()
+                            }
+                        }
+                    },
+                    onApplyClicked = {
+                        filterInteractions.onApplyFilter(
+                            filterState.selectedGenres,
+                            filterState.minimumImdbRating,
+                            filterState.releaseYearRange
+                        )
+                        coroutineScope.launch {
+                            sheetState.hide()
+                        }.invokeOnCompletion {
+                            if (!sheetState.isVisible) {
+                                filterInteractions.onFilterSheetDismiss()
+                            }
+                        }
+                    },
+                )
+            }
         }
     }
 }
@@ -105,20 +115,10 @@ fun FilterBottomSheet(
 @Composable
 private fun FilterBottomSheetContent(
     modifier: Modifier = Modifier,
-    availableGenres: List<Pair<Int, Int>>,
-    onDismissRequest: () -> Unit,
-    onApplyFilters: (
-        selectedGenres: List<Int>,
-        minimumRating: Int,
-        releaseYearRange: ClosedFloatingPointRange<Float>
-    ) -> Unit,
-    onClearFilters: () -> Unit,
-    selectedGenres: List<Int>,
-    imdbRating: Int,
-    releaseYearRange: ClosedFloatingPointRange<Float>,
-    onReleaseYearRangeChange: (ClosedFloatingPointRange<Float>) -> Unit,
-    onGenreSelectedChange: (List<Int>) -> Unit,
-    onRatingChanged: (Int) -> Unit,
+    filterInteractions: SearchInteractions,
+    filterUiState: FilterState,
+    onCloseClicked: () -> Unit,
+    onApplyClicked: () -> Unit,
 ) {
     LazyColumn(
         modifier = modifier.padding(horizontal = 16.dp)
@@ -128,7 +128,8 @@ private fun FilterBottomSheetContent(
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(top = 8.dp, bottom = 24.dp),
-                verticalAlignment = Alignment.CenterVertically
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.SpaceBetween
             ) {
                 Text(
                     text = stringResource(R.string.filter),
@@ -136,9 +137,7 @@ private fun FilterBottomSheetContent(
                     color = NovixTheme.colors.title,
                 )
 
-                Spacer(modifier = Modifier.weight(1f))
-
-                Box(
+                Icon(
                     modifier = Modifier
                         .size(32.dp)
                         .clip(RoundedCornerShape(8.dp))
@@ -147,18 +146,15 @@ private fun FilterBottomSheetContent(
                             color = NovixTheme.colors.stroke,
                             shape = RoundedCornerShape(8.dp)
                         )
-                        .clickable { onDismissRequest() },
-                    contentAlignment = Alignment.Center
-                ) {
-                    Icon(
-                        painter = painterResource(com.london.designsystem.R.drawable.cancel),
-                        contentDescription = "Close filter",
-                        modifier = Modifier.padding(6.dp),
-                        tint = NovixTheme.colors.title
-                    )
-                }
+                        .clickable(onClick = onCloseClicked)
+                        .padding(6.dp),
+                    painter = painterResource(com.london.designsystem.R.drawable.cancel),
+                    contentDescription = "Close filter",
+                    tint = NovixTheme.colors.title
+                )
             }
         }
+
         item {
             Text(
                 text = stringResource(R.string.released_year),
@@ -170,12 +166,13 @@ private fun FilterBottomSheetContent(
 
         item {
             CustomReleasedYearSlider(
-                yearRange = releaseYearRange,
-                onYearRangeChange = onReleaseYearRangeChange,
+                yearRange = filterUiState.releaseYearRange,
+                onYearRangeChange = filterInteractions::onReleaseYearRangeChange,
                 minYear = 1950,
                 maxYear = 2030
             )
         }
+
         item {
             Text(
                 text = stringResource(R.string.genres),
@@ -184,13 +181,15 @@ private fun FilterBottomSheetContent(
                 modifier = Modifier.padding(top = 16.dp, bottom = 8.dp)
             )
         }
+
         item {
             GenreChipGroup(
-                availableGenres = availableGenres,
-                selectedGenres = selectedGenres,
-                onGenreSelectionChanged = onGenreSelectedChange
+                availableGenres = filterUiState.availableGenres,
+                selectedGenres = filterUiState.selectedGenres,
+                onGenreSelectionChanged = filterInteractions::onGenreSelectedChange
             )
         }
+
         item {
             Text(
                 text = stringResource(R.string.imdb_rating),
@@ -199,13 +198,15 @@ private fun FilterBottomSheetContent(
                 modifier = Modifier.padding(top = 24.dp)
             )
         }
+
         item {
             RatingBar(
-                rating = imdbRating,
-                onRatingChanged = onRatingChanged,
+                rating = filterUiState.minimumImdbRating,
+                onRatingChanged = filterInteractions::onRatingChanged,
                 modifier = Modifier.padding(top = 8.dp)
             )
         }
+
         item {
             Column(
                 Modifier
@@ -218,13 +219,7 @@ private fun FilterBottomSheetContent(
                     hasIcon = false,
                     isLoading = false,
                     icon = null,
-                    onClick = {
-                        onApplyFilters(
-                            selectedGenres,
-                            imdbRating,
-                            releaseYearRange
-                        )
-                    },
+                    onClick = onApplyClicked,
                     modifier = Modifier
                         .fillMaxWidth()
                 )
@@ -235,9 +230,7 @@ private fun FilterBottomSheetContent(
                     icon = null,
                     hasIcon = false,
                     isLoading = false,
-                    onClick = {
-                        onClearFilters()
-                    },
+                    onClick = filterInteractions::onClearFilter,
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(top = 8.dp)
@@ -253,25 +246,21 @@ fun FilterBottomSheetContentPreview() {
     NovixTheme {
         Box {
             FilterBottomSheetContent(
-                onDismissRequest = {},
-                onApplyFilters = { selectedGenres, rating, range ->
-                    println("Apply filters clicked with genres=$selectedGenres, rating=$rating, yearRange=$range")
-                },
-                onClearFilters = {
-                    println("Clear filters clicked")
-                },
-                availableGenres = listOf(
-                    28 to R.string.action,
-                    12 to R.string.action,
-                    16 to R.string.action,
-                    35 to R.string.action
+                filterInteractions = koinViewModel<SearchViewModel>(),
+                filterUiState = FilterState(
+                    availableGenres = listOf(
+                        28 to R.string.action,
+                        12 to R.string.action,
+                        16 to R.string.action,
+                        35 to R.string.action
+                    ),
+                    selectedGenres = emptyList(),
+                    minimumImdbRating = 0,
+                    isSheetVisible = true,
+                    releaseYearRange = 1950f..2030f
                 ),
-                selectedGenres = listOf(),
-                imdbRating = 0,
-                releaseYearRange = 1950f..2030f,
-                onReleaseYearRangeChange = {},
-                onGenreSelectedChange = { },
-                onRatingChanged = {},
+                onCloseClicked = {},
+                onApplyClicked = {},
             )
         }
     }
