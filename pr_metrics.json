@@ -5848,5 +5848,33 @@
       "deletions": 37,
       "changed_files": 25
     }
+  },
+  {
+    "pr_number": 256,
+    "url": "https://github.com/LondonSquad/Novix/pull/256",
+    "title": "Feature/home up coming section",
+    "opened_at": "2025-07-21T20:13:48Z",
+    "head_ref": "feature/home-up-coming-section",
+    "base_ref": "develop",
+    "creator": {
+      "login": "marwanqashwa",
+      "id": 100484790,
+      "url": "https://github.com/marwanqashwa"
+    },
+    "approvals": [],
+    "first_approved_at": null,
+    "time_to_first_approval_minutes": null,
+    "required_approvals_met_at": null,
+    "time_to_required_approvals_minutes": null,
+    "closed_at": null,
+    "merged_at": null,
+    "merged_by": null,
+    "week": "2025-W30",
+    "status": "pending",
+    "diff_stats": {
+      "additions": 84,
+      "deletions": 18,
+      "changed_files": 3
+    }
   }
 ]
