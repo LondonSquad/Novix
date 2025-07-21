@@ -1,9 +1,9 @@
 package com.london.data.repository
 
 import com.google.common.truth.Truth.assertThat
-import com.london.data.datasource.remote.details.videoprovider.movie.model.MovieVideoProviderRemote
+import com.london.data.datasource.remote.details.videoprovider.movie.MovieVideoProviderRemote
 import com.london.data.datasource.remote.details.videoprovider.movie.model.MovieVideoRemote
-import com.london.data.datasource.remote.details.videoprovider.movie.model.MovieVideoResponse
+import com.london.data.datasource.remote.details.videoprovider.movie.model.MovieVideoRemoteResponse
 import com.london.domain.entity.videoprovider.MovieVideo
 import com.london.domain.repository.MovieVideoProviderRepository
 import io.mockk.coEvery
@@ -38,7 +38,7 @@ class MovieVideoProviderRepositoryImplTest {
     @Test
     fun `getMovieVideos should return empty list when movies is null`() = runTest {
         // GIVEN
-        val emptyResponse = MovieVideoResponse(
+        val emptyResponse = MovieVideoRemote(
             id = 1, movies = null
         )
         coEvery { movieVideoProviderRemote.getMovieVideos(999) } returns emptyResponse
@@ -51,7 +51,7 @@ class MovieVideoProviderRepositoryImplTest {
     }
 
     companion object {
-        private val REMOTE_VIDEO = MovieVideoRemote(
+        private val REMOTE_VIDEO = MovieVideoRemoteResponse(
             id = "vid123",
             iso6391 = "en",
             iso31661 = "US",
@@ -64,7 +64,7 @@ class MovieVideoProviderRepositoryImplTest {
             publishedAt = "2024-05-01"
         )
 
-        private val MOVIE_VIDEO_LIST_REMOTE = MovieVideoResponse(
+        private val MOVIE_VIDEO_LIST_REMOTE = MovieVideoRemote(
             id = 1, movies = listOf(REMOTE_VIDEO)
         )
 

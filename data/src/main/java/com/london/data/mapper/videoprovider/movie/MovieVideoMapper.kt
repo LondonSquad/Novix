@@ -1,12 +1,12 @@
 package com.london.data.mapper.videoprovider.movie
 
-import com.london.data.datasource.remote.details.videoprovider.movie.model.MovieVideoRemote
+import com.london.data.datasource.remote.details.videoprovider.movie.model.MovieVideoRemoteResponse
 import com.london.data.utils.asYoutubeUrlOrEmpty
 import com.london.data.utils.isTrue
 import com.london.data.utils.orZero
 import com.london.domain.entity.videoprovider.MovieVideo
 
-fun MovieVideoRemote.toMovie(): MovieVideo {
+fun MovieVideoRemoteResponse.toMovie(): MovieVideo {
     return MovieVideo(
         id = id.orEmpty(),
         iso31661 = iso31661.orEmpty(),
@@ -21,8 +21,8 @@ fun MovieVideoRemote.toMovie(): MovieVideo {
     )
 }
 
-fun MovieVideo.toMovieRemote(): MovieVideoRemote {
-    return MovieVideoRemote(
+fun MovieVideo.toMovieRemote(): MovieVideoRemoteResponse {
+    return MovieVideoRemoteResponse(
         id = id,
         iso31661 = iso31661,
         iso6391 = iso6391,
