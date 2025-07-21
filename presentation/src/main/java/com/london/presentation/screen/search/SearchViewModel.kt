@@ -393,7 +393,6 @@ class SearchViewModel(
         val moviesFlow = createPagingSourceFlow(query) { currentQuery, pageNumber ->
             val movies = getMoviesUseCase(
                 name = currentQuery,
-                language = "en-US",
                 pageNumber = pageNumber
             )
             movies.copy(items = applyMovieFilters(movies.items))
@@ -412,7 +411,6 @@ class SearchViewModel(
         val actorsFlow = createPagingSourceFlow(query) { currentQuery, pageNumber ->
             val actors = getActorsUseCase(
                 name = currentQuery,
-                language = "en-US",
                 pageNumber = pageNumber
             )
             actors.copy(items = actors.items)
@@ -431,7 +429,6 @@ class SearchViewModel(
         val tvShowsFlow = createPagingSourceFlow(query) { currentQuery, pageNumber ->
             val tvShows = getTvShowsUseCase(
                 name = currentQuery,
-                language = "en-US",
                 pageNumber = pageNumber
             )
             tvShows.copy(items = applyTvShowFilters(tvShows.items))

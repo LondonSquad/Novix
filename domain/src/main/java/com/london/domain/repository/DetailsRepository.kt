@@ -9,9 +9,9 @@ import com.london.domain.entity.tvshowdetails.episode.TvShowEpisodeByIdEntity
 import com.london.domain.entity.tvshowdetails.episode.TvShowEpisodesEntity
 
 interface DetailsRepository {
-    suspend fun getTvShowDetailsById(tvShowId: Int): TvShowDetailsEntity
-    suspend fun getCastTvShowById(tvShowId: Int): TvShowCastEntity
-    suspend fun getImagesTvShowById(tvShowId: Int): TvShowImagesEntity
+    suspend fun getTvShowDetailsById(id: Int): TvShowDetailsEntity
+    suspend fun getCastTvShowById(id: Int): TvShowCastEntity
+    suspend fun getImagesTvShowById(id: Int): TvShowImagesEntity
     suspend fun getTvShowEpisodesBySeason(
         tvShowId: Int,
         seasonNumber: Int,

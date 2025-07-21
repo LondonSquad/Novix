@@ -11,11 +11,9 @@ class GetMoviesUseCase(
 ) {
     suspend operator fun invoke(
         name: String,
-        language: String,
         pageNumber: Int
     ) = repository.searchForMovies(
         name = name,
-        language = language,
         pageNumber = pageNumber
     )
 }
