@@ -25,9 +25,9 @@ class GetActorsUseCaseTest {
     @Test
     fun `should return PagedFetchResponse when SearchRepository returns PagedFetchResponse`() = runTest {
         //given
-        coEvery { searchRepository.searchForActors(NAME, LANGUAGE, PAGE_NUMBER) } returns pagedFetchResponse
+        coEvery { searchRepository.searchForActors(NAME, PAGE_NUMBER) } returns pagedFetchResponse
         //when
-        val result = getActorsUseCase(NAME, LANGUAGE, PAGE_NUMBER)
+        val result = getActorsUseCase(NAME, PAGE_NUMBER)
         //then
         assertThat(result).isEqualTo(pagedFetchResponse)
     }
@@ -38,20 +38,18 @@ class GetActorsUseCaseTest {
         coEvery {
             searchRepository.searchForActors(
                 NAME,
-                LANGUAGE,
                 PAGE_NUMBER
             )
         } throws ActorSearchFailedException()
         //when //then
         assertThrows<ActorSearchFailedException> {
-            getActorsUseCase(NAME, LANGUAGE, PAGE_NUMBER)
+            getActorsUseCase(NAME, PAGE_NUMBER)
         }
     }
 
 
     private companion object {
         const val NAME = "Tom"
-        const val LANGUAGE = "en-US"
         const val PAGE_NUMBER = 1
         val ACTOR = Actor(
             id = 1, name = "Tom Holland", profilePicture = ""

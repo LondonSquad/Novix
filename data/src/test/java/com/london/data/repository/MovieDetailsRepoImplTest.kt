@@ -1,6 +1,6 @@
 package com.london.data.repository
 
-import com.london.data.datasource.remote.details.moviedetails.MovieDetailsRemote
+import com.london.data.datasource.remote.details.moviedetails.MovieDetailsRemoteDataSource
 import com.london.data.datasource.remote.details.moviedetails.model.moviecast.MovieActor
 import com.london.data.datasource.remote.details.moviedetails.model.moviecast.MovieCastResponse
 import com.london.data.datasource.remote.details.moviedetails.model.moviedetails.CollectionDetails
@@ -28,7 +28,7 @@ import kotlin.test.Test
 
 class MovieDetailsRepoImplTest {
 
-    private lateinit var remoteDataSource: MovieDetailsRemote
+    private lateinit var remoteDataSource: MovieDetailsRemoteDataSource
     private lateinit var repository: MovieDetailsRepoImpl
 
     @Before
