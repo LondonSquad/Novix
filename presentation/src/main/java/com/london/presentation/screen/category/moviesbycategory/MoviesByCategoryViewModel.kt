@@ -30,7 +30,6 @@ class MoviesByCategoryViewModel(
                 val moviesFlow = createPagingSourceFlow(query = "") { _, pageNumber ->
                     val movies = getMoviesByCategoryUseCase(
                         categoryId = categoryId,
-                        language = "en-US",
                         pageNumber = pageNumber
                     )
                     movies.copy(items = movies.items)
