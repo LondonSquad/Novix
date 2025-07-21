@@ -1,8 +1,6 @@
 package com.london.app.navigation
 
 import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.animation.core.FastOutLinearInEasing
-import androidx.compose.animation.core.FastOutSlowInEasing
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
@@ -67,25 +65,19 @@ fun NovixApp() {
         else -> Home
     }
 
-    val showBottomNav = currentDestination?.hasRoute<TvShowDetails>() != true &&
-            currentDestination?.hasRoute<MovieDetails>() != true &&
-            currentDestination?.hasRoute<EpisodeDetails>() != true &&
-            currentDestination?.hasRoute<ActorDetails>() != true &&
-            currentDestination?.hasRoute<Reviews>() != true
+    val showBottomNav = currentDestination?.hasRoute<Home>() == true ||
+            currentDestination?.hasRoute<Search>() == true ||
+            currentDestination?.hasRoute<Categories>() == true ||
+            currentDestination?.hasRoute<Bookmarks>() == true ||
+            currentDestination?.hasRoute<Account>() == true
 
     Scaffold(
         backgroundColor = NovixTheme.colors.surface,
         bottomBar = {
             AnimatedVisibility(
                 visible = showBottomNav,
-                enter = slideInVertically(
-                    animationSpec = tween(300, easing = FastOutSlowInEasing),
-                    initialOffsetY = { it }
-                ),
-                exit = slideOutVertically(
-                    animationSpec = tween(300, easing = FastOutLinearInEasing),
-                    targetOffsetY = { it }
-                )
+                enter = slideInVertically(animationSpec = tween(), initialOffsetY = { it }),
+                exit = slideOutVertically(animationSpec = tween(), targetOffsetY = { it })
             ) {
                 NavBar(
                     modifier = Modifier.navigationBarsPadding(),
@@ -180,7 +172,7 @@ fun NovixApp() {
                     onNavigateToReviews = { tvShowId, mediaType ->
                         navController.navigate(Reviews(tvShowId, mediaType))
                     }, onNavigateToCast = { actorId ->
-                        navController.navigate(Screen.ActorDetails(actorId))
+                        navController.navigate(ActorDetails(actorId))
                     }
                 )
             }
@@ -228,7 +220,7 @@ fun NovixApp() {
                         navController.navigate(MovieDetails(movieId))
                     },
                     onNavigateToActor = { actorId ->
-                        navController.navigate(Screen.ActorDetails(actorId))
+                        navController.navigate(ActorDetails(actorId))
                     },
                     onNavigateToReviews = { movieId, mediaType ->
                         navController.navigate(Reviews(movieId, mediaType))
