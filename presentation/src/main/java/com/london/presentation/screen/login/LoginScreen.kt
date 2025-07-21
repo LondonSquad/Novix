@@ -10,11 +10,14 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.asPaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.statusBars
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -76,16 +79,20 @@ private fun Content(
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(16.dp),
+                .padding(WindowInsets.statusBars.asPaddingValues())
+                .padding(horizontal = 16.dp)
         ) {
-            TopBar(title = stringResource(R.string.login), onBackClick = {})
+            TopBar(
+                title = stringResource(R.string.login),
+                modifier = Modifier.padding(top = 8.dp), onBackClick = {}
+            )
             Icon(
                 painter = painterResource(id = R.drawable.novix_icon),
                 contentDescription = stringResource(R.string.app_icon),
                 tint = Color.Transparent,
                 modifier = Modifier
                     .size(64.dp)
-                    .padding(top = 4.dp, bottom = 8.dp)
+                    .padding(top = 12.dp, bottom = 8.dp)
             )
             Text(
                 stringResource(R.string.login_to_your_account),
