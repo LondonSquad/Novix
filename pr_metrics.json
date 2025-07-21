@@ -5820,5 +5820,33 @@
       "deletions": 1,
       "changed_files": 13
     }
+  },
+  {
+    "pr_number": 255,
+    "url": "https://github.com/LondonSquad/Novix/pull/255",
+    "title": "refactor: update package names from com.ae.imageharamblur to com.london.imageharamblur",
+    "opened_at": "2025-07-21T20:05:33Z",
+    "head_ref": "refactor/update-imageharamblur-package-names",
+    "base_ref": "develop",
+    "creator": {
+      "login": "abdo-essam",
+      "id": 92235360,
+      "url": "https://github.com/abdo-essam"
+    },
+    "approvals": [],
+    "first_approved_at": null,
+    "time_to_first_approval_minutes": null,
+    "required_approvals_met_at": null,
+    "time_to_required_approvals_minutes": null,
+    "closed_at": null,
+    "merged_at": null,
+    "merged_by": null,
+    "week": "2025-W30",
+    "status": "pending",
+    "diff_stats": {
+      "additions": 34,
+      "deletions": 37,
+      "changed_files": 25
+    }
   }
 ]
