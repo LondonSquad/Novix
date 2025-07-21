@@ -5734,5 +5734,33 @@
       "deletions": 20,
       "changed_files": 4
     }
+  },
+  {
+    "pr_number": 252,
+    "url": "https://github.com/LondonSquad/Novix/pull/252",
+    "title": "feat: timber configuration for debugging",
+    "opened_at": "2025-07-21T09:11:30Z",
+    "head_ref": "feature/timber",
+    "base_ref": "develop",
+    "creator": {
+      "login": "ahmeddsamii",
+      "id": 154278495,
+      "url": "https://github.com/ahmeddsamii"
+    },
+    "approvals": [],
+    "first_approved_at": null,
+    "time_to_first_approval_minutes": null,
+    "required_approvals_met_at": null,
+    "time_to_required_approvals_minutes": null,
+    "closed_at": null,
+    "merged_at": null,
+    "merged_by": null,
+    "week": "2025-W30",
+    "status": "pending",
+    "diff_stats": {
+      "additions": 27,
+      "deletions": 0,
+      "changed_files": 1
+    }
   }
 ]
