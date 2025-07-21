@@ -16,6 +16,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.london.designsystem.component.HomeCard
 import com.london.designsystem.component.NovixChip
@@ -29,7 +30,9 @@ fun HomeScreen() {
         Content(
             onMovieClick = { },
             onGenreClick = { },
-            modifier = Modifier.padding(top = 100.dp).fillMaxSize()
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(top = 100.dp)
         )
 }
 
@@ -64,19 +67,10 @@ private fun Content(
             )
         }
         item(span = { GridItemSpan(maxLineSpan) }) {
-            LazyRow(
-                horizontalArrangement = Arrangement.spacedBy(8.dp),
-                contentPadding = PaddingValues(horizontal = 16.dp),
-                modifier = Modifier.requiredWidth(screenWidth)
-            ) {
-                items(10) {
-                    NovixChip(
-                        text = "Adventure",//TODO()
-                        isSelected = true,
-                        onClick = { onGenreClick(it) }
-                    )
-                }
-            }
+            GenresSection(
+                onGenreClick = onGenreClick,
+                screenWidth = screenWidth
+            )
         }
         items(10) {
             HomeCard(
@@ -87,7 +81,25 @@ private fun Content(
         }
     }
 }
-
+@Composable
+private fun GenresSection(
+    onGenreClick: (genreId: Int) -> Unit,
+    screenWidth: Dp
+){
+    LazyRow(
+        horizontalArrangement = Arrangement.spacedBy(8.dp),
+        contentPadding = PaddingValues(horizontal = 16.dp),
+        modifier = Modifier.requiredWidth(screenWidth)
+    ) {
+        items(10) {
+            NovixChip(
+                text = "Adventure",//TODO()
+                isSelected = true,
+                onClick = { onGenreClick(it) }
+            )
+        }
+    }
+}
 @ThemePreviews
 @Composable
 private fun Preview() {
