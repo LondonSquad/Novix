@@ -231,7 +231,11 @@ class SearchRemoteDataSourceImplTest {
                                 "release_date": "2006-01-24",
                                 "video": false,
                                 "vote_average": 7,
-                                "vote_count": 1
+                                "vote_count": 1,
+                                "name": null,
+                                "original_name": null,
+                                "first_air_date": null,
+                                "origin_country": []
                             }
                         ]
                     }

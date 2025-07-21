@@ -17,36 +17,52 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.london.designsystem.component.HomeCard
 import com.london.designsystem.component.TopBar
 import com.london.designsystem.theme.NovixTheme
 import com.london.presentation.R
+import com.london.presentation.screen.BuildScreen
+import com.london.presentation.screen.LoadingScreen
+import com.london.presentation.screen.NetworkErrorScreen
+import com.london.presentation.utils.Listen
 import org.koin.androidx.compose.koinViewModel
 
 @Composable
 fun TopTvShowsPicksScreen(
     modifier: Modifier = Modifier,
     viewModel: TopTvShowsPicksViewModel = koinViewModel(),
-    onTvShowClick: (movieId: Int) -> Unit,
+    onTvShowClick: (tvShowId: Int) -> Unit,
     onBackClick: () -> Unit
 ) {
-    val state by viewModel.uiState.collectAsState()
-    TopTvShowsPicksContent(
-        state = state,
-        interactions = viewModel,
-        modifier = modifier,
-        onBackClick = onBackClick,
-        onTvShowClick = onTvShowClick,
-    )
+    val state by viewModel.state.collectAsStateWithLifecycle()
+    val effect by viewModel.effect.collectAsState(initial = null)
+
+    effect?.Listen { currentEffect ->
+        when (currentEffect) {
+            is TopTvShowsPicksEffect.TvShowNavigation -> onTvShowClick(currentEffect.tvShowId)
+            is TopTvShowsPicksEffect.BackNavigation -> onBackClick()
+        }
+    }
+
+    BuildScreen {
+        when {
+            state.isSaved -> LoadingScreen()
+            state.error != null -> NetworkErrorScreen()
+            else -> TopTvShowsPicksContent(
+                state = state,
+                tvShowsPicksContract = viewModel,
+                modifier = modifier,
+            )
+        }
+    }
 }
 
 @Composable
 private fun TopTvShowsPicksContent(
     state: TopTvShowsPicksUiState,
-    interactions: TopTvShowsPicksInteractions,
+    tvShowsPicksContract: TopTvShowsPicksContract,
     modifier: Modifier = Modifier,
-    onBackClick: () -> Unit,
-    onTvShowClick: (movieId: Int) -> Unit,
 ) {
     LazyVerticalGrid(
         columns = GridCells.Fixed(2),
@@ -63,15 +79,17 @@ private fun TopTvShowsPicksContent(
             TopBar(
                 modifier = Modifier.statusBarsPadding(),
                 title = stringResource(R.string.top_tv_shows_picks),
-                onBackClick = onBackClick
+                onBackClick = tvShowsPicksContract::onBackClicked
             )
         }
         items(state.tvShowDetails.cast) { tvShow ->
             HomeCard(
                 imageUrl = tvShow.posterUrl,
                 isSaved = false,
-                onSaveClick = { interactions.onSaveMovie(tvShow.id) },
-                modifier = Modifier.clickable{ onTvShowClick(tvShow.id) }
+                onSaveClick = { tvShowsPicksContract.onSaveMovie(tvShow.id) },
+                modifier = Modifier.clickable {
+                    tvShowsPicksContract.onTvShowClicked(tvShow.id)
+                }
             )
         }
     }

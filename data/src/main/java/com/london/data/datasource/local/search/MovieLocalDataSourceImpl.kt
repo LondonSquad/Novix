@@ -1,7 +1,7 @@
 package com.london.data.datasource.local.search
 
 import com.london.data.datasource.local.LocalDataSource
-import com.london.data.datasource.local.dao.SearchMoviesDao
+import com.london.data.datasource.local.dao.search.SearchMoviesDao
 import com.london.data.datasource.local.model.SearchMoviesLocal
 import com.london.data.datasource.util.executeDelete
 import com.london.data.datasource.util.executeGetAll
@@ -25,7 +25,6 @@ class MovieLocalDataSourceImpl(
         CoroutineScope(Dispatchers.IO).launch {
             searchMoviesDao.getAll().forEach {
                 if (isOneHourExpired(it.date)) searchMoviesDao.delete(it)
-
             }
         }
     }

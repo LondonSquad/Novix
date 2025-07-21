@@ -18,6 +18,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.paging.PagingData
 import androidx.paging.compose.collectAsLazyPagingItems
 import com.london.designsystem.component.HomeCard
@@ -25,7 +26,11 @@ import com.london.designsystem.component.TopBar
 import com.london.designsystem.theme.NovixTheme
 import com.london.designsystem.theme.ThemePreviews
 import com.london.domain.entity.Movie
+import com.london.presentation.screen.BuildScreen
+import com.london.presentation.screen.LoadingScreen
+import com.london.presentation.screen.NetworkErrorScreen
 import com.london.presentation.screen.search.SearchCategory
+import com.london.presentation.utils.Listen
 import com.london.presentation.utils.convertGenreCodeToString
 import kotlinx.coroutines.flow.flow
 import org.koin.androidx.compose.koinViewModel
@@ -37,22 +42,35 @@ fun MoviesByCategoryScreen(
     onNavigateToMovieDetails: (Int) -> Unit,
     onBackClick: () -> Unit
 ) {
-    val state by viewModel.uiState.collectAsState()
-    MoviesByCategoryContent(
-        state = state,
-        interactions = viewModel,
-        modifier = modifier,
-        onNavigateToMovieDetails = onNavigateToMovieDetails,
-        onBackClick = onBackClick
-    )
+    val state by viewModel.state.collectAsStateWithLifecycle()
+    val effect by viewModel.effect.collectAsState(null)
+
+    effect?.Listen { currentEffect ->
+        when (currentEffect) {
+            MoviesByCategoryEffect.NavigateBack -> onBackClick()
+            is MoviesByCategoryEffect.NavigateToMovieDetails -> onNavigateToMovieDetails(
+                currentEffect.movieId
+            )
+        }
+    }
+
+    BuildScreen {
+        when {
+            state.isLoading -> LoadingScreen()
+            state.error != null -> NetworkErrorScreen()
+            else -> MoviesByCategoryContent(
+                state = state,
+                moviesByCategoryContract = viewModel,
+                modifier = modifier,
+            )
+        }
+    }
 }
 
 @Composable
 private fun MoviesByCategoryContent(
     state: MoviesByCategoryUiState,
-    interactions: MoviesByCategoryInteractions,
-    onNavigateToMovieDetails: (Int) -> Unit,
-    onBackClick: () -> Unit,
+    moviesByCategoryContract: MoviesByCategoryContract,
     modifier: Modifier = Modifier
 ) {
 
@@ -75,7 +93,7 @@ private fun MoviesByCategoryContent(
                     convertGenreCodeToString(
                         genreId = state.categoryId, searchCategory = SearchCategory.Movies
                     )
-                ), onBackClick = onBackClick
+                ), onBackClick = moviesByCategoryContract::onBackClick
             )
         }
         items(moviesLazyList.itemCount) { index ->
@@ -83,8 +101,10 @@ private fun MoviesByCategoryContent(
             if (movie != null) HomeCard(
                 imageUrl = movie.posterPicture,
                 isSaved = false,
-                onSaveClick = { interactions.onSavedClick(movie.id) },
-                modifier = Modifier.clickable { onNavigateToMovieDetails(movie.id) }
+                onSaveClick = { moviesByCategoryContract.onSavedClick(movie.id) },
+                modifier = Modifier.clickable {
+                    moviesByCategoryContract.onMovieClick(movieId = movie.id)
+                }
             )
         }
     }
@@ -160,8 +180,10 @@ private fun MoviesByCategoryContentPreview() {
                     rating = 3,
                     genreIds = listOf()
                 )
-            }), interactions = object : MoviesByCategoryInteractions {
+            }), moviesByCategoryContract = object : MoviesByCategoryContract {
             override fun onSavedClick(movieId: Int) {}
-        }, {}, {}
+            override fun onMovieClick(movieId: Int) {}
+            override fun onBackClick() {}
+        },
     )
 }

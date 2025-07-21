@@ -6,33 +6,33 @@ import kotlinx.serialization.Serializable
 @Serializable
 data class SearchActorRemote(
     @SerialName("adult")
-    val adult: Boolean,
+    val adult: Boolean?,
     @SerialName("gender")
-    val gender: Int,
+    val gender: Int?,
     @SerialName("id")
-    val id: Int,
+    val id: Int?,
     @SerialName("known_for_department")
-    val knownForDepartment: String? = null,
+    val knownForDepartment: String?,
     @SerialName("name")
-    val name: String? = null,
+    val name: String?,
     @SerialName("original_name")
-    val originalName: String? = null,
+    val originalName: String?,
     @SerialName("popularity")
-    val popularity: Double,
+    val popularity: Double?,
     @SerialName("profile_path")
-    val profilePath: String? = null,
+    val profilePath: String?,
     @SerialName("known_for")
-    val knownFor: List<KnownFor>
+    val knownFor: List<KnownFor>?
 )
 
 @Serializable
 data class KnownFor(
     @SerialName("adult")
-    val adult: Boolean,
+    val adult: Boolean? = null,
     @SerialName("backdrop_path")
     val backdropPath: String? = null,
     @SerialName("id")
-    val id: Int,
+    val id: Int? = null,
     @SerialName("title")
     val title: String? = null,
     @SerialName("original_title")
@@ -46,17 +46,17 @@ data class KnownFor(
     @SerialName("original_language")
     val originalLanguage: String? = null,
     @SerialName("genre_ids")
-    val genreIds: List<Int>,
+    val genreIds: List<Int>? = null,
     @SerialName("popularity")
-    val popularity: Double,
+    val popularity: Double? = null,
     @SerialName("release_date")
     val releaseDate: String? = null,
     @SerialName("video")
     val video: Boolean? = null,
     @SerialName("vote_average")
-    val voteAverage: Double,
+    val voteAverage: Double? = null,
     @SerialName("vote_count")
-    val voteCount: Int,
+    val voteCount: Int? = null,
     @SerialName("name")
     val name: String? = null,
     @SerialName("original_name")
