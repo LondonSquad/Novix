@@ -89,10 +89,10 @@ private fun Content(
             Icon(
                 painter = painterResource(id = R.drawable.novix_icon),
                 contentDescription = stringResource(R.string.app_icon),
-                tint = Color.Transparent,
+                tint = Color.Unspecified,
                 modifier = Modifier
                     .size(64.dp)
-                    .padding(top = 12.dp, bottom = 8.dp)
+                    .padding(top = 12.dp, bottom = 16.dp)
             )
             Text(
                 stringResource(R.string.login_to_your_account),
@@ -103,7 +103,7 @@ private fun Content(
                 stringResource(R.string.user_name),
                 style = NovixTheme.typography.title.small,
                 color = NovixTheme.colors.title,
-                modifier = Modifier.padding(top = 40.dp)
+                modifier = Modifier.padding(top = 40.dp, bottom = 8.dp)
             )
             OutlinedTextField(
                 value = username,
@@ -115,7 +115,7 @@ private fun Content(
                 stringResource(R.string.password),
                 style = NovixTheme.typography.title.small,
                 color = NovixTheme.colors.title,
-                modifier = Modifier.padding(top = 16.dp)
+                modifier = Modifier.padding(top = 16.dp, bottom = 8.dp)
             )
             OutlinedTextField(
                 value = password,
