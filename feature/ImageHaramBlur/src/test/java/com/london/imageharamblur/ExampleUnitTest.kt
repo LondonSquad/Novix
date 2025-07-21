@@ -1,4 +1,4 @@
-package com.ae.imageharamblur
+package com.london.imageharamblur
 
 import org.junit.Test
 
