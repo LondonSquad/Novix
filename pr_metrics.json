@@ -5728,9 +5728,18 @@
       "id": 43588217,
       "url": "https://github.com/yusufnasserdev"
     },
-    "approvals": [],
-    "first_approved_at": null,
-    "time_to_first_approval_minutes": null,
+    "approvals": [
+      {
+        "reviewer": {
+          "id": 100484790,
+          "login": "marwanqashwa",
+          "url": "https://github.com/marwanqashwa"
+        },
+        "submitted_at": "2025-07-21T23:24:37Z"
+      }
+    ],
+    "first_approved_at": "2025-07-21T23:24:37Z",
+    "time_to_first_approval_minutes": 1197.55,
     "required_approvals_met_at": null,
     "time_to_required_approvals_minutes": null,
     "closed_at": null,
