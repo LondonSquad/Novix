@@ -38,7 +38,7 @@ fun LoginScreen() {
     val password = TextFieldValue()
     val isLoginEnabled = username.text.isNotEmpty() && password.text.isNotEmpty()
 
-    LoginScreenContent(
+    Content(
         username = username,
         onUsernameChange = {},
         password = password,
@@ -51,7 +51,7 @@ fun LoginScreen() {
 
 @SuppressLint("UnrememberedMutableInteractionSource")
 @Composable
-fun LoginScreenContent(
+private fun Content(
     username: TextFieldValue,
     onUsernameChange: (TextFieldValue) -> Unit,
     password: TextFieldValue,
