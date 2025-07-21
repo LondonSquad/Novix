@@ -21,8 +21,6 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.Icon
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.derivedStateOf
@@ -34,14 +32,15 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.layout
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.zIndex
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.london.designsystem.component.ActorItem
+import com.london.designsystem.component.Icon
+import com.london.designsystem.component.Text
 import com.london.designsystem.theme.NovixTheme
 import com.london.presentation.R
 import com.london.presentation.composables.ConditionalText
@@ -292,7 +291,7 @@ fun TvShowDate(
         horizontalArrangement = Arrangement.spacedBy(4.dp)
     ) {
         Icon(
-            imageVector = ImageVector.vectorResource(com.london.designsystem.R.drawable.icon_calender),
+            painter = painterResource(com.london.designsystem.R.drawable.icon_calender),
             contentDescription = "Calender icon",
             tint = NovixTheme.colors.body,
             modifier = Modifier.size(12.dp)
@@ -349,7 +348,7 @@ fun Seasons(uiState: EpisodeDetailsUiState) {
         horizontalArrangement = Arrangement.spacedBy(4.dp)
     ) {
         Icon(
-            imageVector = ImageVector.vectorResource(com.london.designsystem.R.drawable.icon_tv),
+            painter = painterResource(com.london.designsystem.R.drawable.icon_tv),
             contentDescription = "Tv icon",
             tint = NovixTheme.colors.body,
             modifier = Modifier.size(12.dp)
