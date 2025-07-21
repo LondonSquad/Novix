@@ -1,13 +1,15 @@
 package com.london.app.navigation
 
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.core.FastOutLinearInEasing
+import androidx.compose.animation.core.FastOutSlowInEasing
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
-import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.navigationBars
+import androidx.compose.animation.slideInVertically
+import androidx.compose.animation.slideOutVertically
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.systemBarsPadding
 import androidx.compose.material.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -23,6 +25,7 @@ import com.london.designsystem.component.NavBar
 import com.london.designsystem.theme.NovixTheme
 import com.london.presentation.navigation.Screen
 import com.london.presentation.navigation.Screen.Account
+import com.london.presentation.navigation.Screen.ActorDetails
 import com.london.presentation.navigation.Screen.ActorTopMoviesPicksDetails
 import com.london.presentation.navigation.Screen.Bookmarks
 import com.london.presentation.navigation.Screen.Categories
@@ -72,7 +75,17 @@ fun NovixApp() {
     Scaffold(
         backgroundColor = NovixTheme.colors.surface,
         bottomBar = {
-            if (showBottomNav) {
+            AnimatedVisibility(
+                visible = showBottomNav,
+                enter = slideInVertically(
+                    animationSpec = tween(300, easing = FastOutSlowInEasing),
+                    initialOffsetY = { it }
+                ),
+                exit = slideOutVertically(
+                    animationSpec = tween(300, easing = FastOutLinearInEasing),
+                    targetOffsetY = { it }
+                )
+            ) {
                 NavBar(
                     modifier = Modifier.navigationBarsPadding(),
                     navDestinations = NavigationHelper.getNavigationTabs(),
@@ -165,8 +178,7 @@ fun NovixApp() {
                     },
                     onNavigateToReviews = { tvShowId, mediaType ->
                         navController.navigate(Reviews(tvShowId, mediaType))
-                    }
-                    , onNavigateToCast = { actorId->
+                    }, onNavigateToCast = { actorId ->
                         navController.navigate(Screen.ActorDetails(actorId))
                     }
                 )
@@ -257,10 +269,10 @@ fun NovixApp() {
                     onNavigateToGallery = { actorId ->
                         navController.navigate(Screen.ActorGallery(actorId))
                     },
-                    onNavigateToMovieScreen = { movieId->
+                    onNavigateToMovieScreen = { movieId ->
                         navController.navigate(MovieDetails(movieId))
                     },
-                    onNavigateToTvShowScreen = {tvShowId->
+                    onNavigateToTvShowScreen = { tvShowId ->
                         navController.navigate(TvShowDetails(tvShowId))
                     },
                     onBackClick = { navController.navigateUp() }
