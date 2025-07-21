@@ -30,7 +30,7 @@ fun HomeCard(
     Box(
         modifier = modifier
             .fillMaxWidth()
-            .aspectRatio(158f / 210f)
+            .aspectRatio(3f/4f)
             .clip(RoundedCornerShape(12.dp))
             .border(
                 width = 1.dp,
