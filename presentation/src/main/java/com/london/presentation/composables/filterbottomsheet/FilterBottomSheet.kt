@@ -14,16 +14,10 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.BottomSheetDefaults
-import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.Icon
-import androidx.compose.material3.ModalBottomSheet
-import androidx.compose.material3.Surface
-import androidx.compose.material3.Text
-import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -35,7 +29,10 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.london.designsystem.component.CustomReleasedYearSlider
 import com.london.designsystem.component.GenreChipGroup
+import com.london.designsystem.component.Icon
+import com.london.designsystem.component.ModalBottomSheet
 import com.london.designsystem.component.RatingBar
+import com.london.designsystem.component.Text
 import com.london.designsystem.component.button.OutlineButton
 import com.london.designsystem.component.button.PrimaryButton
 import com.london.designsystem.theme.NovixTheme
@@ -45,7 +42,6 @@ import kotlinx.coroutines.launch
 import org.koin.androidx.compose.koinViewModel
 
 @SuppressLint("ConfigurationScreenWidthHeight")
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun FilterBottomSheet(
     modifier: Modifier = Modifier,
@@ -54,8 +50,9 @@ fun FilterBottomSheet(
 ) {
     val filterUiState by viewModel.state.collectAsState()
 
-    val sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
     val scope = rememberCoroutineScope()
+
+    var isSheetHidden = remember { true }
 
     val configuration = LocalConfiguration.current
     val screenHeightDp = configuration.screenHeightDp
@@ -63,19 +60,13 @@ fun FilterBottomSheet(
     ModalBottomSheet(
         onDismissRequest = {
             scope.launch {
-                sheetState.hide()
+                isSheetHidden=false
                 onDismissRequest()
             }
         },
-        sheetState = sheetState,
-        dragHandle = {
-            BottomSheetDefaults.DragHandle(
-                color = NovixTheme.colors.body,
-            )
-        },
-        containerColor = NovixTheme.colors.surface
+        containerColor = NovixTheme.colors.surface,
+        skipPartiallyExpanded=isSheetHidden
     ) {
-
         Box(
             modifier = Modifier
                 .fillMaxWidth()
@@ -87,14 +78,14 @@ fun FilterBottomSheet(
                 modifier = modifier,
                 onDismissRequest = {
                     scope.launch {
-                        sheetState.hide()
+                        isSheetHidden=false
                         onDismissRequest()
                     }
                 },
                 onApplyFilters = { selectedGenres, minimumRating, releaseYearRange ->
                     viewModel.onApplyFilter(selectedGenres, minimumRating, releaseYearRange)
                     scope.launch {
-                        sheetState.hide()
+                        isSheetHidden=false
                         onDismissRequest()
                     }
                 },
@@ -260,7 +251,7 @@ private fun FilterBottomSheetContent(
 @Composable
 fun FilterBottomSheetContentPreview() {
     NovixTheme {
-        Surface {
+        Box {
             FilterBottomSheetContent(
                 onDismissRequest = {},
                 onApplyFilters = { selectedGenres, rating, range ->

@@ -90,31 +90,30 @@ class SearchRepositoryImplTest {
 
     @Test
     fun `searchForMoviesByID should return data from Remote if available`() = runTest {
-        coEvery { searchRemoteDataSource.getMoviesByCategory(1 ,LANG, PAGE_NUMBER) } returns SearchMoviesRemoteMock
-        val result = repository.searchForMoviesByCategory(1, LANG, PAGE_NUMBER)
+        coEvery { searchRemoteDataSource.getMoviesByCategory(1, PAGE_NUMBER) } returns SearchMoviesRemoteMock
+        val result = repository.searchForMoviesByCategory(1, PAGE_NUMBER)
         assertThat(result).isEqualTo(MovieList)
     }
 
     @Test
     fun `searchForMovies should return data from remote and cache it if local is null`() = runTest {
-        coEvery { searchMovieService.getByQueryAndPage(NAME + LANG, PAGE_NUMBER) } returns null
+        coEvery { searchMovieService.getByQueryAndPage(NAME, PAGE_NUMBER) } returns null
         coEvery {
             searchRemoteDataSource.searchForMovies(
-                any(),
                 any(),
                 any(),
                 any()
             )
         } returns SearchMoviesRemoteMock
-        val result = repository.searchForMovies(NAME, LANG, PAGE_NUMBER)
+        val result = repository.searchForMovies(NAME, PAGE_NUMBER)
         assertThat(result).isEqualTo(MovieList)
         coVerify { searchMovieService.insert(any()) }
     }
 
     @Test
     fun `searchForMovies should return data from local if available`() = runTest {
-        coEvery { searchMovieService.getByQueryAndPage(NAME + LANG, PAGE_NUMBER) } returns SearchMoviesLocalMock
-        val result = repository.searchForMovies(NAME, LANG, PAGE_NUMBER)
+        coEvery { searchMovieService.getByQueryAndPage(NAME, PAGE_NUMBER) } returns SearchMoviesLocalMock
+        val result = repository.searchForMovies(NAME, PAGE_NUMBER)
         assertThat(result).isEqualTo(MovieList)
     }
 
@@ -199,16 +198,15 @@ class SearchRepositoryImplTest {
     @Test
     fun `searchForTvShows should return data from remote and cache it if local is null`() =
         runTest {
-            coEvery { searchTvShowService.getByQueryAndPage(NAME + LANG, PAGE_NUMBER) } returns null
+            coEvery { searchTvShowService.getByQueryAndPage(NAME, PAGE_NUMBER) } returns null
             coEvery {
                 searchRemoteDataSource.searchForTvShows(
-                    any(),
                     any(),
                     any(),
                     any()
                 )
             } returns SearchTvShowRemoteMock
-            val result = repository.searchForTvShows(NAME, LANG, PAGE_NUMBER)
+            val result = repository.searchForTvShows(NAME, PAGE_NUMBER)
             assertThat(result).isEqualTo(TvShowList)
             coVerify { searchTvShowService.insert(any()) }
         }
@@ -220,19 +218,18 @@ class SearchRepositoryImplTest {
                 searchRemoteDataSource.searchForTvShows(
                     any(),
                     any(),
-                    any(),
                     any()
                 )
             } throws Exception()
             assertThrows<Exception> {
-                repository.searchForTvShows(NAME, LANG, PAGE_NUMBER)
+                repository.searchForTvShows(NAME, PAGE_NUMBER)
             }
         }
 
     @Test
     fun `searchForActors should return data from local if available`() = runTest {
-        coEvery { searchActorService.getByQueryAndPage(NAME + LANG, PAGE_NUMBER) } returns SearchActorsLocalMock
-        val result = repository.searchForActors(NAME, LANG, PAGE_NUMBER)
+        coEvery { searchActorService.getByQueryAndPage(NAME, PAGE_NUMBER) } returns SearchActorsLocalMock
+        val result = repository.searchForActors(NAME, PAGE_NUMBER)
         assertThat(result).isEqualTo(ActorList)
     }
 
@@ -243,12 +240,11 @@ class SearchRepositoryImplTest {
                 searchRemoteDataSource.searchForActors(
                     any(),
                     any(),
-                    any(),
                     any()
                 )
             } throws Exception()
             assertThrows<Exception> {
-                repository.searchForActors(NAME, LANG, PAGE_NUMBER)
+                repository.searchForActors(NAME, PAGE_NUMBER)
             }
         }
 
