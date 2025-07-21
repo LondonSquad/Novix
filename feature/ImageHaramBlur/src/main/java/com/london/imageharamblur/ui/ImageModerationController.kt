@@ -1,12 +1,12 @@
-package com.ae.imageharamblur.ui
+package com.london.imageharamblur.ui
 
 import android.content.Context
 import android.graphics.drawable.Drawable
 import android.os.Build
 import android.util.Log
-import com.ae.imageharamblur.ImageModerationProcessor
-import com.ae.imageharamblur.utils.blurBitmap
-import com.ae.imageharamblur.utils.toBitmap
+import com.london.imageharamblur.ImageModerationProcessor
+import com.london.imageharamblur.utils.blurBitmap
+import com.london.imageharamblur.utils.toBitmap
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.withContext
