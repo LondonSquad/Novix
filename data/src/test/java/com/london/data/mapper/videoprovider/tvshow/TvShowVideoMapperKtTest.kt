@@ -1,7 +1,7 @@
 package com.london.data.mapper.videoprovider.tvshow
 
 import com.google.common.truth.Truth.assertThat
-import com.london.data.datasource.remote.details.videoprovider.tvshow.TvShowVideoRemote
+import com.london.data.datasource.remote.details.videoprovider.tvshow.model.TvShowVideoRemote
 import com.london.domain.entity.videoprovider.TvShowVideo
 import kotlin.test.Test
 

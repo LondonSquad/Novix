@@ -2,7 +2,6 @@ package com.london.presentation.composables
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -14,6 +13,7 @@ import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.withStyle
 import com.london.designsystem.R
+import com.london.designsystem.component.AnnotatedStringText
 import com.london.designsystem.theme.NovixTheme
 
 @Composable
@@ -34,18 +34,19 @@ fun ConditionalText(
         fontWeight = NovixTheme.typography.label.medium.fontWeight
     )
 
-    Text(
+    AnnotatedStringText(
         text = buildAnnotatedString {
             when {
                 !showReadMoreButtonState -> append(text)
                 !expandedState -> {
                     append(truncatedText)
-                    append("  ")
+                    append("  ").toString()
                     withStyle(actionStyle) { append(stringResource(R.string.read_more)) }
                 }
+
                 else -> {
                     append(text)
-                    append("  ")
+                    append("  ").toString()
                     withStyle(actionStyle) { append(stringResource(R.string.read_less)) }
                 }
             }
@@ -66,12 +67,9 @@ fun ConditionalText(
                 showReadMoreButtonState = true
             }
         },
-        modifier = modifier
-            .clickable(
-                interactionSource = remember { MutableInteractionSource() },
-                indication = null
+        modifier = modifier.clickable(
+                interactionSource = remember { MutableInteractionSource() }, indication = null
             ) {
                 if (showReadMoreButtonState) onExpandedChange()
-            }
-    )
+            })
 }

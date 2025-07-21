@@ -5,6 +5,14 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class MovieVideoRemote(
+    @SerialName("id")
+    val id: Int?,
+    @SerialName("results")
+    val movies: List<MovieVideoRemoteResponse>?
+)
+
+@Serializable
+data class MovieVideoRemoteResponse(
     val id: String?,
     @SerialName("iso_3166_1")
     val iso31661: String?,

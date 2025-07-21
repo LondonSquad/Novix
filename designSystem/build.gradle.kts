@@ -42,6 +42,7 @@ dependencies {
     api(projects.feature.imageHaramBlur)
 
     implementation(libs.bundles.compose)
+    implementation(libs.androidx.material3)
     implementation(libs.bundles.base.ui)
     implementation(libs.bundles.ui.utils)
     debugImplementation(libs.bundles.compose.debug)

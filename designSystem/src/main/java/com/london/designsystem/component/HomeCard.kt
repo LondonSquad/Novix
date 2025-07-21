@@ -1,7 +1,6 @@
 package com.london.designsystem.component
 
 import androidx.compose.foundation.border
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -21,18 +20,17 @@ import com.london.designsystem.theme.ThemePreviews
 @Composable
 fun HomeCard(
     imageUrl: Any,
-    onSaveClick: () -> Unit,
     modifier: Modifier = Modifier,
     isSaved: Boolean = false,
-    onCardClick: () -> Unit = {},
+    hasSaveIcon: Boolean = true,
     imageDescription: String? = null,
+    onSaveClick: () -> Unit,
 ) {
 
     Box(
         modifier = modifier
             .fillMaxWidth()
             .aspectRatio(158f / 210f)
-            .clickable { onCardClick() }
             .clip(RoundedCornerShape(12.dp))
             .border(
                 width = 1.dp,
@@ -51,15 +49,15 @@ fun HomeCard(
             loadingContent = { CircularLoading(modifier = Modifier.align(Alignment.Center)) },
             moderatedContent = { UnSuitableEye() }
         )
-        SaveIcon(
-            isSaved = isSaved,
-            onSaveClick = onSaveClick,
-            modifier = Modifier
-                .padding(8.dp)
-                .align(Alignment.TopStart),
-            iconTint = NovixTheme.colors.onPrimary,
-
-        )
+        if (hasSaveIcon)
+            SaveIcon(
+                isSaved = isSaved,
+                onSaveClick = onSaveClick,
+                modifier = Modifier
+                    .padding(8.dp)
+                    .align(Alignment.TopStart),
+                iconTint = NovixTheme.colors.onPrimary,
+            )
     }
 }
 
