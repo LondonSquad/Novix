@@ -9,14 +9,14 @@ import com.london.domain.entity.popular.PopularMovie
 
 fun PopularMovieResponse.toPopularMovie(): PopularMovie {
     return PopularMovie(
-        id = this.id.orZero(),
-        title = this.title.orEmpty(),
-        posterPath = this.posterPath.asImageUrlOrEmpty(),
-        backdropPath = this.backdropPath.asImageUrlOrEmpty(),
-        voteAverage = this.voteAverage.orZero(),
+        id = id.orZero(),
+        title = title.orEmpty(),
+        posterPath = posterPath.asImageUrlOrEmpty(),
+        backdropPath = backdropPath.asImageUrlOrEmpty(),
+        voteAverage = voteAverage.orZero(),
     )
 }
 
 fun ApiResponse<PopularMovieResponse>.toPopularMovies(): List<PopularMovie> {
-    return this.items.map { it.toPopularMovie() }
+    return items.map { it.toPopularMovie() }
 }
