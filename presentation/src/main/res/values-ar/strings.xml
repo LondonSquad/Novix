@@ -64,5 +64,14 @@
     <string name="actor_photos">صور الممثلين</string>"
     <string name="author_profile">صورة الممثل</string>
     <string name="tv_show_image">صور مسلسلات</string>
-
+    <string name="login_to_your_account">تسجيل الدخول إلى حسابك</string>
+    <string name="user_name">اسم المستخدم</string>
+    <string name="don_t_have_an_account">ليس لديك حساب؟</string>
+    <string name="create_account">إنشاء حساب</string>
+    <string name="login">تسجيل الدخول</string>
+    <string name="app_icon">صور التطبيق</string>
+    <string name="password">كلمة المرور</string>
+    <string name="forgot_password">هل نسيت كلمة المرور؟</string>
+    <string name="upcoming">القادم</string>
+    <string name="username">اسم المستخدم</string>">
 </resources>

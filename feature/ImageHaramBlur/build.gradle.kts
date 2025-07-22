@@ -7,7 +7,7 @@ plugins {
 }
 
 android {
-    namespace = "com.ae.imageharamblur"
+    namespace = "com.london.imageharamblur"
     compileSdk = 35
 
     defaultConfig {

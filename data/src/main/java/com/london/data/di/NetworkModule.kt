@@ -12,6 +12,7 @@ import com.london.data.datasource.remote.auth.api.AuthApi
 import com.london.data.datasource.remote.details.actordetails.api.ActorDetailsApiService
 import com.london.data.datasource.remote.details.moviedetails.api.MovieDetailsApiService
 import com.london.data.datasource.remote.details.tvshowdetails.api.TvShowDetailsApiService
+import com.london.data.datasource.remote.home.popular.api.PopularApiService
 import com.london.data.datasource.remote.reviews.api.ReviewsApiService
 import com.london.data.datasource.remote.search.api.SearchApiService
 import com.london.domain.repository.SessionTokenProvider
@@ -28,9 +29,6 @@ import retrofit2.Retrofit
 import java.io.File
 import java.util.concurrent.TimeUnit
 
-
-//12345678M
-//mohamed_1982
 @Module
 class NetworkModule {
 
@@ -74,8 +72,6 @@ class NetworkModule {
              //   .addHeader("Authorization", "Bearer ${BuildConfig.AUTHORIZATION_KEY}")
                 .build()
 
-            Log.d("AuthRepositoryImpl", "Request token: ${newRequest}")
-
             chain.proceed(newRequest)
         }
     }
@@ -103,7 +99,6 @@ class NetworkModule {
             .build()
     }
 
-    @OptIn(ExperimentalSerializationApi::class)
     @Single
     fun provideRetrofit(okHttpClient: OkHttpClient, json: Json): Retrofit {
         return Retrofit.Builder()
@@ -136,6 +131,9 @@ class NetworkModule {
         retrofit.create(ReviewsApiService::class.java)
 
     @Single
+    fun providePopularMoviesApiService(retrofit: Retrofit): PopularApiService =
+        retrofit.create(PopularApiService::class.java)
+    @Single
     fun provideSessionTokenProvider(authPreferences: AuthPreferences): SessionTokenProvider {
         return SharedPrefsTokenProvider(authPreferences)
     }
@@ -160,5 +158,4 @@ class NetworkModule {
     fun provideAuthApi(retrofit: Retrofit): AuthApi {
         return retrofit.create(AuthApi::class.java)
     }
-
 }

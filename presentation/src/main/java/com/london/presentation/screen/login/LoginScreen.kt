@@ -14,58 +14,56 @@ import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.asPaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.navigationBars
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.statusBars
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.TextFieldValue
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.london.designsystem.R
 import com.london.designsystem.component.Icon
 import com.london.designsystem.component.OutlinedTextField
 import com.london.designsystem.component.Text
 import com.london.designsystem.component.TopBar
 import com.london.designsystem.component.button.PrimaryButton
 import com.london.designsystem.theme.NovixTheme
-import com.london.presentation.R
-import org.koin.androidx.compose.koinViewModel
-
+import com.london.designsystem.theme.ThemePreviews
+import com.london.presentation.R.string
 
 @Composable
-fun LoginScreen(
-    viewModel: LoginViewModel = koinViewModel()
-) {
-    val state by viewModel.state.collectAsState()
+fun LoginScreen() {
+    var userNameValue by remember { mutableStateOf(TextFieldValue()) }
+    var passwordValue by remember { mutableStateOf(TextFieldValue()) }
+    var passwordVisible by remember { mutableStateOf(false) }
+    val interactionSourceUserName = remember { MutableInteractionSource() }
+    val interactionSourcePassword = remember { MutableInteractionSource() }
+    val isLoginEnabled = userNameValue.text.isNotEmpty() && passwordValue.text.isNotEmpty()
 
-    val isLoginEnabled = state.username.isNotEmpty() && state.password.isNotEmpty()
-    if (state.launchUrl != null) {
-        WebViewScreen(
-            url = state.launchUrl!!,
-            onBackPressed = {
-                viewModel.clearUrl()
-            }
-        )
-    } else {
-        Content(
-            username = TextFieldValue(state.username),
-            onUsernameChange = { viewModel.onUsernameChange(it.text) },
-            password = TextFieldValue(state.password),
-            onPasswordChange = { viewModel.onPasswordChange(it.text) },
-            onCreateAccountClicked = { viewModel.onCreateAccountClicked() },
-            onForgotPasswordClick = { viewModel.onForgotPasswordClicked() },
-            isLoginEnabled = isLoginEnabled,
-            onLoggedIn = { viewModel.login() },
-            loginAsGuest = { viewModel.loginAsGuest() }
-        )
-    }
+    Content(
+        username = userNameValue,
+        onUsernameChange = { userNameValue = it },
+        password = passwordValue,
+        onPasswordChange = { passwordValue = it },
+        passwordVisible = passwordVisible,
+        onLoginClick = {},
+        onForgotPasswordClick = {},
+        isLoginEnabled = isLoginEnabled,
+        onCreateAccountClick = {},
+        interactionSourceUserName = interactionSourceUserName,
+        interactionSourceUserPassword = interactionSourcePassword,
+        onVisibilityChange = { passwordVisible = !passwordVisible }
+    )
 }
 
 @SuppressLint("UnrememberedMutableInteractionSource")
@@ -75,21 +73,24 @@ private fun Content(
     onUsernameChange: (TextFieldValue) -> Unit,
     password: TextFieldValue,
     onPasswordChange: (TextFieldValue) -> Unit,
-    onCreateAccountClicked: () -> Unit,
-    onLoggedIn: () -> Unit,
+    onLoginClick: () -> Unit,
     onForgotPasswordClick: () -> Unit,
     isLoginEnabled: Boolean,
-    loginAsGuest: () -> Unit
-) {
+    onCreateAccountClick: () -> Unit,
+    passwordVisible: Boolean,
+    onVisibilityChange: () -> Unit,
+    interactionSourceUserName: MutableInteractionSource,
+    interactionSourceUserPassword: MutableInteractionSource,
+
+    ) {
     Box(
         modifier = Modifier
             .fillMaxSize()
-            .background(NovixTheme.colors.surface)
-            .padding(bottom = 16.dp),
+            .background(NovixTheme.colors.surface),
     ) {
         Image(
-            painter = painterResource(R.drawable.star),
-            contentDescription = stringResource(R.string.search),
+            painter = painterResource(R.drawable.polygon1),
+            contentDescription = stringResource(string.app_icon),
             modifier = Modifier
                 .align(Alignment.TopStart)
                 .offset(y = (-60).dp, x = (-20).dp)
@@ -100,119 +101,94 @@ private fun Content(
                 .fillMaxSize()
                 .padding(WindowInsets.statusBars.asPaddingValues())
                 .padding(horizontal = 16.dp)
+                .padding(bottom = 16.dp)
         ) {
             TopBar(
-                title = stringResource(R.string.search),
-                modifier = Modifier.padding(top = 8.dp),
-                onBackClick = {}
+                title = stringResource(string.login),
+                modifier = Modifier.padding(top = 12.dp), onBackClick = {}
             )
-
             Icon(
-                painter = painterResource(id = R.drawable.star),
-                contentDescription = stringResource(R.string.star),
+                painter = painterResource(id = R.drawable.novix_icon),
+                contentDescription = stringResource(string.app_icon),
                 tint = Color.Unspecified,
                 modifier = Modifier
+                    .padding(top = 12.dp)
                     .size(64.dp)
-                    .padding(top = 12.dp, bottom = 16.dp)
             )
-
             Text(
-                stringResource(R.string.star),
+                stringResource(string.login_to_your_account),
                 style = NovixTheme.typography.title.medium,
-                color = NovixTheme.colors.title
-            )
-
-            Text(
-                stringResource(R.string.search),
-                style = NovixTheme.typography.title.small,
                 color = NovixTheme.colors.title,
-                modifier = Modifier.padding(top = 40.dp, bottom = 8.dp)
+                modifier = Modifier.padding(top = 16.dp, bottom = 40.dp)
             )
 
             OutlinedTextField(
                 value = username,
-                interactionSource = MutableInteractionSource(),
+                label = stringResource(string.username),
+                interactionSource = interactionSourceUserName,
                 onValueChange = onUsernameChange,
-                leadingIcon = painterResource(com.london.designsystem.R.drawable.icon_user),
+                leadingIcon = painterResource(R.drawable.icon_user),
             )
-
-            Text(
-                stringResource(R.string.star),
-                style = NovixTheme.typography.title.small,
-                color = NovixTheme.colors.title,
-                modifier = Modifier.padding(top = 16.dp, bottom = 8.dp)
-            )
-
             OutlinedTextField(
                 value = password,
-                interactionSource = MutableInteractionSource(),
                 onValueChange = onPasswordChange,
-                leadingIcon = painterResource(R.drawable.star),
-
+                label = "Password",
                 isPasswordField = true,
-                passwordVisibleIcon = painterResource(id = com.london.designsystem.R.drawable.icon_show_password),
-                passwordHiddenIcon = painterResource(id = com.london.designsystem.R.drawable.icon_hide_password),
-                modifier = Modifier.padding(bottom = 32.dp)
+                passwordVisible = passwordVisible,
+                onPasswordVisibilityChange = onVisibilityChange,
+                passwordVisibleIcon = painterResource(id = R.drawable.icon_show_password),
+                passwordHiddenIcon = painterResource(id = R.drawable.icon_hide_password),
+                interactionSource = interactionSourceUserPassword,
+                leadingIcon = painterResource(R.drawable.lock_key),
+                modifier = Modifier.padding(top = 16.dp, bottom = 32.dp)
             )
-
             PrimaryButton(
-                text = stringResource(R.string.search),
+                text = stringResource(string.login),
                 hasLabel = true,
                 hasIcon = false,
                 isLoading = false,
-                onClick = onLoggedIn,
+                onClick = onLoginClick,
                 icon = null,
                 enabled = isLoginEnabled,
                 modifier = Modifier.fillMaxWidth()
             )
-
             Text(
-                stringResource(R.string.star),
+                stringResource(string.forgot_password),
                 style = NovixTheme.typography.label.medium,
                 color = NovixTheme.colors.primary,
                 modifier = Modifier
                     .padding(top = 12.dp)
                     .align(Alignment.CenterHorizontally)
-                    .clickable { onCreateAccountClicked() }
             )
-
-            Text(
-                "Login as a Guest ",
-                style = NovixTheme.typography.label.medium,
-                color = NovixTheme.colors.primary,
-                modifier = Modifier
-                    .padding(top = 12.dp)
-                    .align(Alignment.CenterHorizontally)
-                    .clickable { loginAsGuest() }
-            )
-
             Spacer(modifier = Modifier.weight(1f))
-
             Row(
-                modifier = Modifier.fillMaxWidth(),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(WindowInsets.navigationBars.asPaddingValues()),
                 horizontalArrangement = Arrangement.Center,
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Text(
-                    stringResource(R.string.star),
+                    stringResource(string.don_t_have_an_account),
                     style = NovixTheme.typography.body.small,
                     color = NovixTheme.colors.body,
                     modifier = Modifier
                         .padding(end = 4.dp)
-                        .clickable { onForgotPasswordClick() }
-                )
-
+                        .clickable { onForgotPasswordClick() })
                 Text(
-                    stringResource(R.string.imagr_dot),
+                    stringResource(string.create_account),
                     style = NovixTheme.typography.label.medium,
                     color = NovixTheme.colors.primary,
+                    modifier = Modifier.clickable {
+                        onCreateAccountClick()
+                    }
                 )
             }
         }
     }
 }
 
-@Preview
+@ThemePreviews
 @Composable
 private fun Preview() {
     NovixTheme {

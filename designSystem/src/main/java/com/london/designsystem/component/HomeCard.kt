@@ -12,7 +12,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.dp
-import com.ae.imageharamblur.ui.ImageViewFilter
+import com.london.imageharamblur.ui.ImageViewFilter
 import com.london.designsystem.component.button.ErrorImage
 import com.london.designsystem.theme.NovixTheme
 import com.london.designsystem.theme.ThemePreviews
@@ -30,7 +30,7 @@ fun HomeCard(
     Box(
         modifier = modifier
             .fillMaxWidth()
-            .aspectRatio(158f / 210f)
+            .aspectRatio(3f/4f)
             .clip(RoundedCornerShape(12.dp))
             .border(
                 width = 1.dp,

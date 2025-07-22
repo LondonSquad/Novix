@@ -61,6 +61,7 @@ kover {
                     classes("**.*RemoteDataSourceImpl")
                     classes("**RemoteDataSourceImpl")
                     classes("*di.*")
+                    classes("com.london.imageharamblur.**")
                 }
             }
             verify {

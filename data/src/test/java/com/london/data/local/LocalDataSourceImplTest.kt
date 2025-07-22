@@ -557,11 +557,13 @@ class LocalDataSourceImplTest {
     @Test
     fun `init should clean up expired movie`() = runTest {
         // Given
-        val currentTime = System.currentTimeMillis()
+        val fixedCurrentTime = 1000000000L
+        val expiredTime = fixedCurrentTime - 4000000L
 
         val expiredItem = mockk<SearchMoviesLocal> {
-            every { date } returns currentTime - 4000000
+            every { date } returns expiredTime
         }
+
         coEvery { searchMoviesDao.getAll() } returns listOf(expiredItem)
         coEvery { searchMoviesDao.delete(expiredItem) } just Runs
 
