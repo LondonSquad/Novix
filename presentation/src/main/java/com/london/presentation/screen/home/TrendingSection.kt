@@ -148,6 +148,6 @@ private fun CategoryCard(
 
 @Preview
 @Composable
-fun TrendingSectionPreview() {
+private fun Preview() {
     TrendingSection()
 }
