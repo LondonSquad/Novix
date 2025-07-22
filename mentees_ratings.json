@@ -1,0 +1,304 @@
+[
+  {
+    "name": "Abdelrahman Essam",
+    "id": 92235360,
+    "login": "abdo-essam",
+    "url": "https://github.com/abdo-essam",
+    "actual_score_avg": 4.5,
+    "expected_score_avg": 5.0,
+    "scores": [
+      {
+        "submitted_at": "2024-07-20T12:00:00Z",
+        "respect": 4.6,
+        "teamwork": 4.4,
+        "listening": 4.5,
+        "technical": 4.6,
+        "flexibility": 4.4,
+        "encouragement": 4.1,
+        "communication": 4.6,
+        "constructive_feedback": 4.8
+      }
+    ],
+    "peer_comments": [
+
+    ],
+    "personal_notes": [
+    ]
+  },
+  {
+    "name": "Abdelrhman Ayman",
+    "id": 180463542,
+    "login": "abdelrhman1002",
+    "url": "https://github.com/abdelrhman1002",
+    "actual_score_avg": 4.32,
+    "expected_score_avg": 3.75,
+    "scores": [
+      {
+        "submitted_at": "2024-07-20T12:00:00Z",
+        "respect": 4.8,
+        "teamwork": 4.4,
+        "listening": 4.4,
+        "technical": 4.0,
+        "flexibility": 4.4,
+        "encouragement": 4,
+        "communication": 4.2,
+        "constructive_feedback": 4.5
+      }
+    ],
+    "peer_comments": [
+
+    ],
+    "personal_notes": [
+    ]
+  },
+  {
+    "name": "Abdulrahman Magdey",
+    "id": 90211730,
+    "login": "AbdoMagdey24",
+    "url": "https://github.com/AbdoMagdey24",
+    "actual_score_avg": 4.17,
+    "expected_score_avg": 3.0,
+    "scores": [
+      {
+        "submitted_at": "2024-07-20T12:00:00Z",
+        "respect": 4.7,
+        "teamwork": 3.4,
+        "listening": 4.1,
+        "technical": 4.3,
+        "flexibility": 4.3,
+        "encouragement": 3.7,
+        "communication": 4.3,
+        "constructive_feedback": 4.6
+      }
+    ],
+    "peer_comments": [
+
+    ],
+    "personal_notes": [
+    ]
+  },
+  {
+    "name": "Abdulrahman Mohammad",
+    "id": 76666355,
+    "login": "Abdulrahman1890",
+    "url": "https://github.com/Abdulrahman1890",
+    "actual_score_avg": 4.55,
+    "expected_score_avg": 4.37,
+    "scores": [
+      {
+        "submitted_at": "2024-07-20T12:00:00Z",
+        "respect": 4.7,
+        "teamwork": 4.5,
+        "listening": 4.8,
+        "technical": 3.4,
+        "flexibility": 4.9,
+        "encouragement": 4.4,
+        "communication": 4.8,
+        "constructive_feedback": 4.7
+      }
+    ],
+    "peer_comments": [
+
+    ],
+    "personal_notes": [
+    ]
+  },
+  {
+    "name": "Ahmed Samy",
+    "id": 154278495,
+    "login": "ahmeddsamii",
+    "url": "https://github.com/ahmeddsamii",
+    "actual_score_avg": 4.56,
+    "expected_score_avg": 4.75,
+    "scores": [
+      {
+        "submitted_at": "2024-07-20T12:00:00Z",
+        "respect": 4.7,
+        "teamwork": 4.8,
+        "listening": 4.6,
+        "technical": 5,
+        "flexibility": 4.2,
+        "encouragement": 4.1,
+        "communication": 4.5,
+        "constructive_feedback": 4.6
+      }
+    ],
+    "peer_comments": [
+
+    ],
+    "personal_notes": [
+    ]
+  },
+  {
+    "name": "Asmaa Khaled",
+    "id": 117874933,
+    "login": "AsmaaKhaledGomaa",
+    "url": "https://github.com/AsmaaKhaledGomaa",
+    "actual_score_avg": 3.65,
+    "expected_score_avg": 4.37,
+    "scores": [
+      {
+        "submitted_at": "2024-07-20T12:00:00Z",
+        "respect": 4.2,
+        "teamwork": 4.1,
+        "listening": 3.3,
+        "technical": 3.9,
+        "flexibility": 2.7,
+        "encouragement": 3.8,
+        "communication": 3.3,
+        "constructive_feedback": 3.9
+      }
+    ],
+    "peer_comments": [
+
+    ],
+    "personal_notes": [
+    ]
+  },
+  {
+    "name": "Aseel Abu Kmail",
+    "id": 189210092,
+    "login": "Aseel-AbuKmail",
+    "url": "https://github.com/Aseel-AbuKmail",
+    "actual_score_avg": 4.45,
+    "expected_score_avg": 4.25,
+    "scores": [
+
+    ],
+    "peer_comments": [
+
+    ],
+    "personal_notes": [
+    ]
+  },
+  {
+    "name": "Bassant Mohammed",
+    "id": 102248144,
+    "login": "BassantM",
+    "url": "https://github.com/BassantM",
+    "actual_score_avg": 4.82,
+    "expected_score_avg": 4.37,
+    "scores": [
+      {
+        "submitted_at": "2024-07-20T12:00:00Z",
+        "respect": 5,
+        "teamwork": 5,
+        "listening": 5,
+        "technical": 3.9,
+        "flexibility": 5,
+        "encouragement": 4.9,
+        "communication": 4.9,
+        "constructive_feedback": 4.9
+      }
+    ],
+    "peer_comments": [
+
+    ],
+    "personal_notes": [
+    ]
+  },
+  {
+    "name": "Karim Al Zmzmy",
+    "id": 81706918,
+    "login": "karimdeabes",
+    "url": "https://github.com/karimdeabes",
+    "actual_score_avg": 4.47,
+    "expected_score_avg": 4.25,
+    "scores": [
+      {
+        "submitted_at": "2024-07-20T12:00:00Z",
+        "respect": 5,
+        "teamwork": 4.4,
+        "listening": 4.6,
+        "technical": 4.0,
+        "flexibility": 4.5,
+        "encouragement": 4.1,
+        "communication": 4.5,
+        "constructive_feedback": 4.7
+      }
+    ],
+    "peer_comments": [
+
+    ],
+    "personal_notes": [
+    ]
+  },
+  {
+    "name": "Marwan Mahmoud",
+    "id": 100484790,
+    "login": "marwanqashwa",
+    "url": "https://github.com/marwanqashwa",
+    "actual_score_avg": 4.6,
+    "expected_score_avg": 4.87,
+    "scores": [
+      {
+        "submitted_at": "2024-07-20T12:00:00Z",
+        "respect": 4.8,
+        "teamwork": 4.7,
+        "listening": 4.7,
+        "technical": 4.4,
+        "flexibility": 4.8,
+        "encouragement": 4.3,
+        "communication": 4.6,
+        "constructive_feedback": 4.5
+      }
+    ],
+    "peer_comments": [
+
+    ],
+    "personal_notes": [
+    ]
+  },
+  {
+    "name": "Mostafa Mohamed",
+    "id": 106277855,
+    "login": "Mostafa-alsaygh",
+    "url": "https://github.com/Mostafa-alsaygh",
+    "actual_score_avg": 4.25,
+    "expected_score_avg": 4.87,
+    "scores": [
+      {
+        "submitted_at": "2024-07-20T12:00:00Z",
+        "respect": 4.7,
+        "teamwork": 4.4,
+        "listening": 4.4,
+        "technical": 3.8,
+        "flexibility": 4.4,
+        "encouragement": 3.6,
+        "communication": 4.1,
+        "constructive_feedback": 4.9
+      }
+    ],
+    "peer_comments": [
+
+    ],
+    "personal_notes": [
+    ]
+  },
+  {
+    "name": "Yusuf Nasser",
+    "id": 43588217,
+    "login": "yusufnasserdev",
+    "url": "https://github.com/yusufnasserdev",
+    "actual_score_avg": 3.16,
+    "expected_score_avg": 4,
+    "scores": [
+      {
+        "submitted_at": "2024-07-20T12:00:00Z",
+        "respect": 3.4,
+        "teamwork": 3.6,
+        "listening": 2.8,
+        "technical": 4.3,
+        "flexibility": 3,
+        "encouragement": 2.7,
+        "communication": 2.9,
+        "constructive_feedback": 2.6
+      }
+    ],
+    "peer_comments": [
+
+    ],
+    "personal_notes": [
+    ]
+  }
+]

@@ -1,209 +1,221 @@
 <!DOCTYPE html>
-<html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>London Squad - Team Dashboard</title>
-    <!-- External Libraries -->
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <!-- Google Fonts -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-    <!-- Local Stylesheet -->
-    <link rel="stylesheet" href="style.css">
-  </head>
-  <body>
-    <div class="container">
-      <div class="main-header">
-        <!-- ACCURATE ROBOT LOGO -->
-        <svg class="squad-logo" viewBox="0 0 100 92" xmlns="http://www.w3.org/2000/svg">
-          <defs>
-            <linearGradient id="logoGradient" x1="0%" y1="0%" x2="100%" y2="100%">
-              <stop offset="0%" style="stop-color:#4f46e5;" />
-              <stop offset="100%" style="stop-color:#a855f7;" />
-            </linearGradient>
-          </defs>
-          <g>
-            <path d="M 32,77.5 C 32,70 28,68 25,68 C 22,68 18,70 18,77.5 L 20,87 L 30,87 Z" fill="url(#logoGradient)" stroke="#D1D5DB" stroke-width="0.5" />
-            <path d="M 68,77.5 C 68,70 72,68 75,68 C 78,68 82,70 82,77.5 L 80,87 L 70,87 Z" fill="url(#logoGradient)" stroke="#D1D5DB" stroke-width="0.5" />
-            <path d="M 22,35 A 28,30 0 0,1 78,35" fill="url(#logoGradient)" stroke="#D1D5DB" stroke-width="0.5" />
-            <path d="M 12,38 Q 10,38 10,40 L 10,58 Q 10,60 12,60 L 88,60 Q 90,60 90,58 L 90,40 Q 90,38 88,38 Z" fill="#C7D2FE" />
-            <path d="M 14,39 Q 12,39 12,41 L 12,57 Q 12,59 14,59 L 86,59 Q 88,59 88,57 L 88,41 Q 88,39 86,39 Z" fill="#1E3A8A" />
-            <path d="M 16,40 Q 14,40 14,42 L 14,56 Q 14,58 16,58 L 84,58 Q 86,58 86,56 L 86,42 Q 86,40 84,40 Z" fill="#4B5563" />
-            <g>
-              <circle cx="9" cy="48" r="6" fill="url(#logoGradient)" stroke="#D1D5DB" stroke-width="0.5" />
-              <circle cx="9" cy="48" r="4.5" fill="url(#logoGradient)" fill-opacity="0.5" />
-              <circle cx="9" cy="48" r="3" fill="#1F2937" />
-            </g>
-            <g>
-              <circle cx="91" cy="48" r="6" fill="url(#logoGradient)" stroke="#D1D5DB" stroke-width="0.5" />
-              <circle cx="91" cy="48" r="4.5" fill="url(#logoGradient)" fill-opacity="0.5" />
-              <circle cx="91" cy="48" r="3" fill="#1F2937" />
-            </g>
-            <g>
-              <circle cx="37" cy="49" r="8" fill="url(#logoGradient)" stroke="#FFFFFF" stroke-width="1.5" />
-              <path d="M 40,44 A 5,5 0 0,0 34,48" fill="#FFFFFF" fill-opacity="0.3" />
-            </g>
-            <g>
-              <circle cx="63" cy="49" r="8" fill="url(#logoGradient)" stroke="#FFFFFF" stroke-width="1.5" />
-              <path d="M 66,44 A 5,5 0 0,0 60,48" fill="#FFFFFF" fill-opacity="0.3" />
-            </g>
-            <path d="M 45,64 C 48,67 52,67 55,64" stroke="url(#logoGradient)" stroke-width="2.5" fill="none" stroke-linecap="round" />
-          </g>
+<html lang="en" dir="ltr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>London Squad - Team Dashboard</title>
+  <!-- External Libraries -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <!-- Local Stylesheet -->
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div class="container">
+  <div class="main-header">
+    <!-- ACCURATE ROBOT LOGO -->
+    <svg class="squad-logo" viewBox="0 0 100 92" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <linearGradient id="logoGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+          <stop offset="0%" style="stop-color:#4f46e5;" />
+          <stop offset="100%" style="stop-color:#a855f7;" />
+        </linearGradient>
+      </defs>
+      <g>
+        <path d="M 32,77.5 C 32,70 28,68 25,68 C 22,68 18,70 18,77.5 L 20,87 L 30,87 Z" fill="url(#logoGradient)" stroke="#D1D5DB" stroke-width="0.5" />
+        <path d="M 68,77.5 C 68,70 72,68 75,68 C 78,68 82,70 82,77.5 L 80,87 L 70,87 Z" fill="url(#logoGradient)" stroke="#D1D5DB" stroke-width="0.5" />
+        <path d="M 22,35 A 28,30 0 0,1 78,35" fill="url(#logoGradient)" stroke="#D1D5DB" stroke-width="0.5" />
+        <path d="M 12,38 Q 10,38 10,40 L 10,58 Q 10,60 12,60 L 88,60 Q 90,60 90,58 L 90,40 Q 90,38 88,38 Z" fill="#C7D2FE" />
+        <path d="M 14,39 Q 12,39 12,41 L 12,57 Q 12,59 14,59 L 86,59 Q 88,59 88,57 L 88,41 Q 88,39 86,39 Z" fill="#1E3A8A" />
+        <path d="M 16,40 Q 14,40 14,42 L 14,56 Q 14,58 16,58 L 84,58 Q 86,58 86,56 L 86,42 Q 86,40 84,40 Z" fill="#4B5563" />
+        <g>
+          <circle cx="9" cy="48" r="6" fill="url(#logoGradient)" stroke="#D1D5DB" stroke-width="0.5" />
+          <circle cx="9" cy="48" r="4.5" fill="url(#logoGradient)" fill-opacity="0.5" />
+          <circle cx="9" cy="48" r="3" fill="#1F2937" />
+        </g>
+        <g>
+          <circle cx="91" cy="48" r="6" fill="url(#logoGradient)" stroke="#D1D5DB" stroke-width="0.5" />
+          <circle cx="91" cy="48" r="4.5" fill="url(#logoGradient)" fill-opacity="0.5" />
+          <circle cx="91" cy="48" r="3" fill="#1F2937" />
+        </g>
+        <g>
+          <circle cx="37" cy="49" r="8" fill="url(#logoGradient)" stroke="#FFFFFF" stroke-width="1.5" />
+          <path d="M 40,44 A 5,5 0 0,0 34,48" fill="#FFFFFF" fill-opacity="0.3" />
+        </g>
+        <g>
+          <circle cx="63" cy="49" r="8" fill="url(#logoGradient)" stroke="#FFFFFF" stroke-width="1.5" />
+          <path d="M 66,44 A 5,5 0 0,0 60,48" fill="#FFFFFF" fill-opacity="0.3" />
+        </g>
+        <path d="M 45,64 C 48,67 52,67 55,64" stroke="url(#logoGradient)" stroke-width="2.5" fill="none" stroke-linecap="round" />
+      </g>
+    </svg>
+    <div class="header-container">
+      <div class="lang-switcher">
+        <button class="lang-btn" data-lang="en">EN</button>
+        <button class="lang-btn" data-lang="ar">AR</button>
+      </div>
+      <h1 class="text-4xl font-extrabold text-center">
+        <span class="bg-gradient-to-r from-indigo-500 to-purple-600 text-transparent bg-clip-text"> London Squad Dashboard </span>
+      </h1>
+      <button id="theme-toggle-btn" class="theme-toggle-btn" title="Toggle theme">
+        <svg id="theme-icon-sun" class="hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"></path>
         </svg>
-        <div class="header-container">
-          <h1 class="text-4xl font-extrabold text-center">
-            <span class="bg-gradient-to-r from-indigo-500 to-purple-600 text-transparent bg-clip-text"> London Squad Dashboard </span>
-          </h1>
-          <button id="theme-toggle-btn" class="theme-toggle-btn" title="Toggle theme">
-            <svg id="theme-icon-sun" class="hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"></path>
+        <svg id="theme-icon-moon" class="hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"></path>
+        </svg>
+      </button>
+    </div>
+  </div>
+  <div class="tabs-container">
+    <button class="tab-button active" data-tab="metrics">Metrics</button>
+    <button class="tab-button" data-tab="analytics">Analytics</button>
+    <button class="tab-button" data-tab="ratings">Ratings</button>
+    <button class="tab-button" data-tab="feedback">Feedbacks</button>
+  </div>
+  <div id="status-area">
+    <div class="loading-container" id="loading-indicator">
+      <div class="spinner"></div>
+      <p class="text-secondary">Loading dashboard data...</p>
+    </div>
+  </div>
+  <div id="content-area" class="hidden">
+    <div id="metrics-content" class="tab-content">
+      <div class="pr-controls">
+        <div class="filter-controls-left">
+          <div class="filter-buttons">
+            <button class="filter-btn active" data-status="all">All</button>
+            <button class="filter-btn" data-status="merged">Merged</button>
+            <button class="filter-btn" data-status="pending">Pending</button>
+            <button class="filter-btn" data-status="closed">Closed</button>
+          </div>
+          <select id="author-filter" class="control-input">
+            <option value="all">All Authors</option>
+          </select>
+        </div>
+        <input type="text" id="pr-search" class="control-input" placeholder="Search by title or PR number...">
+      </div>
+      <div id="pr-metrics-container"></div>
+    </div>
+    <div id="analytics-content" class="tab-content hidden space-y-8">
+      <div class="analytics-filter-bar">
+        <label for="analytics-week-filter" class="font-semibold">Filter by Week:</label>
+        <select id="analytics-week-filter" class="control-input"></select>
+      </div>
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+        <div class="kpi-card">
+          <div class="kpi-icon bg-fuchsia-500">
+            <svg viewBox="0 0 24 24" fill="currentColor">
+              <path d="M16,12V14A2,2 0 0,1 14,16H10A2,2 0 0,1 8,14V12A2,2 0 0,1 10,10H14A2,2 0 0,1 16,12M14,4H10A2,2 0 0,0 8,6V8H10V6H14V8H16V6A2,2 0 0,0 14,4M20,10H18V12H20V14H18V16A2,2 0 0,1 16,18H14V20H16A4,4 0 0,0 20,16V10M6,8V6H4V10H6V16A4,4 0 0,0 10,20H12V18H10A2,2 0 0,1 8,16V8A2,2 0 0,1 10,6V4A4,4 0 0,0 6,8Z" />
             </svg>
-            <svg id="theme-icon-moon" class="hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"></path>
+          </div>
+          <div>
+            <div id="kpi-total-prs" class="kpi-value">-</div>
+            <div class="kpi-label">Total PRs</div>
+          </div>
+        </div>
+        <div class="kpi-card">
+          <div class="kpi-icon bg-purple-500">
+            <svg viewBox="0 0 24 24" fill="currentColor">
+              <path d="M17.45,15.18L13.84,18.79L10.23,15.18L9.29,14.24C9.13,14.08 9.13,13.82 9.29,13.66L12.44,10.5C12.73,10.21 13.2,10.21 13.48,10.5L16.63,13.66C16.79,13.82 16.79,14.08 16.63,14.24L17.45,15.18M12,2A10,10 0 0,0 2,12A10,10 0 0,0 12,22A10,10 0 0,0 22,12A10,10 0 0,0 12,2Z" />
             </svg>
-          </button>
+          </div>
+          <div>
+            <div id="kpi-total-merged" class="kpi-value">-</div>
+            <div class="kpi-label">Merged PRs</div>
+          </div>
+        </div>
+        <div class="kpi-card">
+          <div class="kpi-icon bg-red-500">
+            <svg viewBox="0 0 24 24" fill="currentColor">
+              <path d="M12,2A10,10 0 0,0 2,12A10,10 0 0,0 12,22A10,10 0 0,0 22,12A10,10 0 0,0 12,2M17,15.59L15.59,17L12,13.41L8.41,17L7,15.59L10.59,12L7,8.41L8.41,7L12,10.59L15.59,7L17,8.41L13.41,12L17,15.59Z" />
+            </svg>
+          </div>
+          <div>
+            <div id="kpi-total-closed" class="kpi-value">-</div>
+            <div class="kpi-label">Total Closed PRs</div>
+          </div>
+        </div>
+        <div class="kpi-card">
+          <div class="kpi-icon bg-blue-500">
+            <svg viewBox="0 0 24 24" fill="currentColor">
+              <path d="M12,6L17,11H7L12,6M7,13H17V15H7V13M7,17H17V19H7V17Z" />
+            </svg>
+          </div>
+          <div>
+            <div id="kpi-avg-pr-size" class="kpi-value">-</div>
+            <div class="kpi-label">Avg. PR Size</div>
+          </div>
         </div>
       </div>
-      <div class="tabs-container">
-        <button class="tab-button active" data-tab="metrics">Metrics</button>
-        <button class="tab-button" data-tab="analytics">Analytics</button>
-        <button class="tab-button" data-tab="feedback">Feedbacks</button>
+      <div id="merge-process-health-container" class="panel"></div>
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div class="kpi-card">
+          <div class="kpi-icon bg-sky-500">
+            <svg viewBox="0 0 24 24" fill="currentColor">
+              <path d="M12,2A10,10 0 0,0 2,12A10,10 0 0,0 12,22A10,10 0 0,0 22,12A10,10 0 0,0 12,2M16.2,16.2L11,13V7H12.5V12.2L17,14.9L16.2,16.2Z" />
+            </svg>
+          </div>
+          <div>
+            <div id="kpi-avg-approval-time" class="kpi-value">-</div>
+            <div class="kpi-label">Avg. Time to 1st Approval</div>
+          </div>
+        </div>
+        <div class="kpi-card">
+          <div class="kpi-icon bg-green-500">
+            <svg viewBox="0 0 24 24" fill="currentColor">
+              <path d="M12,2A10,10 0 0,0 2,12A10,10 0 0,0 12,22A10,10 0 0,0 22,12A10,10 0 0,0 12,2M11,16.5L6.5,12L7.91,10.59L11,13.67L16.59,8.09L18,9.5L11,16.5Z" />
+            </svg>
+          </div>
+          <div>
+            <div id="kpi-avg-lifespan" class="kpi-value">-</div>
+            <div class="kpi-label">Avg. PR Lifespan</div>
+          </div>
+        </div>
+        <div id="hot-streak-card" class="kpi-card spotlight-card"></div>
+        <div id="fastest-reviewer-card" class="kpi-card spotlight-card"></div>
       </div>
-      <div id="status-area">
-        <div class="loading-container" id="loading-indicator">
-          <div class="spinner"></div>
-          <p class="text-secondary">Loading dashboard data...</p>
+      <div class="panel">
+        <h3 class="panel-header panel-title">Daily Activity Breakdown</h3>
+        <div class="panel-body" id="daily-breakdown-container">
+          <!-- Interactive daily breakdown will be rendered here -->
         </div>
       </div>
-      <div id="content-area" class="hidden">
-        <div id="metrics-content" class="tab-content">
-          <div class="pr-controls">
-            <div class="filter-controls-left">
-              <div class="filter-buttons">
-                <button class="filter-btn active" data-status="all">All</button>
-                <button class="filter-btn" data-status="merged">Merged</button>
-                <button class="filter-btn" data-status="pending">Pending</button>
-                <button class="filter-btn" data-status="closed">Closed</button>
-              </div>
-              <select id="author-filter" class="control-input">
-                <option value="all">All Authors</option>
-              </select>
-            </div>
-            <input type="text" id="pr-search" class="control-input" placeholder="Search by title or PR number...">
-          </div>
-          <div id="pr-metrics-container"></div>
-        </div>
-        <div id="analytics-content" class="tab-content hidden space-y-8">
-          <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-            <div class="kpi-card">
-              <div class="kpi-icon bg-fuchsia-500">
-                <svg viewBox="0 0 24 24" fill="currentColor">
-                  <path d="M16,12V14A2,2 0 0,1 14,16H10A2,2 0 0,1 8,14V12A2,2 0 0,1 10,10H14A2,2 0 0,1 16,12M14,4H10A2,2 0 0,0 8,6V8H10V6H14V8H16V6A2,2 0 0,0 14,4M20,10H18V12H20V14H18V16A2,2 0 0,1 16,18H14V20H16A4,4 0 0,0 20,16V10M6,8V6H4V10H6V16A4,4 0 0,0 10,20H12V18H10A2,2 0 0,1 8,16V8A2,2 0 0,1 10,6V4A4,4 0 0,0 6,8Z" />
-                </svg>
-              </div>
-              <div>
-                <div id="kpi-total-prs" class="kpi-value">-</div>
-                <div class="kpi-label">Total PRs</div>
-              </div>
-            </div>
-            <div class="kpi-card">
-              <div class="kpi-icon bg-purple-500">
-                <svg viewBox="0 0 24 24" fill="currentColor">
-                  <path d="M17.45,15.18L13.84,18.79L10.23,15.18L9.29,14.24C9.13,14.08 9.13,13.82 9.29,13.66L12.44,10.5C12.73,10.21 13.2,10.21 13.48,10.5L16.63,13.66C16.79,13.82 16.79,14.08 16.63,14.24L17.45,15.18M12,2A10,10 0 0,0 2,12A10,10 0 0,0 12,22A10,10 0 0,0 22,12A10,10 0 0,0 12,2Z" />
-                </svg>
-              </div>
-              <div>
-                <div id="kpi-total-merged" class="kpi-value">-</div>
-                <div class="kpi-label">Merged PRs</div>
-              </div>
-            </div>
-            <div class="kpi-card">
-              <div class="kpi-icon bg-red-500">
-                <svg viewBox="0 0 24 24" fill="currentColor">
-                  <path d="M12,2A10,10 0 0,0 2,12A10,10 0 0,0 12,22A10,10 0 0,0 22,12A10,10 0 0,0 12,2M17,15.59L15.59,17L12,13.41L8.41,17L7,15.59L10.59,12L7,8.41L8.41,7L12,10.59L15.59,7L17,8.41L13.41,12L17,15.59Z" />
-                </svg>
-              </div>
-              <div>
-                <div id="kpi-total-closed" class="kpi-value">-</div>
-                <div class="kpi-label">Total Closed PRs</div>
-              </div>
-            </div>
-            <div class="kpi-card">
-              <div class="kpi-icon bg-blue-500">
-                <svg viewBox="0 0 24 24" fill="currentColor">
-                  <path d="M12,6L17,11H7L12,6M7,13H17V15H7V13M7,17H17V19H7V17Z" />
-                </svg>
-              </div>
-              <div>
-                <div id="kpi-avg-pr-size" class="kpi-value">-</div>
-                <div class="kpi-label">Avg. PR Size</div>
-              </div>
-            </div>
-          </div>
-          <div id="merge-process-health-container" class="panel"></div>
-          <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <div class="kpi-card">
-              <div class="kpi-icon bg-sky-500">
-                <svg viewBox="0 0 24 24" fill="currentColor">
-                  <path d="M12,2A10,10 0 0,0 2,12A10,10 0 0,0 12,22A10,10 0 0,0 22,12A10,10 0 0,0 12,2M16.2,16.2L11,13V7H12.5V12.2L17,14.9L16.2,16.2Z" />
-                </svg>
-              </div>
-              <div>
-                <div id="kpi-avg-approval-time" class="kpi-value">-</div>
-                <div class="kpi-label">Avg. Time to 1st Approval</div>
-              </div>
-            </div>
-            <div class="kpi-card">
-              <div class="kpi-icon bg-green-500">
-                <svg viewBox="0 0 24 24" fill="currentColor">
-                  <path d="M12,2A10,10 0 0,0 2,12A10,10 0 0,0 12,22A10,10 0 0,0 22,12A10,10 0 0,0 12,2M11,16.5L6.5,12L7.91,10.59L11,13.67L16.59,8.09L18,9.5L11,16.5Z" />
-                </svg>
-              </div>
-              <div>
-                <div id="kpi-avg-lifespan" class="kpi-value">-</div>
-                <div class="kpi-label">Avg. PR Lifespan</div>
-              </div>
-            </div>
-            <div id="hot-streak-card" class="kpi-card spotlight-card"></div>
-            <div id="fastest-reviewer-card" class="kpi-card spotlight-card"></div>
-          </div>
-          <div class="panel">
-            <h3 class="panel-header panel-title">Daily Activity Breakdown</h3>
-            <div class="panel-body" id="daily-breakdown-container">
-              <!-- Interactive daily breakdown will be rendered here -->
-            </div>
-          </div>
-          <div id="pr-type-trends-container" class="panel"></div>
-          <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
-            <div class="panel">
-              <h3 class="panel-header panel-title">Contribution Leaderboard</h3>
-              <div class="panel-body chart-container">
-                <canvas id="contributionsChart"></canvas>
-              </div>
-            </div>
-            <div class="panel">
-              <h3 class="panel-header panel-title">Review Load Distribution</h3>
-              <div class="panel-body chart-container">
-                <canvas id="reviewersChart"></canvas>
-              </div>
-            </div>
-            <div class="panel lg:col-span-2">
-              <h3 class="panel-header panel-title">Top Collaboration Pairs</h3>
-              <div class="panel-body">
-                <ul id="collaboration-list" class="collaboration-list"></ul>
-              </div>
-            </div>
+      <div id="pr-type-trends-container" class="panel"></div>
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+        <div class="panel">
+          <h3 class="panel-header panel-title">Contribution Leaderboard</h3>
+          <div class="panel-body chart-container">
+            <canvas id="contributionsChart"></canvas>
           </div>
         </div>
-        <div id="feedback-content" class="tab-content hidden" dir="rtl">
-          <!-- This content will be generated by script.js -->
+        <div class="panel">
+          <h3 class="panel-header panel-title">Review Load Distribution</h3>
+          <div class="panel-body chart-container">
+            <canvas id="reviewersChart"></canvas>
+          </div>
+        </div>
+        <div class="panel lg:col-span-2">
+          <h3 class="panel-header panel-title">Top Collaboration Pairs</h3>
+          <div class="panel-body">
+            <ul id="collaboration-list" class="collaboration-list"></ul>
+          </div>
         </div>
       </div>
     </div>
-    <!-- Local Script -->
-    <script src="script.js"></script>
-  </body>
+    <div id="ratings-content" class="tab-content hidden">
+      <!-- This content will be generated by script.js -->
+    </div>
+    <div id="feedback-content" class="tab-content hidden" dir="rtl">
+      <!-- This content will be generated by script.js -->
+    </div>
+  </div>
+</div>
+<!-- Local Script -->
+<script src="script.js"></script>
+</body>
 </html>
