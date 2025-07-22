@@ -3,7 +3,9 @@ package com.london.data.datasource.common
 import android.content.SharedPreferences
 import androidx.core.content.edit
 import com.london.data.BuildConfig
+import org.koin.core.annotation.Named
 
+@Named("auth")
 class AuthPreferences(
     private val sharedPreferences: SharedPreferences,
 ) {
