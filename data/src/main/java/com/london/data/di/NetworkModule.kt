@@ -140,6 +140,11 @@ class NetworkModule {
         return SharedPrefsTokenProvider(authPreferences)
     }
 
+    @Single
+    fun provideAuthPreferences(context: Context): AuthPreferences {
+        return AuthPreferences(context.getSharedPreferences("auth", Context.MODE_PRIVATE))
+    }
+
 //    @Single
 //    fun provideApiInterceptor(tokenProvider: SessionTokenProvider): Interceptor {
 //        return AuthInterceptor(tokenProvider)

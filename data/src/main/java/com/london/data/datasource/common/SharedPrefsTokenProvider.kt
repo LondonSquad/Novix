@@ -7,5 +7,5 @@ import org.koin.core.annotation.Single
 class SharedPrefsTokenProvider(
     private val authPreferences: AuthPreferences
 ) : SessionTokenProvider {
-    override fun getAuthKey(): String? = authPreferences.getRequestToken()
+    override fun getAuthKey(): String? = authPreferences.getAuthKey()
 }
