@@ -22,7 +22,7 @@ class AuthPreferences(
         return sharedPreferences.getString(SESSION_ID, null)
     }
 
-    fun saveRequestToken(token: String) {
+    fun saveRequestToken(token: String?) {
         sharedPreferences.edit { putString(REQUEST_TOKEN, token) }
     }
 

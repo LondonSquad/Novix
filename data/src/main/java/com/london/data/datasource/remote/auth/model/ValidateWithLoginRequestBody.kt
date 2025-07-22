@@ -2,7 +2,7 @@ package com.london.data.datasource.remote.auth.model
 
 import kotlinx.serialization.SerialName
 
-data class CreateSessionWithLoginRequest(
+data class ValidateWithLoginRequestBody(
     @SerialName("username")
     val username: String,
     @SerialName("password")

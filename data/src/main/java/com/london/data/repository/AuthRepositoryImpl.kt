@@ -2,8 +2,8 @@ package com.london.data.repository
 
 import com.london.data.datasource.common.AuthPreferences
 import com.london.data.datasource.remote.auth.api.AuthApi
-import com.london.data.datasource.remote.auth.model.CreateSessionWithLoginRequest
-import com.london.data.datasource.remote.auth.model.RequestTokenResponse
+import com.london.data.datasource.remote.auth.model.Token
+import com.london.data.datasource.remote.auth.model.ValidateWithLoginRequestBody
 import com.london.domain.repository.AuthRepository
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
@@ -17,39 +17,28 @@ class AuthRepositoryImpl(
 
     override fun login(username: String, password: String): Flow<Boolean> = flow {
         // Step 1: Get request token
-        val tokenResponse = authApi.getRequestToken()
-        val requestToken = tokenResponse.requestToken
+        val tokenResponse = authApi.createRequestToken()
+        val unAuthenticatedRequestToken = tokenResponse.requestToken
             ?: throw Exception("Failed to get request token")
-
-        authPreferences.saveRequestToken(requestToken)
-
-        // Step 2: Validate token with login
-        val loginRequest = CreateSessionWithLoginRequest(
+        val loginRequestBody = ValidateWithLoginRequestBody(
             username = username,
             password = password,
-            requestToken = requestToken
+            requestToken = unAuthenticatedRequestToken
         )
 
-        val isValidated = authApi.validateWithLogin(loginRequest)
-        if (!isValidated) throw Exception("Invalid username or password")
-
+        // Step 2: Validate token with login
         // Step 3: Create session
-        val sessionResponse = authApi.createSession(
-            RequestTokenResponse(
-                success = true,
-                expiresAt = null,
-                requestToken = requestToken
+        val sessionResponse = authApi.createSessionWithLogin(loginRequestBody)
+        if (sessionResponse.success == true) {
+            val authenticatedRequestToken = sessionResponse.requestToken
+            val createdSession = authApi.createSession(
+                Token(authenticatedRequestToken)
             )
-        )
+            authPreferences.saveSessionId(createdSession.sessionId)
+            authPreferences.saveUsername(username)
+        } else throw Exception("Failed to create session")
 
-        val sessionId = sessionResponse.sessionId
-        if (!sessionResponse.success || sessionId.isNullOrEmpty()) {
-            throw Exception("Failed to create session")
-        }
-
-        // Save session data
-        authPreferences.saveSessionId(sessionId)
-        authPreferences.saveUsername(username)
+        authPreferences.saveRequestToken(sessionResponse.requestToken)
         authPreferences.setGuestMode(false)
 
         emit(true)

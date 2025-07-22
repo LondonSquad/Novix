@@ -4,11 +4,12 @@ import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class RequestTokenResponse(
+data class ValidateKeyResponse(
     @SerialName("success")
     val success: Boolean,
-    @SerialName("expires_at")
+    @SerialName("status_code")
     val expiresAt: String,
-    @SerialName("request_token")
+    @SerialName("status_message")
     val requestToken: String
+
 )

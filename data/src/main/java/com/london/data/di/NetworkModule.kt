@@ -1,7 +1,6 @@
 package com.london.data.di
 
 import android.content.Context
-import android.util.Log
 import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory
 import com.london.data.BuildConfig
 import com.london.data.datasource.common.AuthInterceptor
@@ -43,7 +42,6 @@ class NetworkModule {
     @Single
     fun provideHttpLoggingInterceptor(): HttpLoggingInterceptor {
         return HttpLoggingInterceptor { message ->
-            Log.i("DEBUGGING", message)
         }.apply {
             level = if (BuildConfig.DEBUG) {
                 HttpLoggingInterceptor.Level.BODY
@@ -68,7 +66,7 @@ class NetworkModule {
 
             val newRequest = originalRequest.newBuilder()
                 .url(newUrl)
-                .addHeader("Authorization", "Bearer ${BuildConfig.AUTHORIZATION_KEY}")
+//                .addHeader("Authorization", "Bearer ${BuildConfig.AUTHORIZATION_KEY}")
                 .build()
 
             chain.proceed(newRequest)
@@ -79,6 +77,7 @@ class NetworkModule {
     fun provideOkHttpClient(
         loggingInterceptor: HttpLoggingInterceptor,
         apiInterceptor: Interceptor,
+        authInterceptor: AuthInterceptor,
         context: Context
     ): OkHttpClient {
         val cacheSize = 10L * 1024 * 1024
@@ -87,6 +86,7 @@ class NetworkModule {
             maxSize = cacheSize
         )
         return OkHttpClient.Builder()
+            .addInterceptor(authInterceptor)
             .addInterceptor(apiInterceptor)
             .addInterceptor(loggingInterceptor)
             .cache(cache)
@@ -140,10 +140,10 @@ class NetworkModule {
         return SharedPrefsTokenProvider(authPreferences)
     }
 
-    @Single
-    fun provideApiInterceptor(tokenProvider: SessionTokenProvider): Interceptor {
-        return AuthInterceptor(tokenProvider)
-    }
+//    @Single
+//    fun provideApiInterceptor(tokenProvider: SessionTokenProvider): Interceptor {
+//        return AuthInterceptor(tokenProvider)
+//    }
 
     @Single
     fun provideAuthApi(retrofit: Retrofit): AuthApi {
