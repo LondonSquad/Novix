@@ -28,6 +28,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
+import com.london.designsystem.R
 import com.london.designsystem.component.Icon
 import com.london.designsystem.component.OutlinedTextField
 import com.london.designsystem.component.Text
@@ -35,7 +36,7 @@ import com.london.designsystem.component.TopBar
 import com.london.designsystem.component.button.PrimaryButton
 import com.london.designsystem.theme.NovixTheme
 import com.london.designsystem.theme.ThemePreviews
-import com.london.presentation.R
+import com.london.presentation.R.string
 
 @Composable
 fun LoginScreen() {
@@ -74,7 +75,7 @@ private fun Content(
     ) {
         Image(
             painter = painterResource(R.drawable.polygon1),
-            contentDescription = stringResource(R.string.app_icon),
+            contentDescription = stringResource(string.app_icon),
             modifier = Modifier
                 .align(Alignment.TopStart)
                 .offset(y = (-60).dp, x = (-20).dp)
@@ -87,24 +88,24 @@ private fun Content(
                 .padding(horizontal = 16.dp)
         ) {
             TopBar(
-                title = stringResource(R.string.login),
+                title = stringResource(string.login),
                 modifier = Modifier.padding(top = 8.dp), onBackClick = {}
             )
             Icon(
                 painter = painterResource(id = R.drawable.novix_icon),
-                contentDescription = stringResource(R.string.app_icon),
+                contentDescription = stringResource(string.app_icon),
                 tint = Color.Unspecified,
                 modifier = Modifier
                     .size(64.dp)
                     .padding(top = 12.dp, bottom = 16.dp)
             )
             Text(
-                stringResource(R.string.login_to_your_account),
+                stringResource(string.login_to_your_account),
                 style = NovixTheme.typography.title.medium,
                 color = NovixTheme.colors.title
             )
             Text(
-                stringResource(R.string.user_name),
+                stringResource(string.user_name),
                 style = NovixTheme.typography.title.small,
                 color = NovixTheme.colors.title,
                 modifier = Modifier.padding(top = 40.dp, bottom = 8.dp)
@@ -113,10 +114,10 @@ private fun Content(
                 value = username,
                 interactionSource = MutableInteractionSource(),
                 onValueChange = onUsernameChange,
-                leadingIcon = painterResource(com.london.designsystem.R.drawable.icon_user),
+                leadingIcon = painterResource(R.drawable.icon_user),
             )
             Text(
-                stringResource(R.string.password),
+                stringResource(string.password),
                 style = NovixTheme.typography.title.small,
                 color = NovixTheme.colors.title,
                 modifier = Modifier.padding(top = 16.dp, bottom = 8.dp)
@@ -127,12 +128,12 @@ private fun Content(
                 onValueChange = onPasswordChange,
                 leadingIcon = painterResource(R.drawable.lock_key),
                 isPasswordField = true,
-                passwordVisibleIcon = painterResource(id = com.london.designsystem.R.drawable.icon_show_password),
-                passwordHiddenIcon = painterResource(id = com.london.designsystem.R.drawable.icon_hide_password),
+                passwordVisibleIcon = painterResource(id = R.drawable.icon_show_password),
+                passwordHiddenIcon = painterResource(id = R.drawable.icon_hide_password),
                 modifier = Modifier.padding(bottom = 32.dp)
             )
             PrimaryButton(
-                text = stringResource(R.string.login),
+                text = stringResource(string.login),
                 hasLabel = true,
                 hasIcon = false,
                 isLoading = false,
@@ -142,7 +143,7 @@ private fun Content(
                 modifier = Modifier.fillMaxWidth()
             )
             Text(
-                stringResource(R.string.forgot_password),
+                stringResource(string.forgot_password),
                 style = NovixTheme.typography.label.medium,
                 color = NovixTheme.colors.primary,
                 modifier = Modifier
@@ -156,14 +157,14 @@ private fun Content(
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Text(
-                    stringResource(R.string.don_t_have_an_account),
+                    stringResource(string.don_t_have_an_account),
                     style = NovixTheme.typography.body.small,
                     color = NovixTheme.colors.body,
                     modifier = Modifier
                         .padding(end = 4.dp)
                         .clickable { onForgotPasswordClick() })
                 Text(
-                    stringResource(R.string.create_account),
+                    stringResource(string.create_account),
                     style = NovixTheme.typography.label.medium,
                     color = NovixTheme.colors.primary,
                     modifier = Modifier.clickable {
