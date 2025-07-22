@@ -6132,9 +6132,9 @@
     "week": "2025-W30",
     "status": "pending",
     "diff_stats": {
-      "additions": 96,
+      "additions": 103,
       "deletions": 37,
-      "changed_files": 7
+      "changed_files": 9
     }
   }
 ]
