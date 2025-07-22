@@ -27,4 +27,3 @@ data class NovixColors(
     val tealBlue: Color,
     val oceanDark: Color
 )
-
