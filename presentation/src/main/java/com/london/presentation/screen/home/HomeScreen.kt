@@ -1,6 +1,5 @@
 package com.london.presentation.screen.home
 
-import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -38,9 +37,6 @@ fun HomeScreen(
 ) {
 
     val uiState by viewModel.state.collectAsStateWithLifecycle()
-    Log.d("homeScreen", "movies: ${uiState.popularMovies}")
-    Log.d("homeScreen", "error: ${uiState.error}")
-    Log.d("homeScreen", "loading: ${uiState.isLoading}")
 
     when {
         uiState.isLoading -> LoadingScreen()
