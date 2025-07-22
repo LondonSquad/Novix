@@ -23,7 +23,7 @@ class PopularRepositoryImplTest {
     }
 
     @Test
-    fun `getPopularMovies returns mapped domain models`() = runTest {
+    fun `when call getPopularMovies should returns mapped domain models`() = runTest {
         // Given
         val remoteResponse = ApiResponse(
             currentPage = 1,

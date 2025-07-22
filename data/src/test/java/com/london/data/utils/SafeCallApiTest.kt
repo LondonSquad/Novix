@@ -12,7 +12,7 @@ import java.io.IOException
 class SafeCallApiTest {
 
     @Test
-    fun `safeCallApi returns data on success`() = runTest {
+    fun `when call safeCallApi should returns data on success`() = runTest {
         // Given
         val expected = "success"
 
@@ -24,7 +24,7 @@ class SafeCallApiTest {
     }
 
     @Test
-    fun `safeCallApi throws RuntimeException on 401 error`() = runTest {
+    fun `when call safeCallApi should throws RuntimeException on 401 error`() = runTest {
         val httpException = createHttpException(401)
 
         val exception = runCatching {
@@ -36,7 +36,7 @@ class SafeCallApiTest {
     }
 
     @Test
-    fun `safeCallApi throws RuntimeException on unknown HTTP error`() = runTest {
+    fun `when call safeCallApi should throws RuntimeException on unknown HTTP error`() = runTest {
         val httpException = createHttpException(418)
 
         val exception = runCatching {
@@ -48,7 +48,7 @@ class SafeCallApiTest {
     }
 
     @Test
-    fun `safeCallApi throws NoInternetException on IOException`() = runTest {
+    fun `when call safeCallApi should throws NoInternetException on IOException`() = runTest {
         val ioException = IOException("timeout")
 
         val exception = runCatching {
