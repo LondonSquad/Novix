@@ -13,6 +13,7 @@ import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -24,15 +25,14 @@ import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.zIndex
 import com.london.designsystem.component.Text
 import com.london.designsystem.theme.NovixTheme
-import com.london.designsystem.theme.ThemePreviews
 import com.london.presentation.R
-
 
 @Composable
 fun TrendingSection(
@@ -55,7 +55,7 @@ fun TrendingSection(
         Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .height(127.dp)
+                .wrapContentHeight()
                 .background(NovixTheme.colors.surface),
             horizontalArrangement = Arrangement.spacedBy(8.dp),
             verticalAlignment = Alignment.Bottom
@@ -103,9 +103,9 @@ private fun CategoryCard(
     startColor: Color,
     endColor: Color,
     imageWidth: Dp,
-    imageHeight: Dp,
     onClick: () -> Unit,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    imageHeight: Dp = 64.dp
 ) {
     val gradient = Brush.linearGradient(
         colors = listOf(startColor, endColor)
@@ -131,7 +131,7 @@ private fun CategoryCard(
                 .size(width = imageWidth, height = imageHeight)
                 .align(Alignment.TopStart)
                 .padding(start = 4.dp)
-                .offset(y = (-14).dp)
+                .offset(y = (-12).dp)
                 .then(if (isRtl) Modifier.scale(-1f, 1f) else Modifier)
         )
 
@@ -146,7 +146,7 @@ private fun CategoryCard(
     }
 }
 
-@ThemePreviews
+@Preview
 @Composable
 fun TrendingSectionPreview() {
     TrendingSection()
