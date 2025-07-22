@@ -1,4 +1,4 @@
-package com.london.presentation.composables.filterbottomsheet
+package com.london.presentation.composables
 
 import android.annotation.SuppressLint
 import androidx.compose.foundation.border
@@ -21,6 +21,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.platform.LocalConfiguration
+import androidx.compose.ui.platform.LocalWindowInfo
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
@@ -28,9 +29,9 @@ import androidx.compose.ui.unit.dp
 import com.london.designsystem.component.CustomReleasedYearSlider
 import com.london.designsystem.component.GenreChipGroup
 import com.london.designsystem.component.Icon
-import com.london.designsystem.component.NovixBottomSheet
-import com.london.designsystem.component.NovixBottomSheetState
+import com.london.designsystem.component.ModalBottomSheet
 import com.london.designsystem.component.RatingBar
+import com.london.designsystem.component.SheetState
 import com.london.designsystem.component.Text
 import com.london.designsystem.component.button.OutlineButton
 import com.london.designsystem.component.button.PrimaryButton
@@ -50,12 +51,11 @@ data class FilterState(
     val releaseYearRange: ClosedFloatingPointRange<Float>
 )
 
-@SuppressLint("ConfigurationScreenWidthHeight")
 @Composable
 fun FilterBottomSheet(
     modifier: Modifier = Modifier,
     filterInteractions: SearchInteractions,
-    sheetState: NovixBottomSheetState = rememberNovixModalBottomSheetState(),
+    sheetState: SheetState = rememberNovixModalBottomSheetState(),
     filterState: FilterState,
 ) {
     val coroutineScope = rememberCoroutineScope()
@@ -67,7 +67,7 @@ fun FilterBottomSheet(
     }
 
     if (filterState.isSheetVisible) {
-        NovixBottomSheet(
+        ModalBottomSheet(
             onDismissRequest = filterInteractions::onFilterSheetDismiss,
             containerColor = NovixTheme.colors.surface,
             state = sheetState
@@ -76,7 +76,7 @@ fun FilterBottomSheet(
                 modifier = Modifier
                     .fillMaxWidth()
                     .wrapContentHeight()
-                    .heightIn(max = (LocalConfiguration.current.screenHeightDp * 0.75f).dp)
+                    .heightIn(max = LocalWindowInfo.current.containerSize.height.dp * 0.75f)
                     .padding(bottom = 24.dp)
             ) {
                 FilterBottomSheetContent(
