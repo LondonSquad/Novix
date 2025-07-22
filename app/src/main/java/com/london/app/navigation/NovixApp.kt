@@ -1,9 +1,11 @@
 package com.london.app.navigation
 
+import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
-import androidx.compose.foundation.background
+import androidx.compose.animation.slideInVertically
+import androidx.compose.animation.slideOutVertically
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.Scaffold
@@ -22,6 +24,7 @@ import com.london.designsystem.theme.NovixTheme
 import com.london.domain.AppPreferencesService
 import com.london.presentation.navigation.Screen
 import com.london.presentation.navigation.Screen.Account
+import com.london.presentation.navigation.Screen.ActorDetails
 import com.london.presentation.navigation.Screen.ActorTopMoviesPicksDetails
 import com.london.presentation.navigation.Screen.Bookmarks
 import com.london.presentation.navigation.Screen.Categories
@@ -65,6 +68,11 @@ fun NovixApp(appPreferencesService: AppPreferencesService) {
         else -> Home
     }
 
+    val showBottomNav = currentDestination?.hasRoute<Home>() == true ||
+            currentDestination?.hasRoute<Search>() == true ||
+            currentDestination?.hasRoute<Categories>() == true ||
+            currentDestination?.hasRoute<Bookmarks>() == true ||
+            currentDestination?.hasRoute<Account>() == true
     val showBottomNav = currentDestination?.hasRoute<TvShowDetails>() != true &&
             currentDestination?.hasRoute<MovieDetails>() != true &&
             currentDestination?.hasRoute<EpisodeDetails>() != true &&
@@ -83,11 +91,13 @@ fun NovixApp(appPreferencesService: AppPreferencesService) {
     Scaffold(
         backgroundColor = NovixTheme.colors.surface,
         bottomBar = {
-            if (showBottomNav) {
+            AnimatedVisibility(
+                visible = showBottomNav,
+                enter = slideInVertically(animationSpec = tween(), initialOffsetY = { it }),
+                exit = slideOutVertically(animationSpec = tween(), targetOffsetY = { it })
+            ) {
                 NavBar(
-                    modifier = Modifier
-                        .background(NovixTheme.colors.surface)
-                        .navigationBarsPadding(),
+                    modifier = Modifier.navigationBarsPadding(),
                     navDestinations = NavigationHelper.getNavigationTabs(),
                     currentSelectedDestination = currentScreen,
                     onNavDestinationClicked = { destination ->
@@ -179,7 +189,7 @@ fun NovixApp(appPreferencesService: AppPreferencesService) {
                     onNavigateToReviews = { tvShowId, mediaType ->
                         navController.navigate(Reviews(tvShowId, mediaType))
                     }, onNavigateToCast = { actorId ->
-                        navController.navigate(Screen.ActorDetails(actorId))
+                        navController.navigate(ActorDetails(actorId))
                     }
                 )
             }
@@ -227,7 +237,7 @@ fun NovixApp(appPreferencesService: AppPreferencesService) {
                         navController.navigate(MovieDetails(movieId))
                     },
                     onNavigateToActor = { actorId ->
-                        navController.navigate(Screen.ActorDetails(actorId))
+                        navController.navigate(ActorDetails(actorId))
                     },
                     onNavigateToReviews = { movieId, mediaType ->
                         navController.navigate(Reviews(movieId, mediaType))
