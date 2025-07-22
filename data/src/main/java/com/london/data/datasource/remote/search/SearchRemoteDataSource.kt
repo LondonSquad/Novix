@@ -1,9 +1,11 @@
+@file:KoverIgnore
 package com.london.data.datasource.remote.search
 
 import com.london.data.datasource.remote.ApiResponse
 import com.london.data.datasource.remote.search.model.SearchActorRemote
 import com.london.data.datasource.remote.search.model.SearchMovieRemote
 import com.london.data.datasource.remote.search.model.SearchTvShowRemote
+import com.london.domain.KoverIgnore
 
 interface SearchRemoteDataSource {
     suspend fun searchForMovies(
@@ -26,6 +28,12 @@ interface SearchRemoteDataSource {
 
     suspend fun getMoviesByCategory(
         categoryId: Int,
+        pageNumber: Int,
+        includeAdult: Boolean = false
+    ): ApiResponse<SearchMovieRemote>
+
+    suspend fun getUpComingMoviesByCategory(
+        categoryId: Int?=null,
         pageNumber: Int,
         includeAdult: Boolean = false
     ): ApiResponse<SearchMovieRemote>
