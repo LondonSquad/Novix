@@ -1,5 +1,4 @@
 @file:KoverIgnore
-
 package com.london.data.datasource.remote.search
 
 import com.london.data.datasource.remote.ApiResponse
@@ -7,10 +6,8 @@ import com.london.data.datasource.remote.search.api.SearchApiService
 import com.london.data.datasource.remote.search.model.SearchActorRemote
 import com.london.data.datasource.remote.search.model.SearchMovieRemote
 import com.london.data.datasource.remote.search.model.SearchTvShowRemote
+import com.london.data.utils.getCurrentDate
 import com.london.domain.KoverIgnore
-import kotlinx.datetime.Clock
-import kotlinx.datetime.TimeZone
-import kotlinx.datetime.toLocalDateTime
 import org.koin.core.annotation.Single
 
 @Single
@@ -73,9 +70,4 @@ class SearchRemoteDataSourceImpl(
             page = pageNumber,
             includeAdult = includeAdult
         )
-
-
-    private fun getCurrentDate(): String = Clock.System.now()
-        .toLocalDateTime(TimeZone.currentSystemDefault())
-        .date.toString()
 }
