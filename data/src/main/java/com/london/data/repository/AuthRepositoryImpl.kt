@@ -1,6 +1,5 @@
 package com.london.data.repository
 
-import android.util.Log
 import com.london.data.datasource.common.AuthPreferences
 import com.london.data.datasource.remote.auth.api.AuthApi
 import com.london.data.datasource.remote.auth.model.Token
@@ -9,6 +8,7 @@ import com.london.domain.repository.AuthRepository
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import org.koin.core.annotation.Single
+import timber.log.Timber
 
 @Single
 class AuthRepositoryImpl(
@@ -20,17 +20,11 @@ class AuthRepositoryImpl(
         // Step 1: Get request token
         val tokenResponse = authApi.createRequestToken()
 
-        Log.d("AuthRepositoryImpl", "Request token: ${tokenResponse.requestToken}")
-        val unAuthenticatedRequestToken = tokenResponse.requestToken
-            ?: throw Exception("Failed to get request token")
-
-        Log.d("AuthRepositoryImpl", "Request token: ${unAuthenticatedRequestToken}")
         val loginRequestBody = ValidateWithLoginRequestBody(
             username = username,
             password = password,
-            requestToken = unAuthenticatedRequestToken
+            requestToken = tokenResponse.requestToken
         )
-        Log.d("AuthRepositoryImpl", " ${loginRequestBody}")
 
         // Step 2: Validate token with login
         // Step 3: Create session
@@ -40,13 +34,12 @@ class AuthRepositoryImpl(
             val createdSession = authApi.createSession(
                 Token(authenticatedRequestToken)
             )
+            Timber.tag("AuthRepositoryImple").d("Created session: ${createdSession.sessionId}")
             authPreferences.saveSessionId(createdSession.sessionId)
             authPreferences.saveUsername(username)
         } else throw Exception("Failed to create session")
-
         authPreferences.saveRequestToken(sessionResponse.requestToken)
         authPreferences.setGuestMode(false)
-
         emit(true)
     }
 
@@ -54,10 +47,8 @@ class AuthRepositoryImpl(
         val guestResponse = authApi.createGuestSession()
         val guestSessionId = guestResponse.guestSessionId
             ?: throw Exception("Failed to create guest session")
-
         authPreferences.saveGuestSessionId(guestSessionId)
         authPreferences.setGuestMode(true)
-
         emit(true)
     }
 

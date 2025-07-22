@@ -15,6 +15,7 @@ import com.london.data.datasource.remote.details.tvshowdetails.api.TvShowDetails
 import com.london.data.datasource.remote.reviews.api.ReviewsApiService
 import com.london.data.datasource.remote.search.api.SearchApiService
 import com.london.domain.repository.SessionTokenProvider
+import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.json.Json
 import okhttp3.Cache
 import okhttp3.Interceptor
@@ -70,7 +71,7 @@ class NetworkModule {
 
             val newRequest = originalRequest.newBuilder()
                 .url(newUrl)
-                .addHeader("Authorization", "Bearer ${BuildConfig.AUTHORIZATION_KEY}")
+             //   .addHeader("Authorization", "Bearer ${BuildConfig.AUTHORIZATION_KEY}")
                 .build()
 
             Log.d("AuthRepositoryImpl", "Request token: ${newRequest}")
@@ -92,8 +93,9 @@ class NetworkModule {
             maxSize = cacheSize
         )
         return OkHttpClient.Builder()
-            .addInterceptor(authInterceptor)
             .addInterceptor(apiInterceptor)
+            .addInterceptor(authInterceptor)
+            .addInterceptor(loggingInterceptor)
             .cache(cache)
             .connectTimeout(30, TimeUnit.SECONDS)
             .readTimeout(30, TimeUnit.SECONDS)
@@ -101,6 +103,7 @@ class NetworkModule {
             .build()
     }
 
+    @OptIn(ExperimentalSerializationApi::class)
     @Single
     fun provideRetrofit(okHttpClient: OkHttpClient, json: Json): Retrofit {
         return Retrofit.Builder()
@@ -131,11 +134,6 @@ class NetworkModule {
     @Single
     fun provideReviewsApiService(retrofit: Retrofit): ReviewsApiService =
         retrofit.create(ReviewsApiService::class.java)
-
-    @Single
-    fun provideAuthPreferences(context: Context): AuthPreferences {
-        return AuthPreferences(context.getSharedPreferences("auth", Context.MODE_PRIVATE))
-    }
 
     @Single
     fun provideSessionTokenProvider(authPreferences: AuthPreferences): SessionTokenProvider {

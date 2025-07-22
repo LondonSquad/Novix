@@ -11,7 +11,7 @@ class AuthInterceptor(
 ) : Interceptor {
     override fun intercept(chain: Interceptor.Chain): Response {
         val builder = chain.request().newBuilder()
-        tokenProvider.getSessionToken()?.let { token ->
+        tokenProvider.getAuthKey()?.let { token ->
             builder.addHeader("Authorization", "Bearer $token")
         }
         return chain.proceed(builder.build())

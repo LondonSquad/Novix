@@ -4,9 +4,8 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
-import com.london.app.navigation.NovixApp
 import com.london.designsystem.theme.NovixTheme
-import com.london.presentation.screen.details.tvshow.episodedetails.EpisodeDetailsScreen
+import com.london.presentation.screen.login.LoginScreen
 
 
 class MainActivity : ComponentActivity() {
@@ -15,7 +14,7 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             NovixTheme {
-                NovixApp()
+                LoginScreen()
             }
         }
     }

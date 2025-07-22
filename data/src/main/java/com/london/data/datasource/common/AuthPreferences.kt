@@ -2,6 +2,7 @@ package com.london.data.datasource.common
 
 import android.content.SharedPreferences
 import androidx.core.content.edit
+import com.london.data.BuildConfig
 
 class AuthPreferences(
     private val sharedPreferences: SharedPreferences,
@@ -12,6 +13,10 @@ class AuthPreferences(
         private const val USERNAME = "username"
         private const val IS_GUEST = "is_guest"
         private const val GUEST_SESSION_ID = "guest_session_id"
+    }
+
+    fun getAuthKey(): String? {
+        return BuildConfig.AUTHORIZATION_KEY
     }
 
     fun saveSessionId(sessionId: String) {

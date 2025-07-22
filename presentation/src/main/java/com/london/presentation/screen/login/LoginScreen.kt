@@ -148,6 +148,7 @@ private fun Content(
                 interactionSource = MutableInteractionSource(),
                 onValueChange = onPasswordChange,
                 leadingIcon = painterResource(R.drawable.star),
+
                 isPasswordField = true,
                 passwordVisibleIcon = painterResource(id = com.london.designsystem.R.drawable.icon_show_password),
                 passwordHiddenIcon = painterResource(id = com.london.designsystem.R.drawable.icon_hide_password),
