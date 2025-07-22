@@ -11,12 +11,14 @@ import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.GridItemSpan
 import androidx.compose.foundation.lazy.grid.LazyGridScope
+import androidx.compose.foundation.lazy.grid.LazyGridState
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalDensity
@@ -54,6 +56,11 @@ fun HomeScreen(
         }
     }
 
+    val lazyGridState = rememberSaveable (
+        saver = LazyGridState.Saver,
+    ){
+        LazyGridState()
+    }
     when {
         uiState.isLoading -> LoadingScreen()
         uiState.error == ErrorState.NoInternet -> NetworkErrorScreen()
@@ -62,7 +69,8 @@ fun HomeScreen(
             uiState = uiState,
             modifier = Modifier
                 .padding(top = 20.dp)
-                .fillMaxSize()
+                .fillMaxSize(),
+            lazyGridState = lazyGridState
         )
     }
 }
@@ -72,12 +80,16 @@ private fun Content(
     homeScreenContract: HomeScreenContract,
     uiState: HomeScreenUiState,
     modifier: Modifier = Modifier,
+    lazyGridState: LazyGridState
 ) {
+
     val density = LocalDensity.current
     val screenWidth = with(density) {
         LocalConfiguration.current.screenWidthDp.dp
     }
     val upcomingMoviesLazyList = uiState.upcomingMovies.collectAsLazyPagingItems()
+    val pagerState =
+        rememberPagerState(initialPage = 0, pageCount = { uiState.popularMovies.size })
     LazyVerticalGrid(
         columns = GridCells.Fixed(2),
         contentPadding = PaddingValues(
@@ -86,6 +98,7 @@ private fun Content(
             start = 16.dp,
             end = 16.dp
         ),
+        state = lazyGridState,
         horizontalArrangement = Arrangement.spacedBy(12.dp),
         verticalArrangement = Arrangement.spacedBy(12.dp),
         modifier = modifier
@@ -93,8 +106,6 @@ private fun Content(
     ) {
 
         item(span = { GridItemSpan(maxLineSpan) }) {
-            val pagerState =
-                rememberPagerState(initialPage = 0, pageCount = { uiState.popularMovies.size })
             PopularSection(
                 modifier = modifier
                     .requiredWidth(screenWidth),
@@ -117,7 +128,7 @@ private fun Content(
     }
 }
 
-fun LazyGridScope.upComingSection(
+private fun LazyGridScope.upComingSection(
     contract: HomeScreenContract,
     screenWidth: Dp,
     state: HomeScreenUiState,
@@ -141,7 +152,7 @@ fun LazyGridScope.upComingSection(
         )
     }
 
-    items(upcomingMoviesLazyList.itemCount) { index ->
+    items(count = upcomingMoviesLazyList.itemCount) { index ->
         val movie = upcomingMoviesLazyList[index]
 
         if (movie != null)
