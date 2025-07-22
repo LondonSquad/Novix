@@ -21,7 +21,10 @@ data class NovixColors(
     val redAccent: Color,
     val yellowAccent: Color,
     val greenAccent: Color,
-    val greenVariant: Color
+    val greenVariant: Color,
+    val darkCocoa: Color,
+    val deepCrimson: Color,
+    val tealBlue: Color,
+    val oceanDark: Color
 )
-
 
