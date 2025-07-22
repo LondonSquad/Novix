@@ -4,12 +4,17 @@ import android.content.Context
 import android.util.Log
 import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory
 import com.london.data.BuildConfig
+import com.london.data.datasource.common.AuthInterceptor
+import com.london.data.datasource.common.AuthPreferences
+import com.london.data.datasource.common.SharedPrefsTokenProvider
 import com.london.data.datasource.device.DeviceConfigurationDataSource
+import com.london.data.datasource.remote.auth.api.AuthApi
 import com.london.data.datasource.remote.details.actordetails.api.ActorDetailsApiService
 import com.london.data.datasource.remote.details.moviedetails.api.MovieDetailsApiService
 import com.london.data.datasource.remote.details.tvshowdetails.api.TvShowDetailsApiService
 import com.london.data.datasource.remote.reviews.api.ReviewsApiService
 import com.london.data.datasource.remote.search.api.SearchApiService
+import com.london.domain.repository.SessionTokenProvider
 import kotlinx.serialization.json.Json
 import okhttp3.Cache
 import okhttp3.Interceptor
@@ -97,7 +102,7 @@ class NetworkModule {
 
     ): Retrofit {
         return Retrofit.Builder()
-            .baseUrl(BuildConfig.BASE_URL)
+            .baseUrl(com.london.data.BuildConfig.BASE_URL)
             .client(okHttpClient)
             .addConverterFactory(
                 json.asConverterFactory(contentType = "application/json".toMediaType())
@@ -124,5 +129,25 @@ class NetworkModule {
     @Single
     fun provideReviewsApiService(retrofit: Retrofit): ReviewsApiService =
         retrofit.create(ReviewsApiService::class.java)
+
+    @Single
+    fun provideAuthPreferences(context: Context): AuthPreferences {
+        return AuthPreferences(context.getSharedPreferences("auth", Context.MODE_PRIVATE))
+    }
+
+    @Single
+    fun provideSessionTokenProvider(authPreferences: AuthPreferences): SessionTokenProvider {
+        return SharedPrefsTokenProvider(authPreferences)
+    }
+
+    @Single
+    fun provideApiInterceptor(tokenProvider: SessionTokenProvider): Interceptor {
+        return AuthInterceptor(tokenProvider)
+    }
+
+    @Single
+    fun provideAuthApi(retrofit: Retrofit): AuthApi {
+        return retrofit.create(AuthApi::class.java)
+    }
 
 }
