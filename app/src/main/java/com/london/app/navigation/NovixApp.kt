@@ -68,12 +68,15 @@ fun NovixApp(appPreferencesService: AppPreferencesService) {
     val showBottomNav = currentDestination?.hasRoute<TvShowDetails>() != true &&
             currentDestination?.hasRoute<MovieDetails>() != true &&
             currentDestination?.hasRoute<EpisodeDetails>() != true &&
-            currentDestination?.hasRoute<Reviews>() != true
+            currentDestination?.hasRoute<Reviews>() != true &&
+            currentDestination?.hasRoute<Screen.OnboardingPager>() != true &&
+            currentDestination?.hasRoute<Screen.Welcome>() != true
+
 
 
     val isOnboardingShown = appPreferencesService.hasOnboardingBeenShown
     val startDestination = if (isOnboardingShown) {
-        Screen.Home
+        Screen.Welcome
     } else {
         Screen.OnboardingPager
     }

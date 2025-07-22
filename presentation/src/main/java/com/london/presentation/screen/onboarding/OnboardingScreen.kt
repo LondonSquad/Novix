@@ -23,18 +23,24 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.systemBarsPadding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.ui.draw.blur
 import androidx.compose.ui.draw.clip
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.london.designsystem.component.Icon
 import com.london.designsystem.component.Text
 import com.london.designsystem.component.button.OutlineButton
 import com.london.designsystem.component.button.PrimaryButton
 import com.london.designsystem.theme.NovixTheme
 import com.london.designsystem.theme.ThemePreviews
 import com.london.presentation.R
-import com.london.presentation.screen.onboarding.data.OnboardingPage
-import com.london.presentation.screen.onboarding.data.onboardingPages
+import com.london.presentation.utils.Listen
 import org.koin.androidx.compose.koinViewModel
 
 @Composable
@@ -43,24 +49,78 @@ fun OnboardingScreen(
     onSkip: () -> Unit
 ) {
     val viewModel: OnboardingViewModel = koinViewModel()
+    val scope = rememberCoroutineScope()
+    val uiState by viewModel.state.collectAsStateWithLifecycle()
+    val effect by viewModel.effect.collectAsState(null)
     val pagerState = rememberPagerState(
-        pageCount = { onboardingPages.size },
-        initialPage = 0
+        pageCount = { uiState.pages.size },
+        initialPage = uiState.currentPage
     )
-
-    val isLastPage = pagerState.currentPage == onboardingPages.lastIndex
-    val isFirstPage = pagerState.currentPage == 0
 
     LaunchedEffect(pagerState.currentPage) {
         viewModel.onPageChanged(pagerState.currentPage)
+    }
+
+    effect?.Listen { currentEffect ->
+        when (currentEffect) {
+            is OnboardingEffect.ScrollToPage -> {
+                viewModel.scrollToPage(pagerState, currentEffect.page, scope)
+            }
+            OnboardingEffect.NavigateToWelcome -> {
+                viewModel.onboardingFinished()
+                onNext()
+            }
+            OnboardingEffect.SkipOnboarding -> {
+                viewModel.onboardingFinished()
+                onSkip()
+            }
+        }
     }
 
     Box(
         modifier = Modifier
             .fillMaxSize()
             .background(NovixTheme.colors.surface)
+            .systemBarsPadding()
     ) {
-        if (!isLastPage) {
+
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+        ) {
+            HorizontalPager(
+                state = pagerState,
+                modifier = Modifier.weight(1f)
+            ) { page ->
+                OnboardingPageContent(uiState.pages[page])
+            }
+
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(vertical = 16.dp, horizontal = 16.dp),
+                horizontalArrangement = Arrangement.SpaceBetween,
+            ) {
+                OnboardingIndicatorBar(
+                    modifier = Modifier
+                        .padding(vertical = 16.dp),
+                    activeStep = pagerState.currentPage,
+                    totalSteps = uiState.pages.size
+                )
+
+                OnboardingNavigationButtons(
+                    isFirstPage = uiState.isFirstPage,
+                    onPrevious = {
+                        viewModel.scrollPrevious(pagerState, scope)
+                    },
+                    onNext = {
+                        viewModel.scrollNext(pagerState, scope)
+                    }
+
+                )
+            }
+        }
+        if (!uiState.isLastPage) {
             Text(
                 modifier = Modifier
                     .align(Alignment.TopStart)
@@ -72,46 +132,6 @@ fun OnboardingScreen(
                 text = stringResource(R.string.skip),
                 style = NovixTheme.typography.label.medium,
                 color = NovixTheme.colors.primary
-            )
-        }
-    }
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-    ) {
-        HorizontalPager(
-            state = pagerState,
-            modifier = Modifier.weight(1f)
-        ) { page ->
-            OnboardingPageContent(onboardingPages[page])
-        }
-
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(vertical = 16.dp, horizontal = 16.dp),
-            horizontalArrangement = Arrangement.SpaceBetween,
-        ) {
-            OnboardingIndicatorBar(
-                modifier = Modifier
-                    .padding(vertical = 16.dp),
-                activeStep = pagerState.currentPage,
-                totalSteps = onboardingPages.size
-            )
-
-            OnboardingNavigationButtons(
-                isFirstPage = isFirstPage,
-                onPrevious = {
-                    viewModel.scrollPrevious(pagerState)
-                },
-                onNext = {
-                    if (isLastPage) {
-                        viewModel.onboardingFinished()
-                        onNext()
-                    } else {
-                        viewModel.scrollNext(pagerState)
-                    }
-                }
             )
         }
     }
@@ -127,18 +147,37 @@ fun OnboardingPageContent(page: OnboardingPage) {
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center
     ) {
-        Image(
-            painter = painterResource(id = page.imageRes),
-            contentDescription = null,
+
+        Box(
             modifier = Modifier
-                .height(250.dp)
-                .fillMaxWidth()
-        )
+                .size(300.dp),
+            contentAlignment = Alignment.Center
+        ) {
+            Icon(
+                painter = painterResource(id = R.drawable.icon_onboarding_ellipse),
+                contentDescription = null,
+                tint = NovixTheme.colors.primary.copy(alpha = 0.2f),
+                modifier = Modifier
+                    .size(450.dp)
+                    .blur(60.dp)
+            )
+
+            Image(
+                painter = painterResource(id = page.imageRes),
+                contentDescription = null,
+                modifier = Modifier
+                    .height(244.dp)
+                    .fillMaxWidth()
+            )
+        }
+
         Spacer(modifier = Modifier.height(24.dp))
+
         Text(
             text = stringResource(page.title),
             style = NovixTheme.typography.title.large,
-            color = NovixTheme.colors.title
+            color = NovixTheme.colors.title,
+            textAlign = TextAlign.Center
         )
         Spacer(modifier = Modifier.height(8.dp))
         Text(
@@ -149,6 +188,7 @@ fun OnboardingPageContent(page: OnboardingPage) {
         )
     }
 }
+
 
 @Composable
 fun OnboardingIndicatorBar(

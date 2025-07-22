@@ -2,7 +2,6 @@ package com.london.data.datasource.preferance
 
 import android.content.SharedPreferences
 import androidx.core.content.edit
-import com.london.data.datasource.preferance.AppPreferencesServiceImpl.PreferencesKeys.HAS_ONBOARDING_BEEN_SHOWN
 import com.london.domain.AppPreferencesService
 import org.koin.core.annotation.Provided
 import org.koin.core.annotation.Single
@@ -13,11 +12,11 @@ class AppPreferencesServiceImpl(
     private val preferences: SharedPreferences,
 ) : AppPreferencesService {
 
-    override val hasOnboardingBeenShown: Boolean =
-        preferences.getBoolean(HAS_ONBOARDING_BEEN_SHOWN, false)
+    override val hasOnboardingBeenShown: Boolean
+        get() = preferences.getBoolean(PreferencesKeys.HAS_ONBOARDING_BEEN_SHOWN, false)
 
     override fun setOnBoardingShown() {
-        preferences.edit { putBoolean(HAS_ONBOARDING_BEEN_SHOWN, true) }
+        preferences.edit { putBoolean(PreferencesKeys.HAS_ONBOARDING_BEEN_SHOWN, true) }
     }
 
     private object PreferencesKeys {

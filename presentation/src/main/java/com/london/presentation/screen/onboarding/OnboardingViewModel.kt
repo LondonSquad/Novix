@@ -4,53 +4,69 @@ import android.util.Log
 import androidx.compose.animation.core.FastOutSlowInEasing
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.pager.PagerState
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.london.domain.AppPreferencesService
+import com.london.presentation.screen.base.BaseViewModel
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import org.koin.android.annotation.KoinViewModel
+import org.koin.core.annotation.Provided
 import kotlin.onFailure
 import kotlin.runCatching
 
 @KoinViewModel
 class OnboardingViewModel(
+    @Provided
     private val appPreferencesService: AppPreferencesService
-) : ViewModel() {
+) : BaseViewModel<OnboardingUiState, OnboardingEffect>(OnboardingUiState()) {
 
-    private val _currentPage = MutableStateFlow(0)
-    val currentPage: StateFlow<Int> = _currentPage.asStateFlow()
 
     fun onPageChanged(page: Int) {
-        _currentPage.value = page
+        updateState { copy(currentPage = page) }
     }
 
-    fun scrollPrevious(pagerState: PagerState) {
-        viewModelScope.launch {
-            val previousPage = pagerState.currentPage - 1
-            if (previousPage >= 0) {
-                pagerState.animateScrollToPage(previousPage)
-            }
-        }
-    }
-
-    fun scrollNext(pagerState: PagerState) {
-        viewModelScope.launch {
-            val nextPage = pagerState.currentPage + 1
-            if (nextPage <= pagerState.pageCount - 1) {
-                pagerState.scrollToPage(pagerState.currentPage)
+    fun scrollToPage(pagerState: PagerState, targetPage: Int, scope: CoroutineScope) {
+        scope.launch {
+            if (targetPage in 0 until pagerState.pageCount) {
                 pagerState.animateScrollToPage(
-                    page = nextPage,
+                    page = targetPage,
                     animationSpec = tween(durationMillis = 750, easing = FastOutSlowInEasing)
                 )
             }
         }
     }
 
+    fun scrollPrevious(pagerState: PagerState, scope: CoroutineScope) {
+        scope.launch {
+            val previousPage = pagerState.currentPage - 1
+            if (previousPage >= 0) {
+                pagerState.animateScrollToPage(
+                    page = previousPage,
+                    animationSpec = tween(durationMillis = 750, easing = FastOutSlowInEasing)
+                )
+            }
+        }
+    }
+
+    fun scrollNext(pagerState: PagerState, scope: CoroutineScope) {
+        scope.launch {
+            val nextPage = pagerState.currentPage + 1
+            if (nextPage <= pagerState.pageCount - 1) {
+                pagerState.animateScrollToPage(
+                    page = nextPage,
+                    animationSpec = tween(durationMillis = 750, easing = FastOutSlowInEasing)
+                )
+            } else {
+                emitEffect(OnboardingEffect.NavigateToWelcome)
+            }
+        }
+    }
+
+
+
     fun onboardingFinished() {
+        emitEffect(OnboardingEffect.SkipOnboarding)
         viewModelScope.launch(Dispatchers.IO) {
             runCatching { appPreferencesService.setOnBoardingShown() }
                 .onFailure { Log.e("OnboardingViewModel", "onboardingFinished: ", it) }
