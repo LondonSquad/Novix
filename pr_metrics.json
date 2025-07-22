@@ -5821,17 +5821,25 @@
           "url": "https://github.com/Mostafa-alsaygh"
         },
         "submitted_at": "2025-07-22T10:30:26Z"
+      },
+      {
+        "reviewer": {
+          "id": 180463542,
+          "login": "abdelrhman1002",
+          "url": "https://github.com/abdelrhman1002"
+        },
+        "submitted_at": "2025-07-22T11:13:24Z"
       }
     ],
     "first_approved_at": "2025-07-22T10:30:26Z",
     "time_to_first_approval_minutes": 1274.3166666666666,
-    "required_approvals_met_at": null,
-    "time_to_required_approvals_minutes": null,
+    "required_approvals_met_at": "2025-07-22T11:13:24Z",
+    "time_to_required_approvals_minutes": 1317.2833333333333,
     "closed_at": null,
     "merged_at": null,
     "merged_by": null,
     "week": "2025-W30",
-    "status": "pending",
+    "status": "approved",
     "diff_stats": {
       "additions": 526,
       "deletions": 5,
