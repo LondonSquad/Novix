@@ -17,3 +17,7 @@ class GetMovieCastFailedException(message: String = "Failed to get movie cast") 
 class GetMovieDetailsFailedException(message: String = "Failed to get movie details") : Exception(message)
 
 class GetReviewsFailedException(message: String = "Failed to get reviews") : Exception(message)
+
+sealed class NetworkException(message: String, cause: Throwable? = null) : Exception(message, cause) {
+    class NoInternetException(message: String = "No internet connection.", cause: Throwable? = null) : NetworkException(message, cause)
+}
