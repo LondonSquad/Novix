@@ -73,10 +73,6 @@ fun NovixApp(appPreferencesService: AppPreferencesService) {
             currentDestination?.hasRoute<Categories>() == true ||
             currentDestination?.hasRoute<Bookmarks>() == true ||
             currentDestination?.hasRoute<Account>() == true
-    val showBottomNav = currentDestination?.hasRoute<TvShowDetails>() != true &&
-            currentDestination?.hasRoute<MovieDetails>() != true &&
-            currentDestination?.hasRoute<EpisodeDetails>() != true &&
-            currentDestination?.hasRoute<Reviews>() != true &&
             currentDestination?.hasRoute<Screen.OnboardingPager>() != true &&
             currentDestination?.hasRoute<Screen.Welcome>() != true
 
