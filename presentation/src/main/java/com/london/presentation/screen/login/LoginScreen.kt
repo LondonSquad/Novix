@@ -86,6 +86,7 @@ private fun Content(
                 .fillMaxSize()
                 .padding(WindowInsets.statusBars.asPaddingValues())
                 .padding(horizontal = 16.dp)
+                .padding(bottom = 16.dp)
         ) {
             TopBar(
                 title = stringResource(string.login),
