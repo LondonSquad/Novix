@@ -6182,5 +6182,33 @@
       "deletions": 37,
       "changed_files": 9
     }
+  },
+  {
+    "pr_number": 264,
+    "url": "https://github.com/LondonSquad/Novix/pull/264",
+    "title": "Feature/integrate up coming",
+    "opened_at": "2025-07-22T20:58:40Z",
+    "head_ref": "feature/integrate-up-coming",
+    "base_ref": "develop",
+    "creator": {
+      "login": "marwanqashwa",
+      "id": 100484790,
+      "url": "https://github.com/marwanqashwa"
+    },
+    "approvals": [],
+    "first_approved_at": null,
+    "time_to_first_approval_minutes": null,
+    "required_approvals_met_at": null,
+    "time_to_required_approvals_minutes": null,
+    "closed_at": null,
+    "merged_at": null,
+    "merged_by": null,
+    "week": "2025-W30",
+    "status": "pending",
+    "diff_stats": {
+      "additions": 120,
+      "deletions": 47,
+      "changed_files": 8
+    }
   }
 ]
