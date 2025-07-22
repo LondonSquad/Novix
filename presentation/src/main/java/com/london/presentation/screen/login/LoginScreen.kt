@@ -19,13 +19,14 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.statusBars
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.TextFieldValue
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.london.designsystem.component.Icon
 import com.london.designsystem.component.OutlinedTextField
@@ -33,22 +34,24 @@ import com.london.designsystem.component.Text
 import com.london.designsystem.component.TopBar
 import com.london.designsystem.component.button.PrimaryButton
 import com.london.designsystem.theme.NovixTheme
+import com.london.designsystem.theme.ThemePreviews
 import com.london.presentation.R
 
 @Composable
 fun LoginScreen() {
-    val username = TextFieldValue()
-    val password = TextFieldValue()
-    val isLoginEnabled = username.text.isNotEmpty() && password.text.isNotEmpty()
+    val username = remember { mutableStateOf(TextFieldValue()) }
+    val password = remember { mutableStateOf(TextFieldValue()) }
+    val isLoginEnabled = username.value.text.isNotEmpty() && password.value.text.isNotEmpty()
 
     Content(
-        username = username,
+        username = username.value,
         onUsernameChange = {},
-        password = password,
+        password = password.value,
         onPasswordChange = {},
         onLoginClick = {},
         onForgotPasswordClick = {},
         isLoginEnabled = isLoginEnabled,
+        onCreateAccountClick = {},
     )
 }
 
@@ -62,6 +65,7 @@ private fun Content(
     onLoginClick: () -> Unit,
     onForgotPasswordClick: () -> Unit,
     isLoginEnabled: Boolean,
+    onCreateAccountClick: () -> Unit
 ) {
     Box(
         modifier = Modifier
@@ -162,13 +166,16 @@ private fun Content(
                     stringResource(R.string.create_account),
                     style = NovixTheme.typography.label.medium,
                     color = NovixTheme.colors.primary,
+                    modifier = Modifier.clickable {
+                        onCreateAccountClick()
+                    }
                 )
             }
         }
     }
 }
 
-@Preview
+@ThemePreviews
 @Composable
 private fun Preview() {
     NovixTheme {
