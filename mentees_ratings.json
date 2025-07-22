@@ -163,7 +163,17 @@
     "actual_score_avg": 4.45,
     "expected_score_avg": 4.25,
     "scores": [
-
+      {
+        "submitted_at": "2024-07-20T12:00:00Z",
+        "respect": 5,
+        "teamwork": 4.4,
+        "listening": 4.6,
+        "technical": 2.7,
+        "flexibility": 4.6,
+        "encouragement": 4.5,
+        "communication": 4.8,
+        "constructive_feedback": 5
+      }
     ],
     "peer_comments": [
 
