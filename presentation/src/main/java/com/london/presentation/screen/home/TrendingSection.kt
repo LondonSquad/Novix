@@ -67,6 +67,7 @@ fun TrendingSection(
                 endColor = NovixTheme.colors.darkCocoa,
                 imageWidth = 60.dp,
                 imageHeight = 64.dp,
+                onClick = {},
                 modifier = Modifier.weight(1f)
             )
 
@@ -77,6 +78,7 @@ fun TrendingSection(
                 endColor = NovixTheme.colors.deepCrimson,
                 imageWidth = 88.46.dp,
                 imageHeight = 64.dp,
+                onClick = {},
                 modifier = Modifier.weight(1f)
             )
 
@@ -87,6 +89,7 @@ fun TrendingSection(
                 endColor = NovixTheme.colors.oceanDark,
                 imageWidth = 56.49.dp,
                 imageHeight = 64.dp,
+                onClick = {},
                 modifier = Modifier.weight(1f)
             )
         }
@@ -101,8 +104,8 @@ private fun CategoryCard(
     endColor: Color,
     imageWidth: Dp,
     imageHeight: Dp,
-    modifier: Modifier = Modifier,
-    onClick: () -> Unit = {}
+    onClick: () -> Unit,
+    modifier: Modifier = Modifier
 ) {
     val gradient = Brush.linearGradient(
         colors = listOf(startColor, endColor)
