@@ -31,14 +31,14 @@ interface SearchApiService {
         @Query("page") page: Int
     ): ApiResponse<SearchActorRemote>
 
-    @GET(ApiConstants.SEARCH_BY_CATEGORY_PATH)
+    @GET(ApiConstants.MOVIE_DISCOVER_PATH)
     suspend fun getMoviesByCategory(
         @Query("with_genres") genreId: Int,
         @Query("page") page: Int,
         @Query("include_adult") includeAdult: Boolean
     ): ApiResponse<SearchMovieRemote>
 
-    @GET(ApiConstants.SEARCH_BY_CATEGORY_PATH)
+    @GET(ApiConstants.MOVIE_DISCOVER_PATH)
     suspend fun getUpComingMoviesByCategory(
         @Query("with_genres") genreId: Int?=null,
         @Query("primary_release_date.gte") releaseDate: String="2025-07-22",
