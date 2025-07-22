@@ -1,7 +1,9 @@
 package com.london.data.datasource.remote.auth.model
 
 import kotlinx.serialization.SerialName
+import kotlinx.serialization.Serializable
 
+@Serializable
 data class ValidateWithLoginRequestBody(
     @SerialName("username")
     val username: String,

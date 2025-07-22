@@ -1,6 +1,7 @@
 package com.london.data.di
 
 import android.content.Context
+import android.util.Log
 import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory
 import com.london.data.BuildConfig
 import com.london.data.datasource.common.AuthInterceptor
@@ -26,6 +27,9 @@ import retrofit2.Retrofit
 import java.io.File
 import java.util.concurrent.TimeUnit
 
+
+//12345678M
+//mohamed_1982
 @Module
 class NetworkModule {
 
@@ -66,8 +70,10 @@ class NetworkModule {
 
             val newRequest = originalRequest.newBuilder()
                 .url(newUrl)
-//                .addHeader("Authorization", "Bearer ${BuildConfig.AUTHORIZATION_KEY}")
+                .addHeader("Authorization", "Bearer ${BuildConfig.AUTHORIZATION_KEY}")
                 .build()
+
+            Log.d("AuthRepositoryImpl", "Request token: ${newRequest}")
 
             chain.proceed(newRequest)
         }
@@ -88,7 +94,6 @@ class NetworkModule {
         return OkHttpClient.Builder()
             .addInterceptor(authInterceptor)
             .addInterceptor(apiInterceptor)
-            .addInterceptor(loggingInterceptor)
             .cache(cache)
             .connectTimeout(30, TimeUnit.SECONDS)
             .readTimeout(30, TimeUnit.SECONDS)
@@ -97,12 +102,9 @@ class NetworkModule {
     }
 
     @Single
-    fun provideRetrofit(okHttpClient: OkHttpClient,
-                        json: Json
-
-    ): Retrofit {
+    fun provideRetrofit(okHttpClient: OkHttpClient, json: Json): Retrofit {
         return Retrofit.Builder()
-            .baseUrl(com.london.data.BuildConfig.BASE_URL)
+            .baseUrl(BuildConfig.BASE_URL)
             .client(okHttpClient)
             .addConverterFactory(
                 json.asConverterFactory(contentType = "application/json".toMediaType())
