@@ -40,25 +40,25 @@ class SearchRepositoryImpl(
         syncBlock: (suspend (T) -> Unit)? = null,
         crashReporter: CrashReporter? = null
     ): T = runCatching { cacheBlock?.invoke() }.getNotNullOrElse {
-            networkBlock().also {
-                syncBlock?.invoke(it)
-            }
-        }.onFailure { crashReporter?.logException(it) }.getOrThrow()
+        networkBlock().also {
+            syncBlock?.invoke(it)
+        }
+    }.onFailure { crashReporter?.logException(it) }.getOrThrow()
 
     override suspend fun searchForMovies(
         name: String, pageNumber: Int
     ): PagedFetchResponse<Movie> = fetchAndSync(
         cacheBlock = {
-        localMovieDataSource.getByQueryAndPage(
-            query = name, page = pageNumber
-        )
-    }, networkBlock = {
-        remoteDataSource.searchForMovies(
-            query = name,
-            includeAdult = false,
-            pageNumber = pageNumber,
-        ).toLocal(query = name)
-    }, syncBlock = { localMovieDataSource.insert(it) }, crashReporter = crashReporter
+            localMovieDataSource.getByQueryAndPage(
+                query = name, page = pageNumber
+            )
+        }, networkBlock = {
+            remoteDataSource.searchForMovies(
+                query = name,
+                includeAdult = false,
+                pageNumber = pageNumber,
+            ).toLocal(query = name)
+        }, syncBlock = { localMovieDataSource.insert(it) }, crashReporter = crashReporter
     ).run {
         PagedFetchResponse(
             currentPage = page,
@@ -72,16 +72,16 @@ class SearchRepositoryImpl(
         name: String, pageNumber: Int
     ): PagedFetchResponse<TvShow> = fetchAndSync(
         cacheBlock = {
-        localTvShowDataSource.getByQueryAndPage(
-            query = name, page = pageNumber
-        )
-    }, networkBlock = {
-        remoteDataSource.searchForTvShows(
-            query = name,
-            includeAdult = false,
-            pageNumber = pageNumber,
-        ).toLocal(query = name)
-    }, syncBlock = { localTvShowDataSource.insert(it) }, crashReporter = crashReporter
+            localTvShowDataSource.getByQueryAndPage(
+                query = name, page = pageNumber
+            )
+        }, networkBlock = {
+            remoteDataSource.searchForTvShows(
+                query = name,
+                includeAdult = false,
+                pageNumber = pageNumber,
+            ).toLocal(query = name)
+        }, syncBlock = { localTvShowDataSource.insert(it) }, crashReporter = crashReporter
     ).run {
         PagedFetchResponse(
             currentPage = page,
@@ -95,16 +95,16 @@ class SearchRepositoryImpl(
         name: String, pageNumber: Int
     ): PagedFetchResponse<Actor> = fetchAndSync(
         cacheBlock = {
-        localActorDataSource.getByQueryAndPage(
-            query = name, page = pageNumber
-        )
-    }, networkBlock = {
-        remoteDataSource.searchForActors(
-            query = name,
-            includeAdult = false,
-            pageNumber = pageNumber,
-        ).toLocal(query = name)
-    }, syncBlock = { localActorDataSource.insert(it) }, crashReporter = crashReporter
+            localActorDataSource.getByQueryAndPage(
+                query = name, page = pageNumber
+            )
+        }, networkBlock = {
+            remoteDataSource.searchForActors(
+                query = name,
+                includeAdult = false,
+                pageNumber = pageNumber,
+            ).toLocal(query = name)
+        }, syncBlock = { localActorDataSource.insert(it) }, crashReporter = crashReporter
     ).run {
         PagedFetchResponse(
             currentPage = page,
@@ -119,6 +119,23 @@ class SearchRepositoryImpl(
     ): PagedFetchResponse<Movie> = fetchAndSync(
         networkBlock = {
             remoteDataSource.getMoviesByCategory(
+                categoryId = categoryId,
+                pageNumber = pageNumber,
+            ).toLocal(query = "")
+        }).run {
+        PagedFetchResponse(
+            currentPage = page,
+            items = results.map { it.toMovieEntity() },
+            totalPages = totalPages,
+            totalItems = totalResults
+        )
+    }
+
+    override suspend fun getUpComingMoviesByCategory(
+        categoryId: Int?, pageNumber: Int
+    ): PagedFetchResponse<Movie> = fetchAndSync(
+        networkBlock = {
+            remoteDataSource.getUpComingMoviesByCategory(
                 categoryId = categoryId,
                 pageNumber = pageNumber,
             ).toLocal(query = "")

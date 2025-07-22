@@ -1,9 +1,11 @@
 package com.london.app.navigation
 
+import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
-import androidx.compose.foundation.background
+import androidx.compose.animation.slideInVertically
+import androidx.compose.animation.slideOutVertically
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.Scaffold
@@ -21,6 +23,7 @@ import com.london.designsystem.component.NavBar
 import com.london.designsystem.theme.NovixTheme
 import com.london.presentation.navigation.Screen
 import com.london.presentation.navigation.Screen.Account
+import com.london.presentation.navigation.Screen.ActorDetails
 import com.london.presentation.navigation.Screen.ActorTopMoviesPicksDetails
 import com.london.presentation.navigation.Screen.Bookmarks
 import com.london.presentation.navigation.Screen.Categories
@@ -62,19 +65,22 @@ fun NovixApp() {
         else -> Home
     }
 
-    val showBottomNav = currentDestination?.hasRoute<TvShowDetails>() != true &&
-            currentDestination?.hasRoute<MovieDetails>() != true &&
-            currentDestination?.hasRoute<EpisodeDetails>() != true &&
-            currentDestination?.hasRoute<Reviews>() != true
+    val showBottomNav = currentDestination?.hasRoute<Home>() == true ||
+            currentDestination?.hasRoute<Search>() == true ||
+            currentDestination?.hasRoute<Categories>() == true ||
+            currentDestination?.hasRoute<Bookmarks>() == true ||
+            currentDestination?.hasRoute<Account>() == true
 
     Scaffold(
         backgroundColor = NovixTheme.colors.surface,
         bottomBar = {
-            if (showBottomNav) {
+            AnimatedVisibility(
+                visible = showBottomNav,
+                enter = slideInVertically(animationSpec = tween(), initialOffsetY = { it }),
+                exit = slideOutVertically(animationSpec = tween(), targetOffsetY = { it })
+            ) {
                 NavBar(
-                    modifier = Modifier
-                        .background(NovixTheme.colors.surface)
-                        .navigationBarsPadding(),
+                    modifier = Modifier.navigationBarsPadding(),
                     navDestinations = NavigationHelper.getNavigationTabs(),
                     currentSelectedDestination = currentScreen,
                     onNavDestinationClicked = { destination ->
@@ -95,7 +101,11 @@ fun NovixApp() {
                 enterTransition = { fadeIn(tween(500)) },
                 popExitTransition = { fadeOut(tween(500)) },
             ) {
-                HomeScreen()
+                HomeScreen(
+                    onMovieClick = { movieId ->
+                        navController.navigate(MovieDetails(movieId))
+                    }
+                )
             }
 
             composable<Search>(
@@ -165,9 +175,8 @@ fun NovixApp() {
                     },
                     onNavigateToReviews = { tvShowId, mediaType ->
                         navController.navigate(Reviews(tvShowId, mediaType))
-                    }
-                    , onNavigateToCast = { actorId->
-                        navController.navigate(Screen.ActorDetails(actorId))
+                    }, onNavigateToCast = { actorId ->
+                        navController.navigate(ActorDetails(actorId))
                     }
                 )
             }
@@ -215,7 +224,7 @@ fun NovixApp() {
                         navController.navigate(MovieDetails(movieId))
                     },
                     onNavigateToActor = { actorId ->
-                        navController.navigate(Screen.ActorDetails(actorId))
+                        navController.navigate(ActorDetails(actorId))
                     },
                     onNavigateToReviews = { movieId, mediaType ->
                         navController.navigate(Reviews(movieId, mediaType))
@@ -257,10 +266,10 @@ fun NovixApp() {
                     onNavigateToGallery = { actorId ->
                         navController.navigate(Screen.ActorGallery(actorId))
                     },
-                    onNavigateToMovieScreen = { movieId->
+                    onNavigateToMovieScreen = { movieId ->
                         navController.navigate(MovieDetails(movieId))
                     },
-                    onNavigateToTvShowScreen = {tvShowId->
+                    onNavigateToTvShowScreen = { tvShowId ->
                         navController.navigate(TvShowDetails(tvShowId))
                     },
                     onBackClick = { navController.navigateUp() }

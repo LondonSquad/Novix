@@ -60,7 +60,7 @@ fun OutlinedTextField(
     trailingIcon: @Composable (() -> Unit)? = null,
     supportingText: @Composable (() -> Unit)? = null,
     isError: Boolean = false,
-    contentPadding: PaddingValues = PaddingValues(all = 12.dp),
+    contentPadding: PaddingValues = PaddingValues(horizontal = 12.dp),
     visualTransformation: VisualTransformation = VisualTransformation.None,
     keyboardOptions: KeyboardOptions = KeyboardOptions.Default,
     keyboardActions: KeyboardActions = KeyboardActions.Default,
@@ -180,7 +180,7 @@ private fun getVisualTransformation(
     defaultTransformation: VisualTransformation
 ): VisualTransformation {
     return when {
-        isPasswordField && !passwordVisible && !isPasswordEmpty -> PasswordVisualTransformation()
+        isPasswordField && !passwordVisible && !isPasswordEmpty -> PasswordVisualTransformation('*')
         else -> defaultTransformation
     }
 }
