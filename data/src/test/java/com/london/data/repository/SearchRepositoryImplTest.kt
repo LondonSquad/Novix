@@ -316,6 +316,19 @@ class SearchRepositoryImplTest {
         coVerify { mockCrashReporter.logException(exception) }
     }
 
+    @Test
+    fun `get MoviesByCategory should return data from remote if available`()= runTest {
+        coEvery { searchRemoteDataSource.getMoviesByCategory(1, PAGE_NUMBER) } returns SearchMoviesRemoteMock
+        val result = repository.searchForMoviesByCategory(1, PAGE_NUMBER)
+        assertThat(result).isEqualTo(MovieList)
+    }
+
+    @Test
+    fun `get upComingMoviesByCategory should return data from remote if available`()= runTest {
+        coEvery { searchRemoteDataSource.getUpComingMoviesByCategory(1, PAGE_NUMBER) } returns SearchMoviesRemoteMock
+        val result = repository.getUpComingMoviesByCategory(1, PAGE_NUMBER)
+        assertThat(result).isEqualTo(MovieList)
+    }
 
     private companion object {
         const val NAME = "Tom"

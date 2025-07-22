@@ -1,11 +1,14 @@
+@file:KoverIgnore
 package com.london.data.datasource.remote
+
+import com.london.domain.KoverIgnore
 
 object ApiConstants {
     const val SEARCH_PATH_MOVIES = "3/search/movie"
     const val SEARCH_PATH_TVS = "3/search/tv"
     const val SEARCH_PATH_ACTORS = "3/search/person"
     private const val MOVIE_DETAILS_PATH = "3/movie"
-    const val SEARCH_BY_CATEGORY_PATH = "3/discover/movie"
+    const val MOVIE_DISCOVER_PATH = "3/discover/movie"
 
     fun getTvShowDetailsPath(tvShowId: Int) = "3/tv/$tvShowId"
     fun getCastTvShowPath(tvShowId: Int) = "3/tv/$tvShowId/aggregate_credits"
