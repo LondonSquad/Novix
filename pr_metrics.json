@@ -6080,5 +6080,33 @@
       "deletions": 5,
       "changed_files": 22
     }
+  },
+  {
+    "pr_number": 262,
+    "url": "https://github.com/LondonSquad/Novix/pull/262",
+    "title": "feat: implement PopularSection and handle navigation",
+    "opened_at": "2025-07-22T18:48:37Z",
+    "head_ref": "feature/popular-home-screen",
+    "base_ref": "develop",
+    "creator": {
+      "login": "ahmeddsamii",
+      "id": 154278495,
+      "url": "https://github.com/ahmeddsamii"
+    },
+    "approvals": [],
+    "first_approved_at": null,
+    "time_to_first_approval_minutes": null,
+    "required_approvals_met_at": null,
+    "time_to_required_approvals_minutes": null,
+    "closed_at": null,
+    "merged_at": null,
+    "merged_by": null,
+    "week": "2025-W30",
+    "status": "pending",
+    "diff_stats": {
+      "additions": 96,
+      "deletions": 37,
+      "changed_files": 7
+    }
   }
 ]
