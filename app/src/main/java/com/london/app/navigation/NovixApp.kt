@@ -95,7 +95,11 @@ fun NovixApp() {
                 enterTransition = { fadeIn(tween(500)) },
                 popExitTransition = { fadeOut(tween(500)) },
             ) {
-                HomeScreen()
+                HomeScreen(
+                    onMovieClick = {
+                        navController.navigate(MovieDetails(it))
+                    },
+                )
             }
 
             composable<Search>(
