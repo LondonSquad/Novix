@@ -1,6 +1,5 @@
 package com.london.presentation.composables
 
-import android.annotation.SuppressLint
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -20,7 +19,6 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalWindowInfo
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -35,7 +33,7 @@ import com.london.designsystem.component.SheetState
 import com.london.designsystem.component.Text
 import com.london.designsystem.component.button.OutlineButton
 import com.london.designsystem.component.button.PrimaryButton
-import com.london.designsystem.component.rememberNovixModalBottomSheetState
+import com.london.designsystem.component.rememberModalBottomSheetState
 import com.london.designsystem.theme.NovixTheme
 import com.london.presentation.R
 import com.london.presentation.screen.search.SearchInteractions
@@ -55,7 +53,7 @@ data class FilterState(
 fun FilterBottomSheet(
     modifier: Modifier = Modifier,
     filterInteractions: SearchInteractions,
-    sheetState: SheetState = rememberNovixModalBottomSheetState(),
+    sheetState: SheetState = rememberModalBottomSheetState(),
     filterState: FilterState,
 ) {
     val coroutineScope = rememberCoroutineScope()

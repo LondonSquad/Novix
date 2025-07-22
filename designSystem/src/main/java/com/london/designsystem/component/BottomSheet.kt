@@ -6,7 +6,6 @@ import androidx.compose.material3.BottomSheetDefaults
 import androidx.compose.material3.ModalBottomSheetDefaults
 import androidx.compose.material3.SheetValue
 import androidx.compose.material3.contentColorFor
-import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
@@ -27,10 +26,11 @@ class SheetState(val sheetState: androidx.compose.material3.SheetState) {
 }
 
 @Composable
-fun rememberNovixModalBottomSheetState(
+fun rememberModalBottomSheetState(
     skipPartiallyExpanded: Boolean = true
 ): SheetState {
-    val sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = skipPartiallyExpanded)
+    val sheetState =
+        androidx.compose.material3.rememberModalBottomSheetState(skipPartiallyExpanded = skipPartiallyExpanded)
     return remember { SheetState(sheetState) }
 }
 
