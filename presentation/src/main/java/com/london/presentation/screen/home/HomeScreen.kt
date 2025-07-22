@@ -100,7 +100,7 @@ private fun Content(
                     .requiredWidth(screenWidth),
                 pagerState = pagerState,
                 images = uiState.popularMovies.map { it.posterPath },
-                onSaveClick = {/* TODO */ },
+                onSaveClick = {/*TODO: SAVE FUNCTIONALITY IS NOT IMPLEMENTED.*/ },
                 onCardClick = {
                     homeScreenContract.onMovieClick(
                         uiState.popularMovies[pagerState.currentPage].id
@@ -148,7 +148,7 @@ fun LazyGridScope.upComingSection(
             HomeCard(
                 imageUrl = movie.posterPicture,
                 isSaved = false,
-                onSaveClick = { },
+                onSaveClick = { /*TODO: SAVE FUNCTIONALITY IS NOT IMPLEMENTED.*/ },
                 modifier = Modifier.clickable { contract.onMovieClick(movie.id) })
     }
 }
