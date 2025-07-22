@@ -9,7 +9,7 @@ import org.junit.Test
 class PopularMovieMapperTest {
 
     @Test
-    fun `toPopularMovie maps fields correctly`() {
+    fun `when map toPopularMovie should map all fields correctly`() {
         // When
         val result: PopularMovie = samplePopularMovieResponse.toPopularMovie()
 
@@ -22,7 +22,7 @@ class PopularMovieMapperTest {
     }
 
     @Test
-    fun `toPopularMovies maps list of items correctly`() {
+    fun `when map toPopularMovies should map list of items correctly`() {
         // Given
         val apiResponse = ApiResponse(
             items = listOf(samplePopularMovieResponse, anotherPopularMovieResponse),
@@ -40,7 +40,7 @@ class PopularMovieMapperTest {
     }
 
     @Test
-    fun `toPopularMovie handles null fields gracefully`() {
+    fun `when map toPopularMovie should handles null fields gracefully`() {
 
         // When
         val result = nullFieldsResponse.toPopularMovie()
