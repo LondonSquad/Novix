@@ -4,10 +4,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.requiredWidth
 import androidx.compose.foundation.lazy.LazyRow
@@ -15,6 +12,7 @@ import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.GridItemSpan
 import androidx.compose.foundation.lazy.grid.LazyGridScope
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
@@ -26,14 +24,18 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.paging.compose.LazyPagingItems
+import androidx.paging.compose.collectAsLazyPagingItems
 import com.london.designsystem.component.HomeCard
 import com.london.designsystem.component.NovixChip
 import com.london.designsystem.component.Text
 import com.london.designsystem.theme.NovixTheme
+import com.london.domain.entity.Movie
 import com.london.presentation.R
 import com.london.presentation.screen.LoadingScreen
 import com.london.presentation.screen.NetworkErrorScreen
 import com.london.presentation.screen.base.ErrorState
+import com.london.presentation.utils.Genre
 import com.london.presentation.utils.Listen
 import org.koin.compose.viewmodel.koinViewModel
 
@@ -48,7 +50,7 @@ fun HomeScreen(
 
     effect?.Listen { currentEffect ->
         when (currentEffect) {
-            is HomeScreenEffect.NavigationPopularCard -> onMovieClick(currentEffect.id)
+            is HomeScreenEffect.NavigationMovieDetails -> onMovieClick(currentEffect.id)
         }
     }
 
@@ -56,8 +58,6 @@ fun HomeScreen(
         uiState.isLoading -> LoadingScreen()
         uiState.error == ErrorState.NoInternet -> NetworkErrorScreen()
         else -> Content(
-            onMovieClick = { },
-            onGenreClick = { },
             homeScreenContract = viewModel,
             uiState = uiState,
             modifier = Modifier
@@ -68,8 +68,6 @@ fun HomeScreen(
 
 @Composable
 private fun Content(
-    onMovieClick: (movieId: Int) -> Unit,
-    onGenreClick: (genreId: Int) -> Unit,
     homeScreenContract: HomeScreenContract,
     uiState: HomeScreenUiState,
     modifier: Modifier = Modifier,
@@ -78,6 +76,7 @@ private fun Content(
     val screenWidth = with(density) {
         LocalConfiguration.current.screenWidthDp.dp
     }
+    val upcomingMoviesLazyList = uiState.upcomingMovies.collectAsLazyPagingItems()
     LazyVerticalGrid(
         columns = GridCells.Fixed(2),
         contentPadding = PaddingValues(
@@ -100,73 +99,75 @@ private fun Content(
                     .requiredWidth(screenWidth),
                 pagerState = pagerState,
                 images = uiState.popularMovies.map { it.posterPath },
-                onSaveClick = {/* TODO */},
+                onSaveClick = {/* TODO */ },
                 onCardClick = {
-                    homeScreenContract.onPopularCardClicked(
+                    homeScreenContract.onMovieClick(
                         uiState.popularMovies[pagerState.currentPage].id
                     )
                 }
             )
         }
-
         upComingSection(
-            onMovieClick = onMovieClick,
-            onGenreClick = onGenreClick,
+            contract = homeScreenContract,
             screenWidth = screenWidth,
+            state = uiState,
+            upcomingMoviesLazyList
         )
     }
 }
 
 fun LazyGridScope.upComingSection(
-    onMovieClick: (movieId: Int) -> Unit,
-    onGenreClick: (genreId: Int) -> Unit,
+    contract: HomeScreenContract,
     screenWidth: Dp,
+    state: HomeScreenUiState,
+    upcomingMoviesLazyList: LazyPagingItems<Movie>
+
 ) {
     item(span = { GridItemSpan(maxLineSpan) }) {
         Text(
             text = stringResource(R.string.upcoming),
             style = NovixTheme.typography.headline.small,
-            color = NovixTheme.colors.title
+            color = NovixTheme.colors.title,
+            modifier = Modifier.padding(bottom = 8.dp)
         )
     }
 
     item(span = { GridItemSpan(maxLineSpan) }) {
-        Spacer(modifier = Modifier.height(8.dp))
         GenresSection(
-            onGenreClick = onGenreClick,
-            screenWidth = screenWidth
+            screenWidth = screenWidth,
+            state = state,
+            contract = contract
         )
     }
 
-    items(10) {
-        HomeCard(
-            imageUrl = "", // TODO
-            isSaved = false,
-            onSaveClick = { }, // TODO
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(4.dp)
-                .clickable { onMovieClick(it) }
-        )
+    items(upcomingMoviesLazyList.itemCount) { index ->
+        val movie = upcomingMoviesLazyList[index]
+
+        if (movie != null)
+            HomeCard(
+                imageUrl = movie.posterPicture,
+                isSaved = false,
+                onSaveClick = { },
+                modifier = Modifier.clickable { contract.onMovieClick(movie.id) })
     }
 }
 
-
 @Composable
 private fun GenresSection(
-    onGenreClick: (genreId: Int) -> Unit,
-    screenWidth: Dp
+    contract: HomeScreenContract,
+    screenWidth: Dp,
+    state: HomeScreenUiState
 ) {
     LazyRow(
         horizontalArrangement = Arrangement.spacedBy(8.dp),
         contentPadding = PaddingValues(horizontal = 16.dp),
         modifier = Modifier.requiredWidth(screenWidth)
     ) {
-        items(10) {
+        items(Genre.entries.toTypedArray()) { genre ->
             NovixChip(
-                text = "Adventure",//TODO()
-                isSelected = true,
-                onClick = { onGenreClick(it) }
+                text = genre.name,
+                isSelected = (genre == state.selectedGenre),
+                onClick = { contract.onGenreSelect(genre) }
             )
         }
     }
