@@ -146,6 +146,12 @@ class NetworkModule {
 //    }
 
     @Single
+    fun provideAuthPreferences(context: Context): AuthPreferences {
+        return AuthPreferences(context.getSharedPreferences("auth", Context.MODE_PRIVATE))
+    }
+
+
+    @Single
     fun provideAuthApi(retrofit: Retrofit): AuthApi {
         return retrofit.create(AuthApi::class.java)
     }

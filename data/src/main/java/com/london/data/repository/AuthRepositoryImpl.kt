@@ -1,5 +1,6 @@
 package com.london.data.repository
 
+import android.util.Log
 import com.london.data.datasource.common.AuthPreferences
 import com.london.data.datasource.remote.auth.api.AuthApi
 import com.london.data.datasource.remote.auth.model.Token
@@ -47,6 +48,8 @@ class AuthRepositoryImpl(
         val guestResponse = authApi.createGuestSession()
         val guestSessionId = guestResponse.guestSessionId
             ?: throw Exception("Failed to create guest session")
+
+        Log.d("AuthRepositoryImplGuestID", "Guest session ID: $guestSessionId")
         authPreferences.saveGuestSessionId(guestSessionId)
         authPreferences.setGuestMode(true)
         emit(true)

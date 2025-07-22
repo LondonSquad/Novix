@@ -72,6 +72,8 @@ class LoginViewModel(
 
             try {
                 loginAsGuestUseCase().collect { result: Boolean ->
+
+                    Log.d("LoginViewModel", "$result")
                     _state.update {
                         it.copy(isAuthenticated = result, isLoading = false)
                     }

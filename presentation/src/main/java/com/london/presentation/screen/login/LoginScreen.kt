@@ -54,8 +54,6 @@ fun LoginScreen(
             }
         )
     } else {
-
-
         Content(
             username = TextFieldValue(state.username),
             onUsernameChange = { viewModel.onUsernameChange(it.text) },
@@ -64,7 +62,8 @@ fun LoginScreen(
             onCreateAccountClicked = { viewModel.onCreateAccountClicked() },
             onForgotPasswordClick = { viewModel.onForgotPasswordClicked() },
             isLoginEnabled = isLoginEnabled,
-            onLoggedIn = { viewModel.login() }
+            onLoggedIn = { viewModel.login() },
+            loginAsGuest = { viewModel.loginAsGuest() }
         )
     }
 }
@@ -80,6 +79,7 @@ private fun Content(
     onLoggedIn: () -> Unit,
     onForgotPasswordClick: () -> Unit,
     isLoginEnabled: Boolean,
+    loginAsGuest: () -> Unit
 ) {
     Box(
         modifier = Modifier
@@ -174,6 +174,16 @@ private fun Content(
                     .padding(top = 12.dp)
                     .align(Alignment.CenterHorizontally)
                     .clickable { onCreateAccountClicked() }
+            )
+
+            Text(
+                "Login as a Guest ",
+                style = NovixTheme.typography.label.medium,
+                color = NovixTheme.colors.primary,
+                modifier = Modifier
+                    .padding(top = 12.dp)
+                    .align(Alignment.CenterHorizontally)
+                    .clickable { loginAsGuest() }
             )
 
             Spacer(modifier = Modifier.weight(1f))
