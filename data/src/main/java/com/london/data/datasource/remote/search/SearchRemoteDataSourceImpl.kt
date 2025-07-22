@@ -8,6 +8,9 @@ import com.london.data.datasource.remote.search.model.SearchActorRemote
 import com.london.data.datasource.remote.search.model.SearchMovieRemote
 import com.london.data.datasource.remote.search.model.SearchTvShowRemote
 import com.london.domain.KoverIgnore
+import kotlinx.datetime.Clock
+import kotlinx.datetime.TimeZone
+import kotlinx.datetime.toLocalDateTime
 import org.koin.core.annotation.Single
 
 @Single
@@ -58,4 +61,21 @@ class SearchRemoteDataSourceImpl(
         page = pageNumber,
         includeAdult = includeAdult
     )
+
+    override suspend fun getUpComingMoviesByCategory(
+        categoryId: Int?,
+        pageNumber: Int,
+        includeAdult: Boolean
+    ): ApiResponse<SearchMovieRemote> =
+        searchApiService.getUpComingMoviesByCategory(
+            genreId = categoryId,
+            releaseDate = getCurrentDate(),
+            page = pageNumber,
+            includeAdult = includeAdult
+        )
+
+
+    private fun getCurrentDate(): String = Clock.System.now()
+        .toLocalDateTime(TimeZone.currentSystemDefault())
+        .date.toString()
 }

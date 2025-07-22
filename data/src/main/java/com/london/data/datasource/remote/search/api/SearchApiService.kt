@@ -37,4 +37,13 @@ interface SearchApiService {
         @Query("page") page: Int,
         @Query("include_adult") includeAdult: Boolean
     ): ApiResponse<SearchMovieRemote>
+
+    @GET(ApiConstants.SEARCH_BY_CATEGORY_PATH)
+    suspend fun getUpComingMoviesByCategory(
+        @Query("with_genres") genreId: Int?=null,
+        @Query("primary_release_date.gte") releaseDate: String="2025-07-22",
+        @Query("sort_by") sortBy: String = "primary_release_date.asc",
+        @Query("page") page: Int,
+        @Query("include_adult") includeAdult: Boolean
+    ): ApiResponse<SearchMovieRemote>
 }

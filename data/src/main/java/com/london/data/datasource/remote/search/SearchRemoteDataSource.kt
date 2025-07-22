@@ -29,4 +29,10 @@ interface SearchRemoteDataSource {
         pageNumber: Int,
         includeAdult: Boolean = false
     ): ApiResponse<SearchMovieRemote>
+
+    suspend fun getUpComingMoviesByCategory(
+        categoryId: Int?=null,
+        pageNumber: Int,
+        includeAdult: Boolean = false
+    ): ApiResponse<SearchMovieRemote>
 }
