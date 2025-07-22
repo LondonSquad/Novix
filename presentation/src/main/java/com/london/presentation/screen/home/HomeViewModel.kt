@@ -7,7 +7,7 @@ import org.koin.android.annotation.KoinViewModel
 @KoinViewModel
 class HomeViewModel(
     private val getPopularMovies: GetPopularMovies
-) : BaseViewModel<HomeScreenUiState, HomeScreenEffect>(HomeScreenUiState()) {
+) : BaseViewModel<HomeScreenUiState, HomeScreenEffect>(HomeScreenUiState()), HomeScreenContract {
 
     init {
         initializePopularMovies()
@@ -26,5 +26,7 @@ class HomeViewModel(
         )
     }
 
-
+    override fun onPopularCardClicked(id: Int) {
+        emitEffect(HomeScreenEffect.NavigationPopularCard(id))
+    }
 }

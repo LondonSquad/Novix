@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.PagerState
@@ -57,13 +58,13 @@ fun PopularSection(
     val horizontalPadding = (screenWidth - cardWidth) / 2
 
     Column(
-        modifier = modifier.fillMaxWidth(),
+        modifier = modifier.wrapContentHeight(),
         horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.spacedBy(8.dp)
+        verticalArrangement = Arrangement.spacedBy(8.dp, Alignment.Top)
     ) {
         HorizontalPager(
             state = pagerState,
-            modifier = modifier,
+            modifier = modifier.wrapContentHeight(),
             pageSpacing = PAGE_SPACING_DP.dp,
             contentPadding = PaddingValues(horizontal = horizontalPadding)
         ) { page ->
