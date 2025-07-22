@@ -10,7 +10,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.requiredWidth
-import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.GridItemSpan
@@ -76,7 +75,6 @@ private fun Content(
     modifier: Modifier = Modifier,
 ) {
 
-    TrendingSection()
     val density = LocalDensity.current
     val screenWidth = with(density) {
         LocalConfiguration.current.screenWidthDp.dp
@@ -103,13 +101,17 @@ private fun Content(
                     .requiredWidth(screenWidth),
                 pagerState = pagerState,
                 images = uiState.popularMovies.map { it.posterPath },
-                onSaveClick = {/* TODO */},
+                onSaveClick = {/* TODO */ },
                 onCardClick = {
                     homeScreenContract.onPopularCardClicked(
                         uiState.popularMovies[pagerState.currentPage].id
                     )
                 }
             )
+        }
+
+        item(span = { GridItemSpan(maxLineSpan) }) {
+            TrendingSection()
         }
 
         upComingSection(
