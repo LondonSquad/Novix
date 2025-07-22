@@ -1,4 +1,7 @@
+@file:KoverIgnore
 package com.london.data.datasource.remote
+
+import com.london.domain.KoverIgnore
 
 object ApiConstants {
     const val SEARCH_PATH_MOVIES = "3/search/movie"
