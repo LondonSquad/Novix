@@ -61,6 +61,7 @@ fun HomeScreen(
             homeScreenContract = viewModel,
             uiState = uiState,
             modifier = Modifier
+                .padding(top = 20.dp)
                 .fillMaxSize()
         )
     }
