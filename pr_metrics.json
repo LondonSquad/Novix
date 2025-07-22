@@ -5976,18 +5976,9 @@
       "id": 43588217,
       "url": "https://github.com/yusufnasserdev"
     },
-    "approvals": [
-      {
-        "reviewer": {
-          "id": 154278495,
-          "login": "ahmeddsamii",
-          "url": "https://github.com/ahmeddsamii"
-        },
-        "submitted_at": "2025-07-22T12:29:09Z"
-      }
-    ],
-    "first_approved_at": "2025-07-22T12:29:09Z",
-    "time_to_first_approval_minutes": 708.6166666666667,
+    "approvals": [],
+    "first_approved_at": null,
+    "time_to_first_approval_minutes": null,
     "required_approvals_met_at": null,
     "time_to_required_approvals_minutes": null,
     "closed_at": null,
@@ -5997,7 +5988,7 @@
     "status": "pending",
     "diff_stats": {
       "additions": 155,
-      "deletions": 139,
+      "deletions": 140,
       "changed_files": 6
     }
   },
