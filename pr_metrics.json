@@ -6082,6 +6082,34 @@
     }
   },
   {
+    "pr_number": 261,
+    "url": "https://github.com/LondonSquad/Novix/pull/261",
+    "title": "Feature/popular section",
+    "opened_at": "2025-07-22T18:39:06Z",
+    "head_ref": "feature/popular-section",
+    "base_ref": "develop",
+    "creator": {
+      "login": "ahmeddsamii",
+      "id": 154278495,
+      "url": "https://github.com/ahmeddsamii"
+    },
+    "approvals": [],
+    "first_approved_at": null,
+    "time_to_first_approval_minutes": null,
+    "required_approvals_met_at": null,
+    "time_to_required_approvals_minutes": null,
+    "closed_at": "2025-07-22T18:39:50Z",
+    "merged_at": null,
+    "merged_by": null,
+    "week": "2025-W30",
+    "status": "closed",
+    "diff_stats": {
+      "additions": 616,
+      "deletions": 36,
+      "changed_files": 25
+    }
+  },
+  {
     "pr_number": 262,
     "url": "https://github.com/LondonSquad/Novix/pull/262",
     "title": "feat: implement PopularSection and handle navigation",
