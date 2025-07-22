@@ -9,5 +9,9 @@ class GetPopularMovies(
     @Provided
     private val popularRepository: PopularRepository
 ) {
-    suspend fun invoke() = popularRepository.getPopularMovies()
+    suspend fun invoke(limit: Int = LIMIT) = popularRepository.getPopularMovies().take(limit)
+
+    companion object{
+        const val LIMIT = 5
+    }
 }
