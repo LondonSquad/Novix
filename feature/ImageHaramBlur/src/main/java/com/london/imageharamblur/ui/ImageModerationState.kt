@@ -1,4 +1,4 @@
-package com.ae.imageharamblur.ui
+package com.london.imageharamblur.ui
 
 import android.graphics.Bitmap
 

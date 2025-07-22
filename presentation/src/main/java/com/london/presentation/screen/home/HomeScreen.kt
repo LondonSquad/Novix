@@ -1,16 +1,114 @@
 package com.london.presentation.screen.home
 
+import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.requiredWidth
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.lazy.grid.GridCells
+import androidx.compose.foundation.lazy.grid.GridItemSpan
+import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalConfiguration
+import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import com.london.designsystem.component.HomeCard
+import com.london.designsystem.component.NovixChip
+import com.london.designsystem.component.Text
+import com.london.designsystem.theme.NovixTheme
+import com.london.designsystem.theme.ThemePreviews
+import com.london.presentation.R
 
 @Composable
-fun HomeScreen(modifier: Modifier = Modifier) {
-    LazyColumn(modifier = modifier.padding(horizontal = 16.dp)) {
-        item {
-            TrendingSection()
+fun HomeScreen() {
+    TrendingSection()
+    Content(
+        onMovieClick = { },
+        onGenreClick = { },
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(top = 100.dp)
+    )
+}
+
+@Composable
+private fun Content(
+    onMovieClick: (movieId: Int) -> Unit,
+    onGenreClick: (genreId: Int) -> Unit,
+    modifier: Modifier = Modifier,
+) {
+    val density = LocalDensity.current
+    val screenWidth = with(density) {
+        LocalConfiguration.current.screenWidthDp.dp
+    }
+    LazyVerticalGrid(
+        columns = GridCells.Fixed(2),
+        contentPadding = PaddingValues(
+            top = 12.dp,
+            bottom = 16.dp,
+            start = 16.dp,
+            end = 16.dp
+        ),
+        horizontalArrangement = Arrangement.spacedBy(12.dp),
+        verticalArrangement = Arrangement.spacedBy(12.dp),
+        modifier = modifier
+            .background(color = NovixTheme.colors.surface)
+    ) {
+        item(span = { GridItemSpan(maxLineSpan) }) {
+            Text(
+                text = stringResource(R.string.upcoming),
+                style = NovixTheme.typography.headline.small,
+                color = NovixTheme.colors.title
+            )
+        }
+        item(span = { GridItemSpan(maxLineSpan) }) {
+            GenresSection(
+                onGenreClick = onGenreClick,
+                screenWidth = screenWidth
+            )
+        }
+        items(10) {
+            HomeCard(
+                imageUrl = "",//TODO()
+                isSaved = false,
+                onSaveClick = { },//TODO()
+                modifier = Modifier.clickable { onMovieClick(it) })
         }
     }
+}
+
+@Composable
+private fun GenresSection(
+    onGenreClick: (genreId: Int) -> Unit,
+    screenWidth: Dp
+) {
+    LazyRow(
+        horizontalArrangement = Arrangement.spacedBy(8.dp),
+        contentPadding = PaddingValues(horizontal = 16.dp),
+        modifier = Modifier.requiredWidth(screenWidth)
+    ) {
+        items(10) {
+            NovixChip(
+                text = "Adventure",//TODO()
+                isSelected = true,
+                onClick = { onGenreClick(it) }
+            )
+        }
+    }
+}
+
+@ThemePreviews
+@Composable
+private fun Preview() {
+    Content(
+        onMovieClick = { },
+        onGenreClick = { },
+    )
 }

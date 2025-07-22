@@ -1,16 +1,16 @@
-package com.ae.imageharamblur
+package com.london.imageharamblur
 
 import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.Rect
-import com.ae.imageharamblur.faceDetection.FaceDetector
-import com.ae.imageharamblur.models.ContentDetectionModel
-import com.ae.imageharamblur.models.GenderDetectionModel
-import com.ae.imageharamblur.models.ModelDownloadManager
+import com.london.imageharamblur.faceDetection.FaceDetector
+import com.london.imageharamblur.models.ContentDetectionModel
+import com.london.imageharamblur.models.GenderDetectionModel
+import com.london.imageharamblur.models.ModelDownloadManager
 import kotlinx.coroutines.*
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
-import com.ae.imageharamblur.faceDetection.DetectedFace
+import com.london.imageharamblur.faceDetection.DetectedFace
 
 class ImageModerationProcessor(private val context: Context) {
 
