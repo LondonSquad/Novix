@@ -12,28 +12,43 @@ import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.GridItemSpan
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.london.designsystem.component.HomeCard
 import com.london.designsystem.component.NovixChip
 import com.london.designsystem.component.Text
 import com.london.designsystem.theme.NovixTheme
 import com.london.designsystem.theme.ThemePreviews
 import com.london.presentation.R
+import com.london.presentation.screen.LoadingScreen
+import com.london.presentation.screen.NetworkErrorScreen
+import com.london.presentation.screen.base.ErrorState
+import org.koin.compose.viewmodel.koinViewModel
 
 @Composable
-fun HomeScreen() {
-        Content(
+fun HomeScreen(
+    viewModel: HomeViewModel = koinViewModel()
+) {
+
+    val uiState by viewModel.state.collectAsStateWithLifecycle()
+
+    when {
+        uiState.isLoading -> LoadingScreen()
+        uiState.error == ErrorState.NoInternet -> NetworkErrorScreen()
+        else -> Content(
             onMovieClick = { },
             onGenreClick = { },
             modifier = Modifier
                 .fillMaxSize()
                 .padding(top = 100.dp)
         )
+    }
 }
 
 @Composable
@@ -81,11 +96,12 @@ private fun Content(
         }
     }
 }
+
 @Composable
 private fun GenresSection(
     onGenreClick: (genreId: Int) -> Unit,
     screenWidth: Dp
-){
+) {
     LazyRow(
         horizontalArrangement = Arrangement.spacedBy(8.dp),
         contentPadding = PaddingValues(horizontal = 16.dp),
@@ -100,6 +116,7 @@ private fun GenresSection(
         }
     }
 }
+
 @ThemePreviews
 @Composable
 private fun Preview() {

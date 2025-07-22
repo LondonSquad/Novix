@@ -8,6 +8,7 @@ import com.london.data.datasource.device.DeviceConfigurationDataSource
 import com.london.data.datasource.remote.details.actordetails.api.ActorDetailsApiService
 import com.london.data.datasource.remote.details.moviedetails.api.MovieDetailsApiService
 import com.london.data.datasource.remote.details.tvshowdetails.api.TvShowDetailsApiService
+import com.london.data.datasource.remote.home.popular.api.PopularApiService
 import com.london.data.datasource.remote.reviews.api.ReviewsApiService
 import com.london.data.datasource.remote.search.api.SearchApiService
 import kotlinx.serialization.json.Json
@@ -124,5 +125,9 @@ class NetworkModule {
     @Single
     fun provideReviewsApiService(retrofit: Retrofit): ReviewsApiService =
         retrofit.create(ReviewsApiService::class.java)
+
+    @Single
+    fun providePopularMoviesApiService(retrofit: Retrofit): PopularApiService =
+        retrofit.create(PopularApiService::class.java)
 
 }

@@ -119,7 +119,7 @@ abstract class BaseViewModel<S, E : Any>(initState: S) : ViewModel() {
         Timber.e(throwable)
         val message = throwable.message.getValueOf("message")
 
-        val exception = when (throwable) {
+        val exception = when (throwable.cause) {
             is ConnectException -> ConnectionException()
             is SocketTimeoutException,
             is TimeoutCancellationException -> TimeoutException()
