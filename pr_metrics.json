@@ -6052,5 +6052,33 @@
       "deletions": 36,
       "changed_files": 9
     }
+  },
+  {
+    "pr_number": 260,
+    "url": "https://github.com/LondonSquad/Novix/pull/260",
+    "title": "Feature/onboarding screen",
+    "opened_at": "2025-07-22T17:07:25Z",
+    "head_ref": "feature/onboarding-screen",
+    "base_ref": "develop",
+    "creator": {
+      "login": "AbdoMagdey24",
+      "id": 90211730,
+      "url": "https://github.com/AbdoMagdey24"
+    },
+    "approvals": [],
+    "first_approved_at": null,
+    "time_to_first_approval_minutes": null,
+    "required_approvals_met_at": null,
+    "time_to_required_approvals_minutes": null,
+    "closed_at": null,
+    "merged_at": null,
+    "merged_by": null,
+    "week": "2025-W30",
+    "status": "pending",
+    "diff_stats": {
+      "additions": 750,
+      "deletions": 5,
+      "changed_files": 22
+    }
   }
 ]
