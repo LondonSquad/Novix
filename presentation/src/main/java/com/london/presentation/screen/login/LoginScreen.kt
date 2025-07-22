@@ -19,8 +19,10 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.statusBars
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -40,19 +42,26 @@ import com.london.presentation.R.string
 
 @Composable
 fun LoginScreen() {
-    val username = remember { mutableStateOf(TextFieldValue()) }
-    val password = remember { mutableStateOf(TextFieldValue()) }
-    val isLoginEnabled = username.value.text.isNotEmpty() && password.value.text.isNotEmpty()
+    var userNameValue by remember { mutableStateOf(TextFieldValue()) }
+    var passwordValue by remember { mutableStateOf(TextFieldValue()) }
+    var passwordVisible by remember { mutableStateOf(false) }
+    val interactionSourceUserName = remember { MutableInteractionSource() }
+    val interactionSourcePassword = remember { MutableInteractionSource() }
+    val isLoginEnabled = userNameValue.text.isNotEmpty() && passwordValue.text.isNotEmpty()
 
     Content(
-        username = username.value,
-        onUsernameChange = {},
-        password = password.value,
-        onPasswordChange = {},
+        username = userNameValue,
+        onUsernameChange = { userNameValue = it },
+        password = passwordValue,
+        onPasswordChange = { passwordValue = it },
+        passwordVisible = passwordVisible,
         onLoginClick = {},
         onForgotPasswordClick = {},
         isLoginEnabled = isLoginEnabled,
         onCreateAccountClick = {},
+        interactionSourceUserName = interactionSourceUserName,
+        interactionSourceUserPassword = interactionSourcePassword,
+        onVisibilityChange = { passwordVisible = !passwordVisible }
     )
 }
 
@@ -66,8 +75,13 @@ private fun Content(
     onLoginClick: () -> Unit,
     onForgotPasswordClick: () -> Unit,
     isLoginEnabled: Boolean,
-    onCreateAccountClick: () -> Unit
-) {
+    onCreateAccountClick: () -> Unit,
+    passwordVisible: Boolean,
+    onVisibilityChange: () -> Unit,
+    interactionSourceUserName: MutableInteractionSource,
+    interactionSourceUserPassword: MutableInteractionSource,
+
+    ) {
     Box(
         modifier = Modifier
             .fillMaxSize()
@@ -90,48 +104,42 @@ private fun Content(
         ) {
             TopBar(
                 title = stringResource(string.login),
-                modifier = Modifier.padding(top = 8.dp), onBackClick = {}
+                modifier = Modifier.padding(top = 12.dp), onBackClick = {}
             )
             Icon(
                 painter = painterResource(id = R.drawable.novix_icon),
                 contentDescription = stringResource(string.app_icon),
                 tint = Color.Unspecified,
                 modifier = Modifier
+                    .padding(top = 12.dp)
                     .size(64.dp)
-                    .padding(top = 12.dp, bottom = 16.dp)
             )
             Text(
                 stringResource(string.login_to_your_account),
                 style = NovixTheme.typography.title.medium,
-                color = NovixTheme.colors.title
-            )
-            Text(
-                stringResource(string.user_name),
-                style = NovixTheme.typography.title.small,
                 color = NovixTheme.colors.title,
-                modifier = Modifier.padding(top = 40.dp, bottom = 8.dp)
+                modifier = Modifier.padding(top = 16.dp, bottom = 40.dp)
             )
+
             OutlinedTextField(
                 value = username,
-                interactionSource = MutableInteractionSource(),
+                label = stringResource(string.username),
+                interactionSource = interactionSourceUserName,
                 onValueChange = onUsernameChange,
                 leadingIcon = painterResource(R.drawable.icon_user),
             )
-            Text(
-                stringResource(string.password),
-                style = NovixTheme.typography.title.small,
-                color = NovixTheme.colors.title,
-                modifier = Modifier.padding(top = 16.dp, bottom = 8.dp)
-            )
             OutlinedTextField(
                 value = password,
-                interactionSource = MutableInteractionSource(),
                 onValueChange = onPasswordChange,
-                leadingIcon = painterResource(R.drawable.lock_key),
+                label = "Password",
                 isPasswordField = true,
+                passwordVisible = passwordVisible,
+                onPasswordVisibilityChange = onVisibilityChange,
                 passwordVisibleIcon = painterResource(id = R.drawable.icon_show_password),
                 passwordHiddenIcon = painterResource(id = R.drawable.icon_hide_password),
-                modifier = Modifier.padding(bottom = 32.dp)
+                interactionSource = interactionSourceUserPassword,
+                leadingIcon = painterResource(R.drawable.lock_key),
+                modifier = Modifier.padding(top = 16.dp, bottom = 32.dp)
             )
             PrimaryButton(
                 text = stringResource(string.login),

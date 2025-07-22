@@ -72,5 +72,6 @@
     <string name="app_icon">صور التطبيق</string>
     <string name="password">كلمة المرور</string>
     <string name="forgot_password">هل نسيت كلمة المرور؟</string>
-    <string name="upcoming">القادم</string>">
+    <string name="upcoming">القادم</string>
+    <string name="username">اسم المستخدم</string>">
 </resources>
