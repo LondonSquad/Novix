@@ -29,6 +29,7 @@ import com.london.presentation.navigation.Screen.Bookmarks
 import com.london.presentation.navigation.Screen.Categories
 import com.london.presentation.navigation.Screen.EpisodeDetails
 import com.london.presentation.navigation.Screen.Home
+import com.london.presentation.navigation.Screen.Login
 import com.london.presentation.navigation.Screen.MovieDetails
 import com.london.presentation.navigation.Screen.MoviesByCategory
 import com.london.presentation.navigation.Screen.Reviews
@@ -47,6 +48,7 @@ import com.london.presentation.screen.details.movieDetalis.MovieDetailsScreen
 import com.london.presentation.screen.details.tvshow.episodedetails.EpisodeDetailsScreen
 import com.london.presentation.screen.details.tvshow.tvshowdetails.TvShowsDetailsScreen
 import com.london.presentation.screen.home.HomeScreen
+import com.london.presentation.screen.login.LoginScreen
 import com.london.presentation.screen.reviews.ReviewsScreen
 import com.london.presentation.screen.search.SearchScreen
 
@@ -62,6 +64,7 @@ fun NovixApp() {
         currentDestination?.hasRoute<Categories>() == true -> Categories
         currentDestination?.hasRoute<Bookmarks>() == true -> Bookmarks
         currentDestination?.hasRoute<Account>() == true -> Account
+        currentDestination?.hasRoute<Login>() == true -> Login
         else -> Home
     }
 
@@ -92,9 +95,29 @@ fun NovixApp() {
     ) { innerPadding ->
         NavHost(
             navController = navController,
-            startDestination = Home,
+            startDestination = Login,
             modifier = Modifier.padding(innerPadding)
         ) {
+
+            composable<Login>(
+                exitTransition = { fadeOut(tween(500)) },
+                popEnterTransition = { fadeIn(tween(500)) },
+                enterTransition = { fadeIn(tween(500)) },
+                popExitTransition = { fadeOut(tween(500)) },
+            ) {
+                LoginScreen(
+                    onNavigateToHome = {
+                        navController.navigate(Screen.Home) {
+                            popUpTo(Screen.Login) { inclusive = true }
+                            launchSingleTop = true
+                        }
+                    },
+                    onNavigateBack = {
+                        navController.popBackStack()
+                    }
+                )
+            }
+
             composable<Home>(
                 exitTransition = { fadeOut(tween(500)) },
                 popEnterTransition = { fadeIn(tween(500)) },
@@ -256,7 +279,7 @@ fun NovixApp() {
                 )
             }
 
-            composable<Screen.ActorDetails> {
+            composable<ActorDetails> {
                 ActorDetailsScreen(
                     onNavigateToMoviePicks = { actorId ->
                         navController.navigate(ActorTopMoviesPicksDetails(actorId))

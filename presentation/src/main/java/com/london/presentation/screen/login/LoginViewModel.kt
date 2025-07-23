@@ -1,105 +1,103 @@
 package com.london.presentation.screen.login
 
-import android.util.Log
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
+import androidx.compose.ui.text.input.TextFieldValue
 import com.london.domain.usecase.login.LoginAsGuestUseCase
 import com.london.domain.usecase.login.LoginUseCase
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.update
-import kotlinx.coroutines.launch
+import com.london.presentation.screen.base.BaseViewModel
+import com.london.presentation.screen.base.ErrorState
 import org.koin.android.annotation.KoinViewModel
 
 @KoinViewModel
 class LoginViewModel(
     private val loginUseCase: LoginUseCase,
-    private val loginAsGuestUseCase: LoginAsGuestUseCase
-) : ViewModel() {
+    private val loginAsGuestUseCase: LoginAsGuestUseCase,
+) : BaseViewModel<LoginUiState, LoginEffect>(LoginUiState()),
+    LoginContract {
 
-    private val _state = MutableStateFlow(LoginState())
-    val state: StateFlow<LoginState> = _state
-
-
-    fun onUsernameChange(username: String) {
-        _state.update { it.copy(username = username) }
+    companion object {
+        private const val CREATE_ACCOUNT_URL = "https://www.themoviedb.org/signup"
+        private const val FORGOT_PASSWORD_URL = "https://www.themoviedb.org/reset-password"
     }
 
-    fun onPasswordChange(password: String) {
-        _state.update { it.copy(password = password) }
+    override fun onUsernameChanged(username: TextFieldValue) {
+        updateState {
+            copy(
+                username = username,
+                isLoginEnabled = username.toString().isNotEmpty() && password.text.isNotEmpty(),
+                error = null
+            )
+        }
     }
 
-    fun clearError() {
-        _state.update { it.copy(error = null) }
+    override fun onPasswordChanged(password: TextFieldValue) {
+        updateState {
+            copy(
+                password = password,
+                isLoginEnabled = username.text.isNotEmpty() && password.toString().isNotEmpty(),
+                error = null
+            )
+        }
     }
 
-    fun clearUrl() {
-        _state.update { it.copy(launchUrl = null) }
+    override fun onPasswordVisibilityToggled() {
+        updateState {
+            copy(passwordVisible = !passwordVisible)
+        }
     }
 
-    //Bassent01
-//    12345
-    fun login() {
-        val username = _state.value.username.trim()
-        val password = _state.value.password.trim()
-
-        if (username.isEmpty() || password.isEmpty()) {
-            _state.update { it.copy(launchUrl = "https://www.themoviedb.org/signup") }
+    override fun onLoginClick() {
+        val currentState = state.value
+        if (currentState.username.text.isEmpty() || currentState.password.text.isEmpty()) {
             return
         }
-
-        viewModelScope.launch {
-            Log.d("LoginViewModel", "Login function called!")
-            _state.update { it.copy(isLoading = true, error = null) }
-
-            try {
-                loginUseCase(username, password).collect { result: Boolean ->
-                    _state.update {
-                        it.copy(isAuthenticated = result, isLoading = false)
-                    }
+        tryToExecute(
+            block = { loginUseCase(currentState.username.text, currentState.password.text) },
+            onStart = { updateState { copy(isLoading = true, error = null) } },
+            onSuccess = { isSuccess: Boolean ->
+                if (isSuccess) {
+                    emitEffect(LoginEffect.NavigateToHome)
+                } else {
+                    updateState { copy(error = ErrorState.RequestFailed("Login failed. Please check your credentials.")) }
                 }
-            } catch (e: Exception) {
-                _state.update {
-                    it.copy(error = e.message ?: "Login failed", isLoading = false)
-                }
+            },
+            onError = { errorState ->
+                updateState { copy(error = errorState) }
+            },
+            onCompleted = {
+                updateState { copy(isLoading = false) }
             }
-        }
+        )
     }
 
-    fun loginAsGuest() {
-        viewModelScope.launch {
-            _state.update { it.copy(isLoading = true, error = null) }
-
-            try {
-                loginAsGuestUseCase().collect { result: Boolean ->
-
-                    Log.d("LoginViewModel", "$result")
-                    _state.update {
-                        it.copy(isAuthenticated = result, isLoading = false)
-                    }
+    override fun onLoginAsGuestClick() {
+        tryToExecute(
+            block = { loginAsGuestUseCase() },
+            onStart = { updateState { copy(isGuestLoginLoading = true, error = null) } },
+            onSuccess = { isSuccess: Boolean ->
+                if (isSuccess) {
+                    emitEffect(LoginEffect.NavigateToHome)
+                } else {
+                    updateState { copy(error = ErrorState.RequestFailed("Guest login failed.")) }
                 }
-            } catch (e: Exception) {
-                _state.update {
-                    it.copy(error = e.message ?: "Guest login failed", isLoading = false)
-                }
+            },
+            onError = { errorState ->
+                updateState { copy(error = errorState) }
+            },
+            onCompleted = {
+                updateState { copy(isGuestLoginLoading = false) }
             }
-        }
+        )
     }
 
-    fun onCreateAccountClicked() {
-        _state.update { it.copy(launchUrl = "https://www.themoviedb.org/signup") }
+    override fun onNavigateBack() {
+        emitEffect(LoginEffect.NavigateBack)
     }
 
-    fun onForgotPasswordClicked() {
-        _state.update { it.copy(launchUrl = "https://www.themoviedb.org/reset-password") }
+    override fun onCreateAccountClick() {
+        emitEffect(LoginEffect.NavigateToCreateAccount(CREATE_ACCOUNT_URL))
+    }
+
+    override fun onForgotPasswordClick() {
+        emitEffect(LoginEffect.NavigateToForgotPassword(FORGOT_PASSWORD_URL))
     }
 }
-
-data class LoginState(
-    val username: String = "",
-    val password: String = "",
-    val isLoading: Boolean = false,
-    val isAuthenticated: Boolean = false,
-    val error: String? = null,
-    val launchUrl: String? = null
-)

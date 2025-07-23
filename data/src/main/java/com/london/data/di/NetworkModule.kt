@@ -1,7 +1,6 @@
 package com.london.data.di
 
 import android.content.Context
-import android.util.Log
 import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory
 import com.london.data.BuildConfig
 import com.london.data.datasource.common.AuthInterceptor
@@ -16,7 +15,6 @@ import com.london.data.datasource.remote.home.popular.api.PopularApiService
 import com.london.data.datasource.remote.reviews.api.ReviewsApiService
 import com.london.data.datasource.remote.search.api.SearchApiService
 import com.london.domain.repository.SessionTokenProvider
-import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.json.Json
 import okhttp3.Cache
 import okhttp3.Interceptor
@@ -142,17 +140,6 @@ class NetworkModule {
     fun provideAuthPreferences(context: Context): AuthPreferences {
         return AuthPreferences(context.getSharedPreferences("auth", Context.MODE_PRIVATE))
     }
-
-//    @Single
-//    fun provideApiInterceptor(tokenProvider: SessionTokenProvider): Interceptor {
-//        return AuthInterceptor(tokenProvider)
-//    }
-
-    @Single
-    fun provideAuthPreferences(context: Context): AuthPreferences {
-        return AuthPreferences(context.getSharedPreferences("auth", Context.MODE_PRIVATE))
-    }
-
 
     @Single
     fun provideAuthApi(retrofit: Retrofit): AuthApi {
