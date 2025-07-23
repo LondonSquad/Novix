@@ -74,6 +74,7 @@ private fun Content(
     uiState: HomeScreenUiState,
     modifier: Modifier = Modifier,
 ) {
+
     val density = LocalDensity.current
     val screenWidth = with(density) {
         LocalConfiguration.current.screenWidthDp.dp
@@ -100,13 +101,17 @@ private fun Content(
                     .requiredWidth(screenWidth),
                 pagerState = pagerState,
                 images = uiState.popularMovies.map { it.posterUrl },
-                onSaveClick = {/* TODO */},
+                onSaveClick = {/* TODO */ },
                 onCardClick = {
                     homeScreenContract.onPopularCardClicked(
                         uiState.popularMovies[pagerState.currentPage].id
                     )
                 }
             )
+        }
+
+        item(span = { GridItemSpan(maxLineSpan) }) {
+            TrendingSection()
         }
 
         upComingSection(
