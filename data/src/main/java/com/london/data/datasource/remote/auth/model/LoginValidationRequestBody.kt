@@ -4,7 +4,7 @@ import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class ValidateWithLoginRequestBody(
+data class LoginValidationRequestBody(
     @SerialName("username")
     val username: String,
     @SerialName("password")

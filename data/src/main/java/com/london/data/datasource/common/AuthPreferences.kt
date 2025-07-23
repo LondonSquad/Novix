@@ -17,12 +17,12 @@ class AuthPreferences(
         private const val GUEST_SESSION_ID = "guest_session_id"
     }
 
-    fun getAuthKey(): String? {
+    fun getAuthKey(): String {
         return BuildConfig.AUTHORIZATION_KEY
     }
 
-    fun saveSessionId(sessionId: String) {
-        sharedPreferences.edit { putString(SESSION_ID, sessionId) }
+    fun saveSessionId(id: String) {
+        sharedPreferences.edit { putString(SESSION_ID, id) }
     }
 
     fun getSessionId(): String? {
@@ -33,28 +33,20 @@ class AuthPreferences(
         sharedPreferences.edit { putString(REQUEST_TOKEN, token) }
     }
 
-    fun getRequestToken(): String? {
-        return sharedPreferences.getString(REQUEST_TOKEN, null)
-    }
-
     fun saveUsername(username: String) {
         sharedPreferences.edit { putString(USERNAME, username) }
-    }
-
-    fun getUsername(): String? {
-        return sharedPreferences.getString(USERNAME, null)
     }
 
     fun setGuestMode(isGuest: Boolean) {
         sharedPreferences.edit { putBoolean(IS_GUEST, isGuest) }
     }
 
-    fun isGuestMode(): Boolean {
+    fun getGuestMode(): Boolean {
         return sharedPreferences.getBoolean(IS_GUEST, false)
     }
 
-    fun saveGuestSessionId(guestSessionId: String) {
-        sharedPreferences.edit { putString(GUEST_SESSION_ID, guestSessionId) }
+    fun saveGuestSessionId(id: String) {
+        sharedPreferences.edit { putString(GUEST_SESSION_ID, id) }
     }
 
     fun getGuestSessionId(): String? {

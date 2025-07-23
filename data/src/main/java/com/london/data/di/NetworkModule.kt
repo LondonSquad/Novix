@@ -7,7 +7,7 @@ import com.london.data.datasource.common.AuthInterceptor
 import com.london.data.datasource.common.AuthPreferences
 import com.london.data.datasource.common.SharedPrefsTokenProvider
 import com.london.data.datasource.device.DeviceConfigurationDataSource
-import com.london.data.datasource.remote.auth.api.AuthApi
+import com.london.data.datasource.remote.auth.api.AuthApiService
 import com.london.data.datasource.remote.details.actordetails.api.ActorDetailsApiService
 import com.london.data.datasource.remote.details.moviedetails.api.MovieDetailsApiService
 import com.london.data.datasource.remote.details.tvshowdetails.api.TvShowDetailsApiService
@@ -141,7 +141,7 @@ class NetworkModule {
     }
 
     @Single
-    fun provideAuthApi(retrofit: Retrofit): AuthApi {
-        return retrofit.create(AuthApi::class.java)
+    fun provideAuthApi(retrofit: Retrofit): AuthApiService {
+        return retrofit.create(AuthApiService::class.java)
     }
 }

@@ -1,9 +1,9 @@
 package com.london.data.repository
 
 import com.london.data.datasource.common.AuthPreferences
-import com.london.data.datasource.remote.auth.api.AuthApi
+import com.london.data.datasource.remote.auth.api.AuthApiService
+import com.london.data.datasource.remote.auth.model.LoginValidationRequestBody
 import com.london.data.datasource.remote.auth.model.Token
-import com.london.data.datasource.remote.auth.model.ValidateWithLoginRequestBody
 import com.london.domain.repository.AuthRepository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
@@ -14,26 +14,24 @@ import org.koin.core.annotation.Single
 
 @Single
 class AuthRepositoryImpl(
-    private val authApi: AuthApi,
+    private val authApiService: AuthApiService,
     private val authPreferences: AuthPreferences
 ) : AuthRepository {
 
     override suspend fun login(username: String, password: String): Boolean {
         return withContext(Dispatchers.IO) {
-            try {
-                val tokenResponse = authApi.createRequestToken()
-
-                val loginRequestBody = ValidateWithLoginRequestBody(
+            runCatching {
+                val tokenResponse = authApiService.createRequestToken()
+                val loginRequestBody = LoginValidationRequestBody(
                     username = username,
                     password = password,
                     requestToken = tokenResponse.requestToken
                 )
-
-                val sessionResponse = authApi.createSessionWithLogin(loginRequestBody)
+                val sessionResponse = authApiService.createSessionWithLogin(loginRequestBody)
 
                 if (sessionResponse.success) {
                     val authenticatedRequestToken = sessionResponse.requestToken
-                    val createdSession = authApi.createSession(
+                    val createdSession = authApiService.createSession(
                         Token(authenticatedRequestToken)
                     )
                     authPreferences.saveSessionId(createdSession.sessionId)
@@ -44,7 +42,7 @@ class AuthRepositoryImpl(
                 } else {
                     false
                 }
-            } catch (e: Exception) {
+            }.getOrElse { exception ->
                 false
             }
         }
@@ -52,18 +50,16 @@ class AuthRepositoryImpl(
 
     override suspend fun loginAsGuest(): Boolean {
         return withContext(Dispatchers.IO) {
-            try {
-                val guestResponse = authApi.createGuestSession()
-                val guestSessionId = guestResponse.guestSessionId
-
+            runCatching {
+                val guestResponse = authApiService.createGuestSession()
                 if (guestResponse.success) {
-                    authPreferences.saveGuestSessionId(guestSessionId)
+                    authPreferences.saveGuestSessionId(guestResponse.guestSessionId)
                     authPreferences.setGuestMode(true)
                     true
                 } else {
                     false
                 }
-            } catch (e: Exception) {
+            }.getOrElse { exception ->
                 false
             }
         }
@@ -71,17 +67,18 @@ class AuthRepositoryImpl(
 
     override suspend fun logout(): Boolean {
         return withContext(Dispatchers.IO) {
-            try {
-                val sessionId = authPreferences.getSessionId()
-                if (sessionId != null && !authPreferences.isGuestMode()) {
-                    authApi.deleteSession()
+            val result = runCatching {
+                if (authPreferences.getSessionId() != null && !authPreferences.getGuestMode()) {
+                    authApiService.deleteSession()
                 }
                 true
-            } catch (e: Exception) {
-                false
-            } finally {
-                authPreferences.clearAuth()
             }
+            authPreferences.clearAuth()
+
+            result.map { it }
+                .getOrElse { exception ->
+                    false
+                }
         }
     }
 
