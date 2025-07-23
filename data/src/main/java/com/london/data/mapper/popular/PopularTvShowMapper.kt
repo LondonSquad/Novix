@@ -9,7 +9,7 @@ import com.london.data.utils.orZero
 import com.london.domain.KoverIgnore
 import com.london.domain.entity.popular.PopularTvShow
 
-fun PopularTvShowResponse.toPopularTvShow(): PopularTvShow {
+fun PopularTvShowResponse.toEntity(): PopularTvShow {
     return PopularTvShow(
         id = id.orZero(),
         name = name.orEmpty(),
@@ -19,5 +19,5 @@ fun PopularTvShowResponse.toPopularTvShow(): PopularTvShow {
     )
 }
 
-fun ApiResponse<PopularTvShowResponse>.toPopularTvShows(): List<PopularTvShow> =
-    items.map { it.toPopularTvShow() }
+fun ApiResponse<PopularTvShowResponse>.toEntityList(): List<PopularTvShow> =
+    items.map { it.toEntity() }
