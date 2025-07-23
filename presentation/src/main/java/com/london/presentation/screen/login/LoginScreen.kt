@@ -20,77 +20,74 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.statusBars
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
-import com.london.designsystem.R
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.london.designsystem.component.Icon
 import com.london.designsystem.component.OutlinedTextField
 import com.london.designsystem.component.Text
 import com.london.designsystem.component.TopBar
 import com.london.designsystem.component.button.PrimaryButton
 import com.london.designsystem.theme.NovixTheme
-import com.london.designsystem.theme.ThemePreviews
-import com.london.presentation.R.string
+import com.london.presentation.R
+import org.koin.androidx.compose.koinViewModel
+import com.london.designsystem.R as dsR
 
 @Composable
-fun LoginScreen() {
-    var userNameValue by remember { mutableStateOf(TextFieldValue()) }
-    var passwordValue by remember { mutableStateOf(TextFieldValue()) }
-    var passwordVisible by remember { mutableStateOf(false) }
-    val interactionSourceUserName = remember { MutableInteractionSource() }
-    val interactionSourcePassword = remember { MutableInteractionSource() }
-    val isLoginEnabled = userNameValue.text.isNotEmpty() && passwordValue.text.isNotEmpty()
+fun LoginScreen(
+    viewModel: LoginViewModel = koinViewModel(),
+    onNavigateToHome: () -> Unit,
+    onNavigateBack: () -> Unit
+) {
+    val uiState by viewModel.state.collectAsStateWithLifecycle()
+    val uriHandler = LocalUriHandler.current
 
-    Content(
-        username = userNameValue,
-        onUsernameChange = { userNameValue = it },
-        password = passwordValue,
-        onPasswordChange = { passwordValue = it },
-        passwordVisible = passwordVisible,
-        onLoginClick = {},
-        onForgotPasswordClick = {},
-        isLoginEnabled = isLoginEnabled,
-        onCreateAccountClick = {},
-        interactionSourceUserName = interactionSourceUserName,
-        interactionSourceUserPassword = interactionSourcePassword,
-        onVisibilityChange = { passwordVisible = !passwordVisible }
-    )
+    LaunchedEffect(Unit) {
+        viewModel.effect.collect { effect ->
+            when (effect) {
+                is LoginEffect.NavigateToHome -> onNavigateToHome()
+                is LoginEffect.NavigateToCreateAccount -> uriHandler.openUri(effect.url)
+                is LoginEffect.NavigateToForgotPassword -> uriHandler.openUri(effect.url)
+                is LoginEffect.NavigateBack -> onNavigateBack()
+                null -> {}
+            }
+        }
+    }
+
+    Box(modifier = Modifier.fillMaxSize()) {
+        Content(
+            uiState = uiState,
+            loginContract = viewModel
+        )
+    }
 }
 
 @SuppressLint("UnrememberedMutableInteractionSource")
 @Composable
 private fun Content(
-    username: TextFieldValue,
-    onUsernameChange: (TextFieldValue) -> Unit,
-    password: TextFieldValue,
-    onPasswordChange: (TextFieldValue) -> Unit,
-    onLoginClick: () -> Unit,
-    onForgotPasswordClick: () -> Unit,
-    isLoginEnabled: Boolean,
-    onCreateAccountClick: () -> Unit,
-    passwordVisible: Boolean,
-    onVisibilityChange: () -> Unit,
-    interactionSourceUserName: MutableInteractionSource,
-    interactionSourceUserPassword: MutableInteractionSource,
+    uiState: LoginUiState,
+    loginContract: LoginContract
+) {
+    val interactionSourceUserName = remember { MutableInteractionSource() }
+    val interactionSourcePassword = remember { MutableInteractionSource() }
+    val isLoadingGeneral = uiState.isLoading || uiState.isGuestLoginLoading
 
-    ) {
     Box(
         modifier = Modifier
             .fillMaxSize()
             .background(NovixTheme.colors.surface),
     ) {
         Image(
-            painter = painterResource(R.drawable.polygon1),
-            contentDescription = stringResource(string.app_icon),
+            painter = painterResource(dsR.drawable.polygon1),
+            contentDescription = stringResource(R.string.app_icon),
             modifier = Modifier
                 .align(Alignment.TopStart)
                 .offset(y = (-60).dp, x = (-20).dp)
@@ -104,63 +101,79 @@ private fun Content(
                 .padding(bottom = 16.dp)
         ) {
             TopBar(
-                title = stringResource(string.login),
-                modifier = Modifier.padding(top = 12.dp), onBackClick = {}
+                title = stringResource(R.string.login),
+                modifier = Modifier.padding(top = 12.dp),
+                onBackClick = loginContract::onNavigateBack
             )
+
             Icon(
-                painter = painterResource(id = R.drawable.novix_icon),
-                contentDescription = stringResource(string.app_icon),
+                painter = painterResource(id = dsR.drawable.novix_icon),
+                contentDescription = stringResource(R.string.app_icon),
                 tint = Color.Unspecified,
                 modifier = Modifier
                     .padding(top = 12.dp)
                     .size(64.dp)
             )
+
             Text(
-                stringResource(string.login_to_your_account),
+                stringResource(R.string.login_to_your_account),
                 style = NovixTheme.typography.title.medium,
                 color = NovixTheme.colors.title,
                 modifier = Modifier.padding(top = 16.dp, bottom = 40.dp)
             )
 
             OutlinedTextField(
-                value = username,
-                label = stringResource(string.username),
+                value = uiState.username,
+                label = stringResource(R.string.username),
                 interactionSource = interactionSourceUserName,
-                onValueChange = onUsernameChange,
-                leadingIcon = painterResource(R.drawable.icon_user),
+                onValueChange = loginContract::onUsernameChanged,
+                leadingIcon = painterResource(dsR.drawable.icon_user),
             )
+
             OutlinedTextField(
-                value = password,
-                onValueChange = onPasswordChange,
-                label = "Password",
+                value = uiState.password,
+                onValueChange = loginContract::onPasswordChanged,
+                label = stringResource(R.string.password),
                 isPasswordField = true,
-                passwordVisible = passwordVisible,
-                onPasswordVisibilityChange = onVisibilityChange,
-                passwordVisibleIcon = painterResource(id = R.drawable.icon_show_password),
-                passwordHiddenIcon = painterResource(id = R.drawable.icon_hide_password),
-                interactionSource = interactionSourceUserPassword,
-                leadingIcon = painterResource(R.drawable.lock_key),
-                modifier = Modifier.padding(top = 16.dp, bottom = 32.dp)
+                passwordVisible = uiState.passwordVisible,
+                onPasswordVisibilityChange = loginContract::onPasswordVisibilityToggled,
+                passwordVisibleIcon = painterResource(id = dsR.drawable.icon_show_password),
+                passwordHiddenIcon = painterResource(id = dsR.drawable.icon_hide_password),
+                interactionSource = interactionSourcePassword,
+                leadingIcon = painterResource(dsR.drawable.lock_key),
+                modifier = Modifier.padding(top = 16.dp, bottom = 16.dp),
+                enabled = !isLoadingGeneral
             )
+
             PrimaryButton(
-                text = stringResource(string.login),
+                text = stringResource(R.string.login),
                 hasLabel = true,
                 hasIcon = false,
-                isLoading = false,
-                onClick = onLoginClick,
+                isLoading = uiState.isLoading,
+                onClick = loginContract::onLoginClick,
                 icon = null,
-                enabled = isLoginEnabled,
+                enabled = uiState.isLoginEnabled && !isLoadingGeneral,
                 modifier = Modifier.fillMaxWidth()
             )
+
             Text(
-                stringResource(string.forgot_password),
+                stringResource(R.string.forgot_password),
                 style = NovixTheme.typography.label.medium,
                 color = NovixTheme.colors.primary,
                 modifier = Modifier
                     .padding(top = 12.dp)
                     .align(Alignment.CenterHorizontally)
+                    .clickable(
+                        interactionSource = remember { MutableInteractionSource() },
+                        indication = null,
+                        enabled = !isLoadingGeneral
+                    ) {
+                        loginContract.onForgotPasswordClick()
+                    }
             )
+
             Spacer(modifier = Modifier.weight(1f))
+
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -169,29 +182,24 @@ private fun Content(
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Text(
-                    stringResource(string.don_t_have_an_account),
+                    stringResource(R.string.don_t_have_an_account),
                     style = NovixTheme.typography.body.small,
                     color = NovixTheme.colors.body,
-                    modifier = Modifier
-                        .padding(end = 4.dp)
-                        .clickable { onForgotPasswordClick() })
+                    modifier = Modifier.padding(end = 4.dp)
+                )
                 Text(
-                    stringResource(string.create_account),
+                    stringResource(R.string.create_account),
                     style = NovixTheme.typography.label.medium,
                     color = NovixTheme.colors.primary,
-                    modifier = Modifier.clickable {
-                        onCreateAccountClick()
+                    modifier = Modifier.clickable(
+                        interactionSource = remember { MutableInteractionSource() },
+                        indication = null,
+                        enabled = !isLoadingGeneral
+                    ) {
+                        loginContract.onCreateAccountClick()
                     }
                 )
             }
         }
-    }
-}
-
-@ThemePreviews
-@Composable
-private fun Preview() {
-    NovixTheme {
-        LoginScreen()
     }
 }

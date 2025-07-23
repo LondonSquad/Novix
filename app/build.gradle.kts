@@ -16,7 +16,7 @@ plugins {
 
 android {
     namespace = AppConfig.APPLICATION_ID
-    compileSdk = AppConfig.Version.COMPILE_SDK
+    compileSdk = 36
 
     defaultConfig {
         applicationId = AppConfig.APPLICATION_ID
