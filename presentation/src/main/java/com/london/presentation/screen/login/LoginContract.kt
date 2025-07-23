@@ -9,7 +9,6 @@ interface LoginContract {
  fun onLoginClick()
  fun onLoginAsGuestClick()
 
- // fun onWebAuthClick()
  fun onNavigateBack()
  fun onCreateAccountClick()
  fun onForgotPasswordClick()

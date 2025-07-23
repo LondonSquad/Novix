@@ -67,7 +67,6 @@ class NetworkModule {
 
             val newRequest = originalRequest.newBuilder()
                 .url(newUrl)
-             //   .addHeader("Authorization", "Bearer ${BuildConfig.AUTHORIZATION_KEY}")
                 .build()
 
             chain.proceed(newRequest)
