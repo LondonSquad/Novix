@@ -6382,5 +6382,33 @@
       "deletions": 450,
       "changed_files": 21
     }
+  },
+  {
+    "pr_number": 269,
+    "url": "https://github.com/LondonSquad/Novix/pull/269",
+    "title": "feat: Integrate Popular TV Shows into HomeScreen",
+    "opened_at": "2025-07-23T20:31:36Z",
+    "head_ref": "feature/update-home-tv-show",
+    "base_ref": "develop",
+    "creator": {
+      "login": "ahmeddsamii",
+      "id": 154278495,
+      "url": "https://github.com/ahmeddsamii"
+    },
+    "approvals": [],
+    "first_approved_at": null,
+    "time_to_first_approval_minutes": null,
+    "required_approvals_met_at": null,
+    "time_to_required_approvals_minutes": null,
+    "closed_at": null,
+    "merged_at": null,
+    "merged_by": null,
+    "week": "2025-W30",
+    "status": "pending",
+    "diff_stats": {
+      "additions": 416,
+      "deletions": 23,
+      "changed_files": 9
+    }
   }
 ]
