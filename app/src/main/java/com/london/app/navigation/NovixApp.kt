@@ -48,6 +48,7 @@ import com.london.presentation.screen.details.movieDetalis.MovieDetailsScreen
 import com.london.presentation.screen.details.tvshow.episodedetails.EpisodeDetailsScreen
 import com.london.presentation.screen.details.tvshow.tvshowdetails.TvShowsDetailsScreen
 import com.london.presentation.screen.home.HomeScreen
+import com.london.presentation.screen.login.LoginScreen
 import com.london.presentation.screen.onboarding.OnboardingRoute
 import com.london.presentation.screen.onboarding.WelcomeScreen
 import com.london.presentation.screen.reviews.ReviewsScreen
@@ -319,10 +320,18 @@ fun NovixApp(appPreferencesService: AppPreferencesService) {
             composable<Screen.Welcome> {
                 WelcomeScreen(
                     onLoginClicked = {
-
+                        navController.navigate(Screen.Login)
                     },
                     onContinueClicked = {
                         navController.navigate(Screen.Home)
+                    }
+                )
+            }
+
+            composable<Screen.Login> {
+                LoginScreen(
+                    onBackClick = {
+                        navController.navigate(Screen.Welcome)
                     }
                 )
             }

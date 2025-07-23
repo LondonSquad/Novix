@@ -42,7 +42,9 @@ import com.london.designsystem.theme.ThemePreviews
 import com.london.presentation.R.string
 
 @Composable
-fun LoginScreen() {
+fun LoginScreen(
+    onBackClick: () -> Unit
+) {
     var userNameValue by remember { mutableStateOf(TextFieldValue()) }
     var passwordValue by remember { mutableStateOf(TextFieldValue()) }
     var passwordVisible by remember { mutableStateOf(false) }
@@ -62,7 +64,8 @@ fun LoginScreen() {
         onCreateAccountClick = {},
         interactionSourceUserName = interactionSourceUserName,
         interactionSourceUserPassword = interactionSourcePassword,
-        onVisibilityChange = { passwordVisible = !passwordVisible }
+        onVisibilityChange = { passwordVisible = !passwordVisible },
+        onBackClick = onBackClick
     )
 }
 
@@ -81,7 +84,7 @@ private fun Content(
     onVisibilityChange: () -> Unit,
     interactionSourceUserName: MutableInteractionSource,
     interactionSourceUserPassword: MutableInteractionSource,
-
+    onBackClick: () -> Unit,
     ) {
     Box(
         modifier = Modifier
@@ -105,7 +108,7 @@ private fun Content(
         ) {
             TopBar(
                 title = stringResource(string.login),
-                modifier = Modifier.padding(top = 12.dp), onBackClick = {}
+                modifier = Modifier.padding(top = 12.dp), onBackClick = onBackClick
             )
             Icon(
                 painter = painterResource(id = R.drawable.novix_icon),
@@ -192,6 +195,8 @@ private fun Content(
 @Composable
 private fun Preview() {
     NovixTheme {
-        LoginScreen()
+        LoginScreen(
+            onBackClick = {}
+        )
     }
 }
