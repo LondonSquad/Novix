@@ -57,7 +57,7 @@ fun LoginScreen(
                 is LoginEffect.NavigateToCreateAccount -> uriHandler.openUri(effect.url)
                 is LoginEffect.NavigateToForgotPassword -> uriHandler.openUri(effect.url)
                 is LoginEffect.NavigateBack -> onNavigateBack()
-                null -> TODO()
+                null -> {}
             }
         }
     }
