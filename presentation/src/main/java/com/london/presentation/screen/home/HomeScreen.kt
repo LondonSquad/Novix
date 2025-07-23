@@ -145,7 +145,6 @@ private fun LazyGridScope.upComingSection(
             text = stringResource(R.string.upcoming),
             style = NovixTheme.typography.headline.small,
             color = NovixTheme.colors.title,
-            modifier = Modifier.padding(bottom = 8.dp)
         )
     }
 
