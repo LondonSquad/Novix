@@ -1,6 +1,7 @@
-package com.london.app.di
+package com.london.app
 
 import android.app.Application
+import com.london.app.di.AppModule
 import com.london.data.BuildConfig
 import org.koin.android.ext.koin.androidContext
 import org.koin.android.ext.koin.androidLogger
@@ -14,7 +15,7 @@ class NovixApplication : Application() {
         super.onCreate()
         timberConfig()
         startKoin {
-            androidLogger(level =Level.DEBUG)
+            androidLogger(level = Level.DEBUG)
             androidContext(this@NovixApplication)
             modules(AppModule().module)
         }
@@ -22,7 +23,7 @@ class NovixApplication : Application() {
 
     private fun timberConfig() {
         if (BuildConfig.DEBUG)
-            Timber.plant(object : Timber.DebugTree() {
+            Timber.Forest.plant(object : Timber.DebugTree() {
                 /**
                  * Override [log] to modify the tag and add a "global tag" prefix to it. You can rename the String "global_tag_" as you see fit.
                  */
