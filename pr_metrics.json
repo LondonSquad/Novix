@@ -6263,5 +6263,33 @@
       "deletions": 77,
       "changed_files": 27
     }
+  },
+  {
+    "pr_number": 266,
+    "url": "https://github.com/LondonSquad/Novix/pull/266",
+    "title": "feat: Implement popular TV shows feature",
+    "opened_at": "2025-07-23T10:10:51Z",
+    "head_ref": "feature/popular-tv-show",
+    "base_ref": "develop",
+    "creator": {
+      "login": "ahmeddsamii",
+      "id": 154278495,
+      "url": "https://github.com/ahmeddsamii"
+    },
+    "approvals": [],
+    "first_approved_at": null,
+    "time_to_first_approval_minutes": null,
+    "required_approvals_met_at": null,
+    "time_to_required_approvals_minutes": null,
+    "closed_at": null,
+    "merged_at": null,
+    "merged_by": null,
+    "week": "2025-W30",
+    "status": "pending",
+    "diff_stats": {
+      "additions": 331,
+      "deletions": 29,
+      "changed_files": 14
+    }
   }
 ]
