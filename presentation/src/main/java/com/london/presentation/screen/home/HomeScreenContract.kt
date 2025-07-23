@@ -1,5 +1,8 @@
 package com.london.presentation.screen.home
 
+import com.london.presentation.utils.Genre
+
 interface HomeScreenContract {
-    fun onPopularCardClicked(id: Int)
+    fun onMovieClick(id: Int)
+    fun onGenreSelect(genre: Genre)
 }
