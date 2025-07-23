@@ -5,13 +5,13 @@ import com.london.domain.entity.Movie
 import com.london.domain.entity.popular.PopularMovie
 import com.london.presentation.screen.base.ErrorState
 import com.london.presentation.utils.Genre
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 
 data class HomeScreenUiState(
     val isLoading: Boolean = false,
     val error: ErrorState? = null,
     val popularMovies: List<PopularMovie> = emptyList(),
-    val upcomingMovies: Flow<PagingData<Movie>> = flow {},
+    val upcomingMovies:  StateFlow<PagingData<Movie>> = MutableStateFlow<PagingData<Movie>>(PagingData.empty()),
     val selectedGenre: Genre = Genre.All
 )
