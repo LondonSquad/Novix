@@ -16,9 +16,9 @@ class PopularMovieMapperTest {
         // Then
         assertThat(result.id).isEqualTo(123)
         assertThat(result.title).isEqualTo("Inception")
-        assertThat(result.posterPath).contains("/poster.jpg")
-        assertThat(result.backdropPath).contains("/backdrop.jpg")
-        assertThat(result.voteAverage).isEqualTo(8.7)
+        assertThat(result.posterUrl).contains("/poster.jpg")
+        assertThat(result.backdropUrl).contains("/backdrop.jpg")
+        assertThat(result.rating).isEqualTo(8.7)
     }
 
     @Test
@@ -48,9 +48,9 @@ class PopularMovieMapperTest {
         // Then
         assertThat(result.id).isEqualTo(0)
         assertThat(result.title).isEmpty()
-        assertThat(result.posterPath).isEmpty()
-        assertThat(result.backdropPath).isEmpty()
-        assertThat(result.voteAverage).isEqualTo(0.0)
+        assertThat(result.posterUrl).isEmpty()
+        assertThat(result.backdropUrl).isEmpty()
+        assertThat(result.rating).isEqualTo(0.0)
     }
 
     companion object {

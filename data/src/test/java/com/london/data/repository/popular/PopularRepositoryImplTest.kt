@@ -57,8 +57,8 @@ class PopularRepositoryImplTest {
         assertThat(result).hasSize(1)
         assertThat(result[0].id).isEqualTo(101)
         assertThat(result[0].title).isEqualTo("Test Movie")
-        assertThat(result[0].posterPath).contains("/poster.jpg")
-        assertThat(result[0].voteAverage).isEqualTo(7.8)
+        assertThat(result[0].posterUrl).contains("/poster.jpg")
+        assertThat(result[0].rating).isEqualTo(7.8)
 
         coVerify(exactly = 1) { remoteDataSource.getPopularMovies() }
     }

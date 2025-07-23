@@ -11,9 +11,9 @@ fun PopularMovieResponse.toPopularMovie(): PopularMovie {
     return PopularMovie(
         id = id.orZero(),
         title = title.orEmpty(),
-        posterPath = posterPath.asImageUrlOrEmpty(),
-        backdropPath = backdropPath.asImageUrlOrEmpty(),
-        voteAverage = voteAverage.orZero(),
+        posterUrl = posterPath.asImageUrlOrEmpty(),
+        backdropUrl = backdropPath.asImageUrlOrEmpty(),
+        rating = voteAverage.orZero(),
     )
 }
 
