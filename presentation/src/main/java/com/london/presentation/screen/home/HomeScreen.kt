@@ -119,6 +119,11 @@ private fun Content(
                 }
             )
         }
+
+        item(span = { GridItemSpan(maxLineSpan) }) {
+            TrendingSection()
+        }
+
         upComingSection(
             contract = homeScreenContract,
             screenWidth = screenWidth,

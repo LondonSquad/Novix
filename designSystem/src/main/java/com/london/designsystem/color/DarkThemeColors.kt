@@ -22,7 +22,10 @@ val YellowAccentDark = Color(0xFFCFC657)
 val GreenAccentDark = Color(0xFF19744D)
 val GreenVariantDark = Color(0xFF1D1F1E)
 val LinearGradientDark = Color(0x0D060800)
-
+val DarkCocoaDark = Color(0xFF4D1D12)
+val DeepCrimsonDark = Color(0xFF39010C)
+val TealBlueDark = Color(0xFF3B99AC)
+val OceanDarkDark = Color(0xFF094E5C)
 
 val DarkNovixColors = NovixColors(
     primary = PrimaryDark,
@@ -44,4 +47,8 @@ val DarkNovixColors = NovixColors(
     yellowAccent = YellowAccentDark,
     greenAccent = GreenAccentDark,
     greenVariant = GreenVariantDark,
+    darkCocoa = DarkCocoaDark,
+    deepCrimson = DeepCrimsonDark,
+    tealBlue = TealBlueDark,
+    oceanDark = OceanDarkDark
 )

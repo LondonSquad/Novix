@@ -30,4 +30,6 @@ interface SearchInteractions {
     fun onMovieClick(movieId: Int)
     fun onActorClick(actorId: Int)
     fun onTvShowClick(tvShowId: Int)
+    fun onFilterClick()
+    fun onFilterSheetDismiss()
 }
