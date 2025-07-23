@@ -6354,5 +6354,33 @@
       "deletions": 30,
       "changed_files": 15
     }
+  },
+  {
+    "pr_number": 267,
+    "url": "https://github.com/LondonSquad/Novix/pull/267",
+    "title": "refactor/movie-details: update movie details structure",
+    "opened_at": "2025-07-23T18:46:41Z",
+    "head_ref": "refactor/movie-details",
+    "base_ref": "develop",
+    "creator": {
+      "login": "abdelrhman1002",
+      "id": 180463542,
+      "url": "https://github.com/abdelrhman1002"
+    },
+    "approvals": [],
+    "first_approved_at": null,
+    "time_to_first_approval_minutes": null,
+    "required_approvals_met_at": null,
+    "time_to_required_approvals_minutes": null,
+    "closed_at": null,
+    "merged_at": null,
+    "merged_by": null,
+    "week": "2025-W30",
+    "status": "pending",
+    "diff_stats": {
+      "additions": 334,
+      "deletions": 450,
+      "changed_files": 21
+    }
   }
 ]
