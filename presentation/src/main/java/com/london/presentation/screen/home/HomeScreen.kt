@@ -100,7 +100,7 @@ private fun Content(
                 modifier = modifier
                     .requiredWidth(screenWidth),
                 pagerState = pagerState,
-                images = uiState.popularMovies.map { it.posterPath },
+                images = uiState.popularMovies.map { it.posterUrl },
                 onSaveClick = {/* TODO */ },
                 onCardClick = {
                     homeScreenContract.onPopularCardClicked(
