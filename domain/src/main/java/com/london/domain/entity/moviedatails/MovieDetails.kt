@@ -1,17 +1,60 @@
 package com.london.domain.entity.moviedatails
 
-import com.london.domain.entity.Actor
-
 data class MovieDetails(
-    val movieId: Int,
-    val movieImage: List<String>,
-    val movieName: String,
-    val movieRating: String,
-    val movieDuration: String,
-    val releaseDate: String,
-    val movieOverview: String,
+    val adult: Boolean,
+    val backdropUrl: String,
+    val belongsToCollection: CollectionDetails,
+    val budget: Int,
     val genres: List<Genre>,
-    val actors: List<Actor>,
-    val similarMovies: List<SimilarMovie>,
-    val movieHaveTrailer: Boolean,
+    val homepage: String,
+    val id: Int,
+    val imdbId: String,
+    val originCountry: List<String>,
+    val originalLanguage: String,
+    val originalTitle: String,
+    val overview: String,
+    val popularity: Double,
+    val posterUrl: String,
+    val productionCompanies: List<ProductionCompany>,
+    val productionCountries: List<ProductionCountry>,
+    val releaseDate: String,
+    val revenue: Long,
+    val runtime: Int,
+    val spokenLanguages: List<SpokenLanguage>,
+    val status: String,
+    val tagline: String,
+    val title: String,
+    val video: Boolean,
+    val voteAverage: String,
+    val voteCount: Int
+)
+
+
+data class CollectionDetails(
+    val id: Int,
+    val name: String
+)
+
+data class Genre(
+    val id: Int,
+    val name: String
+)
+
+data class ProductionCompany(
+    val id: Int,
+    val logoPath: String,
+    val name: String,
+    val originCountry: String
+)
+
+
+data class ProductionCountry(
+    val iso31661: String,
+    val name: String
+)
+
+data class SpokenLanguage(
+    val englishName: String,
+    val iso6391: String,
+    val name: String
 )

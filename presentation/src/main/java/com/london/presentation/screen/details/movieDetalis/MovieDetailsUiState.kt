@@ -1,6 +1,8 @@
 package com.london.presentation.screen.details.movieDetalis
 
+import com.london.domain.entity.Actor
 import com.london.domain.entity.moviedatails.Genre
+import com.london.domain.entity.moviedatails.SimilarMovie
 import com.london.presentation.screen.base.ErrorState
 
 data class MovieDetailsUiState(
@@ -12,8 +14,8 @@ data class MovieDetailsUiState(
     val movieDuration: String = "",
     val releaseDate: String = "",
     val movieOverview: String = "",
-    val actors: List<ActorUIState> = listOf(),
-    val similarMovies: List<SimilarMovieUIState> = listOf(),
+    val actors: List<Actor> = listOf(),
+    val similarMovies: List<SimilarMovie> = listOf(),
     val isRated: Boolean = false,
     val isSaved: Boolean = false,
     val currentImageIndex: Int = 0,
@@ -26,16 +28,3 @@ data class MovieDetailsUiState(
     val movieHaveTrailer: Boolean
         get() = movieVideo.isNotEmpty()
 }
-
-data class ActorUIState(
-    val name: String,
-    val avatarUrl: String,
-    val characterName: String,
-    val actorId: Int
-)
-
-data class SimilarMovieUIState(
-    val image: String,
-    val isSaved: Boolean,
-    val movieId: Int,
-)

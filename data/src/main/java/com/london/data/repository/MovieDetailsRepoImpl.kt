@@ -2,8 +2,6 @@ package com.london.data.repository
 
 import com.london.data.datasource.remote.details.moviedetails.MovieDetailsRemoteDataSource
 import com.london.data.mapper.moviedetails.toEntity
-import com.london.data.mapper.moviedetails.toGenre
-import com.london.data.mapper.moviedetails.toSimilarMovie
 import com.london.data.utils.asImageUrlOrEmpty
 import com.london.data.utils.isTrue
 import com.london.domain.entity.Actor
@@ -19,17 +17,13 @@ class MovieDetailsRepoImpl(
 
     override suspend fun getMovieById(id: Int): MovieDetails {
         val remoteDetails = movieDetailsRemoteDataSource.getMovieDetails(id)
-        return remoteDetails.toEntity(
-            genres = remoteDetails.genreRemote?.map { it.toGenre() }.orEmpty(),
-            movieImages = getMovieImagesById(id),
-            movieDuration = remoteDetails.runtime?.toString().orEmpty()
-        )
+        return remoteDetails.toEntity()
     }
 
-    override suspend fun getSimilarMoviesById(id: Int): List<SimilarMovie> {
-        val similarMoviesRemote = movieDetailsRemoteDataSource.getSimilarMovies(id)
-        return similarMoviesRemote.similarMovieRemotes?.map { it.toSimilarMovie() }.orEmpty()
-    }
+    override suspend fun getSimilarMoviesById(id: Int): List<SimilarMovie> =
+        movieDetailsRemoteDataSource.getSimilarMovies(id)
+            .similarMovieRemotes?.map { it.toEntity() }.orEmpty()
+
 
     override suspend fun getMovieImagesById(id: Int): List<String> {
         val images = movieDetailsRemoteDataSource.getMovieImages(id)
@@ -41,10 +35,10 @@ class MovieDetailsRepoImpl(
         }?.take(IMAGE_LIMIT).orEmpty()
     }
 
-    override suspend fun getMovieCastById(id: Int): List<Actor> {
-        val movieCast = movieDetailsRemoteDataSource.getMovieCast(id)
-        return movieCast.actorRemote?.map { it.toEntity() } ?: emptyList()
-    }
+    override suspend fun getMovieCastById(id: Int): List<Actor> =
+        movieDetailsRemoteDataSource.getMovieCast(id).actorRemote?.map { it.toEntity() }
+            ?: emptyList()
+
 
     companion object {
         private const val IMAGE_LIMIT = 10
