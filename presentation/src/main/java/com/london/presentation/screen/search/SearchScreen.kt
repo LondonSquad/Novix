@@ -15,7 +15,6 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -32,9 +31,7 @@ import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
@@ -65,7 +62,8 @@ import com.london.presentation.composables.ActorsLayout
 import com.london.presentation.composables.MoviesLayOut
 import com.london.presentation.composables.TriangleBlurredShape
 import com.london.presentation.composables.TvShowLayOut
-import com.london.presentation.composables.filterbottomsheet.FilterBottomSheet
+import com.london.presentation.composables.FilterBottomSheet
+import com.london.presentation.composables.FilterState
 import com.london.presentation.utils.Listen
 import com.london.presentation.utils.ResultOrEmpty
 import org.koin.androidx.compose.koinViewModel
@@ -105,7 +103,6 @@ fun SearchScreenContent(
     keyboardController: SoftwareKeyboardController?,
 ) {
     val interactionSource = remember { MutableInteractionSource() }
-    var showFilterBottomSheet by remember { mutableStateOf(false) }
 
     Box(
         modifier = Modifier
@@ -133,7 +130,6 @@ fun SearchScreenContent(
                 viewModel = viewModel,
                 interactionSource = interactionSource,
                 keyboardController = keyboardController,
-                onFilterClick = { showFilterBottomSheet = true },
                 modifier = Modifier
                     .padding(start = 16.dp, end = 16.dp, bottom = 12.dp)
                     .fillMaxWidth()
@@ -238,10 +234,17 @@ fun SearchScreenContent(
 
             })
         }
-        if (showFilterBottomSheet) {
-            FilterBottomSheet(
-                onDismissRequest = { showFilterBottomSheet = false })
-        }
+
+        FilterBottomSheet(
+            filterInteractions = viewModel,
+            filterState = FilterState(
+                isSheetVisible = state.showFilterBottomSheet,
+                availableGenres = state.availableGenresWithNames,
+                selectedGenres = state.selectedGenres,
+                minimumImdbRating = state.imdbRating,
+                releaseYearRange = state.releaseYearRange,
+            ),
+        )
     }
 }
 
@@ -251,18 +254,17 @@ private fun SearchBar(
     viewModel: SearchViewModel,
     interactionSource: MutableInteractionSource,
     keyboardController: SoftwareKeyboardController?,
-    onFilterClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
     AnimatedContent(
         targetState = uiState.showFilterButton, transitionSpec = {
-            (fadeIn(animationSpec = tween(0)) + scaleIn(initialScale = 0.98f)) togetherWith (fadeOut(
-                animationSpec = tween(0)
-            ) + scaleOut(targetScale = 0.98f))
+            (fadeIn(animationSpec = tween(200)) + scaleIn(initialScale = 1f)) togetherWith
+                    (fadeOut(animationSpec = tween(200)) + scaleOut(targetScale = 1f))
         }, modifier = modifier
     ) { showFilterButton ->
         Row(
-            modifier = Modifier.fillMaxWidth()
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.spacedBy(8.dp)
         ) {
             OutlinedTextField(
                 value = uiState.searchQuery,
@@ -312,10 +314,9 @@ private fun SearchBar(
             )
 
             if (showFilterButton) {
-                Spacer(modifier = Modifier.width(8.dp))
                 PrimaryButton(
                     text = "",
-                    onClick = onFilterClick,
+                    onClick = viewModel::onFilterClick,
                     isLoading = false,
                     hasIcon = true,
                     icon = R.drawable.icon_filter,
