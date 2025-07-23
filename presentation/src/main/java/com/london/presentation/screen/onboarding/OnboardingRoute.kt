@@ -1,5 +1,6 @@
 package com.london.presentation.screen.onboarding
 
+import android.window.SplashScreen
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -17,7 +18,7 @@ fun OnboardingRoute(
         defaultValue = null,
     )
     when (isOnboardingCompleted) {
-        false -> Unit
+        false -> SplashScreen()
         null -> OnboardingScreen(
             onNext = {
                 isOnboardingCompleted = true
