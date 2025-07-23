@@ -2,8 +2,10 @@ package com.london.presentation.screen.home
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.wrapContentHeight
@@ -23,6 +25,9 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.util.lerp
 import com.london.designsystem.component.HomeCard
 import com.london.designsystem.component.NovixCarousalRow
+import com.london.designsystem.component.Text
+import com.london.designsystem.theme.NovixTheme
+import com.london.presentation.composables.RatingItem
 import kotlin.math.abs
 
 private const val CARD_WIDTH_DP = 244
@@ -47,6 +52,8 @@ fun PopularSection(
     modifier: Modifier = Modifier,
     pagerState: PagerState,
     images: List<String>,
+    cardTitle: String,
+    cardRating: String,
     onSaveClick: () -> Unit,
     onCardClick: () -> Unit,
 ) {
@@ -68,7 +75,8 @@ fun PopularSection(
             pageSpacing = PAGE_SPACING_DP.dp,
             contentPadding = PaddingValues(horizontal = horizontalPadding)
         ) { page ->
-            HomeCard(
+
+            Box(
                 modifier = Modifier
                     .fillMaxWidth()
                     .wrapContentSize(Alignment.Center)
@@ -89,15 +97,49 @@ fun PopularSection(
                         scaleY = lerp(
                             start = SCALE_CURRENT,
                             stop = SCALE_SIDE_CARDS,
-                            fraction = abs(pageOffset).coerceIn(SCALE_MIN_FRACTION, SCALE_MAX_FRACTION)
+                            fraction = abs(pageOffset).coerceIn(
+                                SCALE_MIN_FRACTION,
+                                SCALE_MAX_FRACTION
+                            )
                         )
 
                         transformOrigin = TransformOrigin(TRANSFORM_ORIGIN_X, TRANSFORM_ORIGIN_Y)
-                    }.clickable { onCardClick() },
-                imageUrl = images[page],
-                onSaveClick = { onSaveClick() },
-                hasSaveIcon = pagerState.currentPage == page
-            )
+                    }
+                    .clickable { onCardClick() },
+            ) {
+
+                HomeCard(
+                    imageUrl = images[page],
+                    onSaveClick = { onSaveClick() },
+                    hasSaveIcon = pagerState.currentPage == page
+                )
+
+                if (pagerState.currentPage == page)
+                    Column(
+                        modifier = Modifier
+                            .padding(start = 8.dp, bottom = 6.dp, end = 8.dp)
+                            .align(Alignment.BottomStart),
+                        horizontalAlignment = Alignment.Start,
+                    ) {
+                        Text(
+                            text = cardTitle,
+                            style = NovixTheme.typography.label.medium,
+                            color = NovixTheme.colors.onPrimary,
+                            maxLines = 2,
+                            modifier = Modifier.padding(bottom = 2.dp)
+                        )
+
+                        Row(
+                            modifier = Modifier,
+                            verticalAlignment = Alignment.CenterVertically,
+                            horizontalArrangement = Arrangement.Start
+                        ) {
+                            RatingItem(
+                                rating = cardRating
+                            )
+                        }
+                    }
+            }
         }
 
         NovixCarousalRow(
@@ -115,6 +157,8 @@ private fun Preview(modifier: Modifier = Modifier) {
         pagerState = rememberPagerState(initialPage = 0, pageCount = { 4 }),
         onSaveClick = {},
         onCardClick = {},
+        cardTitle = "Popular",
+        cardRating = "4.5",
         images = listOf(
             "https://image.tmdb.org/t/p/w500/rktDFPbfHfUbArZ6OOOKsXcv0Bm.jpg",
             "https://image.tmdb.org/t/p/w500/rktDFPbfHfUbArZ6OOOKsXcv0Bm.jpg",
