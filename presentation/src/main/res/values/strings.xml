@@ -72,8 +72,9 @@
     <string name="app_icon">App Icon</string>
     <string name="password">Password</string>
     <string name="forgot_password">Forgot Password?</string>
-    <string name="upcoming">Upcoming</string>
     <string name="username">Username</string>">
+    <string name="upcoming">Upcoming</string>
+    <string name="all">All</string>
     <string name="actors">Actors</string>
     <string name="What_you_want_to_watch">What you want to watch?</string>
 </resources>
