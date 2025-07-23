@@ -3,10 +3,10 @@ package com.london.domain.entity.popular
 
 import com.london.domain.KoverIgnore
 
-data class PopularMovie(
+data class PopularTvShow(
     val id: Int,
-    val title: String,
+    val name: String,
+    val overview: String,
     val posterUrl: String,
-    val backdropUrl: String,
-    val rating: Double,
+    val rating: Double
 )
