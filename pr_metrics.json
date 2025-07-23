@@ -6231,5 +6231,33 @@
       "deletions": 55,
       "changed_files": 10
     }
+  },
+  {
+    "pr_number": 265,
+    "url": "https://github.com/LondonSquad/Novix/pull/265",
+    "title": "Feature/Add User Authentication",
+    "opened_at": "2025-07-23T08:58:00Z",
+    "head_ref": "feature/auth",
+    "base_ref": "develop",
+    "creator": {
+      "login": "karimdeabes",
+      "id": 81706918,
+      "url": "https://github.com/karimdeabes"
+    },
+    "approvals": [],
+    "first_approved_at": null,
+    "time_to_first_approval_minutes": null,
+    "required_approvals_met_at": null,
+    "time_to_required_approvals_minutes": null,
+    "closed_at": null,
+    "merged_at": null,
+    "merged_by": null,
+    "week": "2025-W30",
+    "status": "pending",
+    "diff_stats": {
+      "additions": 736,
+      "deletions": 77,
+      "changed_files": 27
+    }
   }
 ]
