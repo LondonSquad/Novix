@@ -6280,8 +6280,8 @@
     "week": "2025-W30",
     "status": "pending",
     "diff_stats": {
-      "additions": 718,
-      "deletions": 77,
+      "additions": 655,
+      "deletions": 92,
       "changed_files": 27
     }
   },
