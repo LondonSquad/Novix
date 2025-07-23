@@ -39,12 +39,8 @@ class AuthRepositoryImpl(
                     authPreferences.saveRequestToken(sessionResponse.requestToken)
                     authPreferences.setGuestMode(false)
                     true
-                } else {
-                    false
-                }
-            }.getOrElse { exception ->
-                false
-            }
+                } else { false }
+            }.getOrElse { false }
         }
     }
 
@@ -56,19 +52,15 @@ class AuthRepositoryImpl(
                     authPreferences.saveGuestSessionId(guestResponse.guestSessionId)
                     authPreferences.setGuestMode(true)
                     true
-                } else {
-                    false
-                }
-            }.getOrElse { exception ->
-                false
-            }
+                } else { false }
+            }.getOrElse { false }
         }
     }
 
     override suspend fun logout(): Boolean {
         return withContext(Dispatchers.IO) {
             val result = runCatching {
-                if (authPreferences.getSessionId() != null && !authPreferences.getGuestMode()) {
+                if (authPreferences.getSessionId() != null && !authPreferences.isGuestMode()) {
                     authApiService.deleteSession()
                 }
                 true
@@ -76,9 +68,7 @@ class AuthRepositoryImpl(
             authPreferences.clearAuth()
 
             result.map { it }
-                .getOrElse { exception ->
-                    false
-                }
+                .getOrElse { false }
         }
     }
 

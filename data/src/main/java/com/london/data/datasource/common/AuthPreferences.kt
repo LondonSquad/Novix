@@ -41,7 +41,7 @@ class AuthPreferences(
         sharedPreferences.edit { putBoolean(IS_GUEST, isGuest) }
     }
 
-    fun getGuestMode(): Boolean {
+    fun isGuestMode(): Boolean {
         return sharedPreferences.getBoolean(IS_GUEST, false)
     }
 

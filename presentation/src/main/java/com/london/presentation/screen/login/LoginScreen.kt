@@ -1,4 +1,5 @@
 package com.london.presentation.screen.login
+
 import android.annotation.SuppressLint
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -20,7 +21,6 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.statusBars
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
@@ -29,15 +29,14 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.london.designsystem.component.Icon
 import com.london.designsystem.component.OutlinedTextField
 import com.london.designsystem.component.Text
 import com.london.designsystem.component.TopBar
 import com.london.designsystem.component.button.PrimaryButton
 import com.london.designsystem.theme.NovixTheme
-import com.london.designsystem.theme.ThemePreviews
 import com.london.presentation.R
 import org.koin.androidx.compose.koinViewModel
 import com.london.designsystem.R as dsR
@@ -48,7 +47,7 @@ fun LoginScreen(
     onNavigateToHome: () -> Unit,
     onNavigateBack: () -> Unit
 ) {
-    val uiState by viewModel.state.collectAsState()
+    val uiState by viewModel.state.collectAsStateWithLifecycle()
     val uriHandler = LocalUriHandler.current
 
     LaunchedEffect(Unit) {
@@ -58,40 +57,24 @@ fun LoginScreen(
                 is LoginEffect.NavigateToCreateAccount -> uriHandler.openUri(effect.url)
                 is LoginEffect.NavigateToForgotPassword -> uriHandler.openUri(effect.url)
                 is LoginEffect.NavigateBack -> onNavigateBack()
-                is LoginEffect.WebAuthProcessCompleted -> {
-                }
-
-                null -> { /* Do nothing for null effect */
-                }
+                null -> TODO()
             }
         }
     }
 
     Box(modifier = Modifier.fillMaxSize()) {
-        LoginContent(
+        Content(
             uiState = uiState,
-            onUsernameChange = viewModel::onUsernameChanged,
-            onPasswordChange = viewModel::onPasswordChanged,
-            onPasswordVisibilityToggle = viewModel::onPasswordVisibilityToggled,
-            onLoginClick = viewModel::onLoginClick,
-            onForgotPasswordClick = viewModel::onForgotPasswordClick,
-            onCreateAccountClick = viewModel::onCreateAccountClick,
-            onBackClick = viewModel::onNavigateBack
+            loginContract = viewModel
         )
     }
 }
 
 @SuppressLint("UnrememberedMutableInteractionSource")
 @Composable
-private fun LoginContent(
+private fun Content(
     uiState: LoginUiState,
-    onUsernameChange: (TextFieldValue) -> Unit,
-    onPasswordChange: (TextFieldValue) -> Unit,
-    onPasswordVisibilityToggle: () -> Unit,
-    onLoginClick: () -> Unit,
-    onForgotPasswordClick: () -> Unit,
-    onCreateAccountClick: () -> Unit,
-    onBackClick: () -> Unit
+    loginContract: LoginContract
 ) {
     val interactionSourceUserName = remember { MutableInteractionSource() }
     val interactionSourcePassword = remember { MutableInteractionSource() }
@@ -120,7 +103,7 @@ private fun LoginContent(
             TopBar(
                 title = stringResource(R.string.login),
                 modifier = Modifier.padding(top = 12.dp),
-                onBackClick = onBackClick
+                onBackClick = loginContract::onNavigateBack
             )
 
             Icon(
@@ -143,17 +126,17 @@ private fun LoginContent(
                 value = uiState.username,
                 label = stringResource(R.string.username),
                 interactionSource = interactionSourceUserName,
-                onValueChange = onUsernameChange,
+                onValueChange = loginContract::onUsernameChanged,
                 leadingIcon = painterResource(dsR.drawable.icon_user),
             )
 
             OutlinedTextField(
                 value = uiState.password,
-                onValueChange = onPasswordChange,
+                onValueChange = loginContract::onPasswordChanged,
                 label = stringResource(R.string.password),
                 isPasswordField = true,
                 passwordVisible = uiState.passwordVisible,
-                onPasswordVisibilityChange = onPasswordVisibilityToggle,
+                onPasswordVisibilityChange = loginContract::onPasswordVisibilityToggled,
                 passwordVisibleIcon = painterResource(id = dsR.drawable.icon_show_password),
                 passwordHiddenIcon = painterResource(id = dsR.drawable.icon_hide_password),
                 interactionSource = interactionSourcePassword,
@@ -167,7 +150,7 @@ private fun LoginContent(
                 hasLabel = true,
                 hasIcon = false,
                 isLoading = uiState.isLoading,
-                onClick = onLoginClick,
+                onClick = loginContract::onLoginClick,
                 icon = null,
                 enabled = uiState.isLoginEnabled && !isLoadingGeneral,
                 modifier = Modifier.fillMaxWidth()
@@ -185,7 +168,7 @@ private fun LoginContent(
                         indication = null,
                         enabled = !isLoadingGeneral
                     ) {
-                        onForgotPasswordClick()
+                        loginContract.onForgotPasswordClick()
                     }
             )
 
@@ -213,31 +196,10 @@ private fun LoginContent(
                         indication = null,
                         enabled = !isLoadingGeneral
                     ) {
-                        onCreateAccountClick()
+                        loginContract.onCreateAccountClick()
                     }
                 )
             }
         }
-    }
-}
-
-@ThemePreviews
-@Composable
-private fun LoginScreenPreview() {
-    NovixTheme {
-        LoginContent(
-            uiState = LoginUiState(
-                username = TextFieldValue(text = "previewUser"),
-                password = TextFieldValue(text = "password")
-            ),
-            onUsernameChange = {},
-            onPasswordChange = {},
-            onPasswordVisibilityToggle = {},
-            onLoginClick = {},
-            onForgotPasswordClick = {},
-            onCreateAccountClick = {},
-            onBackClick = {},
-
-            )
     }
 }

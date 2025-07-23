@@ -12,11 +12,11 @@ import retrofit2.http.GET
 import retrofit2.http.POST
 
 interface AuthApiService {
-    @GET("3/authentication/guest_session/new")
-    suspend fun createGuestSession(): GuestSessionResponse
-
     @GET("3/authentication/token/new")
     suspend fun createRequestToken(): RequestTokenResponse
+
+    @GET("3/authentication/guest_session/new")
+    suspend fun createGuestSession(): GuestSessionResponse
 
     @POST("3/authentication/session/new")
     suspend fun createSession(@Body requestBody: Token): SessionResponse
