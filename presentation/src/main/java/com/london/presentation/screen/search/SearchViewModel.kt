@@ -334,6 +334,10 @@ class SearchViewModel(
         emitEffect(SearchEffect.TvNavigation(tvId = tvShowId))
     }
 
+    override fun onFilterClick() = updateState { copy(showFilterBottomSheet = true) }
+
+    override fun onFilterSheetDismiss() = updateState { copy(showFilterBottomSheet = false) }
+
     fun incrementGenreInterest(genreId: Int, mediaType: String) {
         tryToExecute(
             block = {

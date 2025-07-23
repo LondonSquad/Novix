@@ -17,7 +17,7 @@ data class SearchUiState(
     val error: ErrorState? = null,
     val showNoSearchBefore: Boolean = false,
     val showNoSearchResults: Boolean = false,
-    var showFilterBottomSheet: Boolean = false,
+    val showFilterBottomSheet: Boolean = false,
     val showFilterButton: Boolean = true,
     val isSearchHistoryExpanded: Boolean = false,
     val isMovieSaved: (MovieUi) -> Boolean = { false },
