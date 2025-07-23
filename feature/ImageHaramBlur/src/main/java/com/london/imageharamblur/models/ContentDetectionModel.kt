@@ -88,9 +88,11 @@ internal class ContentDetectionModel {
             DataType.UINT8 -> {
                 // Don't add normalization for UINT8
             }
+
             DataType.FLOAT32 -> {
                 builder.add(NormalizeOp(0f, 255f))
             }
+
             else -> {
                 builder.add(NormalizeOp(0f, 255f))
             }
@@ -122,12 +124,14 @@ internal class ContentDetectionModel {
                     outputBuffer.buffer.asFloatBuffer().get(floatArray)
                     floatArray
                 }
+
                 DataType.UINT8 -> {
                     val byteArray = ByteArray(outputSize)
                     outputBuffer.buffer.get(byteArray)
                     val floatArray = byteArray.map { (it.toInt() and 0xFF) / 255f }.toFloatArray()
                     floatArray
                 }
+
                 else -> {
                     FloatArray(outputSize)
                 }
@@ -138,18 +142,9 @@ internal class ContentDetectionModel {
             val categoryScores = mutableMapOf<Category, Float>()
 
             if (outputSize == 2) {
-                val safeProb = probabilities[0]
                 val unsafeProb = probabilities[1]
-
                 score = unsafeProb
                 isInappropriate = unsafeProb > ImageModerationProcessor.DEFAULT_CONTENT_THRESHOLD
-
-                categoryScores[Category.NEUTRAL] = safeProb
-                categoryScores[Category.PORN] = unsafeProb * 0.5f
-                categoryScores[Category.SEXY] = unsafeProb * 0.3f
-                categoryScores[Category.HENTAI] = unsafeProb * 0.2f
-                categoryScores[Category.DRAWING] = 0f
-
             } else if (outputSize >= 5) {
                 Category.entries.forEach { category ->
                     if (category.index < probabilities.size) {
