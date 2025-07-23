@@ -6,31 +6,31 @@ import kotlinx.serialization.Serializable
 @Serializable
 data class PopularTvShowResponse(
     @SerialName("adult")
-    val adult: Boolean,
+    val adult: Boolean?,
     @SerialName("backdrop_path")
     val backdropPath: String?,
     @SerialName("genre_ids")
-    val genreIds: List<Int>,
+    val genreIds: List<Int>?,
     @SerialName("id")
-    val id: Int,
+    val id: Int?,
     @SerialName("origin_country")
-    val originCountry: List<String>,
+    val originCountry: List<String>?,
     @SerialName("original_language")
-    val originalLanguage: String,
+    val originalLanguage: String?,
     @SerialName("original_name")
-    val originalName: String,
+    val originalName: String?,
     @SerialName("overview")
-    val overview: String,
+    val overview: String?,
     @SerialName("popularity")
-    val popularity: Double,
+    val popularity: Double?,
     @SerialName("poster_path")
     val posterPath: String?,
     @SerialName("first_air_date")
-    val firstAirDate: String,
+    val firstAirDate: String?,
     @SerialName("name")
-    val name: String,
+    val name: String?,
     @SerialName("vote_average")
-    val voteAverage: Double,
+    val voteAverage: Double?,
     @SerialName("vote_count")
-    val voteCount: Int
+    val voteCount: Int?
 )
