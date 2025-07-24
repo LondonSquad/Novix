@@ -173,7 +173,7 @@ class AuthRepositoryImplTest {
 
     // region: isLoggedIn()
     @Test
-    fun `isLoggedIn returns true or false based on preferences`() {
+    fun `isLoggedIn returns true or false based on preferences`() = runTest {
         every { authPreferences.isLoggedIn() } returns true
         assertTrue(repository.isLoggedIn())
 

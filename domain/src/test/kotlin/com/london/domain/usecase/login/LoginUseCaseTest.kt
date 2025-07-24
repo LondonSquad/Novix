@@ -28,7 +28,7 @@ class LoginUseCaseTest {
   coEvery { authRepository.login(username, password) } returns true
 
   // When
-  val result = loginUseCase(username, password)
+  val result = loginUseCase.invoke(username, password)
 
   // Then
   coVerify(exactly = 1) { authRepository.login(username, password) }
@@ -43,7 +43,7 @@ class LoginUseCaseTest {
   coEvery { authRepository.login(username, password) } returns false
 
   // When
-  val result = loginUseCase(username, password)
+  val result = loginUseCase.invoke(username, password)
 
   // Then
   coVerify(exactly = 1) { authRepository.login(username, password) }

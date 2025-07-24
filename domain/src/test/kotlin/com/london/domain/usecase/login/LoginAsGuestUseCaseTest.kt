@@ -26,7 +26,7 @@ class LoginAsGuestUseCaseTest {
   coEvery { authRepository.loginAsGuest() } returns true
 
   // When
-  val result = loginAsGuestUseCase()
+  val result = loginAsGuestUseCase.invoke()
 
   // Then
   coVerify(exactly = 1) { authRepository.loginAsGuest() }
@@ -39,7 +39,7 @@ class LoginAsGuestUseCaseTest {
   coEvery { authRepository.loginAsGuest() } returns false
 
   // When
-  val result = loginAsGuestUseCase()
+  val result = loginAsGuestUseCase.invoke()
 
   // Then
   coVerify(exactly = 1) { authRepository.loginAsGuest() }
