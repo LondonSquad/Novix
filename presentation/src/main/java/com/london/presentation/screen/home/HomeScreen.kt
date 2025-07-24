@@ -28,6 +28,7 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.paging.compose.LazyPagingItems
 import androidx.paging.compose.collectAsLazyPagingItems
+import com.london.designsystem.component.DefaultTopBar
 import com.london.designsystem.component.HomeCard
 import com.london.designsystem.component.NovixChip
 import com.london.designsystem.component.Text
@@ -44,6 +45,7 @@ import org.koin.compose.viewmodel.koinViewModel
 @Composable
 fun HomeScreen(
     onMovieClick: (movieId: Int) -> Unit = {},
+    onTvShowClick: (tvShowId: Int) -> Unit = {},
     viewModel: HomeViewModel = koinViewModel()
 ) {
 
@@ -53,12 +55,13 @@ fun HomeScreen(
     effect?.Listen { currentEffect ->
         when (currentEffect) {
             is HomeScreenEffect.NavigationMovieDetails -> onMovieClick(currentEffect.id)
+            is HomeScreenEffect.NavigationTvShowDetails -> onTvShowClick(currentEffect.id)
         }
     }
 
-    val lazyGridState = rememberSaveable (
+    val lazyGridState = rememberSaveable(
         saver = LazyGridState.Saver,
-    ){
+    ) {
         LazyGridState()
     }
     when {
@@ -68,7 +71,6 @@ fun HomeScreen(
             homeScreenContract = viewModel,
             uiState = uiState,
             modifier = Modifier
-                .padding(top = 20.dp)
                 .fillMaxSize(),
             lazyGridState = lazyGridState
         )
@@ -88,8 +90,12 @@ private fun Content(
         LocalConfiguration.current.screenWidthDp.dp
     }
     val upcomingMoviesLazyList = uiState.upcomingMovies.collectAsLazyPagingItems()
-    val pagerState =
-        rememberPagerState(initialPage = 0, pageCount = { uiState.popularMovies.size })
+
+    val totalPopularItems = uiState.popularMovies.size + uiState.popularTvShows.size
+
+    val pagerState = rememberPagerState(initialPage = 0, pageCount = { totalPopularItems })
+
+
     LazyVerticalGrid(
         columns = GridCells.Fixed(2),
         contentPadding = PaddingValues(
@@ -105,19 +111,53 @@ private fun Content(
             .background(color = NovixTheme.colors.surface)
     ) {
 
-        item(span = { GridItemSpan(maxLineSpan) }) {
-            PopularSection(
-                modifier = modifier
-                    .requiredWidth(screenWidth),
-                pagerState = pagerState,
-                images = uiState.popularMovies.map { it.posterUrl },
-                onSaveClick = {/*TODO: SAVE FUNCTIONALITY IS NOT IMPLEMENTED.*/ },
-                onCardClick = {
-                    homeScreenContract.onMovieClick(
-                        uiState.popularMovies[pagerState.currentPage].id
-                    )
-                }
+        stickyHeader {
+            DefaultTopBar(
+                modifier = Modifier
+                    .requiredWidth(screenWidth)
+                    .background(NovixTheme.colors.surface)
+                    .padding(top = 12.dp)
             )
+        }
+
+        if (totalPopularItems > 0) {
+            val moviesCount = uiState.popularMovies.size
+            val currentPage = pagerState.currentPage
+
+            val popularCardImages = uiState.popularMovies.map { it.posterUrl } +
+                    uiState.popularTvShows.map { it.posterUrl }
+
+            val popularCardRating = uiState.popularMovies.map { it.rating } +
+                    uiState.popularTvShows.map { it.rating }
+
+            val popularCardTitle = uiState.popularMovies.map { it.title } +
+                    uiState.popularTvShows.map { it.name }
+
+            item(span = { GridItemSpan(maxLineSpan) }) {
+                PopularSection(
+                    modifier = modifier
+                        .requiredWidth(screenWidth),
+                    pagerState = pagerState,
+                    images = popularCardImages,
+                    onSaveClick = {/*TODO: SAVE FUNCTIONALITY IS NOT IMPLEMENTED.*/ },
+                    cardRating = popularCardRating[currentPage].toString(),
+                    cardTitle = popularCardTitle[currentPage],
+                    onCardClick = {
+                        if (currentPage < moviesCount) {
+                            homeScreenContract.onMovieClick(
+                                uiState.popularMovies[currentPage].id
+                            )
+                        } else {
+                            val tvShowIndex = currentPage - moviesCount
+                            if (tvShowIndex < uiState.popularTvShows.size) {
+                                homeScreenContract.onTvShowClick(
+                                    uiState.popularTvShows[tvShowIndex].id
+                                )
+                            }
+                        }
+                    }
+                )
+            }
         }
 
         item(span = { GridItemSpan(maxLineSpan) }) {

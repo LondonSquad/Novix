@@ -4,5 +4,6 @@ import com.london.presentation.utils.Genre
 
 interface HomeScreenContract {
     fun onMovieClick(id: Int)
+    fun onTvShowClick(id: Int)
     fun onGenreSelect(genre: Genre)
 }

@@ -31,7 +31,7 @@ fun RatingItem(
         Text(
             text = rating,
             style = NovixTheme.typography.label.small,
-            color = NovixTheme.colors.title
+            color = NovixTheme.colors.onPrimary
         )
     }
 }
