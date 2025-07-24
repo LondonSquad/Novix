@@ -20,6 +20,7 @@ import com.london.domain.entity.Movie
 import com.london.domain.entity.PagedFetchResponse
 import com.london.domain.entity.TvShow
 import io.mockk.coEvery
+import io.mockk.coJustRun
 import io.mockk.coVerify
 import io.mockk.impl.annotations.MockK
 import io.mockk.mockk
@@ -329,6 +330,23 @@ class SearchRepositoryImplTest {
         val result = repository.getUpComingMoviesByCategory(1, PAGE_NUMBER)
         assertThat(result).isEqualTo(MovieList)
     }
+    @Test
+    fun `incrementGenreInterest inserts new genre when not existing`() = runTest {
+        val genreId = 1
+        val mediaType = "movie"
+
+        coEvery { genreInterestDao.getGenreInterest(genreId, mediaType) } returns null
+        coJustRun { genreInterestDao.insertGenreInterest(any()) }
+
+        repository.incrementGenreInterest(genreId, mediaType)
+
+        coVerify {
+            genreInterestDao.insertGenreInterest(
+                GenreInterestEntity(genreId, mediaType, count = 1)
+            )
+        }
+    }
+
 
     private companion object {
         const val NAME = "Tom"
@@ -477,23 +495,5 @@ class SearchRepositoryImplTest {
             totalItems = 1
         )
 
-        val SearchActorsRemoteMock = ApiResponse(
-            currentPage = PAGE_NUMBER,
-            items = listOf(
-                SearchActorRemote(
-                    adult = false,
-                    gender = 2,
-                    id = 3,
-                    knownForDepartment = "",
-                    name = "Tom Holland",
-                    originalName = "Tom Holland",
-                    popularity = 0.0,
-                    profilePath = "",
-                    knownFor = emptyList()
-                )
-            ),
-            totalPages = 1,
-            totalItems = 1
-        )
     }
 }
