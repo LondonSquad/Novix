@@ -3,37 +3,53 @@ package com.london.presentation.utils
 import androidx.annotation.StringRes
 import com.london.presentation.R
 
-data class GenreId(
-    @StringRes val name: Int,
-    val movieId: Int,
-    val tvShowId: Int,
-)
-
-enum class Genre(val id: GenreId) {
-    All(id = GenreId(name = R.string.all, movieId = 0, tvShowId = 0)),
-    Action(id = GenreId(name = R.string.action, movieId = 28, tvShowId = 10759)),
-    Adventure(id = GenreId(name = R.string.adventure, movieId = 12, tvShowId = 10759)),
-    Animation(id = GenreId(name = R.string.animation, movieId = 16, tvShowId = 16)),
-    Comedy(id = GenreId(name = R.string.comedy, movieId = 35, tvShowId = 35)),
-    Crime(id = GenreId(name = R.string.crime, movieId = 80, tvShowId = 80)),
-    Documentary(id = GenreId(name = R.string.documentary, movieId = 99, tvShowId = 99)),
-    Drama(id = GenreId(name = R.string.drama, movieId = 18, tvShowId = 18)),
-    Family(id = GenreId(name = R.string.family, movieId = 10751, tvShowId = 10751)),
-    Fantasy(id = GenreId(name = R.string.fantasy, movieId = 14, tvShowId = 10765)),
-    History(id = GenreId(name = R.string.history, movieId = 36, tvShowId = 0)),
-    Horror(id = GenreId(name = R.string.horror, movieId = 27, tvShowId = 0)),
-    Music(id = GenreId(name = R.string.music, movieId = 10402, tvShowId = 0)),
-    Mystery(id = GenreId(name = R.string.mystery, movieId = 9648, tvShowId = 9648)),
-    Romance(id = GenreId(name = R.string.romance, movieId = 10749, tvShowId = 0)),
-    SciFi(id = GenreId(name = R.string.sci_fi, movieId = 878, tvShowId = 10765)),
-    TvMovie(id = GenreId(name = R.string.tv_movie, movieId = 10770, tvShowId = 0)),
-    Thriller(id = GenreId(name = R.string.thriller, movieId = 53, tvShowId = 0)),
-    War(id = GenreId(name = R.string.war, movieId = 10752, tvShowId = 10768)),
-    Western(id = GenreId(name = R.string.western, movieId = 37, tvShowId = 37)),
-    Kids(id = GenreId(name = R.string.kids, movieId = 0, tvShowId = 10762)),
-    News(id = GenreId(name = R.string.news, movieId = 0, tvShowId = 10763)),
-    Reality(id = GenreId(name = R.string.reality, movieId = 0, tvShowId = 10764)),
-    Soap(id = GenreId(name = R.string.soap, movieId = 0, tvShowId = 10766)),
-    Talk(id = GenreId(name = R.string.talk, movieId = 0, tvShowId = 10767)),
-    Politics(id = GenreId(name = R.string.politics, movieId = 0, tvShowId = 10768)),
+enum class MovieGenre(
+    val id: Int,
+    @StringRes val stringResId: Int
+) {
+    All(id = -1, stringResId = R.string.all),
+    Action(id = 28, stringResId = R.string.action),
+    Adventure(id = 12, stringResId = R.string.adventure),
+    Animation(id = 16, stringResId = R.string.animation),
+    Comedy(id = 35, stringResId = R.string.comedy),
+    Crime(id = 80, stringResId = R.string.crime),
+    Documentary(id = 99, stringResId = R.string.documentary),
+    Drama(id = 18, stringResId = R.string.drama),
+    Family(id = 10751, stringResId = R.string.family),
+    Fantasy(id = 14, stringResId = R.string.fantasy),
+    History(id = 36, stringResId = R.string.history),
+    Horror(id = 27, stringResId = R.string.horror),
+    Music(id = 10402, stringResId = R.string.music),
+    Mystery(id = 9648, stringResId = R.string.mystery),
+    Romance(id = 10749, stringResId = R.string.romance),
+    SciFi(id = 878, stringResId = R.string.sci_fi),
+    TvMovie(id = 10770, stringResId = R.string.tv_movie),
+    Thriller(id = 53, stringResId = R.string.thriller),
+    War(id = 10752, stringResId = R.string.war),
+    Western(id = 37, stringResId = R.string.western),
 }
+
+enum class TvShowGenre(
+    val id: Int,
+    @StringRes val stringResId: Int
+) {
+    All(id = -1, stringResId = R.string.all),
+    ActionAdventure(id = 10759, stringResId = R.string.action_adventure),
+    Animation(id = 16, stringResId = R.string.animation),
+    Comedy(id = 35, stringResId = R.string.comedy),
+    Crime(id = 80, stringResId = R.string.crime),
+    Documentary(id = 99, stringResId = R.string.documentary),
+    Drama(id = 18, stringResId = R.string.drama),
+    Family(id = 10751, stringResId = R.string.family),
+    Kids(id = 10762, stringResId = R.string.kids),
+    Mystery(id = 9648, stringResId = R.string.mystery),
+    News(id = 10763, stringResId = R.string.news),
+    Reality(id = 10764, stringResId = R.string.reality),
+    Fantasy(id = 10765, stringResId = R.string.fantasy),
+    Soap(id = 10766, stringResId = R.string.soap),
+    Talk(id = 10767, stringResId = R.string.talk),
+    WarPolitics(id = 10768, stringResId = R.string.war_politics),
+    Western(id = 37, stringResId = R.string.western),
+}
+
+

@@ -38,8 +38,8 @@ import com.london.presentation.R
 import com.london.presentation.screen.LoadingScreen
 import com.london.presentation.screen.NetworkErrorScreen
 import com.london.presentation.screen.base.ErrorState
-import com.london.presentation.utils.Genre
 import com.london.presentation.utils.Listen
+import com.london.presentation.utils.MovieGenre
 import org.koin.compose.viewmodel.koinViewModel
 
 @Composable
@@ -219,7 +219,7 @@ private fun GenresSection(
         contentPadding = PaddingValues(horizontal = 16.dp),
         modifier = Modifier.requiredWidth(screenWidth)
     ) {
-        items(Genre.entries.toTypedArray()) { genre ->
+        items(MovieGenre.entries.toTypedArray()) { genre ->
             NovixChip(
                 text = genre.name,
                 isSelected = (genre == state.selectedGenre),

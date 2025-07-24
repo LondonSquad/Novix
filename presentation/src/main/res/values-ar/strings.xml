@@ -79,4 +79,6 @@
     <string name="all">الكل</string>
     <string name="popular">شائع</string>
     <string name="politics">سياسي</string>
+    <string name="action_adventure">اكشن ومغامره</string>
+    <string name="war_politics">حرب وسياسه</string>
 </resources>

@@ -9,7 +9,7 @@ import com.london.domain.usecase.GetPopularTvShow
 import com.london.domain.usecase.GetUpComingMoviesByCategoryUseCase
 import com.london.presentation.screen.base.BaseViewModel
 import com.london.presentation.screen.base.createPagingSourceFlow
-import com.london.presentation.utils.Genre
+import com.london.presentation.utils.MovieGenre
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -98,9 +98,9 @@ class HomeViewModel(
         }
     }
 
-    override fun onGenreSelect(genre: Genre) {
+    override fun onGenreSelect(genre: MovieGenre) {
         if (genre == state.value.selectedGenre) return
         updateState { copy(selectedGenre = genre) }
-        loadUpcomingMovies(categoryId = if (genre == Genre.All) null else genre.id.movieId)
+        loadUpcomingMovies(categoryId = if (genre == MovieGenre.All) null else genre.id)
     }
 }
