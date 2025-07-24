@@ -6583,5 +6583,33 @@
       "deletions": 0,
       "changed_files": 23
     }
+  },
+  {
+    "pr_number": 275,
+    "url": "https://github.com/LondonSquad/Novix/pull/275",
+    "title": "fix: implement clickable navigation in episode details screen to navi…",
+    "opened_at": "2025-07-24T11:36:40Z",
+    "head_ref": "fix/guest-honor-not-clickable",
+    "base_ref": "develop",
+    "creator": {
+      "login": "BassantM",
+      "id": 102248144,
+      "url": "https://github.com/BassantM"
+    },
+    "approvals": [],
+    "first_approved_at": null,
+    "time_to_first_approval_minutes": null,
+    "required_approvals_met_at": null,
+    "time_to_required_approvals_minutes": null,
+    "closed_at": null,
+    "merged_at": null,
+    "merged_by": null,
+    "week": "2025-W30",
+    "status": "pending",
+    "diff_stats": {
+      "additions": 29,
+      "deletions": 15,
+      "changed_files": 5
+    }
   }
 ]
