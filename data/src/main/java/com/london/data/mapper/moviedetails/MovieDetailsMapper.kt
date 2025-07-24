@@ -7,7 +7,7 @@ import com.london.data.utils.isTrue
 import com.london.data.utils.orZero
 import com.london.data.utils.roundToFirstDecimal
 import com.london.domain.entity.Actor
-import com.london.domain.entity.moviedatails.Genre
+import com.london.domain.entity.Genre
 import com.london.domain.entity.moviedatails.MovieDetails
 import com.london.domain.entity.moviedatails.SimilarMovie
 

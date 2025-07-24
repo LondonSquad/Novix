@@ -2,7 +2,7 @@ package com.london.data.repository
 
 import com.london.data.datasource.remote.details.moviedetails.MovieDetailsRemoteDataSource
 import com.london.data.mapper.moviedetails.toEntity
-import com.london.data.mapper.moviedetails.toGenre
+import com.london.data.mapper.genre.toGenre
 import com.london.data.mapper.moviedetails.toSimilarMovie
 import com.london.data.utils.asImageUrlOrEmpty
 import com.london.data.utils.isTrue
