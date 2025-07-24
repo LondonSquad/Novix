@@ -29,4 +29,5 @@
     <string name="no_internet">NO internet image</string>
     <string name="you_are_offline">Oops! It looks like you’re offline.</string>
     <string name="check_your_connection">Check your connection and try again, we’ll be waiting with your movies and popcorn</string>
+    <string name="incorrect_password">Incorrect password</string>
 </resources>
