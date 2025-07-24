@@ -12,5 +12,6 @@ class GetRecentWatchedMoviesUseCase(
     private val recentWatchedRepository: RecentWatchedRepository
 ) {
 
-    suspend fun invoke() = recentWatchedRepository.getAllRecentWatchedMovies()
+    suspend fun invoke(limit: Int? = null) =
+        recentWatchedRepository.getAllRecentWatchedMovies().take(limit ?: Int.MAX_VALUE)
 }
