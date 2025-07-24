@@ -6,7 +6,7 @@ import com.london.domain.GetMovieDetailsFailedException
 import com.london.domain.GetMovieImagesFailedException
 import com.london.domain.GetSimilarMoviesFailedException
 import com.london.domain.entity.Actor
-import com.london.domain.entity.moviedatails.Genre
+import com.london.domain.entity.Genre
 import com.london.domain.entity.moviedatails.MovieDetails
 import com.london.domain.entity.moviedatails.SimilarMovie
 import io.mockk.coEvery
