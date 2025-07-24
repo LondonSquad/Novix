@@ -24,6 +24,7 @@ import com.london.designsystem.theme.NovixTheme
 import com.london.presentation.navigation.Screen
 import com.london.presentation.navigation.Screen.Account
 import com.london.presentation.navigation.Screen.ActorDetails
+import com.london.presentation.navigation.Screen.ActorGallery
 import com.london.presentation.navigation.Screen.ActorTopMoviesPicksDetails
 import com.london.presentation.navigation.Screen.Bookmarks
 import com.london.presentation.navigation.Screen.Categories
@@ -35,6 +36,8 @@ import com.london.presentation.navigation.Screen.MoviesByCategory
 import com.london.presentation.navigation.Screen.Reviews
 import com.london.presentation.navigation.Screen.Search
 import com.london.presentation.navigation.Screen.TopTvShowsPicksDetails
+import com.london.presentation.navigation.Screen.Trending
+import com.london.presentation.navigation.Screen.TrendingMovies
 import com.london.presentation.navigation.Screen.TvShowDetails
 import com.london.presentation.screen.account.AccountScreen
 import com.london.presentation.screen.bookmark.BookmarksScreen
@@ -48,6 +51,7 @@ import com.london.presentation.screen.details.movieDetalis.MovieDetailsScreen
 import com.london.presentation.screen.details.tvshow.episodedetails.EpisodeDetailsScreen
 import com.london.presentation.screen.details.tvshow.tvshowdetails.TvShowsDetailsScreen
 import com.london.presentation.screen.home.HomeScreen
+import com.london.presentation.screen.home.trending.TrendingMoviesScreen
 import com.london.presentation.screen.login.LoginScreen
 import com.london.presentation.screen.reviews.ReviewsScreen
 import com.london.presentation.screen.search.SearchScreen
@@ -127,6 +131,15 @@ fun NovixApp() {
                 HomeScreen(
                     onMovieClick = { movieId ->
                         navController.navigate(MovieDetails(movieId))
+                    },
+                    onTrendingMovies = {
+                        navController.navigate(Screen.TrendingMovies)
+                    },
+                    onTrendingTvShows = {
+                        navController.navigate(Trending(1))
+                    },
+                    onTrendingActors = {
+                        navController.navigate(Trending(2))
                     }
                 )
             }
@@ -287,7 +300,7 @@ fun NovixApp() {
                         navController.navigate(TopTvShowsPicksDetails(actorId))
                     },
                     onNavigateToGallery = { actorId ->
-                        navController.navigate(Screen.ActorGallery(actorId))
+                        navController.navigate(ActorGallery(actorId))
                     },
                     onNavigateToMovieScreen = { movieId ->
                         navController.navigate(MovieDetails(movieId))
@@ -309,9 +322,28 @@ fun NovixApp() {
                     onBackClick = { navController.popBackStack() }
                 )
             }
-            composable<Screen.ActorGallery> {
+            composable<ActorGallery> {
                 ActorGalleryScreen(
                     onBackClick = { navController.popBackStack() }
+                )
+            }
+            composable<Trending> {
+                SearchScreen(
+                    onNavigateToTvShowDetails = { tvShowId ->
+                        navController.navigate(TvShowDetails(tvShowId))
+                    },
+                    onNavigateToActorDetails = { actorId ->
+                        navController.navigate(ActorDetails(actorId))
+                    },
+                    onNavigateToMovieDetails = { movieId ->
+                        navController.navigate(MovieDetails(movieId))
+                    }
+                )
+            }
+            composable<TrendingMovies> {
+                TrendingMoviesScreen(
+                    onBackClick = { navController.navigateUp() },
+                    onMovieClick = { movieId -> navController.navigate(MovieDetails(movieId)) }
                 )
             }
         }
