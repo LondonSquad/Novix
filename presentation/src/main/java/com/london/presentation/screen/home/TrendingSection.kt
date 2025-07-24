@@ -48,12 +48,13 @@ fun TrendingSection(
             style = NovixTheme.typography.headline.small,
             color = NovixTheme.colors.title,
             modifier = Modifier
-                .padding(bottom = 12.dp)
+                .padding(bottom = 24.dp)
                 .zIndex(1f)
         )
 
         Row(
             modifier = Modifier
+                .padding(bottom = 12.dp)
                 .fillMaxWidth()
                 .wrapContentHeight()
                 .background(NovixTheme.colors.surface),

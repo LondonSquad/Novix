@@ -17,12 +17,12 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import com.london.imageharamblur.ui.ImageViewFilter
 import com.london.designsystem.component.CircularLoading
 import com.london.designsystem.component.NovixCarousalRow
 import com.london.designsystem.component.UnSuitableEye
 import com.london.designsystem.component.button.ErrorImage
 import com.london.designsystem.theme.NovixTheme
+import com.london.imageharamblur.ui.ImageViewFilter
 import com.london.presentation.R
 import kotlinx.coroutines.currentCoroutineContext
 import kotlinx.coroutines.delay
@@ -38,8 +38,10 @@ fun CustomBackDropImagePager(
             modifier = modifier
                 .fillMaxWidth()
                 .height(252.dp)
-                .background(NovixTheme.colors.surface)
+                .background(NovixTheme.colors.surface),
+            contentAlignment = Alignment.Center
         ) {
+            ErrorImage()
             NovixCarousalRow(
                 dotsStates = listOf(false),
                 modifier = Modifier
