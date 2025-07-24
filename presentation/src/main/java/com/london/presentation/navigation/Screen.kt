@@ -27,6 +27,9 @@ sealed interface Screen {
     object TrendingMovies : Screen
 
     @Serializable
+    data object TrendingTvShows : Screen
+
+    @Serializable
     data class TvShowDetails(
         val tvShowId: Int,
     ) : Screen
