@@ -9,6 +9,7 @@ import com.london.imageharamblur.utils.blurBitmap
 import com.london.imageharamblur.utils.toBitmap
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.withContext
 
 class ImageModerationController(
@@ -24,21 +25,16 @@ class ImageModerationController(
     private val _state = MutableStateFlow(
         ModerationCacheManager.get(cacheKey) ?: ImageModerationState()
     )
-
-    init {
-        ModerationCacheManager.get(cacheKey)?.let { cachedState ->
-            _state.value = cachedState
-        }
-    }
+    val state: StateFlow<ImageModerationState> = _state
 
     suspend fun processImage(
         drawable: Drawable,
         detectFemales: Boolean = true,
         detectMales: Boolean = false,
-        useContentDetection: Boolean = true,
-        strictMode: Boolean = false
+        useContentDetection: Boolean = true
     ): ImageModerationState = withContext(Dispatchers.Default) {
 
+        // Check cache first
         ModerationCacheManager.get(cacheKey)?.let { cachedState ->
             if (cachedState.isModerated && cachedState.originalBitmap != null) {
                 _state.value = cachedState
@@ -66,23 +62,21 @@ class ImageModerationController(
                 return@withContext newState
             }
 
-            val result = processor.processImage(
+            val shouldModerate = processor.shouldModerateImage(
                 bitmap = bitmap,
                 detectFemales = detectFemales,
                 detectMales = detectMales,
-                useContentDetection = useContentDetection,
-                strictMode = strictMode
+                useContentDetection = useContentDetection
             )
 
-            val blurredBitmap = if (result.shouldModerate && Build.VERSION.SDK_INT < Build.VERSION_CODES.S) {
+            val blurredBitmap = if (shouldModerate && Build.VERSION.SDK_INT < Build.VERSION_CODES.S) {
                 blurBitmap(bitmap, blurStrength.toInt())
             } else null
 
             val newState = ImageModerationState(
                 isProcessing = false,
                 isModerated = true,
-                shouldBlur = result.shouldModerate,
-                moderationReason = result.reason,
+                shouldBlur = shouldModerate,
                 originalBitmap = bitmap,
                 blurredBitmap = blurredBitmap
             )
@@ -100,5 +94,9 @@ class ImageModerationController(
             _state.value = errorState
             errorState
         }
+    }
+
+    fun close() {
+        processor?.close()
     }
 }

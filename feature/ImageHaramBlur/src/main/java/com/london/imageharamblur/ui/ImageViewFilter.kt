@@ -5,12 +5,7 @@ import android.graphics.drawable.Drawable
 import android.util.Log
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
@@ -30,7 +25,7 @@ fun ImageViewFilter(
     config: ImageFilterConfig = ImageFilterConfig(),
     loadingContent: @Composable () -> Unit,
     errorContent: @Composable (String?) -> Unit,
-    onModerationResult: ((Boolean, String?) -> Unit)? = null,
+    onModerationResult: ((Boolean) -> Unit)? = null,
     onLoadingStateChange: ((Boolean) -> Unit)? = null,
     moderatedContent: @Composable () -> Unit = @Composable {}
 ) {
@@ -46,6 +41,8 @@ fun ImageViewFilter(
         isLoading = true
         errorState = null
 
+        var controller: ImageModerationController? = null
+
         try {
             val drawable = loadImageDrawable(context, model)
 
@@ -56,21 +53,29 @@ fun ImageViewFilter(
                 return@LaunchedEffect
             }
 
-            val state = processImageModeration(
+            controller = createModerationController(
                 context = context,
                 imageKey = imageKey,
-                drawable = drawable,
                 config = config
             )
 
+            val state = controller.processImage(
+                drawable = drawable,
+                detectFemales = config.detectFemales,
+                detectMales = config.detectMales,
+                useContentDetection = config.useContentDetection
+            )
+
             moderationState = state
-            onModerationResult?.invoke(state.shouldBlur, state.moderationReason)
+            onModerationResult?.invoke(state.shouldBlur)
             isLoading = false
             onLoadingStateChange?.invoke(false)
         } catch (e: Exception) {
             errorState = e.message
             isLoading = false
             onLoadingStateChange?.invoke(false)
+        } finally {
+            controller?.close()
         }
     }
 
@@ -94,7 +99,6 @@ fun ImageViewFilter(
                     moderatedContent()
                 }
             }
-
             else -> Log.d(
                 "ImageViewFilter",
                 "No content to show - moderationState: $moderationState"
@@ -108,10 +112,8 @@ data class ImageFilterConfig(
     val blurStrength: Float = 80f,
     val detectFemales: Boolean = true,
     val detectMales: Boolean = false,
-    val useContentDetection: Boolean = true,
-    val strictMode: Boolean = false
+    val useContentDetection: Boolean = true
 )
-
 
 private fun generateImageKey(model: Any?): String = when (model) {
     is String -> model
@@ -136,27 +138,6 @@ private suspend fun loadImageDrawable(
         Log.e("ImageViewFilter", "Failed to load image", e)
         null
     }
-}
-
-private suspend fun processImageModeration(
-    context: Context,
-    imageKey: String,
-    drawable: Drawable,
-    config: ImageFilterConfig
-): ImageModerationState {
-    val controller = createModerationController(
-        context = context,
-        imageKey = imageKey,
-        config = config
-    )
-
-    return controller.processImage(
-        drawable = drawable,
-        detectFemales = config.detectFemales,
-        detectMales = config.detectMales,
-        useContentDetection = config.useContentDetection,
-        strictMode = config.strictMode
-    )
 }
 
 private fun createModerationController(
