@@ -21,7 +21,6 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.london.designsystem.component.NavBar
 import com.london.designsystem.theme.NovixTheme
-import com.london.domain.AppPreferencesService
 import com.london.presentation.navigation.Screen
 import com.london.presentation.navigation.Screen.Account
 import com.london.presentation.navigation.Screen.ActorDetails
@@ -48,14 +47,11 @@ import com.london.presentation.screen.details.movieDetalis.MovieDetailsScreen
 import com.london.presentation.screen.details.tvshow.episodedetails.EpisodeDetailsScreen
 import com.london.presentation.screen.details.tvshow.tvshowdetails.TvShowsDetailsScreen
 import com.london.presentation.screen.home.HomeScreen
-import com.london.presentation.screen.login.LoginScreen
-import com.london.presentation.screen.onboarding.OnboardingRoute
-import com.london.presentation.screen.onboarding.WelcomeScreen
 import com.london.presentation.screen.reviews.ReviewsScreen
 import com.london.presentation.screen.search.SearchScreen
 
 @Composable
-fun NovixApp(appPreferencesService: AppPreferencesService) {
+fun NovixApp() {
     val navController = rememberNavController()
     val navBackStackEntry by navController.currentBackStackEntryAsState()
     val currentDestination = navBackStackEntry?.destination
@@ -66,6 +62,7 @@ fun NovixApp(appPreferencesService: AppPreferencesService) {
         currentDestination?.hasRoute<Categories>() == true -> Categories
         currentDestination?.hasRoute<Bookmarks>() == true -> Bookmarks
         currentDestination?.hasRoute<Account>() == true -> Account
+        currentDestination?.hasRoute<Login>() == true -> Login
         else -> Home
     }
 
@@ -74,9 +71,6 @@ fun NovixApp(appPreferencesService: AppPreferencesService) {
             currentDestination?.hasRoute<Categories>() == true ||
             currentDestination?.hasRoute<Bookmarks>() == true ||
             currentDestination?.hasRoute<Account>() == true
-            currentDestination?.hasRoute<Screen.OnboardingPager>() != true &&
-            currentDestination?.hasRoute<Screen.Welcome>() != true
-
 
 
     val isOnboardingShown = appPreferencesService.hasOnboardingBeenShown
@@ -109,6 +103,26 @@ fun NovixApp(appPreferencesService: AppPreferencesService) {
             startDestination = startDestination,
             modifier = Modifier.padding(innerPadding)
         ) {
+
+            composable<Login>(
+                exitTransition = { fadeOut(tween(500)) },
+                popEnterTransition = { fadeIn(tween(500)) },
+                enterTransition = { fadeIn(tween(500)) },
+                popExitTransition = { fadeOut(tween(500)) },
+            ) {
+                LoginScreen(
+                    onNavigateToHome = {
+                        navController.navigate(Screen.Home) {
+                            popUpTo(Screen.Login) { inclusive = true }
+                            launchSingleTop = true
+                        }
+                    },
+                    onNavigateBack = {
+                        navController.popBackStack()
+                    }
+                )
+            }
+
             composable<Home>(
                 exitTransition = { fadeOut(tween(500)) },
                 popEnterTransition = { fadeIn(tween(500)) },
@@ -270,7 +284,7 @@ fun NovixApp(appPreferencesService: AppPreferencesService) {
                 )
             }
 
-            composable<Screen.ActorDetails> {
+            composable<ActorDetails> {
                 ActorDetailsScreen(
                     onNavigateToMoviePicks = { actorId ->
                         navController.navigate(ActorTopMoviesPicksDetails(actorId))
