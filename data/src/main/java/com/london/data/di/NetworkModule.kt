@@ -15,6 +15,7 @@ import com.london.data.datasource.remote.home.popular.api.PopularApiService
 import com.london.data.datasource.remote.reviews.api.ReviewsApiService
 import com.london.data.datasource.remote.search.api.SearchApiService
 import com.london.domain.repository.SessionTokenProvider
+import com.london.data.datasource.remote.home.trending.api.TrendingApiService
 import kotlinx.serialization.json.Json
 import okhttp3.Cache
 import okhttp3.Interceptor
@@ -139,6 +140,10 @@ class NetworkModule {
     fun provideAuthPreferences(context: Context): AuthPreferences {
         return AuthPreferences(context.getSharedPreferences("auth", Context.MODE_PRIVATE))
     }
+    @Single
+    fun provideTrendingApiService(retrofit: Retrofit): TrendingApiService =
+        retrofit.create(TrendingApiService::class.java)
+
 
     @Single
     fun provideAuthApi(retrofit: Retrofit): AuthApiService {
