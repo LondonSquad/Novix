@@ -5,6 +5,8 @@ import com.london.data.datasource.local.DatabaseProvider
 import com.london.data.datasource.local.NovixDatabase
 import com.london.data.datasource.local.dao.recent.search.RecentSearchDao
 import com.london.data.datasource.local.dao.recent.viewed.RecentViewedDao
+import com.london.data.datasource.local.dao.recent.whatched.movie.RecentWatchedMoviesDao
+import com.london.data.datasource.local.dao.recent.whatched.tvshow.RecentWatchedTvShowsDao
 import com.london.data.datasource.local.dao.search.GenreInterestDao
 import com.london.data.datasource.local.dao.search.SearchActorsDao
 import com.london.data.datasource.local.dao.search.SearchMoviesDao
@@ -50,5 +52,17 @@ class DataBaseModule {
     @Single
     fun provideRecentSearchDao(database: NovixDatabase): RecentSearchDao {
         return database.recentSearchDao()
+    }
+
+    @Named("recentWatchedMoviesDao")
+    @Single
+    fun provideRecentWatchedMoviesDao(database: NovixDatabase): RecentWatchedMoviesDao {
+        return database.recentWatchedMoviesDao()
+    }
+
+    @Named("recentWatchedTvShowsDao")
+    @Single
+    fun provideRecentWatchedTvShowsDao(database: NovixDatabase): RecentWatchedTvShowsDao {
+        return database.recentWatchedTvShowsDao()
     }
 }
