@@ -6800,5 +6800,33 @@
       "deletions": 1,
       "changed_files": 1
     }
+  },
+  {
+    "pr_number": 279,
+    "url": "https://github.com/LondonSquad/Novix/pull/279",
+    "title": "test: add authentication repository implementation test and coverage",
+    "opened_at": "2025-07-24T15:22:16Z",
+    "head_ref": "refactor/upgrade-test-coverage",
+    "base_ref": "develop",
+    "creator": {
+      "login": "BassantM",
+      "id": 102248144,
+      "url": "https://github.com/BassantM"
+    },
+    "approvals": [],
+    "first_approved_at": null,
+    "time_to_first_approval_minutes": null,
+    "required_approvals_met_at": null,
+    "time_to_required_approvals_minutes": null,
+    "closed_at": null,
+    "merged_at": null,
+    "merged_by": null,
+    "week": "2025-W30",
+    "status": "pending",
+    "diff_stats": {
+      "additions": 254,
+      "deletions": 18,
+      "changed_files": 2
+    }
   }
 ]
