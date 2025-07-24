@@ -9,7 +9,5 @@ import com.london.domain.KoverIgnore
 interface TopRatedMovieRemoteDataSource {
     suspend fun getTopRatedMovies(
         pageNumber: Int,
-        language: String,
-        region: String
     ): ApiResponse<TopRatedMovieRemote>
 }

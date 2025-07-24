@@ -1,6 +1,5 @@
 package com.london.domain.usecase
 
-import com.london.domain.entity.toprated.TopRatedTvSeries
 import com.london.domain.repository.TopRatedTvSeriesRepository
 import org.koin.core.annotation.Provided
 import org.koin.core.annotation.Single
@@ -12,9 +11,7 @@ class GetTopRatedTvSeriesUseCase(
 ) {
     suspend operator fun invoke(
         pageNumber: Int,
-        language: String
-    ): List<TopRatedTvSeries> = topRatedTvSeriesRepo.getTopRatedTvSeries(
+    ) = topRatedTvSeriesRepo.getTopRatedTvSeries(
         pageNumber,
-        language,
     )
 }

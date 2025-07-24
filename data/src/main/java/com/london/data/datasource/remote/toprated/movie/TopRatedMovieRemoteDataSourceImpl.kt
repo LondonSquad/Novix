@@ -14,8 +14,6 @@ class TopRatedMovieRemoteDataSourceImpl(
 ) : TopRatedMovieRemoteDataSource {
     override suspend fun getTopRatedMovies(
         pageNumber: Int,
-        language: String,
-        region: String
     ): ApiResponse<TopRatedMovieRemote> =
-        topRatedMovieApi.getTopRatedMovies(pageNumber, language, region)
+        topRatedMovieApi.getTopRatedMovies(pageNumber)
 }

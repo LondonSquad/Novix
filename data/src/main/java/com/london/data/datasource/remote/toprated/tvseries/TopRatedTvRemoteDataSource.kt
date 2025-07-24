@@ -9,6 +9,5 @@ import com.london.domain.KoverIgnore
 interface TopRatedTvRemoteDataSource {
     suspend fun getTopRatedTvShows(
         pageNumber: Int,
-        language: String
     ): ApiResponse<TopRatedTvSeriesRemote>
 }

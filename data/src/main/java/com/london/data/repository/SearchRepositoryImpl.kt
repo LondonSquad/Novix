@@ -12,6 +12,7 @@ import com.london.data.mapper.toActorEntity
 import com.london.data.mapper.toLocal
 import com.london.data.mapper.toMovieEntity
 import com.london.data.mapper.toTvShowEntity
+import com.london.data.utils.fetchAndSync
 import com.london.domain.entity.Actor
 import com.london.domain.entity.Movie
 import com.london.domain.entity.PagedFetchResponse
@@ -30,20 +31,6 @@ class SearchRepositoryImpl(
     private val remoteDataSource: SearchRemoteDataSource,
     private val crashReporter: CrashReporter
 ) : SearchRepository {
-
-    suspend fun <T> Result<T?>.getNotNullOrElse(elseBlock: suspend () -> T): Result<T> =
-        runCatching { getOrElse { elseBlock() } ?: elseBlock() }
-
-    suspend fun <T> fetchAndSync(
-        cacheBlock: (suspend () -> T?)? = null,
-        networkBlock: suspend () -> T,
-        syncBlock: (suspend (T) -> Unit)? = null,
-        crashReporter: CrashReporter? = null
-    ): T = runCatching { cacheBlock?.invoke() }.getNotNullOrElse {
-        networkBlock().also {
-            syncBlock?.invoke(it)
-        }
-    }.onFailure { crashReporter?.logException(it) }.getOrThrow()
 
     override suspend fun searchForMovies(
         name: String, pageNumber: Int

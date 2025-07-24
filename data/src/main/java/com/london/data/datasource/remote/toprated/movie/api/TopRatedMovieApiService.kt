@@ -12,7 +12,5 @@ interface TopRatedMovieApiService {
     @GET("3/movie/top_rated")
     suspend fun getTopRatedMovies(
         @Query("page") pageNumber: Int,
-        @Query("language") language: String,
-        @Query("region") region: String
     ): ApiResponse<TopRatedMovieRemote>
 }

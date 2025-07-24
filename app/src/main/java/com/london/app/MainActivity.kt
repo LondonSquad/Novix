@@ -5,8 +5,8 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
-import com.london.app.navigation.NovixApp
 import com.london.designsystem.theme.NovixTheme
+import com.london.presentation.screen.toprated.TopRatedScreen
 
 
 class MainActivity : ComponentActivity() {
@@ -20,7 +20,8 @@ class MainActivity : ComponentActivity() {
 
         setContent {
             NovixTheme {
-                NovixApp()
+                TopRatedScreen(
+                )
             }
         }
     }
