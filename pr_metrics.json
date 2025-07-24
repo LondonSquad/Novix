@@ -6727,5 +6727,33 @@
       "deletions": 2,
       "changed_files": 1
     }
+  },
+  {
+    "pr_number": 278,
+    "url": "https://github.com/LondonSquad/Novix/pull/278",
+    "title": "fix: reduce animation duration in reviews screen to solve delay in top bar",
+    "opened_at": "2025-07-24T13:41:45Z",
+    "head_ref": "fix/delay-in-top-bar",
+    "base_ref": "develop",
+    "creator": {
+      "login": "BassantM",
+      "id": 102248144,
+      "url": "https://github.com/BassantM"
+    },
+    "approvals": [],
+    "first_approved_at": null,
+    "time_to_first_approval_minutes": null,
+    "required_approvals_met_at": null,
+    "time_to_required_approvals_minutes": null,
+    "closed_at": null,
+    "merged_at": null,
+    "merged_by": null,
+    "week": "2025-W30",
+    "status": "pending",
+    "diff_stats": {
+      "additions": 1,
+      "deletions": 1,
+      "changed_files": 1
+    }
   }
 ]
