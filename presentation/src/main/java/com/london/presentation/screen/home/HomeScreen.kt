@@ -7,13 +7,11 @@ import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.requiredWidth
-import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.GridItemSpan
 import androidx.compose.foundation.lazy.grid.LazyGridScope
 import androidx.compose.foundation.lazy.grid.LazyGridState
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
-import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
@@ -29,7 +27,6 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.paging.compose.LazyPagingItems
 import androidx.paging.compose.collectAsLazyPagingItems
 import com.london.designsystem.component.HomeCard
-import com.london.designsystem.component.NovixChip
 import com.london.designsystem.component.Text
 import com.london.designsystem.theme.NovixTheme
 import com.london.domain.entity.Movie
@@ -37,13 +34,16 @@ import com.london.presentation.R
 import com.london.presentation.screen.LoadingScreen
 import com.london.presentation.screen.NetworkErrorScreen
 import com.london.presentation.screen.base.ErrorState
-import com.london.presentation.utils.Genre
+import com.london.presentation.screen.home.trending.TrendingSection
 import com.london.presentation.utils.Listen
 import org.koin.compose.viewmodel.koinViewModel
 
 @Composable
 fun HomeScreen(
     onMovieClick: (movieId: Int) -> Unit = {},
+    onTrendingMovies: () -> Unit = {},
+    onTrendingTvShows: () -> Unit = {},
+    onTrendingActors: () -> Unit = {},
     viewModel: HomeViewModel = koinViewModel()
 ) {
 
@@ -53,12 +53,13 @@ fun HomeScreen(
     effect?.Listen { currentEffect ->
         when (currentEffect) {
             is HomeScreenEffect.NavigationMovieDetails -> onMovieClick(currentEffect.id)
+            is HomeScreenEffect.NavigationTrendingCard -> onTrendingMovies()
         }
     }
 
-    val lazyGridState = rememberSaveable (
+    val lazyGridState = rememberSaveable(
         saver = LazyGridState.Saver,
-    ){
+    ) {
         LazyGridState()
     }
     when {
@@ -70,7 +71,10 @@ fun HomeScreen(
             modifier = Modifier
                 .padding(top = 20.dp)
                 .fillMaxSize(),
-            lazyGridState = lazyGridState
+            lazyGridState = lazyGridState,
+            onTrendingMovies = { viewModel.onTrendingCardClicked(0) },
+            onTrendingTvShows = onTrendingTvShows,
+            onTrendingActors = onTrendingActors
         )
     }
 }
@@ -80,7 +84,10 @@ private fun Content(
     homeScreenContract: HomeScreenContract,
     uiState: HomeScreenUiState,
     modifier: Modifier = Modifier,
-    lazyGridState: LazyGridState
+    lazyGridState: LazyGridState,
+    onTrendingMovies: () -> Unit,
+    onTrendingTvShows: () -> Unit,
+    onTrendingActors: () -> Unit
 ) {
 
     val density = LocalDensity.current
@@ -121,7 +128,11 @@ private fun Content(
         }
 
         item(span = { GridItemSpan(maxLineSpan) }) {
-            TrendingSection()
+            TrendingSection(
+                onMoviesClick = { homeScreenContract.onTrendingCardClicked(0) },
+                onTvShowsClick = onTrendingTvShows,
+                onActorsClick = onTrendingActors
+            )
         }
 
         upComingSection(
@@ -138,7 +149,6 @@ private fun LazyGridScope.upComingSection(
     screenWidth: Dp,
     state: HomeScreenUiState,
     upcomingMoviesLazyList: LazyPagingItems<Movie>
-
 ) {
     item(span = { GridItemSpan(maxLineSpan) }) {
         Text(
@@ -150,9 +160,10 @@ private fun LazyGridScope.upComingSection(
 
     item(span = { GridItemSpan(maxLineSpan) }) {
         GenresSection(
+            genres = state.genres,
+            selectedGenreId = state.selectedGenreId,
             screenWidth = screenWidth,
-            state = state,
-            contract = contract
+            onGenreClick = { contract.onGenreSelect(it) }
         )
     }
 
@@ -168,23 +179,3 @@ private fun LazyGridScope.upComingSection(
     }
 }
 
-@Composable
-private fun GenresSection(
-    contract: HomeScreenContract,
-    screenWidth: Dp,
-    state: HomeScreenUiState
-) {
-    LazyRow(
-        horizontalArrangement = Arrangement.spacedBy(8.dp),
-        contentPadding = PaddingValues(horizontal = 16.dp),
-        modifier = Modifier.requiredWidth(screenWidth)
-    ) {
-        items(Genre.entries.toTypedArray()) { genre ->
-            NovixChip(
-                text = genre.name,
-                isSelected = (genre == state.selectedGenre),
-                onClick = { contract.onGenreSelect(genre) }
-            )
-        }
-    }
-}
