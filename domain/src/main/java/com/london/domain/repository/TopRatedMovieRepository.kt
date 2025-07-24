@@ -2,7 +2,7 @@ package com.london.domain.repository
 
 import com.london.domain.entity.toprated.TopRatedMovie
 
-interface TopRatedMovieRepo {
+interface TopRatedMovieRepository {
     suspend fun getTopRatedMovies(
         pageNumber: Int,
         language: String,

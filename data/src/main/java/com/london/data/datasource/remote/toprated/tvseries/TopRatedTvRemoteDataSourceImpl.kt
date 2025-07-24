@@ -3,14 +3,14 @@
 package com.london.data.datasource.remote.toprated.tvseries
 
 import com.london.data.datasource.remote.ApiResponse
-import com.london.data.datasource.remote.toprated.tvseries.api.TopRatedTvSeriesApi
+import com.london.data.datasource.remote.toprated.tvseries.api.TopRatedTvSeriesApiService
 import com.london.data.datasource.remote.toprated.tvseries.model.TopRatedTvSeriesRemote
 import com.london.domain.KoverIgnore
 import org.koin.core.annotation.Single
 
 @Single
 class TopRatedTvRemoteDataSourceImpl(
-    private val topRatedTvSeriesApi: TopRatedTvSeriesApi
+    private val topRatedTvSeriesApi: TopRatedTvSeriesApiService
 ) : TopRatedTvRemoteDataSource {
     override suspend fun getTopRatedTvShows(
         pageNumber: Int,

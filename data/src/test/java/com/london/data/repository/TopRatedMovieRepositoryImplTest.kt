@@ -13,7 +13,7 @@ import org.junit.Before
 import org.junit.Test
 import org.junit.jupiter.api.assertThrows
 
-class TopRatedMovieRepoImplTest {
+class TopRatedMovieRepositoryImplTest {
 
     private lateinit var remoteDataSource: TopRatedMovieRemoteDataSource
     private lateinit var repository: TopRatedMovieRepoImpl

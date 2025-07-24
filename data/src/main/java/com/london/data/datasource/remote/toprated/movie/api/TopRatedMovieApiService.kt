@@ -8,7 +8,7 @@ import com.london.domain.KoverIgnore
 import retrofit2.http.GET
 import retrofit2.http.Query
 
-interface TopRatedMovieApi {
+interface TopRatedMovieApiService {
     @GET("3/movie/top_rated")
     suspend fun getTopRatedMovies(
         @Query("page") pageNumber: Int,

@@ -8,7 +8,7 @@ import com.london.domain.KoverIgnore
 import retrofit2.http.GET
 import retrofit2.http.Query
 
-interface TopRatedTvSeriesApi {
+interface TopRatedTvSeriesApiService {
 
     @GET("3/tv/top_rated")
     suspend fun getTopRatedTvSeries(

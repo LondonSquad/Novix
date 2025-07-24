@@ -2,7 +2,7 @@ package com.london.domain.usecase
 
 import com.google.common.truth.Truth.assertThat
 import com.london.domain.entity.toprated.TopRatedTvSeries
-import com.london.domain.repository.TopRatedTvSeriesRepo
+import com.london.domain.repository.TopRatedTvSeriesRepository
 import io.mockk.coEvery
 import io.mockk.mockk
 import kotlinx.coroutines.test.runTest
@@ -12,7 +12,7 @@ import org.junit.jupiter.api.assertThrows
 
 class GetTopRatedTvSeriesUseCaseTest {
 
-    private lateinit var repository: TopRatedTvSeriesRepo
+    private lateinit var repository: TopRatedTvSeriesRepository
     private lateinit var getTopRatedTvSeries: GetTopRatedTvSeriesUseCase
 
     @Before

@@ -14,8 +14,8 @@ import com.london.data.datasource.remote.details.tvshowdetails.api.TvShowDetails
 import com.london.data.datasource.remote.home.popular.api.PopularApiService
 import com.london.data.datasource.remote.reviews.api.ReviewsApiService
 import com.london.data.datasource.remote.search.api.SearchApiService
-import com.london.data.datasource.remote.toprated.movie.api.TopRatedMovieApi
-import com.london.data.datasource.remote.toprated.tvseries.api.TopRatedTvSeriesApi
+import com.london.data.datasource.remote.toprated.movie.api.TopRatedMovieApiService
+import com.london.data.datasource.remote.toprated.tvseries.api.TopRatedTvSeriesApiService
 import com.london.domain.repository.SessionTokenProvider
 import kotlinx.serialization.json.Json
 import okhttp3.Cache
@@ -148,10 +148,10 @@ class NetworkModule {
     }
 
     @Single
-    fun provideTopRatedMovieApi(retrofit: Retrofit): TopRatedMovieApi =
-        retrofit.create(TopRatedMovieApi::class.java)
+    fun provideTopRatedMovieApi(retrofit: Retrofit): TopRatedMovieApiService =
+        retrofit.create(TopRatedMovieApiService::class.java)
 
     @Single
-    fun provideTopRatedTvShowApi(retrofit: Retrofit): TopRatedTvSeriesApi =
-        retrofit.create(TopRatedTvSeriesApi::class.java)
+    fun provideTopRatedTvShowApi(retrofit: Retrofit): TopRatedTvSeriesApiService =
+        retrofit.create(TopRatedTvSeriesApiService::class.java)
 }
