@@ -6618,11 +6618,15 @@
     "time_to_first_approval_minutes": 55.55,
     "required_approvals_met_at": "2025-07-24T12:49:11Z",
     "time_to_required_approvals_minutes": 72.51666666666667,
-    "closed_at": null,
-    "merged_at": null,
-    "merged_by": null,
+    "closed_at": "2025-07-24T12:49:33Z",
+    "merged_at": "2025-07-24T12:49:33Z",
+    "merged_by": {
+      "login": "BassantM",
+      "id": 102248144,
+      "url": "https://github.com/BassantM"
+    },
     "week": "2025-W30",
-    "status": "approved",
+    "status": "merged",
     "diff_stats": {
       "additions": 25,
       "deletions": 11,
