@@ -31,6 +31,9 @@ import com.london.presentation.navigation.Screen.Categories
 import com.london.presentation.navigation.Screen.EpisodeDetails
 import com.london.presentation.navigation.Screen.Home
 import com.london.presentation.navigation.Screen.Login
+import com.london.presentation.navigation.Screen.Splash
+import com.london.presentation.navigation.Screen.OnboardingPager
+import com.london.presentation.navigation.Screen.Welcome
 import com.london.presentation.navigation.Screen.MovieDetails
 import com.london.presentation.navigation.Screen.MoviesByCategory
 import com.london.presentation.navigation.Screen.Reviews
@@ -328,7 +331,7 @@ fun NovixApp(appPreferencesService: AppPreferencesService) {
                 )
             }
 
-           composable<Screen.Splash> {
+           composable<Splash> {
                 SplashRoute(
                     onNavigateToOnboarding = { navController.navigate(Screen.OnboardingPager) },
                     onNavigateToWelcome = { navController.navigate(Screen.Welcome) },
@@ -338,14 +341,14 @@ fun NovixApp(appPreferencesService: AppPreferencesService) {
                 )
             }
 
-            composable<Screen.OnboardingPager> {
+            composable<OnboardingPager> {
                 OnboardingRoute(
                     onNavigateToWelcome = { navController.navigate(Screen.Welcome) },
                     appPreferencesService = appPreferencesService
                 )
             }
 
-            composable<Screen.Welcome> {
+            composable<Welcome> {
                 WelcomeScreen(
                     onLoginClicked = {
                         navController.navigate(Login)

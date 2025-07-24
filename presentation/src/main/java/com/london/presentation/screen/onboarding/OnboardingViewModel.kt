@@ -38,28 +38,18 @@ class OnboardingViewModel(
     }
 
     fun scrollPrevious(pagerState: PagerState, scope: CoroutineScope) {
-        scope.launch {
-            val previousPage = pagerState.currentPage - 1
-            if (previousPage >= 0) {
-                pagerState.animateScrollToPage(
-                    page = previousPage,
-                    animationSpec = tween(durationMillis = 750, easing = FastOutSlowInEasing)
-                )
-            }
+        val previousPage = pagerState.currentPage - 1
+        if (previousPage >= 0) {
+            scrollToPage(pagerState = pagerState, targetPage = previousPage, scope = scope)
         }
     }
 
     fun scrollNext(pagerState: PagerState, scope: CoroutineScope) {
-        scope.launch {
-            val nextPage = pagerState.currentPage + 1
-            if (nextPage <= pagerState.pageCount - 1) {
-                pagerState.animateScrollToPage(
-                    page = nextPage,
-                    animationSpec = tween(durationMillis = 750, easing = FastOutSlowInEasing)
-                )
-            } else {
-                navigateToWelcome()
-            }
+        val nextPage = pagerState.currentPage + 1
+        if (nextPage <= pagerState.pageCount - 1) {
+            scrollToPage(pagerState = pagerState, targetPage = nextPage, scope = scope)
+        } else {
+            navigateToWelcome()
         }
     }
 

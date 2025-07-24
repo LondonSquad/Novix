@@ -40,7 +40,7 @@ fun OnboardingRoute(
     @Provided appPreferencesService: AppPreferencesService
 ) {
     OnboardingScreen(
-        onNext = {
+        onComplete = {
             appPreferencesService.setOnBoardingShown()
             onNavigateToWelcome()
         }

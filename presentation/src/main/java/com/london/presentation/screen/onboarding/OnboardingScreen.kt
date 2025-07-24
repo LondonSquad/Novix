@@ -1,6 +1,7 @@
 package com.london.presentation.screen.onboarding
 
 import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.animateContentSize
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -43,7 +44,7 @@ import org.koin.androidx.compose.koinViewModel
 
 @Composable
 fun OnboardingScreen(
-    onNext: () -> Unit,
+    onComplete: () -> Unit,
 ) {
     val viewModel: OnboardingViewModel = koinViewModel()
     val scope = rememberCoroutineScope()
@@ -66,7 +67,7 @@ fun OnboardingScreen(
 
             OnboardingEffect.NavigateToWelcome -> {
                 viewModel.onboardingFinished()
-                onNext()
+                onComplete()
             }
 
             else -> {}
@@ -182,7 +183,6 @@ fun OnboardingPageContent(page: OnboardingPage) {
     }
 }
 
-
 @Composable
 fun OnboardingNavigationButtons(
     isFirstPage: Boolean,
@@ -193,27 +193,28 @@ fun OnboardingNavigationButtons(
     Row(
         modifier = modifier
     ) {
-        if (!isFirstPage) {
-            OutlineButton(
-                modifier = Modifier
-                    .width(52.dp)
-                    .height(48.dp),
-                text = "",
-                onClick = onPrevious,
-                isLoading = false,
-                hasIcon = true,
-                hasLabel = false,
-                icon = com.london.designsystem.R.drawable.arrow_left
-            )
+        Row(modifier = Modifier.animateContentSize()) {
+            AnimatedVisibility(visible = !isFirstPage) {
+                OutlineButton(
+                    modifier = Modifier
+                        .width(52.dp)
+                        .height(48.dp),
+                    text = null,
+                    onClick = onPrevious,
+                    isLoading = false,
+                    hasIcon = true,
+                    hasLabel = false,
+                    icon = com.london.designsystem.R.drawable.arrow_left
+                )
+            }
 
             Spacer(modifier = Modifier.width(12.dp))
         }
-
         PrimaryButton(
             modifier = Modifier
                 .width(52.dp)
                 .height(48.dp),
-            text = "",
+            text = null,
             onClick = onNext,
             isLoading = false,
             hasIcon = true,
@@ -228,6 +229,6 @@ fun OnboardingNavigationButtons(
 @Composable
 fun OnboardingPreview() {
     OnboardingScreen(
-        onNext = {},
+        onComplete = {},
     )
 }
