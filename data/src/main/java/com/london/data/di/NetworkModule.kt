@@ -1,16 +1,22 @@
 package com.london.data.di
 
 import android.content.Context
-import android.util.Log
 import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory
 import com.london.data.BuildConfig
+import com.london.data.datasource.common.AuthInterceptor
+import com.london.data.datasource.common.AuthPreferences
+import com.london.data.datasource.common.SharedPrefsTokenProvider
 import com.london.data.datasource.device.DeviceConfigurationDataSource
+import com.london.data.datasource.remote.auth.api.AuthApiService
 import com.london.data.datasource.remote.details.actordetails.api.ActorDetailsApiService
 import com.london.data.datasource.remote.details.moviedetails.api.MovieDetailsApiService
 import com.london.data.datasource.remote.details.tvshowdetails.api.TvShowDetailsApiService
 import com.london.data.datasource.remote.home.popular.api.PopularApiService
 import com.london.data.datasource.remote.reviews.api.ReviewsApiService
 import com.london.data.datasource.remote.search.api.SearchApiService
+import com.london.data.datasource.remote.toprated.movie.api.TopRatedMovieApiService
+import com.london.data.datasource.remote.toprated.tvseries.api.TopRatedTvSeriesApiService
+import com.london.domain.repository.SessionTokenProvider
 import kotlinx.serialization.json.Json
 import okhttp3.Cache
 import okhttp3.Interceptor
@@ -39,7 +45,6 @@ class NetworkModule {
     @Single
     fun provideHttpLoggingInterceptor(): HttpLoggingInterceptor {
         return HttpLoggingInterceptor { message ->
-            Log.i("DEBUGGING", message)
         }.apply {
             level = if (BuildConfig.DEBUG) {
                 HttpLoggingInterceptor.Level.BODY
@@ -64,7 +69,6 @@ class NetworkModule {
 
             val newRequest = originalRequest.newBuilder()
                 .url(newUrl)
-                .addHeader("Authorization", "Bearer ${BuildConfig.AUTHORIZATION_KEY}")
                 .build()
 
             chain.proceed(newRequest)
@@ -75,6 +79,7 @@ class NetworkModule {
     fun provideOkHttpClient(
         loggingInterceptor: HttpLoggingInterceptor,
         apiInterceptor: Interceptor,
+        authInterceptor: AuthInterceptor,
         context: Context
     ): OkHttpClient {
         val cacheSize = 10L * 1024 * 1024
@@ -84,6 +89,7 @@ class NetworkModule {
         )
         return OkHttpClient.Builder()
             .addInterceptor(apiInterceptor)
+            .addInterceptor(authInterceptor)
             .addInterceptor(loggingInterceptor)
             .cache(cache)
             .connectTimeout(30, TimeUnit.SECONDS)
@@ -93,10 +99,7 @@ class NetworkModule {
     }
 
     @Single
-    fun provideRetrofit(okHttpClient: OkHttpClient,
-                        json: Json
-
-    ): Retrofit {
+    fun provideRetrofit(okHttpClient: OkHttpClient, json: Json): Retrofit {
         return Retrofit.Builder()
             .baseUrl(BuildConfig.BASE_URL)
             .client(okHttpClient)
@@ -129,5 +132,26 @@ class NetworkModule {
     @Single
     fun providePopularMoviesApiService(retrofit: Retrofit): PopularApiService =
         retrofit.create(PopularApiService::class.java)
+    @Single
+    fun provideSessionTokenProvider(authPreferences: AuthPreferences): SessionTokenProvider {
+        return SharedPrefsTokenProvider(authPreferences)
+    }
 
+    @Single
+    fun provideAuthPreferences(context: Context): AuthPreferences {
+        return AuthPreferences(context.getSharedPreferences("auth", Context.MODE_PRIVATE))
+    }
+
+    @Single
+    fun provideAuthApi(retrofit: Retrofit): AuthApiService {
+        return retrofit.create(AuthApiService::class.java)
+    }
+
+    @Single
+    fun provideTopRatedMovieApi(retrofit: Retrofit): TopRatedMovieApiService =
+        retrofit.create(TopRatedMovieApiService::class.java)
+
+    @Single
+    fun provideTopRatedTvShowApi(retrofit: Retrofit): TopRatedTvSeriesApiService =
+        retrofit.create(TopRatedTvSeriesApiService::class.java)
 }
