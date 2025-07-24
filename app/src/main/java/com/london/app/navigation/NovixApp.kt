@@ -55,6 +55,8 @@ import com.london.presentation.screen.home.trending.TrendingMoviesScreen
 import com.london.presentation.screen.login.LoginScreen
 import com.london.presentation.screen.reviews.ReviewsScreen
 import com.london.presentation.screen.search.SearchScreen
+import com.london.presentation.screen.home.trending.TrendingMoviesScreen
+import com.london.presentation.screen.home.trending.TrendingTvShowsScreen
 
 @Composable
 fun NovixApp() {
@@ -344,6 +346,12 @@ fun NovixApp() {
                 TrendingMoviesScreen(
                     onBackClick = { navController.navigateUp() },
                     onMovieClick = { movieId -> navController.navigate(MovieDetails(movieId)) }
+                )
+            }
+            composable<Screen.TrendingTvShows> {
+                TrendingTvShowsScreen(
+                    onBackClick = { navController.navigateUp() },
+                    onTvShowClick = { tvShowId -> navController.navigate(TvShowDetails(tvShowId)) }
                 )
             }
         }
