@@ -83,4 +83,8 @@ class HomeViewModel(
         updateState { copy(selectedGenre = genre) }
         loadUpcomingMovies(categoryId = if (genre == Genre.All) null else genre.id)
     }
+
+    override fun onTrendingCardClicked(id: Int) {
+        emitEffect(HomeScreenEffect.NavigationTrendingCard(id))
+    }
 }
