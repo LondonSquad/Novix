@@ -6465,7 +6465,7 @@
     "title": "refactor/remote-data-source-for-review-and-popular",
     "opened_at": "2025-07-24T03:48:23Z",
     "head_ref": "refactor/remote-data-source-for-review-and-popular",
-    "base_ref": "develop",
+    "base_ref": "refactor/add-base-remote-data-source-for-details",
     "creator": {
       "login": "abdelrhman1002",
       "id": 180463542,
@@ -6476,15 +6476,15 @@
     "time_to_first_approval_minutes": null,
     "required_approvals_met_at": null,
     "time_to_required_approvals_minutes": null,
-    "closed_at": null,
+    "closed_at": "2025-07-24T06:17:57Z",
     "merged_at": null,
     "merged_by": null,
     "week": "2025-W30",
-    "status": "pending",
+    "status": "closed",
     "diff_stats": {
-      "additions": 708,
-      "deletions": 430,
-      "changed_files": 34
+      "additions": 157,
+      "deletions": 43,
+      "changed_files": 10
     }
   },
   {
@@ -6570,7 +6570,7 @@
     "title": "feature/top-rated-remote-domin",
     "opened_at": "2025-07-24T07:56:45Z",
     "head_ref": "feature/top-rated-remote-domin",
-    "base_ref": "develop",
+    "base_ref": "feature/top-rated-remote-data-source",
     "creator": {
       "login": "abdelrhman1002",
       "id": 180463542,
@@ -6591,9 +6591,9 @@
     "week": "2025-W30",
     "status": "merged",
     "diff_stats": {
-      "additions": 860,
-      "deletions": 0,
-      "changed_files": 23
+      "additions": 692,
+      "deletions": 17,
+      "changed_files": 22
     }
   },
   {
@@ -6665,12 +6665,20 @@
           "url": "https://github.com/Abdulrahman1890"
         },
         "submitted_at": "2025-07-24T13:31:48Z"
+      },
+      {
+        "reviewer": {
+          "id": 154278495,
+          "login": "ahmeddsamii",
+          "url": "https://github.com/ahmeddsamii"
+        },
+        "submitted_at": "2025-07-24T13:36:05Z"
       }
     ],
     "first_approved_at": "2025-07-24T13:31:48Z",
     "time_to_first_approval_minutes": 43.416666666666664,
-    "required_approvals_met_at": null,
-    "time_to_required_approvals_minutes": null,
+    "required_approvals_met_at": "2025-07-24T13:36:05Z",
+    "time_to_required_approvals_minutes": 47.7,
     "closed_at": "2025-07-24T13:36:06Z",
     "merged_at": "2025-07-24T13:36:06Z",
     "merged_by": {
@@ -6834,15 +6842,19 @@
     "time_to_first_approval_minutes": 314.0833333333333,
     "required_approvals_met_at": "2025-07-24T20:36:33Z",
     "time_to_required_approvals_minutes": 314.28333333333336,
-    "closed_at": null,
-    "merged_at": null,
-    "merged_by": null,
+    "closed_at": "2025-07-24T20:36:40Z",
+    "merged_at": "2025-07-24T20:36:40Z",
+    "merged_by": {
+      "login": "BassantM",
+      "id": 102248144,
+      "url": "https://github.com/BassantM"
+    },
     "week": "2025-W30",
-    "status": "approved",
+    "status": "merged",
     "diff_stats": {
-      "additions": 254,
+      "additions": 452,
       "deletions": 18,
-      "changed_files": 2
+      "changed_files": 6
     }
   },
   {
@@ -6857,11 +6869,28 @@
       "id": 100484790,
       "url": "https://github.com/marwanqashwa"
     },
-    "approvals": [],
-    "first_approved_at": null,
-    "time_to_first_approval_minutes": null,
-    "required_approvals_met_at": null,
-    "time_to_required_approvals_minutes": null,
+    "approvals": [
+      {
+        "reviewer": {
+          "id": 102248144,
+          "login": "BassantM",
+          "url": "https://github.com/BassantM"
+        },
+        "submitted_at": "2025-07-24T19:56:50Z"
+      },
+      {
+        "reviewer": {
+          "id": 154278495,
+          "login": "ahmeddsamii",
+          "url": "https://github.com/ahmeddsamii"
+        },
+        "submitted_at": "2025-07-24T19:56:51Z"
+      }
+    ],
+    "first_approved_at": "2025-07-24T19:56:50Z",
+    "time_to_first_approval_minutes": 219.83333333333334,
+    "required_approvals_met_at": "2025-07-24T19:56:51Z",
+    "time_to_required_approvals_minutes": 219.85,
     "closed_at": "2025-07-24T19:56:52Z",
     "merged_at": "2025-07-24T19:56:52Z",
     "merged_by": {
@@ -6875,6 +6904,51 @@
       "additions": 900,
       "deletions": 20,
       "changed_files": 46
+    }
+  },
+  {
+    "pr_number": 281,
+    "url": "https://github.com/LondonSquad/Novix/pull/281",
+    "title": "feat: add snack bar appearance when login credentials is not correct",
+    "opened_at": "2025-07-24T17:14:32Z",
+    "head_ref": "feature/snack-bar-ui-state",
+    "base_ref": "develop",
+    "creator": {
+      "login": "Abdulrahman1890",
+      "id": 76666355,
+      "url": "https://github.com/Abdulrahman1890"
+    },
+    "approvals": [
+      {
+        "reviewer": {
+          "id": 117874933,
+          "login": "AsmaaKhaledGomaa",
+          "url": "https://github.com/AsmaaKhaledGomaa"
+        },
+        "submitted_at": "2025-07-24T17:19:36Z"
+      },
+      {
+        "reviewer": {
+          "id": 154278495,
+          "login": "ahmeddsamii",
+          "url": "https://github.com/ahmeddsamii"
+        },
+        "submitted_at": "2025-07-24T20:26:48Z"
+      }
+    ],
+    "first_approved_at": "2025-07-24T17:19:36Z",
+    "time_to_first_approval_minutes": 5.066666666666666,
+    "required_approvals_met_at": "2025-07-24T20:26:48Z",
+    "time_to_required_approvals_minutes": 192.26666666666668,
+    "closed_at": null,
+    "merged_at": null,
+    "merged_by": null,
+    "week": "2025-W30",
+    "status": "approved",
+    "diff_stats": {
+      "additions": 60,
+      "deletions": 10,
+      "changed_files": 6
     }
   }
 ]
