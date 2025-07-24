@@ -127,7 +127,11 @@ fun NovixApp() {
                 HomeScreen(
                     onMovieClick = { movieId ->
                         navController.navigate(MovieDetails(movieId))
-                    }
+                    },
+
+                   onTvShowClick = { tvShowId ->
+                        navController.navigate(TvShowDetails(tvShowId))
+                   }
                 )
             }
 
