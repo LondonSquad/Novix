@@ -6446,5 +6446,33 @@
       "deletions": 390,
       "changed_files": 26
     }
+  },
+  {
+    "pr_number": 271,
+    "url": "https://github.com/LondonSquad/Novix/pull/271",
+    "title": "refactor/remote-data-source-for-review-and-popular",
+    "opened_at": "2025-07-24T03:48:23Z",
+    "head_ref": "refactor/remote-data-source-for-review-and-popular",
+    "base_ref": "develop",
+    "creator": {
+      "login": "abdelrhman1002",
+      "id": 180463542,
+      "url": "https://github.com/abdelrhman1002"
+    },
+    "approvals": [],
+    "first_approved_at": null,
+    "time_to_first_approval_minutes": null,
+    "required_approvals_met_at": null,
+    "time_to_required_approvals_minutes": null,
+    "closed_at": null,
+    "merged_at": null,
+    "merged_by": null,
+    "week": "2025-W30",
+    "status": "pending",
+    "diff_stats": {
+      "additions": 708,
+      "deletions": 430,
+      "changed_files": 34
+    }
   }
 ]
