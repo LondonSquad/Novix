@@ -6660,5 +6660,33 @@
       "deletions": 31,
       "changed_files": 7
     }
+  },
+  {
+    "pr_number": 277,
+    "url": "https://github.com/LondonSquad/Novix/pull/277",
+    "title": "fix: place holder in custom back drop image",
+    "opened_at": "2025-07-24T13:23:34Z",
+    "head_ref": "fix/add-episode-place-holder",
+    "base_ref": "develop",
+    "creator": {
+      "login": "BassantM",
+      "id": 102248144,
+      "url": "https://github.com/BassantM"
+    },
+    "approvals": [],
+    "first_approved_at": null,
+    "time_to_first_approval_minutes": null,
+    "required_approvals_met_at": null,
+    "time_to_required_approvals_minutes": null,
+    "closed_at": null,
+    "merged_at": null,
+    "merged_by": null,
+    "week": "2025-W30",
+    "status": "pending",
+    "diff_stats": {
+      "additions": 4,
+      "deletions": 2,
+      "changed_files": 1
+    }
   }
 ]
