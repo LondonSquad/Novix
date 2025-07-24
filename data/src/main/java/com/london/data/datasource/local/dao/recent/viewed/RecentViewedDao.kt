@@ -1,3 +1,4 @@
+@file:KoverIgnore
 package com.london.data.datasource.local.dao.recent.viewed
 
 import androidx.room.Dao
@@ -7,9 +8,11 @@ import androidx.room.Query
 import androidx.room.Transaction
 import com.london.data.datasource.local.dao.recent.RecentDao
 import com.london.data.datasource.local.model.recent.RecentViewedLocal
+import com.london.domain.KoverIgnore
 
 @Dao
 interface RecentViewedDao : RecentDao<RecentViewedLocal> {
+
     @Query("SELECT * FROM recent_viewed_table")
     override suspend fun getAll(): List<RecentViewedLocal>
 

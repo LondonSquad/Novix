@@ -10,6 +10,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -27,12 +28,13 @@ fun SnackBar(
 ) {
     Row(
         modifier = modifier
-            .background(color = NovixTheme.colors.surface)
             .border(
                 width = 1.dp,
                 color = NovixTheme.colors.stroke,
                 shape = RoundedCornerShape(12.dp)
             )
+            .clip(RoundedCornerShape(12.dp))
+            .background(color = NovixTheme.colors.surface)
             .padding(horizontal = 12.dp, vertical = 16.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {
