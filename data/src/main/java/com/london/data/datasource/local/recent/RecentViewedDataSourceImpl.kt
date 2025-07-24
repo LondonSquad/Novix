@@ -13,6 +13,7 @@ class RecentViewedDataSourceImpl(
 @Named("recentViewedDao")
     private val recentViewedDao: RecentViewedDao
 ) : RecentDataSource<RecentViewedLocal> {
+
     override suspend fun insert(item: RecentViewedLocal) {
         runCatching {
             recentViewedDao.insert(item)
