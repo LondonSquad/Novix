@@ -51,7 +51,7 @@ class LoginViewModel(
             return
         }
         tryToExecute(
-            block = { loginUseCase(currentState.username.text, currentState.password.text) },
+            block = { loginUseCase.invoke(currentState.username.text, currentState.password.text) },
             onStart = { updateState { copy(isLoading = true, error = null) } },
             onSuccess = { isSuccess: Boolean ->
                 if (isSuccess) {
@@ -71,7 +71,7 @@ class LoginViewModel(
 
     override fun onLoginAsGuestClick() {
         tryToExecute(
-            block = { loginAsGuestUseCase() },
+            block = { loginAsGuestUseCase.invoke() },
             onStart = { updateState { copy(isGuestLoginLoading = true, error = null) } },
             onSuccess = { isSuccess: Boolean ->
                 if (isSuccess) {

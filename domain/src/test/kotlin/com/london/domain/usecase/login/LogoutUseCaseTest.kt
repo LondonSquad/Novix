@@ -26,7 +26,7 @@ class LogoutUseCaseTest {
   coEvery { authRepository.logout() } returns true
 
   // When
-  val result = logoutUseCase()
+  val result = logoutUseCase.invoke()
 
   // Then
   coVerify(exactly = 1) { authRepository.logout() }
@@ -39,7 +39,7 @@ class LogoutUseCaseTest {
   coEvery { authRepository.logout() } returns false
 
   // When
-  val result = logoutUseCase()
+  val result = logoutUseCase.invoke()
 
   // Then
   coVerify(exactly = 1) { authRepository.logout() }
