@@ -55,6 +55,7 @@ class LoginViewModel(
             onStart = { updateState { copy(isLoading = true, error = null) } },
             onSuccess = { isSuccess: Boolean ->
                 if (isSuccess) {
+                    updateState { copy(success = true) }
                     emitEffect(LoginEffect.NavigateToHome)
                 } else {
                     updateState { copy(error = ErrorState.RequestFailed("Login failed. Please check your credentials.")) }
