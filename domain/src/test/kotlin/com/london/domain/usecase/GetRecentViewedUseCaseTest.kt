@@ -3,6 +3,7 @@ package com.london.domain.usecase
 import com.google.common.truth.Truth.assertThat
 import com.london.domain.entity.recent.RecentViewed
 import com.london.domain.repository.RecentRepository
+import com.london.domain.usecase.recent.viewed.GetRecentViewedUseCase
 import io.mockk.coEvery
 import io.mockk.mockk
 import kotlinx.coroutines.test.runTest
