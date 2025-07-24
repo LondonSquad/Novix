@@ -5,6 +5,7 @@ import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -57,12 +58,18 @@ import com.london.designsystem.R as Res
 @Composable
 fun EpisodeDetailsScreen(
     viewModel: EpisodeDetailsViewModel = koinViewModel(),
-    onBackClick: () -> Unit
+    onNavigateBackClick: () -> Unit,
+    onNavigateToCast: (Int) -> Unit
 ) {
     val uiState by viewModel.state.collectAsStateWithLifecycle()
     val effect by viewModel.effect.collectAsState(null)
 
-    effect?.Listen { onBackClick()}
+    effect?.Listen { currentEffect ->
+        when (currentEffect) {
+            EpisodeDetailsEffect.NavigationBack -> onNavigateBackClick()
+            is EpisodeDetailsEffect.NavigateToCast -> onNavigateToCast(currentEffect.episodeId)
+        }
+    }
 
     BuildScreen(
         isLoading = uiState.isLoading,
@@ -70,7 +77,8 @@ fun EpisodeDetailsScreen(
         content = {
             EpisodeDetailsScreenContent(
                 uiState = uiState,
-                episodeDetailsContract = viewModel
+                episodeDetailsContract = viewModel,
+                onNavigateToCast = onNavigateToCast
             )
         }
     )
@@ -80,7 +88,8 @@ fun EpisodeDetailsScreen(
 fun EpisodeDetailsScreenContent(
     modifier: Modifier = Modifier,
     uiState: EpisodeDetailsUiState,
-    episodeDetailsContract: EpisodeDetailsContract
+    episodeDetailsContract: EpisodeDetailsContract,
+    onNavigateToCast: (Int) -> Unit
 ) {
 
     val lazyListState = rememberLazyListState()
@@ -192,6 +201,8 @@ fun EpisodeDetailsScreenContent(
                         modifier = Modifier
                             .fillMaxWidth()
                             .padding(horizontal = 16.dp, vertical = 6.dp)
+                            .clickable { onNavigateToCast(member.id) }
+
                     )
                 }
             }
