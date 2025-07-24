@@ -6123,37 +6123,20 @@
       "id": 90211730,
       "url": "https://github.com/AbdoMagdey24"
     },
-    "approvals": [
-      {
-        "reviewer": {
-          "id": 43588217,
-          "login": "yusufnasserdev",
-          "url": "https://github.com/yusufnasserdev"
-        },
-        "submitted_at": "2025-07-24T21:05:31Z"
-      },
-      {
-        "reviewer": {
-          "id": 102248144,
-          "login": "BassantM",
-          "url": "https://github.com/BassantM"
-        },
-        "submitted_at": "2025-07-24T22:07:56Z"
-      }
-    ],
-    "first_approved_at": "2025-07-24T21:05:31Z",
-    "time_to_first_approval_minutes": 3118.1,
-    "required_approvals_met_at": "2025-07-24T22:07:56Z",
-    "time_to_required_approvals_minutes": 3180.516666666667,
+    "approvals": [],
+    "first_approved_at": null,
+    "time_to_first_approval_minutes": null,
+    "required_approvals_met_at": null,
+    "time_to_required_approvals_minutes": null,
     "closed_at": null,
     "merged_at": null,
     "merged_by": null,
     "week": "2025-W30",
-    "status": "approved",
+    "status": "pending",
     "diff_stats": {
-      "additions": 834,
-      "deletions": 19,
-      "changed_files": 32
+      "additions": 839,
+      "deletions": 90,
+      "changed_files": 36
     }
   },
   {
