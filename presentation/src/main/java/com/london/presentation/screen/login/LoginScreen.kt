@@ -1,6 +1,5 @@
 package com.london.presentation.screen.login
 
-import android.annotation.SuppressLint
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -70,7 +69,6 @@ fun LoginScreen(
     }
 }
 
-@SuppressLint("UnrememberedMutableInteractionSource")
 @Composable
 private fun Content(
     uiState: LoginUiState,
