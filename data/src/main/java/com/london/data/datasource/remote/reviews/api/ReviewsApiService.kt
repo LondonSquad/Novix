@@ -2,6 +2,7 @@ package com.london.data.datasource.remote.reviews.api
 
 import com.london.data.datasource.remote.ApiResponse
 import com.london.data.datasource.remote.reviews.model.ReviewResponse
+import retrofit2.Response
 import retrofit2.http.GET
 import retrofit2.http.Path
 import retrofit2.http.Query
@@ -12,11 +13,11 @@ interface ReviewsApiService {
     suspend fun getMovieReviews(
         @Path("movie_id") movieId: Int,
         @Query("page") page: Int
-    ): ApiResponse<ReviewResponse>
+    ): Response<ApiResponse<ReviewResponse>>
 
     @GET("3/tv/{tv_id}/reviews")
     suspend fun getTvShowReviews(
         @Path("tv_id") tvShowId: Int,
         @Query("page") page: Int
-    ): ApiResponse<ReviewResponse>
+    ): Response<ApiResponse<ReviewResponse>>
 }
