@@ -6819,5 +6819,33 @@
       "deletions": 18,
       "changed_files": 2
     }
+  },
+  {
+    "pr_number": 280,
+    "url": "https://github.com/LondonSquad/Novix/pull/280",
+    "title": "Feature/continue watching data",
+    "opened_at": "2025-07-24T16:17:00Z",
+    "head_ref": "feature/continue-watching-data",
+    "base_ref": "develop",
+    "creator": {
+      "login": "marwanqashwa",
+      "id": 100484790,
+      "url": "https://github.com/marwanqashwa"
+    },
+    "approvals": [],
+    "first_approved_at": null,
+    "time_to_first_approval_minutes": null,
+    "required_approvals_met_at": null,
+    "time_to_required_approvals_minutes": null,
+    "closed_at": null,
+    "merged_at": null,
+    "merged_by": null,
+    "week": "2025-W30",
+    "status": "pending",
+    "diff_stats": {
+      "additions": 852,
+      "deletions": 2,
+      "changed_files": 28
+    }
   }
 ]
