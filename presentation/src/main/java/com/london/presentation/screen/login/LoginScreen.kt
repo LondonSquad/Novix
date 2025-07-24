@@ -79,7 +79,6 @@ fun LoginScreen(
     }
 }
 
-@SuppressLint("UnrememberedMutableInteractionSource")
 @Composable
 private fun Content(
     uiState: LoginUiState,
