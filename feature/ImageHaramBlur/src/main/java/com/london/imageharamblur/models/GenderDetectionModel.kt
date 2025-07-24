@@ -126,8 +126,8 @@ internal class GenderDetectionModel {
             val expMale = kotlin.math.exp(maleProbability - maxProb)
             val sumExp = expFemale + expMale
 
-            val normalizedFemaleProbability = (expFemale / sumExp).toFloat()
-            val normalizedMaleProbability = (expMale / sumExp).toFloat()
+            val normalizedFemaleProbability = (expFemale / sumExp)
+            val normalizedMaleProbability = (expMale / sumExp)
 
             val isFemale = normalizedFemaleProbability > normalizedMaleProbability
             val confidence = if (isFemale) normalizedFemaleProbability else normalizedMaleProbability
@@ -136,7 +136,7 @@ internal class GenderDetectionModel {
                 isFemale = isFemale,
                 confidence = confidence
             )
-        } catch (e: Exception) {
+        } catch (_: Exception) {
             GenderResult(
                 isFemale = false,
                 confidence = 0.5f

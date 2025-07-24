@@ -38,7 +38,7 @@ class FaceDetector(private val context: Context) {
             interpreter?.close()
             interpreter = Interpreter(modelBuffer, options)
 
-        } catch (e: Exception) {}
+        } catch (_: Exception) {}
     }
 
     fun detectFaces(bitmap: Bitmap): List<DetectedFace> {

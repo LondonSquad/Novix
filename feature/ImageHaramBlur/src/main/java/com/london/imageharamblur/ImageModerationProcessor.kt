@@ -25,7 +25,7 @@ class ImageModerationProcessor(private val context: Context) {
             genderModel = GenderDetectionModel(modelFiles.genderModelFile)
             contentModel = ContentDetectionModel(modelFiles.nsfwModelFile)
             modelsInitialized = true
-        } catch (e: Exception) {
+        } catch (_: Exception) {
             genderModel = GenderDetectionModel(context)
             contentModel = ContentDetectionModel(context)
             modelsInitialized = true
