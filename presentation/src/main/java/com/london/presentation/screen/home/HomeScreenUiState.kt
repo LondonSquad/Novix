@@ -13,5 +13,7 @@ data class HomeScreenUiState(
     val error: ErrorState? = null,
     val popularMovies: List<PopularMovie> = emptyList(),
     val upcomingMovies:  StateFlow<PagingData<Movie>> = MutableStateFlow<PagingData<Movie>>(PagingData.empty()),
-    val selectedGenre: Genre = Genre.All
+    val selectedGenre: Genre = Genre.All,
+    val genres: List<Genre> = Genre.entries.toList(),
+    val selectedGenreId: Int? = selectedGenre.id
 )
