@@ -3,7 +3,6 @@ package com.london.imageharamblur.ui
 import android.content.Context
 import android.graphics.drawable.Drawable
 import android.os.Build
-import android.util.Log
 import com.london.imageharamblur.ImageModerationProcessor
 import com.london.imageharamblur.utils.blurBitmap
 import com.london.imageharamblur.utils.toBitmap
@@ -34,7 +33,6 @@ class ImageModerationController(
         useContentDetection: Boolean = true
     ): ImageModerationState = withContext(Dispatchers.Default) {
 
-        // Check cache first
         ModerationCacheManager.get(cacheKey)?.let { cachedState ->
             if (cachedState.isModerated && cachedState.originalBitmap != null) {
                 _state.value = cachedState
@@ -47,7 +45,12 @@ class ImageModerationController(
 
             val bitmap = drawable.toBitmap()
             if (bitmap == null || bitmap.isRecycled) {
-                throw IllegalStateException("Invalid bitmap")
+                val errorState = _state.value.copy(
+                    isProcessing = false,
+                    error = "Invalid bitmap"
+                )
+                _state.value = errorState
+                return@withContext errorState
             }
 
             if (!enableModeration || processor == null) {
@@ -86,7 +89,6 @@ class ImageModerationController(
 
             newState
         } catch (e: Exception) {
-            Log.e("ImageModerationController", "Error processing image", e)
             val errorState = _state.value.copy(
                 isProcessing = false,
                 error = e.message

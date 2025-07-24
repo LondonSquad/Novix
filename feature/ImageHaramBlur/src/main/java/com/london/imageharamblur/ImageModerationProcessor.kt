@@ -7,28 +7,94 @@ import com.london.imageharamblur.faceDetection.FaceDetector
 import com.london.imageharamblur.models.ContentDetectionModel
 import com.london.imageharamblur.models.GenderDetectionModel
 import com.london.imageharamblur.models.ModelDownloadManager
+import com.london.imageharamblur.ui.ModerationCacheManager
 import kotlinx.coroutines.*
+import kotlinx.coroutines.sync.Mutex
+import kotlinx.coroutines.sync.withLock
 
 class ImageModerationProcessor(private val context: Context) {
+    companion object {
+        private val initMutex = Mutex()
+        @Volatile
+        private var sharedGenderModel: GenderDetectionModel? = null
+        @Volatile
+        private var sharedContentModel: ContentDetectionModel? = null
+        @Volatile
+        private var modelsInitialized = false
+        @Volatile
+        private var activeProcessorCount = 0
+        @Volatile
+        private var currentModelsAreFromFirebase = false
+
+        private val modelChangeListeners = mutableListOf<() -> Unit>()
+
+        private fun notifyModelChange() {
+            modelChangeListeners.forEach { it.invoke() }
+        }
+    }
 
     private val faceDetector = FaceDetector(context)
     private val modelDownloadManager = ModelDownloadManager(context)
-    private var genderModel: GenderDetectionModel? = null
-    private var contentModel: ContentDetectionModel? = null
-    private var modelsInitialized = false
+
+    init {
+        synchronized(ImageModerationProcessor::class.java) {
+            activeProcessorCount++
+        }
+    }
 
     private suspend fun ensureModelsLoaded() {
-        if (modelsInitialized) return
+        if (modelsInitialized && sharedGenderModel != null && sharedContentModel != null) {
+            return
+        }
 
-        try {
-            val modelFiles = modelDownloadManager.downloadModelsIfNeeded()
-            genderModel = GenderDetectionModel(modelFiles.genderModelFile)
-            contentModel = ContentDetectionModel(modelFiles.nsfwModelFile)
-            modelsInitialized = true
-        } catch (_: Exception) {
-            genderModel = GenderDetectionModel(context)
-            contentModel = ContentDetectionModel(context)
-            modelsInitialized = true
+        initMutex.withLock {
+            if (modelsInitialized && sharedGenderModel != null && sharedContentModel != null) {
+                return
+            }
+
+            try {
+                val modelFiles = modelDownloadManager.downloadModelsIfNeeded()
+                val switchingToFirebase = !currentModelsAreFromFirebase && modelFiles.isFromFirebase && modelsInitialized
+
+                if (switchingToFirebase) {
+                    sharedGenderModel?.close()
+                    sharedContentModel?.close()
+                    sharedGenderModel = null
+                    sharedContentModel = null
+                    modelsInitialized = false
+                }
+
+                if (modelFiles.isFromFirebase) {
+                    sharedGenderModel = GenderDetectionModel(modelFiles.genderModelFile)
+                    sharedContentModel = ContentDetectionModel(modelFiles.nsfwModelFile)
+                    currentModelsAreFromFirebase = true
+
+                    if (switchingToFirebase) {
+                        ModerationCacheManager.clear()
+                        notifyModelChange()
+                    }
+                } else {
+                    sharedGenderModel = GenderDetectionModel(context)
+                    sharedContentModel = ContentDetectionModel(context)
+                    currentModelsAreFromFirebase = false
+                }
+
+                modelsInitialized = true
+            } catch (e: Exception) {
+                if (currentModelsAreFromFirebase) {
+                    try {
+                        sharedGenderModel?.close()
+                        sharedContentModel?.close()
+
+                        sharedGenderModel = GenderDetectionModel(context)
+                        sharedContentModel = ContentDetectionModel(context)
+                        currentModelsAreFromFirebase = false
+                        modelsInitialized = true
+                    } catch (fallbackError: Exception) {
+                        // Silently fail
+                    }
+                }
+            }
         }
     }
 
@@ -40,31 +106,44 @@ class ImageModerationProcessor(private val context: Context) {
     ): Boolean = withContext(Dispatchers.Default) {
         ensureModelsLoaded()
 
-        // Check content first
-        if (useContentDetection && contentModel != null) {
-            val contentResult = contentModel!!.detectContent(bitmap)
-            if (contentResult.isInappropriate) {
-                return@withContext true
+        if (useContentDetection) {
+            try {
+                val contentModel = sharedContentModel
+                if (contentModel != null) {
+                    val contentResult = contentModel.detectContent(bitmap)
+                    if (contentResult.isInappropriate) {
+                        return@withContext true
+                    }
+                }
+            } catch (e: Exception) {
+                // Ignore errors
             }
         }
 
-        // Check faces
-        val faces = faceDetector.detectFaces(bitmap)
+        try {
+            val faces = faceDetector.detectFaces(bitmap)
 
-        for (face in faces) {
-            try {
-                val faceBitmap = cropFace(bitmap, face)
-                val genderResult = genderModel?.detectGender(faceBitmap)
+            for (face in faces) {
+                try {
+                    val faceBitmap = cropFace(bitmap, face)
+                    val genderModel = sharedGenderModel
 
-                genderResult?.let { result ->
-                    when {
-                        detectFemales && result.isFemale -> return@withContext true
-                        detectMales && !result.isFemale -> return@withContext true
+                    if (genderModel != null) {
+                        val genderResult = genderModel.detectGender(faceBitmap)
+
+                        genderResult.let { result ->
+                            when {
+                                detectFemales && result.isFemale -> return@withContext true
+                                detectMales && !result.isFemale -> return@withContext true
+                            }
+                        }
                     }
+                } catch (e: Exception) {
+                    // Ignore errors
                 }
-            } catch (_: Exception) {
-                // Skip this face
             }
+        } catch (e: Exception) {
+            // Ignore errors
         }
 
         return@withContext false
@@ -81,8 +160,39 @@ class ImageModerationProcessor(private val context: Context) {
     }
 
     fun close() {
-        faceDetector.close()
-        genderModel?.close()
-        contentModel?.close()
+        synchronized(ImageModerationProcessor::class.java) {
+            activeProcessorCount--
+
+            if (activeProcessorCount == 0) {
+                try {
+                    faceDetector.close()
+                } catch (e: Exception) {
+                    // Ignore
+                }
+
+                try {
+                    sharedGenderModel?.close()
+                    sharedGenderModel = null
+                } catch (e: Exception) {
+                    // Ignore
+                }
+
+                try {
+                    sharedContentModel?.close()
+                    sharedContentModel = null
+                } catch (e: Exception) {
+                    // Ignore
+                }
+
+                modelsInitialized = false
+                currentModelsAreFromFirebase = false
+            } else {
+                try {
+                    faceDetector.close()
+                } catch (e: Exception) {
+                    // Ignore
+                }
+            }
+        }
     }
 }

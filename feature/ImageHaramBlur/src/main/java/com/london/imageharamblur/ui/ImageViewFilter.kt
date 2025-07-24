@@ -2,7 +2,6 @@ package com.london.imageharamblur.ui
 
 import android.content.Context
 import android.graphics.drawable.Drawable
-import android.util.Log
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.*
@@ -13,6 +12,7 @@ import androidx.compose.ui.platform.LocalContext
 import coil.Coil
 import coil.request.CachePolicy
 import coil.request.ImageRequest
+import com.london.imageharamblur.utils.toBitmap
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 
@@ -36,28 +36,51 @@ fun ImageViewFilter(
     var errorState by remember { mutableStateOf<String?>(null) }
     var isLoading by remember { mutableStateOf(true) }
 
-    LaunchedEffect(model, config.enableModeration) {
+    val controller = remember(context, imageKey, config) {
+        if (config.enableModeration) {
+            createModerationController(
+                context = context,
+                imageKey = imageKey,
+                config = config
+            )
+        } else null
+    }
+
+    DisposableEffect(controller) {
+        onDispose {
+            controller?.close()
+        }
+    }
+
+    LaunchedEffect(model, config) {
         onLoadingStateChange?.invoke(true)
         isLoading = true
         errorState = null
-
-        var controller: ImageModerationController? = null
+        moderationState = null
 
         try {
             val drawable = loadImageDrawable(context, model)
 
             if (drawable == null) {
-                errorState = "Failed to load image for moderation."
+                errorState = "Failed to load image"
                 isLoading = false
                 onLoadingStateChange?.invoke(false)
                 return@LaunchedEffect
             }
 
-            controller = createModerationController(
-                context = context,
-                imageKey = imageKey,
-                config = config
-            )
+            if (!config.enableModeration || controller == null) {
+                val bitmap = drawable.toBitmap()
+                moderationState = ImageModerationState(
+                    isProcessing = false,
+                    isModerated = true,
+                    shouldBlur = false,
+                    originalBitmap = bitmap
+                )
+                onModerationResult?.invoke(false)
+                isLoading = false
+                onLoadingStateChange?.invoke(false)
+                return@LaunchedEffect
+            }
 
             val state = controller.processImage(
                 drawable = drawable,
@@ -71,11 +94,9 @@ fun ImageViewFilter(
             isLoading = false
             onLoadingStateChange?.invoke(false)
         } catch (e: Exception) {
-            errorState = e.message
+            errorState = e.message ?: "Unknown error"
             isLoading = false
             onLoadingStateChange?.invoke(false)
-        } finally {
-            controller?.close()
         }
     }
 
@@ -84,8 +105,12 @@ fun ImageViewFilter(
         contentAlignment = Alignment.Center
     ) {
         when {
-            isLoading -> loadingContent()
-            errorState != null -> errorContent(errorState)
+            isLoading -> {
+                loadingContent()
+            }
+            errorState != null -> {
+                errorContent(errorState)
+            }
             moderationState != null && moderationState!!.isModerated -> {
                 ModeratedImage(
                     state = moderationState!!,
@@ -99,10 +124,6 @@ fun ImageViewFilter(
                     moderatedContent()
                 }
             }
-            else -> Log.d(
-                "ImageViewFilter",
-                "No content to show - moderationState: $moderationState"
-            )
         }
     }
 }
@@ -133,9 +154,9 @@ private suspend fun loadImageDrawable(
         .build()
 
     try {
-        Coil.imageLoader(context).execute(request).drawable
+        val result = Coil.imageLoader(context).execute(request)
+        result.drawable
     } catch (e: Exception) {
-        Log.e("ImageViewFilter", "Failed to load image", e)
         null
     }
 }
