@@ -1,0 +1,14 @@
+package com.london.domain.usecase
+
+import com.london.domain.entity.trending.TrendingMovie
+import com.london.domain.entity.PagedFetchResponse
+import com.london.domain.repository.TrendingRepository
+import org.koin.core.annotation.Provided
+import org.koin.core.annotation.Single
+
+@Single
+class GetTrendingMoviesUseCase(
+    @Provided private val trendingRepository: TrendingRepository
+) {
+    suspend operator fun invoke(page: Int): PagedFetchResponse<TrendingMovie> = trendingRepository.getTrendingMovies(page)
+} 
