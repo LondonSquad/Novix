@@ -7,8 +7,8 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.PagerState
@@ -20,6 +20,7 @@ import androidx.compose.ui.graphics.TransformOrigin
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.util.lerp
@@ -27,6 +28,7 @@ import com.london.designsystem.component.HomeCard
 import com.london.designsystem.component.NovixCarousalRow
 import com.london.designsystem.component.Text
 import com.london.designsystem.theme.NovixTheme
+import com.london.presentation.R
 import com.london.presentation.composables.RatingItem
 import kotlin.math.abs
 
@@ -65,13 +67,23 @@ fun PopularSection(
     val horizontalPadding = (screenWidth - cardWidth) / 2
 
     Column(
-        modifier = modifier.wrapContentHeight(),
+        modifier = modifier,
         horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.spacedBy(8.dp, Alignment.Top)
     ) {
+
+        Text(
+            text = stringResource(R.string.popular),
+            style = NovixTheme.typography.headline.small,
+            color = NovixTheme.colors.title,
+            modifier = Modifier
+                .padding(start = 16.dp, end = 16.dp,)
+                .align(Alignment.Start)
+        )
+
         HorizontalPager(
             state = pagerState,
-            modifier = modifier.wrapContentHeight(),
+            modifier = Modifier
+                .heightIn(CARD_WIDTH_DP.dp),
             pageSpacing = PAGE_SPACING_DP.dp,
             contentPadding = PaddingValues(horizontal = horizontalPadding)
         ) { page ->
@@ -105,7 +117,10 @@ fun PopularSection(
 
                         transformOrigin = TransformOrigin(TRANSFORM_ORIGIN_X, TRANSFORM_ORIGIN_Y)
                     }
-                    .clickable { onCardClick() },
+                    .clickable(
+                        indication = null,
+                        interactionSource = null
+                    ) { onCardClick() },
             ) {
 
                 HomeCard(

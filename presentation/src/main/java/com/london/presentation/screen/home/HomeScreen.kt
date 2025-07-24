@@ -28,6 +28,7 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.paging.compose.LazyPagingItems
 import androidx.paging.compose.collectAsLazyPagingItems
+import com.london.designsystem.component.DefaultTopBar
 import com.london.designsystem.component.HomeCard
 import com.london.designsystem.component.NovixChip
 import com.london.designsystem.component.Text
@@ -58,9 +59,9 @@ fun HomeScreen(
         }
     }
 
-    val lazyGridState = rememberSaveable (
+    val lazyGridState = rememberSaveable(
         saver = LazyGridState.Saver,
-    ){
+    ) {
         LazyGridState()
     }
     when {
@@ -70,7 +71,6 @@ fun HomeScreen(
             homeScreenContract = viewModel,
             uiState = uiState,
             modifier = Modifier
-                .padding(top = 20.dp)
                 .fillMaxSize(),
             lazyGridState = lazyGridState
         )
@@ -95,6 +95,7 @@ private fun Content(
 
     val pagerState = rememberPagerState(initialPage = 0, pageCount = { totalPopularItems })
 
+
     LazyVerticalGrid(
         columns = GridCells.Fixed(2),
         contentPadding = PaddingValues(
@@ -109,6 +110,15 @@ private fun Content(
         modifier = modifier
             .background(color = NovixTheme.colors.surface)
     ) {
+
+        stickyHeader {
+            DefaultTopBar(
+                modifier = Modifier
+                    .requiredWidth(screenWidth)
+                    .background(NovixTheme.colors.surface)
+                    .padding(top = 12.dp)
+            )
+        }
 
         if (totalPopularItems > 0) {
             val moviesCount = uiState.popularMovies.size
