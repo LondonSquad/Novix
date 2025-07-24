@@ -57,7 +57,7 @@ import com.london.designsystem.component.Text
 import com.london.designsystem.component.button.ErrorImage
 import com.london.designsystem.theme.NovixTheme
 import com.london.designsystem.theme.noRippleClickable
-import com.london.domain.entity.moviedatails.Genre
+import com.london.domain.entity.Genre
 import com.london.presentation.R.drawable
 import com.london.presentation.R.string.calendar
 import com.london.presentation.R.string.dot

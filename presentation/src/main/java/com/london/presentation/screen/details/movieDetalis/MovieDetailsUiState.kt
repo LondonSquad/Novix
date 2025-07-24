@@ -1,6 +1,6 @@
 package com.london.presentation.screen.details.movieDetalis
 
-import com.london.domain.entity.moviedatails.Genre
+import com.london.domain.entity.Genre
 import com.london.presentation.screen.base.ErrorState
 
 data class MovieDetailsUiState(
