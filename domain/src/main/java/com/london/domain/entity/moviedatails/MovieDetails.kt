@@ -1,6 +1,7 @@
 package com.london.domain.entity.moviedatails
 
 import com.london.domain.entity.Actor
+import com.london.domain.entity.Genre
 
 data class MovieDetails(
     val movieId: Int,
