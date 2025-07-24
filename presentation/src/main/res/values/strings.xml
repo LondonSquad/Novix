@@ -78,4 +78,7 @@
     <string name="actors">Actors</string>
     <string name="What_you_want_to_watch">What you want to watch?</string>
     <string name="popular">Popular</string>
+    <string name="politics">Politics</string>
+    <string name="action_adventure">Action And Adventure</string>
+    <string name="war_politics">war And Politics</string>
 </resources>
