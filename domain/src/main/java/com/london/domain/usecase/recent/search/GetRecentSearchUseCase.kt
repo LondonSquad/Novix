@@ -12,5 +12,6 @@ class GetRecentSearchUseCase(
     @Named("recentSearchRepository")
     private val recentSearchRepository: RecentRepository<RecentSearch>
 ) {
+
     suspend fun invoke(): List<RecentSearch> = recentSearchRepository.getAll()
 }

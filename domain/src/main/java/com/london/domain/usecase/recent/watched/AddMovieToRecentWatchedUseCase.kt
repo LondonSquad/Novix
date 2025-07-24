@@ -12,5 +12,6 @@ class AddMovieToRecentWatchedUseCase(
     @Named("recentWatchedRepository")
     private val recentWatchedRepository: RecentWatchedRepository
 ) {
+
     suspend fun invoke(item: Movie) = recentWatchedRepository.insertMovie(item)
 }

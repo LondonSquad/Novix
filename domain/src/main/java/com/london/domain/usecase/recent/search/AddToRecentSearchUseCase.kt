@@ -12,5 +12,6 @@ class AddToRecentSearchUseCase(
     @Named("recentSearchRepository")
     private val recentSearchRepository: RecentRepository<RecentSearch>
 ) {
+
     suspend fun invoke(item: RecentSearch) = recentSearchRepository.insert(item)
 }

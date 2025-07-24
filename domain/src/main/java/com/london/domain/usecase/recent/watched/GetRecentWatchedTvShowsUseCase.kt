@@ -11,6 +11,7 @@ class GetRecentWatchedTvShowsUseCase(
     @Named("recentWatchedRepository")
     private val recentWatchedRepository: RecentWatchedRepository
 ) {
+
     suspend fun invoke(limit: Int? = null) =
         recentWatchedRepository.getAllRecentWatchedTvShows().take(limit ?: Int.MAX_VALUE)
 }

@@ -12,5 +12,6 @@ class DeleteRecentSearchUseCase(
     @Named("recentSearchRepository")
     private val recentSearchRepository: RecentRepository<RecentSearch>
 ) {
+
     suspend fun invoke(item: RecentSearch) = recentSearchRepository.delete(item)
 }

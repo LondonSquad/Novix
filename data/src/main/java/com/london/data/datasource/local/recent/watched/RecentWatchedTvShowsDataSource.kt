@@ -13,6 +13,7 @@ class RecentWatchedTvShowsDataSource(
     @Named("recentWatchedTvShowsDao")
     private val recentWatchedTvShowsDao: RecentWatchedTvShowsDao
 ) : RecentWatchedDataSource<RecentWatchedTvShowLocal> {
+
     override suspend fun getAll(): List<RecentWatchedTvShowLocal> = runCatching {
         recentWatchedTvShowsDao.getAll()
     }.getOrDefault(emptyList())

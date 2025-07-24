@@ -12,5 +12,6 @@ class GetRecentViewedUseCase(
     @Named("recentViewedRepository")
     private val repository: RecentRepository<RecentViewed>,
 ) {
+
     suspend fun invoke() = repository.getAll()
 }

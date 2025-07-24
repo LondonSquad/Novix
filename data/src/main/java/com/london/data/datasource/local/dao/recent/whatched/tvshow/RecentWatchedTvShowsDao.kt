@@ -9,8 +9,10 @@ import com.london.data.datasource.local.model.recent.watched.RecentWatchedTvShow
 
 @Dao
 interface RecentWatchedTvShowsDao: RecentWatchedDao<RecentWatchedTvShowLocal>{
+
     @Query("SELECT * FROM recent_watched_tv_show_table")
     override suspend fun getAll(): List<RecentWatchedTvShowLocal>
+
     @Insert(onConflict = OnConflictStrategy.Companion.REPLACE)
     override suspend fun insert(item: RecentWatchedTvShowLocal)
 }

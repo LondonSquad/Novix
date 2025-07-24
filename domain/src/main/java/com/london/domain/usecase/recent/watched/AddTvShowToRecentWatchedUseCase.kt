@@ -12,5 +12,6 @@ class AddTvShowToRecentWatchedUseCase(
     @Named("recentWatchedRepository")
     private val recentWatchedRepository: RecentWatchedRepository
 ) {
+
     suspend fun invoke(item: TvShow) = recentWatchedRepository.insertTvShow(item)
 }

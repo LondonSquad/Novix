@@ -12,5 +12,6 @@ class AddToRecentViewedUseCase(
     @Named("recentViewedRepository")
     private val repository: RecentRepository<RecentViewed>,
 ) {
+
     suspend fun invoke(item: RecentViewed) = repository.insert(item)
 }

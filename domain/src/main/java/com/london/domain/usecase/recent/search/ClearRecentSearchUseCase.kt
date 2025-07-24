@@ -12,5 +12,6 @@ class ClearRecentSearchUseCase(
     @Named("recentSearchRepository")
     private val recentSearchRepository: RecentRepository<RecentSearch>
 ) {
+
     suspend fun invoke() = recentSearchRepository.clearAll()
 }

@@ -12,6 +12,7 @@ import com.london.domain.KoverIgnore
 
 @Dao
 interface RecentViewedDao : RecentDao<RecentViewedLocal> {
+
     @Query("SELECT * FROM recent_viewed_table")
     override suspend fun getAll(): List<RecentViewedLocal>
 
