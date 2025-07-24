@@ -6645,33 +6645,16 @@
       "id": 100484790,
       "url": "https://github.com/marwanqashwa"
     },
-    "approvals": [
-      {
-        "reviewer": {
-          "id": 102248144,
-          "login": "BassantM",
-          "url": "https://github.com/BassantM"
-        },
-        "submitted_at": "2025-07-24T12:49:12Z"
-      },
-      {
-        "reviewer": {
-          "id": 92235360,
-          "login": "abdo-essam",
-          "url": "https://github.com/abdo-essam"
-        },
-        "submitted_at": "2025-07-24T12:55:25Z"
-      }
-    ],
-    "first_approved_at": "2025-07-24T12:49:12Z",
-    "time_to_first_approval_minutes": 0.8166666666666667,
-    "required_approvals_met_at": "2025-07-24T12:55:25Z",
-    "time_to_required_approvals_minutes": 7.033333333333333,
+    "approvals": [],
+    "first_approved_at": null,
+    "time_to_first_approval_minutes": null,
+    "required_approvals_met_at": null,
+    "time_to_required_approvals_minutes": null,
     "closed_at": null,
     "merged_at": null,
     "merged_by": null,
     "week": "2025-W30",
-    "status": "approved",
+    "status": "pending",
     "diff_stats": {
       "additions": 64,
       "deletions": 30,
