@@ -6530,5 +6530,33 @@
       "deletions": 0,
       "changed_files": 9
     }
+  },
+  {
+    "pr_number": 274,
+    "url": "https://github.com/LondonSquad/Novix/pull/274",
+    "title": "feature/top-rated-remote-domin",
+    "opened_at": "2025-07-24T07:56:45Z",
+    "head_ref": "feature/top-rated-remote-domin",
+    "base_ref": "develop",
+    "creator": {
+      "login": "abdelrhman1002",
+      "id": 180463542,
+      "url": "https://github.com/abdelrhman1002"
+    },
+    "approvals": [],
+    "first_approved_at": null,
+    "time_to_first_approval_minutes": null,
+    "required_approvals_met_at": null,
+    "time_to_required_approvals_minutes": null,
+    "closed_at": null,
+    "merged_at": null,
+    "merged_by": null,
+    "week": "2025-W30",
+    "status": "pending",
+    "diff_stats": {
+      "additions": 860,
+      "deletions": 0,
+      "changed_files": 23
+    }
   }
 ]
