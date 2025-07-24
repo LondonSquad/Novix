@@ -4,9 +4,8 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 sealed interface Screen {
-
     @Serializable
-    object Login : Screen
+    object Splash : Screen
 
     @Serializable
     object OnboardingPager : Screen

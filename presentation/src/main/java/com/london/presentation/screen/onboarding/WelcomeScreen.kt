@@ -8,13 +8,13 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Brush
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.zIndex
-import com.london.designsystem.component.Icon
 import com.london.designsystem.component.Text
 import com.london.designsystem.component.button.OutlineButton
 import com.london.designsystem.component.button.PrimaryButton
@@ -27,35 +27,19 @@ fun WelcomeScreen(
     onLoginClicked: () -> Unit,
     onContinueClicked: () -> Unit,
 ) {
-    Column(modifier = Modifier.fillMaxSize()) {
-        Box(
+    Column(modifier = Modifier
+        .fillMaxSize()
+        .verticalScroll(rememberScrollState())) {
+        WelcomePoster(
             modifier = Modifier
+                .weight(1f)
                 .fillMaxWidth()
-                .weight(0.6f)
-        ) {
-            Image(
-                painter = painterResource(id = R.drawable.image_onboarding_background),
-                contentDescription = null,
-                contentScale = ContentScale.Crop,
-                modifier = Modifier.matchParentSize()
-            )
-
-            Icon(
-                painter = painterResource(id = R.drawable.app_icon),
-                contentDescription = null,
-                tint = NovixTheme.colors.primary,
-                modifier = Modifier
-                    .size(100.dp)
-                    .align(Alignment.BottomCenter)
-                    .padding(bottom = 6.dp)
-                    .zIndex(1f)
-            )
-        }
+        )
 
         Box(
             modifier = Modifier
                 .fillMaxSize()
-                .weight(0.3f)
+                .weight(0.5f)
                 .background(NovixTheme.colors.surface)
                 .padding(start = 16.dp, end = 16.dp, bottom = 50.dp)
         ) {
@@ -108,6 +92,44 @@ fun WelcomeScreen(
                 )
             }
         }
+    }
+}
+
+@Composable
+fun WelcomePoster(modifier: Modifier = Modifier) {
+    Box(
+        modifier = modifier,
+        contentAlignment = Alignment.BottomCenter
+    ) {
+        Image(
+            painter = painterResource(id = R.drawable.image_onboarding_background),
+            contentDescription = "",
+            contentScale = ContentScale.Crop,
+            modifier = Modifier.matchParentSize()
+        )
+        Box(
+            modifier = Modifier
+                .matchParentSize()
+                .background(
+                    Brush.verticalGradient(
+                        colorStops = arrayOf(
+                            0.00f to Color.Transparent,
+                            0.20f to NovixTheme.colors.surface.copy(alpha = 0.10f),
+                            0.45f to NovixTheme.colors.surface.copy(alpha = 0.35f),
+                            0.75f to NovixTheme.colors.surface.copy(alpha = 0.70f),
+                            0.90f to NovixTheme.colors.surface.copy(alpha = 0.85f),
+                            1.00f to NovixTheme.colors.surface.copy(alpha = 1f),
+                        )
+                    )
+                )
+        )
+        Image(
+            painter = painterResource(id = R.drawable.app_icon),
+            contentDescription = null,
+            modifier = Modifier
+                .size(100.dp)
+                .padding(bottom = 32.dp)
+        )
     }
 }
 

@@ -58,15 +58,16 @@ class OnboardingViewModel(
                     animationSpec = tween(durationMillis = 750, easing = FastOutSlowInEasing)
                 )
             } else {
-                emitEffect(OnboardingEffect.NavigateToWelcome)
+                navigateToWelcome()
             }
         }
     }
 
-
+    fun navigateToWelcome() {
+        emitEffect(OnboardingEffect.NavigateToWelcome)
+    }
 
     fun onboardingFinished() {
-        emitEffect(OnboardingEffect.SkipOnboarding)
         viewModelScope.launch(Dispatchers.IO) {
             runCatching { appPreferencesService.setOnBoardingShown() }
                 .onFailure { Log.e("OnboardingViewModel", "onboardingFinished: ", it) }

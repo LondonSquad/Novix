@@ -1,39 +1,48 @@
 package com.london.presentation.screen.onboarding
 
-import android.window.SplashScreen
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.setValue
-import dev.burnoo.compose.rememberpreference.rememberBooleanPreference
+import com.london.domain.AppPreferencesService
+import com.london.domain.repository.AuthRepository
+import kotlinx.coroutines.delay
+import org.koin.core.annotation.Provided
+
 
 @Composable
-fun OnboardingRoute(
-    onCompleted: () -> Unit,
-    onSkip: () -> Unit,
+fun SplashRoute(
+    onNavigateToOnboarding: () -> Unit,
+    onNavigateToWelcome: () -> Unit,
+    onNavigateToHome: () -> Unit,
+    @Provided appPreferencesService: AppPreferencesService,
+    @Provided authRepository: AuthRepository
 ) {
-    var isOnboardingCompleted by rememberBooleanPreference(
-        keyName = "onboardingKey",
-        initialValue = false,
-        defaultValue = null,
-    )
-    when (isOnboardingCompleted) {
-        false -> SplashScreen()
-        null -> OnboardingScreen(
-            onNext = {
-                isOnboardingCompleted = true
-                onCompleted()
-            },
-            onSkip = {
-                isOnboardingCompleted = true
-                onSkip()
-            },
-        )
+    SplashScreen()
 
-        true -> {
-            LaunchedEffect(Unit) {
-                onCompleted()
+    LaunchedEffect(Unit) {
+        delay(1500)
+        val hasSeenOnboarding = appPreferencesService.hasOnboardingBeenShown
+        if (!hasSeenOnboarding) {
+            onNavigateToOnboarding()
+        } else {
+            val isLoggedIn = authRepository.isLoggedIn()
+            if (isLoggedIn) {
+                onNavigateToHome()
+            } else {
+                onNavigateToWelcome()
             }
         }
     }
+}
+
+@Composable
+fun OnboardingRoute(
+    onNavigateToWelcome: () -> Unit,
+    @Provided appPreferencesService: AppPreferencesService
+) {
+    OnboardingScreen(
+        onNext = {
+            appPreferencesService.setOnBoardingShown()
+            onNavigateToWelcome()
+        }
+    )
 }

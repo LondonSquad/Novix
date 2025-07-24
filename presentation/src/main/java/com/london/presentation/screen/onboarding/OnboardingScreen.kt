@@ -1,5 +1,6 @@
 package com.london.presentation.screen.onboarding
 
+import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -11,7 +12,6 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -25,28 +25,25 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.systemBarsPadding
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.draw.blur
-import androidx.compose.ui.draw.clip
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.london.designsystem.component.Icon
+import com.london.designsystem.component.NovixCarousalRow
 import com.london.designsystem.component.Text
 import com.london.designsystem.component.button.OutlineButton
 import com.london.designsystem.component.button.PrimaryButton
 import com.london.designsystem.theme.NovixTheme
 import com.london.designsystem.theme.ThemePreviews
 import com.london.presentation.R
-import com.london.presentation.utils.Listen
 import org.koin.androidx.compose.koinViewModel
 
 @Composable
 fun OnboardingScreen(
     onNext: () -> Unit,
-    onSkip: () -> Unit
 ) {
     val viewModel: OnboardingViewModel = koinViewModel()
     val scope = rememberCoroutineScope()
@@ -61,19 +58,18 @@ fun OnboardingScreen(
         viewModel.onPageChanged(pagerState.currentPage)
     }
 
-    effect?.Listen { currentEffect ->
-        when (currentEffect) {
+    LaunchedEffect(effect) {
+        when (val currentEffect = effect) {
             is OnboardingEffect.ScrollToPage -> {
                 viewModel.scrollToPage(pagerState, currentEffect.page, scope)
             }
+
             OnboardingEffect.NavigateToWelcome -> {
                 viewModel.onboardingFinished()
                 onNext()
             }
-            OnboardingEffect.SkipOnboarding -> {
-                viewModel.onboardingFinished()
-                onSkip()
-            }
+
+            else -> {}
         }
     }
 
@@ -100,12 +96,10 @@ fun OnboardingScreen(
                     .fillMaxWidth()
                     .padding(vertical = 16.dp, horizontal = 16.dp),
                 horizontalArrangement = Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.CenterVertically
             ) {
-                OnboardingIndicatorBar(
-                    modifier = Modifier
-                        .padding(vertical = 16.dp),
-                    activeStep = pagerState.currentPage,
-                    totalSteps = uiState.pages.size
+                NovixCarousalRow(
+                    dotsStates = List(uiState.pages.size) { index -> index == pagerState.currentPage },
                 )
 
                 OnboardingNavigationButtons(
@@ -120,14 +114,13 @@ fun OnboardingScreen(
                 )
             }
         }
-        if (!uiState.isLastPage) {
+        AnimatedVisibility(!uiState.isLastPage) {
             Text(
                 modifier = Modifier
                     .align(Alignment.TopStart)
                     .padding(16.dp)
                     .clickable {
-                        viewModel.onboardingFinished()
-                        onSkip()
+                        viewModel.navigateToWelcome()
                     },
                 text = stringResource(R.string.skip),
                 style = NovixTheme.typography.label.medium,
@@ -191,40 +184,6 @@ fun OnboardingPageContent(page: OnboardingPage) {
 
 
 @Composable
-fun OnboardingIndicatorBar(
-    modifier: Modifier = Modifier,
-    activeStep: Int,
-    totalSteps: Int
-) {
-    Row(
-        modifier = modifier
-            .wrapContentWidth(),
-        horizontalArrangement = Arrangement.Start,
-        verticalAlignment = Alignment.CenterVertically
-    ) {
-        repeat(totalSteps) { index ->
-            val color = if (index == activeStep) {
-                NovixTheme.colors.primary
-            } else {
-                NovixTheme.colors.stroke
-            }
-
-            Box(
-                modifier = Modifier
-                    .size(10.dp)
-                    .clip(CircleShape)
-                    .background(color)
-                    .padding(horizontal = 4.dp)
-            )
-
-            if (index != totalSteps - 1) {
-                Spacer(modifier = Modifier.width(8.dp))
-            }
-        }
-    }
-}
-
-@Composable
 fun OnboardingNavigationButtons(
     isFirstPage: Boolean,
     modifier: Modifier = Modifier,
@@ -269,6 +228,6 @@ fun OnboardingNavigationButtons(
 @Composable
 fun OnboardingPreview() {
     OnboardingScreen(
-        onNext = {}, onSkip = {}
+        onNext = {},
     )
 }
