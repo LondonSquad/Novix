@@ -6620,5 +6620,33 @@
       "deletions": 11,
       "changed_files": 5
     }
+  },
+  {
+    "pr_number": 276,
+    "url": "https://github.com/LondonSquad/Novix/pull/276",
+    "title": "Feature/fetch all geners",
+    "opened_at": "2025-07-24T12:48:23Z",
+    "head_ref": "feature/fetch-all-geners",
+    "base_ref": "develop",
+    "creator": {
+      "login": "marwanqashwa",
+      "id": 100484790,
+      "url": "https://github.com/marwanqashwa"
+    },
+    "approvals": [],
+    "first_approved_at": null,
+    "time_to_first_approval_minutes": null,
+    "required_approvals_met_at": null,
+    "time_to_required_approvals_minutes": null,
+    "closed_at": null,
+    "merged_at": null,
+    "merged_by": null,
+    "week": "2025-W30",
+    "status": "pending",
+    "diff_stats": {
+      "additions": 64,
+      "deletions": 30,
+      "changed_files": 7
+    }
   }
 ]
