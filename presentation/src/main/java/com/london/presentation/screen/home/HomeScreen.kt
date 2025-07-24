@@ -203,7 +203,7 @@ private fun LazyGridScope.upComingSection(
             HomeCard(
                 imageUrl = movie.posterPicture,
                 isSaved = false,
-                onSaveClick = { /*TODO: SAVE FUNCTIONALITY IS NOT IMPLEMENTED.*/ },
+                onSaveClick = { /*TODO: SAVE FUNCTIONALITY IS NOT IMPLEMENTED .*/ },
                 modifier = Modifier.clickable { contract.onMovieClick(movie.id) })
     }
 }
