@@ -99,7 +99,7 @@ fun ReviewsScreenContent(
     val backgroundAlpha by animateFloatAsState(
         targetValue = if (shouldShowBackground) 1f else 0f,
         animationSpec = tween(
-            durationMillis = 400,
+            durationMillis = 200,
             easing = FastOutSlowInEasing
         ),
         label = "background_alpha"

@@ -13,7 +13,7 @@ import com.london.domain.repository.MovieDetailsRepository
 import org.koin.core.annotation.Single
 
 @Single
-class MovieDetailsRepoImpl(
+class MovieDetailsRepositoryImpl(
     private val movieDetailsRemoteDataSource: MovieDetailsRemoteDataSource,
 ) : MovieDetailsRepository {
 

@@ -26,15 +26,15 @@ import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.assertThrows
 import kotlin.test.Test
 
-class MovieDetailsRepoImplTest {
+class MovieDetailsRepositoryImplTest {
 
     private lateinit var remoteDataSource: MovieDetailsRemoteDataSource
-    private lateinit var repository: MovieDetailsRepoImpl
+    private lateinit var repository: MovieDetailsRepositoryImpl
 
     @Before
     fun setup() {
         remoteDataSource = mockk(relaxed = true)
-        repository = MovieDetailsRepoImpl(remoteDataSource)
+        repository = MovieDetailsRepositoryImpl(remoteDataSource)
     }
 
     private fun fakeMovieDetailsRemote() = MovieDetailsResponse(

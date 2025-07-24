@@ -5,10 +5,11 @@ import androidx.paging.PagingData
 import androidx.paging.cachedIn
 import com.london.domain.entity.Movie
 import com.london.domain.usecase.GetPopularMovies
+import com.london.domain.usecase.GetPopularTvShow
 import com.london.domain.usecase.GetUpComingMoviesByCategoryUseCase
 import com.london.presentation.screen.base.BaseViewModel
 import com.london.presentation.screen.base.createPagingSourceFlow
-import com.london.presentation.utils.Genre
+import com.london.presentation.utils.MovieGenre
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -19,6 +20,7 @@ import org.koin.android.annotation.KoinViewModel
 @KoinViewModel
 class HomeViewModel(
     private val getPopularMovies: GetPopularMovies,
+    private val getPopularTvShows: GetPopularTvShow,
     private val getUpcomingMoviesByCategoryUseCase: GetUpComingMoviesByCategoryUseCase,
 ) : BaseViewModel<HomeScreenUiState, HomeScreenEffect>(HomeScreenUiState()), HomeScreenContract {
 
@@ -26,10 +28,24 @@ class HomeViewModel(
     private var upcomingJob: Job? = null
     init {
         initializePopularMovies()
+        initializePopularTvShows()
         updateState {
             copy(upcomingMovies = _upcomingMoviesFlow)
         }
         loadUpcomingMovies(categoryId = null)
+    }
+
+    private fun initializePopularTvShows(){
+        tryToExecute(
+            block = { getPopularTvShows.invoke() },
+            onStart = { updateState { copy(isLoading = true) } },
+            onSuccess = { popularTvShows ->
+                updateState { copy(popularTvShows = popularTvShows) }
+            },
+            onError = { errorState -> updateState { copy(error = errorState) } },
+            onCompleted = { updateState { copy(isLoading = false) } },
+            checkSuccess = { it.isNotEmpty() },
+        )
     }
 
     private fun initializePopularMovies() {
@@ -47,6 +63,10 @@ class HomeViewModel(
 
     override fun onMovieClick(id: Int) {
         emitEffect(HomeScreenEffect.NavigationMovieDetails(id))
+    }
+
+    override fun onTvShowClick(id: Int) {
+        emitEffect(HomeScreenEffect.NavigationTvShowDetails(id))
     }
 
     private fun loadUpcomingMovies(categoryId: Int?) {
@@ -78,9 +98,9 @@ class HomeViewModel(
         }
     }
 
-    override fun onGenreSelect(genre: Genre) {
+    override fun onGenreSelect(genre: MovieGenre) {
         if (genre == state.value.selectedGenre) return
         updateState { copy(selectedGenre = genre) }
-        loadUpcomingMovies(categoryId = if (genre == Genre.All) null else genre.id)
+        loadUpcomingMovies(categoryId = if (genre == MovieGenre.All) null else genre.id)
     }
 }
