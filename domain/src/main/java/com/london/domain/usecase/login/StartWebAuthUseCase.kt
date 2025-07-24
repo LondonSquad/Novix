@@ -10,7 +10,7 @@ class StartWebAuthUseCase(
     @Provided
     private val authRepository: AuthRepository
 ) {
-    operator fun invoke(): Flow<Boolean> {
+    suspend fun invoke(): Flow<Boolean> {
         return authRepository.validateSession()
     }
 }

@@ -9,5 +9,5 @@ class LogoutUseCase(
     @Provided
     private val authRepository: AuthRepository
 ) {
-    suspend operator fun invoke() = authRepository.logout()
+    suspend fun invoke() = authRepository.logout()
 }

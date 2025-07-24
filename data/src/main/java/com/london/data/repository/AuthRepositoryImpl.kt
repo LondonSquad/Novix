@@ -76,7 +76,7 @@ class AuthRepositoryImpl(
         return withContext(Dispatchers.IO) { authPreferences.isLoggedIn() }
     }
 
-    override fun validateSession(): Flow<Boolean> = flow {
+    override suspend fun validateSession(): Flow<Boolean> = flow {
         val sessionId = authPreferences.getSessionId()
         val guestSessionId = authPreferences.getGuestSessionId()
         val isValid = sessionId != null || guestSessionId != null

@@ -7,5 +7,5 @@ interface AuthRepository {
     suspend fun loginAsGuest(): Boolean
     suspend fun logout(): Boolean
     suspend fun isLoggedIn(): Boolean
-    fun validateSession(): Flow<Boolean>
+    suspend fun validateSession(): Flow<Boolean>
 }
