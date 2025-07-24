@@ -229,7 +229,7 @@ private fun TextFieldContainer(
                 text = label,
                 style = NovixTheme.typography.title.small,
                 color = NovixTheme.colors.title,
-                modifier = Modifier.padding(bottom = 8.dp),
+                modifier = Modifier.padding(bottom = 8.dp)
             )
         }
         content()
