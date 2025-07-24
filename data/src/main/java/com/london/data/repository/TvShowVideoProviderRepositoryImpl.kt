@@ -14,5 +14,4 @@ class TvShowVideoProviderRepositoryImpl(
         tvShowVideoProviderRemote.getTvShowVideos(tvShowId).getOrThrow().tvShow?.map {
             it.toTvShowVideo()
         }.orEmpty()
-
 }
