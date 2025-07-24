@@ -1,16 +1,16 @@
-package com.london.domain.usecase
+package com.london.domain.usecase.recent.watched
 
-import com.london.domain.entity.Movie
 import com.london.domain.repository.RecentWatchedRepository
 import org.koin.core.annotation.Named
 import org.koin.core.annotation.Provided
 import org.koin.core.annotation.Single
 
 @Single
-class AddMovieToRecentWatchedUseCase(
+class GetRecentWatchedTvShowsUseCase(
     @Provided
     @Named("recentWatchedRepository")
     private val recentWatchedRepository: RecentWatchedRepository
 ) {
-    suspend fun invoke(item: Movie) = recentWatchedRepository.insertMovie(item)
+    suspend fun invoke(limit: Int? = null) =
+        recentWatchedRepository.getAllRecentWatchedTvShows().take(limit ?: Int.MAX_VALUE)
 }

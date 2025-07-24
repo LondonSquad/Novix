@@ -1,4 +1,4 @@
-package com.london.domain.usecase
+package com.london.domain.usecase.recent.watched
 
 import com.london.domain.repository.RecentWatchedRepository
 import org.koin.core.annotation.Named

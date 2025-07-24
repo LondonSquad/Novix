@@ -2,6 +2,7 @@ package com.london.domain.usecase
 
 import com.london.domain.entity.TvShow
 import com.london.domain.repository.RecentWatchedRepository
+import com.london.domain.usecase.recent.watched.AddTvShowToRecentWatchedUseCase
 import io.mockk.Runs
 import io.mockk.coEvery
 import io.mockk.coVerify
