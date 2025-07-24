@@ -6502,5 +6502,33 @@
       "deletions": 71,
       "changed_files": 7
     }
+  },
+  {
+    "pr_number": 273,
+    "url": "https://github.com/LondonSquad/Novix/pull/273",
+    "title": "Add top-rated movie and TV series data sources",
+    "opened_at": "2025-07-24T07:03:08Z",
+    "head_ref": "feature/top-rated-remote-data-source",
+    "base_ref": "develop",
+    "creator": {
+      "login": "abdelrhman1002",
+      "id": 180463542,
+      "url": "https://github.com/abdelrhman1002"
+    },
+    "approvals": [],
+    "first_approved_at": null,
+    "time_to_first_approval_minutes": null,
+    "required_approvals_met_at": null,
+    "time_to_required_approvals_minutes": null,
+    "closed_at": null,
+    "merged_at": null,
+    "merged_by": null,
+    "week": "2025-W30",
+    "status": "pending",
+    "diff_stats": {
+      "additions": 185,
+      "deletions": 0,
+      "changed_files": 9
+    }
   }
 ]
