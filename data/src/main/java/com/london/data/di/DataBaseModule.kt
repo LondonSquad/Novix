@@ -53,10 +53,14 @@ class DataBaseModule {
     fun provideRecentSearchDao(database: NovixDatabase): RecentSearchDao {
         return database.recentSearchDao()
     }
+
+    @Named("recentWatchedMoviesDao")
     @Single
     fun provideRecentWatchedMoviesDao(database: NovixDatabase): RecentWatchedMoviesDao {
         return database.recentWatchedMoviesDao()
     }
+
+    @Named("recentWatchedTvShowsDao")
     @Single
     fun provideRecentWatchedTvShowsDao(database: NovixDatabase): RecentWatchedTvShowsDao {
         return database.recentWatchedTvShowsDao()
