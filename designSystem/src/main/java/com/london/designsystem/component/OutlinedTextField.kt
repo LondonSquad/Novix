@@ -230,7 +230,7 @@ private fun TextFieldContainer(
                 style = NovixTheme.typography.title.small,
                 color = NovixTheme.colors.title,
                 modifier = Modifier.padding(bottom = 8.dp),
-                maxLines = 30
+                maxLines = 25
             )
         }
         content()
