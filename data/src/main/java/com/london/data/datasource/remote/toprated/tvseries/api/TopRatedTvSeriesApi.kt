@@ -3,7 +3,7 @@
 package com.london.data.datasource.remote.toprated.tvseries.api
 
 import com.london.data.datasource.remote.ApiResponse
-import com.london.data.datasource.remote.toprated.tvseries.model.TopRatedTvSeries
+import com.london.data.datasource.remote.toprated.tvseries.model.TopRatedTvSeriesRemote
 import com.london.domain.KoverIgnore
 import retrofit2.http.GET
 import retrofit2.http.Query
@@ -14,5 +14,5 @@ interface TopRatedTvSeriesApi {
     suspend fun getTopRatedTvSeries(
         @Query("page") pageNumber: Int,
         @Query("language") language: String
-    ): ApiResponse<TopRatedTvSeries>
+    ): ApiResponse<TopRatedTvSeriesRemote>
 }

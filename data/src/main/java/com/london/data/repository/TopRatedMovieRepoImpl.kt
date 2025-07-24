@@ -1,0 +1,23 @@
+package com.london.data.repository
+
+import com.london.data.datasource.remote.toprated.movie.TopRatedMovieRemoteDataSource
+import com.london.data.mapper.toprated.toEntity
+import com.london.domain.entity.toprated.TopRatedMovie
+import com.london.domain.repository.TopRatedMovieRepo
+import org.koin.core.annotation.Single
+
+@Single
+class TopRatedMovieRepoImpl(
+    private val topRatedMovieRemoteDataSource: TopRatedMovieRemoteDataSource
+) : TopRatedMovieRepo {
+    override suspend fun getTopRatedMovies(
+        pageNumber: Int,
+        language: String,
+        region: String
+    ): List<TopRatedMovie> =
+        topRatedMovieRemoteDataSource.getTopRatedMovies(
+            pageNumber,
+            language,
+            region
+        ).items.map { it.toEntity() }
+}
