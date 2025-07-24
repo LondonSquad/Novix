@@ -11,6 +11,7 @@ import com.london.data.datasource.local.model.recent.RecentSearchLocal
 
 @Dao
 interface RecentSearchDao : RecentDao<RecentSearchLocal> {
+
     @Query("SELECT * FROM recent_search_table")
     override suspend fun getAll(): List<RecentSearchLocal>
 
@@ -31,6 +32,7 @@ interface RecentSearchDao : RecentDao<RecentSearchLocal> {
         insert(item)
         clearOlderThanTen()
     }
+
     @Delete
     suspend fun delete(item: RecentSearchLocal)
 }

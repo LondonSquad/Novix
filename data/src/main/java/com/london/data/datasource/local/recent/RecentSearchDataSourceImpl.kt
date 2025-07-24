@@ -13,6 +13,7 @@ class RecentSearchDataSourceImpl(
     @Named("recentSearchDao")
     private val recentSearchDao: RecentSearchDao
 ) : RecentDataSource<RecentSearchLocal> {
+
     override suspend fun insert(item: RecentSearchLocal) {
         runCatching {
             recentSearchDao.insert(item)

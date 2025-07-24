@@ -2,6 +2,7 @@ package com.london.domain.usecase
 
 import com.london.domain.entity.recent.RecentSearch
 import com.london.domain.repository.RecentRepository
+import com.london.domain.usecase.recent.search.DeleteRecentSearchUseCase
 import io.mockk.Runs
 import io.mockk.coEvery
 import io.mockk.coVerify
