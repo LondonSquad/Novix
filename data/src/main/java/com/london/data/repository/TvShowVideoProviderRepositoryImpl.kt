@@ -10,9 +10,9 @@ import org.koin.core.annotation.Single
 class TvShowVideoProviderRepositoryImpl(
     private val tvShowVideoProviderRemote: TvShowVideoProviderRemote
 ) : TvShowVideoProviderRepository {
-    override suspend fun getTvShowVideos(tvShowId: Int): List<TvShowVideo> {
-        return tvShowVideoProviderRemote.getTvShowVideos(tvShowId).tvShow?.map {
+    override suspend fun getTvShowVideos(tvShowId: Int): List<TvShowVideo> =
+        tvShowVideoProviderRemote.getTvShowVideos(tvShowId).getOrThrow().tvShow?.map {
             it.toTvShowVideo()
         }.orEmpty()
-    }
+
 }

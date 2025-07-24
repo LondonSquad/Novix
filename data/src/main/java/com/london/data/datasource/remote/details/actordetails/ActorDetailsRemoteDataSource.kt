@@ -6,8 +6,8 @@ import com.london.data.datasource.remote.details.actordetails.model.actormoviede
 import com.london.data.datasource.remote.details.actordetails.model.actortvshowdetails.ActorTvShowDetailsResponse
 
 interface ActorDetailsRemoteDataSource {
-    suspend fun getActorDetailsById(actorId: Int): ActorDetailsResponse
-    suspend fun getActorMovieById(actorId: Int): ActorMovieDetailsResponse
-    suspend fun getActorTvShowById(actorId: Int): ActorTvShowDetailsResponse
-    suspend fun getActorImagePath(actorId: Int): ActorImageResponse
+    suspend fun getActorDetailsById(actorId: Int): Result<ActorDetailsResponse>
+    suspend fun getActorMovieById(actorId: Int): Result<ActorMovieDetailsResponse>
+    suspend fun getActorTvShowById(actorId: Int): Result<ActorTvShowDetailsResponse>
+    suspend fun getActorImagePath(actorId: Int): Result<ActorImageResponse>
 }

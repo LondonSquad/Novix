@@ -11,7 +11,8 @@ class MovieVideoProviderRepositoryImpl(
     private val movieVideoProviderRemote: MovieVideoProviderRemote,
 ) : MovieVideoProviderRepository {
     override suspend fun getMovieVideos(movieId: Int): List<MovieVideo> =
-        movieVideoProviderRemote.getMovieVideos(movieId).movies?.map { movieVideoRemote ->
+        movieVideoProviderRemote.getMovieVideos(movieId)
+            .getOrThrow().movies?.map { movieVideoRemote ->
             movieVideoRemote.toMovie()
         }.orEmpty()
 }

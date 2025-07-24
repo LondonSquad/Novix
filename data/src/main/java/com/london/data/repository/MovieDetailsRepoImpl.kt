@@ -19,20 +19,21 @@ class MovieDetailsRepoImpl(
 
     override suspend fun getMovieById(id: Int): MovieDetails {
         val remoteDetails = movieDetailsRemoteDataSource.getMovieDetails(id)
-        return remoteDetails.toEntity(
-            genres = remoteDetails.genreRemote?.map { it.toGenre() }.orEmpty(),
+        return remoteDetails.getOrThrow().toEntity(
+            genres = remoteDetails.getOrThrow().genreRemote?.map { it.toGenre() }.orEmpty(),
             movieImages = getMovieImagesById(id),
-            movieDuration = remoteDetails.runtime?.toString().orEmpty()
+            movieDuration = remoteDetails.getOrThrow().runtime?.toString().orEmpty()
         )
     }
 
     override suspend fun getSimilarMoviesById(id: Int): List<SimilarMovie> {
         val similarMoviesRemote = movieDetailsRemoteDataSource.getSimilarMovies(id)
-        return similarMoviesRemote.similarMovieRemotes?.map { it.toSimilarMovie() }.orEmpty()
+        return similarMoviesRemote.getOrThrow().similarMovieRemotes?.map { it.toSimilarMovie() }
+            .orEmpty()
     }
 
     override suspend fun getMovieImagesById(id: Int): List<String> {
-        val images = movieDetailsRemoteDataSource.getMovieImages(id)
+        val images = movieDetailsRemoteDataSource.getMovieImages(id).getOrThrow()
         return when {
             images.backdrops?.isNotEmpty().isTrue -> images.backdrops?.map { it.filePath.asImageUrlOrEmpty() }
             images.posters?.isNotEmpty().isTrue -> images.posters?.map { it.filePath.asImageUrlOrEmpty() }
@@ -42,8 +43,8 @@ class MovieDetailsRepoImpl(
     }
 
     override suspend fun getMovieCastById(id: Int): List<Actor> {
-        val movieCast = movieDetailsRemoteDataSource.getMovieCast(id)
-        return movieCast.actorRemote?.map { it.toEntity() } ?: emptyList()
+        val movieCast = movieDetailsRemoteDataSource.getMovieCast(id).getOrThrow()
+        return movieCast.actorRemote?.map { it.toEntity() }.orEmpty()
     }
 
     companion object {
