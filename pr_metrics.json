@@ -6529,7 +6529,7 @@
     "time_to_first_approval_minutes": null,
     "required_approvals_met_at": null,
     "time_to_required_approvals_minutes": null,
-    "closed_at": "2025-07-24T06:18:08Z",
+    "closed_at": null,
     "merged_at": null,
     "merged_by": null,
     "week": "2025-W30",
