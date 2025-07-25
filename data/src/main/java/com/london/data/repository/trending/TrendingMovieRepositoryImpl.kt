@@ -8,7 +8,7 @@ import com.london.domain.repository.TrendingRepository
 import org.koin.core.annotation.Single
 
 @Single
-class TrendingRepositoryImpl(
+class TrendingMovieRepositoryImpl(
     private val trendingRemoteDataSource: TrendingRemoteDataSource
 ) : TrendingRepository {
     override suspend fun getTrendingMovies(page: Int): PagedFetchResponse<TrendingMovie> {
