@@ -30,8 +30,8 @@ import com.london.designsystem.theme.ThemePreviews
 fun TabLayout(
     tabs: List<TabItem>,
     selectedIndex: Int,
-    modifier: Modifier = Modifier,
-    onTabSelected: (Int) -> Unit
+    onTabSelected: (Int) -> Unit,
+    modifier: Modifier = Modifier
 ) {
     Row(
         verticalAlignment = Alignment.CenterVertically,
@@ -39,7 +39,7 @@ fun TabLayout(
         modifier = modifier.fillMaxWidth()
     ) {
         tabs.forEachIndexed { index, tab ->
-            TudeeTab(
+            NovixTab(
                 text = tab.text,
                 isSelected = index == selectedIndex,
                 onClick = { onTabSelected(index) },
@@ -50,11 +50,11 @@ fun TabLayout(
 }
 
 @Composable
-fun TudeeTab(
+fun NovixTab(
     @StringRes text: Int,
     isSelected: Boolean,
-    modifier: Modifier = Modifier,
-    onClick: () -> Unit
+    onClick: () -> Unit,
+    modifier: Modifier = Modifier
 ) {
     val interactionSource = remember { MutableInteractionSource() }
 
@@ -99,7 +99,7 @@ data class TabItem(
 
 @ThemePreviews
 @Composable
-private fun TudeeTabLayoutWithPagerPreview() {
+private fun NovixTabLayoutWithPagerPreview() {
     NovixTheme {
         TabLayout(
             tabs = listOf(

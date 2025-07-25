@@ -36,8 +36,7 @@ class MovieDetailsRepositoryImpl(
     }
 
     override suspend fun getMovieCastById(id: Int): List<Actor> =
-        movieDetailsRemoteDataSource.getMovieCast(id).actorRemote?.map { it.toEntity() }
-            ?: emptyList()
+        movieDetailsRemoteDataSource.getMovieCast(id).actorRemote?.map { it.toEntity() }.orEmpty()
 
 
     companion object {
