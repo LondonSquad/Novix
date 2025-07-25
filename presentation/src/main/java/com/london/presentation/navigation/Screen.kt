@@ -24,10 +24,13 @@ sealed interface Screen {
     object Account : Screen
 
     @Serializable
-    object TrendingMovies : Screen
+    data object TrendingMovies : Screen
 
     @Serializable
     data object TrendingTvShows : Screen
+
+    @Serializable
+    data object TrendingActors : Screen
 
     @Serializable
     data class TvShowDetails(
@@ -79,6 +82,6 @@ sealed interface Screen {
 
     @Serializable
     data class Trending(
-        val category: Int // 0 = Movies, 1 = TvShows, 2 = Actors
+        val category: Int
     ) : Screen
 }
