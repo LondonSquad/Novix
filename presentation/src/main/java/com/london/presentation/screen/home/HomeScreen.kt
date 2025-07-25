@@ -26,8 +26,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.platform.LocalWindowInfo
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
@@ -94,7 +94,9 @@ private fun Content(
     lazyGridState: LazyGridState
 ) {
 
-    val screenWidth = LocalConfiguration.current.screenWidthDp.dp
+    val screenWidth =
+        with(LocalDensity.current) { LocalWindowInfo.current.containerSize.width.toDp() }
+
     val upcomingMoviesLazyList = uiState.upcomingMovies.collectAsLazyPagingItems()
 
     val totalPopularItems = uiState.popularMovies.size + uiState.popularTvShows.size
@@ -118,8 +120,8 @@ private fun Content(
             verticalArrangement = Arrangement.spacedBy(12.dp),
             modifier = modifier
                 .background(color = NovixTheme.colors.surface)
-        .padding(top = 16.dp)
-    ) {
+                .padding(top = 16.dp)
+        ) {
 
             stickyHeader {
                 DefaultTopBar(
@@ -173,17 +175,17 @@ private fun Content(
             item(span = { GridItemSpan(maxLineSpan) }) {
                 TrendingSection()
             }
-        item(span = { GridItemSpan(maxLineSpan) })
-        {
-            SectionHeader(
-                text = stringResource(R.string.top_rating),
-                hasGetAll = true,
-                hasIcon = true,
-                onClick = {
-                    homeScreenContract.onTopRatedClick()
-                }
-            )
-        }
+            item(span = { GridItemSpan(maxLineSpan) })
+            {
+                SectionHeader(
+                    text = stringResource(R.string.top_rating),
+                    hasGetAll = true,
+                    hasIcon = true,
+                    onClick = {
+                        homeScreenContract.onTopRatedClick()
+                    }
+                )
+            }
             upComingSection(
                 contract = homeScreenContract,
                 screenWidth = screenWidth,
