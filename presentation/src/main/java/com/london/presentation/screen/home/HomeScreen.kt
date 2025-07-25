@@ -118,7 +118,8 @@ private fun Content(
             verticalArrangement = Arrangement.spacedBy(12.dp),
             modifier = modifier
                 .background(color = NovixTheme.colors.surface)
-        ) {
+        .padding(top = 16.dp)
+    ) {
 
             stickyHeader {
                 DefaultTopBar(

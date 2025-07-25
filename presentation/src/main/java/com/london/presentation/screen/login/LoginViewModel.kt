@@ -14,35 +14,51 @@ class LoginViewModel(
 ) : BaseViewModel<LoginUiState, LoginEffect>(LoginUiState()),
     LoginContract {
 
-    companion object {
-        private const val CREATE_ACCOUNT_URL = "https://www.themoviedb.org/signup"
-        private const val FORGOT_PASSWORD_URL = "https://www.themoviedb.org/reset-password"
-    }
-
     override fun onUsernameChanged(username: TextFieldValue) {
+        val limitedUsername = if (username.text.length > MAX_LETTERS) {
+            username.copy(text = username.text.take(MAX_LETTERS))
+        } else {
+            username
+        }
+
         updateState {
             copy(
-                username = username,
-                isLoginEnabled = username.toString().isNotEmpty() && password.text.isNotEmpty(),
+                username = limitedUsername,
+                isLoginEnabled = limitedUsername.text.isNotEmpty() && password.text.isNotEmpty(),
                 error = null
             )
         }
     }
 
     override fun onPasswordChanged(password: TextFieldValue) {
+        val limitedPassword = if (password.text.length > MAX_LETTERS) {
+            password.copy(text = password.text.take(MAX_LETTERS))
+        } else {
+            password
+        }
+
         updateState {
             copy(
-                password = password,
-                isLoginEnabled = username.text.isNotEmpty() && password.toString().isNotEmpty(),
+                password = limitedPassword,
+                isLoginEnabled = username.text.isNotEmpty() && limitedPassword.text.isNotEmpty(),
                 error = null
             )
         }
     }
 
+
     override fun onPasswordVisibilityToggled() {
         updateState {
             copy(passwordVisible = !passwordVisible)
         }
+    }
+
+    override fun onCreateAccountClick() {
+        emitEffect(LoginEffect.NavigateToCreateAccount(CREATE_ACCOUNT_URL))
+    }
+
+    override fun onForgotPasswordClick() {
+        emitEffect(LoginEffect.NavigateToForgotPassword(FORGOT_PASSWORD_URL))
     }
 
     override fun onLoginClick() {
@@ -93,11 +109,9 @@ class LoginViewModel(
         emitEffect(LoginEffect.NavigateBack)
     }
 
-    override fun onCreateAccountClick() {
-        emitEffect(LoginEffect.NavigateToCreateAccount(CREATE_ACCOUNT_URL))
-    }
-
-    override fun onForgotPasswordClick() {
-        emitEffect(LoginEffect.NavigateToForgotPassword(FORGOT_PASSWORD_URL))
+    companion object {
+        private const val CREATE_ACCOUNT_URL = "https://www.themoviedb.org/signup"
+        private const val FORGOT_PASSWORD_URL = "https://www.themoviedb.org/reset-password"
+        private const val MAX_LETTERS = 20
     }
 }

@@ -50,6 +50,7 @@ val LightNovixColors = NovixColors(
     darkCocoa = DarkCocoaLight,
     deepCrimson = DeepCrimsonLight,
     tealBlue = TealBlueLight,
-    oceanDark = OceanDarkLight
+    oceanDark = OceanDarkLight,
+    linearGradient = LinearGradientLight
 )
 
