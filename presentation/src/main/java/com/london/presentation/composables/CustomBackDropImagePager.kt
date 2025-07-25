@@ -33,7 +33,9 @@ fun CustomBackDropImagePager(
     modifier: Modifier = Modifier,
     images: List<String>
 ) {
-    if (images.isEmpty()) {
+    val validImages = images.filter { it.isNotBlank() }
+
+    if (validImages.isEmpty()) {
         Box(
             modifier = modifier
                 .fillMaxWidth()
@@ -42,24 +44,6 @@ fun CustomBackDropImagePager(
             contentAlignment = Alignment.Center
         ) {
             ErrorImage()
-            NovixCarousalRow(
-                dotsStates = listOf(false),
-                modifier = Modifier
-                    .padding(bottom = 48.dp)
-                    .height(16.dp)
-                    .clip(RoundedCornerShape(8.dp))
-                    .background(
-                        color = NovixTheme.colors.iconBackgroundLow,
-                        shape = RoundedCornerShape(8.dp)
-                    )
-                    .border(
-                        width = 1.dp,
-                        color = NovixTheme.colors.stroke,
-                        shape = RoundedCornerShape(8.dp)
-                    )
-                    .padding(horizontal = 12.dp, vertical = 4.dp)
-                    .align(Alignment.BottomCenter)
-            )
         }
     } else {
         Box(
@@ -75,14 +59,14 @@ fun CustomBackDropImagePager(
         ) {
             val pagerState = rememberPagerState(
                 initialPage = 0,
-                pageCount = { images.size }
+                pageCount = { validImages.size }
             )
 
             LaunchedEffect(Unit) {
-                if (images.size > 1) {
+                if (validImages.size > 1) {
                     while (currentCoroutineContext().isActive) {
                         delay(4000)
-                        val nextPage = (pagerState.currentPage + 1) % images.size
+                        val nextPage = (pagerState.currentPage + 1) % validImages.size
                         pagerState.animateScrollToPage(nextPage)
                     }
                 }
@@ -97,7 +81,7 @@ fun CustomBackDropImagePager(
                         .fillMaxWidth()
                         .height(252.dp),
                     contentScale = ContentScale.FillBounds,
-                    model = images[pageIndex],
+                    model = validImages[pageIndex],
                     contentDescription = "${stringResource(R.string.tv_show_image)} ${pageIndex + 1}",
                     errorContent = { ErrorImage() },
                     loadingContent = { CircularLoading(modifier = Modifier) },
@@ -105,24 +89,26 @@ fun CustomBackDropImagePager(
                 )
             }
 
-            NovixCarousalRow(
-                dotsStates = List(images.size) { index -> index == pagerState.currentPage },
-                modifier = Modifier
-                    .padding(bottom = 48.dp)
-                    .height(16.dp)
-                    .clip(RoundedCornerShape(8.dp))
-                    .background(
-                        color = NovixTheme.colors.iconBackgroundLow,
-                        shape = RoundedCornerShape(8.dp)
-                    )
-                    .border(
-                        width = 1.dp,
-                        color = NovixTheme.colors.stroke,
-                        shape = RoundedCornerShape(8.dp)
-                    )
-                    .padding(horizontal = 12.dp, vertical = 4.dp)
-                    .align(Alignment.BottomCenter)
-            )
+            if (validImages.size > 1) {
+                NovixCarousalRow(
+                    dotsStates = List(validImages.size) { index -> index == pagerState.currentPage },
+                    modifier = Modifier
+                        .padding(bottom = 48.dp)
+                        .height(16.dp)
+                        .clip(RoundedCornerShape(8.dp))
+                        .background(
+                            color = NovixTheme.colors.iconBackgroundLow,
+                            shape = RoundedCornerShape(8.dp)
+                        )
+                        .border(
+                            width = 1.dp,
+                            color = NovixTheme.colors.stroke,
+                            shape = RoundedCornerShape(8.dp)
+                        )
+                        .padding(horizontal = 12.dp, vertical = 4.dp)
+                        .align(Alignment.BottomCenter)
+                )
+            }
         }
     }
 }
