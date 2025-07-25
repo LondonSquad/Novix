@@ -66,6 +66,16 @@
     <string name="login_to_your_account">Login to your account</string>
     <string name="user_name">User name</string>
     <string name="tv_show_image">TV Show Image</string>
+    <string name="first_onboarding_title">Discover best movies and series</string>
+    <string name="first_onboarding_description">Browse the latest releases, trends, and content tailored to your taste — all in one place.</string>
+    <string name="second_onboarding_title">Search easily… and watch to your taste</string>
+    <string name="second_onboarding_description">Use smart search and filters to find exactly what you love — action, drama, crime, anime and more!</string>
+    <string name="third_onboarding_title">Rate, save, and create your own lists.</string>
+    <string name="third_onboarding_description">Rate movies, track your viewing history, and easily save your favorite lists.</string>
+    <string name="welcome_title">Welcome to Novix</string>
+    <string name="welcome_description">Discover the world’s greatest movies and series. Search, watch, and save your favorites all in one place.</string>
+    <string name="skip">Skip</string>
+    <string name="continue_as_guest">Continue as guest</string>
     <string name="don_t_have_an_account">Don\'t have an account?</string>
     <string name="create_account">Create account</string>
     <string name="login">Login</string>
@@ -77,4 +87,8 @@
     <string name="all">All</string>
     <string name="actors">Actors</string>
     <string name="What_you_want_to_watch">What you want to watch?</string>
+    <string name="popular">Popular</string>
+    <string name="politics">Politics</string>
+    <string name="action_adventure">Action And Adventure</string>
+    <string name="war_politics">war And Politics</string>
 </resources>

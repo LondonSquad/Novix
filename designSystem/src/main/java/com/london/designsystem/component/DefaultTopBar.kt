@@ -1,11 +1,13 @@
 package com.london.designsystem.component
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -30,9 +32,9 @@ fun DefaultTopBar(
     ) {
         Row(verticalAlignment = Alignment.CenterVertically) {
             Image(
-                painter = painterResource(R.drawable.icondesign),
+                painter = painterResource(if(isSystemInDarkTheme()) R.drawable.icon_design_dark else R.drawable.icon_desing_light),
                 contentDescription = "Logo",
-                modifier = Modifier.padding(end = 12.dp)
+                modifier = Modifier.size(48.dp).padding(end = 12.dp)
             )
             Column {
                 Text(

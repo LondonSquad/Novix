@@ -48,7 +48,6 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.zIndex
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.london.imageharamblur.ui.ImageViewFilter
 import com.london.designsystem.R
 import com.london.designsystem.component.ActorItem
 import com.london.designsystem.component.CircularLoading
@@ -59,6 +58,7 @@ import com.london.designsystem.component.UnSuitableEye
 import com.london.designsystem.component.button.ErrorImage
 import com.london.designsystem.theme.NovixTheme
 import com.london.domain.entity.tvshowdetails.TvShowCastMemberEntity
+import com.london.imageharamblur.ui.ImageViewFilter
 import com.london.presentation.composables.ConditionalText
 import com.london.presentation.composables.CustomBackDropImagePager
 import com.london.presentation.composables.DetailsScreenTopBar
@@ -70,6 +70,7 @@ import com.london.presentation.utils.Listen
 import com.london.presentation.utils.convertDate
 import com.london.presentation.utils.offsetLayout
 import com.london.presentation.utils.openUrl
+import com.london.presentation.utils.reverseDateFormat
 import com.london.presentation.utils.toLocalizedNumbers
 import org.koin.androidx.compose.koinViewModel
 
@@ -426,7 +427,7 @@ fun TvShowDate(
         )
 
         Text(
-            text = date.toLocalizedNumbers(),
+            text = reverseDateFormat(date),
             style = NovixTheme.typography.label.small,
             color = NovixTheme.colors.body
         )
@@ -583,7 +584,10 @@ fun EpisodeRow(
                     verticalAlignment = Alignment.CenterVertically,
                     horizontalArrangement = Arrangement.spacedBy(4.dp)
                 ) {
-                    RatingItem(rating = episode.voteAverage.toLocalizedNumbers())
+                    RatingItem(
+                        rating = episode.voteAverage.toLocalizedNumbers(),
+                        color = NovixTheme.colors.hint
+                    )
 
                     Box(
                         modifier = Modifier
@@ -607,7 +611,7 @@ fun EpisodeRow(
 
                     if (episode.airDate != null)
                         Text(
-                            text = convertDate(episode.airDate.toString().toLocalizedNumbers()),
+                            text = convertDate(episode.airDate.toString()),
                             style = NovixTheme.typography.label.small,
                             color = NovixTheme.colors.hint
                         )

@@ -78,6 +78,7 @@ import com.london.presentation.screen.reviews.MediaType
 import com.london.presentation.utils.Listen
 import com.london.presentation.utils.offsetLayout
 import com.london.presentation.utils.openUrl
+import com.london.presentation.utils.reverseDateFormat
 import org.koin.androidx.compose.koinViewModel
 
 @Composable
@@ -389,7 +390,7 @@ private fun RatingAndMetaRow(
                 icon = drawable.calendar_03,
                 contentDesc = stringResource(calendar),
                 tint = NovixTheme.colors.body,
-                text = date,
+                text = reverseDateFormat(date),
                 textColor = NovixTheme.colors.body
             )
         }
