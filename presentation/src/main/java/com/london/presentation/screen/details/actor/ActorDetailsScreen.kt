@@ -132,66 +132,9 @@ fun ActorScreenContent(
                             }
                         }
                     }
-
-                    CustomBackDropImagePager(
-                        images = images.map { it.fileUrl }
-                    )
+                    CustomBackDropImagePager(images = images.map { it.fileUrl })
                 }
             }
-
-            /*
-            @Composable
-private fun CustomBackDropImage(
-    images: List<ImageDetails>,
-    modifier: Modifier = Modifier
-) {
-    Box(
-        modifier = modifier
-            .fillMaxWidth()
-            .height(252.dp)
-            .clip(
-                shape = RoundedCornerShape(
-                    bottomStart = 12.dp, bottomEnd = 12.dp
-                )
-            ),
-        contentAlignment = Alignment.Center
-    ) {
-        if (images.isNotEmpty()) {
-            val pagerState = rememberPagerState(
-                initialPage = 0, pageCount = { images.size })
-
-
-            LaunchedEffect(pagerState) {
-                if (images.size > 1) {
-                    while (true) {
-                        delay(4000)
-                        val nextPage = (pagerState.currentPage + 1) % images.size
-                        pagerState.animateScrollToPage(nextPage)
-                    }
-                }
-            }
-
-            HorizontalPager(
-                modifier = Modifier.align(Alignment.Center),
-                state = pagerState,
-            ) { pageIndex ->
-                ImageViewFilter(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .height(252.dp),
-                    contentScale = ContentScale.FillBounds,
-                    model = images[pageIndex].fileUrl,
-                    contentDescription = "Actor Image ${pageIndex + 1}",
-                    errorContent = { ErrorImage() },
-                    loadingContent = { CircularLoading(modifier = Modifier) })
-            }
-        } else {
-            ErrorImage()
-        }
-    }
-}
-
-             */
 
             item {
                 with(uiState) {
