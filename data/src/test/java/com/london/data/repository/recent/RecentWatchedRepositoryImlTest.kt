@@ -1,9 +1,9 @@
 package com.london.data.repository.recent
 
 import com.google.common.truth.Truth.assertThat
-import com.london.data.datasource.local.model.recent.watched.RecentWatchedMovieLocal
-import com.london.data.datasource.local.model.recent.watched.RecentWatchedTvShowLocal
-import com.london.data.datasource.local.recent.watched.RecentWatchedDataSource
+import com.london.data.local.model.recent.watched.RecentWatchedMovieLocal
+import com.london.data.local.model.recent.watched.RecentWatchedTvShowLocal
+import com.london.data.local.source.recent.watched.RecentWatchedDataSource
 import com.london.domain.entity.Movie
 import com.london.domain.entity.TvShow
 import io.mockk.Runs

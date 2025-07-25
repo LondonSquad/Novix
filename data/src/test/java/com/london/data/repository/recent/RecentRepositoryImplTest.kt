@@ -1,7 +1,7 @@
 package com.london.data.repository.recent
 
-import com.london.data.datasource.local.model.recent.RecentSearchLocal
-import com.london.data.datasource.local.recent.RecentDataSource
+import com.london.data.local.model.recent.search.RecentSearchLocal
+import com.london.data.local.source.recent.RecentDataSource
 import com.london.domain.entity.recent.RecentSearch
 import com.london.domain.repository.RecentRepository
 import io.mockk.Runs

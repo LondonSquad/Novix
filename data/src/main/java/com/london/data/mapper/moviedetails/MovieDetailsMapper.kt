@@ -1,12 +1,12 @@
 package com.london.data.mapper.moviedetails
 
-import com.london.data.datasource.remote.details.moviedetails.model.moviedetails.GenreRemote
-import com.london.data.datasource.remote.details.moviedetails.model.moviedetails.MovieDetailsResponse
-import com.london.data.datasource.remote.details.moviedetails.model.moviedetails.ProductionCompanyRemote
-import com.london.data.datasource.remote.details.moviedetails.model.moviedetails.ProductionCountryRemote
-import com.london.data.datasource.remote.details.moviedetails.model.moviedetails.RemoteCollectionDetails
-import com.london.data.datasource.remote.details.moviedetails.model.moviedetails.SpokenLanguageRemote
-import com.london.data.datasource.remote.details.moviedetails.model.similarmovies.SimilarMovieRemote
+import com.london.data.remote.model.details.movie.model.moviedetails.GenreRemote
+import com.london.data.remote.model.details.movie.model.moviedetails.MovieDetailsResponse
+import com.london.data.remote.model.details.movie.model.moviedetails.ProductionCompanyRemote
+import com.london.data.remote.model.details.movie.model.moviedetails.ProductionCountryRemote
+import com.london.data.remote.model.details.movie.model.moviedetails.RemoteCollectionDetails
+import com.london.data.remote.model.details.movie.model.moviedetails.SpokenLanguageRemote
+import com.london.data.remote.model.details.movie.model.similarmovies.SimilarMovieRemote
 import com.london.data.utils.asImageUrlOrEmpty
 import com.london.data.utils.isTrue
 import com.london.data.utils.orZero

@@ -1,9 +1,9 @@
 package com.london.data.mapper
 
 import com.google.common.truth.Truth.assertThat
-import com.london.data.datasource.local.model.KnownForDtoLocal
-import com.london.data.datasource.local.model.PersonDtoLocal
-import com.london.data.datasource.local.model.SearchActorsLocal
+import com.london.data.local.model.search.KnownForDtoLocal
+import com.london.data.local.model.search.PersonDtoLocal
+import com.london.data.local.model.search.SearchActorsLocal
 import com.london.data.datasource.remote.ApiResponse
 import com.london.data.datasource.remote.search.model.KnownFor
 import com.london.data.datasource.remote.search.model.SearchActorRemote

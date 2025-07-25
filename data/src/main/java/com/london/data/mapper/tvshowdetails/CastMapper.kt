@@ -1,8 +1,8 @@
 package com.london.data.mapper.tvshowdetails
 
-import com.london.data.datasource.remote.details.tvshowdetails.model.Role
-import com.london.data.datasource.remote.details.tvshowdetails.model.TvShowCastMember
-import com.london.data.datasource.remote.details.tvshowdetails.model.TvShowCastRemoteResponse
+import com.london.data.remote.model.details.tvshow.model.Role
+import com.london.data.remote.model.details.tvshow.model.TvShowCastMember
+import com.london.data.remote.model.details.tvshow.model.TvShowCastRemoteResponse
 import com.london.data.utils.asImageUrlOrEmpty
 import com.london.data.utils.isTrue
 import com.london.data.utils.orZero

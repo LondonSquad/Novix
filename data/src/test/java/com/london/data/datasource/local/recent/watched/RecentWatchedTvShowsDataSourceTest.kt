@@ -1,8 +1,8 @@
 package com.london.data.datasource.local.recent.watched
 
 import com.google.common.truth.Truth.assertThat
-import com.london.data.datasource.local.dao.recent.whatched.tvshow.RecentWatchedTvShowsDao
-import com.london.data.datasource.local.model.recent.watched.RecentWatchedTvShowLocal
+import com.london.data.local.database.dao.recent.whatched.tvshow.RecentWatchedTvShowsDao
+import com.london.data.local.model.recent.watched.RecentWatchedTvShowLocal
 import io.mockk.Runs
 import io.mockk.coEvery
 import io.mockk.coVerify
@@ -14,12 +14,15 @@ import kotlin.test.Test
 
 class RecentWatchedTvShowsDataSourceTest {
     private lateinit var recentWatchedTvShowsDao: RecentWatchedTvShowsDao
-    private lateinit var recentWatchedTvShowsDataSource: RecentWatchedTvShowsDataSource
+    private lateinit var recentWatchedTvShowsDataSource: com.london.data.local.source.recent.watched.RecentWatchedTvShowsDataSource
 
     @Before
     fun setUp() {
         recentWatchedTvShowsDao = mockk()
-        recentWatchedTvShowsDataSource = RecentWatchedTvShowsDataSource(recentWatchedTvShowsDao)
+        recentWatchedTvShowsDataSource =
+            com.london.data.local.source.recent.watched.RecentWatchedTvShowsDataSource(
+                recentWatchedTvShowsDao
+            )
     }
 
     @Test

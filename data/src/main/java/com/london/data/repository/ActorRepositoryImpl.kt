@@ -1,7 +1,7 @@
 package com.london.data.repository
 
-import com.london.data.datasource.remote.details.actordetails.ActorDetailsRemoteDataSource
 import com.london.data.mapper.actordetails.toEntity
+import com.london.data.remote.source.details.actor.ActorDetailsRemoteDataSource
 import com.london.domain.entity.actordetails.ActorDetails
 import com.london.domain.entity.actordetails.actorimage.ActorImageDetails
 import com.london.domain.entity.actordetails.actormovie.ActorMovieDetails
