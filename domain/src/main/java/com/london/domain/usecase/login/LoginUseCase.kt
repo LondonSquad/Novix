@@ -9,6 +9,6 @@ class LoginUseCase(
     @Provided
     private val authRepository: AuthRepository
 ) {
-    suspend operator fun invoke(username: String, password: String) =
+    suspend fun invoke(username: String, password: String) =
         authRepository.login(username, password)
 }

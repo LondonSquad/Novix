@@ -238,7 +238,6 @@ private fun TextFieldContainer(
 
 @Composable
 private fun AnimatedLeadingIcon(
-    modifier: Modifier = Modifier,
     painter: Painter,
     isFocused: Boolean,
 ) {

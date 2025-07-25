@@ -81,6 +81,7 @@ fun PrimaryButton(
                 Spacer(modifier = Modifier.width(8.dp))
             }
             Icon(
+                modifier = Modifier.size(20.dp),
                 painter = painterResource(icon),
                 contentDescription = null
             )
