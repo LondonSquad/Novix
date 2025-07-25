@@ -72,7 +72,7 @@ fun HomeScreen(
                 .padding(top = 20.dp)
                 .fillMaxSize(),
             lazyGridState = lazyGridState,
-            onTrendingMovies = { viewModel.onTrendingCardClicked(0) },
+            onTrendingMovies = onTrendingMovies,
             onTrendingTvShows = onTrendingTvShows,
             onTrendingActors = onTrendingActors
         )
@@ -129,7 +129,7 @@ private fun Content(
 
         item(span = { GridItemSpan(maxLineSpan) }) {
             TrendingSection(
-                onMoviesClick = { homeScreenContract.onTrendingCardClicked(0) },
+                onMoviesClick = onTrendingMovies,
                 onTvShowsClick = onTrendingTvShows,
                 onActorsClick = onTrendingActors
             )
