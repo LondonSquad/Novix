@@ -6501,11 +6501,15 @@
     "time_to_first_approval_minutes": null,
     "required_approvals_met_at": null,
     "time_to_required_approvals_minutes": null,
-    "closed_at": null,
-    "merged_at": null,
-    "merged_by": null,
+    "closed_at": "2025-07-25T11:49:15Z",
+    "merged_at": "2025-07-25T11:49:15Z",
+    "merged_by": {
+      "login": "abdelrhman1002",
+      "id": 180463542,
+      "url": "https://github.com/abdelrhman1002"
+    },
     "week": "2025-W30",
-    "status": "closed",
+    "status": "merged",
     "diff_stats": {
       "additions": 157,
       "deletions": 43,
