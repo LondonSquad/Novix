@@ -62,7 +62,6 @@ class GetSimilarMoviesUseCaseTest {
             coVerify(exactly = 1) { movieDetailsRepository.getSimilarMoviesById(MOVIE_ID) }
         }
 
-
     @Test
     fun `should call repository with correct movie ID`() = runTest {
         // given
@@ -82,12 +81,8 @@ class GetSimilarMoviesUseCaseTest {
         val firstId = 111
         val secondId = 222
 
-        val firstMovieList = listOf(
-            SimilarMovie(id = 11, image = "/movie_11.jpg", isSaved = true)
-        )
-        val secondMovieList = listOf(
-            SimilarMovie(id = 20, image = "/movie_20.jpg", isSaved = false)
-        )
+        val firstMovieList = listOf(createDummySimilarMovie(11, "Movie 11"))
+        val secondMovieList = listOf(createDummySimilarMovie(20, "Movie 20"))
 
         coEvery { movieDetailsRepository.getSimilarMoviesById(firstId) } returns firstMovieList
         coEvery { movieDetailsRepository.getSimilarMoviesById(secondId) } returns secondMovieList
@@ -101,16 +96,29 @@ class GetSimilarMoviesUseCaseTest {
         assertThat(resultForSecondId).containsExactlyElementsIn(secondMovieList)
     }
 
-
     private companion object {
         const val MOVIE_ID = 123
 
         val similarMovieMockList = listOf(
-            SimilarMovie(
-                id = 1, image = "/similar_movie_1.jpg", isSaved = false
-            ), SimilarMovie(
-                id = 2, image = "/similar_movie_2.jpg", isSaved = true
-            )
+            createDummySimilarMovie(1, "Similar Movie 1"),
+            createDummySimilarMovie(2, "Similar Movie 2")
+        )
+
+        fun createDummySimilarMovie(id: Int, title: String) = SimilarMovie(
+            id = id,
+            adult = false,
+            backdropPath = "/backdrop_$id.jpg",
+            genreIds = listOf(1, 2, 3),
+            originalLanguage = "en",
+            originalTitle = "$title Original",
+            overview = "Overview for $title",
+            popularity = 123.45,
+            posterPath = "/poster_$id.jpg",
+            releaseDate = "2025-01-01",
+            title = title,
+            video = false,
+            voteAverage = 7.5,
+            voteCount = 200
         )
     }
 }

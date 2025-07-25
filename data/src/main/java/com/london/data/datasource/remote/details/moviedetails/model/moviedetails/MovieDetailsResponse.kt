@@ -8,7 +8,7 @@ data class MovieDetailsResponse(
     @SerialName("backdrop_path")
     val backdropPath: String?,
     @SerialName("belongs_to_collection")
-    val belongsToCollection: CollectionDetails?,
+    val remoteBelongsToCollection: RemoteCollectionDetails?,
     val budget: Int?,
     @SerialName("genres")
     val genreRemote: List<GenreRemote>?,
@@ -27,15 +27,15 @@ data class MovieDetailsResponse(
     @SerialName("poster_path")
     val posterPath: String?,
     @SerialName("production_companies")
-    val productionCompanies: List<ProductionCompany>?,
+    val productionCompanies: List<ProductionCompanyRemote>?,
     @SerialName("production_countries")
-    val productionCountries: List<ProductionCountry>?,
+    val productionCountries: List<ProductionCountryRemote>?,
     @SerialName("release_date")
     val releaseDate: String?,
     val revenue: Long?,
     val runtime: Int?,
     @SerialName("spoken_languages")
-    val spokenLanguages: List<SpokenLanguage>?,
+    val spokenLanguages: List<SpokenLanguageRemote>?,
     val status: String?,
     val tagline: String?,
     val title: String?,

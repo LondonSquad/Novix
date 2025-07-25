@@ -271,12 +271,12 @@ fun MovieDetailsContent(
                             ActorItem(
                                 actorName = actor.name,
                                 characterName = actor.characterName,
-                                imageRes = actor.avatarUrl,
+                                imageRes = actor.profilePicture,
                                 modifier = Modifier
                                     .defaultMinSize(minWidth = 296.dp)
                                     .clickable {
                                         movieDetailsContract.onActorClick(
-                                            actor.actorId
+                                            actor.id
                                         )
                                     }
                             )
@@ -305,15 +305,13 @@ fun MovieDetailsContent(
                     ) {
                         rowItems.forEachIndexed { _, movie ->
                             HomeCard(
-                                imageUrl = movie.image,
-                                isSaved = movie.isSaved,
-                                onSaveClick = {
-                                    // TODO
-                                },
+                                imageUrl = movie.backdropPath,
+                                isSaved = false,
+                                onSaveClick = {},
                                 modifier = Modifier
                                     .weight(1f)
                                     .clickable {
-                                        movieDetailsContract.onMovieClick(movie.movieId)
+                                        movieDetailsContract.onMovieClick(movie.id)
                                     }
                             )
                         }
