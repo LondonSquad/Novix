@@ -1,8 +1,8 @@
 package com.london.data.datasource.local.recent.watched
 
 import com.google.common.truth.Truth.assertThat
-import com.london.data.datasource.local.dao.recent.whatched.movie.RecentWatchedMoviesDao
-import com.london.data.datasource.local.model.recent.watched.RecentWatchedMovieLocal
+import com.london.data.local.database.dao.recent.whatched.movie.RecentWatchedMoviesDao
+import com.london.data.local.model.recent.watched.RecentWatchedMovieLocal
 import io.mockk.Runs
 import io.mockk.coEvery
 import io.mockk.coVerify
@@ -14,12 +14,15 @@ import org.junit.Test
 
 class RecentWatchedMoviesDataSourceTest {
     private lateinit var recentWatchedMoviesDao: RecentWatchedMoviesDao
-    private lateinit var recentWatchedMoviesDataSource: RecentWatchedMoviesDataSource
+    private lateinit var recentWatchedMoviesDataSource: com.london.data.local.source.recent.watched.RecentWatchedMoviesDataSource
 
     @Before
     fun setUp() {
         recentWatchedMoviesDao = mockk()
-        recentWatchedMoviesDataSource = RecentWatchedMoviesDataSource(recentWatchedMoviesDao)
+        recentWatchedMoviesDataSource =
+            com.london.data.local.source.recent.watched.RecentWatchedMoviesDataSource(
+                recentWatchedMoviesDao
+            )
     }
 
     @Test

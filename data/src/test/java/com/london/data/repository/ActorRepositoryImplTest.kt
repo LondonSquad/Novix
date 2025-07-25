@@ -1,13 +1,13 @@
 package com.london.data.repository
 
 import com.google.common.truth.Truth.assertThat
-import com.london.data.datasource.exception.NetworkException
-import com.london.data.datasource.remote.details.actordetails.ActorDetailsRemoteDataSource
-import com.london.data.datasource.remote.details.actordetails.model.ActorDetailsResponse
-import com.london.data.datasource.remote.details.actordetails.model.actorimage.ActorImageResponse
-import com.london.data.datasource.remote.details.actordetails.model.actormoviedetails.ActorMovieDetailsResponse
-import com.london.data.datasource.remote.details.actordetails.model.actortvshowdetails.ActorTvShowDetailsResponse
+import com.london.data.remote.exception.NetworkException
 import com.london.data.mapper.actordetails.toEntity
+import com.london.data.remote.model.details.actor.model.ActorDetailsResponse
+import com.london.data.remote.model.details.actor.model.actorimage.ActorImageResponse
+import com.london.data.remote.model.details.actor.model.actormoviedetails.ActorMovieDetailsResponse
+import com.london.data.remote.model.details.actor.model.actortvshowdetails.ActorTvShowDetailsResponse
+import com.london.data.remote.source.details.actor.ActorDetailsRemoteDataSource
 import com.london.domain.repository.ActorRepository
 import io.mockk.coEvery
 import io.mockk.mockk

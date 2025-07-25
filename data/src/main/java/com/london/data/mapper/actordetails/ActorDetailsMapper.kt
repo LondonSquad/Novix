@@ -1,6 +1,6 @@
 package com.london.data.mapper.actordetails
 
-import com.london.data.datasource.remote.details.actordetails.model.ActorDetailsResponse
+import com.london.data.remote.model.details.actor.model.ActorDetailsResponse
 import com.london.data.utils.asImageUrlOrEmpty
 import com.london.data.utils.isTrue
 import com.london.data.utils.orZero
