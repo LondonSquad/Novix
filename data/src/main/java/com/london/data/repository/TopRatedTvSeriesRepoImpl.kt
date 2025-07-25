@@ -1,6 +1,6 @@
 package com.london.data.repository
 
-import com.london.data.datasource.remote.toprated.tvseries.TopRatedTvRemoteDataSource
+import com.london.data.remote.source.toprated.tvseries.TopRatedTvRemoteDataSource
 import com.london.data.mapper.toprated.toEntity
 import com.london.data.utils.fetchAndSync
 import com.london.domain.entity.PagedFetchResponse

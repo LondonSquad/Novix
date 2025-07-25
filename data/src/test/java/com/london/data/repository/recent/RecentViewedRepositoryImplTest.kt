@@ -1,9 +1,9 @@
 package com.london.data.repository.recent
 
 import com.google.common.truth.Truth.assertThat
-import com.london.data.datasource.local.model.recent.MediaTypeLocal
-import com.london.data.datasource.local.model.recent.RecentViewedLocal
-import com.london.data.datasource.local.recent.RecentDataSource
+import com.london.data.local.model.recent.MediaTypeLocal
+import com.london.data.local.model.recent.viewed.RecentViewedLocal
+import com.london.data.local.source.recent.RecentDataSource
 import com.london.domain.entity.recent.MediaType
 import com.london.domain.entity.recent.RecentViewed
 import com.london.domain.repository.RecentRepository

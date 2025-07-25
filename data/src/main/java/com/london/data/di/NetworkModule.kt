@@ -6,7 +6,6 @@ import com.london.data.BuildConfig
 import com.london.data.datasource.common.AuthInterceptor
 import com.london.data.datasource.common.AuthPreferences
 import com.london.data.datasource.common.SharedPrefsTokenProvider
-import com.london.data.datasource.device.DeviceConfigurationDataSource
 import com.london.data.datasource.remote.auth.api.AuthApiService
 import com.london.data.datasource.remote.details.actordetails.api.ActorDetailsApiService
 import com.london.data.datasource.remote.details.moviedetails.api.MovieDetailsApiService
@@ -16,6 +15,7 @@ import com.london.data.datasource.remote.reviews.api.ReviewsApiService
 import com.london.data.datasource.remote.search.api.SearchApiService
 import com.london.data.datasource.remote.toprated.movie.api.TopRatedMovieApiService
 import com.london.data.datasource.remote.toprated.tvseries.api.TopRatedTvSeriesApiService
+import com.london.data.local.source.device.DeviceConfigurationDataSource
 import com.london.domain.repository.SessionTokenProvider
 import kotlinx.serialization.json.Json
 import okhttp3.Cache

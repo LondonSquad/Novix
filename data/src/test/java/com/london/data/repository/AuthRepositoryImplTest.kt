@@ -2,10 +2,10 @@ package com.london.data.repository
 
 import com.london.data.datasource.common.AuthPreferences
 import com.london.data.datasource.remote.auth.api.AuthApiService
-import com.london.data.datasource.remote.auth.model.GuestSessionResponse
-import com.london.data.datasource.remote.auth.model.RequestTokenResponse
-import com.london.data.datasource.remote.auth.model.SessionResponse
-import com.london.data.datasource.remote.auth.model.Token
+import com.london.data.remote.model.auth.model.GuestSessionResponse
+import com.london.data.remote.model.auth.model.RequestTokenResponse
+import com.london.data.remote.model.auth.model.SessionResponse
+import com.london.data.remote.model.auth.model.Token
 import io.mockk.coEvery
 import io.mockk.coJustRun
 import io.mockk.coVerify

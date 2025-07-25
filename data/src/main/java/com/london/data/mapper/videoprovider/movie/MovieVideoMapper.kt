@@ -1,6 +1,6 @@
 package com.london.data.mapper.videoprovider.movie
 
-import com.london.data.datasource.remote.details.videoprovider.movie.model.MovieVideoRemoteResponse
+import com.london.data.remote.model.details.videoprovider.movie.model.MovieVideoRemoteResponse
 import com.london.data.utils.asYoutubeUrlOrEmpty
 import com.london.data.utils.isTrue
 import com.london.data.utils.orZero

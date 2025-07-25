@@ -1,9 +1,9 @@
 @file:KoverIgnore
 package com.london.data.mapper.actordetails
 
-import com.london.data.datasource.remote.details.actordetails.model.actortvshowdetails.ActorTvShowCastMember
-import com.london.data.datasource.remote.details.actordetails.model.actortvshowdetails.ActorTvShowCrewMember
-import com.london.data.datasource.remote.details.actordetails.model.actortvshowdetails.ActorTvShowDetailsResponse
+import com.london.data.remote.model.details.actor.model.actortvshowdetails.ActorTvShowCastMember
+import com.london.data.remote.model.details.actor.model.actortvshowdetails.ActorTvShowCrewMember
+import com.london.data.remote.model.details.actor.model.actortvshowdetails.ActorTvShowDetailsResponse
 import com.london.data.utils.asImageUrlOrEmpty
 import com.london.data.utils.isTrue
 import com.london.data.utils.orZero

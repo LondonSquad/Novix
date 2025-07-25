@@ -1,18 +1,17 @@
 package com.london.data.repository
 
 import com.google.common.truth.Truth.assertThat
-import com.london.data.datasource.exception.NetworkException
 import com.london.data.datasource.local.LocalDataSource
-import com.london.data.datasource.local.dao.search.GenreInterestDao
-import com.london.data.datasource.local.model.GenreInterestEntity
-import com.london.data.datasource.local.model.PersonDtoLocal
-import com.london.data.datasource.local.model.SearchActorsLocal
-import com.london.data.datasource.local.model.SearchMovieDtoLocal
-import com.london.data.datasource.local.model.SearchMoviesLocal
-import com.london.data.datasource.local.model.SearchTvShowLocal
+import com.london.data.remote.exception.NetworkException
+import com.london.data.local.database.dao.search.GenreInterestDao
+import com.london.data.local.model.search.GenreInterestEntity
+import com.london.data.local.model.search.PersonDtoLocal
+import com.london.data.local.model.search.SearchActorsLocal
+import com.london.data.local.model.search.SearchMovieDtoLocal
+import com.london.data.local.model.search.SearchMoviesLocal
+import com.london.data.local.model.search.SearchTvShowLocal
 import com.london.data.datasource.remote.ApiResponse
-import com.london.data.datasource.remote.search.SearchRemoteDataSource
-import com.london.data.datasource.remote.search.model.SearchActorRemote
+import com.london.data.remote.source.search.SearchRemoteDataSource
 import com.london.data.datasource.remote.search.model.SearchMovieRemote
 import com.london.data.datasource.remote.search.model.SearchTvShowRemote
 import com.london.data.datasource.util.CrashReporter
