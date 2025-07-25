@@ -7,6 +7,9 @@ import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import com.london.app.navigation.NovixApp
 import com.london.designsystem.theme.NovixTheme
+import com.london.domain.AppPreferencesService
+import org.koin.android.ext.android.inject
+import kotlin.getValue
 
 
 class MainActivity : ComponentActivity() {
@@ -20,7 +23,8 @@ class MainActivity : ComponentActivity() {
 
         setContent {
             NovixTheme {
-                NovixApp()
+                val appPreferencesService: AppPreferencesService by inject()
+                NovixApp(appPreferencesService)
             }
         }
     }

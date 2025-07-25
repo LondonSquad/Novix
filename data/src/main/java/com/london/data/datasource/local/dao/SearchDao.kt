@@ -1,4 +1,7 @@
+@file:KoverIgnore
 package com.london.data.datasource.local.dao
+
+import com.london.domain.KoverIgnore
 
 interface SearchDao<T> {
     suspend fun insert(search: T)

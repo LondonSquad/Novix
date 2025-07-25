@@ -9,5 +9,5 @@ class LoginAsGuestUseCase(
     @Provided
     private val authRepository: AuthRepository
 ) {
-    suspend operator fun invoke() = authRepository.loginAsGuest()
+    suspend fun invoke() = authRepository.loginAsGuest()
 }
