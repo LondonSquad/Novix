@@ -15,6 +15,7 @@ import com.london.data.datasource.remote.search.model.SearchActorRemote
 import com.london.data.datasource.remote.search.model.SearchMovieRemote
 import com.london.data.datasource.remote.search.model.SearchTvShowRemote
 import com.london.data.datasource.util.CrashReporter
+import com.london.data.utils.fetchAndSync
 import com.london.domain.entity.Actor
 import com.london.domain.entity.Movie
 import com.london.domain.entity.PagedFetchResponse
@@ -70,7 +71,7 @@ class SearchRepositoryImplTest {
         val actualException = assertThrows<RuntimeException>(
             expectedException::class.java.simpleName
         ) {
-            repository.fetchAndSync(
+            fetchAndSync(
                 cacheBlockAction,
                 networkBlockAction,
                 syncBlockAction,
@@ -185,7 +186,7 @@ class SearchRepositoryImplTest {
 
 
         val actualException = assertThrows<RuntimeException> {
-            repositoryWithNullCrashReporter.fetchAndSync(
+          fetchAndSync(
                 cacheBlock = { throw cacheException },
                 networkBlock = { throw networkException },
                 syncBlock = { /* Do nothing */ },
