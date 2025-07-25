@@ -12,27 +12,27 @@ import org.koin.core.annotation.Single
 class ActorDetailsRemoteDataSourceImpl(
     private val actorDetailsApiService: ActorDetailsApiService,
 ) : ActorDetailsRemoteDataSource, BaseRemoteDatasource {
-    override suspend fun getActorDetailsById(actorId: Int): Result<ActorDetailsResponse> =
+    override suspend fun getActorDetailsById(id: Int): Result<ActorDetailsResponse> =
         callApi(
-            apiCall = { actorDetailsApiService.getActorDetails(actorId = actorId) },
+            apiCall = { actorDetailsApiService.getActorDetails(actorId = id) },
             mapper = { it }
         )
 
-    override suspend fun getActorMovieById(actorId: Int): Result<ActorMovieDetailsResponse> =
+    override suspend fun getActorMovieById(id: Int): Result<ActorMovieDetailsResponse> =
         callApi(
-            apiCall = { actorDetailsApiService.getActorMovies(actorId = actorId) },
+            apiCall = { actorDetailsApiService.getActorMovies(actorId = id) },
             mapper = { it }
         )
 
-    override suspend fun getActorTvShowById(actorId: Int): Result<ActorTvShowDetailsResponse> =
+    override suspend fun getActorTvShowById(id: Int): Result<ActorTvShowDetailsResponse> =
         callApi(
-            apiCall = { actorDetailsApiService.getActorTvShows(actorId = actorId) },
+            apiCall = { actorDetailsApiService.getActorTvShows(actorId = id) },
             mapper = { it }
         )
 
-    override suspend fun getActorImagePath(actorId: Int): Result<ActorImageResponse> =
+    override suspend fun getActorImagePath(id: Int): Result<ActorImageResponse> =
         callApi(
-            apiCall = { actorDetailsApiService.getActorImages(actorId = actorId) },
+            apiCall = { actorDetailsApiService.getActorImages(actorId = id) },
             mapper = { it }
         )
 }

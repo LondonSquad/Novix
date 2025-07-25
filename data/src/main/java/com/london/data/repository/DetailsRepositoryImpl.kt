@@ -25,18 +25,18 @@ class DetailsRepositoryImpl(
     private val reviewsRemoteDataSource: ReviewsRemoteDataSource
 ) : DetailsRepository {
     override suspend fun getTvShowDetailsById(
-        tvShowId: Int,
+        id: Int,
     ): TvShowDetailsEntity = tvShowDetailsRemoteDataSource.getTvShowDetailsById(
-        tvShowId = tvShowId,
+        id = id,
     ).getOrThrow().toEntity()
 
 
-    override suspend fun getCastTvShowById(tvShowId: Int): TvShowCastEntity =
-        tvShowDetailsRemoteDataSource.getCastsByTvShowId(tvShowId).getOrThrow().toCastEntity()
+    override suspend fun getCastTvShowById(id: Int): TvShowCastEntity =
+        tvShowDetailsRemoteDataSource.getCastsByTvShowId(id).getOrThrow().toCastEntity()
 
 
-    override suspend fun getImagesTvShowById(tvShowId: Int): TvShowImagesEntity =
-        tvShowDetailsRemoteDataSource.getTvShowImagesById(tvShowId).getOrThrow().toEntity()
+    override suspend fun getImagesTvShowById(id: Int): TvShowImagesEntity =
+        tvShowDetailsRemoteDataSource.getTvShowImagesById(id).getOrThrow().toEntity()
 
 
     override suspend fun getTvShowEpisodesBySeason(
@@ -44,7 +44,7 @@ class DetailsRepositoryImpl(
     ): TvShowEpisodesEntity =
 
         tvShowDetailsRemoteDataSource.getTvShowEpisodesBySeason(
-            tvShowId = tvShowId, seasonNumber = seasonNumber
+            id = tvShowId, seasonNumber = seasonNumber
         ).getOrThrow().toTvShowEpisodesEntity()
 
 

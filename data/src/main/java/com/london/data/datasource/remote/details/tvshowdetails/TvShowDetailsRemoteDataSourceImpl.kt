@@ -21,13 +21,13 @@ class TvShowDetailsRemoteDataSourceImpl(
         )
 
     override suspend fun getTvShowEpisodesBySeason(
-        tvShowId: Int,
+        id: Int,
         seasonNumber: Int
     ): Result<TvShowEpisodesRemoteResponse> =
         callApiWithRetry(
             apiCall = {
                 tvShowDetailsApiService.getTvShowEpisodesBySeason(
-                    tvShowId = tvShowId,
+                    tvShowId = id,
                     seasonNumber = seasonNumber
                 )
             },

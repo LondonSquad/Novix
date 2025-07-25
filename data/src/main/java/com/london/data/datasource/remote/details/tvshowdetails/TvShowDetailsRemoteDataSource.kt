@@ -8,17 +8,17 @@ import com.london.data.datasource.remote.details.tvshowdetails.model.tvshowepiso
 
 interface TvShowDetailsRemoteDataSource {
     suspend fun getTvShowDetailsById(
-        tvShowId: Int,
+        id: Int,
     ): Result<TvShowDetailsRemoteResponse>
 
     suspend fun getTvShowEpisodesBySeason(
-        tvShowId: Int,
+        id: Int,
         seasonNumber: Int,
     ): Result<TvShowEpisodesRemoteResponse>
 
-    suspend fun getCastsByTvShowId(tvShowId: Int): Result<TvShowCastRemoteResponse>
+    suspend fun getCastsByTvShowId(id: Int): Result<TvShowCastRemoteResponse>
 
-    suspend fun getTvShowImagesById(tvShowId: Int): Result<TvShowImagesRemoteResponse>
+    suspend fun getTvShowImagesById(id: Int): Result<TvShowImagesRemoteResponse>
 
     suspend fun getEpisodeDetailsByPosition(
         tvShowId: Int,

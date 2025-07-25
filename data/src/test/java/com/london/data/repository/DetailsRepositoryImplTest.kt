@@ -152,7 +152,7 @@ class DetailsRepositoryImplTest {
     fun `getTvShowEpisodesBySeason should throw HttpLockedException when remote fails`() = runTest {
         coEvery {
             tvShowDetailsRemoteDataSource.getTvShowEpisodesBySeason(
-                seasonNumber = 0, tvShowId = 123
+                seasonNumber = 0, id = 123
             )
         } throws NetworkException.HttpLockedException("HttpLocked error")
 

@@ -13,17 +13,17 @@ import org.koin.core.annotation.Single
 class ActorRepositoryImpl(
     private val dataSource: ActorDetailsRemoteDataSource
 ) : ActorRepository {
-    override suspend fun getActorDetailsById(actorId: Int): ActorDetails =
-        dataSource.getActorDetailsById(actorId).getOrThrow().toEntity()
+    override suspend fun getActorDetailsById(id: Int): ActorDetails =
+        dataSource.getActorDetailsById(id).getOrThrow().toEntity()
 
 
-    override suspend fun getActorMoviePicksById(actorId: Int): ActorMovieDetails =
-        dataSource.getActorMovieById(actorId).getOrThrow().toEntity()
+    override suspend fun getActorMoviePicksById(id: Int): ActorMovieDetails =
+        dataSource.getActorMovieById(id).getOrThrow().toEntity()
 
 
-    override suspend fun getActorTvShowPicksById(actorId: Int): ActorTvShowDetails =
-        dataSource.getActorTvShowById(actorId).getOrThrow().toEntity()
+    override suspend fun getActorTvShowPicksById(id: Int): ActorTvShowDetails =
+        dataSource.getActorTvShowById(id).getOrThrow().toEntity()
 
-    override suspend fun getActorImagesById(actorId: Int): ActorImageDetails =
-        dataSource.getActorImagePath(actorId).getOrThrow().toEntity()
+    override suspend fun getActorImagesById(id: Int): ActorImageDetails =
+        dataSource.getActorImagePath(id).getOrThrow().toEntity()
 }

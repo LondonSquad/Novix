@@ -55,11 +55,11 @@ interface BaseRemoteDatasource {
 
             result.code() == HttpURLConnection.HTTP_UNAUTHORIZED -> throw result.toUnAuthorizedException()
             result.code() == HttpURLConnection.HTTP_BAD_REQUEST -> throw result.toBadRequestException()
-            result.code() == TOO_MANY_REQUESTS -> throw result.toHttpLockedException()
+            result.code() == TOO_MANY_REQUESTS -> throw result.toManyRequestException()
             result.isServerError() -> throw result.toServerErrorException()
             result.isValidationError() -> throw result.toNetworkValidationException()
             result.isTimeoutError() -> throw result.toTimeoutException()
-            result.code() == HTTP_LOCKED -> throw result.toManyRequestException()
+            result.code() == HTTP_LOCKED -> throw result.toHttpLockedException()
             else -> throw result.toResponseException()
         }
     }
