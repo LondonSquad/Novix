@@ -58,9 +58,6 @@ fun TopRatedScreen(
 
     Content(
         state = state,
-        onBackClick = onBackClick,
-        onMovieGenreClick = viewModel::movieGenreClicked,
-        onTvShowGenreClick = viewModel::tvShowGenreClicked,
         topRatedContract = viewModel
     )
 }
@@ -69,9 +66,6 @@ fun TopRatedScreen(
 @Composable
 private fun Content(
     state: TopRatedUiState,
-    onBackClick: () -> Unit,
-    onMovieGenreClick: (MovieGenre) -> Unit,
-    onTvShowGenreClick: (TvShowGenre) -> Unit,
     topRatedContract: TopRatedContract,
 ) {
     val screenWidth = LocalConfiguration.current.screenWidthDp.dp
@@ -90,7 +84,7 @@ private fun Content(
                 .padding(horizontal = 16.dp)
                 .padding(top = 12.dp),
             title = stringResource(com.london.presentation.R.string.top_rating),
-            onBackClick = onBackClick
+            onBackClick = topRatedContract::onBackClicked
         )
 
         TabLayout(
@@ -104,13 +98,13 @@ private fun Content(
         )
         if (state.isMovieSelected)
             MovieGenreRow(
-                onGenreClick = onMovieGenreClick,
+                onGenreClick = topRatedContract::movieGenreClicked,
                 state = state,
                 screenWidth = screenWidth
             )
         else
             TvShowRow(
-                onGenreClick = onTvShowGenreClick,
+                onGenreClick = topRatedContract::tvShowGenreClicked,
                 state = state,
                 screenWidth = screenWidth
             )
