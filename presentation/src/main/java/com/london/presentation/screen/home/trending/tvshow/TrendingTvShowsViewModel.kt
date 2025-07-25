@@ -1,4 +1,4 @@
-package com.london.presentation.screen.home.trending
+package com.london.presentation.screen.home.trending.tvshow
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope

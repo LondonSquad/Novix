@@ -1,4 +1,4 @@
-package com.london.presentation.screen.home.trending
+package com.london.presentation.screen.home.trending.tvshow
 
 import com.london.domain.entity.trending.TrendingTvShow
 import com.london.presentation.screen.base.ErrorState
