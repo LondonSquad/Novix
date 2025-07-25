@@ -241,7 +241,7 @@ class DetailsRepositoryImplTest {
             ), totalPages = 1, totalItems = 1
         )
         coEvery { reviewsRemoteDataSource.getMovieReviews(MOVIE_ID, PAGE_NUMBER) }.returns(
-            fakeRemoteResponse
+            Result.success(fakeRemoteResponse)
         )
 
         // When
@@ -274,7 +274,7 @@ class DetailsRepositoryImplTest {
         )
 
         coEvery { reviewsRemoteDataSource.getMovieReviews(MOVIE_ID, PAGE_NUMBER) }.returns(
-            fakeEmptyResponse
+            Result.success(fakeEmptyResponse)
         )
 
         // When
@@ -282,6 +282,62 @@ class DetailsRepositoryImplTest {
 
         // Then
         assertThat(result.items).isEmpty()
+    }
+
+    @Test
+    fun `getTvShowReviews should throw UnAuthorizedException when API returns 401`() = runTest {
+        val tvShowId = 456
+        val page = 1
+
+        coEvery {
+            reviewsRemoteDataSource.getTvShowReviews(tvShowId, page)
+        } throws NetworkException.UnAuthorizedException("401 Unauthorized")
+
+        assertThrows<NetworkException.UnAuthorizedException> {
+            repository.getTvShowReviews(tvShowId, page)
+        }
+    }
+
+    @Test
+    fun `getTvShowReviews should throw TimeoutException when API times out`() = runTest {
+        val tvShowId = 456
+        val page = 1
+
+        coEvery {
+            reviewsRemoteDataSource.getTvShowReviews(tvShowId, page)
+        } throws NetworkException.TimeoutException("Request timed out")
+
+        assertThrows<NetworkException.TimeoutException> {
+            repository.getTvShowReviews(tvShowId, page)
+        }
+    }
+
+    @Test
+    fun `getTvShowReviews should throw HttpLockedException when API returns 423`() = runTest {
+        val tvShowId = 456
+        val page = 1
+
+        coEvery {
+            reviewsRemoteDataSource.getTvShowReviews(tvShowId, page)
+        } throws NetworkException.HttpLockedException("Resource locked")
+
+        assertThrows<NetworkException.HttpLockedException> {
+            repository.getTvShowReviews(tvShowId, page)
+        }
+    }
+
+    @Test
+    fun `getTvShowReviews should throw ValidationException when API returns 422`() = runTest {
+        val tvShowId = 456
+        val page = 1
+
+        coEvery {
+            reviewsRemoteDataSource.getTvShowReviews(tvShowId, page)
+        } throws NetworkException.ValidationException("Invalid data")
+
+        assertThrows<NetworkException.ValidationException> {
+            repository.getTvShowReviews(tvShowId, page)
+        }
     }
 
     @Test
@@ -307,7 +363,7 @@ class DetailsRepositoryImplTest {
         )
 
         coEvery { reviewsRemoteDataSource.getTvShowReviews(TV_SHOW_ID, PAGE_NUMBER) }.returns(
-            fakeRemoteResponse
+            Result.success(fakeRemoteResponse)
         )
 
         val result = repository.getTvShowReviews(TV_SHOW_ID, PAGE_NUMBER)

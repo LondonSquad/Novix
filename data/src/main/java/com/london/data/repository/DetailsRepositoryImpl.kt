@@ -62,7 +62,7 @@ class DetailsRepositoryImpl(
         networkBlock = {
             reviewsRemoteDataSource.getMovieReviews(
                 movieId, pageNumber
-            ).toReviewEntity()
+            ).getOrThrow().toReviewEntity()
         }).run {
         PagedFetchResponse(
             currentPage = currentPage,
@@ -76,7 +76,8 @@ class DetailsRepositoryImpl(
         tvShowId: Int, pageNumber: Int
     ): PagedFetchResponse<ReviewEntity> = fetchAndSync(
         networkBlock = {
-            reviewsRemoteDataSource.getTvShowReviews(tvShowId, pageNumber).toReviewEntity()
+            reviewsRemoteDataSource.getTvShowReviews(tvShowId, pageNumber).getOrThrow()
+                .toReviewEntity()
         }).run {
         PagedFetchResponse(
             currentPage = currentPage,
