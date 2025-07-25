@@ -1,4 +1,4 @@
-package com.london.presentation.screen.home.trending
+package com.london.presentation.screen.home.trending.actor
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
@@ -54,7 +54,7 @@ fun TrendingActorsScreen(
                 .statusBarsPadding()
                 .fillMaxWidth()
                 .padding(horizontal = 16.dp, vertical = 12.dp),
-            title = stringResource(R.string.trending_actors),
+            title = stringResource(R.string.trending_people),
             onBackClick = viewModel::onBackClick
         )
         ResultOrEmpty(
