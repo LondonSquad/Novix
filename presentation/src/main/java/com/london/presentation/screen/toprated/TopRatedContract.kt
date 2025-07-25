@@ -4,8 +4,8 @@ import com.london.presentation.utils.MovieGenre
 import com.london.presentation.utils.TvShowGenre
 
 interface TopRatedContract {
-    fun movieGenreClicked(genre: MovieGenre)
-    fun tvShowGenreClicked(genre: TvShowGenre)
+    fun movieGenre(genre: MovieGenre)
+    fun tvShowGenre(genre: TvShowGenre)
     fun tabSelected(index: Int)
     fun onBackClicked()
     fun onMovieClick(id: Int)
