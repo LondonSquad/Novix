@@ -2,6 +2,7 @@ package com.london.data.repository
 
 import com.london.data.datasource.remote.details.moviedetails.MovieDetailsRemoteDataSource
 import com.london.data.mapper.moviedetails.toEntity
+import com.london.data.mapper.moviedetails.toGenre
 import com.london.data.utils.asImageUrlOrEmpty
 import com.london.data.utils.isTrue
 import com.london.domain.entity.Actor
@@ -17,24 +18,25 @@ class MovieDetailsRepositoryImpl(
 
     override suspend fun getMovieById(id: Int): MovieDetails {
         val remoteDetails = movieDetailsRemoteDataSource.getMovieDetails(id)
-        return remoteDetails.getOrThrow().toEntity(
-            genres = remoteDetails.getOrThrow().genreRemote?.map { it.toGenre() }.orEmpty(),
-            movieImages = getMovieImagesById(id),
-            movieDuration = remoteDetails.getOrThrow().runtime?.toString().orEmpty()
-        )
-        return remoteDetails.toEntity()
+        return remoteDetails.getOrThrow().toEntity()
     }
 
     override suspend fun getSimilarMoviesById(id: Int): List<SimilarMovie> =
-        movieDetailsRemoteDataSource.getSimilarMovies(id)
-            .getOrThrow().similarMovieRemotes.orEmpty().map { it.toEntity() }
+        movieDetailsRemoteDataSource.getSimilarMovies(id).getOrThrow().similarMovieRemotes.orEmpty()
+            .map { it.toEntity() }
 
     override suspend fun getMovieImagesById(id: Int): List<String> {
         val images = movieDetailsRemoteDataSource.getMovieImages(id).getOrThrow()
         return when {
-            images.backdrops.orEmpty().isNotEmpty().isTrue -> images.backdrops.orEmpty().map { it.filePath.asImageUrlOrEmpty() }
-            images.posters.orEmpty().isNotEmpty().isTrue -> images.posters.orEmpty().map { it.filePath.asImageUrlOrEmpty() }
-            images.logos.orEmpty().isNotEmpty().isTrue -> images.logos.orEmpty().map { it.filePath.asImageUrlOrEmpty() }
+            images.backdrops.orEmpty().isNotEmpty().isTrue -> images.backdrops.orEmpty()
+                .map { it.filePath.asImageUrlOrEmpty() }
+
+            images.posters.orEmpty().isNotEmpty().isTrue -> images.posters.orEmpty()
+                .map { it.filePath.asImageUrlOrEmpty() }
+
+            images.logos.orEmpty().isNotEmpty().isTrue -> images.logos.orEmpty()
+                .map { it.filePath.asImageUrlOrEmpty() }
+
             else -> emptyList()
         }.take(IMAGE_LIMIT)
     }
@@ -43,9 +45,6 @@ class MovieDetailsRepositoryImpl(
         val movieCast = movieDetailsRemoteDataSource.getMovieCast(id).getOrThrow()
         return movieCast.actorRemote?.map { it.toEntity() }.orEmpty()
     }
-    override suspend fun getMovieCastById(id: Int): List<Actor> =
-        movieDetailsRemoteDataSource.getMovieCast(id).actorRemote.orEmpty().map { it.toEntity() }
-
 
 
     companion object {
