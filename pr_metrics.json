@@ -6999,5 +6999,33 @@
       "deletions": 544,
       "changed_files": 53
     }
+  },
+  {
+    "pr_number": 283,
+    "url": "https://github.com/LondonSquad/Novix/pull/283",
+    "title": "Hotfix/all UI comments",
+    "opened_at": "2025-07-25T01:25:11Z",
+    "head_ref": "hotfix/all-ui-comments",
+    "base_ref": "develop",
+    "creator": {
+      "login": "BassantM",
+      "id": 102248144,
+      "url": "https://github.com/BassantM"
+    },
+    "approvals": [],
+    "first_approved_at": null,
+    "time_to_first_approval_minutes": null,
+    "required_approvals_met_at": null,
+    "time_to_required_approvals_minutes": null,
+    "closed_at": null,
+    "merged_at": null,
+    "merged_by": null,
+    "week": "2025-W30",
+    "status": "pending",
+    "diff_stats": {
+      "additions": 913,
+      "deletions": 172,
+      "changed_files": 45
+    }
   }
 ]
