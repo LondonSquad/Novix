@@ -104,7 +104,7 @@ class GetSimilarMoviesUseCaseTest {
             createDummySimilarMovie(2, "Similar Movie 2")
         )
 
-        fun createDummySimilarMovie(id: Int, title: String) = SimilarMovie(
+       private fun createDummySimilarMovie(id: Int, title: String) = SimilarMovie(
             id = id,
             adult = false,
             backdropPath = "/backdrop_$id.jpg",

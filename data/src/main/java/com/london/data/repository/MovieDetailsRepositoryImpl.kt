@@ -22,22 +22,22 @@ class MovieDetailsRepositoryImpl(
 
     override suspend fun getSimilarMoviesById(id: Int): List<SimilarMovie> =
         movieDetailsRemoteDataSource.getSimilarMovies(id)
-            .similarMovieRemotes?.map { it.toEntity() }.orEmpty()
+            .similarMovieRemotes.orEmpty().map { it.toEntity() }
 
 
     override suspend fun getMovieImagesById(id: Int): List<String> {
         val images = movieDetailsRemoteDataSource.getMovieImages(id)
         return when {
-            images.backdrops?.isNotEmpty().isTrue -> images.backdrops?.map { it.filePath.asImageUrlOrEmpty() }
-            images.posters?.isNotEmpty().isTrue -> images.posters?.map { it.filePath.asImageUrlOrEmpty() }
-            images.logos?.isNotEmpty().isTrue -> images.logos?.map { it.filePath.asImageUrlOrEmpty() }
+            images.backdrops.orEmpty().isNotEmpty().isTrue -> images.backdrops.orEmpty().map { it.filePath.asImageUrlOrEmpty() }
+            images.posters.orEmpty().isNotEmpty().isTrue -> images.posters.orEmpty().map { it.filePath.asImageUrlOrEmpty() }
+            images.logos.orEmpty().isNotEmpty().isTrue -> images.logos.orEmpty().map { it.filePath.asImageUrlOrEmpty() }
             else -> emptyList()
-        }?.take(IMAGE_LIMIT).orEmpty()
+        }.take(IMAGE_LIMIT)
     }
 
     override suspend fun getMovieCastById(id: Int): List<Actor> =
-        movieDetailsRemoteDataSource.getMovieCast(id).actorRemote?.map { it.toEntity() }
-            ?: emptyList()
+        movieDetailsRemoteDataSource.getMovieCast(id).actorRemote.orEmpty().map { it.toEntity() }
+
 
 
     companion object {

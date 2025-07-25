@@ -28,33 +28,3 @@ data class MovieDetails(
     val voteAverage: String,
     val voteCount: Int
 )
-
-
-data class CollectionDetails(
-    val id: Int,
-    val name: String
-)
-
-data class Genre(
-    val id: Int,
-    val name: String
-)
-
-data class ProductionCompany(
-    val id: Int,
-    val logoPath: String,
-    val name: String,
-    val originCountry: String
-)
-
-
-data class ProductionCountry(
-    val iso31661: String,
-    val name: String
-)
-
-data class SpokenLanguage(
-    val englishName: String,
-    val iso6391: String,
-    val name: String
-)
