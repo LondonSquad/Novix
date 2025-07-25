@@ -78,4 +78,6 @@
     <string name="actors">Actors</string>
     <string name="What_you_want_to_watch">What you want to watch?</string>
     <string name="trending_movies">Trending Movies</string>
+    <string name="trending_tv_shows">Trending TV Shows</string>
+    <string name="trending_people">Trending People</string>
 </resources>

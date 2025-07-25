@@ -77,4 +77,7 @@
     <string name="actors">الممثلين</string>
     <string name="What_you_want_to_watch">ماذا تريد أن تشاهد؟</string>
     <string name="all">الكل</string>
+    <string name="trending_movies">الأفلام الرائجة</string>
+    <string name="trending_tv_shows">المسلسلات الرائجة</string>
+    <string name="trending_people">الأشخاص الرائجون</string>
 </resources>
