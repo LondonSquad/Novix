@@ -7,6 +7,7 @@ import kotlinx.serialization.Serializable
 data class Backdrop(
     @SerialName("aspect_ratio")
     val aspectRatio: Double?,
+    @SerialName("height")
     val height: Int?,
     @SerialName("iso_639_1")
     val iso6391: String?,
@@ -16,5 +17,6 @@ data class Backdrop(
     val voteAverage: Double?,
     @SerialName("vote_count")
     val voteCount: Int?,
+    @SerialName("width")
     val width: Int?
 )

@@ -1,8 +1,11 @@
 package com.london.presentation.screen.details.movieDetalis
 
 import androidx.lifecycle.SavedStateHandle
-import com.london.domain.usecase.GetMovieDetailsUseCase
+import com.london.domain.usecase.GetMovieById
+import com.london.domain.usecase.GetMovieCastUseCase
+import com.london.domain.usecase.GetMovieImagesUseCase
 import com.london.domain.usecase.GetMovieVideoUseCase
+import com.london.domain.usecase.GetSimilarMoviesUseCase
 import com.london.presentation.navigation.Screen
 import com.london.presentation.navigation.getArgs
 import com.london.presentation.screen.base.BaseViewModel
@@ -10,29 +13,31 @@ import org.koin.android.annotation.KoinViewModel
 
 @KoinViewModel
 class MovieDetailsViewModel(
-    private val getMovieDetailsUseCase: GetMovieDetailsUseCase,
+    private val getMovieById: GetMovieById,
+    private val getMovieImagesUseCase: GetMovieImagesUseCase,
+    private val getMovieCastUseCase: GetMovieCastUseCase,
+    private val getSimilarMoviesUseCase: GetSimilarMoviesUseCase,
     private val getMovieVideosUseCase: GetMovieVideoUseCase,
     savedStateHandle: SavedStateHandle
 ) : BaseViewModel<MovieDetailsUiState, MovieDetailsEffect>(MovieDetailsUiState()),
     MovieDetailsContract {
 
     private val args = savedStateHandle.getArgs<Screen.MovieDetails>()
-    val movieId = args?.movieId ?: 0
+    private val movieId = args?.movieId ?: 0
 
     init {
         loadMovieDetails(movieId)
+        loadSimilarAndVideos(movieId)
     }
 
-    override fun onBackClick() {
-        emitEffect(MovieDetailsEffect.BackNavigation)
-    }
+    override fun onBackClick() = emitEffect(MovieDetailsEffect.BackNavigation)
 
     override fun onSavedClick() {
-        //TODO("Not yet implemented")
+        // TODO: implement saving logic
     }
 
     override fun onExpandClick() {
-        updateState { copy(expanded = !this.expanded) }
+        updateState { copy(expanded = !expanded) }
     }
 
     override fun onMovieClick(movieId: Int) {
@@ -44,12 +49,7 @@ class MovieDetailsViewModel(
     }
 
     override fun onReviewsClick(movieId: Int, mediaNumber: Int) {
-        emitEffect(
-            MovieDetailsEffect.ReviewsNavigation(
-                movieId = movieId,
-                mediaNumber = mediaNumber
-            )
-        )
+        emitEffect(MovieDetailsEffect.ReviewsNavigation(movieId, mediaNumber))
     }
 
     override fun onGenreClick(genreId: Int) {
@@ -57,27 +57,60 @@ class MovieDetailsViewModel(
     }
 
     private fun loadMovieDetails(movieId: Int) {
-
         tryToExecute(
             block = {
-                val movieDetails = getMovieDetailsUseCase(movieId)
-                val movieVideos = getMovieVideosUseCase.invoke(movieId)
-                Pair(movieDetails, movieVideos)
+                val movieDetails = getMovieById.invoke(movieId)
+                val movieImages = getMovieImagesUseCase.invoke(movieId)
+                val movieCast = getMovieCastUseCase.invoke(movieId)
+                Triple(movieDetails, movieImages, movieCast)
             },
             onStart = { updateState { copy(isLoading = true) } },
-            onSuccess = { (movieDetails, movieVideos) ->
+            onSuccess = { triple ->
+                val (details, images, cast) = triple
                 updateState {
-                    movieDetails.toUiState(this).copy(
-                        isLoading = false,
-                        movieVideo = movieVideos.firstOrNull()?.videoUrl.orEmpty()
+                    copy(
+                        movieName = details.title,
+                        movieGenres = details.genres,
+                        movieRating = details.voteAverage,
+                        movieDuration = details.runtime.toString(),
+                        releaseDate = details.releaseDate,
+                        movieOverview = details.overview,
+                        movieImage = images,
+                        actors = cast
                     )
                 }
             },
             onError = { errorState ->
                 updateState { copy(error = errorState) }
             },
-            onCompleted = { updateState { copy(isLoading = false) } },
-            checkSuccess = { movieId != 0 }
+            onCompleted = {
+                updateState { copy(isLoading = false) }
+            }
+        )
+    }
+
+    private fun loadSimilarAndVideos(movieId: Int) {
+        tryToExecute(
+            block = {
+                val similarMovies = getSimilarMoviesUseCase.invoke(movieId)
+                val movieVideos = getMovieVideosUseCase.invoke(movieId)
+                Pair(similarMovies, movieVideos)
+            },
+            onSuccess = { pair ->
+                val (similarMovies, videos) = pair
+                updateState {
+                    copy(
+                        similarMovies = similarMovies,
+                        movieVideo = videos.firstOrNull()?.videoUrl.orEmpty()
+                    )
+                }
+            },
+            onError = { errorState ->
+                updateState { copy(error = errorState) }
+            },
+            onCompleted = {
+                updateState { copy(isLoading = false) }
+            }
         )
     }
 }

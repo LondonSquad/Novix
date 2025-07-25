@@ -4,12 +4,12 @@ import com.london.data.datasource.exception.NetworkException
 import com.london.data.datasource.remote.details.moviedetails.MovieDetailsRemoteDataSource
 import com.london.data.datasource.remote.details.moviedetails.model.moviecast.MovieActor
 import com.london.data.datasource.remote.details.moviedetails.model.moviecast.MovieCastResponse
-import com.london.data.datasource.remote.details.moviedetails.model.moviedetails.CollectionDetails
 import com.london.data.datasource.remote.details.moviedetails.model.moviedetails.GenreRemote
 import com.london.data.datasource.remote.details.moviedetails.model.moviedetails.MovieDetailsResponse
-import com.london.data.datasource.remote.details.moviedetails.model.moviedetails.ProductionCompany
-import com.london.data.datasource.remote.details.moviedetails.model.moviedetails.ProductionCountry
-import com.london.data.datasource.remote.details.moviedetails.model.moviedetails.SpokenLanguage
+import com.london.data.datasource.remote.details.moviedetails.model.moviedetails.ProductionCompanyRemote
+import com.london.data.datasource.remote.details.moviedetails.model.moviedetails.ProductionCountryRemote
+import com.london.data.datasource.remote.details.moviedetails.model.moviedetails.RemoteCollectionDetails
+import com.london.data.datasource.remote.details.moviedetails.model.moviedetails.SpokenLanguageRemote
 import com.london.data.datasource.remote.details.moviedetails.model.movieimages.MovieImagesResponse
 import com.london.data.datasource.remote.details.moviedetails.model.movieimages.Poster
 import com.london.data.datasource.remote.details.moviedetails.model.similarmovies.SimilarMovieRemote
@@ -37,7 +37,7 @@ class MovieDetailsRepositoryImplTest {
     private fun fakeMovieDetailsRemote() = MovieDetailsResponse(
         adult = false,
         backdropPath = "/b.jpg",
-        belongsToCollection = CollectionDetails(1, "Coll"),
+        remoteBelongsToCollection = RemoteCollectionDetails(1, "Coll"),
         budget = 1,
         genreRemote = listOf(
             GenreRemote(1, "Sci-Fi"),
@@ -53,10 +53,10 @@ class MovieDetailsRepositoryImplTest {
         popularity = 1.0,
         posterPath = "/p.jpg",
         productionCompanies = listOf(
-            ProductionCompany(1, null, "WB", "US")
+            ProductionCompanyRemote(1, null, "WB", "US")
         ),
         productionCountries = listOf(
-            ProductionCountry("US", "USA")
+            ProductionCountryRemote("US", "USA")
         ),
         releaseDate = "2010-07-16",
         revenue = 1,
@@ -68,7 +68,7 @@ class MovieDetailsRepositoryImplTest {
         voteAverage = 8.8,
         voteCount = 100,
         spokenLanguages = listOf(
-            SpokenLanguage("English", "en", "English")
+            SpokenLanguageRemote("English", "en", "English")
         ),
     )
 
@@ -188,7 +188,7 @@ class MovieDetailsRepositoryImplTest {
 
         val result = repository.getMovieById(123)
 
-        assertEquals("Inception", result.movieName)
+        assertEquals("Inception", result.originalTitle)
         assertEquals(2, result.genres.size)
         assertEquals("Sci-Fi", result.genres[0].name)
     }
