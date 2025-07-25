@@ -24,6 +24,7 @@ data class RecentViewedRepositoryImpl(
         recentRecentViewedLocalDataSource.getAll().map { it.toEntity() }
 
     override suspend fun clearAll() = recentRecentViewedLocalDataSource.clearAll()
+
     override suspend fun delete(item: RecentViewed) {
         recentRecentViewedLocalDataSource.delete(item.toLocal())
     }

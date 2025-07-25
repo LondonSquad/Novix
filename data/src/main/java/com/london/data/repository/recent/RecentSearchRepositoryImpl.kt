@@ -25,8 +25,7 @@ class RecentSearchRepositoryImpl(
 
     override suspend fun clearAll() = recentSearchLocalDataSource.clearAll()
 
-   override suspend fun delete(item: RecentSearch) {
+    override suspend fun delete(item: RecentSearch) {
         recentSearchLocalDataSource.delete(item.toRecentSearch())
     }
-
 }
