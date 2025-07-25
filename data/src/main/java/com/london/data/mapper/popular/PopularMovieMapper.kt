@@ -6,6 +6,7 @@ import com.london.data.datasource.remote.ApiResponse
 import com.london.data.datasource.remote.home.popular.model.PopularMovieResponse
 import com.london.data.utils.asImageUrlOrEmpty
 import com.london.data.utils.orZero
+import com.london.data.utils.roundToDecimal
 import com.london.domain.KoverIgnore
 import com.london.domain.entity.popular.PopularMovie
 import kotlin.math.round
