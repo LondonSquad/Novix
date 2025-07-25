@@ -11,7 +11,7 @@ class GetTopRatedMoviesUseCase(
     @Provided
     private val topRatedMovieRepo: TopRatedMovieRepository
 ) {
-    suspend fun invoke(
+    suspend operator fun invoke(
         pageNumber: Int,
         genreId: Int? = null
     ): PagedFetchResponse<TopRatedMovie> {

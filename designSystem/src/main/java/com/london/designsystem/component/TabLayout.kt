@@ -85,15 +85,16 @@ fun NovixTab(
                     .background(NovixTheme.colors.primary)
 
             )
-        } else {
+        } else
             Spacer(modifier = Modifier.height(8.dp))
-        }
+
     }
 }
 
 @Immutable
 data class TabItem(
-    @StringRes val text: Int,
+    @StringRes val
+    text: Int,
 )
 
 

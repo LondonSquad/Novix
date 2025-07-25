@@ -11,7 +11,7 @@ class GetTopRatedTvSeriesUseCase(
     @Provided
     private val topRatedTvSeriesRepo: TopRatedTvSeriesRepository
 ) {
-    suspend fun invoke(
+    suspend operator fun invoke(
         pageNumber: Int,
         genreId: Int? = null
     ) : PagedFetchResponse<TopRatedTvSeries> {
