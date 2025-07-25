@@ -150,7 +150,8 @@ fun PopularSection(
                             horizontalArrangement = Arrangement.Start
                         ) {
                             RatingItem(
-                                rating = cardRating
+                                rating = cardRating,
+                                color = NovixTheme.colors.onPrimary
                             )
                         }
                     }

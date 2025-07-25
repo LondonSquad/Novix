@@ -78,6 +78,20 @@ fun convertDate(input: String): String {
 
     return "$day $monthName $year".toLocalizedNumbers()
 }
+
+fun reverseDateFormat(input: String): String {
+    var day = ""
+    var month = ""
+    var year = ""
+    runCatching {
+        val parts = input.split("-")
+        day = parts[2]
+        month = parts[1]
+        year = parts[0]
+    }
+    return "$day-$month-$year".toLocalizedNumbers()
+}
+
 fun String?.getValueOf(key: String): String? {
     return this
 }

@@ -3,10 +3,12 @@ package com.london.presentation.screen.home
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.requiredWidth
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.GridItemSpan
@@ -19,7 +21,11 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.graphics.Brush
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.stringResource
@@ -95,81 +101,101 @@ private fun Content(
 
     val pagerState = rememberPagerState(initialPage = 0, pageCount = { totalPopularItems })
 
-
-    LazyVerticalGrid(
-        columns = GridCells.Fixed(2),
-        contentPadding = PaddingValues(
-            top = 12.dp,
-            bottom = 16.dp,
-            start = 16.dp,
-            end = 16.dp
-        ),
-        state = lazyGridState,
-        horizontalArrangement = Arrangement.spacedBy(12.dp),
-        verticalArrangement = Arrangement.spacedBy(12.dp),
-        modifier = modifier
-            .background(color = NovixTheme.colors.surface)
-            .padding(top = 16.dp)
+    Box(
+        modifier = Modifier.fillMaxSize()
     ) {
 
-        stickyHeader {
-            DefaultTopBar(
-                modifier = Modifier
-                    .requiredWidth(screenWidth)
-                    .background(NovixTheme.colors.surface)
-                    .padding(top = 12.dp)
+        LazyVerticalGrid(
+            columns = GridCells.Fixed(2),
+            contentPadding = PaddingValues(
+                top = 12.dp,
+                bottom = 16.dp,
+                start = 16.dp,
+                end = 16.dp
+            ),
+            state = lazyGridState,
+            horizontalArrangement = Arrangement.spacedBy(12.dp),
+            verticalArrangement = Arrangement.spacedBy(12.dp),
+            modifier = modifier
+                .background(color = NovixTheme.colors.surface)
+        .padding(top = 16.dp)
+    ) {
+
+            stickyHeader {
+                DefaultTopBar(
+                    modifier = Modifier
+                        .requiredWidth(screenWidth)
+                        .background(NovixTheme.colors.surface)
+                        .padding(top = 12.dp)
+                )
+            }
+
+            if (totalPopularItems > 0) {
+                val moviesCount = uiState.popularMovies.size
+                val currentPage = pagerState.currentPage
+
+                val popularCardImages = uiState.popularMovies.map { it.posterUrl } +
+                        uiState.popularTvShows.map { it.posterUrl }
+
+                val popularCardRating = uiState.popularMovies.map { it.rating } +
+                        uiState.popularTvShows.map { it.rating }
+
+                val popularCardTitle = uiState.popularMovies.map { it.title } +
+                        uiState.popularTvShows.map { it.name }
+
+                item(span = { GridItemSpan(maxLineSpan) }) {
+                    PopularSection(
+                        modifier = modifier
+                            .requiredWidth(screenWidth),
+                        pagerState = pagerState,
+                        images = popularCardImages,
+                        onSaveClick = {/*TODO: SAVE FUNCTIONALITY IS NOT IMPLEMENTED.*/ },
+                        cardRating = popularCardRating[currentPage].toString(),
+                        cardTitle = popularCardTitle[currentPage],
+                        onCardClick = {
+                            if (currentPage < moviesCount) {
+                                homeScreenContract.onMovieClick(
+                                    uiState.popularMovies[currentPage].id
+                                )
+                            } else {
+                                val tvShowIndex = currentPage - moviesCount
+                                if (tvShowIndex < uiState.popularTvShows.size) {
+                                    homeScreenContract.onTvShowClick(
+                                        uiState.popularTvShows[tvShowIndex].id
+                                    )
+                                }
+                            }
+                        }
+                    )
+                }
+            }
+
+            item(span = { GridItemSpan(maxLineSpan) }) {
+                TrendingSection()
+            }
+
+            upComingSection(
+                contract = homeScreenContract,
+                screenWidth = screenWidth,
+                state = uiState,
+                upcomingMoviesLazyList
             )
         }
 
-        if (totalPopularItems > 0) {
-            val moviesCount = uiState.popularMovies.size
-            val currentPage = pagerState.currentPage
-
-            val popularCardImages = uiState.popularMovies.map { it.posterUrl } +
-                    uiState.popularTvShows.map { it.posterUrl }
-
-            val popularCardRating = uiState.popularMovies.map { it.rating } +
-                    uiState.popularTvShows.map { it.rating }
-
-            val popularCardTitle = uiState.popularMovies.map { it.title } +
-                    uiState.popularTvShows.map { it.name }
-
-            item(span = { GridItemSpan(maxLineSpan) }) {
-                PopularSection(
-                    modifier = modifier
-                        .requiredWidth(screenWidth),
-                    pagerState = pagerState,
-                    images = popularCardImages,
-                    onSaveClick = {/*TODO: SAVE FUNCTIONALITY IS NOT IMPLEMENTED.*/ },
-                    cardRating = popularCardRating[currentPage].toString(),
-                    cardTitle = popularCardTitle[currentPage],
-                    onCardClick = {
-                        if (currentPage < moviesCount) {
-                            homeScreenContract.onMovieClick(
-                                uiState.popularMovies[currentPage].id
-                            )
-                        } else {
-                            val tvShowIndex = currentPage - moviesCount
-                            if (tvShowIndex < uiState.popularTvShows.size) {
-                                homeScreenContract.onTvShowClick(
-                                    uiState.popularTvShows[tvShowIndex].id
-                                )
-                            }
-                        }
-                    }
+        Box(
+            modifier = Modifier
+                .size(400.dp)
+                .align(Alignment.TopStart)
+                .background(
+                    Brush.linearGradient(
+                        colors = listOf(
+                            NovixTheme.colors.primary.copy(alpha = 0.09f),
+                            Color.Transparent
+                        ),
+                        start = Offset(0f, 0f),
+                        end = Offset(screenWidth.value, 400f)
+                    )
                 )
-            }
-        }
-
-        item(span = { GridItemSpan(maxLineSpan) }) {
-            TrendingSection()
-        }
-
-        upComingSection(
-            contract = homeScreenContract,
-            screenWidth = screenWidth,
-            state = uiState,
-            upcomingMoviesLazyList
         )
     }
 }

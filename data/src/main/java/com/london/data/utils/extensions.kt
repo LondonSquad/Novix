@@ -13,6 +13,8 @@ val Boolean?.isTrue
 
 fun Double?.roundToFirstDecimal(): String = "%.1f".format(this)
 
+fun Double?.roundToDecimal(): Double = "%.1f".format(this).toDouble()
+
 fun String?.asImageUrlOrEmpty() = this?.let { BuildConfig.IMAGE_URL + it }.orEmpty()
 
 fun String?.asYoutubeUrlOrEmpty() : String = this?.let { BuildConfig.YOUTUBE_URL + it }.orEmpty()
