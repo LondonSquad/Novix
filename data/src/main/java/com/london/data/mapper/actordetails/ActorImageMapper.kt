@@ -2,8 +2,9 @@
 
 package com.london.data.mapper.actordetails
 
-import com.london.data.datasource.remote.details.actordetails.model.actorimage.ActorImageResponse
-import com.london.data.datasource.remote.details.actordetails.model.actorimage.ProfileDto
+
+import com.london.data.remote.model.details.actor.model.actorimage.ActorImageResponse
+import com.london.data.remote.model.details.actor.model.actorimage.ProfileDto
 import com.london.data.utils.asImageUrlOrEmpty
 import com.london.data.utils.orZero
 import com.london.domain.KoverIgnore

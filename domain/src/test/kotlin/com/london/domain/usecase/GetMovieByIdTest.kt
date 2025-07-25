@@ -3,8 +3,11 @@ package com.london.domain.usecase
 import com.london.domain.GetMovieByIdFailedException
 import com.london.domain.entity.Actor
 import com.london.domain.entity.Genre
+import com.london.domain.entity.moviedatails.CollectionDetails
 import com.london.domain.entity.moviedatails.MovieDetails
-import com.london.domain.entity.moviedatails.SimilarMovie
+import com.london.domain.entity.moviedatails.ProductionCompany
+import com.london.domain.entity.moviedatails.ProductionCountry
+import com.london.domain.entity.moviedatails.SpokenLanguage
 import com.london.domain.repository.MovieDetailsRepository
 import io.mockk.coEvery
 import io.mockk.coVerify
@@ -13,8 +16,6 @@ import kotlinx.coroutines.test.runTest
 import org.junit.Before
 import org.junit.Test
 import org.junit.jupiter.api.Assertions.assertEquals
-import org.junit.jupiter.api.Assertions.assertFalse
-import org.junit.jupiter.api.Assertions.assertNotNull
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.assertThrows
 
@@ -30,26 +31,43 @@ class GetMovieByIdTest {
     }
 
     private fun fakeMovieDetailsDomain() = MovieDetails(
-        movieId = 123,
-        movieImage = listOf("/inception.jpg", "/inception_backdrop.jpg"),
-        movieName = "Inception",
-        movieRating = "8.8",
-        movieDuration = "148",
-        releaseDate = "2010-07-16",
-        movieOverview = "A skilled thief is given a chance at redemption",
+        adult = false,
+        backdropUrl = "/inception_backdrop.jpg",
+        belongsToCollection = CollectionDetails(1, "Inception Collection"),
+        budget = 160_000_000,
         genres = listOf(
-            Genre(1, "Sci-Fi"), Genre(2, "Thriller")
+            Genre(1, "Sci-Fi"),
+            Genre(2, "Thriller")
         ),
-        actors = listOf(
-            Actor(1, "Leonardo DiCaprio", "Cobb", "/leo.jpg"),
-            Actor(2, "Joseph Gordon-Levitt", "Arthur", "/jgl.jpg")
+        homepage = "https://www.inceptionmovie.com",
+        id = 123,
+        imdbId = "tt1375666",
+        originCountry = listOf("US"),
+        originalLanguage = "en",
+        originalTitle = "Inception",
+        overview = "A skilled thief is given a chance at redemption.",
+        popularity = 98.5,
+        posterUrl = "/inception_poster.jpg",
+        productionCompanies = listOf(
+            ProductionCompany(1, "/warner_logo.png", "Warner Bros.", "US")
         ),
-        similarMovies = listOf(
-            SimilarMovie(image = "/interstellar.jpg", isSaved = true, id = 1),
-            SimilarMovie(image = "/tenet.jpg", isSaved = false, id = 1)
+        productionCountries = listOf(
+            ProductionCountry("US", "United States")
         ),
-        movieHaveTrailer = true
+        releaseDate = "2010-07-16",
+        revenue = 829_895_144,
+        runtime = 148,
+        spokenLanguages = listOf(
+            SpokenLanguage("English", "en", "English")
+        ),
+        status = "Released",
+        tagline = "Your mind is the scene of the crime.",
+        title = "Inception",
+        video = false,
+        voteAverage = "8.8",
+        voteCount = 10000,
     )
+
 
     @Test
     fun `invoke should return movie details successfully`() = runTest {
@@ -62,21 +80,14 @@ class GetMovieByIdTest {
         val result = getMovieById.invoke(movieId)
 
         // Then
-        assertNotNull(result)
-        assertEquals(123, result.movieId)
-        assertEquals("Inception", result.movieName)
-        assertEquals("8.8", result.movieRating)
-        assertEquals("148", result.movieDuration)
+        assertEquals(123, result.id)
+        assertEquals("Inception", result.title)
+        assertEquals("8.8", result.voteAverage)
+        assertEquals(148, result.runtime)
         assertEquals("2010-07-16", result.releaseDate)
-        assertEquals("A skilled thief is given a chance at redemption", result.movieOverview)
+        assertEquals("A skilled thief is given a chance at redemption.", result.overview)
         assertEquals(2, result.genres.size)
         assertEquals("Sci-Fi", result.genres[0].name)
-        assertEquals("Thriller", result.genres[1].name)
-        assertEquals(2, result.actors.size)
-        assertEquals("Leonardo DiCaprio", result.actors[0].name)
-        assertEquals(2, result.similarMovies.size)
-        assertEquals(2, result.movieImage.size)
-        assertTrue(result.movieHaveTrailer)
 
         coVerify(exactly = 1) { movieRepository.getMovieById(movieId) }
     }
@@ -101,15 +112,15 @@ class GetMovieByIdTest {
     fun `should work with different movie IDs`() = runTest {
         // Given
         val movieId = 456
-        val expectedMovie = fakeMovieDetailsDomain().copy(movieId = movieId, movieName = "Tenet")
+        val expectedMovie = fakeMovieDetailsDomain().copy(id = movieId, originalTitle = "Tenet")
         coEvery { movieRepository.getMovieById(movieId) } returns expectedMovie
 
         // When
         val result = getMovieById.invoke(movieId)
 
         // Then
-        assertEquals(456, result.movieId)
-        assertEquals("Tenet", result.movieName)
+        assertEquals(movieId, result.id)
+        assertEquals("Tenet", result.originalTitle)
         coVerify(exactly = 1) { movieRepository.getMovieById(movieId) }
     }
 
@@ -118,7 +129,7 @@ class GetMovieByIdTest {
         // Given
         val movieId = 789
         val movieWithNoGenres = fakeMovieDetailsDomain().copy(
-            movieId = movieId, genres = emptyList()
+            id = movieId, genres = emptyList()
         )
         coEvery { movieRepository.getMovieById(movieId) } returns movieWithNoGenres
 
@@ -126,7 +137,7 @@ class GetMovieByIdTest {
         val result = getMovieById.invoke(movieId)
 
         // Then
-        assertEquals(movieId, result.movieId)
+        assertEquals(movieId, result.id)
         assertTrue(result.genres.isEmpty())
         assertEquals(0, result.genres.size)
         coVerify(exactly = 1) { movieRepository.getMovieById(movieId) }
@@ -137,7 +148,7 @@ class GetMovieByIdTest {
         // Given
         val movieId = 999
         val movieWithEmptyImages = fakeMovieDetailsDomain().copy(
-            movieId = movieId, movieImage = emptyList()
+            id = movieId, backdropUrl = ""
         )
         coEvery { movieRepository.getMovieById(movieId) } returns movieWithEmptyImages
 
@@ -145,36 +156,37 @@ class GetMovieByIdTest {
         val result = getMovieById.invoke(movieId)
 
         // Then
-        assertEquals(movieId, result.movieId)
-        assertTrue(result.movieImage.isEmpty())
-        assertEquals(0, result.movieImage.size)
+        assertEquals(movieId, result.id)
+        assertTrue(result.backdropUrl.isEmpty())
         coVerify(exactly = 1) { movieRepository.getMovieById(movieId) }
     }
 
     @Test
-    fun `should handle movie with zero duration`() = runTest {
+    fun `should handle movie with zero runtime`() = runTest {
         // Given
         val movieId = 111
-        val movieWithZeroDuration = fakeMovieDetailsDomain().copy(
-            movieId = movieId, movieDuration = "0"
+        val movieWithZeroRuntime = fakeMovieDetailsDomain().copy(
+            id = movieId,
+            runtime = 0
         )
-        coEvery { movieRepository.getMovieById(movieId) } returns movieWithZeroDuration
+        coEvery { movieRepository.getMovieById(movieId) } returns movieWithZeroRuntime
 
         // When
         val result = getMovieById.invoke(movieId)
 
         // Then
-        assertEquals(movieId, result.movieId)
-        assertEquals("0", result.movieDuration)
+        assertEquals(movieId, result.id)
+        assertEquals(0, result.runtime)
         coVerify(exactly = 1) { movieRepository.getMovieById(movieId) }
     }
+
 
     @Test
     fun `should handle movie with empty actors list`() = runTest {
         // Given
         val movieId = 222
         val movieWithNoActors = fakeMovieDetailsDomain().copy(
-            movieId = movieId, actors = emptyList()
+            id = movieId, genres = emptyList()
         )
         coEvery { movieRepository.getMovieById(movieId) } returns movieWithNoActors
 
@@ -182,28 +194,8 @@ class GetMovieByIdTest {
         val result = getMovieById.invoke(movieId)
 
         // Then
-        assertEquals(movieId, result.movieId)
-        assertTrue(result.actors.isEmpty())
-        assertEquals(0, result.actors.size)
-        coVerify(exactly = 1) { movieRepository.getMovieById(movieId) }
-    }
-
-    @Test
-    fun `should handle movie with empty similar movies list`() = runTest {
-        // Given
-        val movieId = 333
-        val movieWithNoSimilar = fakeMovieDetailsDomain().copy(
-            movieId = movieId, similarMovies = emptyList()
-        )
-        coEvery { movieRepository.getMovieById(movieId) } returns movieWithNoSimilar
-
-        // When
-        val result = getMovieById.invoke(movieId)
-
-        // Then
-        assertEquals(movieId, result.movieId)
-        assertTrue(result.similarMovies.isEmpty())
-        assertEquals(0, result.similarMovies.size)
+        assertEquals(movieId, result.id)
+        assertTrue(result.genres.isEmpty())
         coVerify(exactly = 1) { movieRepository.getMovieById(movieId) }
     }
 
@@ -212,7 +204,7 @@ class GetMovieByIdTest {
         // Given
         val movieId = 444
         val movieWithoutTrailer = fakeMovieDetailsDomain().copy(
-            movieId = movieId, movieHaveTrailer = false
+            id = movieId
         )
         coEvery { movieRepository.getMovieById(movieId) } returns movieWithoutTrailer
 
@@ -220,8 +212,7 @@ class GetMovieByIdTest {
         val result = getMovieById.invoke(movieId)
 
         // Then
-        assertEquals(movieId, result.movieId)
-        assertFalse(result.movieHaveTrailer)
+        assertEquals(movieId, result.id)
         coVerify(exactly = 1) { movieRepository.getMovieById(movieId) }
     }
 
@@ -241,7 +232,7 @@ class GetMovieByIdTest {
     fun `should not call repository multiple times for same invocation`() = runTest {
         // Given
         val movieId = 666
-        val expectedMovie = fakeMovieDetailsDomain().copy(movieId = movieId)
+        val expectedMovie = fakeMovieDetailsDomain().copy(id = movieId)
         coEvery { movieRepository.getMovieById(movieId) } returns expectedMovie
 
         // When

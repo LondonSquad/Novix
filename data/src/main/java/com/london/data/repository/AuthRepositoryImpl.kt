@@ -2,8 +2,8 @@ package com.london.data.repository
 
 import com.london.data.datasource.common.AuthPreferences
 import com.london.data.datasource.remote.auth.api.AuthApiService
-import com.london.data.datasource.remote.auth.model.LoginValidationRequestBody
-import com.london.data.datasource.remote.auth.model.Token
+import com.london.data.remote.model.auth.model.LoginValidationRequestBody
+import com.london.data.remote.model.auth.model.Token
 import com.london.domain.repository.AuthRepository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
@@ -72,11 +72,11 @@ class AuthRepositoryImpl(
         }
     }
 
-    override fun isLoggedIn(): Boolean {
-        return authPreferences.isLoggedIn()
+    override suspend fun isLoggedIn(): Boolean {
+        return withContext(Dispatchers.IO) { authPreferences.isLoggedIn() }
     }
 
-    override fun validateSession(): Flow<Boolean> = flow {
+    override suspend fun validateSession(): Flow<Boolean> = flow {
         val sessionId = authPreferences.getSessionId()
         val guestSessionId = authPreferences.getGuestSessionId()
         val isValid = sessionId != null || guestSessionId != null

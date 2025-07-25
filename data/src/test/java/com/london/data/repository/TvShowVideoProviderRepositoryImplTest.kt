@@ -1,10 +1,11 @@
 package com.london.data.repository
 
 import com.google.common.truth.Truth.assertThat
+import com.london.data.remote.exception.NetworkException
 import com.london.data.datasource.remote.details.videoprovider.tvshow.TvShowVideoProviderRemote
-import com.london.data.datasource.remote.details.videoprovider.tvshow.model.TvShowVideoRemote
-import com.london.data.datasource.remote.details.videoprovider.tvshow.model.TvShowVideoResponse
 import com.london.data.mapper.videoprovider.tvshow.toTvShowVideo
+import com.london.data.remote.model.details.videoprovider.tvshow.model.TvShowVideoRemote
+import com.london.data.remote.model.details.videoprovider.tvshow.model.TvShowVideoResponse
 import com.london.domain.entity.videoprovider.TvShowVideo
 
 import io.mockk.coEvery
@@ -29,7 +30,9 @@ class TvShowVideoProviderRepositoryImplTest {
     fun `getTvShowVideos should map remote video list correctly`() = runTest {
         // Given
         val tvShowId = 123
-        coEvery { remoteDataSource.getTvShowVideos(tvShowId) } returns fakeTvShowVideosResponse()
+        coEvery { remoteDataSource.getTvShowVideos(tvShowId) } returns Result.success(
+            fakeTvShowVideosResponse()
+        )
 
         // When
         val result: List<TvShowVideo> = repository.getTvShowVideos(tvShowId)
@@ -50,7 +53,9 @@ class TvShowVideoProviderRepositoryImplTest {
     fun `getTvShowVideos should return empty list when API returns null list`() = runTest {
         // Given
         val tvShowId = 999
-        coEvery { remoteDataSource.getTvShowVideos(tvShowId) } returns fakeNullTvShowVideosResponse()
+        coEvery { remoteDataSource.getTvShowVideos(tvShowId) } returns Result.success(
+            fakeNullTvShowVideosResponse()
+        )
 
         // When
         val result = repository.getTvShowVideos(tvShowId)
@@ -60,17 +65,18 @@ class TvShowVideoProviderRepositoryImplTest {
     }
 
     @Test
-    fun `getTvShowVideos should propagate exceptions`() = runTest {
-        // Given
-        val tvShowId = 123
-        coEvery { remoteDataSource.getTvShowVideos(tvShowId) } throws RuntimeException("Network error")
+    fun `getTvShowVideos should throw ValidationException when remote fails`() = runTest {
 
-        // When && Then
-        val ex = assertThrows<RuntimeException> {
+        val tvShowId = 123
+        coEvery {
+            remoteDataSource.getTvShowVideos(tvShowId)
+        } throws NetworkException.ValidationException("validation error")
+
+        assertThrows<NetworkException.ValidationException> {
             repository.getTvShowVideos(tvShowId)
         }
-        assertThat(ex.message).isEqualTo("Network error")
     }
+
 
     private fun fakeTvShowVideosResponse() = TvShowVideoResponse(
         id = 1,

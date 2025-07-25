@@ -1,13 +1,14 @@
 @file:KoverIgnore
 package com.london.data.mapper.tvshowdetails
 
-import com.london.data.datasource.remote.details.tvshowdetails.model.ImageItem
-import com.london.data.datasource.remote.details.tvshowdetails.model.TvShowImagesRemoteResponse
+import com.london.data.remote.model.details.tvshow.model.ImageItem
+import com.london.data.remote.model.details.tvshow.model.TvShowImagesRemoteResponse
 import com.london.data.utils.asImageUrlOrEmpty
 import com.london.data.utils.orZero
 import com.london.domain.KoverIgnore
 import com.london.domain.entity.tvshowdetails.ImageItemEntity
 import com.london.domain.entity.tvshowdetails.TvShowImagesEntity
+import kotlin.collections.map
 
 object TvShowImagesMapper {
 

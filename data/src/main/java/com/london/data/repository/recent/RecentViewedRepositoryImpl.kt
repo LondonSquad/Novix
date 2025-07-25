@@ -1,7 +1,7 @@
 package com.london.data.repository.recent
 
-import com.london.data.datasource.local.model.recent.RecentViewedLocal
-import com.london.data.datasource.local.recent.RecentDataSource
+import com.london.data.local.model.recent.viewed.RecentViewedLocal
+import com.london.data.local.source.recent.RecentDataSource
 import com.london.data.mapper.recent.toEntity
 import com.london.data.mapper.recent.toLocal
 import com.london.domain.entity.recent.RecentViewed
@@ -24,6 +24,7 @@ data class RecentViewedRepositoryImpl(
         recentRecentViewedLocalDataSource.getAll().map { it.toEntity() }
 
     override suspend fun clearAll() = recentRecentViewedLocalDataSource.clearAll()
+
     override suspend fun delete(item: RecentViewed) {
         recentRecentViewedLocalDataSource.delete(item.toLocal())
     }

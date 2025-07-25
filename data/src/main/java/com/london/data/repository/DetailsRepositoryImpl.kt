@@ -1,7 +1,6 @@
 package com.london.data.repository
 
-import com.london.data.datasource.remote.details.tvshowdetails.TvShowDetailsRemoteDataSource
-import com.london.data.datasource.remote.reviews.ReviewsRemoteDataSource
+import com.london.data.remote.source.reviews.ReviewsRemoteDataSource
 import com.london.data.datasource.util.CrashReporter
 import com.london.data.mapper.toReviewEntity
 import com.london.data.mapper.tvshowdetails.TvShowImagesMapper.toEntity
@@ -9,9 +8,7 @@ import com.london.data.mapper.tvshowdetails.toCastEntity
 import com.london.data.mapper.tvshowdetails.toEntity
 import com.london.data.mapper.tvshowdetails.toTvShowEpisodeEntity
 import com.london.data.mapper.tvshowdetails.toTvShowEpisodesEntity
-import com.london.domain.GetCastByIdFailedException
-import com.london.domain.GetImagesByIdFailedException
-import com.london.domain.TvShowDetailsSearchFailedException
+import com.london.data.remote.source.details.tvshow.TvShowDetailsRemoteDataSource
 import com.london.domain.entity.PagedFetchResponse
 import com.london.domain.entity.review.ReviewEntity
 import com.london.domain.entity.tvshowdetails.TvShowCastEntity
@@ -28,62 +25,36 @@ class DetailsRepositoryImpl(
     private val reviewsRemoteDataSource: ReviewsRemoteDataSource
 ) : DetailsRepository {
     override suspend fun getTvShowDetailsById(
-        tvShowId: Int,
-    ): TvShowDetailsEntity {
-        return runCatching {
-            tvShowDetailsRemoteDataSource.getTvShowDetailsById(
-                tvShowId = tvShowId,
-            ).toEntity()
-        }.getOrElse {
-            throw TvShowDetailsSearchFailedException()
-        }
-    }
+        id: Int,
+    ): TvShowDetailsEntity = tvShowDetailsRemoteDataSource.getTvShowDetailsById(
+        id = id,
+    ).getOrThrow().toEntity()
 
-    override suspend fun getCastTvShowById(tvShowId: Int): TvShowCastEntity {
-        return runCatching {
-            tvShowDetailsRemoteDataSource.getCastsByTvShowId(tvShowId).toCastEntity()
-        }.getOrElse {
-            throw GetCastByIdFailedException()
-        }
-    }
 
-    override suspend fun getImagesTvShowById(tvShowId: Int): TvShowImagesEntity {
-        return runCatching {
-            tvShowDetailsRemoteDataSource.getTvShowImagesById(tvShowId).toEntity()
-        }.getOrElse {
-            throw GetImagesByIdFailedException()
-        }
-    }
+    override suspend fun getCastTvShowById(id: Int): TvShowCastEntity =
+        tvShowDetailsRemoteDataSource.getCastsByTvShowId(id).getOrThrow().toCastEntity()
+
+
+    override suspend fun getImagesTvShowById(id: Int): TvShowImagesEntity =
+        tvShowDetailsRemoteDataSource.getTvShowImagesById(id).getOrThrow().toEntity()
+
 
     override suspend fun getTvShowEpisodesBySeason(
-        tvShowId: Int,
-        seasonNumber: Int
-    ): TvShowEpisodesEntity {
-        return runCatching {
-            tvShowDetailsRemoteDataSource.getTvShowEpisodesBySeason(
-                tvShowId = tvShowId,
-                seasonNumber = seasonNumber
-            ).toTvShowEpisodesEntity()
-        }.getOrElse {
-            throw it
-        }
-    }
+        tvShowId: Int, seasonNumber: Int
+    ): TvShowEpisodesEntity =
+
+        tvShowDetailsRemoteDataSource.getTvShowEpisodesBySeason(
+            id = tvShowId, seasonNumber = seasonNumber
+        ).getOrThrow().toTvShowEpisodesEntity()
+
 
     override suspend fun getTvShowEpisodeByPosition(
-        tvShowId: Int,
-        seasonNumber: Int,
-        episodeNumber: Int
-    ): TvShowEpisodeByIdEntity {
-        return runCatching {
-            tvShowDetailsRemoteDataSource.getEpisodeDetailsByPosition(
-                tvShowId = tvShowId,
-                seasonNumber = seasonNumber,
-                episodeNumber = episodeNumber
-            ).toTvShowEpisodeEntity()
-        }.getOrElse {
-            throw it
-        }
-    }
+        tvShowId: Int, seasonNumber: Int, episodeNumber: Int
+    ): TvShowEpisodeByIdEntity =
+        tvShowDetailsRemoteDataSource.getEpisodeDetailsByPosition(
+            tvShowId = tvShowId, seasonNumber = seasonNumber, episodeNumber = episodeNumber
+        ).getOrThrow().toTvShowEpisodeEntity()
+
 
     override suspend fun getMovieReviews(
         movieId: Int, pageNumber: Int
@@ -91,9 +62,8 @@ class DetailsRepositoryImpl(
         networkBlock = {
             reviewsRemoteDataSource.getMovieReviews(
                 movieId, pageNumber
-            ).toReviewEntity()
-        }
-    ).run {
+            ).getOrThrow().toReviewEntity()
+        }).run {
         PagedFetchResponse(
             currentPage = currentPage,
             items = items,
@@ -106,11 +76,14 @@ class DetailsRepositoryImpl(
         tvShowId: Int, pageNumber: Int
     ): PagedFetchResponse<ReviewEntity> = fetchAndSync(
         networkBlock = {
-            reviewsRemoteDataSource.getTvShowReviews(tvShowId, pageNumber).toReviewEntity()
-        }
-    ).run {
+            reviewsRemoteDataSource.getTvShowReviews(tvShowId, pageNumber).getOrThrow()
+                .toReviewEntity()
+        }).run {
         PagedFetchResponse(
-            currentPage = currentPage, items = items, totalPages = totalPages, totalItems = totalItems
+            currentPage = currentPage,
+            items = items,
+            totalPages = totalPages,
+            totalItems = totalItems
         )
     }
 

@@ -6,7 +6,6 @@ import com.london.data.BuildConfig
 import com.london.data.datasource.common.AuthInterceptor
 import com.london.data.datasource.common.AuthPreferences
 import com.london.data.datasource.common.SharedPrefsTokenProvider
-import com.london.data.datasource.device.DeviceConfigurationDataSource
 import com.london.data.datasource.remote.auth.api.AuthApiService
 import com.london.data.datasource.remote.details.actordetails.api.ActorDetailsApiService
 import com.london.data.datasource.remote.details.moviedetails.api.MovieDetailsApiService
@@ -14,6 +13,9 @@ import com.london.data.datasource.remote.details.tvshowdetails.api.TvShowDetails
 import com.london.data.datasource.remote.home.popular.api.PopularApiService
 import com.london.data.datasource.remote.reviews.api.ReviewsApiService
 import com.london.data.datasource.remote.search.api.SearchApiService
+import com.london.data.datasource.remote.toprated.movie.api.TopRatedMovieApiService
+import com.london.data.datasource.remote.toprated.tvseries.api.TopRatedTvSeriesApiService
+import com.london.data.local.source.device.DeviceConfigurationDataSource
 import com.london.domain.repository.SessionTokenProvider
 import com.london.data.datasource.remote.home.trending.api.TrendingApiService
 import kotlinx.serialization.json.Json
@@ -149,4 +151,12 @@ class NetworkModule {
     fun provideAuthApi(retrofit: Retrofit): AuthApiService {
         return retrofit.create(AuthApiService::class.java)
     }
+
+    @Single
+    fun provideTopRatedMovieApi(retrofit: Retrofit): TopRatedMovieApiService =
+        retrofit.create(TopRatedMovieApiService::class.java)
+
+    @Single
+    fun provideTopRatedTvShowApi(retrofit: Retrofit): TopRatedTvSeriesApiService =
+        retrofit.create(TopRatedTvSeriesApiService::class.java)
 }

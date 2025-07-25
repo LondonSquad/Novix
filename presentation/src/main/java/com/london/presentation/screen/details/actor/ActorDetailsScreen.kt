@@ -23,7 +23,6 @@ import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyHorizontalGrid
 import androidx.compose.foundation.lazy.itemsIndexed
-import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
@@ -43,7 +42,6 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.zIndex
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.london.imageharamblur.ui.ImageViewFilter
 import com.london.designsystem.component.CircularLoading
 import com.london.designsystem.component.HomeCard
 import com.london.designsystem.component.Icon
@@ -55,8 +53,10 @@ import com.london.designsystem.theme.NovixTheme
 import com.london.domain.entity.actordetails.actorimage.ImageDetails
 import com.london.domain.entity.actordetails.actormovie.ActorMovieCastMemberEntity
 import com.london.domain.entity.actordetails.actortvshow.ActorTvShowCastMemberEntity
+import com.london.imageharamblur.ui.ImageViewFilter
 import com.london.presentation.R
 import com.london.presentation.composables.ConditionalText
+import com.london.presentation.composables.CustomBackDropImagePager
 import com.london.presentation.utils.Listen
 import com.london.presentation.utils.offsetLayout
 import kotlinx.coroutines.delay
@@ -82,6 +82,7 @@ fun ActorDetailsScreen(
             is ActorEffectUiState.NavigateToMovieScreen -> {
                 onNavigateToMovieScreen(currentEffect.movieId)
             }
+
             is ActorEffectUiState.NavigateToTvShowPicks ->
                 onNavigateToTvShowPicks(
                     uiState.actorId
@@ -114,12 +115,24 @@ fun ActorScreenContent(
             contentPadding = PaddingValues(bottom = 16.dp)
         ) {
             item {
-                Box {
-                    uiState.actorImageDetails?.let {
-                        CustomBackDropImage(
-                            images = it, modifier.padding(bottom = 16.dp)
-                        )
+                val images = uiState.actorImageDetails.orEmpty()
+
+                if (images.isNotEmpty()) {
+                    val pagerState = rememberPagerState(
+                        initialPage = 0,
+                        pageCount = { images.size }
+                    )
+
+                    LaunchedEffect(images) {
+                        if (images.size > 1) {
+                            while (true) {
+                                delay(4000)
+                                val nextPage = (pagerState.currentPage + 1) % images.size
+                                pagerState.animateScrollToPage(nextPage)
+                            }
+                        }
                     }
+                    CustomBackDropImagePager(images = images.map { it.fileUrl })
                 }
             }
 
@@ -308,57 +321,6 @@ fun ActorGallery(images: List<ImageDetails>) {
                 errorContent = { ErrorImage() },
                 loadingContent = { CircularLoading(modifier = Modifier.size(24.dp)) }
             )
-        }
-    }
-}
-
-@Composable
-private fun CustomBackDropImage(
-    images: List<ImageDetails>,
-    modifier: Modifier = Modifier
-) {
-    Box(
-        modifier = modifier
-            .fillMaxWidth()
-            .height(252.dp)
-            .clip(
-                shape = RoundedCornerShape(
-                    bottomStart = 12.dp, bottomEnd = 12.dp
-                )
-            ),
-        contentAlignment = Alignment.Center
-    ) {
-        if (images.isNotEmpty()) {
-            val pagerState = rememberPagerState(
-                initialPage = 0, pageCount = { images.size })
-
-
-            LaunchedEffect(pagerState) {
-                if (images.size > 1) {
-                    while (true) {
-                        delay(4000)
-                        val nextPage = (pagerState.currentPage + 1) % images.size
-                        pagerState.animateScrollToPage(nextPage)
-                    }
-                }
-            }
-
-            HorizontalPager(
-                modifier = Modifier.align(Alignment.Center),
-                state = pagerState,
-            ) { pageIndex ->
-                ImageViewFilter(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .height(252.dp),
-                    contentScale = ContentScale.FillBounds,
-                    model = images[pageIndex].fileUrl,
-                    contentDescription = "Actor Image ${pageIndex + 1}",
-                    errorContent = { ErrorImage() },
-                    loadingContent = { CircularLoading(modifier = Modifier) })
-            }
-        } else {
-            ErrorImage()
         }
     }
 }
