@@ -10,14 +10,14 @@ import com.london.data.datasource.remote.auth.api.AuthApiService
 import com.london.data.datasource.remote.details.actordetails.api.ActorDetailsApiService
 import com.london.data.datasource.remote.details.moviedetails.api.MovieDetailsApiService
 import com.london.data.datasource.remote.details.tvshowdetails.api.TvShowDetailsApiService
-import com.london.data.datasource.remote.home.popular.api.PopularApiService
+import com.london.data.remote.service.home.popular.PopularApiService
 import com.london.data.datasource.remote.reviews.api.ReviewsApiService
 import com.london.data.datasource.remote.search.api.SearchApiService
 import com.london.data.datasource.remote.toprated.movie.api.TopRatedMovieApiService
 import com.london.data.datasource.remote.toprated.tvseries.api.TopRatedTvSeriesApiService
 import com.london.data.local.source.device.DeviceConfigurationDataSource
 import com.london.domain.repository.SessionTokenProvider
-import com.london.data.datasource.remote.home.trending.api.TrendingApiService
+import com.london.data.remote.service.home.trending.TrendingApiService
 import kotlinx.serialization.json.Json
 import okhttp3.Cache
 import okhttp3.Interceptor

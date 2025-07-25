@@ -1,9 +1,9 @@
 package com.london.data.repository.trending
 
 import com.google.common.truth.Truth.assertThat
-import com.london.data.datasource.remote.home.trending.TrendingRemoteDataSource
-import com.london.data.datasource.remote.home.trending.model.TrendingDto
-import com.london.data.datasource.remote.home.trending.model.TrendingResponse
+import com.london.data.remote.source.home.trending.TrendingRemoteDataSource
+import com.london.data.remote.model.trending.TrendingResponse
+import com.london.data.remote.model.trending.TrendingRemote
 import com.london.data.mapper.trending.toActor
 import com.london.data.mapper.trending.toTrending
 import io.mockk.coEvery
@@ -25,14 +25,14 @@ class TrendingRepositoryImplTest {
 
     @Test
     fun `getTrendingMovies returns expected result`() = runTest {
-        coEvery { remoteDataSource.getTrendingMovies(PAGE) } returns trendingResponse
+        coEvery { remoteDataSource.getTrendingMovies(PAGE) } returns trendingRemote
         val result = repository.getTrendingMovies(PAGE)
-        assertThat(result.items).isEqualTo(trendingResponse.results.map { it.toTrending() })
+        assertThat(result.items).isEqualTo(trendingRemote.results.map { it.toTrending() })
     }
 
     @Test
     fun `getTrendingMovies returns empty result`() = runTest {
-        coEvery { remoteDataSource.getTrendingMovies(PAGE) } returns trendingResponseEmpty
+        coEvery { remoteDataSource.getTrendingMovies(PAGE) } returns trendingRemoteEmpty
         val result = repository.getTrendingMovies(PAGE)
         assertThat(result.items).isEmpty()
     }
@@ -45,14 +45,14 @@ class TrendingRepositoryImplTest {
 
     @Test
     fun `getTrendingTvShows returns expected result`() = runTest {
-        coEvery { remoteDataSource.getTrendingTvShows(PAGE) } returns trendingResponse
+        coEvery { remoteDataSource.getTrendingTvShows(PAGE) } returns trendingRemote
         val result = repository.getTrendingTvShows(PAGE)
-        assertThat(result.items).isEqualTo(trendingResponse.results.map { it.toTrending() })
+        assertThat(result.items).isEqualTo(trendingRemote.results.map { it.toTrending() })
     }
 
     @Test
     fun `getTrendingTvShows returns empty result`() = runTest {
-        coEvery { remoteDataSource.getTrendingTvShows(PAGE) } returns trendingResponseEmpty
+        coEvery { remoteDataSource.getTrendingTvShows(PAGE) } returns trendingRemoteEmpty
         val result = repository.getTrendingTvShows(PAGE)
         assertThat(result.items).isEmpty()
     }
@@ -65,14 +65,14 @@ class TrendingRepositoryImplTest {
 
     @Test
     fun `getTrendingActors returns expected result`() = runTest {
-        coEvery { remoteDataSource.getTrendingActors(PAGE) } returns trendingResponse
+        coEvery { remoteDataSource.getTrendingActors(PAGE) } returns trendingRemote
         val result = repository.getTrendingActors(PAGE)
-        assertThat(result.items).isEqualTo(trendingResponse.results.map { it.toActor() })
+        assertThat(result.items).isEqualTo(trendingRemote.results.map { it.toActor() })
     }
 
     @Test
     fun `getTrendingActors returns empty result`() = runTest {
-        coEvery { remoteDataSource.getTrendingActors(PAGE) } returns trendingResponseEmpty
+        coEvery { remoteDataSource.getTrendingActors(PAGE) } returns trendingRemoteEmpty
         val result = repository.getTrendingActors(PAGE)
         assertThat(result.items).isEmpty()
     }
@@ -85,7 +85,7 @@ class TrendingRepositoryImplTest {
 
     private companion object {
         const val PAGE = 1
-        val trendingDto = TrendingDto(
+        val trendingResponse = TrendingResponse(
             id = 1,
             title = "Test",
             name = "Test",
@@ -93,12 +93,12 @@ class TrendingRepositoryImplTest {
             profilePath = "",
             genreIds = listOf(1, 2, 3)
         )
-        val trendingResponse = TrendingResponse(
-            results = listOf(trendingDto),
+        val trendingRemote = TrendingRemote(
+            results = listOf(trendingResponse),
             page = 1,
             totalPages = 1
         )
-        val trendingResponseEmpty = TrendingResponse(
+        val trendingRemoteEmpty = TrendingRemote(
             results = emptyList(),
             page = 1,
             totalPages = 1

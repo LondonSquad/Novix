@@ -1,7 +1,7 @@
-package com.london.data.datasource.remote.home.popular.api
+package com.london.data.remote.service.home.popular
 
-import com.london.data.datasource.remote.ApiConstants.POPULAR_MOVIES_PATH
-import com.london.data.datasource.remote.ApiConstants.POPULAR_TV_SHOWS_PATH
+import com.london.data.remote.model.ApiConstants.POPULAR_MOVIES_PATH
+import com.london.data.remote.model.ApiConstants.POPULAR_TV_SHOWS_PATH
 import com.london.data.datasource.remote.ApiResponse
 import com.london.data.remote.model.home.model.PopularMovieResponse
 import com.london.data.remote.model.home.model.PopularTvShowResponse

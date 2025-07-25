@@ -1,8 +1,8 @@
-package com.london.data.datasource.remote.home.popular
+package com.london.data.remote.source.home.popular
 
 import com.london.data.datasource.remote.ApiResponse
 import com.london.data.datasource.remote.BaseRemoteDatasource
-import com.london.data.datasource.remote.home.popular.api.PopularApiService
+import com.london.data.remote.service.home.popular.PopularApiService
 import com.london.data.remote.model.home.model.PopularMovieResponse
 import com.london.data.remote.model.home.model.PopularTvShowResponse
 import org.koin.core.annotation.Single

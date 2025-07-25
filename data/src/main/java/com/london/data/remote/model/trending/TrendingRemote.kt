@@ -1,12 +1,12 @@
-package com.london.data.datasource.remote.home.trending.model
+package com.london.data.remote.model.trending
 
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class TrendingResponse(
+data class TrendingRemote(
     @SerialName("results")
-    val results: List<TrendingDto>,
+    val results: List<TrendingResponse>,
     @SerialName("page")
     val page: Int,
     @SerialName("total_pages")
@@ -14,7 +14,7 @@ data class TrendingResponse(
 )
 
 @Serializable
-data class TrendingDto(
+data class TrendingResponse(
     @SerialName("id")
     val id: Int,
     @SerialName("title")

@@ -1,6 +1,6 @@
 package com.london.data.repository.trending
 
-import com.london.data.datasource.remote.home.trending.TrendingRemoteDataSource
+import com.london.data.remote.source.home.trending.TrendingRemoteDataSource
 import com.london.data.mapper.trending.toActor
 import com.london.data.mapper.trending.toTrending
 import com.london.domain.entity.trending.Trending
