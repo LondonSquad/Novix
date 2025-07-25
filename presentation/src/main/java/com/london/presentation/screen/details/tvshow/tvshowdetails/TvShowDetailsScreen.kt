@@ -607,7 +607,7 @@ fun EpisodeRow(
 
                     if (episode.airDate != null)
                         Text(
-                            text = convertDate(episode.airDate.toString().toLocalizedNumbers()),
+                            text = convertDate(episode.airDate.toString()),
                             style = NovixTheme.typography.label.small,
                             color = NovixTheme.colors.hint
                         )
