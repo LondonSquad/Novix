@@ -35,9 +35,9 @@ import com.london.presentation.navigation.Screen.MovieDetails
 import com.london.presentation.navigation.Screen.MoviesByCategory
 import com.london.presentation.navigation.Screen.Reviews
 import com.london.presentation.navigation.Screen.Search
-import com.london.presentation.navigation.Screen.TopTvShowsPicksDetails
-import com.london.presentation.navigation.Screen.Trending
+import com.london.presentation.navigation.Screen.TrendingActors
 import com.london.presentation.navigation.Screen.TrendingMovies
+import com.london.presentation.navigation.Screen.TrendingTvShows
 import com.london.presentation.navigation.Screen.TvShowDetails
 import com.london.presentation.screen.account.AccountScreen
 import com.london.presentation.screen.bookmark.BookmarksScreen
@@ -51,12 +51,12 @@ import com.london.presentation.screen.details.movieDetalis.MovieDetailsScreen
 import com.london.presentation.screen.details.tvshow.episodedetails.EpisodeDetailsScreen
 import com.london.presentation.screen.details.tvshow.tvshowdetails.TvShowsDetailsScreen
 import com.london.presentation.screen.home.HomeScreen
+import com.london.presentation.screen.home.trending.TrendingActorsScreen
 import com.london.presentation.screen.home.trending.TrendingMoviesScreen
+import com.london.presentation.screen.home.trending.TrendingTvShowsScreen
 import com.london.presentation.screen.login.LoginScreen
 import com.london.presentation.screen.reviews.ReviewsScreen
 import com.london.presentation.screen.search.SearchScreen
-import com.london.presentation.screen.home.trending.TrendingMoviesScreen
-import com.london.presentation.screen.home.trending.TrendingTvShowsScreen
 
 @Composable
 fun NovixApp() {
@@ -113,8 +113,8 @@ fun NovixApp() {
             ) {
                 LoginScreen(
                     onNavigateToHome = {
-                        navController.navigate(Screen.Home) {
-                            popUpTo(Screen.Login) { inclusive = true }
+                        navController.navigate(Home) {
+                            popUpTo(Login) { inclusive = true }
                             launchSingleTop = true
                         }
                     },
@@ -135,13 +135,13 @@ fun NovixApp() {
                         navController.navigate(MovieDetails(movieId))
                     },
                     onTrendingMovies = {
-                        navController.navigate(Screen.TrendingMovies)
+                        navController.navigate(TrendingMovies)
                     },
                     onTrendingTvShows = {
-                        navController.navigate(Trending(1))
+                        navController.navigate(TrendingTvShows)
                     },
                     onTrendingActors = {
-                        navController.navigate(Trending(2))
+                        navController.navigate(TrendingActors)
                     }
                 )
             }
@@ -157,7 +157,7 @@ fun NovixApp() {
                         navController.navigate(TvShowDetails(tvShowId))
                     },
                     onNavigateToActorDetails = { actorId ->
-                        navController.navigate(Screen.ActorDetails(actorId))
+                        navController.navigate(ActorDetails(actorId))
                     },
                     onNavigateToMovieDetails = { movieId ->
                         navController.navigate(MovieDetails(movieId))
@@ -219,7 +219,7 @@ fun NovixApp() {
                 )
             }
 
-            composable<TopTvShowsPicksDetails>(
+            composable<Screen.TopTvShowsPicksDetails>(
                 exitTransition = { fadeOut(tween(500)) },
                 popEnterTransition = { fadeIn(tween(500)) },
                 enterTransition = { fadeIn(tween(500)) },
@@ -299,7 +299,7 @@ fun NovixApp() {
                     onNavigateToMoviePicks = { actorId ->
                         navController.navigate(ActorTopMoviesPicksDetails(actorId))
                     }, onNavigateToTvShowPicks = { actorId ->
-                        navController.navigate(TopTvShowsPicksDetails(actorId))
+                        navController.navigate(Screen.TopTvShowsPicksDetails(actorId))
                     },
                     onNavigateToGallery = { actorId ->
                         navController.navigate(ActorGallery(actorId))
@@ -329,29 +329,22 @@ fun NovixApp() {
                     onBackClick = { navController.popBackStack() }
                 )
             }
-            composable<Trending> {
-                SearchScreen(
-                    onNavigateToTvShowDetails = { tvShowId ->
-                        navController.navigate(TvShowDetails(tvShowId))
-                    },
-                    onNavigateToActorDetails = { actorId ->
-                        navController.navigate(ActorDetails(actorId))
-                    },
-                    onNavigateToMovieDetails = { movieId ->
-                        navController.navigate(MovieDetails(movieId))
-                    }
-                )
-            }
             composable<TrendingMovies> {
                 TrendingMoviesScreen(
-                    onBackClick = { navController.navigateUp() },
-                    onMovieClick = { movieId -> navController.navigate(MovieDetails(movieId)) }
+                    onMovieClick = { movieId -> navController.navigate(MovieDetails(movieId)) },
+                    onBackClick = { navController.navigateUp() }
                 )
             }
-            composable<Screen.TrendingTvShows> {
+            composable<TrendingTvShows> {
                 TrendingTvShowsScreen(
-                    onBackClick = { navController.navigateUp() },
-                    onTvShowClick = { tvShowId -> navController.navigate(TvShowDetails(tvShowId)) }
+                    onTvShowClick = { tvShowId -> navController.navigate(TvShowDetails(tvShowId)) },
+                    onBackClick = { navController.navigateUp() }
+                )
+            }
+            composable<TrendingActors> {
+                TrendingActorsScreen(
+                    onActorClick = { actorId -> navController.navigate(ActorDetails(actorId)) },
+                    onBackClick = { navController.navigateUp() }
                 )
             }
         }
