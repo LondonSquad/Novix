@@ -31,6 +31,7 @@ import androidx.paging.compose.collectAsLazyPagingItems
 import com.london.designsystem.component.DefaultTopBar
 import com.london.designsystem.component.HomeCard
 import com.london.designsystem.component.NovixChip
+import com.london.designsystem.component.SectionHeader
 import com.london.designsystem.component.Text
 import com.london.designsystem.theme.NovixTheme
 import com.london.domain.entity.Movie
@@ -46,6 +47,7 @@ import org.koin.compose.viewmodel.koinViewModel
 fun HomeScreen(
     onMovieClick: (movieId: Int) -> Unit = {},
     onTvShowClick: (tvShowId: Int) -> Unit = {},
+    onTopRatedClick: () -> Unit = {},
     viewModel: HomeViewModel = koinViewModel()
 ) {
 
@@ -56,6 +58,7 @@ fun HomeScreen(
         when (currentEffect) {
             is HomeScreenEffect.NavigationMovieDetails -> onMovieClick(currentEffect.id)
             is HomeScreenEffect.NavigationTvShowDetails -> onTvShowClick(currentEffect.id)
+            is HomeScreenEffect.NavigationTopRated -> onTopRatedClick()
         }
     }
 
@@ -85,10 +88,7 @@ private fun Content(
     lazyGridState: LazyGridState
 ) {
 
-    val density = LocalDensity.current
-    val screenWidth = with(density) {
-        LocalConfiguration.current.screenWidthDp.dp
-    }
+    val screenWidth = LocalConfiguration.current.screenWidthDp.dp
     val upcomingMoviesLazyList = uiState.upcomingMovies.collectAsLazyPagingItems()
 
     val totalPopularItems = uiState.popularMovies.size + uiState.popularTvShows.size
@@ -163,7 +163,17 @@ private fun Content(
         item(span = { GridItemSpan(maxLineSpan) }) {
             TrendingSection()
         }
-
+        item(span = { GridItemSpan(maxLineSpan) })
+        {
+            SectionHeader(
+                text = stringResource(R.string.top_rating),
+                hasGetAll = true,
+                hasIcon = true,
+                onClick = {
+                    homeScreenContract.onTopRatedClick()
+                }
+            )
+        }
         upComingSection(
             contract = homeScreenContract,
             screenWidth = screenWidth,

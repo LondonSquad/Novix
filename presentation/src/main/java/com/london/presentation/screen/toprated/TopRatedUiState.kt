@@ -3,26 +3,20 @@ package com.london.presentation.screen.toprated
 import androidx.paging.PagingData
 import com.london.domain.entity.toprated.TopRatedMovie
 import com.london.domain.entity.toprated.TopRatedTvSeries
+import com.london.presentation.utils.MovieGenre
+import com.london.presentation.utils.TvShowGenre
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.emptyFlow
 
 data class TopRatedUiState(
-    val genre: List<GenreUiState>? = null,
-    val media: MediaUiState = MediaUiState.Empty,
+    val movies: Flow<PagingData<TopRatedMovie>> = emptyFlow(),
+    val tvSeries: Flow<PagingData<TopRatedTvSeries>> = emptyFlow(),
     val isLoading: Boolean = false,
-    val errorMessage: String? = null
+    val errorMessage: String? = null,
+    val tabSelected: Int = 0,
+    val selectedMovieGenre: MovieGenre = MovieGenre.All,
+    val selectedTvShowGenre: TvShowGenre = TvShowGenre.All,
+    val isMovieSelected: Boolean = true
 )
 
-sealed class MediaUiState {
-    data object Empty : MediaUiState()
-    data class Combined(
-        val movies: Flow<PagingData<TopRatedMovie>>,
-        val tvSeries: Flow<PagingData<TopRatedTvSeries>>
-    ) : MediaUiState()
-}
-
-data class GenreUiState(
-    val genreId: Int = 0,
-    val genreName: String = "",
-    val isSelected: Boolean = false,
-)
 
