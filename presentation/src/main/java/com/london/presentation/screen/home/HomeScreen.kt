@@ -34,7 +34,7 @@ import com.london.presentation.R
 import com.london.presentation.screen.LoadingScreen
 import com.london.presentation.screen.NetworkErrorScreen
 import com.london.presentation.screen.base.ErrorState
-import com.london.presentation.screen.home.trending.TrendingSection
+import com.london.presentation.screen.home.trending.composable.TrendingSection
 import com.london.presentation.utils.Listen
 import org.koin.compose.viewmodel.koinViewModel
 

@@ -1,4 +1,4 @@
-package com.london.presentation.screen.home.trending
+package com.london.presentation.screen.home.trending.composable
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
