@@ -12,6 +12,7 @@ import com.london.data.datasource.remote.details.tvshowdetails.model.TvShowSpoke
 import com.london.data.utils.asImageUrlOrEmpty
 import com.london.data.utils.isTrue
 import com.london.data.utils.orZero
+import com.london.data.utils.roundToDecimal
 import com.london.domain.KoverIgnore
 import com.london.domain.entity.tvshowdetails.TvShowCreatorEntity
 import com.london.domain.entity.tvshowdetails.TvShowDetailsEntity
@@ -54,7 +55,7 @@ fun TvShowDetailsRemoteResponse.toEntity() = TvShowDetailsEntity(
     status = status.orEmpty(),
     tagline = tagline.orEmpty(),
     type = type.orEmpty(),
-    voteAverage = voteAverage.orZero(),
+    voteAverage = voteAverage.roundToDecimal().orZero(),
     voteCount = voteCount.orZero()
 )
 

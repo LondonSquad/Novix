@@ -44,12 +44,12 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.zIndex
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.paging.compose.collectAsLazyPagingItems
-import com.london.imageharamblur.ui.ImageViewFilter
 import com.london.designsystem.component.ButtonIcon
 import com.london.designsystem.component.CircularLoading
 import com.london.designsystem.component.Text
 import com.london.designsystem.component.button.ErrorImage
 import com.london.designsystem.theme.NovixTheme
+import com.london.imageharamblur.ui.ImageViewFilter
 import com.london.presentation.R
 import com.london.presentation.composables.ConditionalText
 import com.london.presentation.composables.RatingItem
@@ -58,6 +58,7 @@ import com.london.presentation.screen.BuildScreen
 import com.london.presentation.screen.LoadingScreen
 import com.london.presentation.screen.NetworkErrorScreen
 import com.london.presentation.utils.Listen
+import com.london.presentation.utils.reverseDateFormat
 import org.koin.androidx.compose.koinViewModel
 
 @Composable
@@ -233,7 +234,7 @@ fun ReviewItem(
             isExpanded = !isExpanded
         }
 
-        ReviewsDate(date, modifier = Modifier.padding(top = 12.dp))
+        ReviewsDate(reverseDateFormat(date), modifier = Modifier.padding(top = 12.dp))
     }
 }
 
@@ -255,7 +256,6 @@ fun ReviewHeader(
             authorName = authorName,
             authorUserName = authorUserName
         )
-
 
         RatingItem(
             rating = rating,
@@ -312,9 +312,7 @@ fun AuthorItem(
                 style = NovixTheme.typography.label.small,
                 color = NovixTheme.colors.hint,
                 textAlign = TextAlign.Start,
-                modifier = Modifier
-
-                    .align(Alignment.Start)
+                modifier = Modifier.align(Alignment.Start)
             )
         }
     }
