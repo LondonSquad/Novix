@@ -8,5 +8,6 @@ data class SpokenLanguageRemote(
     val englishName: String?,
     @SerialName("iso_639_1")
     val iso6391: String?,
+    @SerialName("name")
     val name: String?
 )

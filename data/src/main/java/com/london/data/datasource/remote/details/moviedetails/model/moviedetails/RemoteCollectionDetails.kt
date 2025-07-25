@@ -6,6 +6,6 @@ import kotlinx.serialization.Serializable
 data class RemoteCollectionDetails(
     @SerialName("id")
     val id: Int?,
-    @SerialName("name")
+ @SerialName("name")
     val name: String?
 )

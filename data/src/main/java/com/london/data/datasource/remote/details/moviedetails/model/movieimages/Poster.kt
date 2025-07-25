@@ -16,5 +16,6 @@ data class Poster(
     val voteAverage: Double?,
     @SerialName("vote_count")
     val voteCount: Int?,
+    @SerialName("width")
     val width: Int,
 )

@@ -44,7 +44,7 @@ class SearchRepositoryImpl(
                 query = name,
                 includeAdult = false,
                 pageNumber = pageNumber,
-            ).toLocal(query = name)
+            ).getOrThrow().toLocal(query = name)
         }, syncBlock = { localMovieDataSource.insert(it) }, crashReporter = crashReporter
     ).run {
         PagedFetchResponse(
@@ -67,7 +67,7 @@ class SearchRepositoryImpl(
                 query = name,
                 includeAdult = false,
                 pageNumber = pageNumber,
-            ).toLocal(query = name)
+            ).getOrThrow().toLocal(query = name)
         }, syncBlock = { localTvShowDataSource.insert(it) }, crashReporter = crashReporter
     ).run {
         PagedFetchResponse(
@@ -90,7 +90,7 @@ class SearchRepositoryImpl(
                 query = name,
                 includeAdult = false,
                 pageNumber = pageNumber,
-            ).toLocal(query = name)
+            ).getOrThrow().toLocal(query = name)
         }, syncBlock = { localActorDataSource.insert(it) }, crashReporter = crashReporter
     ).run {
         PagedFetchResponse(
@@ -108,7 +108,7 @@ class SearchRepositoryImpl(
             remoteDataSource.getMoviesByCategory(
                 categoryId = categoryId,
                 pageNumber = pageNumber,
-            ).toLocal(query = "")
+            ).getOrThrow().toLocal(query = "")
         }).run {
         PagedFetchResponse(
             currentPage = page,
@@ -125,7 +125,7 @@ class SearchRepositoryImpl(
             remoteDataSource.getUpComingMoviesByCategory(
                 categoryId = categoryId,
                 pageNumber = pageNumber,
-            ).toLocal(query = "")
+            ).getOrThrow().toLocal(query = "")
         }).run {
         PagedFetchResponse(
             currentPage = page,
@@ -161,5 +161,4 @@ class SearchRepositoryImpl(
             emptyList()
         }
     }
-
 }
