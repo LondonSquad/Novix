@@ -62,7 +62,7 @@ fun TrendingActorsScreen(
             emptyContent = {
                 if (!isLoading) {
                     EmptySearchLayout(
-                        text = stringResource(R.string.no_search_result_msg),
+                        text = stringResource(R.string.no_trending_actors_in_genre),
                         image = R.drawable.img_no_result,
                         modifier = modifier.padding(horizontal = 16.dp)
                     )

@@ -9,16 +9,21 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.statusBarsPadding
+import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
+import androidx.compose.foundation.lazy.grid.rememberLazyGridState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import androidx.paging.compose.collectAsLazyPagingItems
+import com.london.designsystem.component.EmptySearchLayout
 import com.london.designsystem.component.HomeCard
 import com.london.designsystem.component.TopBar
 import com.london.designsystem.theme.NovixTheme
@@ -26,20 +31,15 @@ import com.london.presentation.R
 import com.london.presentation.screen.home.GenresSection
 import com.london.presentation.utils.Listen
 import org.koin.androidx.compose.koinViewModel
-import androidx.paging.compose.collectAsLazyPagingItems
-import com.london.presentation.screen.home.trending.movie.TrendingMoviesContract
-import com.london.designsystem.component.EmptySearchLayout
 
 @Composable
 fun TrendingMoviesScreen(
-    modifier: Modifier = Modifier,
     viewModel: TrendingMoviesViewModel = koinViewModel(),
     contract: TrendingMoviesContract
 ) {
-    val state by viewModel.state.collectAsState()
-    val effect by viewModel.effect.collectAsState()
-    val density = LocalDensity.current
-    val screenWidth = with(density) { LocalConfiguration.current.screenWidthDp.dp }
+    val state = viewModel.state.collectAsState().value
+    val effect = viewModel.effect.collectAsState().value
+    val screenWidth = with(LocalDensity.current) { LocalConfiguration.current.screenWidthDp.dp }
 
     effect?.Listen { currentEffect ->
         when (currentEffect) {
@@ -55,9 +55,9 @@ fun TrendingMoviesScreen(
     }
 
     Column(
-        modifier = modifier
+        modifier = Modifier
             .fillMaxSize()
-            .background(color = NovixTheme.colors.surface)
+            .background(NovixTheme.colors.surface)
     ) {
         TopBar(
             modifier = Modifier
@@ -71,24 +71,27 @@ fun TrendingMoviesScreen(
             genres = state.genres,
             selectedGenreId = state.selectedGenreId,
             screenWidth = screenWidth,
-            onGenreClick = { viewModel.onGenreSelected(it) },
+            onGenreClick = viewModel::onGenreSelected,
             modifier = Modifier.padding(bottom = 12.dp)
         )
 
         val moviesLazyItems = state.trendingMovies.collectAsLazyPagingItems()
-        val filteredMovies = if (state.selectedGenreId == null || state.selectedGenreId == com.london.presentation.utils.Genre.All.id) {
-            (0 until moviesLazyItems.itemCount).map { moviesLazyItems[it] }.filterNotNull()
-        } else {
-            (0 until moviesLazyItems.itemCount).map { moviesLazyItems[it] }.filterNotNull().filter { it.genreIds.contains(state.selectedGenreId) }
+        val filteredMovies = List(moviesLazyItems.itemCount) { moviesLazyItems[it] }
+            .filterNotNull()
+            .filter { movie ->
+                state.selectedGenreId == null ||
+                state.selectedGenreId == com.london.presentation.utils.Genre.All.id ||
+                movie.genreIds.contains(state.selectedGenreId)
+            }
+        val gridState = rememberLazyGridState()
+
+        LaunchedEffect(state.selectedGenreId) {
+            gridState.scrollToItem(0)
         }
-        if (filteredMovies.isEmpty()) {
-            EmptySearchLayout(
-                text = stringResource(R.string.no_trending_movies_in_genre),
-                image = R.drawable.img_no_result,
-                modifier = Modifier.padding(horizontal = 16.dp)
-            )
-        } else {
+
+        filteredMovies.takeIf { it.isNotEmpty() }?.let { nonEmptyList ->
             LazyVerticalGrid(
+                state = gridState,
                 columns = GridCells.Fixed(2),
                 contentPadding = PaddingValues(bottom = 18.dp),
                 horizontalArrangement = Arrangement.spacedBy(12.dp),
@@ -97,8 +100,8 @@ fun TrendingMoviesScreen(
                     .fillMaxSize()
                     .padding(horizontal = 16.dp)
             ) {
-                items(filteredMovies.size) { index ->
-                    val movie = filteredMovies[index]
+                items(nonEmptyList.size) { index ->
+                    val movie = nonEmptyList[index]
                     HomeCard(
                         imageUrl = movie.posterPath,
                         isSaved = false,
@@ -107,6 +110,13 @@ fun TrendingMoviesScreen(
                     )
                 }
             }
-        }
+        } ?: EmptySearchLayout(
+            text = stringResource(R.string.no_trending_movies_in_genre),
+            image = R.drawable.img_no_result,
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(horizontal = 16.dp)
+                .wrapContentSize(Alignment.Center)
+        )
     }
 }

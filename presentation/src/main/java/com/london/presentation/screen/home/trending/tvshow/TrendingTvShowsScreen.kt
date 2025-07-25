@@ -5,8 +5,10 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
+import androidx.compose.foundation.lazy.grid.rememberLazyGridState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalConfiguration
@@ -75,8 +77,15 @@ fun TrendingTvShowsScreen(
                 tvShow.genreIds.contains(state.selectedGenreId)
             }
 
+        val gridState = rememberLazyGridState()
+
+        LaunchedEffect(state.selectedGenreId) {
+            gridState.scrollToItem(0)
+        }
+
         filteredTvShows.takeIf { it.isNotEmpty() }?.let { nonEmptyList ->
             LazyVerticalGrid(
+                state = gridState,
                 columns = GridCells.Fixed(2),
                 contentPadding = PaddingValues(bottom = 18.dp),
                 horizontalArrangement = Arrangement.spacedBy(12.dp),
