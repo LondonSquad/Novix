@@ -1,4 +1,5 @@
 @file:KoverIgnore
+
 package com.london.data.mapper.popular
 
 import com.london.data.datasource.remote.ApiResponse
@@ -7,6 +8,7 @@ import com.london.data.utils.asImageUrlOrEmpty
 import com.london.data.utils.orZero
 import com.london.domain.KoverIgnore
 import com.london.domain.entity.popular.PopularMovie
+import kotlin.math.round
 
 
 fun PopularMovieResponse.toPopularMovie(): PopularMovie {
@@ -15,7 +17,7 @@ fun PopularMovieResponse.toPopularMovie(): PopularMovie {
         title = title.orEmpty(),
         posterUrl = posterPath.asImageUrlOrEmpty(),
         backdropUrl = backdropPath.asImageUrlOrEmpty(),
-        rating = voteAverage.orZero(),
+        rating = round(voteAverage.orZero() * 100) / 100.0
     )
 }
 
