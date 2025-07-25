@@ -56,7 +56,7 @@ fun TopRatedScreen(
         }
     }
 
-    TopRatedScreenContent(
+    Content(
         state = state,
         onBackClick = onBackClick,
         onMovieGenreClick = viewModel::movieGenreClicked,
@@ -67,7 +67,7 @@ fun TopRatedScreen(
 
 @SuppressLint("ConfigurationScreenWidthHeight")
 @Composable
-fun TopRatedScreenContent(
+private fun Content(
     state: TopRatedUiState,
     onBackClick: () -> Unit,
     onMovieGenreClick: (MovieGenre) -> Unit,
