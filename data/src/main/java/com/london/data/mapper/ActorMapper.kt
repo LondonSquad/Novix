@@ -12,6 +12,7 @@ import com.london.data.utils.isTrue
 import com.london.data.utils.orZero
 import com.london.domain.KoverIgnore
 import com.london.domain.entity.Actor
+import com.london.data.datasource.remote.home.trending.model.TrendingActorDto
 
 fun PersonDtoLocal.toActorEntity(): Actor {
     return Actor(
@@ -69,3 +70,10 @@ fun KnownFor.toKnownForDtoLocal(): KnownForDtoLocal {
         originCountry = originCountry
     )
 }
+
+fun TrendingActorDto.toDomain(): Actor = Actor(
+    id = this.id,
+    name = this.name ?: "",
+    profilePicture = this.profilePath ?: "",
+    characterName = ""
+)
