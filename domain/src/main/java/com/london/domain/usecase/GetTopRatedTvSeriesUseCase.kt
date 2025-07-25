@@ -1,7 +1,6 @@
 package com.london.domain.usecase
 
 import com.london.domain.entity.PagedFetchResponse
-import com.london.domain.entity.toprated.TopRatedMovie
 import com.london.domain.entity.toprated.TopRatedTvSeries
 import com.london.domain.repository.TopRatedTvSeriesRepository
 import org.koin.core.annotation.Provided
@@ -12,7 +11,7 @@ class GetTopRatedTvSeriesUseCase(
     @Provided
     private val topRatedTvSeriesRepo: TopRatedTvSeriesRepository
 ) {
-    suspend operator fun invoke(
+    suspend fun invoke(
         pageNumber: Int,
         genreId: Int? = null
     ) : PagedFetchResponse<TopRatedTvSeries> {
