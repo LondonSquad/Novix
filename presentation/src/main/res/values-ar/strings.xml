@@ -80,4 +80,6 @@
     <string name="trending_movies">الأفلام الرائجة</string>
     <string name="trending_tv_shows">المسلسلات الرائجة</string>
     <string name="trending_people">الأشخاص الرائجون</string>
+    <string name="no_trending_movies_in_genre">لا يوجد أفلام في هذا التصنيف حالياً</string>
+    <string name="no_trending_tvshows_in_genre">لا يوجد مسلسلات في هذا التصنيف حالياً</string>
 </resources>

@@ -1,6 +1,6 @@
 package com.london.domain.entity.trending
 
-data class TrendingMovie(
+data class Trending(
     val id: Int,
     val posterPath: String,
     val genreIds: List<Int>

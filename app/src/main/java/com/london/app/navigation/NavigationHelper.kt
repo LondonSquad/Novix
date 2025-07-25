@@ -19,7 +19,7 @@ class NavigationHelper {
                 NavigationTab(
                     idleIcon = painterResource(R.drawable.icon_search),
                     selectedIcon = painterResource(R.drawable.icon_search_filled),
-                    destination = Screen.Search, // Reverted back to Screen.Search
+                    destination = Screen.Search,
                 ),
                 NavigationTab(
                     idleIcon = painterResource(R.drawable.icon_masks),

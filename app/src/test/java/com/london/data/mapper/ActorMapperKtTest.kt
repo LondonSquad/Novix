@@ -8,6 +8,9 @@ import com.london.data.datasource.remote.ApiResponse
 import com.london.data.datasource.remote.search.model.KnownFor
 import com.london.data.datasource.remote.search.model.SearchActorRemote
 import com.london.data.datasource.util.generateHash
+import com.london.data.mapper.trending.toActorEntity
+import com.london.data.mapper.trending.toKnownForDtoLocal
+import com.london.data.mapper.trending.toLocal
 import com.london.domain.entity.Actor
 import org.junit.Test
 

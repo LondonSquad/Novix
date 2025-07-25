@@ -27,13 +27,14 @@ import com.london.presentation.screen.home.GenresSection
 import com.london.presentation.utils.Listen
 import org.koin.androidx.compose.koinViewModel
 import androidx.paging.compose.collectAsLazyPagingItems
+import com.london.presentation.screen.home.trending.movie.TrendingMoviesContract
+import com.london.designsystem.component.EmptySearchLayout
 
 @Composable
 fun TrendingMoviesScreen(
     modifier: Modifier = Modifier,
     viewModel: TrendingMoviesViewModel = koinViewModel(),
-    onMovieClick: (Int) -> Unit,
-    onBackClick: () -> Unit,
+    contract: TrendingMoviesContract
 ) {
     val state by viewModel.state.collectAsState()
     val effect by viewModel.effect.collectAsState()
@@ -43,12 +44,11 @@ fun TrendingMoviesScreen(
     effect?.Listen { currentEffect ->
         when (currentEffect) {
             is TrendingMoviesEffect.NavigateToMovie -> {
-                onMovieClick(currentEffect.movieId)
+                contract.onMovieClick(currentEffect.movieId)
                 viewModel.resetEffect()
             }
-
             TrendingMoviesEffect.NavigateBack -> {
-                onBackClick()
+                contract.onBackClick()
                 viewModel.resetEffect()
             }
         }
@@ -65,7 +65,7 @@ fun TrendingMoviesScreen(
                 .fillMaxWidth()
                 .padding(horizontal = 16.dp, vertical = 12.dp),
             title = stringResource(R.string.trending_movies),
-            onBackClick = viewModel::onBackClick
+            onBackClick = contract::onBackClick
         )
         GenresSection(
             genres = state.genres,
@@ -81,23 +81,31 @@ fun TrendingMoviesScreen(
         } else {
             (0 until moviesLazyItems.itemCount).map { moviesLazyItems[it] }.filterNotNull().filter { it.genreIds.contains(state.selectedGenreId) }
         }
-        LazyVerticalGrid(
-            columns = GridCells.Fixed(2),
-            contentPadding = PaddingValues(bottom = 18.dp),
-            horizontalArrangement = Arrangement.spacedBy(12.dp),
-            verticalArrangement = Arrangement.spacedBy(12.dp),
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(horizontal = 16.dp)
-        ) {
-            items(filteredMovies.size) { index ->
-                val movie = filteredMovies[index]
-                HomeCard(
-                    imageUrl = movie.posterPath,
-                    isSaved = false,
-                    onSaveClick = {},
-                    modifier = Modifier.clickable { viewModel.onMovieClick(movie.id) }
-                )
+        if (filteredMovies.isEmpty()) {
+            EmptySearchLayout(
+                text = stringResource(R.string.no_trending_movies_in_genre),
+                image = R.drawable.img_no_result,
+                modifier = Modifier.padding(horizontal = 16.dp)
+            )
+        } else {
+            LazyVerticalGrid(
+                columns = GridCells.Fixed(2),
+                contentPadding = PaddingValues(bottom = 18.dp),
+                horizontalArrangement = Arrangement.spacedBy(12.dp),
+                verticalArrangement = Arrangement.spacedBy(12.dp),
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(horizontal = 16.dp)
+            ) {
+                items(filteredMovies.size) { index ->
+                    val movie = filteredMovies[index]
+                    HomeCard(
+                        imageUrl = movie.posterPath,
+                        isSaved = false,
+                        onSaveClick = {},
+                        modifier = Modifier.clickable { contract.onMovieClick(movie.id) }
+                    )
+                }
             }
         }
     }

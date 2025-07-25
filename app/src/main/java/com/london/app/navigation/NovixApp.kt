@@ -57,6 +57,9 @@ import com.london.presentation.screen.home.trending.tvshow.TrendingTvShowsScreen
 import com.london.presentation.screen.login.LoginScreen
 import com.london.presentation.screen.reviews.ReviewsScreen
 import com.london.presentation.screen.search.SearchScreen
+import com.london.presentation.screen.home.trending.movie.TrendingMoviesContract
+import com.london.presentation.screen.home.trending.tvshow.TrendingTvShowsContract
+import com.london.presentation.screen.home.trending.actor.TrendingActorsContract
 
 @Composable
 fun NovixApp() {
@@ -331,20 +334,40 @@ fun NovixApp() {
             }
             composable<TrendingMovies> {
                 TrendingMoviesScreen(
-                    onMovieClick = { movieId -> navController.navigate(MovieDetails(movieId)) },
-                    onBackClick = { navController.navigateUp() }
+                    contract = object : TrendingMoviesContract {
+                        override fun onMovieClick(id: Int) {
+                            navController.navigate(MovieDetails(id))
+                        }
+
+                        override fun onBackClick() {
+                            navController.navigateUp()
+                        }
+                    }
                 )
             }
             composable<TrendingTvShows> {
                 TrendingTvShowsScreen(
-                    onTvShowClick = { tvShowId -> navController.navigate(TvShowDetails(tvShowId)) },
-                    onBackClick = { navController.navigateUp() }
+                    contract = object : TrendingTvShowsContract {
+                        override fun onTvShowClick(id: Int) {
+                            navController.navigate(TvShowDetails(id))
+                        }
+
+                        override fun onBackClick() {
+                            navController.navigateUp()
+                        }
+                    }
                 )
             }
             composable<TrendingActors> {
                 TrendingActorsScreen(
-                    onActorClick = { actorId -> navController.navigate(ActorDetails(actorId)) },
-                    onBackClick = { navController.navigateUp() }
+                    contract = object : TrendingActorsContract {
+                        override fun onActorClick(id: Int) {
+                            navController.navigate(ActorDetails(id))
+                        }
+                        override fun onBackClick() {
+                            navController.navigateUp()
+                        }
+                    }
                 )
             }
         }

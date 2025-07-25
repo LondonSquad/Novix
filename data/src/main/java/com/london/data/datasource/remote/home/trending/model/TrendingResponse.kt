@@ -4,9 +4,9 @@ import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class TrendingMovieResponse(
+data class TrendingResponse(
     @SerialName("results")
-    val results: List<TrendingMovieDto>,
+    val results: List<TrendingDto>,
     @SerialName("page")
     val page: Int,
     @SerialName("total_pages")
@@ -14,17 +14,20 @@ data class TrendingMovieResponse(
 )
 
 @Serializable
-data class TrendingMovieDto(
+data class TrendingDto(
     @SerialName("id")
     val id: Int,
     @SerialName("title")
-    val title: String,
+    val title: String? = null,
+    @SerialName("name")
+    val name: String? = null,
     @SerialName("poster_path")
-    val posterPath: String?,
-    @SerialName("backdrop_path")
-    val backdropPath: String?,
-    @SerialName("vote_average")
-    val voteAverage: Double?,
+    val posterPath: String? = null,
+    @SerialName("profile_path")
+    val profilePath: String? = null,
     @SerialName("genre_ids")
     val genreIds: List<Int>? = emptyList()
-) 
+) {
+    val image: String?
+        get() = posterPath ?: profilePath
+} 

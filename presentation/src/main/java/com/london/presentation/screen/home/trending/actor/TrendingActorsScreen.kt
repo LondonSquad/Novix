@@ -19,13 +19,13 @@ import com.london.presentation.utils.ResultOrEmpty
 import org.koin.androidx.compose.koinViewModel
 import androidx.paging.compose.collectAsLazyPagingItems
 import com.london.designsystem.component.EmptySearchLayout
+import com.london.presentation.screen.home.trending.actor.TrendingActorsContract
 
 @Composable
 fun TrendingActorsScreen(
     modifier: Modifier = Modifier,
     viewModel: TrendingActorsViewModel = koinViewModel(),
-    onActorClick: (Int) -> Unit,
-    onBackClick: () -> Unit,
+    contract: TrendingActorsContract
 ) {
     val state = viewModel.state.collectAsState().value
     val actorsLazyList = state.actorsFlow.collectAsLazyPagingItems()
@@ -34,11 +34,11 @@ fun TrendingActorsScreen(
     effect?.let { currentEffect ->
         when (currentEffect) {
             is TrendingActorsEffect.NavigateToActor -> {
-                onActorClick(currentEffect.actorId)
+                contract.onActorClick(currentEffect.actorId)
                 viewModel.resetEffect()
             }
             TrendingActorsEffect.NavigateBack -> {
-                onBackClick()
+                contract.onBackClick()
                 viewModel.resetEffect()
             }
         }
@@ -55,7 +55,7 @@ fun TrendingActorsScreen(
                 .fillMaxWidth()
                 .padding(horizontal = 16.dp, vertical = 12.dp),
             title = stringResource(R.string.trending_people),
-            onBackClick = viewModel::onBackClick
+            onBackClick = contract::onBackClick
         )
         ResultOrEmpty(
             items = actorsLazyList.itemSnapshotList.items,
@@ -63,7 +63,7 @@ fun TrendingActorsScreen(
                 if (!isLoading) {
                     EmptySearchLayout(
                         text = stringResource(R.string.no_search_result_msg),
-                        image = R.drawable.img_no_search_result,
+                        image = R.drawable.img_no_result,
                         modifier = modifier.padding(horizontal = 16.dp)
                     )
                 }
@@ -71,7 +71,7 @@ fun TrendingActorsScreen(
             content = {
                 ActorsLayout(
                     actorsUis = actorsLazyList,
-                    onActorClick = { viewModel.onActorClick(it.id) }
+                    onActorClick = { contract.onActorClick(it.id) }
                 )
             }
         )
