@@ -26,7 +26,7 @@ class TopRatedViewModel(
     private fun initializeTopMovies() {
         tryToExecute(block = {
             val moviesFlow = createPagingSourceFlow(query = "") { _, pageNumber ->
-                getTopRatedMoviesUseCase(
+                getTopRatedMoviesUseCase.invoke(
                     pageNumber,
                     if (state.value.selectedMovieGenre == MovieGenre.All) null
                     else state.value.selectedMovieGenre.id
@@ -48,7 +48,7 @@ class TopRatedViewModel(
     private fun initializeTvShow() {
         tryToExecute(block = {
             val tvSeriesFlow = createPagingSourceFlow(query = "") { _, pageNumber ->
-                getTopRatedTvSeriesUseCase(
+                getTopRatedTvSeriesUseCase.invoke(
                     pageNumber,
                     if (state.value.selectedTvShowGenre == TvShowGenre.All) null
                     else state.value.selectedTvShowGenre.id
@@ -66,12 +66,12 @@ class TopRatedViewModel(
         }, checkSuccess = { true })
     }
 
-    override fun movieGenreClicked(genre: MovieGenre) {
+    override fun movieGenre(genre: MovieGenre) {
         updateState { copy(selectedMovieGenre = genre) }
         initializeTopMovies()
     }
 
-    override fun tvShowGenreClicked(genre: TvShowGenre) {
+    override fun tvShowGenre(genre: TvShowGenre) {
         updateState { copy(selectedTvShowGenre = genre) }
         initializeTvShow()
     }

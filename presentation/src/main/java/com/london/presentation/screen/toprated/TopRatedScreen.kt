@@ -1,6 +1,5 @@
 package com.london.presentation.screen.toprated
 
-import android.annotation.SuppressLint
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -18,9 +17,11 @@ import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.items
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalConfiguration
+import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.platform.LocalWindowInfo
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
@@ -46,7 +47,7 @@ fun TopRatedScreen(
     onTvShowClick: (Int) -> Unit = {}
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
-    val effect by viewModel.effect.collectAsStateWithLifecycle(null)
+    val effect by viewModel.effect.collectAsState(null)
 
     effect?.Listen { currentEffect ->
         when (currentEffect) {
@@ -56,26 +57,19 @@ fun TopRatedScreen(
         }
     }
 
-    TopRatedScreenContent(
+    Content(
         state = state,
-        onBackClick = onBackClick,
-        onMovieGenreClick = viewModel::movieGenreClicked,
-        onTvShowGenreClick = viewModel::tvShowGenreClicked,
         topRatedContract = viewModel
     )
 }
 
-@SuppressLint("ConfigurationScreenWidthHeight")
 @Composable
-fun TopRatedScreenContent(
+private fun Content(
     state: TopRatedUiState,
-    onBackClick: () -> Unit,
-    onMovieGenreClick: (MovieGenre) -> Unit,
-    onTvShowGenreClick: (TvShowGenre) -> Unit,
     topRatedContract: TopRatedContract,
 ) {
-    val screenWidth = LocalConfiguration.current.screenWidthDp.dp
-
+    val screenWidth =
+        with(LocalDensity.current) { LocalWindowInfo.current.containerSize.width.toDp() }
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -90,7 +84,7 @@ fun TopRatedScreenContent(
                 .padding(horizontal = 16.dp)
                 .padding(top = 12.dp),
             title = stringResource(com.london.presentation.R.string.top_rating),
-            onBackClick = onBackClick
+            onBackClick = topRatedContract::onBackClicked
         )
 
         TabLayout(
@@ -104,13 +98,13 @@ fun TopRatedScreenContent(
         )
         if (state.isMovieSelected)
             MovieGenreRow(
-                onGenreClick = onMovieGenreClick,
+                onGenreClick = topRatedContract::movieGenre,
                 state = state,
                 screenWidth = screenWidth
             )
         else
             TvShowRow(
-                onGenreClick = onTvShowGenreClick,
+                onGenreClick = topRatedContract::tvShowGenre,
                 state = state,
                 screenWidth = screenWidth
             )
@@ -162,7 +156,7 @@ fun TopRatedScreenContent(
 }
 
 @Composable
-fun MovieGenreRow(
+private fun MovieGenreRow(
     onGenreClick: (MovieGenre) -> Unit,
     state: TopRatedUiState,
     screenWidth: Dp,
@@ -185,7 +179,7 @@ fun MovieGenreRow(
 }
 
 @Composable
-fun TvShowRow(
+private fun TvShowRow(
     onGenreClick: (TvShowGenre) -> Unit,
     state: TopRatedUiState,
     screenWidth: Dp,
