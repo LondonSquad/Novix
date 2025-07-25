@@ -32,7 +32,7 @@ fun DefaultTopBar(
     ) {
         Row(verticalAlignment = Alignment.CenterVertically) {
             Image(
-                painter = painterResource(if(isSystemInDarkTheme()) R.drawable.icondesign else R.drawable.icon_desing_light),
+                painter = painterResource(if(isSystemInDarkTheme()) R.drawable.icon_design_dark else R.drawable.icon_desing_light),
                 contentDescription = "Logo",
                 modifier = Modifier.size(48.dp).padding(end = 12.dp)
             )

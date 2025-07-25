@@ -16,7 +16,7 @@ fun PopularMovieResponse.toPopularMovie(): PopularMovie {
         title = title.orEmpty(),
         posterUrl = posterPath.asImageUrlOrEmpty(),
         backdropUrl = backdropPath.asImageUrlOrEmpty(),
-        rating = voteAverage.roundToDecimal().orZero(),
+        rating = voteAverage.orZero().roundToDecimal(),
     )
 }
 

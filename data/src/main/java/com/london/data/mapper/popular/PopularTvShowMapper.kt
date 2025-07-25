@@ -16,7 +16,7 @@ fun PopularTvShowResponse.toEntity(): PopularTvShow {
         name = name.orEmpty(),
         overview = overview.orEmpty(),
         posterUrl = posterPath.asImageUrlOrEmpty(),
-        rating = voteAverage.roundToDecimal().orZero()
+        rating = voteAverage.orZero().roundToDecimal()
     )
 }
 

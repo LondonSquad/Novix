@@ -55,7 +55,7 @@ fun TvShowDetailsRemoteResponse.toEntity() = TvShowDetailsEntity(
     status = status.orEmpty(),
     tagline = tagline.orEmpty(),
     type = type.orEmpty(),
-    voteAverage = voteAverage.roundToDecimal().orZero(),
+    voteAverage = voteAverage.orZero().roundToDecimal(),
     voteCount = voteCount.orZero()
 )
 
