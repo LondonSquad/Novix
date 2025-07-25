@@ -12,29 +12,29 @@ interface SearchRemoteDataSource {
         query: String,
         includeAdult: Boolean,
         pageNumber: Int
-    ): ApiResponse<SearchMovieRemote>
+    ): Result<ApiResponse<SearchMovieRemote>>
 
     suspend fun searchForTvShows(
         query: String,
         includeAdult: Boolean,
         pageNumber: Int
-    ): ApiResponse<SearchTvShowRemote>
+    ): Result<ApiResponse<SearchTvShowRemote>>
 
     suspend fun searchForActors(
         query: String,
         includeAdult: Boolean,
         pageNumber: Int
-    ): ApiResponse<SearchActorRemote>
+    ): Result<ApiResponse<SearchActorRemote>>
 
     suspend fun getMoviesByCategory(
         categoryId: Int,
         pageNumber: Int,
         includeAdult: Boolean = false
-    ): ApiResponse<SearchMovieRemote>
+    ): Result<ApiResponse<SearchMovieRemote>>
 
     suspend fun getUpComingMoviesByCategory(
         categoryId: Int?=null,
         pageNumber: Int,
         includeAdult: Boolean = false
-    ): ApiResponse<SearchMovieRemote>
+    ): Result<ApiResponse<SearchMovieRemote>>
 }

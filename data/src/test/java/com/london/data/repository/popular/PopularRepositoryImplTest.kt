@@ -1,6 +1,7 @@
 package com.london.data.repository.popular
 
 import com.google.common.truth.Truth.assertThat
+import com.london.data.datasource.exception.NetworkException
 import com.london.data.datasource.remote.ApiResponse
 import com.london.data.datasource.remote.home.popular.PopularRemoteDataSource
 import com.london.data.datasource.remote.home.popular.model.PopularMovieResponse
@@ -13,6 +14,7 @@ import io.mockk.mockk
 import kotlinx.coroutines.test.runTest
 import org.junit.Before
 import org.junit.Test
+import org.junit.jupiter.api.assertThrows
 
 class PopularRepositoryImplTest {
 
@@ -27,7 +29,7 @@ class PopularRepositoryImplTest {
     @Test
     fun `when call getPopularMovies should returns mapped domain models`() = runTest {
         // Given
-        coEvery { remoteDataSource.getPopularMovies() } returns singleMovieResponse
+        coEvery { remoteDataSource.getPopularMovies() } returns Result.success(singleMovieResponse)
 
         // When
         val result: List<PopularMovie> = repository.getPopularMovies()
@@ -45,7 +47,7 @@ class PopularRepositoryImplTest {
     @Test
     fun `when call getPopularMovies with empty list should return empty domain list`() = runTest {
         // Given
-        coEvery { remoteDataSource.getPopularMovies() } returns emptyMovieResponse
+        coEvery { remoteDataSource.getPopularMovies() } returns Result.success(emptyMovieResponse)
 
         // When
         val result: List<PopularMovie> = repository.getPopularMovies()
@@ -58,7 +60,9 @@ class PopularRepositoryImplTest {
     @Test
     fun `when call getPopularMovies with multiple items should return mapped list`() = runTest {
         // Given
-        coEvery { remoteDataSource.getPopularMovies() } returns multipleMoviesResponse
+        coEvery { remoteDataSource.getPopularMovies() } returns Result.success(
+            multipleMoviesResponse
+        )
 
         // When
         val result: List<PopularMovie> = repository.getPopularMovies()
@@ -76,7 +80,7 @@ class PopularRepositoryImplTest {
     @Test
     fun `when call getPopularTvShows should returns mapped domain models`() = runTest {
         // Given
-        coEvery { remoteDataSource.getPopularTvShows() } returns singleTvShowResponse
+        coEvery { remoteDataSource.getPopularTvShows() } returns Result.success(singleTvShowResponse)
 
         // When
         val result: List<PopularTvShow> = repository.getPopularTvShows()
@@ -94,7 +98,7 @@ class PopularRepositoryImplTest {
     @Test
     fun `when call getPopularTvShows with empty list should return empty domain list`() = runTest {
         // Given
-        coEvery { remoteDataSource.getPopularTvShows() } returns emptyTvShowResponse
+        coEvery { remoteDataSource.getPopularTvShows() } returns Result.success(emptyTvShowResponse)
 
         // When
         val result: List<PopularTvShow> = repository.getPopularTvShows()
@@ -107,7 +111,9 @@ class PopularRepositoryImplTest {
     @Test
     fun `when call getPopularTvShows with multiple items should return mapped list`() = runTest {
         // Given
-        coEvery { remoteDataSource.getPopularTvShows() } returns multipleTvShowsResponse
+        coEvery { remoteDataSource.getPopularTvShows() } returns Result.success(
+            multipleTvShowsResponse
+        )
 
         // When
         val result: List<PopularTvShow> = repository.getPopularTvShows()
@@ -121,6 +127,48 @@ class PopularRepositoryImplTest {
 
         coVerify(exactly = 1) { remoteDataSource.getPopularTvShows() }
     }
+
+    @Test
+    fun `getPopularMovies should throw UnAuthorizedException when API returns 401`() = runTest {
+        coEvery { remoteDataSource.getPopularMovies() } throws
+                NetworkException.UnAuthorizedException("401 Unauthorized")
+
+        assertThrows<NetworkException.UnAuthorizedException> {
+            repository.getPopularMovies()
+        }
+    }
+
+    @Test
+    fun `getPopularMovies should throw TimeoutException when API times out`() = runTest {
+        coEvery { remoteDataSource.getPopularMovies() } throws NetworkException.TimeoutException("Request timed out")
+
+        assertThrows<NetworkException.TimeoutException> {
+            repository.getPopularMovies()
+        }
+    }
+
+    @Test
+    fun `getPopularTvShows should throw HttpLockedException when API returns 423`() = runTest {
+        coEvery { remoteDataSource.getPopularTvShows() } throws NetworkException.HttpLockedException(
+            "Resource locked"
+        )
+
+        assertThrows<NetworkException.HttpLockedException> {
+            repository.getPopularTvShows()
+        }
+    }
+
+    @Test
+    fun `getPopularTvShows should throw ValidationException when API returns 422`() = runTest {
+        coEvery { remoteDataSource.getPopularTvShows() } throws NetworkException.ValidationException(
+            "Invalid data"
+        )
+
+        assertThrows<NetworkException.ValidationException> {
+            repository.getPopularTvShows()
+        }
+    }
+
 
     companion object TestData {
         val singleMovieResponse = ApiResponse(

@@ -5,6 +5,7 @@ import com.london.data.datasource.remote.details.moviedetails.model.moviedetails
 import com.london.data.datasource.remote.details.moviedetails.model.movieimages.MovieImagesResponse
 import com.london.data.datasource.remote.details.moviedetails.model.similarmovies.SimilarMoviesResponse
 import com.london.data.datasource.remote.details.videoprovider.movie.model.MovieVideoRemote
+import retrofit2.Response
 import retrofit2.http.GET
 import retrofit2.http.Path
 
@@ -13,25 +14,25 @@ interface MovieDetailsApiService {
     @GET("3/movie/{movie_id}")
     suspend fun getMovieDetails(
         @Path("movie_id") movieId: Int,
-    ): MovieDetailsResponse
+    ): Response<MovieDetailsResponse>
 
     @GET("3/movie/{movie_id}/similar")
     suspend fun getSimilarMovies(
         @Path("movie_id") movieId: Int,
-    ): SimilarMoviesResponse
+    ): Response<SimilarMoviesResponse>
 
     @GET("3/movie/{movie_id}/credits")
     suspend fun getMovieCast(
         @Path("movie_id") movieId: Int,
-    ): MovieCastResponse
+    ): Response<MovieCastResponse>
 
     @GET("3/movie/{movie_id}/images")
     suspend fun getMovieImages(
         @Path("movie_id") movieId: Int,
-    ): MovieImagesResponse
+    ): Response<MovieImagesResponse>
 
     @GET("3/movie/{movie_id}/videos")
     suspend fun getMovieVideos(
         @Path("movie_id") movieId: Int,
-    ): MovieVideoRemote
+    ): Response<MovieVideoRemote>
 }

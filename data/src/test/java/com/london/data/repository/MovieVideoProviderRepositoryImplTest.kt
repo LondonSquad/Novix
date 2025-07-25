@@ -26,7 +26,9 @@ class MovieVideoProviderRepositoryImplTest {
     @Test
     fun `getMovieVideos should return mapped MovieVideo list`() = runTest {
         // GIVEN
-        coEvery { movieVideoProviderRemote.getMovieVideos(123) } returns MOVIE_VIDEO_LIST_REMOTE
+        coEvery { movieVideoProviderRemote.getMovieVideos(123) } returns Result.success(
+            MOVIE_VIDEO_LIST_REMOTE
+        )
 
         // WHEN
         val result = repository.getMovieVideos(123)
@@ -41,7 +43,9 @@ class MovieVideoProviderRepositoryImplTest {
         val emptyResponse = MovieVideoRemote(
             id = 1, movies = null
         )
-        coEvery { movieVideoProviderRemote.getMovieVideos(999) } returns emptyResponse
+        coEvery { movieVideoProviderRemote.getMovieVideos(999) } returns Result.success(
+            emptyResponse
+        )
 
         // WHEN
         val result = repository.getMovieVideos(999)

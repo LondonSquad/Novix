@@ -1,5 +1,6 @@
 package com.london.data.datasource.remote.details.tvshowdetails
 
+import com.london.data.datasource.remote.BaseRemoteDatasource
 import com.london.data.datasource.remote.details.tvshowdetails.api.TvShowDetailsApiService
 import com.london.data.datasource.remote.details.tvshowdetails.model.TvShowCastRemoteResponse
 import com.london.data.datasource.remote.details.tvshowdetails.model.TvShowDetailsRemoteResponse
@@ -11,40 +12,52 @@ import org.koin.core.annotation.Single
 @Single
 class TvShowDetailsRemoteDataSourceImpl(
     private val tvShowDetailsApiService: TvShowDetailsApiService,
-) : TvShowDetailsRemoteDataSource {
+) : TvShowDetailsRemoteDataSource, BaseRemoteDatasource {
 
-    override suspend fun getTvShowDetailsById(id: Int): TvShowDetailsRemoteResponse =
-        tvShowDetailsApiService.getTvShowDetails(
-            tvShowId = id
+    override suspend fun getTvShowDetailsById(id: Int): Result<TvShowDetailsRemoteResponse> =
+        callApiWithRetry(
+            apiCall = { tvShowDetailsApiService.getTvShowDetails(tvShowId = id) },
+            mapper = { it }
         )
 
     override suspend fun getTvShowEpisodesBySeason(
-        tvShowId: Int,
+        id: Int,
         seasonNumber: Int
-    ): TvShowEpisodesRemoteResponse =
-        tvShowDetailsApiService.getTvShowEpisodesBySeason(
-            tvShowId = tvShowId,
-            seasonNumber = seasonNumber
+    ): Result<TvShowEpisodesRemoteResponse> =
+        callApiWithRetry(
+            apiCall = {
+                tvShowDetailsApiService.getTvShowEpisodesBySeason(
+                    tvShowId = id,
+                    seasonNumber = seasonNumber
+                )
+            },
+            mapper = { it }
         )
 
-    override suspend fun getCastsByTvShowId(id: Int): TvShowCastRemoteResponse =
-        tvShowDetailsApiService.getTvShowCast(
-            tvShowId = id
+    override suspend fun getCastsByTvShowId(id: Int): Result<TvShowCastRemoteResponse> =
+        callApiWithRetry(
+            apiCall = { tvShowDetailsApiService.getTvShowCast(tvShowId = id) },
+            mapper = { it }
         )
 
-    override suspend fun getTvShowImagesById(id: Int): TvShowImagesRemoteResponse =
-        tvShowDetailsApiService.getTvShowImages(
-            tvShowId = id
+    override suspend fun getTvShowImagesById(id: Int): Result<TvShowImagesRemoteResponse> =
+        callApiWithRetry(
+            apiCall = { tvShowDetailsApiService.getTvShowImages(tvShowId = id) },
+            mapper = { it }
         )
-
     override suspend fun getEpisodeDetailsByPosition(
         tvShowId: Int,
         seasonNumber: Int,
         episodeNumber: Int
-    ): TvShowEpisodeResponse =
-        tvShowDetailsApiService.getEpisodeDetails(
-            tvShowId = tvShowId,
-            seasonNumber = seasonNumber,
-            episodeNumber = episodeNumber
+    ): Result<TvShowEpisodeResponse> =
+        callApiWithRetry(
+            apiCall = {
+                tvShowDetailsApiService.getEpisodeDetails(
+                    tvShowId = tvShowId,
+                    seasonNumber = seasonNumber,
+                    episodeNumber = episodeNumber
+                )
+            },
+            mapper = { it }
         )
 }
