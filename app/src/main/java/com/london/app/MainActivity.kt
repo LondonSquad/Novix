@@ -11,7 +11,6 @@ import com.london.domain.AppPreferencesService
 import org.koin.android.ext.android.inject
 import kotlin.getValue
 
-
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

@@ -32,17 +32,17 @@ import com.london.presentation.navigation.Screen.Categories
 import com.london.presentation.navigation.Screen.EpisodeDetails
 import com.london.presentation.navigation.Screen.Home
 import com.london.presentation.navigation.Screen.Login
-import com.london.presentation.navigation.Screen.Splash
-import com.london.presentation.navigation.Screen.OnboardingPager
-import com.london.presentation.navigation.Screen.Welcome
 import com.london.presentation.navigation.Screen.MovieDetails
 import com.london.presentation.navigation.Screen.MoviesByCategory
+import com.london.presentation.navigation.Screen.OnboardingPager
 import com.london.presentation.navigation.Screen.Reviews
 import com.london.presentation.navigation.Screen.Search
+import com.london.presentation.navigation.Screen.Splash
 import com.london.presentation.navigation.Screen.TrendingActors
 import com.london.presentation.navigation.Screen.TrendingMovies
 import com.london.presentation.navigation.Screen.TrendingTvShows
 import com.london.presentation.navigation.Screen.TvShowDetails
+import com.london.presentation.navigation.Screen.Welcome
 import com.london.presentation.screen.account.AccountScreen
 import com.london.presentation.screen.bookmark.BookmarksScreen
 import com.london.presentation.screen.category.CategoriesScreen
@@ -55,8 +55,11 @@ import com.london.presentation.screen.details.movieDetalis.MovieDetailsScreen
 import com.london.presentation.screen.details.tvshow.episodedetails.EpisodeDetailsScreen
 import com.london.presentation.screen.details.tvshow.tvshowdetails.TvShowsDetailsScreen
 import com.london.presentation.screen.home.HomeScreen
+import com.london.presentation.screen.home.trending.actor.TrendingActorsContract
 import com.london.presentation.screen.home.trending.actor.TrendingActorsScreen
+import com.london.presentation.screen.home.trending.movie.TrendingMoviesContract
 import com.london.presentation.screen.home.trending.movie.TrendingMoviesScreen
+import com.london.presentation.screen.home.trending.tvshow.TrendingTvShowsContract
 import com.london.presentation.screen.home.trending.tvshow.TrendingTvShowsScreen
 import com.london.presentation.screen.login.LoginScreen
 import com.london.presentation.screen.onboarding.OnboardingRoute
@@ -65,9 +68,6 @@ import com.london.presentation.screen.onboarding.WelcomeScreen
 import com.london.presentation.screen.reviews.ReviewsScreen
 import com.london.presentation.screen.search.SearchScreen
 import org.koin.compose.getKoin
-import com.london.presentation.screen.home.trending.movie.TrendingMoviesContract
-import com.london.presentation.screen.home.trending.tvshow.TrendingTvShowsContract
-import com.london.presentation.screen.home.trending.actor.TrendingActorsContract
 
 @Composable
 fun NovixApp(appPreferencesService: AppPreferencesService) {
@@ -147,9 +147,8 @@ fun NovixApp(appPreferencesService: AppPreferencesService) {
                         navController.navigate(MovieDetails(movieId))
                     },
 
-                   onTvShowClick = { tvShowId ->
+                    onTvShowClick = { tvShowId ->
                         navController.navigate(TvShowDetails(tvShowId))
-                   }
                     },
                     onTrendingMovies = {
                         navController.navigate(TrendingMovies)
@@ -350,7 +349,7 @@ fun NovixApp(appPreferencesService: AppPreferencesService) {
                 )
             }
 
-           composable<Splash> {
+            composable<Splash> {
                 SplashRoute(
                     onNavigateToOnboarding = { navController.navigate(Screen.OnboardingPager) },
                     onNavigateToWelcome = { navController.navigate(Screen.Welcome) },
@@ -420,6 +419,7 @@ fun NovixApp(appPreferencesService: AppPreferencesService) {
                         override fun onActorClick(id: Int) {
                             navController.navigate(ActorDetails(id))
                         }
+
                         override fun onBackClick() {
                             navController.navigateUp()
                         }
