@@ -52,7 +52,7 @@ import com.london.presentation.screen.details.tvshow.episodedetails.EpisodeDetai
 import com.london.presentation.screen.details.tvshow.tvshowdetails.TvShowsDetailsScreen
 import com.london.presentation.screen.home.HomeScreen
 import com.london.presentation.screen.home.trending.actor.TrendingActorsScreen
-import com.london.presentation.screen.home.trending.TrendingMoviesScreen
+import com.london.presentation.screen.home.trending.movie.TrendingMoviesScreen
 import com.london.presentation.screen.home.trending.TrendingTvShowsScreen
 import com.london.presentation.screen.login.LoginScreen
 import com.london.presentation.screen.reviews.ReviewsScreen
