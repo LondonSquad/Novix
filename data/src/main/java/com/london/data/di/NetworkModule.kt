@@ -17,6 +17,7 @@ import com.london.data.datasource.remote.toprated.movie.api.TopRatedMovieApiServ
 import com.london.data.datasource.remote.toprated.tvseries.api.TopRatedTvSeriesApiService
 import com.london.data.local.source.device.DeviceConfigurationDataSource
 import com.london.domain.repository.SessionTokenProvider
+import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.json.Json
 import okhttp3.Cache
 import okhttp3.Interceptor
@@ -29,6 +30,7 @@ import retrofit2.Retrofit
 import java.io.File
 import java.util.concurrent.TimeUnit
 
+@OptIn(ExperimentalSerializationApi::class)
 @Module
 class NetworkModule {
 
@@ -44,7 +46,7 @@ class NetworkModule {
 
     @Single
     fun provideHttpLoggingInterceptor(): HttpLoggingInterceptor {
-        return HttpLoggingInterceptor { message ->
+        return HttpLoggingInterceptor {
         }.apply {
             level = if (BuildConfig.DEBUG) {
                 HttpLoggingInterceptor.Level.BODY
