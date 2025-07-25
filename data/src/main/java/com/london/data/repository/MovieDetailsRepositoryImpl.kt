@@ -1,8 +1,8 @@
 package com.london.data.repository
 
-import com.london.data.datasource.remote.details.moviedetails.MovieDetailsRemoteDataSource
 import com.london.data.mapper.moviedetails.toEntity
 import com.london.data.mapper.moviedetails.toGenre
+import com.london.data.remote.source.details.movie.MovieDetailsRemoteDataSource
 import com.london.data.utils.asImageUrlOrEmpty
 import com.london.data.utils.isTrue
 import com.london.domain.entity.Actor

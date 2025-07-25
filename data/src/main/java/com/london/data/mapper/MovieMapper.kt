@@ -1,11 +1,11 @@
 package com.london.data.mapper
 
-import com.london.data.datasource.local.model.SearchMovieDtoLocal
-import com.london.data.datasource.local.model.SearchMoviesLocal
+import com.london.data.local.model.search.SearchMovieDtoLocal
+import com.london.data.local.model.search.SearchMoviesLocal
 import com.london.data.datasource.remote.ApiResponse
 import com.london.data.datasource.remote.search.model.SearchMovieRemote
-import com.london.data.datasource.util.generateHash
 import com.london.data.utils.asImageUrlOrEmpty
+import com.london.data.utils.generateHash
 import com.london.data.utils.isTrue
 import com.london.data.utils.orZero
 import com.london.domain.KoverIgnore

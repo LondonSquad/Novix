@@ -2,8 +2,8 @@ package com.london.data.repository
 
 import com.london.data.datasource.common.AuthPreferences
 import com.london.data.datasource.remote.auth.api.AuthApiService
-import com.london.data.datasource.remote.auth.model.LoginValidationRequestBody
-import com.london.data.datasource.remote.auth.model.Token
+import com.london.data.remote.model.auth.model.LoginValidationRequestBody
+import com.london.data.remote.model.auth.model.Token
 import com.london.domain.repository.AuthRepository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow

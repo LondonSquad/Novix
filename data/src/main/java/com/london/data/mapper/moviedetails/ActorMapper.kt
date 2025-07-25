@@ -1,6 +1,6 @@
 package com.london.data.mapper.moviedetails
 
-import com.london.data.datasource.remote.details.moviedetails.model.moviecast.MovieActor
+import com.london.data.remote.model.details.movie.model.moviecast.MovieActor
 import com.london.data.utils.asImageUrlOrEmpty
 import com.london.data.utils.orZero
 import com.london.domain.entity.Actor

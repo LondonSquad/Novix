@@ -1,14 +1,15 @@
 package com.london.data.mapper.tvshowdetails
 
-import com.london.data.datasource.remote.details.tvshowdetails.model.TvShowCreator
-import com.london.data.datasource.remote.details.tvshowdetails.model.TvShowDetailsRemoteResponse
-import com.london.data.datasource.remote.details.tvshowdetails.model.TvShowEpisode
-import com.london.data.datasource.remote.details.tvshowdetails.model.TvShowGenre
-import com.london.data.datasource.remote.details.tvshowdetails.model.TvShowNetwork
-import com.london.data.datasource.remote.details.tvshowdetails.model.TvShowProductionCompany
-import com.london.data.datasource.remote.details.tvshowdetails.model.TvShowProductionCountry
-import com.london.data.datasource.remote.details.tvshowdetails.model.TvShowSeason
-import com.london.data.datasource.remote.details.tvshowdetails.model.TvShowSpokenLanguage
+
+import com.london.data.remote.model.details.tvshow.model.TvShowCreator
+import com.london.data.remote.model.details.tvshow.model.TvShowDetailsRemoteResponse
+import com.london.data.remote.model.details.tvshow.model.TvShowEpisode
+import com.london.data.remote.model.details.tvshow.model.TvShowGenre
+import com.london.data.remote.model.details.tvshow.model.TvShowNetwork
+import com.london.data.remote.model.details.tvshow.model.TvShowProductionCompany
+import com.london.data.remote.model.details.tvshow.model.TvShowProductionCountry
+import com.london.data.remote.model.details.tvshow.model.TvShowSeason
+import com.london.data.remote.model.details.tvshow.model.TvShowSpokenLanguage
 import com.london.data.utils.asImageUrlOrEmpty
 import com.london.data.utils.isTrue
 import com.london.data.utils.orZero
