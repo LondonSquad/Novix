@@ -7,5 +7,6 @@ import kotlinx.serialization.Serializable
 data class ProductionCountryRemote(
     @SerialName("iso_3166_1")
     val iso31661: String?,
+    @SerialName("name")
     val name: String?
 )
