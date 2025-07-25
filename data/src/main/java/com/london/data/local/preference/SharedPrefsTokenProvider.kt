@@ -1,5 +1,6 @@
-package com.london.data.datasource.common
+package com.london.data.local.preference
 
+import com.london.data.datasource.common.AuthPreferences
 import com.london.domain.repository.SessionTokenProvider
 import org.koin.core.annotation.Single
 

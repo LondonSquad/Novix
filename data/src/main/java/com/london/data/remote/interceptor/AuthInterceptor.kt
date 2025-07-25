@@ -1,4 +1,4 @@
-package com.london.data.datasource.common
+package com.london.data.remote.interceptor
 
 import com.london.domain.repository.SessionTokenProvider
 import okhttp3.Interceptor

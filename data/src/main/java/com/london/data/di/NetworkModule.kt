@@ -3,9 +3,9 @@ package com.london.data.di
 import android.content.Context
 import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory
 import com.london.data.BuildConfig
-import com.london.data.datasource.common.AuthInterceptor
+import com.london.data.remote.interceptor.AuthInterceptor
 import com.london.data.datasource.common.AuthPreferences
-import com.london.data.datasource.common.SharedPrefsTokenProvider
+import com.london.data.local.preference.SharedPrefsTokenProvider
 import com.london.data.datasource.remote.auth.api.AuthApiService
 import com.london.data.datasource.remote.details.actordetails.api.ActorDetailsApiService
 import com.london.data.datasource.remote.details.moviedetails.api.MovieDetailsApiService
