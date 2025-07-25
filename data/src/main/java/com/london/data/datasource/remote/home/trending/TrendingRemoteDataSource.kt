@@ -6,4 +6,5 @@ import com.london.data.datasource.remote.home.trending.model.TrendingTvShowListR
 interface TrendingRemoteDataSource {
     suspend fun getTrendingMovies(page: Int): TrendingMovieResponse
     suspend fun getTrendingTvShows(page: Int): TrendingTvShowListResponse
+    suspend fun getTrendingActors(page: Int): com.london.data.datasource.remote.home.trending.model.TrendingActorResponse
 }
