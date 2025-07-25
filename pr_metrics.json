@@ -6402,9 +6402,9 @@
     "week": "2025-W30",
     "status": "closed",
     "diff_stats": {
-      "additions": 335,
+      "additions": 389,
       "deletions": 448,
-      "changed_files": 24
+      "changed_files": 34
     }
   },
   {
