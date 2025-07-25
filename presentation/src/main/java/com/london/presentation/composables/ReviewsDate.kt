@@ -36,7 +36,7 @@ fun ReviewsDate(
         Text(
             text = date.toLocalizedNumbers(),
             style = NovixTheme.typography.label.small,
-            color = NovixTheme.colors.title
+            color = NovixTheme.colors.body
         )
     }
 }

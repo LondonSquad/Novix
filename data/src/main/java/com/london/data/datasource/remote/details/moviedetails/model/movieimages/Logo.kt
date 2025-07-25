@@ -16,5 +16,6 @@ data class Logo(
     val voteAverage: Double?,
     @SerialName("vote_count")
     val voteCount: Int?,
+    @SerialName("width")
     val width: Int?
 )

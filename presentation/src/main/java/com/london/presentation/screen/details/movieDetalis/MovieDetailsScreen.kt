@@ -78,6 +78,7 @@ import com.london.presentation.screen.reviews.MediaType
 import com.london.presentation.utils.Listen
 import com.london.presentation.utils.offsetLayout
 import com.london.presentation.utils.openUrl
+import com.london.presentation.utils.reverseDateFormat
 import org.koin.androidx.compose.koinViewModel
 
 @Composable
@@ -271,12 +272,12 @@ fun MovieDetailsContent(
                             ActorItem(
                                 actorName = actor.name,
                                 characterName = actor.characterName,
-                                imageRes = actor.avatarUrl,
+                                imageRes = actor.profilePicture,
                                 modifier = Modifier
                                     .defaultMinSize(minWidth = 296.dp)
                                     .clickable {
                                         movieDetailsContract.onActorClick(
-                                            actor.actorId
+                                            actor.id
                                         )
                                     }
                             )
@@ -305,15 +306,13 @@ fun MovieDetailsContent(
                     ) {
                         rowItems.forEachIndexed { _, movie ->
                             HomeCard(
-                                imageUrl = movie.image,
-                                isSaved = movie.isSaved,
-                                onSaveClick = {
-                                    // TODO
-                                },
+                                imageUrl = movie.backdropPath,
+                                isSaved = false,
+                                onSaveClick = {},
                                 modifier = Modifier
                                     .weight(1f)
                                     .clickable {
-                                        movieDetailsContract.onMovieClick(movie.movieId)
+                                        movieDetailsContract.onMovieClick(movie.id)
                                     }
                             )
                         }
@@ -389,7 +388,7 @@ private fun RatingAndMetaRow(
                 icon = drawable.calendar_03,
                 contentDesc = stringResource(calendar),
                 tint = NovixTheme.colors.body,
-                text = date,
+                text = reverseDateFormat(date),
                 textColor = NovixTheme.colors.body
             )
         }

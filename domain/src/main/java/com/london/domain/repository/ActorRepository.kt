@@ -6,8 +6,8 @@ import com.london.domain.entity.actordetails.actormovie.ActorMovieDetails
 import com.london.domain.entity.actordetails.actortvshow.ActorTvShowDetails
 
 interface ActorRepository {
-    suspend fun getActorDetailsById(actorId: Int): ActorDetails
-    suspend fun getActorMoviePicksById(actorId: Int): ActorMovieDetails
-    suspend fun getActorTvShowPicksById(actorId: Int): ActorTvShowDetails
-    suspend fun getActorImagesById(actorId: Int): ActorImageDetails
+    suspend fun getActorDetailsById(id: Int): ActorDetails
+    suspend fun getActorMoviePicksById(id: Int): ActorMovieDetails
+    suspend fun getActorTvShowPicksById(id: Int): ActorTvShowDetails
+    suspend fun getActorImagesById(id: Int): ActorImageDetails
 }

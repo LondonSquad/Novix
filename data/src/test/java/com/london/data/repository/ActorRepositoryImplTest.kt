@@ -1,15 +1,13 @@
 package com.london.data.repository
 
 import com.google.common.truth.Truth.assertThat
+import com.london.data.datasource.exception.NetworkException
 import com.london.data.datasource.remote.details.actordetails.ActorDetailsRemoteDataSource
 import com.london.data.datasource.remote.details.actordetails.model.ActorDetailsResponse
 import com.london.data.datasource.remote.details.actordetails.model.actorimage.ActorImageResponse
 import com.london.data.datasource.remote.details.actordetails.model.actormoviedetails.ActorMovieDetailsResponse
 import com.london.data.datasource.remote.details.actordetails.model.actortvshowdetails.ActorTvShowDetailsResponse
 import com.london.data.mapper.actordetails.toEntity
-import com.london.domain.ActorDetailsSearchFailedException
-import com.london.domain.GetCastByIdFailedException
-import com.london.domain.GetImagesByIdFailedException
 import com.london.domain.repository.ActorRepository
 import io.mockk.coEvery
 import io.mockk.mockk
@@ -31,7 +29,9 @@ class ActorRepositoryImplTest {
 
     @Test
     fun `getActorDetailsById returns expected result`() = runTest {
-        coEvery { remoteDataSource.getActorDetailsById(ACTOR_ID) } returns ActorDetailsRemoteMock
+        coEvery { remoteDataSource.getActorDetailsById(ACTOR_ID) } returns Result.success(
+            ActorDetailsRemoteMock
+        )
 
         val result = repository.getActorDetailsById(ACTOR_ID)
 
@@ -39,53 +39,34 @@ class ActorRepositoryImplTest {
     }
 
     @Test
-    fun `getActorDetailsById throws ActorDetailsSearchFailedException on failure`() = runTest {
-        coEvery { remoteDataSource.getActorDetailsById(ACTOR_ID) } throws RuntimeException()
-
-        assertThrows<ActorDetailsSearchFailedException> {
-            repository.getActorDetailsById(ACTOR_ID)
-        }
-    }
-
-    @Test
     fun `getActorMoviePicksById returns expected result`() = runTest {
-        coEvery { remoteDataSource.getActorMovieById(ACTOR_ID) } returns ActorMovieDetailsRemoteMock
+        coEvery { remoteDataSource.getActorMovieById(ACTOR_ID) } returns Result.success(
+            ActorMovieDetailsRemoteMock
+        )
 
         val result = repository.getActorMoviePicksById(ACTOR_ID)
 
         assertThat(result).isEqualTo(ActorMovieDetailsRemoteMock.toEntity())
     }
 
-    @Test
-    fun `getActorMoviePicksById throws GetCastByIdFailedException on failure`() = runTest {
-        coEvery { remoteDataSource.getActorMovieById(ACTOR_ID) } throws RuntimeException()
-
-        assertThrows<GetCastByIdFailedException> {
-            repository.getActorMoviePicksById(ACTOR_ID)
-        }
-    }
 
     @Test
     fun `getActorTvShowPicksById returns expected result`() = runTest {
-        coEvery { remoteDataSource.getActorTvShowById(ACTOR_ID) } returns ActorTvShowDetailsRemoteMock
+        coEvery { remoteDataSource.getActorTvShowById(ACTOR_ID) } returns Result.success(
+            ActorTvShowDetailsRemoteMock
+        )
 
         val result = repository.getActorTvShowPicksById(ACTOR_ID)
 
         assertThat(result).isEqualTo(ActorTvShowDetailsRemoteMock.toEntity())
     }
 
-    @Test
-    fun `getActorTvShowPicksById throws GetCastByIdFailedException on failure`() = runTest {
-        coEvery { remoteDataSource.getActorTvShowById(ACTOR_ID) } throws RuntimeException()
-
-        assertThrows<GetCastByIdFailedException> {
-            repository.getActorTvShowPicksById(ACTOR_ID)
-        }
-    }
 
     @Test
     fun `getActorImagesById returns expected result`() = runTest {
-        coEvery { remoteDataSource.getActorImagePath(ACTOR_ID) } returns ActorImageResponseMock
+        coEvery { remoteDataSource.getActorImagePath(ACTOR_ID) } returns Result.success(
+            ActorImageResponseMock
+        )
 
         val result = repository.getActorImagesById(ACTOR_ID)
 
@@ -93,13 +74,49 @@ class ActorRepositoryImplTest {
     }
 
     @Test
-    fun `getActorImagesById throws GetImagesByIdFailedException on failure`() = runTest {
-        coEvery { remoteDataSource.getActorImagePath(ACTOR_ID) } throws RuntimeException()
+    fun `getActorTvShowPicksById throws UnAuthorizedException on failure`() = runTest {
+        coEvery { remoteDataSource.getActorTvShowById(ACTOR_ID) } returns Result.failure(
+            NetworkException.UnAuthorizedException("unauthorized")
+        )
 
-        assertThrows<GetImagesByIdFailedException> {
+        assertThrows<NetworkException.UnAuthorizedException> {
+            repository.getActorTvShowPicksById(ACTOR_ID)
+        }
+    }
+
+    @Test
+    fun `getActorDetailsById throws HttpLockedException on failure`() = runTest {
+        coEvery { remoteDataSource.getActorDetailsById(ACTOR_ID) } returns Result.failure(
+            NetworkException.HttpLockedException("locked")
+        )
+
+        assertThrows<NetworkException.HttpLockedException> {
+            repository.getActorDetailsById(ACTOR_ID)
+        }
+    }
+
+    @Test
+    fun `getActorImagePath throws ValidationException on failure`() = runTest {
+        coEvery { remoteDataSource.getActorImagePath(ACTOR_ID) } returns Result.failure(
+            NetworkException.ValidationException("validation failed")
+        )
+
+        assertThrows<NetworkException.ValidationException> {
             repository.getActorImagesById(ACTOR_ID)
         }
     }
+
+    @Test
+    fun `getActorTvShowPicksById throws TimeoutException on failure`() = runTest {
+        coEvery { remoteDataSource.getActorMovieById(ACTOR_ID) } returns Result.failure(
+            NetworkException.TimeoutException("timeout")
+        )
+
+        assertThrows<NetworkException.TimeoutException> {
+            repository.getActorMoviePicksById(ACTOR_ID)
+        }
+    }
+
 
     private companion object {
         const val ACTOR_ID = 123

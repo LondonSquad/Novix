@@ -5,16 +5,16 @@ import com.london.domain.entity.Movie
 import com.london.domain.entity.TvShow
 import com.london.domain.entity.recent.RecentSearch
 import com.london.domain.entity.recent.RecentViewed
-import com.london.domain.usecase.AddToRecentSearchUseCase
-import com.london.domain.usecase.AddToRecentViewedUseCase
-import com.london.domain.usecase.ClearRecentSearchUseCase
-import com.london.domain.usecase.ClearRecentViewedUseCase
-import com.london.domain.usecase.DeleteRecentSearchUseCase
+import com.london.domain.usecase.recent.search.AddToRecentSearchUseCase
+import com.london.domain.usecase.recent.viewed.AddToRecentViewedUseCase
+import com.london.domain.usecase.recent.search.ClearRecentSearchUseCase
+import com.london.domain.usecase.recent.viewed.ClearRecentViewedUseCase
+import com.london.domain.usecase.recent.search.DeleteRecentSearchUseCase
 import com.london.domain.usecase.GetActorsUseCase
 import com.london.domain.usecase.GetGenreInterestCountsUseCase
 import com.london.domain.usecase.GetMoviesUseCase
-import com.london.domain.usecase.GetRecentSearchUseCase
-import com.london.domain.usecase.GetRecentViewedUseCase
+import com.london.domain.usecase.recent.search.GetRecentSearchUseCase
+import com.london.domain.usecase.recent.viewed.GetRecentViewedUseCase
 import com.london.domain.usecase.GetTvShowsUseCase
 import com.london.domain.usecase.IncrementGenreInterestUseCase
 import com.london.presentation.screen.base.BaseViewModel
@@ -100,8 +100,14 @@ class SearchViewModel(
     }
 
     override fun onSearchQueryChange(newValue: TextFieldValue) {
-        updateState { copy(searchQuery = newValue) }
-        _searchQuery.value = newValue.text
+        val limitedQuery = if (newValue.text.length > MAX_QUERY_SEARCH_LENGTH) {
+            newValue.copy(text = newValue.text.take(MAX_QUERY_SEARCH_LENGTH))
+        } else {
+            newValue
+        }
+
+        updateState { copy(searchQuery = limitedQuery) }
+        _searchQuery.value = limitedQuery.text
     }
 
     override fun onCategorySelected(category: SearchCategory) {
@@ -526,5 +532,9 @@ class SearchViewModel(
                 availableGenresWithNames = availableGenresWithNames
             )
         }
+    }
+
+    private companion object{
+        private const val MAX_QUERY_SEARCH_LENGTH = 30
     }
 }
