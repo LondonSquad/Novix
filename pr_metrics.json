@@ -6488,7 +6488,7 @@
   {
     "pr_number": 270,
     "url": "https://github.com/LondonSquad/Novix/pull/270",
-    "title": "refactor/movie-details: update movie details structure",
+    "title": "refactor/movie-details: add base remote data source",
     "opened_at": "2025-07-24T03:16:48Z",
     "head_ref": "refactor/add-base-remote-data-source-for-details",
     "base_ref": "develop",
@@ -6527,11 +6527,11 @@
     "time_to_first_approval_minutes": 2068.85,
     "required_approvals_met_at": "2025-07-25T13:49:06Z",
     "time_to_required_approvals_minutes": 2072.3,
-    "closed_at": "2025-07-24T06:17:45Z",
+    "closed_at": null,
     "merged_at": null,
     "merged_by": null,
     "week": "2025-W30",
-    "status": "closed",
+    "status": "approved",
     "diff_stats": {
       "additions": 908,
       "deletions": 513,
@@ -7013,12 +7013,20 @@
           "url": "https://github.com/marwanqashwa"
         },
         "submitted_at": "2025-07-24T22:52:00Z"
+      },
+      {
+        "reviewer": {
+          "id": 102248144,
+          "login": "BassantM",
+          "url": "https://github.com/BassantM"
+        },
+        "submitted_at": "2025-07-24T22:52:39Z"
       }
     ],
     "first_approved_at": "2025-07-24T22:52:00Z",
     "time_to_first_approval_minutes": 337.46666666666664,
-    "required_approvals_met_at": null,
-    "time_to_required_approvals_minutes": null,
+    "required_approvals_met_at": "2025-07-24T22:52:39Z",
+    "time_to_required_approvals_minutes": 338.1166666666667,
     "closed_at": "2025-07-24T22:52:40Z",
     "merged_at": "2025-07-24T22:52:40Z",
     "merged_by": {
@@ -7037,7 +7045,7 @@
   {
     "pr_number": 282,
     "url": "https://github.com/LondonSquad/Novix/pull/282",
-    "title": "feature/top-rated-ui",
+    "title": "feature/top-rated-ui-with-view-model",
     "opened_at": "2025-07-25T00:29:35Z",
     "head_ref": "feature/top-rated-ui",
     "base_ref": "develop",
@@ -7057,7 +7065,7 @@
     "week": "2025-W30",
     "status": "pending",
     "diff_stats": {
-      "additions": 1010,
+      "additions": 1026,
       "deletions": 570,
       "changed_files": 56
     }
@@ -7082,12 +7090,20 @@
           "url": "https://github.com/Abdulrahman1890"
         },
         "submitted_at": "2025-07-25T02:13:29Z"
+      },
+      {
+        "reviewer": {
+          "id": 154278495,
+          "login": "ahmeddsamii",
+          "url": "https://github.com/ahmeddsamii"
+        },
+        "submitted_at": "2025-07-25T05:42:14Z"
       }
     ],
     "first_approved_at": "2025-07-25T02:13:29Z",
     "time_to_first_approval_minutes": 48.3,
-    "required_approvals_met_at": null,
-    "time_to_required_approvals_minutes": null,
+    "required_approvals_met_at": "2025-07-25T05:42:14Z",
+    "time_to_required_approvals_minutes": 257.05,
     "closed_at": "2025-07-25T05:42:16Z",
     "merged_at": "2025-07-25T05:42:16Z",
     "merged_by": {
@@ -7123,12 +7139,20 @@
           "url": "https://github.com/ahmeddsamii"
         },
         "submitted_at": "2025-07-25T06:13:14Z"
+      },
+      {
+        "reviewer": {
+          "id": 180463542,
+          "login": "abdelrhman1002",
+          "url": "https://github.com/abdelrhman1002"
+        },
+        "submitted_at": "2025-07-25T06:43:19Z"
       }
     ],
     "first_approved_at": "2025-07-25T06:13:14Z",
     "time_to_first_approval_minutes": 230.96666666666667,
-    "required_approvals_met_at": null,
-    "time_to_required_approvals_minutes": null,
+    "required_approvals_met_at": "2025-07-25T06:43:19Z",
+    "time_to_required_approvals_minutes": 261.05,
     "closed_at": "2025-07-25T06:43:20Z",
     "merged_at": "2025-07-25T06:43:20Z",
     "merged_by": {
