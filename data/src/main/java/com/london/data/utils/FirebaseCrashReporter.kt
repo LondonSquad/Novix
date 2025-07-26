@@ -1,4 +1,4 @@
-package com.london.data.datasource.util
+package com.london.data.utils
 
 import com.google.firebase.crashlytics.FirebaseCrashlytics
 import org.koin.core.annotation.Single

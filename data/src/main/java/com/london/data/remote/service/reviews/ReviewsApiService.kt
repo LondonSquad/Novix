@@ -1,6 +1,6 @@
-package com.london.data.datasource.remote.reviews.api
+package com.london.data.remote.service.reviews
 
-import com.london.data.datasource.remote.ApiResponse
+import com.london.data.remote.model.ApiResponse
 import com.london.data.remote.model.reviews.model.ReviewResponse
 import retrofit2.Response
 import retrofit2.http.GET

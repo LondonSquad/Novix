@@ -14,6 +14,7 @@ import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.PagerState
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.TransformOrigin
@@ -30,6 +31,9 @@ import com.london.designsystem.component.Text
 import com.london.designsystem.theme.NovixTheme
 import com.london.presentation.R
 import com.london.presentation.composables.RatingItem
+import kotlinx.coroutines.currentCoroutineContext
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.isActive
 import kotlin.math.abs
 
 private const val CARD_WIDTH_DP = 244
@@ -79,6 +83,16 @@ fun PopularSection(
                 .padding(start = 16.dp, end = 16.dp,)
                 .align(Alignment.Start)
         )
+
+        LaunchedEffect(Unit) {
+            if (images.size > 1) {
+                while (currentCoroutineContext().isActive) {
+                    delay(4000)
+                    val nextPage = (pagerState.currentPage + 1) % images.size
+                    pagerState.animateScrollToPage(nextPage)
+                }
+            }
+        }
 
         HorizontalPager(
             state = pagerState,
