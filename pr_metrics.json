@@ -7175,7 +7175,7 @@
   {
     "pr_number": 285,
     "url": "https://github.com/LondonSquad/Novix/pull/285",
-    "title": "refactor/update-image-blue-feature",
+    "title": "refactor/update-image-blur-feature",
     "opened_at": "2025-07-25T15:33:48Z",
     "head_ref": "refactor/update-image-blue-feature",
     "base_ref": "develop",
