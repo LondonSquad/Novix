@@ -68,9 +68,9 @@ fun TrendingMoviesScreen(
 
 @Composable
 private fun TrendingMoviesContent(
-    state: TrendingMoviesUiState,
     screenWidth: Dp,
-    contract: TrendingMoviesContract
+    state: TrendingMoviesUiState = TrendingMoviesUiState(),
+    contract: TrendingMoviesContract = defaultTrendingMoviesContract()
 ) {
     Column(
         modifier = Modifier
@@ -83,13 +83,13 @@ private fun TrendingMoviesContent(
                 .fillMaxWidth()
                 .padding(horizontal = 16.dp, vertical = 12.dp),
             title = stringResource(R.string.trending_movies),
-            onBackClick = onBackClick
+            onBackClick = contract::onBackClick
         )
         GenresSection(
             genres = MovieGenre.entries.toList(),
             selectedGenreId = state.selectedGenreId,
             screenWidth = screenWidth,
-            onGenreClick = viewModel::onGenreSelected,
+            onGenreClick = contract::onGenreSelected,
             modifier = Modifier.padding(bottom = 12.dp),
             getGenreId = { it.id },
             getGenreName = { stringResource(it.stringResId) }
@@ -135,7 +135,7 @@ private fun TrendingMoviesContent(
                         imageUrl = movie.posterPath,
                         isSaved = false,
                         onSaveClick = {},
-                        modifier = Modifier.clickable { onMovieClick(movie.id) }
+                        modifier = Modifier.clickable { contract::onMovieClick(movie.id) }
                     )
                 }
             }

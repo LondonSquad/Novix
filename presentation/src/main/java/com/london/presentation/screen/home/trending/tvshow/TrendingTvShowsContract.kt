@@ -1,5 +1,7 @@
 package com.london.presentation.screen.home.trending.tvshow
 
+import com.london.presentation.utils.TvShowGenre
+
 interface TrendingTvShowsContract {
     fun onTvShowClick(id: Int)
     fun onBackClick()
