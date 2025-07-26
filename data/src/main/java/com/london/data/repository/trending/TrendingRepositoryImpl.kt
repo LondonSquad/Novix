@@ -2,6 +2,7 @@ package com.london.data.repository.trending
 
 import com.london.data.remote.source.home.trending.TrendingRemoteDataSource
 import com.london.data.mapper.trending.toActor
+import com.london.data.mapper.trending.toLocal
 import com.london.data.mapper.trending.toTrending
 import com.london.domain.entity.trending.Trending
 import com.london.domain.entity.PagedFetchResponse
@@ -17,9 +18,9 @@ class TrendingRepositoryImpl(
     suspend fun <T> Result<T?>.getNotNullOrElse(elseBlock: suspend () -> T): Result<T> =
         runCatching { getOrElse { elseBlock() } ?: elseBlock() }
 
-    suspend fun <T> fetchAndSync(
+    private suspend fun <T> fetchAndSync(
         networkBlock: suspend () -> T
-    ): T = runCatching { networkBlock() }.getOrThrow()
+    ): T = run { networkBlock() }
 
     override suspend fun getTrendingMovies(page: Int): PagedFetchResponse<Trending> {
         val response = fetchAndSync(

@@ -9,21 +9,18 @@ import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import androidx.paging.compose.collectAsLazyPagingItems
+import com.london.designsystem.component.CircularLoading
+import com.london.designsystem.component.EmptyLayout
 import com.london.designsystem.component.TopBar
 import com.london.designsystem.theme.NovixTheme
 import com.london.presentation.R
 import com.london.presentation.composables.ActorsLayout
-import com.london.presentation.utils.ResultOrEmpty
 import org.koin.androidx.compose.koinViewModel
-import androidx.paging.compose.collectAsLazyPagingItems
-import com.london.designsystem.component.EmptyLayout
-import com.london.designsystem.component.NovixLoader
-import androidx.compose.ui.Alignment
-import androidx.compose.ui.layout.wrapContentSize
-import com.london.designsystem.component.CircularLoading
 
 @Composable
 fun TrendingActorsScreen(
@@ -41,6 +38,7 @@ fun TrendingActorsScreen(
                 contract.onActorClick(currentEffect.actorId)
                 viewModel.resetEffect()
             }
+
             TrendingActorsEffect.NavigateBack -> {
                 contract.onBackClick()
                 viewModel.resetEffect()

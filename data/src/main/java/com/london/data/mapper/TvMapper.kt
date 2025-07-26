@@ -2,7 +2,7 @@ package com.london.data.mapper
 
 import com.london.data.local.model.search.SearchTvShowDtoLocal
 import com.london.data.local.model.search.SearchTvShowLocal
-import com.london.data.datasource.remote.ApiResponse
+import com.london.data.remote.model.ApiResponse
 import com.london.data.datasource.remote.search.model.SearchTvShowRemote
 import com.london.data.utils.asImageUrlOrEmpty
 import com.london.data.utils.generateHash

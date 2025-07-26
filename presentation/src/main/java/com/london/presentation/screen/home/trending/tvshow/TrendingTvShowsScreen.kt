@@ -26,7 +26,6 @@ import androidx.paging.compose.collectAsLazyPagingItems
 import com.london.designsystem.component.EmptyLayout
 import com.london.designsystem.component.HomeCard
 import com.london.designsystem.component.TopBar
-import com.london.designsystem.component.NovixLoader
 import com.london.designsystem.theme.NovixTheme
 import com.london.presentation.R
 import com.london.presentation.screen.home.trending.GenresSection

@@ -2,7 +2,7 @@
 package com.london.data.datasource.remote.search.api
 
 import com.london.data.remote.model.ApiConstants
-import com.london.data.datasource.remote.ApiResponse
+import com.london.data.remote.model.ApiResponse
 import com.london.data.datasource.remote.search.model.SearchActorRemote
 import com.london.data.datasource.remote.search.model.SearchMovieRemote
 import com.london.data.datasource.remote.search.model.SearchTvShowRemote

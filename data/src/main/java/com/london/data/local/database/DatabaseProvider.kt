@@ -13,7 +13,9 @@ object DatabaseProvider {
                 context.applicationContext,
                 NovixDatabase::class.java,
                 "NovixDatabase"
-            ).build()
+            )
+                .fallbackToDestructiveMigration(true)
+                .build()
             INSTANCE = instance
             instance
         }
