@@ -7390,5 +7390,33 @@
       "deletions": 91,
       "changed_files": 11
     }
+  },
+  {
+    "pr_number": 291,
+    "url": "https://github.com/LondonSquad/Novix/pull/291",
+    "title": "feat(lint): Add custom lint check for resource extensions",
+    "opened_at": "2025-07-26T23:29:55Z",
+    "head_ref": "feature/linting-rules",
+    "base_ref": "develop",
+    "creator": {
+      "login": "Al-Taie",
+      "id": 68463985,
+      "url": "https://github.com/Al-Taie"
+    },
+    "approvals": [],
+    "first_approved_at": null,
+    "time_to_first_approval_minutes": null,
+    "required_approvals_met_at": null,
+    "time_to_required_approvals_minutes": null,
+    "closed_at": null,
+    "merged_at": null,
+    "merged_by": null,
+    "week": "2025-W30",
+    "status": "pending",
+    "diff_stats": {
+      "additions": 187,
+      "deletions": 74,
+      "changed_files": 17
+    }
   }
 ]
