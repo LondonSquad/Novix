@@ -1,6 +1,7 @@
 package com.london.data.mapper.trending
 
 import com.london.data.remote.model.trending.TrendingResponse
+import com.london.data.remote.model.ApiResponse
 import com.london.domain.entity.trending.Trending
 import com.london.data.utils.orZero
 import com.london.data.utils.asImageUrlOrEmpty
@@ -17,4 +18,8 @@ fun TrendingResponse.toActor(): Actor = Actor(
     name = name ?: title ?: "",
     profilePicture = image.asImageUrlOrEmpty(),
     characterName = ""
-) 
+)
+
+fun ApiResponse<TrendingResponse>.toLocal(query: String): ApiResponse<TrendingResponse> {
+    return this
+} 

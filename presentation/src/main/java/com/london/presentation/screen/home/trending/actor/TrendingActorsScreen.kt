@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.statusBarsPadding
+import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
@@ -19,6 +20,10 @@ import com.london.presentation.utils.ResultOrEmpty
 import org.koin.androidx.compose.koinViewModel
 import androidx.paging.compose.collectAsLazyPagingItems
 import com.london.designsystem.component.EmptyLayout
+import com.london.designsystem.component.NovixLoader
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.layout.wrapContentSize
+import com.london.designsystem.component.CircularLoading
 
 @Composable
 fun TrendingActorsScreen(
@@ -56,23 +61,26 @@ fun TrendingActorsScreen(
             title = stringResource(R.string.trending_people),
             onBackClick = contract::onBackClick
         )
-        ResultOrEmpty(
-            items = actorsLazyList.itemSnapshotList.items,
-            emptyContent = {
-                if (!isLoading) {
-                    EmptyLayout(
-                        text = stringResource(R.string.no_trending_actors_in_genre),
-                        image = R.drawable.img_no_result,
-                        modifier = modifier.padding(horizontal = 16.dp)
-                    )
-                }
-            },
-            content = {
-                ActorsLayout(
-                    actorsUis = actorsLazyList,
-                    onActorClick = { contract.onActorClick(it.id) }
-                )
-            }
-        )
+        isLoading.takeIf { it }?.let {
+            CircularLoading(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .wrapContentSize(Alignment.Center)
+            )
+        }
+
+        (!isLoading).takeIf { it && actorsLazyList.itemSnapshotList.items.isNotEmpty() }?.let {
+            ActorsLayout(
+                actorsUis = actorsLazyList,
+                onActorClick = { contract.onActorClick(it.id) }
+            )
+        }
+
+        (!isLoading && actorsLazyList.itemSnapshotList.items.isEmpty()).takeIf { it }?.let {
+            EmptyLayout(
+                text = stringResource(R.string.no_trending_actors_in_genre),
+                image = R.drawable.img_no_result,
+            )
+        }
     }
 } 

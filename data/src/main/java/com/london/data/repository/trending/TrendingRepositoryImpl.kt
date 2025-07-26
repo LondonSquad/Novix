@@ -14,36 +14,55 @@ class TrendingRepositoryImpl(
     private val trendingRemoteDataSource: TrendingRemoteDataSource
 ) : TrendingRepository {
 
+    suspend fun <T> Result<T?>.getNotNullOrElse(elseBlock: suspend () -> T): Result<T> =
+        runCatching { getOrElse { elseBlock() } ?: elseBlock() }
+
+    suspend fun <T> fetchAndSync(
+        networkBlock: suspend () -> T
+    ): T = runCatching { networkBlock() }.getOrThrow()
+
     override suspend fun getTrendingMovies(page: Int): PagedFetchResponse<Trending> {
-        val response = trendingRemoteDataSource.getTrendingMovies(page)
-        val movies = response.results.map { it.toTrending() }
+        val response = fetchAndSync(
+            networkBlock = {
+                trendingRemoteDataSource.getTrendingMovies(page).body()?.toLocal(query = "") 
+                    ?: throw Exception("Empty response")
+            }
+        )
         return PagedFetchResponse(
-            currentPage = response.page,
-            items = movies,
+            currentPage = response.currentPage,
+            items = response.items.map { it.toTrending() },
             totalPages = response.totalPages,
-            totalItems = movies.size
+            totalItems = response.totalItems
         )
     }
 
     override suspend fun getTrendingTvShows(page: Int): PagedFetchResponse<Trending> {
-        val response = trendingRemoteDataSource.getTrendingTvShows(page)
-        val tvShows = response.results.map { it.toTrending() }
+        val response = fetchAndSync(
+            networkBlock = {
+                trendingRemoteDataSource.getTrendingTvShows(page).body()?.toLocal(query = "") 
+                    ?: throw Exception("Empty response")
+            }
+        )
         return PagedFetchResponse(
-            currentPage = response.page,
-            items = tvShows,
+            currentPage = response.currentPage,
+            items = response.items.map { it.toTrending() },
             totalPages = response.totalPages,
-            totalItems = tvShows.size
+            totalItems = response.totalItems
         )
     }
 
     override suspend fun getTrendingActors(page: Int): PagedFetchResponse<Actor> {
-        val response = trendingRemoteDataSource.getTrendingActors(page)
-        val actors = response.results.map { it.toActor() }
+        val response = fetchAndSync(
+            networkBlock = {
+                trendingRemoteDataSource.getTrendingActors(page).body()?.toLocal(query = "") 
+                    ?: throw Exception("Empty response")
+            }
+        )
         return PagedFetchResponse(
-            currentPage = response.page,
-            items = actors,
+            currentPage = response.currentPage,
+            items = response.items.map { it.toActor() },
             totalPages = response.totalPages,
-            totalItems = actors.size
+            totalItems = response.totalItems
         )
     }
 } 

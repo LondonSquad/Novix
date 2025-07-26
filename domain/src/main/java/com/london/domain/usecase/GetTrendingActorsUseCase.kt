@@ -10,5 +10,6 @@ import org.koin.core.annotation.Single
 class GetTrendingActorsUseCase(
     @Provided private val trendingRepository: TrendingRepository
 ) {
-    suspend operator fun invoke(page: Int): PagedFetchResponse<Actor> = trendingRepository.getTrendingActors(page)
+    suspend operator fun invoke(page: Int): PagedFetchResponse<Actor> =
+        trendingRepository.getTrendingActors(page)
 } 

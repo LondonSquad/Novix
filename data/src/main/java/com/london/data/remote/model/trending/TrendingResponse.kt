@@ -4,16 +4,6 @@ import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class TrendingRemote(
-    @SerialName("results")
-    val results: List<TrendingResponse>,
-    @SerialName("page")
-    val page: Int,
-    @SerialName("total_pages")
-    val totalPages: Int
-)
-
-@Serializable
 data class TrendingResponse(
     @SerialName("id")
     val id: Int,

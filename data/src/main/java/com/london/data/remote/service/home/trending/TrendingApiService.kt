@@ -1,18 +1,19 @@
 package com.london.data.remote.service.home.trending
 
-import com.london.data.remote.model.trending.TrendingRemote
+import com.london.data.remote.model.ApiConstants
+import com.london.data.remote.model.ApiResponse
+import com.london.data.remote.model.trending.TrendingResponse
+import retrofit2.Response
 import retrofit2.http.GET
 import retrofit2.http.Query
 
-import com.london.data.remote.model.ApiConstants
-
 interface TrendingApiService {
     @GET(ApiConstants.TRENDING_MOVIES_PATH)
-    suspend fun getTrendingMovies(@Query("page") page: Int): TrendingRemote
+    suspend fun getTrendingMovies(@Query("page") page: Int): Response<ApiResponse<TrendingResponse>>
 
     @GET(ApiConstants.TRENDING_TV_SHOWS_PATH)
-    suspend fun getTrendingTvShows(@Query("page") page: Int): TrendingRemote
+    suspend fun getTrendingTvShows(@Query("page") page: Int): Response<ApiResponse<TrendingResponse>>
 
     @GET(ApiConstants.TRENDING_ACTORS_PATH)
-    suspend fun getTrendingActors(@Query("page") page: Int): TrendingRemote
+    suspend fun getTrendingActors(@Query("page") page: Int): Response<ApiResponse<TrendingResponse>>
 }
