@@ -48,4 +48,5 @@ dependencies {
     debugImplementation(libs.bundles.compose.debug)
     androidTestImplementation(libs.bundles.base.testing)
     testImplementation(libs.bundles.testing)
+    lintChecks(projects.linting)
 }

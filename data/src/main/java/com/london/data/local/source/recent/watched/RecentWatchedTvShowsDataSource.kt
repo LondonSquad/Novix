@@ -2,9 +2,9 @@ package com.london.data.local.source.recent.watched
 
 import com.london.data.local.database.dao.recent.whatched.tvshow.RecentWatchedTvShowsDao
 import com.london.data.local.model.recent.watched.RecentWatchedTvShowLocal
+import org.koin.core.annotation.Named
 import org.koin.core.annotation.Provided
 import org.koin.core.annotation.Single
-import javax.inject.Named
 
 @Single
 @Named("recentWatchedTvShowsDataSource")

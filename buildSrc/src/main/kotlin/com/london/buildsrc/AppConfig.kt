@@ -8,8 +8,8 @@ object AppConfig {
 
     object Version {
         const val MIN_SDK = 26
-        const val TARGET_SDK = 34
-        const val COMPILE_SDK = 35
+        const val TARGET_SDK = 36
+        const val COMPILE_SDK = 36
         val JVM = JavaVersion.VERSION_17
         const val BUILD_TOOLS = "35.0.0"
     }
@@ -28,6 +28,8 @@ object AppConfig {
     }
 
     val freeCompilerArgs = listOf(
+        "-opt-in=kotlin.time.ExperimentalTime",
+        "-opt-in=kotlinx.serialization.ExperimentalSerializationApi",
         "-opt-in=androidx.compose.material3.ExperimentalMaterial3Api",
         "-opt-in=androidx.compose.foundation.layout.ExperimentalLayoutApi",
     )

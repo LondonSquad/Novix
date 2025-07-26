@@ -24,8 +24,9 @@ dependencyResolutionManagement {
 
 rootProject.name = "Novix"
 include(":app")
-include(":domain")
 include(":data")
+include(":domain")
+include(":linting")
 include(":presentation")
 include(":designSystem")
 include(":feature:ImageHaramBlur")
