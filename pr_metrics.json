@@ -7285,5 +7285,33 @@
       "deletions": 536,
       "changed_files": 195
     }
+  },
+  {
+    "pr_number": 287,
+    "url": "https://github.com/LondonSquad/Novix/pull/287",
+    "title": "feat: Implement auto-scroll for PopularSection image pager",
+    "opened_at": "2025-07-26T08:34:31Z",
+    "head_ref": "feature/popular-carousal-delay",
+    "base_ref": "develop",
+    "creator": {
+      "login": "ahmeddsamii",
+      "id": 154278495,
+      "url": "https://github.com/ahmeddsamii"
+    },
+    "approvals": [],
+    "first_approved_at": null,
+    "time_to_first_approval_minutes": null,
+    "required_approvals_met_at": null,
+    "time_to_required_approvals_minutes": null,
+    "closed_at": null,
+    "merged_at": null,
+    "merged_by": null,
+    "week": "2025-W30",
+    "status": "pending",
+    "diff_stats": {
+      "additions": 14,
+      "deletions": 0,
+      "changed_files": 1
+    }
   }
 ]
