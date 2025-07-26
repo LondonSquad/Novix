@@ -14,98 +14,105 @@ import java.nio.ByteOrder
 import kotlin.math.max
 import kotlin.math.min
 import androidx.core.graphics.scale
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.sync.Mutex
+import kotlinx.coroutines.sync.withLock
+import kotlinx.coroutines.withContext
 
 class FaceDetector(private val context: Context) {
 
-    private var interpreter: Interpreter? = null
-    private val imageProcessor: ImageProcessor
-
-    init {
-        loadModel()
-        imageProcessor = ImageProcessor.Builder()
-            .add(ResizeOp(INPUT_SIZE, INPUT_SIZE, ResizeOp.ResizeMethod.BILINEAR))
-            .add(NormalizeOp(127.5f, 127.5f))
-            .build()
-    }
-
-    private fun loadModel() {
+    // Thread-local interpreter instances
+    private val interpreterThreadLocal = ThreadLocal<Interpreter?>()
+    private val modelBuffer by lazy {
         try {
-            val modelBuffer = FileUtil.loadMappedFile(context, MODEL_FILE)
-            val options = Interpreter.Options().apply {
-                setNumThreads(4)
-            }
-
-            interpreter?.close()
-            interpreter = Interpreter(modelBuffer, options)
-
-        } catch (_: Exception) {}
-    }
-
-    fun detectFaces(bitmap: Bitmap): List<DetectedFace> {
-
-        val interpreter = this.interpreter
-        if (interpreter == null) {
-            return emptyList()
-        }
-
-        try {
-            val scaledBitmap = bitmap.scale(INPUT_SIZE, INPUT_SIZE)
-
-            val inputBuffer =
-                ByteBuffer.allocateDirect(1 * INPUT_SIZE * INPUT_SIZE * NUM_CHANNELS * 4)
-            inputBuffer.order(ByteOrder.nativeOrder())
-
-            val pixels = IntArray(INPUT_SIZE * INPUT_SIZE)
-            scaledBitmap.getPixels(pixels, 0, INPUT_SIZE, 0, 0, INPUT_SIZE, INPUT_SIZE)
-
-            for (pixel in pixels) {
-                val r = (pixel shr 16 and 0xFF)
-                val g = (pixel shr 8 and 0xFF)
-                val b = (pixel and 0xFF)
-
-                inputBuffer.putFloat((r - 127.5f) / 127.5f)
-                inputBuffer.putFloat((g - 127.5f) / 127.5f)
-                inputBuffer.putFloat((b - 127.5f) / 127.5f)
-            }
-
-            inputBuffer.rewind()
-
-            val regressionOutput = Array(1) { Array(NUM_ANCHORS) { FloatArray(16) } }
-            val classificationOutput = Array(1) { Array(NUM_ANCHORS) { FloatArray(1) } }
-
-            val outputs = mapOf(
-                0 to regressionOutput,
-                1 to classificationOutput
-            )
-
-            System.currentTimeMillis()
-
-            interpreter.runForMultipleInputsOutputs(
-                arrayOf(inputBuffer),
-                outputs
-            )
-
-            var maxScore = 0f
-            var scoreAboveThreshold = 0
-            for (i in 0 until NUM_ANCHORS) {
-                val score = sigmoid(classificationOutput[0][i][0])
-                if (score > maxScore) maxScore = score
-                if (score > CONFIDENCE_THRESHOLD) scoreAboveThreshold++
-            }
-
-            // Post-process results
-            val detections = postProcessResults(
-                regressionOutput[0],
-                classificationOutput[0],
-                bitmap.width,
-                bitmap.height
-            )
-
-            return detections
-
+            FileUtil.loadMappedFile(context, MODEL_FILE)
         } catch (e: Exception) {
-            e.printStackTrace()
-            return emptyList()
+            null
+        }
+    }
+
+    private val imageProcessor: ImageProcessor = ImageProcessor.Builder()
+        .add(ResizeOp(INPUT_SIZE, INPUT_SIZE, ResizeOp.ResizeMethod.BILINEAR))
+        .add(NormalizeOp(127.5f, 127.5f))
+        .build()
+
+    // Mutex for thread-safe access
+    private val interpreterLock = Mutex()
+
+    private fun getOrCreateInterpreter(): Interpreter? {
+        var interpreter = interpreterThreadLocal.get()
+        if (interpreter == null && modelBuffer != null) {
+            val options = Interpreter.Options().apply {
+                setNumThreads(1) // Each interpreter uses 1 thread
+            }
+            interpreter = Interpreter(modelBuffer!!, options)
+            interpreterThreadLocal.set(interpreter)
+        }
+        return interpreter
+    }
+
+    suspend fun detectFaces(bitmap: Bitmap): List<DetectedFace> = withContext(Dispatchers.IO) {
+        interpreterLock.withLock {
+            try {
+                val interpreter = getOrCreateInterpreter() ?: return@withContext emptyList()
+
+                val scaledBitmap = bitmap.scale(INPUT_SIZE, INPUT_SIZE)
+
+                val inputBuffer =
+                    ByteBuffer.allocateDirect(1 * INPUT_SIZE * INPUT_SIZE * NUM_CHANNELS * 4)
+                inputBuffer.order(ByteOrder.nativeOrder())
+
+                val pixels = IntArray(INPUT_SIZE * INPUT_SIZE)
+                scaledBitmap.getPixels(pixels, 0, INPUT_SIZE, 0, 0, INPUT_SIZE, INPUT_SIZE)
+
+                for (pixel in pixels) {
+                    val r = (pixel shr 16 and 0xFF)
+                    val g = (pixel shr 8 and 0xFF)
+                    val b = (pixel and 0xFF)
+
+                    inputBuffer.putFloat((r - 127.5f) / 127.5f)
+                    inputBuffer.putFloat((g - 127.5f) / 127.5f)
+                    inputBuffer.putFloat((b - 127.5f) / 127.5f)
+                }
+
+                inputBuffer.rewind()
+
+                val regressionOutput = Array(1) { Array(NUM_ANCHORS) { FloatArray(16) } }
+                val classificationOutput = Array(1) { Array(NUM_ANCHORS) { FloatArray(1) } }
+
+                val outputs = mapOf(
+                    0 to regressionOutput,
+                    1 to classificationOutput
+                )
+
+                // Thread-safe execution
+                interpreter.runForMultipleInputsOutputs(
+                    arrayOf(inputBuffer),
+                    outputs
+                )
+
+                var maxScore = 0f
+                var scoreAboveThreshold = 0
+                for (i in 0 until NUM_ANCHORS) {
+                    val score = sigmoid(classificationOutput[0][i][0])
+                    if (score > maxScore) maxScore = score
+                    if (score > CONFIDENCE_THRESHOLD) scoreAboveThreshold++
+                }
+
+                // Post-process results
+                val detections = postProcessResults(
+                    regressionOutput[0],
+                    classificationOutput[0],
+                    bitmap.width,
+                    bitmap.height
+                )
+
+                detections
+
+            } catch (e: Exception) {
+                e.printStackTrace()
+                emptyList()
+            }
         }
     }
 
@@ -242,8 +249,12 @@ class FaceDetector(private val context: Context) {
     private fun sigmoid(x: Float): Float = 1f / (1f + kotlin.math.exp(-x))
 
     fun close() {
-        interpreter?.close()
-        interpreter = null
+        try {
+            interpreterThreadLocal.get()?.close()
+            interpreterThreadLocal.remove()
+        } catch (e: Exception) {
+            // Ignore
+        }
     }
 
     private data class Anchor(
@@ -260,5 +271,4 @@ class FaceDetector(private val context: Context) {
         private const val NUM_ANCHORS = 896
         private const val NUM_CHANNELS = 3
     }
-
 }
