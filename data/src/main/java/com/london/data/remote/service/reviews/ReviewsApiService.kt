@@ -1,4 +1,4 @@
-package com.london.data.datasource.remote.reviews.api
+package com.london.data.remote.service.reviews
 
 import com.london.data.remote.model.ApiResponse
 import com.london.data.remote.model.reviews.model.ReviewResponse

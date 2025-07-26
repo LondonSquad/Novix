@@ -3,7 +3,7 @@ package com.london.data.mapper
 import com.london.data.local.model.search.SearchMovieDtoLocal
 import com.london.data.local.model.search.SearchMoviesLocal
 import com.london.data.remote.model.ApiResponse
-import com.london.data.datasource.remote.search.model.SearchMovieRemote
+import com.london.data.remote.model.search.model.SearchMovieRemote
 import com.london.data.utils.asImageUrlOrEmpty
 import com.london.data.utils.generateHash
 import com.london.data.utils.isTrue

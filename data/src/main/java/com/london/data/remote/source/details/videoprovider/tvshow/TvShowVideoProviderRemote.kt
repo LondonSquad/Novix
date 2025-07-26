@@ -1,4 +1,4 @@
-package com.london.data.datasource.remote.details.videoprovider.tvshow
+package com.london.data.remote.source.details.videoprovider.tvshow
 
 import com.london.data.remote.model.details.videoprovider.tvshow.model.TvShowVideoResponse
 

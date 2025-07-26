@@ -3,11 +3,11 @@
 package com.london.data.remote.source.search
 
 import com.london.data.remote.model.ApiResponse
-import com.london.data.datasource.remote.BaseRemoteDatasource
-import com.london.data.datasource.remote.search.api.SearchApiService
-import com.london.data.datasource.remote.search.model.SearchActorRemote
-import com.london.data.datasource.remote.search.model.SearchMovieRemote
-import com.london.data.datasource.remote.search.model.SearchTvShowRemote
+import com.london.data.remote.model.search.model.SearchActorRemote
+import com.london.data.remote.model.search.model.SearchMovieRemote
+import com.london.data.remote.model.search.model.SearchTvShowRemote
+import com.london.data.remote.service.search.SearchApiService
+import com.london.data.remote.source.base.BaseRemoteDatasource
 import com.london.data.utils.getCurrentDate
 import com.london.domain.KoverIgnore
 import org.koin.core.annotation.Single

@@ -1,7 +1,7 @@
 package com.london.data.repository
 
 import com.google.common.truth.Truth.assertThat
-import com.london.data.datasource.local.LocalDataSource
+import com.london.data.local.source.LocalDataSource
 import com.london.data.remote.exception.NetworkException
 import com.london.data.local.database.dao.search.GenreInterestDao
 import com.london.data.local.model.search.GenreInterestEntity
@@ -12,9 +12,9 @@ import com.london.data.local.model.search.SearchMoviesLocal
 import com.london.data.local.model.search.SearchTvShowLocal
 import com.london.data.remote.model.ApiResponse
 import com.london.data.remote.source.search.SearchRemoteDataSource
-import com.london.data.datasource.remote.search.model.SearchMovieRemote
-import com.london.data.datasource.remote.search.model.SearchTvShowRemote
-import com.london.data.datasource.util.CrashReporter
+import com.london.data.remote.model.search.model.SearchMovieRemote
+import com.london.data.remote.model.search.model.SearchTvShowRemote
+import com.london.data.utils.CrashReporter
 import com.london.domain.entity.Actor
 import com.london.domain.entity.Movie
 import com.london.domain.entity.PagedFetchResponse

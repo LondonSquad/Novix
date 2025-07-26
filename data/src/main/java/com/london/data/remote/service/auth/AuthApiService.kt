@@ -1,4 +1,4 @@
-package com.london.data.datasource.remote.auth.api
+package com.london.data.remote.service.auth
 
 import com.london.data.remote.model.auth.model.DeleteSessionResponse
 import com.london.data.remote.model.auth.model.GuestSessionResponse

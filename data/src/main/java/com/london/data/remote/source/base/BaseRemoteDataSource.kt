@@ -1,4 +1,4 @@
-package com.london.data.datasource.remote
+package com.london.data.remote.source.base
 
 import com.london.data.remote.exception.NetworkException
 import com.london.data.remote.exception.UnProcessableEntityException

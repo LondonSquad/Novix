@@ -1,11 +1,11 @@
 @file:KoverIgnore
-package com.london.data.datasource.remote.search.api
+package com.london.data.remote.service.search
 
 import com.london.data.remote.model.ApiConstants
 import com.london.data.remote.model.ApiResponse
-import com.london.data.datasource.remote.search.model.SearchActorRemote
-import com.london.data.datasource.remote.search.model.SearchMovieRemote
-import com.london.data.datasource.remote.search.model.SearchTvShowRemote
+import com.london.data.remote.model.search.model.SearchActorRemote
+import com.london.data.remote.model.search.model.SearchMovieRemote
+import com.london.data.remote.model.search.model.SearchTvShowRemote
 import com.london.domain.KoverIgnore
 import retrofit2.Response
 import retrofit2.http.GET

@@ -1,6 +1,6 @@
 package com.london.data.local.source.search
 
-import com.london.data.datasource.local.LocalDataSource
+import com.london.data.local.source.LocalDataSource
 import com.london.data.local.database.dao.search.SearchMoviesDao
 import com.london.data.local.model.search.SearchMoviesLocal
 import com.london.data.local.utils.executeDelete
@@ -10,7 +10,6 @@ import com.london.data.local.utils.executeGetByQuery
 import com.london.data.local.utils.executeGetByQueryAndPage
 import com.london.data.local.utils.executeInsert
 import com.london.data.local.utils.executeUpdate
-import com.london.data.utils.generateHash
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch

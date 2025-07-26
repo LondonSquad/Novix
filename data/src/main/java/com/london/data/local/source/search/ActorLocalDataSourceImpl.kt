@@ -1,6 +1,6 @@
 package com.london.data.local.source.search
 
-import com.london.data.datasource.local.LocalDataSource
+import com.london.data.local.source.LocalDataSource
 import com.london.data.local.database.dao.search.SearchActorsDao
 import com.london.data.local.model.search.SearchActorsLocal
 import com.london.data.local.utils.executeDelete

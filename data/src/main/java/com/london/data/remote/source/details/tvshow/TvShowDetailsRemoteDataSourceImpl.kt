@@ -1,12 +1,12 @@
 package com.london.data.remote.source.details.tvshow
 
-import com.london.data.datasource.remote.BaseRemoteDatasource
-import com.london.data.datasource.remote.details.tvshowdetails.api.TvShowDetailsApiService
 import com.london.data.remote.model.details.tvshow.model.TvShowCastRemoteResponse
 import com.london.data.remote.model.details.tvshow.model.TvShowDetailsRemoteResponse
 import com.london.data.remote.model.details.tvshow.model.TvShowImagesRemoteResponse
 import com.london.data.remote.model.details.tvshow.model.tvshowepisode.TvShowEpisodeResponse
 import com.london.data.remote.model.details.tvshow.model.tvshowepisode.TvShowEpisodesRemoteResponse
+import com.london.data.remote.service.details.tvshow.TvShowDetailsApiService
+import com.london.data.remote.source.base.BaseRemoteDatasource
 import org.koin.core.annotation.Single
 
 @Single
