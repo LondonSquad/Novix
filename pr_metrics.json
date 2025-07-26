@@ -7325,5 +7325,33 @@
       "deletions": 138,
       "changed_files": 69
     }
+  },
+  {
+    "pr_number": 289,
+    "url": "https://github.com/LondonSquad/Novix/pull/289",
+    "title": "Trending Feature",
+    "opened_at": "2025-07-26T14:42:37Z",
+    "head_ref": "feature/trending-feature",
+    "base_ref": "develop",
+    "creator": {
+      "login": "AsmaaKhaledGomaa",
+      "id": 117874933,
+      "url": "https://github.com/AsmaaKhaledGomaa"
+    },
+    "approvals": [],
+    "first_approved_at": null,
+    "time_to_first_approval_minutes": null,
+    "required_approvals_met_at": null,
+    "time_to_required_approvals_minutes": null,
+    "closed_at": null,
+    "merged_at": null,
+    "merged_by": null,
+    "week": "2025-W30",
+    "status": "pending",
+    "diff_stats": {
+      "additions": 1396,
+      "deletions": 75,
+      "changed_files": 61
+    }
   }
 ]
