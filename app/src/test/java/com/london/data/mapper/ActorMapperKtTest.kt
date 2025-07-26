@@ -7,7 +7,7 @@ import com.london.data.local.model.search.SearchActorsLocal
 import com.london.data.remote.model.ApiResponse
 import com.london.data.remote.model.search.model.KnownFor
 import com.london.data.remote.model.search.model.SearchActorRemote
-import com.london.data.datasource.util.generateHash
+import com.london.data.utils.generateHash
 import com.london.domain.entity.Actor
 import org.junit.Test
 
