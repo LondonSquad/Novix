@@ -1,10 +1,10 @@
-package com.london.data.datasource.remote.home.popular
+package com.london.data.remote.source.home
 
-import com.london.data.datasource.remote.ApiResponse
-import com.london.data.datasource.remote.BaseRemoteDatasource
-import com.london.data.datasource.remote.home.popular.api.PopularApiService
+import com.london.data.remote.model.ApiResponse
 import com.london.data.remote.model.home.model.PopularMovieResponse
 import com.london.data.remote.model.home.model.PopularTvShowResponse
+import com.london.data.remote.service.home.PopularApiService
+import com.london.data.remote.source.base.BaseRemoteDatasource
 import org.koin.core.annotation.Single
 
 @Single
