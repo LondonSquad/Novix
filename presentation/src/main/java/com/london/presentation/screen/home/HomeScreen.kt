@@ -212,6 +212,7 @@ private fun LazyGridScope.upComingSection(
             text = stringResource(R.string.upcoming),
             style = NovixTheme.typography.headline.small,
             color = NovixTheme.colors.title,
+            modifier = Modifier.padding(bottom = 4.dp)
         )
     }
 
@@ -231,7 +232,10 @@ private fun LazyGridScope.upComingSection(
                 imageUrl = movie.posterPicture,
                 isSaved = false,
                 onSaveClick = { /*TODO: SAVE FUNCTIONALITY IS NOT IMPLEMENTED .*/ },
-                modifier = Modifier.clickable { contract.onMovieClick(movie.id) })
+                modifier = Modifier
+                    .clickable { contract.onMovieClick(movie.id) }
+                    .padding(top = 4.dp)
+            )
     }
 }
 
