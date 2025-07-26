@@ -31,15 +31,15 @@ import com.london.presentation.navigation.Screen.Categories
 import com.london.presentation.navigation.Screen.EpisodeDetails
 import com.london.presentation.navigation.Screen.Home
 import com.london.presentation.navigation.Screen.Login
-import com.london.presentation.navigation.Screen.Splash
-import com.london.presentation.navigation.Screen.OnboardingPager
-import com.london.presentation.navigation.Screen.Welcome
 import com.london.presentation.navigation.Screen.MovieDetails
 import com.london.presentation.navigation.Screen.MoviesByCategory
+import com.london.presentation.navigation.Screen.OnboardingPager
 import com.london.presentation.navigation.Screen.Reviews
 import com.london.presentation.navigation.Screen.Search
+import com.london.presentation.navigation.Screen.Splash
 import com.london.presentation.navigation.Screen.TopTvShowsPicksDetails
 import com.london.presentation.navigation.Screen.TvShowDetails
+import com.london.presentation.navigation.Screen.Welcome
 import com.london.presentation.screen.account.AccountScreen
 import com.london.presentation.screen.bookmark.BookmarksScreen
 import com.london.presentation.screen.category.CategoriesScreen
@@ -104,9 +104,37 @@ fun NovixApp(appPreferencesService: AppPreferencesService) {
     ) { innerPadding ->
         NavHost(
             navController = navController,
-            startDestination = Screen.Splash,
+            startDestination = Splash,
             modifier = Modifier.padding(innerPadding)
         ) {
+
+            composable<Splash> {
+                SplashRoute(
+                    onNavigateToOnboarding = { navController.navigate(OnboardingPager) },
+                    onNavigateToWelcome = { navController.navigate(Welcome) },
+                    onNavigateToHome = { navController.navigate(Home) },
+                    appPreferencesService = appPreferencesService,
+                    authRepository = getKoin().get(),
+                )
+            }
+
+            composable<OnboardingPager> {
+                OnboardingRoute(
+                    onNavigateToWelcome = { navController.navigate(Welcome) },
+                    appPreferencesService = appPreferencesService
+                )
+            }
+
+            composable<Welcome> {
+                WelcomeScreen(
+                    onLoginClicked = {
+                        navController.navigate(Login)
+                    },
+                    onContinueClicked = {
+                        navController.navigate(Home)
+                    }
+                )
+            }
 
             composable<Login>(
                 exitTransition = { fadeOut(tween(500)) },
@@ -138,9 +166,9 @@ fun NovixApp(appPreferencesService: AppPreferencesService) {
                         navController.navigate(MovieDetails(movieId))
                     },
 
-                   onTvShowClick = { tvShowId ->
+                    onTvShowClick = { tvShowId ->
                         navController.navigate(TvShowDetails(tvShowId))
-                   }
+                    }
                 )
             }
 
@@ -232,6 +260,7 @@ fun NovixApp(appPreferencesService: AppPreferencesService) {
                     }
                 )
             }
+
             composable<ActorTopMoviesPicksDetails> {
                 TopMoviesPicksScreen(
                     onBackClick = {
@@ -325,44 +354,17 @@ fun NovixApp(appPreferencesService: AppPreferencesService) {
                     }
                 )
             }
+
             composable<Screen.ActorGallery> {
                 ActorGalleryScreen(
                     onBackClick = { navController.popBackStack() }
                 )
             }
 
-           composable<Splash> {
-                SplashRoute(
-                    onNavigateToOnboarding = { navController.navigate(Screen.OnboardingPager) },
-                    onNavigateToWelcome = { navController.navigate(Screen.Welcome) },
-                    onNavigateToHome = { navController.navigate(Home) },
-                    appPreferencesService = appPreferencesService,
-                    authRepository = getKoin().get(),
-                )
-            }
-
-            composable<OnboardingPager> {
-                OnboardingRoute(
-                    onNavigateToWelcome = { navController.navigate(Screen.Welcome) },
-                    appPreferencesService = appPreferencesService
-                )
-            }
-
-            composable<Welcome> {
-                WelcomeScreen(
-                    onLoginClicked = {
-                        navController.navigate(Login)
-                    },
-                    onContinueClicked = {
-                        navController.navigate(Home)
-                    }
-                )
-            }
-
             composable<Login> {
                 LoginScreen(
                     onNavigateBack = {
-                        navController.navigate(Screen.Welcome)
+                        navController.navigate(Welcome)
                     },
                     onNavigateToHome = {
                         navController.navigate(Home)

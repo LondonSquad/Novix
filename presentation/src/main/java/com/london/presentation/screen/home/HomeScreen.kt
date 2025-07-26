@@ -118,8 +118,8 @@ private fun Content(
             verticalArrangement = Arrangement.spacedBy(12.dp),
             modifier = modifier
                 .background(color = NovixTheme.colors.surface)
-        .padding(top = 16.dp)
-    ) {
+                .padding(top = 16.dp)
+        ) {
 
             stickyHeader {
                 DefaultTopBar(
@@ -171,7 +171,7 @@ private fun Content(
             }
 
             item(span = { GridItemSpan(maxLineSpan) }) {
-                TrendingSection()
+                TrendingSection(modifier = Modifier.padding(top = 8.dp))
             }
 
             upComingSection(
