@@ -1,4 +1,4 @@
-package com.london.data.datasource.remote.details.tvshowdetails.api
+package com.london.data.remote.service.details.tvshow
 
 
 import com.london.data.remote.model.details.tvshow.model.TvShowCastRemoteResponse

@@ -1,4 +1,4 @@
-package com.london.data.datasource.local
+package com.london.data.local.source
 
 import java.security.MessageDigest
 

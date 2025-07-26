@@ -2,7 +2,7 @@ package com.london.data.repository
 
 import com.google.common.truth.Truth.assertThat
 import com.london.data.remote.exception.NetworkException
-import com.london.data.datasource.remote.details.videoprovider.tvshow.TvShowVideoProviderRemote
+import com.london.data.remote.source.details.videoprovider.tvshow.TvShowVideoProviderRemote
 import com.london.data.mapper.videoprovider.tvshow.toTvShowVideo
 import com.london.data.remote.model.details.videoprovider.tvshow.model.TvShowVideoRemote
 import com.london.data.remote.model.details.videoprovider.tvshow.model.TvShowVideoResponse

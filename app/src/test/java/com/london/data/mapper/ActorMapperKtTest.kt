@@ -4,9 +4,9 @@ import com.google.common.truth.Truth.assertThat
 import com.london.data.local.model.search.KnownForDtoLocal
 import com.london.data.local.model.search.PersonDtoLocal
 import com.london.data.local.model.search.SearchActorsLocal
-import com.london.data.datasource.remote.ApiResponse
-import com.london.data.datasource.remote.search.model.KnownFor
-import com.london.data.datasource.remote.search.model.SearchActorRemote
+import com.london.data.remote.model.ApiResponse
+import com.london.data.remote.model.search.model.KnownFor
+import com.london.data.remote.model.search.model.SearchActorRemote
 import com.london.data.datasource.util.generateHash
 import com.london.domain.entity.Actor
 import org.junit.Test

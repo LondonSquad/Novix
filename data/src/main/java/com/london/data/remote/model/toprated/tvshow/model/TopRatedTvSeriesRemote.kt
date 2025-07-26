@@ -1,4 +1,4 @@
-package com.london.data.datasource.remote.toprated.tvseries.model
+package com.london.data.remote.model.toprated.tvshow.model
 
 
 import kotlinx.serialization.SerialName

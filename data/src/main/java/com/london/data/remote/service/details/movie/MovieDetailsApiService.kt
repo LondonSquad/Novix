@@ -1,4 +1,4 @@
-package com.london.data.datasource.remote.details.moviedetails.api
+package com.london.data.remote.service.details.movie
 
 
 import com.london.data.remote.model.details.movie.model.moviecast.MovieCastResponse
