@@ -1,24 +1,16 @@
 package com.london.presentation.screen.home.trending.actor
 
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.paging.cachedIn
 import com.london.domain.usecase.GetTrendingActorsUseCase
+import com.london.presentation.screen.base.BaseViewModel
 import com.london.presentation.screen.base.createPagingSourceFlow
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.asStateFlow
 import org.koin.android.annotation.KoinViewModel
 
 @KoinViewModel
 class TrendingActorsViewModel(
     private val getTrendingActors: GetTrendingActorsUseCase,
-) : ViewModel() {
-    private val _state = MutableStateFlow(TrendingActorsUiState())
-    val state: StateFlow<TrendingActorsUiState> = _state
-
-    private val _effect = MutableStateFlow<TrendingActorsEffect?>(null)
-    val effect: StateFlow<TrendingActorsEffect?> = _effect.asStateFlow()
+) : BaseViewModel<TrendingActorsUiState, TrendingActorsEffect>(TrendingActorsUiState()), TrendingActorsContract {
 
     init {
         fetchTrendingActors()
@@ -28,18 +20,10 @@ class TrendingActorsViewModel(
         val actorsFlow = createPagingSourceFlow("") { _, pageNumber ->
             getTrendingActors.invoke(pageNumber)
         }.cachedIn(viewModelScope)
-        _state.value = _state.value.copy(actorsFlow = actorsFlow, isLoading = false)
+        updateState { copy(actorsFlow = actorsFlow, isLoading = false) }
     }
 
-    fun onActorClick(actorId: Int) {
-        _effect.value = TrendingActorsEffect.NavigateToActor(actorId)
-    }
+    override fun onActorClick(id: Int) = emitEffect(TrendingActorsEffect.NavigateToActor(id))
 
-    fun onBackClick() {
-        _effect.value = TrendingActorsEffect.NavigateBack
-    }
-
-    fun resetEffect() {
-        _effect.value = null
-    }
-} 
+    override fun onBackClick() = emitEffect(TrendingActorsEffect.NavigateBack)
+}

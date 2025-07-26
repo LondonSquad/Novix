@@ -16,6 +16,7 @@ import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.takeWhile
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import timber.log.Timber
 import java.net.ConnectException
@@ -27,10 +28,10 @@ import kotlin.coroutines.EmptyCoroutineContext
 
 abstract class BaseViewModel<S, E : Any>(initState: S) : ViewModel() {
     private val _state = MutableStateFlow(initState)
-    open val state = _state.asStateFlow()
+    val state = _state.asStateFlow()
 
     private val _effect = MutableSharedFlow<E?>()
-    open val effect = _effect.asSharedFlow()
+    val effect = _effect.asSharedFlow()
 
     protected fun <T> tryToExecute(
         block: suspend () -> T,
@@ -100,15 +101,6 @@ abstract class BaseViewModel<S, E : Any>(initState: S) : ViewModel() {
         viewModelScope.launch(Dispatchers.IO) {
             _effect.emit(newEffect)
             Timber.i("Effect -> ${newEffect::class.simpleName}")
-        }
-    }
-
-    private inline fun <T> MutableStateFlow<T>.update(block: T.() -> T) {
-        while (true) {
-            val prevValue = value
-            val nextValue = block(prevValue)
-            if (compareAndSet(prevValue, nextValue))
-                return
         }
     }
 

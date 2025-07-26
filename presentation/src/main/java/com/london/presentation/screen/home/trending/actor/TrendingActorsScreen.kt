@@ -9,10 +9,14 @@ import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.paging.LoadState
 import androidx.paging.compose.collectAsLazyPagingItems
 import com.london.designsystem.component.CircularLoading
 import com.london.designsystem.component.EmptyLayout
@@ -29,20 +33,13 @@ fun TrendingActorsScreen(
     onBackClick: () -> Unit,
     viewModel: TrendingActorsViewModel = koinViewModel()
 ) {
-    val state = viewModel.state.collectAsState().value
-    val effect = viewModel.effect.collectAsState().value
+    val state by viewModel.state.collectAsStateWithLifecycle()
+    val effect by viewModel.effect.collectAsState(null)
 
     effect?.Listen { currentEffect ->
         when (currentEffect) {
-            is TrendingActorsEffect.NavigateToActor -> {
-                onActorClick(currentEffect.actorId)
-                viewModel.resetEffect()
-            }
-
-            is TrendingActorsEffect.NavigateBack -> {
-                onBackClick()
-                viewModel.resetEffect()
-            }
+            is TrendingActorsEffect.NavigateToActor -> onActorClick(currentEffect.actorId)
+            is TrendingActorsEffect.NavigateBack -> onBackClick()
         }
     }
 
@@ -54,11 +51,11 @@ fun TrendingActorsScreen(
 
 @Composable
 private fun TrendingActorsContent(
-    state: TrendingActorsUiState,
-    contract: TrendingActorsContract
+    state: TrendingActorsUiState = TrendingActorsUiState(),
+    contract: TrendingActorsContract = defaultTrendingActorsContract()
 ) {
     val actorsLazyList = state.actorsFlow.collectAsLazyPagingItems()
-    val isLoading = actorsLazyList.loadState.refresh is androidx.paging.LoadState.Loading
+    val isLoading = actorsLazyList.loadState.refresh is LoadState.Loading
 
     Column(
         modifier = Modifier
@@ -94,4 +91,10 @@ private fun TrendingActorsContent(
             )
         }
     }
-} 
+}
+
+@Preview
+@Composable
+private fun Preview() = NovixTheme {
+    TrendingActorsContent()
+}
