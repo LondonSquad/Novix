@@ -30,6 +30,7 @@ import com.london.designsystem.theme.NovixTheme
 import com.london.presentation.R
 import com.london.presentation.screen.home.GenresSection
 import com.london.presentation.utils.Listen
+import com.london.presentation.utils.MovieGenre
 import org.koin.androidx.compose.koinViewModel
 
 @Composable
@@ -68,7 +69,7 @@ fun TrendingMoviesScreen(
             onBackClick = contract::onBackClick
         )
         GenresSection(
-            genres = state.genres,
+            genres = MovieGenre.entries.toList(),
             selectedGenreId = state.selectedGenreId,
             screenWidth = screenWidth,
             onGenreClick = viewModel::onGenreSelected,
@@ -80,7 +81,7 @@ fun TrendingMoviesScreen(
             .filterNotNull()
             .filter { movie ->
                 state.selectedGenreId == null ||
-                state.selectedGenreId == com.london.presentation.utils.Genre.All.id ||
+                state.selectedGenreId == MovieGenre.All.id ||
                 movie.genreIds.contains(state.selectedGenreId)
             }
         val gridState = rememberLazyGridState()

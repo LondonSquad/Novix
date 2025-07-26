@@ -98,13 +98,14 @@ class HomeViewModel(
         }
     }
 
-    override fun onGenreSelect(genre: MovieGenre) {
-        if (genre == state.value.selectedGenre) return
-        updateState { copy(selectedGenre = genre) }
+    override fun onMovieGenreSelect(genre: MovieGenre) {
+        if (genre == state.value.selectedMovieGenre) return
+        updateState { copy(selectedMovieGenre = genre) }
         loadUpcomingMovies(categoryId = if (genre == MovieGenre.All) null else genre.id)
     }
 
     override fun onTrendingCardClicked(id: Int) {
         emitEffect(HomeScreenEffect.NavigationTrendingCard(id))
     }
+
 }

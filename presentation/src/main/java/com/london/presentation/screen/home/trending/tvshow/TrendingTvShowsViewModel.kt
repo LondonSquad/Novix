@@ -5,7 +5,7 @@ import androidx.lifecycle.viewModelScope
 import androidx.paging.cachedIn
 import com.london.domain.usecase.GetTrendingTvShowsUseCase
 import com.london.presentation.screen.base.createPagingSourceFlow
-import com.london.presentation.utils.Genre
+import com.london.presentation.utils.TvShowGenre
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -23,8 +23,7 @@ class TrendingTvShowsViewModel(
 
     init {
         _state.value = _state.value.copy(
-            genres = Genre.entries.toList(),
-            selectedGenreId = Genre.All.id
+            selectedGenreId = TvShowGenre.All.id
         )
         fetchTrendingTvShows()
     }
@@ -36,7 +35,7 @@ class TrendingTvShowsViewModel(
         _state.value = _state.value.copy(trendingTvShows = tvShowsFlow, isLoading = false)
     }
 
-    fun onGenreSelected(genre: Genre) {
+    fun onGenreSelected(genre: TvShowGenre) {
         _state.value = _state.value.copy(selectedGenreId = genre.id)
     }
 

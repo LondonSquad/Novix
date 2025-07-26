@@ -5,7 +5,7 @@ import androidx.lifecycle.viewModelScope
 import androidx.paging.cachedIn
 import com.london.domain.usecase.GetTrendingMoviesUseCase
 import com.london.presentation.screen.base.createPagingSourceFlow
-import com.london.presentation.utils.Genre
+import com.london.presentation.utils.MovieGenre
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -23,8 +23,7 @@ class TrendingMoviesViewModel(
 
     init {
         _state.value = _state.value.copy(
-            genres = Genre.entries.toList(),
-            selectedGenreId = Genre.All.id
+            selectedGenreId = MovieGenre.All.id
         )
         fetchTrendingMovies()
     }
@@ -36,7 +35,7 @@ class TrendingMoviesViewModel(
         _state.value = _state.value.copy(trendingMovies = moviesFlow, isLoading = false)
     }
 
-    fun onGenreSelected(genre: Genre) {
+    fun onGenreSelected(genre: MovieGenre) {
         _state.value = _state.value.copy(selectedGenreId = genre.id)
     }
 

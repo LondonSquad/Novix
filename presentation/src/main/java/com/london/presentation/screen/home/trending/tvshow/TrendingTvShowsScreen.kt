@@ -2,13 +2,20 @@ package com.london.presentation.screen.home.trending.tvshow
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.statusBarsPadding
+import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.rememberLazyGridState
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalConfiguration
@@ -23,6 +30,7 @@ import com.london.designsystem.theme.NovixTheme
 import com.london.presentation.R
 import com.london.presentation.screen.home.GenresSection
 import com.london.presentation.utils.Listen
+import com.london.presentation.utils.TvShowGenre
 import org.koin.androidx.compose.koinViewModel
 
 @Composable
@@ -40,6 +48,7 @@ fun TrendingTvShowsScreen(
                 contract.onTvShowClick(currentEffect.tvShowId)
                 viewModel.resetEffect()
             }
+
             TrendingTvShowsEffect.NavigateBack -> {
                 contract.onBackClick()
                 viewModel.resetEffect()
@@ -61,7 +70,7 @@ fun TrendingTvShowsScreen(
             onBackClick = contract::onBackClick
         )
         GenresSection(
-            genres = state.genres,
+            genres = TvShowGenre.entries.toList(),
             selectedGenreId = state.selectedGenreId,
             screenWidth = screenWidth,
             onGenreClick = viewModel::onGenreSelected,
@@ -73,8 +82,8 @@ fun TrendingTvShowsScreen(
             .filterNotNull()
             .filter { tvShow ->
                 state.selectedGenreId == null ||
-                state.selectedGenreId == com.london.presentation.utils.Genre.All.id ||
-                tvShow.genreIds.contains(state.selectedGenreId)
+                        state.selectedGenreId == TvShowGenre.All.id ||
+                        tvShow.genreIds.contains(state.selectedGenreId)
             }
 
         val gridState = rememberLazyGridState()

@@ -9,7 +9,6 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.requiredWidth
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.GridItemSpan
 import androidx.compose.foundation.lazy.grid.LazyGridScope
@@ -44,7 +43,6 @@ import com.london.presentation.screen.NetworkErrorScreen
 import com.london.presentation.screen.base.ErrorState
 import com.london.presentation.screen.home.trending.composable.TrendingSection
 import com.london.presentation.utils.Listen
-import com.london.presentation.utils.MovieGenre
 import org.koin.compose.viewmodel.koinViewModel
 
 @Composable
@@ -229,10 +227,10 @@ private fun LazyGridScope.upComingSection(
 
     item(span = { GridItemSpan(maxLineSpan) }) {
         GenresSection(
-            genres = state.genres,
-            selectedGenreId = state.selectedGenreId,
+            genres = state.movieGenres,
+            selectedGenreId = state.selectedMovieGenreId,
             screenWidth = screenWidth,
-            onGenreClick = { contract.onGenreSelect(it) }
+            onGenreClick = { contract.onMovieGenreSelect(it) }
         )
     }
 
@@ -245,26 +243,5 @@ private fun LazyGridScope.upComingSection(
                 isSaved = false,
                 onSaveClick = { /*TODO: SAVE FUNCTIONALITY IS NOT IMPLEMENTED .*/ },
                 modifier = Modifier.clickable { contract.onMovieClick(movie.id) })
-    }
-}
-
-@Composable
-private fun GenresSection(
-    contract: HomeScreenContract,
-    screenWidth: Dp,
-    state: HomeScreenUiState
-) {
-    LazyRow(
-        horizontalArrangement = Arrangement.spacedBy(8.dp),
-        contentPadding = PaddingValues(horizontal = 16.dp),
-        modifier = Modifier.requiredWidth(screenWidth)
-    ) {
-        items(MovieGenre.entries.toTypedArray()) { genre ->
-            NovixChip(
-                text = genre.name,
-                isSelected = (genre == state.selectedGenre),
-                onClick = { contract.onGenreSelect(genre) }
-            )
-        }
     }
 }
