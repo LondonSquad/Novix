@@ -21,6 +21,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.paging.compose.collectAsLazyPagingItems
 import com.london.designsystem.component.CircularLoading
@@ -50,6 +51,7 @@ fun TrendingTvShowsScreen(
                 onTvShowClick(currentEffect.tvShowId)
                 viewModel.resetEffect()
             }
+
             is TrendingTvShowsEffect.NavigateBack -> {
                 onBackClick()
                 viewModel.resetEffect()
@@ -59,20 +61,16 @@ fun TrendingTvShowsScreen(
 
     TrendingTvShowsContent(
         state = state,
-        onTvShowClick = onTvShowClick,
-        onBackClick = onBackClick,
-        screenWidth = screenWidth,
-        viewModel = viewModel
+        contract = viewModel,
+        screenWidth = screenWidth
     )
 }
 
 @Composable
-fun TrendingTvShowsContent(
+private fun TrendingTvShowsContent(
     state: TrendingTvShowsUiState,
-    onTvShowClick: (Int) -> Unit,
-    onBackClick: () -> Unit,
-    screenWidth: androidx.compose.ui.unit.Dp,
-    viewModel: TrendingTvShowsViewModel
+    contract: TrendingTvShowsContract,
+    screenWidth: Dp
 ) {
     val gridState = rememberLazyGridState()
 
@@ -91,13 +89,13 @@ fun TrendingTvShowsContent(
                 .fillMaxWidth()
                 .padding(horizontal = 16.dp, vertical = 12.dp),
             title = stringResource(R.string.trending_tv_shows),
-            onBackClick = onBackClick
+            onBackClick = contract::onBackClick
         )
         GenresSection(
             genres = TvShowGenre.entries.toList(),
             selectedGenreId = state.selectedGenreId,
             screenWidth = screenWidth,
-            onGenreClick = viewModel::onGenreSelected,
+            onGenreClick = contract::onGenreSelected,
             modifier = Modifier.padding(bottom = 12.dp),
             getGenreId = { it.id },
             getGenreName = { stringResource(it.stringResId) }
@@ -138,7 +136,7 @@ fun TrendingTvShowsContent(
                         imageUrl = tvShow.posterPath,
                         isSaved = false,
                         onSaveClick = {},
-                        modifier = Modifier.clickable { onTvShowClick(tvShow.id) }
+                        modifier = Modifier.clickable { contract::onTvShowClick }
                     )
                 }
             }

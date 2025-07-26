@@ -19,8 +19,8 @@ import com.london.designsystem.component.EmptyLayout
 import com.london.designsystem.component.TopBar
 import com.london.designsystem.theme.NovixTheme
 import com.london.presentation.R
-import com.london.presentation.utils.Listen
 import com.london.presentation.composables.ActorsLayout
+import com.london.presentation.utils.Listen
 import org.koin.androidx.compose.koinViewModel
 
 @Composable
@@ -38,6 +38,7 @@ fun TrendingActorsScreen(
                 onActorClick(currentEffect.actorId)
                 viewModel.resetEffect()
             }
+
             is TrendingActorsEffect.NavigateBack -> {
                 onBackClick()
                 viewModel.resetEffect()
@@ -47,18 +48,14 @@ fun TrendingActorsScreen(
 
     TrendingActorsContent(
         state = state,
-        onActorClick = onActorClick,
-        onBackClick = onBackClick,
-        viewModel = viewModel
+        contract = viewModel
     )
 }
 
 @Composable
-fun TrendingActorsContent(
+private fun TrendingActorsContent(
     state: TrendingActorsUiState,
-    onActorClick: (Int) -> Unit,
-    onBackClick: () -> Unit,
-    viewModel: TrendingActorsViewModel
+    contract: TrendingActorsContract
 ) {
     val actorsLazyList = state.actorsFlow.collectAsLazyPagingItems()
     val isLoading = actorsLazyList.loadState.refresh is androidx.paging.LoadState.Loading
@@ -74,7 +71,7 @@ fun TrendingActorsContent(
                 .fillMaxWidth()
                 .padding(horizontal = 16.dp, vertical = 12.dp),
             title = stringResource(R.string.trending_people),
-            onBackClick = onBackClick
+            onBackClick = contract::onBackClick
         )
         isLoading.takeIf { it }?.let {
             CircularLoading(
@@ -86,7 +83,14 @@ fun TrendingActorsContent(
         (!isLoading).takeIf { it }?.let {
             ActorsLayout(
                 actorsUis = actorsLazyList,
-                onActorClick = { onActorClick(it.id) }
+                onActorClick = { contract::onActorClick }
+            )
+        }
+
+        (!isLoading && actorsLazyList.itemSnapshotList.items.isEmpty()).takeIf { it }?.let {
+            EmptyLayout(
+                text = stringResource(R.string.no_trending_actors_in_genre),
+                image = R.drawable.img_no_result,
             )
         }
     }

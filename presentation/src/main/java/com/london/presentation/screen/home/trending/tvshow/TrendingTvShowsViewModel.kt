@@ -12,10 +12,9 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import org.koin.android.annotation.KoinViewModel
 
-@KoinViewModel
 class TrendingTvShowsViewModel(
     private val getTrendingTvShows: GetTrendingTvShowsUseCase,
-) : ViewModel() {
+) : ViewModel(), TrendingTvShowsContract {
     private val _state = MutableStateFlow(TrendingTvShowsUiState())
     val state: StateFlow<TrendingTvShowsUiState> = _state
 
@@ -38,7 +37,7 @@ class TrendingTvShowsViewModel(
         }
     }
 
-    fun onGenreSelected(genre: TvShowGenre) {
+    override fun onGenreSelected(genre: TvShowGenre) {
         if (genre.id == _state.value.selectedGenreId) return
         
         _state.value = _state.value.copy(selectedGenreId = genre.id)

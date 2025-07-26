@@ -21,6 +21,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.paging.compose.collectAsLazyPagingItems
 import com.london.designsystem.component.CircularLoading
@@ -44,13 +45,14 @@ fun TrendingMoviesScreen(
     val effect = viewModel.effect.collectAsState().value
     val screenWidth = with(LocalDensity.current) { LocalConfiguration.current.screenWidthDp.dp }
 
-    effect?.let { currentEffect ->
+    effect?.Listen { currentEffect ->
         when (currentEffect) {
             is TrendingMoviesEffect.NavigateToMovie -> {
                 onMovieClick(currentEffect.movieId)
                 viewModel.resetEffect()
             }
-            TrendingMoviesEffect.NavigateBack -> {
+
+            is TrendingMoviesEffect.NavigateBack -> {
                 onBackClick()
                 viewModel.resetEffect()
             }
@@ -59,20 +61,16 @@ fun TrendingMoviesScreen(
 
     TrendingMoviesContent(
         state = state,
-        onMovieClick = onMovieClick,
-        onBackClick = onBackClick,
         screenWidth = screenWidth,
-        viewModel = viewModel
+        contract = viewModel
     )
 }
 
 @Composable
-fun TrendingMoviesContent(
+private fun TrendingMoviesContent(
     state: TrendingMoviesUiState,
-    onMovieClick: (Int) -> Unit,
-    onBackClick: () -> Unit,
     screenWidth: Dp,
-    viewModel: TrendingMoviesViewModel
+    contract: TrendingMoviesContract
 ) {
     Column(
         modifier = Modifier
