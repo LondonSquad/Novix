@@ -1,4 +1,4 @@
-package com.london.data.datasource.remote.details.actordetails.api
+package com.london.data.remote.service.details.actor
 
 import com.london.data.remote.model.details.actor.model.ActorDetailsResponse
 import com.london.data.remote.model.details.actor.model.actorimage.ActorImageResponse

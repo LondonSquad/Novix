@@ -1,6 +1,6 @@
 package com.london.data.mapper
 
-import com.london.data.datasource.remote.ApiResponse
+import com.london.data.remote.model.ApiResponse
 import com.london.data.remote.model.reviews.model.AuthorDetailsResponse
 import com.london.data.remote.model.reviews.model.ReviewResponse
 import com.london.data.utils.asImageUrlOrEmpty

@@ -1,4 +1,4 @@
-package com.london.data.datasource.common
+package com.london.data.local.preference
 
 import android.content.SharedPreferences
 import androidx.core.content.edit

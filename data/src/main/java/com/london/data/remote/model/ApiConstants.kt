@@ -1,5 +1,5 @@
 @file:KoverIgnore
-package com.london.data.datasource.remote
+package com.london.data.remote.model
 
 import com.london.domain.KoverIgnore
 

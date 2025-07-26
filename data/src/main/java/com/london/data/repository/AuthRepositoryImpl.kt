@@ -1,7 +1,7 @@
 package com.london.data.repository
 
-import com.london.data.datasource.common.AuthPreferences
-import com.london.data.datasource.remote.auth.api.AuthApiService
+import com.london.data.local.preference.AuthPreferences
+import com.london.data.remote.service.auth.AuthApiService
 import com.london.data.remote.model.auth.model.LoginValidationRequestBody
 import com.london.data.remote.model.auth.model.Token
 import com.london.domain.repository.AuthRepository

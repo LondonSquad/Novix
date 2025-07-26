@@ -1,11 +1,11 @@
 package com.london.data.remote.source.details.actor
 
-import com.london.data.datasource.remote.BaseRemoteDatasource
-import com.london.data.datasource.remote.details.actordetails.api.ActorDetailsApiService
 import com.london.data.remote.model.details.actor.model.ActorDetailsResponse
 import com.london.data.remote.model.details.actor.model.actorimage.ActorImageResponse
 import com.london.data.remote.model.details.actor.model.actormoviedetails.ActorMovieDetailsResponse
 import com.london.data.remote.model.details.actor.model.actortvshowdetails.ActorTvShowDetailsResponse
+import com.london.data.remote.service.details.actor.ActorDetailsApiService
+import com.london.data.remote.source.base.BaseRemoteDatasource
 import org.koin.core.annotation.Single
 
 @Single
