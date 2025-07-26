@@ -15,9 +15,6 @@ class TrendingRepositoryImpl(
     private val trendingRemoteDataSource: TrendingRemoteDataSource
 ) : TrendingRepository {
 
-    suspend fun <T> Result<T?>.getNotNullOrElse(elseBlock: suspend () -> T): Result<T> =
-        runCatching { getOrElse { elseBlock() } ?: elseBlock() }
-
     private suspend fun <T> fetchAndSync(
         networkBlock: suspend () -> T
     ): T = run { networkBlock() }
