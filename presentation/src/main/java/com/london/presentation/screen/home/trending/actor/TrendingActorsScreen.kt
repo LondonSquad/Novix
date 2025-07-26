@@ -30,8 +30,6 @@ fun TrendingActorsScreen(
     viewModel: TrendingActorsViewModel = koinViewModel()
 ) {
     val state = viewModel.state.collectAsState().value
-    val actorsLazyList = state.actorsFlow.collectAsLazyPagingItems()
-    val isLoading = actorsLazyList.loadState.refresh is androidx.paging.LoadState.Loading
     val effect = viewModel.effect.collectAsState().value
 
     effect?.Listen { currentEffect ->
@@ -46,6 +44,24 @@ fun TrendingActorsScreen(
             }
         }
     }
+
+    TrendingActorsContent(
+        state = state,
+        onActorClick = onActorClick,
+        onBackClick = onBackClick,
+        viewModel = viewModel
+    )
+}
+
+@Composable
+fun TrendingActorsContent(
+    state: TrendingActorsUiState,
+    onActorClick: (Int) -> Unit,
+    onBackClick: () -> Unit,
+    viewModel: TrendingActorsViewModel
+) {
+    val actorsLazyList = state.actorsFlow.collectAsLazyPagingItems()
+    val isLoading = actorsLazyList.loadState.refresh is androidx.paging.LoadState.Loading
 
     Column(
         modifier = Modifier
@@ -67,18 +83,10 @@ fun TrendingActorsScreen(
                     .wrapContentSize(Alignment.Center)
             )
         }
-
-        (!isLoading).takeIf { it && actorsLazyList.itemSnapshotList.items.isNotEmpty() }?.let {
+        (!isLoading).takeIf { it }?.let {
             ActorsLayout(
                 actorsUis = actorsLazyList,
                 onActorClick = { onActorClick(it.id) }
-            )
-        }
-
-        (!isLoading && actorsLazyList.itemSnapshotList.items.isEmpty()).takeIf { it }?.let {
-            EmptyLayout(
-                text = stringResource(R.string.no_trending_actors_in_genre),
-                image = R.drawable.img_no_result,
             )
         }
     }

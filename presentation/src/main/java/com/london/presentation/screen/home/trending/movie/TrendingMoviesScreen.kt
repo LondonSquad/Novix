@@ -44,20 +44,36 @@ fun TrendingMoviesScreen(
     val effect = viewModel.effect.collectAsState().value
     val screenWidth = with(LocalDensity.current) { LocalConfiguration.current.screenWidthDp.dp }
 
-    effect?.Listen { currentEffect ->
+    effect?.let { currentEffect ->
         when (currentEffect) {
             is TrendingMoviesEffect.NavigateToMovie -> {
                 onMovieClick(currentEffect.movieId)
                 viewModel.resetEffect()
             }
-
-            is TrendingMoviesEffect.NavigateBack -> {
+            TrendingMoviesEffect.NavigateBack -> {
                 onBackClick()
                 viewModel.resetEffect()
             }
         }
     }
 
+    TrendingMoviesContent(
+        state = state,
+        onMovieClick = onMovieClick,
+        onBackClick = onBackClick,
+        screenWidth = screenWidth,
+        viewModel = viewModel
+    )
+}
+
+@Composable
+fun TrendingMoviesContent(
+    state: TrendingMoviesUiState,
+    onMovieClick: (Int) -> Unit,
+    onBackClick: () -> Unit,
+    screenWidth: Dp,
+    viewModel: TrendingMoviesViewModel
+) {
     Column(
         modifier = Modifier
             .fillMaxSize()

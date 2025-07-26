@@ -50,7 +50,6 @@ fun TrendingTvShowsScreen(
                 onTvShowClick(currentEffect.tvShowId)
                 viewModel.resetEffect()
             }
-
             is TrendingTvShowsEffect.NavigateBack -> {
                 onBackClick()
                 viewModel.resetEffect()
@@ -58,6 +57,23 @@ fun TrendingTvShowsScreen(
         }
     }
 
+    TrendingTvShowsContent(
+        state = state,
+        onTvShowClick = onTvShowClick,
+        onBackClick = onBackClick,
+        screenWidth = screenWidth,
+        viewModel = viewModel
+    )
+}
+
+@Composable
+fun TrendingTvShowsContent(
+    state: TrendingTvShowsUiState,
+    onTvShowClick: (Int) -> Unit,
+    onBackClick: () -> Unit,
+    screenWidth: androidx.compose.ui.unit.Dp,
+    viewModel: TrendingTvShowsViewModel
+) {
     val gridState = rememberLazyGridState()
 
     LaunchedEffect(state.selectedGenreId) {
