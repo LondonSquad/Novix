@@ -15,7 +15,6 @@ import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.rememberLazyGridState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -44,19 +43,17 @@ fun TrendingTvShowsScreen(
     viewModel: TrendingTvShowsViewModel = koinViewModel()
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
-    val effect by viewModel.effect.collectAsStateWithLifecycle()
+    val effect by viewModel.effect.collectAsStateWithLifecycle(null)
     val screenWidth = with(LocalDensity.current) { LocalConfiguration.current.screenWidthDp.dp }
 
     effect?.Listen { currentEffect ->
         when (currentEffect) {
             is TrendingTvShowsEffect.NavigateToTvShow -> {
                 onTvShowClick(currentEffect.tvShowId)
-                viewModel.resetEffect()
             }
 
             is TrendingTvShowsEffect.NavigateBack -> {
                 onBackClick()
-                viewModel.resetEffect()
             }
         }
     }
@@ -138,7 +135,7 @@ private fun TrendingTvShowsContent(
                         imageUrl = tvShow.posterPath,
                         isSaved = false,
                         onSaveClick = {},
-                        modifier = Modifier.clickable { contract::onTvShowClick }
+                        modifier = Modifier.clickable { contract.onTvShowClick(tvShow.id) }
                     )
                 }
             }

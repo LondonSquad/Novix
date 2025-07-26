@@ -16,6 +16,7 @@ import androidx.compose.foundation.lazy.grid.rememberLazyGridState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalConfiguration
@@ -23,6 +24,7 @@ import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.paging.compose.collectAsLazyPagingItems
 import com.london.designsystem.component.CircularLoading
 import com.london.designsystem.component.EmptyLayout
@@ -41,20 +43,18 @@ fun TrendingMoviesScreen(
     onBackClick: () -> Unit,
     viewModel: TrendingMoviesViewModel = koinViewModel()
 ) {
-    val state = viewModel.state.collectAsState().value
-    val effect = viewModel.effect.collectAsState().value
+    val state by viewModel.state.collectAsStateWithLifecycle()
+    val effect by viewModel.effect.collectAsStateWithLifecycle(null)
     val screenWidth = with(LocalDensity.current) { LocalConfiguration.current.screenWidthDp.dp }
 
     effect?.Listen { currentEffect ->
         when (currentEffect) {
             is TrendingMoviesEffect.NavigateToMovie -> {
                 onMovieClick(currentEffect.movieId)
-                viewModel.resetEffect()
             }
 
             is TrendingMoviesEffect.NavigateBack -> {
                 onBackClick()
-                viewModel.resetEffect()
             }
         }
     }
@@ -135,7 +135,7 @@ private fun TrendingMoviesContent(
                         imageUrl = movie.posterPath,
                         isSaved = false,
                         onSaveClick = {},
-                        modifier = Modifier.clickable { contract::onMovieClick(movie.id) }
+                        modifier = Modifier.clickable { contract.onMovieClick(movie.id) }
                     )
                 }
             }
