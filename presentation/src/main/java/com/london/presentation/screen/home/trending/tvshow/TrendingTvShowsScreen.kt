@@ -23,6 +23,7 @@ import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.paging.compose.collectAsLazyPagingItems
+import com.london.designsystem.component.CircularLoading
 import com.london.designsystem.component.EmptyLayout
 import com.london.designsystem.component.HomeCard
 import com.london.designsystem.component.TopBar
@@ -32,12 +33,12 @@ import com.london.presentation.screen.home.trending.GenresSection
 import com.london.presentation.utils.Listen
 import com.london.presentation.utils.TvShowGenre
 import org.koin.androidx.compose.koinViewModel
-import com.london.designsystem.component.CircularLoading
 
 @Composable
 fun TrendingTvShowsScreen(
-    viewModel: TrendingTvShowsViewModel = koinViewModel(),
-    contract: TrendingTvShowsContract
+    onTvShowClick: (Int) -> Unit,
+    onBackClick: () -> Unit,
+    viewModel: TrendingTvShowsViewModel = koinViewModel()
 ) {
     val state = viewModel.state.collectAsState().value
     val effect = viewModel.effect.collectAsState().value
@@ -46,12 +47,12 @@ fun TrendingTvShowsScreen(
     effect?.Listen { currentEffect ->
         when (currentEffect) {
             is TrendingTvShowsEffect.NavigateToTvShow -> {
-                contract.onTvShowClick(currentEffect.tvShowId)
+                onTvShowClick(currentEffect.tvShowId)
                 viewModel.resetEffect()
             }
 
-            TrendingTvShowsEffect.NavigateBack -> {
-                contract.onBackClick()
+            is TrendingTvShowsEffect.NavigateBack -> {
+                onBackClick()
                 viewModel.resetEffect()
             }
         }
@@ -74,7 +75,7 @@ fun TrendingTvShowsScreen(
                 .fillMaxWidth()
                 .padding(horizontal = 16.dp, vertical = 12.dp),
             title = stringResource(R.string.trending_tv_shows),
-            onBackClick = contract::onBackClick
+            onBackClick = onBackClick
         )
         GenresSection(
             genres = TvShowGenre.entries.toList(),
@@ -121,7 +122,7 @@ fun TrendingTvShowsScreen(
                         imageUrl = tvShow.posterPath,
                         isSaved = false,
                         onSaveClick = {},
-                        modifier = Modifier.clickable { contract.onTvShowClick(tvShow.id) }
+                        modifier = Modifier.clickable { onTvShowClick(tvShow.id) }
                     )
                 }
             }

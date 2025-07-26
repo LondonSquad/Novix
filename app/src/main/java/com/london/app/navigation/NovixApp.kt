@@ -390,40 +390,31 @@ fun NovixApp(appPreferencesService: AppPreferencesService) {
             }
             composable<TrendingMovies> {
                 TrendingMoviesScreen(
-                    contract = object : TrendingMoviesContract {
-                        override fun onMovieClick(id: Int) {
-                            navController.navigate(MovieDetails(id))
-                        }
-
-                        override fun onBackClick() {
-                            navController.navigateUp()
-                        }
+                    onMovieClick = { id ->
+                        navController.navigate(MovieDetails(id))
+                    },
+                    onBackClick = {
+                        navController.navigateUp()
                     }
                 )
             }
             composable<TrendingTvShows> {
                 TrendingTvShowsScreen(
-                    contract = object : TrendingTvShowsContract {
-                        override fun onTvShowClick(id: Int) {
-                            navController.navigate(TvShowDetails(id))
-                        }
-
-                        override fun onBackClick() {
-                            navController.navigateUp()
-                        }
+                    onTvShowClick = { id ->
+                        navController.navigate(TvShowDetails(id))
+                    },
+                    onBackClick = {
+                        navController.navigateUp()
                     }
                 )
             }
             composable<TrendingActors> {
                 TrendingActorsScreen(
-                    contract = object : TrendingActorsContract {
-                        override fun onActorClick(id: Int) {
-                            navController.navigate(ActorDetails(id))
-                        }
-
-                        override fun onBackClick() {
-                            navController.navigateUp()
-                        }
+                    onActorClick = { id ->
+                        navController.navigate(ActorDetails(id))
+                    },
+                    onBackClick = {
+                        navController.navigateUp()
                     }
                 )
             }

@@ -36,8 +36,9 @@ import org.koin.androidx.compose.koinViewModel
 
 @Composable
 fun TrendingMoviesScreen(
-    viewModel: TrendingMoviesViewModel = koinViewModel(),
-    contract: TrendingMoviesContract
+    onMovieClick: (Int) -> Unit,
+    onBackClick: () -> Unit,
+    viewModel: TrendingMoviesViewModel = koinViewModel()
 ) {
     val state = viewModel.state.collectAsState().value
     val effect = viewModel.effect.collectAsState().value
@@ -46,11 +47,12 @@ fun TrendingMoviesScreen(
     effect?.Listen { currentEffect ->
         when (currentEffect) {
             is TrendingMoviesEffect.NavigateToMovie -> {
-                contract.onMovieClick(currentEffect.movieId)
+                onMovieClick(currentEffect.movieId)
                 viewModel.resetEffect()
             }
-            TrendingMoviesEffect.NavigateBack -> {
-                contract.onBackClick()
+
+            is TrendingMoviesEffect.NavigateBack -> {
+                onBackClick()
                 viewModel.resetEffect()
             }
         }
@@ -67,7 +69,7 @@ fun TrendingMoviesScreen(
                 .fillMaxWidth()
                 .padding(horizontal = 16.dp, vertical = 12.dp),
             title = stringResource(R.string.trending_movies),
-            onBackClick = contract::onBackClick
+            onBackClick = onBackClick
         )
         GenresSection(
             genres = MovieGenre.entries.toList(),
@@ -119,7 +121,7 @@ fun TrendingMoviesScreen(
                         imageUrl = movie.posterPath,
                         isSaved = false,
                         onSaveClick = {},
-                        modifier = Modifier.clickable { contract.onMovieClick(movie.id) }
+                        modifier = Modifier.clickable { onMovieClick(movie.id) }
                     )
                 }
             }

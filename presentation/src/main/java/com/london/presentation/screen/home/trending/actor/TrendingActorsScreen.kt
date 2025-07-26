@@ -19,35 +19,36 @@ import com.london.designsystem.component.EmptyLayout
 import com.london.designsystem.component.TopBar
 import com.london.designsystem.theme.NovixTheme
 import com.london.presentation.R
+import com.london.presentation.utils.Listen
 import com.london.presentation.composables.ActorsLayout
 import org.koin.androidx.compose.koinViewModel
 
 @Composable
 fun TrendingActorsScreen(
-    modifier: Modifier = Modifier,
-    viewModel: TrendingActorsViewModel = koinViewModel(),
-    contract: TrendingActorsContract
+    onActorClick: (Int) -> Unit,
+    onBackClick: () -> Unit,
+    viewModel: TrendingActorsViewModel = koinViewModel()
 ) {
     val state = viewModel.state.collectAsState().value
     val actorsLazyList = state.actorsFlow.collectAsLazyPagingItems()
     val isLoading = actorsLazyList.loadState.refresh is androidx.paging.LoadState.Loading
     val effect = viewModel.effect.collectAsState().value
-    effect?.let { currentEffect ->
+
+    effect?.Listen { currentEffect ->
         when (currentEffect) {
             is TrendingActorsEffect.NavigateToActor -> {
-                contract.onActorClick(currentEffect.actorId)
+                onActorClick(currentEffect.actorId)
                 viewModel.resetEffect()
             }
-
-            TrendingActorsEffect.NavigateBack -> {
-                contract.onBackClick()
+            is TrendingActorsEffect.NavigateBack -> {
+                onBackClick()
                 viewModel.resetEffect()
             }
         }
     }
 
     Column(
-        modifier = modifier
+        modifier = Modifier
             .fillMaxSize()
             .background(color = NovixTheme.colors.surface)
     ) {
@@ -57,7 +58,7 @@ fun TrendingActorsScreen(
                 .fillMaxWidth()
                 .padding(horizontal = 16.dp, vertical = 12.dp),
             title = stringResource(R.string.trending_people),
-            onBackClick = contract::onBackClick
+            onBackClick = onBackClick
         )
         isLoading.takeIf { it }?.let {
             CircularLoading(
@@ -70,7 +71,7 @@ fun TrendingActorsScreen(
         (!isLoading).takeIf { it && actorsLazyList.itemSnapshotList.items.isNotEmpty() }?.let {
             ActorsLayout(
                 actorsUis = actorsLazyList,
-                onActorClick = { contract.onActorClick(it.id) }
+                onActorClick = { onActorClick(it.id) }
             )
         }
 
