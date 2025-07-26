@@ -7188,9 +7188,18 @@
       "id": 92235360,
       "url": "https://github.com/abdo-essam"
     },
-    "approvals": [],
-    "first_approved_at": null,
-    "time_to_first_approval_minutes": null,
+    "approvals": [
+      {
+        "reviewer": {
+          "id": 106277855,
+          "login": "Mostafa-alsaygh",
+          "url": "https://github.com/Mostafa-alsaygh"
+        },
+        "submitted_at": "2025-07-26T16:23:23Z"
+      }
+    ],
+    "first_approved_at": "2025-07-26T16:23:23Z",
+    "time_to_first_approval_minutes": 1489.5833333333333,
     "required_approvals_met_at": null,
     "time_to_required_approvals_minutes": null,
     "closed_at": null,
