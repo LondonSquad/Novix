@@ -28,7 +28,7 @@ import com.london.designsystem.component.HomeCard
 import com.london.designsystem.component.TopBar
 import com.london.designsystem.theme.NovixTheme
 import com.london.presentation.R
-import com.london.presentation.screen.home.GenresSection
+import com.london.presentation.screen.home.trending.GenresSection
 import com.london.presentation.utils.Listen
 import com.london.presentation.utils.MovieGenre
 import org.koin.androidx.compose.koinViewModel
@@ -73,7 +73,9 @@ fun TrendingMoviesScreen(
             selectedGenreId = state.selectedGenreId,
             screenWidth = screenWidth,
             onGenreClick = viewModel::onGenreSelected,
-            modifier = Modifier.padding(bottom = 12.dp)
+            modifier = Modifier.padding(bottom = 12.dp),
+            getGenreId = { it.id },
+            getGenreName = { stringResource(it.stringResId) }
         )
 
         val moviesLazyItems = state.trendingMovies.collectAsLazyPagingItems()

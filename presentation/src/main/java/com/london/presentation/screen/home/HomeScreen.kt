@@ -42,6 +42,7 @@ import com.london.presentation.screen.LoadingScreen
 import com.london.presentation.screen.NetworkErrorScreen
 import com.london.presentation.screen.base.ErrorState
 import com.london.presentation.screen.home.trending.composable.TrendingSection
+import com.london.presentation.screen.home.trending.GenresSection
 import com.london.presentation.utils.Listen
 import org.koin.compose.viewmodel.koinViewModel
 
@@ -230,7 +231,9 @@ private fun LazyGridScope.upComingSection(
             genres = state.movieGenres,
             selectedGenreId = state.selectedMovieGenreId,
             screenWidth = screenWidth,
-            onGenreClick = { contract.onMovieGenreSelect(it) }
+            onGenreClick = { contract.onMovieGenreSelect(it) },
+            getGenreId = { it.id },
+            getGenreName = { stringResource(it.stringResId) }
         )
     }
 

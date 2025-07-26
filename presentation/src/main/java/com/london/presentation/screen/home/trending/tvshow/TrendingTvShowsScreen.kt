@@ -28,7 +28,7 @@ import com.london.designsystem.component.HomeCard
 import com.london.designsystem.component.TopBar
 import com.london.designsystem.theme.NovixTheme
 import com.london.presentation.R
-import com.london.presentation.screen.home.GenresSection
+import com.london.presentation.screen.home.trending.GenresSection
 import com.london.presentation.utils.Listen
 import com.london.presentation.utils.TvShowGenre
 import org.koin.androidx.compose.koinViewModel
@@ -56,6 +56,12 @@ fun TrendingTvShowsScreen(
         }
     }
 
+    val gridState = rememberLazyGridState()
+
+    LaunchedEffect(state.selectedGenreId) {
+        gridState.scrollToItem(0)
+    }
+
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -74,7 +80,9 @@ fun TrendingTvShowsScreen(
             selectedGenreId = state.selectedGenreId,
             screenWidth = screenWidth,
             onGenreClick = viewModel::onGenreSelected,
-            modifier = Modifier.padding(bottom = 12.dp)
+            modifier = Modifier.padding(bottom = 12.dp),
+            getGenreId = { it.id },
+            getGenreName = { stringResource(it.stringResId) }
         )
 
         val tvShowsLazyItems = state.trendingTvShows.collectAsLazyPagingItems()
