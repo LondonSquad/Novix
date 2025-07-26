@@ -3,4 +3,9 @@ package com.london.presentation.screen.home.trending.actor
 interface TrendingActorsContract {
     fun onActorClick(id: Int)
     fun onBackClick()
-} 
+}
+
+fun defaultTrendingActorsContract() = object : TrendingActorsContract {
+    override fun onActorClick(id: Int) = Unit
+    override fun onBackClick() = Unit
+}
