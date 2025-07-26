@@ -18,8 +18,7 @@ import com.london.presentation.composables.ActorsLayout
 import com.london.presentation.utils.ResultOrEmpty
 import org.koin.androidx.compose.koinViewModel
 import androidx.paging.compose.collectAsLazyPagingItems
-import com.london.designsystem.component.EmptySearchLayout
-import com.london.presentation.screen.home.trending.actor.TrendingActorsContract
+import com.london.designsystem.component.EmptyLayout
 
 @Composable
 fun TrendingActorsScreen(
@@ -61,7 +60,7 @@ fun TrendingActorsScreen(
             items = actorsLazyList.itemSnapshotList.items,
             emptyContent = {
                 if (!isLoading) {
-                    EmptySearchLayout(
+                    EmptyLayout(
                         text = stringResource(R.string.no_trending_actors_in_genre),
                         image = R.drawable.img_no_result,
                         modifier = modifier.padding(horizontal = 16.dp)

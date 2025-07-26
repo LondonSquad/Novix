@@ -23,7 +23,7 @@ import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.paging.compose.collectAsLazyPagingItems
-import com.london.designsystem.component.EmptySearchLayout
+import com.london.designsystem.component.EmptyLayout
 import com.london.designsystem.component.HomeCard
 import com.london.designsystem.component.TopBar
 import com.london.designsystem.theme.NovixTheme
@@ -113,7 +113,7 @@ fun TrendingMoviesScreen(
                     )
                 }
             }
-        } ?: EmptySearchLayout(
+        } ?: EmptyLayout(
             text = stringResource(R.string.no_trending_movies_in_genre),
             image = R.drawable.img_no_result,
             modifier = Modifier
