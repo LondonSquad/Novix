@@ -1,7 +1,5 @@
 package com.london.data.utils
 
-import com.london.data.datasource.util.CrashReporter
-
 suspend fun <T> Result<T?>.getNotNullOrElse(elseBlock: suspend () -> T): Result<T> =
     runCatching { getOrElse { elseBlock() } ?: elseBlock() }
 
