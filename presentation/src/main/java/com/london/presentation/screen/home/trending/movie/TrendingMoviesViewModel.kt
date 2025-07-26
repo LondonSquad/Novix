@@ -9,6 +9,7 @@ import com.london.presentation.utils.MovieGenre
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.launch
 import org.koin.android.annotation.KoinViewModel
 
 @KoinViewModel
@@ -29,13 +30,17 @@ class TrendingMoviesViewModel(
     }
 
     private fun fetchTrendingMovies() {
-        val moviesFlow = createPagingSourceFlow("") { _, pageNumber ->
-            getTrendingMovies.invoke(pageNumber)
-        }.cachedIn(viewModelScope)
-        _state.value = _state.value.copy(trendingMovies = moviesFlow, isLoading = false)
+        viewModelScope.launch {
+            val moviesFlow = createPagingSourceFlow("") { _, pageNumber ->
+                getTrendingMovies.invoke(pageNumber)
+            }.cachedIn(viewModelScope)
+            _state.value = _state.value.copy(trendingMovies = moviesFlow, isLoading = false)
+        }
     }
 
     fun onGenreSelected(genre: MovieGenre) {
+        if (genre.id == _state.value.selectedGenreId) return
+        
         _state.value = _state.value.copy(selectedGenreId = genre.id)
     }
 

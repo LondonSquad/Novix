@@ -100,7 +100,12 @@ class HomeViewModel(
 
     override fun onMovieGenreSelect(genre: MovieGenre) {
         if (genre == state.value.selectedMovieGenre) return
-        updateState { copy(selectedMovieGenre = genre) }
+        updateState { 
+            copy(
+                selectedMovieGenre = genre,
+                selectedMovieGenreId = genre.id
+            ) 
+        }
         loadUpcomingMovies(categoryId = if (genre == MovieGenre.All) null else genre.id)
     }
 

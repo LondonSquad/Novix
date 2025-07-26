@@ -23,6 +23,7 @@ import com.london.designsystem.component.NavBar
 import com.london.designsystem.theme.NovixTheme
 import com.london.domain.AppPreferencesService
 import com.london.presentation.navigation.Screen
+import com.london.presentation.navigation.Screen.TopTvShowsPicksDetails
 import com.london.presentation.navigation.Screen.Account
 import com.london.presentation.navigation.Screen.ActorDetails
 import com.london.presentation.navigation.Screen.ActorGallery
@@ -113,7 +114,7 @@ fun NovixApp(appPreferencesService: AppPreferencesService) {
     ) { innerPadding ->
         NavHost(
             navController = navController,
-            startDestination = Screen.Splash,
+            startDestination = Splash,
             modifier = Modifier.padding(innerPadding)
         ) {
 
@@ -235,7 +236,7 @@ fun NovixApp(appPreferencesService: AppPreferencesService) {
                 )
             }
 
-            composable<Screen.TopTvShowsPicksDetails>(
+            composable<TopTvShowsPicksDetails>(
                 exitTransition = { fadeOut(tween(500)) },
                 popEnterTransition = { fadeIn(tween(500)) },
                 enterTransition = { fadeIn(tween(500)) },
@@ -315,7 +316,7 @@ fun NovixApp(appPreferencesService: AppPreferencesService) {
                     onNavigateToMoviePicks = { actorId ->
                         navController.navigate(ActorTopMoviesPicksDetails(actorId))
                     }, onNavigateToTvShowPicks = { actorId ->
-                        navController.navigate(Screen.TopTvShowsPicksDetails(actorId))
+                        navController.navigate(TopTvShowsPicksDetails(actorId))
                     },
                     onNavigateToGallery = { actorId ->
                         navController.navigate(ActorGallery(actorId))
@@ -351,8 +352,8 @@ fun NovixApp(appPreferencesService: AppPreferencesService) {
 
             composable<Splash> {
                 SplashRoute(
-                    onNavigateToOnboarding = { navController.navigate(Screen.OnboardingPager) },
-                    onNavigateToWelcome = { navController.navigate(Screen.Welcome) },
+                    onNavigateToOnboarding = { navController.navigate(OnboardingPager) },
+                    onNavigateToWelcome = { navController.navigate(Welcome) },
                     onNavigateToHome = { navController.navigate(Home) },
                     appPreferencesService = appPreferencesService,
                     authRepository = getKoin().get(),
@@ -361,7 +362,7 @@ fun NovixApp(appPreferencesService: AppPreferencesService) {
 
             composable<OnboardingPager> {
                 OnboardingRoute(
-                    onNavigateToWelcome = { navController.navigate(Screen.Welcome) },
+                    onNavigateToWelcome = { navController.navigate(Welcome) },
                     appPreferencesService = appPreferencesService
                 )
             }
@@ -380,7 +381,7 @@ fun NovixApp(appPreferencesService: AppPreferencesService) {
             composable<Login> {
                 LoginScreen(
                     onNavigateBack = {
-                        navController.navigate(Screen.Welcome)
+                        navController.navigate(Welcome)
                     },
                     onNavigateToHome = {
                         navController.navigate(Home)

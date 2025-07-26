@@ -11,11 +11,13 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.lazy.grid.GridCells
+import androidx.compose.foundation.lazy.grid.GridItemSpan
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.rememberLazyGridState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalConfiguration
@@ -79,47 +81,54 @@ fun TrendingMoviesScreen(
         )
 
         val moviesLazyItems = state.trendingMovies.collectAsLazyPagingItems()
-        val filteredMovies = List(moviesLazyItems.itemCount) { moviesLazyItems[it] }
-            .filterNotNull()
-            .filter { movie ->
-                state.selectedGenreId == null ||
-                state.selectedGenreId == MovieGenre.All.id ||
-                movie.genreIds.contains(state.selectedGenreId)
-            }
+        val isLoading = moviesLazyItems.loadState.refresh is androidx.paging.LoadState.Loading || state.isLoading
+        val hasData = moviesLazyItems.itemCount > 0
+        
+        val filteredMovies = remember(state.selectedGenreId, moviesLazyItems.itemSnapshotList.items) {
+            moviesLazyItems.itemSnapshotList.items
+                .filter { movie ->
+                    state.selectedGenreId == null ||
+                    state.selectedGenreId == MovieGenre.All.id ||
+                    movie.genreIds.contains(state.selectedGenreId)
+                }
+        }
         val gridState = rememberLazyGridState()
 
         LaunchedEffect(state.selectedGenreId) {
             gridState.scrollToItem(0)
         }
 
-        filteredMovies.takeIf { it.isNotEmpty() }?.let { nonEmptyList ->
-            LazyVerticalGrid(
-                state = gridState,
-                columns = GridCells.Fixed(2),
-                contentPadding = PaddingValues(bottom = 18.dp),
-                horizontalArrangement = Arrangement.spacedBy(12.dp),
-                verticalArrangement = Arrangement.spacedBy(12.dp),
-                modifier = Modifier
-                    .fillMaxSize()
-                    .padding(horizontal = 16.dp)
-            ) {
-                items(nonEmptyList.size) { index ->
-                    val movie = nonEmptyList[index]
-                    HomeCard(
-                        imageUrl = movie.posterPath,
-                        isSaved = false,
-                        onSaveClick = {},
-                        modifier = Modifier.clickable { contract.onMovieClick(movie.id) }
+        LazyVerticalGrid(
+            state = gridState,
+            columns = GridCells.Fixed(2),
+            contentPadding = PaddingValues(bottom = 18.dp),
+            horizontalArrangement = Arrangement.spacedBy(12.dp),
+            verticalArrangement = Arrangement.spacedBy(12.dp),
+            modifier = Modifier
+                .weight(1f)
+                .fillMaxWidth()
+                .padding(horizontal = 16.dp)
+        ) {
+            items(filteredMovies.size) { index ->
+                val movie = filteredMovies[index]
+                HomeCard(
+                    imageUrl = movie.posterPath,
+                    isSaved = false,
+                    onSaveClick = {},
+                    modifier = Modifier.clickable { contract.onMovieClick(movie.id) }
+                )
+            }
+            item {
+                if (filteredMovies.isEmpty() && !isLoading && hasData) {
+                    EmptyLayout(
+                        text = stringResource(R.string.no_trending_movies_in_genre),
+                        image = R.drawable.img_no_result,
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .padding(horizontal = 16.dp)
                     )
                 }
             }
-        } ?: EmptyLayout(
-            text = stringResource(R.string.no_trending_movies_in_genre),
-            image = R.drawable.img_no_result,
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(horizontal = 16.dp)
-                .wrapContentSize(Alignment.Center)
-        )
+        }
     }
 }

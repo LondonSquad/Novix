@@ -36,7 +36,7 @@ import com.london.data.local.model.search.SearchTvShowLocal
         RecentWatchedMovieLocal::class,
         RecentWatchedTvShowLocal::class
     ],
-    version = 2,
+    version = 1,
     exportSchema = false
 )
 @TypeConverters(

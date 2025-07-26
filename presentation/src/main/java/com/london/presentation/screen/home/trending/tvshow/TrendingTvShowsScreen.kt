@@ -11,11 +11,13 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.lazy.grid.GridCells
+import androidx.compose.foundation.lazy.grid.GridItemSpan
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.rememberLazyGridState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalConfiguration
@@ -86,13 +88,17 @@ fun TrendingTvShowsScreen(
         )
 
         val tvShowsLazyItems = state.trendingTvShows.collectAsLazyPagingItems()
-        val filteredTvShows = List(tvShowsLazyItems.itemCount) { tvShowsLazyItems[it] }
-            .filterNotNull()
-            .filter { tvShow ->
-                state.selectedGenreId == null ||
-                        state.selectedGenreId == TvShowGenre.All.id ||
-                        tvShow.genreIds.contains(state.selectedGenreId)
-            }
+        val isLoading = tvShowsLazyItems.loadState.refresh is androidx.paging.LoadState.Loading || state.isLoading
+        val hasData = tvShowsLazyItems.itemCount > 0
+        
+        val filteredTvShows = remember(state.selectedGenreId, tvShowsLazyItems.itemSnapshotList.items) {
+            tvShowsLazyItems.itemSnapshotList.items
+                .filter { tvShow ->
+                    state.selectedGenreId == null ||
+                            state.selectedGenreId == TvShowGenre.All.id ||
+                            tvShow.genreIds.contains(state.selectedGenreId)
+                }
+        }
 
         val gridState = rememberLazyGridState()
 
@@ -100,34 +106,37 @@ fun TrendingTvShowsScreen(
             gridState.scrollToItem(0)
         }
 
-        filteredTvShows.takeIf { it.isNotEmpty() }?.let { nonEmptyList ->
-            LazyVerticalGrid(
-                state = gridState,
-                columns = GridCells.Fixed(2),
-                contentPadding = PaddingValues(bottom = 18.dp),
-                horizontalArrangement = Arrangement.spacedBy(12.dp),
-                verticalArrangement = Arrangement.spacedBy(12.dp),
-                modifier = Modifier
-                    .fillMaxSize()
-                    .padding(horizontal = 16.dp)
-            ) {
-                items(nonEmptyList.size) { index ->
-                    val tvShow = nonEmptyList[index]
-                    HomeCard(
-                        imageUrl = tvShow.posterPath,
-                        isSaved = false,
-                        onSaveClick = {},
-                        modifier = Modifier.clickable { contract.onTvShowClick(tvShow.id) }
+        LazyVerticalGrid(
+            state = gridState,
+            columns = GridCells.Fixed(2),
+            contentPadding = PaddingValues(bottom = 18.dp),
+            horizontalArrangement = Arrangement.spacedBy(12.dp),
+            verticalArrangement = Arrangement.spacedBy(12.dp),
+            modifier = Modifier
+                .weight(1f)
+                .fillMaxWidth()
+                .padding(horizontal = 16.dp)
+        ) {
+            items(filteredTvShows.size) { index ->
+                val tvShow = filteredTvShows[index]
+                HomeCard(
+                    imageUrl = tvShow.posterPath,
+                    isSaved = false,
+                    onSaveClick = {},
+                    modifier = Modifier.clickable { contract.onTvShowClick(tvShow.id) }
+                )
+            }
+            item {
+                if (filteredTvShows.isEmpty() && !isLoading && hasData) {
+                    EmptyLayout(
+                        text = stringResource(R.string.no_trending_tvshows_in_genre),
+                        image = R.drawable.img_no_result,
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .padding(horizontal = 16.dp)
                     )
                 }
             }
-        } ?: EmptyLayout(
-            text = stringResource(R.string.no_trending_tvshows_in_genre),
-            image = R.drawable.img_no_result,
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(horizontal = 16.dp)
-                .wrapContentSize(Alignment.Center)
-        )
+        }
     }
 } 
