@@ -1,9 +1,9 @@
 @file:KoverIgnore
 
-package com.london.data.datasource.remote.toprated.tvseries.api
+package com.london.data.remote.service.toprated.tvseries
 
-import com.london.data.datasource.remote.ApiResponse
-import com.london.data.datasource.remote.toprated.tvseries.model.TopRatedTvSeriesRemote
+import com.london.data.remote.model.ApiResponse
+import com.london.data.remote.model.toprated.tvshow.model.TopRatedTvSeriesRemote
 import com.london.domain.KoverIgnore
 import retrofit2.http.GET
 import retrofit2.http.Query

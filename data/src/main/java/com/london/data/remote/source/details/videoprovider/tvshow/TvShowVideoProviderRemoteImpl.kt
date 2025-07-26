@@ -1,8 +1,8 @@
-package com.london.data.datasource.remote.details.videoprovider.tvshow
+package com.london.data.remote.source.details.videoprovider.tvshow
 
-import com.london.data.datasource.remote.BaseRemoteDatasource
-import com.london.data.datasource.remote.details.tvshowdetails.api.TvShowDetailsApiService
 import com.london.data.remote.model.details.videoprovider.tvshow.model.TvShowVideoResponse
+import com.london.data.remote.service.details.tvshow.TvShowDetailsApiService
+import com.london.data.remote.source.base.BaseRemoteDatasource
 import org.koin.core.annotation.Single
 
 @Single

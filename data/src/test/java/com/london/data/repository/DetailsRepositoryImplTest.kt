@@ -1,7 +1,7 @@
 package com.london.data.repository
 
 import com.google.common.truth.Truth.assertThat
-import com.london.data.datasource.remote.ApiResponse
+import com.london.data.remote.model.ApiResponse
 import com.london.data.mapper.toAuthorDetails
 import com.london.data.mapper.toReviewEntity
 import com.london.data.mapper.tvshowdetails.TvShowImagesMapper.toEntity

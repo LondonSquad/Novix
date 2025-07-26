@@ -1,7 +1,7 @@
 package com.london.data.repository
 
 import com.london.data.remote.source.reviews.ReviewsRemoteDataSource
-import com.london.data.datasource.util.CrashReporter
+import com.london.data.utils.CrashReporter
 import com.london.data.mapper.toReviewEntity
 import com.london.data.mapper.tvshowdetails.TvShowImagesMapper.toEntity
 import com.london.data.mapper.tvshowdetails.toCastEntity
