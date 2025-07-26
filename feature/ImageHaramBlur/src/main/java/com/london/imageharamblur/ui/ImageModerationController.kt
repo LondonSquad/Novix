@@ -11,7 +11,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.withContext
 
-class ImageModerationController(
+internal class ImageModerationController(
     context: Context,
     private val cacheKey: String,
     private val enableModeration: Boolean = true,

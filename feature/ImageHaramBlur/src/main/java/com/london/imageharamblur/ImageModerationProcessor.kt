@@ -12,17 +12,22 @@ import kotlinx.coroutines.*
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
 
-class ImageModerationProcessor(private val context: Context) {
+internal class ImageModerationProcessor(private val context: Context) {
     companion object {
         private val initMutex = Mutex()
+
         @Volatile
         private var sharedGenderModel: GenderDetectionModel? = null
+
         @Volatile
         private var sharedContentModel: ContentDetectionModel? = null
+
         @Volatile
         private var modelsInitialized = false
+
         @Volatile
         private var activeProcessorCount = 0
+
         @Volatile
         private var currentModelsAreFromFirebase = false
 
@@ -54,7 +59,8 @@ class ImageModerationProcessor(private val context: Context) {
 
             try {
                 val modelFiles = modelDownloadManager.downloadModelsIfNeeded()
-                val switchingToFirebase = !currentModelsAreFromFirebase && modelFiles.isFromFirebase && modelsInitialized
+                val switchingToFirebase =
+                    !currentModelsAreFromFirebase && modelFiles.isFromFirebase && modelsInitialized
 
                 if (switchingToFirebase) {
                     sharedGenderModel?.close()
@@ -132,10 +138,8 @@ class ImageModerationProcessor(private val context: Context) {
                         val genderResult = genderModel.detectGender(faceBitmap)
 
                         genderResult.let { result ->
-                            when {
-                                detectFemales && result.isFemale -> return@withContext true
-                                detectMales && !result.isFemale -> return@withContext true
-                            }
+                            if ((detectFemales && result.isFemale) || (detectMales && !result.isFemale))
+                                return@withContext true
                         }
                     }
                 } catch (e: Exception) {
