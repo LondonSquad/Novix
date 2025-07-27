@@ -57,7 +57,7 @@ private fun TopMoviesPicksContent(
     modifier: Modifier = Modifier,
 ) {
     LazyVerticalGrid(
-        columns = GridCells.Fixed(2),
+        columns = GridCells.Adaptive(minSize = 158.dp),
         contentPadding = PaddingValues(top = 12.dp, bottom = 18.dp),
         horizontalArrangement = Arrangement.spacedBy(12.dp),
         verticalArrangement = Arrangement.spacedBy(12.dp),
