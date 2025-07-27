@@ -68,8 +68,10 @@ fun ConditionalText(
             }
         },
         modifier = modifier.clickable(
-                interactionSource = remember { MutableInteractionSource() }, indication = null
-            ) {
-                if (showReadMoreButtonState) onExpandedChange()
-            })
+            interactionSource = remember { MutableInteractionSource() }, indication = null
+        ) {
+            if (showReadMoreButtonState) onExpandedChange()
+        }
+
+    )
 }
