@@ -91,4 +91,6 @@
     <string name="politics">Politics</string>
     <string name="action_adventure">Action And Adventure</string>
     <string name="war_politics">war And Politics</string>
+    <string name="top_rating">Top rating</string>
+
 </resources>
