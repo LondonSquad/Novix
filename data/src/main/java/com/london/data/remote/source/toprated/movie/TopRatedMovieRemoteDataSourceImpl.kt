@@ -15,11 +15,9 @@ class TopRatedMovieRemoteDataSourceImpl(
 ) : TopRatedMovieRemoteDataSource , BaseRemoteDatasource {
     override suspend fun getTopRatedMovies(
         pageNumber: Int,
-        language: String,
-        region: String
     ): Result<ApiResponse<TopRatedMovieRemote>> =
         callApiWithRetry(
-            apiCall = { topRatedMovieApi.getTopRatedMovies(pageNumber, language, region) },
+            apiCall = { topRatedMovieApi.getTopRatedMovies(pageNumber) },
             mapper = { it }
         )
 }

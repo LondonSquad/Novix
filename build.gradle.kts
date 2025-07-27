@@ -58,8 +58,6 @@ kover {
                         "org.koin.ksp.generated.**",
                         "com.london.data.datasource.remote.**",
                     )
-                    classes("**.*RemoteDataSourceImpl")
-                    classes("**RemoteDataSourceImpl")
                     classes("*di.*")
                     classes("com.london.imageharamblur.**")
                 }

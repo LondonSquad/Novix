@@ -25,14 +25,14 @@ class TopRatedMovieRepositoryImplTest {
     }
 
     @Test
-    fun `getTopRatedMovies should map remote movie list correctly`() = runTest {
+    fun `should getTopRatedMovies should map when remote movie list correctly`() = runTest {
         // Given
         coEvery {
-            remoteDataSource.getTopRatedMovies(PAGE, LANGUAGE, REGION)
+            remoteDataSource.getTopRatedMovies(PAGE)
         } returns Result.success(fakeApiResponseWithMovies())
 
         // When
-        val result: List<TopRatedMovie> = repository.getTopRatedMovies(PAGE, LANGUAGE, REGION)
+        val result: List<TopRatedMovie> = repository.getTopRatedMovies(PAGE).items
 
         // Then
         assertThat(result).hasSize(2)
@@ -49,29 +49,29 @@ class TopRatedMovieRepositoryImplTest {
     }
 
     @Test
-    fun `getTopRatedMovies should return empty list when API returns empty results`() = runTest {
+    fun `should getTopRatedMovies should return empty list when API returns empty results`() = runTest {
         // Given
         coEvery {
-            remoteDataSource.getTopRatedMovies(PAGE, LANGUAGE, REGION)
+            remoteDataSource.getTopRatedMovies(PAGE)
         } returns Result.success(fakeEmptyApiResponse())
 
         // When
-        val result = repository.getTopRatedMovies(PAGE, LANGUAGE, REGION)
+        val result = repository.getTopRatedMovies(PAGE)
 
         // Then
-        assertThat(result).isEmpty()
+        assertThat(result.items).isEmpty()
     }
 
     @Test
-    fun `getTopRatedMovies should propagate exceptions`() = runTest {
+    fun `should getTopRatedMovies when propagate exceptions`() = runTest {
         // Given
         coEvery {
-            remoteDataSource.getTopRatedMovies(PAGE, LANGUAGE, REGION)
+            remoteDataSource.getTopRatedMovies(PAGE)
         } throws RuntimeException("Network error")
 
         // When && Then
         val ex = assertThrows<RuntimeException> {
-            repository.getTopRatedMovies(PAGE, LANGUAGE, REGION)
+            repository.getTopRatedMovies(PAGE)
         }
         assertThat(ex.message).isEqualTo("Network error")
     }

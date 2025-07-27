@@ -103,4 +103,8 @@ class HomeViewModel(
         updateState { copy(selectedGenre = genre) }
         loadUpcomingMovies(categoryId = if (genre == MovieGenre.All) null else genre.id)
     }
+
+    override fun onTopRatedClick() {
+        emitEffect(HomeScreenEffect.NavigationTopRated)
+    }
 }

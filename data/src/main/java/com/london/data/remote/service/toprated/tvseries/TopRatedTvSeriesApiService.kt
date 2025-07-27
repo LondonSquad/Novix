@@ -14,6 +14,5 @@ interface TopRatedTvSeriesApiService {
     @GET("3/tv/top_rated")
     suspend fun getTopRatedTvSeries(
         @Query("page") pageNumber: Int,
-        @Query("language") language: String
     ): Response<ApiResponse<TopRatedTvSeriesRemote>>
 }

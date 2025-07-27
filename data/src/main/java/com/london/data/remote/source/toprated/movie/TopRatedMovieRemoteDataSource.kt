@@ -10,7 +10,5 @@ import retrofit2.Response
 interface TopRatedMovieRemoteDataSource {
     suspend fun getTopRatedMovies(
         pageNumber: Int,
-        language: String,
-        region: String
     ): Result<ApiResponse<TopRatedMovieRemote>>
 }

@@ -15,10 +15,9 @@ class TopRatedTvRemoteDataSourceImpl(
 ) : TopRatedTvRemoteDataSource, BaseRemoteDatasource {
     override suspend fun getTopRatedTvShows(
         pageNumber: Int,
-        language: String
     ): Result<ApiResponse<TopRatedTvSeriesRemote>> =
         callApi(
-            apiCall = { topRatedTvSeriesApi.getTopRatedTvSeries(pageNumber, language) },
+            apiCall = { topRatedTvSeriesApi.getTopRatedTvSeries(pageNumber) },
             mapper = { it }
         )
 }

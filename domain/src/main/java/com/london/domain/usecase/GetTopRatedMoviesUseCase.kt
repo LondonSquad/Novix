@@ -1,5 +1,6 @@
 package com.london.domain.usecase
 
+import com.london.domain.entity.PagedFetchResponse
 import com.london.domain.entity.toprated.TopRatedMovie
 import com.london.domain.repository.TopRatedMovieRepository
 import org.koin.core.annotation.Provided
@@ -12,11 +13,17 @@ class GetTopRatedMoviesUseCase(
 ) {
     suspend operator fun invoke(
         pageNumber: Int,
-        language: String,
-        region: String
-    ): List<TopRatedMovie> = topRatedMovieRepo.getTopRatedMovies(
-        pageNumber,
-        language,
-        region
-    )
+        genreId: Int? = null
+    ): PagedFetchResponse<TopRatedMovie> {
+        val response = topRatedMovieRepo.getTopRatedMovies(pageNumber)
+
+        val filteredItems = response.items.filter { movie ->
+            genreId == null || movie.genreIds.contains(genreId)
+        }
+
+        return response.copy(
+            items = filteredItems,
+            totalPages = filteredItems.size
+        )
+    }
 }
