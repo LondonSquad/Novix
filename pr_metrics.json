@@ -7857,11 +7857,15 @@
     "time_to_first_approval_minutes": 30.966666666666665,
     "required_approvals_met_at": "2025-07-27T18:42:27Z",
     "time_to_required_approvals_minutes": 34.9,
-    "closed_at": null,
-    "merged_at": null,
-    "merged_by": null,
+    "closed_at": "2025-07-27T18:45:54Z",
+    "merged_at": "2025-07-27T18:45:54Z",
+    "merged_by": {
+      "login": "Al-Taie",
+      "id": 68463985,
+      "url": "https://github.com/Al-Taie"
+    },
     "week": "2025-W30",
-    "status": "approved",
+    "status": "merged",
     "diff_stats": {
       "additions": 31,
       "deletions": 15,
