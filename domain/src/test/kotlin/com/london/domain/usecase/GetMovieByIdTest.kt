@@ -1,13 +1,9 @@
 package com.london.domain.usecase
 
-import com.london.domain.entity.moviedatails.CollectionDetails
-import com.london.domain.entity.moviedatails.Genre
 import com.london.domain.entity.moviedatails.MovieDetails
-import com.london.domain.entity.moviedatails.ProductionCompany
-import com.london.domain.entity.moviedatails.ProductionCountry
-import com.london.domain.entity.moviedatails.SpokenLanguage
 import com.london.domain.error.GetMovieByIdFailedException
 import com.london.domain.repository.MovieDetailsRepository
+import com.london.domain.usecase.details.movie.GetMovieDetailsById
 import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.mockk
@@ -21,50 +17,27 @@ import org.junit.jupiter.api.assertThrows
 class GetMovieByIdTest {
 
     private lateinit var movieRepository: MovieDetailsRepository
-    private lateinit var getMovieById: GetMovieById
+    private lateinit var getMovieById: GetMovieDetailsById
 
     @Before
     fun setup() {
         movieRepository = mockk(relaxed = true)
-        getMovieById = GetMovieById(movieRepository)
+        getMovieById = GetMovieDetailsById(movieRepository)
     }
 
     private fun fakeMovieDetailsDomain() = MovieDetails(
-        adult = false,
         backdropUrl = "/inception_backdrop.jpg",
-        belongsToCollection = CollectionDetails(1, "Inception Collection"),
-        budget = 160_000_000,
-        genres = listOf(
-            Genre(1, "Sci-Fi"),
-            Genre(2, "Thriller")
+        genresId = listOf(
+          1,2,3
         ),
-        homepage = "https://www.inceptionmovie.com",
         id = 123,
-        imdbId = "tt1375666",
-        originCountry = listOf("US"),
-        originalLanguage = "en",
-        originalTitle = "Inception",
         overview = "A skilled thief is given a chance at redemption.",
-        popularity = 98.5,
         posterUrl = "/inception_poster.jpg",
-        productionCompanies = listOf(
-            ProductionCompany(1, "/warner_logo.png", "Warner Bros.", "US")
-        ),
-        productionCountries = listOf(
-            ProductionCountry("US", "United States")
-        ),
         releaseDate = "2010-07-16",
-        revenue = 829_895_144,
         runtime = 148,
-        spokenLanguages = listOf(
-            SpokenLanguage("English", "en", "English")
-        ),
-        status = "Released",
-        tagline = "Your mind is the scene of the crime.",
         title = "Inception",
         video = false,
         voteAverage = "8.8",
-        voteCount = 10000,
     )
 
 
@@ -85,8 +58,7 @@ class GetMovieByIdTest {
         assertEquals(148, result.runtime)
         assertEquals("2010-07-16", result.releaseDate)
         assertEquals("A skilled thief is given a chance at redemption.", result.overview)
-        assertEquals(2, result.genres.size)
-        assertEquals("Sci-Fi", result.genres[0].name)
+        assertEquals(3, result.genresId.size)
 
         coVerify(exactly = 1) { movieRepository.getMovieById(movieId) }
     }
@@ -111,7 +83,7 @@ class GetMovieByIdTest {
     fun `should work with different movie IDs`() = runTest {
         // Given
         val movieId = 456
-        val expectedMovie = fakeMovieDetailsDomain().copy(id = movieId, originalTitle = "Tenet")
+        val expectedMovie = fakeMovieDetailsDomain().copy(id = movieId, title = "Inception")
         coEvery { movieRepository.getMovieById(movieId) } returns expectedMovie
 
         // When
@@ -119,7 +91,7 @@ class GetMovieByIdTest {
 
         // Then
         assertEquals(movieId, result.id)
-        assertEquals("Tenet", result.originalTitle)
+        assertEquals("Inception", result.title)
         coVerify(exactly = 1) { movieRepository.getMovieById(movieId) }
     }
 
@@ -128,7 +100,7 @@ class GetMovieByIdTest {
         // Given
         val movieId = 789
         val movieWithNoGenres = fakeMovieDetailsDomain().copy(
-            id = movieId, genres = emptyList()
+            id = movieId, genresId = emptyList()
         )
         coEvery { movieRepository.getMovieById(movieId) } returns movieWithNoGenres
 
@@ -137,8 +109,8 @@ class GetMovieByIdTest {
 
         // Then
         assertEquals(movieId, result.id)
-        assertTrue(result.genres.isEmpty())
-        assertEquals(0, result.genres.size)
+        assertTrue(result.genresId.isEmpty())
+        assertEquals(0, result.genresId.size)
         coVerify(exactly = 1) { movieRepository.getMovieById(movieId) }
     }
 
@@ -185,7 +157,7 @@ class GetMovieByIdTest {
         // Given
         val movieId = 222
         val movieWithNoActors = fakeMovieDetailsDomain().copy(
-            id = movieId, genres = emptyList()
+            id = movieId, genresId = emptyList()
         )
         coEvery { movieRepository.getMovieById(movieId) } returns movieWithNoActors
 
@@ -194,7 +166,7 @@ class GetMovieByIdTest {
 
         // Then
         assertEquals(movieId, result.id)
-        assertTrue(result.genres.isEmpty())
+        assertTrue(result.genresId.isEmpty())
         coVerify(exactly = 1) { movieRepository.getMovieById(movieId) }
     }
 
