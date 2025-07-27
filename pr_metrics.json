@@ -7822,9 +7822,9 @@
     "week": "2025-W30",
     "status": "pending",
     "diff_stats": {
-      "additions": 23,
-      "deletions": 5,
-      "changed_files": 4
+      "additions": 20,
+      "deletions": 8,
+      "changed_files": 5
     }
   }
 ]
