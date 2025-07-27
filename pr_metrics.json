@@ -7209,33 +7209,16 @@
       "id": 92235360,
       "url": "https://github.com/abdo-essam"
     },
-    "approvals": [
-      {
-        "reviewer": {
-          "id": 106277855,
-          "login": "Mostafa-alsaygh",
-          "url": "https://github.com/Mostafa-alsaygh"
-        },
-        "submitted_at": "2025-07-26T16:23:23Z"
-      },
-      {
-        "reviewer": {
-          "id": 76666355,
-          "login": "Abdulrahman1890",
-          "url": "https://github.com/Abdulrahman1890"
-        },
-        "submitted_at": "2025-07-27T13:48:29Z"
-      }
-    ],
-    "first_approved_at": "2025-07-26T16:23:23Z",
-    "time_to_first_approval_minutes": 1489.5833333333333,
-    "required_approvals_met_at": "2025-07-27T13:48:29Z",
-    "time_to_required_approvals_minutes": 2774.6833333333334,
+    "approvals": [],
+    "first_approved_at": null,
+    "time_to_first_approval_minutes": null,
+    "required_approvals_met_at": null,
+    "time_to_required_approvals_minutes": null,
     "closed_at": null,
     "merged_at": null,
     "merged_by": null,
     "week": "2025-W30",
-    "status": "approved",
+    "status": "pending",
     "diff_stats": {
       "additions": 511,
       "deletions": 661,
