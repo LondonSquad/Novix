@@ -15,36 +15,27 @@ class LoginViewModel(
     LoginContract {
 
     override fun onUsernameChanged(username: TextFieldValue) {
-        val limitedUsername = if (username.text.length > MAX_LETTERS) {
-            username.copy(text = username.text.take(MAX_LETTERS))
-        } else {
-            username
-        }
-
+        val limited = limitTextFieldValue(username)
         updateState {
             copy(
-                username = limitedUsername,
-                isLoginEnabled = limitedUsername.text.isNotEmpty() && password.text.isNotEmpty(),
+                username = limited,
+                isLoginEnabled = limited.text.isNotEmpty() && password.text.isNotEmpty(),
                 error = null
             )
         }
     }
 
     override fun onPasswordChanged(password: TextFieldValue) {
-        val limitedPassword = if (password.text.length > MAX_LETTERS) {
-            password.copy(text = password.text.take(MAX_LETTERS))
-        } else {
-            password
-        }
-
+        val limited = limitTextFieldValue(password)
         updateState {
             copy(
-                password = limitedPassword,
-                isLoginEnabled = username.text.isNotEmpty() && limitedPassword.text.isNotEmpty(),
+                password = limited,
+                isLoginEnabled = username.text.isNotEmpty() && limited.text.isNotEmpty(),
                 error = null
             )
         }
     }
+
 
 
     override fun onPasswordVisibilityToggled() {
@@ -108,6 +99,15 @@ class LoginViewModel(
     override fun onNavigateBack() {
         emitEffect(LoginEffect.NavigateBack)
     }
+
+    private fun limitTextFieldValue(input: TextFieldValue): TextFieldValue {
+        return if (input.text.length > MAX_LETTERS) {
+            input.copy(text = input.text.take(MAX_LETTERS))
+        } else {
+            input
+        }
+    }
+
 
     companion object {
         private const val CREATE_ACCOUNT_URL = "https://www.themoviedb.org/signup"
