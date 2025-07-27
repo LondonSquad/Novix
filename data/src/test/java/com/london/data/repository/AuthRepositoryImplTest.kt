@@ -1,18 +1,18 @@
 package com.london.data.repository
 
 import com.london.data.local.preference.AuthPreferences
-import com.london.data.remote.service.auth.AuthApiService
-import com.london.data.remote.model.auth.model.GuestSessionResponse
-import com.london.data.remote.model.auth.model.RequestTokenResponse
-import com.london.data.remote.model.auth.model.SessionResponse
-import com.london.data.remote.model.auth.model.Token
+import com.london.data.remote.service.authentication.AuthApiService
+import com.london.data.remote.model.authentication.model.GuestSessionResponse
+import com.london.data.remote.model.authentication.model.RequestTokenResponse
+import com.london.data.remote.model.authentication.model.SessionResponse
+import com.london.data.remote.model.authentication.model.Token
+import com.london.data.repository.authentication.AuthenticationRepositoryImpl
 import io.mockk.coEvery
 import io.mockk.coJustRun
 import io.mockk.coVerify
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify
-import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.test.runTest
 import org.junit.Assert.assertFalse
 import org.junit.Assert.assertTrue
@@ -22,13 +22,13 @@ import org.junit.Test
 
 class AuthRepositoryImplTest {
 
-    private lateinit var repository: AuthRepositoryImpl
+    private lateinit var repository: AuthenticationRepositoryImpl
     private val authApiService: AuthApiService = mockk()
     private val authPreferences: AuthPreferences = mockk(relaxed = true)
 
     @Before
     fun setUp() {
-        repository = AuthRepositoryImpl(authApiService, authPreferences)
+        repository = AuthenticationRepositoryImpl(authApiService, authPreferences)
     }
 
     // region: login()
