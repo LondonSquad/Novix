@@ -1,7 +1,7 @@
 package com.london.domain.usecase
 
 import com.google.common.truth.Truth.assertThat
-import com.london.domain.GetMovieImagesFailedException
+import com.london.domain.error.GetMovieImagesFailedException
 import com.london.domain.repository.MovieDetailsRepository
 import io.mockk.coEvery
 import io.mockk.mockk
