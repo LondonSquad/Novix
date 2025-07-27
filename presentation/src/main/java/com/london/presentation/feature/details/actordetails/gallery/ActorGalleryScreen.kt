@@ -22,11 +22,11 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.london.imageharamblur.ui.ImageViewFilter
 import com.london.designsystem.component.CircularLoading
 import com.london.designsystem.component.TopBar
 import com.london.designsystem.component.button.ErrorImage
 import com.london.designsystem.theme.NovixTheme
+import com.london.imageharamblur.ui.ImageViewFilter
 import com.london.presentation.R
 import com.london.presentation.feature.buildscreen.BuildScreen
 import com.london.presentation.feature.buildscreen.LoadingScreen
@@ -71,10 +71,11 @@ private fun Content(
             .padding(horizontal = 16.dp, vertical = 12.dp),
     ) {
         TopBar(
-            modifier = Modifier.padding(bottom = 5.dp),
+            modifier = Modifier.padding(bottom = 16.dp),
             title = stringResource(R.string.gallery),
             onBackClick = actorGalleryContract::onBackClick
         )
+
         Box(modifier = Modifier.weight(1f)) {
             if (uiState.isLoading) {
                 CircularLoading(modifier = Modifier.align(Alignment.Center))
