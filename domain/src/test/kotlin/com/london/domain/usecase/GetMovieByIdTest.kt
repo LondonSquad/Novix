@@ -21,12 +21,12 @@ import org.junit.jupiter.api.assertThrows
 class GetMovieByIdTest {
 
     private lateinit var movieRepository: MovieDetailsRepository
-    private lateinit var getMovieById: GetMovieById
+    private lateinit var getMovieById: GetMovieDetailsById
 
     @Before
     fun setup() {
         movieRepository = mockk(relaxed = true)
-        getMovieById = GetMovieById(movieRepository)
+        getMovieById = GetMovieDetailsById(movieRepository)
     }
 
     private fun fakeMovieDetailsDomain() = MovieDetails(

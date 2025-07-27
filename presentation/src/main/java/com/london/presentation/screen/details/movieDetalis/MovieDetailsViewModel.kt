@@ -1,7 +1,7 @@
 package com.london.presentation.screen.details.movieDetalis
 
 import androidx.lifecycle.SavedStateHandle
-import com.london.domain.usecase.GetMovieById
+import com.london.domain.usecase.GetMovieDetailsById
 import com.london.domain.usecase.GetMovieCastUseCase
 import com.london.domain.usecase.GetMovieImagesUseCase
 import com.london.domain.usecase.GetMovieVideoUseCase
@@ -13,7 +13,7 @@ import org.koin.android.annotation.KoinViewModel
 
 @KoinViewModel
 class MovieDetailsViewModel(
-    private val getMovieById: GetMovieById,
+    private val getMovieById: GetMovieDetailsById,
     private val getMovieImagesUseCase: GetMovieImagesUseCase,
     private val getMovieCastUseCase: GetMovieCastUseCase,
     private val getSimilarMoviesUseCase: GetSimilarMoviesUseCase,

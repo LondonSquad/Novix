@@ -5,7 +5,7 @@ import org.koin.core.annotation.Provided
 import org.koin.core.annotation.Single
 
 @Single
-class GetMovieById(
+class GetMovieDetailsById(
     @Provided
     private val movieRepository: MovieDetailsRepository
 ) {
