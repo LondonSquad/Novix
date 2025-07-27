@@ -66,15 +66,6 @@ import com.london.presentation.R.string.separator
 import com.london.presentation.R.string.star
 import com.london.presentation.R.string.time_icon
 import com.london.presentation.R.string.view_reviews
-import com.london.presentation.composables.ConditionalText
-import com.london.presentation.composables.CustomBackDropImagePager
-import com.london.presentation.composables.DetailsScreenTopBar
-import com.london.presentation.composables.FooterSection
-import com.london.presentation.screen.BuildScreen
-import com.london.presentation.screen.LoadingScreen
-import com.london.presentation.screen.NetworkErrorScreen
-import com.london.presentation.screen.reviews.MediaType
-import com.london.presentation.screen.search.SearchCategory
 import com.london.presentation.shared.ConditionalText
 import com.london.presentation.shared.CustomBackDropImagePager
 import com.london.presentation.shared.DetailsScreenTopBar
@@ -83,6 +74,7 @@ import com.london.presentation.feature.buildscreen.BuildScreen
 import com.london.presentation.feature.buildscreen.LoadingScreen
 import com.london.presentation.feature.buildscreen.NetworkErrorScreen
 import com.london.presentation.feature.reviews.MediaType
+import com.london.presentation.feature.search.SearchCategory
 import com.london.presentation.utils.Listen
 import com.london.presentation.utils.convertGenreCodeToString
 import com.london.presentation.utils.offsetLayout

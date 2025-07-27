@@ -2,9 +2,6 @@ package com.london.presentation.feature.details.movieDetalis
 
 import com.london.domain.entity.Actor
 import com.london.domain.entity.Movie
-import com.london.presentation.screen.base.ErrorState
-import com.london.domain.entity.moviedatails.Genre
-import com.london.domain.entity.moviedatails.SimilarMovie
 import com.london.presentation.feature.base.ErrorState
 
 data class MovieDetailsUiState(
