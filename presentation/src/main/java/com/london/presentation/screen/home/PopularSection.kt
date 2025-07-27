@@ -80,7 +80,7 @@ fun PopularSection(
             style = NovixTheme.typography.headline.small,
             color = NovixTheme.colors.title,
             modifier = Modifier
-                .padding(start = 16.dp, end = 16.dp, bottom = 12.dp)
+                .padding(start = 16.dp, end = 16.dp)
                 .align(Alignment.Start)
         )
 
