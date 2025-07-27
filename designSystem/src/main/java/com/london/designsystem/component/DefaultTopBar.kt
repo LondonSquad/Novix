@@ -25,12 +25,12 @@ fun DefaultTopBar(
 ) {
     Row(
         modifier = modifier
-            .fillMaxWidth()
-            .padding(horizontal = 16.dp, vertical = 8.dp),
+            .fillMaxWidth(),
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.SpaceBetween
     ) {
-        Row(verticalAlignment = Alignment.CenterVertically) {
+        Row(modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp),
+            verticalAlignment = Alignment.CenterVertically) {
             Image(
                 painter = painterResource(if(isSystemInDarkTheme()) R.drawable.icon_design_dark else R.drawable.icon_desing_light),
                 contentDescription = "Logo",

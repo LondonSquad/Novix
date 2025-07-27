@@ -28,7 +28,7 @@
     <string name="unsuitable_eye_content">Unsuitable image</string>
     <string name="no_internet">NO internet image</string>
     <string name="you_are_offline">Oops! It looks like you’re offline.</string>
-    <string name="check_your_connection">Check your connection and try again, we’ll be waiting with your movies and popcorn</string>
+    <string name="check_your_connection">Check your connection and try again, we’ll be \n waiting with your movies and popcorn</string>
     <string name="movies">Movies</string>
     <string name="tv_shows">TV shows</string>
     <string name="incorrect_password">Incorrect password</string>
