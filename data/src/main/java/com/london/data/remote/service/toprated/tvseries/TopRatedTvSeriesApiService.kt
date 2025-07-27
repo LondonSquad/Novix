@@ -5,6 +5,7 @@ package com.london.data.remote.service.toprated.tvseries
 import com.london.data.remote.model.ApiResponse
 import com.london.data.remote.model.toprated.tvshow.model.TopRatedTvSeriesRemote
 import com.london.domain.KoverIgnore
+import retrofit2.Response
 import retrofit2.http.GET
 import retrofit2.http.Query
 
@@ -14,5 +15,5 @@ interface TopRatedTvSeriesApiService {
     suspend fun getTopRatedTvSeries(
         @Query("page") pageNumber: Int,
         @Query("language") language: String
-    ): ApiResponse<TopRatedTvSeriesRemote>
+    ): Response<ApiResponse<TopRatedTvSeriesRemote>>
 }

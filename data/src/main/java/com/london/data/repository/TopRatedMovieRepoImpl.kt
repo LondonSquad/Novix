@@ -19,5 +19,5 @@ class TopRatedMovieRepoImpl(
             pageNumber,
             language,
             region
-        ).items.map { it.toEntity() }
+        ).getOrThrow().items.map { it.toEntity() }
 }

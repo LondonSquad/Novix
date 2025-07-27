@@ -10,5 +10,5 @@ interface TopRatedTvRemoteDataSource {
     suspend fun getTopRatedTvShows(
         pageNumber: Int,
         language: String
-    ): ApiResponse<TopRatedTvSeriesRemote>
+    ): Result<ApiResponse<TopRatedTvSeriesRemote>>
 }

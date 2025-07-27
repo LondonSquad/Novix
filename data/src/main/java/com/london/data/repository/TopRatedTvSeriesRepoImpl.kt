@@ -11,11 +11,8 @@ class TopRatedTvSeriesRepoImpl(
     private val topRatedTvRemoteDataSource: TopRatedTvRemoteDataSource
 ) : TopRatedTvSeriesRepository {
     override suspend fun getTopRatedTvSeries(
-        pageNumber: Int,
-        language: String
-    ): List<TopRatedTvSeries> =
-        topRatedTvRemoteDataSource.getTopRatedTvShows(
-            pageNumber,
-            language
-        ).items.map { it.toEntity() }
+        pageNumber: Int, language: String
+    ): List<TopRatedTvSeries> = topRatedTvRemoteDataSource.getTopRatedTvShows(
+        pageNumber, language
+    ).getOrThrow().items.map { it.toEntity() }
 }
