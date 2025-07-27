@@ -1,9 +1,10 @@
 package com.london.domain.usecase
 
 import com.google.common.truth.Truth.assertThat
-import com.london.domain.GetMovieCastFailedException
-import com.london.domain.entity.moviedatails.SimilarMovie
+import com.london.domain.entity.Movie
+import com.london.domain.error.GetMovieCastFailedException
 import com.london.domain.repository.MovieDetailsRepository
+import com.london.domain.usecase.details.movie.GetSimilarMoviesUseCase
 import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.mockk
@@ -104,21 +105,13 @@ class GetSimilarMoviesUseCaseTest {
             createDummySimilarMovie(2, "Similar Movie 2")
         )
 
-       private fun createDummySimilarMovie(id: Int, title: String) = SimilarMovie(
+        private fun createDummySimilarMovie(id: Int, title: String) = Movie(
             id = id,
-            adult = false,
-            backdropPath = "/backdrop_$id.jpg",
+            name = title,
+            posterPicture = "/backdrop_$id.jpg",
             genreIds = listOf(1, 2, 3),
-            originalLanguage = "en",
-            originalTitle = "$title Original",
-            overview = "Overview for $title",
-            popularity = 123.45,
-            posterPath = "/poster_$id.jpg",
-            releaseDate = "2025-01-01",
-            title = title,
-            video = false,
-            voteAverage = 7.5,
-            voteCount = 200
+            releaseYear = 2025,
+            rating = 7,
         )
     }
 }

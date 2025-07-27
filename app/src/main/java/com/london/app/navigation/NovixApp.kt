@@ -31,35 +31,35 @@ import com.london.presentation.navigation.Screen.Categories
 import com.london.presentation.navigation.Screen.EpisodeDetails
 import com.london.presentation.navigation.Screen.Home
 import com.london.presentation.navigation.Screen.Login
-import com.london.presentation.navigation.Screen.Splash
-import com.london.presentation.navigation.Screen.OnboardingPager
-import com.london.presentation.navigation.Screen.Welcome
 import com.london.presentation.navigation.Screen.MovieDetails
 import com.london.presentation.navigation.Screen.MoviesByCategory
+import com.london.presentation.navigation.Screen.OnboardingPager
 import com.london.presentation.navigation.Screen.Reviews
 import com.london.presentation.navigation.Screen.Search
+import com.london.presentation.navigation.Screen.Splash
 import com.london.presentation.navigation.Screen.TopTvShowsPicksDetails
 import com.london.presentation.navigation.Screen.TvShowDetails
-import com.london.presentation.screen.account.AccountScreen
-import com.london.presentation.screen.bookmark.BookmarksScreen
-import com.london.presentation.screen.category.CategoriesScreen
-import com.london.presentation.screen.category.moviesbycategory.MoviesByCategoryScreen
-import com.london.presentation.screen.details.actor.ActorDetailsScreen
-import com.london.presentation.screen.details.actordetails.gallery.ActorGalleryScreen
-import com.london.presentation.screen.details.actordetails.topmoviespicks.TopMoviesPicksScreen
-import com.london.presentation.screen.details.actordetails.toptvshowspicks.TopTvShowsPicksScreen
-import com.london.presentation.screen.details.movieDetalis.MovieDetailsScreen
-import com.london.presentation.screen.details.tvshow.episodedetails.EpisodeDetailsScreen
-import com.london.presentation.screen.details.tvshow.tvshowdetails.TvShowsDetailsScreen
-import com.london.presentation.screen.home.HomeScreen
-import com.london.presentation.screen.login.LoginScreen
-import com.london.presentation.screen.onboarding.OnboardingRoute
-import com.london.presentation.screen.onboarding.SplashRoute
-import com.london.presentation.screen.onboarding.WelcomeScreen
-import com.london.presentation.screen.reviews.ReviewsScreen
-import com.london.presentation.screen.search.SearchScreen
+import com.london.presentation.navigation.Screen.Welcome
+import com.london.presentation.feature.account.AccountScreen
+import com.london.presentation.feature.bookmark.BookmarksScreen
+import com.london.presentation.feature.category.CategoriesScreen
+import com.london.presentation.feature.category.moviesbycategory.MoviesByCategoryScreen
+import com.london.presentation.feature.details.actor.ActorDetailsScreen
+import com.london.presentation.feature.details.actordetails.gallery.ActorGalleryScreen
+import com.london.presentation.feature.details.actordetails.topmoviespicks.TopMoviesPicksScreen
+import com.london.presentation.feature.details.actordetails.toptvshowspicks.TopTvShowsPicksScreen
+import com.london.presentation.feature.details.movieDetalis.MovieDetailsScreen
+import com.london.presentation.feature.details.tvshow.episodedetails.EpisodeDetailsScreen
+import com.london.presentation.feature.details.tvshow.tvshowdetails.TvShowsDetailsScreen
+import com.london.presentation.feature.home.HomeScreen
+import com.london.presentation.feature.login.LoginScreen
+import com.london.presentation.feature.onboarding.OnboardingRoute
+import com.london.presentation.feature.onboarding.SplashRoute
+import com.london.presentation.feature.onboarding.WelcomeScreen
+import com.london.presentation.feature.reviews.ReviewsScreen
+import com.london.presentation.feature.search.SearchScreen
 import org.koin.compose.getKoin
-import com.london.presentation.screen.toprated.TopRatedScreen
+import com.london.presentation.feature.toprated.TopRatedScreen
 
 @Composable
 fun NovixApp(appPreferencesService: AppPreferencesService) {
@@ -105,9 +105,37 @@ fun NovixApp(appPreferencesService: AppPreferencesService) {
     ) { innerPadding ->
         NavHost(
             navController = navController,
-            startDestination = Screen.Splash,
+            startDestination = Splash,
             modifier = Modifier.padding(innerPadding)
         ) {
+
+            composable<Splash> {
+                SplashRoute(
+                    onNavigateToOnboarding = { navController.navigate(OnboardingPager) },
+                    onNavigateToWelcome = { navController.navigate(Welcome) },
+                    onNavigateToHome = { navController.navigate(Home) },
+                    appPreferencesService = appPreferencesService,
+                    authRepository = getKoin().get(),
+                )
+            }
+
+            composable<OnboardingPager> {
+                OnboardingRoute(
+                    onNavigateToWelcome = { navController.navigate(Welcome) },
+                    appPreferencesService = appPreferencesService
+                )
+            }
+
+            composable<Welcome> {
+                WelcomeScreen(
+                    onLoginClicked = {
+                        navController.navigate(Login)
+                    },
+                    onContinueClicked = {
+                        navController.navigate(Home)
+                    }
+                )
+            }
 
             composable<Login>(
                 exitTransition = { fadeOut(tween(500)) },
@@ -139,9 +167,9 @@ fun NovixApp(appPreferencesService: AppPreferencesService) {
                         navController.navigate(MovieDetails(movieId))
                     },
 
-                   onTvShowClick = { tvShowId ->
+                    onTvShowClick = { tvShowId ->
                         navController.navigate(TvShowDetails(tvShowId))
-                   },
+                    },
                     onTopRatedClick = {
                         navController.navigate(Screen.TopRated)
                     }
@@ -236,6 +264,7 @@ fun NovixApp(appPreferencesService: AppPreferencesService) {
                     }
                 )
             }
+
             composable<ActorTopMoviesPicksDetails> {
                 TopMoviesPicksScreen(
                     onBackClick = {
@@ -329,6 +358,7 @@ fun NovixApp(appPreferencesService: AppPreferencesService) {
                     }
                 )
             }
+
             composable<Screen.ActorGallery> {
                 ActorGalleryScreen(
                     onBackClick = { navController.popBackStack() }
@@ -342,38 +372,10 @@ fun NovixApp(appPreferencesService: AppPreferencesService) {
              )
             }
 
-           composable<Splash> {
-                SplashRoute(
-                    onNavigateToOnboarding = { navController.navigate(Screen.OnboardingPager) },
-                    onNavigateToWelcome = { navController.navigate(Screen.Welcome) },
-                    onNavigateToHome = { navController.navigate(Home) },
-                    appPreferencesService = appPreferencesService,
-                    authRepository = getKoin().get(),
-                )
-            }
-
-            composable<OnboardingPager> {
-                OnboardingRoute(
-                    onNavigateToWelcome = { navController.navigate(Screen.Welcome) },
-                    appPreferencesService = appPreferencesService
-                )
-            }
-
-            composable<Welcome> {
-                WelcomeScreen(
-                    onLoginClicked = {
-                        navController.navigate(Login)
-                    },
-                    onContinueClicked = {
-                        navController.navigate(Home)
-                    }
-                )
-            }
-
             composable<Login> {
                 LoginScreen(
                     onNavigateBack = {
-                        navController.navigate(Screen.Welcome)
+                        navController.navigate(Welcome)
                     },
                     onNavigateToHome = {
                         navController.navigate(Home)
