@@ -15,7 +15,7 @@ class TopRatedMovieRepoImpl(
         pageNumber: Int,
     ): PagedFetchResponse<TopRatedMovie> {
         val remoteResult = topRatedMovieRemoteDataSource
-            .getTopRatedMovies(pageNumber)
+            .getTopRatedMovies(pageNumber).getOrThrow()
 
         val movies = remoteResult.items.map { it.toEntity() }
         return PagedFetchResponse(
