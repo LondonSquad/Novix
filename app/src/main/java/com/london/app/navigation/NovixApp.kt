@@ -40,26 +40,26 @@ import com.london.presentation.navigation.Screen.Splash
 import com.london.presentation.navigation.Screen.TopTvShowsPicksDetails
 import com.london.presentation.navigation.Screen.TvShowDetails
 import com.london.presentation.navigation.Screen.Welcome
-import com.london.presentation.screen.account.AccountScreen
-import com.london.presentation.screen.bookmark.BookmarksScreen
-import com.london.presentation.screen.category.CategoriesScreen
-import com.london.presentation.screen.category.moviesbycategory.MoviesByCategoryScreen
-import com.london.presentation.screen.details.actor.ActorDetailsScreen
-import com.london.presentation.screen.details.actordetails.gallery.ActorGalleryScreen
-import com.london.presentation.screen.details.actordetails.topmoviespicks.TopMoviesPicksScreen
-import com.london.presentation.screen.details.actordetails.toptvshowspicks.TopTvShowsPicksScreen
-import com.london.presentation.screen.details.movieDetalis.MovieDetailsScreen
-import com.london.presentation.screen.details.tvshow.episodedetails.EpisodeDetailsScreen
-import com.london.presentation.screen.details.tvshow.tvshowdetails.TvShowsDetailsScreen
-import com.london.presentation.screen.home.HomeScreen
-import com.london.presentation.screen.login.LoginScreen
-import com.london.presentation.screen.onboarding.OnboardingRoute
-import com.london.presentation.screen.onboarding.SplashRoute
-import com.london.presentation.screen.onboarding.WelcomeScreen
-import com.london.presentation.screen.reviews.ReviewsScreen
-import com.london.presentation.screen.search.SearchScreen
+import com.london.presentation.feature.account.AccountScreen
+import com.london.presentation.feature.bookmark.BookmarksScreen
+import com.london.presentation.feature.category.CategoriesScreen
+import com.london.presentation.feature.category.moviesbycategory.MoviesByCategoryScreen
+import com.london.presentation.feature.details.actor.ActorDetailsScreen
+import com.london.presentation.feature.details.actordetails.gallery.ActorGalleryScreen
+import com.london.presentation.feature.details.actordetails.topmoviespicks.TopMoviesPicksScreen
+import com.london.presentation.feature.details.actordetails.toptvshowspicks.TopTvShowsPicksScreen
+import com.london.presentation.feature.details.movieDetalis.MovieDetailsScreen
+import com.london.presentation.feature.details.tvshow.episodedetails.EpisodeDetailsScreen
+import com.london.presentation.feature.details.tvshow.tvshowdetails.TvShowsDetailsScreen
+import com.london.presentation.feature.home.HomeScreen
+import com.london.presentation.feature.login.LoginScreen
+import com.london.presentation.feature.onboarding.OnboardingRoute
+import com.london.presentation.feature.onboarding.SplashRoute
+import com.london.presentation.feature.onboarding.WelcomeScreen
+import com.london.presentation.feature.reviews.ReviewsScreen
+import com.london.presentation.feature.search.SearchScreen
 import org.koin.compose.getKoin
-import com.london.presentation.screen.toprated.TopRatedScreen
+import com.london.presentation.feature.toprated.TopRatedScreen
 
 @Composable
 fun NovixApp(appPreferencesService: AppPreferencesService) {

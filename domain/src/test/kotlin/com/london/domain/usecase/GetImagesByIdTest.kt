@@ -1,7 +1,7 @@
 package com.london.domain.usecase
 
 import com.google.common.truth.Truth.assertThat
-import com.london.domain.GetImagesByIdFailedException
+import com.london.domain.error.GetImagesByIdFailedException
 import com.london.domain.entity.tvshowdetails.ImageItemEntity
 import com.london.domain.entity.tvshowdetails.TvShowImagesEntity
 import com.london.domain.repository.DetailsRepository
