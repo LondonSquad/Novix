@@ -59,6 +59,7 @@ import com.london.presentation.screen.onboarding.WelcomeScreen
 import com.london.presentation.screen.reviews.ReviewsScreen
 import com.london.presentation.screen.search.SearchScreen
 import org.koin.compose.getKoin
+import com.london.presentation.screen.toprated.TopRatedScreen
 
 @Composable
 fun NovixApp(appPreferencesService: AppPreferencesService) {
@@ -168,6 +169,9 @@ fun NovixApp(appPreferencesService: AppPreferencesService) {
 
                     onTvShowClick = { tvShowId ->
                         navController.navigate(TvShowDetails(tvShowId))
+                    },
+                    onTopRatedClick = {
+                        navController.navigate(Screen.TopRated)
                     }
                 )
             }
@@ -359,6 +363,13 @@ fun NovixApp(appPreferencesService: AppPreferencesService) {
                 ActorGalleryScreen(
                     onBackClick = { navController.popBackStack() }
                 )
+            }
+            composable<Screen.TopRated> {
+                TopRatedScreen(
+                 onBackClick = {navController.popBackStack()},
+                 onMovieClick = {navController.navigate(MovieDetails(it))},
+                 onTvShowClick = {navController.navigate(TvShowDetails(it))}
+             )
             }
 
             composable<Login> {

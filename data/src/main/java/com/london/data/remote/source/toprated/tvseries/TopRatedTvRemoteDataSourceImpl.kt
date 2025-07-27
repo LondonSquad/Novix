@@ -14,7 +14,6 @@ class TopRatedTvRemoteDataSourceImpl(
 ) : TopRatedTvRemoteDataSource {
     override suspend fun getTopRatedTvShows(
         pageNumber: Int,
-        language: String
     ): ApiResponse<TopRatedTvSeriesRemote> =
-        topRatedTvSeriesApi.getTopRatedTvSeries(pageNumber, language)
+        topRatedTvSeriesApi.getTopRatedTvSeries(pageNumber)
 }
