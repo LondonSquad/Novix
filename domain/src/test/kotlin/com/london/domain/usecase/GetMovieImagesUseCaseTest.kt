@@ -3,6 +3,7 @@ package com.london.domain.usecase
 import com.google.common.truth.Truth.assertThat
 import com.london.domain.error.GetMovieImagesFailedException
 import com.london.domain.repository.MovieDetailsRepository
+import com.london.domain.usecase.details.movie.GetMovieImagesUseCase
 import io.mockk.coEvery
 import io.mockk.mockk
 import kotlinx.coroutines.test.runTest
