@@ -1,11 +1,11 @@
 package com.london.presentation.feature.details.movieDetalis
 
 import androidx.lifecycle.SavedStateHandle
-import com.london.domain.usecase.GetMovieDetailsById
-import com.london.domain.usecase.GetMovieCastUseCase
-import com.london.domain.usecase.GetMovieImagesUseCase
-import com.london.domain.usecase.GetMovieVideoUseCase
-import com.london.domain.usecase.GetSimilarMoviesUseCase
+import com.london.domain.usecase.details.movie.GetMovieDetailsById
+import com.london.domain.usecase.details.movie.GetMovieCastUseCase
+import com.london.domain.usecase.details.movie.GetMovieImagesUseCase
+import com.london.domain.usecase.details.movie.GetMovieVideoUseCase
+import com.london.domain.usecase.details.movie.GetSimilarMoviesUseCase
 import com.london.presentation.navigation.Screen
 import com.london.presentation.navigation.getArgs
 import com.london.presentation.feature.base.BaseViewModel

@@ -8,6 +8,7 @@ import com.london.domain.entity.moviedatails.ProductionCountry
 import com.london.domain.entity.moviedatails.SpokenLanguage
 import com.london.domain.error.GetMovieByIdFailedException
 import com.london.domain.repository.MovieDetailsRepository
+import com.london.domain.usecase.details.movie.GetMovieDetailsById
 import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.mockk

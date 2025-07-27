@@ -4,6 +4,7 @@ import com.google.common.truth.Truth.assertThat
 import com.london.domain.error.GetMovieCastFailedException
 import com.london.domain.entity.moviedatails.SimilarMovie
 import com.london.domain.repository.MovieDetailsRepository
+import com.london.domain.usecase.details.movie.GetSimilarMoviesUseCase
 import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.mockk
