@@ -7761,5 +7761,33 @@
       "deletions": 86,
       "changed_files": 5
     }
+  },
+  {
+    "pr_number": 302,
+    "url": "https://github.com/LondonSquad/Novix/pull/302",
+    "title": "fix: add to recent watched",
+    "opened_at": "2025-07-27T17:33:35Z",
+    "head_ref": "refactor/add-continue-watching",
+    "base_ref": "develop",
+    "creator": {
+      "login": "marwanqashwa",
+      "id": 100484790,
+      "url": "https://github.com/marwanqashwa"
+    },
+    "approvals": [],
+    "first_approved_at": null,
+    "time_to_first_approval_minutes": null,
+    "required_approvals_met_at": null,
+    "time_to_required_approvals_minutes": null,
+    "closed_at": null,
+    "merged_at": null,
+    "merged_by": null,
+    "week": "2025-W30",
+    "status": "pending",
+    "diff_stats": {
+      "additions": 38,
+      "deletions": 3,
+      "changed_files": 2
+    }
   }
 ]
