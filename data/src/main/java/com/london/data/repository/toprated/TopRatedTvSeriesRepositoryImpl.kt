@@ -1,15 +1,15 @@
-package com.london.data.repository
+package com.london.data.repository.toprated
 
 import com.london.data.mapper.toprated.toEntity
 import com.london.data.remote.source.toprated.tvseries.TopRatedTvRemoteDataSource
 import com.london.data.utils.fetchAndSync
 import com.london.domain.entity.PagedFetchResponse
 import com.london.domain.entity.toprated.TopRatedTvSeries
-import com.london.domain.repository.TopRatedTvSeriesRepository
+import com.london.domain.repository.toprated.TopRatedTvSeriesRepository
 import org.koin.core.annotation.Single
 
 @Single
-class TopRatedTvSeriesRepoImpl(
+class TopRatedTvSeriesRepositoryImpl(
     private val topRatedTvRemoteDataSource: TopRatedTvRemoteDataSource
 ) : TopRatedTvSeriesRepository {
     override suspend fun getTopRatedTvSeries(

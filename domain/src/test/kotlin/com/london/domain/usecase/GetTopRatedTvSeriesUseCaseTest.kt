@@ -1,9 +1,10 @@
 package com.london.domain.usecase
 
 import com.google.common.truth.Truth.assertThat
-import com.london.domain.entity.toprated.TopRatedTvSeries
-import com.london.domain.repository.TopRatedTvSeriesRepository
 import com.london.domain.entity.PagedFetchResponse
+import com.london.domain.entity.toprated.TopRatedTvSeries
+import com.london.domain.repository.toprated.TopRatedTvSeriesRepository
+import com.london.domain.usecase.toprated.GetTopRatedTvSeriesUseCase
 import io.mockk.coEvery
 import io.mockk.mockk
 import kotlinx.coroutines.test.runTest

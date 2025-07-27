@@ -1,10 +1,11 @@
 package com.london.data.repository
 
 import com.google.common.truth.Truth.assertThat
-import com.london.data.remote.model.ApiResponse
-import com.london.data.remote.source.toprated.tvseries.TopRatedTvRemoteDataSource
-import com.london.data.remote.model.toprated.tvshow.model.TopRatedTvSeriesRemote
 import com.london.data.mapper.toprated.toEntity
+import com.london.data.remote.model.ApiResponse
+import com.london.data.remote.model.toprated.TopRatedTvSeriesRemote
+import com.london.data.remote.source.toprated.tvseries.TopRatedTvRemoteDataSource
+import com.london.data.repository.toprated.TopRatedTvSeriesRepositoryImpl
 import com.london.domain.entity.toprated.TopRatedTvSeries
 import io.mockk.coEvery
 import io.mockk.mockk
@@ -16,12 +17,12 @@ import org.junit.jupiter.api.assertThrows
 class TopRatedTvSeriesRepositoryImplTest {
 
     private lateinit var remoteDataSource: TopRatedTvRemoteDataSource
-    private lateinit var repository: TopRatedTvSeriesRepoImpl
+    private lateinit var repository: TopRatedTvSeriesRepositoryImpl
 
     @Before
     fun setup() {
         remoteDataSource = mockk(relaxed = true)
-        repository = TopRatedTvSeriesRepoImpl(remoteDataSource)
+        repository = TopRatedTvSeriesRepositoryImpl(remoteDataSource)
     }
 
     @Test

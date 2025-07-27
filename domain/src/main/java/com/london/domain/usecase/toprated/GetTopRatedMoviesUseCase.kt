@@ -1,8 +1,8 @@
-package com.london.domain.usecase
+package com.london.domain.usecase.toprated
 
 import com.london.domain.entity.PagedFetchResponse
 import com.london.domain.entity.toprated.TopRatedMovie
-import com.london.domain.repository.TopRatedMovieRepository
+import com.london.domain.repository.toprated.TopRatedMovieRepository
 import org.koin.core.annotation.Provided
 import org.koin.core.annotation.Single
 
