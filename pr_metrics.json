@@ -7418,5 +7418,33 @@
       "deletions": 74,
       "changed_files": 17
     }
+  },
+  {
+    "pr_number": 292,
+    "url": "https://github.com/LondonSquad/Novix/pull/292",
+    "title": "hotfix/ci: refine remote data source packages",
+    "opened_at": "2025-07-27T12:42:56Z",
+    "head_ref": "hotfix/ci",
+    "base_ref": "develop",
+    "creator": {
+      "login": "abdelrhman1002",
+      "id": 180463542,
+      "url": "https://github.com/abdelrhman1002"
+    },
+    "approvals": [],
+    "first_approved_at": null,
+    "time_to_first_approval_minutes": null,
+    "required_approvals_met_at": null,
+    "time_to_required_approvals_minutes": null,
+    "closed_at": null,
+    "merged_at": null,
+    "merged_by": null,
+    "week": "2025-W30",
+    "status": "pending",
+    "diff_stats": {
+      "additions": 1,
+      "deletions": 3,
+      "changed_files": 1
+    }
   }
 ]
