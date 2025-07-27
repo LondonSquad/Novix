@@ -1,7 +1,7 @@
 package com.london.domain.usecase
 
 import com.google.common.truth.Truth.assertThat
-import com.london.domain.TvShowSearchFailedException
+import com.london.domain.error.TvShowSearchFailedException
 import com.london.domain.entity.PagedFetchResponse
 import com.london.domain.entity.TvShow
 import com.london.domain.repository.SearchRepository

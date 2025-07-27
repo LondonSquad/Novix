@@ -2,7 +2,7 @@ package com.london.presentation.utils
 
 import androidx.compose.runtime.Composable
 import com.london.presentation.R
-import com.london.presentation.screen.search.SearchCategory
+import com.london.presentation.feature.search.SearchCategory
 
 @Composable
 fun <T> ResultOrEmpty(
