@@ -1,14 +1,19 @@
 package com.london.presentation.feature.details.tvshow.tvshowdetails
 
 import androidx.lifecycle.SavedStateHandle
+import com.london.domain.entity.TvShow
+import com.london.domain.entity.recent.MediaType
+import com.london.domain.entity.recent.RecentViewed
 import com.london.domain.usecase.GetCastById
 import com.london.domain.usecase.GetEpisodesByTvShowSeason
 import com.london.domain.usecase.GetImagesById
 import com.london.domain.usecase.GetTvShowDetails
 import com.london.domain.usecase.GetTvShowVideoProvider
+import com.london.domain.usecase.recent.viewed.AddToRecentViewedUseCase
+import com.london.domain.usecase.recent.watched.AddTvShowToRecentWatchedUseCase
+import com.london.presentation.feature.base.BaseViewModel
 import com.london.presentation.navigation.Screen
 import com.london.presentation.navigation.getArgs
-import com.london.presentation.feature.base.BaseViewModel
 import org.koin.android.annotation.KoinViewModel
 
 @KoinViewModel
@@ -18,6 +23,8 @@ class TvShowDetailsViewModel(
     private val getTvShowImages: GetImagesById,
     private val getEpisodesByTvShowSeason: GetEpisodesByTvShowSeason,
     private val getTvShowVideoProvider: GetTvShowVideoProvider,
+    private val addTvShowToRecentWatchedUseCase:AddTvShowToRecentWatchedUseCase,
+    private val addToRecentViewedUseCase:AddToRecentViewedUseCase,
     savedStateHandle: SavedStateHandle,
 ) : BaseViewModel<TvShowDetailsUiState, TvShowDetailsEffect>(TvShowDetailsUiState()),
     TvShowDetailsContract {
@@ -147,6 +154,25 @@ class TvShowDetailsViewModel(
                         voteCount = tvShowDetails.voteCount
                     )
                 }
+                addMovieToRecentViewed(
+                    RecentViewed(
+                        id = tvShowDetails.id,
+                        imageUrl = tvShowDetails.posterUrl.toString(),
+                        type = MediaType.TvShow,
+                        viewDate = System.currentTimeMillis())
+                )
+                addToRecentWatched(
+                    TvShow(
+                        id = tvShowDetails.id,
+                        name = tvShowDetails.name,
+                        posterPicture = tvShowDetails.posterUrl.toString(),
+                        releaseYear = 2025,
+                        rating = 1,
+                        genres = tvShowDetails.tvShowGenres.map{
+                            it.id
+                        },
+                    )
+                )
             },
             onError = { errorState ->
                 updateState {
@@ -190,5 +216,11 @@ class TvShowDetailsViewModel(
 
     override fun onBackClicked() {
         emitEffect(TvShowDetailsEffect.NavigateBack)
+    }
+    private suspend fun addToRecentWatched(tvShow: TvShow){
+        addTvShowToRecentWatchedUseCase.invoke(tvShow)
+    }
+    private suspend fun addMovieToRecentViewed(tvShow: RecentViewed){
+        addToRecentViewedUseCase.invoke(tvShow)
     }
 }
