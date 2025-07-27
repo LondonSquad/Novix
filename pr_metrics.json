@@ -7741,5 +7741,33 @@
       "deletions": 60,
       "changed_files": 22
     }
+  },
+  {
+    "pr_number": 299,
+    "url": "https://github.com/LondonSquad/Novix/pull/299",
+    "title": "fix: simplify domain entity and fix errors",
+    "opened_at": "2025-07-27T16:54:22Z",
+    "head_ref": "refactor/movie-video-data",
+    "base_ref": "develop",
+    "creator": {
+      "login": "marwanqashwa",
+      "id": 100484790,
+      "url": "https://github.com/marwanqashwa"
+    },
+    "approvals": [],
+    "first_approved_at": null,
+    "time_to_first_approval_minutes": null,
+    "required_approvals_met_at": null,
+    "time_to_required_approvals_minutes": null,
+    "closed_at": null,
+    "merged_at": null,
+    "merged_by": null,
+    "week": "2025-W30",
+    "status": "pending",
+    "diff_stats": {
+      "additions": 2,
+      "deletions": 86,
+      "changed_files": 5
+    }
   }
 ]
