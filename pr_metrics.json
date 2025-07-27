@@ -7062,33 +7062,16 @@
       "id": 180463542,
       "url": "https://github.com/abdelrhman1002"
     },
-    "approvals": [
-      {
-        "reviewer": {
-          "id": 102248144,
-          "login": "BassantM",
-          "url": "https://github.com/BassantM"
-        },
-        "submitted_at": "2025-07-27T13:28:29Z"
-      },
-      {
-        "reviewer": {
-          "id": 106277855,
-          "login": "Mostafa-alsaygh",
-          "url": "https://github.com/Mostafa-alsaygh"
-        },
-        "submitted_at": "2025-07-27T13:33:15Z"
-      }
-    ],
-    "first_approved_at": "2025-07-27T13:28:29Z",
-    "time_to_first_approval_minutes": 3658.9,
-    "required_approvals_met_at": "2025-07-27T13:33:15Z",
-    "time_to_required_approvals_minutes": 3663.6666666666665,
+    "approvals": [],
+    "first_approved_at": null,
+    "time_to_first_approval_minutes": null,
+    "required_approvals_met_at": null,
+    "time_to_required_approvals_minutes": null,
     "closed_at": null,
     "merged_at": null,
     "merged_by": null,
     "week": "2025-W30",
-    "status": "approved",
+    "status": "pending",
     "diff_stats": {
       "additions": 671,
       "deletions": 123,
