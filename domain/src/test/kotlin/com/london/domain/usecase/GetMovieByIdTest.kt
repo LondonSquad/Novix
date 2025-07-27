@@ -1,12 +1,12 @@
 package com.london.domain.usecase
 
-import com.london.domain.GetMovieByIdFailedException
 import com.london.domain.entity.moviedatails.CollectionDetails
 import com.london.domain.entity.moviedatails.Genre
 import com.london.domain.entity.moviedatails.MovieDetails
 import com.london.domain.entity.moviedatails.ProductionCompany
 import com.london.domain.entity.moviedatails.ProductionCountry
 import com.london.domain.entity.moviedatails.SpokenLanguage
+import com.london.domain.error.GetMovieByIdFailedException
 import com.london.domain.repository.MovieDetailsRepository
 import io.mockk.coEvery
 import io.mockk.coVerify
