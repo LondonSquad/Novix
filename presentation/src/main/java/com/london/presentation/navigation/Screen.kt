@@ -8,10 +8,10 @@ sealed interface Screen {
     object Splash : Screen
 
     @Serializable
-    object OnboardingPager : Screen
-
-    @Serializable
-    object Welcome : Screen
+    object OnBoarding: Screen {
+        @Serializable
+        object Welcome : Screen
+    }
 
     @Serializable
     object Login : Screen
