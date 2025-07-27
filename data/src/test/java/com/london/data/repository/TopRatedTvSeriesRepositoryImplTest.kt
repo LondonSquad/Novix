@@ -29,7 +29,7 @@ class TopRatedTvSeriesRepositoryImplTest {
         // Given
         coEvery {
             remoteDataSource.getTopRatedTvShows(PAGE)
-        } returns fakeApiResponseWithTvSeries()
+        } returns Result.success(fakeApiResponseWithTvSeries())
 
         // When
         val result: List<TopRatedTvSeries> = repository.getTopRatedTvSeries(PAGE).items
@@ -53,7 +53,7 @@ class TopRatedTvSeriesRepositoryImplTest {
         // Given
         coEvery {
             remoteDataSource.getTopRatedTvShows(PAGE)
-        } returns fakeEmptyApiResponse()
+        } returns Result.success(fakeEmptyApiResponse())
 
         // When
         val result = repository.getTopRatedTvSeries(PAGE)
