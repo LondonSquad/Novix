@@ -7537,5 +7537,33 @@
       "deletions": 193,
       "changed_files": 13
     }
+  },
+  {
+    "pr_number": 295,
+    "url": "https://github.com/LondonSquad/Novix/pull/295",
+    "title": "refactor: Move exception classes to 'error' package",
+    "opened_at": "2025-07-27T15:14:23Z",
+    "head_ref": "refactor/restructure-domain",
+    "base_ref": "develop",
+    "creator": {
+      "login": "ahmeddsamii",
+      "id": 154278495,
+      "url": "https://github.com/ahmeddsamii"
+    },
+    "approvals": [],
+    "first_approved_at": null,
+    "time_to_first_approval_minutes": null,
+    "required_approvals_met_at": null,
+    "time_to_required_approvals_minutes": null,
+    "closed_at": null,
+    "merged_at": null,
+    "merged_by": null,
+    "week": "2025-W30",
+    "status": "pending",
+    "diff_stats": {
+      "additions": 15,
+      "deletions": 15,
+      "changed_files": 15
+    }
   }
 ]
