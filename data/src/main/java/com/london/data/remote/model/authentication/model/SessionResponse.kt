@@ -1,4 +1,4 @@
-package com.london.data.remote.model.auth.model
+package com.london.data.remote.model.authentication.model
 
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
