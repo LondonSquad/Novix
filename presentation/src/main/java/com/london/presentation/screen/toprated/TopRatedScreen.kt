@@ -143,7 +143,9 @@ private fun Content(
                     HomeCard(
                         imageUrl = seriesItem.posterUrl,
                         isSaved = false,
-                        onSaveClick = {},
+                        onSaveClick = {
+                            // TODO
+                        },
                         modifier = Modifier.clickable {
                             topRatedContract.onTvShowClick(seriesItem.id)
                         }

@@ -25,7 +25,7 @@ class TopRatedMovieRepositoryImplTest {
     }
 
     @Test
-    fun `getTopRatedMovies should map remote movie list correctly`() = runTest {
+    fun `should getTopRatedMovies should map when remote movie list correctly`() = runTest {
         // Given
         coEvery {
             remoteDataSource.getTopRatedMovies(PAGE)
@@ -49,7 +49,7 @@ class TopRatedMovieRepositoryImplTest {
     }
 
     @Test
-    fun `getTopRatedMovies should return empty list when API returns empty results`() = runTest {
+    fun `should getTopRatedMovies should return empty list when API returns empty results`() = runTest {
         // Given
         coEvery {
             remoteDataSource.getTopRatedMovies(PAGE)
@@ -63,7 +63,7 @@ class TopRatedMovieRepositoryImplTest {
     }
 
     @Test
-    fun `getTopRatedMovies should propagate exceptions`() = runTest {
+    fun `should getTopRatedMovies when propagate exceptions`() = runTest {
         // Given
         coEvery {
             remoteDataSource.getTopRatedMovies(PAGE)
