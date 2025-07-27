@@ -19,38 +19,28 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.london.designsystem.component.carousel.m3.Carousel
 import com.london.designsystem.component.carousel.m3.CarouselAlignment
 import com.london.designsystem.component.carousel.m3.CarouselDefaults
 import com.london.designsystem.component.carousel.m3.CarouselItemScope
+import com.london.designsystem.component.carousel.m3.CarouselState
 import com.london.designsystem.component.carousel.m3.keylineListOf
 import com.london.designsystem.component.carousel.m3.rememberCarouselState
 import kotlin.math.floor
 import kotlin.math.max
 
-/**
- * A custom Material 3 Carousel with one hero item, as many small items as possible,
- * and a partially visible (cut-off) item at the end.
- *
- * @param modifier The modifier to be applied to the carousel.
- * @param itemCount The total number of items in the carousel.
- * @param heroItemSize The size of the main, focused hero item.
- * @param smallItemSize The size of the adjacent, non-focal items.
- * @param itemSpacing The spacing between items.
- * @param itemContent The composable content for each carousel item.
- */
 @Composable
 fun HeroCarousel(
-    modifier: Modifier = Modifier,
-    itemCount: Int,
+    carouselState: CarouselState,
     heroItemSize: Dp,
     smallItemSize: Dp,
     itemSpacing: Dp,
+    modifier: Modifier = Modifier,
     itemContent: @Composable CarouselItemScope.(itemIndex: Int) -> Unit
 ) {
-    val carouselState = rememberCarouselState { itemCount }
     val density = LocalDensity.current
 
     val keylineList = { availableSpace: Float, itemSpacingPx: Float ->
@@ -68,13 +58,9 @@ fun HeroCarousel(
             carouselAlignment = CarouselAlignment.Start
         ) {
             add(anchorSize, isAnchor = true)
-
-            // Add the keyline for the main hero item at the start
             add(size = heroSizePx, isAnchor = false)
-
             repeat(smallItemCount) { add(size = smallSizePx, isAnchor = false) }
 
-            // Add the keyline for the partially visible "cut-off" item if there's space
             val spaceAfterSmallItems =
                 remainingSpace - (smallItemCount * (smallSizePx + itemSpacingPx))
             if (spaceAfterSmallItems > 0f) {
@@ -82,7 +68,6 @@ fun HeroCarousel(
             }
 
             add(anchorSize, isAnchor = true)
-
         }
     }
 
@@ -101,6 +86,7 @@ fun HeroCarousel(
 }
 
 @Composable
+@Preview
 fun MyCarouselScreen() {
     Surface(modifier = Modifier.fillMaxSize()) {
         Column(
@@ -111,7 +97,6 @@ fun MyCarouselScreen() {
             Spacer(Modifier.height(16.dp))
 
             HeroCarousel(
-                itemCount = 10,
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(260.dp)
@@ -119,15 +104,12 @@ fun MyCarouselScreen() {
                 heroItemSize = 158.dp,
                 smallItemSize = 74.dp,
                 itemSpacing = 8.dp,
+                carouselState = rememberCarouselState { 8 }
             ) { itemIndex ->
-                // Example item content
-
                 Card(
                     modifier = Modifier.fillMaxSize(),
                     colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.primaryContainer)
                 ) {
-
-
                     Box(contentAlignment = Alignment.Center, modifier = Modifier.fillMaxSize()) {
                         Text(
                             text = "Item ${itemIndex + 1}",

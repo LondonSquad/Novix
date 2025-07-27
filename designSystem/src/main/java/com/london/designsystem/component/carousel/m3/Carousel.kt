@@ -340,7 +340,6 @@ internal fun Modifier.carouselItem(
                 layerBlock = {
                     val scrollOffset = calculateCurrentScrollOffset(state, strategyResult)
                     val maxScrollOffset = calculateMaxScrollOffset(state, strategyResult)
-                    // TODO: Reduce the number of times keylins are calculated
                     val keylines =
                         strategyResult.getKeylineListForScrollOffset(scrollOffset, maxScrollOffset)
                     val roundedKeylines =
