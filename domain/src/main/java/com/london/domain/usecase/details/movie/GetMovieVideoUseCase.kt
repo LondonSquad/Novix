@@ -1,4 +1,4 @@
-package com.london.domain.usecase
+package com.london.domain.usecase.details.movie
 
 import com.london.domain.repository.MovieVideoProviderRepository
 import org.koin.core.annotation.Provided

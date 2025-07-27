@@ -1,6 +1,7 @@
 package com.london.data.repository
 
 import com.london.data.remote.exception.NetworkException
+import com.london.data.remote.model.ApiResponse
 import com.london.data.remote.model.details.movie.model.moviecast.MovieActor
 import com.london.data.remote.model.details.movie.model.moviecast.MovieCastResponse
 import com.london.data.remote.model.details.movie.model.moviedetails.GenreRemote
@@ -11,8 +12,7 @@ import com.london.data.remote.model.details.movie.model.moviedetails.RemoteColle
 import com.london.data.remote.model.details.movie.model.moviedetails.SpokenLanguageRemote
 import com.london.data.remote.model.details.movie.model.movieimages.MovieImagesResponse
 import com.london.data.remote.model.details.movie.model.movieimages.Poster
-import com.london.data.remote.model.details.movie.model.similarmovies.SimilarMovieRemote
-import com.london.data.remote.model.details.movie.model.similarmovies.SimilarMoviesResponse
+import com.london.data.remote.model.search.model.SearchMovieRemote
 import com.london.data.remote.source.details.movie.MovieDetailsRemoteDataSource
 import com.london.data.utils.asImageUrlOrEmpty
 import io.mockk.coEvery
@@ -72,44 +72,52 @@ class MovieDetailsRepositoryImplTest {
         ),
     )
 
-    private fun fakeSimilarMoviesRemote() = SimilarMoviesResponse(
-        page = 1,
-        totalPages = 1,
-        totalResults = 2,
-        similarMovieRemotes = listOf(
-            SimilarMovieRemote(
+    private fun fakeSimilarMoviesRemote() = ApiResponse(
+        currentPage = 1,
+        items = listOf(
+            SearchMovieRemote(
                 adult = false,
-                backdropPath = "/b1.jpg",
-                genreIds = listOf(1),
+                backdropPath = null,
+                genreIds =listOf(1,2,3),
                 id = 1,
                 originalLanguage = "en",
-                originalTitle = "Interstellar",
-                overview = "Space",
-                popularity = 1.0,
-                posterPath = "/p1.jpg",
-                releaseDate = "2014-11-07",
-                title = "Interstellar",
+                originalTitle = "",
+                overview = "",
+                popularity = 0.0,
+                posterPath = "",
+                releaseDate = "2020-06-15",
+                title = "",
                 video = false,
-                voteAverage = 8.5,
-                voteCount = 1000
+                voteAverage = 8.0,
+                voteCount = 0,
+                originCountry = listOf(""),
+                originalName = "",
+                firstAirDate = "",
+                name = "",
             ),
-            SimilarMovieRemote(
+            SearchMovieRemote(
                 adult = false,
-                backdropPath = "/b2.jpg",
-                genreIds = listOf(2),
-                id = 2,
+                backdropPath = null,
+                genreIds = listOf(1,2,3),
+                id = 1,
                 originalLanguage = "en",
-                originalTitle = "Tenet",
-                overview = "Time",
-                popularity = 1.0,
-                posterPath = "/p2.jpg",
-                releaseDate = "2020-08-26",
-                title = "Tenet",
+                originalTitle = "",
+                overview = "",
+                popularity = 0.0,
+                posterPath = "",
+                releaseDate = "2020-06-15",
+                title = "",
                 video = false,
-                voteAverage = 7.5,
-                voteCount = 900
+                voteAverage = 8.0,
+                voteCount = 0,
+                originCountry = listOf(""),
+                originalName = "",
+                firstAirDate = "",
+                name = "",
             )
-        )
+        ),
+        totalPages = 1,
+        totalItems = 1
     )
 
     private fun fakeMovieImagesRemote() = MovieImagesResponse(
@@ -188,9 +196,8 @@ class MovieDetailsRepositoryImplTest {
 
         val result = repository.getMovieById(123)
 
-        assertEquals("Inception", result.originalTitle)
-        assertEquals(2, result.genres.size)
-        assertEquals("Sci-Fi", result.genres[0].name)
+        assertEquals("Inception", result.title)
+        assertEquals(2, result.genresId.size)
     }
 
     @Test
