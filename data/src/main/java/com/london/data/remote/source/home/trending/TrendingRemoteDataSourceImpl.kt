@@ -16,5 +16,6 @@ class TrendingRemoteDataSourceImpl(
     override suspend fun getTrendingTvShows(page: Int): Response<ApiResponse<TrendingResponse>> =
         trendingApiService.getTrendingTvShows(page)
 
-    override suspend fun getTrendingActors(page: Int) = trendingApiService.getTrendingActors(page)
+    override suspend fun getTrendingActors(page: Int): Response<ApiResponse<TrendingResponse>> =
+        trendingApiService.getTrendingActors(page)
 } 
