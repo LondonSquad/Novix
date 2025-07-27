@@ -1,6 +1,6 @@
 package com.london.data.mapper.toprated
 
-import com.london.data.remote.model.toprated.tvshow.model.TopRatedTvSeriesRemote
+import com.london.data.remote.model.toprated.TopRatedTvSeriesRemote
 import com.london.data.utils.asImageUrlOrEmpty
 import com.london.data.utils.isTrue
 import com.london.data.utils.orZero
