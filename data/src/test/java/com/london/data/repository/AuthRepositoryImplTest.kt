@@ -182,27 +182,6 @@ class AuthRepositoryImplTest {
     }
     // endregion
 
-    // region: validateSession()
-    @Test
-    fun `validateSession emits true when session or guest session exists`() = runTest {
-        every { authPreferences.getSessionId() } returns null
-        every { authPreferences.getGuestSessionId() } returns "guest"
-
-        val result = repository.validateSession().first()
-
-        assertTrue(result)
-    }
-
-    @Test
-    fun `validateSession emits false when both session and guest are null`() = runTest {
-        every { authPreferences.getSessionId() } returns null
-        every { authPreferences.getGuestSessionId() } returns null
-
-        val result = repository.validateSession().first()
-
-        assertFalse(result)
-    }
-
     @Test
     fun `loginAsGuest sets guest mode to true when successful`() = runTest {
         coEvery { authApiService.createGuestSession() } returns GuestSessionResponse(
