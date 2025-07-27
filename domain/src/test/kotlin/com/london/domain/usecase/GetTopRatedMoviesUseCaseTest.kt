@@ -1,6 +1,7 @@
 package com.london.domain.usecase
 
 import com.google.common.truth.Truth.assertThat
+import com.london.domain.entity.PagedFetchResponse
 import com.london.domain.entity.toprated.TopRatedMovie
 import com.london.domain.repository.TopRatedMovieRepository
 import io.mockk.coEvery
@@ -22,51 +23,67 @@ class GetTopRatedMoviesUseCaseTest {
     }
 
     @Test
-    fun `should return movies when repository returns valid list`() = runTest {
+    fun `should return movies when repository returns valid response`() = runTest {
         // Given
+        val mockPagedResponse = PagedFetchResponse(
+            items = mockTopRatedMovies,
+            currentPage = PAGE,
+            totalPages = TOTAL_PAGES,
+            totalItems = TOTAL_ITEMS
+
+        )
+
         coEvery {
-            repository.getTopRatedMovies(PAGE, LANGUAGE, REGION)
-        } returns mockTopRatedMovies
+            repository.getTopRatedMovies(PAGE)
+        } returns mockPagedResponse
 
         // When
-        val result = getTopRatedMovies(PAGE, LANGUAGE, REGION)
+        val result = getTopRatedMovies(PAGE)
 
         // Then
-        assertThat(result).isEqualTo(mockTopRatedMovies)
-        assertThat(result).hasSize(2)
+        assertThat(result).isEqualTo(mockPagedResponse)
+        assertThat(result.items[0].title).isEqualTo("The Shawshank Redemption")
+        assertThat(result.items[1].title).isEqualTo("The Godfather")
     }
 
     @Test
-    fun `should return empty list when repository returns empty list`() = runTest {
+    fun `should return empty list when repository returns empty response`() = runTest {
         // Given
+        val emptyPagedResponse = PagedFetchResponse(
+            currentPage = PAGE,
+            totalPages = TOTAL_PAGES,
+            totalItems = TOTAL_PAGES,
+            items = emptyList<TopRatedMovie>()
+        )
+
         coEvery {
-            repository.getTopRatedMovies(PAGE, LANGUAGE, REGION)
-        } returns emptyList()
+            repository.getTopRatedMovies(PAGE)
+        } returns emptyPagedResponse
 
         // When
-        val result = getTopRatedMovies(PAGE, LANGUAGE, REGION)
+        val result = getTopRatedMovies(PAGE)
 
         // Then
-        assertThat(result).isEmpty()
+        assertThat(result.items).isEmpty()
     }
 
     @Test
     fun `should throw RuntimeException when repository throws`() = runTest {
         // Given
         coEvery {
-            repository.getTopRatedMovies(PAGE, LANGUAGE, REGION)
+            repository.getTopRatedMovies(PAGE)
         } throws RuntimeException()
 
         // When & Then
         assertThrows<RuntimeException> {
-            getTopRatedMovies(PAGE, LANGUAGE, REGION)
+            getTopRatedMovies(PAGE)
         }
     }
 
     companion object {
         private const val PAGE = 1
-        private const val LANGUAGE = "en-US"
-        private const val REGION = "US"
+        private const val TOTAL_PAGES = 2
+        private const val TOTAL_ITEMS = 100
 
         private val mockMovie1 = TopRatedMovie(
             id = 278,

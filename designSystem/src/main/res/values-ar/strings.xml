@@ -29,5 +29,7 @@
     <string name="no_internet">صوره لا يوجد انترنت</string>
     <string name="you_are_offline">يبدو انك غير متصل بالانترنت</string>
     <string name="check_your_connection">تحقق من اتصالك وحاول مرة أخرى، سننتظرك مع أفلامك والفشار</string>
+    <string name="movies">Movies</string>
+    <string name="tv_shows">TV shows</string>
     <string name="incorrect_password">كلمة المرور غير صحيحة</string>
 </resources>
