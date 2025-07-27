@@ -112,16 +112,16 @@ fun ImageViewFilter(
                 errorContent(errorState)
             }
             moderationState != null && moderationState!!.isModerated -> {
-                ModeratedImage(
-                    state = moderationState!!,
-                    contentDescription = contentDescription,
-                    contentScale = contentScale,
-                    blurStrength = config.blurStrength,
-                    modifier = Modifier.fillMaxSize()
-                )
-
-                if (moderationState!!.shouldBlur) {
+                if (moderationState!!.shouldBlur && config.showCustomContentWhenBlurred) {
                     moderatedContent()
+                } else {
+                    ModeratedImage(
+                        state = moderationState!!,
+                        contentDescription = contentDescription,
+                        contentScale = contentScale,
+                        blurStrength = config.blurStrength,
+                        modifier = Modifier.fillMaxSize()
+                    )
                 }
             }
         }
@@ -133,7 +133,8 @@ data class ImageFilterConfig(
     val blurStrength: Float = 80f,
     val detectFemales: Boolean = true,
     val detectMales: Boolean = false,
-    val useContentDetection: Boolean = true
+    val useContentDetection: Boolean = true,
+    val showCustomContentWhenBlurred: Boolean = false // New flag to control behavior
 )
 
 private fun generateImageKey(model: Any?): String = when (model) {
