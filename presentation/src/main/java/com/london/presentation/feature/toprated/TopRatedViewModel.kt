@@ -67,16 +67,19 @@ class TopRatedViewModel(
     }
 
     override fun movieGenre(genre: MovieGenre) {
+        if (genre == state.value.selectedMovieGenre) return
         updateState { copy(selectedMovieGenre = genre) }
         initializeTopMovies()
     }
 
     override fun tvShowGenre(genre: TvShowGenre) {
+        if (genre == state.value.selectedTvShowGenre) return
         updateState { copy(selectedTvShowGenre = genre) }
         initializeTvShow()
     }
 
     override fun tabSelected(index: Int) {
+        if (index == state.value.tabSelected) return
         updateState {
             copy(
                 tabSelected = index, isMovieSelected = index == 0
