@@ -1,11 +1,11 @@
 package com.london.presentation.feature.details.movieDetalis
 
 import androidx.lifecycle.SavedStateHandle
-import com.london.domain.usecase.GetMovieById
-import com.london.domain.usecase.GetMovieCastUseCase
-import com.london.domain.usecase.GetMovieImagesUseCase
-import com.london.domain.usecase.GetMovieVideoUseCase
-import com.london.domain.usecase.GetSimilarMoviesUseCase
+import com.london.domain.usecase.details.movie.GetMovieDetailsById
+import com.london.domain.usecase.details.movie.GetMovieCastUseCase
+import com.london.domain.usecase.details.movie.GetMovieImagesUseCase
+import com.london.domain.usecase.details.movie.GetMovieVideoUseCase
+import com.london.domain.usecase.details.movie.GetSimilarMoviesUseCase
 import com.london.presentation.navigation.Screen
 import com.london.presentation.navigation.getArgs
 import com.london.presentation.feature.base.BaseViewModel
@@ -13,7 +13,7 @@ import org.koin.android.annotation.KoinViewModel
 
 @KoinViewModel
 class MovieDetailsViewModel(
-    private val getMovieById: GetMovieById,
+    private val getMovieById: GetMovieDetailsById,
     private val getMovieImagesUseCase: GetMovieImagesUseCase,
     private val getMovieCastUseCase: GetMovieCastUseCase,
     private val getSimilarMoviesUseCase: GetSimilarMoviesUseCase,
@@ -70,7 +70,7 @@ class MovieDetailsViewModel(
                 updateState {
                     copy(
                         movieName = details.title,
-                        movieGenres = details.genres,
+                        movieGenres = details.genresId,
                         movieRating = details.voteAverage,
                         movieDuration = details.runtime.toString(),
                         releaseDate = details.releaseDate,
