@@ -1,7 +1,7 @@
 package com.london.domain.usecase
 
 import com.google.common.truth.Truth.assertThat
-import com.london.domain.TvShowDetailsSearchFailedException
+import com.london.domain.error.TvShowDetailsSearchFailedException
 import com.london.domain.entity.tvshowdetails.TvShowCreatorEntity
 import com.london.domain.entity.tvshowdetails.TvShowDetailsEntity
 import com.london.domain.entity.tvshowdetails.TvShowEpisodeEntity

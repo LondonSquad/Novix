@@ -1,7 +1,7 @@
 package com.london.data.utils
 
 import com.google.common.truth.Truth.assertThat
-import com.london.domain.NetworkException
+import com.london.domain.error.NetworkException
 import kotlinx.coroutines.test.runTest
 import okhttp3.ResponseBody.Companion.toResponseBody
 import org.junit.Test
