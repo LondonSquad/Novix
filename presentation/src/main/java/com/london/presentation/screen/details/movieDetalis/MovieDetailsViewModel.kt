@@ -70,7 +70,7 @@ class MovieDetailsViewModel(
                 updateState {
                     copy(
                         movieName = details.title,
-                        movieGenres = details.genres,
+                        movieGenres = details.genresId,
                         movieRating = details.voteAverage,
                         movieDuration = details.runtime.toString(),
                         releaseDate = details.releaseDate,

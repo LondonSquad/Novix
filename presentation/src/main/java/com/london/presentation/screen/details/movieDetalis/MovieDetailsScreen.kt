@@ -57,7 +57,6 @@ import com.london.designsystem.component.Text
 import com.london.designsystem.component.button.ErrorImage
 import com.london.designsystem.theme.NovixTheme
 import com.london.designsystem.theme.noRippleClickable
-import com.london.domain.entity.moviedatails.Genre
 import com.london.presentation.R.drawable
 import com.london.presentation.R.string.calendar
 import com.london.presentation.R.string.dot
@@ -75,7 +74,9 @@ import com.london.presentation.screen.BuildScreen
 import com.london.presentation.screen.LoadingScreen
 import com.london.presentation.screen.NetworkErrorScreen
 import com.london.presentation.screen.reviews.MediaType
+import com.london.presentation.screen.search.SearchCategory
 import com.london.presentation.utils.Listen
+import com.london.presentation.utils.convertGenreCodeToString
 import com.london.presentation.utils.offsetLayout
 import com.london.presentation.utils.openUrl
 import com.london.presentation.utils.reverseDateFormat
@@ -306,7 +307,7 @@ fun MovieDetailsContent(
                     ) {
                         rowItems.forEachIndexed { _, movie ->
                             HomeCard(
-                                imageUrl = movie.backdropPath,
+                                imageUrl = movie.posterPicture,
                                 isSaved = false,
                                 onSaveClick = {},
                                 modifier = Modifier
@@ -417,7 +418,7 @@ private fun IconWithText(
 
 @Composable
 private fun GenreRow(
-    genres: List<Genre>,
+    genres: List<Int>,
     onGenreClick: (Int) -> Unit
 ) {
     Row(
@@ -426,11 +427,11 @@ private fun GenreRow(
     ) {
         genres.forEachIndexed { index, genre ->
             Text(
-                genre.name,
+                stringResource(convertGenreCodeToString(genre, SearchCategory.Movies)),
                 style = NovixTheme.typography.label.small,
                 color = NovixTheme.colors.body,
                 modifier = Modifier.noRippleClickable {
-                    onGenreClick(genre.id)
+                    onGenreClick(genre)
                 }
             )
             if (index != genres.lastIndex) Icon(
