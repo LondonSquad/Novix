@@ -7,7 +7,7 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 
 data class TrendingTvShowsUiState(
-    val trendingTvShows: Flow<PagingData<Trending>> = flow {},
+    val tvShowsFlow: Flow<PagingData<Trending>> = flow {},
     val errorState: ErrorState? = null,
     val isLoading: Boolean = false,
     val selectedGenreId: Int? = null

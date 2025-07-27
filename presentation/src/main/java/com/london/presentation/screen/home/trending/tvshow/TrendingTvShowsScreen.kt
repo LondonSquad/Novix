@@ -1,36 +1,29 @@
 package com.london.presentation.screen.home.trending.tvshow
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.statusBarsPadding
-import androidx.compose.foundation.layout.wrapContentSize
-import androidx.compose.foundation.lazy.grid.GridCells
-import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.rememberLazyGridState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.unit.Dp
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.paging.compose.collectAsLazyPagingItems
-import com.london.designsystem.component.CircularLoading
-import com.london.designsystem.component.EmptyLayout
-import com.london.designsystem.component.HomeCard
 import com.london.designsystem.component.TopBar
 import com.london.designsystem.theme.NovixTheme
+import com.london.designsystem.utils.string
 import com.london.presentation.R
+import com.london.presentation.composables.LazyPagingColumn
+import com.london.presentation.composables.MediaLazyPagingGrid
 import com.london.presentation.screen.home.trending.GenresSection
 import com.london.presentation.utils.Listen
 import com.london.presentation.utils.TvShowGenre
@@ -44,33 +37,27 @@ fun TrendingTvShowsScreen(
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
     val effect by viewModel.effect.collectAsStateWithLifecycle(null)
-    val screenWidth = with(LocalDensity.current) { LocalConfiguration.current.screenWidthDp.dp }
 
     effect?.Listen { currentEffect ->
         when (currentEffect) {
-            is TrendingTvShowsEffect.NavigateToTvShow -> {
-                onTvShowClick(currentEffect.tvShowId)
-            }
+            is TrendingTvShowsEffect.NavigateToTvShow -> onTvShowClick(currentEffect.tvShowId)
+            is TrendingTvShowsEffect.NavigateBack -> onBackClick()
 
-            is TrendingTvShowsEffect.NavigateBack -> {
-                onBackClick()
-            }
         }
     }
 
     TrendingTvShowsContent(
         state = state,
         contract = viewModel,
-        screenWidth = screenWidth
     )
 }
 
 @Composable
 private fun TrendingTvShowsContent(
-    state: TrendingTvShowsUiState,
-    contract: TrendingTvShowsContract,
-    screenWidth: Dp
+    state: TrendingTvShowsUiState = TrendingTvShowsUiState(),
+    contract: TrendingTvShowsContract = defaultTrendingTvShowsContract(),
 ) {
+    val screenWidth = with(LocalDensity.current) { LocalConfiguration.current.screenWidthDp.dp }
     val gridState = rememberLazyGridState()
 
     LaunchedEffect(state.selectedGenreId) {
@@ -100,56 +87,30 @@ private fun TrendingTvShowsContent(
             getGenreName = { stringResource(it.stringResId) }
         )
 
-        val tvShowsLazyItems = state.trendingTvShows.collectAsLazyPagingItems()
+        val tvShowsLazyItems = state.tvShowsFlow.collectAsLazyPagingItems()
         val isLoading = tvShowsLazyItems.loadState.refresh is androidx.paging.LoadState.Loading
-        val filteredTvShows = List(tvShowsLazyItems.itemCount) { tvShowsLazyItems[it] }
-            .filterNotNull()
-            .filter { tvShow ->
-                state.selectedGenreId == null ||
-                        state.selectedGenreId == TvShowGenre.All.id ||
-                        tvShow.genreIds.contains(state.selectedGenreId)
-            }
 
-        isLoading.takeIf { it }?.let {
-            CircularLoading(
+        LazyPagingColumn(
+            emptyTitle = R.string.no_trending_tvshows_in_genre.string,
+            pagingFlow = state.tvShowsFlow,
+        ) { tvShow ->
+            MediaLazyPagingGrid(
+                pagingFlow = tvShowsLazyItems,
+                onItemClick = { contract.onTvShowClick(tvShow.id) },
+                getImageUrl = { it.posterPath },
+                getTitle = { it.title },
                 modifier = Modifier
                     .fillMaxSize()
-                    .wrapContentSize(Alignment.Center)
-            )
-        }
-
-        (!isLoading).takeIf { it && filteredTvShows.isNotEmpty() }?.let {
-            LazyVerticalGrid(
-                state = gridState,
-                columns = GridCells.Fixed(2),
-                contentPadding = PaddingValues(bottom = 18.dp),
-                horizontalArrangement = Arrangement.spacedBy(12.dp),
-                verticalArrangement = Arrangement.spacedBy(12.dp),
-                modifier = Modifier
-                    .fillMaxSize()
-                    .padding(horizontal = 16.dp)
-            ) {
-                items(filteredTvShows.size) { index ->
-                    val tvShow = filteredTvShows[index]
-                    HomeCard(
-                        imageUrl = tvShow.posterPath,
-                        isSaved = false,
-                        onSaveClick = {},
-                        modifier = Modifier.clickable { contract.onTvShowClick(tvShow.id) }
-                    )
-                }
-            }
-        }
-
-        (!isLoading && filteredTvShows.isEmpty()).takeIf { it }?.let {
-            EmptyLayout(
-                text = stringResource(R.string.no_trending_tvshows_in_genre),
-                image = R.drawable.img_no_result,
-                modifier = Modifier
-                    .fillMaxSize()
-                    .padding(horizontal = 16.dp)
-                    .wrapContentSize(Alignment.Center)
+                    .padding(horizontal = 16.dp),
+                onSaveClick = { /* TODO: Implement save functionality */ },
+                isItemSaved = { false }
             )
         }
     }
+}
+
+@Preview
+@Composable
+private fun Preview() = NovixTheme {
+    TrendingTvShowsContent()
 }
