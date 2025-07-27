@@ -29,7 +29,7 @@ class TopRatedMovieRepositoryImplTest {
         // Given
         coEvery {
             remoteDataSource.getTopRatedMovies(PAGE)
-        } returns fakeApiResponseWithMovies()
+        } returns Result.success(fakeApiResponseWithMovies())
 
         // When
         val result: List<TopRatedMovie> = repository.getTopRatedMovies(PAGE).items
@@ -53,7 +53,7 @@ class TopRatedMovieRepositoryImplTest {
         // Given
         coEvery {
             remoteDataSource.getTopRatedMovies(PAGE)
-        } returns fakeEmptyApiResponse()
+        } returns Result.success(fakeEmptyApiResponse())
 
         // When
         val result = repository.getTopRatedMovies(PAGE)
