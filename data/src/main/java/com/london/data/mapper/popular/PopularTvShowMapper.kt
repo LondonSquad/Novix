@@ -2,8 +2,8 @@
 
 package com.london.data.mapper.popular
 
-import com.london.data.datasource.remote.ApiResponse
-import com.london.data.datasource.remote.home.popular.model.PopularTvShowResponse
+import com.london.data.remote.model.ApiResponse
+import com.london.data.remote.model.home.model.PopularTvShowResponse
 import com.london.data.utils.asImageUrlOrEmpty
 import com.london.data.utils.orZero
 import com.london.data.utils.roundToDecimal

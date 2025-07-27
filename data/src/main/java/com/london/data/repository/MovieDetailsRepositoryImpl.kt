@@ -1,15 +1,17 @@
 package com.london.data.repository
 
-import com.london.data.datasource.remote.details.moviedetails.MovieDetailsRemoteDataSource
 import com.london.data.mapper.moviedetails.toEntity
-import com.london.data.mapper.moviedetails.toGenre
+import com.london.data.mapper.toMovieEntity
+import com.london.data.mapper.toMovieLocalDto
+import com.london.data.remote.source.details.movie.MovieDetailsRemoteDataSource
 import com.london.data.utils.asImageUrlOrEmpty
 import com.london.data.utils.isTrue
 import com.london.domain.entity.Actor
+import com.london.domain.entity.Movie
 import com.london.domain.entity.moviedatails.MovieDetails
-import com.london.domain.entity.moviedatails.SimilarMovie
 import com.london.domain.repository.MovieDetailsRepository
 import org.koin.core.annotation.Single
+
 
 @Single
 class MovieDetailsRepositoryImpl(
@@ -21,9 +23,9 @@ class MovieDetailsRepositoryImpl(
         return remoteDetails.getOrThrow().toEntity()
     }
 
-    override suspend fun getSimilarMoviesById(id: Int): List<SimilarMovie> =
-        movieDetailsRemoteDataSource.getSimilarMovies(id).getOrThrow().similarMovieRemotes.orEmpty()
-            .map { it.toEntity() }
+    override suspend fun getSimilarMoviesById(id: Int): List<Movie> =
+        movieDetailsRemoteDataSource.getSimilarMovies(id).getOrThrow().items
+            .map { it.toMovieLocalDto().toMovieEntity() }
 
     override suspend fun getMovieImagesById(id: Int): List<String> {
         val images = movieDetailsRemoteDataSource.getMovieImages(id).getOrThrow()

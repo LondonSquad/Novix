@@ -1,11 +1,11 @@
 package com.london.data.repository.popular
 
 import com.google.common.truth.Truth.assertThat
-import com.london.data.datasource.exception.NetworkException
-import com.london.data.datasource.remote.ApiResponse
-import com.london.data.datasource.remote.home.popular.PopularRemoteDataSource
-import com.london.data.datasource.remote.home.popular.model.PopularMovieResponse
-import com.london.data.datasource.remote.home.popular.model.PopularTvShowResponse
+import com.london.data.remote.exception.NetworkException
+import com.london.data.remote.model.ApiResponse
+import com.london.data.remote.source.home.PopularRemoteDataSource
+import com.london.data.remote.model.home.model.PopularMovieResponse
+import com.london.data.remote.model.home.model.PopularTvShowResponse
 import com.london.domain.entity.popular.PopularMovie
 import com.london.domain.entity.popular.PopularTvShow
 import io.mockk.coEvery

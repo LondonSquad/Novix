@@ -1,0 +1,8 @@
+package com.london.data.remote.source.details.videoprovider.tvshow
+
+import com.london.data.remote.model.details.videoprovider.tvshow.model.TvShowVideoResponse
+
+
+interface TvShowVideoProviderRemote {
+    suspend fun getTvShowVideos(tvShowId: Int): Result<TvShowVideoResponse>
+}

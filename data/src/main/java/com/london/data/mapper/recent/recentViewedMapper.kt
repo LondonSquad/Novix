@@ -2,8 +2,8 @@
 
 package com.london.data.mapper.recent
 
-import com.london.data.datasource.local.model.recent.MediaTypeLocal
-import com.london.data.datasource.local.model.recent.RecentViewedLocal
+import com.london.data.local.model.recent.MediaTypeLocal
+import com.london.data.local.model.recent.viewed.RecentViewedLocal
 import com.london.domain.KoverIgnore
 import com.london.domain.entity.recent.MediaType
 import com.london.domain.entity.recent.RecentViewed

@@ -1,10 +1,11 @@
 package com.london.data.repository
 
 import com.google.common.truth.Truth.assertThat
-import com.london.data.datasource.remote.ApiResponse
-import com.london.data.datasource.remote.toprated.tvseries.TopRatedTvRemoteDataSource
-import com.london.data.datasource.remote.toprated.tvseries.model.TopRatedTvSeriesRemote
 import com.london.data.mapper.toprated.toEntity
+import com.london.data.remote.model.ApiResponse
+import com.london.data.remote.model.toprated.TopRatedTvSeriesRemote
+import com.london.data.remote.source.toprated.tvseries.TopRatedTvRemoteDataSource
+import com.london.data.repository.toprated.TopRatedTvSeriesRepositoryImpl
 import com.london.domain.entity.toprated.TopRatedTvSeries
 import io.mockk.coEvery
 import io.mockk.mockk
@@ -16,23 +17,23 @@ import org.junit.jupiter.api.assertThrows
 class TopRatedTvSeriesRepositoryImplTest {
 
     private lateinit var remoteDataSource: TopRatedTvRemoteDataSource
-    private lateinit var repository: TopRatedTvSeriesRepoImpl
+    private lateinit var repository: TopRatedTvSeriesRepositoryImpl
 
     @Before
     fun setup() {
         remoteDataSource = mockk(relaxed = true)
-        repository = TopRatedTvSeriesRepoImpl(remoteDataSource)
+        repository = TopRatedTvSeriesRepositoryImpl(remoteDataSource)
     }
 
     @Test
     fun `getTopRatedTvSeries should map remote series list correctly`() = runTest {
         // Given
         coEvery {
-            remoteDataSource.getTopRatedTvShows(PAGE, LANGUAGE)
-        } returns fakeApiResponseWithTvSeries()
+            remoteDataSource.getTopRatedTvShows(PAGE)
+        } returns Result.success(fakeApiResponseWithTvSeries())
 
         // When
-        val result: List<TopRatedTvSeries> = repository.getTopRatedTvSeries(PAGE, LANGUAGE)
+        val result: List<TopRatedTvSeries> = repository.getTopRatedTvSeries(PAGE).items
 
         // Then
         assertThat(result).hasSize(2)
@@ -52,39 +53,35 @@ class TopRatedTvSeriesRepositoryImplTest {
     fun `getTopRatedTvSeries should return empty list when API returns empty results`() = runTest {
         // Given
         coEvery {
-            remoteDataSource.getTopRatedTvShows(PAGE, LANGUAGE)
-        } returns fakeEmptyApiResponse()
+            remoteDataSource.getTopRatedTvShows(PAGE)
+        } returns Result.success(fakeEmptyApiResponse())
 
         // When
-        val result = repository.getTopRatedTvSeries(PAGE, LANGUAGE)
+        val result = repository.getTopRatedTvSeries(PAGE)
 
         // Then
-        assertThat(result).isEmpty()
+        assertThat(result.items).isEmpty()
     }
 
     @Test
     fun `getTopRatedTvSeries should propagate exceptions`() = runTest {
         // Given
         coEvery {
-            remoteDataSource.getTopRatedTvShows(PAGE, LANGUAGE)
+            remoteDataSource.getTopRatedTvShows(PAGE )
         } throws RuntimeException("Network error")
 
         // When && Then
         val ex = assertThrows<RuntimeException> {
-            repository.getTopRatedTvSeries(PAGE, LANGUAGE)
+            repository.getTopRatedTvSeries(PAGE )
         }
         assertThat(ex.message).isEqualTo("Network error")
     }
 
     companion object {
         private const val PAGE = 1
-        private const val LANGUAGE = "en-US"
 
         private fun fakeApiResponseWithTvSeries() = ApiResponse(
-            currentPage = PAGE,
-            totalPages = 1,
-            totalItems = 2,
-            items = listOf(
+            currentPage = PAGE, totalPages = 1, totalItems = 2, items = listOf(
                 TopRatedTvSeriesRemote(
                     adult = false,
                     backdropPath = "/tsRy63Mu5cu8etL1X7ZLyf7UP1M.jpg",
@@ -100,8 +97,7 @@ class TopRatedTvSeriesRepositoryImplTest {
                     originCountry = listOf("US"),
                     voteAverage = 8.9,
                     voteCount = 18000
-                ),
-                TopRatedTvSeriesRemote(
+                ), TopRatedTvSeriesRemote(
                     adult = false,
                     backdropPath = "/scZlQQYnDVlnpxFTxaIv2g0BWnL.jpg",
                     genreIds = listOf(18, 36),

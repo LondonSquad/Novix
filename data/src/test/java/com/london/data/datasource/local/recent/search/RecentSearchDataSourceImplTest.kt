@@ -1,9 +1,9 @@
 package com.london.data.datasource.local.recent.search
 
 import com.google.common.truth.Truth.assertThat
-import com.london.data.datasource.local.dao.recent.search.RecentSearchDao
-import com.london.data.datasource.local.model.recent.RecentSearchLocal
-import com.london.data.datasource.local.recent.RecentSearchDataSourceImpl
+import com.london.data.local.database.dao.recent.search.RecentSearchDao
+import com.london.data.local.model.recent.search.RecentSearchLocal
+import com.london.data.local.source.recent.RecentSearchDataSourceImpl
 import io.mockk.Runs
 import io.mockk.coEvery
 import io.mockk.coVerify

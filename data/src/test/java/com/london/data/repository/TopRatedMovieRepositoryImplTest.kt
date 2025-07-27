@@ -1,10 +1,11 @@
 package com.london.data.repository
 
 import com.google.common.truth.Truth.assertThat
-import com.london.data.datasource.remote.ApiResponse
-import com.london.data.datasource.remote.toprated.movie.TopRatedMovieRemoteDataSource
-import com.london.data.datasource.remote.toprated.movie.model.TopRatedMovieRemote
 import com.london.data.mapper.toprated.toEntity
+import com.london.data.remote.model.ApiResponse
+import com.london.data.remote.model.toprated.TopRatedMovieRemote
+import com.london.data.remote.source.toprated.movie.TopRatedMovieRemoteDataSource
+import com.london.data.repository.toprated.TopRatedMovieRepositoryImpl
 import com.london.domain.entity.toprated.TopRatedMovie
 import io.mockk.coEvery
 import io.mockk.mockk
@@ -16,23 +17,23 @@ import org.junit.jupiter.api.assertThrows
 class TopRatedMovieRepositoryImplTest {
 
     private lateinit var remoteDataSource: TopRatedMovieRemoteDataSource
-    private lateinit var repository: TopRatedMovieRepoImpl
+    private lateinit var repository: TopRatedMovieRepositoryImpl
 
     @Before
     fun setup() {
         remoteDataSource = mockk(relaxed = true)
-        repository = TopRatedMovieRepoImpl(remoteDataSource)
+        repository = TopRatedMovieRepositoryImpl(remoteDataSource)
     }
 
     @Test
-    fun `getTopRatedMovies should map remote movie list correctly`() = runTest {
+    fun `should getTopRatedMovies should map when remote movie list correctly`() = runTest {
         // Given
         coEvery {
-            remoteDataSource.getTopRatedMovies(PAGE, LANGUAGE, REGION)
-        } returns fakeApiResponseWithMovies()
+            remoteDataSource.getTopRatedMovies(PAGE)
+        } returns Result.success(fakeApiResponseWithMovies())
 
         // When
-        val result: List<TopRatedMovie> = repository.getTopRatedMovies(PAGE, LANGUAGE, REGION)
+        val result: List<TopRatedMovie> = repository.getTopRatedMovies(PAGE).items
 
         // Then
         assertThat(result).hasSize(2)
@@ -49,29 +50,29 @@ class TopRatedMovieRepositoryImplTest {
     }
 
     @Test
-    fun `getTopRatedMovies should return empty list when API returns empty results`() = runTest {
+    fun `should getTopRatedMovies should return empty list when API returns empty results`() = runTest {
         // Given
         coEvery {
-            remoteDataSource.getTopRatedMovies(PAGE, LANGUAGE, REGION)
-        } returns fakeEmptyApiResponse()
+            remoteDataSource.getTopRatedMovies(PAGE)
+        } returns Result.success(fakeEmptyApiResponse())
 
         // When
-        val result = repository.getTopRatedMovies(PAGE, LANGUAGE, REGION)
+        val result = repository.getTopRatedMovies(PAGE)
 
         // Then
-        assertThat(result).isEmpty()
+        assertThat(result.items).isEmpty()
     }
 
     @Test
-    fun `getTopRatedMovies should propagate exceptions`() = runTest {
+    fun `should getTopRatedMovies when propagate exceptions`() = runTest {
         // Given
         coEvery {
-            remoteDataSource.getTopRatedMovies(PAGE, LANGUAGE, REGION)
+            remoteDataSource.getTopRatedMovies(PAGE)
         } throws RuntimeException("Network error")
 
         // When && Then
         val ex = assertThrows<RuntimeException> {
-            repository.getTopRatedMovies(PAGE, LANGUAGE, REGION)
+            repository.getTopRatedMovies(PAGE)
         }
         assertThat(ex.message).isEqualTo("Network error")
     }

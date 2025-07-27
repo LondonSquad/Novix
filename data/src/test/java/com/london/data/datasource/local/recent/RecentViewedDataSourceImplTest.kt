@@ -1,8 +1,8 @@
 package com.london.data.datasource.local.recent
 
 import com.google.common.truth.Truth.assertThat
-import com.london.data.datasource.local.dao.recent.viewed.RecentViewedDao
-import com.london.data.datasource.local.model.recent.RecentViewedLocal
+import com.london.data.local.database.dao.recent.viewed.RecentViewedDao
+import com.london.data.local.model.recent.viewed.RecentViewedLocal
 import io.mockk.Runs
 import io.mockk.coEvery
 import io.mockk.coVerify
@@ -15,12 +15,12 @@ import kotlin.test.Test
 class RecentViewedDataSourceImplTest {
 
     private lateinit var recentViewedDao: RecentViewedDao
-    private lateinit var dataSource: RecentViewedDataSourceImpl
+    private lateinit var dataSource: com.london.data.local.source.recent.RecentViewedDataSourceImpl
 
     @Before
     fun setUp() {
         recentViewedDao = mockk()
-        dataSource = RecentViewedDataSourceImpl(recentViewedDao)
+        dataSource = com.london.data.local.source.recent.RecentViewedDataSourceImpl(recentViewedDao)
     }
 
     @Test

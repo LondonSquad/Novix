@@ -1,9 +1,10 @@
 package com.london.domain.usecase
 
 import com.google.common.truth.Truth.assertThat
-import com.london.domain.GetCastByIdFailedException
 import com.london.domain.entity.Actor
+import com.london.domain.error.GetCastByIdFailedException
 import com.london.domain.repository.MovieDetailsRepository
+import com.london.domain.usecase.details.movie.GetMovieCastUseCase
 import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.mockk

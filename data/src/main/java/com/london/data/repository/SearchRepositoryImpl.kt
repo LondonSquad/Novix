@@ -1,17 +1,18 @@
 package com.london.data.repository
 
-import com.london.data.datasource.local.LocalDataSource
-import com.london.data.datasource.local.dao.search.GenreInterestDao
-import com.london.data.datasource.local.model.GenreInterestEntity
-import com.london.data.datasource.local.model.SearchActorsLocal
-import com.london.data.datasource.local.model.SearchMoviesLocal
-import com.london.data.datasource.local.model.SearchTvShowLocal
-import com.london.data.datasource.remote.search.SearchRemoteDataSource
-import com.london.data.datasource.util.CrashReporter
+import com.london.data.local.source.LocalDataSource
+import com.london.data.local.database.dao.search.GenreInterestDao
+import com.london.data.local.model.search.GenreInterestEntity
+import com.london.data.local.model.search.SearchActorsLocal
+import com.london.data.local.model.search.SearchMoviesLocal
+import com.london.data.local.model.search.SearchTvShowLocal
+import com.london.data.remote.source.search.SearchRemoteDataSource
+import com.london.data.utils.CrashReporter
 import com.london.data.mapper.toActorEntity
 import com.london.data.mapper.toLocal
 import com.london.data.mapper.toMovieEntity
 import com.london.data.mapper.toTvShowEntity
+import com.london.data.utils.fetchAndSync
 import com.london.domain.entity.Actor
 import com.london.domain.entity.Movie
 import com.london.domain.entity.PagedFetchResponse
@@ -30,20 +31,6 @@ class SearchRepositoryImpl(
     private val remoteDataSource: SearchRemoteDataSource,
     private val crashReporter: CrashReporter
 ) : SearchRepository {
-
-    suspend fun <T> Result<T?>.getNotNullOrElse(elseBlock: suspend () -> T): Result<T> =
-        runCatching { getOrElse { elseBlock() } ?: elseBlock() }
-
-    suspend fun <T> fetchAndSync(
-        cacheBlock: (suspend () -> T?)? = null,
-        networkBlock: suspend () -> T,
-        syncBlock: (suspend (T) -> Unit)? = null,
-        crashReporter: CrashReporter? = null
-    ): T = runCatching { cacheBlock?.invoke() }.getNotNullOrElse {
-        networkBlock().also {
-            syncBlock?.invoke(it)
-        }
-    }.onFailure { crashReporter?.logException(it) }.getOrThrow()
 
     override suspend fun searchForMovies(
         name: String, pageNumber: Int

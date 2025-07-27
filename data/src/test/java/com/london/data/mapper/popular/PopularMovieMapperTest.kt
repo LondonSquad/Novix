@@ -1,8 +1,8 @@
 package com.london.data.mapper.popular
 
 import com.google.common.truth.Truth.assertThat
-import com.london.data.datasource.remote.ApiResponse
-import com.london.data.datasource.remote.home.popular.model.PopularMovieResponse
+import com.london.data.remote.model.ApiResponse
+import com.london.data.remote.model.home.model.PopularMovieResponse
 import com.london.domain.entity.popular.PopularMovie
 import org.junit.Test
 
