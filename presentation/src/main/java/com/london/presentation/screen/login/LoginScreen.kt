@@ -1,6 +1,5 @@
 package com.london.presentation.screen.login
 
-import android.annotation.SuppressLint
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.slideInVertically
@@ -217,7 +216,7 @@ private fun Content(
 }
 
 @Composable
-private fun SnackBarAnimation(message: String?){
+private fun SnackBarAnimation(message: String?) {
     var isVisible by remember { mutableStateOf(false) }
     LaunchedEffect(message) {
         isVisible = true
