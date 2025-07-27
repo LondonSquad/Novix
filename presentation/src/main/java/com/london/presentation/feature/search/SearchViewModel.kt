@@ -5,18 +5,18 @@ import com.london.domain.entity.Movie
 import com.london.domain.entity.TvShow
 import com.london.domain.entity.recent.RecentSearch
 import com.london.domain.entity.recent.RecentViewed
-import com.london.domain.usecase.recent.search.AddToRecentSearchUseCase
-import com.london.domain.usecase.recent.viewed.AddToRecentViewedUseCase
-import com.london.domain.usecase.recent.search.ClearRecentSearchUseCase
-import com.london.domain.usecase.recent.viewed.ClearRecentViewedUseCase
-import com.london.domain.usecase.recent.search.DeleteRecentSearchUseCase
 import com.london.domain.usecase.GetActorsUseCase
 import com.london.domain.usecase.GetGenreInterestCountsUseCase
 import com.london.domain.usecase.GetMoviesUseCase
-import com.london.domain.usecase.recent.search.GetRecentSearchUseCase
-import com.london.domain.usecase.recent.viewed.GetRecentViewedUseCase
 import com.london.domain.usecase.GetTvShowsUseCase
 import com.london.domain.usecase.IncrementGenreInterestUseCase
+import com.london.domain.usecase.recent.search.AddToRecentSearchUseCase
+import com.london.domain.usecase.recent.search.ClearRecentSearchUseCase
+import com.london.domain.usecase.recent.search.DeleteRecentSearchUseCase
+import com.london.domain.usecase.recent.search.GetRecentSearchUseCase
+import com.london.domain.usecase.recent.viewed.AddToRecentViewedUseCase
+import com.london.domain.usecase.recent.viewed.ClearRecentViewedUseCase
+import com.london.domain.usecase.recent.viewed.GetRecentViewedUseCase
 import com.london.presentation.feature.base.BaseViewModel
 import com.london.presentation.feature.base.createPagingSourceFlow
 import com.london.presentation.feature.search.model.MovieUi
@@ -111,6 +111,7 @@ class SearchViewModel(
     }
 
     override fun onCategorySelected(category: SearchCategory) {
+        if (category==state.value.selectedCategory) return
         updateState {
             copy(
                 selectedCategory = category,
