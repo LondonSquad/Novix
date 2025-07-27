@@ -1,7 +1,7 @@
 package com.london.data.repository
 
-import com.london.data.remote.source.toprated.tvseries.TopRatedTvRemoteDataSource
 import com.london.data.mapper.toprated.toEntity
+import com.london.data.remote.source.toprated.tvseries.TopRatedTvRemoteDataSource
 import com.london.data.utils.fetchAndSync
 import com.london.domain.entity.PagedFetchResponse
 import com.london.domain.entity.toprated.TopRatedTvSeries
@@ -14,14 +14,15 @@ class TopRatedTvSeriesRepoImpl(
 ) : TopRatedTvSeriesRepository {
     override suspend fun getTopRatedTvSeries(
         pageNumber: Int
-    ): PagedFetchResponse<TopRatedTvSeries> =fetchAndSync(
+    ): PagedFetchResponse<TopRatedTvSeries> = fetchAndSync(
         networkBlock = {
             val remoteResult = topRatedTvRemoteDataSource.getTopRatedTvShows(
-        pageNumber= pageNumber
-            )
+                pageNumber = pageNumber
+            ).getOrThrow()
+
             PagedFetchResponse(
                 totalPages = remoteResult.totalPages,
-    items = remoteResult.getOrThrow().items.map { it.toEntity() },
+                items = remoteResult.items.map { it.toEntity() },
                 currentPage = remoteResult.currentPage,
                 totalItems = remoteResult.totalItems,
             )
