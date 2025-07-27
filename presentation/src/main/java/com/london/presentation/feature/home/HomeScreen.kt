@@ -42,9 +42,9 @@ import com.london.designsystem.component.Text
 import com.london.designsystem.theme.NovixTheme
 import com.london.domain.entity.Movie
 import com.london.presentation.R
+import com.london.presentation.feature.base.ErrorState
 import com.london.presentation.feature.buildscreen.LoadingScreen
 import com.london.presentation.feature.buildscreen.NetworkErrorScreen
-import com.london.presentation.feature.base.ErrorState
 import com.london.presentation.utils.Listen
 import com.london.presentation.utils.MovieGenre
 import org.koin.compose.viewmodel.koinViewModel
@@ -108,7 +108,7 @@ private fun Content(
     ) {
 
         LazyVerticalGrid(
-            columns = GridCells.Fixed(2),
+            columns = GridCells.Adaptive(minSize = 158.dp),
             contentPadding = PaddingValues(
                 top = 12.dp,
                 bottom = 16.dp,
