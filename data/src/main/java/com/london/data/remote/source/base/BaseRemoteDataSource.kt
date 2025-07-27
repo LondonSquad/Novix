@@ -6,13 +6,29 @@ import kotlinx.coroutines.delay
 import kotlinx.serialization.json.Json
 import retrofit2.Response
 import java.net.HttpURLConnection
+import java.net.SocketTimeoutException
+import java.net.UnknownHostException
 
 interface BaseRemoteDatasource {
 
     suspend fun <T, R> callApi(
-        apiCall: suspend () -> Response<T>, mapper: (T) -> R
-    ): Result<R> = checkIfSuccessful(result = apiCall(), mapper = mapper)
-
+        apiCall: suspend () -> Response<T>,
+        mapper: (T) -> R
+    ): Result<R> = try {
+        checkIfSuccessful(result = apiCall(), mapper = mapper)
+    } catch (e: UnknownHostException) {
+        Result.failure(NetworkException.NoInternetException(
+            "No internet connection. Please check your network settings."
+        ))
+    } catch (e: SocketTimeoutException) {
+        Result.failure(NetworkException.TimeoutException(
+            "Request timed out. Please try again."
+        ))
+    } catch (e: Exception) {
+        Result.failure(NetworkException.UnknownException(
+            message = e.message ?: "Unknown error occurred"
+        ))
+    }
     suspend fun <T, R> callApiWithRetry(
         apiCall: suspend () -> Response<T>,
         mapper: (T) -> R,
