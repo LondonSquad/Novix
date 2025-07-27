@@ -7627,5 +7627,33 @@
       "deletions": 232,
       "changed_files": 120
     }
+  },
+  {
+    "pr_number": 297,
+    "url": "https://github.com/LondonSquad/Novix/pull/297",
+    "title": "Refactor/simplify movie details data",
+    "opened_at": "2025-07-27T15:33:12Z",
+    "head_ref": "refactor/simplify-movie-details-data",
+    "base_ref": "develop",
+    "creator": {
+      "login": "marwanqashwa",
+      "id": 100484790,
+      "url": "https://github.com/marwanqashwa"
+    },
+    "approvals": [],
+    "first_approved_at": null,
+    "time_to_first_approval_minutes": null,
+    "required_approvals_met_at": null,
+    "time_to_required_approvals_minutes": null,
+    "closed_at": null,
+    "merged_at": null,
+    "merged_by": null,
+    "week": "2025-W30",
+    "status": "pending",
+    "diff_stats": {
+      "additions": 86,
+      "deletions": 287,
+      "changed_files": 26
+    }
   }
 ]
