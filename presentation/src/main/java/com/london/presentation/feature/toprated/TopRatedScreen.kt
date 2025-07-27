@@ -12,6 +12,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.navigationBars
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.requiredWidth
+import androidx.compose.foundation.layout.statusBars
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
@@ -74,15 +75,15 @@ private fun Content(
         modifier = Modifier
             .fillMaxSize()
             .background(color = NovixTheme.colors.surface)
+            .padding(WindowInsets.statusBars.asPaddingValues())
             .padding(WindowInsets.navigationBars.asPaddingValues())
-            .padding(top = 16.dp)
 
     ) {
         TopBar(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(horizontal = 16.dp)
-                .padding(top = 12.dp),
+                .padding(top = 20.dp),
             title = stringResource(com.london.presentation.R.string.top_rating),
             onBackClick = topRatedContract::onBackClicked
         )
