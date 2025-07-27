@@ -7582,5 +7582,33 @@
       "deletions": 15,
       "changed_files": 15
     }
+  },
+  {
+    "pr_number": 296,
+    "url": "https://github.com/LondonSquad/Novix/pull/296",
+    "title": "Refactor/restructure presentation",
+    "opened_at": "2025-07-27T15:25:04Z",
+    "head_ref": "refactor/restructure-presentation",
+    "base_ref": "develop",
+    "creator": {
+      "login": "ahmeddsamii",
+      "id": 154278495,
+      "url": "https://github.com/ahmeddsamii"
+    },
+    "approvals": [],
+    "first_approved_at": null,
+    "time_to_first_approval_minutes": null,
+    "required_approvals_met_at": null,
+    "time_to_required_approvals_minutes": null,
+    "closed_at": null,
+    "merged_at": null,
+    "merged_by": null,
+    "week": "2025-W30",
+    "status": "pending",
+    "diff_stats": {
+      "additions": 232,
+      "deletions": 232,
+      "changed_files": 120
+    }
   }
 ]
