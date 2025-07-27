@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.lazy.grid.rememberLazyGridState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalConfiguration
@@ -36,7 +37,7 @@ fun TrendingTvShowsScreen(
     viewModel: TrendingTvShowsViewModel = koinViewModel()
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
-    val effect by viewModel.effect.collectAsStateWithLifecycle(null)
+    val effect by viewModel.effect.collectAsState(null)
 
     effect?.Listen { currentEffect ->
         when (currentEffect) {
@@ -78,7 +79,7 @@ private fun TrendingTvShowsContent(
             onBackClick = contract::onBackClick
         )
         GenresSection(
-            genres = TvShowGenre.entries.toList(),
+            genres = state.tvShowsGenres,
             selectedGenreId = state.selectedGenreId,
             screenWidth = screenWidth,
             onGenreClick = contract::onGenreSelected,
@@ -88,7 +89,6 @@ private fun TrendingTvShowsContent(
         )
 
         val tvShowsLazyItems = state.tvShowsFlow.collectAsLazyPagingItems()
-        val isLoading = tvShowsLazyItems.loadState.refresh is androidx.paging.LoadState.Loading
 
         LazyPagingColumn(
             emptyTitle = R.string.no_trending_tvshows_in_genre.string,

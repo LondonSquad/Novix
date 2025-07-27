@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalConfiguration
@@ -35,7 +36,7 @@ fun TrendingMoviesScreen(
     viewModel: TrendingMoviesViewModel = koinViewModel()
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
-    val effect by viewModel.effect.collectAsStateWithLifecycle(null)
+    val effect by viewModel.effect.collectAsState(null)
 
     effect?.Listen { currentEffect ->
         when (currentEffect) {
@@ -71,7 +72,7 @@ private fun TrendingMoviesContent(
             onBackClick = contract::onBackClick
         )
         GenresSection(
-            genres = MovieGenre.entries.toList(),
+            genres = state.movieGenres,
             selectedGenreId = state.selectedGenreId,
             screenWidth = screenWidth,
             onGenreClick = contract::onGenreSelected,
@@ -81,7 +82,6 @@ private fun TrendingMoviesContent(
         )
 
         val moviesLazyItems = state.moviesFlow.collectAsLazyPagingItems()
-        val isLoading = moviesLazyItems.loadState.refresh is LoadState.Loading
 
         LazyPagingColumn(
             emptyTitle = R.string.no_trending_movies_in_genre.string,

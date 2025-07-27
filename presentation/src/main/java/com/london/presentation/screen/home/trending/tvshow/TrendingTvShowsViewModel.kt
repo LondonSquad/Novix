@@ -16,9 +16,9 @@ class TrendingTvShowsViewModel(
         fetchTrendingTvShows()
     }
 
-    private fun fetchTrendingTvShows(genreId: Int? = null) {
+    private fun fetchTrendingTvShows() {
         val tvShowsFlow = createPagingSourceFlow("") { _, pageNumber ->
-            getTrendingTvShows.invoke(pageNumber, genreId)
+            getTrendingTvShows.invoke(pageNumber)
         }.cachedIn(viewModelScope)
         updateState { copy(tvShowsFlow = tvShowsFlow, isLoading = false) }
     }
@@ -26,7 +26,7 @@ class TrendingTvShowsViewModel(
     override fun onGenreSelected(genre: TvShowGenre) {
         if (genre.id == state.value.selectedGenreId) return
         updateState { copy(selectedGenreId = genre.id) }
-        fetchTrendingTvShows(genre.id)
+        fetchTrendingTvShows()
     }
 
     override fun onTvShowClick(id: Int) = emitEffect(TrendingTvShowsEffect.NavigateToTvShow(id))
