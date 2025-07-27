@@ -1,6 +1,6 @@
 package com.london.data.utils
 
-import com.london.domain.NetworkException
+import com.london.domain.error.NetworkException
 import retrofit2.HttpException
 import java.io.IOException
 

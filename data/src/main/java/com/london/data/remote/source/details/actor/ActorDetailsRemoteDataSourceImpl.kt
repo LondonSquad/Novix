@@ -13,25 +13,25 @@ class ActorDetailsRemoteDataSourceImpl(
     private val actorDetailsApiService: ActorDetailsApiService,
 ) : ActorDetailsRemoteDataSource, BaseRemoteDatasource {
     override suspend fun getActorDetailsById(id: Int): Result<ActorDetailsResponse> =
-        callApi(
+        callApiWithRetry(
             apiCall = { actorDetailsApiService.getActorDetails(actorId = id) },
             mapper = { it }
         )
 
     override suspend fun getActorMovieById(id: Int): Result<ActorMovieDetailsResponse> =
-        callApi(
+        callApiWithRetry(
             apiCall = { actorDetailsApiService.getActorMovies(actorId = id) },
             mapper = { it }
         )
 
     override suspend fun getActorTvShowById(id: Int): Result<ActorTvShowDetailsResponse> =
-        callApi(
+        callApiWithRetry(
             apiCall = { actorDetailsApiService.getActorTvShows(actorId = id) },
             mapper = { it }
         )
 
     override suspend fun getActorImagePath(id: Int): Result<ActorImageResponse> =
-        callApi(
+        callApiWithRetry(
             apiCall = { actorDetailsApiService.getActorImages(actorId = id) },
             mapper = { it }
         )

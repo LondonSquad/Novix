@@ -3,6 +3,7 @@ package com.london.domain.usecase
 import com.google.common.truth.Truth.assertThat
 import com.london.domain.entity.videoprovider.MovieVideo
 import com.london.domain.repository.MovieVideoProviderRepository
+import com.london.domain.usecase.details.movie.GetMovieVideoUseCase
 import io.mockk.coEvery
 import io.mockk.mockk
 import kotlinx.coroutines.test.runTest

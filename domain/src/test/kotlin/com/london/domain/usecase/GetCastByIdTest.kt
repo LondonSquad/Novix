@@ -1,10 +1,10 @@
 package com.london.domain.usecase
 
 import com.google.common.truth.Truth.assertThat
-import com.london.domain.GetCastByIdFailedException
 import com.london.domain.entity.tvshowdetails.TvShowCastEntity
 import com.london.domain.entity.tvshowdetails.TvShowCastMemberEntity
 import com.london.domain.entity.tvshowdetails.TvShowRoleEntity
+import com.london.domain.error.GetCastByIdFailedException
 import com.london.domain.repository.DetailsRepository
 import io.mockk.coEvery
 import io.mockk.mockk

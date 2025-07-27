@@ -1,10 +1,11 @@
 package com.london.data.repository
 
 import com.google.common.truth.Truth.assertThat
-import com.london.data.remote.model.ApiResponse
-import com.london.data.remote.source.toprated.movie.TopRatedMovieRemoteDataSource
-import com.london.data.remote.model.toprated.movie.model.TopRatedMovieRemote
 import com.london.data.mapper.toprated.toEntity
+import com.london.data.remote.model.ApiResponse
+import com.london.data.remote.model.toprated.TopRatedMovieRemote
+import com.london.data.remote.source.toprated.movie.TopRatedMovieRemoteDataSource
+import com.london.data.repository.toprated.TopRatedMovieRepositoryImpl
 import com.london.domain.entity.toprated.TopRatedMovie
 import io.mockk.coEvery
 import io.mockk.mockk
@@ -16,12 +17,12 @@ import org.junit.jupiter.api.assertThrows
 class TopRatedMovieRepositoryImplTest {
 
     private lateinit var remoteDataSource: TopRatedMovieRemoteDataSource
-    private lateinit var repository: TopRatedMovieRepoImpl
+    private lateinit var repository: TopRatedMovieRepositoryImpl
 
     @Before
     fun setup() {
         remoteDataSource = mockk(relaxed = true)
-        repository = TopRatedMovieRepoImpl(remoteDataSource)
+        repository = TopRatedMovieRepositoryImpl(remoteDataSource)
     }
 
     @Test
@@ -29,7 +30,7 @@ class TopRatedMovieRepositoryImplTest {
         // Given
         coEvery {
             remoteDataSource.getTopRatedMovies(PAGE)
-        } returns fakeApiResponseWithMovies()
+        } returns Result.success(fakeApiResponseWithMovies())
 
         // When
         val result: List<TopRatedMovie> = repository.getTopRatedMovies(PAGE).items
@@ -53,7 +54,7 @@ class TopRatedMovieRepositoryImplTest {
         // Given
         coEvery {
             remoteDataSource.getTopRatedMovies(PAGE)
-        } returns fakeEmptyApiResponse()
+        } returns Result.success(fakeEmptyApiResponse())
 
         // When
         val result = repository.getTopRatedMovies(PAGE)
