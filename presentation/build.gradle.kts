@@ -62,6 +62,7 @@ dependencies {
     implementation(libs.timber)
 
     implementation(libs.remember.preference)
+    lintChecks(projects.linting)
 }
 
 ksp {

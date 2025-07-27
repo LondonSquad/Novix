@@ -29,8 +29,6 @@ android {
         versionName = project.findProperty("versionName") as? String ?: "1.0"
 
         testInstrumentationRunner = AppConfig.ANDROID_TEST_INSTRUMENTATION
-
-
     }
 
     signingConfigs {
@@ -103,6 +101,8 @@ dependencies {
     implementation(libs.bundles.koin)
     ksp(libs.bundles.room.ksp)
     implementation(libs.timber)
+    implementation(projects.linting)
+    lintChecks(projects.linting)
 }
 
 ksp {

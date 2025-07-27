@@ -10,11 +10,13 @@ import com.london.data.remote.service.search.SearchApiService
 import com.london.data.remote.source.base.BaseRemoteDatasource
 import com.london.data.utils.getCurrentDate
 import com.london.domain.KoverIgnore
+import org.koin.core.annotation.Provided
 import org.koin.core.annotation.Single
 
 @Single
 @KoverIgnore
 class SearchRemoteDataSourceImpl(
+    @Provided
     private val searchApiService: SearchApiService
 ) : SearchRemoteDataSource, BaseRemoteDatasource {
 
