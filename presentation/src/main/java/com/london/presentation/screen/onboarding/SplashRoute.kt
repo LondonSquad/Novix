@@ -19,16 +19,16 @@ fun SplashRoute(
 
     LaunchedEffect(Unit) {
         delay(1500)
-        val hasSeenOnboarding = appPreferencesService.hasOnboardingBeenShown
-        if (!hasSeenOnboarding) {
-            onNavigateToOnboarding()
-        } else {
-            val isLoggedIn = authRepository.isLoggedIn()
-            if (isLoggedIn) {
-                onNavigateToHome()
-            } else {
-                onNavigateToWelcome()
-            }
+
+        val destination = when {
+            !appPreferencesService.hasOnboardingBeenShown -> SplashEffect.Onboarding
+            authRepository.isLoggedIn() -> SplashEffect.Home
+            else -> SplashEffect.Welcome
+        }
+        when (destination) {
+            SplashEffect.Onboarding -> onNavigateToOnboarding()
+            SplashEffect.Home -> onNavigateToHome()
+            SplashEffect.Welcome -> onNavigateToWelcome()
         }
     }
 }
