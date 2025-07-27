@@ -3,6 +3,7 @@ package com.london.domain.usecase
 import com.google.common.truth.Truth.assertThat
 import com.london.domain.entity.toprated.TopRatedTvSeries
 import com.london.domain.repository.TopRatedTvSeriesRepository
+import com.london.domain.entity.PagedFetchResponse
 import io.mockk.coEvery
 import io.mockk.mockk
 import kotlinx.coroutines.test.runTest
@@ -22,50 +23,64 @@ class GetTopRatedTvSeriesUseCaseTest {
     }
 
     @Test
-    fun `should return TV series when repository returns valid list`() = runTest {
+    fun `should return TV series when repository returns valid response`() = runTest {
         // Given
+        val mockPagedResponse = PagedFetchResponse(
+            items = mockTopRatedTvSeries,
+            currentPage =  PAGE,
+            totalPages = 2,
+            totalItems = mockTopRatedTvSeries.size
+        )
+
         coEvery {
-            repository.getTopRatedTvSeries(PAGE, LANGUAGE)
-        } returns mockTopRatedTvSeries
+            repository.getTopRatedTvSeries(PAGE)
+        } returns mockPagedResponse
 
         // When
-        val result = getTopRatedTvSeries(PAGE, LANGUAGE)
+        val result = getTopRatedTvSeries(PAGE)
 
         // Then
-        assertThat(result).isEqualTo(mockTopRatedTvSeries)
-        assertThat(result).hasSize(2)
+        assertThat(result).isEqualTo(mockPagedResponse)
+
     }
 
     @Test
-    fun `should return empty list when repository returns empty list`() = runTest {
+    fun `should return empty list when repository returns empty response`() = runTest {
         // Given
+        val emptyPagedResponse = PagedFetchResponse(
+            items = emptyList<TopRatedTvSeries>(),
+            totalPages = PAGE,
+            currentPage = 1,
+            totalItems = 0
+        )
+
         coEvery {
-            repository.getTopRatedTvSeries(PAGE, LANGUAGE)
-        } returns emptyList()
+            repository.getTopRatedTvSeries(PAGE)
+        } returns emptyPagedResponse
 
         // When
-        val result = getTopRatedTvSeries(PAGE, LANGUAGE)
+        val result = getTopRatedTvSeries(PAGE)
 
         // Then
-        assertThat(result).isEmpty()
+        assertThat(result.items).isEmpty()
+        assertThat(result.currentPage).isEqualTo(PAGE)
     }
 
     @Test
     fun `should throw RuntimeException when repository throws`() = runTest {
         // Given
         coEvery {
-            repository.getTopRatedTvSeries(PAGE, LANGUAGE)
+            repository.getTopRatedTvSeries(PAGE)
         } throws RuntimeException("Something went wrong")
 
         // When & Then
         assertThrows<RuntimeException> {
-            getTopRatedTvSeries(PAGE, LANGUAGE)
+            getTopRatedTvSeries(PAGE)
         }
     }
 
     companion object {
         private const val PAGE = 1
-        private const val LANGUAGE = "en-US"
 
         private val mockTv1 = TopRatedTvSeries(
             id = 1396,

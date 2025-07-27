@@ -78,4 +78,7 @@ sealed interface Screen {
         val mediaId: Int,
         val mediaType: Int
     ) : Screen
+
+    @Serializable
+    object TopRated : Screen
 }

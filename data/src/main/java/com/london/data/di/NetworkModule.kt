@@ -17,6 +17,7 @@ import com.london.data.remote.service.search.SearchApiService
 import com.london.data.remote.service.toprated.movie.TopRatedMovieApiService
 import com.london.data.remote.service.toprated.tvseries.TopRatedTvSeriesApiService
 import com.london.domain.repository.SessionTokenProvider
+import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.json.Json
 import okhttp3.Cache
 import okhttp3.Interceptor
@@ -29,6 +30,7 @@ import retrofit2.Retrofit
 import java.io.File
 import java.util.concurrent.TimeUnit
 
+@OptIn(ExperimentalSerializationApi::class)
 @Module
 class NetworkModule {
 
@@ -44,7 +46,7 @@ class NetworkModule {
 
     @Single
     fun provideHttpLoggingInterceptor(): HttpLoggingInterceptor {
-        return HttpLoggingInterceptor { message ->
+        return HttpLoggingInterceptor {
         }.apply {
             level = if (BuildConfig.DEBUG) {
                 HttpLoggingInterceptor.Level.BODY
