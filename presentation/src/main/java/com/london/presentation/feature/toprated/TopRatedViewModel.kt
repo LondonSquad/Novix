@@ -1,7 +1,7 @@
 package com.london.presentation.feature.toprated
 
-import com.london.domain.usecase.GetTopRatedMoviesUseCase
-import com.london.domain.usecase.GetTopRatedTvSeriesUseCase
+import com.london.domain.usecase.toprated.GetTopRatedMoviesUseCase
+import com.london.domain.usecase.toprated.GetTopRatedTvSeriesUseCase
 import com.london.presentation.feature.base.BaseViewModel
 import com.london.presentation.feature.base.createPagingSourceFlow
 import com.london.presentation.utils.MovieGenre
@@ -97,4 +97,3 @@ class TopRatedViewModel(
         emitEffect(TopRatedEffect.NavigateToTvShowDetails(id))
     }
 }
-
