@@ -68,7 +68,7 @@ private fun TopTvShowsPicksContent(
     modifier: Modifier = Modifier,
 ) {
     LazyVerticalGrid(
-        columns = GridCells.Fixed(2),
+        columns = GridCells.Adaptive(minSize = 158.dp),
         contentPadding = PaddingValues(
             top = 12.dp,
             bottom = WindowInsets.navigationBars.asPaddingValues().calculateBottomPadding() + 16.dp
