@@ -1,6 +1,7 @@
 package com.london.designsystem.component.carousel
 
 import androidx.compose.foundation.gestures.Orientation
+import androidx.compose.foundation.gestures.TargetedFlingBehavior
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -29,8 +30,13 @@ import com.london.designsystem.component.carousel.m3.CarouselItemScope
 import com.london.designsystem.component.carousel.m3.CarouselState
 import com.london.designsystem.component.carousel.m3.keylineListOf
 import com.london.designsystem.component.carousel.m3.rememberCarouselState
+import kotlin.Float
+import kotlin.Int
+import kotlin.Unit
 import kotlin.math.floor
 import kotlin.math.max
+import kotlin.repeat
+import kotlin.with
 
 @Composable
 fun HeroCarousel(
@@ -39,6 +45,8 @@ fun HeroCarousel(
     smallItemSize: Dp,
     itemSpacing: Dp,
     modifier: Modifier = Modifier,
+    contentPadding: PaddingValues = PaddingValues(0.dp),
+    flingBehavior: TargetedFlingBehavior = CarouselDefaults.multiBrowseFlingBehavior(carouselState),
     itemContent: @Composable CarouselItemScope.(itemIndex: Int) -> Unit
 ) {
     val density = LocalDensity.current
@@ -77,11 +85,10 @@ fun HeroCarousel(
         keylineList = keylineList,
         modifier = modifier,
         itemSpacing = itemSpacing,
-        contentPadding = PaddingValues(end = 8.dp),
-        flingBehavior = CarouselDefaults.multiBrowseFlingBehavior(carouselState),
-        content = itemContent,
         maxNonFocalVisibleItemCount = 5,
-        userScrollEnabled = true
+        flingBehavior = flingBehavior,
+        contentPadding = contentPadding,
+        content = itemContent
     )
 }
 
