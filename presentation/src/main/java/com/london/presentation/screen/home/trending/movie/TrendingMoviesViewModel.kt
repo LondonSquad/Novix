@@ -18,16 +18,17 @@ class TrendingMoviesViewModel(
         fetchTrendingMovies()
     }
 
-    private fun fetchTrendingMovies() {
+    private fun fetchTrendingMovies(genreId: Int? = null) {
         val moviesFlow = createPagingSourceFlow("") { _, pageNumber ->
-            getTrendingMovies.invoke(pageNumber)
+            getTrendingMovies.invoke(pageNumber, genreId)
         }.cachedIn(viewModelScope)
-        updateState { copy(trendingMovies = moviesFlow, isLoading = false) }
+        updateState { copy(moviesFlow = moviesFlow, isLoading = false) }
     }
 
     override fun onGenreSelected(genre: MovieGenre) {
         if (genre.id == state.value.selectedGenreId) return
         updateState { copy(selectedGenreId = genre.id) }
+        fetchTrendingMovies(genre.id)
     }
 
     override fun onMovieClick(id: Int) = emitEffect(TrendingMoviesEffect.NavigateToMovie(id))

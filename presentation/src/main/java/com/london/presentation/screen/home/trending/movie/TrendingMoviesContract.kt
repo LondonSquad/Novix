@@ -10,8 +10,6 @@ interface TrendingMoviesContract {
 
 fun defaultTrendingMoviesContract() = object : TrendingMoviesContract {
     override fun onMovieClick(id: Int) {}
-
     override fun onBackClick() {}
-
     override fun onGenreSelected(genre: MovieGenre) {}
 }
