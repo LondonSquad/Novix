@@ -20,12 +20,6 @@ fun ActorImageResponse.toEntity(): ActorImageDetails {
 
 fun ProfileDto.toEntity(): ImageDetails {
     return ImageDetails(
-        aspectRatio = aspectRatio.orZero(),
-        height = height.orZero(),
-        iso = iso,
         fileUrl = filePath.asImageUrlOrEmpty(),
-        voteAverage = voteAverage.orZero(),
-        voteCount = voteCount.orZero(),
-        width = width.orZero()
     )
 }
