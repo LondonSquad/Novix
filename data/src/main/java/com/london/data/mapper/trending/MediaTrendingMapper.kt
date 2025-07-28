@@ -7,7 +7,7 @@ import com.london.domain.entity.Trending
 
 fun TrendingResponse.toMediaTrending(): Trending = Trending(
     id = id.orZero(),
-    title = title.orEmpty(),
+    title = (title ?: name).orEmpty(),
     posterPath = (posterPath ?: profilePath).asImageUrlOrEmpty(),
     genreIds = genreIds.orEmpty()
 )
