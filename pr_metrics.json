@@ -8022,5 +8022,33 @@
       "deletions": 17,
       "changed_files": 11
     }
+  },
+  {
+    "pr_number": 309,
+    "url": "https://github.com/LondonSquad/Novix/pull/309",
+    "title": "Fix/rating bugs",
+    "opened_at": "2025-07-28T14:34:00Z",
+    "head_ref": "fix/rating-bugs",
+    "base_ref": "develop",
+    "creator": {
+      "login": "Abdulrahman1890",
+      "id": 76666355,
+      "url": "https://github.com/Abdulrahman1890"
+    },
+    "approvals": [],
+    "first_approved_at": null,
+    "time_to_first_approval_minutes": null,
+    "required_approvals_met_at": null,
+    "time_to_required_approvals_minutes": null,
+    "closed_at": null,
+    "merged_at": null,
+    "merged_by": null,
+    "week": "2025-W31",
+    "status": "pending",
+    "diff_stats": {
+      "additions": 162,
+      "deletions": 26,
+      "changed_files": 17
+    }
   }
 ]
