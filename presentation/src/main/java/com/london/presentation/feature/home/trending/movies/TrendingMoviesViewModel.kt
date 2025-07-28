@@ -21,7 +21,12 @@ class TrendingMoviesViewModel(
             block = {
                 val moviesFlow = createPagingSourceFlow(query = "") { _, pageNumber ->
                     val movies = getTrendingMovies.invoke(page = pageNumber)
-                    movies.copy(items = movies.items)
+                    val filteredItems = if (state.value.selectedGenreId != null) {
+                        movies.items.filter { it.genreIds.contains(state.value.selectedGenreId) }
+                    } else {
+                        movies.items
+                    }
+                    movies.copy(items = filteredItems)
                 }
                 moviesFlow
             },

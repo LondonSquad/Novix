@@ -12,24 +12,24 @@ class TrendingActorsViewModel(
     TrendingActorsContract {
 
     init {
-        initializeTvShows()
+        initializeActors()
     }
 
-    private fun initializeTvShows() {
+    private fun initializeActors() {
         tryToExecute(
             block = {
                 val actorsFlow = createPagingSourceFlow(query = "") { _, pageNumber ->
-                    val movies = getTrendingActors.invoke(page = pageNumber)
-                    movies.copy(items = movies.items)
+                    val actors = getTrendingActors.invoke(page = pageNumber)
+                    actors.copy(items = actors.items)
                 }
                 actorsFlow
             },
             onStart = {
                 updateState { copy(isLoading = true) }
             },
-            onSuccess = { moviesFlow ->
+            onSuccess = { actorsFlow ->
                 updateState {
-                    copy(actorsFlow = moviesFlow)
+                    copy(actorsFlow = actorsFlow)
                 }
             },
             onCompleted = { updateState { copy(isLoading = false) } },

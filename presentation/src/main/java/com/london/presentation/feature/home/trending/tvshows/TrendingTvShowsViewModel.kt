@@ -19,17 +19,22 @@ class TrendingTvShowsViewModel(private val getTrendingTvShows: GetTrendingTvShow
         tryToExecute(
             block = {
                 val tvShowsFlow = createPagingSourceFlow(query = "") { _, pageNumber ->
-                    val movies = getTrendingTvShows.invoke(page = pageNumber)
-                    movies.copy(items = movies.items)
+                    val tvShows = getTrendingTvShows.invoke(page = pageNumber)
+                    val filteredItems = if (state.value.selectedGenreId != null) {
+                        tvShows.items.filter { it.genreIds.contains(state.value.selectedGenreId) }
+                    } else {
+                        tvShows.items
+                    }
+                    tvShows.copy(items = filteredItems)
                 }
                 tvShowsFlow
             },
             onStart = {
                 updateState { copy(isLoading = true) }
             },
-            onSuccess = { moviesFlow ->
+            onSuccess = { tvShowsFlow ->
                 updateState {
-                    copy(tvShowsFlow = moviesFlow)
+                    copy(tvShowsFlow = tvShowsFlow)
                 }
             },
             onCompleted = { updateState { copy(isLoading = false) } },
