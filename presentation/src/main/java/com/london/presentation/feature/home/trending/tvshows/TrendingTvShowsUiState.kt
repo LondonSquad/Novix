@@ -12,5 +12,5 @@ data class TrendingTvShowsUiState(
     val tvShowsGenres: List<TvShowGenre> = TvShowGenre.entries.toList(),
     val errorState: ErrorState? = null,
     val isLoading: Boolean = false,
-    val selectedGenreId: Int? = null
+    val selectedGenreId: Int? = -1
 )

@@ -20,7 +20,7 @@ class TrendingTvShowsViewModel(private val getTrendingTvShows: GetTrendingTvShow
             block = {
                 val tvShowsFlow = createPagingSourceFlow(query = "") { _, pageNumber ->
                     val tvShows = getTrendingTvShows.invoke(page = pageNumber)
-                    val filteredItems = if (state.value.selectedGenreId != null) {
+                    val filteredItems = if (state.value.selectedGenreId != null && state.value.selectedGenreId != -1) {
                         tvShows.items.filter { it.genreIds.contains(state.value.selectedGenreId) }
                     } else {
                         tvShows.items

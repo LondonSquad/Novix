@@ -15,5 +15,5 @@ data class TrendingMoviesUiState(
     val isSaved: Boolean = false,
     val backdropPath: String = "",
     val id: Int = 0,
-    val selectedGenreId: Int? = null
+    val selectedGenreId: Int? = -1
 )

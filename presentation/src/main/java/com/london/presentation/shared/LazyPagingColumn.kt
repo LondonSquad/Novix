@@ -4,7 +4,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -23,7 +23,7 @@ import kotlinx.coroutines.flow.Flow
 
 
 @Composable
-fun<T: Any> LazyPagingColumn(
+fun <T : Any> LazyPagingColumn(
     emptyTitle: String,
     pagingFlow: Flow<PagingData<T>>,
     modifier: Modifier = Modifier,
@@ -37,10 +37,15 @@ fun<T: Any> LazyPagingColumn(
                 .fillMaxSize()
                 .wrapContentSize(Alignment.Center)
         )
+
         pagingData.isLoading().not() && pagingData.isEmpty() -> EmptyLayout(
             text = emptyTitle,
             image = R.drawable.img_no_result,
+            modifier = Modifier
+                .fillMaxSize()
+                .navigationBarsPadding()
         )
+
         else -> Content(
             modifier = modifier,
             items = pagingData,
