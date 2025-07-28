@@ -81,10 +81,10 @@ private fun TrendingMoviesContent(
 
         val moviesLazyItems = state.moviesFlow.collectAsLazyPagingItems()
 
-//        LazyPagingColumn(
-//            emptyTitle = R.string.no_trending_movies_in_genre.string,
-//            pagingFlow = state.moviesFlow,
-//        ) { movie ->
+        LazyPagingColumn(
+            emptyTitle = R.string.no_trending_movies_in_genre.string,
+            pagingFlow = state.moviesFlow,
+        ) {
             MediaLazyPagingGrid(
                 pagingFlow = moviesLazyItems,
                 onItemClick = { contract.onMovieClick(it.id) },
@@ -97,6 +97,7 @@ private fun TrendingMoviesContent(
                 isItemSaved = { false }
             )
 
+        }
     }
 }
 
