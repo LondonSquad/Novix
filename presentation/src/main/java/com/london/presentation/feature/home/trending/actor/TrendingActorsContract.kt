@@ -6,6 +6,6 @@ interface TrendingActorsContract {
 }
 
 fun defaultTrendingActorsContract() = object : TrendingActorsContract {
-    override fun onActorClick(id: Int) = Unit
-    override fun onBack() = Unit
+    override fun onActorClick(id: Int) {}
+    override fun onBack() {}
 }
