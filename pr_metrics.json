@@ -7482,6 +7482,55 @@
     }
   },
   {
+    "pr_number": 293,
+    "url": "https://github.com/LondonSquad/Novix/pull/293",
+    "title": "refactor/top-rated-data-sources: integrate base datasource",
+    "opened_at": "2025-07-27T14:27:44Z",
+    "head_ref": "hotfix/use-base-remote-data-sorce-for-top-rated",
+    "base_ref": "develop",
+    "creator": {
+      "login": "abdelrhman1002",
+      "id": 180463542,
+      "url": "https://github.com/abdelrhman1002"
+    },
+    "approvals": [
+      {
+        "reviewer": {
+          "id": 154278495,
+          "login": "ahmeddsamii",
+          "url": "https://github.com/ahmeddsamii"
+        },
+        "submitted_at": "2025-07-27T14:44:38Z"
+      },
+      {
+        "reviewer": {
+          "id": 102248144,
+          "login": "BassantM",
+          "url": "https://github.com/BassantM"
+        },
+        "submitted_at": "2025-07-27T15:21:58Z"
+      }
+    ],
+    "first_approved_at": "2025-07-27T14:44:38Z",
+    "time_to_first_approval_minutes": 16.9,
+    "required_approvals_met_at": "2025-07-27T15:21:58Z",
+    "time_to_required_approvals_minutes": 54.233333333333334,
+    "closed_at": "2025-07-27T15:21:59Z",
+    "merged_at": "2025-07-27T15:21:59Z",
+    "merged_by": {
+      "login": "abdelrhman1002",
+      "id": 180463542,
+      "url": "https://github.com/abdelrhman1002"
+    },
+    "week": "2025-W30",
+    "status": "merged",
+    "diff_stats": {
+      "additions": 29,
+      "deletions": 17,
+      "changed_files": 10
+    }
+  },
+  {
     "pr_number": 294,
     "url": "https://github.com/LondonSquad/Novix/pull/294",
     "title": "Refactor: Simplify actor details and related entities",
@@ -7606,13 +7655,13 @@
           "login": "marwanqashwa",
           "url": "https://github.com/marwanqashwa"
         },
-        "submitted_at": "2025-07-27T15:31:10Z"
+        "submitted_at": "2025-07-27T15:39:15Z"
       }
     ],
     "first_approved_at": "2025-07-27T15:29:58Z",
     "time_to_first_approval_minutes": 4.9,
-    "required_approvals_met_at": "2025-07-27T15:31:10Z",
-    "time_to_required_approvals_minutes": 6.1,
+    "required_approvals_met_at": "2025-07-27T15:39:15Z",
+    "time_to_required_approvals_minutes": 14.183333333333334,
     "closed_at": "2025-07-27T15:39:16Z",
     "merged_at": "2025-07-27T15:39:16Z",
     "merged_by": {
@@ -7672,8 +7721,8 @@
     "week": "2025-W30",
     "status": "merged",
     "diff_stats": {
-      "additions": 100,
-      "deletions": 296,
+      "additions": 116,
+      "deletions": 349,
       "changed_files": 30
     }
   },
@@ -7737,7 +7786,7 @@
   {
     "pr_number": 299,
     "url": "https://github.com/LondonSquad/Novix/pull/299",
-    "title": "fix: simplify domain entity and fix errors",
+    "title": "fix: simplify movie video domain entity and fix errors",
     "opened_at": "2025-07-27T16:54:22Z",
     "head_ref": "refactor/movie-video-data",
     "base_ref": "develop",
@@ -7781,6 +7830,83 @@
       "additions": 2,
       "deletions": 86,
       "changed_files": 5
+    }
+  },
+  {
+    "pr_number": 300,
+    "url": "https://github.com/LondonSquad/Novix/pull/300",
+    "title": "refactor/authentication",
+    "opened_at": "2025-07-27T17:10:53Z",
+    "head_ref": "refactor/authentication",
+    "base_ref": "develop",
+    "creator": {
+      "login": "abdo-essam",
+      "id": 92235360,
+      "url": "https://github.com/abdo-essam"
+    },
+    "approvals": [
+      {
+        "reviewer": {
+          "id": 189210092,
+          "login": "Aseel-AbuKmail",
+          "url": "https://github.com/Aseel-AbuKmail"
+        },
+        "submitted_at": "2025-07-27T18:04:26Z"
+      },
+      {
+        "reviewer": {
+          "id": 102248144,
+          "login": "BassantM",
+          "url": "https://github.com/BassantM"
+        },
+        "submitted_at": "2025-07-27T18:08:49Z"
+      }
+    ],
+    "first_approved_at": "2025-07-27T18:04:26Z",
+    "time_to_first_approval_minutes": 53.55,
+    "required_approvals_met_at": "2025-07-27T18:08:49Z",
+    "time_to_required_approvals_minutes": 57.93333333333333,
+    "closed_at": "2025-07-27T18:08:50Z",
+    "merged_at": "2025-07-27T18:08:50Z",
+    "merged_by": {
+      "login": "abdo-essam",
+      "id": 92235360,
+      "url": "https://github.com/abdo-essam"
+    },
+    "week": "2025-W30",
+    "status": "merged",
+    "diff_stats": {
+      "additions": 310,
+      "deletions": 247,
+      "changed_files": 19
+    }
+  },
+  {
+    "pr_number": 301,
+    "url": "https://github.com/LondonSquad/Novix/pull/301",
+    "title": "feature/resolve-comment-trending-feature",
+    "opened_at": "2025-07-27T17:13:04Z",
+    "head_ref": "feature/resolve-comment-trending-feature",
+    "base_ref": "develop",
+    "creator": {
+      "login": "BassantM",
+      "id": 102248144,
+      "url": "https://github.com/BassantM"
+    },
+    "approvals": [],
+    "first_approved_at": null,
+    "time_to_first_approval_minutes": null,
+    "required_approvals_met_at": null,
+    "time_to_required_approvals_minutes": null,
+    "closed_at": "2025-07-27T17:32:21Z",
+    "merged_at": null,
+    "merged_by": null,
+    "week": "2025-W30",
+    "status": "closed",
+    "diff_stats": {
+      "additions": 1512,
+      "deletions": 91,
+      "changed_files": 66
     }
   },
   {
@@ -7851,7 +7977,7 @@
   {
     "pr_number": 303,
     "url": "https://github.com/LondonSquad/Novix/pull/303",
-    "title": "fix: add to recent viewed",
+    "title": "fix: error screen block select category again",
     "opened_at": "2025-07-27T18:07:33Z",
     "head_ref": "refactor/error-screen",
     "base_ref": "develop",
@@ -7895,6 +8021,63 @@
       "additions": 31,
       "deletions": 15,
       "changed_files": 7
+    }
+  },
+  {
+    "pr_number": 304,
+    "url": "https://github.com/LondonSquad/Novix/pull/304",
+    "title": "feat: implement animated top bar for actor details screen",
+    "opened_at": "2025-07-27T18:15:15Z",
+    "head_ref": "refactor/actor-details-picks-screen",
+    "base_ref": "develop",
+    "creator": {
+      "login": "Mostafa-alsaygh",
+      "id": 106277855,
+      "url": "https://github.com/Mostafa-alsaygh"
+    },
+    "approvals": [
+      {
+        "reviewer": {
+          "id": 102248144,
+          "login": "BassantM",
+          "url": "https://github.com/BassantM"
+        },
+        "submitted_at": "2025-07-27T18:37:05Z"
+      },
+      {
+        "reviewer": {
+          "id": 76666355,
+          "login": "Abdulrahman1890",
+          "url": "https://github.com/Abdulrahman1890"
+        },
+        "submitted_at": "2025-07-27T18:39:03Z"
+      },
+      {
+        "reviewer": {
+          "id": 92235360,
+          "login": "abdo-essam",
+          "url": "https://github.com/abdo-essam"
+        },
+        "submitted_at": "2025-07-27T18:39:16Z"
+      }
+    ],
+    "first_approved_at": "2025-07-27T18:37:05Z",
+    "time_to_first_approval_minutes": 21.833333333333332,
+    "required_approvals_met_at": "2025-07-27T18:39:03Z",
+    "time_to_required_approvals_minutes": 23.8,
+    "closed_at": "2025-07-27T18:39:14Z",
+    "merged_at": "2025-07-27T18:39:14Z",
+    "merged_by": {
+      "login": "BassantM",
+      "id": 102248144,
+      "url": "https://github.com/BassantM"
+    },
+    "week": "2025-W30",
+    "status": "merged",
+    "diff_stats": {
+      "additions": 57,
+      "deletions": 12,
+      "changed_files": 4
     }
   },
   {
@@ -7955,6 +8138,38 @@
     }
   },
   {
+    "pr_number": 306,
+    "url": "https://github.com/LondonSquad/Novix/pull/306",
+    "title": "fix: refactor",
+    "opened_at": "2025-07-27T18:54:10Z",
+    "head_ref": "fix/refactor",
+    "base_ref": "develop",
+    "creator": {
+      "login": "Abdulrahman1890",
+      "id": 76666355,
+      "url": "https://github.com/Abdulrahman1890"
+    },
+    "approvals": [],
+    "first_approved_at": null,
+    "time_to_first_approval_minutes": null,
+    "required_approvals_met_at": null,
+    "time_to_required_approvals_minutes": null,
+    "closed_at": "2025-07-27T18:56:09Z",
+    "merged_at": "2025-07-27T18:56:09Z",
+    "merged_by": {
+      "login": "Al-Taie",
+      "id": 68463985,
+      "url": "https://github.com/Al-Taie"
+    },
+    "week": "2025-W30",
+    "status": "merged",
+    "diff_stats": {
+      "additions": 7,
+      "deletions": 5,
+      "changed_files": 4
+    }
+  },
+  {
     "pr_number": 307,
     "url": "https://github.com/LondonSquad/Novix/pull/307",
     "title": "Feature: Hero Carousel Component",
@@ -7974,12 +8189,20 @@
           "url": "https://github.com/marwanqashwa"
         },
         "submitted_at": "2025-07-28T00:03:40Z"
+      },
+      {
+        "reviewer": {
+          "id": 189210092,
+          "login": "Aseel-AbuKmail",
+          "url": "https://github.com/Aseel-AbuKmail"
+        },
+        "submitted_at": "2025-07-28T01:37:35Z"
       }
     ],
     "first_approved_at": "2025-07-28T00:03:40Z",
     "time_to_first_approval_minutes": 223.2,
-    "required_approvals_met_at": null,
-    "time_to_required_approvals_minutes": null,
+    "required_approvals_met_at": "2025-07-28T01:37:35Z",
+    "time_to_required_approvals_minutes": 317.1166666666667,
     "closed_at": "2025-07-28T01:37:36Z",
     "merged_at": "2025-07-28T01:37:36Z",
     "merged_by": {
