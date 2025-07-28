@@ -8,6 +8,6 @@ import org.koin.core.annotation.Single
 
 @Single
 class GetTrendingTvShowsUseCase(@Provided private val trendingRepository: TrendingRepository) {
-    suspend operator fun invoke(page: Int): PagedFetchResponse<Trending> =
+    suspend fun invoke(page: Int): PagedFetchResponse<Trending> =
         trendingRepository.getTrendingTvShows(page)
 }
