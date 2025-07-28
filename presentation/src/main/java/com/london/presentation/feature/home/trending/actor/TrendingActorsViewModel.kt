@@ -1,7 +1,5 @@
 package com.london.presentation.feature.home.trending.actor
 
-import androidx.lifecycle.viewModelScope
-import androidx.paging.cachedIn
 import com.london.domain.usecase.GetTrendingActorsUseCase
 import com.london.presentation.feature.base.BaseViewModel
 import com.london.presentation.feature.base.createPagingSourceFlow
@@ -14,14 +12,28 @@ class TrendingActorsViewModel(
     TrendingActorsContract {
 
     init {
-        fetchTrendingActors()
+        initializeTvShows()
     }
 
-    private fun fetchTrendingActors() {
-        val actorsFlow = createPagingSourceFlow("") { _, pageNumber ->
-            getTrendingActors.invoke(pageNumber)
-        }.cachedIn(viewModelScope)
-        updateState { copy(actorsFlow = actorsFlow, isLoading = false) }
+    private fun initializeTvShows() {
+        tryToExecute(
+            block = {
+                val actorsFlow = createPagingSourceFlow(query = "") { _, pageNumber ->
+                    val movies = getTrendingActors.invoke(page = pageNumber)
+                    movies.copy(items = movies.items)
+                }
+                actorsFlow
+            },
+            onStart = {
+                updateState { copy(isLoading = true) }
+            },
+            onSuccess = { moviesFlow ->
+                updateState {
+                    copy(actorsFlow = moviesFlow)
+                }
+            },
+            onCompleted = { updateState { copy(isLoading = false) } },
+        )
     }
 
     override fun onActorClick(id: Int) = emitEffect(TrendingActorsEffect.NavigateToActor(id))
