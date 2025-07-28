@@ -78,7 +78,7 @@ fun TvShowEpisode.toEntity() = TvShowEpisodeEntity(
     id = id.orZero(),
     name = name.orEmpty(),
     overview = overview.orEmpty(),
-    voteAverage = voteAverage.orZero(),
+    voteAverage = voteAverage.orZero().roundToDecimal(),
     voteCount = voteCount.orZero(),
     airDate = airDate.orEmpty(),
     episodeNumber = episodeNumber.orZero(),
@@ -119,7 +119,7 @@ fun TvShowSeason.toEntity() = TvShowSeasonEntity(
     overview = overview.orEmpty(),
     posterUrl = posterPath,
     seasonNumber = seasonNumber.orZero(),
-    voteAverage = voteAverage.orZero()
+    voteAverage = voteAverage.orZero().roundToDecimal(),
 )
 
 @KoverIgnore
