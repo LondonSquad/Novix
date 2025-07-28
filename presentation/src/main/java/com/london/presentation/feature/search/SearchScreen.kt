@@ -225,7 +225,7 @@ fun SearchScreenContent(
                             },
                             content = {
                                 ActorsLayout(
-                                    actorsUis = actorsLazyList, onActorClick = {
+                                    items = actorsLazyList, onActorClick = {
                                         interactionListener.onActorClick(it.id)
                                     })
                             })
