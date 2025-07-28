@@ -7994,5 +7994,33 @@
       "deletions": 0,
       "changed_files": 8
     }
+  },
+  {
+    "pr_number": 308,
+    "url": "https://github.com/LondonSquad/Novix/pull/308",
+    "title": "feat: implement episode video trailer",
+    "opened_at": "2025-07-28T14:29:39Z",
+    "head_ref": "feature/episode-video-trailer",
+    "base_ref": "develop",
+    "creator": {
+      "login": "Abdulrahman1890",
+      "id": 76666355,
+      "url": "https://github.com/Abdulrahman1890"
+    },
+    "approvals": [],
+    "first_approved_at": null,
+    "time_to_first_approval_minutes": null,
+    "required_approvals_met_at": null,
+    "time_to_required_approvals_minutes": null,
+    "closed_at": null,
+    "merged_at": null,
+    "merged_by": null,
+    "week": "2025-W31",
+    "status": "pending",
+    "diff_stats": {
+      "additions": 149,
+      "deletions": 17,
+      "changed_files": 11
+    }
   }
 ]
