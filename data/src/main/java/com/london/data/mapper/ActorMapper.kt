@@ -10,6 +10,7 @@ import com.london.data.utils.asImageUrlOrEmpty
 import com.london.data.utils.generateHash
 import com.london.data.utils.isTrue
 import com.london.data.utils.orZero
+import com.london.data.utils.roundToDecimal
 import com.london.domain.KoverIgnore
 import com.london.domain.entity.Actor
 
@@ -61,7 +62,7 @@ fun KnownFor.toKnownForDtoLocal(): KnownForDtoLocal {
         popularity = popularity.orZero(),
         releaseDate = releaseDate,
         video = video,
-        voteAverage = voteAverage.orZero(),
+        voteAverage = voteAverage.orZero().roundToDecimal(),
         voteCount = voteCount.orZero(),
         name = name,
         originalName = originalName,
