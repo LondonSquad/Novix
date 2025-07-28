@@ -64,26 +64,16 @@ class GetMovieVideoUseCaseTest {
         val mockVideos = listOf(
             MovieVideo(
                 id = "vid1",
-                iso31661 = "US",
-                iso6391 = "en",
                 videoUrl = "https://youtube.com/watch?v=123",
                 name = "Official Trailer",
                 official = true,
-                publishedAt = "2025-07-19",
                 site = "YouTube",
-                size = 1080,
-                type = "Trailer"
             ), MovieVideo(
                 id = "vid2",
-                iso31661 = "US",
-                iso6391 = "en",
                 videoUrl = "https://youtube.com/watch?v=456",
                 name = "Teaser",
                 official = false,
-                publishedAt = "2025-07-18",
                 site = "YouTube",
-                size = 720,
-                type = "Teaser"
             )
         )
     }

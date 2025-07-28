@@ -59,11 +59,11 @@ import com.london.domain.entity.recent.RecentSearch
 import com.london.domain.entity.recent.RecentViewed
 import com.london.presentation.R
 import com.london.presentation.shared.ActorsLayout
+import com.london.presentation.shared.FilterBottomSheet
+import com.london.presentation.shared.FilterState
 import com.london.presentation.shared.MoviesLayOut
 import com.london.presentation.shared.TriangleBlurredShape
 import com.london.presentation.shared.TvShowLayOut
-import com.london.presentation.shared.FilterBottomSheet
-import com.london.presentation.shared.FilterState
 import com.london.presentation.utils.Listen
 import com.london.presentation.utils.ResultOrEmpty
 import org.koin.androidx.compose.koinViewModel
@@ -336,20 +336,19 @@ private fun SearchChipsRow(
         modifier = modifier
             .fillMaxWidth()
             .padding(horizontal = 16.dp),
-        horizontalArrangement = Arrangement.Start
+        horizontalArrangement = Arrangement.spacedBy(8.dp),
     ) {
-        NovixChip(
-            text = stringResource(SearchCategory.Movies.title),
-            isSelected = selected == SearchCategory.Movies,
-            onClick = { onSelect(SearchCategory.Movies) })
-        NovixChip(
-            text = stringResource(SearchCategory.TvShows.title),
-            isSelected = selected == SearchCategory.TvShows,
-            onClick = { onSelect(SearchCategory.TvShows) })
-        NovixChip(
-            text = stringResource(SearchCategory.Actors.title),
-            isSelected = selected == SearchCategory.Actors,
-            onClick = { onSelect(SearchCategory.Actors) })
+        SearchCategory.entries.forEach { category ->
+            NovixChip(
+                text = stringResource(category.title),
+                isSelected = selected == category,
+                onClick = {
+                    if (selected != category) {
+                        onSelect(category)
+                    }
+                }
+            )
+        }
     }
 }
 
