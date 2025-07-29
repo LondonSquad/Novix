@@ -66,8 +66,8 @@ fun ContinueWatchingScreen(
 
 @Composable
 fun Content(
-    state: ContinueWatchingUiState,
-    continueWatchingContract: ContinueWatchingContract
+    state: ContinueWatchingUiState = ContinueWatchingUiState(),
+    continueWatchingContract: ContinueWatchingContract = defaultContinueWatchingContract()
 ) {
 
     val screenWidth =
