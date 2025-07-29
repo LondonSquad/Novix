@@ -28,10 +28,10 @@ import com.london.designsystem.component.button.ErrorImage
 import com.london.designsystem.theme.NovixTheme
 import com.london.imageharamblur.ui.ImageViewFilter
 import com.london.presentation.R
+import com.london.presentation.feature.base.ErrorState
 import com.london.presentation.feature.buildscreen.BuildScreen
 import com.london.presentation.feature.buildscreen.LoadingScreen
 import com.london.presentation.feature.buildscreen.NetworkErrorScreen
-import com.london.presentation.feature.base.ErrorState
 import com.london.presentation.utils.Listen
 import org.koin.androidx.compose.koinViewModel
 
@@ -68,7 +68,7 @@ private fun Content(
             .fillMaxSize()
             .background(NovixTheme.colors.surface)
             .statusBarsPadding()
-            .padding(horizontal = 16.dp, vertical = 12.dp),
+            .padding(horizontal = 16.dp),
     ) {
         TopBar(
             modifier = Modifier.padding(bottom = 16.dp),
