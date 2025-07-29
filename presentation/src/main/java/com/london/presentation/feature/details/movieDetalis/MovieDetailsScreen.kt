@@ -66,15 +66,15 @@ import com.london.presentation.R.string.separator
 import com.london.presentation.R.string.star
 import com.london.presentation.R.string.time_icon
 import com.london.presentation.R.string.view_reviews
-import com.london.presentation.shared.ConditionalText
-import com.london.presentation.shared.CustomBackDropImagePager
-import com.london.presentation.shared.DetailsScreenTopBar
-import com.london.presentation.shared.FooterSection
 import com.london.presentation.feature.buildscreen.BuildScreen
 import com.london.presentation.feature.buildscreen.LoadingScreen
 import com.london.presentation.feature.buildscreen.NetworkErrorScreen
 import com.london.presentation.feature.reviews.MediaType
 import com.london.presentation.feature.search.SearchCategory
+import com.london.presentation.shared.ConditionalText
+import com.london.presentation.shared.CustomBackDropImagePager
+import com.london.presentation.shared.DetailsScreenTopBar
+import com.london.presentation.shared.FooterSection
 import com.london.presentation.utils.Listen
 import com.london.presentation.utils.convertGenreCodeToString
 import com.london.presentation.utils.offsetLayout
@@ -94,18 +94,14 @@ fun MovieDetailsScreen(
     val state by viewModel.state.collectAsStateWithLifecycle()
     val effect by viewModel.effect.collectAsState(null)
 
-    effect?.Listen { currentEffect ->
-        when (currentEffect) {
-            is MovieDetailsEffect.ActorNavigation -> onNavigateToActor(currentEffect.actorId)
-            MovieDetailsEffect.BackNavigation -> onBackClick()
-            is MovieDetailsEffect.GenreNavigation -> onGenreClick(currentEffect.genreId)
-            is MovieDetailsEffect.MovieNavigation -> onNavigateToMovie(currentEffect.movieId)
-            is MovieDetailsEffect.ReviewsNavigation -> onNavigateToReviews(
-                currentEffect.movieId,
-                currentEffect.mediaNumber
-            )
-        }
-    }
+    HandleMovieDetailsEffects(
+        effect = effect,
+        onBackClick = onBackClick,
+        onGenreClick = onGenreClick,
+        onNavigateToMovie = onNavigateToMovie,
+        onNavigateToActor = onNavigateToActor,
+        onNavigateToReviews = onNavigateToReviews
+    )
 
     BuildScreen {
         when {
@@ -188,9 +184,8 @@ fun MovieDetailsContent(
                         verticalArrangement = Arrangement.spacedBy(4.dp),
                         horizontalAlignment = Alignment.CenterHorizontally
                     ) {
-                        CustomBackDropImagePager(
-                            images = state.movieImage
-                        )
+
+                        CustomBackDropImagePager(images = state.movieImage)
 
                         Column(
                             modifier = Modifier
@@ -396,6 +391,31 @@ private fun RatingAndMetaRow(
     }
 }
 
+
+@Composable
+private fun HandleMovieDetailsEffects(
+    effect: MovieDetailsEffect?,
+    onBackClick: () -> Unit,
+    onGenreClick: (Int) -> Unit,
+    onNavigateToMovie: (Int) -> Unit,
+    onNavigateToActor: (Int) -> Unit,
+    onNavigateToReviews: (Int, Int) -> Unit,
+) {
+    effect?.Listen { currentEffect ->
+        when (currentEffect) {
+            is MovieDetailsEffect.ActorNavigation -> onNavigateToActor(currentEffect.actorId)
+            MovieDetailsEffect.BackNavigation -> onBackClick()
+            is MovieDetailsEffect.GenreNavigation -> onGenreClick(currentEffect.genreId)
+            is MovieDetailsEffect.MovieNavigation -> onNavigateToMovie(currentEffect.movieId)
+            is MovieDetailsEffect.ReviewsNavigation -> onNavigateToReviews(
+                currentEffect.movieId,
+                currentEffect.mediaNumber
+            )
+        }
+    }
+}
+
+
 @Composable
 private fun IconWithText(
     icon: Int,
@@ -415,6 +435,7 @@ private fun IconWithText(
         color = textColor
     )
 }
+
 
 @Composable
 private fun GenreRow(
