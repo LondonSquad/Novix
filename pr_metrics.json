@@ -9218,5 +9218,33 @@
       "deletions": 30,
       "changed_files": 4
     }
+  },
+  {
+    "pr_number": 393,
+    "url": "https://github.com/LondonSquad/Novix/pull/393",
+    "title": "Top movies  picks UI ",
+    "opened_at": "2025-07-29T19:40:53Z",
+    "head_ref": "refactor/top-movies-ui",
+    "base_ref": "develop",
+    "creator": {
+      "login": "AsmaaKhaledGomaa",
+      "id": 117874933,
+      "url": "https://github.com/AsmaaKhaledGomaa"
+    },
+    "approvals": [],
+    "first_approved_at": null,
+    "time_to_first_approval_minutes": null,
+    "required_approvals_met_at": null,
+    "time_to_required_approvals_minutes": null,
+    "closed_at": null,
+    "merged_at": null,
+    "merged_by": null,
+    "week": "2025-W31",
+    "status": "pending",
+    "diff_stats": {
+      "additions": 102,
+      "deletions": 67,
+      "changed_files": 5
+    }
   }
 ]
