@@ -43,12 +43,10 @@ class WebViewRegistrationViewModel :
                 emitEffect(WebViewRegistrationEffect.NavigateBack)
                 true
             }
-            // إذا المستخدم ضغط login بدلاً من signup
             url.contains("login") && url.contains("success") -> {
                 emitEffect(WebViewRegistrationEffect.RegistrationComplete)
                 true
             }
-            // إذا رجع لصفحة الهوم أو أي صفحة تانية
             url == "https://www.themoviedb.org/" || url == "https://themoviedb.org/" -> {
                 emitEffect(WebViewRegistrationEffect.NavigateBack)
                 true
@@ -57,52 +55,34 @@ class WebViewRegistrationViewModel :
         }
     }
 
-    private fun isCancelUrl(url: String): Boolean {
-        return url.contains("cancel") ||
-                url.contains("back") ||
-                url.contains("close") ||
-                url.contains("dismiss") ||
-                url.contains("exit") ||
-                // إذا رجع من صفحة التسجيل للصفحة الرئيسية
-                (url.contains("themoviedb.org") &&
-                        !url.contains("signup") &&
-                        !url.contains("register") &&
-                        !url.contains("account"))
-    }
-
     private fun isUrlAllowed(url: String): Boolean {
-        return try {
+        try {
             val allowedUrls = listOf(
                 "https://www.themoviedb.org/signup",
                 "https://themoviedb.org/signup",
                 "https://www.themoviedb.org/account/signup",
-                "https://themoviedb.org/account/signup",
-                // إضافة المزيد من الـ URLs المسموحة
-                "https://www.themoviedb.org/",
-                "https://themoviedb.org/",
-                "https://www.themoviedb.org/login",
-                "https://themoviedb.org/login"
+                "https://themoviedb.org/account/signup"
             )
 
             val isExactMatch = allowedUrls.any { allowedUrl ->
                 url.startsWith(allowedUrl)
             }
 
-            if (isExactMatch) return true
+            if (isExactMatch) {
+                return true
+            }
 
             val completionUrls = listOf(
                 "account/verify",
                 "registration/success",
-                "signup/complete",
-                "cancel",
-                "back"
+                "signup/complete"
             )
 
-            url.contains("themoviedb.org") &&
+            return url.contains("themoviedb.org") &&
                     completionUrls.any { completionUrl -> url.contains(completionUrl) }
 
         } catch (e: Exception) {
-            false
+            return false
         }
     }
 
@@ -112,5 +92,17 @@ class WebViewRegistrationViewModel :
                 url.contains("signup/complete") ||
                 url.contains("welcome") ||
                 (url.contains("themoviedb.org") && url.contains("u/"))
+    }
+
+    private fun isCancelUrl(url: String): Boolean {
+        return url.contains("cancel", ignoreCase = true) ||
+                url.contains("back", ignoreCase = true) ||
+                url.contains("close", ignoreCase = true) ||
+                url.contains("dismiss", ignoreCase = true) ||
+                url.contains("exit", ignoreCase = true) ||
+                (url.contains("themoviedb.org") &&
+                        !url.contains("signup") &&
+                        !url.contains("register") &&
+                        !url.contains("account"))
     }
 }
