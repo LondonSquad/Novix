@@ -173,11 +173,6 @@ fun MovieDetailsContent(
                         .defaultMinSize(minHeight = 370.dp)
 
                 ) {
-                    MovieDetailsImage(
-                        images = state.movieImage,
-                        currentImageIndex = state.currentImageIndex,
-                        direction = state.imageSlideDirection,
-                    )
 
                     Column(
                         modifier = Modifier
@@ -514,7 +509,8 @@ private fun MovieDetailsImage(
                             .fillMaxSize()
                             .clip(RoundedCornerShape(12.dp)),
                         onLoadingStateChange = { loadingState.value = it },
-                        errorContent = { ErrorImage() })
+                        errorContent = { ErrorImage() }
+                    )
                 }
             }
         } else {
