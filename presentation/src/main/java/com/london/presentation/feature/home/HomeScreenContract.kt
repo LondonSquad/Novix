@@ -7,4 +7,5 @@ interface HomeScreenContract {
     fun onTvShowClick(id: Int)
     fun onGenreSelect(genre: MovieGenre)
     fun onTopRatedClick()
+    fun onContinueWatchingClick()
 }

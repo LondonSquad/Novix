@@ -54,6 +54,7 @@ fun HomeScreen(
     onMovieClick: (movieId: Int) -> Unit = {},
     onTvShowClick: (tvShowId: Int) -> Unit = {},
     onTopRatedClick: () -> Unit = {},
+    onContinueWatchingClick: () -> Unit = {},
     viewModel: HomeViewModel = koinViewModel()
 ) {
 
@@ -62,8 +63,9 @@ fun HomeScreen(
 
     effect?.Listen { currentEffect ->
         when (currentEffect) {
-            is HomeScreenEffect.NavigationMovieDetails -> onMovieClick(currentEffect.id)
             is HomeScreenEffect.NavigationTvShowDetails -> onTvShowClick(currentEffect.id)
+            is HomeScreenEffect.NavigationMovieDetails -> onMovieClick(currentEffect.id)
+            is HomeScreenEffect.NavigationContinueWatching -> onContinueWatchingClick()
             is HomeScreenEffect.NavigationTopRated -> onTopRatedClick()
         }
     }
@@ -186,6 +188,18 @@ private fun Content(
                     }
                 )
             }
+            item(span = { GridItemSpan(maxLineSpan) })
+            {
+                SectionHeader(
+                    text = stringResource(R.string.continue_watching),
+                    hasGetAll = true,
+                    hasIcon = true,
+                    onClick = {
+                        homeScreenContract.onContinueWatchingClick()
+                    }
+                )
+            }
+
             upComingSection(
                 contract = homeScreenContract,
                 screenWidth = screenWidth,

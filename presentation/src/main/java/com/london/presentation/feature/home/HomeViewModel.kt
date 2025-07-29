@@ -107,4 +107,7 @@ class HomeViewModel(
     override fun onTopRatedClick() {
         emitEffect(HomeScreenEffect.NavigationTopRated)
     }
+
+    override fun onContinueWatchingClick() =
+        emitEffect(HomeScreenEffect.NavigationContinueWatching)
 }

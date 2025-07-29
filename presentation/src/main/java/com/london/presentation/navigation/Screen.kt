@@ -80,5 +80,8 @@ sealed interface Screen {
     ) : Screen
 
     @Serializable
-    object TopRated : Screen
+    data object TopRated : Screen
+
+    @Serializable
+    data object ContinueWatching : Screen
 }

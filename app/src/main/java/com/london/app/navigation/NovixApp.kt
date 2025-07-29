@@ -22,6 +22,26 @@ import androidx.navigation.compose.rememberNavController
 import com.london.designsystem.component.NavBar
 import com.london.designsystem.theme.NovixTheme
 import com.london.domain.AppPreferencesService
+import com.london.presentation.feature.account.AccountScreen
+import com.london.presentation.feature.bookmark.BookmarksScreen
+import com.london.presentation.feature.category.CategoriesScreen
+import com.london.presentation.feature.category.moviesbycategory.MoviesByCategoryScreen
+import com.london.presentation.feature.continuewatching.ContinueWatchingScreen
+import com.london.presentation.feature.details.actor.ActorDetailsScreen
+import com.london.presentation.feature.details.actordetails.gallery.ActorGalleryScreen
+import com.london.presentation.feature.details.actordetails.topmoviespicks.TopMoviesPicksScreen
+import com.london.presentation.feature.details.actordetails.toptvshowspicks.TopTvShowsPicksScreen
+import com.london.presentation.feature.details.movieDetalis.MovieDetailsScreen
+import com.london.presentation.feature.details.tvshow.episodedetails.EpisodeDetailsScreen
+import com.london.presentation.feature.details.tvshow.tvshowdetails.TvShowsDetailsScreen
+import com.london.presentation.feature.home.HomeScreen
+import com.london.presentation.feature.login.LoginScreen
+import com.london.presentation.feature.onboarding.OnboardingRoute
+import com.london.presentation.feature.onboarding.SplashRoute
+import com.london.presentation.feature.onboarding.WelcomeScreen
+import com.london.presentation.feature.reviews.ReviewsScreen
+import com.london.presentation.feature.search.SearchScreen
+import com.london.presentation.feature.toprated.TopRatedScreen
 import com.london.presentation.navigation.Screen
 import com.london.presentation.navigation.Screen.Account
 import com.london.presentation.navigation.Screen.ActorDetails
@@ -40,26 +60,7 @@ import com.london.presentation.navigation.Screen.Splash
 import com.london.presentation.navigation.Screen.TopTvShowsPicksDetails
 import com.london.presentation.navigation.Screen.TvShowDetails
 import com.london.presentation.navigation.Screen.Welcome
-import com.london.presentation.feature.account.AccountScreen
-import com.london.presentation.feature.bookmark.BookmarksScreen
-import com.london.presentation.feature.category.CategoriesScreen
-import com.london.presentation.feature.category.moviesbycategory.MoviesByCategoryScreen
-import com.london.presentation.feature.details.actor.ActorDetailsScreen
-import com.london.presentation.feature.details.actordetails.gallery.ActorGalleryScreen
-import com.london.presentation.feature.details.actordetails.topmoviespicks.TopMoviesPicksScreen
-import com.london.presentation.feature.details.actordetails.toptvshowspicks.TopTvShowsPicksScreen
-import com.london.presentation.feature.details.movieDetalis.MovieDetailsScreen
-import com.london.presentation.feature.details.tvshow.episodedetails.EpisodeDetailsScreen
-import com.london.presentation.feature.details.tvshow.tvshowdetails.TvShowsDetailsScreen
-import com.london.presentation.feature.home.HomeScreen
-import com.london.presentation.feature.login.LoginScreen
-import com.london.presentation.feature.onboarding.OnboardingRoute
-import com.london.presentation.feature.onboarding.SplashRoute
-import com.london.presentation.feature.onboarding.WelcomeScreen
-import com.london.presentation.feature.reviews.ReviewsScreen
-import com.london.presentation.feature.search.SearchScreen
 import org.koin.compose.getKoin
-import com.london.presentation.feature.toprated.TopRatedScreen
 
 @Composable
 fun NovixApp(appPreferencesService: AppPreferencesService) {
@@ -172,6 +173,9 @@ fun NovixApp(appPreferencesService: AppPreferencesService) {
                     },
                     onTopRatedClick = {
                         navController.navigate(Screen.TopRated)
+                    },
+                    onContinueWatchingClick = {
+                        navController.navigate(Screen.ContinueWatching)
                     }
                 )
             }
@@ -366,10 +370,10 @@ fun NovixApp(appPreferencesService: AppPreferencesService) {
             }
             composable<Screen.TopRated> {
                 TopRatedScreen(
-                 onBackClick = {navController.popBackStack()},
-                 onMovieClick = {navController.navigate(MovieDetails(it))},
-                 onTvShowClick = {navController.navigate(TvShowDetails(it))}
-             )
+                    onBackClick = { navController.popBackStack() },
+                    onMovieClick = { navController.navigate(MovieDetails(it)) },
+                    onTvShowClick = { navController.navigate(TvShowDetails(it)) }
+                )
             }
 
             composable<Login> {
@@ -380,6 +384,19 @@ fun NovixApp(appPreferencesService: AppPreferencesService) {
                     onNavigateToHome = {
                         navController.navigate(Home)
                     },
+                )
+            }
+            composable<Screen.ContinueWatching> {
+                ContinueWatchingScreen(
+                    onMovieClick = {
+                        navController.navigate(MovieDetails(it))
+                    },
+                    onTvShowClick = {
+                        navController.navigate(TvShowDetails(it))
+                    },
+                    onBackClick = {
+                        navController.navigateUp()
+                    }
                 )
             }
         }
