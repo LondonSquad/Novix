@@ -9047,5 +9047,33 @@
       "deletions": 58,
       "changed_files": 4
     }
+  },
+  {
+    "pr_number": 382,
+    "url": "https://github.com/LondonSquad/Novix/pull/382",
+    "title": "refactor: HomeScreen sticky header and layout",
+    "opened_at": "2025-07-29T18:01:55Z",
+    "head_ref": "fix/sticky-genres-home",
+    "base_ref": "develop",
+    "creator": {
+      "login": "ahmeddsamii",
+      "id": 154278495,
+      "url": "https://github.com/ahmeddsamii"
+    },
+    "approvals": [],
+    "first_approved_at": null,
+    "time_to_first_approval_minutes": null,
+    "required_approvals_met_at": null,
+    "time_to_required_approvals_minutes": null,
+    "closed_at": null,
+    "merged_at": null,
+    "merged_by": null,
+    "week": "2025-W31",
+    "status": "pending",
+    "diff_stats": {
+      "additions": 69,
+      "deletions": 50,
+      "changed_files": 2
+    }
   }
 ]
