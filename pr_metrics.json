@@ -9425,5 +9425,33 @@
       "deletions": 61,
       "changed_files": 17
     }
+  },
+  {
+    "pr_number": 400,
+    "url": "https://github.com/LondonSquad/Novix/pull/400",
+    "title": "Hotfix/44 missing glow in the reviews screen",
+    "opened_at": "2025-07-29T22:35:01Z",
+    "head_ref": "hotfix/44-missing-glow-in-the-reviews-screen",
+    "base_ref": "develop",
+    "creator": {
+      "login": "Aseel-AbuKmail",
+      "id": 189210092,
+      "url": "https://github.com/Aseel-AbuKmail"
+    },
+    "approvals": [],
+    "first_approved_at": null,
+    "time_to_first_approval_minutes": null,
+    "required_approvals_met_at": null,
+    "time_to_required_approvals_minutes": null,
+    "closed_at": null,
+    "merged_at": null,
+    "merged_by": null,
+    "week": "2025-W31",
+    "status": "pending",
+    "diff_stats": {
+      "additions": 4,
+      "deletions": 0,
+      "changed_files": 3
+    }
   }
 ]
