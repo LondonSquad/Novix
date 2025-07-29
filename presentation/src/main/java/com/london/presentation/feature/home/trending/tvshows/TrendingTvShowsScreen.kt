@@ -6,9 +6,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.statusBarsPadding
-import androidx.compose.foundation.lazy.grid.rememberLazyGridState
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
@@ -21,10 +19,8 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.paging.compose.collectAsLazyPagingItems
 import com.london.designsystem.component.TopBar
 import com.london.designsystem.theme.NovixTheme
-import com.london.designsystem.utils.string
 import com.london.presentation.R
 import com.london.presentation.shared.GenresSection
-import com.london.presentation.shared.LazyPagingColumn
 import com.london.presentation.shared.MediaLazyPagingGrid
 import com.london.presentation.utils.Listen
 import org.koin.androidx.compose.koinViewModel
@@ -58,11 +54,7 @@ private fun TrendingTvShowsContent(
     contract: TrendingTvShowsContract = defaultTrendingTvShowsContract(),
 ) {
     val screenWidth = with(LocalDensity.current) { LocalConfiguration.current.screenWidthDp.dp }
-    val gridState = rememberLazyGridState()
-
-    LaunchedEffect(state.selectedGenreId) {
-        gridState.scrollToItem(0)
-    }
+    val tvShowsLazyItems = state.tvShowsFlow.collectAsLazyPagingItems()
 
     Column(
         modifier = Modifier
@@ -77,7 +69,6 @@ private fun TrendingTvShowsContent(
             title = stringResource(R.string.trending_tv_shows),
             onBackClick = contract::onBack
         )
-
         GenresSection(
             genres = state.tvShowsGenres,
             selectedGenreId = state.selectedGenreId,
@@ -87,25 +78,18 @@ private fun TrendingTvShowsContent(
             getGenreId = { it.id },
             getGenreName = { stringResource(it.stringResId) }
         )
-
-        val tvShowsLazyItems = state.tvShowsFlow.collectAsLazyPagingItems()
-
-        LazyPagingColumn(
-            emptyTitle = R.string.no_trending_tvshows_in_genre.string,
-            pagingItems = tvShowsLazyItems,
-        ) { tvShow ->
-            MediaLazyPagingGrid(
-                pagingFlow = tvShowsLazyItems,
-                onItemClick = { contract.onTvShowClick(tvShow.id) },
-                getImageUrl = { it.posterPath },
-                getTitle = { it.title },
-                modifier = Modifier
-                    .fillMaxSize()
-                    .padding(horizontal = 16.dp),
-                onSaveClick = { /* TODO: Implement save functionality */ },
-                isItemSaved = { false }
-            )
-        }
+        MediaLazyPagingGrid(
+            pagingFlow = tvShowsLazyItems,
+            onItemClick = { contract.onTvShowClick(it.id) },
+            getImageUrl = { it.posterPath },
+            getTitle = { it.title },
+            modifier = Modifier
+                .weight(1f)
+                .fillMaxWidth()
+                .padding(horizontal = 16.dp),
+            onSaveClick = { /* TODO: Implement save functionality */ },
+            isItemSaved = { false }
+        )
     }
 }
 

@@ -19,10 +19,8 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.paging.compose.collectAsLazyPagingItems
 import com.london.designsystem.component.TopBar
 import com.london.designsystem.theme.NovixTheme
-import com.london.designsystem.utils.string
 import com.london.presentation.R
 import com.london.presentation.shared.GenresSection
-import com.london.presentation.shared.LazyPagingColumn
 import com.london.presentation.shared.MediaLazyPagingGrid
 import com.london.presentation.utils.Listen
 import org.koin.androidx.compose.koinViewModel
@@ -55,6 +53,7 @@ private fun TrendingMoviesContent(
     contract: TrendingMoviesContract = defaultTrendingMoviesContract()
 ) {
     val screenWidth = with(LocalDensity.current) { LocalConfiguration.current.screenWidthDp.dp }
+    val moviesLazyItems = state.moviesFlow.collectAsLazyPagingItems()
 
     Column(
         modifier = Modifier
@@ -78,26 +77,18 @@ private fun TrendingMoviesContent(
             getGenreId = { it.id },
             getGenreName = { stringResource(it.stringResId) }
         )
-
-        val moviesLazyItems = state.moviesFlow.collectAsLazyPagingItems()
-
-        LazyPagingColumn(
-            emptyTitle = R.string.no_trending_movies_in_genre.string,
-            pagingItems = moviesLazyItems,
-        ) {
-            MediaLazyPagingGrid(
-                pagingFlow = moviesLazyItems,
-                onItemClick = { contract.onMovieClick(it.id) },
-                getImageUrl = { it.posterPath },
-                getTitle = { it.title },
-                modifier = Modifier
-                    .fillMaxSize()
-                    .padding(horizontal = 16.dp),
-                onSaveClick = { /* TODO: Implement save functionality */ },
-                isItemSaved = { false }
-            )
-
-        }
+        MediaLazyPagingGrid(
+            pagingFlow = moviesLazyItems,
+            onItemClick = { contract.onMovieClick(it.id) },
+            getImageUrl = { it.posterPath },
+            getTitle = { it.title },
+            modifier = Modifier
+                .weight(1f)
+                .fillMaxWidth()
+                .padding(horizontal = 16.dp),
+            onSaveClick = { /* TODO: Implement save functionality */ },
+            isItemSaved = { false }
+        )
     }
 }
 
