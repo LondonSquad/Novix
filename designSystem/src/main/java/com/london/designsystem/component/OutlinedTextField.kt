@@ -107,9 +107,7 @@ fun OutlinedTextField(
             ) {
                 BasicTextField(
                     value = value,
-                    onValueChange = { input ->
-                        input.text.length.takeUnless { it < 125 }.let { onValueChange(input) }
-                    },
+                    onValueChange = { if (it.text.length < 125) onValueChange(it) },
                     modifier = Modifier
                         .fillMaxWidth()
                         .defaultMinSize(minWidth = 268.dp, minHeight = 48.dp)
@@ -131,14 +129,7 @@ fun OutlinedTextField(
                             placeholder = placeholder,
                             leadingIcon = null,
                             trailingIcon = null,
-                            prefix = leadingIcon?.let {
-                                {
-                                    AnimatedLeadingIcon(
-                                        painter = it,
-                                        isFocused = isFocused
-                                    )
-                                }
-                            },
+                            prefix = leadingIcon?.let { { AnimatedLeadingIcon(painter = it, isFocused = isFocused) } },
                             suffix = currentTrailingIcon,
                             supportingText = supportingText,
                             singleLine = singleLine,
@@ -208,6 +199,7 @@ private fun getTrailingIcon(
         isPasswordField && passwordVisibleIcon != null && passwordHiddenIcon != null -> {
             {
                 PasswordToggleIcon(
+                    isPasswordEmpty = isPasswordEmpty,
                     passwordVisible = passwordVisible,
                     passwordVisibleIcon = passwordVisibleIcon,
                     passwordHiddenIcon = passwordHiddenIcon,
@@ -265,18 +257,28 @@ private fun AnimatedLeadingIcon(
 
 @Composable
 private fun PasswordToggleIcon(
+    isPasswordEmpty: Boolean,
     passwordVisible: Boolean,
     passwordVisibleIcon: Painter,
     passwordHiddenIcon: Painter,
     onToggle: () -> Unit
 ) {
-    IconButton(onClick = onToggle) {
+    if (isPasswordEmpty) {
         Icon(
-            painter = if (passwordVisible) passwordVisibleIcon else passwordHiddenIcon,
-            contentDescription = if (passwordVisible) "Hide password" else "Show password",
+            painter = passwordHiddenIcon,
+            contentDescription = "Password field empty",
             tint = NovixTheme.colors.hint,
             modifier = Modifier.size(20.dp)
         )
+    } else {
+        IconButton(onClick = onToggle) {
+            Icon(
+                painter = if (passwordVisible) passwordVisibleIcon else passwordHiddenIcon,
+                contentDescription = if (passwordVisible) "Hide password" else "Show password",
+                tint = NovixTheme.colors.hint,
+                modifier = Modifier.size(20.dp)
+            )
+        }
     }
 }
 
