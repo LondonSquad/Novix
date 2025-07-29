@@ -15,6 +15,7 @@ import androidx.paging.compose.collectAsLazyPagingItems
 import com.london.designsystem.component.TopBar
 import com.london.designsystem.theme.ThemePreviews
 import com.london.domain.entity.TvShow
+import com.london.presentation.R
 import com.london.presentation.feature.buildscreen.BuildScreen
 import com.london.presentation.feature.buildscreen.LoadingScreen
 import com.london.presentation.feature.buildscreen.NetworkErrorScreen
@@ -82,7 +83,8 @@ private fun Content(
                 .fillMaxWidth()
                 .padding(horizontal = 16.dp),
             onSaveClick = { /* TODO: Implement save functionality */ },
-            isItemSaved = { false }
+            isItemSaved = { false },
+            emptyTitle = stringResource(id = R.string.no_tv_shows_found),
         )
     }
 }
