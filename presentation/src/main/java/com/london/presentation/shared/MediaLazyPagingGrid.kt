@@ -16,6 +16,7 @@ import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalWindowInfo
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import androidx.paging.compose.LazyPagingItems
 import com.london.designsystem.component.CircularLoading
 import com.london.designsystem.component.EmptyLayout
 import com.london.designsystem.component.HomeCard
@@ -24,7 +25,7 @@ import com.london.presentation.utils.isLoading
 
 @Composable
 fun <T : Any> MediaLazyPagingGrid(
-    pagingFlow: androidx.paging.compose.LazyPagingItems<T>,
+    pagingFlow: LazyPagingItems<T>,
     onItemClick: (T) -> Unit,
     getImageUrl: (T) -> String,
     getTitle: (T) -> String,
