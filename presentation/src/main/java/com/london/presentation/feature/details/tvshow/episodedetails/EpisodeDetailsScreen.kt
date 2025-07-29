@@ -60,7 +60,7 @@ import com.london.designsystem.R as Res
 @Composable
 fun EpisodeDetailsScreen(
     viewModel: EpisodeDetailsViewModel = koinViewModel(),
-    onNavigateBackClick: () -> Unit,
+    onNavigateBack: () -> Unit,
     onNavigateToCast: (Int) -> Unit
 ) {
     val uiState by viewModel.state.collectAsStateWithLifecycle()
@@ -68,7 +68,7 @@ fun EpisodeDetailsScreen(
 
     effect?.Listen { currentEffect ->
         when (currentEffect) {
-            EpisodeDetailsEffect.NavigationBack -> onNavigateBackClick()
+            EpisodeDetailsEffect.NavigationBack -> onNavigateBack()
             is EpisodeDetailsEffect.NavigateToCast -> onNavigateToCast(currentEffect.episodeId)
         }
     }

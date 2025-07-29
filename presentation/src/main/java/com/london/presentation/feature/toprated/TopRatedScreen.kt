@@ -43,18 +43,18 @@ import org.koin.compose.viewmodel.koinViewModel
 @Composable
 fun TopRatedScreen(
     viewModel: TopRatedViewModel = koinViewModel(),
-    onBackClick: () -> Unit = {},
-    onMovieClick: (Int) -> Unit = {},
-    onTvShowClick: (Int) -> Unit = {}
+    onNavigateBack: () -> Unit = {},
+    onNavigateMovie: (Int) -> Unit = {},
+    onNavigateTvShow: (Int) -> Unit = {}
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
     val effect by viewModel.effect.collectAsState(null)
 
     effect?.Listen { currentEffect ->
         when (currentEffect) {
-            is TopRatedEffect.NavigateToMovieDetails -> onMovieClick(currentEffect.id)
-            is TopRatedEffect.NavigateToTvShowDetails -> onTvShowClick(currentEffect.id)
-            is TopRatedEffect.NavigateBack -> onBackClick()
+            is TopRatedEffect.NavigateToMovieDetails -> onNavigateMovie(currentEffect.id)
+            is TopRatedEffect.NavigateToTvShowDetails -> onNavigateTvShow(currentEffect.id)
+            is TopRatedEffect.NavigateBack -> onNavigateBack()
         }
     }
 

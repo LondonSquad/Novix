@@ -16,7 +16,7 @@ import com.london.domain.entity.Actor
 
 @Composable
 fun ActorsLayout(
-    actorsUis: LazyPagingItems<Actor>,
+    items: LazyPagingItems<Actor>,
     onActorClick: (Actor) -> Unit,
     modifier: Modifier = Modifier
 ) {
@@ -25,8 +25,8 @@ fun ActorsLayout(
         contentPadding = PaddingValues(start = 16.dp, end = 16.dp, bottom = 16.dp),
         verticalArrangement = Arrangement.spacedBy(12.dp)
     ) {
-        items(actorsUis.itemCount) { index ->
-            val actor = actorsUis[index]
+        items(items.itemCount) { index ->
+            val actor = items[index]
             if (actor != null) {
                 ActorItem(
                     modifier = Modifier.clickable(onClick = { onActorClick(actor) }),

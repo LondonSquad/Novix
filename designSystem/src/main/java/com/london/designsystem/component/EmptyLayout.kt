@@ -18,7 +18,7 @@ import androidx.compose.ui.unit.dp
 import com.london.designsystem.theme.NovixTheme
 
 @Composable
-fun EmptySearchLayout(
+fun EmptyLayout(
     text: String,
     @DrawableRes image: Int,
     modifier: Modifier = Modifier

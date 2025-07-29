@@ -3,9 +3,9 @@ package com.london.data.repository.popular
 import com.google.common.truth.Truth.assertThat
 import com.london.data.remote.exception.NetworkException
 import com.london.data.remote.model.ApiResponse
-import com.london.data.remote.source.home.PopularRemoteDataSource
-import com.london.data.remote.model.home.model.PopularMovieResponse
-import com.london.data.remote.model.home.model.PopularTvShowResponse
+import com.london.data.remote.source.home.popular.PopularRemoteDataSource
+import com.london.data.remote.model.home.model.popular.PopularMovieResponse
+import com.london.data.remote.model.home.model.popular.PopularTvShowResponse
 import com.london.domain.entity.popular.PopularMovie
 import com.london.domain.entity.popular.PopularTvShow
 import io.mockk.coEvery

@@ -51,7 +51,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.paging.LoadState
 import androidx.paging.compose.collectAsLazyPagingItems
-import com.london.designsystem.component.EmptySearchLayout
+import com.london.designsystem.component.EmptyLayout
 import com.london.designsystem.component.HomeCard
 import com.london.designsystem.component.Icon
 import com.london.designsystem.component.NovixChip
@@ -242,7 +242,7 @@ fun SearchScreenContent(
                             },
                             content = {
                                 ActorsLayout(
-                                    actorsUis = actorsLazyList, onActorClick = {
+                                    items = actorsLazyList, onActorClick = {
                                         interactionListener.onActorClick(it.id)
                                     })
                             })
@@ -527,7 +527,7 @@ private fun RecentSearchItem(
 private fun NoEarlierSearchLayout(
     modifier: Modifier = Modifier
 ) {
-    EmptySearchLayout(
+    EmptyLayout(
         text = stringResource(R.string.start_exploring_msg),
         image = R.drawable.imge_explore,
         modifier = modifier.padding(horizontal = 16.dp)
@@ -539,7 +539,7 @@ private fun NoEarlierSearchLayout(
 private fun NoSearchResultLayOut(
     modifier: Modifier = Modifier
 ) {
-    EmptySearchLayout(
+    EmptyLayout(
         text = stringResource(R.string.no_search_result_msg),
         image = R.drawable.img_no_search_result,
         modifier = modifier.padding(horizontal = 16.dp)
