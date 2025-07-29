@@ -8,6 +8,7 @@ import com.london.data.utils.asImageUrlOrEmpty
 import com.london.data.utils.generateHash
 import com.london.data.utils.isTrue
 import com.london.data.utils.orZero
+import com.london.data.utils.roundToDecimal
 import com.london.domain.KoverIgnore
 import com.london.domain.entity.Movie
 
@@ -49,7 +50,7 @@ fun SearchMovieRemote.toMovieLocalDto(): SearchMovieDtoLocal {
         releaseDate = releaseDate.orEmpty(),
         title = title.orEmpty(),
         video = video.isTrue,
-        voteAverage = voteAverage.orZero(),
+        voteAverage = voteAverage.orZero().roundToDecimal(),
         voteCount = voteCount.orZero()
     )
 }
