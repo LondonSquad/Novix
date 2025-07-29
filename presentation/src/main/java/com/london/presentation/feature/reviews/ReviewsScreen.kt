@@ -159,6 +159,7 @@ fun ReviewsScreenContent(
                         end = 16.dp
                     )
                     .align(Alignment.Center),
+                title = stringResource(R.string.reviews),
                 onBackClick = reviewContract::onBackClicked
             )
         }
