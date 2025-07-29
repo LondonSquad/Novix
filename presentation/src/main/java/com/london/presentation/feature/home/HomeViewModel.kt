@@ -26,6 +26,7 @@ class HomeViewModel(
 
     private val _upcomingMoviesFlow = MutableStateFlow<PagingData<Movie>>(PagingData.empty())
     private var upcomingJob: Job? = null
+
     init {
         initializePopularMovies()
         initializePopularTvShows()
@@ -35,7 +36,7 @@ class HomeViewModel(
         loadUpcomingMovies(categoryId = null)
     }
 
-    private fun initializePopularTvShows(){
+    private fun initializePopularTvShows() {
         tryToExecute(
             block = { getPopularTvShows.invoke() },
             onStart = { updateState { copy(isLoading = true) } },
@@ -76,7 +77,7 @@ class HomeViewModel(
         upcomingJob = viewModelScope.launch {
             tryToExecute(
                 block = {
-                   val pagingFlow= createPagingSourceFlow(query = "") { _, pageNumber ->
+                    val pagingFlow = createPagingSourceFlow(query = "") { _, pageNumber ->
                         getUpcomingMoviesByCategoryUseCase.invoke(
                             categoryId = categoryId,
                             pageNumber = pageNumber
@@ -98,13 +99,25 @@ class HomeViewModel(
         }
     }
 
-    override fun onGenreSelect(genre: MovieGenre) {
-        if (genre == state.value.selectedGenre) return
-        updateState { copy(selectedGenre = genre) }
+    override fun onMovieGenreSelect(genre: MovieGenre) {
+        if (genre == state.value.selectedMovieGenre) return
+        updateState { copy(selectedMovieGenre = genre) }
         loadUpcomingMovies(categoryId = if (genre == MovieGenre.All) null else genre.id)
     }
 
     override fun onTopRatedClick() {
         emitEffect(HomeScreenEffect.NavigationTopRated)
+    }
+
+    override fun onTrendingMoviesCardClicked() {
+        emitEffect(HomeScreenEffect.NavigationTrendingMovie)
+    }
+
+    override fun onTrendingTvShowsCardClicked() {
+        emitEffect(HomeScreenEffect.NavigationTrendingTvShows)
+    }
+
+    override fun onTrendingActorsCardClicked() {
+        emitEffect(HomeScreenEffect.NavigationTrendingActor)
     }
 }

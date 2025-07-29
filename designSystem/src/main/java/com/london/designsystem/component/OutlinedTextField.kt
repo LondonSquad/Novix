@@ -107,7 +107,7 @@ fun OutlinedTextField(
             ) {
                 BasicTextField(
                     value = value,
-                    onValueChange = onValueChange,
+                    onValueChange = { if (it.text.length < 125) onValueChange(it) },
                     modifier = Modifier
                         .fillMaxWidth()
                         .defaultMinSize(minWidth = 268.dp, minHeight = 48.dp)
@@ -252,10 +252,8 @@ private fun AnimatedLeadingIcon(
         modifier = Modifier
             .padding(end = 8.dp)
             .size(24.dp)
-
     )
 }
-
 
 @Composable
 private fun PasswordToggleIcon(
