@@ -59,13 +59,13 @@ import com.london.designsystem.component.button.ErrorImage
 import com.london.designsystem.theme.NovixTheme
 import com.london.domain.entity.tvshowdetails.TvShowCastMemberEntity
 import com.london.imageharamblur.ui.ImageViewFilter
+import com.london.presentation.feature.buildscreen.BuildScreen
+import com.london.presentation.feature.reviews.MediaType
 import com.london.presentation.shared.ConditionalText
 import com.london.presentation.shared.CustomBackDropImagePager
 import com.london.presentation.shared.DetailsScreenTopBar
 import com.london.presentation.shared.FooterSection
 import com.london.presentation.shared.RatingItem
-import com.london.presentation.feature.buildscreen.BuildScreen
-import com.london.presentation.feature.reviews.MediaType
 import com.london.presentation.utils.Listen
 import com.london.presentation.utils.convertDate
 import com.london.presentation.utils.offsetLayout
@@ -80,7 +80,8 @@ fun TvShowsDetailsScreen(
     onNavigateBack: () -> Unit = {},
     onNavigateToEpisodeDetails: (tvShowId: Int, episodeNumber: Int, seasonNumber: Int) -> Unit,
     onNavigateToReviews: (tvShowId: Int, mediaType: Int) -> Unit,
-    onNavigateToCast: (Int) -> Unit
+    onNavigateToCast: (Int) -> Unit,
+    onNavigateToGenre: (Int) -> Unit
 ) {
     val uiState by viewModel.state.collectAsStateWithLifecycle()
     val effect by viewModel.effect.collectAsState(null)
@@ -100,6 +101,10 @@ fun TvShowsDetailsScreen(
             is TvShowDetailsEffect.NavigateToReviews -> onNavigateToReviews(
                 currentEffect.tvShowId,
                 MediaType.TvShow.mediaNum
+            )
+
+            is TvShowDetailsEffect.NavigateTotvShowsByCategoryId -> onNavigateToGenre(
+                currentEffect.categoryId
             )
         }
     }
@@ -194,7 +199,8 @@ fun TvShowsDetailScreenContent(
                     tvShowId = uiState.id,
                     rating = uiState.voteAverage.toString(),
                     date = uiState.firstAirDate,
-                    numberOfSeasons = uiState.numberOfSeasons
+                    numberOfSeasons = uiState.numberOfSeasons,
+                    onGenreClick = tvShowDetailsContract::OnGenreClicked
                 )
             }
 
@@ -257,6 +263,7 @@ fun HeaderDetailsCard(
     modifier: Modifier = Modifier,
     uiState: TvShowDetailsUiState,
     onReviewClick: (tvShowId: Int) -> Unit,
+    onGenreClick: (genreId: Int) -> Unit,
     tvShowId: Int,
     rating: String,
     date: String,
@@ -281,7 +288,8 @@ fun HeaderDetailsCard(
         ) {
             GenreNames(
                 uiState = uiState,
-                modifier = Modifier.fillMaxWidth()
+                modifier = Modifier.fillMaxWidth(),
+                onGenreClick = onGenreClick
             )
             TvShowBasicDetails(
                 modifier = Modifier,
@@ -301,7 +309,8 @@ fun HeaderDetailsCard(
 @Composable
 fun GenreNames(
     modifier: Modifier = Modifier,
-    uiState: TvShowDetailsUiState
+    uiState: TvShowDetailsUiState,
+    onGenreClick: (genreId: Int) -> Unit
 ) {
     FlowRow(
         modifier = modifier
@@ -315,7 +324,13 @@ fun GenreNames(
                     style = NovixTheme.typography.label.small,
                     color = NovixTheme.colors.body,
                     modifier = if (index != uiState.tvShowGenres.lastIndex)
-                        Modifier.padding(end = 8.dp) else Modifier
+                        Modifier
+                            .clickable {
+                                onGenreClick(genre.id)
+                            }
+                            .padding(end = 8.dp) else Modifier.clickable {
+                        onGenreClick(genre.id)
+                    }
                 )
 
                 if (index != uiState.tvShowGenres.lastIndex) {
