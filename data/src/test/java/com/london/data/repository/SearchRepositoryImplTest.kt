@@ -1,19 +1,19 @@
 package com.london.data.repository
 
 import com.google.common.truth.Truth.assertThat
-import com.london.data.local.source.LocalDataSource
-import com.london.data.remote.exception.NetworkException
 import com.london.data.local.database.dao.search.GenreInterestDao
-import com.london.data.local.model.search.GenreInterestEntity
 import com.london.data.local.model.search.ActorLocal
+import com.london.data.local.model.search.GenreInterestEntity
 import com.london.data.local.model.search.SearchActorsLocal
 import com.london.data.local.model.search.SearchMovieDtoLocal
 import com.london.data.local.model.search.SearchMoviesLocal
 import com.london.data.local.model.search.SearchTvShowLocal
+import com.london.data.local.source.LocalDataSource
+import com.london.data.remote.exception.NetworkException
 import com.london.data.remote.model.ApiResponse
-import com.london.data.remote.source.search.SearchRemoteDataSource
 import com.london.data.remote.model.search.model.SearchMovieRemote
 import com.london.data.remote.model.search.model.SearchTvShowRemote
+import com.london.data.remote.source.search.SearchRemoteDataSource
 import com.london.data.utils.CrashReporter
 import com.london.data.utils.fetchAndSync
 import com.london.domain.entity.Actor
@@ -486,7 +486,7 @@ class SearchRepositoryImplTest {
                 Actor(
                     id = 3,
                     name = "Tom Holland",
-                    profilePicture = "https://image.tmdb.org/t/p/w500/tom_holland.jpg",
+                    profileUrl = "https://image.tmdb.org/t/p/w500/tom_holland.jpg",
                     characterName = ""
                 )
             ),
@@ -499,40 +499,27 @@ class SearchRepositoryImplTest {
             page = PAGE_NUMBER,
             results = listOf(
                 SearchMovieDtoLocal(
-                    adult = false,
-                    backdropPath = "",
+
                     genreIds = emptyList(),
                     id = 1,
-                    originalLanguage = "en",
-                    originalTitle = "",
-                    overview = "",
-                    popularity = 0.0,
                     posterPath = "",
-                    releaseDate = "2020-06-15",
-                    title = "",
-                    video = false,
-                    voteAverage = 8.0,
-                    voteCount = 0
+                    name = "",
+                    releaseYear = 2020,
+                    rating = 8,
                 )
             ),
             totalPages = 1,
             totalResults = 1
         )
 
-        private   val SearchActorsLocalMock = SearchActorsLocal(
+        private val SearchActorsLocalMock = SearchActorsLocal(
             query = NAME + LANG,
             page = PAGE_NUMBER,
             results = listOf(
                 ActorLocal(
-                    adult = false,
-                    gender = 2,
                     id = 3,
-                    knownForDepartment = "",
                     name = "Tom Holland",
-                    originalName = "Tom Holland",
-                    popularity = 0.0,
-                    profileUrl = "/tom_holland.jpg",
-                    knownFor = emptyList()
+                    profilePicture = "/tom_holland.jpg",
                 )
             ),
             totalPages = 1,

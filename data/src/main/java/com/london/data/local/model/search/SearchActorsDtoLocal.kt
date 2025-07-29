@@ -15,35 +15,7 @@ data class SearchActorsLocal(
 )
 
 data class ActorLocal(
-    val adult: Boolean,
-    val gender: Int,
     val id: Int,
-    val knownForDepartment: String,
     val name: String,
-    val originalName: String,
-    val popularity: Double,
-    val profileUrl: String,
-    val knownFor: List<KnownForLocal>
-)
-
-data class KnownForLocal(
-    val adult: Boolean,
-    val backdropPath: String,
-    val id: Int,
-    val title: String,
-    val originalTitle: String,
-    val overview: String,
-    val posterUrl: String,
-    val mediaType: String,
-    val originalLanguage: String,
-    val genreIds: List<Int>,
-    val popularity: Double,
-    val releaseDate: String,
-    val video: Boolean,
-    val voteAverage: Double,
-    val voteCount: Int,
-    val name: String,
-    val originalName: String,
-    val firstAirDate: String,
-    val originCountry: List<String>
+    val profilePicture: String,
 )

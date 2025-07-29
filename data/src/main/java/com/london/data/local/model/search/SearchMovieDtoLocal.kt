@@ -15,18 +15,10 @@ data class SearchMoviesLocal(
 )
 
 data class SearchMovieDtoLocal(
-    val adult: Boolean,
-    val backdropPath: String,
-    val genreIds: List<Int>,
     val id: Int,
-    val originalLanguage: String,
-    val originalTitle: String,
-    val overview: String,
-    val popularity: Double,
+    val name: String,
     val posterPath: String,
-    val releaseDate: String,
-    val title: String,
-    val video: Boolean,
-    val voteAverage: Double,
-    val voteCount: Int
+    val releaseYear: Int,
+    val rating: Int,
+    val genreIds: List<Int>,
 )

@@ -32,7 +32,7 @@ fun ActorsLayout(
                     modifier = Modifier.clickable(onClick = { onActorClick(actor) }),
                     actorName = actor.name,
                     characterName = null,
-                    imageRes = actor.profilePicture
+                    imageRes = actor.profileUrl
                 )
             }
         }

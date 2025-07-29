@@ -273,7 +273,7 @@ fun MovieDetailsContent(
                             ActorItem(
                                 actorName = actor.name,
                                 characterName = actor.characterName,
-                                imageRes = actor.profilePicture,
+                                imageRes = actor.profileUrl,
                                 modifier = Modifier
                                     .defaultMinSize(minWidth = 296.dp)
                                     .clickable {

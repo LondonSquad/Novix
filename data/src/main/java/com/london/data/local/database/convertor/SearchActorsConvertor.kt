@@ -2,7 +2,6 @@ package com.london.data.local.database.convertor
 
 import androidx.room.TypeConverter
 import com.google.gson.Gson
-import com.london.data.local.model.search.KnownForLocal
 import com.london.data.local.model.search.ActorLocal
 import com.london.data.local.utils.fromJsonList
 
@@ -17,12 +16,4 @@ class SearchActorsConvertor {
     @TypeConverter
     fun toPersonList(personsString: String): List<ActorLocal> =
         gson.fromJsonList<ActorLocal>(personsString)
-
-    @TypeConverter
-    fun fromKnownForList(knownFor: List<KnownForLocal>): String =
-        gson.toJson(knownFor)
-
-    @TypeConverter
-    fun toKnownForList(knownForString: String): List<KnownForLocal> =
-        gson.fromJsonList<KnownForLocal>(knownForString)
 }

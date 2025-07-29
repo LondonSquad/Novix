@@ -19,10 +19,10 @@ import com.london.domain.entity.Movie
 fun SearchMovieDtoLocal.toEntity() = Movie(
     id = id,
     posterUrl = posterPath.asImageUrlOrEmpty(),
-    name = title,
-    releaseYear = releaseDate.extractYear(),
-    rating = voteAverage.toInt(),
     genreIds = genreIds,
+    name = name,
+    releaseYear =releaseYear,
+    rating = rating,
 )
 
 fun ApiResponse<SearchMovieRemote>.toLocal(query: String) = SearchMoviesLocal(
@@ -35,20 +35,12 @@ fun ApiResponse<SearchMovieRemote>.toLocal(query: String) = SearchMoviesLocal(
 )
 
 fun SearchMovieRemote.toLocal() = SearchMovieDtoLocal(
-    adult = adult.isTrue,
-    backdropPath = backdropPath.orEmpty(),
     genreIds = genreIds.orEmpty(),
     id = id.orZero(),
-    originalLanguage = originalLanguage.orEmpty(),
-    originalTitle = originalTitle.orEmpty(),
-    overview = overview.orEmpty(),
-    popularity = popularity.orZero(),
     posterPath = posterPath.orEmpty(),
-    releaseDate = releaseDate.orEmpty(),
-    title = title.orEmpty(),
-    video = video.isTrue,
-    voteAverage = voteAverage.orZero().roundToDecimal(),
-    voteCount = voteCount.orZero()
+    name = name.orEmpty(),
+    releaseYear = releaseDate?.extractYear().orZero(),
+    rating = voteAverage?.toInt().orZero(),
 )
 
 fun SearchMovieRemote.toEntity() = Movie(

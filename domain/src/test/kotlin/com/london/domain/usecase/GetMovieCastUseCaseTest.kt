@@ -79,7 +79,7 @@ class GetMovieCastUseCaseTest {
     fun `should return different results for different movie IDs`() = runTest {
         // given
         val actorCast = listOf(
-            Actor(id = 3, name = "Tom Hardy", characterName = "Eames", profilePicture = "/hardy.jpg")
+            Actor(id = 3, name = "Tom Hardy", characterName = "Eames", profileUrl = "/hardy.jpg")
         )
 
         coEvery { movieRepository.getMovieCastById(123) } returns actorMockCast
@@ -102,13 +102,13 @@ class GetMovieCastUseCaseTest {
                 id = 1,
                 name = "Leonardo DiCaprio",
                 characterName = "Cobb",
-                profilePicture = "/leo.jpg"
+                profileUrl = "/leo.jpg"
             ),
             Actor(
                 id = 2,
                 name = "Joseph Gordon-Levitt",
                 characterName = "Arthur",
-                profilePicture = "/jgl.jpg"
+                profileUrl = "/jgl.jpg"
             )
         )
     }

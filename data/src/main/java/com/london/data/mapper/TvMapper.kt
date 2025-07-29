@@ -34,18 +34,11 @@ fun ApiResponse<SearchTvShowRemote>.toLocal(query: String) = SearchTvShowLocal(
 )
 
 fun SearchTvShowRemote.toLocal() = SearchTvShowDtoLocal(
-    adult = adult.isTrue,
     backdropUrl = backdropPath.orEmpty(),
     genreIds = genreIds.orEmpty(),
     id = id.orZero(),
-    originCountry = originCountry.orEmpty(),
-    originalLanguage = originalLanguage.orEmpty(),
-    originalName = originalName.orEmpty(),
-    overview = overview.orEmpty(),
-    popularity = popularity.orZero(),
     posterPath = posterPath.orEmpty(),
-    firstAirDate = firstAirDate.orEmpty(),
     name = name.orEmpty(),
     voteAverage = voteAverage.orZero().roundToDecimal(),
-    voteCount = voteCount.orZero()
+    firstAirDate = firstAirDate.orEmpty(),
 )
