@@ -8987,5 +8987,33 @@
       "deletions": 2,
       "changed_files": 1
     }
+  },
+  {
+    "pr_number": 379,
+    "url": "https://github.com/LondonSquad/Novix/pull/379",
+    "title": "feat: add api call and use case for get tv shows by id",
+    "opened_at": "2025-07-29T17:34:13Z",
+    "head_ref": "feature/get-tv-show-by-id-data",
+    "base_ref": "develop",
+    "creator": {
+      "login": "marwanqashwa",
+      "id": 100484790,
+      "url": "https://github.com/marwanqashwa"
+    },
+    "approvals": [],
+    "first_approved_at": null,
+    "time_to_first_approval_minutes": null,
+    "required_approvals_met_at": null,
+    "time_to_required_approvals_minutes": null,
+    "closed_at": null,
+    "merged_at": null,
+    "merged_by": null,
+    "week": "2025-W31",
+    "status": "pending",
+    "diff_stats": {
+      "additions": 163,
+      "deletions": 6,
+      "changed_files": 9
+    }
   }
 ]
