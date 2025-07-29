@@ -44,12 +44,26 @@ class WebViewRegistrationViewModel :
 
     private fun isUrlAllowed(url: String): Boolean {
         try {
+            val allowedUrls = listOf(
+                "https://www.themoviedb.org/signup",
+                "https://themoviedb.org/signup",
+                "https://www.themoviedb.org/account/signup",
+                "https://themoviedb.org/account/signup"
+            )
 
             val isExactMatch = allowedUrls.any { allowedUrl ->
                 url.startsWith(allowedUrl)
             }
 
-            if (isExactMatch) { return true }
+            if (isExactMatch) {
+                return true
+            }
+
+            val completionUrls = listOf(
+                "account/verify",
+                "registration/success",
+                "signup/complete"
+            )
 
             return url.contains("themoviedb.org") &&
                     completionUrls.any { completionUrl -> url.contains(completionUrl) }
@@ -67,16 +81,3 @@ class WebViewRegistrationViewModel :
                 (url.contains("themoviedb.org") && url.contains("u/"))
     }
 }
-
-val allowedUrls = listOf(
-    "https://www.themoviedb.org/signup",
-    "https://themoviedb.org/signup",
-    "https://www.themoviedb.org/account/signup",
-    "https://themoviedb.org/account/signup"
-)
-
-val completionUrls = listOf(
-    "account/verify",
-    "registration/success",
-    "signup/complete"
-)
