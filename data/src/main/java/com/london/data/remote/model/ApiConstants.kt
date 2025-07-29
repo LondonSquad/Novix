@@ -9,6 +9,7 @@ object ApiConstants {
     const val SEARCH_PATH_ACTORS = "3/search/person"
     private const val MOVIE_DETAILS_PATH = "3/movie"
     const val MOVIE_DISCOVER_PATH = "3/discover/movie"
+    const val TV_SHOW_DISCOVER_PATH = "3/discover/tv"
     const val POPULAR_MOVIES_PATH = "3/movie/popular"
     const val POPULAR_TV_SHOWS_PATH = "3/tv/popular"
     const val TRENDING_MOVIES_PATH = "3/trending/movie/day"
