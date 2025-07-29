@@ -26,7 +26,7 @@ import com.london.presentation.R
 @Composable
 fun TopRatedSection(
     modifier: Modifier = Modifier,
-    topRatedUiMediaList: List<TopRatedUiMedia>,
+    topRatedUiMediaList: List<HomeUiMedia>,
     onSaveClick: (Int) -> Unit,
     onCardClick: (Int, MediaType) -> Unit,
     onAllClick: () -> Unit

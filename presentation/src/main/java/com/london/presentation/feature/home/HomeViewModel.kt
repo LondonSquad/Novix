@@ -7,6 +7,8 @@ import com.london.domain.entity.Movie
 import com.london.domain.usecase.GetPopularMovies
 import com.london.domain.usecase.GetPopularTvShow
 import com.london.domain.usecase.GetUpComingMoviesByCategoryUseCase
+import com.london.domain.usecase.recent.watched.GetRecentWatchedMoviesUseCase
+import com.london.domain.usecase.recent.watched.GetRecentWatchedTvShowsUseCase
 import com.london.domain.usecase.toprated.GetTopRatedMoviesUseCase
 import com.london.domain.usecase.toprated.GetTopRatedTvSeriesUseCase
 import com.london.presentation.feature.base.BaseViewModel
@@ -26,6 +28,9 @@ class HomeViewModel(
     private val getUpcomingMoviesByCategoryUseCase: GetUpComingMoviesByCategoryUseCase,
     private val getTopRatedMovies: GetTopRatedMoviesUseCase,
     private val getTopRatedTvShows: GetTopRatedTvSeriesUseCase,
+    private val getRecentWatchedMovies: GetRecentWatchedMoviesUseCase,
+    private val getRecentWatchedTvShows: GetRecentWatchedTvShowsUseCase
+
 ) : BaseViewModel<HomeScreenUiState, HomeScreenEffect>(HomeScreenUiState()), HomeScreenContract {
 
     private val _upcomingMoviesFlow = MutableStateFlow<PagingData<Movie>>(PagingData.empty())
@@ -35,6 +40,7 @@ class HomeViewModel(
         initializePopularMovies()
         initializePopularTvShows()
         initializeTopRatedMedia()
+        initializeRecentWatchedMedia()
         updateState {
             copy(upcomingMovies = _upcomingMoviesFlow)
         }
@@ -62,6 +68,26 @@ class HomeViewModel(
             checkSuccess = { (movies, shows) ->
                 movies.items.isNotEmpty() || shows.items.isNotEmpty()
             }
+        )
+    }
+
+    private fun initializeRecentWatchedMedia() {
+        tryToExecute(
+            block = {
+                val movies = getRecentWatchedMovies.invoke(limit = 10)
+                val shows = getRecentWatchedTvShows.invoke(limit = 10)
+                Pair(movies, shows)
+            },
+            onStart = { updateState { copy(isLoading = true) } },
+            onSuccess = { (movies, shows) ->
+                val topRatedMedia = movies.toUiMedia() + shows.toUiMedia()
+
+                updateState {
+                    copy(topRatedUiMediaList = topRatedMedia.shuffled())
+                }
+            },
+            onError = { errorState -> updateState { copy(error = errorState) } },
+            onCompleted = { updateState { copy(isLoading = false) } },
         )
     }
 
