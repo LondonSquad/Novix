@@ -35,16 +35,16 @@ import org.koin.androidx.compose.koinViewModel
 fun TopTvShowsPicksScreen(
     modifier: Modifier = Modifier,
     viewModel: TopTvShowsPicksViewModel = koinViewModel(),
-    onTvShowClick: (tvShowId: Int) -> Unit,
-    onBackClick: () -> Unit
+    onNavigateTvShow: (tvShowId: Int) -> Unit,
+    onNavigateBack: () -> Unit
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
     val effect by viewModel.effect.collectAsState(initial = null)
 
     effect?.Listen { currentEffect ->
         when (currentEffect) {
-            is TopTvShowsPicksEffect.TvShowNavigation -> onTvShowClick(currentEffect.tvShowId)
-            is TopTvShowsPicksEffect.BackNavigation -> onBackClick()
+            is TopTvShowsPicksEffect.TvShowNavigation -> onNavigateTvShow(currentEffect.tvShowId)
+            is TopTvShowsPicksEffect.BackNavigation -> onNavigateBack()
         }
     }
 
