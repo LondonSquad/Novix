@@ -3,7 +3,6 @@ package com.london.designsystem.component
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
-import com.london.imageharamblur.ui.ImageFilterConfig
 import com.london.imageharamblur.ui.ImageViewFilter
 
 @Composable
@@ -18,9 +17,6 @@ fun ImageView(
     moderatedContent: @Composable () -> Unit = {}
 ) {
     ImageViewFilter(
-        config = ImageFilterConfig(
-            showTextInsteadOfBlur = true
-        ),
         model = model,
         contentDescription = contentDescription,
         modifier = modifier,
