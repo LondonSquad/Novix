@@ -114,7 +114,6 @@ class SearchViewModel(
         )
 
     override fun onCategorySelected(category: SearchCategory) {
-        if (category == state.value.selectedCategory) return
         updateState {
             copy(
                 selectedCategory = category,
