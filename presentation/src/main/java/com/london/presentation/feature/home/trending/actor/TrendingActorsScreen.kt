@@ -77,7 +77,7 @@ private fun TrendingActorsContent(
                 modifier = Modifier.clickable { contract.onActorClick(actor.id) },
                 actorName = actor.name,
                 characterName = null,
-                imageRes = actor.profilePicture
+                imageRes = actor.profileUrl
             )
         }
     }

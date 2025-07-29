@@ -21,7 +21,7 @@ class TrendingActorMapperTest {
         // Then
         assertEquals(123, result.id)
         assertEquals("Test Actor", result.name)
-        assertEquals("https://image.tmdb.org/t/p/w500test_poster.jpg", result.profilePicture)
+        assertEquals("https://image.tmdb.org/t/p/w500test_poster.jpg", result.profileUrl)
         assertEquals("", result.characterName)
     }
 
@@ -40,7 +40,7 @@ class TrendingActorMapperTest {
         // Then
         assertEquals(456, result.id)
         assertEquals("Test Actor", result.name)
-        assertEquals("https://image.tmdb.org/t/p/w500test_profile.jpg", result.profilePicture)
+        assertEquals("https://image.tmdb.org/t/p/w500test_profile.jpg", result.profileUrl)
         assertEquals("", result.characterName)
     }
 
@@ -60,7 +60,7 @@ class TrendingActorMapperTest {
         // Then
         assertEquals(789, result.id)
         assertEquals("Test Actor", result.name)
-        assertEquals("https://image.tmdb.org/t/p/w500test_poster.jpg", result.profilePicture)
+        assertEquals("https://image.tmdb.org/t/p/w500test_poster.jpg", result.profileUrl)
         assertEquals("", result.characterName)
     }
 
@@ -80,7 +80,7 @@ class TrendingActorMapperTest {
         // Then
         assertEquals(0, result.id)
         assertEquals("", result.name)
-        assertEquals("", result.profilePicture)
+        assertEquals("", result.profileUrl)
         assertEquals("", result.characterName)
     }
 
@@ -100,7 +100,7 @@ class TrendingActorMapperTest {
         // Then
         assertEquals(123, result.id)
         assertEquals("", result.name)
-        assertEquals("https://image.tmdb.org/t/p/w500", result.profilePicture)
+        assertEquals("https://image.tmdb.org/t/p/w500", result.profileUrl)
         assertEquals("", result.characterName)
     }
 
@@ -119,7 +119,7 @@ class TrendingActorMapperTest {
         // Then
         assertEquals(0, result.id)
         assertEquals("Test Actor", result.name)
-        assertEquals("https://image.tmdb.org/t/p/w500test_poster.jpg", result.profilePicture)
+        assertEquals("https://image.tmdb.org/t/p/w500test_poster.jpg", result.profileUrl)
         assertEquals("", result.characterName)
     }
 
@@ -138,7 +138,7 @@ class TrendingActorMapperTest {
         // Then
         assertEquals(123, result.id)
         assertEquals("Test Actor (Special)", result.name)
-        assertEquals("https://image.tmdb.org/t/p/w500test_poster.jpg", result.profilePicture)
+        assertEquals("https://image.tmdb.org/t/p/w500test_poster.jpg", result.profileUrl)
         assertEquals("", result.characterName)
     }
 
@@ -158,7 +158,7 @@ class TrendingActorMapperTest {
         // Then
         assertEquals(123, result.id)
         assertEquals(longName, result.name)
-        assertEquals("https://image.tmdb.org/t/p/w500test_poster.jpg", result.profilePicture)
+        assertEquals("https://image.tmdb.org/t/p/w500test_poster.jpg", result.profileUrl)
         assertEquals("", result.characterName)
     }
 
@@ -179,7 +179,7 @@ class TrendingActorMapperTest {
         assertEquals("Test Actor", result.name)
         assertEquals(
             "https://image.tmdb.org/t/p/w500test_poster_with_special_chars_123.jpg",
-            result.profilePicture
+            result.profileUrl
         )
         assertEquals("", result.characterName)
     }

@@ -90,7 +90,7 @@ class TrendingRepositoryImplTest {
         val actor = result.items.first()
         assertEquals(1, actor.id)
         assertEquals("Test Actor", actor.name)
-        assertEquals("https://image.tmdb.org/t/p/w500test_profile.jpg", actor.profilePicture)
+        assertEquals("https://image.tmdb.org/t/p/w500test_profile.jpg", actor.profileUrl)
         assertEquals("", actor.characterName)
     }
 

@@ -8,5 +8,6 @@ import com.london.domain.entity.Actor
 fun TrendingResponse.toEntityActor(): Actor = Actor(
     id = id.orZero(),
     name = name.orEmpty(),
-    profilePicture = (posterPath ?: profilePath).asImageUrlOrEmpty(),
+    profileUrl = (posterPath ?: profilePath).asImageUrlOrEmpty(),
+    characterName = title.orEmpty()
 )
