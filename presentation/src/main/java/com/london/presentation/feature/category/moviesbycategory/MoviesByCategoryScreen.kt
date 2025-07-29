@@ -99,7 +99,7 @@ private fun MoviesByCategoryContent(
         items(moviesLazyList.itemCount) { index ->
             val movie = moviesLazyList[index]
             if (movie != null) HomeCard(
-                imageUrl = movie.posterPicture,
+                imageUrl = movie.posterUrl,
                 isSaved = false,
                 onSaveClick = { moviesByCategoryContract.onSavedClick(movie.id) },
                 modifier = Modifier.clickable {
@@ -119,7 +119,7 @@ private fun MoviesByCategoryContentPreview() {
                 Movie(
                     id = 1,
                     name = "",
-                    posterPicture = "",
+                    posterUrl = "",
                     releaseYear = 1,
                     rating = 3,
                     genreIds = listOf()
@@ -127,7 +127,7 @@ private fun MoviesByCategoryContentPreview() {
                 Movie(
                     id = 1,
                     name = "",
-                    posterPicture = "",
+                    posterUrl = "",
                     releaseYear = 1,
                     rating = 3,
                     genreIds = listOf()
@@ -135,7 +135,7 @@ private fun MoviesByCategoryContentPreview() {
                 Movie(
                     id = 1,
                     name = "",
-                    posterPicture = "",
+                    posterUrl = "",
                     releaseYear = 1,
                     rating = 3,
                     genreIds = listOf()
@@ -143,7 +143,7 @@ private fun MoviesByCategoryContentPreview() {
                 Movie(
                     id = 1,
                     name = "",
-                    posterPicture = "",
+                    posterUrl = "",
                     releaseYear = 1,
                     rating = 3,
                     genreIds = listOf()
@@ -151,7 +151,7 @@ private fun MoviesByCategoryContentPreview() {
                 Movie(
                     id = 1,
                     name = "",
-                    posterPicture = "",
+                    posterUrl = "",
                     releaseYear = 1,
                     rating = 3,
                     genreIds = listOf()
@@ -159,7 +159,7 @@ private fun MoviesByCategoryContentPreview() {
                 Movie(
                     id = 1,
                     name = "",
-                    posterPicture = "",
+                    posterUrl = "",
                     releaseYear = 1,
                     rating = 3,
                     genreIds = listOf()
@@ -167,7 +167,7 @@ private fun MoviesByCategoryContentPreview() {
                 Movie(
                     id = 1,
                     name = "",
-                    posterPicture = "",
+                    posterUrl = "",
                     releaseYear = 1,
                     rating = 3,
                     genreIds = listOf()
@@ -175,7 +175,7 @@ private fun MoviesByCategoryContentPreview() {
                 Movie(
                     id = 1,
                     name = "",
-                    posterPicture = "",
+                    posterUrl = "",
                     releaseYear = 1,
                     rating = 3,
                     genreIds = listOf()

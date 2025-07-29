@@ -9,12 +9,12 @@ data class SearchActorsLocal(
     val date: Long = System.currentTimeMillis(),
     val query: String,
     val page: Int,
-    val results: List<PersonDtoLocal>,
+    val results: List<ActorLocal>,
     val totalPages: Int,
     val totalResults: Int
 )
 
-data class PersonDtoLocal(
+data class ActorLocal(
     val adult: Boolean,
     val gender: Int,
     val id: Int,
@@ -22,28 +22,28 @@ data class PersonDtoLocal(
     val name: String,
     val originalName: String,
     val popularity: Double,
-    val profileUrl: String?,
-    val knownFor: List<KnownForDtoLocal>
+    val profileUrl: String,
+    val knownFor: List<KnownForLocal>
 )
 
-data class KnownForDtoLocal(
+data class KnownForLocal(
     val adult: Boolean,
-    val backdropPath: String?,
+    val backdropPath: String,
     val id: Int,
-    val title: String? = null,
-    val originalTitle: String? = null,
-    val overview: String? = null,
-    val posterUrl: String? = null,
+    val title: String,
+    val originalTitle: String,
+    val overview: String,
+    val posterUrl: String,
     val mediaType: String,
     val originalLanguage: String,
     val genreIds: List<Int>,
     val popularity: Double,
-    val releaseDate: String? = null,
-    val video: Boolean? = null,
+    val releaseDate: String,
+    val video: Boolean,
     val voteAverage: Double,
     val voteCount: Int,
-    val name: String? = null,
-    val originalName: String? = null,
-    val firstAirDate: String? = null,
-    val originCountry: List<String>? = null
+    val name: String,
+    val originalName: String,
+    val firstAirDate: String,
+    val originCountry: List<String>
 )

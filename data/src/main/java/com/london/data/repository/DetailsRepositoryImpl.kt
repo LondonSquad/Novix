@@ -1,7 +1,6 @@
 package com.london.data.repository
 
 import com.london.data.remote.source.reviews.ReviewsRemoteDataSource
-import com.london.data.utils.CrashReporter
 import com.london.data.mapper.toReviewEntity
 import com.london.data.mapper.tvshowdetails.TvShowImagesMapper.toEntity
 import com.london.data.mapper.tvshowdetails.toCastEntity
@@ -9,6 +8,7 @@ import com.london.data.mapper.tvshowdetails.toEntity
 import com.london.data.mapper.tvshowdetails.toTvShowEpisodeEntity
 import com.london.data.mapper.tvshowdetails.toTvShowEpisodesEntity
 import com.london.data.remote.source.details.tvshow.TvShowDetailsRemoteDataSource
+import com.london.data.utils.fetchAndSync
 import com.london.domain.entity.PagedFetchResponse
 import com.london.domain.entity.review.ReviewEntity
 import com.london.domain.entity.tvshowdetails.TvShowCastEntity
@@ -86,18 +86,4 @@ class DetailsRepositoryImpl(
             totalItems = totalItems
         )
     }
-
-    suspend fun <T> Result<T?>.getNotNullOrElse(elseBlock: suspend () -> T): Result<T> =
-        runCatching { getOrElse { elseBlock() } ?: elseBlock() }
-
-    suspend fun <T> fetchAndSync(
-        cacheBlock: (suspend () -> T?)? = null,
-        networkBlock: suspend () -> T,
-        syncBlock: (suspend (T) -> Unit)? = null,
-        crashReporter: CrashReporter? = null
-    ): T = runCatching { cacheBlock?.invoke() }.getNotNullOrElse {
-        networkBlock().also {
-            syncBlock?.invoke(it)
-        }
-    }.onFailure { crashReporter?.logException(it) }.getOrThrow()
 }

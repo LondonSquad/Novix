@@ -18,7 +18,10 @@ fun Double?.roundToDecimal(): Double = "%.1f".format(this).toDouble()
 
 fun String?.asImageUrlOrEmpty() = this?.let { BuildConfig.IMAGE_URL + it }.orEmpty()
 
-fun String?.asYoutubeUrlOrEmpty() : String = this?.let { BuildConfig.YOUTUBE_URL + it }.orEmpty()
+fun String?.asYoutubeUrlOrEmpty(): String = this?.let { BuildConfig.YOUTUBE_URL + it }.orEmpty()
 
 fun String.generateHash(): String =
     MessageDigest.getInstance("MD5").digest(toByteArray()).joinToString("") { "%02x".format(it) }
+
+fun String.extractYear() =
+    takeIf { isNotEmpty() }?.split("-")?.first()?.toInt() ?: 0

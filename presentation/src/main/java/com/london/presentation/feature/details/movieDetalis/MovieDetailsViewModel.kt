@@ -97,9 +97,9 @@ class MovieDetailsViewModel(
                 )
                 addMovieToRecentWatched(
                     Movie(
-                        id =details.id,
+                        id = details.id,
                         name = details.title,
-                        posterPicture = details.posterUrl,
+                        posterUrl = details.posterUrl,
                         releaseYear = 2025,
                         rating = 1,
                         genreIds = details.genresId,

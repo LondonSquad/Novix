@@ -307,7 +307,7 @@ fun MovieDetailsContent(
                     ) {
                         rowItems.forEachIndexed { _, movie ->
                             HomeCard(
-                                imageUrl = movie.posterPicture,
+                                imageUrl = movie.posterUrl,
                                 isSaved = false,
                                 onSaveClick = {},
                                 modifier = Modifier
