@@ -38,4 +38,10 @@ interface SearchRemoteDataSource {
         pageNumber: Int,
         includeAdult: Boolean = false
     ): Result<ApiResponse<SearchMovieRemote>>
+
+    suspend fun searchForTvShowsByCategoryId(
+        categoryId: Int,
+        pageNumber: Int,
+        includeAdult: Boolean = false
+    ): Result<ApiResponse<SearchTvShowRemote>>
 }
