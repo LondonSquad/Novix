@@ -98,8 +98,8 @@ fun MovieDetailsScreen(
 
     HandleMovieDetailsEffects(
         effect = effect,
-        onBackClick = onNavigateBack,
-        onGenreClick = onNavigateGenre,
+        onNavigateBack = onNavigateBack,
+        onNavigateGenre = onNavigateGenre,
         onNavigateToMovie = onNavigateToMovie,
         onNavigateToActor = onNavigateToActor,
         onNavigateToReviews = onNavigateToReviews
