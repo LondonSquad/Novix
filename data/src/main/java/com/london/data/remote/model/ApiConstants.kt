@@ -11,6 +11,9 @@ object ApiConstants {
     const val MOVIE_DISCOVER_PATH = "3/discover/movie"
     const val POPULAR_MOVIES_PATH = "3/movie/popular"
     const val POPULAR_TV_SHOWS_PATH = "3/tv/popular"
+    const val TRENDING_MOVIES_PATH = "3/trending/movie/day"
+    const val TRENDING_TV_SHOWS_PATH = "3/trending/tv/day"
+    const val TRENDING_ACTORS_PATH = "3/trending/person/day"
 
     fun getTvShowDetailsPath(tvShowId: Int) = "3/tv/$tvShowId"
     fun getCastTvShowPath(tvShowId: Int) = "3/tv/$tvShowId/aggregate_credits"

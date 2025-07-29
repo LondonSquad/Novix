@@ -32,17 +32,17 @@ import org.koin.androidx.compose.koinViewModel
 fun TopMoviesPicksScreen(
     modifier: Modifier = Modifier,
     viewModel: TopMoviesPicksViewModel = koinViewModel(),
-    onMovieClick: (Int) -> Unit,
-    onBackClick: () -> Unit,
+    onNavigateMovie: (Int) -> Unit,
+    onNavigateBack: () -> Unit,
 ) {
     val uiState by viewModel.state.collectAsStateWithLifecycle()
     val effects by viewModel.effect.collectAsState(null)
 
     effects?.Listen { currentEffect ->
         when (currentEffect) {
-            TopMoviesPicksEffectUiState.NavigateBack -> onBackClick()
+            TopMoviesPicksEffectUiState.NavigateBack -> onNavigateBack()
             is TopMoviesPicksEffectUiState.NavigationToMovieDetails ->
-                onMovieClick(currentEffect.movieId)
+                onNavigateMovie(currentEffect.movieId)
         }
     }
 

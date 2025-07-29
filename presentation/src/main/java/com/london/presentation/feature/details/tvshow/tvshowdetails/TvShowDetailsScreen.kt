@@ -77,7 +77,7 @@ import org.koin.androidx.compose.koinViewModel
 @Composable
 fun TvShowsDetailsScreen(
     viewModel: TvShowDetailsViewModel = koinViewModel(),
-    onBackClick: () -> Unit = {},
+    onNavigateBack: () -> Unit = {},
     onNavigateToEpisodeDetails: (tvShowId: Int, episodeNumber: Int, seasonNumber: Int) -> Unit,
     onNavigateToReviews: (tvShowId: Int, mediaType: Int) -> Unit,
     onNavigateToCast: (Int) -> Unit
@@ -95,7 +95,7 @@ fun TvShowsDetailsScreen(
                 )
             }
 
-            TvShowDetailsEffect.NavigateBack -> onBackClick()
+            TvShowDetailsEffect.NavigateBack -> onNavigateBack()
             is TvShowDetailsEffect.NavigateToCast -> onNavigateToCast(currentEffect.tvShowId)
             is TvShowDetailsEffect.NavigateToReviews -> onNavigateToReviews(
                 currentEffect.tvShowId,
