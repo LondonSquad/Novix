@@ -8588,18 +8588,9 @@
       "id": 90211730,
       "url": "https://github.com/AbdoMagdey24"
     },
-    "approvals": [
-      {
-        "reviewer": {
-          "id": 106277855,
-          "login": "Mostafa-alsaygh",
-          "url": "https://github.com/Mostafa-alsaygh"
-        },
-        "submitted_at": "2025-07-29T13:30:44Z"
-      }
-    ],
-    "first_approved_at": "2025-07-29T13:30:44Z",
-    "time_to_first_approval_minutes": 101.03333333333333,
+    "approvals": [],
+    "first_approved_at": null,
+    "time_to_first_approval_minutes": null,
     "required_approvals_met_at": null,
     "time_to_required_approvals_minutes": null,
     "closed_at": null,
@@ -8608,7 +8599,7 @@
     "week": "2025-W31",
     "status": "pending",
     "diff_stats": {
-      "additions": 16,
+      "additions": 2,
       "deletions": 8,
       "changed_files": 1
     }
