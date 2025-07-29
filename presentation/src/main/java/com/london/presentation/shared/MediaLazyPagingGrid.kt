@@ -4,52 +4,77 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.navigationBarsPadding
+import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.rememberLazyGridState
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalWindowInfo
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import androidx.paging.compose.LazyPagingItems
+import com.london.designsystem.component.CircularLoading
+import com.london.designsystem.component.EmptyLayout
 import com.london.designsystem.component.HomeCard
+import com.london.presentation.R
+import com.london.presentation.utils.isLoading
 
 @Composable
 fun <T : Any> MediaLazyPagingGrid(
-    pagingFlow: LazyPagingItems<T>,
+    pagingFlow: androidx.paging.compose.LazyPagingItems<T>,
     onItemClick: (T) -> Unit,
     getImageUrl: (T) -> String,
     getTitle: (T) -> String,
     modifier: Modifier = Modifier,
     onSaveClick: (T) -> Unit = {},
     isItemSaved: (T) -> Boolean = { false },
+    emptyTitle: String = stringResource(R.string.no_trending_movies_in_genre),
+    emptyImage: Int = R.drawable.img_no_result
+) {
+    when {
+        pagingFlow.isLoading() -> CircularLoading(
+            modifier = Modifier
+                .fillMaxSize()
+                .wrapContentSize(Alignment.Center)
+        )
 
-    ) {
-    val screenWidth = LocalWindowInfo.current.containerSize.width
-    val itemWidthPx = with(LocalDensity.current) { 158.dp.toPx() }
-    val screenPaddingPx = with(LocalDensity.current) { 32.dp.toPx() }
-    val columns = ((screenWidth - screenPaddingPx) / itemWidthPx).toInt().coerceAtLeast(2)
-    val gridState = rememberLazyGridState()
+        pagingFlow.isLoading().not() && pagingFlow.itemCount == 0 -> EmptyLayout(
+            text = emptyTitle,
+            image = emptyImage,
+            modifier = Modifier
+                .fillMaxSize()
+                .navigationBarsPadding()
+        )
 
-    LazyVerticalGrid(
-        state = gridState,
-        columns = GridCells.Fixed(columns),
-        modifier = modifier.fillMaxSize(),
-        horizontalArrangement = Arrangement.spacedBy(12.dp),
-        verticalArrangement = Arrangement.spacedBy(12.dp),
-        contentPadding = PaddingValues(bottom = 16.dp)
-    ) {
-        items(pagingFlow.itemCount) { index ->
-            val item = pagingFlow[index]
-            if (item != null) {
-                HomeCard(
-                    imageUrl = getImageUrl(item),
-                    onSaveClick = { onSaveClick(item) },
-                    isSaved = isItemSaved(item),
-                    imageDescription = getTitle(item),
-                    modifier = Modifier.clickable { onItemClick(item) }
-                )
+        else -> {
+            val screenWidth = LocalWindowInfo.current.containerSize.width
+            val itemWidthPx = with(LocalDensity.current) { 158.dp.toPx() }
+            val screenPaddingPx = with(LocalDensity.current) { 32.dp.toPx() }
+            val columns = ((screenWidth - screenPaddingPx) / itemWidthPx).toInt().coerceAtLeast(2)
+
+            LazyVerticalGrid(
+                state = rememberLazyGridState(),
+                columns = GridCells.Fixed(columns),
+                modifier = modifier.fillMaxSize(),
+                horizontalArrangement = Arrangement.spacedBy(12.dp),
+                verticalArrangement = Arrangement.spacedBy(12.dp),
+                contentPadding = PaddingValues(bottom = 16.dp)
+            ) {
+                items(pagingFlow.itemCount) { index ->
+                    val item = pagingFlow[index]
+                    if (item != null) {
+                        HomeCard(
+                            imageUrl = getImageUrl(item),
+                            onSaveClick = { onSaveClick(item) },
+                            isSaved = isItemSaved(item),
+                            imageDescription = getTitle(item),
+                            modifier = Modifier.clickable { onItemClick(item) }
+                        )
+                    }
+                }
             }
         }
     }
