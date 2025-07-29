@@ -57,7 +57,7 @@ internal class ImageModerationProcessor(private val context: Context) {
                 return
             }
 
-            try {
+            runCatching {
                 val modelFiles = modelDownloadManager.downloadModelsIfNeeded()
                 val switchingToFirebase =
                     !currentModelsAreFromFirebase && modelFiles.isFromFirebase && modelsInitialized
@@ -86,9 +86,9 @@ internal class ImageModerationProcessor(private val context: Context) {
                 }
 
                 modelsInitialized = true
-            } catch (e: Exception) {
+            }.onFailure {
                 if (currentModelsAreFromFirebase) {
-                    try {
+                    runCatching {
                         sharedGenderModel?.close()
                         sharedContentModel?.close()
 
@@ -96,8 +96,6 @@ internal class ImageModerationProcessor(private val context: Context) {
                         sharedContentModel = ContentDetectionModel(context)
                         currentModelsAreFromFirebase = false
                         modelsInitialized = true
-                    } catch (fallbackError: Exception) {
-                        // Silently fail
                     }
                 }
             }
@@ -113,7 +111,7 @@ internal class ImageModerationProcessor(private val context: Context) {
         ensureModelsLoaded()
 
         if (useContentDetection) {
-            try {
+            runCatching {
                 val contentModel = sharedContentModel
                 if (contentModel != null) {
                     val contentResult = contentModel.detectContent(bitmap)
@@ -121,16 +119,14 @@ internal class ImageModerationProcessor(private val context: Context) {
                         return@withContext true
                     }
                 }
-            } catch (e: Exception) {
-                // Ignore errors
             }
         }
 
-        try {
+        runCatching {
             val faces = faceDetector.detectFaces(bitmap)
 
             for (face in faces) {
-                try {
+                runCatching {
                     val faceBitmap = cropFace(bitmap, face)
                     val genderModel = sharedGenderModel
 
@@ -142,12 +138,8 @@ internal class ImageModerationProcessor(private val context: Context) {
                                 return@withContext true
                         }
                     }
-                } catch (e: Exception) {
-                    // Ignore errors
                 }
             }
-        } catch (e: Exception) {
-            // Ignore errors
         }
 
         return@withContext false
@@ -168,34 +160,16 @@ internal class ImageModerationProcessor(private val context: Context) {
             activeProcessorCount--
 
             if (activeProcessorCount == 0) {
-                try {
-                    faceDetector.close()
-                } catch (e: Exception) {
-                    // Ignore
-                }
-
-                try {
-                    sharedGenderModel?.close()
-                    sharedGenderModel = null
-                } catch (e: Exception) {
-                    // Ignore
-                }
-
-                try {
-                    sharedContentModel?.close()
-                    sharedContentModel = null
-                } catch (e: Exception) {
-                    // Ignore
-                }
+                runCatching { faceDetector.close() }
+                runCatching { sharedGenderModel?.close() }
+                sharedGenderModel = null
+                runCatching { sharedContentModel?.close() }
+                sharedContentModel = null
 
                 modelsInitialized = false
                 currentModelsAreFromFirebase = false
             } else {
-                try {
-                    faceDetector.close()
-                } catch (e: Exception) {
-                    // Ignore
-                }
+                runCatching { faceDetector.close() }
             }
         }
     }
