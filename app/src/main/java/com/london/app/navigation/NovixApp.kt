@@ -42,6 +42,7 @@ import com.london.presentation.feature.register.WebViewRegistrationScreen
 import com.london.presentation.feature.onboarding.OnboardingRoute
 import com.london.presentation.feature.onboarding.SplashRoute
 import com.london.presentation.feature.onboarding.WelcomeScreen
+import com.london.presentation.feature.register.WebViewRegistrationScreen
 import com.london.presentation.feature.reviews.ReviewsScreen
 import com.london.presentation.feature.search.SearchScreen
 import com.london.presentation.feature.toprated.TopRatedScreen
@@ -143,13 +144,13 @@ fun NovixApp(appPreferencesService: AppPreferencesService) {
             composable<Welcome> {
                 WelcomeScreen(
                     onNavigateLogin = {
-                        navController.navigate(Login){
+                        navController.navigate(Login) {
                             popUpTo(Welcome) { inclusive = true }
                             launchSingleTop = true
                         }
                     },
                     onNavigateContinue = {
-                           navController.navigate(Home)
+                        navController.navigate(Home)
                     }
                 )
             }
@@ -384,6 +385,20 @@ fun NovixApp(appPreferencesService: AppPreferencesService) {
                     onNavigateToCast = { actorId ->
                         navController.navigate(ActorDetails(actorId))
                     }
+                )
+            }
+
+            composable<Screen.Register>(
+                exitTransition = { fadeOut(tween(500)) },
+                popEnterTransition = { fadeIn(tween(500)) },
+                enterTransition = { fadeIn(tween(500)) },
+                popExitTransition = { fadeOut(tween(500)) },
+            ) {
+                WebViewRegistrationScreen(
+                    onNavigateBack = {
+                        navController.popBackStack()
+                    },
+                    onRegistrationComplete = { navController.navigate(Login) }
                 )
             }
 
