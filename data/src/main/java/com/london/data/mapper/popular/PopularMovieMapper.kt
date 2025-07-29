@@ -3,7 +3,7 @@
 package com.london.data.mapper.popular
 
 import com.london.data.remote.model.ApiResponse
-import com.london.data.remote.model.home.model.PopularMovieResponse
+import com.london.data.remote.model.home.model.popular.PopularMovieResponse
 import com.london.data.utils.asImageUrlOrEmpty
 import com.london.data.utils.orZero
 import com.london.domain.KoverIgnore

@@ -37,13 +37,13 @@ import org.koin.androidx.compose.koinViewModel
 
 @Composable
 fun ActorGalleryScreen(
-    onBackClick: () -> Unit,
+    onNavigateBack: () -> Unit,
     viewModel: ActorGalleryViewModel = koinViewModel()
 ) {
     val uiState by viewModel.state.collectAsStateWithLifecycle()
     val effect by viewModel.effect.collectAsState(null)
 
-    effect.Listen<ActorGalleryEffectUiState> { onBackClick() }
+    effect.Listen<ActorGalleryEffectUiState> { onNavigateBack() }
 
     BuildScreen {
         when {

@@ -64,12 +64,12 @@ import org.koin.androidx.compose.koinViewModel
 @Composable
 fun ReviewsScreen(
     viewModel: ReviewsViewModel = koinViewModel(),
-    onBackClick: () -> Unit = {},
+    onNavigateBack: () -> Unit = {},
 ) {
     val uiState by viewModel.state.collectAsStateWithLifecycle()
     val effect by viewModel.effect.collectAsState(initial = null)
 
-    effect?.Listen { onBackClick() }
+    effect?.Listen { onNavigateBack() }
 
     BuildScreen {
         when {
