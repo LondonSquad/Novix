@@ -5,34 +5,43 @@ import kotlinx.serialization.Serializable
 @Serializable
 sealed interface Screen {
     @Serializable
-    object Splash : Screen
+    data object Splash : Screen
 
     @Serializable
-    object OnboardingPager : Screen
+    data object OnboardingPager : Screen
 
     @Serializable
-    object Welcome : Screen
+    data object Welcome : Screen
 
     @Serializable
-    object Login : Screen
+    data object Login : Screen
+
+    @Serializable
+    data object Home : Screen
 
     @Serializable
     object Register : Screen
 
     @Serializable
-    object Home : Screen
+    data object Search : Screen
 
     @Serializable
-    object Search : Screen
+    data object Categories : Screen
 
     @Serializable
-    object Categories : Screen
+    data object Bookmarks : Screen
 
     @Serializable
-    object Bookmarks : Screen
+    data object Account : Screen
 
     @Serializable
-    object Account : Screen
+    data object TrendingMovies : Screen
+
+    @Serializable
+    data object TrendingTvShows : Screen
+
+    @Serializable
+    data object TrendingActors : Screen
 
     @Serializable
     data class TvShowDetails(
@@ -83,5 +92,6 @@ sealed interface Screen {
     ) : Screen
 
     @Serializable
-    object TopRated : Screen
+    data object TopRated : Screen
+
 }

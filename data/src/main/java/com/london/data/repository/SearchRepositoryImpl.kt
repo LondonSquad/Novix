@@ -1,17 +1,17 @@
 package com.london.data.repository
 
-import com.london.data.local.source.LocalDataSource
 import com.london.data.local.database.dao.search.GenreInterestDao
 import com.london.data.local.model.search.GenreInterestEntity
 import com.london.data.local.model.search.SearchActorsLocal
 import com.london.data.local.model.search.SearchMoviesLocal
 import com.london.data.local.model.search.SearchTvShowLocal
-import com.london.data.remote.source.search.SearchRemoteDataSource
-import com.london.data.utils.CrashReporter
+import com.london.data.local.source.LocalDataSource
 import com.london.data.mapper.toActorEntity
 import com.london.data.mapper.toLocal
 import com.london.data.mapper.toMovieEntity
 import com.london.data.mapper.toTvShowEntity
+import com.london.data.remote.source.search.SearchRemoteDataSource
+import com.london.data.utils.CrashReporter
 import com.london.data.utils.fetchAndSync
 import com.london.domain.entity.Actor
 import com.london.domain.entity.Movie
@@ -160,5 +160,22 @@ class SearchRepositoryImpl(
             crashReporter.logException(e)
             emptyList()
         }
+    }
+
+    override suspend fun searchForTvShowByCategory(
+        categoryId: Int, pageNumber: Int
+    ): PagedFetchResponse<TvShow> = fetchAndSync(
+        networkBlock = {
+            remoteDataSource.searchForTvShowsByCategoryId(
+                categoryId = categoryId,
+                pageNumber = pageNumber,
+            ).getOrThrow().toLocal(query = "")
+        }).run {
+        PagedFetchResponse(
+            currentPage = page,
+            items = results.map { it.toTvShowEntity() },
+            totalPages = totalPages,
+            totalItems = totalResults
+        )
     }
 }

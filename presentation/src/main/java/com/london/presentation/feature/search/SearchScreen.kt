@@ -31,6 +31,7 @@ import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
@@ -44,10 +45,13 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.lifecycle.repeatOnLifecycle
 import androidx.paging.LoadState
 import androidx.paging.compose.collectAsLazyPagingItems
-import com.london.designsystem.component.EmptySearchLayout
+import com.london.designsystem.component.EmptyLayout
 import com.london.designsystem.component.HomeCard
 import com.london.designsystem.component.Icon
 import com.london.designsystem.component.NovixChip
@@ -88,6 +92,12 @@ fun SearchScreen(
             is SearchEffect.ActorNavigation -> onNavigateToActorDetails(currentEffect.actorId)
             is SearchEffect.MovieNavigation -> onNavigateToMovieDetails(currentEffect.movieId)
             is SearchEffect.TvNavigation -> onNavigateToTvShowDetails(currentEffect.tvId)
+        }
+    }
+    val lifecycleOwner= LocalLifecycleOwner.current
+    LaunchedEffect(key1 = Unit) {
+        lifecycleOwner.lifecycle.repeatOnLifecycle(Lifecycle.State.RESUMED) {
+            viewModel.updateRecentData()
         }
     }
 
@@ -169,6 +179,7 @@ fun SearchScreenContent(
                     onSelect = interactionListener::onCategorySelected,
                     modifier = Modifier.padding(bottom = 12.dp)
                 )
+
                 when (state.selectedCategory) {
                     SearchCategory.Movies -> {
                         val moviesLazyList = state.moviesFlow.collectAsLazyPagingItems()
@@ -232,7 +243,7 @@ fun SearchScreenContent(
                             },
                             content = {
                                 ActorsLayout(
-                                    actorsUis = actorsLazyList, onActorClick = {
+                                    items = actorsLazyList, onActorClick = {
                                         interactionListener.onActorClick(it.id)
                                     })
                             })
@@ -517,7 +528,7 @@ private fun RecentSearchItem(
 private fun NoEarlierSearchLayout(
     modifier: Modifier = Modifier
 ) {
-    EmptySearchLayout(
+    EmptyLayout(
         text = stringResource(R.string.start_exploring_msg),
         image = R.drawable.imge_explore,
         modifier = modifier.padding(horizontal = 16.dp)
@@ -529,7 +540,7 @@ private fun NoEarlierSearchLayout(
 private fun NoSearchResultLayOut(
     modifier: Modifier = Modifier
 ) {
-    EmptySearchLayout(
+    EmptyLayout(
         text = stringResource(R.string.no_search_result_msg),
         image = R.drawable.img_no_search_result,
         modifier = modifier.padding(horizontal = 16.dp)

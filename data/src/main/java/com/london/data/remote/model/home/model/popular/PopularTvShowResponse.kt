@@ -1,4 +1,4 @@
-package com.london.data.remote.model.home.model
+package com.london.data.remote.model.home.model.popular
 
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
