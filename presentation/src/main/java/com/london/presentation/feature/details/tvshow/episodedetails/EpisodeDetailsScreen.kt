@@ -381,6 +381,7 @@ fun OverviewSection(
     uiState: EpisodeDetailsUiState
 ) {
     var isTextCollapsed by rememberSaveable { mutableStateOf(false) }
+    if(uiState.overview.isNotBlank())
     Column(
         modifier = modifier
     ) {
