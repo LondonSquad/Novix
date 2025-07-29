@@ -23,6 +23,8 @@ interface DetailsRepository {
         episodeNumber: Int
     ): TvShowEpisodeByIdEntity
 
+    suspend fun getEpisodeVideos(seriesId: Int, seasonNumber: Int, episodeNumber: Int): List<String>
+
     suspend fun getMovieReviews(movieId: Int, pageNumber: Int): PagedFetchResponse<ReviewEntity>
     suspend fun getTvShowReviews(tvShowId: Int, pageNumber: Int): PagedFetchResponse<ReviewEntity>
 }
