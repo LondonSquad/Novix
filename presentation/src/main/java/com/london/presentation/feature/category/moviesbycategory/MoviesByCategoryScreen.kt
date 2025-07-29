@@ -40,14 +40,14 @@ fun MoviesByCategoryScreen(
     modifier: Modifier = Modifier,
     viewModel: MoviesByCategoryViewModel = koinViewModel(),
     onNavigateToMovieDetails: (Int) -> Unit,
-    onBackClick: () -> Unit
+    onNavigateBack: () -> Unit
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
     val effect by viewModel.effect.collectAsState(null)
 
     effect?.Listen { currentEffect ->
         when (currentEffect) {
-            MoviesByCategoryEffect.NavigateBack -> onBackClick()
+            MoviesByCategoryEffect.NavigateBack -> onNavigateBack()
             is MoviesByCategoryEffect.NavigateToMovieDetails -> onNavigateToMovieDetails(
                 currentEffect.movieId
             )

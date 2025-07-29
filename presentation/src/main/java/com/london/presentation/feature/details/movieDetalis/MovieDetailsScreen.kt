@@ -85,8 +85,8 @@ import org.koin.androidx.compose.koinViewModel
 @Composable
 fun MovieDetailsScreen(
     viewModel: MovieDetailsViewModel = koinViewModel(),
-    onBackClick: () -> Unit = {},
-    onGenreClick: (Int) -> Unit = {},
+    onNavigateBack: () -> Unit = {},
+    onNavigateGenre: (Int) -> Unit = {},
     onNavigateToMovie: (Int) -> Unit,
     onNavigateToActor: (Int) -> Unit,
     onNavigateToReviews: (Int, Int) -> Unit,
@@ -97,8 +97,8 @@ fun MovieDetailsScreen(
     effect?.Listen { currentEffect ->
         when (currentEffect) {
             is MovieDetailsEffect.ActorNavigation -> onNavigateToActor(currentEffect.actorId)
-            MovieDetailsEffect.BackNavigation -> onBackClick()
-            is MovieDetailsEffect.GenreNavigation -> onGenreClick(currentEffect.genreId)
+            MovieDetailsEffect.BackNavigation -> onNavigateBack()
+            is MovieDetailsEffect.GenreNavigation -> onNavigateGenre(currentEffect.genreId)
             is MovieDetailsEffect.MovieNavigation -> onNavigateToMovie(currentEffect.movieId)
             is MovieDetailsEffect.ReviewsNavigation -> onNavigateToReviews(
                 currentEffect.movieId,
