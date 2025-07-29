@@ -33,19 +33,32 @@ fun TabLayout(
     onTabSelected: (Int) -> Unit,
     modifier: Modifier = Modifier
 ) {
-    Row(
-        verticalAlignment = Alignment.CenterVertically,
-        horizontalArrangement = Arrangement.SpaceEvenly,
-        modifier = modifier.fillMaxWidth()
+    Box(
+        modifier = modifier
+            .fillMaxWidth()
+            .background(NovixTheme.colors.surface)
     ) {
-        tabs.forEachIndexed { index, tab ->
-            NovixTab(
-                text = tab.text,
-                isSelected = index == selectedIndex,
-                onClick = { onTabSelected(index) },
-                modifier = Modifier.weight(1f)
-            )
+        Row(
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.SpaceEvenly,
+            modifier = Modifier.fillMaxWidth()
+        ) {
+            tabs.forEachIndexed { index, tab ->
+                NovixTab(
+                    text = tab.text,
+                    isSelected = index == selectedIndex,
+                    onClick = { onTabSelected(index) },
+                    modifier = Modifier.weight(1f)
+                )
+            }
         }
+        Box(
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(0.5.dp)
+                .background(NovixTheme.colors.stroke)
+                .align(Alignment.BottomCenter)
+        )
     }
 }
 
@@ -65,7 +78,7 @@ fun NovixTab(
                 indication = null,
                 onClick = onClick
             )
-            .padding(vertical = 8.dp),
+            .padding(top = 8.dp),
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
