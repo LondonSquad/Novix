@@ -34,7 +34,7 @@ class GetTrendingMoviesUseCaseTest {
         assertEquals(10, result.totalPages)
         assertEquals(100, result.totalItems)
         assertEquals(1, result.items.size)
-        
+
         val trending = result.items.first()
         assertEquals(1, trending.id)
         assertEquals("Test Movie", trending.title)
@@ -144,14 +144,13 @@ class GetTrendingMoviesUseCaseTest {
         assertEquals(1, result.currentPage)
     }
 
-    private fun createMockTrendingResponse(): PagedFetchResponse<Trending> {
-        return PagedFetchResponse(
+    private fun createMockTrendingResponse(): PagedFetchResponse<Trending> =
+        PagedFetchResponse(
             currentPage = 1,
             items = listOf(createMockTrending()),
             totalPages = 10,
             totalItems = 100
         )
-    }
 
     private fun createMockTrending(
         id: Int = 1,

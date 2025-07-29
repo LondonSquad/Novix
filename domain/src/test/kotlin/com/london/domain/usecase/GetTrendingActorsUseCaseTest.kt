@@ -190,14 +190,13 @@ class GetTrendingActorsUseCaseTest {
         assertEquals("", result.items[2].profilePicture)
     }
 
-    private fun createMockActorsResponse(): PagedFetchResponse<Actor> {
-        return PagedFetchResponse(
+    private fun createMockActorsResponse(): PagedFetchResponse<Actor> =
+        PagedFetchResponse(
             currentPage = 1,
             items = listOf(createMockActor()),
             totalPages = 10,
             totalItems = 100
         )
-    }
 
     private fun createMockActor(
         id: Int = 1,

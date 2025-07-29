@@ -167,14 +167,13 @@ class GetTrendingTvShowsUseCaseTest {
         assertEquals(listOf(28), result.items[2].genreIds)
     }
 
-    private fun createMockTrendingResponse(): PagedFetchResponse<Trending> {
-        return PagedFetchResponse(
+    private fun createMockTrendingResponse(): PagedFetchResponse<Trending> =
+        PagedFetchResponse(
             currentPage = 1,
             items = listOf(createMockTrending()),
             totalPages = 10,
             totalItems = 100
         )
-    }
 
     private fun createMockTrending(
         id: Int = 1,
