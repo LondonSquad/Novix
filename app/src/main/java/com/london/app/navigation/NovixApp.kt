@@ -142,14 +142,13 @@ fun NovixApp(appPreferencesService: AppPreferencesService) {
             composable<Welcome> {
                 WelcomeScreen(
                     onNavigateLogin = {
-                        navController.navigate(Login)
+                        navController.navigate(Login){
+                            popUpTo(Welcome) { inclusive = true }
+                            launchSingleTop = true
+                        }
                     },
                     onNavigateContinue = {
-                            navController.navigate(Home) {
-                                popUpTo(Splash) { inclusive = true }
-                                launchSingleTop = true
-                            }
-
+                           navController.navigate(Home)
                     }
                 )
             }
