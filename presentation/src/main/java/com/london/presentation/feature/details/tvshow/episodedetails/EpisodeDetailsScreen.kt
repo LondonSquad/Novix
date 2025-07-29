@@ -12,8 +12,10 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -34,6 +36,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.layout
+import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
@@ -44,13 +47,14 @@ import com.london.designsystem.component.Icon
 import com.london.designsystem.component.Text
 import com.london.designsystem.theme.NovixTheme
 import com.london.presentation.R
+import com.london.presentation.feature.buildscreen.BuildScreen
 import com.london.presentation.shared.ConditionalText
 import com.london.presentation.shared.CustomBackDropImagePager
 import com.london.presentation.shared.DetailsScreenTopBar
 import com.london.presentation.shared.FooterSection
 import com.london.presentation.shared.RatingItem
-import com.london.presentation.feature.buildscreen.BuildScreen
 import com.london.presentation.utils.Listen
+import com.london.presentation.utils.openUrl
 import com.london.presentation.utils.toLocalizedNumbers
 import org.koin.androidx.compose.koinViewModel
 import com.london.designsystem.R as Res
@@ -58,7 +62,7 @@ import com.london.designsystem.R as Res
 @Composable
 fun EpisodeDetailsScreen(
     viewModel: EpisodeDetailsViewModel = koinViewModel(),
-    onNavigateBackClick: () -> Unit,
+    onNavigateBack: () -> Unit,
     onNavigateToCast: (Int) -> Unit
 ) {
     val uiState by viewModel.state.collectAsStateWithLifecycle()
@@ -66,7 +70,7 @@ fun EpisodeDetailsScreen(
 
     effect?.Listen { currentEffect ->
         when (currentEffect) {
-            EpisodeDetailsEffect.NavigationBack -> onNavigateBackClick()
+            EpisodeDetailsEffect.NavigationBack -> onNavigateBack()
             is EpisodeDetailsEffect.NavigateToCast -> onNavigateToCast(currentEffect.episodeId)
         }
     }
@@ -91,7 +95,7 @@ fun EpisodeDetailsScreenContent(
     episodeDetailsContract: EpisodeDetailsContract,
     onNavigateToCast: (Int) -> Unit
 ) {
-
+    val uriHandler = LocalUriHandler.current
     val lazyListState = rememberLazyListState()
     val shouldShowBackground by remember {
         derivedStateOf {
@@ -205,14 +209,17 @@ fun EpisodeDetailsScreenContent(
 
                     )
                 }
+
+                item {
+                    Spacer(Modifier.height(30.dp))
+                }
             }
         }
-
         FooterSection(
-            haveTrailer = uiState.haveTrailer,
+            haveTrailer = uiState.episodeHaveTrailer,
             modifier = Modifier.align(Alignment.BottomCenter),
             onPlayClick = {
-                // TODO play trailer onclick handler
+                uriHandler.openUrl(uiState.videoProvider)
             },
             onStarClick = {
                 // TODO save favorite onclick handler
@@ -302,7 +309,7 @@ fun TvShowDate(
         horizontalArrangement = Arrangement.spacedBy(4.dp)
     ) {
         Icon(
-            painter = painterResource(com.london.designsystem.R.drawable.icon_calender),
+            painter = painterResource(Res.drawable.icon_calender),
             contentDescription = "Calender icon",
             tint = NovixTheme.colors.body,
             modifier = Modifier.size(12.dp)
@@ -359,14 +366,14 @@ fun Seasons(uiState: EpisodeDetailsUiState) {
         horizontalArrangement = Arrangement.spacedBy(4.dp)
     ) {
         Icon(
-            painter = painterResource(com.london.designsystem.R.drawable.icon_tv),
+            painter = painterResource(Res.drawable.icon_tv),
             contentDescription = "Tv icon",
             tint = NovixTheme.colors.body,
             modifier = Modifier.size(12.dp)
         )
 
         Text(
-            text = "${stringResource(com.london.designsystem.R.string.s)} ${uiState.seasonNumber.toLocalizedNumbers()}",
+            text = "${stringResource(Res.string.s)}${uiState.seasonNumber.toLocalizedNumbers()}",
             style = NovixTheme.typography.label.small,
             color = NovixTheme.colors.title,
         )
@@ -379,18 +386,20 @@ fun OverviewSection(
     uiState: EpisodeDetailsUiState
 ) {
     var isTextCollapsed by rememberSaveable { mutableStateOf(false) }
-    Column(
-        modifier = modifier
-    ) {
-        Text(
-            text = stringResource(Res.string.overview),
-            style = NovixTheme.typography.title.medium,
-            color = NovixTheme.colors.title
-        )
+    if(uiState.overview.isNotBlank()){
+        Column(
+            modifier = modifier
+        ) {
+            Text(
+                text = stringResource(Res.string.overview),
+                style = NovixTheme.typography.title.medium,
+                color = NovixTheme.colors.title
+            )
 
-        ConditionalText(
-            text = uiState.overview,
-            expandedState = isTextCollapsed
-        ) { isTextCollapsed = !isTextCollapsed }
+            ConditionalText(
+                text = uiState.overview,
+                expandedState = isTextCollapsed
+            ) { isTextCollapsed = !isTextCollapsed }
+        }
     }
 }

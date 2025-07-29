@@ -4,6 +4,7 @@ package com.london.data.remote.service.details.tvshow
 import com.london.data.remote.model.details.tvshow.model.TvShowCastRemoteResponse
 import com.london.data.remote.model.details.tvshow.model.TvShowDetailsRemoteResponse
 import com.london.data.remote.model.details.tvshow.model.TvShowImagesRemoteResponse
+import com.london.data.remote.model.details.tvshow.model.tvshowepisode.EpisodeVideoResponse
 import com.london.data.remote.model.details.tvshow.model.tvshowepisode.TvShowEpisodeResponse
 import com.london.data.remote.model.details.tvshow.model.tvshowepisode.TvShowEpisodesRemoteResponse
 import com.london.data.remote.model.details.videoprovider.tvshow.model.TvShowVideoResponse
@@ -40,6 +41,13 @@ interface TvShowDetailsApiService {
         @Path("season_number") seasonNumber: Int,
         @Path("episode_number") episodeNumber: Int,
     ): Response<TvShowEpisodeResponse>
+
+    @GET("3/tv/{series_id}/season/{season_number}/episode/{episode_number}/videos")
+    suspend fun getEpisodeVideo(
+        @Path("series_id") seriesId: Int,
+        @Path("season_number") seasonNumber: Int,
+        @Path("episode_number") episodeNumber: Int,
+    ): Response<EpisodeVideoResponse>
 
     @GET("3/tv/{tv_id}/videos")
     suspend fun getTvShowVideos(

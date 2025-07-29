@@ -1,5 +1,8 @@
 package com.london.presentation.feature.details.actor
 
+import androidx.compose.animation.core.FastOutSlowInEasing
+import androidx.compose.animation.core.animateFloatAsState
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -15,6 +18,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.heightIn
+import androidx.compose.foundation.layout.navigationBars
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.statusBars
@@ -23,11 +27,13 @@ import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyHorizontalGrid
 import androidx.compose.foundation.lazy.itemsIndexed
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -64,7 +70,7 @@ import org.koin.androidx.compose.koinViewModel
 
 @Composable
 fun ActorDetailsScreen(
-    onBackClick: () -> Unit,
+    onNavigateBack: () -> Unit,
     onNavigateToMoviePicks: (Int) -> Unit,
     onNavigateToGallery: (Int) -> Unit,
     onNavigateToTvShowPicks: (Int) -> Unit,
@@ -77,7 +83,7 @@ fun ActorDetailsScreen(
 
     effect?.Listen { currentEffect ->
         when (currentEffect) {
-            is ActorEffectUiState.NavigationBack -> onBackClick()
+            is ActorEffectUiState.NavigationBack -> onNavigateBack()
             is ActorEffectUiState.NavigateToGallery -> onNavigateToGallery(currentEffect.actorId)
             is ActorEffectUiState.NavigateToMovieScreen -> {
                 onNavigateToMovieScreen(currentEffect.movieId)
@@ -105,14 +111,38 @@ fun ActorScreenContent(
     uiState: ActorDetailsUiState,
     actorDetailsContract: ActorDetailsContract,
 ) {
+
+    val lazyState = rememberLazyListState()
+
+    val shouldShowBackground by remember {
+        derivedStateOf {
+            lazyState.firstVisibleItemScrollOffset > 40f ||
+                    lazyState.firstVisibleItemIndex > 0
+        }
+    }
+
+    val backgroundAlpha by animateFloatAsState(
+        targetValue = if (shouldShowBackground) 1f else 0f,
+        animationSpec = tween(
+            durationMillis = 400,
+            easing = FastOutSlowInEasing
+        ),
+        label = "background_alpha"
+    )
+
     Box(
         modifier = modifier
             .fillMaxSize()
             .background(NovixTheme.colors.surface)
     ) {
         LazyColumn(
-            modifier = Modifier.fillMaxSize(),
-            contentPadding = PaddingValues(bottom = 16.dp)
+            modifier = Modifier
+                .fillMaxSize(),
+            contentPadding = PaddingValues(
+                bottom = WindowInsets.navigationBars.asPaddingValues()
+                    .calculateBottomPadding() + 16.dp
+            ),
+            state = lazyState
         ) {
             item {
                 val images = uiState.actorImageDetails.orEmpty()
@@ -165,7 +195,7 @@ fun ActorScreenContent(
                         text = stringResource(R.string.biography),
                         style = NovixTheme.typography.title.medium,
                         color = NovixTheme.colors.title,
-                        modifier = Modifier.padding(start = 16.dp)
+                        modifier = Modifier.padding(start = 16.dp, bottom = 4.dp)
                     )
                     var isExpanded by remember { mutableStateOf(false) }
 
@@ -187,7 +217,7 @@ fun ActorScreenContent(
                         hasGetAll = true,
                         hasIcon = true,
                         modifier = Modifier
-                            .padding(bottom = 12.dp)
+                            .padding(bottom = 12.dp, top = 16.dp)
                             .padding(horizontal = 16.dp),
                         onClick = { actorDetailsContract.onGalleryClick(uiState.actorId) }
                     )
@@ -238,6 +268,9 @@ fun ActorScreenContent(
             onBackClick = actorDetailsContract::onNavigateBack,
             modifier = Modifier
                 .fillMaxWidth()
+                .background(
+                    NovixTheme.colors.surface.copy(alpha = backgroundAlpha)
+                )
                 .padding(
                     start = 16.dp,
                     top = WindowInsets.statusBars.asPaddingValues().calculateTopPadding()
@@ -356,7 +389,7 @@ private fun ActorInfoSection(
             modifier = Modifier
                 .padding(horizontal = 12.dp)
                 .padding(bottom = 12.dp),
-            verticalArrangement = Arrangement.Center,
+            verticalArrangement = Arrangement.spacedBy(8.dp),
             horizontalArrangement = Arrangement.spacedBy(8.dp)
         ) {
             Text(
@@ -385,9 +418,8 @@ private fun ActorInfoSection(
             )
             TextWithIcon(
                 icon = painterResource(R.drawable.birthday_cake),
-                text = if (deathDay != "") "$birthday  -  $deathDay" else birthday
+                text = if (deathDay != "") "$birthday  -  $deathDay" else birthday,
             )
-
         }
     }
 }
@@ -398,7 +430,7 @@ private fun TextWithIcon(
     text: String, icon: Painter
 ) {
     Row(
-        modifier = Modifier,
+        modifier = Modifier.padding(),
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.spacedBy(4.dp)
     ) {

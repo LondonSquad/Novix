@@ -1,9 +1,9 @@
 package com.london.data.repository
 
 import com.google.common.truth.Truth.assertThat
-import com.london.data.remote.source.details.videoprovider.movie.MovieVideoProviderRemote
 import com.london.data.remote.model.details.videoprovider.movie.model.MovieVideoRemote
 import com.london.data.remote.model.details.videoprovider.movie.model.MovieVideoRemoteResponse
+import com.london.data.remote.source.details.videoprovider.movie.MovieVideoProviderRemote
 import com.london.domain.entity.videoprovider.MovieVideo
 import com.london.domain.repository.MovieVideoProviderRepository
 import io.mockk.coEvery
@@ -75,15 +75,10 @@ class MovieVideoProviderRepositoryImplTest {
         private val EXPECTED_MOVIE_VIDEOS = listOf(
             MovieVideo(
                 id = "vid123",
-                iso6391 = "en",
-                iso31661 = "US",
                 videoUrl = "https://www.youtube.com/watch?v=abcd1234",
                 name = "Official Trailer",
                 site = "YouTube",
-                size = 1080,
-                type = "Trailer",
                 official = true,
-                publishedAt = "2024-05-01"
             )
         )
     }

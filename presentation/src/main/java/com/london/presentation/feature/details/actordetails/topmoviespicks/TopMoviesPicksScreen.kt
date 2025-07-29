@@ -4,7 +4,10 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.asPaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.navigationBars
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.lazy.grid.GridCells
@@ -29,17 +32,17 @@ import org.koin.androidx.compose.koinViewModel
 fun TopMoviesPicksScreen(
     modifier: Modifier = Modifier,
     viewModel: TopMoviesPicksViewModel = koinViewModel(),
-    onMovieClick: (Int) -> Unit,
-    onBackClick: () -> Unit,
+    onNavigateMovie: (Int) -> Unit,
+    onNavigateBack: () -> Unit,
 ) {
     val uiState by viewModel.state.collectAsStateWithLifecycle()
     val effects by viewModel.effect.collectAsState(null)
 
     effects?.Listen { currentEffect ->
         when (currentEffect) {
-            TopMoviesPicksEffectUiState.NavigateBack -> onBackClick()
+            TopMoviesPicksEffectUiState.NavigateBack -> onNavigateBack()
             is TopMoviesPicksEffectUiState.NavigationToMovieDetails ->
-                onMovieClick(currentEffect.movieId)
+                onNavigateMovie(currentEffect.movieId)
         }
     }
 
@@ -57,8 +60,11 @@ private fun TopMoviesPicksContent(
     modifier: Modifier = Modifier,
 ) {
     LazyVerticalGrid(
-        columns = GridCells.Fixed(2),
-        contentPadding = PaddingValues(top = 12.dp, bottom = 18.dp),
+        columns = GridCells.Adaptive(minSize = 158.dp),
+        contentPadding = PaddingValues(
+            top = 12.dp,
+            bottom = WindowInsets.navigationBars.asPaddingValues().calculateBottomPadding() + 16.dp
+        ),
         horizontalArrangement = Arrangement.spacedBy(12.dp),
         verticalArrangement = Arrangement.spacedBy(12.dp),
         modifier = modifier

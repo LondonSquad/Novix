@@ -92,5 +92,11 @@
     <string name="action_adventure">Action And Adventure</string>
     <string name="war_politics">war And Politics</string>
     <string name="top_rating">Top rating</string>
-
+    <string name="retry">Retry</string>
+    <string name="trending_movies">Trending Movies</string>
+    <string name="trending_tv_shows">Trending TV Shows</string>
+    <string name="trending_people">Trending People</string>
+    <string name="no_trending_movies_in_genre">No movies found in this genre.</string>
+    <string name="no_trending_tvshows_in_genre">No tv shows found in this genre.</string>
+    <string name="no_trending_actors_in_genre">No people found in this genre.</string>
 </resources>

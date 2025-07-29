@@ -5,18 +5,18 @@ import com.london.domain.entity.Movie
 import com.london.domain.entity.TvShow
 import com.london.domain.entity.recent.RecentSearch
 import com.london.domain.entity.recent.RecentViewed
-import com.london.domain.usecase.recent.search.AddToRecentSearchUseCase
-import com.london.domain.usecase.recent.viewed.AddToRecentViewedUseCase
-import com.london.domain.usecase.recent.search.ClearRecentSearchUseCase
-import com.london.domain.usecase.recent.viewed.ClearRecentViewedUseCase
-import com.london.domain.usecase.recent.search.DeleteRecentSearchUseCase
 import com.london.domain.usecase.GetActorsUseCase
 import com.london.domain.usecase.GetGenreInterestCountsUseCase
 import com.london.domain.usecase.GetMoviesUseCase
-import com.london.domain.usecase.recent.search.GetRecentSearchUseCase
-import com.london.domain.usecase.recent.viewed.GetRecentViewedUseCase
 import com.london.domain.usecase.GetTvShowsUseCase
 import com.london.domain.usecase.IncrementGenreInterestUseCase
+import com.london.domain.usecase.recent.search.AddToRecentSearchUseCase
+import com.london.domain.usecase.recent.search.ClearRecentSearchUseCase
+import com.london.domain.usecase.recent.search.DeleteRecentSearchUseCase
+import com.london.domain.usecase.recent.search.GetRecentSearchUseCase
+import com.london.domain.usecase.recent.viewed.AddToRecentViewedUseCase
+import com.london.domain.usecase.recent.viewed.ClearRecentViewedUseCase
+import com.london.domain.usecase.recent.viewed.GetRecentViewedUseCase
 import com.london.presentation.feature.base.BaseViewModel
 import com.london.presentation.feature.base.createPagingSourceFlow
 import com.london.presentation.feature.search.model.MovieUi
@@ -60,11 +60,11 @@ class SearchViewModel(
     private val _searchQuery = MutableStateFlow("")
 
     init {
-        initializeData()
+        updateRecentData()
         setupSearchDebouncing()
     }
 
-    private fun initializeData() {
+     fun updateRecentData() {
         tryToExecute(
             block = {
                 val recentViewed = getRecentViewedUseCase.invoke().reversed()
@@ -100,15 +100,18 @@ class SearchViewModel(
     }
 
     override fun onSearchQueryChange(newValue: TextFieldValue) {
-        val limitedQuery = if (newValue.text.length > MAX_QUERY_SEARCH_LENGTH) {
-            newValue.copy(text = newValue.text.take(MAX_QUERY_SEARCH_LENGTH))
-        } else {
-            newValue
-        }
+        updateState { copy(searchQuery = newValue) }
 
+        val limitedQuery = applyLimitationOnTextFieldValue(newValue)
         updateState { copy(searchQuery = limitedQuery) }
-        _searchQuery.value = limitedQuery.text
+        _searchQuery.value = limitedQuery.text.trim()
     }
+
+    private fun applyLimitationOnTextFieldValue(newValue: TextFieldValue): TextFieldValue =
+        newValue.copy(
+            text = newValue.text.replace(regex = Regex("\\s{2,}"), replacement = " ")
+                .trimStart()
+        )
 
     override fun onCategorySelected(category: SearchCategory) {
         updateState {
@@ -532,9 +535,5 @@ class SearchViewModel(
                 availableGenresWithNames = availableGenresWithNames
             )
         }
-    }
-
-    private companion object{
-        private const val MAX_QUERY_SEARCH_LENGTH = 30
     }
 }

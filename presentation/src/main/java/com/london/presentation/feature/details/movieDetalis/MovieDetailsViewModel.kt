@@ -1,14 +1,19 @@
 package com.london.presentation.feature.details.movieDetalis
 
 import androidx.lifecycle.SavedStateHandle
-import com.london.domain.usecase.details.movie.GetMovieDetailsById
+import com.london.domain.entity.Movie
+import com.london.domain.entity.recent.MediaType
+import com.london.domain.entity.recent.RecentViewed
 import com.london.domain.usecase.details.movie.GetMovieCastUseCase
+import com.london.domain.usecase.details.movie.GetMovieDetailsById
 import com.london.domain.usecase.details.movie.GetMovieImagesUseCase
 import com.london.domain.usecase.details.movie.GetMovieVideoUseCase
 import com.london.domain.usecase.details.movie.GetSimilarMoviesUseCase
+import com.london.domain.usecase.recent.viewed.AddToRecentViewedUseCase
+import com.london.domain.usecase.recent.watched.AddMovieToRecentWatchedUseCase
+import com.london.presentation.feature.base.BaseViewModel
 import com.london.presentation.navigation.Screen
 import com.london.presentation.navigation.getArgs
-import com.london.presentation.feature.base.BaseViewModel
 import org.koin.android.annotation.KoinViewModel
 
 @KoinViewModel
@@ -18,6 +23,8 @@ class MovieDetailsViewModel(
     private val getMovieCastUseCase: GetMovieCastUseCase,
     private val getSimilarMoviesUseCase: GetSimilarMoviesUseCase,
     private val getMovieVideosUseCase: GetMovieVideoUseCase,
+    private val addMovieToRecentWatchedUseCase:AddMovieToRecentWatchedUseCase,
+    private val addToRecentViewedUseCase:AddToRecentViewedUseCase,
     savedStateHandle: SavedStateHandle
 ) : BaseViewModel<MovieDetailsUiState, MovieDetailsEffect>(MovieDetailsUiState()),
     MovieDetailsContract {
@@ -78,7 +85,26 @@ class MovieDetailsViewModel(
                         movieImage = images,
                         actors = cast
                     )
+
                 }
+                addMovieToRecentViewed(
+                    RecentViewed(
+                        id =details.id,
+                        imageUrl = details.posterUrl,
+                        type = MediaType.Movie,
+                        viewDate = System.currentTimeMillis()
+                    )
+                )
+                addMovieToRecentWatched(
+                    Movie(
+                        id =details.id,
+                        name = details.title,
+                        posterPicture = details.posterUrl,
+                        releaseYear = 2025,
+                        rating = 1,
+                        genreIds = details.genresId,
+                    )
+                )
             },
             onError = { errorState ->
                 updateState { copy(error = errorState) }
@@ -87,6 +113,13 @@ class MovieDetailsViewModel(
                 updateState { copy(isLoading = false) }
             }
         )
+    }
+
+    private suspend fun addMovieToRecentWatched(movie: Movie){
+        addMovieToRecentWatchedUseCase.invoke(movie)
+    }
+    private suspend fun addMovieToRecentViewed(movie: RecentViewed){
+        addToRecentViewedUseCase.invoke(movie)
     }
 
     private fun loadSimilarAndVideos(movieId: Int) {

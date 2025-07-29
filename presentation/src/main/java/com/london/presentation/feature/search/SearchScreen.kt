@@ -9,7 +9,9 @@ import androidx.compose.animation.scaleOut
 import androidx.compose.animation.togetherWith
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.interaction.MutableInteractionSource
+import androidx.compose.foundation.interaction.collectIsFocusedAsState
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -29,21 +31,27 @@ import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.input.pointer.pointerInput
+import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.platform.SoftwareKeyboardController
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.lifecycle.repeatOnLifecycle
 import androidx.paging.LoadState
 import androidx.paging.compose.collectAsLazyPagingItems
-import com.london.designsystem.component.EmptySearchLayout
+import com.london.designsystem.component.EmptyLayout
 import com.london.designsystem.component.HomeCard
 import com.london.designsystem.component.Icon
 import com.london.designsystem.component.NovixChip
@@ -59,11 +67,11 @@ import com.london.domain.entity.recent.RecentSearch
 import com.london.domain.entity.recent.RecentViewed
 import com.london.presentation.R
 import com.london.presentation.shared.ActorsLayout
+import com.london.presentation.shared.FilterBottomSheet
+import com.london.presentation.shared.FilterState
 import com.london.presentation.shared.MoviesLayOut
 import com.london.presentation.shared.TriangleBlurredShape
 import com.london.presentation.shared.TvShowLayOut
-import com.london.presentation.shared.FilterBottomSheet
-import com.london.presentation.shared.FilterState
 import com.london.presentation.utils.Listen
 import com.london.presentation.utils.ResultOrEmpty
 import org.koin.androidx.compose.koinViewModel
@@ -86,6 +94,12 @@ fun SearchScreen(
             is SearchEffect.TvNavigation -> onNavigateToTvShowDetails(currentEffect.tvId)
         }
     }
+    val lifecycleOwner= LocalLifecycleOwner.current
+    LaunchedEffect(key1 = Unit) {
+        lifecycleOwner.lifecycle.repeatOnLifecycle(Lifecycle.State.RESUMED) {
+            viewModel.updateRecentData()
+        }
+    }
 
     SearchScreenContent(
         state = state,
@@ -103,10 +117,13 @@ fun SearchScreenContent(
     keyboardController: SoftwareKeyboardController?,
 ) {
     val interactionSource = remember { MutableInteractionSource() }
-
+    val focusManager = LocalFocusManager.current
     Box(
         modifier = Modifier
             .fillMaxSize()
+            .pointerInput(Unit){ detectTapGestures(onTap = {
+                focusManager.clearFocus()
+            }) }
             .background(color = NovixTheme.colors.surface)
     ) {
 
@@ -162,6 +179,7 @@ fun SearchScreenContent(
                     onSelect = interactionListener::onCategorySelected,
                     modifier = Modifier.padding(bottom = 12.dp)
                 )
+
                 when (state.selectedCategory) {
                     SearchCategory.Movies -> {
                         val moviesLazyList = state.moviesFlow.collectAsLazyPagingItems()
@@ -225,7 +243,7 @@ fun SearchScreenContent(
                             },
                             content = {
                                 ActorsLayout(
-                                    actorsUis = actorsLazyList, onActorClick = {
+                                    items = actorsLazyList, onActorClick = {
                                         interactionListener.onActorClick(it.id)
                                     })
                             })
@@ -256,6 +274,9 @@ private fun SearchBar(
     keyboardController: SoftwareKeyboardController?,
     modifier: Modifier = Modifier
 ) {
+
+    val focusManager = LocalFocusManager.current
+    val focusedState = interactionSource.collectIsFocusedAsState().value
     AnimatedContent(
         targetState = uiState.showFilterButton, transitionSpec = {
             (fadeIn(animationSpec = tween(200)) + scaleIn(initialScale = 1f)) togetherWith
@@ -278,7 +299,8 @@ private fun SearchBar(
                 },
                 leadingIcon = painterResource(id = R.drawable.icon_search_normal),
                 trailingIcon = when {
-                    uiState.searchQuery.text.isNotEmpty() -> {
+                    uiState.searchQuery.text.isNotEmpty()
+                            && focusedState -> {
                         {
                             Icon(
                                 painter = painterResource(id = R.drawable.icon_remove_filled),
@@ -300,6 +322,7 @@ private fun SearchBar(
                 ),
                 keyboardActions = KeyboardActions(
                     onSearch = {
+                        focusManager.clearFocus()
                         keyboardController?.hide()
                         viewModel.addToRecentSearches(
                             RecentSearch(
@@ -336,20 +359,19 @@ private fun SearchChipsRow(
         modifier = modifier
             .fillMaxWidth()
             .padding(horizontal = 16.dp),
-        horizontalArrangement = Arrangement.Start
+        horizontalArrangement = Arrangement.spacedBy(8.dp),
     ) {
-        NovixChip(
-            text = stringResource(SearchCategory.Movies.title),
-            isSelected = selected == SearchCategory.Movies,
-            onClick = { onSelect(SearchCategory.Movies) })
-        NovixChip(
-            text = stringResource(SearchCategory.TvShows.title),
-            isSelected = selected == SearchCategory.TvShows,
-            onClick = { onSelect(SearchCategory.TvShows) })
-        NovixChip(
-            text = stringResource(SearchCategory.Actors.title),
-            isSelected = selected == SearchCategory.Actors,
-            onClick = { onSelect(SearchCategory.Actors) })
+        SearchCategory.entries.forEach { category ->
+            NovixChip(
+                text = stringResource(category.title),
+                isSelected = selected == category,
+                onClick = {
+                    if (selected != category) {
+                        onSelect(category)
+                    }
+                }
+            )
+        }
     }
 }
 
@@ -506,7 +528,7 @@ private fun RecentSearchItem(
 private fun NoEarlierSearchLayout(
     modifier: Modifier = Modifier
 ) {
-    EmptySearchLayout(
+    EmptyLayout(
         text = stringResource(R.string.start_exploring_msg),
         image = R.drawable.imge_explore,
         modifier = modifier.padding(horizontal = 16.dp)
@@ -518,7 +540,7 @@ private fun NoEarlierSearchLayout(
 private fun NoSearchResultLayOut(
     modifier: Modifier = Modifier
 ) {
-    EmptySearchLayout(
+    EmptyLayout(
         text = stringResource(R.string.no_search_result_msg),
         image = R.drawable.img_no_search_result,
         modifier = modifier.padding(horizontal = 16.dp)

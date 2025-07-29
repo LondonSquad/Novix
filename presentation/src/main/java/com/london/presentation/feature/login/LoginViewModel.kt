@@ -15,32 +15,21 @@ class LoginViewModel(
     LoginContract {
 
     override fun onUsernameChanged(username: TextFieldValue) {
-        val limitedUsername = if (username.text.length > MAX_LETTERS) {
-            username.copy(text = username.text.take(MAX_LETTERS))
-        } else {
-            username
-        }
-
         updateState {
             copy(
-                username = limitedUsername,
-                isLoginEnabled = limitedUsername.text.isNotEmpty() && password.text.isNotEmpty(),
+                username = username,
+                isLoginEnabled = username.text.isNotEmpty() && password.text.isNotEmpty(),
                 error = null
             )
         }
     }
 
     override fun onPasswordChanged(password: TextFieldValue) {
-        val limitedPassword = if (password.text.length > MAX_LETTERS) {
-            password.copy(text = password.text.take(MAX_LETTERS))
-        } else {
-            password
-        }
-
         updateState {
             copy(
-                password = limitedPassword,
-                isLoginEnabled = username.text.isNotEmpty() && limitedPassword.text.isNotEmpty(),
+                password = password,
+                isLoginEnabled = username.text.isNotEmpty()
+                        && password.text.isNotEmpty() && password.text.length >= 4,
                 error = null
             )
         }
@@ -63,21 +52,23 @@ class LoginViewModel(
 
     override fun onLoginClick() {
         val currentState = state.value
-        if (currentState.username.text.isEmpty() || currentState.password.text.isEmpty()) {
-            return
-        }
+        val username = currentState.username.text
+        val password = currentState.password.text
+
+        if (username.isEmpty() || password.isEmpty()) return
+
         tryToExecute(
-            block = { loginUseCase.invoke(currentState.username.text, currentState.password.text) },
+            block = { loginUseCase.invoke(username, password) },
             onStart = { updateState { copy(isLoading = true, error = null) } },
             onSuccess = { isSuccess: Boolean ->
-                if (isSuccess) {
+                if (isSuccess)
                     emitEffect(LoginEffect.NavigateToHome)
-                } else {
+                else
                     updateState { copy(error = ErrorState.RequestFailed("Login failed. Please check your credentials.")) }
-                }
+
             },
-            onError = { errorState ->
-                updateState { copy(error = errorState) }
+            onError = {
+                updateState { copy(error = ErrorState.RequestFailed("Login failed. Please check your credentials.")) }
             },
             onCompleted = {
                 updateState { copy(isLoading = false) }
@@ -96,8 +87,8 @@ class LoginViewModel(
                     updateState { copy(error = ErrorState.RequestFailed("Guest login failed.")) }
                 }
             },
-            onError = { errorState ->
-                updateState { copy(error = errorState) }
+            onError = {
+                updateState { copy(error = ErrorState.RequestFailed("Guest login failed.")) }
             },
             onCompleted = {
                 updateState { copy(isGuestLoginLoading = false) }
@@ -112,6 +103,5 @@ class LoginViewModel(
     companion object {
         private const val CREATE_ACCOUNT_URL = "https://www.themoviedb.org/signup"
         private const val FORGOT_PASSWORD_URL = "https://www.themoviedb.org/reset-password"
-        private const val MAX_LETTERS = 20
     }
 }

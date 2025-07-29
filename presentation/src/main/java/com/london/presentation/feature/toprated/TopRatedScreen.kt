@@ -12,6 +12,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.navigationBars
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.requiredWidth
+import androidx.compose.foundation.layout.statusBars
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
@@ -42,18 +43,18 @@ import org.koin.compose.viewmodel.koinViewModel
 @Composable
 fun TopRatedScreen(
     viewModel: TopRatedViewModel = koinViewModel(),
-    onBackClick: () -> Unit = {},
-    onMovieClick: (Int) -> Unit = {},
-    onTvShowClick: (Int) -> Unit = {}
+    onNavigateBack: () -> Unit = {},
+    onNavigateMovie: (Int) -> Unit = {},
+    onNavigateTvShow: (Int) -> Unit = {}
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
     val effect by viewModel.effect.collectAsState(null)
 
     effect?.Listen { currentEffect ->
         when (currentEffect) {
-            is TopRatedEffect.NavigateToMovieDetails -> onMovieClick(currentEffect.id)
-            is TopRatedEffect.NavigateToTvShowDetails -> onTvShowClick(currentEffect.id)
-            is TopRatedEffect.NavigateBack -> onBackClick()
+            is TopRatedEffect.NavigateToMovieDetails -> onNavigateMovie(currentEffect.id)
+            is TopRatedEffect.NavigateToTvShowDetails -> onNavigateTvShow(currentEffect.id)
+            is TopRatedEffect.NavigateBack -> onNavigateBack()
         }
     }
 
@@ -74,8 +75,8 @@ private fun Content(
         modifier = Modifier
             .fillMaxSize()
             .background(color = NovixTheme.colors.surface)
+            .padding(WindowInsets.statusBars.asPaddingValues())
             .padding(WindowInsets.navigationBars.asPaddingValues())
-            .padding(top = 16.dp)
 
     ) {
         TopBar(
@@ -129,7 +130,9 @@ private fun Content(
                         HomeCard(
                             imageUrl = movieItem.posterUrl,
                             isSaved = false,
-                            onSaveClick = {},
+                            onSaveClick = {
+                                // TODO
+                            },
                             modifier = Modifier.clickable {
                                 topRatedContract.onMovieClick(movieItem.id)
                             }

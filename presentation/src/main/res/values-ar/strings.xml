@@ -31,9 +31,9 @@
     <string name="mystery">غموض</string>
     <string name="kids">اطفال</string>
     <string name="news">اخبار</string>
-    <string name="reality">واقعي</string>
-    <string name="soap">صابون</string>
-    <string name="talk">حديث</string>
+    <string name="reality">واقع</string>
+    <string name="soap">أوبرا صابونية</string>
+    <string name="talk">حوار</string>
     <string name="tv_movie">فيلم تلفزيوني</string>
     <string name="thriller">إثارة</string>
     <string name="war">حرب</string>
@@ -92,4 +92,11 @@
     <string name="action_adventure">اكشن ومغامره</string>
     <string name="war_politics">حرب وسياسه</string>
     <string name="top_rating">الأكثر تقيماً</string>
+    <string name="retry">حاول مجددا</string>
+    <string name="trending_movies">الأفلام الرائجة</string>
+    <string name="trending_tv_shows">المسلسلات الرائجة</string>
+    <string name="trending_people">الأشخاص الرائجون</string>
+    <string name="no_trending_movies_in_genre">لا يوجد أفلام في هذا التصنيف حالياً</string>
+    <string name="no_trending_tvshows_in_genre">لا يوجد مسلسلات في هذا التصنيف حالياً</string>
+    <string name="no_trending_actors_in_genre">لا يوجد أشخاص في هذا التصنيف حالياً</string>
 </resources>

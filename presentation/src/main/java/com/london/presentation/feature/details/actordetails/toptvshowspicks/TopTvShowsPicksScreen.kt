@@ -4,7 +4,10 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.asPaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.navigationBars
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.lazy.grid.GridCells
@@ -32,16 +35,16 @@ import org.koin.androidx.compose.koinViewModel
 fun TopTvShowsPicksScreen(
     modifier: Modifier = Modifier,
     viewModel: TopTvShowsPicksViewModel = koinViewModel(),
-    onTvShowClick: (tvShowId: Int) -> Unit,
-    onBackClick: () -> Unit
+    onNavigateTvShow: (tvShowId: Int) -> Unit,
+    onNavigateBack: () -> Unit
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
     val effect by viewModel.effect.collectAsState(initial = null)
 
     effect?.Listen { currentEffect ->
         when (currentEffect) {
-            is TopTvShowsPicksEffect.TvShowNavigation -> onTvShowClick(currentEffect.tvShowId)
-            is TopTvShowsPicksEffect.BackNavigation -> onBackClick()
+            is TopTvShowsPicksEffect.TvShowNavigation -> onNavigateTvShow(currentEffect.tvShowId)
+            is TopTvShowsPicksEffect.BackNavigation -> onNavigateBack()
         }
     }
 
@@ -65,8 +68,11 @@ private fun TopTvShowsPicksContent(
     modifier: Modifier = Modifier,
 ) {
     LazyVerticalGrid(
-        columns = GridCells.Fixed(2),
-        contentPadding = PaddingValues(top = 12.dp, bottom = 18.dp),
+        columns = GridCells.Adaptive(minSize = 158.dp),
+        contentPadding = PaddingValues(
+            top = 12.dp,
+            bottom = WindowInsets.navigationBars.asPaddingValues().calculateBottomPadding() + 16.dp
+        ),
         horizontalArrangement = Arrangement.spacedBy(12.dp),
         verticalArrangement = Arrangement.spacedBy(12.dp),
         modifier = modifier
