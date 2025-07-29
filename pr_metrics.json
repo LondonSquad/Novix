@@ -8523,18 +8523,9 @@
       "id": 180463542,
       "url": "https://github.com/abdelrhman1002"
     },
-    "approvals": [
-      {
-        "reviewer": {
-          "id": 106277855,
-          "login": "Mostafa-alsaygh",
-          "url": "https://github.com/Mostafa-alsaygh"
-        },
-        "submitted_at": "2025-07-29T13:34:48Z"
-      }
-    ],
-    "first_approved_at": "2025-07-29T13:34:48Z",
-    "time_to_first_approval_minutes": 503.03333333333336,
+    "approvals": [],
+    "first_approved_at": null,
+    "time_to_first_approval_minutes": null,
     "required_approvals_met_at": null,
     "time_to_required_approvals_minutes": null,
     "closed_at": null,
@@ -8543,9 +8534,9 @@
     "week": "2025-W31",
     "status": "pending",
     "diff_stats": {
-      "additions": 419,
-      "deletions": 34,
-      "changed_files": 15
+      "additions": 815,
+      "deletions": 635,
+      "changed_files": 70
     }
   },
   {
