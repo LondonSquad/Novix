@@ -53,7 +53,7 @@ class GetTrendingMoviesUseCaseTest {
         assertNotNull(result1)
         assertNotNull(result2)
         assertEquals(1, result1.currentPage)
-        assertEquals(1, result2.currentPage) // Mock returns same page
+        assertEquals(1, result2.currentPage)
     }
 
     @Test
@@ -77,7 +77,7 @@ class GetTrendingMoviesUseCaseTest {
 
     @Test
     fun `invoke should handle multiple movies in response`() = runTest {
-        val multipleMoviesResponse = PagedFetchResponse<Trending>(
+        val multipleMoviesResponse = PagedFetchResponse(
             currentPage = 1,
             items = listOf(
                 createMockTrending(id = 1, title = "Movie 1"),
@@ -105,7 +105,7 @@ class GetTrendingMoviesUseCaseTest {
 
         try {
             useCase.invoke(page = 1)
-            assert(false) // Should not reach here
+            assert(false)
         } catch (e: Exception) {
             assertEquals("Repository error", e.message)
         }

@@ -34,7 +34,7 @@ class GetTrendingTvShowsUseCaseTest {
         assertEquals(10, result.totalPages)
         assertEquals(100, result.totalItems)
         assertEquals(1, result.items.size)
-        
+
         val trending = result.items.first()
         assertEquals(1, trending.id)
         assertEquals("Test TV Show", trending.title)
@@ -53,7 +53,7 @@ class GetTrendingTvShowsUseCaseTest {
         assertNotNull(result1)
         assertNotNull(result2)
         assertEquals(1, result1.currentPage)
-        assertEquals(1, result2.currentPage) // Mock returns same page
+        assertEquals(1, result2.currentPage)
     }
 
     @Test
@@ -105,7 +105,7 @@ class GetTrendingTvShowsUseCaseTest {
 
         try {
             useCase.invoke(page = 1)
-            assert(false) // Should not reach here
+            assert(false)
         } catch (e: Exception) {
             assertEquals("Repository error", e.message)
         }

@@ -1,7 +1,6 @@
 package com.london.data.mapper.trending
 
 import com.london.data.remote.model.home.model.trending.TrendingResponse
-import com.london.domain.entity.Actor
 import org.junit.Assert.assertEquals
 import org.junit.Test
 
@@ -178,7 +177,10 @@ class TrendingActorMapperTest {
         // Then
         assertEquals(123, result.id)
         assertEquals("Test Actor", result.name)
-        assertEquals("https://image.tmdb.org/t/p/w500test_poster_with_special_chars_123.jpg", result.profilePicture)
+        assertEquals(
+            "https://image.tmdb.org/t/p/w500test_poster_with_special_chars_123.jpg",
+            result.profilePicture
+        )
         assertEquals("", result.characterName)
     }
 } 

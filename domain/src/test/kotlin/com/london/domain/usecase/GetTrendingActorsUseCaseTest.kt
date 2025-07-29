@@ -34,7 +34,7 @@ class GetTrendingActorsUseCaseTest {
         assertEquals(10, result.totalPages)
         assertEquals(100, result.totalItems)
         assertEquals(1, result.items.size)
-        
+
         val actor = result.items.first()
         assertEquals(1, actor.id)
         assertEquals("Test Actor", actor.name)
@@ -53,7 +53,7 @@ class GetTrendingActorsUseCaseTest {
         assertNotNull(result1)
         assertNotNull(result2)
         assertEquals(1, result1.currentPage)
-        assertEquals(1, result2.currentPage) // Mock returns same page
+        assertEquals(1, result2.currentPage)
     }
 
     @Test
@@ -105,7 +105,7 @@ class GetTrendingActorsUseCaseTest {
 
         try {
             useCase.invoke(page = 1)
-            assert(false) // Should not reach here
+            assert(false)
         } catch (e: Exception) {
             assertEquals("Repository error", e.message)
         }
@@ -169,7 +169,7 @@ class GetTrendingActorsUseCaseTest {
 
     @Test
     fun `invoke should handle actors with different profile pictures`() = runTest {
-        val actorsWithDifferentProfilePictures = PagedFetchResponse<Actor>(
+        val actorsWithDifferentProfilePictures = PagedFetchResponse(
             currentPage = 1,
             items = listOf(
                 createMockActor(id = 1, name = "Actor 1", profilePicture = "profile1.jpg"),
