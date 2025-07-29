@@ -28,9 +28,10 @@ fun TopBar(
     modifier: Modifier = Modifier,
     title: String? = null,
     onBackClick: (() -> Unit)? = null,
-    option1: (() -> Unit)? = null,
-    option2: (() -> Unit)? = null,
-    customEndContent: (@Composable () -> Unit)? = null
+    onClickOption1: (() -> Unit)? = null,
+    onClickOption2: (() -> Unit)? = null,
+    option1Icon: Int? = null,
+    option2Icon: Int? = null,
 ) {
     Row(
         modifier = modifier
@@ -62,26 +63,23 @@ fun TopBar(
             )
         }
 
-        customEndContent?.let {
-            it()
-        } ?: run {
-            Row(
-                horizontalArrangement = Arrangement.spacedBy(8.dp),
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                option1?.let {
-                    ButtonTopBar(R.drawable.add_icon, onClick = it)
-                }
-                option2?.let {
-                    ButtonTopBar(R.drawable.pencil_edit, onClick = it)
-                }
+        Row(
+            horizontalArrangement = Arrangement.spacedBy(8.dp),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            onClickOption1?.let {
+                ButtonTopBar(option1Icon, onClick = it)
+            }
+            onClickOption2?.let {
+                ButtonTopBar(option2Icon, onClick = it)
             }
         }
     }
+
 }
 
 @Composable
-fun ButtonTopBar(icon: Int, onClick: () -> Unit) {
+fun ButtonTopBar(icon: Int?, onClick: () -> Unit) {
     Box(
         modifier = Modifier
             .size(40.dp)
@@ -98,7 +96,7 @@ fun ButtonTopBar(icon: Int, onClick: () -> Unit) {
         contentAlignment = Alignment.Center
     ) {
         Icon(
-            painter = painterResource(icon),
+            painter = painterResource(icon ?: R.drawable.add_icon),
             contentDescription = "Back",
             tint = NovixTheme.colors.title,
         )
@@ -109,7 +107,7 @@ fun ButtonTopBar(icon: Int, onClick: () -> Unit) {
 @ThemePreviews
 fun TopBarPreview() {
     TopBar(
-        option1 = {},
-        option2 = {}
+        onClickOption1 = {},
+        onClickOption2 = {}
     )
 }

@@ -24,7 +24,6 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.statusBars
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.grid.GridCells
@@ -54,11 +53,11 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.london.designsystem.R
 import com.london.designsystem.component.ActorItem
 import com.london.designsystem.component.HomeCard
 import com.london.designsystem.component.Icon
 import com.london.designsystem.component.ImageView
-import com.london.designsystem.component.SaveIcon
 import com.london.designsystem.component.Text
 import com.london.designsystem.component.TopBar
 import com.london.designsystem.component.button.ErrorImage
@@ -167,18 +166,8 @@ fun MovieDetailsContent(
                 .padding(
                     top = WindowInsets.statusBars.asPaddingValues().calculateTopPadding() + 12.dp
                 ),
-            customEndContent = {
-                SaveIcon(
-                    isSaved = uiState.isSaved,
-                    onSaveClick = { //* TODO on save the show *//
-                    },
-                    modifier = Modifier
-                        .size(40.dp)
-                        .clip(RoundedCornerShape(16)),
-                    backgroundColor = NovixTheme.colors.iconBackgroundLow,
-                    roundCorner = 12
-                )
-            },
+            onClickOption1 = { /*todo on click on save*/ },
+            option1Icon = R.drawable.icon_remove,
         )
 
         LazyColumn(
@@ -390,7 +379,11 @@ private fun RatingAndMetaRow(
                 icon = drawable.time_04,
                 contentDesc = stringResource(time_icon),
                 tint = NovixTheme.colors.body,
-                text = "${(timeInt / 60).toLocalizedNumbers()}${getLocalizedTimeUnit("h")} ${(timeInt % 60).toLocalizedNumbers()}${getLocalizedTimeUnit("m")}",
+                text = "${(timeInt / 60).toLocalizedNumbers()}${getLocalizedTimeUnit("h")} ${(timeInt % 60).toLocalizedNumbers()}${
+                    getLocalizedTimeUnit(
+                        "m"
+                    )
+                }",
                 textColor = NovixTheme.colors.body
             )
         }
