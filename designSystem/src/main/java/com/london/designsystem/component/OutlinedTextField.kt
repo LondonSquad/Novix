@@ -60,7 +60,7 @@ fun OutlinedTextField(
     trailingIcon: @Composable (() -> Unit)? = null,
     supportingText: @Composable (() -> Unit)? = null,
     isError: Boolean = false,
-    contentPadding: PaddingValues = PaddingValues(horizontal = 12.dp),
+    contentPadding: PaddingValues = PaddingValues(start = 12.dp),
     visualTransformation: VisualTransformation = VisualTransformation.None,
     keyboardOptions: KeyboardOptions = KeyboardOptions.Default,
     keyboardActions: KeyboardActions = KeyboardActions.Default,
@@ -107,7 +107,7 @@ fun OutlinedTextField(
             ) {
                 BasicTextField(
                     value = value,
-                    onValueChange = onValueChange,
+                    onValueChange = { if (it.text.length < 125) onValueChange(it) },
                     modifier = Modifier
                         .fillMaxWidth()
                         .defaultMinSize(minWidth = 268.dp, minHeight = 48.dp)
@@ -129,7 +129,16 @@ fun OutlinedTextField(
                             placeholder = placeholder,
                             leadingIcon = null,
                             trailingIcon = null,
-                            prefix = leadingIcon?.let { { AnimatedLeadingIcon(painter = it, isFocused = isFocused) } },
+                            prefix = leadingIcon?.let {
+                                {
+                                    AnimatedLeadingIcon(
+                                        painter = it,
+                                        isFocused = isFocused,
+                                        value = value.text
+
+                                    )
+                                }
+                            },
                             suffix = currentTrailingIcon,
                             supportingText = supportingText,
                             singleLine = singleLine,
@@ -199,7 +208,6 @@ private fun getTrailingIcon(
         isPasswordField && passwordVisibleIcon != null && passwordHiddenIcon != null -> {
             {
                 PasswordToggleIcon(
-                    isPasswordEmpty = isPasswordEmpty,
                     passwordVisible = passwordVisible,
                     passwordVisibleIcon = passwordVisibleIcon,
                     passwordHiddenIcon = passwordHiddenIcon,
@@ -240,9 +248,12 @@ private fun TextFieldContainer(
 private fun AnimatedLeadingIcon(
     painter: Painter,
     isFocused: Boolean,
+    value: String
 ) {
     val iconColor by animateColorAsState(
-        targetValue = if (isFocused) NovixTheme.colors.primary else NovixTheme.colors.hint,
+        targetValue = if (isFocused) NovixTheme.colors.primary
+        else if (value.isNotEmpty()) NovixTheme.colors.hint.copy(0.38f)
+        else NovixTheme.colors.hint,
         label = "Leading Icon Color"
     )
     Icon(
@@ -252,35 +263,23 @@ private fun AnimatedLeadingIcon(
         modifier = Modifier
             .padding(end = 8.dp)
             .size(24.dp)
-
     )
 }
 
-
 @Composable
 private fun PasswordToggleIcon(
-    isPasswordEmpty: Boolean,
     passwordVisible: Boolean,
     passwordVisibleIcon: Painter,
     passwordHiddenIcon: Painter,
     onToggle: () -> Unit
 ) {
-    if (isPasswordEmpty) {
+    IconButton(onClick = onToggle) {
         Icon(
-            painter = passwordHiddenIcon,
-            contentDescription = "Password field empty",
+            painter = if (passwordVisible) passwordVisibleIcon else passwordHiddenIcon,
+            contentDescription = if (passwordVisible) "Hide password" else "Show password",
             tint = NovixTheme.colors.hint,
             modifier = Modifier.size(20.dp)
         )
-    } else {
-        IconButton(onClick = onToggle) {
-            Icon(
-                painter = if (passwordVisible) passwordVisibleIcon else passwordHiddenIcon,
-                contentDescription = if (passwordVisible) "Hide password" else "Show password",
-                tint = NovixTheme.colors.hint,
-                modifier = Modifier.size(20.dp)
-            )
-        }
     }
 }
 

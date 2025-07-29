@@ -100,14 +100,7 @@ class SearchViewModel(
     }
 
     override fun onSearchQueryChange(newValue: TextFieldValue) {
-        val limitedQuery = if (newValue.text.length > MAX_QUERY_SEARCH_LENGTH) {
-            newValue.copy(text = newValue.text.take(MAX_QUERY_SEARCH_LENGTH))
-        } else {
-            newValue
-        }
-
-        updateState { copy(searchQuery = limitedQuery) }
-        _searchQuery.value = limitedQuery.text
+        updateState { copy(searchQuery = newValue) }
     }
 
     override fun onCategorySelected(category: SearchCategory) {
@@ -535,7 +528,4 @@ class SearchViewModel(
         }
     }
 
-    private companion object{
-        private const val MAX_QUERY_SEARCH_LENGTH = 30
-    }
 }
