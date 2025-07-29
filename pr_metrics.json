@@ -9246,5 +9246,33 @@
       "deletions": 67,
       "changed_files": 5
     }
+  },
+  {
+    "pr_number": 394,
+    "url": "https://github.com/LondonSquad/Novix/pull/394",
+    "title": "34- The time is fixed to English even tho the device language is arabic",
+    "opened_at": "2025-07-29T19:46:39Z",
+    "head_ref": "fix/arabic-issues",
+    "base_ref": "develop",
+    "creator": {
+      "login": "AbdoMagdey24",
+      "id": 90211730,
+      "url": "https://github.com/AbdoMagdey24"
+    },
+    "approvals": [],
+    "first_approved_at": null,
+    "time_to_first_approval_minutes": null,
+    "required_approvals_met_at": null,
+    "time_to_required_approvals_minutes": null,
+    "closed_at": null,
+    "merged_at": null,
+    "merged_by": null,
+    "week": "2025-W31",
+    "status": "pending",
+    "diff_stats": {
+      "additions": 16,
+      "deletions": 1,
+      "changed_files": 2
+    }
   }
 ]
