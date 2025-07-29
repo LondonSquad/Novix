@@ -28,7 +28,8 @@ fun TopBar(
     title: String? = null,
     onBackClick: (() -> Unit)? = null,
     option1: (() -> Unit)? = null,
-    option2: (() -> Unit)? = null
+    option2: (() -> Unit)? = null,
+    customEndContent: (@Composable () -> Unit)? = null
 ) {
     Row(
         modifier = modifier
@@ -38,7 +39,14 @@ fun TopBar(
         horizontalArrangement = Arrangement.SpaceBetween
     ) {
 
-        onBackClick?.let { ButtonTopBar(icon = R.drawable.arrow_left, onClick = it) }
+        onBackClick?.let {
+            ButtonIcon(
+                onClick = it,
+                iconRes = R.drawable.arrow_left,
+                backgroundColor = NovixTheme.colors.iconBackgroundLow,
+                modifier = Modifier.size(40.dp)
+            )
+        }
 
         title?.let {
             Text(
@@ -52,15 +60,19 @@ fun TopBar(
             )
         }
 
-        Row(
-            horizontalArrangement = Arrangement.spacedBy(8.dp),
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            option1?.let {
-                ButtonTopBar(R.drawable.add_icon, onClick = it)
-            }
-            option2?.let {
-                ButtonTopBar(R.drawable.pencil_edit, onClick = it)
+        customEndContent?.let {
+            it()
+        } ?: run {
+            Row(
+                horizontalArrangement = Arrangement.spacedBy(8.dp),
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                option1?.let {
+                    ButtonTopBar(R.drawable.add_icon, onClick = it)
+                }
+                option2?.let {
+                    ButtonTopBar(R.drawable.pencil_edit, onClick = it)
+                }
             }
         }
     }

@@ -14,9 +14,8 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.unit.dp
-import com.london.designsystem.R
-import com.london.designsystem.component.ButtonIcon
 import com.london.designsystem.component.SaveIcon
+import com.london.designsystem.component.TopBar
 import com.london.designsystem.theme.NovixTheme
 
 @Composable
@@ -25,6 +24,9 @@ fun DetailsScreenTopBar(
     isSaved: Boolean,
     backgroundAlpha: Float,
     onBackClick: () -> Unit,
+    onSaveClick: () -> Unit = {
+        // TODO on save the show
+    }
 ) {
     Box(
         modifier = modifier
@@ -33,34 +35,24 @@ fun DetailsScreenTopBar(
                 NovixTheme.colors.surface.copy(alpha = backgroundAlpha)
             )
             .padding(
-                top = WindowInsets.statusBars.asPaddingValues().calculateTopPadding()
+                top = WindowInsets.statusBars.asPaddingValues().calculateTopPadding() + 12.dp
             ),
         contentAlignment = Alignment.Center
     ) {
-        ButtonIcon(
-            onClick = onBackClick,
-            iconRes = R.drawable.arrow_left,
-            backgroundColor = NovixTheme.colors.iconBackgroundLow,
-            modifier = Modifier
-                .padding(horizontal = 16.dp)
-                .padding(top = 20.dp, bottom = 8.dp)
-                .size(40.dp)
-                .align(Alignment.TopStart),
-        )
-
-        SaveIcon(
-            isSaved = isSaved,
-            onSaveClick = {
-                // TODO on save the show
-            },
-            modifier = Modifier
-                .padding(horizontal = 16.dp)
-                .padding(top = 20.dp, bottom = 8.dp)
-                .size(40.dp)
-                .clip(RoundedCornerShape(16))
-                .align(Alignment.TopEnd),
-            backgroundColor = NovixTheme.colors.iconBackgroundLow,
-            roundCorner = 12
+        TopBar(
+            onBackClick = onBackClick,
+            modifier = Modifier.padding(horizontal = 16.dp),
+            customEndContent = {
+                SaveIcon(
+                    isSaved = isSaved,
+                    onSaveClick = onSaveClick,
+                    modifier = Modifier
+                        .size(40.dp)
+                        .clip(RoundedCornerShape(16)),
+                    backgroundColor = NovixTheme.colors.iconBackgroundLow,
+                    roundCorner = 12
+                )
+            }
         )
     }
 }

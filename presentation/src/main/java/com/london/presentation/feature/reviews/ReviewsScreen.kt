@@ -17,7 +17,6 @@ import androidx.compose.foundation.layout.asPaddingValues
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.statusBars
@@ -139,29 +138,19 @@ fun ReviewsScreenContent(
             }
         }
 
-        Box(
+        TopBar(
+            onBackClick = reviewContract::onBackClicked,
             modifier = Modifier
                 .fillMaxWidth()
-                .height(
-                    WindowInsets.statusBars.asPaddingValues().calculateTopPadding() +
-                            64.dp
-                )
                 .background(
                     NovixTheme.colors.surface.copy(alpha = backgroundAlpha)
                 )
-                .zIndex(0.5f)
-        ) {
-            TopBar(
-                modifier = Modifier
-                    .padding(
-                        top = WindowInsets.statusBars.asPaddingValues().calculateTopPadding(),
-                        start = 16.dp,
-                        end = 16.dp
-                    )
-                    .align(Alignment.Center),
-                onBackClick = reviewContract::onBackClicked
-            )
-        }
+                .padding(
+                    start = 16.dp,
+                    top = WindowInsets.statusBars.asPaddingValues().calculateTopPadding() + 12.dp
+                )
+                .zIndex(1f)
+        )
     }
 }
 
