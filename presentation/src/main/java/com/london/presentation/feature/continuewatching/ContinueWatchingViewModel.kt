@@ -79,11 +79,11 @@ class ContinueWatchingViewModel(
     override fun onBack() =
         emitEffect(ContinueWatchingEffect.NavigateBack)
 
-    override fun onMovieClick(id: Int) =
+    override fun onNavigateToMovie(id: Int) =
         emitEffect(ContinueWatchingEffect.NavigateToMovieDetails(id))
 
 
-    override fun onTvShowClick(id: Int) =
+    override fun onNavigateToTvShow(id: Int) =
         emitEffect(ContinueWatchingEffect.NavigateToTvShowDetails(id))
 
 }

@@ -135,7 +135,7 @@ fun Content(
                                 // TODO
                             },
                             modifier = Modifier.clickable {
-                                continueWatchingContract.onMovieClick(movieItem.id)
+                                continueWatchingContract.onNavigateToMovie(movieItem.id)
                             }
                         )
                     }
@@ -151,7 +151,7 @@ fun Content(
                             // TODO
                         },
                         modifier = Modifier.clickable {
-                            continueWatchingContract.onTvShowClick(seriesItem.id)
+                            continueWatchingContract.onNavigateToTvShow(seriesItem.id)
                         }
                     )
                 }

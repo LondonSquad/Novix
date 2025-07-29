@@ -8,8 +8,8 @@ interface ContinueWatchingContract {
     fun tvShowGenre(genre: TvShowGenre)
     fun tabSelected(index: Int)
     fun onBack()
-    fun onMovieClick(id: Int)
-    fun onTvShowClick(id: Int)
+    fun onNavigateToMovie(id: Int)
+    fun onNavigateToTvShow(id: Int)
 }
 
 fun defaultContinueWatchingContract()= object : ContinueWatchingContract{
@@ -17,6 +17,6 @@ fun defaultContinueWatchingContract()= object : ContinueWatchingContract{
     override fun tvShowGenre(genre: TvShowGenre) {}
     override fun tabSelected(index: Int) {}
     override fun onBack() {}
-    override fun onMovieClick(id: Int){}
-    override fun onTvShowClick(id: Int) {}
+    override fun onNavigateToMovie(id: Int){}
+    override fun onNavigateToTvShow(id: Int) {}
 }
