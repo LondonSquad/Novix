@@ -8986,11 +8986,15 @@
     "time_to_first_approval_minutes": 1.05,
     "required_approvals_met_at": "2025-07-29T16:35:16Z",
     "time_to_required_approvals_minutes": 8.1,
-    "closed_at": null,
-    "merged_at": null,
-    "merged_by": null,
+    "closed_at": "2025-07-29T17:37:08Z",
+    "merged_at": "2025-07-29T17:37:08Z",
+    "merged_by": {
+      "login": "AsmaaKhaledGomaa",
+      "id": 117874933,
+      "url": "https://github.com/AsmaaKhaledGomaa"
+    },
     "week": "2025-W31",
-    "status": "approved",
+    "status": "merged",
     "diff_stats": {
       "additions": 3,
       "deletions": 2,
