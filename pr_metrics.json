@@ -8582,5 +8582,33 @@
       "deletions": 8,
       "changed_files": 1
     }
+  },
+  {
+    "pr_number": 359,
+    "url": "https://github.com/LondonSquad/Novix/pull/359",
+    "title": "feat: Add retry button for upcoming movies",
+    "opened_at": "2025-07-29T12:22:30Z",
+    "head_ref": "hotfix/add-refresh-button-home",
+    "base_ref": "develop",
+    "creator": {
+      "login": "ahmeddsamii",
+      "id": 154278495,
+      "url": "https://github.com/ahmeddsamii"
+    },
+    "approvals": [],
+    "first_approved_at": null,
+    "time_to_first_approval_minutes": null,
+    "required_approvals_met_at": null,
+    "time_to_required_approvals_minutes": null,
+    "closed_at": null,
+    "merged_at": null,
+    "merged_by": null,
+    "week": "2025-W31",
+    "status": "pending",
+    "diff_stats": {
+      "additions": 35,
+      "deletions": 0,
+      "changed_files": 2
+    }
   }
 ]
