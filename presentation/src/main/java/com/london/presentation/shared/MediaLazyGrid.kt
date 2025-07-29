@@ -11,7 +11,6 @@ import androidx.compose.foundation.layout.navigationBars
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.lazy.grid.GridCells
-import androidx.compose.foundation.lazy.grid.GridItemSpan
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.runtime.Composable
@@ -42,10 +41,13 @@ fun MediaLazyGrid(
             .background(color = NovixTheme.colors.surface)
             .padding(horizontal = 16.dp)
     ) {
-        item(
-            span = { GridItemSpan(maxLineSpan) }) {
+
+        stickyHeader {
             TopBar(
-                modifier = Modifier.statusBarsPadding(),
+                modifier = Modifier
+                    .background(NovixTheme.colors.surface)
+                    .padding(bottom = 16.dp)
+                    .statusBarsPadding(),
                 title = title,
                 onBackClick = onBackClick
             )
