@@ -129,7 +129,7 @@ fun Content(
                     val movie = state.movies[index]
                     movie.let { movieItem ->
                         HomeCard(
-                            imageUrl = movieItem.posterPicture,
+                            imageUrl = movieItem.posterUrl,
                             isSaved = false,
                             onSaveClick = {
                                 // TODO

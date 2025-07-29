@@ -68,10 +68,7 @@ fun HomeScreen(
 
     effect?.Listen { currentEffect ->
         when (currentEffect) {
-            is HomeScreenEffect.NavigationTvShowDetails -> onTvShowClick(currentEffect.id)
-            is HomeScreenEffect.NavigationMovieDetails -> onMovieClick(currentEffect.id)
             is HomeScreenEffect.NavigationContinueWatching -> onContinueWatchingClick()
-            is HomeScreenEffect.NavigationTopRated -> onTopRatedClick()
             is HomeScreenEffect.NavigationMovieDetails -> onNavigateMovie(currentEffect.id)
             is HomeScreenEffect.NavigationTvShowDetails -> onNavigateTvShow(currentEffect.id)
             is HomeScreenEffect.NavigationTrendingMovie -> onNavigateTrendingMovies()
