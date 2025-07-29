@@ -79,6 +79,19 @@ fun convertDate(input: String): String {
     return "$day $monthName $year".toLocalizedNumbers()
 }
 
+fun getLocalizedTimeUnit(unit: String): String {
+    val lang = Locale.getDefault().language
+    val arMap = mapOf("h" to "س", "m" to "د", "s" to "ث")
+    val enMap = mapOf("h" to "h", "m" to "m", "s" to "s")
+
+    val key = unit.lowercase()
+    return when (lang) {
+        "ar" -> arMap[key] ?: unit
+        else -> enMap[key] ?: unit
+    }
+}
+
+
 fun reverseDateFormat(input: String): String {
     var day = ""
     var month = ""
