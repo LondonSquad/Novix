@@ -9259,9 +9259,18 @@
       "id": 90211730,
       "url": "https://github.com/AbdoMagdey24"
     },
-    "approvals": [],
-    "first_approved_at": null,
-    "time_to_first_approval_minutes": null,
+    "approvals": [
+      {
+        "reviewer": {
+          "id": 100484790,
+          "login": "marwanqashwa",
+          "url": "https://github.com/marwanqashwa"
+        },
+        "submitted_at": "2025-07-29T19:54:21Z"
+      }
+    ],
+    "first_approved_at": "2025-07-29T19:54:21Z",
+    "time_to_first_approval_minutes": 7.7,
     "required_approvals_met_at": null,
     "time_to_required_approvals_minutes": null,
     "closed_at": null,
