@@ -9283,5 +9283,33 @@
       "deletions": 1,
       "changed_files": 2
     }
+  },
+  {
+    "pr_number": 396,
+    "url": "https://github.com/LondonSquad/Novix/pull/396",
+    "title": "feat: Add rounded corners and clipping to movie items in HomeScreen",
+    "opened_at": "2025-07-29T20:00:02Z",
+    "head_ref": "fix/ripple-effect-upcoming-hom",
+    "base_ref": "develop",
+    "creator": {
+      "login": "ahmeddsamii",
+      "id": 154278495,
+      "url": "https://github.com/ahmeddsamii"
+    },
+    "approvals": [],
+    "first_approved_at": null,
+    "time_to_first_approval_minutes": null,
+    "required_approvals_met_at": null,
+    "time_to_required_approvals_minutes": null,
+    "closed_at": null,
+    "merged_at": null,
+    "merged_by": null,
+    "week": "2025-W31",
+    "status": "pending",
+    "diff_stats": {
+      "additions": 6,
+      "deletions": 1,
+      "changed_files": 1
+    }
   }
 ]
