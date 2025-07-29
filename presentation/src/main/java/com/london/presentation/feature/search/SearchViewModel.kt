@@ -101,10 +101,25 @@ class SearchViewModel(
 
     override fun onSearchQueryChange(newValue: TextFieldValue) {
         updateState { copy(searchQuery = newValue) }
+
+        val limitedQuery = applyLimitationOnTextFieldValue(newValue)
+        updateState { copy(searchQuery = limitedQuery) }
+        _searchQuery.value = limitedQuery.text.trim()
     }
 
+    private fun applyLimitationOnTextFieldValue(newValue: TextFieldValue): TextFieldValue {
+        return if (newValue.text.length > MAX_QUERY_SEARCH_LENGTH)
+            newValue.copy(
+                text = newValue.text.replace(regex = Regex("\\s{2,}"), replacement = " ")
+                    .trimStart().take(MAX_QUERY_SEARCH_LENGTH)
+            )
+        else
+            newValue.copy(text = newValue.text.replace(
+                regex = Regex("\\s{2,}"), replacement = " "
+            ).trimStart())
+    }
     override fun onCategorySelected(category: SearchCategory) {
-        if (category==state.value.selectedCategory) return
+        if (category == state.value.selectedCategory) return
         updateState {
             copy(
                 selectedCategory = category,
@@ -528,4 +543,7 @@ class SearchViewModel(
         }
     }
 
+    private companion object {
+        private const val MAX_QUERY_SEARCH_LENGTH = 125
+    }
 }
