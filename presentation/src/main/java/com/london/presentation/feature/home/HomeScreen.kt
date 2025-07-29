@@ -308,7 +308,7 @@ private fun GenresSection(
     ) {
         items(MovieGenre.entries.toTypedArray()) { genre ->
             NovixChip(
-                text = genre.name,
+                text = stringResource(genre.stringResId),
                 isSelected = (genre == state.selectedGenre),
                 onClick = { contract.onGenreSelect(genre) }
             )
