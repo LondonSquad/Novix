@@ -27,7 +27,6 @@ import com.london.designsystem.component.ImageView
 import com.london.designsystem.component.TopBar
 import com.london.designsystem.component.button.ErrorImage
 import com.london.designsystem.theme.NovixTheme
-import com.london.imageharamblur.ui.ImageViewFilter
 import com.london.presentation.R
 import com.london.presentation.feature.base.ErrorState
 import com.london.presentation.feature.buildscreen.BuildScreen
