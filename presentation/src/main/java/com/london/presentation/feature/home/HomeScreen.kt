@@ -260,23 +260,3 @@ private fun LazyGridScope.upComingSection(
     }
 }
 
-//@Composable
-//private fun GenresSection(
-//    contract: HomeScreenContract,
-//    screenWidth: Dp,
-//    state: HomeScreenUiState
-//) {
-//    LazyRow(
-//        horizontalArrangement = Arrangement.spacedBy(8.dp),
-//        contentPadding = PaddingValues(horizontal = 16.dp),
-//        modifier = Modifier.requiredWidth(screenWidth)
-//    ) {
-//        items(MovieGenre.entries.toTypedArray()) { genre ->
-//            NovixChip(
-//                text = genre.name,
-//                isSelected = (genre == state.selectedMovieGenre),
-//                onClick = { contract.onGenreSelect(genre) }
-//            )
-//        }
-//    }
-//}
