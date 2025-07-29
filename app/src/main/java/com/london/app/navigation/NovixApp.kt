@@ -123,7 +123,12 @@ fun NovixApp(appPreferencesService: AppPreferencesService) {
                 SplashRoute(
                     onNavigateToOnboarding = { navController.navigate(OnboardingPager) },
                     onNavigateToWelcome = { navController.navigate(Welcome) },
-                    onNavigateToHome = { navController.navigate(Home) },
+                    onNavigateToHome = {
+                        navController.navigate(Home) {
+                            popUpTo(Splash) { inclusive = true }
+                            launchSingleTop = true
+                        }
+                    },
                     appPreferencesService = appPreferencesService,
                     authRepository = getKoin().get(),
                 )
@@ -139,10 +144,13 @@ fun NovixApp(appPreferencesService: AppPreferencesService) {
             composable<Welcome> {
                 WelcomeScreen(
                     onNavigateLogin = {
-                        navController.navigate(Login)
+                        navController.navigate(Login){
+                            popUpTo(Welcome) { inclusive = true }
+                            launchSingleTop = true
+                        }
                     },
                     onNavigateContinue = {
-                        navController.navigate(Home)
+                           navController.navigate(Home)
                     }
                 )
             }
@@ -415,10 +423,14 @@ fun NovixApp(appPreferencesService: AppPreferencesService) {
                         navController.navigate(Welcome)
                     },
                     onNavigateToHome = {
-                        navController.navigate(Home)
-                    },
+                        navController.navigate(Home) {
+                            popUpTo(navController.graph.startDestinationId) { inclusive = true }
+                            launchSingleTop = true
+                        }
+                    }
                 )
             }
+
 
             composable<TrendingMovies> {
                 TrendingMoviesScreen(
