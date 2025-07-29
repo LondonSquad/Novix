@@ -45,29 +45,9 @@ import com.london.presentation.feature.onboarding.WelcomeScreen
 import com.london.presentation.feature.reviews.ReviewsScreen
 import com.london.presentation.feature.search.SearchScreen
 import com.london.presentation.feature.toprated.TopRatedScreen
-import com.london.presentation.navigation.Screen
-import com.london.presentation.navigation.Screen.Account
-import com.london.presentation.navigation.Screen.ActorDetails
-import com.london.presentation.navigation.Screen.ActorTopMoviesPicksDetails
-import com.london.presentation.navigation.Screen.Bookmarks
-import com.london.presentation.navigation.Screen.Categories
-import com.london.presentation.navigation.Screen.EpisodeDetails
-import com.london.presentation.navigation.Screen.Home
-import com.london.presentation.navigation.Screen.Login
-import com.london.presentation.navigation.Screen.MovieDetails
-import com.london.presentation.navigation.Screen.MoviesByCategory
-import com.london.presentation.navigation.Screen.OnboardingPager
-import com.london.presentation.navigation.Screen.Reviews
-import com.london.presentation.navigation.Screen.Search
-import com.london.presentation.navigation.Screen.Splash
-import com.london.presentation.navigation.Screen.TopRated
-import com.london.presentation.navigation.Screen.ActorGallery
-import com.london.presentation.navigation.Screen.TopTvShowsPicksDetails
 import com.london.presentation.navigation.Screen.TrendingActors
 import com.london.presentation.navigation.Screen.TrendingMovies
 import com.london.presentation.navigation.Screen.TrendingTvShows
-import com.london.presentation.navigation.Screen.TvShowDetails
-import com.london.presentation.navigation.Screen.Welcome
 import org.koin.compose.getKoin
 import com.london.presentation.navigation.Screen
 import com.london.presentation.navigation.Screen.Account
@@ -87,7 +67,6 @@ import com.london.presentation.navigation.Screen.Splash
 import com.london.presentation.navigation.Screen.TopTvShowsPicksDetails
 import com.london.presentation.navigation.Screen.TvShowDetails
 import com.london.presentation.navigation.Screen.Welcome
-import org.koin.compose.getKoin
 
 @Composable
 fun NovixApp(appPreferencesService: AppPreferencesService) {
@@ -197,14 +176,12 @@ fun NovixApp(appPreferencesService: AppPreferencesService) {
                     onNavigateTvShow = { tvShowId ->
                         navController.navigate(TvShowDetails(tvShowId))
                     },
-                    onTopRatedClick = {
+                    onNavigateTopRated = {
                         navController.navigate(Screen.TopRated)
                     },
                     onContinueWatchingClick = {
                         navController.navigate(Screen.ContinueWatching)
-                    onNavigateTopRated = {
-                        navController.navigate(TopRated)
-                    },
+                    } ,
                     onNavigateTrendingMovies = {
                         navController.navigate(TrendingMovies)
                     },
@@ -374,7 +351,7 @@ fun NovixApp(appPreferencesService: AppPreferencesService) {
                         navController.navigate(TopTvShowsPicksDetails(actorId))
                     },
                     onNavigateToGallery = { actorId ->
-                        navController.navigate(ActorGallery(actorId))
+                        navController.navigate(Screen.ActorGallery(actorId))
                     },
                     onNavigateToMovieScreen = { movieId ->
                         navController.navigate(MovieDetails(movieId))
@@ -400,12 +377,12 @@ fun NovixApp(appPreferencesService: AppPreferencesService) {
                 )
             }
 
-            composable<ActorGallery> {
+            composable<Screen.ActorGallery> {
                 ActorGalleryScreen(
                     onNavigateBack = { navController.popBackStack() }
                 )
             }
-            composable<TopRated> {
+            composable<Screen.TopRated> {
                 TopRatedScreen(
                     onNavigateBack = { navController.popBackStack() },
                     onNavigateMovie = { navController.navigate(MovieDetails(it)) },
