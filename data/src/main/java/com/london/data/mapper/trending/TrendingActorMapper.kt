@@ -5,7 +5,7 @@ import com.london.data.utils.asImageUrlOrEmpty
 import com.london.data.utils.orZero
 import com.london.domain.entity.Actor
 
-fun TrendingResponse.toEntity(): Actor = Actor(
+fun TrendingResponse.toTrendingActor(): Actor = Actor(
     id = id.orZero(),
     name = name.orEmpty(),
     profilePicture = (posterPath ?: profilePath).asImageUrlOrEmpty(),
