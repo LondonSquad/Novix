@@ -5,7 +5,6 @@ import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFact
 import com.london.data.BuildConfig
 import com.london.data.remote.interceptor.AuthInterceptor
 import com.london.data.local.preference.AuthPreferences
-import com.london.data.remote.interceptor.AuthInterceptor
 import com.london.data.local.preference.SharedPrefsTokenProvider
 import com.london.data.remote.service.details.actor.ActorDetailsApiService
 import com.london.data.remote.service.details.movie.MovieDetailsApiService
