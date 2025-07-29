@@ -48,12 +48,12 @@ import org.koin.compose.viewmodel.koinViewModel
 
 @Composable
 fun HomeScreen(
-    onMovieClick: (movieId: Int) -> Unit = {},
-    onTvShowClick: (tvShowId: Int) -> Unit = {},
-    onTopRatedClick: () -> Unit = {},
-    onTrendingMovies: () -> Unit = {},
-    onTrendingTvShows: () -> Unit = {},
-    onTrendingActors: () -> Unit = {},
+    onNavigateMovie: (movieId: Int) -> Unit = {},
+    onNavigateTvShow: (tvShowId: Int) -> Unit = {},
+    onNavigateTopRated: () -> Unit = {},
+    onNavigateTrendingMovies: () -> Unit = {},
+    onNavigateTrendingTvShows: () -> Unit = {},
+    onNavigateTrendingActors: () -> Unit = {},
     viewModel: HomeViewModel = koinViewModel(),
 ) {
 
@@ -62,12 +62,12 @@ fun HomeScreen(
 
     effect?.Listen { currentEffect ->
         when (currentEffect) {
-            is HomeScreenEffect.NavigationMovieDetails -> onMovieClick(currentEffect.id)
-            is HomeScreenEffect.NavigationTvShowDetails -> onTvShowClick(currentEffect.id)
-            is HomeScreenEffect.NavigationTrendingMovie -> onTrendingMovies()
-            is HomeScreenEffect.NavigationTrendingTvShows -> onTrendingTvShows()
-            is HomeScreenEffect.NavigationTrendingActor -> onTrendingActors()
-            is HomeScreenEffect.NavigationTopRated -> onTopRatedClick()
+            is HomeScreenEffect.NavigationMovieDetails -> onNavigateMovie(currentEffect.id)
+            is HomeScreenEffect.NavigationTvShowDetails -> onNavigateTvShow(currentEffect.id)
+            is HomeScreenEffect.NavigationTrendingMovie -> onNavigateTrendingMovies()
+            is HomeScreenEffect.NavigationTrendingTvShows -> onNavigateTrendingTvShows()
+            is HomeScreenEffect.NavigationTrendingActor -> onNavigateTrendingActors()
+            is HomeScreenEffect.NavigationTopRated -> onNavigateTopRated()
         }
     }
 

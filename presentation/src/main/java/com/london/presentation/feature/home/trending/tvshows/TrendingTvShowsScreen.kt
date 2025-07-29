@@ -27,8 +27,8 @@ import org.koin.androidx.compose.koinViewModel
 
 @Composable
 fun TrendingTvShowsScreen(
-    onNavigateTvShowClick: (Int) -> Unit,
-    onBackClick: () -> Unit,
+    onNavigateTvShow: (Int) -> Unit,
+    onNavigateBack: () -> Unit,
     viewModel: TrendingTvShowsViewModel = koinViewModel()
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
@@ -36,8 +36,8 @@ fun TrendingTvShowsScreen(
 
     effect?.Listen { currentEffect ->
         when (currentEffect) {
-            is TrendingTvShowsEffect.NavigateToTvShow -> onNavigateTvShowClick(currentEffect.tvShowId)
-            is TrendingTvShowsEffect.NavigateBack -> onBackClick()
+            is TrendingTvShowsEffect.NavigateToTvShow -> onNavigateTvShow(currentEffect.tvShowId)
+            is TrendingTvShowsEffect.NavigateBack -> onNavigateBack()
         }
     }
 
