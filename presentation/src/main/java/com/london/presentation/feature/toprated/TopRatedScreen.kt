@@ -35,6 +35,7 @@ import com.london.designsystem.component.TabItem
 import com.london.designsystem.component.TabLayout
 import com.london.designsystem.component.TopBar
 import com.london.designsystem.theme.NovixTheme
+import com.london.designsystem.utils.string
 import com.london.presentation.utils.Listen
 import com.london.presentation.utils.MovieGenre
 import com.london.presentation.utils.TvShowGenre
@@ -84,7 +85,7 @@ private fun Content(
                 .fillMaxWidth()
                 .padding(horizontal = 16.dp)
                 .padding(top = 20.dp),
-            title = stringResource(com.london.presentation.R.string.top_rating),
+            title = com.london.presentation.R.string.top_rated.string,
             onBackClick = topRatedContract::onBackClicked
         )
 

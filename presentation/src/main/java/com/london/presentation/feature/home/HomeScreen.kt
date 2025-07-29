@@ -37,10 +37,10 @@ import androidx.paging.compose.collectAsLazyPagingItems
 import com.london.designsystem.component.DefaultTopBar
 import com.london.designsystem.component.HomeCard
 import com.london.designsystem.component.NovixChip
-import com.london.designsystem.component.SectionHeader
 import com.london.designsystem.component.Text
 import com.london.designsystem.theme.NovixTheme
 import com.london.domain.entity.Movie
+import com.london.domain.entity.recent.MediaType
 import com.london.presentation.R
 import com.london.presentation.feature.base.ErrorState
 import com.london.presentation.feature.buildscreen.LoadingScreen
@@ -175,17 +175,22 @@ private fun Content(
             item(span = { GridItemSpan(maxLineSpan) }) {
                 TrendingSection(modifier = Modifier.padding(top = 8.dp))
             }
-            item(span = { GridItemSpan(maxLineSpan) })
-            {
-                SectionHeader(
-                    text = stringResource(R.string.top_rating),
-                    hasGetAll = true,
-                    hasIcon = true,
-                    onClick = {
-                        homeScreenContract.onTopRatedClick()
-                    }
+
+            item(span = { GridItemSpan(maxLineSpan) }) {
+                TopRatedSection(
+                    modifier = Modifier.requiredWidth(screenWidth),
+                    topRatedUiMediaList = uiState.topRatedUiMediaList,
+                    onSaveClick = {/*TODO: SAVE FUNCTIONALITY IS NOT IMPLEMENTED.*/ },
+                    onCardClick = { id, mediaType ->
+                        when (mediaType) {
+                            MediaType.TvShow -> homeScreenContract.onTvShowClick(id)
+                            MediaType.Movie -> homeScreenContract.onMovieClick(id)
+                        }
+                    },
+                    onAllClick = homeScreenContract::onTopRatedClick
                 )
             }
+
             upComingSection(
                 contract = homeScreenContract,
                 screenWidth = screenWidth,
