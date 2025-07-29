@@ -24,8 +24,6 @@ fun ImageView(
         onLoadingStateChange = onLoadingStateChange,
         loadingContent = loadingContent,
         errorContent = errorContent,
-        moderatedContent = {
-            moderatedContent
-        }
+        moderatedContent = moderatedContent
     )
 }
