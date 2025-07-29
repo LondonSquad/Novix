@@ -99,4 +99,5 @@
     <string name="no_trending_movies_in_genre">لا يوجد أفلام في هذا التصنيف حالياً</string>
     <string name="no_trending_tvshows_in_genre">لا يوجد مسلسلات في هذا التصنيف حالياً</string>
     <string name="no_trending_actors_in_genre">لا يوجد أشخاص في هذا التصنيف حالياً</string>
+    <string name="reviews">المراجعات</string>
 </resources>
