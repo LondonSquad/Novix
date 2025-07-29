@@ -9,7 +9,9 @@ import androidx.compose.animation.scaleOut
 import androidx.compose.animation.togetherWith
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.interaction.MutableInteractionSource
+import androidx.compose.foundation.interaction.collectIsFocusedAsState
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -34,6 +36,8 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.input.pointer.pointerInput
+import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.platform.SoftwareKeyboardController
 import androidx.compose.ui.res.painterResource
@@ -103,10 +107,13 @@ fun SearchScreenContent(
     keyboardController: SoftwareKeyboardController?,
 ) {
     val interactionSource = remember { MutableInteractionSource() }
-
+    val focusManager = LocalFocusManager.current
     Box(
         modifier = Modifier
             .fillMaxSize()
+            .pointerInput(Unit){ detectTapGestures(onTap = {
+                focusManager.clearFocus()
+            }) }
             .background(color = NovixTheme.colors.surface)
     ) {
 
@@ -257,6 +264,9 @@ private fun SearchBar(
     keyboardController: SoftwareKeyboardController?,
     modifier: Modifier = Modifier
 ) {
+
+    val focusManager = LocalFocusManager.current
+    val focusedState = interactionSource.collectIsFocusedAsState().value
     AnimatedContent(
         targetState = uiState.showFilterButton, transitionSpec = {
             (fadeIn(animationSpec = tween(200)) + scaleIn(initialScale = 1f)) togetherWith
@@ -279,7 +289,8 @@ private fun SearchBar(
                 },
                 leadingIcon = painterResource(id = R.drawable.icon_search_normal),
                 trailingIcon = when {
-                    uiState.searchQuery.text.isNotEmpty() -> {
+                    uiState.searchQuery.text.isNotEmpty()
+                            && focusedState -> {
                         {
                             Icon(
                                 painter = painterResource(id = R.drawable.icon_remove_filled),
@@ -301,6 +312,7 @@ private fun SearchBar(
                 ),
                 keyboardActions = KeyboardActions(
                     onSearch = {
+                        focusManager.clearFocus()
                         keyboardController?.hide()
                         viewModel.addToRecentSearches(
                             RecentSearch(

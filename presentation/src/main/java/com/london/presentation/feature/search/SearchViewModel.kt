@@ -100,18 +100,20 @@ class SearchViewModel(
     }
 
     override fun onSearchQueryChange(newValue: TextFieldValue) {
-        val limitedQuery = if (newValue.text.length > MAX_QUERY_SEARCH_LENGTH) {
-            newValue.copy(text = newValue.text.take(MAX_QUERY_SEARCH_LENGTH))
-        } else {
-            newValue
-        }
+        updateState { copy(searchQuery = newValue) }
 
+        val limitedQuery = applyLimitationOnTextFieldValue(newValue)
         updateState { copy(searchQuery = limitedQuery) }
-        _searchQuery.value = limitedQuery.text
+        _searchQuery.value = limitedQuery.text.trim()
     }
 
-    override fun onCategorySelected(category: SearchCategory) {
+    private fun applyLimitationOnTextFieldValue(newValue: TextFieldValue): TextFieldValue =
+        newValue.copy(
+            text = newValue.text.replace(regex = Regex("\\s{2,}"), replacement = " ")
+                .trimStart()
+        )
 
+    override fun onCategorySelected(category: SearchCategory) {
         updateState {
             copy(
                 selectedCategory = category,
@@ -533,9 +535,5 @@ class SearchViewModel(
                 availableGenresWithNames = availableGenresWithNames
             )
         }
-    }
-
-    private companion object{
-        private const val MAX_QUERY_SEARCH_LENGTH = 30
     }
 }

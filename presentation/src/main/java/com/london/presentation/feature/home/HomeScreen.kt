@@ -6,9 +6,11 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.requiredWidth
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.GridItemSpan
@@ -19,7 +21,9 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -39,6 +43,7 @@ import com.london.designsystem.component.HomeCard
 import com.london.designsystem.component.NovixChip
 import com.london.designsystem.component.SectionHeader
 import com.london.designsystem.component.Text
+import com.london.designsystem.component.button.PrimaryButton
 import com.london.designsystem.theme.NovixTheme
 import com.london.domain.entity.Movie
 import com.london.presentation.R
@@ -102,6 +107,14 @@ private fun Content(
     val totalPopularItems = uiState.popularMovies.size + uiState.popularTvShows.size
 
     val pagerState = rememberPagerState(initialPage = 0, pageCount = { totalPopularItems })
+
+    val isAtEndOfGrid by remember {
+        derivedStateOf {
+            val lastVisibleItem = lazyGridState.layoutInfo.visibleItemsInfo.lastOrNull()
+            val totalItems = lazyGridState.layoutInfo.totalItemsCount
+            lastVisibleItem?.index == totalItems - 1
+        }
+    }
 
     Box(
         modifier = Modifier.fillMaxSize()
@@ -194,6 +207,23 @@ private fun Content(
             )
         }
 
+        if (isAtEndOfGrid)
+            PrimaryButton(
+                text = "",
+                hasLabel = false,
+                icon = R.drawable.retry,
+                hasIcon = true,
+                isLoading = false,
+                onClick = {
+                    upcomingMoviesLazyList.retry()
+                },
+                enabled = true,
+                modifier = Modifier
+                    .offset(y = (-8).dp)
+                    .align(Alignment.BottomCenter)
+                    .width(52.dp)
+            )
+
         Box(
             modifier = Modifier
                 .size(400.dp)
@@ -264,7 +294,7 @@ private fun GenresSection(
     ) {
         items(MovieGenre.entries.toTypedArray()) { genre ->
             NovixChip(
-                text = genre.name,
+                text = stringResource(genre.stringResId),
                 isSelected = (genre == state.selectedGenre),
                 onClick = { contract.onGenreSelect(genre) }
             )
