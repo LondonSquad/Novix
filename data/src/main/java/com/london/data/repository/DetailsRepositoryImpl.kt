@@ -8,7 +8,6 @@ import com.london.data.mapper.tvshowdetails.toTvShowEpisodeEntity
 import com.london.data.mapper.tvshowdetails.toTvShowEpisodesEntity
 import com.london.data.remote.source.details.tvshow.TvShowDetailsRemoteDataSource
 import com.london.data.remote.source.reviews.ReviewsRemoteDataSource
-import com.london.data.utils.CrashReporter
 import com.london.data.utils.asYoutubeUrlOrEmpty
 import com.london.data.utils.fetchAndSync
 import com.london.domain.entity.PagedFetchResponse
