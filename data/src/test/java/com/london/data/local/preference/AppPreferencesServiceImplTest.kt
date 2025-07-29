@@ -28,36 +28,43 @@ class AppPreferencesServiceImplTest {
 
     @Test
     fun `hasOnboardingBeenShown returns false when preference is not set`() {
+        //Given
         every {
             sharedPreferences.getBoolean("has_onboarding_been_shown", false)
         } returns false
-
+        //When
         val result = service.hasOnboardingBeenShown
-
+        //Then
         assertFalse(result)
         verify { sharedPreferences.getBoolean("has_onboarding_been_shown", false) }
     }
 
     @Test
     fun `hasOnboardingBeenShown returns true when preference is set`() {
+        //Given
         every {
             sharedPreferences.getBoolean("has_onboarding_been_shown", false)
         } returns true
 
+        //When
         val result = service.hasOnboardingBeenShown
 
+        //Then
         assertTrue(result)
         verify { sharedPreferences.getBoolean("has_onboarding_been_shown", false) }
     }
 
     @Test
     fun `setOnBoardingShown sets preference to true`() {
+        //Given
         every { sharedPreferences.edit() } returns editor
         every { editor.putBoolean("has_onboarding_been_shown", true) } returns editor
         every { editor.apply() } just Runs
 
+        //When
         service.setOnBoardingShown()
 
+        //Then
         verifySequence {
             sharedPreferences.edit()
             editor.putBoolean("has_onboarding_been_shown", true)
