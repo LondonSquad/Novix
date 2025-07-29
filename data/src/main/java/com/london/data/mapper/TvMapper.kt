@@ -11,6 +11,7 @@ import com.london.data.utils.extractYear
 import com.london.data.utils.generateHash
 import com.london.data.utils.isTrue
 import com.london.data.utils.orZero
+import com.london.data.utils.roundToDecimal
 import com.london.domain.KoverIgnore
 import com.london.domain.entity.TvShow
 
@@ -45,6 +46,6 @@ fun SearchTvShowRemote.toLocal() = SearchTvShowDtoLocal(
     posterPath = posterPath.orEmpty(),
     firstAirDate = firstAirDate.orEmpty(),
     name = name.orEmpty(),
-    voteAverage = voteAverage.orZero(),
+    voteAverage = voteAverage.orZero().roundToDecimal(),
     voteCount = voteCount.orZero()
 )

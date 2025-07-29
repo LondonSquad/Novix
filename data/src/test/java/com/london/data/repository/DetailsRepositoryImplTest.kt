@@ -1,7 +1,6 @@
 package com.london.data.repository
 
 import com.google.common.truth.Truth.assertThat
-import com.london.data.remote.model.ApiResponse
 import com.london.data.mapper.toAuthorDetails
 import com.london.data.mapper.toReviewEntity
 import com.london.data.mapper.tvshowdetails.TvShowImagesMapper.toEntity
@@ -9,6 +8,7 @@ import com.london.data.mapper.tvshowdetails.toCastEntity
 import com.london.data.mapper.tvshowdetails.toEntity
 import com.london.data.mapper.tvshowdetails.toTvShowEpisodesEntity
 import com.london.data.remote.exception.NetworkException
+import com.london.data.remote.model.ApiResponse
 import com.london.data.remote.model.details.tvshow.model.ImageItem
 import com.london.data.remote.model.details.tvshow.model.Role
 import com.london.data.remote.model.details.tvshow.model.TvShowCastMember
@@ -25,6 +25,8 @@ import com.london.data.remote.model.details.tvshow.model.TvShowSeason
 import com.london.data.remote.model.details.tvshow.model.TvShowSpokenLanguage
 import com.london.data.remote.model.details.tvshow.model.tvshowepisode.EpisodeCrewMember
 import com.london.data.remote.model.details.tvshow.model.tvshowepisode.EpisodeGuestStar
+import com.london.data.remote.model.details.tvshow.model.tvshowepisode.EpisodeVideoProviderRemote
+import com.london.data.remote.model.details.tvshow.model.tvshowepisode.EpisodeVideoResponse
 import com.london.data.remote.model.details.tvshow.model.tvshowepisode.TvShowEpisodeBySeason
 import com.london.data.remote.model.details.tvshow.model.tvshowepisode.TvShowEpisodesRemoteResponse
 import com.london.data.remote.model.reviews.model.AuthorDetailsResponse
@@ -32,6 +34,7 @@ import com.london.data.remote.model.reviews.model.ReviewResponse
 import com.london.data.remote.source.details.tvshow.TvShowDetailsRemoteDataSource
 import com.london.data.remote.source.reviews.ReviewsRemoteDataSource
 import com.london.data.utils.asImageUrlOrEmpty
+import com.london.data.utils.asYoutubeUrlOrEmpty
 import com.london.data.utils.orZero
 import com.london.domain.entity.PagedFetchResponse
 import com.london.domain.entity.review.ReviewEntity
@@ -125,7 +128,6 @@ class DetailsRepositoryImplTest {
         }
     }
 
-
     @Test
     fun `getCastsByTvShowId should throw UnAuthorizedException when remote fails`() = runTest {
         coEvery {
@@ -218,6 +220,95 @@ class DetailsRepositoryImplTest {
 
             assertThat(actualException).isEqualTo(networkException)
         }
+
+    @Test
+    fun `getEpisodeVideos should return list of YouTube URLs when remote call succeeds`() = runTest {
+        // Given
+        coEvery {
+            tvShowDetailsRemoteDataSource.getEpisodeVideos(
+                seriesId = TV_SHOW_ID,
+                seasonNumber = SEASON_NUMBER,
+                episodeNumber = EPISODE_NUMBER
+            )
+        }.returns(Result.success(EpisodeVideoResponseMock))
+
+        // When
+        val result = repository.getEpisodeVideos(TV_SHOW_ID, SEASON_NUMBER, EPISODE_NUMBER)
+
+        // Then
+        val expectedUrls = listOf(
+            "dQw4w9WgXcQ".asYoutubeUrlOrEmpty(),
+            "abc123def456".asYoutubeUrlOrEmpty()
+        )
+        assertThat(result).isEqualTo(expectedUrls)
+    }
+
+    @Test
+    fun `getEpisodeVideos should return empty list when remote returns null results`() = runTest {
+        // Given
+        val mockVideoResponse = EpisodeVideoResponse(
+            id = TV_SHOW_ID,
+            results = null
+        )
+
+        coEvery {
+            tvShowDetailsRemoteDataSource.getEpisodeVideos(
+                seriesId = TV_SHOW_ID,
+                seasonNumber = SEASON_NUMBER,
+                episodeNumber = EPISODE_NUMBER
+            )
+        }.returns(Result.success(mockVideoResponse))
+
+        // When
+        val result = repository.getEpisodeVideos(TV_SHOW_ID, SEASON_NUMBER, EPISODE_NUMBER)
+
+        // Then
+        assertThat(result).isEmpty()
+    }
+
+    @Test
+    fun `getEpisodeVideos should return empty list when remote returns empty results`() = runTest {
+        // Given
+        val mockVideoResponse = EpisodeVideoResponse(
+            id = TV_SHOW_ID,
+            results = emptyList()
+        )
+
+        coEvery {
+            tvShowDetailsRemoteDataSource.getEpisodeVideos(
+                seriesId = TV_SHOW_ID,
+                seasonNumber = SEASON_NUMBER,
+                episodeNumber = EPISODE_NUMBER
+            )
+        }.returns(Result.success(mockVideoResponse))
+
+        // When
+        val result = repository.getEpisodeVideos(TV_SHOW_ID, SEASON_NUMBER, EPISODE_NUMBER)
+
+        // Then
+        assertThat(result).isEmpty()
+    }
+
+    @Test
+    fun `getEpisodeVideos should throw NetworkException when remote call fails`() = runTest {
+        // Given
+        val networkException = NetworkException.ServerErrorException("Server error")
+
+        coEvery {
+            tvShowDetailsRemoteDataSource.getEpisodeVideos(
+                seriesId = TV_SHOW_ID,
+                seasonNumber = SEASON_NUMBER,
+                episodeNumber = EPISODE_NUMBER
+            )
+        }.throws(networkException)
+
+        // When & Then
+        val actualException = assertThrows<NetworkException.ServerErrorException> {
+            repository.getEpisodeVideos(TV_SHOW_ID, SEASON_NUMBER, EPISODE_NUMBER)
+        }
+
+        assertThat(actualException).isEqualTo(networkException)
+    }
 
     @Test
     fun `getMovieReviews should return paged reviews when remote succeeds`() = runTest {
@@ -676,7 +767,6 @@ class DetailsRepositoryImplTest {
             )
         )
 
-
         val TvShowEpisodesRemoteMock = TvShowEpisodesRemoteResponse(
             id = "season_id", airDate = "2020-01-01", episodes = listOf(
                 TvShowEpisodeBySeason(
@@ -773,6 +863,82 @@ class DetailsRepositoryImplTest {
                             profilePath = "/guest.jpg"
                         )
                     )
+                )
+            )
+        )
+
+        val TvShowEpisodeBySeasonMock = TvShowEpisodeBySeason(
+            airDate = "2020-01-01",
+            episodeNumber = 1,
+            episodeType = "standard",
+            id = 1,
+            name = "Episode 1",
+            overview = "Episode overview",
+            productionCode = "101",
+            runtime = 45,
+            seasonNumber = 1,
+            showId = TV_SHOW_ID,
+            stillPath = "/still.jpg",
+            voteAverage = 8.5,
+            voteCount = 100,
+            crew = listOf(
+                EpisodeCrewMember(
+                    job = "Director",
+                    department = "Directing",
+                    creditId = "crew1",
+                    adult = false,
+                    gender = 1,
+                    id = 10,
+                    knownForDepartment = "Directing",
+                    name = "Director Name",
+                    originalName = "Director Original Name",
+                    popularity = 60.0,
+                    profilePath = "/director.jpg"
+                )
+            ),
+            episodeGuestStars = listOf(
+                EpisodeGuestStar(
+                    character = "Guest Character",
+                    creditId = "guest1",
+                    order = 1,
+                    adult = false,
+                    gender = 2,
+                    id = 20,
+                    knownForDepartment = "Acting",
+                    name = "Guest Actor",
+                    originalName = "Guest Actor Original",
+                    popularity = 40.0,
+                    profilePath = "/guest.jpg"
+                )
+            )
+        )
+
+        val EpisodeVideoResponseMock = EpisodeVideoResponse(
+            id = TV_SHOW_ID,
+            results = listOf(
+                EpisodeVideoProviderRemote(
+                    id = "video1",
+                    key = "dQw4w9WgXcQ",
+                    name = "Episode Trailer",
+                    site = "YouTube",
+                    type = "Trailer",
+                    official = true,
+                    publishedAt = "2024-01-01T00:00:00.000Z",
+                    iso31661 = "US",
+                    iso6391 = "en",
+                    size = 1080
+                ),
+                EpisodeVideoProviderRemote(
+                    id = "video2",
+                    key = "abc123def456",
+                    name = "Behind the Scenes",
+                    site = "YouTube",
+                    type = "Behind the Scenes",
+                    official = false,
+                    publishedAt = "2024-01-02T00:00:00.000Z",
+                    iso31661 = "US",
+                    iso6391 = "en",
+                    size = 720
                 )
             )
         )
