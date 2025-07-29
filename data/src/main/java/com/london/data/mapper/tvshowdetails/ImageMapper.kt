@@ -5,10 +5,10 @@ import com.london.data.remote.model.details.tvshow.model.ImageItem
 import com.london.data.remote.model.details.tvshow.model.TvShowImagesRemoteResponse
 import com.london.data.utils.asImageUrlOrEmpty
 import com.london.data.utils.orZero
+import com.london.data.utils.roundToDecimal
 import com.london.domain.KoverIgnore
 import com.london.domain.entity.tvshowdetails.ImageItemEntity
 import com.london.domain.entity.tvshowdetails.TvShowImagesEntity
-import kotlin.collections.map
 
 object TvShowImagesMapper {
 
@@ -27,7 +27,7 @@ object TvShowImagesMapper {
             height = height,
             iso6391 = iso6391,
             fileUrl = filePath.asImageUrlOrEmpty(),
-            voteAverage = voteAverage,
+            voteAverage = voteAverage.roundToDecimal(),
             voteCount = voteCount,
             width = width
         )
