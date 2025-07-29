@@ -8686,5 +8686,33 @@
       "deletions": 6,
       "changed_files": 10
     }
+  },
+  {
+    "pr_number": 364,
+    "url": "https://github.com/LondonSquad/Novix/pull/364",
+    "title": "fix: Display localized genre names in NovixChip",
+    "opened_at": "2025-07-29T14:08:19Z",
+    "head_ref": "fix/chips-localization",
+    "base_ref": "develop",
+    "creator": {
+      "login": "abdo-essam",
+      "id": 92235360,
+      "url": "https://github.com/abdo-essam"
+    },
+    "approvals": [],
+    "first_approved_at": null,
+    "time_to_first_approval_minutes": null,
+    "required_approvals_met_at": null,
+    "time_to_required_approvals_minutes": null,
+    "closed_at": null,
+    "merged_at": null,
+    "merged_by": null,
+    "week": "2025-W31",
+    "status": "pending",
+    "diff_stats": {
+      "additions": 1,
+      "deletions": 1,
+      "changed_files": 1
+    }
   }
 ]
