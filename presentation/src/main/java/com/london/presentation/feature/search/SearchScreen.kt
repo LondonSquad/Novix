@@ -169,6 +169,7 @@ fun SearchScreenContent(
                     onSelect = interactionListener::onCategorySelected,
                     modifier = Modifier.padding(bottom = 12.dp)
                 )
+
                 when (state.selectedCategory) {
                     SearchCategory.Movies -> {
                         val moviesLazyList = state.moviesFlow.collectAsLazyPagingItems()
