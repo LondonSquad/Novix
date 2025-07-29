@@ -9144,5 +9144,33 @@
       "deletions": 5,
       "changed_files": 1
     }
+  },
+  {
+    "pr_number": 391,
+    "url": "https://github.com/LondonSquad/Novix/pull/391",
+    "title": "fix: issues from 43, 47, 48, 49, 58",
+    "opened_at": "2025-07-29T19:06:13Z",
+    "head_ref": "fix/solving-bugs",
+    "base_ref": "develop",
+    "creator": {
+      "login": "Abdulrahman1890",
+      "id": 76666355,
+      "url": "https://github.com/Abdulrahman1890"
+    },
+    "approvals": [],
+    "first_approved_at": null,
+    "time_to_first_approval_minutes": null,
+    "required_approvals_met_at": null,
+    "time_to_required_approvals_minutes": null,
+    "closed_at": null,
+    "merged_at": null,
+    "merged_by": null,
+    "week": "2025-W31",
+    "status": "pending",
+    "diff_stats": {
+      "additions": 49,
+      "deletions": 30,
+      "changed_files": 4
+    }
   }
 ]
