@@ -83,7 +83,7 @@ private fun Content(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(horizontal = 16.dp)
-                .padding(top = 20.dp),
+                .padding(top = 12.dp),
             title = stringResource(com.london.presentation.R.string.top_rating),
             onBackClick = topRatedContract::onBackClicked
         )
@@ -130,7 +130,9 @@ private fun Content(
                         HomeCard(
                             imageUrl = movieItem.posterUrl,
                             isSaved = false,
-                            onSaveClick = {},
+                            onSaveClick = {
+                                // TODO
+                            },
                             modifier = Modifier.clickable {
                                 topRatedContract.onMovieClick(movieItem.id)
                             }
