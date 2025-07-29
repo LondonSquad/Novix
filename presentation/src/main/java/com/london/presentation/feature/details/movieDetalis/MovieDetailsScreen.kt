@@ -79,9 +79,11 @@ import com.london.presentation.shared.DetailsScreenTopBar
 import com.london.presentation.shared.FooterSection
 import com.london.presentation.utils.Listen
 import com.london.presentation.utils.convertGenreCodeToString
+import com.london.presentation.utils.getLocalizedTimeUnit
 import com.london.presentation.utils.offsetLayout
 import com.london.presentation.utils.openUrl
 import com.london.presentation.utils.reverseDateFormat
+import com.london.presentation.utils.toLocalizedNumbers
 import org.koin.androidx.compose.koinViewModel
 
 @Composable
@@ -369,7 +371,7 @@ private fun RatingAndMetaRow(
                 icon = drawable.time_04,
                 contentDesc = stringResource(time_icon),
                 tint = NovixTheme.colors.body,
-                text = "${timeInt / 60}h ${timeInt % 60}m",
+                text = "${(timeInt / 60).toLocalizedNumbers()}${getLocalizedTimeUnit("h")} ${(timeInt % 60).toLocalizedNumbers()}${getLocalizedTimeUnit("m")}",
                 textColor = NovixTheme.colors.body
             )
         }
