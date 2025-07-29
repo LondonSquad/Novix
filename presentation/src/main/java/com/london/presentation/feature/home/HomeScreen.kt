@@ -22,6 +22,7 @@ import androidx.compose.foundation.lazy.grid.LazyGridScope
 import androidx.compose.foundation.lazy.grid.LazyGridState
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.pager.rememberPagerState
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.derivedStateOf
@@ -30,6 +31,8 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.clipToBounds
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
@@ -301,8 +304,10 @@ private fun LazyGridScope.upComingSection(
                 isSaved = false,
                 onSaveClick = { /*TODO*/ },
                 modifier = Modifier
-                    .clickable { contract.onMovieClick(movie.id) }
                     .padding(top = 4.dp)
+                    .clipToBounds()
+                    .clip(RoundedCornerShape(12.dp))
+                    .clickable { contract.onMovieClick(movie.id) }
             )
     }
 }
