@@ -5,5 +5,4 @@ sealed class LoginEffect {
     data object NavigateBack : LoginEffect()
     data class NavigateToCreateAccount(val url: String) : LoginEffect()
     data class NavigateToForgotPassword(val url: String) : LoginEffect()
-    data object NavigateToWebViewRegistration : LoginEffect()
 }

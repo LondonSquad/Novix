@@ -17,9 +17,6 @@ sealed interface Screen {
     object Login : Screen
 
     @Serializable
-    object Register: Screen
-
-    @Serializable
     object Home : Screen
 
     @Serializable
