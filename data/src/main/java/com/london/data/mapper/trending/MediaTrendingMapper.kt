@@ -5,7 +5,7 @@ import com.london.data.utils.asImageUrlOrEmpty
 import com.london.data.utils.orZero
 import com.london.domain.entity.Trending
 
-fun TrendingResponse.toMediaTrending(): Trending = Trending(
+fun TrendingResponse.toEntityMedia(): Trending = Trending(
     id = id.orZero(),
     title = (title ?: name).orEmpty(),
     posterPath = (posterPath ?: profilePath).asImageUrlOrEmpty(),

@@ -17,7 +17,7 @@ class MediaTrendingMapperTest {
         )
 
         // When
-        val result = trendingResponse.toMediaTrending()
+        val result = trendingResponse.toEntityMedia()
 
         // Then
         assertEquals(123, result.id)
@@ -37,7 +37,7 @@ class MediaTrendingMapperTest {
         )
 
         // When
-        val result = trendingResponse.toMediaTrending()
+        val result = trendingResponse.toEntityMedia()
 
         // Then
         assertEquals(456, result.id)
@@ -57,7 +57,7 @@ class MediaTrendingMapperTest {
         )
 
         // When
-        val result = trendingResponse.toMediaTrending()
+        val result = trendingResponse.toEntityMedia()
 
         // Then
         assertEquals(789, result.id)
@@ -79,7 +79,7 @@ class MediaTrendingMapperTest {
         )
 
         // When
-        val result = trendingResponse.toMediaTrending()
+        val result = trendingResponse.toEntityMedia()
 
         // Then
         assertEquals(0, result.id)
@@ -100,7 +100,7 @@ class MediaTrendingMapperTest {
         )
 
         // When
-        val result = trendingResponse.toMediaTrending()
+        val result = trendingResponse.toEntityMedia()
 
         // Then
         assertEquals("Test Movie", result.title)
@@ -118,7 +118,7 @@ class MediaTrendingMapperTest {
         )
 
         // When
-        val result = trendingResponse.toMediaTrending()
+        val result = trendingResponse.toEntityMedia()
 
         // Then
         assertEquals("https://image.tmdb.org/t/p/w500test_poster.jpg", result.posterPath)
@@ -137,7 +137,7 @@ class MediaTrendingMapperTest {
         )
 
         // When
-        val result = trendingResponse.toMediaTrending()
+        val result = trendingResponse.toEntityMedia()
 
         // Then
         assertEquals(123, result.id)
@@ -157,7 +157,7 @@ class MediaTrendingMapperTest {
         )
 
         // When
-        val result = trendingResponse.toMediaTrending()
+        val result = trendingResponse.toEntityMedia()
 
         // Then
         assertEquals(0, result.id)

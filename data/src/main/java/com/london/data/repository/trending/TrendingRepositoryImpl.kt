@@ -1,7 +1,7 @@
 package com.london.data.repository.trending
 
-import com.london.data.mapper.trending.toMediaTrending
-import com.london.data.mapper.trending.toTrendingActor
+import com.london.data.mapper.trending.toEntityMedia
+import com.london.data.mapper.trending.toEntityActor
 import com.london.data.remote.source.home.trending.TrendingRemoteDataSource
 import com.london.domain.entity.Actor
 import com.london.domain.entity.PagedFetchResponse
@@ -18,7 +18,7 @@ class TrendingRepositoryImpl(
         val response = trendingRemoteDataSource.getTrendingMovies(page).getOrThrow()
         return PagedFetchResponse(
             currentPage = response.currentPage,
-            items = response.items.map { it.toMediaTrending() },
+            items = response.items.map { it.toEntityMedia() },
             totalPages = response.totalPages,
             totalItems = response.totalItems
         )
@@ -28,7 +28,7 @@ class TrendingRepositoryImpl(
         val response = trendingRemoteDataSource.getTrendingTvShows(page).getOrThrow()
         return PagedFetchResponse(
             currentPage = response.currentPage,
-            items = response.items.map { it.toMediaTrending() },
+            items = response.items.map { it.toEntityMedia() },
             totalPages = response.totalPages,
             totalItems = response.totalItems
         )
@@ -38,7 +38,7 @@ class TrendingRepositoryImpl(
         val response = trendingRemoteDataSource.getTrendingActors(page).getOrThrow()
         return PagedFetchResponse(
             currentPage = response.currentPage,
-            items = response.items.map { it.toTrendingActor() },
+            items = response.items.map { it.toEntityActor() },
             totalPages = response.totalPages,
             totalItems = response.totalItems
         )
