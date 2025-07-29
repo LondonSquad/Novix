@@ -38,10 +38,10 @@ import com.london.presentation.feature.home.trending.actor.TrendingActorsScreen
 import com.london.presentation.feature.home.trending.movies.TrendingMoviesScreen
 import com.london.presentation.feature.home.trending.tvshows.TrendingTvShowsScreen
 import com.london.presentation.feature.login.LoginScreen
-import com.london.presentation.feature.register.WebViewRegistrationScreen
 import com.london.presentation.feature.onboarding.OnboardingRoute
 import com.london.presentation.feature.onboarding.SplashRoute
 import com.london.presentation.feature.onboarding.WelcomeScreen
+import com.london.presentation.feature.register.WebViewRegistrationScreen
 import com.london.presentation.feature.reviews.ReviewsScreen
 import com.london.presentation.feature.search.SearchScreen
 import com.london.presentation.feature.toprated.TopRatedScreen
@@ -143,13 +143,13 @@ fun NovixApp(appPreferencesService: AppPreferencesService) {
             composable<Welcome> {
                 WelcomeScreen(
                     onNavigateLogin = {
-                        navController.navigate(Login){
+                        navController.navigate(Login) {
                             popUpTo(Welcome) { inclusive = true }
                             launchSingleTop = true
                         }
                     },
                     onNavigateContinue = {
-                           navController.navigate(Home)
+                        navController.navigate(Home)
                     }
                 )
             }
@@ -397,7 +397,7 @@ fun NovixApp(appPreferencesService: AppPreferencesService) {
                     onNavigateBack = {
                         navController.popBackStack()
                     },
-                    onRegistrationComplete = {navController.navigate(Login)}
+                    onRegistrationComplete = { navController.navigate(Login) }
                 )
             }
 
@@ -408,9 +408,9 @@ fun NovixApp(appPreferencesService: AppPreferencesService) {
             }
             composable<TopRated> {
                 TopRatedScreen(
-                    onNavigateBack = {navController.popBackStack()},
-                    onNavigateMovie = {navController.navigate(MovieDetails(it))},
-                    onNavigateTvShow = {navController.navigate(TvShowDetails(it))}
+                    onNavigateBack = { navController.popBackStack() },
+                    onNavigateMovie = { navController.navigate(MovieDetails(it)) },
+                    onNavigateTvShow = { navController.navigate(TvShowDetails(it)) }
                 )
             }
 
@@ -420,14 +420,12 @@ fun NovixApp(appPreferencesService: AppPreferencesService) {
                         navController.navigate(Welcome)
                     },
                     onNavigateToHome = {
-                        navController.navigate(Home)
-                    },
-                    onNavigateToWebViewRegistration = {navController.navigate(Screen.Register)}
                         navController.navigate(Home) {
                             popUpTo(navController.graph.startDestinationId) { inclusive = true }
                             launchSingleTop = true
                         }
-                    }
+                    },
+                    onNavigateToWebViewRegistration = { navController.navigate(Screen.Register) }
                 )
             }
 
