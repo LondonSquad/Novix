@@ -8238,17 +8238,25 @@
           "url": "https://github.com/ahmeddsamii"
         },
         "submitted_at": "2025-07-29T05:25:54Z"
+      },
+      {
+        "reviewer": {
+          "id": 180463542,
+          "login": "abdelrhman1002",
+          "url": "https://github.com/abdelrhman1002"
+        },
+        "submitted_at": "2025-07-29T06:22:34Z"
       }
     ],
     "first_approved_at": "2025-07-29T05:25:54Z",
     "time_to_first_approval_minutes": 896.25,
-    "required_approvals_met_at": null,
-    "time_to_required_approvals_minutes": null,
+    "required_approvals_met_at": "2025-07-29T06:22:34Z",
+    "time_to_required_approvals_minutes": 952.9166666666666,
     "closed_at": null,
     "merged_at": null,
     "merged_by": null,
     "week": "2025-W31",
-    "status": "pending",
+    "status": "approved",
     "diff_stats": {
       "additions": 149,
       "deletions": 17,
