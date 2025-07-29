@@ -70,7 +70,7 @@ import org.koin.androidx.compose.koinViewModel
 
 @Composable
 fun ActorDetailsScreen(
-    onBackClick: () -> Unit,
+    onNavigateBack: () -> Unit,
     onNavigateToMoviePicks: (Int) -> Unit,
     onNavigateToGallery: (Int) -> Unit,
     onNavigateToTvShowPicks: (Int) -> Unit,
@@ -83,7 +83,7 @@ fun ActorDetailsScreen(
 
     effect?.Listen { currentEffect ->
         when (currentEffect) {
-            is ActorEffectUiState.NavigationBack -> onBackClick()
+            is ActorEffectUiState.NavigationBack -> onNavigateBack()
             is ActorEffectUiState.NavigateToGallery -> onNavigateToGallery(currentEffect.actorId)
             is ActorEffectUiState.NavigateToMovieScreen -> {
                 onNavigateToMovieScreen(currentEffect.movieId)

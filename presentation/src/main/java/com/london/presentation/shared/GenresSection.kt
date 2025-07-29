@@ -1,0 +1,37 @@
+package com.london.presentation.shared
+
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.requiredWidth
+import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.lazy.items
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.unit.Dp
+import androidx.compose.ui.unit.dp
+import com.london.designsystem.component.NovixChip
+
+@Composable
+fun <T> GenresSection(
+    genres: List<T>,
+    screenWidth: Dp,
+    selectedGenreId: Int?,
+    onGenreClick: (T) -> Unit,
+    modifier: Modifier = Modifier,
+    getGenreId: (T) -> Int,
+    getGenreName: @Composable (T) -> String
+) {
+    LazyRow(
+        horizontalArrangement = Arrangement.spacedBy(8.dp),
+        contentPadding = PaddingValues(horizontal = 16.dp),
+        modifier = modifier.requiredWidth(screenWidth)
+    ) {
+        items(genres) { genre ->
+            NovixChip(
+                text = getGenreName(genre),
+                isSelected = (getGenreId(genre) == selectedGenreId),
+                onClick = { onGenreClick(genre) }
+            )
+        }
+    }
+}

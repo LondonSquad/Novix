@@ -3,8 +3,8 @@ package com.london.data.remote.service.home
 import com.london.data.remote.model.ApiConstants.POPULAR_MOVIES_PATH
 import com.london.data.remote.model.ApiConstants.POPULAR_TV_SHOWS_PATH
 import com.london.data.remote.model.ApiResponse
-import com.london.data.remote.model.home.model.PopularMovieResponse
-import com.london.data.remote.model.home.model.PopularTvShowResponse
+import com.london.data.remote.model.home.model.popular.PopularMovieResponse
+import com.london.data.remote.model.home.model.popular.PopularTvShowResponse
 import retrofit2.Response
 import retrofit2.http.GET
 
