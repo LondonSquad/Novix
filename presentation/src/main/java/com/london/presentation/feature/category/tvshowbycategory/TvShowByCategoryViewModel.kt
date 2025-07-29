@@ -31,7 +31,7 @@ class TvShowByCategoryViewModel(
         emitEffect(TvShowByCategoryEffect.NavigateToTvShowDetails(tvShowId = tvShowId))
     }
 
-    override fun onBackClick() {
+    override fun onBack() {
         emitEffect(TvShowByCategoryEffect.NavigateBack)
     }
 

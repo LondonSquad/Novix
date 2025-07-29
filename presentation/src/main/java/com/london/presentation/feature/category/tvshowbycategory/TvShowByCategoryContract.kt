@@ -4,5 +4,5 @@ interface TvShowByCategoryContract {
 
     fun onSavedClick(tvShowId: Int)
     fun onTvShowClick(tvShowId: Int)
-    fun onBackClick()
+    fun onBack()
 }

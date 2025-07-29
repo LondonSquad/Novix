@@ -4,5 +4,5 @@ interface MoviesByCategoryContract {
 
     fun onSavedClick(movieId: Int)
     fun onMovieClick(movieId: Int)
-    fun onBackClick()
+    fun onBack()
 }

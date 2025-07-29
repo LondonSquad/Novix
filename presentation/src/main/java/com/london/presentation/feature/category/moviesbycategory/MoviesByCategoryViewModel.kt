@@ -62,7 +62,7 @@ class MoviesByCategoryViewModel(
         emitEffect(MoviesByCategoryEffect.NavigateToMovieDetails(movieId = movieId))
     }
 
-    override fun onBackClick() {
+    override fun onBack() {
         emitEffect(MoviesByCategoryEffect.NavigateBack)
     }
 }

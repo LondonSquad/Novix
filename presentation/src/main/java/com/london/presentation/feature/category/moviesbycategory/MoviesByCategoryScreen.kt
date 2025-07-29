@@ -72,7 +72,7 @@ private fun MoviesByCategoryContent(
                 convertGenreCodeToString(
                     genreId = state.categoryId, searchCategory = SearchCategory.Movies
                 )
-            ), onBackClick = contract::onBackClick,
+            ), onBackClick = contract::onBack,
             modifier = modifier
                 .statusBarsPadding()
                 .padding(horizontal = 16.dp, vertical = 12.dp)
@@ -167,7 +167,7 @@ private fun MoviesByCategoryContentPreview() {
         contract = object : MoviesByCategoryContract {
             override fun onSavedClick(movieId: Int) {}
             override fun onMovieClick(movieId: Int) {}
-            override fun onBackClick() {}
+            override fun onBack() {}
         },
     )
 }

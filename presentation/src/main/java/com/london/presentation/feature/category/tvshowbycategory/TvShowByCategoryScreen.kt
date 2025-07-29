@@ -68,7 +68,7 @@ private fun Content(
                 convertGenreCodeToString(
                     genreId = state.categoryId, searchCategory = SearchCategory.TvShows
                 )
-            ), onBackClick = contract::onBackClick,
+            ), onBackClick = contract::onBack,
             modifier = modifier
                 .statusBarsPadding()
                 .padding(horizontal = 16.dp, vertical = 12.dp)
@@ -99,7 +99,7 @@ private fun Preview() {
 
             override fun onTvShowClick(tvShowId: Int) {}
 
-            override fun onBackClick() {}
+            override fun onBack() {}
         }
     )
 }
