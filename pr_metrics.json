@@ -9094,5 +9094,33 @@
       "deletions": 12,
       "changed_files": 1
     }
+  },
+  {
+    "pr_number": 384,
+    "url": "https://github.com/LondonSquad/Novix/pull/384",
+    "title": "hotfix/navigation-app",
+    "opened_at": "2025-07-29T18:27:22Z",
+    "head_ref": "hotfix/navigation-app",
+    "base_ref": "develop",
+    "creator": {
+      "login": "abdelrhman1002",
+      "id": 180463542,
+      "url": "https://github.com/abdelrhman1002"
+    },
+    "approvals": [],
+    "first_approved_at": null,
+    "time_to_first_approval_minutes": null,
+    "required_approvals_met_at": null,
+    "time_to_required_approvals_minutes": null,
+    "closed_at": null,
+    "merged_at": null,
+    "merged_by": null,
+    "week": "2025-W31",
+    "status": "pending",
+    "diff_stats": {
+      "additions": 18,
+      "deletions": 5,
+      "changed_files": 1
+    }
   }
 ]
