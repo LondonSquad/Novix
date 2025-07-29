@@ -8329,5 +8329,33 @@
       "deletions": 121,
       "changed_files": 59
     }
+  },
+  {
+    "pr_number": 342,
+    "url": "https://github.com/LondonSquad/Novix/pull/342",
+    "title": "fix/login-bugs: update text field validation logic",
+    "opened_at": "2025-07-29T00:27:40Z",
+    "head_ref": "hotfix/login-bugs",
+    "base_ref": "develop",
+    "creator": {
+      "login": "abdelrhman1002",
+      "id": 180463542,
+      "url": "https://github.com/abdelrhman1002"
+    },
+    "approvals": [],
+    "first_approved_at": null,
+    "time_to_first_approval_minutes": null,
+    "required_approvals_met_at": null,
+    "time_to_required_approvals_minutes": null,
+    "closed_at": null,
+    "merged_at": null,
+    "merged_by": null,
+    "week": "2025-W31",
+    "status": "pending",
+    "diff_stats": {
+      "additions": 38,
+      "deletions": 59,
+      "changed_files": 3
+    }
   }
 ]
