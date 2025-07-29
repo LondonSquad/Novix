@@ -386,18 +386,20 @@ fun OverviewSection(
     uiState: EpisodeDetailsUiState
 ) {
     var isTextCollapsed by rememberSaveable { mutableStateOf(false) }
-    Column(
-        modifier = modifier
-    ) {
-        Text(
-            text = stringResource(Res.string.overview),
-            style = NovixTheme.typography.title.medium,
-            color = NovixTheme.colors.title
-        )
+    if(uiState.overview.isNotBlank()){
+        Column(
+            modifier = modifier
+        ) {
+            Text(
+                text = stringResource(Res.string.overview),
+                style = NovixTheme.typography.title.medium,
+                color = NovixTheme.colors.title
+            )
 
-        ConditionalText(
-            text = uiState.overview,
-            expandedState = isTextCollapsed
-        ) { isTextCollapsed = !isTextCollapsed }
+            ConditionalText(
+                text = uiState.overview,
+                expandedState = isTextCollapsed
+            ) { isTextCollapsed = !isTextCollapsed }
+        }
     }
 }
