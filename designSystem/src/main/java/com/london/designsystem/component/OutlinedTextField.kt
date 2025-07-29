@@ -60,7 +60,7 @@ fun OutlinedTextField(
     trailingIcon: @Composable (() -> Unit)? = null,
     supportingText: @Composable (() -> Unit)? = null,
     isError: Boolean = false,
-    contentPadding: PaddingValues = PaddingValues(start = 12.dp),
+    contentPadding: PaddingValues = PaddingValues(horizontal = 12.dp),
     visualTransformation: VisualTransformation = VisualTransformation.None,
     keyboardOptions: KeyboardOptions = KeyboardOptions.Default,
     keyboardActions: KeyboardActions = KeyboardActions.Default,
@@ -107,7 +107,9 @@ fun OutlinedTextField(
             ) {
                 BasicTextField(
                     value = value,
-                    onValueChange = { if (it.text.length < 125) onValueChange(it) },
+                    onValueChange = { input ->
+                        input.text.length.takeUnless { it < 125 }.let { onValueChange(input) }
+                    },
                     modifier = Modifier
                         .fillMaxWidth()
                         .defaultMinSize(minWidth = 268.dp, minHeight = 48.dp)
@@ -133,9 +135,7 @@ fun OutlinedTextField(
                                 {
                                     AnimatedLeadingIcon(
                                         painter = it,
-                                        isFocused = isFocused,
-                                        value = value.text
-
+                                        isFocused = isFocused
                                     )
                                 }
                             },
@@ -248,12 +248,9 @@ private fun TextFieldContainer(
 private fun AnimatedLeadingIcon(
     painter: Painter,
     isFocused: Boolean,
-    value: String
 ) {
     val iconColor by animateColorAsState(
-        targetValue = if (isFocused) NovixTheme.colors.primary
-        else if (value.isNotEmpty()) NovixTheme.colors.hint.copy(0.38f)
-        else NovixTheme.colors.hint,
+        targetValue = if (isFocused) NovixTheme.colors.primary else NovixTheme.colors.hint,
         label = "Leading Icon Color"
     )
     Icon(
