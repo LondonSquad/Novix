@@ -47,6 +47,7 @@ import com.london.presentation.feature.toprated.TopRatedScreen
 import com.london.presentation.navigation.Screen
 import com.london.presentation.navigation.Screen.Account
 import com.london.presentation.navigation.Screen.ActorDetails
+import com.london.presentation.navigation.Screen.ActorGallery
 import com.london.presentation.navigation.Screen.ActorTopMoviesPicksDetails
 import com.london.presentation.navigation.Screen.Bookmarks
 import com.london.presentation.navigation.Screen.Categories
@@ -60,7 +61,6 @@ import com.london.presentation.navigation.Screen.Reviews
 import com.london.presentation.navigation.Screen.Search
 import com.london.presentation.navigation.Screen.Splash
 import com.london.presentation.navigation.Screen.TopRated
-import com.london.presentation.navigation.Screen.ActorGallery
 import com.london.presentation.navigation.Screen.TopTvShowsPicksDetails
 import com.london.presentation.navigation.Screen.TrendingActors
 import com.london.presentation.navigation.Screen.TrendingMovies
@@ -121,7 +121,12 @@ fun NovixApp(appPreferencesService: AppPreferencesService) {
                 SplashRoute(
                     onNavigateToOnboarding = { navController.navigate(OnboardingPager) },
                     onNavigateToWelcome = { navController.navigate(Welcome) },
-                    onNavigateToHome = { navController.navigate(Home) },
+                    onNavigateToHome = {
+                        navController.navigate(Home) {
+                            popUpTo(Splash) { inclusive = true }
+                            launchSingleTop = true
+                        }
+                    },
                     appPreferencesService = appPreferencesService,
                     authRepository = getKoin().get(),
                 )
@@ -140,7 +145,11 @@ fun NovixApp(appPreferencesService: AppPreferencesService) {
                         navController.navigate(Login)
                     },
                     onNavigateContinue = {
-                        navController.navigate(Home)
+                            navController.navigate(Home) {
+                                popUpTo(Splash) { inclusive = true }
+                                launchSingleTop = true
+                            }
+
                     }
                 )
             }
@@ -394,10 +403,14 @@ fun NovixApp(appPreferencesService: AppPreferencesService) {
                         navController.navigate(Welcome)
                     },
                     onNavigateToHome = {
-                        navController.navigate(Home)
-                    },
+                        navController.navigate(Home) {
+                            popUpTo(navController.graph.startDestinationId) { inclusive = true }
+                            launchSingleTop = true
+                        }
+                    }
                 )
             }
+
 
             composable<TrendingMovies> {
                 TrendingMoviesScreen(
