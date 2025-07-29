@@ -60,11 +60,11 @@ class SearchViewModel(
     private val _searchQuery = MutableStateFlow("")
 
     init {
-        initializeData()
+        updateRecentData()
         setupSearchDebouncing()
     }
 
-    private fun initializeData() {
+     fun updateRecentData() {
         tryToExecute(
             block = {
                 val recentViewed = getRecentViewedUseCase.invoke().reversed()
