@@ -15,6 +15,9 @@ import androidx.compose.foundation.pager.PagerState
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.derivedStateOf
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.TransformOrigin
@@ -24,6 +27,7 @@ import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.lerp
 import androidx.compose.ui.util.lerp
 import com.london.designsystem.component.HomeCard
 import com.london.designsystem.component.NovixCarousalRow
@@ -101,19 +105,24 @@ fun PopularSection(
             pageSpacing = PAGE_SPACING_DP.dp,
             contentPadding = PaddingValues(horizontal = horizontalPadding)
         ) { page ->
+            val pageOffset = (pagerState.currentPage - page) + pagerState.currentPageOffsetFraction
+
+            val animatedPadding by remember(pageOffset) {
+                derivedStateOf {
+                    lerp(
+                        start = 0.dp,
+                        stop = CARD_HORIZONTAL_PADDING_DP.dp,
+                        fraction = 1f - abs(pageOffset).coerceIn(0f, 1f)
+                    )
+                }
+            }
 
             Box(
                 modifier = Modifier
                     .fillMaxWidth()
                     .wrapContentSize(Alignment.Center)
-                    .padding(
-                        horizontal = if (page == pagerState.currentPage)
-                            CARD_HORIZONTAL_PADDING_DP.dp else 0.dp
-                    )
+                    .padding(horizontal = animatedPadding)
                     .graphicsLayer {
-                        val pageOffset =
-                            (pagerState.currentPage - page) + pagerState.currentPageOffsetFraction
-
                         rotationZ = lerp(
                             start = ROTATION_PREVIOUS_DEGREES,
                             stop = ROTATION_NEXT_DEGREES,
@@ -142,7 +151,6 @@ fun PopularSection(
                     onSaveClick = { onSaveClick() },
                     hasSaveIcon = pagerState.currentPage == page
                 )
-
                 if (pagerState.currentPage == page)
                     Column(
                         modifier = Modifier
