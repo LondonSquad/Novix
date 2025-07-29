@@ -1,7 +1,5 @@
 package com.london.data.repository
 
-import com.london.data.remote.source.reviews.ReviewsRemoteDataSource
-import com.london.data.utils.CrashReporter
 import com.london.data.mapper.toReviewEntity
 import com.london.data.mapper.tvshowdetails.TvShowImagesMapper.toEntity
 import com.london.data.mapper.tvshowdetails.toCastEntity
@@ -9,6 +7,9 @@ import com.london.data.mapper.tvshowdetails.toEntity
 import com.london.data.mapper.tvshowdetails.toTvShowEpisodeEntity
 import com.london.data.mapper.tvshowdetails.toTvShowEpisodesEntity
 import com.london.data.remote.source.details.tvshow.TvShowDetailsRemoteDataSource
+import com.london.data.remote.source.reviews.ReviewsRemoteDataSource
+import com.london.data.utils.CrashReporter
+import com.london.data.utils.asYoutubeUrlOrEmpty
 import com.london.domain.entity.PagedFetchResponse
 import com.london.domain.entity.review.ReviewEntity
 import com.london.domain.entity.tvshowdetails.TvShowCastEntity
@@ -54,6 +55,15 @@ class DetailsRepositoryImpl(
         tvShowDetailsRemoteDataSource.getEpisodeDetailsByPosition(
             tvShowId = tvShowId, seasonNumber = seasonNumber, episodeNumber = episodeNumber
         ).getOrThrow().toTvShowEpisodeEntity()
+
+    override suspend fun getEpisodeVideos(
+        seriesId: Int,
+        seasonNumber: Int,
+        episodeNumber: Int
+    ): List<String> =
+        tvShowDetailsRemoteDataSource.getEpisodeVideos(
+            seriesId = seriesId, seasonNumber = seasonNumber, episodeNumber = episodeNumber
+        ).getOrThrow().results?.map { it.key.asYoutubeUrlOrEmpty() }.orEmpty()
 
 
     override suspend fun getMovieReviews(
