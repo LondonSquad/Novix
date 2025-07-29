@@ -7,7 +7,7 @@ import org.koin.core.annotation.Provided
 import org.koin.core.annotation.Single
 
 @Single
-class GetTrendingMoviesUseCase(@Provided private val trendingRepository: TrendingRepository) {
+class GetTrendingMoviesUseCase(@Provided private val repository: TrendingRepository) {
     suspend fun invoke(page: Int): PagedFetchResponse<Trending> =
-        trendingRepository.getTrendingMovies(page)
+        repository.getTrendingMovies(page)
 }

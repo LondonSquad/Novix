@@ -12,19 +12,19 @@ class TrendingRemoteDataSourceImpl(
 ) : TrendingRemoteDataSource, BaseRemoteDatasource {
     override suspend fun getTrendingMovies(page: Int): Result<ApiResponse<TrendingResponse>> =
         callApiWithRetry(
-            apiCall = { trendingApiService.getTrendingMovies(page) },
+            apiCall = { trendingApiService.getTrendingMovies(page =  page) },
             mapper = { it }
         )
 
     override suspend fun getTrendingTvShows(page: Int): Result<ApiResponse<TrendingResponse>> =
         callApiWithRetry(
-            apiCall = { trendingApiService.getTrendingTvShows(page) },
+            apiCall = { trendingApiService.getTrendingTvShows(page = page) },
             mapper = { it }
         )
 
     override suspend fun getTrendingActors(page: Int): Result<ApiResponse<TrendingResponse>> =
         callApiWithRetry(
-            apiCall = { trendingApiService.getTrendingActors(page) },
+            apiCall = { trendingApiService.getTrendingActors(page = page) },
             mapper = { it }
         )
 }

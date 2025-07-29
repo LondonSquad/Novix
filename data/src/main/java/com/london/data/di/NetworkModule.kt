@@ -163,8 +163,5 @@ class NetworkModule {
     @Single
     fun provideTrendingApiService(retrofit: Retrofit): TrendingApiService =
         retrofit.create(TrendingApiService::class.java)
-
-    @Single
-    fun provideTrendingRemoteDataSource(trendingApiService: TrendingApiService): TrendingRemoteDataSource =
-        TrendingRemoteDataSourceImpl(trendingApiService)
+    
 }

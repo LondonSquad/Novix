@@ -16,7 +16,7 @@ class TrendingActorMapperTest {
         )
 
         // When
-        val result = trendingResponse.toTrendingActor()
+        val result = trendingResponse.toEntity()
 
         // Then
         assertEquals(123, result.id)
@@ -35,7 +35,7 @@ class TrendingActorMapperTest {
         )
 
         // When
-        val result = trendingResponse.toTrendingActor()
+        val result = trendingResponse.toEntity()
 
         // Then
         assertEquals(456, result.id)
@@ -55,7 +55,7 @@ class TrendingActorMapperTest {
         )
 
         // When
-        val result = trendingResponse.toTrendingActor()
+        val result = trendingResponse.toEntity()
 
         // Then
         assertEquals(789, result.id)
@@ -75,7 +75,7 @@ class TrendingActorMapperTest {
         )
 
         // When
-        val result = trendingResponse.toTrendingActor()
+        val result = trendingResponse.toEntity()
 
         // Then
         assertEquals(0, result.id)
@@ -95,7 +95,7 @@ class TrendingActorMapperTest {
         )
 
         // When
-        val result = trendingResponse.toTrendingActor()
+        val result = trendingResponse.toEntity()
 
         // Then
         assertEquals(123, result.id)
@@ -114,7 +114,7 @@ class TrendingActorMapperTest {
         )
 
         // When
-        val result = trendingResponse.toTrendingActor()
+        val result = trendingResponse.toEntity()
 
         // Then
         assertEquals(0, result.id)
@@ -133,7 +133,7 @@ class TrendingActorMapperTest {
         )
 
         // When
-        val result = trendingResponse.toTrendingActor()
+        val result = trendingResponse.toEntity()
 
         // Then
         assertEquals(123, result.id)
@@ -153,7 +153,7 @@ class TrendingActorMapperTest {
         )
 
         // When
-        val result = trendingResponse.toTrendingActor()
+        val result = trendingResponse.toEntity()
 
         // Then
         assertEquals(123, result.id)
@@ -172,7 +172,7 @@ class TrendingActorMapperTest {
         )
 
         // When
-        val result = trendingResponse.toTrendingActor()
+        val result = trendingResponse.toEntity()
 
         // Then
         assertEquals(123, result.id)
