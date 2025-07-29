@@ -20,7 +20,7 @@ import androidx.compose.ui.unit.sp
 import coil.Coil
 import coil.request.CachePolicy
 import coil.request.ImageRequest
-import com.london.imageharamblur.utils.toBitmap
+import com.london.imageharamblur.extensions.toBitmap
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 

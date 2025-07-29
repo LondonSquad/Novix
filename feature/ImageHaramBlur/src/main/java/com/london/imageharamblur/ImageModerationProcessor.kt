@@ -2,12 +2,12 @@ package com.london.imageharamblur
 
 import android.content.Context
 import android.graphics.Bitmap
-import com.london.imageharamblur.faceDetection.DetectedFace
 import com.london.imageharamblur.faceDetection.FaceDetector
 import com.london.imageharamblur.models.ContentDetectionModel
 import com.london.imageharamblur.models.GenderDetectionModel
 import com.london.imageharamblur.models.ModelDownloadManager
 import com.london.imageharamblur.ui.ModerationCacheManager
+import com.london.imageharamblur.utils.cropFace
 import kotlinx.coroutines.*
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
@@ -143,16 +143,6 @@ internal class ImageModerationProcessor(private val context: Context) {
         }
 
         return@withContext false
-    }
-
-    private fun cropFace(bitmap: Bitmap, face: DetectedFace): Bitmap {
-        val rect = face.boundingBox
-        val left = rect.left.coerceAtLeast(0)
-        val top = rect.top.coerceAtLeast(0)
-        val right = rect.right.coerceAtMost(bitmap.width)
-        val bottom = rect.bottom.coerceAtMost(bitmap.height)
-
-        return Bitmap.createBitmap(bitmap, left, top, right - left, bottom - top)
     }
 
     fun close() {
