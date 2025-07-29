@@ -618,7 +618,6 @@ fun EpisodeRow(
                 }
             }
         }
-
         Spacer(Modifier.height(8.dp))
     }
 }
