@@ -4,7 +4,7 @@ import com.london.presentation.feature.base.BaseViewModel
 import org.koin.android.annotation.KoinViewModel
 
 @KoinViewModel
-class WebViewRegistrationViewModel : 
+class WebViewRegistrationViewModel :
     BaseViewModel<WebViewRegistrationUiState, WebViewRegistrationEffect>(WebViewRegistrationUiState()),
     WebViewRegistrationContract {
 
@@ -15,8 +15,6 @@ class WebViewRegistrationViewModel :
     override fun onPageLoaded(url: String?) {
         url?.let { currentUrl ->
             updateState { copy(currentUrl = currentUrl, isLoading = false) }
-            
-            // Check if registration is complete based on URL patterns
             if (isRegistrationCompleteUrl(currentUrl)) {
                 emitEffect(WebViewRegistrationEffect.RegistrationComplete)
             }
@@ -28,7 +26,8 @@ class WebViewRegistrationViewModel :
     }
 
     override fun shouldInterceptUrl(url: String): Boolean {
-        // Intercept URLs that indicate registration completion
+        if (!isUrlAllowed(url)) { return true }
+
         return when {
             isRegistrationCompleteUrl(url) -> {
                 emitEffect(WebViewRegistrationEffect.RegistrationComplete)
@@ -43,11 +42,42 @@ class WebViewRegistrationViewModel :
         }
     }
 
+    private fun isUrlAllowed(url: String): Boolean {
+        try {
+            val allowedUrls = listOf(
+                "https://www.themoviedb.org/signup",
+                "https://themoviedb.org/signup",
+                "https://www.themoviedb.org/account/signup",
+                "https://themoviedb.org/account/signup"
+            )
+
+            val isExactMatch = allowedUrls.any { allowedUrl ->
+                url.startsWith(allowedUrl)
+            }
+
+            if (isExactMatch) {
+                return true
+            }
+
+            val completionUrls = listOf(
+                "account/verify",
+                "registration/success",
+                "signup/complete"
+            )
+
+            return url.contains("themoviedb.org") &&
+                    completionUrls.any { completionUrl -> url.contains(completionUrl) }
+
+        } catch (e: Exception) {
+            return false
+        }
+    }
+
     private fun isRegistrationCompleteUrl(url: String): Boolean {
-        return url.contains("account/verify") || 
-               url.contains("registration/success") ||
-               url.contains("signup/complete") ||
-               url.contains("welcome") ||
-               (url.contains("themoviedb.org") && url.contains("u/"))
+        return url.contains("account/verify") ||
+                url.contains("registration/success") ||
+                url.contains("signup/complete") ||
+                url.contains("welcome") ||
+                (url.contains("themoviedb.org") && url.contains("u/"))
     }
 }
