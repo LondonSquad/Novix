@@ -7,6 +7,8 @@ import com.london.domain.entity.Movie
 import com.london.domain.usecase.GetPopularMovies
 import com.london.domain.usecase.GetPopularTvShow
 import com.london.domain.usecase.GetUpComingMoviesByCategoryUseCase
+import com.london.domain.usecase.toprated.GetTopRatedMoviesUseCase
+import com.london.domain.usecase.toprated.GetTopRatedTvSeriesUseCase
 import com.london.presentation.feature.base.BaseViewModel
 import com.london.presentation.feature.base.createPagingSourceFlow
 import com.london.presentation.utils.MovieGenre
@@ -22,20 +24,48 @@ class HomeViewModel(
     private val getPopularMovies: GetPopularMovies,
     private val getPopularTvShows: GetPopularTvShow,
     private val getUpcomingMoviesByCategoryUseCase: GetUpComingMoviesByCategoryUseCase,
+    private val getTopRatedMovies: GetTopRatedMoviesUseCase,
+    private val getTopRatedTvShows: GetTopRatedTvSeriesUseCase,
 ) : BaseViewModel<HomeScreenUiState, HomeScreenEffect>(HomeScreenUiState()), HomeScreenContract {
 
     private val _upcomingMoviesFlow = MutableStateFlow<PagingData<Movie>>(PagingData.empty())
     private var upcomingJob: Job? = null
+
     init {
         initializePopularMovies()
         initializePopularTvShows()
+        initializeTopRatedMedia()
         updateState {
             copy(upcomingMovies = _upcomingMoviesFlow)
         }
         loadUpcomingMovies(categoryId = null)
     }
 
-    private fun initializePopularTvShows(){
+    private fun initializeTopRatedMedia() {
+        tryToExecute(
+            block = {
+                val movies = getTopRatedMovies.invoke(pageNumber = 1)
+                val shows = getTopRatedTvShows.invoke(pageNumber = 1)
+                Pair(movies, shows)
+            },
+            onStart = { updateState { copy(isLoading = true) } },
+            onSuccess = { (movies, shows) ->
+                val topRatedMedia = movies.items.take(10).toUiMedia() +
+                        shows.items.take(10).toUiMedia()
+
+                updateState {
+                    copy(topRatedUiMediaList = topRatedMedia.shuffled())
+                }
+            },
+            onError = { errorState -> updateState { copy(error = errorState) } },
+            onCompleted = { updateState { copy(isLoading = false) } },
+            checkSuccess = { (movies, shows) ->
+                movies.items.isNotEmpty() || shows.items.isNotEmpty()
+            }
+        )
+    }
+
+    private fun initializePopularTvShows() {
         tryToExecute(
             block = { getPopularTvShows.invoke() },
             onStart = { updateState { copy(isLoading = true) } },
@@ -76,7 +106,7 @@ class HomeViewModel(
         upcomingJob = viewModelScope.launch {
             tryToExecute(
                 block = {
-                   val pagingFlow= createPagingSourceFlow(query = "") { _, pageNumber ->
+                    val pagingFlow = createPagingSourceFlow(query = "") { _, pageNumber ->
                         getUpcomingMoviesByCategoryUseCase.invoke(
                             categoryId = categoryId,
                             pageNumber = pageNumber
