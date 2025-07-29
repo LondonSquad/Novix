@@ -27,7 +27,7 @@ import org.koin.androidx.compose.koinViewModel
 
 @Composable
 fun TrendingActorsScreen(
-    onActorClick: (Int) -> Unit,
+    onNavigateActorClick: (Int) -> Unit,
     onBackClick: () -> Unit,
     viewModel: TrendingActorsViewModel = koinViewModel()
 ) {
@@ -36,7 +36,7 @@ fun TrendingActorsScreen(
 
     effect?.Listen { currentEffect ->
         when (currentEffect) {
-            is TrendingActorsEffect.NavigateToActor -> onActorClick(currentEffect.actorId)
+            is TrendingActorsEffect.NavigateToActor -> onNavigateActorClick(currentEffect.actorId)
             is TrendingActorsEffect.NavigateBack -> onBackClick()
         }
     }

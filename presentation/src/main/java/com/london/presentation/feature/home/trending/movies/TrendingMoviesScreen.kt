@@ -27,7 +27,7 @@ import org.koin.androidx.compose.koinViewModel
 
 @Composable
 fun TrendingMoviesScreen(
-    onMovieClick: (Int) -> Unit,
+    onNavigateMovieClick: (Int) -> Unit,
     onBackClick: () -> Unit,
     viewModel: TrendingMoviesViewModel = koinViewModel()
 ) {
@@ -36,7 +36,7 @@ fun TrendingMoviesScreen(
 
     effect?.Listen { currentEffect ->
         when (currentEffect) {
-            is TrendingMoviesEffect.NavigateToMovie -> onMovieClick(currentEffect.movieId)
+            is TrendingMoviesEffect.NavigateToMovie -> onNavigateMovieClick(currentEffect.movieId)
             is TrendingMoviesEffect.NavigateBack -> onBackClick()
         }
     }

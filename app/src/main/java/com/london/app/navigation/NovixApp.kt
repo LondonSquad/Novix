@@ -59,6 +59,8 @@ import com.london.presentation.navigation.Screen.OnboardingPager
 import com.london.presentation.navigation.Screen.Reviews
 import com.london.presentation.navigation.Screen.Search
 import com.london.presentation.navigation.Screen.Splash
+import com.london.presentation.navigation.Screen.TopRated
+import com.london.presentation.navigation.Screen.ActorGallery
 import com.london.presentation.navigation.Screen.TopTvShowsPicksDetails
 import com.london.presentation.navigation.Screen.TrendingActors
 import com.london.presentation.navigation.Screen.TrendingMovies
@@ -176,7 +178,7 @@ fun NovixApp(appPreferencesService: AppPreferencesService) {
                         navController.navigate(TvShowDetails(tvShowId))
                     },
                     onTopRatedClick = {
-                        navController.navigate(Screen.TopRated)
+                        navController.navigate(TopRated)
                     },
                     onTrendingMovies = {
                         navController.navigate(TrendingMovies)
@@ -347,7 +349,7 @@ fun NovixApp(appPreferencesService: AppPreferencesService) {
                         navController.navigate(TopTvShowsPicksDetails(actorId))
                     },
                     onNavigateToGallery = { actorId ->
-                        navController.navigate(Screen.ActorGallery(actorId))
+                        navController.navigate(ActorGallery(actorId))
                     },
                     onNavigateToMovieScreen = { movieId ->
                         navController.navigate(MovieDetails(movieId))
@@ -373,12 +375,12 @@ fun NovixApp(appPreferencesService: AppPreferencesService) {
                 )
             }
 
-            composable<Screen.ActorGallery> {
+            composable<ActorGallery> {
                 ActorGalleryScreen(
                     onBackClick = { navController.popBackStack() }
                 )
             }
-            composable<Screen.TopRated> {
+            composable<TopRated> {
                 TopRatedScreen(
                     onBackClick = { navController.popBackStack() },
                     onMovieClick = { navController.navigate(MovieDetails(it)) },
@@ -399,7 +401,7 @@ fun NovixApp(appPreferencesService: AppPreferencesService) {
 
             composable<TrendingMovies> {
                 TrendingMoviesScreen(
-                    onMovieClick = { id ->
+                    onNavigateMovieClick = { id ->
                         navController.navigate(MovieDetails(id))
                     },
                     onBackClick = {
@@ -409,7 +411,7 @@ fun NovixApp(appPreferencesService: AppPreferencesService) {
             }
             composable<TrendingTvShows> {
                 TrendingTvShowsScreen(
-                    onTvShowClick = { id ->
+                    onNavigateTvShowClick = { id ->
                         navController.navigate(TvShowDetails(id))
                     },
                     onBackClick = {
@@ -419,7 +421,7 @@ fun NovixApp(appPreferencesService: AppPreferencesService) {
             }
             composable<TrendingActors> {
                 TrendingActorsScreen(
-                    onActorClick = { id ->
+                    onNavigateActorClick = { id ->
                         navController.navigate(ActorDetails(id))
                     },
                     onBackClick = {
