@@ -47,7 +47,6 @@ fun OnboardingScreen(
     onComplete: () -> Unit,
     viewModel: OnboardingViewModel = koinViewModel()
 ) {
-
     val scope = rememberCoroutineScope()
     val uiState by viewModel.state.collectAsStateWithLifecycle()
     val effect by viewModel.effect.collectAsState(null)
