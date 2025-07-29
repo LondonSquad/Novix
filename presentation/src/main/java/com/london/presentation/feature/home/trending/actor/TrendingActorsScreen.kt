@@ -15,6 +15,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.paging.compose.collectAsLazyPagingItems
 import com.london.designsystem.component.ActorItem
 import com.london.designsystem.component.TopBar
 import com.london.designsystem.theme.NovixTheme
@@ -65,9 +66,12 @@ private fun TrendingActorsContent(
             onBackClick = contract::onBack
         )
 
+        val actorsLazyItems = state.actorsFlow.collectAsLazyPagingItems()
+
+
         LazyPagingColumn(
             emptyTitle = R.string.no_trending_actors_in_genre.string,
-            pagingFlow = state.actorsFlow,
+            pagingItems = actorsLazyItems,
         ) { actor ->
             ActorItem(
                 modifier = Modifier.clickable { contract.onActorClick(actor.id) },

@@ -2,11 +2,8 @@ package com.london.presentation.feature.home.trending.tvshows
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.defaultMinSize
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.lazy.grid.rememberLazyGridState
@@ -59,9 +56,7 @@ fun TrendingTvShowsScreen(
 private fun TrendingTvShowsContent(
     state: TrendingTvShowsUiState = TrendingTvShowsUiState(),
     contract: TrendingTvShowsContract = defaultTrendingTvShowsContract(),
-
-    ) {
-
+) {
     val screenWidth = with(LocalDensity.current) { LocalConfiguration.current.screenWidthDp.dp }
     val gridState = rememberLazyGridState()
 
@@ -97,7 +92,7 @@ private fun TrendingTvShowsContent(
 
         LazyPagingColumn(
             emptyTitle = R.string.no_trending_tvshows_in_genre.string,
-            pagingFlow = state.tvShowsFlow,
+            pagingItems = tvShowsLazyItems,
         ) { tvShow ->
             MediaLazyPagingGrid(
                 pagingFlow = tvShowsLazyItems,

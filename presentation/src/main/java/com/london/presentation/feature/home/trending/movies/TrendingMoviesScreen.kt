@@ -83,7 +83,7 @@ private fun TrendingMoviesContent(
 
         LazyPagingColumn(
             emptyTitle = R.string.no_trending_movies_in_genre.string,
-            pagingFlow = state.moviesFlow,
+            pagingItems = moviesLazyItems,
         ) {
             MediaLazyPagingGrid(
                 pagingFlow = moviesLazyItems,
