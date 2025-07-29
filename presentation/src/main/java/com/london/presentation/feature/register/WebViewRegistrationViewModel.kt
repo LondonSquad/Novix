@@ -1,5 +1,6 @@
 package com.london.presentation.feature.register
 
+import android.util.Log
 import com.london.presentation.feature.base.BaseViewModel
 import org.koin.android.annotation.KoinViewModel
 
@@ -26,6 +27,8 @@ class WebViewRegistrationViewModel :
     }
 
     override fun shouldInterceptUrl(url: String): Boolean {
+        if (!isUrlAllowed(url)) return true
+
         return when {
             isRegistrationCompleteUrl(url) -> {
                 emitEffect(WebViewRegistrationEffect.RegistrationComplete)
@@ -45,12 +48,14 @@ class WebViewRegistrationViewModel :
         }
     }
 
+
     private fun isCancelUrl(url: String): Boolean {
-        return url.contains("cancel") ||
-                url.contains("back") ||
-                url.contains("close") ||
-                url.contains("dismiss") ||
-                url.contains("exit")
+        return url.contains("cancel", ignoreCase = true) ||
+                url.contains("back", ignoreCase = true) ||
+                url.contains("close", ignoreCase = true) ||
+                url.contains("dismiss", ignoreCase = true) ||
+                url.contains("exit", ignoreCase = true) ||
+                url == "https://www.themoviedb.org/"
     }
 
     private fun isUrlAllowed(url: String): Boolean {
@@ -76,7 +81,7 @@ class WebViewRegistrationViewModel :
                 "account/verify",
                 "registration/success",
                 "signup/complete",
-                "cancel",
+                "Cancel",
                 "back"
             )
 
