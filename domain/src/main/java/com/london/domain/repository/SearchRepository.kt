@@ -32,6 +32,11 @@ interface SearchRepository {
         pageNumber: Int
     ): PagedFetchResponse<Movie>
 
+    suspend fun searchForTvShowByCategory(
+        categoryId: Int,
+        pageNumber: Int
+    ): PagedFetchResponse<TvShow>
+
     suspend fun incrementGenreInterest(genreId: Int, mediaType: String)
     suspend fun getGenreInterestCounts(mediaType: String): List<Pair<Int, Int>>
 }
