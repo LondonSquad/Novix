@@ -13,6 +13,7 @@ import com.london.data.remote.service.home.PopularApiService
 import com.london.data.remote.service.reviews.ReviewsApiService
 import com.london.data.remote.service.search.SearchApiService
 import com.london.data.local.source.device.DeviceConfigurationDataSource
+import com.london.data.remote.service.home.TrendingApiService
 import com.london.data.remote.service.authentication.AuthenticationApiService
 import com.london.data.remote.service.toprated.TopRatedMovieApiService
 import com.london.data.remote.service.toprated.TopRatedTvSeriesApiService
@@ -29,6 +30,8 @@ import org.koin.core.annotation.Single
 import retrofit2.Retrofit
 import java.io.File
 import java.util.concurrent.TimeUnit
+import com.london.data.remote.source.home.trending.TrendingRemoteDataSource
+import com.london.data.remote.source.home.trending.TrendingRemoteDataSourceImpl
 
 @OptIn(ExperimentalSerializationApi::class)
 @Module
@@ -156,4 +159,9 @@ class NetworkModule {
     @Single
     fun provideTopRatedTvShowApi(retrofit: Retrofit): TopRatedTvSeriesApiService =
         retrofit.create(TopRatedTvSeriesApiService::class.java)
+
+    @Single
+    fun provideTrendingApiService(retrofit: Retrofit): TrendingApiService =
+        retrofit.create(TrendingApiService::class.java)
+    
 }

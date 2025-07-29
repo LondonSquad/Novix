@@ -1,17 +1,15 @@
 package com.london.data.repository
 
-import com.london.data.local.source.LocalDataSource
 import com.london.data.local.database.dao.search.GenreInterestDao
 import com.london.data.local.model.search.GenreInterestEntity
 import com.london.data.local.model.search.SearchActorsLocal
 import com.london.data.local.model.search.SearchMoviesLocal
 import com.london.data.local.model.search.SearchTvShowLocal
+import com.london.data.local.source.LocalDataSource
+import com.london.data.mapper.toEntity
+import com.london.data.mapper.toLocal
 import com.london.data.remote.source.search.SearchRemoteDataSource
 import com.london.data.utils.CrashReporter
-import com.london.data.mapper.toActorEntity
-import com.london.data.mapper.toLocal
-import com.london.data.mapper.toMovieEntity
-import com.london.data.mapper.toTvShowEntity
 import com.london.data.utils.fetchAndSync
 import com.london.domain.entity.Actor
 import com.london.domain.entity.Movie
@@ -24,9 +22,12 @@ import org.koin.core.annotation.Single
 
 @Single
 class SearchRepositoryImpl(
-    @Provided @Named("tvShowLocalDataSource") private val localTvShowDataSource: LocalDataSource<SearchTvShowLocal>,
-    @Provided @Named("actorLocalDataSource") private val localActorDataSource: LocalDataSource<SearchActorsLocal>,
-    @Provided @Named("movieLocalDataSource") private val localMovieDataSource: LocalDataSource<SearchMoviesLocal>,
+    @Provided @Named("tvShowLocalDataSource")
+    private val localTvShowDataSource: LocalDataSource<SearchTvShowLocal>,
+    @Provided @Named("actorLocalDataSource")
+    private val localActorDataSource: LocalDataSource<SearchActorsLocal>,
+    @Provided @Named("movieLocalDataSource")
+    private val localMovieDataSource: LocalDataSource<SearchMoviesLocal>,
     private val genreInterestDao: GenreInterestDao,
     private val remoteDataSource: SearchRemoteDataSource,
     private val crashReporter: CrashReporter
@@ -36,20 +37,20 @@ class SearchRepositoryImpl(
         name: String, pageNumber: Int
     ): PagedFetchResponse<Movie> = fetchAndSync(
         cacheBlock = {
-            localMovieDataSource.getByQueryAndPage(
-                query = name, page = pageNumber
-            )
-        }, networkBlock = {
-            remoteDataSource.searchForMovies(
-                query = name,
-                includeAdult = false,
-                pageNumber = pageNumber,
-            ).getOrThrow().toLocal(query = name)
-        }, syncBlock = { localMovieDataSource.insert(it) }, crashReporter = crashReporter
+        localMovieDataSource.getByQueryAndPage(
+            query = name, page = pageNumber
+        )
+    }, networkBlock = {
+        remoteDataSource.searchForMovies(
+            query = name,
+            includeAdult = false,
+            pageNumber = pageNumber,
+        ).getOrThrow().toLocal(query = name)
+    }, syncBlock = { localMovieDataSource.insert(item = it) }, crashReporter = crashReporter
     ).run {
         PagedFetchResponse(
             currentPage = page,
-            items = results.map { it.toMovieEntity() },
+            items = results.map { it.toEntity() },
             totalPages = totalPages,
             totalItems = totalResults
         )
@@ -59,20 +60,20 @@ class SearchRepositoryImpl(
         name: String, pageNumber: Int
     ): PagedFetchResponse<TvShow> = fetchAndSync(
         cacheBlock = {
-            localTvShowDataSource.getByQueryAndPage(
-                query = name, page = pageNumber
-            )
-        }, networkBlock = {
-            remoteDataSource.searchForTvShows(
-                query = name,
-                includeAdult = false,
-                pageNumber = pageNumber,
-            ).getOrThrow().toLocal(query = name)
-        }, syncBlock = { localTvShowDataSource.insert(it) }, crashReporter = crashReporter
+        localTvShowDataSource.getByQueryAndPage(
+            query = name, page = pageNumber
+        )
+    }, networkBlock = {
+        remoteDataSource.searchForTvShows(
+            query = name,
+            includeAdult = false,
+            pageNumber = pageNumber,
+        ).getOrThrow().toLocal(query = name)
+    }, syncBlock = { localTvShowDataSource.insert(item = it) }, crashReporter = crashReporter
     ).run {
         PagedFetchResponse(
             currentPage = page,
-            items = results.map { it.toTvShowEntity() },
+            items = results.map { it.toEntity() },
             totalPages = totalPages,
             totalItems = totalResults
         )
@@ -82,20 +83,20 @@ class SearchRepositoryImpl(
         name: String, pageNumber: Int
     ): PagedFetchResponse<Actor> = fetchAndSync(
         cacheBlock = {
-            localActorDataSource.getByQueryAndPage(
-                query = name, page = pageNumber
-            )
-        }, networkBlock = {
-            remoteDataSource.searchForActors(
-                query = name,
-                includeAdult = false,
-                pageNumber = pageNumber,
-            ).getOrThrow().toLocal(query = name)
-        }, syncBlock = { localActorDataSource.insert(it) }, crashReporter = crashReporter
+        localActorDataSource.getByQueryAndPage(
+            query = name, page = pageNumber
+        )
+    }, networkBlock = {
+        remoteDataSource.searchForActors(
+            query = name,
+            includeAdult = false,
+            pageNumber = pageNumber,
+        ).getOrThrow().toLocal(query = name)
+    }, syncBlock = { localActorDataSource.insert(item = it) }, crashReporter = crashReporter
     ).run {
         PagedFetchResponse(
             currentPage = page,
-            items = results.map { it.toActorEntity() },
+            items = results.map { it.toEntity("") },
             totalPages = totalPages,
             totalItems = totalResults
         )
@@ -112,7 +113,7 @@ class SearchRepositoryImpl(
         }).run {
         PagedFetchResponse(
             currentPage = page,
-            items = results.map { it.toMovieEntity() },
+            items = results.map { it.toEntity() },
             totalPages = totalPages,
             totalItems = totalResults
         )
@@ -129,36 +130,36 @@ class SearchRepositoryImpl(
         }).run {
         PagedFetchResponse(
             currentPage = page,
-            items = results.map { it.toMovieEntity() },
+            items = results.map { it.toEntity() },
             totalPages = totalPages,
             totalItems = totalResults
         )
     }
 
     override suspend fun incrementGenreInterest(genreId: Int, mediaType: String) {
-        try {
+        runCatching {
             val current = genreInterestDao.getGenreInterest(genreId, mediaType)
             if (current == null) {
                 genreInterestDao.insertGenreInterest(
-                    GenreInterestEntity(genreId = genreId, mediaType = mediaType, count = 1)
+                    GenreInterestEntity(
+                        genreId = genreId, mediaType = mediaType, count = 1
+                    )
                 )
             } else {
                 genreInterestDao.updateGenreInterest(
                     current.copy(count = current.count + 1)
                 )
             }
-        } catch (e: Exception) {
+        }.getOrElse { e ->
             crashReporter.logException(e)
         }
     }
 
-    override suspend fun getGenreInterestCounts(mediaType: String): List<Pair<Int, Int>> {
-        return try {
-            genreInterestDao.getGenresByInterest(mediaType)
-                .map { entity -> entity.genreId to entity.count }
-        } catch (e: Exception) {
+    override suspend fun getGenreInterestCounts(mediaType: String): List<Pair<Int, Int>> =
+        runCatching {
+            genreInterestDao.getGenresByInterest(mediaType).map { it.genreId to it.count }
+        }.getOrElse { e ->
             crashReporter.logException(e)
             emptyList()
         }
-    }
 }

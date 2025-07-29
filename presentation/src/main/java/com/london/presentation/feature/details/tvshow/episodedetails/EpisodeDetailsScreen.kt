@@ -60,7 +60,7 @@ import com.london.designsystem.R as Res
 @Composable
 fun EpisodeDetailsScreen(
     viewModel: EpisodeDetailsViewModel = koinViewModel(),
-    onNavigateBackClick: () -> Unit,
+    onNavigateBack: () -> Unit,
     onNavigateToCast: (Int) -> Unit
 ) {
     val uiState by viewModel.state.collectAsStateWithLifecycle()
@@ -68,7 +68,7 @@ fun EpisodeDetailsScreen(
 
     effect?.Listen { currentEffect ->
         when (currentEffect) {
-            EpisodeDetailsEffect.NavigationBack -> onNavigateBackClick()
+            EpisodeDetailsEffect.NavigationBack -> onNavigateBack()
             is EpisodeDetailsEffect.NavigateToCast -> onNavigateToCast(currentEffect.episodeId)
         }
     }
@@ -199,7 +199,7 @@ fun EpisodeDetailsScreenContent(
                     ActorItem(
                         actorName = member.name,
                         characterName = member.characterName,
-                        imageRes = member.profilePicture,
+                        imageRes = member.profileUrl,
                         modifier = Modifier
                             .fillMaxWidth()
                             .padding(horizontal = 16.dp, vertical = 6.dp)
@@ -381,18 +381,20 @@ fun OverviewSection(
     uiState: EpisodeDetailsUiState
 ) {
     var isTextCollapsed by rememberSaveable { mutableStateOf(false) }
-    Column(
-        modifier = modifier
-    ) {
-        Text(
-            text = stringResource(Res.string.overview),
-            style = NovixTheme.typography.title.medium,
-            color = NovixTheme.colors.title
-        )
+    if(uiState.overview.isNotBlank()){
+        Column(
+            modifier = modifier
+        ) {
+            Text(
+                text = stringResource(Res.string.overview),
+                style = NovixTheme.typography.title.medium,
+                color = NovixTheme.colors.title
+            )
 
-        ConditionalText(
-            text = uiState.overview,
-            expandedState = isTextCollapsed
-        ) { isTextCollapsed = !isTextCollapsed }
+            ConditionalText(
+                text = uiState.overview,
+                expandedState = isTextCollapsed
+            ) { isTextCollapsed = !isTextCollapsed }
+        }
     }
 }

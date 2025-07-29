@@ -94,4 +94,10 @@
     <string name="top_rating">Top rating</string>
     <string name="retry">Retry</string>
     <string name="continue_watching"> "Continue watching" </string>
+    <string name="trending_movies">Trending Movies</string>
+    <string name="trending_tv_shows">Trending TV Shows</string>
+    <string name="trending_people">Trending People</string>
+    <string name="no_trending_movies_in_genre">No movies found in this genre.</string>
+    <string name="no_trending_tvshows_in_genre">No tv shows found in this genre.</string>
+    <string name="no_trending_actors_in_genre">No people found in this genre.</string>
 </resources>

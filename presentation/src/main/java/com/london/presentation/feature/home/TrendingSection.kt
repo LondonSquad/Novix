@@ -36,6 +36,9 @@ import com.london.presentation.R
 
 @Composable
 fun TrendingSection(
+    onMoviesClick: () -> Unit,
+    onTvShowsClick: () -> Unit,
+    onActorsClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
     Column(
@@ -68,7 +71,7 @@ fun TrendingSection(
                 endColor = NovixTheme.colors.darkCocoa,
                 imageWidth = 60.dp,
                 imageHeight = 64.dp,
-                onClick = {},
+                onClick = onMoviesClick,
                 modifier = Modifier.weight(1f)
             )
 
@@ -79,7 +82,7 @@ fun TrendingSection(
                 endColor = NovixTheme.colors.deepCrimson,
                 imageWidth = 88.46.dp,
                 imageHeight = 64.dp,
-                onClick = {},
+                onClick = onTvShowsClick,
                 modifier = Modifier.weight(1f)
             )
 
@@ -90,7 +93,7 @@ fun TrendingSection(
                 endColor = NovixTheme.colors.oceanDark,
                 imageWidth = 56.49.dp,
                 imageHeight = 64.dp,
-                onClick = {},
+                onClick = onActorsClick,
                 modifier = Modifier.weight(1f)
             )
         }
@@ -150,5 +153,9 @@ private fun CategoryCard(
 @Preview
 @Composable
 private fun Preview() {
-    TrendingSection()
+    TrendingSection(
+        onMoviesClick = {},
+        onTvShowsClick = {},
+        onActorsClick = {}
+    )
 }
