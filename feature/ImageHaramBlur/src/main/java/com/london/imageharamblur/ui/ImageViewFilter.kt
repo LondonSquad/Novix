@@ -2,13 +2,21 @@ package com.london.imageharamblur.ui
 
 import android.content.Context
 import android.graphics.drawable.Drawable
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.BasicText
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import coil.Coil
 import coil.request.CachePolicy
 import coil.request.ImageRequest
@@ -115,13 +123,36 @@ fun ImageViewFilter(
                 if (moderationState!!.shouldBlur && config.showCustomContentWhenBlurred) {
                     moderatedContent()
                 } else {
+                    // Show unblurred image if showTextInsteadOfBlur is true
+                    val shouldActuallyBlur = moderationState!!.shouldBlur && !config.showTextInsteadOfBlur
+
                     ModeratedImage(
-                        state = moderationState!!,
+                        state = moderationState!!.copy(shouldBlur = shouldActuallyBlur),
                         contentDescription = contentDescription,
                         contentScale = contentScale,
                         blurStrength = config.blurStrength,
                         modifier = Modifier.fillMaxSize()
                     )
+
+                    // Show text overlay when image should be blurred but showTextInsteadOfBlur is true
+                    if (moderationState!!.shouldBlur && config.showTextInsteadOfBlur) {
+                        Box(
+                            modifier = Modifier
+                                .background(
+                                    color = Color.Red.copy(alpha = 0.7f),
+                                    shape = RoundedCornerShape(4.dp)
+                                )
+                                .padding(horizontal = 12.dp, vertical = 6.dp)
+                        ) {
+                            BasicText(
+                                text = "Image must be blurred",
+                                style = TextStyle(
+                                    color = Color.White,
+                                    fontSize = 14.sp
+                                )
+                            )
+                        }
+                    }
                 }
             }
         }
@@ -134,7 +165,8 @@ data class ImageFilterConfig(
     val detectFemales: Boolean = true,
     val detectMales: Boolean = false,
     val useContentDetection: Boolean = true,
-    val showCustomContentWhenBlurred: Boolean = false // New flag to control behavior
+    val showCustomContentWhenBlurred: Boolean = false,
+    val showTextInsteadOfBlur: Boolean = false
 )
 
 private fun generateImageKey(model: Any?): String = when (model) {
