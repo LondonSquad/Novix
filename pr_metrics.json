@@ -8744,5 +8744,33 @@
       "deletions": 1,
       "changed_files": 1
     }
+  },
+  {
+    "pr_number": 368,
+    "url": "https://github.com/LondonSquad/Novix/pull/368",
+    "title": "Fix: update recent sections in real time,Ensure episode overview is s…",
+    "opened_at": "2025-07-29T14:50:26Z",
+    "head_ref": "hotfix/update-recent-sections-on-real-time",
+    "base_ref": "develop",
+    "creator": {
+      "login": "marwanqashwa",
+      "id": 100484790,
+      "url": "https://github.com/marwanqashwa"
+    },
+    "approvals": [],
+    "first_approved_at": null,
+    "time_to_first_approval_minutes": null,
+    "required_approvals_met_at": null,
+    "time_to_required_approvals_minutes": null,
+    "closed_at": null,
+    "merged_at": null,
+    "merged_by": null,
+    "week": "2025-W31",
+    "status": "pending",
+    "diff_stats": {
+      "additions": 13,
+      "deletions": 2,
+      "changed_files": 3
+    }
   }
 ]
