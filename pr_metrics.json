@@ -8357,5 +8357,33 @@
       "deletions": 59,
       "changed_files": 3
     }
+  },
+  {
+    "pr_number": 343,
+    "url": "https://github.com/LondonSquad/Novix/pull/343",
+    "title": "fix: search text field empty characters, not perform empty transactions",
+    "opened_at": "2025-07-29T01:13:48Z",
+    "head_ref": "hotfix/search-text-field",
+    "base_ref": "develop",
+    "creator": {
+      "login": "marwanqashwa",
+      "id": 100484790,
+      "url": "https://github.com/marwanqashwa"
+    },
+    "approvals": [],
+    "first_approved_at": null,
+    "time_to_first_approval_minutes": null,
+    "required_approvals_met_at": null,
+    "time_to_required_approvals_minutes": null,
+    "closed_at": null,
+    "merged_at": null,
+    "merged_by": null,
+    "week": "2025-W31",
+    "status": "pending",
+    "diff_stats": {
+      "additions": 30,
+      "deletions": 11,
+      "changed_files": 2
+    }
   }
 ]
