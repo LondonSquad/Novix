@@ -8541,5 +8541,33 @@
       "deletions": 74,
       "changed_files": 6
     }
+  },
+  {
+    "pr_number": 358,
+    "url": "https://github.com/LondonSquad/Novix/pull/358",
+    "title": "refactor: fix slow animation issue in popular section",
+    "opened_at": "2025-07-29T11:49:42Z",
+    "head_ref": "fix/popular-pager-animation",
+    "base_ref": "develop",
+    "creator": {
+      "login": "AbdoMagdey24",
+      "id": 90211730,
+      "url": "https://github.com/AbdoMagdey24"
+    },
+    "approvals": [],
+    "first_approved_at": null,
+    "time_to_first_approval_minutes": null,
+    "required_approvals_met_at": null,
+    "time_to_required_approvals_minutes": null,
+    "closed_at": null,
+    "merged_at": null,
+    "merged_by": null,
+    "week": "2025-W31",
+    "status": "pending",
+    "diff_stats": {
+      "additions": 16,
+      "deletions": 8,
+      "changed_files": 1
+    }
   }
 ]
