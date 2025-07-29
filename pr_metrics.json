@@ -9075,5 +9075,33 @@
       "deletions": 50,
       "changed_files": 2
     }
+  },
+  {
+    "pr_number": 383,
+    "url": "https://github.com/LondonSquad/Novix/pull/383",
+    "title": "hotfix/tab-layout",
+    "opened_at": "2025-07-29T18:02:26Z",
+    "head_ref": "hotfix/tab-layout",
+    "base_ref": "develop",
+    "creator": {
+      "login": "abdelrhman1002",
+      "id": 180463542,
+      "url": "https://github.com/abdelrhman1002"
+    },
+    "approvals": [],
+    "first_approved_at": null,
+    "time_to_first_approval_minutes": null,
+    "required_approvals_met_at": null,
+    "time_to_required_approvals_minutes": null,
+    "closed_at": null,
+    "merged_at": null,
+    "merged_by": null,
+    "week": "2025-W31",
+    "status": "pending",
+    "diff_stats": {
+      "additions": 25,
+      "deletions": 12,
+      "changed_files": 1
+    }
   }
 ]
