@@ -53,6 +53,7 @@ import com.london.presentation.feature.details.tvshow.episodedetails.EpisodeDeta
 import com.london.presentation.feature.details.tvshow.tvshowdetails.TvShowsDetailsScreen
 import com.london.presentation.feature.home.HomeScreen
 import com.london.presentation.feature.login.LoginScreen
+import com.london.presentation.feature.register.WebViewRegistrationScreen
 import com.london.presentation.feature.onboarding.OnboardingRoute
 import com.london.presentation.feature.onboarding.SplashRoute
 import com.london.presentation.feature.onboarding.WelcomeScreen
@@ -152,6 +153,9 @@ fun NovixApp(appPreferencesService: AppPreferencesService) {
                     },
                     onNavigateBack = {
                         navController.popBackStack()
+                    },
+                    onNavigateToWebViewRegistration = {
+
                     }
                 )
             }
@@ -359,6 +363,20 @@ fun NovixApp(appPreferencesService: AppPreferencesService) {
                 )
             }
 
+            composable<Screen.Register>(
+                exitTransition = { fadeOut(tween(500)) },
+                popEnterTransition = { fadeIn(tween(500)) },
+                enterTransition = { fadeIn(tween(500)) },
+                popExitTransition = { fadeOut(tween(500)) },
+            ) {
+                WebViewRegistrationScreen(
+                    onNavigateBack = {
+                        navController.popBackStack()
+                    },
+                    onRegistrationComplete = {navController.navigate(Login)}
+                )
+            }
+
             composable<Screen.ActorGallery> {
                 ActorGalleryScreen(
                     onBackClick = { navController.popBackStack() }
@@ -366,10 +384,10 @@ fun NovixApp(appPreferencesService: AppPreferencesService) {
             }
             composable<Screen.TopRated> {
                 TopRatedScreen(
-                 onBackClick = {navController.popBackStack()},
-                 onMovieClick = {navController.navigate(MovieDetails(it))},
-                 onTvShowClick = {navController.navigate(TvShowDetails(it))}
-             )
+                    onBackClick = {navController.popBackStack()},
+                    onMovieClick = {navController.navigate(MovieDetails(it))},
+                    onTvShowClick = {navController.navigate(TvShowDetails(it))}
+                )
             }
 
             composable<Login> {
@@ -380,6 +398,7 @@ fun NovixApp(appPreferencesService: AppPreferencesService) {
                     onNavigateToHome = {
                         navController.navigate(Home)
                     },
+                    onNavigateToWebViewRegistration = {navController.navigate(Screen.Register)}
                 )
             }
         }

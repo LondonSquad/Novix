@@ -37,7 +37,6 @@ class LoginViewModel(
     }
 
 
-
     override fun onPasswordVisibilityToggled() {
         updateState {
             copy(passwordVisible = !passwordVisible)
@@ -45,7 +44,7 @@ class LoginViewModel(
     }
 
     override fun onCreateAccountClick() {
-        emitEffect(LoginEffect.NavigateToCreateAccount(CREATE_ACCOUNT_URL))
+        emitEffect(LoginEffect.NavigateToWebViewRegistration)
     }
 
     override fun onForgotPasswordClick() {
