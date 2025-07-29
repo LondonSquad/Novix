@@ -32,8 +32,8 @@ import com.london.presentation.R
 
 @Composable
 fun WelcomeScreen(
-    onLoginClicked: () -> Unit,
-    onContinueClicked: () -> Unit,
+    onNavigateLogin: () -> Unit,
+    onNavigateContinue: () -> Unit,
 ) {
     Column(
         modifier = Modifier
@@ -79,7 +79,7 @@ fun WelcomeScreen(
 
                 PrimaryButton(
                     text = stringResource(R.string.login),
-                    onClick = onLoginClicked,
+                    onClick = onNavigateLogin,
                     modifier = Modifier
                         .fillMaxWidth(),
                     isLoading = false,
@@ -92,7 +92,7 @@ fun WelcomeScreen(
 
                 OutlineButton(
                     text = stringResource(R.string.continue_as_guest),
-                    onClick = onContinueClicked,
+                    onClick = onNavigateContinue,
                     modifier = Modifier
                         .fillMaxWidth(),
                     hasLabel = true,
@@ -147,7 +147,7 @@ fun WelcomePoster(modifier: Modifier = Modifier) {
 @Composable
 fun PreviewWelcomeScreen() {
     WelcomeScreen(
-        onContinueClicked = {},
-        onLoginClicked = {}
+        onNavigateContinue = {},
+        onNavigateLogin = {}
     )
 }

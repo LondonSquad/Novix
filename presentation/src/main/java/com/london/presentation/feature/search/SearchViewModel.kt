@@ -60,11 +60,11 @@ class SearchViewModel(
     private val _searchQuery = MutableStateFlow("")
 
     init {
-        initializeData()
+        updateRecentData()
         setupSearchDebouncing()
     }
 
-    private fun initializeData() {
+     fun updateRecentData() {
         tryToExecute(
             block = {
                 val recentViewed = getRecentViewedUseCase.invoke().reversed()
@@ -114,7 +114,6 @@ class SearchViewModel(
         )
 
     override fun onCategorySelected(category: SearchCategory) {
-        if (category == state.value.selectedCategory) return
         updateState {
             copy(
                 selectedCategory = category,
