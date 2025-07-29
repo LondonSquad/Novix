@@ -86,4 +86,19 @@ class SearchRemoteDataSourceImpl(
             },
             mapper = { it }
         )
+
+    override suspend fun searchForTvShowsByCategoryId(
+        categoryId: Int,
+        pageNumber: Int,
+        includeAdult: Boolean
+    ): Result<ApiResponse<SearchTvShowRemote>> =callApiWithRetry(
+        {
+            searchApiService.searchForTvShowsByCategory(
+                genreId = categoryId,
+                page = pageNumber,
+                includeAdult = includeAdult
+            )
+        },
+        mapper = { it }
+    )
 }
