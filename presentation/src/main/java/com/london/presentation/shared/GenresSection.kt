@@ -2,6 +2,7 @@ package com.london.presentation.shared
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.requiredWidth
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
@@ -30,7 +31,8 @@ fun <T> GenresSection(
             NovixChip(
                 text = getGenreName(genre),
                 isSelected = (getGenreId(genre) == selectedGenreId),
-                onClick = { onGenreClick(genre) }
+                onClick = { onGenreClick(genre) },
+                modifier = Modifier.padding(bottom = 8.dp)
             )
         }
     }
