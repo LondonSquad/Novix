@@ -8776,5 +8776,33 @@
       "deletions": 15,
       "changed_files": 3
     }
+  },
+  {
+    "pr_number": 371,
+    "url": "https://github.com/LondonSquad/Novix/pull/371",
+    "title": "Refactor: Replace custom ReviewTopBar with TopBar component in Reviews Screen",
+    "opened_at": "2025-07-29T15:25:42Z",
+    "head_ref": "fix/top-bar-review-screen",
+    "base_ref": "develop",
+    "creator": {
+      "login": "Mostafa-alsaygh",
+      "id": 106277855,
+      "url": "https://github.com/Mostafa-alsaygh"
+    },
+    "approvals": [],
+    "first_approved_at": null,
+    "time_to_first_approval_minutes": null,
+    "required_approvals_met_at": null,
+    "time_to_required_approvals_minutes": null,
+    "closed_at": null,
+    "merged_at": null,
+    "merged_by": null,
+    "week": "2025-W31",
+    "status": "pending",
+    "diff_stats": {
+      "additions": 17,
+      "deletions": 45,
+      "changed_files": 1
+    }
   }
 ]
