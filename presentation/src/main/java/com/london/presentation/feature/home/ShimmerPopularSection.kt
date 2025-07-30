@@ -1,6 +1,5 @@
 package com.london.presentation.feature.home
 
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -12,7 +11,6 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.PagerState
-import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -22,19 +20,14 @@ import androidx.compose.ui.graphics.TransformOrigin
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalDensity
-import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.util.lerp
-import com.london.designsystem.component.Text
-import com.london.designsystem.theme.NovixTheme
 import com.london.designsystem.utils.shimmerEffect
-import com.london.presentation.R
 import kotlin.math.abs
 
 private const val CARD_WIDTH_DP = 244
 private const val CARD_HORIZONTAL_PADDING_DP = 8
-private const val PAGE_SPACING_DP = 8
+private const val PAGE_SPACING_DP = 2
 
 private const val ROTATION_PREVIOUS_DEGREES = 3f
 private const val ROTATION_NEXT_DEGREES = -3f
@@ -48,7 +41,6 @@ private const val ROTATION_OFFSET_ADJUSTMENT = 1f
 private const val ROTATION_FRACTION_MULTIPLIER = 0.5f
 private const val SCALE_MIN_FRACTION = 0f
 private const val SCALE_MAX_FRACTION = 1f
-
 
 @Composable
 fun ShimmerPopularSection(
@@ -67,13 +59,14 @@ fun ShimmerPopularSection(
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
 
-        Text(
-            text = stringResource(R.string.popular),
-            style = NovixTheme.typography.headline.small,
-            color = NovixTheme.colors.title,
+        Box(
             modifier = Modifier
                 .padding(start = 16.dp, end = 16.dp)
+                .height(30.dp)
+                .width(60.dp)
                 .align(Alignment.Start)
+                .clip(RoundedCornerShape(8.dp))
+                .shimmerEffect()
         )
 
         HorizontalPager(
@@ -89,7 +82,10 @@ fun ShimmerPopularSection(
                 modifier = Modifier
                     .fillMaxWidth()
                     .wrapContentSize(Alignment.Center)
-                    .padding(horizontal =  CARD_HORIZONTAL_PADDING_DP.dp, vertical = CARD_HORIZONTAL_PADDING_DP.dp)
+                    .padding(
+
+                        vertical = CARD_HORIZONTAL_PADDING_DP.dp
+                    )
                     .graphicsLayer {
                         rotationZ = lerp(
                             start = ROTATION_PREVIOUS_DEGREES,
@@ -108,35 +104,43 @@ fun ShimmerPopularSection(
 
                         transformOrigin = TransformOrigin(TRANSFORM_ORIGIN_X, TRANSFORM_ORIGIN_Y)
                     }
+                    .clip(RoundedCornerShape(12.dp))
+                    .shimmerEffect(),
             ) {
-                // Add background color to make shimmer visible
-                Box(
-                    modifier = Modifier
-                        .height(200.dp)
-                        .width(160.dp) // Make it wider like a card
-                        .background(NovixTheme.colors.surface.copy(alpha = 0.3f)) // Add background
-                        .clip(RoundedCornerShape(12.dp)) // Add rounded corners
-                        .shimmerEffect()
-                )
+
+                repeat(3){
+                    Box(modifier = Modifier
+                        .height(280.dp)
+                        .width(190.dp))
+                }
+
+                if (pagerState.currentPage == page)
+                    Column(
+                        modifier = Modifier
+                            .padding(start = 8.dp, bottom = 6.dp, end = 8.dp)
+                            .align(Alignment.BottomStart),
+                        horizontalAlignment = Alignment.Start,
+                    ) {
+                        Box(
+                            modifier = Modifier
+                                .height(40.dp)
+                                .fillMaxWidth()
+                                .clip(RoundedCornerShape(8.dp))
+                                .shimmerEffect()
+                        )
+
+                        Box(
+                            modifier = Modifier
+                                .padding(top = 2.dp)
+                                .height(30.dp)
+                                .width(60.dp)
+                                .clip(RoundedCornerShape(8.dp))
+                                .shimmerEffect()
+                        )
+                    }
             }
         }
-    }
-}
 
-@Preview
-@Composable
-private fun Preview(modifier: Modifier = Modifier) {
-    PopularSection(
-        pagerState = rememberPagerState(initialPage = 0, pageCount = { 4 }),
-        onSaveClick = {},
-        onCardClick = {},
-        cardTitle = "Popular",
-        cardRating = "4.5",
-        images = listOf(
-            "https://image.tmdb.org/t/p/w500/rktDFPbfHfUbArZ6OOOKsXcv0Bm.jpg",
-            "https://image.tmdb.org/t/p/w500/rktDFPbfHfUbArZ6OOOKsXcv0Bm.jpg",
-            "https://image.tmdb.org/t/p/w500/rktDFPbfHfUbArZ6OOOKsXcv0Bm.jpg",
-            "https://image.tmdb.org/t/p/w500/rktDFPbfHfUbArZ6OOOKsXcv0Bm.jpg",
-        )
-    )
+    }
+
 }

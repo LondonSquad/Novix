@@ -41,10 +41,10 @@ fun Modifier.shimmerEffect(): Modifier = composed {
         initialValue = -2 * size.width.toFloat(),
         targetValue = 2 * size.width.toFloat(),
         animationSpec = infiniteRepeatable(
-            animation = tween(1000)
+            animation = tween(2000)
         ), label = "start offset"
     )
-    val shimmerColor = Color.LightGray
+    val shimmerColor = Color.Gray
     val shimmerColors = remember {
         listOf(
             shimmerColor.copy(alpha = 0.24f),
@@ -63,7 +63,6 @@ fun Modifier.shimmerEffect(): Modifier = composed {
         size = coordinates.size
     }
         .drawWithCache {
-
             onDrawWithContent {
                 drawContent()
                 drawRect(brush = shimmerBrush)
