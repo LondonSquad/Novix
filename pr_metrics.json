@@ -13909,11 +13909,11 @@
     "time_to_first_approval_minutes": 9.85,
     "required_approvals_met_at": null,
     "time_to_required_approvals_minutes": null,
-    "closed_at": null,
+    "closed_at": "2025-07-30T19:40:39Z",
     "merged_at": null,
     "merged_by": null,
     "week": "2025-W31",
-    "status": "pending",
+    "status": "closed",
     "diff_stats": {
       "additions": 14,
       "deletions": 17,
