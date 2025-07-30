@@ -9606,5 +9606,33 @@
       "deletions": 2,
       "changed_files": 1
     }
+  },
+  {
+    "pr_number": 409,
+    "url": "https://github.com/LondonSquad/Novix/pull/409",
+    "title": "Top Tv Shows picks UI",
+    "opened_at": "2025-07-30T01:08:22Z",
+    "head_ref": "hotfix/top-tvshows-ui",
+    "base_ref": "develop",
+    "creator": {
+      "login": "AsmaaKhaledGomaa",
+      "id": 117874933,
+      "url": "https://github.com/AsmaaKhaledGomaa"
+    },
+    "approvals": [],
+    "first_approved_at": null,
+    "time_to_first_approval_minutes": null,
+    "required_approvals_met_at": null,
+    "time_to_required_approvals_minutes": null,
+    "closed_at": null,
+    "merged_at": null,
+    "merged_by": null,
+    "week": "2025-W31",
+    "status": "pending",
+    "diff_stats": {
+      "additions": 72,
+      "deletions": 95,
+      "changed_files": 8
+    }
   }
 ]
