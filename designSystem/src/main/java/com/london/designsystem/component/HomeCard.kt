@@ -15,6 +15,7 @@ import androidx.compose.ui.unit.dp
 import com.london.designsystem.component.button.ErrorImage
 import com.london.designsystem.theme.NovixTheme
 import com.london.designsystem.theme.ThemePreviews
+import com.london.imageharamblur.ui.ImageViewFilter
 
 @Composable
 fun HomeCard(
@@ -27,10 +28,11 @@ fun HomeCard(
 ) {
 
     Box(
-        modifier = modifier
+        modifier = Modifier
+            .clip(RoundedCornerShape(12.dp))
+            .then(modifier)
             .fillMaxWidth()
             .aspectRatio(3f/4f)
-            .clip(RoundedCornerShape(12.dp))
             .border(
                 width = 1.dp,
                 color = NovixTheme.colors.stroke,

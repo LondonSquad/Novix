@@ -10,19 +10,23 @@ import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.asPaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.requiredWidth
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.statusBars
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.GridItemSpan
 import androidx.compose.foundation.lazy.grid.LazyGridScope
 import androidx.compose.foundation.lazy.grid.LazyGridState
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.pager.rememberPagerState
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
@@ -30,6 +34,8 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.clipToBounds
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
@@ -38,19 +44,20 @@ import androidx.compose.ui.platform.LocalWindowInfo
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.lifecycle.repeatOnLifecycle
 import androidx.paging.compose.LazyPagingItems
 import androidx.paging.compose.collectAsLazyPagingItems
 import com.london.designsystem.component.DefaultTopBar
 import com.london.designsystem.component.HomeCard
-import com.london.designsystem.component.SectionHeader
 import com.london.designsystem.component.Text
 import com.london.designsystem.component.button.PrimaryButton
 import com.london.designsystem.theme.NovixTheme
+import com.london.designsystem.utils.shimmerEffect
 import com.london.domain.entity.Movie
 import com.london.presentation.R
-import com.london.presentation.feature.base.ErrorState
-import com.london.presentation.feature.buildscreen.LoadingScreen
 import com.london.presentation.feature.buildscreen.NetworkErrorScreen
 import com.london.presentation.shared.GenresSection
 import com.london.presentation.utils.Listen
@@ -64,6 +71,7 @@ fun HomeScreen(
     onNavigateTrendingMovies: () -> Unit = {},
     onNavigateTrendingTvShows: () -> Unit = {},
     onNavigateTrendingActors: () -> Unit = {},
+    onNavigateContinueWatching: () -> Unit = {},
     viewModel: HomeViewModel = koinViewModel(),
 ) {
     val uiState by viewModel.state.collectAsStateWithLifecycle()
@@ -77,7 +85,14 @@ fun HomeScreen(
             is HomeScreenEffect.NavigationTrendingTvShows -> onNavigateTrendingTvShows()
             is HomeScreenEffect.NavigationTrendingActor -> onNavigateTrendingActors()
             is HomeScreenEffect.NavigationTopRated -> onNavigateTopRated()
+            is HomeScreenEffect.NavigationContinueWatching -> onNavigateContinueWatching()
         }
+    }
+
+    val lifecycleOwner = LocalLifecycleOwner.current
+    LaunchedEffect(key1 = Unit) {
+        lifecycleOwner.lifecycle.repeatOnLifecycle(Lifecycle.State.RESUMED) {
+            viewModel.fetchRecentWatchedMedia()        }
     }
 
     val lazyGridState = rememberSaveable(
@@ -86,53 +101,51 @@ fun HomeScreen(
         LazyGridState()
     }
 
-    when {
-        uiState.isLoading -> LoadingScreen()
-        uiState.error == ErrorState.NoInternet -> NetworkErrorScreen()
-        else -> {
-            val screenWidth =
-                with(LocalDensity.current) { LocalWindowInfo.current.containerSize.width.toDp() }
+    val screenWidth =
+        with(LocalDensity.current) { LocalWindowInfo.current.containerSize.width.toDp() }
+
+    when{
+        uiState.error != null -> NetworkErrorScreen()
+        else ->
+            Box(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(WindowInsets.statusBars.asPaddingValues())
+        ) {
 
             Box(
                 modifier = Modifier
-                    .fillMaxSize()
-                    .padding(WindowInsets.statusBars.asPaddingValues())
-            ) {
-
-                Box(
-                    modifier = Modifier
-                        .size(400.dp)
-                        .align(Alignment.TopStart)
-                        .background(
-                            Brush.linearGradient(
-                                colors = listOf(
-                                    NovixTheme.colors.primary.copy(alpha = 0.09f),
-                                    Color.Transparent
-                                ),
-                                start = Offset(0f, 0f),
-                                end = Offset(screenWidth.value, 400f)
-                            )
+                    .size(400.dp)
+                    .align(Alignment.TopStart)
+                    .background(
+                        Brush.linearGradient(
+                            colors = listOf(
+                                NovixTheme.colors.primary.copy(alpha = 0.09f),
+                                Color.Transparent
+                            ),
+                            start = Offset(0f, 0f),
+                            end = Offset(screenWidth.value, 400f)
                         )
+                    )
+            )
+            Column(modifier = Modifier.fillMaxSize()) {
+                DefaultTopBar(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .background(NovixTheme.colors.surface)
+
                 )
-                Column(modifier = Modifier.fillMaxSize()) {
-                    DefaultTopBar(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .background(NovixTheme.colors.surface)
 
-                    )
-
-
-                    Content(
-                        homeScreenContract = viewModel,
-                        uiState = uiState,
-                        modifier = Modifier.weight(1f),
-                        lazyGridState = lazyGridState,
-                        screenWidth = screenWidth
-                    )
-                }
+                Content(
+                    homeScreenContract = viewModel,
+                    uiState = uiState,
+                    modifier = Modifier.weight(1f),
+                    lazyGridState = lazyGridState,
+                    screenWidth = screenWidth
+                )
             }
         }
+
     }
 }
 
@@ -146,7 +159,9 @@ private fun Content(
 ) {
     val upcomingMoviesLazyList = uiState.upcomingMovies.collectAsLazyPagingItems()
     val totalPopularItems = uiState.popularMovies.size + uiState.popularTvShows.size
-    val pagerState = rememberPagerState(initialPage = 0, pageCount = { totalPopularItems })
+    val pagerState = rememberPagerState(initialPage = 0, pageCount = {
+        if (totalPopularItems > 0) totalPopularItems else 3
+    })
 
     val isAtEndOfGrid by remember {
         derivedStateOf {
@@ -156,9 +171,9 @@ private fun Content(
         }
     }
 
+    val isLoading = uiState.isLoading
+
     Box(modifier = modifier.fillMaxSize()) {
-
-
 
         LazyVerticalGrid(
             columns = GridCells.Adaptive(minSize = 158.dp),
@@ -176,23 +191,22 @@ private fun Content(
                 .fillMaxSize()
         ) {
 
-            if (totalPopularItems > 0) {
-                val moviesCount = uiState.popularMovies.size
-                val currentPage = pagerState.currentPage
+            item(span = { GridItemSpan(maxLineSpan) }) {
+                if (totalPopularItems > 0) {
+                    val moviesCount = uiState.popularMovies.size
+                    val currentPage = pagerState.currentPage
 
-                val popularCardImages = uiState.popularMovies.map { it.posterUrl } +
-                        uiState.popularTvShows.map { it.posterUrl }
+                    val popularCardImages = uiState.popularMovies.map { it.posterUrl } +
+                            uiState.popularTvShows.map { it.posterUrl }
 
-                val popularCardRating = uiState.popularMovies.map { it.rating } +
-                        uiState.popularTvShows.map { it.rating }
+                    val popularCardRating = uiState.popularMovies.map { it.rating } +
+                            uiState.popularTvShows.map { it.rating }
 
-                val popularCardTitle = uiState.popularMovies.map { it.title } +
-                        uiState.popularTvShows.map { it.name }
+                    val popularCardTitle = uiState.popularMovies.map { it.title } +
+                            uiState.popularTvShows.map { it.name }
 
-                item(span = { GridItemSpan(maxLineSpan) }) {
                     PopularSection(
-                        modifier = Modifier
-                            .requiredWidth(screenWidth),
+                        modifier = Modifier.requiredWidth(screenWidth),
                         pagerState = pagerState,
                         images = popularCardImages,
                         onSaveClick = {/*TODO*/ },
@@ -213,11 +227,17 @@ private fun Content(
                             }
                         }
                     )
+                } else {
+                    ShimmerPopularSection(
+                        modifier = Modifier.requiredWidth(screenWidth),
+                        pagerState = pagerState,
+                    )
                 }
             }
 
             item(span = { GridItemSpan(maxLineSpan) }) {
                 TrendingSection(
+                    isLoading = isLoading,
                     modifier = Modifier.padding(top = 8.dp),
                     onMoviesClick = homeScreenContract::onTrendingMoviesCardClicked,
                     onTvShowsClick = homeScreenContract::onTrendingTvShowsCardClicked,
@@ -226,21 +246,35 @@ private fun Content(
             }
 
             item(span = { GridItemSpan(maxLineSpan) }) {
-                SectionHeader(
-                    text = stringResource(R.string.top_rating),
-                    hasGetAll = true,
-                    hasIcon = true,
-                    onClick = {
-                        homeScreenContract.onTopRatedClick()
-                    }
-                )
+                if (!uiState.isTopRatedLoading)
+                    TopRatedSection(
+                        uiState = uiState,
+                        homeScreenContract = homeScreenContract,
+                        modifier = Modifier.requiredWidth(screenWidth)
+                    )
+                else
+                    CarousalShimmerEffect()
             }
+
+            if (uiState.recentWatchedMediaList.isNotEmpty()) {
+                item(span = { GridItemSpan(maxLineSpan) }) {
+                    if (!isLoading)
+                        ContinueWatchingSection(
+                            uiState = uiState,
+                            homeScreenContract = homeScreenContract,
+                            modifier = Modifier.requiredWidth(screenWidth)
+                        )
+                    else CarousalShimmerEffect()
+                }
+            }
+
 
             upComingSection(
                 contract = homeScreenContract,
                 screenWidth = screenWidth,
                 state = uiState,
-                upcomingMoviesLazyList
+                upcomingMoviesLazyList = upcomingMoviesLazyList,
+                isLoading = isLoading
             )
         }
 
@@ -267,19 +301,28 @@ private fun LazyGridScope.upComingSection(
     contract: HomeScreenContract,
     screenWidth: Dp,
     state: HomeScreenUiState,
-    upcomingMoviesLazyList: LazyPagingItems<Movie>
+    upcomingMoviesLazyList: LazyPagingItems<Movie>,
+    isLoading: Boolean = false
 ) {
     item(span = { GridItemSpan(maxLineSpan) }) {
-        Text(
-            text = stringResource(R.string.upcoming),
-            style = NovixTheme.typography.headline.small,
-            color = NovixTheme.colors.title,
-            modifier = Modifier.padding(bottom = 4.dp)
-        )
+        if (!isLoading)
+            Text(
+                text = stringResource(R.string.upcoming),
+                style = NovixTheme.typography.headline.small,
+                color = NovixTheme.colors.title,
+                modifier = Modifier.padding(bottom = 4.dp)
+            )
+        else
+            Box(modifier = Modifier
+                .height(20.dp)
+                .padding(bottom = 4.dp)
+                .wrapContentWidth()
+                .shimmerEffect())
     }
 
     stickyHeader {
         GenresSection(
+            isLoading = isLoading,
             genres = state.movieGenres,
             selectedGenreId = state.selectedMovieGenre.id,
             screenWidth = screenWidth,
@@ -295,15 +338,22 @@ private fun LazyGridScope.upComingSection(
     items(count = upcomingMoviesLazyList.itemCount) { index ->
         val movie = upcomingMoviesLazyList[index]
 
-        if (movie != null)
+        if (movie != null && !isLoading)
             HomeCard(
                 imageUrl = movie.posterPicture,
                 isSaved = false,
                 onSaveClick = { /*TODO*/ },
                 modifier = Modifier
-                    .clickable { contract.onMovieClick(movie.id) }
                     .padding(top = 4.dp)
+                    .clipToBounds()
+                    .clip(RoundedCornerShape(12.dp))
+                    .clickable { contract.onMovieClick(movie.id) }
             )
+        else
+            Box(modifier = Modifier
+                .height(240.dp)
+                .clip(RoundedCornerShape(12.dp))
+                .shimmerEffect())
     }
 }
 

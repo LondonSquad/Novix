@@ -38,4 +38,8 @@ class TrendingActorsViewModel(
 
     override fun onActorClick(id: Int) = emitEffect(TrendingActorsEffect.NavigateToActor(id))
     override fun onBack() = emitEffect(TrendingActorsEffect.NavigateBack)
+
+    override fun onRetry() {
+        initializeActors()
+    }
 }

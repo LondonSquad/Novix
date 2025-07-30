@@ -8,16 +8,19 @@ sealed interface Screen {
     data object Splash : Screen
 
     @Serializable
-    data object OnboardingPager : Screen
-
-    @Serializable
-    data object Welcome : Screen
+    object OnBoarding : Screen {
+        @Serializable
+        object Welcome : Screen
+    }
 
     @Serializable
     data object Login : Screen
 
     @Serializable
     data object Home : Screen
+
+    @Serializable
+    object Register : Screen
 
     @Serializable
     data object Search : Screen
@@ -71,6 +74,11 @@ sealed interface Screen {
     )
 
     @Serializable
+    data class TvShowsByCategory(
+        val categoryId: Int,
+    ) : Screen
+
+    @Serializable
     data class EpisodeDetails(
         val tvShowId: Int,
         val seasonNumber: Int,
@@ -91,4 +99,6 @@ sealed interface Screen {
     @Serializable
     data object TopRated : Screen
 
+    @Serializable
+    data object ContinueWatching : Screen
 }

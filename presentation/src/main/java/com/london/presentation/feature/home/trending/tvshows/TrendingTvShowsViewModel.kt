@@ -51,4 +51,7 @@ class TrendingTvShowsViewModel(private val getTrendingTvShows: GetTrendingTvShow
 
     override fun onBack() = emitEffect(TrendingTvShowsEffect.NavigateBack)
 
+    override fun onRetry() {
+        initializeTvShows()
+    }
 }
