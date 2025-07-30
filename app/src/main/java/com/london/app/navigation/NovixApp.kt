@@ -29,6 +29,7 @@ import com.london.presentation.feature.account.AccountScreen
 import com.london.presentation.feature.bookmark.BookmarksScreen
 import com.london.presentation.feature.category.CategoriesScreen
 import com.london.presentation.feature.category.moviesbycategory.MoviesByCategoryScreen
+import com.london.presentation.feature.continuewatching.ContinueWatchingScreen
 import com.london.presentation.feature.details.actor.ActorDetailsScreen
 import com.london.presentation.feature.details.actordetails.gallery.ActorGalleryScreen
 import com.london.presentation.feature.details.actordetails.topmoviespicks.TopMoviesPicksScreen
@@ -37,6 +38,9 @@ import com.london.presentation.feature.details.movieDetalis.MovieDetailsScreen
 import com.london.presentation.feature.details.tvshow.episodedetails.EpisodeDetailsScreen
 import com.london.presentation.feature.details.tvshow.tvshowdetails.TvShowsDetailsScreen
 import com.london.presentation.feature.home.HomeScreen
+import com.london.presentation.feature.home.trending.actor.TrendingActorsScreen
+import com.london.presentation.feature.home.trending.movies.TrendingMoviesScreen
+import com.london.presentation.feature.home.trending.tvshows.TrendingTvShowsScreen
 import com.london.presentation.feature.login.LoginScreen
 import com.london.presentation.feature.onboarding.OnboardingRoute
 import com.london.presentation.feature.onboarding.SplashRoute
@@ -45,9 +49,12 @@ import com.london.presentation.feature.register.WebViewRegistrationScreen
 import com.london.presentation.feature.reviews.ReviewsScreen
 import com.london.presentation.feature.search.SearchScreen
 import com.london.presentation.feature.toprated.TopRatedScreen
-import com.london.presentation.feature.continuewatching.ContinueWatchingScreen
 import com.london.presentation.navigation.Screen
+import com.london.presentation.navigation.Screen.ActorDetails
 import com.london.presentation.navigation.Screen.MovieDetails
+import com.london.presentation.navigation.Screen.TrendingActors
+import com.london.presentation.navigation.Screen.TrendingMovies
+import com.london.presentation.navigation.Screen.TrendingTvShows
 import com.london.presentation.navigation.Screen.TvShowDetails
 import kotlinx.serialization.Serializable
 import org.koin.compose.getKoin
@@ -239,7 +246,36 @@ fun NavGraphBuilder.mainNavGraph(
             onNavigateContinueWatching = { navController.navigate(Screen.ContinueWatching) }
         )
     }
-
+    composable<TrendingMovies> {
+        TrendingMoviesScreen(
+            onNavigateMovie = { id ->
+                navController.navigate(MovieDetails(id))
+            },
+            onNavigateBack = {
+                navController.navigateUp()
+            }
+        )
+    }
+    composable<TrendingTvShows> {
+        TrendingTvShowsScreen(
+            onNavigateTvShow = { id ->
+                navController.navigate(TvShowDetails(id))
+            },
+            onNavigateBack = {
+                navController.navigateUp()
+            }
+        )
+    }
+    composable<TrendingActors> {
+        TrendingActorsScreen(
+            onNavigateActor = { id ->
+                navController.navigate(ActorDetails(id))
+            },
+            onNavigateBack = {
+                navController.navigateUp()
+            }
+        )
+    }
     composable<Screen.Search>(
         exitTransition = { fadeOut(tween(500)) },
         popEnterTransition = { fadeIn(tween(500)) },
