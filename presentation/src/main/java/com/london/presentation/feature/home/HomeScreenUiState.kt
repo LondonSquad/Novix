@@ -12,6 +12,7 @@ import kotlinx.coroutines.flow.StateFlow
 data class HomeScreenUiState(
     val isLoading: Boolean = false,
     val error: ErrorState? = null,
+    val isTopRatedLoading: Boolean = false,
     val popularMovies: List<PopularMovie> = emptyList(),
     val popularTvShows: List<PopularTvShow> = emptyList(),
     val topRatedUiMediaList: List<HomeUiMedia> = emptyList(),

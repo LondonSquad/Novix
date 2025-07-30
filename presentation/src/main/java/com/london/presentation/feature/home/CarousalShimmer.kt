@@ -49,7 +49,7 @@ fun CarousalShimmerEffect(
             )
 
             Box(modifier = Modifier
-                .height(240.dp)
+                .height(210.dp)
                 .clip(RoundedCornerShape(12.dp))
                 .weight(0.5f)
                 .shimmerEffect()
