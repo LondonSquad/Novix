@@ -13751,17 +13751,33 @@
           "url": "https://github.com/abdelrhman1002"
         },
         "submitted_at": "2025-07-30T16:25:08Z"
+      },
+      {
+        "reviewer": {
+          "id": 81706918,
+          "login": "karimdeabes",
+          "url": "https://github.com/karimdeabes"
+        },
+        "submitted_at": "2025-07-30T16:25:45Z"
+      },
+      {
+        "reviewer": {
+          "id": 92235360,
+          "login": "abdo-essam",
+          "url": "https://github.com/abdo-essam"
+        },
+        "submitted_at": "2025-07-30T16:25:45Z"
       }
     ],
     "first_approved_at": "2025-07-30T16:25:08Z",
     "time_to_first_approval_minutes": 3.4,
-    "required_approvals_met_at": null,
-    "time_to_required_approvals_minutes": null,
+    "required_approvals_met_at": "2025-07-30T16:25:45Z",
+    "time_to_required_approvals_minutes": 4.016666666666667,
     "closed_at": null,
     "merged_at": null,
     "merged_by": null,
     "week": "2025-W31",
-    "status": "pending",
+    "status": "approved",
     "diff_stats": {
       "additions": 1,
       "deletions": 2,
