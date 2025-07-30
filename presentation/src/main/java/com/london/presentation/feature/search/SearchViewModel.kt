@@ -64,7 +64,7 @@ class SearchViewModel(
         setupSearchDebouncing()
     }
 
-     fun updateRecentData() {
+    fun updateRecentData() {
         tryToExecute(
             block = {
                 val recentViewed = getRecentViewedUseCase.invoke().reversed()
@@ -83,6 +83,10 @@ class SearchViewModel(
                 updateState { copy(error = errorState) }
             },
         )
+    }
+
+    fun updateSearchState(updater: SearchUiState.() -> SearchUiState) {
+        updateState(updater)
     }
 
     private fun setupSearchDebouncing() {
@@ -362,7 +366,7 @@ class SearchViewModel(
         )
     }
 
-    private fun performSearch(query: String, category: SearchCategory) {
+    fun performSearch(query: String, category: SearchCategory) {
         val trimmedQuery = query.trim()
 
         updateAvailableGenres(category)
