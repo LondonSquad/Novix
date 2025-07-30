@@ -13178,11 +13178,15 @@
     "time_to_first_approval_minutes": 40.666666666666664,
     "required_approvals_met_at": "2025-07-30T01:50:23Z",
     "time_to_required_approvals_minutes": 41.11666666666667,
-    "closed_at": null,
-    "merged_at": null,
-    "merged_by": null,
+    "closed_at": "2025-07-30T02:22:43Z",
+    "merged_at": "2025-07-30T02:22:43Z",
+    "merged_by": {
+      "login": "Aseel-AbuKmail",
+      "id": 189210092,
+      "url": "https://github.com/Aseel-AbuKmail"
+    },
     "week": "2025-W31",
-    "status": "approved",
+    "status": "merged",
     "diff_stats": {
       "additions": 3,
       "deletions": 4,
