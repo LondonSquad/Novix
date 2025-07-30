@@ -29,6 +29,7 @@ import com.london.presentation.feature.account.AccountScreen
 import com.london.presentation.feature.bookmark.BookmarksScreen
 import com.london.presentation.feature.category.CategoriesScreen
 import com.london.presentation.feature.category.moviesbycategory.MoviesByCategoryScreen
+import com.london.presentation.feature.category.tvshowbycategory.TvShowByCategoryScreen
 import com.london.presentation.feature.continuewatching.ContinueWatchingScreen
 import com.london.presentation.feature.details.actor.ActorDetailsScreen
 import com.london.presentation.feature.details.actordetails.gallery.ActorGalleryScreen
@@ -276,6 +277,21 @@ fun NavGraphBuilder.mainNavGraph(
             }
         )
     }
+
+    composable<Screen.TvShowsByCategory>(
+        exitTransition = { fadeOut(tween(500)) },
+        popEnterTransition = { fadeIn(tween(500)) },
+        enterTransition = { fadeIn(tween(500)) },
+        popExitTransition = { fadeOut(tween(500)) },
+    ){
+        TvShowByCategoryScreen(
+            onNavigateBack = navController::navigateUp,
+            onNavigateToTvShowDetails = { tvShowId ->
+                navController.navigate(TvShowDetails(tvShowId))
+            }
+        )
+    }
+
     composable<Screen.Search>(
         exitTransition = { fadeOut(tween(500)) },
         popEnterTransition = { fadeIn(tween(500)) },
