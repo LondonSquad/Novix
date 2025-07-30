@@ -45,7 +45,7 @@ fun ContinueWatchingScreen(
     viewModel: ContinueWatchingViewModel = koinViewModel(),
     onBackClick: () -> Unit = {},
     onMovieClick: (Int) -> Unit = {},
-    onTvShowClick: (Int) -> Unit = {}
+    onTvShowClick: (Int) -> Unit = {},
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
     val effect by viewModel.effect.collectAsState(null)
@@ -85,7 +85,7 @@ fun Content(
                 .fillMaxWidth()
                 .padding(horizontal = 16.dp)
                 .padding(top = 20.dp),
-            title = stringResource(string.continue_watching),
+            title = stringResource(string.continue_watch),
             onBackClick = continueWatchingContract::onBack
         )
 

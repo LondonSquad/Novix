@@ -178,7 +178,4 @@ class HomeViewModel(
     override fun onTrendingActorsCardClicked() {
         emitEffect(HomeScreenEffect.NavigationTrendingActor)
     }
-
-    override fun onContinueWatchingClick() =
-        emitEffect(HomeScreenEffect.NavigationContinueWatching)
 }

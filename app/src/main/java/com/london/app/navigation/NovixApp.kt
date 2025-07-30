@@ -27,6 +27,7 @@ import com.london.presentation.feature.bookmark.BookmarksScreen
 import com.london.presentation.feature.category.CategoriesScreen
 import com.london.presentation.feature.category.moviesbycategory.MoviesByCategoryScreen
 import com.london.presentation.feature.category.tvshowbycategory.TvShowByCategoryScreen
+import com.london.presentation.feature.continuewatching.ContinueWatchingScreen
 import com.london.presentation.feature.details.actor.ActorDetailsScreen
 import com.london.presentation.feature.details.actordetails.gallery.ActorGalleryScreen
 import com.london.presentation.feature.details.actordetails.topmoviespicks.TopMoviesPicksScreen
@@ -202,6 +203,9 @@ fun NovixApp(appPreferencesService: AppPreferencesService) {
                     },
                     onNavigateTrendingActors = {
                         navController.navigate(TrendingActors)
+                    },
+                    onNavigateContinueWatching = {
+                        navController.navigate(Screen.ContinueWatching)
                     }
                 )
             }
@@ -494,6 +498,9 @@ fun NovixApp(appPreferencesService: AppPreferencesService) {
                         navController.navigateUp()
                     }
                 )
+            }
+            composable<Screen.ContinueWatching> {
+                ContinueWatchingScreen()
             }
         }
     }

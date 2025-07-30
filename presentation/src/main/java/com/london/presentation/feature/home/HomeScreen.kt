@@ -49,6 +49,7 @@ import androidx.paging.compose.LazyPagingItems
 import androidx.paging.compose.collectAsLazyPagingItems
 import com.london.designsystem.component.DefaultTopBar
 import com.london.designsystem.component.HomeCard
+import com.london.designsystem.component.SectionHeader
 import com.london.designsystem.component.Text
 import com.london.designsystem.component.button.PrimaryButton
 import com.london.designsystem.theme.NovixTheme
@@ -76,7 +77,6 @@ fun HomeScreen(
 
     effect?.Listen { currentEffect ->
         when (currentEffect) {
-            is HomeScreenEffect.NavigationContinueWatching -> onContinueWatchingClick()
             is HomeScreenEffect.NavigationMovieDetails -> onNavigateMovie(currentEffect.id)
             is HomeScreenEffect.NavigationTvShowDetails -> onNavigateTvShow(currentEffect.id)
             is HomeScreenEffect.NavigationTrendingMovie -> onNavigateTrendingMovies()
@@ -262,17 +262,6 @@ private fun Content(
                         )
                     else CarousalShimmerEffect()
                 }
-            }
-            item(span = { GridItemSpan(maxLineSpan) })
-            {
-                SectionHeader(
-                    text = stringResource(R.string.continue_watching),
-                    hasGetAll = true,
-                    hasIcon = true,
-                    onClick = {
-                        homeScreenContract.onContinueWatchingClick()
-                    }
-                )
             }
 
 
