@@ -8,4 +8,5 @@ interface HomeScreenEffect {
     object NavigationTrendingTvShows : HomeScreenEffect
     object NavigationTrendingActor : HomeScreenEffect
     object NavigationTopRated : HomeScreenEffect
+    object NavigationContinueWatching : HomeScreenEffect
 }

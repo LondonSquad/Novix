@@ -26,6 +26,7 @@ import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
@@ -48,7 +49,6 @@ import androidx.paging.compose.LazyPagingItems
 import androidx.paging.compose.collectAsLazyPagingItems
 import com.london.designsystem.component.DefaultTopBar
 import com.london.designsystem.component.HomeCard
-import com.london.designsystem.component.SectionHeader
 import com.london.designsystem.component.Text
 import com.london.designsystem.component.button.PrimaryButton
 import com.london.designsystem.theme.NovixTheme
@@ -68,7 +68,7 @@ fun HomeScreen(
     onNavigateTrendingMovies: () -> Unit = {},
     onNavigateTrendingTvShows: () -> Unit = {},
     onNavigateTrendingActors: () -> Unit = {},
-    onContinueWatchingClick: () -> Unit = {},
+    onNavigateContinueWatching: () -> Unit = {},
     viewModel: HomeViewModel = koinViewModel(),
 ) {
     val uiState by viewModel.state.collectAsStateWithLifecycle()
@@ -83,7 +83,12 @@ fun HomeScreen(
             is HomeScreenEffect.NavigationTrendingTvShows -> onNavigateTrendingTvShows()
             is HomeScreenEffect.NavigationTrendingActor -> onNavigateTrendingActors()
             is HomeScreenEffect.NavigationTopRated -> onNavigateTopRated()
+            is HomeScreenEffect.NavigationContinueWatching -> onNavigateContinueWatching()
         }
+    }
+
+    LaunchedEffect(Unit) {
+        viewModel.fetchRecentWatchedMedia()
     }
 
     val lazyGridState = rememberSaveable(
@@ -237,15 +242,26 @@ private fun Content(
             }
 
             item(span = { GridItemSpan(maxLineSpan) }) {
-                SectionHeader(
-                    isLoading = isLoading,
-                    text = stringResource(R.string.top_rating),
-                    hasGetAll = true,
-                    hasIcon = true,
-                    onClick = {
-                        homeScreenContract.onTopRatedClick()
-                    }
-                )
+                if (!isLoading)
+                    TopRatedSection(
+                        uiState = uiState,
+                        homeScreenContract = homeScreenContract,
+                        modifier = Modifier.requiredWidth(screenWidth)
+                    )
+                else
+                    CarousalShimmerEffect()
+            }
+
+            if (uiState.recentWatchedMediaList.isNotEmpty()) {
+                item(span = { GridItemSpan(maxLineSpan) }) {
+                    if (!isLoading)
+                        ContinueWatchingSection(
+                            uiState = uiState,
+                            homeScreenContract = homeScreenContract,
+                            modifier = Modifier.requiredWidth(screenWidth)
+                        )
+                    else CarousalShimmerEffect()
+                }
             }
             item(span = { GridItemSpan(maxLineSpan) })
             {

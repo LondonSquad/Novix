@@ -16,15 +16,15 @@
     <string name="comedy">كوميديا</string>
     <string name="clear">مسح</string>
     <string name="start_exploring_msg">ابدأ الاستكشاف! ابحث عن أفلامك ومسلسلاتك المفضلة</string>
-    <string name="no_search_result_msg">لا توجد نتائج، جرّب كلمة مفتاحية أخرى!</string>
-    <string name="romance">رومانسي</string>
+    <string name="no_search_result_msg">لا توجد نتائج، جرّب كلمة بحث أخرى!</string>
+    <string name="romance">غرامي</string>
     <string name="crime">جريمة</string>
     <string name="apply">قبول</string>
     <string name="adventure">مغامرة</string>
     <string name="documentary">وثائقي</string>
     <string name="animation">أنمي</string>
     <string name="family">عائلي</string>
-    <string name="fantasy">فانتازيا</string>
+    <string name="fantasy">خيالي</string>
     <string name="history">تاريخي</string>
     <string name="horror">رعب</string>
     <string name="music">موسيقى</string>
@@ -32,7 +32,7 @@
     <string name="kids">اطفال</string>
     <string name="news">اخبار</string>
     <string name="reality">واقع</string>
-    <string name="soap">أوبرا صابونية</string>
+    <string name="soap">مسلسل درامي</string>
     <string name="talk">حوار</string>
     <string name="tv_movie">فيلم تلفزيوني</string>
     <string name="thriller">إثارة</string>
@@ -91,8 +91,9 @@
     <string name="politics">سياسي</string>
     <string name="action_adventure">اكشن ومغامره</string>
     <string name="war_politics">حرب وسياسه</string>
-    <string name="top_rating">الأكثر تقيماً</string>
     <string name="retry">حاول مجددا</string>
+    <string name="top_rated">الأعلى تقييمًا</string>
+    <string name="continue_watch">تابع المشاهدة</string>
     <string name="trending_movies">الأفلام الرائجة</string>
     <string name="trending_tv_shows">المسلسلات الرائجة</string>
     <string name="trending_people">الأشخاص الرائجون</string>
@@ -100,6 +101,7 @@
     <string name="no_trending_tvshows_in_genre">لا يوجد مسلسلات في هذا التصنيف حالياً</string>
     <string name="no_trending_actors_in_genre">لا يوجد أشخاص في هذا التصنيف حالياً</string>
     <string name="reviews">المراجعات</string>
+    <string name="no_recent_history">لم تتفقد أي شيء بعد.\nخذ جولة في التطبيق ثم عُدّ مجددًا! </string>
     <string name="no_tv_shows_found">لا يوجد مسلسلات في هذا التصنيف حاليا</string>
     <string name="continue_watching">متابعة المشاهدة</string>
 </resources>
