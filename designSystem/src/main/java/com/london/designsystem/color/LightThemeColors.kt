@@ -26,7 +26,7 @@ val DarkCocoaLight = Color(0xFFBF4C33)
 val DeepCrimsonLight = Color(0xFF5B0113)
 val TealBlueLight = Color(0xFF3B99AC)
 val OceanDarkLight = Color(0xFF21606D)
-val BlackLinearGradientLight = Color(0xff000000).copy(alpha = 0.5f)
+val BlackLinearGradientLight = Color(0xff000000).copy(alpha = 0.6f)
 val WhiteLinearGradientLight = Color(0xff000000).copy(alpha = 0f)
 
 val LightNovixColors = NovixColors(
