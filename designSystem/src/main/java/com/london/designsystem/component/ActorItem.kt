@@ -53,12 +53,11 @@ fun ActorItem(
 
 @Composable
 private fun ActorImage(imageRes: Any) {
-    val isRtl = isRtlLayout()
     val imageShape = RoundedCornerShape(
         topStart = 12.dp,
         topEnd = 12.dp,
-        bottomStart = if (isRtl) 12.dp else 12.dp,
-        bottomEnd = if (isRtl) 0.dp else 0.dp
+        bottomStart = 12.dp,
+        bottomEnd = 0.dp
     )
 
     Box {
