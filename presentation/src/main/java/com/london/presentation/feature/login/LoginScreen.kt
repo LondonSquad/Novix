@@ -55,7 +55,8 @@ import com.london.designsystem.R as dsR
 fun LoginScreen(
     viewModel: LoginViewModel = koinViewModel(),
     onNavigateToHome: () -> Unit,
-    onNavigateBack: () -> Unit
+    onNavigateBack: () -> Unit,
+    onNavigateToWebViewRegistration: () -> Unit
 ) {
     val uiState by viewModel.state.collectAsStateWithLifecycle()
     val effect by viewModel.effect.collectAsState(null)
@@ -67,6 +68,7 @@ fun LoginScreen(
             is LoginEffect.NavigateToCreateAccount -> uriHandler.openUri(currentEffect.url)
             is LoginEffect.NavigateToForgotPassword -> uriHandler.openUri(currentEffect.url)
             is LoginEffect.NavigateBack -> onNavigateBack()
+            is LoginEffect.NavigateToWebViewRegistration -> onNavigateToWebViewRegistration()
         }
     }
 
