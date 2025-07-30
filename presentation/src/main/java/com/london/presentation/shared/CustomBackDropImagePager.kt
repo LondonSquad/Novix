@@ -14,6 +14,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
@@ -43,6 +44,7 @@ fun CustomBackDropImagePager(
                 .background(NovixTheme.colors.surface),
             contentAlignment = Alignment.Center
         ) {
+            ImageVerticalGradient()
             ErrorImage()
         }
     } else {
@@ -109,6 +111,30 @@ fun CustomBackDropImagePager(
                         .align(Alignment.BottomCenter)
                 )
             }
+            ImageVerticalGradient()
         }
     }
+}
+
+@Composable
+private fun ImageVerticalGradient() {
+    Box(
+        modifier = Modifier
+            .fillMaxWidth()
+            .height(252.dp)
+            .clip(
+                shape = RoundedCornerShape(
+                    bottomStart = 12.dp,
+                    bottomEnd = 12.dp
+                )
+            )
+            .background(
+                brush = Brush.verticalGradient(
+                    colors = listOf(
+                        NovixTheme.colors.blackLinearGradient,
+                        NovixTheme.colors.whiteLinearGradient
+                    )
+                )
+            )
+    )
 }
