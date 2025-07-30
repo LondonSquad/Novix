@@ -482,8 +482,8 @@ fun CastSection(
                     characterName = "${member.roles[0].character} - ${member.roles[0].episodeCount}",
                     imageRes = member.profileUrl.orEmpty(),
                     modifier = Modifier
-                        .widthIn(296.dp)
-                        .clickable { onNavigateToCast(member.id) }
+                        .widthIn(296.dp),
+                    onClick = { onNavigateToCast(member.id) }
                 )
             }
         }

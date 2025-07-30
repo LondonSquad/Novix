@@ -5,7 +5,6 @@ import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -211,9 +210,8 @@ fun EpisodeDetailsScreenContent(
                         imageRes = member.profilePicture,
                         modifier = Modifier
                             .fillMaxWidth()
-                            .padding(horizontal = 16.dp, vertical = 6.dp)
-                            .clickable { onNavigateToCast(member.id) }
-
+                            .padding(horizontal = 16.dp, vertical = 6.dp),
+                        onClick = { onNavigateToCast(member.id) }
                     )
                 }
 

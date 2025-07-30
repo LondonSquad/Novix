@@ -1,7 +1,6 @@
 package com.london.presentation.feature.home.trending.actor
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -75,10 +74,10 @@ private fun TrendingActorsContent(
             pagingItems = actorsLazyItems,
         ) { actor ->
             ActorItem(
-                modifier = Modifier.clickable { contract.onActorClick(actor.id) },
                 actorName = actor.name,
                 characterName = null,
-                imageRes = actor.profilePicture
+                imageRes = actor.profilePicture,
+                onClick = {contract.onActorClick(actor.id)}
             )
         }
     }

@@ -282,12 +282,12 @@ fun MovieDetailsContent(
                                 characterName = actor.characterName,
                                 imageRes = actor.profilePicture,
                                 modifier = Modifier
-                                    .defaultMinSize(minWidth = 296.dp)
-                                    .clickable {
-                                        movieDetailsContract.onActorClick(
-                                            actor.id
-                                        )
-                                    }
+                                    .defaultMinSize(minWidth = 296.dp),
+                                onClick = {
+                                    movieDetailsContract.onActorClick(
+                                        actor.id
+                                    )
+                                }
                             )
                         }
                     }
