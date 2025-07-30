@@ -57,6 +57,7 @@ import com.london.designsystem.component.Text
 import com.london.designsystem.component.UnSuitableEye
 import com.london.designsystem.component.button.ErrorImage
 import com.london.designsystem.theme.NovixTheme
+import com.london.designsystem.theme.noRippleClickable
 import com.london.domain.entity.tvshowdetails.TvShowCastMemberEntity
 import com.london.imageharamblur.ui.ImageViewFilter
 import com.london.presentation.feature.buildscreen.BuildScreen
@@ -325,7 +326,7 @@ fun GenreNames(
                     color = NovixTheme.colors.body,
                     modifier = if (index != uiState.tvShowGenres.lastIndex)
                         Modifier
-                            .clickable {
+                            .noRippleClickable {
                                 onGenreClick(genre.id)
                             }
                             .padding(end = 8.dp) else Modifier.clickable {
