@@ -112,7 +112,7 @@ fun WelcomePoster(modifier: Modifier = Modifier) {
         contentAlignment = Alignment.BottomCenter
     ) {
         Image(
-            painter = painterResource(id = R.drawable.image_onboarding_background),
+            painter = painterResource(id = R.drawable.img_onboarding_fourth),
             contentDescription = "",
             contentScale = ContentScale.Crop,
             modifier = Modifier.matchParentSize()
