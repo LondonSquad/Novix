@@ -41,6 +41,7 @@ import com.london.presentation.feature.login.LoginScreen
 import com.london.presentation.feature.onboarding.OnboardingRoute
 import com.london.presentation.feature.onboarding.SplashRoute
 import com.london.presentation.feature.onboarding.WelcomeScreen
+import com.london.presentation.feature.register.WebViewRegistrationScreen
 import com.london.presentation.feature.reviews.ReviewsScreen
 import com.london.presentation.feature.search.SearchScreen
 import com.london.presentation.feature.toprated.TopRatedScreen
@@ -194,8 +195,22 @@ fun NavGraphBuilder.authNavGraph(
                 navController.popBackStack()
             },
             onNavigateToWebViewRegistration = {
-
+                navController.navigate(Screen.Register)
             }
+        )
+    }
+
+    composable<Screen.Register>(
+        exitTransition = { fadeOut(tween(500)) },
+        popEnterTransition = { fadeIn(tween(500)) },
+        enterTransition = { fadeIn(tween(500)) },
+        popExitTransition = { fadeOut(tween(500)) },
+    ) {
+        WebViewRegistrationScreen(
+            onNavigateBack = {
+                navController.popBackStack()
+            },
+            onRegistrationComplete = { navController.navigate(Screen.Login) }
         )
     }
 }
@@ -217,9 +232,9 @@ fun NavGraphBuilder.mainNavGraph(
                 navController.navigate(TvShowDetails(tvShowId))
             },
             onNavigateTopRated = { navController.navigate(Screen.TopRated) },
-            onNavigateTrendingMovies = {},
-            onNavigateTrendingTvShows = {},
-            onNavigateTrendingActors = {},
+            onNavigateTrendingMovies = { navController.navigate(Screen.TrendingMovies) },
+            onNavigateTrendingTvShows = { navController.navigate(Screen.TrendingTvShows) },
+            onNavigateTrendingActors = { navController.navigate(Screen.TrendingActors) }
         )
     }
 
@@ -291,7 +306,9 @@ fun NavGraphBuilder.mainNavGraph(
                 navController.navigate(Screen.ActorDetails(actorId))
             },
             onNavigateBack = { navController.navigateUp() },
-            onNavigateToGenre = {}
+            onNavigateToGenre = { genreId ->
+                navController.navigate(Screen.TvShowsByCategory(genreId))
+            }
         )
     }
 
