@@ -430,6 +430,30 @@ class SearchRepositoryImplTest {
         }
 
     @Test
+    fun `searchForTvShowsByCategory should throw HttpLockedException when API returns 423`() =
+        runTest {
+            val categoryId = 12
+            val page = 1
+
+            coEvery {
+                searchRemoteDataSource.searchForTvShowsByCategoryId(categoryId, page)
+            } throws NetworkException.HttpLockedException("Resource locked")
+
+            assertThrows<NetworkException.HttpLockedException> {
+                repository.searchForTvShowByCategory(categoryId, page)
+            }
+        }
+    @Test
+    fun `searchForTvShowsByCategory should return data from data source if available`()=runTest {
+        //Given
+        coEvery { searchRemoteDataSource.searchForTvShowsByCategoryId(any(), any()) } returns Result.success(SearchTvShowRemoteMock)
+        //When
+        val result = repository.searchForTvShowByCategory(1, PAGE_NUMBER)
+        //Then
+        assertThat(result).isEqualTo(TvShowList)
+    }
+
+    @Test
     fun `getUpComingMoviesByCategory should throw TimeoutException when API times out`() = runTest {
         val categoryId = 34
         val page = 1

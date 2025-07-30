@@ -3,7 +3,7 @@
 package com.london.data.remote.source.search
 
 import com.london.data.remote.model.ApiResponse
-import com.london.data.remote.model.search.model.searchactormodel.SearchActorRemote
+import com.london.data.remote.model.search.model.SearchActorRemote
 import com.london.data.remote.model.search.model.SearchMovieRemote
 import com.london.data.remote.model.search.model.SearchTvShowRemote
 import com.london.domain.KoverIgnore
@@ -38,4 +38,10 @@ interface SearchRemoteDataSource {
         pageNumber: Int,
         includeAdult: Boolean = false
     ): Result<ApiResponse<SearchMovieRemote>>
+
+    suspend fun searchForTvShowsByCategoryId(
+        categoryId: Int,
+        pageNumber: Int,
+        includeAdult: Boolean = false
+    ): Result<ApiResponse<SearchTvShowRemote>>
 }

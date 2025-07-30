@@ -1,0 +1,64 @@
+package com.london.domain.usecase
+
+import com.google.common.truth.Truth.assertThat
+import com.london.domain.entity.PagedFetchResponse
+import com.london.domain.entity.TvShow
+import com.london.domain.error.TvShowSearchFailedException
+import com.london.domain.repository.SearchRepository
+import io.mockk.coEvery
+import io.mockk.mockk
+import kotlinx.coroutines.test.runTest
+import org.junit.Before
+import org.junit.Test
+import org.junit.jupiter.api.assertThrows
+
+class GetTvShowsByCategoryIdTest {
+    lateinit var searchRepository: SearchRepository
+    lateinit var getTvShowsUseCase: GetTvShowsByCategoryId
+
+    @Before
+    fun setUp() {
+        searchRepository = mockk()
+        getTvShowsUseCase = GetTvShowsByCategoryId(searchRepository)
+    }
+
+    @Test
+    fun `should return a paged fetch response of tvShows when repository successfully fetches tvShows`() = runTest {
+        //given
+        coEvery { searchRepository.searchForTvShowByCategory(CATEGORY_ID, PAGE_NUMBER) } returns pagedFetchResponse
+        //when
+        val result = getTvShowsUseCase.invoke(CATEGORY_ID, PAGE_NUMBER)
+        //then
+        assertThat(result).isEqualTo(pagedFetchResponse)
+    }
+
+    @Test
+    fun `should throw MovieSearchFailedException when repository throws an exception during tvShows search`() = runTest {
+        //given
+        coEvery { searchRepository.searchForTvShowByCategory(CATEGORY_ID, PAGE_NUMBER) } throws TvShowSearchFailedException()
+        //when //then
+        assertThrows<TvShowSearchFailedException> {
+            getTvShowsUseCase.invoke(CATEGORY_ID, PAGE_NUMBER)
+        }
+    }
+
+
+    private companion object {
+        const val CATEGORY_ID = 1
+        const val PAGE_NUMBER = 1
+        val tvShow = TvShow(
+            id = 1,
+            name = "",
+            posterPicture = "",
+            releaseYear = 2024,
+            rating = 8,
+            genres = listOf(1, 2, 3)
+        )
+        val pagedFetchResponse = PagedFetchResponse(
+            currentPage = 1,
+            items = listOf(tvShow),
+            totalPages = 1,
+            totalItems = 1
+        )
+    }
+}

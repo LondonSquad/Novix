@@ -49,4 +49,11 @@ interface SearchApiService {
         @Query("page") page: Int,
         @Query("include_adult") includeAdult: Boolean
     ): Response<ApiResponse<SearchMovieRemote>>
+
+    @GET(ApiConstants.TV_SHOW_DISCOVER_PATH)
+    suspend fun searchForTvShowsByCategory(
+        @Query("with_genres") genreId: Int,
+        @Query("page") page: Int,
+        @Query("include_adult") includeAdult: Boolean
+    ): Response<ApiResponse<SearchTvShowRemote>>
 }
