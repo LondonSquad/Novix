@@ -26,6 +26,7 @@ import com.london.presentation.feature.account.AccountScreen
 import com.london.presentation.feature.bookmark.BookmarksScreen
 import com.london.presentation.feature.category.CategoriesScreen
 import com.london.presentation.feature.category.moviesbycategory.MoviesByCategoryScreen
+import com.london.presentation.feature.category.tvshowbycategory.TvShowByCategoryScreen
 import com.london.presentation.feature.details.actor.ActorDetailsScreen
 import com.london.presentation.feature.details.actordetails.gallery.ActorGalleryScreen
 import com.london.presentation.feature.details.actordetails.topmoviespicks.TopMoviesPicksScreen
@@ -68,6 +69,7 @@ import com.london.presentation.navigation.Screen.TrendingActors
 import com.london.presentation.navigation.Screen.TrendingMovies
 import com.london.presentation.navigation.Screen.TrendingTvShows
 import com.london.presentation.navigation.Screen.TvShowDetails
+import com.london.presentation.navigation.Screen.TvShowsByCategory
 import com.london.presentation.navigation.Screen.Welcome
 import org.koin.compose.getKoin
 
@@ -274,6 +276,9 @@ fun NovixApp(appPreferencesService: AppPreferencesService) {
                         navController.navigate(Reviews(tvShowId, mediaType))
                     }, onNavigateToCast = { actorId ->
                         navController.navigate(ActorDetails(actorId))
+                    },
+                    onNavigateToGenre = { genreId ->
+                        navController.navigate(TvShowsByCategory(genreId))
                     }
                 )
             }
@@ -347,6 +352,22 @@ fun NovixApp(appPreferencesService: AppPreferencesService) {
                 MoviesByCategoryScreen(
                     onNavigateToMovieDetails = { movieId ->
                         navController.navigate(MovieDetails(movieId))
+                    },
+                    onNavigateBack = {
+                        navController.navigateUp()
+                    },
+                )
+            }
+
+            composable<TvShowsByCategory>(
+                exitTransition = { fadeOut(tween(500)) },
+                popEnterTransition = { fadeIn(tween(500)) },
+                enterTransition = { fadeIn(tween(500)) },
+                popExitTransition = { fadeOut(tween(500)) },
+            ) {
+                TvShowByCategoryScreen(
+                    onNavigateToTvShowDetails = { tvShowId ->
+                        navController.navigate(TvShowDetails(tvShowId))
                     },
                     onNavigateBack = {
                         navController.navigateUp()
