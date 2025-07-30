@@ -13412,5 +13412,33 @@
       "deletions": 14,
       "changed_files": 3
     }
+  },
+  {
+    "pr_number": 423,
+    "url": "https://github.com/LondonSquad/Novix/pull/423",
+    "title": "feat: ActorDetailsScreen: Make TopBar a sticky header",
+    "opened_at": "2025-07-30T14:58:44Z",
+    "head_ref": "fix/card-for-an-actor-with-no-image",
+    "base_ref": "develop",
+    "creator": {
+      "login": "ahmeddsamii",
+      "id": 154278495,
+      "url": "https://github.com/ahmeddsamii"
+    },
+    "approvals": [],
+    "first_approved_at": null,
+    "time_to_first_approval_minutes": null,
+    "required_approvals_met_at": null,
+    "time_to_required_approvals_minutes": null,
+    "closed_at": null,
+    "merged_at": null,
+    "merged_by": null,
+    "week": "2025-W31",
+    "status": "pending",
+    "diff_stats": {
+      "additions": 17,
+      "deletions": 12,
+      "changed_files": 1
+    }
   }
 ]
