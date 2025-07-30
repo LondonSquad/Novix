@@ -365,7 +365,7 @@ private fun RatingAndMetaRow(
                 contentDesc = stringResource(star),
                 tint = NovixTheme.colors.yellowAccent,
                 text = rate,
-                textColor = NovixTheme.colors.title
+                textColor = NovixTheme.colors.body
             )
         }
 
