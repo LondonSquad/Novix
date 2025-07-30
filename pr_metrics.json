@@ -9060,9 +9060,18 @@
       "id": 106277855,
       "url": "https://github.com/Mostafa-alsaygh"
     },
-    "approvals": [],
-    "first_approved_at": null,
-    "time_to_first_approval_minutes": null,
+    "approvals": [
+      {
+        "reviewer": {
+          "id": 117874933,
+          "login": "AsmaaKhaledGomaa",
+          "url": "https://github.com/AsmaaKhaledGomaa"
+        },
+        "submitted_at": "2025-07-30T01:09:29Z"
+      }
+    ],
+    "first_approved_at": "2025-07-30T01:09:29Z",
+    "time_to_first_approval_minutes": 447.3666666666667,
     "required_approvals_met_at": null,
     "time_to_required_approvals_minutes": null,
     "closed_at": null,
