@@ -163,6 +163,10 @@ class HomeViewModel(
         emitEffect(HomeScreenEffect.NavigationTopRated)
     }
 
+    override fun onContinueWatchingClick() {
+        emitEffect(HomeScreenEffect.NavigationContinueWatching)
+    }
+
     override fun onTrendingMoviesCardClicked() {
         emitEffect(HomeScreenEffect.NavigationTrendingMovie)
     }
