@@ -333,12 +333,9 @@ fun GenreNames(
                     color = NovixTheme.colors.body,
                     modifier = if (index != uiState.tvShowGenres.lastIndex)
                         Modifier
-                            .noRippleClickable {
-                                onGenreClick(genre.id)
-                            }
-                            .padding(end = 8.dp) else Modifier.clickable {
-                        onGenreClick(genre.id)
-                    }
+                            .noRippleClickable { onGenreClick(genre.id) }
+                            .padding(end = 8.dp)
+                    else Modifier.noRippleClickable { onGenreClick(genre.id) }
                 )
 
                 if (index != uiState.tvShowGenres.lastIndex) {
