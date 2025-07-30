@@ -16,12 +16,15 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.asPaddingValues
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.defaultMinSize
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.statusBars
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyHorizontalGrid
@@ -49,13 +52,14 @@ import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.zIndex
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.london.designsystem.R
 import com.london.designsystem.component.ActorItem
 import com.london.designsystem.component.HomeCard
 import com.london.designsystem.component.Icon
 import com.london.designsystem.component.ImageView
 import com.london.designsystem.component.Text
+import com.london.designsystem.component.TopBar
 import com.london.designsystem.component.button.ErrorImage
 import com.london.designsystem.theme.NovixTheme
 import com.london.designsystem.theme.noRippleClickable
@@ -75,7 +79,6 @@ import com.london.presentation.feature.reviews.MediaType
 import com.london.presentation.feature.search.SearchCategory
 import com.london.presentation.shared.ConditionalText
 import com.london.presentation.shared.CustomBackDropImagePager
-import com.london.presentation.shared.DetailsScreenTopBar
 import com.london.presentation.shared.FooterSection
 import com.london.presentation.utils.Listen
 import com.london.presentation.utils.convertGenreCodeToString
@@ -112,7 +115,7 @@ fun MovieDetailsScreen(
             state.isLoading -> LoadingScreen()
             state.error != null -> NetworkErrorScreen()
             else -> MovieDetailsContent(
-                state = state,
+                uiState = state,
                 movieDetailsContract = viewModel
             )
         }
@@ -121,7 +124,7 @@ fun MovieDetailsScreen(
 
 @Composable
 fun MovieDetailsContent(
-    state: MovieDetailsUiState,
+    uiState: MovieDetailsUiState,
     movieDetailsContract: MovieDetailsContract
 ) {
     val uriHandler = LocalUriHandler.current
@@ -152,14 +155,19 @@ fun MovieDetailsContent(
             .background(NovixTheme.colors.surface)
     ) {
 
-        DetailsScreenTopBar(
+        TopBar(
+            onBackClick = movieDetailsContract::onBackClick,
             modifier = Modifier
                 .fillMaxWidth()
-                .zIndex(1f)
-                .align(Alignment.TopCenter),
-            isSaved = state.isSaved,
-            backgroundAlpha = backgroundAlpha,
-            onBackClick = movieDetailsContract::onBackClick,
+                .background(
+                    NovixTheme.colors.surface.copy(alpha = backgroundAlpha)
+                )
+                .padding(horizontal = 16.dp)
+                .padding(
+                    top = WindowInsets.statusBars.asPaddingValues().calculateTopPadding() + 12.dp
+                ),
+            onClickOption1 = { /*todo on click on save*/ },
+            option1Icon = R.drawable.icon_remove,
         )
 
         LazyColumn(
@@ -175,6 +183,11 @@ fun MovieDetailsContent(
                         .defaultMinSize(minHeight = 370.dp)
 
                 ) {
+                    MovieDetailsImage(
+                        images = uiState.movieImage,
+                        currentImageIndex = uiState.currentImageIndex,
+                        direction = uiState.imageSlideDirection,
+                    )
 
                     Column(
                         modifier = Modifier
@@ -184,7 +197,7 @@ fun MovieDetailsContent(
                         horizontalAlignment = Alignment.CenterHorizontally
                     ) {
 
-                        CustomBackDropImagePager(images = state.movieImage)
+                        CustomBackDropImagePager(images = uiState.movieImage)
 
                         Column(
                             modifier = Modifier
@@ -199,16 +212,16 @@ fun MovieDetailsContent(
                             verticalArrangement = Arrangement.spacedBy(8.dp)
                         ) {
                             Text(
-                                text = state.movieName,
+                                text = uiState.movieName,
                                 style = NovixTheme.typography.title.medium,
                                 color = NovixTheme.colors.title,
                                 modifier = Modifier.defaultMinSize(minHeight = 56.dp)
                             )
-                            GenreRow(state.movieGenres, movieDetailsContract::onGenreClick)
+                            GenreRow(uiState.movieGenres, movieDetailsContract::onGenreClick)
                             RatingAndMetaRow(
-                                rate = state.movieRating,
-                                time = state.movieDuration,
-                                date = state.releaseDate
+                                rate = uiState.movieRating,
+                                time = uiState.movieDuration,
+                                date = uiState.releaseDate
                             )
                             Text(
                                 text = stringResource(view_reviews),
@@ -216,7 +229,7 @@ fun MovieDetailsContent(
                                 color = NovixTheme.colors.primary,
                                 modifier = Modifier.noRippleClickable {
                                     movieDetailsContract.onReviewsClick(
-                                        state.movieId,
+                                        uiState.movieId,
                                         MediaType.Movie.mediaNum
                                     )
                                 }
@@ -226,7 +239,7 @@ fun MovieDetailsContent(
                 }
             }
 
-            if (state.movieOverview.isNotBlank()) {
+            if (uiState.movieOverview.isNotBlank()) {
                 item {
                     Text(
                         text = stringResource(overview),
@@ -238,15 +251,15 @@ fun MovieDetailsContent(
 
                 item {
                     ConditionalText(
-                        state.movieOverview,
-                        state.expanded,
+                        uiState.movieOverview,
+                        uiState.expanded,
                         modifier = Modifier.padding(horizontal = 16.dp, vertical = 4.dp),
                         onExpandedChange = movieDetailsContract::onExpandClick
                     )
                 }
             }
 
-            if (state.actors.isNotEmpty()) {
+            if (uiState.actors.isNotEmpty()) {
                 item {
                     Text(
                         text = stringResource(com.london.presentation.R.string.cast),
@@ -263,7 +276,7 @@ fun MovieDetailsContent(
                         horizontalArrangement = Arrangement.spacedBy(12.dp),
                         contentPadding = PaddingValues(vertical = 8.dp, horizontal = 16.dp)
                     ) {
-                        itemsIndexed(state.actors) { _, actor ->
+                        itemsIndexed(uiState.actors) { _, actor ->
                             ActorItem(
                                 actorName = actor.name,
                                 characterName = actor.characterName,
@@ -281,7 +294,7 @@ fun MovieDetailsContent(
                 }
             }
 
-            if (state.similarMovies.isNotEmpty()) {
+            if (uiState.similarMovies.isNotEmpty()) {
                 item {
                     Text(
                         text = stringResource(more_like_this),
@@ -291,7 +304,7 @@ fun MovieDetailsContent(
                     )
                 }
 
-                items(state.similarMovies.chunked(2)) { rowItems ->
+                items(uiState.similarMovies.chunked(2)) { rowItems ->
                     Row(
                         modifier = Modifier
                             .fillMaxWidth()
@@ -320,14 +333,14 @@ fun MovieDetailsContent(
         }
 
         FooterSection(
-            haveTrailer = state.movieHaveTrailer,
+            haveTrailer = uiState.movieHaveTrailer,
             modifier = Modifier
                 .onGloballyPositioned { coordinates ->
                     footerHeight = with(density) { coordinates.size.height.toDp() }
                 }
                 .align(Alignment.BottomCenter),
             onPlayClick = {
-                uriHandler.openUrl(state.movieVideo)
+                uriHandler.openUrl(uiState.movieVideo)
             },
             onStarClick = {
                 // TODO save favorite onclick handler
@@ -366,7 +379,11 @@ private fun RatingAndMetaRow(
                 icon = drawable.time_04,
                 contentDesc = stringResource(time_icon),
                 tint = NovixTheme.colors.body,
-                text = "${(timeInt / 60).toLocalizedNumbers()}${getLocalizedTimeUnit("h")} ${(timeInt % 60).toLocalizedNumbers()}${getLocalizedTimeUnit("m")}",
+                text = "${(timeInt / 60).toLocalizedNumbers()}${getLocalizedTimeUnit("h")} ${(timeInt % 60).toLocalizedNumbers()}${
+                    getLocalizedTimeUnit(
+                        "m"
+                    )
+                }",
                 textColor = NovixTheme.colors.body
             )
         }
