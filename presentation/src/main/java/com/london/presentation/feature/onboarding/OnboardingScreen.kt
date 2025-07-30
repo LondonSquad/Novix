@@ -1,5 +1,6 @@
 package com.london.presentation.feature.onboarding
 
+import android.os.Build
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.animateContentSize
 import androidx.compose.foundation.Image
@@ -26,8 +27,9 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.BlurredEdgeTreatment
 import androidx.compose.ui.draw.blur
-import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.draw.scale
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -39,6 +41,7 @@ import com.london.designsystem.component.button.OutlineButton
 import com.london.designsystem.component.button.PrimaryButton
 import com.london.designsystem.theme.NovixTheme
 import com.london.designsystem.theme.ThemePreviews
+import com.london.designsystem.utils.painter
 import com.london.presentation.R
 import org.koin.androidx.compose.koinViewModel
 
@@ -147,17 +150,25 @@ fun OnboardingPageContent(page: OnboardingPage) {
                 .size(300.dp),
             contentAlignment = Alignment.Center
         ) {
-            Icon(
-                painter = painterResource(id = R.drawable.icon_onboarding_ellipse),
-                contentDescription = null,
-                tint = NovixTheme.colors.primary.copy(alpha = 0.2f),
-                modifier = Modifier
-                    .size(450.dp)
-                    .blur(60.dp)
-            )
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+                Icon(
+                    painter = R.drawable.onboarding_glow.painter,
+                    contentDescription = null,
+                    tint = NovixTheme.colors.primary,
+                    modifier = Modifier
+                        .size(300.dp)
+                        .blur(100.dp, edgeTreatment = BlurredEdgeTreatment.Unbounded)
+                )
+            } else {
+                Image(
+                    modifier = Modifier.scale(2f),
+                    painter = R.drawable.img_onboarding_glow.painter,
+                    contentDescription = null
+                )
+            }
 
             Image(
-                painter = painterResource(id = page.imageRes),
+                painter = page.imageRes.painter,
                 contentDescription = null,
                 modifier = Modifier
                     .height(244.dp)
