@@ -20,6 +20,9 @@ sealed interface Screen {
     data object Home : Screen
 
     @Serializable
+    object Register : Screen
+
+    @Serializable
     data object Search : Screen
 
     @Serializable
@@ -69,6 +72,10 @@ sealed interface Screen {
     data class MoviesByCategory(
         val categoryId: Int,
     )
+    @Serializable
+    data class TvShowsByCategory(
+        val categoryId: Int,
+    ): Screen
 
     @Serializable
     data class EpisodeDetails(

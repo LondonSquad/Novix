@@ -102,5 +102,5 @@
     <string name="no_trending_actors_in_genre">لا يوجد أشخاص في هذا التصنيف حالياً</string>
     <string name="reviews">المراجعات</string>
     <string name="no_recent_history">لم تتفقد أي شيء بعد.\nخذ جولة في التطبيق ثم عُدّ مجددًا! </string>
-
+    <string name="no_tv_shows_found">لا يوجد مسلسلات في هذا التصنيف حاليا</string>
 </resources>

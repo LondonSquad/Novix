@@ -7,6 +7,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.london.presentation.R
+import com.london.presentation.feature.buildscreen.BuildScreen
+import com.london.presentation.feature.buildscreen.LoadingScreen
+import com.london.presentation.feature.buildscreen.NetworkErrorScreen
 import com.london.presentation.shared.MediaLazyGrid
 import com.london.presentation.utils.Listen
 import org.koin.androidx.compose.koinViewModel
@@ -15,36 +18,40 @@ import org.koin.androidx.compose.koinViewModel
 fun TopMoviesPicksScreen(
     onNavigateMovie: (Int) -> Unit,
     onNavigateBack: () -> Unit,
-    modifier: Modifier = Modifier,
     viewModel: TopMoviesPicksViewModel = koinViewModel()
 ) {
-    val uiState by viewModel.state.collectAsStateWithLifecycle()
-    val effects by viewModel.effect.collectAsState(null)
+    val state by viewModel.state.collectAsStateWithLifecycle()
+    val effect by viewModel.effect.collectAsState(null)
 
     HandleTopMoviesPicksEffects(
-        effect = effects,
+        effect = effect,
         onNavigateMovie = onNavigateMovie,
         onNavigateBack = onNavigateBack
     )
-
-    TopMoviesPicksContent(
-        state = uiState,
-        topMoviesPicksContract = viewModel,
-        modifier = modifier,
-    )
+    BuildScreen {
+        when {
+            state.isSaved -> LoadingScreen()
+            state.errorState != null -> NetworkErrorScreen()
+            else -> TopMoviesPicksContent(
+                state = state,
+                contract = viewModel,
+            )
+        }
+    }
 }
 
 @Composable
 private fun TopMoviesPicksContent(
     state: TopMoviesPicksUiState,
-    topMoviesPicksContract: TopMoviesPicksContract,
+    contract: TopMoviesPicksContract,
     modifier: Modifier = Modifier,
 ) {
     MediaLazyGrid(
         title = stringResource(R.string.top_movies_picks),
-        movies = state.movieDetails.cast,
-        onBackClick = topMoviesPicksContract::onClickBack,
-        onMovieClick = topMoviesPicksContract::onSaveMovie,
+        items = state.movieDetails.cast,
+        onBack = contract::onBack,
+        getImageUrl = { it.posterUrl },
+        onSaveClick = { contract.onSaveMovie(it.id) },
         modifier = modifier
     )
 }

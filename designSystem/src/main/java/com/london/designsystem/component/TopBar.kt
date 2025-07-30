@@ -1,5 +1,6 @@
 package com.london.designsystem.component
 
+import androidx.annotation.DrawableRes
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -18,6 +19,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.zIndex
 import com.london.designsystem.R
 import com.london.designsystem.theme.NovixTheme
 import com.london.designsystem.theme.ThemePreviews
@@ -27,18 +29,28 @@ fun TopBar(
     modifier: Modifier = Modifier,
     title: String? = null,
     onBackClick: (() -> Unit)? = null,
-    option1: (() -> Unit)? = null,
-    option2: (() -> Unit)? = null
+    onClickOption1: (() -> Unit)? = null,
+    onClickOption2: (() -> Unit)? = null,
+    @DrawableRes option1Icon: Int? = null,
+    @DrawableRes option2Icon: Int? = null,
 ) {
     Row(
         modifier = modifier
             .fillMaxWidth()
-            .padding(vertical = 8.dp),
+            .padding(vertical = 8.dp)
+            .zIndex(1f),
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.SpaceBetween
     ) {
 
-        onBackClick?.let { ButtonTopBar(icon = R.drawable.arrow_left, onClick = it) }
+        onBackClick?.let {
+            ButtonIcon(
+                onClick = it,
+                iconRes = R.drawable.arrow_left,
+                backgroundColor = NovixTheme.colors.iconBackgroundLow,
+                modifier = Modifier.size(40.dp)
+            )
+        }
 
         title?.let {
             Text(
@@ -56,18 +68,19 @@ fun TopBar(
             horizontalArrangement = Arrangement.spacedBy(8.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
-            option1?.let {
-                ButtonTopBar(R.drawable.add_icon, onClick = it)
+            onClickOption1?.let {
+                ButtonTopBar(option1Icon, onClick = it)
             }
-            option2?.let {
-                ButtonTopBar(R.drawable.pencil_edit, onClick = it)
+            onClickOption2?.let {
+                ButtonTopBar(option2Icon, onClick = it)
             }
         }
     }
+
 }
 
 @Composable
-fun ButtonTopBar(icon: Int, onClick: () -> Unit) {
+fun ButtonTopBar(icon: Int?, onClick: () -> Unit) {
     Box(
         modifier = Modifier
             .size(40.dp)
@@ -84,7 +97,7 @@ fun ButtonTopBar(icon: Int, onClick: () -> Unit) {
         contentAlignment = Alignment.Center
     ) {
         Icon(
-            painter = painterResource(icon),
+            painter = painterResource(icon ?: R.drawable.add_icon),
             contentDescription = "Back",
             tint = NovixTheme.colors.title,
         )
@@ -95,7 +108,7 @@ fun ButtonTopBar(icon: Int, onClick: () -> Unit) {
 @ThemePreviews
 fun TopBarPreview() {
     TopBar(
-        option1 = {},
-        option2 = {}
+        onClickOption1 = {},
+        onClickOption2 = {}
     )
 }
