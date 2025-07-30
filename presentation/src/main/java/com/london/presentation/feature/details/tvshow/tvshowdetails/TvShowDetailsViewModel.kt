@@ -214,6 +214,10 @@ class TvShowDetailsViewModel(
         emitEffect(TvShowDetailsEffect.NavigateToCast(tvShowId))
     }
 
+    override fun OnGenreClicked(genreId: Int) {
+        emitEffect(TvShowDetailsEffect.NavigateTotvShowsByCategoryId(genreId))
+    }
+
     override fun onBackClicked() {
         emitEffect(TvShowDetailsEffect.NavigateBack)
     }
