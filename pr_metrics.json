@@ -13874,5 +13874,33 @@
       "deletions": 3,
       "changed_files": 1
     }
+  },
+  {
+    "pr_number": 433,
+    "url": "https://github.com/LondonSquad/Novix/pull/433",
+    "title": "Hotfix actors details screen ",
+    "opened_at": "2025-07-30T17:08:55Z",
+    "head_ref": "hotfix/actors-details-screen",
+    "base_ref": "develop",
+    "creator": {
+      "login": "AsmaaKhaledGomaa",
+      "id": 117874933,
+      "url": "https://github.com/AsmaaKhaledGomaa"
+    },
+    "approvals": [],
+    "first_approved_at": null,
+    "time_to_first_approval_minutes": null,
+    "required_approvals_met_at": null,
+    "time_to_required_approvals_minutes": null,
+    "closed_at": null,
+    "merged_at": null,
+    "merged_by": null,
+    "week": "2025-W31",
+    "status": "pending",
+    "diff_stats": {
+      "additions": 84,
+      "deletions": 38,
+      "changed_files": 12
+    }
   }
 ]
