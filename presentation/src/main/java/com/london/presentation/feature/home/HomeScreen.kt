@@ -44,7 +44,10 @@ import androidx.compose.ui.platform.LocalWindowInfo
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.lifecycle.repeatOnLifecycle
 import androidx.paging.compose.LazyPagingItems
 import androidx.paging.compose.collectAsLazyPagingItems
 import com.london.designsystem.component.DefaultTopBar
@@ -86,8 +89,10 @@ fun HomeScreen(
         }
     }
 
-    LaunchedEffect(Unit) {
-        viewModel.fetchRecentWatchedMedia()
+    val lifecycleOwner = LocalLifecycleOwner.current
+    LaunchedEffect(key1 = Unit) {
+        lifecycleOwner.lifecycle.repeatOnLifecycle(Lifecycle.State.RESUMED) {
+            viewModel.fetchRecentWatchedMedia()        }
     }
 
     val lazyGridState = rememberSaveable(
