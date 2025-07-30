@@ -31,7 +31,8 @@ fun HomeCarouselSection(
     carouselState: CarouselState = rememberCarouselState { uiMediaList.size },
     onSaveClick: (Int) -> Unit,
     onCardClick: (Int, MediaType) -> Unit,
-    onAllClick: () -> Unit
+    onAllClick: () -> Unit,
+    emptyLayout: @Composable (() -> Unit)? = null,
 ) {
 
     Column(
@@ -41,42 +42,46 @@ fun HomeCarouselSection(
         SectionHeader(
             modifier = Modifier.padding(horizontal = HomeCarouselDefaults.HORIZONTAL_PADDING),
             text = sectionName.string,
-            hasGetAll = true,
-            hasIcon = true,
+            hasGetAll = uiMediaList.isNotEmpty(),
+            hasIcon = uiMediaList.isNotEmpty(),
             onClick = onAllClick
         )
 
-        HeroCarousel(
-            modifier = Modifier
-                .height(HomeCarouselDefaults.CAROUSEL_HEIGHT)
-                .padding(start = HomeCarouselDefaults.CAROUSEL_START_PADDING),
-            carouselState = carouselState,
-            heroItemSize = HomeCarouselDefaults.HERO_ITEM_SIZE,
-            smallItemSize = HomeCarouselDefaults.SMALL_ITEM_SIZE,
-            itemSpacing = HomeCarouselDefaults.ITEM_SPACING,
-            contentPadding = PaddingValues(end = HomeCarouselDefaults.CONTENT_END_PADDING)
-        ) { index ->
-            val mediaItem = uiMediaList[index]
-            HomeCard(
+        if (uiMediaList.isEmpty()) {
+            emptyLayout?.invoke()
+        } else {
+            HeroCarousel(
                 modifier = Modifier
-                    .noRippleClickable {
-                        onCardClick(
-                            mediaItem.id,
-                            mediaItem.mediaType
-                        )
-                    }
-                    .maskClip(RoundedCornerShape(HomeCarouselDefaults.CARD_CORNER_RADIUS))
-                    .maskBorder(
-                        border = BorderStroke(
-                            width = HomeCarouselDefaults.BORDER_WIDTH,
-                            color = NovixTheme.colors.stroke
+                    .height(HomeCarouselDefaults.CAROUSEL_HEIGHT)
+                    .padding(start = HomeCarouselDefaults.CAROUSEL_START_PADDING),
+                carouselState = carouselState,
+                heroItemSize = HomeCarouselDefaults.HERO_ITEM_SIZE,
+                smallItemSize = HomeCarouselDefaults.SMALL_ITEM_SIZE,
+                itemSpacing = HomeCarouselDefaults.ITEM_SPACING,
+                contentPadding = PaddingValues(end = HomeCarouselDefaults.CONTENT_END_PADDING)
+            ) { index ->
+                val mediaItem = uiMediaList[index]
+                HomeCard(
+                    modifier = Modifier
+                        .noRippleClickable {
+                            onCardClick(
+                                mediaItem.id,
+                                mediaItem.mediaType
+                            )
+                        }
+                        .maskClip(RoundedCornerShape(HomeCarouselDefaults.CARD_CORNER_RADIUS))
+                        .maskBorder(
+                            border = BorderStroke(
+                                width = HomeCarouselDefaults.BORDER_WIDTH,
+                                color = NovixTheme.colors.stroke
+                            ),
+                            shape = RoundedCornerShape(HomeCarouselDefaults.CARD_CORNER_RADIUS)
                         ),
-                        shape = RoundedCornerShape(HomeCarouselDefaults.CARD_CORNER_RADIUS)
-                    ),
-                imageUrl = mediaItem.posterUrl,
-                onSaveClick = { onSaveClick(mediaItem.id) },
-                hasSaveIcon = isHero
-            )
+                    imageUrl = mediaItem.posterUrl,
+                    onSaveClick = { onSaveClick(mediaItem.id) },
+                    hasSaveIcon = isHero
+                )
+            }
         }
     }
 }
