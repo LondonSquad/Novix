@@ -310,7 +310,6 @@ fun TvShowBasicDetails(
 fun TvShowDate(
     uiState: EpisodeDetailsUiState
 ) {
-
     Row(
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.spacedBy(4.dp)

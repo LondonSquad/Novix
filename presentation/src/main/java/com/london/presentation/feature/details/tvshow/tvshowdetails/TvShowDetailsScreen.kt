@@ -386,7 +386,7 @@ fun ViewReviewText(
 ) {
     Text(
         text = stringResource(R.string.view_review),
-        style = NovixTheme.typography.title.medium,
+        style = NovixTheme.typography.label.medium,
         color = NovixTheme.colors.primary,
         modifier = Modifier.clickable { onReviewClick(tvShowId) }
     )
