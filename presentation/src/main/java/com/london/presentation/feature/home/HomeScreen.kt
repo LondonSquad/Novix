@@ -52,9 +52,6 @@ import com.london.designsystem.component.button.PrimaryButton
 import com.london.designsystem.theme.NovixTheme
 import com.london.domain.entity.Movie
 import com.london.presentation.R
-import com.london.presentation.feature.base.ErrorState
-import com.london.presentation.feature.buildscreen.LoadingScreen
-import com.london.presentation.feature.buildscreen.NetworkErrorScreen
 import com.london.presentation.shared.GenresSection
 import com.london.presentation.utils.Listen
 import org.koin.compose.viewmodel.koinViewModel
@@ -89,10 +86,7 @@ fun HomeScreen(
         LazyGridState()
     }
 
-    when {
-        uiState.isLoading -> LoadingScreen()
-        uiState.error == ErrorState.NoInternet -> NetworkErrorScreen()
-        else -> {
+
             val screenWidth =
                 with(LocalDensity.current) { LocalWindowInfo.current.containerSize.width.toDp() }
 
@@ -135,8 +129,6 @@ fun HomeScreen(
                     )
                 }
             }
-        }
-    }
 }
 
 @Composable
@@ -158,6 +150,8 @@ private fun Content(
             lastVisibleItem?.index == totalItems - 1
         }
     }
+
+    val isLoading = uiState.error != null
 
     Box(modifier = modifier.fillMaxSize()) {
 
@@ -215,6 +209,13 @@ private fun Content(
                                 }
                             }
                         }
+                    )
+                }
+            }else {
+                item(span = { GridItemSpan(maxLineSpan) }) {
+                    ShimmerPopularSection(
+                        modifier = Modifier.requiredWidth(screenWidth),
+                        pagerState = pagerState
                     )
                 }
             }
