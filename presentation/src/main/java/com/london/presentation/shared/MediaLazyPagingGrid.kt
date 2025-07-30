@@ -16,11 +16,13 @@ import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalWindowInfo
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import androidx.paging.LoadState
 import androidx.paging.compose.LazyPagingItems
 import com.london.designsystem.component.CircularLoading
 import com.london.designsystem.component.EmptyLayout
 import com.london.designsystem.component.HomeCard
 import com.london.presentation.R
+import com.london.presentation.feature.buildscreen.NetworkErrorScreen
 import com.london.presentation.utils.isLoading
 
 @Composable
@@ -33,9 +35,14 @@ fun <T : Any> MediaLazyPagingGrid(
     onSaveClick: (T) -> Unit = {},
     isItemSaved: (T) -> Boolean = { false },
     emptyTitle: String = stringResource(R.string.no_trending_movies_in_genre),
-    emptyImage: Int = R.drawable.img_no_result
+    emptyImage: Int = R.drawable.img_no_result,
+    onRetry: () -> Unit = {}
 ) {
     when {
+        pagingFlow.loadState.refresh is LoadState.Error -> NetworkErrorScreen(
+            onRetry = onRetry
+        )
+
         pagingFlow.isLoading() -> CircularLoading(
             modifier = Modifier
                 .fillMaxSize()
