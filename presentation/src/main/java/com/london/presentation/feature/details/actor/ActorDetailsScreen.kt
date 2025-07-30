@@ -46,7 +46,6 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.zIndex
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.london.designsystem.component.CircularLoading
 import com.london.designsystem.component.HomeCard
@@ -273,9 +272,8 @@ fun ActorScreenContent(
                 )
                 .padding(
                     start = 16.dp,
-                    top = WindowInsets.statusBars.asPaddingValues().calculateTopPadding()
+                    top = WindowInsets.statusBars.asPaddingValues().calculateTopPadding() + 12.dp
                 )
-                .zIndex(1f)
         )
 
     }

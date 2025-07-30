@@ -13,12 +13,15 @@ import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.asPaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.statusBars
 import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.lazy.LazyColumn
@@ -46,7 +49,6 @@ import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.zIndex
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.london.designsystem.R
 import com.london.designsystem.component.ActorItem
@@ -54,18 +56,18 @@ import com.london.designsystem.component.CircularLoading
 import com.london.designsystem.component.Icon
 import com.london.designsystem.component.NovixChip
 import com.london.designsystem.component.Text
+import com.london.designsystem.component.TopBar
 import com.london.designsystem.component.UnSuitableEye
 import com.london.designsystem.component.button.ErrorImage
 import com.london.designsystem.theme.NovixTheme
 import com.london.domain.entity.tvshowdetails.TvShowCastMemberEntity
 import com.london.imageharamblur.ui.ImageViewFilter
-import com.london.presentation.shared.ConditionalText
-import com.london.presentation.shared.CustomBackDropImagePager
-import com.london.presentation.shared.DetailsScreenTopBar
-import com.london.presentation.shared.FooterSection
-import com.london.presentation.shared.RatingItem
 import com.london.presentation.feature.buildscreen.BuildScreen
 import com.london.presentation.feature.reviews.MediaType
+import com.london.presentation.shared.ConditionalText
+import com.london.presentation.shared.CustomBackDropImagePager
+import com.london.presentation.shared.FooterSection
+import com.london.presentation.shared.RatingItem
 import com.london.presentation.utils.Listen
 import com.london.presentation.utils.convertDate
 import com.london.presentation.utils.offsetLayout
@@ -147,14 +149,19 @@ fun TvShowsDetailScreenContent(
             .fillMaxSize()
             .background(NovixTheme.colors.surface)
     ) {
-        DetailsScreenTopBar(
+        TopBar(
+            onBackClick = tvShowDetailsContract::onBackClicked,
             modifier = Modifier
                 .fillMaxWidth()
-                .zIndex(1f)
-                .align(Alignment.TopCenter),
-            isSaved = uiState.isSaved,
-            backgroundAlpha = backgroundAlpha,
-            onBackClick = tvShowDetailsContract::onBackClicked,
+                .background(
+                    NovixTheme.colors.surface.copy(alpha = backgroundAlpha)
+                )
+                .padding(horizontal = 16.dp)
+                .padding(
+                    top = WindowInsets.statusBars.asPaddingValues().calculateTopPadding() + 12.dp
+                ),
+            onClickOption1 = { /*todo on click on save*/ },
+            option1Icon = R.drawable.icon_remove,
         )
 
         LazyColumn(
@@ -379,7 +386,7 @@ fun ViewReviewText(
 ) {
     Text(
         text = stringResource(R.string.view_review),
-        style = NovixTheme.typography.title.medium,
+        style = NovixTheme.typography.label.medium,
         color = NovixTheme.colors.primary,
         modifier = Modifier.clickable { onReviewClick(tvShowId) }
     )
