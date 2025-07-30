@@ -31,6 +31,7 @@ import com.london.designsystem.component.Text
 import com.london.designsystem.theme.NovixTheme
 import com.london.presentation.R
 import com.london.presentation.shared.RatingItem
+import com.london.presentation.utils.toLocalizedNumbers
 import kotlinx.coroutines.currentCoroutineContext
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.isActive
@@ -71,7 +72,7 @@ fun PopularSection(
     val horizontalPadding = (screenWidth - cardWidth) / 2
 
     Column(
-        modifier = modifier,
+        modifier = modifier.heightIn(min=302.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
 
@@ -158,7 +159,7 @@ fun PopularSection(
                             horizontalArrangement = Arrangement.Start
                         ) {
                             RatingItem(
-                                rating = cardRating,
+                                rating = cardRating.toLocalizedNumbers(),
                                 color = NovixTheme.colors.onPrimary
                             )
                         }
