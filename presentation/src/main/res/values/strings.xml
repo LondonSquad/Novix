@@ -99,5 +99,6 @@
     <string name="no_trending_movies_in_genre">No movies found in this genre.</string>
     <string name="no_trending_tvshows_in_genre">No tv shows found in this genre.</string>
     <string name="no_trending_actors_in_genre">No people found in this genre.</string>
+    <string name="no_tv_shows_found">no tv shows found in this category</string>
     <string name="reviews">Reviews</string>
 </resources>
