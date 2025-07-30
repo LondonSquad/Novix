@@ -71,7 +71,7 @@ private fun Content(
             .background(NovixTheme.colors.surface)
             .statusBarsPadding()
             .navigationBarsPadding()
-            .padding(start = 16.dp, end =  16.dp, bottom = 12.dp),
+            .padding(horizontal = 16.dp, vertical = 12.dp),
     ) {
         TopBar(
             modifier = Modifier.padding(bottom = 16.dp),
