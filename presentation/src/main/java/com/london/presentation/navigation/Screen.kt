@@ -20,6 +20,9 @@ sealed interface Screen {
     data object Home : Screen
 
     @Serializable
+    object Register : Screen
+
+    @Serializable
     data object Search : Screen
 
     @Serializable
