@@ -86,7 +86,7 @@ fun PopularSection(
             color = NovixTheme.colors.title,
             modifier = Modifier
                 .padding(start = 16.dp, end = 16.dp)
-                .align(if (isRtl) Alignment.End else Alignment.Start)
+                .align(Alignment.Start)
         )
 
         LaunchedEffect(Unit) {
