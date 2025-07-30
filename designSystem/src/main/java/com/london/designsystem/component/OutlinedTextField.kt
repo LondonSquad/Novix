@@ -58,6 +58,7 @@ fun OutlinedTextField(
     placeholder: @Composable (() -> Unit)? = null,
     leadingIcon: Painter? = null,
     trailingIcon: @Composable (() -> Unit)? = null,
+    suffix: @Composable (() -> Unit)? = null,
     supportingText: @Composable (() -> Unit)? = null,
     isError: Boolean = false,
     contentPadding: PaddingValues = PaddingValues(horizontal = 12.dp),
@@ -107,7 +108,7 @@ fun OutlinedTextField(
             ) {
                 BasicTextField(
                     value = value,
-                    onValueChange = onValueChange,
+                    onValueChange = { if (it.text.length < 125) onValueChange(it) },
                     modifier = Modifier
                         .fillMaxWidth()
                         .defaultMinSize(minWidth = 268.dp, minHeight = 48.dp)
@@ -128,9 +129,9 @@ fun OutlinedTextField(
                             innerTextField = innerTextField,
                             placeholder = placeholder,
                             leadingIcon = null,
-                            trailingIcon = null,
+                            trailingIcon = currentTrailingIcon,
                             prefix = leadingIcon?.let { { AnimatedLeadingIcon(painter = it, isFocused = isFocused) } },
-                            suffix = currentTrailingIcon,
+                            suffix = suffix,
                             supportingText = supportingText,
                             singleLine = singleLine,
                             enabled = enabled,
@@ -252,10 +253,8 @@ private fun AnimatedLeadingIcon(
         modifier = Modifier
             .padding(end = 8.dp)
             .size(24.dp)
-
     )
 }
-
 
 @Composable
 private fun PasswordToggleIcon(

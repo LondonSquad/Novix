@@ -44,18 +44,18 @@ import org.koin.compose.viewmodel.koinViewModel
 @Composable
 fun TopRatedScreen(
     viewModel: TopRatedViewModel = koinViewModel(),
-    onBackClick: () -> Unit = {},
-    onMovieClick: (Int) -> Unit = {},
-    onTvShowClick: (Int) -> Unit = {}
+    onNavigateBack: () -> Unit = {},
+    onNavigateMovie: (Int) -> Unit = {},
+    onNavigateTvShow: (Int) -> Unit = {}
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
     val effect by viewModel.effect.collectAsState(null)
 
     effect?.Listen { currentEffect ->
         when (currentEffect) {
-            is TopRatedEffect.NavigateToMovieDetails -> onMovieClick(currentEffect.id)
-            is TopRatedEffect.NavigateToTvShowDetails -> onTvShowClick(currentEffect.id)
-            is TopRatedEffect.NavigateBack -> onBackClick()
+            is TopRatedEffect.NavigateToMovieDetails -> onNavigateMovie(currentEffect.id)
+            is TopRatedEffect.NavigateToTvShowDetails -> onNavigateTvShow(currentEffect.id)
+            is TopRatedEffect.NavigateBack -> onNavigateBack()
         }
     }
 
@@ -84,7 +84,7 @@ private fun Content(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(horizontal = 16.dp)
-                .padding(top = 20.dp),
+                .padding(top = 12.dp),
             title = com.london.presentation.R.string.top_rated.string,
             onBackClick = topRatedContract::onBackClicked
         )
@@ -131,7 +131,9 @@ private fun Content(
                         HomeCard(
                             imageUrl = movieItem.posterUrl,
                             isSaved = false,
-                            onSaveClick = {},
+                            onSaveClick = {
+                                // TODO
+                            },
                             modifier = Modifier.clickable {
                                 topRatedContract.onMovieClick(movieItem.id)
                             }

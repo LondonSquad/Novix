@@ -9,6 +9,7 @@ import androidx.compose.animation.slideOutHorizontally
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -27,6 +28,7 @@ import androidx.compose.foundation.lazy.grid.LazyHorizontalGrid
 import androidx.compose.foundation.lazy.grid.itemsIndexed
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
@@ -66,27 +68,29 @@ import com.london.presentation.R.string.separator
 import com.london.presentation.R.string.star
 import com.london.presentation.R.string.time_icon
 import com.london.presentation.R.string.view_reviews
-import com.london.presentation.shared.ConditionalText
-import com.london.presentation.shared.CustomBackDropImagePager
-import com.london.presentation.shared.DetailsScreenTopBar
-import com.london.presentation.shared.FooterSection
 import com.london.presentation.feature.buildscreen.BuildScreen
 import com.london.presentation.feature.buildscreen.LoadingScreen
 import com.london.presentation.feature.buildscreen.NetworkErrorScreen
 import com.london.presentation.feature.reviews.MediaType
 import com.london.presentation.feature.search.SearchCategory
+import com.london.presentation.shared.ConditionalText
+import com.london.presentation.shared.CustomBackDropImagePager
+import com.london.presentation.shared.DetailsScreenTopBar
+import com.london.presentation.shared.FooterSection
 import com.london.presentation.utils.Listen
 import com.london.presentation.utils.convertGenreCodeToString
+import com.london.presentation.utils.getLocalizedTimeUnit
 import com.london.presentation.utils.offsetLayout
 import com.london.presentation.utils.openUrl
 import com.london.presentation.utils.reverseDateFormat
+import com.london.presentation.utils.toLocalizedNumbers
 import org.koin.androidx.compose.koinViewModel
 
 @Composable
 fun MovieDetailsScreen(
     viewModel: MovieDetailsViewModel = koinViewModel(),
-    onBackClick: () -> Unit = {},
-    onGenreClick: (Int) -> Unit = {},
+    onNavigateBack: () -> Unit = {},
+    onNavigateGenre: (Int) -> Unit = {},
     onNavigateToMovie: (Int) -> Unit,
     onNavigateToActor: (Int) -> Unit,
     onNavigateToReviews: (Int, Int) -> Unit,
@@ -94,18 +98,14 @@ fun MovieDetailsScreen(
     val state by viewModel.state.collectAsStateWithLifecycle()
     val effect by viewModel.effect.collectAsState(null)
 
-    effect?.Listen { currentEffect ->
-        when (currentEffect) {
-            is MovieDetailsEffect.ActorNavigation -> onNavigateToActor(currentEffect.actorId)
-            MovieDetailsEffect.BackNavigation -> onBackClick()
-            is MovieDetailsEffect.GenreNavigation -> onGenreClick(currentEffect.genreId)
-            is MovieDetailsEffect.MovieNavigation -> onNavigateToMovie(currentEffect.movieId)
-            is MovieDetailsEffect.ReviewsNavigation -> onNavigateToReviews(
-                currentEffect.movieId,
-                currentEffect.mediaNumber
-            )
-        }
-    }
+    HandleMovieDetailsEffects(
+        effect = effect,
+        onNavigateBack = onNavigateBack,
+        onNavigateGenre = onNavigateGenre,
+        onNavigateToMovie = onNavigateToMovie,
+        onNavigateToActor = onNavigateToActor,
+        onNavigateToReviews = onNavigateToReviews
+    )
 
     BuildScreen {
         when {
@@ -188,9 +188,8 @@ fun MovieDetailsContent(
                         verticalArrangement = Arrangement.spacedBy(4.dp),
                         horizontalAlignment = Alignment.CenterHorizontally
                     ) {
-                        CustomBackDropImagePager(
-                            images = state.movieImage
-                        )
+
+                        CustomBackDropImagePager(images = state.movieImage)
 
                         Column(
                             modifier = Modifier
@@ -372,7 +371,7 @@ private fun RatingAndMetaRow(
                 icon = drawable.time_04,
                 contentDesc = stringResource(time_icon),
                 tint = NovixTheme.colors.body,
-                text = "${timeInt / 60}h ${timeInt % 60}m",
+                text = "${(timeInt / 60).toLocalizedNumbers()}${getLocalizedTimeUnit("h")} ${(timeInt % 60).toLocalizedNumbers()}${getLocalizedTimeUnit("m")}",
                 textColor = NovixTheme.colors.body
             )
         }
@@ -396,6 +395,31 @@ private fun RatingAndMetaRow(
     }
 }
 
+
+@Composable
+private fun HandleMovieDetailsEffects(
+    effect: MovieDetailsEffect?,
+    onNavigateBack: () -> Unit,
+    onNavigateGenre: (Int) -> Unit,
+    onNavigateToMovie: (Int) -> Unit,
+    onNavigateToActor: (Int) -> Unit,
+    onNavigateToReviews: (Int, Int) -> Unit,
+) {
+    effect?.Listen { currentEffect ->
+        when (currentEffect) {
+            is MovieDetailsEffect.ActorNavigation -> onNavigateToActor(currentEffect.actorId)
+            MovieDetailsEffect.BackNavigation -> onNavigateBack()
+            is MovieDetailsEffect.GenreNavigation -> onNavigateGenre(currentEffect.genreId)
+            is MovieDetailsEffect.MovieNavigation -> onNavigateToMovie(currentEffect.movieId)
+            is MovieDetailsEffect.ReviewsNavigation -> onNavigateToReviews(
+                currentEffect.movieId,
+                currentEffect.mediaNumber
+            )
+        }
+    }
+}
+
+
 @Composable
 private fun IconWithText(
     icon: Int,
@@ -416,6 +440,7 @@ private fun IconWithText(
     )
 }
 
+
 @Composable
 private fun GenreRow(
     genres: List<Int>,
@@ -423,7 +448,8 @@ private fun GenreRow(
 ) {
     Row(
         horizontalArrangement = Arrangement.spacedBy(8.dp),
-        verticalAlignment = Alignment.CenterVertically
+        verticalAlignment = Alignment.CenterVertically,
+        modifier = Modifier.horizontalScroll(rememberScrollState())
     ) {
         genres.forEachIndexed { index, genre ->
             Text(

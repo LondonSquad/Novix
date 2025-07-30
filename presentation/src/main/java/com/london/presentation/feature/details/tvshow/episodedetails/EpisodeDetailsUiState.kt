@@ -10,7 +10,6 @@ data class EpisodeDetailsUiState(
     val error: ErrorState? = null,
     val episodeGenres: List<String> = listOf(),
     val airDate: String = "",
-    val episodeNumber: Int = 0,
     val seasonNumber: Int = 0,
     val episodeTypes: String = "",
     val tvShowId: Int = 0,
@@ -22,6 +21,9 @@ data class EpisodeDetailsUiState(
     val guestStars:List<Actor> = listOf(),
     val id: Int = 0,
     val backdropPath: String? = "",
-    val haveTrailer: Boolean = false,
-    val isSaved: Boolean = false
-)
+    val isSaved: Boolean = false,
+    val videoProvider: String = ""
+){
+    val episodeHaveTrailer: Boolean
+        get() = videoProvider.isNotEmpty()
+}

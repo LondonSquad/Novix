@@ -30,7 +30,6 @@ class HomeViewModel(
     private val getTopRatedTvShows: GetTopRatedTvSeriesUseCase,
     private val getRecentWatchedMovies: GetRecentWatchedMoviesUseCase,
     private val getRecentWatchedTvShows: GetRecentWatchedTvShowsUseCase
-
 ) : BaseViewModel<HomeScreenUiState, HomeScreenEffect>(HomeScreenUiState()), HomeScreenContract {
 
     private val _upcomingMoviesFlow = MutableStateFlow<PagingData<Movie>>(PagingData.empty())
@@ -154,13 +153,25 @@ class HomeViewModel(
         }
     }
 
-    override fun onGenreSelect(genre: MovieGenre) {
-        if (genre == state.value.selectedGenre) return
-        updateState { copy(selectedGenre = genre) }
+    override fun onMovieGenreSelect(genre: MovieGenre) {
+        if (genre == state.value.selectedMovieGenre) return
+        updateState { copy(selectedMovieGenre = genre) }
         loadUpcomingMovies(categoryId = if (genre == MovieGenre.All) null else genre.id)
     }
 
     override fun onTopRatedClick() {
         emitEffect(HomeScreenEffect.NavigationTopRated)
+    }
+
+    override fun onTrendingMoviesCardClicked() {
+        emitEffect(HomeScreenEffect.NavigationTrendingMovie)
+    }
+
+    override fun onTrendingTvShowsCardClicked() {
+        emitEffect(HomeScreenEffect.NavigationTrendingTvShows)
+    }
+
+    override fun onTrendingActorsCardClicked() {
+        emitEffect(HomeScreenEffect.NavigationTrendingActor)
     }
 }

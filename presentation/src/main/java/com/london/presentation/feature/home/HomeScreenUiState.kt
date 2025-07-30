@@ -17,5 +17,6 @@ data class HomeScreenUiState(
     val topRatedUiMediaList: List<HomeUiMedia> = emptyList(),
     val recentWatchedMediaList: List<HomeUiMedia> = emptyList(),
     val upcomingMovies: StateFlow<PagingData<Movie>> = MutableStateFlow(PagingData.empty()),
-    val selectedGenre: MovieGenre = MovieGenre.All
+    val selectedMovieGenre: MovieGenre = MovieGenre.All,
+    val movieGenres: List<MovieGenre> = MovieGenre.entries.toList(),
 )

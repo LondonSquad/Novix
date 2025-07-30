@@ -44,19 +44,19 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.zIndex
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.paging.compose.collectAsLazyPagingItems
-import com.london.designsystem.component.ButtonIcon
 import com.london.designsystem.component.CircularLoading
 import com.london.designsystem.component.Text
+import com.london.designsystem.component.TopBar
 import com.london.designsystem.component.button.ErrorImage
 import com.london.designsystem.theme.NovixTheme
 import com.london.imageharamblur.ui.ImageViewFilter
 import com.london.presentation.R
-import com.london.presentation.shared.ConditionalText
-import com.london.presentation.shared.RatingItem
-import com.london.presentation.shared.ReviewsDate
 import com.london.presentation.feature.buildscreen.BuildScreen
 import com.london.presentation.feature.buildscreen.LoadingScreen
 import com.london.presentation.feature.buildscreen.NetworkErrorScreen
+import com.london.presentation.shared.ConditionalText
+import com.london.presentation.shared.RatingItem
+import com.london.presentation.shared.ReviewsDate
 import com.london.presentation.utils.Listen
 import com.london.presentation.utils.reverseDateFormat
 import org.koin.androidx.compose.koinViewModel
@@ -64,12 +64,12 @@ import org.koin.androidx.compose.koinViewModel
 @Composable
 fun ReviewsScreen(
     viewModel: ReviewsViewModel = koinViewModel(),
-    onBackClick: () -> Unit = {},
+    onNavigateBack: () -> Unit = {},
 ) {
     val uiState by viewModel.state.collectAsStateWithLifecycle()
     val effect by viewModel.effect.collectAsState(initial = null)
 
-    effect?.Listen { onBackClick() }
+    effect?.Listen { onNavigateBack() }
 
     BuildScreen {
         when {
@@ -120,7 +120,7 @@ fun ReviewsScreenContent(
             LazyColumn(
                 modifier = Modifier
                     .fillMaxSize()
-                    .padding(top = 120.dp),
+                    .padding(top = 100.dp),
                 verticalArrangement = Arrangement.spacedBy(18.dp),
                 contentPadding = PaddingValues(16.dp)
             ) {
@@ -150,46 +150,19 @@ fun ReviewsScreenContent(
                     NovixTheme.colors.surface.copy(alpha = backgroundAlpha)
                 )
                 .zIndex(0.5f)
-        )
-
-        ReviewTopBar(
-            modifier = Modifier
-                .padding(
-                    start = 16.dp,
-                    end = 16.dp,
-                    top = 12.dp
-                )
-                .align(Alignment.TopCenter),
-            onBackClick = reviewContract::onBackClicked
-        )
-    }
-}
-
-
-@Composable
-fun ReviewTopBar(
-    modifier: Modifier,
-    onBackClick: () -> Unit
-) {
-    Box(
-        modifier = modifier
-            .fillMaxWidth()
-            .zIndex(1.0f)
-            .background(NovixTheme.colors.surface)
-            .padding(
-                top = WindowInsets.statusBars.asPaddingValues().calculateTopPadding()
-            ),
-        contentAlignment = Alignment.Center
-    ) {
-
-        ButtonIcon(
-            onClick = onBackClick,
-            iconRes = com.london.designsystem.R.drawable.arrow_left,
-            backgroundColor = NovixTheme.colors.iconBackgroundLow,
-            modifier = Modifier
-                .size(40.dp)
-                .align(Alignment.TopStart),
-        )
+        ) {
+            TopBar(
+                modifier = Modifier
+                    .padding(
+                        top = WindowInsets.statusBars.asPaddingValues().calculateTopPadding(),
+                        start = 16.dp,
+                        end = 16.dp
+                    )
+                    .align(Alignment.Center),
+                title = stringResource(R.string.reviews),
+                onBackClick = reviewContract::onBackClicked
+            )
+        }
     }
 }
 

@@ -1,8 +1,6 @@
 package com.london.data.repository
 
 import com.google.common.truth.Truth.assertThat
-import com.london.data.local.source.LocalDataSource
-import com.london.data.remote.exception.NetworkException
 import com.london.data.local.database.dao.search.GenreInterestDao
 import com.london.data.local.model.search.GenreInterestEntity
 import com.london.data.local.model.search.PersonDtoLocal
@@ -10,10 +8,12 @@ import com.london.data.local.model.search.SearchActorsLocal
 import com.london.data.local.model.search.SearchMovieDtoLocal
 import com.london.data.local.model.search.SearchMoviesLocal
 import com.london.data.local.model.search.SearchTvShowLocal
+import com.london.data.local.source.LocalDataSource
+import com.london.data.remote.exception.NetworkException
 import com.london.data.remote.model.ApiResponse
-import com.london.data.remote.source.search.SearchRemoteDataSource
 import com.london.data.remote.model.search.model.SearchMovieRemote
 import com.london.data.remote.model.search.model.SearchTvShowRemote
+import com.london.data.remote.source.search.SearchRemoteDataSource
 import com.london.data.utils.CrashReporter
 import com.london.data.utils.fetchAndSync
 import com.london.domain.entity.Actor
@@ -428,6 +428,30 @@ class SearchRepositoryImplTest {
                 repository.searchForMoviesByCategory(categoryId, page)
             }
         }
+
+    @Test
+    fun `searchForTvShowsByCategory should throw HttpLockedException when API returns 423`() =
+        runTest {
+            val categoryId = 12
+            val page = 1
+
+            coEvery {
+                searchRemoteDataSource.searchForTvShowsByCategoryId(categoryId, page)
+            } throws NetworkException.HttpLockedException("Resource locked")
+
+            assertThrows<NetworkException.HttpLockedException> {
+                repository.searchForTvShowByCategory(categoryId, page)
+            }
+        }
+    @Test
+    fun `searchForTvShowsByCategory should return data from data source if available`()=runTest {
+        //Given
+        coEvery { searchRemoteDataSource.searchForTvShowsByCategoryId(any(), any()) } returns Result.success(SearchTvShowRemoteMock)
+        //When
+        val result = repository.searchForTvShowByCategory(1, PAGE_NUMBER)
+        //Then
+        assertThat(result).isEqualTo(TvShowList)
+    }
 
     @Test
     fun `getUpComingMoviesByCategory should throw TimeoutException when API times out`() = runTest {
