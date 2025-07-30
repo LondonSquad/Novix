@@ -31,6 +31,7 @@ fun HomeCarouselSection(
     carouselState: CarouselState = rememberCarouselState { uiMediaList.size },
     onSaveClick: (Int) -> Unit,
     onCardClick: (Int, MediaType) -> Unit,
+    isLoading: Boolean = false,
     onAllClick: () -> Unit,
 ) {
     Column(
@@ -40,6 +41,7 @@ fun HomeCarouselSection(
         SectionHeader(
             modifier = Modifier.padding(horizontal = HomeCarouselDefaults.HORIZONTAL_PADDING),
             text = sectionName.string,
+            isLoading = isLoading,
             hasGetAll = true,
             hasIcon = true,
             onClick = onAllClick

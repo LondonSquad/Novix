@@ -241,20 +241,25 @@ private fun Content(
             }
 
             item(span = { GridItemSpan(maxLineSpan) }) {
-                TopRatedSection(
-                    uiState = uiState,
-                    homeScreenContract = homeScreenContract,
-                    modifier = Modifier.requiredWidth(screenWidth)
-                )
-            }
-
-            if (uiState.recentWatchedMediaList.isNotEmpty()) {
-                item(span = { GridItemSpan(maxLineSpan) }) {
-                    ContinueWatchingSection(
+                if (!isLoading)
+                    TopRatedSection(
                         uiState = uiState,
                         homeScreenContract = homeScreenContract,
                         modifier = Modifier.requiredWidth(screenWidth)
                     )
+                else
+                    CarousalShimmerEffect()
+            }
+
+            if (uiState.recentWatchedMediaList.isNotEmpty()) {
+                item(span = { GridItemSpan(maxLineSpan) }) {
+                    if (!isLoading)
+                        ContinueWatchingSection(
+                            uiState = uiState,
+                            homeScreenContract = homeScreenContract,
+                            modifier = Modifier.requiredWidth(screenWidth)
+                        )
+                    else CarousalShimmerEffect()
                 }
             }
 
