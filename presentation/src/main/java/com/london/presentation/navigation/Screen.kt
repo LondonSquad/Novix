@@ -98,4 +98,6 @@ sealed interface Screen {
     @Serializable
     data object TopRated : Screen
 
+    @Serializable
+    data object ContinueWatching : Screen
 }
