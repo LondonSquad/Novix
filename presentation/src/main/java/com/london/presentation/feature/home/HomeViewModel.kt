@@ -52,7 +52,7 @@ class HomeViewModel(
                 val shows = getTopRatedTvShows.invoke(pageNumber = 1)
                 Pair(movies, shows)
             },
-            onStart = { updateState { copy(isLoading = true) } },
+            onStart = { updateState { copy(isTopRatedLoading  = true) } },
             onSuccess = { (movies, shows) ->
                 val topRatedMedia = movies.items.take(10).toUiMedia() +
                         shows.items.take(10).toUiMedia()
@@ -62,7 +62,7 @@ class HomeViewModel(
                 }
             },
             onError = { errorState -> updateState { copy(error = errorState) } },
-            onCompleted = { updateState { copy(isLoading = false) } },
+            onCompleted = { updateState { copy(isTopRatedLoading  = false) } },
             checkSuccess = { (movies, shows) ->
                 movies.items.isNotEmpty() || shows.items.isNotEmpty()
             }
