@@ -9625,5 +9625,33 @@
       "deletions": 95,
       "changed_files": 8
     }
+  },
+  {
+    "pr_number": 410,
+    "url": "https://github.com/LondonSquad/Novix/pull/410",
+    "title": "fix: actor item corner radius",
+    "opened_at": "2025-07-30T01:09:16Z",
+    "head_ref": "hotfix/45-the-actor-image-is-not-supported-in-the-rtl-screen-layout",
+    "base_ref": "develop",
+    "creator": {
+      "login": "Aseel-AbuKmail",
+      "id": 189210092,
+      "url": "https://github.com/Aseel-AbuKmail"
+    },
+    "approvals": [],
+    "first_approved_at": null,
+    "time_to_first_approval_minutes": null,
+    "required_approvals_met_at": null,
+    "time_to_required_approvals_minutes": null,
+    "closed_at": null,
+    "merged_at": null,
+    "merged_by": null,
+    "week": "2025-W31",
+    "status": "pending",
+    "diff_stats": {
+      "additions": 3,
+      "deletions": 3,
+      "changed_files": 1
+    }
   }
 ]
