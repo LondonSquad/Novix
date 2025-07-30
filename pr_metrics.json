@@ -13685,5 +13685,33 @@
       "deletions": 9,
       "changed_files": 7
     }
+  },
+  {
+    "pr_number": 430,
+    "url": "https://github.com/LondonSquad/Novix/pull/430",
+    "title": "feat: HomeScreen: Add separate loader for top rated media section",
+    "opened_at": "2025-07-30T16:20:10Z",
+    "head_ref": "fix/shimmer-top-rated",
+    "base_ref": "develop",
+    "creator": {
+      "login": "ahmeddsamii",
+      "id": 154278495,
+      "url": "https://github.com/ahmeddsamii"
+    },
+    "approvals": [],
+    "first_approved_at": null,
+    "time_to_first_approval_minutes": null,
+    "required_approvals_met_at": null,
+    "time_to_required_approvals_minutes": null,
+    "closed_at": null,
+    "merged_at": null,
+    "merged_by": null,
+    "week": "2025-W31",
+    "status": "pending",
+    "diff_stats": {
+      "additions": 5,
+      "deletions": 4,
+      "changed_files": 4
+    }
   }
 ]
