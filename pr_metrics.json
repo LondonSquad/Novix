@@ -9496,5 +9496,33 @@
       "deletions": 0,
       "changed_files": 3
     }
+  },
+  {
+    "pr_number": 406,
+    "url": "https://github.com/LondonSquad/Novix/pull/406",
+    "title": "fix: show and hide password icon tint",
+    "opened_at": "2025-07-30T00:48:02Z",
+    "head_ref": "fix/password-icon",
+    "base_ref": "develop",
+    "creator": {
+      "login": "Abdulrahman1890",
+      "id": 76666355,
+      "url": "https://github.com/Abdulrahman1890"
+    },
+    "approvals": [],
+    "first_approved_at": null,
+    "time_to_first_approval_minutes": null,
+    "required_approvals_met_at": null,
+    "time_to_required_approvals_minutes": null,
+    "closed_at": null,
+    "merged_at": null,
+    "merged_by": null,
+    "week": "2025-W31",
+    "status": "pending",
+    "diff_stats": {
+      "additions": 0,
+      "deletions": 3,
+      "changed_files": 2
+    }
   }
 ]
