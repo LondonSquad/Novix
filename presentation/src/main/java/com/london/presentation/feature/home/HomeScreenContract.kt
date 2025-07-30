@@ -21,4 +21,5 @@ fun defaultHomeScreenContract() = object : HomeScreenContract {
     override fun onTrendingTvShowsCardClicked() {}
     override fun onTrendingActorsCardClicked() {}
     override fun onMovieGenreSelect(genre: MovieGenre) {}
+    override fun onContinueWatchingClick() {}
 }
