@@ -13314,5 +13314,33 @@
       "deletions": 37,
       "changed_files": 2
     }
+  },
+  {
+    "pr_number": 419,
+    "url": "https://github.com/LondonSquad/Novix/pull/419",
+    "title": "Feature/shimmer home",
+    "opened_at": "2025-07-30T12:31:50Z",
+    "head_ref": "feature/shimmer-home",
+    "base_ref": "develop",
+    "creator": {
+      "login": "ahmeddsamii",
+      "id": 154278495,
+      "url": "https://github.com/ahmeddsamii"
+    },
+    "approvals": [],
+    "first_approved_at": null,
+    "time_to_first_approval_minutes": null,
+    "required_approvals_met_at": null,
+    "time_to_required_approvals_minutes": null,
+    "closed_at": null,
+    "merged_at": null,
+    "merged_by": null,
+    "week": "2025-W31",
+    "status": "pending",
+    "diff_stats": {
+      "additions": 354,
+      "deletions": 84,
+      "changed_files": 6
+    }
   }
 ]
