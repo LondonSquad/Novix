@@ -21,11 +21,12 @@ class TrendingMoviesViewModel(
             block = {
                 val moviesFlow = createPagingSourceFlow(query = "") { _, pageNumber ->
                     val movies = getTrendingMovies.invoke(page = pageNumber)
-                    val filteredItems = if (state.value.selectedGenreId != null && state.value.selectedGenreId != -1) {
-                        movies.items.filter { it.genreIds.contains(state.value.selectedGenreId) }
-                    } else {
-                        movies.items
-                    }
+                    val filteredItems =
+                        if (state.value.selectedGenreId != null && state.value.selectedGenreId != -1) {
+                            movies.items.filter { it.genreIds.contains(state.value.selectedGenreId) }
+                        } else {
+                            movies.items
+                        }
                     movies.copy(items = filteredItems)
                 }
                 moviesFlow
@@ -54,4 +55,11 @@ class TrendingMoviesViewModel(
 
     override fun onMovieClick(id: Int) = emitEffect(TrendingMoviesEffect.NavigateToMovie(id))
 
+    override fun onRetry() {
+        initializeMovies()
+    }
+
+    override fun onError(error: androidx.paging.LoadState.Error) {
+        onRetry()
+    }
 }
