@@ -239,12 +239,14 @@ private fun Content(
                 )
             }
 
-            item(span = { GridItemSpan(maxLineSpan) }) {
-                ContinueWatchingSection(
-                    uiState = uiState,
-                    homeScreenContract = homeScreenContract,
-                    modifier = Modifier.requiredWidth(screenWidth)
-                )
+            if (uiState.recentWatchedMediaList.isNotEmpty()) {
+                item(span = { GridItemSpan(maxLineSpan) }) {
+                    ContinueWatchingSection(
+                        uiState = uiState,
+                        homeScreenContract = homeScreenContract,
+                        modifier = Modifier.requiredWidth(screenWidth)
+                    )
+                }
             }
 
             upComingSection(

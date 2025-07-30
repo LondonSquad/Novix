@@ -70,27 +70,24 @@ class HomeViewModel(
     }
 
     fun fetchRecentWatchedMedia() {
-        viewModelScope.launch {
-            tryToExecute(
-                block = {
-                    val movies = getRecentWatchedMovies.invoke(limit = 10)
-                    val shows = getRecentWatchedTvShows.invoke(limit = 10)
-                    Pair(movies, shows)
-                },
-                onStart = { updateState { copy(isLoading = true) } },
-                onSuccess = { (movies, shows) ->
-                    val recentWatchedMedia = movies.toUiMedia() +
-                            shows.toUiMedia()
+        tryToExecute(
+            block = {
+                val movies = getRecentWatchedMovies.invoke(limit = 10)
+                val shows = getRecentWatchedTvShows.invoke(limit = 10)
+                Pair(movies, shows)
+            },
+            onStart = { updateState { copy(isLoading = true) } },
+            onSuccess = { (movies, shows) ->
+                val recentWatchedMedia = movies.toUiMedia() +
+                        shows.toUiMedia()
 
-                    updateState {
-                        copy(recentWatchedMediaList = recentWatchedMedia.shuffled())
-                    }
-                },
-                onError = { errorState -> updateState { copy(error = errorState) } },
-                onCompleted = { updateState { copy(isLoading = false) } },
-            )
-        }
-
+                updateState {
+                    copy(recentWatchedMediaList = recentWatchedMedia.shuffled())
+                }
+            },
+            onError = { errorState -> updateState { copy(error = errorState) } },
+            onCompleted = { updateState { copy(isLoading = false) } },
+        )
     }
 
     private fun initializePopularTvShows() {

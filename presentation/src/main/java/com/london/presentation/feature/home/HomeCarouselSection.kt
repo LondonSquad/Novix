@@ -32,9 +32,7 @@ fun HomeCarouselSection(
     onSaveClick: (Int) -> Unit,
     onCardClick: (Int, MediaType) -> Unit,
     onAllClick: () -> Unit,
-    emptyLayout: @Composable (() -> Unit)? = null,
 ) {
-
     Column(
         modifier = modifier.fillMaxWidth(),
         verticalArrangement = Arrangement.spacedBy(HomeCarouselDefaults.SECTION_VERTICAL_SPACING)
@@ -42,46 +40,42 @@ fun HomeCarouselSection(
         SectionHeader(
             modifier = Modifier.padding(horizontal = HomeCarouselDefaults.HORIZONTAL_PADDING),
             text = sectionName.string,
-            hasGetAll = uiMediaList.isNotEmpty(),
-            hasIcon = uiMediaList.isNotEmpty(),
+            hasGetAll = true,
+            hasIcon = true,
             onClick = onAllClick
         )
 
-        if (uiMediaList.isEmpty()) {
-            emptyLayout?.invoke()
-        } else {
-            HeroCarousel(
+        HeroCarousel(
+            modifier = Modifier
+                .height(HomeCarouselDefaults.CAROUSEL_HEIGHT)
+                .padding(start = HomeCarouselDefaults.CAROUSEL_START_PADDING),
+            carouselState = carouselState,
+            heroItemSize = HomeCarouselDefaults.HERO_ITEM_SIZE,
+            smallItemSize = HomeCarouselDefaults.SMALL_ITEM_SIZE,
+            itemSpacing = HomeCarouselDefaults.ITEM_SPACING,
+            contentPadding = PaddingValues(end = HomeCarouselDefaults.CONTENT_END_PADDING)
+        ) { index ->
+            val mediaItem = uiMediaList[index]
+            HomeCard(
                 modifier = Modifier
-                    .height(HomeCarouselDefaults.CAROUSEL_HEIGHT)
-                    .padding(start = HomeCarouselDefaults.CAROUSEL_START_PADDING),
-                carouselState = carouselState,
-                heroItemSize = HomeCarouselDefaults.HERO_ITEM_SIZE,
-                smallItemSize = HomeCarouselDefaults.SMALL_ITEM_SIZE,
-                itemSpacing = HomeCarouselDefaults.ITEM_SPACING,
-                contentPadding = PaddingValues(end = HomeCarouselDefaults.CONTENT_END_PADDING)
-            ) { index ->
-                val mediaItem = uiMediaList[index]
-                HomeCard(
-                    modifier = Modifier
-                        .noRippleClickable {
-                            onCardClick(
-                                mediaItem.id,
-                                mediaItem.mediaType
-                            )
-                        }
-                        .maskClip(RoundedCornerShape(HomeCarouselDefaults.CARD_CORNER_RADIUS))
-                        .maskBorder(
-                            border = BorderStroke(
-                                width = HomeCarouselDefaults.BORDER_WIDTH,
-                                color = NovixTheme.colors.stroke
-                            ),
-                            shape = RoundedCornerShape(HomeCarouselDefaults.CARD_CORNER_RADIUS)
+                    .noRippleClickable {
+                        onCardClick(
+                            mediaItem.id,
+                            mediaItem.mediaType
+                        )
+                    }
+                    .maskClip(RoundedCornerShape(HomeCarouselDefaults.CARD_CORNER_RADIUS))
+                    .maskBorder(
+                        border = BorderStroke(
+                            width = HomeCarouselDefaults.BORDER_WIDTH,
+                            color = NovixTheme.colors.stroke
                         ),
-                    imageUrl = mediaItem.posterUrl,
-                    onSaveClick = { onSaveClick(mediaItem.id) },
-                    hasSaveIcon = isHero
-                )
-            }
+                        shape = RoundedCornerShape(HomeCarouselDefaults.CARD_CORNER_RADIUS)
+                    ),
+                imageUrl = mediaItem.posterUrl,
+                onSaveClick = { onSaveClick(mediaItem.id) },
+                hasSaveIcon = isHero
+            )
         }
     }
 }
