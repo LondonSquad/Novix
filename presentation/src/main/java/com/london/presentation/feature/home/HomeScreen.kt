@@ -24,6 +24,7 @@ import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
@@ -82,6 +83,10 @@ fun HomeScreen(
             is HomeScreenEffect.NavigationTopRated -> onNavigateTopRated()
             is HomeScreenEffect.NavigationContinueWatching -> onNavigateContinueWatching()
         }
+    }
+
+    LaunchedEffect(Unit) {
+        viewModel.fetchRecentWatchedMedia()
     }
 
     val lazyGridState = rememberSaveable(

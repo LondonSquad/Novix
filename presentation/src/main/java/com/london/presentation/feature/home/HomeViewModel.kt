@@ -39,7 +39,6 @@ class HomeViewModel(
         initializePopularMovies()
         initializePopularTvShows()
         initializeTopRatedMedia()
-        initializeRecentWatchedMedia()
         updateState {
             copy(upcomingMovies = _upcomingMoviesFlow)
         }
@@ -70,24 +69,28 @@ class HomeViewModel(
         )
     }
 
-    private fun initializeRecentWatchedMedia() {
-        tryToExecute(
-            block = {
-                val movies = getRecentWatchedMovies.invoke(limit = 10)
-                val shows = getRecentWatchedTvShows.invoke(limit = 10)
-                Pair(movies, shows)
-            },
-            onStart = { updateState { copy(isLoading = true) } },
-            onSuccess = { (movies, shows) ->
-                val topRatedMedia = movies.toUiMedia() + shows.toUiMedia()
+    fun fetchRecentWatchedMedia() {
+        viewModelScope.launch {
+            tryToExecute(
+                block = {
+                    val movies = getRecentWatchedMovies.invoke(limit = 10)
+                    val shows = getRecentWatchedTvShows.invoke(limit = 10)
+                    Pair(movies, shows)
+                },
+                onStart = { updateState { copy(isLoading = true) } },
+                onSuccess = { (movies, shows) ->
+                    val recentWatchedMedia = movies.toUiMedia() +
+                            shows.toUiMedia()
 
-                updateState {
-                    copy(topRatedUiMediaList = topRatedMedia.shuffled())
-                }
-            },
-            onError = { errorState -> updateState { copy(error = errorState) } },
-            onCompleted = { updateState { copy(isLoading = false) } },
-        )
+                    updateState {
+                        copy(recentWatchedMediaList = recentWatchedMedia.shuffled())
+                    }
+                },
+                onError = { errorState -> updateState { copy(error = errorState) } },
+                onCompleted = { updateState { copy(isLoading = false) } },
+            )
+        }
+
     }
 
     private fun initializePopularTvShows() {
