@@ -1,5 +1,6 @@
 package com.london.designsystem.component
 
+import androidx.annotation.DrawableRes
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -30,8 +31,8 @@ fun TopBar(
     onBackClick: (() -> Unit)? = null,
     onClickOption1: (() -> Unit)? = null,
     onClickOption2: (() -> Unit)? = null,
-    option1Icon: Int? = null,
-    option2Icon: Int? = null,
+    @DrawableRes option1Icon: Int? = null,
+    @DrawableRes option2Icon: Int? = null,
 ) {
     Row(
         modifier = modifier
