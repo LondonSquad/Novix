@@ -143,6 +143,22 @@ fun ActorScreenContent(
             ),
             state = lazyState
         ) {
+
+            stickyHeader {
+                TopBar(
+                    onBackClick = actorDetailsContract::onNavigateBack,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .background(
+                            NovixTheme.colors.surface.copy(alpha = backgroundAlpha)
+                        )
+                        .padding(
+                            start = 16.dp,
+                            top = WindowInsets.statusBars.asPaddingValues().calculateTopPadding() + 12.dp
+                        )
+                )
+            }
+
             item {
                 val images = uiState.actorImageDetails.orEmpty()
 
@@ -263,18 +279,7 @@ fun ActorScreenContent(
 
         }
 
-        TopBar(
-            onBackClick = actorDetailsContract::onNavigateBack,
-            modifier = Modifier
-                .fillMaxWidth()
-                .background(
-                    NovixTheme.colors.surface.copy(alpha = backgroundAlpha)
-                )
-                .padding(
-                    start = 16.dp,
-                    top = WindowInsets.statusBars.asPaddingValues().calculateTopPadding() + 12.dp
-                )
-        )
+
 
     }
 }
