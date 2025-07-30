@@ -2,6 +2,7 @@ package com.london.data.utils
 
 import com.london.data.BuildConfig
 import java.security.MessageDigest
+import java.util.Locale
 
 fun Int?.orZero() = this ?: 0
 
@@ -14,7 +15,10 @@ val Boolean?.isTrue
 
 fun Double?.roundToFirstDecimal(): String = "%.1f".format(this)
 
-fun Double?.roundToDecimal(): Double = "%.1f".format(this).toDouble()
+fun Double?.roundToDecimal(): Double {
+    if (this == null) return 0.0
+    return "%.1f".format(Locale.US, this).toDouble()
+}
 
 fun String?.asImageUrlOrEmpty() = this?.let { BuildConfig.IMAGE_URL + it }.orEmpty()
 
