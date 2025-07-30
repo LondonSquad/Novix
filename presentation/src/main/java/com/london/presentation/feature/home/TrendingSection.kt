@@ -13,11 +13,13 @@ import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.scale
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
@@ -25,6 +27,7 @@ import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.LayoutDirection
@@ -32,6 +35,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.zIndex
 import com.london.designsystem.component.Text
 import com.london.designsystem.theme.NovixTheme
+import com.london.designsystem.utils.shimmerEffect
 import com.london.presentation.R
 
 @Composable
@@ -39,23 +43,34 @@ fun TrendingSection(
     onMoviesClick: () -> Unit,
     onTvShowsClick: () -> Unit,
     onActorsClick: () -> Unit,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    isLoading: Boolean = false,
 ) {
     Column(
         modifier = modifier
             .fillMaxWidth()
             .background(NovixTheme.colors.surface)
     ) {
-        Text(
-            text = stringResource(R.string.What_you_want_to_watch),
-            style = NovixTheme.typography.headline.small,
-            color = NovixTheme.colors.title,
-            modifier = Modifier
-                .padding(bottom = 24.dp)
-                .zIndex(1f)
-        )
+        if (!isLoading)
+            Text(
+                text = stringResource(R.string.What_you_want_to_watch),
+                style = NovixTheme.typography.headline.small,
+                color = NovixTheme.colors.title,
+                modifier = Modifier
+                    .padding(bottom = 24.dp)
+                    .zIndex(1f)
+            ) else
+            Box(
+                modifier = Modifier
+                    .padding(bottom = 24.dp)
+                    .height(40.dp)
+                    .width(200.dp)
+                    .align(Alignment.Start)
+                    .clip(RoundedCornerShape(8.dp))
+                    .shimmerEffect()
+            )
 
-        Row(
+        Row (
             modifier = Modifier
                 .padding(bottom = 12.dp)
                 .fillMaxWidth()
@@ -64,38 +79,38 @@ fun TrendingSection(
             horizontalArrangement = Arrangement.spacedBy(8.dp),
             verticalAlignment = Alignment.Bottom
         ) {
-            CategoryCard(
-                title = stringResource(R.string.Movies),
-                icon = painterResource(id = R.drawable.icon_movie),
-                startColor = NovixTheme.colors.primary,
-                endColor = NovixTheme.colors.darkCocoa,
-                imageWidth = 60.dp,
-                imageHeight = 64.dp,
-                onClick = onMoviesClick,
-                modifier = Modifier.weight(1f)
-            )
+                CategoryCard(
+                    title = stringResource(R.string.Movies),
+                    icon = painterResource(id = R.drawable.icon_movie),
+                    startColor = NovixTheme.colors.primary,
+                    endColor = NovixTheme.colors.darkCocoa,
+                    imageWidth = 60.dp,
+                    imageHeight = 64.dp,
+                    onClick = onMoviesClick,
+                    modifier = Modifier.weight(1f)
+                )
 
-            CategoryCard(
-                title = stringResource(R.string.TV_Shows),
-                icon = painterResource(id = R.drawable.icon_tvshow),
-                startColor = NovixTheme.colors.secondary,
-                endColor = NovixTheme.colors.deepCrimson,
-                imageWidth = 88.46.dp,
-                imageHeight = 64.dp,
-                onClick = onTvShowsClick,
-                modifier = Modifier.weight(1f)
-            )
+                CategoryCard(
+                    title = stringResource(R.string.TV_Shows),
+                    icon = painterResource(id = R.drawable.icon_tvshow),
+                    startColor = NovixTheme.colors.secondary,
+                    endColor = NovixTheme.colors.deepCrimson,
+                    imageWidth = 88.46.dp,
+                    imageHeight = 64.dp,
+                    onClick = onTvShowsClick,
+                    modifier = Modifier.weight(1f)
+                )
 
-            CategoryCard(
-                title = stringResource(R.string.actors),
-                icon = painterResource(id = R.drawable.icon_actor),
-                startColor = NovixTheme.colors.tealBlue,
-                endColor = NovixTheme.colors.oceanDark,
-                imageWidth = 56.49.dp,
-                imageHeight = 64.dp,
-                onClick = onActorsClick,
-                modifier = Modifier.weight(1f)
-            )
+                CategoryCard(
+                    title = stringResource(R.string.actors),
+                    icon = painterResource(id = R.drawable.icon_actor),
+                    startColor = NovixTheme.colors.tealBlue,
+                    endColor = NovixTheme.colors.oceanDark,
+                    imageWidth = 56.49.dp,
+                    imageHeight = 64.dp,
+                    onClick = onActorsClick,
+                    modifier = Modifier.weight(1f)
+                )
         }
     }
 }
@@ -120,7 +135,7 @@ private fun CategoryCard(
     Box(
         modifier = modifier
             .height(116.dp)
-            .width(104.dp)
+            .widthIn(min = 104.dp)
             .background(
                 brush = gradient,
                 shape = RoundedCornerShape(12.dp)
@@ -143,9 +158,11 @@ private fun CategoryCard(
             text = title,
             style = NovixTheme.typography.title.medium,
             color = NovixTheme.colors.onPrimary,
+            maxLines = 1,
+            overflow = TextOverflow.Ellipsis,
             modifier = Modifier
                 .align(Alignment.BottomStart)
-                .padding(start = 8.dp, bottom = 7.dp)
+                .padding(start = 8.dp, end = 8.dp, bottom = 7.dp)
         )
     }
 }
