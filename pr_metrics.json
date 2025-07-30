@@ -13657,5 +13657,33 @@
       "deletions": 39,
       "changed_files": 10
     }
+  },
+  {
+    "pr_number": 429,
+    "url": "https://github.com/LondonSquad/Novix/pull/429",
+    "title": "Feature No network screen Movie & Tv Show  trending ",
+    "opened_at": "2025-07-30T16:19:11Z",
+    "head_ref": "feature/no-network-screen",
+    "base_ref": "develop",
+    "creator": {
+      "login": "AsmaaKhaledGomaa",
+      "id": 117874933,
+      "url": "https://github.com/AsmaaKhaledGomaa"
+    },
+    "approvals": [],
+    "first_approved_at": null,
+    "time_to_first_approval_minutes": null,
+    "required_approvals_met_at": null,
+    "time_to_required_approvals_minutes": null,
+    "closed_at": null,
+    "merged_at": null,
+    "merged_by": null,
+    "week": "2025-W31",
+    "status": "pending",
+    "diff_stats": {
+      "additions": 267,
+      "deletions": 113,
+      "changed_files": 11
+    }
   }
 ]
