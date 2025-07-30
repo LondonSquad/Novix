@@ -13273,5 +13273,33 @@
       "deletions": 174,
       "changed_files": 15
     }
+  },
+  {
+    "pr_number": 418,
+    "url": "https://github.com/LondonSquad/Novix/pull/418",
+    "title": "refactor: - replace Row with LazyRow in TrendingSection and add fill max width to that box - translate numbers in popular section to accept arabic - make min height to popular section",
+    "opened_at": "2025-07-30T11:41:13Z",
+    "head_ref": "hotfix/issues-in-home-screen",
+    "base_ref": "develop",
+    "creator": {
+      "login": "BassantM",
+      "id": 102248144,
+      "url": "https://github.com/BassantM"
+    },
+    "approvals": [],
+    "first_approved_at": null,
+    "time_to_first_approval_minutes": null,
+    "required_approvals_met_at": null,
+    "time_to_required_approvals_minutes": null,
+    "closed_at": null,
+    "merged_at": null,
+    "merged_by": null,
+    "week": "2025-W31",
+    "status": "pending",
+    "diff_stats": {
+      "additions": 41,
+      "deletions": 37,
+      "changed_files": 2
+    }
   }
 ]
