@@ -13572,5 +13572,33 @@
       "deletions": 413,
       "changed_files": 40
     }
+  },
+  {
+    "pr_number": 427,
+    "url": "https://github.com/LondonSquad/Novix/pull/427",
+    "title": "fix: enhance ripple effects home card actor item category item",
+    "opened_at": "2025-07-30T16:00:27Z",
+    "head_ref": "hotfix/ripple-effects",
+    "base_ref": "develop",
+    "creator": {
+      "login": "marwanqashwa",
+      "id": 100484790,
+      "url": "https://github.com/marwanqashwa"
+    },
+    "approvals": [],
+    "first_approved_at": null,
+    "time_to_first_approval_minutes": null,
+    "required_approvals_met_at": null,
+    "time_to_required_approvals_minutes": null,
+    "closed_at": null,
+    "merged_at": null,
+    "merged_by": null,
+    "week": "2025-W31",
+    "status": "pending",
+    "diff_stats": {
+      "additions": 47,
+      "deletions": 39,
+      "changed_files": 10
+    }
   }
 ]
