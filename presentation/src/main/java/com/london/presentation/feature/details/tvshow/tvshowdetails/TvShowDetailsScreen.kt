@@ -54,6 +54,7 @@ import com.london.designsystem.R
 import com.london.designsystem.component.ActorItem
 import com.london.designsystem.component.CircularLoading
 import com.london.designsystem.component.Icon
+import com.london.designsystem.component.ImageView
 import com.london.designsystem.component.NovixChip
 import com.london.designsystem.component.Text
 import com.london.designsystem.component.TopBar
@@ -62,7 +63,6 @@ import com.london.designsystem.component.button.ErrorImage
 import com.london.designsystem.theme.NovixTheme
 import com.london.designsystem.theme.noRippleClickable
 import com.london.domain.entity.tvshowdetails.TvShowCastMemberEntity
-import com.london.imageharamblur.ui.ImageViewFilter
 import com.london.presentation.feature.buildscreen.BuildScreen
 import com.london.presentation.feature.reviews.MediaType
 import com.london.presentation.shared.ConditionalText
@@ -570,7 +570,7 @@ fun EpisodeRow(
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.spacedBy(12.dp)
         ) {
-            ImageViewFilter(
+            ImageView(
                 model = episode.stillUrl,
                 contentDescription = stringResource(R.string.s),
                 contentScale = ContentScale.FillBounds,
