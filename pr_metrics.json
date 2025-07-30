@@ -9656,9 +9656,18 @@
       "id": 189210092,
       "url": "https://github.com/Aseel-AbuKmail"
     },
-    "approvals": [],
-    "first_approved_at": null,
-    "time_to_first_approval_minutes": null,
+    "approvals": [
+      {
+        "reviewer": {
+          "id": 106277855,
+          "login": "Mostafa-alsaygh",
+          "url": "https://github.com/Mostafa-alsaygh"
+        },
+        "submitted_at": "2025-07-30T01:10:09Z"
+      }
+    ],
+    "first_approved_at": "2025-07-30T01:10:09Z",
+    "time_to_first_approval_minutes": 0.8833333333333333,
     "required_approvals_met_at": null,
     "time_to_required_approvals_minutes": null,
     "closed_at": null,
