@@ -16,6 +16,7 @@ import com.london.designsystem.component.HomeCard
 import com.london.designsystem.component.SectionHeader
 import com.london.designsystem.component.carousel.HeroCarousel
 import com.london.designsystem.component.carousel.isHero
+import com.london.designsystem.component.carousel.m3.CarouselState
 import com.london.designsystem.component.carousel.m3.rememberCarouselState
 import com.london.designsystem.theme.NovixTheme
 import com.london.designsystem.theme.noRippleClickable
@@ -27,6 +28,7 @@ fun HomeCarouselSection(
     modifier: Modifier = Modifier,
     uiMediaList: List<HomeUiMedia>,
     @StringRes sectionName: Int,
+    carouselState: CarouselState = rememberCarouselState { uiMediaList.size },
     onSaveClick: (Int) -> Unit,
     onCardClick: (Int, MediaType) -> Unit,
     onAllClick: () -> Unit
@@ -34,10 +36,10 @@ fun HomeCarouselSection(
 
     Column(
         modifier = modifier.fillMaxWidth(),
-        verticalArrangement = Arrangement.spacedBy(12.dp)
+        verticalArrangement = Arrangement.spacedBy(HomeCarouselDefaults.SECTION_VERTICAL_SPACING)
     ) {
         SectionHeader(
-            modifier = Modifier.padding(horizontal = 16.dp),
+            modifier = Modifier.padding(horizontal = HomeCarouselDefaults.HORIZONTAL_PADDING),
             text = sectionName.string,
             hasGetAll = true,
             hasIcon = true,
@@ -46,13 +48,13 @@ fun HomeCarouselSection(
 
         HeroCarousel(
             modifier = Modifier
-                .height(210.dp)
-                .padding(start = 16.dp),
-            carouselState = rememberCarouselState { uiMediaList.size },
-            heroItemSize = 158.dp,
-            smallItemSize = 74.dp,
-            itemSpacing = 8.dp,
-            contentPadding = PaddingValues(end = 16.dp)
+                .height(HomeCarouselDefaults.CAROUSEL_HEIGHT)
+                .padding(start = HomeCarouselDefaults.CAROUSEL_START_PADDING),
+            carouselState = carouselState,
+            heroItemSize = HomeCarouselDefaults.HERO_ITEM_SIZE,
+            smallItemSize = HomeCarouselDefaults.SMALL_ITEM_SIZE,
+            itemSpacing = HomeCarouselDefaults.ITEM_SPACING,
+            contentPadding = PaddingValues(end = HomeCarouselDefaults.CONTENT_END_PADDING)
         ) { index ->
             val mediaItem = uiMediaList[index]
             HomeCard(
@@ -63,10 +65,13 @@ fun HomeCarouselSection(
                             mediaItem.mediaType
                         )
                     }
-                    .maskClip(RoundedCornerShape(12.dp))
+                    .maskClip(RoundedCornerShape(HomeCarouselDefaults.CARD_CORNER_RADIUS))
                     .maskBorder(
-                        border = BorderStroke(width = 1.dp, color = NovixTheme.colors.stroke),
-                        shape = RoundedCornerShape(12.dp)
+                        border = BorderStroke(
+                            width = HomeCarouselDefaults.BORDER_WIDTH,
+                            color = NovixTheme.colors.stroke
+                        ),
+                        shape = RoundedCornerShape(HomeCarouselDefaults.CARD_CORNER_RADIUS)
                     ),
                 imageUrl = mediaItem.posterUrl,
                 onSaveClick = { onSaveClick(mediaItem.id) },
@@ -74,4 +79,17 @@ fun HomeCarouselSection(
             )
         }
     }
+}
+
+private object HomeCarouselDefaults {
+    val SECTION_VERTICAL_SPACING = 12.dp
+    val HORIZONTAL_PADDING = 16.dp
+    val CONTENT_END_PADDING = 16.dp
+    val CAROUSEL_START_PADDING = 16.dp
+    val CAROUSEL_HEIGHT = 210.dp
+    val HERO_ITEM_SIZE = 158.dp
+    val SMALL_ITEM_SIZE = 74.dp
+    val ITEM_SPACING = 8.dp
+    val CARD_CORNER_RADIUS = 12.dp
+    val BORDER_WIDTH = 1.dp
 }
