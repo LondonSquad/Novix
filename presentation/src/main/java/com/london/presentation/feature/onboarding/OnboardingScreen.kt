@@ -161,7 +161,7 @@ fun OnboardingPageContent(page: OnboardingPage) {
                 )
             } else {
                 Image(
-                    modifier = Modifier.scale(2f),
+                    modifier = Modifier.scale(2.1f),
                     painter = R.drawable.img_onboarding_glow.painter,
                     contentDescription = null
                 )
