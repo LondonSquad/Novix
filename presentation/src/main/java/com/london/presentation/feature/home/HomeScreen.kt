@@ -246,7 +246,7 @@ private fun Content(
             }
 
             item(span = { GridItemSpan(maxLineSpan) }) {
-                if (!isLoading)
+                if (!uiState.isTopRatedLoading)
                     TopRatedSection(
                         uiState = uiState,
                         homeScreenContract = homeScreenContract,
