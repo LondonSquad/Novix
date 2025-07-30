@@ -45,6 +45,7 @@ import com.london.presentation.feature.register.WebViewRegistrationScreen
 import com.london.presentation.feature.reviews.ReviewsScreen
 import com.london.presentation.feature.search.SearchScreen
 import com.london.presentation.feature.toprated.TopRatedScreen
+import com.london.presentation.feature.continuewatching.ContinueWatchingScreen
 import com.london.presentation.navigation.Screen
 import com.london.presentation.navigation.Screen.MovieDetails
 import com.london.presentation.navigation.Screen.TvShowDetails
@@ -234,7 +235,8 @@ fun NavGraphBuilder.mainNavGraph(
             onNavigateTopRated = { navController.navigate(Screen.TopRated) },
             onNavigateTrendingMovies = { navController.navigate(Screen.TrendingMovies) },
             onNavigateTrendingTvShows = { navController.navigate(Screen.TrendingTvShows) },
-            onNavigateTrendingActors = { navController.navigate(Screen.TrendingActors) }
+            onNavigateTrendingActors = { navController.navigate(Screen.TrendingActors) },
+            onNavigateContinueWatching = { navController.navigate(Screen.ContinueWatching) }
         )
     }
 
@@ -429,6 +431,20 @@ fun NavGraphBuilder.mainNavGraph(
             onNavigateBack = { navController.popBackStack() },
             onNavigateMovie = { navController.navigate(MovieDetails(it)) },
             onNavigateTvShow = { navController.navigate(TvShowDetails(it)) }
+        )
+    }
+
+    composable<Screen.ContinueWatching> {
+        ContinueWatchingScreen(
+            onBackClick = {
+                navController.navigateUp()
+            },
+            onMovieClick = { id ->
+                navController.navigate(MovieDetails(id))
+            },
+            onTvShowClick = { id ->
+                navController.navigate(TvShowDetails(id))
+            }
         )
     }
 }
