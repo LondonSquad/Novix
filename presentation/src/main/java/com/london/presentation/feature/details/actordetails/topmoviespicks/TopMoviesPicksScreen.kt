@@ -50,8 +50,8 @@ private fun TopMoviesPicksContent(
         title = stringResource(R.string.top_movies_picks),
         items = state.movieDetails.cast,
         onBack = contract::onBack,
-        onItemClick = contract::onSaveMovie,
         getImageUrl = { it.posterUrl },
+        onSaveClick = { contract.onSaveMovie(it.id) },
         modifier = modifier
     )
 }
