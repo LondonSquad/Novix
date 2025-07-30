@@ -2,20 +2,20 @@ package com.london.presentation.feature.details.actordetails.topmoviespicks
 
 import androidx.lifecycle.SavedStateHandle
 import com.london.domain.usecase.GetActorMoviePicksByIdUseCase
+import com.london.presentation.feature.base.BaseViewModel
 import com.london.presentation.navigation.Screen
 import com.london.presentation.navigation.getArgs
-import com.london.presentation.feature.base.BaseViewModel
 import org.koin.android.annotation.KoinViewModel
 
 @KoinViewModel
 class TopMoviesPicksViewModel(
     private val getActorMoviePicksById: GetActorMoviePicksByIdUseCase,
     savedStateHandle: SavedStateHandle,
-) : BaseViewModel<TopMoviesPicksUiState, TopMoviesPicksEffectUiState>(TopMoviesPicksUiState()),
+) : BaseViewModel<TopMoviesPicksUiState, TopMoviesPicksEffect>(TopMoviesPicksUiState()),
     TopMoviesPicksContract {
 
-    private val args =  savedStateHandle.getArgs<Screen.ActorTopMoviesPicksDetails>()
-    val actorId = args?.actorId?: 0
+    private val args = savedStateHandle.getArgs<Screen.ActorTopMoviesPicksDetails>()
+    val actorId = args?.actorId ?: 0
 
     init {
         if (actorId != 0) {
@@ -41,17 +41,17 @@ class TopMoviesPicksViewModel(
             onError = { errorState ->
                 updateState { copy(errorState = errorState) }
             },
-            onCompleted = {updateState { copy(isLoading = true) }},
-            checkSuccess = {actorId != 0},
+            onCompleted = { updateState { copy(isLoading = false) } },
+            checkSuccess = { actorId != 0 },
         )
     }
 
     override fun onSaveMovie(movieId: Int) {
         updateState { copy(isSaved = isSaved) }
-        emitEffect(TopMoviesPicksEffectUiState.NavigationToMovieDetails(movieId))
+        emitEffect(TopMoviesPicksEffect.NavigationToMovieDetails(movieId))
     }
 
-    override fun onClickBack() {
-        emitEffect(TopMoviesPicksEffectUiState.NavigateBack)
+    override fun onBack() {
+        emitEffect(TopMoviesPicksEffect.NavigateBack)
     }
 }

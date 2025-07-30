@@ -46,7 +46,6 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.zIndex
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.london.designsystem.component.CircularLoading
 import com.london.designsystem.component.HomeCard
@@ -70,7 +69,7 @@ import org.koin.androidx.compose.koinViewModel
 
 @Composable
 fun ActorDetailsScreen(
-    onBackClick: () -> Unit,
+    onNavigateBack: () -> Unit,
     onNavigateToMoviePicks: (Int) -> Unit,
     onNavigateToGallery: (Int) -> Unit,
     onNavigateToTvShowPicks: (Int) -> Unit,
@@ -83,7 +82,7 @@ fun ActorDetailsScreen(
 
     effect?.Listen { currentEffect ->
         when (currentEffect) {
-            is ActorEffectUiState.NavigationBack -> onBackClick()
+            is ActorEffectUiState.NavigationBack -> onNavigateBack()
             is ActorEffectUiState.NavigateToGallery -> onNavigateToGallery(currentEffect.actorId)
             is ActorEffectUiState.NavigateToMovieScreen -> {
                 onNavigateToMovieScreen(currentEffect.movieId)
@@ -273,9 +272,8 @@ fun ActorScreenContent(
                 )
                 .padding(
                     start = 16.dp,
-                    top = WindowInsets.statusBars.asPaddingValues().calculateTopPadding()
+                    top = WindowInsets.statusBars.asPaddingValues().calculateTopPadding() + 12.dp
                 )
-                .zIndex(1f)
         )
 
     }

@@ -61,6 +61,56 @@ import com.london.presentation.navigation.Screen.TopTvShowsPicksDetails
 import com.london.presentation.navigation.Screen.TvShowDetails
 import com.london.presentation.navigation.Screen.Welcome
 import org.koin.compose.getKoin
+import com.london.presentation.feature.account.AccountScreen
+import com.london.presentation.feature.bookmark.BookmarksScreen
+import com.london.presentation.feature.category.CategoriesScreen
+import com.london.presentation.feature.category.moviesbycategory.MoviesByCategoryScreen
+import com.london.presentation.feature.category.tvshowbycategory.TvShowByCategoryScreen
+import com.london.presentation.feature.details.actor.ActorDetailsScreen
+import com.london.presentation.feature.details.actordetails.gallery.ActorGalleryScreen
+import com.london.presentation.feature.details.actordetails.topmoviespicks.TopMoviesPicksScreen
+import com.london.presentation.feature.details.actordetails.toptvshowspicks.TopTvShowsPicksScreen
+import com.london.presentation.feature.details.movieDetalis.MovieDetailsScreen
+import com.london.presentation.feature.details.tvshow.episodedetails.EpisodeDetailsScreen
+import com.london.presentation.feature.details.tvshow.tvshowdetails.TvShowsDetailsScreen
+import com.london.presentation.feature.home.HomeScreen
+import com.london.presentation.feature.home.trending.actor.TrendingActorsScreen
+import com.london.presentation.feature.home.trending.movies.TrendingMoviesScreen
+import com.london.presentation.feature.home.trending.tvshows.TrendingTvShowsScreen
+import com.london.presentation.feature.login.LoginScreen
+import com.london.presentation.feature.register.WebViewRegistrationScreen
+import com.london.presentation.feature.onboarding.OnboardingRoute
+import com.london.presentation.feature.onboarding.SplashRoute
+import com.london.presentation.feature.onboarding.WelcomeScreen
+import com.london.presentation.feature.register.WebViewRegistrationScreen
+import com.london.presentation.feature.reviews.ReviewsScreen
+import com.london.presentation.feature.search.SearchScreen
+import com.london.presentation.feature.toprated.TopRatedScreen
+import com.london.presentation.navigation.Screen
+import com.london.presentation.navigation.Screen.Account
+import com.london.presentation.navigation.Screen.ActorDetails
+import com.london.presentation.navigation.Screen.ActorGallery
+import com.london.presentation.navigation.Screen.ActorTopMoviesPicksDetails
+import com.london.presentation.navigation.Screen.Bookmarks
+import com.london.presentation.navigation.Screen.Categories
+import com.london.presentation.navigation.Screen.EpisodeDetails
+import com.london.presentation.navigation.Screen.Home
+import com.london.presentation.navigation.Screen.Login
+import com.london.presentation.navigation.Screen.MovieDetails
+import com.london.presentation.navigation.Screen.MoviesByCategory
+import com.london.presentation.navigation.Screen.OnboardingPager
+import com.london.presentation.navigation.Screen.Reviews
+import com.london.presentation.navigation.Screen.Search
+import com.london.presentation.navigation.Screen.Splash
+import com.london.presentation.navigation.Screen.TopRated
+import com.london.presentation.navigation.Screen.TopTvShowsPicksDetails
+import com.london.presentation.navigation.Screen.TrendingActors
+import com.london.presentation.navigation.Screen.TrendingMovies
+import com.london.presentation.navigation.Screen.TrendingTvShows
+import com.london.presentation.navigation.Screen.TvShowDetails
+import com.london.presentation.navigation.Screen.TvShowsByCategory
+import com.london.presentation.navigation.Screen.Welcome
+import org.koin.compose.getKoin
 
 @Composable
 fun NovixApp(appPreferencesService: AppPreferencesService) {
@@ -114,7 +164,12 @@ fun NovixApp(appPreferencesService: AppPreferencesService) {
                 SplashRoute(
                     onNavigateToOnboarding = { navController.navigate(OnboardingPager) },
                     onNavigateToWelcome = { navController.navigate(Welcome) },
-                    onNavigateToHome = { navController.navigate(Home) },
+                    onNavigateToHome = {
+                        navController.navigate(Home) {
+                            popUpTo(Splash) { inclusive = true }
+                            launchSingleTop = true
+                        }
+                    },
                     appPreferencesService = appPreferencesService,
                     authRepository = getKoin().get(),
                 )
@@ -129,10 +184,13 @@ fun NovixApp(appPreferencesService: AppPreferencesService) {
 
             composable<Welcome> {
                 WelcomeScreen(
-                    onLoginClicked = {
-                        navController.navigate(Login)
+                    onNavigateLogin = {
+                        navController.navigate(Login) {
+                            popUpTo(Welcome) { inclusive = true }
+                            launchSingleTop = true
+                        }
                     },
-                    onContinueClicked = {
+                    onNavigateContinue = {
                         navController.navigate(Home)
                     }
                 )
@@ -153,6 +211,9 @@ fun NovixApp(appPreferencesService: AppPreferencesService) {
                     },
                     onNavigateBack = {
                         navController.popBackStack()
+                    },
+                    onNavigateToWebViewRegistration = {
+
                     }
                 )
             }
@@ -164,13 +225,23 @@ fun NovixApp(appPreferencesService: AppPreferencesService) {
                 popExitTransition = { fadeOut(tween(500)) },
             ) {
                 HomeScreen(
-                    onMovieClick = { movieId ->
+                    onNavigateMovie = { movieId ->
                         navController.navigate(MovieDetails(movieId))
                     },
-
-                    onTvShowClick = { tvShowId ->
+                    onNavigateTvShow = { tvShowId ->
                         navController.navigate(TvShowDetails(tvShowId))
                     },
+                    onNavigateTopRated = {
+                        navController.navigate(TopRated)
+                    },
+                    onNavigateTrendingMovies = {
+                        navController.navigate(TrendingMovies)
+                    },
+                    onNavigateTrendingTvShows = {
+                        navController.navigate(TrendingTvShows)
+                    },
+                    onNavigateTrendingActors = {
+                        navController.navigate(TrendingActors)
                     onTopRatedClick = {
                         navController.navigate(Screen.TopRated)
                     },
@@ -233,7 +304,7 @@ fun NovixApp(appPreferencesService: AppPreferencesService) {
                 popExitTransition = { fadeOut(tween(500)) },
             ) {
                 TvShowsDetailsScreen(
-                    onBackClick = {
+                    onNavigateBack = {
                         navController.navigateUp()
                     },
                     onNavigateToEpisodeDetails = { tvShowId, episodeNumber, seasonNumber ->
@@ -249,6 +320,9 @@ fun NovixApp(appPreferencesService: AppPreferencesService) {
                         navController.navigate(Reviews(tvShowId, mediaType))
                     }, onNavigateToCast = { actorId ->
                         navController.navigate(ActorDetails(actorId))
+                    },
+                    onNavigateToGenre = { genreId ->
+                        navController.navigate(TvShowsByCategory(genreId))
                     }
                 )
             }
@@ -260,10 +334,10 @@ fun NovixApp(appPreferencesService: AppPreferencesService) {
                 popExitTransition = { fadeOut(tween(500)) },
             ) {
                 TopTvShowsPicksScreen(
-                    onBackClick = {
+                    onNavigateBack = {
                         navController.navigateUp()
                     },
-                    onTvShowClick = { tvShowId ->
+                    onNavigateTvShow = { tvShowId ->
                         navController.navigate(TvShowDetails(tvShowId))
                     }
                 )
@@ -271,10 +345,10 @@ fun NovixApp(appPreferencesService: AppPreferencesService) {
 
             composable<ActorTopMoviesPicksDetails> {
                 TopMoviesPicksScreen(
-                    onBackClick = {
+                    onNavigateBack = {
                         navController.navigateUp()
                     },
-                    onMovieClick = { movieId ->
+                    onNavigateMovie = { movieId ->
                         navController.navigate(MovieDetails(movieId))
                     }
                 )
@@ -287,10 +361,10 @@ fun NovixApp(appPreferencesService: AppPreferencesService) {
                 popExitTransition = { fadeOut(tween(500)) },
             ) {
                 MovieDetailsScreen(
-                    onBackClick = {
+                    onNavigateBack = {
                         navController.navigateUp()
                     },
-                    onGenreClick = { genreId ->
+                    onNavigateGenre = { genreId ->
                         navController.navigate(MoviesByCategory(genreId))
                     },
                     onNavigateToMovie = { movieId ->
@@ -307,7 +381,7 @@ fun NovixApp(appPreferencesService: AppPreferencesService) {
 
             composable<Reviews> {
                 ReviewsScreen(
-                    onBackClick = {
+                    onNavigateBack = {
                         navController.navigateUp()
                     }
                 )
@@ -323,7 +397,23 @@ fun NovixApp(appPreferencesService: AppPreferencesService) {
                     onNavigateToMovieDetails = { movieId ->
                         navController.navigate(MovieDetails(movieId))
                     },
-                    onBackClick = {
+                    onNavigateBack = {
+                        navController.navigateUp()
+                    },
+                )
+            }
+
+            composable<TvShowsByCategory>(
+                exitTransition = { fadeOut(tween(500)) },
+                popEnterTransition = { fadeIn(tween(500)) },
+                enterTransition = { fadeIn(tween(500)) },
+                popExitTransition = { fadeOut(tween(500)) },
+            ) {
+                TvShowByCategoryScreen(
+                    onNavigateToTvShowDetails = { tvShowId ->
+                        navController.navigate(TvShowDetails(tvShowId))
+                    },
+                    onNavigateBack = {
                         navController.navigateUp()
                     },
                 )
@@ -337,7 +427,7 @@ fun NovixApp(appPreferencesService: AppPreferencesService) {
                         navController.navigate(TopTvShowsPicksDetails(actorId))
                     },
                     onNavigateToGallery = { actorId ->
-                        navController.navigate(Screen.ActorGallery(actorId))
+                        navController.navigate(ActorGallery(actorId))
                     },
                     onNavigateToMovieScreen = { movieId ->
                         navController.navigate(MovieDetails(movieId))
@@ -345,7 +435,7 @@ fun NovixApp(appPreferencesService: AppPreferencesService) {
                     onNavigateToTvShowScreen = { tvShowId ->
                         navController.navigate(TvShowDetails(tvShowId))
                     },
-                    onBackClick = { navController.navigateUp() }
+                    onNavigateBack = { navController.navigateUp() }
                 )
             }
 
@@ -356,23 +446,51 @@ fun NovixApp(appPreferencesService: AppPreferencesService) {
                 popExitTransition = { fadeOut(tween(500)) },
             ) {
                 EpisodeDetailsScreen(
-                    onNavigateBackClick = { navController.popBackStack() },
+                    onNavigateBack = { navController.popBackStack() },
                     onNavigateToCast = { actorId ->
                         navController.navigate(ActorDetails(actorId))
                     }
                 )
             }
 
-            composable<Screen.ActorGallery> {
-                ActorGalleryScreen(
-                    onBackClick = { navController.popBackStack() }
+            composable<Screen.Register>(
+                exitTransition = { fadeOut(tween(500)) },
+                popEnterTransition = { fadeIn(tween(500)) },
+                enterTransition = { fadeIn(tween(500)) },
+                popExitTransition = { fadeOut(tween(500)) },
+            ) {
+                WebViewRegistrationScreen(
+                    onNavigateBack = {
+                        navController.popBackStack()
+                    },
+                    onRegistrationComplete = { navController.navigate(Login) }
                 )
             }
-            composable<Screen.TopRated> {
+
+            composable<Screen.Register>(
+                exitTransition = { fadeOut(tween(500)) },
+                popEnterTransition = { fadeIn(tween(500)) },
+                enterTransition = { fadeIn(tween(500)) },
+                popExitTransition = { fadeOut(tween(500)) },
+            ) {
+                WebViewRegistrationScreen(
+                    onNavigateBack = {
+                        navController.popBackStack()
+                    },
+                    onRegistrationComplete = {navController.navigate(Login)}
+                )
+            }
+
+            composable<ActorGallery> {
+                ActorGalleryScreen(
+                    onNavigateBack = { navController.popBackStack() }
+                )
+            }
+            composable<TopRated> {
                 TopRatedScreen(
-                    onBackClick = { navController.popBackStack() },
-                    onMovieClick = { navController.navigate(MovieDetails(it)) },
-                    onTvShowClick = { navController.navigate(TvShowDetails(it)) }
+                    onNavigateBack = { navController.popBackStack() },
+                    onNavigateMovie = { navController.navigate(MovieDetails(it)) },
+                    onNavigateTvShow = { navController.navigate(TvShowDetails(it)) }
                 )
             }
 
@@ -382,8 +500,44 @@ fun NovixApp(appPreferencesService: AppPreferencesService) {
                         navController.navigate(Welcome)
                     },
                     onNavigateToHome = {
-                        navController.navigate(Home)
+                        navController.navigate(Home) {
+                            popUpTo(navController.graph.startDestinationId) { inclusive = true }
+                            launchSingleTop = true
+                        }
                     },
+                    onNavigateToWebViewRegistration = {navController.navigate(Screen.Register)}
+                )
+            }
+
+
+            composable<TrendingMovies> {
+                TrendingMoviesScreen(
+                    onNavigateMovie = { id ->
+                        navController.navigate(MovieDetails(id))
+                    },
+                    onNavigateBack = {
+                        navController.navigateUp()
+                    }
+                )
+            }
+            composable<TrendingTvShows> {
+                TrendingTvShowsScreen(
+                    onNavigateTvShow = { id ->
+                        navController.navigate(TvShowDetails(id))
+                    },
+                    onNavigateBack = {
+                        navController.navigateUp()
+                    }
+                )
+            }
+            composable<TrendingActors> {
+                TrendingActorsScreen(
+                    onNavigateActor = { id ->
+                        navController.navigate(ActorDetails(id))
+                    },
+                    onNavigateBack = {
+                        navController.navigateUp()
+                    }
                 )
             }
             composable<Screen.ContinueWatching> {

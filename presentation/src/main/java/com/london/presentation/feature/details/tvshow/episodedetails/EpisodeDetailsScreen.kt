@@ -12,11 +12,16 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.asPaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.statusBars
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
@@ -38,17 +43,16 @@ import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.zIndex
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.london.designsystem.component.ActorItem
 import com.london.designsystem.component.Icon
 import com.london.designsystem.component.Text
+import com.london.designsystem.component.TopBar
 import com.london.designsystem.theme.NovixTheme
 import com.london.presentation.R
 import com.london.presentation.feature.buildscreen.BuildScreen
 import com.london.presentation.shared.ConditionalText
 import com.london.presentation.shared.CustomBackDropImagePager
-import com.london.presentation.shared.DetailsScreenTopBar
 import com.london.presentation.shared.FooterSection
 import com.london.presentation.shared.RatingItem
 import com.london.presentation.utils.Listen
@@ -60,7 +64,7 @@ import com.london.designsystem.R as Res
 @Composable
 fun EpisodeDetailsScreen(
     viewModel: EpisodeDetailsViewModel = koinViewModel(),
-    onNavigateBackClick: () -> Unit,
+    onNavigateBack: () -> Unit,
     onNavigateToCast: (Int) -> Unit
 ) {
     val uiState by viewModel.state.collectAsStateWithLifecycle()
@@ -68,7 +72,7 @@ fun EpisodeDetailsScreen(
 
     effect?.Listen { currentEffect ->
         when (currentEffect) {
-            EpisodeDetailsEffect.NavigationBack -> onNavigateBackClick()
+            EpisodeDetailsEffect.NavigationBack -> onNavigateBack()
             is EpisodeDetailsEffect.NavigateToCast -> onNavigateToCast(currentEffect.episodeId)
         }
     }
@@ -116,14 +120,19 @@ fun EpisodeDetailsScreenContent(
             .background(NovixTheme.colors.surface)
     ) {
 
-        DetailsScreenTopBar(
+        TopBar(
+            onBackClick = episodeDetailsContract::onBackClicked,
             modifier = Modifier
                 .fillMaxWidth()
-                .zIndex(1f)
-                .align(Alignment.TopCenter),
-            isSaved = uiState.isSaved,
-            backgroundAlpha = backgroundAlpha,
-            onBackClick = episodeDetailsContract::onBackClicked,
+                .background(
+                    NovixTheme.colors.surface.copy(alpha = backgroundAlpha)
+                )
+                .padding(horizontal = 16.dp)
+                .padding(
+                    top = WindowInsets.statusBars.asPaddingValues().calculateTopPadding() + 12.dp
+                ),
+            onClickOption1 = { /*todo on click on save*/ },
+            option1Icon = com.london.designsystem.R.drawable.icon_remove,
         )
 
         LazyColumn(
@@ -207,9 +216,12 @@ fun EpisodeDetailsScreenContent(
 
                     )
                 }
+
+                item {
+                    Spacer(Modifier.height(30.dp))
+                }
             }
         }
-
         FooterSection(
             haveTrailer = uiState.episodeHaveTrailer,
             modifier = Modifier.align(Alignment.BottomCenter),
@@ -298,7 +310,6 @@ fun TvShowBasicDetails(
 fun TvShowDate(
     uiState: EpisodeDetailsUiState
 ) {
-
     Row(
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.spacedBy(4.dp)
@@ -381,18 +392,20 @@ fun OverviewSection(
     uiState: EpisodeDetailsUiState
 ) {
     var isTextCollapsed by rememberSaveable { mutableStateOf(false) }
-    Column(
-        modifier = modifier
-    ) {
-        Text(
-            text = stringResource(Res.string.overview),
-            style = NovixTheme.typography.title.medium,
-            color = NovixTheme.colors.title
-        )
+    if (uiState.overview.isNotBlank()) {
+        Column(
+            modifier = modifier
+        ) {
+            Text(
+                text = stringResource(Res.string.overview),
+                style = NovixTheme.typography.title.medium,
+                color = NovixTheme.colors.title
+            )
 
-        ConditionalText(
-            text = uiState.overview,
-            expandedState = isTextCollapsed
-        ) { isTextCollapsed = !isTextCollapsed }
+            ConditionalText(
+                text = uiState.overview,
+                expandedState = isTextCollapsed
+            ) { isTextCollapsed = !isTextCollapsed }
+        }
     }
 }
