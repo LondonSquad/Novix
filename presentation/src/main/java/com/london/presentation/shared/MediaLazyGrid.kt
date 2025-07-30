@@ -23,14 +23,14 @@ import com.london.designsystem.component.EmptyLayout
 import com.london.designsystem.component.HomeCard
 import com.london.designsystem.component.TopBar
 import com.london.designsystem.theme.NovixTheme
-import com.london.domain.entity.actordetails.actormovie.ActorMovieCastMemberEntity
 
 @Composable
-fun MediaLazyGrid(
+fun <T> MediaLazyGrid(
     title: String,
-    movies: List<ActorMovieCastMemberEntity>,
-    onBackClick: () -> Unit,
-    onMovieClick: (Int) -> Unit,
+    items: List<T>,
+    onBack: () -> Unit,
+    onItemClick: (Int) -> Unit,
+    getImageUrl: (T) -> String,
     modifier: Modifier = Modifier,
     isLoading: Boolean = false,
     emptyTitle: String = "",
@@ -47,7 +47,7 @@ fun MediaLazyGrid(
                 .statusBarsPadding()
                 .padding(horizontal = 16.dp, vertical = 12.dp),
             title = title,
-            onBackClick = onBackClick
+            onBackClick = onBack
         )
 
         when {
@@ -57,7 +57,7 @@ fun MediaLazyGrid(
                     .wrapContentSize(Alignment.Center)
             )
 
-            !isLoading && movies.isEmpty() && emptyImage != null -> EmptyLayout(
+            !isLoading && items.isEmpty() && emptyImage != null -> EmptyLayout(
                 text = emptyTitle,
                 image = emptyImage,
                 modifier = Modifier
@@ -79,16 +79,24 @@ fun MediaLazyGrid(
                         .navigationBarsPadding()
                         .padding(horizontal = 16.dp)
                 ) {
-                    items(movies) { item ->
+                    items(items) { item ->
                         HomeCard(
-                            imageUrl = item.posterUrl,
+                            imageUrl = getImageUrl(item),
                             isSaved = false,
-                            onSaveClick = { onMovieClick(item.id) },
-                            modifier = Modifier.clickable { onMovieClick(item.id) }
+                            onSaveClick = { onItemClick(getItemId(item)) },
+                            modifier = Modifier.clickable { onItemClick(getItemId(item)) }
                         )
                     }
                 }
             }
         }
+    }
+}
+
+private fun <T> getItemId(item: T): Int {
+    return when (item) {
+        is com.london.domain.entity.actordetails.actormovie.ActorMovieCastMemberEntity -> item.id
+        is com.london.domain.entity.actordetails.actortvshow.ActorTvShowCastMemberEntity -> item.id
+        else -> 0
     }
 }
