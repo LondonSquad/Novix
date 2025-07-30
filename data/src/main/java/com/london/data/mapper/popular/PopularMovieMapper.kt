@@ -6,10 +6,9 @@ import com.london.data.remote.model.ApiResponse
 import com.london.data.remote.model.home.model.popular.PopularMovieResponse
 import com.london.data.utils.asImageUrlOrEmpty
 import com.london.data.utils.orZero
+import com.london.data.utils.roundToDecimal
 import com.london.domain.KoverIgnore
 import com.london.domain.entity.popular.PopularMovie
-import kotlin.math.round
-
 
 fun PopularMovieResponse.toPopularMovie(): PopularMovie {
     return PopularMovie(
@@ -17,10 +16,9 @@ fun PopularMovieResponse.toPopularMovie(): PopularMovie {
         title = title.orEmpty(),
         posterUrl = posterPath.asImageUrlOrEmpty(),
         backdropUrl = backdropPath.asImageUrlOrEmpty(),
-        rating = round(voteAverage.orZero() * 100) / 100.0
+        rating = voteAverage.orZero().roundToDecimal()
     )
 }
 
-fun ApiResponse<PopularMovieResponse>.toPopularMovies(): List<PopularMovie> {
-    return items.map { it.toPopularMovie() }
-}
+fun ApiResponse<PopularMovieResponse>.toPopularMovies(): List<PopularMovie> =
+    items.map { it.toPopularMovie() }
