@@ -101,19 +101,14 @@ fun PopularSection(
             pageSpacing = PAGE_SPACING_DP.dp,
             contentPadding = PaddingValues(horizontal = horizontalPadding)
         ) { page ->
+            val pageOffset = (pagerState.currentPage - page) + pagerState.currentPageOffsetFraction
 
             Box(
                 modifier = Modifier
                     .fillMaxWidth()
                     .wrapContentSize(Alignment.Center)
-                    .padding(
-                        horizontal = if (page == pagerState.currentPage)
-                            CARD_HORIZONTAL_PADDING_DP.dp else 0.dp
-                    )
+                    .padding(horizontal =  CARD_HORIZONTAL_PADDING_DP.dp, vertical = CARD_HORIZONTAL_PADDING_DP.dp)
                     .graphicsLayer {
-                        val pageOffset =
-                            (pagerState.currentPage - page) + pagerState.currentPageOffsetFraction
-
                         rotationZ = lerp(
                             start = ROTATION_PREVIOUS_DEGREES,
                             stop = ROTATION_NEXT_DEGREES,
@@ -142,7 +137,6 @@ fun PopularSection(
                     onSaveClick = { onSaveClick() },
                     hasSaveIcon = pagerState.currentPage == page
                 )
-
                 if (pagerState.currentPage == page)
                     Column(
                         modifier = Modifier
