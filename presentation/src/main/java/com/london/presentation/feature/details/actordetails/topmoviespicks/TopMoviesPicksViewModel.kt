@@ -51,7 +51,7 @@ class TopMoviesPicksViewModel(
         emitEffect(TopMoviesPicksEffect.NavigationToMovieDetails(movieId))
     }
 
-    override fun onClickBack() {
+    override fun onBack() {
         emitEffect(TopMoviesPicksEffect.NavigateBack)
     }
 }
