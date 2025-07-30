@@ -23,15 +23,16 @@ import com.london.designsystem.component.EmptyLayout
 import com.london.designsystem.component.HomeCard
 import com.london.designsystem.component.TopBar
 import com.london.designsystem.theme.NovixTheme
-import com.london.domain.entity.actordetails.actormovie.ActorMovieCastMemberEntity
 
 @Composable
-fun MediaLazyGrid(
+fun <T> MediaLazyGrid(
     title: String,
-    movies: List<ActorMovieCastMemberEntity>,
-    onBackClick: () -> Unit,
-    onMovieClick: (Int) -> Unit,
+    items: List<T>,
+    onBack: () -> Unit,
+    getImageUrl: (T) -> String,
     modifier: Modifier = Modifier,
+    onSaveClick: (T) -> Unit = {},
+    isItemSaved: (T) -> Boolean = { false },
     isLoading: Boolean = false,
     emptyTitle: String = "",
     emptyImage: Int? = null
@@ -47,7 +48,7 @@ fun MediaLazyGrid(
                 .statusBarsPadding()
                 .padding(horizontal = 16.dp, vertical = 12.dp),
             title = title,
-            onBackClick = onBackClick
+            onBackClick = onBack
         )
 
         when {
@@ -57,7 +58,7 @@ fun MediaLazyGrid(
                     .wrapContentSize(Alignment.Center)
             )
 
-            !isLoading && movies.isEmpty() && emptyImage != null -> EmptyLayout(
+            !isLoading && items.isEmpty() && emptyImage != null -> EmptyLayout(
                 text = emptyTitle,
                 image = emptyImage,
                 modifier = Modifier
@@ -79,12 +80,12 @@ fun MediaLazyGrid(
                         .navigationBarsPadding()
                         .padding(horizontal = 16.dp)
                 ) {
-                    items(movies) { item ->
+                    items(items) { item ->
                         HomeCard(
-                            imageUrl = item.posterUrl,
-                            isSaved = false,
-                            onSaveClick = { onMovieClick(item.id) },
-                            modifier = Modifier.clickable { onMovieClick(item.id) }
+                            imageUrl = getImageUrl(item),
+                            isSaved = isItemSaved(item),
+                            onSaveClick = { onSaveClick(item) },
+                            modifier = Modifier.clickable { onSaveClick(item)}
                         )
                     }
                 }
