@@ -143,16 +143,14 @@ fun PopularSection(
 
                         transformOrigin = TransformOrigin(TRANSFORM_ORIGIN_X, TRANSFORM_ORIGIN_Y)
                     }
-                    .clickable(
-                        indication = null,
-                        interactionSource = null
-                    ) { onCardClick() },
+                    ,
             ) {
 
                 HomeCard(
                     imageUrl = images[page],
                     onSaveClick = { onSaveClick() },
-                    hasSaveIcon = pagerState.currentPage == page
+                    hasSaveIcon = pagerState.currentPage == page,
+                    modifier = Modifier.clickable{ if (pagerState.currentPage == page) onCardClick() }
                 )
                 if (pagerState.currentPage == page)
                     Column(

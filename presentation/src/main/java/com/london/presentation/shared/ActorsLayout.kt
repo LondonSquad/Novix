@@ -1,6 +1,5 @@
 package com.london.presentation.shared
 
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -29,10 +28,10 @@ fun ActorsLayout(
             val actor = items[index]
             if (actor != null) {
                 ActorItem(
-                    modifier = Modifier.clickable(onClick = { onActorClick(actor) }),
                     actorName = actor.name,
                     characterName = null,
-                    imageRes = actor.profilePicture
+                    imageRes = actor.profilePicture,
+                    onClick = { onActorClick(actor) }
                 )
             }
         }
