@@ -13803,5 +13803,33 @@
       "deletions": 2,
       "changed_files": 1
     }
+  },
+  {
+    "pr_number": 432,
+    "url": "https://github.com/LondonSquad/Novix/pull/432",
+    "title": "fix: only update with on resume",
+    "opened_at": "2025-07-30T16:47:07Z",
+    "head_ref": "hotfix/recent-watched-section",
+    "base_ref": "develop",
+    "creator": {
+      "login": "marwanqashwa",
+      "id": 100484790,
+      "url": "https://github.com/marwanqashwa"
+    },
+    "approvals": [],
+    "first_approved_at": null,
+    "time_to_first_approval_minutes": null,
+    "required_approvals_met_at": null,
+    "time_to_required_approvals_minutes": null,
+    "closed_at": null,
+    "merged_at": null,
+    "merged_by": null,
+    "week": "2025-W31",
+    "status": "pending",
+    "diff_stats": {
+      "additions": 7,
+      "deletions": 3,
+      "changed_files": 1
+    }
   }
 ]
