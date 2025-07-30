@@ -1,6 +1,5 @@
 package com.london.presentation.feature.continuewatching
 
-import android.util.Log
 import com.london.domain.usecase.recent.watched.GetRecentWatchedMoviesUseCase
 import com.london.domain.usecase.recent.watched.GetRecentWatchedTvShowsUseCase
 import com.london.presentation.feature.base.BaseViewModel
@@ -50,7 +49,6 @@ class ContinueWatchingViewModel(
             onCompleted = {
                 updateState { copy(isLoading = false) }
             },
-            checkSuccess = { true }
         )
     }
 
