@@ -2,9 +2,9 @@ package com.london.presentation.feature.details.actordetails.toptvshowspicks
 
 import androidx.lifecycle.SavedStateHandle
 import com.london.domain.usecase.GetActorTvShowPicksByIdUseCase
+import com.london.presentation.feature.base.BaseViewModel
 import com.london.presentation.navigation.Screen
 import com.london.presentation.navigation.getArgs
-import com.london.presentation.feature.base.BaseViewModel
 import org.koin.android.annotation.KoinViewModel
 
 @KoinViewModel
@@ -20,7 +20,6 @@ class TopTvShowsPicksViewModel(
 
     init {
         getActorTvShowsPicksData()
-
     }
 
     private fun getActorTvShowsPicksData() {
@@ -36,7 +35,7 @@ class TopTvShowsPicksViewModel(
             },
             onError = { errorState ->
                 updateState {
-                    copy(error = errorState)
+                    copy(errorState = errorState)
                 }
             },
             onCompleted = { updateState { copy(isLoading = false) } },
@@ -48,7 +47,7 @@ class TopTvShowsPicksViewModel(
         updateState { copy(isSaved = !this.isSaved) }
     }
 
-    override fun onBackClicked() {
+    override fun onBack() {
         emitEffect(TopTvShowsPicksEffect.BackNavigation)
     }
 
