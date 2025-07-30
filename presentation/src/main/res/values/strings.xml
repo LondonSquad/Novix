@@ -89,8 +89,8 @@
     <string name="What_you_want_to_watch">What you want to watch?</string>
     <string name="popular">Popular</string>
     <string name="politics">Politics</string>
-    <string name="action_adventure">Action And Adventure</string>
-    <string name="war_politics">war And Politics</string>
+    <string name="action_adventure">Action and Adventure</string>
+    <string name="war_politics">War and Politics</string>
     <string name="retry">Retry</string>
     <string name="top_rated">Top rated</string>
     <string name="continue_watch">Continue watching</string>
@@ -101,5 +101,6 @@
     <string name="no_trending_tvshows_in_genre">No tv shows found in this genre.</string>
     <string name="no_trending_actors_in_genre">No people found in this genre.</string>
     <string name="reviews">Reviews</string>
+    <string name="no_recent_history">Looks like you haven\'t checked anything yet.\nTake a look around and come back!</string>
 
 </resources>
