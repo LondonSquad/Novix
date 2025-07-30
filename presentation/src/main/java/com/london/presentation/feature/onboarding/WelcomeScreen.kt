@@ -38,7 +38,6 @@ fun WelcomeScreen(
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .verticalScroll(rememberScrollState())
     ) {
         WelcomePoster(
             modifier = Modifier
