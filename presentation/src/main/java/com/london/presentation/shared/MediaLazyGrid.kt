@@ -29,9 +29,10 @@ fun <T> MediaLazyGrid(
     title: String,
     items: List<T>,
     onBack: () -> Unit,
-    onItemClick: (Int) -> Unit,
     getImageUrl: (T) -> String,
     modifier: Modifier = Modifier,
+    onSaveClick: (T) -> Unit = {},
+    isItemSaved: (T) -> Boolean = { false },
     isLoading: Boolean = false,
     emptyTitle: String = "",
     emptyImage: Int? = null
@@ -82,21 +83,13 @@ fun <T> MediaLazyGrid(
                     items(items) { item ->
                         HomeCard(
                             imageUrl = getImageUrl(item),
-                            isSaved = false,
-                            onSaveClick = { onItemClick(getItemId(item)) },
-                            modifier = Modifier.clickable { onItemClick(getItemId(item)) }
+                            isSaved = isItemSaved(item),
+                            onSaveClick = { onSaveClick(item) },
+                            modifier = Modifier.clickable { onSaveClick(item)}
                         )
                     }
                 }
             }
         }
-    }
-}
-
-private fun <T> getItemId(item: T): Int {
-    return when (item) {
-        is com.london.domain.entity.actordetails.actormovie.ActorMovieCastMemberEntity -> item.id
-        is com.london.domain.entity.actordetails.actortvshow.ActorTvShowCastMemberEntity -> item.id
-        else -> 0
     }
 }
