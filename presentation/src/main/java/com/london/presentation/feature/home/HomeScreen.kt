@@ -50,7 +50,6 @@ import com.london.designsystem.component.Text
 import com.london.designsystem.component.button.PrimaryButton
 import com.london.designsystem.theme.NovixTheme
 import com.london.domain.entity.Movie
-import com.london.domain.entity.recent.MediaType
 import com.london.presentation.R
 import com.london.presentation.feature.base.ErrorState
 import com.london.presentation.feature.buildscreen.LoadingScreen
@@ -67,6 +66,7 @@ fun HomeScreen(
     onNavigateTrendingMovies: () -> Unit = {},
     onNavigateTrendingTvShows: () -> Unit = {},
     onNavigateTrendingActors: () -> Unit = {},
+    onNavigateContinueWatching: () -> Unit = {},
     viewModel: HomeViewModel = koinViewModel(),
 ) {
     val uiState by viewModel.state.collectAsStateWithLifecycle()
@@ -80,6 +80,7 @@ fun HomeScreen(
             is HomeScreenEffect.NavigationTrendingTvShows -> onNavigateTrendingTvShows()
             is HomeScreenEffect.NavigationTrendingActor -> onNavigateTrendingActors()
             is HomeScreenEffect.NavigationTopRated -> onNavigateTopRated()
+            is HomeScreenEffect.NavigationContinueWatching -> onNavigateContinueWatching()
         }
     }
 
@@ -160,9 +161,6 @@ private fun Content(
     }
 
     Box(modifier = modifier.fillMaxSize()) {
-
-
-
         LazyVerticalGrid(
             columns = GridCells.Adaptive(minSize = 158.dp),
             contentPadding = PaddingValues(
@@ -230,16 +228,17 @@ private fun Content(
 
             item(span = { GridItemSpan(maxLineSpan) }) {
                 TopRatedSection(
-                    modifier = Modifier.requiredWidth(screenWidth),
-                    topRatedUiMediaList = uiState.topRatedUiMediaList,
-                    onSaveClick = {/*TODO: SAVE FUNCTIONALITY IS NOT IMPLEMENTED.*/ },
-                    onCardClick = { id, mediaType ->
-                        when (mediaType) {
-                            MediaType.TvShow -> homeScreenContract.onTvShowClick(id)
-                            MediaType.Movie -> homeScreenContract.onMovieClick(id)
-                        }
-                    },
-                    onAllClick = homeScreenContract::onTopRatedClick
+                    uiState = uiState,
+                    homeScreenContract = homeScreenContract,
+                    modifier = Modifier.requiredWidth(screenWidth)
+                )
+            }
+
+            item(span = { GridItemSpan(maxLineSpan) }) {
+                ContinueWatchingSection(
+                    uiState = uiState,
+                    homeScreenContract = homeScreenContract,
+                    modifier = Modifier.requiredWidth(screenWidth)
                 )
             }
 
