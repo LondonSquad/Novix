@@ -26,5 +26,7 @@ data class NovixColors(
     val deepCrimson: Color,
     val tealBlue: Color,
     val oceanDark: Color,
-    val linearGradient: Color
+    val linearGradient: Color,
+    val blackLinearGradient: Color,
+    val whiteLinearGradient: Color,
 )

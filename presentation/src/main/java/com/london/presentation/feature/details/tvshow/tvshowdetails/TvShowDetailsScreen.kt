@@ -13,12 +13,15 @@ import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.asPaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.statusBars
 import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.lazy.LazyColumn
@@ -46,26 +49,26 @@ import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.zIndex
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.london.designsystem.R
 import com.london.designsystem.component.ActorItem
 import com.london.designsystem.component.CircularLoading
 import com.london.designsystem.component.Icon
-import com.london.designsystem.component.ImageView
 import com.london.designsystem.component.NovixChip
 import com.london.designsystem.component.Text
+import com.london.designsystem.component.TopBar
 import com.london.designsystem.component.UnSuitableEye
 import com.london.designsystem.component.button.ErrorImage
 import com.london.designsystem.theme.NovixTheme
+import com.london.designsystem.theme.noRippleClickable
 import com.london.domain.entity.tvshowdetails.TvShowCastMemberEntity
-import com.london.presentation.shared.ConditionalText
-import com.london.presentation.shared.CustomBackDropImagePager
-import com.london.presentation.shared.DetailsScreenTopBar
-import com.london.presentation.shared.FooterSection
-import com.london.presentation.shared.RatingItem
+import com.london.imageharamblur.ui.ImageViewFilter
 import com.london.presentation.feature.buildscreen.BuildScreen
 import com.london.presentation.feature.reviews.MediaType
+import com.london.presentation.shared.ConditionalText
+import com.london.presentation.shared.CustomBackDropImagePager
+import com.london.presentation.shared.FooterSection
+import com.london.presentation.shared.RatingItem
 import com.london.presentation.utils.Listen
 import com.london.presentation.utils.convertDate
 import com.london.presentation.utils.offsetLayout
@@ -80,7 +83,8 @@ fun TvShowsDetailsScreen(
     onNavigateBack: () -> Unit = {},
     onNavigateToEpisodeDetails: (tvShowId: Int, episodeNumber: Int, seasonNumber: Int) -> Unit,
     onNavigateToReviews: (tvShowId: Int, mediaType: Int) -> Unit,
-    onNavigateToCast: (Int) -> Unit
+    onNavigateToCast: (Int) -> Unit,
+    onNavigateToGenre: (Int) -> Unit
 ) {
     val uiState by viewModel.state.collectAsStateWithLifecycle()
     val effect by viewModel.effect.collectAsState(null)
@@ -100,6 +104,10 @@ fun TvShowsDetailsScreen(
             is TvShowDetailsEffect.NavigateToReviews -> onNavigateToReviews(
                 currentEffect.tvShowId,
                 MediaType.TvShow.mediaNum
+            )
+
+            is TvShowDetailsEffect.NavigateTotvShowsByCategoryId -> onNavigateToGenre(
+                currentEffect.categoryId
             )
         }
     }
@@ -147,14 +155,19 @@ fun TvShowsDetailScreenContent(
             .fillMaxSize()
             .background(NovixTheme.colors.surface)
     ) {
-        DetailsScreenTopBar(
+        TopBar(
+            onBackClick = tvShowDetailsContract::onBackClicked,
             modifier = Modifier
                 .fillMaxWidth()
-                .zIndex(1f)
-                .align(Alignment.TopCenter),
-            isSaved = uiState.isSaved,
-            backgroundAlpha = backgroundAlpha,
-            onBackClick = tvShowDetailsContract::onBackClicked,
+                .background(
+                    NovixTheme.colors.surface.copy(alpha = backgroundAlpha)
+                )
+                .padding(horizontal = 16.dp)
+                .padding(
+                    top = WindowInsets.statusBars.asPaddingValues().calculateTopPadding() + 12.dp
+                ),
+            onClickOption1 = { /*todo on click on save*/ },
+            option1Icon = R.drawable.icon_remove,
         )
 
         LazyColumn(
@@ -194,7 +207,8 @@ fun TvShowsDetailScreenContent(
                     tvShowId = uiState.id,
                     rating = uiState.voteAverage.toString(),
                     date = uiState.firstAirDate,
-                    numberOfSeasons = uiState.numberOfSeasons
+                    numberOfSeasons = uiState.numberOfSeasons,
+                    onGenreClick = tvShowDetailsContract::OnGenreClicked
                 )
             }
 
@@ -257,6 +271,7 @@ fun HeaderDetailsCard(
     modifier: Modifier = Modifier,
     uiState: TvShowDetailsUiState,
     onReviewClick: (tvShowId: Int) -> Unit,
+    onGenreClick: (genreId: Int) -> Unit,
     tvShowId: Int,
     rating: String,
     date: String,
@@ -281,7 +296,8 @@ fun HeaderDetailsCard(
         ) {
             GenreNames(
                 uiState = uiState,
-                modifier = Modifier.fillMaxWidth()
+                modifier = Modifier.fillMaxWidth(),
+                onGenreClick = onGenreClick
             )
             TvShowBasicDetails(
                 modifier = Modifier,
@@ -301,7 +317,8 @@ fun HeaderDetailsCard(
 @Composable
 fun GenreNames(
     modifier: Modifier = Modifier,
-    uiState: TvShowDetailsUiState
+    uiState: TvShowDetailsUiState,
+    onGenreClick: (genreId: Int) -> Unit
 ) {
     FlowRow(
         modifier = modifier
@@ -315,7 +332,10 @@ fun GenreNames(
                     style = NovixTheme.typography.label.small,
                     color = NovixTheme.colors.body,
                     modifier = if (index != uiState.tvShowGenres.lastIndex)
-                        Modifier.padding(end = 8.dp) else Modifier
+                        Modifier
+                            .noRippleClickable { onGenreClick(genre.id) }
+                            .padding(end = 8.dp)
+                    else Modifier.noRippleClickable { onGenreClick(genre.id) }
                 )
 
                 if (index != uiState.tvShowGenres.lastIndex) {
@@ -379,7 +399,7 @@ fun ViewReviewText(
 ) {
     Text(
         text = stringResource(R.string.view_review),
-        style = NovixTheme.typography.title.medium,
+        style = NovixTheme.typography.label.medium,
         color = NovixTheme.colors.primary,
         modifier = Modifier.clickable { onReviewClick(tvShowId) }
     )
@@ -459,8 +479,8 @@ fun CastSection(
                     characterName = "${member.roles[0].character} - ${member.roles[0].episodeCount}",
                     imageRes = member.profileUrl.orEmpty(),
                     modifier = Modifier
-                        .widthIn(296.dp)
-                        .clickable { onNavigateToCast(member.id) }
+                        .widthIn(296.dp),
+                    onClick = { onNavigateToCast(member.id) }
                 )
             }
         }
@@ -550,7 +570,7 @@ fun EpisodeRow(
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.spacedBy(12.dp)
         ) {
-            ImageView(
+            ImageViewFilter(
                 model = episode.stillUrl,
                 contentDescription = stringResource(R.string.s),
                 contentScale = ContentScale.FillBounds,

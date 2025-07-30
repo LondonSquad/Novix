@@ -1,6 +1,7 @@
 package com.london.designsystem.component
 
 import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -29,35 +30,40 @@ import com.london.designsystem.R
 import com.london.designsystem.component.button.ErrorImage
 import com.london.designsystem.theme.NovixTheme
 import com.london.designsystem.theme.ThemePreviews
+import com.london.imageharamblur.ui.ImageViewFilter
 
 @Composable
 fun ActorItem(
     actorName: String,
     characterName: String?,
     imageRes: Any,
+    onClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
     Row(
         modifier = modifier.fillMaxWidth(),
         verticalAlignment = Alignment.Bottom,
     ) {
-        ActorImage(imageRes = imageRes)
+        ActorImage(imageRes = imageRes, onClick = onClick)
         TextSection(
             actorName = actorName,
             characterName = characterName,
+            onClick= onClick,
             modifier = Modifier.weight(1f)
         )
     }
 }
 
 @Composable
-private fun ActorImage(imageRes: Any) {
-    val isRtl = isRtlLayout()
+private fun ActorImage(
+    imageRes: Any,
+    onClick: () -> Unit
+) {
     val imageShape = RoundedCornerShape(
         topStart = 12.dp,
         topEnd = 12.dp,
-        bottomStart = if (isRtl) 0.dp else 12.dp,
-        bottomEnd = if (isRtl) 12.dp else 0.dp
+        bottomStart = 12.dp,
+        bottomEnd = 0.dp
     )
 
     Box {
@@ -67,6 +73,7 @@ private fun ActorImage(imageRes: Any) {
             modifier = Modifier
                 .size(78.dp)
                 .clip(shape = imageShape)
+                .clickable(onClick = onClick)
                 .border(
                     width = 1.dp,
                     shape = imageShape,
@@ -125,6 +132,7 @@ fun Modifier.customBorder(
 private fun TextSection(
     actorName: String,
     characterName: String?,
+    onClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
     val color = NovixTheme.colors.stroke
@@ -132,8 +140,10 @@ private fun TextSection(
     Column(
         modifier = modifier
             .fillMaxWidth()
-            .height( 55.dp)
+            .height(55.dp)
             .customBorder(color = color, isRtl = isRtl)
+            .clip(RoundedCornerShape(topEnd = 12.dp, bottomEnd = 12.dp))
+            .clickable(onClick = onClick)
             .padding(
                 horizontal = 12.dp,
             ),
@@ -156,7 +166,9 @@ private fun TextSection(
                 style = NovixTheme.typography.label.small,
                 color = NovixTheme.colors.hint,
                 textAlign = TextAlign.Start,
-                modifier = Modifier.fillMaxWidth().align(Alignment.Start),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .align(Alignment.Start),
                 maxLines = 1,
                 overflow = TextOverflow.Ellipsis
             )
@@ -172,7 +184,8 @@ private fun ActorItemPreview() {
             actorName = "Lee Jung-jae",
             characterName = "Character name",
             imageRes = R.drawable.frame1597883073,
-            modifier = Modifier.padding(16.dp)
+            modifier = Modifier.padding(16.dp),
+            onClick = {}
         )
     }
 }

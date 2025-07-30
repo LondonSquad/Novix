@@ -1,10 +1,12 @@
 package com.london.presentation.feature.details.actordetails.gallery
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.statusBarsPadding
@@ -68,7 +70,8 @@ private fun Content(
             .fillMaxSize()
             .background(NovixTheme.colors.surface)
             .statusBarsPadding()
-            .padding(horizontal = 16.dp),
+            .navigationBarsPadding()
+            .padding(horizontal = 16.dp, vertical = 12.dp),
     ) {
         TopBar(
             modifier = Modifier.padding(bottom = 16.dp),
@@ -83,7 +86,7 @@ private fun Content(
                 LazyVerticalGrid(
                     columns = GridCells.Adaptive(minSize = 104.dp),
                     horizontalArrangement = Arrangement.spacedBy(8.dp),
-                    verticalArrangement = Arrangement.spacedBy(8.dp),
+                    verticalArrangement = Arrangement.spacedBy(12.dp),
                     modifier = Modifier
                         .fillMaxSize()
                         .background(NovixTheme.colors.surface)
@@ -94,7 +97,12 @@ private fun Content(
                             contentDescription = stringResource(R.string.actor_photos),
                             modifier = Modifier
                                 .size(width = 104.dp, height = 101.dp)
-                                .clip(RoundedCornerShape(4.dp)),
+                                .border(
+                                    width = 1.dp,
+                                    color = NovixTheme.colors.stroke,
+                                    shape = RoundedCornerShape(12.dp)
+                                )
+                                .clip(RoundedCornerShape(12.dp)),
                             contentScale = ContentScale.Crop,
                             loadingContent = { CircularLoading() },
                             errorContent = { ErrorImage() }

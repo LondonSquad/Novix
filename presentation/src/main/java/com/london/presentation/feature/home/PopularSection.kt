@@ -21,8 +21,10 @@ import androidx.compose.ui.graphics.TransformOrigin
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.util.lerp
 import com.london.designsystem.component.HomeCard
@@ -64,6 +66,9 @@ fun PopularSection(
     onCardClick: () -> Unit,
 ) {
     val density = LocalDensity.current
+    val layoutDirection = LocalLayoutDirection.current
+    val isRtl = layoutDirection == LayoutDirection.Rtl
+
     val screenWidth = with(density) {
         LocalConfiguration.current.screenWidthDp.dp
     }
@@ -88,7 +93,11 @@ fun PopularSection(
             if (images.size > 1) {
                 while (currentCoroutineContext().isActive) {
                     delay(4000)
-                    val nextPage = (pagerState.currentPage + 1) % images.size
+                    val nextPage = if (isRtl) {
+                        if (pagerState.currentPage == 0) images.size - 1 else pagerState.currentPage - 1
+                    } else {
+                        (pagerState.currentPage + 1) % images.size
+                    }
                     pagerState.animateScrollToPage(nextPage)
                 }
             }
@@ -99,24 +108,27 @@ fun PopularSection(
             modifier = Modifier
                 .heightIn(CARD_WIDTH_DP.dp),
             pageSpacing = PAGE_SPACING_DP.dp,
-            contentPadding = PaddingValues(horizontal = horizontalPadding)
+            contentPadding = PaddingValues(horizontal = horizontalPadding),
+            reverseLayout = isRtl
         ) { page ->
+            val pageOffset = if (isRtl) {
+                (page - pagerState.currentPage) - pagerState.currentPageOffsetFraction
+            } else {
+                (pagerState.currentPage - page) + pagerState.currentPageOffsetFraction
+            }
 
             Box(
                 modifier = Modifier
                     .fillMaxWidth()
                     .wrapContentSize(Alignment.Center)
-                    .padding(
-                        horizontal = if (page == pagerState.currentPage)
-                            CARD_HORIZONTAL_PADDING_DP.dp else 0.dp
-                    )
+                    .padding(horizontal = CARD_HORIZONTAL_PADDING_DP.dp, vertical = CARD_HORIZONTAL_PADDING_DP.dp)
                     .graphicsLayer {
-                        val pageOffset =
-                            (pagerState.currentPage - page) + pagerState.currentPageOffsetFraction
+                        val rotationStart = if (isRtl) ROTATION_NEXT_DEGREES else ROTATION_PREVIOUS_DEGREES
+                        val rotationStop = if (isRtl) ROTATION_PREVIOUS_DEGREES else ROTATION_NEXT_DEGREES
 
                         rotationZ = lerp(
-                            start = ROTATION_PREVIOUS_DEGREES,
-                            stop = ROTATION_NEXT_DEGREES,
+                            start = rotationStart,
+                            stop = rotationStop,
                             fraction = (pageOffset + ROTATION_OFFSET_ADJUSTMENT) * ROTATION_FRACTION_MULTIPLIER
                         )
 
@@ -131,24 +143,21 @@ fun PopularSection(
 
                         transformOrigin = TransformOrigin(TRANSFORM_ORIGIN_X, TRANSFORM_ORIGIN_Y)
                     }
-                    .clickable(
-                        indication = null,
-                        interactionSource = null
-                    ) { onCardClick() },
+                    ,
             ) {
 
                 HomeCard(
                     imageUrl = images[page],
                     onSaveClick = { onSaveClick() },
-                    hasSaveIcon = pagerState.currentPage == page
+                    hasSaveIcon = pagerState.currentPage == page,
+                    modifier = Modifier.clickable{ if (pagerState.currentPage == page) onCardClick() }
                 )
-
                 if (pagerState.currentPage == page)
                     Column(
                         modifier = Modifier
                             .padding(start = 8.dp, bottom = 6.dp, end = 8.dp)
-                            .align(Alignment.BottomStart),
-                        horizontalAlignment = Alignment.Start,
+                            .align(if (isRtl) Alignment.BottomEnd else Alignment.BottomStart),
+                        horizontalAlignment = if (isRtl) Alignment.End else Alignment.Start,
                     ) {
                         Text(
                             text = cardTitle,
@@ -161,7 +170,7 @@ fun PopularSection(
                         Row(
                             modifier = Modifier,
                             verticalAlignment = Alignment.CenterVertically,
-                            horizontalArrangement = Arrangement.Start
+                            horizontalArrangement = if (isRtl) Arrangement.End else Arrangement.Start
                         ) {
                             RatingItem(
                                 rating = cardRating,

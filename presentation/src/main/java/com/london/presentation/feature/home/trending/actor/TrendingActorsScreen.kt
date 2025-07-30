@@ -55,13 +55,14 @@ private fun TrendingActorsContent(
     Column(
         modifier = Modifier
             .fillMaxSize()
+            .padding(horizontal = 16.dp)
             .background(color = NovixTheme.colors.surface)
     ) {
         TopBar(
             modifier = Modifier
                 .statusBarsPadding()
                 .fillMaxWidth()
-                .padding(horizontal = 16.dp, vertical = 12.dp),
+                .padding(vertical = 12.dp),
             title = stringResource(R.string.trending_people),
             onBackClick = contract::onBack
         )
@@ -72,14 +73,20 @@ private fun TrendingActorsContent(
         LazyPagingColumn(
             emptyTitle = R.string.no_trending_actors_in_genre.string,
             pagingItems = actorsLazyItems,
-        ) { actor ->
-            ActorItem(
-                modifier = Modifier.clickable { contract.onActorClick(actor.id) },
-                actorName = actor.name,
-                characterName = null,
-                imageRes = actor.profilePicture
-            )
-        }
+            modifier = Modifier.fillMaxSize(),
+            onRetry = {
+                contract.onRetry()
+            },
+            itemContent = { actor ->
+                ActorItem(
+                    modifier = Modifier.clickable { contract.onActorClick(actor.id) },
+                    actorName = actor.name,
+                    characterName = null,
+                    imageRes = actor.profilePicture,
+                    onClick = {contract.onActorClick(actor.id)}
+                )
+            }
+        )
     }
 }
 

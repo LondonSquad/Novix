@@ -15,9 +15,10 @@ class LoginViewModel(
     LoginContract {
 
     override fun onUsernameChanged(username: TextFieldValue) {
+        val trimmedUsername = username.copy(text = username.text.trim())
         updateState {
             copy(
-                username = username,
+                username = trimmedUsername,
                 isLoginEnabled = username.text.isNotEmpty() && password.text.isNotEmpty(),
                 error = null
             )
@@ -43,7 +44,7 @@ class LoginViewModel(
     }
 
     override fun onCreateAccountClick() {
-        emitEffect(LoginEffect.NavigateToCreateAccount(CREATE_ACCOUNT_URL))
+        emitEffect(LoginEffect.NavigateToWebViewRegistration)
     }
 
     override fun onForgotPasswordClick() {
