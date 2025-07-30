@@ -6,6 +6,7 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.offset
@@ -14,7 +15,6 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.layout.wrapContentHeight
-import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -27,6 +27,7 @@ import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.LayoutDirection
@@ -69,7 +70,7 @@ fun TrendingSection(
                     .shimmerEffect()
             )
 
-        LazyRow(
+        Row (
             modifier = Modifier
                 .padding(bottom = 12.dp)
                 .fillMaxWidth()
@@ -78,7 +79,6 @@ fun TrendingSection(
             horizontalArrangement = Arrangement.spacedBy(8.dp),
             verticalAlignment = Alignment.Bottom
         ) {
-            item {
                 CategoryCard(
                     title = stringResource(R.string.Movies),
                     icon = painterResource(id = R.drawable.icon_movie),
@@ -87,10 +87,9 @@ fun TrendingSection(
                     imageWidth = 60.dp,
                     imageHeight = 64.dp,
                     onClick = onMoviesClick,
+                    modifier = Modifier.weight(1f)
                 )
-            }
 
-            item {
                 CategoryCard(
                     title = stringResource(R.string.TV_Shows),
                     icon = painterResource(id = R.drawable.icon_tvshow),
@@ -99,10 +98,9 @@ fun TrendingSection(
                     imageWidth = 88.46.dp,
                     imageHeight = 64.dp,
                     onClick = onTvShowsClick,
+                    modifier = Modifier.weight(1f)
                 )
-            }
 
-            item {
                 CategoryCard(
                     title = stringResource(R.string.actors),
                     icon = painterResource(id = R.drawable.icon_actor),
@@ -111,8 +109,8 @@ fun TrendingSection(
                     imageWidth = 56.49.dp,
                     imageHeight = 64.dp,
                     onClick = onActorsClick,
+                    modifier = Modifier.weight(1f)
                 )
-            }
         }
     }
 }
@@ -160,6 +158,8 @@ private fun CategoryCard(
             text = title,
             style = NovixTheme.typography.title.medium,
             color = NovixTheme.colors.onPrimary,
+            maxLines = 1,
+            overflow = TextOverflow.Ellipsis,
             modifier = Modifier
                 .align(Alignment.BottomStart)
                 .padding(start = 8.dp, end = 8.dp, bottom = 7.dp)
