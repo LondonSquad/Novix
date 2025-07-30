@@ -66,6 +66,8 @@ import com.london.domain.entity.recent.MediaType
 import com.london.domain.entity.recent.RecentSearch
 import com.london.domain.entity.recent.RecentViewed
 import com.london.presentation.R
+import com.london.presentation.feature.base.ErrorState
+import com.london.presentation.feature.buildscreen.NetworkErrorScreen
 import com.london.presentation.shared.ActorsLayout
 import com.london.presentation.shared.FilterBottomSheet
 import com.london.presentation.shared.FilterState
@@ -101,12 +103,16 @@ fun SearchScreen(
         }
     }
 
-    SearchScreenContent(
-        state = state,
-        interactionListener = viewModel,
-        keyboardController = keyboardController,
-        viewModel = viewModel,
-    )
+    when{
+        state.error is ErrorState.NoInternet -> NetworkErrorScreen()
+        else ->
+            SearchScreenContent(
+                state = state,
+                interactionListener = viewModel,
+                keyboardController = keyboardController,
+                viewModel = viewModel,
+            )
+    }
 }
 
 @Composable
