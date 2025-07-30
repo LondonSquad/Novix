@@ -54,16 +54,18 @@ abstract class BasePagingSource<T : Any>() : PagingSource<Int, T>() {
 fun <T : Any> createPagingSourceFlow(
     query: String,
     block: suspend (query: String, pageNumber: Int) -> PagedFetchResponse<T>
-) = Pager(
-    config = PagingConfig(
-        pageSize = BasePagingSource.PAGING_PAGE_SIZE,
-        enablePlaceholders = true
-    ),
-    pagingSourceFactory = {
-        object : BasePagingSource<T>() {
-            override suspend fun onFetchPage(pageNumber: Int): PagedFetchResponse<T> {
-                return block(query, pageNumber)
+): Flow<PagingData<T>> {
+    return Pager(
+        config = PagingConfig(
+            pageSize = BasePagingSource.PAGING_PAGE_SIZE,
+            enablePlaceholders = true
+        ),
+        pagingSourceFactory = {
+            object : BasePagingSource<T>() {
+                override suspend fun onFetchPage(pageNumber: Int): PagedFetchResponse<T> {
+                    return block(query, pageNumber)
+                }
             }
         }
-    }
-).flow
+    ).flow
+}

@@ -19,9 +19,12 @@ import com.london.designsystem.component.button.OutlineButton
 import com.london.designsystem.theme.NovixTheme
 
 @Composable
-fun NetworkErrorScreen() {
+fun NetworkErrorScreen(
+    modifier: Modifier = Modifier,
+    onRetry: () -> Unit = {},
+) {
     Column(
-        modifier = Modifier
+        modifier = modifier
             .fillMaxSize()
             .padding(horizontal = 16.dp),
         verticalArrangement = Arrangement.Center,
@@ -30,7 +33,9 @@ fun NetworkErrorScreen() {
         Image(
             painter = painterResource(id = R.drawable.image_no_internet),
             contentDescription = stringResource(R.string.no_internet),
-            modifier = Modifier.padding(bottom = 16.dp).size(82.dp,64.dp)
+            modifier = Modifier
+                .padding(bottom = 16.dp)
+                .size(82.dp, 64.dp)
         )
 
         Text(
@@ -53,7 +58,7 @@ fun NetworkErrorScreen() {
             icon = null,
             hasIcon = false,
             isLoading = false,
-            onClick = {},
+            onClick = onRetry,
             modifier = Modifier.padding(top = 16.dp)
         )
     }
