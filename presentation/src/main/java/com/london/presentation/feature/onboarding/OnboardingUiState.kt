@@ -20,19 +20,19 @@ data class OnboardingPage(
     companion object {
         val defaultPages = listOf(
             OnboardingPage(
-                R.string.first_onboarding_title,
-                R.string.first_onboarding_description,
-                R.drawable.image_onboarding_first
+                title = R.string.first_onboarding_title,
+                description = R.string.first_onboarding_description,
+                imageRes = R.drawable.img_onboarding_first
             ),
             OnboardingPage(
-                R.string.second_onboarding_title,
-                R.string.second_onboarding_description,
-                R.drawable.image_onboarding_second
+                title = R.string.second_onboarding_title,
+                description = R.string.second_onboarding_description,
+                imageRes = R.drawable.img_onboarding_second
             ),
             OnboardingPage(
-                R.string.third_onboarding_title,
-                R.string.third_onboarding_description,
-                R.drawable.image_onboarding_third
+                title = R.string.third_onboarding_title,
+                description = R.string.third_onboarding_description,
+                imageRes = R.drawable.img_onboarding_third
             )
         )
     }
