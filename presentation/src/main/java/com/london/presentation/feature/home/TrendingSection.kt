@@ -140,6 +140,7 @@ private fun CategoryCard(
                 brush = gradient,
                 shape = RoundedCornerShape(12.dp)
             )
+            .clip(RoundedCornerShape(12.dp))
             .clickable(onClick = onClick),
         contentAlignment = Alignment.BottomCenter
     ) {
