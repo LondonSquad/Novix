@@ -43,9 +43,7 @@ class ContinueWatchingViewModel(
                     )
                 }
             },
-            onError = {
-                updateState { copy(errorMessage = it.toString()) }
-            },
+            onError = { errorState -> updateState { copy(error = errorState) } },
             onCompleted = {
                 updateState { copy(isLoading = false) }
             },
