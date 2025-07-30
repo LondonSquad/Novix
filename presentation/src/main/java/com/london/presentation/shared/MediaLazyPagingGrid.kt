@@ -16,6 +16,7 @@ import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalWindowInfo
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import androidx.paging.LoadState
 import androidx.paging.compose.LazyPagingItems
 import com.london.designsystem.component.CircularLoading
 import com.london.designsystem.component.EmptyLayout
@@ -38,7 +39,7 @@ fun <T : Any> MediaLazyPagingGrid(
     onRetry: () -> Unit = {}
 ) {
     when {
-        pagingFlow.loadState.refresh is androidx.paging.LoadState.Error -> NetworkErrorScreen(
+        pagingFlow.loadState.refresh is LoadState.Error -> NetworkErrorScreen(
             onRetry = onRetry
         )
 
