@@ -2,6 +2,7 @@ package com.london.presentation.feature.home
 
 import androidx.annotation.StringRes
 import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -19,7 +20,6 @@ import com.london.designsystem.component.carousel.isHero
 import com.london.designsystem.component.carousel.m3.CarouselState
 import com.london.designsystem.component.carousel.m3.rememberCarouselState
 import com.london.designsystem.theme.NovixTheme
-import com.london.designsystem.theme.noRippleClickable
 import com.london.designsystem.utils.string
 import com.london.domain.entity.recent.MediaType
 
@@ -60,12 +60,6 @@ fun HomeCarouselSection(
             val mediaItem = uiMediaList[index]
             HomeCard(
                 modifier = Modifier
-                    .noRippleClickable {
-                        onCardClick(
-                            mediaItem.id,
-                            mediaItem.mediaType
-                        )
-                    }
                     .maskClip(RoundedCornerShape(HomeCarouselDefaults.CARD_CORNER_RADIUS))
                     .maskBorder(
                         border = BorderStroke(
@@ -73,7 +67,12 @@ fun HomeCarouselSection(
                             color = NovixTheme.colors.stroke
                         ),
                         shape = RoundedCornerShape(HomeCarouselDefaults.CARD_CORNER_RADIUS)
-                    ),
+                    ).clickable {
+                        onCardClick(
+                            mediaItem.id,
+                            mediaItem.mediaType
+                        )
+                    },
                 imageUrl = mediaItem.posterUrl,
                 onSaveClick = { onSaveClick(mediaItem.id) },
                 hasSaveIcon = isHero
