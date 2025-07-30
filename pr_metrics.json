@@ -13470,5 +13470,33 @@
       "deletions": 12,
       "changed_files": 1
     }
+  },
+  {
+    "pr_number": 424,
+    "url": "https://github.com/LondonSquad/Novix/pull/424",
+    "title": "fix: rating in popular section and back button padding in gallery sec…",
+    "opened_at": "2025-07-30T15:37:47Z",
+    "head_ref": "fix/rating-and-padding-issues",
+    "base_ref": "develop",
+    "creator": {
+      "login": "Abdulrahman1890",
+      "id": 76666355,
+      "url": "https://github.com/Abdulrahman1890"
+    },
+    "approvals": [],
+    "first_approved_at": null,
+    "time_to_first_approval_minutes": null,
+    "required_approvals_met_at": null,
+    "time_to_required_approvals_minutes": null,
+    "closed_at": null,
+    "merged_at": null,
+    "merged_by": null,
+    "week": "2025-W31",
+    "status": "pending",
+    "diff_stats": {
+      "additions": 5,
+      "deletions": 7,
+      "changed_files": 2
+    }
   }
 ]
