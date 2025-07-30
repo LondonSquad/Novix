@@ -13722,5 +13722,33 @@
       "deletions": 4,
       "changed_files": 4
     }
+  },
+  {
+    "pr_number": 431,
+    "url": "https://github.com/LondonSquad/Novix/pull/431",
+    "title": "fix: update password handling in LoginViewModel",
+    "opened_at": "2025-07-30T16:21:44Z",
+    "head_ref": "hotfix/passowrd-test-feild",
+    "base_ref": "develop",
+    "creator": {
+      "login": "BassantM",
+      "id": 102248144,
+      "url": "https://github.com/BassantM"
+    },
+    "approvals": [],
+    "first_approved_at": null,
+    "time_to_first_approval_minutes": null,
+    "required_approvals_met_at": null,
+    "time_to_required_approvals_minutes": null,
+    "closed_at": null,
+    "merged_at": null,
+    "merged_by": null,
+    "week": "2025-W31",
+    "status": "pending",
+    "diff_stats": {
+      "additions": 1,
+      "deletions": 2,
+      "changed_files": 1
+    }
   }
 ]
