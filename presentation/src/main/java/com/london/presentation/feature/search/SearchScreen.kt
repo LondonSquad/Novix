@@ -115,12 +115,16 @@ fun SearchScreen(
         }
     }
 
-    SearchScreenContent(
-        state = state,
-        interactionListener = viewModel,
-        keyboardController = keyboardController,
-        viewModel = viewModel,
-    )
+    when{
+        state.error is ErrorState.NoInternet -> NetworkErrorScreen()
+        else ->
+            SearchScreenContent(
+                state = state,
+                interactionListener = viewModel,
+                keyboardController = keyboardController,
+                viewModel = viewModel,
+            )
+    }
 }
 
 @Composable

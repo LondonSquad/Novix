@@ -25,11 +25,11 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
-import com.london.imageharamblur.ui.ImageViewFilter
 import com.london.designsystem.R
 import com.london.designsystem.component.button.ErrorImage
 import com.london.designsystem.theme.NovixTheme
 import com.london.designsystem.theme.ThemePreviews
+import com.london.imageharamblur.ui.ImageViewFilter
 
 @Composable
 fun ActorItem(
@@ -53,12 +53,11 @@ fun ActorItem(
 
 @Composable
 private fun ActorImage(imageRes: Any) {
-    val isRtl = isRtlLayout()
     val imageShape = RoundedCornerShape(
         topStart = 12.dp,
         topEnd = 12.dp,
-        bottomStart = if (isRtl) 0.dp else 12.dp,
-        bottomEnd = if (isRtl) 12.dp else 0.dp
+        bottomStart = 12.dp,
+        bottomEnd = 0.dp
     )
 
     Box {
