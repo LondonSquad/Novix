@@ -510,7 +510,7 @@ class SearchRepositoryImplTest {
                 Actor(
                     id = 3,
                     name = "Tom Holland",
-                    profileUrl = "https://image.tmdb.org/t/p/w500/tom_holland.jpg",
+                    profilePictureUrl = "https://image.tmdb.org/t/p/w500/tom_holland.jpg",
                     characterName = ""
                 )
             ),

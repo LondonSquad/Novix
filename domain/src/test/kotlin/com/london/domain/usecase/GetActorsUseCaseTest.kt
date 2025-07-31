@@ -54,7 +54,7 @@ class GetActorsUseCaseTest {
       private  val ACTOR = Actor(
             id = 1,
             name = "Tom Holland",
-            profileUrl = "",
+            profilePictureUrl = "",
             characterName = ""
         )
      private  val pagedFetchResponse = PagedFetchResponse(

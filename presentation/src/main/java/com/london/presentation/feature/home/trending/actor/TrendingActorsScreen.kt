@@ -80,7 +80,7 @@ private fun TrendingActorsContent(
                 ActorItem(
                     actorName = actor.name,
                     characterName = null,
-                    imageRes = actor.profilePicture,
+                    imageRes = actor.profilePictureUrl,
                     onClick = {contract.onActorClick(actor.id)}
                 )
             }

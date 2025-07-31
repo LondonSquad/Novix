@@ -25,7 +25,7 @@ class ActorMapperKtTest {
             Actor(
                 id = 123,
                 name = "John Doe",
-                profileUrl = "https://image.tmdb.org/t/p/w500/profile.jpg",
+                profilePictureUrl = "https://image.tmdb.org/t/p/w500/profile.jpg",
                 characterName = ""
             )
         )

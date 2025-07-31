@@ -9,7 +9,7 @@ fun MovieActor.toEntity(): Actor {
     return Actor(
         id = id.orZero(),
         name = originalName.orEmpty(),
-        profileUrl = profilePath.asImageUrlOrEmpty(),
+        profilePictureUrl = profilePath.asImageUrlOrEmpty(),
         characterName = character.orEmpty(),
     )
 }

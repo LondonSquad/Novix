@@ -21,7 +21,7 @@ fun List<Movie>.toUiMedia(): List<HomeUiMedia> =
     map { movie ->
         HomeUiMedia(
             id = movie.id,
-            posterUrl = movie.posterPicture,
+            posterUrl = movie.posterUrl,
             mediaType = MediaType.Movie
         )
     }

@@ -38,7 +38,7 @@ class GetTrendingActorsUseCaseTest {
         val actor = result.items.first()
         assertEquals(1, actor.id)
         assertEquals("Test Actor", actor.name)
-        assertEquals("test_profile.jpg", actor.profileUrl)
+        assertEquals("test_profile.jpg", actor.profilePictureUrl)
         assertEquals("", actor.characterName)
     }
 
@@ -185,9 +185,9 @@ class GetTrendingActorsUseCaseTest {
 
         assertNotNull(result)
         assertEquals(3, result.items.size)
-        assertEquals("profile1.jpg", result.items[0].profileUrl)
-        assertEquals("profile2.jpg", result.items[1].profileUrl)
-        assertEquals("", result.items[2].profileUrl)
+        assertEquals("profile1.jpg", result.items[0].profilePictureUrl)
+        assertEquals("profile2.jpg", result.items[1].profilePictureUrl)
+        assertEquals("", result.items[2].profilePictureUrl)
     }
 
     private fun createMockActorsResponse(): PagedFetchResponse<Actor> =
@@ -207,7 +207,7 @@ class GetTrendingActorsUseCaseTest {
         return Actor(
             id = id,
             name = name,
-            profileUrl = profilePicture,
+            profilePictureUrl = profilePicture,
             characterName = characterName
         )
     }
