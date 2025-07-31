@@ -22,7 +22,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.statusBars
 import androidx.compose.foundation.layout.widthIn
-import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
@@ -175,7 +174,6 @@ fun TvShowsDetailScreenContent(
             modifier = Modifier.fillMaxSize(),
             contentPadding = PaddingValues(bottom = footerHeight + 16.dp)
         ) {
-            // Backdrop images
             item {
                 val images = uiState.tvImages
                 CustomBackDropImagePager(
@@ -184,7 +182,6 @@ fun TvShowsDetailScreenContent(
                 )
             }
 
-            // Header details card
             item {
                 HeaderDetailsCard(
                     uiState = uiState,
@@ -214,7 +211,6 @@ fun TvShowsDetailScreenContent(
                 )
             }
 
-            // Overview title
             item {
                 Text(
                     text = stringResource(R.string.overview),
@@ -224,7 +220,6 @@ fun TvShowsDetailScreenContent(
                 )
             }
 
-            // Overview content
             item {
                 var isExpanded by remember { mutableStateOf(false) }
                 ConditionalText(
@@ -236,7 +231,6 @@ fun TvShowsDetailScreenContent(
                 }
             }
 
-            // Cast section
             item {
                 CastSection(
                     modifier = Modifier.padding(top = 16.dp),
@@ -245,7 +239,6 @@ fun TvShowsDetailScreenContent(
                 )
             }
 
-            // Season section header
             item {
                 Column(
                     modifier = Modifier
