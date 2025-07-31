@@ -414,23 +414,7 @@ fun TvShowBasicDetails(
             rating = rating
         )
 
-        Box(
-            modifier = Modifier
-                .padding(horizontal = 8.dp)
-                .size(3.dp)
-                .clip(CircleShape)
-                .background(NovixTheme.colors.hint)
-        )
-
         TvShowDate(date)
-
-        Box(
-            modifier = Modifier
-                .padding(horizontal = 8.dp)
-                .size(3.dp)
-                .clip(CircleShape)
-                .background(NovixTheme.colors.hint)
-        )
 
         Seasons(numberOfSeasons)
     }
@@ -458,11 +442,20 @@ fun Seasons(
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.spacedBy(4.dp)
     ) {
+
+        Box(
+            modifier = Modifier
+                .padding(horizontal = 4.dp)
+                .size(3.dp)
+                .clip(CircleShape)
+                .background(NovixTheme.colors.hint)
+        )
+
         Icon(
             painter = painterResource(R.drawable.icon_tv),
             contentDescription = "Tv icon",
             tint = NovixTheme.colors.body,
-            modifier = Modifier.size(12.dp)
+            modifier = Modifier.size(11.dp)
         )
 
         Text(
@@ -483,11 +476,20 @@ fun TvShowDate(
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.spacedBy(4.dp)
     ) {
+
+        Box(
+            modifier = Modifier
+                .padding(horizontal = 4.dp)
+                .size(3.dp)
+                .clip(CircleShape)
+                .background(NovixTheme.colors.hint)
+        )
+
         Icon(
             painter = painterResource(R.drawable.icon_calender),
             contentDescription = "Calender icon",
             tint = NovixTheme.colors.body,
-            modifier = Modifier.size(12.dp)
+            modifier = Modifier.size(11.dp)
         )
 
         Text(
