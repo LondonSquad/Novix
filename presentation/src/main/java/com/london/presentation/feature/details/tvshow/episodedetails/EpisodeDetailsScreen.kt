@@ -144,7 +144,8 @@ fun EpisodeDetailsScreenContent(
                 val images = uiState.tvImages
                 if (images != null) {
                     CustomBackDropImagePager(
-                        images = images.map { it.fileUrl }
+                        images = images.map { it.fileUrl },
+                        isVisibleDots = true
                     )
                 }
             }

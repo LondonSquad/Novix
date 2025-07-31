@@ -32,7 +32,8 @@ import kotlinx.coroutines.isActive
 @Composable
 fun CustomBackDropImagePager(
     modifier: Modifier = Modifier,
-    images: List<String>
+    images: List<String>,
+    isVisibleDots: Boolean
 ) {
     val validImages = images.filter { it.isNotBlank() }
 
@@ -91,7 +92,7 @@ fun CustomBackDropImagePager(
                 )
             }
 
-            if (validImages.size > 1) {
+            if (validImages.size > 1 && isVisibleDots) {
                 NovixCarousalRow(
                     dotsStates = List(validImages.size) { index -> index == pagerState.currentPage },
                     modifier = Modifier
