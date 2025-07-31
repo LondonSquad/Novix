@@ -207,7 +207,7 @@ fun EpisodeDetailsScreenContent(
                     ActorItem(
                         actorName = member.name,
                         characterName = member.characterName,
-                        imageRes = member.profilePicture,
+                        imageRes = member.profilePictureUrl,
                         modifier = Modifier
                             .fillMaxWidth()
                             .padding(horizontal = 16.dp, vertical = 6.dp),

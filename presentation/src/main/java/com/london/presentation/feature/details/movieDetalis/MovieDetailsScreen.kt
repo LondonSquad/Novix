@@ -267,7 +267,7 @@ fun MovieDetailsContent(
                             ActorItem(
                                 actorName = actor.name,
                                 characterName = actor.characterName,
-                                imageRes = actor.profilePicture,
+                                imageRes = actor.profilePictureUrl,
                                 modifier = Modifier
                                     .defaultMinSize(minWidth = 296.dp),
                                 onClick = {
@@ -301,7 +301,7 @@ fun MovieDetailsContent(
                     ) {
                         rowItems.forEachIndexed { _, movie ->
                             HomeCard(
-                                imageUrl = movie.posterPicture,
+                                imageUrl = movie.posterUrl,
                                 isSaved = false,
                                 onSaveClick = {},
                                 modifier = Modifier

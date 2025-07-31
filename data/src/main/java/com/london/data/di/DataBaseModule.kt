@@ -23,19 +23,19 @@ class DataBaseModule {
     }
 
     @Single
-    fun provideSearchMoviesDao(database: NovixDatabase): SearchMoviesDao {
-        return database.searchMoviesDao()
-    }
+    fun provideSearchMoviesDao(database: NovixDatabase): SearchMoviesDao =
+        database.searchMoviesDao()
+
 
     @Single
-    fun provideSearchTvShowDao(database: NovixDatabase): SearchTvShowDao {
-        return database.searchTvShowDao()
-    }
+    fun provideSearchTvShowDao(database: NovixDatabase): SearchTvShowDao =
+        database.searchTvShowDao()
+
 
     @Single
-    fun provideSearchActorsDao(database: NovixDatabase): SearchActorsDao {
-        return database.searchActorsDao()
-    }
+    fun provideSearchActorsDao(database: NovixDatabase): SearchActorsDao =
+        database.searchActorsDao()
+
 
     @Single
     fun provideGenreInterestDao(database: NovixDatabase): GenreInterestDao {

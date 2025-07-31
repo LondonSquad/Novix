@@ -105,7 +105,7 @@ fun EpisodeGuestStar.toActorEntity(): Actor {
     return Actor(
         id = id.orZero(),
         name = name.orEmpty(),
-        profilePicture = profilePath.asImageUrlOrEmpty(),
+        profilePictureUrl = profilePath.asImageUrlOrEmpty(),
         characterName = character.orEmpty()
     )
 }

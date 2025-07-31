@@ -8,7 +8,7 @@ import com.london.domain.entity.recent.RecentViewed
 fun Movie.toRecentViewed(): RecentViewed=
      RecentViewed(
         id = this.id,
-        imageUrl = this.posterPicture,
+        imageUrl = this.posterUrl,
         type = MediaType.Movie,
         viewDate = System.currentTimeMillis()
     )

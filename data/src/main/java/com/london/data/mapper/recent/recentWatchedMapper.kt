@@ -11,7 +11,7 @@ import com.london.domain.entity.TvShow
 fun RecentWatchedMovieLocal.toEntity() = Movie(
     id = id,
     name = name,
-    posterPicture = posterPictureUrl,
+    posterUrl = posterPictureUrl,
     releaseYear = releaseYear,
     rating = rating,
     genreIds = genreIds
@@ -20,7 +20,7 @@ fun RecentWatchedMovieLocal.toEntity() = Movie(
 fun Movie.toRecentWatchedMovieLocal() = RecentWatchedMovieLocal(
     id = id,
     name = name,
-    posterPictureUrl = posterPicture,
+    posterPictureUrl = posterUrl,
     releaseYear = releaseYear,
     rating = rating,
     genreIds = genreIds,
