@@ -275,7 +275,6 @@ fun TvShowsDetailScreenContent(
                 }
             }
 
-            // Episodes as individual items
             items(
                 items = uiState.tvShowEpisodes,
                 key = { episode -> "${episode.showId}_${episode.seasonNumber}_${episode.episodeNumber}" }
