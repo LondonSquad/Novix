@@ -15308,9 +15308,18 @@
       "id": 102248144,
       "url": "https://github.com/BassantM"
     },
-    "approvals": [],
-    "first_approved_at": null,
-    "time_to_first_approval_minutes": null,
+    "approvals": [
+      {
+        "reviewer": {
+          "id": 76666355,
+          "login": "Abdulrahman1890",
+          "url": "https://github.com/Abdulrahman1890"
+        },
+        "submitted_at": "2025-07-31T20:30:26Z"
+      }
+    ],
+    "first_approved_at": "2025-07-31T20:30:26Z",
+    "time_to_first_approval_minutes": 16.916666666666668,
     "required_approvals_met_at": null,
     "time_to_required_approvals_minutes": null,
     "closed_at": null,
