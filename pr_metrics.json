@@ -14310,5 +14310,33 @@
       "deletions": 10,
       "changed_files": 1
     }
+  },
+  {
+    "pr_number": 441,
+    "url": "https://github.com/LondonSquad/Novix/pull/441",
+    "title": "feat: Update CircularLoading component with wavy animation",
+    "opened_at": "2025-07-31T08:11:51Z",
+    "head_ref": "feature/wavy-progress-indicator",
+    "base_ref": "develop",
+    "creator": {
+      "login": "ahmeddsamii",
+      "id": 154278495,
+      "url": "https://github.com/ahmeddsamii"
+    },
+    "approvals": [],
+    "first_approved_at": null,
+    "time_to_first_approval_minutes": null,
+    "required_approvals_met_at": null,
+    "time_to_required_approvals_minutes": null,
+    "closed_at": null,
+    "merged_at": null,
+    "merged_by": null,
+    "week": "2025-W31",
+    "status": "pending",
+    "diff_stats": {
+      "additions": 44,
+      "deletions": 29,
+      "changed_files": 1
+    }
   }
 ]
