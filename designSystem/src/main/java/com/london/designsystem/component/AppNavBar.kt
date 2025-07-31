@@ -11,6 +11,8 @@ import androidx.compose.animation.core.spring
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
+import androidx.compose.animation.scaleIn
+import androidx.compose.animation.scaleOut
 import androidx.compose.animation.slideInVertically
 import androidx.compose.animation.slideOutVertically
 import androidx.compose.foundation.Image
@@ -111,6 +113,7 @@ private fun <T> NavBarItem(
         contentAlignment = Alignment.Center
     ) {
         AnimatedBackgroundBlur(
+            modifier = Modifier.align(Alignment.BottomCenter),
             isVisible = isSelected,
             selectedIconColor = selectedIconColor
         )
@@ -128,17 +131,17 @@ private fun <T> NavBarItem(
 @Composable
 private fun AnimatedBackgroundBlur(
     isVisible: Boolean,
-    selectedIconColor: Color
+    selectedIconColor: Color,
+    modifier: Modifier = Modifier
 ) {
     AnimatedVisibility(
+        modifier = modifier,
         visible = isVisible,
-        enter = slideInVertically(
+        enter = scaleIn(
             animationSpec = tween(400, easing = FastOutSlowInEasing),
-            initialOffsetY = { it }
         ),
-        exit = slideOutVertically(
+        exit = scaleOut(
             animationSpec = tween(300, easing = FastOutLinearInEasing),
-            targetOffsetY = { it }
         )
     ) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
@@ -146,7 +149,7 @@ private fun AnimatedBackgroundBlur(
                 modifier = Modifier
                     .width(60.dp)
                     .height(16.dp)
-                    .blur(radius = 62.dp, edgeTreatment = BlurredEdgeTreatment.Unbounded),
+                    .blur(radius = 54.dp, edgeTreatment = BlurredEdgeTreatment.Unbounded),
                 painter = painterResource(R.drawable.ellipse_blur_filled),
                 contentDescription = null,
                 tint = selectedIconColor
