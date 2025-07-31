@@ -31,6 +31,7 @@ import com.london.designsystem.component.HomeCard
 import com.london.designsystem.component.NovixCarousalRow
 import com.london.designsystem.component.Text
 import com.london.designsystem.theme.NovixTheme
+import com.london.domain.entity.recent.MediaType
 import com.london.presentation.R
 import com.london.presentation.shared.RatingItem
 import com.london.presentation.utils.toLocalizedNumbers
@@ -60,11 +61,9 @@ private const val SCALE_MAX_FRACTION = 1f
 fun PopularSection(
     modifier: Modifier = Modifier,
     pagerState: PagerState,
-    images: List<String>,
-    cardTitle: String,
-    cardRating: String,
+    uiMediaList: List<PopularUiMedia>,
     onSaveClick: () -> Unit,
-    onCardClick: () -> Unit,
+    onCardClick: (Int, MediaType) -> Unit,
 ) {
     val density = LocalDensity.current
     val layoutDirection = LocalLayoutDirection.current
@@ -91,13 +90,13 @@ fun PopularSection(
         )
 
         LaunchedEffect(Unit) {
-            if (images.size > 1) {
+            if (uiMediaList.size > 1) {
                 while (currentCoroutineContext().isActive) {
                     delay(4000)
                     val nextPage = if (isRtl) {
-                        if (pagerState.currentPage == 0) images.size - 1 else pagerState.currentPage - 1
+                        if (pagerState.currentPage == 0) uiMediaList.size - 1 else pagerState.currentPage - 1
                     } else {
-                        (pagerState.currentPage + 1) % images.size
+                        (pagerState.currentPage + 1) % uiMediaList.size
                     }
                     pagerState.animateScrollToPage(nextPage)
                 }
@@ -122,10 +121,15 @@ fun PopularSection(
                 modifier = Modifier
                     .fillMaxWidth()
                     .wrapContentSize(Alignment.Center)
-                    .padding(horizontal = CARD_HORIZONTAL_PADDING_DP.dp, vertical = CARD_HORIZONTAL_PADDING_DP.dp)
+                    .padding(
+                        horizontal = CARD_HORIZONTAL_PADDING_DP.dp,
+                        vertical = CARD_HORIZONTAL_PADDING_DP.dp
+                    )
                     .graphicsLayer {
-                        val rotationStart = if (isRtl) ROTATION_NEXT_DEGREES else ROTATION_PREVIOUS_DEGREES
-                        val rotationStop = if (isRtl) ROTATION_PREVIOUS_DEGREES else ROTATION_NEXT_DEGREES
+                        val rotationStart =
+                            if (isRtl) ROTATION_NEXT_DEGREES else ROTATION_PREVIOUS_DEGREES
+                        val rotationStop =
+                            if (isRtl) ROTATION_PREVIOUS_DEGREES else ROTATION_NEXT_DEGREES
 
                         rotationZ = lerp(
                             start = rotationStart,
@@ -143,15 +147,19 @@ fun PopularSection(
                         )
 
                         transformOrigin = TransformOrigin(TRANSFORM_ORIGIN_X, TRANSFORM_ORIGIN_Y)
-                    }
-                    ,
+                    },
             ) {
 
                 HomeCard(
-                    imageUrl = images[page],
+                    imageUrl = uiMediaList[page].posterUrl,
                     onSaveClick = { onSaveClick() },
                     hasSaveIcon = pagerState.currentPage == page,
-                    modifier = Modifier.clickable{ if (pagerState.currentPage == page) onCardClick() }
+                    modifier = Modifier.clickable {
+                        if (pagerState.currentPage == page) onCardClick(
+                            uiMediaList[page].id,
+                            uiMediaList[page].mediaType
+                        )
+                    }
                 )
                 if (pagerState.currentPage == page)
                     Column(
@@ -161,7 +169,7 @@ fun PopularSection(
                         horizontalAlignment = if (isRtl) Alignment.End else Alignment.Start,
                     ) {
                         Text(
-                            text = cardTitle,
+                            text = uiMediaList[page].name,
                             style = NovixTheme.typography.label.medium,
                             color = NovixTheme.colors.onPrimary,
                             maxLines = 2,
@@ -174,7 +182,7 @@ fun PopularSection(
                             horizontalArrangement = if (isRtl) Arrangement.End else Arrangement.Start
                         ) {
                             RatingItem(
-                                rating = cardRating.toLocalizedNumbers(),
+                                rating = uiMediaList[page].rating.toLocalizedNumbers(),
                                 color = NovixTheme.colors.onPrimary
                             )
                         }
@@ -183,7 +191,7 @@ fun PopularSection(
         }
 
         NovixCarousalRow(
-            dotsStates = List(images.size) { index -> index == pagerState.currentPage },
+            dotsStates = List(uiMediaList.size) { index -> index == pagerState.currentPage },
         )
 
     }
@@ -196,14 +204,43 @@ private fun Preview(modifier: Modifier = Modifier) {
     PopularSection(
         pagerState = rememberPagerState(initialPage = 0, pageCount = { 4 }),
         onSaveClick = {},
-        onCardClick = {},
-        cardTitle = "Popular",
-        cardRating = "4.5",
-        images = listOf(
-            "https://image.tmdb.org/t/p/w500/rktDFPbfHfUbArZ6OOOKsXcv0Bm.jpg",
-            "https://image.tmdb.org/t/p/w500/rktDFPbfHfUbArZ6OOOKsXcv0Bm.jpg",
-            "https://image.tmdb.org/t/p/w500/rktDFPbfHfUbArZ6OOOKsXcv0Bm.jpg",
-            "https://image.tmdb.org/t/p/w500/rktDFPbfHfUbArZ6OOOKsXcv0Bm.jpg",
-        )
+        onCardClick = { id, mediaType -> },
+        uiMediaList = listOf(
+            PopularUiMedia(
+                name = "Popular",
+                rating = "4.5",
+                id = 0,
+                posterUrl = "https://image.tmdb.org/t/p/w500/rktDFPbfHfUbArZ6OOOKsXcv0Bm.jpg",
+                mediaType = MediaType.Movie
+            ),
+            PopularUiMedia(
+                name = "Popular",
+                rating = "4.5",
+                id = 1,
+                posterUrl = "https://image.tmdb.org/t/p/w500/rktDFPbfHfUbArZ6OOOKsXcv0Bm.jpg",
+                mediaType = MediaType.Movie
+            ),
+            PopularUiMedia(
+                name = "Popular",
+                rating = "4.5",
+                id = 2,
+                posterUrl = "https://image.tmdb.org/t/p/w500/rktDFPbfHfUbArZ6OOOKsXcv0Bm.jpg",
+                mediaType = MediaType.Movie
+            ),
+            PopularUiMedia(
+                name = "Popular",
+                rating = "4.5",
+                id = 3,
+                posterUrl = "https://image.tmdb.org/t/p/w500/rktDFPbfHfUbArZ6OOOKsXcv0Bm.jpg",
+                mediaType = MediaType.Movie
+            ),
+            PopularUiMedia(
+                name = "Popular",
+                rating = "4.5",
+                id = 4,
+                posterUrl = "https://image.tmdb.org/t/p/w500/rktDFPbfHfUbArZ6OOOKsXcv0Bm.jpg",
+                mediaType = MediaType.Movie
+            ),
+        ),
     )
 }
