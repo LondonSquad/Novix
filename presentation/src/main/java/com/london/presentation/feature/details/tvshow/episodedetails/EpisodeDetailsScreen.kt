@@ -78,16 +78,16 @@ fun EpisodeDetailsScreen(
     }
 
     BuildScreen(
+        onBack = viewModel::onBackClicked,
         isLoading = uiState.isLoading,
-        isError = false,
-        content = {
-            EpisodeDetailsScreenContent(
-                uiState = uiState,
-                episodeDetailsContract = viewModel,
-                onNavigateToCast = onNavigateToCast
-            )
-        }
-    )
+        isError = uiState.error != null
+    ) {
+        EpisodeDetailsScreenContent(
+            uiState = uiState,
+            episodeDetailsContract = viewModel,
+            onNavigateToCast = onNavigateToCast
+        )
+    }
 }
 
 @Composable
@@ -278,7 +278,7 @@ fun TvShowBasicDetails(
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.spacedBy(4.dp)
     ) {
-        if (uiState.voteAverage.isNotZeroRate()){
+        if (uiState.voteAverage.isNotZeroRate()) {
             RatingItem(
                 modifier = Modifier,
                 rating = uiState.voteAverage.toLocalizedNumbers(),
@@ -287,7 +287,7 @@ fun TvShowBasicDetails(
 
         Box(
             modifier = Modifier
-                .padding(horizontal = 8.dp)
+                .padding(horizontal = 4.dp)
                 .size(3.dp)
                 .clip(CircleShape)
                 .background(NovixTheme.colors.hint)
@@ -297,7 +297,7 @@ fun TvShowBasicDetails(
 
         Box(
             modifier = Modifier
-                .padding(horizontal = 8.dp)
+                .padding(horizontal = 4.dp)
                 .size(3.dp)
                 .clip(CircleShape)
                 .background(NovixTheme.colors.hint)
@@ -319,13 +319,13 @@ fun TvShowDate(
             painter = painterResource(Res.drawable.icon_calender),
             contentDescription = "Calender icon",
             tint = NovixTheme.colors.body,
-            modifier = Modifier.size(12.dp)
+            modifier = Modifier.size(11.dp)
         )
 
         Text(
             text = uiState.airDate.toLocalizedNumbers(),
             style = NovixTheme.typography.label.small,
-            color = NovixTheme.colors.title
+            color = NovixTheme.colors.body
         )
     }
 }
@@ -376,13 +376,13 @@ fun Seasons(uiState: EpisodeDetailsUiState) {
             painter = painterResource(Res.drawable.icon_tv),
             contentDescription = "Tv icon",
             tint = NovixTheme.colors.body,
-            modifier = Modifier.size(12.dp)
+            modifier = Modifier.size(11.dp)
         )
 
         Text(
             text = "${stringResource(Res.string.s)}${uiState.seasonNumber.toLocalizedNumbers()}",
             style = NovixTheme.typography.label.small,
-            color = NovixTheme.colors.title,
+            color = NovixTheme.colors.body,
         )
     }
 }

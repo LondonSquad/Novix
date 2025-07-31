@@ -29,6 +29,7 @@ import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyHorizontalGrid
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.lazy.rememberLazyListState
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
@@ -65,6 +66,7 @@ import com.london.presentation.shared.CustomBackDropImagePager
 import com.london.presentation.utils.Listen
 import com.london.presentation.utils.offsetLayout
 import com.london.presentation.utils.toLocalizedNumbers
+import com.london.presentation.utils.trimExcessiveSpaces
 import org.koin.androidx.compose.koinViewModel
 
 @Composable
@@ -236,7 +238,7 @@ private fun BiographySection(uiState: ActorDetailsUiState) {
         var isExpanded by remember { mutableStateOf(false) }
 
         ConditionalText(
-            text = uiState.actorBiography,
+            text = uiState.actorBiography.trimExcessiveSpaces(),
             expandedState = isExpanded,
             modifier = Modifier.padding(horizontal = 16.dp, vertical = 4.dp)
         ) {
@@ -425,32 +427,16 @@ private fun ActorInfoSection(
                 .padding(horizontal = 12.dp)
                 .padding(bottom = 12.dp),
             verticalArrangement = Arrangement.spacedBy(8.dp),
-            horizontalArrangement = Arrangement.spacedBy(8.dp)
+            horizontalArrangement = Arrangement.spacedBy(4.dp)
         ) {
             Text(
                 text = job,
                 style = NovixTheme.typography.label.small,
                 color = NovixTheme.colors.body,
             )
-            Icon(
-                painter = painterResource(R.drawable.image_dot),
-                contentDescription = stringResource(R.string.imagr_dot),
-                tint = NovixTheme.colors.body,
-                modifier = Modifier
-                    .size(3.dp)
-                    .align(alignment = Alignment.CenterVertically)
-            )
             TextWithIcon(
                 icon = painterResource(R.drawable.icon_location),
-                text = placeOfBirth
-            )
-            Icon(
-                painter = painterResource(R.drawable.image_dot),
-                contentDescription = stringResource(R.string.imagr_dot),
-                tint = NovixTheme.colors.body,
-                modifier = Modifier
-                    .size(3.dp)
-                    .align(alignment = Alignment.CenterVertically)
+                text = placeOfBirth,
             )
             TextWithIcon(
                 icon = painterResource(R.drawable.birthday_cake),
@@ -466,15 +452,22 @@ private fun TextWithIcon(
     icon: Painter
 ) {
     Row(
-        modifier = Modifier.padding(),
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.spacedBy(4.dp)
     ) {
+        Box(
+            modifier = Modifier
+                .padding(4.dp)
+                .size(3.dp)
+                .clip(CircleShape)
+                .background(NovixTheme.colors.body)
+                .align(alignment = Alignment.CenterVertically)
+        )
         Icon(
             painter = icon,
             contentDescription = stringResource(R.string.imagr_dot),
             tint = NovixTheme.colors.body,
-            modifier = Modifier.size(12.dp)
+            modifier = Modifier.size(11.dp)
         )
         Text(
             text = text,
@@ -483,4 +476,3 @@ private fun TextWithIcon(
         )
     }
 }
-

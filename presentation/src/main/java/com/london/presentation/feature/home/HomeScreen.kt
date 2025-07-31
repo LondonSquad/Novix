@@ -105,7 +105,7 @@ fun HomeScreen(
         with(LocalDensity.current) { LocalWindowInfo.current.containerSize.width.toDp() }
 
     when{
-        uiState.error != null -> NetworkErrorScreen()
+        uiState.error != null -> NetworkErrorScreen(onBack = null)
         else ->
             Box(
             modifier = Modifier

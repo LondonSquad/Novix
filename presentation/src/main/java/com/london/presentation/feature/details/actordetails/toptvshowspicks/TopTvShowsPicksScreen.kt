@@ -8,8 +8,6 @@ import androidx.compose.ui.res.stringResource
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.london.presentation.R
 import com.london.presentation.feature.buildscreen.BuildScreen
-import com.london.presentation.feature.buildscreen.LoadingScreen
-import com.london.presentation.feature.buildscreen.NetworkErrorScreen
 import com.london.presentation.shared.MediaLazyGrid
 import com.london.presentation.utils.Listen
 import org.koin.androidx.compose.koinViewModel
@@ -29,15 +27,17 @@ fun TopTvShowsPicksScreen(
         onNavigateBack = onNavigateBack
     )
 
-    BuildScreen {
-        when {
-            state.isSaved -> LoadingScreen()
-            state.errorState != null -> NetworkErrorScreen()
-            else -> TopTvShowsPicksContent(
-                state = state,
-                contract = viewModel,
-            )
-        }
+    BuildScreen(
+        onBack = viewModel::onBack,
+        isLoading = state.isLoading,
+        isError = state.errorState != null
+    ) {
+
+        TopTvShowsPicksContent(
+            state = state,
+            contract = viewModel,
+        )
+
     }
 }
 
