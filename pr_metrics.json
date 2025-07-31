@@ -15769,5 +15769,33 @@
       "deletions": 8,
       "changed_files": 2
     }
+  },
+  {
+    "pr_number": 492,
+    "url": "https://github.com/LondonSquad/Novix/pull/492",
+    "title": "Revert \"Add extension to trim excessive spaces\"",
+    "opened_at": "2025-07-31T23:21:37Z",
+    "head_ref": "revert-477-hotfix/remove-spaces",
+    "base_ref": "develop",
+    "creator": {
+      "login": "yusufnasserdev",
+      "id": 43588217,
+      "url": "https://github.com/yusufnasserdev"
+    },
+    "approvals": [],
+    "first_approved_at": null,
+    "time_to_first_approval_minutes": null,
+    "required_approvals_met_at": null,
+    "time_to_required_approvals_minutes": null,
+    "closed_at": null,
+    "merged_at": null,
+    "merged_by": null,
+    "week": "2025-W31",
+    "status": "pending",
+    "diff_stats": {
+      "additions": 1,
+      "deletions": 6,
+      "changed_files": 2
+    }
   }
 ]
