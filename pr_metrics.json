@@ -15401,5 +15401,33 @@
       "deletions": 1,
       "changed_files": 2
     }
+  },
+  {
+    "pr_number": 479,
+    "url": "https://github.com/LondonSquad/Novix/pull/479",
+    "title": "fix: refactor start padding in top rated and continue watching",
+    "opened_at": "2025-07-31T20:56:05Z",
+    "head_ref": "fix/home-carousel-padding",
+    "base_ref": "develop",
+    "creator": {
+      "login": "Abdulrahman1890",
+      "id": 76666355,
+      "url": "https://github.com/Abdulrahman1890"
+    },
+    "approvals": [],
+    "first_approved_at": null,
+    "time_to_first_approval_minutes": null,
+    "required_approvals_met_at": null,
+    "time_to_required_approvals_minutes": null,
+    "closed_at": null,
+    "merged_at": null,
+    "merged_by": null,
+    "week": "2025-W31",
+    "status": "pending",
+    "diff_stats": {
+      "additions": 5,
+      "deletions": 4,
+      "changed_files": 2
+    }
   }
 ]
