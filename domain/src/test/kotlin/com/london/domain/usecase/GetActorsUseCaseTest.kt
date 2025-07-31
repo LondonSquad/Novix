@@ -49,12 +49,15 @@ class GetActorsUseCaseTest {
 
 
     private companion object {
-        const val NAME = "Tom"
-        const val PAGE_NUMBER = 1
-        val ACTOR = Actor(
-            id = 1, name = "Tom Holland", profilePicture = ""
+      private  const val NAME = "Tom"
+      private  const val PAGE_NUMBER = 1
+      private  val ACTOR = Actor(
+            id = 1,
+            name = "Tom Holland",
+            profilePictureUrl = "",
+            characterName = ""
         )
-        val pagedFetchResponse = PagedFetchResponse(
+     private  val pagedFetchResponse = PagedFetchResponse(
             currentPage = 1,
             items = listOf(ACTOR),
             totalPages = 1,

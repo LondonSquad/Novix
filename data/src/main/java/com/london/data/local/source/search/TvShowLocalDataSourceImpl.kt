@@ -1,8 +1,8 @@
 package com.london.data.local.source.search
 
-import com.london.data.local.source.LocalDataSource
 import com.london.data.local.database.dao.search.SearchTvShowDao
 import com.london.data.local.model.search.SearchTvShowLocal
+import com.london.data.local.source.LocalDataSource
 import com.london.data.local.utils.executeDelete
 import com.london.data.local.utils.executeGetAll
 import com.london.data.local.utils.executeGetByDate
@@ -17,7 +17,6 @@ import org.koin.core.annotation.Named
 import org.koin.core.annotation.Provided
 import org.koin.core.annotation.Single
 
-
 @Named("tvShowLocalDataSource")
 @Single
 class TvShowLocalDataSourceImpl(
@@ -26,8 +25,9 @@ class TvShowLocalDataSourceImpl(
 ) : LocalDataSource<SearchTvShowLocal> {
     init {
         CoroutineScope(Dispatchers.IO).launch {
-            searchTvShowDao.getAll().forEach {
-                if (isOneHourExpired(it.date)) searchTvShowDao.delete(it)
+            searchTvShowDao.getAll().forEach { searchTvShowLocal ->
+                if (searchTvShowLocal.date.isOneHourExpired())
+                    searchTvShowDao.delete(searchTvShowLocal)
             }
         }
     }
@@ -42,19 +42,14 @@ class TvShowLocalDataSourceImpl(
 
     override suspend fun getByDate(date: Long) = searchTvShowDao.executeGetByDate(date)
 
-    override suspend fun getByQuery(query: String): SearchTvShowLocal? {
-        return try {
+    override suspend fun getByQuery(query: String): SearchTvShowLocal? =
+        runCatching {
             searchTvShowDao.executeGetByQuery(query.generateHash())
-        } catch (_: Exception) {
-            null
-        }
-    }
+        }.getOrNull()
 
-    override suspend fun getByQueryAndPage(query: String, page: Int): SearchTvShowLocal? {
-        return try {
+
+    override suspend fun getByQueryAndPage(query: String, page: Int): SearchTvShowLocal? =
+        runCatching {
             searchTvShowDao.executeGetByQueryAndPage(query.generateHash(), page)
-        } catch (_: Exception) {
-            null
-        }
-    }
+        }.getOrNull()
 }

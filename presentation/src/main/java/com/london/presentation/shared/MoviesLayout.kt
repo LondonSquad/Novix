@@ -39,7 +39,7 @@ fun MoviesLayOut(
             val movie = movieUis[index]
             if (movie != null) {
                 HomeCard(
-                    imageUrl = movie.posterPicture,
+                    imageUrl = movie.posterUrl,
                     onSaveClick = { onSaveClick(movie) },
                     isSaved = isMovieSaved(movie),
                     imageDescription = movie.name,

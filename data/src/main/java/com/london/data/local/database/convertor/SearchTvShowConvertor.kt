@@ -13,7 +13,6 @@ class SearchTvShowConvertor {
     fun fromSearchTvShowsResponseDtoList(value: List<SearchTvShowDtoLocal>): String =
         gson.toJson(value)
 
-
     @TypeConverter
     fun toSearchTvShowsResponseDtoList(value: String): List<SearchTvShowDtoLocal> =
         gson.fromJsonList(value)
