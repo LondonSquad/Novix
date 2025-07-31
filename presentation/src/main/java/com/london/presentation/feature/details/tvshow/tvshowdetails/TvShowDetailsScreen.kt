@@ -12,7 +12,6 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.asPaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
@@ -62,6 +61,7 @@ import com.london.designsystem.component.button.ErrorImage
 import com.london.designsystem.theme.NovixTheme
 import com.london.designsystem.theme.noRippleClickable
 import com.london.domain.entity.tvshowdetails.TvShowCastMemberEntity
+import com.london.domain.entity.tvshowdetails.episode.TvShowEpisodeBySeasonEntity
 import com.london.imageharamblur.ui.ImageViewFilter
 import com.london.presentation.feature.buildscreen.BuildScreen
 import com.london.presentation.feature.reviews.MediaType
@@ -549,66 +549,97 @@ fun EpisodeRow(
     uiState: TvShowDetailsUiState,
     viewModel: TvShowDetailsViewModel = koinViewModel()
 ) {
-    Text(
-        text = "${
-            uiState.tvShowEpisodeCountBySeason?.episodes?.size.toString().toLocalizedNumbers()
-        } ${stringResource(R.string.episodes)}",
-        style = NovixTheme.typography.label.small,
-        color = NovixTheme.colors.hint,
-        modifier = Modifier.padding(top = 8.dp, bottom = 12.dp)
-    )
+    Column(modifier = modifier) {
+        Text(
+            text = "${
+                uiState.tvShowEpisodeCountBySeason?.episodes?.size.toString().toLocalizedNumbers()
+            } ${stringResource(R.string.episodes)}",
+            style = NovixTheme.typography.label.small,
+            color = NovixTheme.colors.hint,
+            modifier = Modifier.padding(top = 8.dp, bottom = 12.dp)
+        )
 
-    uiState.tvShowEpisodes.forEach { episode ->
-        Row(
-            modifier = modifier
-                .clickable {
-                    viewModel.onEpisodeClick(
-                        episode.showId,
-                        episode.episodeNumber,
-                        episode.seasonNumber,
-                    )
-                },
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.spacedBy(12.dp)
+        // Use LazyColumn for episodes instead of forEach
+        LazyColumn(
+            modifier = Modifier.heightIn(max = 400.dp), // Set a max height to prevent infinite height
+            verticalArrangement = Arrangement.spacedBy(8.dp)
         ) {
-            ImageViewFilter(
-                model = episode.stillUrl,
-                contentDescription = stringResource(R.string.s),
-                contentScale = ContentScale.FillBounds,
-                modifier = Modifier
-                    .clip(RoundedCornerShape(12.dp))
-                    .height(78.dp)
-                    .weight(0.35f),
-                loadingContent = { CircularLoading() },
-                errorContent = { ErrorImage() },
-                moderatedContent = { UnSuitableEye() }
+            items(uiState.tvShowEpisodes) { episode ->
+                EpisodeItem(
+                    episode = episode,
+                    onEpisodeClick = {
+                        viewModel.onEpisodeClick(
+                            episode.showId,
+                            episode.episodeNumber,
+                            episode.seasonNumber,
+                        )
+                    }
+                )
+            }
+        }
+    }
+}
+
+@Composable
+private fun EpisodeItem(
+    episode: TvShowEpisodeBySeasonEntity,
+    onEpisodeClick: () -> Unit
+) {
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .clickable { onEpisodeClick() },
+        verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.spacedBy(12.dp)
+    ) {
+        ImageViewFilter(
+            model = episode.stillUrl,
+            contentDescription = stringResource(R.string.s),
+            contentScale = ContentScale.FillBounds,
+            modifier = Modifier
+                .clip(RoundedCornerShape(12.dp))
+                .height(78.dp)
+                .weight(0.35f),
+            loadingContent = { CircularLoading() },
+            errorContent = { ErrorImage() },
+            moderatedContent = { UnSuitableEye() }
+        )
+
+        Column(
+            verticalArrangement = Arrangement.spacedBy(2.dp),
+            modifier = Modifier.weight(0.65f)
+        ) {
+            Text(
+                text = episode.name,
+                style = NovixTheme.typography.label.large,
+                color = NovixTheme.colors.title
             )
 
-            Column(
-                verticalArrangement = Arrangement.spacedBy(2.dp),
-                modifier = Modifier.weight(0.65f)
+            Text(
+                text = episode.episodeType,
+                style = NovixTheme.typography.label.small,
+                color = NovixTheme.colors.hint
+            )
+
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.spacedBy(4.dp)
             ) {
-
-                Text(
-                    text = episode.name,
-                    style = NovixTheme.typography.label.large,
-                    color = NovixTheme.colors.title
-                )
-
-                Text(
-                    text = episode.episodeType,
-                    style = NovixTheme.typography.label.small,
+                RatingItem(
+                    rating = episode.voteAverage.toLocalizedNumbers(),
                     color = NovixTheme.colors.hint
                 )
 
-                Row(
-                    verticalAlignment = Alignment.CenterVertically,
-                    horizontalArrangement = Arrangement.spacedBy(4.dp)
-                ) {
-                    RatingItem(
-                        rating = episode.voteAverage.toLocalizedNumbers(),
-                        color = NovixTheme.colors.hint
-                    )
+                Box(
+                    modifier = Modifier
+                        .padding(horizontal = 8.dp)
+                        .size(3.dp)
+                        .clip(CircleShape)
+                        .background(NovixTheme.colors.hint)
+                )
+
+                if (episode.runtime != null) {
+                    EpisodeDuration(episode.runtime.toString().toLocalizedNumbers())
 
                     Box(
                         modifier = Modifier
@@ -617,29 +648,16 @@ fun EpisodeRow(
                             .clip(CircleShape)
                             .background(NovixTheme.colors.hint)
                     )
-
-                    if (episode.runtime != null) {
-                        EpisodeDuration(episode.runtime.toString().toLocalizedNumbers())
-
-                        Box(
-                            modifier = Modifier
-                                .padding(horizontal = 8.dp)
-                                .size(3.dp)
-                                .clip(CircleShape)
-                                .background(NovixTheme.colors.hint)
-                        )
-                    }
-
-                    if (episode.airDate != null)
-                        Text(
-                            text = convertDate(episode.airDate.toString()),
-                            style = NovixTheme.typography.label.small,
-                            color = NovixTheme.colors.hint
-                        )
                 }
+
+                if (episode.airDate != null)
+                    Text(
+                        text = convertDate(episode.airDate.toString()),
+                        style = NovixTheme.typography.label.small,
+                        color = NovixTheme.colors.hint
+                    )
             }
         }
-        Spacer(Modifier.height(8.dp))
     }
 }
 
