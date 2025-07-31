@@ -40,10 +40,10 @@ class AddMovieToRecentWatchedUseCaseTest {
     }
 
     companion object{
-        val movie = Movie(
+       private val movie = Movie(
             id = 1,
             name = "movie1",
-            posterPicture = "none",
+            posterUrl = "none",
             releaseYear = 1,
             rating = 1,
             genreIds = listOf(1, 2, 3)

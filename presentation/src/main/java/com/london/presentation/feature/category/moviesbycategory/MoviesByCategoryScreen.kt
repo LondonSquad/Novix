@@ -81,7 +81,7 @@ private fun MoviesByCategoryContent(
         MediaLazyPagingGrid<Movie>(
             pagingFlow = moviesLazyList,
             onItemClick = { contract.onMovieClick(it.id) },
-            getImageUrl = { it.posterPicture },
+            getImageUrl = { it.posterUrl },
             getTitle = { "${it.name} movie img" },
             modifier = Modifier
                 .weight(1f)
@@ -102,7 +102,7 @@ private fun MoviesByCategoryContentPreview() {
                 Movie(
                     id = 1,
                     name = "",
-                    posterPicture = "",
+                    posterUrl = "",
                     releaseYear = 1,
                     rating = 3,
                     genreIds = listOf()
@@ -110,7 +110,7 @@ private fun MoviesByCategoryContentPreview() {
                 Movie(
                     id = 1,
                     name = "",
-                    posterPicture = "",
+                    posterUrl = "",
                     releaseYear = 1,
                     rating = 3,
                     genreIds = listOf()
@@ -118,7 +118,7 @@ private fun MoviesByCategoryContentPreview() {
                 Movie(
                     id = 1,
                     name = "",
-                    posterPicture = "",
+                    posterUrl = "",
                     releaseYear = 1,
                     rating = 3,
                     genreIds = listOf()
@@ -126,7 +126,7 @@ private fun MoviesByCategoryContentPreview() {
                 Movie(
                     id = 1,
                     name = "",
-                    posterPicture = "",
+                    posterUrl = "",
                     releaseYear = 1,
                     rating = 3,
                     genreIds = listOf()
@@ -134,7 +134,7 @@ private fun MoviesByCategoryContentPreview() {
                 Movie(
                     id = 1,
                     name = "",
-                    posterPicture = "",
+                    posterUrl = "",
                     releaseYear = 1,
                     rating = 3,
                     genreIds = listOf()
@@ -142,7 +142,7 @@ private fun MoviesByCategoryContentPreview() {
                 Movie(
                     id = 1,
                     name = "",
-                    posterPicture = "",
+                    posterUrl = "",
                     releaseYear = 1,
                     rating = 3,
                     genreIds = listOf()
@@ -150,7 +150,7 @@ private fun MoviesByCategoryContentPreview() {
                 Movie(
                     id = 1,
                     name = "",
-                    posterPicture = "",
+                    posterUrl = "",
                     releaseYear = 1,
                     rating = 3,
                     genreIds = listOf()
@@ -158,7 +158,7 @@ private fun MoviesByCategoryContentPreview() {
                 Movie(
                     id = 1,
                     name = "",
-                    posterPicture = "",
+                    posterUrl = "",
                     releaseYear = 1,
                     rating = 3,
                     genreIds = listOf()

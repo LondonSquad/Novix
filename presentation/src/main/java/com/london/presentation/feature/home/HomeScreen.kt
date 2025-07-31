@@ -367,7 +367,7 @@ private fun LazyGridScope.upComingSection(
 
         if (movie != null && !isLoading)
             HomeCard(
-                imageUrl = movie.posterPicture,
+                imageUrl = movie.posterUrl,
                 isSaved = false,
                 onSaveClick = { /*TODO*/ },
                 modifier = Modifier

@@ -25,3 +25,6 @@ fun String?.asYoutubeUrlOrEmpty(): String = this?.let { BuildConfig.YOUTUBE_URL 
 
 fun String.generateHash(): String =
     MessageDigest.getInstance("MD5").digest(toByteArray()).joinToString("") { "%02x".format(it) }
+
+fun String.extractYear() =
+    takeIf { isNotEmpty() }?.split("-")?.first()?.toInt() ?: 0
