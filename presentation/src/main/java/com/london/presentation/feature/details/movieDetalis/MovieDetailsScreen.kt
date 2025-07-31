@@ -1,4 +1,5 @@
 package com.london.presentation.feature.details.movieDetalis
+
 import androidx.compose.animation.core.FastOutSlowInEasing
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
@@ -360,24 +361,24 @@ private fun RatingAndMetaRow(
             Dot()
         }
 
-        if (!time.isNullOrBlank()) {
+        if (!time.isNullOrBlank() && time != "0") {
             val timeInt = time.toInt()
             IconWithText(
                 icon = drawable.time_04,
                 contentDesc = stringResource(time_icon),
                 tint = NovixTheme.colors.body,
-                text = "${(timeInt / 60).toLocalizedNumbers()}${getLocalizedTimeUnit("h")} ${(timeInt % 60).toLocalizedNumbers()}${
-                    getLocalizedTimeUnit(
-                        "m"
-                    )
-                }",
+                text = "${if (timeInt / 60 > 0)"${(timeInt / 60).toLocalizedNumbers()}${
+                        getLocalizedTimeUnit(
+                            "h"
+                        )} " else ""
+                }${(timeInt % 60).toLocalizedNumbers()}${getLocalizedTimeUnit("m")}",
                 textColor = NovixTheme.colors.body
             )
         }
 
         if (
-            (!time.isNullOrBlank() && !date.isNullOrBlank()) ||
-            (rate.isNullOrBlank() && !time.isNullOrBlank() && !date.isNullOrBlank())
+            (!time.isNullOrBlank() && !date.isNullOrBlank()) &&
+            (rate.isNullOrBlank() && !time.isNullOrBlank() && !date.isNullOrBlank() && time != "0")
         ) {
             Dot()
         }
