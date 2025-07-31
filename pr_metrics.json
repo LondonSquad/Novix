@@ -14395,5 +14395,33 @@
       "deletions": 758,
       "changed_files": 134
     }
+  },
+  {
+    "pr_number": 443,
+    "url": "https://github.com/LondonSquad/Novix/pull/443",
+    "title": "Refactor: Extract effect handling logic into separate functions and ",
+    "opened_at": "2025-07-31T09:47:18Z",
+    "head_ref": "refactor/presentation",
+    "base_ref": "develop",
+    "creator": {
+      "login": "Mostafa-alsaygh",
+      "id": 106277855,
+      "url": "https://github.com/Mostafa-alsaygh"
+    },
+    "approvals": [],
+    "first_approved_at": null,
+    "time_to_first_approval_minutes": null,
+    "required_approvals_met_at": null,
+    "time_to_required_approvals_minutes": null,
+    "closed_at": null,
+    "merged_at": null,
+    "merged_by": null,
+    "week": "2025-W31",
+    "status": "pending",
+    "diff_stats": {
+      "additions": 327,
+      "deletions": 214,
+      "changed_files": 11
+    }
   }
 ]
