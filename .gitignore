@@ -24,3 +24,5 @@ captures/
 .cxx/
 *.apk
 *.dm
+
+.idea/**/*

@@ -2,6 +2,7 @@ package com.london.presentation.feature.onboarding
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -11,7 +12,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.runtime.Composable
@@ -37,6 +37,7 @@ fun WelcomeScreen(
     onNavigateLogin: () -> Unit,
     onNavigateContinue: () -> Unit,
 ) {
+
     val configuration = LocalConfiguration.current
     val screenHeight = configuration.screenHeightDp.dp
     val posterHeight = screenHeight * 0.85f
@@ -45,8 +46,6 @@ fun WelcomeScreen(
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .background(NovixTheme.colors.surface)
-            .statusBarsPadding()
             .verticalScroll(rememberScrollState())
     ) {
         WelcomePoster(
@@ -115,11 +114,19 @@ fun WelcomePoster(modifier: Modifier = Modifier) {
         modifier = modifier,
         contentAlignment = Alignment.BottomCenter
     ) {
+        val image = if (isSystemInDarkTheme()) {
+            painterResource(id = R.drawable.welcome_screen_dark)
+        } else {
+            painterResource(id = R.drawable.welcome_screen_light)
+        }
+
         Image(
-            painter = painterResource(id = R.drawable.img_onboarding_fourth),
+            painter = image,
             contentDescription = "",
             contentScale = ContentScale.Crop,
-            modifier = Modifier.fillMaxSize()
+            modifier = Modifier
+                .fillMaxSize()
+                .background(NovixTheme.colors.linearGradient)
         )
         Box(
             modifier = Modifier
@@ -146,6 +153,7 @@ fun WelcomePoster(modifier: Modifier = Modifier) {
         )
     }
 }
+
 
 @ThemePreviews
 @Composable
