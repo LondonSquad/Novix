@@ -15513,18 +15513,9 @@
       "id": 180463542,
       "url": "https://github.com/abdelrhman1002"
     },
-    "approvals": [
-      {
-        "reviewer": {
-          "id": 102248144,
-          "login": "BassantM",
-          "url": "https://github.com/BassantM"
-        },
-        "submitted_at": "2025-07-31T22:33:29Z"
-      }
-    ],
-    "first_approved_at": "2025-07-31T22:33:29Z",
-    "time_to_first_approval_minutes": 95.66666666666667,
+    "approvals": [],
+    "first_approved_at": null,
+    "time_to_first_approval_minutes": null,
     "required_approvals_met_at": null,
     "time_to_required_approvals_minutes": null,
     "closed_at": null,
@@ -15533,9 +15524,9 @@
     "week": "2025-W31",
     "status": "pending",
     "diff_stats": {
-      "additions": 10,
-      "deletions": 2,
-      "changed_files": 1
+      "additions": 11,
+      "deletions": 5,
+      "changed_files": 3
     }
   },
   {
