@@ -45,10 +45,12 @@ import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.zIndex
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.london.designsystem.component.CircularLoading
+import com.london.designsystem.component.EmptyLayout
 import com.london.designsystem.component.HomeCard
 import com.london.designsystem.component.Icon
 import com.london.designsystem.component.SectionHeader
@@ -61,6 +63,7 @@ import com.london.domain.entity.actordetails.actormovie.ActorMovieCastMemberEnti
 import com.london.domain.entity.actordetails.actortvshow.ActorTvShowCastMemberEntity
 import com.london.imageharamblur.ui.ImageViewFilter
 import com.london.presentation.R
+import com.london.presentation.feature.buildscreen.NetworkErrorScreen
 import com.london.presentation.shared.ConditionalText
 import com.london.presentation.shared.CustomBackDropImagePager
 import com.london.presentation.utils.Listen
@@ -107,86 +110,108 @@ fun ActorScreenContent(
     uiState: ActorDetailsUiState,
     actorDetailsContract: ActorDetailsContract,
 ) {
-    val lazyState = rememberLazyListState()
-
-    val shouldShowBackground by remember {
-        derivedStateOf {
-            lazyState.firstVisibleItemScrollOffset > 40f ||
-                    lazyState.firstVisibleItemIndex > 0
-        }
-    }
-
-    val backgroundAlpha by animateFloatAsState(
-        targetValue = if (shouldShowBackground) 1f else 0f,
-        animationSpec = tween(
-            durationMillis = 400,
-            easing = FastOutSlowInEasing
-        ),
-        label = "background_alpha"
-    )
-
-    Box(
-        modifier = modifier
-            .fillMaxSize()
-            .background(NovixTheme.colors.surface)
-    ) {
-        LazyColumn(
-            modifier = Modifier.fillMaxSize(),
-            contentPadding = PaddingValues(
-                bottom = WindowInsets.navigationBars.asPaddingValues()
-                    .calculateBottomPadding() + 16.dp
-            ),
-            state = lazyState
-        ) {
-            item {
-                ActorImagePager(images = uiState.actorImageDetails.orEmpty())
-            }
-
-            item {
-                ActorInfoSectionItem(uiState = uiState)
-            }
-
-            item {
-                BiographySection(uiState = uiState)
-            }
-
-            item {
-                GallerySection(
-                    images = uiState.actorImageDetails,
-                    onGalleryClick = { actorDetailsContract.onGalleryClick(uiState.actorId) }
-                )
-            }
-
-            item {
-                MoviesSection(
-                    movies = uiState.actorMovieDetails?.cast,
-                    onMoviePicksClick = { actorDetailsContract.onMoviePicksClick(uiState.actorId) },
-                    onMovieScreenClick = actorDetailsContract::onMovieScreenClick
-                )
-            }
-
-            item {
-                TvShowsSection(
-                    tvShows = uiState.actorTvShowDetails?.cast,
-                    onTvShowPicksClick = { actorDetailsContract.onTvShowPicksClick(uiState.actorId) },
-                    onTvShowScreenClick = actorDetailsContract::onTvShowScreenClick
-                )
-            }
-        }
-
-        TopBar(
-            onBackClick = actorDetailsContract::onNavigateBack,
-            modifier = Modifier
-                .fillMaxWidth()
-                .background(
-                    NovixTheme.colors.surface.copy(alpha = backgroundAlpha)
-                )
-                .padding(
-                    start = 16.dp,
-                    top = WindowInsets.statusBars.asPaddingValues().calculateTopPadding() + 12.dp
-                )
-                .zIndex(1f)
+    when {
+        uiState.isError != null || uiState.movieError || uiState.tvShowError -> NetworkErrorScreen(
+            onRetry = { }
         )
+
+        uiState.isLoading -> CircularLoading(
+            modifier = Modifier.fillMaxSize()
+        )
+
+        !uiState.isLoading && uiState.actorName.isBlank() && uiState.actorBiography.isBlank() &&
+                uiState.actorImageDetails.isNullOrEmpty() &&
+                uiState.actorMovieDetails?.cast.isNullOrEmpty() &&
+                uiState.actorTvShowDetails?.cast.isNullOrEmpty() -> EmptyLayout(
+            text = stringResource(R.string.no_actor_details),
+            image = R.drawable.img_no_result,
+            modifier = Modifier.fillMaxSize()
+        )
+
+        else -> {
+            val lazyState = rememberLazyListState()
+
+            val shouldShowBackground by remember {
+                derivedStateOf {
+                    lazyState.firstVisibleItemScrollOffset > 40f ||
+                            lazyState.firstVisibleItemIndex > 0
+                }
+            }
+
+            val backgroundAlpha by animateFloatAsState(
+                targetValue = if (shouldShowBackground) 1f else 0f,
+                animationSpec = tween(
+                    durationMillis = 400,
+                    easing = FastOutSlowInEasing
+                ),
+                label = "background_alpha"
+            )
+
+            Box(
+                modifier = modifier
+                    .fillMaxSize()
+                    .background(NovixTheme.colors.surface)
+            ) {
+                LazyColumn(
+                    modifier = Modifier.fillMaxSize(),
+                    contentPadding = PaddingValues(
+                        bottom = WindowInsets.navigationBars.asPaddingValues()
+                            .calculateBottomPadding() + 16.dp
+                    ),
+                    state = lazyState
+                ) {
+                    item {
+                        ActorImagePager(images = uiState.actorImageDetails.orEmpty())
+                    }
+
+                    item {
+                        ActorInfoSectionItem(uiState = uiState)
+                    }
+
+                    item {
+                        BiographySection(uiState = uiState)
+                    }
+
+                    item {
+                        GallerySection(
+                            images = uiState.actorImageDetails,
+                            onGalleryClick = { actorDetailsContract.onGalleryClick(uiState.actorId) }
+                        )
+                    }
+
+                    item {
+                        MoviesSection(
+                            movies = uiState.actorMovieDetails?.cast,
+                            onMoviePicksClick = { actorDetailsContract.onMoviePicksClick(uiState.actorId) },
+                            onMovieScreenClick = actorDetailsContract::onMovieScreenClick
+                        )
+                    }
+
+                    item {
+                        TvShowsSection(
+                            tvShows = uiState.actorTvShowDetails?.cast,
+                            onTvShowPicksClick = { actorDetailsContract.onTvShowPicksClick(uiState.actorId) },
+                            onTvShowScreenClick = actorDetailsContract::onTvShowScreenClick
+                        )
+                    }
+                }
+
+                TopBar(
+                    onBackClick = actorDetailsContract::onNavigateBack,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .background(
+                            NovixTheme.colors.surface.copy(alpha = backgroundAlpha)
+                        )
+                        .padding(
+                            start = 16.dp,
+                            top = WindowInsets.statusBars.asPaddingValues()
+                                .calculateTopPadding() + 12.dp
+                        )
+                        .zIndex(1f)
+                )
+            }
+        }
     }
 }
 
@@ -472,6 +497,21 @@ private fun TextWithIcon(
             text = text,
             style = NovixTheme.typography.label.small,
             color = NovixTheme.colors.body,
+        )
+    }
+}
+
+@Preview
+@Composable
+fun Preview() {
+    NovixTheme {
+        ActorDetailsScreen(
+            onNavigateBack = {},
+            onNavigateToMoviePicks = {},
+            onNavigateToGallery = {},
+            onNavigateToTvShowPicks = {},
+            onNavigateToMovieScreen = {},
+            onNavigateToTvShowScreen = {}
         )
     }
 }

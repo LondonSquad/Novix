@@ -38,7 +38,7 @@ class ActorDetailsViewModel(
             onStart = { updateState { copy(isLoading = true) } },
             onSuccess = { images -> updateState { copy(actorImageDetails = images) } },
             onError = { errorState ->
-                updateState { copy(error = errorState) }
+                updateState { copy(isError = errorState) }
             },
             onCompleted = { updateState { copy(isLoading = false) } },
         )
@@ -65,7 +65,7 @@ class ActorDetailsViewModel(
                 }
             },
             onError = { errorState ->
-                updateState { copy(error = errorState) }
+                updateState { copy(isError = errorState) }
             },
             onCompleted = { updateState { copy(isLoading = false) } },
         )
@@ -86,7 +86,7 @@ class ActorDetailsViewModel(
                 }
             },
             onError = { errorState ->
-                updateState { copy(error = errorState) }
+                updateState { copy(isError = errorState) }
             },
             onCompleted = { updateState { copy(isLoading = false) } },
         )
@@ -108,7 +108,7 @@ class ActorDetailsViewModel(
                 }
             },
             onError = { errorState ->
-                updateState { copy(error = errorState) }
+                updateState { copy(isError = errorState) }
             },
             onCompleted = { updateState { copy(isLoading = false) } },
             checkSuccess = { actorId != null },
