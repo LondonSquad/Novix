@@ -14651,5 +14651,33 @@
       "deletions": 7,
       "changed_files": 6
     }
+  },
+  {
+    "pr_number": 454,
+    "url": "https://github.com/LondonSquad/Novix/pull/454",
+    "title": "fix: make the onboarding screen scrollable",
+    "opened_at": "2025-07-31T15:22:30Z",
+    "head_ref": "fix/onboarding-screen",
+    "base_ref": "develop",
+    "creator": {
+      "login": "Abdulrahman1890",
+      "id": 76666355,
+      "url": "https://github.com/Abdulrahman1890"
+    },
+    "approvals": [],
+    "first_approved_at": null,
+    "time_to_first_approval_minutes": null,
+    "required_approvals_met_at": null,
+    "time_to_required_approvals_minutes": null,
+    "closed_at": null,
+    "merged_at": null,
+    "merged_by": null,
+    "week": "2025-W31",
+    "status": "pending",
+    "diff_stats": {
+      "additions": 12,
+      "deletions": 4,
+      "changed_files": 1
+    }
   }
 ]
