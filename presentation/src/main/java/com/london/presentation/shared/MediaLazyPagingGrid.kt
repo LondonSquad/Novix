@@ -38,7 +38,7 @@ fun <T : Any> MediaLazyPagingGrid(
 ) {
     when {
         pagingFlow.loadState.refresh is LoadState.Error -> NetworkErrorScreen(
-            onRetry = onRetry
+            onRetry = onRetry, onBack = null
         )
 
         pagingFlow.isLoading() -> CircularLoading(
