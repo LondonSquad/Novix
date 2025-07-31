@@ -20,6 +20,8 @@ import androidx.compose.foundation.layout.systemBarsPadding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
@@ -77,6 +79,12 @@ fun OnboardingScreen(
         }
     }
 
+    val scrollState = rememberScrollState()
+
+    LaunchedEffect(pagerState.currentPage) {
+        scrollState.animateScrollTo(0)
+    }
+
     Box(
         modifier = Modifier
             .fillMaxSize()
@@ -85,12 +93,12 @@ fun OnboardingScreen(
     ) {
 
         Column(
-            modifier = Modifier
-                .fillMaxSize()
+            modifier = Modifier.fillMaxSize()
         ) {
             HorizontalPager(
                 state = pagerState,
-                modifier = Modifier.weight(1f)
+                modifier = Modifier.weight(1f).verticalScroll(scrollState)
+
             ) { page ->
                 OnboardingPageContent(uiState.pages[page])
             }
@@ -98,7 +106,7 @@ fun OnboardingScreen(
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(vertical = 16.dp, horizontal = 16.dp),
+                    .padding(horizontal = 16.dp, vertical = 16.dp),
                 horizontalArrangement = Arrangement.SpaceBetween,
                 verticalAlignment = Alignment.CenterVertically
             ) {
