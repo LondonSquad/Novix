@@ -22,7 +22,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.statusBars
 import androidx.compose.foundation.layout.widthIn
-import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
@@ -645,17 +644,7 @@ private fun EpisodeItem(
                     color = NovixTheme.colors.hint
                 )
 
-                Box(
-                    modifier = Modifier
-                        .padding(horizontal = 8.dp)
-                        .size(3.dp)
-                        .clip(CircleShape)
-                        .background(NovixTheme.colors.hint)
-                )
-
                 if (episode.runtime != null) {
-                    EpisodeDuration(episode.runtime.toString().toLocalizedNumbers())
-
                     Box(
                         modifier = Modifier
                             .padding(horizontal = 8.dp)
@@ -663,9 +652,17 @@ private fun EpisodeItem(
                             .clip(CircleShape)
                             .background(NovixTheme.colors.hint)
                     )
+                    EpisodeDuration(episode.runtime.toString().toLocalizedNumbers())
                 }
 
                 if (episode.airDate != null) {
+                    Box(
+                        modifier = Modifier
+                            .padding(horizontal = 8.dp)
+                            .size(3.dp)
+                            .clip(CircleShape)
+                            .background(NovixTheme.colors.hint)
+                    )
                     Text(
                         text = convertDate(episode.airDate.toString()),
                         style = NovixTheme.typography.label.small,
