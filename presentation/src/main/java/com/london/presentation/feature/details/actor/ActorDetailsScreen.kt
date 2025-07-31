@@ -81,23 +81,16 @@ fun ActorDetailsScreen(
     val uiState by viewModel.state.collectAsStateWithLifecycle()
     val effect by viewModel.effect.collectAsState(null)
 
-    effect?.Listen { currentEffect ->
-        when (currentEffect) {
-            is ActorEffectUiState.NavigationBack -> onNavigateBack()
-            is ActorEffectUiState.NavigateToGallery -> onNavigateToGallery(currentEffect.actorId)
-            is ActorEffectUiState.NavigateToMovieScreen -> {
-                onNavigateToMovieScreen(currentEffect.movieId)
-            }
-
-            is ActorEffectUiState.NavigateToTvShowPicks ->
-                onNavigateToTvShowPicks(
-                    uiState.actorId
-                )
-
-            is ActorEffectUiState.NavigateToTvShowScreen -> onNavigateToTvShowScreen(currentEffect.tvShowId)
-            is ActorEffectUiState.NavigateToMoviePicks -> onNavigateToMoviePicks(uiState.actorId)
-        }
-    }
+    HandleActorDetailsScreenEffects(
+        effect = effect,
+        uiState = uiState,
+        onNavigateBack = onNavigateBack,
+        onNavigateToGallery = onNavigateToGallery,
+        onNavigateToMovieScreen = onNavigateToMovieScreen,
+        onNavigateToTvShowPicks = onNavigateToTvShowPicks,
+        onNavigateToTvShowScreen = onNavigateToTvShowScreen,
+        onNavigateToMoviePicks = onNavigateToMoviePicks
+    )
 
     ActorScreenContent(
         uiState = uiState,
@@ -278,6 +271,33 @@ fun ActorScreenContent(
                 .zIndex(1f)
         )
 
+    }
+}
+
+
+@Composable
+private fun HandleActorDetailsScreenEffects(
+    effect: ActorEffectUiState?,
+    uiState: ActorDetailsUiState, // Assuming this is your state type
+    onNavigateBack: () -> Unit,
+    onNavigateToGallery: (Int) -> Unit,
+    onNavigateToMovieScreen: (Int) -> Unit,
+    onNavigateToTvShowPicks: (Int) -> Unit,
+    onNavigateToTvShowScreen: (Int) -> Unit,
+    onNavigateToMoviePicks: (Int) -> Unit
+) {
+    effect?.Listen { currentEffect ->
+        when (currentEffect) {
+            is ActorEffectUiState.NavigationBack -> onNavigateBack()
+            is ActorEffectUiState.NavigateToGallery -> onNavigateToGallery(currentEffect.actorId)
+            is ActorEffectUiState.NavigateToMovieScreen -> {
+                onNavigateToMovieScreen(currentEffect.movieId)
+            }
+
+            is ActorEffectUiState.NavigateToTvShowPicks -> onNavigateToTvShowPicks(uiState.actorId)
+            is ActorEffectUiState.NavigateToTvShowScreen -> onNavigateToTvShowScreen(currentEffect.tvShowId)
+            is ActorEffectUiState.NavigateToMoviePicks -> onNavigateToMoviePicks(uiState.actorId)
+        }
     }
 }
 

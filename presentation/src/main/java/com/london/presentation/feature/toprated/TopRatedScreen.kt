@@ -51,13 +51,12 @@ fun TopRatedScreen(
     val state by viewModel.state.collectAsStateWithLifecycle()
     val effect by viewModel.effect.collectAsState(null)
 
-    effect?.Listen { currentEffect ->
-        when (currentEffect) {
-            is TopRatedEffect.NavigateToMovieDetails -> onNavigateMovie(currentEffect.id)
-            is TopRatedEffect.NavigateToTvShowDetails -> onNavigateTvShow(currentEffect.id)
-            is TopRatedEffect.NavigateBack -> onNavigateBack()
-        }
-    }
+    HandleTopRatedEffects(
+        effect = effect,
+        onNavigateMovie = onNavigateMovie,
+        onNavigateTvShow = onNavigateTvShow,
+        onNavigateBack = onNavigateBack
+    )
 
     Content(
         state = state,
@@ -159,6 +158,22 @@ private fun Content(
         }
     }
 
+}
+
+@Composable
+private fun HandleTopRatedEffects(
+    effect: TopRatedEffect?,
+    onNavigateMovie: (Int) -> Unit,
+    onNavigateTvShow: (Int) -> Unit,
+    onNavigateBack: () -> Unit
+) {
+    effect?.Listen { currentEffect ->
+        when (currentEffect) {
+            is TopRatedEffect.NavigateToMovieDetails -> onNavigateMovie(currentEffect.id)
+            is TopRatedEffect.NavigateToTvShowDetails -> onNavigateTvShow(currentEffect.id)
+            is TopRatedEffect.NavigateBack -> onNavigateBack()
+        }
+    }
 }
 
 @Composable

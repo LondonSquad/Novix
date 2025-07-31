@@ -39,10 +39,62 @@ class HomeViewModel(
         initializePopularMovies()
         initializePopularTvShows()
         initializeTopRatedMedia()
-        updateState {
-            copy(upcomingMovies = _upcomingMoviesFlow)
-        }
-        loadUpcomingMovies(categoryId = null)
+        initializeUpcomingMovies()
+    }
+
+    override fun onMovieClick(id: Int) {
+        emitEffect(HomeScreenEffect.NavigationMovieDetails(id))
+    }
+
+    override fun onTvShowClick(id: Int) {
+        emitEffect(HomeScreenEffect.NavigationTvShowDetails(id))
+    }
+
+    override fun onMovieGenreSelect(genre: MovieGenre) {
+        if (genre == state.value.selectedMovieGenre) return
+        updateState { copy(selectedMovieGenre = genre) }
+        loadUpcomingMovies(categoryId = if (genre == MovieGenre.All) null else genre.id)
+    }
+
+    override fun onTopRatedClick() {
+        emitEffect(HomeScreenEffect.NavigationTopRated)
+    }
+
+    override fun onContinueWatchingClick() {
+        emitEffect(HomeScreenEffect.NavigationContinueWatching)
+    }
+
+    override fun onTrendingMoviesCardClicked() {
+        emitEffect(HomeScreenEffect.NavigationTrendingMovie)
+    }
+
+    override fun onTrendingTvShowsCardClicked() {
+        emitEffect(HomeScreenEffect.NavigationTrendingTvShows)
+    }
+
+    override fun onTrendingActorsCardClicked() {
+        emitEffect(HomeScreenEffect.NavigationTrendingActor)
+    }
+
+    fun fetchRecentWatchedMedia() {
+        tryToExecute(
+            block = {
+                val movies = getRecentWatchedMovies.invoke(limit = 10)
+                val shows = getRecentWatchedTvShows.invoke(limit = 10)
+                Pair(movies, shows)
+            },
+            onStart = { updateState { copy(isLoading = true) } },
+            onSuccess = { (movies, shows) ->
+                val recentWatchedMedia = movies.toUiMedia() +
+                        shows.toUiMedia()
+
+                updateState {
+                    copy(recentWatchedMediaList = recentWatchedMedia.shuffled())
+                }
+            },
+            onError = { errorState -> updateState { copy(error = errorState) } },
+            onCompleted = { updateState { copy(isLoading = false) } },
+        )
     }
 
     private fun initializeTopRatedMedia() {
@@ -67,61 +119,6 @@ class HomeViewModel(
                 movies.items.isNotEmpty() || shows.items.isNotEmpty()
             }
         )
-    }
-
-    fun fetchRecentWatchedMedia() {
-        tryToExecute(
-            block = {
-                val movies = getRecentWatchedMovies.invoke(limit = 10)
-                val shows = getRecentWatchedTvShows.invoke(limit = 10)
-                Pair(movies, shows)
-            },
-            onStart = { updateState { copy(isLoading = true) } },
-            onSuccess = { (movies, shows) ->
-                val recentWatchedMedia = movies.toUiMedia() +
-                        shows.toUiMedia()
-
-                updateState {
-                    copy(recentWatchedMediaList = recentWatchedMedia.shuffled())
-                }
-            },
-            onError = { errorState -> updateState { copy(error = errorState) } },
-            onCompleted = { updateState { copy(isLoading = false) } },
-        )
-    }
-
-    private fun initializePopularTvShows() {
-        tryToExecute(
-            block = { getPopularTvShows.invoke() },
-            onStart = { updateState { copy(isLoading = true) } },
-            onSuccess = { popularTvShows ->
-                updateState { copy(popularTvShows = popularTvShows) }
-            },
-            onError = { errorState -> updateState { copy(error = errorState) } },
-            onCompleted = { updateState { copy(isLoading = false) } },
-            checkSuccess = { it.isNotEmpty() },
-        )
-    }
-
-    private fun initializePopularMovies() {
-        tryToExecute(
-            block = { getPopularMovies.invoke() },
-            onStart = { updateState { copy(isLoading = true) } },
-            onSuccess = { popularMovies ->
-                updateState { copy(popularMovies = popularMovies) }
-            },
-            onError = { errorState -> updateState { copy(error = errorState) } },
-            onCompleted = { updateState { copy(isLoading = false) } },
-            checkSuccess = { it.isNotEmpty() },
-        )
-    }
-
-    override fun onMovieClick(id: Int) {
-        emitEffect(HomeScreenEffect.NavigationMovieDetails(id))
-    }
-
-    override fun onTvShowClick(id: Int) {
-        emitEffect(HomeScreenEffect.NavigationTvShowDetails(id))
     }
 
     private fun loadUpcomingMovies(categoryId: Int?) {
@@ -153,29 +150,45 @@ class HomeViewModel(
         }
     }
 
-    override fun onMovieGenreSelect(genre: MovieGenre) {
-        if (genre == state.value.selectedMovieGenre) return
-        updateState { copy(selectedMovieGenre = genre) }
-        loadUpcomingMovies(categoryId = if (genre == MovieGenre.All) null else genre.id)
+    private fun initializePopularTvShows() {
+        tryToExecute(
+            block = { getPopularTvShows.invoke() },
+            onStart = { updateState { copy(isLoading = true) } },
+            onSuccess = { popularTvShows ->
+                updateState { copy(popularTvShows = popularTvShows) }
+            },
+            onError = { errorState -> updateState { copy(error = errorState) } },
+            onCompleted = { updateState { copy(isLoading = false) } },
+            checkSuccess = { it.isNotEmpty() },
+        )
     }
 
-    override fun onTopRatedClick() {
-        emitEffect(HomeScreenEffect.NavigationTopRated)
+    private fun initializePopularMovies() {
+        tryToExecute(
+            block = { getPopularMovies.invoke() },
+            onStart = { updateState { copy(isLoading = true) } },
+            onSuccess = { popularMovies ->
+                updateState { copy(popularMovies = popularMovies) }
+            },
+            onError = { errorState -> updateState { copy(error = errorState) } },
+            onCompleted = { updateState { copy(isLoading = false) } },
+            checkSuccess = { it.isNotEmpty() },
+        )
     }
 
-    override fun onContinueWatchingClick() {
-        emitEffect(HomeScreenEffect.NavigationContinueWatching)
-    }
-
-    override fun onTrendingMoviesCardClicked() {
-        emitEffect(HomeScreenEffect.NavigationTrendingMovie)
-    }
-
-    override fun onTrendingTvShowsCardClicked() {
-        emitEffect(HomeScreenEffect.NavigationTrendingTvShows)
-    }
-
-    override fun onTrendingActorsCardClicked() {
-        emitEffect(HomeScreenEffect.NavigationTrendingActor)
+    private fun initializeUpcomingMovies() {
+        tryToExecute(
+            block = {
+                updateState {
+                    copy(upcomingMovies = _upcomingMoviesFlow)
+                }
+                loadUpcomingMovies(categoryId = null)
+            },
+            onError = { errorMessage ->
+                updateState {
+                    copy(error = errorMessage, isLoading = false)
+                }
+            }
+        )
     }
 }

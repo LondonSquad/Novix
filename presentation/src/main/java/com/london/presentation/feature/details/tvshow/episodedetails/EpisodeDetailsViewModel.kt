@@ -30,6 +30,10 @@ class EpisodeDetailsViewModel(
         loadVideoProvider()
     }
 
+    override fun onBackClicked() {
+        emitEffect(EpisodeDetailsEffect.NavigationBack)
+    }
+
     private fun loadEpisodeDetails() {
         tryToExecute(
             block = {
@@ -83,9 +87,5 @@ class EpisodeDetailsViewModel(
                 }
             }
         )
-    }
-
-    override fun onBackClicked() {
-        emitEffect(EpisodeDetailsEffect.NavigationBack)
     }
 }

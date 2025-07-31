@@ -24,7 +24,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalWindowInfo
 import androidx.compose.ui.res.stringResource
-import com.london.presentation.R.string
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -35,6 +34,7 @@ import com.london.designsystem.component.TabItem
 import com.london.designsystem.component.TabLayout
 import com.london.designsystem.component.TopBar
 import com.london.designsystem.theme.NovixTheme
+import com.london.presentation.R.string
 import com.london.presentation.utils.Listen
 import com.london.presentation.utils.MovieGenre
 import com.london.presentation.utils.TvShowGenre
@@ -50,13 +50,12 @@ fun ContinueWatchingScreen(
     val state by viewModel.state.collectAsStateWithLifecycle()
     val effect by viewModel.effect.collectAsState(null)
 
-    effect?.Listen {
-        when (it) {
-            is ContinueWatchingEffect.NavigateToMovieDetails -> onMovieClick(it.id)
-            is ContinueWatchingEffect.NavigateToTvShowDetails -> onTvShowClick(it.id)
-            is ContinueWatchingEffect.NavigateBack -> onBackClick()
-        }
-    }
+    HandleContinueWatchingEffects(
+        effect = effect,
+        onMovieClick = onMovieClick,
+        onTvShowClick = onTvShowClick,
+        onBackClick = onBackClick
+    )
 
     Content(
         state = state,
@@ -159,6 +158,23 @@ fun Content(
         }
     }
 }
+
+@Composable
+private fun HandleContinueWatchingEffects(
+    effect: ContinueWatchingEffect?,
+    onMovieClick: (Int) -> Unit,
+    onTvShowClick: (Int) -> Unit,
+    onBackClick: () -> Unit
+) {
+    effect?.Listen {
+        when (it) {
+            is ContinueWatchingEffect.NavigateToMovieDetails -> onMovieClick(it.id)
+            is ContinueWatchingEffect.NavigateToTvShowDetails -> onTvShowClick(it.id)
+            is ContinueWatchingEffect.NavigateBack -> onBackClick()
+        }
+    }
+}
+
 
 @Composable
 private fun MovieGenreRow(

@@ -108,6 +108,7 @@ fun SearchScreen(
             is SearchEffect.TvNavigation -> onNavigateToTvShowDetails(currentEffect.tvId)
         }
     }
+
     val lifecycleOwner = LocalLifecycleOwner.current
     LaunchedEffect(key1 = Unit) {
         lifecycleOwner.lifecycle.repeatOnLifecycle(Lifecycle.State.RESUMED) {

@@ -23,8 +23,8 @@ class TvShowDetailsViewModel(
     private val getTvShowImages: GetImagesById,
     private val getEpisodesByTvShowSeason: GetEpisodesByTvShowSeason,
     private val getTvShowVideoProvider: GetTvShowVideoProvider,
-    private val addTvShowToRecentWatchedUseCase:AddTvShowToRecentWatchedUseCase,
-    private val addToRecentViewedUseCase:AddToRecentViewedUseCase,
+    private val addTvShowToRecentWatchedUseCase: AddTvShowToRecentWatchedUseCase,
+    private val addToRecentViewedUseCase: AddToRecentViewedUseCase,
     savedStateHandle: SavedStateHandle,
 ) : BaseViewModel<TvShowDetailsUiState, TvShowDetailsEffect>(TvShowDetailsUiState()),
     TvShowDetailsContract {
@@ -39,6 +39,32 @@ class TvShowDetailsViewModel(
         initializeGetImagesData()
         initializeEpisodesBySeasons()
 
+    }
+
+    override fun onEpisodeDetailsClicked(tvShowId: Int, episodeNumber: Int, seasonNumber: Int) {
+        emitEffect(
+            TvShowDetailsEffect.OnNavigateToEpisodeDetails(
+                tvShowId = tvShowId,
+                episodeNumber = episodeNumber,
+                seasonNumber = seasonNumber
+            )
+        )
+    }
+
+    override fun onReviewsClicked(tvShowId: Int, mediaType: Int) {
+        emitEffect(TvShowDetailsEffect.NavigateToReviews(tvShowId, mediaType))
+    }
+
+    override fun onCastClicked(tvShowId: Int) {
+        emitEffect(TvShowDetailsEffect.NavigateToCast(tvShowId))
+    }
+
+    override fun OnGenreClicked(genreId: Int) {
+        emitEffect(TvShowDetailsEffect.NavigateTotvShowsByCategoryId(genreId))
+    }
+
+    override fun onBackClicked() {
+        emitEffect(TvShowDetailsEffect.NavigateBack)
     }
 
     fun initializeEpisodesBySeasons(seasonNumber: Int = 1) {
@@ -65,8 +91,17 @@ class TvShowDetailsViewModel(
         )
     }
 
-    private fun initializeGetImagesData() {
+    override fun onEpisodeClick(tvShowId: Int, episodeNumber: Int, seasonNumber: Int) {
+        emitEffect(
+            TvShowDetailsEffect.OnNavigateToEpisodeDetails(
+                tvShowId = tvShowId,
+                episodeNumber = episodeNumber,
+                seasonNumber = seasonNumber
+            )
+        )
+    }
 
+    private fun initializeGetImagesData() {
         tryToExecute(
             block = {
                 getTvShowImages(tvShowId)
@@ -159,7 +194,8 @@ class TvShowDetailsViewModel(
                         id = tvShowDetails.id,
                         imageUrl = tvShowDetails.posterUrl.toString(),
                         type = MediaType.TvShow,
-                        viewDate = System.currentTimeMillis())
+                        viewDate = System.currentTimeMillis()
+                    )
                 )
                 addToRecentWatched(
                     TvShow(
@@ -168,7 +204,7 @@ class TvShowDetailsViewModel(
                         posterPicture = tvShowDetails.posterUrl.toString(),
                         releaseYear = 2025,
                         rating = 1,
-                        genres = tvShowDetails.tvShowGenres.map{
+                        genres = tvShowDetails.tvShowGenres.map {
                             it.id
                         },
                     )
@@ -186,45 +222,11 @@ class TvShowDetailsViewModel(
         )
     }
 
-    fun onEpisodeClick(tvShowId: Int, episodeNumber: Int, seasonNumber: Int) {
-        emitEffect(
-            TvShowDetailsEffect.OnNavigateToEpisodeDetails(
-                tvShowId = tvShowId,
-                episodeNumber = episodeNumber,
-                seasonNumber = seasonNumber
-            )
-        )
-    }
-
-    override fun onEpisodeDetailsClicked(tvShowId: Int, episodeNumber: Int, seasonNumber: Int) {
-        emitEffect(
-            TvShowDetailsEffect.OnNavigateToEpisodeDetails(
-                tvShowId = tvShowId,
-                episodeNumber = episodeNumber,
-                seasonNumber = seasonNumber
-            )
-        )
-    }
-
-    override fun onReviewsClicked(tvShowId: Int, mediaType: Int) {
-        emitEffect(TvShowDetailsEffect.NavigateToReviews(tvShowId, mediaType))
-    }
-
-    override fun onCastClicked(tvShowId: Int) {
-        emitEffect(TvShowDetailsEffect.NavigateToCast(tvShowId))
-    }
-
-    override fun OnGenreClicked(genreId: Int) {
-        emitEffect(TvShowDetailsEffect.NavigateTotvShowsByCategoryId(genreId))
-    }
-
-    override fun onBackClicked() {
-        emitEffect(TvShowDetailsEffect.NavigateBack)
-    }
-    private suspend fun addToRecentWatched(tvShow: TvShow){
+    private suspend fun addToRecentWatched(tvShow: TvShow) {
         addTvShowToRecentWatchedUseCase.invoke(tvShow)
     }
-    private suspend fun addMovieToRecentViewed(tvShow: RecentViewed){
+
+    private suspend fun addMovieToRecentViewed(tvShow: RecentViewed) {
         addToRecentViewedUseCase.invoke(tvShow)
     }
 }

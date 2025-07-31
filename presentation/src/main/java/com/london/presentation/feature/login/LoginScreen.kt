@@ -60,17 +60,13 @@ fun LoginScreen(
 ) {
     val uiState by viewModel.state.collectAsStateWithLifecycle()
     val effect by viewModel.effect.collectAsState(null)
-    val uriHandler = LocalUriHandler.current
 
-    effect?.Listen { currentEffect ->
-        when (currentEffect) {
-            is LoginEffect.NavigateToHome -> onNavigateToHome()
-            is LoginEffect.NavigateToCreateAccount -> uriHandler.openUri(currentEffect.url)
-            is LoginEffect.NavigateToForgotPassword -> uriHandler.openUri(currentEffect.url)
-            is LoginEffect.NavigateBack -> onNavigateBack()
-            is LoginEffect.NavigateToWebViewRegistration -> onNavigateToWebViewRegistration()
-        }
-    }
+    HandleLoginEffects(
+        effect = effect,
+        onNavigateToHome = onNavigateToHome,
+        onNavigateBack = onNavigateBack,
+        onNavigateToWebViewRegistration = onNavigateToWebViewRegistration
+    )
 
     Box(modifier = Modifier.fillMaxSize()) {
         Content(
@@ -213,6 +209,26 @@ private fun Content(
         if (uiState.error is ErrorState.RequestFailed) {
             val message = uiState.error.message
             SnackBarAnimation(message)
+        }
+    }
+}
+
+@Composable
+private fun HandleLoginEffects(
+    effect: LoginEffect?,
+    onNavigateToHome: () -> Unit,
+    onNavigateBack: () -> Unit,
+    onNavigateToWebViewRegistration: () -> Unit
+) {
+    val uriHandler = LocalUriHandler.current
+
+    effect?.Listen { currentEffect ->
+        when (currentEffect) {
+            is LoginEffect.NavigateToHome -> onNavigateToHome()
+            is LoginEffect.NavigateToCreateAccount -> uriHandler.openUri(currentEffect.url)
+            is LoginEffect.NavigateToForgotPassword -> uriHandler.openUri(currentEffect.url)
+            is LoginEffect.NavigateBack -> onNavigateBack()
+            is LoginEffect.NavigateToWebViewRegistration -> onNavigateToWebViewRegistration()
         }
     }
 }

@@ -77,22 +77,22 @@ fun HomeScreen(
     val uiState by viewModel.state.collectAsStateWithLifecycle()
     val effect by viewModel.effect.collectAsState(null)
 
-    effect?.Listen { currentEffect ->
-        when (currentEffect) {
-            is HomeScreenEffect.NavigationMovieDetails -> onNavigateMovie(currentEffect.id)
-            is HomeScreenEffect.NavigationTvShowDetails -> onNavigateTvShow(currentEffect.id)
-            is HomeScreenEffect.NavigationTrendingMovie -> onNavigateTrendingMovies()
-            is HomeScreenEffect.NavigationTrendingTvShows -> onNavigateTrendingTvShows()
-            is HomeScreenEffect.NavigationTrendingActor -> onNavigateTrendingActors()
-            is HomeScreenEffect.NavigationTopRated -> onNavigateTopRated()
-            is HomeScreenEffect.NavigationContinueWatching -> onNavigateContinueWatching()
-        }
-    }
+    HandleHomeScreenEffects(
+        effect = effect,
+        onNavigateMovie = onNavigateMovie,
+        onNavigateTvShow = onNavigateTvShow,
+        onNavigateTrendingMovies = onNavigateTrendingMovies,
+        onNavigateTrendingTvShows = onNavigateTrendingTvShows,
+        onNavigateTrendingActors = onNavigateTrendingActors,
+        onNavigateTopRated = onNavigateTopRated,
+        onNavigateContinueWatching = onNavigateContinueWatching
+    )
 
     val lifecycleOwner = LocalLifecycleOwner.current
     LaunchedEffect(key1 = Unit) {
         lifecycleOwner.lifecycle.repeatOnLifecycle(Lifecycle.State.RESUMED) {
-            viewModel.fetchRecentWatchedMedia()        }
+            viewModel.fetchRecentWatchedMedia()
+        }
     }
 
     val lazyGridState = rememberSaveable(
@@ -104,47 +104,47 @@ fun HomeScreen(
     val screenWidth =
         with(LocalDensity.current) { LocalWindowInfo.current.containerSize.width.toDp() }
 
-    when{
+    when {
         uiState.error != null -> NetworkErrorScreen()
         else ->
             Box(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(WindowInsets.statusBars.asPaddingValues())
-        ) {
-
-            Box(
                 modifier = Modifier
-                    .size(400.dp)
-                    .align(Alignment.TopStart)
-                    .background(
-                        Brush.linearGradient(
-                            colors = listOf(
-                                NovixTheme.colors.primary.copy(alpha = 0.09f),
-                                Color.Transparent
-                            ),
-                            start = Offset(0f, 0f),
-                            end = Offset(screenWidth.value, 400f)
-                        )
-                    )
-            )
-            Column(modifier = Modifier.fillMaxSize()) {
-                DefaultTopBar(
+                    .fillMaxSize()
+                    .padding(WindowInsets.statusBars.asPaddingValues())
+            ) {
+
+                Box(
                     modifier = Modifier
-                        .fillMaxWidth()
-                        .background(NovixTheme.colors.surface)
-
+                        .size(400.dp)
+                        .align(Alignment.TopStart)
+                        .background(
+                            Brush.linearGradient(
+                                colors = listOf(
+                                    NovixTheme.colors.primary.copy(alpha = 0.09f),
+                                    Color.Transparent
+                                ),
+                                start = Offset(0f, 0f),
+                                end = Offset(screenWidth.value, 400f)
+                            )
+                        )
                 )
+                Column(modifier = Modifier.fillMaxSize()) {
+                    DefaultTopBar(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .background(NovixTheme.colors.surface)
 
-                Content(
-                    homeScreenContract = viewModel,
-                    uiState = uiState,
-                    modifier = Modifier.weight(1f),
-                    lazyGridState = lazyGridState,
-                    screenWidth = screenWidth
-                )
+                    )
+
+                    Content(
+                        homeScreenContract = viewModel,
+                        uiState = uiState,
+                        modifier = Modifier.weight(1f),
+                        lazyGridState = lazyGridState,
+                        screenWidth = screenWidth
+                    )
+                }
             }
-        }
 
     }
 }
@@ -297,6 +297,31 @@ private fun Content(
     }
 }
 
+
+@Composable
+private fun HandleHomeScreenEffects(
+    effect: HomeScreenEffect?,
+    onNavigateMovie: (Int) -> Unit,
+    onNavigateTvShow: (Int) -> Unit,
+    onNavigateTrendingMovies: () -> Unit,
+    onNavigateTrendingTvShows: () -> Unit,
+    onNavigateTrendingActors: () -> Unit,
+    onNavigateTopRated: () -> Unit,
+    onNavigateContinueWatching: () -> Unit
+) {
+    effect?.Listen { currentEffect ->
+        when (currentEffect) {
+            is HomeScreenEffect.NavigationMovieDetails -> onNavigateMovie(currentEffect.id)
+            is HomeScreenEffect.NavigationTvShowDetails -> onNavigateTvShow(currentEffect.id)
+            is HomeScreenEffect.NavigationTrendingMovie -> onNavigateTrendingMovies()
+            is HomeScreenEffect.NavigationTrendingTvShows -> onNavigateTrendingTvShows()
+            is HomeScreenEffect.NavigationTrendingActor -> onNavigateTrendingActors()
+            is HomeScreenEffect.NavigationTopRated -> onNavigateTopRated()
+            is HomeScreenEffect.NavigationContinueWatching -> onNavigateContinueWatching()
+        }
+    }
+}
+
 private fun LazyGridScope.upComingSection(
     contract: HomeScreenContract,
     screenWidth: Dp,
@@ -313,11 +338,13 @@ private fun LazyGridScope.upComingSection(
                 modifier = Modifier.padding(bottom = 4.dp)
             )
         else
-            Box(modifier = Modifier
-                .height(20.dp)
-                .padding(bottom = 4.dp)
-                .wrapContentWidth()
-                .shimmerEffect())
+            Box(
+                modifier = Modifier
+                    .height(20.dp)
+                    .padding(bottom = 4.dp)
+                    .wrapContentWidth()
+                    .shimmerEffect()
+            )
     }
 
     stickyHeader {
@@ -350,10 +377,12 @@ private fun LazyGridScope.upComingSection(
                     .clickable { contract.onMovieClick(movie.id) }
             )
         else
-            Box(modifier = Modifier
-                .height(240.dp)
-                .clip(RoundedCornerShape(12.dp))
-                .shimmerEffect())
+            Box(
+                modifier = Modifier
+                    .height(240.dp)
+                    .clip(RoundedCornerShape(12.dp))
+                    .shimmerEffect()
+            )
     }
 }
 

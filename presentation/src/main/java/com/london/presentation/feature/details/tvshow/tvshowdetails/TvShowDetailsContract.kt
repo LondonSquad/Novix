@@ -6,4 +6,5 @@ interface TvShowDetailsContract {
     fun onReviewsClicked(tvShowId: Int, mediaType: Int)
     fun onCastClicked(tvShowId: Int)
     fun OnGenreClicked(genreId: Int)
+    fun onEpisodeClick(tvShowId: Int, episodeNumber: Int, seasonNumber: Int)
 }
