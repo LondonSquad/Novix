@@ -55,6 +55,7 @@ import com.london.presentation.shared.CustomBackDropImagePager
 import com.london.presentation.shared.FooterSection
 import com.london.presentation.shared.RatingItem
 import com.london.presentation.utils.Listen
+import com.london.presentation.utils.isNotZeroRate
 import com.london.presentation.utils.openUrl
 import com.london.presentation.utils.toLocalizedNumbers
 import org.koin.androidx.compose.koinViewModel
@@ -277,10 +278,12 @@ fun TvShowBasicDetails(
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.spacedBy(4.dp)
     ) {
-        RatingItem(
-            modifier = Modifier,
-            rating = uiState.voteAverage.toLocalizedNumbers(),
-        )
+        if (uiState.voteAverage.isNotZeroRate()){
+            RatingItem(
+                modifier = Modifier,
+                rating = uiState.voteAverage.toLocalizedNumbers(),
+            )
+        }
 
         Box(
             modifier = Modifier

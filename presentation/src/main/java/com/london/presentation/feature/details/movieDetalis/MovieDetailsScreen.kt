@@ -75,6 +75,7 @@ import com.london.presentation.shared.FooterSection
 import com.london.presentation.utils.Listen
 import com.london.presentation.utils.convertGenreCodeToString
 import com.london.presentation.utils.getLocalizedTimeUnit
+import com.london.presentation.utils.isNotZeroRate
 import com.london.presentation.utils.offsetLayout
 import com.london.presentation.utils.openUrl
 import com.london.presentation.utils.reverseDateFormat
@@ -347,7 +348,7 @@ private fun RatingAndMetaRow(
         horizontalArrangement = Arrangement.spacedBy(4.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {
-        if (!rate.isNullOrBlank()) {
+        if (!rate.isNullOrBlank() && rate.isNotZeroRate() ) {
             IconWithText(
                 icon = drawable.star,
                 contentDesc = stringResource(star),
