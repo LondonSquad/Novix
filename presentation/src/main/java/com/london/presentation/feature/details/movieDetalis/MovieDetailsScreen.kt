@@ -45,6 +45,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalUriHandler
+import androidx.compose.ui.platform.LocalWindowInfo
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
@@ -120,6 +121,10 @@ fun MovieDetailsContent(
     uiState: MovieDetailsUiState,
     movieDetailsContract: MovieDetailsContract
 ) {
+    val screenWidth = LocalWindowInfo.current.containerSize.width
+    val itemWidthPx = with(LocalDensity.current) { 158.dp.toPx() }
+    val screenPaddingPx = with(LocalDensity.current) { 16.dp.toPx() }
+    val columns = ((screenWidth - screenPaddingPx) / itemWidthPx).toInt().coerceAtLeast(2)
     val uriHandler = LocalUriHandler.current
 
     val lazyState = rememberLazyListState()
@@ -293,7 +298,8 @@ fun MovieDetailsContent(
                     )
                 }
 
-                items(uiState.similarMovies.chunked(2)) { rowItems ->
+
+                items(uiState.similarMovies.chunked(columns)) { rowItems ->
                     Row(
                         modifier = Modifier
                             .fillMaxWidth()
