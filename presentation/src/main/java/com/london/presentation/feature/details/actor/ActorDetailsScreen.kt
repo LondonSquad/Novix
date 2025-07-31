@@ -46,6 +46,7 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.zIndex
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.london.designsystem.component.CircularLoading
 import com.london.designsystem.component.HomeCard
@@ -143,22 +144,6 @@ fun ActorScreenContent(
             ),
             state = lazyState
         ) {
-
-            stickyHeader {
-                TopBar(
-                    onBackClick = actorDetailsContract::onNavigateBack,
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .background(
-                            NovixTheme.colors.surface.copy(alpha = backgroundAlpha)
-                        )
-                        .padding(
-                            start = 16.dp,
-                            top = WindowInsets.statusBars.asPaddingValues().calculateTopPadding() + 12.dp
-                        )
-                )
-            }
-
             item {
                 val images = uiState.actorImageDetails.orEmpty()
 
@@ -177,7 +162,10 @@ fun ActorScreenContent(
                             }
                         }
                     }
-                    CustomBackDropImagePager(images = images.map { it.fileUrl })
+                    CustomBackDropImagePager(
+                        images = images.map { it.fileUrl },
+                        isVisibleDots = false
+                    )
                 }
             }
 
@@ -279,7 +267,19 @@ fun ActorScreenContent(
 
         }
 
-
+        TopBar(
+            onBackClick = actorDetailsContract::onNavigateBack,
+            modifier = Modifier
+                .fillMaxWidth()
+                .background(
+                    NovixTheme.colors.surface.copy(alpha = backgroundAlpha)
+                )
+                .padding(
+                    start = 16.dp,
+                    top = WindowInsets.statusBars.asPaddingValues().calculateTopPadding()
+                )
+                .zIndex(1f)
+        )
 
     }
 }

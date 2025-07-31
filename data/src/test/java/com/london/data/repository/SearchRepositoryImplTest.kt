@@ -2,8 +2,8 @@ package com.london.data.repository
 
 import com.google.common.truth.Truth.assertThat
 import com.london.data.local.database.dao.search.GenreInterestDao
+import com.london.data.local.model.search.ActorLocal
 import com.london.data.local.model.search.GenreInterestEntity
-import com.london.data.local.model.search.PersonDtoLocal
 import com.london.data.local.model.search.SearchActorsLocal
 import com.london.data.local.model.search.SearchMovieDtoLocal
 import com.london.data.local.model.search.SearchMoviesLocal
@@ -468,17 +468,17 @@ class SearchRepositoryImplTest {
     }
 
     private companion object {
-        const val NAME = "Tom"
-        const val LANG = "en-US"
-        const val PAGE_NUMBER = 1
+      private  const val NAME = "Tom"
+       private const val LANG = "en-US"
+       private const val PAGE_NUMBER = 1
 
-        val MovieList = PagedFetchResponse(
+        private    val MovieList = PagedFetchResponse(
             PAGE_NUMBER,
             listOf(
                 Movie(
                     id = 1,
                     name = "",
-                    posterPicture = "https://image.tmdb.org/t/p/w500",
+                    posterUrl = "https://image.tmdb.org/t/p/w500",
                     releaseYear = 2020,
                     rating = 8,
                     genreIds = listOf(),
@@ -488,7 +488,7 @@ class SearchRepositoryImplTest {
             totalPages = 1
         )
 
-        val TvShowList = PagedFetchResponse(
+        private   val TvShowList = PagedFetchResponse(
             PAGE_NUMBER,
             listOf(
                 TvShow(
@@ -504,65 +504,53 @@ class SearchRepositoryImplTest {
             totalPages = 1
         )
 
-        val ActorList = PagedFetchResponse(
+        private val ActorList = PagedFetchResponse(
             PAGE_NUMBER,
             listOf(
                 Actor(
                     id = 3,
                     name = "Tom Holland",
-                    profilePicture = "https://image.tmdb.org/t/p/w500/tom_holland.jpg"
+                    profilePictureUrl = "https://image.tmdb.org/t/p/w500/tom_holland.jpg",
+                    characterName = ""
                 )
             ),
             totalItems = 1,
             totalPages = 1
         )
 
-        val SearchMoviesLocalMock = SearchMoviesLocal(
+        private  val SearchMoviesLocalMock = SearchMoviesLocal(
             query = NAME + LANG,
             page = PAGE_NUMBER,
             results = listOf(
                 SearchMovieDtoLocal(
-                    adult = false,
-                    backdropPath = null,
+
                     genreIds = emptyList(),
                     id = 1,
-                    originalLanguage = "en",
-                    originalTitle = "",
-                    overview = "",
-                    popularity = 0.0,
                     posterPath = "",
-                    releaseDate = "2020-06-15",
-                    title = "",
-                    video = false,
-                    voteAverage = 8.0,
-                    voteCount = 0
+                    name = "",
+                    releaseYear = 2020,
+                    rating = 8,
                 )
             ),
             totalPages = 1,
             totalResults = 1
         )
 
-        val SearchActorsLocalMock = SearchActorsLocal(
+        private val SearchActorsLocalMock = SearchActorsLocal(
             query = NAME + LANG,
             page = PAGE_NUMBER,
             results = listOf(
-                PersonDtoLocal(
-                    adult = false,
-                    gender = 2,
+                ActorLocal(
                     id = 3,
-                    knownForDepartment = "",
                     name = "Tom Holland",
-                    originalName = "Tom Holland",
-                    popularity = 0.0,
-                    profileUrl = "/tom_holland.jpg",
-                    knownFor = emptyList()
+                    profilePicture = "/tom_holland.jpg",
                 )
             ),
             totalPages = 1,
             totalResults = 1
         )
 
-        val SearchMoviesRemoteMock = ApiResponse(
+        private val SearchMoviesRemoteMock = ApiResponse(
             currentPage = PAGE_NUMBER,
             items = listOf(
                 SearchMovieRemote(
@@ -590,7 +578,7 @@ class SearchRepositoryImplTest {
             totalItems = 1
         )
 
-        val SearchTvShowRemoteMock = ApiResponse(
+        private   val SearchTvShowRemoteMock = ApiResponse(
             currentPage = PAGE_NUMBER,
             items = listOf(
                 SearchTvShowRemote(

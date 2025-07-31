@@ -30,7 +30,7 @@ fun ActorsLayout(
                 ActorItem(
                     actorName = actor.name,
                     characterName = null,
-                    imageRes = actor.profilePicture,
+                    imageRes = actor.profilePictureUrl,
                     onClick = { onActorClick(actor) }
                 )
             }

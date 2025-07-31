@@ -1,8 +1,8 @@
 package com.london.data.local.source.search
 
-import com.london.data.local.source.LocalDataSource
 import com.london.data.local.database.dao.search.SearchMoviesDao
 import com.london.data.local.model.search.SearchMoviesLocal
+import com.london.data.local.source.LocalDataSource
 import com.london.data.local.utils.executeDelete
 import com.london.data.local.utils.executeGetAll
 import com.london.data.local.utils.executeGetByDate
@@ -23,8 +23,11 @@ class MovieLocalDataSourceImpl(
 ) : LocalDataSource<SearchMoviesLocal> {
     init {
         CoroutineScope(Dispatchers.IO).launch {
-            searchMoviesDao.getAll().forEach {
-                if (isOneHourExpired(it.date)) searchMoviesDao.delete(it)
+            searchMoviesDao.getAll().forEach { searchMoviesLocal ->
+                if (searchMoviesLocal.date.isOneHourExpired())
+                    searchMoviesDao.delete(
+                    searchMoviesLocal
+                )
             }
         }
     }
@@ -40,21 +43,13 @@ class MovieLocalDataSourceImpl(
     override suspend fun getByDate(date: Long): SearchMoviesLocal =
         searchMoviesDao.executeGetByDate(date)
 
-    override suspend fun getByQuery(query: String): SearchMoviesLocal? {
-        return try {
-            searchMoviesDao.executeGetByQuery(query.generateHash())
-        } catch (_: Exception) {
-            null
-        }
-    }
+    override suspend fun getByQuery(query: String): SearchMoviesLocal? = runCatching {
+        searchMoviesDao.executeGetByQuery(query.generateHash())
+    }.getOrNull()
 
-    override suspend fun getByQueryAndPage(query: String, page: Int): SearchMoviesLocal? {
-        return try {
+
+    override suspend fun getByQueryAndPage(query: String, page: Int): SearchMoviesLocal? =
+        runCatching {
             searchMoviesDao.executeGetByQueryAndPage(query.generateHash(), page)
-        } catch (_: Exception) {
-            null
-        }
-
-    }
-
+        }.getOrNull()
 }

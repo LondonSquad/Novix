@@ -3,7 +3,7 @@ package com.london.domain.usecase
 import com.google.common.truth.Truth.assertThat
 import com.london.domain.error.GetMovieImagesFailedException
 import com.london.domain.repository.MovieDetailsRepository
-import com.london.domain.usecase.details.movie.GetMovieImagesUseCase
+import com.london.domain.usecase.details.movie.GetFirstTenMovieImagesUseCase
 import io.mockk.coEvery
 import io.mockk.mockk
 import kotlinx.coroutines.test.runTest
@@ -11,14 +11,14 @@ import org.junit.Before
 import org.junit.Test
 import org.junit.jupiter.api.assertThrows
 
-class GetMovieImagesUseCaseTest {
+class GetFirstTenMovieImagesUseCaseTest {
     private lateinit var movieDetailsRepository: MovieDetailsRepository
-    private lateinit var getMovieImageUseCase: GetMovieImagesUseCase
+    private lateinit var getMovieImageUseCase: GetFirstTenMovieImagesUseCase
 
     @Before
     fun setUp() {
         movieDetailsRepository = mockk()
-        getMovieImageUseCase = GetMovieImagesUseCase(movieDetailsRepository)
+        getMovieImageUseCase = GetFirstTenMovieImagesUseCase(movieDetailsRepository)
     }
 
     @Test
