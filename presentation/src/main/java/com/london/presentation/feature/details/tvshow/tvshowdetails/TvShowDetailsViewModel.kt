@@ -197,7 +197,7 @@ class TvShowDetailsViewModel @Inject constructor(
         )
     }
 
-    override fun onEpisodeDetailsClicked(tvShowId: Int, episodeNumber: Int, seasonNumber: Int) {
+    override fun onEpisodeClicked(tvShowId: Int, episodeNumber: Int, seasonNumber: Int) {
         emitEffect(
             TvShowDetailsEffect.OnNavigateToEpisodeDetails(
                 tvShowId = tvShowId,
