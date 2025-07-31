@@ -15390,9 +15390,18 @@
       "id": 117874933,
       "url": "https://github.com/AsmaaKhaledGomaa"
     },
-    "approvals": [],
-    "first_approved_at": null,
-    "time_to_first_approval_minutes": null,
+    "approvals": [
+      {
+        "reviewer": {
+          "id": 189210092,
+          "login": "Aseel-AbuKmail",
+          "url": "https://github.com/Aseel-AbuKmail"
+        },
+        "submitted_at": "2025-07-31T22:10:36Z"
+      }
+    ],
+    "first_approved_at": "2025-07-31T22:10:36Z",
+    "time_to_first_approval_minutes": 78.58333333333333,
     "required_approvals_met_at": null,
     "time_to_required_approvals_minutes": null,
     "closed_at": null,
