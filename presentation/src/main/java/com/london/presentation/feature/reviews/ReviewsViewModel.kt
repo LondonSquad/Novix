@@ -3,10 +3,10 @@ package com.london.presentation.feature.reviews
 import androidx.lifecycle.SavedStateHandle
 import com.london.domain.usecase.reviews.GetMovieReviewsUseCase
 import com.london.domain.usecase.reviews.GetTvShowReviewsUseCase
-import com.london.presentation.navigation.Screen
-import com.london.presentation.navigation.getArgs
 import com.london.presentation.feature.base.BaseViewModel
 import com.london.presentation.feature.base.createPagingSourceFlow
+import com.london.presentation.navigation.Screen
+import com.london.presentation.navigation.getArgs
 import org.koin.android.annotation.KoinViewModel
 
 @KoinViewModel
@@ -22,6 +22,10 @@ class ReviewsViewModel(
 
     init {
         initializeReviews(mediaType, mediaId)
+    }
+
+    override fun onBackClicked() {
+        emitEffect(ReviewEffect.NavigateBack)
     }
 
     private fun initializeReviews(mediaType: Int, mediaId: Int) {
@@ -47,9 +51,5 @@ class ReviewsViewModel(
             onError = { errorState -> updateState { copy(error = errorState) } },
             onCompleted = { updateState { copy(isLoading = false) } },
         )
-    }
-
-    override fun onBackClicked() {
-        emitEffect(ReviewEffect.NavigateBack)
     }
 }

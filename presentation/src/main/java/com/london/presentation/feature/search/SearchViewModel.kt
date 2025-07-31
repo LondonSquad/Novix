@@ -64,44 +64,6 @@ class SearchViewModel(
         setupSearchDebouncing()
     }
 
-    fun updateRecentData() {
-        tryToExecute(
-            block = {
-                val recentViewed = getRecentViewedUseCase.invoke().reversed()
-                val recentSearches = getRecentSearchUseCase.invoke()
-                Pair(recentViewed, recentSearches)
-            },
-            onSuccess = { (recentViewed, recentSearches) ->
-                updateState {
-                    copy(
-                        recentViewed = recentViewed,
-                        recentSearches = recentSearches
-                    )
-                }
-            },
-            onError = { errorState ->
-                updateState { copy(error = errorState) }
-            },
-        )
-    }
-
-    fun updateSearchState(updater: SearchUiState.() -> SearchUiState) {
-        updateState(updater)
-    }
-
-    private fun setupSearchDebouncing() {
-        tryToCollect(
-            block = {
-                _searchQuery.debounce(500)
-            },
-            onNewValue = { query ->
-                performSearch(query = query, category = state.value.selectedCategory)
-            },
-            onError = { errorState ->
-                updateState { copy(error = errorState) }
-            }
-        )
-    }
 
     override fun onSearchQueryChange(newValue: TextFieldValue) {
         updateState { copy(searchQuery = newValue) }
@@ -111,11 +73,6 @@ class SearchViewModel(
         _searchQuery.value = limitedQuery.text.trim()
     }
 
-    private fun applyLimitationOnTextFieldValue(newValue: TextFieldValue): TextFieldValue =
-        newValue.copy(
-            text = newValue.text.replace(regex = Regex("\\s{2,}"), replacement = " ")
-                .trimStart()
-        )
 
     override fun onCategorySelected(category: SearchCategory) {
         updateState {
@@ -378,6 +335,51 @@ class SearchViewModel(
 
         searchWithApi(trimmedQuery, category)
     }
+
+    fun updateRecentData() {
+        tryToExecute(
+            block = {
+                val recentViewed = getRecentViewedUseCase.invoke().reversed()
+                val recentSearches = getRecentSearchUseCase.invoke()
+                Pair(recentViewed, recentSearches)
+            },
+            onSuccess = { (recentViewed, recentSearches) ->
+                updateState {
+                    copy(
+                        recentViewed = recentViewed,
+                        recentSearches = recentSearches
+                    )
+                }
+            },
+            onError = { errorState ->
+                updateState { copy(error = errorState) }
+            },
+        )
+    }
+
+    fun updateSearchState(updater: SearchUiState.() -> SearchUiState) {
+        updateState(updater)
+    }
+
+    private fun setupSearchDebouncing() {
+        tryToCollect(
+            block = {
+                _searchQuery.debounce(500)
+            },
+            onNewValue = { query ->
+                performSearch(query = query, category = state.value.selectedCategory)
+            },
+            onError = { errorState ->
+                updateState { copy(error = errorState) }
+            }
+        )
+    }
+
+    private fun applyLimitationOnTextFieldValue(newValue: TextFieldValue): TextFieldValue =
+        newValue.copy(
+            text = newValue.text.replace(regex = Regex("\\s{2,}"), replacement = " ")
+                .trimStart()
+        )
 
     private fun clearSearchResults() {
         updateState {
