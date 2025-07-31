@@ -475,4 +475,3 @@ private fun TextWithIcon(
         )
     }
 }
-
