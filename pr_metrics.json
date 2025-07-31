@@ -14593,5 +14593,33 @@
       "deletions": 107,
       "changed_files": 3
     }
+  },
+  {
+    "pr_number": 453,
+    "url": "https://github.com/LondonSquad/Novix/pull/453",
+    "title": "hotfix/Improve-image-pager-dot-visibility",
+    "opened_at": "2025-07-31T14:54:37Z",
+    "head_ref": "hotfix/Improve-image-pager-dot-visibility",
+    "base_ref": "develop",
+    "creator": {
+      "login": "abdo-essam",
+      "id": 92235360,
+      "url": "https://github.com/abdo-essam"
+    },
+    "approvals": [],
+    "first_approved_at": null,
+    "time_to_first_approval_minutes": null,
+    "required_approvals_met_at": null,
+    "time_to_required_approvals_minutes": null,
+    "closed_at": null,
+    "merged_at": null,
+    "merged_by": null,
+    "week": "2025-W31",
+    "status": "pending",
+    "diff_stats": {
+      "additions": 6,
+      "deletions": 6,
+      "changed_files": 5
+    }
   }
 ]
