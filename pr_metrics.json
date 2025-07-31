@@ -15554,5 +15554,33 @@
       "deletions": 25,
       "changed_files": 1
     }
+  },
+  {
+    "pr_number": 488,
+    "url": "https://github.com/LondonSquad/Novix/pull/488",
+    "title": "refactor/onboarding-scroll-and-status-bar",
+    "opened_at": "2025-07-31T22:07:19Z",
+    "head_ref": "refactor/onboarding-scroll-and-status-bar",
+    "base_ref": "develop",
+    "creator": {
+      "login": "BassantM",
+      "id": 102248144,
+      "url": "https://github.com/BassantM"
+    },
+    "approvals": [],
+    "first_approved_at": null,
+    "time_to_first_approval_minutes": null,
+    "required_approvals_met_at": null,
+    "time_to_required_approvals_minutes": null,
+    "closed_at": null,
+    "merged_at": null,
+    "merged_by": null,
+    "week": "2025-W31",
+    "status": "pending",
+    "diff_stats": {
+      "additions": 31,
+      "deletions": 14,
+      "changed_files": 5
+    }
   }
 ]
