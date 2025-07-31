@@ -180,7 +180,7 @@ fun TvShowsDetailScreenContent(
                 val images = uiState.tvImages
                 CustomBackDropImagePager(
                     images = images?.map { it.fileUrl } ?: emptyList(),
-                    isVisibleDots = true
+                    isVisibleDots = (images?.size ?: 0) > 1,
                 )
             }
 
