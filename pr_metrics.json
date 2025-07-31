@@ -15119,5 +15119,33 @@
       "deletions": 5,
       "changed_files": 6
     }
+  },
+  {
+    "pr_number": 470,
+    "url": "https://github.com/LondonSquad/Novix/pull/470",
+    "title": "fix: handle if data is not visible remove the dot after it",
+    "opened_at": "2025-07-31T17:46:32Z",
+    "head_ref": "fix/dots-appearance",
+    "base_ref": "develop",
+    "creator": {
+      "login": "Abdulrahman1890",
+      "id": 76666355,
+      "url": "https://github.com/Abdulrahman1890"
+    },
+    "approvals": [],
+    "first_approved_at": null,
+    "time_to_first_approval_minutes": null,
+    "required_approvals_met_at": null,
+    "time_to_required_approvals_minutes": null,
+    "closed_at": null,
+    "merged_at": null,
+    "merged_by": null,
+    "week": "2025-W31",
+    "status": "pending",
+    "diff_stats": {
+      "additions": 8,
+      "deletions": 11,
+      "changed_files": 1
+    }
   }
 ]
