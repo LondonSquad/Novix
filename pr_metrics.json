@@ -14849,5 +14849,33 @@
       "deletions": 733,
       "changed_files": 26
     }
+  },
+  {
+    "pr_number": 460,
+    "url": "https://github.com/LondonSquad/Novix/pull/460",
+    "title": "fix: change icons color tint in login text fields upon if they includ…",
+    "opened_at": "2025-07-31T16:34:54Z",
+    "head_ref": "fix/login-icons-color",
+    "base_ref": "develop",
+    "creator": {
+      "login": "Abdulrahman1890",
+      "id": 76666355,
+      "url": "https://github.com/Abdulrahman1890"
+    },
+    "approvals": [],
+    "first_approved_at": null,
+    "time_to_first_approval_minutes": null,
+    "required_approvals_met_at": null,
+    "time_to_required_approvals_minutes": null,
+    "closed_at": null,
+    "merged_at": null,
+    "merged_by": null,
+    "week": "2025-W31",
+    "status": "pending",
+    "diff_stats": {
+      "additions": 47,
+      "deletions": 5,
+      "changed_files": 4
+    }
   }
 ]
