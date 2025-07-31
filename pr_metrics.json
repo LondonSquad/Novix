@@ -15428,11 +15428,11 @@
     "time_to_first_approval_minutes": 9.066666666666666,
     "required_approvals_met_at": null,
     "time_to_required_approvals_minutes": null,
-    "closed_at": null,
+    "closed_at": "2025-07-31T21:34:06Z",
     "merged_at": null,
     "merged_by": null,
     "week": "2025-W31",
-    "status": "pending",
+    "status": "closed",
     "diff_stats": {
       "additions": 5,
       "deletions": 4,
