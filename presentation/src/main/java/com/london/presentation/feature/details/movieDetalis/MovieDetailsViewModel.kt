@@ -76,6 +76,7 @@ class MovieDetailsViewModel(
                 val (details, images, cast) = triple
                 updateState {
                     copy(
+                        movieId = details.id,
                         movieName = details.title,
                         movieGenres = details.genresId,
                         movieRating = details.voteAverage,

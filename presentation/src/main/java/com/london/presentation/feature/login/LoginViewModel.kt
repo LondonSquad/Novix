@@ -27,9 +27,8 @@ class LoginViewModel(
 
     override fun onPasswordChanged(password: TextFieldValue) {
         updateState {
-            val trimmedPassword = username.copy(text = password.text.trim())
             copy(
-                password = trimmedPassword,
+                password = password,
                 isLoginEnabled = username.text.isNotEmpty()
                         && password.text.isNotEmpty() && password.text.length >= 4,
                 error = null

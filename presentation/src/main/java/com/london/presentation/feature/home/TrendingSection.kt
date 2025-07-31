@@ -2,7 +2,6 @@ package com.london.presentation.feature.home
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -35,6 +34,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.zIndex
 import com.london.designsystem.component.Text
 import com.london.designsystem.theme.NovixTheme
+import com.london.designsystem.theme.noRippleClickable
 import com.london.designsystem.utils.shimmerEffect
 import com.london.presentation.R
 
@@ -140,7 +140,7 @@ private fun CategoryCard(
                 brush = gradient,
                 shape = RoundedCornerShape(12.dp)
             )
-            .clickable(onClick = onClick),
+            .noRippleClickable(onClick = onClick),
         contentAlignment = Alignment.BottomCenter
     ) {
         Image(

@@ -87,7 +87,10 @@ private fun TrendingMoviesContent(
                 .fillMaxWidth()
                 .padding(horizontal = 16.dp),
             onSaveClick = { /* TODO: Implement save functionality */ },
-            isItemSaved = { false }
+            isItemSaved = { false },
+            onRetry = {
+                contract.onRetry()
+            }
         )
     }
 }

@@ -333,12 +333,9 @@ fun GenreNames(
                     color = NovixTheme.colors.body,
                     modifier = if (index != uiState.tvShowGenres.lastIndex)
                         Modifier
-                            .noRippleClickable {
-                                onGenreClick(genre.id)
-                            }
-                            .padding(end = 8.dp) else Modifier.clickable {
-                        onGenreClick(genre.id)
-                    }
+                            .noRippleClickable { onGenreClick(genre.id) }
+                            .padding(end = 8.dp)
+                    else Modifier.noRippleClickable { onGenreClick(genre.id) }
                 )
 
                 if (index != uiState.tvShowGenres.lastIndex) {
@@ -482,8 +479,8 @@ fun CastSection(
                     characterName = "${member.roles[0].character} - ${member.roles[0].episodeCount}",
                     imageRes = member.profileUrl.orEmpty(),
                     modifier = Modifier
-                        .widthIn(296.dp)
-                        .clickable { onNavigateToCast(member.id) }
+                        .widthIn(296.dp),
+                    onClick = { onNavigateToCast(member.id) }
                 )
             }
         }
