@@ -12,6 +12,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.asPaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
@@ -187,18 +188,27 @@ fun ActorScreenContent(
                             placeOfBirth = actorPlaceOfBirth,
                             modifier = Modifier.offsetLayout()
                         )
+                    } else {
+                        Spacer(modifier = Modifier.height(16.dp))
                     }
                 }
             }
 
             item {
                 if (uiState.actorBiography.isNotBlank()) {
+                    val isOnlySection = uiState.actorImageDetails.isNullOrEmpty() &&
+                            uiState.actorMovieDetails?.cast.isNullOrEmpty() &&
+                            uiState.actorTvShowDetails?.cast.isNullOrEmpty()
 
                     Text(
                         text = stringResource(R.string.biography),
                         style = NovixTheme.typography.title.medium,
                         color = NovixTheme.colors.title,
-                        modifier = Modifier.padding(start = 16.dp, bottom = 4.dp)
+                        modifier = Modifier.padding(
+                            start = 16.dp,
+                            bottom = 4.dp,
+                            top = if (isOnlySection) 32.dp else 0.dp
+                        )
                     )
                     var isExpanded by remember { mutableStateOf(false) }
 
@@ -209,33 +219,44 @@ fun ActorScreenContent(
                     ) {
                         isExpanded = !isExpanded
                     }
-
+                } else {
+                    Spacer(modifier = Modifier.height(16.dp))
                 }
             }
 
             item {
                 if (!uiState.actorImageDetails.isNullOrEmpty()) {
+                    val isOnlySection = uiState.actorBiography.isBlank() &&
+                            uiState.actorMovieDetails?.cast.isNullOrEmpty() &&
+                            uiState.actorTvShowDetails?.cast.isNullOrEmpty()
+
                     SectionHeader(
                         text = stringResource(R.string.gallery),
                         hasGetAll = true,
                         hasIcon = true,
                         modifier = Modifier
-                            .padding(bottom = 12.dp, top = 16.dp)
+                            .padding(bottom = 12.dp, top = if (isOnlySection) 32.dp else 16.dp)
                             .padding(horizontal = 16.dp),
                         onClick = { actorDetailsContract.onGalleryClick(uiState.actorId) }
                     )
                     ActorGallery(images = uiState.actorImageDetails)
+                } else {
+                    Spacer(modifier = Modifier.height(16.dp))
                 }
             }
 
             item {
                 uiState.actorMovieDetails?.cast?.takeIf { it.isNotEmpty() }?.let { movieCast ->
+                    val isOnlySection = uiState.actorBiography.isBlank() &&
+                            uiState.actorImageDetails.isNullOrEmpty() &&
+                            uiState.actorTvShowDetails?.cast.isNullOrEmpty()
+
                     SectionHeader(
                         text = stringResource(R.string.top_movies_picks),
                         hasGetAll = true,
                         hasIcon = true,
                         modifier = Modifier
-                            .padding(top = 16.dp, bottom = 12.dp)
+                            .padding(top = if (isOnlySection) 32.dp else 16.dp, bottom = 12.dp)
                             .padding(horizontal = 16.dp),
                         onClick = { actorDetailsContract.onMoviePicksClick(uiState.actorId) }
                     )
@@ -244,17 +265,23 @@ fun ActorScreenContent(
                         onNavigateToMoviePicks = actorDetailsContract::onMovieScreenClick
 
                     )
+                } ?: run {
+                    Spacer(modifier = Modifier.height(16.dp))
                 }
             }
 
-            uiState.actorTvShowDetails?.cast?.takeIf { it.isNotEmpty() }?.let { tvShows ->
-                item {
+            item {
+                uiState.actorTvShowDetails?.cast?.takeIf { it.isNotEmpty() }?.let { tvShows ->
+                    val isOnlySection = uiState.actorBiography.isBlank() &&
+                            uiState.actorImageDetails.isNullOrEmpty() &&
+                            uiState.actorMovieDetails?.cast.isNullOrEmpty()
+
                     SectionHeader(
                         text = stringResource(R.string.top_tv_shows_picks),
                         hasGetAll = true,
                         hasIcon = true,
                         modifier = Modifier
-                            .padding(top = 16.dp, bottom = 12.dp)
+                            .padding(top = if (isOnlySection) 32.dp else 16.dp, bottom = 12.dp)
                             .padding(horizontal = 16.dp),
                         onClick = { actorDetailsContract.onTvShowPicksClick(uiState.actorId) }
                     )
@@ -262,6 +289,8 @@ fun ActorScreenContent(
                         tvShow = tvShows,
                         onNavigateToTvShowPicks = actorDetailsContract::onTvShowScreenClick
                     )
+                } ?: run {
+                    Spacer(modifier = Modifier.padding(top = 32.dp))
                 }
             }
 
