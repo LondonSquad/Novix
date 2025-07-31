@@ -15663,17 +15663,25 @@
           "url": "https://github.com/Aseel-AbuKmail"
         },
         "submitted_at": "2025-07-31T23:05:33Z"
+      },
+      {
+        "reviewer": {
+          "id": 76666355,
+          "login": "Abdulrahman1890",
+          "url": "https://github.com/Abdulrahman1890"
+        },
+        "submitted_at": "2025-07-31T23:08:09Z"
       }
     ],
     "first_approved_at": "2025-07-31T23:05:33Z",
     "time_to_first_approval_minutes": 58.233333333333334,
-    "required_approvals_met_at": null,
-    "time_to_required_approvals_minutes": null,
+    "required_approvals_met_at": "2025-07-31T23:08:09Z",
+    "time_to_required_approvals_minutes": 60.833333333333336,
     "closed_at": null,
     "merged_at": null,
     "merged_by": null,
     "week": "2025-W31",
-    "status": "pending",
+    "status": "approved",
     "diff_stats": {
       "additions": 30,
       "deletions": 15,
