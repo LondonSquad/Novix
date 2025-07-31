@@ -20,6 +20,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.statusBars
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.grid.GridCells
@@ -28,6 +29,7 @@ import androidx.compose.foundation.lazy.grid.itemsIndexed
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
@@ -57,10 +59,8 @@ import com.london.designsystem.theme.NovixTheme
 import com.london.designsystem.theme.noRippleClickable
 import com.london.presentation.R.drawable
 import com.london.presentation.R.string.calendar
-import com.london.presentation.R.string.dot
 import com.london.presentation.R.string.more_like_this
 import com.london.presentation.R.string.overview
-import com.london.presentation.R.string.separator
 import com.london.presentation.R.string.star
 import com.london.presentation.R.string.time_icon
 import com.london.presentation.R.string.view_reviews
@@ -359,7 +359,13 @@ private fun RatingAndMetaRow(
         }
 
         if (!time.isNullOrBlank() || !date.isNullOrBlank()) {
-            Dot()
+            Box(
+                modifier = Modifier
+                    .padding(4.dp)
+                    .size(3.dp)
+                    .clip(CircleShape)
+                    .background(NovixTheme.colors.body)
+            )
         }
 
         if (!time.isNullOrBlank() && time != "0") {
@@ -379,7 +385,13 @@ private fun RatingAndMetaRow(
         val showDot = !time.isNullOrBlank() && time != "0" && !date.isNullOrBlank() && !rate.isNullOrBlank()
 
         if (showDot) {
-            Dot()
+            Box(
+                modifier = Modifier
+                    .padding(4.dp)
+                    .size(3.dp)
+                    .clip(CircleShape)
+                    .background(NovixTheme.colors.body)
+            )
         }
 
 
@@ -460,21 +472,13 @@ private fun GenreRow(
                     onGenreClick(genre)
                 }
             )
-            if (index != genres.lastIndex) Icon(
-                painter = painterResource(drawable.ellipse_2),
-                contentDescription = stringResource(separator),
-                tint = NovixTheme.colors.hint
-            )
+            if (index != genres.lastIndex)
+                Box(
+                    modifier = Modifier
+                        .size(3.dp)
+                        .clip(CircleShape)
+                        .background(NovixTheme.colors.hint)
+                )
         }
     }
-}
-
-@Composable
-private fun Dot(modifier: Modifier = Modifier) {
-    Icon(
-        painter = painterResource(drawable.ellipse_2),
-        contentDescription = stringResource(dot),
-        tint = NovixTheme.colors.body,
-        modifier = modifier
-    )
 }
