@@ -12,17 +12,13 @@ class SearchMoviesConverter {
     private val gson = Gson()
 
     @TypeConverter
-    fun fromSearchMoviesResponse(value: SearchMoviesLocal): String {
-        return gson.toJson(value)
-    }
+    fun fromSearchMoviesResponse(value: SearchMoviesLocal): String = gson.toJson(value)
 
     @TypeConverter
     fun toSearchMoviesResponse(json: String): SearchMoviesLocal = gson.fromJsonObject(json)
 
-
     @TypeConverter
     fun fromSearchMoviesResponseDtoList(list: List<SearchMovieDtoLocal>): String = gson.toJson(list)
-
 
     @TypeConverter
     fun toSearchMoviesResponseDtoList(json: String): List<SearchMovieDtoLocal> =
