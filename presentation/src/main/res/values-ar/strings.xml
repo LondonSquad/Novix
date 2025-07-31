@@ -43,10 +43,10 @@
     <string name="TV_Shows">"مسلسلات"</string>
     <string name="Actors">"ممثلين"</string>
     <string name="top_movies_picks">أفضل الأفلام المختارة</string>
-    <string name="top_tv_shows_picks">أفضل اختيارات البرامج التلفزيونية</string>
+    <string name="top_tv_shows_picks">أفضل البرامج التلفزيونية</string>
     <string name="episode">الحلقة</string>
     <string name="guests_of_honor">ضيوف الشرف</string>
-    <string name="view_reviews">عرض المراجعات</string>
+    <string name="view_reviews">المراجعات</string>
     <string name="overview">نظرة عامة</string>
     <string name="more_like_this">المزيد مثل هذا</string>
     <string name="play_trailer">تشغيل الإعلان</string>
