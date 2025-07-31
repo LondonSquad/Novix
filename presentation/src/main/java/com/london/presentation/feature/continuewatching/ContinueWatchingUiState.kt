@@ -14,5 +14,6 @@ data class ContinueWatchingUiState(
     val tabSelected: Int = 0,
     val selectedMovieGenre: MovieGenre = MovieGenre.All,
     val selectedTvShowGenre: TvShowGenre = TvShowGenre.All,
-    val isMovieSelected: Boolean = true
+    val isMovieSelected: Boolean = true,
+    val isTvSelected: Boolean = true
 )
