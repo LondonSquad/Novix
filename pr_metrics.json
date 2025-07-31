@@ -15291,5 +15291,33 @@
       "deletions": 22,
       "changed_files": 4
     }
+  },
+  {
+    "pr_number": 474,
+    "url": "https://github.com/LondonSquad/Novix/pull/474",
+    "title": "fix: handle empty state in continue watching",
+    "opened_at": "2025-07-31T20:13:31Z",
+    "head_ref": "hotfix/handel-empty-state-in-continue-watching",
+    "base_ref": "develop",
+    "creator": {
+      "login": "BassantM",
+      "id": 102248144,
+      "url": "https://github.com/BassantM"
+    },
+    "approvals": [],
+    "first_approved_at": null,
+    "time_to_first_approval_minutes": null,
+    "required_approvals_met_at": null,
+    "time_to_required_approvals_minutes": null,
+    "closed_at": null,
+    "merged_at": null,
+    "merged_by": null,
+    "week": "2025-W31",
+    "status": "pending",
+    "diff_stats": {
+      "additions": 44,
+      "deletions": 7,
+      "changed_files": 7
+    }
   }
 ]
