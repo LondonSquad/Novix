@@ -113,15 +113,15 @@ fun TvShowsDetailsScreen(
     }
 
     BuildScreen(
+        onBack = viewModel::onBackClicked,
         isLoading = uiState.isLoading,
-        isError = false,
-        content = {
-            TvShowsDetailScreenContent(
-                uiState = uiState,
-                tvShowDetailsContract = viewModel
-            )
-        }
-    )
+        isError = uiState.error != null
+    ) {
+        TvShowsDetailScreenContent(
+            uiState = uiState,
+            tvShowDetailsContract = viewModel
+        )
+    }
 }
 
 @Composable
