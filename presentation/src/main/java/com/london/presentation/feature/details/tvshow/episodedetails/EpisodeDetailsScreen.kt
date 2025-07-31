@@ -145,7 +145,6 @@ fun EpisodeDetailsScreenContent(
                 if (images != null) {
                     CustomBackDropImagePager(
                         images = images.map { it.fileUrl },
-                        isVisibleDots = images.size > 1,
                     )
                 }
             }

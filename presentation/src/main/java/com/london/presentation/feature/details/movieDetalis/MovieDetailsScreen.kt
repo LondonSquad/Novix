@@ -184,7 +184,6 @@ fun MovieDetailsContent(
 
                         CustomBackDropImagePager(
                             images = uiState.movieImages,
-                            isVisibleDots = uiState.movieImages.size > 1,
                         )
 
                         Column(
