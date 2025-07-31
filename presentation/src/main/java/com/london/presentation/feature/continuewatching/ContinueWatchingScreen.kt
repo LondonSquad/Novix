@@ -35,6 +35,7 @@ import com.london.designsystem.component.TabItem
 import com.london.designsystem.component.TabLayout
 import com.london.designsystem.component.TopBar
 import com.london.designsystem.theme.NovixTheme
+import com.london.designsystem.theme.ThemePreviews
 import com.london.presentation.utils.Listen
 import com.london.presentation.utils.MovieGenre
 import com.london.presentation.utils.TvShowGenre
@@ -204,4 +205,10 @@ private fun TvShowRow(
                 onClick = { onGenreClick(genre) })
         }
     }
+}
+
+@ThemePreviews
+@Composable
+private fun ContinueWatchingScreenPreview() {
+    Content()
 }

@@ -34,14 +34,19 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.paging.PagingData
 import androidx.paging.compose.collectAsLazyPagingItems
 import com.london.designsystem.component.CircularLoading
 import com.london.designsystem.component.Text
 import com.london.designsystem.component.TopBar
 import com.london.designsystem.component.button.ErrorImage
 import com.london.designsystem.theme.NovixTheme
+import com.london.designsystem.theme.ThemePreviews
+import com.london.domain.entity.review.AuthorDetails
+import com.london.domain.entity.review.ReviewEntity
 import com.london.imageharamblur.ui.ImageViewFilter
 import com.london.presentation.R
 import com.london.presentation.feature.buildscreen.BuildScreen
@@ -52,6 +57,7 @@ import com.london.presentation.shared.RatingItem
 import com.london.presentation.shared.ReviewsDate
 import com.london.presentation.utils.Listen
 import com.london.presentation.utils.reverseDateFormat
+import kotlinx.coroutines.flow.flow
 import org.koin.androidx.compose.koinViewModel
 
 @Composable
@@ -280,4 +286,38 @@ fun EmptyReviews(
             modifier = Modifier.fillMaxWidth()
         )
     }
+}
+
+@ThemePreviews
+@Composable
+private fun ReviewsScreenPreview() {
+    val mockReview = ReviewEntity(
+        authorName = "John Doe",
+        authorDetails = AuthorDetails(
+            name = "Jane Smith",
+            username = "janesmith",
+            profileUrl = "https://example.com/avatar.jpg",
+            rating = 7.8
+        ),
+        content = "This movie was absolutely amazing! Highly recommend it to everyone.",
+        createdAt = "2023-08-01T12:34:56Z",
+        id = "review_001",
+        updatedAt = "2023-08-02T09:00:00Z",
+        url = "https://example.com/review/review_001"
+    )
+
+    val mockPagingData = PagingData.from(listOf(mockReview, mockReview.copy(id = "review_002")))
+
+    ReviewsScreenContent(
+        uiState = ReviewsUiState(
+            isLoading = false,
+            error = null,
+            reviews = flow { emit(mockPagingData) }
+        ),
+        reviewContract = object : ReviewContract {
+            override fun onBackClicked() {
+                TODO("Not yet implemented")
+            }
+        }
+    )
 }

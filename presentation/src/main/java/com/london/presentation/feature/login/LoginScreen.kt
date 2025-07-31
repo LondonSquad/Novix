@@ -35,6 +35,8 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.input.TextFieldValue
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.london.designsystem.component.Icon
@@ -44,6 +46,7 @@ import com.london.designsystem.component.Text
 import com.london.designsystem.component.TopBar
 import com.london.designsystem.component.button.PrimaryButton
 import com.london.designsystem.theme.NovixTheme
+import com.london.designsystem.theme.ThemePreviews
 import com.london.presentation.R
 import com.london.presentation.feature.base.ErrorState
 import com.london.presentation.utils.Listen
@@ -245,4 +248,50 @@ private fun SnackBarAnimation(message: String?) {
             icon = painterResource(dsR.drawable.ic_failed)
         )
     }
+}
+
+@ThemePreviews
+@Composable
+private fun LoginPreview() {
+    Content(
+        uiState = LoginUiState(
+            isLoading = true,
+            username = TextFieldValue(""),
+            password = TextFieldValue(""),
+            isLoginEnabled = false
+        ),
+        loginContract = object : LoginContract{
+            override fun onUsernameChanged(username: TextFieldValue) {
+                TODO("Not yet implemented")
+            }
+
+            override fun onPasswordChanged(password: TextFieldValue) {
+                TODO("Not yet implemented")
+            }
+
+            override fun onPasswordVisibilityToggled() {
+                TODO("Not yet implemented")
+            }
+
+            override fun onLoginClick() {
+                TODO("Not yet implemented")
+            }
+
+            override fun onLoginAsGuestClick() {
+                TODO("Not yet implemented")
+            }
+
+            override fun onNavigateBack() {
+                TODO("Not yet implemented")
+            }
+
+            override fun onCreateAccountClick() {
+                TODO("Not yet implemented")
+            }
+
+            override fun onForgotPasswordClick() {
+                TODO("Not yet implemented")
+            }
+        }
+    )
 }

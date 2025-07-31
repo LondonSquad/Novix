@@ -6,6 +6,10 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.london.designsystem.theme.ThemePreviews
+import com.london.domain.entity.actordetails.actormovie.ActorMovieCastMemberEntity
+import com.london.domain.entity.actordetails.actormovie.ActorMovieDetails
+import com.london.domain.entity.actordetails.actortvshow.ActorTvShowCastMemberEntity
 import com.london.presentation.R
 import com.london.presentation.feature.buildscreen.BuildScreen
 import com.london.presentation.feature.buildscreen.LoadingScreen
@@ -68,4 +72,26 @@ private fun HandleTopMoviesPicksEffects(
             is TopMoviesPicksEffect.NavigationToMovieDetails -> onNavigateMovie(currentEffect.movieId)
         }
     }
+}
+
+@ThemePreviews
+@Composable
+private fun TopMoviesPicksScreenPreview() {
+    val mockState = TopMoviesPicksUiState(
+        movieDetails = ActorMovieDetails(
+            cast = listOf(
+                ActorMovieCastMemberEntity(1, "https://image.tmdb.org/t/p/w500/abc.jpg"),
+                ActorTvShowCastMemberEntity(2, "https://image.tmdb.org/t/p/w500/def.jpg"),
+                ActorTvShowCastMemberEntity(3, "https://image.tmdb.org/t/p/w500/ghi.jpg"),
+            ) as List<ActorMovieCastMemberEntity>
+        )
+    )
+
+    TopMoviesPicksContent(
+        state = mockState,
+        contract = object : TopMoviesPicksContract {
+            override fun onBack() {}
+            override fun onSaveMovie(movieId: Int) {}
+        }
+    )
 }

@@ -62,7 +62,10 @@ import com.london.designsystem.component.Text
 import com.london.designsystem.component.TopBar
 import com.london.designsystem.component.button.ErrorImage
 import com.london.designsystem.theme.NovixTheme
+import com.london.designsystem.theme.ThemePreviews
 import com.london.designsystem.theme.noRippleClickable
+import com.london.domain.entity.Actor
+import com.london.domain.entity.Movie
 import com.london.presentation.R.drawable
 import com.london.presentation.R.string.calendar
 import com.london.presentation.R.string.dot
@@ -536,4 +539,86 @@ private fun MovieDetailsImage(
             ErrorImage()
         }
     }
+}
+
+@ThemePreviews
+@Composable
+private fun MovieDetailsContentPreview() {
+    MovieDetailsContent(
+        uiState = MovieDetailsUiState(
+            movieId = 101,
+            movieImage = listOf(
+                "https://image.tmdb.org/t/p/w500/image1.jpg",
+                "https://image.tmdb.org/t/p/w500/image2.jpg",
+                "https://image.tmdb.org/t/p/w500/image3.jpg"
+            ),
+            movieName = "Inception",
+            movieGenres = listOf(28, 878, 12),
+            movieRating = "8.8",
+            movieDuration = "2h 28m",
+            releaseDate = "2010-07-16",
+            movieOverview = "A thief who steals corporate secrets through the use of dream-sharing technology is given the inverse task of planting an idea...",
+            actors = listOf(
+                Actor(1, "Leonardo DiCaprio", "https://image.tmdb.org/t/p/w500/leo.jpg"),
+                Actor(2, "Joseph Gordon-Levitt", "https://image.tmdb.org/t/p/w500/joseph.jpg"),
+                Actor(3, "Elliot Page", "https://image.tmdb.org/t/p/w500/elliot.jpg")
+            ),
+            similarMovies = listOf(
+                Movie(
+                    id = 1,
+                    name = "Interstellar",
+                    posterPicture = "https://image.tmdb.org/t/p/w500/interstellar.jpg",
+                    releaseYear = 2014,
+                    rating = 87,
+                    genreIds = listOf(878, 12, 18)
+                ),
+                Movie(
+                    id = 2,
+                    name = "The Prestige",
+                    posterPicture = "https://image.tmdb.org/t/p/w500/prestige.jpg",
+                    releaseYear = 2006,
+                    rating = 85,
+                    genreIds = listOf(18, 9648, 53)
+                )
+            ),
+            isRated = true,
+            isSaved = true,
+            currentImageIndex = 1,
+            imageSlideDirection = 1,
+            expanded = false,
+            isLoading = false,
+            error = null,
+            movieVideo = "https://www.youtube.com/watch?v=YoHD9XEInc0"
+        ),
+        movieDetailsContract = object : MovieDetailsContract {
+            override fun onBackClick() {
+                TODO("Not yet implemented")
+            }
+
+            override fun onSavedClick() {
+                TODO("Not yet implemented")
+            }
+
+            override fun onExpandClick() {
+                TODO("Not yet implemented")
+            }
+
+            override fun onMovieClick(movieId: Int) {
+                TODO("Not yet implemented")
+            }
+
+            override fun onActorClick(actorId: Int) {
+                TODO("Not yet implemented")
+            }
+
+            override fun onReviewsClick(movieId: Int, mediaNumber: Int) {
+                TODO("Not yet implemented")
+            }
+
+            override fun onGenreClick(genreId: Int) {
+                TODO("Not yet implemented")
+            }
+
+        }
+    )
 }

@@ -23,6 +23,7 @@ import androidx.compose.foundation.lazy.grid.GridItemSpan
 import androidx.compose.foundation.lazy.grid.LazyGridScope
 import androidx.compose.foundation.lazy.grid.LazyGridState
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
+import androidx.compose.foundation.lazy.grid.rememberLazyGridState
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
@@ -55,12 +56,17 @@ import com.london.designsystem.component.HomeCard
 import com.london.designsystem.component.Text
 import com.london.designsystem.component.button.PrimaryButton
 import com.london.designsystem.theme.NovixTheme
+import com.london.designsystem.theme.ThemePreviews
 import com.london.designsystem.utils.shimmerEffect
 import com.london.domain.entity.Movie
+import com.london.domain.entity.popular.PopularMovie
+import com.london.domain.entity.popular.PopularTvShow
 import com.london.presentation.R
 import com.london.presentation.feature.buildscreen.NetworkErrorScreen
+import com.london.domain.entity.recent.MediaType
 import com.london.presentation.shared.GenresSection
 import com.london.presentation.utils.Listen
+import com.london.presentation.utils.MovieGenre
 import org.koin.compose.viewmodel.koinViewModel
 
 @Composable
@@ -357,3 +363,51 @@ private fun LazyGridScope.upComingSection(
     }
 }
 
+@ThemePreviews
+@Composable
+private fun HomePreview() {
+    val mockUiState = HomeScreenUiState(
+        isLoading = false,
+        popularMovies = listOf(
+            PopularMovie(
+                id = 1,
+                title = "Inception",
+                posterUrl = "https://image.tmdb.org/t/p/w500/sample.jpg",
+                backdropUrl = "https://image.tmdb.org/t/p/w500/sample_backdrop.jpg",
+                rating = 8.7
+            ),
+            PopularMovie(
+                id = 2,
+                title = "The Dark Knight",
+                posterUrl = "https://image.tmdb.org/t/p/w500/sample2.jpg",
+                backdropUrl = "https://image.tmdb.org/t/p/w500/sample_backdrop2.jpg",
+                rating = 9.0
+            )
+        ),
+        popularTvShows = listOf(
+            PopularTvShow(
+                id = 101,
+                name = "Breaking Bad",
+                overview = "A high school chemistry teacher turned meth producer.",
+                posterUrl = "https://image.tmdb.org/t/p/w500/tv_sample.jpg",
+                rating = 9.5
+            )
+        ),
+        topRatedUiMediaList = listOf(
+            HomeUiMedia(1, "https://image.tmdb.org/t/p/w500/sample.jpg", MediaType.Movie)
+        ),
+        recentWatchedMediaList = listOf(
+            HomeUiMedia(2, "https://image.tmdb.org/t/p/w500/sample2.jpg", MediaType.TvShow)
+        ),
+        movieGenres = MovieGenre.entries.toList(),
+        selectedMovieGenre = MovieGenre.Action
+    )
+
+    val mockLazyGridState = rememberLazyGridState()
+
+    Content(
+        uiState = mockUiState,
+        lazyGridState = mockLazyGridState,
+        screenWidth = 360.dp
+    )
+}

@@ -17,6 +17,7 @@ import com.london.designsystem.R
 import com.london.designsystem.component.Text
 import com.london.designsystem.component.button.OutlineButton
 import com.london.designsystem.theme.NovixTheme
+import com.london.designsystem.theme.ThemePreviews
 
 @Composable
 fun NetworkErrorScreen(
@@ -62,4 +63,10 @@ fun NetworkErrorScreen(
             modifier = Modifier.padding(top = 16.dp)
         )
     }
+}
+
+@ThemePreviews
+@Composable
+private fun NetworkErrorScreenPreview() {
+    NetworkErrorScreen()
 }

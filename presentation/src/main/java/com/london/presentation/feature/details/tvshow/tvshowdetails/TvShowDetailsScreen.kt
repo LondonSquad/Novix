@@ -60,8 +60,23 @@ import com.london.designsystem.component.TopBar
 import com.london.designsystem.component.UnSuitableEye
 import com.london.designsystem.component.button.ErrorImage
 import com.london.designsystem.theme.NovixTheme
+import com.london.designsystem.theme.ThemePreviews
 import com.london.designsystem.theme.noRippleClickable
+import com.london.domain.entity.tvshowdetails.ImageItemEntity
+import com.london.domain.entity.tvshowdetails.TvShowCastEntity
 import com.london.domain.entity.tvshowdetails.TvShowCastMemberEntity
+import com.london.domain.entity.tvshowdetails.TvShowCreatorEntity
+import com.london.domain.entity.tvshowdetails.TvShowEpisodeEntity
+import com.london.domain.entity.tvshowdetails.TvShowGenreEntity
+import com.london.domain.entity.tvshowdetails.TvShowNetworkEntity
+import com.london.domain.entity.tvshowdetails.TvShowProductionCompanyEntity
+import com.london.domain.entity.tvshowdetails.TvShowProductionCountryEntity
+import com.london.domain.entity.tvshowdetails.TvShowSeasonEntity
+import com.london.domain.entity.tvshowdetails.TvShowSpokenLanguageEntity
+import com.london.domain.entity.tvshowdetails.episode.EpisodeCrewMemberEntity
+import com.london.domain.entity.tvshowdetails.episode.EpisodeGuestStarEntity
+import com.london.domain.entity.tvshowdetails.episode.TvShowEpisodeBySeasonEntity
+import com.london.domain.entity.tvshowdetails.episode.TvShowEpisodesEntity
 import com.london.imageharamblur.ui.ImageViewFilter
 import com.london.presentation.feature.buildscreen.BuildScreen
 import com.london.presentation.feature.reviews.MediaType
@@ -665,4 +680,180 @@ fun EpisodeDuration(
             )
         }
     }
+}
+
+@ThemePreviews
+@Composable
+private fun TvShowsDetailScreenContentPreview() {
+    val mockTvShowDetailsUiState = TvShowDetailsUiState(
+        isLoading = false,
+        isError = false,
+        error = null,
+        tvImages = listOf(
+            ImageItemEntity(
+                aspectRatio = 1.78,
+                height = 1080,
+                iso6391 = "en",
+                fileUrl = "https://via.placeholder.com/1920x1080.png?text=TV+Image",
+                voteAverage = 8.2,
+                voteCount = 420,
+                width = 1920
+            )
+        ),
+        tvShowEpisodes = listOf(
+            TvShowEpisodeBySeasonEntity(
+                airDate = "2025-07-15",
+                episodeNumber = 1,
+                episodeType = "Standard",
+                id = 1001,
+                name = "Episode One",
+                overview = "Introduction to the new world and its characters.",
+                productionCode = "E101",
+                runtime = 45,
+                seasonNumber = 1,
+                showId = 500,
+                stillUrl = "https://via.placeholder.com/1280x720.png?text=Episode+1",
+                voteAverage = 8.7,
+                voteCount = 350,
+                crew = listOf(
+                    EpisodeCrewMemberEntity(name = "Director A", job = "Director")
+                ),
+                episodeGuestStars = listOf(
+                    EpisodeGuestStarEntity(name = "Guest Actor", character = "Mystery Man")
+                )
+            )
+        ),
+        tvShowEpisodeCountBySeason = TvShowEpisodesEntity(
+            id = "season-1",
+            airDate = "2025-07-01",
+            episodes = emptyList()
+        ),
+        adult = false,
+        cast = TvShowCastEntity(
+            id = 1,
+            cast = listOf(),
+        ),
+        backdropPath = "https://via.placeholder.com/1920x1080.png?text=Backdrop",
+        createdBy = listOf(
+            TvShowCreatorEntity(
+                id = 1,
+                creditId = "abc123",
+                name = "John Smith",
+                originalName = "John Smith",
+                gender = 2,
+                profileUrl = "https://via.placeholder.com/150.png?text=JS"
+            )
+        ),
+        episodeRunTime = listOf(45),
+        firstAirDate = "2025-07-01",
+        tvShowGenres = listOf(
+            TvShowGenreEntity(1, "Drama"),
+            TvShowGenreEntity(2, "Mystery")
+        ),
+        homepage = "https://tvshow.com",
+        id = 500,
+        isSaved = true,
+        inProduction = true,
+        languages = listOf("en"),
+        lastAirDate = "2025-07-29",
+        lastTvShowEpisodeToAir = TvShowEpisodeEntity(
+            id = 2001,
+            name = "The Turning Point",
+            overview = "Major revelations change everything.",
+            voteAverage = 9.0,
+            voteCount = 1020,
+            airDate = "2025-07-29",
+            episodeNumber = 4,
+            episodeType = "Standard",
+            productionCode = "E104",
+            runtime = 45,
+            seasonNumber = 1,
+            showId = 500,
+            stillPath = "https://via.placeholder.com/1280x720.png?text=Ep4"
+        ),
+        name = "Mystery Falls",
+        nextTvShowEpisodeToAir = null,
+        tvShowNetworks = listOf(
+            TvShowNetworkEntity(
+                id = 10,
+                logoUrl = "https://via.placeholder.com/100x50.png?text=Logo",
+                name = "Network X",
+                originCountry = "US"
+            )
+        ),
+        numberOfEpisodes = 10,
+        numberOfSeasons = 1,
+        originCountry = listOf("US"),
+        originalLanguage = "en",
+        originalName = "Mystery Falls",
+        overview = "A small town holds dark secrets. Each episode reveals more.",
+        popularity = 75.5,
+        posterPath = "https://via.placeholder.com/400x600.png?text=Poster",
+        productionCompanies = listOf(
+            TvShowProductionCompanyEntity(
+                id = 1,
+                logoUrl = "https://via.placeholder.com/100.png?text=PC",
+                name = "Studio A",
+                originCountry = "US"
+            )
+        ),
+        productionCountries = listOf(
+            TvShowProductionCountryEntity(name = "United States", iso31661 = "US")
+        ),
+        tvShowSeasons = listOf(
+            TvShowSeasonEntity(
+                airDate = "2025-07-01",
+                episodeCount = 10,
+                id = 700,
+                name = "Season 1",
+                overview = "The beginning of everything.",
+                posterUrl = "https://via.placeholder.com/300x450.png?text=Season+1",
+                seasonNumber = 1,
+                voteAverage = 8.5
+            )
+        ),
+        tvShowSpokenLanguages = listOf(
+            TvShowSpokenLanguageEntity(
+                englishName = "English",
+                iso6391 = "en",
+                name = "English"
+            )
+        ),
+        status = "Returning Series",
+        tagline = "Every secret has a price.",
+        type = "Scripted",
+        voteAverage = 8.9,
+        voteCount = 2025,
+        videoProvider = "YouTube"
+    )
+
+    TvShowsDetailScreenContent(
+        uiState = mockTvShowDetailsUiState,
+        tvShowDetailsContract = object : TvShowDetailsContract{
+            override fun onBackClicked() {
+                TODO("Not yet implemented")
+            }
+
+            override fun onEpisodeDetailsClicked(
+                tvShowId: Int,
+                episodeNumber: Int,
+                seasonNumber: Int
+            ) {
+                TODO("Not yet implemented")
+            }
+
+            override fun onReviewsClicked(tvShowId: Int, mediaType: Int) {
+                TODO("Not yet implemented")
+            }
+
+            override fun onCastClicked(tvShowId: Int) {
+                TODO("Not yet implemented")
+            }
+
+            override fun OnGenreClicked(genreId: Int) {
+                TODO("Not yet implemented")
+            }
+
+        }
+    )
 }

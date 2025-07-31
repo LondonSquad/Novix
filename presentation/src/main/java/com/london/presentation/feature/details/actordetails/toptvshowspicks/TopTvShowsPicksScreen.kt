@@ -5,7 +5,11 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.london.designsystem.theme.ThemePreviews
+import com.london.domain.entity.actordetails.actortvshow.ActorTvShowCastMemberEntity
+import com.london.domain.entity.actordetails.actortvshow.ActorTvShowDetails
 import com.london.presentation.R
 import com.london.presentation.feature.buildscreen.BuildScreen
 import com.london.presentation.feature.buildscreen.LoadingScreen
@@ -69,4 +73,29 @@ private fun HandleTvShowsPicksEffects(
             is TopTvShowsPicksEffect.BackNavigation -> onNavigateBack()
         }
     }
+}
+
+@ThemePreviews
+@Composable
+private fun TopTvShowsPicksContentPreview() {
+    val mockState = TopTvShowsPicksUiState(
+        tvShowDetails = ActorTvShowDetails(
+            cast = listOf(
+                ActorTvShowCastMemberEntity(1, "https://image.tmdb.org/t/p/w500/abc.jpg"),
+                ActorTvShowCastMemberEntity(2, "https://image.tmdb.org/t/p/w500/def.jpg"),
+                ActorTvShowCastMemberEntity(3, "https://image.tmdb.org/t/p/w500/ghi.jpg"),
+            )
+        )
+    )
+
+    TopTvShowsPicksContent(
+        state = mockState,
+        contract = object : TopTvShowsPicksContract {
+            override fun onBack() {}
+            override fun onSaveMovie(movieId: Int) {}
+            override fun onTvShowClicked(tvShowId: Int) {
+                TODO("Not yet implemented")
+            }
+        }
+    )
 }

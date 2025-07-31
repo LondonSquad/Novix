@@ -28,6 +28,7 @@ import com.london.designsystem.component.CircularLoading
 import com.london.designsystem.component.TopBar
 import com.london.designsystem.component.button.ErrorImage
 import com.london.designsystem.theme.NovixTheme
+import com.london.designsystem.theme.ThemePreviews
 import com.london.imageharamblur.ui.ImageViewFilter
 import com.london.presentation.R
 import com.london.presentation.feature.base.ErrorState
@@ -114,3 +115,21 @@ private fun Content(
     }
 }
 
+@ThemePreviews
+@Composable
+private fun ActorGalleryScreenPreview() {
+    Content(
+        uiState = ActorGalleryUiState(
+            images = listOf(
+                "https://image.tmdb.org/t/p/w500/a1.jpg",
+                "https://image.tmdb.org/t/p/w500/a1.jpg",
+                "https://image.tmdb.org/t/p/w500/a1.jpg"
+            )
+        ),
+        actorGalleryContract = object : ActorGalleryContract {
+            override fun onBackClick() {
+
+            }
+        }
+    )
+}

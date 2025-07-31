@@ -48,6 +48,9 @@ import com.london.designsystem.component.Icon
 import com.london.designsystem.component.Text
 import com.london.designsystem.component.TopBar
 import com.london.designsystem.theme.NovixTheme
+import com.london.designsystem.theme.ThemePreviews
+import com.london.domain.entity.Actor
+import com.london.domain.entity.tvshowdetails.ImageItemEntity
 import com.london.presentation.R
 import com.london.presentation.feature.buildscreen.BuildScreen
 import com.london.presentation.shared.ConditionalText
@@ -406,4 +409,67 @@ fun OverviewSection(
             ) { isTextCollapsed = !isTextCollapsed }
         }
     }
+}
+
+@ThemePreviews
+@Composable
+private fun EpisodeDetailsScreenContentPreview() {
+    EpisodeDetailsScreenContent(
+        uiState = EpisodeDetailsUiState(
+            tvImages = listOf(
+                ImageItemEntity(
+                    aspectRatio = 1.78,
+                    height = 1080,
+                    iso6391 = "en",
+                    fileUrl = "https://via.placeholder.com/1920x1080.png?text=TV+Image+1",
+                    voteAverage = 8.5,
+                    voteCount = 200,
+                    width = 1920
+                ),
+                ImageItemEntity(
+                    aspectRatio = 1.78,
+                    height = 720,
+                    iso6391 = "en",
+                    fileUrl = "https://via.placeholder.com/1280x720.png?text=TV+Image+2",
+                    voteAverage = 7.9,
+                    voteCount = 150,
+                    width = 1280
+                )
+            ),
+            isLoading = false,
+            error = null,
+            episodeGenres = listOf("Drama", "Thriller"),
+            airDate = "2024-12-15",
+            seasonNumber = 3,
+            episodeTypes = "Finale",
+            tvShowId = 101,
+            name = "The Great Escape",
+            overview = "In this episode, the tension reaches its peak as the crew attempts one last escape.",
+            stillPath = "https://via.placeholder.com/500x300.png?text=Still",
+            voteAverage = 8.9,
+            voteCount = 1450,
+            guestStars = listOf(
+                Actor(
+                    id = 1,
+                    name = "John Doe",
+                    profilePicture = "https://via.placeholder.com/150.png?text=Actor1"
+                ),
+                Actor(
+                    id = 2,
+                    name = "Jane Smith",
+                    profilePicture = "https://via.placeholder.com/150.png?text=Actor2"
+                )
+            ),
+            id = 303,
+            backdropPath = "https://via.placeholder.com/800x450.png?text=Backdrop",
+            isSaved = true,
+            videoProvider = "YouTube"
+        ),
+        episodeDetailsContract = object : EpisodeDetailsContract {
+            override fun onBackClicked() {
+                TODO("Not yet implemented")
+            }
+        },
+        onNavigateToCast = {}
+    )
 }

@@ -56,9 +56,13 @@ import com.london.designsystem.component.Text
 import com.london.designsystem.component.TopBar
 import com.london.designsystem.component.button.ErrorImage
 import com.london.designsystem.theme.NovixTheme
+import com.london.designsystem.theme.ThemePreviews
+import com.london.domain.entity.actordetails.ActorDetails
 import com.london.domain.entity.actordetails.actorimage.ImageDetails
 import com.london.domain.entity.actordetails.actormovie.ActorMovieCastMemberEntity
+import com.london.domain.entity.actordetails.actormovie.ActorMovieDetails
 import com.london.domain.entity.actordetails.actortvshow.ActorTvShowCastMemberEntity
+import com.london.domain.entity.actordetails.actortvshow.ActorTvShowDetails
 import com.london.imageharamblur.ui.ImageViewFilter
 import com.london.presentation.R
 import com.london.presentation.shared.ConditionalText
@@ -448,3 +452,66 @@ private fun TextWithIcon(
     }
 }
 
+@ThemePreviews
+@Composable
+private fun ActorDetailsScreenPreview() {
+    val mockActorDetailsUiState = ActorDetailsUiState(
+        isLoading = false,
+        actorId = 123,
+        actorName = "Leonardo DiCaprio",
+        actorBirthday = "1974-11-11",
+        actorPlaceOfBirth = "Los Angeles, California",
+        actorBiography = "Leonardo Wilhelm DiCaprio is an American actor and film producer known for his work in biopics and period films.",
+        knownForDepartment = "Acting",
+        actorDetails = ActorDetails(),
+        actorImageDetails = listOf(
+            ImageDetails("https://image.tmdb.org/t/p/w500/img1.jpg"),
+            ImageDetails("https://image.tmdb.org/t/p/w500/img2.jpg"),
+            ImageDetails("https://image.tmdb.org/t/p/w500/img3.jpg")
+        ),
+        actorMovieDetails = ActorMovieDetails(
+            cast = listOf(
+                ActorMovieCastMemberEntity(1, "https://image.tmdb.org/t/p/w500/abc.jpg"),
+                ActorTvShowCastMemberEntity(2, "https://image.tmdb.org/t/p/w500/def.jpg"),
+                ActorTvShowCastMemberEntity(3, "https://image.tmdb.org/t/p/w500/ghi.jpg"),
+            ) as List<ActorMovieCastMemberEntity>
+        ),
+        actorTvShowDetails = ActorTvShowDetails(
+            cast = listOf(
+                ActorTvShowCastMemberEntity(1, "https://image.tmdb.org/t/p/w500/abc.jpg"),
+                ActorTvShowCastMemberEntity(2, "https://image.tmdb.org/t/p/w500/def.jpg"),
+                ActorTvShowCastMemberEntity(3, "https://image.tmdb.org/t/p/w500/ghi.jpg"),
+            )
+        )
+    )
+
+
+    ActorScreenContent(
+        uiState = mockActorDetailsUiState,
+        actorDetailsContract = object : ActorDetailsContract {
+            override fun onNavigateBack() {
+                TODO("Not yet implemented")
+            }
+
+            override fun onGalleryClick(actorId: Int) {
+                TODO("Not yet implemented")
+            }
+
+            override fun onTvShowPicksClick(actorId: Int) {
+                TODO("Not yet implemented")
+            }
+
+            override fun onTvShowScreenClick(tvShowId: Int) {
+                TODO("Not yet implemented")
+            }
+
+            override fun onMoviePicksClick(actorId: Int) {
+                TODO("Not yet implemented")
+            }
+
+            override fun onMovieScreenClick(movieId: Int) {
+                TODO("Not yet implemented")
+            }
+        }
+    )
+}

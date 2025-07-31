@@ -441,21 +441,18 @@ fun NavGraphBuilder.mainNavGraph(
 
     composable<Screen.ActorDetails> {
         ActorDetailsScreen(
-            onNavigateToMoviePicks = { actorId ->
+            onNavigateBack = { navController.navigateUp() }, onNavigateToMoviePicks = { actorId ->
                 navController.navigate(Screen.ActorTopMoviesPicksDetails(actorId))
-            }, onNavigateToTvShowPicks = { actorId ->
-                navController.navigate(Screen.TopTvShowsPicksDetails(actorId))
             },
             onNavigateToGallery = { actorId ->
                 navController.navigate(Screen.ActorGallery(actorId))
             },
+            onNavigateToTvShowPicks = { actorId ->
+                navController.navigate(Screen.TopTvShowsPicksDetails(actorId))
+            },
             onNavigateToMovieScreen = { movieId ->
                 navController.navigate(MovieDetails(movieId))
-            },
-            onNavigateToTvShowScreen = { tvShowId ->
-                navController.navigate(TvShowDetails(tvShowId))
-            },
-            onNavigateBack = { navController.navigateUp() }
+            }
         )
     }
 
