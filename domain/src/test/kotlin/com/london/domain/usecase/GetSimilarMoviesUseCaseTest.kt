@@ -98,9 +98,9 @@ class GetSimilarMoviesUseCaseTest {
     }
 
     private companion object {
-        const val MOVIE_ID = 123
+        private const val MOVIE_ID = 123
 
-        val similarMovieMockList = listOf(
+        private val similarMovieMockList = listOf(
             createDummySimilarMovie(1, "Similar Movie 1"),
             createDummySimilarMovie(2, "Similar Movie 2")
         )
@@ -108,7 +108,7 @@ class GetSimilarMoviesUseCaseTest {
         private fun createDummySimilarMovie(id: Int, title: String) = Movie(
             id = id,
             name = title,
-            posterPicture = "/backdrop_$id.jpg",
+            posterUrl = "/backdrop_$id.jpg",
             genreIds = listOf(1, 2, 3),
             releaseYear = 2025,
             rating = 7,

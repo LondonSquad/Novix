@@ -44,17 +44,17 @@ class GetMoviesByCategoryUseCaseTest {
 
 
     private companion object {
-        const val CATEGORY_ID = 1
-        const val PAGE_NUMBER = 1
-        val movie = Movie(
+       private const val CATEGORY_ID = 1
+       private const val PAGE_NUMBER = 1
+       private val movie = Movie(
             id = 1,
             name = "",
-            posterPicture = "",
+            posterUrl = "",
             releaseYear = 2024,
             rating = 8,
             genreIds = listOf(1, 2, 3)
         )
-        val pagedFetchResponse = PagedFetchResponse(
+       private val pagedFetchResponse = PagedFetchResponse(
             currentPage = 1,
             items = listOf(movie),
             totalPages = 1,

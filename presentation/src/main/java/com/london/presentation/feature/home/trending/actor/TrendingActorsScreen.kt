@@ -1,11 +1,11 @@
 package com.london.presentation.feature.home.trending.actor
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.statusBarsPadding
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -51,40 +51,45 @@ private fun TrendingActorsContent(
     state: TrendingActorsUiState = TrendingActorsUiState(),
     contract: TrendingActorsContract = defaultTrendingActorsContract()
 ) {
-    Column(
+    LazyColumn(
         modifier = Modifier
             .fillMaxSize()
             .padding(horizontal = 16.dp)
             .background(color = NovixTheme.colors.surface)
     ) {
-        TopBar(
-            modifier = Modifier
-                .statusBarsPadding()
-                .fillMaxWidth()
-                .padding(vertical = 12.dp),
-            title = stringResource(R.string.trending_people),
-            onBackClick = contract::onBack
-        )
+        stickyHeader {
+            TopBar(
+                title = stringResource(R.string.trending_people),
+                onBackClick = contract::onBack,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .background(NovixTheme.colors.surface)
+                    .statusBarsPadding()
+                    .padding(vertical = 12.dp)
+            )
+        }
 
-        val actorsLazyItems = state.actorsFlow.collectAsLazyPagingItems()
+        item {
+            val actorsLazyItems = state.actorsFlow.collectAsLazyPagingItems()
 
 
-        LazyPagingColumn(
-            emptyTitle = R.string.no_trending_actors_in_genre.string,
-            pagingItems = actorsLazyItems,
-            modifier = Modifier.fillMaxSize(),
-            onRetry = {
-                contract.onRetry()
-            },
-            itemContent = { actor ->
-                ActorItem(
-                    actorName = actor.name,
-                    characterName = null,
-                    imageRes = actor.profilePicture,
-                    onClick = {contract.onActorClick(actor.id)}
-                )
-            }
-        )
+            LazyPagingColumn(
+                emptyTitle = R.string.no_trending_actors_in_genre.string,
+                pagingItems = actorsLazyItems,
+                modifier = Modifier.fillMaxSize(),
+                onRetry = {
+                    contract.onRetry()
+                },
+                itemContent = { actor ->
+                    ActorItem(
+                        actorName = actor.name,
+                        characterName = null,
+                        imageRes = actor.profilePictureUrl,
+                        onClick = { contract.onActorClick(actor.id) }
+                    )
+                }
+            )
+        }
     }
 }
 

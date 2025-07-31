@@ -24,7 +24,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalWindowInfo
 import androidx.compose.ui.res.stringResource
-import com.london.presentation.R.string
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -35,6 +34,7 @@ import com.london.designsystem.component.TabItem
 import com.london.designsystem.component.TabLayout
 import com.london.designsystem.component.TopBar
 import com.london.designsystem.theme.NovixTheme
+import com.london.presentation.R.string
 import com.london.presentation.utils.Listen
 import com.london.presentation.utils.MovieGenre
 import com.london.presentation.utils.TvShowGenre
@@ -129,7 +129,7 @@ fun Content(
                     val movie = state.movies[index]
                     movie.let { movieItem ->
                         HomeCard(
-                            imageUrl = movieItem.posterPicture,
+                            imageUrl = movieItem.posterUrl,
                             isSaved = false,
                             onSaveClick = {
                                 // TODO

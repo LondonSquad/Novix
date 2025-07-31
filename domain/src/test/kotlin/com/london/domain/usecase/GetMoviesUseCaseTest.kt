@@ -44,12 +44,12 @@ class GetMoviesUseCaseTest {
 
 
     private companion object {
-        const val NAME = "Movie"
-        const val PAGE_NUMBER = 1
-        val movie = Movie(
+       private const val NAME = "Movie"
+        private const val PAGE_NUMBER = 1
+        private  val movie = Movie(
             id = 1,
             name = NAME,
-            posterPicture = "",
+            posterUrl = "",
             releaseYear = 2024,
             rating = 8,
             genreIds = listOf(1, 2, 3)
