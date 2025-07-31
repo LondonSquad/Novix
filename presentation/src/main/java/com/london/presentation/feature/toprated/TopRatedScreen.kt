@@ -214,7 +214,7 @@ private fun TvShowRow(
 
 @ThemePreviews
 @Composable
-private fun TopRatedPreview() {
+private fun Preview() {
     val mockTopRatedMovie = TopRatedMovie(
         adult = false,
         backdropUrl = "https://example.com/backdrop.jpg",

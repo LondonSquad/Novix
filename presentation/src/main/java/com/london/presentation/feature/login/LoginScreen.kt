@@ -251,7 +251,7 @@ private fun SnackBarAnimation(message: String?) {
 
 @ThemePreviews
 @Composable
-private fun LoginPreview() {
+private fun Preview() {
     Content(
         uiState = LoginUiState(
             isLoading = true,

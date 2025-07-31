@@ -454,7 +454,7 @@ private fun TextWithIcon(
 
 @ThemePreviews
 @Composable
-private fun ActorDetailsScreenPreview() {
+private fun Preview() {
     val mockActorDetailsUiState = ActorDetailsUiState(
         isLoading = false,
         actorId = 123,

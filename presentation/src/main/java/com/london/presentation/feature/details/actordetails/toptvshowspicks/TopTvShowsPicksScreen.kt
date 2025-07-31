@@ -77,7 +77,7 @@ private fun HandleTvShowsPicksEffects(
 
 @ThemePreviews
 @Composable
-private fun TopTvShowsPicksContentPreview() {
+private fun Preview() {
     val mockState = TopTvShowsPicksUiState(
         tvShowDetails = ActorTvShowDetails(
             cast = listOf(

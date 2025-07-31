@@ -95,7 +95,7 @@ private fun MoviesByCategoryContent(
 
 @ThemePreviews
 @Composable
-private fun MoviesByCategoryContentPreview() {
+private fun Preview() {
     MoviesByCategoryContent(
         state = MoviesByCategoryUiState(
             movies = flow<PagingData<Movie>> {

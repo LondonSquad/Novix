@@ -684,7 +684,7 @@ fun EpisodeDuration(
 
 @ThemePreviews
 @Composable
-private fun TvShowsDetailScreenContentPreview() {
+private fun Preview() {
     val mockTvShowDetailsUiState = TvShowDetailsUiState(
         isLoading = false,
         isError = false,

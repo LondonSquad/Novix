@@ -76,7 +76,7 @@ private fun HandleTopMoviesPicksEffects(
 
 @ThemePreviews
 @Composable
-private fun TopMoviesPicksScreenPreview() {
+private fun Preview() {
     val mockState = TopMoviesPicksUiState(
         movieDetails = ActorMovieDetails(
             cast = listOf(

@@ -543,7 +543,7 @@ private fun MovieDetailsImage(
 
 @ThemePreviews
 @Composable
-private fun MovieDetailsContentPreview() {
+private fun Preview() {
     MovieDetailsContent(
         uiState = MovieDetailsUiState(
             movieId = 101,

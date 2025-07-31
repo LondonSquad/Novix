@@ -238,7 +238,7 @@ fun OnboardingNavigationButtons(
 
 @ThemePreviews
 @Composable
-fun OnboardingPreview() {
+fun Preview() {
     OnboardingScreen(
         onComplete = {},
     )

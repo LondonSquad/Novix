@@ -289,7 +289,7 @@ fun EmptyReviews(
 
 @ThemePreviews
 @Composable
-private fun ReviewsScreenPreview() {
+private fun Preview() {
     val mockReview = ReviewEntity(
         authorName = "John Doe",
         authorDetails = AuthorDetails(

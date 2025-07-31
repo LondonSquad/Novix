@@ -365,7 +365,7 @@ private fun LazyGridScope.upComingSection(
 
 @ThemePreviews
 @Composable
-private fun HomePreview() {
+private fun Preview() {
     val mockUiState = HomeScreenUiState(
         isLoading = false,
         popularMovies = listOf(

@@ -668,6 +668,6 @@ private fun SearchContentWithErrorHandling(
 
 @ThemePreviews
 @Composable
-fun SearchScreenPreview() {
+fun Preview() {
     SearchScreen()
 }

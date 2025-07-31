@@ -117,7 +117,7 @@ private fun Content(
 
 @ThemePreviews
 @Composable
-private fun ActorGalleryScreenPreview() {
+private fun Preview() {
     Content(
         uiState = ActorGalleryUiState(
             images = listOf(
