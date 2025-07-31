@@ -5,6 +5,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.london.presentation.R
 import com.london.presentation.feature.buildscreen.BuildScreen
@@ -12,13 +13,12 @@ import com.london.presentation.feature.buildscreen.LoadingScreen
 import com.london.presentation.feature.buildscreen.NetworkErrorScreen
 import com.london.presentation.shared.MediaLazyGrid
 import com.london.presentation.utils.Listen
-import org.koin.androidx.compose.koinViewModel
 
 @Composable
 fun TopMoviesPicksScreen(
     onNavigateMovie: (Int) -> Unit,
     onNavigateBack: () -> Unit,
-    viewModel: TopMoviesPicksViewModel = koinViewModel()
+    viewModel: TopMoviesPicksViewModel = hiltViewModel()
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
     val effect by viewModel.effect.collectAsState(null)

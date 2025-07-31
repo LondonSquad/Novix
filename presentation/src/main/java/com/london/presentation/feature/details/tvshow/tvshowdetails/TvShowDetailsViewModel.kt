@@ -14,10 +14,11 @@ import com.london.domain.usecase.recent.watched.AddTvShowToRecentWatchedUseCase
 import com.london.presentation.feature.base.BaseViewModel
 import com.london.presentation.navigation.Screen
 import com.london.presentation.navigation.getArgs
-import org.koin.android.annotation.KoinViewModel
+import dagger.hilt.android.lifecycle.HiltViewModel
+import javax.inject.Inject
 
-@KoinViewModel
-class TvShowDetailsViewModel(
+@HiltViewModel
+class TvShowDetailsViewModel @Inject constructor(
     private val getTvShowDetails: GetTvShowDetails,
     private val getCastById: GetCastById,
     private val getTvShowImages: GetImagesById,

@@ -10,11 +10,10 @@ import com.london.domain.entity.Actor
 import com.london.domain.entity.Movie
 import com.london.domain.entity.moviedatails.MovieDetails
 import com.london.domain.repository.MovieDetailsRepository
-import org.koin.core.annotation.Single
+import javax.inject.Inject
 
 
-@Single
-class MovieDetailsRepositoryImpl(
+class MovieDetailsRepositoryImpl @Inject constructor(
     private val movieDetailsRemoteDataSource: MovieDetailsRemoteDataSource,
 ) : MovieDetailsRepository {
 

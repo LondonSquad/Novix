@@ -8,10 +8,11 @@ import com.london.domain.usecase.GetTvShowDetails
 import com.london.presentation.feature.base.BaseViewModel
 import com.london.presentation.navigation.Screen
 import com.london.presentation.navigation.getArgs
-import org.koin.android.annotation.KoinViewModel
+import dagger.hilt.android.lifecycle.HiltViewModel
+import javax.inject.Inject
 
-@KoinViewModel
-class EpisodeDetailsViewModel(
+@HiltViewModel
+class EpisodeDetailsViewModel @Inject constructor(
     private val getTvShowImages: GetImagesById,
     private val getEpisodeByTvShowIdUseCase: GetEpisodeByTvShowId,
     private val getTvShowDetails: GetTvShowDetails,

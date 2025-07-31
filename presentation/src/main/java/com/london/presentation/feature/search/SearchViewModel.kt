@@ -21,39 +21,27 @@ import com.london.presentation.feature.base.BaseViewModel
 import com.london.presentation.feature.base.createPagingSourceFlow
 import com.london.presentation.feature.search.model.MovieUi
 import com.london.presentation.utils.convertGenreCodeToString
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.debounce
 import kotlinx.coroutines.flow.flow
-import org.koin.android.annotation.KoinViewModel
-import org.koin.core.annotation.Provided
+import javax.inject.Inject
 
 @OptIn(FlowPreview::class)
-@KoinViewModel
-class SearchViewModel(
-    @Provided
+@HiltViewModel
+class SearchViewModel @Inject constructor(
     private val getActorsUseCase: GetActorsUseCase,
-    @Provided
     private val getTvShowsUseCase: GetTvShowsUseCase,
-    @Provided
     private val getMoviesUseCase: GetMoviesUseCase,
-    @Provided
     private val addToRecentSearchUseCase: AddToRecentSearchUseCase,
-    @Provided
     private val getRecentSearchUseCase: GetRecentSearchUseCase,
-    @Provided
     private val clearRecentSearchUseCase: ClearRecentSearchUseCase,
-    @Provided
     private val getGenreInterestCountsUseCase: GetGenreInterestCountsUseCase,
-    @Provided
     private val incrementGenreInterestUseCase: IncrementGenreInterestUseCase,
-    @Provided
     private val getRecentViewedUseCase: GetRecentViewedUseCase,
-    @Provided
     private val addToRecentViewedUseCase: AddToRecentViewedUseCase,
-    @Provided
     private val clearRecentViewedUseCase: ClearRecentViewedUseCase,
-    @Provided
     private val deleteRecentSearchUseCase: DeleteRecentSearchUseCase
 ) : BaseViewModel<SearchUiState, SearchEffect>(SearchUiState()), SearchInteractions {
 

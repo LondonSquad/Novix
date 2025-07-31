@@ -14,15 +14,16 @@ import com.london.domain.usecase.toprated.GetTopRatedTvSeriesUseCase
 import com.london.presentation.feature.base.BaseViewModel
 import com.london.presentation.feature.base.createPagingSourceFlow
 import com.london.presentation.utils.MovieGenre
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
-import org.koin.android.annotation.KoinViewModel
+import javax.inject.Inject
 
-@KoinViewModel
-class HomeViewModel(
+@HiltViewModel
+class HomeViewModel @Inject constructor(
     private val getPopularMovies: GetPopularMovies,
     private val getPopularTvShows: GetPopularTvShow,
     private val getUpcomingMoviesByCategoryUseCase: GetUpComingMoviesByCategoryUseCase,

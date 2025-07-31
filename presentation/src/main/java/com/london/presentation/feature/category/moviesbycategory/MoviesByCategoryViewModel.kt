@@ -6,12 +6,12 @@ import com.london.presentation.feature.base.BaseViewModel
 import com.london.presentation.feature.base.createPagingSourceFlow
 import com.london.presentation.navigation.Screen
 import com.london.presentation.navigation.getArgs
-import org.koin.android.annotation.KoinViewModel
-import org.koin.core.annotation.Provided
+import dagger.hilt.android.lifecycle.HiltViewModel
+import javax.inject.Inject
 
-@KoinViewModel
-class MoviesByCategoryViewModel(
-    @Provided private val getMoviesByCategoryUseCase: GetMoviesByCategoryUseCase,
+@HiltViewModel
+class MoviesByCategoryViewModel @Inject constructor(
+    private val getMoviesByCategoryUseCase: GetMoviesByCategoryUseCase,
     savedStateHandle: SavedStateHandle
 ) : BaseViewModel<MoviesByCategoryUiState, MoviesByCategoryEffect>(MoviesByCategoryUiState()),
     MoviesByCategoryContract {

@@ -12,6 +12,7 @@ plugins {
     alias(libs.plugins.google.gms.google.services)
     alias(libs.plugins.google.firebase.crashlytics)
     alias(libs.plugins.kotlinx.kover)
+    alias(libs.plugins.hilt)
 }
 
 android {
@@ -103,10 +104,6 @@ dependencies {
     implementation(libs.bundles.koin)
     ksp(libs.bundles.room.ksp)
     implementation(libs.timber)
-}
-
-ksp {
-    arg("KOIN_CONFIG_CHECK", "true")
-    arg("KOIN_DEFAULT_MODULE", "false")
-    arg("KOIN_USE_COMPOSE_VIEWMODEL", "true")
+    implementation(libs.hilt.android)
+    ksp(libs.hilt.compiler)
 }

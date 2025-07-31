@@ -1,8 +1,8 @@
 package com.london.data.local.source.search
 
-import com.london.data.local.source.LocalDataSource
 import com.london.data.local.database.dao.search.SearchMoviesDao
 import com.london.data.local.model.search.SearchMoviesLocal
+import com.london.data.local.source.LocalDataSource
 import com.london.data.local.utils.executeDelete
 import com.london.data.local.utils.executeGetAll
 import com.london.data.local.utils.executeGetByDate
@@ -13,12 +13,9 @@ import com.london.data.local.utils.executeUpdate
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import org.koin.core.annotation.Named
-import org.koin.core.annotation.Single
+import javax.inject.Inject
 
-@Single
-@Named("movieLocalDataSource")
-class MovieLocalDataSourceImpl(
+class MovieLocalDataSourceImpl @Inject constructor(
     private val searchMoviesDao: SearchMoviesDao
 ) : LocalDataSource<SearchMoviesLocal> {
     init {

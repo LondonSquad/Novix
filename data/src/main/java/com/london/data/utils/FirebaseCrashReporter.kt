@@ -1,13 +1,12 @@
 package com.london.data.utils
 
 import com.google.firebase.crashlytics.FirebaseCrashlytics
-import org.koin.core.annotation.Single
+import javax.inject.Inject
 
 interface CrashReporter {
     fun logException(exception: Throwable)
 }
-@Single
-class FirebaseCrashReporter : CrashReporter {
+class FirebaseCrashReporter @Inject constructor() : CrashReporter {
     override fun logException(exception: Throwable) {
         FirebaseCrashlytics.getInstance().apply {
             setCustomKey("operation", "un_known_error")

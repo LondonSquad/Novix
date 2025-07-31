@@ -54,8 +54,6 @@ dependencies {
     implementation(libs.bundles.datastore)
     implementation(libs.bundles.room)
     ksp(libs.bundles.room.ksp)
-    implementation(libs.bundles.koin)
-    ksp(libs.bundles.koin.ksp)
     implementation(libs.gson)
     implementation(libs.firebase.crashlytics)
 
@@ -75,12 +73,8 @@ dependencies {
     implementation(libs.bundles.retrofit)
     implementation(libs.retrofit2.kotlinx.serialization.converter)
     implementation(libs.kotlinx.serialization.json)
-
+    implementation(libs.hilt.android)
+    ksp(libs.hilt.compiler)
 
     implementation(libs.timber)
-}
-ksp {
-    arg("KOIN_CONFIG_CHECK", "true")
-    arg("KOIN_DEFAULT_MODULE", "false")
-    arg("KOIN_USE_COMPOSE_VIEWMODEL", "true")
 }

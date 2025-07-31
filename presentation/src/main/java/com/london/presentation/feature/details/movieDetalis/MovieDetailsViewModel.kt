@@ -14,10 +14,11 @@ import com.london.domain.usecase.recent.watched.AddMovieToRecentWatchedUseCase
 import com.london.presentation.feature.base.BaseViewModel
 import com.london.presentation.navigation.Screen
 import com.london.presentation.navigation.getArgs
-import org.koin.android.annotation.KoinViewModel
+import dagger.hilt.android.lifecycle.HiltViewModel
+import javax.inject.Inject
 
-@KoinViewModel
-class MovieDetailsViewModel(
+@HiltViewModel
+class MovieDetailsViewModel @Inject constructor(
     private val getMovieById: GetMovieDetailsById,
     private val getMovieImagesUseCase: GetMovieImagesUseCase,
     private val getMovieCastUseCase: GetMovieCastUseCase,

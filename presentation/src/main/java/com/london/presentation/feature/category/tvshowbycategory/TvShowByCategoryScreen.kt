@@ -10,6 +10,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.paging.compose.collectAsLazyPagingItems
 import com.london.designsystem.component.TopBar
@@ -23,13 +24,12 @@ import com.london.presentation.feature.search.SearchCategory
 import com.london.presentation.shared.MediaLazyPagingGrid
 import com.london.presentation.utils.Listen
 import com.london.presentation.utils.convertGenreCodeToString
-import org.koin.androidx.compose.koinViewModel
 
 @Composable
 fun TvShowByCategoryScreen(
     onNavigateBack: () -> Unit,
     onNavigateToTvShowDetails: (Int) -> Unit,
-    viewModel: TvShowByCategoryViewModel = koinViewModel(),
+    viewModel: TvShowByCategoryViewModel = hiltViewModel(),
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
     val effect by viewModel.effect.collectAsState(null)

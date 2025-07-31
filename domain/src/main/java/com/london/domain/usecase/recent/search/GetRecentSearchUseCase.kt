@@ -2,14 +2,9 @@ package com.london.domain.usecase.recent.search
 
 import com.london.domain.entity.recent.RecentSearch
 import com.london.domain.repository.RecentRepository
-import org.koin.core.annotation.Named
-import org.koin.core.annotation.Provided
-import org.koin.core.annotation.Single
+import javax.inject.Inject
 
-@Single
-class GetRecentSearchUseCase(
-    @Provided
-    @Named("recentSearchRepository")
+class GetRecentSearchUseCase @Inject constructor(
     private val recentSearchRepository: RecentRepository<RecentSearch>
 ) {
 

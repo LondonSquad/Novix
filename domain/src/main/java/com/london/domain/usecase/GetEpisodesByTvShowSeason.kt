@@ -1,12 +1,9 @@
 package com.london.domain.usecase
 
 import com.london.domain.repository.DetailsRepository
-import org.koin.core.annotation.Provided
-import org.koin.core.annotation.Single
+import javax.inject.Inject
 
-@Single
-class GetEpisodesByTvShowSeason(
-    @Provided
+class GetEpisodesByTvShowSeason @Inject constructor(
     private val detailsRepository: DetailsRepository
 ) {
     suspend operator fun invoke(tvShowId: Int, seasonNumber: Int) =

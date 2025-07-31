@@ -24,9 +24,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalWindowInfo
 import androidx.compose.ui.res.stringResource
-import com.london.presentation.R.string
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.london.designsystem.R
 import com.london.designsystem.component.HomeCard
@@ -35,14 +35,14 @@ import com.london.designsystem.component.TabItem
 import com.london.designsystem.component.TabLayout
 import com.london.designsystem.component.TopBar
 import com.london.designsystem.theme.NovixTheme
+import com.london.presentation.R.string
 import com.london.presentation.utils.Listen
 import com.london.presentation.utils.MovieGenre
 import com.london.presentation.utils.TvShowGenre
-import org.koin.compose.viewmodel.koinViewModel
 
 @Composable
 fun ContinueWatchingScreen(
-    viewModel: ContinueWatchingViewModel = koinViewModel(),
+    viewModel: ContinueWatchingViewModel = hiltViewModel(),
     onBackClick: () -> Unit = {},
     onMovieClick: (Int) -> Unit = {},
     onTvShowClick: (Int) -> Unit = {},

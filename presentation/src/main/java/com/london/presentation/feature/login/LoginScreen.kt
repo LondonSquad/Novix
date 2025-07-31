@@ -36,6 +36,7 @@ import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.london.designsystem.component.Icon
 import com.london.designsystem.component.OutlinedTextField
@@ -48,12 +49,11 @@ import com.london.presentation.R
 import com.london.presentation.feature.base.ErrorState
 import com.london.presentation.utils.Listen
 import kotlinx.coroutines.delay
-import org.koin.androidx.compose.koinViewModel
 import com.london.designsystem.R as dsR
 
 @Composable
 fun LoginScreen(
-    viewModel: LoginViewModel = koinViewModel(),
+    viewModel: LoginViewModel = hiltViewModel(),
     onNavigateToHome: () -> Unit,
     onNavigateBack: () -> Unit,
     onNavigateToWebViewRegistration: () -> Unit

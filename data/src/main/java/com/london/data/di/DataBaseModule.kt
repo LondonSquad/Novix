@@ -3,66 +3,53 @@ package com.london.data.di
 import android.content.Context
 import com.london.data.local.database.DatabaseProvider
 import com.london.data.local.database.NovixDatabase
-import com.london.data.local.database.dao.recent.search.RecentSearchDao
-import com.london.data.local.database.dao.recent.viewed.RecentViewedDao
-import com.london.data.local.database.dao.recent.whatched.movie.RecentWatchedMoviesDao
-import com.london.data.local.database.dao.recent.whatched.tvshow.RecentWatchedTvShowsDao
-import com.london.data.local.database.dao.search.GenreInterestDao
 import com.london.data.local.database.dao.search.SearchActorsDao
-import com.london.data.local.database.dao.search.SearchMoviesDao
-import com.london.data.local.database.dao.search.SearchTvShowDao
-import org.koin.core.annotation.Module
-import org.koin.core.annotation.Named
-import org.koin.core.annotation.Single
+import dagger.Module
+import dagger.Provides
+import dagger.hilt.InstallIn
+import dagger.hilt.android.qualifiers.ApplicationContext
+import dagger.hilt.components.SingletonComponent
+import javax.inject.Singleton
 
 @Module
-class DataBaseModule {
-    @Single
-    fun provideNovixDatabase(context: Context): NovixDatabase {
-        return DatabaseProvider.getDatabase(context)
-    }
+@InstallIn(SingletonComponent::class)
+object DataBaseModule {
 
-    @Single
-    fun provideSearchMoviesDao(database: NovixDatabase): SearchMoviesDao {
-        return database.searchMoviesDao()
-    }
+    @Provides
+    @Singleton
+    fun provideNovixDatabase(@ApplicationContext context: Context) =
+        DatabaseProvider.getDatabase(context = context)
 
-    @Single
-    fun provideSearchTvShowDao(database: NovixDatabase): SearchTvShowDao {
-        return database.searchTvShowDao()
-    }
+    @Provides
+    fun provideSearchMoviesDao(database: NovixDatabase) =
+        database.searchMoviesDao()
 
-    @Single
-    fun provideSearchActorsDao(database: NovixDatabase): SearchActorsDao {
-        return database.searchActorsDao()
-    }
+    @Provides
+    fun provideSearchTvShowDao(database: NovixDatabase) =
+        database.searchTvShowDao()
 
-    @Single
-    fun provideGenreInterestDao(database: NovixDatabase): GenreInterestDao {
-        return database.genreInterestDao()
-    }
+    @Provides
+    fun provideSearchActorsDao(database: NovixDatabase): SearchActorsDao =
+        database.searchActorsDao()
 
-    @Named("recentViewedDao")
-    @Single
-    fun provideRecentViewedDao(database: NovixDatabase): RecentViewedDao {
-        return database.recentViewedDao()
-    }
+    @Provides
+    fun provideGenreInterestDao(database: NovixDatabase) =
+        database.genreInterestDao()
 
-    @Named("recentSearchDao")
-    @Single
-    fun provideRecentSearchDao(database: NovixDatabase): RecentSearchDao {
-        return database.recentSearchDao()
-    }
+    @Provides
+    fun provideRecentViewedDao(database: NovixDatabase) =
+        database.recentViewedDao()
 
-    @Named("recentWatchedMoviesDao")
-    @Single
-    fun provideRecentWatchedMoviesDao(database: NovixDatabase): RecentWatchedMoviesDao {
-        return database.recentWatchedMoviesDao()
-    }
+    @Provides
+    fun provideRecentSearchDao(database: NovixDatabase) =
+        database.recentSearchDao()
 
-    @Named("recentWatchedTvShowsDao")
-    @Single
-    fun provideRecentWatchedTvShowsDao(database: NovixDatabase): RecentWatchedTvShowsDao {
-        return database.recentWatchedTvShowsDao()
-    }
+    @Provides
+    fun provideRecentWatchedMoviesDao(database: NovixDatabase) =
+        database.recentWatchedMoviesDao()
+
+    @Provides
+    fun provideRecentWatchedTvShowsDao(database: NovixDatabase) =
+        database.recentWatchedTvShowsDao()
+
 }

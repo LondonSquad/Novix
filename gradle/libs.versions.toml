@@ -81,6 +81,8 @@ firebaseAnalytics = "22.5.0"
 kotlinxKover = "0.9.1"
 firebaseCrashlyticsKtx = "19.4.4"
 
+hilt = "2.57"
+
 [libraries]
 # AndroidX Core
 androidx-constraintlayout-compose = { module = "androidx.constraintlayout:constraintlayout-compose", version.ref = "constraintlayoutCompose" }
@@ -161,6 +163,11 @@ firebase-analytics = { group = "com.google.firebase", name = "firebase-analytics
 mockk-agent-jvm = { module = "io.mockk:mockk-agent-jvm", version.ref = "mockk" }
 firebase-crashlytics-ktx = { group = "com.google.firebase", name = "firebase-crashlytics-ktx", version.ref = "firebaseCrashlyticsKtx" }
 
+# Compiler and runtime
+hilt-android = { group = "com.google.dagger", name = "hilt-android", version.ref = "hilt" }
+hilt-compiler = { group = "com.google.dagger", name = "hilt-compiler", version.ref = "hilt" }
+hilt-navigation-compose = { group = "androidx.hilt", name = "hilt-navigation-compose", version = "1.2.0" }
+
 # Add Retrofit libraries
 retrofit-core = { group = "com.squareup.retrofit2", name = "retrofit", version.ref = "retrofit" }
 retrofit-converter-gson = { group = "com.squareup.retrofit2", name = "converter-gson", version.ref = "retrofit" }
@@ -180,6 +187,8 @@ google-firebase-firebase-perf = { id = "com.google.firebase.firebase-perf", vers
 google-gms-google-services = { id = "com.google.gms.google-services", version.ref = "googleGmsGoogleServices" }
 google-firebase-crashlytics = { id = "com.google.firebase.crashlytics", version.ref = "googleFirebaseCrashlytics" }
 kotlinx-kover = { id = "org.jetbrains.kotlinx.kover", version.ref = "kotlinxKover" }
+hilt = { id = "com.google.dagger.hilt.android", version.ref ="hilt" }
+
 
 [bundles]
 

@@ -8,11 +8,18 @@ import androidx.activity.enableEdgeToEdge
 import com.london.app.navigation.NovixApp
 import com.london.designsystem.theme.NovixTheme
 import com.london.domain.AppPreferencesService
-import org.koin.android.ext.android.inject
-import kotlin.getValue
+import com.london.domain.repository.AuthRepository
+import dagger.hilt.android.AndroidEntryPoint
+import javax.inject.Inject
 
-
+@AndroidEntryPoint
 class MainActivity : ComponentActivity() {
+    @Inject
+    lateinit var appPreferencesService: AppPreferencesService
+
+    @Inject
+    lateinit var authRepository: AuthRepository
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
@@ -23,8 +30,7 @@ class MainActivity : ComponentActivity() {
 
         setContent {
             NovixTheme {
-                val appPreferencesService: AppPreferencesService by inject()
-                NovixApp(appPreferencesService)
+                NovixApp(appPreferencesService , authRepository)
             }
         }
     }
