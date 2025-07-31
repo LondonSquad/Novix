@@ -14664,9 +14664,18 @@
       "id": 76666355,
       "url": "https://github.com/Abdulrahman1890"
     },
-    "approvals": [],
-    "first_approved_at": null,
-    "time_to_first_approval_minutes": null,
+    "approvals": [
+      {
+        "reviewer": {
+          "id": 180463542,
+          "login": "abdelrhman1002",
+          "url": "https://github.com/abdelrhman1002"
+        },
+        "submitted_at": "2025-07-31T15:28:32Z"
+      }
+    ],
+    "first_approved_at": "2025-07-31T15:28:32Z",
+    "time_to_first_approval_minutes": 6.033333333333333,
     "required_approvals_met_at": null,
     "time_to_required_approvals_minutes": null,
     "closed_at": null,
