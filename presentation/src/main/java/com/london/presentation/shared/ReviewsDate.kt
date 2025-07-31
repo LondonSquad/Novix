@@ -30,7 +30,7 @@ fun ReviewsDate(
             painter = painterResource(R.drawable.icon_calender),
             contentDescription = "Calender icon",
             tint = NovixTheme.colors.body,
-            modifier = Modifier.size(12.dp)
+            modifier = Modifier.size(11.dp)
         )
 
         Text(
