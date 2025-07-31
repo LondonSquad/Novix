@@ -14983,5 +14983,33 @@
       "deletions": 2,
       "changed_files": 2
     }
+  },
+  {
+    "pr_number": 468,
+    "url": "https://github.com/LondonSquad/Novix/pull/468",
+    "title": "fix: adjust top padding for sections in ActorDetailsScreen",
+    "opened_at": "2025-07-31T17:21:14Z",
+    "head_ref": "refactor/actor-details-screen-ui",
+    "base_ref": "develop",
+    "creator": {
+      "login": "AsmaaKhaledGomaa",
+      "id": 117874933,
+      "url": "https://github.com/AsmaaKhaledGomaa"
+    },
+    "approvals": [],
+    "first_approved_at": null,
+    "time_to_first_approval_minutes": null,
+    "required_approvals_met_at": null,
+    "time_to_required_approvals_minutes": null,
+    "closed_at": null,
+    "merged_at": null,
+    "merged_by": null,
+    "week": "2025-W31",
+    "status": "pending",
+    "diff_stats": {
+      "additions": 36,
+      "deletions": 7,
+      "changed_files": 1
+    }
   }
 ]
