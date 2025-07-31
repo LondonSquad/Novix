@@ -172,10 +172,10 @@ fun TvShowsDetailScreenContent(
 
         LazyColumn(
             state = lazyListState,
-            modifier = Modifier
-                .fillMaxSize(),
+            modifier = Modifier.fillMaxSize(),
             contentPadding = PaddingValues(bottom = footerHeight + 16.dp)
         ) {
+            // Backdrop images
             item {
                 val images = uiState.tvImages
                 CustomBackDropImagePager(
@@ -184,6 +184,7 @@ fun TvShowsDetailScreenContent(
                 )
             }
 
+            // Header details card
             item {
                 HeaderDetailsCard(
                     uiState = uiState,
@@ -213,6 +214,7 @@ fun TvShowsDetailScreenContent(
                 )
             }
 
+            // Overview title
             item {
                 Text(
                     text = stringResource(R.string.overview),
@@ -222,6 +224,7 @@ fun TvShowsDetailScreenContent(
                 )
             }
 
+            // Overview content
             item {
                 var isExpanded by remember { mutableStateOf(false) }
                 ConditionalText(
@@ -233,6 +236,7 @@ fun TvShowsDetailScreenContent(
                 }
             }
 
+            // Cast section
             item {
                 CastSection(
                     modifier = Modifier.padding(top = 16.dp),
@@ -241,10 +245,51 @@ fun TvShowsDetailScreenContent(
                 )
             }
 
+            // Season section header
             item {
-                SeasonDetailsSection(
-                    uiState = uiState,
-                    modifier = Modifier.padding(horizontal = 16.dp)
+                Column(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = 16.dp)
+                ) {
+                    Text(
+                        text = stringResource(R.string.season),
+                        style = NovixTheme.typography.title.medium,
+                        color = NovixTheme.colors.title,
+                        modifier = Modifier.padding(top = 16.dp, bottom = 12.dp)
+                    )
+
+                    SeasonEpisodesDetails(
+                        modifier = Modifier.fillMaxWidth(),
+                        uiState = uiState
+                    )
+
+                    Text(
+                        text = "${
+                            uiState.tvShowEpisodeCountBySeason?.episodes?.size.toString().toLocalizedNumbers()
+                        } ${stringResource(R.string.episodes)}",
+                        style = NovixTheme.typography.label.small,
+                        color = NovixTheme.colors.hint,
+                        modifier = Modifier.padding(top = 8.dp, bottom = 12.dp)
+                    )
+                }
+            }
+
+            // Episodes as individual items
+            items(
+                items = uiState.tvShowEpisodes,
+                key = { episode -> "${episode.showId}_${episode.seasonNumber}_${episode.episodeNumber}" }
+            ) { episode ->
+                EpisodeItem(
+                    episode = episode,
+                    onEpisodeClick = {
+                        tvShowDetailsContract.onEpisodeClicked(
+                            episode.showId,
+                            episode.episodeNumber,
+                            episode.seasonNumber,
+                        )
+                    },
+                    modifier = Modifier.padding(horizontal = 16.dp, vertical = 4.dp)
                 )
             }
         }
@@ -489,35 +534,6 @@ fun CastSection(
 }
 
 @Composable
-fun SeasonDetailsSection(
-    modifier: Modifier = Modifier,
-    uiState: TvShowDetailsUiState
-) {
-    Column(
-        modifier = modifier
-            .fillMaxWidth()
-            .wrapContentHeight(),
-    ) {
-        Text(
-            text = stringResource(R.string.season),
-            style = NovixTheme.typography.title.medium,
-            color = NovixTheme.colors.title,
-            modifier = Modifier.padding(top = 16.dp, bottom = 12.dp)
-        )
-
-        SeasonEpisodesDetails(
-            modifier = Modifier.fillMaxWidth(),
-            uiState = uiState
-        )
-
-        EpisodeRow(
-            uiState = uiState,
-            modifier = Modifier.fillMaxWidth()
-        )
-    }
-}
-
-@Composable
 fun SeasonEpisodesDetails(
     modifier: Modifier = Modifier,
     uiState: TvShowDetailsUiState,
@@ -559,9 +575,8 @@ fun EpisodeRow(
             modifier = Modifier.padding(top = 8.dp, bottom = 12.dp)
         )
 
-        // Use LazyColumn for episodes instead of forEach
         LazyColumn(
-            modifier = Modifier.heightIn(max = 400.dp), // Set a max height to prevent infinite height
+            modifier = Modifier.heightIn(max = 400.dp),
             verticalArrangement = Arrangement.spacedBy(8.dp)
         ) {
             items(uiState.tvShowEpisodes) { episode ->
@@ -583,10 +598,11 @@ fun EpisodeRow(
 @Composable
 private fun EpisodeItem(
     episode: TvShowEpisodeBySeasonEntity,
-    onEpisodeClick: () -> Unit
+    onEpisodeClick: () -> Unit,
+    modifier: Modifier = Modifier
 ) {
     Row(
-        modifier = Modifier
+        modifier = modifier
             .fillMaxWidth()
             .clickable { onEpisodeClick() },
         verticalAlignment = Alignment.CenterVertically,
@@ -650,12 +666,13 @@ private fun EpisodeItem(
                     )
                 }
 
-                if (episode.airDate != null)
+                if (episode.airDate != null) {
                     Text(
                         text = convertDate(episode.airDate.toString()),
                         style = NovixTheme.typography.label.small,
                         color = NovixTheme.colors.hint
                     )
+                }
             }
         }
     }
