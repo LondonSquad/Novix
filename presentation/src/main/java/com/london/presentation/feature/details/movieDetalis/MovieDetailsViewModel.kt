@@ -83,7 +83,7 @@ class MovieDetailsViewModel(
                         movieDuration = details.runtime.toString(),
                         releaseDate = details.releaseDate,
                         movieOverview = details.overview,
-                        movieImages = images,
+                        movieImages = images.ifEmpty { listOf(details.posterUrl) },
                         actors = cast
                     )
 
