@@ -77,7 +77,6 @@ class TvShowDetailsViewModel(
         )
     }
 
-
     fun initializeEpisodesBySeasons(seasonNumber: Int = 1) {
 
         tryToExecute(
@@ -148,7 +147,6 @@ class TvShowDetailsViewModel(
             checkSuccess = { tvShowId != 0 }
         )
     }
-
 
     private fun initializeGetTvShowDetailsData() {
         tryToExecute(

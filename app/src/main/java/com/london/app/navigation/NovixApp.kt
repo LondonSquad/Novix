@@ -455,7 +455,7 @@ fun NavGraphBuilder.mainNavGraph(
             onNavigateToTvShowScreen = { tvShowId ->
                 navController.navigate(TvShowDetails(tvShowId))
             },
-            onBack = { navController.navigateUp() }
+            onNavigateBack = { navController.navigateUp() }
         )
     }
 

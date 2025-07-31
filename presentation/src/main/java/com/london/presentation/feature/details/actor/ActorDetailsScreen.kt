@@ -71,7 +71,7 @@ import org.koin.androidx.compose.koinViewModel
 @Composable
 fun ActorDetailsScreen(
     viewModel: ActorDetailsViewModel = koinViewModel(),
-    onBack: () -> Unit,
+    onNavigateBack: () -> Unit,
     onNavigateToMoviePicks: (Int) -> Unit,
     onNavigateToGallery: (Int) -> Unit,
     onNavigateToTvShowPicks: (Int) -> Unit,
@@ -84,7 +84,7 @@ fun ActorDetailsScreen(
     HandleActorDetailsScreenEffects(
         effect = effect,
         uiState = uiState,
-        onBack = onBack,
+        onBack = onNavigateBack,
         onNavigateToGallery = onNavigateToGallery,
         onNavigateToMovieScreen = onNavigateToMovieScreen,
         onNavigateToTvShowPicks = onNavigateToTvShowPicks,
