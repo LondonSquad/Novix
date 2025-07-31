@@ -15698,5 +15698,33 @@
       "deletions": 124,
       "changed_files": 7
     }
+  },
+  {
+    "pr_number": 490,
+    "url": "https://github.com/LondonSquad/Novix/pull/490",
+    "title": "Hotfix/unification grid items count",
+    "opened_at": "2025-07-31T22:56:46Z",
+    "head_ref": "hotfix/unification-grid-items-count",
+    "base_ref": "develop",
+    "creator": {
+      "login": "marwanqashwa",
+      "id": 100484790,
+      "url": "https://github.com/marwanqashwa"
+    },
+    "approvals": [],
+    "first_approved_at": null,
+    "time_to_first_approval_minutes": null,
+    "required_approvals_met_at": null,
+    "time_to_required_approvals_minutes": null,
+    "closed_at": null,
+    "merged_at": null,
+    "merged_by": null,
+    "week": "2025-W31",
+    "status": "pending",
+    "diff_stats": {
+      "additions": 9,
+      "deletions": 8,
+      "changed_files": 2
+    }
   }
 ]
