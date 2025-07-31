@@ -11,6 +11,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.runtime.Composable
@@ -19,6 +20,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
@@ -35,27 +37,32 @@ fun WelcomeScreen(
     onNavigateLogin: () -> Unit,
     onNavigateContinue: () -> Unit,
 ) {
+    val configuration = LocalConfiguration.current
+    val screenHeight = configuration.screenHeightDp.dp
+    val posterHeight = screenHeight * 0.85f
+
+
     Column(
         modifier = Modifier
             .fillMaxSize()
+            .background(NovixTheme.colors.surface)
+            .statusBarsPadding()
+            .verticalScroll(rememberScrollState())
     ) {
         WelcomePoster(
             modifier = Modifier
-                .weight(1f)
                 .fillMaxWidth()
+                .height(posterHeight)
         )
 
         Box(
             modifier = Modifier
-                .fillMaxSize()
-                .weight(0.5f)
+                .fillMaxWidth()
                 .background(NovixTheme.colors.surface)
                 .padding(start = 16.dp, end = 16.dp, bottom = 50.dp)
         ) {
             Column(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .verticalScroll(rememberScrollState()),
+                modifier = Modifier.fillMaxSize(),
                 verticalArrangement = Arrangement.Bottom,
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
@@ -79,8 +86,7 @@ fun WelcomeScreen(
                 PrimaryButton(
                     text = stringResource(R.string.login),
                     onClick = onNavigateLogin,
-                    modifier = Modifier
-                        .fillMaxWidth(),
+                    modifier = Modifier.fillMaxWidth(),
                     isLoading = false,
                     hasIcon = false,
                     hasLabel = true,
@@ -92,8 +98,7 @@ fun WelcomeScreen(
                 OutlineButton(
                     text = stringResource(R.string.continue_as_guest),
                     onClick = onNavigateContinue,
-                    modifier = Modifier
-                        .fillMaxWidth(),
+                    modifier = Modifier.fillMaxWidth(),
                     hasLabel = true,
                     icon = null,
                     hasIcon = false,
@@ -114,11 +119,11 @@ fun WelcomePoster(modifier: Modifier = Modifier) {
             painter = painterResource(id = R.drawable.img_onboarding_fourth),
             contentDescription = "",
             contentScale = ContentScale.Crop,
-            modifier = Modifier.matchParentSize()
+            modifier = Modifier.fillMaxSize()
         )
         Box(
             modifier = Modifier
-                .matchParentSize()
+                .fillMaxSize()
                 .background(
                     Brush.verticalGradient(
                         colorStops = arrayOf(
