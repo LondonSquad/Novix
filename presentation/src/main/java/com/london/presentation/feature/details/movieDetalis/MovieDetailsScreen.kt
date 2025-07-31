@@ -368,7 +368,7 @@ private fun RatingAndMetaRow(
             )
         }
 
-        if (!time.isNullOrBlank()) {
+        if (!time.isNullOrBlank() && time != "0") {
             val timeInt = time.toInt()
             IconWithText(
                 icon = drawable.time_04,
@@ -382,11 +382,9 @@ private fun RatingAndMetaRow(
                 textColor = NovixTheme.colors.body
             )
         }
+        val showDot = !time.isNullOrBlank() && time != "0" && !date.isNullOrBlank() && !rate.isNullOrBlank()
 
-        if (
-            (time.toLocalizedNumbers().isNotBlank() && date.toLocalizedNumbers().isNotBlank()) ||
-            (rate.isNullOrBlank() && !time.isNullOrBlank() && !date.isNullOrBlank())
-        ) {
+        if (showDot) {
             Box(
                 modifier = Modifier
                     .padding(4.dp)
@@ -395,6 +393,7 @@ private fun RatingAndMetaRow(
                     .background(NovixTheme.colors.body)
             )
         }
+
 
         if (!date.isNullOrBlank()) {
             IconWithText(
