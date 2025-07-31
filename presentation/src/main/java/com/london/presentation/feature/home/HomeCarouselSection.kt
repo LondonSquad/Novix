@@ -49,13 +49,15 @@ fun HomeCarouselSection(
 
         HeroCarousel(
             modifier = Modifier
-                .height(HomeCarouselDefaults.CAROUSEL_HEIGHT)
-                .padding(start = HomeCarouselDefaults.CAROUSEL_START_PADDING),
+                .height(HomeCarouselDefaults.CAROUSEL_HEIGHT),
             carouselState = carouselState,
             heroItemSize = HomeCarouselDefaults.HERO_ITEM_SIZE,
             smallItemSize = HomeCarouselDefaults.SMALL_ITEM_SIZE,
             itemSpacing = HomeCarouselDefaults.ITEM_SPACING,
-            contentPadding = PaddingValues(end = HomeCarouselDefaults.CONTENT_END_PADDING)
+            contentPadding = PaddingValues(
+                start = HomeCarouselDefaults.CAROUSEL_START_PADDING,
+                end = HomeCarouselDefaults.CONTENT_END_PADDING
+            )
         ) { index ->
             val mediaItem = uiMediaList[index]
             HomeCard(

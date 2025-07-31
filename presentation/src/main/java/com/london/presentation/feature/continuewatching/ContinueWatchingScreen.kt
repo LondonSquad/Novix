@@ -78,7 +78,6 @@ fun Content(
             .background(color = NovixTheme.colors.surface)
             .padding(WindowInsets.statusBars.asPaddingValues())
             .padding(WindowInsets.navigationBars.asPaddingValues())
-
     ) {
         TopBar(
             modifier = Modifier
