@@ -35,63 +35,81 @@ import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
+import javax.inject.Singleton
 
 @Module
 @InstallIn(SingletonComponent::class)
 object RemoteDataSourceModule {
 
     @Provides
+    @Singleton
     fun provideActorDetailsRemoteDataSource(
         apiService: ActorDetailsApiService,
-    ) : ActorDetailsRemoteDataSource = ActorDetailsRemoteDataSourceImpl(actorDetailsApiService = apiService)
+    ): ActorDetailsRemoteDataSource =
+        ActorDetailsRemoteDataSourceImpl(actorDetailsApiService = apiService)
 
     @Provides
+    @Singleton
     fun provideTvShowDetailsRemoteDataSource(
         apiService: TvShowDetailsApiService,
-    ) : TvShowDetailsRemoteDataSource = TvShowDetailsRemoteDataSourceImpl(tvShowDetailsApiService = apiService)
+    ): TvShowDetailsRemoteDataSource =
+        TvShowDetailsRemoteDataSourceImpl(tvShowDetailsApiService = apiService)
 
     @Provides
+    @Singleton
     fun provideReviewsRemoteDataSource(
         apiService: ReviewsApiService,
     ): ReviewsRemoteDataSource = ReviewsRemoteDataSourceImpl(reviewsApiService = apiService)
 
     @Provides
+    @Singleton
     fun providePopularRemoteDataSource(
         apiService: PopularApiService,
-    ) : PopularRemoteDataSource = PopularRemoteDataSourceImpl(popularApiService = apiService)
+    ): PopularRemoteDataSource = PopularRemoteDataSourceImpl(popularApiService = apiService)
 
     @Provides
+    @Singleton
     fun provideSearchRemoteDataSource(
         apiService: SearchApiService,
     ): SearchRemoteDataSource = SearchRemoteDataSourceImpl(searchApiService = apiService)
 
     @Provides
+    @Singleton
     fun provideTopRatedMovieRemoteDataSource(
         apiService: TopRatedMovieApiService,
-    ): TopRatedMovieRemoteDataSource = TopRatedMovieRemoteDataSourceImpl(topRatedMovieApi = apiService)
+    ): TopRatedMovieRemoteDataSource =
+        TopRatedMovieRemoteDataSourceImpl(topRatedMovieApi = apiService)
 
     @Provides
+    @Singleton
     fun provideTopRatedTvRemoteDataSource(
         apiService: TopRatedTvSeriesApiService,
     ): TopRatedTvRemoteDataSource = TopRatedTvRemoteDataSourceImpl(topRatedTvSeriesApi = apiService)
 
     @Provides
+    @Singleton
     fun provideAuthenticationRemoteDataSource(
         apiService: AuthenticationApiService,
-    ): AuthenticationRemoteDataSource = AuthenticationRemoteDataSourceImpl(authApiService = apiService)
+    ): AuthenticationRemoteDataSource =
+        AuthenticationRemoteDataSourceImpl(authApiService = apiService)
 
     @Provides
+    @Singleton
     fun provideMovieDetailsRemoteDataSource(
         apiService: MovieDetailsApiService,
-    ): MovieDetailsRemoteDataSource = MovieDetailsRemoteDataSourceImpl(movieDetailsApiService = apiService)
+    ): MovieDetailsRemoteDataSource =
+        MovieDetailsRemoteDataSourceImpl(movieDetailsApiService = apiService)
 
     @Provides
+    @Singleton
     fun provideMovieVideoProviderRemote(
         apiService: MovieDetailsApiService,
     ): MovieVideoProviderRemote = MovieVideoProviderRemoteImpl(movieDetailsApiService = apiService)
 
     @Provides
+    @Singleton
     fun provideTvShowVideoProviderRemote(
         apiService: TvShowDetailsApiService,
-    ): TvShowVideoProviderRemote = TvShowVideoProviderRemoteImpl(tvShowDetailsApiService = apiService)
+    ): TvShowVideoProviderRemote =
+        TvShowVideoProviderRemoteImpl(tvShowDetailsApiService = apiService)
 }

@@ -105,42 +105,52 @@ object NetworkModule {
 
 
     @Provides
+    @Singleton
     fun provideActorDetailsApiService(retrofit: Retrofit): ActorDetailsApiService =
         retrofit.create(ActorDetailsApiService::class.java)
 
     @Provides
+    @Singleton
     fun provideMovieDetailsApiService(retrofit: Retrofit): MovieDetailsApiService =
         retrofit.create(MovieDetailsApiService::class.java)
 
     @Provides
+    @Singleton
     fun provideTvShowDetailsApiService(retrofit: Retrofit): TvShowDetailsApiService =
         retrofit.create(TvShowDetailsApiService::class.java)
 
     @Provides
+    @Singleton
     fun provideSearchApiService(retrofit: Retrofit): SearchApiService =
         retrofit.create(SearchApiService::class.java)
 
     @Provides
+    @Singleton
     fun provideReviewsApiService(retrofit: Retrofit): ReviewsApiService =
         retrofit.create(ReviewsApiService::class.java)
 
     @Provides
+    @Singleton
     fun provideTrendingApiService(retrofit: Retrofit): TrendingApiService =
         retrofit.create(TrendingApiService::class.java)
 
     @Provides
+    @Singleton
     fun providePopularApiService(retrofit: Retrofit): PopularApiService =
         retrofit.create(PopularApiService::class.java)
 
     @Provides
+    @Singleton
     fun provideTopRatedMovieApiService(retrofit: Retrofit): TopRatedMovieApiService =
         retrofit.create(TopRatedMovieApiService::class.java)
 
     @Provides
+    @Singleton
     fun provideTopRatedTvShowApiService(retrofit: Retrofit): TopRatedTvSeriesApiService =
         retrofit.create(TopRatedTvSeriesApiService::class.java)
 
     @Provides
+    @Singleton
     fun provideAuthApiService(retrofit: Retrofit): AuthenticationApiService =
         retrofit.create(AuthenticationApiService::class.java)
 
@@ -150,6 +160,7 @@ object NetworkModule {
         AuthPreferences(context.getSharedPreferences("auth", Context.MODE_PRIVATE))
 
     @Provides
+    @Singleton
     fun provideSessionTokenProvider(authPreferences: AuthPreferences): SessionTokenProvider =
         SharedPrefsTokenProvider(authPreferences = authPreferences)
 

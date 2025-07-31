@@ -5,6 +5,7 @@ plugins {
     alias(libs.plugins.jetbrains.kotlin.jvm)
     alias(libs.plugins.ksp)
     alias(libs.plugins.kotlinx.kover)
+    id ("kotlin-kapt")
 }
 
 java {
@@ -25,5 +26,6 @@ dependencies {
     testImplementation(libs.bundles.testing)
     api(libs.koin.core)
     ksp(libs.bundles.koin.ksp)
-    implementation(libs.javax.inject)
+    implementation( "com.google.dagger:dagger:2.51")
+    kapt("com.google.dagger:dagger-compiler:2.51")
 }

@@ -1,7 +1,7 @@
 package com.london.data.di
 
 import android.content.Context
-import com.london.data.local.database.DatabaseProvider
+import androidx.room.Room
 import com.london.data.local.database.NovixDatabase
 import com.london.data.local.database.dao.search.SearchActorsDao
 import dagger.Module
@@ -17,38 +17,50 @@ object DataBaseModule {
 
     @Provides
     @Singleton
-    fun provideNovixDatabase(@ApplicationContext context: Context) =
-        DatabaseProvider.getDatabase(context = context)
+    fun provideNovixDatabase(@ApplicationContext context: Context): NovixDatabase =
+        Room.databaseBuilder(
+            context.applicationContext,
+            NovixDatabase::class.java,
+            "NovixDatabase"
+        ).build()
 
     @Provides
+    @Singleton
     fun provideSearchMoviesDao(database: NovixDatabase) =
         database.searchMoviesDao()
 
     @Provides
+    @Singleton
     fun provideSearchTvShowDao(database: NovixDatabase) =
         database.searchTvShowDao()
 
     @Provides
+    @Singleton
     fun provideSearchActorsDao(database: NovixDatabase): SearchActorsDao =
         database.searchActorsDao()
 
     @Provides
+    @Singleton
     fun provideGenreInterestDao(database: NovixDatabase) =
         database.genreInterestDao()
 
     @Provides
+    @Singleton
     fun provideRecentViewedDao(database: NovixDatabase) =
         database.recentViewedDao()
 
     @Provides
+    @Singleton
     fun provideRecentSearchDao(database: NovixDatabase) =
         database.recentSearchDao()
 
     @Provides
+    @Singleton
     fun provideRecentWatchedMoviesDao(database: NovixDatabase) =
         database.recentWatchedMoviesDao()
 
     @Provides
+    @Singleton
     fun provideRecentWatchedTvShowsDao(database: NovixDatabase) =
         database.recentWatchedTvShowsDao()
 

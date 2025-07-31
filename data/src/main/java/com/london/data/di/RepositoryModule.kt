@@ -58,35 +58,41 @@ import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
+import javax.inject.Singleton
 
 @Module
 @InstallIn(SingletonComponent::class)
 object RepositoryModule {
 
     @Provides
+    @Singleton
     fun provideAuthenticationRepository(
         authRemoteDataSource: AuthenticationRemoteDataSource,
         authPreferences: AuthPreferences
     ): AuthRepository = AuthenticationRepositoryImpl(authRemoteDataSource, authPreferences)
 
     @Provides
+    @Singleton
     fun providePopularRepository(
         dataSource: PopularRemoteDataSource
     ): PopularRepository = PopularRepositoryImpl(popularRemoteDataSource = dataSource)
 
     @Provides
+    @Singleton
     fun provideRecentSearchRepository(
         dataSource: RecentDataSource<RecentSearchLocal>
     ): RecentRepository<RecentSearch> =
         RecentSearchRepositoryImpl(recentSearchLocalDataSource = dataSource)
 
     @Provides
+    @Singleton
     fun provideRecentViewedRepository(
         dataSource: RecentDataSource<RecentViewedLocal>
     ): RecentRepository<RecentViewed> =
         RecentViewedRepositoryImpl(recentRecentViewedLocalDataSource = dataSource)
 
     @Provides
+    @Singleton
     fun provideRecentWatchedRepository(
         recentWatchedMoviesDataSource: RecentWatchedDataSource<RecentWatchedMovieLocal>,
         recentWatchedTvShowsDataSource: RecentWatchedDataSource<RecentWatchedTvShowLocal>
@@ -96,28 +102,33 @@ object RepositoryModule {
     )
 
     @Provides
+    @Singleton
     fun provideTopRatedMovieRepository(
         dataSource: TopRatedMovieRemoteDataSource
     ): TopRatedMovieRepository =
         TopRatedMovieRepositoryImpl(topRatedMovieRemoteDataSource = dataSource)
 
     @Provides
+    @Singleton
     fun provideTopRatedTvSeriesRepository(
         dataSource: TopRatedTvRemoteDataSource
     ): TopRatedTvSeriesRepository =
         TopRatedTvSeriesRepositoryImpl(topRatedTvRemoteDataSource = dataSource)
 
     @Provides
+    @Singleton
     fun provideTrendingRepository(
         dataSource: TrendingRemoteDataSource
     ): TrendingRepository = TrendingRepositoryImpl(trendingRemoteDataSource = dataSource)
 
     @Provides
+    @Singleton
     fun provideActorRepository(
         dataSource: ActorDetailsRemoteDataSource
     ): ActorRepository = ActorRepositoryImpl(dataSource = dataSource)
 
     @Provides
+    @Singleton
     fun provideDetailsRepository(
         tvShowDetailsRemoteDataSource: TvShowDetailsRemoteDataSource,
         reviewsRemoteDataSource: ReviewsRemoteDataSource
@@ -127,17 +138,20 @@ object RepositoryModule {
     )
 
     @Provides
+    @Singleton
     fun provideMovieDetailsRepository(
         dataSource: MovieDetailsRemoteDataSource
     ): MovieDetailsRepository =
         MovieDetailsRepositoryImpl(movieDetailsRemoteDataSource = dataSource)
 
     @Provides
+    @Singleton
     fun provideMovieVideoRepository(
         dataSource: MovieVideoProviderRemote
     ): MovieVideoProviderRepository = MovieVideoProviderRepositoryImpl(dataSource)
 
     @Provides
+    @Singleton
     fun provideSearchRepository(
         localTvShowDataSource: LocalDataSource<SearchTvShowLocal>,
         localActorDataSource: LocalDataSource<SearchActorsLocal>,
@@ -155,6 +169,7 @@ object RepositoryModule {
     )
 
     @Provides
+    @Singleton
     fun provideTvShowVideoProviderRepository(
         dataSource: TvShowVideoProviderRemote
     ): TvShowVideoProviderRepository =

@@ -35,14 +35,16 @@ import javax.inject.Singleton
 
 @Module
 @InstallIn(SingletonComponent::class)
-object DataSourceModule {
+object LocalDataSourceModule {
     @Provides
+    @Singleton
     fun provideRecentWatchedTvShowsDataSource(
         dao: RecentWatchedTvShowsDao
     ): RecentWatchedDataSource<RecentWatchedTvShowLocal> =
         RecentWatchedTvShowsDataSource(recentWatchedTvShowsDao = dao)
 
     @Provides
+    @Singleton
     fun provideRecentWatchedMovieDataSource(
         dao: RecentWatchedMoviesDao
     ): RecentWatchedDataSource<RecentWatchedMovieLocal> =
@@ -55,21 +57,25 @@ object DataSourceModule {
     ): LocalDataSource<SearchTvShowLocal> = TvShowLocalDataSourceImpl(searchTvShowDao = dao)
 
     @Provides
+    @Singleton
     fun provideActorLocalDataSource(
         dao: SearchActorsDao
     ): LocalDataSource<SearchActorsLocal> = ActorLocalDataSourceImpl(searchActorsDao = dao)
 
     @Provides
+    @Singleton
     fun provideSearchMoviesLocalDataSource(
         dao: SearchMoviesDao
     ): LocalDataSource<SearchMoviesLocal> = MovieLocalDataSourceImpl(searchMoviesDao = dao)
 
     @Provides
+    @Singleton
     fun provideRecentSearchDataSource(
         dao: RecentSearchDao
     ): RecentDataSource<RecentSearchLocal> = RecentSearchDataSourceImpl(recentSearchDao = dao)
 
     @Provides
+    @Singleton
     fun provideRecentViewedDataSource(
         dao: RecentViewedDao
     ): RecentDataSource<RecentViewedLocal> = RecentViewedDataSourceImpl(recentViewedDao = dao)

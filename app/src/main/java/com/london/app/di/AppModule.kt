@@ -1,4 +1,3 @@
-// AppModule.kt
 package com.london.app.di
 
 import android.content.Context
@@ -18,7 +17,7 @@ object AppModule {
     @Singleton
     fun provideDeviceConfigurationDataSource(
         @ApplicationContext context: Context
-    ): DeviceConfigurationDataSource {
-        return DeviceConfigurationDataSource(context)
-    }
+    ): DeviceConfigurationDataSource
+        = DeviceConfigurationDataSource(context)
+
 }

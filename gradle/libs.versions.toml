@@ -122,7 +122,6 @@ androidx-datastore-core = { group = "androidx.datastore", name = "datastore-core
 firebase-bom = { module = "com.google.firebase:firebase-bom", version.ref = "firebaseBom" }
 firebase-ml-modeldownloader = { module = "com.google.firebase:firebase-ml-modeldownloader", version.ref = "firebaseMlModeldownloader" }
 gson = { module = "com.google.code.gson:gson", version.ref = "gson" }
-javax-inject = { module = "javax.inject:javax.inject", version.ref = "javaxInject" }
 koin-android = { group = "io.insert-koin", name = "koin-android", version.ref = "koin" }
 koin-core = { group = "io.insert-koin", name = "koin-core", version.ref = "koin" }
 koin-androidx-compose = { group = "io.insert-koin", name = "koin-androidx-compose", version.ref = "koinAndroidxCompose" }
@@ -191,7 +190,6 @@ google-gms-google-services = { id = "com.google.gms.google-services", version.re
 google-firebase-crashlytics = { id = "com.google.firebase.crashlytics", version.ref = "googleFirebaseCrashlytics" }
 kotlinx-kover = { id = "org.jetbrains.kotlinx.kover", version.ref = "kotlinxKover" }
 hilt = { id = "com.google.dagger.hilt.android", version.ref ="hilt" }
-
 
 [bundles]
 
