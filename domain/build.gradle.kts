@@ -27,6 +27,7 @@ dependencies {
     api(libs.koin.core)
     ksp(libs.bundles.koin.ksp)
 
-    implementation(libs.bundles.dagger.kapt)
+    implementation(libs.bundles.dagger.runtime)
     kapt(libs.bundles.dagger.kapt)
+
 }

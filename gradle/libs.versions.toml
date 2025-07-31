@@ -291,7 +291,10 @@ hilt-ksp = [
     "hilt-compiler",
 ]
 
+dagger-runtime = [
+    "dagger"
+]
+
 dagger-kapt = [
-    "dagger",
     "dagger-compiler"
 ]
