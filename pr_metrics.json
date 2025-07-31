@@ -14761,5 +14761,33 @@
       "deletions": 4,
       "changed_files": 1
     }
+  },
+  {
+    "pr_number": 457,
+    "url": "https://github.com/LondonSquad/Novix/pull/457",
+    "title": "localize: update Arabic translations",
+    "opened_at": "2025-07-31T15:58:02Z",
+    "head_ref": "hotfix/rename-arabic-values",
+    "base_ref": "develop",
+    "creator": {
+      "login": "AsmaaKhaledGomaa",
+      "id": 117874933,
+      "url": "https://github.com/AsmaaKhaledGomaa"
+    },
+    "approvals": [],
+    "first_approved_at": null,
+    "time_to_first_approval_minutes": null,
+    "required_approvals_met_at": null,
+    "time_to_required_approvals_minutes": null,
+    "closed_at": null,
+    "merged_at": null,
+    "merged_by": null,
+    "week": "2025-W31",
+    "status": "pending",
+    "diff_stats": {
+      "additions": 2,
+      "deletions": 2,
+      "changed_files": 1
+    }
   }
 ]
