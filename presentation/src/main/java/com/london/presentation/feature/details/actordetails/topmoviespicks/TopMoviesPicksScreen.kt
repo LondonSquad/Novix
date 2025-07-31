@@ -9,8 +9,6 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.london.presentation.R
 import com.london.presentation.feature.buildscreen.BuildScreen
-import com.london.presentation.feature.buildscreen.LoadingScreen
-import com.london.presentation.feature.buildscreen.NetworkErrorScreen
 import com.london.presentation.shared.MediaLazyGrid
 import com.london.presentation.utils.Listen
 
@@ -28,15 +26,17 @@ fun TopMoviesPicksScreen(
         onNavigateMovie = onNavigateMovie,
         onNavigateBack = onNavigateBack
     )
-    BuildScreen {
-        when {
-            state.isSaved -> LoadingScreen()
-            state.errorState != null -> NetworkErrorScreen()
-            else -> TopMoviesPicksContent(
-                state = state,
-                contract = viewModel,
-            )
-        }
+    BuildScreen(
+        onBack = viewModel::onBack,
+        isLoading = state.isLoading,
+        isError = state.errorState != null
+    ) {
+
+        TopMoviesPicksContent(
+            state = state,
+            contract = viewModel,
+        )
+
     }
 }
 

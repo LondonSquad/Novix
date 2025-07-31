@@ -18,8 +18,6 @@ import com.london.designsystem.theme.ThemePreviews
 import com.london.domain.entity.TvShow
 import com.london.presentation.R
 import com.london.presentation.feature.buildscreen.BuildScreen
-import com.london.presentation.feature.buildscreen.LoadingScreen
-import com.london.presentation.feature.buildscreen.NetworkErrorScreen
 import com.london.presentation.feature.search.SearchCategory
 import com.london.presentation.shared.MediaLazyPagingGrid
 import com.london.presentation.utils.Listen
@@ -42,15 +40,15 @@ fun TvShowByCategoryScreen(
             )
         }
     }
-    BuildScreen {
-        when {
-            state.isLoading -> LoadingScreen()
-            state.error != null -> NetworkErrorScreen()
-            else -> Content(
+    BuildScreen(
+        onBack = viewModel::onBack,
+        isLoading = state.isLoading,
+        isError = state.error != null
+    ) {
+             Content(
                 state = state,
                 contract = viewModel,
             )
-        }
     }
 }
 

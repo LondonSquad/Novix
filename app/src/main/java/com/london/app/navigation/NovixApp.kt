@@ -202,7 +202,7 @@ fun NavGraphBuilder.authNavGraph(
                 navController.navigateToMainGraph()
             },
             onNavigateBack = {
-                navController.popBackStack()
+                navController.navigate(Screen.OnBoarding.Welcome)
             },
             onNavigateToWebViewRegistration = {
                 navController.navigate(Screen.Register)

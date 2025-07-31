@@ -46,8 +46,6 @@ import com.london.designsystem.theme.NovixTheme
 import com.london.imageharamblur.ui.ImageViewFilter
 import com.london.presentation.R
 import com.london.presentation.feature.buildscreen.BuildScreen
-import com.london.presentation.feature.buildscreen.LoadingScreen
-import com.london.presentation.feature.buildscreen.NetworkErrorScreen
 import com.london.presentation.shared.ConditionalText
 import com.london.presentation.shared.RatingItem
 import com.london.presentation.shared.ReviewsDate
@@ -64,15 +62,15 @@ fun ReviewsScreen(
 
     effect?.Listen { onNavigateBack() }
 
-    BuildScreen {
-        when {
-            uiState.isLoading -> LoadingScreen()
-            uiState.error != null -> NetworkErrorScreen()
-            else -> ReviewsScreenContent(
-                uiState = uiState,
-                reviewContract = viewModel,
-            )
-        }
+    BuildScreen(
+        isLoading = uiState.isLoading,
+        isError = uiState.error != null,
+        onBack = onNavigateBack,
+    ) {
+        ReviewsScreenContent(
+            uiState = uiState,
+            reviewContract = viewModel,
+        )
     }
 }
 

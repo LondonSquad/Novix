@@ -116,7 +116,7 @@ fun SearchScreen(
     }
 
     when{
-        state.error is ErrorState.NoInternet -> NetworkErrorScreen()
+        state.error is ErrorState.NoInternet -> NetworkErrorScreen(onBack = null)
         else ->
             SearchScreenContent(
                 state = state,
@@ -239,7 +239,8 @@ fun SearchScreenContent(
                                         state.searchQuery.text,
                                         state.selectedCategory
                                     )
-                                }
+                                },
+                                onBack = null
                             )
                         } else {
                             when (state.selectedCategory) {
@@ -659,7 +660,8 @@ private fun SearchContentWithErrorHandling(
                     state.searchQuery.text,
                     state.selectedCategory
                 )
-            }
+            },
+            onBack = null
         )
     } else {
         content(isLoading)

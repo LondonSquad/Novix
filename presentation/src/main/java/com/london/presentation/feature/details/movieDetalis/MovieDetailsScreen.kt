@@ -20,6 +20,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.statusBars
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.grid.GridCells
@@ -28,6 +29,7 @@ import androidx.compose.foundation.lazy.grid.itemsIndexed
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
@@ -58,16 +60,12 @@ import com.london.designsystem.theme.NovixTheme
 import com.london.designsystem.theme.noRippleClickable
 import com.london.presentation.R.drawable
 import com.london.presentation.R.string.calendar
-import com.london.presentation.R.string.dot
 import com.london.presentation.R.string.more_like_this
 import com.london.presentation.R.string.overview
-import com.london.presentation.R.string.separator
 import com.london.presentation.R.string.star
 import com.london.presentation.R.string.time_icon
 import com.london.presentation.R.string.view_reviews
 import com.london.presentation.feature.buildscreen.BuildScreen
-import com.london.presentation.feature.buildscreen.LoadingScreen
-import com.london.presentation.feature.buildscreen.NetworkErrorScreen
 import com.london.presentation.feature.reviews.MediaType
 import com.london.presentation.feature.search.SearchCategory
 import com.london.presentation.shared.ConditionalText
@@ -103,15 +101,15 @@ fun MovieDetailsScreen(
         onNavigateToReviews = onNavigateToReviews
     )
 
-    BuildScreen {
-        when {
-            state.isLoading -> LoadingScreen()
-            state.error != null -> NetworkErrorScreen()
-            else -> MovieDetailsContent(
-                uiState = state,
-                movieDetailsContract = viewModel
-            )
-        }
+    BuildScreen(
+        onBack = viewModel::onBackClick,
+        isLoading = state.isLoading,
+        isError = state.error != null
+    ) {
+        MovieDetailsContent(
+            uiState = state,
+            movieDetailsContract = viewModel
+        )
     }
 }
 
@@ -348,7 +346,7 @@ private fun RatingAndMetaRow(
         horizontalArrangement = Arrangement.spacedBy(4.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {
-        if (!rate.isNullOrBlank() && rate.isNotZeroRate() ) {
+        if (!rate.isNullOrBlank() && rate.isNotZeroRate()) {
             IconWithText(
                 icon = drawable.star,
                 contentDesc = stringResource(star),
@@ -359,10 +357,16 @@ private fun RatingAndMetaRow(
         }
 
         if (!time.isNullOrBlank() || !date.isNullOrBlank()) {
-            Dot()
+            Box(
+                modifier = Modifier
+                    .padding(4.dp)
+                    .size(3.dp)
+                    .clip(CircleShape)
+                    .background(NovixTheme.colors.body)
+            )
         }
 
-        if (!time.isNullOrBlank()) {
+        if (!time.isNullOrBlank() && time != "0") {
             val timeInt = time.toInt()
             IconWithText(
                 icon = drawable.time_04,
@@ -376,13 +380,19 @@ private fun RatingAndMetaRow(
                 textColor = NovixTheme.colors.body
             )
         }
+        val showDot =
+            !time.isNullOrBlank() && time != "0" && !date.isNullOrBlank() && !rate.isNullOrBlank()
 
-        if (
-            (time.toLocalizedNumbers().isNotBlank() && date.toLocalizedNumbers().isNotBlank()) ||
-            (rate.isNullOrBlank() && !time.isNullOrBlank() && !date.isNullOrBlank())
-        ) {
-            Dot()
+        if (showDot) {
+            Box(
+                modifier = Modifier
+                    .padding(4.dp)
+                    .size(3.dp)
+                    .clip(CircleShape)
+                    .background(NovixTheme.colors.body)
+            )
         }
+
 
         if (!date.isNullOrBlank()) {
             IconWithText(
@@ -461,21 +471,13 @@ private fun GenreRow(
                     onGenreClick(genre)
                 }
             )
-            if (index != genres.lastIndex) Icon(
-                painter = painterResource(drawable.ellipse_2),
-                contentDescription = stringResource(separator),
-                tint = NovixTheme.colors.hint
-            )
+            if (index != genres.lastIndex)
+                Box(
+                    modifier = Modifier
+                        .size(3.dp)
+                        .clip(CircleShape)
+                        .background(NovixTheme.colors.hint)
+                )
         }
     }
-}
-
-@Composable
-private fun Dot(modifier: Modifier = Modifier) {
-    Icon(
-        painter = painterResource(drawable.ellipse_2),
-        contentDescription = stringResource(dot),
-        tint = NovixTheme.colors.body,
-        modifier = modifier
-    )
 }

@@ -67,7 +67,9 @@ class ContinueWatchingViewModel @Inject constructor(
         if (index == state.value.tabSelected) return
         updateState {
             copy(
-                tabSelected = index, isMovieSelected = index == 0
+                tabSelected = index,
+                isMovieSelected = index == 0,
+                isTvSelected = index == 0
             )
         }
         initializeContinueWatching()

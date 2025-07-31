@@ -36,6 +36,7 @@ import com.london.designsystem.component.TabLayout
 import com.london.designsystem.component.TopBar
 import com.london.designsystem.theme.NovixTheme
 import com.london.presentation.R.string
+import com.london.presentation.shared.EmptyStateView
 import com.london.presentation.utils.Listen
 import com.london.presentation.utils.MovieGenre
 import com.london.presentation.utils.TvShowGenre
@@ -98,18 +99,20 @@ fun Content(
             onTabSelected = continueWatchingContract::tabSelected,
             modifier = Modifier.background(NovixTheme.colors.surface)
         )
-        if (state.isMovieSelected)
-            MovieGenreRow(
+        when {
+            state.isMovieSelected -> MovieGenreRow(
                 onGenreClick = continueWatchingContract::movieGenre,
                 state = state,
                 screenWidth = screenWidth
             )
-        else
-            TvShowRow(
+
+            state.isTvSelected -> TvShowRow(
                 onGenreClick = continueWatchingContract::tvShowGenre,
                 state = state,
                 screenWidth = screenWidth
             )
+            else -> EmptyStateView()
+        }
 
         LazyVerticalGrid(
             columns = GridCells.Fixed(2),
