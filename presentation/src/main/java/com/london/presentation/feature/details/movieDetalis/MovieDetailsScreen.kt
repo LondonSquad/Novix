@@ -352,7 +352,7 @@ private fun RatingAndMetaRow(
                 icon = drawable.star,
                 contentDesc = stringResource(star),
                 tint = NovixTheme.colors.yellowAccent,
-                text = rate,
+                text = rate.toLocalizedNumbers(),
                 textColor = NovixTheme.colors.body
             )
         }
