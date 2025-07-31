@@ -22,7 +22,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.statusBars
 import androidx.compose.foundation.layout.widthIn
-import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
@@ -71,6 +70,7 @@ import com.london.presentation.shared.FooterSection
 import com.london.presentation.shared.RatingItem
 import com.london.presentation.utils.Listen
 import com.london.presentation.utils.convertDate
+import com.london.presentation.utils.isNotZeroRate
 import com.london.presentation.utils.offsetLayout
 import com.london.presentation.utils.openUrl
 import com.london.presentation.utils.reverseDateFormat
@@ -266,7 +266,8 @@ fun TvShowsDetailScreenContent(
 
                     Text(
                         text = "${
-                            uiState.tvShowEpisodeCountBySeason?.episodes?.size.toString().toLocalizedNumbers()
+                            uiState.tvShowEpisodeCountBySeason?.episodes?.size.toString()
+                                .toLocalizedNumbers()
                         } ${stringResource(R.string.episodes)}",
                         style = NovixTheme.typography.label.small,
                         color = NovixTheme.colors.hint,
@@ -410,28 +411,13 @@ fun TvShowBasicDetails(
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.spacedBy(4.dp)
     ) {
-        RatingItem(
-            modifier = Modifier,
-            rating = rating
-        )
-
-        Box(
-            modifier = Modifier
-                .padding(horizontal = 8.dp)
-                .size(3.dp)
-                .clip(CircleShape)
-                .background(NovixTheme.colors.hint)
-        )
+        if (rating.isNotBlank() && rating.isNotZeroRate()) {
+            RatingItem(
+                rating = rating
+            )
+        }
 
         TvShowDate(date)
-
-        Box(
-            modifier = Modifier
-                .padding(horizontal = 8.dp)
-                .size(3.dp)
-                .clip(CircleShape)
-                .background(NovixTheme.colors.hint)
-        )
 
         Seasons(numberOfSeasons)
     }
@@ -459,11 +445,20 @@ fun Seasons(
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.spacedBy(4.dp)
     ) {
+
+        Box(
+            modifier = Modifier
+                .padding(horizontal = 4.dp)
+                .size(3.dp)
+                .clip(CircleShape)
+                .background(NovixTheme.colors.hint)
+        )
+
         Icon(
             painter = painterResource(R.drawable.icon_tv),
             contentDescription = "Tv icon",
             tint = NovixTheme.colors.body,
-            modifier = Modifier.size(12.dp)
+            modifier = Modifier.size(11.dp)
         )
 
         Text(
@@ -484,11 +479,20 @@ fun TvShowDate(
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.spacedBy(4.dp)
     ) {
+
+        Box(
+            modifier = Modifier
+                .padding(horizontal = 4.dp)
+                .size(3.dp)
+                .clip(CircleShape)
+                .background(NovixTheme.colors.hint)
+        )
+
         Icon(
             painter = painterResource(R.drawable.icon_calender),
             contentDescription = "Calender icon",
             tint = NovixTheme.colors.body,
-            modifier = Modifier.size(12.dp)
+            modifier = Modifier.size(11.dp)
         )
 
         Text(
@@ -640,37 +644,37 @@ private fun EpisodeItem(
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.spacedBy(4.dp)
             ) {
-                RatingItem(
-                    rating = episode.voteAverage.toLocalizedNumbers(),
-                    color = NovixTheme.colors.hint
-                )
-
-                Box(
-                    modifier = Modifier
-                        .padding(horizontal = 8.dp)
-                        .size(3.dp)
-                        .clip(CircleShape)
-                        .background(NovixTheme.colors.hint)
-                )
-
-                if (episode.runtime != null) {
-                    EpisodeDuration(episode.runtime.toString().toLocalizedNumbers())
-
-                    Box(
-                        modifier = Modifier
-                            .padding(horizontal = 8.dp)
-                            .size(3.dp)
-                            .clip(CircleShape)
-                            .background(NovixTheme.colors.hint)
-                    )
-                }
-
-                if (episode.airDate != null) {
-                    Text(
-                        text = convertDate(episode.airDate.toString()),
-                        style = NovixTheme.typography.label.small,
+                if (episode.voteAverage.isNotZeroRate()) {
+                    RatingItem(
+                        rating = episode.voteAverage.toLocalizedNumbers(),
                         color = NovixTheme.colors.hint
                     )
+
+                    if (episode.runtime != null) {
+                        Box(
+                            modifier = Modifier
+                                .padding(horizontal = 8.dp)
+                                .size(3.dp)
+                                .clip(CircleShape)
+                                .background(NovixTheme.colors.hint)
+                        )
+                        EpisodeDuration(episode.runtime.toString().toLocalizedNumbers())
+                    }
+
+                    if (episode.airDate != null) {
+                        Box(
+                            modifier = Modifier
+                                .padding(horizontal = 8.dp)
+                                .size(3.dp)
+                                .clip(CircleShape)
+                                .background(NovixTheme.colors.hint)
+                        )
+                        Text(
+                            text = convertDate(episode.airDate.toString()),
+                            style = NovixTheme.typography.label.small,
+                            color = NovixTheme.colors.hint
+                        )
+                    }
                 }
             }
         }

@@ -255,7 +255,7 @@ fun AuthorItem(
 @Composable
 fun EmptyReviews(
     modifier: Modifier = Modifier,
-    text: String = "there is no review"
+    text: String = stringResource(R.string.no_reviews)
 ) {
     Column(
         modifier = modifier
