@@ -70,13 +70,13 @@ import org.koin.androidx.compose.koinViewModel
 
 @Composable
 fun ActorDetailsScreen(
-    onNavigateBack: () -> Unit,
+    viewModel: ActorDetailsViewModel = koinViewModel(),
+    onBack: () -> Unit,
     onNavigateToMoviePicks: (Int) -> Unit,
     onNavigateToGallery: (Int) -> Unit,
     onNavigateToTvShowPicks: (Int) -> Unit,
     onNavigateToMovieScreen: (Int) -> Unit,
     onNavigateToTvShowScreen: (Int) -> Unit,
-    viewModel: ActorDetailsViewModel = koinViewModel(),
 ) {
     val uiState by viewModel.state.collectAsStateWithLifecycle()
     val effect by viewModel.effect.collectAsState(null)
@@ -84,7 +84,7 @@ fun ActorDetailsScreen(
     HandleActorDetailsScreenEffects(
         effect = effect,
         uiState = uiState,
-        onNavigateBack = onNavigateBack,
+        onBack = onBack,
         onNavigateToGallery = onNavigateToGallery,
         onNavigateToMovieScreen = onNavigateToMovieScreen,
         onNavigateToTvShowPicks = onNavigateToTvShowPicks,
@@ -278,8 +278,8 @@ fun ActorScreenContent(
 @Composable
 private fun HandleActorDetailsScreenEffects(
     effect: ActorEffectUiState?,
-    uiState: ActorDetailsUiState, // Assuming this is your state type
-    onNavigateBack: () -> Unit,
+    uiState: ActorDetailsUiState,
+    onBack: () -> Unit,
     onNavigateToGallery: (Int) -> Unit,
     onNavigateToMovieScreen: (Int) -> Unit,
     onNavigateToTvShowPicks: (Int) -> Unit,
@@ -288,7 +288,7 @@ private fun HandleActorDetailsScreenEffects(
 ) {
     effect?.Listen { currentEffect ->
         when (currentEffect) {
-            is ActorEffectUiState.NavigationBack -> onNavigateBack()
+            is ActorEffectUiState.NavigationBack -> onBack()
             is ActorEffectUiState.NavigateToGallery -> onNavigateToGallery(currentEffect.actorId)
             is ActorEffectUiState.NavigateToMovieScreen -> {
                 onNavigateToMovieScreen(currentEffect.movieId)

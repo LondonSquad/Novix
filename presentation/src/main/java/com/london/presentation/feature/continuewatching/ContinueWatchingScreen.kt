@@ -54,7 +54,7 @@ fun ContinueWatchingScreen(
         effect = effect,
         onMovieClick = onMovieClick,
         onTvShowClick = onTvShowClick,
-        onBackClick = onBackClick
+        onBack = onBackClick
     )
 
     Content(
@@ -164,13 +164,13 @@ private fun HandleContinueWatchingEffects(
     effect: ContinueWatchingEffect?,
     onMovieClick: (Int) -> Unit,
     onTvShowClick: (Int) -> Unit,
-    onBackClick: () -> Unit
+    onBack: () -> Unit
 ) {
     effect?.Listen {
         when (it) {
             is ContinueWatchingEffect.NavigateToMovieDetails -> onMovieClick(it.id)
             is ContinueWatchingEffect.NavigateToTvShowDetails -> onTvShowClick(it.id)
-            is ContinueWatchingEffect.NavigateBack -> onBackClick()
+            is ContinueWatchingEffect.NavigateBack -> onBack()
         }
     }
 }
