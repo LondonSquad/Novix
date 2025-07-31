@@ -155,7 +155,10 @@ fun ActorScreenContent(
                             }
                         }
                     }
-                    CustomBackDropImagePager(images = images.map { it.fileUrl })
+                    CustomBackDropImagePager(
+                        images = images.map { it.fileUrl },
+                        isVisibleDots = false
+                    )
                 }
             }
 
