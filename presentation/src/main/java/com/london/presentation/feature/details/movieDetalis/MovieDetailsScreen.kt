@@ -65,8 +65,6 @@ import com.london.presentation.R.string.star
 import com.london.presentation.R.string.time_icon
 import com.london.presentation.R.string.view_reviews
 import com.london.presentation.feature.buildscreen.BuildScreen
-import com.london.presentation.feature.buildscreen.LoadingScreen
-import com.london.presentation.feature.buildscreen.NetworkErrorScreen
 import com.london.presentation.feature.reviews.MediaType
 import com.london.presentation.feature.search.SearchCategory
 import com.london.presentation.shared.ConditionalText
@@ -103,15 +101,15 @@ fun MovieDetailsScreen(
         onNavigateToReviews = onNavigateToReviews
     )
 
-    BuildScreen {
-        when {
-            state.isLoading -> LoadingScreen()
-            state.error != null -> NetworkErrorScreen()
-            else -> MovieDetailsContent(
-                uiState = state,
-                movieDetailsContract = viewModel
-            )
-        }
+    BuildScreen(
+        onBack = viewModel::onBackClick,
+        isLoading = state.isLoading,
+        isError = state.error != null
+    ) {
+        MovieDetailsContent(
+            uiState = state,
+            movieDetailsContract = viewModel
+        )
     }
 }
 
@@ -348,7 +346,7 @@ private fun RatingAndMetaRow(
         horizontalArrangement = Arrangement.spacedBy(4.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {
-        if (!rate.isNullOrBlank() && rate.isNotZeroRate() ) {
+        if (!rate.isNullOrBlank() && rate.isNotZeroRate()) {
             IconWithText(
                 icon = drawable.star,
                 contentDesc = stringResource(star),
@@ -382,7 +380,8 @@ private fun RatingAndMetaRow(
                 textColor = NovixTheme.colors.body
             )
         }
-        val showDot = !time.isNullOrBlank() && time != "0" && !date.isNullOrBlank() && !rate.isNullOrBlank()
+        val showDot =
+            !time.isNullOrBlank() && time != "0" && !date.isNullOrBlank() && !rate.isNullOrBlank()
 
         if (showDot) {
             Box(

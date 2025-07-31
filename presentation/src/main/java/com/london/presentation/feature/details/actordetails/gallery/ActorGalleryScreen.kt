@@ -30,10 +30,7 @@ import com.london.designsystem.component.TopBar
 import com.london.designsystem.component.button.ErrorImage
 import com.london.designsystem.theme.NovixTheme
 import com.london.presentation.R
-import com.london.presentation.feature.base.ErrorState
 import com.london.presentation.feature.buildscreen.BuildScreen
-import com.london.presentation.feature.buildscreen.LoadingScreen
-import com.london.presentation.feature.buildscreen.NetworkErrorScreen
 import com.london.presentation.utils.Listen
 import org.koin.androidx.compose.koinViewModel
 
@@ -47,15 +44,15 @@ fun ActorGalleryScreen(
 
     effect.Listen<ActorGalleryEffectUiState> { onNavigateBack() }
 
-    BuildScreen {
-        when {
-            uiState.isLoading -> LoadingScreen()
-            uiState.error == ErrorState.NoInternet -> NetworkErrorScreen()
-            else -> Content(
-                actorGalleryContract = viewModel,
-                uiState = uiState
-            )
-        }
+    BuildScreen(
+        onBack = viewModel::onBackClick,
+        isLoading = uiState.isLoading,
+        isError = uiState.error != null
+    ) {
+        Content(
+            actorGalleryContract = viewModel,
+            uiState = uiState
+        )
     }
 }
 

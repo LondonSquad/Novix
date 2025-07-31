@@ -29,7 +29,7 @@ fun <T : Any> LazyPagingColumn(
 ) {
     when {
         pagingItems.loadState.refresh is LoadState.Error -> NetworkErrorScreen(
-            onRetry = onRetry
+            onRetry = onRetry, onBack = null
         )
 
         pagingItems.isLoading() -> CircularLoading(
