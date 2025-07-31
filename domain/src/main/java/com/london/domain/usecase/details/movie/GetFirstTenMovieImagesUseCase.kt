@@ -5,7 +5,7 @@ import org.koin.core.annotation.Provided
 import org.koin.core.annotation.Single
 
 @Single
-class GetMovieImagesUseCase(
+class GetFirstTenMovieImagesUseCase(
     @Provided
     private val movieDetailsRepository: MovieDetailsRepository
 ) {
