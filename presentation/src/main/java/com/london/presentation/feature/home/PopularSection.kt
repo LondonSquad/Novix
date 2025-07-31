@@ -33,6 +33,7 @@ import com.london.designsystem.component.Text
 import com.london.designsystem.theme.NovixTheme
 import com.london.presentation.R
 import com.london.presentation.shared.RatingItem
+import com.london.presentation.utils.toLocalizedNumbers
 import kotlinx.coroutines.currentCoroutineContext
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.isActive
@@ -173,7 +174,7 @@ fun PopularSection(
                             horizontalArrangement = if (isRtl) Arrangement.End else Arrangement.Start
                         ) {
                             RatingItem(
-                                rating = cardRating,
+                                rating = cardRating.toLocalizedNumbers(),
                                 color = NovixTheme.colors.onPrimary
                             )
                         }
