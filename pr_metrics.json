@@ -14672,17 +14672,25 @@
           "url": "https://github.com/abdelrhman1002"
         },
         "submitted_at": "2025-07-31T15:28:32Z"
+      },
+      {
+        "reviewer": {
+          "id": 102248144,
+          "login": "BassantM",
+          "url": "https://github.com/BassantM"
+        },
+        "submitted_at": "2025-07-31T15:30:12Z"
       }
     ],
     "first_approved_at": "2025-07-31T15:28:32Z",
     "time_to_first_approval_minutes": 6.033333333333333,
-    "required_approvals_met_at": null,
-    "time_to_required_approvals_minutes": null,
+    "required_approvals_met_at": "2025-07-31T15:30:12Z",
+    "time_to_required_approvals_minutes": 7.7,
     "closed_at": null,
     "merged_at": null,
     "merged_by": null,
     "week": "2025-W31",
-    "status": "pending",
+    "status": "approved",
     "diff_stats": {
       "additions": 12,
       "deletions": 4,
