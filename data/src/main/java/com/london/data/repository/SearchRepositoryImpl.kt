@@ -6,10 +6,8 @@ import com.london.data.local.model.search.SearchActorsLocal
 import com.london.data.local.model.search.SearchMoviesLocal
 import com.london.data.local.model.search.SearchTvShowLocal
 import com.london.data.local.source.LocalDataSource
-import com.london.data.mapper.toActorEntity
+import com.london.data.mapper.toEntity
 import com.london.data.mapper.toLocal
-import com.london.data.mapper.toMovieEntity
-import com.london.data.mapper.toTvShowEntity
 import com.london.data.remote.source.search.SearchRemoteDataSource
 import com.london.data.utils.CrashReporter
 import com.london.data.utils.fetchAndSync
@@ -46,7 +44,7 @@ class SearchRepositoryImpl @Inject constructor(
     ).run {
         PagedFetchResponse(
             currentPage = page,
-            items = results.map { it.toMovieEntity() },
+            items = results.map { it.toEntity() },
             totalPages = totalPages,
             totalItems = totalResults
         )
@@ -69,7 +67,7 @@ class SearchRepositoryImpl @Inject constructor(
     ).run {
         PagedFetchResponse(
             currentPage = page,
-            items = results.map { it.toTvShowEntity() },
+            items = results.map { it.toEntity() },
             totalPages = totalPages,
             totalItems = totalResults
         )
@@ -92,7 +90,7 @@ class SearchRepositoryImpl @Inject constructor(
     ).run {
         PagedFetchResponse(
             currentPage = page,
-            items = results.map { it.toActorEntity() },
+            items = results.map { it.toEntity("") },
             totalPages = totalPages,
             totalItems = totalResults
         )
@@ -109,7 +107,7 @@ class SearchRepositoryImpl @Inject constructor(
         }).run {
         PagedFetchResponse(
             currentPage = page,
-            items = results.map { it.toMovieEntity() },
+            items = results.map { it.toEntity() },
             totalPages = totalPages,
             totalItems = totalResults
         )
@@ -126,7 +124,7 @@ class SearchRepositoryImpl @Inject constructor(
         }).run {
         PagedFetchResponse(
             currentPage = page,
-            items = results.map { it.toMovieEntity() },
+            items = results.map { it.toEntity() },
             totalPages = totalPages,
             totalItems = totalResults
         )
@@ -170,7 +168,7 @@ class SearchRepositoryImpl @Inject constructor(
         }).run {
         PagedFetchResponse(
             currentPage = page,
-            items = results.map { it.toTvShowEntity() },
+            items = results.map { it.toEntity() },
             totalPages = totalPages,
             totalItems = totalResults
         )

@@ -6,7 +6,7 @@ import com.london.presentation.feature.base.ErrorState
 
 data class MovieDetailsUiState(
     val movieId: Int = 0,
-    val movieImage: List<String> = listOf(),
+    val movieImages: List<String> = listOf(),
     val movieName: String = "",
     val movieGenres: List<Int> = listOf(),
     val movieRating: String = "",

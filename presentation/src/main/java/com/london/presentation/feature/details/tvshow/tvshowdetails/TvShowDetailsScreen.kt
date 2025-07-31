@@ -22,7 +22,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.statusBars
 import androidx.compose.foundation.layout.widthIn
-import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
@@ -72,6 +71,7 @@ import com.london.presentation.shared.FooterSection
 import com.london.presentation.shared.RatingItem
 import com.london.presentation.utils.Listen
 import com.london.presentation.utils.convertDate
+import com.london.presentation.utils.isNotZeroRate
 import com.london.presentation.utils.offsetLayout
 import com.london.presentation.utils.openUrl
 import com.london.presentation.utils.reverseDateFormat
@@ -180,7 +180,7 @@ fun TvShowsDetailScreenContent(
                 val images = uiState.tvImages
                 CustomBackDropImagePager(
                     images = images?.map { it.fileUrl } ?: emptyList(),
-                    isVisibleDots = true
+                    isVisibleDots = (images?.size ?: 0) > 1,
                 )
             }
 
@@ -410,10 +410,11 @@ fun TvShowBasicDetails(
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.spacedBy(4.dp)
     ) {
-        RatingItem(
-            modifier = Modifier,
-            rating = rating
-        )
+        if (rating.isNotBlank() && rating.isNotZeroRate()) {
+            RatingItem(
+                rating = rating
+            )
+        }
 
         Box(
             modifier = Modifier
@@ -640,18 +641,20 @@ private fun EpisodeItem(
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.spacedBy(4.dp)
             ) {
-                RatingItem(
-                    rating = episode.voteAverage.toLocalizedNumbers(),
-                    color = NovixTheme.colors.hint
-                )
+                if (episode.voteAverage.isNotZeroRate()){
+                    RatingItem(
+                        rating = episode.voteAverage.toLocalizedNumbers(),
+                        color = NovixTheme.colors.hint
+                    )
 
-                Box(
-                    modifier = Modifier
-                        .padding(horizontal = 8.dp)
-                        .size(3.dp)
-                        .clip(CircleShape)
-                        .background(NovixTheme.colors.hint)
-                )
+                    Box(
+                        modifier = Modifier
+                            .padding(horizontal = 8.dp)
+                            .size(3.dp)
+                            .clip(CircleShape)
+                            .background(NovixTheme.colors.hint)
+                    )
+                }
 
                 if (episode.runtime != null) {
                     EpisodeDuration(episode.runtime.toString().toLocalizedNumbers())

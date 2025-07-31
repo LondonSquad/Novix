@@ -4,9 +4,9 @@ import androidx.lifecycle.SavedStateHandle
 import com.london.domain.entity.Movie
 import com.london.domain.entity.recent.MediaType
 import com.london.domain.entity.recent.RecentViewed
+import com.london.domain.usecase.details.movie.GetFirstTenMovieImagesUseCase
 import com.london.domain.usecase.details.movie.GetMovieCastUseCase
 import com.london.domain.usecase.details.movie.GetMovieDetailsById
-import com.london.domain.usecase.details.movie.GetMovieImagesUseCase
 import com.london.domain.usecase.details.movie.GetMovieVideoUseCase
 import com.london.domain.usecase.details.movie.GetSimilarMoviesUseCase
 import com.london.domain.usecase.recent.viewed.AddToRecentViewedUseCase
@@ -20,7 +20,7 @@ import javax.inject.Inject
 @HiltViewModel
 class MovieDetailsViewModel @Inject constructor(
     private val getMovieById: GetMovieDetailsById,
-    private val getMovieImagesUseCase: GetMovieImagesUseCase,
+    private val getMovieImagesUseCase: GetFirstTenMovieImagesUseCase,
     private val getMovieCastUseCase: GetMovieCastUseCase,
     private val getSimilarMoviesUseCase: GetSimilarMoviesUseCase,
     private val getMovieVideosUseCase: GetMovieVideoUseCase,
@@ -84,7 +84,7 @@ class MovieDetailsViewModel @Inject constructor(
                         movieDuration = details.runtime.toString(),
                         releaseDate = details.releaseDate,
                         movieOverview = details.overview,
-                        movieImage = images,
+                        movieImages = images.ifEmpty { listOf(details.posterUrl) },
                         actors = cast
                     )
 
@@ -99,9 +99,9 @@ class MovieDetailsViewModel @Inject constructor(
                 )
                 addMovieToRecentWatched(
                     Movie(
-                        id =details.id,
+                        id = details.id,
                         name = details.title,
-                        posterPicture = details.posterUrl,
+                        posterUrl = details.posterUrl,
                         releaseYear = 2025,
                         rating = 1,
                         genreIds = details.genresId,

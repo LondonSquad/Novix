@@ -20,8 +20,11 @@ class MovieLocalDataSourceImpl @Inject constructor(
 ) : LocalDataSource<SearchMoviesLocal> {
     init {
         CoroutineScope(Dispatchers.IO).launch {
-            searchMoviesDao.getAll().forEach {
-                if (isOneHourExpired(it.date)) searchMoviesDao.delete(it)
+            searchMoviesDao.getAll().forEach { searchMoviesLocal ->
+                if (searchMoviesLocal.date.isOneHourExpired())
+                    searchMoviesDao.delete(
+                    searchMoviesLocal
+                )
             }
         }
     }
@@ -37,21 +40,13 @@ class MovieLocalDataSourceImpl @Inject constructor(
     override suspend fun getByDate(date: Long): SearchMoviesLocal =
         searchMoviesDao.executeGetByDate(date)
 
-    override suspend fun getByQuery(query: String): SearchMoviesLocal? {
-        return try {
-            searchMoviesDao.executeGetByQuery(query.generateHash())
-        } catch (_: Exception) {
-            null
-        }
-    }
+    override suspend fun getByQuery(query: String): SearchMoviesLocal? = runCatching {
+        searchMoviesDao.executeGetByQuery(query.generateHash())
+    }.getOrNull()
 
-    override suspend fun getByQueryAndPage(query: String, page: Int): SearchMoviesLocal? {
-        return try {
+
+    override suspend fun getByQueryAndPage(query: String, page: Int): SearchMoviesLocal? =
+        runCatching {
             searchMoviesDao.executeGetByQueryAndPage(query.generateHash(), page)
-        } catch (_: Exception) {
-            null
-        }
-
-    }
-
+        }.getOrNull()
 }

@@ -3,7 +3,7 @@
 package com.london.data.remote.source.search
 
 import com.london.data.remote.model.ApiResponse
-import com.london.data.remote.model.search.model.SearchActorRemote
+import com.london.data.remote.model.search.model.searchactormodel.SearchActorRemote
 import com.london.data.remote.model.search.model.SearchMovieRemote
 import com.london.data.remote.model.search.model.SearchTvShowRemote
 import com.london.data.remote.service.search.SearchApiService
@@ -18,7 +18,9 @@ class SearchRemoteDataSourceImpl @Inject constructor(
 ) : SearchRemoteDataSource, BaseRemoteDatasource {
 
     override suspend fun searchForMovies(
-        query: String, includeAdult: Boolean, pageNumber: Int
+        query: String,
+        includeAdult: Boolean,
+        pageNumber: Int
     ): Result<ApiResponse<SearchMovieRemote>> = callApiWithRetry(
         {
             searchApiService.searchMovies(
@@ -30,9 +32,10 @@ class SearchRemoteDataSourceImpl @Inject constructor(
         mapper = { it }
     )
 
-
     override suspend fun searchForTvShows(
-        query: String, includeAdult: Boolean, pageNumber: Int
+        query: String,
+        includeAdult: Boolean,
+        pageNumber: Int
     ): Result<ApiResponse<SearchTvShowRemote>> = callApiWithRetry(
         {
             searchApiService.searchTvShows(
@@ -44,9 +47,10 @@ class SearchRemoteDataSourceImpl @Inject constructor(
         mapper = { it }
     )
 
-
     override suspend fun searchForActors(
-        query: String, includeAdult: Boolean, pageNumber: Int
+        query: String,
+        includeAdult: Boolean,
+        pageNumber: Int
     ): Result<ApiResponse<SearchActorRemote>> = callApiWithRetry(
         {
             searchApiService.searchActors(
@@ -59,7 +63,9 @@ class SearchRemoteDataSourceImpl @Inject constructor(
     )
 
     override suspend fun getMoviesByCategory(
-        categoryId: Int, pageNumber: Int, includeAdult: Boolean
+        categoryId: Int,
+        pageNumber: Int,
+        includeAdult: Boolean
     ): Result<ApiResponse<SearchMovieRemote>> = callApiWithRetry(
         {
             searchApiService.getMoviesByCategory(
@@ -72,7 +78,9 @@ class SearchRemoteDataSourceImpl @Inject constructor(
     )
 
     override suspend fun getUpComingMoviesByCategory(
-        categoryId: Int?, pageNumber: Int, includeAdult: Boolean
+        categoryId: Int?,
+        pageNumber: Int,
+        includeAdult: Boolean
     ): Result<ApiResponse<SearchMovieRemote>> =
         callApiWithRetry(
             {

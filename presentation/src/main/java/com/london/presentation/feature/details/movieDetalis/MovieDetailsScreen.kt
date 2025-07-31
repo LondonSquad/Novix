@@ -1,4 +1,5 @@
 package com.london.presentation.feature.details.movieDetalis
+
 import androidx.compose.animation.core.FastOutSlowInEasing
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
@@ -75,6 +76,7 @@ import com.london.presentation.shared.FooterSection
 import com.london.presentation.utils.Listen
 import com.london.presentation.utils.convertGenreCodeToString
 import com.london.presentation.utils.getLocalizedTimeUnit
+import com.london.presentation.utils.isNotZeroRate
 import com.london.presentation.utils.offsetLayout
 import com.london.presentation.utils.openUrl
 import com.london.presentation.utils.reverseDateFormat
@@ -183,8 +185,7 @@ fun MovieDetailsContent(
                     ) {
 
                         CustomBackDropImagePager(
-                            images = uiState.movieImage,
-                            isVisibleDots = false
+                            images = uiState.movieImages,
                         )
 
                         Column(
@@ -268,7 +269,7 @@ fun MovieDetailsContent(
                             ActorItem(
                                 actorName = actor.name,
                                 characterName = actor.characterName,
-                                imageRes = actor.profilePicture,
+                                imageRes = actor.profilePictureUrl,
                                 modifier = Modifier
                                     .defaultMinSize(minWidth = 296.dp),
                                 onClick = {
@@ -302,7 +303,7 @@ fun MovieDetailsContent(
                     ) {
                         rowItems.forEachIndexed { _, movie ->
                             HomeCard(
-                                imageUrl = movie.posterPicture,
+                                imageUrl = movie.posterUrl,
                                 isSaved = false,
                                 onSaveClick = {},
                                 modifier = Modifier
@@ -347,12 +348,12 @@ private fun RatingAndMetaRow(
         horizontalArrangement = Arrangement.spacedBy(4.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {
-        if (!rate.isNullOrBlank()) {
+        if (!rate.isNullOrBlank() && rate.isNotZeroRate() ) {
             IconWithText(
                 icon = drawable.star,
                 contentDesc = stringResource(star),
                 tint = NovixTheme.colors.yellowAccent,
-                text = rate,
+                text = rate.toLocalizedNumbers(),
                 textColor = NovixTheme.colors.body
             )
         }
@@ -377,7 +378,7 @@ private fun RatingAndMetaRow(
         }
 
         if (
-            (!time.isNullOrBlank() && !date.isNullOrBlank()) ||
+            (time.toLocalizedNumbers().isNotBlank() && date.toLocalizedNumbers().isNotBlank()) ||
             (rate.isNullOrBlank() && !time.isNullOrBlank() && !date.isNullOrBlank())
         ) {
             Dot()

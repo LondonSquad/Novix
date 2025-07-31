@@ -1,8 +1,8 @@
 package com.london.data.repository
 
 import com.london.data.mapper.moviedetails.toEntity
-import com.london.data.mapper.toMovieEntity
-import com.london.data.mapper.toMovieLocalDto
+import com.london.data.mapper.toEntity
+
 import com.london.data.remote.source.details.movie.MovieDetailsRemoteDataSource
 import com.london.data.utils.asImageUrlOrEmpty
 import com.london.data.utils.isTrue
@@ -24,7 +24,7 @@ class MovieDetailsRepositoryImpl @Inject constructor(
 
     override suspend fun getSimilarMoviesById(id: Int): List<Movie> =
         movieDetailsRemoteDataSource.getSimilarMovies(id).getOrThrow().items
-            .map { it.toMovieLocalDto().toMovieEntity() }
+            .map { it.toEntity() }
 
     override suspend fun getMovieImagesById(id: Int): List<String> {
         val images = movieDetailsRemoteDataSource.getMovieImages(id).getOrThrow()
@@ -39,7 +39,7 @@ class MovieDetailsRepositoryImpl @Inject constructor(
                 .map { it.filePath.asImageUrlOrEmpty() }
 
             else -> emptyList()
-        }.take(IMAGE_LIMIT)
+        }
     }
 
     override suspend fun getMovieCastById(id: Int): List<Actor> {
@@ -47,8 +47,4 @@ class MovieDetailsRepositoryImpl @Inject constructor(
         return movieCast.actorRemote?.map { it.toEntity() }.orEmpty()
     }
 
-
-    companion object {
-        private const val IMAGE_LIMIT = 10
-    }
 }

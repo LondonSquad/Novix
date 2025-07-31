@@ -20,8 +20,11 @@ class ActorLocalDataSourceImpl @Inject constructor(
 ) : LocalDataSource<SearchActorsLocal> {
     init {
         CoroutineScope(Dispatchers.IO).launch {
-            searchActorsDao.getAll().forEach {
-                if (isOneHourExpired(it.date)) searchActorsDao.delete(it)
+            searchActorsDao.getAll().forEach { searchActorsLocal ->
+                if (searchActorsLocal.date.isOneHourExpired())
+                    searchActorsDao.delete(
+                        searchActorsLocal
+                    )
             }
         }
     }
@@ -37,19 +40,13 @@ class ActorLocalDataSourceImpl @Inject constructor(
     override suspend fun getByDate(date: Long): SearchActorsLocal =
         searchActorsDao.executeGetByDate(date)
 
-    override suspend fun getByQuery(query: String): SearchActorsLocal?{
-        return try {
-            searchActorsDao.executeGetByQuery(query.generateHash())
-        } catch (_: Exception) {
-            null
-        }
-    }
+    override suspend fun getByQuery(query: String): SearchActorsLocal? = runCatching {
+        searchActorsDao.executeGetByQuery(query.generateHash())
+    }.getOrNull()
 
-    override suspend fun getByQueryAndPage(query: String, page: Int): SearchActorsLocal? {
-        return try {
+    override suspend fun getByQueryAndPage(query: String, page: Int): SearchActorsLocal? =
+        runCatching {
             searchActorsDao.executeGetByQueryAndPage(query.generateHash(), page)
-        } catch (_: Exception) {
-            null
-        }
-    }
+        }.getOrNull()
+
 }

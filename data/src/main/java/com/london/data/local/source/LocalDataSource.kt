@@ -14,9 +14,9 @@ interface LocalDataSource<T> {
     fun String.generateHash(): String = MessageDigest.getInstance("MD5").digest(toByteArray())
         .joinToString("") { "%02x".format(it) }
 
-    fun isOneHourExpired(date: Long): Boolean {
+    fun Long.isOneHourExpired(): Boolean {
         val oneHourInMillis = 60 * 60 * 1000
         val oneHourAgo = System.currentTimeMillis() - oneHourInMillis
-        return date < oneHourAgo
+        return this < oneHourAgo
     }
 }
