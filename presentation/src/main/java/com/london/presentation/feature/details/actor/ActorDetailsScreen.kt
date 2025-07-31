@@ -88,11 +88,7 @@ fun ActorDetailsScreen(
                 onNavigateToMovieScreen(currentEffect.movieId)
             }
 
-            is ActorEffectUiState.NavigateToTvShowPicks ->
-                onNavigateToTvShowPicks(
-                    uiState.actorId
-                )
-
+            is ActorEffectUiState.NavigateToTvShowPicks -> onNavigateToTvShowPicks(uiState.actorId)
             is ActorEffectUiState.NavigateToTvShowScreen -> onNavigateToTvShowScreen(currentEffect.tvShowId)
             is ActorEffectUiState.NavigateToMoviePicks -> onNavigateToMoviePicks(uiState.actorId)
         }
@@ -110,7 +106,6 @@ fun ActorScreenContent(
     uiState: ActorDetailsUiState,
     actorDetailsContract: ActorDetailsContract,
 ) {
-
     val lazyState = rememberLazyListState()
 
     val shouldShowBackground by remember {
@@ -135,8 +130,7 @@ fun ActorScreenContent(
             .background(NovixTheme.colors.surface)
     ) {
         LazyColumn(
-            modifier = Modifier
-                .fillMaxSize(),
+            modifier = Modifier.fillMaxSize(),
             contentPadding = PaddingValues(
                 bottom = WindowInsets.navigationBars.asPaddingValues()
                     .calculateBottomPadding() + 16.dp
@@ -144,114 +138,39 @@ fun ActorScreenContent(
             state = lazyState
         ) {
             item {
-                val images = uiState.actorImageDetails.orEmpty()
-                CustomBackDropImagePager(
-                    images = images.map { it.fileUrl },
-                    isVisibleDots = false
+                ActorImagePager(images = uiState.actorImageDetails.orEmpty())
+            }
+
+            item {
+                ActorInfoSectionItem(uiState = uiState)
+            }
+
+            item {
+                BiographySection(uiState = uiState)
+            }
+
+            item {
+                GallerySection(
+                    images = uiState.actorImageDetails,
+                    onGalleryClick = { actorDetailsContract.onGalleryClick(uiState.actorId) }
                 )
             }
 
             item {
-                with(uiState) {
-                    if (listOf(
-                            actorName,
-                            actorBirthday,
-                            actorPlaceOfBirth,
-                            knownForDepartment
-                        )
-                            .all { it.isNotBlank() }
-                    ) {
-                        ActorInfoSection(
-                            job = knownForDepartment,
-                            name = actorName,
-                            birthday = actorBirthday,
-                            deathDay = actorDeathDay ?: "",
-                            placeOfBirth = actorPlaceOfBirth,
-                            modifier = Modifier.offsetLayout()
-                        )
-                    } else {
-                        Spacer(modifier = Modifier.height(16.dp))
-                    }
-                }
+                MoviesSection(
+                    movies = uiState.actorMovieDetails?.cast,
+                    onMoviePicksClick = { actorDetailsContract.onMoviePicksClick(uiState.actorId) },
+                    onMovieScreenClick = actorDetailsContract::onMovieScreenClick
+                )
             }
 
             item {
-                if (uiState.actorBiography.isNotBlank()) {
-                    Text(
-                        text = stringResource(R.string.biography),
-                        style = NovixTheme.typography.title.medium,
-                        color = NovixTheme.colors.title,
-                        modifier = Modifier.padding(
-                            start = 16.dp,
-                            bottom = 4.dp,
-                        )
-                    )
-                    var isExpanded by remember { mutableStateOf(false) }
-
-                    ConditionalText(
-                        text = uiState.actorBiography,
-                        expandedState = isExpanded,
-                        modifier = Modifier.padding(horizontal = 16.dp, vertical = 4.dp)
-                    ) {
-                        isExpanded = !isExpanded
-                    }
-                } else {
-                    Spacer(modifier = Modifier.height(16.dp))
-                }
+                TvShowsSection(
+                    tvShows = uiState.actorTvShowDetails?.cast,
+                    onTvShowPicksClick = { actorDetailsContract.onTvShowPicksClick(uiState.actorId) },
+                    onTvShowScreenClick = actorDetailsContract::onTvShowScreenClick
+                )
             }
-
-            item {
-                if (!uiState.actorImageDetails.isNullOrEmpty()) {
-                    SectionHeader(
-                        text = stringResource(R.string.gallery),
-                        hasGetAll = true,
-                        hasIcon = true,
-                        modifier = Modifier
-                            .padding(bottom = 12.dp, top = 16.dp)
-                            .padding(horizontal = 16.dp),
-                        onClick = { actorDetailsContract.onGalleryClick(uiState.actorId) }
-                    )
-                    ActorGallery(images = uiState.actorImageDetails)
-                }
-            }
-
-            item {
-                uiState.actorMovieDetails?.cast?.takeIf { it.isNotEmpty() }?.let { movieCast ->
-                    SectionHeader(
-                        text = stringResource(R.string.top_movies_picks),
-                        hasGetAll = true,
-                        hasIcon = true,
-                        modifier = Modifier
-                            .padding(top = 16.dp, bottom = 12.dp)
-                            .padding(horizontal = 16.dp),
-                        onClick = { actorDetailsContract.onMoviePicksClick(uiState.actorId) }
-                    )
-                    TopMoviesPicksList(
-                        movie = movieCast,
-                        onNavigateToMoviePicks = actorDetailsContract::onMovieScreenClick
-
-                    )
-                }
-            }
-
-            item {
-                uiState.actorTvShowDetails?.cast?.takeIf { it.isNotEmpty() }?.let { tvShows ->
-                    SectionHeader(
-                        text = stringResource(R.string.top_tv_shows_picks),
-                        hasGetAll = true,
-                        hasIcon = true,
-                        modifier = Modifier
-                            .padding(top = 16.dp, bottom = 12.dp)
-                            .padding(horizontal = 16.dp),
-                        onClick = { actorDetailsContract.onTvShowPicksClick(uiState.actorId) }
-                    )
-                    TopTvShowsPicksList(
-                        tvShow = tvShows,
-                        onNavigateToTvShowPicks = actorDetailsContract::onTvShowScreenClick
-                    )
-                }
-            }
-
         }
 
         TopBar(
@@ -267,7 +186,129 @@ fun ActorScreenContent(
                 )
                 .zIndex(1f)
         )
+    }
+}
 
+@Composable
+private fun ActorImagePager(images: List<ImageDetails>) {
+    CustomBackDropImagePager(
+        images = images.map { it.fileUrl },
+        isVisibleDots = false
+    )
+}
+
+@Composable
+private fun ActorInfoSectionItem(uiState: ActorDetailsUiState) {
+    with(uiState) {
+        if (listOf(
+                actorName,
+                actorBirthday,
+                actorPlaceOfBirth,
+                knownForDepartment
+            ).all { it.isNotBlank() }
+        ) {
+            ActorInfoSection(
+                job = knownForDepartment,
+                name = actorName,
+                birthday = actorBirthday,
+                deathDay = actorDeathDay ?: "",
+                placeOfBirth = actorPlaceOfBirth,
+                modifier = Modifier.offsetLayout()
+            )
+        } else {
+            Spacer(modifier = Modifier.height(16.dp))
+        }
+    }
+}
+
+@Composable
+private fun BiographySection(uiState: ActorDetailsUiState) {
+    if (uiState.actorBiography.isNotBlank()) {
+        Text(
+            text = stringResource(R.string.biography),
+            style = NovixTheme.typography.title.medium,
+            color = NovixTheme.colors.title,
+            modifier = Modifier.padding(
+                start = 16.dp,
+                bottom = 4.dp,
+            )
+        )
+        var isExpanded by remember { mutableStateOf(false) }
+
+        ConditionalText(
+            text = uiState.actorBiography,
+            expandedState = isExpanded,
+            modifier = Modifier.padding(horizontal = 16.dp, vertical = 4.dp)
+        ) {
+            isExpanded = !isExpanded
+        }
+    } else {
+        Spacer(modifier = Modifier.height(16.dp))
+    }
+}
+
+@Composable
+private fun GallerySection(
+    images: List<ImageDetails>?,
+    onGalleryClick: () -> Unit
+) {
+    if (!images.isNullOrEmpty()) {
+        SectionHeader(
+            text = stringResource(R.string.gallery),
+            hasGetAll = true,
+            hasIcon = true,
+            modifier = Modifier
+                .padding(bottom = 12.dp, top = 16.dp)
+                .padding(horizontal = 16.dp),
+            onClick = onGalleryClick
+        )
+        ActorGallery(images = images)
+    }
+}
+
+@Composable
+private fun MoviesSection(
+    movies: List<ActorMovieCastMemberEntity>?,
+    onMoviePicksClick: () -> Unit,
+    onMovieScreenClick: (Int) -> Unit
+) {
+    movies?.takeIf { it.isNotEmpty() }?.let { movieCast ->
+        SectionHeader(
+            text = stringResource(R.string.top_movies_picks),
+            hasGetAll = true,
+            hasIcon = true,
+            modifier = Modifier
+                .padding(top = 16.dp, bottom = 12.dp)
+                .padding(horizontal = 16.dp),
+            onClick = onMoviePicksClick
+        )
+        TopMoviesPicksList(
+            movie = movieCast,
+            onNavigateToMoviePicks = onMovieScreenClick
+        )
+    }
+}
+
+@Composable
+private fun TvShowsSection(
+    tvShows: List<ActorTvShowCastMemberEntity>?,
+    onTvShowPicksClick: () -> Unit,
+    onTvShowScreenClick: (Int) -> Unit
+) {
+    tvShows?.takeIf { it.isNotEmpty() }?.let { shows ->
+        SectionHeader(
+            text = stringResource(R.string.top_tv_shows_picks),
+            hasGetAll = true,
+            hasIcon = true,
+            modifier = Modifier
+                .padding(top = 16.dp, bottom = 12.dp)
+                .padding(horizontal = 16.dp),
+            onClick = onTvShowPicksClick
+        )
+        TopTvShowsPicksList(
+            tvShow = shows,
+            onNavigateToTvShowPicks = onTvShowScreenClick
+        )
     }
 }
 
@@ -278,8 +319,7 @@ fun TopMoviesPicksList(
 ) {
     LazyHorizontalGrid(
         rows = GridCells.Adaptive(minSize = 128.dp),
-        modifier = Modifier
-            .height(210.dp),
+        modifier = Modifier.height(210.dp),
         horizontalArrangement = Arrangement.spacedBy(8.dp),
         contentPadding = PaddingValues(horizontal = 16.dp)
     ) {
@@ -292,7 +332,8 @@ fun TopMoviesPicksList(
                 },
                 modifier = Modifier.clickable {
                     onNavigateToMoviePicks(movie[index].id)
-                })
+                }
+            )
         }
     }
 }
@@ -304,8 +345,7 @@ fun TopTvShowsPicksList(
 ) {
     LazyHorizontalGrid(
         rows = GridCells.Adaptive(minSize = 128.dp),
-        modifier = Modifier
-            .height(210.dp),
+        modifier = Modifier.height(210.dp),
         horizontalArrangement = Arrangement.spacedBy(8.dp),
         contentPadding = PaddingValues(horizontal = 16.dp)
     ) {
@@ -316,7 +356,10 @@ fun TopTvShowsPicksList(
                 onSaveClick = {
                     //TODO("Not yet implemented")
                 },
-                modifier = Modifier.clickable { onNavigateToTvShowPicks(tvShow[index].id) })
+                modifier = Modifier.clickable {
+                    onNavigateToTvShowPicks(tvShow[index].id)
+                }
+            )
         }
     }
 }
@@ -365,7 +408,9 @@ private fun ActorInfoSection(
             .padding(16.dp)
             .clip(RoundedCornerShape(16.dp))
             .border(
-                width = 1.dp, color = NovixTheme.colors.stroke, shape = RoundedCornerShape(16.dp)
+                width = 1.dp,
+                color = NovixTheme.colors.stroke,
+                shape = RoundedCornerShape(16.dp)
             )
             .background(NovixTheme.colors.surface),
     ) {
@@ -396,7 +441,8 @@ private fun ActorInfoSection(
                     .align(alignment = Alignment.CenterVertically)
             )
             TextWithIcon(
-                icon = painterResource(R.drawable.icon_location), text = placeOfBirth
+                icon = painterResource(R.drawable.icon_location),
+                text = placeOfBirth
             )
             Icon(
                 painter = painterResource(R.drawable.image_dot),
@@ -414,10 +460,10 @@ private fun ActorInfoSection(
     }
 }
 
-
 @Composable
 private fun TextWithIcon(
-    text: String, icon: Painter
+    text: String,
+    icon: Painter
 ) {
     Row(
         modifier = Modifier.padding(),
