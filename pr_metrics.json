@@ -15806,5 +15806,33 @@
       "deletions": 6,
       "changed_files": 2
     }
+  },
+  {
+    "pr_number": 493,
+    "url": "https://github.com/LondonSquad/Novix/pull/493",
+    "title": "fix: Adjust spacing and item size in HomeScreen",
+    "opened_at": "2025-07-31T23:34:41Z",
+    "head_ref": "fix/10-padding-for-upcoming-section-in-home-screen",
+    "base_ref": "develop",
+    "creator": {
+      "login": "Aseel-AbuKmail",
+      "id": 189210092,
+      "url": "https://github.com/Aseel-AbuKmail"
+    },
+    "approvals": [],
+    "first_approved_at": null,
+    "time_to_first_approval_minutes": null,
+    "required_approvals_met_at": null,
+    "time_to_required_approvals_minutes": null,
+    "closed_at": null,
+    "merged_at": null,
+    "merged_by": null,
+    "week": "2025-W31",
+    "status": "pending",
+    "diff_stats": {
+      "additions": 3,
+      "deletions": 6,
+      "changed_files": 1
+    }
   }
 ]
