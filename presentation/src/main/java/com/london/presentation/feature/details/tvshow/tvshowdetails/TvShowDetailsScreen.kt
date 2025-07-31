@@ -266,7 +266,8 @@ fun TvShowsDetailScreenContent(
 
                     Text(
                         text = "${
-                            uiState.tvShowEpisodeCountBySeason?.episodes?.size.toString().toLocalizedNumbers()
+                            uiState.tvShowEpisodeCountBySeason?.episodes?.size.toString()
+                                .toLocalizedNumbers()
                         } ${stringResource(R.string.episodes)}",
                         style = NovixTheme.typography.label.small,
                         color = NovixTheme.colors.hint,
@@ -643,46 +644,37 @@ private fun EpisodeItem(
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.spacedBy(4.dp)
             ) {
-                if (episode.voteAverage.isNotZeroRate()){
+                if (episode.voteAverage.isNotZeroRate()) {
                     RatingItem(
                         rating = episode.voteAverage.toLocalizedNumbers(),
                         color = NovixTheme.colors.hint
                     )
 
-                if (episode.runtime != null) {
-                    Box(
-                        modifier = Modifier
-                            .padding(horizontal = 8.dp)
-                            .size(3.dp)
-                            .clip(CircleShape)
-                            .background(NovixTheme.colors.hint)
-                    )
-                    Box(
-                        modifier = Modifier
-                            .padding(horizontal = 8.dp)
-                            .size(3.dp)
-                            .clip(CircleShape)
-                            .background(NovixTheme.colors.hint)
-                    )
-                }
+                    if (episode.runtime != null) {
+                        Box(
+                            modifier = Modifier
+                                .padding(horizontal = 8.dp)
+                                .size(3.dp)
+                                .clip(CircleShape)
+                                .background(NovixTheme.colors.hint)
+                        )
+                        EpisodeDuration(episode.runtime.toString().toLocalizedNumbers())
+                    }
 
-                if (episode.runtime != null) {
-                    EpisodeDuration(episode.runtime.toString().toLocalizedNumbers())
-                }
-
-                if (episode.airDate != null) {
-                    Box(
-                        modifier = Modifier
-                            .padding(horizontal = 8.dp)
-                            .size(3.dp)
-                            .clip(CircleShape)
-                            .background(NovixTheme.colors.hint)
-                    )
-                    Text(
-                        text = convertDate(episode.airDate.toString()),
-                        style = NovixTheme.typography.label.small,
-                        color = NovixTheme.colors.hint
-                    )
+                    if (episode.airDate != null) {
+                        Box(
+                            modifier = Modifier
+                                .padding(horizontal = 8.dp)
+                                .size(3.dp)
+                                .clip(CircleShape)
+                                .background(NovixTheme.colors.hint)
+                        )
+                        Text(
+                            text = convertDate(episode.airDate.toString()),
+                            style = NovixTheme.typography.label.small,
+                            color = NovixTheme.colors.hint
+                        )
+                    }
                 }
             }
         }
