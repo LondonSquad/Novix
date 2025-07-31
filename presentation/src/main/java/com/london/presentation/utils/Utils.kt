@@ -108,3 +108,12 @@ fun reverseDateFormat(input: String): String {
 fun String?.getValueOf(key: String): String? {
     return this
 }
+
+fun String.isNotZeroRate() = runCatching {
+    this != "0.0" && this != "٠٫٠"
+}.getOrDefault(false)
+
+fun Double.isNotZeroRate() = runCatching {
+    this != 0.0
+}.getOrDefault(false)
+
