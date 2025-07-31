@@ -66,6 +66,7 @@ import com.london.presentation.shared.ConditionalText
 import com.london.presentation.shared.CustomBackDropImagePager
 import com.london.presentation.utils.Listen
 import com.london.presentation.utils.offsetLayout
+import com.london.presentation.utils.toLocalizedNumbers
 import kotlinx.coroutines.delay
 import org.koin.androidx.compose.koinViewModel
 
@@ -450,7 +451,7 @@ private fun ActorInfoSection(
             )
             TextWithIcon(
                 icon = painterResource(R.drawable.birthday_cake),
-                text = if (deathDay != "") "$birthday  -  $deathDay" else birthday,
+                text = if (deathDay != "") "${birthday.toLocalizedNumbers()}  -  ${deathDay.toLocalizedNumbers()}" else birthday.toLocalizedNumbers(),
             )
         }
     }
