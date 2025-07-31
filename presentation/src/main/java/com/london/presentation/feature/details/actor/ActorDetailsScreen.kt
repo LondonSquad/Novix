@@ -276,7 +276,7 @@ fun ActorScreenContent(
                 )
                 .padding(
                     start = 16.dp,
-                    top = WindowInsets.statusBars.asPaddingValues().calculateTopPadding()
+                    top = WindowInsets.statusBars.asPaddingValues().calculateTopPadding() + 12.dp
                 )
                 .zIndex(1f)
         )
