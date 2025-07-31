@@ -39,7 +39,10 @@ class HomeViewModel(
         initializePopularMovies()
         initializePopularTvShows()
         initializeTopRatedMedia()
-        initializeUpcomingMovies()
+        updateState {
+            copy(upcomingMovies = _upcomingMoviesFlow)
+        }
+        loadUpcomingMovies(categoryId = null)
     }
 
     override fun onMovieClick(id: Int) {
@@ -176,19 +179,4 @@ class HomeViewModel(
         )
     }
 
-    private fun initializeUpcomingMovies() {
-        tryToExecute(
-            block = {
-                updateState {
-                    copy(upcomingMovies = _upcomingMoviesFlow)
-                }
-                loadUpcomingMovies(categoryId = null)
-            },
-            onError = { errorMessage ->
-                updateState {
-                    copy(error = errorMessage, isLoading = false)
-                }
-            }
-        )
-    }
 }
