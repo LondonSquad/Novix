@@ -14955,5 +14955,33 @@
       "deletions": 9,
       "changed_files": 2
     }
+  },
+  {
+    "pr_number": 467,
+    "url": "https://github.com/LondonSquad/Novix/pull/467",
+    "title": "Fix: Navigation and UI padding adjustments",
+    "opened_at": "2025-07-31T17:16:04Z",
+    "head_ref": "fix/actor-details-screen-topbar-and-navigate",
+    "base_ref": "develop",
+    "creator": {
+      "login": "Mostafa-alsaygh",
+      "id": 106277855,
+      "url": "https://github.com/Mostafa-alsaygh"
+    },
+    "approvals": [],
+    "first_approved_at": null,
+    "time_to_first_approval_minutes": null,
+    "required_approvals_met_at": null,
+    "time_to_required_approvals_minutes": null,
+    "closed_at": null,
+    "merged_at": null,
+    "merged_by": null,
+    "week": "2025-W31",
+    "status": "pending",
+    "diff_stats": {
+      "additions": 2,
+      "deletions": 2,
+      "changed_files": 2
+    }
   }
 ]
