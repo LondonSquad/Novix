@@ -14574,5 +14574,33 @@
       "deletions": 27,
       "changed_files": 1
     }
+  },
+  {
+    "pr_number": 450,
+    "url": "https://github.com/LondonSquad/Novix/pull/450",
+    "title": "hotfix/crash-for-big-episodes",
+    "opened_at": "2025-07-31T14:37:03Z",
+    "head_ref": "hotfix/crash-for-big-episodes",
+    "base_ref": "develop",
+    "creator": {
+      "login": "abdo-essam",
+      "id": 92235360,
+      "url": "https://github.com/abdo-essam"
+    },
+    "approvals": [],
+    "first_approved_at": null,
+    "time_to_first_approval_minutes": null,
+    "required_approvals_met_at": null,
+    "time_to_required_approvals_minutes": null,
+    "closed_at": null,
+    "merged_at": null,
+    "merged_by": null,
+    "week": "2025-W31",
+    "status": "pending",
+    "diff_stats": {
+      "additions": 141,
+      "deletions": 107,
+      "changed_files": 3
+    }
   }
 ]
