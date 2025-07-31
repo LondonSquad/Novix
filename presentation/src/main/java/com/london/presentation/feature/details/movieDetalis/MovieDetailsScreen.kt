@@ -1,11 +1,7 @@
 package com.london.presentation.feature.details.movieDetalis
-
-import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.FastOutSlowInEasing
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
-import androidx.compose.animation.slideInHorizontally
-import androidx.compose.animation.slideOutHorizontally
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -18,7 +14,6 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.asPaddingValues
-import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.defaultMinSize
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -34,7 +29,6 @@ import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
@@ -45,7 +39,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalUriHandler
@@ -57,10 +50,8 @@ import com.london.designsystem.R
 import com.london.designsystem.component.ActorItem
 import com.london.designsystem.component.HomeCard
 import com.london.designsystem.component.Icon
-import com.london.designsystem.component.ImageView
 import com.london.designsystem.component.Text
 import com.london.designsystem.component.TopBar
-import com.london.designsystem.component.button.ErrorImage
 import com.london.designsystem.theme.NovixTheme
 import com.london.designsystem.theme.noRippleClickable
 import com.london.presentation.R.drawable
@@ -183,12 +174,6 @@ fun MovieDetailsContent(
                         .defaultMinSize(minHeight = 370.dp)
 
                 ) {
-                    MovieDetailsImage(
-                        images = uiState.movieImage,
-                        currentImageIndex = uiState.currentImageIndex,
-                        direction = uiState.imageSlideDirection,
-                    )
-
                     Column(
                         modifier = Modifier
                             .fillMaxWidth()
@@ -197,7 +182,10 @@ fun MovieDetailsContent(
                         horizontalAlignment = Alignment.CenterHorizontally
                     ) {
 
-                        CustomBackDropImagePager(images = uiState.movieImage)
+                        CustomBackDropImagePager(
+                            images = uiState.movieImage,
+                            isVisibleDots = false
+                        )
 
                         Column(
                             modifier = Modifier
@@ -489,51 +477,4 @@ private fun Dot(modifier: Modifier = Modifier) {
         tint = NovixTheme.colors.body,
         modifier = modifier
     )
-}
-
-@Composable
-private fun MovieDetailsImage(
-    images: List<Any>,
-    modifier: Modifier = Modifier,
-    imageDescription: String? = null,
-    loadingState: MutableState<Boolean> = remember { mutableStateOf(false) },
-    currentImageIndex: Int,
-    direction: Int,
-) {
-    Box(
-        modifier = modifier
-            .fillMaxWidth()
-            .aspectRatio(8f / 5f)
-            .clip(RoundedCornerShape(12.dp)),
-        contentAlignment = Alignment.Center
-    ) {
-        if (images.isNotEmpty()) {
-            images.forEachIndexed { index, image ->
-                AnimatedVisibility(
-                    visible = currentImageIndex == index,
-                    enter = slideInHorizontally(
-                        initialOffsetX = { if (direction > 0) it else -it },
-                        animationSpec = tween(durationMillis = 1000)
-                    ),
-                    exit = slideOutHorizontally(
-                        targetOffsetX = { if (direction > 0) -it else it },
-                        animationSpec = tween(durationMillis = 1000)
-                    ),
-                ) {
-                    ImageView(
-                        model = image,
-                        contentDescription = imageDescription,
-                        contentScale = ContentScale.Crop,
-                        modifier = Modifier
-                            .fillMaxSize()
-                            .clip(RoundedCornerShape(12.dp)),
-                        onLoadingStateChange = { loadingState.value = it },
-                        errorContent = { ErrorImage() }
-                    )
-                }
-            }
-        } else {
-            ErrorImage()
-        }
-    }
 }
