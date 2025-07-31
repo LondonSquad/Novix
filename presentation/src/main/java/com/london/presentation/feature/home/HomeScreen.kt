@@ -310,7 +310,7 @@ private fun LazyGridScope.upComingSection(
                 text = stringResource(R.string.upcoming),
                 style = NovixTheme.typography.headline.small,
                 color = NovixTheme.colors.title,
-                modifier = Modifier.padding(bottom = 4.dp)
+//                modifier = Modifier.padding(bottom = 4.dp)
             )
         else
             Box(modifier = Modifier
