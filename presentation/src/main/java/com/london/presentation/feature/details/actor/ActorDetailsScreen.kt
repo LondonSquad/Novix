@@ -148,27 +148,10 @@ fun ActorScreenContent(
         ) {
             item {
                 val images = uiState.actorImageDetails.orEmpty()
-
-                if (images.isNotEmpty()) {
-                    val pagerState = rememberPagerState(
-                        initialPage = 0,
-                        pageCount = { images.size }
-                    )
-
-                    LaunchedEffect(images) {
-                        if (images.size > 1) {
-                            while (true) {
-                                delay(4000)
-                                val nextPage = (pagerState.currentPage + 1) % images.size
-                                pagerState.animateScrollToPage(nextPage)
-                            }
-                        }
-                    }
-                    CustomBackDropImagePager(
-                        images = images.map { it.fileUrl },
-                        isVisibleDots = false
-                    )
-                }
+                CustomBackDropImagePager(
+                    images = images.map { it.fileUrl },
+                    isVisibleDots = false
+                )
             }
 
             item {
@@ -197,10 +180,6 @@ fun ActorScreenContent(
 
             item {
                 if (uiState.actorBiography.isNotBlank()) {
-                    val isOnlySection = uiState.actorImageDetails.isNullOrEmpty() &&
-                            uiState.actorMovieDetails?.cast.isNullOrEmpty() &&
-                            uiState.actorTvShowDetails?.cast.isNullOrEmpty()
-
                     Text(
                         text = stringResource(R.string.biography),
                         style = NovixTheme.typography.title.medium,
@@ -208,7 +187,6 @@ fun ActorScreenContent(
                         modifier = Modifier.padding(
                             start = 16.dp,
                             bottom = 4.dp,
-                            top = if (isOnlySection) 32.dp else 0.dp
                         )
                     )
                     var isExpanded by remember { mutableStateOf(false) }
@@ -227,37 +205,27 @@ fun ActorScreenContent(
 
             item {
                 if (!uiState.actorImageDetails.isNullOrEmpty()) {
-                    val isOnlySection = uiState.actorBiography.isBlank() &&
-                            uiState.actorMovieDetails?.cast.isNullOrEmpty() &&
-                            uiState.actorTvShowDetails?.cast.isNullOrEmpty()
-
                     SectionHeader(
                         text = stringResource(R.string.gallery),
                         hasGetAll = true,
                         hasIcon = true,
                         modifier = Modifier
-                            .padding(bottom = 12.dp, top = if (isOnlySection) 32.dp else 16.dp)
+                            .padding(bottom = 12.dp, top = 16.dp)
                             .padding(horizontal = 16.dp),
                         onClick = { actorDetailsContract.onGalleryClick(uiState.actorId) }
                     )
                     ActorGallery(images = uiState.actorImageDetails)
-                } else {
-                    Spacer(modifier = Modifier.height(16.dp))
                 }
             }
 
             item {
                 uiState.actorMovieDetails?.cast?.takeIf { it.isNotEmpty() }?.let { movieCast ->
-                    val isOnlySection = uiState.actorBiography.isBlank() &&
-                            uiState.actorImageDetails.isNullOrEmpty() &&
-                            uiState.actorTvShowDetails?.cast.isNullOrEmpty()
-
                     SectionHeader(
                         text = stringResource(R.string.top_movies_picks),
                         hasGetAll = true,
                         hasIcon = true,
                         modifier = Modifier
-                            .padding(top = if (isOnlySection) 32.dp else 16.dp, bottom = 12.dp)
+                            .padding(top = 16.dp, bottom = 12.dp)
                             .padding(horizontal = 16.dp),
                         onClick = { actorDetailsContract.onMoviePicksClick(uiState.actorId) }
                     )
@@ -266,23 +234,17 @@ fun ActorScreenContent(
                         onNavigateToMoviePicks = actorDetailsContract::onMovieScreenClick
 
                     )
-                } ?: run {
-                    Spacer(modifier = Modifier.height(16.dp))
                 }
             }
 
             item {
                 uiState.actorTvShowDetails?.cast?.takeIf { it.isNotEmpty() }?.let { tvShows ->
-                    val isOnlySection = uiState.actorBiography.isBlank() &&
-                            uiState.actorImageDetails.isNullOrEmpty() &&
-                            uiState.actorMovieDetails?.cast.isNullOrEmpty()
-
                     SectionHeader(
                         text = stringResource(R.string.top_tv_shows_picks),
                         hasGetAll = true,
                         hasIcon = true,
                         modifier = Modifier
-                            .padding(top = if (isOnlySection) 32.dp else 16.dp, bottom = 12.dp)
+                            .padding(top = 16.dp, bottom = 12.dp)
                             .padding(horizontal = 16.dp),
                         onClick = { actorDetailsContract.onTvShowPicksClick(uiState.actorId) }
                     )
@@ -290,8 +252,6 @@ fun ActorScreenContent(
                         tvShow = tvShows,
                         onNavigateToTvShowPicks = actorDetailsContract::onTvShowScreenClick
                     )
-                } ?: run {
-                    Spacer(modifier = Modifier.padding(top = 32.dp))
                 }
             }
 
