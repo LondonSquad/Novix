@@ -73,8 +73,9 @@ dependencies {
     implementation(libs.bundles.retrofit)
     implementation(libs.retrofit2.kotlinx.serialization.converter)
     implementation(libs.kotlinx.serialization.json)
-    implementation(libs.hilt.android)
     ksp(libs.hilt.compiler)
+
+    implementation(libs.hilt.android)
 
     implementation(libs.timber)
 }
