@@ -106,8 +106,9 @@ fun HomeScreen(
     val screenWidth =
         with(LocalDensity.current) { LocalWindowInfo.current.containerSize.width.toDp() }
 
-    when {
-        uiState.error != null -> NetworkErrorScreen()
+    when{
+        uiState.error != null -> NetworkErrorScreen(onBack = null)
+
         else ->
             Box(
                 modifier = Modifier

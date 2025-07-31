@@ -78,16 +78,16 @@ fun EpisodeDetailsScreen(
     }
 
     BuildScreen(
+        onBack = viewModel::onBackClicked,
         isLoading = uiState.isLoading,
-        isError = false,
-        content = {
-            EpisodeDetailsScreenContent(
-                uiState = uiState,
-                episodeDetailsContract = viewModel,
-                onNavigateToCast = onNavigateToCast
-            )
-        }
-    )
+        isError = uiState.error != null
+    ) {
+        EpisodeDetailsScreenContent(
+            uiState = uiState,
+            episodeDetailsContract = viewModel,
+            onNavigateToCast = onNavigateToCast
+        )
+    }
 }
 
 @Composable
@@ -278,7 +278,7 @@ fun TvShowBasicDetails(
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.spacedBy(4.dp)
     ) {
-        if (uiState.voteAverage.isNotZeroRate()){
+        if (uiState.voteAverage.isNotZeroRate()) {
             RatingItem(
                 modifier = Modifier,
                 rating = uiState.voteAverage.toLocalizedNumbers(),
