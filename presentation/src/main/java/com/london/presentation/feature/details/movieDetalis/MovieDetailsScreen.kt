@@ -367,21 +367,20 @@ private fun RatingAndMetaRow(
                 icon = drawable.time_04,
                 contentDesc = stringResource(time_icon),
                 tint = NovixTheme.colors.body,
-                text = "${if (timeInt / 60 > 0)"${(timeInt / 60).toLocalizedNumbers()}${
-                        getLocalizedTimeUnit(
-                            "h"
-                        )} " else ""
-                }${(timeInt % 60).toLocalizedNumbers()}${getLocalizedTimeUnit("m")}",
+                text = "${(timeInt / 60).toLocalizedNumbers()}${getLocalizedTimeUnit("h")} ${(timeInt % 60).toLocalizedNumbers()}${
+                    getLocalizedTimeUnit(
+                        "m"
+                    )
+                }",
                 textColor = NovixTheme.colors.body
             )
         }
+        val showDot = !time.isNullOrBlank() && time != "0" && !date.isNullOrBlank() && !rate.isNullOrBlank()
 
-        if (
-            (!time.isNullOrBlank() && !date.isNullOrBlank()) &&
-            (rate.isNullOrBlank() && !time.isNullOrBlank() && !date.isNullOrBlank() && time != "0")
-        ) {
+        if (showDot) {
             Dot()
         }
+
 
         if (!date.isNullOrBlank()) {
             IconWithText(
