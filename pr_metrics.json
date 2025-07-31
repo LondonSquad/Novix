@@ -14423,5 +14423,33 @@
       "deletions": 263,
       "changed_files": 13
     }
+  },
+  {
+    "pr_number": 444,
+    "url": "https://github.com/LondonSquad/Novix/pull/444",
+    "title": "refactor: remove unused MovieDetailsImage composable",
+    "opened_at": "2025-07-31T12:26:15Z",
+    "head_ref": "hotfix/actor-and-movie-detail-screens",
+    "base_ref": "develop",
+    "creator": {
+      "login": "BassantM",
+      "id": 102248144,
+      "url": "https://github.com/BassantM"
+    },
+    "approvals": [],
+    "first_approved_at": null,
+    "time_to_first_approval_minutes": null,
+    "required_approvals_met_at": null,
+    "time_to_required_approvals_minutes": null,
+    "closed_at": null,
+    "merged_at": null,
+    "merged_by": null,
+    "week": "2025-W31",
+    "status": "pending",
+    "diff_stats": {
+      "additions": 15,
+      "deletions": 68,
+      "changed_files": 5
+    }
   }
 ]
