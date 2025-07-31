@@ -136,7 +136,11 @@ private fun Content(
                 label = stringResource(R.string.username),
                 interactionSource = interactionSourceUserName,
                 onValueChange = loginContract::onUsernameChanged,
-                leadingIcon = painterResource(dsR.drawable.icon_user),
+                leadingIcon = if(uiState.username.text.isNotEmpty()){
+                    painterResource(dsR.drawable.icon_user)
+                } else {
+                    painterResource(dsR.drawable.light_icon_user)
+                },
             )
 
             OutlinedTextField(
@@ -149,7 +153,11 @@ private fun Content(
                 passwordVisibleIcon = painterResource(id = dsR.drawable.icon_show_password),
                 passwordHiddenIcon = painterResource(id = dsR.drawable.icon_hide_password),
                 interactionSource = interactionSourcePassword,
-                leadingIcon = painterResource(dsR.drawable.lock_key),
+                leadingIcon = if(uiState.password.text.isNotEmpty()){
+                    painterResource(dsR.drawable.lock_key)
+                } else {
+                    painterResource(dsR.drawable.light_lock_key)
+                },
                 modifier = Modifier.padding(top = 16.dp, bottom = 16.dp),
                 enabled = !isLoadingGeneral
             )
