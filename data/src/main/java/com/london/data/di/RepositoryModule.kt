@@ -39,7 +39,21 @@ import com.london.data.repository.toprated.TopRatedMovieRepositoryImpl
 import com.london.data.repository.toprated.TopRatedTvSeriesRepositoryImpl
 import com.london.data.repository.trending.TrendingRepositoryImpl
 import com.london.data.utils.CrashReporter
+import com.london.domain.entity.recent.RecentSearch
+import com.london.domain.entity.recent.RecentViewed
+import com.london.domain.repository.ActorRepository
+import com.london.domain.repository.AuthRepository
+import com.london.domain.repository.DetailsRepository
+import com.london.domain.repository.MovieDetailsRepository
+import com.london.domain.repository.MovieVideoProviderRepository
+import com.london.domain.repository.PopularRepository
+import com.london.domain.repository.RecentRepository
 import com.london.domain.repository.RecentWatchedRepository
+import com.london.domain.repository.SearchRepository
+import com.london.domain.repository.TrendingRepository
+import com.london.domain.repository.TvShowVideoProviderRepository
+import com.london.domain.repository.toprated.TopRatedMovieRepository
+import com.london.domain.repository.toprated.TopRatedTvSeriesRepository
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -53,22 +67,24 @@ object RepositoryModule {
     fun provideAuthenticationRepository(
         authRemoteDataSource: AuthenticationRemoteDataSource,
         authPreferences: AuthPreferences
-    ) = AuthenticationRepositoryImpl(authRemoteDataSource, authPreferences)
+    ): AuthRepository = AuthenticationRepositoryImpl(authRemoteDataSource, authPreferences)
 
     @Provides
     fun providePopularRepository(
         dataSource: PopularRemoteDataSource
-    ) = PopularRepositoryImpl(popularRemoteDataSource = dataSource)
+    ): PopularRepository = PopularRepositoryImpl(popularRemoteDataSource = dataSource)
 
     @Provides
     fun provideRecentSearchRepository(
         dataSource: RecentDataSource<RecentSearchLocal>
-    ) = RecentSearchRepositoryImpl(recentSearchLocalDataSource = dataSource)
+    ): RecentRepository<RecentSearch> =
+        RecentSearchRepositoryImpl(recentSearchLocalDataSource = dataSource)
 
     @Provides
     fun provideRecentViewedRepository(
         dataSource: RecentDataSource<RecentViewedLocal>
-    ) = RecentViewedRepositoryImpl(recentRecentViewedLocalDataSource = dataSource)
+    ): RecentRepository<RecentViewed> =
+        RecentViewedRepositoryImpl(recentRecentViewedLocalDataSource = dataSource)
 
     @Provides
     fun provideRecentWatchedRepository(
@@ -82,28 +98,30 @@ object RepositoryModule {
     @Provides
     fun provideTopRatedMovieRepository(
         dataSource: TopRatedMovieRemoteDataSource
-    ) = TopRatedMovieRepositoryImpl(topRatedMovieRemoteDataSource = dataSource)
+    ): TopRatedMovieRepository =
+        TopRatedMovieRepositoryImpl(topRatedMovieRemoteDataSource = dataSource)
 
     @Provides
     fun provideTopRatedTvSeriesRepository(
         dataSource: TopRatedTvRemoteDataSource
-    ) = TopRatedTvSeriesRepositoryImpl(topRatedTvRemoteDataSource = dataSource)
+    ): TopRatedTvSeriesRepository =
+        TopRatedTvSeriesRepositoryImpl(topRatedTvRemoteDataSource = dataSource)
 
     @Provides
     fun provideTrendingRepository(
         dataSource: TrendingRemoteDataSource
-    ) = TrendingRepositoryImpl(trendingRemoteDataSource = dataSource)
+    ): TrendingRepository = TrendingRepositoryImpl(trendingRemoteDataSource = dataSource)
 
     @Provides
     fun provideActorRepository(
         dataSource: ActorDetailsRemoteDataSource
-    ) = ActorRepositoryImpl(dataSource = dataSource)
+    ): ActorRepository = ActorRepositoryImpl(dataSource = dataSource)
 
     @Provides
     fun provideDetailsRepository(
         tvShowDetailsRemoteDataSource: TvShowDetailsRemoteDataSource,
         reviewsRemoteDataSource: ReviewsRemoteDataSource
-    ) = DetailsRepositoryImpl(
+    ): DetailsRepository = DetailsRepositoryImpl(
         tvShowDetailsRemoteDataSource = tvShowDetailsRemoteDataSource,
         reviewsRemoteDataSource = reviewsRemoteDataSource
     )
@@ -111,12 +129,13 @@ object RepositoryModule {
     @Provides
     fun provideMovieDetailsRepository(
         dataSource: MovieDetailsRemoteDataSource
-    ) = MovieDetailsRepositoryImpl(movieDetailsRemoteDataSource = dataSource)
+    ): MovieDetailsRepository =
+        MovieDetailsRepositoryImpl(movieDetailsRemoteDataSource = dataSource)
 
     @Provides
     fun provideMovieVideoRepository(
         dataSource: MovieVideoProviderRemote
-    ) = MovieVideoProviderRepositoryImpl(dataSource)
+    ): MovieVideoProviderRepository = MovieVideoProviderRepositoryImpl(dataSource)
 
     @Provides
     fun provideSearchRepository(
@@ -126,7 +145,7 @@ object RepositoryModule {
         genreInterestDao: GenreInterestDao,
         remoteDataSource: SearchRemoteDataSource,
         crashReporter: CrashReporter
-    ) = SearchRepositoryImpl(
+    ): SearchRepository = SearchRepositoryImpl(
         localTvShowDataSource = localTvShowDataSource,
         localActorDataSource = localActorDataSource,
         localMovieDataSource = localMovieDataSource,
@@ -138,5 +157,6 @@ object RepositoryModule {
     @Provides
     fun provideTvShowVideoProviderRepository(
         dataSource: TvShowVideoProviderRemote
-    ) = TvShowVideoProviderRepositoryImpl(tvShowVideoProviderRemote = dataSource)
+    ): TvShowVideoProviderRepository =
+        TvShowVideoProviderRepositoryImpl(tvShowVideoProviderRemote = dataSource)
 }

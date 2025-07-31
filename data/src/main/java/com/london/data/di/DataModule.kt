@@ -17,5 +17,5 @@ object DataModule {
     @Singleton
     fun provideSharedPreferences(
         @ApplicationContext context: Context
-    ): SharedPreferences =context.getSharedPreferences("app_prefs", Context.MODE_PRIVATE)
+    ): SharedPreferences = context.getSharedPreferences("app_prefs", Context.MODE_PRIVATE)
 }

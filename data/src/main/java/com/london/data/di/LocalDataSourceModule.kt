@@ -8,14 +8,25 @@ import com.london.data.local.database.dao.recent.whatched.tvshow.RecentWatchedTv
 import com.london.data.local.database.dao.search.SearchActorsDao
 import com.london.data.local.database.dao.search.SearchMoviesDao
 import com.london.data.local.database.dao.search.SearchTvShowDao
+import com.london.data.local.model.recent.search.RecentSearchLocal
+import com.london.data.local.model.recent.viewed.RecentViewedLocal
+import com.london.data.local.model.recent.watched.RecentWatchedMovieLocal
+import com.london.data.local.model.recent.watched.RecentWatchedTvShowLocal
+import com.london.data.local.model.search.SearchActorsLocal
+import com.london.data.local.model.search.SearchMoviesLocal
+import com.london.data.local.model.search.SearchTvShowLocal
 import com.london.data.local.preference.AppPreferencesServiceImpl
+import com.london.data.local.source.LocalDataSource
+import com.london.data.local.source.recent.RecentDataSource
 import com.london.data.local.source.recent.RecentSearchDataSourceImpl
 import com.london.data.local.source.recent.RecentViewedDataSourceImpl
+import com.london.data.local.source.recent.watched.RecentWatchedDataSource
 import com.london.data.local.source.recent.watched.RecentWatchedMoviesDataSource
 import com.london.data.local.source.recent.watched.RecentWatchedTvShowsDataSource
 import com.london.data.local.source.search.ActorLocalDataSourceImpl
 import com.london.data.local.source.search.MovieLocalDataSourceImpl
 import com.london.data.local.source.search.TvShowLocalDataSourceImpl
+import com.london.domain.AppPreferencesService
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -25,46 +36,47 @@ import javax.inject.Singleton
 @Module
 @InstallIn(SingletonComponent::class)
 object DataSourceModule {
-
     @Provides
     fun provideRecentWatchedTvShowsDataSource(
         dao: RecentWatchedTvShowsDao
-    ) = RecentWatchedTvShowsDataSource(recentWatchedTvShowsDao = dao)
+    ): RecentWatchedDataSource<RecentWatchedTvShowLocal> =
+        RecentWatchedTvShowsDataSource(recentWatchedTvShowsDao = dao)
 
     @Provides
     fun provideRecentWatchedMovieDataSource(
         dao: RecentWatchedMoviesDao
-    ) = RecentWatchedMoviesDataSource(recentWatchedMoviesDao = dao)
+    ): RecentWatchedDataSource<RecentWatchedMovieLocal> =
+        RecentWatchedMoviesDataSource(recentWatchedMoviesDao = dao)
 
     @Provides
     @Singleton
     fun provideTvShowLocalDataSource(
         dao: SearchTvShowDao
-    ) = TvShowLocalDataSourceImpl(searchTvShowDao = dao)
+    ): LocalDataSource<SearchTvShowLocal> = TvShowLocalDataSourceImpl(searchTvShowDao = dao)
 
     @Provides
     fun provideActorLocalDataSource(
         dao: SearchActorsDao
-    ) = ActorLocalDataSourceImpl(searchActorsDao = dao)
+    ): LocalDataSource<SearchActorsLocal> = ActorLocalDataSourceImpl(searchActorsDao = dao)
 
     @Provides
     fun provideSearchMoviesLocalDataSource(
         dao: SearchMoviesDao
-    ) = MovieLocalDataSourceImpl(searchMoviesDao =  dao)
+    ): LocalDataSource<SearchMoviesLocal> = MovieLocalDataSourceImpl(searchMoviesDao = dao)
 
     @Provides
     fun provideRecentSearchDataSource(
         dao: RecentSearchDao
-    ) = RecentSearchDataSourceImpl(recentSearchDao = dao)
+    ): RecentDataSource<RecentSearchLocal> = RecentSearchDataSourceImpl(recentSearchDao = dao)
 
     @Provides
     fun provideRecentViewedDataSource(
         dao: RecentViewedDao
-    ) = RecentViewedDataSourceImpl(recentViewedDao = dao)
+    ): RecentDataSource<RecentViewedLocal> = RecentViewedDataSourceImpl(recentViewedDao = dao)
 
     @Provides
     @Singleton
     fun provideAppPreferencesService(
         sharedPreferences: SharedPreferences
-    ) = AppPreferencesServiceImpl(preferences = sharedPreferences)
+    ): AppPreferencesService = AppPreferencesServiceImpl(preferences = sharedPreferences)
 }
