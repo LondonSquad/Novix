@@ -25,5 +25,5 @@ dependencies {
     testImplementation(libs.bundles.testing)
     api(libs.koin.core)
     ksp(libs.bundles.koin.ksp)
-    implementation("javax.inject:javax.inject:1")
+    implementation(libs.javax.inject)
 }
