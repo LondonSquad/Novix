@@ -17,8 +17,6 @@ import com.london.designsystem.component.TopBar
 import com.london.designsystem.theme.ThemePreviews
 import com.london.domain.entity.Movie
 import com.london.presentation.feature.buildscreen.BuildScreen
-import com.london.presentation.feature.buildscreen.LoadingScreen
-import com.london.presentation.feature.buildscreen.NetworkErrorScreen
 import com.london.presentation.feature.search.SearchCategory
 import com.london.presentation.shared.MediaLazyPagingGrid
 import com.london.presentation.utils.Listen
@@ -45,16 +43,16 @@ fun MoviesByCategoryScreen(
         }
     }
 
-    BuildScreen {
-        when {
-            state.isLoading -> LoadingScreen()
-            state.error != null -> NetworkErrorScreen()
-            else -> MoviesByCategoryContent(
+    BuildScreen(
+        onBack = viewModel::onBack,
+        isLoading = state.isLoading,
+        isError = state.error != null
+    ) {
+        MoviesByCategoryContent(
                 state = state,
                 contract = viewModel,
                 modifier = modifier,
             )
-        }
     }
 }
 

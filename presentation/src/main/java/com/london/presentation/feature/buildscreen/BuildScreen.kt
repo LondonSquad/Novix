@@ -6,11 +6,12 @@ import androidx.compose.runtime.Composable
 fun BuildScreen(
     isLoading: Boolean = false,
     isError: Boolean = false,
-    content: @Composable () -> Unit
+    onBack: () -> Unit,
+    content: @Composable () -> Unit,
 ) {
     when{
         isLoading -> LoadingScreen()
-        isError -> NetworkErrorScreen()
+        isError -> NetworkErrorScreen(onBack = onBack)
         else -> content()
     }
 }
