@@ -26,6 +26,7 @@ dependencies {
     testImplementation(libs.bundles.testing)
     api(libs.koin.core)
     ksp(libs.bundles.koin.ksp)
-    implementation( "com.google.dagger:dagger:2.51")
-    kapt("com.google.dagger:dagger-compiler:2.51")
+
+    implementation(libs.bundles.dagger.kapt)
+    kapt(libs.bundles.dagger.kapt)
 }

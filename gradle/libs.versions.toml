@@ -83,7 +83,7 @@ kotlinxKover = "0.9.1"
 firebaseCrashlyticsKtx = "19.4.4"
 
 hilt = "2.57"
-androidHiltNavigation= "1.2.0"
+androidHiltNavigation = "1.2.0"
 
 [libraries]
 # AndroidX Core
@@ -119,6 +119,7 @@ androidx-datastore-preferences = { group = "androidx.datastore", name = "datasto
 androidx-datastore-core = { group = "androidx.datastore", name = "datastore-core", version.ref = "datastoreCore" }
 
 # Dependency Injection (Koin)
+dagger-compiler = { module = "com.google.dagger:dagger-compiler", version.ref = "hilt" }
 firebase-bom = { module = "com.google.firebase:firebase-bom", version.ref = "firebaseBom" }
 firebase-ml-modeldownloader = { module = "com.google.firebase:firebase-ml-modeldownloader", version.ref = "firebaseMlModeldownloader" }
 gson = { module = "com.google.code.gson:gson", version.ref = "gson" }
@@ -169,6 +170,7 @@ firebase-crashlytics-ktx = { group = "com.google.firebase", name = "firebase-cra
 hilt-android = { group = "com.google.dagger", name = "hilt-android", version.ref = "hilt" }
 hilt-compiler = { group = "com.google.dagger", name = "hilt-compiler", version.ref = "hilt" }
 hilt-navigation-compose = { group = "androidx.hilt", name = "hilt-navigation-compose", version.ref = "androidHiltNavigation" }
+dagger = { module = "com.google.dagger:dagger", version.ref = "hilt" }
 
 # Add Retrofit libraries
 retrofit-core = { group = "com.squareup.retrofit2", name = "retrofit", version.ref = "retrofit" }
@@ -189,10 +191,9 @@ google-firebase-firebase-perf = { id = "com.google.firebase.firebase-perf", vers
 google-gms-google-services = { id = "com.google.gms.google-services", version.ref = "googleGmsGoogleServices" }
 google-firebase-crashlytics = { id = "com.google.firebase.crashlytics", version.ref = "googleFirebaseCrashlytics" }
 kotlinx-kover = { id = "org.jetbrains.kotlinx.kover", version.ref = "kotlinxKover" }
-hilt = { id = "com.google.dagger.hilt.android", version.ref ="hilt" }
+hilt = { id = "com.google.dagger.hilt.android", version.ref = "hilt" }
 
 [bundles]
-
 androidx-core = [
     "androidx-core-ktx",
     "androidx-lifecycle-runtime-ktx",
@@ -280,4 +281,17 @@ retrofit = [
     "retrofit-converter-gson",
     "okhttp-core",
     "okhttp-logging"
+]
+hilt-runtime = [
+    "hilt-android",
+    "hilt-navigation-compose",
+]
+
+hilt-ksp = [
+    "hilt-compiler",
+]
+
+dagger-kapt = [
+    "dagger",
+    "dagger-compiler"
 ]

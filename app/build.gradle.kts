@@ -35,7 +35,7 @@ android {
     }
 
     signingConfigs {
-        create("release"){
+        create("release") {
             keyAlias = getKey("keyAlias")
             keyPassword = getKey("keyPassword")
             storeFile = file(getKey("storeFile"))
@@ -104,6 +104,7 @@ dependencies {
     implementation(libs.bundles.koin)
     ksp(libs.bundles.room.ksp)
     implementation(libs.timber)
-    implementation(libs.hilt.android)
-    ksp(libs.hilt.compiler)
+
+    ksp(libs.bundles.hilt.ksp)
+    implementation(libs.bundles.hilt.runtime)
 }

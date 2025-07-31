@@ -64,7 +64,6 @@ dependencies {
 
     implementation(libs.remember.preference)
 
-    implementation(libs.hilt.android)
-    implementation(libs.hilt.navigation.compose)
-    ksp(libs.hilt.compiler)
+    ksp(libs.bundles.hilt.ksp)
+    implementation(libs.bundles.hilt.runtime)
 }

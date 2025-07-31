@@ -26,7 +26,7 @@ android {
         buildConfigField("String", "YOUTUBE_URL", getKey("YOUTUBE_URL"))
     }
 
-    buildFeatures{
+    buildFeatures {
         buildConfig = true
     }
 
@@ -60,7 +60,7 @@ dependencies {
     //Testing
     testImplementation(libs.mockk)
     testImplementation(libs.kotlinx.coroutines.test)
-    testImplementation (libs.truth)
+    testImplementation(libs.truth)
 
     // Test dependencies - properly scoped
     testImplementation(libs.bundles.testing)
@@ -73,9 +73,9 @@ dependencies {
     implementation(libs.bundles.retrofit)
     implementation(libs.retrofit2.kotlinx.serialization.converter)
     implementation(libs.kotlinx.serialization.json)
-    ksp(libs.hilt.compiler)
-
-    implementation(libs.hilt.android)
 
     implementation(libs.timber)
+
+    implementation(libs.bundles.hilt.runtime)
+    ksp(libs.bundles.hilt.ksp)
 }
