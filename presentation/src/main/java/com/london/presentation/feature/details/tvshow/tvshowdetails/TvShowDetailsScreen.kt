@@ -70,6 +70,7 @@ import com.london.presentation.shared.FooterSection
 import com.london.presentation.shared.RatingItem
 import com.london.presentation.utils.Listen
 import com.london.presentation.utils.convertDate
+import com.london.presentation.utils.isNotZeroRate
 import com.london.presentation.utils.offsetLayout
 import com.london.presentation.utils.openUrl
 import com.london.presentation.utils.reverseDateFormat
@@ -409,10 +410,11 @@ fun TvShowBasicDetails(
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.spacedBy(4.dp)
     ) {
-        RatingItem(
-            modifier = Modifier,
-            rating = rating
-        )
+        if (rating.isNotBlank() && rating.isNotZeroRate()) {
+            RatingItem(
+                rating = rating
+            )
+        }
 
         Box(
             modifier = Modifier
@@ -603,18 +605,20 @@ private fun EpisodeItem(
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.spacedBy(4.dp)
             ) {
-                RatingItem(
-                    rating = episode.voteAverage.toLocalizedNumbers(),
-                    color = NovixTheme.colors.hint
-                )
+                if (episode.voteAverage.isNotZeroRate()){
+                    RatingItem(
+                        rating = episode.voteAverage.toLocalizedNumbers(),
+                        color = NovixTheme.colors.hint
+                    )
 
-                Box(
-                    modifier = Modifier
-                        .padding(horizontal = 8.dp)
-                        .size(3.dp)
-                        .clip(CircleShape)
-                        .background(NovixTheme.colors.hint)
-                )
+                    Box(
+                        modifier = Modifier
+                            .padding(horizontal = 8.dp)
+                            .size(3.dp)
+                            .clip(CircleShape)
+                            .background(NovixTheme.colors.hint)
+                    )
+                }
 
                 if (episode.runtime != null) {
                     EpisodeDuration(episode.runtime.toString().toLocalizedNumbers())
