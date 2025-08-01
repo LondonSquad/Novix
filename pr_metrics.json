@@ -16026,17 +16026,25 @@
           "url": "https://github.com/marwanqashwa"
         },
         "submitted_at": "2025-08-01T09:18:29Z"
+      },
+      {
+        "reviewer": {
+          "id": 154278495,
+          "login": "ahmeddsamii",
+          "url": "https://github.com/ahmeddsamii"
+        },
+        "submitted_at": "2025-08-01T09:18:51Z"
       }
     ],
     "first_approved_at": "2025-08-01T09:18:29Z",
     "time_to_first_approval_minutes": 27,
-    "required_approvals_met_at": null,
-    "time_to_required_approvals_minutes": null,
+    "required_approvals_met_at": "2025-08-01T09:18:51Z",
+    "time_to_required_approvals_minutes": 27.366666666666667,
     "closed_at": null,
     "merged_at": null,
     "merged_by": null,
     "week": "2025-W31",
-    "status": "pending",
+    "status": "approved",
     "diff_stats": {
       "additions": 4,
       "deletions": 0,
