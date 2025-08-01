@@ -90,7 +90,8 @@ private fun TrendingMoviesContent(
             isItemSaved = { false },
             onRetry = {
                 contract.onRetry()
-            }
+            },
+            noMediaMessage = R.string.no_trending_movies_in_genre
         )
     }
 }
