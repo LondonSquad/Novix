@@ -310,12 +310,11 @@ private fun LazyGridScope.upComingSection(
                 text = stringResource(R.string.upcoming),
                 style = NovixTheme.typography.headline.small,
                 color = NovixTheme.colors.title,
-                modifier = Modifier
             )
         else
             Box(modifier = Modifier
                 .height(20.dp)
-                .padding(bottom = 12.dp)
+                .padding(bottom = 4.dp)
                 .wrapContentWidth()
                 .shimmerEffect())
     }
