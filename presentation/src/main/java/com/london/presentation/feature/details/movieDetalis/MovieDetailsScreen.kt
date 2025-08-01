@@ -365,7 +365,6 @@ private fun RatingAndMetaRow(
                 append("${(timeInt % 60).toLocalizedNumbers()}${getLocalizedTimeUnit("m")}")
             }
 
-
             IconWithText(
                 icon = drawable.time_04,
                 contentDesc = stringResource(time_icon),
