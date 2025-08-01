@@ -347,9 +347,6 @@ private fun RatingAndMetaRow(
                 text = rate.toLocalizedNumbers(),
                 textColor = NovixTheme.colors.body
             )
-        }
-
-        if (!time.isNullOrBlank() || !date.isNullOrBlank()) {
             Box(
                 modifier = Modifier
                     .padding(4.dp)
@@ -361,15 +358,19 @@ private fun RatingAndMetaRow(
 
         if (!time.isNullOrBlank() && time != "0") {
             val timeInt = time.toInt()
+            val text = buildString {
+                if (timeInt >= 60)
+                    append("${(timeInt / 60).toLocalizedNumbers()}${getLocalizedTimeUnit("h")} ")
+
+                append("${(timeInt % 60).toLocalizedNumbers()}${getLocalizedTimeUnit("m")}")
+            }
+
+
             IconWithText(
                 icon = drawable.time_04,
                 contentDesc = stringResource(time_icon),
                 tint = NovixTheme.colors.body,
-                text = "${(timeInt / 60).toLocalizedNumbers()}${getLocalizedTimeUnit("h")} ${(timeInt % 60).toLocalizedNumbers()}${
-                    getLocalizedTimeUnit(
-                        "m"
-                    )
-                }",
+                text = text,
                 textColor = NovixTheme.colors.body
             )
         }
