@@ -38,7 +38,7 @@ class ActorDetailsViewModel(
             onStart = { updateState { copy(isLoading = true) } },
             onSuccess = { images -> updateState { copy(actorImageDetails = images) } },
             onError = { errorState ->
-                updateState { copy(isError = errorState) }
+                updateState { copy(error = errorState) }
             },
             onCompleted = { updateState { copy(isLoading = false) } },
         )
@@ -65,7 +65,7 @@ class ActorDetailsViewModel(
                 }
             },
             onError = { errorState ->
-                updateState { copy(isError = errorState) }
+                updateState { copy(error = errorState) }
             },
             onCompleted = { updateState { copy(isLoading = false) } },
         )
@@ -86,7 +86,7 @@ class ActorDetailsViewModel(
                 }
             },
             onError = { errorState ->
-                updateState { copy(isError = errorState) }
+                updateState { copy(error = errorState) }
             },
             onCompleted = { updateState { copy(isLoading = false) } },
         )
@@ -108,11 +108,19 @@ class ActorDetailsViewModel(
                 }
             },
             onError = { errorState ->
-                updateState { copy(isError = errorState) }
+                updateState { copy(error = errorState) }
             },
             onCompleted = { updateState { copy(isLoading = false) } },
             checkSuccess = { actorId != null },
         )
+    }
+
+    override fun onRetry() {
+        updateState { copy(error = null, movieError = false, tvShowError = false) }
+        getActorImage()
+        getActorDetails()
+        getActorMovieDetails()
+        getActorTvShowDetails()
     }
 
     override fun onNavigateBack() {
