@@ -176,7 +176,7 @@ private fun Content(
     Box(modifier = modifier.fillMaxSize()) {
 
         LazyVerticalGrid(
-            columns = GridCells.Adaptive(minSize = 120.dp),
+            columns = GridCells.Adaptive(minSize = 158.dp),
             contentPadding = PaddingValues(
                 top = 12.dp,
                 bottom = 16.dp,
