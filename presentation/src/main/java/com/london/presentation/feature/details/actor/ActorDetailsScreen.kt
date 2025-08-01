@@ -1,6 +1,6 @@
 package com.london.presentation.feature.details.actor
 
-import androidx.compose.animation.core.FastOutSlowInEasing
+import androidx.compose.animation.core.LinearOutSlowInEasing
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
@@ -63,6 +63,7 @@ import com.london.domain.entity.actordetails.actormovie.ActorMovieCastMemberEnti
 import com.london.domain.entity.actordetails.actortvshow.ActorTvShowCastMemberEntity
 import com.london.imageharamblur.ui.ImageViewFilter
 import com.london.presentation.R
+import com.london.presentation.feature.base.ErrorState
 import com.london.presentation.feature.buildscreen.NetworkErrorScreen
 import com.london.presentation.shared.ConditionalText
 import com.london.presentation.shared.CustomBackDropImagePager
@@ -112,22 +113,13 @@ fun ActorScreenContent(
     actorDetailsContract: ActorDetailsContract,
 ) {
     when {
-        uiState.isError != null || uiState.movieError || uiState.tvShowError -> NetworkErrorScreen(
-            onRetry = { }
+        uiState.error is ErrorState.NoInternet -> NetworkErrorScreen(
+            onRetry = actorDetailsContract::onRetry,
+            modifier = Modifier.fillMaxSize(),
+            onBack = actorDetailsContract::onNavigateBack
         )
 
-        uiState.isLoading -> CircularLoading(
-            modifier = Modifier.fillMaxSize()
-        )
-
-        !uiState.isLoading && uiState.actorName.isBlank() && uiState.actorBiography.isBlank() &&
-                uiState.actorImageDetails.isNullOrEmpty() &&
-                uiState.actorMovieDetails?.cast.isNullOrEmpty() &&
-                uiState.actorTvShowDetails?.cast.isNullOrEmpty() -> EmptyLayout(
-            text = stringResource(R.string.no_actor_details),
-            image = R.drawable.img_no_result,
-            modifier = Modifier.fillMaxSize()
-        )
+        uiState.isLoading -> CircularLoading()
 
         else -> {
             val lazyState = rememberLazyListState()
@@ -143,7 +135,7 @@ fun ActorScreenContent(
                 targetValue = if (shouldShowBackground) 1f else 0f,
                 animationSpec = tween(
                     durationMillis = 400,
-                    easing = FastOutSlowInEasing
+                    easing = LinearOutSlowInEasing
                 ),
                 label = "background_alpha"
             )
@@ -153,6 +145,9 @@ fun ActorScreenContent(
                     .fillMaxSize()
                     .background(NovixTheme.colors.surface)
             ) {
+
+                EmptyScreen(uiState)
+
                 LazyColumn(
                     modifier = Modifier.fillMaxSize(),
                     contentPadding = PaddingValues(
@@ -162,7 +157,14 @@ fun ActorScreenContent(
                     state = lazyState
                 ) {
                     item {
-                        ActorImagePager(images = uiState.actorImageDetails.orEmpty())
+                        val hasOtherContent = uiState.actorName.isNotBlank() ||
+                                uiState.actorBiography.isNotBlank() ||
+                                !uiState.actorMovieDetails?.cast.isNullOrEmpty() ||
+                                !uiState.actorTvShowDetails?.cast.isNullOrEmpty()
+                        ActorImagePager(
+                            images = uiState.actorImageDetails.orEmpty(),
+                            hasOtherContent = hasOtherContent
+                        )
                     }
 
                     item {
@@ -191,37 +193,46 @@ fun ActorScreenContent(
                     item {
                         TvShowsSection(
                             tvShows = uiState.actorTvShowDetails?.cast,
-                            onTvShowPicksClick = { actorDetailsContract.onTvShowPicksClick(uiState.actorId) },
+                            onTvShowPicksClick = {
+                                actorDetailsContract.onTvShowPicksClick(
+                                    uiState.actorId
+                                )
+                            },
                             onTvShowScreenClick = actorDetailsContract::onTvShowScreenClick
                         )
                     }
                 }
-
-                TopBar(
-                    onBackClick = actorDetailsContract::onNavigateBack,
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .background(
-                            NovixTheme.colors.surface.copy(alpha = backgroundAlpha)
-                        )
-                        .padding(
-                            start = 16.dp,
-                            top = WindowInsets.statusBars.asPaddingValues()
-                                .calculateTopPadding() + 12.dp
-                        )
-                        .zIndex(1f)
-                )
             }
+
+            TopBar(
+                onBackClick = actorDetailsContract::onNavigateBack,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .background(
+                        NovixTheme.colors.surface.copy(alpha = backgroundAlpha)
+                    )
+                    .padding(
+                        start = 16.dp,
+                        top = WindowInsets.statusBars.asPaddingValues()
+                            .calculateTopPadding() + 12.dp
+                    )
+                    .zIndex(1f)
+            )
         }
     }
 }
 
 @Composable
-private fun ActorImagePager(images: List<ImageDetails>) {
-    CustomBackDropImagePager(
-        images = images.map { it.fileUrl },
-        isVisibleDots = false
-    )
+private fun ActorImagePager(
+    images: List<ImageDetails>,
+    hasOtherContent: Boolean = false
+) {
+    if (hasOtherContent) {
+        CustomBackDropImagePager(
+            images = images.map { it.fileUrl },
+            isVisibleDots = false
+        )
+    }
 }
 
 @Composable
@@ -412,7 +423,7 @@ fun ActorGallery(images: List<ImageDetails>) {
                     )
                     .clip(RoundedCornerShape(12.dp)),
                 errorContent = { ErrorImage() },
-                loadingContent = { CircularLoading(modifier = Modifier.size(24.dp)) }
+                loadingContent = { CircularLoading(modifier = Modifier) }
             )
         }
     }
@@ -498,6 +509,26 @@ private fun TextWithIcon(
             text = text,
             style = NovixTheme.typography.label.small,
             color = NovixTheme.colors.body,
+        )
+    }
+}
+
+@Composable
+private fun EmptyScreen(uiState: ActorDetailsUiState) {
+    if (uiState.isLoading) return
+
+    val hasNoContent = uiState.actorImageDetails.isNullOrEmpty() &&
+            uiState.actorMovieDetails?.cast.isNullOrEmpty() &&
+            uiState.actorTvShowDetails?.cast.isNullOrEmpty() &&
+            uiState.actorBiography.isBlank() &&
+            (uiState.actorName.isBlank() || uiState.actorBirthday.isBlank() ||
+                    uiState.actorPlaceOfBirth.isBlank() || uiState.knownForDepartment.isBlank())
+
+    if (hasNoContent) {
+        EmptyLayout(
+            text = stringResource(R.string.no_actor_details),
+            image = R.drawable.img_no_result,
+            modifier = Modifier.fillMaxSize()
         )
     }
 }
