@@ -1,5 +1,13 @@
 package com.london.presentation.utils
 
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
+import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.platform.LocalWindowInfo
+import androidx.compose.ui.unit.Density
+import androidx.compose.ui.unit.DpSize
+import androidx.compose.ui.unit.IntSize
+import androidx.compose.ui.unit.toSize
 import java.util.Locale
 
 fun Any?.toLocalizedNumbers(): String {
@@ -117,3 +125,13 @@ fun Double.isNotZeroRate() = runCatching {
     this != 0.0
 }.getOrDefault(false)
 
+fun IntSize.toDpSize(density: Density): DpSize = with(density) {
+    toSize().toDpSize()
+}
+
+@Composable
+fun rememberContainerSize(): DpSize {
+    val density = LocalDensity.current
+    val windowInfo = LocalWindowInfo.current
+    return remember(windowInfo, density) { windowInfo.containerSize.toDpSize(density) }
+}

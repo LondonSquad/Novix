@@ -113,9 +113,12 @@ fun Content(
             )
             else -> EmptyStateView()
         }
-
+        val screenWidth = LocalWindowInfo.current.containerSize.width
+        val itemWidthPx = with(LocalDensity.current) { 158.dp.toPx() }
+        val screenPaddingPx = with(LocalDensity.current) { 32.dp.toPx() }
+        val columns = ((screenWidth - screenPaddingPx) / itemWidthPx).toInt().coerceAtLeast(2)
         LazyVerticalGrid(
-            columns = GridCells.Fixed(2),
+            columns = GridCells.Fixed(columns),
             contentPadding = PaddingValues(
                 top = 12.dp,
                 bottom = 16.dp,

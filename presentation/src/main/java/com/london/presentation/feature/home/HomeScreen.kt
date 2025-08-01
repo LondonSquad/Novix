@@ -172,12 +172,12 @@ private fun Content(
     }
 
     val isLoading = uiState.isLoading
-    val screenWidth = screenWidth.value
-    val itemWidthPx = with(LocalDensity.current) { 158.dp.toPx() }
-    val screenPaddingPx = with(LocalDensity.current) { 32.dp.toPx() }
-    val columns = ((screenWidth - screenPaddingPx) / itemWidthPx).toInt().coerceAtLeast(2)
-    Box(modifier = modifier.fillMaxSize()) {
 
+    Box(modifier = modifier.fillMaxSize()) {
+        val containerWidth = LocalWindowInfo.current.containerSize.width
+        val itemWidthPx = with(LocalDensity.current) { 158.dp.toPx() }
+        val screenPaddingPx = with(LocalDensity.current) { 32.dp.toPx() }
+        val columns = ((containerWidth - screenPaddingPx) / itemWidthPx).toInt().coerceAtLeast(2)
         LazyVerticalGrid(
             columns = GridCells.Fixed(columns),
             contentPadding = PaddingValues(
@@ -209,7 +209,7 @@ private fun Content(
                             uiState.popularTvShows.map { it.name }
 
                     PopularSection(
-                        modifier = Modifier.requiredWidth(screenWidth.dp),
+                        modifier = Modifier.requiredWidth(screenWidth),
                         pagerState = pagerState,
                         images = popularCardImages,
                         onSaveClick = {/*TODO*/ },
@@ -232,7 +232,7 @@ private fun Content(
                     )
                 } else {
                     ShimmerPopularSection(
-                        modifier = Modifier.requiredWidth(screenWidth.dp),
+                        modifier = Modifier.requiredWidth(screenWidth),
                         pagerState = pagerState,
                     )
                 }
@@ -253,7 +253,7 @@ private fun Content(
                     TopRatedSection(
                         uiState = uiState,
                         homeScreenContract = homeScreenContract,
-                        modifier = Modifier.requiredWidth(screenWidth.dp)
+                        modifier = Modifier.requiredWidth(screenWidth)
                     )
                 else
                     CarousalShimmerEffect()
@@ -265,7 +265,7 @@ private fun Content(
                         ContinueWatchingSection(
                             uiState = uiState,
                             homeScreenContract = homeScreenContract,
-                            modifier = Modifier.requiredWidth(screenWidth.dp)
+                            modifier = Modifier.requiredWidth(screenWidth)
                         )
                     else CarousalShimmerEffect()
                 }
@@ -274,7 +274,7 @@ private fun Content(
 
             upComingSection(
                 contract = homeScreenContract,
-                screenWidth = screenWidth.dp,
+                screenWidth = screenWidth,
                 state = uiState,
                 upcomingMoviesLazyList = upcomingMoviesLazyList,
                 isLoading = isLoading
