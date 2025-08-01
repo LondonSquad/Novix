@@ -24,14 +24,27 @@ class AddToRecentSearchUseCaseTest {
 
     @Test
     fun `should call the repository add to recent search`() = runTest {
-        //given
-        val recentSearch = RecentSearch(1,"name",1)
+        // given
+        val recentSearch = RecentSearch(1, "name", 1)
         coEvery { recentSearchRepository.insert(recentSearch) } just Runs
-        //when
+
+        // when
         addToRecentSearchUseCase.invoke(recentSearch)
-        //then
+
+        // then
         coVerify(exactly = 1) { recentSearchRepository.insert(recentSearch) }
     }
 
+    @Test
+    fun `should handle empty query string`() = runTest {
+        // given
+        val recentSearch = RecentSearch(2, "", System.currentTimeMillis())
+        coEvery { recentSearchRepository.insert(recentSearch) } just Runs
 
+        // when
+        addToRecentSearchUseCase.invoke(recentSearch)
+
+        // then
+        coVerify(exactly = 1) { recentSearchRepository.insert(recentSearch) }
+    }
 }

@@ -37,6 +37,10 @@ android {
         compose = true
     }
 
+    aaptOptions {
+        noCompress += "tflite"
+    }
+
     lint {
         disable += "CoroutineCreationDuringComposition"
         disable += "StateFlowValueCalledInComposition"

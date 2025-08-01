@@ -17,6 +17,8 @@ import java.io.File
 import java.io.FileInputStream
 import java.nio.MappedByteBuffer
 import java.nio.channels.FileChannel
+import kotlin.math.exp
+
 internal class GenderDetectionModel {
     private val interpreter: Interpreter
     private val imageProcessor: ImageProcessor
@@ -122,12 +124,12 @@ internal class GenderDetectionModel {
             }
 
             val maxProb = maxOf(femaleProbability, maleProbability)
-            val expFemale = kotlin.math.exp(femaleProbability - maxProb)
-            val expMale = kotlin.math.exp(maleProbability - maxProb)
+            val expFemale = exp(femaleProbability - maxProb)
+            val expMale = exp(maleProbability - maxProb)
             val sumExp = expFemale + expMale
 
-            val normalizedFemaleProbability = (expFemale / sumExp).toFloat()
-            val normalizedMaleProbability = (expMale / sumExp).toFloat()
+            val normalizedFemaleProbability = (expFemale / sumExp)
+            val normalizedMaleProbability = (expMale / sumExp)
 
             val isFemale = normalizedFemaleProbability > normalizedMaleProbability
             val confidence = if (isFemale) normalizedFemaleProbability else normalizedMaleProbability
@@ -136,7 +138,7 @@ internal class GenderDetectionModel {
                 isFemale = isFemale,
                 confidence = confidence
             )
-        } catch (e: Exception) {
+        } catch (_: Exception) {
             GenderResult(
                 isFemale = false,
                 confidence = 0.5f

@@ -2,212 +2,165 @@ package com.london.imageharamblur
 
 import android.content.Context
 import android.graphics.Bitmap
-import android.graphics.Rect
 import com.london.imageharamblur.faceDetection.FaceDetector
 import com.london.imageharamblur.models.ContentDetectionModel
 import com.london.imageharamblur.models.GenderDetectionModel
 import com.london.imageharamblur.models.ModelDownloadManager
+import com.london.imageharamblur.ui.ModerationCacheManager
+import com.london.imageharamblur.utils.cropFace
 import kotlinx.coroutines.*
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
-import com.london.imageharamblur.faceDetection.DetectedFace
 
-class ImageModerationProcessor(private val context: Context) {
+internal class ImageModerationProcessor(private val context: Context) {
+    companion object {
+        private val initMutex = Mutex()
+
+        @Volatile
+        private var sharedGenderModel: GenderDetectionModel? = null
+
+        @Volatile
+        private var sharedContentModel: ContentDetectionModel? = null
+
+        @Volatile
+        private var modelsInitialized = false
+
+        @Volatile
+        private var activeProcessorCount = 0
+
+        @Volatile
+        private var currentModelsAreFromFirebase = false
+
+        private val modelChangeListeners = mutableListOf<() -> Unit>()
+
+        private fun notifyModelChange() {
+            modelChangeListeners.forEach { it.invoke() }
+        }
+    }
 
     private val faceDetector = FaceDetector(context)
     private val modelDownloadManager = ModelDownloadManager(context)
 
-    private var genderModel: GenderDetectionModel? = null
-    private var contentModel: ContentDetectionModel? = null
-    private var modelsInitialized = false
-
-    private val mutex = Mutex()
-    private var activeJob: Job? = null
+    init {
+        synchronized(ImageModerationProcessor::class.java) {
+            activeProcessorCount++
+        }
+    }
 
     private suspend fun ensureModelsLoaded() {
-        if (modelsInitialized) return
+        if (modelsInitialized && sharedGenderModel != null && sharedContentModel != null) {
+            return
+        }
 
-        mutex.withLock {
-            if (modelsInitialized) return
+        initMutex.withLock {
+            if (modelsInitialized && sharedGenderModel != null && sharedContentModel != null) {
+                return
+            }
 
-            try {
+            runCatching {
                 val modelFiles = modelDownloadManager.downloadModelsIfNeeded()
-                genderModel = GenderDetectionModel(modelFiles.genderModelFile)
-                contentModel = ContentDetectionModel(modelFiles.nsfwModelFile)
+                val switchingToFirebase =
+                    !currentModelsAreFromFirebase && modelFiles.isFromFirebase && modelsInitialized
+
+                if (switchingToFirebase) {
+                    sharedGenderModel?.close()
+                    sharedContentModel?.close()
+                    sharedGenderModel = null
+                    sharedContentModel = null
+                    modelsInitialized = false
+                }
+
+                if (modelFiles.isFromFirebase) {
+                    sharedGenderModel = GenderDetectionModel(modelFiles.genderModelFile)
+                    sharedContentModel = ContentDetectionModel(modelFiles.nsfwModelFile)
+                    currentModelsAreFromFirebase = true
+
+                    if (switchingToFirebase) {
+                        ModerationCacheManager.clear()
+                        notifyModelChange()
+                    }
+                } else {
+                    sharedGenderModel = GenderDetectionModel(context)
+                    sharedContentModel = ContentDetectionModel(context)
+                    currentModelsAreFromFirebase = false
+                }
+
                 modelsInitialized = true
-            } catch (e: Exception) {
-                genderModel = GenderDetectionModel(context)
-                contentModel = ContentDetectionModel(context)
-                modelsInitialized = true
+            }.onFailure {
+                if (currentModelsAreFromFirebase) {
+                    runCatching {
+                        sharedGenderModel?.close()
+                        sharedContentModel?.close()
+
+                        sharedGenderModel = GenderDetectionModel(context)
+                        sharedContentModel = ContentDetectionModel(context)
+                        currentModelsAreFromFirebase = false
+                        modelsInitialized = true
+                    }
+                }
             }
         }
     }
 
-    suspend fun processImage(
+    suspend fun shouldModerateImage(
         bitmap: Bitmap,
         detectFemales: Boolean = true,
         detectMales: Boolean = false,
-        useContentDetection: Boolean = true,
-        strictMode: Boolean = false
-    ): ProcessingResult = withContext(Dispatchers.Default) {
+        useContentDetection: Boolean = true
+    ): Boolean = withContext(Dispatchers.Default) {
         ensureModelsLoaded()
 
-        mutex.withLock {
-            activeJob = coroutineContext[Job]
-        }
-
-        try {
-            val contentDeferred = async {
-                if (useContentDetection && contentModel != null)
-                    contentModel!!.detectContent(bitmap)
-                else null
-            }
-
-            val facesDeferred = async {
-                faceDetector.detectFaces(bitmap)
-            }
-
-            val contentResult = contentDeferred.await()
-            val faces = facesDeferred.await()
-            val faceInfoList = mutableListOf<FaceInfo>()
-
-            if (contentResult != null && contentResult.isInappropriate)
-                return@withContext ProcessingResult(
-                    shouldModerate = true,
-                    reason = "Inappropriate content detected",
-                    details = ProcessingDetails(
-                        contentScore = contentResult.score,
-                        isInappropriate = true,
-                        faceRegions = faceInfoList
-                    )
-                )
-
-            var femaleCount = 0
-            var maleCount = 0
-            var uncertainCount = 0
-
-            faces.forEach { face ->
-                try {
-                    val faceBitmap = cropFace(bitmap, face)
-                    val genderResult = genderModel?.detectGender(faceBitmap)
-
-                    genderResult?.let { result ->
-                        val gender = when {
-                            result.confidence < DEFAULT_GENDER_CONFIDENCE_THRESHOLD -> {
-                                uncertainCount++
-                                if (strictMode) femaleCount++
-                                Gender.UNCERTAIN
-                            }
-
-                            result.isFemale -> {
-                                femaleCount++
-                                Gender.FEMALE
-                            }
-
-                            else -> {
-                                maleCount++
-                                Gender.MALE
-                            }
-                        }
-
-                        faceInfoList.add(
-                            FaceInfo(
-                                boundingBox = face.boundingBox,
-                                gender = gender,
-                                confidence = result.confidence
-                            )
-                        )
+        if (useContentDetection) {
+            runCatching {
+                val contentModel = sharedContentModel
+                if (contentModel != null) {
+                    val contentResult = contentModel.detectContent(bitmap)
+                    if (contentResult.isInappropriate) {
+                        return@withContext true
                     }
-                } catch (_: Exception) {
-                    // Skip this face
                 }
             }
+        }
 
-            val shouldModerate = when {
-                detectFemales && femaleCount > 0 -> true
-                detectMales && maleCount > 0 -> true
-                strictMode && uncertainCount > 0 -> true
-                else -> false
-            }
+        runCatching {
+            val faces = faceDetector.detectFaces(bitmap)
 
-            val reason = when {
-                femaleCount > 0 && detectFemales -> "Detected $femaleCount female face(s)"
-                maleCount > 0 && detectMales -> "Detected $maleCount male face(s)"
-                uncertainCount > 0 && strictMode -> "Uncertain detection in strict mode"
-                else -> null
-            }
+            for (face in faces) {
+                runCatching {
+                    val faceBitmap = cropFace(bitmap, face)
+                    val genderModel = sharedGenderModel
 
-            ProcessingResult(
-                shouldModerate = shouldModerate,
-                reason = reason,
-                details = ProcessingDetails(
-                    facesDetected = faces.size,
-                    femalesDetected = femaleCount,
-                    malesDetected = maleCount,
-                    contentScore = contentResult?.score ?: 0f,
-                    isInappropriate = contentResult?.isInappropriate == true,
-                    faceRegions = faceInfoList
-                )
-            )
-        } finally {
-            mutex.withLock {
-                activeJob = null
+                    if (genderModel != null) {
+                        val genderResult = genderModel.detectGender(faceBitmap)
+
+                        genderResult.let { result ->
+                            if ((detectFemales && result.isFemale) || (detectMales && !result.isFemale))
+                                return@withContext true
+                        }
+                    }
+                }
             }
         }
-    }
 
-    private fun cropFace(bitmap: Bitmap, face: DetectedFace): Bitmap {
-        val rect = face.boundingBox
-        val left = (rect.left).coerceAtLeast(0)
-        val top = (rect.top).coerceAtLeast(0)
-        val right = (rect.right).coerceAtMost(bitmap.width)
-        val bottom = (rect.bottom).coerceAtMost(bitmap.height)
-
-        val width = right - left
-        val height = bottom - top
-
-        return Bitmap.createBitmap(bitmap, left, top, width, height)
+        return@withContext false
     }
 
     fun close() {
-        runBlocking {
-            mutex.withLock {
-                activeJob?.cancelAndJoin()
+        synchronized(ImageModerationProcessor::class.java) {
+            activeProcessorCount--
+
+            if (activeProcessorCount == 0) {
+                runCatching { faceDetector.close() }
+                runCatching { sharedGenderModel?.close() }
+                sharedGenderModel = null
+                runCatching { sharedContentModel?.close() }
+                sharedContentModel = null
+
+                modelsInitialized = false
+                currentModelsAreFromFirebase = false
+            } else {
+                runCatching { faceDetector.close() }
             }
         }
-        faceDetector.close()
-        genderModel?.close()
-        contentModel?.close()
-    }
-
-    data class ProcessingResult(
-        val shouldModerate: Boolean,
-        val reason: String? = null,
-        val details: ProcessingDetails? = null
-    )
-
-    data class ProcessingDetails(
-        val facesDetected: Int = 0,
-        val femalesDetected: Int = 0,
-        val malesDetected: Int = 0,
-        val contentScore: Float = 0f,
-        val isInappropriate: Boolean = false,
-        val faceRegions: List<FaceInfo> = emptyList()
-    )
-
-    data class FaceInfo(
-        val boundingBox: Rect,
-        val gender: Gender,
-        val confidence: Float
-    )
-
-    enum class Gender {
-        MALE, FEMALE, UNCERTAIN
-    }
-
-    companion object {
-        const val DEFAULT_CONTENT_THRESHOLD = 0.3f
-        private const val DEFAULT_GENDER_CONFIDENCE_THRESHOLD = 0.5f
-        private const val FACE_CROP_PADDING = 0.15f
     }
 }

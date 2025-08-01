@@ -153,8 +153,7 @@ object NetworkModule {
     @Singleton
     fun provideAuthApiService(retrofit: Retrofit): AuthenticationApiService =
         retrofit.create(AuthenticationApiService::class.java)
-
-    @Provides
+@Provides
     @Singleton
     fun provideAuthPreferences(@ApplicationContext context: Context): AuthPreferences =
         AuthPreferences(context.getSharedPreferences("auth", Context.MODE_PRIVATE))
