@@ -115,7 +115,7 @@ fun SearchScreen(
         }
     }
 
-    when{
+    when {
         state.error is ErrorState.NoInternet -> NetworkErrorScreen(onBack = null)
         else ->
             SearchScreenContent(
@@ -477,6 +477,7 @@ private fun RecentSearchLayOut(
     onNavigateToMovieDetails: (Int) -> Unit
 ) {
     if (state.recentViewed.isNotEmpty()) {
+
         RecentViewedSection(
             recentViewed = state.recentViewed,
             onClearAll = viewModel::clearRecentViewed,
@@ -486,10 +487,17 @@ private fun RecentSearchLayOut(
     }
 
     if (state.recentSearches.isNotEmpty()) {
+
+        val focusManager = LocalFocusManager.current
+        val keyboardController = LocalSoftwareKeyboardController.current
         RecentSearchesSection(
             recentSearches = state.recentSearches,
             onClearAll = interactionListener::clearRecentSearches,
-            onSearchClick = interactionListener::onRecentSearchClick,
+            onSearchClick = { query ->
+                focusManager.clearFocus()
+                keyboardController?.hide()
+                interactionListener.onRecentSearchClick(query)
+            },
             onRemoveClick = interactionListener::removeRecentSearch
         )
     }
