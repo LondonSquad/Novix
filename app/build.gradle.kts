@@ -88,7 +88,6 @@ dependencies {
     implementation(projects.presentation)
     implementation(projects.designSystem)
     implementation(libs.bundles.base.ui)
-    ksp(libs.bundles.koin.ksp)
     debugImplementation(libs.bundles.compose.debug)
     androidTestImplementation(libs.bundles.base.testing)
     androidTestImplementation(libs.bundles.android.testing)
@@ -98,10 +97,8 @@ dependencies {
     implementation(libs.firebase.analytics)
     testImplementation(libs.bundles.testing)
     implementation(libs.androidx.navigation.compose)
-    implementation(libs.koin.androidx.navigation)
     implementation(libs.androidx.material)
     implementation(libs.bundles.room)
-    implementation(libs.bundles.koin)
     ksp(libs.bundles.room.ksp)
     implementation(libs.timber)
 

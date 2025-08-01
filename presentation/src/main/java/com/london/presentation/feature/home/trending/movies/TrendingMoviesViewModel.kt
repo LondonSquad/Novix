@@ -4,10 +4,11 @@ import com.london.domain.usecase.GetTrendingMoviesUseCase
 import com.london.presentation.feature.base.BaseViewModel
 import com.london.presentation.feature.base.createPagingSourceFlow
 import com.london.presentation.utils.MovieGenre
-import org.koin.android.annotation.KoinViewModel
+import dagger.hilt.android.lifecycle.HiltViewModel
+import javax.inject.Inject
 
-@KoinViewModel
-class TrendingMoviesViewModel(
+@HiltViewModel
+class TrendingMoviesViewModel @Inject constructor(
     private val getTrendingMovies: GetTrendingMoviesUseCase,
 ) : BaseViewModel<TrendingMoviesUiState, TrendingMoviesEffect>(TrendingMoviesUiState()),
     TrendingMoviesContract {
