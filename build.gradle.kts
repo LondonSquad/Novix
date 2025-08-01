@@ -31,12 +31,11 @@ subprojects {
 }
 
 dependencies {
-    kover(projects.app)
     kover(projects.domain)
     kover(projects.data)
     kover(projects.presentation)
-    kover(projects.designSystem)
 }
+
 kover {
     reports {
         total {
@@ -56,7 +55,6 @@ kover {
                 excludes {
                     annotatedBy("com.london.domain.KoverIgnore")
                     packages(
-                        "org.koin.ksp.generated.**",
                         "com.london.data.datasource.remote.**",
                     )
                     classes("*di.*")
@@ -73,4 +71,5 @@ kover {
         }
     }
 }
+
 configureGitHooks()

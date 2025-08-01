@@ -3,10 +3,11 @@ package com.london.presentation.feature.home.trending.actor
 import com.london.domain.usecase.GetTrendingActorsUseCase
 import com.london.presentation.feature.base.BaseViewModel
 import com.london.presentation.feature.base.createPagingSourceFlow
-import org.koin.android.annotation.KoinViewModel
+import dagger.hilt.android.lifecycle.HiltViewModel
+import javax.inject.Inject
 
-@KoinViewModel
-class TrendingActorsViewModel(
+@HiltViewModel
+class TrendingActorsViewModel @Inject constructor(
     private val getTrendingActors: GetTrendingActorsUseCase,
 ) : BaseViewModel<TrendingActorsUiState, TrendingActorsEffect>(TrendingActorsUiState()),
     TrendingActorsContract {

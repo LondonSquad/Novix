@@ -45,14 +45,12 @@ dependencies {
     implementation(libs.bundles.compose)
     implementation(libs.bundles.base.ui)
     implementation(libs.bundles.coroutines)
-    implementation(libs.bundles.koin)
 
     // paging 3
     implementation(libs.androidx.paging.runtime)
     implementation(libs.androidx.paging.compose)
     testImplementation(libs.androidx.paging.common)
 
-    ksp(libs.bundles.koin.ksp)
     testImplementation(libs.bundles.testing)
     androidTestImplementation(libs.bundles.android.testing)
     implementation(libs.firebase.crashlytics)

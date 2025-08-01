@@ -105,5 +105,5 @@
     <string name="reviews">Reviews</string>
     <string name="no_recent_history">Looks like you haven\'t checked anything yet.\nTake a look around and come back!</string>
     <string name="no_reviews">\"There is no review\"</string>
-    <string name="no_data_until_now">No Data Until Now</string>
+    <string name="no_data_until_now">No Data Yet</string>
 </resources>

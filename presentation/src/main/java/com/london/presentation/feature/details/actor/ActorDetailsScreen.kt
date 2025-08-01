@@ -70,6 +70,8 @@ import com.london.presentation.shared.CustomBackDropImagePager
 import com.london.presentation.utils.Listen
 import com.london.presentation.utils.offsetLayout
 import com.london.presentation.utils.toLocalizedNumbers
+import androidx.hilt.navigation.compose.hiltViewModel
+import kotlinx.coroutines.delay
 
 @Composable
 fun ActorDetailsScreen(
