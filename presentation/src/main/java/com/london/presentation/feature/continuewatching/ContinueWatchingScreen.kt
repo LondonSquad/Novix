@@ -40,6 +40,7 @@ import com.london.presentation.shared.EmptyStateView
 import com.london.presentation.utils.Listen
 import com.london.presentation.utils.MovieGenre
 import com.london.presentation.utils.TvShowGenre
+import com.london.presentation.utils.gridColmuns
 
 @Composable
 fun ContinueWatchingScreen(
@@ -113,9 +114,8 @@ fun Content(
             )
             else -> EmptyStateView()
         }
-
         LazyVerticalGrid(
-            columns = GridCells.Fixed(2),
+            columns = GridCells.Fixed(gridColmuns()),
             contentPadding = PaddingValues(
                 top = 12.dp,
                 bottom = 16.dp,
