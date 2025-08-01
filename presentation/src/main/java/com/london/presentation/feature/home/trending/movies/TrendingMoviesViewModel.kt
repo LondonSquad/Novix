@@ -59,8 +59,4 @@ class TrendingMoviesViewModel @Inject constructor(
     override fun onRetry() {
         initializeMovies()
     }
-
-    override fun onError(error: androidx.paging.LoadState.Error) {
-        onRetry()
-    }
 }

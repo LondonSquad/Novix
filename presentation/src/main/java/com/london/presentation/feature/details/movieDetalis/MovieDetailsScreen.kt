@@ -67,6 +67,7 @@ import com.london.presentation.R.string.overview
 import com.london.presentation.R.string.star
 import com.london.presentation.R.string.time_icon
 import com.london.presentation.R.string.view_reviews
+import com.london.presentation.feature.base.ErrorState
 import com.london.presentation.feature.buildscreen.BuildScreen
 import com.london.presentation.feature.reviews.MediaType
 import com.london.presentation.feature.search.SearchCategory
@@ -107,7 +108,8 @@ fun MovieDetailsScreen(
     BuildScreen(
         onBack = viewModel::onBackClick,
         isLoading = state.isLoading,
-        isError = state.error != null
+        isError = state.error is ErrorState.NoInternet,
+        onRetry = viewModel::onRetry
     ) {
         MovieDetailsContent(
             uiState = state,

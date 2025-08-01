@@ -67,6 +67,11 @@ class TopRatedViewModel @Inject constructor(
         }, checkSuccess = { true })
     }
 
+    fun onRetry(){
+        updateState { copy(errorMessage = null) }
+        initializeTopRated()
+    }
+
     override fun movieGenre(genre: MovieGenre) {
         if (genre == state.value.selectedMovieGenre) return
         updateState { copy(selectedMovieGenre = genre) }

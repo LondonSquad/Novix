@@ -12,6 +12,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.paging.LoadState
 import androidx.paging.compose.collectAsLazyPagingItems
 import com.london.designsystem.component.TopBar
 import com.london.designsystem.theme.ThemePreviews
@@ -21,6 +22,7 @@ import com.london.presentation.feature.search.SearchCategory
 import com.london.presentation.shared.MediaLazyPagingGrid
 import com.london.presentation.utils.Listen
 import com.london.presentation.utils.convertGenreCodeToString
+import com.london.presentation.utils.isLoading
 
 @Composable
 fun TvShowByCategoryScreen(
@@ -39,10 +41,14 @@ fun TvShowByCategoryScreen(
             )
         }
     }
+
+    val tvShowByCategory = state.tvShowFlow.collectAsLazyPagingItems()
+
     BuildScreen(
         onBack = viewModel::onBack,
-        isLoading = state.isLoading,
-        isError = state.error != null
+        isLoading = tvShowByCategory.isLoading(),
+        isError = tvShowByCategory.loadState.refresh is LoadState.Error,
+        onRetry = tvShowByCategory::refresh
     ) {
         Content(
             state = state,

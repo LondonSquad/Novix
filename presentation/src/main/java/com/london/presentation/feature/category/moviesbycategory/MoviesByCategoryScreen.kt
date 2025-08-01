@@ -12,6 +12,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.paging.LoadState
 import androidx.paging.PagingData
 import androidx.paging.compose.collectAsLazyPagingItems
 import com.london.designsystem.component.TopBar
@@ -23,6 +24,7 @@ import com.london.presentation.feature.search.SearchCategory
 import com.london.presentation.shared.MediaLazyPagingGrid
 import com.london.presentation.utils.Listen
 import com.london.presentation.utils.convertGenreCodeToString
+import com.london.presentation.utils.isLoading
 import kotlinx.coroutines.flow.flow
 
 @Composable
@@ -44,10 +46,13 @@ fun MoviesByCategoryScreen(
         }
     }
 
+    val moviesByCategory = state.movies.collectAsLazyPagingItems()
+
     BuildScreen(
         onBack = viewModel::onBack,
-        isLoading = state.isLoading,
-        isError = state.error != null
+        isLoading = moviesByCategory.isLoading(),
+        isError = moviesByCategory.loadState.refresh is LoadState.Error,
+        onRetry = moviesByCategory::refresh
     ) {
         MoviesByCategoryContent(
             state = state,

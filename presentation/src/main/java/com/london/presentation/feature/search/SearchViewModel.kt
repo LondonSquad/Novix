@@ -528,4 +528,10 @@ class SearchViewModel @Inject constructor(
             )
         }
     }
+
+    fun onRetry(){
+        updateState { copy(error = null) }
+        updateRecentData()
+        setupSearchDebouncing()
+    }
 }

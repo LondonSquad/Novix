@@ -15,14 +15,17 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.paging.LoadState
 import androidx.paging.compose.collectAsLazyPagingItems
 import com.london.designsystem.component.ActorItem
 import com.london.designsystem.component.TopBar
 import com.london.designsystem.theme.NovixTheme
 import com.london.designsystem.utils.string
 import com.london.presentation.R
+import com.london.presentation.feature.buildscreen.BuildScreen
 import com.london.presentation.shared.LazyPagingColumn
 import com.london.presentation.utils.Listen
+import com.london.presentation.utils.isLoading
 
 @Composable
 fun TrendingActorsScreen(
@@ -40,16 +43,29 @@ fun TrendingActorsScreen(
         }
     }
 
-    TrendingActorsContent(
-        state = state,
-        contract = viewModel
-    )
+
+    val actorsLazyItems = state.actorsFlow.collectAsLazyPagingItems()
+
+    BuildScreen(
+        isLoading = actorsLazyItems.isLoading(),
+        isError = actorsLazyItems.loadState.refresh is LoadState.Error,
+        onBack = viewModel::onBack,
+        onRetry = viewModel::onRetry,
+        emptyLayoutMessage = R.string.no_trending_actors_in_genre,
+        emptyLayoutImage = R.drawable.img_no_result,
+        pagingFlow = actorsLazyItems
+    ) {
+        TrendingActorsContent(
+            state = state,
+            contract = viewModel,
+        )
+    }
 }
 
 @Composable
 private fun TrendingActorsContent(
     state: TrendingActorsUiState = TrendingActorsUiState(),
-    contract: TrendingActorsContract = defaultTrendingActorsContract()
+    contract: TrendingActorsContract = defaultTrendingActorsContract(),
 ) {
     LazyColumn(
         modifier = Modifier
@@ -70,12 +86,10 @@ private fun TrendingActorsContent(
         }
 
         item {
-            val actorsLazyItems = state.actorsFlow.collectAsLazyPagingItems()
-
 
             LazyPagingColumn(
                 emptyTitle = R.string.no_trending_actors_in_genre.string,
-                pagingItems = actorsLazyItems,
+                pagingItems = state.actorsFlow.collectAsLazyPagingItems(),
                 modifier = Modifier.fillMaxSize(),
                 onRetry = {
                     contract.onRetry()

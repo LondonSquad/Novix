@@ -47,6 +47,10 @@ class TopMoviesPicksViewModel @Inject constructor(
         )
     }
 
+    fun onRetry(){
+        getActorMoviePicksData()
+    }
+
     override fun onSaveMovie(movieId: Int) {
         updateState { copy(isSaved = isSaved) }
         emitEffect(TopMoviesPicksEffect.NavigationToMovieDetails(movieId))

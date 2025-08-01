@@ -23,8 +23,8 @@ class EpisodeDetailsViewModel @Inject constructor(
 
     private val args = savedStateHandle.getArgs<Screen.EpisodeDetails>()
     val tvShowId = args?.tvShowId ?: 0
-    val seasonNumber = args?.seasonNumber ?: 0
-    val episodeNumber = args?.episodeNumber ?: 0
+    private val seasonNumber = args?.seasonNumber ?: 0
+    private val episodeNumber = args?.episodeNumber ?: 0
 
     init {
         loadEpisodeDetails()
@@ -84,6 +84,12 @@ class EpisodeDetailsViewModel @Inject constructor(
                 }
             }
         )
+    }
+
+    fun onRetry(){
+        updateState { copy(error = null) }
+        loadEpisodeDetails()
+        loadVideoProvider()
     }
 
     override fun onBackClicked() {
