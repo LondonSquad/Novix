@@ -116,6 +116,14 @@ class ActorDetailsViewModel @Inject constructor(
         )
     }
 
+    override fun onRetry() {
+        updateState { copy(error = null, movieError = false, tvShowError = false) }
+        getActorImage()
+        getActorDetails()
+        getActorMovieDetails()
+        getActorTvShowDetails()
+    }
+
     override fun onNavigateBack() {
         emitEffect(ActorEffectUiState.NavigationBack)
     }
