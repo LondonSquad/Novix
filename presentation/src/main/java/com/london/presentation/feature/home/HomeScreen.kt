@@ -311,7 +311,6 @@ private fun LazyGridScope.upComingSection(
                 text = stringResource(R.string.upcoming),
                 style = NovixTheme.typography.headline.small,
                 color = NovixTheme.colors.title,
-//                modifier = Modifier.padding(bottom = 4.dp)
             )
         else
             Box(modifier = Modifier
@@ -329,7 +328,6 @@ private fun LazyGridScope.upComingSection(
             screenWidth = screenWidth,
             onGenreClick = contract::onMovieGenreSelect,
             modifier = Modifier
-                .padding(bottom = 12.dp)
                 .background(NovixTheme.colors.surface),
             getGenreId = { it.id },
             getGenreName = { stringResource(it.stringResId) }
@@ -345,7 +343,6 @@ private fun LazyGridScope.upComingSection(
                 isSaved = false,
                 onSaveClick = { /*TODO*/ },
                 modifier = Modifier
-                    .padding(top = 4.dp)
                     .clipToBounds()
                     .clip(RoundedCornerShape(12.dp))
                     .clickable { contract.onMovieClick(movie.id) }
@@ -357,4 +354,3 @@ private fun LazyGridScope.upComingSection(
                 .shimmerEffect())
     }
 }
-
