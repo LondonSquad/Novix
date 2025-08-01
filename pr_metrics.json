@@ -16205,17 +16205,25 @@
           "url": "https://github.com/marwanqashwa"
         },
         "submitted_at": "2025-08-01T19:16:56Z"
+      },
+      {
+        "reviewer": {
+          "id": 106277855,
+          "login": "Mostafa-alsaygh",
+          "url": "https://github.com/Mostafa-alsaygh"
+        },
+        "submitted_at": "2025-08-01T20:03:52Z"
       }
     ],
     "first_approved_at": "2025-08-01T19:16:56Z",
     "time_to_first_approval_minutes": 162.23333333333332,
-    "required_approvals_met_at": null,
-    "time_to_required_approvals_minutes": null,
+    "required_approvals_met_at": "2025-08-01T20:03:52Z",
+    "time_to_required_approvals_minutes": 209.16666666666666,
     "closed_at": null,
     "merged_at": null,
     "merged_by": null,
     "week": "2025-W31",
-    "status": "pending",
+    "status": "approved",
     "diff_stats": {
       "additions": 116,
       "deletions": 58,
