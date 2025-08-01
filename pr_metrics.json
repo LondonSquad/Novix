@@ -16176,5 +16176,33 @@
       "deletions": 320,
       "changed_files": 20
     }
+  },
+  {
+    "pr_number": 503,
+    "url": "https://github.com/LondonSquad/Novix/pull/503",
+    "title": "refactor/update-image-blue-feature",
+    "opened_at": "2025-08-01T16:34:42Z",
+    "head_ref": "refactor/update-image-blue-feature",
+    "base_ref": "develop",
+    "creator": {
+      "login": "abdo-essam",
+      "id": 92235360,
+      "url": "https://github.com/abdo-essam"
+    },
+    "approvals": [],
+    "first_approved_at": null,
+    "time_to_first_approval_minutes": null,
+    "required_approvals_met_at": null,
+    "time_to_required_approvals_minutes": null,
+    "closed_at": null,
+    "merged_at": null,
+    "merged_by": null,
+    "week": "2025-W31",
+    "status": "pending",
+    "diff_stats": {
+      "additions": 116,
+      "deletions": 58,
+      "changed_files": 1
+    }
   }
 ]
