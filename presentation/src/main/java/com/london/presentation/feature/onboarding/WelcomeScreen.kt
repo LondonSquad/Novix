@@ -7,9 +7,12 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.asPaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.navigationBars
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
@@ -42,69 +45,87 @@ fun WelcomeScreen(
     val screenHeight = configuration.screenHeightDp.dp
     val posterHeight = screenHeight * 0.85f
 
-
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .verticalScroll(rememberScrollState())
-    ) {
-        WelcomePoster(
+    Box (modifier = Modifier.fillMaxSize()){
+        Column(
             modifier = Modifier
-                .fillMaxWidth()
-                .height(posterHeight)
+                .fillMaxSize()
+                .verticalScroll(rememberScrollState())
+        ) {
+            WelcomePoster(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(posterHeight)
+            )
+        }
+    }
+    WelcomeFooterSection(
+        onNavigateLogin = onNavigateLogin,
+        onNavigateContinue = onNavigateContinue,
+        modifier = Modifier.padding(
+            bottom = WindowInsets.navigationBars.asPaddingValues()
+                .calculateBottomPadding()
+            )
+    )
+}
+
+@Composable
+private fun WelcomeFooterSection(
+    onNavigateLogin: () -> Unit,
+    onNavigateContinue: () -> Unit,
+    modifier: Modifier = Modifier
+) {
+    Column(
+        modifier = modifier
+            .fillMaxSize()
+            .padding(start = 16.dp, end = 16.dp, bottom = 21.dp),
+        verticalArrangement = Arrangement.Bottom,
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+        Image(
+            painter = painterResource(id = R.drawable.app_icon),
+            contentDescription = null,
+            modifier = Modifier
+                .size(100.dp)
+                .padding(bottom = 32.dp)
+        )
+        Text(
+            text = stringResource(R.string.welcome_title),
+            style = NovixTheme.typography.title.large,
+            color = NovixTheme.colors.title
         )
 
-        Box(
-            modifier = Modifier
-                .fillMaxWidth()
-                .background(NovixTheme.colors.surface)
-                .padding(start = 16.dp, end = 16.dp, bottom = 50.dp)
-        ) {
-            Column(
-                modifier = Modifier.fillMaxSize(),
-                verticalArrangement = Arrangement.Bottom,
-                horizontalAlignment = Alignment.CenterHorizontally
-            ) {
-                Text(
-                    text = stringResource(R.string.welcome_title),
-                    style = NovixTheme.typography.title.large,
-                    color = NovixTheme.colors.title
-                )
+        Spacer(modifier = Modifier.height(12.dp))
 
-                Spacer(modifier = Modifier.height(12.dp))
+        Text(
+            text = stringResource(R.string.welcome_description),
+            style = NovixTheme.typography.body.small,
+            color = NovixTheme.colors.body,
+            textAlign = TextAlign.Center
+        )
 
-                Text(
-                    text = stringResource(R.string.welcome_description),
-                    style = NovixTheme.typography.body.small,
-                    color = NovixTheme.colors.body,
-                    textAlign = TextAlign.Center
-                )
+        Spacer(modifier = Modifier.height(32.dp))
 
-                Spacer(modifier = Modifier.height(32.dp))
+        PrimaryButton(
+            text = stringResource(R.string.login),
+            onClick = onNavigateLogin,
+            modifier = Modifier.fillMaxWidth(),
+            isLoading = false,
+            hasIcon = false,
+            hasLabel = true,
+            icon = null
+        )
 
-                PrimaryButton(
-                    text = stringResource(R.string.login),
-                    onClick = onNavigateLogin,
-                    modifier = Modifier.fillMaxWidth(),
-                    isLoading = false,
-                    hasIcon = false,
-                    hasLabel = true,
-                    icon = null
-                )
+        Spacer(modifier = Modifier.height(12.dp))
 
-                Spacer(modifier = Modifier.height(12.dp))
-
-                OutlineButton(
-                    text = stringResource(R.string.continue_as_guest),
-                    onClick = onNavigateContinue,
-                    modifier = Modifier.fillMaxWidth(),
-                    hasLabel = true,
-                    icon = null,
-                    hasIcon = false,
-                    isLoading = false,
-                )
-            }
-        }
+        OutlineButton(
+            text = stringResource(R.string.continue_as_guest),
+            onClick = onNavigateContinue,
+            modifier = Modifier.fillMaxWidth(),
+            hasLabel = true,
+            icon = null,
+            hasIcon = false,
+            isLoading = false,
+        )
     }
 }
 
@@ -143,13 +164,6 @@ fun WelcomePoster(modifier: Modifier = Modifier) {
                         )
                     )
                 )
-        )
-        Image(
-            painter = painterResource(id = R.drawable.app_icon),
-            contentDescription = null,
-            modifier = Modifier
-                .size(100.dp)
-                .padding(bottom = 32.dp)
         )
     }
 }
