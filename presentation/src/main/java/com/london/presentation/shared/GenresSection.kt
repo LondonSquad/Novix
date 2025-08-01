@@ -39,8 +39,7 @@ fun <T> GenresSection(
                 NovixChip(
                     text = getGenreName(genre),
                     isSelected = (getGenreId(genre) == selectedGenreId),
-                    onClick = { onGenreClick(genre) },
-                    modifier = Modifier.padding(bottom = 8.dp)
+                    onClick = { onGenreClick(genre) }
                 )
             else
                 Box(modifier = Modifier.height(40.dp)

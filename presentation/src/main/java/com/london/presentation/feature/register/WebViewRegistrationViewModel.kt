@@ -1,11 +1,11 @@
 package com.london.presentation.feature.register
 
-import android.util.Log
 import com.london.presentation.feature.base.BaseViewModel
-import org.koin.android.annotation.KoinViewModel
+import dagger.hilt.android.lifecycle.HiltViewModel
+import javax.inject.Inject
 
-@KoinViewModel
-class WebViewRegistrationViewModel :
+@HiltViewModel
+class WebViewRegistrationViewModel @Inject constructor() :
     BaseViewModel<WebViewRegistrationUiState, WebViewRegistrationEffect>(WebViewRegistrationUiState()),
     WebViewRegistrationContract {
 

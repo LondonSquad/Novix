@@ -26,7 +26,7 @@ android {
         buildConfigField("String", "YOUTUBE_URL", getKey("YOUTUBE_URL"))
     }
 
-    buildFeatures{
+    buildFeatures {
         buildConfig = true
     }
 
@@ -54,15 +54,13 @@ dependencies {
     implementation(libs.bundles.datastore)
     implementation(libs.bundles.room)
     ksp(libs.bundles.room.ksp)
-    implementation(libs.bundles.koin)
-    ksp(libs.bundles.koin.ksp)
     implementation(libs.gson)
     implementation(libs.firebase.crashlytics)
 
     //Testing
     testImplementation(libs.mockk)
     testImplementation(libs.kotlinx.coroutines.test)
-    testImplementation (libs.truth)
+    testImplementation(libs.truth)
 
     // Test dependencies - properly scoped
     testImplementation(libs.bundles.testing)
@@ -76,11 +74,8 @@ dependencies {
     implementation(libs.retrofit2.kotlinx.serialization.converter)
     implementation(libs.kotlinx.serialization.json)
 
-
     implementation(libs.timber)
-}
-ksp {
-    arg("KOIN_CONFIG_CHECK", "true")
-    arg("KOIN_DEFAULT_MODULE", "false")
-    arg("KOIN_USE_COMPOSE_VIEWMODEL", "true")
+
+    implementation(libs.bundles.hilt.runtime)
+    ksp(libs.bundles.hilt.ksp)
 }

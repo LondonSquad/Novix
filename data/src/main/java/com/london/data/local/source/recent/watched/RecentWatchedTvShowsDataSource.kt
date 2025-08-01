@@ -2,15 +2,9 @@ package com.london.data.local.source.recent.watched
 
 import com.london.data.local.database.dao.recent.whatched.tvshow.RecentWatchedTvShowsDao
 import com.london.data.local.model.recent.watched.RecentWatchedTvShowLocal
-import org.koin.core.annotation.Provided
-import org.koin.core.annotation.Single
-import javax.inject.Named
+import javax.inject.Inject
 
-@Single
-@Named("recentWatchedTvShowsDataSource")
-class RecentWatchedTvShowsDataSource(
-    @Provided
-    @Named("recentWatchedTvShowsDao")
+class RecentWatchedTvShowsDataSource @Inject constructor(
     private val recentWatchedTvShowsDao: RecentWatchedTvShowsDao
 ) : RecentWatchedDataSource<RecentWatchedTvShowLocal> {
 

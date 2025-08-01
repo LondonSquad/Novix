@@ -6,15 +6,9 @@ import com.london.data.mapper.recent.toEntity
 import com.london.data.mapper.recent.toRecentSearch
 import com.london.domain.entity.recent.RecentSearch
 import com.london.domain.repository.RecentRepository
-import org.koin.core.annotation.Named
-import org.koin.core.annotation.Provided
-import org.koin.core.annotation.Single
+import javax.inject.Inject
 
-@Single
-@Named("recentSearchRepository")
-class RecentSearchRepositoryImpl(
-    @Provided
-    @Named("recentSearchDataSource")
+class RecentSearchRepositoryImpl @Inject constructor(
     private val recentSearchLocalDataSource: RecentDataSource<RecentSearchLocal>
 ) : RecentRepository<RecentSearch> {
     override suspend fun insert(item: RecentSearch) =

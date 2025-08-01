@@ -1,12 +1,9 @@
 package com.london.domain.usecase.login
 
 import com.london.domain.repository.AuthRepository
-import org.koin.core.annotation.Provided
-import org.koin.core.annotation.Single
+import javax.inject.Inject
 
-@Single
-class LoginAsGuestUseCase(
-    @Provided
+class LoginAsGuestUseCase @Inject constructor(
     private val authRepository: AuthRepository
 ) {
     suspend fun invoke() = authRepository.loginAsGuest()

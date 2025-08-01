@@ -6,10 +6,9 @@ import com.london.data.remote.source.home.popular.PopularRemoteDataSource
 import com.london.domain.entity.popular.PopularMovie
 import com.london.domain.entity.popular.PopularTvShow
 import com.london.domain.repository.PopularRepository
-import org.koin.core.annotation.Single
+import javax.inject.Inject
 
-@Single
-class PopularRepositoryImpl(
+class PopularRepositoryImpl @Inject constructor(
     private val popularRemoteDataSource: PopularRemoteDataSource
 ) : PopularRepository {
     override suspend fun getPopularMovies(): List<PopularMovie> {

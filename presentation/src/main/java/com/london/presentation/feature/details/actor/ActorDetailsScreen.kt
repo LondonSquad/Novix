@@ -48,6 +48,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.zIndex
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.london.designsystem.component.CircularLoading
 import com.london.designsystem.component.EmptyLayout
@@ -70,8 +71,8 @@ import com.london.presentation.shared.CustomBackDropImagePager
 import com.london.presentation.utils.Listen
 import com.london.presentation.utils.offsetLayout
 import com.london.presentation.utils.toLocalizedNumbers
-import com.london.presentation.utils.trimExcessiveSpaces
 import org.koin.androidx.compose.koinViewModel
+import kotlinx.coroutines.delay
 
 @Composable
 fun ActorDetailsScreen(
@@ -81,7 +82,7 @@ fun ActorDetailsScreen(
     onNavigateToTvShowPicks: (Int) -> Unit,
     onNavigateToMovieScreen: (Int) -> Unit,
     onNavigateToTvShowScreen: (Int) -> Unit,
-    viewModel: ActorDetailsViewModel = koinViewModel(),
+    viewModel: ActorDetailsViewModel = hiltViewModel(),
 ) {
     val uiState by viewModel.state.collectAsStateWithLifecycle()
     val effect by viewModel.effect.collectAsState(null)
@@ -264,7 +265,7 @@ private fun BiographySection(uiState: ActorDetailsUiState) {
         var isExpanded by remember { mutableStateOf(false) }
 
         ConditionalText(
-            text = uiState.actorBiography.trimExcessiveSpaces(),
+            text = uiState.actorBiography,
             expandedState = isExpanded,
             modifier = Modifier.padding(horizontal = 16.dp, vertical = 4.dp)
         ) {

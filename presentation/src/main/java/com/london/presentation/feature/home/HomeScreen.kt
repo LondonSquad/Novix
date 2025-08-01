@@ -44,6 +44,7 @@ import androidx.compose.ui.platform.LocalWindowInfo
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -61,7 +62,6 @@ import com.london.presentation.R
 import com.london.presentation.feature.buildscreen.NetworkErrorScreen
 import com.london.presentation.shared.GenresSection
 import com.london.presentation.utils.Listen
-import org.koin.compose.viewmodel.koinViewModel
 
 @Composable
 fun HomeScreen(
@@ -72,7 +72,7 @@ fun HomeScreen(
     onNavigateTrendingTvShows: () -> Unit = {},
     onNavigateTrendingActors: () -> Unit = {},
     onNavigateContinueWatching: () -> Unit = {},
-    viewModel: HomeViewModel = koinViewModel(),
+    viewModel: HomeViewModel = hiltViewModel(),
 ) {
     val uiState by viewModel.state.collectAsStateWithLifecycle()
     val effect by viewModel.effect.collectAsState(null)
@@ -308,7 +308,6 @@ private fun LazyGridScope.upComingSection(
                 text = stringResource(R.string.upcoming),
                 style = NovixTheme.typography.headline.small,
                 color = NovixTheme.colors.title,
-//                modifier = Modifier.padding(bottom = 4.dp)
             )
         else
             Box(modifier = Modifier
@@ -326,7 +325,6 @@ private fun LazyGridScope.upComingSection(
             screenWidth = screenWidth,
             onGenreClick = contract::onMovieGenreSelect,
             modifier = Modifier
-                .padding(bottom = 12.dp)
                 .background(NovixTheme.colors.surface),
             getGenreId = { it.id },
             getGenreName = { stringResource(it.stringResId) }
@@ -342,7 +340,6 @@ private fun LazyGridScope.upComingSection(
                 isSaved = false,
                 onSaveClick = { /*TODO*/ },
                 modifier = Modifier
-                    .padding(top = 4.dp)
                     .clipToBounds()
                     .clip(RoundedCornerShape(12.dp))
                     .clickable { contract.onMovieClick(movie.id) }
@@ -354,4 +351,3 @@ private fun LazyGridScope.upComingSection(
                 .shimmerEffect())
     }
 }
-

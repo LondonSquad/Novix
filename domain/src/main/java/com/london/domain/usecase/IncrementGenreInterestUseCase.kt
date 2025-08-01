@@ -1,12 +1,9 @@
 package com.london.domain.usecase
 
 import com.london.domain.repository.SearchRepository
-import org.koin.core.annotation.Provided
-import org.koin.core.annotation.Single
+import javax.inject.Inject
 
-@Single
-class IncrementGenreInterestUseCase(
-    @Provided
+class IncrementGenreInterestUseCase @Inject constructor(
     private val repository: SearchRepository
 ) {
     suspend fun invoke(genreId: Int, mediaType: String) =

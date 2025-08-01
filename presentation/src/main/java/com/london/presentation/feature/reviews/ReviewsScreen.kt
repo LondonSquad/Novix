@@ -35,6 +35,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.paging.compose.collectAsLazyPagingItems
 import com.london.designsystem.component.CircularLoading
@@ -50,11 +51,10 @@ import com.london.presentation.shared.RatingItem
 import com.london.presentation.shared.ReviewsDate
 import com.london.presentation.utils.Listen
 import com.london.presentation.utils.reverseDateFormat
-import org.koin.androidx.compose.koinViewModel
 
 @Composable
 fun ReviewsScreen(
-    viewModel: ReviewsViewModel = koinViewModel(),
+    viewModel: ReviewsViewModel = hiltViewModel(),
     onNavigateBack: () -> Unit = {},
 ) {
     val uiState by viewModel.state.collectAsStateWithLifecycle()

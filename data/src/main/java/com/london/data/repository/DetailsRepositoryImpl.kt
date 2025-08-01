@@ -18,10 +18,9 @@ import com.london.domain.entity.tvshowdetails.TvShowImagesEntity
 import com.london.domain.entity.tvshowdetails.episode.TvShowEpisodeByIdEntity
 import com.london.domain.entity.tvshowdetails.episode.TvShowEpisodesEntity
 import com.london.domain.repository.DetailsRepository
-import org.koin.core.annotation.Single
+import javax.inject.Inject
 
-@Single
-class DetailsRepositoryImpl(
+class DetailsRepositoryImpl @Inject constructor(
     private val tvShowDetailsRemoteDataSource: TvShowDetailsRemoteDataSource,
     private val reviewsRemoteDataSource: ReviewsRemoteDataSource
 ) : DetailsRepository {

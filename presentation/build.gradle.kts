@@ -7,16 +7,17 @@ plugins {
     alias(libs.plugins.ksp)
     alias(libs.plugins.kotlinx.kover)
     alias(libs.plugins.kotlin.serialization)
+    alias(libs.plugins.hilt)
 }
 
 android {
-    namespace =  AppConfig.Namespace.PRESENTATION
+    namespace = AppConfig.Namespace.PRESENTATION
     compileSdk = AppConfig.Version.COMPILE_SDK
 
     defaultConfig {
         minSdk = AppConfig.Version.MIN_SDK
 
-        testInstrumentationRunner =  AppConfig.ANDROID_TEST_INSTRUMENTATION
+        testInstrumentationRunner = AppConfig.ANDROID_TEST_INSTRUMENTATION
         consumerProguardFiles("consumer-rules.pro")
     }
 
@@ -62,10 +63,7 @@ dependencies {
     implementation(libs.timber)
 
     implementation(libs.remember.preference)
-}
 
-ksp {
-    arg("KOIN_CONFIG_CHECK", "true")
-    arg("KOIN_DEFAULT_MODULE", "false")
-    arg("KOIN_USE_COMPOSE_VIEWMODEL", "true")
+    ksp(libs.bundles.hilt.ksp)
+    implementation(libs.bundles.hilt.runtime)
 }

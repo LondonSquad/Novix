@@ -5,15 +5,14 @@ import androidx.compose.runtime.LaunchedEffect
 import com.london.domain.AppPreferencesService
 import com.london.domain.repository.AuthRepository
 import kotlinx.coroutines.delay
-import org.koin.core.annotation.Provided
 
 @Composable
 fun SplashRoute(
     onNavigateToOnboarding: () -> Unit,
     onNavigateToWelcome: () -> Unit,
     onNavigateToHome: () -> Unit,
-    @Provided appPreferencesService: AppPreferencesService,
-    @Provided authRepository: AuthRepository
+    appPreferencesService: AppPreferencesService,
+     authRepository: AuthRepository
 ) {
     SplashScreen()
 
