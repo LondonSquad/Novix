@@ -48,8 +48,6 @@ import com.london.designsystem.theme.ThemePreviews
 import com.london.designsystem.utils.painter
 import com.london.presentation.R
 import kotlinx.coroutines.CoroutineScope
-import org.koin.androidx.compose.koinViewModel
-
 
 @Composable
 fun OnboardingScreen(
