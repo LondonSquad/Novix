@@ -506,6 +506,10 @@ private fun navigateToBottomBarDestination(
     navController: NavHostController,
     destination: Screen
 ) {
+    if (navController.currentBackStackEntry?.destination?.hasRoute(destination::class) == true) {
+        return
+    }
+
     navController.navigate(destination) {
         popUpTo(navController.graph.findStartDestination().id) {
             saveState = true
