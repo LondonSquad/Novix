@@ -10,18 +10,15 @@ import androidx.paging.compose.LazyPagingItems
 
 @Composable
 fun <T : Any> LazyPagingColumn(
-    emptyTitle: String,
     pagingItems: LazyPagingItems<T>,
     modifier: Modifier = Modifier,
     itemContent: @Composable (T) -> Unit,
-    onRetry: () -> Unit = {}
 ) {
     Content(
             modifier = modifier,
             items = pagingItems,
             itemContent = itemContent
         )
-
 }
 
 @Composable

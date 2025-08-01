@@ -104,10 +104,6 @@ private fun TrendingTvShowsContent(
                 .padding(horizontal = 16.dp),
             onSaveClick = { /* TODO: Implement save functionality */ },
             isItemSaved = { false },
-            onRetry = {
-                contract.onRetry()
-            },
-            noMediaMessage = R.string.no_trending_tvshows_in_genre
         )
     }
 }

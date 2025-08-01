@@ -46,7 +46,6 @@ fun TrendingMoviesScreen(
 
     val moviesLazyItems = state.moviesFlow.collectAsLazyPagingItems()
 
-
     BuildScreen(
         isLoading = moviesLazyItems.isLoading(),
         isError = moviesLazyItems.loadState.refresh is LoadState.Error,
@@ -103,7 +102,6 @@ private fun TrendingMoviesContent(
                 .padding(horizontal = 16.dp),
             onSaveClick = { /* TODO: Implement save functionality */ },
             isItemSaved = { false },
-            noMediaMessage = R.string.trending_movies,
         )
     }
 }

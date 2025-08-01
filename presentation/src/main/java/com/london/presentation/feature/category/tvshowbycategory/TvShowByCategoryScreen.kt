@@ -16,7 +16,6 @@ import androidx.paging.LoadState
 import androidx.paging.compose.collectAsLazyPagingItems
 import com.london.designsystem.component.TopBar
 import com.london.designsystem.theme.ThemePreviews
-import com.london.presentation.R
 import com.london.presentation.feature.buildscreen.BuildScreen
 import com.london.presentation.feature.search.SearchCategory
 import com.london.presentation.shared.MediaLazyPagingGrid
@@ -87,7 +86,6 @@ private fun Content(
                 .padding(horizontal = 16.dp),
             onSaveClick = { /* TODO: Implement save functionality */ },
             isItemSaved = { false },
-            noMediaMessage = R.string.no_tv_shows_found,
         )
     }
 }

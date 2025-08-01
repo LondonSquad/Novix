@@ -1,6 +1,5 @@
 package com.london.presentation.shared
 
-import androidx.annotation.StringRes
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.PaddingValues
@@ -13,7 +12,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.paging.compose.LazyPagingItems
 import com.london.designsystem.component.HomeCard
-import com.london.presentation.R
 import com.london.presentation.utils.gridColmuns
 
 @Composable
@@ -25,9 +23,6 @@ fun <T : Any> MediaLazyPagingGrid(
     modifier: Modifier = Modifier,
     onSaveClick: (T) -> Unit = {},
     isItemSaved: (T) -> Boolean = { false },
-    @StringRes noMediaMessage: Int,
-    emptyImage: Int = R.drawable.img_no_result,
-    onRetry: () -> Unit = {}
 ) {
     LazyVerticalGrid(
         state = rememberLazyGridState(),

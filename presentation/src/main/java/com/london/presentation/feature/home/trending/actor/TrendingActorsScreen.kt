@@ -20,7 +20,6 @@ import androidx.paging.compose.collectAsLazyPagingItems
 import com.london.designsystem.component.ActorItem
 import com.london.designsystem.component.TopBar
 import com.london.designsystem.theme.NovixTheme
-import com.london.designsystem.utils.string
 import com.london.presentation.R
 import com.london.presentation.feature.buildscreen.BuildScreen
 import com.london.presentation.shared.LazyPagingColumn
@@ -88,12 +87,8 @@ private fun TrendingActorsContent(
         item {
 
             LazyPagingColumn(
-                emptyTitle = R.string.no_trending_actors_in_genre.string,
                 pagingItems = state.actorsFlow.collectAsLazyPagingItems(),
                 modifier = Modifier.fillMaxSize(),
-                onRetry = {
-                    contract.onRetry()
-                },
                 itemContent = { actor ->
                     ActorItem(
                         actorName = actor.name,
