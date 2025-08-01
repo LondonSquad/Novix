@@ -218,7 +218,6 @@ private fun Content(
             item(span = { GridItemSpan(maxLineSpan) }) {
                 TrendingSection(
                     isLoading = isLoading,
-                    modifier = Modifier.padding(top = 8.dp),
                     onMoviesClick = homeScreenContract::onTrendingMoviesCardClicked,
                     onTvShowsClick = homeScreenContract::onTrendingTvShowsCardClicked,
                     onActorsClick = homeScreenContract::onTrendingActorsCardClicked
@@ -247,7 +246,6 @@ private fun Content(
                     else CarousalShimmerEffect()
                 }
             }
-
 
             upComingSection(
                 contract = homeScreenContract,
