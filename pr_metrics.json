@@ -14935,11 +14935,15 @@
     "time_to_first_approval_minutes": 748.6333333333333,
     "required_approvals_met_at": "2025-08-01T05:01:36Z",
     "time_to_required_approvals_minutes": 751.1833333333333,
-    "closed_at": null,
-    "merged_at": null,
-    "merged_by": null,
+    "closed_at": "2025-08-01T05:02:05Z",
+    "merged_at": "2025-08-01T05:02:05Z",
+    "merged_by": {
+      "login": "ahmeddsamii",
+      "id": 154278495,
+      "url": "https://github.com/ahmeddsamii"
+    },
     "week": "2025-W31",
-    "status": "approved",
+    "status": "merged",
     "diff_stats": {
       "additions": 718,
       "deletions": 807,
