@@ -1,8 +1,10 @@
 package com.london.presentation.feature.login
 
+import android.app.Application
 import androidx.compose.ui.text.input.TextFieldValue
 import com.london.domain.usecase.login.LoginAsGuestUseCase
 import com.london.domain.usecase.login.LoginUseCase
+import com.london.presentation.R
 import com.london.presentation.feature.base.BaseViewModel
 import com.london.presentation.feature.base.ErrorState
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -10,6 +12,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class LoginViewModel @Inject constructor(
+    private val context: Application,
     private val loginUseCase: LoginUseCase,
     private val loginAsGuestUseCase: LoginAsGuestUseCase,
 ) : BaseViewModel<LoginUiState, LoginEffect>(LoginUiState()),
@@ -66,11 +69,11 @@ class LoginViewModel @Inject constructor(
                 if (isSuccess)
                     emitEffect(LoginEffect.NavigateToHome)
                 else
-                    updateState { copy(error = ErrorState.RequestFailed("Login failed. Please check your credentials.")) }
+                    updateState { copy(error = ErrorState.RequestFailed(context.getString(R.string.login_failed))) }
 
             },
             onError = {
-                updateState { copy(error = ErrorState.RequestFailed("Login failed. Please check your credentials.")) }
+                updateState { copy(error = ErrorState.RequestFailed(context.getString(R.string.login_failed))) }
             },
             onCompleted = {
                 updateState { copy(isLoading = false) }
@@ -86,11 +89,11 @@ class LoginViewModel @Inject constructor(
                 if (isSuccess) {
                     emitEffect(LoginEffect.NavigateToHome)
                 } else {
-                    updateState { copy(error = ErrorState.RequestFailed("Guest login failed.")) }
+                    updateState { copy(error = ErrorState.RequestFailed(context.getString(R.string.guest_login_failed))) }
                 }
             },
             onError = {
-                updateState { copy(error = ErrorState.RequestFailed("Guest login failed.")) }
+                updateState { copy(error = ErrorState.RequestFailed(context.getString(R.string.guest_login_failed))) }
             },
             onCompleted = {
                 updateState { copy(isGuestLoginLoading = false) }

@@ -1,5 +1,6 @@
 package com.london.presentation.shared
 
+import androidx.annotation.StringRes
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.PaddingValues
@@ -12,13 +13,13 @@ import androidx.compose.foundation.lazy.grid.rememberLazyGridState
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.paging.LoadState
 import androidx.paging.compose.LazyPagingItems
 import com.london.designsystem.component.CircularLoading
 import com.london.designsystem.component.EmptyLayout
 import com.london.designsystem.component.HomeCard
+import com.london.designsystem.utils.string
 import com.london.presentation.R
 import com.london.presentation.feature.buildscreen.NetworkErrorScreen
 import com.london.presentation.utils.gridColmuns
@@ -33,7 +34,7 @@ fun <T : Any> MediaLazyPagingGrid(
     modifier: Modifier = Modifier,
     onSaveClick: (T) -> Unit = {},
     isItemSaved: (T) -> Boolean = { false },
-    emptyTitle: String = stringResource(R.string.no_trending_movies_in_genre),
+    @StringRes noMediaMessage: Int,
     emptyImage: Int = R.drawable.img_no_result,
     onRetry: () -> Unit = {}
 ) {
@@ -49,7 +50,7 @@ fun <T : Any> MediaLazyPagingGrid(
         )
 
         pagingFlow.isLoading().not() && pagingFlow.itemCount == 0 -> EmptyLayout(
-            text = emptyTitle,
+            text = noMediaMessage.string,
             image = emptyImage,
             modifier = Modifier
                 .fillMaxSize()

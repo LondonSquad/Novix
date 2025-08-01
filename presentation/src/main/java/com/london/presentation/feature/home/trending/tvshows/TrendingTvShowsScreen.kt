@@ -15,6 +15,7 @@ import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.paging.compose.collectAsLazyPagingItems
 import com.london.designsystem.component.TopBar
@@ -23,7 +24,6 @@ import com.london.presentation.R
 import com.london.presentation.shared.GenresSection
 import com.london.presentation.shared.MediaLazyPagingGrid
 import com.london.presentation.utils.Listen
-import androidx.hilt.navigation.compose.hiltViewModel
 
 @Composable
 fun TrendingTvShowsScreen(
@@ -91,7 +91,8 @@ private fun TrendingTvShowsContent(
             isItemSaved = { false },
             onRetry = {
                 contract.onRetry()
-            }
+            },
+            noMediaMessage = R.string.no_trending_tvshows_in_genre
         )
     }
 }
