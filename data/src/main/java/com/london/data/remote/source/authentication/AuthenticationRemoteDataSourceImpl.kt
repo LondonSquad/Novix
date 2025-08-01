@@ -9,10 +9,9 @@ import com.london.data.remote.model.authentication.model.SessionResponse
 import com.london.data.remote.model.authentication.model.Token
 import com.london.data.remote.service.authentication.AuthenticationApiService
 import com.london.data.remote.source.base.BaseRemoteDatasource
-import org.koin.core.annotation.Single
+import javax.inject.Inject
 
-@Single
-class AuthenticationRemoteDataSourceImpl(
+class AuthenticationRemoteDataSourceImpl @Inject constructor(
     private val authApiService: AuthenticationApiService
 ) : AuthenticationRemoteDataSource, BaseRemoteDatasource {
 

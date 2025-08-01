@@ -1,12 +1,9 @@
 package com.london.domain.usecase
 
 import com.london.domain.repository.PopularRepository
-import org.koin.core.annotation.Provided
-import org.koin.core.annotation.Single
+import javax.inject.Inject
 
-@Single
-class GetPopularMovies(
-    @Provided
+class GetPopularMovies @Inject constructor(
     private val popularRepository: PopularRepository
 ) {
     suspend fun invoke(limit: Int = LIMIT) = popularRepository.getPopularMovies().take(limit)

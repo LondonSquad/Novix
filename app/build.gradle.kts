@@ -12,6 +12,7 @@ plugins {
     alias(libs.plugins.google.gms.google.services)
     alias(libs.plugins.google.firebase.crashlytics)
     alias(libs.plugins.kotlinx.kover)
+    alias(libs.plugins.hilt)
 }
 
 android {
@@ -34,7 +35,7 @@ android {
     }
 
     signingConfigs {
-        create("release"){
+        create("release") {
             keyAlias = getKey("keyAlias")
             keyPassword = getKey("keyPassword")
             storeFile = file(getKey("storeFile"))
@@ -103,10 +104,7 @@ dependencies {
     implementation(libs.bundles.koin)
     ksp(libs.bundles.room.ksp)
     implementation(libs.timber)
-}
 
-ksp {
-    arg("KOIN_CONFIG_CHECK", "true")
-    arg("KOIN_DEFAULT_MODULE", "false")
-    arg("KOIN_USE_COMPOSE_VIEWMODEL", "true")
+    ksp(libs.bundles.hilt.ksp)
+    implementation(libs.bundles.hilt.runtime)
 }

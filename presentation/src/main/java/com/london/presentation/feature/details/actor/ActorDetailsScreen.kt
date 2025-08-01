@@ -48,6 +48,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.zIndex
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.london.designsystem.component.CircularLoading
 import com.london.designsystem.component.HomeCard
@@ -69,6 +70,7 @@ import com.london.presentation.utils.offsetLayout
 import com.london.presentation.utils.toLocalizedNumbers
 import com.london.presentation.utils.trimExcessiveSpaces
 import org.koin.androidx.compose.koinViewModel
+import kotlinx.coroutines.delay
 
 @Composable
 fun ActorDetailsScreen(
@@ -78,7 +80,7 @@ fun ActorDetailsScreen(
     onNavigateToTvShowPicks: (Int) -> Unit,
     onNavigateToMovieScreen: (Int) -> Unit,
     onNavigateToTvShowScreen: (Int) -> Unit,
-    viewModel: ActorDetailsViewModel = koinViewModel(),
+    viewModel: ActorDetailsViewModel = hiltViewModel(),
 ) {
     val uiState by viewModel.state.collectAsStateWithLifecycle()
     val effect by viewModel.effect.collectAsState(null)

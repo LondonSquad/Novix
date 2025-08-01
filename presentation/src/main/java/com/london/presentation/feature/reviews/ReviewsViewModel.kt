@@ -3,14 +3,15 @@ package com.london.presentation.feature.reviews
 import androidx.lifecycle.SavedStateHandle
 import com.london.domain.usecase.reviews.GetMovieReviewsUseCase
 import com.london.domain.usecase.reviews.GetTvShowReviewsUseCase
-import com.london.presentation.navigation.Screen
-import com.london.presentation.navigation.getArgs
 import com.london.presentation.feature.base.BaseViewModel
 import com.london.presentation.feature.base.createPagingSourceFlow
-import org.koin.android.annotation.KoinViewModel
+import com.london.presentation.navigation.Screen
+import com.london.presentation.navigation.getArgs
+import dagger.hilt.android.lifecycle.HiltViewModel
+import javax.inject.Inject
 
-@KoinViewModel
-class ReviewsViewModel(
+@HiltViewModel
+class ReviewsViewModel @Inject constructor(
     private val getMovieReviewsUseCase: GetMovieReviewsUseCase,
     private val getTvShowReviewsUseCase: GetTvShowReviewsUseCase,
     savedStateHandle: SavedStateHandle

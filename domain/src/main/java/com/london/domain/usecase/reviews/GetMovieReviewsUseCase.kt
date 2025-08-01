@@ -1,12 +1,9 @@
 package com.london.domain.usecase.reviews
 
 import com.london.domain.repository.DetailsRepository
-import org.koin.core.annotation.Provided
-import org.koin.core.annotation.Single
+import javax.inject.Inject
 
-@Single
-class GetMovieReviewsUseCase(
-    @Provided
+class GetMovieReviewsUseCase @Inject constructor(
     private val detailsRepository: DetailsRepository
 ) {
     suspend fun invoke(movieId: Int, pageNumber: Int) =

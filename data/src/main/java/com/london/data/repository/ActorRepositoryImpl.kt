@@ -7,10 +7,9 @@ import com.london.domain.entity.actordetails.actorimage.ActorImageDetails
 import com.london.domain.entity.actordetails.actormovie.ActorMovieDetails
 import com.london.domain.entity.actordetails.actortvshow.ActorTvShowDetails
 import com.london.domain.repository.ActorRepository
-import org.koin.core.annotation.Single
+import javax.inject.Inject
 
-@Single
-class ActorRepositoryImpl(
+class ActorRepositoryImpl @Inject constructor(
     private val dataSource: ActorDetailsRemoteDataSource
 ) : ActorRepository {
     override suspend fun getActorDetailsById(id: Int): ActorDetails =

@@ -36,6 +36,7 @@ import androidx.compose.ui.draw.scale
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.london.designsystem.component.Icon
 import com.london.designsystem.component.NovixCarousalRow
@@ -49,10 +50,11 @@ import com.london.presentation.R
 import kotlinx.coroutines.CoroutineScope
 import org.koin.androidx.compose.koinViewModel
 
+
 @Composable
 fun OnboardingScreen(
     onComplete: () -> Unit,
-    viewModel: OnboardingViewModel = koinViewModel()
+    viewModel: OnboardingViewModel = hiltViewModel()
 ) {
     val scope = rememberCoroutineScope()
     val uiState by viewModel.state.collectAsStateWithLifecycle()
