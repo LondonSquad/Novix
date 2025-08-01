@@ -68,7 +68,6 @@ import com.london.presentation.shared.CustomBackDropImagePager
 import com.london.presentation.utils.Listen
 import com.london.presentation.utils.offsetLayout
 import com.london.presentation.utils.toLocalizedNumbers
-import com.london.presentation.utils.trimExcessiveSpaces
 import org.koin.androidx.compose.koinViewModel
 import kotlinx.coroutines.delay
 
@@ -231,7 +230,7 @@ private fun BiographySection(uiState: ActorDetailsUiState) {
         var isExpanded by remember { mutableStateOf(false) }
 
         ConditionalText(
-            text = uiState.actorBiography.trimExcessiveSpaces(),
+            text = uiState.actorBiography,
             expandedState = isExpanded,
             modifier = Modifier.padding(horizontal = 16.dp, vertical = 4.dp)
         ) {
