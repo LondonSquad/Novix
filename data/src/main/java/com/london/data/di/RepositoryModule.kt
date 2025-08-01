@@ -12,6 +12,7 @@ import com.london.data.local.preference.AuthPreferences
 import com.london.data.local.source.LocalDataSource
 import com.london.data.local.source.recent.RecentDataSource
 import com.london.data.local.source.recent.watched.RecentWatchedDataSource
+import com.london.data.remote.service.home.TrendingApiService
 import com.london.data.remote.source.authentication.AuthenticationRemoteDataSource
 import com.london.data.remote.source.details.actor.ActorDetailsRemoteDataSource
 import com.london.data.remote.source.details.movie.MovieDetailsRemoteDataSource
@@ -20,6 +21,7 @@ import com.london.data.remote.source.details.videoprovider.movie.MovieVideoProvi
 import com.london.data.remote.source.details.videoprovider.tvshow.TvShowVideoProviderRemote
 import com.london.data.remote.source.home.popular.PopularRemoteDataSource
 import com.london.data.remote.source.home.trending.TrendingRemoteDataSource
+import com.london.data.remote.source.home.trending.TrendingRemoteDataSourceImpl
 import com.london.data.remote.source.reviews.ReviewsRemoteDataSource
 import com.london.data.remote.source.search.SearchRemoteDataSource
 import com.london.data.remote.source.toprated.movie.TopRatedMovieRemoteDataSource
@@ -114,6 +116,13 @@ object RepositoryModule {
         dataSource: TopRatedTvRemoteDataSource
     ): TopRatedTvSeriesRepository =
         TopRatedTvSeriesRepositoryImpl(topRatedTvRemoteDataSource = dataSource)
+
+    @Provides
+    @Singleton
+    fun provideTrendingRemoteDataSource(
+        trendingApiService: TrendingApiService
+    ): TrendingRemoteDataSource =
+        TrendingRemoteDataSourceImpl(trendingApiService = trendingApiService)
 
     @Provides
     @Singleton

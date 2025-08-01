@@ -41,11 +41,11 @@ roomRuntime = "2.7.2"
 datastorePreferences = "1.1.7"
 datastoreCore = "1.1.7"
 
-# Dependency Injection (Koin)
-koin = "4.1.0"
-koinAndroidxCompose = "4.1.0"
-koinAnnotations = "2.1.0"
-koinKspCompiler = "2.1.0"
+## Dependency Injection (Koin)
+#koin = "4.1.0"
+#koinAndroidxCompose = "4.1.0"
+#koinAnnotations = "2.1.0"
+#koinKspCompiler = "2.1.0"
 
 
 # Coroutines & Date/Time
@@ -123,12 +123,12 @@ dagger-compiler = { module = "com.google.dagger:dagger-compiler", version.ref = 
 firebase-bom = { module = "com.google.firebase:firebase-bom", version.ref = "firebaseBom" }
 firebase-ml-modeldownloader = { module = "com.google.firebase:firebase-ml-modeldownloader", version.ref = "firebaseMlModeldownloader" }
 gson = { module = "com.google.code.gson:gson", version.ref = "gson" }
-koin-android = { group = "io.insert-koin", name = "koin-android", version.ref = "koin" }
-koin-core = { group = "io.insert-koin", name = "koin-core", version.ref = "koin" }
-koin-androidx-compose = { group = "io.insert-koin", name = "koin-androidx-compose", version.ref = "koinAndroidxCompose" }
-koin-androidx-navigation = { module = "io.insert-koin:koin-androidx-navigation", version.ref = "koin" }
-koin-annotations = { group = "io.insert-koin", name = "koin-annotations", version.ref = "koinAnnotations" }
-koin-ksp-compiler = { group = "io.insert-koin", name = "koin-ksp-compiler", version.ref = "koinKspCompiler" }
+#koin-android = { group = "io.insert-koin", name = "koin-android", version.ref = "koin" }
+#koin-core = { group = "io.insert-koin", name = "koin-core", version.ref = "koin" }
+#koin-androidx-compose = { group = "io.insert-koin", name = "koin-androidx-compose", version.ref = "koinAndroidxCompose" }
+#koin-androidx-navigation = { module = "io.insert-koin:koin-androidx-navigation", version.ref = "koin" }
+#koin-annotations = { group = "io.insert-koin", name = "koin-annotations", version.ref = "koinAnnotations" }
+#koin-ksp-compiler = { group = "io.insert-koin", name = "koin-ksp-compiler", version.ref = "koinKspCompiler" }
 
 # Coroutines & Date/Time
 kotlinx-coroutines-android = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-android", version.ref = "kotlinxCoroutinesAndroid" }
@@ -212,16 +212,16 @@ compose-debug = [
     "androidx-ui-test-manifest"
 ]
 
-koin = [
-    "koin-core",
-    "koin-android",
-    "koin-annotations",
-    "koin-androidx-compose",
-]
-
-koin-ksp = [
-    "koin-ksp-compiler"
-]
+#koin = [
+#    "koin-core",
+#    "koin-android",
+#    "koin-annotations",
+#    "koin-androidx-compose",
+#]
+#
+#koin-ksp = [
+#    "koin-ksp-compiler"
+#]
 
 datastore = [
     "androidx-datastore-preferences",

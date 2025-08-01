@@ -12,7 +12,7 @@
 -keep class * extends androidx.lifecycle.ViewModel { *; }
 
 # Keep Koin generated
--keep class org.koin.ksp.generated.** { *; }
+#-keep class org.koin.ksp.generated.** { *; }
 
 # Ignore missing classes that are safe to ignore
 -dontwarn java.lang.management.**
