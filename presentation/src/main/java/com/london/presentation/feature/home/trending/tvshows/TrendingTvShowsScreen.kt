@@ -23,13 +23,13 @@ import com.london.presentation.R
 import com.london.presentation.shared.GenresSection
 import com.london.presentation.shared.MediaLazyPagingGrid
 import com.london.presentation.utils.Listen
-import org.koin.androidx.compose.koinViewModel
+import androidx.hilt.navigation.compose.hiltViewModel
 
 @Composable
 fun TrendingTvShowsScreen(
     onNavigateTvShow: (Int) -> Unit,
     onNavigateBack: () -> Unit,
-    viewModel: TrendingTvShowsViewModel = koinViewModel()
+    viewModel: TrendingTvShowsViewModel = hiltViewModel()
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
     val effect by viewModel.effect.collectAsState(null)
