@@ -21,12 +21,7 @@ kotlin {
 
 dependencies {
     api(libs.bundles.coroutines)
-    api(libs.koin.annotations)
-    ksp(libs.koin.ksp.compiler)
     testImplementation(libs.bundles.testing)
-    api(libs.koin.core)
-    ksp(libs.bundles.koin.ksp)
-
     implementation(libs.bundles.dagger.runtime)
     kapt(libs.bundles.dagger.kapt)
 

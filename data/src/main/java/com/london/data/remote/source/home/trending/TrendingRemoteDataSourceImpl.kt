@@ -4,9 +4,9 @@ import com.london.data.remote.model.ApiResponse
 import com.london.data.remote.model.home.model.trending.TrendingResponse
 import com.london.data.remote.service.home.TrendingApiService
 import com.london.data.remote.source.base.BaseRemoteDatasource
-import org.koin.core.annotation.Single
+import javax.inject.Singleton
 
-@Single
+@Singleton
 class TrendingRemoteDataSourceImpl(
     private val trendingApiService: TrendingApiService
 ) : TrendingRemoteDataSource, BaseRemoteDatasource {

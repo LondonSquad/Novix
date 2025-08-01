@@ -11,11 +11,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.london.presentation.utils.Listen
-import org.koin.androidx.compose.koinViewModel
+import androidx.hilt.navigation.compose.hiltViewModel
 
 @Composable
 fun WebViewRegistrationScreen(
-    viewModel: WebViewRegistrationViewModel = koinViewModel(),
+    viewModel: WebViewRegistrationViewModel = hiltViewModel(),
     onNavigateBack: () -> Unit,
     onRegistrationComplete: () -> Unit
 ) {
