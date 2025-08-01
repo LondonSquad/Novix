@@ -5,13 +5,14 @@ import com.london.domain.usecase.GetActorDetailsByIdUseCase
 import com.london.domain.usecase.GetActorImagesByIdUseCase
 import com.london.domain.usecase.GetActorMoviePicksByIdUseCase
 import com.london.domain.usecase.GetActorTvShowPicksByIdUseCase
+import com.london.presentation.feature.base.BaseViewModel
 import com.london.presentation.navigation.Screen
 import com.london.presentation.navigation.getArgs
-import com.london.presentation.feature.base.BaseViewModel
-import org.koin.android.annotation.KoinViewModel
+import dagger.hilt.android.lifecycle.HiltViewModel
+import javax.inject.Inject
 
-@KoinViewModel
-class ActorDetailsViewModel(
+@HiltViewModel
+class ActorDetailsViewModel @Inject constructor(
     private val getActorDetailsByIdUseCase: GetActorDetailsByIdUseCase,
     private val getActorImagesByIdUseCase: GetActorImagesByIdUseCase,
     private val getActorMoviePicksByIdUseCase: GetActorMoviePicksByIdUseCase,
@@ -113,6 +114,14 @@ class ActorDetailsViewModel(
             onCompleted = { updateState { copy(isLoading = false) } },
             checkSuccess = { actorId != null },
         )
+    }
+
+    override fun onRetry() {
+        updateState { copy(error = null, movieError = false, tvShowError = false) }
+        getActorImage()
+        getActorDetails()
+        getActorMovieDetails()
+        getActorTvShowDetails()
     }
 
     override fun onNavigateBack() {

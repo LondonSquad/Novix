@@ -4,10 +4,9 @@ import com.london.data.remote.model.ApiResponse
 import com.london.data.remote.model.reviews.model.ReviewResponse
 import com.london.data.remote.service.reviews.ReviewsApiService
 import com.london.data.remote.source.base.BaseRemoteDatasource
-import org.koin.core.annotation.Single
+import javax.inject.Inject
 
-@Single
-class ReviewsRemoteDataSourceImpl(
+class ReviewsRemoteDataSourceImpl @Inject constructor(
     private val reviewsApiService: ReviewsApiService
 ) : ReviewsRemoteDataSource, BaseRemoteDatasource {
 

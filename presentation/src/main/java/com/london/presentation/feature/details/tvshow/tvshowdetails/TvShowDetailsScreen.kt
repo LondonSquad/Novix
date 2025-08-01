@@ -47,12 +47,12 @@ import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.london.designsystem.R
 import com.london.designsystem.component.ActorItem
 import com.london.designsystem.component.CircularLoading
 import com.london.designsystem.component.Icon
-import com.london.designsystem.component.ImageView
 import com.london.designsystem.component.NovixChip
 import com.london.designsystem.component.Text
 import com.london.designsystem.component.TopBar
@@ -62,6 +62,7 @@ import com.london.designsystem.theme.NovixTheme
 import com.london.designsystem.theme.noRippleClickable
 import com.london.domain.entity.tvshowdetails.TvShowCastMemberEntity
 import com.london.domain.entity.tvshowdetails.episode.TvShowEpisodeBySeasonEntity
+import com.london.imageharamblur.ui.ImageViewFilter
 import com.london.presentation.feature.buildscreen.BuildScreen
 import com.london.presentation.feature.reviews.MediaType
 import com.london.presentation.shared.ConditionalText
@@ -75,11 +76,10 @@ import com.london.presentation.utils.offsetLayout
 import com.london.presentation.utils.openUrl
 import com.london.presentation.utils.reverseDateFormat
 import com.london.presentation.utils.toLocalizedNumbers
-import org.koin.androidx.compose.koinViewModel
 
 @Composable
 fun TvShowsDetailsScreen(
-    viewModel: TvShowDetailsViewModel = koinViewModel(),
+    viewModel: TvShowDetailsViewModel = hiltViewModel(),
     onNavigateBack: () -> Unit = {},
     onNavigateToEpisodeDetails: (tvShowId: Int, episodeNumber: Int, seasonNumber: Int) -> Unit,
     onNavigateToReviews: (tvShowId: Int, mediaType: Int) -> Unit,
@@ -540,7 +540,7 @@ fun CastSection(
 fun SeasonEpisodesDetails(
     modifier: Modifier = Modifier,
     uiState: TvShowDetailsUiState,
-    viewModel: TvShowDetailsViewModel = koinViewModel()
+    viewModel: TvShowDetailsViewModel = hiltViewModel()
 ) {
     var selectedSeasonIndex by rememberSaveable { mutableIntStateOf(0) }
 
@@ -563,6 +563,42 @@ fun SeasonEpisodesDetails(
 }
 
 @Composable
+fun EpisodeRow(
+    modifier: Modifier = Modifier,
+    uiState: TvShowDetailsUiState,
+    viewModel: TvShowDetailsViewModel = hiltViewModel()
+) {
+    Column(modifier = modifier) {
+        Text(
+            text = "${
+                uiState.tvShowEpisodeCountBySeason?.episodes?.size.toString().toLocalizedNumbers()
+            } ${stringResource(R.string.episodes)}",
+            style = NovixTheme.typography.label.small,
+            color = NovixTheme.colors.hint,
+            modifier = Modifier.padding(top = 8.dp, bottom = 12.dp)
+        )
+
+        LazyColumn(
+            modifier = Modifier.heightIn(max = 400.dp),
+            verticalArrangement = Arrangement.spacedBy(8.dp)
+        ) {
+            items(uiState.tvShowEpisodes) { episode ->
+                EpisodeItem(
+                    episode = episode,
+                    onEpisodeClick = {
+                        viewModel.onEpisodeClick(
+                            episode.showId,
+                            episode.episodeNumber,
+                            episode.seasonNumber,
+                        )
+                    }
+                )
+            }
+        }
+    }
+}
+
+@Composable
 private fun EpisodeItem(
     episode: TvShowEpisodeBySeasonEntity,
     onEpisodeClick: () -> Unit,
@@ -575,7 +611,7 @@ private fun EpisodeItem(
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.spacedBy(12.dp)
     ) {
-        ImageView(
+        ImageViewFilter(
             model = episode.stillUrl,
             contentDescription = stringResource(R.string.s),
             contentScale = ContentScale.FillBounds,

@@ -7,16 +7,17 @@ plugins {
     alias(libs.plugins.ksp)
     alias(libs.plugins.kotlinx.kover)
     alias(libs.plugins.kotlin.serialization)
+    alias(libs.plugins.hilt)
 }
 
 android {
-    namespace =  AppConfig.Namespace.PRESENTATION
+    namespace = AppConfig.Namespace.PRESENTATION
     compileSdk = AppConfig.Version.COMPILE_SDK
 
     defaultConfig {
         minSdk = AppConfig.Version.MIN_SDK
 
-        testInstrumentationRunner =  AppConfig.ANDROID_TEST_INSTRUMENTATION
+        testInstrumentationRunner = AppConfig.ANDROID_TEST_INSTRUMENTATION
         consumerProguardFiles("consumer-rules.pro")
     }
 
@@ -44,14 +45,12 @@ dependencies {
     implementation(libs.bundles.compose)
     implementation(libs.bundles.base.ui)
     implementation(libs.bundles.coroutines)
-    implementation(libs.bundles.koin)
 
     // paging 3
     implementation(libs.androidx.paging.runtime)
     implementation(libs.androidx.paging.compose)
     testImplementation(libs.androidx.paging.common)
 
-    ksp(libs.bundles.koin.ksp)
     testImplementation(libs.bundles.testing)
     androidTestImplementation(libs.bundles.android.testing)
     implementation(libs.firebase.crashlytics)
@@ -62,10 +61,7 @@ dependencies {
     implementation(libs.timber)
 
     implementation(libs.remember.preference)
-}
 
-ksp {
-    arg("KOIN_CONFIG_CHECK", "true")
-    arg("KOIN_DEFAULT_MODULE", "false")
-    arg("KOIN_USE_COMPOSE_VIEWMODEL", "true")
+    ksp(libs.bundles.hilt.ksp)
+    implementation(libs.bundles.hilt.runtime)
 }

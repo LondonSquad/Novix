@@ -17,7 +17,14 @@ import com.london.data.remote.service.reviews.ReviewsApiService
 import com.london.data.remote.service.search.SearchApiService
 import com.london.data.remote.service.toprated.TopRatedMovieApiService
 import com.london.data.remote.service.toprated.TopRatedTvSeriesApiService
+import com.london.data.utils.CrashReporter
+import com.london.data.utils.FirebaseCrashReporter
 import com.london.domain.repository.SessionTokenProvider
+import dagger.Module
+import dagger.Provides
+import dagger.hilt.InstallIn
+import dagger.hilt.android.qualifiers.ApplicationContext
+import dagger.hilt.components.SingletonComponent
 import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.json.Json
 import okhttp3.Cache
@@ -25,143 +32,138 @@ import okhttp3.Interceptor
 import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
-import org.koin.core.annotation.Module
-import org.koin.core.annotation.Single
 import retrofit2.Retrofit
 import java.io.File
 import java.util.concurrent.TimeUnit
+import javax.inject.Singleton
 
 @OptIn(ExperimentalSerializationApi::class)
 @Module
-class NetworkModule {
+@InstallIn(SingletonComponent::class)
+object NetworkModule {
 
-    @Single
-    fun provideJson(): Json {
-        return Json {
-            ignoreUnknownKeys = true
-            isLenient = true
-            prettyPrint = BuildConfig.DEBUG
-            encodeDefaults = true
-        }
+    @Provides
+    @Singleton
+    fun provideJson(): Json = Json {
+        ignoreUnknownKeys = true
+        isLenient = true
+        prettyPrint = BuildConfig.DEBUG
+        encodeDefaults = true
     }
 
-    @Single
-    fun provideHttpLoggingInterceptor(): HttpLoggingInterceptor {
-        return HttpLoggingInterceptor {
-        }.apply {
-            level = if (BuildConfig.DEBUG) {
-                HttpLoggingInterceptor.Level.BODY
-            } else {
-                HttpLoggingInterceptor.Level.NONE
-            }
-        }
+    @Provides
+    @Singleton
+    fun provideHttpLoggingInterceptor(): HttpLoggingInterceptor = HttpLoggingInterceptor().apply {
+        level = if (BuildConfig.DEBUG) HttpLoggingInterceptor.Level.BODY
+        else HttpLoggingInterceptor.Level.NONE
     }
 
-    @Single
-    fun provideApiInterceptor(context: Context): Interceptor {
-        return Interceptor { chain ->
-            val originalRequest = chain.request()
-            val originalUrl = originalRequest.url
-
+    @Provides
+    @Singleton
+    fun provideApiInterceptor(@ApplicationContext context: Context): Interceptor =
+        Interceptor { chain ->
+            val original = chain.request()
             val deviceLanguage = DeviceConfigurationDataSource(context).getCurrentLanguage()
 
-            val urlBuilder = originalUrl.newBuilder()
+            val newUrl = original.url.newBuilder()
                 .addQueryParameter("api_key", BuildConfig.API_KEY)
+                .apply {
+                    if (!original.url.encodedPath.endsWith("/images")) {
+                        addQueryParameter("language", deviceLanguage)
+                    }
+                }.build()
 
-            if (!originalUrl.encodedPath.endsWith("/images")) {
-                urlBuilder.addQueryParameter("language", deviceLanguage)
-            }
-
-            val newRequest = originalRequest.newBuilder()
-                .url(urlBuilder.build())
-                .build()
-
+            val newRequest = original.newBuilder().url(newUrl).build()
             chain.proceed(newRequest)
         }
-    }
 
-    @Single
+    @Provides
+    @Singleton
     fun provideOkHttpClient(
-        loggingInterceptor: HttpLoggingInterceptor,
-        apiInterceptor: Interceptor,
-        authInterceptor: AuthInterceptor,
-        context: Context
-    ): OkHttpClient {
-        val cacheSize = 10L * 1024 * 1024
-        val cache = Cache(
-            directory = File(context.cacheDir, "http_cache"),
-            maxSize = cacheSize
-        )
-        return OkHttpClient.Builder()
-            .addInterceptor(apiInterceptor)
-            .addInterceptor(authInterceptor)
-            .addInterceptor(loggingInterceptor)
-            .cache(cache)
-            .connectTimeout(30, TimeUnit.SECONDS)
-            .readTimeout(30, TimeUnit.SECONDS)
-            .writeTimeout(30, TimeUnit.SECONDS)
-            .build()
-    }
+        logging: HttpLoggingInterceptor,
+        api: Interceptor,
+        auth: AuthInterceptor,
+        @ApplicationContext context: Context
+    ): OkHttpClient = OkHttpClient.Builder()
+        .addInterceptor(api)
+        .addInterceptor(auth)
+        .addInterceptor(logging)
+        .cache(Cache(File(context.cacheDir, "http_cache"), 10L * 1024 * 1024))
+        .connectTimeout(30, TimeUnit.SECONDS)
+        .readTimeout(30, TimeUnit.SECONDS)
+        .writeTimeout(30, TimeUnit.SECONDS)
+        .build()
 
-    @Single
-    fun provideRetrofit(okHttpClient: OkHttpClient, json: Json): Retrofit {
-        return Retrofit.Builder()
+    @Provides
+    @Singleton
+    fun provideRetrofit(okHttpClient: OkHttpClient, json: Json): Retrofit =
+        Retrofit.Builder()
             .baseUrl(BuildConfig.BASE_URL)
             .client(okHttpClient)
-            .addConverterFactory(
-                json.asConverterFactory(contentType = "application/json".toMediaType())
-            )
+            .addConverterFactory(json.asConverterFactory("application/json".toMediaType()))
             .build()
-    }
 
-    @Single
-    fun provideSearchApiService(retrofit: Retrofit): SearchApiService {
-        return retrofit.create(SearchApiService::class.java)
-    }
-    @Single
-    fun provideMovieDetailsApiService(retrofit: Retrofit): MovieDetailsApiService =
-        retrofit.create(MovieDetailsApiService::class.java)
 
-    @Single
-    fun provideTvShowDetailsApiService(retrofit: Retrofit): TvShowDetailsApiService =
-        retrofit.create(TvShowDetailsApiService::class.java)
-
-    @Single
+    @Provides
+    @Singleton
     fun provideActorDetailsApiService(retrofit: Retrofit): ActorDetailsApiService =
         retrofit.create(ActorDetailsApiService::class.java)
 
-    @Single
+    @Provides
+    @Singleton
+    fun provideMovieDetailsApiService(retrofit: Retrofit): MovieDetailsApiService =
+        retrofit.create(MovieDetailsApiService::class.java)
+
+    @Provides
+    @Singleton
+    fun provideTvShowDetailsApiService(retrofit: Retrofit): TvShowDetailsApiService =
+        retrofit.create(TvShowDetailsApiService::class.java)
+
+    @Provides
+    @Singleton
+    fun provideSearchApiService(retrofit: Retrofit): SearchApiService =
+        retrofit.create(SearchApiService::class.java)
+
+    @Provides
+    @Singleton
     fun provideReviewsApiService(retrofit: Retrofit): ReviewsApiService =
         retrofit.create(ReviewsApiService::class.java)
 
-    @Single
-    fun providePopularMoviesApiService(retrofit: Retrofit): PopularApiService =
-        retrofit.create(PopularApiService::class.java)
-    @Single
-    fun provideSessionTokenProvider(authPreferences: AuthPreferences): SessionTokenProvider {
-        return SharedPrefsTokenProvider(authPreferences)
-    }
-
-    @Single
-    fun provideAuthPreferences(context: Context): AuthPreferences {
-        return AuthPreferences(context.getSharedPreferences("auth", Context.MODE_PRIVATE))
-    }
-
-    @Single
-    fun provideAuthApi(retrofit: Retrofit): AuthenticationApiService {
-        return retrofit.create(AuthenticationApiService::class.java)
-    }
-
-    @Single
-    fun provideTopRatedMovieApi(retrofit: Retrofit): TopRatedMovieApiService =
-        retrofit.create(TopRatedMovieApiService::class.java)
-
-    @Single
-    fun provideTopRatedTvShowApi(retrofit: Retrofit): TopRatedTvSeriesApiService =
-        retrofit.create(TopRatedTvSeriesApiService::class.java)
-
-    @Single
+    @Provides
+    @Singleton
     fun provideTrendingApiService(retrofit: Retrofit): TrendingApiService =
         retrofit.create(TrendingApiService::class.java)
 
+    @Provides
+    @Singleton
+    fun providePopularApiService(retrofit: Retrofit): PopularApiService =
+        retrofit.create(PopularApiService::class.java)
+
+    @Provides
+    @Singleton
+    fun provideTopRatedMovieApiService(retrofit: Retrofit): TopRatedMovieApiService =
+        retrofit.create(TopRatedMovieApiService::class.java)
+
+    @Provides
+    @Singleton
+    fun provideTopRatedTvShowApiService(retrofit: Retrofit): TopRatedTvSeriesApiService =
+        retrofit.create(TopRatedTvSeriesApiService::class.java)
+
+    @Provides
+    @Singleton
+    fun provideAuthApiService(retrofit: Retrofit): AuthenticationApiService =
+        retrofit.create(AuthenticationApiService::class.java)
+@Provides
+    @Singleton
+    fun provideAuthPreferences(@ApplicationContext context: Context): AuthPreferences =
+        AuthPreferences(context.getSharedPreferences("auth", Context.MODE_PRIVATE))
+
+    @Provides
+    @Singleton
+    fun provideSessionTokenProvider(authPreferences: AuthPreferences): SessionTokenProvider =
+        SharedPrefsTokenProvider(authPreferences = authPreferences)
+
+    @Provides
+    @Singleton
+    fun provideCrashReporter(): CrashReporter = FirebaseCrashReporter()
 }

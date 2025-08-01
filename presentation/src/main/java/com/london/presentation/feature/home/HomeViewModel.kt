@@ -14,15 +14,16 @@ import com.london.domain.usecase.toprated.GetTopRatedTvSeriesUseCase
 import com.london.presentation.feature.base.BaseViewModel
 import com.london.presentation.feature.base.createPagingSourceFlow
 import com.london.presentation.utils.MovieGenre
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
-import org.koin.android.annotation.KoinViewModel
+import javax.inject.Inject
 
-@KoinViewModel
-class HomeViewModel(
+@HiltViewModel
+class HomeViewModel @Inject constructor(
     private val getPopularMovies: GetPopularMovies,
     private val getPopularTvShows: GetPopularTvShow,
     private val getUpcomingMoviesByCategoryUseCase: GetUpComingMoviesByCategoryUseCase,
@@ -36,8 +37,7 @@ class HomeViewModel(
     private var upcomingJob: Job? = null
 
     init {
-        initializePopularMovies()
-        initializePopularTvShows()
+        initializePopularMedia()
         initializeTopRatedMedia()
         updateState {
             copy(upcomingMovies = _upcomingMoviesFlow)
@@ -58,7 +58,7 @@ class HomeViewModel(
                         shows.items.take(10).toUiMedia()
 
                 updateState {
-                    copy(topRatedUiMediaList = topRatedMedia.shuffled())
+                    copy(topRatedMediaList = topRatedMedia.shuffled())
                 }
             },
             onError = { errorState -> updateState { copy(error = errorState) } },
@@ -90,29 +90,27 @@ class HomeViewModel(
         )
     }
 
-    private fun initializePopularTvShows() {
+    private fun initializePopularMedia() {
         tryToExecute(
-            block = { getPopularTvShows.invoke() },
-            onStart = { updateState { copy(isLoading = true) } },
-            onSuccess = { popularTvShows ->
-                updateState { copy(popularTvShows = popularTvShows) }
+            block = {
+                val movies = getPopularMovies.invoke()
+                val shows = getPopularTvShows.invoke()
+                Pair(movies, shows)
             },
-            onError = { errorState -> updateState { copy(error = errorState) } },
-            onCompleted = { updateState { copy(isLoading = false) } },
-            checkSuccess = { it.isNotEmpty() },
-        )
-    }
+            onStart = { updateState { copy(isTopRatedLoading = true) } },
+            onSuccess = { (movies, shows) ->
+                val popularMedia = movies.toPopularUiMedia() +
+                        shows.toPopularUiMedia()
 
-    private fun initializePopularMovies() {
-        tryToExecute(
-            block = { getPopularMovies.invoke() },
-            onStart = { updateState { copy(isLoading = true) } },
-            onSuccess = { popularMovies ->
-                updateState { copy(popularMovies = popularMovies) }
+                updateState {
+                    copy(popularMediaList = popularMedia)
+                }
             },
             onError = { errorState -> updateState { copy(error = errorState) } },
-            onCompleted = { updateState { copy(isLoading = false) } },
-            checkSuccess = { it.isNotEmpty() },
+            onCompleted = { updateState { copy(isTopRatedLoading = false) } },
+            checkSuccess = { (movies, shows) ->
+                movies.isNotEmpty() || shows.isNotEmpty()
+            }
         )
     }
 

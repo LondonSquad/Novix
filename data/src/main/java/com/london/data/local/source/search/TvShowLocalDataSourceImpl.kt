@@ -13,14 +13,9 @@ import com.london.data.local.utils.executeUpdate
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import org.koin.core.annotation.Named
-import org.koin.core.annotation.Provided
-import org.koin.core.annotation.Single
+import javax.inject.Inject
 
-@Named("tvShowLocalDataSource")
-@Single
-class TvShowLocalDataSourceImpl(
-    @Provided
+class TvShowLocalDataSourceImpl @Inject constructor(
     private val searchTvShowDao: SearchTvShowDao
 ) : LocalDataSource<SearchTvShowLocal> {
     init {

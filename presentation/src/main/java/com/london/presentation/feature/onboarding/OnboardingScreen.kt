@@ -19,6 +19,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.systemBarsPadding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.pager.HorizontalPager
+import androidx.compose.foundation.pager.PagerState
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
@@ -35,6 +36,7 @@ import androidx.compose.ui.draw.scale
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.london.designsystem.component.Icon
 import com.london.designsystem.component.NovixCarousalRow
@@ -45,12 +47,12 @@ import com.london.designsystem.theme.NovixTheme
 import com.london.designsystem.theme.ThemePreviews
 import com.london.designsystem.utils.painter
 import com.london.presentation.R
-import org.koin.androidx.compose.koinViewModel
+import kotlinx.coroutines.CoroutineScope
 
 @Composable
 fun OnboardingScreen(
     onComplete: () -> Unit,
-    viewModel: OnboardingViewModel = koinViewModel()
+    viewModel: OnboardingViewModel = hiltViewModel()
 ) {
     val scope = rememberCoroutineScope()
     val uiState by viewModel.state.collectAsStateWithLifecycle()
@@ -60,30 +62,8 @@ fun OnboardingScreen(
         initialPage = uiState.currentPage
     )
 
-    LaunchedEffect(pagerState.currentPage) {
-        viewModel.onPageChanged(pagerState.currentPage)
-    }
-
-    LaunchedEffect(effect) {
-        when (val currentEffect = effect) {
-            is OnboardingEffect.ScrollToPage -> {
-                viewModel.scrollToPage(pagerState, currentEffect.page, scope)
-            }
-
-            OnboardingEffect.NavigateToWelcome -> {
-                viewModel.onboardingFinished()
-                onComplete()
-            }
-
-            else -> {}
-        }
-    }
-
-    val scrollState = rememberScrollState()
-
-    LaunchedEffect(pagerState.currentPage) {
-        scrollState.animateScrollTo(0)
-    }
+    HandlePagerStateChanges(pagerState, viewModel)
+    HandleEffects(effect, viewModel, pagerState, scope, onComplete)
 
     Box(
         modifier = Modifier
@@ -91,64 +71,138 @@ fun OnboardingScreen(
             .background(NovixTheme.colors.surface)
             .systemBarsPadding()
     ) {
+        OnboardingContent(
+            pagerState = pagerState,
+            uiState = uiState,
+            viewModel = viewModel,
+            scope = scope
+        )
 
-        Column(
-            modifier = Modifier.fillMaxSize()
-        ) {
-            HorizontalPager(
-                state = pagerState,
-                modifier = Modifier.weight(1f).verticalScroll(scrollState)
+        SkipButton(
+            visible = !uiState.isLastPage,
+            onClick = viewModel::navigateToWelcome
+        )
+    }
+}
 
-            ) { page ->
-                OnboardingPageContent(uiState.pages[page])
+@Composable
+private fun HandlePagerStateChanges(
+    pagerState: PagerState,
+    viewModel: OnboardingViewModel
+) {
+    LaunchedEffect(pagerState.currentPage) {
+        viewModel.onPageChanged(pagerState.currentPage)
+    }
+}
+
+
+@Composable
+private fun HandleEffects(
+    effect: OnboardingEffect?,
+    viewModel: OnboardingViewModel,
+    pagerState: PagerState,
+    scope: CoroutineScope,
+    onComplete: () -> Unit
+) {
+    LaunchedEffect(effect) {
+        when (effect) {
+            is OnboardingEffect.ScrollToPage -> {
+                viewModel.scrollToPage(pagerState, effect.page, scope)
             }
 
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = 16.dp, vertical = 16.dp),
-                horizontalArrangement = Arrangement.SpaceBetween,
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                NovixCarousalRow(
-                    dotsStates = List(uiState.pages.size) { index -> index == pagerState.currentPage },
-                )
-
-                OnboardingNavigationButtons(
-                    isFirstPage = uiState.isFirstPage,
-                    onPrevious = {
-                        viewModel.scrollPrevious(pagerState, scope)
-                    },
-                    onNext = {
-                        viewModel.scrollNext(pagerState, scope)
-                    }
-
-                )
+            OnboardingEffect.NavigateToWelcome -> {
+                viewModel.onboardingFinished()
+                onComplete()
             }
-        }
-        AnimatedVisibility(!uiState.isLastPage) {
-            Text(
-                modifier = Modifier
-                    .align(Alignment.TopStart)
-                    .padding(16.dp)
-                    .clickable {
-                        viewModel.navigateToWelcome()
-                    },
-                text = stringResource(R.string.skip),
-                style = NovixTheme.typography.label.medium,
-                color = NovixTheme.colors.primary
-            )
+
+            null -> {}
         }
     }
 }
 
+@Composable
+private fun OnboardingContent(
+    pagerState: PagerState,
+    uiState: OnboardingUiState,
+    viewModel: OnboardingViewModel,
+    scope: CoroutineScope
+) {
+    Column(modifier = Modifier.fillMaxSize()) {
+        HorizontalPager(
+            state = pagerState,
+            modifier = Modifier.weight(1f)
+        ) { page ->
+            Column(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .verticalScroll(rememberScrollState())
+            ) {
+                Spacer(Modifier.weight(1f))
+                OnboardingPageContent(uiState.pages[page])
+                Spacer(Modifier.weight(1f))
+            }
+        }
+
+        BottomNavigation(
+            pagesCount = uiState.pages.size,
+            currentPage = pagerState.currentPage,
+            isFirstPage = uiState.isFirstPage,
+            onPrevious = { viewModel.scrollPrevious(pagerState, scope) },
+            onNext = { viewModel.scrollNext(pagerState, scope) }
+        )
+    }
+}
+
+@Composable
+private fun BottomNavigation(
+    pagesCount: Int,
+    currentPage: Int,
+    isFirstPage: Boolean,
+    onPrevious: () -> Unit,
+    onNext: () -> Unit
+) {
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(horizontal = 16.dp, vertical = 16.dp),
+        horizontalArrangement = Arrangement.SpaceBetween,
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        NovixCarousalRow(
+            dotsStates = List(pagesCount) { index -> index == currentPage }
+        )
+
+        OnboardingNavigationButtons(
+            isFirstPage = isFirstPage,
+            onPrevious = onPrevious,
+            onNext = onNext
+        )
+    }
+}
+
+@Composable
+private fun SkipButton(
+    visible: Boolean,
+    onClick: () -> Unit
+) {
+    AnimatedVisibility(visible) {
+        Text(
+            modifier = Modifier
+                .padding(16.dp)
+                .clickable { onClick() },
+            text = stringResource(R.string.skip),
+            style = NovixTheme.typography.label.medium,
+            color = NovixTheme.colors.primary
+        )
+    }
+}
 
 @Composable
 fun OnboardingPageContent(page: OnboardingPage) {
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .padding(32.dp),
+            .padding(horizontal = 41.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center
     ) {
@@ -184,7 +238,7 @@ fun OnboardingPageContent(page: OnboardingPage) {
             )
         }
 
-        Spacer(modifier = Modifier.height(24.dp))
+        Spacer(modifier = Modifier.height(32.dp))
 
         Text(
             text = stringResource(page.title),
@@ -192,7 +246,7 @@ fun OnboardingPageContent(page: OnboardingPage) {
             color = NovixTheme.colors.title,
             textAlign = TextAlign.Center
         )
-        Spacer(modifier = Modifier.height(8.dp))
+        Spacer(modifier = Modifier.height(4.dp))
         Text(
             text = stringResource(page.description),
             style = NovixTheme.typography.body.medium,

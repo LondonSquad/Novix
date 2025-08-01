@@ -1,16 +1,15 @@
 package com.london.data.repository.trending
 
-import com.london.data.mapper.trending.toEntityMedia
 import com.london.data.mapper.trending.toEntityActor
+import com.london.data.mapper.trending.toEntityMedia
 import com.london.data.remote.source.home.trending.TrendingRemoteDataSource
 import com.london.domain.entity.Actor
 import com.london.domain.entity.PagedFetchResponse
 import com.london.domain.entity.Trending
 import com.london.domain.repository.TrendingRepository
-import org.koin.core.annotation.Single
+import javax.inject.Inject
 
-@Single
-class TrendingRepositoryImpl(
+class TrendingRepositoryImpl @Inject constructor(
     private val trendingRemoteDataSource: TrendingRemoteDataSource
 ) : TrendingRepository {
 
