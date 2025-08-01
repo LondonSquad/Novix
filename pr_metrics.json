@@ -15874,5 +15874,33 @@
       "deletions": 6,
       "changed_files": 2
     }
+  },
+  {
+    "pr_number": 495,
+    "url": "https://github.com/LondonSquad/Novix/pull/495",
+    "title": "Feature/empty actor details screen",
+    "opened_at": "2025-08-01T03:20:27Z",
+    "head_ref": "feature/empty-actor-details-screen",
+    "base_ref": "develop",
+    "creator": {
+      "login": "AsmaaKhaledGomaa",
+      "id": 117874933,
+      "url": "https://github.com/AsmaaKhaledGomaa"
+    },
+    "approvals": [],
+    "first_approved_at": null,
+    "time_to_first_approval_minutes": null,
+    "required_approvals_met_at": null,
+    "time_to_required_approvals_minutes": null,
+    "closed_at": null,
+    "merged_at": null,
+    "merged_by": null,
+    "week": "2025-W31",
+    "status": "pending",
+    "diff_stats": {
+      "additions": 192,
+      "deletions": 120,
+      "changed_files": 6
+    }
   }
 ]
