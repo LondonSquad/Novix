@@ -47,6 +47,7 @@ import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.london.designsystem.R
 import com.london.designsystem.component.ActorItem
@@ -75,11 +76,10 @@ import com.london.presentation.utils.offsetLayout
 import com.london.presentation.utils.openUrl
 import com.london.presentation.utils.reverseDateFormat
 import com.london.presentation.utils.toLocalizedNumbers
-import org.koin.androidx.compose.koinViewModel
 
 @Composable
 fun TvShowsDetailsScreen(
-    viewModel: TvShowDetailsViewModel = koinViewModel(),
+    viewModel: TvShowDetailsViewModel = hiltViewModel(),
     onNavigateBack: () -> Unit = {},
     onNavigateToEpisodeDetails: (tvShowId: Int, episodeNumber: Int, seasonNumber: Int) -> Unit,
     onNavigateToReviews: (tvShowId: Int, mediaType: Int) -> Unit,
@@ -540,7 +540,7 @@ fun CastSection(
 fun SeasonEpisodesDetails(
     modifier: Modifier = Modifier,
     uiState: TvShowDetailsUiState,
-    viewModel: TvShowDetailsViewModel = koinViewModel()
+    viewModel: TvShowDetailsViewModel = hiltViewModel()
 ) {
     var selectedSeasonIndex by rememberSaveable { mutableIntStateOf(0) }
 
@@ -566,7 +566,7 @@ fun SeasonEpisodesDetails(
 fun EpisodeRow(
     modifier: Modifier = Modifier,
     uiState: TvShowDetailsUiState,
-    viewModel: TvShowDetailsViewModel = koinViewModel()
+    viewModel: TvShowDetailsViewModel = hiltViewModel()
 ) {
     Column(modifier = modifier) {
         Text(

@@ -45,6 +45,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -76,7 +77,6 @@ import com.london.presentation.shared.TriangleBlurredShape
 import com.london.presentation.shared.TvShowLayOut
 import com.london.presentation.utils.Listen
 import com.london.presentation.utils.ResultOrEmpty
-import org.koin.androidx.compose.koinViewModel
 
 @Composable
 private fun HandleLoadStateError(
@@ -92,7 +92,7 @@ private fun HandleLoadStateError(
 
 @Composable
 fun SearchScreen(
-    viewModel: SearchViewModel = koinViewModel(),
+    viewModel: SearchViewModel = hiltViewModel(),
     onNavigateToActorDetails: (Int) -> Unit = { },
     onNavigateToTvShowDetails: (Int) -> Unit = { },
     onNavigateToMovieDetails: (Int) -> Unit = { }

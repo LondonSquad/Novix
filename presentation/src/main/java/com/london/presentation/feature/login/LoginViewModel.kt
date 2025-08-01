@@ -5,10 +5,11 @@ import com.london.domain.usecase.login.LoginAsGuestUseCase
 import com.london.domain.usecase.login.LoginUseCase
 import com.london.presentation.feature.base.BaseViewModel
 import com.london.presentation.feature.base.ErrorState
-import org.koin.android.annotation.KoinViewModel
+import dagger.hilt.android.lifecycle.HiltViewModel
+import javax.inject.Inject
 
-@KoinViewModel
-class LoginViewModel(
+@HiltViewModel
+class LoginViewModel @Inject constructor(
     private val loginUseCase: LoginUseCase,
     private val loginAsGuestUseCase: LoginAsGuestUseCase,
 ) : BaseViewModel<LoginUiState, LoginEffect>(LoginUiState()),

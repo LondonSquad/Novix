@@ -13,13 +13,9 @@ import com.london.data.local.utils.executeUpdate
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import org.koin.core.annotation.Named
-import org.koin.core.annotation.Single
+import javax.inject.Inject
 
-
-@Single
-@Named("actorLocalDataSource")
-class ActorLocalDataSourceImpl(
+class ActorLocalDataSourceImpl @Inject constructor(
     private val searchActorsDao: SearchActorsDao
 ) : LocalDataSource<SearchActorsLocal> {
     init {
