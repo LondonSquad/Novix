@@ -1,7 +1,9 @@
 @file:Suppress("OPT_IN_USAGE")
 
 import com.london.buildsrc.AppConfig
+import com.london.buildsrc.AppConfig.freeCompilerArgs
 import com.london.buildsrc.configureGitHooks
+import kotlinx.kover.gradle.plugin.dsl.KoverProjectExtension
 import org.jetbrains.kotlin.gradle.dsl.KotlinAndroidProjectExtension
 
 // Top-level build file where you can add configuration options common to all sub-projects/modules.
@@ -25,6 +27,17 @@ subprojects {
         extensions.configure<KotlinAndroidProjectExtension> {
             compilerOptions {
                 freeCompilerArgs.addAll(AppConfig.freeCompilerArgs)
+            }
+        }
+    }
+
+    plugins.withId("org.jetbrains.kotlinx.kover"){
+        extensions.configure<KoverProjectExtension> {
+            currentProject {
+                createVariant("custom") {
+                    add("jvm", optional = true)
+                    add("debug", optional = true)
+                }
             }
         }
     }

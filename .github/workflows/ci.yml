@@ -119,12 +119,12 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           name: kover-coverage-report
-          path: ${{ github.workspace }}/build/reports/kover/
+          path: build/reports/kover/
 
       - name: Comment PR with Overall Coverage
         uses: mi-kas/kover-report@v1
         with:
-          path: ${{ github.workspace }}/build/reports/kover/report.xml
+          path: build/reports/kover/report.xml
           token: ${{ secrets.GITHUB_TOKEN }}
           min-coverage-overall: 80
           min-coverage-changed-files: 80
