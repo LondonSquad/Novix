@@ -16054,5 +16054,33 @@
       "deletions": 0,
       "changed_files": 1
     }
+  },
+  {
+    "pr_number": 500,
+    "url": "https://github.com/LondonSquad/Novix/pull/500",
+    "title": "fix: popular section pager height",
+    "opened_at": "2025-08-01T09:21:24Z",
+    "head_ref": "fix/home-dancing",
+    "base_ref": "develop",
+    "creator": {
+      "login": "ahmeddsamii",
+      "id": 154278495,
+      "url": "https://github.com/ahmeddsamii"
+    },
+    "approvals": [],
+    "first_approved_at": null,
+    "time_to_first_approval_minutes": null,
+    "required_approvals_met_at": null,
+    "time_to_required_approvals_minutes": null,
+    "closed_at": null,
+    "merged_at": null,
+    "merged_by": null,
+    "week": "2025-W31",
+    "status": "pending",
+    "diff_stats": {
+      "additions": 2,
+      "deletions": 0,
+      "changed_files": 1
+    }
   }
 ]
