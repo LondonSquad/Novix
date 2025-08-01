@@ -15927,5 +15927,33 @@
       "deletions": 118,
       "changed_files": 6
     }
+  },
+  {
+    "pr_number": 497,
+    "url": "https://github.com/LondonSquad/Novix/pull/497",
+    "title": "fix: modify `MediaLazyPagingGrid` with customizable empty message",
+    "opened_at": "2025-08-01T04:44:54Z",
+    "head_ref": "fix/media-grid-message",
+    "base_ref": "develop",
+    "creator": {
+      "login": "yusufnasserdev",
+      "id": 43588217,
+      "url": "https://github.com/yusufnasserdev"
+    },
+    "approvals": [],
+    "first_approved_at": null,
+    "time_to_first_approval_minutes": null,
+    "required_approvals_met_at": null,
+    "time_to_required_approvals_minutes": null,
+    "closed_at": null,
+    "merged_at": null,
+    "merged_by": null,
+    "week": "2025-W31",
+    "status": "pending",
+    "diff_stats": {
+      "additions": 23,
+      "deletions": 19,
+      "changed_files": 5
+    }
   }
 ]
