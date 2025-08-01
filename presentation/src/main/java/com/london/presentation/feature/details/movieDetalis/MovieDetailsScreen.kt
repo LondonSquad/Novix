@@ -12,7 +12,6 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.asPaddingValues
 import androidx.compose.foundation.layout.defaultMinSize
@@ -20,14 +19,16 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.requiredWidth
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.statusBars
-import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.grid.GridCells
+import androidx.compose.foundation.lazy.grid.GridItemSpan
 import androidx.compose.foundation.lazy.grid.LazyHorizontalGrid
+import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
+import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.lazy.grid.itemsIndexed
-import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.lazy.rememberLazyListState
+import androidx.compose.foundation.lazy.grid.rememberLazyGridState
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -45,6 +46,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalUriHandler
+import androidx.compose.ui.platform.LocalWindowInfo
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
@@ -74,6 +76,7 @@ import com.london.presentation.shared.FooterSection
 import com.london.presentation.utils.Listen
 import com.london.presentation.utils.convertGenreCodeToString
 import com.london.presentation.utils.getLocalizedTimeUnit
+import com.london.presentation.utils.gridColmuns
 import com.london.presentation.utils.isNotZeroRate
 import com.london.presentation.utils.offsetLayout
 import com.london.presentation.utils.openUrl
@@ -118,9 +121,11 @@ fun MovieDetailsContent(
     uiState: MovieDetailsUiState,
     movieDetailsContract: MovieDetailsContract
 ) {
+    val screenWidthDp =
+        with(LocalDensity.current) { LocalWindowInfo.current.containerSize.width.toDp() }
     val uriHandler = LocalUriHandler.current
 
-    val lazyState = rememberLazyListState()
+    val lazyState = rememberLazyGridState()
     var footerHeight by remember { mutableStateOf(0.dp) }
     val density = LocalDensity.current
 
@@ -161,13 +166,17 @@ fun MovieDetailsContent(
             option1Icon = R.drawable.icon_remove,
         )
 
-        LazyColumn(
+        LazyVerticalGrid(
             modifier = Modifier
+                .padding(horizontal = 16.dp)
                 .fillMaxSize(),
             contentPadding = PaddingValues(bottom = 16.dp + footerHeight),
-            state = lazyState
+            state = lazyState,
+            horizontalArrangement = Arrangement.spacedBy(12.dp),
+            verticalArrangement = Arrangement.spacedBy(12.dp),
+            columns = GridCells.Fixed(gridColmuns()),
         ) {
-            item {
+            item(span = { GridItemSpan(maxLineSpan) }) {
                 Box(
                     modifier = Modifier
                         .fillMaxWidth()
@@ -184,6 +193,7 @@ fun MovieDetailsContent(
 
                         CustomBackDropImagePager(
                             images = uiState.movieImages,
+                            modifier = Modifier.requiredWidth(screenWidthDp)
                         )
 
                         Column(
@@ -191,7 +201,6 @@ fun MovieDetailsContent(
                                 .offsetLayout()
                                 .fillMaxWidth()
                                 .defaultMinSize(minHeight = 158.dp)
-                                .padding(horizontal = 16.dp)
                                 .clip(RoundedCornerShape(12.dp))
                                 .background(NovixTheme.colors.surface)
                                 .border(1.dp, NovixTheme.colors.stroke, RoundedCornerShape(12.dp))
@@ -227,37 +236,35 @@ fun MovieDetailsContent(
             }
 
             if (uiState.movieOverview.isNotBlank()) {
-                item {
+                item(span = { GridItemSpan(maxLineSpan) }) {
                     Text(
                         text = stringResource(overview),
                         style = NovixTheme.typography.title.medium,
                         color = NovixTheme.colors.title,
-                        modifier = Modifier.padding(start = 16.dp, top = 16.dp, bottom = 4.dp)
                     )
                 }
 
-                item {
+                item(span = { GridItemSpan(maxLineSpan) }) {
                     ConditionalText(
                         uiState.movieOverview,
                         uiState.expanded,
-                        modifier = Modifier.padding(horizontal = 16.dp, vertical = 4.dp),
                         onExpandedChange = movieDetailsContract::onExpandClick
                     )
                 }
             }
 
             if (uiState.actors.isNotEmpty()) {
-                item {
+                item(span = { GridItemSpan(maxLineSpan) }) {
                     Text(
                         text = stringResource(com.london.presentation.R.string.cast),
                         style = NovixTheme.typography.title.medium,
                         color = NovixTheme.colors.title,
-                        modifier = Modifier.padding(start = 16.dp, top = 16.dp)
                     )
 
                     LazyHorizontalGrid(
                         modifier = Modifier
-                            .fillMaxWidth()
+                            .padding(top = 16.dp)
+                            .requiredWidth(screenWidthDp)
                             .height(100.dp),
                         rows = GridCells.Fixed(1),
                         horizontalArrangement = Arrangement.spacedBy(12.dp),
@@ -282,39 +289,25 @@ fun MovieDetailsContent(
             }
 
             if (uiState.similarMovies.isNotEmpty()) {
-                item {
+                item(span = { GridItemSpan(maxLineSpan) }) {
                     Text(
                         text = stringResource(more_like_this),
                         style = NovixTheme.typography.title.medium,
                         color = NovixTheme.colors.title,
-                        modifier = Modifier.padding(start = 16.dp, top = 16.dp)
+                        modifier = Modifier.padding(top = 4.dp)
                     )
                 }
 
-                items(uiState.similarMovies.chunked(2)) { rowItems ->
-                    Row(
+                items(uiState.similarMovies) { movie ->
+                    HomeCard(
+                        imageUrl = movie.posterUrl,
+                        isSaved = false,
+                        onSaveClick = {},
                         modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(horizontal = 16.dp)
-                            .padding(top = 12.dp),
-                        horizontalArrangement = Arrangement.spacedBy(12.dp)
-                    ) {
-                        rowItems.forEachIndexed { _, movie ->
-                            HomeCard(
-                                imageUrl = movie.posterUrl,
-                                isSaved = false,
-                                onSaveClick = {},
-                                modifier = Modifier
-                                    .weight(1f)
-                                    .clickable {
-                                        movieDetailsContract.onMovieClick(movie.id)
-                                    }
-                            )
-                        }
-                        if (rowItems.size == 1) {
-                            Spacer(modifier = Modifier.weight(1f))
-                        }
-                    }
+                            .clickable {
+                                movieDetailsContract.onMovieClick(movie.id)
+                            }
+                    )
                 }
             }
         }
