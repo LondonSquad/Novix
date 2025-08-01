@@ -17,6 +17,7 @@ import androidx.paging.compose.collectAsLazyPagingItems
 import com.london.designsystem.component.TopBar
 import com.london.designsystem.theme.ThemePreviews
 import com.london.domain.entity.Movie
+import com.london.presentation.R
 import com.london.presentation.feature.buildscreen.BuildScreen
 import com.london.presentation.feature.search.SearchCategory
 import com.london.presentation.shared.MediaLazyPagingGrid
@@ -49,10 +50,10 @@ fun MoviesByCategoryScreen(
         isError = state.error != null
     ) {
         MoviesByCategoryContent(
-                state = state,
-                contract = viewModel,
-                modifier = modifier,
-            )
+            state = state,
+            contract = viewModel,
+            modifier = modifier,
+        )
     }
 }
 
@@ -76,7 +77,7 @@ private fun MoviesByCategoryContent(
                 .padding(horizontal = 16.dp, vertical = 12.dp)
 
         )
-        MediaLazyPagingGrid<Movie>(
+        MediaLazyPagingGrid(
             pagingFlow = moviesLazyList,
             onItemClick = { contract.onMovieClick(it.id) },
             getImageUrl = { it.posterUrl },
@@ -86,7 +87,8 @@ private fun MoviesByCategoryContent(
                 .fillMaxWidth()
                 .padding(horizontal = 16.dp),
             onSaveClick = { /* TODO: Implement save functionality */ },
-            isItemSaved = { false }
+            isItemSaved = { false },
+            noMediaMessage = R.string.no_trending_movies_in_genre
         )
     }
 }

@@ -15,7 +15,6 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.paging.compose.collectAsLazyPagingItems
 import com.london.designsystem.component.TopBar
 import com.london.designsystem.theme.ThemePreviews
-import com.london.domain.entity.TvShow
 import com.london.presentation.R
 import com.london.presentation.feature.buildscreen.BuildScreen
 import com.london.presentation.feature.search.SearchCategory
@@ -45,10 +44,10 @@ fun TvShowByCategoryScreen(
         isLoading = state.isLoading,
         isError = state.error != null
     ) {
-             Content(
-                state = state,
-                contract = viewModel,
-            )
+        Content(
+            state = state,
+            contract = viewModel,
+        )
     }
 }
 
@@ -71,7 +70,7 @@ private fun Content(
                 .statusBarsPadding()
                 .padding(horizontal = 16.dp, vertical = 12.dp)
         )
-        MediaLazyPagingGrid<TvShow>(
+        MediaLazyPagingGrid(
             pagingFlow = tvShowLazyList,
             onItemClick = { contract.onTvShowClick(it.id) },
             getImageUrl = { it.posterPicture },
@@ -82,7 +81,7 @@ private fun Content(
                 .padding(horizontal = 16.dp),
             onSaveClick = { /* TODO: Implement save functionality */ },
             isItemSaved = { false },
-            emptyTitle = stringResource(id = R.string.no_tv_shows_found),
+            noMediaMessage = R.string.no_tv_shows_found,
         )
     }
 }
