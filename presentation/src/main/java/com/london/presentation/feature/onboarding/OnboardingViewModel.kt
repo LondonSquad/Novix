@@ -7,17 +7,14 @@ import androidx.compose.foundation.pager.PagerState
 import androidx.lifecycle.viewModelScope
 import com.london.domain.AppPreferencesService
 import com.london.presentation.feature.base.BaseViewModel
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import org.koin.android.annotation.KoinViewModel
-import org.koin.core.annotation.Provided
-import kotlin.onFailure
-import kotlin.runCatching
+import javax.inject.Inject
 
-@KoinViewModel
-class OnboardingViewModel(
-    @Provided
+@HiltViewModel
+class OnboardingViewModel @Inject constructor(
     private val appPreferencesService: AppPreferencesService
 ) : BaseViewModel<OnboardingUiState, OnboardingEffect>(OnboardingUiState()) {
 

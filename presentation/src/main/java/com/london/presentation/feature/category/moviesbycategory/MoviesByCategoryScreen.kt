@@ -10,6 +10,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.paging.PagingData
 import androidx.paging.compose.collectAsLazyPagingItems
@@ -22,12 +23,11 @@ import com.london.presentation.shared.MediaLazyPagingGrid
 import com.london.presentation.utils.Listen
 import com.london.presentation.utils.convertGenreCodeToString
 import kotlinx.coroutines.flow.flow
-import org.koin.androidx.compose.koinViewModel
 
 @Composable
 fun MoviesByCategoryScreen(
     modifier: Modifier = Modifier,
-    viewModel: MoviesByCategoryViewModel = koinViewModel(),
+    viewModel: MoviesByCategoryViewModel = hiltViewModel(),
     onNavigateToMovieDetails: (Int) -> Unit,
     onNavigateBack: () -> Unit
 ) {

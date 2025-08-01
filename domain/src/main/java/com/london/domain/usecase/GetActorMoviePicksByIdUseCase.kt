@@ -1,12 +1,9 @@
 package com.london.domain.usecase
 
 import com.london.domain.repository.ActorRepository
-import org.koin.core.annotation.Provided
-import org.koin.core.annotation.Single
+import javax.inject.Inject
 
-@Single
-class GetActorMoviePicksByIdUseCase(
-    @Provided
+class GetActorMoviePicksByIdUseCase @Inject constructor(
     private val repository: ActorRepository
 ) {
     suspend fun invoke(actorId: Int) = repository.getActorMoviePicksById(actorId)

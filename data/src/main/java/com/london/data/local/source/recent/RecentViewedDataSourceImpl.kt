@@ -2,15 +2,9 @@ package com.london.data.local.source.recent
 
 import com.london.data.local.database.dao.recent.viewed.RecentViewedDao
 import com.london.data.local.model.recent.viewed.RecentViewedLocal
-import org.koin.core.annotation.Named
-import org.koin.core.annotation.Provided
-import org.koin.core.annotation.Single
+import javax.inject.Inject
 
-@Single
-@Named("recentViewedDataSource")
-class RecentViewedDataSourceImpl(
-    @Provided
-@Named("recentViewedDao")
+class RecentViewedDataSourceImpl @Inject constructor(
     private val recentViewedDao: RecentViewedDao
 ) : RecentDataSource<RecentViewedLocal> {
 

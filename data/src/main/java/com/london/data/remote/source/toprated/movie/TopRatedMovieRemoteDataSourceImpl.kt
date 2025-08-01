@@ -7,10 +7,9 @@ import com.london.data.remote.model.toprated.TopRatedMovieRemote
 import com.london.data.remote.service.toprated.TopRatedMovieApiService
 import com.london.data.remote.source.base.BaseRemoteDatasource
 import com.london.domain.KoverIgnore
-import org.koin.core.annotation.Single
+import javax.inject.Inject
 
-@Single
-class TopRatedMovieRemoteDataSourceImpl(
+class TopRatedMovieRemoteDataSourceImpl @Inject constructor(
     private val topRatedMovieApi: TopRatedMovieApiService
 ) : TopRatedMovieRemoteDataSource , BaseRemoteDatasource {
     override suspend fun getTopRatedMovies(

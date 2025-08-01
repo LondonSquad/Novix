@@ -8,10 +8,9 @@ import com.london.data.remote.model.details.tvshow.model.tvshowepisode.TvShowEpi
 import com.london.data.remote.model.details.tvshow.model.tvshowepisode.TvShowEpisodesRemoteResponse
 import com.london.data.remote.service.details.tvshow.TvShowDetailsApiService
 import com.london.data.remote.source.base.BaseRemoteDatasource
-import org.koin.core.annotation.Single
+import javax.inject.Inject
 
-@Single
-class TvShowDetailsRemoteDataSourceImpl(
+class TvShowDetailsRemoteDataSourceImpl @Inject constructor(
     private val tvShowDetailsApiService: TvShowDetailsApiService,
 ) : TvShowDetailsRemoteDataSource, BaseRemoteDatasource {
 

@@ -6,10 +6,9 @@ import com.london.data.utils.fetchAndSync
 import com.london.domain.entity.PagedFetchResponse
 import com.london.domain.entity.toprated.TopRatedTvSeries
 import com.london.domain.repository.toprated.TopRatedTvSeriesRepository
-import org.koin.core.annotation.Single
+import javax.inject.Inject
 
-@Single
-class TopRatedTvSeriesRepositoryImpl(
+class TopRatedTvSeriesRepositoryImpl @Inject constructor(
     private val topRatedTvRemoteDataSource: TopRatedTvRemoteDataSource
 ) : TopRatedTvSeriesRepository {
     override suspend fun getTopRatedTvSeries(
