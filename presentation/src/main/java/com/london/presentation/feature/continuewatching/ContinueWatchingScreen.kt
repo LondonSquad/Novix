@@ -44,21 +44,20 @@ import com.london.presentation.utils.gridColmuns
 
 @Composable
 fun ContinueWatchingScreen(
-    viewModel: ContinueWatchingViewModel = hiltViewModel(),
     onBackClick: () -> Unit = {},
     onMovieClick: (Int) -> Unit = {},
     onTvShowClick: (Int) -> Unit = {},
+    viewModel: ContinueWatchingViewModel = hiltViewModel(),
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
     val effect by viewModel.effect.collectAsState(null)
 
-    effect?.Listen {
-        when (it) {
-            is ContinueWatchingEffect.NavigateToMovieDetails -> onMovieClick(it.id)
-            is ContinueWatchingEffect.NavigateToTvShowDetails -> onTvShowClick(it.id)
-            is ContinueWatchingEffect.NavigateBack -> onBackClick()
-        }
-    }
+    HandleContinueWatchingEffects(
+        effect = effect,
+        onMovieClick = onMovieClick,
+        onTvShowClick = onTvShowClick,
+        onBackClick = onBackClick
+    )
 
     Content(
         state = state,
@@ -159,6 +158,22 @@ fun Content(
                     )
                 }
             }
+        }
+    }
+}
+
+@Composable
+private fun HandleContinueWatchingEffects(
+    effect: ContinueWatchingEffect?,
+    onMovieClick: (Int) -> Unit,
+    onTvShowClick: (Int) -> Unit,
+    onBackClick: () -> Unit
+) {
+    effect?.Listen {
+        when (it) {
+            is ContinueWatchingEffect.NavigateToMovieDetails -> onMovieClick(it.id)
+            is ContinueWatchingEffect.NavigateToTvShowDetails -> onTvShowClick(it.id)
+            is ContinueWatchingEffect.NavigateBack -> onBackClick()
         }
     }
 }

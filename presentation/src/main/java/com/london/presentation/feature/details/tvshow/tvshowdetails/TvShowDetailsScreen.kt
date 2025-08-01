@@ -79,38 +79,24 @@ import com.london.presentation.utils.toLocalizedNumbers
 
 @Composable
 fun TvShowsDetailsScreen(
-    viewModel: TvShowDetailsViewModel = hiltViewModel(),
     onNavigateBack: () -> Unit = {},
     onNavigateToEpisodeDetails: (tvShowId: Int, episodeNumber: Int, seasonNumber: Int) -> Unit,
     onNavigateToReviews: (tvShowId: Int, mediaType: Int) -> Unit,
     onNavigateToCast: (Int) -> Unit,
-    onNavigateToGenre: (Int) -> Unit
+    onNavigateToGenre: (Int) -> Unit,
+    viewModel: TvShowDetailsViewModel = hiltViewModel()
 ) {
     val uiState by viewModel.state.collectAsStateWithLifecycle()
     val effect by viewModel.effect.collectAsState(null)
 
-    effect?.Listen { currentEffect ->
-        when (currentEffect) {
-            is TvShowDetailsEffect.OnNavigateToEpisodeDetails -> {
-                onNavigateToEpisodeDetails(
-                    currentEffect.tvShowId,
-                    currentEffect.episodeNumber,
-                    currentEffect.seasonNumber
-                )
-            }
-
-            TvShowDetailsEffect.NavigateBack -> onNavigateBack()
-            is TvShowDetailsEffect.NavigateToCast -> onNavigateToCast(currentEffect.tvShowId)
-            is TvShowDetailsEffect.NavigateToReviews -> onNavigateToReviews(
-                currentEffect.tvShowId,
-                MediaType.TvShow.mediaNum
-            )
-
-            is TvShowDetailsEffect.NavigateTotvShowsByCategoryId -> onNavigateToGenre(
-                currentEffect.categoryId
-            )
-        }
-    }
+    HandleTvShowDetailsEffects(
+        effect = effect,
+        onNavigateToEpisodeDetails = onNavigateToEpisodeDetails,
+        onNavigateBack = onNavigateBack,
+        onNavigateToCast = onNavigateToCast,
+        onNavigateToReviews = onNavigateToReviews,
+        onNavigateToGenre = onNavigateToGenre
+    )
 
     BuildScreen(
         onBack = viewModel::onBackClicked,
@@ -175,7 +161,6 @@ fun TvShowsDetailScreenContent(
             modifier = Modifier.fillMaxSize(),
             contentPadding = PaddingValues(bottom = footerHeight + 16.dp)
         ) {
-            // Backdrop images
             item {
                 val images = uiState.tvImages
                 CustomBackDropImagePager(
@@ -184,7 +169,6 @@ fun TvShowsDetailScreenContent(
                 )
             }
 
-            // Header details card
             item {
                 HeaderDetailsCard(
                     uiState = uiState,
@@ -214,7 +198,6 @@ fun TvShowsDetailScreenContent(
                 )
             }
 
-            // Overview title
             item {
                 Text(
                     text = stringResource(R.string.overview),
@@ -224,7 +207,6 @@ fun TvShowsDetailScreenContent(
                 )
             }
 
-            // Overview content
             item {
                 var isExpanded by remember { mutableStateOf(false) }
                 ConditionalText(
@@ -236,7 +218,6 @@ fun TvShowsDetailScreenContent(
                 }
             }
 
-            // Cast section
             item {
                 CastSection(
                     modifier = Modifier.padding(top = 16.dp),
@@ -245,7 +226,6 @@ fun TvShowsDetailScreenContent(
                 )
             }
 
-            // Season section header
             item {
                 Column(
                     modifier = Modifier
@@ -308,6 +288,41 @@ fun TvShowsDetailScreenContent(
                 // TODO save favorite onclick handler
             }
         )
+    }
+}
+
+@Composable
+private fun HandleTvShowDetailsEffects(
+    effect: TvShowDetailsEffect?,
+    onNavigateToEpisodeDetails: (Int, Int, Int) -> Unit,
+    onNavigateBack: () -> Unit,
+    onNavigateToCast: (Int) -> Unit,
+    onNavigateToReviews: (Int, Int) -> Unit,
+    onNavigateToGenre: (Int) -> Unit
+) {
+    effect?.Listen { currentEffect ->
+        when (currentEffect) {
+            is TvShowDetailsEffect.OnNavigateToEpisodeDetails -> {
+                onNavigateToEpisodeDetails(
+                    currentEffect.tvShowId,
+                    currentEffect.episodeNumber,
+                    currentEffect.seasonNumber
+                )
+            }
+
+            TvShowDetailsEffect.NavigateBack -> onNavigateBack()
+
+            is TvShowDetailsEffect.NavigateToCast -> onNavigateToCast(currentEffect.tvShowId)
+
+            is TvShowDetailsEffect.NavigateToReviews -> onNavigateToReviews(
+                currentEffect.tvShowId,
+                MediaType.TvShow.mediaNum
+            )
+
+            is TvShowDetailsEffect.NavigateTotvShowsByCategoryId -> onNavigateToGenre(
+                currentEffect.categoryId
+            )
+        }
     }
 }
 

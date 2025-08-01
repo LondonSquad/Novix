@@ -85,12 +85,12 @@ import com.london.presentation.utils.toLocalizedNumbers
 
 @Composable
 fun MovieDetailsScreen(
-    viewModel: MovieDetailsViewModel = hiltViewModel(),
     onNavigateBack: () -> Unit = {},
     onNavigateGenre: (Int) -> Unit = {},
     onNavigateToMovie: (Int) -> Unit,
     onNavigateToActor: (Int) -> Unit,
     onNavigateToReviews: (Int, Int) -> Unit,
+    viewModel: MovieDetailsViewModel = hiltViewModel(),
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
     val effect by viewModel.effect.collectAsState(null)

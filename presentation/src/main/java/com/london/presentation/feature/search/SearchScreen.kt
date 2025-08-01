@@ -101,13 +101,13 @@ fun SearchScreen(
     val effect by viewModel.effect.collectAsState(initial = null)
     val keyboardController = LocalSoftwareKeyboardController.current
 
-    effect?.Listen { currentEffect ->
-        when (currentEffect) {
-            is SearchEffect.ActorNavigation -> onNavigateToActorDetails(currentEffect.actorId)
-            is SearchEffect.MovieNavigation -> onNavigateToMovieDetails(currentEffect.movieId)
-            is SearchEffect.TvNavigation -> onNavigateToTvShowDetails(currentEffect.tvId)
-        }
-    }
+    HandleSearchEffects(
+        effect = effect,
+        onNavigateToActorDetails = onNavigateToActorDetails,
+        onNavigateToMovieDetails = onNavigateToMovieDetails,
+        onNavigateToTvShowDetails = onNavigateToTvShowDetails
+    )
+
     val lifecycleOwner = LocalLifecycleOwner.current
     LaunchedEffect(key1 = Unit) {
         lifecycleOwner.lifecycle.repeatOnLifecycle(Lifecycle.State.RESUMED) {
@@ -356,6 +356,22 @@ fun SearchScreenContent(
                 releaseYearRange = state.releaseYearRange,
             ),
         )
+    }
+}
+
+@Composable
+private fun HandleSearchEffects(
+    effect: SearchEffect?,
+    onNavigateToActorDetails: (Int) -> Unit,
+    onNavigateToMovieDetails: (Int) -> Unit,
+    onNavigateToTvShowDetails: (Int) -> Unit
+) {
+    effect?.Listen { currentEffect ->
+        when (currentEffect) {
+            is SearchEffect.ActorNavigation -> onNavigateToActorDetails(currentEffect.actorId)
+            is SearchEffect.MovieNavigation -> onNavigateToMovieDetails(currentEffect.movieId)
+            is SearchEffect.TvNavigation -> onNavigateToTvShowDetails(currentEffect.tvId)
+        }
     }
 }
 

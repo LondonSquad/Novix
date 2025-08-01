@@ -39,7 +39,32 @@ class TvShowDetailsViewModel @Inject constructor(
         initializeGetCastData()
         initializeGetImagesData()
         initializeEpisodesBySeasons()
+    }
 
+    override fun onEpisodeClicked(tvShowId: Int, episodeNumber: Int, seasonNumber: Int) {
+        emitEffect(
+            TvShowDetailsEffect.OnNavigateToEpisodeDetails(
+                tvShowId = tvShowId,
+                episodeNumber = episodeNumber,
+                seasonNumber = seasonNumber
+            )
+        )
+    }
+
+    override fun onReviewsClicked(tvShowId: Int, mediaType: Int) {
+        emitEffect(TvShowDetailsEffect.NavigateToReviews(tvShowId, mediaType))
+    }
+
+    override fun onCastClicked(tvShowId: Int) {
+        emitEffect(TvShowDetailsEffect.NavigateToCast(tvShowId))
+    }
+
+    override fun OnGenreClicked(genreId: Int) {
+        emitEffect(TvShowDetailsEffect.NavigateTotvShowsByCategoryId(genreId))
+    }
+
+    override fun onBackClicked() {
+        emitEffect(TvShowDetailsEffect.NavigateBack)
     }
 
     fun initializeEpisodesBySeasons(seasonNumber: Int = 1) {
@@ -187,41 +212,6 @@ class TvShowDetailsViewModel @Inject constructor(
         )
     }
 
-    fun onEpisodeClick(tvShowId: Int, episodeNumber: Int, seasonNumber: Int) {
-        emitEffect(
-            TvShowDetailsEffect.OnNavigateToEpisodeDetails(
-                tvShowId = tvShowId,
-                episodeNumber = episodeNumber,
-                seasonNumber = seasonNumber
-            )
-        )
-    }
-
-    override fun onEpisodeClicked(tvShowId: Int, episodeNumber: Int, seasonNumber: Int) {
-        emitEffect(
-            TvShowDetailsEffect.OnNavigateToEpisodeDetails(
-                tvShowId = tvShowId,
-                episodeNumber = episodeNumber,
-                seasonNumber = seasonNumber
-            )
-        )
-    }
-
-    override fun onReviewsClicked(tvShowId: Int, mediaType: Int) {
-        emitEffect(TvShowDetailsEffect.NavigateToReviews(tvShowId, mediaType))
-    }
-
-    override fun onCastClicked(tvShowId: Int) {
-        emitEffect(TvShowDetailsEffect.NavigateToCast(tvShowId))
-    }
-
-    override fun OnGenreClicked(genreId: Int) {
-        emitEffect(TvShowDetailsEffect.NavigateTotvShowsByCategoryId(genreId))
-    }
-
-    override fun onBackClicked() {
-        emitEffect(TvShowDetailsEffect.NavigateBack)
-    }
     private suspend fun addToRecentWatched(tvShow: TvShow){
         addTvShowToRecentWatchedUseCase.invoke(tvShow)
     }

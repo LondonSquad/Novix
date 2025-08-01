@@ -63,9 +63,9 @@ import com.london.designsystem.R as Res
 
 @Composable
 fun EpisodeDetailsScreen(
-    viewModel: EpisodeDetailsViewModel = hiltViewModel(),
     onNavigateBack: () -> Unit,
-    onNavigateToCast: (Int) -> Unit
+    onNavigateToCast: (Int) -> Unit,
+    viewModel: EpisodeDetailsViewModel = hiltViewModel()
 ) {
     val uiState by viewModel.state.collectAsStateWithLifecycle()
     val effect by viewModel.effect.collectAsState(null)

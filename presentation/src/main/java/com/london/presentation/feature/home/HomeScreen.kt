@@ -79,17 +79,16 @@ fun HomeScreen(
     val uiState by viewModel.state.collectAsStateWithLifecycle()
     val effect by viewModel.effect.collectAsState(null)
 
-    effect?.Listen { currentEffect ->
-        when (currentEffect) {
-            is HomeScreenEffect.NavigationMovieDetails -> onNavigateMovie(currentEffect.id)
-            is HomeScreenEffect.NavigationTvShowDetails -> onNavigateTvShow(currentEffect.id)
-            is HomeScreenEffect.NavigationTrendingMovie -> onNavigateTrendingMovies()
-            is HomeScreenEffect.NavigationTrendingTvShows -> onNavigateTrendingTvShows()
-            is HomeScreenEffect.NavigationTrendingActor -> onNavigateTrendingActors()
-            is HomeScreenEffect.NavigationTopRated -> onNavigateTopRated()
-            is HomeScreenEffect.NavigationContinueWatching -> onNavigateContinueWatching()
-        }
-    }
+    HandleHomeScreenEffects(
+        effect = effect,
+        onNavigateMovie = onNavigateMovie,
+        onNavigateTvShow = onNavigateTvShow,
+        onNavigateTrendingMovies = onNavigateTrendingMovies,
+        onNavigateTrendingTvShows = onNavigateTrendingTvShows,
+        onNavigateTrendingActors = onNavigateTrendingActors,
+        onNavigateTopRated = onNavigateTopRated,
+        onNavigateContinueWatching = onNavigateContinueWatching
+    )
 
     val lifecycleOwner = LocalLifecycleOwner.current
     LaunchedEffect(key1 = Unit) {
@@ -272,6 +271,30 @@ private fun Content(
                     .align(Alignment.BottomCenter)
                     .width(52.dp)
             )
+    }
+}
+
+@Composable
+private fun HandleHomeScreenEffects(
+    effect: HomeScreenEffect?,
+    onNavigateMovie: (Int) -> Unit,
+    onNavigateTvShow: (Int) -> Unit,
+    onNavigateTrendingMovies: () -> Unit,
+    onNavigateTrendingTvShows: () -> Unit,
+    onNavigateTrendingActors: () -> Unit,
+    onNavigateTopRated: () -> Unit,
+    onNavigateContinueWatching: () -> Unit
+) {
+    effect?.Listen { currentEffect ->
+        when (currentEffect) {
+            is HomeScreenEffect.NavigationMovieDetails -> onNavigateMovie(currentEffect.id)
+            is HomeScreenEffect.NavigationTvShowDetails -> onNavigateTvShow(currentEffect.id)
+            is HomeScreenEffect.NavigationTrendingMovie -> onNavigateTrendingMovies()
+            is HomeScreenEffect.NavigationTrendingTvShows -> onNavigateTrendingTvShows()
+            is HomeScreenEffect.NavigationTrendingActor -> onNavigateTrendingActors()
+            is HomeScreenEffect.NavigationTopRated -> onNavigateTopRated()
+            is HomeScreenEffect.NavigationContinueWatching -> onNavigateContinueWatching()
+        }
     }
 }
 

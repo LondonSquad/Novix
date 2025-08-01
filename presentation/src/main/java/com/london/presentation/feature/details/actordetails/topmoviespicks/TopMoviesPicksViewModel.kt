@@ -24,6 +24,15 @@ class TopMoviesPicksViewModel @Inject constructor(
         }
     }
 
+    override fun onSaveMovie(movieId: Int) {
+        updateState { copy(isSaved = isSaved) }
+        emitEffect(TopMoviesPicksEffect.NavigationToMovieDetails(movieId))
+    }
+
+    override fun onBack() {
+        emitEffect(TopMoviesPicksEffect.NavigateBack)
+    }
+
     private fun getActorMoviePicksData() {
 
         tryToExecute(
@@ -45,14 +54,5 @@ class TopMoviesPicksViewModel @Inject constructor(
             onCompleted = { updateState { copy(isLoading = false) } },
             checkSuccess = { actorId != 0 },
         )
-    }
-
-    override fun onSaveMovie(movieId: Int) {
-        updateState { copy(isSaved = isSaved) }
-        emitEffect(TopMoviesPicksEffect.NavigationToMovieDetails(movieId))
-    }
-
-    override fun onBack() {
-        emitEffect(TopMoviesPicksEffect.NavigateBack)
     }
 }

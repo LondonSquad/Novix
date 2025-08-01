@@ -16,16 +16,29 @@ class TrendingTvShowsViewModel @Inject constructor(private val getTrendingTvShow
         initializeTvShows()
     }
 
+    override fun onGenreSelected(genre: TvShowGenre) {
+        if (genre.id == state.value.selectedGenreId) return
+        updateState { copy(selectedGenreId = genre.id) }
+        initializeTvShows()
+    }
+
+    override fun onTvShowClick(id: Int) = emitEffect(TrendingTvShowsEffect.NavigateToTvShow(id))
+
+    override fun onBack() = emitEffect(TrendingTvShowsEffect.NavigateBack)
+
+    override fun onRetry() = initializeTvShows()
+
     private fun initializeTvShows() {
         tryToExecute(
             block = {
                 val tvShowsFlow = createPagingSourceFlow(query = "") { _, pageNumber ->
                     val tvShows = getTrendingTvShows.invoke(page = pageNumber)
-                    val filteredItems = if (state.value.selectedGenreId != null && state.value.selectedGenreId != -1) {
-                        tvShows.items.filter { it.genreIds.contains(state.value.selectedGenreId) }
-                    } else {
-                        tvShows.items
-                    }
+                    val filteredItems =
+                        if (state.value.selectedGenreId != null && state.value.selectedGenreId != -1) {
+                            tvShows.items.filter { it.genreIds.contains(state.value.selectedGenreId) }
+                        } else {
+                            tvShows.items
+                        }
                     tvShows.copy(items = filteredItems)
                 }
                 tvShowsFlow
@@ -40,19 +53,5 @@ class TrendingTvShowsViewModel @Inject constructor(private val getTrendingTvShow
             },
             onCompleted = { updateState { copy(isLoading = false) } },
         )
-    }
-
-    override fun onGenreSelected(genre: TvShowGenre) {
-        if (genre.id == state.value.selectedGenreId) return
-        updateState { copy(selectedGenreId = genre.id) }
-        initializeTvShows()
-    }
-
-    override fun onTvShowClick(id: Int) = emitEffect(TrendingTvShowsEffect.NavigateToTvShow(id))
-
-    override fun onBack() = emitEffect(TrendingTvShowsEffect.NavigateBack)
-
-    override fun onRetry() {
-        initializeTvShows()
     }
 }

@@ -22,6 +22,10 @@ class ActorGalleryViewModel @Inject constructor(
         loadImages(actorId)
     }
 
+    override fun onBackClick() {
+        emitEffect(ActorGalleryEffectUiState.NavigationBack)
+    }
+
     private fun loadImages(actorId: Int) {
         tryToExecute(
             block = {
@@ -41,9 +45,5 @@ class ActorGalleryViewModel @Inject constructor(
             onCompleted = { updateState { copy(isLoading = false) } },
             checkSuccess = { actorId != 0 },
         )
-    }
-
-    override fun onBackClick() {
-        emitEffect(ActorGalleryEffectUiState.NavigationBack)
     }
 }

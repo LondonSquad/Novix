@@ -23,6 +23,18 @@ class TopTvShowsPicksViewModel @Inject constructor(
         getActorTvShowsPicksData()
     }
 
+    override fun onSaveMovie(movieId: Int) {
+        updateState { copy(isSaved = !this.isSaved) }
+    }
+
+    override fun onBack() {
+        emitEffect(TopTvShowsPicksEffect.BackNavigation)
+    }
+
+    override fun onTvShowClicked(tvShowId: Int) {
+        emitEffect(TopTvShowsPicksEffect.TvShowNavigation(tvShowId))
+    }
+
     private fun getActorTvShowsPicksData() {
         tryToExecute(
             block = {
@@ -44,15 +56,4 @@ class TopTvShowsPicksViewModel @Inject constructor(
         )
     }
 
-    override fun onSaveMovie(movieId: Int) {
-        updateState { copy(isSaved = !this.isSaved) }
-    }
-
-    override fun onBack() {
-        emitEffect(TopTvShowsPicksEffect.BackNavigation)
-    }
-
-    override fun onTvShowClicked(tvShowId: Int) {
-        emitEffect(TopTvShowsPicksEffect.TvShowNavigation(tvShowId))
-    }
 }

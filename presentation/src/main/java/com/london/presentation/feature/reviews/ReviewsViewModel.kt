@@ -25,6 +25,10 @@ class ReviewsViewModel @Inject constructor(
         initializeReviews(mediaType, mediaId)
     }
 
+    override fun onBackClicked() {
+        emitEffect(ReviewEffect.NavigateBack)
+    }
+
     private fun initializeReviews(mediaType: Int, mediaId: Int) {
         tryToExecute(
             block = {
@@ -50,7 +54,4 @@ class ReviewsViewModel @Inject constructor(
         )
     }
 
-    override fun onBackClicked() {
-        emitEffect(ReviewEffect.NavigateBack)
-    }
 }

@@ -16,6 +16,10 @@ class TrendingActorsViewModel @Inject constructor(
         initializeActors()
     }
 
+    override fun onActorClick(id: Int) = emitEffect(TrendingActorsEffect.NavigateToActor(id))
+    override fun onBack() = emitEffect(TrendingActorsEffect.NavigateBack)
+    override fun onRetry() = initializeActors()
+
     private fun initializeActors() {
         tryToExecute(
             block = {
@@ -35,12 +39,5 @@ class TrendingActorsViewModel @Inject constructor(
             },
             onCompleted = { updateState { copy(isLoading = false) } },
         )
-    }
-
-    override fun onActorClick(id: Int) = emitEffect(TrendingActorsEffect.NavigateToActor(id))
-    override fun onBack() = emitEffect(TrendingActorsEffect.NavigateBack)
-
-    override fun onRetry() {
-        initializeActors()
     }
 }

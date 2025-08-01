@@ -31,6 +31,38 @@ class ActorDetailsViewModel @Inject constructor(
         getActorTvShowDetails()
     }
 
+    override fun onRetry() {
+        updateState { copy(error = null, movieError = false, tvShowError = false) }
+        getActorImage()
+        getActorDetails()
+        getActorMovieDetails()
+        getActorTvShowDetails()
+    }
+
+    override fun onNavigateBack() {
+        emitEffect(ActorEffectUiState.NavigationBack)
+    }
+
+    override fun onGalleryClick(actorId: Int) {
+        emitEffect(ActorEffectUiState.NavigateToGallery(actorId))
+    }
+
+    override fun onTvShowPicksClick(actorId: Int) {
+        emitEffect(ActorEffectUiState.NavigateToTvShowPicks(actorId))
+    }
+
+    override fun onMoviePicksClick(actorId: Int) {
+        emitEffect(ActorEffectUiState.NavigateToMoviePicks(actorId))
+    }
+
+    override fun onTvShowScreenClick(tvShowId: Int) {
+        emitEffect(ActorEffectUiState.NavigateToTvShowScreen(tvShowId))
+    }
+
+    override fun onMovieScreenClick(movieId: Int) {
+        emitEffect(ActorEffectUiState.NavigateToMovieScreen(movieId))
+    }
+
     private fun getActorImage() {
         tryToExecute(
             block = {
@@ -114,37 +146,5 @@ class ActorDetailsViewModel @Inject constructor(
             onCompleted = { updateState { copy(isLoading = false) } },
             checkSuccess = { actorId != null },
         )
-    }
-
-    override fun onRetry() {
-        updateState { copy(error = null, movieError = false, tvShowError = false) }
-        getActorImage()
-        getActorDetails()
-        getActorMovieDetails()
-        getActorTvShowDetails()
-    }
-
-    override fun onNavigateBack() {
-        emitEffect(ActorEffectUiState.NavigationBack)
-    }
-
-    override fun onGalleryClick(actorId: Int) {
-        emitEffect(ActorEffectUiState.NavigateToGallery(actorId))
-    }
-
-    override fun onTvShowPicksClick(actorId: Int) {
-        emitEffect(ActorEffectUiState.NavigateToTvShowPicks(actorId))
-    }
-
-    override fun onMoviePicksClick(actorId: Int) {
-        emitEffect(ActorEffectUiState.NavigateToMoviePicks(actorId))
-    }
-
-    override fun onTvShowScreenClick(tvShowId: Int) {
-        emitEffect(ActorEffectUiState.NavigateToTvShowScreen(tvShowId))
-    }
-
-    override fun onMovieScreenClick(movieId: Int) {
-        emitEffect(ActorEffectUiState.NavigateToMovieScreen(movieId))
     }
 }
