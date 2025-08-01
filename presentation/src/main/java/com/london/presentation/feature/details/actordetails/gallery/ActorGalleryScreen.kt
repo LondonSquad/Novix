@@ -23,6 +23,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.london.designsystem.component.CircularLoading
 import com.london.designsystem.component.TopBar
@@ -32,12 +33,11 @@ import com.london.imageharamblur.ui.ImageViewFilter
 import com.london.presentation.R
 import com.london.presentation.feature.buildscreen.BuildScreen
 import com.london.presentation.utils.Listen
-import org.koin.androidx.compose.koinViewModel
 
 @Composable
 fun ActorGalleryScreen(
     onNavigateBack: () -> Unit,
-    viewModel: ActorGalleryViewModel = koinViewModel()
+    viewModel: ActorGalleryViewModel = hiltViewModel()
 ) {
     val uiState by viewModel.state.collectAsStateWithLifecycle()
     val effect by viewModel.effect.collectAsState(null)

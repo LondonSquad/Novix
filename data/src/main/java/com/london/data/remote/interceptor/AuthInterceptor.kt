@@ -3,10 +3,9 @@ package com.london.data.remote.interceptor
 import com.london.domain.repository.SessionTokenProvider
 import okhttp3.Interceptor
 import okhttp3.Response
-import org.koin.core.annotation.Single
+import javax.inject.Inject
 
-@Single
-class AuthInterceptor(
+class AuthInterceptor @Inject constructor(
     private val tokenProvider: SessionTokenProvider
 ) : Interceptor {
     override fun intercept(chain: Interceptor.Chain): Response {

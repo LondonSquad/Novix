@@ -16,15 +16,12 @@ import com.london.domain.entity.Movie
 import com.london.domain.entity.PagedFetchResponse
 import com.london.domain.entity.TvShow
 import com.london.domain.repository.SearchRepository
-import org.koin.core.annotation.Named
-import org.koin.core.annotation.Provided
-import org.koin.core.annotation.Single
+import javax.inject.Inject
 
-@Single
-class SearchRepositoryImpl(
-    @Provided @Named("tvShowLocalDataSource") private val localTvShowDataSource: LocalDataSource<SearchTvShowLocal>,
-    @Provided @Named("actorLocalDataSource") private val localActorDataSource: LocalDataSource<SearchActorsLocal>,
-    @Provided @Named("movieLocalDataSource") private val localMovieDataSource: LocalDataSource<SearchMoviesLocal>,
+class SearchRepositoryImpl @Inject constructor(
+    private val localTvShowDataSource: LocalDataSource<SearchTvShowLocal>,
+    private val localActorDataSource: LocalDataSource<SearchActorsLocal>,
+    private val localMovieDataSource: LocalDataSource<SearchMoviesLocal>,
     private val genreInterestDao: GenreInterestDao,
     private val remoteDataSource: SearchRemoteDataSource,
     private val crashReporter: CrashReporter

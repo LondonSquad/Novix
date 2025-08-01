@@ -1,24 +1,15 @@
 package com.london.app
 
 import android.app.Application
-import com.london.app.di.AppModule
 import com.london.data.BuildConfig
-import org.koin.android.ext.koin.androidContext
-import org.koin.android.ext.koin.androidLogger
-import org.koin.core.context.startKoin
-import org.koin.core.logger.Level
-import org.koin.ksp.generated.module
+import dagger.hilt.android.HiltAndroidApp
 import timber.log.Timber
 
+@HiltAndroidApp
 class NovixApplication : Application() {
     override fun onCreate() {
         super.onCreate()
         timberConfig()
-        startKoin {
-            androidLogger(level = Level.DEBUG)
-            androidContext(this@NovixApplication)
-            modules(AppModule().module)
-        }
     }
 
     private fun timberConfig() {

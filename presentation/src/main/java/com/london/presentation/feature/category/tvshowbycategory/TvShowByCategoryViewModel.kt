@@ -6,12 +6,12 @@ import com.london.presentation.feature.base.BaseViewModel
 import com.london.presentation.feature.base.createPagingSourceFlow
 import com.london.presentation.navigation.Screen
 import com.london.presentation.navigation.getArgs
-import org.koin.android.annotation.KoinViewModel
-import org.koin.core.annotation.Provided
+import dagger.hilt.android.lifecycle.HiltViewModel
+import javax.inject.Inject
 
-@KoinViewModel
-class TvShowByCategoryViewModel(
-    @Provided private val getTvShowsByCategoryIdUseCase: GetTvShowsByCategoryId,
+@HiltViewModel
+class TvShowByCategoryViewModel @Inject constructor(
+    private val getTvShowsByCategoryIdUseCase: GetTvShowsByCategoryId,
     savedStateHandle: SavedStateHandle
 ) : BaseViewModel<TvShowByCategoryUiState, TvShowByCategoryEffect>(TvShowByCategoryUiState()),
     TvShowByCategoryContract {

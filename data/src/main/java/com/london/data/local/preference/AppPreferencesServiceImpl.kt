@@ -3,12 +3,9 @@ package com.london.data.local.preference
 import android.content.SharedPreferences
 import androidx.core.content.edit
 import com.london.domain.AppPreferencesService
-import org.koin.core.annotation.Provided
-import org.koin.core.annotation.Single
+import javax.inject.Inject
 
-@Single
-class AppPreferencesServiceImpl(
-    @Provided
+class AppPreferencesServiceImpl @Inject constructor(
     private val preferences: SharedPreferences,
 ) : AppPreferencesService {
 

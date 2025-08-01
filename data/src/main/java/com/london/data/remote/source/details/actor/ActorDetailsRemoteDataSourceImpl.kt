@@ -6,10 +6,9 @@ import com.london.data.remote.model.details.actor.model.actormoviedetails.ActorM
 import com.london.data.remote.model.details.actor.model.actortvshowdetails.ActorTvShowDetailsResponse
 import com.london.data.remote.service.details.actor.ActorDetailsApiService
 import com.london.data.remote.source.base.BaseRemoteDatasource
-import org.koin.core.annotation.Single
+import javax.inject.Inject
 
-@Single
-class ActorDetailsRemoteDataSourceImpl(
+class ActorDetailsRemoteDataSourceImpl @Inject constructor(
     private val actorDetailsApiService: ActorDetailsApiService,
 ) : ActorDetailsRemoteDataSource, BaseRemoteDatasource {
     override suspend fun getActorDetailsById(id: Int): Result<ActorDetailsResponse> =

@@ -3,10 +3,9 @@ package com.london.data.local.preference
 import android.content.SharedPreferences
 import androidx.core.content.edit
 import com.london.data.BuildConfig
-import org.koin.core.annotation.Named
+import javax.inject.Inject
 
-@Named("auth")
-class AuthPreferences(
+class AuthPreferences @Inject constructor(
     private val sharedPreferences: SharedPreferences,
 ) {
     companion object {

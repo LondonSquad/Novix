@@ -3,10 +3,10 @@ package com.london.data.remote.source.details.videoprovider.tvshow
 import com.london.data.remote.model.details.videoprovider.tvshow.model.TvShowVideoResponse
 import com.london.data.remote.service.details.tvshow.TvShowDetailsApiService
 import com.london.data.remote.source.base.BaseRemoteDatasource
-import org.koin.core.annotation.Single
+import javax.inject.Inject
 
-@Single
-class TvShowVideoProviderRemoteImpl(
+
+class TvShowVideoProviderRemoteImpl @Inject constructor(
     private val tvShowDetailsApiService: TvShowDetailsApiService,
 ) : TvShowVideoProviderRemote, BaseRemoteDatasource {
     override suspend fun getTvShowVideos(tvShowId: Int): Result<TvShowVideoResponse> =
