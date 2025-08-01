@@ -1,12 +1,9 @@
 package com.london.domain.usecase
 
 import com.london.domain.repository.DetailsRepository
-import org.koin.core.annotation.Provided
-import org.koin.core.annotation.Single
+import javax.inject.Inject
 
-@Single
-class GetEpisodeVideoProviderUseCase(
-    @Provided
+class GetEpisodeVideoProviderUseCase @Inject constructor(
     private val repository: DetailsRepository
 ) {
     suspend fun invoke(seriesId: Int, seasonNumber: Int, episodeNumber: Int)

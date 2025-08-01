@@ -26,6 +26,7 @@ import androidx.compose.ui.platform.LocalWindowInfo
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.paging.compose.collectAsLazyPagingItems
 import com.london.designsystem.R
@@ -39,11 +40,10 @@ import com.london.designsystem.utils.string
 import com.london.presentation.utils.Listen
 import com.london.presentation.utils.MovieGenre
 import com.london.presentation.utils.TvShowGenre
-import org.koin.compose.viewmodel.koinViewModel
 
 @Composable
 fun TopRatedScreen(
-    viewModel: TopRatedViewModel = koinViewModel(),
+    viewModel: TopRatedViewModel = hiltViewModel(),
     onNavigateBack: () -> Unit = {},
     onNavigateMovie: (Int) -> Unit = {},
     onNavigateTvShow: (Int) -> Unit = {}

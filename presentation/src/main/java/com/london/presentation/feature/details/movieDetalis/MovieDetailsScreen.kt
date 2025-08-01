@@ -50,6 +50,7 @@ import androidx.compose.ui.platform.LocalWindowInfo
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.london.designsystem.R
 import com.london.designsystem.component.ActorItem
@@ -80,11 +81,10 @@ import com.london.presentation.utils.offsetLayout
 import com.london.presentation.utils.openUrl
 import com.london.presentation.utils.reverseDateFormat
 import com.london.presentation.utils.toLocalizedNumbers
-import org.koin.androidx.compose.koinViewModel
 
 @Composable
 fun MovieDetailsScreen(
-    viewModel: MovieDetailsViewModel = koinViewModel(),
+    viewModel: MovieDetailsViewModel = hiltViewModel(),
     onNavigateBack: () -> Unit = {},
     onNavigateGenre: (Int) -> Unit = {},
     onNavigateToMovie: (Int) -> Unit,

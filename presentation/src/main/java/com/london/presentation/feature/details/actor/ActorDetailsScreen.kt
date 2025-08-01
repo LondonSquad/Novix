@@ -43,10 +43,12 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.zIndex
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.london.designsystem.component.CircularLoading
 import com.london.designsystem.component.HomeCard
@@ -66,8 +68,8 @@ import com.london.presentation.shared.CustomBackDropImagePager
 import com.london.presentation.utils.Listen
 import com.london.presentation.utils.offsetLayout
 import com.london.presentation.utils.toLocalizedNumbers
-import com.london.presentation.utils.trimExcessiveSpaces
 import org.koin.androidx.compose.koinViewModel
+import kotlinx.coroutines.delay
 
 @Composable
 fun ActorDetailsScreen(
@@ -77,7 +79,7 @@ fun ActorDetailsScreen(
     onNavigateToTvShowPicks: (Int) -> Unit,
     onNavigateToMovieScreen: (Int) -> Unit,
     onNavigateToTvShowScreen: (Int) -> Unit,
-    viewModel: ActorDetailsViewModel = koinViewModel(),
+    viewModel: ActorDetailsViewModel = hiltViewModel(),
 ) {
     val uiState by viewModel.state.collectAsStateWithLifecycle()
     val effect by viewModel.effect.collectAsState(null)
@@ -202,24 +204,14 @@ private fun ActorImagePager(images: List<ImageDetails>) {
 @Composable
 private fun ActorInfoSectionItem(uiState: ActorDetailsUiState) {
     with(uiState) {
-        if (listOf(
-                actorName,
-                actorBirthday,
-                actorPlaceOfBirth,
-                knownForDepartment
-            ).all { it.isNotBlank() }
-        ) {
-            ActorInfoSection(
-                job = knownForDepartment,
-                name = actorName,
-                birthday = actorBirthday,
-                deathDay = actorDeathDay ?: "",
-                placeOfBirth = actorPlaceOfBirth,
-                modifier = Modifier.offsetLayout()
-            )
-        } else {
-            Spacer(modifier = Modifier.height(16.dp))
-        }
+        ActorInfoSection(
+            job = knownForDepartment,
+            name = actorName,
+            birthday = actorBirthday,
+            deathDay = actorDeathDay ?: "",
+            placeOfBirth = actorPlaceOfBirth,
+            modifier = Modifier.offsetLayout()
+        )
     }
 }
 
@@ -238,7 +230,7 @@ private fun BiographySection(uiState: ActorDetailsUiState) {
         var isExpanded by remember { mutableStateOf(false) }
 
         ConditionalText(
-            text = uiState.actorBiography.trimExcessiveSpaces(),
+            text = uiState.actorBiography,
             expandedState = isExpanded,
             modifier = Modifier.padding(horizontal = 16.dp, vertical = 4.dp)
         ) {
@@ -398,12 +390,12 @@ private fun ActorInfoSection(
     job: String,
     name: String,
     birthday: String,
-    deathDay: String?,
+    deathDay: String,
     placeOfBirth: String,
     modifier: Modifier = Modifier
 ) {
     Column(
-        verticalArrangement = Arrangement.spacedBy(8.dp),
+        verticalArrangement = Arrangement.SpaceBetween,
         modifier = modifier
             .fillMaxWidth()
             .heightIn(min = 132.dp)
@@ -415,6 +407,7 @@ private fun ActorInfoSection(
                 shape = RoundedCornerShape(16.dp)
             )
             .background(NovixTheme.colors.surface),
+        horizontalAlignment = Alignment.Start
     ) {
         Text(
             text = "${name}\n",
@@ -424,8 +417,8 @@ private fun ActorInfoSection(
         )
         FlowRow(
             modifier = Modifier
-                .padding(horizontal = 12.dp)
-                .padding(bottom = 12.dp),
+                .fillMaxWidth()
+                .padding(start = 12.dp, end = 12.dp, top = 8.dp, bottom = 12.dp),
             verticalArrangement = Arrangement.spacedBy(8.dp),
             horizontalArrangement = Arrangement.spacedBy(4.dp)
         ) {
@@ -440,7 +433,7 @@ private fun ActorInfoSection(
             )
             TextWithIcon(
                 icon = painterResource(R.drawable.birthday_cake),
-                text = if (deathDay != "") "${birthday.toLocalizedNumbers()}  -  ${deathDay.toLocalizedNumbers()}" else birthday.toLocalizedNumbers(),
+                text = if (!deathDay.isEmpty()) "${birthday.toLocalizedNumbers()}  -  ${deathDay.toLocalizedNumbers()}" else birthday.toLocalizedNumbers(),
             )
         }
     }
@@ -455,6 +448,9 @@ private fun TextWithIcon(
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.spacedBy(4.dp)
     ) {
+        val scale = LocalDensity.current.fontScale
+        val baseIconSize = 12.dp
+
         Box(
             modifier = Modifier
                 .padding(4.dp)
@@ -467,7 +463,7 @@ private fun TextWithIcon(
             painter = icon,
             contentDescription = stringResource(R.string.imagr_dot),
             tint = NovixTheme.colors.body,
-            modifier = Modifier.size(11.dp)
+            modifier = Modifier.size(baseIconSize * scale)
         )
         Text(
             text = text,

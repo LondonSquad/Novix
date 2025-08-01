@@ -4,10 +4,9 @@ import com.london.data.mapper.videoprovider.tvshow.toTvShowVideo
 import com.london.data.remote.source.details.videoprovider.tvshow.TvShowVideoProviderRemote
 import com.london.domain.entity.videoprovider.TvShowVideo
 import com.london.domain.repository.TvShowVideoProviderRepository
-import org.koin.core.annotation.Single
+import javax.inject.Inject
 
-@Single
-class TvShowVideoProviderRepositoryImpl(
+class TvShowVideoProviderRepositoryImpl @Inject constructor(
     private val tvShowVideoProviderRemote: TvShowVideoProviderRemote
 ) : TvShowVideoProviderRepository {
     override suspend fun getTvShowVideos(tvShowId: Int): List<TvShowVideo> =

@@ -6,10 +6,11 @@ import com.london.presentation.feature.base.BaseViewModel
 import com.london.presentation.feature.base.createPagingSourceFlow
 import com.london.presentation.utils.MovieGenre
 import com.london.presentation.utils.TvShowGenre
-import org.koin.android.annotation.KoinViewModel
+import dagger.hilt.android.lifecycle.HiltViewModel
+import javax.inject.Inject
 
-@KoinViewModel
-class TopRatedViewModel(
+@HiltViewModel
+class TopRatedViewModel @Inject constructor(
     private val getTopRatedMoviesUseCase: GetTopRatedMoviesUseCase,
     private val getTopRatedTvSeriesUseCase: GetTopRatedTvSeriesUseCase,
 ) : BaseViewModel<TopRatedUiState, TopRatedEffect>(TopRatedUiState()), TopRatedContract {

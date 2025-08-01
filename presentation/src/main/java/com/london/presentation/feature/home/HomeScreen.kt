@@ -44,6 +44,7 @@ import androidx.compose.ui.platform.LocalWindowInfo
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -61,7 +62,6 @@ import com.london.presentation.R
 import com.london.presentation.feature.buildscreen.NetworkErrorScreen
 import com.london.presentation.shared.GenresSection
 import com.london.presentation.utils.Listen
-import org.koin.compose.viewmodel.koinViewModel
 
 @Composable
 fun HomeScreen(
@@ -72,7 +72,7 @@ fun HomeScreen(
     onNavigateTrendingTvShows: () -> Unit = {},
     onNavigateTrendingActors: () -> Unit = {},
     onNavigateContinueWatching: () -> Unit = {},
-    viewModel: HomeViewModel = koinViewModel(),
+    viewModel: HomeViewModel = hiltViewModel(),
 ) {
     val uiState by viewModel.state.collectAsStateWithLifecycle()
     val effect by viewModel.effect.collectAsState(null)
@@ -241,7 +241,6 @@ private fun Content(
             item(span = { GridItemSpan(maxLineSpan) }) {
                 TrendingSection(
                     isLoading = isLoading,
-                    modifier = Modifier.padding(top = 8.dp),
                     onMoviesClick = homeScreenContract::onTrendingMoviesCardClicked,
                     onTvShowsClick = homeScreenContract::onTrendingTvShowsCardClicked,
                     onActorsClick = homeScreenContract::onTrendingActorsCardClicked
@@ -270,7 +269,6 @@ private fun Content(
                     else CarousalShimmerEffect()
                 }
             }
-
 
             upComingSection(
                 contract = homeScreenContract,

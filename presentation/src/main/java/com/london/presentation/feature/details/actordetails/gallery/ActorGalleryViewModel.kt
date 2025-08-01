@@ -2,13 +2,14 @@ package com.london.presentation.feature.details.actordetails.gallery
 
 import androidx.lifecycle.SavedStateHandle
 import com.london.domain.usecase.GetActorImagesByIdUseCase
+import com.london.presentation.feature.base.BaseViewModel
 import com.london.presentation.navigation.Screen
 import com.london.presentation.navigation.getArgs
-import com.london.presentation.feature.base.BaseViewModel
-import org.koin.android.annotation.KoinViewModel
+import dagger.hilt.android.lifecycle.HiltViewModel
+import javax.inject.Inject
 
-@KoinViewModel
-class ActorGalleryViewModel(
+@HiltViewModel
+class ActorGalleryViewModel @Inject constructor(
     private val getActorImagesByIdUseCase: GetActorImagesByIdUseCase,
     savedStateHandle: SavedStateHandle
 ) : BaseViewModel<ActorGalleryUiState, ActorGalleryEffectUiState>(ActorGalleryUiState()),
