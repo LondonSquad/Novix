@@ -25,6 +25,7 @@ import androidx.navigation.navigation
 import com.london.designsystem.component.NavBar
 import com.london.designsystem.theme.NovixTheme
 import com.london.domain.AppPreferencesService
+import com.london.domain.repository.AuthRepository
 import com.london.presentation.feature.account.AccountScreen
 import com.london.presentation.feature.bookmark.BookmarksScreen
 import com.london.presentation.feature.category.CategoriesScreen
@@ -58,11 +59,10 @@ import com.london.presentation.navigation.Screen.TrendingMovies
 import com.london.presentation.navigation.Screen.TrendingTvShows
 import com.london.presentation.navigation.Screen.TvShowDetails
 import kotlinx.serialization.Serializable
-import org.koin.compose.getKoin
 import timber.log.Timber
 
 @Composable
-fun NovixApp(appPreferencesService: AppPreferencesService) {
+fun NovixApp(appPreferencesService: AppPreferencesService , authRepository: AuthRepository) {
     val navController = rememberNavController()
     val navBackStackEntry by navController.currentBackStackEntryAsState()
     val currentDestination = navBackStackEntry?.destination
@@ -108,7 +108,7 @@ fun NovixApp(appPreferencesService: AppPreferencesService) {
             modifier = Modifier.padding(innerPadding)
         ) {
             onboardingNavGraph(navController, appPreferencesService)
-            splashNavGraph(navController, appPreferencesService)
+            splashNavGraph(navController, appPreferencesService , authRepository)
             authNavGraph(navController)
             mainNavGraph(navController)
         }
@@ -155,7 +155,8 @@ sealed interface NovixAppNavGraph {
 
 fun NavGraphBuilder.splashNavGraph(
     navController: NavHostController,
-    appPreferencesService: AppPreferencesService
+    appPreferencesService: AppPreferencesService,
+    authRepository: AuthRepository
 ) = navigation<NovixAppNavGraph.Splash>(startDestination = Screen.Splash) {
     composable<Screen.Splash> {
         SplashRoute(
@@ -163,7 +164,7 @@ fun NavGraphBuilder.splashNavGraph(
             onNavigateToWelcome = { navController.navigateTo(Screen.OnBoarding.Welcome) },
             onNavigateToHome = { navController.navigateToMainGraph() },
             appPreferencesService = appPreferencesService,
-            authRepository = getKoin().get(),
+            authRepository = authRepository,
         )
     }
 }

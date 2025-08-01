@@ -5,10 +5,9 @@ import com.london.data.remote.source.toprated.movie.TopRatedMovieRemoteDataSourc
 import com.london.domain.entity.PagedFetchResponse
 import com.london.domain.entity.toprated.TopRatedMovie
 import com.london.domain.repository.toprated.TopRatedMovieRepository
-import org.koin.core.annotation.Single
+import javax.inject.Inject
 
-@Single
-class TopRatedMovieRepositoryImpl(
+class TopRatedMovieRepositoryImpl @Inject constructor(
     private val topRatedMovieRemoteDataSource: TopRatedMovieRemoteDataSource
 ) : TopRatedMovieRepository {
     override suspend fun getTopRatedMovies(
