@@ -62,6 +62,7 @@ import com.london.presentation.R
 import com.london.presentation.feature.buildscreen.NetworkErrorScreen
 import com.london.presentation.shared.GenresSection
 import com.london.presentation.utils.Listen
+import com.london.presentation.utils.gridColmuns
 
 @Composable
 fun HomeScreen(
@@ -174,12 +175,8 @@ private fun Content(
     val isLoading = uiState.isLoading
 
     Box(modifier = modifier.fillMaxSize()) {
-        val containerWidth = LocalWindowInfo.current.containerSize.width
-        val itemWidthPx = with(LocalDensity.current) { 158.dp.toPx() }
-        val screenPaddingPx = with(LocalDensity.current) { 32.dp.toPx() }
-        val columns = ((containerWidth - screenPaddingPx) / itemWidthPx).toInt().coerceAtLeast(2)
         LazyVerticalGrid(
-            columns = GridCells.Fixed(columns),
+            columns = GridCells.Fixed(gridColmuns()),
             contentPadding = PaddingValues(
                 top = 12.dp,
                 bottom = 16.dp,

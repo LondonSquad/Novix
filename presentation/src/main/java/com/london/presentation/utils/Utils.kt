@@ -7,6 +7,7 @@ import androidx.compose.ui.platform.LocalWindowInfo
 import androidx.compose.ui.unit.Density
 import androidx.compose.ui.unit.DpSize
 import androidx.compose.ui.unit.IntSize
+import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.toSize
 import java.util.Locale
 
@@ -135,3 +136,11 @@ fun rememberContainerSize(): DpSize {
     val windowInfo = LocalWindowInfo.current
     return remember(windowInfo, density) { windowInfo.containerSize.toDpSize(density) }
 }
+
+@Composable
+fun gridColmuns(): Int= runCatching {
+    val screenWidth = LocalWindowInfo.current.containerSize.width
+    val itemWidthPx = with(LocalDensity.current) { 158.dp.toPx() }
+    val screenPaddingPx = with(LocalDensity.current) { 16.dp.toPx() }
+    ((screenWidth - screenPaddingPx) / itemWidthPx).toInt().coerceAtLeast(2)
+}.getOrDefault(1)

@@ -40,6 +40,7 @@ import com.london.designsystem.utils.string
 import com.london.presentation.utils.Listen
 import com.london.presentation.utils.MovieGenre
 import com.london.presentation.utils.TvShowGenre
+import com.london.presentation.utils.gridColmuns
 
 @Composable
 fun TopRatedScreen(
@@ -113,12 +114,8 @@ private fun Content(
 
         val moviesPagingItems = state.movies.collectAsLazyPagingItems()
         val tvSeriesPagingItems = state.tvSeries.collectAsLazyPagingItems()
-        val screenWidth = LocalWindowInfo.current.containerSize.width
-        val itemWidthPx = with(LocalDensity.current) { 158.dp.toPx() }
-        val screenPaddingPx = with(LocalDensity.current) { 32.dp.toPx() }
-        val columns = ((screenWidth - screenPaddingPx) / itemWidthPx).toInt().coerceAtLeast(2)
         LazyVerticalGrid(
-            columns = GridCells.Fixed(columns),
+            columns = GridCells.Fixed(gridColmuns()),
             contentPadding = PaddingValues(
                 top = 12.dp, bottom = 16.dp, start = 16.dp, end = 16.dp
             ),

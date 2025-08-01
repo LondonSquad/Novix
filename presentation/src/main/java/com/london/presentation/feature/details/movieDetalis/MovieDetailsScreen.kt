@@ -76,6 +76,7 @@ import com.london.presentation.shared.FooterSection
 import com.london.presentation.utils.Listen
 import com.london.presentation.utils.convertGenreCodeToString
 import com.london.presentation.utils.getLocalizedTimeUnit
+import com.london.presentation.utils.gridColmuns
 import com.london.presentation.utils.isNotZeroRate
 import com.london.presentation.utils.offsetLayout
 import com.london.presentation.utils.openUrl
@@ -120,12 +121,8 @@ fun MovieDetailsContent(
     uiState: MovieDetailsUiState,
     movieDetailsContract: MovieDetailsContract
 ) {
-    val screenWidth = LocalWindowInfo.current.containerSize.width
     val screenWidthDp =
         with(LocalDensity.current) { LocalWindowInfo.current.containerSize.width.toDp() }
-    val itemWidthPx = with(LocalDensity.current) { 158.dp.toPx() }
-    val screenPaddingPx = with(LocalDensity.current) { 16.dp.toPx() }
-    val columns = ((screenWidth - screenPaddingPx) / itemWidthPx).toInt().coerceAtLeast(2)
     val uriHandler = LocalUriHandler.current
 
     val lazyState = rememberLazyGridState()
@@ -177,7 +174,7 @@ fun MovieDetailsContent(
             state = lazyState,
             horizontalArrangement = Arrangement.spacedBy(12.dp),
             verticalArrangement = Arrangement.spacedBy(12.dp),
-            columns = GridCells.Fixed(columns),
+            columns = GridCells.Fixed(gridColmuns()),
         ) {
             item(span = { GridItemSpan(maxLineSpan) }) {
                 Box(

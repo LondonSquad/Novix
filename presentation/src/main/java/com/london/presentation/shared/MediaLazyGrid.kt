@@ -17,14 +17,13 @@ import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalDensity
-import androidx.compose.ui.platform.LocalWindowInfo
 import androidx.compose.ui.unit.dp
 import com.london.designsystem.component.CircularLoading
 import com.london.designsystem.component.EmptyLayout
 import com.london.designsystem.component.HomeCard
 import com.london.designsystem.component.TopBar
 import com.london.designsystem.theme.NovixTheme
+import com.london.presentation.utils.gridColmuns
 
 @Composable
 fun <T> MediaLazyGrid(
@@ -69,12 +68,8 @@ fun <T> MediaLazyGrid(
             )
 
             else -> {
-                val screenWidth = LocalWindowInfo.current.containerSize.width
-                val itemWidthPx = with(LocalDensity.current) { 158.dp.toPx() }
-                val screenPaddingPx = with(LocalDensity.current) { 32.dp.toPx() }
-                val columns = ((screenWidth - screenPaddingPx) / itemWidthPx).toInt().coerceAtLeast(2)
                 LazyVerticalGrid(
-                    columns = GridCells.Fixed(columns),
+                    columns = GridCells.Fixed(gridColmuns()),
                     contentPadding = PaddingValues(
                         top = 12.dp,
                         bottom = 16.dp

@@ -15,6 +15,7 @@ import androidx.compose.ui.unit.dp
 import androidx.paging.compose.LazyPagingItems
 import com.london.designsystem.component.HomeCard
 import com.london.domain.entity.TvShow
+import com.london.presentation.utils.gridColmuns
 
 @Composable
 fun TvShowLayOut(
@@ -23,13 +24,8 @@ fun TvShowLayOut(
     isTvShowSaved: (TvShow) -> Boolean,
     onTvShowClick: (TvShow) -> Unit
 ) {
-    val screenWidth = LocalWindowInfo.current.containerSize.width
-    val itemWidthPx = with(LocalDensity.current) { 158.dp.toPx() }
-    val screenPaddingPx = with(LocalDensity.current) { 32.dp.toPx() }
-    val columns = ((screenWidth - screenPaddingPx) / itemWidthPx).toInt().coerceAtLeast(2)
-
     LazyVerticalGrid(
-        columns = GridCells.Fixed(columns),
+        columns = GridCells.Fixed(gridColmuns()),
         modifier = Modifier
             .fillMaxSize()
             .padding(horizontal = 16.dp),
