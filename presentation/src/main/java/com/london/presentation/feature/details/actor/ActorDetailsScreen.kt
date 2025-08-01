@@ -1,6 +1,5 @@
 package com.london.presentation.feature.details.actor
 
-import androidx.compose.animation.core.LinearOutSlowInEasing
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
@@ -43,6 +42,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
@@ -238,24 +238,14 @@ private fun ActorImagePager(
 @Composable
 private fun ActorInfoSectionItem(uiState: ActorDetailsUiState) {
     with(uiState) {
-        if (listOf(
-                actorName,
-                actorBirthday,
-                actorPlaceOfBirth,
-                knownForDepartment
-            ).all { it.isNotBlank() }
-        ) {
-            ActorInfoSection(
-                job = knownForDepartment,
-                name = actorName,
-                birthday = actorBirthday,
-                deathDay = actorDeathDay ?: "",
-                placeOfBirth = actorPlaceOfBirth,
-                modifier = Modifier.offsetLayout()
-            )
-        } else {
-            Spacer(modifier = Modifier.height(16.dp))
-        }
+        ActorInfoSection(
+            job = knownForDepartment,
+            name = actorName,
+            birthday = actorBirthday,
+            deathDay = actorDeathDay ?: "",
+            placeOfBirth = actorPlaceOfBirth,
+            modifier = Modifier.offsetLayout()
+        )
     }
 }
 
@@ -434,12 +424,12 @@ private fun ActorInfoSection(
     job: String,
     name: String,
     birthday: String,
-    deathDay: String?,
+    deathDay: String,
     placeOfBirth: String,
     modifier: Modifier = Modifier
 ) {
     Column(
-        verticalArrangement = Arrangement.spacedBy(8.dp),
+        verticalArrangement = Arrangement.SpaceBetween,
         modifier = modifier
             .fillMaxWidth()
             .heightIn(min = 132.dp)
@@ -451,6 +441,7 @@ private fun ActorInfoSection(
                 shape = RoundedCornerShape(16.dp)
             )
             .background(NovixTheme.colors.surface),
+        horizontalAlignment = Alignment.Start
     ) {
         Text(
             text = "${name}\n",
@@ -460,8 +451,8 @@ private fun ActorInfoSection(
         )
         FlowRow(
             modifier = Modifier
-                .padding(horizontal = 12.dp)
-                .padding(bottom = 12.dp),
+                .fillMaxWidth()
+                .padding(start = 12.dp, end = 12.dp, top = 8.dp, bottom = 12.dp),
             verticalArrangement = Arrangement.spacedBy(8.dp),
             horizontalArrangement = Arrangement.spacedBy(4.dp)
         ) {
@@ -476,7 +467,7 @@ private fun ActorInfoSection(
             )
             TextWithIcon(
                 icon = painterResource(R.drawable.birthday_cake),
-                text = if (deathDay != "") "${birthday.toLocalizedNumbers()}  -  ${deathDay.toLocalizedNumbers()}" else birthday.toLocalizedNumbers(),
+                text = if (!deathDay.isEmpty()) "${birthday.toLocalizedNumbers()}  -  ${deathDay.toLocalizedNumbers()}" else birthday.toLocalizedNumbers(),
             )
         }
     }
@@ -491,6 +482,9 @@ private fun TextWithIcon(
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.spacedBy(4.dp)
     ) {
+        val scale = LocalDensity.current.fontScale
+        val baseIconSize = 12.dp
+
         Box(
             modifier = Modifier
                 .padding(4.dp)
@@ -503,7 +497,7 @@ private fun TextWithIcon(
             painter = icon,
             contentDescription = stringResource(R.string.imagr_dot),
             tint = NovixTheme.colors.body,
-            modifier = Modifier.size(11.dp)
+            modifier = Modifier.size(baseIconSize * scale)
         )
         Text(
             text = text,
