@@ -12,8 +12,6 @@ import androidx.compose.foundation.lazy.grid.rememberLazyGridState
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalDensity
-import androidx.compose.ui.platform.LocalWindowInfo
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.paging.LoadState
@@ -23,6 +21,7 @@ import com.london.designsystem.component.EmptyLayout
 import com.london.designsystem.component.HomeCard
 import com.london.presentation.R
 import com.london.presentation.feature.buildscreen.NetworkErrorScreen
+import com.london.presentation.utils.gridColmuns
 import com.london.presentation.utils.isLoading
 
 @Composable
@@ -58,14 +57,9 @@ fun <T : Any> MediaLazyPagingGrid(
         )
 
         else -> {
-            val screenWidth = LocalWindowInfo.current.containerSize.width
-            val itemWidthPx = with(LocalDensity.current) { 158.dp.toPx() }
-            val screenPaddingPx = with(LocalDensity.current) { 32.dp.toPx() }
-            val columns = ((screenWidth - screenPaddingPx) / itemWidthPx).toInt().coerceAtLeast(2)
-
             LazyVerticalGrid(
                 state = rememberLazyGridState(),
-                columns = GridCells.Fixed(columns),
+                columns = GridCells.Fixed(gridColmuns()),
                 modifier = modifier.fillMaxSize(),
                 horizontalArrangement = Arrangement.spacedBy(12.dp),
                 verticalArrangement = Arrangement.spacedBy(12.dp),
