@@ -26,6 +26,7 @@ import androidx.compose.ui.platform.LocalWindowInfo
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.london.designsystem.R
 import com.london.designsystem.component.HomeCard
@@ -39,11 +40,11 @@ import com.london.presentation.shared.EmptyStateView
 import com.london.presentation.utils.Listen
 import com.london.presentation.utils.MovieGenre
 import com.london.presentation.utils.TvShowGenre
-import org.koin.compose.viewmodel.koinViewModel
+import com.london.presentation.utils.gridColmuns
 
 @Composable
 fun ContinueWatchingScreen(
-    viewModel: ContinueWatchingViewModel = koinViewModel(),
+    viewModel: ContinueWatchingViewModel = hiltViewModel(),
     onBackClick: () -> Unit = {},
     onMovieClick: (Int) -> Unit = {},
     onTvShowClick: (Int) -> Unit = {},
@@ -113,9 +114,8 @@ fun Content(
             )
             else -> EmptyStateView()
         }
-
         LazyVerticalGrid(
-            columns = GridCells.Fixed(2),
+            columns = GridCells.Fixed(gridColmuns()),
             contentPadding = PaddingValues(
                 top = 12.dp,
                 bottom = 16.dp,

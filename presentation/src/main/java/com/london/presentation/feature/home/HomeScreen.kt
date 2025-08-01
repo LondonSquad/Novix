@@ -44,6 +44,7 @@ import androidx.compose.ui.platform.LocalWindowInfo
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -57,11 +58,12 @@ import com.london.designsystem.component.button.PrimaryButton
 import com.london.designsystem.theme.NovixTheme
 import com.london.designsystem.utils.shimmerEffect
 import com.london.domain.entity.Movie
+import com.london.domain.entity.recent.MediaType
 import com.london.presentation.R
 import com.london.presentation.feature.buildscreen.NetworkErrorScreen
 import com.london.presentation.shared.GenresSection
 import com.london.presentation.utils.Listen
-import org.koin.compose.viewmodel.koinViewModel
+import com.london.presentation.utils.gridColmuns
 
 @Composable
 fun HomeScreen(
@@ -72,7 +74,7 @@ fun HomeScreen(
     onNavigateTrendingTvShows: () -> Unit = {},
     onNavigateTrendingActors: () -> Unit = {},
     onNavigateContinueWatching: () -> Unit = {},
-    viewModel: HomeViewModel = koinViewModel(),
+    viewModel: HomeViewModel = hiltViewModel(),
 ) {
     val uiState by viewModel.state.collectAsStateWithLifecycle()
     val effect by viewModel.effect.collectAsState(null)
@@ -92,7 +94,8 @@ fun HomeScreen(
     val lifecycleOwner = LocalLifecycleOwner.current
     LaunchedEffect(key1 = Unit) {
         lifecycleOwner.lifecycle.repeatOnLifecycle(Lifecycle.State.RESUMED) {
-            viewModel.fetchRecentWatchedMedia()        }
+            viewModel.fetchRecentWatchedMedia()
+        }
     }
 
     val lazyGridState = rememberSaveable(
@@ -106,45 +109,46 @@ fun HomeScreen(
 
     when{
         uiState.error != null -> NetworkErrorScreen(onBack = null)
+
         else ->
             Box(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(WindowInsets.statusBars.asPaddingValues())
-        ) {
-
-            Box(
                 modifier = Modifier
-                    .size(400.dp)
-                    .align(Alignment.TopStart)
-                    .background(
-                        Brush.linearGradient(
-                            colors = listOf(
-                                NovixTheme.colors.primary.copy(alpha = 0.09f),
-                                Color.Transparent
-                            ),
-                            start = Offset(0f, 0f),
-                            end = Offset(screenWidth.value, 400f)
-                        )
-                    )
-            )
-            Column(modifier = Modifier.fillMaxSize()) {
-                DefaultTopBar(
+                    .fillMaxSize()
+                    .padding(WindowInsets.statusBars.asPaddingValues())
+            ) {
+
+                Box(
                     modifier = Modifier
-                        .fillMaxWidth()
-                        .background(NovixTheme.colors.surface)
-
+                        .size(400.dp)
+                        .align(Alignment.TopStart)
+                        .background(
+                            Brush.linearGradient(
+                                colors = listOf(
+                                    NovixTheme.colors.primary.copy(alpha = 0.09f),
+                                    Color.Transparent
+                                ),
+                                start = Offset(0f, 0f),
+                                end = Offset(screenWidth.value, 400f)
+                            )
+                        )
                 )
+                Column(modifier = Modifier.fillMaxSize()) {
+                    DefaultTopBar(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .background(NovixTheme.colors.surface)
 
-                Content(
-                    homeScreenContract = viewModel,
-                    uiState = uiState,
-                    modifier = Modifier.weight(1f),
-                    lazyGridState = lazyGridState,
-                    screenWidth = screenWidth
-                )
+                    )
+
+                    Content(
+                        homeScreenContract = viewModel,
+                        uiState = uiState,
+                        modifier = Modifier.weight(1f),
+                        lazyGridState = lazyGridState,
+                        screenWidth = screenWidth
+                    )
+                }
             }
-        }
 
     }
 }
@@ -158,9 +162,8 @@ private fun Content(
     homeScreenContract: HomeScreenContract = defaultHomeScreenContract(),
 ) {
     val upcomingMoviesLazyList = uiState.upcomingMovies.collectAsLazyPagingItems()
-    val totalPopularItems = uiState.popularMovies.size + uiState.popularTvShows.size
     val pagerState = rememberPagerState(initialPage = 0, pageCount = {
-        if (totalPopularItems > 0) totalPopularItems else 3
+        if (uiState.popularMediaList.isNotEmpty()) uiState.popularMediaList.size else 3
     })
 
     val isAtEndOfGrid by remember {
@@ -174,9 +177,8 @@ private fun Content(
     val isLoading = uiState.isLoading
 
     Box(modifier = modifier.fillMaxSize()) {
-
         LazyVerticalGrid(
-            columns = GridCells.Adaptive(minSize = 158.dp),
+            columns = GridCells.Fixed(gridColmuns()),
             contentPadding = PaddingValues(
                 top = 12.dp,
                 bottom = 16.dp,
@@ -192,38 +194,16 @@ private fun Content(
         ) {
 
             item(span = { GridItemSpan(maxLineSpan) }) {
-                if (totalPopularItems > 0) {
-                    val moviesCount = uiState.popularMovies.size
-                    val currentPage = pagerState.currentPage
-
-                    val popularCardImages = uiState.popularMovies.map { it.posterUrl } +
-                            uiState.popularTvShows.map { it.posterUrl }
-
-                    val popularCardRating = uiState.popularMovies.map { it.rating } +
-                            uiState.popularTvShows.map { it.rating }
-
-                    val popularCardTitle = uiState.popularMovies.map { it.title } +
-                            uiState.popularTvShows.map { it.name }
-
+                if (uiState.popularMediaList.isNotEmpty()) {
                     PopularSection(
                         modifier = Modifier.requiredWidth(screenWidth),
                         pagerState = pagerState,
-                        images = popularCardImages,
+                        uiMediaList = uiState.popularMediaList,
                         onSaveClick = {/*TODO*/ },
-                        cardRating = popularCardRating[currentPage].toString(),
-                        cardTitle = popularCardTitle[currentPage],
-                        onCardClick = {
-                            if (currentPage < moviesCount) {
-                                homeScreenContract.onMovieClick(
-                                    uiState.popularMovies[currentPage].id
-                                )
-                            } else {
-                                val tvShowIndex = currentPage - moviesCount
-                                if (tvShowIndex < uiState.popularTvShows.size) {
-                                    homeScreenContract.onTvShowClick(
-                                        uiState.popularTvShows[tvShowIndex].id
-                                    )
-                                }
+                        onCardClick = { id, mediaType ->
+                            when (mediaType) {
+                                MediaType.TvShow -> homeScreenContract.onTvShowClick(id)
+                                MediaType.Movie -> homeScreenContract.onMovieClick(id)
                             }
                         }
                     )
@@ -308,14 +288,15 @@ private fun LazyGridScope.upComingSection(
                 text = stringResource(R.string.upcoming),
                 style = NovixTheme.typography.headline.small,
                 color = NovixTheme.colors.title,
-//                modifier = Modifier.padding(bottom = 4.dp)
             )
         else
-            Box(modifier = Modifier
-                .height(20.dp)
-                .padding(bottom = 4.dp)
-                .wrapContentWidth()
-                .shimmerEffect())
+            Box(
+                modifier = Modifier
+                    .height(20.dp)
+                    .padding(bottom = 4.dp)
+                    .wrapContentWidth()
+                    .shimmerEffect()
+            )
     }
 
     stickyHeader {
@@ -326,7 +307,6 @@ private fun LazyGridScope.upComingSection(
             screenWidth = screenWidth,
             onGenreClick = contract::onMovieGenreSelect,
             modifier = Modifier
-                .padding(bottom = 12.dp)
                 .background(NovixTheme.colors.surface),
             getGenreId = { it.id },
             getGenreName = { stringResource(it.stringResId) }
@@ -342,16 +322,16 @@ private fun LazyGridScope.upComingSection(
                 isSaved = false,
                 onSaveClick = { /*TODO*/ },
                 modifier = Modifier
-                    .padding(top = 4.dp)
                     .clipToBounds()
                     .clip(RoundedCornerShape(12.dp))
                     .clickable { contract.onMovieClick(movie.id) }
             )
         else
-            Box(modifier = Modifier
-                .height(240.dp)
-                .clip(RoundedCornerShape(12.dp))
-                .shimmerEffect())
+            Box(
+                modifier = Modifier
+                    .height(240.dp)
+                    .clip(RoundedCornerShape(12.dp))
+                    .shimmerEffect()
+            )
     }
 }
-

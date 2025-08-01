@@ -26,6 +26,7 @@ import androidx.compose.ui.platform.LocalWindowInfo
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.paging.compose.collectAsLazyPagingItems
 import com.london.designsystem.R
@@ -39,11 +40,11 @@ import com.london.designsystem.utils.string
 import com.london.presentation.utils.Listen
 import com.london.presentation.utils.MovieGenre
 import com.london.presentation.utils.TvShowGenre
-import org.koin.compose.viewmodel.koinViewModel
+import com.london.presentation.utils.gridColmuns
 
 @Composable
 fun TopRatedScreen(
-    viewModel: TopRatedViewModel = koinViewModel(),
+    viewModel: TopRatedViewModel = hiltViewModel(),
     onNavigateBack: () -> Unit = {},
     onNavigateMovie: (Int) -> Unit = {},
     onNavigateTvShow: (Int) -> Unit = {}
@@ -113,9 +114,8 @@ private fun Content(
 
         val moviesPagingItems = state.movies.collectAsLazyPagingItems()
         val tvSeriesPagingItems = state.tvSeries.collectAsLazyPagingItems()
-
         LazyVerticalGrid(
-            columns = GridCells.Fixed(2),
+            columns = GridCells.Fixed(gridColmuns()),
             contentPadding = PaddingValues(
                 top = 12.dp, bottom = 16.dp, start = 16.dp, end = 16.dp
             ),

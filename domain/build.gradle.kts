@@ -5,6 +5,7 @@ plugins {
     alias(libs.plugins.jetbrains.kotlin.jvm)
     alias(libs.plugins.ksp)
     alias(libs.plugins.kotlinx.kover)
+    id ("kotlin-kapt")
 }
 
 java {
@@ -20,15 +21,8 @@ kotlin {
 
 dependencies {
     api(libs.bundles.coroutines)
-    api(libs.koin.annotations)
-    ksp(libs.koin.ksp.compiler)
     testImplementation(libs.bundles.testing)
-    api(libs.koin.core)
-    ksp(libs.bundles.koin.ksp)
-}
+    implementation(libs.bundles.dagger.runtime)
+    kapt(libs.bundles.dagger.kapt)
 
-ksp {
-    arg("KOIN_CONFIG_CHECK", "true")
-    arg("KOIN_DEFAULT_MODULE", "false")
-    arg("KOIN_USE_COMPOSE_VIEWMODEL", "true")
 }

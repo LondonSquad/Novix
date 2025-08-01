@@ -101,8 +101,9 @@
     <string name="no_trending_tvshows_in_genre">No tv shows found in this genre.</string>
     <string name="no_trending_actors_in_genre">No people found in this genre.</string>
     <string name="no_tv_shows_found">no tv shows found in this category</string>
+    <string name="no_actor_details">No actor details available</string>
     <string name="reviews">Reviews</string>
     <string name="no_recent_history">Looks like you haven\'t checked anything yet.\nTake a look around and come back!</string>
     <string name="no_reviews">\"There is no review\"</string>
-    <string name="no_data_until_now">No Data Until Now</string>
+    <string name="no_data_until_now">No Data Yet</string>
 </resources>

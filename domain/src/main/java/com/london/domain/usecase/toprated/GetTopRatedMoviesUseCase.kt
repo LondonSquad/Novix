@@ -3,12 +3,9 @@ package com.london.domain.usecase.toprated
 import com.london.domain.entity.PagedFetchResponse
 import com.london.domain.entity.toprated.TopRatedMovie
 import com.london.domain.repository.toprated.TopRatedMovieRepository
-import org.koin.core.annotation.Provided
-import org.koin.core.annotation.Single
+import javax.inject.Inject
 
-@Single
-class GetTopRatedMoviesUseCase(
-    @Provided
+class GetTopRatedMoviesUseCase @Inject constructor(
     private val topRatedMovieRepo: TopRatedMovieRepository
 ) {
     suspend operator fun invoke(

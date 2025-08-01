@@ -6,15 +6,9 @@ import com.london.data.mapper.recent.toEntity
 import com.london.data.mapper.recent.toLocal
 import com.london.domain.entity.recent.RecentViewed
 import com.london.domain.repository.RecentRepository
-import org.koin.core.annotation.Named
-import org.koin.core.annotation.Provided
-import org.koin.core.annotation.Single
+import javax.inject.Inject
 
-@Single
-@Named("recentViewedRepository")
-data class RecentViewedRepositoryImpl(
-    @Provided
-    @Named("recentViewedDataSource")
+data class RecentViewedRepositoryImpl @Inject constructor(
     private val recentRecentViewedLocalDataSource: RecentDataSource<RecentViewedLocal>
 ) : RecentRepository<RecentViewed> {
     override suspend fun insert(item: RecentViewed) =

@@ -1,10 +1,9 @@
 package com.london.data.local.source.device
 
 import android.content.Context
-import org.koin.core.annotation.Single
+import javax.inject.Inject
 
-@Single
-class DeviceConfigurationDataSource(
+class DeviceConfigurationDataSource @Inject constructor(
     private val context: Context
 ) {
     fun getCurrentLanguage(): String {

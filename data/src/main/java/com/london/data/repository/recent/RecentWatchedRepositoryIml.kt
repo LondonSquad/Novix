@@ -9,18 +9,11 @@ import com.london.data.mapper.recent.toRecentWatchedTvShowLocal
 import com.london.domain.entity.Movie
 import com.london.domain.entity.TvShow
 import com.london.domain.repository.RecentWatchedRepository
-import org.koin.core.annotation.Named
-import org.koin.core.annotation.Provided
-import org.koin.core.annotation.Single
+import javax.inject.Inject
 
-@Single
-@Named("recentWatchedRepository")
-class RecentWatchedRepositoryIml(
-    @Provided
-    @Named("recentWatchedMoviesDataSource")
+
+class RecentWatchedRepositoryIml @Inject constructor(
     private val recentWatchedMoviesDataSource: RecentWatchedDataSource<RecentWatchedMovieLocal>,
-    @Provided
-    @Named("recentWatchedTvShowsDataSource")
     private val recentWatchedTvShowsDataSource: RecentWatchedDataSource<RecentWatchedTvShowLocal>
 ) : RecentWatchedRepository {
     override suspend fun getAllRecentWatchedMovies(): List<Movie> =

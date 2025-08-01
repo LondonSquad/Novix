@@ -5,10 +5,11 @@ import com.london.domain.usecase.recent.watched.GetRecentWatchedTvShowsUseCase
 import com.london.presentation.feature.base.BaseViewModel
 import com.london.presentation.utils.MovieGenre
 import com.london.presentation.utils.TvShowGenre
-import org.koin.android.annotation.KoinViewModel
+import dagger.hilt.android.lifecycle.HiltViewModel
+import javax.inject.Inject
 
-@KoinViewModel
-class ContinueWatchingViewModel(
+@HiltViewModel
+class ContinueWatchingViewModel @Inject constructor(
     private val getRecentWatchedMoviesUseCase: GetRecentWatchedMoviesUseCase,
     private val getRecentWatchedTvShowsUseCase: GetRecentWatchedTvShowsUseCase,
 ) : BaseViewModel<ContinueWatchingUiState, ContinueWatchingEffect>(ContinueWatchingUiState()),

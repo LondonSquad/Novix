@@ -1,9 +1,9 @@
 package com.london.data.local.preference
 
 import com.london.domain.repository.SessionTokenProvider
-import org.koin.core.annotation.Single
+import javax.inject.Singleton
 
-@Single
+@Singleton
 class SharedPrefsTokenProvider(
     private val authPreferences: AuthPreferences
 ) : SessionTokenProvider {

@@ -4,10 +4,11 @@ import com.london.domain.usecase.GetTrendingTvShowsUseCase
 import com.london.presentation.feature.base.BaseViewModel
 import com.london.presentation.feature.base.createPagingSourceFlow
 import com.london.presentation.utils.TvShowGenre
-import org.koin.android.annotation.KoinViewModel
+import dagger.hilt.android.lifecycle.HiltViewModel
+import javax.inject.Inject
 
-@KoinViewModel
-class TrendingTvShowsViewModel(private val getTrendingTvShows: GetTrendingTvShowsUseCase) :
+@HiltViewModel
+class TrendingTvShowsViewModel @Inject constructor(private val getTrendingTvShows: GetTrendingTvShowsUseCase) :
     BaseViewModel<TrendingTvShowsUiState, TrendingTvShowsEffect>(TrendingTvShowsUiState()),
     TrendingTvShowsContract {
 

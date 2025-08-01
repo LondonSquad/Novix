@@ -9,6 +9,7 @@ import com.london.presentation.feature.base.ErrorState
 data class ActorDetailsUiState(
     val isLoading: Boolean = false,
     val error: ErrorState? = null,
+    val isEmpty: Boolean = false,
     val actorDetails: ActorDetails = ActorDetails(),
     val actorImageDetails: List<ImageDetails>? = null,
     val actorMovieDetails: ActorMovieDetails? = null,

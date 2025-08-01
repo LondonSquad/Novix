@@ -13,6 +13,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.paging.compose.collectAsLazyPagingItems
 import com.london.designsystem.component.ActorItem
@@ -22,13 +23,12 @@ import com.london.designsystem.utils.string
 import com.london.presentation.R
 import com.london.presentation.shared.LazyPagingColumn
 import com.london.presentation.utils.Listen
-import org.koin.androidx.compose.koinViewModel
 
 @Composable
 fun TrendingActorsScreen(
     onNavigateActor: (Int) -> Unit,
     onNavigateBack: () -> Unit,
-    viewModel: TrendingActorsViewModel = koinViewModel()
+    viewModel: TrendingActorsViewModel = hiltViewModel()
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
     val effect by viewModel.effect.collectAsState(null)
