@@ -67,7 +67,7 @@ class TopRatedViewModel @Inject constructor(
         }, checkSuccess = { true })
     }
 
-    fun onRetry(){
+    override fun onRetry(){
         updateState { copy(errorMessage = null) }
         initializeTopRated()
     }

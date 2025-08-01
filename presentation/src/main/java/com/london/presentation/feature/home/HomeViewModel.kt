@@ -114,7 +114,7 @@ class HomeViewModel @Inject constructor(
         )
     }
 
-    fun onRetry() {
+    override fun onRetry() {
         updateState { copy(error = null) }
         initializeTopRatedMedia()
         fetchRecentWatchedMedia()

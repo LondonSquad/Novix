@@ -43,7 +43,7 @@ class SearchViewModel @Inject constructor(
     private val addToRecentViewedUseCase: AddToRecentViewedUseCase,
     private val clearRecentViewedUseCase: ClearRecentViewedUseCase,
     private val deleteRecentSearchUseCase: DeleteRecentSearchUseCase
-) : BaseViewModel<SearchUiState, SearchEffect>(SearchUiState()), SearchInteractions {
+) : BaseViewModel<SearchUiState, SearchEffect>(SearchUiState()), SearchContract {
 
     private val _searchQuery = MutableStateFlow("")
 
@@ -529,7 +529,7 @@ class SearchViewModel @Inject constructor(
         }
     }
 
-    fun onRetry(){
+    override fun onRetry(){
         updateState { copy(error = null) }
         updateRecentData()
         setupSearchDebouncing()

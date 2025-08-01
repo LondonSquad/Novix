@@ -148,7 +148,7 @@ fun SearchScreen(
 @Composable
 fun SearchScreenContent(
     state: SearchUiState,
-    interactionListener: SearchInteractions,
+    interactionListener: SearchContract,
     viewModel: SearchViewModel,
     keyboardController: SoftwareKeyboardController?,
 ) {
@@ -489,7 +489,7 @@ private fun SearchChipsRow(
 @Composable
 private fun RecentSearchLayOut(
     state: SearchUiState,
-    interactionListener: SearchInteractions,
+    interactionListener: SearchContract,
     viewModel: SearchViewModel,
     onNavigateToTvShowDetails: (Int) -> Unit,
     onNavigateToMovieDetails: (Int) -> Unit

@@ -44,7 +44,7 @@ class TopTvShowsPicksViewModel @Inject constructor(
         )
     }
 
-    fun onRetry(){
+    override fun onRetry(){
         updateState { copy(errorState = null) }
         getActorTvShowsPicksData()
     }
