@@ -1,5 +1,6 @@
 package com.london.presentation.feature.details.actor
 
+import androidx.compose.animation.core.FastOutSlowInEasing
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
@@ -11,7 +12,6 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.asPaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
@@ -64,15 +64,12 @@ import com.london.domain.entity.actordetails.actormovie.ActorMovieCastMemberEnti
 import com.london.domain.entity.actordetails.actortvshow.ActorTvShowCastMemberEntity
 import com.london.imageharamblur.ui.ImageViewFilter
 import com.london.presentation.R
-import com.london.presentation.feature.base.ErrorState
 import com.london.presentation.feature.buildscreen.NetworkErrorScreen
 import com.london.presentation.shared.ConditionalText
 import com.london.presentation.shared.CustomBackDropImagePager
 import com.london.presentation.utils.Listen
 import com.london.presentation.utils.offsetLayout
 import com.london.presentation.utils.toLocalizedNumbers
-import org.koin.androidx.compose.koinViewModel
-import kotlinx.coroutines.delay
 
 @Composable
 fun ActorDetailsScreen(
@@ -87,25 +84,23 @@ fun ActorDetailsScreen(
     val uiState by viewModel.state.collectAsStateWithLifecycle()
     val effect by viewModel.effect.collectAsState(null)
 
-    effect?.Listen { currentEffect ->
-        when (currentEffect) {
-            is ActorEffectUiState.NavigationBack -> onNavigateBack()
-            is ActorEffectUiState.NavigateToGallery -> onNavigateToGallery(currentEffect.actorId)
-            is ActorEffectUiState.NavigateToMovieScreen -> {
-                onNavigateToMovieScreen(currentEffect.movieId)
-            }
-
-            is ActorEffectUiState.NavigateToTvShowPicks -> onNavigateToTvShowPicks(uiState.actorId)
-            is ActorEffectUiState.NavigateToTvShowScreen -> onNavigateToTvShowScreen(currentEffect.tvShowId)
-            is ActorEffectUiState.NavigateToMoviePicks -> onNavigateToMoviePicks(uiState.actorId)
-        }
-    }
+    HandleEffect(
+        effect = effect,
+        uiState = uiState,
+        onNavigateBack = onNavigateBack,
+        onNavigateToGallery = onNavigateToGallery,
+        onNavigateToMovieScreen = onNavigateToMovieScreen,
+        onNavigateToTvShowPicks = onNavigateToTvShowPicks,
+        onNavigateToTvShowScreen = onNavigateToTvShowScreen,
+        onNavigateToMoviePicks = onNavigateToMoviePicks
+    )
 
     ActorScreenContent(
         uiState = uiState,
         actorDetailsContract = viewModel
     )
 }
+
 
 @Composable
 fun ActorScreenContent(
@@ -114,30 +109,24 @@ fun ActorScreenContent(
     actorDetailsContract: ActorDetailsContract,
 ) {
     when {
-        uiState.error is ErrorState.NoInternet -> NetworkErrorScreen(
+        uiState.error != null -> NetworkErrorScreen(
             onRetry = actorDetailsContract::onRetry,
-            modifier = Modifier.fillMaxSize(),
-            onBack = actorDetailsContract::onNavigateBack
+            onBack = actorDetailsContract::onNavigateBack,
+            modifier = Modifier.fillMaxSize()
         )
 
         uiState.isLoading -> CircularLoading()
 
         else -> {
             val lazyState = rememberLazyListState()
-
             val shouldShowBackground by remember {
                 derivedStateOf {
-                    lazyState.firstVisibleItemScrollOffset > 40f ||
-                            lazyState.firstVisibleItemIndex > 0
+                    lazyState.firstVisibleItemScrollOffset > 40f || lazyState.firstVisibleItemIndex > 0
                 }
             }
-
             val backgroundAlpha by animateFloatAsState(
                 targetValue = if (shouldShowBackground) 1f else 0f,
-                animationSpec = tween(
-                    durationMillis = 400,
-                    easing = LinearOutSlowInEasing
-                ),
+                animationSpec = tween(durationMillis = 400, easing = FastOutSlowInEasing),
                 label = "background_alpha"
             )
 
@@ -146,7 +135,6 @@ fun ActorScreenContent(
                     .fillMaxSize()
                     .background(NovixTheme.colors.surface)
             ) {
-
                 EmptyScreen(uiState)
 
                 LazyColumn(
@@ -158,31 +146,24 @@ fun ActorScreenContent(
                     state = lazyState
                 ) {
                     item {
-                        val hasOtherContent = uiState.actorName.isNotBlank() ||
-                                uiState.actorBiography.isNotBlank() ||
-                                !uiState.actorMovieDetails?.cast.isNullOrEmpty() ||
-                                !uiState.actorTvShowDetails?.cast.isNullOrEmpty()
-                        ActorImagePager(
-                            images = uiState.actorImageDetails.orEmpty(),
-                            hasOtherContent = hasOtherContent
-                        )
+                        if (hasOtherContent(uiState)) {
+                            uiState.actorImageDetails?.let { image ->
+                                CustomBackDropImagePager(
+                                    images = image.map { it.fileUrl },
+                                    isVisibleDots = false
+                                )
+                            }
+                        }
                     }
 
-                    item {
-                        ActorInfoSectionItem(uiState = uiState)
-                    }
-
-                    item {
-                        BiographySection(uiState = uiState)
-                    }
-
+                    item { ActorInfoSectionItem(uiState = uiState) }
+                    item { BiographySection(uiState = uiState) }
                     item {
                         GallerySection(
                             images = uiState.actorImageDetails,
                             onGalleryClick = { actorDetailsContract.onGalleryClick(uiState.actorId) }
                         )
                     }
-
                     item {
                         MoviesSection(
                             movies = uiState.actorMovieDetails?.cast,
@@ -190,63 +171,49 @@ fun ActorScreenContent(
                             onMovieScreenClick = actorDetailsContract::onMovieScreenClick
                         )
                     }
-
                     item {
                         TvShowsSection(
                             tvShows = uiState.actorTvShowDetails?.cast,
-                            onTvShowPicksClick = {
-                                actorDetailsContract.onTvShowPicksClick(
-                                    uiState.actorId
-                                )
-                            },
+                            onTvShowPicksClick = { actorDetailsContract.onTvShowPicksClick(uiState.actorId) },
                             onTvShowScreenClick = actorDetailsContract::onTvShowScreenClick
                         )
                     }
                 }
+
+                TopBar(
+                    onBackClick = actorDetailsContract::onNavigateBack,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .background(NovixTheme.colors.surface.copy(alpha = backgroundAlpha))
+                        .padding(
+                            start = 16.dp,
+                            top = WindowInsets.statusBars.asPaddingValues()
+                                .calculateTopPadding() + 12.dp
+                        )
+                        .zIndex(1f)
+                )
             }
-
-            TopBar(
-                onBackClick = actorDetailsContract::onNavigateBack,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .background(
-                        NovixTheme.colors.surface.copy(alpha = backgroundAlpha)
-                    )
-                    .padding(
-                        start = 16.dp,
-                        top = WindowInsets.statusBars.asPaddingValues()
-                            .calculateTopPadding() + 12.dp
-                    )
-                    .zIndex(1f)
-            )
         }
-    }
-}
-
-@Composable
-private fun ActorImagePager(
-    images: List<ImageDetails>,
-    hasOtherContent: Boolean = false
-) {
-    if (hasOtherContent) {
-        CustomBackDropImagePager(
-            images = images.map { it.fileUrl },
-            isVisibleDots = false
-        )
     }
 }
 
 @Composable
 private fun ActorInfoSectionItem(uiState: ActorDetailsUiState) {
     with(uiState) {
-        ActorInfoSection(
-            job = knownForDepartment,
-            name = actorName,
-            birthday = actorBirthday,
-            deathDay = actorDeathDay ?: "",
-            placeOfBirth = actorPlaceOfBirth,
-            modifier = Modifier.offsetLayout()
-        )
+        if (actorName.isNotEmpty()
+            || actorBirthday.isNotBlank()
+            || actorPlaceOfBirth.isNotBlank()
+            || knownForDepartment.isNotBlank()
+        ) {
+            ActorInfoSection(
+                job = knownForDepartment,
+                name = actorName,
+                birthday = actorBirthday,
+                deathDay = actorDeathDay ?: "",
+                placeOfBirth = actorPlaceOfBirth,
+                modifier = Modifier.offsetLayout()
+            )
+        }
     }
 }
 
@@ -257,22 +224,16 @@ private fun BiographySection(uiState: ActorDetailsUiState) {
             text = stringResource(R.string.biography),
             style = NovixTheme.typography.title.medium,
             color = NovixTheme.colors.title,
-            modifier = Modifier.padding(
-                start = 16.dp,
-                bottom = 4.dp,
-            )
+            modifier = Modifier.padding(start = 16.dp, bottom = 4.dp)
         )
         var isExpanded by remember { mutableStateOf(false) }
-
         ConditionalText(
             text = uiState.actorBiography,
             expandedState = isExpanded,
-            modifier = Modifier.padding(horizontal = 16.dp, vertical = 4.dp)
+            modifier = Modifier.padding(start = 16.dp, end = 16.dp, top = 4.dp, bottom = 16.dp)
         ) {
             isExpanded = !isExpanded
         }
-    } else {
-        Spacer(modifier = Modifier.height(16.dp))
     }
 }
 
@@ -287,8 +248,7 @@ private fun GallerySection(
             hasGetAll = true,
             hasIcon = true,
             modifier = Modifier
-                .padding(bottom = 12.dp, top = 16.dp)
-                .padding(horizontal = 16.dp),
+                .padding(start = 16.dp, end = 16.dp, bottom = 12.dp),
             onClick = onGalleryClick
         )
         ActorGallery(images = images)
@@ -356,9 +316,7 @@ fun TopMoviesPicksList(
             HomeCard(
                 imageUrl = movie[index].posterUrl,
                 isSaved = false,
-                onSaveClick = {
-                    //TODO("Not yet implemented")
-                },
+                onSaveClick = { /* TODO: Not yet implemented */ },
                 modifier = Modifier.clickable {
                     onNavigateToMoviePicks(movie[index].id)
                 }
@@ -382,9 +340,7 @@ fun TopTvShowsPicksList(
             HomeCard(
                 imageUrl = tvShow[index].posterUrl,
                 isSaved = false,
-                onSaveClick = {
-                    //TODO("Not yet implemented")
-                },
+                onSaveClick = { /* TODO: Not yet implemented */ },
                 modifier = Modifier.clickable {
                     onNavigateToTvShowPicks(tvShow[index].id)
                 }
@@ -479,6 +435,7 @@ private fun TextWithIcon(
     text: String,
     icon: Painter
 ) {
+    if (text.isEmpty()) return
     Row(
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.spacedBy(4.dp)
@@ -510,14 +467,14 @@ private fun TextWithIcon(
 
 @Composable
 private fun EmptyScreen(uiState: ActorDetailsUiState) {
-    if (uiState.isLoading) return
+    if (uiState.isLoading || uiState.error != null) return
 
     val hasNoContent = uiState.actorImageDetails.isNullOrEmpty() &&
             uiState.actorMovieDetails?.cast.isNullOrEmpty() &&
             uiState.actorTvShowDetails?.cast.isNullOrEmpty() &&
             uiState.actorBiography.isBlank() &&
-            (uiState.actorName.isBlank() || uiState.actorBirthday.isBlank() ||
-                    uiState.actorPlaceOfBirth.isBlank() || uiState.knownForDepartment.isBlank())
+            (uiState.actorName.isBlank() && uiState.actorBirthday.isBlank() &&
+                    uiState.actorPlaceOfBirth.isBlank() && uiState.knownForDepartment.isBlank())
 
     if (hasNoContent) {
         EmptyLayout(
@@ -526,6 +483,39 @@ private fun EmptyScreen(uiState: ActorDetailsUiState) {
             modifier = Modifier.fillMaxSize()
         )
     }
+}
+
+@Composable
+private fun HandleEffect(
+    effect: ActorEffectUiState?,
+    uiState: ActorDetailsUiState,
+    onNavigateBack: () -> Unit,
+    onNavigateToGallery: (Int) -> Unit,
+    onNavigateToMovieScreen: (Int) -> Unit,
+    onNavigateToTvShowPicks: (Int) -> Unit,
+    onNavigateToTvShowScreen: (Int) -> Unit,
+    onNavigateToMoviePicks: (Int) -> Unit
+) {
+    effect?.Listen { currentEffect ->
+        when (currentEffect) {
+            is ActorEffectUiState.NavigationBack -> onNavigateBack()
+            is ActorEffectUiState.NavigateToGallery -> onNavigateToGallery(currentEffect.actorId)
+            is ActorEffectUiState.NavigateToMovieScreen -> onNavigateToMovieScreen(currentEffect.movieId)
+            is ActorEffectUiState.NavigateToTvShowPicks -> onNavigateToTvShowPicks(uiState.actorId)
+            is ActorEffectUiState.NavigateToTvShowScreen -> onNavigateToTvShowScreen(currentEffect.tvShowId)
+            is ActorEffectUiState.NavigateToMoviePicks -> onNavigateToMoviePicks(uiState.actorId)
+        }
+    }
+}
+
+private fun hasOtherContent(uiState: ActorDetailsUiState): Boolean {
+    return uiState.actorName.isNotBlank() ||
+            uiState.actorBirthday.isNotBlank() ||
+            uiState.actorPlaceOfBirth.isNotBlank() ||
+            uiState.knownForDepartment.isNotBlank() ||
+            uiState.actorBiography.isNotBlank() ||
+            !uiState.actorMovieDetails?.cast.isNullOrEmpty() ||
+            !uiState.actorTvShowDetails?.cast.isNullOrEmpty()
 }
 
 @Preview
