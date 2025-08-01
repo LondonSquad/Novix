@@ -137,7 +137,9 @@ private fun OnboardingContent(
                     .fillMaxSize()
                     .verticalScroll(rememberScrollState())
             ) {
+                Spacer(Modifier.weight(1f))
                 OnboardingPageContent(uiState.pages[page])
+                Spacer(Modifier.weight(1f))
             }
         }
 
@@ -200,7 +202,7 @@ fun OnboardingPageContent(page: OnboardingPage) {
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .padding(32.dp),
+            .padding(horizontal = 41.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center
     ) {
@@ -236,7 +238,7 @@ fun OnboardingPageContent(page: OnboardingPage) {
             )
         }
 
-        Spacer(modifier = Modifier.height(24.dp))
+        Spacer(modifier = Modifier.height(32.dp))
 
         Text(
             text = stringResource(page.title),
@@ -244,7 +246,7 @@ fun OnboardingPageContent(page: OnboardingPage) {
             color = NovixTheme.colors.title,
             textAlign = TextAlign.Center
         )
-        Spacer(modifier = Modifier.height(8.dp))
+        Spacer(modifier = Modifier.height(4.dp))
         Text(
             text = stringResource(page.description),
             style = NovixTheme.typography.body.medium,
