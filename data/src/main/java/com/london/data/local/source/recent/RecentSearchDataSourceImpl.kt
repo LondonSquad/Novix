@@ -2,15 +2,11 @@ package com.london.data.local.source.recent
 
 import com.london.data.local.database.dao.recent.search.RecentSearchDao
 import com.london.data.local.model.recent.search.RecentSearchLocal
-import org.koin.core.annotation.Named
-import org.koin.core.annotation.Provided
-import org.koin.core.annotation.Single
 
-@Single
-@Named("recentSearchDataSource")
-class RecentSearchDataSourceImpl(
-    @Provided
-    @Named("recentSearchDao")
+import javax.inject.Inject
+
+
+class RecentSearchDataSourceImpl @Inject constructor(
     private val recentSearchDao: RecentSearchDao
 ) : RecentDataSource<RecentSearchLocal> {
 

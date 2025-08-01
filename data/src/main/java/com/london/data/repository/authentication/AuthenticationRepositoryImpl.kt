@@ -3,10 +3,9 @@ package com.london.data.repository.authentication
 import com.london.data.local.preference.AuthPreferences
 import com.london.data.remote.source.authentication.AuthenticationRemoteDataSource
 import com.london.domain.repository.AuthRepository
-import org.koin.core.annotation.Single
+import javax.inject.Inject
 
-@Single
-class AuthenticationRepositoryImpl(
+class AuthenticationRepositoryImpl @Inject constructor(
     private val authRemoteDataSource: AuthenticationRemoteDataSource,
     private val authPreferences: AuthPreferences
 ) : AuthRepository {
