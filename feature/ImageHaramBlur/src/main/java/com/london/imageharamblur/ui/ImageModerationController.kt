@@ -3,15 +3,15 @@ package com.london.imageharamblur.ui
 import android.content.Context
 import android.graphics.drawable.Drawable
 import android.os.Build
-import android.util.Log
 import com.london.imageharamblur.ImageModerationProcessor
 import com.london.imageharamblur.utils.blurBitmap
-import com.london.imageharamblur.utils.toBitmap
+import com.london.imageharamblur.extensions.toBitmap
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.withContext
 
-class ImageModerationController(
+internal class ImageModerationController(
     context: Context,
     private val cacheKey: String,
     private val enableModeration: Boolean = true,
@@ -24,19 +24,13 @@ class ImageModerationController(
     private val _state = MutableStateFlow(
         ModerationCacheManager.get(cacheKey) ?: ImageModerationState()
     )
-
-    init {
-        ModerationCacheManager.get(cacheKey)?.let { cachedState ->
-            _state.value = cachedState
-        }
-    }
+    val state: StateFlow<ImageModerationState> = _state
 
     suspend fun processImage(
         drawable: Drawable,
         detectFemales: Boolean = true,
         detectMales: Boolean = false,
-        useContentDetection: Boolean = true,
-        strictMode: Boolean = false
+        useContentDetection: Boolean = true
     ): ImageModerationState = withContext(Dispatchers.Default) {
 
         ModerationCacheManager.get(cacheKey)?.let { cachedState ->
@@ -51,7 +45,12 @@ class ImageModerationController(
 
             val bitmap = drawable.toBitmap()
             if (bitmap == null || bitmap.isRecycled) {
-                throw IllegalStateException("Invalid bitmap")
+                val errorState = _state.value.copy(
+                    isProcessing = false,
+                    error = "Invalid bitmap"
+                )
+                _state.value = errorState
+                return@withContext errorState
             }
 
             if (!enableModeration || processor == null) {
@@ -66,23 +65,21 @@ class ImageModerationController(
                 return@withContext newState
             }
 
-            val result = processor.processImage(
+            val shouldModerate = processor.shouldModerateImage(
                 bitmap = bitmap,
                 detectFemales = detectFemales,
                 detectMales = detectMales,
-                useContentDetection = useContentDetection,
-                strictMode = strictMode
+                useContentDetection = useContentDetection
             )
 
-            val blurredBitmap = if (result.shouldModerate && Build.VERSION.SDK_INT < Build.VERSION_CODES.S) {
+            val blurredBitmap = if (shouldModerate && Build.VERSION.SDK_INT < Build.VERSION_CODES.S) {
                 blurBitmap(bitmap, blurStrength.toInt())
             } else null
 
             val newState = ImageModerationState(
                 isProcessing = false,
                 isModerated = true,
-                shouldBlur = result.shouldModerate,
-                moderationReason = result.reason,
+                shouldBlur = shouldModerate,
                 originalBitmap = bitmap,
                 blurredBitmap = blurredBitmap
             )
@@ -92,7 +89,6 @@ class ImageModerationController(
 
             newState
         } catch (e: Exception) {
-            Log.e("ImageModerationController", "Error processing image", e)
             val errorState = _state.value.copy(
                 isProcessing = false,
                 error = e.message
@@ -100,5 +96,9 @@ class ImageModerationController(
             _state.value = errorState
             errorState
         }
+    }
+
+    fun close() {
+        processor?.close()
     }
 }

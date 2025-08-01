@@ -19,11 +19,11 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.london.designsystem.component.CircularLoading
+import com.london.designsystem.component.ImageView
 import com.london.designsystem.component.NovixCarousalRow
 import com.london.designsystem.component.UnSuitableEye
 import com.london.designsystem.component.button.ErrorImage
 import com.london.designsystem.theme.NovixTheme
-import com.london.imageharamblur.ui.ImageViewFilter
 import com.london.presentation.R
 import kotlinx.coroutines.currentCoroutineContext
 import kotlinx.coroutines.delay
@@ -79,7 +79,7 @@ fun CustomBackDropImagePager(
                 modifier = Modifier.align(Alignment.Center),
                 state = pagerState,
             ) { pageIndex ->
-                ImageViewFilter(
+                ImageView(
                     modifier = Modifier
                         .fillMaxWidth()
                         .height(252.dp),

@@ -39,11 +39,11 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.paging.compose.collectAsLazyPagingItems
 import com.london.designsystem.component.CircularLoading
+import com.london.designsystem.component.ImageView
 import com.london.designsystem.component.Text
 import com.london.designsystem.component.TopBar
 import com.london.designsystem.component.button.ErrorImage
 import com.london.designsystem.theme.NovixTheme
-import com.london.imageharamblur.ui.ImageViewFilter
 import com.london.presentation.R
 import com.london.presentation.feature.buildscreen.BuildScreen
 import com.london.presentation.shared.ConditionalText
@@ -216,7 +216,7 @@ fun AuthorItem(
                 ),
             contentAlignment = Alignment.Center
         ) {
-            ImageViewFilter(
+            ImageView(
                 model = profileUrl,
                 contentDescription = stringResource(R.string.author_profile),
                 modifier = Modifier,

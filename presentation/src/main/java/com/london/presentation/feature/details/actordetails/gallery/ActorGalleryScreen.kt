@@ -26,10 +26,10 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.london.designsystem.component.CircularLoading
+import com.london.designsystem.component.ImageView
 import com.london.designsystem.component.TopBar
 import com.london.designsystem.component.button.ErrorImage
 import com.london.designsystem.theme.NovixTheme
-import com.london.imageharamblur.ui.ImageViewFilter
 import com.london.presentation.R
 import com.london.presentation.feature.buildscreen.BuildScreen
 import com.london.presentation.utils.Listen
@@ -89,7 +89,7 @@ private fun Content(
                         .background(NovixTheme.colors.surface)
                 ) {
                     items(uiState.images) { imageUrl ->
-                        ImageViewFilter(
+                        ImageView(
                             model = imageUrl,
                             contentDescription = stringResource(R.string.actor_photos),
                             modifier = Modifier

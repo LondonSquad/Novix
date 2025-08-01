@@ -13,8 +13,8 @@ fun ImageView(
     contentScale: ContentScale = ContentScale.Crop,
     onLoadingStateChange: ((Boolean) -> Unit)? = null,
     loadingContent: @Composable () -> Unit = {},
-    errorContent: @Composable (String?) -> Unit = {}
-
+    errorContent: @Composable (String?) -> Unit = {},
+    moderatedContent: @Composable () -> Unit = {}
 ) {
     ImageViewFilter(
         model = model,
@@ -24,8 +24,6 @@ fun ImageView(
         onLoadingStateChange = onLoadingStateChange,
         loadingContent = loadingContent,
         errorContent = errorContent,
-        moderatedContent = {
-            UnSuitableEye()
-        }
+        moderatedContent = moderatedContent
     )
 }

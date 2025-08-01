@@ -67,7 +67,7 @@ private fun ActorImage(
     )
 
     Box {
-        ImageViewFilter(
+        ImageView(
             model = imageRes,
             contentDescription = "actorImage",
             modifier = Modifier

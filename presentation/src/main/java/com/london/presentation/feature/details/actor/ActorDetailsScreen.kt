@@ -54,6 +54,7 @@ import com.london.designsystem.component.CircularLoading
 import com.london.designsystem.component.EmptyLayout
 import com.london.designsystem.component.HomeCard
 import com.london.designsystem.component.Icon
+import com.london.designsystem.component.ImageView
 import com.london.designsystem.component.SectionHeader
 import com.london.designsystem.component.Text
 import com.london.designsystem.component.TopBar
@@ -62,7 +63,6 @@ import com.london.designsystem.theme.NovixTheme
 import com.london.domain.entity.actordetails.actorimage.ImageDetails
 import com.london.domain.entity.actordetails.actormovie.ActorMovieCastMemberEntity
 import com.london.domain.entity.actordetails.actortvshow.ActorTvShowCastMemberEntity
-import com.london.imageharamblur.ui.ImageViewFilter
 import com.london.presentation.R
 import com.london.presentation.feature.buildscreen.NetworkErrorScreen
 import com.london.presentation.shared.ConditionalText
@@ -359,7 +359,7 @@ fun ActorGallery(images: List<ImageDetails>) {
         modifier = Modifier.height(88.dp)
     ) {
         itemsIndexed(images) { _, imageDetails ->
-            ImageViewFilter(
+            ImageView(
                 model = imageDetails.fileUrl,
                 contentDescription = null,
                 contentScale = ContentScale.FillBounds,

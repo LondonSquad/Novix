@@ -41,7 +41,7 @@ fun HomeCard(
         contentAlignment = Alignment.Center
     ) {
 
-        ImageViewFilter(
+        ImageView(
             model = imageUrl,
             contentDescription = imageDescription,
             modifier = Modifier.matchParentSize(),

@@ -21,7 +21,6 @@ import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.layout.ContentScale.Companion.Crop
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
-import com.london.imageharamblur.ui.ImageViewFilter
 import com.london.designsystem.component.button.ErrorImage
 import com.london.designsystem.theme.NovixTheme
 import com.london.designsystem.theme.ThemePreviews
@@ -48,7 +47,7 @@ fun CategoriesItem(
             .height(68.dp)
             .noRippleClickable(onClick = onClick),
     ) {
-        ImageViewFilter(
+        ImageView(
             model = categoryImage,
             errorContent = { ErrorImage() },
             contentDescription = "Image of ${categoryName.joinToString()}",
