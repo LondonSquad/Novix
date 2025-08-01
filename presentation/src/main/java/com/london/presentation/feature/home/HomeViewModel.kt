@@ -37,8 +37,7 @@ class HomeViewModel @Inject constructor(
     private var upcomingJob: Job? = null
 
     init {
-        initializePopularMovies()
-        initializePopularTvShows()
+        initializePopularMedia()
         initializeTopRatedMedia()
         updateState {
             copy(upcomingMovies = _upcomingMoviesFlow)
@@ -59,7 +58,7 @@ class HomeViewModel @Inject constructor(
                         shows.items.take(10).toUiMedia()
 
                 updateState {
-                    copy(topRatedUiMediaList = topRatedMedia.shuffled())
+                    copy(topRatedMediaList = topRatedMedia.shuffled())
                 }
             },
             onError = { errorState -> updateState { copy(error = errorState) } },
@@ -91,29 +90,27 @@ class HomeViewModel @Inject constructor(
         )
     }
 
-    private fun initializePopularTvShows() {
+    private fun initializePopularMedia() {
         tryToExecute(
-            block = { getPopularTvShows.invoke() },
-            onStart = { updateState { copy(isLoading = true) } },
-            onSuccess = { popularTvShows ->
-                updateState { copy(popularTvShows = popularTvShows) }
+            block = {
+                val movies = getPopularMovies.invoke()
+                val shows = getPopularTvShows.invoke()
+                Pair(movies, shows)
             },
-            onError = { errorState -> updateState { copy(error = errorState) } },
-            onCompleted = { updateState { copy(isLoading = false) } },
-            checkSuccess = { it.isNotEmpty() },
-        )
-    }
+            onStart = { updateState { copy(isTopRatedLoading = true) } },
+            onSuccess = { (movies, shows) ->
+                val popularMedia = movies.toPopularUiMedia() +
+                        shows.toPopularUiMedia()
 
-    private fun initializePopularMovies() {
-        tryToExecute(
-            block = { getPopularMovies.invoke() },
-            onStart = { updateState { copy(isLoading = true) } },
-            onSuccess = { popularMovies ->
-                updateState { copy(popularMovies = popularMovies) }
+                updateState {
+                    copy(popularMediaList = popularMedia)
+                }
             },
             onError = { errorState -> updateState { copy(error = errorState) } },
-            onCompleted = { updateState { copy(isLoading = false) } },
-            checkSuccess = { it.isNotEmpty() },
+            onCompleted = { updateState { copy(isTopRatedLoading = false) } },
+            checkSuccess = { (movies, shows) ->
+                movies.isNotEmpty() || shows.isNotEmpty()
+            }
         )
     }
 
