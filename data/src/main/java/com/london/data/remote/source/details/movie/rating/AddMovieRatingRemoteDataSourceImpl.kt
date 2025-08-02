@@ -1,7 +1,7 @@
 package com.london.data.remote.source.details.movie.rating
 
 import com.london.data.remote.model.details.rating.RatingRemoteBody
-import com.london.data.remote.model.details.rating.RatingResponse
+import com.london.data.remote.model.details.rating.RatingRemoteResponse
 import com.london.data.remote.service.details.movie.AddMovieRatingApiService
 import com.london.data.remote.source.base.BaseRemoteDatasource
 import javax.inject.Inject
@@ -14,8 +14,8 @@ class AddMovieRatingRemoteDataSourceImpl @Inject constructor(
         rating: Double,
         guestSessionId: String?,
         userSessionId: String?
-    ): Result<RatingResponse> = callApiWithRetry(apiCall = {
-        addMovieRatingApiService.addMovieRating(
+    ): Result<RatingRemoteResponse> = callApiWithRetry(apiCall = {
+        addMovieRatingApiService.getMovieAccountStates(
             movieId = movieId,
             ratingRequest = RatingRemoteBody(rating),
             guestSessionId = guestSessionId,

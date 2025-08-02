@@ -5,7 +5,7 @@ import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class RatingResponse(
+data class RatingRemoteResponse(
     @SerialName("status_code")
     val statusCode: Int? = null,
     @SerialName("status_message")
