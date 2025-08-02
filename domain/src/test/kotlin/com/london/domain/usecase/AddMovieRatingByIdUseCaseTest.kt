@@ -28,14 +28,14 @@ class AddMovieRatingByIdUseCaseTest {
         // Given
         val movieId = 456
         val rating = 7.5
-        coEvery { repository.addMovieRatingById(movieId, rating) } returns true
+        coEvery { repository.addMovieRatingById(movieId, rating.toInt()) } returns true
 
         // When
-        val result = useCase(movieId, rating)
+        val result = useCase(movieId, rating.toInt())
 
         // Then
         assertTrue(result)
-        coVerify(exactly = 1) { repository.addMovieRatingById(movieId, rating) }
+        coVerify(exactly = 1) { repository.addMovieRatingById(movieId, rating.toInt()) }
     }
 
     @Test
@@ -44,13 +44,13 @@ class AddMovieRatingByIdUseCaseTest {
             // Given
             val movieId = 789
             val rating = 4.0
-            coEvery { repository.addMovieRatingById(movieId, rating) } returns false
+            coEvery { repository.addMovieRatingById(movieId, rating.toInt()) } returns false
 
             // When
-            val result = useCase(movieId, rating)
+            val result = useCase(movieId, rating.toInt())
 
             // Then
             assertFalse(result)
-            coVerify(exactly = 1) { repository.addMovieRatingById(movieId, rating) }
+            coVerify(exactly = 1) { repository.addMovieRatingById(movieId, rating.toInt()) }
         }
 }

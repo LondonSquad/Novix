@@ -4,7 +4,6 @@ package com.london.data.remote.service.details.movie
 import com.london.data.remote.model.ApiResponse
 import com.london.data.remote.model.details.movie.model.moviecast.MovieCastResponse
 import com.london.data.remote.model.details.movie.model.moviedetails.AccountMovieStatesResponse
-import com.london.data.remote.model.details.movie.model.moviedetails.MovieAccountStatesResponse
 import com.london.data.remote.model.details.movie.model.moviedetails.MovieDetailsResponse
 import com.london.data.remote.model.details.movie.model.movieimages.MovieImagesResponse
 import com.london.data.remote.model.details.videoprovider.movie.model.MovieVideoRemote

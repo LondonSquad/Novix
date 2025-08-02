@@ -1,16 +1,17 @@
 package com.london.data.repository
 
 import com.london.data.local.preference.AuthPreferences
-import com.london.data.remote.model.details.rating.RatingResponse
+import com.london.data.remote.model.details.rating.RatingRemoteResponse
 import com.london.data.remote.source.details.movie.rating.AddMovieRatingRemoteDataSource
 import io.mockk.coEvery
 import io.mockk.mockk
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runTest
-import org.junit.Assert.assertFalse
+import org.junit.Assert.assertThrows
 import org.junit.Assert.assertTrue
 import org.junit.Before
 import org.junit.Test
+import kotlin.test.assertFalse
 
 
 @ExperimentalCoroutinesApi
@@ -25,9 +26,9 @@ class AddMovieRatingRepositoryImplTest {
         repository = AddMovieRatingRepositoryImpl(remoteDataSource, authPreferences)
     }
 
-    private fun fakeRatingResponse() = RatingResponse(
+    private fun fakeRatingResponse() = RatingRemoteResponse(
         statusCode = 1,
-        statusMessage = "Success"
+        statusMessage = "Success",
     )
 
     @Test
@@ -35,7 +36,7 @@ class AddMovieRatingRepositoryImplTest {
         runTest {
             // Given
             val movieId = 1
-            val rating = 9.5
+            val rating = 9
             val sessionId = "user-session-id"
 
             coEvery { authPreferences.getSessionId() } returns sessionId
@@ -43,7 +44,7 @@ class AddMovieRatingRepositoryImplTest {
             coEvery {
                 remoteDataSource.addMovieRating(
                     movieId = movieId,
-                    rating = rating,
+                    rating = rating.toDouble(),
                     userSessionId = sessionId,
                     guestSessionId = null,
                 )
@@ -76,7 +77,7 @@ class AddMovieRatingRepositoryImplTest {
             } returns Result.success(fakeRatingResponse())
 
             // When
-            val result = repository.addMovieRatingById(movieId, rating)
+            val result = repository.addMovieRatingById(movieId, rating.toInt())
 
             // Then
             assertTrue(result)
@@ -84,15 +85,45 @@ class AddMovieRatingRepositoryImplTest {
 
     @Test
     fun `given no session when addMovieRatingById called then return false`() = runTest {
-
         // Given
+        val movieId = 1
+        val rating = 5
+
         coEvery { authPreferences.getSessionId() } returns null
         coEvery { authPreferences.getGuestSessionId() } returns null
 
         // When
-        val result = repository.addMovieRatingById(1, 5.0)
+        val result = repository.addMovieRatingById(movieId, rating)
 
         // Then
         assertFalse(result)
     }
+
+    @Test
+    fun `given failure from remote data source when getAccountMovieStatesById called then throw`() =
+        runTest {
+            // Given
+            val movieId = 123
+            val sessionId = "user-session"
+
+            coEvery { authPreferences.getSessionId() } returns sessionId
+            coEvery { authPreferences.getGuestSessionId() } returns null
+            coEvery {
+                remoteDataSource.addMovieRating(
+                    movieId = movieId,
+                    userSessionId = sessionId,
+                    guestSessionId = null,
+                    rating = 5.5
+                )
+            } returns Result.failure(RuntimeException("Network error"))
+
+            // When && Then
+            assertThrows(RuntimeException::class.java) {
+                runTest {
+                    repository.addMovieRatingById(
+                        movieId = movieId, rating = 3
+                    )
+                }
+            }
+        }
 }

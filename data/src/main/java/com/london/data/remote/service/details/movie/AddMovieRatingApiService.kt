@@ -2,7 +2,6 @@ package com.london.data.remote.service.details.movie
 
 import com.london.data.remote.model.details.rating.RatingRemoteBody
 import com.london.data.remote.model.details.rating.RatingRemoteResponse
-import com.london.data.remote.model.details.rating.RatingResponse
 import retrofit2.Response
 import retrofit2.http.Body
 import retrofit2.http.POST
