@@ -10,7 +10,7 @@ import retrofit2.http.Query
 
 interface AddMovieRatingApiService {
     @POST("3/movie/{movie_id}/rating")
-    suspend fun getMovieAccountStates(
+    suspend fun getAccountMovieStates(
         @Path("movie_id") movieId: Int,
         @Query("guest_session_id") guestSessionId: String?,
         @Query("session_id") userSessionId: String?,
