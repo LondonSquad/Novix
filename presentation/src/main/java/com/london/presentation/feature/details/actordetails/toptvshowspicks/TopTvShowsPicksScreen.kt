@@ -8,6 +8,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.london.presentation.R
+import com.london.presentation.feature.base.ErrorState
 import com.london.presentation.feature.buildscreen.BuildScreen
 import com.london.presentation.shared.MediaLazyGrid
 import com.london.presentation.utils.Listen
@@ -30,14 +31,13 @@ fun TopTvShowsPicksScreen(
     BuildScreen(
         onBack = viewModel::onBack,
         isLoading = state.isLoading,
-        isError = state.errorState != null
+        isError = state.errorState is ErrorState.NoInternet,
+        onRetry = viewModel::onRetry
     ) {
-
         TopTvShowsPicksContent(
             state = state,
             contract = viewModel,
         )
-
     }
 }
 

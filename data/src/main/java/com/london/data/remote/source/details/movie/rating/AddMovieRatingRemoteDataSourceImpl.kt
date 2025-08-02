@@ -15,7 +15,7 @@ class AddMovieRatingRemoteDataSourceImpl @Inject constructor(
         guestSessionId: String?,
         userSessionId: String?
     ): Result<RatingRemoteResponse> = callApiWithRetry(apiCall = {
-        addMovieRatingApiService.getAccountMovieStates(
+        addMovieRatingApiService.addMovieRating(
             movieId = movieId,
             ratingRequest = RatingRemoteBody(rating),
             guestSessionId = guestSessionId,

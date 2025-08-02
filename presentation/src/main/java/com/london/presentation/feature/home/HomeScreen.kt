@@ -107,8 +107,17 @@ fun HomeScreen(
     val screenWidth =
         with(LocalDensity.current) { LocalWindowInfo.current.containerSize.width.toDp() }
 
+    val upcomingMoviesLazyList = uiState.upcomingMovies.collectAsLazyPagingItems()
+
+
     when{
-        uiState.error != null -> NetworkErrorScreen(onBack = null)
+        uiState.error != null -> NetworkErrorScreen(
+            onRetry = {
+                viewModel.onRetry()
+                upcomingMoviesLazyList.retry()
+            },
+            onBack = null
+        )
 
         else ->
             Box(

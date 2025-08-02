@@ -1,13 +1,17 @@
 package com.london.data.repository
 
+import com.london.data.local.preference.AuthPreferences
+import com.london.data.mapper.moviedetails.toEntity
 import com.london.data.remote.exception.NetworkException
 import com.london.data.remote.model.ApiResponse
 import com.london.data.remote.model.details.movie.model.moviecast.MovieActor
 import com.london.data.remote.model.details.movie.model.moviecast.MovieCastResponse
+import com.london.data.remote.model.details.movie.model.moviedetails.AccountMovieStatesResponse
 import com.london.data.remote.model.details.movie.model.moviedetails.GenreRemote
 import com.london.data.remote.model.details.movie.model.moviedetails.MovieDetailsResponse
 import com.london.data.remote.model.details.movie.model.moviedetails.ProductionCompanyRemote
 import com.london.data.remote.model.details.movie.model.moviedetails.ProductionCountryRemote
+import com.london.data.remote.model.details.movie.model.moviedetails.RatingValue
 import com.london.data.remote.model.details.movie.model.moviedetails.RemoteCollectionDetails
 import com.london.data.remote.model.details.movie.model.moviedetails.SpokenLanguageRemote
 import com.london.data.remote.model.details.movie.model.movieimages.MovieImagesResponse
@@ -26,12 +30,17 @@ import kotlin.test.Test
 class MovieDetailsRepositoryImplTest {
 
     private lateinit var remoteDataSource: MovieDetailsRemoteDataSource
+    private lateinit var authPreferences: AuthPreferences
     private lateinit var repository: MovieDetailsRepositoryImpl
 
     @Before
     fun setup() {
         remoteDataSource = mockk(relaxed = true)
-        repository = MovieDetailsRepositoryImpl(remoteDataSource)
+        authPreferences = mockk(relaxed = true)
+        repository = MovieDetailsRepositoryImpl(
+            remoteDataSource,
+            authPreferences = authPreferences
+        )
     }
 
     private fun fakeMovieDetailsRemote() = MovieDetailsResponse(
@@ -78,7 +87,7 @@ class MovieDetailsRepositoryImplTest {
             SearchMovieRemote(
                 adult = false,
                 backdropPath = null,
-                genreIds =listOf(1,2,3),
+                genreIds = listOf(1, 2, 3),
                 id = 1,
                 originalLanguage = "en",
                 originalTitle = "",
@@ -98,7 +107,7 @@ class MovieDetailsRepositoryImplTest {
             SearchMovieRemote(
                 adult = false,
                 backdropPath = null,
-                genreIds = listOf(1,2,3),
+                genreIds = listOf(1, 2, 3),
                 id = 1,
                 originalLanguage = "en",
                 originalTitle = "",
@@ -180,6 +189,23 @@ class MovieDetailsRepositoryImplTest {
         ),
         crew = emptyList()
     )
+
+    private fun fakeMovieStatesRemote(): AccountMovieStatesResponse =
+        AccountMovieStatesResponse(
+            id = 123,
+            favorite = true,
+            rated = RatingValue(5),
+            watchlist = true
+        )
+
+    private fun secondFakeMovieStatesRemote(): AccountMovieStatesResponse {
+        return AccountMovieStatesResponse(
+            favorite = true,
+            id = 5,
+            rated = RatingValue(value = 5),
+            watchlist = false
+        )
+    }
 
     @Test
     fun `getMovieUsingId should map remote data correctly`() = runTest {
@@ -277,4 +303,26 @@ class MovieDetailsRepositoryImplTest {
         }
     }
 
+    @Test
+    fun `getMovieAccountStatesById should use guestSessionId when userSessionId is null`() =
+        runTest {
+            val movieId = 123
+            val guestSessionId = "guest123"
+            val remoteMovieStates = fakeMovieStatesRemote()
+
+            coEvery { authPreferences.getSessionId() } returns null
+            coEvery { authPreferences.getGuestSessionId() } returns guestSessionId
+
+            coEvery {
+                remoteDataSource.getAccountMovieStates(
+                    movieId,
+                    guestSessionId,
+                    null
+                )
+            } returns Result.success(remoteMovieStates)
+
+            val result = repository.getAccountMovieStatesById(movieId)
+
+            assertEquals(remoteMovieStates.toEntity(), result)
+        }
 }

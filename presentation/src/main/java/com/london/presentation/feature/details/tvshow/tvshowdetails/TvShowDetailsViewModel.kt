@@ -187,14 +187,12 @@ class TvShowDetailsViewModel @Inject constructor(
         )
     }
 
-    fun onEpisodeClick(tvShowId: Int, episodeNumber: Int, seasonNumber: Int) {
-        emitEffect(
-            TvShowDetailsEffect.OnNavigateToEpisodeDetails(
-                tvShowId = tvShowId,
-                episodeNumber = episodeNumber,
-                seasonNumber = seasonNumber
-            )
-        )
+    fun onRetry() {
+        updateState { copy(error = null) }
+        initializeGetTvShowDetailsData()
+        initializeGetCastData()
+        initializeGetImagesData()
+        initializeEpisodesBySeasons()
     }
 
     override fun onEpisodeClicked(tvShowId: Int, episodeNumber: Int, seasonNumber: Int) {

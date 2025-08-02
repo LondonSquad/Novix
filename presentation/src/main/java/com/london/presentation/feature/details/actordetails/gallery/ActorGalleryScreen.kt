@@ -47,7 +47,8 @@ fun ActorGalleryScreen(
     BuildScreen(
         onBack = viewModel::onBackClick,
         isLoading = uiState.isLoading,
-        isError = uiState.error != null
+        isError = uiState.error != null,
+        onRetry = viewModel::onRetry
     ) {
         Content(
             actorGalleryContract = viewModel,

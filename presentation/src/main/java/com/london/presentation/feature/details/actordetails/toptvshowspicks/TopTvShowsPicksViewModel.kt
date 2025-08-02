@@ -44,6 +44,11 @@ class TopTvShowsPicksViewModel @Inject constructor(
         )
     }
 
+    override fun onRetry(){
+        updateState { copy(errorState = null) }
+        getActorTvShowsPicksData()
+    }
+
     override fun onSaveMovie(movieId: Int) {
         updateState { copy(isSaved = !this.isSaved) }
     }

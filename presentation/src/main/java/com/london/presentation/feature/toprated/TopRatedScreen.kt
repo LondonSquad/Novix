@@ -28,6 +28,7 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.paging.LoadState
 import androidx.paging.compose.collectAsLazyPagingItems
 import com.london.designsystem.R
 import com.london.designsystem.component.HomeCard
@@ -37,10 +38,12 @@ import com.london.designsystem.component.TabLayout
 import com.london.designsystem.component.TopBar
 import com.london.designsystem.theme.NovixTheme
 import com.london.designsystem.utils.string
+import com.london.presentation.feature.buildscreen.BuildScreen
 import com.london.presentation.utils.Listen
 import com.london.presentation.utils.MovieGenre
 import com.london.presentation.utils.TvShowGenre
 import com.london.presentation.utils.gridColmuns
+import com.london.presentation.utils.isLoading
 
 @Composable
 fun TopRatedScreen(
@@ -60,10 +63,21 @@ fun TopRatedScreen(
         }
     }
 
-    Content(
-        state = state,
-        topRatedContract = viewModel
-    )
+    val topRatedMovieFlow = state.movies.collectAsLazyPagingItems()
+    val topRatedTvShowFlow = state.tvSeries.collectAsLazyPagingItems()
+
+    BuildScreen(
+        isLoading = topRatedTvShowFlow.isLoading() && topRatedMovieFlow.isLoading(),
+        isError = topRatedMovieFlow.loadState.refresh is LoadState.Error
+                && topRatedTvShowFlow.loadState.refresh is LoadState.Error,
+        onBack = viewModel::onBackClicked,
+        onRetry = viewModel::onRetry,
+    ) {
+        Content(
+            state = state,
+            topRatedContract = viewModel
+        )
+    }
 }
 
 @Composable
