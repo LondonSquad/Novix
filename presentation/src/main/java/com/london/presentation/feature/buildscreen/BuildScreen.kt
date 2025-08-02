@@ -7,6 +7,10 @@ import androidx.compose.ui.res.stringResource
 import androidx.paging.LoadState
 import androidx.paging.compose.LazyPagingItems
 import com.london.designsystem.component.EmptyLayout
+import com.london.presentation.utils.isEmpty
+import com.london.presentation.utils.isNotEmpty
+import com.london.presentation.utils.isNotNull
+import com.london.presentation.utils.shouldShowLoading
 
 
 @Composable
@@ -22,18 +26,22 @@ fun BuildScreen(
     content: @Composable () -> Unit,
 ) {
     when {
-        isLoading || (handlePagingLoadingAutomatically && pagingFlow?.loadState?.refresh is LoadState.Loading) -> {
-            LoadingScreen()
-        }
+        shouldShowLoading(
+            isLoading = isLoading,
+            handlePagingLoadingAutomatically = handlePagingLoadingAutomatically,
+            pagingFlow = pagingFlow
+        ) -> { LoadingScreen() }
+
         isError || (pagingFlow?.loadState?.refresh is LoadState.Error) -> {
             NetworkErrorScreen(onBack = onBack, onRetry = onRetry)
         }
-        pagingFlow != null &&
-                pagingFlow.itemCount == 0 &&
+
+        pagingFlow?.isNotEmpty() == true &&
+                pagingFlow.isEmpty() &&
                 pagingFlow.loadState.refresh is LoadState.NotLoading &&
-                emptyLayoutMessage != null -> {
+                emptyLayoutMessage.isNotNull() -> {
             EmptyLayout(
-                text = stringResource(emptyLayoutMessage),
+                text = stringResource(emptyLayoutMessage!!),
                 image = emptyLayoutImage ?: 0
             )
         }

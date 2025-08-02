@@ -48,6 +48,7 @@ class TopMoviesPicksViewModel @Inject constructor(
     }
 
     override fun onRetry(){
+        updateState { copy(errorState = null) }
         getActorMoviePicksData()
     }
 

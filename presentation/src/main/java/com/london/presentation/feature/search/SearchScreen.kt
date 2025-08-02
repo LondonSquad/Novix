@@ -118,14 +118,10 @@ fun SearchScreen(
         }
     }
 
-    val actorFlow = state.actorsFlow.collectAsLazyPagingItems()
-    val tvShowFlow = state.tvShowsFlow.collectAsLazyPagingItems()
-    val movieFlow = state.moviesFlow.collectAsLazyPagingItems()
-
     val currentPagingFlow = when (state.selectedCategory) {
-        SearchCategory.Movies -> movieFlow
-        SearchCategory.TvShows -> tvShowFlow
-        SearchCategory.Actors -> actorFlow
+        SearchCategory.Movies -> state.moviesFlow.collectAsLazyPagingItems()
+        SearchCategory.TvShows -> state.tvShowsFlow.collectAsLazyPagingItems()
+        SearchCategory.Actors -> state.actorsFlow.collectAsLazyPagingItems()
     }
 
     BuildScreen(
