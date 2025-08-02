@@ -4,23 +4,24 @@ import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
+import com.london.data.local.database.dao.HomeDao
 import com.london.data.local.model.home.popular.PopularSectionLocal
 
 @Dao
-interface PopularSectionDao {
-
-    @Query("SELECT * FROM popular_section_table")
-    suspend fun getAll(): List<PopularSectionLocal>
+interface PopularSectionDao: HomeDao<PopularSectionLocal> {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insert(item: PopularSectionLocal)
+    override suspend fun insert(item: PopularSectionLocal)
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insertAll(items: List<PopularSectionLocal>)
+    override suspend fun insertAll(items: List<PopularSectionLocal>)
 
     @Query("DELETE FROM popular_section_table")
-    suspend fun deleteAll()
+    override suspend fun deleteAll()
+
+    @Query("SELECT * FROM popular_section_table")
+    override suspend fun getAll(): List<PopularSectionLocal>
 
     @Query("SELECT * FROM popular_section_table WHERE date = :date")
-    suspend fun getCurrentPopularByDate(date: Long): PopularSectionLocal
+    override suspend fun getCurrentPopularByDate(date: Long): PopularSectionLocal
 }
