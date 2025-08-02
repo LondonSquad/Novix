@@ -5,7 +5,7 @@ import com.london.domain.entity.recent.RecentSearch
 import com.london.domain.entity.recent.RecentViewed
 import com.london.presentation.feature.search.model.MovieUi
 
-interface SearchInteractions {
+interface SearchContract {
     fun onSearchQueryChange(newValue: TextFieldValue)
     fun onSearchFilterClick(query: String, category: SearchCategory)
     fun onCategorySelected(category: SearchCategory)
@@ -32,4 +32,5 @@ interface SearchInteractions {
     fun onTvShowClick(tvShowId: Int)
     fun onFilterClick()
     fun onFilterSheetDismiss()
+    fun onRetry()
 }

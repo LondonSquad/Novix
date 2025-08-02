@@ -17,13 +17,16 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.paging.LoadState
 import androidx.paging.compose.collectAsLazyPagingItems
 import com.london.designsystem.component.TopBar
 import com.london.designsystem.theme.NovixTheme
 import com.london.presentation.R
+import com.london.presentation.feature.buildscreen.BuildScreen
 import com.london.presentation.shared.GenresSection
 import com.london.presentation.shared.MediaLazyPagingGrid
 import com.london.presentation.utils.Listen
+import com.london.presentation.utils.isLoading
 
 @Composable
 fun TrendingMoviesScreen(
@@ -41,10 +44,22 @@ fun TrendingMoviesScreen(
         }
     }
 
-    TrendingMoviesContent(
-        state = state,
-        contract = viewModel
-    )
+    val moviesLazyItems = state.moviesFlow.collectAsLazyPagingItems()
+
+    BuildScreen(
+        isLoading = moviesLazyItems.isLoading(),
+        isError = moviesLazyItems.loadState.refresh is LoadState.Error,
+        onBack = viewModel::onBack,
+        onRetry = viewModel::onRetry,
+        emptyLayoutMessage = R.string.no_trending_movies_in_genre,
+        emptyLayoutImage = R.drawable.img_no_result,
+        pagingFlow = moviesLazyItems
+    ) {
+        TrendingMoviesContent(
+            state = state,
+            contract = viewModel
+        )
+    }
 }
 
 @Composable
@@ -53,7 +68,6 @@ private fun TrendingMoviesContent(
     contract: TrendingMoviesContract = defaultTrendingMoviesContract()
 ) {
     val screenWidth = with(LocalDensity.current) { LocalConfiguration.current.screenWidthDp.dp }
-    val moviesLazyItems = state.moviesFlow.collectAsLazyPagingItems()
 
     Column(
         modifier = Modifier
@@ -78,7 +92,7 @@ private fun TrendingMoviesContent(
             getGenreName = { stringResource(it.stringResId) }
         )
         MediaLazyPagingGrid(
-            pagingFlow = moviesLazyItems,
+            pagingFlow = state.moviesFlow.collectAsLazyPagingItems(),
             onItemClick = { contract.onMovieClick(it.id) },
             getImageUrl = { it.posterPath },
             getTitle = { it.title },
@@ -88,10 +102,6 @@ private fun TrendingMoviesContent(
                 .padding(horizontal = 16.dp),
             onSaveClick = { /* TODO: Implement save functionality */ },
             isItemSaved = { false },
-            onRetry = {
-                contract.onRetry()
-            },
-            noMediaMessage = R.string.no_trending_movies_in_genre
         )
     }
 }

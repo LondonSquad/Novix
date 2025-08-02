@@ -37,7 +37,7 @@ import com.london.designsystem.component.button.PrimaryButton
 import com.london.designsystem.component.rememberModalBottomSheetState
 import com.london.designsystem.theme.NovixTheme
 import com.london.presentation.R
-import com.london.presentation.feature.search.SearchInteractions
+import com.london.presentation.feature.search.SearchContract
 import com.london.presentation.feature.search.SearchViewModel
 import kotlinx.coroutines.launch
 
@@ -52,7 +52,7 @@ data class FilterState(
 @Composable
 fun FilterBottomSheet(
     modifier: Modifier = Modifier,
-    filterInteractions: SearchInteractions,
+    filterInteractions: SearchContract,
     sheetState: SheetState = rememberModalBottomSheetState(),
     filterState: FilterState,
 ) {
@@ -113,7 +113,7 @@ fun FilterBottomSheet(
 @Composable
 private fun FilterBottomSheetContent(
     modifier: Modifier = Modifier,
-    filterInteractions: SearchInteractions,
+    filterInteractions: SearchContract,
     filterUiState: FilterState,
     onCloseClicked: () -> Unit,
     onApplyClicked: () -> Unit,

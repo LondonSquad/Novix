@@ -17,13 +17,16 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.paging.LoadState
 import androidx.paging.compose.collectAsLazyPagingItems
 import com.london.designsystem.component.TopBar
 import com.london.designsystem.theme.NovixTheme
 import com.london.presentation.R
+import com.london.presentation.feature.buildscreen.BuildScreen
 import com.london.presentation.shared.GenresSection
 import com.london.presentation.shared.MediaLazyPagingGrid
 import com.london.presentation.utils.Listen
+import com.london.presentation.utils.isLoading
 
 @Composable
 fun TrendingTvShowsScreen(
@@ -41,10 +44,22 @@ fun TrendingTvShowsScreen(
         }
     }
 
-    TrendingTvShowsContent(
-        state = state,
-        contract = viewModel,
-    )
+    val tvShowsLazyItems = state.tvShowsFlow.collectAsLazyPagingItems()
+
+    BuildScreen(
+        isLoading = tvShowsLazyItems.isLoading(),
+        isError = tvShowsLazyItems.loadState.refresh is LoadState.Error,
+        onBack = viewModel::onBack,
+        onRetry = viewModel::onRetry,
+        emptyLayoutMessage = R.string.no_trending_tvshows_in_genre,
+        emptyLayoutImage = R.drawable.img_no_result,
+        pagingFlow = tvShowsLazyItems
+    ) {
+        TrendingTvShowsContent(
+            state = state,
+            contract = viewModel,
+        )
+    }
 }
 
 
@@ -89,10 +104,6 @@ private fun TrendingTvShowsContent(
                 .padding(horizontal = 16.dp),
             onSaveClick = { /* TODO: Implement save functionality */ },
             isItemSaved = { false },
-            onRetry = {
-                contract.onRetry()
-            },
-            noMediaMessage = R.string.no_trending_tvshows_in_genre
         )
     }
 }

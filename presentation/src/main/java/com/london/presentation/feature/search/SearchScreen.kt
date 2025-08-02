@@ -50,7 +50,9 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.repeatOnLifecycle
+import androidx.paging.CombinedLoadStates
 import androidx.paging.LoadState
+import androidx.paging.compose.LazyPagingItems
 import androidx.paging.compose.collectAsLazyPagingItems
 import com.london.designsystem.component.EmptyLayout
 import com.london.designsystem.component.HomeCard
@@ -68,6 +70,7 @@ import com.london.domain.entity.recent.RecentSearch
 import com.london.domain.entity.recent.RecentViewed
 import com.london.presentation.R
 import com.london.presentation.feature.base.ErrorState
+import com.london.presentation.feature.buildscreen.BuildScreen
 import com.london.presentation.feature.buildscreen.NetworkErrorScreen
 import com.london.presentation.shared.ActorsLayout
 import com.london.presentation.shared.FilterBottomSheet
@@ -80,7 +83,7 @@ import com.london.presentation.utils.ResultOrEmpty
 
 @Composable
 private fun HandleLoadStateError(
-    loadState: androidx.paging.CombinedLoadStates,
+    loadState: CombinedLoadStates,
     viewModel: SearchViewModel
 ) {
     LaunchedEffect(loadState) {
@@ -115,22 +118,33 @@ fun SearchScreen(
         }
     }
 
-    when {
-        state.error is ErrorState.NoInternet -> NetworkErrorScreen(onBack = null)
-        else ->
-            SearchScreenContent(
-                state = state,
-                interactionListener = viewModel,
-                keyboardController = keyboardController,
-                viewModel = viewModel,
-            )
+    val currentPagingFlow = when (state.selectedCategory) {
+        SearchCategory.Movies -> state.moviesFlow.collectAsLazyPagingItems()
+        SearchCategory.TvShows -> state.tvShowsFlow.collectAsLazyPagingItems()
+        SearchCategory.Actors -> state.actorsFlow.collectAsLazyPagingItems()
+    }
+
+    BuildScreen(
+        isLoading = false,
+        isError = currentPagingFlow.loadState.refresh is LoadState.Error,
+        onBack = {},
+        onRetry = viewModel::onRetry,
+        pagingFlow = currentPagingFlow,
+        handlePagingLoadingAutomatically = false
+    ) {
+        SearchScreenContent(
+            state = state,
+            interactionListener = viewModel,
+            keyboardController = keyboardController,
+            viewModel = viewModel,
+        )
     }
 }
 
 @Composable
 fun SearchScreenContent(
     state: SearchUiState,
-    interactionListener: SearchInteractions,
+    interactionListener: SearchContract,
     viewModel: SearchViewModel,
     keyboardController: SoftwareKeyboardController?,
 ) {
@@ -471,7 +485,7 @@ private fun SearchChipsRow(
 @Composable
 private fun RecentSearchLayOut(
     state: SearchUiState,
-    interactionListener: SearchInteractions,
+    interactionListener: SearchContract,
     viewModel: SearchViewModel,
     onNavigateToTvShowDetails: (Int) -> Unit,
     onNavigateToMovieDetails: (Int) -> Unit
@@ -650,7 +664,7 @@ private fun NoSearchResultLayOut(
 
 @Composable
 private fun SearchContentWithErrorHandling(
-    lazyPagingItems: androidx.paging.compose.LazyPagingItems<*>,
+    lazyPagingItems: LazyPagingItems<*>,
     viewModel: SearchViewModel,
     state: SearchUiState,
     content: @Composable (Boolean) -> Unit

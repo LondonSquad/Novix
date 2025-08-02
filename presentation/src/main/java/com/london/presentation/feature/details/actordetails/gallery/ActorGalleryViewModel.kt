@@ -43,6 +43,11 @@ class ActorGalleryViewModel @Inject constructor(
         )
     }
 
+    override fun onRetry(){
+        updateState { copy(error = null) }
+        loadImages(actorId)
+    }
+
     override fun onBackClick() {
         emitEffect(ActorGalleryEffectUiState.NavigationBack)
     }

@@ -114,6 +114,13 @@ class HomeViewModel @Inject constructor(
         )
     }
 
+    override fun onRetry() {
+        updateState { copy(error = null) }
+        initializeTopRatedMedia()
+        fetchRecentWatchedMedia()
+        initializePopularMedia()
+    }
+
     override fun onMovieClick(id: Int) {
         emitEffect(HomeScreenEffect.NavigationMovieDetails(id))
     }

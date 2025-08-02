@@ -135,6 +135,12 @@ class MovieDetailsViewModel @Inject constructor(
         addToRecentViewedUseCase.invoke(movie)
     }
 
+    override fun onRetry() {
+        updateState { copy(error = null) }
+        loadMovieDetails(movieId)
+        loadSimilarAndVideos(movieId)
+    }
+
     private fun loadSimilarAndVideos(movieId: Int) {
         tryToExecute(
             block = {

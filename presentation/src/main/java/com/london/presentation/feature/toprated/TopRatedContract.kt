@@ -10,4 +10,5 @@ interface TopRatedContract {
     fun onBackClicked()
     fun onMovieClick(id: Int)
     fun onTvShowClick(id: Int)
+    fun onRetry()
 }
