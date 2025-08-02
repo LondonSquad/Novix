@@ -17,7 +17,6 @@ fun PopularMovieResponse.toPopularMovie(): PopularMovie {
         id = id.orZero(),
         title = title.orEmpty(),
         posterUrl = posterPath.asImageUrlOrEmpty(),
-        backdropUrl = backdropPath.asImageUrlOrEmpty(),
         rating = voteAverage.orZero().roundToDecimal()
     )
 }
@@ -25,22 +24,20 @@ fun PopularMovieResponse.toPopularMovie(): PopularMovie {
 fun ApiResponse<PopularMovieResponse>.toPopularMovies(): List<PopularMovie> =
     items.map { it.toPopularMovie() }
 
-fun PopularSectionLocal.toEntity(): PopularMovie = PopularMovie(
+fun PopularSectionLocal.toMovieEntity(): PopularMovie = PopularMovie(
     id = id,
     title = name,
     posterUrl = posterPictureUrl,
-    backdropUrl = backdropPictureUrl,
     rating = rating,
 )
 
-fun PopularMovie.toPopularSectionLocal(
+fun PopularMovie.toPopularMovieSectionLocal(
     mediaType: MediaType,
     date: Long = System.currentTimeMillis()
 ): PopularSectionLocal = PopularSectionLocal(
     id = id,
     name = title,
     posterPictureUrl = posterUrl,
-    backdropPictureUrl = backdropUrl,
     rating = rating,
     mediaType = mediaType,
     date = date

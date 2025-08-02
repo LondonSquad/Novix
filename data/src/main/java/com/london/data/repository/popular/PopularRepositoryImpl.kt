@@ -2,10 +2,12 @@ package com.london.data.repository.popular
 
 import com.london.data.local.model.home.popular.PopularSectionLocal
 import com.london.data.local.source.HomeLocalDataSource
-import com.london.data.mapper.popular.toEntity
-import com.london.data.mapper.popular.toEntityList
+import com.london.data.mapper.popular.toMovieEntity
+import com.london.data.mapper.popular.toPopularMovieSectionLocal
 import com.london.data.mapper.popular.toPopularMovies
-import com.london.data.mapper.popular.toPopularSectionLocal
+import com.london.data.mapper.popular.toPopularTvShowSectionLocal
+import com.london.data.mapper.popular.toPopularTvShows
+import com.london.data.mapper.popular.toTvShowEntity
 import com.london.data.remote.source.home.popular.PopularRemoteDataSource
 import com.london.data.utils.CrashReporter
 import com.london.data.utils.fetchAndSync
@@ -21,23 +23,31 @@ class PopularRepositoryImpl @Inject constructor(
     private val crashReporter: CrashReporter
 ) : PopularRepository {
 
-    override suspend fun getPopularMovies(
-    ): List<PopularMovie> = fetchAndSync(
+    override suspend fun getPopularMovies(): List<PopularMovie> = fetchAndSync(
         cacheBlock = {
-            val local = homeLocalDataSource.getAll().map { it.toEntity() }
+            val local = homeLocalDataSource.getAll().map { it.toMovieEntity() }
             local.takeIf { it.isNotEmpty() }
         },
         networkBlock = {
-            popularRemoteDataSource.getPopularMovies().getOrThrow().toPopularMovies()
+            popularRemoteDataSource.getPopularMovies().getOrThrow().toPopularMovies().take(5)
         },
         syncBlock = { popularList ->
-            homeLocalDataSource.insertAll(popularList.map { it.toPopularSectionLocal(MediaType.Movie) })
+            homeLocalDataSource.insertAll(popularList.map { it.toPopularMovieSectionLocal(MediaType.Movie) }.take(5))
         },
         crashReporter = crashReporter
     )
 
-    override suspend fun getPopularTvShows(): List<PopularTvShow> {
-        return popularRemoteDataSource.getPopularTvShows().getOrThrow().toEntityList()
-    }
-
+    override suspend fun getPopularTvShows(): List<PopularTvShow> = fetchAndSync(
+        cacheBlock = {
+            val local = homeLocalDataSource.getAll().map { it.toTvShowEntity() }
+            local.takeIf { it.isNotEmpty() }
+        },
+        networkBlock = {
+            popularRemoteDataSource.getPopularTvShows().getOrThrow().toPopularTvShows().take(5)
+        },
+        syncBlock = { popularList ->
+            homeLocalDataSource.insertAll(popularList.map { it.toPopularTvShowSectionLocal(MediaType.TvShow) }.take(5))
+        },
+        crashReporter = crashReporter
+    )
 }
