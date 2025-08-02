@@ -11,7 +11,7 @@ interface MovieDetailsRepository {
     suspend fun getSimilarMoviesById(id: Int): List<Movie>
     suspend fun getMovieImagesById(id: Int): List<String>
     suspend fun getMovieCastById(id: Int): List<Actor>
-    suspend fun getMovieAccountStatesById(
+    suspend fun getAccountMovieStatesById(
         id: Int,
     ): MovieStates
 }

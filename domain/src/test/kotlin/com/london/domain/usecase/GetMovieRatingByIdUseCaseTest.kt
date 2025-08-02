@@ -29,7 +29,7 @@ class GetMovieRatingByIdUseCaseTest {
         val expectedRate = 8
         val movieStates = mockMovieStates()
 
-        coEvery { repository.getMovieAccountStatesById(movieId) } returns movieStates
+        coEvery { repository.getAccountMovieStatesById(movieId) } returns movieStates
 
         // When
         val result = useCase(movieId)

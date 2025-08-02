@@ -49,7 +49,7 @@ class MovieDetailsRepositoryImpl @Inject constructor(
         return movieCast.actorRemote?.map { it.toEntity() }.orEmpty()
     }
 
-    override suspend fun getMovieAccountStatesById(
+    override suspend fun getAccountMovieStatesById(
         id: Int,
     ): MovieStates = movieDetailsRemoteDataSource.getMovieAccountStates(
             movieId = id,

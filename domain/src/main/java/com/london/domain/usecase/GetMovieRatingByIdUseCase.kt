@@ -7,7 +7,7 @@ class GetMovieRatingByIdUseCase @Inject constructor(
     private val repository: MovieDetailsRepository
 ) {
     suspend operator fun invoke(id: Int): Int =
-        repository.getMovieAccountStatesById(
+        repository.getAccountMovieStatesById(
              id = id,
          ).rate
 }

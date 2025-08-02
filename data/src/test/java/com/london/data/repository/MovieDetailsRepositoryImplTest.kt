@@ -308,7 +308,7 @@ class MovieDetailsRepositoryImplTest {
             )
         } returns Result.success(remoteMovieStates)
 
-        val result = repository.getMovieAccountStatesById(movieId)
+        val result = repository.getAccountMovieStatesById(movieId)
 
         assertEquals(remoteMovieStates.toEntity(), result)
     }
@@ -328,7 +328,7 @@ class MovieDetailsRepositoryImplTest {
             )
         } returns Result.success(remoteMovieStates)
 
-        val result = repository.getMovieAccountStatesById(movieId)
+        val result = repository.getAccountMovieStatesById(movieId)
 
         assertEquals(remoteMovieStates.toEntity(), result)
     }
@@ -338,7 +338,7 @@ class MovieDetailsRepositoryImplTest {
         val movieId = 123
 
         val exception = assertThrows<NetworkException.UnknownException> {
-            repository.getMovieAccountStatesById(movieId)
+            repository.getAccountMovieStatesById(movieId)
         }
         assertEquals("No session id found", exception.message)
     }
