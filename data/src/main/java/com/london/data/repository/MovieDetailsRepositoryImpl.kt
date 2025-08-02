@@ -51,7 +51,7 @@ class MovieDetailsRepositoryImpl @Inject constructor(
 
     override suspend fun getAccountMovieStatesById(
         id: Int,
-    ): MovieStates = movieDetailsRemoteDataSource.getMovieAccountStates(
+    ): MovieStates = movieDetailsRemoteDataSource.getAccountMovieStates(
             movieId = id,
             userSessionId = authPreferences.getSessionId(),
             guestSessionId = authPreferences.getGuestSessionId()
