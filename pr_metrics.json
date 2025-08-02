@@ -16367,5 +16367,33 @@
       "deletions": 12,
       "changed_files": 17
     }
+  },
+  {
+    "pr_number": 507,
+    "url": "https://github.com/LondonSquad/Novix/pull/507",
+    "title": "fix/preview-popular-movies-section",
+    "opened_at": "2025-08-02T22:08:23Z",
+    "head_ref": "fix/preview-popular-movies-section",
+    "base_ref": "develop",
+    "creator": {
+      "login": "BassantM",
+      "id": 102248144,
+      "url": "https://github.com/BassantM"
+    },
+    "approvals": [],
+    "first_approved_at": null,
+    "time_to_first_approval_minutes": null,
+    "required_approvals_met_at": null,
+    "time_to_required_approvals_minutes": null,
+    "closed_at": null,
+    "merged_at": null,
+    "merged_by": null,
+    "week": "2025-W31",
+    "status": "pending",
+    "diff_stats": {
+      "additions": 246,
+      "deletions": 11,
+      "changed_files": 14
+    }
   }
 ]
