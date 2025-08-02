@@ -1,9 +1,12 @@
 package com.london.presentation.feature.details.movieDetalis
 
 import androidx.lifecycle.SavedStateHandle
+import androidx.lifecycle.viewModelScope
 import com.london.domain.entity.Movie
 import com.london.domain.entity.recent.MediaType
 import com.london.domain.entity.recent.RecentViewed
+import com.london.domain.usecase.AddMovieRatingByIdUseCase
+import com.london.domain.usecase.GetMovieRatingByIdUseCase
 import com.london.domain.usecase.details.movie.GetFirstTenMovieImagesUseCase
 import com.london.domain.usecase.details.movie.GetMovieCastUseCase
 import com.london.domain.usecase.details.movie.GetMovieDetailsById
@@ -15,6 +18,7 @@ import com.london.presentation.feature.base.BaseViewModel
 import com.london.presentation.navigation.Screen
 import com.london.presentation.navigation.getArgs
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
@@ -24,8 +28,10 @@ class MovieDetailsViewModel @Inject constructor(
     private val getMovieCastUseCase: GetMovieCastUseCase,
     private val getSimilarMoviesUseCase: GetSimilarMoviesUseCase,
     private val getMovieVideosUseCase: GetMovieVideoUseCase,
-    private val addMovieToRecentWatchedUseCase:AddMovieToRecentWatchedUseCase,
-    private val addToRecentViewedUseCase:AddToRecentViewedUseCase,
+    private val addMovieToRecentWatchedUseCase: AddMovieToRecentWatchedUseCase,
+    private val addToRecentViewedUseCase: AddToRecentViewedUseCase,
+    private val addMovieRatingByIdUseCase: AddMovieRatingByIdUseCase,
+    private val getMovieRatingByIdUseCase: GetMovieRatingByIdUseCase,
     savedStateHandle: SavedStateHandle
 ) : BaseViewModel<MovieDetailsUiState, MovieDetailsEffect>(MovieDetailsUiState()),
     MovieDetailsContract {
@@ -91,7 +97,7 @@ class MovieDetailsViewModel @Inject constructor(
                 }
                 addMovieToRecentViewed(
                     RecentViewed(
-                        id =details.id,
+                        id = details.id,
                         imageUrl = details.posterUrl,
                         type = MediaType.Movie,
                         viewDate = System.currentTimeMillis()
@@ -117,10 +123,11 @@ class MovieDetailsViewModel @Inject constructor(
         )
     }
 
-    private suspend fun addMovieToRecentWatched(movie: Movie){
+    private suspend fun addMovieToRecentWatched(movie: Movie) {
         addMovieToRecentWatchedUseCase.invoke(movie)
     }
-    private suspend fun addMovieToRecentViewed(movie: RecentViewed){
+
+    private suspend fun addMovieToRecentViewed(movie: RecentViewed) {
         addToRecentViewedUseCase.invoke(movie)
     }
 
@@ -130,19 +137,32 @@ class MovieDetailsViewModel @Inject constructor(
         loadSimilarAndVideos(movieId)
     }
 
+    override fun onRateBottomSheetClick() =
+        updateState { copy(isRateBottomSheetVisible = isRateBottomSheetVisible.not()) }
+
+
+    override fun onSelectRatingClick(rating: Int) = updateState {
+        viewModelScope.launch {
+            addMovieRatingByIdUseCase.invoke(movieId, rating)
+        }
+        copy(selectedRating = rating, isRateBottomSheetVisible = false)
+    }
+
     private fun loadSimilarAndVideos(movieId: Int) {
         tryToExecute(
             block = {
                 val similarMovies = getSimilarMoviesUseCase.invoke(movieId)
                 val movieVideos = getMovieVideosUseCase.invoke(movieId)
-                Pair(similarMovies, movieVideos)
+                val movieRating = getMovieRatingByIdUseCase.invoke(movieId)
+                Triple(similarMovies, movieVideos , movieRating)
             },
             onSuccess = { pair ->
                 val (similarMovies, videos) = pair
                 updateState {
                     copy(
                         similarMovies = similarMovies,
-                        movieVideo = videos.firstOrNull()?.videoUrl.orEmpty()
+                        movieVideo = videos.firstOrNull()?.videoUrl.orEmpty(),
+                        isRated = movieRating.isNotEmpty()
                     )
                 }
             },

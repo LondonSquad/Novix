@@ -323,9 +323,8 @@ fun MovieDetailsContent(
             onPlayClick = {
                 uriHandler.openUrl(uiState.movieVideo)
             },
-            onStarClick = {
-                // TODO save favorite onclick handler
-            }
+            onStarClick = movieDetailsContract::onRateBottomSheetClick
+
         )
     }
 }

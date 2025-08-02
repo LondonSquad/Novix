@@ -9,4 +9,6 @@ interface MovieDetailsContract {
     fun onReviewsClick(movieId: Int, mediaNumber: Int)
     fun onGenreClick(genreId: Int)
     fun onRetry()
+    fun onRateBottomSheetClick()
+    fun onSelectRatingClick(rating: Int)
 }
