@@ -5,7 +5,7 @@ import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class MovieStatesResponse(
+data class MovieAccountStatesResponse(
     @SerialName("favorite")
     val favorite: Boolean? = null,
     @SerialName("id")

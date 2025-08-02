@@ -171,7 +171,7 @@ object NetworkModule {
 
     @Provides
     @Singleton
-    fun provideAuthInterceptor(retrofit: Retrofit): AddMovieRatingApiService =
+    fun provideMovieRatingApiService(retrofit: Retrofit): AddMovieRatingApiService =
         retrofit.create(AddMovieRatingApiService::class.java)
 
 }

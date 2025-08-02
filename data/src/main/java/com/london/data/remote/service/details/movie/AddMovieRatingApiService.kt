@@ -1,7 +1,7 @@
 package com.london.data.remote.service.details.movie
 
-import com.london.data.remote.model.details.RatingRemote
-import com.london.data.remote.model.details.RatingResponse
+import com.london.data.remote.model.details.rating.RatingRemoteBody
+import com.london.data.remote.model.details.rating.RatingResponse
 import retrofit2.Response
 import retrofit2.http.Body
 import retrofit2.http.POST
@@ -14,6 +14,6 @@ interface AddMovieRatingApiService {
         @Path("movie_id") movieId: Int,
         @Query("guest_session_id") guestSessionId: String?,
         @Query("session_id") userSessionId: String?,
-        @Body ratingRequest: RatingRemote
+        @Body ratingRequest: RatingRemoteBody
     ): Response<RatingResponse>
 }

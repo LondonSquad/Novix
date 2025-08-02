@@ -14,10 +14,10 @@ import com.london.data.remote.source.authentication.AuthenticationRemoteDataSour
 import com.london.data.remote.source.authentication.AuthenticationRemoteDataSourceImpl
 import com.london.data.remote.source.details.actor.ActorDetailsRemoteDataSource
 import com.london.data.remote.source.details.actor.ActorDetailsRemoteDataSourceImpl
-import com.london.data.remote.source.details.movie.AddMovieRatingRemoteDataSource
-import com.london.data.remote.source.details.movie.AddMovieRatingRemoteDataSourceImpl
 import com.london.data.remote.source.details.movie.MovieDetailsRemoteDataSource
 import com.london.data.remote.source.details.movie.MovieDetailsRemoteDataSourceImpl
+import com.london.data.remote.source.details.movie.rating.AddMovieRatingRemoteDataSource
+import com.london.data.remote.source.details.movie.rating.AddMovieRatingRemoteDataSourceImpl
 import com.london.data.remote.source.details.tvshow.TvShowDetailsRemoteDataSource
 import com.london.data.remote.source.details.tvshow.TvShowDetailsRemoteDataSourceImpl
 import com.london.data.remote.source.details.videoprovider.movie.MovieVideoProviderRemote

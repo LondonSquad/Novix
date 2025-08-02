@@ -3,8 +3,8 @@ package com.london.data.remote.service.details.movie
 
 import com.london.data.remote.model.ApiResponse
 import com.london.data.remote.model.details.movie.model.moviecast.MovieCastResponse
+import com.london.data.remote.model.details.movie.model.moviedetails.MovieAccountStatesResponse
 import com.london.data.remote.model.details.movie.model.moviedetails.MovieDetailsResponse
-import com.london.data.remote.model.details.movie.model.moviedetails.MovieStatesResponse
 import com.london.data.remote.model.details.movie.model.movieimages.MovieImagesResponse
 import com.london.data.remote.model.details.videoprovider.movie.model.MovieVideoRemote
 import com.london.data.remote.model.search.model.SearchMovieRemote
@@ -46,5 +46,5 @@ interface MovieDetailsApiService {
         @Path("movie_id") movieId: Int,
         @Query("guest_session_id") guestSessionId: String?,
         @Query("session_id") userSessionId: String?,
-    ) : Response<MovieStatesResponse>
+    ) : Response<MovieAccountStatesResponse>
 }

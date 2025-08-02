@@ -1,6 +1,6 @@
-package com.london.data.remote.source.details.movie
+package com.london.data.remote.source.details.movie.rating
 
-import com.london.data.remote.model.details.RatingResponse
+import com.london.data.remote.model.details.rating.RatingResponse
 
 interface AddMovieRatingRemoteDataSource {
     suspend fun addMovieRating(

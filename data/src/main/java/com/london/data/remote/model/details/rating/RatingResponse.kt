@@ -1,4 +1,4 @@
-package com.london.data.remote.model.details
+package com.london.data.remote.model.details.rating
 
 
 import kotlinx.serialization.SerialName
