@@ -5,9 +5,10 @@ import com.london.presentation.feature.base.BaseViewModel
 import com.london.presentation.feature.list.viewlistitems.uistate.ItemsType
 import com.london.presentation.feature.list.viewlistitems.uistate.ViewListItemsUiState
 import dagger.hilt.android.lifecycle.HiltViewModel
+import javax.inject.Inject
 
 @HiltViewModel
-class ViewListItemsViewModel :
+class ViewListItemsViewModel @Inject constructor() :
     BaseViewModel<ViewListItemsUiState, ViewListItemsEffect>(ViewListItemsUiState()),
     ViewListItemsContract {
 
