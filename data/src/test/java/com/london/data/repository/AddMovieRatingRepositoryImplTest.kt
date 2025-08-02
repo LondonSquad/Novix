@@ -92,6 +92,15 @@ class AddMovieRatingRepositoryImplTest {
         coEvery { authPreferences.getSessionId() } returns null
         coEvery { authPreferences.getGuestSessionId() } returns null
 
+        coEvery {
+            remoteDataSource.addMovieRating(
+                movieId = movieId,
+                rating = rating.toDouble(),
+                userSessionId = null,
+                guestSessionId = null
+            )
+        } returns Result.failure(RuntimeException("No session"))
+
         // When
         val result = repository.addMovieRatingById(movieId, rating)
 
