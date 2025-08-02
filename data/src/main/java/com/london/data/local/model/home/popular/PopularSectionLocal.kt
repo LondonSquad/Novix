@@ -10,6 +10,7 @@ data class PopularSectionLocal(
     val id: Int,
     val name: String,
     val posterPictureUrl: String,
+    val backdropPictureUrl: String,
     val rating: Double,
     val mediaType: MediaType,
     val date: Long = System.currentTimeMillis()
