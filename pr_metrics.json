@@ -16266,5 +16266,33 @@
       "deletions": 265,
       "changed_files": 40
     }
+  },
+  {
+    "pr_number": 505,
+    "url": "https://github.com/LondonSquad/Novix/pull/505",
+    "title": "feature/add-movie-rating-data: Implement movie rating API",
+    "opened_at": "2025-08-02T07:59:16Z",
+    "head_ref": "feature/add-movie-rating-data",
+    "base_ref": "develop",
+    "creator": {
+      "login": "abdelrhman1002",
+      "id": 180463542,
+      "url": "https://github.com/abdelrhman1002"
+    },
+    "approvals": [],
+    "first_approved_at": null,
+    "time_to_first_approval_minutes": null,
+    "required_approvals_met_at": null,
+    "time_to_required_approvals_minutes": null,
+    "closed_at": null,
+    "merged_at": null,
+    "merged_by": null,
+    "week": "2025-W31",
+    "status": "pending",
+    "diff_stats": {
+      "additions": 161,
+      "deletions": 12,
+      "changed_files": 12
+    }
   }
 ]
