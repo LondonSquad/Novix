@@ -16399,5 +16399,33 @@
       "deletions": 11,
       "changed_files": 14
     }
+  },
+  {
+    "pr_number": 508,
+    "url": "https://github.com/LondonSquad/Novix/pull/508",
+    "title": "feat: implement ViewListItems screen, init logic",
+    "opened_at": "2025-08-02T22:19:16Z",
+    "head_ref": "feature/list-items-screen",
+    "base_ref": "develop",
+    "creator": {
+      "login": "marwanqashwa",
+      "id": 100484790,
+      "url": "https://github.com/marwanqashwa"
+    },
+    "approvals": [],
+    "first_approved_at": null,
+    "time_to_first_approval_minutes": null,
+    "required_approvals_met_at": null,
+    "time_to_required_approvals_minutes": null,
+    "closed_at": null,
+    "merged_at": null,
+    "merged_by": null,
+    "week": "2025-W31",
+    "status": "pending",
+    "diff_stats": {
+      "additions": 289,
+      "deletions": 4,
+      "changed_files": 12
+    }
   }
 ]
