@@ -2,6 +2,7 @@ package com.london.data.di
 
 import com.london.data.remote.service.authentication.AuthenticationApiService
 import com.london.data.remote.service.details.actor.ActorDetailsApiService
+import com.london.data.remote.service.details.movie.AddMovieRatingApiService
 import com.london.data.remote.service.details.movie.MovieDetailsApiService
 import com.london.data.remote.service.details.tvshow.TvShowDetailsApiService
 import com.london.data.remote.service.home.PopularApiService
@@ -13,6 +14,8 @@ import com.london.data.remote.source.authentication.AuthenticationRemoteDataSour
 import com.london.data.remote.source.authentication.AuthenticationRemoteDataSourceImpl
 import com.london.data.remote.source.details.actor.ActorDetailsRemoteDataSource
 import com.london.data.remote.source.details.actor.ActorDetailsRemoteDataSourceImpl
+import com.london.data.remote.source.details.movie.AddMovieRatingRemoteDataSource
+import com.london.data.remote.source.details.movie.AddMovieRatingRemoteDataSourceImpl
 import com.london.data.remote.source.details.movie.MovieDetailsRemoteDataSource
 import com.london.data.remote.source.details.movie.MovieDetailsRemoteDataSourceImpl
 import com.london.data.remote.source.details.tvshow.TvShowDetailsRemoteDataSource
@@ -112,4 +115,11 @@ object RemoteDataSourceModule {
         apiService: TvShowDetailsApiService,
     ): TvShowVideoProviderRemote =
         TvShowVideoProviderRemoteImpl(tvShowDetailsApiService = apiService)
+
+    @Provides
+    @Singleton
+    fun provideAddMovieRatingRemoteDataSource(
+        apiService: AddMovieRatingApiService,
+    ): AddMovieRatingRemoteDataSource =
+        AddMovieRatingRemoteDataSourceImpl(addMovieRatingApiService = apiService)
 }

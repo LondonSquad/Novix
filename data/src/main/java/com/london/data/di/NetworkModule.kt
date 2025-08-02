@@ -9,6 +9,7 @@ import com.london.data.local.source.device.DeviceConfigurationDataSource
 import com.london.data.remote.interceptor.AuthInterceptor
 import com.london.data.remote.service.authentication.AuthenticationApiService
 import com.london.data.remote.service.details.actor.ActorDetailsApiService
+import com.london.data.remote.service.details.movie.AddMovieRatingApiService
 import com.london.data.remote.service.details.movie.MovieDetailsApiService
 import com.london.data.remote.service.details.tvshow.TvShowDetailsApiService
 import com.london.data.remote.service.home.PopularApiService
@@ -153,7 +154,8 @@ object NetworkModule {
     @Singleton
     fun provideAuthApiService(retrofit: Retrofit): AuthenticationApiService =
         retrofit.create(AuthenticationApiService::class.java)
-@Provides
+
+    @Provides
     @Singleton
     fun provideAuthPreferences(@ApplicationContext context: Context): AuthPreferences =
         AuthPreferences(context.getSharedPreferences("auth", Context.MODE_PRIVATE))
@@ -166,4 +168,10 @@ object NetworkModule {
     @Provides
     @Singleton
     fun provideCrashReporter(): CrashReporter = FirebaseCrashReporter()
+
+    @Provides
+    @Singleton
+    fun provideAuthInterceptor(retrofit: Retrofit): AddMovieRatingApiService =
+        retrofit.create(AddMovieRatingApiService::class.java)
+
 }
