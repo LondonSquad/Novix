@@ -1,6 +1,6 @@
 package com.london.domain.repository
 
-interface AddMovieRatingRepository {
+interface RatingRepository {
     suspend fun addMovieRatingById(
         id: Int,
         rating: Int,

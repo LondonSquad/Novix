@@ -28,7 +28,6 @@ import com.london.data.remote.source.search.SearchRemoteDataSource
 import com.london.data.remote.source.toprated.movie.TopRatedMovieRemoteDataSource
 import com.london.data.remote.source.toprated.tvseries.TopRatedTvRemoteDataSource
 import com.london.data.repository.ActorRepositoryImpl
-import com.london.data.repository.AddMovieRatingRepositoryImpl
 import com.london.data.repository.DetailsRepositoryImpl
 import com.london.data.repository.MovieDetailsRepositoryImpl
 import com.london.data.repository.MovieVideoProviderRepositoryImpl
@@ -36,6 +35,7 @@ import com.london.data.repository.SearchRepositoryImpl
 import com.london.data.repository.TvShowVideoProviderRepositoryImpl
 import com.london.data.repository.authentication.AuthenticationRepositoryImpl
 import com.london.data.repository.popular.PopularRepositoryImpl
+import com.london.data.repository.rating.RatingRepositoryImpl
 import com.london.data.repository.recent.RecentSearchRepositoryImpl
 import com.london.data.repository.recent.RecentViewedRepositoryImpl
 import com.london.data.repository.recent.RecentWatchedRepositoryIml
@@ -46,12 +46,12 @@ import com.london.data.utils.CrashReporter
 import com.london.domain.entity.recent.RecentSearch
 import com.london.domain.entity.recent.RecentViewed
 import com.london.domain.repository.ActorRepository
-import com.london.domain.repository.AddMovieRatingRepository
 import com.london.domain.repository.AuthRepository
 import com.london.domain.repository.DetailsRepository
 import com.london.domain.repository.MovieDetailsRepository
 import com.london.domain.repository.MovieVideoProviderRepository
 import com.london.domain.repository.PopularRepository
+import com.london.domain.repository.RatingRepository
 import com.london.domain.repository.RecentRepository
 import com.london.domain.repository.RecentWatchedRepository
 import com.london.domain.repository.SearchRepository
@@ -195,7 +195,7 @@ object RepositoryModule {
     fun provideAddMovieRatingRepository(
         addMovieRatingRemoteDataSource: AddMovieRatingRemoteDataSource,
         authPreferences: AuthPreferences
-    ): AddMovieRatingRepository = AddMovieRatingRepositoryImpl(
+    ): RatingRepository = RatingRepositoryImpl(
         addMovieRatingRemoteDataSource = addMovieRatingRemoteDataSource,
         authPreferences = authPreferences
     )

@@ -3,6 +3,7 @@ package com.london.data.repository
 import com.london.data.local.preference.AuthPreferences
 import com.london.data.remote.model.details.rating.RatingRemoteResponse
 import com.london.data.remote.source.details.movie.rating.AddMovieRatingRemoteDataSource
+import com.london.data.repository.rating.RatingRepositoryImpl
 import io.mockk.coEvery
 import io.mockk.mockk
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -15,15 +16,15 @@ import kotlin.test.assertFalse
 
 
 @ExperimentalCoroutinesApi
-class AddMovieRatingRepositoryImplTest {
+class RatingRepositoryImplTest {
 
-    private lateinit var repository: AddMovieRatingRepositoryImpl
+    private lateinit var repository: RatingRepositoryImpl
     private val remoteDataSource: AddMovieRatingRemoteDataSource = mockk()
     private val authPreferences: AuthPreferences = mockk()
 
     @Before
     fun setup() {
-        repository = AddMovieRatingRepositoryImpl(remoteDataSource, authPreferences)
+        repository = RatingRepositoryImpl(remoteDataSource, authPreferences)
     }
 
     private fun fakeRatingResponse() = RatingRemoteResponse(
@@ -130,7 +131,7 @@ class AddMovieRatingRepositoryImplTest {
             assertThrows(RuntimeException::class.java) {
                 runTest {
                     repository.addMovieRatingById(
-                        movieId = movieId, rating = 3
+                        id = movieId, rating = 3
                     )
                 }
             }

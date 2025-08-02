@@ -1,6 +1,6 @@
 package com.london.domain.usecase
 
-import com.london.domain.repository.AddMovieRatingRepository
+import com.london.domain.repository.RatingRepository
 import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.mockk
@@ -14,7 +14,7 @@ import org.junit.Test
 @ExperimentalCoroutinesApi
 class AddMovieRatingByIdUseCaseTest {
 
-    private lateinit var repository: AddMovieRatingRepository
+    private lateinit var repository: RatingRepository
     private lateinit var useCase: AddMovieRatingByIdUseCase
 
     @Before
