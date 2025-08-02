@@ -16,6 +16,7 @@ import com.london.data.remote.service.home.TrendingApiService
 import com.london.data.remote.source.authentication.AuthenticationRemoteDataSource
 import com.london.data.remote.source.details.actor.ActorDetailsRemoteDataSource
 import com.london.data.remote.source.details.movie.MovieDetailsRemoteDataSource
+import com.london.data.remote.source.details.movie.rating.AddMovieRatingRemoteDataSource
 import com.london.data.remote.source.details.tvshow.TvShowDetailsRemoteDataSource
 import com.london.data.remote.source.details.videoprovider.movie.MovieVideoProviderRemote
 import com.london.data.remote.source.details.videoprovider.tvshow.TvShowVideoProviderRemote
@@ -27,6 +28,7 @@ import com.london.data.remote.source.search.SearchRemoteDataSource
 import com.london.data.remote.source.toprated.movie.TopRatedMovieRemoteDataSource
 import com.london.data.remote.source.toprated.tvseries.TopRatedTvRemoteDataSource
 import com.london.data.repository.ActorRepositoryImpl
+import com.london.data.repository.AddMovieRatingRepositoryImpl
 import com.london.data.repository.DetailsRepositoryImpl
 import com.london.data.repository.MovieDetailsRepositoryImpl
 import com.london.data.repository.MovieVideoProviderRepositoryImpl
@@ -44,6 +46,7 @@ import com.london.data.utils.CrashReporter
 import com.london.domain.entity.recent.RecentSearch
 import com.london.domain.entity.recent.RecentViewed
 import com.london.domain.repository.ActorRepository
+import com.london.domain.repository.AddMovieRatingRepository
 import com.london.domain.repository.AuthRepository
 import com.london.domain.repository.DetailsRepository
 import com.london.domain.repository.MovieDetailsRepository
@@ -149,9 +152,12 @@ object RepositoryModule {
     @Provides
     @Singleton
     fun provideMovieDetailsRepository(
-        dataSource: MovieDetailsRemoteDataSource
+        dataSource: MovieDetailsRemoteDataSource,
+        authPreferences: AuthPreferences
     ): MovieDetailsRepository =
-        MovieDetailsRepositoryImpl(movieDetailsRemoteDataSource = dataSource)
+        MovieDetailsRepositoryImpl(
+            movieDetailsRemoteDataSource = dataSource, authPreferences = authPreferences
+        )
 
     @Provides
     @Singleton
@@ -183,4 +189,14 @@ object RepositoryModule {
         dataSource: TvShowVideoProviderRemote
     ): TvShowVideoProviderRepository =
         TvShowVideoProviderRepositoryImpl(tvShowVideoProviderRemote = dataSource)
+
+    @Provides
+    @Singleton
+    fun provideAddMovieRatingRepository(
+        addMovieRatingRemoteDataSource: AddMovieRatingRemoteDataSource,
+        authPreferences: AuthPreferences
+    ): AddMovieRatingRepository = AddMovieRatingRepositoryImpl(
+        addMovieRatingRemoteDataSource = addMovieRatingRemoteDataSource,
+        authPreferences = authPreferences
+    )
 }

@@ -1,7 +1,9 @@
 package com.london.data.repository
 
+import com.london.data.local.preference.AuthPreferences
 import com.london.data.mapper.moviedetails.toEntity
 import com.london.data.mapper.toEntity
+import com.london.data.remote.exception.NetworkException
 
 import com.london.data.remote.source.details.movie.MovieDetailsRemoteDataSource
 import com.london.data.utils.asImageUrlOrEmpty
@@ -9,12 +11,14 @@ import com.london.data.utils.isTrue
 import com.london.domain.entity.Actor
 import com.london.domain.entity.Movie
 import com.london.domain.entity.moviedatails.MovieDetails
+import com.london.domain.entity.moviedatails.MovieStates
 import com.london.domain.repository.MovieDetailsRepository
 import javax.inject.Inject
 
 
 class MovieDetailsRepositoryImpl @Inject constructor(
     private val movieDetailsRemoteDataSource: MovieDetailsRemoteDataSource,
+    private val authPreferences: AuthPreferences
 ) : MovieDetailsRepository {
 
     override suspend fun getMovieById(id: Int): MovieDetails {
@@ -47,4 +51,25 @@ class MovieDetailsRepositoryImpl @Inject constructor(
         return movieCast.actorRemote?.map { it.toEntity() }.orEmpty()
     }
 
+    override suspend fun getMovieAccountStatesById(
+        id: Int,
+    ): MovieStates {
+        val userSessionId = authPreferences.getSessionId()
+        val guestSessionId = authPreferences.getGuestSessionId()
+
+        val result = when {
+            userSessionId.isNullOrBlank().not() -> movieDetailsRemoteDataSource.getMovieAccountStates(
+                movieId = id,
+                userSessionId = userSessionId,
+                guestSessionId = null
+            )
+            guestSessionId.isNullOrBlank().not() -> movieDetailsRemoteDataSource.getMovieAccountStates(
+                movieId = id,
+                userSessionId = null,
+                guestSessionId = guestSessionId
+            )
+            else -> Result.failure(NetworkException.UnknownException("No session id found"))
+        }
+        return result.getOrThrow().toEntity()
+    }
 }
