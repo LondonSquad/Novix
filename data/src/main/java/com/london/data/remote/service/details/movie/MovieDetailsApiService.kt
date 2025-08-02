@@ -3,13 +3,16 @@ package com.london.data.remote.service.details.movie
 
 import com.london.data.remote.model.ApiResponse
 import com.london.data.remote.model.details.movie.model.moviecast.MovieCastResponse
+import com.london.data.remote.model.details.movie.model.moviedetails.AccountMovieStatesResponse
 import com.london.data.remote.model.details.movie.model.moviedetails.MovieDetailsResponse
 import com.london.data.remote.model.details.movie.model.movieimages.MovieImagesResponse
 import com.london.data.remote.model.details.videoprovider.movie.model.MovieVideoRemote
 import com.london.data.remote.model.search.model.SearchMovieRemote
 import retrofit2.Response
 import retrofit2.http.GET
+import retrofit2.http.POST
 import retrofit2.http.Path
+import retrofit2.http.Query
 
 interface MovieDetailsApiService {
 
@@ -37,4 +40,11 @@ interface MovieDetailsApiService {
     suspend fun getMovieVideos(
         @Path("movie_id") movieId: Int,
     ): Response<MovieVideoRemote>
+
+    @POST("3/movie/{movie_id}/account_states")
+    suspend fun getMovieStates(
+        @Path("movie_id") movieId: Int,
+        @Query("guest_session_id") guestSessionId: String?,
+        @Query("session_id") userSessionId: String?,
+    ) : Response<AccountMovieStatesResponse>
 }
