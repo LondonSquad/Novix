@@ -12,26 +12,10 @@ class AddMovieRatingRepositoryImpl @Inject constructor(
     override suspend fun addMovieRatingById(
         movieId: Int,
         rating: Int,
-    ): Boolean {
-        val userSessionId = authPreferences.getSessionId()
-        val guestSessionId = authPreferences.getGuestSessionId()
-
-        val result = when {
-            userSessionId.isNullOrBlank().not() -> addMovieRatingRemoteDataSource.addMovieRating(
-                    movieId = movieId,
-                    rating = rating.toDouble(),
-                    userSessionId = userSessionId,
-                    guestSessionId = null
-                )
-
-            guestSessionId.isNullOrBlank().not() -> addMovieRatingRemoteDataSource.addMovieRating(
-                movieId = movieId,
-                rating = rating.toDouble(),
-                userSessionId = null,
-                guestSessionId = guestSessionId
-            )
-            else -> return false
-        }
-        return result.isSuccess
-    }
+    ): Boolean = addMovieRatingRemoteDataSource.addMovieRating(
+        movieId = movieId,
+        rating = rating.toDouble(),
+        userSessionId = authPreferences.getSessionId(),
+        guestSessionId = authPreferences.getGuestSessionId()
+    ).isSuccess
 }

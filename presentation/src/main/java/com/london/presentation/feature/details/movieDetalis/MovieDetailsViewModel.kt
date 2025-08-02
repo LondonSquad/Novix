@@ -1,9 +1,11 @@
 package com.london.presentation.feature.details.movieDetalis
 
 import androidx.lifecycle.SavedStateHandle
+import androidx.lifecycle.viewModelScope
 import com.london.domain.entity.Movie
 import com.london.domain.entity.recent.MediaType
 import com.london.domain.entity.recent.RecentViewed
+import com.london.domain.usecase.AddMovieRatingByIdUseCase
 import com.london.domain.usecase.details.movie.GetFirstTenMovieImagesUseCase
 import com.london.domain.usecase.details.movie.GetMovieCastUseCase
 import com.london.domain.usecase.details.movie.GetMovieDetailsById
@@ -15,6 +17,7 @@ import com.london.presentation.feature.base.BaseViewModel
 import com.london.presentation.navigation.Screen
 import com.london.presentation.navigation.getArgs
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
@@ -26,6 +29,7 @@ class MovieDetailsViewModel @Inject constructor(
     private val getMovieVideosUseCase: GetMovieVideoUseCase,
     private val addMovieToRecentWatchedUseCase:AddMovieToRecentWatchedUseCase,
     private val addToRecentViewedUseCase:AddToRecentViewedUseCase,
+    private val addMovieRatingByIdUseCase:AddMovieRatingByIdUseCase,
     savedStateHandle: SavedStateHandle
 ) : BaseViewModel<MovieDetailsUiState, MovieDetailsEffect>(MovieDetailsUiState()),
     MovieDetailsContract {
@@ -35,7 +39,14 @@ class MovieDetailsViewModel @Inject constructor(
 
     init {
         loadMovieDetails(movieId)
+        test()
         loadSimilarAndVideos(movieId)
+    }
+
+    fun test(){
+        viewModelScope.launch {
+            addMovieRatingByIdUseCase.invoke(703 , 10)
+        }
     }
 
     override fun onBackClick() = emitEffect(MovieDetailsEffect.BackNavigation)

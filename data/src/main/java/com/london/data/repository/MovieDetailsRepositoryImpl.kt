@@ -3,8 +3,6 @@ package com.london.data.repository
 import com.london.data.local.preference.AuthPreferences
 import com.london.data.mapper.moviedetails.toEntity
 import com.london.data.mapper.toEntity
-import com.london.data.remote.exception.NetworkException
-
 import com.london.data.remote.source.details.movie.MovieDetailsRemoteDataSource
 import com.london.data.utils.asImageUrlOrEmpty
 import com.london.data.utils.isTrue
@@ -53,23 +51,9 @@ class MovieDetailsRepositoryImpl @Inject constructor(
 
     override suspend fun getMovieAccountStatesById(
         id: Int,
-    ): MovieStates {
-        val userSessionId = authPreferences.getSessionId()
-        val guestSessionId = authPreferences.getGuestSessionId()
-
-        val result = when {
-            userSessionId.isNullOrBlank().not() -> movieDetailsRemoteDataSource.getMovieAccountStates(
-                movieId = id,
-                userSessionId = userSessionId,
-                guestSessionId = null
-            )
-            guestSessionId.isNullOrBlank().not() -> movieDetailsRemoteDataSource.getMovieAccountStates(
-                movieId = id,
-                userSessionId = null,
-                guestSessionId = guestSessionId
-            )
-            else -> Result.failure(NetworkException.UnknownException("No session id found"))
-        }
-        return result.getOrThrow().toEntity()
-    }
+    ): MovieStates = movieDetailsRemoteDataSource.getMovieAccountStates(
+            movieId = id,
+            userSessionId = authPreferences.getSessionId(),
+            guestSessionId = authPreferences.getGuestSessionId()
+        ).getOrThrow().toEntity()
 }
