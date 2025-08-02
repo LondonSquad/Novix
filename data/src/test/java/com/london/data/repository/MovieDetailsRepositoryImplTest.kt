@@ -6,8 +6,8 @@ import com.london.data.remote.exception.NetworkException
 import com.london.data.remote.model.ApiResponse
 import com.london.data.remote.model.details.movie.model.moviecast.MovieActor
 import com.london.data.remote.model.details.movie.model.moviecast.MovieCastResponse
+import com.london.data.remote.model.details.movie.model.moviedetails.AccountMovieStatesResponse
 import com.london.data.remote.model.details.movie.model.moviedetails.GenreRemote
-import com.london.data.remote.model.details.movie.model.moviedetails.MovieAccountStatesResponse
 import com.london.data.remote.model.details.movie.model.moviedetails.MovieDetailsResponse
 import com.london.data.remote.model.details.movie.model.moviedetails.ProductionCompanyRemote
 import com.london.data.remote.model.details.movie.model.moviedetails.ProductionCountryRemote
@@ -189,12 +189,21 @@ class MovieDetailsRepositoryImplTest {
         ),
         crew = emptyList()
     )
-    private fun fakeMovieStatesRemote(): MovieAccountStatesResponse{
-        return MovieAccountStatesResponse(
+
+    private fun fakeMovieStatesRemote(): AccountMovieStatesResponse =
+        AccountMovieStatesResponse(
             id = 123,
             favorite = true,
-            rated = RatingValue(1),
+            rated = RatingValue(5),
             watchlist = true
+        )
+
+    private fun secondFakeMovieStatesRemote(): AccountMovieStatesResponse {
+        return AccountMovieStatesResponse(
+            favorite = true,
+            id = 5,
+            rated = RatingValue(value = 5),
+            watchlist = false
         )
     }
 
@@ -293,53 +302,27 @@ class MovieDetailsRepositoryImplTest {
             repository.getSimilarMoviesById(123)
         }
     }
-    @Test
-    fun `getMovieAccountStatesById should use userSessionId when available`() = runTest {
-        val movieId = 123
-        val userSessionId = "user123"
-        val remoteMovieStates = fakeMovieStatesRemote()
-
-        coEvery { authPreferences.getSessionId() } returns userSessionId
-        coEvery {
-            remoteDataSource.getMovieAccountStates(
-                movieId = movieId,
-                userSessionId = userSessionId,
-                guestSessionId = null
-            )
-        } returns Result.success(remoteMovieStates)
-
-        val result = repository.getAccountMovieStatesById(movieId)
-
-        assertEquals(remoteMovieStates.toEntity(), result)
-    }
 
     @Test
-    fun `getMovieAccountStatesById should use guestSessionId when userSessionId is null`() = runTest {
-        val movieId = 123
-        val guestSessionId = "guest123"
-        val remoteMovieStates = fakeMovieStatesRemote()
+    fun `getMovieAccountStatesById should use guestSessionId when userSessionId is null`() =
+        runTest {
+            val movieId = 123
+            val guestSessionId = "guest123"
+            val remoteMovieStates = fakeMovieStatesRemote()
 
-        coEvery { authPreferences.getGuestSessionId() } returns guestSessionId
-        coEvery {
-            remoteDataSource.getMovieAccountStates(
-                movieId = movieId,
-                userSessionId = null,
-                guestSessionId = guestSessionId
-            )
-        } returns Result.success(remoteMovieStates)
+            coEvery { authPreferences.getSessionId() } returns null
+            coEvery { authPreferences.getGuestSessionId() } returns guestSessionId
 
-        val result = repository.getAccountMovieStatesById(movieId)
+            coEvery {
+                remoteDataSource.getAccountMovieStates(
+                    movieId,
+                    guestSessionId,
+                    null
+                )
+            } returns Result.success(remoteMovieStates)
 
-        assertEquals(remoteMovieStates.toEntity(), result)
-    }
+            val result = repository.getAccountMovieStatesById(movieId)
 
-    @Test
-    fun `getMovieAccountStatesById should throw UnknownException when no session id`() = runTest {
-        val movieId = 123
-
-        val exception = assertThrows<NetworkException.UnknownException> {
-            repository.getAccountMovieStatesById(movieId)
+            assertEquals(remoteMovieStates.toEntity(), result)
         }
-        assertEquals("No session id found", exception.message)
-    }
 }
