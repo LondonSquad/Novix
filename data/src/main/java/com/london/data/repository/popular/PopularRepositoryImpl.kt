@@ -21,16 +21,12 @@ class PopularRepositoryImpl @Inject constructor(
     private val crashReporter: CrashReporter
 ) : PopularRepository {
 
-    //    override suspend fun getPopularMovies(): List<PopularMovie> {
-//        return popularRemoteDataSource.getPopularMovies().getOrThrow().toPopularMovies()
-//    }
-//
-    override suspend fun getPopularTvShows(): List<PopularTvShow> {
-        return popularRemoteDataSource.getPopularTvShows().getOrThrow().toEntityList()
-    }
     override suspend fun getPopularMovies(
     ): List<PopularMovie> = fetchAndSync(
-        cacheBlock = { homeLocalDataSource.getAll().map { it.toEntity() } },
+        cacheBlock = {
+            val local = homeLocalDataSource.getAll().map { it.toEntity() }
+            local.takeIf { it.isNotEmpty() }
+        },
         networkBlock = {
             popularRemoteDataSource.getPopularMovies().getOrThrow().toPopularMovies()
         },
@@ -40,8 +36,8 @@ class PopularRepositoryImpl @Inject constructor(
         crashReporter = crashReporter
     )
 
-//    override suspend fun getPopularTvShows(): List<PopularTvShow> {
-//
-//    }
+    override suspend fun getPopularTvShows(): List<PopularTvShow> {
+        return popularRemoteDataSource.getPopularTvShows().getOrThrow().toEntityList()
+    }
 
 }
