@@ -8,7 +8,7 @@ class AddMovieRatingByIdUseCase @Inject constructor(
 ) {
     suspend operator fun invoke(
         id: Int,
-        rating: Double,
+        rating: Int,
     ): Boolean = repository.addMovieRatingById(
             id = id,
             rating = rating,
