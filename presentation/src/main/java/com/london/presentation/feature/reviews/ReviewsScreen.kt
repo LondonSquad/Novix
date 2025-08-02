@@ -37,6 +37,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.paging.LoadState
 import androidx.paging.compose.collectAsLazyPagingItems
 import com.london.designsystem.component.CircularLoading
 import com.london.designsystem.component.ImageView
@@ -50,6 +51,7 @@ import com.london.presentation.shared.ConditionalText
 import com.london.presentation.shared.RatingItem
 import com.london.presentation.shared.ReviewsDate
 import com.london.presentation.utils.Listen
+import com.london.presentation.utils.isLoading
 import com.london.presentation.utils.reverseDateFormat
 
 @Composable
@@ -62,10 +64,13 @@ fun ReviewsScreen(
 
     effect?.Listen { onNavigateBack() }
 
+    val reviewsList = uiState.reviews.collectAsLazyPagingItems()
+
     BuildScreen(
-        isLoading = uiState.isLoading,
-        isError = uiState.error != null,
+        isLoading = reviewsList.isLoading(),
+        isError = reviewsList.loadState.refresh is LoadState.Error,
         onBack = onNavigateBack,
+        onRetry = viewModel::onRetry
     ) {
         ReviewsScreenContent(
             uiState = uiState,

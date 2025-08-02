@@ -107,7 +107,8 @@ fun MovieDetailsScreen(
     BuildScreen(
         onBack = viewModel::onBackClick,
         isLoading = state.isLoading,
-        isError = state.error != null
+        isError = state.error != null,
+        onRetry = viewModel::onRetry
     ) {
         MovieDetailsContent(
             uiState = state,

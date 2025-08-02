@@ -50,6 +50,11 @@ class ReviewsViewModel @Inject constructor(
         )
     }
 
+    override fun onRetry(){
+        updateState { copy(error = null) }
+        initializeReviews(mediaType, mediaId)
+    }
+
     override fun onBackClicked() {
         emitEffect(ReviewEffect.NavigateBack)
     }

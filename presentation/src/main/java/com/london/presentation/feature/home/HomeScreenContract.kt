@@ -11,6 +11,7 @@ interface HomeScreenContract {
     fun onTrendingTvShowsCardClicked()
     fun onTrendingActorsCardClicked()
     fun onMovieGenreSelect(genre: MovieGenre)
+    fun onRetry()
 }
 
 fun defaultHomeScreenContract() = object : HomeScreenContract {
@@ -22,4 +23,5 @@ fun defaultHomeScreenContract() = object : HomeScreenContract {
     override fun onTrendingTvShowsCardClicked() {}
     override fun onTrendingActorsCardClicked() {}
     override fun onMovieGenreSelect(genre: MovieGenre) {}
+    override fun onRetry() {}
 }

@@ -115,7 +115,8 @@ fun TvShowsDetailsScreen(
     BuildScreen(
         onBack = viewModel::onBackClicked,
         isLoading = uiState.isLoading,
-        isError = uiState.error != null
+        isError = uiState.error != null,
+        onRetry = viewModel::onRetry
     ) {
         TvShowsDetailScreenContent(
             uiState = uiState,

@@ -9,6 +9,8 @@ import androidx.compose.ui.unit.DpSize
 import androidx.compose.ui.unit.IntSize
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.toSize
+import androidx.paging.LoadState
+import androidx.paging.compose.LazyPagingItems
 import java.util.Locale
 
 fun Any?.toLocalizedNumbers(): String {
@@ -138,9 +140,21 @@ fun rememberContainerSize(): DpSize {
 }
 
 @Composable
-fun gridColmuns(): Int= runCatching {
+fun gridColmuns(): Int = runCatching {
     val screenWidth = LocalWindowInfo.current.containerSize.width
     val itemWidthPx = with(LocalDensity.current) { 158.dp.toPx() }
     val screenPaddingPx = with(LocalDensity.current) { 16.dp.toPx() }
     ((screenWidth - screenPaddingPx) / itemWidthPx).toInt().coerceAtLeast(2)
 }.getOrDefault(1)
+
+fun Int?.isNotNull(): Boolean {
+    return this != null
+}
+
+fun shouldShowLoading(
+    isLoading: Boolean,
+    handlePagingLoadingAutomatically: Boolean = true,
+    pagingFlow: LazyPagingItems<*>? = null
+): Boolean = isLoading || (handlePagingLoadingAutomatically
+        && pagingFlow?.loadState?.refresh is LoadState.Loading)
+
