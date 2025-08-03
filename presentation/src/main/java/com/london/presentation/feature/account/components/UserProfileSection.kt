@@ -127,7 +127,7 @@ private fun UserMenuDropdown(
 private fun LogoutMenuItem() {
     Row(
         verticalAlignment = Alignment.CenterVertically,
-        modifier = Modifier.padding(12.dp)
+        modifier = Modifier.padding(8.dp)
     ) {
         Icon(
             painter = painterResource(R.drawable.logout),

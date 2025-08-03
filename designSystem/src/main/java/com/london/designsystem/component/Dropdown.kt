@@ -28,7 +28,7 @@ fun Dropdown(
         ) {
             Card(
                 modifier = modifier,
-                shape = RoundedCornerShape(12.dp),
+                shape = RoundedCornerShape(8.dp),
                 border = BorderStroke(
                     width = 1.dp,
                     color = NovixTheme.colors.stroke
