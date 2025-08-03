@@ -201,7 +201,7 @@ object RepositoryModule {
 
     @Provides
     @Singleton
-    fun provideAddMovieRatingRepository(
+    fun provideMovieRatingRepository(
         movieRatingRemoteDataSource: MovieRatingRemoteDataSource,
         authPreferences: AuthPreferences
     ): RatingRepository = RatingRepositoryImpl(
