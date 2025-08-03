@@ -27,11 +27,6 @@ interface SearchRepository {
         pageNumber: Int
     ): PagedFetchResponse<Movie>
 
-    suspend fun getUpComingMoviesByCategory(
-        categoryId: Int?,
-        pageNumber: Int
-    ): PagedFetchResponse<Movie>
-
     suspend fun searchForTvShowByCategory(
         categoryId: Int,
         pageNumber: Int

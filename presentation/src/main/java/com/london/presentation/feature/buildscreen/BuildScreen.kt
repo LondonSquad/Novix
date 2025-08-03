@@ -24,6 +24,7 @@ fun BuildScreen(
     handlePagingLoadingAutomatically: Boolean = true,
     content: @Composable () -> Unit,
 ) {
+
     when {
         shouldShowLoading(
             isLoading = isLoading,
@@ -35,18 +36,14 @@ fun BuildScreen(
             NetworkErrorScreen(onBack = onBack, onRetry = onRetry)
         }
 
-        (pagingFlow!=null)  &&
-                pagingFlow.isEmpty() &&
-                emptyLayoutMessage.isNotNull() -> {
+        pagingFlow?.isEmpty() == true && emptyLayoutMessage.isNotNull() -> {
             EmptyLayout(
                 text = stringResource(emptyLayoutMessage!!),
-                image = emptyLayoutImage ?: 0
+                image = emptyLayoutImage
             )
         }
 
-        else -> {
-            content()
-        }
+        else -> { content() }
     }
 }
 

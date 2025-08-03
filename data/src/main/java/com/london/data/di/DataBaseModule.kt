@@ -70,4 +70,9 @@ object DataBaseModule {
     @Named("popularSectionDao")
     fun providePopularSectionDao(database: NovixDatabase) =
         database.popularSectionDao()
+
+    @Provides
+    @Singleton
+    fun provideUpComingMoviesDao(database: NovixDatabase) =
+        database.upComingSectionDao()
 }

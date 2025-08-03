@@ -23,5 +23,5 @@ interface PopularSectionDao: HomeDao<PopularSectionLocal> {
     override suspend fun getAll(): List<PopularSectionLocal>
 
     @Query("SELECT * FROM popular_section_table WHERE date = :date")
-    override suspend fun getCurrentPopularByDate(date: Long): PopularSectionLocal
+    override suspend fun getByDate(date: Long): PopularSectionLocal
 }
