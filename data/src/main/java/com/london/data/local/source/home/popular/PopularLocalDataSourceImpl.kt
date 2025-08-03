@@ -9,7 +9,6 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
-
 class PopularLocalDataSourceImpl @Inject constructor(
     private val popularSectionDao: PopularSectionDao
 ) : HomeLocalDataSource<PopularSectionLocal> {
