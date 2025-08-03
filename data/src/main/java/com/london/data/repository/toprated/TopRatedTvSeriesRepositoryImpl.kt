@@ -24,7 +24,7 @@ class TopRatedTvSeriesRepositoryImpl @Inject constructor(
     ): PagedFetchResponse<TopRatedTvSeries> = fetchAndSync(
         cacheBlock = {
             val local = topRatedTvShow.getAll()
-                .filter { it.mediaType == MediaType.Movie }
+                .filter { it.mediaType == MediaType.TvShow }
                 .map { it.toTvShow() }
             local.takeIf { it.isNotEmpty() }
         },
