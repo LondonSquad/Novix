@@ -24,6 +24,6 @@ interface UpcomingSectionDao{
     @Query("SELECT * FROM upcoming_section_table WHERE date = :date")
     suspend fun getByDate(date: Long): UpComingSectionLocal
 
-    @Query("SELECT * FROM upcoming_section_table WHERE page = :page")
-    suspend fun getUpComingMoviesPage(page: Int): UpComingSectionLocal
+    @Query("SELECT * FROM upcoming_section_table WHERE categoryId = :categoryId AND page = :page")
+    suspend fun getUpComingMoviesPage(categoryId: Int?, page: Int): UpComingSectionLocal
 }

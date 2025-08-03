@@ -13,19 +13,22 @@ import javax.inject.Inject
 class UpComingRepositoryImpl @Inject constructor(
     private val upComingLocalDataSource: UpComingLocalDataSource,
     private val upComingRemoteDataSource: UpComingRemoteDataSource
-): UpComingRepository {
+) : UpComingRepository {
     override suspend fun getUpComingMoviesByCategory(
         categoryId: Int?, pageNumber: Int
     ): PagedFetchResponse<UpComingMovie> = fetchAndSync(
         cacheBlock = {
-            upComingLocalDataSource.getUpComingMoviesPage(page = pageNumber)
+            upComingLocalDataSource.getUpComingMoviesPage(
+                page = pageNumber,
+                categoryId = categoryId
+            )
         },
-        syncBlock = {upComingLocalDataSource.insert(it)},
+        syncBlock = { upComingLocalDataSource.insert(it) },
         networkBlock = {
             upComingRemoteDataSource.getUpComingMoviesByCategory(
                 categoryId = categoryId,
                 pageNumber = pageNumber,
-            ).getOrThrow().toLocal()
+            ).getOrThrow().toLocal(categoryId)
         }).run {
         PagedFetchResponse(
             currentPage = page,

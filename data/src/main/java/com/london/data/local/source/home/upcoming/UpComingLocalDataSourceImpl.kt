@@ -34,7 +34,7 @@ class UpComingLocalDataSourceImpl @Inject constructor(
     override suspend fun getByDate(date: Long): UpComingSectionLocal =
         upcomingSectionDao.getByDate(date)
 
-    override suspend fun getUpComingMoviesPage(page: Int): UpComingSectionLocal =
-        upcomingSectionDao.getUpComingMoviesPage(page)
+    override suspend fun getUpComingMoviesPage(categoryId: Int?, page: Int): UpComingSectionLocal =
+        upcomingSectionDao.getUpComingMoviesPage(categoryId, page)
 
 }

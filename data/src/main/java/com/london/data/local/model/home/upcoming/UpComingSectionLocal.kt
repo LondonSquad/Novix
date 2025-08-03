@@ -7,6 +7,7 @@ import androidx.room.PrimaryKey
 data class UpComingSectionLocal(
     @PrimaryKey(autoGenerate = true) val id: Int = 0,
     val date: Long = System.currentTimeMillis(),
+    val categoryId: Int?,
     val page: Int,
     val results: List<UpComingMovieDtoLocal>,
     val totalPages: Int,

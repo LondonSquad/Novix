@@ -34,12 +34,13 @@ fun ApiResponse<MovieRemote>.toLocal(query: String) = SearchMoviesLocal(
     totalResults = totalItems
 )
 
-fun ApiResponse<MovieRemote>.toLocal() = UpComingSectionLocal(
+fun ApiResponse<MovieRemote>.toLocal(categoryId: Int?) = UpComingSectionLocal(
     date = System.currentTimeMillis(),
     page = currentPage,
     results = items.map { it.toUpComingLocal() },
     totalPages = totalPages,
-    totalResults = totalItems
+    totalResults = totalItems,
+    categoryId = categoryId
 )
 
 fun UpComingMovieDtoLocal.toEntity() = UpComingMovie(
@@ -48,7 +49,7 @@ fun UpComingMovieDtoLocal.toEntity() = UpComingMovie(
     genreIds = genreIds,
 )
 
-fun MovieRemote.toUpComingLocal() = UpComingMovieDtoLocal(
+private fun MovieRemote.toUpComingLocal() = UpComingMovieDtoLocal(
     id = id.orZero(),
     imageUrl = posterPath.asImageUrlOrEmpty(),
     genreIds = genreIds.orEmpty()

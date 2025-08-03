@@ -7,5 +7,5 @@ interface UpComingLocalDataSource {
     suspend fun insertAll(items: List<UpComingSectionLocal>)
     suspend fun getAll(): List<UpComingSectionLocal>
     suspend fun getByDate(date: Long): UpComingSectionLocal
-    suspend fun getUpComingMoviesPage(page: Int): UpComingSectionLocal
+    suspend fun getUpComingMoviesPage(categoryId: Int?, page: Int): UpComingSectionLocal
 }
