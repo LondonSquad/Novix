@@ -117,4 +117,5 @@
     <string name="language">اللغة</string>
     <string name="user_profile">الملف الشخصي</string>
     <string name="logout">تسجيل خروج</string>
+    <string name="please_login_to_access">يرجى تسجيل الدخول للوصول إلى تفاصيل حسابك والميزات الأخرى!</string>
 </resources>

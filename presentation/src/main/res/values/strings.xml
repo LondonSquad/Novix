@@ -117,4 +117,5 @@
     <string name="language">Language</string>
     <string name="user_profile">User profile</string>
     <string name="logout">Logout</string>
+    <string name="please_login_to_access">Please login to access your account details and other features!</string>
 </resources>

@@ -8,6 +8,7 @@ data class AccountUiState(
     val username: String = "@Hamsa_2025",
     val currentAppearance: String = "Dark",
     val currentLanguage: String = "ENG",
+    val isUserLoggedIn: Boolean = true,
     val showUserMenu: Boolean = false,
     val showContentRestrictionBottomSheet: Boolean = false,
     val showAppearanceBottomSheet: Boolean = false,

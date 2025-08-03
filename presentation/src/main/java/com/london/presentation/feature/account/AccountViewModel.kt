@@ -12,6 +12,17 @@ class AccountViewModel @Inject constructor(
 ) : BaseViewModel<AccountUiState, AccountEffect>(AccountUiState()),
     AccountContract {
 
+    init {
+        updateState {
+            copy(isUserLoggedIn = checkIfUserIsLoggedIn())
+        }
+    }
+
+    private fun checkIfUserIsLoggedIn(): Boolean {
+        // todo: Implement your authentication check logic here
+        // This could check shared preferences, auth repository, etc.
+        return true // Replace with actual logic
+    }
     override fun onWatchingHistoryClick() {
         emitEffect(AccountEffect.NavigateToWatchingHistory)
     }
@@ -59,5 +70,9 @@ class AccountViewModel @Inject constructor(
                 showUserMenu = false
             )
         }
+    }
+
+    override fun onLoginClick() {
+        emitEffect(AccountEffect.NavigateToLogin)
     }
 }

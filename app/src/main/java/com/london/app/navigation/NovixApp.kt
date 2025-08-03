@@ -342,6 +342,13 @@ fun NavGraphBuilder.mainNavGraph(
             },
             onNavigateToWatchingHistory = { navController.navigate(Screen.WatchingHistory) },
             onNavigateToMyRating = { navController.navigate(Screen.MyRating) },
+            onNavigateToLogin = {
+                navController.navigate(Screen.Login) {
+                    popUpTo(navController.graph.findStartDestination().id) {
+                        inclusive = true
+                    }
+                }
+            },
             onNavigateToChangePassword = {
                 // todo: Handle change password logic here, e.g., reset password flow
             })

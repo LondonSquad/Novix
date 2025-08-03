@@ -10,4 +10,5 @@ interface AccountContract {
     fun onUserMenuClick()
     fun onLogoutClick()
     fun onBottomSheetDismiss()
+    fun onLoginClick()
 }
