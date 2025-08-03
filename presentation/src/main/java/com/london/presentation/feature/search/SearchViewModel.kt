@@ -107,8 +107,6 @@ class SearchViewModel @Inject constructor(
             )
         }
 
-        updateAvailableGenres(category)
-
         tryToExecute(
             block = {
                 performSearch(state.value.searchQuery.text, category)
@@ -249,10 +247,6 @@ class SearchViewModel @Inject constructor(
         }
     }
 
-    override fun onGenreSelectedChange(selectedGenres: List<Int>) {
-        updateState { copy(selectedGenres = selectedGenres) }
-    }
-
     override fun onMovieClick(movieId: Int) {
         emitEffect(SearchEffect.MovieNavigation(movieId = movieId))
     }
@@ -282,8 +276,6 @@ class SearchViewModel @Inject constructor(
 
     fun performSearch(query: String, category: SearchCategory) {
         val trimmedQuery = query.trim()
-
-        updateAvailableGenres(category)
 
         if (trimmedQuery.isEmpty()) {
             clearSearchResults()
@@ -379,18 +371,6 @@ class SearchViewModel @Inject constructor(
                 tvShowsFlow = flow {},
                 actorsFlow = flow {}
             )
-        }
-    }
-
-    private fun updateAvailableGenres(searchCategory: SearchCategory) {
-        val availableGenres = when (searchCategory) {
-            SearchCategory.Movies -> availableMovieGenres
-            SearchCategory.TvShows -> availableTvGenres
-            SearchCategory.Actors -> emptyList()
-        }
-
-        updateState {
-            copy(availableGenres = availableGenres)
         }
     }
 

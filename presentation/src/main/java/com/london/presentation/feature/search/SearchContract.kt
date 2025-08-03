@@ -17,7 +17,6 @@ interface SearchContract {
     fun addToRecentViewed(item: RecentViewed)
     fun onClickMovie(genresListId : List<Int>)
     fun clearSearch()
-    fun onGenreSelectedChange(selectedGenres: List<Int>)
     fun onMovieClick(movieId: Int)
     fun onActorClick(actorId: Int)
     fun onTvShowClick(tvShowId: Int)
