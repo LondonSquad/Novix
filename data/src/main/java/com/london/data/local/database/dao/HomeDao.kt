@@ -8,6 +8,6 @@ interface HomeDao<T> {
     suspend fun insert(item: T)
     suspend fun deleteAll()
     suspend fun getAll(): List<T>
-    suspend fun insertAll(item: List<T>)
-    suspend fun getCurrentPopularByDate(date: Long): T
+    suspend fun insertAll(items: List<T>)
+    suspend fun getByDate(date: Long): T
 }

@@ -11,7 +11,7 @@ import com.london.data.local.model.search.SearchTvShowLocal
 import com.london.data.local.source.LocalDataSource
 import com.london.data.remote.exception.NetworkException
 import com.london.data.remote.model.ApiResponse
-import com.london.data.remote.model.search.model.SearchMovieRemote
+import com.london.data.remote.model.search.model.MovieRemote
 import com.london.data.remote.model.search.model.SearchTvShowRemote
 import com.london.data.remote.source.search.SearchRemoteDataSource
 import com.london.data.utils.CrashReporter
@@ -338,17 +338,6 @@ class SearchRepositoryImplTest {
     }
 
     @Test
-    fun `get upComingMoviesByCategory should return data from remote if available`()= runTest {
-        coEvery {
-            searchRemoteDataSource.getUpComingMoviesByCategory(
-                1,
-                PAGE_NUMBER
-            )
-        } returns Result.success(SearchMoviesRemoteMock)
-        val result = repository.getUpComingMoviesByCategory(1, PAGE_NUMBER)
-        assertThat(result).isEqualTo(MovieList)
-    }
-    @Test
     fun `incrementGenreInterest inserts new genre when not existing`() = runTest {
         val genreId = 1
         val mediaType = "movie"
@@ -453,20 +442,6 @@ class SearchRepositoryImplTest {
         assertThat(result).isEqualTo(TvShowList)
     }
 
-    @Test
-    fun `getUpComingMoviesByCategory should throw TimeoutException when API times out`() = runTest {
-        val categoryId = 34
-        val page = 1
-
-        coEvery {
-            searchRemoteDataSource.getUpComingMoviesByCategory(categoryId, page)
-        } throws NetworkException.TimeoutException("Request timed out")
-
-        assertThrows<NetworkException.TimeoutException> {
-            repository.getUpComingMoviesByCategory(categoryId, page)
-        }
-    }
-
     private companion object {
       private  const val NAME = "Tom"
        private const val LANG = "en-US"
@@ -553,7 +528,7 @@ class SearchRepositoryImplTest {
         private val SearchMoviesRemoteMock = ApiResponse(
             currentPage = PAGE_NUMBER,
             items = listOf(
-                SearchMovieRemote(
+                MovieRemote(
                     adult = false,
                     backdropPath = null,
                     genreIds = emptyList(),
