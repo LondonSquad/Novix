@@ -1,17 +1,13 @@
-package com.london.designsystem.component
-
 import androidx.compose.foundation.BorderStroke
-import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.border
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.Card
-import androidx.compose.material3.CardDefaults
-import androidx.compose.material3.Surface
+import androidx.compose.material3.DropdownMenu
+import androidx.compose.material3.DropdownMenuItem
+import androidx.compose.material3.MenuDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.window.Popup
-import androidx.compose.ui.window.PopupProperties
 import com.london.designsystem.theme.NovixTheme
 
 @Composable
@@ -21,26 +17,22 @@ fun Dropdown(
     modifier: Modifier = Modifier,
     content: @Composable () -> Unit
 ) {
-    if (expanded) {
-        Popup(
-            onDismissRequest = onDismissRequest,
-            properties = PopupProperties(focusable = true)
-        ) {
-            Card(
-                modifier = modifier,
-                shape = RoundedCornerShape(8.dp),
-                border = BorderStroke(
+    DropdownMenu(
+        expanded = expanded,
+        onDismissRequest = onDismissRequest,
+        modifier = modifier
+            .clip(RoundedCornerShape(8.dp))
+            .border(
+                BorderStroke(
                     width = 1.dp,
                     color = NovixTheme.colors.stroke
                 ),
-                colors = CardDefaults.cardColors(
-                    containerColor = NovixTheme.colors.surface,
-                    contentColor = NovixTheme.colors.body
-                )
-            ) {
-                content()
-            }
-        }
+                shape = RoundedCornerShape(8.dp)
+            ),
+        shape = RoundedCornerShape(8.dp),
+        containerColor = NovixTheme.colors.surface
+    ) {
+        content()
     }
 }
 
@@ -50,12 +42,12 @@ fun DropdownItem(
     modifier: Modifier = Modifier,
     content: @Composable () -> Unit
 ) {
-    Surface(
-        modifier = modifier
-            .fillMaxWidth()
-            .clickable { onClick() },
-        color = NovixTheme.colors.surface
-    ) {
-        content()
-    }
+    DropdownMenuItem(
+        text = { content() },
+        onClick = onClick,
+        modifier = modifier,
+        colors = MenuDefaults.itemColors(
+            textColor = NovixTheme.colors.body
+        )
+    )
 }

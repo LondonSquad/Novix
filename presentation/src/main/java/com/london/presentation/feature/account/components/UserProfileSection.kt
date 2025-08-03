@@ -1,5 +1,7 @@
 package com.london.presentation.feature.account.components
 
+import Dropdown
+import DropdownItem
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -7,6 +9,7 @@ import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -20,8 +23,6 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import com.london.designsystem.component.Dropdown
-import com.london.designsystem.component.DropdownItem
 import com.london.designsystem.component.Icon
 import com.london.designsystem.component.Text
 import com.london.designsystem.theme.NovixTheme
@@ -135,7 +136,9 @@ private fun LogoutMenuItem() {
             tint = NovixTheme.colors.redAccent,
             modifier = Modifier
                 .size(20.dp)
-                .padding(end = 8.dp)
+        )
+        Spacer(
+            modifier = Modifier.width(8.dp)
         )
         Text(
             text = stringResource(R.string.logout),
