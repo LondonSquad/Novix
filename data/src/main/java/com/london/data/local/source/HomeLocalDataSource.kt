@@ -6,10 +6,4 @@ interface HomeLocalDataSource<T> {
     suspend fun deleteAll()
     suspend fun getAll(): List<T>
     suspend fun getByDate(date: Long): T
-
-    fun Long.isDayExpired(): Boolean {
-        val oneDayInMillis = 24 * 60 * 60 * 1000L
-        val oneDayAgo = System.currentTimeMillis() - oneDayInMillis
-        return System.currentTimeMillis() < oneDayAgo
-    }
 }

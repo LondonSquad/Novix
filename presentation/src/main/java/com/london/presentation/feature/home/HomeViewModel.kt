@@ -1,6 +1,5 @@
 package com.london.presentation.feature.home
 
-import android.util.Log
 import androidx.lifecycle.viewModelScope
 import androidx.paging.PagingData
 import androidx.paging.cachedIn
@@ -160,7 +159,6 @@ class HomeViewModel @Inject constructor(
     }
 
     override fun onMovieGenreSelect(genre: MovieGenre) {
-        Log.d("TAG", "onMovieGenreSelect: $genre")
         if (genre == state.value.selectedMovieGenre) return
         updateState { copy(selectedMovieGenre = genre) }
         loadUpcomingMovies(categoryId = if (genre == MovieGenre.All) null else genre.id)
