@@ -4,8 +4,7 @@ import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
-import com.london.data.local.database.dao.HomeDao
-import com.london.data.local.model.home.popular.PopularSectionLocal
+import com.london.data.local.model.home.PopularSectionLocal
 
 @Dao
 interface PopularSectionDao: HomeDao<PopularSectionLocal> {

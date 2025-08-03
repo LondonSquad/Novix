@@ -1,4 +1,4 @@
-package com.london.data.local.model.home.popular
+package com.london.data.local.model.home
 
 import androidx.room.Entity
 import com.london.domain.entity.recent.MediaType

@@ -14,7 +14,7 @@ import org.junit.Before
 import org.junit.Test
 import org.junit.jupiter.api.assertThrows
 
-class TopRatedTvSeriesRepositoryImplTest {
+class TopRatedDaoTvSeriesRepositoryImplTest {
 
     private lateinit var remoteDataSource: TopRatedTvRemoteDataSource
     private lateinit var repository: TopRatedTvSeriesRepositoryImpl

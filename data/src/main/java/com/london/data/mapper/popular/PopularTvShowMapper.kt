@@ -2,7 +2,7 @@
 
 package com.london.data.mapper.popular
 
-import com.london.data.local.model.home.popular.PopularSectionLocal
+import com.london.data.local.model.home.PopularSectionLocal
 import com.london.data.remote.model.ApiResponse
 import com.london.data.remote.model.home.model.popular.PopularTvShowResponse
 import com.london.data.utils.asImageUrlOrEmpty

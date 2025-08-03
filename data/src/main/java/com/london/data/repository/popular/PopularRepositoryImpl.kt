@@ -1,7 +1,7 @@
 package com.london.data.repository.popular
 
-import com.london.data.local.model.home.popular.PopularSectionLocal
-import com.london.data.local.source.HomeLocalDataSource
+import com.london.data.local.model.home.PopularSectionLocal
+import com.london.data.local.source.home.popular.HomeLocalDataSource
 import com.london.data.mapper.popular.toMovieEntity
 import com.london.data.mapper.popular.toPopularMovieSectionLocal
 import com.london.data.mapper.popular.toPopularMovies
