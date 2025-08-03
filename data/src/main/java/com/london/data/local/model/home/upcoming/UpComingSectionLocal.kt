@@ -5,9 +5,9 @@ import androidx.room.PrimaryKey
 
 @Entity(tableName = "upcoming_section_table")
 data class UpComingSectionLocal(
-    @PrimaryKey(autoGenerate = true) val id: Int = 0,
     val date: Long = System.currentTimeMillis(),
-    val categoryId: Int?,
+    @PrimaryKey
+    val categoryId: Int,
     val page: Int,
     val results: List<UpComingMovieDtoLocal>,
     val totalPages: Int,
