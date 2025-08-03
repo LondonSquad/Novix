@@ -108,4 +108,7 @@
     <string name="no_data_until_now">No Data Yet</string>
     <string name="login_failed">Login failed. Please check your credentials.</string>
     <string name="guest_login_failed">Guest login failed.</string>
+    <string name="edit_list">Edit list</string>
+    <string name="save">Save</string>
+    <string name="list_title">List title</string>
 </resources>
