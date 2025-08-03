@@ -1,9 +1,10 @@
 package com.london.presentation.feature.home
 
+import android.util.Log
 import androidx.lifecycle.viewModelScope
 import androidx.paging.PagingData
 import androidx.paging.cachedIn
-import com.london.domain.entity.Movie
+import com.london.domain.entity.UpComingMovie
 import com.london.domain.usecase.GetPopularMovies
 import com.london.domain.usecase.GetPopularTvShow
 import com.london.domain.usecase.GetUpComingMoviesByCategoryUseCase
@@ -33,7 +34,7 @@ class HomeViewModel @Inject constructor(
     private val getRecentWatchedTvShows: GetRecentWatchedTvShowsUseCase
 ) : BaseViewModel<HomeScreenUiState, HomeScreenEffect>(HomeScreenUiState()), HomeScreenContract {
 
-    private val _upcomingMoviesFlow = MutableStateFlow<PagingData<Movie>>(PagingData.empty())
+    private val _upcomingMoviesFlow = MutableStateFlow<PagingData<UpComingMovie>>(PagingData.empty())
     private var upcomingJob: Job? = null
 
     init {
@@ -159,6 +160,7 @@ class HomeViewModel @Inject constructor(
     }
 
     override fun onMovieGenreSelect(genre: MovieGenre) {
+        Log.d("TAG", "onMovieGenreSelect: $genre")
         if (genre == state.value.selectedMovieGenre) return
         updateState { copy(selectedMovieGenre = genre) }
         loadUpcomingMovies(categoryId = if (genre == MovieGenre.All) null else genre.id)

@@ -34,7 +34,7 @@ class PopularLocalDataSourceImpl @Inject constructor(
     override suspend fun insertAll(items: List<PopularSectionLocal>) =
         popularSectionDao.insertAll(items)
 
-    override suspend fun getCurrentPopularByDate(date: Long): PopularSectionLocal =
-        popularSectionDao.getCurrentPopularByDate(date)
+    override suspend fun getByDate(date: Long): PopularSectionLocal =
+        popularSectionDao.getByDate(date)
 
 }

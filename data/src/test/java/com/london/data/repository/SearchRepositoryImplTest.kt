@@ -11,7 +11,7 @@ import com.london.data.local.model.search.SearchTvShowLocal
 import com.london.data.local.source.LocalDataSource
 import com.london.data.remote.exception.NetworkException
 import com.london.data.remote.model.ApiResponse
-import com.london.data.remote.model.search.model.SearchMovieRemote
+import com.london.data.remote.model.search.model.MovieRemote
 import com.london.data.remote.model.search.model.SearchTvShowRemote
 import com.london.data.remote.source.search.SearchRemoteDataSource
 import com.london.data.utils.CrashReporter
@@ -553,7 +553,7 @@ class SearchRepositoryImplTest {
         private val SearchMoviesRemoteMock = ApiResponse(
             currentPage = PAGE_NUMBER,
             items = listOf(
-                SearchMovieRemote(
+                MovieRemote(
                     adult = false,
                     backdropPath = null,
                     genreIds = emptyList(),
