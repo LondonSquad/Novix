@@ -20,8 +20,8 @@ import com.london.designsystem.theme.NovixTheme
 @Composable
 fun EmptyLayout(
     text: String,
-    @DrawableRes image: Int,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    @DrawableRes image: Int? = null
 ) {
     Column(
         modifier = modifier
@@ -30,14 +30,17 @@ fun EmptyLayout(
         horizontalAlignment = CenterHorizontally,
         verticalArrangement = Center
     ) {
-        Image(
-            painter = painterResource(id = image),
-            contentDescription = "Search Icon",
-            modifier = Modifier
-                .size(128.dp)
-                .align(CenterHorizontally),
-            contentScale = ContentScale.Fit
-        )
+        image?.let {
+            Image(
+                painter = painterResource(id = it),
+                contentDescription = "Search Icon",
+                modifier = Modifier
+                    .size(128.dp)
+                    .align(CenterHorizontally),
+                contentScale = ContentScale.Fit
+            )
+        }
+
         Text(
             text = text,
             style = NovixTheme.typography.body.small,
