@@ -14,6 +14,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -126,7 +127,7 @@ private fun ItemsTypeRow(
     ) {
         items(ItemsType.entries.toTypedArray()) {
             NovixChip(
-                text = it.name,
+                text = stringResource(it.titleId),
                 isSelected = it == state.selectedItemsType,
                 onClick = { onItemsTypeClick(it) },
             )
