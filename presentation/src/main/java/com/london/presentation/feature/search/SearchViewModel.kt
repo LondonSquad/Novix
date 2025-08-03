@@ -1,12 +1,9 @@
 package com.london.presentation.feature.search
 
 import androidx.compose.ui.text.input.TextFieldValue
-import com.london.domain.entity.Movie
-import com.london.domain.entity.TvShow
 import com.london.domain.entity.recent.RecentSearch
 import com.london.domain.entity.recent.RecentViewed
 import com.london.domain.usecase.GetActorsUseCase
-import com.london.domain.usecase.GetGenreInterestCountsUseCase
 import com.london.domain.usecase.GetMoviesUseCase
 import com.london.domain.usecase.GetTvShowsUseCase
 import com.london.domain.usecase.IncrementGenreInterestUseCase
@@ -20,7 +17,6 @@ import com.london.domain.usecase.recent.viewed.GetRecentViewedUseCase
 import com.london.presentation.feature.base.BaseViewModel
 import com.london.presentation.feature.base.createPagingSourceFlow
 import com.london.presentation.feature.search.model.MovieUi
-import com.london.presentation.utils.convertGenreCodeToString
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -37,7 +33,6 @@ class SearchViewModel @Inject constructor(
     private val addToRecentSearchUseCase: AddToRecentSearchUseCase,
     private val getRecentSearchUseCase: GetRecentSearchUseCase,
     private val clearRecentSearchUseCase: ClearRecentSearchUseCase,
-    private val getGenreInterestCountsUseCase: GetGenreInterestCountsUseCase,
     private val incrementGenreInterestUseCase: IncrementGenreInterestUseCase,
     private val getRecentViewedUseCase: GetRecentViewedUseCase,
     private val addToRecentViewedUseCase: AddToRecentViewedUseCase,
@@ -108,8 +103,7 @@ class SearchViewModel @Inject constructor(
     override fun onCategorySelected(category: SearchCategory) {
         updateState {
             copy(
-                selectedCategory = category,
-                showFilterButton = category != SearchCategory.Actors
+                selectedCategory = category
             )
         }
 
@@ -118,42 +112,6 @@ class SearchViewModel @Inject constructor(
         tryToExecute(
             block = {
                 performSearch(state.value.searchQuery.text, category)
-            },
-            onError = { errorState ->
-                updateState { copy(error = errorState) }
-            },
-            checkSuccess = { true }
-        )
-    }
-
-    override fun onSearchFilterClick(query: String, category: SearchCategory) {
-        tryToExecute(
-            block = {
-                performSearch(query, category)
-            },
-            onError = { errorState ->
-                updateState { copy(error = errorState) }
-            },
-            checkSuccess = { true }
-        )
-    }
-
-    override fun onApplyFilter(
-        selectedGenres: List<Int>,
-        minimumRating: Int,
-        releaseYearRange: ClosedFloatingPointRange<Float>
-    ) {
-        updateState {
-            copy(
-                selectedGenres = selectedGenres,
-                imdbRating = minimumRating,
-                releaseYearRange = releaseYearRange
-            )
-        }
-
-        tryToExecute(
-            block = {
-                performSearch(state.value.searchQuery.text, state.value.selectedCategory)
             },
             onError = { errorState ->
                 updateState { copy(error = errorState) }
@@ -291,36 +249,8 @@ class SearchViewModel @Inject constructor(
         }
     }
 
-    override fun onClearFilter() {
-        updateState {
-            copy(
-                selectedGenres = emptyList(),
-                imdbRating = 0,
-                releaseYearRange = 1950f..2030f
-            )
-        }
-
-        tryToExecute(
-            block = {
-                performSearch(state.value.searchQuery.text, state.value.selectedCategory)
-            },
-            onError = { errorState ->
-                updateState { copy(error = errorState) }
-            },
-            checkSuccess = { true }
-        )
-    }
-
-    override fun onReleaseYearRangeChange(range: ClosedFloatingPointRange<Float>) {
-        updateState { copy(releaseYearRange = range) }
-    }
-
     override fun onGenreSelectedChange(selectedGenres: List<Int>) {
         updateState { copy(selectedGenres = selectedGenres) }
-    }
-
-    override fun onRatingChanged(selectedRating: Int) {
-        updateState { copy(imdbRating = selectedRating) }
     }
 
     override fun onMovieClick(movieId: Int) {
@@ -334,10 +264,6 @@ class SearchViewModel @Inject constructor(
     override fun onTvShowClick(tvShowId: Int) {
         emitEffect(SearchEffect.TvNavigation(tvId = tvShowId))
     }
-
-    override fun onFilterClick() = updateState { copy(showFilterBottomSheet = true) }
-
-    override fun onFilterSheetDismiss() = updateState { copy(showFilterBottomSheet = false) }
 
     fun incrementGenreInterest(genreId: Int, mediaType: String) {
         tryToExecute(
@@ -396,11 +322,10 @@ class SearchViewModel @Inject constructor(
 
     private fun searchMovies(query: String) {
         val moviesFlow = createPagingSourceFlow(query) { currentQuery, pageNumber ->
-            val movies = getMoviesUseCase(
+            getMoviesUseCase(
                 name = currentQuery,
                 pageNumber = pageNumber
             )
-            movies.copy(items = applyMovieFilters(movies.items))
         }
 
         updateState {
@@ -432,11 +357,10 @@ class SearchViewModel @Inject constructor(
 
     private fun searchTvShows(query: String) {
         val tvShowsFlow = createPagingSourceFlow(query) { currentQuery, pageNumber ->
-            val tvShows = getTvShowsUseCase(
+            getTvShowsUseCase(
                 name = currentQuery,
                 pageNumber = pageNumber
             )
-            tvShows.copy(items = applyTvShowFilters(tvShows.items))
         }
 
         updateState {
@@ -458,58 +382,6 @@ class SearchViewModel @Inject constructor(
         }
     }
 
-    private suspend fun applyMovieFilters(movies: List<Movie>): List<Movie> {
-        val filterState = state.value
-        val interests = getGenreInterestCountsUseCase.invoke("movie")
-        val interestMap = interests.associate { it.first to it.second }
-
-        val movieFiltered = movies.filter { movie ->
-            val matchesGenres =
-                filterState.selectedGenres.isEmpty() || movie.genreIds.any { genre ->
-                    filterState.selectedGenres.contains(genre)
-                }
-
-            val matchesRating = movie.rating >= filterState.imdbRating
-
-            val matchesYear =
-                movie.releaseYear in filterState.releaseYearRange.start.toInt()..filterState.releaseYearRange.endInclusive.toInt()
-
-            matchesGenres && matchesRating && matchesYear
-        }
-
-        return movieFiltered.sortedByDescending { movie ->
-            movie.genreIds.maxOfOrNull { genreId ->
-                interestMap[genreId] ?: 0
-            } ?: 0
-        }
-    }
-
-    private suspend fun applyTvShowFilters(tvShows: List<TvShow>): List<TvShow> {
-        val filterState = state.value
-
-        val interests = getGenreInterestCountsUseCase.invoke("tv")
-        val interestMap = interests.associate { it.first to it.second }
-
-        val tvShowsFiltered = tvShows.filter { tvShow ->
-            val matchesGenres = filterState.selectedGenres.isEmpty() || tvShow.genres.any { genre ->
-                filterState.selectedGenres.contains(genre)
-            }
-
-            val matchesRating = tvShow.rating >= filterState.imdbRating
-
-            val matchesYear =
-                tvShow.releaseYear in filterState.releaseYearRange.start.toInt()..filterState.releaseYearRange.endInclusive.toInt()
-
-            matchesGenres && matchesRating && matchesYear
-        }
-
-        return tvShowsFiltered.sortedByDescending { tv ->
-            tv.genres.maxOfOrNull { genreId ->
-                interestMap[genreId] ?: 0
-            } ?: 0
-        }
-    }
-
     private fun updateAvailableGenres(searchCategory: SearchCategory) {
         val availableGenres = when (searchCategory) {
             SearchCategory.Movies -> availableMovieGenres
@@ -517,19 +389,12 @@ class SearchViewModel @Inject constructor(
             SearchCategory.Actors -> emptyList()
         }
 
-        val availableGenresWithNames = availableGenres.map { genreId ->
-            genreId to convertGenreCodeToString(genreId, searchCategory)
-        }
-
         updateState {
-            copy(
-                availableGenres = availableGenres,
-                availableGenresWithNames = availableGenresWithNames
-            )
+            copy(availableGenres = availableGenres)
         }
     }
 
-    override fun onRetry(){
+    override fun onRetry() {
         updateState { copy(error = null) }
         updateRecentData()
         setupSearchDebouncing()

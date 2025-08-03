@@ -17,8 +17,6 @@ data class SearchUiState(
     val error: ErrorState? = null,
     val showNoSearchBefore: Boolean = false,
     val showNoSearchResults: Boolean = false,
-    val showFilterBottomSheet: Boolean = false,
-    val showFilterButton: Boolean = true,
     val isSearchHistoryExpanded: Boolean = false,
     val isMovieSaved: (MovieUi) -> Boolean = { false },
     val searchHistory: List<String> = emptyList(),
@@ -32,12 +30,7 @@ data class SearchUiState(
     val recentSearches: List<RecentSearch> = emptyList(),
     val lastSearch: String="",
     val availableGenres: List<Int> = availableMovieGenres,
-    val availableGenresWithNames: List<Pair<Int, Int>> = emptyList(),
     val selectedGenres: List<Int> = listOf(),
-    val minimumRating: Double = 0.0,
-    val maximumRating: Double = 0.0,
-    val imdbRating: Int = 0,
-    val releaseYearRange: ClosedFloatingPointRange<Float> = 1950f..2030f
 )
 
 enum class MoviesGenres(val id: Int) {
