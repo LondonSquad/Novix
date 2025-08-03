@@ -16781,5 +16781,33 @@
       "deletions": 284,
       "changed_files": 15
     }
+  },
+  {
+    "pr_number": 516,
+    "url": "https://github.com/LondonSquad/Novix/pull/516",
+    "title": "feature: create saved lists screen",
+    "opened_at": "2025-08-03T18:10:43Z",
+    "head_ref": "feature/saved-lists-screen",
+    "base_ref": "develop",
+    "creator": {
+      "login": "AbdoMagdey24",
+      "id": 90211730,
+      "url": "https://github.com/AbdoMagdey24"
+    },
+    "approvals": [],
+    "first_approved_at": null,
+    "time_to_first_approval_minutes": null,
+    "required_approvals_met_at": null,
+    "time_to_required_approvals_minutes": null,
+    "closed_at": null,
+    "merged_at": null,
+    "merged_by": null,
+    "week": "2025-W31",
+    "status": "pending",
+    "diff_stats": {
+      "additions": 576,
+      "deletions": 12,
+      "changed_files": 16
+    }
   }
 ]
