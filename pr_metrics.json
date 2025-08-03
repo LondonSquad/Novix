@@ -15529,12 +15529,20 @@
           "url": "https://github.com/yusufnasserdev"
         },
         "submitted_at": "2025-07-31T23:12:54Z"
+      },
+      {
+        "reviewer": {
+          "id": 102248144,
+          "login": "BassantM",
+          "url": "https://github.com/BassantM"
+        },
+        "submitted_at": "2025-08-01T00:12:41Z"
       }
     ],
     "first_approved_at": "2025-07-31T23:12:54Z",
     "time_to_first_approval_minutes": 135.08333333333334,
-    "required_approvals_met_at": null,
-    "time_to_required_approvals_minutes": null,
+    "required_approvals_met_at": "2025-08-01T00:12:41Z",
+    "time_to_required_approvals_minutes": 194.86666666666667,
     "closed_at": "2025-08-01T00:12:43Z",
     "merged_at": "2025-08-01T00:12:43Z",
     "merged_by": {
@@ -15651,12 +15659,20 @@
           "url": "https://github.com/Mostafa-alsaygh"
         },
         "submitted_at": "2025-07-31T23:00:08Z"
+      },
+      {
+        "reviewer": {
+          "id": 117874933,
+          "login": "AsmaaKhaledGomaa",
+          "url": "https://github.com/AsmaaKhaledGomaa"
+        },
+        "submitted_at": "2025-08-01T00:37:02Z"
       }
     ],
     "first_approved_at": "2025-07-31T23:00:08Z",
     "time_to_first_approval_minutes": 53.733333333333334,
-    "required_approvals_met_at": null,
-    "time_to_required_approvals_minutes": null,
+    "required_approvals_met_at": "2025-08-01T00:37:02Z",
+    "time_to_required_approvals_minutes": 150.63333333333333,
     "closed_at": "2025-08-01T00:37:04Z",
     "merged_at": "2025-08-01T00:37:03Z",
     "merged_by": {
@@ -15920,7 +15936,7 @@
   {
     "pr_number": 495,
     "url": "https://github.com/LondonSquad/Novix/pull/495",
-    "title": "Feature/empty actor details screen",
+    "title": "Feature empty actor details screen",
     "opened_at": "2025-08-01T03:20:27Z",
     "head_ref": "feature/empty-actor-details-screen",
     "base_ref": "develop",
@@ -16004,6 +16020,63 @@
       "additions": 34,
       "deletions": 23,
       "changed_files": 8
+    }
+  },
+  {
+    "pr_number": 498,
+    "url": "https://github.com/LondonSquad/Novix/pull/498",
+    "title": "refactor/update-image-blue-feature",
+    "opened_at": "2025-08-01T07:29:09Z",
+    "head_ref": "refactor/update-image-blue-feature",
+    "base_ref": "develop",
+    "creator": {
+      "login": "abdo-essam",
+      "id": 92235360,
+      "url": "https://github.com/abdo-essam"
+    },
+    "approvals": [
+      {
+        "reviewer": {
+          "id": 43588217,
+          "login": "yusufnasserdev",
+          "url": "https://github.com/yusufnasserdev"
+        },
+        "submitted_at": "2025-08-01T08:11:07Z"
+      },
+      {
+        "reviewer": {
+          "id": 100484790,
+          "login": "marwanqashwa",
+          "url": "https://github.com/marwanqashwa"
+        },
+        "submitted_at": "2025-08-01T08:14:18Z"
+      },
+      {
+        "reviewer": {
+          "id": 154278495,
+          "login": "ahmeddsamii",
+          "url": "https://github.com/ahmeddsamii"
+        },
+        "submitted_at": "2025-08-01T08:14:32Z"
+      }
+    ],
+    "first_approved_at": "2025-08-01T08:11:07Z",
+    "time_to_first_approval_minutes": 41.96666666666667,
+    "required_approvals_met_at": "2025-08-01T08:14:18Z",
+    "time_to_required_approvals_minutes": 45.15,
+    "closed_at": "2025-08-01T08:15:07Z",
+    "merged_at": "2025-08-01T08:15:07Z",
+    "merged_by": {
+      "login": "yusufnasserdev",
+      "id": 43588217,
+      "url": "https://github.com/yusufnasserdev"
+    },
+    "week": "2025-W31",
+    "status": "merged",
+    "diff_stats": {
+      "additions": 322,
+      "deletions": 235,
+      "changed_files": 1
     }
   },
   {
@@ -16223,11 +16296,15 @@
     "time_to_first_approval_minutes": 162.23333333333332,
     "required_approvals_met_at": "2025-08-01T20:03:52Z",
     "time_to_required_approvals_minutes": 209.16666666666666,
-    "closed_at": null,
-    "merged_at": null,
-    "merged_by": null,
+    "closed_at": "2025-08-02T12:55:04Z",
+    "merged_at": "2025-08-02T12:55:04Z",
+    "merged_by": {
+      "login": "abdo-essam",
+      "id": 92235360,
+      "url": "https://github.com/abdo-essam"
+    },
     "week": "2025-W31",
-    "status": "approved",
+    "status": "merged",
     "diff_stats": {
       "additions": 116,
       "deletions": 58,
@@ -16374,7 +16451,7 @@
     "title": "fix/preview-popular-movies-section",
     "opened_at": "2025-08-02T22:08:23Z",
     "head_ref": "fix/preview-popular-movies-section",
-    "base_ref": "develop",
+    "base_ref": "feature/popular-caching",
     "creator": {
       "login": "BassantM",
       "id": 102248144,
@@ -16395,9 +16472,9 @@
     "week": "2025-W31",
     "status": "merged",
     "diff_stats": {
-      "additions": 246,
+      "additions": 7,
       "deletions": 11,
-      "changed_files": 14
+      "changed_files": 1
     }
   },
   {
@@ -16434,7 +16511,7 @@
     "title": "fix/tvshow-and-movie-concatination",
     "opened_at": "2025-08-03T00:00:49Z",
     "head_ref": "fix/tvshow-and-movie-concatination",
-    "base_ref": "develop",
+    "base_ref": "feature/popular-caching",
     "creator": {
       "login": "BassantM",
       "id": 102248144,
@@ -16455,9 +16532,9 @@
     "week": "2025-W31",
     "status": "merged",
     "diff_stats": {
-      "additions": 287,
-      "deletions": 23,
-      "changed_files": 17
+      "additions": 10,
+      "deletions": 6,
+      "changed_files": 1
     }
   },
   {
