@@ -1,8 +1,10 @@
 package com.london.presentation.feature.list.viewlistitems
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.statusBarsPadding
@@ -53,6 +55,7 @@ fun ViewListItemsScreen(
             is ViewListItemsEffect.NavigationTvShowDetails -> onNavigateToTvShowDetails(
                 currentEffect.id
             )
+
             is ViewListItemsEffect.NavigationMovieDetails -> onNavigateToMovieDetails(currentEffect.id)
         }
     }
@@ -77,7 +80,11 @@ private fun Content(
     contract: ViewListItemsContract,
     listItems: LazyPagingItems<MediaUi>
 ) {
-    Column {
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(color = NovixTheme.colors.surface)
+    ) {
         TopBar(
             title = state.listTitle,
             onBackClick = contract::onBack,
@@ -151,21 +158,22 @@ private fun ItemsLazyGrid(
 @Preview
 @ThemePreviews
 private fun Preview() {
-
-    val listItems = flow<PagingData<MediaUi>> {
-    }.collectAsLazyPagingItems()
-    Content(
-        state = ViewListItemsUiState(),
-        contract = object : ViewListItemsContract {
-            override fun onBack() {}
-            override fun onRetry() {}
-            override fun onEditClick() {}
-            override fun onDeleteClick() {}
-            override fun onMovieClick(id: Int) {}
-            override fun onTvShowClick(id: Int) {}
-            override fun onItemsTypeClick(itemsType: ItemsType) {}
-            override fun onRemoveMediaClick(id: Int, type: MediaType) {}
-        },
-        listItems = listItems
-    )
+    NovixTheme {
+        val listItems = flow<PagingData<MediaUi>> {
+        }.collectAsLazyPagingItems()
+        Content(
+            state = ViewListItemsUiState(),
+            contract = object : ViewListItemsContract {
+                override fun onBack() {}
+                override fun onRetry() {}
+                override fun onEditClick() {}
+                override fun onDeleteClick() {}
+                override fun onMovieClick(id: Int) {}
+                override fun onTvShowClick(id: Int) {}
+                override fun onItemsTypeClick(itemsType: ItemsType) {}
+                override fun onRemoveMediaClick(id: Int, type: MediaType) {}
+            },
+            listItems = listItems
+        )
+    }
 }
