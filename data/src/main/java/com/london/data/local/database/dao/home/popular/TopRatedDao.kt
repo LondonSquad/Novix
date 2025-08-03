@@ -1,0 +1,26 @@
+package com.london.data.local.database.dao.home.popular
+
+import androidx.room.Dao
+import androidx.room.Insert
+import androidx.room.OnConflictStrategy
+import androidx.room.Query
+import com.london.data.local.model.home.TopRatedLocal
+
+@Dao
+interface TopRatedDao: HomeDao<TopRatedLocal> {
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    override suspend fun insert(item: TopRatedLocal)
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    override suspend fun insertAll(item: List<TopRatedLocal>)
+
+    @Query("DELETE FROM top_rated_table")
+    override suspend fun deleteAll()
+
+    @Query("SELECT * FROM top_rated_table")
+    override suspend fun getAll(): List<TopRatedLocal>
+
+    @Query("SELECT * FROM top_rated_table WHERE date = :date")
+    override suspend fun getCurrentPopularByDate(date: Long): TopRatedLocal
+}
