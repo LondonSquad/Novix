@@ -16630,9 +16630,9 @@
     "week": "2025-W31",
     "status": "pending",
     "diff_stats": {
-      "additions": 813,
+      "additions": 810,
       "deletions": 31,
-      "changed_files": 26
+      "changed_files": 27
     }
   },
   {
@@ -16647,18 +16647,9 @@
       "id": 154278495,
       "url": "https://github.com/ahmeddsamii"
     },
-    "approvals": [
-      {
-        "reviewer": {
-          "id": 189210092,
-          "login": "Aseel-AbuKmail",
-          "url": "https://github.com/Aseel-AbuKmail"
-        },
-        "submitted_at": "2025-08-03T12:48:15Z"
-      }
-    ],
-    "first_approved_at": "2025-08-03T12:48:15Z",
-    "time_to_first_approval_minutes": 21.566666666666666,
+    "approvals": [],
+    "first_approved_at": null,
+    "time_to_first_approval_minutes": null,
     "required_approvals_met_at": null,
     "time_to_required_approvals_minutes": null,
     "closed_at": null,
@@ -16667,9 +16658,65 @@
     "week": "2025-W31",
     "status": "pending",
     "diff_stats": {
-      "additions": 365,
-      "deletions": 127,
-      "changed_files": 41
+      "additions": 376,
+      "deletions": 173,
+      "changed_files": 42
+    }
+  },
+  {
+    "pr_number": 513,
+    "url": "https://github.com/LondonSquad/Novix/pull/513",
+    "title": "fix: empty state in build screen",
+    "opened_at": "2025-08-03T16:17:03Z",
+    "head_ref": "hotfix/build-screen",
+    "base_ref": "develop",
+    "creator": {
+      "login": "marwanqashwa",
+      "id": 100484790,
+      "url": "https://github.com/marwanqashwa"
+    },
+    "approvals": [],
+    "first_approved_at": null,
+    "time_to_first_approval_minutes": null,
+    "required_approvals_met_at": null,
+    "time_to_required_approvals_minutes": null,
+    "closed_at": null,
+    "merged_at": null,
+    "merged_by": null,
+    "week": "2025-W31",
+    "status": "pending",
+    "diff_stats": {
+      "additions": 7,
+      "deletions": 6,
+      "changed_files": 4
+    }
+  },
+  {
+    "pr_number": 514,
+    "url": "https://github.com/LondonSquad/Novix/pull/514",
+    "title": "feature/top-rated-caching",
+    "opened_at": "2025-08-03T17:11:46Z",
+    "head_ref": "feature/top-rated-caching",
+    "base_ref": "develop",
+    "creator": {
+      "login": "BassantM",
+      "id": 102248144,
+      "url": "https://github.com/BassantM"
+    },
+    "approvals": [],
+    "first_approved_at": null,
+    "time_to_first_approval_minutes": null,
+    "required_approvals_met_at": null,
+    "time_to_required_approvals_minutes": null,
+    "closed_at": null,
+    "merged_at": null,
+    "merged_by": null,
+    "week": "2025-W31",
+    "status": "pending",
+    "diff_stats": {
+      "additions": 474,
+      "deletions": 272,
+      "changed_files": 28
     }
   }
 ]
