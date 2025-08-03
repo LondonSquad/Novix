@@ -8,7 +8,6 @@ import androidx.paging.LoadState
 import androidx.paging.compose.LazyPagingItems
 import com.london.designsystem.component.EmptyLayout
 import com.london.presentation.utils.isEmpty
-import com.london.presentation.utils.isNotEmpty
 import com.london.presentation.utils.isNotNull
 import com.london.presentation.utils.shouldShowLoading
 
@@ -25,6 +24,7 @@ fun BuildScreen(
     handlePagingLoadingAutomatically: Boolean = true,
     content: @Composable () -> Unit,
 ) {
+
     when {
         shouldShowLoading(
             isLoading = isLoading,
@@ -36,17 +36,12 @@ fun BuildScreen(
             NetworkErrorScreen(onBack = onBack, onRetry = onRetry)
         }
 
-        pagingFlow?.isNotEmpty() == true &&
-                pagingFlow.isEmpty() &&
-                pagingFlow.loadState.refresh is LoadState.NotLoading &&
-                emptyLayoutMessage.isNotNull() -> {
+        pagingFlow?.isEmpty() == true && emptyLayoutMessage.isNotNull() -> {
             EmptyLayout(
                 text = stringResource(emptyLayoutMessage!!),
-                image = emptyLayoutImage ?: 0
+                image = emptyLayoutImage
             )
         }
-        else -> {
-            content()
-        }
+        else -> { content() }
     }
 }
