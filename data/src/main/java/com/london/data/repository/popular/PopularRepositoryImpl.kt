@@ -25,28 +25,32 @@ class PopularRepositoryImpl @Inject constructor(
 
     override suspend fun getPopularMovies(): List<PopularMovie> = fetchAndSync(
         cacheBlock = {
-            val local = homeLocalDataSource.getAll().map { it.toMovieEntity() }
+            val local = homeLocalDataSource.getAll()
+                .filter { it.mediaType == MediaType.Movie }
+                .map { it.toMovieEntity() }
             local.takeIf { it.isNotEmpty() }
         },
         networkBlock = {
-            popularRemoteDataSource.getPopularMovies().getOrThrow().toPopularMovies().take(5)
+            popularRemoteDataSource.getPopularMovies().getOrThrow().toPopularMovies()
         },
         syncBlock = { popularList ->
-            homeLocalDataSource.insertAll(popularList.map { it.toPopularMovieSectionLocal(MediaType.Movie) }.take(5))
+            homeLocalDataSource.insertAll(popularList.map { it.toPopularMovieSectionLocal(MediaType.Movie) })
         },
         crashReporter = crashReporter
     )
 
     override suspend fun getPopularTvShows(): List<PopularTvShow> = fetchAndSync(
         cacheBlock = {
-            val local = homeLocalDataSource.getAll().map { it.toTvShowEntity() }
+            val local = homeLocalDataSource.getAll()
+                .filter { it.mediaType == MediaType.TvShow }
+                .map { it.toTvShowEntity() }
             local.takeIf { it.isNotEmpty() }
         },
         networkBlock = {
-            popularRemoteDataSource.getPopularTvShows().getOrThrow().toPopularTvShows().take(5)
+            popularRemoteDataSource.getPopularTvShows().getOrThrow().toPopularTvShows()
         },
         syncBlock = { popularList ->
-            homeLocalDataSource.insertAll(popularList.map { it.toPopularTvShowSectionLocal(MediaType.TvShow) }.take(5))
+            homeLocalDataSource.insertAll(popularList.map { it.toPopularTvShowSectionLocal(MediaType.TvShow) })
         },
         crashReporter = crashReporter
     )
