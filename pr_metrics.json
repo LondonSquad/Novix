@@ -16690,5 +16690,33 @@
       "deletions": 6,
       "changed_files": 4
     }
+  },
+  {
+    "pr_number": 514,
+    "url": "https://github.com/LondonSquad/Novix/pull/514",
+    "title": "feature/top-rated-caching",
+    "opened_at": "2025-08-03T17:11:46Z",
+    "head_ref": "feature/top-rated-caching",
+    "base_ref": "develop",
+    "creator": {
+      "login": "BassantM",
+      "id": 102248144,
+      "url": "https://github.com/BassantM"
+    },
+    "approvals": [],
+    "first_approved_at": null,
+    "time_to_first_approval_minutes": null,
+    "required_approvals_met_at": null,
+    "time_to_required_approvals_minutes": null,
+    "closed_at": null,
+    "merged_at": null,
+    "merged_by": null,
+    "week": "2025-W31",
+    "status": "pending",
+    "diff_stats": {
+      "additions": 474,
+      "deletions": 272,
+      "changed_files": 28
+    }
   }
 ]
