@@ -63,7 +63,7 @@ fun NotLoggedInContent(
 
 @ThemePreviews
 @Composable
-fun NotLoggedInContentPreview() {
+fun Preview() {
     NovixTheme {
         NotLoggedInContent(
             onLoginClick = {}
