@@ -4,6 +4,7 @@ import com.london.data.local.database.dao.home.popular.PopularSectionDao
 import com.london.data.local.model.home.popular.PopularSectionLocal
 import com.london.data.local.source.HomeLocalDataSource
 import com.london.data.local.utils.executeInsert
+import com.london.data.utils.isDayExpired
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -34,7 +35,7 @@ class PopularLocalDataSourceImpl @Inject constructor(
     override suspend fun insertAll(items: List<PopularSectionLocal>) =
         popularSectionDao.insertAll(items)
 
-    override suspend fun getCurrentPopularByDate(date: Long): PopularSectionLocal =
-        popularSectionDao.getCurrentPopularByDate(date)
+    override suspend fun getByDate(date: Long): PopularSectionLocal =
+        popularSectionDao.getByDate(date)
 
 }
