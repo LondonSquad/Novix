@@ -14,7 +14,6 @@ import androidx.compose.ui.window.Popup
 import androidx.compose.ui.window.PopupProperties
 import com.london.designsystem.theme.NovixTheme
 
-// In your design system module
 @Composable
 fun Dropdown(
     expanded: Boolean,
