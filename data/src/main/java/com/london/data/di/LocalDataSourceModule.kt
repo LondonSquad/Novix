@@ -3,6 +3,7 @@ package com.london.data.di
 import android.content.SharedPreferences
 import com.london.data.local.database.dao.home.popular.PopularSectionDao
 import com.london.data.local.database.dao.home.popular.TopRatedDao
+import com.london.data.local.database.dao.home.upcoming.UpcomingSectionDao
 import com.london.data.local.database.dao.recent.search.RecentSearchDao
 import com.london.data.local.database.dao.recent.viewed.RecentViewedDao
 import com.london.data.local.database.dao.recent.whatched.movie.RecentWatchedMoviesDao
@@ -24,6 +25,8 @@ import com.london.data.local.source.home.popular.HomeLocalDataSource
 import com.london.data.local.source.LocalDataSource
 import com.london.data.local.source.home.popular.PopularLocalDataSourceImpl
 import com.london.data.local.source.home.popular.TopRatedDataSourceImpl
+import com.london.data.local.source.home.upcoming.UpComingLocalDataSource
+import com.london.data.local.source.home.upcoming.UpComingLocalDataSourceImpl
 import com.london.data.local.source.recent.RecentDataSource
 import com.london.data.local.source.recent.RecentSearchDataSourceImpl
 import com.london.data.local.source.recent.RecentViewedDataSourceImpl
@@ -101,6 +104,12 @@ object LocalDataSourceModule {
         @Named("popularSectionDao") popularSectionDao: PopularSectionDao
     ): HomeLocalDataSource<PopularSectionLocal> =
         PopularLocalDataSourceImpl(popularSectionDao)
+
+    @Provides
+    @Singleton
+    fun provideUpComingLocalDataSource(
+        upComingSectionDao: UpcomingSectionDao
+    ): UpComingLocalDataSource = UpComingLocalDataSourceImpl(upComingSectionDao)
 
     @Provides
     @Singleton
