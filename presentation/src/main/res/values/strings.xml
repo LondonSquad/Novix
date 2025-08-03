@@ -108,4 +108,13 @@
     <string name="no_data_until_now">No Data Yet</string>
     <string name="login_failed">Login failed. Please check your credentials.</string>
     <string name="guest_login_failed">Guest login failed.</string>
+    <string name="my_account">My account</string>
+    <string name="watching_history">Watching history</string>
+    <string name="my_rating">My rating</string>
+    <string name="content_restriction">Content Restriction</string>
+    <string name="change_password">Change password</string>
+    <string name="appearance">Appearance</string>
+    <string name="language">Language</string>
+    <string name="user_profile">User profile</string>
+    <string name="logout">Logout</string>
 </resources>

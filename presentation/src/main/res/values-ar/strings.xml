@@ -108,4 +108,13 @@
     <string name="no_data_until_now">لا يوجد بيانات حتي الآن</string>
     <string name="login_failed">فشل تسجيل الدخول. يرجى التحقق من بيانات التسجيل الخاصة بك.</string>
     <string name="guest_login_failed">فشل تسجيل الدخول كضيف.</string>
+    <string name="my_account">حسابي</string>
+    <string name="watching_history">سجل المشاهدة</string>
+    <string name="my_rating">تقييمي</string>
+    <string name="content_restriction">تقييد المحتوى</string>
+    <string name="change_password">تغيير كلمة المرور</string>
+    <string name="appearance">المظهر</string>
+    <string name="language">اللغة</string>
+    <string name="user_profile">الملف الشخصي</string>
+    <string name="logout">تسجيل خروج</string>
 </resources>
