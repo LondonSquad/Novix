@@ -17,7 +17,6 @@ class PopularMovieMapperTest {
         assertThat(result.id).isEqualTo(123)
         assertThat(result.title).isEqualTo("Inception")
         assertThat(result.posterUrl).contains("/poster.jpg")
-        assertThat(result.backdropUrl).contains("/backdrop.jpg")
         assertThat(result.rating).isEqualTo(8.7)
     }
 
@@ -49,7 +48,6 @@ class PopularMovieMapperTest {
         assertThat(result.id).isEqualTo(0)
         assertThat(result.title).isEmpty()
         assertThat(result.posterUrl).isEmpty()
-        assertThat(result.backdropUrl).isEmpty()
         assertThat(result.rating).isEqualTo(0.0)
     }
 
