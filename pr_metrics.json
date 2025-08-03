@@ -16817,5 +16817,33 @@
       "deletions": 12,
       "changed_files": 16
     }
+  },
+  {
+    "pr_number": 517,
+    "url": "https://github.com/LondonSquad/Novix/pull/517",
+    "title": "Refactor: Remove Search Filtering",
+    "opened_at": "2025-08-03T19:00:22Z",
+    "head_ref": "refactor/remove-search-filtering",
+    "base_ref": "develop",
+    "creator": {
+      "login": "yusufnasserdev",
+      "id": 43588217,
+      "url": "https://github.com/yusufnasserdev"
+    },
+    "approvals": [],
+    "first_approved_at": null,
+    "time_to_first_approval_minutes": null,
+    "required_approvals_met_at": null,
+    "time_to_required_approvals_minutes": null,
+    "closed_at": null,
+    "merged_at": null,
+    "merged_by": null,
+    "week": "2025-W31",
+    "status": "pending",
+    "diff_stats": {
+      "additions": 59,
+      "deletions": 621,
+      "changed_files": 5
+    }
   }
 ]
