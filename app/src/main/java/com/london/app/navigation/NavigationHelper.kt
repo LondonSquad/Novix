@@ -29,7 +29,7 @@ class NavigationHelper {
                 NavigationTab(
                     idleIcon = painterResource(R.drawable.icon_bookmark),
                     selectedIcon = painterResource(R.drawable.icon_bookmark_filled),
-                    destination = Screen.Bookmarks,
+                    destination = Screen.SavedList,
                 ),
                 NavigationTab(
                     idleIcon = painterResource(R.drawable.icon_user),

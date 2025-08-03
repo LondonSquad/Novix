@@ -108,4 +108,7 @@
     <string name="no_data_until_now">No Data Yet</string>
     <string name="login_failed">Login failed. Please check your credentials.</string>
     <string name="guest_login_failed">Guest login failed.</string>
+    <string name="saved_list_title">Saved List</string>
+    <string name="no_saved_list">There is no saved list yet, click on + button to add a new list!</string>
+    <string name="login_to_create_list">Please login to create lists and add your favorite items to it!</string>
 </resources>

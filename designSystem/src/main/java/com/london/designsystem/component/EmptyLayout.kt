@@ -21,7 +21,8 @@ import com.london.designsystem.theme.NovixTheme
 fun EmptyLayout(
     text: String,
     @DrawableRes image: Int,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    additionalContent: (@Composable () -> Unit)? = null
 ) {
     Column(
         modifier = modifier
@@ -45,5 +46,7 @@ fun EmptyLayout(
             textAlign = TextAlign.Center,
             modifier = Modifier.fillMaxWidth()
         )
+
+        additionalContent?.let { it() }
     }
 }

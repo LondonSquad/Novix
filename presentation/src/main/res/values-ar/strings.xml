@@ -108,4 +108,7 @@
     <string name="no_data_until_now">لا يوجد بيانات حتي الآن</string>
     <string name="login_failed">فشل تسجيل الدخول. يرجى التحقق من بيانات التسجيل الخاصة بك.</string>
     <string name="guest_login_failed">فشل تسجيل الدخول كضيف.</string>
+    <string name="saved_list_title">القوائم المحفوظة</string>
+    <string name="no_saved_list">لا توجد أي قوائم حتي الان، اضغط علي زر + لاضافة قائمة جديدة</string>
+    <string name="login_to_create_list">سجل دخول اولاً حتي تتمكن من استعراض او اضافة قوائم جديدة</string>
 </resources>

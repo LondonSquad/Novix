@@ -1,0 +1,276 @@
+package com.london.presentation.feature.list.savedlist
+
+import androidx.compose.foundation.background
+import androidx.compose.foundation.border
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.statusBarsPadding
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.paging.compose.collectAsLazyPagingItems
+import com.london.designsystem.component.EmptyLayout
+import com.london.designsystem.component.Icon
+import com.london.designsystem.component.Text
+import com.london.designsystem.component.TopBar
+import com.london.designsystem.component.button.FloatingActionButton
+import com.london.designsystem.component.button.OutlineButton
+import com.london.designsystem.theme.NovixTheme
+import com.london.designsystem.theme.ThemePreviews
+import com.london.designsystem.theme.noRippleClickable
+import com.london.presentation.R
+import com.london.presentation.feature.buildscreen.BuildScreen
+import com.london.presentation.utils.Listen
+
+@Composable
+fun SavedListScreen(
+    onNavigateToDetails: (Int) -> Unit,
+    onFabClick: () -> Unit,
+    viewModel: SavedListViewModel = hiltViewModel()
+) {
+
+    val state by viewModel.state.collectAsStateWithLifecycle()
+    val effect by viewModel.effect.collectAsState(null)
+
+    effect?.Listen { currentEffect ->
+        when (currentEffect) {
+            is SavedListEffect.AddNewList -> onFabClick()
+            is SavedListEffect.NavigateToDetails -> onNavigateToDetails(currentEffect.id)
+        }
+    }
+
+    Content(
+        state = state,
+        contract = viewModel,
+    )
+}
+
+@Composable
+private fun ScreenScaffold(
+    titleRes: Int,
+    showFab: Boolean = true,
+    onFabClick: (() -> Unit)? = null,
+    content: @Composable () -> Unit,
+) {
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(NovixTheme.colors.surface)
+    ) {
+        TopBar(
+            modifier = Modifier
+                .statusBarsPadding()
+                .height(56.dp),
+            title = stringResource(titleRes),
+        )
+
+        Box(modifier = Modifier.fillMaxSize()) {
+            content()
+
+            if (showFab && onFabClick != null) {
+                FloatingActionButton(
+                    modifier = Modifier
+                        .align(Alignment.BottomEnd)
+                        .padding(bottom = 16.dp, end = 16.dp),
+                    onClick = onFabClick,
+                    isLoadingIcon = false,
+                    isDisabledIcon = false,
+                    isDefaultIcon = true
+                )
+            }
+        }
+    }
+}
+
+
+@Composable
+private fun Content(
+    state: SavedListUiState,
+    contract: SavedListContract,
+) {
+    val pagingItems = state.items.collectAsLazyPagingItems()
+    BuildScreen(
+        onRetry = contract::onRetry,
+        isLoading = state.isLoading,
+        isError = state.errorMessage.isNullOrEmpty().not(),
+        pagingFlow = pagingItems,
+        isGuest = state.isGuest,
+        guestContent = {
+            NoListFoundAsGuest(
+                onLoginClick = contract::onLoginClick
+            )
+        },
+        emptyContent = {
+            EmptyList(contract = contract)
+        }
+    ) {
+        ScreenScaffold(
+            titleRes = R.string.saved_list_title,
+            onFabClick = contract::onFabClick
+        ) {
+            LazyColumn(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(horizontal = 16.dp),
+                verticalArrangement = Arrangement.spacedBy(8.dp)
+            ) {
+                items(pagingItems.itemCount) { index ->
+                    pagingItems[index]?.let { item ->
+                        SavedListItemRow(
+                            itemUi = item,
+                            onCountClick = contract::onItemCountClick
+                        )
+                    }
+                }
+            }
+        }
+    }
+}
+
+@Composable
+private fun SavedListItemRow(
+    itemUi: SavedListItemUi,
+    onCountClick: (Int) -> Unit
+) {
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .border(
+                width = 1.dp,
+                color = NovixTheme.colors.stroke,
+                shape = RoundedCornerShape(12.dp)
+            )
+            .background(color = NovixTheme.colors.surface)
+            .padding(horizontal = 12.dp, vertical = 16.dp)
+    ) {
+        Text(
+            text = itemUi.title,
+            style = NovixTheme.typography.title.medium,
+            color = NovixTheme.colors.title,
+            maxLines = 1,
+            modifier = Modifier
+                .weight(1f)
+        )
+        ItemCount(
+            itemUi = itemUi,
+            onCountClick = onCountClick
+        )
+    }
+}
+
+@Composable
+private fun ItemCount(
+    itemUi: SavedListItemUi,
+    onCountClick: (Int) -> Unit
+) {
+    Row(
+        verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.spacedBy(4.dp),
+        modifier = Modifier
+            .clip(RoundedCornerShape(8.dp))
+            .background(color = NovixTheme.colors.primaryVariant)
+            .padding(horizontal = 8.dp, vertical = 4.dp)
+            .noRippleClickable(onClick = { onCountClick(itemUi.id) }),
+    ) {
+        Text(
+            text = itemUi.count.toString(),
+            style = NovixTheme.typography.label.small,
+            color = NovixTheme.colors.primary,
+        )
+        Icon(
+            painter = painterResource(id = com.london.designsystem.R.drawable.icon_arrow),
+            contentDescription = stringResource(com.london.designsystem.R.string.arrow),
+            tint = NovixTheme.colors.primary
+        )
+    }
+}
+
+@Composable
+private fun EmptyList(contract: SavedListContract) {
+    ScreenScaffold(
+        titleRes = R.string.saved_list_title,
+        onFabClick = contract::onFabClick,
+        showFab = true,
+    ) {
+        Box(
+            modifier = Modifier.fillMaxSize()
+        ) {
+            EmptyLayout(
+                modifier = Modifier
+                    .padding(horizontal = 16.dp)
+                    .align(Alignment.Center),
+                text = stringResource(R.string.no_saved_list),
+                image = R.drawable.ic_no_saved_list_yet,
+            )
+        }
+    }
+}
+
+@Composable
+private fun NoListFoundAsGuest(
+    onLoginClick: () -> Unit,
+    modifier: Modifier = Modifier
+) {
+    ScreenScaffold(
+        titleRes = R.string.saved_list_title,
+        showFab = false
+    ) {
+        Box(
+            modifier = Modifier.fillMaxSize()
+        ) {
+            EmptyLayout(
+                modifier = modifier
+                    .padding(horizontal = 16.dp)
+                    .align(Alignment.Center),
+                text = stringResource(R.string.login_to_create_list),
+                image = R.drawable.ic_no_saved_list_as_guest,
+                additionalContent = {
+                    OutlineButton(
+                        text = stringResource(R.string.login),
+                        hasLabel = true,
+                        icon = null,
+                        hasIcon = false,
+                        isLoading = false,
+                        onClick = onLoginClick,
+                        modifier = Modifier.padding(top = 16.dp)
+                    )
+                }
+            )
+        }
+    }
+}
+
+@Composable
+@Preview
+@ThemePreviews
+private fun Preview() {
+    NovixTheme {
+        val state = SavedListUiState()
+        Content(
+            state = state,
+            contract = object : SavedListContract {
+                override fun onRetry() {}
+                override fun onLoginClick() {}
+                override fun onItemCountClick(id: Int) {}
+                override fun onFabClick() {}
+            }
+        )
+    }
+}
