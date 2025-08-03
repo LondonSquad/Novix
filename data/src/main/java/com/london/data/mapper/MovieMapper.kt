@@ -2,7 +2,7 @@
 
 package com.london.data.mapper
 
-import com.london.data.local.model.home.upcoming.UpComingMovieDtoLocal
+import com.london.data.local.model.home.upcoming.UpComingMovieLocal
 import com.london.data.local.model.home.upcoming.UpComingSectionLocal
 import com.london.data.local.model.search.SearchMovieDtoLocal
 import com.london.data.local.model.search.SearchMoviesLocal
@@ -43,13 +43,13 @@ fun ApiResponse<MovieRemote>.toLocal(categoryId: Int?) = UpComingSectionLocal(
     categoryId = categoryId?: 0
 )
 
-fun UpComingMovieDtoLocal.toEntity() = UpComingMovie(
+fun UpComingMovieLocal.toEntity() = UpComingMovie(
     id = id,
     imageUrl = imageUrl,
     genreIds = genreIds,
 )
 
-private fun MovieRemote.toUpComingLocal() = UpComingMovieDtoLocal(
+private fun MovieRemote.toUpComingLocal() = UpComingMovieLocal(
     id = id.orZero(),
     imageUrl = posterPath.asImageUrlOrEmpty(),
     genreIds = genreIds.orEmpty()

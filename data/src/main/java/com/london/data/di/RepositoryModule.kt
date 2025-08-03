@@ -46,6 +46,7 @@ import com.london.data.repository.toprated.TopRatedMovieRepositoryImpl
 import com.london.data.repository.toprated.TopRatedTvSeriesRepositoryImpl
 import com.london.data.repository.trending.TrendingRepositoryImpl
 import com.london.data.utils.CrashReporter
+import com.london.data.utils.FirebaseCrashReporter
 import com.london.domain.entity.recent.RecentSearch
 import com.london.domain.entity.recent.RecentViewed
 import com.london.domain.repository.ActorRepository
@@ -201,9 +202,11 @@ object RepositoryModule {
     @Singleton
     fun provideUpComingRepository(
         upComingLocalDataSource: UpComingLocalDataSource,
-        upComingRemoteDataSource: UpComingRemoteDataSource
+        upComingRemoteDataSource: UpComingRemoteDataSource,
+        crashReporter: FirebaseCrashReporter
     ): UpComingRepository = UpComingRepositoryImpl(
         upComingLocalDataSource = upComingLocalDataSource,
-        upComingRemoteDataSource = upComingRemoteDataSource
+        upComingRemoteDataSource = upComingRemoteDataSource,
+        crashReporter = crashReporter
     )
 }

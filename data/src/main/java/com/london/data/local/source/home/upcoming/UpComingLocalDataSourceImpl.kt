@@ -13,6 +13,10 @@ class UpComingLocalDataSourceImpl @Inject constructor(
 ): UpComingLocalDataSource{
 
     init {
+        deleteExpiredData()
+    }
+
+    private fun deleteExpiredData(){
         CoroutineScope(Dispatchers.IO).launch {
             upcomingSectionDao.getAll().forEach { upcomingSectionLocal ->
                 if (upcomingSectionLocal.date.isDayExpired())
@@ -21,18 +25,8 @@ class UpComingLocalDataSourceImpl @Inject constructor(
         }
     }
 
-    override suspend fun insertAll(items: List<UpComingSectionLocal>) =
-        upcomingSectionDao.insertAll(items)
-
-
     override suspend fun insert(item: UpComingSectionLocal) =
         upcomingSectionDao.insert(item)
-
-    override suspend fun getAll(): List<UpComingSectionLocal> =
-        upcomingSectionDao.getAll()
-
-    override suspend fun getByDate(date: Long): UpComingSectionLocal =
-        upcomingSectionDao.getByDate(date)
 
     override suspend fun getUpComingMoviesPage(categoryId: Int?, page: Int): UpComingSectionLocal =
         upcomingSectionDao.getUpComingMoviesPage(categoryId, page)

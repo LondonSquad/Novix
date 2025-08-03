@@ -9,12 +9,12 @@ data class UpComingSectionLocal(
     @PrimaryKey
     val categoryId: Int,
     val page: Int,
-    val results: List<UpComingMovieDtoLocal>,
+    val results: List<UpComingMovieLocal>,
     val totalPages: Int,
     val totalResults: Int
 )
 
-data class UpComingMovieDtoLocal(
+data class UpComingMovieLocal(
     val id: Int,
     val imageUrl: String,
     val genreIds: List<Int>,
