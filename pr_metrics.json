@@ -16427,5 +16427,33 @@
       "deletions": 4,
       "changed_files": 12
     }
+  },
+  {
+    "pr_number": 509,
+    "url": "https://github.com/LondonSquad/Novix/pull/509",
+    "title": "fix/tvshow-and-movie-concatination",
+    "opened_at": "2025-08-03T00:00:49Z",
+    "head_ref": "fix/tvshow-and-movie-concatination",
+    "base_ref": "develop",
+    "creator": {
+      "login": "BassantM",
+      "id": 102248144,
+      "url": "https://github.com/BassantM"
+    },
+    "approvals": [],
+    "first_approved_at": null,
+    "time_to_first_approval_minutes": null,
+    "required_approvals_met_at": null,
+    "time_to_required_approvals_minutes": null,
+    "closed_at": null,
+    "merged_at": null,
+    "merged_by": null,
+    "week": "2025-W31",
+    "status": "pending",
+    "diff_stats": {
+      "additions": 287,
+      "deletions": 23,
+      "changed_files": 17
+    }
   }
 ]
