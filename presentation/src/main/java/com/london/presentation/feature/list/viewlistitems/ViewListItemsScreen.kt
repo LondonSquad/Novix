@@ -19,7 +19,6 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import androidx.paging.LoadState
 import androidx.paging.PagingData
 import androidx.paging.compose.LazyPagingItems
 import androidx.paging.compose.collectAsLazyPagingItems
@@ -29,13 +28,13 @@ import com.london.designsystem.theme.NovixTheme
 import com.london.designsystem.theme.ThemePreviews
 import com.london.domain.entity.recent.MediaType
 import com.london.presentation.R
+import com.london.presentation.feature.base.ErrorState
 import com.london.presentation.feature.buildscreen.BuildScreen
 import com.london.presentation.feature.list.viewlistitems.uistate.ItemsType
 import com.london.presentation.feature.list.viewlistitems.uistate.MediaUi
 import com.london.presentation.feature.list.viewlistitems.uistate.ViewListItemsUiState
 import com.london.presentation.shared.MediaLazyPagingGrid
 import com.london.presentation.utils.Listen
-import com.london.presentation.utils.isLoading
 import kotlinx.coroutines.flow.flow
 
 @Composable
@@ -64,8 +63,10 @@ fun ViewListItemsScreen(
     BuildScreen(
         onBack = viewModel::onBack,
         onRetry = listItems::refresh,
-        isLoading = listItems.isLoading(),
-        isError = listItems.loadState.refresh is LoadState.Error
+        isLoading = state.isLoading,
+        isError = state.error is ErrorState.NoInternet,
+        pagingFlow = listItems,
+        handlePagingLoadingAutomatically = true
     ) {
         Content(
             state = state,
