@@ -28,3 +28,9 @@ fun String.generateHash(): String =
 
 fun String.extractYear() =
     takeIf { isNotEmpty() }?.split("-")?.first()?.toInt() ?: 0
+
+fun Long.isDayExpired(): Boolean {
+    val oneDayInMillis = 24 * 60 * 60 * 1000L
+    val oneDayAgo = System.currentTimeMillis() - oneDayInMillis
+    return System.currentTimeMillis() < oneDayAgo
+}

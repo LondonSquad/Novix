@@ -12,6 +12,7 @@ import com.london.data.local.model.search.SearchTvShowLocal
 import com.london.data.local.preference.AuthPreferences
 import com.london.data.local.source.HomeLocalDataSource
 import com.london.data.local.source.LocalDataSource
+import com.london.data.local.source.home.upcoming.UpComingLocalDataSource
 import com.london.data.local.source.recent.RecentDataSource
 import com.london.data.local.source.recent.watched.RecentWatchedDataSource
 import com.london.data.remote.service.home.TrendingApiService
@@ -24,6 +25,7 @@ import com.london.data.remote.source.details.videoprovider.tvshow.TvShowVideoPro
 import com.london.data.remote.source.home.popular.PopularRemoteDataSource
 import com.london.data.remote.source.home.trending.TrendingRemoteDataSource
 import com.london.data.remote.source.home.trending.TrendingRemoteDataSourceImpl
+import com.london.data.remote.source.home.upcoming.UpComingRemoteDataSource
 import com.london.data.remote.source.reviews.ReviewsRemoteDataSource
 import com.london.data.remote.source.search.SearchRemoteDataSource
 import com.london.data.remote.source.toprated.movie.TopRatedMovieRemoteDataSource
@@ -35,7 +37,8 @@ import com.london.data.repository.MovieVideoProviderRepositoryImpl
 import com.london.data.repository.SearchRepositoryImpl
 import com.london.data.repository.TvShowVideoProviderRepositoryImpl
 import com.london.data.repository.authentication.AuthenticationRepositoryImpl
-import com.london.data.repository.popular.PopularRepositoryImpl
+import com.london.data.repository.home.popular.PopularRepositoryImpl
+import com.london.data.repository.home.upcoming.UpComingRepositoryImpl
 import com.london.data.repository.recent.RecentSearchRepositoryImpl
 import com.london.data.repository.recent.RecentViewedRepositoryImpl
 import com.london.data.repository.recent.RecentWatchedRepositoryIml
@@ -43,6 +46,7 @@ import com.london.data.repository.toprated.TopRatedMovieRepositoryImpl
 import com.london.data.repository.toprated.TopRatedTvSeriesRepositoryImpl
 import com.london.data.repository.trending.TrendingRepositoryImpl
 import com.london.data.utils.CrashReporter
+import com.london.data.utils.FirebaseCrashReporter
 import com.london.domain.entity.recent.RecentSearch
 import com.london.domain.entity.recent.RecentViewed
 import com.london.domain.repository.ActorRepository
@@ -56,6 +60,7 @@ import com.london.domain.repository.RecentWatchedRepository
 import com.london.domain.repository.SearchRepository
 import com.london.domain.repository.TrendingRepository
 import com.london.domain.repository.TvShowVideoProviderRepository
+import com.london.domain.repository.UpComingRepository
 import com.london.domain.repository.toprated.TopRatedMovieRepository
 import com.london.domain.repository.toprated.TopRatedTvSeriesRepository
 import dagger.Module
@@ -192,4 +197,16 @@ object RepositoryModule {
         dataSource: TvShowVideoProviderRemote
     ): TvShowVideoProviderRepository =
         TvShowVideoProviderRepositoryImpl(tvShowVideoProviderRemote = dataSource)
+
+    @Provides
+    @Singleton
+    fun provideUpComingRepository(
+        upComingLocalDataSource: UpComingLocalDataSource,
+        upComingRemoteDataSource: UpComingRemoteDataSource,
+        crashReporter: FirebaseCrashReporter
+    ): UpComingRepository = UpComingRepositoryImpl(
+        upComingLocalDataSource = upComingLocalDataSource,
+        upComingRemoteDataSource = upComingRemoteDataSource,
+        crashReporter = crashReporter
+    )
 }
