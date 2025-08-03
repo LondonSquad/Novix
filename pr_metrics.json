@@ -16671,5 +16671,33 @@
       "deletions": 127,
       "changed_files": 41
     }
+  },
+  {
+    "pr_number": 513,
+    "url": "https://github.com/LondonSquad/Novix/pull/513",
+    "title": "fix: empty state in build screen",
+    "opened_at": "2025-08-03T16:17:03Z",
+    "head_ref": "hotfix/build-screen",
+    "base_ref": "develop",
+    "creator": {
+      "login": "marwanqashwa",
+      "id": 100484790,
+      "url": "https://github.com/marwanqashwa"
+    },
+    "approvals": [],
+    "first_approved_at": null,
+    "time_to_first_approval_minutes": null,
+    "required_approvals_met_at": null,
+    "time_to_required_approvals_minutes": null,
+    "closed_at": null,
+    "merged_at": null,
+    "merged_by": null,
+    "week": "2025-W31",
+    "status": "pending",
+    "diff_stats": {
+      "additions": 7,
+      "deletions": 6,
+      "changed_files": 4
+    }
   }
 ]
