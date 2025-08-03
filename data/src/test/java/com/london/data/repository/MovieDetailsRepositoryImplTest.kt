@@ -12,7 +12,7 @@ import com.london.data.remote.model.details.movie.model.moviedetails.RemoteColle
 import com.london.data.remote.model.details.movie.model.moviedetails.SpokenLanguageRemote
 import com.london.data.remote.model.details.movie.model.movieimages.MovieImagesResponse
 import com.london.data.remote.model.details.movie.model.movieimages.Poster
-import com.london.data.remote.model.search.model.SearchMovieRemote
+import com.london.data.remote.model.search.model.MovieRemote
 import com.london.data.remote.source.details.movie.MovieDetailsRemoteDataSource
 import com.london.data.utils.asImageUrlOrEmpty
 import io.mockk.coEvery
@@ -75,7 +75,7 @@ class MovieDetailsRepositoryImplTest {
     private fun fakeSimilarMoviesRemote() = ApiResponse(
         currentPage = 1,
         items = listOf(
-            SearchMovieRemote(
+            MovieRemote(
                 adult = false,
                 backdropPath = null,
                 genreIds =listOf(1,2,3),
@@ -95,7 +95,7 @@ class MovieDetailsRepositoryImplTest {
                 firstAirDate = "",
                 name = "",
             ),
-            SearchMovieRemote(
+            MovieRemote(
                 adult = false,
                 backdropPath = null,
                 genreIds = listOf(1,2,3),

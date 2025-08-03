@@ -3,9 +3,9 @@ package com.london.data.remote.service.search
 
 import com.london.data.remote.model.ApiConstants
 import com.london.data.remote.model.ApiResponse
-import com.london.data.remote.model.search.model.searchactormodel.SearchActorRemote
-import com.london.data.remote.model.search.model.SearchMovieRemote
+import com.london.data.remote.model.search.model.MovieRemote
 import com.london.data.remote.model.search.model.SearchTvShowRemote
+import com.london.data.remote.model.search.model.searchactormodel.SearchActorRemote
 import com.london.domain.KoverIgnore
 import retrofit2.Response
 import retrofit2.http.GET
@@ -18,7 +18,7 @@ interface SearchApiService {
         @Query("query") query: String,
         @Query("include_adult") includeAdult: Boolean,
         @Query("page") page: Int
-    ): Response<ApiResponse<SearchMovieRemote>>
+    ): Response<ApiResponse<MovieRemote>>
 
     @GET(ApiConstants.SEARCH_PATH_TVS)
     suspend fun searchTvShows(
@@ -39,16 +39,8 @@ interface SearchApiService {
         @Query("with_genres") genreId: Int,
         @Query("page") page: Int,
         @Query("include_adult") includeAdult: Boolean
-    ): Response<ApiResponse<SearchMovieRemote>>
+    ): Response<ApiResponse<MovieRemote>>
 
-    @GET(ApiConstants.MOVIE_DISCOVER_PATH)
-    suspend fun getUpComingMoviesByCategory(
-        @Query("with_genres") genreId: Int?=null,
-        @Query("primary_release_date.gte") releaseDate: String,
-        @Query("sort_by") sortBy: String = "primary_release_date.asc",
-        @Query("page") page: Int,
-        @Query("include_adult") includeAdult: Boolean
-    ): Response<ApiResponse<SearchMovieRemote>>
 
     @GET(ApiConstants.TV_SHOW_DISCOVER_PATH)
     suspend fun searchForTvShowsByCategory(

@@ -1,4 +1,4 @@
-package com.london.data.repository.popular
+package com.london.data.repository.home.popular
 
 import com.london.data.local.model.home.popular.PopularSectionLocal
 import com.london.data.local.source.HomeLocalDataSource
