@@ -8,8 +8,8 @@ interface ViewListItemsContract {
     fun onRetry()
     fun onEditClick()
     fun onDeleteClick()
-    fun onRemoveMediaClick(id: Int, type: MediaType)
     fun onMovieClick(id: Int)
     fun onTvShowClick(id: Int)
     fun onItemsTypeClick(itemsType: ItemsType)
+    fun onRemoveMediaClick(id: Int, type: MediaType)
 }
