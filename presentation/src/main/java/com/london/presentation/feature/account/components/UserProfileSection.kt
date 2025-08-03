@@ -1,6 +1,5 @@
 package com.london.presentation.feature.account.components
 
-import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -13,8 +12,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.DropdownMenu
-import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
@@ -23,6 +20,8 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import com.london.designsystem.component.Dropdown
+import com.london.designsystem.component.DropdownItem
 import com.london.designsystem.component.Icon
 import com.london.designsystem.component.Text
 import com.london.designsystem.theme.NovixTheme
@@ -107,25 +106,19 @@ private fun UserMenuDropdown(
                 ) { onMenuClick() }
         )
 
-        DropdownMenu(
+        Dropdown(
             expanded = showUserMenu,
             onDismissRequest = onMenuClick,
-            modifier = Modifier
-                .background(NovixTheme.colors.surface)
-                .width(172.dp),
-            containerColor = NovixTheme.colors.surface,
-            shape = RoundedCornerShape(12.dp),
-            border = BorderStroke(
-                width = 1.dp,
-                color = NovixTheme.colors.stroke
-            )
+            modifier = Modifier.width(172.dp)
         ) {
-            DropdownMenuItem(
-                text = {
-                    LogoutMenuItem()
-                },
-                onClick = onLogoutClick,
-            )
+            DropdownItem(
+                onClick = {
+                    onLogoutClick()
+                    onMenuClick()
+                }
+            ) {
+                LogoutMenuItem()
+            }
         }
     }
 }

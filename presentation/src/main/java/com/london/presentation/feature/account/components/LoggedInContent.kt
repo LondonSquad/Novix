@@ -5,18 +5,18 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material3.HorizontalDivider
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import com.london.designsystem.component.Divider
+import com.london.designsystem.component.SpacerDivider
 import com.london.designsystem.theme.NovixTheme
 import com.london.presentation.R
 import com.london.presentation.feature.account.AccountContract
 import com.london.presentation.feature.account.state.AccountUiState
 import com.london.designsystem.R as dsR
-
 
 @Composable
 fun LoggedInContent(
@@ -87,18 +87,15 @@ fun LoggedInContent(
             onClick = accountContract::onLanguageClick
         )
 
-        HorizontalDivider(
-            color = androidx.compose.ui.graphics.Color.Transparent,
-            thickness = 16.dp
-        )
+        SpacerDivider(thickness = 16.dp)
     }
 }
 
 @Composable
 private fun AccountMenuDivider() {
-    HorizontalDivider(
+    Divider(
+        modifier = Modifier.padding(vertical = 8.dp),
         color = NovixTheme.colors.stroke,
-        thickness = 1.dp,
-        modifier = Modifier.padding(vertical = 8.dp)
+        thickness = 1.dp
     )
 }
