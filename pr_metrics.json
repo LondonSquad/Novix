@@ -16618,5 +16618,33 @@
       "deletions": 31,
       "changed_files": 26
     }
+  },
+  {
+    "pr_number": 512,
+    "url": "https://github.com/LondonSquad/Novix/pull/512",
+    "title": "Feature/cache upcoming home",
+    "opened_at": "2025-08-03T12:26:41Z",
+    "head_ref": "feature/cache-upcoming-home",
+    "base_ref": "develop",
+    "creator": {
+      "login": "ahmeddsamii",
+      "id": 154278495,
+      "url": "https://github.com/ahmeddsamii"
+    },
+    "approvals": [],
+    "first_approved_at": null,
+    "time_to_first_approval_minutes": null,
+    "required_approvals_met_at": null,
+    "time_to_required_approvals_minutes": null,
+    "closed_at": null,
+    "merged_at": null,
+    "merged_by": null,
+    "week": "2025-W31",
+    "status": "pending",
+    "diff_stats": {
+      "additions": 365,
+      "deletions": 127,
+      "changed_files": 41
+    }
   }
 ]
