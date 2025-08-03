@@ -3,6 +3,7 @@ package com.london.data.local.source.home.popular
 import com.london.data.local.database.dao.home.popular.TopRatedDao
 import com.london.data.local.model.home.TopRatedLocal
 import com.london.data.local.utils.executeInsert
+import com.london.data.utils.isDayExpired
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -34,7 +35,7 @@ class TopRatedDataSourceImpl @Inject constructor (
     override suspend fun getAll(): List<TopRatedLocal> =
         topRatedDao.getAll()
 
-    override suspend fun getCurrentPopularByDate(date: Long): TopRatedLocal =
-        topRatedDao.getCurrentPopularByDate(date)
-
+    override suspend fun getByDate(date: Long): TopRatedLocal =
+        topRatedDao.getByDate(date)
 }
+

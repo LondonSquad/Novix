@@ -13,7 +13,7 @@ interface TopRatedDao: HomeDao<TopRatedLocal> {
     override suspend fun insert(item: TopRatedLocal)
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    override suspend fun insertAll(item: List<TopRatedLocal>)
+    override suspend fun insertAll(items: List<TopRatedLocal>)
 
     @Query("DELETE FROM top_rated_table")
     override suspend fun deleteAll()
@@ -22,5 +22,6 @@ interface TopRatedDao: HomeDao<TopRatedLocal> {
     override suspend fun getAll(): List<TopRatedLocal>
 
     @Query("SELECT * FROM top_rated_table WHERE date = :date")
-    override suspend fun getCurrentPopularByDate(date: Long): TopRatedLocal
+    override suspend fun getByDate(date: Long): TopRatedLocal
+    
 }

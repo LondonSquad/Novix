@@ -1,7 +1,7 @@
 package com.london.data.local.source.home.popular
 
 import com.london.data.local.database.dao.home.popular.PopularSectionDao
-import com.london.data.local.model.home.PopularSectionLocal
+import com.london.data.local.model.home.popular.PopularSectionLocal
 import com.london.data.local.utils.executeInsert
 import com.london.data.utils.isDayExpired
 import kotlinx.coroutines.CoroutineScope

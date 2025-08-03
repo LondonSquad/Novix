@@ -21,9 +21,8 @@ import com.london.data.local.database.dao.search.GenreInterestDao
 import com.london.data.local.database.dao.search.SearchActorsDao
 import com.london.data.local.database.dao.search.SearchMoviesDao
 import com.london.data.local.database.dao.search.SearchTvShowDao
-import com.london.data.local.model.home.PopularSectionLocal
-import com.london.data.local.model.home.TopRatedLocal
 import com.london.data.local.model.home.popular.PopularSectionLocal
+import com.london.data.local.model.home.TopRatedLocal
 import com.london.data.local.model.home.upcoming.UpComingSectionLocal
 import com.london.data.local.model.recent.search.RecentSearchLocal
 import com.london.data.local.model.recent.viewed.RecentViewedLocal
@@ -46,7 +45,6 @@ import com.london.data.local.model.search.SearchTvShowLocal
         RecentWatchedTvShowLocal::class,
         PopularSectionLocal::class,
         TopRatedLocal::class,
-        PopularSectionLocal::class,
         UpComingSectionLocal::class
     ],
     version = 1,
