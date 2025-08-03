@@ -11,8 +11,8 @@ import com.london.data.local.model.search.SearchActorsLocal
 import com.london.data.local.model.search.SearchMoviesLocal
 import com.london.data.local.model.search.SearchTvShowLocal
 import com.london.data.local.preference.AuthPreferences
-import com.london.data.local.source.home.popular.HomeLocalDataSource
 import com.london.data.local.source.LocalDataSource
+import com.london.data.local.source.home.popular.HomeLocalDataSource
 import com.london.data.local.source.recent.RecentDataSource
 import com.london.data.local.source.recent.watched.RecentWatchedDataSource
 import com.london.data.remote.service.home.TrendingApiService
@@ -117,20 +117,27 @@ object RepositoryModule {
     @Singleton
     fun provideTopRatedMovieRepository(
         dataSource: TopRatedMovieRemoteDataSource,
-        @Named("topRatedLocalDataSource")localTopRated: HomeLocalDataSource<TopRatedLocal>,
+        @Named("topRatedLocalDataSource") localTopRated: HomeLocalDataSource<TopRatedLocal>,
         crashReporter: CrashReporter
     ): TopRatedMovieRepository =
         TopRatedMovieRepositoryImpl(
             topRatedMovieRemoteDataSource = dataSource,
             localTopRated = localTopRated,
-            crashReporter = crashReporter)
+            crashReporter = crashReporter
+        )
 
     @Provides
     @Singleton
     fun provideTopRatedTvSeriesRepository(
-        dataSource: TopRatedTvRemoteDataSource
+        dataSource: TopRatedTvRemoteDataSource,
+        @Named("topRatedLocalDataSource") localTopRated: HomeLocalDataSource<TopRatedLocal>,
+        crashReporter: CrashReporter
     ): TopRatedTvSeriesRepository =
-        TopRatedTvSeriesRepositoryImpl(topRatedTvRemoteDataSource = dataSource)
+        TopRatedTvSeriesRepositoryImpl(
+            topRatedTvRemoteDataSource = dataSource,
+            topRatedTvShow = localTopRated,
+            crashReporter = crashReporter
+        )
 
     @Provides
     @Singleton
