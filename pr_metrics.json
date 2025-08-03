@@ -16718,5 +16718,33 @@
       "deletions": 289,
       "changed_files": 28
     }
+  },
+  {
+    "pr_number": 515,
+    "url": "https://github.com/LondonSquad/Novix/pull/515",
+    "title": "feat(list): add edit list bottom sheet",
+    "opened_at": "2025-08-03T17:43:41Z",
+    "head_ref": "feature/edit-list-bottom-sheet",
+    "base_ref": "develop",
+    "creator": {
+      "login": "Mostafa-alsaygh",
+      "id": 106277855,
+      "url": "https://github.com/Mostafa-alsaygh"
+    },
+    "approvals": [],
+    "first_approved_at": null,
+    "time_to_first_approval_minutes": null,
+    "required_approvals_met_at": null,
+    "time_to_required_approvals_minutes": null,
+    "closed_at": null,
+    "merged_at": null,
+    "merged_by": null,
+    "week": "2025-W31",
+    "status": "pending",
+    "diff_stats": {
+      "additions": 253,
+      "deletions": 284,
+      "changed_files": 15
+    }
   }
 ]
