@@ -16590,5 +16590,33 @@
       "deletions": 85,
       "changed_files": 21
     }
+  },
+  {
+    "pr_number": 511,
+    "url": "https://github.com/LondonSquad/Novix/pull/511",
+    "title": "feature/profile-screen",
+    "opened_at": "2025-08-03T11:10:13Z",
+    "head_ref": "feature/profile-screen",
+    "base_ref": "develop",
+    "creator": {
+      "login": "abdo-essam",
+      "id": 92235360,
+      "url": "https://github.com/abdo-essam"
+    },
+    "approvals": [],
+    "first_approved_at": null,
+    "time_to_first_approval_minutes": null,
+    "required_approvals_met_at": null,
+    "time_to_required_approvals_minutes": null,
+    "closed_at": null,
+    "merged_at": null,
+    "merged_by": null,
+    "week": "2025-W31",
+    "status": "pending",
+    "diff_stats": {
+      "additions": 792,
+      "deletions": 31,
+      "changed_files": 26
+    }
   }
 ]
