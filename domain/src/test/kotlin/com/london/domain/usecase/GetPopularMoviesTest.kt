@@ -25,8 +25,8 @@ class GetPopularMoviesTest {
     fun `when call invoke should return list of popular movies from repository`() = runTest {
         // Given
         val expectedMovies = listOf(
-            PopularMovie(id = 1, title = "Movie One", posterUrl = "path1", rating = 7.5, backdropUrl = ""),
-            PopularMovie(id = 2, title = "Movie Two", posterUrl = "path2", rating = 8.3, backdropUrl = "")
+            PopularMovie(id = 1, title = "Movie One", posterUrl = "path1", rating = 7.5),
+            PopularMovie(id = 2, title = "Movie Two", posterUrl = "path2", rating = 8.3)
         )
         coEvery { repository.getPopularMovies() } returns expectedMovies
 
