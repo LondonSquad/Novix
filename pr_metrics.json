@@ -16884,9 +16884,18 @@
       "id": 81706918,
       "url": "https://github.com/karimdeabes"
     },
-    "approvals": [],
-    "first_approved_at": null,
-    "time_to_first_approval_minutes": null,
+    "approvals": [
+      {
+        "reviewer": {
+          "id": 117874933,
+          "login": "AsmaaKhaledGomaa",
+          "url": "https://github.com/AsmaaKhaledGomaa"
+        },
+        "submitted_at": "2025-08-03T20:03:51Z"
+      }
+    ],
+    "first_approved_at": "2025-08-03T20:03:51Z",
+    "time_to_first_approval_minutes": 35.166666666666664,
     "required_approvals_met_at": null,
     "time_to_required_approvals_minutes": null,
     "closed_at": null,
