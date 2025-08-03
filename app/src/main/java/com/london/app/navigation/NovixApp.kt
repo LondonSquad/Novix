@@ -328,7 +328,6 @@ fun NavGraphBuilder.mainNavGraph(
         popExitTransition = { fadeOut(tween(500)) },
     ) {
         SavedListScreen(
-            onFabClick = {},
             onNavigateToDetails = {}
         )
     }

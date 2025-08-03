@@ -23,23 +23,23 @@ class SavedListViewModel @Inject constructor() :
         TODO("Not yet implemented")
     }
 
-    override fun onItemCountClick(id: Int) {
+    override fun onListClick(id: Int) {
         emitEffect(SavedListEffect.NavigateToDetails(id))
     }
 
     override fun onFabClick() {
-        emitEffect(SavedListEffect.AddNewList)
+        TODO("Not yet implemented")
     }
 
     private fun dummyItems(): Flow<PagingData<SavedListItemUi>> {
-        val list =  //emptyList<SavedListItemUi>()
-            List(10) { index ->
-                SavedListItemUi(
-                    id = index,
-                    title = "Dummy List #$index",
-                    count = (1..10).random()
-                )
-            }
+        val list =  emptyList<SavedListItemUi>()
+//            List(10) { index ->
+//                SavedListItemUi(
+//                    id = index,
+//                    title = "Dummy List #$index",
+//                    count = (1..10).random()
+//                )
+//            }
         return flowOf(PagingData.from(list))
     }
 

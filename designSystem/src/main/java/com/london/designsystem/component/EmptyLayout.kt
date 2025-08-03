@@ -6,6 +6,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement.Center
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -22,7 +23,6 @@ fun EmptyLayout(
     text: String,
     @DrawableRes image: Int,
     modifier: Modifier = Modifier,
-    additionalContent: (@Composable () -> Unit)? = null
 ) {
     Column(
         modifier = modifier
@@ -45,6 +45,32 @@ fun EmptyLayout(
             color = NovixTheme.colors.body,
             textAlign = TextAlign.Center,
             modifier = Modifier.fillMaxWidth()
+        )
+    }
+}
+
+@Composable
+fun EmptyLayout(
+    text: String,
+    modifier: Modifier = Modifier,
+    imageContent: (@Composable () -> Unit)? = null,
+    additionalContent: (@Composable () -> Unit)? = null
+) {
+    Column(
+        modifier = modifier
+            .fillMaxWidth()
+            .background(NovixTheme.colors.surface),
+        horizontalAlignment = CenterHorizontally,
+        verticalArrangement = Center
+    ) {
+        imageContent?.let { it() }
+
+        Text(
+            text = text,
+            style = NovixTheme.typography.body.small,
+            color = NovixTheme.colors.body,
+            textAlign = TextAlign.Center,
+            modifier = Modifier.padding(horizontal = 48.dp, vertical = 12.dp)
         )
 
         additionalContent?.let { it() }

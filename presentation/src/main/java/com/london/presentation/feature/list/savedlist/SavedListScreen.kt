@@ -1,7 +1,11 @@
 package com.london.presentation.feature.list.savedlist
 
+import android.os.Build
+import androidx.annotation.DrawableRes
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -10,6 +14,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -18,7 +23,10 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.BlurredEdgeTreatment
+import androidx.compose.ui.draw.blur
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.scale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
@@ -34,15 +42,15 @@ import com.london.designsystem.component.button.FloatingActionButton
 import com.london.designsystem.component.button.OutlineButton
 import com.london.designsystem.theme.NovixTheme
 import com.london.designsystem.theme.ThemePreviews
-import com.london.designsystem.theme.noRippleClickable
+import com.london.designsystem.utils.painter
 import com.london.presentation.R
+import com.london.presentation.feature.base.ErrorState
 import com.london.presentation.feature.buildscreen.BuildScreen
 import com.london.presentation.utils.Listen
 
 @Composable
 fun SavedListScreen(
     onNavigateToDetails: (Int) -> Unit,
-    onFabClick: () -> Unit,
     viewModel: SavedListViewModel = hiltViewModel()
 ) {
 
@@ -51,7 +59,6 @@ fun SavedListScreen(
 
     effect?.Listen { currentEffect ->
         when (currentEffect) {
-            is SavedListEffect.AddNewList -> onFabClick()
             is SavedListEffect.NavigateToDetails -> onNavigateToDetails(currentEffect.id)
         }
     }
@@ -77,7 +84,8 @@ private fun ScreenScaffold(
         TopBar(
             modifier = Modifier
                 .statusBarsPadding()
-                .height(56.dp),
+                .height(56.dp)
+                .padding(top = 12.dp),
             title = stringResource(titleRes),
         )
 
@@ -109,7 +117,7 @@ private fun Content(
     BuildScreen(
         onRetry = contract::onRetry,
         isLoading = state.isLoading,
-        isError = state.errorMessage.isNullOrEmpty().not(),
+        isError = state.error is ErrorState.NoInternet,
         pagingFlow = pagingItems,
         isGuest = state.isGuest,
         guestContent = {
@@ -135,7 +143,7 @@ private fun Content(
                     pagingItems[index]?.let { item ->
                         SavedListItemRow(
                             itemUi = item,
-                            onCountClick = contract::onItemCountClick
+                            onCountClick = contract::onListClick
                         )
                     }
                 }
@@ -159,6 +167,7 @@ private fun SavedListItemRow(
             )
             .background(color = NovixTheme.colors.surface)
             .padding(horizontal = 12.dp, vertical = 16.dp)
+            .clickable { onCountClick(itemUi.id) }
     ) {
         Text(
             text = itemUi.title,
@@ -170,7 +179,6 @@ private fun SavedListItemRow(
         )
         ItemCount(
             itemUi = itemUi,
-            onCountClick = onCountClick
         )
     }
 }
@@ -178,7 +186,6 @@ private fun SavedListItemRow(
 @Composable
 private fun ItemCount(
     itemUi: SavedListItemUi,
-    onCountClick: (Int) -> Unit
 ) {
     Row(
         verticalAlignment = Alignment.CenterVertically,
@@ -187,7 +194,6 @@ private fun ItemCount(
             .clip(RoundedCornerShape(8.dp))
             .background(color = NovixTheme.colors.primaryVariant)
             .padding(horizontal = 8.dp, vertical = 4.dp)
-            .noRippleClickable(onClick = { onCountClick(itemUi.id) }),
     ) {
         Text(
             text = itemUi.count.toString(),
@@ -195,7 +201,7 @@ private fun ItemCount(
             color = NovixTheme.colors.primary,
         )
         Icon(
-            painter = painterResource(id = com.london.designsystem.R.drawable.icon_arrow),
+            painter = painterResource(id = R.drawable.ic_arrow),
             contentDescription = stringResource(com.london.designsystem.R.string.arrow),
             tint = NovixTheme.colors.primary
         )
@@ -217,7 +223,9 @@ private fun EmptyList(contract: SavedListContract) {
                     .padding(horizontal = 16.dp)
                     .align(Alignment.Center),
                 text = stringResource(R.string.no_saved_list),
-                image = R.drawable.ic_no_saved_list_yet,
+                imageContent = {
+                    BlurredImage(imageId = R.drawable.ic_no_saved_list_yet)
+                },
             )
         }
     }
@@ -240,7 +248,9 @@ private fun NoListFoundAsGuest(
                     .padding(horizontal = 16.dp)
                     .align(Alignment.Center),
                 text = stringResource(R.string.login_to_create_list),
-                image = R.drawable.ic_no_saved_list_as_guest,
+                imageContent = {
+                    BlurredImage(imageId = R.drawable.ic_no_saved_list_as_guest)
+                },
                 additionalContent = {
                     OutlineButton(
                         text = stringResource(R.string.login),
@@ -258,6 +268,42 @@ private fun NoListFoundAsGuest(
 }
 
 @Composable
+private fun BlurredImage(@DrawableRes imageId: Int) {
+    Box(
+        modifier = Modifier
+            .size(128.dp),
+        contentAlignment = Alignment.Center
+    ) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+            Icon(
+                painter = R.drawable.ellipse_blur_filled.painter,
+                contentDescription = null,
+                tint = NovixTheme.colors.primary,
+                modifier = Modifier
+                    .size(23.dp)
+                    .blur(40.dp, edgeTreatment = BlurredEdgeTreatment.Unbounded)
+                    .align(Alignment.BottomCenter)
+            )
+        } else {
+            Image(
+                modifier = Modifier
+                    .scale(2.1f)
+                    .size(23.dp)
+                    .align(Alignment.BottomCenter),
+                painter = R.drawable.ellipse_pre_blurred.painter,
+                contentDescription = null
+            )
+        }
+        Image(
+            painter = painterResource(id = imageId),
+            contentDescription = "List Image",
+            modifier = Modifier
+                .size(128.dp),
+        )
+    }
+}
+
+@Composable
 @Preview
 @ThemePreviews
 private fun Preview() {
@@ -268,7 +314,7 @@ private fun Preview() {
             contract = object : SavedListContract {
                 override fun onRetry() {}
                 override fun onLoginClick() {}
-                override fun onItemCountClick(id: Int) {}
+                override fun onListClick(id: Int) {}
                 override fun onFabClick() {}
             }
         )
