@@ -1,6 +1,7 @@
 package com.london.data.di
 
 import android.content.SharedPreferences
+import com.london.data.local.database.dao.home.popular.PopularSectionDao
 import com.london.data.local.database.dao.recent.search.RecentSearchDao
 import com.london.data.local.database.dao.recent.viewed.RecentViewedDao
 import com.london.data.local.database.dao.recent.whatched.movie.RecentWatchedMoviesDao
@@ -8,6 +9,7 @@ import com.london.data.local.database.dao.recent.whatched.tvshow.RecentWatchedTv
 import com.london.data.local.database.dao.search.SearchActorsDao
 import com.london.data.local.database.dao.search.SearchMoviesDao
 import com.london.data.local.database.dao.search.SearchTvShowDao
+import com.london.data.local.model.home.popular.PopularSectionLocal
 import com.london.data.local.model.recent.search.RecentSearchLocal
 import com.london.data.local.model.recent.viewed.RecentViewedLocal
 import com.london.data.local.model.recent.watched.RecentWatchedMovieLocal
@@ -16,7 +18,9 @@ import com.london.data.local.model.search.SearchActorsLocal
 import com.london.data.local.model.search.SearchMoviesLocal
 import com.london.data.local.model.search.SearchTvShowLocal
 import com.london.data.local.preference.AppPreferencesServiceImpl
+import com.london.data.local.source.HomeLocalDataSource
 import com.london.data.local.source.LocalDataSource
+import com.london.data.local.source.home.popular.PopularLocalDataSourceImpl
 import com.london.data.local.source.recent.RecentDataSource
 import com.london.data.local.source.recent.RecentSearchDataSourceImpl
 import com.london.data.local.source.recent.RecentViewedDataSourceImpl
@@ -31,6 +35,7 @@ import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
+import javax.inject.Named
 import javax.inject.Singleton
 
 @Module
@@ -85,4 +90,12 @@ object LocalDataSourceModule {
     fun provideAppPreferencesService(
         sharedPreferences: SharedPreferences
     ): AppPreferencesService = AppPreferencesServiceImpl(preferences = sharedPreferences)
+
+    @Provides
+    @Singleton
+    @Named("popularLocalDataSource")
+    fun provideHomeLocalDataSource(
+        @Named("popularSectionDao") popularSectionDao: PopularSectionDao
+    ): HomeLocalDataSource<PopularSectionLocal> =
+        PopularLocalDataSourceImpl(popularSectionDao)
 }

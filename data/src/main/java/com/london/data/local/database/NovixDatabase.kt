@@ -4,10 +4,12 @@ import androidx.room.Database
 import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
 import com.london.data.local.database.convertor.CommonConverter
+import com.london.data.local.database.convertor.MediaTypeConverter
 import com.london.data.local.database.convertor.RecentViewedConverter
 import com.london.data.local.database.convertor.SearchActorsConvertor
 import com.london.data.local.database.convertor.SearchMoviesConverter
 import com.london.data.local.database.convertor.SearchTvShowConvertor
+import com.london.data.local.database.dao.home.popular.PopularSectionDao
 import com.london.data.local.database.dao.recent.search.RecentSearchDao
 import com.london.data.local.database.dao.recent.viewed.RecentViewedDao
 import com.london.data.local.database.dao.recent.whatched.movie.RecentWatchedMoviesDao
@@ -16,6 +18,7 @@ import com.london.data.local.database.dao.search.GenreInterestDao
 import com.london.data.local.database.dao.search.SearchActorsDao
 import com.london.data.local.database.dao.search.SearchMoviesDao
 import com.london.data.local.database.dao.search.SearchTvShowDao
+import com.london.data.local.model.home.popular.PopularSectionLocal
 import com.london.data.local.model.recent.search.RecentSearchLocal
 import com.london.data.local.model.recent.viewed.RecentViewedLocal
 import com.london.data.local.model.recent.watched.RecentWatchedMovieLocal
@@ -34,7 +37,8 @@ import com.london.data.local.model.search.SearchTvShowLocal
         GenreInterestEntity::class,
         RecentViewedLocal::class,
         RecentWatchedMovieLocal::class,
-        RecentWatchedTvShowLocal::class
+        RecentWatchedTvShowLocal::class,
+        PopularSectionLocal::class
     ],
     version = 1,
     exportSchema = false
@@ -45,6 +49,7 @@ import com.london.data.local.model.search.SearchTvShowLocal
     SearchTvShowConvertor::class,
     CommonConverter::class,
     RecentViewedConverter::class,
+    MediaTypeConverter::class
 )
 abstract class NovixDatabase : RoomDatabase() {
     abstract fun searchTvShowDao(): SearchTvShowDao
@@ -55,4 +60,5 @@ abstract class NovixDatabase : RoomDatabase() {
     abstract fun recentViewedDao(): RecentViewedDao
     abstract fun recentWatchedMoviesDao(): RecentWatchedMoviesDao
     abstract fun recentWatchedTvShowsDao(): RecentWatchedTvShowsDao
+    abstract fun popularSectionDao(): PopularSectionDao
 }

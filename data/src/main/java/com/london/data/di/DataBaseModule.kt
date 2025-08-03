@@ -9,6 +9,7 @@ import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
+import javax.inject.Named
 import javax.inject.Singleton
 
 @Module
@@ -64,4 +65,9 @@ object DataBaseModule {
     fun provideRecentWatchedTvShowsDao(database: NovixDatabase) =
         database.recentWatchedTvShowsDao()
 
+    @Provides
+    @Singleton
+    @Named("popularSectionDao")
+    fun providePopularSectionDao(database: NovixDatabase) =
+        database.popularSectionDao()
 }

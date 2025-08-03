@@ -130,7 +130,6 @@ class GetPopularTvShowTest {
 
         assertThat(firstShow.id).isEqualTo(expectedShow.id)
         assertThat(firstShow.name).isEqualTo(expectedShow.name)
-        assertThat(firstShow.overview).isEqualTo(expectedShow.overview)
         assertThat(firstShow.posterUrl).isEqualTo(expectedShow.posterUrl)
         assertThat(firstShow.rating).isEqualTo(expectedShow.rating)
     }
@@ -169,7 +168,6 @@ class GetPopularTvShowTest {
             assertThat(tvShow.rating).isAtMost(10.0)
             assertThat(tvShow.id).isGreaterThan(0)
             assertThat(tvShow.name).isNotEmpty()
-            assertThat(tvShow.overview).isNotEmpty()
             assertThat(tvShow.posterUrl).isNotEmpty()
         }
     }
@@ -178,7 +176,6 @@ class GetPopularTvShowTest {
         return PopularTvShow(
             id = mockData.id,
             name = mockData.name,
-            overview = mockData.overview,
             posterUrl = mockData.posterUrl,
             rating = mockData.rating
         )
@@ -189,7 +186,6 @@ class GetPopularTvShowTest {
         private const val CUSTOM_LIMIT = 3
         private const val LARGE_LIMIT = 10
         private const val ZERO_LIMIT = 0
-        private const val EXPECTED_DEFAULT_LIMIT = 5
         private const val EXCEPTION_MESSAGE = "Network error"
 
         private val EMPTY_TV_SHOWS_LIST = emptyList<PopularTvShow>()
