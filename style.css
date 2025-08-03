@@ -611,6 +611,29 @@ html.dark .pr-row-details {
     cursor: pointer;
     user-select: none;
     border-bottom: 1px solid var(--border-color);
+    display: flex;
+    align-items: center;
+}
+
+.pr-week-title {
+    flex-grow: 1;
+}
+
+.pr-week-count {
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: var(--text-secondary);
+    background-color: var(--bg-primary);
+    border: 1px solid var(--border-color);
+    padding: 0.2rem 0.75rem;
+    border-radius: 9999px;
+    margin-right: 1.5rem;
+    white-space: nowrap;
+}
+
+html.dark .pr-week-count {
+    background-color: var(--bg-secondary);
+    border-color: #4b5563;
 }
 
 .pr-week-group.collapsed .pr-week-header {
@@ -1085,8 +1108,12 @@ html.dark .pr-type-bar {
     border-style: solid;
     border-color: var(--text-secondary);
     border-width: 0 2px 2px 0;
-    transform: translateY(-50%) rotate(45deg);
+    transform: translateY(-50%) rotate(45deg); /* Default state: Points DOWN (v) */
     transition: transform 0.3s ease-out;
+}
+
+.rating-card:not(.expanded) .rating-card-header::after {
+    transform: translateY(-50%) rotate(-45deg); /* Collapsed state: Points RIGHT (>) */
 }
 
 .rating-card-header .avatar {

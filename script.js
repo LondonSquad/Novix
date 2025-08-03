@@ -251,11 +251,11 @@ document.addEventListener("DOMContentLoaded", () => {
         return `Week of ${datePart}, ${startDate.getFullYear()}`;
     };
 
-    const getRelativeWeekName = (index, baseWeekNumber = 16) => {
+    const getRelativeWeekName = (index, baseWeekNumber = 19) => {
         if (index === 0) {
             return "Current Week";
         }
-        const weekNum = baseWeekNumber - (index - 1);
+        const weekNum = baseWeekNumber - index;
         return `Week ${weekNum}`;
     };
 
@@ -362,6 +362,7 @@ document.addEventListener("DOMContentLoaded", () => {
         sortedWeeks.forEach((weekKey, index) => {
             const weekStartDate = new Date(weekKey);
             const weekPrs = groupedPrs[weekKey];
+            const prCount = weekPrs.length;
             const isCollapsed = index > 0;
 
             const sortedData = [...weekPrs].sort((a, b) => {
@@ -395,7 +396,10 @@ document.addEventListener("DOMContentLoaded", () => {
 
             finalHtml += `
                 <div class="pr-week-group ${isCollapsed ? 'collapsed' : ''}">
-                    <h3 class="pr-week-header" title="${formatWeekHeader(weekStartDate)}">${getRelativeWeekName(index)}</h3>
+                    <h3 class="pr-week-header" title="${formatWeekHeader(weekStartDate)}">
+                        <span class="pr-week-title">${getRelativeWeekName(index)}</span>
+                        <span class="pr-week-count">${prCount} PR${prCount !== 1 ? 's' : ''}</span>
+                    </h3>
                     <div class="pr-week-content">
                         ${tableHeaderHtml}
                         ${generatePrListHtml(sortedData)}
@@ -487,10 +491,23 @@ document.addEventListener("DOMContentLoaded", () => {
 
         finalVisibleRows.forEach(item => item.style.display = 'flex');
 
+        // ** START OF FIX **
+        // Recalculate counts for each week group based on visible rows.
         prMetricsContainer.querySelectorAll('.pr-week-group').forEach(group => {
-            const visibleRowsInGroup = group.querySelector('.pr-row[style*="flex"]');
-            group.style.display = visibleRowsInGroup ? 'block' : 'none';
+            // Find all rows inside this specific group that are currently visible
+            const visibleRowsInGroup = group.querySelectorAll('.pr-row[style*="flex"]');
+            const count = visibleRowsInGroup.length;
+
+            // Find the count span in the header and update its text
+            const countSpan = group.querySelector('.pr-week-count');
+            if (countSpan) {
+                countSpan.textContent = `${count} PR${count !== 1 ? 's' : ''}`;
+            }
+
+            // Hide or show the entire week group based on whether it has visible PRs
+            group.style.display = count > 0 ? 'block' : 'none';
         });
+        // ** END OF FIX **
     };
 
     const setupEventListeners = () => {
