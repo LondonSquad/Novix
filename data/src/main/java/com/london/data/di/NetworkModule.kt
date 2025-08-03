@@ -9,7 +9,7 @@ import com.london.data.local.source.device.DeviceConfigurationDataSource
 import com.london.data.remote.interceptor.AuthInterceptor
 import com.london.data.remote.service.authentication.AuthenticationApiService
 import com.london.data.remote.service.details.actor.ActorDetailsApiService
-import com.london.data.remote.service.details.movie.AddMovieRatingApiService
+import com.london.data.remote.service.details.movie.MovieRatingApiService
 import com.london.data.remote.service.details.movie.MovieDetailsApiService
 import com.london.data.remote.service.details.tvshow.TvShowDetailsApiService
 import com.london.data.remote.service.home.PopularApiService
@@ -171,7 +171,7 @@ object NetworkModule {
 
     @Provides
     @Singleton
-    fun provideMovieRatingApiService(retrofit: Retrofit): AddMovieRatingApiService =
-        retrofit.create(AddMovieRatingApiService::class.java)
+    fun provideMovieRatingApiService(retrofit: Retrofit): MovieRatingApiService =
+        retrofit.create(MovieRatingApiService::class.java)
 
 }

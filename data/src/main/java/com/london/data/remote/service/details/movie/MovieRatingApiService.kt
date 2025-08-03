@@ -8,7 +8,7 @@ import retrofit2.http.POST
 import retrofit2.http.Path
 import retrofit2.http.Query
 
-interface AddMovieRatingApiService {
+interface MovieRatingApiService {
     @POST("3/movie/{movie_id}/rating")
     suspend fun addMovieRating(
         @Path("movie_id") movieId: Int,

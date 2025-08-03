@@ -2,7 +2,7 @@ package com.london.data.repository
 
 import com.london.data.local.preference.AuthPreferences
 import com.london.data.remote.model.details.rating.RatingRemoteResponse
-import com.london.data.remote.source.details.movie.rating.AddMovieRatingRemoteDataSource
+import com.london.data.remote.source.details.movie.rating.MovieRatingRemoteDataSource
 import com.london.data.repository.rating.RatingRepositoryImpl
 import io.mockk.coEvery
 import io.mockk.mockk
@@ -19,7 +19,7 @@ import kotlin.test.assertFalse
 class RatingRepositoryImplTest {
 
     private lateinit var repository: RatingRepositoryImpl
-    private val remoteDataSource: AddMovieRatingRemoteDataSource = mockk()
+    private val remoteDataSource: MovieRatingRemoteDataSource = mockk()
     private val authPreferences: AuthPreferences = mockk()
 
     @Before
