@@ -73,24 +73,150 @@ fun TopRatedScreen(
         onBack = viewModel::onBackClicked,
         onRetry = viewModel::onRetry,
     ) {
-        MediaGridWithTabsPaging(
-            screenTitle = R.string.top_rating,
-            moviesPagingItems = topRatedMovieFlow,
-            tvShowsPagingItems = topRatedTvShowFlow,
-            tabSelected = state.tabSelected,
-            selectedMovieGenre = state.selectedMovieGenre,
-            selectedTvShowGenre = state.selectedTvShowGenre,
-            isMovieSelected = state.isMovieSelected,
-            isTvSelected = !state.isMovieSelected,
-            onBackClick = viewModel::onBackClicked,
-            onTabSelected = viewModel::tabSelected,
-            onMovieGenreClick = viewModel::movieGenre,
-            onTvShowGenreClick = viewModel::tvShowGenre,
-            onMovieClick = viewModel::onMovieClick,
-            onTvShowClick = viewModel::onTvShowClick,
-            isLoading = isLoading,
-            emptyTitle = stringResource(R.string.no_content_found),
-            emptyImage = R.drawable.img_no_reviews
+        Content(
+            state = state,
+            topRatedContract = viewModel
         )
+    }
+}
+
+@Composable
+private fun Content(
+    state: TopRatedUiState,
+    topRatedContract: TopRatedContract,
+) {
+    val screenWidth =
+        with(LocalDensity.current) { LocalWindowInfo.current.containerSize.width.toDp() }
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(color = NovixTheme.colors.surface)
+            .padding(WindowInsets.statusBars.asPaddingValues())
+            .padding(WindowInsets.navigationBars.asPaddingValues())
+
+    ) {
+        TopBar(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 16.dp)
+                .padding(top = 12.dp),
+            title = com.london.presentation.R.string.top_rated.string,
+            onBackClick = topRatedContract::onBackClicked
+        )
+
+        TabLayout(
+            tabs = listOf(
+                TabItem(R.string.movies),
+                TabItem(R.string.tv_shows),
+            ),
+            selectedIndex = state.tabSelected,
+            onTabSelected = topRatedContract::tabSelected,
+            modifier = Modifier.background(NovixTheme.colors.surface)
+        )
+        if (state.isMovieSelected)
+            MovieGenreRow(
+                onGenreClick = topRatedContract::movieGenre,
+                state = state,
+                screenWidth = screenWidth
+            )
+        else
+            TvShowRow(
+                onGenreClick = topRatedContract::tvShowGenre,
+                state = state,
+                screenWidth = screenWidth
+            )
+
+        val moviesPagingItems = state.movies.collectAsLazyPagingItems()
+        val tvSeriesPagingItems = state.tvSeries.collectAsLazyPagingItems()
+        LazyVerticalGrid(
+            columns = GridCells.Fixed(gridColmuns()),
+            contentPadding = PaddingValues(
+                top = 12.dp, bottom = 16.dp, start = 16.dp, end = 16.dp
+            ),
+            horizontalArrangement = Arrangement.spacedBy(12.dp),
+            verticalArrangement = Arrangement.spacedBy(12.dp),
+            modifier = Modifier.background(NovixTheme.colors.surface)
+        ) {
+
+            if (state.isMovieSelected) {
+                items(moviesPagingItems.itemCount) { index ->
+                    val movie = moviesPagingItems[index]
+                    movie?.let { movieItem ->
+                        HomeCard(
+                            imageUrl = movieItem.posterUrl,
+                            isSaved = false,
+                            onSaveClick = {
+                                // TODO
+                            },
+                            modifier = Modifier.clickable {
+                                topRatedContract.onMovieClick(movieItem.id)
+                            }
+                        )
+                    }
+                }
+            }
+            items(tvSeriesPagingItems.itemCount) { index ->
+                val tvSeries = tvSeriesPagingItems[index]
+                tvSeries?.let { seriesItem ->
+                    HomeCard(
+                        imageUrl = seriesItem.posterUrl,
+                        isSaved = false,
+                        onSaveClick = {
+                            // TODO
+                        },
+                        modifier = Modifier.clickable {
+                            topRatedContract.onTvShowClick(seriesItem.id)
+                        }
+                    )
+                }
+            }
+        }
+    }
+
+}
+
+@Composable
+private fun MovieGenreRow(
+    onGenreClick: (MovieGenre) -> Unit,
+    state: TopRatedUiState,
+    screenWidth: Dp,
+    modifier: Modifier = Modifier
+) {
+    LazyRow(
+        horizontalArrangement = Arrangement.spacedBy(8.dp),
+        contentPadding = PaddingValues(horizontal = 16.dp),
+        modifier = modifier
+            .requiredWidth(screenWidth)
+            .padding(vertical = 12.dp)
+    ) {
+        items(MovieGenre.entries.toTypedArray()) { genre ->
+            NovixChip(
+                text = stringResource(genre.stringResId),
+                isSelected = genre == state.selectedMovieGenre,
+                onClick = { onGenreClick(genre) })
+        }
+    }
+}
+
+@Composable
+private fun TvShowRow(
+    onGenreClick: (TvShowGenre) -> Unit,
+    state: TopRatedUiState,
+    screenWidth: Dp,
+    modifier: Modifier = Modifier
+) {
+    LazyRow(
+        horizontalArrangement = Arrangement.spacedBy(8.dp),
+        contentPadding = PaddingValues(horizontal = 16.dp),
+        modifier = modifier
+            .requiredWidth(screenWidth)
+            .padding(vertical = 12.dp)
+    ) {
+        items(TvShowGenre.entries.toTypedArray()) { genre ->
+            NovixChip(
+                text = stringResource(genre.stringResId),
+                isSelected = genre == state.selectedTvShowGenre,
+                onClick = { onGenreClick(genre) })
+        }
     }
 }
