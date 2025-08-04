@@ -16915,5 +16915,33 @@
       "deletions": 1,
       "changed_files": 4
     }
+  },
+  {
+    "pr_number": 519,
+    "url": "https://github.com/LondonSquad/Novix/pull/519",
+    "title": "refactor: move category search to DiscoverRepository",
+    "opened_at": "2025-08-04T03:45:13Z",
+    "head_ref": "refactor/search-repository",
+    "base_ref": "develop",
+    "creator": {
+      "login": "marwanqashwa",
+      "id": 100484790,
+      "url": "https://github.com/marwanqashwa"
+    },
+    "approvals": [],
+    "first_approved_at": null,
+    "time_to_first_approval_minutes": null,
+    "required_approvals_met_at": null,
+    "time_to_required_approvals_minutes": null,
+    "closed_at": null,
+    "merged_at": null,
+    "merged_by": null,
+    "week": "2025-W32",
+    "status": "pending",
+    "diff_stats": {
+      "additions": 444,
+      "deletions": 227,
+      "changed_files": 21
+    }
   }
 ]
