@@ -1,7 +1,7 @@
 package com.london.data.remote.service.reviews
 
 import com.london.data.remote.model.ApiResponse
-import com.london.data.remote.model.reviews.model.ReviewResponse
+import com.london.data.remote.model.reviews.ReviewResponse
 import retrofit2.Response
 import retrofit2.http.GET
 import retrofit2.http.Path

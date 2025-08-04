@@ -2,7 +2,7 @@ package com.london.data.remote.service.home
 
 import com.london.data.remote.model.ApiConstants
 import com.london.data.remote.model.ApiResponse
-import com.london.data.remote.model.home.model.trending.TrendingResponse
+import com.london.data.remote.model.home.trending.TrendingResponse
 import retrofit2.Response
 import retrofit2.http.GET
 import retrofit2.http.Query
