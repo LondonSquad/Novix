@@ -16933,12 +16933,20 @@
           "url": "https://github.com/marwanqashwa"
         },
         "submitted_at": "2025-08-03T19:10:44Z"
+      },
+      {
+        "reviewer": {
+          "id": 106277855,
+          "login": "Mostafa-alsaygh",
+          "url": "https://github.com/Mostafa-alsaygh"
+        },
+        "submitted_at": "2025-08-04T11:17:28Z"
       }
     ],
     "first_approved_at": "2025-08-03T19:10:44Z",
     "time_to_first_approval_minutes": 10.366666666666667,
-    "required_approvals_met_at": null,
-    "time_to_required_approvals_minutes": null,
+    "required_approvals_met_at": "2025-08-04T11:17:28Z",
+    "time_to_required_approvals_minutes": 977.1,
     "closed_at": "2025-08-04T11:17:30Z",
     "merged_at": "2025-08-04T11:17:30Z",
     "merged_by": {
@@ -17002,7 +17010,7 @@
   {
     "pr_number": 519,
     "url": "https://github.com/LondonSquad/Novix/pull/519",
-    "title": "refactor: move category search to DiscoverRepository",
+    "title": "refactor: move fetch media by category to DiscoverRepository",
     "opened_at": "2025-08-04T03:45:13Z",
     "head_ref": "refactor/search-repository",
     "base_ref": "develop",
