@@ -65,8 +65,6 @@ class TopRatedMovieRepositoryImplTest {
         assertThat(secondMovie).isEqualTo(
             fakeApiResponse.items[1].toEntity()
         )
-
-        // Verify that data was synced to local storage
         coVerify {
             localTopRatedMovie.insertAll(any())
         }
@@ -137,10 +135,7 @@ class TopRatedMovieRepositoryImplTest {
             val result = repository.getTopRatedMovies(PAGE)
 
             // Then
-            // Should still return remote data due to the implementation structure
             assertThat(result.items).hasSize(2)
-
-            // Verify local data was accessed
             coVerify {
                 localTopRatedMovie.getAll()
             }
