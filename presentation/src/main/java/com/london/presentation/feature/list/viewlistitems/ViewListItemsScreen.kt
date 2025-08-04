@@ -28,6 +28,7 @@ import com.london.designsystem.theme.NovixTheme
 import com.london.designsystem.theme.ThemePreviews
 import com.london.domain.entity.recent.MediaType
 import com.london.presentation.R
+import com.london.presentation.feature.base.ErrorState
 import com.london.presentation.feature.buildscreen.BuildScreen
 import com.london.presentation.feature.list.viewlistitems.uistate.ItemsType
 import com.london.presentation.feature.list.viewlistitems.uistate.MediaUi
@@ -63,11 +64,9 @@ fun ViewListItemsScreen(
         onBack = viewModel::onBack,
         onRetry = listItems::refresh,
         isLoading = state.isLoading,
-        isError = state.error !=null,
-        emptyLayoutMessage = R.string.no_items_found,
-        emptyLayoutImage = R.drawable.img_no_result,
+        isError = state.error is ErrorState.NoInternet,
         pagingFlow = listItems,
-        handlePagingLoadingAutomatically = false
+        handlePagingLoadingAutomatically = true
     ) {
         Content(
             state = state,
