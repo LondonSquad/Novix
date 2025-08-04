@@ -58,7 +58,7 @@
     <string name="read_more">" Read more"</string>
     <string name="read_less">" Read less"</string>
     <string name="cast">Cast</string>
-    <string name="imagr_dot">dot</string>
+    <string name="image_dot">dot</string>
     <string name="biography">Biography</string>
     <string name="gallery">Gallery</string>
     <string name="actor_photos">Actor Photos</string>
@@ -98,7 +98,7 @@
     <string name="trending_tv_shows">Trending TV Shows</string>
     <string name="trending_people">Trending People</string>
     <string name="no_trending_movies_in_genre">No movies found in this genre.</string>
-    <string name="no_trending_tvshows_in_genre">No tv shows found in this genre.</string>
+    <string name="no_trending_shows_in_genre">No tv shows found in this genre.</string>
     <string name="no_trending_actors_in_genre">No people found in this genre.</string>
     <string name="no_tv_shows_found">no tv shows found in this category</string>
     <string name="no_actor_details">No actor details available</string>
@@ -109,4 +109,9 @@
     <string name="login_failed">Login failed. Please check your credentials.</string>
     <string name="guest_login_failed">Guest login failed.</string>
     <string name="no_items_found">There is no items</string>
+    <string name="save_to_list">Save to list</string>
+    <string name="cancel_addition_to_list">Cancel addition to list</string>
+    <string name="create_new_list">Create new list</string>
+    <string name="add">Add</string>
+    <string name="n_movies">%1$d items</string>
 </resources>

@@ -450,7 +450,7 @@ private fun TextWithIcon(
         )
         Icon(
             painter = icon,
-            contentDescription = stringResource(R.string.imagr_dot),
+            contentDescription = stringResource(R.string.image_dot),
             tint = NovixTheme.colors.body,
             modifier = Modifier.size(baseIconSize * scale)
         )

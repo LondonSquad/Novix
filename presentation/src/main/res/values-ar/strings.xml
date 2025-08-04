@@ -60,7 +60,7 @@
     <string name="cast">طاقم العمل</string>
     <string name="biography">السيرة</string>
     <string name="gallery">المعرض</string>
-    <string name="imagr_dot">نقطه</string>
+    <string name="image_dot">نقطه</string>
     <string name="actor_photos">صور الممثلين</string>
     <string name="author_profile">صورة الممثل</string>
     <string name="tv_show_image">صور مسلسلات</string>
@@ -98,7 +98,7 @@
     <string name="trending_tv_shows">المسلسلات الرائجة</string>
     <string name="trending_people">الأشخاص الرائجون</string>
     <string name="no_trending_movies_in_genre">لا يوجد أفلام في هذا التصنيف حالياً</string>
-    <string name="no_trending_tvshows_in_genre">لا يوجد مسلسلات في هذا التصنيف حالياً</string>
+    <string name="no_trending_shows_in_genre">لا يوجد مسلسلات في هذا التصنيف حالياً</string>
     <string name="no_trending_actors_in_genre">لا يوجد أشخاص في هذا التصنيف حالياً</string>
     <string name="no_actor_details">لا توجد تفاصيل متاحة للممثل</string>
     <string name="reviews">المراجعات</string>
@@ -109,4 +109,10 @@
     <string name="login_failed">فشل تسجيل الدخول. يرجى التحقق من بيانات التسجيل الخاصة بك.</string>
     <string name="guest_login_failed">فشل تسجيل الدخول كضيف.</string>
     <string name="no_items_found">لا يوجد محتوى</string>
+    <string name="save_to_list">أضف إلى قائمة</string>
+    <string name="cancel_addition_to_list">ألغي الإضافة إلي قائمة</string>
+    <string name="create_new_list">انشئ قائمة جديدة</string>
+    <string name="add">أضف</string>
+    <string name="n_movies">%1$d عناصر</string>
+
 </resources>
