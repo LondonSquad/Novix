@@ -3,8 +3,10 @@ package com.london.presentation.shared
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.paging.compose.LazyPagingItems
+import com.london.designsystem.theme.ThemePreviews
 import com.london.domain.entity.Movie
 import com.london.domain.entity.TvShow
+import com.london.presentation.R
 import com.london.presentation.utils.MovieGenre
 import com.london.presentation.utils.TvShowGenre
 
@@ -102,4 +104,28 @@ fun MediaGridWithTabsPaging(
         emptyTitle = emptyTitle,
         emptyImage = emptyImage
     )
-} 
+}
+
+@ThemePreviews
+@Composable
+private fun Preview() {
+    MediaGridWithTabs(
+        screenTitle = R.string.continue_watch,
+        tabSelected = 0,
+        selectedMovieGenre = MovieGenre.All,
+        selectedTvShowGenre = TvShowGenre.All,
+        isMovieSelected = true,
+        isTvSelected = false,
+        onBackClick = {},
+        onTabSelected = {},
+        onMovieGenreClick = {},
+        onTvShowGenreClick = {},
+        onMovieClick = {},
+        onTvShowClick = {},
+        movies = emptyList(),
+        tvShows = emptyList(),
+        isLoading = false,
+        emptyTitle = "No content found",
+        emptyImage = null
+    )
+}

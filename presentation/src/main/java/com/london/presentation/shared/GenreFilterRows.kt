@@ -12,6 +12,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.london.designsystem.component.NovixChip
+import com.london.designsystem.theme.ThemePreviews
 import com.london.presentation.utils.MovieGenre
 import com.london.presentation.utils.TvShowGenre
 
@@ -29,27 +30,30 @@ fun MediaGenreFilters(
     screenWidth: Dp
 ) {
     when {
-        isMovieSelected -> MovieGenreChipsRow(
-            onGenreClick = onMovieGenreClick,
+        isMovieSelected -> GenreChipsRow(
+            genres = MovieGenre.entries.toTypedArray(),
             selectedGenre = selectedMovieGenre,
+            onGenreClick = onMovieGenreClick,
             screenWidth = screenWidth
         )
 
-        isTvSelected -> TvShowGenreChipsRow(
-            onGenreClick = onTvShowGenreClick,
+        isTvSelected -> GenreChipsRow(
+            genres = TvShowGenre.entries.toTypedArray(),
             selectedGenre = selectedTvShowGenre,
+            onGenreClick = onTvShowGenreClick,
             screenWidth = screenWidth
         )
     }
 }
 
 /**
- * Horizontal scrollable row of movie genre filter chips
+ * Generic horizontal scrollable row of genre filter chips
  */
 @Composable
-fun MovieGenreChipsRow(
-    onGenreClick: (MovieGenre) -> Unit,
-    selectedGenre: MovieGenre,
+inline fun <reified T : Enum<T>> GenreChipsRow(
+    genres: Array<T>,
+    selectedGenre: T,
+    crossinline onGenreClick: (T) -> Unit,
     screenWidth: Dp,
     modifier: Modifier = Modifier
 ) {
@@ -60,9 +64,9 @@ fun MovieGenreChipsRow(
             .requiredWidth(screenWidth)
             .padding(vertical = 12.dp)
     ) {
-        items(MovieGenre.entries.toTypedArray()) { genre ->
+        items(genres) { genre ->
             NovixChip(
-                text = stringResource(genre.stringResId),
+                text = getGenreText(genre),
                 isSelected = genre == selectedGenre,
                 onClick = { onGenreClick(genre) }
             )
@@ -71,28 +75,29 @@ fun MovieGenreChipsRow(
 }
 
 /**
- * Horizontal scrollable row of TV show genre filter chips
+ * Get the string resource for the genre
  */
 @Composable
-fun TvShowGenreChipsRow(
-    onGenreClick: (TvShowGenre) -> Unit,
-    selectedGenre: TvShowGenre,
-    screenWidth: Dp,
-    modifier: Modifier = Modifier
-) {
-    LazyRow(
-        horizontalArrangement = Arrangement.spacedBy(8.dp),
-        contentPadding = PaddingValues(horizontal = 16.dp),
-        modifier = modifier
-            .requiredWidth(screenWidth)
-            .padding(vertical = 12.dp)
-    ) {
-        items(TvShowGenre.entries.toTypedArray()) { genre ->
-            NovixChip(
-                text = stringResource(genre.stringResId),
-                isSelected = genre == selectedGenre,
-                onClick = { onGenreClick(genre) }
-            )
-        }
+inline fun <reified T : Enum<T>> getGenreText(genre: T): String {
+    return when (genre) {
+        is MovieGenre -> stringResource(genre.stringResId)
+        is TvShowGenre -> stringResource(genre.stringResId)
+        else -> genre.name
     }
 }
+
+
+@ThemePreviews
+@Composable
+private fun Preview() {
+    MediaGenreFilters(
+        isMovieSelected = true,
+        isTvSelected = false,
+        selectedMovieGenre = MovieGenre.All,
+        selectedTvShowGenre = TvShowGenre.All,
+        onMovieGenreClick = {},
+        onTvShowGenreClick = {},
+        screenWidth = 360.dp
+    )
+}
+
