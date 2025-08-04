@@ -1,16 +1,16 @@
 package com.london.data.remote.service.authentication
 
-import com.london.data.remote.model.authentication.model.DeleteSessionResponse
-import com.london.data.remote.model.authentication.model.GuestSessionResponse
-import com.london.data.remote.model.authentication.model.LoginValidationRequestBody
-import com.london.data.remote.model.authentication.model.RequestTokenResponse
-import com.london.data.remote.model.authentication.model.SessionResponse
-import com.london.data.remote.model.authentication.model.Token
+import com.london.data.remote.model.authentication.DeleteSessionResponse
+import com.london.data.remote.model.authentication.GuestSessionResponse
+import com.london.data.remote.model.authentication.LoginValidationRequestBody
+import com.london.data.remote.model.authentication.RequestTokenResponse
+import com.london.data.remote.model.authentication.SessionResponse
+import com.london.data.remote.model.authentication.Token
+import retrofit2.Response
 import retrofit2.http.Body
 import retrofit2.http.DELETE
 import retrofit2.http.GET
 import retrofit2.http.POST
-import retrofit2.Response
 
 
 interface AuthenticationApiService {
