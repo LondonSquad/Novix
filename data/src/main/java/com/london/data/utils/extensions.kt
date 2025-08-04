@@ -1,6 +1,12 @@
 package com.london.data.utils
 
 import com.london.data.BuildConfig
+import kotlinx.serialization.json.JsonElement
+import kotlinx.serialization.json.JsonObject
+import kotlinx.serialization.json.JsonPrimitive
+import kotlinx.serialization.json.booleanOrNull
+import kotlinx.serialization.json.doubleOrNull
+import kotlinx.serialization.json.jsonPrimitive
 import java.security.MessageDigest
 import java.util.Locale
 
@@ -28,3 +34,10 @@ fun String.generateHash(): String =
 
 fun String.extractYear() =
     takeIf { isNotEmpty() }?.split("-")?.first()?.toInt() ?: 0
+
+fun JsonElement?.parseRatingValue(): Double? = when {
+    this == null -> null
+    this is JsonObject -> this["value"]?.jsonPrimitive?.doubleOrNull
+    this is JsonPrimitive && this.booleanOrNull == false -> null
+    else -> null
+}

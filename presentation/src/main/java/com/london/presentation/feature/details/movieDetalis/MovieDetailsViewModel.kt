@@ -142,10 +142,12 @@ class MovieDetailsViewModel @Inject constructor(
 
 
     override fun onSelectRatingClick(rating: Int) = updateState {
+        var isRatedSuccessful = false
         viewModelScope.launch {
-            addMovieRatingByIdUseCase.invoke(movieId, rating)
+          isRatedSuccessful =  addMovieRatingByIdUseCase.invoke(movieId, rating)
         }
-        copy(selectedRating = rating, isRateBottomSheetVisible = false)
+        if (isRatedSuccessful) copy(selectedRating = rating, isRated = true, isRateBottomSheetVisible = false)
+        else copy(isRateBottomSheetVisible = false)
     }
 
     private fun loadSimilarAndVideos(movieId: Int) {
@@ -154,15 +156,15 @@ class MovieDetailsViewModel @Inject constructor(
                 val similarMovies = getSimilarMoviesUseCase.invoke(movieId)
                 val movieVideos = getMovieVideosUseCase.invoke(movieId)
                 val movieRating = getMovieRatingByIdUseCase.invoke(movieId)
-                Triple(similarMovies, movieVideos , movieRating)
+                Triple(similarMovies, movieVideos, movieRating)
             },
             onSuccess = { pair ->
-                val (similarMovies, videos) = pair
+                val (similarMovies, videos, movieRating) = pair
                 updateState {
                     copy(
                         similarMovies = similarMovies,
                         movieVideo = videos.firstOrNull()?.videoUrl.orEmpty(),
-                        isRated = movieRating.isNotEmpty()
+                        isRated = movieRating != 0
                     )
                 }
             },

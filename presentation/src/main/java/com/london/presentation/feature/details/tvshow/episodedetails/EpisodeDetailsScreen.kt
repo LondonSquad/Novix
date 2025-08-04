@@ -225,7 +225,7 @@ fun EpisodeDetailsScreenContent(
         FooterSection(
             haveTrailer = uiState.episodeHaveTrailer,
             modifier = Modifier.align(Alignment.BottomCenter),
-            onPlayClick = {
+            onRateClick = {
                 uriHandler.openUrl(uiState.videoProvider)
             },
             onStarClick = {

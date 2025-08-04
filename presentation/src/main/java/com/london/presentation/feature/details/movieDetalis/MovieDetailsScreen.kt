@@ -56,6 +56,7 @@ import com.london.designsystem.R
 import com.london.designsystem.component.ActorItem
 import com.london.designsystem.component.HomeCard
 import com.london.designsystem.component.Icon
+import com.london.designsystem.component.RatingBottomSheet
 import com.london.designsystem.component.Text
 import com.london.designsystem.component.TopBar
 import com.london.designsystem.theme.NovixTheme
@@ -312,7 +313,6 @@ fun MovieDetailsContent(
                 }
             }
         }
-
         FooterSection(
             haveTrailer = uiState.movieHaveTrailer,
             modifier = Modifier
@@ -320,11 +320,14 @@ fun MovieDetailsContent(
                     footerHeight = with(density) { coordinates.size.height.toDp() }
                 }
                 .align(Alignment.BottomCenter),
-            onPlayClick = {
-                uriHandler.openUrl(uiState.movieVideo)
-            },
-            onStarClick = movieDetailsContract::onRateBottomSheetClick
+            onStarClick = { uriHandler.openUrl(uiState.movieVideo) },
+            onRateClick = movieDetailsContract::onRateBottomSheetClick,
+            isRateEnabled = !uiState.isRated && (uiState.movieRating.isBlank() || uiState.movieRating.isNotZeroRate())
+        )
 
+        if (uiState.isRateBottomSheetVisible) RatingBottomSheet(
+            onDismissRequest = movieDetailsContract::onRateBottomSheetClick,
+            onSubmitClick = movieDetailsContract::onSelectRatingClick,
         )
     }
 }

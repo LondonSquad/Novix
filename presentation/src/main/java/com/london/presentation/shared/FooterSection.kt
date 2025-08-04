@@ -1,5 +1,6 @@
 package com.london.presentation.shared
 
+import android.annotation.SuppressLint
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
@@ -18,12 +19,14 @@ import com.london.designsystem.component.button.PrimaryButton
 import com.london.presentation.R
 import com.london.presentation.R.drawable
 
+@SuppressLint("SuspiciousIndentation")
 @Composable
 fun FooterSection(
     haveTrailer: Boolean,
     modifier: Modifier,
+    isRateEnabled: Boolean = true,
     onStarClick: () -> Unit,
-    onPlayClick: () -> Unit,
+    onRateClick: () -> Unit,
 ) {
     Row(
         modifier = modifier
@@ -45,21 +48,20 @@ fun FooterSection(
             ),
         horizontalArrangement = Arrangement.spacedBy(8.dp)
     ) {
-        PrimaryButton(
-            text = null,
-            onClick = onStarClick,
-            hasLabel = false,
-            icon = drawable.movie_button_star,
-            hasIcon = true,
-            isLoading = false,
-        )
-
+        if (isRateEnabled) {
+            PrimaryButton(
+                text = null,
+                onClick = onRateClick,
+                hasLabel = false,
+                icon = drawable.movie_button_star,
+                hasIcon = true,
+                isLoading = false,
+            )
+        }
 
         PrimaryButton(
             text = stringResource(R.string.play_trailer),
-            onClick = {
-                onPlayClick()
-            },
+            onClick = onStarClick,
             hasLabel = true,
             hasIcon = false,
             isLoading = false,

@@ -28,7 +28,7 @@ import com.london.designsystem.theme.NovixTheme
 @Composable
 fun RatingBottomSheet(
     onDismissRequest: () -> Unit,
-    onSubmit: (Int) -> Unit
+    onSubmitClick: (Int) -> Unit
 ) {
     var rating by remember { mutableIntStateOf(0) }
     val density = LocalDensity.current
@@ -113,7 +113,7 @@ fun RatingBottomSheet(
                 }
 
                 PrimaryButton(
-                    onClick = { onSubmit(rating) },
+                    onClick = { onSubmitClick(rating) },
                     modifier = Modifier.fillMaxWidth(),
                     enabled = rating > 0,
                     text = stringResource(R.string.submit),

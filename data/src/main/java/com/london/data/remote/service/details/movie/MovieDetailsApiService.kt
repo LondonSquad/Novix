@@ -10,7 +10,6 @@ import com.london.data.remote.model.details.videoprovider.movie.model.MovieVideo
 import com.london.data.remote.model.search.model.SearchMovieRemote
 import retrofit2.Response
 import retrofit2.http.GET
-import retrofit2.http.POST
 import retrofit2.http.Path
 import retrofit2.http.Query
 
@@ -41,7 +40,7 @@ interface MovieDetailsApiService {
         @Path("movie_id") movieId: Int,
     ): Response<MovieVideoRemote>
 
-    @POST("3/movie/{movie_id}/account_states")
+    @GET("3/movie/{movie_id}/account_states")
     suspend fun getMovieStates(
         @Path("movie_id") movieId: Int,
         @Query("guest_session_id") guestSessionId: String?,

@@ -44,5 +44,4 @@ class MovieDetailsRemoteDataSourceImpl @Inject constructor(
                 userSessionId = userSessionId
             )
         }, mapper = { it })
-
 }
