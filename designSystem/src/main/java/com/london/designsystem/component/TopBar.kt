@@ -63,7 +63,7 @@ fun TopBar(
                 maxLines = 1,
                 modifier = Modifier
                     .weight(1f)
-                    .padding(horizontal = 12.dp)
+                    .padding(horizontal = 12.dp, vertical = 13.dp)
             )
         }
 

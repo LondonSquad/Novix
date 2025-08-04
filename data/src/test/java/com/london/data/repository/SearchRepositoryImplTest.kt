@@ -11,7 +11,7 @@ import com.london.data.local.model.search.SearchTvShowLocal
 import com.london.data.local.source.LocalDataSource
 import com.london.data.remote.exception.NetworkException
 import com.london.data.remote.model.ApiResponse
-import com.london.data.remote.model.search.model.SearchMovieRemote
+import com.london.data.remote.model.search.model.MovieRemote
 import com.london.data.remote.model.search.model.SearchTvShowRemote
 import com.london.data.remote.source.search.SearchRemoteDataSource
 import com.london.data.utils.CrashReporter
@@ -88,18 +88,6 @@ class SearchRepositoryImplTest {
         } else {
             coVerify(exactly = 0) { mockCrashReporter.logException(any()) }
         }
-    }
-
-    @Test
-    fun `searchForMoviesByID should return data from Remote if available`() = runTest {
-        coEvery {
-            searchRemoteDataSource.getMoviesByCategory(
-                1,
-                PAGE_NUMBER
-            )
-        } returns Result.success(SearchMoviesRemoteMock)
-        val result = repository.searchForMoviesByCategory(1, PAGE_NUMBER)
-        assertThat(result).isEqualTo(MovieList)
     }
 
     @Test
@@ -326,29 +314,6 @@ class SearchRepositoryImplTest {
     }
 
     @Test
-    fun `get MoviesByCategory should return data from remote if available`()= runTest {
-        coEvery {
-            searchRemoteDataSource.getMoviesByCategory(
-                1,
-                PAGE_NUMBER
-            )
-        } returns Result.success(SearchMoviesRemoteMock)
-        val result = repository.searchForMoviesByCategory(1, PAGE_NUMBER)
-        assertThat(result).isEqualTo(MovieList)
-    }
-
-    @Test
-    fun `get upComingMoviesByCategory should return data from remote if available`()= runTest {
-        coEvery {
-            searchRemoteDataSource.getUpComingMoviesByCategory(
-                1,
-                PAGE_NUMBER
-            )
-        } returns Result.success(SearchMoviesRemoteMock)
-        val result = repository.getUpComingMoviesByCategory(1, PAGE_NUMBER)
-        assertThat(result).isEqualTo(MovieList)
-    }
-    @Test
     fun `incrementGenreInterest inserts new genre when not existing`() = runTest {
         val genreId = 1
         val mediaType = "movie"
@@ -411,59 +376,6 @@ class SearchRepositoryImplTest {
 
         assertThrows<NetworkException.ValidationException> {
             repository.searchForActors(query, page)
-        }
-    }
-
-    @Test
-    fun `searchForMoviesByCategory should throw HttpLockedException when API returns 423`() =
-        runTest {
-            val categoryId = 12
-            val page = 1
-
-            coEvery {
-                searchRemoteDataSource.getMoviesByCategory(categoryId, page)
-            } throws NetworkException.HttpLockedException("Resource locked")
-
-            assertThrows<NetworkException.HttpLockedException> {
-                repository.searchForMoviesByCategory(categoryId, page)
-            }
-        }
-
-    @Test
-    fun `searchForTvShowsByCategory should throw HttpLockedException when API returns 423`() =
-        runTest {
-            val categoryId = 12
-            val page = 1
-
-            coEvery {
-                searchRemoteDataSource.searchForTvShowsByCategoryId(categoryId, page)
-            } throws NetworkException.HttpLockedException("Resource locked")
-
-            assertThrows<NetworkException.HttpLockedException> {
-                repository.searchForTvShowByCategory(categoryId, page)
-            }
-        }
-    @Test
-    fun `searchForTvShowsByCategory should return data from data source if available`()=runTest {
-        //Given
-        coEvery { searchRemoteDataSource.searchForTvShowsByCategoryId(any(), any()) } returns Result.success(SearchTvShowRemoteMock)
-        //When
-        val result = repository.searchForTvShowByCategory(1, PAGE_NUMBER)
-        //Then
-        assertThat(result).isEqualTo(TvShowList)
-    }
-
-    @Test
-    fun `getUpComingMoviesByCategory should throw TimeoutException when API times out`() = runTest {
-        val categoryId = 34
-        val page = 1
-
-        coEvery {
-            searchRemoteDataSource.getUpComingMoviesByCategory(categoryId, page)
-        } throws NetworkException.TimeoutException("Request timed out")
-
-        assertThrows<NetworkException.TimeoutException> {
-            repository.getUpComingMoviesByCategory(categoryId, page)
         }
     }
 
@@ -553,7 +465,7 @@ class SearchRepositoryImplTest {
         private val SearchMoviesRemoteMock = ApiResponse(
             currentPage = PAGE_NUMBER,
             items = listOf(
-                SearchMovieRemote(
+                MovieRemote(
                     adult = false,
                     backdropPath = null,
                     genreIds = emptyList(),
