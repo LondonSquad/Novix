@@ -108,6 +108,7 @@
     <string name="no_data_until_now">No Data Yet</string>
     <string name="login_failed">Login failed. Please check your credentials.</string>
     <string name="guest_login_failed">Guest login failed.</string>
+    <string name="no_items_found">There is no items</string>
     <string name="my_account">My account</string>
     <string name="watching_history">Watching history</string>
     <string name="my_rating">My rating</string>
