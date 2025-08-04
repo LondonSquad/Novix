@@ -108,24 +108,9 @@ private fun AddEditListBottomSheetContent(
 ) {
     val interactionSourceUserName = remember { MutableInteractionSource() }
 
-    val titleText = when (editAddSheetState.sheetMode) {
-        ListSheetMode.ADD -> stringResource(R.string.add_new_list)
-        ListSheetMode.EDIT -> stringResource(R.string.edit_list)
-    }
-
-    val buttonText = when (editAddSheetState.sheetMode) {
-        ListSheetMode.ADD -> stringResource(R.string.add)
-        ListSheetMode.EDIT -> stringResource(R.string.save)
-    }
-
-    val isButtonEnabled = when (editAddSheetState.sheetMode) {
-        ListSheetMode.ADD -> !editAddSheetState.isSheetLoading &&
-                editAddSheetState.listName.text.trim().isNotEmpty()
-
-        ListSheetMode.EDIT -> !editAddSheetState.isSheetLoading &&
-                editAddSheetState.listName.text.trim().isNotEmpty() &&
-                editAddSheetState.listName.text.trim() != editAddSheetState.originalListName
-    }
+    val titleText = getTitleText(editAddSheetState.sheetMode)
+    val buttonText = getButtonText(editAddSheetState.sheetMode)
+    val isButtonEnabled = isButtonEnabled(editAddSheetState)
 
     Column(
         modifier = modifier.padding(horizontal = 16.dp),
@@ -190,6 +175,35 @@ private fun AddEditListBottomSheetContent(
             modifier = Modifier
                 .fillMaxWidth()
         )
+    }
+}
+
+@Composable
+private fun getTitleText(sheetMode: ListSheetMode): String {
+    return when (sheetMode) {
+        ListSheetMode.ADD -> stringResource(R.string.add_new_list)
+        ListSheetMode.EDIT -> stringResource(R.string.edit_list)
+    }
+}
+
+@Composable
+private fun getButtonText(sheetMode: ListSheetMode): String {
+    return when (sheetMode) {
+        ListSheetMode.ADD -> stringResource(R.string.add)
+        ListSheetMode.EDIT -> stringResource(R.string.save)
+    }
+}
+
+private fun isButtonEnabled(editAddSheetState: EditAddSheetState): Boolean {
+    val trimmedListName = editAddSheetState.listName.text.trim()
+    val isLoading = editAddSheetState.isSheetLoading
+    val isNameNotEmpty = trimmedListName.isNotEmpty()
+
+    return when (editAddSheetState.sheetMode) {
+        ListSheetMode.ADD -> !isLoading && isNameNotEmpty
+        ListSheetMode.EDIT -> !isLoading &&
+                isNameNotEmpty &&
+                trimmedListName != editAddSheetState.originalListName
     }
 }
 
