@@ -36,7 +36,6 @@ import com.london.data.repository.home.toprated.TopRatedMovieRepositoryImpl
 import com.london.data.repository.home.toprated.TopRatedTvSeriesRepositoryImpl
 import com.london.data.repository.home.trending.TrendingRepositoryImpl
 import com.london.data.repository.home.upcoming.UpComingRepositoryImpl
-import com.london.data.repository.popular.PopularRepositoryImpl
 import com.london.data.repository.rating.RatingRepositoryImpl
 import com.london.data.repository.recent.RecentSearchRepositoryImpl
 import com.london.data.repository.recent.RecentViewedRepositoryImpl
@@ -179,9 +178,15 @@ object RepositoryModule {
     @Provides
     @Singleton
     fun provideMovieDetailsRepository(
-        dataSource: MovieDetailsRemoteDataSource
+        dataSource: MovieDetailsRemoteDataSource,
+        reviewsRemoteDataSource: ReviewsRemoteDataSource,
+        authPreferences: AuthPreferences
     ): MovieDetailsRepository =
-        MovieDetailsRepositoryImpl(movieDetailsRemoteDataSource = dataSource)
+        MovieDetailsRepositoryImpl(
+            movieDetailsRemoteDataSource = dataSource,
+            reviewsRemoteDataSource = reviewsRemoteDataSource,
+            authPreferences = authPreferences
+        )
 
     @Provides
     @Singleton
