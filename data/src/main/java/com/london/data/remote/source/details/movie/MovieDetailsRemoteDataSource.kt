@@ -5,12 +5,12 @@ import com.london.data.remote.model.details.movie.model.moviecast.MovieCastRespo
 import com.london.data.remote.model.details.movie.model.moviedetails.AccountMovieStatesResponse
 import com.london.data.remote.model.details.movie.model.moviedetails.MovieDetailsResponse
 import com.london.data.remote.model.details.movie.model.movieimages.MovieImagesResponse
-import com.london.data.remote.model.search.model.SearchMovieRemote
+import com.london.data.remote.model.search.model.MovieRemote
 
 
 interface MovieDetailsRemoteDataSource {
     suspend fun getMovieDetails(movieId: Int): Result<MovieDetailsResponse>
-    suspend fun getSimilarMovies(movieId: Int): Result<ApiResponse<SearchMovieRemote>>
+    suspend fun getSimilarMovies(movieId: Int): Result<ApiResponse<MovieRemote>>
     suspend fun getMovieCast(movieId: Int): Result<MovieCastResponse>
     suspend fun getMovieImages(movieId: Int): Result<MovieImagesResponse>
     suspend fun getAccountMovieStates(

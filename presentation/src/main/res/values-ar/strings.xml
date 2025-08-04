@@ -111,4 +111,8 @@
     <string name="edit_list">تعديل المجموعة</string>
     <string name="save">حفظ</string>
     <string name="list_title">عنوان المجموعة</string>
+    <string name="no_items_found">لا يوجد محتوى</string>
+    <string name="saved_list_title">القوائم المحفوظة</string>
+    <string name="no_saved_list">لا توجد أي قوائم حتي الان، اضغط علي زر + لاضافة قائمة جديدة</string>
+    <string name="login_to_create_list">سجل دخول اولاً حتي تتمكن من استعراض او اضافة قوائم جديدة</string>
 </resources>
