@@ -73,7 +73,7 @@
     <string name="third_onboarding_title">Rate, save, and create your own lists.</string>
     <string name="third_onboarding_description">Rate movies, track your viewing history, and easily save your favorite lists.</string>
     <string name="welcome_title">Welcome to Novix</string>
-    <string name="welcome_description">Discover the world’s greatest movies and series. Search, watch, and save your favorites all in one place.</string>
+    <string name="welcome_description">Discover the world\'s greatest movies and series. Search, watch, and save your favorites all in one place.</string>
     <string name="skip">Skip</string>
     <string name="continue_as_guest">Continue as guest</string>
     <string name="don_t_have_an_account">Don\'t have an account?</string>
@@ -82,7 +82,7 @@
     <string name="app_icon">App Icon</string>
     <string name="password">Password</string>
     <string name="forgot_password">Forgot Password?</string>
-    <string name="username">Username</string>">
+    <string name="username">Username</string>
     <string name="upcoming">Upcoming</string>
     <string name="all">All</string>
     <string name="actors">Actors</string>
@@ -109,4 +109,9 @@
     <string name="login_failed">Login failed. Please check your credentials.</string>
     <string name="guest_login_failed">Guest login failed.</string>
     <string name="no_items_found">There is no items</string>
+    <string name="watching_history">Watching History</string>
+    <string name="top_rating">Top Rating</string>
+    <string name="no_content_found">No content found</string>
+    <string name="movies">Movies</string>
+    <string name="tv_shows">TV Shows</string>
 </resources>
