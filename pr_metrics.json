@@ -17226,5 +17226,33 @@
       "deletions": 0,
       "changed_files": 12
     }
+  },
+  {
+    "pr_number": 529,
+    "url": "https://github.com/LondonSquad/Novix/pull/529",
+    "title": "Feature watching history screen UI",
+    "opened_at": "2025-08-04T22:05:05Z",
+    "head_ref": "feature/watching-history-screen-ui",
+    "base_ref": "develop",
+    "creator": {
+      "login": "AsmaaKhaledGomaa",
+      "id": 117874933,
+      "url": "https://github.com/AsmaaKhaledGomaa"
+    },
+    "approvals": [],
+    "first_approved_at": null,
+    "time_to_first_approval_minutes": null,
+    "required_approvals_met_at": null,
+    "time_to_required_approvals_minutes": null,
+    "closed_at": null,
+    "merged_at": null,
+    "merged_by": null,
+    "week": "2025-W32",
+    "status": "pending",
+    "diff_stats": {
+      "additions": 302,
+      "deletions": 224,
+      "changed_files": 9
+    }
   }
 ]
