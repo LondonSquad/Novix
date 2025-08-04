@@ -73,6 +73,12 @@ object DataBaseModule {
 
     @Provides
     @Singleton
+    @Named("topRatedDao")
+    fun provideTopRatedDao(database: NovixDatabase) =
+        database.topRatedDao()
+
+    @Provides
+    @Singleton
     fun provideUpComingMoviesDao(database: NovixDatabase) =
         database.upComingSectionDao()
 }
