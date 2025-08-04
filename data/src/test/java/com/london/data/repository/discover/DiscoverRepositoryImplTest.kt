@@ -3,8 +3,8 @@ package com.london.data.repository.discover
 import com.google.common.truth.Truth.assertThat
 import com.london.data.remote.exception.NetworkException
 import com.london.data.remote.model.ApiResponse
-import com.london.data.remote.model.search.model.MovieRemote
-import com.london.data.remote.model.search.model.SearchTvShowRemote
+import com.london.data.remote.model.search.MovieRemote
+import com.london.data.remote.model.search.SearchTvShowRemote
 import com.london.data.remote.source.discover.DiscoverRemoteDataSource
 import com.london.domain.entity.Movie
 import com.london.domain.entity.PagedFetchResponse

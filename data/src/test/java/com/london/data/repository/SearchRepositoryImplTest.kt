@@ -11,9 +11,10 @@ import com.london.data.local.model.search.SearchTvShowLocal
 import com.london.data.local.source.LocalDataSource
 import com.london.data.remote.exception.NetworkException
 import com.london.data.remote.model.ApiResponse
-import com.london.data.remote.model.search.model.MovieRemote
-import com.london.data.remote.model.search.model.SearchTvShowRemote
+import com.london.data.remote.model.search.MovieRemote
+import com.london.data.remote.model.search.SearchTvShowRemote
 import com.london.data.remote.source.search.SearchRemoteDataSource
+import com.london.data.repository.search.SearchRepositoryImpl
 import com.london.data.utils.CrashReporter
 import com.london.data.utils.fetchAndSync
 import com.london.domain.entity.Actor
