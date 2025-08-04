@@ -16826,18 +16826,9 @@
       "id": 90211730,
       "url": "https://github.com/AbdoMagdey24"
     },
-    "approvals": [
-      {
-        "reviewer": {
-          "id": 154278495,
-          "login": "ahmeddsamii",
-          "url": "https://github.com/ahmeddsamii"
-        },
-        "submitted_at": "2025-08-04T11:07:33Z"
-      }
-    ],
-    "first_approved_at": "2025-08-04T11:07:33Z",
-    "time_to_first_approval_minutes": 1016.8333333333334,
+    "approvals": [],
+    "first_approved_at": null,
+    "time_to_first_approval_minutes": null,
     "required_approvals_met_at": null,
     "time_to_required_approvals_minutes": null,
     "closed_at": null,
@@ -16846,7 +16837,7 @@
     "week": "2025-W31",
     "status": "pending",
     "diff_stats": {
-      "additions": 671,
+      "additions": 668,
       "deletions": 9,
       "changed_files": 20
     }
