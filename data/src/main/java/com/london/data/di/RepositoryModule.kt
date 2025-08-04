@@ -52,7 +52,6 @@ import com.london.domain.entity.recent.RecentSearch
 import com.london.domain.entity.recent.RecentViewed
 import com.london.domain.repository.ActorRepository
 import com.london.domain.repository.AuthRepository
-import com.london.domain.repository.DetailsRepository
 import com.london.domain.repository.MovieDetailsRepository
 import com.london.domain.repository.MovieVideoProviderRepository
 import com.london.domain.repository.PopularRepository
@@ -60,6 +59,7 @@ import com.london.domain.repository.RecentRepository
 import com.london.domain.repository.RecentWatchedRepository
 import com.london.domain.repository.SearchRepository
 import com.london.domain.repository.TrendingRepository
+import com.london.domain.repository.TvShowRepository
 import com.london.domain.repository.TvShowVideoProviderRepository
 import com.london.domain.repository.UpComingRepository
 import com.london.domain.repository.toprated.TopRatedMovieRepository
@@ -168,7 +168,7 @@ object RepositoryModule {
     fun provideDetailsRepository(
         tvShowDetailsRemoteDataSource: TvShowDetailsRemoteDataSource,
         reviewsRemoteDataSource: ReviewsRemoteDataSource
-    ): DetailsRepository = TvShowRepositoryImpl(
+    ): TvShowRepository = TvShowRepositoryImpl(
         tvShowDetailsRemoteDataSource = tvShowDetailsRemoteDataSource,
         reviewsRemoteDataSource = reviewsRemoteDataSource
     )

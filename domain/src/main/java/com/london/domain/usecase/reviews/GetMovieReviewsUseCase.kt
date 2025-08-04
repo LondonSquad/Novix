@@ -1,11 +1,11 @@
 package com.london.domain.usecase.reviews
 
-import com.london.domain.repository.DetailsRepository
+import com.london.domain.repository.TvShowRepository
 import javax.inject.Inject
 
 class GetMovieReviewsUseCase @Inject constructor(
-    private val detailsRepository: DetailsRepository
+    private val tvShowRepository: TvShowRepository
 ) {
     suspend fun invoke(movieId: Int, pageNumber: Int) =
-        detailsRepository.getMovieReviews(movieId, pageNumber)
+        tvShowRepository.getMovieReviews(movieId, pageNumber)
 }

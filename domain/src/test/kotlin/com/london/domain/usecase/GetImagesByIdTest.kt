@@ -1,10 +1,10 @@
 package com.london.domain.usecase
 
 import com.google.common.truth.Truth.assertThat
-import com.london.domain.error.GetImagesByIdFailedException
 import com.london.domain.entity.tvshowdetails.ImageItemEntity
 import com.london.domain.entity.tvshowdetails.TvShowImagesEntity
-import com.london.domain.repository.DetailsRepository
+import com.london.domain.error.GetImagesByIdFailedException
+import com.london.domain.repository.TvShowRepository
 import io.mockk.coEvery
 import io.mockk.mockk
 import kotlinx.coroutines.test.runTest
@@ -13,19 +13,19 @@ import org.junit.Test
 import org.junit.jupiter.api.assertThrows
 
 class GetImagesByIdTest {
-    lateinit var detailsRepository: DetailsRepository
+    lateinit var tvShowRepository: TvShowRepository
     lateinit var getImagesById: GetImagesById
 
     @Before
     fun setUp() {
-        detailsRepository = mockk()
-        getImagesById = GetImagesById(detailsRepository)
+        tvShowRepository = mockk()
+        getImagesById = GetImagesById(tvShowRepository)
     }
 
     @Test
     fun `should return backdrops when backdrops are available`() = runTest {
         // Given
-        coEvery { detailsRepository.getImagesTvShowById(TV_SHOW_ID) } returns mockTvShowImagesWithBackdrops
+        coEvery { tvShowRepository.getImagesTvShowById(TV_SHOW_ID) } returns mockTvShowImagesWithBackdrops
         // When
         val result = getImagesById(TV_SHOW_ID)
         // Then
@@ -35,7 +35,7 @@ class GetImagesByIdTest {
     @Test
     fun `should return posters when backdrops are empty but posters are available`() = runTest {
         // Given
-        coEvery { detailsRepository.getImagesTvShowById(TV_SHOW_ID) } returns mockTvShowImagesWithPostersOnly
+        coEvery { tvShowRepository.getImagesTvShowById(TV_SHOW_ID) } returns mockTvShowImagesWithPostersOnly
         // When
         val result = getImagesById(TV_SHOW_ID)
         // Then
@@ -45,7 +45,7 @@ class GetImagesByIdTest {
     @Test
     fun `should return logos when backdrops and posters are empty but logos are available`() = runTest {
         // Given
-        coEvery { detailsRepository.getImagesTvShowById(TV_SHOW_ID) } returns mockTvShowImagesWithLogosOnly
+        coEvery { tvShowRepository.getImagesTvShowById(TV_SHOW_ID) } returns mockTvShowImagesWithLogosOnly
         // When
         val result = getImagesById(TV_SHOW_ID)
         // Then
@@ -55,7 +55,7 @@ class GetImagesByIdTest {
     @Test
     fun `should return empty list when all image types are empty`() = runTest {
         // Given
-        coEvery { detailsRepository.getImagesTvShowById(TV_SHOW_ID) } returns mockTvShowImagesEmpty
+        coEvery { tvShowRepository.getImagesTvShowById(TV_SHOW_ID) } returns mockTvShowImagesEmpty
         // When
         val result = getImagesById(TV_SHOW_ID)
         // Then
@@ -65,7 +65,7 @@ class GetImagesByIdTest {
     @Test
     fun `should limit backdrops to 10 items when more than 10 are available`() = runTest {
         // Given
-        coEvery { detailsRepository.getImagesTvShowById(TV_SHOW_ID) } returns mockTvShowImagesWithManyBackdrops
+        coEvery { tvShowRepository.getImagesTvShowById(TV_SHOW_ID) } returns mockTvShowImagesWithManyBackdrops
         // When
         val result = getImagesById(TV_SHOW_ID)
         // Then
@@ -76,7 +76,7 @@ class GetImagesByIdTest {
     @Test
     fun `should throw exception when repository throws exception`() = runTest {
         // Given
-        coEvery { detailsRepository.getImagesTvShowById(TV_SHOW_ID) } throws GetImagesByIdFailedException()
+        coEvery { tvShowRepository.getImagesTvShowById(TV_SHOW_ID) } throws GetImagesByIdFailedException()
         // When & Then
         assertThrows<GetImagesByIdFailedException> {
             getImagesById(TV_SHOW_ID)

@@ -17,13 +17,13 @@ import com.london.domain.entity.tvshowdetails.TvShowDetailsEntity
 import com.london.domain.entity.tvshowdetails.TvShowImagesEntity
 import com.london.domain.entity.tvshowdetails.episode.TvShowEpisodeByIdEntity
 import com.london.domain.entity.tvshowdetails.episode.TvShowEpisodesEntity
-import com.london.domain.repository.DetailsRepository
+import com.london.domain.repository.TvShowRepository
 import javax.inject.Inject
 
 class TvShowRepositoryImpl @Inject constructor(
     private val tvShowDetailsRemoteDataSource: TvShowDetailsRemoteDataSource,
     private val reviewsRemoteDataSource: ReviewsRemoteDataSource
-) : DetailsRepository {
+) : TvShowRepository {
     override suspend fun getTvShowDetailsById(
         id: Int,
     ): TvShowDetailsEntity = tvShowDetailsRemoteDataSource.getTvShowDetailsById(
@@ -63,23 +63,6 @@ class TvShowRepositoryImpl @Inject constructor(
         tvShowDetailsRemoteDataSource.getEpisodeVideos(
             seriesId = seriesId, seasonNumber = seasonNumber, episodeNumber = episodeNumber
         ).getOrThrow().results?.map { it.key.asYoutubeUrlOrEmpty() }.orEmpty()
-
-
-    override suspend fun getMovieReviews(
-        movieId: Int, pageNumber: Int
-    ): PagedFetchResponse<ReviewEntity> = fetchAndSync(
-        networkBlock = {
-            reviewsRemoteDataSource.getMovieReviews(
-                movieId, pageNumber
-            ).getOrThrow().toReviewEntity()
-        }).run {
-        PagedFetchResponse(
-            currentPage = currentPage,
-            items = items,
-            totalPages = totalPages,
-            totalItems = totalItems
-        )
-    }
 
     override suspend fun getTvShowReviews(
         tvShowId: Int, pageNumber: Int

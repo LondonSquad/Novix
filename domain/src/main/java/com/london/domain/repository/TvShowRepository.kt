@@ -8,7 +8,7 @@ import com.london.domain.entity.tvshowdetails.TvShowImagesEntity
 import com.london.domain.entity.tvshowdetails.episode.TvShowEpisodeByIdEntity
 import com.london.domain.entity.tvshowdetails.episode.TvShowEpisodesEntity
 
-interface DetailsRepository {
+interface TvShowRepository {
     suspend fun getTvShowDetailsById(id: Int): TvShowDetailsEntity
     suspend fun getCastTvShowById(id: Int): TvShowCastEntity
     suspend fun getImagesTvShowById(id: Int): TvShowImagesEntity
@@ -25,6 +25,5 @@ interface DetailsRepository {
 
     suspend fun getEpisodeVideos(seriesId: Int, seasonNumber: Int, episodeNumber: Int): List<String>
 
-    suspend fun getMovieReviews(movieId: Int, pageNumber: Int): PagedFetchResponse<ReviewEntity>
     suspend fun getTvShowReviews(tvShowId: Int, pageNumber: Int): PagedFetchResponse<ReviewEntity>
 }
