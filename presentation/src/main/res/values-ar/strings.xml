@@ -112,4 +112,14 @@
     <string name="saved_list_title">القوائم المحفوظة</string>
     <string name="no_saved_list">لا توجد أي قوائم حتي الان، اضغط علي زر + لاضافة قائمة جديدة</string>
     <string name="login_to_create_list">سجل دخول اولاً حتي تتمكن من استعراض او اضافة قوائم جديدة</string>
+    <string name="my_account">حسابي</string>
+    <string name="watching_history">سجل المشاهدة</string>
+    <string name="my_rating">تقييمي</string>
+    <string name="content_restriction">تقييد المحتوى</string>
+    <string name="change_password">تغيير كلمة المرور</string>
+    <string name="appearance">المظهر</string>
+    <string name="language">اللغة</string>
+    <string name="user_profile">الملف الشخصي</string>
+    <string name="logout">تسجيل خروج</string>
+    <string name="please_login_to_access">يرجى تسجيل الدخول للوصول إلى تفاصيل حسابك والميزات الأخرى!</string>
 </resources>
