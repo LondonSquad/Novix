@@ -1,7 +1,7 @@
 package com.london.data.local.source.home.toprated
 
 import com.london.data.local.database.dao.home.toprated.TopRatedDao
-import com.london.data.local.model.home.TopRatedLocal
+import com.london.data.local.model.home.topRated.TopRatedLocal
 import com.london.data.local.source.home.HomeLocalDataSource
 import com.london.data.local.utils.executeInsert
 import com.london.data.utils.isDayExpired

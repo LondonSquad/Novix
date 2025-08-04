@@ -1,6 +1,6 @@
 package com.london.data.mapper.toprated
 
-import com.london.data.local.model.home.TopRatedLocal
+import com.london.data.local.model.home.topRated.TopRatedLocal
 import com.london.data.remote.model.toprated.TopRatedMovieRemote
 import com.london.data.utils.asImageUrlOrEmpty
 import com.london.data.utils.orZero

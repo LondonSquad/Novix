@@ -1,6 +1,6 @@
 package com.london.data.repository.toprated
 
-import com.london.data.local.model.home.TopRatedLocal
+import com.london.data.local.model.home.topRated.TopRatedLocal
 import com.london.data.local.source.home.HomeLocalDataSource
 import com.london.data.mapper.toprated.toEntity
 import com.london.data.mapper.toprated.toLocal

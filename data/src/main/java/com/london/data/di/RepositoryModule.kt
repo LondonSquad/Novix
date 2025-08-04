@@ -1,8 +1,8 @@
 package com.london.data.di
 
 import com.london.data.local.database.dao.search.GenreInterestDao
-import com.london.data.local.model.home.TopRatedLocal
 import com.london.data.local.model.home.popular.PopularSectionLocal
+import com.london.data.local.model.home.topRated.TopRatedLocal
 import com.london.data.local.model.recent.search.RecentSearchLocal
 import com.london.data.local.model.recent.viewed.RecentViewedLocal
 import com.london.data.local.model.recent.watched.RecentWatchedMovieLocal
