@@ -17136,5 +17136,33 @@
       "deletions": 26,
       "changed_files": 11
     }
+  },
+  {
+    "pr_number": 523,
+    "url": "https://github.com/LondonSquad/Novix/pull/523",
+    "title": "refactor: refactor top bar padding",
+    "opened_at": "2025-08-04T17:58:45Z",
+    "head_ref": "refactor/top-bar-padding",
+    "base_ref": "develop",
+    "creator": {
+      "login": "AbdoMagdey24",
+      "id": 90211730,
+      "url": "https://github.com/AbdoMagdey24"
+    },
+    "approvals": [],
+    "first_approved_at": null,
+    "time_to_first_approval_minutes": null,
+    "required_approvals_met_at": null,
+    "time_to_required_approvals_minutes": null,
+    "closed_at": null,
+    "merged_at": null,
+    "merged_by": null,
+    "week": "2025-W32",
+    "status": "pending",
+    "diff_stats": {
+      "additions": 12,
+      "deletions": 3,
+      "changed_files": 3
+    }
   }
 ]
