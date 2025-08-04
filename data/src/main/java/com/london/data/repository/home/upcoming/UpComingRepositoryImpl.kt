@@ -1,8 +1,8 @@
 package com.london.data.repository.home.upcoming
 
 import com.london.data.local.source.home.upcoming.UpComingLocalDataSource
-import com.london.data.mapper.toEntity
-import com.london.data.mapper.toLocal
+import com.london.data.mapper.search.toEntity
+import com.london.data.mapper.search.toLocal
 import com.london.data.remote.source.home.upcoming.UpComingRemoteDataSource
 import com.london.data.utils.FirebaseCrashReporter
 import com.london.data.utils.fetchAndSync

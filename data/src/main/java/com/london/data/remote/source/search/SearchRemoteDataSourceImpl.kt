@@ -3,9 +3,9 @@
 package com.london.data.remote.source.search
 
 import com.london.data.remote.model.ApiResponse
-import com.london.data.remote.model.search.model.MovieRemote
-import com.london.data.remote.model.search.model.SearchTvShowRemote
-import com.london.data.remote.model.search.model.searchactormodel.SearchActorRemote
+import com.london.data.remote.model.search.MovieRemote
+import com.london.data.remote.model.search.SearchTvShowRemote
+import com.london.data.remote.model.search.searchactor.SearchActorRemote
 import com.london.data.remote.service.search.SearchApiService
 import com.london.data.remote.source.base.BaseRemoteDatasource
 import com.london.domain.KoverIgnore
