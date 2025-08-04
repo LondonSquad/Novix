@@ -1,7 +1,8 @@
-package com.london.data.local.source.home.popular
+package com.london.data.local.source.home.toprated
 
-import com.london.data.local.database.dao.home.popular.TopRatedDao
+import com.london.data.local.database.dao.home.toprated.TopRatedDao
 import com.london.data.local.model.home.TopRatedLocal
+import com.london.data.local.source.home.HomeLocalDataSource
 import com.london.data.local.utils.executeInsert
 import com.london.data.utils.isDayExpired
 import kotlinx.coroutines.CoroutineScope
@@ -14,12 +15,7 @@ class TopRatedDataSourceImpl @Inject constructor (
 ) : HomeLocalDataSource<TopRatedLocal> {
 
     init {
-        CoroutineScope(Dispatchers.IO).launch {
-            topRatedDao.getAll().forEach { popularLocal ->
-                if (popularLocal.date.isDayExpired())
-                    topRatedDao.deleteAll()
-            }
-        }
+        deleteExpired()
     }
 
     override suspend fun insert(item: TopRatedLocal) =
@@ -37,5 +33,14 @@ class TopRatedDataSourceImpl @Inject constructor (
 
     override suspend fun getByDate(date: Long): TopRatedLocal =
         topRatedDao.getByDate(date)
+    
+    private fun deleteExpired() {
+        CoroutineScope(Dispatchers.IO).launch {
+            topRatedDao.getAll().forEach { popularLocal ->
+                if (popularLocal.date.isDayExpired())
+                    topRatedDao.deleteAll()
+            }
+        }
+    }
 }
 

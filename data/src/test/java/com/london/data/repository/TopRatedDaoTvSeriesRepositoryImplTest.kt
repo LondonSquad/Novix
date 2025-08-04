@@ -2,7 +2,7 @@ package com.london.data.repository
 
 import com.google.common.truth.Truth.assertThat
 import com.london.data.local.model.home.TopRatedLocal
-import com.london.data.local.source.home.popular.HomeLocalDataSource
+import com.london.data.local.source.home.HomeLocalDataSource
 import com.london.data.mapper.toprated.toEntity
 import com.london.data.remote.model.ApiResponse
 import com.london.data.remote.model.toprated.TopRatedTvSeriesRemote

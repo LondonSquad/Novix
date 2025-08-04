@@ -1,4 +1,4 @@
-package com.london.data.local.source.home.popular
+package com.london.data.local.source.home
 
 interface HomeLocalDataSource<T> {
     suspend fun insert(item: T)
