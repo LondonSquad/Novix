@@ -36,18 +36,17 @@ import com.london.designsystem.component.button.PrimaryButton
 import com.london.designsystem.component.rememberModalBottomSheetState
 import com.london.designsystem.theme.NovixTheme
 import com.london.presentation.R
-import com.london.presentation.feature.list.savedlist.EditAddSheetState
+import com.london.presentation.feature.list.savedlist.AddSheetState
 import com.london.presentation.feature.list.savedlist.ListContract
-import com.london.presentation.feature.list.savedlist.ListSheetMode
 import com.london.presentation.feature.list.savedlist.ListUiState
 import com.london.presentation.feature.list.savedlist.ListViewModel
 import com.london.presentation.feature.list.savedlist.defaultContractList
 import kotlinx.coroutines.launch
 
 @Composable
-fun AddEditListBottomSheet(
+fun AddListBottomSheet(
     modifier: Modifier = Modifier,
-    editAddInteractions: ListContract = hiltViewModel<ListViewModel>(),
+    addListInteractions: ListContract = hiltViewModel<ListViewModel>(),
     sheetState: SheetState = rememberModalBottomSheetState(),
     listUiState: ListUiState,
 ) {
@@ -62,7 +61,7 @@ fun AddEditListBottomSheet(
     if (listUiState.isSheetVisible) {
         ModalBottomSheet(
             onDismissRequest = {
-                editAddInteractions.onEditAddListSheetDismiss()
+                addListInteractions.onAddListSheetDismiss()
             },
             containerColor = NovixTheme.colors.surface,
             state = sheetState,
@@ -74,23 +73,23 @@ fun AddEditListBottomSheet(
                     .heightIn(max = LocalWindowInfo.current.containerSize.height.dp * 0.35f)
                     .padding(bottom = 24.dp)
             ) {
-                AddEditListBottomSheetContent(
+                AddListBottomSheetContent(
                     modifier = modifier,
-                    editInteractions = editAddInteractions,
-                    editAddSheetState = listUiState.editAddSheetState,
+                    addInteractions = addListInteractions,
+                    addSheetState = listUiState.addListSheetState,
                     onCloseClicked = {
                         if (!listUiState.isLoading) {
                             coroutineScope.launch {
                                 sheetState.hide()
                             }.invokeOnCompletion {
                                 if (!sheetState.isVisible) {
-                                    editAddInteractions.onEditAddListSheetDismiss()
+                                    addListInteractions.onAddListSheetDismiss()
                                 }
                             }
                         }
                     },
-                    onActionClicked = {
-                        editAddInteractions.onSaveEdit(listUiState.editAddSheetState.listName)
+                    onAddClicked = {
+                        addListInteractions.onAddList(listUiState.addListSheetState.listName)
                     }
                 )
             }
@@ -99,18 +98,16 @@ fun AddEditListBottomSheet(
 }
 
 @Composable
-private fun AddEditListBottomSheetContent(
+private fun AddListBottomSheetContent(
     modifier: Modifier = Modifier,
-    editInteractions: ListContract,
+    addInteractions: ListContract,
     onCloseClicked: () -> Unit,
-    onActionClicked: () -> Unit,
-    editAddSheetState: EditAddSheetState,
+    onAddClicked: () -> Unit,
+    addSheetState: AddSheetState,
 ) {
     val interactionSourceUserName = remember { MutableInteractionSource() }
 
-    val titleText = getTitleText(editAddSheetState.sheetMode)
-    val buttonText = getButtonText(editAddSheetState.sheetMode)
-    val isButtonEnabled = isButtonEnabled(editAddSheetState)
+    val isButtonEnabled = isButtonEnabled(addSheetState)
 
     Column(
         modifier = modifier.padding(horizontal = 16.dp),
@@ -123,7 +120,7 @@ private fun AddEditListBottomSheetContent(
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
             Text(
-                text = titleText,
+                text = stringResource(R.string.add_new_list),
                 style = NovixTheme.typography.title.large,
                 color = NovixTheme.colors.title,
             )
@@ -138,7 +135,7 @@ private fun AddEditListBottomSheetContent(
                         shape = RoundedCornerShape(8.dp)
                     )
                     .clickable(
-                        enabled = !editAddSheetState.isSheetLoading,
+                        enabled = !addSheetState.isSheetLoading,
                         onClick = onCloseClicked
                     )
                     .padding(6.dp),
@@ -149,22 +146,22 @@ private fun AddEditListBottomSheetContent(
         }
 
         OutlinedTextField(
-            value = editAddSheetState.listName,
+            value = addSheetState.listName,
             interactionSource = interactionSourceUserName,
-            onValueChange = editInteractions::onListNameChanged,
+            onValueChange = addInteractions::onListNameChanged,
             label = stringResource(R.string.list_title),
-            leadingIcon = painterResource(R.drawable.ic_edit_list),
-            isError = editAddSheetState.errorMessage != null,
-            enabled = !editAddSheetState.isSheetLoading
+            leadingIcon = painterResource(R.drawable.ic_save_list),
+            isError = addSheetState.errorMessage != null,
+            enabled = !addSheetState.isSheetLoading
         )
 
         PrimaryButton(
-            text = buttonText,
+            text = stringResource(R.string.add),
             hasLabel = true,
             hasIcon = false,
-            isLoading = editAddSheetState.isSheetLoading,
+            isLoading = addSheetState.isSheetLoading,
             icon = null,
-            onClick = onActionClicked,
+            onClick = onAddClicked,
             enabled = isButtonEnabled,
             modifier = Modifier
                 .fillMaxWidth()
@@ -172,60 +169,23 @@ private fun AddEditListBottomSheetContent(
     }
 }
 
-@Composable
-private fun getTitleText(sheetMode: ListSheetMode): String {
-    return when (sheetMode) {
-        ListSheetMode.ADD -> stringResource(R.string.add_new_list)
-        ListSheetMode.EDIT -> stringResource(R.string.edit_list)
-    }
-}
-
-@Composable
-private fun getButtonText(sheetMode: ListSheetMode): String {
-    return when (sheetMode) {
-        ListSheetMode.ADD -> stringResource(R.string.add)
-        ListSheetMode.EDIT -> stringResource(R.string.save)
-    }
-}
-
-private fun isButtonEnabled(editAddSheetState: EditAddSheetState): Boolean {
-    val trimmedListName = editAddSheetState.listName.text.trim()
-    val isLoading = editAddSheetState.isSheetLoading
+private fun isButtonEnabled(addSheetState: AddSheetState): Boolean {
+    val trimmedListName = addSheetState.listName.text.trim()
+    val isLoading = addSheetState.isSheetLoading
     val isNameNotEmpty = trimmedListName.isNotEmpty()
 
-    return when (editAddSheetState.sheetMode) {
-        ListSheetMode.ADD -> !isLoading && isNameNotEmpty
-        ListSheetMode.EDIT -> !isLoading &&
-                isNameNotEmpty &&
-                trimmedListName != editAddSheetState.originalListName
-    }
+    return !isLoading && isNameNotEmpty
 }
 
 @Composable
-@Preview(name = "Add Mode")
+@Preview
 fun PreviewAddMode() {
-    AddEditListBottomSheetContent(
-        editAddSheetState = EditAddSheetState(
+    AddListBottomSheetContent(
+        addSheetState = AddSheetState(
             listName = TextFieldValue(""),
-            sheetMode = ListSheetMode.ADD
         ),
-        onActionClicked = {},
+        onAddClicked = {},
         onCloseClicked = {},
-        editInteractions = defaultContractList()
-    )
-}
-
-@Composable
-@Preview(name = "Edit Mode")
-fun PreviewEditMode() {
-    AddEditListBottomSheetContent(
-        editAddSheetState = EditAddSheetState(
-            listName = TextFieldValue("My Movie List"),
-            originalListName = "My Movie List",
-            sheetMode = ListSheetMode.EDIT
-        ),
-        onActionClicked = {},
-        onCloseClicked = {},
-        editInteractions = defaultContractList()
+        addInteractions = defaultContractList()
     )
 }

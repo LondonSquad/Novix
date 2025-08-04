@@ -33,11 +33,11 @@ class ListViewModel @Inject constructor() :
         /*TODO*/
     }
 
-    override fun onEditAddListSheetDismiss() {
-        /*TODO*/
+    override fun onAddList(listName: TextFieldValue) {
+        TODO("Not yet implemented")
     }
 
-    override fun onSaveEdit(listName: TextFieldValue) {
+    override fun onAddListSheetDismiss() {
         /*TODO*/
     }
 
@@ -53,9 +53,6 @@ class ListViewModel @Inject constructor() :
         /*TODO*/
     }
 
-    override fun showEditListSheet(listId: Int, currentName: String, mediaType: MediaType) {
-        /*TODO*/
-    }
 
     private fun dummyItems(): Flow<PagingData<ListItemUi>> {
         val list =  //emptyList<SavedListItemUi>()

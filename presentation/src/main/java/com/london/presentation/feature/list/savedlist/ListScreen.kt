@@ -62,7 +62,6 @@ fun ListScreen(
         when (currentEffect) {
             is ListEffect.NavigateToDetails -> onNavigateToDetails(currentEffect.id)
             ListEffect.ShowAddListSheet -> TODO()
-            is ListEffect.ShowEditListSheet -> TODO()
         }
     }
 

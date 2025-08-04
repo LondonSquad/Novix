@@ -14,20 +14,14 @@ data class ListUiState(
     val items: Flow<PagingData<ListItemUi>> = flow {},
     val isSheetVisible: Boolean = false,
     val errorMessage: String? = null,
-    val editAddSheetState: EditAddSheetState = EditAddSheetState(),
+    val addListSheetState: AddSheetState = AddSheetState(),
 )
 
-data class EditAddSheetState(
+data class AddSheetState(
     val listName: TextFieldValue = TextFieldValue(""),
     val originalListName: String = "",
     val listId: Int? = null,
-    val sheetMode: ListSheetMode = ListSheetMode.ADD,
     val mediaType: MediaType = MediaType.Movie,
     val isSheetLoading: Boolean = false,
     val errorMessage: String? = null,
 )
-
-enum class ListSheetMode {
-    ADD,
-    EDIT
-}
