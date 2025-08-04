@@ -17070,11 +17070,11 @@
     "time_to_first_approval_minutes": 241.86666666666667,
     "required_approvals_met_at": null,
     "time_to_required_approvals_minutes": null,
-    "closed_at": null,
+    "closed_at": "2025-08-04T19:48:35Z",
     "merged_at": null,
     "merged_by": null,
     "week": "2025-W32",
-    "status": "pending",
+    "status": "closed",
     "diff_stats": {
       "additions": 604,
       "deletions": 6,
