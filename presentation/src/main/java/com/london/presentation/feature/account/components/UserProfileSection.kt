@@ -2,6 +2,7 @@ package com.london.presentation.feature.account.components
 
 import Dropdown
 import DropdownItem
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -79,10 +80,9 @@ private fun UserProfileIcon() {
             ),
         contentAlignment = Alignment.Center
     ) {
-        Icon(
+        Image(
             painter = painterResource(dsR.drawable.user),
             contentDescription = stringResource(R.string.user_profile),
-            tint = NovixTheme.colors.hint,
             modifier = Modifier.size(28.dp)
         )
     }
@@ -95,10 +95,9 @@ private fun UserMenuDropdown(
     onLogoutClick: () -> Unit
 ) {
     Box {
-        Icon(
+        Image(
             painter = painterResource(R.drawable.more_vertical),
             contentDescription = "More options",
-            tint = NovixTheme.colors.body,
             modifier = Modifier
                 .size(24.dp)
                 .clickable(
@@ -128,7 +127,6 @@ private fun UserMenuDropdown(
 private fun LogoutMenuItem() {
     Row(
         verticalAlignment = Alignment.CenterVertically,
-        modifier = Modifier.padding(8.dp)
     ) {
         Icon(
             painter = painterResource(R.drawable.logout),
