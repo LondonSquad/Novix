@@ -16900,9 +16900,18 @@
       "id": 81706918,
       "url": "https://github.com/karimdeabes"
     },
-    "approvals": [],
-    "first_approved_at": null,
-    "time_to_first_approval_minutes": null,
+    "approvals": [
+      {
+        "reviewer": {
+          "id": 43588217,
+          "login": "yusufnasserdev",
+          "url": "https://github.com/yusufnasserdev"
+        },
+        "submitted_at": "2025-08-04T07:58:49Z"
+      }
+    ],
+    "first_approved_at": "2025-08-04T07:58:49Z",
+    "time_to_first_approval_minutes": 750.1333333333333,
     "required_approvals_met_at": null,
     "time_to_required_approvals_minutes": null,
     "closed_at": null,
