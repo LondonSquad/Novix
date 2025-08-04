@@ -5,8 +5,7 @@ enum class AppLanguage(val code: String) {
     ARABIC("ar");
 
     companion object {
-        fun fromCode(code: String): AppLanguage {
-            return AppLanguage.entries.find { it.code == code } ?: ENGLISH
-        }
+        fun fromCode(languageCode: String): AppLanguage =
+            AppLanguage.entries.find { it.code == languageCode } ?: ENGLISH
     }
 }
