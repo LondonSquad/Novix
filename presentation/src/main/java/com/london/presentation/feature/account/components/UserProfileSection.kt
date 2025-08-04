@@ -80,10 +80,11 @@ private fun UserProfileIcon() {
             ),
         contentAlignment = Alignment.Center
     ) {
-        Image(
+        Icon(
             painter = painterResource(dsR.drawable.user),
             contentDescription = stringResource(R.string.user_profile),
-            modifier = Modifier.size(28.dp)
+            modifier = Modifier.size(28.dp),
+            tint = NovixTheme.colors.title
         )
     }
 }
