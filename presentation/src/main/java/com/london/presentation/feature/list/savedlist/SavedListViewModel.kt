@@ -32,14 +32,14 @@ class SavedListViewModel @Inject constructor() :
     }
 
     private fun dummyItems(): Flow<PagingData<SavedListItemUi>> {
-        val list =  emptyList<SavedListItemUi>()
-//            List(10) { index ->
-//                SavedListItemUi(
-//                    id = index,
-//                    title = "Dummy List #$index",
-//                    count = (1..10).random()
-//                )
-//            }
+        val list =  //emptyList<SavedListItemUi>()
+            List(5) { index ->
+                SavedListItemUi(
+                    id = index,
+                    title = "Dummy List #$index",
+                    count = (1..10).random()
+                )
+            }
         return flowOf(PagingData.from(list))
     }
 

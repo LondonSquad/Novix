@@ -12,11 +12,12 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
@@ -82,14 +83,22 @@ private fun ScreenScaffold(
             .background(NovixTheme.colors.surface)
     ) {
         TopBar(
+            title = stringResource(titleRes),
             modifier = Modifier
                 .statusBarsPadding()
-                .height(56.dp)
-                .padding(top = 12.dp),
-            title = stringResource(titleRes),
+                .heightIn(56.dp)
+                   .padding(top = 12.dp)
+                  .padding(horizontal = 4.dp)
+                .background(NovixTheme.colors.hint)
+
+
         )
 
-        Box(modifier = Modifier.fillMaxSize()) {
+        Box(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(top = 8.dp)
+        ) {
             content()
 
             if (showFab && onFabClick != null) {
@@ -139,17 +148,16 @@ private fun Content(
                     .padding(horizontal = 16.dp),
                 verticalArrangement = Arrangement.spacedBy(8.dp)
             ) {
-                items(pagingItems.itemCount) { index ->
-                    pagingItems[index]?.let { item ->
-                        SavedListItemRow(
-                            itemUi = item,
-                            onCountClick = contract::onListClick
-                        )
-                    }
+                items(pagingItems.itemSnapshotList.items) { item ->
+                    SavedListItemRow(
+                        itemUi = item,
+                        onCountClick = contract::onListClick
+                    )
                 }
             }
         }
     }
+
 }
 
 @Composable
