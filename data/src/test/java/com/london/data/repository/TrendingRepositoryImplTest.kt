@@ -1,9 +1,9 @@
 package com.london.data.repository
 
 import com.london.data.remote.model.ApiResponse
-import com.london.data.remote.model.home.model.trending.TrendingResponse
+import com.london.data.remote.model.home.trending.TrendingResponse
 import com.london.data.remote.source.home.trending.TrendingRemoteDataSource
-import com.london.data.repository.trending.TrendingRepositoryImpl
+import com.london.data.repository.home.trending.TrendingRepositoryImpl
 import io.mockk.coEvery
 import io.mockk.mockk
 import kotlinx.coroutines.test.runTest

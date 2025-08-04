@@ -3,8 +3,8 @@
 package com.london.data.remote.source.discover
 
 import com.london.data.remote.model.ApiResponse
-import com.london.data.remote.model.search.model.MovieRemote
-import com.london.data.remote.model.search.model.SearchTvShowRemote
+import com.london.data.remote.model.search.MovieRemote
+import com.london.data.remote.model.search.SearchTvShowRemote
 import com.london.data.remote.service.discover.DiscoverApiService
 import com.london.data.remote.source.base.BaseRemoteDatasource
 import com.london.domain.KoverIgnore
