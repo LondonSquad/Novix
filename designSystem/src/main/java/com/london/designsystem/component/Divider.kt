@@ -24,15 +24,3 @@ fun Divider(
             .background(color)
     )
 }
-
-@Composable
-fun SpacerDivider(
-    modifier: Modifier = Modifier,
-    thickness: Dp = 16.dp
-) {
-    Box(
-        modifier = modifier
-            .fillMaxWidth()
-            .height(thickness)
-    )
-}
