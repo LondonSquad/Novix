@@ -8,20 +8,13 @@ import com.london.data.local.database.dao.recent.search.RecentSearchDao
 import com.london.data.local.database.dao.recent.viewed.RecentViewedDao
 import com.london.data.local.database.dao.recent.whatched.movie.RecentWatchedMoviesDao
 import com.london.data.local.database.dao.recent.whatched.tvshow.RecentWatchedTvShowsDao
-import com.london.data.local.database.dao.search.SearchActorsDao
-import com.london.data.local.database.dao.search.SearchMoviesDao
-import com.london.data.local.database.dao.search.SearchTvShowDao
 import com.london.data.local.model.home.TopRatedLocal
 import com.london.data.local.model.home.popular.PopularSectionLocal
 import com.london.data.local.model.recent.search.RecentSearchLocal
 import com.london.data.local.model.recent.viewed.RecentViewedLocal
 import com.london.data.local.model.recent.watched.RecentWatchedMovieLocal
 import com.london.data.local.model.recent.watched.RecentWatchedTvShowLocal
-import com.london.data.local.model.search.SearchActorsLocal
-import com.london.data.local.model.search.SearchMoviesLocal
-import com.london.data.local.model.search.SearchTvShowLocal
 import com.london.data.local.preference.AppPreferencesServiceImpl
-import com.london.data.local.source.LocalDataSource
 import com.london.data.local.source.home.HomeLocalDataSource
 import com.london.data.local.source.home.popular.PopularLocalDataSourceImpl
 import com.london.data.local.source.home.toprated.TopRatedDataSourceImpl
@@ -33,9 +26,6 @@ import com.london.data.local.source.recent.RecentViewedDataSourceImpl
 import com.london.data.local.source.recent.watched.RecentWatchedDataSource
 import com.london.data.local.source.recent.watched.RecentWatchedMoviesDataSource
 import com.london.data.local.source.recent.watched.RecentWatchedTvShowsDataSource
-import com.london.data.local.source.search.ActorLocalDataSourceImpl
-import com.london.data.local.source.search.MovieLocalDataSourceImpl
-import com.london.data.local.source.search.TvShowLocalDataSourceImpl
 import com.london.domain.AppPreferencesService
 import dagger.Module
 import dagger.Provides
@@ -61,23 +51,6 @@ object LocalDataSourceModule {
     ): RecentWatchedDataSource<RecentWatchedMovieLocal> =
         RecentWatchedMoviesDataSource(recentWatchedMoviesDao = dao)
 
-    @Provides
-    @Singleton
-    fun provideTvShowLocalDataSource(
-        dao: SearchTvShowDao
-    ): LocalDataSource<SearchTvShowLocal> = TvShowLocalDataSourceImpl(searchTvShowDao = dao)
-
-    @Provides
-    @Singleton
-    fun provideActorLocalDataSource(
-        dao: SearchActorsDao
-    ): LocalDataSource<SearchActorsLocal> = ActorLocalDataSourceImpl(searchActorsDao = dao)
-
-    @Provides
-    @Singleton
-    fun provideSearchMoviesLocalDataSource(
-        dao: SearchMoviesDao
-    ): LocalDataSource<SearchMoviesLocal> = MovieLocalDataSourceImpl(searchMoviesDao = dao)
 
     @Provides
     @Singleton

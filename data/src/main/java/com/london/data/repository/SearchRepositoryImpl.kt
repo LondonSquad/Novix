@@ -72,40 +72,6 @@ class SearchRepositoryImpl @Inject constructor(
         )
     }
 
-    override suspend fun searchForMoviesByCategory(
-        categoryId: Int,
-        pageNumber: Int
-    ): PagedFetchResponse<Movie> {
-            val response = remoteDataSource.getMoviesByCategory(
-                categoryId = categoryId,
-                pageNumber = pageNumber,
-            ).getOrThrow()
-
-        return PagedFetchResponse(
-            currentPage = response.currentPage,
-            items = response.items.map { it.toEntity() },
-            totalPages = response.totalPages,
-            totalItems = response.totalItems
-        )
-    }
-
-    override suspend fun getUpComingMoviesByCategory(
-        categoryId: Int?,
-        pageNumber: Int
-    ): PagedFetchResponse<Movie> {
-            val response = remoteDataSource.getUpComingMoviesByCategory(
-                categoryId = categoryId,
-                pageNumber = pageNumber,
-            ).getOrThrow()
-
-        return PagedFetchResponse(
-            currentPage = response.currentPage,
-            items = response.items.map { it.toEntity() },
-            totalPages = response.totalPages,
-            totalItems = response.totalItems
-        )
-    }
-
     override suspend fun incrementGenreInterest(genreId: Int, mediaType: String) {
         try {
             val current = genreInterestDao.getGenreInterest(genreId, mediaType)
@@ -131,22 +97,5 @@ class SearchRepositoryImpl @Inject constructor(
             crashReporter.logException(e)
             emptyList()
         }
-    }
-
-    override suspend fun searchForTvShowByCategory(
-        categoryId: Int,
-        pageNumber: Int
-    ): PagedFetchResponse<TvShow> {
-        val response = remoteDataSource.searchForTvShowsByCategoryId(
-            categoryId = categoryId,
-            pageNumber = pageNumber,
-        ).getOrThrow()
-
-        return PagedFetchResponse(
-            currentPage = response.currentPage,
-            items = response.items.map { it.toEntity() },
-            totalPages = response.totalPages,
-            totalItems = response.totalItems
-        )
     }
 }
