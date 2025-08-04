@@ -1,15 +1,13 @@
 package com.london.presentation.feature.account
 
-import android.app.Application
 import com.london.presentation.feature.account.state.AccountUiState
 import com.london.presentation.feature.base.BaseViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 
 @HiltViewModel
-class AccountViewModel @Inject constructor(
-    private val context: Application
-) : BaseViewModel<AccountUiState, AccountEffect>(AccountUiState()),
+class AccountViewModel @Inject constructor() :
+    BaseViewModel<AccountUiState, AccountEffect>(AccountUiState()),
     AccountContract {
 
     init {
@@ -23,6 +21,7 @@ class AccountViewModel @Inject constructor(
         // This could check shared preferences, auth repository, etc.
         return true // Replace with actual logic
     }
+
     override fun onWatchingHistoryClick() {
         emitEffect(AccountEffect.NavigateToWatchingHistory)
     }
