@@ -22,7 +22,7 @@ import com.london.presentation.utils.TvShowGenre
 @Composable
 fun MediaGenreFilters(
     isMovieSelected: Boolean,
-    isTvSelected: Boolean,
+    isTvShowSelected: Boolean,
     selectedMovieGenre: MovieGenre,
     selectedTvShowGenre: TvShowGenre,
     onMovieGenreClick: (MovieGenre) -> Unit,
@@ -37,7 +37,7 @@ fun MediaGenreFilters(
             screenWidth = screenWidth
         )
 
-        isTvSelected -> GenreChipsRow(
+        isTvShowSelected -> GenreChipsRow(
             genres = TvShowGenre.entries.toTypedArray(),
             selectedGenre = selectedTvShowGenre,
             onGenreClick = onTvShowGenreClick,
@@ -92,7 +92,7 @@ inline fun <reified T : Enum<T>> getGenreText(genre: T): String {
 private fun Preview() {
     MediaGenreFilters(
         isMovieSelected = true,
-        isTvSelected = false,
+        isTvShowSelected = false,
         selectedMovieGenre = MovieGenre.All,
         selectedTvShowGenre = TvShowGenre.All,
         onMovieGenreClick = {},
