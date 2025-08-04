@@ -148,17 +148,11 @@ private fun AddEditListBottomSheetContent(
             )
         }
 
-        Text(
-            text = stringResource(R.string.list_title),
-            style = NovixTheme.typography.title.small,
-            color = NovixTheme.colors.title,
-            modifier = Modifier.padding(bottom = 8.dp)
-        )
-
         OutlinedTextField(
             value = editAddSheetState.listName,
             interactionSource = interactionSourceUserName,
             onValueChange = editInteractions::onListNameChanged,
+            label = stringResource(R.string.list_title),
             leadingIcon = painterResource(R.drawable.ic_edit_list),
             isError = editAddSheetState.errorMessage != null,
             enabled = !editAddSheetState.isSheetLoading
