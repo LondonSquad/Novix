@@ -1,9 +1,9 @@
 package com.london.data.repository
 
 import com.google.common.truth.Truth.assertThat
-import com.london.data.mapper.search.toAuthorDetails
 import com.london.data.local.preference.AuthPreferences
 import com.london.data.mapper.moviedetails.toEntity
+import com.london.data.mapper.search.toAuthorDetails
 import com.london.data.remote.exception.NetworkException
 import com.london.data.remote.model.ApiResponse
 import com.london.data.remote.model.details.movie.model.moviecast.MovieActor
@@ -39,7 +39,7 @@ class MovieDetailsRepositoryImplTest {
 
     private val remoteDataSource: MovieDetailsRemoteDataSource = mockk(relaxed = true)
     private val reviewRemoteDataSource: ReviewsRemoteDataSource = mockk(relaxed = true)
-    private lateinit var authPreferences: AuthPreferences = mockk(relaxed = true)
+    private val authPreferences: AuthPreferences = mockk(relaxed = true)
     private lateinit var repository: MovieDetailsRepositoryImpl
 
     @Before
