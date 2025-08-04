@@ -50,9 +50,9 @@ import com.london.presentation.feature.buildscreen.BuildScreen
 import com.london.presentation.utils.Listen
 
 @Composable
-fun SavedListScreen(
+fun ListScreen(
     onNavigateToDetails: (Int) -> Unit,
-    viewModel: SavedListViewModel = hiltViewModel()
+    viewModel: ListViewModel = hiltViewModel()
 ) {
 
     val state by viewModel.state.collectAsStateWithLifecycle()
@@ -60,7 +60,7 @@ fun SavedListScreen(
 
     effect?.Listen { currentEffect ->
         when (currentEffect) {
-            is SavedListEffect.NavigateToDetails -> onNavigateToDetails(currentEffect.id)
+            is ListEffect.NavigateToDetails -> onNavigateToDetails(currentEffect.id)
         }
     }
 
@@ -116,8 +116,8 @@ private fun ScreenScaffold(
 
 @Composable
 private fun Content(
-    state: SavedListUiState,
-    contract: SavedListContract,
+    state: ListUiState,
+    contract: ListContract,
 ) {
     val pagingItems = state.items.collectAsLazyPagingItems()
     BuildScreen(
@@ -159,7 +159,7 @@ private fun Content(
 
 @Composable
 private fun SavedListItemRow(
-    itemUi: SavedListItemUi,
+    itemUi: ListItemUi,
     onCountClick: (Int) -> Unit
 ) {
     Row(
@@ -191,7 +191,7 @@ private fun SavedListItemRow(
 
 @Composable
 private fun ItemCount(
-    itemUi: SavedListItemUi,
+    itemUi: ListItemUi,
 ) {
     Row(
         verticalAlignment = Alignment.CenterVertically,
@@ -215,7 +215,7 @@ private fun ItemCount(
 }
 
 @Composable
-private fun EmptyList(contract: SavedListContract) {
+private fun EmptyList(contract: ListContract) {
     ScreenScaffold(
         titleRes = R.string.saved_list_title,
         onFabClick = contract::onFabClick,
@@ -314,10 +314,10 @@ private fun BlurredImage(@DrawableRes imageId: Int) {
 @ThemePreviews
 private fun Preview() {
     NovixTheme {
-        val state = SavedListUiState()
+        val state = ListUiState()
         Content(
             state = state,
-            contract = object : SavedListContract {
+            contract = object : ListContract {
                 override fun onRetry() {}
                 override fun onLoginClick() {}
                 override fun onListClick(id: Int) {}

@@ -8,8 +8,8 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flowOf
 
 @HiltViewModel
-class SavedListViewModel @Inject constructor() :
-    BaseViewModel<SavedListUiState, SavedListEffect>(SavedListUiState()), SavedListContract {
+class ListViewModel @Inject constructor() :
+    BaseViewModel<ListUiState, ListEffect>(ListUiState()), ListContract {
 
     init {
         getSavedLists()
@@ -24,17 +24,17 @@ class SavedListViewModel @Inject constructor() :
     }
 
     override fun onListClick(id: Int) {
-        emitEffect(SavedListEffect.NavigateToDetails(id))
+        emitEffect(ListEffect.NavigateToDetails(id))
     }
 
     override fun onFabClick() {
        // TODO("Not yet implemented")
     }
 
-    private fun dummyItems(): Flow<PagingData<SavedListItemUi>> {
+    private fun dummyItems(): Flow<PagingData<ListItemUi>> {
         val list =  //emptyList<SavedListItemUi>()
             List(5) { index ->
-                SavedListItemUi(
+                ListItemUi(
                     id = index,
                     title = "Dummy List #$index",
                     count = (1..10).random()

@@ -42,7 +42,7 @@ import com.london.presentation.feature.home.HomeScreen
 import com.london.presentation.feature.home.trending.actor.TrendingActorsScreen
 import com.london.presentation.feature.home.trending.movies.TrendingMoviesScreen
 import com.london.presentation.feature.home.trending.tvshows.TrendingTvShowsScreen
-import com.london.presentation.feature.list.savedlist.SavedListScreen
+import com.london.presentation.feature.list.savedlist.ListScreen
 import com.london.presentation.feature.login.LoginScreen
 import com.london.presentation.feature.onboarding.OnboardingRoute
 import com.london.presentation.feature.onboarding.SplashRoute
@@ -71,7 +71,7 @@ fun NovixApp(appPreferencesService: AppPreferencesService , authRepository: Auth
         currentDestination?.hasRoute<Screen.Home>() == true -> Screen.Home
         currentDestination?.hasRoute<Screen.Search>() == true -> Screen.Search
         currentDestination?.hasRoute<Screen.Categories>() == true -> Screen.Categories
-        currentDestination?.hasRoute<Screen.SavedList>() == true -> Screen.SavedList
+        currentDestination?.hasRoute<Screen.Lists>() == true -> Screen.Lists
         currentDestination?.hasRoute<Screen.Account>() == true -> Screen.Account
         currentDestination?.hasRoute<Screen.Login>() == true -> Screen.Login
         else -> Screen.Home
@@ -80,7 +80,7 @@ fun NovixApp(appPreferencesService: AppPreferencesService , authRepository: Auth
     val showBottomNav = currentDestination?.hasRoute<Screen.Home>() == true ||
             currentDestination?.hasRoute<Screen.Search>() == true ||
             currentDestination?.hasRoute<Screen.Categories>() == true ||
-            currentDestination?.hasRoute<Screen.SavedList>() == true ||
+            currentDestination?.hasRoute<Screen.Lists>() == true ||
             currentDestination?.hasRoute<Screen.Account>() == true
 
     Scaffold(
@@ -321,13 +321,13 @@ fun NavGraphBuilder.mainNavGraph(
         CategoriesScreen()
     }
 
-    composable<Screen.SavedList>(
+    composable<Screen.Lists>(
         exitTransition = { fadeOut(tween(500)) },
         popEnterTransition = { fadeIn(tween(500)) },
         enterTransition = { fadeIn(tween(500)) },
         popExitTransition = { fadeOut(tween(500)) },
     ) {
-        SavedListScreen(
+        ListScreen(
             onNavigateToDetails = {}
         )
     }

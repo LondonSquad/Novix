@@ -1,6 +1,6 @@
 package com.london.presentation.feature.list.savedlist
 
-interface SavedListContract {
+interface ListContract {
     fun onRetry()
     fun onLoginClick()
     fun onListClick(id: Int)

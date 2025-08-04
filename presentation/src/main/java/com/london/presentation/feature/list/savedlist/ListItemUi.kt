@@ -1,6 +1,6 @@
 package com.london.presentation.feature.list.savedlist
 
-data class SavedListItemUi(
+data class ListItemUi(
     val id: Int,
     val title: String,
     val count: Int

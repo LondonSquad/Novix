@@ -29,7 +29,7 @@ sealed interface Screen {
     data object Categories : Screen
 
     @Serializable
-    data object SavedList : Screen
+    data object Lists : Screen
 
     @Serializable
     data object Account : Screen

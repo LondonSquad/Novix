@@ -5,9 +5,9 @@ import com.london.presentation.feature.base.ErrorState
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 
-data class SavedListUiState(
+data class ListUiState(
     val isLoading: Boolean = false,
     val isGuest: Boolean = false,
     val error: ErrorState? = null,
-    val items: Flow<PagingData<SavedListItemUi>> = flow {},
+    val items: Flow<PagingData<ListItemUi>> = flow {},
 )
