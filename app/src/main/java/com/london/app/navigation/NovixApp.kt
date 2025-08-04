@@ -338,7 +338,40 @@ fun NavGraphBuilder.mainNavGraph(
         enterTransition = { fadeIn(tween(500)) },
         popExitTransition = { fadeOut(tween(500)) },
     ) {
-        AccountScreen()
+        AccountScreen(
+            onLogout = {
+                // todo: Handle logout logic here, e.g., clear user session, navigate to login screen
+            },
+            onNavigateToWatchingHistory = { navController.navigate(Screen.WatchingHistory) },
+            onNavigateToMyRating = { navController.navigate(Screen.MyRating) },
+            onNavigateToLogin = {
+                navController.navigate(Screen.Login) {
+                    popUpTo(navController.graph.findStartDestination().id) {
+                        inclusive = true
+                    }
+                }
+            },
+            onNavigateToChangePassword = {
+                // todo: Handle change password logic here, e.g., reset password flow
+            })
+    }
+
+    composable<Screen.WatchingHistory>(
+        exitTransition = { fadeOut(tween(500)) },
+        popEnterTransition = { fadeIn(tween(500)) },
+        enterTransition = { fadeIn(tween(500)) },
+        popExitTransition = { fadeOut(tween(500)) },
+    ) {
+        // todo: Implement WatchingHistoryScreen
+    }
+
+    composable<Screen.MyRating>(
+        exitTransition = { fadeOut(tween(500)) },
+        popEnterTransition = { fadeIn(tween(500)) },
+        enterTransition = { fadeIn(tween(500)) },
+        popExitTransition = { fadeOut(tween(500)) },
+    ) {
+        // todo: Implement MyRatingScreen
     }
 
     composable<TvShowDetails>(
