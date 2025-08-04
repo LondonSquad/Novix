@@ -17018,5 +17018,33 @@
       "deletions": 227,
       "changed_files": 21
     }
+  },
+  {
+    "pr_number": 520,
+    "url": "https://github.com/LondonSquad/Novix/pull/520",
+    "title": "New Composables",
+    "opened_at": "2025-08-04T14:17:04Z",
+    "head_ref": "feature/watching-history",
+    "base_ref": "develop",
+    "creator": {
+      "login": "AsmaaKhaledGomaa",
+      "id": 117874933,
+      "url": "https://github.com/AsmaaKhaledGomaa"
+    },
+    "approvals": [],
+    "first_approved_at": null,
+    "time_to_first_approval_minutes": null,
+    "required_approvals_met_at": null,
+    "time_to_required_approvals_minutes": null,
+    "closed_at": null,
+    "merged_at": null,
+    "merged_by": null,
+    "week": "2025-W32",
+    "status": "pending",
+    "diff_stats": {
+      "additions": 553,
+      "deletions": 0,
+      "changed_files": 3
+    }
   }
 ]
