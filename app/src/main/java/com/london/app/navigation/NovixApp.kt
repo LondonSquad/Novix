@@ -27,7 +27,6 @@ import com.london.designsystem.theme.NovixTheme
 import com.london.domain.AppPreferencesService
 import com.london.domain.repository.AuthRepository
 import com.london.presentation.feature.account.AccountScreen
-import com.london.presentation.feature.bookmark.BookmarksScreen
 import com.london.presentation.feature.category.CategoriesScreen
 import com.london.presentation.feature.category.moviesbycategory.MoviesByCategoryScreen
 import com.london.presentation.feature.category.tvshowbycategory.TvShowByCategoryScreen
@@ -43,6 +42,7 @@ import com.london.presentation.feature.home.HomeScreen
 import com.london.presentation.feature.home.trending.actor.TrendingActorsScreen
 import com.london.presentation.feature.home.trending.movies.TrendingMoviesScreen
 import com.london.presentation.feature.home.trending.tvshows.TrendingTvShowsScreen
+import com.london.presentation.feature.list.savedlist.ListScreen
 import com.london.presentation.feature.login.LoginScreen
 import com.london.presentation.feature.onboarding.OnboardingRoute
 import com.london.presentation.feature.onboarding.SplashRoute
@@ -71,7 +71,7 @@ fun NovixApp(appPreferencesService: AppPreferencesService , authRepository: Auth
         currentDestination?.hasRoute<Screen.Home>() == true -> Screen.Home
         currentDestination?.hasRoute<Screen.Search>() == true -> Screen.Search
         currentDestination?.hasRoute<Screen.Categories>() == true -> Screen.Categories
-        currentDestination?.hasRoute<Screen.Bookmarks>() == true -> Screen.Bookmarks
+        currentDestination?.hasRoute<Screen.Lists>() == true -> Screen.Lists
         currentDestination?.hasRoute<Screen.Account>() == true -> Screen.Account
         currentDestination?.hasRoute<Screen.Login>() == true -> Screen.Login
         else -> Screen.Home
@@ -80,7 +80,7 @@ fun NovixApp(appPreferencesService: AppPreferencesService , authRepository: Auth
     val showBottomNav = currentDestination?.hasRoute<Screen.Home>() == true ||
             currentDestination?.hasRoute<Screen.Search>() == true ||
             currentDestination?.hasRoute<Screen.Categories>() == true ||
-            currentDestination?.hasRoute<Screen.Bookmarks>() == true ||
+            currentDestination?.hasRoute<Screen.Lists>() == true ||
             currentDestination?.hasRoute<Screen.Account>() == true
 
     Scaffold(
@@ -321,13 +321,15 @@ fun NavGraphBuilder.mainNavGraph(
         CategoriesScreen()
     }
 
-    composable<Screen.Bookmarks>(
+    composable<Screen.Lists>(
         exitTransition = { fadeOut(tween(500)) },
         popEnterTransition = { fadeIn(tween(500)) },
         enterTransition = { fadeIn(tween(500)) },
         popExitTransition = { fadeOut(tween(500)) },
     ) {
-        BookmarksScreen()
+        ListScreen(
+            onNavigateToDetails = {}
+        )
     }
 
     composable<Screen.Account>(
