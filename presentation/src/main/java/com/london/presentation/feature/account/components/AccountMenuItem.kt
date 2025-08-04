@@ -60,7 +60,7 @@ fun AccountMenuItem(
         endText?.let {
             Text(
                 text = it,
-                style = NovixTheme.typography.body.small,
+                style = NovixTheme.typography.label.small,
                 color = NovixTheme.colors.body
             )
         }
