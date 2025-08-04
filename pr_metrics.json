@@ -17079,5 +17079,33 @@
       "deletions": 0,
       "changed_files": 3
     }
+  },
+  {
+    "pr_number": 521,
+    "url": "https://github.com/LondonSquad/Novix/pull/521",
+    "title": "refactor/data_packaging",
+    "opened_at": "2025-08-04T15:35:56Z",
+    "head_ref": "refactor/data_packaging",
+    "base_ref": "develop",
+    "creator": {
+      "login": "BassantM",
+      "id": 102248144,
+      "url": "https://github.com/BassantM"
+    },
+    "approvals": [],
+    "first_approved_at": null,
+    "time_to_first_approval_minutes": null,
+    "required_approvals_met_at": null,
+    "time_to_required_approvals_minutes": null,
+    "closed_at": null,
+    "merged_at": null,
+    "merged_by": null,
+    "week": "2025-W32",
+    "status": "pending",
+    "diff_stats": {
+      "additions": 246,
+      "deletions": 278,
+      "changed_files": 104
+    }
   }
 ]
