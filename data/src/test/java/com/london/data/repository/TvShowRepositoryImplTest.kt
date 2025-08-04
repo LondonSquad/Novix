@@ -5,7 +5,6 @@ import com.london.data.mapper.details.tvshow.TvShowImagesMapper.toEntity
 import com.london.data.mapper.details.tvshow.toCastEntity
 import com.london.data.mapper.details.tvshow.toEntity
 import com.london.data.mapper.details.tvshow.toTvShowEpisodesEntity
-import com.london.data.mapper.search.toAuthorDetails
 import com.london.data.mapper.search.toReviewEntity
 import com.london.data.remote.exception.NetworkException
 import com.london.data.remote.model.ApiResponse
@@ -37,8 +36,6 @@ import com.london.data.repository.search.TvShowRepositoryImpl
 import com.london.data.utils.asImageUrlOrEmpty
 import com.london.data.utils.asYoutubeUrlOrEmpty
 import com.london.data.utils.orZero
-import com.london.domain.entity.PagedFetchResponse
-import com.london.domain.entity.review.ReviewEntity
 import com.london.domain.entity.tvshowdetails.ImageItemEntity
 import com.london.domain.entity.tvshowdetails.TvShowCastEntity
 import com.london.domain.entity.tvshowdetails.TvShowCastMemberEntity
@@ -223,26 +220,27 @@ class TvShowRepositoryImplTest {
         }
 
     @Test
-    fun `getEpisodeVideos should return list of YouTube URLs when remote call succeeds`() = runTest {
-        // Given
-        coEvery {
-            tvShowDetailsRemoteDataSource.getEpisodeVideos(
-                seriesId = TV_SHOW_ID,
-                seasonNumber = SEASON_NUMBER,
-                episodeNumber = EPISODE_NUMBER
+    fun `getEpisodeVideos should return list of YouTube URLs when remote call succeeds`() =
+        runTest {
+            // Given
+            coEvery {
+                tvShowDetailsRemoteDataSource.getEpisodeVideos(
+                    seriesId = TV_SHOW_ID,
+                    seasonNumber = SEASON_NUMBER,
+                    episodeNumber = EPISODE_NUMBER
+                )
+            }.returns(Result.success(EpisodeVideoResponseMock))
+
+            // When
+            val result = repository.getEpisodeVideos(TV_SHOW_ID, SEASON_NUMBER, EPISODE_NUMBER)
+
+            // Then
+            val expectedUrls = listOf(
+                "dQw4w9WgXcQ".asYoutubeUrlOrEmpty(),
+                "abc123def456".asYoutubeUrlOrEmpty()
             )
-        }.returns(Result.success(EpisodeVideoResponseMock))
-
-        // When
-        val result = repository.getEpisodeVideos(TV_SHOW_ID, SEASON_NUMBER, EPISODE_NUMBER)
-
-        // Then
-        val expectedUrls = listOf(
-            "dQw4w9WgXcQ".asYoutubeUrlOrEmpty(),
-            "abc123def456".asYoutubeUrlOrEmpty()
-        )
-        assertThat(result).isEqualTo(expectedUrls)
-    }
+            assertThat(result).isEqualTo(expectedUrls)
+        }
 
     @Test
     fun `getEpisodeVideos should return empty list when remote returns null results`() = runTest {
@@ -309,71 +307,6 @@ class TvShowRepositoryImplTest {
         }
 
         assertThat(actualException).isEqualTo(networkException)
-    }
-
-    @Test
-    fun `getMovieReviews should return paged reviews when remote succeeds`() = runTest {
-        // Given
-        val fakeRemoteResponse = ApiResponse(
-            currentPage = 1, items = listOf(
-                ReviewResponse(
-                    id = "review1",
-                    author = "Author 1",
-                    content = "This is review 1",
-                    createdAt = "2024-01-01",
-                    updatedAt = "2024-01-02",
-                    authorDetailsResponse = AuthorDetailsResponse(
-                        authorName = "John Doe",
-                        authorUsername = "johndoe",
-                        authorPictureUrl = "https://image.tmdb.org/t/p/w500/profile.jpg",
-                        rating = 4.5
-                    ),
-                    url = "https://example.com/review1"
-                )
-            ), totalPages = 1, totalItems = 1
-        )
-        coEvery { reviewsRemoteDataSource.getMovieReviews(MOVIE_ID, PAGE_NUMBER) }.returns(
-            Result.success(fakeRemoteResponse)
-        )
-
-        // When
-        val result: PagedFetchResponse<ReviewEntity> =
-            repository.getMovieReviews(MOVIE_ID, PAGE_NUMBER)
-
-        //Then
-        assertThat(result.items.first().authorDetails).isEqualTo(fakeRemoteResponse.items.first().authorDetailsResponse.toAuthorDetails())
-    }
-
-    @Test
-    fun `getMovieReviews should throw when remote fails`() = runTest {
-        //Given
-        coEvery { reviewsRemoteDataSource.getMovieReviews(MOVIE_ID, PAGE_NUMBER) }.throws(
-            RuntimeException("Network error")
-        )
-
-        // When && Then
-        val exception = assertThrows<RuntimeException> {
-            repository.getMovieReviews(MOVIE_ID, PAGE_NUMBER)
-        }
-        assertThat(exception.message).contains("Network error")
-    }
-
-    @Test
-    fun `getMovieReviews should return empty when remote has no results`() = runTest {
-        //Given
-        val fakeEmptyResponse = ApiResponse(
-            currentPage = 1, items = emptyList<ReviewResponse>(), totalPages = 0, totalItems = 0
-        )
-
-        coEvery { reviewsRemoteDataSource.getMovieReviews(MOVIE_ID, PAGE_NUMBER) }.returns(
-            Result.success(fakeEmptyResponse)
-        )
-
-        // When
-        val result = repository.getMovieReviews(MOVIE_ID, PAGE_NUMBER)
-
-        // Then
-        assertThat(result.items).isEmpty()
     }
 
     @Test
@@ -470,7 +403,6 @@ class TvShowRepositoryImplTest {
         const val TV_SHOW_ID = 1
         const val SEASON_NUMBER = 1
         const val EPISODE_NUMBER = 2
-        const val MOVIE_ID = 99
         const val PAGE_NUMBER = 1
 
         val TvShowDetailsRemoteMock = TvShowDetailsRemoteResponse(
