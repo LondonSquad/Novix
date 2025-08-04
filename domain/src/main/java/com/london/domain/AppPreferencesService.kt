@@ -10,13 +10,13 @@ interface AppPreferencesService {
 
     //endregion
     //region Theme
-    val appTheme: String?
+    val appTheme: String
     fun getAppTheme(): AppTheme
     fun setAppTheme(theme: AppTheme)
 
     //endregion
     //region Language
-    val appLanguage: String?
+    val appLanguageCode: String
     fun getAppLanguage(): AppLanguage
     fun setAppLanguage(language: AppLanguage)
     //endregion

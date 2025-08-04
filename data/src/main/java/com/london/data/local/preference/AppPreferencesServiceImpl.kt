@@ -20,25 +20,27 @@ class AppPreferencesServiceImpl @Inject constructor(
     //endregion
 
     //region App Theme
-    override val appTheme: String?
+    override val appTheme: String
         get() = preferences.getString(PreferencesKeys.THEME_KEY, AppTheme.SYSTEM.name)
+            ?: AppTheme.SYSTEM.name
 
     override fun getAppTheme(): AppTheme =
-        AppTheme.valueOf(appTheme ?: AppTheme.SYSTEM.name)
+        AppTheme.valueOf(appTheme)
 
     override fun setAppTheme(theme: AppTheme) =
         preferences.edit { putString(PreferencesKeys.THEME_KEY, theme.name) }
     //endregion
 
     //region App Language
-    override val appLanguage: String?
-        get() = preferences.getString(PreferencesKeys.LANGUAGE_KEY, AppLanguage.ENGLISH.name)
+    override val appLanguageCode: String
+        get() = preferences.getString(PreferencesKeys.LANGUAGE_KEY, AppLanguage.ENGLISH.code)
+            ?: AppLanguage.ENGLISH.code
 
     override fun getAppLanguage(): AppLanguage =
-        AppLanguage.valueOf(appLanguage ?: AppLanguage.ENGLISH.name)
+        AppLanguage.fromCode(appLanguageCode)
 
     override fun setAppLanguage(language: AppLanguage) =
-        preferences.edit { putString(PreferencesKeys.LANGUAGE_KEY, language.name) }
+        preferences.edit { putString(PreferencesKeys.LANGUAGE_KEY, language.code) }
     //endregion
 
     private object PreferencesKeys {
