@@ -10,6 +10,7 @@ import com.london.data.local.database.dao.recent.search.RecentSearchDao
 import com.london.data.local.database.dao.recent.viewed.RecentViewedDao
 import com.london.data.local.database.dao.recent.whatched.movie.RecentWatchedMoviesDao
 import com.london.data.local.database.dao.recent.whatched.tvshow.RecentWatchedTvShowsDao
+import com.london.data.local.database.dao.search.GenreInterestDao
 import com.london.data.local.model.home.popular.PopularSectionLocal
 import com.london.data.local.model.recent.search.RecentSearchLocal
 import com.london.data.local.model.recent.viewed.RecentViewedLocal
@@ -22,9 +23,10 @@ import com.london.data.local.model.recent.watched.RecentWatchedTvShowLocal
         RecentViewedLocal::class,
         RecentWatchedMovieLocal::class,
         RecentWatchedTvShowLocal::class,
-        PopularSectionLocal::class
+        PopularSectionLocal::class,
+        GenreInterestDao::class
     ],
-    version = 2,
+    version = 1,
     exportSchema = false
 )
 @TypeConverters(
@@ -37,4 +39,5 @@ abstract class NovixDatabase : RoomDatabase() {
     abstract fun recentWatchedMoviesDao(): RecentWatchedMoviesDao
     abstract fun recentWatchedTvShowsDao(): RecentWatchedTvShowsDao
     abstract fun popularSectionDao(): PopularSectionDao
+    abstract fun genreInterestDao(): GenreInterestDao
 }
