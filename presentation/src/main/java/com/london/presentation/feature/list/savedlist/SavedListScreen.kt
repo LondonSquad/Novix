@@ -160,14 +160,15 @@ private fun SavedListItemRow(
     Row(
         modifier = Modifier
             .fillMaxWidth()
+            .clip(RoundedCornerShape(12.dp))
+            .clickable { onCountClick(itemUi.id) }
+            .background(NovixTheme.colors.surface)
             .border(
                 width = 1.dp,
                 color = NovixTheme.colors.stroke,
                 shape = RoundedCornerShape(12.dp)
             )
-            .background(color = NovixTheme.colors.surface)
             .padding(horizontal = 12.dp, vertical = 16.dp)
-            .clickable { onCountClick(itemUi.id) }
     ) {
         Text(
             text = itemUi.title,
