@@ -1,7 +1,7 @@
 package com.london.domain.usecase
 
 import com.google.common.truth.Truth.assertThat
-import com.london.domain.repository.DetailsRepository
+import com.london.domain.repository.TvShowRepository
 import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.mockk
@@ -12,7 +12,7 @@ import org.junit.jupiter.api.assertThrows
 
 class GetEpisodeVideoProviderUseCaseTest {
 
-    private lateinit var repository: DetailsRepository
+    private lateinit var repository: TvShowRepository
     private lateinit var useCase: GetEpisodeVideoProviderUseCase
 
     @Before

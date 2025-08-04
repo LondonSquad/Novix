@@ -2,12 +2,12 @@ package com.london.data.repository.home.popular
 
 import com.london.data.local.model.home.popular.PopularSectionLocal
 import com.london.data.local.source.home.HomeLocalDataSource
-import com.london.data.mapper.popular.toMovieEntity
-import com.london.data.mapper.popular.toPopularMovieSectionLocal
-import com.london.data.mapper.popular.toPopularMovies
-import com.london.data.mapper.popular.toPopularTvShowSectionLocal
-import com.london.data.mapper.popular.toPopularTvShows
-import com.london.data.mapper.popular.toTvShowEntity
+import com.london.data.mapper.home.popular.toMovieEntity
+import com.london.data.mapper.home.popular.toPopularMovieSectionLocal
+import com.london.data.mapper.home.popular.toPopularMovies
+import com.london.data.mapper.home.popular.toPopularTvShowSectionLocal
+import com.london.data.mapper.home.popular.toPopularTvShows
+import com.london.data.mapper.home.popular.toTvShowEntity
 import com.london.data.remote.source.home.popular.PopularRemoteDataSource
 import com.london.data.utils.CrashReporter
 import com.london.data.utils.fetchAndSync

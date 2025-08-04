@@ -2,7 +2,9 @@ package com.london.domain.repository
 
 import com.london.domain.entity.Actor
 import com.london.domain.entity.Movie
+import com.london.domain.entity.PagedFetchResponse
 import com.london.domain.entity.moviedatails.MovieDetails
+import com.london.domain.entity.review.ReviewEntity
 
 
 interface MovieDetailsRepository {
@@ -10,4 +12,5 @@ interface MovieDetailsRepository {
     suspend fun getSimilarMoviesById(id: Int): List<Movie>
     suspend fun getMovieImagesById(id: Int): List<String>
     suspend fun getMovieCastById(id: Int): List<Actor>
+    suspend fun getMovieReviews(movieId: Int, pageNumber: Int): PagedFetchResponse<ReviewEntity>
 }
