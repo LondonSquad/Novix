@@ -5,6 +5,8 @@ import androidx.core.content.edit
 import com.london.domain.AppPreferencesService
 import com.london.domain.language.AppLanguage
 import com.london.domain.theme.AppTheme
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 import javax.inject.Inject
 
 class AppPreferencesServiceImpl @Inject constructor(
@@ -20,24 +22,27 @@ class AppPreferencesServiceImpl @Inject constructor(
     //endregion
 
     //region App Theme
-    override val appTheme: String
-        get() = preferences.getString(PreferencesKeys.THEME_KEY, AppTheme.SYSTEM.name)
-            ?: AppTheme.SYSTEM.name
+    private val _appTheme = MutableStateFlow(getAppTheme())
+    override val appTheme: StateFlow<AppTheme> = _appTheme
 
-    override fun getAppTheme(): AppTheme =
-        AppTheme.valueOf(appTheme)
+    private fun getAppTheme(): AppTheme {
+        val theme = preferences.getString(PreferencesKeys.THEME_KEY, AppTheme.SYSTEM.name)
+        return AppTheme.valueOf(theme ?: AppTheme.SYSTEM.name)
+    }
 
     override fun setAppTheme(theme: AppTheme) =
         preferences.edit { putString(PreferencesKeys.THEME_KEY, theme.name) }
     //endregion
 
     //region App Language
-    override val appLanguageCode: String
-        get() = preferences.getString(PreferencesKeys.LANGUAGE_KEY, AppLanguage.ENGLISH.code)
-            ?: AppLanguage.ENGLISH.code
+    private val _appLanguage = MutableStateFlow(getAppLanguage())
+    override val appLanguage: StateFlow<AppLanguage> = _appLanguage
 
-    override fun getAppLanguage(): AppLanguage =
-        AppLanguage.fromCode(appLanguageCode)
+    private fun getAppLanguage(): AppLanguage {
+        val languageCode =
+            preferences.getString(PreferencesKeys.LANGUAGE_KEY, AppLanguage.ENGLISH.code)
+        return AppLanguage.fromCode(languageCode ?: AppLanguage.ENGLISH.code)
+    }
 
     override fun setAppLanguage(language: AppLanguage) =
         preferences.edit { putString(PreferencesKeys.LANGUAGE_KEY, language.code) }
