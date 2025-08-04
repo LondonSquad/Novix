@@ -9,6 +9,7 @@ import com.london.data.remote.model.search.model.searchactormodel.SearchActorRem
 import com.london.domain.KoverIgnore
 
 interface SearchRemoteDataSource {
+
     suspend fun searchForMovies(
         query: String,
         includeAdult: Boolean,
@@ -27,15 +28,4 @@ interface SearchRemoteDataSource {
         pageNumber: Int
     ): Result<ApiResponse<SearchActorRemote>>
 
-    suspend fun getMoviesByCategory(
-        categoryId: Int,
-        pageNumber: Int,
-        includeAdult: Boolean = false
-    ): Result<ApiResponse<MovieRemote>>
-
-    suspend fun searchForTvShowsByCategoryId(
-        categoryId: Int,
-        pageNumber: Int,
-        includeAdult: Boolean = false
-    ): Result<ApiResponse<SearchTvShowRemote>>
 }
