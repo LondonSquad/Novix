@@ -51,6 +51,7 @@ import com.london.presentation.feature.register.WebViewRegistrationScreen
 import com.london.presentation.feature.reviews.ReviewsScreen
 import com.london.presentation.feature.search.SearchScreen
 import com.london.presentation.feature.toprated.TopRatedScreen
+import com.london.presentation.feature.watchinghistory.WatchingHistoryScreen
 import com.london.presentation.navigation.Screen
 import com.london.presentation.navigation.Screen.ActorDetails
 import com.london.presentation.navigation.Screen.MovieDetails
@@ -58,11 +59,12 @@ import com.london.presentation.navigation.Screen.TrendingActors
 import com.london.presentation.navigation.Screen.TrendingMovies
 import com.london.presentation.navigation.Screen.TrendingTvShows
 import com.london.presentation.navigation.Screen.TvShowDetails
+import com.london.presentation.navigation.Screen.WatchingHistory
 import kotlinx.serialization.Serializable
 import timber.log.Timber
 
 @Composable
-fun NovixApp(appPreferencesService: AppPreferencesService , authRepository: AuthRepository) {
+fun NovixApp(appPreferencesService: AppPreferencesService, authRepository: AuthRepository) {
     val navController = rememberNavController()
     val navBackStackEntry by navController.currentBackStackEntryAsState()
     val currentDestination = navBackStackEntry?.destination
@@ -108,7 +110,7 @@ fun NovixApp(appPreferencesService: AppPreferencesService , authRepository: Auth
             modifier = Modifier.padding(innerPadding)
         ) {
             onboardingNavGraph(navController, appPreferencesService)
-            splashNavGraph(navController, appPreferencesService , authRepository)
+            splashNavGraph(navController, appPreferencesService, authRepository)
             authNavGraph(navController)
             mainNavGraph(navController)
         }
@@ -284,7 +286,7 @@ fun NavGraphBuilder.mainNavGraph(
         popEnterTransition = { fadeIn(tween(500)) },
         enterTransition = { fadeIn(tween(500)) },
         popExitTransition = { fadeOut(tween(500)) },
-    ){
+    ) {
         TvShowByCategoryScreen(
             onNavigateBack = navController::navigateUp,
             onNavigateToTvShowDetails = { tvShowId ->
@@ -356,13 +358,21 @@ fun NavGraphBuilder.mainNavGraph(
             })
     }
 
-    composable<Screen.WatchingHistory>(
+    composable<WatchingHistory>(
         exitTransition = { fadeOut(tween(500)) },
         popEnterTransition = { fadeIn(tween(500)) },
         enterTransition = { fadeIn(tween(500)) },
         popExitTransition = { fadeOut(tween(500)) },
     ) {
-        // todo: Implement WatchingHistoryScreen
+        WatchingHistoryScreen(
+            onBackClick = { navController.navigateUp() },
+            onMovieClick = { movieId ->
+                navController.navigate(MovieDetails(movieId))
+            },
+            onTvShowClick = { tvShowId ->
+                navController.navigate(TvShowDetails(tvShowId))
+            }
+        )
     }
 
     composable<Screen.MyRating>(
