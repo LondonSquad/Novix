@@ -2,12 +2,7 @@ package com.london.data.repository.search
 
 import com.london.data.local.database.dao.search.GenreInterestDao
 import com.london.data.local.model.search.GenreInterestEntity
-import com.london.data.local.model.search.SearchActorsLocal
-import com.london.data.local.model.search.SearchMoviesLocal
-import com.london.data.local.model.search.SearchTvShowLocal
-import com.london.data.local.source.LocalDataSource
 import com.london.data.mapper.search.toEntity
-import com.london.data.mapper.search.toLocal
 import com.london.data.remote.source.search.SearchRemoteDataSource
 import com.london.data.utils.CrashReporter
 import com.london.domain.entity.Actor
