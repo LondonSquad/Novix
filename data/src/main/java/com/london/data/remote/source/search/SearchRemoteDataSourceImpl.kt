@@ -61,33 +61,4 @@ class SearchRemoteDataSourceImpl @Inject constructor(
         mapper = { it }
     )
 
-    override suspend fun getMoviesByCategory(
-        categoryId: Int,
-        pageNumber: Int,
-        includeAdult: Boolean
-    ): Result<ApiResponse<MovieRemote>> = callApiWithRetry(
-        {
-            searchApiService.getMoviesByCategory(
-                genreId = categoryId,
-                page = pageNumber,
-                includeAdult = includeAdult
-            )
-        },
-        mapper = { it }
-    )
-
-    override suspend fun searchForTvShowsByCategoryId(
-        categoryId: Int,
-        pageNumber: Int,
-        includeAdult: Boolean
-    ): Result<ApiResponse<SearchTvShowRemote>> =callApiWithRetry(
-        {
-            searchApiService.searchForTvShowsByCategory(
-                genreId = categoryId,
-                page = pageNumber,
-                includeAdult = includeAdult
-            )
-        },
-        mapper = { it }
-    )
 }

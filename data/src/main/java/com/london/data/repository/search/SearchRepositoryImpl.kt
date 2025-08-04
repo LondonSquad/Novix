@@ -96,23 +96,6 @@ class SearchRepositoryImpl @Inject constructor(
         )
     }
 
-    override suspend fun searchForMoviesByCategory(
-        categoryId: Int, pageNumber: Int
-    ): PagedFetchResponse<Movie> = fetchAndSync(
-        networkBlock = {
-            remoteDataSource.getMoviesByCategory(
-                categoryId = categoryId,
-                pageNumber = pageNumber,
-            ).getOrThrow().toLocal(query = "")
-        }).run {
-        PagedFetchResponse(
-            currentPage = page,
-            items = results.map { it.toEntity() },
-            totalPages = totalPages,
-            totalItems = totalResults
-        )
-    }
-
     override suspend fun incrementGenreInterest(genreId: Int, mediaType: String) {
         try {
             val current = genreInterestDao.getGenreInterest(genreId, mediaType)
@@ -140,20 +123,4 @@ class SearchRepositoryImpl @Inject constructor(
         }
     }
 
-    override suspend fun searchForTvShowByCategory(
-        categoryId: Int, pageNumber: Int
-    ): PagedFetchResponse<TvShow> = fetchAndSync(
-        networkBlock = {
-            remoteDataSource.searchForTvShowsByCategoryId(
-                categoryId = categoryId,
-                pageNumber = pageNumber,
-            ).getOrThrow().toLocal(query = "")
-        }).run {
-        PagedFetchResponse(
-            currentPage = page,
-            items = results.map { it.toEntity() },
-            totalPages = totalPages,
-            totalItems = totalResults
-        )
-    }
 }

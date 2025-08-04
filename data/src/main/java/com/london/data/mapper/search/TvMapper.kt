@@ -41,3 +41,12 @@ fun SearchTvShowRemote.toLocal() = SearchTvShowDtoLocal(
     voteAverage = voteAverage.orZero().roundToDecimal(),
     firstAirDate = firstAirDate.orEmpty(),
 )
+
+fun SearchTvShowRemote.toEntity(): TvShow = TvShow(
+    id = id.orZero(),
+    name = name.orEmpty(),
+    posterPicture = posterPath.asImageUrlOrEmpty(),
+    releaseYear = firstAirDate.orEmpty().extractYear(),
+    rating = voteAverage.orZero().toInt(),
+    genres = genreIds.orEmpty()
+)
