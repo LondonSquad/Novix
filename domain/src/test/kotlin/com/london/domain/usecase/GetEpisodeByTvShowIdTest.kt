@@ -2,7 +2,7 @@ package com.london.domain.usecase
 
 import com.google.common.truth.Truth.assertThat
 import com.london.domain.entity.tvshowdetails.episode.TvShowEpisodeByIdEntity
-import com.london.domain.repository.DetailsRepository
+import com.london.domain.repository.TvShowRepository
 import io.mockk.coEvery
 import io.mockk.mockk
 import kotlinx.coroutines.test.runTest
@@ -12,20 +12,20 @@ import org.junit.jupiter.api.assertThrows
 
 class GetEpisodeByTvShowIdTest {
 
-    private lateinit var detailsRepository: DetailsRepository
+    private lateinit var tvShowRepository: TvShowRepository
     private lateinit var getEpisodeByTvShowId: GetEpisodeByTvShowId
 
     @Before
     fun setUp() {
-        detailsRepository = mockk()
-        getEpisodeByTvShowId = GetEpisodeByTvShowId(detailsRepository)
+        tvShowRepository = mockk()
+        getEpisodeByTvShowId = GetEpisodeByTvShowId(tvShowRepository)
     }
 
     @Test
     fun `should return episode when repository returns episode`() = runTest {
         // Given
         coEvery {
-            detailsRepository.getTvShowEpisodeByPosition(TV_SHOW_ID, SEASON_NUMBER, EPISODE_NUMBER)
+            tvShowRepository.getTvShowEpisodeByPosition(TV_SHOW_ID, SEASON_NUMBER, EPISODE_NUMBER)
         } returns mockEpisode
 
         // When
@@ -39,7 +39,7 @@ class GetEpisodeByTvShowIdTest {
     fun `should throw exception when repository throws`() = runTest {
         // Given
         coEvery {
-            detailsRepository.getTvShowEpisodeByPosition(TV_SHOW_ID, SEASON_NUMBER, EPISODE_NUMBER)
+            tvShowRepository.getTvShowEpisodeByPosition(TV_SHOW_ID, SEASON_NUMBER, EPISODE_NUMBER)
         } throws RuntimeException("Network error")
 
         // When / Then

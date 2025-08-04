@@ -1,7 +1,7 @@
 package com.london.data.remote.source.home.trending
 
 import com.london.data.remote.model.ApiResponse
-import com.london.data.remote.model.home.model.trending.TrendingResponse
+import com.london.data.remote.model.home.trending.TrendingResponse
 import com.london.data.remote.service.home.TrendingApiService
 import com.london.data.remote.source.base.BaseRemoteDatasource
 import javax.inject.Singleton
