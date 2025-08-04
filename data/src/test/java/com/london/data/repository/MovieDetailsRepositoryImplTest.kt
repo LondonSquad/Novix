@@ -31,18 +31,18 @@ import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.assertThrows
 import kotlin.test.Test
 
-class MovieTvShowRepositoryImplTest {
+class MovieDetailsRepositoryImplTest {
 
-    private lateinit var remoteDataSource: MovieDetailsRemoteDataSource
-    private lateinit var reviewRemoteDataSource: ReviewsRemoteDataSource
+    private val remoteDataSource: MovieDetailsRemoteDataSource = mockk(relaxed = true)
+    private val reviewRemoteDataSource: ReviewsRemoteDataSource = mockk(relaxed = true)
     private lateinit var repository: MovieDetailsRepositoryImpl
 
     @Before
     fun setup() {
-        remoteDataSource = mockk(relaxed = true)
         repository = MovieDetailsRepositoryImpl(
             movieDetailsRemoteDataSource = remoteDataSource,
-            reviewsRemoteDataSource = reviewRemoteDataSource)
+            reviewsRemoteDataSource = reviewRemoteDataSource
+        )
     }
 
     private fun fakeMovieDetailsRemote() = MovieDetailsResponse(
@@ -89,7 +89,7 @@ class MovieTvShowRepositoryImplTest {
             MovieRemote(
                 adult = false,
                 backdropPath = null,
-                genreIds =listOf(1,2,3),
+                genreIds = listOf(1, 2, 3),
                 id = 1,
                 originalLanguage = "en",
                 originalTitle = "",
@@ -109,7 +109,7 @@ class MovieTvShowRepositoryImplTest {
             MovieRemote(
                 adult = false,
                 backdropPath = null,
-                genreIds = listOf(1,2,3),
+                genreIds = listOf(1, 2, 3),
                 id = 1,
                 originalLanguage = "en",
                 originalTitle = "",
@@ -288,7 +288,7 @@ class MovieTvShowRepositoryImplTest {
         }
     }
 
-    @org.junit.Test
+    @Test
     fun `getMovieReviews should return paged reviews when remote succeeds`() = runTest {
         // Given
         val fakeRemoteResponse = ApiResponse(
@@ -352,8 +352,10 @@ class MovieTvShowRepositoryImplTest {
         // Then
         assertThat(result.items).isEmpty()
     }
+
     private companion object {
         const val MOVIE_ID = 1
-        const val PAGE_NUMBER = 1}
+        const val PAGE_NUMBER = 1
+    }
 
 }
