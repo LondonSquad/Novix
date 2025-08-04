@@ -22,6 +22,7 @@ import com.london.data.local.model.recent.search.RecentSearchLocal
 import com.london.data.local.model.recent.viewed.RecentViewedLocal
 import com.london.data.local.model.recent.watched.RecentWatchedMovieLocal
 import com.london.data.local.model.recent.watched.RecentWatchedTvShowLocal
+import com.london.data.local.model.search.GenreInterestEntity
 
 @Database(
     entities = [
@@ -29,11 +30,10 @@ import com.london.data.local.model.recent.watched.RecentWatchedTvShowLocal
         RecentViewedLocal::class,
         RecentWatchedMovieLocal::class,
         RecentWatchedTvShowLocal::class,
-        PopularSectionLocal::class,
         TopRatedLocal::class,
         UpComingSectionLocal::class,
         PopularSectionLocal::class,
-        GenreInterestDao::class
+        GenreInterestEntity::class
     ],
     version = 1,
     exportSchema = false
