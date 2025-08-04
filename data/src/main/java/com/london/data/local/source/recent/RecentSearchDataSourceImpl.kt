@@ -41,7 +41,8 @@ class RecentSearchDataSourceImpl @Inject constructor(
             recentSearchDao.clearAll()
         }
     }
-   override suspend fun delete(item: RecentSearchLocal) {
+
+    override suspend fun delete(item: RecentSearchLocal) {
         runCatching {
             recentSearchDao.delete(item)
         }

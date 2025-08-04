@@ -1,10 +1,10 @@
 package com.london.domain.usecase
 
-import com.london.domain.repository.SearchRepository
+import com.london.domain.repository.UpComingRepository
 import javax.inject.Inject
 
 class GetUpComingMoviesByCategoryUseCase @Inject constructor(
-    private val repository: SearchRepository
+    private val repository: UpComingRepository
 ) {
     suspend operator fun invoke(
         categoryId: Int?, pageNumber: Int

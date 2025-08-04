@@ -1,13 +1,17 @@
 package com.london.data.repository
 
 import com.google.common.truth.Truth.assertThat
-import com.london.data.mapper.toprated.toEntity
+import com.london.data.local.model.home.topRated.TopRatedLocal
+import com.london.data.local.source.home.HomeLocalDataSource
+import com.london.data.mapper.home.toprated.toEntity
 import com.london.data.remote.model.ApiResponse
-import com.london.data.remote.model.toprated.TopRatedMovieRemote
+import com.london.data.remote.model.home.toprated.TopRatedMovieRemote
 import com.london.data.remote.source.toprated.movie.TopRatedMovieRemoteDataSource
-import com.london.data.repository.toprated.TopRatedMovieRepositoryImpl
-import com.london.domain.entity.toprated.TopRatedMovie
+import com.london.data.repository.home.toprated.TopRatedMovieRepositoryImpl
+import com.london.data.utils.CrashReporter
+import com.london.domain.entity.recent.MediaType
 import io.mockk.coEvery
+import io.mockk.coVerify
 import io.mockk.mockk
 import kotlinx.coroutines.test.runTest
 import org.junit.Before
@@ -18,69 +22,127 @@ class TopRatedMovieRepositoryImplTest {
 
     private lateinit var remoteDataSource: TopRatedMovieRemoteDataSource
     private lateinit var repository: TopRatedMovieRepositoryImpl
+    private val crashReporter: CrashReporter = mockk(relaxed = true)
+    private val localTopRatedMovie: HomeLocalDataSource<TopRatedLocal> = mockk(relaxed = true)
 
     @Before
     fun setup() {
         remoteDataSource = mockk(relaxed = true)
-        repository = TopRatedMovieRepositoryImpl(remoteDataSource)
+        repository = TopRatedMovieRepositoryImpl(
+            topRatedMovieRemoteDataSource = remoteDataSource,
+            localTopRated = localTopRatedMovie,
+            crashReporter = crashReporter
+        )
     }
 
     @Test
-    fun `should getTopRatedMovies should map when remote movie list correctly`() = runTest {
+    fun `getTopRatedMovies should return mapped movies from remote data source`() = runTest {
         // Given
+        val fakeApiResponse = fakeApiResponseWithMovies()
         coEvery {
             remoteDataSource.getTopRatedMovies(PAGE)
-        } returns Result.success(fakeApiResponseWithMovies())
+        } returns Result.success(fakeApiResponse)
+
+        coEvery {
+            localTopRatedMovie.getAll()
+        } returns emptyList()
 
         // When
-        val result: List<TopRatedMovie> = repository.getTopRatedMovies(PAGE).items
+        val result = repository.getTopRatedMovies(PAGE)
 
         // Then
-        assertThat(result).hasSize(2)
+        assertThat(result.items).hasSize(2)
+        assertThat(result.currentPage).isEqualTo(PAGE)
+        assertThat(result.totalPages).isEqualTo(1)
+        assertThat(result.totalItems).isEqualTo(2)
 
-        val firstMovie = result.first()
+        val firstMovie = result.items.first()
         assertThat(firstMovie).isEqualTo(
-            fakeApiResponseWithMovies().items[0].toEntity()
+            fakeApiResponse.items[0].toEntity()
         )
 
-        val secondMovie = result[1]
+        val secondMovie = result.items[1]
         assertThat(secondMovie).isEqualTo(
-            fakeApiResponseWithMovies().items[1].toEntity()
+            fakeApiResponse.items[1].toEntity()
         )
+        coVerify {
+            localTopRatedMovie.insertAll(any())
+        }
     }
 
     @Test
-    fun `should getTopRatedMovies should return empty list when API returns empty results`() = runTest {
+    fun `getTopRatedMovies should return empty list when API returns empty results`() = runTest {
         // Given
+        val emptyApiResponse = fakeEmptyApiResponse()
         coEvery {
             remoteDataSource.getTopRatedMovies(PAGE)
-        } returns Result.success(fakeEmptyApiResponse())
+        } returns Result.success(emptyApiResponse)
+
+        coEvery {
+            localTopRatedMovie.getAll()
+        } returns emptyList()
 
         // When
         val result = repository.getTopRatedMovies(PAGE)
 
         // Then
         assertThat(result.items).isEmpty()
+        assertThat(result.currentPage).isEqualTo(PAGE)
+        assertThat(result.totalPages).isEqualTo(1)
+        assertThat(result.totalItems).isEqualTo(0)
     }
 
     @Test
-    fun `should getTopRatedMovies when propagate exceptions`() = runTest {
+    fun `getTopRatedMovies should propagate exceptions from remote data source`() = runTest {
         // Given
         coEvery {
             remoteDataSource.getTopRatedMovies(PAGE)
-        } throws RuntimeException("Network error")
+        } returns Result.failure(RuntimeException("Network error"))
 
-        // When && Then
-        val ex = assertThrows<RuntimeException> {
+        coEvery {
+            localTopRatedMovie.getAll()
+        } returns emptyList()
+
+        // When & Then
+        val exception = assertThrows<RuntimeException> {
             repository.getTopRatedMovies(PAGE)
         }
-        assertThat(ex.message).isEqualTo("Network error")
+        assertThat(exception.message).isEqualTo("Network error")
     }
+
+    @Test
+    fun `getTopRatedMovies should handle local cache when available and filter by MediaType Movie`() =
+        runTest {
+            // Given
+            val localMovies = listOf(
+                createFakeTopRatedLocal(id = 1, mediaType = MediaType.Movie),
+                createFakeTopRatedLocal(
+                    id = 2,
+                    mediaType = MediaType.TvShow
+                ), // This should be filtered out
+                createFakeTopRatedLocal(id = 3, mediaType = MediaType.Movie)
+            )
+
+            coEvery {
+                localTopRatedMovie.getAll()
+            } returns localMovies
+
+            coEvery {
+                remoteDataSource.getTopRatedMovies(PAGE)
+            } returns Result.success(fakeApiResponseWithMovies())
+
+            // When
+            val result = repository.getTopRatedMovies(PAGE)
+
+            // Then
+            assertThat(result.items).hasSize(2)
+            coVerify {
+                localTopRatedMovie.getAll()
+            }
+        }
 
     companion object {
         private const val PAGE = 1
-        private const val LANGUAGE = "en-US"
-        private const val REGION = "US"
 
         private fun fakeApiResponseWithMovies() = ApiResponse(
             currentPage = PAGE,
@@ -127,6 +189,26 @@ class TopRatedMovieRepositoryImplTest {
             totalPages = 1,
             totalItems = 0,
             items = emptyList<TopRatedMovieRemote>()
+        )
+
+        private fun createFakeTopRatedLocal(
+            id: Int,
+            name: String = "",
+            posterPictureUrl: String = "",
+            rating: Double = 0.0,
+            releaseYear: String = "",
+            mediaType: MediaType,
+            date: Long = 0L,
+            genre: List<Int> = listOf(1)
+        ) = TopRatedLocal(
+            id = id,
+            name = name,
+            posterPictureUrl = posterPictureUrl,
+            rating = rating,
+            releaseYear = releaseYear,
+            mediaType = mediaType,
+            date = date,
+            genre = genre
         )
     }
 }

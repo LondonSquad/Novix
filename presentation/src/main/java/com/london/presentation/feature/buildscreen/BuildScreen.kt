@@ -8,7 +8,6 @@ import androidx.paging.LoadState
 import androidx.paging.compose.LazyPagingItems
 import com.london.designsystem.component.EmptyLayout
 import com.london.presentation.utils.isEmpty
-import com.london.presentation.utils.isNotEmpty
 import com.london.presentation.utils.isNotNull
 import com.london.presentation.utils.shouldShowLoading
 
@@ -25,6 +24,7 @@ fun BuildScreen(
     handlePagingLoadingAutomatically: Boolean = true,
     content: @Composable () -> Unit,
 ) {
+
     when {
         shouldShowLoading(
             isLoading = isLoading,
@@ -36,15 +36,56 @@ fun BuildScreen(
             NetworkErrorScreen(onBack = onBack, onRetry = onRetry)
         }
 
-        pagingFlow?.isNotEmpty() == true &&
+        pagingFlow?.isEmpty() == true && emptyLayoutMessage.isNotNull() -> {
+            EmptyLayout(
+                text = stringResource(emptyLayoutMessage!!),
+                image = emptyLayoutImage
+            )
+        }
+
+        else -> { content() }
+    }
+}
+
+@Composable
+fun BuildScreen(
+    isLoading: Boolean = false,
+    isError: Boolean = false,
+    isGuest: Boolean = false,
+    onBack: () -> Unit = {},
+    onRetry: () -> Unit = {},
+    @StringRes emptyLayoutMessage: Int? = null,
+    @DrawableRes emptyLayoutImage: Int? = null,
+    pagingFlow: LazyPagingItems<*>? = null,
+    handlePagingLoadingAutomatically: Boolean = false,
+    emptyContent: (@Composable () -> Unit)? = null,
+    guestContent: (@Composable () -> Unit)? = null,
+    content: @Composable () -> Unit,
+) {
+    when {
+        shouldShowLoading(
+            isLoading = isLoading,
+            handlePagingLoadingAutomatically = handlePagingLoadingAutomatically,
+            pagingFlow = pagingFlow
+        ) -> { LoadingScreen() }
+
+        isError || (pagingFlow?.loadState?.refresh is LoadState.Error) -> {
+            NetworkErrorScreen(onBack = onBack, onRetry = onRetry)
+        }
+
+        isGuest && guestContent != null  -> { guestContent.invoke() }
+
+        (pagingFlow!=null)  &&
                 pagingFlow.isEmpty() &&
-                pagingFlow.loadState.refresh is LoadState.NotLoading &&
                 emptyLayoutMessage.isNotNull() -> {
             EmptyLayout(
                 text = stringResource(emptyLayoutMessage!!),
                 image = emptyLayoutImage ?: 0
             )
         }
+        pagingFlow != null &&
+                pagingFlow.isEmpty() &&
+                emptyContent != null -> emptyContent()
         else -> {
             content()
         }

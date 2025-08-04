@@ -57,7 +57,7 @@ import com.london.designsystem.component.Text
 import com.london.designsystem.component.button.PrimaryButton
 import com.london.designsystem.theme.NovixTheme
 import com.london.designsystem.utils.shimmerEffect
-import com.london.domain.entity.Movie
+import com.london.domain.entity.UpComingMovie
 import com.london.domain.entity.recent.MediaType
 import com.london.presentation.R
 import com.london.presentation.feature.buildscreen.NetworkErrorScreen
@@ -288,7 +288,7 @@ private fun LazyGridScope.upComingSection(
     contract: HomeScreenContract,
     screenWidth: Dp,
     state: HomeScreenUiState,
-    upcomingMoviesLazyList: LazyPagingItems<Movie>,
+    upcomingMoviesLazyList: LazyPagingItems<UpComingMovie>,
     isLoading: Boolean = false
 ) {
     item(span = { GridItemSpan(maxLineSpan) }) {
@@ -327,7 +327,7 @@ private fun LazyGridScope.upComingSection(
 
         if (movie != null && !isLoading)
             HomeCard(
-                imageUrl = movie.posterUrl,
+                imageUrl = movie.imageUrl,
                 isSaved = false,
                 onSaveClick = { /*TODO*/ },
                 modifier = Modifier

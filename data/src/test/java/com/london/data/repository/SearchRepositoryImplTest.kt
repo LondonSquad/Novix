@@ -2,18 +2,13 @@ package com.london.data.repository
 
 import com.google.common.truth.Truth.assertThat
 import com.london.data.local.database.dao.search.GenreInterestDao
-import com.london.data.local.model.search.ActorLocal
 import com.london.data.local.model.search.GenreInterestEntity
-import com.london.data.local.model.search.SearchActorsLocal
-import com.london.data.local.model.search.SearchMovieDtoLocal
-import com.london.data.local.model.search.SearchMoviesLocal
-import com.london.data.local.model.search.SearchTvShowLocal
-import com.london.data.local.source.LocalDataSource
 import com.london.data.remote.exception.NetworkException
 import com.london.data.remote.model.ApiResponse
-import com.london.data.remote.model.search.model.SearchMovieRemote
-import com.london.data.remote.model.search.model.SearchTvShowRemote
+import com.london.data.remote.model.search.MovieRemote
+import com.london.data.remote.model.search.SearchTvShowRemote
 import com.london.data.remote.source.search.SearchRemoteDataSource
+import com.london.data.repository.search.SearchRepositoryImpl
 import com.london.data.utils.CrashReporter
 import com.london.data.utils.fetchAndSync
 import com.london.domain.entity.Actor
@@ -33,9 +28,6 @@ import org.junit.jupiter.api.assertThrows
 class SearchRepositoryImplTest {
 
     @MockK(relaxed = true)
-    private lateinit var searchMovieService: LocalDataSource<SearchMoviesLocal>
-    private lateinit var searchTvShowService: LocalDataSource<SearchTvShowLocal>
-    private lateinit var searchActorService: LocalDataSource<SearchActorsLocal>
     private lateinit var searchRemoteDataSource: SearchRemoteDataSource
     private lateinit var mockCrashReporter: CrashReporter
     private lateinit var genreInterestDao: GenreInterestDao
@@ -43,16 +35,10 @@ class SearchRepositoryImplTest {
 
     @Before
     fun setUp() {
-        searchTvShowService = mockk(relaxed = true)
-        searchActorService = mockk(relaxed = true)
-        searchMovieService = mockk(relaxed = true)
         searchRemoteDataSource = mockk(relaxed = true)
         mockCrashReporter = mockk<CrashReporter>(relaxed = true)
         genreInterestDao = mockk<GenreInterestDao>(relaxed = true)
         repository = SearchRepositoryImpl(
-            localTvShowDataSource = searchTvShowService,
-            localActorDataSource = searchActorService,
-            localMovieDataSource = searchMovieService,
             remoteDataSource = searchRemoteDataSource,
             crashReporter = mockCrashReporter,
             genreInterestDao = genreInterestDao
@@ -88,52 +74,6 @@ class SearchRepositoryImplTest {
         } else {
             coVerify(exactly = 0) { mockCrashReporter.logException(any()) }
         }
-    }
-
-    @Test
-    fun `searchForMoviesByID should return data from Remote if available`() = runTest {
-        coEvery {
-            searchRemoteDataSource.getMoviesByCategory(
-                1,
-                PAGE_NUMBER
-            )
-        } returns Result.success(SearchMoviesRemoteMock)
-        val result = repository.searchForMoviesByCategory(1, PAGE_NUMBER)
-        assertThat(result).isEqualTo(MovieList)
-    }
-
-    @Test
-    fun `searchForMovies should return data from remote and cache it if local is null`() = runTest {
-        coEvery { searchMovieService.getByQueryAndPage(NAME, PAGE_NUMBER) } returns null
-        coEvery {
-            searchRemoteDataSource.searchForMovies(
-                any(),
-                any(),
-                any()
-            )
-        } returns Result.success(SearchMoviesRemoteMock)
-        val result = repository.searchForMovies(NAME, PAGE_NUMBER)
-        assertThat(result).isEqualTo(MovieList)
-        coVerify { searchMovieService.insert(any()) }
-    }
-
-    @Test
-    fun `searchForMovies should return data from local if available`() = runTest {
-        coEvery { searchMovieService.getByQueryAndPage(NAME, PAGE_NUMBER) } returns SearchMoviesLocalMock
-        val result = repository.searchForMovies(NAME, PAGE_NUMBER)
-        assertThat(result).isEqualTo(MovieList)
-    }
-
-    @Test
-    fun `fetchAndSync reports to crashReporter when cacheBlock and networkBlock throw`() = runTest {
-        val cacheException = RuntimeException("Cache failed")
-        val networkException = RuntimeException("Network failed")
-
-        testFetchAndSyncScenario(
-            cacheBlockAction = { throw cacheException },
-            networkBlockAction = { throw networkException },
-            expectedException = networkException
-        )
     }
 
     @Test
@@ -181,9 +121,6 @@ class SearchRepositoryImplTest {
 
         // Need to create a repository instance with a null crash reporter for this specific test
         val repositoryWithNullCrashReporter = SearchRepositoryImpl(
-            searchTvShowService,
-            searchActorService,
-            searchMovieService,
             genreInterestDao,
             searchRemoteDataSource,
             mockCrashReporter
@@ -203,22 +140,6 @@ class SearchRepositoryImplTest {
     }
 
     @Test
-    fun `searchForTvShows should return data from remote and cache it if local is null`() =
-        runTest {
-            coEvery { searchTvShowService.getByQueryAndPage(NAME, PAGE_NUMBER) } returns null
-            coEvery {
-                searchRemoteDataSource.searchForTvShows(
-                    any(),
-                    any(),
-                    any()
-                )
-            } returns Result.success(SearchTvShowRemoteMock)
-            val result = repository.searchForTvShows(NAME, PAGE_NUMBER)
-            assertThat(result).isEqualTo(TvShowList)
-            coVerify { searchTvShowService.insert(any()) }
-        }
-
-    @Test
     fun `searchForTvShows should throw TvShowSearchFailedException when GetException is thrown`() =
         runTest {
             coEvery {
@@ -232,13 +153,6 @@ class SearchRepositoryImplTest {
                 repository.searchForTvShows(NAME, PAGE_NUMBER)
             }
         }
-
-    @Test
-    fun `searchForActors should return data from local if available`() = runTest {
-        coEvery { searchActorService.getByQueryAndPage(NAME, PAGE_NUMBER) } returns SearchActorsLocalMock
-        val result = repository.searchForActors(NAME, PAGE_NUMBER)
-        assertThat(result).isEqualTo(ActorList)
-    }
 
     @Test
     fun `searchForActors should throw ActorSearchFailedException when GetException is thrown`() =
@@ -326,29 +240,6 @@ class SearchRepositoryImplTest {
     }
 
     @Test
-    fun `get MoviesByCategory should return data from remote if available`()= runTest {
-        coEvery {
-            searchRemoteDataSource.getMoviesByCategory(
-                1,
-                PAGE_NUMBER
-            )
-        } returns Result.success(SearchMoviesRemoteMock)
-        val result = repository.searchForMoviesByCategory(1, PAGE_NUMBER)
-        assertThat(result).isEqualTo(MovieList)
-    }
-
-    @Test
-    fun `get upComingMoviesByCategory should return data from remote if available`()= runTest {
-        coEvery {
-            searchRemoteDataSource.getUpComingMoviesByCategory(
-                1,
-                PAGE_NUMBER
-            )
-        } returns Result.success(SearchMoviesRemoteMock)
-        val result = repository.getUpComingMoviesByCategory(1, PAGE_NUMBER)
-        assertThat(result).isEqualTo(MovieList)
-    }
-    @Test
     fun `incrementGenreInterest inserts new genre when not existing`() = runTest {
         val genreId = 1
         val mediaType = "movie"
@@ -371,8 +262,6 @@ class SearchRepositoryImplTest {
         val query = "Breaking Bad"
         val page = 1
 
-        coEvery { searchTvShowService.getByQueryAndPage(query, page) } returns null
-
         coEvery {
             searchRemoteDataSource.searchForTvShows(query, false, page)
         } throws NetworkException.UnAuthorizedException("401 Unauthorized")
@@ -386,8 +275,6 @@ class SearchRepositoryImplTest {
     fun `searchForTvShows should throw TimeoutException when API times out`() = runTest {
         val query = "Breaking Bad"
         val page = 1
-
-        coEvery { searchTvShowService.getByQueryAndPage(query, page) } returns null
 
         coEvery {
             searchRemoteDataSource.searchForTvShows(query, false, page)
@@ -403,67 +290,12 @@ class SearchRepositoryImplTest {
         val query = "Leonardo DiCaprio"
         val page = 1
 
-        coEvery { searchActorService.getByQueryAndPage(query, page) } returns null
-
         coEvery {
             searchRemoteDataSource.searchForActors(query, false, page)
         } throws NetworkException.ValidationException("Invalid query")
 
         assertThrows<NetworkException.ValidationException> {
             repository.searchForActors(query, page)
-        }
-    }
-
-    @Test
-    fun `searchForMoviesByCategory should throw HttpLockedException when API returns 423`() =
-        runTest {
-            val categoryId = 12
-            val page = 1
-
-            coEvery {
-                searchRemoteDataSource.getMoviesByCategory(categoryId, page)
-            } throws NetworkException.HttpLockedException("Resource locked")
-
-            assertThrows<NetworkException.HttpLockedException> {
-                repository.searchForMoviesByCategory(categoryId, page)
-            }
-        }
-
-    @Test
-    fun `searchForTvShowsByCategory should throw HttpLockedException when API returns 423`() =
-        runTest {
-            val categoryId = 12
-            val page = 1
-
-            coEvery {
-                searchRemoteDataSource.searchForTvShowsByCategoryId(categoryId, page)
-            } throws NetworkException.HttpLockedException("Resource locked")
-
-            assertThrows<NetworkException.HttpLockedException> {
-                repository.searchForTvShowByCategory(categoryId, page)
-            }
-        }
-    @Test
-    fun `searchForTvShowsByCategory should return data from data source if available`()=runTest {
-        //Given
-        coEvery { searchRemoteDataSource.searchForTvShowsByCategoryId(any(), any()) } returns Result.success(SearchTvShowRemoteMock)
-        //When
-        val result = repository.searchForTvShowByCategory(1, PAGE_NUMBER)
-        //Then
-        assertThat(result).isEqualTo(TvShowList)
-    }
-
-    @Test
-    fun `getUpComingMoviesByCategory should throw TimeoutException when API times out`() = runTest {
-        val categoryId = 34
-        val page = 1
-
-        coEvery {
-            searchRemoteDataSource.getUpComingMoviesByCategory(categoryId, page)
-        } throws NetworkException.TimeoutException("Request timed out")
-
-        assertThrows<NetworkException.TimeoutException> {
-            repository.getUpComingMoviesByCategory(categoryId, page)
         }
     }
 
@@ -518,42 +350,10 @@ class SearchRepositoryImplTest {
             totalPages = 1
         )
 
-        private  val SearchMoviesLocalMock = SearchMoviesLocal(
-            query = NAME + LANG,
-            page = PAGE_NUMBER,
-            results = listOf(
-                SearchMovieDtoLocal(
-
-                    genreIds = emptyList(),
-                    id = 1,
-                    posterPath = "",
-                    name = "",
-                    releaseYear = 2020,
-                    rating = 8,
-                )
-            ),
-            totalPages = 1,
-            totalResults = 1
-        )
-
-        private val SearchActorsLocalMock = SearchActorsLocal(
-            query = NAME + LANG,
-            page = PAGE_NUMBER,
-            results = listOf(
-                ActorLocal(
-                    id = 3,
-                    name = "Tom Holland",
-                    profilePicture = "/tom_holland.jpg",
-                )
-            ),
-            totalPages = 1,
-            totalResults = 1
-        )
-
         private val SearchMoviesRemoteMock = ApiResponse(
             currentPage = PAGE_NUMBER,
             items = listOf(
-                SearchMovieRemote(
+                MovieRemote(
                     adult = false,
                     backdropPath = null,
                     genreIds = emptyList(),
@@ -601,6 +401,5 @@ class SearchRepositoryImplTest {
             totalPages = 1,
             totalItems = 1
         )
-
     }
 }
