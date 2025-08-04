@@ -7,5 +7,5 @@ class GetMovieReviewsUseCase @Inject constructor(
     private val tvShowRepository: TvShowRepository
 ) {
     suspend fun invoke(movieId: Int, pageNumber: Int) =
-        tvShowRepository.getMovieReviews(movieId, pageNumber)
+        tvShowRepository.getTvShowReviews(movieId, pageNumber)
 }

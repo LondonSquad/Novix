@@ -176,9 +176,12 @@ object RepositoryModule {
     @Provides
     @Singleton
     fun provideMovieDetailsRepository(
-        dataSource: MovieDetailsRemoteDataSource
+        dataSource: MovieDetailsRemoteDataSource,
+        reviewsRemoteDataSource: ReviewsRemoteDataSource
     ): MovieDetailsRepository =
-        MovieDetailsRepositoryImpl(movieDetailsRemoteDataSource = dataSource)
+        MovieDetailsRepositoryImpl(
+            movieDetailsRemoteDataSource = dataSource,
+            reviewsRemoteDataSource =reviewsRemoteDataSource)
 
     @Provides
     @Singleton
