@@ -24,7 +24,7 @@ import androidx.compose.ui.platform.LocalWindowInfo
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.paging.compose.LazyPagingItems
-import com.london.designsystem.R
+import com.london.presentation.R
 import com.london.designsystem.component.CircularLoading
 import com.london.designsystem.component.EmptyLayout
 import com.london.designsystem.component.HomeCard
@@ -37,6 +37,7 @@ import com.london.domain.entity.TvShow
 import com.london.presentation.utils.MovieGenre
 import com.london.presentation.utils.TvShowGenre
 import com.london.presentation.utils.gridColmuns
+import androidx.compose.ui.tooling.preview.Preview
 
 /**
  * Core layout implementation for both regular lists and paging data
@@ -106,7 +107,7 @@ fun MediaGridLayout(
 
                 MediaGenreFilters(
                     isMovieSelected = isMovieSelected,
-                    isTvSelected = isTvSelected,
+                    isTvShowSelected = isTvSelected,
                     selectedMovieGenre = selectedMovieGenre,
                     selectedTvShowGenre = selectedTvShowGenre,
                     onMovieGenreClick = onMovieGenreClick,
@@ -145,6 +146,7 @@ private fun MediaContent(
     emptyImage: Int?
 ) {
     val isContentEmpty = checkIfContentEmpty(
+        isMovieSelected = isMovieSelected,
         isPaging = isPaging,
         movies = movies,
         tvShows = tvShows,
@@ -173,6 +175,7 @@ private fun MediaContent(
 }
 
 private fun checkIfContentEmpty(
+    isMovieSelected: Boolean,
     isPaging: Boolean,
     movies: List<Movie>?,
     tvShows: List<TvShow>?,
@@ -180,16 +183,29 @@ private fun checkIfContentEmpty(
     tvShowsPagingItems: LazyPagingItems<*>?
 ): Boolean {
     return when {
-        isPaging -> {
-            val movieCount = moviesPagingItems?.itemCount ?: 0
-            val tvShowCount = tvShowsPagingItems?.itemCount ?: 0
-            movieCount == 0 && tvShowCount == 0
+        isMovieSelected -> {
+            when {
+                isPaging -> {
+                    val movieCount = moviesPagingItems?.itemCount ?: 0
+                    movieCount == 0
+                }
+                else -> {
+                    val movieCount = movies?.size ?: 0
+                    movieCount == 0
+                }
+            }
         }
-
         else -> {
-            val movieCount = movies?.size ?: 0
-            val tvShowCount = tvShows?.size ?: 0
-            movieCount == 0 && tvShowCount == 0
+            when {
+                isPaging -> {
+                    val tvShowCount = tvShowsPagingItems?.itemCount ?: 0
+                    tvShowCount == 0
+                }
+                else -> {
+                    val tvShowCount = tvShows?.size ?: 0
+                    tvShowCount == 0
+                }
+            }
         }
     }
 }
@@ -315,5 +331,30 @@ private fun TvShowCard(
         modifier = Modifier.clickable {
             onTvShowClick(tvShowId)
         }
+    )
+}
+
+@Preview(showBackground = true)
+@Composable
+fun MediaGridLayoutPreview() {
+    MediaGridLayout(
+        screenTitle = R.string.continue_watch,
+        tabSelected = 0,
+        selectedMovieGenre = MovieGenre.All,
+        selectedTvShowGenre = TvShowGenre.All,
+        isMovieSelected = true,
+        isTvSelected = false,
+        onBackClick = {},
+        onTabSelected = {},
+        onMovieGenreClick = {},
+        onTvShowGenreClick = {},
+        onMovieClick = {},
+        onTvShowClick = {},
+        movies = emptyList(),
+        tvShows = emptyList(),
+        isPaging = false,
+        isLoading = false,
+        emptyTitle = "No content found",
+        emptyImage = null
     )
 } 
