@@ -112,8 +112,6 @@
     <string name="watching_history">Watching History</string>
     <string name="top_rating">Top Rating</string>
     <string name="no_content_found">No content found</string>
-    <string name="movies">Movies</string>
-    <string name="tv_shows">TV Shows</string>
     <string name="saved_list_title">My Lists</string>
     <string name="no_saved_list">There is no saved list yet, click on + button to add a new list!</string>
     <string name="login_to_create_list">Please login to create lists and add your favorite items to it!</string>

@@ -112,8 +112,6 @@
     <string name="watching_history">سجل المشاهدة</string>
     <string name="top_rating">أعلى التقييمات</string>
     <string name="no_content_found">لا يوجد محتوى</string>
-    <string name="movies">أفلام</string>
-    <string name="tv_shows">مسلسلات</string>
     <string name="saved_list_title">القوائم المحفوظة</string>
     <string name="no_saved_list">لا توجد أي قوائم حتي الان، اضغط علي زر + لاضافة قائمة جديدة</string>
     <string name="login_to_create_list">سجل دخول اولاً حتي تتمكن من استعراض او اضافة قوائم جديدة</string>
