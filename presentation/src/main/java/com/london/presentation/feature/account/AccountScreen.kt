@@ -1,12 +1,8 @@
 package com.london.presentation.feature.account
 
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.WindowInsets
-import androidx.compose.foundation.layout.asPaddingValues
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.statusBars
+import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -16,11 +12,11 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.london.designsystem.component.TopBar
-import com.london.designsystem.theme.NovixTheme
 import com.london.presentation.R
 import com.london.presentation.feature.account.components.LoggedInContent
 import com.london.presentation.feature.account.components.NotLoggedInContent
 import com.london.presentation.feature.account.state.AccountUiState
+import com.london.presentation.feature.buildscreen.BuildScreen
 import com.london.presentation.utils.Listen
 
 @Composable
@@ -62,10 +58,17 @@ fun AccountScreen(
         }
     }
 
-    AccountScreenContent(
-        uiState = uiState,
-        accountContract = viewModel
-    )
+    BuildScreen(
+        isLoading = uiState.isLoading,
+        isError = uiState.error != null,
+        onRetry = {},
+        onBack = {},
+    ) {
+        AccountScreenContent(
+            uiState = uiState,
+            accountContract = viewModel
+        )
+    }
 }
 
 @Composable
@@ -74,14 +77,11 @@ internal fun AccountScreenContent(
     accountContract: AccountContract
 ) {
     Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(NovixTheme.colors.surface)
-            .padding(WindowInsets.statusBars.asPaddingValues())
+        modifier = Modifier.statusBarsPadding()
     ) {
         TopBar(
             title = stringResource(R.string.my_account),
-            modifier = Modifier.padding(vertical = 12.dp),
+            modifier = Modifier.padding(horizontal = 16.dp, vertical = 12.dp)
         )
 
         if (uiState.isUserLoggedIn) {
@@ -94,7 +94,5 @@ internal fun AccountScreenContent(
                 onLoginClick = accountContract::onLoginClick
             )
         }
-
-
     }
 }
