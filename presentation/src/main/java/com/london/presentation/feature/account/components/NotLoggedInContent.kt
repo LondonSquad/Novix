@@ -45,10 +45,8 @@ fun NotLoggedInContent(
             style = NovixTheme.typography.body.small,
             color = NovixTheme.colors.body,
             textAlign = TextAlign.Center,
-            modifier = Modifier.padding(horizontal = 48.dp, vertical = 12.dp)
+            modifier = Modifier.padding(horizontal = 48.dp, vertical = 24.dp)
         )
-
-        Spacer(modifier = Modifier.height(12.dp))
 
         OutlineButton(
             text = stringResource(R.string.login),
