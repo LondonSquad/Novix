@@ -61,7 +61,7 @@ fun AccountMenuItem(
             Text(
                 text = it,
                 style = NovixTheme.typography.label.small,
-                color = NovixTheme.colors.body
+                color = NovixTheme.colors.hint
             )
         }
     }
