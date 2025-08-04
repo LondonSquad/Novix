@@ -122,4 +122,13 @@
     <string name="user_profile">User profile</string>
     <string name="logout">Logout</string>
     <string name="please_login_to_access">Please login to access your account details and other features!</string>
+    <string name="strict">Strict</string>
+    <string name="moderate">Moderate</string>
+    <string name="off">Off</string>
+    <string name="blurs_all_sensitive_content">Blurs all sensitive content.</string>
+    <string name="blurs_explicit_scenes_only">Blurs explicit scenes only.</string>
+    <string name="no_content_is_blurred">No content is blurred.</string>
+    <string name="save">Save</string>
+
+
 </resources>

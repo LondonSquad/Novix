@@ -11,8 +11,11 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.london.designsystem.component.ModalBottomSheet
 import com.london.designsystem.component.TopBar
+import com.london.designsystem.component.rememberModalBottomSheetState
 import com.london.presentation.R
+import com.london.presentation.feature.account.components.ContentRestrictionBottomSheet
 import com.london.presentation.feature.account.components.LoggedInContent
 import com.london.presentation.feature.account.components.NotLoggedInContent
 import com.london.presentation.feature.account.state.AccountUiState
@@ -68,6 +71,18 @@ fun AccountScreen(
             uiState = uiState,
             accountContract = viewModel
         )
+    }
+
+    if (uiState.showContentRestrictionBottomSheet) {
+        ModalBottomSheet(
+            onDismissRequest = viewModel::onBottomSheetDismiss,
+            state = rememberModalBottomSheetState(skipPartiallyExpanded = true),
+        ) {
+            ContentRestrictionBottomSheet(
+                currentLevel = uiState.currentContentRestriction,
+                onSaveClick = viewModel::onContentRestrictionSave
+            )
+        }
     }
 }
 

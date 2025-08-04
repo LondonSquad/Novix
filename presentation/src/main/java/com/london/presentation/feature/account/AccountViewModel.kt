@@ -1,19 +1,34 @@
 package com.london.presentation.feature.account
 
+import androidx.lifecycle.viewModelScope
+import com.london.domain.AppPreferencesService
+import com.london.domain.contentrestriction.ContentRestrictionLevel
 import com.london.presentation.feature.account.state.AccountUiState
 import com.london.presentation.feature.base.BaseViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 import javax.inject.Inject
 
 @HiltViewModel
-class AccountViewModel @Inject constructor() :
-    BaseViewModel<AccountUiState, AccountEffect>(AccountUiState()),
+class AccountViewModel @Inject constructor(
+    private val appPreferencesService: AppPreferencesService
+) : BaseViewModel<AccountUiState, AccountEffect>(AccountUiState()),
     AccountContract {
 
     init {
         updateState {
             copy(isUserLoggedIn = checkIfUserIsLoggedIn())
         }
+        observeContentRestrictionLevel()
+    }
+
+    private fun observeContentRestrictionLevel() {
+        appPreferencesService.contentRestrictionLevel
+            .onEach { level ->
+                updateState { copy(currentContentRestriction = level) }
+            }
+            .launchIn(viewModelScope)
     }
 
     private fun checkIfUserIsLoggedIn(): Boolean {
@@ -36,6 +51,11 @@ class AccountViewModel @Inject constructor() :
 
     override fun onChangePasswordClick() {
         emitEffect(AccountEffect.NavigateToChangePassword)
+    }
+
+    override fun onContentRestrictionSave(level: ContentRestrictionLevel) {
+        appPreferencesService.setContentRestrictionLevel(level)
+        updateState { copy(showContentRestrictionBottomSheet = false) }
     }
 
     override fun onAppearanceClick() {

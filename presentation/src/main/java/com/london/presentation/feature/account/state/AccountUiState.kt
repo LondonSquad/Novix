@@ -1,5 +1,6 @@
 package com.london.presentation.feature.account.state
 
+import com.london.domain.contentrestriction.ContentRestrictionLevel
 import com.london.presentation.feature.base.ErrorState
 
 data class AccountUiState(
@@ -8,6 +9,7 @@ data class AccountUiState(
     val username: String = "",
     val currentAppearance: String = "",
     val currentLanguage: String = "",
+    val currentContentRestriction: ContentRestrictionLevel = ContentRestrictionLevel.MODERATE,
     val isUserLoggedIn: Boolean = true,
     val showUserMenu: Boolean = false,
     val showContentRestrictionBottomSheet: Boolean = false,

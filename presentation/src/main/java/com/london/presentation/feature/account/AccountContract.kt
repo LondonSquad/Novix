@@ -1,5 +1,7 @@
 package com.london.presentation.feature.account
 
+import com.london.domain.contentrestriction.ContentRestrictionLevel
+
 interface AccountContract {
     fun onWatchingHistoryClick()
     fun onMyRatingClick()
@@ -11,4 +13,5 @@ interface AccountContract {
     fun onLogoutClick()
     fun onBottomSheetDismiss()
     fun onLoginClick()
+    fun onContentRestrictionSave(level: ContentRestrictionLevel)
 }
