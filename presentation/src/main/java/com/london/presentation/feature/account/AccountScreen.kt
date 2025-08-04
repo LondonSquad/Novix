@@ -26,11 +26,11 @@ import com.london.presentation.utils.Listen
 @Composable
 fun AccountScreen(
     viewModel: AccountViewModel = hiltViewModel(),
-    onNavigateToWatchingHistory: () -> Unit,
-    onNavigateToMyRating: () -> Unit,
-    onNavigateToChangePassword: () -> Unit,
-    onNavigateToLogin: () -> Unit,
-    onLogout: () -> Unit
+    onNavigateToWatchingHistory: () -> Unit = {},
+    onNavigateToMyRating: () -> Unit = {},
+    onNavigateToChangePassword: () -> Unit = {},
+    onNavigateToLogin: () -> Unit = {},
+    onLogout: () -> Unit = {}
 ) {
     val uiState by viewModel.state.collectAsStateWithLifecycle()
     val effect by viewModel.effect.collectAsState(null)
