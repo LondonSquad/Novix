@@ -15,7 +15,7 @@ class TopRatedDataSourceImpl @Inject constructor (
 ) : HomeLocalDataSource<TopRatedLocal> {
 
     init {
-        deleteExpired()
+        deleteExpiredData()
     }
 
     override suspend fun insert(item: TopRatedLocal) =
@@ -34,7 +34,7 @@ class TopRatedDataSourceImpl @Inject constructor (
     override suspend fun getByDate(date: Long): TopRatedLocal =
         topRatedDao.getByDate(date)
     
-    private fun deleteExpired() {
+    private fun deleteExpiredData() {
         CoroutineScope(Dispatchers.IO).launch {
             topRatedDao.getAll().forEach { popularLocal ->
                 if (popularLocal.date.isDayExpired())

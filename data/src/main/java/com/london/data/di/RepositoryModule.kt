@@ -31,21 +31,21 @@ import com.london.data.remote.source.reviews.ReviewsRemoteDataSource
 import com.london.data.remote.source.search.SearchRemoteDataSource
 import com.london.data.remote.source.toprated.movie.TopRatedMovieRemoteDataSource
 import com.london.data.remote.source.toprated.tvseries.TopRatedTvRemoteDataSource
-import com.london.data.repository.ActorRepositoryImpl
-import com.london.data.repository.DetailsRepositoryImpl
-import com.london.data.repository.MovieDetailsRepositoryImpl
-import com.london.data.repository.MovieVideoProviderRepositoryImpl
-import com.london.data.repository.SearchRepositoryImpl
-import com.london.data.repository.TvShowVideoProviderRepositoryImpl
 import com.london.data.repository.authentication.AuthenticationRepositoryImpl
 import com.london.data.repository.home.popular.PopularRepositoryImpl
+import com.london.data.repository.home.toprated.TopRatedMovieRepositoryImpl
+import com.london.data.repository.home.toprated.TopRatedTvSeriesRepositoryImpl
+import com.london.data.repository.home.trending.TrendingRepositoryImpl
 import com.london.data.repository.home.upcoming.UpComingRepositoryImpl
 import com.london.data.repository.recent.RecentSearchRepositoryImpl
 import com.london.data.repository.recent.RecentViewedRepositoryImpl
 import com.london.data.repository.recent.RecentWatchedRepositoryIml
-import com.london.data.repository.toprated.TopRatedMovieRepositoryImpl
-import com.london.data.repository.toprated.TopRatedTvSeriesRepositoryImpl
-import com.london.data.repository.trending.TrendingRepositoryImpl
+import com.london.data.repository.search.ActorRepositoryImpl
+import com.london.data.repository.search.MovieDetailsRepositoryImpl
+import com.london.data.repository.search.MovieVideoProviderRepositoryImpl
+import com.london.data.repository.search.SearchRepositoryImpl
+import com.london.data.repository.search.TvShowRepositoryImpl
+import com.london.data.repository.search.TvShowVideoProviderRepositoryImpl
 import com.london.data.utils.CrashReporter
 import com.london.data.utils.FirebaseCrashReporter
 import com.london.domain.entity.recent.RecentSearch
@@ -168,7 +168,7 @@ object RepositoryModule {
     fun provideDetailsRepository(
         tvShowDetailsRemoteDataSource: TvShowDetailsRemoteDataSource,
         reviewsRemoteDataSource: ReviewsRemoteDataSource
-    ): DetailsRepository = DetailsRepositoryImpl(
+    ): DetailsRepository = TvShowRepositoryImpl(
         tvShowDetailsRemoteDataSource = tvShowDetailsRemoteDataSource,
         reviewsRemoteDataSource = reviewsRemoteDataSource
     )

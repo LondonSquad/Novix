@@ -3,9 +3,9 @@ package com.london.data.remote.service.search
 
 import com.london.data.remote.model.ApiConstants
 import com.london.data.remote.model.ApiResponse
-import com.london.data.remote.model.search.model.MovieRemote
-import com.london.data.remote.model.search.model.SearchTvShowRemote
-import com.london.data.remote.model.search.model.searchactormodel.SearchActorRemote
+import com.london.data.remote.model.search.MovieRemote
+import com.london.data.remote.model.search.SearchTvShowRemote
+import com.london.data.remote.model.search.searchactor.SearchActorRemote
 import com.london.domain.KoverIgnore
 import retrofit2.Response
 import retrofit2.http.GET
