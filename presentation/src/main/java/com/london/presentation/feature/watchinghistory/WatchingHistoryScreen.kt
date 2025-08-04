@@ -1,17 +1,17 @@
-package com.london.presentation.feature.continuewatching
+package com.london.presentation.feature.watchinghistory
 
 import androidx.compose.runtime.Composable
 import com.london.presentation.R
 import com.london.presentation.feature.watching.WatchingMediaScreen
 
 @Composable
-fun ContinueWatchingScreen(
+fun WatchingHistoryScreen(
     onBackClick: () -> Unit = {},
     onMovieClick: (Int) -> Unit = {},
     onTvShowClick: (Int) -> Unit = {},
 ) {
     WatchingMediaScreen(
-        screenTitle = R.string.continue_watch,
+        screenTitle = R.string.watching_history,
         onBackClick = onBackClick,
         onMovieClick = onMovieClick,
         onTvShowClick = onTvShowClick
