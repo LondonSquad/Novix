@@ -2,7 +2,7 @@ package com.london.data.di
 
 import android.content.SharedPreferences
 import com.london.data.local.database.dao.home.popular.PopularSectionDao
-import com.london.data.local.database.dao.home.popular.TopRatedDao
+import com.london.data.local.database.dao.home.toprated.TopRatedDao
 import com.london.data.local.database.dao.home.upcoming.UpcomingSectionDao
 import com.london.data.local.database.dao.recent.search.RecentSearchDao
 import com.london.data.local.database.dao.recent.viewed.RecentViewedDao
@@ -11,8 +11,8 @@ import com.london.data.local.database.dao.recent.whatched.tvshow.RecentWatchedTv
 import com.london.data.local.database.dao.search.SearchActorsDao
 import com.london.data.local.database.dao.search.SearchMoviesDao
 import com.london.data.local.database.dao.search.SearchTvShowDao
-import com.london.data.local.model.home.popular.PopularSectionLocal
 import com.london.data.local.model.home.TopRatedLocal
+import com.london.data.local.model.home.popular.PopularSectionLocal
 import com.london.data.local.model.recent.search.RecentSearchLocal
 import com.london.data.local.model.recent.viewed.RecentViewedLocal
 import com.london.data.local.model.recent.watched.RecentWatchedMovieLocal
@@ -21,10 +21,10 @@ import com.london.data.local.model.search.SearchActorsLocal
 import com.london.data.local.model.search.SearchMoviesLocal
 import com.london.data.local.model.search.SearchTvShowLocal
 import com.london.data.local.preference.AppPreferencesServiceImpl
-import com.london.data.local.source.home.popular.HomeLocalDataSource
 import com.london.data.local.source.LocalDataSource
+import com.london.data.local.source.home.HomeLocalDataSource
 import com.london.data.local.source.home.popular.PopularLocalDataSourceImpl
-import com.london.data.local.source.home.popular.TopRatedDataSourceImpl
+import com.london.data.local.source.home.toprated.TopRatedDataSourceImpl
 import com.london.data.local.source.home.upcoming.UpComingLocalDataSource
 import com.london.data.local.source.home.upcoming.UpComingLocalDataSourceImpl
 import com.london.data.local.source.recent.RecentDataSource

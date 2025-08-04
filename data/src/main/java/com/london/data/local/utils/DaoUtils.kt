@@ -1,7 +1,7 @@
 package com.london.data.local.utils
 
-import com.london.data.local.database.dao.home.popular.HomeDao
 import com.london.data.local.database.dao.SearchDao
+import com.london.data.local.database.dao.home.HomeDao
 import com.london.data.local.exception.DeleteException
 import com.london.data.local.exception.GetException
 import com.london.data.local.exception.InsertException
