@@ -9,7 +9,6 @@ import com.london.data.remote.model.search.model.SearchTvShowRemote
 import com.london.data.utils.asImageUrlOrEmpty
 import com.london.data.utils.extractYear
 import com.london.data.utils.generateHash
-import com.london.data.utils.isTrue
 import com.london.data.utils.orZero
 import com.london.data.utils.roundToDecimal
 import com.london.domain.KoverIgnore
@@ -41,4 +40,14 @@ fun SearchTvShowRemote.toLocal() = SearchTvShowDtoLocal(
     name = name.orEmpty(),
     voteAverage = voteAverage.orZero().roundToDecimal(),
     firstAirDate = firstAirDate.orEmpty(),
+)
+
+fun SearchTvShowRemote.toEntity() = TvShow(
+    id = id.orZero(),
+    posterPicture = posterPath.asImageUrlOrEmpty(),
+    name = name.orEmpty(),
+    releaseYear = firstAirDate?.extractYear().orZero(),
+    rating = voteAverage.orZero().toInt(),
+    genres = genreIds.orEmpty(),
+
 )

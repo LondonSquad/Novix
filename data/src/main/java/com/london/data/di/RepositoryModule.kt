@@ -6,12 +6,8 @@ import com.london.data.local.model.recent.search.RecentSearchLocal
 import com.london.data.local.model.recent.viewed.RecentViewedLocal
 import com.london.data.local.model.recent.watched.RecentWatchedMovieLocal
 import com.london.data.local.model.recent.watched.RecentWatchedTvShowLocal
-import com.london.data.local.model.search.SearchActorsLocal
-import com.london.data.local.model.search.SearchMoviesLocal
-import com.london.data.local.model.search.SearchTvShowLocal
 import com.london.data.local.preference.AuthPreferences
 import com.london.data.local.source.HomeLocalDataSource
-import com.london.data.local.source.LocalDataSource
 import com.london.data.local.source.recent.RecentDataSource
 import com.london.data.local.source.recent.watched.RecentWatchedDataSource
 import com.london.data.remote.service.home.TrendingApiService
@@ -171,16 +167,10 @@ object RepositoryModule {
     @Provides
     @Singleton
     fun provideSearchRepository(
-        localTvShowDataSource: LocalDataSource<SearchTvShowLocal>,
-        localActorDataSource: LocalDataSource<SearchActorsLocal>,
-        localMovieDataSource: LocalDataSource<SearchMoviesLocal>,
         genreInterestDao: GenreInterestDao,
         remoteDataSource: SearchRemoteDataSource,
         crashReporter: CrashReporter
     ): SearchRepository = SearchRepositoryImpl(
-        localTvShowDataSource = localTvShowDataSource,
-        localActorDataSource = localActorDataSource,
-        localMovieDataSource = localMovieDataSource,
         genreInterestDao = genreInterestDao,
         remoteDataSource = remoteDataSource,
         crashReporter = crashReporter

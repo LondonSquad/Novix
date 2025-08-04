@@ -9,10 +9,7 @@ import com.london.data.remote.model.search.model.SearchMovieRemote
 import com.london.data.utils.asImageUrlOrEmpty
 import com.london.data.utils.extractYear
 import com.london.data.utils.generateHash
-import com.london.data.utils.isTrue
 import com.london.data.utils.orZero
-import com.london.data.utils.roundToDecimal
-import com.london.data.utils.roundToFirstDecimal
 import com.london.domain.KoverIgnore
 import com.london.domain.entity.Movie
 

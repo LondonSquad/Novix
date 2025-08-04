@@ -2,15 +2,9 @@ package com.london.data.repository
 
 import com.london.data.local.database.dao.search.GenreInterestDao
 import com.london.data.local.model.search.GenreInterestEntity
-import com.london.data.local.model.search.SearchActorsLocal
-import com.london.data.local.model.search.SearchMoviesLocal
-import com.london.data.local.model.search.SearchTvShowLocal
-import com.london.data.local.source.LocalDataSource
 import com.london.data.mapper.toEntity
-import com.london.data.mapper.toLocal
 import com.london.data.remote.source.search.SearchRemoteDataSource
 import com.london.data.utils.CrashReporter
-import com.london.data.utils.fetchAndSync
 import com.london.domain.entity.Actor
 import com.london.domain.entity.Movie
 import com.london.domain.entity.PagedFetchResponse
@@ -19,114 +13,96 @@ import com.london.domain.repository.SearchRepository
 import javax.inject.Inject
 
 class SearchRepositoryImpl @Inject constructor(
-    private val localTvShowDataSource: LocalDataSource<SearchTvShowLocal>,
-    private val localActorDataSource: LocalDataSource<SearchActorsLocal>,
-    private val localMovieDataSource: LocalDataSource<SearchMoviesLocal>,
     private val genreInterestDao: GenreInterestDao,
     private val remoteDataSource: SearchRemoteDataSource,
     private val crashReporter: CrashReporter
 ) : SearchRepository {
 
     override suspend fun searchForMovies(
-        name: String, pageNumber: Int
-    ): PagedFetchResponse<Movie> = fetchAndSync(
-        cacheBlock = {
-            localMovieDataSource.getByQueryAndPage(
-                query = name, page = pageNumber
-            )
-        }, networkBlock = {
-            remoteDataSource.searchForMovies(
+        name: String,
+        pageNumber: Int
+    ): PagedFetchResponse<Movie> {
+            val response = remoteDataSource.searchForMovies(
                 query = name,
                 includeAdult = false,
                 pageNumber = pageNumber,
-            ).getOrThrow().toLocal(query = name)
-        }, syncBlock = { localMovieDataSource.insert(it) }, crashReporter = crashReporter
-    ).run {
-        PagedFetchResponse(
-            currentPage = page,
-            items = results.map { it.toEntity() },
-            totalPages = totalPages,
-            totalItems = totalResults
+            ).getOrThrow()
+
+        return PagedFetchResponse(
+            currentPage = response.currentPage,
+            items = response.items.map { it.toEntity() },
+            totalPages = response.totalPages,
+            totalItems = response.totalItems
         )
     }
 
     override suspend fun searchForTvShows(
-        name: String, pageNumber: Int
-    ): PagedFetchResponse<TvShow> = fetchAndSync(
-        cacheBlock = {
-            localTvShowDataSource.getByQueryAndPage(
-                query = name, page = pageNumber
-            )
-        }, networkBlock = {
-            remoteDataSource.searchForTvShows(
+        name: String,
+        pageNumber: Int
+    ): PagedFetchResponse<TvShow> {
+            val response = remoteDataSource.searchForTvShows(
                 query = name,
                 includeAdult = false,
                 pageNumber = pageNumber,
-            ).getOrThrow().toLocal(query = name)
-        }, syncBlock = { localTvShowDataSource.insert(it) }, crashReporter = crashReporter
-    ).run {
-        PagedFetchResponse(
-            currentPage = page,
-            items = results.map { it.toEntity() },
-            totalPages = totalPages,
-            totalItems = totalResults
+            ).getOrThrow()
+
+        return PagedFetchResponse(
+            currentPage = response.currentPage,
+            items = response.items.map { it.toEntity() },
+            totalPages = response.totalPages,
+            totalItems = response.totalItems
         )
     }
 
     override suspend fun searchForActors(
-        name: String, pageNumber: Int
-    ): PagedFetchResponse<Actor> = fetchAndSync(
-        cacheBlock = {
-            localActorDataSource.getByQueryAndPage(
-                query = name, page = pageNumber
-            )
-        }, networkBlock = {
-            remoteDataSource.searchForActors(
+        name: String,
+        pageNumber: Int
+    ): PagedFetchResponse<Actor> {
+            val response = remoteDataSource.searchForActors(
                 query = name,
                 includeAdult = false,
                 pageNumber = pageNumber,
-            ).getOrThrow().toLocal(query = name)
-        }, syncBlock = { localActorDataSource.insert(it) }, crashReporter = crashReporter
-    ).run {
-        PagedFetchResponse(
-            currentPage = page,
-            items = results.map { it.toEntity("") },
-            totalPages = totalPages,
-            totalItems = totalResults
+            ).getOrThrow()
+
+        return PagedFetchResponse(
+            currentPage = response.currentPage,
+            items = response.items.map { it.toEntity() },
+            totalPages = response.totalPages,
+            totalItems = response.totalItems
         )
     }
 
     override suspend fun searchForMoviesByCategory(
-        categoryId: Int, pageNumber: Int
-    ): PagedFetchResponse<Movie> = fetchAndSync(
-        networkBlock = {
-            remoteDataSource.getMoviesByCategory(
+        categoryId: Int,
+        pageNumber: Int
+    ): PagedFetchResponse<Movie> {
+            val response = remoteDataSource.getMoviesByCategory(
                 categoryId = categoryId,
                 pageNumber = pageNumber,
-            ).getOrThrow().toLocal(query = "")
-        }).run {
-        PagedFetchResponse(
-            currentPage = page,
-            items = results.map { it.toEntity() },
-            totalPages = totalPages,
-            totalItems = totalResults
+            ).getOrThrow()
+
+        return PagedFetchResponse(
+            currentPage = response.currentPage,
+            items = response.items.map { it.toEntity() },
+            totalPages = response.totalPages,
+            totalItems = response.totalItems
         )
     }
 
     override suspend fun getUpComingMoviesByCategory(
-        categoryId: Int?, pageNumber: Int
-    ): PagedFetchResponse<Movie> = fetchAndSync(
-        networkBlock = {
-            remoteDataSource.getUpComingMoviesByCategory(
+        categoryId: Int?,
+        pageNumber: Int
+    ): PagedFetchResponse<Movie> {
+            val response = remoteDataSource.getUpComingMoviesByCategory(
                 categoryId = categoryId,
                 pageNumber = pageNumber,
-            ).getOrThrow().toLocal(query = "")
-        }).run {
-        PagedFetchResponse(
-            currentPage = page,
-            items = results.map { it.toEntity() },
-            totalPages = totalPages,
-            totalItems = totalResults
+            ).getOrThrow()
+
+        return PagedFetchResponse(
+            currentPage = response.currentPage,
+            items = response.items.map { it.toEntity() },
+            totalPages = response.totalPages,
+            totalItems = response.totalItems
         )
     }
 
@@ -158,19 +134,19 @@ class SearchRepositoryImpl @Inject constructor(
     }
 
     override suspend fun searchForTvShowByCategory(
-        categoryId: Int, pageNumber: Int
-    ): PagedFetchResponse<TvShow> = fetchAndSync(
-        networkBlock = {
-            remoteDataSource.searchForTvShowsByCategoryId(
-                categoryId = categoryId,
-                pageNumber = pageNumber,
-            ).getOrThrow().toLocal(query = "")
-        }).run {
-        PagedFetchResponse(
-            currentPage = page,
-            items = results.map { it.toEntity() },
-            totalPages = totalPages,
-            totalItems = totalResults
+        categoryId: Int,
+        pageNumber: Int
+    ): PagedFetchResponse<TvShow> {
+        val response = remoteDataSource.searchForTvShowsByCategoryId(
+            categoryId = categoryId,
+            pageNumber = pageNumber,
+        ).getOrThrow()
+
+        return PagedFetchResponse(
+            currentPage = response.currentPage,
+            items = response.items.map { it.toEntity() },
+            totalPages = response.totalPages,
+            totalItems = response.totalItems
         )
     }
 }

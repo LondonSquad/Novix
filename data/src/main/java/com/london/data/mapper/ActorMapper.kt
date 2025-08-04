@@ -35,3 +35,10 @@ fun SearchActorRemote.toLocal() = ActorLocal(
     name = name.orEmpty(),
     profilePicture = profilePath.orEmpty(),
 )
+
+fun SearchActorRemote.toEntity() = Actor(
+    id = id.orZero(),
+    name = name.orEmpty(),
+    profilePictureUrl = profilePath.orEmpty(),
+    characterName = originalName.orEmpty(),
+)
