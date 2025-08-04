@@ -12,6 +12,7 @@ import com.london.data.remote.service.details.actor.ActorDetailsApiService
 import com.london.data.remote.service.details.movie.AddMovieRatingApiService
 import com.london.data.remote.service.details.movie.MovieDetailsApiService
 import com.london.data.remote.service.details.tvshow.TvShowDetailsApiService
+import com.london.data.remote.service.discover.DiscoverApiService
 import com.london.data.remote.service.home.PopularApiService
 import com.london.data.remote.service.home.TrendingApiService
 import com.london.data.remote.service.home.UpComingApiService
@@ -179,4 +180,9 @@ object NetworkModule {
     @Singleton
     fun proviesUpComingMovieApiService(retrofit: Retrofit): UpComingApiService =
         retrofit.create(UpComingApiService::class.java)
+
+    @Provides
+    @Singleton
+    fun provideDiscoverApiService(retrofit: Retrofit): DiscoverApiService =
+        retrofit.create(DiscoverApiService::class.java)
 }

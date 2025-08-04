@@ -23,6 +23,7 @@ import com.london.data.remote.source.details.movie.MovieDetailsRemoteDataSource
 import com.london.data.remote.source.details.tvshow.TvShowDetailsRemoteDataSource
 import com.london.data.remote.source.details.videoprovider.movie.MovieVideoProviderRemote
 import com.london.data.remote.source.details.videoprovider.tvshow.TvShowVideoProviderRemote
+import com.london.data.remote.source.discover.DiscoverRemoteDataSource
 import com.london.data.remote.source.home.popular.PopularRemoteDataSource
 import com.london.data.remote.source.home.trending.TrendingRemoteDataSource
 import com.london.data.remote.source.home.trending.TrendingRemoteDataSourceImpl
@@ -38,6 +39,7 @@ import com.london.data.repository.MovieVideoProviderRepositoryImpl
 import com.london.data.repository.SearchRepositoryImpl
 import com.london.data.repository.TvShowVideoProviderRepositoryImpl
 import com.london.data.repository.authentication.AuthenticationRepositoryImpl
+import com.london.data.repository.discover.DiscoverRepositoryImpl
 import com.london.data.repository.home.popular.PopularRepositoryImpl
 import com.london.data.repository.home.upcoming.UpComingRepositoryImpl
 import com.london.data.repository.recent.RecentSearchRepositoryImpl
@@ -62,6 +64,7 @@ import com.london.domain.repository.SearchRepository
 import com.london.domain.repository.TrendingRepository
 import com.london.domain.repository.TvShowVideoProviderRepository
 import com.london.domain.repository.UpComingRepository
+import com.london.domain.repository.discover.DiscoverRepository
 import com.london.domain.repository.toprated.TopRatedMovieRepository
 import com.london.domain.repository.toprated.TopRatedTvSeriesRepository
 import dagger.Module
@@ -222,4 +225,13 @@ object RepositoryModule {
         upComingRemoteDataSource = upComingRemoteDataSource,
         crashReporter = crashReporter
     )
+
+    @Provides
+    @Singleton
+    fun provideDisCoverRepository(
+        dataSource: DiscoverRemoteDataSource
+    ): DiscoverRepository = DiscoverRepositoryImpl(
+        remoteDataSource = dataSource
+    )
+
 }
