@@ -1,10 +1,9 @@
 package com.london.data.local.utils
 
-import com.london.data.local.database.dao.HomeDao
+import com.london.data.local.database.dao.home.HomeDao
 import com.london.data.local.exception.DeleteException
 import com.london.data.local.exception.GetException
 import com.london.data.local.exception.InsertException
-import com.london.data.local.exception.UpdateException
 
 suspend inline fun <T> runOrThrow(
     crossinline block: suspend () -> T, crossinline error: () -> Throwable
