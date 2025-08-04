@@ -2,7 +2,7 @@ package com.london.data.repository.popular
 
 import com.google.common.truth.Truth.assertThat
 import com.london.data.local.model.home.popular.PopularSectionLocal
-import com.london.data.local.source.HomeLocalDataSource
+import com.london.data.local.source.home.HomeLocalDataSource
 import com.london.data.remote.exception.NetworkException
 import com.london.data.remote.model.ApiResponse
 import com.london.data.remote.model.home.model.popular.PopularMovieResponse
