@@ -13,6 +13,7 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.statusBarsPadding
@@ -161,8 +162,9 @@ fun SearchScreenContent(
             TopBar(
                 modifier = Modifier
                     .statusBarsPadding()
-                    .height(56.dp)
-                    .padding(horizontal = 16.dp),
+                    .heightIn(56.dp)
+                    .padding(top = 12.dp)
+                    .padding(horizontal = 4.dp),
                 title = stringResource(R.string.search),
             )
 

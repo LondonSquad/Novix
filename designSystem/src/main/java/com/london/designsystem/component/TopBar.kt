@@ -25,6 +25,10 @@ import com.london.designsystem.R
 import com.london.designsystem.theme.NovixTheme
 import com.london.designsystem.theme.ThemePreviews
 
+/**
+ * When you want to use this TopBar with text only without back button
+ * Please apply padding(horizontal = 4.dp) not padding(horizontal = 16.dp)
+ */
 @Composable
 fun TopBar(
     modifier: Modifier = Modifier,
