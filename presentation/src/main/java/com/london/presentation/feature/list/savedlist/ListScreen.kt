@@ -30,7 +30,6 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.scale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -45,7 +44,6 @@ import com.london.designsystem.component.button.OutlineButton
 import com.london.designsystem.theme.NovixTheme
 import com.london.designsystem.theme.ThemePreviews
 import com.london.designsystem.utils.painter
-import com.london.domain.entity.recent.MediaType
 import com.london.presentation.R
 import com.london.presentation.feature.base.ErrorState
 import com.london.presentation.feature.buildscreen.BuildScreen
@@ -321,23 +319,7 @@ private fun Preview() {
         val state = ListUiState()
         Content(
             state = state,
-            contract = object : ListContract {
-                override fun onRetry() {}
-                override fun onLoginClick() {}
-                override fun onListClick(id: Int) {}
-                override fun onFabClick() {}
-                override fun onEditListSheetDismiss() {}
-                override fun onSaveEdit(listName: TextFieldValue) {}
-                override fun onListNameChanged(listName: TextFieldValue) {}
-                override fun onMediaTypeChanged(mediaType: MediaType) {}
-                override fun showAddListSheet(mediaType: MediaType) {}
-                override fun showEditListSheet(
-                    listId: String,
-                    currentName: String,
-                    mediaType: MediaType
-                ) {
-                }
-            }
+            contract = defaultContractList()
         )
     }
 }

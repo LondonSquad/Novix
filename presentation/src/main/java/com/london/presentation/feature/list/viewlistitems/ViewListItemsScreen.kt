@@ -165,16 +165,7 @@ private fun Preview() {
         }.collectAsLazyPagingItems()
         Content(
             state = ViewListItemsUiState(),
-            contract = object : ViewListItemsContract {
-                override fun onBack() {}
-                override fun onRetry() {}
-                override fun onEditClick() {}
-                override fun onDeleteClick() {}
-                override fun onMovieClick(id: Int) {}
-                override fun onTvShowClick(id: Int) {}
-                override fun onItemsTypeClick(itemsType: ItemsType) {}
-                override fun onRemoveMediaClick(id: Int, type: MediaType) {}
-            },
+            contract = defaultContractViewListItems(),
             listItems = listItems
         )
     }

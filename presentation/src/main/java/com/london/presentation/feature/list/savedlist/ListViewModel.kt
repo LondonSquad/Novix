@@ -33,7 +33,7 @@ class ListViewModel @Inject constructor() :
         /*TODO*/
     }
 
-    override fun onEditListSheetDismiss() {
+    override fun onEditAddListSheetDismiss() {
         /*TODO*/
     }
 
@@ -53,7 +53,7 @@ class ListViewModel @Inject constructor() :
         /*TODO*/
     }
 
-    override fun showEditListSheet(listId: String, currentName: String, mediaType: MediaType) {
+    override fun showEditListSheet(listId: Int, currentName: String, mediaType: MediaType) {
         /*TODO*/
     }
 

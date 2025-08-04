@@ -10,10 +10,29 @@ interface ListContract {
     fun onFabClick()
 
 
-    fun onEditListSheetDismiss()
+    fun onEditAddListSheetDismiss()
     fun onSaveEdit(listName: TextFieldValue)
     fun onListNameChanged(listName: TextFieldValue)
     fun onMediaTypeChanged(mediaType: MediaType)
     fun showAddListSheet(mediaType: MediaType = MediaType.Movie)
-    fun showEditListSheet(listId: String, currentName: String, mediaType: MediaType)
+    fun showEditListSheet(listId: Int, currentName: String, mediaType: MediaType)
+}
+
+
+fun defaultContractList() = object : ListContract {
+    override fun onRetry() {}
+    override fun onLoginClick() {}
+    override fun onListClick(id: Int) {}
+    override fun onFabClick() {}
+    override fun onEditAddListSheetDismiss() {}
+    override fun onSaveEdit(listName: TextFieldValue) {}
+    override fun onListNameChanged(listName: TextFieldValue) {}
+    override fun onMediaTypeChanged(mediaType: MediaType) {}
+    override fun showAddListSheet(mediaType: MediaType) {}
+    override fun showEditListSheet(
+        listId: Int,
+        currentName: String,
+        mediaType: MediaType
+    ) {
+    }
 }
