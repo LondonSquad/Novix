@@ -16,6 +16,12 @@ class UpComingLocalDataSourceImpl @Inject constructor(
         deleteExpiredData()
     }
 
+    override suspend fun insert(item: UpComingSectionLocal) =
+        upcomingSectionDao.insert(item)
+
+    override suspend fun getUpComingMoviesPage(categoryId: Int?, page: Int): UpComingSectionLocal =
+        upcomingSectionDao.getUpComingMoviesPage(categoryId, page)
+
     private fun deleteExpiredData(){
         CoroutineScope(Dispatchers.IO).launch {
             upcomingSectionDao.getAll().forEach { upcomingSectionLocal ->
@@ -24,11 +30,4 @@ class UpComingLocalDataSourceImpl @Inject constructor(
             }
         }
     }
-
-    override suspend fun insert(item: UpComingSectionLocal) =
-        upcomingSectionDao.insert(item)
-
-    override suspend fun getUpComingMoviesPage(categoryId: Int?, page: Int): UpComingSectionLocal =
-        upcomingSectionDao.getUpComingMoviesPage(categoryId, page)
-
 }

@@ -3,9 +3,11 @@ package com.london.data.mapper
 import com.google.common.truth.Truth.assertThat
 import com.london.data.local.model.search.ActorLocal
 import com.london.data.local.model.search.SearchActorsLocal
+import com.london.data.mapper.search.toEntity
+import com.london.data.mapper.search.toLocal
 import com.london.data.remote.model.ApiResponse
-import com.london.data.remote.model.search.model.searchactormodel.KnownFor
-import com.london.data.remote.model.search.model.searchactormodel.SearchActorRemote
+import com.london.data.remote.model.search.searchactor.KnownFor
+import com.london.data.remote.model.search.searchactor.SearchActorRemote
 import com.london.data.utils.generateHash
 import com.london.domain.entity.Actor
 import org.junit.Test
