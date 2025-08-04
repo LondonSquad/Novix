@@ -19,6 +19,7 @@ class SheetState(val sheetState: androidx.compose.material3.SheetState) {
     suspend fun show() = sheetState.show()
     suspend fun hide() = sheetState.hide()
     val isVisible: Boolean get() = sheetState.isVisible
+    val isNotVisible: Boolean get() = sheetState.isVisible.not()
     val currentValue: SheetValue get() = sheetState.currentValue
     val targetValue: SheetValue get() = sheetState.targetValue
     val hasExpanded: Boolean get() = sheetState.hasExpandedState
