@@ -1,6 +1,7 @@
 package com.london.data.di
 
 import com.london.data.local.database.dao.search.GenreInterestDao
+import com.london.data.local.model.home.TopRatedLocal
 import com.london.data.local.model.home.popular.PopularSectionLocal
 import com.london.data.local.model.recent.search.RecentSearchLocal
 import com.london.data.local.model.recent.viewed.RecentViewedLocal
@@ -10,8 +11,8 @@ import com.london.data.local.model.search.SearchActorsLocal
 import com.london.data.local.model.search.SearchMoviesLocal
 import com.london.data.local.model.search.SearchTvShowLocal
 import com.london.data.local.preference.AuthPreferences
-import com.london.data.local.source.HomeLocalDataSource
 import com.london.data.local.source.LocalDataSource
+import com.london.data.local.source.home.HomeLocalDataSource
 import com.london.data.local.source.home.upcoming.UpComingLocalDataSource
 import com.london.data.local.source.recent.RecentDataSource
 import com.london.data.local.source.recent.watched.RecentWatchedDataSource
@@ -120,16 +121,28 @@ object RepositoryModule {
     @Provides
     @Singleton
     fun provideTopRatedMovieRepository(
-        dataSource: TopRatedMovieRemoteDataSource
+        dataSource: TopRatedMovieRemoteDataSource,
+        @Named("topRatedLocalDataSource") localTopRated: HomeLocalDataSource<TopRatedLocal>,
+        crashReporter: CrashReporter
     ): TopRatedMovieRepository =
-        TopRatedMovieRepositoryImpl(topRatedMovieRemoteDataSource = dataSource)
+        TopRatedMovieRepositoryImpl(
+            topRatedMovieRemoteDataSource = dataSource,
+            localTopRated = localTopRated,
+            crashReporter = crashReporter
+        )
 
     @Provides
     @Singleton
     fun provideTopRatedTvSeriesRepository(
-        dataSource: TopRatedTvRemoteDataSource
+        dataSource: TopRatedTvRemoteDataSource,
+        @Named("topRatedLocalDataSource") localTopRated: HomeLocalDataSource<TopRatedLocal>,
+        crashReporter: CrashReporter
     ): TopRatedTvSeriesRepository =
-        TopRatedTvSeriesRepositoryImpl(topRatedTvRemoteDataSource = dataSource)
+        TopRatedTvSeriesRepositoryImpl(
+            topRatedTvRemoteDataSource = dataSource,
+            topRatedTvShow = localTopRated,
+            crashReporter = crashReporter
+        )
 
     @Provides
     @Singleton

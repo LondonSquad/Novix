@@ -11,6 +11,7 @@ import com.london.data.local.database.convertor.SearchMoviesConverter
 import com.london.data.local.database.convertor.SearchTvShowConvertor
 import com.london.data.local.database.convertor.UpComingMovieTypeConverter
 import com.london.data.local.database.dao.home.popular.PopularSectionDao
+import com.london.data.local.database.dao.home.toprated.TopRatedDao
 import com.london.data.local.database.dao.home.upcoming.UpcomingSectionDao
 import com.london.data.local.database.dao.recent.search.RecentSearchDao
 import com.london.data.local.database.dao.recent.viewed.RecentViewedDao
@@ -20,6 +21,7 @@ import com.london.data.local.database.dao.search.GenreInterestDao
 import com.london.data.local.database.dao.search.SearchActorsDao
 import com.london.data.local.database.dao.search.SearchMoviesDao
 import com.london.data.local.database.dao.search.SearchTvShowDao
+import com.london.data.local.model.home.TopRatedLocal
 import com.london.data.local.model.home.popular.PopularSectionLocal
 import com.london.data.local.model.home.upcoming.UpComingSectionLocal
 import com.london.data.local.model.recent.search.RecentSearchLocal
@@ -42,6 +44,7 @@ import com.london.data.local.model.search.SearchTvShowLocal
         RecentWatchedMovieLocal::class,
         RecentWatchedTvShowLocal::class,
         PopularSectionLocal::class,
+        TopRatedLocal::class,
         UpComingSectionLocal::class
     ],
     version = 1,
@@ -67,4 +70,5 @@ abstract class NovixDatabase : RoomDatabase() {
     abstract fun recentWatchedTvShowsDao(): RecentWatchedTvShowsDao
     abstract fun popularSectionDao(): PopularSectionDao
     abstract fun upComingSectionDao(): UpcomingSectionDao
+    abstract fun topRatedDao(): TopRatedDao
 }

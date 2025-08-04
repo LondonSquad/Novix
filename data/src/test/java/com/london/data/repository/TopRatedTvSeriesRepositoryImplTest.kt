@@ -1,13 +1,18 @@
 package com.london.data.repository
 
 import com.google.common.truth.Truth.assertThat
+import com.london.data.local.model.home.TopRatedLocal
+import com.london.data.local.source.home.HomeLocalDataSource
 import com.london.data.mapper.toprated.toEntity
 import com.london.data.remote.model.ApiResponse
 import com.london.data.remote.model.toprated.TopRatedTvSeriesRemote
 import com.london.data.remote.source.toprated.tvseries.TopRatedTvRemoteDataSource
 import com.london.data.repository.toprated.TopRatedTvSeriesRepositoryImpl
+import com.london.data.utils.CrashReporter
+import com.london.domain.entity.PagedFetchResponse
 import com.london.domain.entity.toprated.TopRatedTvSeries
 import io.mockk.coEvery
+import io.mockk.coVerify
 import io.mockk.mockk
 import kotlinx.coroutines.test.runTest
 import org.junit.Before
@@ -17,71 +22,142 @@ import org.junit.jupiter.api.assertThrows
 class TopRatedTvSeriesRepositoryImplTest {
 
     private lateinit var remoteDataSource: TopRatedTvRemoteDataSource
+    private lateinit var localDataSource: HomeLocalDataSource<TopRatedLocal>
+    private lateinit var crashReporter: CrashReporter
     private lateinit var repository: TopRatedTvSeriesRepositoryImpl
 
     @Before
     fun setup() {
         remoteDataSource = mockk(relaxed = true)
-        repository = TopRatedTvSeriesRepositoryImpl(remoteDataSource)
+        localDataSource = mockk(relaxed = true)
+        crashReporter = mockk(relaxed = true)
+        repository = TopRatedTvSeriesRepositoryImpl(
+            topRatedTvRemoteDataSource = remoteDataSource,
+            topRatedTvShow = localDataSource,
+            crashReporter = crashReporter
+        )
     }
 
     @Test
-    fun `getTopRatedTvSeries should map remote series list correctly`() = runTest {
+    fun `getTopRatedTvSeries should return paged response with correct data`() = runTest {
         // Given
+        val expectedApiResponse = fakeApiResponseWithTvSeries()
         coEvery {
             remoteDataSource.getTopRatedTvShows(PAGE)
-        } returns Result.success(fakeApiResponseWithTvSeries())
+        } returns Result.success(expectedApiResponse)
+
+        coEvery {
+            localDataSource.getAll()
+        } returns emptyList()
 
         // When
-        val result: List<TopRatedTvSeries> = repository.getTopRatedTvSeries(PAGE).items
+        val result: PagedFetchResponse<TopRatedTvSeries> = repository.getTopRatedTvSeries(PAGE)
 
         // Then
-        assertThat(result).hasSize(2)
+        assertThat(result.items).hasSize(2)
+        assertThat(result.currentPage).isEqualTo(PAGE)
+        assertThat(result.totalPages).isEqualTo(1)
+        assertThat(result.totalItems).isEqualTo(2)
 
-        val firstSeries = result.first()
+        val firstSeries = result.items.first()
         assertThat(firstSeries).isEqualTo(
-            fakeApiResponseWithTvSeries().items[0].toEntity()
+            expectedApiResponse.items[0].toEntity()
         )
 
-        val secondSeries = result[1]
+        val secondSeries = result.items[1]
         assertThat(secondSeries).isEqualTo(
-            fakeApiResponseWithTvSeries().items[1].toEntity()
+            expectedApiResponse.items[1].toEntity()
         )
     }
 
     @Test
-    fun `getTopRatedTvSeries should return empty list when API returns empty results`() = runTest {
+    fun `getTopRatedTvSeries should return empty paged response when API returns empty results`() = runTest {
         // Given
+        val emptyApiResponse = fakeEmptyApiResponse()
         coEvery {
             remoteDataSource.getTopRatedTvShows(PAGE)
-        } returns Result.success(fakeEmptyApiResponse())
+        } returns Result.success(emptyApiResponse)
+
+        coEvery {
+            localDataSource.getAll()
+        } returns emptyList()
 
         // When
         val result = repository.getTopRatedTvSeries(PAGE)
 
         // Then
         assertThat(result.items).isEmpty()
+        assertThat(result.currentPage).isEqualTo(PAGE)
+        assertThat(result.totalPages).isEqualTo(1)
+        assertThat(result.totalItems).isEqualTo(0)
     }
 
     @Test
-    fun `getTopRatedTvSeries should propagate exceptions`() = runTest {
+    fun `getTopRatedTvSeries should propagate exceptions when remote call fails`() = runTest {
         // Given
         coEvery {
-            remoteDataSource.getTopRatedTvShows(PAGE )
-        } throws RuntimeException("Network error")
+            remoteDataSource.getTopRatedTvShows(PAGE)
+        } returns Result.failure(RuntimeException("Network error"))
 
-        // When && Then
+        coEvery {
+            localDataSource.getAll()
+        } returns emptyList()
+
+        // When & Then
         val ex = assertThrows<RuntimeException> {
-            repository.getTopRatedTvSeries(PAGE )
+            repository.getTopRatedTvSeries(PAGE)
         }
         assertThat(ex.message).isEqualTo("Network error")
+    }
+
+    @Test
+    fun `getTopRatedTvSeries should call local data source for caching`() = runTest {
+        // Given
+        coEvery {
+            remoteDataSource.getTopRatedTvShows(PAGE)
+        } returns Result.success(fakeApiResponseWithTvSeries())
+
+        coEvery {
+            localDataSource.getAll()
+        } returns emptyList()
+
+        // When
+        repository.getTopRatedTvSeries(PAGE)
+
+        // Then
+        coVerify { localDataSource.getAll() }
+    }
+
+    @Test
+    fun `getTopRatedTvSeries should insert data to local storage after successful fetch`() = runTest {
+        // Given
+        coEvery {
+            remoteDataSource.getTopRatedTvShows(PAGE)
+        } returns Result.success(fakeApiResponseWithTvSeries())
+
+        coEvery {
+            localDataSource.getAll()
+        } returns emptyList()
+
+        coEvery {
+            localDataSource.insertAll(any())
+        } returns Unit
+
+        // When
+        repository.getTopRatedTvSeries(PAGE)
+
+        // Then
+        coVerify { localDataSource.insertAll(any()) }
     }
 
     companion object {
         private const val PAGE = 1
 
         private fun fakeApiResponseWithTvSeries() = ApiResponse(
-            currentPage = PAGE, totalPages = 1, totalItems = 2, items = listOf(
+            currentPage = PAGE,
+            totalPages = 1,
+            totalItems = 2,
+            items = listOf(
                 TopRatedTvSeriesRemote(
                     adult = false,
                     backdropPath = "/tsRy63Mu5cu8etL1X7ZLyf7UP1M.jpg",
@@ -97,7 +173,8 @@ class TopRatedTvSeriesRepositoryImplTest {
                     originCountry = listOf("US"),
                     voteAverage = 8.9,
                     voteCount = 18000
-                ), TopRatedTvSeriesRemote(
+                ),
+                TopRatedTvSeriesRemote(
                     adult = false,
                     backdropPath = "/scZlQQYnDVlnpxFTxaIv2g0BWnL.jpg",
                     genreIds = listOf(18, 36),

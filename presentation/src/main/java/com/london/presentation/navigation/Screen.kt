@@ -101,4 +101,12 @@ sealed interface Screen {
 
     @Serializable
     data object ContinueWatching : Screen
+
+
+    @Serializable
+    data object WatchingHistory : Screen
+
+    @Serializable
+    data object MyRating : Screen
+
 }
