@@ -11,6 +11,8 @@ import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.just
 import io.mockk.mockk
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.test.runTest
 import org.junit.Before
 import kotlin.test.Test
@@ -33,9 +35,11 @@ class RecentWatchedRepositoryImlTest {
     fun `getAllRecentWatchedMovies should return list of Movie when recentWatchedMoviesDataSource returns list`() =
         runTest {
             // Given
-            coEvery { recentWatchedMoviesDataSource.getAll() } returns recentWatchedMovieLocalList
+            coEvery { recentWatchedMoviesDataSource.getAll() } returns flowOf(
+                recentWatchedMovieLocalList
+            )
             // When
-            val result = recentWatchedRepositoryIml.getAllRecentWatchedMovies()
+            val result = recentWatchedRepositoryIml.getAllRecentWatchedMovies().first()
             // Then
             assertThat(result).isEqualTo(movieList)
         }
@@ -44,9 +48,9 @@ class RecentWatchedRepositoryImlTest {
     fun `getAllRecentWatchedMovies should return empty list when recentWatchedMoviesDataSource returns empty list`() =
         runTest {
             // Given
-            coEvery { recentWatchedMoviesDataSource.getAll() } returns emptyList()
+            coEvery { recentWatchedMoviesDataSource.getAll() } returns flowOf(emptyList())
             // When
-            val result = recentWatchedRepositoryIml.getAllRecentWatchedMovies()
+            val result = recentWatchedRepositoryIml.getAllRecentWatchedMovies().first()
             // Then
             assertThat(result).isEmpty()
         }
@@ -55,9 +59,11 @@ class RecentWatchedRepositoryImlTest {
     fun `getAllRecentWatchedTvShows should return list of TvShow when recentWatchedTvShowsDataSource returns list`() =
         runTest {
             // Given
-            coEvery { recentWatchedTvShowsDataSource.getAll() } returns recentWatchedTvShowLocalList
+            coEvery { recentWatchedTvShowsDataSource.getAll() } returns flowOf(
+                recentWatchedTvShowLocalList
+            )
             // When
-            val result = recentWatchedRepositoryIml.getAllRecentWatchedTvShows()
+            val result = recentWatchedRepositoryIml.getAllRecentWatchedTvShows().first()
             // Then
             assertThat(result).isEqualTo(tvShowList)
         }
@@ -66,9 +72,9 @@ class RecentWatchedRepositoryImlTest {
     fun `getAllRecentWatchedTvShows should return empty list when recentWatchedTvShowsDataSource returns empty list`() =
         runTest {
             // Given
-            coEvery { recentWatchedTvShowsDataSource.getAll() } returns emptyList()
+            coEvery { recentWatchedTvShowsDataSource.getAll() } returns flowOf(emptyList())
             // When
-            val result = recentWatchedRepositoryIml.getAllRecentWatchedTvShows()
+            val result = recentWatchedRepositoryIml.getAllRecentWatchedTvShows().first()
             // Then
             assertThat(result).isEmpty()
         }
