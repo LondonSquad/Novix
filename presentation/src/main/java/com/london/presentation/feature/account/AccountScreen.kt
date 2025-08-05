@@ -36,7 +36,7 @@ fun AccountScreen(
     val systemDarkTheme = isSystemInDarkTheme()
 
     LaunchedEffect(systemDarkTheme) {
-        viewModel.updateSelectedThemeOnSystemDarkChange(systemDarkTheme)
+        viewModel.updateSelectedThemeAsSystemDark(systemDarkTheme)
     }
 
     effect?.Listen { currentEffect ->
