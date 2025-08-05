@@ -1,5 +1,6 @@
 package com.london.presentation.feature.continuewatching
 
+import com.london.designsystem.component.MediaCategory
 import com.london.domain.usecase.recent.watched.GetRecentWatchedMoviesUseCase
 import com.london.domain.usecase.recent.watched.GetRecentWatchedTvShowsUseCase
 import com.london.presentation.feature.base.BaseViewModel
@@ -16,17 +17,17 @@ class ContinueWatchingViewModel @Inject constructor(
     ContinueWatchingContract {
 
     init {
-        initializeContinueWatching()
+        fetchRecentWatchedMedia()
     }
 
-    private fun initializeContinueWatching() {
+    private fun fetchRecentWatchedMedia() {
         tryToExecute(
             block = {
-                val recentWatchedMovie = getRecentWatchedMoviesUseCase.invoke(
+                val recentWatchedMovie = getRecentWatchedMoviesUseCase.getAll(
                     genreId = if (state.value.selectedMovieGenre == MovieGenre.All) null
                     else state.value.selectedMovieGenre.id
                 )
-                val recentWatchedTvShow = getRecentWatchedTvShowsUseCase.invoke(
+                val recentWatchedTvShow = getRecentWatchedTvShowsUseCase.getAll(
                     genreId = if (state.value.selectedTvShowGenre == TvShowGenre.All) null
                     else state.value.selectedTvShowGenre.id
                 )
@@ -36,11 +37,11 @@ class ContinueWatchingViewModel @Inject constructor(
             onStart = {
                 updateState { copy(isLoading = true) }
             },
-            onSuccess = {
+            onSuccess = { (movies, shows) ->
                 updateState {
                     copy(
-                        movies = it.first,
-                        tvSeries = it.second
+                        movies = movies,
+                        tvSeries = shows
                     )
                 }
             },
@@ -51,32 +52,30 @@ class ContinueWatchingViewModel @Inject constructor(
         )
     }
 
-    override fun movieGenre(genre: MovieGenre) {
+    override fun onMovieGenreChanged(genre: MovieGenre) {
         if (genre == state.value.selectedMovieGenre) return
         updateState { copy(selectedMovieGenre = genre) }
-        initializeContinueWatching()
+        fetchRecentWatchedMedia()
     }
 
-    override fun tvShowGenre(genre: TvShowGenre) {
+    override fun onTvShowGenreChanged(genre: TvShowGenre) {
         if (genre == state.value.selectedTvShowGenre) return
         updateState { copy(selectedTvShowGenre = genre) }
-        initializeContinueWatching()
+        fetchRecentWatchedMedia()
     }
 
-    override fun tabSelected(index: Int) {
-        if (index == state.value.tabSelected) return
+    override fun onMediaCategoryTabSelected(selectedMediaCategory: MediaCategory) {
+        if (selectedMediaCategory == state.value.selectedMediaCategory) return
         updateState {
             copy(
-                tabSelected = index,
-                isMovieSelected = index == 0,
-                isTvSelected = index == 0
+                selectedMediaCategory = selectedMediaCategory,
+                isMovieSelected = selectedMediaCategory == MediaCategory.MOVIES,
+                isTvSelected = selectedMediaCategory == MediaCategory.TV_SHOWS
             )
         }
-        initializeContinueWatching()
     }
 
-    override fun onBack() =
-        emitEffect(ContinueWatchingEffect.NavigateBack)
+    override fun onBack() = emitEffect(ContinueWatchingEffect.NavigateBack)
 
     override fun onNavigateToMovie(id: Int) =
         emitEffect(ContinueWatchingEffect.NavigateToMovieDetails(id))

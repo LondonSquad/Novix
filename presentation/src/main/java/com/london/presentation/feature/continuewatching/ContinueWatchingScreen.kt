@@ -16,6 +16,7 @@ import androidx.compose.foundation.layout.statusBars
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
+import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.lazy.items
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
@@ -74,6 +75,10 @@ fun Content(
 
     val screenWidth =
         with(LocalDensity.current) { LocalWindowInfo.current.containerSize.width.toDp() }
+
+    val movies by state.movies.collectAsStateWithLifecycle(emptyList())
+    val tvSeries by state.tvSeries.collectAsStateWithLifecycle(emptyList())
+
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -96,22 +101,23 @@ fun Content(
                 TabItem(R.string.movies),
                 TabItem(R.string.tv_shows),
             ),
-            selectedIndex = state.tabSelected,
-            onTabSelected = continueWatchingContract::tabSelected,
+            selectedMediaCategory = state.selectedMediaCategory,
+            onTabSelected = continueWatchingContract::onMediaCategoryTabSelected,
             modifier = Modifier.background(NovixTheme.colors.surface)
         )
         when {
             state.isMovieSelected -> MovieGenreRow(
-                onGenreClick = continueWatchingContract::movieGenre,
+                onGenreClick = continueWatchingContract::onMovieGenreChanged,
                 state = state,
                 screenWidth = screenWidth
             )
 
             state.isTvSelected -> TvShowRow(
-                onGenreClick = continueWatchingContract::tvShowGenre,
+                onGenreClick = continueWatchingContract::onTvShowGenreChanged,
                 state = state,
                 screenWidth = screenWidth
             )
+
             else -> EmptyStateView()
         }
         LazyVerticalGrid(
@@ -128,8 +134,7 @@ fun Content(
         ) {
 
             if (state.isMovieSelected) {
-                items(state.movies.size) { index ->
-                    val movie = state.movies[index]
+                items(movies) { movie ->
                     movie.let { movieItem ->
                         HomeCard(
                             imageUrl = movieItem.posterUrl,
@@ -143,20 +148,20 @@ fun Content(
                         )
                     }
                 }
-            }
-            items(state.tvSeries.size) { index ->
-                val tvSeries = state.tvSeries[index]
-                tvSeries.let { seriesItem ->
-                    HomeCard(
-                        imageUrl = seriesItem.posterPicture,
-                        isSaved = false,
-                        onSaveClick = {
-                            // TODO
-                        },
-                        modifier = Modifier.clickable {
-                            continueWatchingContract.onNavigateToTvShow(seriesItem.id)
-                        }
-                    )
+            } else {
+                items(tvSeries) { tvSeries ->
+                    tvSeries.let { seriesItem ->
+                        HomeCard(
+                            imageUrl = seriesItem.posterPicture,
+                            isSaved = false,
+                            onSaveClick = {
+                                // TODO
+                            },
+                            modifier = Modifier.clickable {
+                                continueWatchingContract.onNavigateToTvShow(seriesItem.id)
+                            }
+                        )
+                    }
                 }
             }
         }
