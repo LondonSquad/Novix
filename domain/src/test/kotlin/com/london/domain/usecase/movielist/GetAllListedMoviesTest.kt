@@ -4,7 +4,7 @@ import com.google.common.truth.Truth.assertThat
 import com.london.domain.entity.Movie
 import com.london.domain.entity.MovieList
 import com.london.domain.entity.PagedFetchResponse
-import com.london.domain.repository.MovieListRepository
+import com.london.domain.repository.CustomMovieListRepository
 import io.mockk.coEvery
 import io.mockk.mockk
 import kotlinx.coroutines.test.runTest
@@ -14,21 +14,21 @@ import org.junit.jupiter.api.assertThrows
 
 class GetAllListedMoviesTest {
 
-    private lateinit var movieListRepository: MovieListRepository
+    private lateinit var customMovieListRepository: CustomMovieListRepository
     private lateinit var getAllListedMovies: GetAllListedMovies
 
     @Before
     fun setUp() {
-        movieListRepository = mockk()
-        getAllListedMovies = GetAllListedMovies(movieListRepository)
+        customMovieListRepository = mockk()
+        getAllListedMovies = GetAllListedMovies(customMovieListRepository)
     }
 
     @Test
     fun `invoke should return all listed movies`() = runTest {
         //Given
-        coEvery { movieListRepository.getMovieLists() } returns movieLists
-        coEvery { movieListRepository.getMovieListDetails(listId = 1u) } returns listDetails1
-        coEvery { movieListRepository.getMovieListDetails(listId = 2u) } returns listDetails2
+        coEvery { customMovieListRepository.getMovieLists() } returns movieLists
+        coEvery { customMovieListRepository.getMovieListDetails(listId = 1u) } returns listDetails1
+        coEvery { customMovieListRepository.getMovieListDetails(listId = 2u) } returns listDetails2
         //When
         val result = getAllListedMovies.invoke()
         //Then
@@ -38,7 +38,7 @@ class GetAllListedMoviesTest {
     @Test
     fun `invoke throws exception when movieListRepository throws exception`() = runTest {
         //Given
-        coEvery { movieListRepository.getMovieLists() } throws Exception()
+        coEvery { customMovieListRepository.getMovieLists() } throws Exception()
         //When //Then
         assertThrows<Exception> {
             getAllListedMovies.invoke()
