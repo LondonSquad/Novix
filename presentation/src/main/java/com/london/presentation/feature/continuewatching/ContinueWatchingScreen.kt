@@ -36,6 +36,8 @@ import com.london.designsystem.component.TabLayout
 import com.london.designsystem.component.TopBar
 import com.london.designsystem.theme.NovixTheme
 import com.london.presentation.R.string
+import com.london.presentation.feature.base.ErrorState
+import com.london.presentation.feature.buildscreen.BuildScreen
 import com.london.presentation.shared.EmptyStateView
 import com.london.presentation.utils.Listen
 import com.london.presentation.utils.MovieGenre
@@ -44,11 +46,12 @@ import com.london.presentation.utils.gridColmuns
 
 @Composable
 fun ContinueWatchingScreen(
-    viewModel: ContinueWatchingViewModel = hiltViewModel(),
+    screenTitle: Int,
     onBackClick: () -> Unit = {},
     onMovieClick: (Int) -> Unit = {},
     onTvShowClick: (Int) -> Unit = {},
-    title: String = stringResource(string.continue_watch),
+    viewModel: ContinueWatchingViewModel = hiltViewModel()
+
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
     val effect by viewModel.effect.collectAsState(null)
@@ -64,7 +67,9 @@ fun ContinueWatchingScreen(
     Content(
         state = state,
         continueWatchingContract = viewModel,
-        title = title
+        screenTitle = screenTitle,
+        onRetry = viewModel::initializeContinueWatching,
+        onBack = viewModel::onBack
     )
 }
 
@@ -72,7 +77,9 @@ fun ContinueWatchingScreen(
 fun Content(
     state: ContinueWatchingUiState = ContinueWatchingUiState(),
     continueWatchingContract: ContinueWatchingContract = defaultContinueWatchingContract(),
-    title: String = stringResource(string.continue_watch)
+    screenTitle: Int = string.continue_watch,
+    onRetry: () -> Unit = {},
+    onBack: () -> Unit = {}
 ) {
 
     val screenWidth =
@@ -85,81 +92,92 @@ fun Content(
             .padding(WindowInsets.navigationBars.asPaddingValues())
 
     ) {
-        TopBar(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(start = 16.dp, end = 16.dp, top = 12.dp),
-            title = title,
-            onBackClick = continueWatchingContract::onBack
-        )
-
-        TabLayout(
-            tabs = listOf(
-                TabItem(R.string.movies),
-                TabItem(R.string.tv_shows),
-            ),
-            selectedIndex = state.tabSelected,
-            onTabSelected = continueWatchingContract::tabSelected,
-            modifier = Modifier.background(NovixTheme.colors.surface)
-        )
-        when {
-            state.isMovieSelected -> MovieGenreRow(
-                onGenreClick = continueWatchingContract::movieGenre,
-                state = state,
-                screenWidth = screenWidth
-            )
-
-            state.isTvSelected -> TvShowRow(
-                onGenreClick = continueWatchingContract::tvShowGenre,
-                state = state,
-                screenWidth = screenWidth
-            )
-
-            else -> EmptyStateView()
-        }
-        LazyVerticalGrid(
-            columns = GridCells.Fixed(gridColmuns()),
-            contentPadding = PaddingValues(
-                top = 12.dp,
-                bottom = 16.dp,
-                start = 16.dp,
-                end = 16.dp
-            ),
-            horizontalArrangement = Arrangement.spacedBy(12.dp),
-            verticalArrangement = Arrangement.spacedBy(12.dp),
-            modifier = Modifier.background(NovixTheme.colors.surface)
+        BuildScreen(
+            onBack = onBack,
+            isLoading = state.isLoading,
+            isError = state.error is ErrorState.NoInternet,
+            onRetry = onRetry,
         ) {
+            TopBar(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(start = 16.dp, end = 16.dp, top = 12.dp),
+                title = stringResource(screenTitle),
+                onBackClick = continueWatchingContract::onBack
+            )
 
-            if (state.isMovieSelected) {
-                items(state.movies.size) { index ->
-                    val movie = state.movies[index]
-                    movie.let { movieItem ->
-                        HomeCard(
-                            imageUrl = movieItem.posterUrl,
-                            isSaved = false,
-                            onSaveClick = {
-                                // TODO
-                            },
-                            modifier = Modifier.clickable {
-                                continueWatchingContract.onNavigateToMovie(movieItem.id)
-                            }
-                        )
-                    }
-                }
+            TabLayout(
+                tabs = listOf(
+                    TabItem(R.string.movies),
+                    TabItem(R.string.tv_shows),
+                ),
+                selectedIndex = state.tabSelected,
+                onTabSelected = continueWatchingContract::tabSelected,
+                modifier = Modifier.background(NovixTheme.colors.surface)
+            )
+            when {
+                state.isMovieSelected -> MovieGenreRow(
+                    onGenreClick = continueWatchingContract::movieGenre,
+                    state = state,
+                    screenWidth = screenWidth
+                )
+
+                state.isTvSelected -> TvShowRow(
+                    onGenreClick = continueWatchingContract::tvShowGenre,
+                    state = state,
+                    screenWidth = screenWidth
+                )
             }
-            items(state.tvSeries.size) { index ->
-                val tvSeries = state.tvSeries[index]
-                tvSeries.let { seriesItem ->
-                    HomeCard(
-                        imageUrl = seriesItem.posterPicture,
-                        isSaved = false,
-                        onSaveClick = {
-                            // TODO
-                        },
-                        modifier = Modifier.clickable {
-                            continueWatchingContract.onNavigateToTvShow(seriesItem.id)
+            if ((state.isMovieSelected && state.movies.isEmpty()) || (state.isTvSelected && state.tvSeries.isEmpty())) {
+                EmptyStateView() // TODO
+            } else {
+                LazyVerticalGrid(
+                    columns = GridCells.Fixed(gridColmuns()),
+                    contentPadding = PaddingValues(
+                        top = 12.dp,
+                        bottom = 16.dp,
+                        start = 16.dp,
+                        end = 16.dp
+                    ),
+                    horizontalArrangement = Arrangement.spacedBy(12.dp),
+                    verticalArrangement = Arrangement.spacedBy(12.dp),
+                    modifier = Modifier.background(NovixTheme.colors.surface)
+                ) {
+
+                    if (state.isMovieSelected) {
+                        items(state.movies.size) { index ->
+                            val movie = state.movies[index]
+                            movie.let { movieItem ->
+                                HomeCard(
+                                    imageUrl = movieItem.posterUrl,
+                                    isSaved = false,
+                                    onSaveClick = {
+                                        // TODO
+                                    },
+                                    modifier = Modifier.clickable {
+                                        continueWatchingContract.onNavigateToMovie(movieItem.id)
+                                    }
+                                )
+                            }
                         }
-                    )
+                    }
+                    if (state.isTvSelected) {
+                        items(state.tvSeries.size) { index ->
+                            val tvSeries = state.tvSeries[index]
+                            tvSeries.let { seriesItem ->
+                                HomeCard(
+                                    imageUrl = seriesItem.posterPicture,
+                                    isSaved = false,
+                                    onSaveClick = {
+                                        // TODO
+                                    },
+                                    modifier = Modifier.clickable {
+                                        continueWatchingContract.onNavigateToTvShow(seriesItem.id)
+                                    }
+                                )
+                            }
+                        }
+                    }
                 }
             }
         }

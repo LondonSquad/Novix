@@ -19,7 +19,7 @@ class ContinueWatchingViewModel @Inject constructor(
         initializeContinueWatching()
     }
 
-    private fun initializeContinueWatching() {
+    fun initializeContinueWatching() {
         tryToExecute(
             block = {
                 val recentWatchedMovie = getRecentWatchedMoviesUseCase.invoke(
@@ -69,7 +69,7 @@ class ContinueWatchingViewModel @Inject constructor(
             copy(
                 tabSelected = index,
                 isMovieSelected = index == 0,
-                isTvSelected = index == 0
+                isTvSelected = index == 1
             )
         }
         initializeContinueWatching()

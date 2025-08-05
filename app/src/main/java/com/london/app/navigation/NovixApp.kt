@@ -367,7 +367,7 @@ fun NavGraphBuilder.mainNavGraph(
             onTvShowClick = { id ->
                 navController.navigate(TvShowDetails(id))
             },
-            title = stringResource(R.string.watching_history)
+            screenTitle = R.string.watching_history
         )
     }
 
@@ -539,7 +539,7 @@ fun NavGraphBuilder.mainNavGraph(
             onTvShowClick = { id ->
                 navController.navigate(TvShowDetails(id))
             },
-            title = stringResource(R.string.continue_watch)
+            screenTitle = R.string.continue_watch
         )
     }
 }
