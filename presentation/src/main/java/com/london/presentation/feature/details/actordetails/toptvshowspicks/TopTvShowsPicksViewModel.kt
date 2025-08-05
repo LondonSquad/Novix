@@ -1,7 +1,7 @@
 package com.london.presentation.feature.details.actordetails.toptvshowspicks
 
 import androidx.lifecycle.SavedStateHandle
-import com.london.domain.usecase.GetActorTvShowPicksByIdUseCase
+import com.london.domain.usecase.toppicks.GetActorTvShowPicksByIdUseCase
 import com.london.presentation.feature.base.BaseViewModel
 import com.london.presentation.navigation.Screen
 import com.london.presentation.navigation.getArgs
