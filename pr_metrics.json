@@ -17254,5 +17254,33 @@
       "deletions": 224,
       "changed_files": 9
     }
+  },
+  {
+    "pr_number": 531,
+    "url": "https://github.com/LondonSquad/Novix/pull/531",
+    "title": "Refactor: Adopt Flow for Recent Watched Data",
+    "opened_at": "2025-08-05T07:12:45Z",
+    "head_ref": "refactor/recent-watched",
+    "base_ref": "develop",
+    "creator": {
+      "login": "yusufnasserdev",
+      "id": 43588217,
+      "url": "https://github.com/yusufnasserdev"
+    },
+    "approvals": [],
+    "first_approved_at": null,
+    "time_to_first_approval_minutes": null,
+    "required_approvals_met_at": null,
+    "time_to_required_approvals_minutes": null,
+    "closed_at": null,
+    "merged_at": null,
+    "merged_by": null,
+    "week": "2025-W32",
+    "status": "pending",
+    "diff_stats": {
+      "additions": 332,
+      "deletions": 211,
+      "changed_files": 32
+    }
   }
 ]
