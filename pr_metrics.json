@@ -17395,5 +17395,33 @@
       "deletions": 4,
       "changed_files": 3
     }
+  },
+  {
+    "pr_number": 535,
+    "url": "https://github.com/LondonSquad/Novix/pull/535",
+    "title": "feat: update empty state visuals and strings by new design",
+    "opened_at": "2025-08-05T17:12:32Z",
+    "head_ref": "feature/handel-empty-state-screen",
+    "base_ref": "develop",
+    "creator": {
+      "login": "BassantM",
+      "id": 102248144,
+      "url": "https://github.com/BassantM"
+    },
+    "approvals": [],
+    "first_approved_at": null,
+    "time_to_first_approval_minutes": null,
+    "required_approvals_met_at": null,
+    "time_to_required_approvals_minutes": null,
+    "closed_at": null,
+    "merged_at": null,
+    "merged_by": null,
+    "week": "2025-W32",
+    "status": "pending",
+    "diff_stats": {
+      "additions": 10,
+      "deletions": 4,
+      "changed_files": 4
+    }
   }
 ]
