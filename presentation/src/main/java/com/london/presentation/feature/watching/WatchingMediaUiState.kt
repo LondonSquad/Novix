@@ -15,5 +15,5 @@ data class WatchingMediaUiState(
     val selectedMovieGenre: MovieGenre = MovieGenre.All,
     val selectedTvShowGenre: TvShowGenre = TvShowGenre.All,
     val isMovieSelected: Boolean = true,
-    val isTvSelected: Boolean = true
+    val isTvSelected: Boolean = false
 )

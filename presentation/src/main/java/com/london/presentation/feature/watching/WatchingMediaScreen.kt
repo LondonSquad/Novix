@@ -127,11 +127,9 @@ fun Content(
                     state = state,
                     screenWidth = screenWidth
                 )
-
-                else -> EmptyStateView()  // TODO
             }
-            if (state.isMovieSelected && state.movies.isEmpty() || state.isTvSelected && state.tvSeries.isEmpty()) {
-                EmptyStateView()  // TODO
+            if ((state.isMovieSelected && state.movies.isEmpty()) || (state.isTvSelected && state.tvSeries.isEmpty())) {
+                EmptyStateView() // TODO
             } else {
                 LazyVerticalGrid(
                     columns = GridCells.Fixed(gridColmuns()),
