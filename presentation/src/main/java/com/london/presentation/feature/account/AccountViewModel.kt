@@ -74,10 +74,12 @@ class AccountViewModel @Inject constructor(
         }
     }
 
-    fun updateSelectedThemeOnSystemDarkChange(isSystemDark: Boolean) {
-        updateState {
-            copy(appTheme = if (isSystemDark) AppTheme.DARK else AppTheme.LIGHT)
-        }
+    fun updateSelectedThemeAsSystemDark(isSystemDark: Boolean) {
+        val currentTheme = appPreferencesService.appTheme.value
+        if (currentTheme == AppTheme.SYSTEM)
+            updateState {
+                copy(appTheme = if (isSystemDark) AppTheme.DARK else AppTheme.LIGHT)
+            }
     }
 
     override fun showAppearanceBottomSheet() {
