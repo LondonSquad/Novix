@@ -3,6 +3,7 @@
 package com.london.data.local.database.dao.recent.viewed
 
 import androidx.room.Dao
+import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
@@ -19,7 +20,7 @@ interface RecentViewedDao : RecentDao<RecentViewedLocal> {
 
     @Insert(onConflict = OnConflictStrategy.Companion.REPLACE)
     override suspend fun insert(item: RecentViewedLocal)
-
+    
     @Query("SELECT * FROM recent_viewed_table ORDER BY viewDate DESC LIMIT 10")
     override suspend fun getRecentTen(): List<RecentViewedLocal>
 
@@ -34,4 +35,7 @@ interface RecentViewedDao : RecentDao<RecentViewedLocal> {
         insert(item)
         clearOlderThanTen()
     }
+
+    @Delete
+    suspend fun delete(item: RecentViewedLocal)
 }

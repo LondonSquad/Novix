@@ -5,7 +5,7 @@ import com.london.data.remote.model.details.movie.model.moviecast.MovieCastRespo
 import com.london.data.remote.model.details.movie.model.moviedetails.AccountMovieStatesResponse
 import com.london.data.remote.model.details.movie.model.moviedetails.MovieDetailsResponse
 import com.london.data.remote.model.details.movie.model.movieimages.MovieImagesResponse
-import com.london.data.remote.model.search.model.MovieRemote
+import com.london.data.remote.model.search.MovieRemote
 
 
 interface MovieDetailsRemoteDataSource {
