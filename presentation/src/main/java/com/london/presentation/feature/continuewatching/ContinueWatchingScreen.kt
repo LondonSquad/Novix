@@ -88,8 +88,7 @@ fun Content(
         TopBar(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(horizontal = 16.dp)
-                .padding(top = 20.dp),
+                .padding(start = 16.dp, end = 16.dp, top = 12.dp),
             title = title,
             onBackClick = continueWatchingContract::onBack
         )
@@ -115,6 +114,7 @@ fun Content(
                 state = state,
                 screenWidth = screenWidth
             )
+
             else -> EmptyStateView()
         }
         LazyVerticalGrid(
