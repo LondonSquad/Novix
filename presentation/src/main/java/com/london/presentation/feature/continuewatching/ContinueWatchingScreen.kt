@@ -46,7 +46,7 @@ import com.london.presentation.utils.gridColmuns
 
 @Composable
 fun ContinueWatchingScreen(
-    screenTitle: Int,
+    screenTitle: String,
     onBackClick: () -> Unit = {},
     onMovieClick: (Int) -> Unit = {},
     onTvShowClick: (Int) -> Unit = {},
@@ -77,7 +77,7 @@ fun ContinueWatchingScreen(
 fun Content(
     state: ContinueWatchingUiState = ContinueWatchingUiState(),
     continueWatchingContract: ContinueWatchingContract = defaultContinueWatchingContract(),
-    screenTitle: Int = string.continue_watch,
+    screenTitle: String = stringResource(string.continue_watch),
     onRetry: () -> Unit = {},
     onBack: () -> Unit = {}
 ) {
@@ -102,7 +102,7 @@ fun Content(
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(start = 16.dp, end = 16.dp, top = 12.dp),
-                title = stringResource(screenTitle),
+                title = screenTitle,
                 onBackClick = continueWatchingContract::onBack
             )
 
