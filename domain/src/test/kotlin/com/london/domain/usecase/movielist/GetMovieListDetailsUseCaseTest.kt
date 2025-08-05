@@ -3,7 +3,7 @@ package com.london.domain.usecase.movielist
 import com.google.common.truth.Truth.assertThat
 import com.london.domain.entity.Movie
 import com.london.domain.entity.PagedFetchResponse
-import com.london.domain.repository.MovieListRepository
+import com.london.domain.repository.CustomMovieListRepository
 import io.mockk.coEvery
 import io.mockk.mockk
 import kotlinx.coroutines.test.runTest
@@ -13,7 +13,7 @@ import org.junit.jupiter.api.assertThrows
 
 class GetMovieListDetailsUseCaseTest {
 
-    private lateinit var listRepository: MovieListRepository
+    private lateinit var listRepository: CustomMovieListRepository
     private lateinit var getMovieListDetailsUseCase: GetMovieListDetailsUseCase
 
     @Before

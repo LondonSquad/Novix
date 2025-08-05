@@ -1,7 +1,7 @@
 package com.london.domain.usecase.movielist
 
 import com.google.common.truth.Truth.assertThat
-import com.london.domain.repository.MovieListRepository
+import com.london.domain.repository.CustomMovieListRepository
 import io.mockk.coEvery
 import io.mockk.mockk
 import kotlinx.coroutines.test.runTest
@@ -11,20 +11,20 @@ import org.junit.jupiter.api.assertThrows
 
 class ManageMovieListUseCaseTest {
 
-    private lateinit var movieListRepository: MovieListRepository
+    private lateinit var customMovieListRepository: CustomMovieListRepository
     private lateinit var manageMovieListUseCase: ManageMovieListUseCase
 
     @Before
     fun setUp() {
-        movieListRepository = mockk()
-        manageMovieListUseCase = ManageMovieListUseCase(movieListRepository)
+        customMovieListRepository = mockk()
+        manageMovieListUseCase = ManageMovieListUseCase(customMovieListRepository)
     }
 
     @Test
     fun `createMovieList should return true when movieListRepository returns true`() =
         runTest {
             // Given
-            coEvery { movieListRepository.createMovieList(LIST_NAME) } returns true
+            coEvery { customMovieListRepository.createMovieList(LIST_NAME) } returns true
             // When
             val result = manageMovieListUseCase.createMovieList(LIST_NAME)
             // Then
@@ -34,7 +34,7 @@ class ManageMovieListUseCaseTest {
     @Test
     fun `createMovieList should return false when movieListRepository returns false`() = runTest {
         // Given
-        coEvery { movieListRepository.createMovieList(LIST_NAME) } returns false
+        coEvery { customMovieListRepository.createMovieList(LIST_NAME) } returns false
         // When
         val result = manageMovieListUseCase.createMovieList(LIST_NAME)
         // Then
@@ -45,7 +45,7 @@ class ManageMovieListUseCaseTest {
     fun `createMovieList should throw exception when movieListRepository throws exception`() =
         runTest {
             // Given
-            coEvery { movieListRepository.createMovieList(LIST_NAME) } throws Exception()
+            coEvery { customMovieListRepository.createMovieList(LIST_NAME) } throws Exception()
             // When // Then
             assertThrows<Exception> {
                 manageMovieListUseCase.createMovieList(LIST_NAME)
@@ -55,7 +55,7 @@ class ManageMovieListUseCaseTest {
     @Test
     fun `deleteMovieList should return true when movieListRepository returns true`() = runTest {
         // Given
-        coEvery { movieListRepository.deleteMovieList(LIST_ID) } returns true
+        coEvery { customMovieListRepository.deleteMovieList(LIST_ID) } returns true
         // When
         val result = manageMovieListUseCase.deleteMovieList(LIST_ID)
         // Then
@@ -65,7 +65,7 @@ class ManageMovieListUseCaseTest {
     @Test
     fun `deleteMovieList should return false when movieListRepository returns false`() = runTest {
         // Given
-        coEvery { movieListRepository.deleteMovieList(LIST_ID) } returns false
+        coEvery { customMovieListRepository.deleteMovieList(LIST_ID) } returns false
         // When
         val result = manageMovieListUseCase.deleteMovieList(LIST_ID)
         // Then
@@ -76,7 +76,7 @@ class ManageMovieListUseCaseTest {
     fun `deleteMovieList should throw exception when movieListRepository throws exception`() =
         runTest {
             // Given
-            coEvery { movieListRepository.deleteMovieList(LIST_ID) } throws Exception()
+            coEvery { customMovieListRepository.deleteMovieList(LIST_ID) } throws Exception()
             // When // Then
             assertThrows<Exception> {
                 manageMovieListUseCase.deleteMovieList(LIST_ID)
