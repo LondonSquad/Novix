@@ -57,7 +57,7 @@ internal class GenderDetectionModel {
 
     private fun createInterpreter(modelBuffer: MappedByteBuffer): Interpreter {
         val options = Interpreter.Options().apply {
-            setNumThreads(4)
+            numThreads = 4
         }
         return Interpreter(modelBuffer, options)
     }
@@ -70,9 +70,11 @@ internal class GenderDetectionModel {
             DataType.UINT8 -> {
                 builder.add(NormalizeOp(0f, 1f))
             }
+
             DataType.FLOAT32 -> {
                 builder.add(NormalizeOp(IMAGE_MEAN, IMAGE_STD))
             }
+
             else -> {
                 builder.add(NormalizeOp(0f, 255f))
             }
@@ -95,7 +97,9 @@ internal class GenderDetectionModel {
 
             val outputBuffer = TensorBuffer.createFixedSize(outputShape, outputDataType)
 
-            interpreter.run(processedImage.buffer, outputBuffer.buffer.rewind())
+            synchronized(interpreter) {
+                interpreter.run(processedImage.buffer, outputBuffer.buffer.rewind())
+            }
 
             val (femaleProbability, maleProbability) = when (outputDataType) {
                 DataType.FLOAT32 -> {
@@ -107,6 +111,7 @@ internal class GenderDetectionModel {
                         0.5f to 0.5f
                     }
                 }
+
                 DataType.UINT8 -> {
                     val byteArray = ByteArray(outputBuffer.buffer.remaining())
                     outputBuffer.buffer.get(byteArray)
@@ -118,6 +123,7 @@ internal class GenderDetectionModel {
                         0.5f to 0.5f
                     }
                 }
+
                 else -> {
                     0.5f to 0.5f
                 }
@@ -132,7 +138,8 @@ internal class GenderDetectionModel {
             val normalizedMaleProbability = (expMale / sumExp)
 
             val isFemale = normalizedFemaleProbability > normalizedMaleProbability
-            val confidence = if (isFemale) normalizedFemaleProbability else normalizedMaleProbability
+            val confidence =
+                if (isFemale) normalizedFemaleProbability else normalizedMaleProbability
 
             GenderResult(
                 isFemale = isFemale,
