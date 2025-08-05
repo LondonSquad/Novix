@@ -47,7 +47,7 @@ import androidx.paging.LoadState
 import androidx.paging.compose.LazyPagingItems
 import androidx.paging.compose.collectAsLazyPagingItems
 import com.london.designsystem.component.EmptyLayout
-import com.london.designsystem.component.HomeCard
+import com.london.presentation.shared.HomeCard
 import com.london.designsystem.component.Icon
 import com.london.designsystem.component.NovixChip
 import com.london.designsystem.component.OutlinedTextField

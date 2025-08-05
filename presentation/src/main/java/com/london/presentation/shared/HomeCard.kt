@@ -1,4 +1,4 @@
-package com.london.designsystem.component
+package com.london.presentation.shared
 
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Box
@@ -12,10 +12,12 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.dp
+import com.london.designsystem.component.CircularLoading
+import com.london.designsystem.component.SaveIcon
+import com.london.designsystem.component.UnSuitableEye
 import com.london.designsystem.component.button.ErrorImage
 import com.london.designsystem.theme.NovixTheme
 import com.london.designsystem.theme.ThemePreviews
-import com.london.imageharamblur.ui.ImageViewFilter
 
 @Composable
 fun HomeCard(
@@ -32,7 +34,7 @@ fun HomeCard(
             .clip(RoundedCornerShape(12.dp))
             .then(modifier)
             .fillMaxWidth()
-            .aspectRatio(3f/4f)
+            .aspectRatio(3f / 4f)
             .border(
                 width = 1.dp,
                 color = NovixTheme.colors.stroke,

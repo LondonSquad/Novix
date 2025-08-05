@@ -1,4 +1,4 @@
-package com.london.designsystem.component
+package com.london.presentation.shared
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -13,14 +13,17 @@ import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.layout.ContentScale.Companion.Crop
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import com.london.designsystem.component.CircularLoading
+import com.london.designsystem.component.Text
+import com.london.designsystem.component.UnSuitableEye
 import com.london.designsystem.component.button.ErrorImage
 import com.london.designsystem.theme.NovixTheme
 import com.london.designsystem.theme.ThemePreviews
@@ -53,7 +56,7 @@ fun CategoriesItem(
             contentDescription = "Image of ${categoryName.joinToString()}",
             modifier = Modifier.fillMaxSize(),
             contentScale = Crop,
-            loadingContent = { CircularLoading(modifier = Modifier.align(androidx.compose.ui.Alignment.Center)) },
+            loadingContent = { CircularLoading(modifier = Modifier.align(Alignment.Center)) },
             moderatedContent = { UnSuitableEye() }
         )
         Box(

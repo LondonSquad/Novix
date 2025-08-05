@@ -53,8 +53,8 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.london.designsystem.R
-import com.london.designsystem.component.ActorItem
-import com.london.designsystem.component.HomeCard
+import com.london.presentation.shared.ActorItem
+import com.london.presentation.shared.HomeCard
 import com.london.designsystem.component.Icon
 import com.london.designsystem.component.Text
 import com.london.designsystem.component.TopBar

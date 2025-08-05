@@ -1,4 +1,4 @@
-package com.london.designsystem.component
+package com.london.presentation.shared
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier

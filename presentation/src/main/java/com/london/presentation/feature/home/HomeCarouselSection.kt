@@ -13,7 +13,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import com.london.designsystem.component.HomeCard
+import com.london.presentation.shared.HomeCard
 import com.london.designsystem.component.SectionHeader
 import com.london.designsystem.component.carousel.HeroCarousel
 import com.london.designsystem.component.carousel.isHero
@@ -67,7 +67,8 @@ fun HomeCarouselSection(
                             color = NovixTheme.colors.stroke
                         ),
                         shape = RoundedCornerShape(HomeCarouselDefaults.CARD_CORNER_RADIUS)
-                    ).clickable {
+                    )
+                    .clickable {
                         onCardClick(
                             mediaItem.id,
                             mediaItem.mediaType
