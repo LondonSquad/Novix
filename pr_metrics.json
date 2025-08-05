@@ -17310,5 +17310,33 @@
       "deletions": 11,
       "changed_files": 13
     }
+  },
+  {
+    "pr_number": 533,
+    "url": "https://github.com/LondonSquad/Novix/pull/533",
+    "title": "feat: Refactor onboarding and splash screens with ViewModels",
+    "opened_at": "2025-08-05T11:29:48Z",
+    "head_ref": "fix/splash-onBoarding",
+    "base_ref": "develop",
+    "creator": {
+      "login": "ahmeddsamii",
+      "id": 154278495,
+      "url": "https://github.com/ahmeddsamii"
+    },
+    "approvals": [],
+    "first_approved_at": null,
+    "time_to_first_approval_minutes": null,
+    "required_approvals_met_at": null,
+    "time_to_required_approvals_minutes": null,
+    "closed_at": null,
+    "merged_at": null,
+    "merged_by": null,
+    "week": "2025-W32",
+    "status": "pending",
+    "diff_stats": {
+      "additions": 99,
+      "deletions": 60,
+      "changed_files": 10
+    }
   }
 ]
