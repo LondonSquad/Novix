@@ -26,11 +26,16 @@ import com.london.designsystem.R
 import com.london.designsystem.theme.NovixTheme
 import com.london.designsystem.theme.ThemePreviews
 
+enum class MediaCategory(val id: Int) {
+    MOVIES(0),
+    TV_SHOWS(1)
+}
+
 @Composable
 fun TabLayout(
     tabs: List<TabItem>,
-    selectedIndex: Int,
-    onTabSelected: (Int) -> Unit,
+    selectedMediaCategory: MediaCategory,
+    onTabSelected: (MediaCategory) -> Unit,
     modifier: Modifier = Modifier
 ) {
     Box(
@@ -46,8 +51,8 @@ fun TabLayout(
             tabs.forEachIndexed { index, tab ->
                 NovixTab(
                     text = tab.text,
-                    isSelected = index == selectedIndex,
-                    onClick = { onTabSelected(index) },
+                    isSelected = index == selectedMediaCategory.id,
+                    onClick = { onTabSelected(MediaCategory.entries[index]) },
                     modifier = Modifier.weight(1f)
                 )
             }
@@ -106,8 +111,8 @@ fun NovixTab(
 
 @Immutable
 data class TabItem(
-    @StringRes val
-    text: Int,
+    @StringRes
+    val text: Int,
 )
 
 
@@ -120,7 +125,7 @@ private fun NovixTabLayoutWithPagerPreview() {
                 TabItem(R.string.movies),
                 TabItem(R.string.tv_shows),
             ),
-            selectedIndex = 0,
+            selectedMediaCategory = MediaCategory.MOVIES,
             onTabSelected = {}
         )
     }
