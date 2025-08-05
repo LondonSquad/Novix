@@ -105,7 +105,6 @@
     <string name="no_recent_history">لم تتفقد أي شيء بعد.\nخذ جولة في التطبيق ثم عُدّ مجددًا! </string>
     <string name="no_tv_shows_found">لا يوجد مسلسلات في هذا التصنيف حاليا</string>
     <string name="no_reviews">"لا يوجد مراجعات"</string>
-    <string name="no_data_until_now">لا يوجد بيانات حتي الآن</string>
     <string name="login_failed">فشل تسجيل الدخول. يرجى التحقق من بيانات التسجيل الخاصة بك.</string>
     <string name="guest_login_failed">فشل تسجيل الدخول كضيف.</string>
     <string name="no_items_found">لا يوجد محتوى</string>
@@ -119,6 +118,7 @@
     <string name="change_password">تغيير كلمة المرور</string>
     <string name="user_profile">الملف الشخصي</string>
     <string name="please_login_to_access">يرجى تسجيل الدخول للوصول إلى تفاصيل حسابك والميزات الأخرى!</string>
+    <string name="there_is_no_items_for_this_genre">لا يوجد عناصر لهذا النوع!</string>
     <string name="logout">تسجيل لخروج</string>
     <string name="are_you_sure_to_continue">هل أنت متأكد أنك تريد المتابعة؟</string>
     <string name="appearance">المظهر</string>
