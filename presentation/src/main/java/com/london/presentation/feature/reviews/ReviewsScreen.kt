@@ -221,7 +221,6 @@ fun AuthorItem(
             ImageView(
                 model = profileUrl,
                 contentDescription = stringResource(R.string.author_profile),
-                modifier = Modifier,
                 contentScale = ContentScale.Crop,
                 loadingContent = { CircularLoading() },
                 errorContent = { ErrorImage() },
