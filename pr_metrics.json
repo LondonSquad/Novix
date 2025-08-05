@@ -17530,5 +17530,33 @@
       "deletions": 6,
       "changed_files": 7
     }
+  },
+  {
+    "pr_number": 538,
+    "url": "https://github.com/LondonSquad/Novix/pull/538",
+    "title": "feat: Make ContinueWatchingScreen title customizable",
+    "opened_at": "2025-08-05T21:21:52Z",
+    "head_ref": "feature/watching-history-ui",
+    "base_ref": "develop",
+    "creator": {
+      "login": "AsmaaKhaledGomaa",
+      "id": 117874933,
+      "url": "https://github.com/AsmaaKhaledGomaa"
+    },
+    "approvals": [],
+    "first_approved_at": null,
+    "time_to_first_approval_minutes": null,
+    "required_approvals_met_at": null,
+    "time_to_required_approvals_minutes": null,
+    "closed_at": null,
+    "merged_at": null,
+    "merged_by": null,
+    "week": "2025-W32",
+    "status": "pending",
+    "diff_stats": {
+      "additions": 25,
+      "deletions": 7,
+      "changed_files": 2
+    }
   }
 ]
