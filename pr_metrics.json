@@ -17441,5 +17441,33 @@
       "deletions": 33,
       "changed_files": 6
     }
+  },
+  {
+    "pr_number": 536,
+    "url": "https://github.com/LondonSquad/Novix/pull/536",
+    "title": "fix the topbar position and its background ",
+    "opened_at": "2025-08-05T17:37:38Z",
+    "head_ref": "fix/reviews-screen-top-bar",
+    "base_ref": "develop",
+    "creator": {
+      "login": "Mostafa-alsaygh",
+      "id": 106277855,
+      "url": "https://github.com/Mostafa-alsaygh"
+    },
+    "approvals": [],
+    "first_approved_at": null,
+    "time_to_first_approval_minutes": null,
+    "required_approvals_met_at": null,
+    "time_to_required_approvals_minutes": null,
+    "closed_at": null,
+    "merged_at": null,
+    "merged_by": null,
+    "week": "2025-W32",
+    "status": "pending",
+    "diff_stats": {
+      "additions": 12,
+      "deletions": 15,
+      "changed_files": 1
+    }
   }
 ]
