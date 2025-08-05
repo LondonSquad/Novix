@@ -11,5 +11,5 @@ data class CreateCustomListBody(
     @SerialName("description")
     val description: String,
     @SerialName("language")
-    val language: String,
+    val languageCode: String,
 )

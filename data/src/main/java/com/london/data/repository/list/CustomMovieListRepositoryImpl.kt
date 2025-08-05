@@ -4,6 +4,7 @@ import com.london.data.local.preference.AuthPreferences
 import com.london.data.mapper.list.toEntity
 import com.london.data.mapper.search.toEntity
 import com.london.data.remote.source.list.CustomMovieListsRemoteDataSource
+import com.london.domain.AppPreferencesService
 import com.london.domain.entity.Movie
 import com.london.domain.entity.MovieList
 import com.london.domain.entity.PagedFetchResponse
@@ -12,7 +13,8 @@ import javax.inject.Inject
 
 class CustomMovieListRepositoryImpl @Inject constructor(
     private val remoteDataSource: CustomMovieListsRemoteDataSource,
-    private val authPreferences: AuthPreferences
+    private val authPreferences: AuthPreferences,
+    private val preferencesService: AppPreferencesService
 ) : CustomMovieListRepository {
 
     override suspend fun deleteMovieList(id: UInt): Boolean =
@@ -22,7 +24,11 @@ class CustomMovieListRepositoryImpl @Inject constructor(
         ).isSuccess
 
     override suspend fun createMovieList(name: String): Boolean =
-        remoteDataSource.create(name = name, sessionId = authPreferences.getSessionId()).isSuccess
+        remoteDataSource.create(
+            name = name,
+            sessionId = authPreferences.getSessionId(),
+            languageCode = preferencesService.appLanguage.value.code
+        ).isSuccess
 
     override suspend fun getMovieLists(pageNumber: Int): PagedFetchResponse<MovieList> {
         val response = remoteDataSource.getAllMovieLists(

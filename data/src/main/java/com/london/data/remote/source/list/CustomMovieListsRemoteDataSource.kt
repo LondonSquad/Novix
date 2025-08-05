@@ -8,7 +8,7 @@ import com.london.data.remote.model.search.MovieRemote
 
 interface CustomMovieListsRemoteDataSource {
 
-    suspend fun create(name: String, sessionId: String?): Result<CreateCustomListResponse>
+    suspend fun create(name: String, sessionId: String?, languageCode: String): Result<CreateCustomListResponse>
     suspend fun delete(listId: Int, sessionId: String?): Result<CustomListResponse>
     suspend fun getDetails(
         listId: Int,
