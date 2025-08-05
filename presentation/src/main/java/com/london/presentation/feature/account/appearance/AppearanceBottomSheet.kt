@@ -45,7 +45,7 @@ fun AppearanceBottomSheet(
         state = rememberModalBottomSheetState(skipPartiallyExpanded = true)
     ) {
         Box(
-            modifier = Modifier
+            modifier = modifier
                 .fillMaxWidth()
                 .wrapContentHeight()
                 .heightIn(max = LocalWindowInfo.current.containerSize.height.dp * 0.75f)
@@ -117,7 +117,7 @@ fun AppearanceBottomSheetContent(
             mainText = stringResource(R.string.light),
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(top = 8.dp),
+                .padding(top = 12.dp, bottom = 24.dp),
             isSelected =
                 (state.appTheme == AppTheme.LIGHT),
             onClick = onLight
@@ -132,7 +132,6 @@ fun AppearanceBottomSheetContent(
             onClick = onSave,
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(top = 24.dp)
         )
     }
 }
