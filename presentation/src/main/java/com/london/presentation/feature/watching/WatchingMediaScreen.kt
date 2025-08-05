@@ -101,8 +101,7 @@ fun Content(
             TopBar(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(horizontal = 16.dp)
-                    .padding(top = 20.dp),
+                    .padding(start = 16.dp, end = 16.dp, top = 12.dp),
                 title = stringResource(screenTitle),
                 onBackClick = watchingMediaContract::onBack
             )
