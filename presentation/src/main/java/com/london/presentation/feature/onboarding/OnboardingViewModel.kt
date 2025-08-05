@@ -51,6 +51,7 @@ class OnboardingViewModel @Inject constructor(
     }
 
     fun navigateToWelcome() {
+        setOnBoardingShown()
         emitEffect(OnboardingEffect.NavigateToWelcome)
     }
 
@@ -58,6 +59,12 @@ class OnboardingViewModel @Inject constructor(
         viewModelScope.launch(Dispatchers.IO) {
             runCatching { appPreferencesService.setOnBoardingShown() }
                 .onFailure { Log.e("OnboardingViewModel", "onboardingFinished: ", it) }
+        }
+    }
+
+    private fun setOnBoardingShown() {
+        viewModelScope.launch(Dispatchers.IO) {
+            runCatching { appPreferencesService.setOnBoardingShown() }
         }
     }
 }
