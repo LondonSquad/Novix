@@ -30,7 +30,7 @@ fun EmptyStateInGenres() {
         Image(
             painter = painterResource(id = R.drawable.empty),
             contentDescription = stringResource(R.string.there_is_no_items_for_this_genre),
-            modifier = Modifier.size(28.dp)
+            modifier = Modifier.size(128.dp)
         )
         Text(
             text = stringResource(R.string.there_is_no_items_for_this_genre),
