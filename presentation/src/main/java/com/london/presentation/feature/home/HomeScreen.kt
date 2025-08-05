@@ -87,13 +87,6 @@ fun HomeScreen(
         }
     }
 
-//    val lifecycleOwner = LocalLifecycleOwner.current
-//    LaunchedEffect(key1 = Unit) {
-//        lifecycleOwner.lifecycle.repeatOnLifecycle(Lifecycle.State.RESUMED) {
-//            viewModel.fetchRecentWatchedMedia()
-//        }
-//    }
-
     val lazyGridState = rememberSaveable(
         saver = LazyGridState.Saver,
     ) {
