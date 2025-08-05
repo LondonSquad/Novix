@@ -8,18 +8,10 @@ import androidx.activity.enableEdgeToEdge
 import androidx.core.view.WindowCompat
 import com.london.app.navigation.NovixApp
 import com.london.designsystem.theme.NovixTheme
-import com.london.domain.AppPreferencesService
-import com.london.domain.repository.AuthRepository
 import dagger.hilt.android.AndroidEntryPoint
-import javax.inject.Inject
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
-    @Inject
-    lateinit var appPreferencesService: AppPreferencesService
-
-    @Inject
-    lateinit var authRepository: AuthRepository
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -32,7 +24,7 @@ class MainActivity : ComponentActivity() {
 
         setContent {
             NovixTheme {
-                NovixApp(appPreferencesService , authRepository)
+                NovixApp()
             }
         }
     }
