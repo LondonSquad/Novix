@@ -105,7 +105,6 @@
     <string name="reviews">Reviews</string>
     <string name="no_recent_history">Looks like you haven\'t checked anything yet.\nTake a look around and come back!</string>
     <string name="no_reviews">\"There is no review\"</string>
-    <string name="no_data_until_now">No Data Yet</string>
     <string name="login_failed">Login failed. Please check your credentials.</string>
     <string name="guest_login_failed">Guest login failed.</string>
     <string name="no_items_found">There is no items</string>
@@ -122,4 +121,5 @@
     <string name="user_profile">User profile</string>
     <string name="logout">Logout</string>
     <string name="please_login_to_access">Please login to access your account details and other features!</string>
+    <string name="there_is_no_items_for_this_genre">There is no items for this genre!</string>
 </resources>
