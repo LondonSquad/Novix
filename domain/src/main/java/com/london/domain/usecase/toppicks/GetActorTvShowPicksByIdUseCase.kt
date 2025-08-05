@@ -1,4 +1,4 @@
-package com.london.domain.usecase
+package com.london.domain.usecase.toppicks
 
 import com.london.domain.repository.ActorRepository
 import javax.inject.Inject
