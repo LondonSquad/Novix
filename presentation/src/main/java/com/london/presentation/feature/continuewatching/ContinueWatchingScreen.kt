@@ -48,6 +48,7 @@ fun ContinueWatchingScreen(
     onBackClick: () -> Unit = {},
     onMovieClick: (Int) -> Unit = {},
     onTvShowClick: (Int) -> Unit = {},
+    title: String = stringResource(string.continue_watch),
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
     val effect by viewModel.effect.collectAsState(null)
@@ -62,14 +63,16 @@ fun ContinueWatchingScreen(
 
     Content(
         state = state,
-        continueWatchingContract = viewModel
+        continueWatchingContract = viewModel,
+        title = title
     )
 }
 
 @Composable
 fun Content(
     state: ContinueWatchingUiState = ContinueWatchingUiState(),
-    continueWatchingContract: ContinueWatchingContract = defaultContinueWatchingContract()
+    continueWatchingContract: ContinueWatchingContract = defaultContinueWatchingContract(),
+    title: String = stringResource(string.continue_watch)
 ) {
 
     val screenWidth =
@@ -87,7 +90,7 @@ fun Content(
                 .fillMaxWidth()
                 .padding(horizontal = 16.dp)
                 .padding(top = 20.dp),
-            title = stringResource(string.continue_watch),
+            title = title,
             onBackClick = continueWatchingContract::onBack
         )
 

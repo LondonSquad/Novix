@@ -12,6 +12,7 @@ import androidx.compose.material.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.navigation.NavController
 import androidx.navigation.NavDestination.Companion.hasRoute
 import androidx.navigation.NavGraph.Companion.findStartDestination
@@ -24,6 +25,7 @@ import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navigation
 import com.london.designsystem.component.NavBar
 import com.london.designsystem.theme.NovixTheme
+import com.london.presentation.R
 import com.london.presentation.feature.account.AccountScreen
 import com.london.presentation.feature.category.CategoriesScreen
 import com.london.presentation.feature.category.moviesbycategory.MoviesByCategoryScreen
@@ -56,6 +58,7 @@ import com.london.presentation.navigation.Screen.TrendingActors
 import com.london.presentation.navigation.Screen.TrendingMovies
 import com.london.presentation.navigation.Screen.TrendingTvShows
 import com.london.presentation.navigation.Screen.TvShowDetails
+import com.london.presentation.navigation.Screen.WatchingHistory
 import kotlinx.serialization.Serializable
 import timber.log.Timber
 
@@ -276,7 +279,7 @@ fun NavGraphBuilder.mainNavGraph(
         popEnterTransition = { fadeIn(tween(500)) },
         enterTransition = { fadeIn(tween(500)) },
         popExitTransition = { fadeOut(tween(500)) },
-    ){
+    ) {
         TvShowByCategoryScreen(
             onNavigateBack = navController::navigateUp,
             onNavigateToTvShowDetails = { tvShowId ->
@@ -348,13 +351,24 @@ fun NavGraphBuilder.mainNavGraph(
             })
     }
 
-    composable<Screen.WatchingHistory>(
+    composable<WatchingHistory>(
         exitTransition = { fadeOut(tween(500)) },
         popEnterTransition = { fadeIn(tween(500)) },
         enterTransition = { fadeIn(tween(500)) },
         popExitTransition = { fadeOut(tween(500)) },
     ) {
-        // todo: Implement WatchingHistoryScreen
+        ContinueWatchingScreen(
+            onBackClick = {
+                navController.navigateUp()
+            },
+            onMovieClick = { id ->
+                navController.navigate(MovieDetails(id))
+            },
+            onTvShowClick = { id ->
+                navController.navigate(TvShowDetails(id))
+            },
+            title = stringResource(R.string.watching_history)
+        )
     }
 
     composable<Screen.MyRating>(
@@ -524,7 +538,8 @@ fun NavGraphBuilder.mainNavGraph(
             },
             onTvShowClick = { id ->
                 navController.navigate(TvShowDetails(id))
-            }
+            },
+            title = stringResource(R.string.continue_watch)
         )
     }
 }
