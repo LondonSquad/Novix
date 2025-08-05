@@ -4,6 +4,7 @@ import com.london.data.remote.model.ApiResponse
 import com.london.data.remote.model.list.CreateCustomListBody
 import com.london.data.remote.model.list.CreateCustomListResponse
 import com.london.data.remote.model.list.CustomListResponse
+import com.london.data.remote.model.list.CustomMovieListResponse
 import com.london.data.remote.model.list.ListMovieBody
 import com.london.data.remote.model.search.MovieRemote
 import retrofit2.Response
@@ -46,4 +47,9 @@ interface CustomMovieListsApiService {
         @Query("session_id") sessionId: String,
         @Body movieDeletionBody: ListMovieBody
     ): Response<CustomListResponse>
+
+    @GET("3/account/{account_id}/lists")
+    suspend fun getAllUserLists(
+        @Query("session_id") sessionId: String
+    ): Response<ApiResponse<CustomMovieListResponse>>
 }
