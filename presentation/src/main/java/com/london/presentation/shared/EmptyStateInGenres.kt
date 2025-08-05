@@ -32,6 +32,7 @@ fun EmptyStateInGenres() {
             contentDescription = stringResource(R.string.there_is_no_items_for_this_genre),
             modifier = Modifier.size(128.dp)
         )
+
         Text(
             text = stringResource(R.string.there_is_no_items_for_this_genre),
             style = NovixTheme.typography.body.small,

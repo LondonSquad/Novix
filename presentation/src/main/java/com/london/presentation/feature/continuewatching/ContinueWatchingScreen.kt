@@ -160,8 +160,8 @@ fun Content(
             }
         }
 
-        if ((!state.isMovieSelected && state.movies.isEmpty()) ||
-            (!state.isMovieSelected && state.tvSeries.isEmpty())
+        if ((state.isMovieSelected && state.movies.isEmpty()) ||
+            (state.isTvSelected && state.tvSeries.isEmpty())
         ) {
             EmptyStateInGenres()
         }
