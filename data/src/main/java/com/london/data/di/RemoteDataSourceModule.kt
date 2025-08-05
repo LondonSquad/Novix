@@ -8,6 +8,7 @@ import com.london.data.remote.service.details.tvshow.TvShowDetailsApiService
 import com.london.data.remote.service.discover.DiscoverApiService
 import com.london.data.remote.service.home.PopularApiService
 import com.london.data.remote.service.home.UpComingApiService
+import com.london.data.remote.service.list.CustomMovieListsApiService
 import com.london.data.remote.service.reviews.ReviewsApiService
 import com.london.data.remote.service.search.SearchApiService
 import com.london.data.remote.service.toprated.TopRatedMovieApiService
@@ -32,6 +33,8 @@ import com.london.data.remote.source.home.popular.PopularRemoteDataSource
 import com.london.data.remote.source.home.popular.PopularRemoteDataSourceImpl
 import com.london.data.remote.source.home.upcoming.UpComingRemoteDataSource
 import com.london.data.remote.source.home.upcoming.UpComingRemoteDataSourceImpl
+import com.london.data.remote.source.list.CustomMovieListsRemoteDataSource
+import com.london.data.remote.source.list.CustomMovieListsRemoteDataSourceImpl
 import com.london.data.remote.source.reviews.ReviewsRemoteDataSource
 import com.london.data.remote.source.reviews.ReviewsRemoteDataSourceImpl
 import com.london.data.remote.source.search.SearchRemoteDataSource
@@ -140,4 +143,12 @@ object RemoteDataSourceModule {
         apiService: DiscoverApiService,
     ): DiscoverRemoteDataSource =
         DiscoverRemoteDataSourceImpl(discoverApiService = apiService)
+
+    @Provides
+    @Singleton
+    fun provideCustomMovieListsRemoteDataSource(
+        apiService: CustomMovieListsApiService,
+    ): CustomMovieListsRemoteDataSource =
+        CustomMovieListsRemoteDataSourceImpl(customMovieListsApiService = apiService)
+
 }

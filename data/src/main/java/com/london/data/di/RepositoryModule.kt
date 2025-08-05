@@ -24,6 +24,7 @@ import com.london.data.remote.source.home.popular.PopularRemoteDataSource
 import com.london.data.remote.source.home.trending.TrendingRemoteDataSource
 import com.london.data.remote.source.home.trending.TrendingRemoteDataSourceImpl
 import com.london.data.remote.source.home.upcoming.UpComingRemoteDataSource
+import com.london.data.remote.source.list.CustomMovieListsRemoteDataSource
 import com.london.data.remote.source.reviews.ReviewsRemoteDataSource
 import com.london.data.remote.source.search.SearchRemoteDataSource
 import com.london.data.remote.source.toprated.movie.TopRatedMovieRemoteDataSource
@@ -35,6 +36,7 @@ import com.london.data.repository.home.toprated.TopRatedMovieRepositoryImpl
 import com.london.data.repository.home.toprated.TopRatedTvSeriesRepositoryImpl
 import com.london.data.repository.home.trending.TrendingRepositoryImpl
 import com.london.data.repository.home.upcoming.UpComingRepositoryImpl
+import com.london.data.repository.list.CustomMovieListRepositoryImpl
 import com.london.data.repository.recent.RecentSearchRepositoryImpl
 import com.london.data.repository.recent.RecentViewedRepositoryImpl
 import com.london.data.repository.recent.RecentWatchedRepositoryIml
@@ -46,10 +48,12 @@ import com.london.data.repository.search.TvShowRepositoryImpl
 import com.london.data.repository.search.TvShowVideoProviderRepositoryImpl
 import com.london.data.utils.CrashReporter
 import com.london.data.utils.FirebaseCrashReporter
+import com.london.domain.AppPreferencesService
 import com.london.domain.entity.recent.RecentSearch
 import com.london.domain.entity.recent.RecentViewed
 import com.london.domain.repository.ActorRepository
 import com.london.domain.repository.AuthRepository
+import com.london.domain.repository.CustomMovieListRepository
 import com.london.domain.repository.MovieDetailsRepository
 import com.london.domain.repository.MovieVideoProviderRepository
 import com.london.domain.repository.PopularRepository
@@ -180,7 +184,8 @@ object RepositoryModule {
     ): MovieDetailsRepository =
         MovieDetailsRepositoryImpl(
             movieDetailsRemoteDataSource = dataSource,
-            reviewsRemoteDataSource =reviewsRemoteDataSource)
+            reviewsRemoteDataSource = reviewsRemoteDataSource
+        )
 
     @Provides
     @Singleton
@@ -225,6 +230,18 @@ object RepositoryModule {
         dataSource: DiscoverRemoteDataSource
     ): DiscoverRepository = DiscoverRepositoryImpl(
         remoteDataSource = dataSource
+    )
+
+    @Provides
+    @Singleton
+    fun provideCustomMovieListsRepository(
+        dataSource: CustomMovieListsRemoteDataSource,
+        authPreferences: AuthPreferences,
+        preferencesService: AppPreferencesService
+    ): CustomMovieListRepository = CustomMovieListRepositoryImpl(
+        remoteDataSource = dataSource,
+        authPreferences = authPreferences,
+        preferencesService = preferencesService
     )
 
 }
