@@ -1,5 +1,6 @@
 package com.london.presentation.feature.toprated
 
+import com.london.designsystem.component.MediaCategory
 import com.london.domain.usecase.toprated.GetTopRatedMoviesUseCase
 import com.london.domain.usecase.toprated.GetTopRatedTvSeriesUseCase
 import com.london.presentation.feature.base.BaseViewModel
@@ -67,7 +68,7 @@ class TopRatedViewModel @Inject constructor(
         }, checkSuccess = { true })
     }
 
-    override fun onRetry(){
+    override fun onRetry() {
         updateState { copy(errorMessage = null) }
         initializeTopRated()
     }
@@ -84,11 +85,12 @@ class TopRatedViewModel @Inject constructor(
         initializeTvShow()
     }
 
-    override fun tabSelected(index: Int) {
-        if (index == state.value.tabSelected) return
+    override fun onMediaCategoryTabSelected(selectedMediaCategory: MediaCategory) {
+        if (selectedMediaCategory == state.value.selectedMediaCategory) return
         updateState {
             copy(
-                tabSelected = index, isMovieSelected = index == 0
+                selectedMediaCategory = selectedMediaCategory,
+                isMovieSelected = selectedMediaCategory == MediaCategory.MOVIES
             )
         }
         initializeTopRated()
@@ -99,7 +101,7 @@ class TopRatedViewModel @Inject constructor(
     }
 
     override fun onMovieClick(id: Int) {
-      emitEffect(TopRatedEffect.NavigateToMovieDetails(id))
+        emitEffect(TopRatedEffect.NavigateToMovieDetails(id))
     }
 
     override fun onTvShowClick(id: Int) {

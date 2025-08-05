@@ -109,8 +109,8 @@ private fun Content(
                 TabItem(R.string.movies),
                 TabItem(R.string.tv_shows),
             ),
-            selectedIndex = state.tabSelected,
-            onTabSelected = topRatedContract::tabSelected,
+            selectedMediaCategory = state.selectedMediaCategory,
+            onTabSelected = topRatedContract::onMediaCategoryTabSelected,
             modifier = Modifier.background(NovixTheme.colors.surface)
         )
         if (state.isMovieSelected)
