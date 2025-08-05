@@ -17331,12 +17331,28 @@
           "url": "https://github.com/abdelrhman1002"
         },
         "submitted_at": "2025-08-05T12:04:32Z"
+      },
+      {
+        "reviewer": {
+          "id": 106277855,
+          "login": "Mostafa-alsaygh",
+          "url": "https://github.com/Mostafa-alsaygh"
+        },
+        "submitted_at": "2025-08-05T14:46:25Z"
+      },
+      {
+        "reviewer": {
+          "id": 76666355,
+          "login": "Abdulrahman1890",
+          "url": "https://github.com/Abdulrahman1890"
+        },
+        "submitted_at": "2025-08-05T15:04:44Z"
       }
     ],
     "first_approved_at": "2025-08-05T12:04:32Z",
     "time_to_first_approval_minutes": 34.733333333333334,
-    "required_approvals_met_at": null,
-    "time_to_required_approvals_minutes": null,
+    "required_approvals_met_at": "2025-08-05T14:46:25Z",
+    "time_to_required_approvals_minutes": 196.61666666666667,
     "closed_at": "2025-08-05T14:46:27Z",
     "merged_at": "2025-08-05T14:46:27Z",
     "merged_by": {
