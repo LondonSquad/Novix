@@ -100,14 +100,14 @@ fun Content(
             onTabSelected = continueWatchingContract::tabSelected,
             modifier = Modifier.background(NovixTheme.colors.surface)
         )
-        when {
-            state.isMovieSelected -> MovieGenreRow(
+        if (state.isMovieSelected) {
+            MovieGenreRow(
                 onGenreClick = continueWatchingContract::movieGenre,
                 state = state,
                 screenWidth = screenWidth
             )
-
-            state.isTvSelected -> TvShowRow(
+        } else {
+            TvShowRow(
                 onGenreClick = continueWatchingContract::tvShowGenre,
                 state = state,
                 screenWidth = screenWidth
@@ -170,7 +170,10 @@ private fun MovieGenreRow(
     modifier: Modifier = Modifier
 ) {
     val genres = MovieGenre.entries.toTypedArray()
-    if (genres.isNotEmpty()) {
+
+    if (state.movies.isEmpty()) {
+        EmptyStateInGenres()
+    } else {
         LazyRow(
             horizontalArrangement = Arrangement.spacedBy(8.dp),
             contentPadding = PaddingValues(horizontal = 16.dp),
@@ -178,7 +181,6 @@ private fun MovieGenreRow(
                 .requiredWidth(screenWidth)
                 .padding(vertical = 12.dp)
         ) {
-
             items(genres) { genre ->
                 NovixChip(
                     text = stringResource(genre.stringResId),
@@ -186,8 +188,6 @@ private fun MovieGenreRow(
                     onClick = { onGenreClick(genre) })
             }
         }
-    } else {
-        EmptyStateInGenres()
     }
 }
 
@@ -199,7 +199,9 @@ private fun TvShowRow(
     modifier: Modifier = Modifier
 ) {
     val genres = TvShowGenre.entries.toTypedArray()
-    if (genres.isNotEmpty()) {
+    if (state.tvSeries.isEmpty()) {
+            EmptyStateInGenres()
+    } else {
         LazyRow(
             horizontalArrangement = Arrangement.spacedBy(8.dp),
             contentPadding = PaddingValues(horizontal = 16.dp),
@@ -214,7 +216,5 @@ private fun TvShowRow(
                     onClick = { onGenreClick(genre) })
             }
         }
-    } else {
-        EmptyStateInGenres()
     }
 }
