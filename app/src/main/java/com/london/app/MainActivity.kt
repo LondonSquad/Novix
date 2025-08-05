@@ -5,11 +5,14 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.core.view.WindowCompat
 import com.london.app.navigation.NovixApp
 import com.london.designsystem.theme.NovixTheme
 import com.london.domain.AppPreferencesService
 import com.london.domain.repository.AuthRepository
+import com.london.presentation.shared.ContentRestrictionProvider
+import com.london.presentation.shared.LocalContentRestrictionLevel
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
@@ -32,7 +35,13 @@ class MainActivity : ComponentActivity() {
 
         setContent {
             NovixTheme {
-                NovixApp(appPreferencesService , authRepository)
+                ContentRestrictionProvider(appPreferencesService) { contentRestrictionLevel ->
+                    CompositionLocalProvider(
+                        LocalContentRestrictionLevel provides contentRestrictionLevel
+                    ) {
+                        NovixApp(appPreferencesService, authRepository)
+                    }
+                }
             }
         }
     }

@@ -55,7 +55,12 @@ class AccountViewModel @Inject constructor(
 
     override fun onContentRestrictionSave(level: ContentRestrictionLevel) {
         appPreferencesService.setContentRestrictionLevel(level)
-        updateState { copy(showContentRestrictionBottomSheet = false) }
+        updateState {
+            copy(
+                showContentRestrictionBottomSheet = false,
+                currentContentRestriction = level
+            )
+        }
     }
 
     override fun onAppearanceClick() {
