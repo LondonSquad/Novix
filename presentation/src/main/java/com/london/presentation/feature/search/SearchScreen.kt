@@ -163,7 +163,6 @@ fun SearchScreenContent(
                 modifier = Modifier
                     .statusBarsPadding()
                     .heightIn(56.dp)
-                    .padding(top = 12.dp)
                     .padding(horizontal = 4.dp),
                 title = stringResource(R.string.search),
             )
