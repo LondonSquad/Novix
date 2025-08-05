@@ -1,9 +1,9 @@
 package com.london.data.repository
 
 import com.google.common.truth.Truth.assertThat
-import com.london.data.mapper.search.toAuthorDetails
 import com.london.data.local.preference.AuthPreferences
 import com.london.data.mapper.moviedetails.toEntity
+import com.london.data.mapper.search.toAuthorDetails
 import com.london.data.remote.exception.NetworkException
 import com.london.data.remote.model.ApiResponse
 import com.london.data.remote.model.details.movie.model.moviecast.MovieActor
@@ -13,7 +13,6 @@ import com.london.data.remote.model.details.movie.model.moviedetails.GenreRemote
 import com.london.data.remote.model.details.movie.model.moviedetails.MovieDetailsResponse
 import com.london.data.remote.model.details.movie.model.moviedetails.ProductionCompanyRemote
 import com.london.data.remote.model.details.movie.model.moviedetails.ProductionCountryRemote
-import com.london.data.remote.model.details.movie.model.moviedetails.RatingValue
 import com.london.data.remote.model.details.movie.model.moviedetails.RemoteCollectionDetails
 import com.london.data.remote.model.details.movie.model.moviedetails.SpokenLanguageRemote
 import com.london.data.remote.model.details.movie.model.movieimages.MovieImagesResponse
@@ -37,8 +36,7 @@ import kotlin.test.Test
 
 class MovieDetailsRepositoryImplTest {
 
-    private lateinit var remoteDataSource: MovieDetailsRemoteDataSource
-    private lateinit var authPreferences: AuthPreferences
+    private val authPreferences: AuthPreferences = mockk(relaxed = true)
     private val remoteDataSource: MovieDetailsRemoteDataSource = mockk(relaxed = true)
     private val reviewRemoteDataSource: ReviewsRemoteDataSource = mockk(relaxed = true)
     private lateinit var repository: MovieDetailsRepositoryImpl
@@ -47,7 +45,8 @@ class MovieDetailsRepositoryImplTest {
     fun setup() {
         repository = MovieDetailsRepositoryImpl(
             movieDetailsRemoteDataSource = remoteDataSource,
-            reviewsRemoteDataSource = reviewRemoteDataSource
+            reviewsRemoteDataSource = reviewRemoteDataSource,
+            authPreferences = authPreferences
         )
     }
 
@@ -202,7 +201,6 @@ class MovieDetailsRepositoryImplTest {
         AccountMovieStatesResponse(
             id = 123,
             favorite = true,
-            rated = RatingValue(5),
             watchlist = true
         )
 
@@ -210,7 +208,6 @@ class MovieDetailsRepositoryImplTest {
         return AccountMovieStatesResponse(
             favorite = true,
             id = 5,
-            rated = RatingValue(value = 5),
             watchlist = false
         )
     }
