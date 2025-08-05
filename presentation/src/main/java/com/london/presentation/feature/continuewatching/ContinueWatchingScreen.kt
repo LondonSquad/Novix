@@ -112,7 +112,6 @@ fun Content(
                 state = state,
                 screenWidth = screenWidth
             )
-            else -> EmptyStateInGenres()
         }
         LazyVerticalGrid(
             columns = GridCells.Fixed(gridColmuns()),
@@ -170,19 +169,25 @@ private fun MovieGenreRow(
     screenWidth: Dp,
     modifier: Modifier = Modifier
 ) {
-    LazyRow(
-        horizontalArrangement = Arrangement.spacedBy(8.dp),
-        contentPadding = PaddingValues(horizontal = 16.dp),
-        modifier = modifier
-            .requiredWidth(screenWidth)
-            .padding(vertical = 12.dp)
-    ) {
-        items(MovieGenre.entries.toTypedArray()) { genre ->
-            NovixChip(
-                text = stringResource(genre.stringResId),
-                isSelected = genre == state.selectedMovieGenre,
-                onClick = { onGenreClick(genre) })
+    val genres = MovieGenre.entries.toTypedArray()
+    if (genres.isNotEmpty()) {
+        LazyRow(
+            horizontalArrangement = Arrangement.spacedBy(8.dp),
+            contentPadding = PaddingValues(horizontal = 16.dp),
+            modifier = modifier
+                .requiredWidth(screenWidth)
+                .padding(vertical = 12.dp)
+        ) {
+
+            items(genres) { genre ->
+                NovixChip(
+                    text = stringResource(genre.stringResId),
+                    isSelected = genre == state.selectedMovieGenre,
+                    onClick = { onGenreClick(genre) })
+            }
         }
+    } else {
+        EmptyStateInGenres()
     }
 }
 
@@ -193,18 +198,23 @@ private fun TvShowRow(
     screenWidth: Dp,
     modifier: Modifier = Modifier
 ) {
-    LazyRow(
-        horizontalArrangement = Arrangement.spacedBy(8.dp),
-        contentPadding = PaddingValues(horizontal = 16.dp),
-        modifier = modifier
-            .requiredWidth(screenWidth)
-            .padding(vertical = 12.dp)
-    ) {
-        items(TvShowGenre.entries.toTypedArray()) { genre ->
-            NovixChip(
-                text = stringResource(genre.stringResId),
-                isSelected = genre == state.selectedTvShowGenre,
-                onClick = { onGenreClick(genre) })
+    val genres = TvShowGenre.entries.toTypedArray()
+    if (genres.isNotEmpty()) {
+        LazyRow(
+            horizontalArrangement = Arrangement.spacedBy(8.dp),
+            contentPadding = PaddingValues(horizontal = 16.dp),
+            modifier = modifier
+                .requiredWidth(screenWidth)
+                .padding(vertical = 12.dp)
+        ) {
+            items(genres) { genre ->
+                NovixChip(
+                    text = stringResource(genre.stringResId),
+                    isSelected = genre == state.selectedTvShowGenre,
+                    onClick = { onGenreClick(genre) })
+            }
         }
+    } else {
+        EmptyStateInGenres()
     }
 }
