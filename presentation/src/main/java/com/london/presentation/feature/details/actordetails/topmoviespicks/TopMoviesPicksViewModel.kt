@@ -1,7 +1,7 @@
 package com.london.presentation.feature.details.actordetails.topmoviespicks
 
 import androidx.lifecycle.SavedStateHandle
-import com.london.domain.usecase.GetActorMoviePicksByIdUseCase
+import com.london.domain.usecase.toppicks.GetActorMoviePicksByIdUseCase
 import com.london.presentation.feature.base.BaseViewModel
 import com.london.presentation.navigation.Screen
 import com.london.presentation.navigation.getArgs
