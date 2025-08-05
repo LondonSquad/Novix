@@ -1,7 +1,5 @@
 package com.london.presentation.feature.watching
 
-import com.london.domain.entity.Movie
-import com.london.domain.entity.TvShow
 import com.london.domain.usecase.recent.watched.GetRecentWatchedMoviesUseCase
 import com.london.domain.usecase.recent.watched.GetRecentWatchedTvShowsUseCase
 import com.london.presentation.feature.base.BaseViewModel
@@ -21,7 +19,7 @@ open class WatchingMediaViewModel @Inject constructor(
         initializeContinueWatching()
     }
 
-    private fun initializeContinueWatching() {
+    fun initializeContinueWatching() {
         tryToExecute(
             block = {
                 val recentWatchedMovie = getRecentWatchedMoviesUseCase.invoke(
@@ -71,7 +69,7 @@ open class WatchingMediaViewModel @Inject constructor(
             copy(
                 tabSelected = index,
                 isMovieSelected = index == 0,
-                isTvSelected = index == 0
+                isTvSelected = index == 1
             )
         }
         initializeContinueWatching()
