@@ -1,6 +1,7 @@
 package com.london.data.remote.service.details.tvshow
 
 
+import com.london.data.remote.model.details.rating.AccountMediaStatesResponse
 import com.london.data.remote.model.details.tvshow.model.TvShowCastRemoteResponse
 import com.london.data.remote.model.details.tvshow.model.TvShowDetailsRemoteResponse
 import com.london.data.remote.model.details.tvshow.model.TvShowImagesRemoteResponse
@@ -11,6 +12,7 @@ import com.london.data.remote.model.details.videoprovider.tvshow.model.TvShowVid
 import retrofit2.Response
 import retrofit2.http.GET
 import retrofit2.http.Path
+import retrofit2.http.Query
 
 interface TvShowDetailsApiService {
 
@@ -53,4 +55,11 @@ interface TvShowDetailsApiService {
     suspend fun getTvShowVideos(
         @Path("tv_id") tvShowId: Int,
     ): Response<TvShowVideoResponse>
+
+    @GET("3/movie/{tv_id}/account_states")
+    suspend fun getAccountTvShowState(
+        @Path("tv_id") tvShowId: Int,
+        @Query("guest_session_id") guestSessionId: String?,
+        @Query("session_id") userSessionId: String?,
+    ): Response<AccountMediaStatesResponse>
 }

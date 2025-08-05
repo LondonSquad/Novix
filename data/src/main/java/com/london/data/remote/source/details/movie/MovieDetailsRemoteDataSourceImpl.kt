@@ -2,9 +2,9 @@ package com.london.data.remote.source.details.movie
 
 import com.london.data.remote.model.ApiResponse
 import com.london.data.remote.model.details.movie.model.moviecast.MovieCastResponse
-import com.london.data.remote.model.details.movie.model.moviedetails.AccountMovieStatesResponse
 import com.london.data.remote.model.details.movie.model.moviedetails.MovieDetailsResponse
 import com.london.data.remote.model.details.movie.model.movieimages.MovieImagesResponse
+import com.london.data.remote.model.details.rating.AccountMediaStatesResponse
 import com.london.data.remote.model.search.MovieRemote
 import com.london.data.remote.service.details.movie.MovieDetailsApiService
 import com.london.data.remote.source.base.BaseRemoteDatasource
@@ -36,7 +36,7 @@ class MovieDetailsRemoteDataSourceImpl @Inject constructor(
         movieId: Int,
         guestSessionId: String?,
         userSessionId: String?
-    ): Result<AccountMovieStatesResponse> =
+    ): Result<AccountMediaStatesResponse> =
         callApiWithRetry(apiCall = {
             movieDetailsApiService.getMovieStates(
                 movieId = movieId,

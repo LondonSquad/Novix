@@ -1,5 +1,6 @@
 package com.london.data.remote.source.details.tvshow
 
+import com.london.data.remote.model.details.rating.AccountMediaStatesResponse
 import com.london.data.remote.model.details.tvshow.model.TvShowCastRemoteResponse
 import com.london.data.remote.model.details.tvshow.model.TvShowDetailsRemoteResponse
 import com.london.data.remote.model.details.tvshow.model.TvShowImagesRemoteResponse
@@ -33,4 +34,9 @@ interface TvShowDetailsRemoteDataSource {
         episodeNumber: Int
     ): Result<EpisodeVideoResponse>
 
+    suspend fun getAccountTvShowStates(
+        tvShowShow: Int,
+        guestSessionId: String?,
+        userSessionId: String?
+    ): Result<AccountMediaStatesResponse>
 }

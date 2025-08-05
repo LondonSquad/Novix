@@ -2,9 +2,9 @@ package com.london.data.remote.source.details.movie
 
 import com.london.data.remote.model.ApiResponse
 import com.london.data.remote.model.details.movie.model.moviecast.MovieCastResponse
-import com.london.data.remote.model.details.movie.model.moviedetails.AccountMovieStatesResponse
 import com.london.data.remote.model.details.movie.model.moviedetails.MovieDetailsResponse
 import com.london.data.remote.model.details.movie.model.movieimages.MovieImagesResponse
+import com.london.data.remote.model.details.rating.AccountMediaStatesResponse
 import com.london.data.remote.model.search.MovieRemote
 
 
@@ -17,5 +17,5 @@ interface MovieDetailsRemoteDataSource {
         movieId: Int,
         guestSessionId: String?,
         userSessionId: String?
-    ) : Result<AccountMovieStatesResponse>
+    ): Result<AccountMediaStatesResponse>
 }
