@@ -1,19 +1,23 @@
 package com.london.presentation.feature.account
 
+import com.london.domain.AppPreferencesService
+import com.london.domain.theme.AppTheme
 import com.london.presentation.feature.account.state.AccountUiState
 import com.london.presentation.feature.base.BaseViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 
 @HiltViewModel
-class AccountViewModel @Inject constructor() :
-    BaseViewModel<AccountUiState, AccountEffect>(AccountUiState()),
+class AccountViewModel @Inject constructor(
+    private val appPreferencesService: AppPreferencesService
+) : BaseViewModel<AccountUiState, AccountEffect>(AccountUiState()),
     AccountContract {
 
     init {
         updateState {
             copy(isUserLoggedIn = checkIfUserIsLoggedIn())
         }
+        initializeSelectedAppearanceMode()
     }
 
     private fun checkIfUserIsLoggedIn(): Boolean {
@@ -38,12 +42,67 @@ class AccountViewModel @Inject constructor() :
         emitEffect(AccountEffect.NavigateToChangePassword)
     }
 
+    //region AppearanceBottomSheet
     override fun onAppearanceClick() {
-        updateState { copy(showAppearanceBottomSheet = true) }
+        updateState {
+            copy(
+                isAppearanceBottomSheetVisible = true
+            )
+        }
     }
 
+    override fun onDarkModeSelected() {
+        updateState {
+            copy(
+                appTheme = AppTheme.DARK
+            )
+        }
+    }
+
+    override fun onLightModeSelected() {
+        updateState {
+            copy(
+                appTheme = AppTheme.LIGHT
+            )
+        }
+    }
+
+    override fun onAppearanceModeSave() {
+        appPreferencesService.setAppTheme(state.value.appTheme)
+        updateState {
+            copy(
+                isAppearanceBottomSheetVisible = false
+            )
+        }
+    }
+
+    private fun initializeSelectedAppearanceMode() {
+        updateState {
+            copy(
+                appTheme = appPreferencesService.appTheme.value
+            )
+        }
+    }
+
+    fun updateSelectedThemeOnSystemDarkChange(isSystemDark: Boolean) {
+        updateState {
+            copy(
+                appTheme = if (isSystemDark) AppTheme.DARK else AppTheme.LIGHT
+            )
+        }
+    }
+
+    override fun showAppearanceBottomSheet() {
+        updateState {
+            copy(
+                isAppearanceBottomSheetVisible = true
+            )
+        }
+    }
+    //endregion
+
     override fun onLanguageClick() {
-        updateState { copy(showLanguageBottomSheet = true) }
+        updateState { copy(isLanguageBottomSheetVisible = true) }
     }
 
     override fun onUserMenuClick() {
@@ -54,7 +113,7 @@ class AccountViewModel @Inject constructor() :
         updateState {
             copy(
                 showUserMenu = false,
-                showLogoutBottomSheet = true
+                isLogoutBottomSheetVisible = true
             )
         }
     }
@@ -63,9 +122,9 @@ class AccountViewModel @Inject constructor() :
         updateState {
             copy(
                 showContentRestrictionBottomSheet = false,
-                showAppearanceBottomSheet = false,
-                showLanguageBottomSheet = false,
-                showLogoutBottomSheet = false,
+                isAppearanceBottomSheetVisible = false,
+                isLanguageBottomSheetVisible = false,
+                isLogoutBottomSheetVisible = false,
                 showUserMenu = false
             )
         }
