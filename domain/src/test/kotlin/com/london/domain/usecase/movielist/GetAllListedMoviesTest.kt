@@ -26,9 +26,19 @@ class GetAllListedMoviesTest {
     @Test
     fun `invoke should return all listed movies`() = runTest {
         //Given
-        coEvery { customMovieListRepository.getMovieLists() } returns movieLists
-        coEvery { customMovieListRepository.getMovieListDetails(listId = 1u) } returns listDetails1
-        coEvery { customMovieListRepository.getMovieListDetails(listId = 2u) } returns listDetails2
+        coEvery { customMovieListRepository.getMovieLists(pageNumber = 1) } returns movieLists
+        coEvery {
+            customMovieListRepository.getMovieListDetails(
+                listId = 1u,
+                pageNumber = 1
+            )
+        } returns listDetails1
+        coEvery {
+            customMovieListRepository.getMovieListDetails(
+                listId = 2u,
+                pageNumber = 1
+            )
+        } returns listDetails2
         //When
         val result = getAllListedMovies.invoke()
         //Then
@@ -38,7 +48,7 @@ class GetAllListedMoviesTest {
     @Test
     fun `invoke throws exception when movieListRepository throws exception`() = runTest {
         //Given
-        coEvery { customMovieListRepository.getMovieLists() } throws Exception()
+        coEvery { customMovieListRepository.getMovieLists(pageNumber = 1) } throws Exception()
         //When //Then
         assertThrows<Exception> {
             getAllListedMovies.invoke()

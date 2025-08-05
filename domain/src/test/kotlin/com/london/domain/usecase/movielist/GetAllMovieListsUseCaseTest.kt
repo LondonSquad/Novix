@@ -25,9 +25,9 @@ class GetAllMovieListsUseCaseTest {
     @Test
     fun `invoke should return movie lists from repository`() = runTest {
         // Given
-        coEvery { customMovieListRepository.getMovieLists() } returns movieLists
+        coEvery { customMovieListRepository.getMovieLists(pageNumber = 1) } returns movieLists
         // When
-        val result = getAllMovieListsUseCase.invoke()
+        val result = getAllMovieListsUseCase.invoke(pageNumber = 1)
         // Then
         assertThat(result).isEqualTo(movieLists)
     }
@@ -35,10 +35,10 @@ class GetAllMovieListsUseCaseTest {
     @Test
     fun `invoke should throw exception when repository throws exception`() = runTest {
         // Given
-        coEvery { customMovieListRepository.getMovieLists() } throws Exception()
+        coEvery { customMovieListRepository.getMovieLists(pageNumber = 1) } throws Exception()
         // When // Then
         assertThrows<Exception> {
-            getAllMovieListsUseCase.invoke()
+            getAllMovieListsUseCase.invoke(pageNumber = 1)
         }
     }
 
