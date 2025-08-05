@@ -82,9 +82,7 @@ internal fun AccountScreenContent(
     ) {
         TopBar(
             title = stringResource(R.string.my_account),
-            modifier = Modifier
-                .heightIn(56.dp)
-                .padding(horizontal = 4.dp)
+            modifier = Modifier.padding(horizontal = 16.dp)
         )
 
         if (uiState.isUserLoggedIn) {

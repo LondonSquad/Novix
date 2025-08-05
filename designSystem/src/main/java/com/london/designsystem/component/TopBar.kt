@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -25,10 +26,6 @@ import com.london.designsystem.R
 import com.london.designsystem.theme.NovixTheme
 import com.london.designsystem.theme.ThemePreviews
 
-/**
- * When you want to use this TopBar with text only without back button
- * Please apply padding(horizontal = 4.dp) not padding(horizontal = 16.dp)
- */
 @Composable
 fun TopBar(
     modifier: Modifier = Modifier,
@@ -44,6 +41,7 @@ fun TopBar(
     Row(
         modifier = modifier
             .fillMaxWidth()
+            .heightIn(56.dp)
             .padding(vertical = 8.dp)
             .zIndex(1f),
         verticalAlignment = Alignment.CenterVertically,
@@ -67,7 +65,7 @@ fun TopBar(
                 maxLines = 1,
                 modifier = Modifier
                     .weight(1f)
-                    .padding(horizontal = 12.dp, vertical = 13.dp)
+                    .padding(start = if (onBackClick != null) 12.dp else 0.dp)
             )
         }
 

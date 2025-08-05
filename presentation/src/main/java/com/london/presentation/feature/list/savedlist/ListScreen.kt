@@ -86,8 +86,7 @@ private fun ScreenScaffold(
             title = stringResource(titleRes),
             modifier = Modifier
                 .statusBarsPadding()
-                .heightIn(56.dp)
-                .padding(horizontal = 4.dp)
+                .padding(horizontal = 16.dp)
         )
 
         Box(
