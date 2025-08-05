@@ -45,58 +45,44 @@ class AccountViewModel @Inject constructor(
     //region AppearanceBottomSheet
     override fun onAppearanceClick() {
         updateState {
-            copy(
-                isAppearanceBottomSheetVisible = true
-            )
+            copy(isAppearanceBottomSheetVisible = true)
         }
     }
 
     override fun onDarkModeSelected() {
         updateState {
-            copy(
-                appTheme = AppTheme.DARK
-            )
+            copy(appTheme = AppTheme.DARK)
         }
     }
 
     override fun onLightModeSelected() {
         updateState {
-            copy(
-                appTheme = AppTheme.LIGHT
-            )
+            copy(appTheme = AppTheme.LIGHT)
         }
     }
 
     override fun onAppearanceModeSave() {
         appPreferencesService.setAppTheme(state.value.appTheme)
         updateState {
-            copy(
-                isAppearanceBottomSheetVisible = false
-            )
+            copy(isAppearanceBottomSheetVisible = false)
         }
     }
 
     private fun initializeSelectedAppearanceMode() {
         updateState {
-            copy(
-                appTheme = appPreferencesService.appTheme.value
-            )
+            copy(appTheme = appPreferencesService.appTheme.value)
         }
     }
 
     fun updateSelectedThemeOnSystemDarkChange(isSystemDark: Boolean) {
         updateState {
-            copy(
-                appTheme = if (isSystemDark) AppTheme.DARK else AppTheme.LIGHT
-            )
+            copy(appTheme = if (isSystemDark) AppTheme.DARK else AppTheme.LIGHT)
         }
     }
 
     override fun showAppearanceBottomSheet() {
         updateState {
-            copy(
-                isAppearanceBottomSheetVisible = true
-            )
+            copy(isAppearanceBottomSheetVisible = true)
         }
     }
     //endregion
