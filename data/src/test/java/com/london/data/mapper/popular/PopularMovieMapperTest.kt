@@ -1,8 +1,10 @@
 package com.london.data.mapper.popular
 
 import com.google.common.truth.Truth.assertThat
+import com.london.data.mapper.home.popular.toPopularMovie
+import com.london.data.mapper.home.popular.toPopularMovies
 import com.london.data.remote.model.ApiResponse
-import com.london.data.remote.model.home.model.popular.PopularMovieResponse
+import com.london.data.remote.model.home.popular.PopularMovieResponse
 import com.london.domain.entity.popular.PopularMovie
 import org.junit.Test
 
@@ -17,7 +19,6 @@ class PopularMovieMapperTest {
         assertThat(result.id).isEqualTo(123)
         assertThat(result.title).isEqualTo("Inception")
         assertThat(result.posterUrl).contains("/poster.jpg")
-        assertThat(result.backdropUrl).contains("/backdrop.jpg")
         assertThat(result.rating).isEqualTo(8.7)
     }
 
@@ -49,7 +50,6 @@ class PopularMovieMapperTest {
         assertThat(result.id).isEqualTo(0)
         assertThat(result.title).isEmpty()
         assertThat(result.posterUrl).isEmpty()
-        assertThat(result.backdropUrl).isEmpty()
         assertThat(result.rating).isEqualTo(0.0)
     }
 

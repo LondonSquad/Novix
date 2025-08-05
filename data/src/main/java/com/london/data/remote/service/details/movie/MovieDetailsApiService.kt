@@ -7,7 +7,7 @@ import com.london.data.remote.model.details.movie.model.moviedetails.AccountMovi
 import com.london.data.remote.model.details.movie.model.moviedetails.MovieDetailsResponse
 import com.london.data.remote.model.details.movie.model.movieimages.MovieImagesResponse
 import com.london.data.remote.model.details.videoprovider.movie.model.MovieVideoRemote
-import com.london.data.remote.model.search.model.SearchMovieRemote
+import com.london.data.remote.model.search.MovieRemote
 import retrofit2.Response
 import retrofit2.http.GET
 import retrofit2.http.Path
@@ -23,7 +23,7 @@ interface MovieDetailsApiService {
     @GET("3/movie/{movie_id}/similar")
     suspend fun getSimilarMovies(
         @Path("movie_id") movieId: Int,
-    ): Response<ApiResponse<SearchMovieRemote>>
+    ): Response<ApiResponse<MovieRemote>>
 
     @GET("3/movie/{movie_id}/credits")
     suspend fun getMovieCast(

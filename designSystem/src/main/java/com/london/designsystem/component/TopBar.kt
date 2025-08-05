@@ -17,6 +17,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.zIndex
@@ -33,6 +34,8 @@ fun TopBar(
     onClickOption2: (() -> Unit)? = null,
     @DrawableRes option1Icon: Int? = null,
     @DrawableRes option2Icon: Int? = null,
+    option1IconTint: Color? = null,
+    option2IconTint: Color? = null
 ) {
     Row(
         modifier = modifier
@@ -60,7 +63,7 @@ fun TopBar(
                 maxLines = 1,
                 modifier = Modifier
                     .weight(1f)
-                    .padding(horizontal = 12.dp)
+                    .padding(horizontal = 12.dp, vertical = 13.dp)
             )
         }
 
@@ -69,10 +72,10 @@ fun TopBar(
             verticalAlignment = Alignment.CenterVertically
         ) {
             onClickOption1?.let {
-                ButtonTopBar(option1Icon, onClick = it)
+                ButtonTopBar(option1Icon, onClick = it, iconTint = option1IconTint)
             }
             onClickOption2?.let {
-                ButtonTopBar(option2Icon, onClick = it)
+                ButtonTopBar(option2Icon, onClick = it, iconTint = option2IconTint)
             }
         }
     }
@@ -80,7 +83,11 @@ fun TopBar(
 }
 
 @Composable
-fun ButtonTopBar(icon: Int?, onClick: () -> Unit) {
+fun ButtonTopBar(
+    icon: Int?,
+    onClick: () -> Unit,
+    iconTint: Color? = null
+) {
     Box(
         modifier = Modifier
             .size(40.dp)
@@ -99,7 +106,8 @@ fun ButtonTopBar(icon: Int?, onClick: () -> Unit) {
         Icon(
             painter = painterResource(icon ?: R.drawable.add_icon),
             contentDescription = "Back",
-            tint = NovixTheme.colors.title,
+            tint = iconTint ?: NovixTheme.colors.title,
+            modifier = Modifier.size(20.dp)
         )
     }
 }

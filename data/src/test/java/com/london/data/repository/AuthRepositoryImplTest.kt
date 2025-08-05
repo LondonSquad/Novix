@@ -1,10 +1,10 @@
 package com.london.data.repository
 
 import com.london.data.local.preference.AuthPreferences
-import com.london.data.remote.model.authentication.model.DeleteSessionResponse
-import com.london.data.remote.model.authentication.model.GuestSessionResponse
-import com.london.data.remote.model.authentication.model.RequestTokenResponse
-import com.london.data.remote.model.authentication.model.SessionResponse
+import com.london.data.remote.model.authentication.DeleteSessionResponse
+import com.london.data.remote.model.authentication.GuestSessionResponse
+import com.london.data.remote.model.authentication.RequestTokenResponse
+import com.london.data.remote.model.authentication.SessionResponse
 import com.london.data.remote.source.authentication.AuthenticationRemoteDataSource
 import com.london.data.repository.authentication.AuthenticationRepositoryImpl
 import io.mockk.coEvery
@@ -14,8 +14,8 @@ import io.mockk.mockk
 import io.mockk.verify
 import kotlinx.coroutines.test.runTest
 import org.junit.Assert.assertFalse
-import org.junit.Assert.assertTrue
 import org.junit.Assert.assertThrows
+import org.junit.Assert.assertTrue
 import org.junit.Before
 import org.junit.Test
 
