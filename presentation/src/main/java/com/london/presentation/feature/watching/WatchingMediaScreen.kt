@@ -68,8 +68,8 @@ fun WatchingMediaScreen(
         state = state,
         watchingMediaContract = viewModel,
         screenTitle = screenTitle,
-        onRetry = { viewModel.initializeContinueWatching() },
-        onBack = { viewModel.onBack() }
+        onRetry = viewModel::initializeContinueWatching,
+        onBack = viewModel::onBack
     )
 }
 
