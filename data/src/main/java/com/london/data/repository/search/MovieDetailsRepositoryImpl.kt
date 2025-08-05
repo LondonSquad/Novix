@@ -2,7 +2,9 @@ package com.london.data.repository.search
 
 import com.london.data.local.preference.AuthPreferences
 import com.london.data.mapper.details.movie.toEntity
-import com.london.data.mapper.search.toEntityimport com.london.data.mapper.search.toReviewEntity
+import com.london.data.mapper.moviedetails.toEntity
+import com.london.data.mapper.search.toEntity
+import com.london.data.mapper.search.toReviewEntity
 import com.london.data.remote.source.details.movie.MovieDetailsRemoteDataSource
 import com.london.data.remote.source.reviews.ReviewsRemoteDataSource
 import com.london.data.utils.asImageUrlOrEmpty
@@ -20,7 +22,7 @@ import javax.inject.Inject
 
 class MovieDetailsRepositoryImpl @Inject constructor(
     private val movieDetailsRemoteDataSource: MovieDetailsRemoteDataSource,
-    private val authPreferences: AuthPreferences
+    private val authPreferences: AuthPreferences,
     private val reviewsRemoteDataSource: ReviewsRemoteDataSource
 ) : MovieDetailsRepository {
 
