@@ -53,6 +53,7 @@ import com.london.designsystem.component.Text
 import com.london.designsystem.component.button.PrimaryButton
 import com.london.designsystem.theme.NovixTheme
 import com.london.designsystem.utils.shimmerEffect
+import com.london.designsystem.utils.string
 import com.london.domain.entity.UpComingMovie
 import com.london.domain.entity.recent.MediaType
 import com.london.presentation.R
@@ -135,6 +136,9 @@ fun HomeScreen(
                         .fillMaxSize()
                 ) {
                     DefaultTopBar(
+                        appIconRes = if (uiState.isDarkTheme) R.drawable.img_novix_dark else R.drawable.img_novix_light,
+                        appName = R.string.app_name.string,
+                        appDescription = R.string.app_name_description.string,
                         modifier = Modifier
                             .fillMaxWidth()
                             .background(NovixTheme.colors.surface)
