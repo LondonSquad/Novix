@@ -5,7 +5,6 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
-import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.core.view.WindowCompat
@@ -34,7 +33,7 @@ class MainActivity : ComponentActivity() {
         setContent {
             val appTheme by appPreferencesService.appTheme.collectAsState()
             NovixTheme(
-                isDarkMode = if (appTheme == AppTheme.SYSTEM) isSystemInDarkTheme() else appTheme.name.isDark()
+                isDarkMode = if (appTheme == AppTheme.SYSTEM) true else appTheme.name.isDark()
             ) {
                 NovixApp()
             }
