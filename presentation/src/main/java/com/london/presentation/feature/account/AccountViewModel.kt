@@ -77,7 +77,7 @@ class AccountViewModel @Inject constructor(
     }
     //endregion
 
-    //region Logout
+    //region Logout Bottom Sheet
     override fun onLogoutConfirmed() {
         tryToExecute(
             block = { logoutUseCase.invoke() },

@@ -1,7 +1,6 @@
 package com.london.presentation.feature.account
 
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.runtime.Composable
@@ -29,7 +28,6 @@ fun AccountScreen(
     onNavigateToMyRating: () -> Unit = {},
     onNavigateToChangePassword: () -> Unit = {},
     onNavigateToLogin: () -> Unit = {},
-    onLogout: () -> Unit = {}
 ) {
     val uiState by viewModel.state.collectAsStateWithLifecycle()
     val effect by viewModel.effect.collectAsState(null)
@@ -39,22 +37,6 @@ fun AccountScreen(
             is AccountEffect.NavigateToWatchingHistory -> onNavigateToWatchingHistory()
             is AccountEffect.NavigateToMyRating -> onNavigateToMyRating()
             is AccountEffect.NavigateToChangePassword -> onNavigateToChangePassword()
-            is AccountEffect.ShowContentRestrictionBottomSheet -> {
-                viewModel.onContentRestrictionClick()
-            }
-
-            is AccountEffect.ShowAppearanceBottomSheet -> {
-                viewModel::showAppearanceBottomSheet
-            }
-
-            is AccountEffect.ShowLanguageBottomSheet -> {
-                viewModel.onLanguageClick()
-            }
-
-            is AccountEffect.ShowLogoutBottomSheet -> {
-                onLogout()
-            }
-
             is AccountEffect.NavigateToLogin -> {
                 onNavigateToLogin()
             }
