@@ -1,9 +1,9 @@
 package com.london.presentation.feature.continuewatching
 
-import com.london.designsystem.component.MediaCategory
 import com.london.domain.entity.Movie
 import com.london.domain.entity.TvShow
 import com.london.presentation.feature.base.ErrorState
+import com.london.presentation.shared.MediaCategory
 import com.london.presentation.utils.MovieGenre
 import com.london.presentation.utils.TvShowGenre
 import kotlinx.coroutines.flow.Flow

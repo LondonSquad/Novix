@@ -29,15 +29,14 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.london.designsystem.R
 import com.london.designsystem.component.HomeCard
 import com.london.designsystem.component.NovixChip
-import com.london.designsystem.component.TabItem
 import com.london.designsystem.component.TabLayout
 import com.london.designsystem.component.TopBar
 import com.london.designsystem.theme.NovixTheme
 import com.london.presentation.R.string
 import com.london.presentation.shared.EmptyStateView
+import com.london.presentation.shared.MediaCategory
 import com.london.presentation.utils.Listen
 import com.london.presentation.utils.MovieGenre
 import com.london.presentation.utils.TvShowGenre
@@ -98,10 +97,10 @@ fun Content(
 
         TabLayout(
             tabs = listOf(
-                TabItem(R.string.movies),
-                TabItem(R.string.tv_shows),
+                MediaCategory.MOVIES,
+                MediaCategory.TV_SHOWS
             ),
-            selectedMediaCategory = state.selectedMediaCategory,
+            selectedTab = state.selectedMediaCategory,
             onTabSelected = continueWatchingContract::onMediaCategoryTabSelected,
             modifier = Modifier.background(NovixTheme.colors.surface)
         )

@@ -1,9 +1,9 @@
 package com.london.presentation.feature.toprated
 
 import androidx.paging.PagingData
-import com.london.designsystem.component.MediaCategory
 import com.london.domain.entity.toprated.TopRatedMovie
 import com.london.domain.entity.toprated.TopRatedTvSeries
+import com.london.presentation.shared.MediaCategory
 import com.london.presentation.utils.MovieGenre
 import com.london.presentation.utils.TvShowGenre
 import kotlinx.coroutines.flow.Flow

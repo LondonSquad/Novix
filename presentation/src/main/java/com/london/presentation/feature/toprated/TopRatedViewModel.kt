@@ -1,10 +1,10 @@
 package com.london.presentation.feature.toprated
 
-import com.london.designsystem.component.MediaCategory
 import com.london.domain.usecase.toprated.GetTopRatedMoviesUseCase
 import com.london.domain.usecase.toprated.GetTopRatedTvSeriesUseCase
 import com.london.presentation.feature.base.BaseViewModel
 import com.london.presentation.feature.base.createPagingSourceFlow
+import com.london.presentation.shared.MediaCategory
 import com.london.presentation.utils.MovieGenre
 import com.london.presentation.utils.TvShowGenre
 import dagger.hilt.android.lifecycle.HiltViewModel
