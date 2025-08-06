@@ -6,11 +6,12 @@ import com.london.data.local.source.home.HomeLocalDataSource
 import com.london.data.mapper.home.toprated.toEntity
 import com.london.data.remote.model.ApiResponse
 import com.london.data.remote.model.home.toprated.TopRatedTvSeriesRemote
-import com.london.data.remote.source.toprated.tvseries.TopRatedTvRemoteDataSource
-import com.london.data.repository.home.toprated.TopRatedTvSeriesRepositoryImpl
+import com.london.data.remote.source.toprated.TopRatedRemoteDataSource
+import com.london.data.repository.home.toprated.TopRatedRepositoryImpl
 import com.london.data.utils.CrashReporter
 import com.london.domain.entity.PagedFetchResponse
 import com.london.domain.entity.toprated.TopRatedTvSeries
+import com.london.domain.repository.toprated.TopRatedRepository
 import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.mockk
@@ -19,21 +20,21 @@ import org.junit.Before
 import org.junit.Test
 import org.junit.jupiter.api.assertThrows
 
-class TopRatedTvSeriesRepositoryImplTest {
+class TopRatedRepositoryImplTest {
 
-    private lateinit var remoteDataSource: TopRatedTvRemoteDataSource
+    private lateinit var remoteDataSource: TopRatedRemoteDataSource
     private lateinit var localDataSource: HomeLocalDataSource<TopRatedLocal>
     private lateinit var crashReporter: CrashReporter
-    private lateinit var repository: TopRatedTvSeriesRepositoryImpl
+    private lateinit var repository: TopRatedRepository
 
     @Before
     fun setup() {
         remoteDataSource = mockk(relaxed = true)
         localDataSource = mockk(relaxed = true)
         crashReporter = mockk(relaxed = true)
-        repository = TopRatedTvSeriesRepositoryImpl(
-            topRatedTvRemoteDataSource = remoteDataSource,
-            topRatedTvShow = localDataSource,
+        repository = TopRatedRepositoryImpl(
+            topRatedRemoteDataSource = remoteDataSource,
+            localTopRated = localDataSource,
             crashReporter = crashReporter
         )
     }
@@ -71,26 +72,25 @@ class TopRatedTvSeriesRepositoryImplTest {
     }
 
     @Test
-    fun `getTopRatedTvSeries should return empty paged response when API returns empty results`() = runTest {
-        // Given
-        val emptyApiResponse = fakeEmptyApiResponse()
-        coEvery {
-            remoteDataSource.getTopRatedTvShows(PAGE)
-        } returns Result.success(emptyApiResponse)
+    fun `getTopRatedTvSeries should return empty paged response when API returns empty results`() =
+        runTest {
+            // Given
+            val emptyApiResponse = fakeEmptyApiResponse()
+            coEvery { remoteDataSource.getTopRatedTvShows(PAGE) } returns Result.success(
+                emptyApiResponse
+            )
 
-        coEvery {
-            localDataSource.getAll()
-        } returns emptyList()
+            coEvery { localDataSource.getAll() } returns emptyList()
 
-        // When
-        val result = repository.getTopRatedTvSeries(PAGE)
+            // When
+            val result = repository.getTopRatedTvSeries(PAGE)
 
-        // Then
-        assertThat(result.items).isEmpty()
-        assertThat(result.currentPage).isEqualTo(PAGE)
-        assertThat(result.totalPages).isEqualTo(1)
-        assertThat(result.totalItems).isEqualTo(0)
-    }
+            // Then
+            assertThat(result.items).isEmpty()
+            assertThat(result.currentPage).isEqualTo(PAGE)
+            assertThat(result.totalPages).isEqualTo(1)
+            assertThat(result.totalItems).isEqualTo(0)
+        }
 
     @Test
     fun `getTopRatedTvSeries should propagate exceptions when remote call fails`() = runTest {
@@ -99,14 +99,10 @@ class TopRatedTvSeriesRepositoryImplTest {
             remoteDataSource.getTopRatedTvShows(PAGE)
         } returns Result.failure(RuntimeException("Network error"))
 
-        coEvery {
-            localDataSource.getAll()
-        } returns emptyList()
+        coEvery { localDataSource.getAll() } returns emptyList()
 
         // When & Then
-        val ex = assertThrows<RuntimeException> {
-            repository.getTopRatedTvSeries(PAGE)
-        }
+        val ex = assertThrows<RuntimeException> { repository.getTopRatedTvSeries(PAGE) }
         assertThat(ex.message).isEqualTo("Network error")
     }
 
@@ -117,9 +113,7 @@ class TopRatedTvSeriesRepositoryImplTest {
             remoteDataSource.getTopRatedTvShows(PAGE)
         } returns Result.success(fakeApiResponseWithTvSeries())
 
-        coEvery {
-            localDataSource.getAll()
-        } returns emptyList()
+        coEvery { localDataSource.getAll() } returns emptyList()
 
         // When
         repository.getTopRatedTvSeries(PAGE)
@@ -129,26 +123,22 @@ class TopRatedTvSeriesRepositoryImplTest {
     }
 
     @Test
-    fun `getTopRatedTvSeries should insert data to local storage after successful fetch`() = runTest {
-        // Given
-        coEvery {
-            remoteDataSource.getTopRatedTvShows(PAGE)
-        } returns Result.success(fakeApiResponseWithTvSeries())
+    fun `getTopRatedTvSeries should insert data to local storage after successful fetch`() =
+        runTest {
+            // Given
+            coEvery {
+                remoteDataSource.getTopRatedTvShows(PAGE)
+            } returns Result.success(fakeApiResponseWithTvSeries())
 
-        coEvery {
-            localDataSource.getAll()
-        } returns emptyList()
+            coEvery { localDataSource.getAll() } returns emptyList()
+            coEvery { localDataSource.insertAll(any()) } returns Unit
 
-        coEvery {
-            localDataSource.insertAll(any())
-        } returns Unit
+            // When
+            repository.getTopRatedTvSeries(PAGE)
 
-        // When
-        repository.getTopRatedTvSeries(PAGE)
-
-        // Then
-        coVerify { localDataSource.insertAll(any()) }
-    }
+            // Then
+            coVerify { localDataSource.insertAll(any()) }
+        }
 
     companion object {
         private const val PAGE = 1
