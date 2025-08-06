@@ -18091,5 +18091,33 @@
       "deletions": 27,
       "changed_files": 4
     }
+  },
+  {
+    "pr_number": 550,
+    "url": "https://github.com/LondonSquad/Novix/pull/550",
+    "title": "feat: Add javax.inject dependency and configure kapt",
+    "opened_at": "2025-08-06T23:49:21Z",
+    "head_ref": "hotfix/java-inject",
+    "base_ref": "develop",
+    "creator": {
+      "login": "yusufnasserdev",
+      "id": 43588217,
+      "url": "https://github.com/yusufnasserdev"
+    },
+    "approvals": [],
+    "first_approved_at": null,
+    "time_to_first_approval_minutes": null,
+    "required_approvals_met_at": null,
+    "time_to_required_approvals_minutes": null,
+    "closed_at": null,
+    "merged_at": null,
+    "merged_by": null,
+    "week": "2025-W32",
+    "status": "pending",
+    "diff_stats": {
+      "additions": 6,
+      "deletions": 0,
+      "changed_files": 2
+    }
   }
 ]
