@@ -13,6 +13,7 @@ data class HomeScreenUiState(
     val isLoading: Boolean = false,
     val error: ErrorState? = null,
     val isTopRatedLoading: Boolean = false,
+    val isDarkTheme: Boolean = true,
     val popularMediaList: List<PopularUiMedia> = emptyList(),
     val topRatedMediaList: List<HomeUiMedia> = emptyList(),
     val recentWatchedMediaFlow: Flow<List<HomeUiMedia>> = emptyFlow(),
