@@ -303,10 +303,10 @@ fun TvShowsDetailScreenContent(
                     footerHeight = with(density) { coordinates.size.height.toDp() }
                 },
             onRateClick = {
-                uriHandler.openUrl(uiState.videoProvider)
+                // TODO save favorite onclick handler
             },
             onVideoClick = {
-                // TODO save favorite onclick handler
+                uriHandler.openUrl(uiState.videoProvider)
             }
         )
     }
