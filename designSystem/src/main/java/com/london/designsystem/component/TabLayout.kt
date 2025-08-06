@@ -15,7 +15,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.Immutable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -26,11 +25,15 @@ import com.london.designsystem.R
 import com.london.designsystem.theme.NovixTheme
 import com.london.designsystem.theme.ThemePreviews
 
+interface Tabbable {
+    val tabTextResId: Int
+}
+
 @Composable
-fun TabLayout(
-    tabs: List<TabItem>,
-    selectedIndex: Int,
-    onTabSelected: (Int) -> Unit,
+fun <T : Tabbable> TabLayout(
+    tabs: List<T>,
+    selectedTab: T?,
+    onTabSelected: (T) -> Unit,
     modifier: Modifier = Modifier
 ) {
     Box(
@@ -43,11 +46,11 @@ fun TabLayout(
             horizontalArrangement = Arrangement.SpaceEvenly,
             modifier = Modifier.fillMaxWidth()
         ) {
-            tabs.forEachIndexed { index, tab ->
+            tabs.forEach { tab ->
                 NovixTab(
-                    text = tab.text,
-                    isSelected = index == selectedIndex,
-                    onClick = { onTabSelected(index) },
+                    text = tab.tabTextResId,
+                    isSelected = tab == selectedTab,
+                    onClick = { onTabSelected(tab) },
                     modifier = Modifier.weight(1f)
                 )
             }
@@ -104,24 +107,20 @@ fun NovixTab(
     }
 }
 
-@Immutable
-data class TabItem(
-    @StringRes val
-    text: Int,
-)
-
-
 @ThemePreviews
 @Composable
 private fun NovixTabLayoutWithPagerPreview() {
+
+    data class TabbableItem(override val tabTextResId: Int) : Tabbable
+
     NovixTheme {
         TabLayout(
             tabs = listOf(
-                TabItem(R.string.movies),
-                TabItem(R.string.tv_shows),
+                TabbableItem(R.string.movies),
+                TabbableItem(R.string.tv_shows)
             ),
-            selectedIndex = 0,
-            onTabSelected = {}
+            selectedTab = TabbableItem(R.string.movies),
+            onTabSelected = { },
         )
     }
 }
