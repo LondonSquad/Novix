@@ -1,6 +1,7 @@
 package com.london.domain.usecase.movielist
 
 import com.london.domain.entity.Movie
+import com.london.domain.entity.MovieList
 import com.london.domain.repository.CustomMovieListRepository
 import javax.inject.Inject
 
@@ -8,41 +9,24 @@ class GetAllListedMovies @Inject constructor(
     private val customMovieListRepository: CustomMovieListRepository,
 ) {
 
-    val allMoviesSet: Set<Movie> = mutableSetOf()
+    suspend fun invoke(): Set<Movie> =
+        getAllLists(1).flatMap { movieList ->
+            getAllMovies(movieList.id, 1)
+        }.toSet()
 
-    suspend fun invoke(): Set<Movie> {
-
-//        customMovieListRepository.getMovieLists(pageNumber = ).items.flatMap { movieList ->
-//            customMovieListRepository.getMovieListDetails(movieList.id, pageNumber = ).items
-//        }.toSet()
-
-        val allMovies = mutableSetOf<Movie>()
-        var listPageNumber = 1
-        var hasMoreLists = true
-
-        while (hasMoreLists) {
-            val listsResponse = customMovieListRepository.getMovieLists(pageNumber = listPageNumber)
-
-            listsResponse.items.forEach { movieList ->
-                var moviePageNumber = 1
-                var hasMoreMovies = true
-
-                while (hasMoreMovies) {
-                    val moviesResponse = customMovieListRepository.getMovieListDetails(
-                        listId = movieList.id,
-                        pageNumber = moviePageNumber
-                    )
-                    allMovies.addAll(moviesResponse.items)
-
-                    hasMoreMovies = moviePageNumber < moviesResponse.totalPages
-                    moviePageNumber++
-                }
-            }
-
-            hasMoreLists = listPageNumber < listsResponse.totalPages
-            listPageNumber++
+    private suspend fun getAllLists(page: Int): List<MovieList> =
+        customMovieListRepository.getMovieLists(page).let { response ->
+            val nextPages =
+                if (page < response.totalPages) getAllLists(page + 1)
+                else emptyList()
+            response.items + nextPages
         }
 
-        return allMovies
-    }
+    private suspend fun getAllMovies(listId: UInt, page: Int): List<Movie> =
+        customMovieListRepository.getMovieListDetails(listId, page).let { response ->
+            val nextPages =
+                if (page < response.totalPages) getAllMovies(listId, page + 1)
+                else emptyList()
+            response.items + nextPages
+        }
 }
