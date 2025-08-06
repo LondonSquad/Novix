@@ -6,11 +6,7 @@ import com.london.domain.entity.recent.MediaType
 import com.london.domain.entity.recent.RecentViewed
 import com.london.domain.usecase.AddMovieRatingByIdUseCase
 import com.london.domain.usecase.GetAccountMovieStatesById
-import com.london.domain.usecase.details.movie.GetFirstTenMovieImagesUseCase
-import com.london.domain.usecase.details.movie.GetMovieCastUseCase
-import com.london.domain.usecase.details.movie.GetMovieDetailsById
-import com.london.domain.usecase.details.movie.GetMovieVideoUseCase
-import com.london.domain.usecase.details.movie.GetSimilarMoviesUseCase
+import com.london.domain.usecase.details.movie.ManageMovieDetailsUseCase
 import com.london.domain.usecase.recent.viewed.AddToRecentViewedUseCase
 import com.london.domain.usecase.recent.watched.AddMovieToRecentWatchedUseCase
 import com.london.presentation.feature.base.BaseViewModel
@@ -21,11 +17,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class MovieDetailsViewModel @Inject constructor(
-    private val getMovieById: GetMovieDetailsById,
-    private val getMovieImagesUseCase: GetFirstTenMovieImagesUseCase,
-    private val getMovieCastUseCase: GetMovieCastUseCase,
-    private val getSimilarMoviesUseCase: GetSimilarMoviesUseCase,
-    private val getMovieVideosUseCase: GetMovieVideoUseCase,
+    private val movieDetails: ManageMovieDetailsUseCase,
     private val addMovieToRecentWatchedUseCase: AddMovieToRecentWatchedUseCase,
     private val addToRecentViewedUseCase: AddToRecentViewedUseCase,
     private val addMovieRatingByIdUseCase: AddMovieRatingByIdUseCase,
@@ -71,10 +63,10 @@ class MovieDetailsViewModel @Inject constructor(
     private fun loadMovieDetails(movieId: Int) {
         tryToExecute(
             block = {
-                val movieDetails = getMovieById.invoke(movieId)
-                val movieImages = getMovieImagesUseCase.invoke(movieId)
-                val movieCast = getMovieCastUseCase.invoke(movieId)
-                Triple(movieDetails, movieImages, movieCast)
+                val movie = movieDetails.getMovieDetails(movieId)
+                val movieImages = movieDetails.getFirstTenMovieImagesUseCase(movieId)
+                val movieCast = movieDetails.getMovieCast(movieId)
+                Triple(movie, movieImages, movieCast)
             },
             onStart = { updateState { copy(isLoading = true) } },
             onSuccess = { triple ->
@@ -156,8 +148,8 @@ class MovieDetailsViewModel @Inject constructor(
     private fun loadSimilarAndVideos(movieId: Int) {
         tryToExecute(
             block = {
-                val similarMovies = getSimilarMoviesUseCase.invoke(movieId)
-                val movieVideos = getMovieVideosUseCase.invoke(movieId)
+                val similarMovies = movieDetails.getSimilarMovies(movieId)
+                val movieVideos = movieDetails.getMovieVideo(movieId)
                 val movieRating = getAccountMovieStatesById.invoke(movieId)
                 Triple(similarMovies, movieVideos, movieRating)
             },

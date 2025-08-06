@@ -2,11 +2,11 @@ package com.london.domain.usecase.toprated
 
 import com.london.domain.entity.PagedFetchResponse
 import com.london.domain.entity.toprated.TopRatedMovie
-import com.london.domain.repository.toprated.TopRatedMovieRepository
+import com.london.domain.repository.toprated.TopRatedRepository
 import javax.inject.Inject
 
 class GetTopRatedMoviesUseCase @Inject constructor(
-    private val topRatedMovieRepo: TopRatedMovieRepository
+    private val topRatedMovieRepo: TopRatedRepository
 ) {
     suspend operator fun invoke(
         pageNumber: Int,
