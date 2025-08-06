@@ -63,16 +63,23 @@ class CustomMovieListsRemoteDataSourceImpl @Inject constructor(
         listId: Int,
         movieId: Int,
         sessionId: String?
-    ): Result<CustomListResponse> = callApiWithRetry(
-        apiCall = {
-            customMovieListsApiService.addMovieToList(
-                listId = listId,
-                sessionId = sessionId,
-                movieAdditionBody = ListMovieBody(mediaId = movieId)
+    ): Result<CustomListResponse> {
+        return try {
+            callApiWithRetry(
+                apiCall = {
+                    customMovieListsApiService.addMovieToList(
+                        listId = listId,
+                        sessionId = sessionId,
+                        movieAdditionBody = ListMovieBody(mediaId = movieId)
+                    )
+                },
+                mapper = { it },
+                retryCount = 5
             )
-        },
-        mapper = { it }
-    )
+        } catch (e: Exception) {
+            Result.failure(e)
+        }
+    }
 
     override suspend fun removeMovieFromList(
         listId: Int,
@@ -100,5 +107,4 @@ class CustomMovieListsRemoteDataSourceImpl @Inject constructor(
         },
         mapper = { it }
     )
-
 }
