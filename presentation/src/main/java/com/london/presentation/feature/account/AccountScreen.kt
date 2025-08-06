@@ -1,10 +1,12 @@
 package com.london.presentation.feature.account
 
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
@@ -14,6 +16,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.london.designsystem.component.TopBar
 import com.london.presentation.R
+import com.london.presentation.feature.account.appearance.AppearanceBottomSheet
 import com.london.presentation.feature.account.components.LoggedInContent
 import com.london.presentation.feature.account.components.NotLoggedInContent
 import com.london.presentation.feature.account.state.AccountUiState
@@ -31,6 +34,11 @@ fun AccountScreen(
 ) {
     val uiState by viewModel.state.collectAsStateWithLifecycle()
     val effect by viewModel.effect.collectAsState(null)
+    val systemDarkTheme = isSystemInDarkTheme()
+
+    LaunchedEffect(systemDarkTheme) {
+        viewModel.updateSelectedThemeAsSystemDark(systemDarkTheme)
+    }
 
     effect?.Listen { currentEffect ->
         when (currentEffect) {
@@ -42,7 +50,7 @@ fun AccountScreen(
             }
 
             is AccountEffect.ShowAppearanceBottomSheet -> {
-                viewModel.onAppearanceClick()
+                viewModel::showAppearanceBottomSheet
             }
 
             is AccountEffect.ShowLanguageBottomSheet -> {
@@ -67,7 +75,7 @@ fun AccountScreen(
     ) {
         AccountScreenContent(
             uiState = uiState,
-            accountContract = viewModel
+            accountContract = viewModel,
         )
     }
 }
@@ -75,7 +83,7 @@ fun AccountScreen(
 @Composable
 internal fun AccountScreenContent(
     uiState: AccountUiState,
-    accountContract: AccountContract
+    accountContract: AccountContract,
 ) {
     Column(
         modifier = Modifier.statusBarsPadding()
@@ -95,5 +103,11 @@ internal fun AccountScreenContent(
                 onLoginClick = accountContract::onLoginClick
             )
         }
+    }
+    if (uiState.isAppearanceBottomSheetVisible) {
+        AppearanceBottomSheet(
+            appearanceContract = accountContract,
+            appearanceState = uiState,
+        )
     }
 }
