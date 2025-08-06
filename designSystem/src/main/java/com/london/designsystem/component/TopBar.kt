@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -40,7 +41,7 @@ fun TopBar(
     Row(
         modifier = modifier
             .fillMaxWidth()
-            .padding(vertical = 8.dp)
+            .heightIn(56.dp)
             .zIndex(1f),
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.SpaceBetween
@@ -63,7 +64,7 @@ fun TopBar(
                 maxLines = 1,
                 modifier = Modifier
                     .weight(1f)
-                    .padding(horizontal = 12.dp, vertical = 13.dp)
+                    .padding(start = if (onBackClick != null) 12.dp else 0.dp)
             )
         }
 
