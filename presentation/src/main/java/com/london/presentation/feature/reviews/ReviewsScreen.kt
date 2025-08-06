@@ -88,7 +88,6 @@ fun ReviewsScreenContent(
         modifier = Modifier
             .fillMaxSize()
             .background(NovixTheme.colors.surface)
-
     ) {
         TopBar(
             onBackClick = reviewContract::onBackClicked,
@@ -101,12 +100,18 @@ fun ReviewsScreenContent(
         )
 
         val reviewsList = uiState.reviews.collectAsLazyPagingItems()
-        if (reviewsList.itemSnapshotList.isEmpty())
-            EmptyReviews(modifier = Modifier.align(CenterHorizontally))
-        else {
-            LazyColumn(
+        if (reviewsList.itemSnapshotList.isEmpty()) {
+            Box(
                 modifier = Modifier
-                    .fillMaxSize(),
+                    .fillMaxSize()
+                    .weight(1f),
+                contentAlignment = Alignment.Center
+            ) {
+                EmptyReviews()
+            }
+        } else {
+            LazyColumn(
+                modifier = Modifier.fillMaxSize(),
                 verticalArrangement = Arrangement.spacedBy(18.dp),
                 contentPadding = PaddingValues(16.dp),
             ) {
