@@ -53,7 +53,6 @@ class AppPreferencesServiceImpl @Inject constructor(
     override fun setAppLanguage(language: AppLanguage) =
         preferences.edit { putString(PreferencesKeys.LANGUAGE_KEY, language.code) }
     //endregion
-    //endregion
 
     //region Content Restriction
     private val _contentRestrictionLevel = MutableStateFlow(getContentRestrictionLevel())
