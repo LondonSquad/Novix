@@ -7,8 +7,6 @@ import com.london.domain.entity.popular.PopularTvShow
 import com.london.domain.entity.recent.MediaType
 import com.london.domain.entity.toprated.TopRatedMovie
 import com.london.domain.entity.toprated.TopRatedTvSeries
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.map
 
 @JvmName("topRatedMovieToUiMedia")
 fun List<TopRatedMovie>.toUiMedia(): List<HomeUiMedia> =
@@ -39,14 +37,6 @@ fun List<TvShow>.toUiMedia(): List<HomeUiMedia> =
             mediaType = MediaType.TvShow
         )
     }
-
-@JvmName("movie")
-fun Flow<List<Movie>>.toUiMediaList() = map { it.toUiMedia() }
-
-@JvmName("tvShow")
-
-fun Flow<List<TvShow>>.toUiMediaList() = map { it.toUiMedia() }
-
 
 @JvmName("topRatedTvSeriesToUiMedia")
 fun List<TopRatedTvSeries>.toUiMedia(): List<HomeUiMedia> =
