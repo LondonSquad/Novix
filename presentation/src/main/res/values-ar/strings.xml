@@ -134,5 +134,4 @@
     <string name="blurs_all_sensitive_content">يتم تمويه جميع المحتويات الحساسة.</string>
     <string name="blurs_explicit_scenes_only">يتم تمويه المشاهد الصريحة فقط.</string>
     <string name="no_content_is_blurred">لا يتم تمويه أي محتوى.</string>
-    <string name="save">حفظ</string>
 </resources>
