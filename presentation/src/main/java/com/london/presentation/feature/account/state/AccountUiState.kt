@@ -16,8 +16,10 @@ data class AccountUiState(
     val isLightMode: Boolean = false,
     val isDarkMode: Boolean = false,
     val isAppearanceBottomSheetVisible: Boolean = false,
-    val appTheme: AppTheme = AppTheme.SYSTEM,
+    val appTheme: AppTheme = AppTheme.DARK,
+    // Logout Bottom Sheet
+    val isLogoutBottomSheetVisible: Boolean = false,
+    val isLogoutLoading: Boolean = false,
 
     val isLanguageBottomSheetVisible: Boolean = false,
-    val isLogoutBottomSheetVisible: Boolean = false,
 )

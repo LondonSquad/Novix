@@ -2,14 +2,17 @@ package com.london.presentation.feature.account
 
 import com.london.domain.AppPreferencesService
 import com.london.domain.theme.AppTheme
+import com.london.domain.usecase.login.LogoutUseCase
 import com.london.presentation.feature.account.state.AccountUiState
 import com.london.presentation.feature.base.BaseViewModel
+import com.london.presentation.feature.base.ErrorState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 
 @HiltViewModel
 class AccountViewModel @Inject constructor(
-    private val appPreferencesService: AppPreferencesService
+    private val appPreferencesService: AppPreferencesService,
+    private val logoutUseCase: LogoutUseCase
 ) : BaseViewModel<AccountUiState, AccountEffect>(AccountUiState()),
     AccountContract {
 
@@ -17,7 +20,6 @@ class AccountViewModel @Inject constructor(
         updateState {
             copy(isUserLoggedIn = checkIfUserIsLoggedIn())
         }
-        initializeSelectedAppearanceMode()
     }
 
     private fun checkIfUserIsLoggedIn(): Boolean {
@@ -42,7 +44,7 @@ class AccountViewModel @Inject constructor(
         emitEffect(AccountEffect.NavigateToChangePassword)
     }
 
-    //region AppearanceBottomSheet
+    //region Appearance Bottom Sheet
     override fun onAppearanceClick() {
         updateState {
             copy(isAppearanceBottomSheetVisible = true)
@@ -68,23 +70,41 @@ class AccountViewModel @Inject constructor(
         }
     }
 
-    private fun initializeSelectedAppearanceMode() {
-        updateState {
-            copy(appTheme = appPreferencesService.appTheme.value)
-        }
-    }
-
-    fun updateSelectedThemeAsSystemDark(isSystemDark: Boolean) {
-        val currentTheme = appPreferencesService.appTheme.value
-        if (currentTheme == AppTheme.SYSTEM)
-            updateState {
-                copy(appTheme = if (isSystemDark) AppTheme.DARK else AppTheme.LIGHT)
-            }
-    }
-
     override fun showAppearanceBottomSheet() {
         updateState {
             copy(isAppearanceBottomSheetVisible = true)
+        }
+    }
+    //endregion
+
+    //region Logout
+    override fun onLogoutConfirmed() {
+        tryToExecute(
+            block = { logoutUseCase.invoke() },
+            onStart = {
+                updateState { copy(isLogoutLoading = true) }
+            },
+            onSuccess = { isSuccess: Boolean ->
+                if (isSuccess) {
+                    updateState { copy(isLogoutLoading = false) }
+                } else {
+                    updateState {
+                        copy(error = ErrorState.RequestFailed("Logout failed"))
+                    }
+                }
+            },
+            onCompleted = {
+                emitEffect(AccountEffect.NavigateToLogin)
+            }
+        )
+    }
+
+    override fun onLogoutClick() {
+        updateState {
+            copy(
+                showUserMenu = false,
+                isLogoutBottomSheetVisible = true
+            )
         }
     }
     //endregion
@@ -95,15 +115,6 @@ class AccountViewModel @Inject constructor(
 
     override fun onUserMenuClick() {
         updateState { copy(showUserMenu = !showUserMenu) }
-    }
-
-    override fun onLogoutClick() {
-        updateState {
-            copy(
-                showUserMenu = false,
-                isLogoutBottomSheetVisible = true
-            )
-        }
     }
 
     override fun onBottomSheetDismiss() {
