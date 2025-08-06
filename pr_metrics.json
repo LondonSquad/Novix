@@ -17889,5 +17889,33 @@
       "deletions": 19,
       "changed_files": 1
     }
+  },
+  {
+    "pr_number": 545,
+    "url": "https://github.com/LondonSquad/Novix/pull/545",
+    "title": "Feature/logout bottom sheet",
+    "opened_at": "2025-08-06T20:16:17Z",
+    "head_ref": "feature/logout-bottom-sheet",
+    "base_ref": "develop",
+    "creator": {
+      "login": "karimdeabes",
+      "id": 81706918,
+      "url": "https://github.com/karimdeabes"
+    },
+    "approvals": [],
+    "first_approved_at": null,
+    "time_to_first_approval_minutes": null,
+    "required_approvals_met_at": null,
+    "time_to_required_approvals_minutes": null,
+    "closed_at": null,
+    "merged_at": null,
+    "merged_by": null,
+    "week": "2025-W32",
+    "status": "pending",
+    "diff_stats": {
+      "additions": 187,
+      "deletions": 36,
+      "changed_files": 7
+    }
   }
 ]
