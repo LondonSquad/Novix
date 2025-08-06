@@ -2,7 +2,7 @@ package com.london.data.remote.source.details.rating
 
 import com.london.data.remote.model.details.rating.RatingRemoteBody
 import com.london.data.remote.model.details.rating.RatingRemoteResponse
-import com.london.data.remote.service.details.movie.RatingApiService
+import com.london.data.remote.service.details.rating.RatingApiService
 import com.london.data.remote.source.base.BaseRemoteDatasource
 import javax.inject.Inject
 

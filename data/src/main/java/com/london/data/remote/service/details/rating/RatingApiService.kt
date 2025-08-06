@@ -1,4 +1,4 @@
-package com.london.data.remote.service.details.movie
+package com.london.data.remote.service.details.rating
 
 import com.london.data.remote.model.details.rating.RatingRemoteBody
 import com.london.data.remote.model.details.rating.RatingRemoteResponse

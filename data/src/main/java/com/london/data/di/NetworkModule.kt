@@ -10,7 +10,7 @@ import com.london.data.remote.interceptor.AuthInterceptor
 import com.london.data.remote.service.authentication.AuthenticationApiService
 import com.london.data.remote.service.details.actor.ActorDetailsApiService
 import com.london.data.remote.service.details.movie.MovieDetailsApiService
-import com.london.data.remote.service.details.movie.RatingApiService
+import com.london.data.remote.service.details.rating.RatingApiService
 import com.london.data.remote.service.details.tvshow.TvShowDetailsApiService
 import com.london.data.remote.service.discover.DiscoverApiService
 import com.london.data.remote.service.home.PopularApiService
