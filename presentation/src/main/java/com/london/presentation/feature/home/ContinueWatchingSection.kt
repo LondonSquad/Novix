@@ -7,13 +7,13 @@ import com.london.presentation.R
 
 @Composable
 fun ContinueWatchingSection(
-    uiState: HomeScreenUiState,
+    recentWatchedMediaList: List<HomeUiMedia>,
     homeScreenContract: HomeScreenContract,
     modifier: Modifier = Modifier
 ) {
     HomeCarouselSection(
         modifier = modifier,
-        uiMediaList = uiState.recentWatchedMediaList,
+        uiMediaList = recentWatchedMediaList,
         sectionName = R.string.continue_watch,
         onSaveClick = {/*TODO: SAVE FUNCTIONALITY IS NOT IMPLEMENTED.*/ },
         onCardClick = { id, mediaType ->

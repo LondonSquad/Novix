@@ -18,7 +18,7 @@ import com.london.designsystem.theme.NovixTheme
 import com.london.presentation.R
 
 @Composable
-fun EmptyStateInGenres() {
+fun EmptyGenreLayout() {
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -44,5 +44,5 @@ fun EmptyStateInGenres() {
 @Preview
 @Composable
 fun EmptyStateViewPreview() {
-    EmptyStateInGenres()
+    EmptyGenreLayout()
 }

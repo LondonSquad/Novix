@@ -26,7 +26,6 @@ import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
@@ -45,10 +44,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import androidx.lifecycle.repeatOnLifecycle
 import androidx.paging.compose.LazyPagingItems
 import androidx.paging.compose.collectAsLazyPagingItems
 import com.london.designsystem.component.DefaultTopBar
@@ -88,13 +84,6 @@ fun HomeScreen(
             is HomeScreenEffect.NavigationTrendingActor -> onNavigateTrendingActors()
             is HomeScreenEffect.NavigationTopRated -> onNavigateTopRated()
             is HomeScreenEffect.NavigationContinueWatching -> onNavigateContinueWatching()
-        }
-    }
-
-    val lifecycleOwner = LocalLifecycleOwner.current
-    LaunchedEffect(key1 = Unit) {
-        lifecycleOwner.lifecycle.repeatOnLifecycle(Lifecycle.State.RESUMED) {
-            viewModel.fetchRecentWatchedMedia()
         }
     }
 
@@ -187,6 +176,9 @@ private fun Content(
     }
 
     val isLoading = uiState.isLoading
+    val recentWatchedMediaFlow by uiState.recentWatchedMediaFlow.collectAsStateWithLifecycle(
+        emptyList()
+    )
 
     Box(modifier = modifier.fillMaxSize()) {
         LazyVerticalGrid(
@@ -247,11 +239,11 @@ private fun Content(
                     CarousalShimmerEffect()
             }
 
-            if (uiState.recentWatchedMediaList.isNotEmpty()) {
+            if (recentWatchedMediaFlow.isNotEmpty()) {
                 item(span = { GridItemSpan(maxLineSpan) }) {
                     if (!isLoading)
                         ContinueWatchingSection(
-                            uiState = uiState,
+                            recentWatchedMediaList = recentWatchedMediaFlow,
                             homeScreenContract = homeScreenContract,
                             modifier = Modifier.requiredWidth(screenWidth)
                         )
