@@ -19,8 +19,7 @@ import com.london.data.remote.service.home.UpComingApiService
 import com.london.data.remote.service.list.CustomMovieListsApiService
 import com.london.data.remote.service.reviews.ReviewsApiService
 import com.london.data.remote.service.search.SearchApiService
-import com.london.data.remote.service.toprated.TopRatedMovieApiService
-import com.london.data.remote.service.toprated.TopRatedTvSeriesApiService
+import com.london.data.remote.service.toprated.TopRatedApiService
 import com.london.data.utils.CrashReporter
 import com.london.data.utils.FirebaseCrashReporter
 import com.london.domain.repository.SessionTokenProvider
@@ -145,13 +144,8 @@ object NetworkModule {
 
     @Provides
     @Singleton
-    fun provideTopRatedMovieApiService(retrofit: Retrofit): TopRatedMovieApiService =
-        retrofit.create(TopRatedMovieApiService::class.java)
-
-    @Provides
-    @Singleton
-    fun provideTopRatedTvShowApiService(retrofit: Retrofit): TopRatedTvSeriesApiService =
-        retrofit.create(TopRatedTvSeriesApiService::class.java)
+    fun provideTopRatedApiService(retrofit: Retrofit): TopRatedApiService =
+        retrofit.create(TopRatedApiService::class.java)
 
     @Provides
     @Singleton

@@ -11,8 +11,7 @@ import com.london.data.remote.service.home.UpComingApiService
 import com.london.data.remote.service.list.CustomMovieListsApiService
 import com.london.data.remote.service.reviews.ReviewsApiService
 import com.london.data.remote.service.search.SearchApiService
-import com.london.data.remote.service.toprated.TopRatedMovieApiService
-import com.london.data.remote.service.toprated.TopRatedTvSeriesApiService
+import com.london.data.remote.service.toprated.TopRatedApiService
 import com.london.data.remote.source.authentication.AuthenticationRemoteDataSource
 import com.london.data.remote.source.authentication.AuthenticationRemoteDataSourceImpl
 import com.london.data.remote.source.details.actor.ActorDetailsRemoteDataSource
@@ -23,8 +22,6 @@ import com.london.data.remote.source.details.movie.rating.AddMovieRatingRemoteDa
 import com.london.data.remote.source.details.movie.rating.AddMovieRatingRemoteDataSourceImpl
 import com.london.data.remote.source.details.tvshow.TvShowDetailsRemoteDataSource
 import com.london.data.remote.source.details.tvshow.TvShowDetailsRemoteDataSourceImpl
-import com.london.data.remote.source.details.videoprovider.movie.MovieVideoProviderRemote
-import com.london.data.remote.source.details.videoprovider.movie.MovieVideoProviderRemoteImpl
 import com.london.data.remote.source.details.videoprovider.tvshow.TvShowVideoProviderRemote
 import com.london.data.remote.source.details.videoprovider.tvshow.TvShowVideoProviderRemoteImpl
 import com.london.data.remote.source.discover.DiscoverRemoteDataSource
@@ -39,10 +36,8 @@ import com.london.data.remote.source.reviews.ReviewsRemoteDataSource
 import com.london.data.remote.source.reviews.ReviewsRemoteDataSourceImpl
 import com.london.data.remote.source.search.SearchRemoteDataSource
 import com.london.data.remote.source.search.SearchRemoteDataSourceImpl
-import com.london.data.remote.source.toprated.movie.TopRatedMovieRemoteDataSource
-import com.london.data.remote.source.toprated.movie.TopRatedMovieRemoteDataSourceImpl
-import com.london.data.remote.source.toprated.tvseries.TopRatedTvRemoteDataSource
-import com.london.data.remote.source.toprated.tvseries.TopRatedTvRemoteDataSourceImpl
+import com.london.data.remote.source.toprated.TopRatedRemoteDataSource
+import com.london.data.remote.source.toprated.TopRatedRemoteDataSourceImpl
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -87,16 +82,10 @@ object RemoteDataSourceModule {
 
     @Provides
     @Singleton
-    fun provideTopRatedMovieRemoteDataSource(
-        apiService: TopRatedMovieApiService,
-    ): TopRatedMovieRemoteDataSource =
-        TopRatedMovieRemoteDataSourceImpl(topRatedMovieApi = apiService)
-
-    @Provides
-    @Singleton
-    fun provideTopRatedTvRemoteDataSource(
-        apiService: TopRatedTvSeriesApiService,
-    ): TopRatedTvRemoteDataSource = TopRatedTvRemoteDataSourceImpl(topRatedTvSeriesApi = apiService)
+    fun provideTopRatedRemoteDataSource(
+        apiService: TopRatedApiService,
+    ): TopRatedRemoteDataSource =
+        TopRatedRemoteDataSourceImpl(topRatedMovieApi = apiService)
 
     @Provides
     @Singleton
@@ -111,12 +100,6 @@ object RemoteDataSourceModule {
         apiService: MovieDetailsApiService,
     ): MovieDetailsRemoteDataSource =
         MovieDetailsRemoteDataSourceImpl(movieDetailsApiService = apiService)
-
-    @Provides
-    @Singleton
-    fun provideMovieVideoProviderRemote(
-        apiService: MovieDetailsApiService,
-    ): MovieVideoProviderRemote = MovieVideoProviderRemoteImpl(movieDetailsApiService = apiService)
 
     @Provides
     @Singleton
