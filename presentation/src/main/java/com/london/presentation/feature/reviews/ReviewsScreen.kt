@@ -90,6 +90,7 @@ fun ReviewsScreenContent(
             .background(NovixTheme.colors.surface)
     ) {
         TopBar(
+            title = stringResource(R.string.reviews),
             onBackClick = reviewContract::onBackClicked,
             modifier = Modifier
                 .fillMaxWidth()
