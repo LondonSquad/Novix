@@ -1,7 +1,6 @@
 package com.london.presentation.feature.details.movieDetalis
 
 import androidx.lifecycle.SavedStateHandle
-import androidx.lifecycle.viewModelScope
 import com.london.domain.entity.Movie
 import com.london.domain.entity.recent.MediaType
 import com.london.domain.entity.recent.RecentViewed
@@ -18,7 +17,6 @@ import com.london.presentation.feature.base.BaseViewModel
 import com.london.presentation.navigation.Screen
 import com.london.presentation.navigation.getArgs
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
@@ -141,13 +139,18 @@ class MovieDetailsViewModel @Inject constructor(
         updateState { copy(isRateBottomSheetVisible = isRateBottomSheetVisible.not()) }
 
 
-    override fun onSelectRatingClick(rating: Int) = updateState {
-        var isRatedSuccessful = false
-        viewModelScope.launch {
-          isRatedSuccessful =  addMovieRatingByIdUseCase.invoke(movieId, rating)
-        }
-        if (isRatedSuccessful) copy(selectedRating = rating, isRated = true, isRateBottomSheetVisible = false)
-        else copy(isRateBottomSheetVisible = false)
+    override fun onSelectRatingClick(rating: Int) {
+        tryToExecute(
+            block = {
+                addMovieRatingByIdUseCase.invoke(movieId, rating)
+            },
+            onSuccess = {
+                updateState { copy(selectedRating = rating, isRated = true, isRateBottomSheetVisible = false) }
+            },
+            onError = {},
+            onCompleted = {},
+        )
+
     }
 
     private fun loadSimilarAndVideos(movieId: Int) {
