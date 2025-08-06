@@ -4,7 +4,7 @@ import com.london.data.remote.model.ApiResponse
 import com.london.data.remote.model.list.CreateCustomListResponse
 import com.london.data.remote.model.list.CustomListResponse
 import com.london.data.remote.model.list.CustomMovieListResponse
-import com.london.data.remote.model.search.MovieRemote
+import com.london.data.remote.model.list.ListDetailsResponse
 
 interface CustomMovieListsRemoteDataSource {
 
@@ -13,7 +13,7 @@ interface CustomMovieListsRemoteDataSource {
     suspend fun getDetails(
         listId: Int,
         page: Int
-    ): Result<ApiResponse<MovieRemote>>
+    ): Result<ListDetailsResponse>
 
     suspend fun addMovieToList(
         listId: Int,

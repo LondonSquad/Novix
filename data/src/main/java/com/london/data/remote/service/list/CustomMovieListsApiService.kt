@@ -5,8 +5,8 @@ import com.london.data.remote.model.list.CreateCustomListBody
 import com.london.data.remote.model.list.CreateCustomListResponse
 import com.london.data.remote.model.list.CustomListResponse
 import com.london.data.remote.model.list.CustomMovieListResponse
+import com.london.data.remote.model.list.ListDetailsResponse
 import com.london.data.remote.model.list.ListMovieBody
-import com.london.data.remote.model.search.MovieRemote
 import retrofit2.Response
 import retrofit2.http.Body
 import retrofit2.http.GET
@@ -32,7 +32,7 @@ interface CustomMovieListsApiService {
     suspend fun getDetails(
         @Path("list_id") listId: Int,
         @Query("page") page: Int
-    ): Response<ApiResponse<MovieRemote>>
+    ): Response<ListDetailsResponse>
 
     @POST("3/list/{list_id}/add_item")
     suspend fun addMovieToList(
