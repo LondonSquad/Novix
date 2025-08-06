@@ -40,7 +40,7 @@ class CustomMovieListRepositoryImplTest {
     }
 
     @Test
-    fun `deleteMovieList should return true when API succeeds`() = runTest {
+    fun `deleteMovieList should return true when data source returns success`() = runTest {
 
         //Given
         coEvery { remoteDataSource.delete(any(), any()) } returns Result.success(
@@ -56,7 +56,7 @@ class CustomMovieListRepositoryImplTest {
     }
 
     @Test
-    fun `deleteMovieList should return false when API fails`() = runTest {
+    fun `deleteMovieList should return false when data source returns failure`() = runTest {
 
         //Given
         coEvery { remoteDataSource.delete(any(), any()) } returns Result.failure(Exception("error"))
@@ -67,7 +67,7 @@ class CustomMovieListRepositoryImplTest {
     }
 
     @Test
-    fun `createMovieList should return true when API succeeds`() = runTest {
+    fun `createMovieList should return true when data source returns success`() = runTest {
 
         //Given
         coEvery { remoteDataSource.create(any(), any(), any()) } returns Result.success(
@@ -82,7 +82,7 @@ class CustomMovieListRepositoryImplTest {
     }
 
     @Test
-    fun `createMovieList should return false when API fails`() = runTest {
+    fun `createMovieList should return false when data source returns failure`() = runTest {
 
         //Given
         coEvery {
@@ -99,7 +99,7 @@ class CustomMovieListRepositoryImplTest {
     }
 
     @Test
-    fun `getMovieLists should return paged data`() = runTest {
+    fun `getMovieLists should return paged data when data source returns success`() = runTest {
 
         //Given
         coEvery { remoteDataSource.getAllMovieLists(any(), any()) } returns Result.success(
@@ -112,7 +112,7 @@ class CustomMovieListRepositoryImplTest {
     }
 
     @Test
-    fun `getMovieLists should throw exception when API fails`() = runTest {
+    fun `getMovieLists should throw exception when data source returns failure`() = runTest {
 
         //Given
         coEvery { remoteDataSource.getAllMovieLists(any(), any()) } returns Result.failure(
@@ -125,7 +125,7 @@ class CustomMovieListRepositoryImplTest {
     }
 
     @Test
-    fun `addMovieToList should return true when API succeeds`() = runTest {
+    fun `addMovieToList should return true when data source returns success`() = runTest {
 
         //Given
         coEvery { remoteDataSource.addMovieToList(any(), any(), any()) } returns Result.success(
@@ -138,7 +138,7 @@ class CustomMovieListRepositoryImplTest {
     }
 
     @Test
-    fun `addMovieToList should return false when API returns failure`() = runTest {
+    fun `addMovieToList should return false when data source returns failure`() = runTest {
 
         //Given
         coEvery { remoteDataSource.addMovieToList(any(), any(), any()) } returns Result.failure(
@@ -151,7 +151,7 @@ class CustomMovieListRepositoryImplTest {
     }
 
     @Test
-    fun `getMovieListDetails should return paged data on success`() = runTest {
+    fun `getMovieListDetails should return paged data when data source returns success`() = runTest {
 
         //Given
         coEvery { remoteDataSource.getDetails(any(), any()) } returns Result.success(
@@ -164,7 +164,7 @@ class CustomMovieListRepositoryImplTest {
     }
 
     @Test
-    fun `getMovieListDetails should throw exception when API fails`() = runTest {
+    fun `getMovieListDetails should throw exception when data source returns failure`() = runTest {
 
         //Given
         coEvery { remoteDataSource.getDetails(any(), any()) } returns Result.failure(
