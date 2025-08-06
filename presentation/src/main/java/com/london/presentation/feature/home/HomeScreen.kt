@@ -110,7 +110,7 @@ fun HomeScreen(
     val upcomingMoviesLazyList = uiState.upcomingMovies.collectAsLazyPagingItems()
 
 
-    when{
+    when {
         uiState.error != null -> NetworkErrorScreen(
             onRetry = {
                 viewModel.onRetry()
@@ -141,12 +141,15 @@ fun HomeScreen(
                             )
                         )
                 )
-                Column(modifier = Modifier.fillMaxSize()) {
+                Column(
+                    modifier = Modifier
+                        .fillMaxSize()
+                ) {
                     DefaultTopBar(
                         modifier = Modifier
                             .fillMaxWidth()
                             .background(NovixTheme.colors.surface)
-
+                            .padding(top = 12.dp, bottom = 8.dp)
                     )
 
                     Content(
@@ -189,7 +192,7 @@ private fun Content(
         LazyVerticalGrid(
             columns = GridCells.Fixed(gridColmuns()),
             contentPadding = PaddingValues(
-                top = 12.dp,
+                top = 8.dp,
                 bottom = 16.dp,
                 start = 16.dp,
                 end = 16.dp
