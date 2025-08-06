@@ -32,11 +32,6 @@ fun AccountScreen(
 ) {
     val uiState by viewModel.state.collectAsStateWithLifecycle()
     val effect by viewModel.effect.collectAsState(null)
-    val systemDarkTheme = isSystemInDarkTheme()
-
-    LaunchedEffect(systemDarkTheme) {
-        viewModel.updateSelectedThemeAsSystemDark(systemDarkTheme)
-    }
 
     effect?.Listen { currentEffect ->
         when (currentEffect) {
