@@ -17267,18 +17267,9 @@
       "id": 43588217,
       "url": "https://github.com/yusufnasserdev"
     },
-    "approvals": [
-      {
-        "reviewer": {
-          "id": 106277855,
-          "login": "Mostafa-alsaygh",
-          "url": "https://github.com/Mostafa-alsaygh"
-        },
-        "submitted_at": "2025-08-05T16:33:17Z"
-      }
-    ],
-    "first_approved_at": "2025-08-05T16:33:17Z",
-    "time_to_first_approval_minutes": 560.5333333333333,
+    "approvals": [],
+    "first_approved_at": null,
+    "time_to_first_approval_minutes": null,
     "required_approvals_met_at": null,
     "time_to_required_approvals_minutes": null,
     "closed_at": null,
@@ -17287,9 +17278,9 @@
     "week": "2025-W32",
     "status": "pending",
     "diff_stats": {
-      "additions": 326,
-      "deletions": 212,
-      "changed_files": 32
+      "additions": 479,
+      "deletions": 302,
+      "changed_files": 35
     }
   },
   {
