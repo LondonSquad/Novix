@@ -13,12 +13,8 @@ data class ActorTvShowCrewMember(
     val creditId: String?,
     @SerialName("department")
     val department: String?,
-    @SerialName("episode_count")
-    val episodeCount: Int?,
     @SerialName("first_air_date")
     val firstAirDate: String?,
-    @SerialName("first_credit_air_date")
-    val firstCreditAirDate: String?,
     @SerialName("genre_ids")
     val genreIds: List<Int>?,
     @SerialName("id")

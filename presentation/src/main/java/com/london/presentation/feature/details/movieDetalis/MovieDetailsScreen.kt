@@ -1,5 +1,6 @@
 package com.london.presentation.feature.details.movieDetalis
 
+import android.util.Log
 import androidx.compose.animation.core.FastOutSlowInEasing
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
@@ -279,9 +280,8 @@ fun MovieDetailsContent(
                                 modifier = Modifier
                                     .defaultMinSize(minWidth = 296.dp),
                                 onClick = {
-                                    movieDetailsContract.onActorClick(
-                                        actor.id
-                                    )
+                                    Log.d("TAG", "MovieDetailsContent: ${actor.id}")
+                                    movieDetailsContract.onActorClick(actor.id)
                                 }
                             )
                         }
