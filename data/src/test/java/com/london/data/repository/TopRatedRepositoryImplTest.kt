@@ -6,8 +6,8 @@ import com.london.data.local.source.home.HomeLocalDataSource
 import com.london.data.mapper.home.toprated.toEntity
 import com.london.data.remote.model.ApiResponse
 import com.london.data.remote.model.home.toprated.TopRatedMovieRemote
-import com.london.data.remote.source.toprated.movie.TopRatedMovieRemoteDataSource
-import com.london.data.repository.home.toprated.TopRatedMovieRepositoryImpl
+import com.london.data.remote.source.toprated.TopRatedRemoteDataSource
+import com.london.data.repository.home.toprated.TopRatedRepositoryImpl
 import com.london.data.utils.CrashReporter
 import com.london.domain.entity.recent.MediaType
 import io.mockk.coEvery
@@ -18,18 +18,18 @@ import org.junit.Before
 import org.junit.Test
 import org.junit.jupiter.api.assertThrows
 
-class TopRatedMovieRepositoryImplTest {
+class TopRatedRepositoryImplTest {
 
-    private lateinit var remoteDataSource: TopRatedMovieRemoteDataSource
-    private lateinit var repository: TopRatedMovieRepositoryImpl
+    private lateinit var remoteDataSource: TopRatedRemoteDataSource
+    private lateinit var repository: TopRatedRepositoryImpl
     private val crashReporter: CrashReporter = mockk(relaxed = true)
     private val localTopRatedMovie: HomeLocalDataSource<TopRatedLocal> = mockk(relaxed = true)
 
     @Before
     fun setup() {
         remoteDataSource = mockk(relaxed = true)
-        repository = TopRatedMovieRepositoryImpl(
-            topRatedMovieRemoteDataSource = remoteDataSource,
+        repository = TopRatedRepositoryImpl(
+            topRatedRemoteDataSource = remoteDataSource,
             localTopRated = localTopRatedMovie,
             crashReporter = crashReporter
         )
