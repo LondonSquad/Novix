@@ -8,7 +8,6 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.wrapContentHeight
@@ -20,7 +19,6 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.platform.LocalWindowInfo
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.TextFieldValue
@@ -70,7 +68,6 @@ fun AddListBottomSheet(
                 modifier = modifier
                     .fillMaxWidth()
                     .wrapContentHeight()
-                    .heightIn(max = LocalWindowInfo.current.containerSize.height.dp * 0.35f)
                     .padding(bottom = 24.dp)
             ) {
                 AddListBottomSheetContent(
@@ -179,7 +176,7 @@ private fun isButtonEnabled(addSheetState: AddSheetState): Boolean {
 
 @Composable
 @Preview
-fun PreviewAddMode() {
+fun Preview() {
     AddListBottomSheetContent(
         addSheetState = AddSheetState(
             listName = TextFieldValue(""),
