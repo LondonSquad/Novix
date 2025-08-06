@@ -1,4 +1,4 @@
-package com.london.presentation.feature.onboarding
+package com.london.presentation.feature.splash
 
 sealed class SplashEffect {
     object Onboarding : SplashEffect()

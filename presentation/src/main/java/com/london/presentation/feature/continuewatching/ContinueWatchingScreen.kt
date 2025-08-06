@@ -36,7 +36,7 @@ import com.london.designsystem.component.TabLayout
 import com.london.designsystem.component.TopBar
 import com.london.designsystem.theme.NovixTheme
 import com.london.presentation.R.string
-import com.london.presentation.shared.EmptyStateView
+import com.london.presentation.shared.EmptyStateInGenres
 import com.london.presentation.utils.Listen
 import com.london.presentation.utils.MovieGenre
 import com.london.presentation.utils.TvShowGenre
@@ -100,20 +100,20 @@ fun Content(
             onTabSelected = continueWatchingContract::tabSelected,
             modifier = Modifier.background(NovixTheme.colors.surface)
         )
-        when {
-            state.isMovieSelected -> MovieGenreRow(
+        if (state.isMovieSelected) {
+            MovieGenreRow(
                 onGenreClick = continueWatchingContract::movieGenre,
                 state = state,
                 screenWidth = screenWidth
             )
-
-            state.isTvSelected -> TvShowRow(
+        } else {
+            TvShowRow(
                 onGenreClick = continueWatchingContract::tvShowGenre,
                 state = state,
                 screenWidth = screenWidth
             )
-            else -> EmptyStateView()
         }
+
         LazyVerticalGrid(
             columns = GridCells.Fixed(gridColmuns()),
             contentPadding = PaddingValues(
@@ -126,7 +126,6 @@ fun Content(
             verticalArrangement = Arrangement.spacedBy(12.dp),
             modifier = Modifier.background(NovixTheme.colors.surface)
         ) {
-
             if (state.isMovieSelected) {
                 items(state.movies.size) { index ->
                     val movie = state.movies[index]
@@ -160,6 +159,12 @@ fun Content(
                 }
             }
         }
+
+        if ((state.isMovieSelected && state.movies.isEmpty()) ||
+            (!state.isMovieSelected && state.tvSeries.isEmpty())
+        ) {
+            EmptyStateInGenres()
+        }
     }
 }
 
@@ -170,6 +175,7 @@ private fun MovieGenreRow(
     screenWidth: Dp,
     modifier: Modifier = Modifier
 ) {
+    val genres = MovieGenre.entries.toTypedArray()
     LazyRow(
         horizontalArrangement = Arrangement.spacedBy(8.dp),
         contentPadding = PaddingValues(horizontal = 16.dp),
@@ -177,7 +183,7 @@ private fun MovieGenreRow(
             .requiredWidth(screenWidth)
             .padding(vertical = 12.dp)
     ) {
-        items(MovieGenre.entries.toTypedArray()) { genre ->
+        items(genres) { genre ->
             NovixChip(
                 text = stringResource(genre.stringResId),
                 isSelected = genre == state.selectedMovieGenre,
@@ -193,6 +199,7 @@ private fun TvShowRow(
     screenWidth: Dp,
     modifier: Modifier = Modifier
 ) {
+    val genres = TvShowGenre.entries.toTypedArray()
     LazyRow(
         horizontalArrangement = Arrangement.spacedBy(8.dp),
         contentPadding = PaddingValues(horizontal = 16.dp),
@@ -200,7 +207,7 @@ private fun TvShowRow(
             .requiredWidth(screenWidth)
             .padding(vertical = 12.dp)
     ) {
-        items(TvShowGenre.entries.toTypedArray()) { genre ->
+        items(genres) { genre ->
             NovixChip(
                 text = stringResource(genre.stringResId),
                 isSelected = genre == state.selectedTvShowGenre,

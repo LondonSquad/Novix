@@ -20,6 +20,7 @@ import com.london.designsystem.theme.ThemePreviews
 import com.london.domain.entity.Movie
 import com.london.presentation.feature.buildscreen.BuildScreen
 import com.london.presentation.feature.search.SearchCategory
+import com.london.presentation.shared.EmptyStateInGenres
 import com.london.presentation.shared.MediaLazyPagingGrid
 import com.london.presentation.utils.Listen
 import com.london.presentation.utils.convertGenreCodeToString
@@ -69,6 +70,7 @@ private fun MoviesByCategoryContent(
 ) {
 
     val moviesLazyList = state.movies.collectAsLazyPagingItems()
+    if(moviesLazyList.itemCount == 0) return EmptyStateInGenres()
     Column {
         TopBar(
             title = stringResource(
