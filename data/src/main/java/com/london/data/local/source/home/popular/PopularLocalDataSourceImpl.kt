@@ -15,12 +15,7 @@ class PopularLocalDataSourceImpl @Inject constructor(
 ) : HomeLocalDataSource<PopularSectionLocal> {
 
     init {
-        CoroutineScope(Dispatchers.IO).launch {
-            popularSectionDao.getAll().forEach { popularLocal ->
-                if (popularLocal.date.isDayExpired())
-                    popularSectionDao.deleteAll()
-            }
-        }
+        deleteExpiredData()
     }
 
     override suspend fun insert(item: PopularSectionLocal) =
@@ -37,5 +32,14 @@ class PopularLocalDataSourceImpl @Inject constructor(
 
     override suspend fun getByDate(date: Long): PopularSectionLocal =
         popularSectionDao.getByDate(date)
+    
+    private fun deleteExpiredData() {
+        CoroutineScope(Dispatchers.IO).launch {
+            popularSectionDao.getAll().forEach { popularLocal ->
+                if (popularLocal.date.isDayExpired())
+                    popularSectionDao.deleteAll()
+            }
+        }
+    }
 
 }

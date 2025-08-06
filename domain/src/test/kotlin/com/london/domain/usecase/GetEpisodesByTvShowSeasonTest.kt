@@ -1,18 +1,18 @@
 package com.london.domain.usecase
 
-import com.london.domain.repository.DetailsRepository
 import com.london.domain.entity.tvshowdetails.episode.TvShowEpisodesEntity
+import com.london.domain.repository.TvShowRepository
 import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.mockk
 import kotlinx.coroutines.test.runTest
+import org.junit.Assert.assertEquals
 import org.junit.Before
 import org.junit.Test
-import org.junit.Assert.assertEquals
 
 class GetEpisodesByTvShowSeasonTest {
 
-    private lateinit var repository: DetailsRepository
+    private lateinit var repository: TvShowRepository
     private lateinit var useCase: GetEpisodesByTvShowSeason
 
     @Before

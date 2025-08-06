@@ -1,9 +1,8 @@
 package com.london.data.remote.source.discover
 
 import com.london.data.remote.model.ApiResponse
-import com.london.data.remote.model.search.model.MovieRemote
-import com.london.data.remote.model.search.model.SearchTvShowRemote
-
+import com.london.data.remote.model.search.MovieRemote
+import com.london.data.remote.model.search.SearchTvShowRemote
 interface DiscoverRemoteDataSource {
 
     suspend fun getMoviesByCategory(

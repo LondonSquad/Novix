@@ -1,6 +1,7 @@
 package com.london.presentation.feature.account.state
 
 import com.london.domain.contentrestriction.ContentRestrictionLevel
+import com.london.domain.theme.AppTheme
 import com.london.presentation.feature.base.ErrorState
 
 data class AccountUiState(
@@ -13,7 +14,14 @@ data class AccountUiState(
     val isUserLoggedIn: Boolean = true,
     val showUserMenu: Boolean = false,
     val showContentRestrictionBottomSheet: Boolean = false,
-    val showAppearanceBottomSheet: Boolean = false,
-    val showLanguageBottomSheet: Boolean = false,
-    val showLogoutBottomSheet: Boolean = false,
+    // Appearance Bottom Sheet
+    val isLightMode: Boolean = false,
+    val isDarkMode: Boolean = false,
+    val isAppearanceBottomSheetVisible: Boolean = false,
+    val appTheme: AppTheme = AppTheme.DARK,
+    // Logout Bottom Sheet
+    val isLogoutBottomSheetVisible: Boolean = false,
+    val isLogoutLoading: Boolean = false,
+
+    val isLanguageBottomSheetVisible: Boolean = false,
 )

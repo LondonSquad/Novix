@@ -12,6 +12,7 @@ import androidx.compose.material.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.navigation.NavController
 import androidx.navigation.NavDestination.Companion.hasRoute
 import androidx.navigation.NavGraph.Companion.findStartDestination
@@ -24,8 +25,7 @@ import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navigation
 import com.london.designsystem.component.NavBar
 import com.london.designsystem.theme.NovixTheme
-import com.london.domain.AppPreferencesService
-import com.london.domain.repository.AuthRepository
+import com.london.presentation.R
 import com.london.presentation.feature.account.AccountScreen
 import com.london.presentation.feature.category.CategoriesScreen
 import com.london.presentation.feature.category.moviesbycategory.MoviesByCategoryScreen
@@ -45,11 +45,11 @@ import com.london.presentation.feature.home.trending.tvshows.TrendingTvShowsScre
 import com.london.presentation.feature.list.savedlist.ListScreen
 import com.london.presentation.feature.login.LoginScreen
 import com.london.presentation.feature.onboarding.OnboardingRoute
-import com.london.presentation.feature.onboarding.SplashRoute
 import com.london.presentation.feature.onboarding.WelcomeScreen
 import com.london.presentation.feature.register.WebViewRegistrationScreen
 import com.london.presentation.feature.reviews.ReviewsScreen
 import com.london.presentation.feature.search.SearchScreen
+import com.london.presentation.feature.splash.SplashRoute
 import com.london.presentation.feature.toprated.TopRatedScreen
 import com.london.presentation.navigation.Screen
 import com.london.presentation.navigation.Screen.ActorDetails
@@ -58,11 +58,12 @@ import com.london.presentation.navigation.Screen.TrendingActors
 import com.london.presentation.navigation.Screen.TrendingMovies
 import com.london.presentation.navigation.Screen.TrendingTvShows
 import com.london.presentation.navigation.Screen.TvShowDetails
+import com.london.presentation.navigation.Screen.WatchingHistory
 import kotlinx.serialization.Serializable
 import timber.log.Timber
 
 @Composable
-fun NovixApp(appPreferencesService: AppPreferencesService , authRepository: AuthRepository) {
+fun NovixApp() {
     val navController = rememberNavController()
     val navBackStackEntry by navController.currentBackStackEntryAsState()
     val currentDestination = navBackStackEntry?.destination
@@ -107,8 +108,8 @@ fun NovixApp(appPreferencesService: AppPreferencesService , authRepository: Auth
             startDestination = NovixAppNavGraph.Splash,
             modifier = Modifier.padding(innerPadding)
         ) {
-            onboardingNavGraph(navController, appPreferencesService)
-            splashNavGraph(navController, appPreferencesService , authRepository)
+            onboardingNavGraph(navController)
+            splashNavGraph(navController)
             authNavGraph(navController)
             mainNavGraph(navController)
         }
@@ -155,28 +156,22 @@ sealed interface NovixAppNavGraph {
 
 fun NavGraphBuilder.splashNavGraph(
     navController: NavHostController,
-    appPreferencesService: AppPreferencesService,
-    authRepository: AuthRepository
 ) = navigation<NovixAppNavGraph.Splash>(startDestination = Screen.Splash) {
     composable<Screen.Splash> {
         SplashRoute(
             onNavigateToOnboarding = { navController.navigateToOnboardingGraph() },
             onNavigateToWelcome = { navController.navigateTo(Screen.OnBoarding.Welcome) },
             onNavigateToHome = { navController.navigateToMainGraph() },
-            appPreferencesService = appPreferencesService,
-            authRepository = authRepository,
         )
     }
 }
 
 fun NavGraphBuilder.onboardingNavGraph(
     navController: NavHostController,
-    appPreferencesService: AppPreferencesService
 ) = navigation<NovixAppNavGraph.OnBoarding>(startDestination = Screen.OnBoarding) {
     composable<Screen.OnBoarding> {
         OnboardingRoute(
             onNavigateToWelcome = { navController.navigateTo(Screen.OnBoarding.Welcome) },
-            appPreferencesService = appPreferencesService
         )
     }
 
@@ -284,7 +279,7 @@ fun NavGraphBuilder.mainNavGraph(
         popEnterTransition = { fadeIn(tween(500)) },
         enterTransition = { fadeIn(tween(500)) },
         popExitTransition = { fadeOut(tween(500)) },
-    ){
+    ) {
         TvShowByCategoryScreen(
             onNavigateBack = navController::navigateUp,
             onNavigateToTvShowDetails = { tvShowId ->
@@ -356,13 +351,24 @@ fun NavGraphBuilder.mainNavGraph(
             })
     }
 
-    composable<Screen.WatchingHistory>(
+    composable<WatchingHistory>(
         exitTransition = { fadeOut(tween(500)) },
         popEnterTransition = { fadeIn(tween(500)) },
         enterTransition = { fadeIn(tween(500)) },
         popExitTransition = { fadeOut(tween(500)) },
     ) {
-        // todo: Implement WatchingHistoryScreen
+        ContinueWatchingScreen(
+            onBackClick = {
+                navController.navigateUp()
+            },
+            onMovieClick = { id ->
+                navController.navigate(MovieDetails(id))
+            },
+            onTvShowClick = { id ->
+                navController.navigate(TvShowDetails(id))
+            },
+            screenTitle = stringResource(R.string.watching_history)
+        )
     }
 
     composable<Screen.MyRating>(
@@ -532,7 +538,8 @@ fun NavGraphBuilder.mainNavGraph(
             },
             onTvShowClick = { id ->
                 navController.navigate(TvShowDetails(id))
-            }
+            },
+            screenTitle = stringResource(R.string.continue_watch)
         )
     }
 }

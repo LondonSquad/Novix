@@ -5,7 +5,7 @@ import com.london.domain.entity.tvshowdetails.TvShowCastEntity
 import com.london.domain.entity.tvshowdetails.TvShowCastMemberEntity
 import com.london.domain.entity.tvshowdetails.TvShowRoleEntity
 import com.london.domain.error.GetCastByIdFailedException
-import com.london.domain.repository.DetailsRepository
+import com.london.domain.repository.TvShowRepository
 import io.mockk.coEvery
 import io.mockk.mockk
 import kotlinx.coroutines.test.runTest
@@ -14,19 +14,19 @@ import org.junit.Test
 import org.junit.jupiter.api.assertThrows
 
 class GetCastByIdTest {
-    lateinit var detailsRepository: DetailsRepository
+    lateinit var tvShowRepository: TvShowRepository
     lateinit var getCastById: GetCastById
 
     @Before
     fun setUp() {
-        detailsRepository = mockk()
-        getCastById = GetCastById(detailsRepository)
+        tvShowRepository = mockk()
+        getCastById = GetCastById(tvShowRepository)
     }
 
     @Test
     fun `should return cast when repository returns cast`() = runTest {
         //given
-        coEvery { detailsRepository.getCastTvShowById(TV_SHOW_ID) } returns mockCast
+        coEvery { tvShowRepository.getCastTvShowById(TV_SHOW_ID) } returns mockCast
         //when
         val result = getCastById(TV_SHOW_ID)
         //then
@@ -36,7 +36,7 @@ class GetCastByIdTest {
     @Test
     fun `should throw exception when repository throws exception`() = runTest {
         //given
-        coEvery { detailsRepository.getCastTvShowById(TV_SHOW_ID) } throws GetCastByIdFailedException()
+        coEvery { tvShowRepository.getCastTvShowById(TV_SHOW_ID) } throws GetCastByIdFailedException()
         //when & then
         assertThrows<GetCastByIdFailedException> {
             getCastById(TV_SHOW_ID)

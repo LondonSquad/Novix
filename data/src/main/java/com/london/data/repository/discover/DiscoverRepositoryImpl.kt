@@ -1,6 +1,6 @@
 package com.london.data.repository.discover
 
-import com.london.data.mapper.toEntity
+import com.london.data.mapper.search.toEntity
 import com.london.data.remote.source.discover.DiscoverRemoteDataSource
 import com.london.domain.entity.Movie
 import com.london.domain.entity.PagedFetchResponse

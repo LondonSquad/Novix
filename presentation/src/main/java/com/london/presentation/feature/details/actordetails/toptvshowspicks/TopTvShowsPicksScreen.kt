@@ -48,7 +48,7 @@ private fun TopTvShowsPicksContent(
     modifier: Modifier = Modifier,
 ) {
     MediaLazyGrid(
-        title = stringResource(R.string.top_movies_picks),
+        title = stringResource(R.string.top_tv_shows_picks),
         items = state.tvShowDetails.cast,
         onBack = contract::onBack,
         getImageUrl = { it.posterUrl },

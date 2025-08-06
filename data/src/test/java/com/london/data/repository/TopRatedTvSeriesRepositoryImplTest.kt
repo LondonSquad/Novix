@@ -1,13 +1,13 @@
 package com.london.data.repository
 
 import com.google.common.truth.Truth.assertThat
-import com.london.data.local.model.home.TopRatedLocal
+import com.london.data.local.model.home.topRated.TopRatedLocal
 import com.london.data.local.source.home.HomeLocalDataSource
-import com.london.data.mapper.toprated.toEntity
+import com.london.data.mapper.home.toprated.toEntity
 import com.london.data.remote.model.ApiResponse
-import com.london.data.remote.model.toprated.TopRatedTvSeriesRemote
+import com.london.data.remote.model.home.toprated.TopRatedTvSeriesRemote
 import com.london.data.remote.source.toprated.tvseries.TopRatedTvRemoteDataSource
-import com.london.data.repository.toprated.TopRatedTvSeriesRepositoryImpl
+import com.london.data.repository.home.toprated.TopRatedTvSeriesRepositoryImpl
 import com.london.data.utils.CrashReporter
 import com.london.domain.entity.PagedFetchResponse
 import com.london.domain.entity.toprated.TopRatedTvSeries

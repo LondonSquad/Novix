@@ -41,6 +41,8 @@ class RecentViewedDataSourceImpl @Inject constructor(
     }
 
     override suspend fun delete(item: RecentViewedLocal) {
-        //TODO("Not yet implemented")
+            runCatching {
+            recentViewedDao.delete(item)
+        }
     }
 }

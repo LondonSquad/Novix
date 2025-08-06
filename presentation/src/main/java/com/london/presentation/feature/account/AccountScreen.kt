@@ -1,6 +1,7 @@
 package com.london.presentation.feature.account
 
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.runtime.Composable
@@ -15,9 +16,11 @@ import com.london.designsystem.component.ModalBottomSheet
 import com.london.designsystem.component.TopBar
 import com.london.designsystem.component.rememberModalBottomSheetState
 import com.london.presentation.R
+import com.london.presentation.feature.account.appearance.AppearanceBottomSheet
 import com.london.presentation.feature.account.components.ContentRestrictionBottomSheet
 import com.london.presentation.feature.account.components.LoggedInContent
 import com.london.presentation.feature.account.components.NotLoggedInContent
+import com.london.presentation.feature.account.logout.LogoutBottomSheet
 import com.london.presentation.feature.account.state.AccountUiState
 import com.london.presentation.feature.buildscreen.BuildScreen
 import com.london.presentation.utils.Listen
@@ -44,7 +47,7 @@ fun AccountScreen(
             }
 
             is AccountEffect.ShowAppearanceBottomSheet -> {
-                viewModel.onAppearanceClick()
+                viewModel::showAppearanceBottomSheet
             }
 
             is AccountEffect.ShowLanguageBottomSheet -> {
@@ -69,7 +72,7 @@ fun AccountScreen(
     ) {
         AccountScreenContent(
             uiState = uiState,
-            accountContract = viewModel
+            accountContract = viewModel,
         )
     }
 
@@ -89,14 +92,14 @@ fun AccountScreen(
 @Composable
 internal fun AccountScreenContent(
     uiState: AccountUiState,
-    accountContract: AccountContract
+    accountContract: AccountContract,
 ) {
     Column(
         modifier = Modifier.statusBarsPadding()
     ) {
         TopBar(
             title = stringResource(R.string.my_account),
-            modifier = Modifier.padding(horizontal = 16.dp, vertical = 12.dp)
+            modifier = Modifier.padding(horizontal = 16.dp)
         )
 
         if (uiState.isUserLoggedIn) {
@@ -109,5 +112,17 @@ internal fun AccountScreenContent(
                 onLoginClick = accountContract::onLoginClick
             )
         }
+    }
+    if (uiState.isAppearanceBottomSheetVisible) {
+        AppearanceBottomSheet(
+            appearanceContract = accountContract,
+            appearanceState = uiState,
+        )
+    }
+    if (uiState.isLogoutBottomSheetVisible) {
+        LogoutBottomSheet(
+            logoutContract = accountContract,
+            isLoading = uiState.isLogoutLoading
+        )
     }
 }

@@ -5,7 +5,7 @@ import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import com.london.data.local.database.dao.home.HomeDao
-import com.london.data.local.model.home.TopRatedLocal
+import com.london.data.local.model.home.topRated.TopRatedLocal
 
 @Dao
 interface TopRatedDao: HomeDao<TopRatedLocal> {

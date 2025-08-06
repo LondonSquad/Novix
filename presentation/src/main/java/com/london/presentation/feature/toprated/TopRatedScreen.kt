@@ -30,15 +30,14 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.paging.LoadState
 import androidx.paging.compose.collectAsLazyPagingItems
-import com.london.designsystem.R
-import com.london.presentation.shared.HomeCard
+import com.london.designsystem.component.HomeCard
 import com.london.designsystem.component.NovixChip
-import com.london.designsystem.component.TabItem
 import com.london.designsystem.component.TabLayout
 import com.london.designsystem.component.TopBar
 import com.london.designsystem.theme.NovixTheme
 import com.london.designsystem.utils.string
 import com.london.presentation.feature.buildscreen.BuildScreen
+import com.london.presentation.shared.MediaCategory
 import com.london.presentation.utils.Listen
 import com.london.presentation.utils.MovieGenre
 import com.london.presentation.utils.TvShowGenre
@@ -106,11 +105,11 @@ private fun Content(
 
         TabLayout(
             tabs = listOf(
-                TabItem(R.string.movies),
-                TabItem(R.string.tv_shows),
+                MediaCategory.MOVIES,
+                MediaCategory.TV_SHOWS
             ),
-            selectedIndex = state.tabSelected,
-            onTabSelected = topRatedContract::tabSelected,
+            selectedTab = state.selectedMediaCategory,
+            onTabSelected = topRatedContract::onMediaCategoryTabSelected,
             modifier = Modifier.background(NovixTheme.colors.surface)
         )
         if (state.isMovieSelected)

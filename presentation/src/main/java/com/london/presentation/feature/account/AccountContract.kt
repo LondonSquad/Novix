@@ -7,7 +7,16 @@ interface AccountContract {
     fun onMyRatingClick()
     fun onContentRestrictionClick()
     fun onChangePasswordClick()
+    // appearance bottom sheet
     fun onAppearanceClick()
+    fun onDarkModeSelected()
+    fun onLightModeSelected()
+    fun onAppearanceModeSave()
+    fun showAppearanceBottomSheet()
+
+    // logout bottom sheet
+    fun onLogoutConfirmed()
+
     fun onLanguageClick()
     fun onUserMenuClick()
     fun onLogoutClick()

@@ -19,6 +19,7 @@ import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -42,6 +43,7 @@ class HomeViewModel @Inject constructor(
         updateState {
             copy(upcomingMovies = _upcomingMoviesFlow)
         }
+        fetchRecentWatchedMedia()
         loadUpcomingMovies(categoryId = null)
     }
 
@@ -69,20 +71,25 @@ class HomeViewModel @Inject constructor(
         )
     }
 
-    fun fetchRecentWatchedMedia() {
+    private fun fetchRecentWatchedMedia() {
         tryToExecute(
             block = {
-                val movies = getRecentWatchedMovies.invoke(limit = 10)
-                val shows = getRecentWatchedTvShows.invoke(limit = 10)
-                Pair(movies, shows)
+                val recentWatchedMovies = getRecentWatchedMovies.getMostRecent()
+                val recentWatchedShows = getRecentWatchedTvShows.getMostRecent()
+
+                Pair(recentWatchedMovies, recentWatchedShows)
             },
             onStart = { updateState { copy(isLoading = true) } },
-            onSuccess = { (movies, shows) ->
-                val recentWatchedMedia = movies.toUiMedia() +
-                        shows.toUiMedia()
+            onSuccess = { (recentWatchedMovies, recentWatchedShows) ->
+                val recentWatchedMedia = combine(
+                    recentWatchedMovies,
+                    recentWatchedShows
+                ) { movies, shows ->
+                    movies.toUiMedia() + shows.toUiMedia()
+                }
 
                 updateState {
-                    copy(recentWatchedMediaList = recentWatchedMedia.shuffled())
+                    copy(recentWatchedMediaFlow = recentWatchedMedia)
                 }
             },
             onError = { errorState -> updateState { copy(error = errorState) } },

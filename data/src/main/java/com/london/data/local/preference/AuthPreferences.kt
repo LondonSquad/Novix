@@ -8,14 +8,6 @@ import javax.inject.Inject
 class AuthPreferences @Inject constructor(
     private val sharedPreferences: SharedPreferences,
 ) {
-    companion object {
-        private const val SESSION_ID = "session_id"
-        private const val REQUEST_TOKEN = "request_token"
-        private const val USERNAME = "username"
-        private const val IS_GUEST = "is_guest"
-        private const val GUEST_SESSION_ID = "guest_session_id"
-    }
-
     fun getAuthKey(): String {
         return BuildConfig.AUTHORIZATION_KEY
     }
@@ -48,7 +40,7 @@ class AuthPreferences @Inject constructor(
         sharedPreferences.edit { putString(GUEST_SESSION_ID, id) }
     }
 
-    fun getGuestSessionId(): String? {
+    private fun getGuestSessionId(): String? {
         return sharedPreferences.getString(GUEST_SESSION_ID, null)
     }
 
@@ -64,5 +56,13 @@ class AuthPreferences @Inject constructor(
 
     fun isLoggedIn(): Boolean {
         return getSessionId() != null || getGuestSessionId() != null
+    }
+
+    companion object {
+        private const val SESSION_ID = "session_id"
+        private const val REQUEST_TOKEN = "request_token"
+        private const val USERNAME = "username"
+        private const val IS_GUEST = "is_guest"
+        private const val GUEST_SESSION_ID = "guest_session_id"
     }
 }

@@ -7,7 +7,7 @@ import com.london.data.remote.model.details.movie.model.moviedetails.AccountMovi
 import com.london.data.remote.model.details.movie.model.moviedetails.MovieDetailsResponse
 import com.london.data.remote.model.details.movie.model.movieimages.MovieImagesResponse
 import com.london.data.remote.model.details.videoprovider.movie.model.MovieVideoRemote
-import com.london.data.remote.model.search.model.MovieRemote
+import com.london.data.remote.model.search.MovieRemote
 import retrofit2.Response
 import retrofit2.http.GET
 import retrofit2.http.POST

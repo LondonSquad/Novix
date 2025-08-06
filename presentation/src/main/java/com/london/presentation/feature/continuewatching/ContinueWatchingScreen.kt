@@ -16,6 +16,7 @@ import androidx.compose.foundation.layout.statusBars
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
+import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.lazy.items
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
@@ -28,15 +29,18 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.london.designsystem.R
-import com.london.presentation.shared.HomeCard
+import com.london.designsystem.component.HomeCard
 import com.london.designsystem.component.NovixChip
-import com.london.designsystem.component.TabItem
 import com.london.designsystem.component.TabLayout
 import com.london.designsystem.component.TopBar
 import com.london.designsystem.theme.NovixTheme
-import com.london.presentation.R.string
-import com.london.presentation.shared.EmptyStateView
+import com.london.domain.entity.Movie
+import com.london.domain.entity.TvShow
+import com.london.presentation.R
+import com.london.presentation.feature.base.ErrorState
+import com.london.presentation.feature.buildscreen.BuildScreen
+import com.london.presentation.shared.EmptyGenreLayout
+import com.london.presentation.shared.MediaCategory
 import com.london.presentation.utils.Listen
 import com.london.presentation.utils.MovieGenre
 import com.london.presentation.utils.TvShowGenre
@@ -44,10 +48,11 @@ import com.london.presentation.utils.gridColmuns
 
 @Composable
 fun ContinueWatchingScreen(
-    viewModel: ContinueWatchingViewModel = hiltViewModel(),
+    screenTitle: String,
     onBackClick: () -> Unit = {},
     onMovieClick: (Int) -> Unit = {},
     onTvShowClick: (Int) -> Unit = {},
+    viewModel: ContinueWatchingViewModel = hiltViewModel(),
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
     val effect by viewModel.effect.collectAsState(null)
@@ -62,105 +67,183 @@ fun ContinueWatchingScreen(
 
     Content(
         state = state,
-        continueWatchingContract = viewModel
+        continueWatchingContract = viewModel,
+        screenTitle = screenTitle
     )
 }
 
 @Composable
 fun Content(
     state: ContinueWatchingUiState = ContinueWatchingUiState(),
-    continueWatchingContract: ContinueWatchingContract = defaultContinueWatchingContract()
+    continueWatchingContract: ContinueWatchingContract = defaultContinueWatchingContract(),
+    screenTitle: String = stringResource(R.string.continue_watch)
 ) {
+    val screenWidth = with(LocalDensity.current) {
+        LocalWindowInfo.current.containerSize.width.toDp()
+    }
 
-    val screenWidth =
-        with(LocalDensity.current) { LocalWindowInfo.current.containerSize.width.toDp() }
     Column(
         modifier = Modifier
             .fillMaxSize()
             .background(color = NovixTheme.colors.surface)
             .padding(WindowInsets.statusBars.asPaddingValues())
             .padding(WindowInsets.navigationBars.asPaddingValues())
-
     ) {
-        TopBar(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(horizontal = 16.dp)
-                .padding(top = 20.dp),
-            title = stringResource(string.continue_watch),
-            onBackClick = continueWatchingContract::onBack
-        )
-
-        TabLayout(
-            tabs = listOf(
-                TabItem(R.string.movies),
-                TabItem(R.string.tv_shows),
-            ),
-            selectedIndex = state.tabSelected,
-            onTabSelected = continueWatchingContract::tabSelected,
-            modifier = Modifier.background(NovixTheme.colors.surface)
-        )
-        when {
-            state.isMovieSelected -> MovieGenreRow(
-                onGenreClick = continueWatchingContract::movieGenre,
-                state = state,
-                screenWidth = screenWidth
-            )
-
-            state.isTvSelected -> TvShowRow(
-                onGenreClick = continueWatchingContract::tvShowGenre,
-                state = state,
-                screenWidth = screenWidth
-            )
-            else -> EmptyStateView()
-        }
-        LazyVerticalGrid(
-            columns = GridCells.Fixed(gridColmuns()),
-            contentPadding = PaddingValues(
-                top = 12.dp,
-                bottom = 16.dp,
-                start = 16.dp,
-                end = 16.dp
-            ),
-            horizontalArrangement = Arrangement.spacedBy(12.dp),
-            verticalArrangement = Arrangement.spacedBy(12.dp),
-            modifier = Modifier.background(NovixTheme.colors.surface)
+        BuildScreen(
+            onBack = continueWatchingContract::onBack,
+            isLoading = state.isLoading,
+            isError = state.error is ErrorState.NoInternet,
+            onRetry = continueWatchingContract::onRetry,
         ) {
+            TopBar(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(start = 16.dp, end = 16.dp, top = 12.dp),
+                title = screenTitle,
+                onBackClick = continueWatchingContract::onBack
+            )
 
-            if (state.isMovieSelected) {
-                items(state.movies.size) { index ->
-                    val movie = state.movies[index]
-                    movie.let { movieItem ->
-                        HomeCard(
-                            imageUrl = movieItem.posterUrl,
-                            isSaved = false,
-                            onSaveClick = {
-                                // TODO
-                            },
-                            modifier = Modifier.clickable {
-                                continueWatchingContract.onNavigateToMovie(movieItem.id)
-                            }
-                        )
-                    }
+            MediaCategoryTabs(
+                selectedCategory = state.selectedMediaCategory,
+                onTabSelected = continueWatchingContract::onMediaCategoryTabSelected
+            )
+
+            GenreFilterRow(
+                state = state,
+                continueWatchingContract = continueWatchingContract,
+                screenWidth = screenWidth
+            )
+
+            MediaContentGrid(
+                state = state,
+                continueWatchingContract = continueWatchingContract
+            )
+        }
+    }
+}
+
+@Composable
+private fun MediaCategoryTabs(
+    selectedCategory: MediaCategory,
+    onTabSelected: (MediaCategory) -> Unit
+) {
+    TabLayout(
+        tabs = listOf(MediaCategory.MOVIES, MediaCategory.TV_SHOWS),
+        selectedTab = selectedCategory,
+        onTabSelected = onTabSelected,
+        modifier = Modifier.background(NovixTheme.colors.surface)
+    )
+}
+
+@Composable
+private fun GenreFilterRow(
+    state: ContinueWatchingUiState,
+    continueWatchingContract: ContinueWatchingContract,
+    screenWidth: Dp
+) {
+    when {
+        state.isMovieSelected -> MovieGenreRow(
+            onGenreClick = continueWatchingContract::onMovieGenreChanged,
+            state = state,
+            screenWidth = screenWidth
+        )
+
+        state.isTvSelected -> TvShowRow(
+            onGenreClick = continueWatchingContract::onTvShowGenreChanged,
+            state = state,
+            screenWidth = screenWidth
+        )
+    }
+}
+
+@Composable
+private fun MediaContentGrid(
+    state: ContinueWatchingUiState,
+    continueWatchingContract: ContinueWatchingContract
+) {
+    val movies by state.movies.collectAsStateWithLifecycle(emptyList())
+    val tvSeries by state.tvSeries.collectAsStateWithLifecycle(emptyList())
+
+    val isEmpty = (state.isMovieSelected && movies.isEmpty()) ||
+            (state.isTvSelected && tvSeries.isEmpty())
+
+    if (isEmpty) {
+        EmptyGenreLayout()
+    } else {
+        MediaGrid(
+            state = state,
+            movies = movies,
+            tvSeries = tvSeries,
+            continueWatchingContract = continueWatchingContract
+        )
+    }
+}
+
+@Composable
+private fun MediaGrid(
+    state: ContinueWatchingUiState,
+    movies: List<Movie>,
+    tvSeries: List<TvShow>,
+    continueWatchingContract: ContinueWatchingContract
+) {
+    LazyVerticalGrid(
+        columns = GridCells.Fixed(gridColmuns()),
+        contentPadding = PaddingValues(
+            top = 12.dp,
+            bottom = 16.dp,
+            start = 16.dp,
+            end = 16.dp
+        ),
+        horizontalArrangement = Arrangement.spacedBy(12.dp),
+        verticalArrangement = Arrangement.spacedBy(12.dp),
+        modifier = Modifier.background(NovixTheme.colors.surface)
+    ) {
+        when {
+            state.isMovieSelected -> {
+                items(movies) { movie ->
+                    MovieCard(
+                        movie = movie,
+                        onMovieClick = continueWatchingContract::onNavigateToMovie
+                    )
                 }
             }
-            items(state.tvSeries.size) { index ->
-                val tvSeries = state.tvSeries[index]
-                tvSeries.let { seriesItem ->
-                    HomeCard(
-                        imageUrl = seriesItem.posterPicture,
-                        isSaved = false,
-                        onSaveClick = {
-                            // TODO
-                        },
-                        modifier = Modifier.clickable {
-                            continueWatchingContract.onNavigateToTvShow(seriesItem.id)
-                        }
+
+            else -> {
+                items(tvSeries) { series ->
+                    TvSeriesCard(
+                        series = series,
+                        onSeriesClick = continueWatchingContract::onNavigateToTvShow
                     )
                 }
             }
         }
     }
+}
+
+@Composable
+private fun MovieCard(
+    movie: Movie,
+    onMovieClick: (Int) -> Unit
+) {
+    HomeCard(
+        imageUrl = movie.posterUrl,
+        isSaved = false,
+        onSaveClick = { /* TODO */ },
+        modifier = Modifier.clickable { onMovieClick(movie.id) }
+    )
+}
+
+@Composable
+private fun TvSeriesCard(
+    series: TvShow,
+    onSeriesClick: (Int) -> Unit
+) {
+    HomeCard(
+        imageUrl = series.posterPicture,
+        isSaved = false,
+        onSaveClick = { /* TODO */ },
+        modifier = Modifier.clickable { onSeriesClick(series.id) }
+    )
 }
 
 @Composable
