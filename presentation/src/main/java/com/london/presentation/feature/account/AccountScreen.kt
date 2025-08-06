@@ -1,6 +1,7 @@
 package com.london.presentation.feature.account
 
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.runtime.Composable
@@ -83,7 +84,7 @@ internal fun AccountScreenContent(
     ) {
         TopBar(
             title = stringResource(R.string.my_account),
-            modifier = Modifier.padding(horizontal = 16.dp, vertical = 12.dp)
+            modifier = Modifier.padding(horizontal = 16.dp)
         )
 
         if (uiState.isUserLoggedIn) {
