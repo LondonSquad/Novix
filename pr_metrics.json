@@ -17853,5 +17853,33 @@
       "deletions": 2,
       "changed_files": 2
     }
+  },
+  {
+    "pr_number": 544,
+    "url": "https://github.com/LondonSquad/Novix/pull/544",
+    "title": "feat: animate genre section padding on scroll in HomeScreen",
+    "opened_at": "2025-08-06T16:44:59Z",
+    "head_ref": "fix/home-genere-padding",
+    "base_ref": "develop",
+    "creator": {
+      "login": "Mostafa-alsaygh",
+      "id": 106277855,
+      "url": "https://github.com/Mostafa-alsaygh"
+    },
+    "approvals": [],
+    "first_approved_at": null,
+    "time_to_first_approval_minutes": null,
+    "required_approvals_met_at": null,
+    "time_to_required_approvals_minutes": null,
+    "closed_at": null,
+    "merged_at": null,
+    "merged_by": null,
+    "week": "2025-W32",
+    "status": "pending",
+    "diff_stats": {
+      "additions": 55,
+      "deletions": 19,
+      "changed_files": 1
+    }
   }
 ]
