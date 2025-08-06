@@ -42,7 +42,6 @@ fun TopBar(
         modifier = modifier
             .fillMaxWidth()
             .heightIn(56.dp)
-            .padding(vertical = 8.dp)
             .zIndex(1f),
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.SpaceBetween

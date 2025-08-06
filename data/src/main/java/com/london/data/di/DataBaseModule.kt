@@ -22,7 +22,7 @@ object DataBaseModule {
             context.applicationContext,
             NovixDatabase::class.java,
             "NovixDatabase"
-        ).fallbackToDestructiveMigration(true).build()
+        ).build()
 
     @Provides
     @Singleton
