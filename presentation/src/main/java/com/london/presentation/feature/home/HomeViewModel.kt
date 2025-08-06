@@ -71,25 +71,25 @@ class HomeViewModel @Inject constructor(
         )
     }
 
-    fun fetchRecentWatchedMedia() {
+    private fun fetchRecentWatchedMedia() {
         tryToExecute(
             block = {
-                val moviesFlow = getRecentWatchedMovies.getMostRecent()
-                val showsFlow = getRecentWatchedTvShows.getMostRecent()
+                val recentWatchedMovies = getRecentWatchedMovies.getMostRecent()
+                val recentWatchedShows = getRecentWatchedTvShows.getMostRecent()
 
-                Pair(moviesFlow, showsFlow)
+                Pair(recentWatchedMovies, recentWatchedShows)
             },
             onStart = { updateState { copy(isLoading = true) } },
-            onSuccess = { (movies, shows) ->
-                val recentWatchedMediaFlow = combine(
-                    movies,
-                    shows
+            onSuccess = { (recentWatchedMovies, recentWatchedShows) ->
+                val recentWatchedMedia = combine(
+                    recentWatchedMovies,
+                    recentWatchedShows
                 ) { movies, shows ->
                     movies.toUiMedia() + shows.toUiMedia()
                 }
 
                 updateState {
-                    copy(recentWatchedMediaFlow = recentWatchedMediaFlow)
+                    copy(recentWatchedMediaFlow = recentWatchedMedia)
                 }
             },
             onError = { errorState -> updateState { copy(error = errorState) } },
