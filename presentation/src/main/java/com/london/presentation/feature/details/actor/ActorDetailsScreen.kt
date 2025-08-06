@@ -149,7 +149,7 @@ fun ActorScreenContent(
                     uiState.actorImageDetails?.let { image ->
                         CustomBackDropImagePager(
                             images = image.map { it.fileUrl },
-                            isVisibleDots = false
+                            isVisibleDots = uiState.actorImageDetails.size > 1
                         )
                     }
                 }
