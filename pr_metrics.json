@@ -17917,5 +17917,33 @@
       "deletions": 36,
       "changed_files": 7
     }
+  },
+  {
+    "pr_number": 546,
+    "url": "https://github.com/LondonSquad/Novix/pull/546",
+    "title": "Fix: default top bar",
+    "opened_at": "2025-08-06T20:38:34Z",
+    "head_ref": "fix/default-top-bar",
+    "base_ref": "develop",
+    "creator": {
+      "login": "yusufnasserdev",
+      "id": 43588217,
+      "url": "https://github.com/yusufnasserdev"
+    },
+    "approvals": [],
+    "first_approved_at": null,
+    "time_to_first_approval_minutes": null,
+    "required_approvals_met_at": null,
+    "time_to_required_approvals_minutes": null,
+    "closed_at": null,
+    "merged_at": null,
+    "merged_by": null,
+    "week": "2025-W32",
+    "status": "pending",
+    "diff_stats": {
+      "additions": 38,
+      "deletions": 33,
+      "changed_files": 8
+    }
   }
 ]
