@@ -1,12 +1,12 @@
 package com.london.data.repository.rating
 
 import com.london.data.local.preference.AuthPreferences
-import com.london.data.remote.source.details.movie.rating.AddMovieRatingRemoteDataSource
+import com.london.data.remote.source.details.rating.RatingRemoteDataSource
 import com.london.domain.repository.RatingRepository
 import javax.inject.Inject
 
 class RatingRepositoryImpl @Inject constructor(
-    private val addMovieRatingRemoteDataSource: AddMovieRatingRemoteDataSource,
+    private val addMovieRatingRemoteDataSource: RatingRemoteDataSource,
     private val authPreferences: AuthPreferences
 ) : RatingRepository {
     override suspend fun addMovieRatingById(

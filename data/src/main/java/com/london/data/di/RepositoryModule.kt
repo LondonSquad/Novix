@@ -16,7 +16,7 @@ import com.london.data.remote.service.home.TrendingApiService
 import com.london.data.remote.source.authentication.AuthenticationRemoteDataSource
 import com.london.data.remote.source.details.actor.ActorDetailsRemoteDataSource
 import com.london.data.remote.source.details.movie.MovieDetailsRemoteDataSource
-import com.london.data.remote.source.details.movie.rating.AddMovieRatingRemoteDataSource
+import com.london.data.remote.source.details.rating.RatingRemoteDataSource
 import com.london.data.remote.source.details.tvshow.TvShowDetailsRemoteDataSource
 import com.london.data.remote.source.details.videoprovider.movie.MovieVideoProviderRemote
 import com.london.data.remote.source.details.videoprovider.tvshow.TvShowVideoProviderRemote
@@ -214,8 +214,8 @@ object RepositoryModule {
 
     @Provides
     @Singleton
-    fun provideAddMovieRatingRepository(
-        addMovieRatingRemoteDataSource: AddMovieRatingRemoteDataSource,
+    fun RatingRepository(
+        addMovieRatingRemoteDataSource: RatingRemoteDataSource,
         authPreferences: AuthPreferences
     ): RatingRepository = RatingRepositoryImpl(
         addMovieRatingRemoteDataSource = addMovieRatingRemoteDataSource,

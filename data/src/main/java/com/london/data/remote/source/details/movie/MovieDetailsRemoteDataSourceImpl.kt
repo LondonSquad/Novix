@@ -38,7 +38,7 @@ class MovieDetailsRemoteDataSourceImpl @Inject constructor(
         userSessionId: String?
     ): Result<AccountMovieStatesResponse> =
         callApiWithRetry(apiCall = {
-            movieDetailsApiService.getMovieStates(
+            movieDetailsApiService.getAccountMovieStates(
                 movieId = movieId,
                 guestSessionId = guestSessionId,
                 userSessionId = userSessionId

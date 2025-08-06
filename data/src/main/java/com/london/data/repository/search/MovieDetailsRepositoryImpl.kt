@@ -19,7 +19,6 @@ import com.london.domain.entity.review.ReviewEntity
 import com.london.domain.repository.MovieDetailsRepository
 import javax.inject.Inject
 
-
 class MovieDetailsRepositoryImpl @Inject constructor(
     private val movieDetailsRemoteDataSource: MovieDetailsRemoteDataSource,
     private val authPreferences: AuthPreferences,

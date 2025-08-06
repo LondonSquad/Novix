@@ -41,7 +41,7 @@ interface MovieDetailsApiService {
     ): Response<MovieVideoRemote>
 
     @GET("3/movie/{movie_id}/account_states")
-    suspend fun getMovieStates(
+    suspend fun getAccountMovieStates(
         @Path("movie_id") movieId: Int,
         @Query("guest_session_id") guestSessionId: String?,
         @Query("session_id") userSessionId: String?,

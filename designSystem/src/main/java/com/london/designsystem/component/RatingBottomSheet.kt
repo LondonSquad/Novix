@@ -69,14 +69,16 @@ fun RatingBottomSheet(
                     )
                     IconButton(
                         onClick = onDismissRequest,
-                        modifier = Modifier.background(
-                           shape = RoundedCornerShape(8.dp),
-                           color =  NovixTheme.colors.iconBackgroundLow
-                        ).size(32.dp)
+                        modifier = Modifier
+                            .background(
+                                shape = RoundedCornerShape(8.dp),
+                                color = NovixTheme.colors.iconBackgroundLow
+                            )
+                            .size(32.dp)
 
                     ) {
                         Icon(
-                            painter = painterResource(R.drawable.cancel_01),
+                            painter = painterResource(R.drawable.ic_close),
                             contentDescription = stringResource(R.string.close),
                             tint = NovixTheme.colors.body,
                             modifier = Modifier.size(16.dp)
