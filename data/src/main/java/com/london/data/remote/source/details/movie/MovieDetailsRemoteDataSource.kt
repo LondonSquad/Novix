@@ -5,6 +5,7 @@ import com.london.data.remote.model.details.movie.model.moviecast.MovieCastRespo
 import com.london.data.remote.model.details.movie.model.moviedetails.AccountMovieStatesResponse
 import com.london.data.remote.model.details.movie.model.moviedetails.MovieDetailsResponse
 import com.london.data.remote.model.details.movie.model.movieimages.MovieImagesResponse
+import com.london.data.remote.model.details.videoprovider.movie.model.MovieVideoRemote
 import com.london.data.remote.model.search.MovieRemote
 
 
@@ -13,9 +14,11 @@ interface MovieDetailsRemoteDataSource {
     suspend fun getSimilarMovies(movieId: Int): Result<ApiResponse<MovieRemote>>
     suspend fun getMovieCast(movieId: Int): Result<MovieCastResponse>
     suspend fun getMovieImages(movieId: Int): Result<MovieImagesResponse>
+    suspend fun getMovieVideos(movieId: Int): Result<MovieVideoRemote>
     suspend fun getAccountMovieStates(
         movieId: Int,
         guestSessionId: String?,
         userSessionId: String?
     ) : Result<AccountMovieStatesResponse>
+
 }
