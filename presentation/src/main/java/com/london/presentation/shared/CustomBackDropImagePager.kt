@@ -83,7 +83,7 @@ fun CustomBackDropImagePager(
                     modifier = Modifier
                         .fillMaxWidth()
                         .height(252.dp),
-                    contentScale = ContentScale.FillBounds,
+                    contentScale = ContentScale.Crop,
                     model = validImages[pageIndex],
                     contentDescription = "${stringResource(R.string.tv_show_image)} ${pageIndex + 1}",
                     errorContent = { ErrorImage() },
