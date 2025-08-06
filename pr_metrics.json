@@ -17779,5 +17779,33 @@
       "deletions": 0,
       "changed_files": 6
     }
+  },
+  {
+    "pr_number": 543,
+    "url": "https://github.com/LondonSquad/Novix/pull/543",
+    "title": "fix: Image scaling and pager dots visibility",
+    "opened_at": "2025-08-06T10:22:18Z",
+    "head_ref": "fix/actor-details-image",
+    "base_ref": "develop",
+    "creator": {
+      "login": "ahmeddsamii",
+      "id": 154278495,
+      "url": "https://github.com/ahmeddsamii"
+    },
+    "approvals": [],
+    "first_approved_at": null,
+    "time_to_first_approval_minutes": null,
+    "required_approvals_met_at": null,
+    "time_to_required_approvals_minutes": null,
+    "closed_at": null,
+    "merged_at": null,
+    "merged_by": null,
+    "week": "2025-W32",
+    "status": "pending",
+    "diff_stats": {
+      "additions": 2,
+      "deletions": 2,
+      "changed_files": 2
+    }
   }
 ]
