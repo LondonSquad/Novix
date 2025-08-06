@@ -13,41 +13,40 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.london.designsystem.R
 import com.london.designsystem.theme.NovixTheme
 import com.london.designsystem.theme.ThemePreviews
+import com.london.designsystem.utils.string
 
 @Composable
 fun DefaultTopBar(
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    isDarkTheme: Boolean = isSystemInDarkTheme()
 ) {
     Row(
-        modifier = modifier
-            .fillMaxWidth(),
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(horizontal = 16.dp),
         verticalAlignment = Alignment.CenterVertically,
-        horizontalArrangement = Arrangement.SpaceBetween
+        horizontalArrangement = Arrangement.spacedBy(12.dp, Alignment.Start)
     ) {
-        Row(modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp),
-            verticalAlignment = Alignment.CenterVertically) {
-            Image(
-                painter = painterResource(if(isSystemInDarkTheme()) R.drawable.icon_design_dark else R.drawable.icon_desing_light),
-                contentDescription = "Logo",
-                modifier = Modifier.size(48.dp).padding(end = 12.dp)
+        Image(
+            painter = painterResource(if (isDarkTheme) R.drawable.icon_design_dark else R.drawable.icon_desing_light),
+            contentDescription = "Logo",
+            modifier = Modifier.size(48.dp)
+        )
+        Column {
+            Text(
+                text = R.string.app_name.string,
+                style = NovixTheme.typography.title.medium,
+                color = NovixTheme.colors.body
             )
-            Column {
-                Text(
-                    text = stringResource(R.string.appName),
-                    style = NovixTheme.typography.title.medium,
-                    color = NovixTheme.colors.body
-                )
-                Text(
-                    text = stringResource(R.string.explainTheNameOfApp),
-                    style = NovixTheme.typography.label.small,
-                    color = NovixTheme.colors.hint
-                )
-            }
+            Text(
+                text = R.string.app_name_description.string,
+                style = NovixTheme.typography.label.small,
+                color = NovixTheme.colors.hint
+            )
         }
     }
 }
@@ -55,6 +54,5 @@ fun DefaultTopBar(
 @Composable
 @ThemePreviews
 fun DefaultPreview() {
-    DefaultTopBar(
-    )
+    DefaultTopBar()
 }
