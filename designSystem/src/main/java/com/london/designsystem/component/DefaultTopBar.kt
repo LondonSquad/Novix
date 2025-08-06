@@ -22,7 +22,9 @@ import com.london.designsystem.utils.string
 @Composable
 fun DefaultTopBar(
     modifier: Modifier = Modifier,
-    isDarkTheme: Boolean = isSystemInDarkTheme()
+    isDarkTheme: Boolean = isSystemInDarkTheme(),
+    appName: String = R.string.app_name.string,
+    appDescription: String = R.string.app_name_description.string
 ) {
     Row(
         modifier = modifier
@@ -38,12 +40,12 @@ fun DefaultTopBar(
         )
         Column {
             Text(
-                text = R.string.app_name.string,
+                text = appName,
                 style = NovixTheme.typography.title.medium,
                 color = NovixTheme.colors.body
             )
             Text(
-                text = R.string.app_name_description.string,
+                text = appDescription,
                 style = NovixTheme.typography.label.small,
                 color = NovixTheme.colors.hint
             )
