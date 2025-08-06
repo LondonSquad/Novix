@@ -12,8 +12,8 @@ import com.london.data.local.database.dao.home.toprated.TopRatedDao
 import com.london.data.local.database.dao.home.upcoming.UpcomingSectionDao
 import com.london.data.local.database.dao.recent.search.RecentSearchDao
 import com.london.data.local.database.dao.recent.viewed.RecentViewedDao
-import com.london.data.local.database.dao.recent.whatched.movie.RecentWatchedMoviesDao
-import com.london.data.local.database.dao.recent.whatched.tvshow.RecentWatchedTvShowsDao
+import com.london.data.local.database.dao.recent.watched.movie.RecentWatchedMoviesDao
+import com.london.data.local.database.dao.recent.watched.tvshow.RecentWatchedTvShowsDao
 import com.london.data.local.database.dao.search.GenreInterestDao
 import com.london.data.local.model.home.popular.PopularSectionLocal
 import com.london.data.local.model.home.topRated.TopRatedLocal
