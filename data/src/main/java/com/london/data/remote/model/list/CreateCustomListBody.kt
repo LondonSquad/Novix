@@ -7,9 +7,9 @@ import kotlinx.serialization.Serializable
 data class CreateCustomListBody(
 
     @SerialName("name")
-    val name: String,
+    val name: String?,
     @SerialName("description")
-    val description: String,
+    val description: String?,
     @SerialName("language")
-    val languageCode: String,
+    val languageCode: String?,
 )

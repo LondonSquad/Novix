@@ -7,11 +7,11 @@ import kotlinx.serialization.Serializable
 data class CreateCustomListResponse(
 
     @SerialName("list_id")
-    val id: Int,
+    val id: Int?,
     @SerialName("status_message")
-    val statusMessage: String,
+    val statusMessage: String?,
     @SerialName("success")
-    val success: Boolean,
+    val success: Boolean?,
     @SerialName("status_code")
-    val statusCode: Int,
+    val statusCode: Int?,
 )

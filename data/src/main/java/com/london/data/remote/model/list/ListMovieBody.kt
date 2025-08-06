@@ -7,5 +7,5 @@ import kotlinx.serialization.Serializable
 data class ListMovieBody(
 
     @SerialName("media_id")
-    val mediaId: Int,
+    val mediaId: Int?,
 )

@@ -7,21 +7,21 @@ import kotlinx.serialization.Serializable
 @Serializable
 data class ListDetailsResponse(
     @SerialName("created_by")
-    val createdBy: String? = null,
+    val createdBy: String?,
     @SerialName("description")
-    val description: String? = null,
+    val description: String?,
     @SerialName("favorite_count")
-    val favoriteCount: Int? = null,
+    val favoriteCount: Int?,
     @SerialName("id")
-    val id: String? = null,
+    val id: String?,
     @SerialName("iso_639_1")
-    val iso6391: String? = null,
+    val iso6391: String?,
     @SerialName("item_count")
-    val itemCount: Int? = null,
+    val itemCount: Int?,
     @SerialName("name")
-    val name: String? = null,
+    val name: String?,
     @SerialName("poster_path")
-    val posterPath: String? = null,
+    val posterPath: String?,
     @SerialName("items")
-    val items: List<MovieRemote>? = null,
+    val items: List<MovieRemote>?,
 )

@@ -7,7 +7,7 @@ import kotlinx.serialization.Serializable
 data class CustomListResponse(
 
     @SerialName("status_message")
-    val statusMessage: String,
+    val statusMessage: String?,
     @SerialName("status_code")
-    val statusCode: Int
+    val statusCode: Int?
 )
