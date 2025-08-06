@@ -84,4 +84,8 @@ class ContinueWatchingViewModel @Inject constructor(
     override fun onNavigateToTvShow(id: Int) =
         emitEffect(ContinueWatchingEffect.NavigateToTvShowDetails(id))
 
+    override fun onRetry() {
+        fetchRecentWatchedMedia()
+    }
+
 }

@@ -11,6 +11,7 @@ interface ContinueWatchingContract {
     fun onBack()
     fun onNavigateToMovie(id: Int)
     fun onNavigateToTvShow(id: Int)
+    fun onRetry()
 }
 
 fun defaultContinueWatchingContract() = object : ContinueWatchingContract {
@@ -20,4 +21,5 @@ fun defaultContinueWatchingContract() = object : ContinueWatchingContract {
     override fun onBack() {}
     override fun onNavigateToMovie(id: Int) {}
     override fun onNavigateToTvShow(id: Int) {}
+    override fun onRetry() {}
 }
