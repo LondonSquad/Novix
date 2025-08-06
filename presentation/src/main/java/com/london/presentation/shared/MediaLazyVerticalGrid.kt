@@ -68,7 +68,7 @@ private fun Preview() {
     val sampleMovies = listOf(
         Movie(
             id = 1,
-            name = "Movie One",
+            name = "Movie 1",
             posterUrl = "https://example.com/movie1.jpg",
             releaseYear = 2023,
             rating = 8,
