@@ -25,7 +25,7 @@ fun DefaultTopBar(
     isDarkTheme: Boolean = isSystemInDarkTheme()
 ) {
     Row(
-        modifier = Modifier
+        modifier = modifier
             .fillMaxWidth()
             .padding(horizontal = 16.dp),
         verticalAlignment = Alignment.CenterVertically,
