@@ -9,6 +9,7 @@ import com.london.data.remote.model.list.ListDetailsResponse
 import com.london.data.remote.model.list.ListMovieBody
 import retrofit2.Response
 import retrofit2.http.Body
+import retrofit2.http.DELETE
 import retrofit2.http.GET
 import retrofit2.http.POST
 import retrofit2.http.Path
@@ -22,7 +23,7 @@ interface CustomMovieListsApiService {
         @Body createCustomListBody: CreateCustomListBody
     ): Response<CreateCustomListResponse>
 
-    @POST("3/list/{list_id}")
+    @DELETE("3/list/{list_id}")
     suspend fun delete(
         @Path("list_id") listId: Int,
         @Query("session_id") sessionId: String?
