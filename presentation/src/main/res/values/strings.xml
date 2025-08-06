@@ -108,7 +108,6 @@
     <string name="login_failed">Login failed. Please check your credentials.</string>
     <string name="guest_login_failed">Guest login failed.</string>
     <string name="edit_list">Edit list</string>
-    <string name="save">Save</string>
     <string name="list_title">List title</string>
     <string name="no_items_found">There is no items</string>
     <string name="saved_list_title">My Lists</string>
