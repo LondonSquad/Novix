@@ -18119,5 +18119,33 @@
       "deletions": 0,
       "changed_files": 2
     }
+  },
+  {
+    "pr_number": 551,
+    "url": "https://github.com/LondonSquad/Novix/pull/551",
+    "title": "Feature Content Restrictions",
+    "opened_at": "2025-08-06T23:56:11Z",
+    "head_ref": "feature/content-restrictions",
+    "base_ref": "develop",
+    "creator": {
+      "login": "AsmaaKhaledGomaa",
+      "id": 117874933,
+      "url": "https://github.com/AsmaaKhaledGomaa"
+    },
+    "approvals": [],
+    "first_approved_at": null,
+    "time_to_first_approval_minutes": null,
+    "required_approvals_met_at": null,
+    "time_to_required_approvals_minutes": null,
+    "closed_at": null,
+    "merged_at": null,
+    "merged_by": null,
+    "week": "2025-W32",
+    "status": "pending",
+    "diff_stats": {
+      "additions": 380,
+      "deletions": 82,
+      "changed_files": 40
+    }
   }
 ]
