@@ -2,7 +2,6 @@ package com.london.designsystem.component
 
 import androidx.annotation.DrawableRes
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -18,15 +17,13 @@ import com.london.designsystem.R
 import com.london.designsystem.theme.NovixTheme
 import com.london.designsystem.theme.ThemePreviews
 import com.london.designsystem.utils.painter
-import com.london.designsystem.utils.string
 
 @Composable
 fun DefaultTopBar(
     modifier: Modifier = Modifier,
-    isDarkTheme: Boolean = isSystemInDarkTheme(),
-    appName: String = R.string.app_name.string,
-    appDescription: String = R.string.app_name_description.string,
-    @DrawableRes iconRes: Int = if (isDarkTheme) R.drawable.img_novix_dark else R.drawable.img_novix_light
+    appName: String,
+    appDescription: String,
+    @DrawableRes appIconRes: Int
 ) {
     Row(
         modifier = modifier
@@ -36,7 +33,7 @@ fun DefaultTopBar(
         horizontalArrangement = Arrangement.spacedBy(12.dp, Alignment.Start)
     ) {
         Image(
-            painter = iconRes.painter,
+            painter = appIconRes.painter,
             contentDescription = "Logo",
             modifier = Modifier.size(48.dp)
         )
@@ -58,5 +55,9 @@ fun DefaultTopBar(
 @Composable
 @ThemePreviews
 fun DefaultPreview() {
-    DefaultTopBar()
+    DefaultTopBar(
+        appName = "Novix",
+        appDescription = "Born from Nova, Made for Flix.",
+        appIconRes = R.drawable.novix_icon
+    )
 }
