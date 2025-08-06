@@ -1,5 +1,6 @@
 package com.london.designsystem.component
 
+import androidx.annotation.DrawableRes
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Arrangement
@@ -12,11 +13,11 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import com.london.designsystem.R
 import com.london.designsystem.theme.NovixTheme
 import com.london.designsystem.theme.ThemePreviews
+import com.london.designsystem.utils.painter
 import com.london.designsystem.utils.string
 
 @Composable
@@ -24,7 +25,8 @@ fun DefaultTopBar(
     modifier: Modifier = Modifier,
     isDarkTheme: Boolean = isSystemInDarkTheme(),
     appName: String = R.string.app_name.string,
-    appDescription: String = R.string.app_name_description.string
+    appDescription: String = R.string.app_name_description.string,
+    @DrawableRes iconRes: Int = if (isDarkTheme) R.drawable.img_novix_dark else R.drawable.img_novix_light
 ) {
     Row(
         modifier = modifier
@@ -34,7 +36,7 @@ fun DefaultTopBar(
         horizontalArrangement = Arrangement.spacedBy(12.dp, Alignment.Start)
     ) {
         Image(
-            painter = painterResource(if (isDarkTheme) R.drawable.icon_design_dark else R.drawable.icon_desing_light),
+            painter = iconRes.painter,
             contentDescription = "Logo",
             modifier = Modifier.size(48.dp)
         )
