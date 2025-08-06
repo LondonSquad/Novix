@@ -36,10 +36,9 @@ import com.london.designsystem.component.TabLayout
 import com.london.designsystem.component.TopBar
 import com.london.designsystem.theme.NovixTheme
 import com.london.presentation.R.string
-import com.london.presentation.shared.EmptyStateInGenres
 import com.london.presentation.feature.base.ErrorState
 import com.london.presentation.feature.buildscreen.BuildScreen
-import com.london.presentation.shared.EmptyStateView
+import com.london.presentation.shared.EmptyStateInGenres
 import com.london.presentation.utils.Listen
 import com.london.presentation.utils.MovieGenre
 import com.london.presentation.utils.TvShowGenre
