@@ -18,7 +18,8 @@ class GetRecentWatchedTvShowsUseCase @Inject constructor(
             }
         }
 
-    suspend fun getMostRecent(): Flow<List<TvShow>> = getAll(limit = MOST_RECENT_LIMIT)
+    suspend fun getMostRecent(limit: Int = MOST_RECENT_LIMIT): Flow<List<TvShow>> =
+        getAll(limit = limit)
 
     private companion object {
         const val MOST_RECENT_LIMIT = 10
