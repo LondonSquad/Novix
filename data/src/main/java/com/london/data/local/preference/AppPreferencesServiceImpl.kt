@@ -5,6 +5,7 @@ import androidx.core.content.edit
 import com.london.domain.AppPreferencesService
 import com.london.domain.language.AppLanguage
 import com.london.domain.theme.AppTheme
+import com.london.domain.theme.toAppTheme
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import javax.inject.Inject
@@ -26,12 +27,16 @@ class AppPreferencesServiceImpl @Inject constructor(
     override val appTheme: StateFlow<AppTheme> = _appTheme
 
     private fun getAppTheme(): AppTheme {
-        val theme = preferences.getString(PreferencesKeys.THEME_KEY, AppTheme.SYSTEM.name)
-        return AppTheme.valueOf(theme ?: AppTheme.SYSTEM.name)
+        val theme = preferences.getString(
+            PreferencesKeys.THEME_KEY, AppTheme.SYSTEM.name
+        ) ?: AppTheme.SYSTEM.name
+        return theme.toAppTheme()
     }
 
-    override fun setAppTheme(theme: AppTheme) =
+    override fun setAppTheme(theme: AppTheme) {
+        _appTheme.value = theme.name.toAppTheme()
         preferences.edit { putString(PreferencesKeys.THEME_KEY, theme.name) }
+    }
     //endregion
 
     //region App Language
@@ -53,4 +58,5 @@ class AppPreferencesServiceImpl @Inject constructor(
         const val THEME_KEY = "theme_key"
         const val LANGUAGE_KEY = "language_key"
     }
+
 }
