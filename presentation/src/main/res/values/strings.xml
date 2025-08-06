@@ -128,4 +128,6 @@
     <string name="language">Language</string>
     <string name="english">English</string>
     <string name="arabic">Arabic</string>
+    <string name="app_name">Novix</string>
+    <string name="app_name_description">Born from Nova, Made for Flix.</string>
 </resources>
