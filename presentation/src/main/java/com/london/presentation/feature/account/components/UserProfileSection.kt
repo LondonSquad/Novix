@@ -114,19 +114,27 @@ private fun UserMenuDropdown(
         ) {
             DropdownItem(
                 onClick = {
-                    onLogoutClick()
                     onMenuClick()
                 }
             ) {
-                LogoutMenuItem()
+                LogoutMenuItem(onLogoutClick)
             }
         }
     }
 }
 
 @Composable
-private fun LogoutMenuItem() {
+private fun LogoutMenuItem(onLogoutClick: () -> Unit) {
     Row(
+        modifier = Modifier
+            .clickable(
+                interactionSource = remember { MutableInteractionSource() },
+                indication = null
+            ) { onLogoutClick() }
+            .padding(
+                vertical = 8.dp,
+                horizontal = 16.dp
+            ),
         verticalAlignment = Alignment.CenterVertically,
     ) {
         Icon(
