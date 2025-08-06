@@ -25,7 +25,7 @@ fun FooterSection(
     haveTrailer: Boolean,
     modifier: Modifier,
     isRateEnabled: Boolean = true,
-    onStarClick: () -> Unit,
+    onVideoClick: () -> Unit,
     onRateClick: () -> Unit,
 ) {
     Row(
@@ -61,7 +61,7 @@ fun FooterSection(
 
         PrimaryButton(
             text = stringResource(R.string.play_trailer),
-            onClick = onStarClick,
+            onClick = onVideoClick,
             hasLabel = true,
             hasIcon = false,
             isLoading = false,

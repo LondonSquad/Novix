@@ -305,7 +305,7 @@ fun TvShowsDetailScreenContent(
             onRateClick = {
                 uriHandler.openUrl(uiState.videoProvider)
             },
-            onStarClick = {
+            onVideoClick = {
                 // TODO save favorite onclick handler
             }
         )

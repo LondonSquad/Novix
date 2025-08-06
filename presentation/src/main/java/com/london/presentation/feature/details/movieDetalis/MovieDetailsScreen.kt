@@ -320,7 +320,7 @@ fun MovieDetailsContent(
                     footerHeight = with(density) { coordinates.size.height.toDp() }
                 }
                 .align(Alignment.BottomCenter),
-            onStarClick = { uriHandler.openUrl(uiState.movieVideo) },
+            onVideoClick = { uriHandler.openUrl(uiState.movieVideo) },
             onRateClick = movieDetailsContract::onRateBottomSheetClick,
             isRateEnabled = !uiState.isRated && (uiState.movieRating.isBlank() || uiState.movieRating.isNotZeroRate())
         )
