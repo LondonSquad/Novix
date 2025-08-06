@@ -14,12 +14,12 @@ import org.junit.Test
 class GetMovieRatingByIdUseCaseTest {
 
     private lateinit var repository: MovieDetailsRepository
-    private lateinit var useCase: GetMovieRatingByIdUseCase
+    private lateinit var useCase: GetAccountMovieStatesById
 
     @Before
     fun setup() {
         repository = mockk()
-        useCase = GetMovieRatingByIdUseCase(repository)
+        useCase = GetAccountMovieStatesById(repository)
     }
 
     @Test

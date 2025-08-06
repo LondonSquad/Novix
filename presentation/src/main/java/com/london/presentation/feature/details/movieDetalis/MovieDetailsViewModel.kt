@@ -6,7 +6,7 @@ import com.london.domain.entity.Movie
 import com.london.domain.entity.recent.MediaType
 import com.london.domain.entity.recent.RecentViewed
 import com.london.domain.usecase.AddMovieRatingByIdUseCase
-import com.london.domain.usecase.GetMovieRatingByIdUseCase
+import com.london.domain.usecase.GetAccountMovieStatesById
 import com.london.domain.usecase.details.movie.GetFirstTenMovieImagesUseCase
 import com.london.domain.usecase.details.movie.GetMovieCastUseCase
 import com.london.domain.usecase.details.movie.GetMovieDetailsById
@@ -31,7 +31,7 @@ class MovieDetailsViewModel @Inject constructor(
     private val addMovieToRecentWatchedUseCase: AddMovieToRecentWatchedUseCase,
     private val addToRecentViewedUseCase: AddToRecentViewedUseCase,
     private val addMovieRatingByIdUseCase: AddMovieRatingByIdUseCase,
-    private val getMovieRatingByIdUseCase: GetMovieRatingByIdUseCase,
+    private val getAccountMovieStatesById: GetAccountMovieStatesById,
     savedStateHandle: SavedStateHandle
 ) : BaseViewModel<MovieDetailsUiState, MovieDetailsEffect>(MovieDetailsUiState()),
     MovieDetailsContract {
@@ -155,7 +155,7 @@ class MovieDetailsViewModel @Inject constructor(
             block = {
                 val similarMovies = getSimilarMoviesUseCase.invoke(movieId)
                 val movieVideos = getMovieVideosUseCase.invoke(movieId)
-                val movieRating = getMovieRatingByIdUseCase.invoke(movieId)
+                val movieRating = getAccountMovieStatesById.invoke(movieId)
                 Triple(similarMovies, movieVideos, movieRating)
             },
             onSuccess = { pair ->
