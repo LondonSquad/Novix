@@ -5,11 +5,13 @@ import com.london.data.local.model.home.topRated.TopRatedLocal
 import com.london.data.local.source.home.HomeLocalDataSource
 import com.london.data.mapper.home.toprated.toEntity
 import com.london.data.remote.model.ApiResponse
-import com.london.data.remote.model.home.toprated.TopRatedMovieRemote
+import com.london.data.remote.model.home.toprated.TopRatedTvSeriesRemote
 import com.london.data.remote.source.toprated.TopRatedRemoteDataSource
 import com.london.data.repository.home.toprated.TopRatedRepositoryImpl
 import com.london.data.utils.CrashReporter
-import com.london.domain.entity.recent.MediaType
+import com.london.domain.entity.PagedFetchResponse
+import com.london.domain.entity.toprated.TopRatedTvSeries
+import com.london.domain.repository.toprated.TopRatedRepository
 import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.mockk
@@ -21,34 +23,36 @@ import org.junit.jupiter.api.assertThrows
 class TopRatedRepositoryImplTest {
 
     private lateinit var remoteDataSource: TopRatedRemoteDataSource
-    private lateinit var repository: TopRatedRepositoryImpl
-    private val crashReporter: CrashReporter = mockk(relaxed = true)
-    private val localTopRatedMovie: HomeLocalDataSource<TopRatedLocal> = mockk(relaxed = true)
+    private lateinit var localDataSource: HomeLocalDataSource<TopRatedLocal>
+    private lateinit var crashReporter: CrashReporter
+    private lateinit var repository: TopRatedRepository
 
     @Before
     fun setup() {
         remoteDataSource = mockk(relaxed = true)
+        localDataSource = mockk(relaxed = true)
+        crashReporter = mockk(relaxed = true)
         repository = TopRatedRepositoryImpl(
             topRatedRemoteDataSource = remoteDataSource,
-            localTopRated = localTopRatedMovie,
+            localTopRated = localDataSource,
             crashReporter = crashReporter
         )
     }
 
     @Test
-    fun `getTopRatedMovies should return mapped movies from remote data source`() = runTest {
+    fun `getTopRatedTvSeries should return paged response with correct data`() = runTest {
         // Given
-        val fakeApiResponse = fakeApiResponseWithMovies()
+        val expectedApiResponse = fakeApiResponseWithTvSeries()
         coEvery {
-            remoteDataSource.getTopRatedMovies(PAGE)
-        } returns Result.success(fakeApiResponse)
+            remoteDataSource.getTopRatedTvShows(PAGE)
+        } returns Result.success(expectedApiResponse)
 
         coEvery {
-            localTopRatedMovie.getAll()
+            localDataSource.getAll()
         } returns emptyList()
 
         // When
-        val result = repository.getTopRatedMovies(PAGE)
+        val result: PagedFetchResponse<TopRatedTvSeries> = repository.getTopRatedTvSeries(PAGE)
 
         // Then
         assertThat(result.items).hasSize(2)
@@ -56,130 +60,125 @@ class TopRatedRepositoryImplTest {
         assertThat(result.totalPages).isEqualTo(1)
         assertThat(result.totalItems).isEqualTo(2)
 
-        val firstMovie = result.items.first()
-        assertThat(firstMovie).isEqualTo(
-            fakeApiResponse.items[0].toEntity()
+        val firstSeries = result.items.first()
+        assertThat(firstSeries).isEqualTo(
+            expectedApiResponse.items[0].toEntity()
         )
 
-        val secondMovie = result.items[1]
-        assertThat(secondMovie).isEqualTo(
-            fakeApiResponse.items[1].toEntity()
+        val secondSeries = result.items[1]
+        assertThat(secondSeries).isEqualTo(
+            expectedApiResponse.items[1].toEntity()
         )
-        coVerify {
-            localTopRatedMovie.insertAll(any())
-        }
     }
 
     @Test
-    fun `getTopRatedMovies should return empty list when API returns empty results`() = runTest {
-        // Given
-        val emptyApiResponse = fakeEmptyApiResponse()
-        coEvery {
-            remoteDataSource.getTopRatedMovies(PAGE)
-        } returns Result.success(emptyApiResponse)
-
-        coEvery {
-            localTopRatedMovie.getAll()
-        } returns emptyList()
-
-        // When
-        val result = repository.getTopRatedMovies(PAGE)
-
-        // Then
-        assertThat(result.items).isEmpty()
-        assertThat(result.currentPage).isEqualTo(PAGE)
-        assertThat(result.totalPages).isEqualTo(1)
-        assertThat(result.totalItems).isEqualTo(0)
-    }
-
-    @Test
-    fun `getTopRatedMovies should propagate exceptions from remote data source`() = runTest {
-        // Given
-        coEvery {
-            remoteDataSource.getTopRatedMovies(PAGE)
-        } returns Result.failure(RuntimeException("Network error"))
-
-        coEvery {
-            localTopRatedMovie.getAll()
-        } returns emptyList()
-
-        // When & Then
-        val exception = assertThrows<RuntimeException> {
-            repository.getTopRatedMovies(PAGE)
-        }
-        assertThat(exception.message).isEqualTo("Network error")
-    }
-
-    @Test
-    fun `getTopRatedMovies should handle local cache when available and filter by MediaType Movie`() =
+    fun `getTopRatedTvSeries should return empty paged response when API returns empty results`() =
         runTest {
             // Given
-            val localMovies = listOf(
-                createFakeTopRatedLocal(id = 1, mediaType = MediaType.Movie),
-                createFakeTopRatedLocal(
-                    id = 2,
-                    mediaType = MediaType.TvShow
-                ), // This should be filtered out
-                createFakeTopRatedLocal(id = 3, mediaType = MediaType.Movie)
+            val emptyApiResponse = fakeEmptyApiResponse()
+            coEvery { remoteDataSource.getTopRatedTvShows(PAGE) } returns Result.success(
+                emptyApiResponse
             )
 
-            coEvery {
-                localTopRatedMovie.getAll()
-            } returns localMovies
-
-            coEvery {
-                remoteDataSource.getTopRatedMovies(PAGE)
-            } returns Result.success(fakeApiResponseWithMovies())
+            coEvery { localDataSource.getAll() } returns emptyList()
 
             // When
-            val result = repository.getTopRatedMovies(PAGE)
+            val result = repository.getTopRatedTvSeries(PAGE)
 
             // Then
-            assertThat(result.items).hasSize(2)
-            coVerify {
-                localTopRatedMovie.getAll()
-            }
+            assertThat(result.items).isEmpty()
+            assertThat(result.currentPage).isEqualTo(PAGE)
+            assertThat(result.totalPages).isEqualTo(1)
+            assertThat(result.totalItems).isEqualTo(0)
+        }
+
+    @Test
+    fun `getTopRatedTvSeries should propagate exceptions when remote call fails`() = runTest {
+        // Given
+        coEvery {
+            remoteDataSource.getTopRatedTvShows(PAGE)
+        } returns Result.failure(RuntimeException("Network error"))
+
+        coEvery { localDataSource.getAll() } returns emptyList()
+
+        // When & Then
+        val ex = assertThrows<RuntimeException> { repository.getTopRatedTvSeries(PAGE) }
+        assertThat(ex.message).isEqualTo("Network error")
+    }
+
+    @Test
+    fun `getTopRatedTvSeries should call local data source for caching`() = runTest {
+        // Given
+        coEvery {
+            remoteDataSource.getTopRatedTvShows(PAGE)
+        } returns Result.success(fakeApiResponseWithTvSeries())
+
+        coEvery { localDataSource.getAll() } returns emptyList()
+
+        // When
+        repository.getTopRatedTvSeries(PAGE)
+
+        // Then
+        coVerify { localDataSource.getAll() }
+    }
+
+    @Test
+    fun `getTopRatedTvSeries should insert data to local storage after successful fetch`() =
+        runTest {
+            // Given
+            coEvery {
+                remoteDataSource.getTopRatedTvShows(PAGE)
+            } returns Result.success(fakeApiResponseWithTvSeries())
+
+            coEvery { localDataSource.getAll() } returns emptyList()
+            coEvery { localDataSource.insertAll(any()) } returns Unit
+
+            // When
+            repository.getTopRatedTvSeries(PAGE)
+
+            // Then
+            coVerify { localDataSource.insertAll(any()) }
         }
 
     companion object {
         private const val PAGE = 1
 
-        private fun fakeApiResponseWithMovies() = ApiResponse(
+        private fun fakeApiResponseWithTvSeries() = ApiResponse(
             currentPage = PAGE,
             totalPages = 1,
             totalItems = 2,
             items = listOf(
-                TopRatedMovieRemote(
+                TopRatedTvSeriesRemote(
                     adult = false,
-                    backdropPath = "/zfbjgQEluSd9wiPTX4VzslorGfY.jpg",
+                    backdropPath = "/tsRy63Mu5cu8etL1X7ZLyf7UP1M.jpg",
                     genreIds = listOf(18, 80),
-                    id = 278,
+                    id = 1396,
                     originalLanguage = "en",
-                    originalTitle = "The Shawshank Redemption",
-                    overview = "Imprisoned in the 1940s for the murder of his wife...",
-                    popularity = 31.7537,
-                    posterPath = "/q6y0Go1tsGEsmtFryDOJo3dEmqu.jpg",
-                    releaseDate = "1994-09-23",
-                    title = "The Shawshank Redemption",
-                    video = false,
-                    voteAverage = 8.712,
-                    voteCount = 25000
+                    originalName = "Breaking Bad",
+                    overview = "A chemistry teacher diagnosed with cancer starts manufacturing meth.",
+                    popularity = 100.0,
+                    posterPath = "/ggFHVNu6YYI5L9pCfOacjizRGt.jpg",
+                    firstAirDate = "2008-01-20",
+                    name = "Breaking Bad",
+                    originCountry = listOf("US"),
+                    voteAverage = 8.9,
+                    voteCount = 18000
                 ),
-                TopRatedMovieRemote(
+                TopRatedTvSeriesRemote(
                     adult = false,
-                    backdropPath = "/ejdD20cdHNFAYAN2DlqPToXKyzx.jpg",
-                    genreIds = listOf(18, 80),
-                    id = 238,
+                    backdropPath = "/scZlQQYnDVlnpxFTxaIv2g0BWnL.jpg",
+                    genreIds = listOf(18, 36),
+                    id = 87108,
                     originalLanguage = "en",
-                    originalTitle = "The Godfather",
-                    overview = "Spanning the years 1945 to 1955...",
-                    popularity = 45.123,
-                    posterPath = "/3bhkrj58Vtu7enYsRolD1fZdja1.jpg",
-                    releaseDate = "1972-03-14",
-                    title = "The Godfather",
-                    video = false,
-                    voteAverage = 8.7,
-                    voteCount = 20000
+                    originalName = "Chernobyl",
+                    overview = "A dramatization of the true story of the Chernobyl disaster.",
+                    popularity = 75.5,
+                    posterPath = "/hlLXt2tOPT6RRnjiUmoxyG1LTFi.jpg",
+                    firstAirDate = "2019-05-06",
+                    name = "Chernobyl",
+                    originCountry = listOf("US", "GB"),
+                    voteAverage = 9.0,
+                    voteCount = 12000
                 )
             )
         )
@@ -188,27 +187,7 @@ class TopRatedRepositoryImplTest {
             currentPage = PAGE,
             totalPages = 1,
             totalItems = 0,
-            items = emptyList<TopRatedMovieRemote>()
-        )
-
-        private fun createFakeTopRatedLocal(
-            id: Int,
-            name: String = "",
-            posterPictureUrl: String = "",
-            rating: Double = 0.0,
-            releaseYear: String = "",
-            mediaType: MediaType,
-            date: Long = 0L,
-            genre: List<Int> = listOf(1)
-        ) = TopRatedLocal(
-            id = id,
-            name = name,
-            posterPictureUrl = posterPictureUrl,
-            rating = rating,
-            releaseYear = releaseYear,
-            mediaType = mediaType,
-            date = date,
-            genre = genre
+            items = emptyList<TopRatedTvSeriesRemote>()
         )
     }
 }
