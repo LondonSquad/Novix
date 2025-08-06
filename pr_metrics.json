@@ -17161,17 +17161,25 @@
           "url": "https://github.com/Abdulrahman1890"
         },
         "submitted_at": "2025-08-06T17:53:17Z"
+      },
+      {
+        "reviewer": {
+          "id": 106277855,
+          "login": "Mostafa-alsaygh",
+          "url": "https://github.com/Mostafa-alsaygh"
+        },
+        "submitted_at": "2025-08-06T17:53:51Z"
       }
     ],
     "first_approved_at": "2025-08-06T17:53:17Z",
     "time_to_first_approval_minutes": 2874.5333333333333,
-    "required_approvals_met_at": null,
-    "time_to_required_approvals_minutes": null,
+    "required_approvals_met_at": "2025-08-06T17:53:51Z",
+    "time_to_required_approvals_minutes": 2875.1,
     "closed_at": null,
     "merged_at": null,
     "merged_by": null,
     "week": "2025-W32",
-    "status": "pending",
+    "status": "approved",
     "diff_stats": {
       "additions": 9,
       "deletions": 8,
