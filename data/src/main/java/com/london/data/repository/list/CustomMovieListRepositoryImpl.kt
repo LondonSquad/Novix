@@ -4,6 +4,7 @@ import com.london.data.local.preference.AuthPreferences
 import com.london.data.mapper.list.toEntity
 import com.london.data.mapper.search.toEntity
 import com.london.data.remote.source.list.CustomMovieListsRemoteDataSource
+import com.london.data.utils.orZero
 import com.london.domain.AppPreferencesService
 import com.london.domain.entity.Movie
 import com.london.domain.entity.MovieList
@@ -44,12 +45,17 @@ class CustomMovieListRepositoryImpl @Inject constructor(
         )
     }
 
-    override suspend fun addMovieToList(listId: UInt, movieId: UInt): Boolean =
-        remoteDataSource.addMovieToList(
+    override suspend fun addMovieToList(listId: UInt, movieId: UInt): Boolean {
+         remoteDataSource.addMovieToList(
             listId = listId.toInt(),
             movieId = movieId.toInt(),
             sessionId = authPreferences.getSessionId()
-        ).isSuccess
+        ).onFailure {
+            return false
+         }
+        return true
+    }
+
 
     override suspend fun getMovieListDetails(
         listId: UInt,
@@ -60,10 +66,10 @@ class CustomMovieListRepositoryImpl @Inject constructor(
             page = pageNumber
         ).getOrThrow()
         return PagedFetchResponse(
-            currentPage = response.currentPage,
-            items = response.items.map { it.toEntity() },
-            totalPages = response.totalPages,
-            totalItems = response.totalItems
+            currentPage = 1,
+            items = response.items.orEmpty().map { it.toEntity() },
+            totalPages = 1,
+            totalItems = response.itemCount.orZero()
         )
     }
 }

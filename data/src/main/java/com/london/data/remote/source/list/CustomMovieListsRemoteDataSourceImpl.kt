@@ -5,8 +5,8 @@ import com.london.data.remote.model.list.CreateCustomListBody
 import com.london.data.remote.model.list.CreateCustomListResponse
 import com.london.data.remote.model.list.CustomListResponse
 import com.london.data.remote.model.list.CustomMovieListResponse
+import com.london.data.remote.model.list.ListDetailsResponse
 import com.london.data.remote.model.list.ListMovieBody
-import com.london.data.remote.model.search.MovieRemote
 import com.london.data.remote.service.list.CustomMovieListsApiService
 import com.london.data.remote.source.base.BaseRemoteDatasource
 import javax.inject.Inject
@@ -36,7 +36,7 @@ class CustomMovieListsRemoteDataSourceImpl @Inject constructor(
     override suspend fun getDetails(
         listId: Int,
         page: Int
-    ): Result<ApiResponse<MovieRemote>> = callApiWithRetry(
+    ): Result<ListDetailsResponse> = callApiWithRetry(
         apiCall = {
             customMovieListsApiService.getDetails(
                 listId = listId,
