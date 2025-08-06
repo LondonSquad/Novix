@@ -141,6 +141,8 @@ class SearchViewModel @Inject constructor(
 
     override fun addToRecentSearches(query: RecentSearch) {
         if (query.query.isBlank() || query.query == state.value.lastSearch) return
+        if (isQueryDuplicated(query.query)) return
+
         updateState { copy(lastSearch = query.query) }
 
         tryToExecute(
@@ -156,6 +158,8 @@ class SearchViewModel @Inject constructor(
             },
         )
     }
+
+    private fun isQueryDuplicated(query: String) = query.equals(state.value.lastSearch, ignoreCase = true)
 
     override fun addToRecentViewed(item: RecentViewed) {
         tryToExecute(
