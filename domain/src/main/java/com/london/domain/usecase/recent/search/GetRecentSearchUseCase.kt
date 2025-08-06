@@ -8,5 +8,5 @@ class GetRecentSearchUseCase @Inject constructor(
     private val recentSearchRepository: RecentRepository<RecentSearch>
 ) {
 
-    suspend fun invoke(): List<RecentSearch> = recentSearchRepository.getAll()
+    suspend fun invoke(): List<RecentSearch> = recentSearchRepository.getAll().distinct()
 }
