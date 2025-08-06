@@ -36,6 +36,7 @@ import com.london.designsystem.component.TabLayout
 import com.london.designsystem.component.TopBar
 import com.london.designsystem.theme.NovixTheme
 import com.london.presentation.R.string
+import com.london.presentation.shared.EmptyStateInGenres
 import com.london.presentation.feature.base.ErrorState
 import com.london.presentation.feature.buildscreen.BuildScreen
 import com.london.presentation.shared.EmptyStateView
@@ -129,7 +130,7 @@ fun Content(
                 )
             }
             if ((state.isMovieSelected && state.movies.isEmpty()) || (state.isTvSelected && state.tvSeries.isEmpty())) {
-                EmptyStateView() // TODO
+                EmptyStateInGenres()
             } else {
                 LazyVerticalGrid(
                     columns = GridCells.Fixed(gridColmuns()),
