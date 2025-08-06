@@ -2,7 +2,7 @@ package com.london.data.repository
 
 import com.google.common.truth.Truth.assertThat
 import com.london.data.local.preference.AuthPreferences
-import com.london.data.mapper.moviedetails.toEntity
+import com.london.data.mapper.details.movie.toEntity
 import com.london.data.mapper.search.toAuthorDetails
 import com.london.data.remote.exception.NetworkException
 import com.london.data.remote.model.ApiResponse

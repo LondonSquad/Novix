@@ -1,4 +1,4 @@
-package com.london.data.mapper.moviedetails
+package com.london.data.mapper.details.movie
 
 import com.london.data.remote.model.details.movie.model.moviedetails.AccountMovieStatesResponse
 import com.london.data.utils.isTrue
