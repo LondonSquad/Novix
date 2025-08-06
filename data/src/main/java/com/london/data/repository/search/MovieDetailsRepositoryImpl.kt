@@ -72,11 +72,10 @@ class MovieDetailsRepositoryImpl @Inject constructor(
         )
     }
 
-    override suspend fun getAccountMovieStatesById(
-        id: Int,
-    ): MovieStates = movieDetailsRemoteDataSource.getAccountMovieStates(
-            movieId = id,
-            userSessionId = authPreferences.getSessionId(),
-            guestSessionId = authPreferences.getGuestSessionId()
-        ).getOrThrow().toEntity()
+    override suspend fun getAccountMovieStatesById(id: Int)
+            : MovieStates = movieDetailsRemoteDataSource.getAccountMovieStates(
+        movieId = id,
+        userSessionId = authPreferences.getSessionId(),
+        guestSessionId = authPreferences.getGuestSessionId()
+    ).getOrThrow().toEntity()
 }
