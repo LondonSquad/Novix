@@ -3,7 +3,9 @@ package com.london.presentation.feature.home
 import androidx.lifecycle.viewModelScope
 import androidx.paging.PagingData
 import androidx.paging.cachedIn
+import com.london.domain.AppPreferencesService
 import com.london.domain.entity.UpComingMovie
+import com.london.domain.theme.AppTheme
 import com.london.domain.usecase.GetPopularMovies
 import com.london.domain.usecase.GetPopularTvShow
 import com.london.domain.usecase.GetUpComingMoviesByCategoryUseCase
@@ -31,10 +33,12 @@ class HomeViewModel @Inject constructor(
     private val getTopRatedMovies: GetTopRatedMoviesUseCase,
     private val getTopRatedTvShows: GetTopRatedTvSeriesUseCase,
     private val getRecentWatchedMovies: GetRecentWatchedMoviesUseCase,
-    private val getRecentWatchedTvShows: GetRecentWatchedTvShowsUseCase
+    private val getRecentWatchedTvShows: GetRecentWatchedTvShowsUseCase,
+    private val appPreferencesService: AppPreferencesService
 ) : BaseViewModel<HomeScreenUiState, HomeScreenEffect>(HomeScreenUiState()), HomeScreenContract {
 
-    private val _upcomingMoviesFlow = MutableStateFlow<PagingData<UpComingMovie>>(PagingData.empty())
+    private val _upcomingMoviesFlow =
+        MutableStateFlow<PagingData<UpComingMovie>>(PagingData.empty())
     private var upcomingJob: Job? = null
 
     init {
@@ -126,6 +130,7 @@ class HomeViewModel @Inject constructor(
         initializeTopRatedMedia()
         fetchRecentWatchedMedia()
         initializePopularMedia()
+        initializeAppTheme()
     }
 
     override fun onMovieClick(id: Int) {
@@ -162,6 +167,14 @@ class HomeViewModel @Inject constructor(
                     }
                 },
             )
+        }
+    }
+
+    private fun initializeAppTheme() {
+        viewModelScope.launch {
+            appPreferencesService.appTheme.collect { theme ->
+                updateState { copy(isDarkTheme = theme == AppTheme.DARK) }
+            }
         }
     }
 
