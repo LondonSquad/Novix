@@ -10,8 +10,8 @@ class GetAllListedMovies @Inject constructor(
 ) {
 
     suspend fun invoke(): Set<Movie> =
-        getAllLists(1).flatMap { movieList ->
-            getAllMovies(movieList.id, 1)
+        getAllLists(page = 1).flatMap { movieList ->
+            getAllMovies(movieList.id, page =  1)
         }.toSet()
 
     private suspend fun getAllLists(page: Int): List<MovieList> =

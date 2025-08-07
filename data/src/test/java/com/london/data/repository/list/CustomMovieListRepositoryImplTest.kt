@@ -217,7 +217,14 @@ class CustomMovieListRepositoryImplTest {
                     firstAirDate = "",
                     name = ""
                 )
-            )
+            ),
+            createdBy = "",
+            description = "",
+            favoriteCount = 0,
+            id = "",
+            iso6391 = "",
+            name = "",
+            posterPath = ""
         )
     }
 }
