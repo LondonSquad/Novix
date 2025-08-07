@@ -18111,16 +18111,33 @@
       "id": 81706918,
       "url": "https://github.com/karimdeabes"
     },
-    "approvals": [],
-    "first_approved_at": null,
-    "time_to_first_approval_minutes": null,
-    "required_approvals_met_at": null,
-    "time_to_required_approvals_minutes": null,
+    "approvals": [
+      {
+        "reviewer": {
+          "id": 154278495,
+          "login": "ahmeddsamii",
+          "url": "https://github.com/ahmeddsamii"
+        },
+        "submitted_at": "2025-08-07T06:55:09Z"
+      },
+      {
+        "reviewer": {
+          "id": 43588217,
+          "login": "yusufnasserdev",
+          "url": "https://github.com/yusufnasserdev"
+        },
+        "submitted_at": "2025-08-07T06:55:17Z"
+      }
+    ],
+    "first_approved_at": "2025-08-07T06:55:09Z",
+    "time_to_first_approval_minutes": 499.65,
+    "required_approvals_met_at": "2025-08-07T06:55:17Z",
+    "time_to_required_approvals_minutes": 499.78333333333336,
     "closed_at": null,
     "merged_at": null,
     "merged_by": null,
     "week": "2025-W32",
-    "status": "pending",
+    "status": "approved",
     "diff_stats": {
       "additions": 71,
       "deletions": 78,
