@@ -48,7 +48,6 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.paging.compose.LazyPagingItems
 import androidx.paging.compose.collectAsLazyPagingItems
 import com.london.designsystem.component.DefaultTopBar
-import com.london.presentation.shared.HomeCard
 import com.london.designsystem.component.Text
 import com.london.designsystem.component.button.PrimaryButton
 import com.london.designsystem.theme.NovixTheme
@@ -65,6 +64,7 @@ import com.london.presentation.feature.home.trending.TrendingSection
 import com.london.presentation.shared.CarousalShimmerEffect
 import com.london.presentation.shared.buildscreen.NetworkErrorScreen
 import com.london.presentation.shared.GenresSection
+import com.london.presentation.shared.HomeCard
 import com.london.presentation.utils.Listen
 import com.london.presentation.utils.gridColmuns
 
@@ -142,7 +142,7 @@ fun HomeScreen(
                         .fillMaxSize()
                 ) {
                     DefaultTopBar(
-                        appIconRes = if (NovixTheme.theme.isDark()) R.drawable.img_novix_dark else R.drawable.img_novix_light,
+                        appIconRes = if (NovixTheme.colors.isDarkTheme) R.drawable.img_novix_dark else R.drawable.img_novix_light,
                         appName = R.string.app_name.string,
                         appDescription = R.string.app_name_description.string,
                         appIconContentDescription = R.string.novix_icon.string,
