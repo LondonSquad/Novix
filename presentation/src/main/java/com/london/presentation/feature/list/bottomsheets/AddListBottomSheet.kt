@@ -4,13 +4,11 @@ import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -63,32 +61,25 @@ fun AddListBottomSheet(
             containerColor = NovixTheme.colors.surface,
             state = sheetState,
         ) {
-            Box(
-                modifier = modifier
-                    .fillMaxWidth()
-                    .wrapContentHeight()
-                    .padding(bottom = 24.dp)
-            ) {
-                AddListBottomSheetContent(
-                    modifier = modifier,
-                    addInteractions = addListInteractions,
-                    addSheetState = addListSheetState,
-                    onCloseClicked = {
-                        if (!addListSheetState.isSheetLoading) {
-                            coroutineScope.launch {
-                                sheetState.hide()
-                            }.invokeOnCompletion {
-                                if (!sheetState.isVisible) {
-                                    addListInteractions.onAddListSheetDismiss()
-                                }
+            AddListBottomSheetContent(
+                modifier = modifier.padding(bottom = 24.dp),
+                addInteractions = addListInteractions,
+                addSheetState = addListSheetState,
+                onCloseClicked = {
+                    if (!addListSheetState.isSheetLoading) {
+                        coroutineScope.launch {
+                            sheetState.hide()
+                        }.invokeOnCompletion {
+                            if (!sheetState.isVisible) {
+                                addListInteractions.onAddListSheetDismiss()
                             }
                         }
-                    },
-                    onAddClicked = {
-                        addListInteractions.onAddList(addListSheetState.listName)
                     }
-                )
-            }
+                },
+                onAddClicked = {
+                    addListInteractions.onAddList(addListSheetState.listName)
+                }
+            )
         }
     }
 }
