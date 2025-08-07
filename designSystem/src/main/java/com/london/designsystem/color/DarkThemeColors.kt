@@ -56,4 +56,5 @@ val DarkNovixColors = NovixColors(
     linearGradient = LinearGradientDark,
     blackLinearGradient = BlackLinearGradientDark,
     whiteLinearGradient = WhiteLinearGradientDark,
+    isDarkTheme = true
 )
