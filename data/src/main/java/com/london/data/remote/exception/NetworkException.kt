@@ -13,6 +13,7 @@ sealed class NetworkException(override val message: String?) : Exception(message
     data class TimeoutException(override val message: String?) : NetworkException(message)
     data class BadRequestException(override val message: String?) : NetworkException(message)
     data class ManyRequestException(override val message: String?) : NetworkException(message)
+    data class CantAddMovieToListException(override val message: String?) : NetworkException(message)
     data class NoInternetException(
         override val message: String
     ) : NetworkException(message)
