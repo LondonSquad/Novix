@@ -5,9 +5,13 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.ui.platform.LocalView
 import androidx.core.view.WindowCompat
+import androidx.core.view.WindowInsetsControllerCompat
 import com.london.app.navigation.NovixApp
 import com.london.designsystem.theme.NovixTheme
 import com.london.domain.AppPreferencesService
@@ -32,11 +36,33 @@ class MainActivity : ComponentActivity() {
 
         setContent {
             val appTheme by appPreferencesService.appTheme.collectAsState()
+            val isSystemInDarkTheme = androidx.compose.foundation.isSystemInDarkTheme()
+
+            val useDarkTheme = when (appTheme) {
+                AppTheme.SYSTEM -> isSystemInDarkTheme
+                else -> appTheme.name.isDark()
+            }
+
+            UpdateSystemBarsTheme(useDarkTheme)
+
             NovixTheme(
-                isDarkMode = if (appTheme == AppTheme.SYSTEM) true else appTheme.name.isDark()
+                isDarkMode = useDarkTheme
             ) {
                 NovixApp()
             }
+        }
+    }
+}
+
+@Composable
+private fun UpdateSystemBarsTheme(useDarkTheme: Boolean) {
+    val view = LocalView.current
+
+    LaunchedEffect(useDarkTheme) {
+        val window = (view.context as? ComponentActivity)?.window
+        window?.let {
+            WindowInsetsControllerCompat(it, view).isAppearanceLightStatusBars = !useDarkTheme
+            WindowInsetsControllerCompat(it, view).isAppearanceLightNavigationBars = !useDarkTheme
         }
     }
 }
