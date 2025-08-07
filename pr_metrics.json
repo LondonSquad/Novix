@@ -17549,9 +17549,18 @@
       "id": 106277855,
       "url": "https://github.com/Mostafa-alsaygh"
     },
-    "approvals": [],
-    "first_approved_at": null,
-    "time_to_first_approval_minutes": null,
+    "approvals": [
+      {
+        "reviewer": {
+          "id": 43588217,
+          "login": "yusufnasserdev",
+          "url": "https://github.com/yusufnasserdev"
+        },
+        "submitted_at": "2025-08-07T14:47:24Z"
+      }
+    ],
+    "first_approved_at": "2025-08-07T14:47:24Z",
+    "time_to_first_approval_minutes": 2709.766666666667,
     "required_approvals_met_at": null,
     "time_to_required_approvals_minutes": null,
     "closed_at": null,
