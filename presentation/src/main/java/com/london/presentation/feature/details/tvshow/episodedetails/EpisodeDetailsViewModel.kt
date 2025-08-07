@@ -5,9 +5,9 @@ import com.london.domain.usecase.GetEpisodeByTvShowId
 import com.london.domain.usecase.GetEpisodeVideoProviderUseCase
 import com.london.domain.usecase.GetImagesById
 import com.london.domain.usecase.GetTvShowDetails
-import com.london.presentation.feature.base.BaseViewModel
 import com.london.presentation.navigation.Screen
 import com.london.presentation.navigation.getArgs
+import com.london.presentation.shared.base.BaseViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 

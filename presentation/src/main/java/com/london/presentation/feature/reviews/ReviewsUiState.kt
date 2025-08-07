@@ -2,7 +2,7 @@ package com.london.presentation.feature.reviews
 
 import androidx.paging.PagingData
 import com.london.domain.entity.review.ReviewEntity
-import com.london.presentation.feature.base.ErrorState
+import com.london.presentation.shared.base.ErrorState
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 

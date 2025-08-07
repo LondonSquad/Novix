@@ -2,10 +2,10 @@ package com.london.presentation.feature.category.tvshowbycategory
 
 import androidx.lifecycle.SavedStateHandle
 import com.london.domain.usecase.GetTvShowsByCategoryId
-import com.london.presentation.feature.base.BaseViewModel
-import com.london.presentation.feature.base.createPagingSourceFlow
 import com.london.presentation.navigation.Screen
 import com.london.presentation.navigation.getArgs
+import com.london.presentation.shared.base.BaseViewModel
+import com.london.presentation.shared.base.createPagingSourceFlow
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 

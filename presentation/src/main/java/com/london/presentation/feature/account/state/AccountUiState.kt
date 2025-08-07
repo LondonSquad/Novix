@@ -2,7 +2,7 @@ package com.london.presentation.feature.account.state
 
 import com.london.domain.contentrestriction.ContentRestrictionLevel
 import com.london.domain.theme.AppTheme
-import com.london.presentation.feature.base.ErrorState
+import com.london.presentation.shared.base.ErrorState
 
 data class AccountUiState(
     val isLoading: Boolean = false,
