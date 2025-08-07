@@ -75,6 +75,7 @@ import com.london.presentation.feature.search.SearchCategory
 import com.london.presentation.shared.ConditionalText
 import com.london.presentation.shared.CustomBackDropImagePager
 import com.london.presentation.shared.FooterSection
+import com.london.presentation.shared.SnackBarAnimation
 import com.london.presentation.utils.Listen
 import com.london.presentation.utils.convertGenreCodeToString
 import com.london.presentation.utils.getLocalizedTimeUnit
@@ -334,6 +335,20 @@ fun MovieDetailsContent(
             onDismissClick = movieDetailsContract::onRateBottomSheetClick,
             onLoginClick = movieDetailsContract::onLoginClick,
         )
+    }
+
+    uiState.isSuccessfullyRated?.let { isSuccessful ->
+        if (isSuccessful) {
+            SnackBarAnimation(
+                message = stringResource(R.string.rated_successfully),
+                icon = R.drawable.ic_success,
+            )
+        } else {
+            SnackBarAnimation(
+                message = stringResource(R.string.rated_fail),
+                icon = R.drawable.ic_failed
+            )
+        }
     }
 }
 

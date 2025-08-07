@@ -134,11 +134,7 @@ class MovieDetailsViewModel @Inject constructor(
             block = { getUserLoggedInUseCase.invoke() },
             onSuccess = { isLoggedIn ->
                 if (isLoggedIn)
-                    updateState {
-                        copy(
-                            isRateBottomSheetVisible = isRateBottomSheetVisible.not()
-                        )
-                    }
+                    updateState { copy(isRateBottomSheetVisible = isRateBottomSheetVisible.not()) }
                 else
                     updateState {
                         copy(
@@ -158,15 +154,24 @@ class MovieDetailsViewModel @Inject constructor(
         tryToExecute(
             block = { addMovieRatingByIdUseCase.invoke(movieId, rating) },
             onSuccess = {
+                println("🎉 Rating submission successful!")
                 updateState {
                     copy(
                         selectedRating = rating,
                         isRated = true,
-                        isRateBottomSheetVisible = false
+                        isRateBottomSheetVisible = false,
+                        isSuccessfullyRated = true
                     )
                 }
             },
-            onError = { errorState -> updateState { copy(error = errorState) } },
+            onError = { errorState ->
+                updateState {
+                    copy(
+                        error = errorState,
+                        isSuccessfullyRated = false
+                    )
+                }
+            },
             onCompleted = { updateState { copy(isLoading = false) } },
         )
     }

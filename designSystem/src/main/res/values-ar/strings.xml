@@ -39,4 +39,6 @@
     <string name="user_person_profile">الملف الشخصي للمستخدم</string>
     <string name="please_login_to_rate_your_favorite_items">يرجى تسجيل الدخول لتقييم العناصر المفضلة لديك.</string>
     <string name="login">تسجيل دخول</string>
+    <string name="rated_successfully">تم التقييم بنجاح</string>
+    <string name="rated_fail">حدث خطأ اثناء التقييم</string>
 </resources>

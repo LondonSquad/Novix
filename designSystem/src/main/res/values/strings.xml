@@ -40,4 +40,6 @@
     <string name="user_person_profile">user person profile</string>
     <string name="please_login_to_rate_your_favorite_items">Please login to rate your favorite items.</string>
     <string name="login">login</string>
+    <string name="rated_successfully">Item rated successfully</string>
+    <string name="rated_fail">Failed to rate the item</string>
 </resources>
