@@ -12,8 +12,8 @@ import com.london.domain.usecase.recent.watched.GetRecentWatchedMoviesUseCase
 import com.london.domain.usecase.recent.watched.GetRecentWatchedTvShowsUseCase
 import com.london.domain.usecase.toprated.GetTopRatedMoviesUseCase
 import com.london.domain.usecase.toprated.GetTopRatedTvSeriesUseCase
-import com.london.presentation.feature.base.BaseViewModel
-import com.london.presentation.feature.base.createPagingSourceFlow
+import com.london.presentation.shared.base.BaseViewModel
+import com.london.presentation.shared.base.createPagingSourceFlow
 import com.london.presentation.utils.MovieGenre
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Job

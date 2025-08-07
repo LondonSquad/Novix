@@ -14,9 +14,8 @@ import com.london.domain.usecase.recent.search.GetRecentSearchUseCase
 import com.london.domain.usecase.recent.viewed.AddToRecentViewedUseCase
 import com.london.domain.usecase.recent.viewed.ClearRecentViewedUseCase
 import com.london.domain.usecase.recent.viewed.GetRecentViewedUseCase
-import com.london.presentation.feature.base.BaseViewModel
-import com.london.presentation.feature.base.createPagingSourceFlow
-import com.london.presentation.feature.search.model.MovieUi
+import com.london.presentation.shared.base.BaseViewModel
+import com.london.presentation.shared.base.createPagingSourceFlow
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.MutableStateFlow
