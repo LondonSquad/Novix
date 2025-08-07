@@ -30,14 +30,11 @@ class TvShowRepositoryImpl @Inject constructor(
         id = id,
     ).getOrThrow().toEntity()
 
-
     override suspend fun getCastTvShowById(id: Int): TvShowCastEntity =
         tvShowDetailsRemoteDataSource.getCastsByTvShowId(id).getOrThrow().toCastEntity()
 
-
     override suspend fun getImagesTvShowById(id: Int): TvShowImagesEntity =
         tvShowDetailsRemoteDataSource.getTvShowImagesById(id).getOrThrow().toEntity()
-
 
     override suspend fun getTvShowEpisodesBySeason(
         tvShowId: Int, seasonNumber: Int
@@ -65,7 +62,8 @@ class TvShowRepositoryImpl @Inject constructor(
         ).getOrThrow().results?.map { it.key.asYoutubeUrlOrEmpty() }.orEmpty()
 
     override suspend fun getTvShowReviews(
-        tvShowId: Int, pageNumber: Int
+        tvShowId: Int,
+        pageNumber: Int
     ): PagedFetchResponse<ReviewEntity> = fetchAndSync(
         networkBlock = {
             reviewsRemoteDataSource.getTvShowReviews(tvShowId, pageNumber).getOrThrow()

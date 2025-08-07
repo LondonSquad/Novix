@@ -17,7 +17,6 @@ interface MovieDetailsRemoteDataSource {
     suspend fun getMovieVideos(movieId: Int): Result<MovieVideoRemote>
     suspend fun getAccountMovieStates(
         movieId: Int,
-        guestSessionId: String?,
         userSessionId: String?
     ) : Result<AccountMovieStatesResponse>
 
