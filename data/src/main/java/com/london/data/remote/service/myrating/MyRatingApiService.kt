@@ -12,6 +12,5 @@ interface MyRatingApiService {
     suspend fun getRatedMovies(
         @Path("account_id") accountId: Int,
         @Query("session_id") sessionId: String,
-        @Query("page") page: String
     ): Response<ApiResponse<RatedMovieResponse>>
 }

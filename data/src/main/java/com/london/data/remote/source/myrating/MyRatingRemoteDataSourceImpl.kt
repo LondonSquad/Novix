@@ -13,10 +13,15 @@ class MyRatingRemoteDataSourceImpl @Inject constructor(
     override suspend fun getAllRatedMovies(
         accountId: Int,
         sessionId: String,
-        page: Int,
-        language: String,
-        sortBy: String
     ): Result<ApiResponse<RatedMovieResponse>> {
-
+        return callApiWithRetry(
+            apiCall = {
+                myRatingApiResponse.getRatedMovies(
+                    accountId = accountId,
+                    sessionId = sessionId,
+                )
+            },
+            mapper = { it }
+        )
     }
 }
