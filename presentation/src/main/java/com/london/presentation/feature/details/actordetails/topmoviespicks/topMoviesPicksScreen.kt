@@ -27,18 +27,12 @@ fun TopMoviesPicksScreen(
         onNavigateMovie = onNavigateMovie,
         onNavigateBack = onNavigateBack
     )
-    BuildScreen(
-        onBack = viewModel::onBack,
-        isLoading = state.isLoading,
-        isError = state.errorState is ErrorState.NoInternet,
-        onRetry = viewModel::onRetry,
-    ) {
-        TopMoviesPicksContent(
-            state = state,
-            contract = viewModel,
-        )
 
-    }
+    TopMoviesPicksContent(
+        state = state,
+        contract = viewModel,
+    )
+
 }
 
 @Composable
@@ -47,14 +41,21 @@ private fun TopMoviesPicksContent(
     contract: TopMoviesPicksContract,
     modifier: Modifier = Modifier,
 ) {
-    MediaLazyGrid(
-        title = stringResource(R.string.top_movies_picks),
-        items = state.movieDetails.cast,
+    BuildScreen(
         onBack = contract::onBack,
-        getImageUrl = { it.posterUrl },
-        onSaveClick = { contract.onSaveMovie(it.id) },
-        modifier = modifier
-    )
+        isLoading = state.isLoading,
+        isError = state.errorState is ErrorState.NoInternet,
+        onRetry = contract::onRetry,
+    ) {
+        MediaLazyGrid(
+            title = stringResource(R.string.top_movies_picks),
+            items = state.movieDetails.cast,
+            onBack = contract::onBack,
+            getImageUrl = { it.posterUrl },
+            onSaveClick = { contract.onSaveMovie(it.id) },
+            modifier = modifier
+        )
+    }
 }
 
 @Composable
