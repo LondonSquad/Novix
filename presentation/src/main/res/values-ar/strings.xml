@@ -145,5 +145,7 @@
     <string name="movie_not_found">الفيلم غير موجود</string>
     <string name="delete_list">حذف المجموعة</string>
     <string name="cancel_list_deletion">حذف المجموعة المحفوظة سيحذف جميع عناصرها. هل أنت متأكد أنك تريد المتابعة؟</string>
-    <string name="btn_delete">Delete</string>
+    <string name="btn_delete">حذف</string>
+    <string name="list_deletion_success">تم حذف المجموعة</string>
+    <string name="list_deletion_failed">فشل حذف المجموعة</string>
 </resources>
