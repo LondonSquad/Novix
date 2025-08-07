@@ -52,9 +52,9 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.london.designsystem.component.CircularLoading
 import com.london.designsystem.component.EmptyLayout
-import com.london.designsystem.component.HomeCard
+import com.london.presentation.shared.HomeCard
 import com.london.designsystem.component.Icon
-import com.london.designsystem.component.ImageView
+import com.london.presentation.shared.ImageView
 import com.london.designsystem.component.SectionHeader
 import com.london.designsystem.component.Text
 import com.london.designsystem.component.TopBar
