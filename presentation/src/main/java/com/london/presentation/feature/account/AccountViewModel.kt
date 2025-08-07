@@ -3,8 +3,8 @@ package com.london.presentation.feature.account
 import androidx.lifecycle.viewModelScope
 import com.london.domain.AppPreferencesService
 import com.london.domain.contentrestriction.ContentRestrictionLevel
-import com.london.domain.repository.AuthRepository
 import com.london.domain.theme.AppTheme
+import com.london.domain.usecase.LoggedInUseCase
 import com.london.domain.usecase.login.LogoutUseCase
 import com.london.presentation.feature.account.state.AccountUiState
 import com.london.presentation.feature.base.BaseViewModel
@@ -18,7 +18,7 @@ import javax.inject.Inject
 class AccountViewModel @Inject constructor(
     private val appPreferencesService: AppPreferencesService,
     private val logoutUseCase: LogoutUseCase,
-    private val authRepository: AuthRepository
+    private val loggedInUseCase: LoggedInUseCase
 ) : BaseViewModel<AccountUiState, AccountEffect>(AccountUiState()),
     AccountContract {
 
@@ -27,33 +27,20 @@ class AccountViewModel @Inject constructor(
         observeContentRestrictionLevel()
     }
 
-    private fun observeContentRestrictionLevel() {
-        appPreferencesService.contentRestrictionLevel
-            .onEach { level ->
-                updateState { copy(currentContentRestriction = level) }
-            }
-            .launchIn(viewModelScope)
-    }
-
     private fun checkUserLoginStatus() {
         tryToExecute(
-            block = { authRepository.isLoggedIn() },
-            onStart = { updateState { copy(isLoading = true) } },
+            block = { loggedInUseCase.invoke() },
+            onStart = {
+                updateState { copy(isLoading = true) }
+            },
             onSuccess = { isLoggedIn: Boolean ->
-                updateState {
-                    copy(
-                        isUserLoggedIn = isLoggedIn,
-                        isLoading = false
-                    )
-                }
+                updateState { copy(isUserLoggedIn = isLoggedIn) }
             },
             onError = {
-                updateState {
-                    copy(
-                        isUserLoggedIn = false,
-                        isLoading = false
-                    )
-                }
+                updateState { copy(isUserLoggedIn = false) }
+            },
+            onCompleted = {
+                updateState { copy(isLoading = false) }
             }
         )
     }
@@ -74,7 +61,15 @@ class AccountViewModel @Inject constructor(
         emitEffect(AccountEffect.NavigateToChangePassword)
     }
 
-    //region Appearance Bottom Sheet
+    //region Content Restriction Bottom Sheet
+    private fun observeContentRestrictionLevel() {
+        appPreferencesService.contentRestrictionLevel
+            .onEach { level ->
+                updateState { copy(currentContentRestriction = level) }
+            }
+            .launchIn(viewModelScope)
+    }
+
     override fun onContentRestrictionSave(level: ContentRestrictionLevel) {
         appPreferencesService.setContentRestrictionLevel(level)
         updateState {
@@ -84,7 +79,9 @@ class AccountViewModel @Inject constructor(
             )
         }
     }
+    //endregion
 
+    //region Appearance Bottom Sheet
     override fun onAppearanceClick() {
         updateState {
             copy(isAppearanceBottomSheetVisible = true)
