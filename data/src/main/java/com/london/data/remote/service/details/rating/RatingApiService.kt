@@ -1,4 +1,4 @@
-package com.london.data.remote.service.details.movie
+package com.london.data.remote.service.details.rating
 
 import com.london.data.remote.model.details.rating.RatingRemoteBody
 import com.london.data.remote.model.details.rating.RatingRemoteResponse
@@ -8,9 +8,9 @@ import retrofit2.http.POST
 import retrofit2.http.Path
 import retrofit2.http.Query
 
-interface AddMovieRatingApiService {
+interface RatingApiService {
     @POST("3/movie/{movie_id}/rating")
-    suspend fun getAccountMovieStates(
+    suspend fun addMovieRating(
         @Path("movie_id") movieId: Int,
         @Query("guest_session_id") guestSessionId: String?,
         @Query("session_id") userSessionId: String?,
