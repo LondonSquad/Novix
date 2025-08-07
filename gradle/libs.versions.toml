@@ -6,6 +6,7 @@ firebaseBom = "33.16.0"
 firebaseMlModeldownloader = "25.0.1"
 gson = "2.13.1"
 javaxInject = "1"
+javaxInjectVersion = "1"
 kotlin = "2.0.21"
 kotlinxCoroutinesTestVersion = "1.10.2"
 ksp = "2.0.21-1.0.27"
@@ -131,6 +132,7 @@ gson = { module = "com.google.code.gson:gson", version.ref = "gson" }
 #koin-ksp-compiler = { group = "io.insert-koin", name = "koin-ksp-compiler", version.ref = "koinKspCompiler" }
 
 # Coroutines & Date/Time
+javax-inject = { module = "javax.inject:javax.inject", version.ref = "javaxInjectVersion" }
 kotlinx-coroutines-android = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-android", version.ref = "kotlinxCoroutinesAndroid" }
 kotlinx-coroutines-test = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-test", version.ref = "kotlinxCoroutinesTest" }
 kotlinx-datetime = { group = "org.jetbrains.kotlinx", name = "kotlinx-datetime", version.ref = "kotlinxDatetime" }
