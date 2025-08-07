@@ -7,6 +7,7 @@ sealed class ErrorState {
     object Timeout : ErrorState()
     object Validation : ErrorState()
     data class RequestFailed(val message: String? = "Request failed") : ErrorState()
+    data class EntryNotFound(val message: String? = "Entry not found") : ErrorState()
 }
 
 object HttpStatus {
