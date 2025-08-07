@@ -27,7 +27,6 @@ class ViewListItemsViewModel @Inject constructor(
     private val listId = args?.listId ?: 0
 
     init {
-        
         getMovieListName(listId = listId)
         fetchMovieListDetails(listId = listId)
     }
@@ -58,7 +57,7 @@ class ViewListItemsViewModel @Inject constructor(
                 manageMovieListUseCase.deleteMovieList(listId.toUInt())
             },
             onError = {
-                updateState { copy(error = ErrorState.EntryNotFound()) }
+                updateState { copy(error = ErrorState.RequestFailed()) }
             },
             onSuccess = {
                 emitEffect(ViewListItemsEffect.NavigateBack)
@@ -87,6 +86,10 @@ class ViewListItemsViewModel @Inject constructor(
                 updateState { copy(isSnackBarSuccessVisible = true) }
             }
         )
+    }
+
+    override fun onDeleteBottomSheetDismiss() {
+        updateState { copy(isDeleteBottomSheetVisible = false) }
     }
 
     private fun fetchMovieListDetails(listId: Int) {
