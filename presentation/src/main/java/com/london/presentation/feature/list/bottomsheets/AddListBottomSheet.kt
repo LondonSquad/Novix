@@ -36,7 +36,6 @@ import com.london.designsystem.theme.NovixTheme
 import com.london.presentation.R
 import com.london.presentation.feature.list.savedlist.AddSheetState
 import com.london.presentation.feature.list.savedlist.ListContract
-import com.london.presentation.feature.list.savedlist.ListUiState
 import com.london.presentation.feature.list.savedlist.ListViewModel
 import com.london.presentation.feature.list.savedlist.defaultContractList
 import kotlinx.coroutines.launch
@@ -46,17 +45,17 @@ fun AddListBottomSheet(
     modifier: Modifier = Modifier,
     addListInteractions: ListContract = hiltViewModel<ListViewModel>(),
     sheetState: SheetState = rememberModalBottomSheetState(),
-    listUiState: ListUiState,
+    addListSheetState: AddSheetState,
 ) {
     val coroutineScope = rememberCoroutineScope()
 
-    LaunchedEffect(listUiState.isSheetVisible) {
-        if (listUiState.isSheetVisible) {
+    LaunchedEffect(addListSheetState.isSheetVisible) {
+        if (addListSheetState.isSheetVisible) {
             coroutineScope.launch { sheetState.show() }
         }
     }
 
-    if (listUiState.isSheetVisible) {
+    if (addListSheetState.isSheetVisible) {
         ModalBottomSheet(
             onDismissRequest = {
                 addListInteractions.onAddListSheetDismiss()
@@ -73,9 +72,9 @@ fun AddListBottomSheet(
                 AddListBottomSheetContent(
                     modifier = modifier,
                     addInteractions = addListInteractions,
-                    addSheetState = listUiState.addListSheetState,
+                    addSheetState = addListSheetState,
                     onCloseClicked = {
-                        if (!listUiState.isLoading) {
+                        if (!addListSheetState.isSheetLoading) {
                             coroutineScope.launch {
                                 sheetState.hide()
                             }.invokeOnCompletion {
@@ -86,7 +85,7 @@ fun AddListBottomSheet(
                         }
                     },
                     onAddClicked = {
-                        addListInteractions.onAddList(listUiState.addListSheetState.listName)
+                        addListInteractions.onAddList(addListSheetState.listName)
                     }
                 )
             }
