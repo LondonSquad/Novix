@@ -8,114 +8,173 @@ class ExtensionsKtTest {
 
     @Test
     fun `orZero returns zero when null`() {
+        // Given
         val nullableInt: Int? = null
         val nullableDouble: Double? = null
+        val nullableLong: Long? = null
 
+        // When & Then
         assertThat(nullableInt.orZero()).isEqualTo(0)
         assertThat(nullableDouble.orZero()).isEqualTo(0.0)
+        assertThat(nullableLong.orZero()).isEqualTo(0L)
     }
 
     @Test
     fun `orZero returns same value when not null`() {
-        assertThat(42.orZero()).isEqualTo(42)
-        assertThat(3.14.orZero()).isEqualTo(3.14)
+        // Given
+        val intValue = 42
+        val doubleValue = 3.14
+        val longValue = 123L
+
+        // When & Then
+        assertThat(intValue.orZero()).isEqualTo(42)
+        assertThat(doubleValue.orZero()).isEqualTo(3.14)
+        assertThat(longValue.orZero()).isEqualTo(123L)
     }
 
     @Test
-    fun `roundToFirstDecimal formats correctly`() {
-        assertThat(3.14.roundToFirstDecimal()).isEqualTo("3.1")
-        assertThat(2.0.roundToFirstDecimal()).isEqualTo("2.0")
+    fun `roundToFirstDecimal formats correctly when positive value`() {
+        // Given
+        val value = 3.14
+
+        // When
+        val result = value.roundToFirstDecimal()
+
+        // Then
+        assertThat(result).isEqualTo("3.1")
     }
 
     @Test
-    fun `asImageUrlOrEmpty returns url when not null`() {
+    fun `roundToFirstDecimal formats correctly when negative value`() {
+        // Given
+        val value = -1.5
+
+        // When
+        val result = value.roundToFirstDecimal()
+
+        // Then
+        assertThat(result).isEqualTo("-1.5")
+    }
+
+    @Test
+    fun `roundToFirstDecimal formats correctly when zero`() {
+        // Given
+        val value = 0.0
+
+        // When
+        val result = value.roundToFirstDecimal()
+
+        // Then
+        assertThat(result).isEqualTo("0.0")
+    }
+
+    @Test
+    fun `roundToDecimal converts correctly when positive value`() {
+        // Given
+        val value = 3.14
+
+        // When
+        val result = value.roundToDecimal()
+
+        // Then
+        assertThat(result).isEqualTo(3.1)
+    }
+
+    @Test
+    fun `roundToDecimal converts correctly when negative value`() {
+        // Given
+        val value = -1.5
+
+        // When
+        val result = value.roundToDecimal()
+
+        // Then
+        assertThat(result).isEqualTo(-1.5)
+    }
+
+    @Test
+    fun `roundToDecimal converts correctly when zero`() {
+        // Given
+        val value = 0.0
+
+        // When
+        val result = value.roundToDecimal()
+
+        // Then
+        assertThat(result).isEqualTo(0.0)
+    }
+
+    @Test
+    fun `asImageUrlOrEmpty returns url when path is not null`() {
+        // Given
         val original = "/path/to/image.jpg"
         val expected = BuildConfig.IMAGE_URL + original
-        assertThat(original.asImageUrlOrEmpty()).isEqualTo(expected)
+
+        // When
+        val result = original.asImageUrlOrEmpty()
+
+        // Then
+        assertThat(result).isEqualTo(expected)
     }
 
     @Test
-    fun `asImageUrlOrEmpty returns empty string for null`() {
+    fun `asImageUrlOrEmpty returns empty string when path is null`() {
+        // Given
         val original: String? = null
-        assertThat(original.asImageUrlOrEmpty()).isEmpty()
+
+        // When
+        val result = original.asImageUrlOrEmpty()
+
+        // Then
+        assertThat(result).isEmpty()
     }
 
     @Test
-    fun `asImageUrlOrEmpty debug test`() {
-        // Test null value
-        val nullValue: String? = null
-        val nullResult = nullValue.asImageUrlOrEmpty()
-        println("nullValue.asImageUrlOrEmpty() = '$nullResult'")
-        assertThat(nullResult).isEmpty()
-        
-        // Test empty string
-        val emptyValue = ""
-        val emptyResult = emptyValue.asImageUrlOrEmpty()
-        println("emptyValue.asImageUrlOrEmpty() = '$emptyResult'")
-        assertThat(emptyResult).isEqualTo(BuildConfig.IMAGE_URL + "")
-        
-        // Test actual path
-        val pathValue = "/test/path.jpg"
-        val pathResult = pathValue.asImageUrlOrEmpty()
-        println("pathValue.asImageUrlOrEmpty() = '$pathResult'")
-        assertThat(pathResult).isEqualTo(BuildConfig.IMAGE_URL + "/test/path.jpg")
-    }
-
-    @Test
-    fun `asImageUrlOrEmpty returns base url for empty string`() {
+    fun `asImageUrlOrEmpty returns base url when path is empty string`() {
+        // Given
         val original = ""
         val expected = BuildConfig.IMAGE_URL + original
-        assertThat(original.asImageUrlOrEmpty()).isEqualTo(expected)
+
+        // When
+        val result = original.asImageUrlOrEmpty()
+
+        // Then
+        assertThat(result).isEqualTo(expected)
     }
 
     @Test
-    fun `orZero handles various null values`() {
-        val nullInt: Int? = null
-        assertThat(nullInt.orZero()).isEqualTo(0)
+    fun `isTrue returns true when boolean is true`() {
+        // Given
+        val booleanValue = true
 
-        val nullDouble: Double? = null
-        assertThat(nullDouble.orZero()).isEqualTo(0.0)
+        // When
+        val result = booleanValue.isTrue
 
-        val nullLong: Long? = null
-        assertThat(nullLong.orZero()).isEqualTo(0L)
+        // Then
+        assertThat(result).isTrue()
     }
 
     @Test
-    fun `orZero handles various non-null values`() {
-        // Test Int
-        assertThat(42.orZero()).isEqualTo(42)
-        assertThat(0.orZero()).isEqualTo(0)
-        
-        // Test Double
-        assertThat(3.14.orZero()).isEqualTo(3.14)
-        assertThat(0.0.orZero()).isEqualTo(0.0)
-        
-        // Test Long
-        assertThat(123L.orZero()).isEqualTo(123L)
-        assertThat(0L.orZero()).isEqualTo(0L)
+    fun `isTrue returns false when boolean is false`() {
+        // Given
+        val booleanValue = false
+
+        // When
+        val result = booleanValue.isTrue
+
+        // Then
+        assertThat(result).isFalse()
     }
 
     @Test
-    fun `roundToFirstDecimal handles various values`() {
-        assertThat(3.14.roundToFirstDecimal()).isEqualTo("3.1")
-        assertThat(2.0.roundToFirstDecimal()).isEqualTo("2.0")
-        assertThat(0.0.roundToFirstDecimal()).isEqualTo("0.0")
-        assertThat((-1.5).roundToFirstDecimal()).isEqualTo("-1.5")
-    }
+    fun `isTrue returns false when boolean is null`() {
+        // Given
+        val booleanValue: Boolean? = null
 
-    @Test
-    fun `roundToDecimal handles various values`() {
-        assertThat(3.14.roundToDecimal()).isEqualTo(3.1)
-        assertThat(2.0.roundToDecimal()).isEqualTo(2.0)
-        assertThat(0.0.roundToDecimal()).isEqualTo(0.0)
-        assertThat((-1.5).roundToDecimal()).isEqualTo(-1.5)
-    }
+        // When
+        val result = booleanValue.isTrue
 
-    @Test
-    fun `isTrue handles boolean values`() {
-        assertThat(true.isTrue).isTrue()
-        assertThat(false.isTrue).isFalse()
-        val nullBoolean: Boolean? = null
-        assertThat(nullBoolean.isTrue).isFalse()
+        // Then
+        assertThat(result).isFalse()
     }
 }
