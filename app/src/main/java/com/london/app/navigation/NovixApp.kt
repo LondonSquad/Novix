@@ -325,6 +325,7 @@ fun NavGraphBuilder.mainNavGraph(
     ) {
         ListScreen(
             onNavigateToDetails = {
+                // id is dummy
                 navController.navigate(Screen.ViewListItems(8548075))
             }
         )
