@@ -17133,17 +17133,25 @@
           "url": "https://github.com/yusufnasserdev"
         },
         "submitted_at": "2025-08-07T09:41:11Z"
+      },
+      {
+        "reviewer": {
+          "id": 154278495,
+          "login": "ahmeddsamii",
+          "url": "https://github.com/ahmeddsamii"
+        },
+        "submitted_at": "2025-08-07T12:23:04Z"
       }
     ],
     "first_approved_at": "2025-08-07T09:41:11Z",
     "time_to_first_approval_minutes": 3958.9,
-    "required_approvals_met_at": null,
-    "time_to_required_approvals_minutes": null,
+    "required_approvals_met_at": "2025-08-07T12:23:04Z",
+    "time_to_required_approvals_minutes": 4120.783333333334,
     "closed_at": null,
     "merged_at": null,
     "merged_by": null,
     "week": "2025-W32",
-    "status": "pending",
+    "status": "approved",
     "diff_stats": {
       "additions": 280,
       "deletions": 25,
