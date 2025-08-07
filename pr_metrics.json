@@ -18412,5 +18412,33 @@
       "deletions": 4,
       "changed_files": 2
     }
+  },
+  {
+    "pr_number": 559,
+    "url": "https://github.com/LondonSquad/Novix/pull/559",
+    "title": "feat: Implement get movie list name and remove movie from list use cases",
+    "opened_at": "2025-08-07T18:36:47Z",
+    "head_ref": "feature/update-custom-list-data",
+    "base_ref": "develop",
+    "creator": {
+      "login": "marwanqashwa",
+      "id": 100484790,
+      "url": "https://github.com/marwanqashwa"
+    },
+    "approvals": [],
+    "first_approved_at": null,
+    "time_to_first_approval_minutes": null,
+    "required_approvals_met_at": null,
+    "time_to_required_approvals_minutes": null,
+    "closed_at": null,
+    "merged_at": null,
+    "merged_by": null,
+    "week": "2025-W32",
+    "status": "pending",
+    "diff_stats": {
+      "additions": 231,
+      "deletions": 29,
+      "changed_files": 11
+    }
   }
 ]
