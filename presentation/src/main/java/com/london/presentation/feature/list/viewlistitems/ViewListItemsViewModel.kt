@@ -1,7 +1,14 @@
 package com.london.presentation.feature.list.viewlistitems
 
+import androidx.lifecycle.SavedStateHandle
 import com.london.domain.usecase.movielist.GetMovieListDetailsUseCase
+import com.london.domain.usecase.movielist.GetMovieListNameUseCase
+import com.london.domain.usecase.movielist.ManageMovieListUseCase
+import com.london.domain.usecase.movielist.RemoveMovieFromListUseCase
+import com.london.presentation.navigation.Screen
+import com.london.presentation.navigation.getArgs
 import com.london.presentation.shared.base.BaseViewModel
+import com.london.presentation.shared.base.ErrorState
 import com.london.presentation.shared.base.createPagingSourceFlow
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
@@ -9,15 +16,81 @@ import javax.inject.Inject
 @HiltViewModel
 class ViewListItemsViewModel @Inject constructor(
     private val getMovieListDetailsUseCase: GetMovieListDetailsUseCase,
-) :
-    BaseViewModel<ViewListItemsUiState, ViewListItemsEffect>(ViewListItemsUiState()),
+    private val removeMovieFromListUseCase: RemoveMovieFromListUseCase,
+    private val getMovieListNameUseCase: GetMovieListNameUseCase,
+    private val manageMovieListUseCase: ManageMovieListUseCase,
+    savedStateHandle: SavedStateHandle
+) : BaseViewModel<ViewListItemsUiState, ViewListItemsEffect>(ViewListItemsUiState()),
     ViewListItemsContract {
 
+    private val args = savedStateHandle.getArgs<Screen.ViewListItems>()
+    private val listId = args?.listId ?: 0
+
     init {
-        fetchMovieListDetails(8548075)
+        
+        getMovieListName(listId = listId)
+        fetchMovieListDetails(listId = listId)
+    }
+
+    override fun onBack() {
+
+        emitEffect(ViewListItemsEffect.NavigateBack)
+    }
+
+    override fun onRetry() {
+
+        updateState { copy(error = null) }
+        fetchMovieListDetails(listId)
+    }
+
+    override fun onDeleteClick() {
+
+        updateState { copy(isDeleteBottomSheetVisible = true) }
+    }
+
+    override fun onConfirmDelete() {
+
+        tryToExecute(
+            onStart = {
+                updateState { copy(isDeleteBottomSheetVisible = false) }
+            },
+            block = {
+                manageMovieListUseCase.deleteMovieList(listId.toUInt())
+            },
+            onError = {
+                updateState { copy(error = ErrorState.EntryNotFound()) }
+            },
+            onSuccess = {
+                emitEffect(ViewListItemsEffect.NavigateBack)
+            }
+        )
+    }
+
+    override fun onMovieClick(id: Int) {
+
+        emitEffect(ViewListItemsEffect.NavigationMovieDetails(id))
+    }
+
+    override fun onRemoveMovieClick(id: Int) {
+
+        tryToExecute(
+            block = {
+                removeMovieFromListUseCase.invoke(listId = listId.toUInt(), movieId = id.toUInt())
+            },
+            onStart = {
+                updateState { copy(error = null, isSnackBarSuccessVisible = false) }
+            },
+            onError = {
+                updateState { copy(error = ErrorState.EntryNotFound()) }
+            },
+            onSuccess = {
+                updateState { copy(isSnackBarSuccessVisible = true) }
+            }
+        )
     }
 
     private fun fetchMovieListDetails(listId: Int) {
+
         tryToExecute(
             block = {
                 val moviesFlow = createPagingSourceFlow(query = "") { _, pageNumber ->
@@ -46,26 +119,20 @@ class ViewListItemsViewModel @Inject constructor(
         )
     }
 
-    override fun onBack() {
-        emitEffect(ViewListItemsEffect.NavigateBack)
+    private fun getMovieListName(listId: Int) {
+
+        tryToExecute(
+            block = {
+                getMovieListNameUseCase.invoke(listId.toUInt())
+            },
+            onStart = {
+                updateState { copy(isLoading = true) }
+            },
+            onSuccess = {
+                updateState {
+                    copy(listTitle = it)
+                }
+            }
+        )
     }
-
-    override fun onRetry() {
-        updateState { copy(error = null) }
-        fetchMovieListDetails(8548075)
-    }
-
-
-    override fun onDeleteClick() {
-        fetchMovieListDetails(8547741)
-    }
-
-    override fun onMovieClick(id: Int) {
-        emitEffect(ViewListItemsEffect.NavigationMovieDetails(id))
-    }
-
-    override fun onRemoveMovieClick(id: Int) {
-        //TODO("Not yet implemented")
-    }
-
 }

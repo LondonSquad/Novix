@@ -7,6 +7,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -17,6 +18,8 @@ import com.london.designsystem.theme.NovixTheme
 import com.london.designsystem.theme.ThemePreviews
 import com.london.presentation.R
 import com.london.presentation.shared.MediaLazyPagingGrid
+import com.london.presentation.shared.SnackBarAnimation
+import com.london.presentation.shared.base.ErrorState
 import com.london.presentation.shared.buildscreen.BuildScreen
 import com.london.presentation.utils.Listen
 
@@ -26,13 +29,6 @@ fun ViewListItemsScreen(
     onNavigateToMovieDetails: (Int) -> Unit,
     viewModel: ViewListItemsViewModel = hiltViewModel()
 ) {
-
-
-//    ViewListItemsScreen(
-//        onNavigateBack = navController::navigateUp,
-//        onNavigateToMovieDetails = { id -> navController.navigate(MovieDetails(id)) },
-//    )
-
 
     val state by viewModel.state.collectAsStateWithLifecycle()
     val effect by viewModel.effect.collectAsState(null)
@@ -44,6 +40,7 @@ fun ViewListItemsScreen(
                 onNavigateToMovieDetails(currentEffect.id)
         }
     }
+
     Content(
         state = state,
         contract = viewModel,
@@ -72,7 +69,7 @@ private fun Content(
             onBack = null,
             onRetry = listItems::refresh,
             isLoading = state.isLoading,
-            isError = state.error != null,
+            isError = (state.error != null && state.error != ErrorState.EntryNotFound()),
             emptyLayoutMessage = R.string.no_items_found,
             emptyLayoutImage = R.drawable.img_no_result,
             pagingFlow = listItems,
@@ -84,11 +81,22 @@ private fun Content(
                 onItemClick = { contract.onMovieClick(it.id.toInt()) },
                 getImageUrl = { it.posterUrl },
                 getTitle = { "${it.id} media img" },
-                onSaveClick = { contract.onRemoveMovieClick(it.id.toInt()) },
+                onSaveClick = {
+                    contract.onRemoveMovieClick(it.id.toInt())
+                    contract.onRetry()
+                },
                 isItemSaved = { true },
-
-                )
+            )
         }
+    }
+    if (state.error is ErrorState.EntryNotFound) {
+        SnackBarAnimation(stringResource(R.string.movie_not_found))
+    }
+    if (state.isSnackBarSuccessVisible) {
+        SnackBarAnimation(
+            stringResource(R.string.movie_removed_successfully),
+            icon = com.london.designsystem.R.drawable.ic_success
+        )
     }
 }
 
@@ -104,6 +112,7 @@ private fun Preview() {
                 override fun onBack() {}
                 override fun onRetry() {}
                 override fun onDeleteClick() {}
+                override fun onConfirmDelete() {}
                 override fun onMovieClick(id: Int) {}
                 override fun onRemoveMovieClick(id: Int) {}
             },
