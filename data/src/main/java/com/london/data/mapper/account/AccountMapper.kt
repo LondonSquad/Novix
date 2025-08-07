@@ -7,6 +7,6 @@ import com.london.domain.entity.AccountInfo
 fun AccountInfoResponse.toEntity(): AccountInfo {
     return AccountInfo(
         id = this.id.orZero(),
-        userName = this.userName.orEmpty()
+        userName = this.name?.takeIf { it.isNotBlank() } ?: this.userName.orEmpty()
     )
 }

@@ -8,5 +8,7 @@ data class AccountInfoResponse(
     @SerialName("id")
     val id: Int?,
     @SerialName("username")
-    val userName: String?
+    val userName: String?,
+    @SerialName("name")
+    val name: String?
 )
