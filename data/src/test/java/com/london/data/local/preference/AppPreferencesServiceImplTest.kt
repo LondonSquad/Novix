@@ -74,7 +74,7 @@ class AppPreferencesServiceImplTest {
 
         // When
         service = AppPreferencesServiceImpl(sharedPreferences)
-        val currentTheme = service.appTheme.first()
+        val currentTheme = service.isAppDarkMode.first()
 
         // Then
         assertEquals(AppTheme.SYSTEM, currentTheme)
@@ -87,7 +87,7 @@ class AppPreferencesServiceImplTest {
 
         // When
         service = AppPreferencesServiceImpl(sharedPreferences)
-        val currentTheme = service.appTheme.first()
+        val currentTheme = service.isAppDarkMode.first()
 
         // Then
         assertEquals(AppTheme.DARK, currentTheme)
