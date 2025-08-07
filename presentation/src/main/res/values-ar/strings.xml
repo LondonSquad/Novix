@@ -141,4 +141,6 @@
     <string name="blurs_all_sensitive_content">يتم تمويه جميع المحتويات الحساسة.</string>
     <string name="blurs_explicit_scenes_only">يتم تمويه المشاهد الصريحة فقط.</string>
     <string name="no_content_is_blurred">لا يتم تمويه أي محتوى.</string>
+    <string name="movie_removed_successfully">تم حذف الفيلم بنجاح</string>
+    <string name="movie_not_found">الفيلم غير موجود</string>
 </resources>
