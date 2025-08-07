@@ -23,7 +23,8 @@ fun DefaultTopBar(
     modifier: Modifier = Modifier,
     appName: String,
     appDescription: String,
-    @DrawableRes appIconRes: Int
+    @DrawableRes appIconRes: Int,
+    appIconContentDescription: String
 ) {
     Row(
         modifier = modifier
@@ -34,7 +35,7 @@ fun DefaultTopBar(
     ) {
         Image(
             painter = appIconRes.painter,
-            contentDescription = "Logo",
+            contentDescription = appIconContentDescription,
             modifier = Modifier.size(48.dp)
         )
         Column {
@@ -58,6 +59,7 @@ fun DefaultPreview() {
     DefaultTopBar(
         appName = "Novix",
         appDescription = "Born from Nova, Made for Flix.",
-        appIconRes = R.drawable.novix_icon
+        appIconRes = R.drawable.novix_icon,
+        appIconContentDescription = "Logo"
     )
 }

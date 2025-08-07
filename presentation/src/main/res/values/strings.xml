@@ -130,4 +130,5 @@
     <string name="arabic">Arabic</string>
     <string name="app_name">Novix</string>
     <string name="app_name_description">Born from Nova, Made for Flix.</string>
+    <string name="novix_icon">Novix Icon</string>
 </resources>
