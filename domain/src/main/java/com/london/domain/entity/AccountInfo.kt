@@ -2,5 +2,6 @@ package com.london.domain.entity
 
 data class AccountInfo(
     val id: Int,
-    val userName: String
+    val userName: String,
+    val avatarPath: String
 )
