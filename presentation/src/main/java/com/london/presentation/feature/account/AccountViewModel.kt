@@ -5,7 +5,7 @@ import com.london.domain.AppPreferencesService
 import com.london.domain.contentrestriction.ContentRestrictionLevel
 import com.london.domain.theme.AppTheme
 import com.london.domain.usecase.LoggedInUseCase
-import com.london.domain.usecase.GetAccountUsernameUseCase
+import com.london.domain.usecase.GetUsername
 import com.london.domain.usecase.login.LogoutUseCase
 import com.london.presentation.feature.account.state.AccountUiState
 import com.london.presentation.feature.base.BaseViewModel
@@ -20,12 +20,13 @@ class AccountViewModel @Inject constructor(
     private val appPreferencesService: AppPreferencesService,
     private val logoutUseCase: LogoutUseCase,
     private val loggedInUseCase: LoggedInUseCase,
-    private val getAccountUsernameUseCase: GetAccountUsernameUseCase
+    private val usernameUseCase: GetUsername
 ) : BaseViewModel<AccountUiState, AccountEffect>(AccountUiState()),
     AccountContract {
 
     init {
         checkUserLoginStatus()
+        fetchAndSetUsername()
         observeContentRestrictionLevel()
     }
 
@@ -49,9 +50,9 @@ class AccountViewModel @Inject constructor(
 
     private fun fetchAndSetUsername() {
         tryToExecute(
-            block = { getAccountUsernameUseCase() },
+            block = { usernameUseCase() },
             onSuccess = { username ->
-                updateState { copy(username = username) }
+                updateState { copy(userName = username) }
             }
         )
     }
