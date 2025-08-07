@@ -136,7 +136,7 @@ fun HomeScreen(
                         .fillMaxSize()
                 ) {
                     DefaultTopBar(
-                        appIconRes = if (uiState.isDarkTheme) R.drawable.img_novix_dark else R.drawable.img_novix_light,
+                        appIconRes = if (NovixTheme.theme.isDark()) R.drawable.img_novix_dark else R.drawable.img_novix_light,
                         appName = R.string.app_name.string,
                         appDescription = R.string.app_name_description.string,
                         modifier = Modifier
