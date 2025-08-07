@@ -1,6 +1,5 @@
 package com.london.designsystem.theme
 
-import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import com.london.designsystem.color.DarkNovixColors
@@ -9,15 +8,15 @@ import com.london.designsystem.typography.NovixTypography
 
 @Composable
 fun NovixTheme(
-    isDarkMode: Boolean = isSystemInDarkTheme(),
+    isAppDarkMode: Boolean = true,
     content: @Composable () -> Unit
 ) {
-    val colors = if (isDarkMode) DarkNovixColors else LightNovixColors
+    val colors = if (isAppDarkMode) DarkNovixColors else LightNovixColors
 
     CompositionLocalProvider(
         LocalNovixColors provides colors,
         LocalNovixTypography provides NovixTypography,
-        LocalAppTheme provides if (isDarkMode) AppTheme.DARK else AppTheme.LIGHT
+        LocalAppTheme provides isAppDarkMode
     ) {
         content()
     }
