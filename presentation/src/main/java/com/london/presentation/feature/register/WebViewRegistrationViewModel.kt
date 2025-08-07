@@ -1,6 +1,6 @@
 package com.london.presentation.feature.register
 
-import com.london.presentation.feature.base.BaseViewModel
+import com.london.presentation.shared.base.BaseViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 

@@ -9,11 +9,8 @@ import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalDensity
-import androidx.compose.ui.platform.LocalWindowInfo
 import androidx.compose.ui.unit.dp
 import androidx.paging.compose.LazyPagingItems
-import com.london.designsystem.component.HomeCard
 import com.london.domain.entity.TvShow
 import com.london.presentation.utils.gridColmuns
 

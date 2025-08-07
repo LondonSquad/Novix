@@ -1,11 +1,9 @@
 package com.london.presentation.feature.list.viewlistitems
 
 import com.london.domain.usecase.movielist.GetMovieListDetailsUseCase
-import com.london.presentation.feature.base.BaseViewModel
-import com.london.presentation.feature.base.createPagingSourceFlow
-import com.london.presentation.feature.list.viewlistitems.ViewListItemsUiState
+import com.london.presentation.shared.base.BaseViewModel
+import com.london.presentation.shared.base.createPagingSourceFlow
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.flow.map
 import javax.inject.Inject
 
 @HiltViewModel

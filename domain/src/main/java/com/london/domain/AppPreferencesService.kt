@@ -3,6 +3,7 @@ package com.london.domain
 import com.london.domain.language.AppLanguage
 import com.london.domain.theme.AppTheme
 import kotlinx.coroutines.flow.StateFlow
+import com.london.domain.contentrestriction.ContentRestrictionLevel
 
 interface AppPreferencesService {
     //region Onboarding
@@ -16,5 +17,9 @@ interface AppPreferencesService {
     //region Language
     val appLanguage: StateFlow<AppLanguage>
     fun setAppLanguage(language: AppLanguage)
+    //endregion
+    //region Content Restriction
+    val contentRestrictionLevel: StateFlow<ContentRestrictionLevel>
+    fun setContentRestrictionLevel(level: ContentRestrictionLevel)
     //endregion
 }

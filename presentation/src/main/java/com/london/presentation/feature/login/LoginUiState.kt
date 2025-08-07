@@ -1,7 +1,7 @@
 package com.london.presentation.feature.login
 
 import androidx.compose.ui.text.input.TextFieldValue
-import com.london.presentation.feature.base.ErrorState
+import com.london.presentation.shared.base.ErrorState
 
 data class LoginUiState(
     val isLoading: Boolean = false,

@@ -13,5 +13,5 @@ interface AuthenticationRemoteDataSource {
         password: String,
         requestToken: String
     ): Result<RequestTokenResponse>
-    suspend fun deleteSession(): Result<DeleteSessionResponse>
+    suspend fun deleteSession(sessionId: String): Result<DeleteSessionResponse>
 }

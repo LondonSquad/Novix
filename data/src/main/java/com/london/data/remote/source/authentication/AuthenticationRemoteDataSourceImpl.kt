@@ -5,6 +5,7 @@ import com.london.data.remote.model.authentication.DeleteSessionResponse
 import com.london.data.remote.model.authentication.GuestSessionResponse
 import com.london.data.remote.model.authentication.LoginValidationRequestBody
 import com.london.data.remote.model.authentication.RequestTokenResponse
+import com.london.data.remote.model.authentication.SessionId
 import com.london.data.remote.model.authentication.SessionResponse
 import com.london.data.remote.model.authentication.Token
 import com.london.data.remote.service.authentication.AuthenticationApiService
@@ -51,9 +52,11 @@ class AuthenticationRemoteDataSourceImpl @Inject constructor(
             mapper = { it }
         )
 
-    override suspend fun deleteSession(): Result<DeleteSessionResponse> =
+    override suspend fun deleteSession(
+        sessionId: String
+    ): Result<DeleteSessionResponse> =
         callApi(
-            apiCall = { authApiService.deleteSession() },
+            apiCall = { authApiService.deleteSession(SessionId(sessionId)) },
             mapper = { it }
         )
 }

@@ -11,7 +11,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.paging.compose.LazyPagingItems
-import com.london.designsystem.component.HomeCard
 import com.london.presentation.utils.gridColmuns
 
 @Composable

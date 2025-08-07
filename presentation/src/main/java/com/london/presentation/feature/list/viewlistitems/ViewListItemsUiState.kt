@@ -2,7 +2,7 @@ package com.london.presentation.feature.list.viewlistitems
 
 import androidx.paging.PagingData
 import com.london.domain.entity.Movie
-import com.london.presentation.feature.base.ErrorState
+import com.london.presentation.shared.base.ErrorState
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 
