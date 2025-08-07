@@ -3,7 +3,7 @@ package com.london.presentation.feature.list.savedlist
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.paging.PagingData
 import com.london.domain.entity.recent.MediaType
-import com.london.presentation.feature.base.BaseViewModel
+import com.london.presentation.shared.base.BaseViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import jakarta.inject.Inject
 import kotlinx.coroutines.flow.Flow

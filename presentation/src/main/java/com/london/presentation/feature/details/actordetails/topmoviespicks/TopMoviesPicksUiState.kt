@@ -1,7 +1,7 @@
 package com.london.presentation.feature.details.actordetails.topmoviespicks
 
 import com.london.domain.entity.actordetails.actormovie.ActorMovieDetails
-import com.london.presentation.feature.base.ErrorState
+import com.london.presentation.shared.base.ErrorState
 
 data class TopMoviesPicksUiState(
     val movieDetails: ActorMovieDetails = ActorMovieDetails(),

@@ -7,8 +7,8 @@ import com.london.domain.theme.AppTheme
 import com.london.domain.usecase.LoggedInUseCase
 import com.london.domain.usecase.login.LogoutUseCase
 import com.london.presentation.feature.account.state.AccountUiState
-import com.london.presentation.feature.base.BaseViewModel
-import com.london.presentation.feature.base.ErrorState
+import com.london.presentation.shared.base.BaseViewModel
+import com.london.presentation.shared.base.ErrorState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
