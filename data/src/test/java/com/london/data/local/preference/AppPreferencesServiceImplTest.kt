@@ -48,8 +48,8 @@ class AppPreferencesServiceImplTest {
         every { sharedPreferences.edit() } returns editor
 
         every {
-            sharedPreferences.getString(THEME_KEY, AppTheme.SYSTEM.name)
-        } returns AppTheme.SYSTEM.name
+            sharedPreferences.getString(THEME_KEY, AppTheme.DARK.name)
+        } returns AppTheme.DARK.name
 
         every {
             sharedPreferences.getString(LANGUAGE_KEY, AppLanguage.ENGLISH.code)
@@ -68,30 +68,30 @@ class AppPreferencesServiceImplTest {
     }
 
     @Test
-    fun `appTheme returns default SYSTEM when no preference is set`() = runTest {
+    fun `appTheme returns default Dark theme true when no preference is set`() = runTest {
         // Given
-        every { sharedPreferences.getString(THEME_KEY, AppTheme.SYSTEM.name) } returns null
+        every { sharedPreferences.getString(THEME_KEY, AppTheme.DARK.name) } returns null
 
         // When
         service = AppPreferencesServiceImpl(sharedPreferences)
-        val currentTheme = service.appTheme.first()
+        val currentTheme = service.isAppDarkMode.first()
 
         // Then
-        assertEquals(AppTheme.SYSTEM, currentTheme)
+        assertEquals(true, currentTheme)
     }
 
     @Test
     fun `appTheme returns specific theme when preference is set`() = runTest {
         // Given
-        every { sharedPreferences.getString(THEME_KEY, AppTheme.SYSTEM.name) } returns AppTheme.DARK.name
+        every { sharedPreferences.getString(THEME_KEY, AppTheme.DARK.name) } returns AppTheme.DARK.name
 
         // When
         service = AppPreferencesServiceImpl(sharedPreferences)
-        val currentTheme = service.appTheme.first()
+        val currentTheme = service.isAppDarkMode.first()
 
         // Then
-        assertEquals(AppTheme.DARK, currentTheme)
-        verify { sharedPreferences.getString(THEME_KEY, AppTheme.SYSTEM.name) }
+        assertEquals(true, currentTheme)
+        verify { sharedPreferences.getString(THEME_KEY, AppTheme.DARK.name) }
     }
 
     @Test

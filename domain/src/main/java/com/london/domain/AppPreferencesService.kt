@@ -1,9 +1,9 @@
 package com.london.domain
 
+import com.london.domain.contentrestriction.ContentRestrictionLevel
 import com.london.domain.language.AppLanguage
 import com.london.domain.theme.AppTheme
 import kotlinx.coroutines.flow.StateFlow
-import com.london.domain.contentrestriction.ContentRestrictionLevel
 
 interface AppPreferencesService {
     //region Onboarding
@@ -11,7 +11,7 @@ interface AppPreferencesService {
     fun setOnBoardingShown()
     //endregion
     //region Theme
-    val appTheme: StateFlow<AppTheme>
+    val isAppDarkMode: StateFlow<Boolean>
     fun setAppTheme(theme: AppTheme)
     //endregion
     //region Language
