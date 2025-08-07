@@ -97,6 +97,11 @@ sealed interface Screen {
     ) : Screen
 
     @Serializable
+    data class ViewListItems(
+        val listId: Int,
+    ): Screen
+
+    @Serializable
     data object TopRated : Screen
 
     @Serializable

@@ -72,9 +72,9 @@ class CustomMovieListRepositoryImpl @Inject constructor(
             page = pageNumber
         ).getOrThrow()
         return PagedFetchResponse(
-            currentPage = 1,
+            currentPage = pageNumber,
             items = response.items.orEmpty().map { it.toEntity() },
-            totalPages = 1,
+            totalPages = MAX_PAGES,
             totalItems = response.itemCount.orZero()
         )
     }
@@ -92,5 +92,8 @@ class CustomMovieListRepositoryImpl @Inject constructor(
             return false
         }
         return true
+    }
+   private companion object{
+        const val MAX_PAGES = 10
     }
 }
