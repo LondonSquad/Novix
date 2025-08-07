@@ -18220,9 +18220,9 @@
     "week": "2025-W32",
     "status": "pending",
     "diff_stats": {
-      "additions": 368,
-      "deletions": 82,
-      "changed_files": 40
+      "additions": 463,
+      "deletions": 97,
+      "changed_files": 41
     }
   }
 ]
