@@ -13,8 +13,8 @@ class AccountRepositoryImp @Inject constructor(
     override suspend fun getUserName(): String =
         authPreferences.getSessionId()?.let { sessionId ->
             accountRemoteDataSource.getUserName(sessionId)
-                .getOrNull()
-                ?.toEntity()
-                ?.userName
+                .getOrThrow()
+                .toEntity()
+                .userName
         } ?: ""
 }
