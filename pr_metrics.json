@@ -18111,18 +18111,9 @@
       "id": 81706918,
       "url": "https://github.com/karimdeabes"
     },
-    "approvals": [
-      {
-        "reviewer": {
-          "id": 43588217,
-          "login": "yusufnasserdev",
-          "url": "https://github.com/yusufnasserdev"
-        },
-        "submitted_at": "2025-08-07T01:29:55Z"
-      }
-    ],
-    "first_approved_at": "2025-08-07T01:29:55Z",
-    "time_to_first_approval_minutes": 174.41666666666666,
+    "approvals": [],
+    "first_approved_at": null,
+    "time_to_first_approval_minutes": null,
     "required_approvals_met_at": null,
     "time_to_required_approvals_minutes": null,
     "closed_at": null,
@@ -18131,9 +18122,9 @@
     "week": "2025-W32",
     "status": "pending",
     "diff_stats": {
-      "additions": 2,
-      "deletions": 27,
-      "changed_files": 4
+      "additions": 25,
+      "deletions": 36,
+      "changed_files": 9
     }
   },
   {
