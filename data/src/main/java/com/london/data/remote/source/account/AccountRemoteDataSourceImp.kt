@@ -7,9 +7,9 @@ import com.london.data.remote.source.base.BaseRemoteDatasource
 class AccountRemoteDataSourceImp(
     private val accountApiService: AccountApiService
 ) : AccountRemoteDataSource, BaseRemoteDatasource {
-    override suspend fun getUserName(sessionId: String): Result<AccountInfoResponse> =
+    override suspend fun getAccountDetails(sessionId: String): Result<AccountInfoResponse> =
         callApi(
-            apiCall = { accountApiService.getAccountInfo(sessionId) },
+            apiCall = { accountApiService.getAccountDetails(sessionId) },
             mapper = { it }
         )
 }

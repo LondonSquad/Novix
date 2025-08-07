@@ -8,6 +8,7 @@ data class AccountUiState(
     val isLoading: Boolean = false,
     val error: ErrorState? = null,
     val userName: String = "",
+    val userAvatar: String? = null,
     val currentAppearance: String = "",
     val currentLanguage: String = "",
     val currentContentRestriction: ContentRestrictionLevel = ContentRestrictionLevel.MODERATE,
