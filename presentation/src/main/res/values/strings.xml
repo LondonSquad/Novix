@@ -104,7 +104,7 @@
     <string name="no_actor_details">No actor details available</string>
     <string name="reviews">Reviews</string>
     <string name="no_recent_history">Looks like you haven\'t checked anything yet.\nTake a look around and come back!</string>
-    <string name="no_reviews">\"There is no review\"</string>
+    <string name="no_reviews">There is no review!</string>
     <string name="login_failed">Login failed. Please check your credentials.</string>
     <string name="guest_login_failed">Guest login failed.</string>
     <string name="edit_list">Edit list</string>
