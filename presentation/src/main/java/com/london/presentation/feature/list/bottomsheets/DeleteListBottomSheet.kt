@@ -1,4 +1,4 @@
-package com.london.presentation.feature.list
+package com.london.presentation.feature.list.bottomsheets
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -19,7 +19,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.london.designsystem.component.Icon
 import com.london.designsystem.component.ModalBottomSheet
@@ -115,7 +114,7 @@ private fun Content(
         ) {
             Image(
                 modifier = Modifier.size(100.dp),
-                painter = if (NovixTheme.colors.isDarkTheme) R.drawable.ic_trash_dark.painter else R.drawable.ic_trash_light.painter,
+                painter = if (NovixTheme.isThemeDark) R.drawable.ic_trash_dark.painter else R.drawable.ic_trash_light.painter,
                 contentDescription = R.string.delete_list.string,
             )
 
@@ -123,7 +122,7 @@ private fun Content(
                 text = R.string.cancel_list_deletion.string,
                 style = NovixTheme.typography.body.medium,
                 color = NovixTheme.colors.body,
-                textAlign = TextAlign.Center // Can be removed based on designer feedback
+                textAlign = TextAlign.Center
             )
         }
 
@@ -136,17 +135,6 @@ private fun Content(
             isLoading = false,
             icon = null,
             onClick = {}
-        )
-    }
-}
-
-@Composable
-@Preview
-private fun BookmarkBottomSheetPreview() {
-    NovixTheme {
-        DeleteListBottomSheet(
-            onSheetDismiss = {},
-            isSheetVisible = true,
         )
     }
 }
