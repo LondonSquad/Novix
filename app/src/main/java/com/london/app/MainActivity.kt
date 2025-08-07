@@ -15,10 +15,10 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.platform.LocalView
 import androidx.core.graphics.toColorInt
 import androidx.core.view.WindowInsetsControllerCompat
+import androidx.core.view.WindowCompat
 import com.london.app.navigation.NovixApp
 import com.london.designsystem.theme.NovixTheme
 import com.london.domain.AppPreferencesService
-import com.london.domain.theme.isDark
 import com.london.presentation.shared.ContentRestrictionProvider
 import com.london.presentation.shared.LocalContentRestrictionLevel
 import dagger.hilt.android.AndroidEntryPoint
@@ -31,14 +31,19 @@ class MainActivity : ComponentActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        WindowCompat.setDecorFitsSystemWindows(window, false)
         enableEdgeToEdge()
 
-        setContent {
-            val appTheme by appPreferencesService.appTheme.collectAsState()
-            val useDarkTheme = appTheme.isDark()
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+            window.isNavigationBarContrastEnforced = false
+        }
 
-            NovixTheme(isDarkMode = useDarkTheme) {
-                ApplySystemBarTheme(useDarkTheme = useDarkTheme)
+        setContent {
+            val isAppDarkMode by appPreferencesService.isAppDarkMode.collectAsState()
+            NovixTheme(
+                isAppDarkMode = isAppDarkMode
+            ) {
+                ApplySystemBarTheme(useDarkTheme = isAppDarkMode)
 
                 ContentRestrictionProvider(appPreferencesService) { contentRestrictionLevel ->
                     CompositionLocalProvider(

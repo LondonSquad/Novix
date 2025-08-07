@@ -63,20 +63,10 @@ fun ReviewsScreen(
     val effect by viewModel.effect.collectAsState(initial = null)
 
     effect?.Listen { onNavigateBack() }
-
-    val reviewsList = uiState.reviews.collectAsLazyPagingItems()
-
-    BuildScreen(
-        isLoading = reviewsList.isLoading(),
-        isError = reviewsList.loadState.refresh is LoadState.Error,
-        onBack = onNavigateBack,
-        onRetry = viewModel::onRetry
-    ) {
-        ReviewsScreenContent(
-            uiState = uiState,
-            reviewContract = viewModel,
-        )
-    }
+    ReviewsScreenContent(
+        uiState = uiState,
+        reviewContract = viewModel,
+    )
 }
 
 @Composable
@@ -84,50 +74,75 @@ fun ReviewsScreenContent(
     uiState: ReviewsUiState,
     reviewContract: ReviewContract
 ) {
-    Box(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(NovixTheme.colors.surface)
+    val reviewsList = uiState.reviews.collectAsLazyPagingItems()
 
+    BuildScreen(
+        isLoading = reviewsList.isLoading(),
+        isError = reviewsList.loadState.refresh is LoadState.Error,
+        onBack = reviewContract::onBackClicked,
+        onRetry = reviewContract::onRetry
     ) {
-
-        val reviewsList = uiState.reviews.collectAsLazyPagingItems()
-        if (reviewsList.itemSnapshotList.isEmpty())
-            EmptyReviews(modifier = Modifier.align(Alignment.Center))
-        else {
-            LazyColumn(
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .background(NovixTheme.colors.surface)
+        ) {
+            TopBar(
+                title = stringResource(R.string.reviews),
+                onBackClick = reviewContract::onBackClicked,
                 modifier = Modifier
-                    .fillMaxSize()
-                    .padding(top = 110.dp),
-                verticalArrangement = Arrangement.spacedBy(18.dp),
-                contentPadding = PaddingValues(16.dp),
-            ) {
-                items(reviewsList.itemCount) { index ->
-                    val review = reviewsList[index]
-                    if (review != null)
-                        ReviewItem(
-                            profileUrl = review.authorDetails.profileUrl,
-                            authorName = review.authorDetails.name,
-                            authorUserName = review.authorDetails.username,
-                            rating = review.authorDetails.rating.toString(),
-                            content = review.content,
-                            date = review.createdAt.substringBefore("T")
-                        )
+                    .fillMaxWidth()
+                    .padding(horizontal = 16.dp)
+                    .padding(
+                        top = WindowInsets.statusBars.asPaddingValues()
+                            .calculateTopPadding() + 12.dp
+                    )
+            )
+
+            if (reviewsList.itemSnapshotList.isEmpty()) {
+                Box(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .weight(1f),
+                    contentAlignment = Alignment.Center
+                ) {
+                    EmptyReviews()
+                }
+            } else {
+                LazyColumn(
+                    modifier = Modifier.fillMaxSize(),
+                    verticalArrangement = Arrangement.spacedBy(18.dp),
+                    contentPadding = PaddingValues(16.dp),
+                ) {
+                    items(reviewsList.itemCount) { index ->
+                        val review = reviewsList[index]
+                        if (review != null)
+                            ReviewItem(
+                                profileUrl = review.authorDetails.profileUrl,
+                                authorName = review.authorDetails.name,
+                                authorUserName = review.authorDetails.username,
+                                rating = review.authorDetails.rating.toString(),
+                                content = review.content,
+                                date = review.createdAt.substringBefore("T")
+                            )
+                    }
                 }
             }
-        }
 
-        TopBar(
-            title = stringResource(R.string.reviews),
-            onBackClick = reviewContract::onBackClicked,
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(
-                    start = 16.dp,
-                    top = WindowInsets.statusBars.asPaddingValues().calculateTopPadding() + 12.dp
-                )
-        )
+            TopBar(
+                title = stringResource(R.string.reviews),
+                onBackClick = reviewContract::onBackClicked,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(
+                        start = 16.dp,
+                        top = WindowInsets.statusBars.asPaddingValues()
+                            .calculateTopPadding() + 12.dp
+                    )
+            )
+        }
     }
+
 }
 
 @Composable
@@ -253,6 +268,7 @@ fun AuthorItem(
         }
     }
 }
+
 
 @Composable
 fun EmptyReviews(
