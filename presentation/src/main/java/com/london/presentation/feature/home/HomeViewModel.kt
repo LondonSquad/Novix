@@ -5,7 +5,6 @@ import androidx.paging.PagingData
 import androidx.paging.cachedIn
 import com.london.domain.AppPreferencesService
 import com.london.domain.entity.UpComingMovie
-import com.london.domain.theme.AppTheme
 import com.london.domain.usecase.GetPopularMovies
 import com.london.domain.usecase.GetPopularTvShow
 import com.london.domain.usecase.GetUpComingMoviesByCategoryUseCase
@@ -130,7 +129,6 @@ class HomeViewModel @Inject constructor(
         initializeTopRatedMedia()
         fetchRecentWatchedMedia()
         initializePopularMedia()
-        initializeAppTheme()
     }
 
     override fun onMovieClick(id: Int) {
@@ -167,14 +165,6 @@ class HomeViewModel @Inject constructor(
                     }
                 },
             )
-        }
-    }
-
-    private fun initializeAppTheme() {
-        viewModelScope.launch {
-            appPreferencesService.appTheme.collect { theme ->
-                updateState { copy(isDarkTheme = theme == AppTheme.DARK) }
-            }
         }
     }
 

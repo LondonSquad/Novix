@@ -2,6 +2,7 @@ package com.london.presentation.feature.home
 
 import androidx.paging.PagingData
 import com.london.domain.entity.UpComingMovie
+import com.london.domain.theme.AppTheme
 import com.london.presentation.feature.base.ErrorState
 import com.london.presentation.utils.MovieGenre
 import kotlinx.coroutines.flow.Flow
@@ -13,7 +14,6 @@ data class HomeScreenUiState(
     val isLoading: Boolean = false,
     val error: ErrorState? = null,
     val isTopRatedLoading: Boolean = false,
-    val isDarkTheme: Boolean = true,
     val popularMediaList: List<PopularUiMedia> = emptyList(),
     val topRatedMediaList: List<HomeUiMedia> = emptyList(),
     val recentWatchedMediaFlow: Flow<List<HomeUiMedia>> = emptyFlow(),
