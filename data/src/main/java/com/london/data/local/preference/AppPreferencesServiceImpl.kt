@@ -3,12 +3,12 @@ package com.london.data.local.preference
 import android.content.SharedPreferences
 import androidx.core.content.edit
 import com.london.domain.AppPreferencesService
+import com.london.domain.contentrestriction.ContentRestrictionLevel
 import com.london.domain.language.AppLanguage
 import com.london.domain.theme.AppTheme
 import com.london.domain.theme.toAppTheme
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
-import com.london.domain.contentrestriction.ContentRestrictionLevel
 import javax.inject.Inject
 
 class AppPreferencesServiceImpl @Inject constructor(
@@ -29,8 +29,8 @@ class AppPreferencesServiceImpl @Inject constructor(
 
     private fun getAppTheme(): AppTheme {
         val theme = preferences.getString(
-            PreferencesKeys.THEME_KEY, AppTheme.SYSTEM.name
-        ) ?: AppTheme.SYSTEM.name
+            PreferencesKeys.THEME_KEY, AppTheme.DARK.name
+        ) ?: AppTheme.DARK.name
         return theme.toAppTheme()
     }
 

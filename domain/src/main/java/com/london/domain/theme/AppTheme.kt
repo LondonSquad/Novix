@@ -2,17 +2,15 @@ package com.london.domain.theme
 
 enum class AppTheme {
     LIGHT,
-    DARK,
-    SYSTEM
+    DARK
 }
 
-fun String.isDark(): Boolean = when (this) {
-    AppTheme.DARK.name -> true
+fun AppTheme.isDark(): Boolean = when (this) {
+    AppTheme.DARK -> true
     else -> false
 }
 
 fun String.toAppTheme(): AppTheme = when (this) {
     AppTheme.DARK.name -> AppTheme.DARK
-    AppTheme.LIGHT.name -> AppTheme.LIGHT
-    else -> AppTheme.SYSTEM
+    else -> AppTheme.LIGHT
 }

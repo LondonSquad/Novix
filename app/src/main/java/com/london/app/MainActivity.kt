@@ -16,7 +16,6 @@ import androidx.core.view.WindowInsetsControllerCompat
 import com.london.app.navigation.NovixApp
 import com.london.designsystem.theme.NovixTheme
 import com.london.domain.AppPreferencesService
-import com.london.domain.theme.AppTheme
 import com.london.domain.theme.isDark
 import com.london.presentation.shared.ContentRestrictionProvider
 import com.london.presentation.shared.LocalContentRestrictionLevel
@@ -39,12 +38,7 @@ class MainActivity : ComponentActivity() {
 
         setContent {
             val appTheme by appPreferencesService.appTheme.collectAsState()
-            val isSystemInDarkTheme = androidx.compose.foundation.isSystemInDarkTheme()
-
-            val useDarkTheme = when (appTheme) {
-                AppTheme.SYSTEM -> isSystemInDarkTheme
-                else -> appTheme.name.isDark()
-            }
+            val useDarkTheme = appTheme.isDark()
 
             UpdateSystemBarsTheme(useDarkTheme)
 
