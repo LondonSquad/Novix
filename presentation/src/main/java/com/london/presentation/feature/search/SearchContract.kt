@@ -3,7 +3,6 @@ package com.london.presentation.feature.search
 import androidx.compose.ui.text.input.TextFieldValue
 import com.london.domain.entity.recent.RecentSearch
 import com.london.domain.entity.recent.RecentViewed
-import com.london.presentation.feature.search.model.MovieUi
 
 interface SearchContract {
     fun onSearchQueryChange(newValue: TextFieldValue)

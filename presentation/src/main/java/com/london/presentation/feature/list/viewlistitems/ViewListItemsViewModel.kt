@@ -1,9 +1,9 @@
 package com.london.presentation.feature.list.viewlistitems
 
 import com.london.domain.entity.recent.MediaType
-import com.london.presentation.feature.base.BaseViewModel
 import com.london.presentation.feature.list.viewlistitems.uistate.ItemsType
 import com.london.presentation.feature.list.viewlistitems.uistate.ViewListItemsUiState
+import com.london.presentation.shared.base.BaseViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 
