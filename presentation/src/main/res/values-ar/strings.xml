@@ -128,4 +128,7 @@
     <string name="language">اللغة</string>
     <string name="english">الانجليزية</string>
     <string name="arabic">العربية</string>
+    <string name="app_name">نوفيكس</string>
+    <string name="app_name_description">مشتق من نوفا، مُصمم من أجل الأفلام</string>
+    <string name="novix_icon">أيقونة نوفيكس</string>
 </resources>
