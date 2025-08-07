@@ -4,6 +4,9 @@ import androidx.lifecycle.SavedStateHandle
 import com.london.domain.entity.Movie
 import com.london.domain.entity.recent.MediaType
 import com.london.domain.entity.recent.RecentViewed
+import com.london.domain.usecase.AddMovieRatingByIdUseCase
+import com.london.domain.usecase.GetAccountMovieStatesById
+import com.london.domain.usecase.LoggedInUseCase
 import com.london.domain.usecase.details.movie.ManageMovieDetailsUseCase
 import com.london.domain.usecase.recent.viewed.AddToRecentViewedUseCase
 import com.london.domain.usecase.recent.watched.AddMovieToRecentWatchedUseCase
@@ -16,8 +19,11 @@ import javax.inject.Inject
 @HiltViewModel
 class MovieDetailsViewModel @Inject constructor(
     private val movieDetails: ManageMovieDetailsUseCase,
-    private val addMovieToRecentWatchedUseCase:AddMovieToRecentWatchedUseCase,
-    private val addToRecentViewedUseCase:AddToRecentViewedUseCase,
+    private val addMovieToRecentWatchedUseCase: AddMovieToRecentWatchedUseCase,
+    private val addToRecentViewedUseCase: AddToRecentViewedUseCase,
+    private val addMovieRatingByIdUseCase: AddMovieRatingByIdUseCase,
+    private val getAccountMovieStatesById: GetAccountMovieStatesById,
+    private val getUserLoggedInUseCase: LoggedInUseCase,
     savedStateHandle: SavedStateHandle
 ) : BaseViewModel<MovieDetailsUiState, MovieDetailsEffect>(MovieDetailsUiState()),
     MovieDetailsContract {
@@ -83,7 +89,7 @@ class MovieDetailsViewModel @Inject constructor(
                 }
                 addMovieToRecentViewed(
                     RecentViewed(
-                        id =details.id,
+                        id = details.id,
                         imageUrl = details.posterUrl,
                         type = MediaType.Movie,
                         viewDate = System.currentTimeMillis()
@@ -109,10 +115,11 @@ class MovieDetailsViewModel @Inject constructor(
         )
     }
 
-    private suspend fun addMovieToRecentWatched(movie: Movie){
+    private suspend fun addMovieToRecentWatched(movie: Movie) {
         addMovieToRecentWatchedUseCase.invoke(movie)
     }
-    private suspend fun addMovieToRecentViewed(movie: RecentViewed){
+
+    private suspend fun addMovieToRecentViewed(movie: RecentViewed) {
         addToRecentViewedUseCase.invoke(movie)
     }
 
@@ -122,19 +129,68 @@ class MovieDetailsViewModel @Inject constructor(
         loadSimilarAndVideos(movieId)
     }
 
+    override fun onRateBottomSheetClick() {
+        tryToExecute(
+            block = { getUserLoggedInUseCase.invoke() },
+            onSuccess = { isLoggedIn ->
+                if (isLoggedIn)
+                    updateState { copy(isRateBottomSheetVisible = isRateBottomSheetVisible.not()) }
+                else
+                    updateState {
+                        copy(
+                            isGuestUserBottomSheetVisible = isGuestUserBottomSheetVisible.not(),
+                            isGuestUser = true
+                        )
+
+                    }
+            },
+            onError = { errorState ->
+                updateState { copy(error = errorState) }
+            }
+        )
+    }
+
+    override fun onSelectRatingClick(rating: Int) {
+        tryToExecute(
+            block = { addMovieRatingByIdUseCase.invoke(movieId, rating) },
+            onSuccess = {
+                updateState {
+                    copy(
+                        selectedRating = rating,
+                        isRated = true,
+                        isRateBottomSheetVisible = false,
+                        isSuccessfullyRated = true
+                    )
+                }
+            },
+            onError = { errorState ->
+                updateState {
+                    copy(
+                        error = errorState,
+                        isSuccessfullyRated = false
+                    )
+                }
+            },
+            onCompleted = { updateState { copy(isLoading = false) } },
+        )
+    }
+
+    override fun onLoginClick() = emitEffect(MovieDetailsEffect.OnLoginNavigation)
     private fun loadSimilarAndVideos(movieId: Int) {
         tryToExecute(
             block = {
                 val similarMovies = movieDetails.getSimilarMovies(movieId)
                 val movieVideos = movieDetails.getMovieVideo(movieId)
-                Pair(similarMovies, movieVideos)
+                val movieRating = if (getUserLoggedInUseCase.invoke())
+                    getAccountMovieStatesById.invoke(movieId) else 0
+                Triple(similarMovies, movieVideos, movieRating)
             },
-            onSuccess = { pair ->
-                val (similarMovies, videos) = pair
+            onSuccess = { (similarMovies, videos, movieRating) ->
                 updateState {
                     copy(
                         similarMovies = similarMovies,
-                        movieVideo = videos.firstOrNull()?.videoUrl.orEmpty()
+                        movieVideo = videos.firstOrNull()?.videoUrl.orEmpty(),
+                        isRated = movieRating != 0 && state.value.isGuestUser.not()
                     )
                 }
             },

@@ -6,6 +6,7 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -17,6 +18,8 @@ import com.london.designsystem.theme.NovixTheme
 import com.london.domain.AppPreferencesService
 import com.london.domain.theme.AppTheme
 import com.london.domain.theme.isDark
+import com.london.presentation.shared.ContentRestrictionProvider
+import com.london.presentation.shared.LocalContentRestrictionLevel
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
@@ -48,7 +51,13 @@ class MainActivity : ComponentActivity() {
             NovixTheme(
                 isDarkMode = useDarkTheme
             ) {
-                NovixApp()
+                ContentRestrictionProvider(appPreferencesService) { contentRestrictionLevel ->
+                    CompositionLocalProvider(
+                        LocalContentRestrictionLevel provides contentRestrictionLevel
+                    ) {
+                        NovixApp()
+                    }
+                }
             }
         }
     }

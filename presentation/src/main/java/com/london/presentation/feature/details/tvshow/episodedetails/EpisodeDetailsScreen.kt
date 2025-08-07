@@ -44,7 +44,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.london.designsystem.component.ActorItem
+import com.london.presentation.shared.ActorItem
 import com.london.designsystem.component.Icon
 import com.london.designsystem.component.Text
 import com.london.designsystem.component.TopBar
@@ -225,10 +225,10 @@ fun EpisodeDetailsScreenContent(
         FooterSection(
             haveTrailer = uiState.episodeHaveTrailer,
             modifier = Modifier.align(Alignment.BottomCenter),
-            onPlayClick = {
+            onVideoClick = {
                 uriHandler.openUrl(uiState.videoProvider)
             },
-            onStarClick = {
+            onRateClick = {
                 // TODO save favorite onclick handler
             }
         )
