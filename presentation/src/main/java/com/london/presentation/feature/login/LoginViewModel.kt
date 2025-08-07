@@ -5,8 +5,8 @@ import androidx.compose.ui.text.input.TextFieldValue
 import com.london.domain.usecase.login.LoginAsGuestUseCase
 import com.london.domain.usecase.login.LoginUseCase
 import com.london.presentation.R
-import com.london.presentation.feature.base.BaseViewModel
-import com.london.presentation.feature.base.ErrorState
+import com.london.presentation.shared.base.BaseViewModel
+import com.london.presentation.shared.base.ErrorState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 

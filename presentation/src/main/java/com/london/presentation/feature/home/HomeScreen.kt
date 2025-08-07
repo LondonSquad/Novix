@@ -1,5 +1,8 @@
 package com.london.presentation.feature.home
 
+import androidx.compose.animation.core.FastOutSlowInEasing
+import androidx.compose.animation.core.animateDpAsState
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -57,7 +60,13 @@ import com.london.designsystem.utils.string
 import com.london.domain.entity.UpComingMovie
 import com.london.domain.entity.recent.MediaType
 import com.london.presentation.R
-import com.london.presentation.feature.buildscreen.NetworkErrorScreen
+import com.london.presentation.feature.home.popular.PopularSection
+import com.london.presentation.feature.home.section.ContinueWatchingSection
+import com.london.presentation.feature.home.section.ShimmerPopularSection
+import com.london.presentation.feature.home.section.TopRatedSection
+import com.london.presentation.feature.home.trending.TrendingSection
+import com.london.presentation.shared.CarousalShimmerEffect
+import com.london.presentation.shared.buildscreen.NetworkErrorScreen
 import com.london.presentation.shared.GenresSection
 import com.london.presentation.utils.Listen
 import com.london.presentation.utils.gridColmuns
@@ -171,7 +180,6 @@ private fun Content(
     val pagerState = rememberPagerState(initialPage = 0, pageCount = {
         if (uiState.popularMediaList.isNotEmpty()) uiState.popularMediaList.size else 3
     })
-
     val isAtEndOfGrid by remember {
         derivedStateOf {
             val lastVisibleItem = lazyGridState.layoutInfo.visibleItemsInfo.lastOrNull()
@@ -184,6 +192,16 @@ private fun Content(
     val recentWatchedMediaFlow by uiState.recentWatchedMediaFlow.collectAsStateWithLifecycle(
         emptyList()
     )
+
+    val isHeaderStuck by remember {
+        derivedStateOf {
+            val itemsBeforeStickyHeader = if (recentWatchedMediaFlow.isNotEmpty()) 5 else 4
+            val scrollThreshold = 42
+            lazyGridState.firstVisibleItemIndex > itemsBeforeStickyHeader ||
+                    (lazyGridState.firstVisibleItemIndex == itemsBeforeStickyHeader &&
+                            lazyGridState.firstVisibleItemScrollOffset > scrollThreshold)
+        }
+    }
 
     Box(modifier = modifier.fillMaxSize()) {
         LazyVerticalGrid(
@@ -200,6 +218,7 @@ private fun Content(
             modifier = Modifier
                 .background(color = NovixTheme.colors.surface)
                 .fillMaxSize()
+
         ) {
 
             item(span = { GridItemSpan(maxLineSpan) }) {
@@ -259,6 +278,7 @@ private fun Content(
             upComingSection(
                 contract = homeScreenContract,
                 screenWidth = screenWidth,
+                isHeaderStuck = isHeaderStuck,
                 state = uiState,
                 upcomingMoviesLazyList = upcomingMoviesLazyList,
                 isLoading = isLoading
@@ -286,6 +306,7 @@ private fun Content(
 
 private fun LazyGridScope.upComingSection(
     contract: HomeScreenContract,
+    isHeaderStuck: Boolean = false,
     screenWidth: Dp,
     state: HomeScreenUiState,
     upcomingMoviesLazyList: LazyPagingItems<UpComingMovie>,
@@ -309,6 +330,15 @@ private fun LazyGridScope.upComingSection(
     }
 
     stickyHeader {
+        val animatedPadding by animateDpAsState(
+            targetValue = if (isHeaderStuck) 8.dp else 0.dp,
+            animationSpec = tween(
+                durationMillis = 300,
+                easing = FastOutSlowInEasing
+            ),
+            label = "header_padding"
+        )
+
         GenresSection(
             isLoading = isLoading,
             genres = state.movieGenres,
@@ -316,7 +346,8 @@ private fun LazyGridScope.upComingSection(
             screenWidth = screenWidth,
             onGenreClick = contract::onMovieGenreSelect,
             modifier = Modifier
-                .background(NovixTheme.colors.surface),
+                .background(NovixTheme.colors.surface)
+                .padding(bottom = animatedPadding),
             getGenreId = { it.id },
             getGenreName = { stringResource(it.stringResId) }
         )
@@ -325,22 +356,33 @@ private fun LazyGridScope.upComingSection(
     items(count = upcomingMoviesLazyList.itemCount) { index ->
         val movie = upcomingMoviesLazyList[index]
 
-        if (movie != null && !isLoading)
-            HomeCard(
-                imageUrl = movie.imageUrl,
-                isSaved = false,
-                onSaveClick = { /*TODO*/ },
-                modifier = Modifier
-                    .clipToBounds()
-                    .clip(RoundedCornerShape(12.dp))
-                    .clickable { contract.onMovieClick(movie.id) }
-            )
-        else
-            Box(
-                modifier = Modifier
-                    .height(240.dp)
-                    .clip(RoundedCornerShape(12.dp))
-                    .shimmerEffect()
-            )
+
+        when {
+            isLoading || movie == null -> {
+                ShimmerMovieCard()
+            }
+
+            else -> {
+                HomeCard(
+                    imageUrl = movie.imageUrl,
+                    isSaved = false,
+                    onSaveClick = { /*TODO*/ },
+                    modifier = Modifier
+                        .clipToBounds()
+                        .clip(RoundedCornerShape(12.dp))
+                        .clickable { contract.onMovieClick(movie.id) }
+                )
+            }
+        }
     }
+}
+
+@Composable
+private fun ShimmerMovieCard() {
+    Box(
+        modifier = Modifier
+            .height(240.dp)
+            .clip(RoundedCornerShape(12.dp))
+            .shimmerEffect()
+    )
 }
