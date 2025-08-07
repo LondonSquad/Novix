@@ -3,7 +3,7 @@ package com.london.domain.usecase.movielist
 import com.google.common.truth.Truth.assertThat
 import com.london.domain.entity.Movie
 import com.london.domain.entity.PagedFetchResponse
-import com.london.domain.repository.MovieListRepository
+import com.london.domain.repository.CustomMovieListRepository
 import io.mockk.coEvery
 import io.mockk.mockk
 import kotlinx.coroutines.test.runTest
@@ -13,7 +13,7 @@ import org.junit.jupiter.api.assertThrows
 
 class GetMovieListDetailsUseCaseTest {
 
-    private lateinit var listRepository: MovieListRepository
+    private lateinit var listRepository: CustomMovieListRepository
     private lateinit var getMovieListDetailsUseCase: GetMovieListDetailsUseCase
 
     @Before
@@ -25,9 +25,9 @@ class GetMovieListDetailsUseCaseTest {
     @Test
     fun `invoke should return movie list of movies from repository`() = runTest {
         //Given
-        coEvery { listRepository.getMovieListDetails(any()) } returns movieListDetails
+        coEvery { listRepository.getMovieListDetails(any(), pageNumber = 1) } returns movieListDetails
         //When
-        val result = getMovieListDetailsUseCase.invoke(LIST_ID)
+        val result = getMovieListDetailsUseCase.invoke(LIST_ID, pageNumber = 1)
         //Then
         assertThat(result).isEqualTo(movieListDetails)
     }
@@ -35,10 +35,10 @@ class GetMovieListDetailsUseCaseTest {
     @Test
     fun `invoke should throw exception when repository throws exception`() = runTest {
         //Given
-        coEvery { listRepository.getMovieListDetails(any()) } throws Exception()
+        coEvery { listRepository.getMovieListDetails(any(), pageNumber = 1) } throws Exception()
         //When //Then
         assertThrows<Exception> {
-            getMovieListDetailsUseCase.invoke(LIST_ID)
+            getMovieListDetailsUseCase.invoke(LIST_ID, pageNumber = 1)
         }
     }
 
