@@ -35,6 +35,7 @@ import com.london.data.repository.home.toprated.TopRatedRepositoryImpl
 import com.london.data.repository.home.trending.TrendingRepositoryImpl
 import com.london.data.repository.home.upcoming.UpComingRepositoryImpl
 import com.london.data.repository.list.CustomMovieListRepositoryImpl
+import com.london.data.repository.rating.RatingRepositoryImpl
 import com.london.data.repository.recent.RecentSearchRepositoryImpl
 import com.london.data.repository.recent.RecentViewedRepositoryImpl
 import com.london.data.repository.recent.RecentWatchedRepositoryIml
