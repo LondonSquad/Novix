@@ -3,12 +3,11 @@ package com.london.data.local.preference
 import android.content.SharedPreferences
 import androidx.core.content.edit
 import com.london.domain.AppPreferencesService
+import com.london.domain.contentrestriction.ContentRestrictionLevel
 import com.london.domain.language.AppLanguage
 import com.london.domain.theme.AppTheme
-import com.london.domain.theme.toAppTheme
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
-import com.london.domain.contentrestriction.ContentRestrictionLevel
 import javax.inject.Inject
 
 class AppPreferencesServiceImpl @Inject constructor(
@@ -24,18 +23,18 @@ class AppPreferencesServiceImpl @Inject constructor(
     //endregion
 
     //region App Theme
-    private val _appTheme = MutableStateFlow(getAppTheme())
-    override val appTheme: StateFlow<AppTheme> = _appTheme
+    private val _isAppDarkMode = MutableStateFlow(getAppTheme())
+    override val isAppDarkMode: StateFlow<Boolean> = _isAppDarkMode
 
-    private fun getAppTheme(): AppTheme {
+    private fun getAppTheme(): Boolean {
         val theme = preferences.getString(
-            PreferencesKeys.THEME_KEY, AppTheme.SYSTEM.name
-        ) ?: AppTheme.SYSTEM.name
-        return theme.toAppTheme()
+            PreferencesKeys.THEME_KEY, AppTheme.DARK.name
+        ) ?: AppTheme.DARK.name
+        return theme == AppTheme.DARK.name
     }
 
     override fun setAppTheme(theme: AppTheme) {
-        _appTheme.value = theme.name.toAppTheme()
+        _isAppDarkMode.value = theme == AppTheme.DARK
         preferences.edit { putString(PreferencesKeys.THEME_KEY, theme.name) }
     }
     //endregion
