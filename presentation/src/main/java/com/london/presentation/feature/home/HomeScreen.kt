@@ -53,6 +53,7 @@ import com.london.designsystem.component.Text
 import com.london.designsystem.component.button.PrimaryButton
 import com.london.designsystem.theme.NovixTheme
 import com.london.designsystem.utils.shimmerEffect
+import com.london.designsystem.utils.string
 import com.london.domain.entity.UpComingMovie
 import com.london.domain.entity.recent.MediaType
 import com.london.presentation.R
@@ -130,12 +131,19 @@ fun HomeScreen(
                             )
                         )
                 )
-                Column(modifier = Modifier.fillMaxSize()) {
+                Column(
+                    modifier = Modifier
+                        .fillMaxSize()
+                ) {
                     DefaultTopBar(
+                        appIconRes = if (NovixTheme.theme.isDark()) R.drawable.img_novix_dark else R.drawable.img_novix_light,
+                        appName = R.string.app_name.string,
+                        appDescription = R.string.app_name_description.string,
+                        appIconContentDescription = R.string.novix_icon.string,
                         modifier = Modifier
                             .fillMaxWidth()
                             .background(NovixTheme.colors.surface)
-
+                            .padding(top = 12.dp, bottom = 8.dp)
                     )
 
                     Content(
@@ -181,7 +189,7 @@ private fun Content(
         LazyVerticalGrid(
             columns = GridCells.Fixed(gridColmuns()),
             contentPadding = PaddingValues(
-                top = 12.dp,
+                top = 8.dp,
                 bottom = 16.dp,
                 start = 16.dp,
                 end = 16.dp

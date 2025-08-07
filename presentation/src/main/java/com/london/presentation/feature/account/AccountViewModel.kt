@@ -117,7 +117,7 @@ class AccountViewModel @Inject constructor(
     }
     //endregion
 
-    //region Logout
+    //region Logout Bottom Sheet
     override fun onLogoutConfirmed() {
         tryToExecute(
             block = { logoutUseCase.invoke() },
@@ -134,7 +134,7 @@ class AccountViewModel @Inject constructor(
                 }
             },
             onCompleted = {
-                emitEffect(AccountEffect.NavigateToLogin)
+                emitEffect(AccountEffect.NavigateLogout)
             }
         )
     }
@@ -170,6 +170,6 @@ class AccountViewModel @Inject constructor(
     }
 
     override fun onLoginClick() {
-        emitEffect(AccountEffect.NavigateToLogin)
+        emitEffect(AccountEffect.NavigateLogout)
     }
 }
