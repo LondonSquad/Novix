@@ -4,8 +4,8 @@ import androidx.lifecycle.viewModelScope
 import com.london.domain.AppPreferencesService
 import com.london.domain.contentrestriction.ContentRestrictionLevel
 import com.london.domain.theme.AppTheme
-import com.london.domain.usecase.GetAccountUsernameUseCase
 import com.london.domain.usecase.LoggedInUseCase
+import com.london.domain.usecase.GetAccountUsernameUseCase
 import com.london.domain.usecase.login.LogoutUseCase
 import com.london.presentation.feature.account.state.AccountUiState
 import com.london.presentation.feature.base.BaseViewModel
@@ -37,9 +37,6 @@ class AccountViewModel @Inject constructor(
             },
             onSuccess = { isLoggedIn: Boolean ->
                 updateState { copy(isUserLoggedIn = isLoggedIn) }
-                if (isLoggedIn) {
-                    fetchAndSetUsername()
-                }
             },
             onError = {
                 updateState { copy(isUserLoggedIn = false) }

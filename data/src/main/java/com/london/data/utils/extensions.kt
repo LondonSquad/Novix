@@ -1,6 +1,12 @@
 package com.london.data.utils
 
 import com.london.data.BuildConfig
+import kotlinx.serialization.json.JsonElement
+import kotlinx.serialization.json.JsonObject
+import kotlinx.serialization.json.JsonPrimitive
+import kotlinx.serialization.json.booleanOrNull
+import kotlinx.serialization.json.doubleOrNull
+import kotlinx.serialization.json.jsonPrimitive
 import java.security.MessageDigest
 import java.util.Locale
 
@@ -33,4 +39,11 @@ fun Long.isDayExpired(): Boolean {
     val oneDayInMillis = 24 * 60 * 60 * 1000L
     val oneDayAgo = System.currentTimeMillis() - oneDayInMillis
     return System.currentTimeMillis() < oneDayAgo
+}
+
+fun JsonElement?.parseRatingValue(): Double? = when {
+    this == null -> null
+    this is JsonObject -> this["value"]?.jsonPrimitive?.doubleOrNull
+    this is JsonPrimitive && this.booleanOrNull == false -> null
+    else -> null
 }
