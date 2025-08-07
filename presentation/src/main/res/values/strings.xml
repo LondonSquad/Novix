@@ -135,4 +135,10 @@
     <string name="app_name">Novix</string>
     <string name="app_name_description">Born from Nova, Made for Flix.</string>
     <string name="novix_icon">Novix Icon</string>
+    <string name="strict">Strict</string>
+    <string name="moderate">Moderate</string>
+    <string name="off">Off</string>
+    <string name="blurs_all_sensitive_content">Blurs all sensitive content.</string>
+    <string name="blurs_explicit_scenes_only">Blurs explicit scenes only.</string>
+    <string name="no_content_is_blurred">No content is blurred.</string>
 </resources>

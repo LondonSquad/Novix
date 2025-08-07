@@ -135,4 +135,10 @@
     <string name="app_name">نوفيكس</string>
     <string name="app_name_description">مشتق من نوفا، مُصمم من أجل الأفلام</string>
     <string name="novix_icon">أيقونة نوفيكس</string>
+    <string name="strict">صارم</string>
+    <string name="moderate">متوسط</string>
+    <string name="off">إيقاف</string>
+    <string name="blurs_all_sensitive_content">يتم تمويه جميع المحتويات الحساسة.</string>
+    <string name="blurs_explicit_scenes_only">يتم تمويه المشاهد الصريحة فقط.</string>
+    <string name="no_content_is_blurred">لا يتم تمويه أي محتوى.</string>
 </resources>

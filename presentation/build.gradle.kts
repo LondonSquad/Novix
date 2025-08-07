@@ -51,6 +51,9 @@ dependencies {
     implementation(libs.androidx.paging.compose)
     testImplementation(libs.androidx.paging.common)
 
+    // feature module for image blur
+    implementation(projects.feature.imageHaramBlur)
+
     testImplementation(libs.bundles.testing)
     androidTestImplementation(libs.bundles.android.testing)
     implementation(libs.firebase.crashlytics)
