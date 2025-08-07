@@ -34,6 +34,7 @@ fun MoviesByCategoryScreen(
     onNavigateToMovieDetails: (Int) -> Unit,
     onNavigateBack: () -> Unit
 ) {
+
     val state by viewModel.state.collectAsStateWithLifecycle()
     val effect by viewModel.effect.collectAsState(null)
 
@@ -46,20 +47,11 @@ fun MoviesByCategoryScreen(
         }
     }
 
-    val moviesByCategory = state.movies.collectAsLazyPagingItems()
-
-    BuildScreen(
-        onBack = viewModel::onBack,
-        isLoading = moviesByCategory.isLoading(),
-        isError = moviesByCategory.loadState.refresh is LoadState.Error,
-        onRetry = moviesByCategory::refresh
-    ) {
-        MoviesByCategoryContent(
-            state = state,
-            contract = viewModel,
-            modifier = modifier,
-        )
-    }
+    MoviesByCategoryContent(
+        state = state,
+        contract = viewModel,
+        modifier = modifier,
+    )
 }
 
 @Composable
@@ -70,31 +62,38 @@ private fun MoviesByCategoryContent(
 ) {
 
     val moviesLazyList = state.movies.collectAsLazyPagingItems()
-    if(moviesLazyList.itemCount == 0) return EmptyGenreLayout()
-    Column {
-        TopBar(
-            title = stringResource(
-                convertGenreCodeToString(
-                    genreId = state.categoryId, searchCategory = SearchCategory.Movies
-                )
-            ), onBackClick = contract::onBack,
-            modifier = modifier
-                .statusBarsPadding()
-                .padding(horizontal = 16.dp, vertical = 12.dp)
+    if (moviesLazyList.itemCount == 0) return EmptyGenreLayout()
+    BuildScreen(
+        onBack = contract::onBack,
+        isLoading = moviesLazyList.isLoading(),
+        isError = moviesLazyList.loadState.refresh is LoadState.Error,
+        onRetry = moviesLazyList::refresh
+    ) {
+        Column {
+            TopBar(
+                title = stringResource(
+                    convertGenreCodeToString(
+                        genreId = state.categoryId, searchCategory = SearchCategory.Movies
+                    )
+                ), onBackClick = contract::onBack,
+                modifier = modifier
+                    .statusBarsPadding()
+                    .padding(horizontal = 16.dp, vertical = 12.dp)
 
-        )
-        MediaLazyPagingGrid(
-            pagingFlow = moviesLazyList,
-            onItemClick = { contract.onMovieClick(it.id) },
-            getImageUrl = { it.posterUrl },
-            getTitle = { "${it.name} movie img" },
-            modifier = Modifier
-                .weight(1f)
-                .fillMaxWidth()
-                .padding(horizontal = 16.dp),
-            onSaveClick = { /* TODO: Implement save functionality */ },
-            isItemSaved = { false },
-        )
+            )
+            MediaLazyPagingGrid(
+                pagingFlow = moviesLazyList,
+                onItemClick = { contract.onMovieClick(it.id) },
+                getImageUrl = { it.posterUrl },
+                getTitle = { "${it.name} movie img" },
+                modifier = Modifier
+                    .weight(1f)
+                    .fillMaxWidth()
+                    .padding(horizontal = 16.dp),
+                onSaveClick = { /* TODO: Implement save functionality */ },
+                isItemSaved = { false },
+            )
+        }
     }
 }
 
