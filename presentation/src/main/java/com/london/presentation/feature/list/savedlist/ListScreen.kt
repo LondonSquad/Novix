@@ -61,6 +61,7 @@ fun ListScreen(
     effect?.Listen { currentEffect ->
         when (currentEffect) {
             is ListEffect.NavigateToDetails -> onNavigateToDetails(currentEffect.id)
+            ListEffect.ShowAddListSheet -> TODO()
         }
     }
 
@@ -315,12 +316,7 @@ private fun Preview() {
         val state = ListUiState()
         Content(
             state = state,
-            contract = object : ListContract {
-                override fun onRetry() {}
-                override fun onLoginClick() {}
-                override fun onListClick(id: Int) {}
-                override fun onFabClick() {}
-            }
+            contract = defaultContractList()
         )
     }
 }
