@@ -30,9 +30,6 @@ fun <T : Any> MediaLazyGridWithFilter(
     onMovieGenreClick: (MovieGenre) -> Unit = {},
     onTvShowGenreClick: (TvShowGenre) -> Unit = {}
 ) {
-    val screenWidth = with(LocalDensity.current) {
-        LocalWindowInfo.current.containerSize.width.toDp()
-    }
 
     Column(
         modifier = modifier
@@ -46,7 +43,6 @@ fun <T : Any> MediaLazyGridWithFilter(
             selectedTvShowGenre = selectedTvShowGenre,
             onMovieGenreClick = onMovieGenreClick,
             onTvShowGenreClick = onTvShowGenreClick,
-            screenWidth = screenWidth
         )
 
         MediaLazyVerticalGrid(

@@ -11,8 +11,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.paging.compose.LazyPagingItems
-import com.london.designsystem.component.TabItem
 import com.london.designsystem.component.TabLayout
+import com.london.designsystem.component.Tabbable
 import com.london.designsystem.component.TopBar
 import com.london.designsystem.theme.NovixTheme
 import com.london.designsystem.theme.ThemePreviews
@@ -42,9 +42,11 @@ fun <T : Any> MediaLazyGridWithTabs(
 ) {
 
     val tabs = listOf(
-        TabItem(R.string.Movies),
-        TabItem(R.string.TV_Shows)
+        TabbableItem(R.string.Movies),
+        TabbableItem(R.string.TV_Shows)
     )
+
+    val selectedTab = tabs.getOrNull(tabSelected)
 
     val isMovieSelected = tabSelected == 0
     val isTvShowSelected = tabSelected == 1
@@ -65,8 +67,11 @@ fun <T : Any> MediaLazyGridWithTabs(
 
         TabLayout(
             tabs = tabs,
-            selectedIndex = tabSelected,
-            onTabSelected = onTabSelected,
+            selectedTab = selectedTab,
+            onTabSelected = { tab ->
+                val index = tabs.indexOf(tab)
+                if (index != -1) onTabSelected(index)
+            },
             modifier = Modifier.padding(top = 4.dp)
         )
 
@@ -88,6 +93,8 @@ fun <T : Any> MediaLazyGridWithTabs(
     }
 }
 
+data class TabbableItem(override val tabTextResId: Int) : Tabbable
+
 @ThemePreviews
 @Composable
 private fun Preview() {
@@ -101,6 +108,7 @@ private fun Preview() {
             genreIds = listOf(28, 12)
         )
     )
+
     val sampleTvShows = listOf(
         TvShow(
             id = 1,

@@ -8,6 +8,8 @@ import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.platform.LocalWindowInfo
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
@@ -24,8 +26,10 @@ fun MediaGenreFilters(
     selectedTvShowGenre: TvShowGenre,
     onMovieGenreClick: (MovieGenre) -> Unit,
     onTvShowGenreClick: (TvShowGenre) -> Unit,
-    screenWidth: Dp
 ) {
+    val screenWidth = with(LocalDensity.current) {
+        LocalWindowInfo.current.containerSize.width.toDp()
+    }
     when {
         isMovieSelected -> GenreChipsRow(
             genres = MovieGenre.entries,
@@ -80,7 +84,6 @@ private fun Preview() {
         selectedMovieGenre = MovieGenre.All,
         selectedTvShowGenre = TvShowGenre.All,
         onMovieGenreClick = {},
-        onTvShowGenreClick = {},
-        screenWidth = 360.dp
+        onTvShowGenreClick = {}
     )
 }
