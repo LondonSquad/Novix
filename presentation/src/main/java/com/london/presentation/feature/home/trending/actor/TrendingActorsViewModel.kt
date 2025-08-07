@@ -1,8 +1,8 @@
 package com.london.presentation.feature.home.trending.actor
 
 import com.london.domain.usecase.GetTrendingActorsUseCase
-import com.london.presentation.feature.base.BaseViewModel
-import com.london.presentation.feature.base.createPagingSourceFlow
+import com.london.presentation.shared.base.BaseViewModel
+import com.london.presentation.shared.base.createPagingSourceFlow
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 

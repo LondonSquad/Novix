@@ -1,31 +1,48 @@
 package com.london.presentation.feature.account
 
+import androidx.lifecycle.viewModelScope
 import com.london.domain.AppPreferencesService
+import com.london.domain.contentrestriction.ContentRestrictionLevel
 import com.london.domain.theme.AppTheme
+import com.london.domain.usecase.LoggedInUseCase
 import com.london.domain.usecase.login.LogoutUseCase
 import com.london.presentation.feature.account.state.AccountUiState
-import com.london.presentation.feature.base.BaseViewModel
-import com.london.presentation.feature.base.ErrorState
+import com.london.presentation.shared.base.BaseViewModel
+import com.london.presentation.shared.base.ErrorState
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 import javax.inject.Inject
 
 @HiltViewModel
 class AccountViewModel @Inject constructor(
     private val appPreferencesService: AppPreferencesService,
-    private val logoutUseCase: LogoutUseCase
+    private val logoutUseCase: LogoutUseCase,
+    private val loggedInUseCase: LoggedInUseCase
 ) : BaseViewModel<AccountUiState, AccountEffect>(AccountUiState()),
     AccountContract {
 
     init {
-        updateState {
-            copy(isUserLoggedIn = checkIfUserIsLoggedIn())
-        }
+        checkUserLoginStatus()
+        observeContentRestrictionLevel()
     }
 
-    private fun checkIfUserIsLoggedIn(): Boolean {
-        // todo: Implement your authentication check logic here
-        // This could check shared preferences, auth repository, etc.
-        return true // Replace with actual logic
+    private fun checkUserLoginStatus() {
+        tryToExecute(
+            block = { loggedInUseCase.invoke() },
+            onStart = {
+                updateState { copy(isLoading = true) }
+            },
+            onSuccess = { isLoggedIn: Boolean ->
+                updateState { copy(isUserLoggedIn = isLoggedIn) }
+            },
+            onError = {
+                updateState { copy(isUserLoggedIn = false) }
+            },
+            onCompleted = {
+                updateState { copy(isLoading = false) }
+            }
+        )
     }
 
     override fun onWatchingHistoryClick() {
@@ -43,6 +60,26 @@ class AccountViewModel @Inject constructor(
     override fun onChangePasswordClick() {
         emitEffect(AccountEffect.NavigateToChangePassword)
     }
+
+    //region Content Restriction Bottom Sheet
+    private fun observeContentRestrictionLevel() {
+        appPreferencesService.contentRestrictionLevel
+            .onEach { level ->
+                updateState { copy(currentContentRestriction = level) }
+            }
+            .launchIn(viewModelScope)
+    }
+
+    override fun onContentRestrictionSave(level: ContentRestrictionLevel) {
+        appPreferencesService.setContentRestrictionLevel(level)
+        updateState {
+            copy(
+                showContentRestrictionBottomSheet = false,
+                currentContentRestriction = level
+            )
+        }
+    }
+    //endregion
 
     //region Appearance Bottom Sheet
     override fun onAppearanceClick() {

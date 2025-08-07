@@ -30,19 +30,20 @@ import com.london.presentation.feature.account.AccountScreen
 import com.london.presentation.feature.category.CategoriesScreen
 import com.london.presentation.feature.category.moviesbycategory.MoviesByCategoryScreen
 import com.london.presentation.feature.category.tvshowbycategory.TvShowByCategoryScreen
-import com.london.presentation.feature.continuewatching.ContinueWatchingScreen
 import com.london.presentation.feature.details.actor.ActorDetailsScreen
 import com.london.presentation.feature.details.actordetails.gallery.ActorGalleryScreen
 import com.london.presentation.feature.details.actordetails.topmoviespicks.TopMoviesPicksScreen
 import com.london.presentation.feature.details.actordetails.toptvshowspicks.TopTvShowsPicksScreen
-import com.london.presentation.feature.details.movieDetalis.MovieDetailsScreen
+import com.london.presentation.feature.details.movie.MovieDetailsScreen
 import com.london.presentation.feature.details.tvshow.episodedetails.EpisodeDetailsScreen
 import com.london.presentation.feature.details.tvshow.tvshowdetails.TvShowsDetailsScreen
 import com.london.presentation.feature.home.HomeScreen
+import com.london.presentation.feature.home.toprated.TopRatedScreen
 import com.london.presentation.feature.home.trending.actor.TrendingActorsScreen
-import com.london.presentation.feature.home.trending.movies.TrendingMoviesScreen
-import com.london.presentation.feature.home.trending.tvshows.TrendingTvShowsScreen
+import com.london.presentation.feature.home.trending.movie.TrendingMoviesScreen
+import com.london.presentation.feature.home.trending.tvshow.TrendingTvShowsScreen
 import com.london.presentation.feature.list.savedlist.ListScreen
+import com.london.presentation.feature.list.viewlistitems.ViewListItemsScreen
 import com.london.presentation.feature.login.LoginScreen
 import com.london.presentation.feature.onboarding.OnboardingRoute
 import com.london.presentation.feature.onboarding.WelcomeScreen
@@ -50,7 +51,6 @@ import com.london.presentation.feature.register.WebViewRegistrationScreen
 import com.london.presentation.feature.reviews.ReviewsScreen
 import com.london.presentation.feature.search.SearchScreen
 import com.london.presentation.feature.splash.SplashRoute
-import com.london.presentation.feature.toprated.TopRatedScreen
 import com.london.presentation.navigation.Screen
 import com.london.presentation.navigation.Screen.ActorDetails
 import com.london.presentation.navigation.Screen.MovieDetails
@@ -59,6 +59,7 @@ import com.london.presentation.navigation.Screen.TrendingMovies
 import com.london.presentation.navigation.Screen.TrendingTvShows
 import com.london.presentation.navigation.Screen.TvShowDetails
 import com.london.presentation.navigation.Screen.WatchingHistory
+import com.london.presentation.shared.continuewatching.ContinueWatchingScreen
 import kotlinx.serialization.Serializable
 import timber.log.Timber
 
@@ -237,9 +238,9 @@ fun NavGraphBuilder.mainNavGraph(
                 navController.navigate(TvShowDetails(tvShowId))
             },
             onNavigateTopRated = { navController.navigate(Screen.TopRated) },
-            onNavigateTrendingMovies = { navController.navigate(Screen.TrendingMovies) },
-            onNavigateTrendingTvShows = { navController.navigate(Screen.TrendingTvShows) },
-            onNavigateTrendingActors = { navController.navigate(Screen.TrendingActors) },
+            onNavigateTrendingMovies = { navController.navigate(TrendingMovies) },
+            onNavigateTrendingTvShows = { navController.navigate(TrendingTvShows) },
+            onNavigateTrendingActors = { navController.navigate(TrendingActors) },
             onNavigateContinueWatching = { navController.navigate(Screen.ContinueWatching) }
         )
     }
@@ -299,7 +300,7 @@ fun NavGraphBuilder.mainNavGraph(
                 navController.navigate(TvShowDetails(tvShowId))
             },
             onNavigateToActorDetails = { actorId ->
-                navController.navigate(Screen.ActorDetails(actorId))
+                navController.navigate(ActorDetails(actorId))
             },
             onNavigateToMovieDetails = { movieId ->
                 navController.navigate(MovieDetails(movieId))
@@ -323,7 +324,10 @@ fun NavGraphBuilder.mainNavGraph(
         popExitTransition = { fadeOut(tween(500)) },
     ) {
         ListScreen(
-            onNavigateToDetails = {}
+            onNavigateToDetails = {
+                // id is dummy
+                navController.navigate(Screen.ViewListItems(8548075))
+            }
         )
     }
 
@@ -334,7 +338,7 @@ fun NavGraphBuilder.mainNavGraph(
         popExitTransition = { fadeOut(tween(500)) },
     ) {
         AccountScreen(
-            onNavigateToWatchingHistory = { navController.navigate(Screen.WatchingHistory) },
+            onNavigateToWatchingHistory = { navController.navigate(WatchingHistory) },
             onNavigateToMyRating = { navController.navigate(Screen.MyRating) },
             onNavigateToLogin = {
                 navController.navigate(Screen.Login) {
@@ -396,7 +400,7 @@ fun NavGraphBuilder.mainNavGraph(
             onNavigateToReviews = { tvShowId, mediaType ->
                 navController.navigate(Screen.Reviews(tvShowId, mediaType))
             }, onNavigateToCast = { actorId ->
-                navController.navigate(Screen.ActorDetails(actorId))
+                navController.navigate(ActorDetails(actorId))
             },
             onNavigateBack = { navController.navigateUp() },
             onNavigateToGenre = { genreId ->
@@ -446,10 +450,13 @@ fun NavGraphBuilder.mainNavGraph(
                 navController.navigate(MovieDetails(movieId))
             },
             onNavigateToActor = { actorId ->
-                navController.navigate(Screen.ActorDetails(actorId))
+                navController.navigate(ActorDetails(actorId))
             },
             onNavigateToReviews = { movieId, mediaType ->
                 navController.navigate(Screen.Reviews(movieId, mediaType))
+            },
+            onNavigateToLogin = {
+                navController.navigate(Screen.Login)
             }
         )
     }
@@ -478,7 +485,7 @@ fun NavGraphBuilder.mainNavGraph(
         )
     }
 
-    composable<Screen.ActorDetails> {
+    composable<ActorDetails> {
         ActorDetailsScreen(
             onNavigateToMoviePicks = { actorId ->
                 navController.navigate(Screen.ActorTopMoviesPicksDetails(actorId))
@@ -507,7 +514,7 @@ fun NavGraphBuilder.mainNavGraph(
         EpisodeDetailsScreen(
             onNavigateBack = { navController.popBackStack() },
             onNavigateToCast = { actorId ->
-                navController.navigate(Screen.ActorDetails(actorId))
+                navController.navigate(ActorDetails(actorId))
             }
         )
     }
@@ -537,6 +544,20 @@ fun NavGraphBuilder.mainNavGraph(
                 navController.navigate(TvShowDetails(id))
             },
             screenTitle = stringResource(R.string.continue_watch)
+        )
+    }
+
+    composable<Screen.ViewListItems>(
+        exitTransition = { fadeOut(tween(500)) },
+        popEnterTransition = { fadeIn(tween(500)) },
+        enterTransition = { fadeIn(tween(500)) },
+        popExitTransition = { fadeOut(tween(500)) },
+    ) {
+        ViewListItemsScreen(
+            onNavigateBack = navController::navigateUp,
+            onNavigateToMovieDetails = {
+                navController.navigate(MovieDetails(it))
+            },
         )
     }
 }
