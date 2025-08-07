@@ -1,0 +1,22 @@
+package com.london.data.remote.source.myrating
+
+import com.london.data.remote.model.ApiResponse
+import com.london.data.remote.model.myrating.RatedMovieResponse
+import com.london.data.remote.service.myrating.MyRatingApiService
+import com.london.data.remote.source.base.BaseRemoteDatasource
+import javax.inject.Inject
+
+class MyRatingRemoteDataSourceImpl @Inject constructor(
+    private val myRatingApiResponse: MyRatingApiService
+) : MyRatingRemoteDataSource, BaseRemoteDatasource {
+
+    override suspend fun getAllRatedMovies(
+        accountId: Int,
+        sessionId: String,
+        page: Int,
+        language: String,
+        sortBy: String
+    ): Result<ApiResponse<RatedMovieResponse>> {
+
+    }
+}
