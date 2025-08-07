@@ -67,8 +67,6 @@ import com.london.presentation.shared.CustomBackDropImagePager
 import com.london.presentation.shared.HomeCard
 import com.london.presentation.shared.ImageView
 import com.london.presentation.shared.buildscreen.BuildScreen
-import com.london.presentation.shared.HomeCard
-import com.london.presentation.shared.ImageView
 import com.london.presentation.utils.Listen
 import com.london.presentation.utils.offsetLayout
 import com.london.presentation.utils.toLocalizedNumbers
@@ -151,7 +149,7 @@ fun ActorScreenContent(
                     uiState.actorImageDetails?.let { image ->
                         CustomBackDropImagePager(
                             images = image.map { it.fileUrl },
-                            isVisibleDots = uiState.actorImageDetails.size > 1
+                            isVisibleDots = false
                         )
                     }
                 }
