@@ -41,19 +41,10 @@ fun TvShowByCategoryScreen(
         }
     }
 
-    val tvShowByCategory = state.tvShowFlow.collectAsLazyPagingItems()
-
-    BuildScreen(
-        onBack = viewModel::onBack,
-        isLoading = tvShowByCategory.isLoading(),
-        isError = tvShowByCategory.loadState.refresh is LoadState.Error,
-        onRetry = tvShowByCategory::refresh
-    ) {
-        Content(
-            state = state,
-            contract = viewModel,
-        )
-    }
+    Content(
+        state = state,
+        contract = viewModel,
+    )
 }
 
 @Composable
@@ -64,29 +55,36 @@ private fun Content(
 ) {
 
     val tvShowLazyList = state.tvShowFlow.collectAsLazyPagingItems()
-    Column {
-        TopBar(
-            title = stringResource(
-                convertGenreCodeToString(
-                    genreId = state.categoryId, searchCategory = SearchCategory.TvShows
-                )
-            ), onBackClick = contract::onBack,
-            modifier = modifier
-                .statusBarsPadding()
-                .padding(horizontal = 16.dp, vertical = 12.dp)
-        )
-        MediaLazyPagingGrid(
-            pagingFlow = tvShowLazyList,
-            onItemClick = { contract.onTvShowClick(it.id) },
-            getImageUrl = { it.posterPicture },
-            getTitle = { "${it.name} tv show img" },
-            modifier = Modifier
-                .weight(1f)
-                .fillMaxWidth()
-                .padding(horizontal = 16.dp),
-            onSaveClick = { /* TODO: Implement save functionality */ },
-            isItemSaved = { false },
-        )
+    BuildScreen(
+        onBack = contract::onBack,
+        isLoading = tvShowLazyList.isLoading(),
+        isError = tvShowLazyList.loadState.refresh is LoadState.Error,
+        onRetry = tvShowLazyList::refresh
+    ) {
+        Column {
+            TopBar(
+                title = stringResource(
+                    convertGenreCodeToString(
+                        genreId = state.categoryId, searchCategory = SearchCategory.TvShows
+                    )
+                ), onBackClick = contract::onBack,
+                modifier = modifier
+                    .statusBarsPadding()
+                    .padding(horizontal = 16.dp, vertical = 12.dp)
+            )
+            MediaLazyPagingGrid(
+                pagingFlow = tvShowLazyList,
+                onItemClick = { contract.onTvShowClick(it.id) },
+                getImageUrl = { it.posterPicture },
+                getTitle = { "${it.name} tv show img" },
+                modifier = Modifier
+                    .weight(1f)
+                    .fillMaxWidth()
+                    .padding(horizontal = 16.dp),
+                onSaveClick = { /* TODO: Implement save functionality */ },
+                isItemSaved = { false },
+            )
+        }
     }
 }
 
@@ -97,9 +95,7 @@ private fun Preview() {
         state = TvShowByCategoryUiState(),
         contract = object : TvShowByCategoryContract {
             override fun onSavedClick(tvShowId: Int) {}
-
             override fun onTvShowClick(tvShowId: Int) {}
-
             override fun onBack() {}
         }
     )
