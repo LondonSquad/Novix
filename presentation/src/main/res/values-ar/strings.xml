@@ -107,6 +107,9 @@
     <string name="no_reviews">"لا يوجد مراجعات"</string>
     <string name="login_failed">فشل تسجيل الدخول. يرجى التحقق من بيانات التسجيل الخاصة بك.</string>
     <string name="guest_login_failed">فشل تسجيل الدخول كضيف.</string>
+    <string name="edit_list">تعديل المجموعة</string>
+    <string name="save">حفظ</string>
+    <string name="list_title">عنوان المجموعة</string>
     <string name="no_items_found">لا يوجد محتوى</string>
     <string name="saved_list_title">القوائم المحفوظة</string>
     <string name="no_saved_list">لا توجد أي قوائم حتي الان، اضغط علي زر + لاضافة قائمة جديدة</string>
@@ -124,10 +127,11 @@
     <string name="appearance">المظهر</string>
     <string name="dark">مظلم</string>
     <string name="light">فاتح</string>
-    <string name="save">حفظ</string>
     <string name="language">اللغة</string>
     <string name="english">الانجليزية</string>
     <string name="arabic">العربية</string>
+    <string name="add_new_list">اضافة مجموعة جديدة</string>
+    <string name="add">اضافة</string>
     <string name="app_name">نوفيكس</string>
     <string name="app_name_description">مشتق من نوفا، مُصمم من أجل الأفلام</string>
     <string name="novix_icon">أيقونة نوفيكس</string>
