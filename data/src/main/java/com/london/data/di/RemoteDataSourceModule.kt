@@ -33,6 +33,7 @@ import com.london.data.remote.source.home.upcoming.UpComingRemoteDataSource
 import com.london.data.remote.source.home.upcoming.UpComingRemoteDataSourceImpl
 import com.london.data.remote.source.list.CustomMovieListsRemoteDataSource
 import com.london.data.remote.source.list.CustomMovieListsRemoteDataSourceImpl
+import com.london.data.remote.source.myrating.MyRatingRemoteDataSource
 import com.london.data.remote.source.myrating.MyRatingRemoteDataSourceImpl
 import com.london.data.remote.source.reviews.ReviewsRemoteDataSource
 import com.london.data.remote.source.reviews.ReviewsRemoteDataSourceImpl
@@ -140,7 +141,7 @@ object RemoteDataSourceModule {
     @Singleton
     fun provideMyRatingRemoteDataSource(
         apiService: MyRatingApiService
-    ): MyRatingRemoteDataSourceImpl = MyRatingRemoteDataSourceImpl(
+    ): MyRatingRemoteDataSource = MyRatingRemoteDataSourceImpl(
         myRatingApiResponse = apiService
     )
 
