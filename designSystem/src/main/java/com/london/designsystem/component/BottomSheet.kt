@@ -41,7 +41,7 @@ fun ModalBottomSheet(
     modifier: Modifier = Modifier,
     sheetMaxWidth: Dp = BottomSheetDefaults.SheetMaxWidth,
     shape: Shape = BottomSheetDefaults.ExpandedShape,
-    containerColor: Color = BottomSheetDefaults.ContainerColor,
+    containerColor: Color = NovixTheme.colors.surface,
     contentColor: Color = contentColorFor(containerColor),
     tonalElevation: Dp = 0.dp,
     scrimColor: Color = BottomSheetDefaults.ScrimColor,

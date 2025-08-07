@@ -29,7 +29,6 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.london.designsystem.component.HomeCard
 import com.london.designsystem.component.NovixChip
 import com.london.designsystem.component.TabLayout
 import com.london.designsystem.component.TopBar
@@ -40,6 +39,7 @@ import com.london.presentation.R
 import com.london.presentation.feature.base.ErrorState
 import com.london.presentation.feature.buildscreen.BuildScreen
 import com.london.presentation.shared.EmptyGenreLayout
+import com.london.presentation.shared.HomeCard
 import com.london.presentation.shared.MediaCategory
 import com.london.presentation.utils.Listen
 import com.london.presentation.utils.MovieGenre
