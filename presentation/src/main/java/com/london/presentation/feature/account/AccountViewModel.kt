@@ -11,6 +11,7 @@ import com.london.presentation.feature.account.state.AccountUiState
 import com.london.presentation.shared.base.BaseViewModel
 import com.london.presentation.shared.base.ErrorState
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import javax.inject.Inject
@@ -28,6 +29,7 @@ class AccountViewModel @Inject constructor(
         checkUserLoginStatus()
         fetchAndSetUsername()
         observeContentRestrictionLevel()
+        initializeAppTheme()
     }
 
     private fun checkUserLoginStatus() {
@@ -38,6 +40,21 @@ class AccountViewModel @Inject constructor(
             },
             onSuccess = { isLoggedIn: Boolean ->
                 updateState { copy(isUserLoggedIn = isLoggedIn) }
+            },
+            onError = {
+                updateState { copy(isUserLoggedIn = false) }
+            },
+            onCompleted = {
+                updateState { copy(isLoading = false) }
+            }
+        )
+    }
+
+    private fun initializeAppTheme() {
+        tryToExecute(
+            block = { appPreferencesService.isAppDarkMode.first() },
+            onSuccess = { isAppDarkMode ->
+                updateState { copy(appTheme = if (isAppDarkMode) AppTheme.DARK else AppTheme.LIGHT) }
             },
             onError = {
                 updateState { copy(isUserLoggedIn = false) }
