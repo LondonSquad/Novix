@@ -42,7 +42,7 @@ interface CustomMovieListsApiService {
         @Body movieAdditionBody: ListMovieBody
     ): Response<CustomListResponse>
 
-    @GET("3/list/{list_id}/remove_item")
+    @POST("3/list/{list_id}/remove_item")
     suspend fun removeMovieFromList(
         @Path("list_id") listId: Int,
         @Query("session_id") sessionId: String?,
