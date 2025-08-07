@@ -1,5 +1,8 @@
 package com.london.presentation.feature.home
 
+import androidx.compose.animation.core.FastOutSlowInEasing
+import androidx.compose.animation.core.animateDpAsState
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -48,6 +51,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.paging.compose.LazyPagingItems
 import androidx.paging.compose.collectAsLazyPagingItems
 import com.london.designsystem.component.DefaultTopBar
+import com.london.presentation.shared.HomeCard
 import com.london.designsystem.component.Text
 import com.london.designsystem.component.button.PrimaryButton
 import com.london.designsystem.theme.NovixTheme
@@ -62,9 +66,8 @@ import com.london.presentation.feature.home.section.ShimmerPopularSection
 import com.london.presentation.feature.home.section.TopRatedSection
 import com.london.presentation.feature.home.trending.TrendingSection
 import com.london.presentation.shared.CarousalShimmerEffect
-import com.london.presentation.shared.GenresSection
-import com.london.presentation.shared.HomeCard
 import com.london.presentation.shared.buildscreen.NetworkErrorScreen
+import com.london.presentation.shared.GenresSection
 import com.london.presentation.utils.Listen
 import com.london.presentation.utils.gridColmuns
 
@@ -94,21 +97,6 @@ fun HomeScreen(
         }
     }
 
-
-    Content(
-        uiState = uiState,
-        homeScreenContract = viewModel
-    )
-
-}
-
-@Composable
-private fun Content(
-    uiState: HomeScreenUiState,
-    modifier: Modifier = Modifier,
-    homeScreenContract: HomeScreenContract = defaultHomeScreenContract(),
-) {
-    val upcomingMoviesLazyList = uiState.upcomingMovies.collectAsLazyPagingItems()
     val lazyGridState = rememberSaveable(
         saver = LazyGridState.Saver,
     ) {
@@ -118,29 +106,13 @@ private fun Content(
     val screenWidth =
         with(LocalDensity.current) { LocalWindowInfo.current.containerSize.width.toDp() }
 
-
-    val pagerState = rememberPagerState(initialPage = 0, pageCount = {
-        if (uiState.popularMediaList.isNotEmpty()) uiState.popularMediaList.size else 3
-    })
-
-    val isAtEndOfGrid by remember {
-        derivedStateOf {
-            val lastVisibleItem = lazyGridState.layoutInfo.visibleItemsInfo.lastOrNull()
-            val totalItems = lazyGridState.layoutInfo.totalItemsCount
-            lastVisibleItem?.index == totalItems - 1
-        }
-    }
-
-    val isLoading = uiState.isLoading
-    val recentWatchedMediaFlow by uiState.recentWatchedMediaFlow.collectAsStateWithLifecycle(
-        emptyList()
-    )
+    val upcomingMoviesLazyList = uiState.upcomingMovies.collectAsLazyPagingItems()
 
 
     when {
         uiState.error != null -> NetworkErrorScreen(
             onRetry = {
-                homeScreenContract.onRetry()
+                viewModel.onRetry()
                 upcomingMoviesLazyList.retry()
             },
             onBack = null
@@ -183,117 +155,158 @@ private fun Content(
                             .padding(top = 12.dp, bottom = 8.dp)
                     )
 
-                    Box(modifier = modifier.fillMaxSize()) {
-                        LazyVerticalGrid(
-                            columns = GridCells.Fixed(gridColmuns()),
-                            contentPadding = PaddingValues(
-                                top = 8.dp,
-                                bottom = 16.dp,
-                                start = 16.dp,
-                                end = 16.dp
-                            ),
-                            state = lazyGridState,
-                            horizontalArrangement = Arrangement.spacedBy(12.dp),
-                            verticalArrangement = Arrangement.spacedBy(12.dp),
-                            modifier = Modifier
-                                .background(color = NovixTheme.colors.surface)
-                                .fillMaxSize()
-                        ) {
-
-                            item(span = { GridItemSpan(maxLineSpan) }) {
-                                if (uiState.popularMediaList.isNotEmpty()) {
-                                    PopularSection(
-                                        modifier = Modifier.requiredWidth(screenWidth),
-                                        pagerState = pagerState,
-                                        uiMediaList = uiState.popularMediaList,
-                                        onSaveClick = {/*TODO*/ },
-                                        onCardClick = { id, mediaType ->
-                                            when (mediaType) {
-                                                MediaType.TvShow -> homeScreenContract.onTvShowClick(
-                                                    id
-                                                )
-
-                                                MediaType.Movie -> homeScreenContract.onMovieClick(
-                                                    id
-                                                )
-                                            }
-                                        }
-                                    )
-                                } else {
-                                    ShimmerPopularSection(
-                                        modifier = Modifier.requiredWidth(screenWidth),
-                                        pagerState = pagerState,
-                                    )
-                                }
-                            }
-
-                            item(span = { GridItemSpan(maxLineSpan) }) {
-                                TrendingSection(
-                                    isLoading = isLoading,
-                                    onMoviesClick = homeScreenContract::onTrendingMoviesCardClicked,
-                                    onTvShowsClick = homeScreenContract::onTrendingTvShowsCardClicked,
-                                    onActorsClick = homeScreenContract::onTrendingActorsCardClicked
-                                )
-                            }
-
-                            item(span = { GridItemSpan(maxLineSpan) }) {
-                                if (!uiState.isTopRatedLoading)
-                                    TopRatedSection(
-                                        uiState = uiState,
-                                        homeScreenContract = homeScreenContract,
-                                        modifier = Modifier.requiredWidth(screenWidth)
-                                    )
-                                else
-                                    CarousalShimmerEffect()
-                            }
-
-                            if (recentWatchedMediaFlow.isNotEmpty()) {
-                                item(span = { GridItemSpan(maxLineSpan) }) {
-                                    if (!isLoading)
-                                        ContinueWatchingSection(
-                                            recentWatchedMediaList = recentWatchedMediaFlow,
-                                            homeScreenContract = homeScreenContract,
-                                            modifier = Modifier.requiredWidth(screenWidth)
-                                        )
-                                    else CarousalShimmerEffect()
-                                }
-                            }
-
-                            upComingSection(
-                                contract = homeScreenContract,
-                                screenWidth = screenWidth,
-                                state = uiState,
-                                upcomingMoviesLazyList = upcomingMoviesLazyList,
-                                isLoading = isLoading
-                            )
-                        }
-
-                        if (isAtEndOfGrid)
-                            PrimaryButton(
-                                text = "",
-                                hasLabel = false,
-                                icon = R.drawable.retry,
-                                hasIcon = true,
-                                isLoading = false,
-                                onClick = {
-                                    upcomingMoviesLazyList.retry()
-                                },
-                                enabled = true,
-                                modifier = Modifier
-                                    .offset(y = (-8).dp)
-                                    .align(Alignment.BottomCenter)
-                                    .width(52.dp)
-                            )
-                    }
+                    Content(
+                        homeScreenContract = viewModel,
+                        uiState = uiState,
+                        modifier = Modifier.weight(1f),
+                        lazyGridState = lazyGridState,
+                        screenWidth = screenWidth
+                    )
                 }
             }
 
     }
+}
 
+@Composable
+private fun Content(
+    uiState: HomeScreenUiState,
+    lazyGridState: LazyGridState,
+    screenWidth: Dp,
+    modifier: Modifier = Modifier,
+    homeScreenContract: HomeScreenContract = defaultHomeScreenContract(),
+) {
+    val upcomingMoviesLazyList = uiState.upcomingMovies.collectAsLazyPagingItems()
+    val pagerState = rememberPagerState(initialPage = 0, pageCount = {
+        if (uiState.popularMediaList.isNotEmpty()) uiState.popularMediaList.size else 3
+    })
+    val isAtEndOfGrid by remember {
+        derivedStateOf {
+            val lastVisibleItem = lazyGridState.layoutInfo.visibleItemsInfo.lastOrNull()
+            val totalItems = lazyGridState.layoutInfo.totalItemsCount
+            lastVisibleItem?.index == totalItems - 1
+        }
+    }
+
+    val isLoading = uiState.isLoading
+    val recentWatchedMediaFlow by uiState.recentWatchedMediaFlow.collectAsStateWithLifecycle(
+        emptyList()
+    )
+
+    val isHeaderStuck by remember {
+        derivedStateOf {
+            val itemsBeforeStickyHeader = if (recentWatchedMediaFlow.isNotEmpty()) 5 else 4
+            val scrollThreshold = 42
+            lazyGridState.firstVisibleItemIndex > itemsBeforeStickyHeader ||
+                    (lazyGridState.firstVisibleItemIndex == itemsBeforeStickyHeader &&
+                            lazyGridState.firstVisibleItemScrollOffset > scrollThreshold)
+        }
+    }
+
+    Box(modifier = modifier.fillMaxSize()) {
+        LazyVerticalGrid(
+            columns = GridCells.Fixed(gridColmuns()),
+            contentPadding = PaddingValues(
+                top = 8.dp,
+                bottom = 16.dp,
+                start = 16.dp,
+                end = 16.dp
+            ),
+            state = lazyGridState,
+            horizontalArrangement = Arrangement.spacedBy(12.dp),
+            verticalArrangement = Arrangement.spacedBy(12.dp),
+            modifier = Modifier
+                .background(color = NovixTheme.colors.surface)
+                .fillMaxSize()
+
+        ) {
+
+            item(span = { GridItemSpan(maxLineSpan) }) {
+                if (uiState.popularMediaList.isNotEmpty()) {
+                    PopularSection(
+                        modifier = Modifier.requiredWidth(screenWidth),
+                        pagerState = pagerState,
+                        uiMediaList = uiState.popularMediaList,
+                        onSaveClick = {/*TODO*/ },
+                        onCardClick = { id, mediaType ->
+                            when (mediaType) {
+                                MediaType.TvShow -> homeScreenContract.onTvShowClick(id)
+                                MediaType.Movie -> homeScreenContract.onMovieClick(id)
+                            }
+                        }
+                    )
+                } else {
+                    ShimmerPopularSection(
+                        modifier = Modifier.requiredWidth(screenWidth),
+                        pagerState = pagerState,
+                    )
+                }
+            }
+
+            item(span = { GridItemSpan(maxLineSpan) }) {
+                TrendingSection(
+                    isLoading = isLoading,
+                    onMoviesClick = homeScreenContract::onTrendingMoviesCardClicked,
+                    onTvShowsClick = homeScreenContract::onTrendingTvShowsCardClicked,
+                    onActorsClick = homeScreenContract::onTrendingActorsCardClicked
+                )
+            }
+
+            item(span = { GridItemSpan(maxLineSpan) }) {
+                if (!uiState.isTopRatedLoading)
+                    TopRatedSection(
+                        uiState = uiState,
+                        homeScreenContract = homeScreenContract,
+                        modifier = Modifier.requiredWidth(screenWidth)
+                    )
+                else
+                    CarousalShimmerEffect()
+            }
+
+            if (recentWatchedMediaFlow.isNotEmpty()) {
+                item(span = { GridItemSpan(maxLineSpan) }) {
+                    if (!isLoading)
+                        ContinueWatchingSection(
+                            recentWatchedMediaList = recentWatchedMediaFlow,
+                            homeScreenContract = homeScreenContract,
+                            modifier = Modifier.requiredWidth(screenWidth)
+                        )
+                    else CarousalShimmerEffect()
+                }
+            }
+
+            upComingSection(
+                contract = homeScreenContract,
+                screenWidth = screenWidth,
+                isHeaderStuck = isHeaderStuck,
+                state = uiState,
+                upcomingMoviesLazyList = upcomingMoviesLazyList,
+                isLoading = isLoading
+            )
+        }
+
+        if (isAtEndOfGrid)
+            PrimaryButton(
+                text = "",
+                hasLabel = false,
+                icon = R.drawable.retry,
+                hasIcon = true,
+                isLoading = false,
+                onClick = {
+                    upcomingMoviesLazyList.retry()
+                },
+                enabled = true,
+                modifier = Modifier
+                    .offset(y = (-8).dp)
+                    .align(Alignment.BottomCenter)
+                    .width(52.dp)
+            )
+    }
 }
 
 private fun LazyGridScope.upComingSection(
     contract: HomeScreenContract,
+    isHeaderStuck: Boolean = false,
     screenWidth: Dp,
     state: HomeScreenUiState,
     upcomingMoviesLazyList: LazyPagingItems<UpComingMovie>,
@@ -317,6 +330,15 @@ private fun LazyGridScope.upComingSection(
     }
 
     stickyHeader {
+        val animatedPadding by animateDpAsState(
+            targetValue = if (isHeaderStuck) 8.dp else 0.dp,
+            animationSpec = tween(
+                durationMillis = 300,
+                easing = FastOutSlowInEasing
+            ),
+            label = "header_padding"
+        )
+
         GenresSection(
             isLoading = isLoading,
             genres = state.movieGenres,
@@ -324,7 +346,8 @@ private fun LazyGridScope.upComingSection(
             screenWidth = screenWidth,
             onGenreClick = contract::onMovieGenreSelect,
             modifier = Modifier
-                .background(NovixTheme.colors.surface),
+                .background(NovixTheme.colors.surface)
+                .padding(bottom = animatedPadding),
             getGenreId = { it.id },
             getGenreName = { stringResource(it.stringResId) }
         )
@@ -333,22 +356,33 @@ private fun LazyGridScope.upComingSection(
     items(count = upcomingMoviesLazyList.itemCount) { index ->
         val movie = upcomingMoviesLazyList[index]
 
-        if (movie != null && !isLoading)
-            HomeCard(
-                imageUrl = movie.imageUrl,
-                isSaved = false,
-                onSaveClick = { /*TODO*/ },
-                modifier = Modifier
-                    .clipToBounds()
-                    .clip(RoundedCornerShape(12.dp))
-                    .clickable { contract.onMovieClick(movie.id) }
-            )
-        else
-            Box(
-                modifier = Modifier
-                    .height(240.dp)
-                    .clip(RoundedCornerShape(12.dp))
-                    .shimmerEffect()
-            )
+
+        when {
+            isLoading || movie == null -> {
+                ShimmerMovieCard()
+            }
+
+            else -> {
+                HomeCard(
+                    imageUrl = movie.imageUrl,
+                    isSaved = false,
+                    onSaveClick = { /*TODO*/ },
+                    modifier = Modifier
+                        .clipToBounds()
+                        .clip(RoundedCornerShape(12.dp))
+                        .clickable { contract.onMovieClick(movie.id) }
+                )
+            }
+        }
     }
+}
+
+@Composable
+private fun ShimmerMovieCard() {
+    Box(
+        modifier = Modifier
+            .height(240.dp)
+            .clip(RoundedCornerShape(12.dp))
+            .shimmerEffect()
+    )
 }
