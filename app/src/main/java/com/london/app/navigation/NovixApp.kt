@@ -334,14 +334,11 @@ fun NavGraphBuilder.mainNavGraph(
         popExitTransition = { fadeOut(tween(500)) },
     ) {
         AccountScreen(
-            onLogout = {
-                // todo: Handle logout logic here, e.g., clear user session, navigate to login screen
-            },
             onNavigateToWatchingHistory = { navController.navigate(Screen.WatchingHistory) },
             onNavigateToMyRating = { navController.navigate(Screen.MyRating) },
             onNavigateToLogin = {
                 navController.navigate(Screen.Login) {
-                    popUpTo(navController.graph.findStartDestination().id) {
+                    popUpTo(NovixAppNavGraph.Main) {
                         inclusive = true
                     }
                 }

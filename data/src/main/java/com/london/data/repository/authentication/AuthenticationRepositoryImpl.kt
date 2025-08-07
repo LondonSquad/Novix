@@ -47,8 +47,9 @@ class AuthenticationRepositoryImpl @Inject constructor(
     }
 
     override suspend fun logout(): Boolean {
-        if (authPreferences.getSessionId() != null && !authPreferences.isGuestMode()) {
-            authRemoteDataSource.deleteSession().getOrThrow()
+        val sessionId = authPreferences.getSessionId()
+        if (sessionId != null && !authPreferences.isGuestMode()) {
+            authRemoteDataSource.deleteSession(sessionId).getOrThrow()
         }
         authPreferences.clearAuth()
         return true
