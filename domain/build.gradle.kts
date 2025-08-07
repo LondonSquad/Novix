@@ -24,5 +24,9 @@ dependencies {
     testImplementation(libs.bundles.testing)
     implementation(libs.bundles.dagger.runtime)
     kapt(libs.bundles.dagger.kapt)
+    implementation(libs.javax.inject)
+}
 
+kapt {
+    correctErrorTypes = true
 }
