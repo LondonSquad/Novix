@@ -28,11 +28,11 @@ import com.london.designsystem.theme.NovixTheme
 @Composable
 fun RatingBottomSheet(
     onDismissClick: () -> Unit,
-    onSubmitClick: (Int) -> Unit
+    onSubmitClick: (Int) -> Unit,
+    sheetState: SheetState = rememberModalBottomSheetState()
+
 ) {
     var rating by remember { mutableIntStateOf(0) }
-
-    val sheetState = rememberModalBottomSheetState()
 
         ModalBottomSheet(
             onDismissRequest = onDismissClick,

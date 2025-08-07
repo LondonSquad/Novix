@@ -24,10 +24,10 @@ import com.london.designsystem.theme.NovixTheme
 @Composable
 fun GuestUserLoginBottomSheet(
     onDismissClick: () -> Unit,
-    onLoginClick: () -> Unit
+    onLoginClick: () -> Unit,
+    sheetState: SheetState = rememberModalBottomSheetState()
 ) {
 
-    val sheetState = rememberModalBottomSheetState()
 
     ModalBottomSheet(
         onDismissRequest = onDismissClick,
