@@ -389,11 +389,7 @@ class MovieDetailsRepositoryImplTest {
             coEvery { authPreferences.getGuestSessionId() } returns guestSessionId
 
             coEvery {
-                remoteDataSource.getAccountMovieStates(
-                    movieId,
-                    guestSessionId,
-                    null
-                )
+                remoteDataSource.getAccountMovieStates(any(), any())
             } returns Result.success(remoteMovieStates)
 
             val result = repository.getAccountMovieStatesById(movieId)

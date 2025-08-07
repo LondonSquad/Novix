@@ -1,12 +1,10 @@
 package com.london.data.repository.search
 
-import android.util.Log
 import com.london.data.local.preference.AuthPreferences
 import com.london.data.mapper.details.movie.toEntity
 import com.london.data.mapper.search.toEntity
 import com.london.data.mapper.search.toReviewEntity
 import com.london.data.mapper.videoprovider.movie.toMovie
-
 import com.london.data.remote.source.details.movie.MovieDetailsRemoteDataSource
 import com.london.data.remote.source.reviews.ReviewsRemoteDataSource
 import com.london.data.utils.asImageUrlOrEmpty
@@ -87,9 +85,6 @@ class MovieDetailsRepositoryImpl @Inject constructor(
             movieId = id,
             userSessionId = authPreferences.getSessionId(),
         ).getOrThrow().toEntity()
-        Log.d("dfksdl;fds;makf`", "getAccountMovieStatesById: $apiCall")
-        Log.d("dfksdl;fds;makf", "getAccountMovieStatesById: ${authPreferences.getSessionId()}")
-
         return apiCall
     }
 }
