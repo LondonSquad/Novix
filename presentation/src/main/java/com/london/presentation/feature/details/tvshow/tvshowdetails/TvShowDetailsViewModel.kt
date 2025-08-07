@@ -15,9 +15,9 @@ import com.london.domain.usecase.GetTvShowVideoProvider
 import com.london.domain.usecase.LoggedInUseCase
 import com.london.domain.usecase.recent.viewed.AddToRecentViewedUseCase
 import com.london.domain.usecase.recent.watched.AddTvShowToRecentWatchedUseCase
-import com.london.presentation.feature.base.BaseViewModel
 import com.london.presentation.navigation.Screen
 import com.london.presentation.navigation.getArgs
+import com.london.presentation.shared.base.BaseViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 

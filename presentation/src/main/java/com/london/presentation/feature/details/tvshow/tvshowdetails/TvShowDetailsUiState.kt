@@ -12,7 +12,7 @@ import com.london.domain.entity.tvshowdetails.TvShowSeasonEntity
 import com.london.domain.entity.tvshowdetails.TvShowSpokenLanguageEntity
 import com.london.domain.entity.tvshowdetails.episode.TvShowEpisodeBySeasonEntity
 import com.london.domain.entity.tvshowdetails.episode.TvShowEpisodesEntity
-import com.london.presentation.feature.base.ErrorState
+import com.london.presentation.shared.base.ErrorState
 
 data class TvShowDetailsUiState(
     val isLoading: Boolean = false,

@@ -151,6 +151,38 @@ class CustomMovieListRepositoryImplTest {
     }
 
     @Test
+    fun `removeMovieFromList should return true when data source returns success`() = runTest {
+
+        //Given
+        coEvery {
+            remoteDataSource.removeMovieFromList(
+                any(),
+                any(),
+                any()
+            )
+        } returns Result.success(
+            CustomListResponse("", 1)
+        )
+        //When
+        val result = repository.removeMovieFromList(1u, 100u)
+        //Then
+        assertThat(result).isTrue()
+    }
+
+    @Test
+    fun `removeMovieFromList should return false when data source returns failure`() = runTest {
+
+        //Given
+        coEvery { remoteDataSource.addMovieToList(any(), any(), any()) } returns Result.failure(
+            Exception("error")
+        )
+        //When
+        val result = repository.addMovieToList(1u, 100u)
+        //Then
+        assertThat(result).isFalse()
+    }
+
+    @Test
     fun `getMovieListDetails should return paged data when data source returns success`() = runTest {
 
         //Given
@@ -173,6 +205,31 @@ class CustomMovieListRepositoryImplTest {
         //When //Then
         assertThrows<NetworkException.HttpLockedException> {
             repository.getMovieListDetails(1u, 1)
+        }
+    }
+
+    @Test
+    fun `getMovieListName should return name when data source returns movie list details`() =
+        runTest {
+            //Given
+            coEvery { remoteDataSource.getDetails(any(), any()) } returns Result.success(
+                MovieListDetailsMock
+            )
+            //When
+            val result = repository.getMovieListName(1u)
+            //Then
+            assertThat(result).isEqualTo(MovieListDetailsMock.name)
+        }
+
+    @Test
+    fun `getMovieListName should throw exception when data source returns failure`() = runTest {
+        //Given
+        coEvery { remoteDataSource.getDetails(any(), any()) } returns Result.failure(
+            NetworkException.HttpLockedException("locked")
+        )
+        //When //Then
+        assertThrows<NetworkException.HttpLockedException> {
+            repository.getMovieListName(1u)
         }
     }
 
