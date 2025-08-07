@@ -67,7 +67,7 @@ class AccountViewModel @Inject constructor(
 
     private fun fetchAndSetUsername() {
         tryToExecute(
-            block = { accountDetailsUseCase() },
+            block = { accountDetailsUseCase.invoke() },
             onSuccess = { accountInfo ->
                 updateState {
                     copy(
