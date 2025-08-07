@@ -1,5 +1,7 @@
 package com.london.app
 
+import android.app.Activity
+import android.graphics.Color
 import android.os.Build
 import android.os.Bundle
 import androidx.activity.ComponentActivity
@@ -11,7 +13,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.platform.LocalView
-import androidx.core.view.WindowCompat
+import androidx.core.graphics.toColorInt
 import androidx.core.view.WindowInsetsControllerCompat
 import com.london.app.navigation.NovixApp
 import com.london.designsystem.theme.NovixTheme
@@ -29,22 +31,15 @@ class MainActivity : ComponentActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        WindowCompat.setDecorFitsSystemWindows(window, false)
         enableEdgeToEdge()
-
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-            window.isNavigationBarContrastEnforced = false
-        }
 
         setContent {
             val appTheme by appPreferencesService.appTheme.collectAsState()
             val useDarkTheme = appTheme.isDark()
 
-            UpdateSystemBarsTheme(useDarkTheme)
+            NovixTheme(isDarkMode = useDarkTheme) {
+                ApplySystemBarTheme(useDarkTheme = useDarkTheme)
 
-            NovixTheme(
-                isDarkMode = useDarkTheme
-            ) {
                 ContentRestrictionProvider(appPreferencesService) { contentRestrictionLevel ->
                     CompositionLocalProvider(
                         LocalContentRestrictionLevel provides contentRestrictionLevel
@@ -57,15 +52,26 @@ class MainActivity : ComponentActivity() {
     }
 }
 
+@Suppress("DEPRECATION")
 @Composable
-private fun UpdateSystemBarsTheme(useDarkTheme: Boolean) {
+private fun ApplySystemBarTheme(useDarkTheme: Boolean) {
     val view = LocalView.current
+    if (view.isInEditMode) return
+
+    val translucentScrimColor = "#40000000".toColorInt()
 
     LaunchedEffect(useDarkTheme) {
-        val window = (view.context as? ComponentActivity)?.window
-        window?.let {
-            WindowInsetsControllerCompat(it, view).isAppearanceLightStatusBars = !useDarkTheme
-            WindowInsetsControllerCompat(it, view).isAppearanceLightNavigationBars = !useDarkTheme
+        val window = (view.context as Activity).window
+        val insetsController = WindowInsetsControllerCompat(window, view)
+
+        insetsController.isAppearanceLightStatusBars = !useDarkTheme
+        insetsController.isAppearanceLightNavigationBars = !useDarkTheme
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+            window.navigationBarColor = Color.TRANSPARENT
+            window.isNavigationBarContrastEnforced = false
+        } else {
+            window.navigationBarColor = translucentScrimColor
         }
     }
 }
