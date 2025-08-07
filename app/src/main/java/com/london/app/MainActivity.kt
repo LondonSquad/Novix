@@ -58,7 +58,7 @@ private fun ApplySystemBarTheme(useDarkTheme: Boolean) {
     val view = LocalView.current
     if (view.isInEditMode) return
 
-    val translucentScrimColor = "#40000000".toColorInt()
+    val translucentScrimColor = "#00000000".toColorInt()
 
     LaunchedEffect(useDarkTheme) {
         val window = (view.context as Activity).window
