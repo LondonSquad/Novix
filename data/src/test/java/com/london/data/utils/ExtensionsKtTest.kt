@@ -69,13 +69,53 @@ class ExtensionsKtTest {
     }
 
     @Test
-    fun `isTrue returns true only for true`() {
-        val trueResult = true
-        val falseResult = false
-        val nullResult: Boolean? = null
+    fun `orZero handles various null values`() {
+        val nullInt: Int? = null
+        assertThat(nullInt.orZero()).isEqualTo(0)
 
-        assertThat(trueResult.isTrue).isTrue()
-        assertThat(falseResult.isTrue).isFalse()
-        assertThat(nullResult.isTrue).isFalse()
+        val nullDouble: Double? = null
+        assertThat(nullDouble.orZero()).isEqualTo(0.0)
+
+        val nullLong: Long? = null
+        assertThat(nullLong.orZero()).isEqualTo(0L)
+    }
+
+    @Test
+    fun `orZero handles various non-null values`() {
+        // Test Int
+        assertThat(42.orZero()).isEqualTo(42)
+        assertThat(0.orZero()).isEqualTo(0)
+        
+        // Test Double
+        assertThat(3.14.orZero()).isEqualTo(3.14)
+        assertThat(0.0.orZero()).isEqualTo(0.0)
+        
+        // Test Long
+        assertThat(123L.orZero()).isEqualTo(123L)
+        assertThat(0L.orZero()).isEqualTo(0L)
+    }
+
+    @Test
+    fun `roundToFirstDecimal handles various values`() {
+        assertThat(3.14.roundToFirstDecimal()).isEqualTo("3.1")
+        assertThat(2.0.roundToFirstDecimal()).isEqualTo("2.0")
+        assertThat(0.0.roundToFirstDecimal()).isEqualTo("0.0")
+        assertThat((-1.5).roundToFirstDecimal()).isEqualTo("-1.5")
+    }
+
+    @Test
+    fun `roundToDecimal handles various values`() {
+        assertThat(3.14.roundToDecimal()).isEqualTo(3.1)
+        assertThat(2.0.roundToDecimal()).isEqualTo(2.0)
+        assertThat(0.0.roundToDecimal()).isEqualTo(0.0)
+        assertThat((-1.5).roundToDecimal()).isEqualTo(-1.5)
+    }
+
+    @Test
+    fun `isTrue handles boolean values`() {
+        assertThat(true.isTrue).isTrue()
+        assertThat(false.isTrue).isFalse()
+        val nullBoolean: Boolean? = null
+        assertThat(nullBoolean.isTrue).isFalse()
     }
 }

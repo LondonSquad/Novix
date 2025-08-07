@@ -243,4 +243,142 @@ class AccountMapperTest {
         assertEquals("Test User", result.userName)
         assertEquals("", result.avatarPath)
     }
+
+    @Test
+    fun `toEntity should handle negative id`() {
+        // Given
+        val accountResponse = AccountInfoResponse(
+            id = -1,
+            userName = "testuser",
+            name = "Test User",
+            avatar = null
+        )
+
+        // When
+        val result = accountResponse.toEntity()
+
+        // Then
+        assertEquals(-1, result.id)
+        assertEquals("Test User", result.userName)
+        assertEquals("", result.avatarPath)
+    }
+
+    @Test
+    fun `toEntity should handle large id`() {
+        // Given
+        val accountResponse = AccountInfoResponse(
+            id = 999999999,
+            userName = "testuser",
+            name = "Test User",
+            avatar = null
+        )
+
+        // When
+        val result = accountResponse.toEntity()
+
+        // Then
+        assertEquals(999999999, result.id)
+        assertEquals("Test User", result.userName)
+        assertEquals("", result.avatarPath)
+    }
+
+    @Test
+    fun `toEntity should handle special characters in name`() {
+        // Given
+        val accountResponse = AccountInfoResponse(
+            id = 1,
+            userName = "testuser",
+            name = "Test User with Special Chars: @#$%^&*()",
+            avatar = null
+        )
+
+        // When
+        val result = accountResponse.toEntity()
+
+        // Then
+        assertEquals(1, result.id)
+        assertEquals("Test User with Special Chars: @#$%^&*()", result.userName)
+        assertEquals("", result.avatarPath)
+    }
+
+    @Test
+    fun `toEntity should handle unicode characters in name`() {
+        // Given
+        val accountResponse = AccountInfoResponse(
+            id = 1,
+            userName = "testuser",
+            name = "José María García",
+            avatar = null
+        )
+
+        // When
+        val result = accountResponse.toEntity()
+
+        // Then
+        assertEquals(1, result.id)
+        assertEquals("José María García", result.userName)
+        assertEquals("", result.avatarPath)
+    }
+
+    @Test
+    fun `toEntity should handle very long name`() {
+        // Given
+        val longName = "A".repeat(1000)
+        val accountResponse = AccountInfoResponse(
+            id = 1,
+            userName = "testuser",
+            name = longName,
+            avatar = null
+        )
+
+        // When
+        val result = accountResponse.toEntity()
+
+        // Then
+        assertEquals(1, result.id)
+        assertEquals(longName, result.userName)
+        assertEquals("", result.avatarPath)
+    }
+
+    @Test
+    fun `toEntity should handle avatar path with special characters`() {
+        // Given
+        val accountResponse = AccountInfoResponse(
+            id = 1,
+            userName = "testuser",
+            name = "Test User",
+            avatar = AvatarInfo(
+                tmdb = AvatarDetails(avatarPath = "/path/with spaces & special chars.jpg")
+            )
+        )
+
+        // When
+        val result = accountResponse.toEntity()
+
+        // Then
+        assertEquals(1, result.id)
+        assertEquals("Test User", result.userName)
+        assertEquals("https://image.tmdb.org/t/p/w500/path/with spaces & special chars.jpg", result.avatarPath)
+    }
+
+    @Test
+    fun `toEntity should handle avatar path with query parameters`() {
+        // Given
+        val accountResponse = AccountInfoResponse(
+            id = 1,
+            userName = "testuser",
+            name = "Test User",
+            avatar = AvatarInfo(
+                tmdb = AvatarDetails(avatarPath = "/path/image.jpg?size=large&format=png")
+            )
+        )
+
+        // When
+        val result = accountResponse.toEntity()
+
+        // Then
+        assertEquals(1, result.id)
+        assertEquals("Test User", result.userName)
+        assertEquals("https://image.tmdb.org/t/p/w500/path/image.jpg?size=large&format=png", result.avatarPath)
+    }
 }

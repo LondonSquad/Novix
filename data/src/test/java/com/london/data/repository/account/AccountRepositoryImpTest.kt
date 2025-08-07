@@ -152,9 +152,370 @@ class AccountRepositoryImpTest {
 
         // Then
         assertThat(result.id).isEqualTo(12345)
-        assertThat(result.userName).isEqualTo(expectedName) // Should use name since it's not blank
+        assertThat(result.userName).isEqualTo(expectedName)
         assertThat(result.avatarPath).isEqualTo("https://image.tmdb.org/t/p/w500/path/to/avatar.jpg")
         
+        coVerify { authPreferences.getSessionId() }
+        coVerify { remoteDataSource.getAccountDetails(sessionId) }
+    }
+
+    @Test
+    fun `getAccountDetails handles account with null id`() = runTest {
+        // Given
+        val sessionId = "valid_session"
+        val accountResponse = AccountInfoResponse(
+            id = null, 
+            userName = "testuser", 
+            name = "Test User",
+            avatar = null
+        )
+
+        coEvery { authPreferences.getSessionId() } returns sessionId
+        coEvery { remoteDataSource.getAccountDetails(sessionId) } returns Result.success(accountResponse)
+
+        // When
+        val result = repository.getAccountDetails()
+
+        // Then
+        assertThat(result.id).isEqualTo(0) // Should default to 0 when id is null
+        assertThat(result.userName).isEqualTo("Test User")
+        assertThat(result.avatarPath).isEqualTo("")
+        
+        coVerify { authPreferences.getSessionId() }
+        coVerify { remoteDataSource.getAccountDetails(sessionId) }
+    }
+
+    @Test
+    fun `getAccountDetails handles account with blank name`() = runTest {
+        // Given
+        val sessionId = "valid_session"
+        val accountResponse = AccountInfoResponse(
+            id = 1, 
+            userName = "testuser", 
+            name = "   ", // Blank name
+            avatar = null
+        )
+
+        coEvery { authPreferences.getSessionId() } returns sessionId
+        coEvery { remoteDataSource.getAccountDetails(sessionId) } returns Result.success(accountResponse)
+
+        // When
+        val result = repository.getAccountDetails()
+
+        // Then
+        assertThat(result.id).isEqualTo(1)
+        assertThat(result.userName).isEqualTo("testuser") // Should use userName when name is blank
+        assertThat(result.avatarPath).isEqualTo("")
+        
+        coVerify { authPreferences.getSessionId() }
+        coVerify { remoteDataSource.getAccountDetails(sessionId) }
+    }
+
+    @Test
+    fun `getAccountDetails handles account with empty name`() = runTest {
+        // Given
+        val sessionId = "valid_session"
+        val accountResponse = AccountInfoResponse(
+            id = 1, 
+            userName = "testuser", 
+            name = "", // Empty name
+            avatar = null
+        )
+
+        coEvery { authPreferences.getSessionId() } returns sessionId
+        coEvery { remoteDataSource.getAccountDetails(sessionId) } returns Result.success(accountResponse)
+
+        // When
+        val result = repository.getAccountDetails()
+
+        // Then
+        assertThat(result.id).isEqualTo(1)
+        assertThat(result.userName).isEqualTo("testuser")
+        assertThat(result.avatarPath).isEqualTo("")
+        
+        coVerify { authPreferences.getSessionId() }
+        coVerify { remoteDataSource.getAccountDetails(sessionId) }
+    }
+
+    @Test
+    fun `getAccountDetails handles account with avatar but null tmdb`() = runTest {
+        // Given
+        val sessionId = "valid_session"
+        val accountResponse = AccountInfoResponse(
+            id = 1, 
+            userName = "testuser", 
+            name = "Test User",
+            avatar = AvatarInfo(tmdb = null)
+        )
+
+        coEvery { authPreferences.getSessionId() } returns sessionId
+        coEvery { remoteDataSource.getAccountDetails(sessionId) } returns Result.success(accountResponse)
+
+        // When
+        val result = repository.getAccountDetails()
+
+        // Then
+        assertThat(result.id).isEqualTo(1)
+        assertThat(result.userName).isEqualTo("Test User")
+        assertThat(result.avatarPath).isEqualTo("")
+        
+        coVerify { authPreferences.getSessionId() }
+        coVerify { remoteDataSource.getAccountDetails(sessionId) }
+    }
+
+    @Test
+    fun `getAccountDetails handles account with avatar but null avatarPath`() = runTest {
+        // Given
+        val sessionId = "valid_session"
+        val accountResponse = AccountInfoResponse(
+            id = 1, 
+            userName = "testuser", 
+            name = "Test User",
+            avatar = AvatarInfo(
+                tmdb = AvatarDetails(avatarPath = null)
+            )
+        )
+
+        coEvery { authPreferences.getSessionId() } returns sessionId
+        coEvery { remoteDataSource.getAccountDetails(sessionId) } returns Result.success(accountResponse)
+
+        // When
+        val result = repository.getAccountDetails()
+
+        // Then
+        assertThat(result.id).isEqualTo(1)
+        assertThat(result.userName).isEqualTo("Test User")
+        assertThat(result.avatarPath).isEqualTo("")
+        
+        coVerify { authPreferences.getSessionId() }
+        coVerify { remoteDataSource.getAccountDetails(sessionId) }
+    }
+
+    @Test
+    fun `getAccountDetails handles account with empty avatarPath`() = runTest {
+        // Given
+        val sessionId = "valid_session"
+        val accountResponse = AccountInfoResponse(
+            id = 1, 
+            userName = "testuser", 
+            name = "Test User",
+            avatar = AvatarInfo(
+                tmdb = AvatarDetails(avatarPath = "")
+            )
+        )
+
+        coEvery { authPreferences.getSessionId() } returns sessionId
+        coEvery { remoteDataSource.getAccountDetails(sessionId) } returns Result.success(accountResponse)
+
+        // When
+        val result = repository.getAccountDetails()
+
+        // Then
+        assertThat(result.id).isEqualTo(1)
+        assertThat(result.userName).isEqualTo("Test User")
+        assertThat(result.avatarPath).isEqualTo("https://image.tmdb.org/t/p/w500")
+        
+        coVerify { authPreferences.getSessionId() }
+        coVerify { remoteDataSource.getAccountDetails(sessionId) }
+    }
+
+    @Test
+    fun `getAccountDetails handles account with null userName`() = runTest {
+        // Given
+        val sessionId = "valid_session"
+        val accountResponse = AccountInfoResponse(
+            id = 1, 
+            userName = null, 
+            name = "Test User",
+            avatar = null
+        )
+
+        coEvery { authPreferences.getSessionId() } returns sessionId
+        coEvery { remoteDataSource.getAccountDetails(sessionId) } returns Result.success(accountResponse)
+
+        // When
+        val result = repository.getAccountDetails()
+
+        // Then
+        assertThat(result.id).isEqualTo(1)
+        assertThat(result.userName).isEqualTo("Test User") // Should use name since userName is null
+        assertThat(result.avatarPath).isEqualTo("")
+        
+        coVerify { authPreferences.getSessionId() }
+        coVerify { remoteDataSource.getAccountDetails(sessionId) }
+    }
+
+    @Test
+    fun `getAccountDetails handles account with empty userName`() = runTest {
+        // Given
+        val sessionId = "valid_session"
+        val accountResponse = AccountInfoResponse(
+            id = 1, 
+            userName = "", 
+            name = "Test User",
+            avatar = null
+        )
+
+        coEvery { authPreferences.getSessionId() } returns sessionId
+        coEvery { remoteDataSource.getAccountDetails(sessionId) } returns Result.success(accountResponse)
+
+        // When
+        val result = repository.getAccountDetails()
+
+        // Then
+        assertThat(result.id).isEqualTo(1)
+        assertThat(result.userName).isEqualTo("Test User") // Should use name since userName is empty
+        assertThat(result.avatarPath).isEqualTo("")
+        
+        coVerify { authPreferences.getSessionId() }
+        coVerify { remoteDataSource.getAccountDetails(sessionId) }
+    }
+
+    @Test
+    fun `getAccountDetails handles account with both name and userName as null`() = runTest {
+        // Given
+        val sessionId = "valid_session"
+        val accountResponse = AccountInfoResponse(
+            id = 1, 
+            userName = null, 
+            name = null,
+            avatar = null
+        )
+
+        coEvery { authPreferences.getSessionId() } returns sessionId
+        coEvery { remoteDataSource.getAccountDetails(sessionId) } returns Result.success(accountResponse)
+
+        // When
+        val result = repository.getAccountDetails()
+
+        // Then
+        assertThat(result.id).isEqualTo(1)
+        assertThat(result.userName).isEqualTo("") // Should be empty string when both are null
+        assertThat(result.avatarPath).isEqualTo("")
+        
+        coVerify { authPreferences.getSessionId() }
+        coVerify { remoteDataSource.getAccountDetails(sessionId) }
+    }
+
+    @Test
+    fun `getAccountDetails handles account with both name and userName as empty`() = runTest {
+        // Given
+        val sessionId = "valid_session"
+        val accountResponse = AccountInfoResponse(
+            id = 1, 
+            userName = "", 
+            name = "",
+            avatar = null
+        )
+
+        coEvery { authPreferences.getSessionId() } returns sessionId
+        coEvery { remoteDataSource.getAccountDetails(sessionId) } returns Result.success(accountResponse)
+
+        // When
+        val result = repository.getAccountDetails()
+
+        // Then
+        assertThat(result.id).isEqualTo(1)
+        assertThat(result.userName).isEqualTo("")
+        assertThat(result.avatarPath).isEqualTo("")
+        
+        coVerify { authPreferences.getSessionId() }
+        coVerify { remoteDataSource.getAccountDetails(sessionId) }
+    }
+
+    @Test
+    fun `getAccountDetails handles account with zero id`() = runTest {
+        // Given
+        val sessionId = "valid_session"
+        val accountResponse = AccountInfoResponse(
+            id = 0, 
+            userName = "testuser", 
+            name = "Test User",
+            avatar = null
+        )
+
+        coEvery { authPreferences.getSessionId() } returns sessionId
+        coEvery { remoteDataSource.getAccountDetails(sessionId) } returns Result.success(accountResponse)
+
+        // When
+        val result = repository.getAccountDetails()
+
+        // Then
+        assertThat(result.id).isEqualTo(0)
+        assertThat(result.userName).isEqualTo("Test User")
+        assertThat(result.avatarPath).isEqualTo("")
+        
+        coVerify { authPreferences.getSessionId() }
+        coVerify { remoteDataSource.getAccountDetails(sessionId) }
+    }
+
+    @Test
+    fun `getAccountDetails covers let block when sessionId is not null`() = runTest {
+        // Given
+        val sessionId = "test_session_id"
+        val accountResponse = AccountInfoResponse(
+            id = 1, 
+            userName = "testuser", 
+            name = "Test User",
+            avatar = null
+        )
+
+        coEvery { authPreferences.getSessionId() } returns sessionId
+        coEvery { remoteDataSource.getAccountDetails(sessionId) } returns Result.success(accountResponse)
+
+        // When
+        val result = repository.getAccountDetails()
+
+        // Then
+        assertThat(result.id).isEqualTo(1)
+        assertThat(result.userName).isEqualTo("Test User")
+        assertThat(result.avatarPath).isEqualTo("")
+        
+        // Verify
+        coVerify { authPreferences.getSessionId() }
+        coVerify { remoteDataSource.getAccountDetails(sessionId) }
+    }
+
+    @Test
+    fun `getAccountDetails covers let block when sessionId is null`() = runTest {
+        // Given
+        coEvery { authPreferences.getSessionId() } returns null
+
+        // When
+        val result = repository.getAccountDetails()
+
+        // Then
+        assertThat(result.id).isEqualTo(0)
+        assertThat(result.userName).isEqualTo("")
+        assertThat(result.avatarPath).isEqualTo("")
+        
+        // Verify
+        coVerify(exactly = 0) { remoteDataSource.getAccountDetails(any()) }
+    }
+
+    @Test
+    fun `getAccountDetails covers let block with empty sessionId`() = runTest {
+        // Given
+        val sessionId = ""
+        val accountResponse = AccountInfoResponse(
+            id = 1, 
+            userName = "testuser", 
+            name = "Test User",
+            avatar = null
+        )
+
+        coEvery { authPreferences.getSessionId() } returns sessionId
+        coEvery { remoteDataSource.getAccountDetails(sessionId) } returns Result.success(accountResponse)
+
+        // When
+        val result = repository.getAccountDetails()
+
+        // Then
+        assertThat(result.id).isEqualTo(1)
+        assertThat(result.userName).isEqualTo("Test User")
+        assertThat(result.avatarPath).isEqualTo("")
+        
+        // Verify
         coVerify { authPreferences.getSessionId() }
         coVerify { remoteDataSource.getAccountDetails(sessionId) }
     }
