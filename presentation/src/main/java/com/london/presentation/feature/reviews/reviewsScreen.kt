@@ -82,21 +82,35 @@ fun ReviewsScreenContent(
         onBack = reviewContract::onBackClicked,
         onRetry = reviewContract::onRetry
     ) {
-        Box(
+        Column(
             modifier = Modifier
                 .fillMaxSize()
                 .background(NovixTheme.colors.surface)
-
         ) {
+            TopBar(
+                title = stringResource(R.string.reviews),
+                onBackClick = reviewContract::onBackClicked,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 16.dp)
+                    .padding(
+                        top = WindowInsets.statusBars.asPaddingValues()
+                            .calculateTopPadding() + 12.dp
+                    )
+            )
 
-            val reviewsList = uiState.reviews.collectAsLazyPagingItems()
-            if (reviewsList.itemSnapshotList.isEmpty())
-                EmptyReviews(modifier = Modifier.align(Alignment.Center))
-            else {
-                LazyColumn(
+            if (reviewsList.itemSnapshotList.isEmpty()) {
+                Box(
                     modifier = Modifier
                         .fillMaxSize()
-                        .padding(top = 110.dp),
+                        .weight(1f),
+                    contentAlignment = Alignment.Center
+                ) {
+                    EmptyReviews()
+                }
+            } else {
+                LazyColumn(
+                    modifier = Modifier.fillMaxSize(),
                     verticalArrangement = Arrangement.spacedBy(18.dp),
                     contentPadding = PaddingValues(16.dp),
                 ) {
@@ -254,6 +268,7 @@ fun AuthorItem(
         }
     }
 }
+
 
 @Composable
 fun EmptyReviews(

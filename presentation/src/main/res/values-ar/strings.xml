@@ -104,7 +104,7 @@
     <string name="reviews">المراجعات</string>
     <string name="no_recent_history">لم تتفقد أي شيء بعد.\nخذ جولة في التطبيق ثم عُدّ مجددًا! </string>
     <string name="no_tv_shows_found">لا يوجد مسلسلات في هذا التصنيف حاليا</string>
-    <string name="no_reviews">"لا يوجد مراجعات"</string>
+    <string name="no_reviews">لا يوجد مراجعات!</string>
     <string name="login_failed">فشل تسجيل الدخول. يرجى التحقق من بيانات التسجيل الخاصة بك.</string>
     <string name="guest_login_failed">فشل تسجيل الدخول كضيف.</string>
     <string name="edit_list">تعديل المجموعة</string>
