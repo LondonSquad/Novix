@@ -41,6 +41,34 @@ class ExtensionsKtTest {
     }
 
     @Test
+    fun `asImageUrlOrEmpty debug test`() {
+        // Test null value
+        val nullValue: String? = null
+        val nullResult = nullValue.asImageUrlOrEmpty()
+        println("nullValue.asImageUrlOrEmpty() = '$nullResult'")
+        assertThat(nullResult).isEmpty()
+        
+        // Test empty string
+        val emptyValue = ""
+        val emptyResult = emptyValue.asImageUrlOrEmpty()
+        println("emptyValue.asImageUrlOrEmpty() = '$emptyResult'")
+        assertThat(emptyResult).isEqualTo(BuildConfig.IMAGE_URL + "")
+        
+        // Test actual path
+        val pathValue = "/test/path.jpg"
+        val pathResult = pathValue.asImageUrlOrEmpty()
+        println("pathValue.asImageUrlOrEmpty() = '$pathResult'")
+        assertThat(pathResult).isEqualTo(BuildConfig.IMAGE_URL + "/test/path.jpg")
+    }
+
+    @Test
+    fun `asImageUrlOrEmpty returns base url for empty string`() {
+        val original = ""
+        val expected = BuildConfig.IMAGE_URL + original
+        assertThat(original.asImageUrlOrEmpty()).isEqualTo(expected)
+    }
+
+    @Test
     fun `isTrue returns true only for true`() {
         val trueResult = true
         val falseResult = false
