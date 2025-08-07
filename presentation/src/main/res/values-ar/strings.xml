@@ -131,4 +131,7 @@
     <string name="app_name">نوفيكس</string>
     <string name="app_name_description">مشتق من نوفا، مُصمم من أجل الأفلام</string>
     <string name="novix_icon">أيقونة نوفيكس</string>
+    <string name="delete_list">حذف المجموعة</string>
+    <string name="cancel_list_deletion">حذف المجموعة المحفوظة سيحذف جميع عناصرها. هل أنت متأكد أنك تريد المتابعة؟</string>
+    <string name="btn_delete">Delete</string>
 </resources>

@@ -131,4 +131,7 @@
     <string name="app_name">Novix</string>
     <string name="app_name_description">Born from Nova, Made for Flix.</string>
     <string name="novix_icon">Novix Icon</string>
+    <string name="delete_list">Delete list</string>
+    <string name="cancel_list_deletion">Deleting the saved list will remove all items it contains. Are you sure you want to proceed?</string>
+    <string name="btn_delete">Delete</string>
 </resources>
