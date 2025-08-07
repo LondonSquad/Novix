@@ -1,12 +1,12 @@
 package com.london.domain.usecase.movielist
 
-import com.london.domain.repository.MovieListRepository
+import com.london.domain.repository.CustomMovieListRepository
 import javax.inject.Inject
 
 class AddMovieToListUseCase @Inject constructor(
-    private val movieListRepository: MovieListRepository,
+    private val customMovieListRepository: CustomMovieListRepository,
 ) {
 
     suspend fun invoke(listId: UInt, movieId: UInt): Boolean =
-        movieListRepository.addMovieToList(listId, movieId)
+        customMovieListRepository.addMovieToList(listId, movieId)
 }

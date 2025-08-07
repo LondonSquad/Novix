@@ -17,41 +17,40 @@ import com.london.data.remote.source.authentication.AuthenticationRemoteDataSour
 import com.london.data.remote.source.details.actor.ActorDetailsRemoteDataSource
 import com.london.data.remote.source.details.movie.MovieDetailsRemoteDataSource
 import com.london.data.remote.source.details.tvshow.TvShowDetailsRemoteDataSource
-import com.london.data.remote.source.details.videoprovider.movie.MovieVideoProviderRemote
 import com.london.data.remote.source.details.videoprovider.tvshow.TvShowVideoProviderRemote
 import com.london.data.remote.source.discover.DiscoverRemoteDataSource
 import com.london.data.remote.source.home.popular.PopularRemoteDataSource
 import com.london.data.remote.source.home.trending.TrendingRemoteDataSource
 import com.london.data.remote.source.home.trending.TrendingRemoteDataSourceImpl
 import com.london.data.remote.source.home.upcoming.UpComingRemoteDataSource
+import com.london.data.remote.source.list.CustomMovieListsRemoteDataSource
 import com.london.data.remote.source.reviews.ReviewsRemoteDataSource
 import com.london.data.remote.source.search.SearchRemoteDataSource
-import com.london.data.remote.source.toprated.movie.TopRatedMovieRemoteDataSource
-import com.london.data.remote.source.toprated.tvseries.TopRatedTvRemoteDataSource
+import com.london.data.remote.source.toprated.TopRatedRemoteDataSource
 import com.london.data.repository.authentication.AuthenticationRepositoryImpl
 import com.london.data.repository.discover.DiscoverRepositoryImpl
 import com.london.data.repository.home.popular.PopularRepositoryImpl
-import com.london.data.repository.home.toprated.TopRatedMovieRepositoryImpl
-import com.london.data.repository.home.toprated.TopRatedTvSeriesRepositoryImpl
+import com.london.data.repository.home.toprated.TopRatedRepositoryImpl
 import com.london.data.repository.home.trending.TrendingRepositoryImpl
 import com.london.data.repository.home.upcoming.UpComingRepositoryImpl
+import com.london.data.repository.list.CustomMovieListRepositoryImpl
 import com.london.data.repository.recent.RecentSearchRepositoryImpl
 import com.london.data.repository.recent.RecentViewedRepositoryImpl
 import com.london.data.repository.recent.RecentWatchedRepositoryIml
 import com.london.data.repository.search.ActorRepositoryImpl
 import com.london.data.repository.search.MovieDetailsRepositoryImpl
-import com.london.data.repository.search.MovieVideoProviderRepositoryImpl
 import com.london.data.repository.search.SearchRepositoryImpl
 import com.london.data.repository.search.TvShowRepositoryImpl
 import com.london.data.repository.search.TvShowVideoProviderRepositoryImpl
 import com.london.data.utils.CrashReporter
 import com.london.data.utils.FirebaseCrashReporter
+import com.london.domain.AppPreferencesService
 import com.london.domain.entity.recent.RecentSearch
 import com.london.domain.entity.recent.RecentViewed
 import com.london.domain.repository.ActorRepository
 import com.london.domain.repository.AuthRepository
+import com.london.domain.repository.CustomMovieListRepository
 import com.london.domain.repository.MovieDetailsRepository
-import com.london.domain.repository.MovieVideoProviderRepository
 import com.london.domain.repository.PopularRepository
 import com.london.domain.repository.RecentRepository
 import com.london.domain.repository.RecentWatchedRepository
@@ -61,8 +60,7 @@ import com.london.domain.repository.TvShowRepository
 import com.london.domain.repository.TvShowVideoProviderRepository
 import com.london.domain.repository.UpComingRepository
 import com.london.domain.repository.discover.DiscoverRepository
-import com.london.domain.repository.toprated.TopRatedMovieRepository
-import com.london.domain.repository.toprated.TopRatedTvSeriesRepository
+import com.london.domain.repository.toprated.TopRatedRepository
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -119,27 +117,14 @@ object RepositoryModule {
 
     @Provides
     @Singleton
-    fun provideTopRatedMovieRepository(
-        dataSource: TopRatedMovieRemoteDataSource,
+    fun provideTopRatedRepository(
+        dataSource: TopRatedRemoteDataSource,
         @Named("topRatedLocalDataSource") localTopRated: HomeLocalDataSource<TopRatedLocal>,
         crashReporter: CrashReporter
-    ): TopRatedMovieRepository =
-        TopRatedMovieRepositoryImpl(
-            topRatedMovieRemoteDataSource = dataSource,
+    ): TopRatedRepository =
+        TopRatedRepositoryImpl(
+            topRatedRemoteDataSource = dataSource,
             localTopRated = localTopRated,
-            crashReporter = crashReporter
-        )
-
-    @Provides
-    @Singleton
-    fun provideTopRatedTvSeriesRepository(
-        dataSource: TopRatedTvRemoteDataSource,
-        @Named("topRatedLocalDataSource") localTopRated: HomeLocalDataSource<TopRatedLocal>,
-        crashReporter: CrashReporter
-    ): TopRatedTvSeriesRepository =
-        TopRatedTvSeriesRepositoryImpl(
-            topRatedTvRemoteDataSource = dataSource,
-            topRatedTvShow = localTopRated,
             crashReporter = crashReporter
         )
 
@@ -180,13 +165,8 @@ object RepositoryModule {
     ): MovieDetailsRepository =
         MovieDetailsRepositoryImpl(
             movieDetailsRemoteDataSource = dataSource,
-            reviewsRemoteDataSource =reviewsRemoteDataSource)
-
-    @Provides
-    @Singleton
-    fun provideMovieVideoRepository(
-        dataSource: MovieVideoProviderRemote
-    ): MovieVideoProviderRepository = MovieVideoProviderRepositoryImpl(dataSource)
+            reviewsRemoteDataSource = reviewsRemoteDataSource
+        )
 
     @Provides
     @Singleton
@@ -225,6 +205,18 @@ object RepositoryModule {
         dataSource: DiscoverRemoteDataSource
     ): DiscoverRepository = DiscoverRepositoryImpl(
         remoteDataSource = dataSource
+    )
+
+    @Provides
+    @Singleton
+    fun provideCustomMovieListsRepository(
+        dataSource: CustomMovieListsRemoteDataSource,
+        authPreferences: AuthPreferences,
+        preferencesService: AppPreferencesService
+    ): CustomMovieListRepository = CustomMovieListRepositoryImpl(
+        remoteDataSource = dataSource,
+        authPreferences = authPreferences,
+        preferencesService = preferencesService
     )
 
 }

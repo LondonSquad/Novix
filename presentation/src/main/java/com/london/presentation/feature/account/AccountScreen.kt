@@ -1,11 +1,10 @@
 package com.london.presentation.feature.account
 
-import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
@@ -18,6 +17,7 @@ import com.london.presentation.R
 import com.london.presentation.feature.account.appearance.AppearanceBottomSheet
 import com.london.presentation.feature.account.components.LoggedInContent
 import com.london.presentation.feature.account.components.NotLoggedInContent
+import com.london.presentation.feature.account.logout.LogoutBottomSheet
 import com.london.presentation.feature.account.state.AccountUiState
 import com.london.presentation.feature.buildscreen.BuildScreen
 import com.london.presentation.utils.Listen
@@ -33,11 +33,6 @@ fun AccountScreen(
 ) {
     val uiState by viewModel.state.collectAsStateWithLifecycle()
     val effect by viewModel.effect.collectAsState(null)
-    val systemDarkTheme = isSystemInDarkTheme()
-
-    LaunchedEffect(systemDarkTheme) {
-        viewModel.updateSelectedThemeAsSystemDark(systemDarkTheme)
-    }
 
     effect?.Listen { currentEffect ->
         when (currentEffect) {
@@ -89,7 +84,7 @@ internal fun AccountScreenContent(
     ) {
         TopBar(
             title = stringResource(R.string.my_account),
-            modifier = Modifier.padding(horizontal = 16.dp, vertical = 12.dp)
+            modifier = Modifier.padding(horizontal = 16.dp)
         )
 
         if (uiState.isUserLoggedIn) {
@@ -107,6 +102,12 @@ internal fun AccountScreenContent(
         AppearanceBottomSheet(
             appearanceContract = accountContract,
             appearanceState = uiState,
+        )
+    }
+    if (uiState.isLogoutBottomSheetVisible) {
+        LogoutBottomSheet(
+            logoutContract = accountContract,
+            isLoading = uiState.isLogoutLoading
         )
     }
 }

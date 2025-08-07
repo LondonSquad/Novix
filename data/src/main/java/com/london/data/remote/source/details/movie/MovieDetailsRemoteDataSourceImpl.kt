@@ -5,6 +5,7 @@ import com.london.data.remote.model.details.movie.model.moviecast.MovieCastRespo
 import com.london.data.remote.model.details.movie.model.moviedetails.AccountMovieStatesResponse
 import com.london.data.remote.model.details.movie.model.moviedetails.MovieDetailsResponse
 import com.london.data.remote.model.details.movie.model.movieimages.MovieImagesResponse
+import com.london.data.remote.model.details.videoprovider.movie.model.MovieVideoRemote
 import com.london.data.remote.model.search.MovieRemote
 import com.london.data.remote.service.details.movie.MovieDetailsApiService
 import com.london.data.remote.source.base.BaseRemoteDatasource
@@ -44,5 +45,11 @@ class MovieDetailsRemoteDataSourceImpl @Inject constructor(
                 userSessionId = userSessionId
             )
         }, mapper = { it })
+
+    override suspend fun getMovieVideos(movieId: Int): Result<MovieVideoRemote> =
+        callApiWithRetry(
+            { movieDetailsApiService.getMovieVideos(movieId = movieId) },
+            mapper = { it }
+        )
 
 }
