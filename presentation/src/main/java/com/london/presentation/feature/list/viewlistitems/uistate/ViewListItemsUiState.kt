@@ -9,7 +9,6 @@ data class ViewListItemsUiState(
     val listTitle: String = "",
     val error: ErrorState? = null,
     val isLoading: Boolean = false,
-    val isEditBottomSheetVisible: Boolean = false,
     val isDeleteBottomSheetVisible: Boolean = false,
     val selectedItemsType: ItemsType = ItemsType.All,
     val listItems: Flow<PagingData<MediaUi>> = flow {},
