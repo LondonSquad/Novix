@@ -7,6 +7,6 @@ import kotlinx.serialization.Serializable
 data class AccountInfoResponse(
     @SerialName("id")
     val id: Int,
-    @SerialName("name")
-    val userName: String?,
+    @SerialName("username")
+    val userName: String?
 )
