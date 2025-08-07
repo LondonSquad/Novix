@@ -1,6 +1,5 @@
 package com.london.presentation.feature.details.movieDetalis
 
-import android.util.Log
 import androidx.compose.animation.core.FastOutSlowInEasing
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
@@ -55,6 +54,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.london.designsystem.R
 import com.london.designsystem.component.ActorItem
+import com.london.designsystem.component.GuestUserLoginBottomSheet
 import com.london.designsystem.component.HomeCard
 import com.london.designsystem.component.Icon
 import com.london.designsystem.component.RatingBottomSheet
@@ -93,6 +93,7 @@ fun MovieDetailsScreen(
     onNavigateToMovie: (Int) -> Unit,
     onNavigateToActor: (Int) -> Unit,
     onNavigateToReviews: (Int, Int) -> Unit,
+    onNavigateToLogin: () -> Unit
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
     val effect by viewModel.effect.collectAsState(null)
@@ -103,7 +104,8 @@ fun MovieDetailsScreen(
         onNavigateGenre = onNavigateGenre,
         onNavigateToMovie = onNavigateToMovie,
         onNavigateToActor = onNavigateToActor,
-        onNavigateToReviews = onNavigateToReviews
+        onNavigateToReviews = onNavigateToReviews,
+        onNavigateToLogin = onNavigateToLogin
     )
 
     BuildScreen(
@@ -281,7 +283,6 @@ fun MovieDetailsContent(
                                 modifier = Modifier
                                     .defaultMinSize(minWidth = 296.dp),
                                 onClick = {
-                                    Log.d("TAG", "MovieDetailsContent: ${actor.id}")
                                     movieDetailsContract.onActorClick(actor.id)
                                 }
                             )
@@ -326,8 +327,12 @@ fun MovieDetailsContent(
         )
 
         if (uiState.isRateBottomSheetVisible) RatingBottomSheet(
-            onDismissRequest = movieDetailsContract::onRateBottomSheetClick,
+            onDismissClick = movieDetailsContract::onRateBottomSheetClick,
             onSubmitClick = movieDetailsContract::onSelectRatingClick,
+        )
+        else if (uiState.isGuestUserBottomSheetVisible) GuestUserLoginBottomSheet(
+            onDismissClick = movieDetailsContract::onRateBottomSheetClick,
+            onLoginClick = movieDetailsContract::onLoginClick,
         )
     }
 }
@@ -411,6 +416,7 @@ private fun HandleMovieDetailsEffects(
     onNavigateToMovie: (Int) -> Unit,
     onNavigateToActor: (Int) -> Unit,
     onNavigateToReviews: (Int, Int) -> Unit,
+    onNavigateToLogin: () -> Unit
 ) {
     effect?.Listen { currentEffect ->
         when (currentEffect) {
@@ -422,6 +428,7 @@ private fun HandleMovieDetailsEffects(
                 currentEffect.movieId,
                 currentEffect.mediaNumber
             )
+            is MovieDetailsEffect.OnLoginNavigation -> onNavigateToLogin()
         }
     }
 }

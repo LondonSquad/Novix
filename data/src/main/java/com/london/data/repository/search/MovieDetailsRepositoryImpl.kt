@@ -1,5 +1,6 @@
 package com.london.data.repository.search
 
+import android.util.Log
 import com.london.data.local.preference.AuthPreferences
 import com.london.data.mapper.details.movie.toEntity
 import com.london.data.mapper.search.toEntity
@@ -81,9 +82,14 @@ class MovieDetailsRepositoryImpl @Inject constructor(
 
     override suspend fun getAccountMovieStatesById(
         id: Int,
-    ): MovieStates = movieDetailsRemoteDataSource.getAccountMovieStates(
+    ): MovieStates {
+        val apiCall = movieDetailsRemoteDataSource.getAccountMovieStates(
             movieId = id,
             userSessionId = authPreferences.getSessionId(),
-            guestSessionId = authPreferences.getGuestSessionId()
         ).getOrThrow().toEntity()
+        Log.d("dfksdl;fds;makf`", "getAccountMovieStatesById: $apiCall")
+        Log.d("dfksdl;fds;makf", "getAccountMovieStatesById: ${authPreferences.getSessionId()}")
+
+        return apiCall
+    }
 }

@@ -11,4 +11,5 @@ interface MovieDetailsContract {
     fun onRetry()
     fun onRateBottomSheetClick()
     fun onSelectRatingClick(rating: Int)
+    fun onLoginClick()
 }

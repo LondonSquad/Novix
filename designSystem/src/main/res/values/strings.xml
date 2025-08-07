@@ -38,5 +38,8 @@
     <string name="submit">Submit</string>
     <string name="rate_it">Rate it</string>
     <string name="select_how_much_you_like_it">Select how much you like it</string>
-    <string name="close" />
+    <string name="close">close</string>
+    <string name="user_person_profile">user person profile</string>
+    <string name="please_login_to_rate_your_favorite_items">Please login to rate your favorite items.</string>
+    <string name="login">login</string>
 </resources>

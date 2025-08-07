@@ -35,13 +35,11 @@ class MovieDetailsRemoteDataSourceImpl @Inject constructor(
 
     override suspend fun getAccountMovieStates(
         movieId: Int,
-        guestSessionId: String?,
         userSessionId: String?
     ): Result<AccountMovieStatesResponse> =
         callApiWithRetry(apiCall = {
             movieDetailsApiService.getAccountMovieStates(
                 movieId = movieId,
-                guestSessionId = guestSessionId,
                 userSessionId = userSessionId
             )
         }, mapper = { it })

@@ -1,5 +1,6 @@
 package com.london.designsystem.component
 
+import android.annotation.SuppressLint
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -23,9 +24,10 @@ import com.london.designsystem.R
 import com.london.designsystem.component.button.PrimaryButton
 import com.london.designsystem.theme.NovixTheme
 
+@SuppressLint("SuspiciousIndentation")
 @Composable
 fun RatingBottomSheet(
-    onDismissRequest: () -> Unit,
+    onDismissClick: () -> Unit,
     onSubmitClick: (Int) -> Unit
 ) {
     var rating by remember { mutableIntStateOf(0) }
@@ -33,7 +35,7 @@ fun RatingBottomSheet(
     val sheetState = rememberModalBottomSheetState()
 
         ModalBottomSheet(
-            onDismissRequest = onDismissRequest,
+            onDismissRequest = onDismissClick,
             state = sheetState,
             containerColor = NovixTheme.colors.surface
         ) {
@@ -56,7 +58,7 @@ fun RatingBottomSheet(
                         style = NovixTheme.typography.title.large
                     )
                     IconButton(
-                        onClick = onDismissRequest,
+                        onClick = onDismissClick,
                         modifier = Modifier
                             .background(
                                 shape = RoundedCornerShape(8.dp),

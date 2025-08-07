@@ -6,6 +6,7 @@ import com.london.domain.entity.recent.MediaType
 import com.london.domain.entity.recent.RecentViewed
 import com.london.domain.usecase.AddMovieRatingByIdUseCase
 import com.london.domain.usecase.GetAccountMovieStatesById
+import com.london.domain.usecase.LoggedInUseCase
 import com.london.domain.usecase.details.movie.ManageMovieDetailsUseCase
 import com.london.domain.usecase.recent.viewed.AddToRecentViewedUseCase
 import com.london.domain.usecase.recent.watched.AddMovieToRecentWatchedUseCase
@@ -22,6 +23,7 @@ class MovieDetailsViewModel @Inject constructor(
     private val addToRecentViewedUseCase: AddToRecentViewedUseCase,
     private val addMovieRatingByIdUseCase: AddMovieRatingByIdUseCase,
     private val getAccountMovieStatesById: GetAccountMovieStatesById,
+    private val getUserLoggedInUseCase: LoggedInUseCase,
     savedStateHandle: SavedStateHandle
 ) : BaseViewModel<MovieDetailsUiState, MovieDetailsEffect>(MovieDetailsUiState()),
     MovieDetailsContract {
@@ -127,9 +129,31 @@ class MovieDetailsViewModel @Inject constructor(
         loadSimilarAndVideos(movieId)
     }
 
-    override fun onRateBottomSheetClick() =
-        updateState { copy(isRateBottomSheetVisible = isRateBottomSheetVisible.not()) }
-
+    override fun onRateBottomSheetClick() {
+        tryToExecute(
+            block = {
+                getUserLoggedInUseCase.invoke()
+            },
+            onSuccess = { isLoggedIn ->
+                if (isLoggedIn)
+                    updateState {
+                        copy(
+                            isRateBottomSheetVisible = isRateBottomSheetVisible.not()
+                        )
+                    }
+                else
+                    updateState {
+                        copy(
+                            isGuestUserBottomSheetVisible = isGuestUserBottomSheetVisible.not(),
+                            isGuestUser = true
+                        )
+                    }
+            },
+            onError = { errorState ->
+                updateState { copy(error = errorState) }
+            }
+        )
+    }
 
     override fun onSelectRatingClick(rating: Int) {
         tryToExecute(
@@ -137,14 +161,24 @@ class MovieDetailsViewModel @Inject constructor(
                 addMovieRatingByIdUseCase.invoke(movieId, rating)
             },
             onSuccess = {
-                updateState { copy(selectedRating = rating, isRated = true, isRateBottomSheetVisible = false) }
+                updateState {
+                    copy(
+                        selectedRating = rating,
+                        isRated = true,
+                        isRateBottomSheetVisible = false
+                    )
+                }
             },
-            onError = {},
-            onCompleted = {},
+            onError = { errorState ->
+                updateState { copy(error = errorState) }
+            },
+            onCompleted = {
+                updateState { copy(isLoading = false) }
+            },
         )
-
     }
 
+    override fun onLoginClick() = emitEffect(MovieDetailsEffect.OnLoginNavigation)
     private fun loadSimilarAndVideos(movieId: Int) {
         tryToExecute(
             block = {
@@ -159,7 +193,7 @@ class MovieDetailsViewModel @Inject constructor(
                     copy(
                         similarMovies = similarMovies,
                         movieVideo = videos.firstOrNull()?.videoUrl.orEmpty(),
-                        isRated = movieRating != 0
+                        isRated = movieRating != 0 && state.value.isGuestUser.not()
                     )
                 }
             },
