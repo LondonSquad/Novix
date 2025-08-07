@@ -1,7 +1,7 @@
 package com.london.data.remote.source.base
 
 import com.london.data.remote.exception.NetworkException
-import com.london.data.remote.exception.NetworkException.CantAddMovieToListException
+import com.london.data.remote.exception.NetworkException.EntryNotFoundException
 import com.london.data.remote.exception.UnProcessableEntityException
 import com.london.data.remote.model.list.CustomListResponse
 import kotlinx.coroutines.delay
@@ -30,7 +30,7 @@ interface BaseRemoteDatasource {
                 "Request timed out. Please try again."
             )
         )
-    } catch (e: CantAddMovieToListException) {
+    } catch (e: EntryNotFoundException) {
         throw e
     } catch (e: Exception) {
         Result.failure(
@@ -76,7 +76,7 @@ interface BaseRemoteDatasource {
 
                 if (result.body() is CustomListResponse &&
                     (result.body() as CustomListResponse).statusCode == 21
-                ) throw result.toCantAddMovieToListException()
+                ) throw result.toEntryNotFoundException()
 
                 getOrEmptyResult(result = result, mapper = mapper).map {
                     it ?: throw NetworkException.EmptyResponseException(
@@ -161,8 +161,8 @@ interface BaseRemoteDatasource {
         message = errorBody()?.string()
     )
 
-    private fun <T> Response<T>.toCantAddMovieToListException() =
-        NetworkException.CantAddMovieToListException(
-            message = "Cant add movie to list"
+    private fun <T> Response<T>.toEntryNotFoundException() =
+        EntryNotFoundException(
+            message = "Entry not found"
         )
 }

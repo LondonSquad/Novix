@@ -31,6 +31,12 @@ class CustomMovieListRepositoryImpl @Inject constructor(
             languageCode = preferencesService.appLanguage.value.code
         ).isSuccess
 
+    override suspend fun getMovieListName(listId: UInt): String =
+        remoteDataSource.getDetails(
+            listId = listId.toInt(),
+            page = 1
+        ).getOrThrow().name.orEmpty()
+
     override suspend fun getMovieLists(pageNumber: Int): PagedFetchResponse<MovieList> {
         val response = remoteDataSource.getAllMovieLists(
             page = pageNumber,
@@ -46,13 +52,13 @@ class CustomMovieListRepositoryImpl @Inject constructor(
     }
 
     override suspend fun addMovieToList(listId: UInt, movieId: UInt): Boolean {
-         remoteDataSource.addMovieToList(
+        remoteDataSource.addMovieToList(
             listId = listId.toInt(),
             movieId = movieId.toInt(),
             sessionId = authPreferences.getSessionId()
         ).onFailure {
             return false
-         }
+        }
         return true
     }
 
@@ -71,5 +77,20 @@ class CustomMovieListRepositoryImpl @Inject constructor(
             totalPages = 1,
             totalItems = response.itemCount.orZero()
         )
+    }
+
+    override suspend fun removeMovieFromList(
+        listId: UInt,
+        movieId: UInt
+    ): Boolean {
+
+        remoteDataSource.removeMovieFromList(
+            listId = listId.toInt(),
+            movieId = movieId.toInt(),
+            sessionId = authPreferences.getSessionId()
+        ).onFailure {
+            return false
+        }
+        return true
     }
 }
