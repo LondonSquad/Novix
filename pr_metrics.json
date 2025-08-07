@@ -18593,5 +18593,33 @@
       "deletions": 162,
       "changed_files": 15
     }
+  },
+  {
+    "pr_number": 563,
+    "url": "https://github.com/LondonSquad/Novix/pull/563",
+    "title": "Refactor: Enhance Top Picks screen navigation and interactions",
+    "opened_at": "2025-08-07T23:06:23Z",
+    "head_ref": "fix/media-picks",
+    "base_ref": "develop",
+    "creator": {
+      "login": "Mostafa-alsaygh",
+      "id": 106277855,
+      "url": "https://github.com/Mostafa-alsaygh"
+    },
+    "approvals": [],
+    "first_approved_at": null,
+    "time_to_first_approval_minutes": null,
+    "required_approvals_met_at": null,
+    "time_to_required_approvals_minutes": null,
+    "closed_at": null,
+    "merged_at": null,
+    "merged_by": null,
+    "week": "2025-W32",
+    "status": "pending",
+    "diff_stats": {
+      "additions": 13,
+      "deletions": 9,
+      "changed_files": 7
+    }
   }
 ]
