@@ -1,9 +1,5 @@
 package com.london.presentation.feature.login
 
-import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.animation.core.tween
-import androidx.compose.animation.slideInVertically
-import androidx.compose.animation.slideOutVertically
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -23,12 +19,9 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.statusBars
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -40,15 +33,14 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.london.designsystem.component.Icon
 import com.london.designsystem.component.OutlinedTextField
-import com.london.designsystem.component.SnackBar
 import com.london.designsystem.component.Text
 import com.london.designsystem.component.TopBar
 import com.london.designsystem.component.button.PrimaryButton
 import com.london.designsystem.theme.NovixTheme
 import com.london.presentation.R
 import com.london.presentation.shared.base.ErrorState
+import com.london.presentation.shared.SnackBarAnimation
 import com.london.presentation.utils.Listen
-import kotlinx.coroutines.delay
 import com.london.designsystem.R as dsR
 
 @Composable
@@ -222,35 +214,5 @@ private fun Content(
             val message = uiState.error.message
             SnackBarAnimation(message)
         }
-    }
-}
-
-@Composable
-private fun SnackBarAnimation(message: String?) {
-    var isVisible by remember { mutableStateOf(false) }
-    LaunchedEffect(message) {
-        isVisible = true
-        delay(3000)
-        isVisible = false
-    }
-    AnimatedVisibility(
-        visible = isVisible,
-        enter = slideInVertically(
-            initialOffsetY = { -it },
-            animationSpec = tween(durationMillis = 300)
-        ),
-        exit = slideOutVertically(
-            targetOffsetY = { -it },
-            animationSpec = tween(durationMillis = 300)
-        )
-    ) {
-        SnackBar(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(horizontal = 16.dp)
-                .offset(y = 56.dp),
-            title = message ?: stringResource(dsR.string.incorrect_password),
-            icon = painterResource(dsR.drawable.ic_failed)
-        )
     }
 }

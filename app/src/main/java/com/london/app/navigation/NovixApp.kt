@@ -450,6 +450,9 @@ fun NavGraphBuilder.mainNavGraph(
             },
             onNavigateToReviews = { movieId, mediaType ->
                 navController.navigate(Screen.Reviews(movieId, mediaType))
+            },
+            onNavigateToLogin = {
+                navController.navigate(Screen.Login)
             }
         )
     }

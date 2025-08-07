@@ -1,6 +1,5 @@
 package com.london.presentation.feature.details.movie
 
-import android.util.Log
 import androidx.compose.animation.core.FastOutSlowInEasing
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
@@ -54,7 +53,11 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.london.designsystem.R
+import com.london.presentation.shared.ActorItem
+import com.london.designsystem.component.GuestUserLoginBottomSheet
+import com.london.presentation.shared.HomeCard
 import com.london.designsystem.component.Icon
+import com.london.designsystem.component.RatingBottomSheet
 import com.london.designsystem.component.Text
 import com.london.designsystem.component.TopBar
 import com.london.designsystem.theme.NovixTheme
@@ -74,6 +77,7 @@ import com.london.presentation.shared.CustomBackDropImagePager
 import com.london.presentation.shared.FooterSection
 import com.london.presentation.shared.HomeCard
 import com.london.presentation.shared.buildscreen.BuildScreen
+import com.london.presentation.shared.SnackBarAnimation
 import com.london.presentation.utils.Listen
 import com.london.presentation.utils.convertGenreCodeToString
 import com.london.presentation.utils.getLocalizedTimeUnit
@@ -92,6 +96,7 @@ fun MovieDetailsScreen(
     onNavigateToMovie: (Int) -> Unit,
     onNavigateToActor: (Int) -> Unit,
     onNavigateToReviews: (Int, Int) -> Unit,
+    onNavigateToLogin: () -> Unit
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
     val effect by viewModel.effect.collectAsState(null)
@@ -102,7 +107,8 @@ fun MovieDetailsScreen(
         onNavigateGenre = onNavigateGenre,
         onNavigateToMovie = onNavigateToMovie,
         onNavigateToActor = onNavigateToActor,
-        onNavigateToReviews = onNavigateToReviews
+        onNavigateToReviews = onNavigateToReviews,
+        onNavigateToLogin = onNavigateToLogin
     )
 
     BuildScreen(
@@ -280,7 +286,6 @@ fun MovieDetailsContent(
                                 modifier = Modifier
                                     .defaultMinSize(minWidth = 296.dp),
                                 onClick = {
-                                    Log.d("TAG", "MovieDetailsContent: ${actor.id}")
                                     movieDetailsContract.onActorClick(actor.id)
                                 }
                             )
@@ -312,7 +317,6 @@ fun MovieDetailsContent(
                 }
             }
         }
-
         FooterSection(
             haveTrailer = uiState.movieHaveTrailer,
             modifier = Modifier
@@ -320,13 +324,33 @@ fun MovieDetailsContent(
                     footerHeight = with(density) { coordinates.size.height.toDp() }
                 }
                 .align(Alignment.BottomCenter),
-            onPlayClick = {
-                uriHandler.openUrl(uiState.movieVideo)
-            },
-            onStarClick = {
-                // TODO save favorite onclick handler
-            }
+            onVideoClick = { uriHandler.openUrl(uiState.movieVideo) },
+            onRateClick = movieDetailsContract::onRateBottomSheetClick,
+            isRateEnabled = !uiState.isRated && (uiState.movieRating.isBlank() || uiState.movieRating.isNotZeroRate())
         )
+
+        if (uiState.isRateBottomSheetVisible) RatingBottomSheet(
+            onDismissClick = movieDetailsContract::onRateBottomSheetClick,
+            onSubmitClick = movieDetailsContract::onSelectRatingClick,
+        )
+        else if (uiState.isGuestUserBottomSheetVisible) GuestUserLoginBottomSheet(
+            onDismissClick = movieDetailsContract::onRateBottomSheetClick,
+            onLoginClick = movieDetailsContract::onLoginClick,
+        )
+    }
+
+    uiState.isSuccessfullyRated?.let { isSuccessful ->
+        if (isSuccessful) {
+            SnackBarAnimation(
+                message = stringResource(R.string.rated_successfully),
+                icon = R.drawable.ic_success,
+            )
+        } else {
+            SnackBarAnimation(
+                message = stringResource(R.string.rated_fail),
+                icon = R.drawable.ic_failed
+            )
+        }
     }
 }
 
@@ -409,6 +433,7 @@ private fun HandleMovieDetailsEffects(
     onNavigateToMovie: (Int) -> Unit,
     onNavigateToActor: (Int) -> Unit,
     onNavigateToReviews: (Int, Int) -> Unit,
+    onNavigateToLogin: () -> Unit
 ) {
     effect?.Listen { currentEffect ->
         when (currentEffect) {
@@ -420,6 +445,7 @@ private fun HandleMovieDetailsEffects(
                 currentEffect.movieId,
                 currentEffect.mediaNumber
             )
+            is MovieDetailsEffect.OnLoginNavigation -> onNavigateToLogin()
         }
     }
 }

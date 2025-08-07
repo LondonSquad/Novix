@@ -30,4 +30,15 @@
     <string name="movies">افلام</string>
     <string name="tv_shows">مسلسلات</string>
     <string name="incorrect_password">كلمة المرور غير صحيحة</string>
+    <string name="filled_star">نجمة ممتلئة</string>
+    <string name="outline_star">نجمة فارغة</string>
+    <string name="submit">إرسال</string>
+    <string name="rate_it">قيّمه</string>
+    <string name="select_how_much_you_like_it">اختر مدى إعجابك به</string>
+    <string name="close">إغلاق</string>
+    <string name="user_person_profile">الملف الشخصي للمستخدم</string>
+    <string name="please_login_to_rate_your_favorite_items">يرجى تسجيل الدخول لتقييم العناصر المفضلة لديك.</string>
+    <string name="login">تسجيل دخول</string>
+    <string name="rated_successfully">تم التقييم بنجاح</string>
+    <string name="rated_fail">حدث خطأ اثناء التقييم</string>
 </resources>

@@ -14,10 +14,10 @@ import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.asPaddingValues
+import androidx.compose.foundation.layout.defaultMinSize
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.navigationBars
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -67,6 +67,8 @@ import com.london.presentation.shared.CustomBackDropImagePager
 import com.london.presentation.shared.HomeCard
 import com.london.presentation.shared.ImageView
 import com.london.presentation.shared.buildscreen.BuildScreen
+import com.london.presentation.shared.HomeCard
+import com.london.presentation.shared.ImageView
 import com.london.presentation.utils.Listen
 import com.london.presentation.utils.offsetLayout
 import com.london.presentation.utils.toLocalizedNumbers
@@ -208,7 +210,6 @@ private fun ActorInfoSectionItem(uiState: ActorDetailsUiState) {
                 birthday = actorBirthday,
                 deathDay = actorDeathDay ?: "",
                 placeOfBirth = actorPlaceOfBirth,
-                modifier = Modifier.offsetLayout()
             )
         }
     }
@@ -385,16 +386,13 @@ private fun ActorInfoSection(
     Column(
         verticalArrangement = Arrangement.SpaceBetween,
         modifier = modifier
+            .padding(start = 16.dp, end = 16.dp, bottom = 16.dp)
+            .offsetLayout()
             .fillMaxWidth()
-            .heightIn(min = 132.dp)
-            .padding(16.dp)
-            .clip(RoundedCornerShape(16.dp))
-            .border(
-                width = 1.dp,
-                color = NovixTheme.colors.stroke,
-                shape = RoundedCornerShape(16.dp)
-            )
-            .background(NovixTheme.colors.surface),
+            .defaultMinSize(minHeight = 132.dp)
+            .clip(RoundedCornerShape(12.dp))
+            .background(NovixTheme.colors.surface)
+            .border(1.dp, NovixTheme.colors.stroke, RoundedCornerShape(12.dp)),
         horizontalAlignment = Alignment.Start
     ) {
         Text(

@@ -302,11 +302,11 @@ fun TvShowsDetailScreenContent(
                 .onGloballyPositioned { coordinates ->
                     footerHeight = with(density) { coordinates.size.height.toDp() }
                 },
-            onPlayClick = {
-                uriHandler.openUrl(uiState.videoProvider)
-            },
-            onStarClick = {
+            onRateClick = {
                 // TODO save favorite onclick handler
+            },
+            onVideoClick = {
+                uriHandler.openUrl(uiState.videoProvider)
             }
         )
     }

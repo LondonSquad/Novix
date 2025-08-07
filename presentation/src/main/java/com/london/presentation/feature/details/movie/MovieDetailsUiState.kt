@@ -22,7 +22,12 @@ data class MovieDetailsUiState(
     val expanded: Boolean = false,
     val isLoading: Boolean = true,
     val error: ErrorState? = null,
-    val movieVideo: String = ""
+    val movieVideo: String = "",
+    val isRateBottomSheetVisible: Boolean = false,
+    val selectedRating: Int = 0,
+    val isSuccessfullyRated: Boolean? = null,
+    val isGuestUserBottomSheetVisible: Boolean = false,
+    val isGuestUser: Boolean = false
 ){
     val movieHaveTrailer: Boolean
         get() = movieVideo.isNotEmpty()
