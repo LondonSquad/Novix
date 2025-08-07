@@ -512,7 +512,8 @@ fun NavGraphBuilder.mainNavGraph(
             onNavigateBack = { navController.popBackStack() },
             onNavigateToCast = { actorId ->
                 navController.navigate(ActorDetails(actorId))
-            }
+            },
+            onNavigateLogin = { navController.navigate(Screen.Login) }
         )
     }
     composable<Screen.ActorGallery> {

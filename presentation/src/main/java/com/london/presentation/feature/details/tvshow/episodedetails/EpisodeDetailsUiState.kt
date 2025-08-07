@@ -22,7 +22,13 @@ data class EpisodeDetailsUiState(
     val id: Int = 0,
     val backdropPath: String? = "",
     val isSaved: Boolean = false,
-    val videoProvider: String = ""
+    val videoProvider: String = "",
+    val isRateBottomSheetVisible: Boolean = false,
+    val selectedRating: Int = 0,
+    val isSuccessfullyRated: Boolean? = null,
+    val isGuestUserBottomSheetVisible: Boolean = false,
+    val isGuestUser: Boolean = false,
+    val isRated: Boolean = false
 ){
     val episodeHaveTrailer: Boolean
         get() = videoProvider.isNotEmpty()
