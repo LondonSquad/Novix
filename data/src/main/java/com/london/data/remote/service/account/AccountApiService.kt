@@ -7,7 +7,7 @@ import retrofit2.http.Query
 
 interface AccountApiService {
     @GET("3/account")
-    suspend fun getUserName(
+    suspend fun getAccountInfo(
         @Query("session_id") sessionId: String
     ): Response<AccountInfoResponse>
 }

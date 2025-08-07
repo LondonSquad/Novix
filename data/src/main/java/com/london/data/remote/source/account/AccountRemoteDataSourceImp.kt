@@ -9,7 +9,7 @@ class AccountRemoteDataSourceImp(
 ) : AccountRemoteDataSource, BaseRemoteDatasource {
     override suspend fun getUserName(sessionId: String): Result<AccountInfoResponse> =
         callApi(
-            apiCall = { accountApiService.getUserName(sessionId) },
+            apiCall = { accountApiService.getAccountInfo(sessionId) },
             mapper = { it }
         )
 }
