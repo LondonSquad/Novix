@@ -1,6 +1,8 @@
 package com.london.presentation.feature.list.savedlist
 
+import androidx.compose.ui.text.input.TextFieldValue
 import androidx.paging.PagingData
+import com.london.domain.entity.recent.MediaType
 import com.london.presentation.feature.base.BaseViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import jakarta.inject.Inject
@@ -16,11 +18,11 @@ class ListViewModel @Inject constructor() :
     }
 
     override fun onRetry() {
-       // TODO("Not yet implemented")
+        // TODO("Not yet implemented")
     }
 
     override fun onLoginClick() {
-       // TODO("Not yet implemented")
+        // TODO("Not yet implemented")
     }
 
     override fun onListClick(id: Int) {
@@ -28,8 +30,29 @@ class ListViewModel @Inject constructor() :
     }
 
     override fun onFabClick() {
-       // TODO("Not yet implemented")
+        /*TODO*/
     }
+
+    override fun onAddList(listName: TextFieldValue) {
+        TODO("Not yet implemented")
+    }
+
+    override fun onAddListSheetDismiss() {
+        /*TODO*/
+    }
+
+    override fun onListNameChanged(listName: TextFieldValue) {
+        /*TODO*/
+    }
+
+    override fun onMediaTypeChanged(mediaType: MediaType) {
+        /*TODO*/
+    }
+
+    override fun showAddListSheet(mediaType: MediaType) {
+        /*TODO*/
+    }
+
 
     private fun dummyItems(): Flow<PagingData<ListItemUi>> {
         val list =  //emptyList<SavedListItemUi>()
@@ -48,5 +71,4 @@ class ListViewModel @Inject constructor() :
             copy(isLoading = false, items = dummyItems())
         }
     }
-
 }
