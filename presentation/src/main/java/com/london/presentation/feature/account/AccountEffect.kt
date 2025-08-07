@@ -4,5 +4,5 @@ sealed interface AccountEffect {
     data object NavigateToWatchingHistory : AccountEffect
     data object NavigateToMyRating : AccountEffect
     data object NavigateToChangePassword : AccountEffect
-    data object NavigateToLogin : AccountEffect
+    data object NavigateLogout : AccountEffect
 }

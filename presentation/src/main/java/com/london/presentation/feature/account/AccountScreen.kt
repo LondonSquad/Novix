@@ -37,7 +37,7 @@ fun AccountScreen(
             is AccountEffect.NavigateToWatchingHistory -> onNavigateToWatchingHistory()
             is AccountEffect.NavigateToMyRating -> onNavigateToMyRating()
             is AccountEffect.NavigateToChangePassword -> onNavigateToChangePassword()
-            is AccountEffect.NavigateToLogin -> onNavigateToLogin()
+            is AccountEffect.NavigateLogout -> onNavigateToLogin()
         }
     }
 

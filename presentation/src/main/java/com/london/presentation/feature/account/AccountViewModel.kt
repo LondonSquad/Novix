@@ -94,7 +94,7 @@ class AccountViewModel @Inject constructor(
                 }
             },
             onCompleted = {
-                emitEffect(AccountEffect.NavigateToLogin)
+                emitEffect(AccountEffect.NavigateLogout)
             }
         )
     }
@@ -130,6 +130,6 @@ class AccountViewModel @Inject constructor(
     }
 
     override fun onLoginClick() {
-        emitEffect(AccountEffect.NavigateToLogin)
+        emitEffect(AccountEffect.NavigateLogout)
     }
 }
