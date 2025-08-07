@@ -30,13 +30,14 @@ import com.london.designsystem.theme.NovixTheme
 import com.london.designsystem.utils.painter
 import com.london.designsystem.utils.string
 import com.london.presentation.R
+import com.london.presentation.feature.list.viewlistitems.ViewListItemsContract
 import kotlinx.coroutines.launch
 
 @Composable
 fun DeleteListBottomSheet(
     modifier: Modifier = Modifier,
-    onSheetDismiss: () -> Unit,
     isSheetVisible: Boolean,
+    contract: ViewListItemsContract,
     sheetState: SheetState = rememberModalBottomSheetState(),
 ) {
     val coroutineScope = rememberCoroutineScope()
@@ -49,13 +50,19 @@ fun DeleteListBottomSheet(
 
     if (isSheetVisible) {
         ModalBottomSheet(
-            onDismissRequest = onSheetDismiss,
+            onDismissRequest = contract::onDeleteBottomSheetDismiss,
             containerColor = NovixTheme.colors.surface,
             state = sheetState
         ) {
             Content(
-                modifier = modifier
-
+                modifier = modifier,
+                onConfirmDelete = contract::onDeleteBottomSheetDismiss,
+                hideSheet = {
+                    coroutineScope.launch { sheetState.hide() }
+                        .invokeOnCompletion {
+                            if (!sheetState.isVisible) { contract.onDeleteBottomSheetDismiss() }
+                    }
+                },
             )
         }
     }
@@ -64,6 +71,8 @@ fun DeleteListBottomSheet(
 @Composable
 private fun Content(
     modifier: Modifier = Modifier,
+    onConfirmDelete: () -> Unit,
+    hideSheet: () -> Unit
 ) {
 
     Column(
@@ -93,7 +102,7 @@ private fun Content(
                         color = NovixTheme.colors.stroke,
                         shape = RoundedCornerShape(8.dp)
                     )
-                    .clickable(onClick = { /*onCancelClick*/ }),
+                    .clickable(onClick = hideSheet),
                 contentAlignment = Alignment.Center
             ) {
                 Icon(
@@ -126,7 +135,6 @@ private fun Content(
             )
         }
 
-
         PrimaryButton(
             modifier = Modifier.fillMaxWidth(),
             text = R.string.btn_delete.string,
@@ -134,7 +142,7 @@ private fun Content(
             hasIcon = false,
             isLoading = false,
             icon = null,
-            onClick = {}
+            onClick = onConfirmDelete
         )
     }
 }
