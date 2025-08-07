@@ -1,5 +1,6 @@
 package com.london.data.remote.source.details.tvshow
 
+import com.london.data.remote.model.details.rating.AccountStatesResponse
 import com.london.data.remote.model.details.tvshow.model.TvShowCastRemoteResponse
 import com.london.data.remote.model.details.tvshow.model.TvShowDetailsRemoteResponse
 import com.london.data.remote.model.details.tvshow.model.TvShowImagesRemoteResponse
@@ -77,4 +78,42 @@ class TvShowDetailsRemoteDataSourceImpl @Inject constructor(
             },
             mapper = { it }
         )
+
+    override suspend fun getAccountTvShowStates(
+        seriesId: Int,
+        seasonNumber: Int,
+        episodeNumber: Int,
+        guestSessionId: String?,
+        userSessionId: String?,
+    ): Result<AccountStatesResponse> = callApiWithRetry(
+        apiCall = {
+            tvShowDetailsApiService.getAccountTvShowState(
+                seriesId = seriesId,
+                seasonNumber = seasonNumber,
+                episodeNumber = episodeNumber,
+                guestSessionId = guestSessionId,
+                userSessionId = userSessionId
+            )
+        },
+        mapper = { it }
+    )
+
+    override suspend fun getAccountTvEpisodeState(
+        seriesId: Int,
+        seasonNumber: Int,
+        episodeNumber: Int,
+        guestSessionId: String?,
+        userSessionId: String?
+    ): Result<AccountStatesResponse> = callApiWithRetry(
+        apiCall = {
+            tvShowDetailsApiService.getAccountTvEpisode(
+                tvShowId = seriesId,
+                seasonNumber = seasonNumber,
+                episodeNumber = episodeNumber,
+                guestSessionId = guestSessionId,
+                userSessionId = userSessionId
+            )
+        },
+        mapper = { it }
+    )
 }

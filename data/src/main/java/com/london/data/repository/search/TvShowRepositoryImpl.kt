@@ -1,5 +1,6 @@
 package com.london.data.repository.search
 
+import com.london.data.local.preference.AuthPreferences
 import com.london.data.mapper.details.tvshow.TvShowImagesMapper.toEntity
 import com.london.data.mapper.details.tvshow.toCastEntity
 import com.london.data.mapper.details.tvshow.toEntity
@@ -22,7 +23,8 @@ import javax.inject.Inject
 
 class TvShowRepositoryImpl @Inject constructor(
     private val tvShowDetailsRemoteDataSource: TvShowDetailsRemoteDataSource,
-    private val reviewsRemoteDataSource: ReviewsRemoteDataSource
+    private val reviewsRemoteDataSource: ReviewsRemoteDataSource,
+    private val authPreferences: AuthPreferences,
 ) : TvShowRepository {
     override suspend fun getTvShowDetailsById(
         id: Int,
@@ -76,4 +78,30 @@ class TvShowRepositoryImpl @Inject constructor(
             totalItems = totalItems
         )
     }
+
+    override suspend fun getAccountTvShowState(
+        seriesId: Int,
+        seasonNumber: Int,
+        episodeNumber: Int,
+        rating: Int
+    ): Boolean = tvShowDetailsRemoteDataSource.getAccountTvShowStates(
+        seriesId = seriesId,
+        seasonNumber = seasonNumber,
+        episodeNumber = episodeNumber,
+        guestSessionId = authPreferences.getGuestSessionId(),
+        userSessionId = authPreferences.getSessionId()
+    ).isSuccess
+
+    override suspend fun getAccountTvEpisode(
+        seriesId: Int,
+        seasonNumber: Int,
+        episodeNumber: Int,
+        rating: Int
+    ): Boolean = tvShowDetailsRemoteDataSource.getAccountTvEpisodeState(
+        seriesId = seriesId,
+        seasonNumber = seasonNumber,
+        episodeNumber = episodeNumber,
+        guestSessionId = authPreferences.getGuestSessionId(),
+        userSessionId = authPreferences.getSessionId(),
+    ).isSuccess
 }

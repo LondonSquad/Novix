@@ -5,4 +5,16 @@ interface RatingRepository {
         id: Int,
         rating: Int,
     ) : Boolean
+
+    suspend fun addTvShowById(
+        id: Int,
+        rating: Int
+    ): Boolean
+
+    suspend fun addTvEpisode(
+        tvShowId: Int,
+        seasonNumber: Int,
+        episodeNumber: Int,
+        rating: Int
+    ): Boolean
 }

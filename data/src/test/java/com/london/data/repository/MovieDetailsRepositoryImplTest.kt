@@ -8,7 +8,6 @@ import com.london.data.remote.exception.NetworkException
 import com.london.data.remote.model.ApiResponse
 import com.london.data.remote.model.details.movie.model.moviecast.MovieActor
 import com.london.data.remote.model.details.movie.model.moviecast.MovieCastResponse
-import com.london.data.remote.model.details.movie.model.moviedetails.AccountMovieStatesResponse
 import com.london.data.remote.model.details.movie.model.moviedetails.GenreRemote
 import com.london.data.remote.model.details.movie.model.moviedetails.MovieDetailsResponse
 import com.london.data.remote.model.details.movie.model.moviedetails.ProductionCompanyRemote
@@ -17,6 +16,7 @@ import com.london.data.remote.model.details.movie.model.moviedetails.RemoteColle
 import com.london.data.remote.model.details.movie.model.moviedetails.SpokenLanguageRemote
 import com.london.data.remote.model.details.movie.model.movieimages.MovieImagesResponse
 import com.london.data.remote.model.details.movie.model.movieimages.Poster
+import com.london.data.remote.model.details.rating.AccountStatesResponse
 import com.london.data.remote.model.reviews.AuthorDetailsResponse
 import com.london.data.remote.model.reviews.ReviewResponse
 import com.london.data.remote.model.search.MovieRemote
@@ -197,15 +197,15 @@ class MovieDetailsRepositoryImplTest {
         crew = emptyList()
     )
 
-    private fun fakeMovieStatesRemote(): AccountMovieStatesResponse =
-        AccountMovieStatesResponse(
+    private fun fakeMovieStatesRemote(): AccountStatesResponse =
+        AccountStatesResponse(
             id = 123,
             favorite = true,
             watchlist = true
         )
 
-    private fun secondFakeMovieStatesRemote(): AccountMovieStatesResponse {
-        return AccountMovieStatesResponse(
+    private fun secondFakeMovieStatesRemote(): AccountStatesResponse {
+        return AccountStatesResponse(
             favorite = true,
             id = 5,
             watchlist = false

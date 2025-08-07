@@ -1,6 +1,6 @@
 package com.london.domain.usecase
 
-import com.london.domain.entity.moviedatails.MovieStates
+import com.london.domain.entity.moviedatails.MediaStates
 import com.london.domain.repository.MovieDetailsRepository
 import io.mockk.coEvery
 import io.mockk.mockk
@@ -38,7 +38,7 @@ class GetMovieRatingByIdUseCaseTest {
         assertEquals(expectedRate, result)
     }
 
-    private fun mockMovieStates() = MovieStates(
+    private fun mockMovieStates() = MediaStates(
         id = 123,
         rate = 8,
         favorite = false,
