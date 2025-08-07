@@ -40,7 +40,7 @@ class AuthPreferences @Inject constructor(
         sharedPreferences.edit { putString(GUEST_SESSION_ID, id) }
     }
 
-    private fun getGuestSessionId(): String? {
+    fun getGuestSessionId(): String? {
         return sharedPreferences.getString(GUEST_SESSION_ID, null)
     }
 
