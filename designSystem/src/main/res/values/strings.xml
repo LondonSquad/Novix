@@ -31,4 +31,15 @@
     <string name="tv_shows">TV shows</string>
     <string name="incorrect_password">Incorrect password</string>
     <string name="error_image" translatable="false">Error Image</string>
+    <string name="filled_star">Filled star</string>
+    <string name="outline_star">Outline star</string>
+    <string name="submit">Submit</string>
+    <string name="rate_it">Rate it</string>
+    <string name="select_how_much_you_like_it">Select how much you like it</string>
+    <string name="close">close</string>
+    <string name="user_person_profile">user person profile</string>
+    <string name="please_login_to_rate_your_favorite_items">Please login to rate your favorite items.</string>
+    <string name="login">login</string>
+    <string name="rated_successfully">Item rated successfully</string>
+    <string name="rated_fail">Failed to rate the item</string>
 </resources>
