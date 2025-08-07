@@ -49,9 +49,9 @@ class AccountViewModel @Inject constructor(
 
     private fun initializeAppTheme() {
         tryToExecute(
-            block = { appPreferencesService.appTheme.first() },
-            onSuccess = { theme ->
-                updateState { copy(appTheme = theme) }
+            block = { appPreferencesService.isAppDarkMode.first() },
+            onSuccess = { isAppDarkMode ->
+                updateState { copy(appTheme = if (isAppDarkMode) AppTheme.DARK else AppTheme.LIGHT) }
             },
             onError = {
                 updateState { copy(isUserLoggedIn = false) }
