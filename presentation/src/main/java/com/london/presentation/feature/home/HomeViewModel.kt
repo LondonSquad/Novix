@@ -3,7 +3,6 @@ package com.london.presentation.feature.home
 import androidx.lifecycle.viewModelScope
 import androidx.paging.PagingData
 import androidx.paging.cachedIn
-import com.london.domain.AppPreferencesService
 import com.london.domain.entity.UpComingMovie
 import com.london.domain.usecase.GetPopularMovies
 import com.london.domain.usecase.GetPopularTvShow
@@ -15,6 +14,8 @@ import com.london.domain.usecase.toprated.GetTopRatedTvSeriesUseCase
 import com.london.presentation.shared.base.BaseViewModel
 import com.london.presentation.shared.base.createPagingSourceFlow
 import com.london.presentation.utils.MovieGenre
+import com.london.presentation.utils.toPopularUiMedia
+import com.london.presentation.utils.toUiMedia
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
@@ -33,7 +34,6 @@ class HomeViewModel @Inject constructor(
     private val getTopRatedTvShows: GetTopRatedTvSeriesUseCase,
     private val getRecentWatchedMovies: GetRecentWatchedMoviesUseCase,
     private val getRecentWatchedTvShows: GetRecentWatchedTvShowsUseCase,
-    private val appPreferencesService: AppPreferencesService
 ) : BaseViewModel<HomeScreenUiState, HomeScreenEffect>(HomeScreenUiState()), HomeScreenContract {
 
     private val _upcomingMoviesFlow =
