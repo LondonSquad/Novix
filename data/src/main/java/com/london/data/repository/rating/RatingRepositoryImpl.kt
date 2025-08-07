@@ -6,13 +6,13 @@ import com.london.domain.repository.RatingRepository
 import javax.inject.Inject
 
 class RatingRepositoryImpl @Inject constructor(
-    private val addMovieRatingRemoteDataSource: RatingRemoteDataSource,
+    private val movieRatingRemoteDataSource: RatingRemoteDataSource,
     private val authPreferences: AuthPreferences
 ) : RatingRepository {
     override suspend fun addMovieRatingById(
         id: Int,
         rating: Int,
-    ): Boolean = addMovieRatingRemoteDataSource.addMovieRating(
+    ): Boolean = movieRatingRemoteDataSource.addMovieRating(
         movieId = id,
         rating = rating.toDouble(),
         userSessionId = authPreferences.getSessionId(),

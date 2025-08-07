@@ -81,10 +81,9 @@ class MovieDetailsRepositoryImpl @Inject constructor(
     override suspend fun getAccountMovieStatesById(
         id: Int,
     ): MovieStates {
-        val apiCall = movieDetailsRemoteDataSource.getAccountMovieStates(
+         return movieDetailsRemoteDataSource.getAccountMovieStates(
             movieId = id,
             userSessionId = authPreferences.getSessionId(),
         ).getOrThrow().toEntity()
-        return apiCall
     }
 }

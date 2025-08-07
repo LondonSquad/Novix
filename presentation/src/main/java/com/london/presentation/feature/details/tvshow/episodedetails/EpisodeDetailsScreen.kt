@@ -225,10 +225,10 @@ fun EpisodeDetailsScreenContent(
         FooterSection(
             haveTrailer = uiState.episodeHaveTrailer,
             modifier = Modifier.align(Alignment.BottomCenter),
-            onRateClick = {
+            onVideoClick = {
                 uriHandler.openUrl(uiState.videoProvider)
             },
-            onVideoClick = {
+            onRateClick = {
                 // TODO save favorite onclick handler
             }
         )

@@ -168,7 +168,7 @@ object NetworkModule {
 
     @Provides
     @Singleton
-    fun provideMovieRatingApiService(retrofit: Retrofit): RatingApiService =
+    fun provideRatingApiService(retrofit: Retrofit): RatingApiService =
         retrofit.create(RatingApiService::class.java)
 
     @Provides

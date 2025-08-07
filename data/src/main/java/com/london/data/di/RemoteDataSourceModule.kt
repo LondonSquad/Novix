@@ -110,7 +110,7 @@ object RemoteDataSourceModule {
 
     @Provides
     @Singleton
-    fun provideRatingApiService(
+    fun provideRatingRemoteDataSource(
         apiService: RatingApiService,
     ): RatingRemoteDataSource =
         RatingRemoteDataSourceImpl(ratingApiService = apiService)

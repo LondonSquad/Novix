@@ -6,11 +6,9 @@ import com.london.data.utils.orZero
 import com.london.data.utils.parseRatingValue
 import com.london.domain.entity.moviedatails.MovieStates
 
-
 fun AccountMovieStatesResponse.toEntity() = MovieStates(
     favorite = favorite.isTrue,
     id = id.orZero(),
     rate  = rated.parseRatingValue()?.toInt().orZero(),
     watchlist = watchlist.isTrue
 )
-

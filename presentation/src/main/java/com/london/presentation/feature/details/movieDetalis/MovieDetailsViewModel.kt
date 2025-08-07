@@ -154,7 +154,6 @@ class MovieDetailsViewModel @Inject constructor(
         tryToExecute(
             block = { addMovieRatingByIdUseCase.invoke(movieId, rating) },
             onSuccess = {
-                println("🎉 Rating submission successful!")
                 updateState {
                     copy(
                         selectedRating = rating,
