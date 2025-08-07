@@ -12,9 +12,7 @@ data class AccountInfoResponse(
     @SerialName("name")
     val name: String?,
     @SerialName("avatar")
-    val avatar: AvatarInfo?,
-    @SerialName("avatar_path")
-    val avatarPath: String?
+    val avatar: AvatarInfo?
 )
 
 @Serializable
