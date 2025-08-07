@@ -131,9 +131,7 @@ class MovieDetailsViewModel @Inject constructor(
 
     override fun onRateBottomSheetClick() {
         tryToExecute(
-            block = {
-                getUserLoggedInUseCase.invoke()
-            },
+            block = { getUserLoggedInUseCase.invoke() },
             onSuccess = { isLoggedIn ->
                 if (isLoggedIn)
                     updateState {
@@ -147,6 +145,7 @@ class MovieDetailsViewModel @Inject constructor(
                             isGuestUserBottomSheetVisible = isGuestUserBottomSheetVisible.not(),
                             isGuestUser = true
                         )
+
                     }
             },
             onError = { errorState ->
@@ -157,9 +156,7 @@ class MovieDetailsViewModel @Inject constructor(
 
     override fun onSelectRatingClick(rating: Int) {
         tryToExecute(
-            block = {
-                addMovieRatingByIdUseCase.invoke(movieId, rating)
-            },
+            block = { addMovieRatingByIdUseCase.invoke(movieId, rating) },
             onSuccess = {
                 updateState {
                     copy(
@@ -169,12 +166,8 @@ class MovieDetailsViewModel @Inject constructor(
                     )
                 }
             },
-            onError = { errorState ->
-                updateState { copy(error = errorState) }
-            },
-            onCompleted = {
-                updateState { copy(isLoading = false) }
-            },
+            onError = { errorState -> updateState { copy(error = errorState) } },
+            onCompleted = { updateState { copy(isLoading = false) } },
         )
     }
 
@@ -184,11 +177,11 @@ class MovieDetailsViewModel @Inject constructor(
             block = {
                 val similarMovies = movieDetails.getSimilarMovies(movieId)
                 val movieVideos = movieDetails.getMovieVideo(movieId)
-                val movieRating = getAccountMovieStatesById.invoke(movieId)
+                val movieRating = if (getUserLoggedInUseCase.invoke())
+                    getAccountMovieStatesById.invoke(movieId) else 0
                 Triple(similarMovies, movieVideos, movieRating)
             },
-            onSuccess = { pair ->
-                val (similarMovies, videos, movieRating) = pair
+            onSuccess = { (similarMovies, videos, movieRating) ->
                 updateState {
                     copy(
                         similarMovies = similarMovies,
