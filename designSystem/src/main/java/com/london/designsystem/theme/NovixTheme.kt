@@ -17,7 +17,6 @@ fun NovixTheme(
     CompositionLocalProvider(
         LocalNovixColors provides colors,
         LocalNovixTypography provides NovixTypography,
-        LocalAppTheme provides if (isDarkMode) AppTheme.DARK else AppTheme.LIGHT
     ) {
         content()
     }
