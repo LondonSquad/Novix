@@ -338,7 +338,7 @@ class AccountRepositoryImpTest {
 
         // Then
         assertThat(result.id).isEqualTo(1)
-        assertThat(result.userName).isEqualTo("Test User") // Should use name since userName is null
+        assertThat(result.userName).isEqualTo("Test User")
         assertThat(result.avatarPath).isEqualTo("")
         
         coVerify { authPreferences.getSessionId() }
