@@ -31,7 +31,7 @@ fun <T> MediaLazyGrid(
     onBack: () -> Unit,
     getImageUrl: (T) -> String,
     modifier: Modifier = Modifier,
-    onSaveClick: (T) -> Unit = {},
+    onItemClick: (T) -> Unit = {},
     isItemSaved: (T) -> Boolean = { false },
     isLoading: Boolean = false,
     emptyTitle: String = "",
@@ -46,7 +46,7 @@ fun <T> MediaLazyGrid(
             modifier = Modifier
                 .fillMaxWidth()
                 .statusBarsPadding()
-                .padding(horizontal = 16.dp, vertical = 12.dp),
+                .padding(horizontal = 16.dp),
             title = title,
             onBackClick = onBack
         )
@@ -84,8 +84,8 @@ fun <T> MediaLazyGrid(
                         HomeCard(
                             imageUrl = getImageUrl(item),
                             isSaved = isItemSaved(item),
-                            onSaveClick = { onSaveClick(item) },
-                            modifier = Modifier.clickable { onSaveClick(item)}
+                            onSaveClick = { /* todo on save click */ },
+                            modifier = Modifier.clickable { onItemClick(item) }
                         )
                     }
                 }

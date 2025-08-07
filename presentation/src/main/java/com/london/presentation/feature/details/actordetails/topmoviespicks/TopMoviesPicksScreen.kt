@@ -1,4 +1,4 @@
-package com.london.presentation.feature.details.actordetails.toptvshowspicks
+package com.london.presentation.feature.details.actordetails.topmoviespicks
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
@@ -14,59 +14,60 @@ import com.london.presentation.shared.buildscreen.BuildScreen
 import com.london.presentation.utils.Listen
 
 @Composable
-fun TopTvShowsPicksScreen(
-    onNavigateTvShow: (tvShowId: Int) -> Unit,
+fun TopMoviesPicksScreen(
+    onNavigateMovie: (Int) -> Unit,
     onNavigateBack: () -> Unit,
-    viewModel: TopTvShowsPicksViewModel = hiltViewModel(),
+    viewModel: TopMoviesPicksViewModel = hiltViewModel()
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
-    val effect by viewModel.effect.collectAsState(initial = null)
+    val effect by viewModel.effect.collectAsState(null)
 
-    HandleTvShowsPicksEffects(
+    HandleTopMoviesPicksEffects(
         effect = effect,
-        onNavigateTvShow = onNavigateTvShow,
+        onNavigateMovie = onNavigateMovie,
         onNavigateBack = onNavigateBack
     )
 
-    TopTvShowsPicksContent(
+    TopMoviesPicksContent(
         state = state,
         contract = viewModel,
     )
+
 }
 
 @Composable
-private fun TopTvShowsPicksContent(
-    state: TopTvShowsPicksUiState,
-    contract: TopTvShowsPicksContract,
+private fun TopMoviesPicksContent(
+    state: TopMoviesPicksUiState,
+    contract: TopMoviesPicksContract,
     modifier: Modifier = Modifier,
 ) {
     BuildScreen(
         onBack = contract::onBack,
         isLoading = state.isLoading,
         isError = state.errorState is ErrorState.NoInternet,
-        onRetry = contract::onRetry
+        onRetry = contract::onRetry,
     ) {
         MediaLazyGrid(
-            title = stringResource(R.string.top_tv_shows_picks),
-            items = state.tvShowDetails.cast,
+            title = stringResource(R.string.top_movies_picks),
+            items = state.movieDetails.cast,
             onBack = contract::onBack,
             getImageUrl = { it.posterUrl },
-            onSaveClick = { contract.onSaveMovie(it.id) },
+            onItemClick = { contract.onMovieClicked(it.id) },
             modifier = modifier
         )
     }
 }
 
 @Composable
-private fun HandleTvShowsPicksEffects(
-    effect: TopTvShowsPicksEffect?,
-    onNavigateTvShow: (Int) -> Unit,
-    onNavigateBack: () -> Unit
+private fun HandleTopMoviesPicksEffects(
+    effect: TopMoviesPicksEffect?,
+    onNavigateMovie: (Int) -> Unit,
+    onNavigateBack: () -> Unit,
 ) {
     effect?.Listen { currentEffect ->
         when (currentEffect) {
-            is TopTvShowsPicksEffect.TvShowNavigation -> onNavigateTvShow(currentEffect.tvShowId)
-            is TopTvShowsPicksEffect.BackNavigation -> onNavigateBack()
+            is TopMoviesPicksEffect.NavigateBack -> onNavigateBack()
+            is TopMoviesPicksEffect.NavigationToMovieDetails -> onNavigateMovie(currentEffect.movieId)
         }
     }
 }
