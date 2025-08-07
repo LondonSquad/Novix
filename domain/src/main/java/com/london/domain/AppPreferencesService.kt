@@ -18,8 +18,6 @@ interface AppPreferencesService {
     val appLanguage: StateFlow<AppLanguage>
     fun setAppLanguage(language: AppLanguage)
     //endregion
-    //endregion
-
     //region Content Restriction
     val contentRestrictionLevel: StateFlow<ContentRestrictionLevel>
     fun setContentRestrictionLevel(level: ContentRestrictionLevel)
