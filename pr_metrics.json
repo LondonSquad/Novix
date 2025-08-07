@@ -18539,5 +18539,33 @@
       "deletions": 64,
       "changed_files": 8
     }
+  },
+  {
+    "pr_number": 561,
+    "url": "https://github.com/LondonSquad/Novix/pull/561",
+    "title": "Feature/view list items screen",
+    "opened_at": "2025-08-07T20:55:58Z",
+    "head_ref": "feature/view-list-items-screen",
+    "base_ref": "develop",
+    "creator": {
+      "login": "marwanqashwa",
+      "id": 100484790,
+      "url": "https://github.com/marwanqashwa"
+    },
+    "approvals": [],
+    "first_approved_at": null,
+    "time_to_first_approval_minutes": null,
+    "required_approvals_met_at": null,
+    "time_to_required_approvals_minutes": null,
+    "closed_at": null,
+    "merged_at": null,
+    "merged_by": null,
+    "week": "2025-W32",
+    "status": "pending",
+    "diff_stats": {
+      "additions": 199,
+      "deletions": 162,
+      "changed_files": 15
+    }
   }
 ]
