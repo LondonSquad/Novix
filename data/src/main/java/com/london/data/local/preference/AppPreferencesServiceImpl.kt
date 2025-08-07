@@ -8,6 +8,7 @@ import com.london.domain.theme.AppTheme
 import com.london.domain.theme.toAppTheme
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import com.london.domain.contentrestriction.ContentRestrictionLevel
 import javax.inject.Inject
 
 class AppPreferencesServiceImpl @Inject constructor(
@@ -53,8 +54,28 @@ class AppPreferencesServiceImpl @Inject constructor(
         preferences.edit { putString(PreferencesKeys.LANGUAGE_KEY, language.code) }
     //endregion
 
+    //region Content Restriction
+    private val _contentRestrictionLevel = MutableStateFlow(getContentRestrictionLevel())
+    override val contentRestrictionLevel: StateFlow<ContentRestrictionLevel> =
+        _contentRestrictionLevel
+
+    private fun getContentRestrictionLevel(): ContentRestrictionLevel {
+        val level = preferences.getString(
+            PreferencesKeys.CONTENT_RESTRICTION_KEY,
+            ContentRestrictionLevel.MODERATE.name
+        )
+        return ContentRestrictionLevel.valueOf(level ?: ContentRestrictionLevel.MODERATE.name)
+    }
+
+    override fun setContentRestrictionLevel(level: ContentRestrictionLevel) {
+        preferences.edit { putString(PreferencesKeys.CONTENT_RESTRICTION_KEY, level.name) }
+        _contentRestrictionLevel.value = level
+    }
+    //endregion
+
     private object PreferencesKeys {
         const val HAS_ONBOARDING_BEEN_SHOWN = "has_onboarding_been_shown"
+        const val CONTENT_RESTRICTION_KEY = "content_restriction_key"
         const val THEME_KEY = "theme_key"
         const val LANGUAGE_KEY = "language_key"
     }
