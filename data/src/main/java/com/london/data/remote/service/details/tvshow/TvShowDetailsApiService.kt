@@ -59,8 +59,6 @@ interface TvShowDetailsApiService {
     @GET("3/tv/{series_id}/account_states")
     suspend fun getAccountTvShowState(
         @Path("series_id") seriesId: Int,
-        @Path("season_number") seasonNumber: Int,
-        @Path("episode_number") episodeNumber: Int,
         @Query("guest_session_id") guestSessionId: String?,
         @Query("session_id") userSessionId: String?,
     ): Response<AccountStatesResponse>

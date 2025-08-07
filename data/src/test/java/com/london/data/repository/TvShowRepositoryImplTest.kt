@@ -1,6 +1,7 @@
 package com.london.data.repository
 
 import com.google.common.truth.Truth.assertThat
+import com.london.data.local.preference.AuthPreferences
 import com.london.data.mapper.details.tvshow.TvShowImagesMapper.toEntity
 import com.london.data.mapper.details.tvshow.toCastEntity
 import com.london.data.mapper.details.tvshow.toEntity
@@ -8,6 +9,7 @@ import com.london.data.mapper.details.tvshow.toTvShowEpisodesEntity
 import com.london.data.mapper.search.toReviewEntity
 import com.london.data.remote.exception.NetworkException
 import com.london.data.remote.model.ApiResponse
+import com.london.data.remote.model.details.rating.AccountStatesResponse
 import com.london.data.remote.model.details.tvshow.model.ImageItem
 import com.london.data.remote.model.details.tvshow.model.Role
 import com.london.data.remote.model.details.tvshow.model.TvShowCastMember
@@ -36,6 +38,7 @@ import com.london.data.repository.search.TvShowRepositoryImpl
 import com.london.data.utils.asImageUrlOrEmpty
 import com.london.data.utils.asYoutubeUrlOrEmpty
 import com.london.data.utils.orZero
+import com.london.domain.entity.moviedatails.MediaStates
 import com.london.domain.entity.tvshowdetails.ImageItemEntity
 import com.london.domain.entity.tvshowdetails.TvShowCastEntity
 import com.london.domain.entity.tvshowdetails.TvShowCastMemberEntity
@@ -55,24 +58,31 @@ import com.london.domain.entity.tvshowdetails.episode.EpisodeGuestStarEntity
 import com.london.domain.entity.tvshowdetails.episode.TvShowEpisodeBySeasonEntity
 import com.london.domain.entity.tvshowdetails.episode.TvShowEpisodesEntity
 import io.mockk.coEvery
+import io.mockk.every
 import io.mockk.mockk
 import kotlinx.coroutines.test.runTest
+import kotlinx.serialization.json.Json
 import org.junit.Before
 import org.junit.Test
 import org.junit.jupiter.api.assertThrows
+import kotlin.test.assertEquals
 
 class TvShowRepositoryImplTest {
 
     private lateinit var tvShowDetailsRemoteDataSource: TvShowDetailsRemoteDataSource
     private lateinit var repository: TvShowRepositoryImpl
     private lateinit var reviewsRemoteDataSource: ReviewsRemoteDataSource
+    private lateinit var authPreferences: AuthPreferences
 
     @Before
     fun setUp() {
         tvShowDetailsRemoteDataSource = mockk(relaxed = true)
         reviewsRemoteDataSource = mockk(relaxed = true)
+        authPreferences = mockk(relaxed = false)
         repository = TvShowRepositoryImpl(
-            tvShowDetailsRemoteDataSource, reviewsRemoteDataSource = reviewsRemoteDataSource
+            tvShowDetailsRemoteDataSource,
+            reviewsRemoteDataSource = reviewsRemoteDataSource,
+            authPreferences = authPreferences,
         )
     }
 
@@ -399,12 +409,74 @@ class TvShowRepositoryImplTest {
         assertThat(result).isEqualTo(expected)
     }
 
+    @Test
+    fun `getAccountTvShowState returns correct MediaStates`() = runTest {
+        // Given
+        val seriesId = 456
+        coEvery {
+            tvShowDetailsRemoteDataSource.getAccountTvShowStates(
+                seriesId = seriesId,
+                guestSessionId = GUSETSESSION,
+                userSessionId = USERSESSION
+            )
+        } returns Result.success(mediaStatesDto)
+        every { authPreferences.getGuestSessionId() } returns GUSETSESSION
+        every { authPreferences.getSessionId() } returns USERSESSION
+
+        // When
+        val result = repository.getAccountTvShowState(seriesId)
+
+        // Then
+        assertEquals(expectedEntity, result)
+    }
+
+    @Test
+    fun `getAccountTvEpisode returns correct MediaStates`() = runTest {
+        // Given
+        val seriesId = 789
+        val seasonNumber = 1
+        val episodeNumber = 2
+
+        coEvery {
+            tvShowDetailsRemoteDataSource.getAccountTvEpisodeState(
+                seriesId = seriesId,
+                seasonNumber = seasonNumber,
+                episodeNumber = episodeNumber,
+                guestSessionId = GUSETSESSION,
+                userSessionId = USERSESSION
+            )
+        } returns Result.success(mediaStatesDto)
+        every { authPreferences.getGuestSessionId() } returns GUSETSESSION
+        every { authPreferences.getSessionId() } returns USERSESSION
+
+        // When
+        val result = repository.getAccountTvEpisode(seriesId, seasonNumber, episodeNumber)
+
+        // Then
+        assertEquals(expectedEntity, result)
+    }
+
+
     private companion object {
         const val TV_SHOW_ID = 1
         const val SEASON_NUMBER = 1
         const val EPISODE_NUMBER = 2
         const val PAGE_NUMBER = 1
+        private val GUSETSESSION = "mockGuestSessionId"
+        private const val USERSESSION = "mockUserSessionId"
+        private val mediaStatesDto = AccountStatesResponse(
+            id = 1,
+            favorite = true,
+            rated = Json.parseToJsonElement("""{ "value": 7 }"""),
+            watchlist = false
+        )
 
+        private val expectedEntity = MediaStates(
+            id = 1,
+            favorite = true,
+            rate = 7,
+            watchlist = false
+        )
         val TvShowDetailsRemoteMock = TvShowDetailsRemoteResponse(
             adult = false,
             backdropPath = "https://image.tmdb.org/t/p/w500/backdrop.jpg",

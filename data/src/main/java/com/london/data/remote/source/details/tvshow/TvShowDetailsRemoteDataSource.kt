@@ -36,8 +36,6 @@ interface TvShowDetailsRemoteDataSource {
 
     suspend fun getAccountTvShowStates(
         seriesId: Int,
-        seasonNumber: Int,
-        episodeNumber: Int,
         guestSessionId: String?,
         userSessionId: String?,
     ): Result<AccountStatesResponse>

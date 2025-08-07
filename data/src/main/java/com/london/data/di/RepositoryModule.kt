@@ -154,10 +154,12 @@ object RepositoryModule {
     @Singleton
     fun provideDetailsRepository(
         tvShowDetailsRemoteDataSource: TvShowDetailsRemoteDataSource,
-        reviewsRemoteDataSource: ReviewsRemoteDataSource
+        reviewsRemoteDataSource: ReviewsRemoteDataSource,
+        authPreferences: AuthPreferences
     ): TvShowRepository = TvShowRepositoryImpl(
         tvShowDetailsRemoteDataSource = tvShowDetailsRemoteDataSource,
-        reviewsRemoteDataSource = reviewsRemoteDataSource
+        reviewsRemoteDataSource = reviewsRemoteDataSource,
+        authPreferences = authPreferences
     )
 
     @Provides

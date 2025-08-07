@@ -1,8 +1,9 @@
 package com.london.domain.usecase
 
 import com.london.domain.repository.RatingRepository
+import javax.inject.Inject
 
-class AddTvEpisodeByIdUseCase(
+class AddTvEpisodeRatingByIdUseCase @Inject constructor(
     private val ratingRepository: RatingRepository
 ) {
     suspend fun invoke(id: Int, rating: Int) =

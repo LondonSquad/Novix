@@ -1,6 +1,7 @@
 package com.london.data.repository.search
 
 import com.london.data.local.preference.AuthPreferences
+import com.london.data.mapper.details.movie.toEntity
 import com.london.data.mapper.details.tvshow.TvShowImagesMapper.toEntity
 import com.london.data.mapper.details.tvshow.toCastEntity
 import com.london.data.mapper.details.tvshow.toEntity
@@ -12,6 +13,7 @@ import com.london.data.remote.source.reviews.ReviewsRemoteDataSource
 import com.london.data.utils.asYoutubeUrlOrEmpty
 import com.london.data.utils.fetchAndSync
 import com.london.domain.entity.PagedFetchResponse
+import com.london.domain.entity.moviedatails.MediaStates
 import com.london.domain.entity.review.ReviewEntity
 import com.london.domain.entity.tvshowdetails.TvShowCastEntity
 import com.london.domain.entity.tvshowdetails.TvShowDetailsEntity
@@ -81,27 +83,21 @@ class TvShowRepositoryImpl @Inject constructor(
 
     override suspend fun getAccountTvShowState(
         seriesId: Int,
-        seasonNumber: Int,
-        episodeNumber: Int,
-        rating: Int
-    ): Boolean = tvShowDetailsRemoteDataSource.getAccountTvShowStates(
+    ): MediaStates = tvShowDetailsRemoteDataSource.getAccountTvShowStates(
         seriesId = seriesId,
-        seasonNumber = seasonNumber,
-        episodeNumber = episodeNumber,
         guestSessionId = authPreferences.getGuestSessionId(),
         userSessionId = authPreferences.getSessionId()
-    ).isSuccess
+    ).getOrThrow().toEntity()
 
     override suspend fun getAccountTvEpisode(
         seriesId: Int,
         seasonNumber: Int,
         episodeNumber: Int,
-        rating: Int
-    ): Boolean = tvShowDetailsRemoteDataSource.getAccountTvEpisodeState(
+    ): MediaStates = tvShowDetailsRemoteDataSource.getAccountTvEpisodeState(
         seriesId = seriesId,
         seasonNumber = seasonNumber,
         episodeNumber = episodeNumber,
         guestSessionId = authPreferences.getGuestSessionId(),
         userSessionId = authPreferences.getSessionId(),
-    ).isSuccess
+    ).getOrThrow().toEntity()
 }

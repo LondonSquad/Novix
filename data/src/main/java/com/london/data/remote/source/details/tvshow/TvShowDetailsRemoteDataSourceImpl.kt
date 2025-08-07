@@ -81,16 +81,12 @@ class TvShowDetailsRemoteDataSourceImpl @Inject constructor(
 
     override suspend fun getAccountTvShowStates(
         seriesId: Int,
-        seasonNumber: Int,
-        episodeNumber: Int,
         guestSessionId: String?,
         userSessionId: String?,
     ): Result<AccountStatesResponse> = callApiWithRetry(
         apiCall = {
             tvShowDetailsApiService.getAccountTvShowState(
                 seriesId = seriesId,
-                seasonNumber = seasonNumber,
-                episodeNumber = episodeNumber,
                 guestSessionId = guestSessionId,
                 userSessionId = userSessionId
             )

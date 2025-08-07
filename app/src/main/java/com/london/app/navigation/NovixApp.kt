@@ -237,9 +237,9 @@ fun NavGraphBuilder.mainNavGraph(
                 navController.navigate(TvShowDetails(tvShowId))
             },
             onNavigateTopRated = { navController.navigate(Screen.TopRated) },
-            onNavigateTrendingMovies = { navController.navigate(Screen.TrendingMovies) },
-            onNavigateTrendingTvShows = { navController.navigate(Screen.TrendingTvShows) },
-            onNavigateTrendingActors = { navController.navigate(Screen.TrendingActors) },
+            onNavigateTrendingMovies = { navController.navigate(TrendingMovies) },
+            onNavigateTrendingTvShows = { navController.navigate(TrendingTvShows) },
+            onNavigateTrendingActors = { navController.navigate(TrendingActors) },
             onNavigateContinueWatching = { navController.navigate(Screen.ContinueWatching) }
         )
     }
@@ -299,7 +299,7 @@ fun NavGraphBuilder.mainNavGraph(
                 navController.navigate(TvShowDetails(tvShowId))
             },
             onNavigateToActorDetails = { actorId ->
-                navController.navigate(Screen.ActorDetails(actorId))
+                navController.navigate(ActorDetails(actorId))
             },
             onNavigateToMovieDetails = { movieId ->
                 navController.navigate(MovieDetails(movieId))
@@ -334,7 +334,7 @@ fun NavGraphBuilder.mainNavGraph(
         popExitTransition = { fadeOut(tween(500)) },
     ) {
         AccountScreen(
-            onNavigateToWatchingHistory = { navController.navigate(Screen.WatchingHistory) },
+            onNavigateToWatchingHistory = { navController.navigate(WatchingHistory) },
             onNavigateToMyRating = { navController.navigate(Screen.MyRating) },
             onNavigateToLogin = {
                 navController.navigate(Screen.Login) {
@@ -396,12 +396,13 @@ fun NavGraphBuilder.mainNavGraph(
             onNavigateToReviews = { tvShowId, mediaType ->
                 navController.navigate(Screen.Reviews(tvShowId, mediaType))
             }, onNavigateToCast = { actorId ->
-                navController.navigate(Screen.ActorDetails(actorId))
+                navController.navigate(ActorDetails(actorId))
             },
             onNavigateBack = { navController.navigateUp() },
             onNavigateToGenre = { genreId ->
                 navController.navigate(Screen.TvShowsByCategory(genreId))
-            }
+            },
+            onNavigateToLogin = { navController.navigate(Screen.Login) }
         )
     }
 
@@ -446,7 +447,7 @@ fun NavGraphBuilder.mainNavGraph(
                 navController.navigate(MovieDetails(movieId))
             },
             onNavigateToActor = { actorId ->
-                navController.navigate(Screen.ActorDetails(actorId))
+                navController.navigate(ActorDetails(actorId))
             },
             onNavigateToReviews = { movieId, mediaType ->
                 navController.navigate(Screen.Reviews(movieId, mediaType))
@@ -481,7 +482,7 @@ fun NavGraphBuilder.mainNavGraph(
         )
     }
 
-    composable<Screen.ActorDetails> {
+    composable<ActorDetails> {
         ActorDetailsScreen(
             onNavigateToMoviePicks = { actorId ->
                 navController.navigate(Screen.ActorTopMoviesPicksDetails(actorId))
@@ -510,7 +511,7 @@ fun NavGraphBuilder.mainNavGraph(
         EpisodeDetailsScreen(
             onNavigateBack = { navController.popBackStack() },
             onNavigateToCast = { actorId ->
-                navController.navigate(Screen.ActorDetails(actorId))
+                navController.navigate(ActorDetails(actorId))
             }
         )
     }

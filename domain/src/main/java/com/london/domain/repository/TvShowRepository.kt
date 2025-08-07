@@ -1,6 +1,7 @@
 package com.london.domain.repository
 
 import com.london.domain.entity.PagedFetchResponse
+import com.london.domain.entity.moviedatails.MediaStates
 import com.london.domain.entity.review.ReviewEntity
 import com.london.domain.entity.tvshowdetails.TvShowCastEntity
 import com.london.domain.entity.tvshowdetails.TvShowDetailsEntity
@@ -28,15 +29,11 @@ interface TvShowRepository {
     suspend fun getTvShowReviews(tvShowId: Int, pageNumber: Int): PagedFetchResponse<ReviewEntity>
     suspend fun getAccountTvShowState(
         tvShowId: Int,
-        seasonNumber: Int,
-        episodeNumber: Int,
-        rating: Int
-    ): Boolean
+    ): MediaStates
 
     suspend fun getAccountTvEpisode(
         tvShowId: Int,
         seasonNumber: Int,
         episodeNumber: Int,
-        rating: Int
-    ): Boolean
+    ): MediaStates
 }
