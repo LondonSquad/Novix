@@ -30,6 +30,7 @@ fun LoggedInContent(
     ) {
         UserProfileSection(
             username = uiState.userName,
+            avatarPath = uiState.userAvatar,
             showUserMenu = uiState.showUserMenu,
             onMenuClick = accountContract::onUserMenuClick,
             onLogoutClick = accountContract::onLogoutClick,
