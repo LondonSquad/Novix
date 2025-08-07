@@ -17946,11 +17946,15 @@
     "time_to_first_approval_minutes": 541.85,
     "required_approvals_met_at": "2025-08-07T13:41:54Z",
     "time_to_required_approvals_minutes": 1256.9166666666667,
-    "closed_at": null,
-    "merged_at": null,
-    "merged_by": null,
+    "closed_at": "2025-08-07T16:49:57Z",
+    "merged_at": "2025-08-07T16:49:57Z",
+    "merged_by": {
+      "login": "Mostafa-alsaygh",
+      "id": 106277855,
+      "url": "https://github.com/Mostafa-alsaygh"
+    },
     "week": "2025-W32",
-    "status": "approved",
+    "status": "merged",
     "diff_stats": {
       "additions": 55,
       "deletions": 19,
