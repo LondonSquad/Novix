@@ -177,7 +177,7 @@ class AccountRepositoryImpTest {
         val result = repository.getAccountDetails()
 
         // Then
-        assertThat(result.id).isEqualTo(0) // Should default to 0 when id is null
+        assertThat(result.id).isEqualTo(0)
         assertThat(result.userName).isEqualTo("Test User")
         assertThat(result.avatarPath).isEqualTo("")
         
@@ -204,7 +204,7 @@ class AccountRepositoryImpTest {
 
         // Then
         assertThat(result.id).isEqualTo(1)
-        assertThat(result.userName).isEqualTo("testuser") // Should use userName when name is blank
+        assertThat(result.userName).isEqualTo("testuser")
         assertThat(result.avatarPath).isEqualTo("")
         
         coVerify { authPreferences.getSessionId() }
@@ -364,7 +364,7 @@ class AccountRepositoryImpTest {
 
         // Then
         assertThat(result.id).isEqualTo(1)
-        assertThat(result.userName).isEqualTo("Test User") // Should use name since userName is empty
+        assertThat(result.userName).isEqualTo("Test User")
         assertThat(result.avatarPath).isEqualTo("")
         
         coVerify { authPreferences.getSessionId() }
@@ -390,7 +390,7 @@ class AccountRepositoryImpTest {
 
         // Then
         assertThat(result.id).isEqualTo(1)
-        assertThat(result.userName).isEqualTo("") // Should be empty string when both are null
+        assertThat(result.userName).isEqualTo("")
         assertThat(result.avatarPath).isEqualTo("")
         
         coVerify { authPreferences.getSessionId() }
