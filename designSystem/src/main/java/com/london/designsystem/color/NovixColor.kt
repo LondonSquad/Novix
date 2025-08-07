@@ -29,4 +29,5 @@ data class NovixColors(
     val linearGradient: Color,
     val blackLinearGradient: Color,
     val whiteLinearGradient: Color,
+    val isDarkTheme: Boolean,
 )
