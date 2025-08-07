@@ -542,6 +542,19 @@ fun NavGraphBuilder.mainNavGraph(
             screenTitle = stringResource(R.string.continue_watch)
         )
     }
+
+    composable<Screen.ViewListItems>(
+        exitTransition = { fadeOut(tween(500)) },
+        popEnterTransition = { fadeIn(tween(500)) },
+        enterTransition = { fadeIn(tween(500)) },
+        popExitTransition = { fadeOut(tween(500)) },
+    ) {
+        ListScreen(
+            onNavigateToDetails = {listId ->
+                navController.navigate(MovieDetails(listId))
+            }
+        )
+    }
 }
 
 private fun navigateToBottomBarDestination(

@@ -51,7 +51,8 @@ class ViewListItemsViewModel @Inject constructor(
     }
 
     override fun onRetry() {
-        //TODO("handle retry to fetch data")
+        updateState { copy(error = null) }
+        fetchMovieListDetails(8548075)
     }
 
 
