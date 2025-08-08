@@ -147,4 +147,6 @@
     <string name="no_content_is_blurred">لا يتم تمويه أي محتوى.</string>
     <string name="movie_removed_successfully">تم حذف الفيلم بنجاح</string>
     <string name="movie_not_found">الفيلم غير موجود</string>
+    <string name="list_added_successfly">تم اضافه القائمه بنجاح</string>
+    <string name="can_not_delete_list">حدث خطا ما لا يمكن اضافه القائمه</string>
 </resources>
