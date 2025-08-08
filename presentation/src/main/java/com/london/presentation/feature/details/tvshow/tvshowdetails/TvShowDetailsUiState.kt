@@ -56,7 +56,13 @@ data class TvShowDetailsUiState(
     val voteAverage: Double = 0.0,
     val voteCount: Int = 0,
     val videoProvider: String = "",
-){
+    val isRateBottomSheetVisible: Boolean = false,
+    val selectedRating: Int = 0,
+    val isSuccessfullyRated: Boolean? = null,
+    val isGuestUserBottomSheetVisible: Boolean = false,
+    val isGuestUser: Boolean = false,
+    val isRated: Boolean = false
+) {
     val movieHaveTrailer: Boolean
         get() = videoProvider.isNotEmpty()
 }

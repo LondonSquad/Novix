@@ -93,7 +93,8 @@ class CustomMovieListRepositoryImpl @Inject constructor(
         }
         return true
     }
-   private companion object{
+
+    private companion object {
         const val MAX_PAGES = 10
     }
 }

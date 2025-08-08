@@ -44,7 +44,9 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.london.designsystem.component.GuestUserLoginBottomSheet
 import com.london.designsystem.component.Icon
+import com.london.designsystem.component.RatingBottomSheet
 import com.london.designsystem.component.Text
 import com.london.designsystem.component.TopBar
 import com.london.designsystem.theme.NovixTheme
@@ -54,6 +56,7 @@ import com.london.presentation.shared.ConditionalText
 import com.london.presentation.shared.CustomBackDropImagePager
 import com.london.presentation.shared.FooterSection
 import com.london.presentation.shared.RatingItem
+import com.london.presentation.shared.SnackBarAnimation
 import com.london.presentation.shared.buildscreen.BuildScreen
 import com.london.presentation.utils.Listen
 import com.london.presentation.utils.isNotZeroRate
@@ -65,7 +68,8 @@ import com.london.designsystem.R as Res
 fun EpisodeDetailsScreen(
     viewModel: EpisodeDetailsViewModel = hiltViewModel(),
     onNavigateBack: () -> Unit,
-    onNavigateToCast: (Int) -> Unit
+    onNavigateToCast: (Int) -> Unit,
+    onNavigateLogin: () -> Unit
 ) {
     val uiState by viewModel.state.collectAsStateWithLifecycle()
     val effect by viewModel.effect.collectAsState(null)
@@ -74,6 +78,7 @@ fun EpisodeDetailsScreen(
         when (currentEffect) {
             EpisodeDetailsEffect.NavigationBack -> onNavigateBack()
             is EpisodeDetailsEffect.NavigateToCast -> onNavigateToCast(currentEffect.episodeId)
+            is EpisodeDetailsEffect.OnLoginNavigation -> onNavigateLogin()
         }
     }
 
@@ -228,10 +233,33 @@ fun EpisodeDetailsScreenContent(
             onVideoClick = {
                 uriHandler.openUrl(uiState.videoProvider)
             },
-            onRateClick = {
-                // TODO save favorite onclick handler
-            }
+            onRateClick = episodeDetailsContract::onRateBottomSheetClick,
+            isRateEnabled = uiState.isRated.not() && (uiState.voteAverage.isNotZeroRate()),
+
+            )
+        if (uiState.isRateBottomSheetVisible) RatingBottomSheet(
+            onDismissClick = episodeDetailsContract::onRateBottomSheetClick,
+            onSubmitClick = episodeDetailsContract::onSelectRatingClick,
         )
+        else if (uiState.isGuestUserBottomSheetVisible) GuestUserLoginBottomSheet(
+            onDismissClick = episodeDetailsContract::onRateBottomSheetClick,
+            onLoginClick = episodeDetailsContract::onLoginClick,
+        )
+    }
+
+    uiState.isSuccessfullyRated?.let { isSuccessful ->
+        if (isSuccessful) {
+            SnackBarAnimation(
+                message = stringResource(Res.string.rated_successfully),
+                icon = Res.drawable.ic_success,
+            )
+        } else {
+            SnackBarAnimation(
+                message = stringResource(Res.string.rated_fail),
+                icon = Res.drawable.ic_failed
+            )
+        }
+
     }
 }
 

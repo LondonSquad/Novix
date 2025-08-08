@@ -52,4 +52,3 @@ enum class TvShowGenre(
     Western(id = 37, stringResId = R.string.western),
 }
 
-

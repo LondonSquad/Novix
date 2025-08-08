@@ -1,10 +1,13 @@
 package com.london.presentation.feature.details.tvshow.episodedetails
 
+import android.annotation.SuppressLint
 import androidx.lifecycle.SavedStateHandle
 import com.london.domain.usecase.GetEpisodeByTvShowId
 import com.london.domain.usecase.GetEpisodeVideoProviderUseCase
 import com.london.domain.usecase.GetImagesById
+import com.london.domain.usecase.authentication.AuthenticationUseCase
 import com.london.domain.usecase.details.tvshow.ManageTvShowDetailsUseCase
+import com.london.domain.usecase.rating.RatingUseCase
 import com.london.presentation.navigation.Screen
 import com.london.presentation.navigation.getArgs
 import com.london.presentation.shared.base.BaseViewModel
@@ -17,6 +20,8 @@ class EpisodeDetailsViewModel @Inject constructor(
     private val getEpisodeByTvShowIdUseCase: GetEpisodeByTvShowId,
     private val manageTvShowDetailsUseCase: ManageTvShowDetailsUseCase,
     private val getVideoProvider: GetEpisodeVideoProviderUseCase,
+    private val ratingUseCase: RatingUseCase,
+    private val authenticationUseCase: AuthenticationUseCase,
     savedStateHandle: SavedStateHandle,
 ) : BaseViewModel<EpisodeDetailsUiState, EpisodeDetailsEffect>(EpisodeDetailsUiState()),
     EpisodeDetailsContract {
@@ -28,7 +33,31 @@ class EpisodeDetailsViewModel @Inject constructor(
 
     init {
         loadEpisodeDetails()
+        loadEpisodeRating()
         loadVideoProvider()
+    }
+
+    @SuppressLint("SuspiciousIndentation")
+    private fun loadEpisodeRating(){
+       tryToExecute(
+           block = {
+           val data =  if (authenticationUseCase.isLoggedIn()) {
+               ratingUseCase.getRateAccountTvEpisode(
+                       tvShowId = tvShowId,
+                       seasonNumber = seasonNumber,
+                       episodeNumber =episodeNumber,
+                   )
+               } else 0
+               data
+           },
+           onSuccess = { rating ->
+               updateState {
+                   copy(
+                       isRated = rating != 0 && state.value.isGuestUser.not(),
+                   )
+               }
+           }
+       )
     }
 
     private fun loadEpisodeDetails() {
@@ -39,7 +68,6 @@ class EpisodeDetailsViewModel @Inject constructor(
                 )
                 val images = getTvShowImages(tvShowId)
                 val tvShowDetails = manageTvShowDetailsUseCase.getTvShowDetails(tvShowId)
-
 
                 Triple(episode, images, tvShowDetails)
             },
@@ -58,7 +86,7 @@ class EpisodeDetailsViewModel @Inject constructor(
                         voteCount = episode.voteCount,
                         guestStars = episode.guestStars,
                         seasonNumber = episode.seasonNumber,
-                        )
+                    )
                 }
             },
             onError = { errorState -> updateState { copy(error = errorState) } },
@@ -86,7 +114,7 @@ class EpisodeDetailsViewModel @Inject constructor(
         )
     }
 
-    fun onRetry(){
+    fun onRetry() {
         updateState { copy(error = null) }
         loadEpisodeDetails()
         loadVideoProvider()
@@ -95,4 +123,60 @@ class EpisodeDetailsViewModel @Inject constructor(
     override fun onBackClicked() {
         emitEffect(EpisodeDetailsEffect.NavigationBack)
     }
+
+    override fun onLoginClick() = emitEffect(EpisodeDetailsEffect.OnLoginNavigation)
+
+    override fun onRateBottomSheetClick() {
+        tryToExecute(
+            block = { authenticationUseCase.isLoggedIn() },
+            onSuccess = { isLoggedIn ->
+                if (isLoggedIn)
+                    updateState { copy(isRateBottomSheetVisible = isRateBottomSheetVisible.not()) }
+                else
+                    updateState {
+                        copy(
+                            isGuestUserBottomSheetVisible = isGuestUserBottomSheetVisible.not(),
+                            isGuestUser = true
+                        )
+
+                    }
+            },
+            onError = { errorState ->
+                updateState { copy(error = errorState) }
+            }
+        )
+    }
+
+    override fun onSelectRatingClick(rating: Int) {
+        tryToExecute(
+            block = {
+                ratingUseCase.addTvEpisodeRatingById(
+                    id = tvShowId,
+                    rating = rating,
+                    episodeNumber = episodeNumber,
+                    seasonNumber = seasonNumber
+                )
+            },
+            onSuccess = {
+                updateState {
+                    copy(
+                        selectedRating = rating,
+                        isRateBottomSheetVisible = false,
+                        isSuccessfullyRated = true,
+                        isRated = true
+                    )
+                }
+            },
+            onError = { errorState ->
+                updateState {
+                    copy(
+                        error = errorState,
+                        isSuccessfullyRated = false
+                    )
+                }
+            },
+            onCompleted = { updateState { copy(isLoading = false) } },
+        )
+    }
+
 }

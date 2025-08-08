@@ -12,10 +12,8 @@ import io.mockk.verifyOrder
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.first
-import kotlinx.coroutines.test.StandardTestDispatcher
 import kotlinx.coroutines.test.resetMain
 import kotlinx.coroutines.test.runTest
-import kotlinx.coroutines.test.setMain
 import org.junit.After
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
@@ -37,12 +35,9 @@ class AppPreferencesServiceImplTest {
         private const val CONTENT_RESTRICTION_KEY = "content_restriction_key"
     }
 
-    private val testDispatcher = StandardTestDispatcher()
 
     @Before
     fun setUp() {
-        Dispatchers.setMain(testDispatcher)
-
         sharedPreferences = mockk()
         editor = mockk(relaxed = true)
         every { sharedPreferences.edit() } returns editor
@@ -83,7 +78,12 @@ class AppPreferencesServiceImplTest {
     @Test
     fun `appTheme returns specific theme when preference is set`() = runTest {
         // Given
-        every { sharedPreferences.getString(THEME_KEY, AppTheme.DARK.name) } returns AppTheme.DARK.name
+        every {
+            sharedPreferences.getString(
+                THEME_KEY,
+                AppTheme.DARK.name
+            )
+        } returns AppTheme.DARK.name
 
         // When
         service = AppPreferencesServiceImpl(sharedPreferences)
