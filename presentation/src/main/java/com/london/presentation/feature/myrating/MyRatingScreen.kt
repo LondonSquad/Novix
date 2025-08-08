@@ -103,8 +103,8 @@ private fun MyRatingContent(
         when (state.selectedRatingCategory) {
             RatingCategory.All -> {
                 AllRatedContent(
-                    movies = state.allRated.second,
-                    tvShows = state.allRated.first,
+                    movies = state.allRated.movies,
+                    tvShows = state.allRated.tvShows,
                     onMovieClick = contract::onMovieClick,
                     onTvShowClick = contract::onTvShowClick,
                     onDeleteClick = contract::onDelete
@@ -129,8 +129,8 @@ private fun MyRatingContent(
 
             null -> {
                 AllRatedContent(
-                    movies = state.allRated.second,
-                    tvShows = state.allRated.first,
+                    movies = state.allRated.movies,
+                    tvShows = state.allRated.tvShows,
                     onMovieClick = contract::onMovieClick,
                     onTvShowClick = contract::onTvShowClick,
                     onDeleteClick = contract::onDelete
