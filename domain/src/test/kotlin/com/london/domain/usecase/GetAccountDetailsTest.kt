@@ -28,7 +28,7 @@ class GetAccountDetailsTest {
         coEvery { accountRepository.getAccountDetails() } returns expectedAccountInfo
 
         // When
-        val result = getAccountDetails()
+        val result = getAccountDetails.invoke()
 
         // Then
         assertEquals(expectedAccountInfo, result)
@@ -42,7 +42,7 @@ class GetAccountDetailsTest {
         coEvery { accountRepository.getAccountDetails() } returns expectedAccountInfo
 
         // When
-        val result = getAccountDetails()
+        val result = getAccountDetails.invoke()
 
         // Then
         assertEquals(expectedAccountInfo, result)
