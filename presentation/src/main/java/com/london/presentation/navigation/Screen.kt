@@ -29,7 +29,7 @@ sealed interface Screen {
     data object Categories : Screen
 
     @Serializable
-    data object Bookmarks : Screen
+    data object Lists : Screen
 
     @Serializable
     data object Account : Screen
@@ -97,8 +97,21 @@ sealed interface Screen {
     ) : Screen
 
     @Serializable
+    data class ViewListItems(
+        val listId: Int,
+    ): Screen
+
+    @Serializable
     data object TopRated : Screen
 
     @Serializable
     data object ContinueWatching : Screen
+
+
+    @Serializable
+    data object WatchingHistory : Screen
+
+    @Serializable
+    data object MyRating : Screen
+
 }

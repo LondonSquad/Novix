@@ -1,8 +1,8 @@
 package com.london.data.remote.source.home.popular
 
 import com.london.data.remote.model.ApiResponse
-import com.london.data.remote.model.home.model.popular.PopularMovieResponse
-import com.london.data.remote.model.home.model.popular.PopularTvShowResponse
+import com.london.data.remote.model.home.popular.PopularMovieResponse
+import com.london.data.remote.model.home.popular.PopularTvShowResponse
 import com.london.data.remote.service.home.PopularApiService
 import com.london.data.remote.source.base.BaseRemoteDatasource
 import javax.inject.Inject

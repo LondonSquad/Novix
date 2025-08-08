@@ -1,7 +1,7 @@
 package com.london.data.remote.source.reviews
 
 import com.london.data.remote.model.ApiResponse
-import com.london.data.remote.model.reviews.model.ReviewResponse
+import com.london.data.remote.model.reviews.ReviewResponse
 import com.london.data.remote.service.reviews.ReviewsApiService
 import com.london.data.remote.source.base.BaseRemoteDatasource
 import javax.inject.Inject

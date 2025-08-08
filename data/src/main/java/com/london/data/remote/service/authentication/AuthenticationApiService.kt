@@ -1,17 +1,17 @@
 package com.london.data.remote.service.authentication
 
-import com.london.data.remote.model.authentication.model.DeleteSessionResponse
-import com.london.data.remote.model.authentication.model.GuestSessionResponse
-import com.london.data.remote.model.authentication.model.LoginValidationRequestBody
-import com.london.data.remote.model.authentication.model.RequestTokenResponse
-import com.london.data.remote.model.authentication.model.SessionResponse
-import com.london.data.remote.model.authentication.model.Token
-import retrofit2.http.Body
-import retrofit2.http.DELETE
-import retrofit2.http.GET
-import retrofit2.http.POST
+import com.london.data.remote.model.authentication.DeleteSessionResponse
+import com.london.data.remote.model.authentication.GuestSessionResponse
+import com.london.data.remote.model.authentication.LoginValidationRequestBody
+import com.london.data.remote.model.authentication.RequestTokenResponse
+import com.london.data.remote.model.authentication.SessionId
+import com.london.data.remote.model.authentication.SessionResponse
+import com.london.data.remote.model.authentication.Token
 import retrofit2.Response
-
+import retrofit2.http.Body
+import retrofit2.http.GET
+import retrofit2.http.HTTP
+import retrofit2.http.POST
 
 interface AuthenticationApiService {
     @GET("3/authentication/token/new")
@@ -26,6 +26,6 @@ interface AuthenticationApiService {
     @POST("3/authentication/token/validate_with_login")
     suspend fun createSessionWithLogin(@Body requestBody: LoginValidationRequestBody): Response<RequestTokenResponse>
 
-    @DELETE("3/authentication/session")
-    suspend fun deleteSession(): Response<DeleteSessionResponse>
+    @HTTP(method = "DELETE", path = "3/authentication/session", hasBody = true)
+    suspend fun deleteSession(@Body sessionId: SessionId): Response<DeleteSessionResponse>
 }

@@ -1,7 +1,9 @@
 package com.london.data.remote.source.base
 
 import com.london.data.remote.exception.NetworkException
+import com.london.data.remote.exception.NetworkException.EntryNotFoundException
 import com.london.data.remote.exception.UnProcessableEntityException
+import com.london.data.remote.model.list.CustomListResponse
 import kotlinx.coroutines.delay
 import kotlinx.serialization.json.Json
 import retrofit2.Response
@@ -17,18 +19,27 @@ interface BaseRemoteDatasource {
     ): Result<R> = try {
         checkIfSuccessful(result = apiCall(), mapper = mapper)
     } catch (e: UnknownHostException) {
-        Result.failure(NetworkException.NoInternetException(
-            "No internet connection. Please check your network settings."
-        ))
+        Result.failure(
+            NetworkException.NoInternetException(
+                "No internet connection. Please check your network settings."
+            )
+        )
     } catch (e: SocketTimeoutException) {
-        Result.failure(NetworkException.TimeoutException(
-            "Request timed out. Please try again."
-        ))
+        Result.failure(
+            NetworkException.TimeoutException(
+                "Request timed out. Please try again."
+            )
+        )
+    } catch (e: EntryNotFoundException) {
+        throw e
     } catch (e: Exception) {
-        Result.failure(NetworkException.UnknownException(
-            message = e.message ?: "Unknown error occurred"
-        ))
+        Result.failure(
+            NetworkException.UnknownException(
+                message = e.message ?: "Unknown error occurred"
+            )
+        )
     }
+
     suspend fun <T, R> callApiWithRetry(
         apiCall: suspend () -> Response<T>,
         mapper: (T) -> R,
@@ -62,6 +73,11 @@ interface BaseRemoteDatasource {
     ): Result<R> {
         return when {
             result.isSuccessful -> {
+
+                if (result.body() is CustomListResponse &&
+                    (result.body() as CustomListResponse).statusCode == 21
+                ) throw result.toEntryNotFoundException()
+
                 getOrEmptyResult(result = result, mapper = mapper).map {
                     it ?: throw NetworkException.EmptyResponseException(
                         "Empty response", result.code()
@@ -144,4 +160,9 @@ interface BaseRemoteDatasource {
     private fun <T> Response<T>.toManyRequestException() = NetworkException.ManyRequestException(
         message = errorBody()?.string()
     )
+
+    private fun <T> Response<T>.toEntryNotFoundException() =
+        EntryNotFoundException(
+            message = "Entry not found"
+        )
 }

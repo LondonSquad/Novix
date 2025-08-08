@@ -15,13 +15,15 @@ import com.london.designsystem.color.NovixColors
 import com.london.designsystem.typography.NovixTypography
 import com.london.designsystem.typography.NovixTypographySet
 
-
 object NovixTheme {
     val colors: NovixColors
         @Composable @ReadOnlyComposable get() = LocalNovixColors.current
 
     val typography: NovixTypographySet
         @Composable @ReadOnlyComposable get() = LocalNovixTypography.current
+
+    val isThemeDark: Boolean
+        @Composable @ReadOnlyComposable get() = LocalAppTheme.current
 }
 
 @Composable
@@ -36,6 +38,7 @@ fun Modifier.noRippleClickable(onClick: () -> Unit): Modifier = composed {
 
 val LocalNovixColors = staticCompositionLocalOf { LightNovixColors }
 val LocalNovixTypography = staticCompositionLocalOf { NovixTypography }
+val LocalAppTheme = staticCompositionLocalOf { true }
 
 val horizontalGradient = listOf(
     LinearGradientLight.copy(alpha = 1f),

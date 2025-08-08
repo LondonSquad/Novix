@@ -3,11 +3,11 @@ package com.london.presentation.feature.details.actor
 import androidx.lifecycle.SavedStateHandle
 import com.london.domain.usecase.GetActorDetailsByIdUseCase
 import com.london.domain.usecase.GetActorImagesByIdUseCase
-import com.london.domain.usecase.GetActorMoviePicksByIdUseCase
-import com.london.domain.usecase.GetActorTvShowPicksByIdUseCase
-import com.london.presentation.feature.base.BaseViewModel
+import com.london.domain.usecase.toppicks.GetActorMoviePicksByIdUseCase
+import com.london.domain.usecase.toppicks.GetActorTvShowPicksByIdUseCase
 import com.london.presentation.navigation.Screen
 import com.london.presentation.navigation.getArgs
+import com.london.presentation.shared.base.BaseViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 

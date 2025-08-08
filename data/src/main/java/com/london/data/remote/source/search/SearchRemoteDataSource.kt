@@ -3,12 +3,13 @@
 package com.london.data.remote.source.search
 
 import com.london.data.remote.model.ApiResponse
-import com.london.data.remote.model.search.model.MovieRemote
-import com.london.data.remote.model.search.model.SearchTvShowRemote
-import com.london.data.remote.model.search.model.searchactormodel.SearchActorRemote
+import com.london.data.remote.model.search.MovieRemote
+import com.london.data.remote.model.search.SearchTvShowRemote
+import com.london.data.remote.model.search.searchactor.SearchActorRemote
 import com.london.domain.KoverIgnore
 
 interface SearchRemoteDataSource {
+
     suspend fun searchForMovies(
         query: String,
         includeAdult: Boolean,
@@ -27,15 +28,4 @@ interface SearchRemoteDataSource {
         pageNumber: Int
     ): Result<ApiResponse<SearchActorRemote>>
 
-    suspend fun getMoviesByCategory(
-        categoryId: Int,
-        pageNumber: Int,
-        includeAdult: Boolean = false
-    ): Result<ApiResponse<MovieRemote>>
-
-    suspend fun searchForTvShowsByCategoryId(
-        categoryId: Int,
-        pageNumber: Int,
-        includeAdult: Boolean = false
-    ): Result<ApiResponse<SearchTvShowRemote>>
 }

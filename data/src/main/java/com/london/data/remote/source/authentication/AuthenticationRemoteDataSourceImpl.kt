@@ -1,12 +1,13 @@
 package com.london.data.remote.source.authentication
 
 
-import com.london.data.remote.model.authentication.model.DeleteSessionResponse
-import com.london.data.remote.model.authentication.model.GuestSessionResponse
-import com.london.data.remote.model.authentication.model.LoginValidationRequestBody
-import com.london.data.remote.model.authentication.model.RequestTokenResponse
-import com.london.data.remote.model.authentication.model.SessionResponse
-import com.london.data.remote.model.authentication.model.Token
+import com.london.data.remote.model.authentication.DeleteSessionResponse
+import com.london.data.remote.model.authentication.GuestSessionResponse
+import com.london.data.remote.model.authentication.LoginValidationRequestBody
+import com.london.data.remote.model.authentication.RequestTokenResponse
+import com.london.data.remote.model.authentication.SessionId
+import com.london.data.remote.model.authentication.SessionResponse
+import com.london.data.remote.model.authentication.Token
 import com.london.data.remote.service.authentication.AuthenticationApiService
 import com.london.data.remote.source.base.BaseRemoteDatasource
 import javax.inject.Inject
@@ -51,9 +52,11 @@ class AuthenticationRemoteDataSourceImpl @Inject constructor(
             mapper = { it }
         )
 
-    override suspend fun deleteSession(): Result<DeleteSessionResponse> =
+    override suspend fun deleteSession(
+        sessionId: String
+    ): Result<DeleteSessionResponse> =
         callApi(
-            apiCall = { authApiService.deleteSession() },
+            apiCall = { authApiService.deleteSession(SessionId(sessionId)) },
             mapper = { it }
         )
 }

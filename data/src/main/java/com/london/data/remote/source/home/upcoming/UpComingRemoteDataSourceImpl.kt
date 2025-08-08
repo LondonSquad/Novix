@@ -1,7 +1,7 @@
 package com.london.data.remote.source.home.upcoming
 
 import com.london.data.remote.model.ApiResponse
-import com.london.data.remote.model.search.model.MovieRemote
+import com.london.data.remote.model.search.MovieRemote
 import com.london.data.remote.service.home.UpComingApiService
 import com.london.data.remote.source.base.BaseRemoteDatasource
 import com.london.data.utils.getCurrentDate

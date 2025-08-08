@@ -5,7 +5,8 @@ import com.london.data.remote.model.details.movie.model.moviecast.MovieCastRespo
 import com.london.data.remote.model.details.movie.model.moviedetails.AccountMovieStatesResponse
 import com.london.data.remote.model.details.movie.model.moviedetails.MovieDetailsResponse
 import com.london.data.remote.model.details.movie.model.movieimages.MovieImagesResponse
-import com.london.data.remote.model.search.model.MovieRemote
+import com.london.data.remote.model.details.videoprovider.movie.model.MovieVideoRemote
+import com.london.data.remote.model.search.MovieRemote
 import com.london.data.remote.service.details.movie.MovieDetailsApiService
 import com.london.data.remote.source.base.BaseRemoteDatasource
 import javax.inject.Inject
@@ -34,15 +35,19 @@ class MovieDetailsRemoteDataSourceImpl @Inject constructor(
 
     override suspend fun getAccountMovieStates(
         movieId: Int,
-        guestSessionId: String?,
         userSessionId: String?
     ): Result<AccountMovieStatesResponse> =
         callApiWithRetry(apiCall = {
-            movieDetailsApiService.getMovieStates(
+            movieDetailsApiService.getAccountMovieStates(
                 movieId = movieId,
-                guestSessionId = guestSessionId,
                 userSessionId = userSessionId
             )
         }, mapper = { it })
+
+    override suspend fun getMovieVideos(movieId: Int): Result<MovieVideoRemote> =
+        callApiWithRetry(
+            { movieDetailsApiService.getMovieVideos(movieId = movieId) },
+            mapper = { it }
+        )
 
 }

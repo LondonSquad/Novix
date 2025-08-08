@@ -2,15 +2,15 @@ package com.london.domain.usecase
 
 import com.london.domain.KoverIgnore
 import com.london.domain.entity.tvshowdetails.ImageItemEntity
-import com.london.domain.repository.DetailsRepository
+import com.london.domain.repository.TvShowRepository
 import javax.inject.Inject
 
 @KoverIgnore
 class GetImagesById @Inject constructor(
-    private val detailsRepository: DetailsRepository
+    private val tvShowRepository: TvShowRepository
 ) {
     suspend operator fun invoke(tvShowId: Int): List<ImageItemEntity> {
-        val images = detailsRepository.getImagesTvShowById(tvShowId)
+        val images = tvShowRepository.getImagesTvShowById(tvShowId)
 
         return when {
             images.backdrops.isNotEmpty() -> images.backdrops.take(10)

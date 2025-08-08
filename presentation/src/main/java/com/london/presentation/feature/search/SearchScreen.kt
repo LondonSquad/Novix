@@ -1,12 +1,5 @@
 package com.london.presentation.feature.search
 
-import androidx.compose.animation.AnimatedContent
-import androidx.compose.animation.core.tween
-import androidx.compose.animation.fadeIn
-import androidx.compose.animation.fadeOut
-import androidx.compose.animation.scaleIn
-import androidx.compose.animation.scaleOut
-import androidx.compose.animation.togetherWith
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.gestures.detectTapGestures
@@ -23,7 +16,6 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.statusBarsPadding
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
@@ -55,31 +47,29 @@ import androidx.paging.LoadState
 import androidx.paging.compose.LazyPagingItems
 import androidx.paging.compose.collectAsLazyPagingItems
 import com.london.designsystem.component.EmptyLayout
-import com.london.designsystem.component.HomeCard
 import com.london.designsystem.component.Icon
 import com.london.designsystem.component.NovixChip
 import com.london.designsystem.component.OutlinedTextField
 import com.london.designsystem.component.SectionHeader
 import com.london.designsystem.component.Text
 import com.london.designsystem.component.TopBar
-import com.london.designsystem.component.button.PrimaryButton
 import com.london.designsystem.theme.NovixTheme
 import com.london.designsystem.theme.ThemePreviews
 import com.london.domain.entity.recent.MediaType
 import com.london.domain.entity.recent.RecentSearch
 import com.london.domain.entity.recent.RecentViewed
 import com.london.presentation.R
-import com.london.presentation.feature.base.ErrorState
-import com.london.presentation.feature.buildscreen.BuildScreen
-import com.london.presentation.feature.buildscreen.NetworkErrorScreen
 import com.london.presentation.shared.ActorsLayout
-import com.london.presentation.shared.FilterBottomSheet
-import com.london.presentation.shared.FilterState
+import com.london.presentation.shared.HomeCard
 import com.london.presentation.shared.MoviesLayOut
 import com.london.presentation.shared.TriangleBlurredShape
 import com.london.presentation.shared.TvShowLayOut
+import com.london.presentation.shared.base.ErrorState
+import com.london.presentation.shared.buildscreen.BuildScreen
+import com.london.presentation.shared.buildscreen.NetworkErrorScreen
 import com.london.presentation.utils.Listen
 import com.london.presentation.utils.ResultOrEmpty
+import com.london.presentation.utils.toRecentViewed
 
 @Composable
 private fun HandleLoadStateError(
@@ -150,6 +140,7 @@ fun SearchScreenContent(
 ) {
     val interactionSource = remember { MutableInteractionSource() }
     val focusManager = LocalFocusManager.current
+
     Box(
         modifier = Modifier
             .fillMaxSize()
@@ -171,7 +162,6 @@ fun SearchScreenContent(
             TopBar(
                 modifier = Modifier
                     .statusBarsPadding()
-                    .height(56.dp)
                     .padding(horizontal = 16.dp),
                 title = stringResource(R.string.search),
             )
@@ -360,16 +350,7 @@ fun SearchScreenContent(
 
         }
 
-        FilterBottomSheet(
-            filterInteractions = viewModel,
-            filterState = FilterState(
-                isSheetVisible = state.showFilterBottomSheet,
-                availableGenres = state.availableGenresWithNames,
-                selectedGenres = state.selectedGenres,
-                minimumImdbRating = state.imdbRating,
-                releaseYearRange = state.releaseYearRange,
-            ),
-        )
+
     }
 }
 
@@ -384,78 +365,61 @@ private fun SearchBar(
 
     val focusManager = LocalFocusManager.current
     val focusedState = interactionSource.collectIsFocusedAsState().value
-    AnimatedContent(
-        targetState = uiState.showFilterButton, transitionSpec = {
-            (fadeIn(animationSpec = tween(200)) + scaleIn(initialScale = 1f)) togetherWith
-                    (fadeOut(animationSpec = tween(200)) + scaleOut(targetScale = 1f))
-        }, modifier = modifier
-    ) { showFilterButton ->
-        Row(
-            modifier = Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.spacedBy(8.dp)
-        ) {
-            OutlinedTextField(
-                value = uiState.searchQuery,
-                onValueChange = { viewModel.onSearchQueryChange(it) },
-                placeholder = {
-                    Text(
-                        stringResource(R.string.search_placeholder),
-                        style = NovixTheme.typography.body.small,
-                        modifier = Modifier.padding(end = 4.dp)
-                    )
-                },
-                leadingIcon = painterResource(id = R.drawable.icon_search_normal),
-                trailingIcon = when {
-                    uiState.searchQuery.text.isNotEmpty()
-                            && focusedState -> {
-                        {
-                            Icon(
-                                painter = painterResource(id = R.drawable.icon_remove_filled),
-                                contentDescription = stringResource(R.string.clear),
-                                tint = NovixTheme.colors.hint,
-                                modifier = Modifier
-                                    .size(20.dp)
-                                    .clickable(
-                                        interactionSource = remember { MutableInteractionSource() },
-                                        indication = null
-                                    ) { viewModel.clearSearch() })
-                        }
-                    }
 
-                    else -> null
-                },
-                keyboardOptions = KeyboardOptions(
-                    imeAction = ImeAction.Search
-                ),
-                keyboardActions = KeyboardActions(
-                    onSearch = {
-                        focusManager.clearFocus()
-                        keyboardController?.hide()
-                        viewModel.addToRecentSearches(
-                            RecentSearch(
-                                query = uiState.searchQuery.text,
-                                timestamp = System.currentTimeMillis(),
-                                id = 0
-                            )
-                        )
-                    }),
-                interactionSource = interactionSource,
-                modifier = Modifier.weight(1f)
-            )
-
-            if (showFilterButton) {
-                PrimaryButton(
-                    text = "",
-                    onClick = viewModel::onFilterClick,
-                    isLoading = false,
-                    hasIcon = true,
-                    icon = R.drawable.icon_filter,
-                    hasLabel = false,
-                    modifier = Modifier.width(52.dp)
+    Row(
+        modifier = modifier.fillMaxWidth(),
+        horizontalArrangement = Arrangement.spacedBy(8.dp)
+    ) {
+        OutlinedTextField(
+            value = uiState.searchQuery,
+            onValueChange = { viewModel.onSearchQueryChange(it) },
+            placeholder = {
+                Text(
+                    stringResource(R.string.search_placeholder),
+                    style = NovixTheme.typography.body.small,
+                    modifier = Modifier.padding(end = 4.dp)
                 )
-            }
-        }
+            },
+            leadingIcon = painterResource(id = R.drawable.icon_search_normal),
+            trailingIcon = when {
+                uiState.searchQuery.text.isNotEmpty()
+                        && focusedState -> {
+                    {
+                        Icon(
+                            painter = painterResource(id = R.drawable.icon_remove_filled),
+                            contentDescription = stringResource(R.string.clear),
+                            tint = NovixTheme.colors.hint,
+                            modifier = Modifier
+                                .size(20.dp)
+                                .clickable(
+                                    interactionSource = remember { MutableInteractionSource() },
+                                    indication = null
+                                ) { viewModel.clearSearch() })
+                    }
+                }
+
+                else -> null
+            },
+            keyboardOptions = KeyboardOptions(
+                imeAction = ImeAction.Search
+            ),
+            keyboardActions = KeyboardActions(
+                onSearch = {
+                    focusManager.clearFocus()
+                    keyboardController?.hide()
+                    viewModel.addToRecentSearches(
+                        RecentSearch(
+                            query = uiState.searchQuery.text,
+                            timestamp = System.currentTimeMillis(),
+                            id = 0
+                        )
+                    )
+                }),
+            interactionSource = interactionSource,
+            modifier = Modifier.weight(1f)
+        )
     }
+
 }
 
 @Composable

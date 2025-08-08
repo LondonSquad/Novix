@@ -1,9 +1,14 @@
 package com.london.data.repository
 
+import com.google.common.truth.Truth.assertThat
+import com.london.data.local.preference.AuthPreferences
+import com.london.data.mapper.details.movie.toEntity
+import com.london.data.mapper.search.toAuthorDetails
 import com.london.data.remote.exception.NetworkException
 import com.london.data.remote.model.ApiResponse
 import com.london.data.remote.model.details.movie.model.moviecast.MovieActor
 import com.london.data.remote.model.details.movie.model.moviecast.MovieCastResponse
+import com.london.data.remote.model.details.movie.model.moviedetails.AccountMovieStatesResponse
 import com.london.data.remote.model.details.movie.model.moviedetails.GenreRemote
 import com.london.data.remote.model.details.movie.model.moviedetails.MovieDetailsResponse
 import com.london.data.remote.model.details.movie.model.moviedetails.ProductionCompanyRemote
@@ -12,9 +17,15 @@ import com.london.data.remote.model.details.movie.model.moviedetails.RemoteColle
 import com.london.data.remote.model.details.movie.model.moviedetails.SpokenLanguageRemote
 import com.london.data.remote.model.details.movie.model.movieimages.MovieImagesResponse
 import com.london.data.remote.model.details.movie.model.movieimages.Poster
-import com.london.data.remote.model.search.model.MovieRemote
+import com.london.data.remote.model.reviews.AuthorDetailsResponse
+import com.london.data.remote.model.reviews.ReviewResponse
+import com.london.data.remote.model.search.MovieRemote
 import com.london.data.remote.source.details.movie.MovieDetailsRemoteDataSource
+import com.london.data.remote.source.reviews.ReviewsRemoteDataSource
+import com.london.data.repository.search.MovieDetailsRepositoryImpl
 import com.london.data.utils.asImageUrlOrEmpty
+import com.london.domain.entity.PagedFetchResponse
+import com.london.domain.entity.review.ReviewEntity
 import io.mockk.coEvery
 import io.mockk.mockk
 import kotlinx.coroutines.test.runTest
@@ -25,13 +36,18 @@ import kotlin.test.Test
 
 class MovieDetailsRepositoryImplTest {
 
-    private lateinit var remoteDataSource: MovieDetailsRemoteDataSource
+    private val authPreferences: AuthPreferences = mockk(relaxed = true)
+    private val remoteDataSource: MovieDetailsRemoteDataSource = mockk(relaxed = true)
+    private val reviewRemoteDataSource: ReviewsRemoteDataSource = mockk(relaxed = true)
     private lateinit var repository: MovieDetailsRepositoryImpl
 
     @Before
     fun setup() {
-        remoteDataSource = mockk(relaxed = true)
-        repository = MovieDetailsRepositoryImpl(remoteDataSource)
+        repository = MovieDetailsRepositoryImpl(
+            movieDetailsRemoteDataSource = remoteDataSource,
+            reviewsRemoteDataSource = reviewRemoteDataSource,
+            authPreferences = authPreferences
+        )
     }
 
     private fun fakeMovieDetailsRemote() = MovieDetailsResponse(
@@ -78,7 +94,7 @@ class MovieDetailsRepositoryImplTest {
             MovieRemote(
                 adult = false,
                 backdropPath = null,
-                genreIds =listOf(1,2,3),
+                genreIds = listOf(1, 2, 3),
                 id = 1,
                 originalLanguage = "en",
                 originalTitle = "",
@@ -98,7 +114,7 @@ class MovieDetailsRepositoryImplTest {
             MovieRemote(
                 adult = false,
                 backdropPath = null,
-                genreIds = listOf(1,2,3),
+                genreIds = listOf(1, 2, 3),
                 id = 1,
                 originalLanguage = "en",
                 originalTitle = "",
@@ -180,6 +196,21 @@ class MovieDetailsRepositoryImplTest {
         ),
         crew = emptyList()
     )
+
+    private fun fakeMovieStatesRemote(): AccountMovieStatesResponse =
+        AccountMovieStatesResponse(
+            id = 123,
+            favorite = true,
+            watchlist = true
+        )
+
+    private fun secondFakeMovieStatesRemote(): AccountMovieStatesResponse {
+        return AccountMovieStatesResponse(
+            favorite = true,
+            id = 5,
+            watchlist = false
+        )
+    }
 
     @Test
     fun `getMovieUsingId should map remote data correctly`() = runTest {
@@ -277,4 +308,92 @@ class MovieDetailsRepositoryImplTest {
         }
     }
 
+    @Test
+    fun `getMovieReviews should return paged reviews when remote succeeds`() = runTest {
+        // Given
+        val fakeRemoteResponse = ApiResponse(
+            currentPage = 1, items = listOf(
+                ReviewResponse(
+                    id = "review1",
+                    author = "Author 1",
+                    content = "This is review 1",
+                    createdAt = "2024-01-01",
+                    updatedAt = "2024-01-02",
+                    authorDetailsResponse = AuthorDetailsResponse(
+                        authorName = "John Doe",
+                        authorUsername = "johndoe",
+                        authorPictureUrl = "https://image.tmdb.org/t/p/w500/profile.jpg",
+                        rating = 4.5
+                    ),
+                    url = "https://example.com/review1"
+                )
+            ), totalPages = 1, totalItems = 1
+        )
+        coEvery { reviewRemoteDataSource.getMovieReviews(MOVIE_ID, PAGE_NUMBER) }.returns(
+            Result.success(fakeRemoteResponse)
+        )
+
+        // When
+        val result: PagedFetchResponse<ReviewEntity> =
+            repository.getMovieReviews(MOVIE_ID, PAGE_NUMBER)
+
+        //Then
+        assertThat(result.items.first().authorDetails).isEqualTo(fakeRemoteResponse.items.first().authorDetailsResponse.toAuthorDetails())
+    }
+
+    @org.junit.Test
+    fun `getMovieReviews should throw when remote fails`() = runTest {
+        //Given
+        coEvery { reviewRemoteDataSource.getMovieReviews(MOVIE_ID, PAGE_NUMBER) }.throws(
+            RuntimeException("Network error")
+        )
+
+        // When && Then
+        val exception = assertThrows<RuntimeException> {
+            repository.getMovieReviews(MOVIE_ID, PAGE_NUMBER)
+        }
+        assertThat(exception.message).contains("Network error")
+    }
+
+    @org.junit.Test
+    fun `getMovieReviews should return empty when remote has no results`() = runTest {
+        //Given
+        val fakeEmptyResponse = ApiResponse(
+            currentPage = 1, items = emptyList<ReviewResponse>(), totalPages = 0, totalItems = 0
+        )
+
+        coEvery { reviewRemoteDataSource.getMovieReviews(MOVIE_ID, PAGE_NUMBER) }.returns(
+            Result.success(fakeEmptyResponse)
+        )
+
+        // When
+        val result = repository.getMovieReviews(MOVIE_ID, PAGE_NUMBER)
+
+        // Then
+        assertThat(result.items).isEmpty()
+    }
+
+    private companion object {
+        const val MOVIE_ID = 1
+        const val PAGE_NUMBER = 1
+    }
+
+    @Test
+    fun `getMovieAccountStatesById should use guestSessionId when userSessionId is null`() =
+        runTest {
+            val movieId = 123
+            val guestSessionId = "guest123"
+            val remoteMovieStates = fakeMovieStatesRemote()
+
+            coEvery { authPreferences.getSessionId() } returns null
+            coEvery { authPreferences.getGuestSessionId() } returns guestSessionId
+
+            coEvery {
+                remoteDataSource.getAccountMovieStates(any(), any())
+            } returns Result.success(remoteMovieStates)
+
+            val result = repository.getAccountMovieStatesById(movieId)
+
+            assertEquals(remoteMovieStates.toEntity(), result)
+        }
 }

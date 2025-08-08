@@ -19,7 +19,6 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.london.designsystem.component.CircularLoading
-import com.london.designsystem.component.ImageView
 import com.london.designsystem.component.NovixCarousalRow
 import com.london.designsystem.component.UnSuitableEye
 import com.london.designsystem.component.button.ErrorImage
@@ -83,7 +82,7 @@ fun CustomBackDropImagePager(
                     modifier = Modifier
                         .fillMaxWidth()
                         .height(252.dp),
-                    contentScale = ContentScale.FillBounds,
+                    contentScale = ContentScale.Crop,
                     model = validImages[pageIndex],
                     contentDescription = "${stringResource(R.string.tv_show_image)} ${pageIndex + 1}",
                     errorContent = { ErrorImage() },

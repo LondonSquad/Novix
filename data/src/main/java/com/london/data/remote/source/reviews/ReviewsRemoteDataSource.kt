@@ -1,7 +1,7 @@
 package com.london.data.remote.source.reviews
 
 import com.london.data.remote.model.ApiResponse
-import com.london.data.remote.model.reviews.model.ReviewResponse
+import com.london.data.remote.model.reviews.ReviewResponse
 
 interface ReviewsRemoteDataSource {
     suspend fun getMovieReviews(movieId: Int, pageNumber: Int): Result<ApiResponse<ReviewResponse>>

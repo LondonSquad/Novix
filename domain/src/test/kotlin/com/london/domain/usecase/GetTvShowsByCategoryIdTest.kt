@@ -4,7 +4,7 @@ import com.google.common.truth.Truth.assertThat
 import com.london.domain.entity.PagedFetchResponse
 import com.london.domain.entity.TvShow
 import com.london.domain.error.TvShowSearchFailedException
-import com.london.domain.repository.SearchRepository
+import com.london.domain.repository.discover.DiscoverRepository
 import io.mockk.coEvery
 import io.mockk.mockk
 import kotlinx.coroutines.test.runTest
@@ -13,35 +13,45 @@ import org.junit.Test
 import org.junit.jupiter.api.assertThrows
 
 class GetTvShowsByCategoryIdTest {
-    lateinit var searchRepository: SearchRepository
-    lateinit var getTvShowsUseCase: GetTvShowsByCategoryId
+
+    private lateinit var repository: DiscoverRepository
+    private lateinit var getTvShowsUseCase: GetTvShowsByCategoryId
 
     @Before
     fun setUp() {
-        searchRepository = mockk()
-        getTvShowsUseCase = GetTvShowsByCategoryId(searchRepository)
+        repository = mockk()
+        getTvShowsUseCase = GetTvShowsByCategoryId(repository)
     }
 
     @Test
-    fun `should return a paged fetch response of tvShows when repository successfully fetches tvShows`() = runTest {
-        //given
-        coEvery { searchRepository.searchForTvShowByCategory(CATEGORY_ID, PAGE_NUMBER) } returns pagedFetchResponse
-        //when
-        val result = getTvShowsUseCase.invoke(CATEGORY_ID, PAGE_NUMBER)
-        //then
-        assertThat(result).isEqualTo(pagedFetchResponse)
-    }
-
-    @Test
-    fun `should throw MovieSearchFailedException when repository throws an exception during tvShows search`() = runTest {
-        //given
-        coEvery { searchRepository.searchForTvShowByCategory(CATEGORY_ID, PAGE_NUMBER) } throws TvShowSearchFailedException()
-        //when //then
-        assertThrows<TvShowSearchFailedException> {
-            getTvShowsUseCase.invoke(CATEGORY_ID, PAGE_NUMBER)
+    fun `should return a paged fetch response of tvShows when repository successfully fetches tvShows`() =
+        runTest {
+            //given
+            coEvery {
+                repository.getTvShowsByCategory(
+                    CATEGORY_ID, PAGE_NUMBER
+                )
+            } returns pagedFetchResponse
+            //when
+            val result = getTvShowsUseCase.invoke(CATEGORY_ID, PAGE_NUMBER)
+            //then
+            assertThat(result).isEqualTo(pagedFetchResponse)
         }
-    }
 
+    @Test
+    fun `should throw MovieSearchFailedException when repository throws an exception during tvShows search`() =
+        runTest {
+            //given
+            coEvery {
+                repository.getTvShowsByCategory(
+                    CATEGORY_ID, PAGE_NUMBER
+                )
+            } throws TvShowSearchFailedException()
+            //when //then
+            assertThrows<TvShowSearchFailedException> {
+                getTvShowsUseCase.invoke(CATEGORY_ID, PAGE_NUMBER)
+            }
+        }
 
     private companion object {
         const val CATEGORY_ID = 1
@@ -55,10 +65,7 @@ class GetTvShowsByCategoryIdTest {
             genres = listOf(1, 2, 3)
         )
         val pagedFetchResponse = PagedFetchResponse(
-            currentPage = 1,
-            items = listOf(tvShow),
-            totalPages = 1,
-            totalItems = 1
+            currentPage = 1, items = listOf(tvShow), totalPages = 1, totalItems = 1
         )
     }
 }

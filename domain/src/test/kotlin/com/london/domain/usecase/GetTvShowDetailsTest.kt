@@ -1,7 +1,6 @@
 package com.london.domain.usecase
 
 import com.google.common.truth.Truth.assertThat
-import com.london.domain.error.TvShowDetailsSearchFailedException
 import com.london.domain.entity.tvshowdetails.TvShowCreatorEntity
 import com.london.domain.entity.tvshowdetails.TvShowDetailsEntity
 import com.london.domain.entity.tvshowdetails.TvShowEpisodeEntity
@@ -11,7 +10,8 @@ import com.london.domain.entity.tvshowdetails.TvShowProductionCompanyEntity
 import com.london.domain.entity.tvshowdetails.TvShowProductionCountryEntity
 import com.london.domain.entity.tvshowdetails.TvShowSeasonEntity
 import com.london.domain.entity.tvshowdetails.TvShowSpokenLanguageEntity
-import com.london.domain.repository.DetailsRepository
+import com.london.domain.error.TvShowDetailsSearchFailedException
+import com.london.domain.repository.TvShowRepository
 import io.mockk.coEvery
 import io.mockk.mockk
 import kotlinx.coroutines.test.runTest
@@ -20,19 +20,19 @@ import org.junit.Test
 import org.junit.jupiter.api.assertThrows
 
 class GetTvShowDetailsTest {
-    lateinit var detailsRepository: DetailsRepository
+    lateinit var tvShowRepository: TvShowRepository
     lateinit var getTvShowDetails: GetTvShowDetails
 
     @Before
     fun setUp() {
-        detailsRepository = mockk()
-        getTvShowDetails = GetTvShowDetails(detailsRepository)
+        tvShowRepository = mockk()
+        getTvShowDetails = GetTvShowDetails(tvShowRepository)
     }
 
     @Test
     fun `should return tv show details when repository returns tv show details`() = runTest {
         //given
-        coEvery { detailsRepository.getTvShowDetailsById(TV_SHOW_ID) } returns mockTvShowDetails
+        coEvery { tvShowRepository.getTvShowDetailsById(TV_SHOW_ID) } returns mockTvShowDetails
         //when
         val result = getTvShowDetails(TV_SHOW_ID)
         //then
@@ -42,7 +42,7 @@ class GetTvShowDetailsTest {
     @Test
     fun `should throw exception when repository throws exception`() = runTest {
         //given
-        coEvery { detailsRepository.getTvShowDetailsById(TV_SHOW_ID) } throws TvShowDetailsSearchFailedException()
+        coEvery { tvShowRepository.getTvShowDetailsById(TV_SHOW_ID) } throws TvShowDetailsSearchFailedException()
         //when //then
         assertThrows<TvShowDetailsSearchFailedException> {
             getTvShowDetails(TV_SHOW_ID)

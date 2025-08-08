@@ -6,7 +6,7 @@ import androidx.compose.animation.core.tween
 import androidx.compose.foundation.pager.PagerState
 import androidx.lifecycle.viewModelScope
 import com.london.domain.AppPreferencesService
-import com.london.presentation.feature.base.BaseViewModel
+import com.london.presentation.shared.base.BaseViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -51,6 +51,7 @@ class OnboardingViewModel @Inject constructor(
     }
 
     fun navigateToWelcome() {
+        setOnBoardingShown()
         emitEffect(OnboardingEffect.NavigateToWelcome)
     }
 
@@ -58,6 +59,12 @@ class OnboardingViewModel @Inject constructor(
         viewModelScope.launch(Dispatchers.IO) {
             runCatching { appPreferencesService.setOnBoardingShown() }
                 .onFailure { Log.e("OnboardingViewModel", "onboardingFinished: ", it) }
+        }
+    }
+
+    private fun setOnBoardingShown() {
+        viewModelScope.launch(Dispatchers.IO) {
+            runCatching { appPreferencesService.setOnBoardingShown() }
         }
     }
 }

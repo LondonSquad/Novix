@@ -4,7 +4,7 @@ import com.london.domain.entity.actordetails.ActorDetails
 import com.london.domain.entity.actordetails.actorimage.ImageDetails
 import com.london.domain.entity.actordetails.actormovie.ActorMovieDetails
 import com.london.domain.entity.actordetails.actortvshow.ActorTvShowDetails
-import com.london.presentation.feature.base.ErrorState
+import com.london.presentation.shared.base.ErrorState
 
 data class ActorDetailsUiState(
     val isLoading: Boolean = false,
