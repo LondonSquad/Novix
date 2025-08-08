@@ -7,11 +7,11 @@ import kotlinx.serialization.Serializable
 @Serializable
 data class RatingMediaResponse(
     @SerialName("id")
-    val id: Int,
+    val id: Int? = null,
     @SerialName("adult")
-    val adult: Boolean,
+    val adult: Boolean? = null,
     @SerialName("backdrop_path")
-    val backdropPath: String,
+    val backdropPath: String? = null,
     @SerialName("genre_ids")
     val genreIds: List<Int>? = null,
     @SerialName("original_language")
@@ -26,8 +26,8 @@ data class RatingMediaResponse(
     val posterPath: String? = null,
     @SerialName("release_date")
     val releaseDate: String? = null,
-    @SerialName ("title")
-    val title:String?= null,
+    @SerialName("title")
+    val title: String? = null,
     @SerialName("video")
     val video: Boolean? = null,
     @SerialName("vote_average")

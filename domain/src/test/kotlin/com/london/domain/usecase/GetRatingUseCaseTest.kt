@@ -12,13 +12,13 @@ import org.junit.Test
 
 class GetRatingUseCaseTest {
 
-    private lateinit var useCase: GetRatingUseCase
+    private lateinit var useCase: RatingUseCase
     private lateinit var repository: RatingRepository
 
     @Before
     fun setup() {
         repository = mockk(relaxed = true)
-        useCase = GetRatingUseCase(repository)
+        useCase = RatingUseCase(repository)
     }
 
     @Test

@@ -1,13 +1,13 @@
 package com.london.presentation.feature.myrating
 
-import com.london.domain.usecase.GetRatingUseCase
+import com.london.domain.usecase.RatingUseCase
 import com.london.presentation.shared.base.BaseViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 
 @HiltViewModel
 class RatingViewModel @Inject constructor(
-    private val getRatingUseCase: GetRatingUseCase
+    private val getRatingUseCase: RatingUseCase
 ) : BaseViewModel<MyRatingUiState, MyRatingEffect>(MyRatingUiState()),
     MyRatingContract {
 

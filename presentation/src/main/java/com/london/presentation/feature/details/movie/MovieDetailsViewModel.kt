@@ -4,8 +4,7 @@ import androidx.lifecycle.SavedStateHandle
 import com.london.domain.entity.Movie
 import com.london.domain.entity.recent.MediaType
 import com.london.domain.entity.recent.RecentViewed
-import com.london.domain.usecase.AddMovieRatingByIdUseCase
-import com.london.domain.usecase.GetAccountMovieStatesById
+import com.london.domain.usecase.RatingUseCase
 import com.london.domain.usecase.authentication.AuthenticationUseCase
 import com.london.domain.usecase.details.movie.ManageMovieDetailsUseCase
 import com.london.domain.usecase.recent.viewed.ManageRecentViewedUseCase
@@ -21,8 +20,7 @@ class MovieDetailsViewModel @Inject constructor(
     private val movieDetails: ManageMovieDetailsUseCase,
     private val manageRecentMovieWatchedUseCase: ManageRecentMovieWatchedUseCase,
     private val manageRecentViewedUseCase: ManageRecentViewedUseCase,
-    private val addMovieRatingByIdUseCase: AddMovieRatingByIdUseCase,
-    private val getAccountMovieStatesById: GetAccountMovieStatesById,
+    private val ratingUseCase: RatingUseCase,
     private val authenticationUseCase: AuthenticationUseCase,
     savedStateHandle: SavedStateHandle
 ) : BaseViewModel<MovieDetailsUiState, MovieDetailsEffect>(MovieDetailsUiState()),
@@ -152,7 +150,7 @@ class MovieDetailsViewModel @Inject constructor(
 
     override fun onSelectRatingClick(rating: Int) {
         tryToExecute(
-            block = { addMovieRatingByIdUseCase.invoke(movieId, rating) },
+            block = { ratingUseCase.addMovieRatingByIdUseCase(movieId, rating) },
             onSuccess = {
                 updateState {
                     copy(
@@ -182,7 +180,7 @@ class MovieDetailsViewModel @Inject constructor(
                 val similarMovies = movieDetails.getSimilarMovies(movieId)
                 val movieVideos = movieDetails.getMovieVideo(movieId)
                 val movieRating = if (authenticationUseCase.isLoggedIn())
-                    getAccountMovieStatesById.invoke(movieId) else 0
+                    ratingUseCase.getAccountMovieStatesById(movieId) else 0
                 Triple(similarMovies, movieVideos, movieRating)
             },
             onSuccess = { (similarMovies, videos, movieRating) ->

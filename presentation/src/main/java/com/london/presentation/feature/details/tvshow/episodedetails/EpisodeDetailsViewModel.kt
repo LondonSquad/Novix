@@ -1,10 +1,11 @@
 package com.london.presentation.feature.details.tvshow.episodedetails
 
+import android.annotation.SuppressLint
 import androidx.lifecycle.SavedStateHandle
-import com.london.domain.usecase.GetAccountTvEpisodeUseCase
 import com.london.domain.usecase.GetEpisodeByTvShowId
 import com.london.domain.usecase.GetEpisodeVideoProviderUseCase
 import com.london.domain.usecase.GetImagesById
+import com.london.domain.usecase.RatingUseCase
 import com.london.domain.usecase.authentication.AuthenticationUseCase
 import com.london.domain.usecase.details.tvshow.ManageTvShowDetailsUseCase
 import com.london.presentation.navigation.Screen
@@ -19,7 +20,7 @@ class EpisodeDetailsViewModel @Inject constructor(
     private val getEpisodeByTvShowIdUseCase: GetEpisodeByTvShowId,
     private val manageTvShowDetailsUseCase: ManageTvShowDetailsUseCase,
     private val getVideoProvider: GetEpisodeVideoProviderUseCase,
-    private val getAccountTvEpisodeUseCase: GetAccountTvEpisodeUseCase,
+    private val ratingUseCase: RatingUseCase,
     private val authenticationUseCase: AuthenticationUseCase,
     savedStateHandle: SavedStateHandle,
 ) : BaseViewModel<EpisodeDetailsUiState, EpisodeDetailsEffect>(EpisodeDetailsUiState()),
@@ -32,7 +33,31 @@ class EpisodeDetailsViewModel @Inject constructor(
 
     init {
         loadEpisodeDetails()
+        loadEpisodeRating()
         loadVideoProvider()
+    }
+
+    @SuppressLint("SuspiciousIndentation")
+    private fun loadEpisodeRating(){
+       tryToExecute(
+           block = {
+           val data =  if (authenticationUseCase.isLoggedIn()) {
+               ratingUseCase.getAccountTvEpisodeUseCase(
+                       tvShowId = tvShowId,
+                       seasonNumber = seasonNumber,
+                       episodeNumber =episodeNumber,
+                   )
+               } else 0
+               data
+           },
+           onSuccess = { rating ->
+               updateState {
+                   copy(
+                       isRated = rating != 0 && state.value.isGuestUser.not(),
+                   )
+               }
+           }
+       )
     }
 
     private fun loadEpisodeDetails() {
@@ -43,7 +68,6 @@ class EpisodeDetailsViewModel @Inject constructor(
                 )
                 val images = getTvShowImages(tvShowId)
                 val tvShowDetails = manageTvShowDetailsUseCase.getTvShowDetails(tvShowId)
-
 
                 Triple(episode, images, tvShowDetails)
             },
@@ -126,9 +150,11 @@ class EpisodeDetailsViewModel @Inject constructor(
     override fun onSelectRatingClick(rating: Int) {
         tryToExecute(
             block = {
-                getAccountTvEpisodeUseCase.invoke(
-                    tvShowId, seasonNumber,
-                    episodeNumber = episodeNumber
+                ratingUseCase.addTvEpisodeRatingByIdUseCase(
+                    id = tvShowId,
+                    rating = rating,
+                    episodeNumber = episodeNumber,
+                    seasonNumber = seasonNumber
                 )
             },
             onSuccess = {

@@ -4,11 +4,10 @@ import androidx.lifecycle.SavedStateHandle
 import com.london.domain.entity.TvShow
 import com.london.domain.entity.recent.MediaType
 import com.london.domain.entity.recent.RecentViewed
-import com.london.domain.usecase.AddTvShowRatingByIdUseCase
-import com.london.domain.usecase.GetAccountTvShowStateUseCase
 import com.london.domain.usecase.GetCastById
 import com.london.domain.usecase.GetEpisodesByTvShowSeason
 import com.london.domain.usecase.GetImagesById
+import com.london.domain.usecase.RatingUseCase
 import com.london.domain.usecase.authentication.AuthenticationUseCase
 import com.london.domain.usecase.details.tvshow.ManageTvShowDetailsUseCase
 import com.london.domain.usecase.recent.viewed.ManageRecentViewedUseCase
@@ -27,9 +26,8 @@ class TvShowDetailsViewModel @Inject constructor(
     private val manageTvShowDetailsUseCase: ManageTvShowDetailsUseCase,
     private val manageRecentTvShowWatchedUseCase: ManageRecentTvShowWatchedUseCase,
     private val manageRecentViewedUseCase: ManageRecentViewedUseCase,
-    private val addTvShowRatingByIdUseCase: AddTvShowRatingByIdUseCase,
+    private val ratingUseCase: RatingUseCase,
     private val authenticationUseCase: AuthenticationUseCase,
-    private val getAccountTvShowStateUseCase: GetAccountTvShowStateUseCase,
     savedStateHandle: SavedStateHandle,
 ) : BaseViewModel<TvShowDetailsUiState, TvShowDetailsEffect>(TvShowDetailsUiState()),
     TvShowDetailsContract {
@@ -128,7 +126,7 @@ class TvShowDetailsViewModel @Inject constructor(
 
                 val episodes = getEpisodesByTvShowSeason(tvShowId, seasonNumber).episodes
                 val rating = if (authenticationUseCase.isLoggedIn()) {
-                    getAccountTvShowStateUseCase.invoke(
+                    ratingUseCase.getAccountTvShowStateUseCase(
                         tvShowId = tvShowId,
                     )
                 } else 0
@@ -256,7 +254,7 @@ class TvShowDetailsViewModel @Inject constructor(
     override fun onSelectRatingClick(rating: Int) {
         tryToExecute(
             block = {
-                addTvShowRatingByIdUseCase.invoke(tvShowId, rating)
+                ratingUseCase.addTvShowRatingByIdUseCase(tvShowId, rating)
             },
             onSuccess = {
                 updateState {

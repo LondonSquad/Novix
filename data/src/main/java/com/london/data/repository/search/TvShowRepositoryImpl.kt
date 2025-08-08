@@ -82,19 +82,19 @@ class TvShowRepositoryImpl @Inject constructor(
     }
 
     override suspend fun getAccountTvShowState(
-        seriesId: Int,
+        tvShowId: Int,
     ): MediaStates = tvShowDetailsRemoteDataSource.getAccountTvShowStates(
-        seriesId = seriesId,
+        seriesId = tvShowId,
         guestSessionId = authPreferences.getGuestSessionId(),
         userSessionId = authPreferences.getSessionId()
     ).getOrThrow().toEntity()
 
     override suspend fun getAccountTvEpisode(
-        seriesId: Int,
+        tvShowId: Int,
         seasonNumber: Int,
         episodeNumber: Int,
     ): MediaStates = tvShowDetailsRemoteDataSource.getAccountTvEpisodeState(
-        seriesId = seriesId,
+        seriesId = tvShowId,
         seasonNumber = seasonNumber,
         episodeNumber = episodeNumber,
         guestSessionId = authPreferences.getGuestSessionId(),

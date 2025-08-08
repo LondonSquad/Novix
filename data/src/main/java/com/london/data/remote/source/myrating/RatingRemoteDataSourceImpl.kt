@@ -54,7 +54,7 @@ class RatingRemoteDataSourceImpl @Inject constructor(
                     movieId = movieId,
                     guestSessionId = guestSessionId,
                     userSessionId = userSessionId,
-                    ratingRequest = RatingRemoteBody(value = rating)
+                    ratingRequest = RatingRemoteBody(value = rating.toInt())
                 )
             },
             mapper = { it }
@@ -73,7 +73,7 @@ class RatingRemoteDataSourceImpl @Inject constructor(
                     tvShowId = tvShowId,
                     guestSessionId = guestSessionId,
                     userSessionId = userSessionId,
-                    ratingRequest = RatingRemoteBody(value = rating)
+                    ratingRequest = RatingRemoteBody(value = rating.toInt())
                 )
             },
             mapper = { it }
@@ -96,7 +96,7 @@ class RatingRemoteDataSourceImpl @Inject constructor(
                     episodeNumber = episodeNumber,
                     guestSessionId = guestSessionId,
                     userSessionId = userSessionId,
-                    ratingRequest = RatingRemoteBody(value = rating)
+                    ratingRequest = RatingRemoteBody(value = rating.toInt())
                 )
             },
             mapper = { it }
