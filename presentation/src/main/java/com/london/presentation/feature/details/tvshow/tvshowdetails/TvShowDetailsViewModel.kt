@@ -1,6 +1,5 @@
 package com.london.presentation.feature.details.tvshow.tvshowdetails
 
-import android.util.Log
 import androidx.lifecycle.SavedStateHandle
 import com.london.domain.entity.TvShow
 import com.london.domain.entity.recent.MediaType
@@ -10,8 +9,8 @@ import com.london.domain.usecase.GetAccountTvShowStateUseCase
 import com.london.domain.usecase.GetCastById
 import com.london.domain.usecase.GetEpisodesByTvShowSeason
 import com.london.domain.usecase.GetImagesById
+import com.london.domain.usecase.authentication.AuthenticationUseCase
 import com.london.domain.usecase.details.tvshow.ManageTvShowDetailsUseCase
-import com.london.domain.usecase.LoggedInUseCase
 import com.london.domain.usecase.recent.viewed.ManageRecentViewedUseCase
 import com.london.domain.usecase.recent.watched.tvshow.ManageRecentTvShowWatchedUseCase
 import com.london.presentation.navigation.Screen
@@ -27,9 +26,9 @@ class TvShowDetailsViewModel @Inject constructor(
     private val getEpisodesByTvShowSeason: GetEpisodesByTvShowSeason,
     private val manageTvShowDetailsUseCase: ManageTvShowDetailsUseCase,
     private val manageRecentTvShowWatchedUseCase: ManageRecentTvShowWatchedUseCase,
-    private val manageRecentViewedUseCase:ManageRecentViewedUseCase,
+    private val manageRecentViewedUseCase: ManageRecentViewedUseCase,
     private val addTvShowRatingByIdUseCase: AddTvShowRatingByIdUseCase,
-    private val getUserLoggedInUseCase: LoggedInUseCase,
+    private val authenticationUseCase: AuthenticationUseCase,
     private val getAccountTvShowStateUseCase: GetAccountTvShowStateUseCase,
     savedStateHandle: SavedStateHandle,
 ) : BaseViewModel<TvShowDetailsUiState, TvShowDetailsEffect>(TvShowDetailsUiState()),
@@ -122,13 +121,13 @@ class TvShowDetailsViewModel @Inject constructor(
     private fun initializeGetTvShowDetailsData() {
         tryToExecute(
             block = {
-                val tvShowDetails = getTvShowDetails(tvShowId)
+                val tvShowDetails = manageTvShowDetailsUseCase.getTvShowDetails(tvShowId)
 
                 val firstSeason = tvShowDetails.tvShowSeasons.firstOrNull()
                 val seasonNumber = firstSeason?.seasonNumber ?: 1
 
                 val episodes = getEpisodesByTvShowSeason(tvShowId, seasonNumber).episodes
-                val rating = if (getUserLoggedInUseCase.invoke()) {
+                val rating = if (authenticationUseCase.isLoggedIn()) {
                     getAccountTvShowStateUseCase.invoke(
                         tvShowId = tvShowId,
                     )
@@ -235,7 +234,7 @@ class TvShowDetailsViewModel @Inject constructor(
 
     override fun onRateBottomSheetClick() {
         tryToExecute(
-            block = { getUserLoggedInUseCase.invoke() },
+            block = { authenticationUseCase.isLoggedIn() },
             onSuccess = { isLoggedIn ->
                 if (isLoggedIn)
                     updateState { copy(isRateBottomSheetVisible = isRateBottomSheetVisible.not()) }
@@ -287,11 +286,11 @@ class TvShowDetailsViewModel @Inject constructor(
         emitEffect(TvShowDetailsEffect.NavigateBack)
     }
 
-    private suspend fun addToRecentWatched(tvShow: TvShow){
+    private suspend fun addToRecentWatched(tvShow: TvShow) {
         manageRecentTvShowWatchedUseCase.addTvShowToRecentWatched(tvShow)
     }
 
-    private suspend fun addMovieToRecentViewed(tvShow: RecentViewed){
+    private suspend fun addMovieToRecentViewed(tvShow: RecentViewed) {
         manageRecentViewedUseCase.addToRecentViewed(tvShow)
     }
 }

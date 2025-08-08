@@ -135,7 +135,8 @@ private fun MyRatingContent(
                                 item.isMovie -> contract.onMovieClick(item.id)
                                 !item.isMovie -> contract.onTvShowClick(item.id)
                             }
-                        }
+                        },
+                        isDarkMode = NovixTheme.isThemeDark
                     )
                 }
             }

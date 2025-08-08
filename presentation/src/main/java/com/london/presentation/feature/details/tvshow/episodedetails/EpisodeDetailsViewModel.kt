@@ -5,6 +5,7 @@ import com.london.domain.usecase.GetAccountTvEpisodeUseCase
 import com.london.domain.usecase.GetEpisodeByTvShowId
 import com.london.domain.usecase.GetEpisodeVideoProviderUseCase
 import com.london.domain.usecase.GetImagesById
+import com.london.domain.usecase.authentication.AuthenticationUseCase
 import com.london.domain.usecase.details.tvshow.ManageTvShowDetailsUseCase
 import com.london.presentation.navigation.Screen
 import com.london.presentation.navigation.getArgs
@@ -19,6 +20,7 @@ class EpisodeDetailsViewModel @Inject constructor(
     private val manageTvShowDetailsUseCase: ManageTvShowDetailsUseCase,
     private val getVideoProvider: GetEpisodeVideoProviderUseCase,
     private val getAccountTvEpisodeUseCase: GetAccountTvEpisodeUseCase,
+    private val authenticationUseCase: AuthenticationUseCase,
     savedStateHandle: SavedStateHandle,
 ) : BaseViewModel<EpisodeDetailsUiState, EpisodeDetailsEffect>(EpisodeDetailsUiState()),
     EpisodeDetailsContract {
@@ -60,7 +62,7 @@ class EpisodeDetailsViewModel @Inject constructor(
                         voteCount = episode.voteCount,
                         guestStars = episode.guestStars,
                         seasonNumber = episode.seasonNumber,
-                        )
+                    )
                 }
             },
             onError = { errorState -> updateState { copy(error = errorState) } },
@@ -88,7 +90,7 @@ class EpisodeDetailsViewModel @Inject constructor(
         )
     }
 
-    fun onRetry(){
+    fun onRetry() {
         updateState { copy(error = null) }
         loadEpisodeDetails()
         loadVideoProvider()
@@ -102,7 +104,7 @@ class EpisodeDetailsViewModel @Inject constructor(
 
     override fun onRateBottomSheetClick() {
         tryToExecute(
-            block = { getUserLoggedInUseCase.invoke() },
+            block = { authenticationUseCase.isLoggedIn() },
             onSuccess = { isLoggedIn ->
                 if (isLoggedIn)
                     updateState { copy(isRateBottomSheetVisible = isRateBottomSheetVisible.not()) }
