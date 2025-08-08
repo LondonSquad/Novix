@@ -28,6 +28,14 @@ class AuthPreferences @Inject constructor(
         sharedPreferences.edit { putString(USERNAME, username) }
     }
 
+    fun saveAccountId(accountId: Int) {
+        sharedPreferences.edit { putInt(ACCOUNT_ID, accountId) }
+    }
+
+    fun getAccountId(): Int {
+        return sharedPreferences.getInt(ACCOUNT_ID, 0)
+    }
+
     fun setGuestMode(isGuest: Boolean) {
         sharedPreferences.edit { putBoolean(IS_GUEST, isGuest) }
     }
@@ -49,6 +57,7 @@ class AuthPreferences @Inject constructor(
             remove(SESSION_ID)
             remove(REQUEST_TOKEN)
             remove(USERNAME)
+            remove(ACCOUNT_ID)
             remove(IS_GUEST)
             remove(GUEST_SESSION_ID)
         }
@@ -62,6 +71,7 @@ class AuthPreferences @Inject constructor(
         private const val SESSION_ID = "session_id"
         private const val REQUEST_TOKEN = "request_token"
         private const val USERNAME = "username"
+        private const val ACCOUNT_ID = "account_id"
         private const val IS_GUEST = "is_guest"
         private const val GUEST_SESSION_ID = "guest_session_id"
     }

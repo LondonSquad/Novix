@@ -5,4 +5,5 @@ interface AuthRepository {
     suspend fun loginAsGuest(): Boolean
     suspend fun logout(): Boolean
     suspend fun isLoggedIn(): Boolean
+    suspend fun getAccountId(): Int
 }
