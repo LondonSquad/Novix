@@ -184,7 +184,11 @@ private fun Content(
                         .fillMaxSize()
                 ) {
                     DefaultTopBar(
-                        appIconRes = if (NovixTheme.theme.isDark()) R.drawable.img_novix_dark else R.drawable.img_novix_light,
+                        appIconRes = if (NovixTheme.isThemeDark) {
+                            R.drawable.img_novix_dark
+                        } else {
+                            R.drawable.img_novix_light
+                        },
                         appName = R.string.app_name.string,
                         appDescription = R.string.app_name_description.string,
                         appIconContentDescription = R.string.novix_icon.string,

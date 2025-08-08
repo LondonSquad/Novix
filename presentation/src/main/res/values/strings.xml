@@ -104,7 +104,7 @@
     <string name="no_actor_details">No actor details available</string>
     <string name="reviews">Reviews</string>
     <string name="no_recent_history">Looks like you haven\'t checked anything yet.\nTake a look around and come back!</string>
-    <string name="no_reviews">\"There is no review\"</string>
+    <string name="no_reviews">There is no review!</string>
     <string name="login_failed">Login failed. Please check your credentials.</string>
     <string name="guest_login_failed">Guest login failed.</string>
     <string name="edit_list">Edit list</string>
@@ -141,4 +141,6 @@
     <string name="blurs_all_sensitive_content">Blurs all sensitive content.</string>
     <string name="blurs_explicit_scenes_only">Blurs explicit scenes only.</string>
     <string name="no_content_is_blurred">No content is blurred.</string>
+    <string name="movie_removed_successfully">movie removed successffly</string>
+    <string name="movie_not_found">movie not found</string>
 </resources>
