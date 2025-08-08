@@ -128,18 +128,6 @@ fun ReviewsScreenContent(
                     }
                 }
             }
-
-            TopBar(
-                title = stringResource(R.string.reviews),
-                onBackClick = reviewContract::onBackClicked,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(
-                        start = 16.dp,
-                        top = WindowInsets.statusBars.asPaddingValues()
-                            .calculateTopPadding() + 12.dp
-                    )
-            )
         }
     }
 

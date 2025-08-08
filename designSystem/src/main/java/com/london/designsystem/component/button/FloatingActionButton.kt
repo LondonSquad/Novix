@@ -26,7 +26,7 @@ fun FloatingActionButton(
         onClick = onClick,
         modifier = modifier
             .size(56.dp),
-        shape = RoundedCornerShape(12),
+        shape = RoundedCornerShape(12.dp),
         colors = ButtonDefaults.buttonColors(
             containerColor = if (isDisabledIcon) NovixTheme.colors.disable else NovixTheme.colors.primary,
             contentColor = if (isDisabledIcon) NovixTheme.colors.onPrimaryHint else NovixTheme.colors.onPrimary

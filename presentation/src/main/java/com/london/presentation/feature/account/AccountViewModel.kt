@@ -3,6 +3,7 @@ package com.london.presentation.feature.account
 import androidx.lifecycle.viewModelScope
 import com.london.domain.AppPreferencesService
 import com.london.domain.contentrestriction.ContentRestrictionLevel
+import com.london.domain.language.AppLanguage
 import com.london.domain.theme.AppTheme
 import com.london.domain.usecase.GetAccountDetails
 import com.london.domain.usecase.LoggedInUseCase
@@ -11,7 +12,6 @@ import com.london.presentation.feature.account.state.AccountUiState
 import com.london.presentation.shared.base.BaseViewModel
 import com.london.presentation.shared.base.ErrorState
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import javax.inject.Inject
@@ -29,7 +29,7 @@ class AccountViewModel @Inject constructor(
         checkUserLoginStatus()
         fetchAndSetUsername()
         observeContentRestrictionLevel()
-        initializeAppTheme()
+        initializeAppLanguage()
     }
 
     private fun checkUserLoginStatus() {
@@ -40,21 +40,6 @@ class AccountViewModel @Inject constructor(
             },
             onSuccess = { isLoggedIn: Boolean ->
                 updateState { copy(isUserLoggedIn = isLoggedIn) }
-            },
-            onError = {
-                updateState { copy(isUserLoggedIn = false) }
-            },
-            onCompleted = {
-                updateState { copy(isLoading = false) }
-            }
-        )
-    }
-
-    private fun initializeAppTheme() {
-        tryToExecute(
-            block = { appPreferencesService.isAppDarkMode.first() },
-            onSuccess = { isAppDarkMode ->
-                updateState { copy(appTheme = if (isAppDarkMode) AppTheme.DARK else AppTheme.LIGHT) }
             },
             onError = {
                 updateState { copy(isUserLoggedIn = false) }
@@ -92,7 +77,7 @@ class AccountViewModel @Inject constructor(
     }
 
     override fun onChangePasswordClick() {
-        emitEffect(AccountEffect.NavigateToChangePassword)
+        emitEffect(AccountEffect.NavigateToChangePassword(FORGOT_PASSWORD_URL))
     }
 
     //region Content Restriction Bottom Sheet
@@ -116,6 +101,13 @@ class AccountViewModel @Inject constructor(
     //endregion
 
     //region Appearance Bottom Sheet
+    private fun initializeAppTheme() {
+        val isAppDarkMode = appPreferencesService.isAppDarkMode.value
+        updateState {
+            copy(appTheme = if (isAppDarkMode) AppTheme.DARK else AppTheme.LIGHT)
+        }
+    }
+
     override fun onAppearanceClick() {
         updateState {
             copy(isAppearanceBottomSheetVisible = true)
@@ -180,9 +172,41 @@ class AccountViewModel @Inject constructor(
     }
     //endregion
 
-    override fun onLanguageClick() {
-        updateState { copy(isLanguageBottomSheetVisible = true) }
+    //region Language Bottom Sheet
+    private fun initializeAppLanguage() {
+        updateState {
+            copy(appLanguage = appPreferencesService.appLanguage.value)
+        }
     }
+
+    override fun onLanguageClick() {
+        updateState {
+            copy(isLanguageBottomSheetVisible = true)
+        }
+    }
+
+    override fun onEnglishSelected() {
+        updateState {
+            copy(appLanguage = AppLanguage.ENGLISH)
+        }
+    }
+
+    override fun onArabicSelected() {
+        updateState {
+            copy(appLanguage = AppLanguage.ARABIC)
+        }
+    }
+
+    override fun onLanguageSettingsSave() {
+        appPreferencesService.setAppLanguage(state.value.appLanguage)
+        updateState {
+            copy(
+                isLanguageBottomSheetVisible = false,
+                appLanguage = state.value.appLanguage
+            )
+        }
+    }
+    //endregion
 
     override fun onUserMenuClick() {
         updateState { copy(showUserMenu = !showUserMenu) }
@@ -202,5 +226,9 @@ class AccountViewModel @Inject constructor(
 
     override fun onLoginClick() {
         emitEffect(AccountEffect.NavigateLogout)
+    }
+
+    companion object {
+        private const val FORGOT_PASSWORD_URL = "https://www.themoviedb.org/reset-password"
     }
 }

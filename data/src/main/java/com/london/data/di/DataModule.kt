@@ -2,6 +2,7 @@ package com.london.data.di
 
 import android.content.Context
 import android.content.SharedPreferences
+import com.london.data.utils.APP_SHARED_PREFS_NAME
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -17,5 +18,5 @@ object DataModule {
     @Singleton
     fun provideSharedPreferences(
         @ApplicationContext context: Context
-    ): SharedPreferences = context.getSharedPreferences("app_prefs", Context.MODE_PRIVATE)
+    ): SharedPreferences = context.getSharedPreferences(APP_SHARED_PREFS_NAME, Context.MODE_PRIVATE)
 }

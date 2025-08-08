@@ -5,7 +5,7 @@ import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFact
 import com.london.data.BuildConfig
 import com.london.data.local.preference.AuthPreferences
 import com.london.data.local.preference.SharedPrefsTokenProvider
-import com.london.data.local.source.device.DeviceConfigurationDataSource
+import com.london.data.local.preference.readLanguageCode
 import com.london.data.remote.interceptor.AuthInterceptor
 import com.london.data.remote.service.account.AccountApiService
 import com.london.data.remote.service.authentication.AuthenticationApiService
@@ -68,7 +68,7 @@ object NetworkModule {
     fun provideApiInterceptor(@ApplicationContext context: Context): Interceptor =
         Interceptor { chain ->
             val original = chain.request()
-            val deviceLanguage = DeviceConfigurationDataSource(context).getCurrentLanguage()
+            val deviceLanguage = readLanguageCode(context)
 
             val newUrl = original.url.newBuilder()
                 .addQueryParameter("api_key", BuildConfig.API_KEY)
@@ -197,4 +197,5 @@ object NetworkModule {
     @Singleton
     fun provideMyRatingApiService(retrofit: Retrofit): MyRatingApiService =
         retrofit.create(MyRatingApiService::class.java)
+
 }

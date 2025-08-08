@@ -14,10 +14,15 @@ interface AccountContract {
     fun onAppearanceModeSave()
     fun showAppearanceBottomSheet()
 
-    // logout bottom sheet
+    // Language Bottom Sheet
+    fun onLanguageClick()
+    fun onEnglishSelected()
+    fun onArabicSelected()
+    fun onLanguageSettingsSave()
+
+    // Logout Bottom Sheet
     fun onLogoutConfirmed()
 
-    fun onLanguageClick()
     fun onUserMenuClick()
     fun onLogoutClick()
     fun onBottomSheetDismiss()

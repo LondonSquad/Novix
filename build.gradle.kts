@@ -1,7 +1,6 @@
 @file:Suppress("OPT_IN_USAGE")
 
 import com.london.buildsrc.AppConfig
-import com.london.buildsrc.AppConfig.freeCompilerArgs
 import com.london.buildsrc.configureGitHooks
 import kotlinx.kover.gradle.plugin.dsl.KoverProjectExtension
 import org.jetbrains.kotlin.gradle.dsl.KotlinAndroidProjectExtension
@@ -11,7 +10,6 @@ plugins {
     alias(libs.plugins.android.application) apply false
     alias(libs.plugins.kotlin.android) apply false
     alias(libs.plugins.kotlin.compose) apply false
-    // Ksp
     alias(libs.plugins.ksp) apply false
     alias(libs.plugins.hilt) apply false
     alias(libs.plugins.jetbrains.kotlin.jvm) apply false
