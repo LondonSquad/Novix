@@ -8,11 +8,7 @@ class GetAllRatedUseCase @Inject constructor(
     private val repository: MyRatingRepository
 ) {
     suspend fun invoke(): AllRatedContent {
-        val ratedMovies = repository.getAllRatedMovies()
-        val ratedTvShows = repository.getAllRatedTvShows()
-        return AllRatedContent(
-            movies = ratedMovies,
-            tvShows = ratedTvShows
-        )
+        val ratedMedia = repository.getAllRatedMedia()
+        return AllRatedContent(items = ratedMedia)
     }
 }
