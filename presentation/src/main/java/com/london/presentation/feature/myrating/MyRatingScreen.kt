@@ -1,7 +1,9 @@
 package com.london.presentation.feature.myrating
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -10,30 +12,25 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalConfiguration
-import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import androidx.paging.LoadState
-import androidx.paging.compose.collectAsLazyPagingItems
+import com.london.designsystem.component.NovixChip
 import com.london.designsystem.component.TopBar
 import com.london.designsystem.theme.NovixTheme
 import com.london.designsystem.theme.ThemePreviews
 import com.london.presentation.R
-import com.london.presentation.shared.GenresSection
-import com.london.presentation.shared.MediaLazyPagingGrid
 import com.london.presentation.shared.SnackBarAnimation
 import com.london.presentation.shared.base.ErrorState
 import com.london.presentation.shared.buildscreen.BuildScreen
 import com.london.presentation.utils.Listen
-import com.london.presentation.utils.isLoading
 import com.london.designsystem.R as dsR
 
 @Composable
 fun MyRatingScreen(
     onNavigateMovie: (Int) -> Unit,
+    onNavigateTvShow: (Int) -> Unit,
     onNavigateBack: () -> Unit,
     viewModel: MyRatingViewModel = hiltViewModel()
 ) {
@@ -42,29 +39,25 @@ fun MyRatingScreen(
 
     effect?.Listen { currentEffect ->
         when (currentEffect) {
-            is MyRatingEffect.NavigateToItem -> onNavigateMovie(currentEffect.itemId)
+            is MyRatingEffect.NavigateToMovie -> onNavigateMovie(currentEffect.movieId)
+            is MyRatingEffect.NavigateToTvShow -> onNavigateTvShow(currentEffect.tvShowId)
             is MyRatingEffect.NavigateBack -> onNavigateBack()
         }
     }
 
-
-    val lazyItems = state.itemsFlow.collectAsLazyPagingItems()
-
     BuildScreen(
-        isLoading = lazyItems.isLoading(),
-        isError = lazyItems.loadState.refresh is LoadState.Error,
+        isLoading = state.isLoading,
+        isError = state.errorState != null,
         onBack = viewModel::onBackClicked,
-        onRetry = viewModel::onDelete,
+        onRetry = { /* TODO: Implement retry functionality */ },
         emptyLayoutMessage = R.string.no_rating_items_in_list,
-        emptyLayoutImage = R.drawable.img_no_result,
-        pagingFlow = lazyItems
+        emptyLayoutImage = R.drawable.img_no_result
     ) {
         MyRatingContent(
             state = state,
             contract = viewModel
         )
     }
-
 }
 
 @Composable
@@ -72,7 +65,6 @@ private fun MyRatingContent(
     state: MyRatingUiState = MyRatingUiState(),
     contract: MyRatingContract = defaultMyRatingContract()
 ) {
-    val screenWidth = with(LocalDensity.current) { LocalConfiguration.current.screenWidthDp.dp }
 
     Column(
         modifier = Modifier
@@ -87,37 +79,61 @@ private fun MyRatingContent(
             title = stringResource(R.string.my_rating),
             onBackClick = contract::onBackClicked
         )
-        GenresSection(
-            genres = state.genres,
-            selectedGenreId = state.selectedGenreId,
-            screenWidth = screenWidth,
-            onGenreClick = contract::onGenreSelected,
-            modifier = Modifier.padding(bottom = 12.dp),
-            getGenreId = { it.id },
-            getGenreName = { stringResource(it.stringResId) }
+
+        RatingChipsRow(
+            selected = state.selectedRatingCategory ?: RatingCategory.All,
+            onSelect = contract::onRatingCategorySelected,
+            modifier = Modifier.padding(bottom = 12.dp)
         )
-        MediaLazyPagingGrid(
-            pagingFlow = state.itemsFlow.collectAsLazyPagingItems(),
-            onItemClick = { contract.onItemClick(it.id) },
-            getImageUrl = { it.posterPath },
-            getTitle = { it.title },
-            myRatingList = true,
-            rate = rate,
-            onDeleteClick = { /* TODO: Implement delete functionality */ },
-            modifier = Modifier
-                .weight(1f)
-                .fillMaxWidth()
-                .padding(horizontal = 16.dp),
-        )
+
+        when (state.selectedRatingCategory) {
+            RatingCategory.All -> {
+            }
+
+            RatingCategory.Movies -> {
+            }
+
+            RatingCategory.TvShows -> {
+            }
+
+            null -> {
+            }
+        }
+
         if (state.isDeleteClicked) {
             if (state.errorState is ErrorState.RequestFailed) {
                 val message = state.errorState.message
                 SnackBarAnimation(message)
-            }
-            else {
+            } else {
                 val message = "Delete rating successfully"
                 SnackBarAnimation(message, dsR.drawable.ic_success)
             }
+        }
+    }
+}
+
+@Composable
+private fun RatingChipsRow(
+    selected: RatingCategory,
+    onSelect: (RatingCategory) -> Unit,
+    modifier: Modifier = Modifier
+) {
+    Row(
+        modifier = modifier
+            .fillMaxWidth()
+            .padding(horizontal = 16.dp),
+        horizontalArrangement = Arrangement.spacedBy(8.dp),
+    ) {
+        RatingCategory.entries.forEach { category ->
+            NovixChip(
+                text = stringResource(category.title),
+                isSelected = selected == category,
+                onClick = {
+                    if (selected != category) {
+                        onSelect(category)
+                    }
+                }
+            )
         }
     }
 }
@@ -127,6 +143,7 @@ private fun MyRatingContent(
 private fun MyRatingScreenPreview() = NovixTheme {
     MyRatingScreen(
         onNavigateMovie = {},
+        onNavigateTvShow = {},
         onNavigateBack = {}
     )
 }
