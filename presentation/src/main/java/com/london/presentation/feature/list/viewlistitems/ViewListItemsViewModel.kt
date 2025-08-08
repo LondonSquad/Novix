@@ -50,11 +50,11 @@ class ViewListItemsViewModel @Inject constructor(
     override fun onConfirmDelete() {
 
         tryToExecute(
-            onStart = {
-                updateState { copy(isDeleteBottomSheetVisible = false) }
-            },
             block = {
                 manageMovieListUseCase.deleteMovieList(listId.toUInt())
+            },
+            onCompleted = {
+                updateState { copy(isDeleteBottomSheetVisible = false) }
             },
             onError = {
                 updateState { copy(error = ErrorState.RequestFailed()) }

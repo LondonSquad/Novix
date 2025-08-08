@@ -56,12 +56,14 @@ fun DeleteListBottomSheet(
         ) {
             Content(
                 modifier = modifier,
-                onConfirmDelete = contract::onDeleteBottomSheetDismiss,
+                onConfirmDelete = contract::onConfirmDelete,
                 hideSheet = {
                     coroutineScope.launch { sheetState.hide() }
                         .invokeOnCompletion {
-                            if (!sheetState.isVisible) { contract.onDeleteBottomSheetDismiss() }
-                    }
+                            if (!sheetState.isVisible) {
+                                contract.onDeleteBottomSheetDismiss()
+                            }
+                        }
                 },
             )
         }
@@ -142,7 +144,10 @@ private fun Content(
             hasIcon = false,
             isLoading = false,
             icon = null,
-            onClick = onConfirmDelete
+            onClick = {
+                onConfirmDelete()
+                hideSheet()
+            }
         )
     }
 }
