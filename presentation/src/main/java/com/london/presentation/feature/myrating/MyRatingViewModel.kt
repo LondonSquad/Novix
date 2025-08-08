@@ -20,6 +20,10 @@ class MyRatingViewModel @Inject constructor(
         initializeItems()
     }
 
+    fun refreshData() {
+        initializeItems()
+    }
+
     private fun initializeItems() {
         tryToExecute(
             block = {
@@ -63,6 +67,7 @@ class MyRatingViewModel @Inject constructor(
     }
 
     override fun onItemClick(id: Int) {
+        // TODO: Implement item click functionality
         emitEffect(MyRatingEffect.NavigateToMovie(id))
     }
 }
