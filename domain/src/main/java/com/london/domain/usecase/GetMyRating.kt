@@ -8,48 +8,46 @@ class GetMyRating @Inject constructor(
     private val repository: MyRatingRepository
 ) {
     suspend fun getAllRated(): List<RatedMedia> {
-        val ratedMedia = repository.getAllRatedMedia()
-        return ratedMedia.map { media ->
-            RatedMedia(
-                id = media.id,
-                title = media.title,
-                posterPath = media.posterPath,
-                rating = media.rating,
-                isMovie = media.isMovie,
-                addedAt = System.currentTimeMillis()
-            )
-        }.sortedByDescending { it.addedAt }
+        return repository.getAllRatedMedia()
+            .map { media: RatedMedia ->
+                RatedMedia(
+                    id = media.id,
+                    title = media.title,
+                    posterPath = media.posterPath,
+                    rating = media.rating,
+                    isMovie = media.isMovie
+                )
+            }
+            .sortedByDescending { media -> media.rating }
     }
 
     suspend fun getRatedMovies(): List<RatedMedia> {
         return repository.getAllRatedMedia()
-            .filter { it.isMovie }
-            .map { media ->
+            .filter { media: RatedMedia -> media.isMovie }
+            .map { media: RatedMedia ->
                 RatedMedia(
                     id = media.id,
                     title = media.title,
                     posterPath = media.posterPath,
                     rating = media.rating,
-                    isMovie = media.isMovie,
-                    addedAt = System.currentTimeMillis()
+                    isMovie = media.isMovie
                 )
             }
-            .sortedByDescending { it.addedAt }
+            .sortedByDescending { media -> media.rating }
     }
 
     suspend fun getRatedTvShows(): List<RatedMedia> {
         return repository.getAllRatedMedia()
-            .filter { !it.isMovie }
-            .map { media ->
+            .filter { media: RatedMedia -> !media.isMovie }
+            .map { media: RatedMedia ->
                 RatedMedia(
                     id = media.id,
                     title = media.title,
                     posterPath = media.posterPath,
                     rating = media.rating,
-                    isMovie = media.isMovie,
-                    addedAt = System.currentTimeMillis()
+                    isMovie = media.isMovie
                 )
             }
-            .sortedByDescending { it.addedAt }
+            .sortedByDescending { media -> media.rating }
     }
 }

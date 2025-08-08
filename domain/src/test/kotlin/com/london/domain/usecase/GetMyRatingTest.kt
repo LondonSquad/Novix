@@ -22,7 +22,7 @@ class GetMyRatingTest {
     }
 
     @Test
-    fun `getAllRated returns sorted list with timestamps`() = runTest {
+    fun `getAllRated returns sorted list by rating`() = runTest {
         // Given
         coEvery { repository.getAllRatedMedia() } returns mockRatedMedia
 
@@ -31,12 +31,12 @@ class GetMyRatingTest {
 
         // Then
         assertEquals(3, result.size)
-        assertTrue(result[0].addedAt >= result[1].addedAt)
-        assertTrue(result[1].addedAt >= result[2].addedAt)
+        assertTrue(result[0].rating >= result[1].rating)
+        assertTrue(result[1].rating >= result[2].rating)
     }
 
     @Test
-    fun `getRatedMovies returns only movies`() = runTest {
+    fun `getRatedMovies returns only movies sorted by rating`() = runTest {
         // Given
         coEvery { repository.getAllRatedMedia() } returns mockRatedMedia
 
@@ -46,12 +46,13 @@ class GetMyRatingTest {
         // Then
         assertEquals(2, result.size)
         assertTrue(result.all { it.isMovie })
-        assertEquals("Movie 1", result[0].title)
-        assertEquals("Movie 2", result[1].title)
+        assertTrue(result[0].rating >= result[1].rating)
+        assertEquals("Movie 2", result[0].title) // rating = 9
+        assertEquals("Movie 1", result[1].title) // rating = 8
     }
 
     @Test
-    fun `getRatedTvShows returns only tv shows`() = runTest {
+    fun `getRatedTvShows returns only tv shows sorted by rating`() = runTest {
         // Given
         coEvery { repository.getAllRatedMedia() } returns mockRatedMediaWithTvShows
 
@@ -61,8 +62,9 @@ class GetMyRatingTest {
         // Then
         assertEquals(2, result.size)
         assertTrue(result.all { !it.isMovie })
-        assertEquals("TV Show 1", result[0].title)
-        assertEquals("TV Show 2", result[1].title)
+        assertTrue(result[0].rating >= result[1].rating)
+        assertEquals("TV Show 2", result[0].title) // rating = 9
+        assertEquals("TV Show 1", result[1].title) // rating = 7
     }
 
     @Test
@@ -102,7 +104,7 @@ class GetMyRatingTest {
     }
 
     @Test
-    fun `getAllRated assigns new timestamps`() = runTest {
+    fun `getAllRated returns correct rating`() = runTest {
         // Given
         coEvery { repository.getAllRatedMedia() } returns mockSingleItem
 
@@ -111,11 +113,11 @@ class GetMyRatingTest {
 
         // Then
         assertEquals(1, result.size)
-        assertTrue(result[0].addedAt > 1000L)
+        assertEquals(8, result[0].rating)
     }
 
     @Test
-    fun `getAllRated sorts by addedAt descending`() = runTest {
+    fun `getAllRated sorts by rating descending`() = runTest {
         // Given
         coEvery { repository.getAllRatedMedia() } returns mockSortedItems
 
@@ -124,7 +126,7 @@ class GetMyRatingTest {
 
         // Then
         assertEquals(2, result.size)
-        assertTrue(result[0].addedAt >= result[1].addedAt)
+        assertTrue(result[0].rating >= result[1].rating)
     }
 
     companion object {
@@ -134,24 +136,21 @@ class GetMyRatingTest {
                 title = "Movie 1",
                 posterPath = "/movie1.jpg",
                 rating = 8,
-                isMovie = true,
-                addedAt = 1000L
+                isMovie = true
             ),
             RatedMedia(
                 id = 2,
                 title = "TV Show 1",
                 posterPath = "/tvshow1.jpg",
                 rating = 7,
-                isMovie = false,
-                addedAt = 2000L
+                isMovie = false
             ),
             RatedMedia(
                 id = 3,
                 title = "Movie 2",
                 posterPath = "/movie2.jpg",
                 rating = 9,
-                isMovie = true,
-                addedAt = 3000L
+                isMovie = true
             )
         )
 
@@ -161,24 +160,21 @@ class GetMyRatingTest {
                 title = "Movie 1",
                 posterPath = "/movie1.jpg",
                 rating = 8,
-                isMovie = true,
-                addedAt = 1000L
+                isMovie = true
             ),
             RatedMedia(
                 id = 2,
                 title = "TV Show 1",
                 posterPath = "/tvshow1.jpg",
                 rating = 7,
-                isMovie = false,
-                addedAt = 2000L
+                isMovie = false
             ),
             RatedMedia(
                 id = 3,
                 title = "TV Show 2",
                 posterPath = "/tvshow2.jpg",
                 rating = 9,
-                isMovie = false,
-                addedAt = 3000L
+                isMovie = false
             )
         )
 
@@ -188,8 +184,7 @@ class GetMyRatingTest {
                 title = "TV Show 1",
                 posterPath = "/tvshow1.jpg",
                 rating = 7,
-                isMovie = false,
-                addedAt = 1000L
+                isMovie = false
             )
         )
 
@@ -199,8 +194,7 @@ class GetMyRatingTest {
                 title = "Movie 1",
                 posterPath = "/movie1.jpg",
                 rating = 8,
-                isMovie = true,
-                addedAt = 1000L
+                isMovie = true
             )
         )
 
@@ -210,8 +204,7 @@ class GetMyRatingTest {
                 title = "Movie 1",
                 posterPath = "/movie1.jpg",
                 rating = 8,
-                isMovie = true,
-                addedAt = 1000L
+                isMovie = true
             )
         )
 
@@ -221,16 +214,14 @@ class GetMyRatingTest {
                 title = "First",
                 posterPath = "/first.jpg",
                 rating = 8,
-                isMovie = true,
-                addedAt = 1000L
+                isMovie = true
             ),
             RatedMedia(
                 id = 2,
                 title = "Second",
                 posterPath = "/second.jpg",
                 rating = 7,
-                isMovie = false,
-                addedAt = 2000L
+                isMovie = false
             )
         )
     }
