@@ -154,7 +154,13 @@ class CustomMovieListRepositoryImplTest {
     fun `removeMovieFromList should return true when data source returns success`() = runTest {
 
         //Given
-        coEvery { remoteDataSource.removeMovieFromList(any(), any(), any()) } returns Result.success(
+        coEvery {
+            remoteDataSource.removeMovieFromList(
+                any(),
+                any(),
+                any()
+            )
+        } returns Result.success(
             CustomListResponse("", 1)
         )
         //When
@@ -203,16 +209,17 @@ class CustomMovieListRepositoryImplTest {
     }
 
     @Test
-    fun `getMovieListName should return name when data source returns movie list details`()= runTest {
-        //Given
-        coEvery { remoteDataSource.getDetails(any(), any()) } returns Result.success(
-            MovieListDetailsMock
-        )
-        //When
-        val result = repository.getMovieListName(1u)
-        //Then
-        assertThat(result).isEqualTo(MovieListDetailsMock.name)
-    }
+    fun `getMovieListName should return name when data source returns movie list details`() =
+        runTest {
+            //Given
+            coEvery { remoteDataSource.getDetails(any(), any()) } returns Result.success(
+                MovieListDetailsMock
+            )
+            //When
+            val result = repository.getMovieListName(1u)
+            //Then
+            assertThat(result).isEqualTo(MovieListDetailsMock.name)
+        }
 
     @Test
     fun `getMovieListName should throw exception when data source returns failure`() = runTest {

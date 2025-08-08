@@ -422,7 +422,8 @@ fun NavGraphBuilder.mainNavGraph(
             onNavigateBack = { navController.navigateUp() },
             onNavigateToGenre = { genreId ->
                 navController.navigate(Screen.TvShowsByCategory(genreId))
-            }
+            },
+            onNavigateToLogin = { navController.navigate(Screen.Login) }
         )
     }
 
@@ -532,7 +533,8 @@ fun NavGraphBuilder.mainNavGraph(
             onNavigateBack = { navController.popBackStack() },
             onNavigateToCast = { actorId ->
                 navController.navigate(ActorDetails(actorId))
-            }
+            },
+            onNavigateLogin = { navController.navigate(Screen.Login) }
         )
     }
     composable<Screen.ActorGallery> {

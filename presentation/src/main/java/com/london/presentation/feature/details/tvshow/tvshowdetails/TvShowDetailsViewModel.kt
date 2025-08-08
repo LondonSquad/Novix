@@ -1,14 +1,18 @@
 package com.london.presentation.feature.details.tvshow.tvshowdetails
 
+import android.util.Log
 import androidx.lifecycle.SavedStateHandle
 import com.london.domain.entity.TvShow
 import com.london.domain.entity.recent.MediaType
 import com.london.domain.entity.recent.RecentViewed
+import com.london.domain.usecase.AddTvShowRatingByIdUseCase
+import com.london.domain.usecase.GetAccountTvShowStateUseCase
 import com.london.domain.usecase.GetCastById
 import com.london.domain.usecase.GetEpisodesByTvShowSeason
 import com.london.domain.usecase.GetImagesById
 import com.london.domain.usecase.GetTvShowDetails
 import com.london.domain.usecase.GetTvShowVideoProvider
+import com.london.domain.usecase.LoggedInUseCase
 import com.london.domain.usecase.recent.viewed.AddToRecentViewedUseCase
 import com.london.domain.usecase.recent.watched.AddTvShowToRecentWatchedUseCase
 import com.london.presentation.navigation.Screen
@@ -26,6 +30,9 @@ class TvShowDetailsViewModel @Inject constructor(
     private val getTvShowVideoProvider: GetTvShowVideoProvider,
     private val addTvShowToRecentWatchedUseCase:AddTvShowToRecentWatchedUseCase,
     private val addToRecentViewedUseCase:AddToRecentViewedUseCase,
+    private val addTvShowRatingByIdUseCase: AddTvShowRatingByIdUseCase,
+    private val getUserLoggedInUseCase: LoggedInUseCase,
+    private val getAccountTvShowStateUseCase: GetAccountTvShowStateUseCase,
     savedStateHandle: SavedStateHandle,
 ) : BaseViewModel<TvShowDetailsUiState, TvShowDetailsEffect>(TvShowDetailsUiState()),
     TvShowDetailsContract {
@@ -116,9 +123,24 @@ class TvShowDetailsViewModel @Inject constructor(
 
     private fun initializeGetTvShowDetailsData() {
         tryToExecute(
-            block = { getTvShowDetails(tvShowId) },
+            block = {
+                val tvShowDetails = getTvShowDetails(tvShowId)
+
+                val firstSeason = tvShowDetails.tvShowSeasons.firstOrNull()
+                val seasonNumber = firstSeason?.seasonNumber ?: 1
+
+                val episodes = getEpisodesByTvShowSeason(tvShowId, seasonNumber).episodes
+                val rating = if (getUserLoggedInUseCase.invoke()) {
+                    getAccountTvShowStateUseCase.invoke(
+                        tvShowId = tvShowId,
+                    )
+                } else 0
+
+                Triple(tvShowDetails, rating, episodes)
+            },
             onStart = { updateState { copy(isLoading = true) } },
-            onSuccess = { tvShowDetails ->
+            onSuccess = { (tvShowDetails, rating, episodes) ->
+                Log.d("test", "initializeGetTvShowDetailsData: $rating")
                 updateState {
                     copy(
                         adult = tvShowDetails.adult,
@@ -152,7 +174,9 @@ class TvShowDetailsViewModel @Inject constructor(
                         tagline = tvShowDetails.tagline,
                         type = tvShowDetails.type,
                         voteAverage = tvShowDetails.voteAverage,
-                        voteCount = tvShowDetails.voteCount
+                        voteCount = tvShowDetails.voteCount,
+                        tvShowEpisodes = episodes,
+                        isRated = rating != 0 && state.value.isGuestUser.not(),
                     )
                 }
                 addMovieToRecentViewed(
@@ -160,7 +184,8 @@ class TvShowDetailsViewModel @Inject constructor(
                         id = tvShowDetails.id,
                         imageUrl = tvShowDetails.posterUrl.toString(),
                         type = MediaType.TvShow,
-                        viewDate = System.currentTimeMillis())
+                        viewDate = System.currentTimeMillis()
+                    )
                 )
                 addToRecentWatched(
                     TvShow(
@@ -169,18 +194,12 @@ class TvShowDetailsViewModel @Inject constructor(
                         posterPicture = tvShowDetails.posterUrl.toString(),
                         releaseYear = 2025,
                         rating = 1,
-                        genres = tvShowDetails.tvShowGenres.map{
-                            it.id
-                        },
+                        genres = tvShowDetails.tvShowGenres.map { it.id },
                     )
                 )
             },
             onError = { errorState ->
-                updateState {
-                    copy(
-                        error = errorState
-                    )
-                }
+                updateState { copy(error = errorState) }
             },
             onCompleted = { updateState { copy(isLoading = false) } },
             checkSuccess = { tvShowId != 0 }
@@ -216,6 +235,56 @@ class TvShowDetailsViewModel @Inject constructor(
     override fun OnGenreClicked(genreId: Int) {
         emitEffect(TvShowDetailsEffect.NavigateTotvShowsByCategoryId(genreId))
     }
+
+    override fun onRateBottomSheetClick() {
+        tryToExecute(
+            block = { getUserLoggedInUseCase.invoke() },
+            onSuccess = { isLoggedIn ->
+                if (isLoggedIn)
+                    updateState { copy(isRateBottomSheetVisible = isRateBottomSheetVisible.not()) }
+                else
+                    updateState {
+                        copy(
+                            isGuestUserBottomSheetVisible = isGuestUserBottomSheetVisible.not(),
+                            isGuestUser = true
+                        )
+
+                    }
+            },
+            onError = { errorState ->
+                updateState { copy(error = errorState) }
+            }
+        )
+    }
+
+    override fun onSelectRatingClick(rating: Int) {
+        tryToExecute(
+            block = {
+                addTvShowRatingByIdUseCase.invoke(tvShowId, rating)
+            },
+            onSuccess = {
+                updateState {
+                    copy(
+                        selectedRating = rating,
+                        isRateBottomSheetVisible = false,
+                        isSuccessfullyRated = true,
+                        isRated = true
+                    )
+                }
+            },
+            onError = { errorState ->
+                updateState {
+                    copy(
+                        error = errorState,
+                        isSuccessfullyRated = false
+                    )
+                }
+            },
+            onCompleted = { updateState { copy(isLoading = false) } },
+        )
+    }
+
+    override fun onLoginClick() = emitEffect(TvShowDetailsEffect.OnLoginNavigation)
 
     override fun onBackClicked() {
         emitEffect(TvShowDetailsEffect.NavigateBack)

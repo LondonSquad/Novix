@@ -14,8 +14,8 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.platform.LocalView
 import androidx.core.graphics.toColorInt
-import androidx.core.view.WindowInsetsControllerCompat
 import androidx.core.view.WindowCompat
+import androidx.core.view.WindowInsetsControllerCompat
 import com.london.app.navigation.NovixApp
 import com.london.designsystem.theme.NovixTheme
 import com.london.domain.AppPreferencesService

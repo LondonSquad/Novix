@@ -53,9 +53,7 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.london.designsystem.R
-import com.london.presentation.shared.ActorItem
 import com.london.designsystem.component.GuestUserLoginBottomSheet
-import com.london.presentation.shared.HomeCard
 import com.london.designsystem.component.Icon
 import com.london.designsystem.component.RatingBottomSheet
 import com.london.designsystem.component.Text
@@ -76,8 +74,8 @@ import com.london.presentation.shared.ConditionalText
 import com.london.presentation.shared.CustomBackDropImagePager
 import com.london.presentation.shared.FooterSection
 import com.london.presentation.shared.HomeCard
-import com.london.presentation.shared.buildscreen.BuildScreen
 import com.london.presentation.shared.SnackBarAnimation
+import com.london.presentation.shared.buildscreen.BuildScreen
 import com.london.presentation.utils.Listen
 import com.london.presentation.utils.convertGenreCodeToString
 import com.london.presentation.utils.getLocalizedTimeUnit

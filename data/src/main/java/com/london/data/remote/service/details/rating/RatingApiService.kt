@@ -16,4 +16,22 @@ interface RatingApiService {
         @Query("session_id") userSessionId: String?,
         @Body ratingRequest: RatingRemoteBody
     ): Response<RatingRemoteResponse>
+
+    @POST("3/tv/{series_id}/rating")
+    suspend fun addTvShowRating(
+        @Path("series_id") tvShowId: Int,
+        @Query("guest_session_id") guestSessionId: String?,
+        @Query("session_id") userSessionId: String?,
+        @Body ratingRequest: RatingRemoteBody
+    ): Response<RatingRemoteResponse>
+
+    @POST("/tv/{series_id}/season/{season_number}/episode/{episode_number}/rating")
+    suspend fun addTvEpisode(
+        @Path("series_id") tvShowId: Int,
+        @Path("season_number") seasonNumber: Int,
+        @Path("episode_number") episodeNumber: Int,
+        @Query("guest_session_id") guestSessionId: String?,
+        @Query("session_id") userSessionId: String?,
+        @Body ratingRequest: RatingRemoteBody
+    ): Response<RatingRemoteResponse>
 }

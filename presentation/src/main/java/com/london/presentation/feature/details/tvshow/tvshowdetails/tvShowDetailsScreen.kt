@@ -51,8 +51,10 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.london.designsystem.R
 import com.london.designsystem.component.CircularLoading
+import com.london.designsystem.component.GuestUserLoginBottomSheet
 import com.london.designsystem.component.Icon
 import com.london.designsystem.component.NovixChip
+import com.london.designsystem.component.RatingBottomSheet
 import com.london.designsystem.component.Text
 import com.london.designsystem.component.TopBar
 import com.london.designsystem.component.UnSuitableEye
@@ -68,6 +70,7 @@ import com.london.presentation.shared.CustomBackDropImagePager
 import com.london.presentation.shared.FooterSection
 import com.london.presentation.shared.ImageView
 import com.london.presentation.shared.RatingItem
+import com.london.presentation.shared.SnackBarAnimation
 import com.london.presentation.shared.buildscreen.BuildScreen
 import com.london.presentation.utils.Listen
 import com.london.presentation.utils.convertDate
@@ -84,7 +87,8 @@ fun TvShowsDetailsScreen(
     onNavigateToEpisodeDetails: (tvShowId: Int, episodeNumber: Int, seasonNumber: Int) -> Unit,
     onNavigateToReviews: (tvShowId: Int, mediaType: Int) -> Unit,
     onNavigateToCast: (Int) -> Unit,
-    onNavigateToGenre: (Int) -> Unit
+    onNavigateToGenre: (Int) -> Unit,
+    onNavigateToLogin: () -> Unit
 ) {
     val uiState by viewModel.state.collectAsStateWithLifecycle()
     val effect by viewModel.effect.collectAsState(null)
@@ -109,6 +113,8 @@ fun TvShowsDetailsScreen(
             is TvShowDetailsEffect.NavigateTotvShowsByCategoryId -> onNavigateToGenre(
                 currentEffect.categoryId
             )
+
+            is TvShowDetailsEffect.OnLoginNavigation -> onNavigateToLogin()
         }
     }
 
@@ -176,7 +182,6 @@ fun TvShowsDetailScreenContent(
             modifier = Modifier.fillMaxSize(),
             contentPadding = PaddingValues(bottom = footerHeight + 16.dp)
         ) {
-            // Backdrop images
             item {
                 val images = uiState.tvImages
                 CustomBackDropImagePager(
@@ -184,8 +189,6 @@ fun TvShowsDetailScreenContent(
                     isVisibleDots = (images?.size ?: 0) > 1,
                 )
             }
-
-            // Header details card
             item {
                 HeaderDetailsCard(
                     uiState = uiState,
@@ -236,8 +239,6 @@ fun TvShowsDetailScreenContent(
                     isExpanded = !isExpanded
                 }
             }
-
-            // Cast section
             item {
                 CastSection(
                     modifier = Modifier.padding(top = 16.dp),
@@ -245,8 +246,6 @@ fun TvShowsDetailScreenContent(
                     onNavigateToCast = tvShowDetailsContract::onCastClicked
                 )
             }
-
-            // Season section header
             item {
                 Column(
                     modifier = Modifier
@@ -302,16 +301,35 @@ fun TvShowsDetailScreenContent(
                 .onGloballyPositioned { coordinates ->
                     footerHeight = with(density) { coordinates.size.height.toDp() }
                 },
-            onRateClick = {
-                // TODO save favorite onclick handler
-            },
-            onVideoClick = {
-                uriHandler.openUrl(uiState.videoProvider)
-            }
+            onRateClick = tvShowDetailsContract::onRateBottomSheetClick,
+            isRateEnabled = uiState.isRated.not() && (uiState.voteAverage.isNotZeroRate()),
+            onVideoClick = { uriHandler.openUrl(uiState.videoProvider) }
+
+        )
+        if (uiState.isRateBottomSheetVisible) RatingBottomSheet(
+            onDismissClick = tvShowDetailsContract::onRateBottomSheetClick,
+            onSubmitClick = tvShowDetailsContract::onSelectRatingClick,
+        )
+        else if (uiState.isGuestUserBottomSheetVisible) GuestUserLoginBottomSheet(
+            onDismissClick = tvShowDetailsContract::onRateBottomSheetClick,
+            onLoginClick = tvShowDetailsContract::onLoginClick,
         )
     }
-}
 
+    uiState.isSuccessfullyRated?.let { isSuccessful ->
+        if (isSuccessful) {
+            SnackBarAnimation(
+                message = stringResource(R.string.rated_successfully),
+                icon = R.drawable.ic_success,
+            )
+        } else {
+            SnackBarAnimation(
+                message = stringResource(R.string.rated_fail),
+                icon = R.drawable.ic_failed
+            )
+        }
+    }
+}
 
 @Composable
 fun HeaderDetailsCard(

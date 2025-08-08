@@ -18,4 +18,26 @@ class RatingRepositoryImpl @Inject constructor(
         userSessionId = authPreferences.getSessionId(),
         guestSessionId = authPreferences.getGuestSessionId()
     ).isSuccess
+
+    override suspend fun addTvShowById(id: Int, rating: Int): Boolean =
+        movieRatingRemoteDataSource.addTvShowRating(
+            tvShowId = id,
+            rating = rating.toDouble(),
+            userSessionId = authPreferences.getSessionId(),
+            guestSessionId = authPreferences.getGuestSessionId()
+        ).isSuccess
+
+    override suspend fun addTvEpisode(
+        tvShowId: Int,
+        seasonNumber: Int,
+        episodeNumber: Int,
+        rating: Int
+    ): Boolean = movieRatingRemoteDataSource.addTvEpisode(
+        tvShowId = tvShowId,
+        seasonNumber = seasonNumber,
+        episodeNumber = episodeNumber,
+        guestSessionId = authPreferences.getSessionId(),
+        userSessionId = authPreferences.getSessionId(),
+        rating = rating.toDouble()
+    ).isSuccess
 }

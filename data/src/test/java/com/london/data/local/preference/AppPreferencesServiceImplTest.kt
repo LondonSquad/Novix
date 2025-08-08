@@ -83,7 +83,12 @@ class AppPreferencesServiceImplTest {
     @Test
     fun `appTheme returns specific theme when preference is set`() = runTest {
         // Given
-        every { sharedPreferences.getString(THEME_KEY, AppTheme.DARK.name) } returns AppTheme.DARK.name
+        every {
+            sharedPreferences.getString(
+                THEME_KEY,
+                AppTheme.DARK.name
+            )
+        } returns AppTheme.DARK.name
 
         // When
         service = AppPreferencesServiceImpl(sharedPreferences)

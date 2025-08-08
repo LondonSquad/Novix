@@ -22,4 +22,42 @@ class RatingRemoteDataSourceImpl @Inject constructor(
             userSessionId = userSessionId
         )
     }, mapper = { it })
+
+    override suspend fun addTvShowRating(
+        tvShowId: Int,
+        guestSessionId: String?,
+        userSessionId: String?,
+        rating: Double
+    ): Result<RatingRemoteResponse> = callApiWithRetry(
+        apiCall = {
+            ratingApiService.addTvShowRating(
+                tvShowId = tvShowId,
+                guestSessionId = guestSessionId,
+                userSessionId = userSessionId,
+                ratingRequest = RatingRemoteBody(rating)
+            )
+        },
+        mapper = { it },
+    )
+
+    override suspend fun addTvEpisode(
+        tvShowId: Int,
+        seasonNumber: Int,
+        episodeNumber: Int,
+        guestSessionId: String?,
+        userSessionId: String?,
+        rating: Double
+    ): Result<RatingRemoteResponse> = callApiWithRetry(
+        apiCall = {
+            ratingApiService.addTvEpisode(
+                tvShowId = tvShowId,
+                seasonNumber = seasonNumber,
+                episodeNumber = episodeNumber,
+                guestSessionId = guestSessionId,
+                userSessionId = userSessionId,
+                ratingRequest = RatingRemoteBody(rating)
+            )
+        },
+        mapper = { it },
+    )
 }

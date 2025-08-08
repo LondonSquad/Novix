@@ -27,7 +27,7 @@ class ViewListItemsViewModel @Inject constructor(
     private val listId = args?.listId ?: 0
 
     init {
-        
+
         getMovieListName(listId = listId)
         fetchMovieListDetails(listId = listId)
     }
