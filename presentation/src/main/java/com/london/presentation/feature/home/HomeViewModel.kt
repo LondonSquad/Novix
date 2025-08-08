@@ -5,10 +5,10 @@ import androidx.paging.PagingData
 import androidx.paging.cachedIn
 import com.london.domain.entity.UpComingMovie
 import com.london.domain.usecase.GetPopularMovies
-import com.london.domain.usecase.GetPopularTvShow
 import com.london.domain.usecase.GetUpComingMoviesByCategoryUseCase
-import com.london.domain.usecase.recent.watched.GetRecentWatchedMoviesUseCase
-import com.london.domain.usecase.recent.watched.GetRecentWatchedTvShowsUseCase
+import com.london.domain.usecase.details.tvshow.ManageTvShowDetailsUseCase
+import com.london.domain.usecase.recent.watched.movie.ManageRecentMovieWatchedUseCase
+import com.london.domain.usecase.recent.watched.tvshow.ManageRecentTvShowWatchedUseCase
 import com.london.domain.usecase.toprated.GetTopRatedMoviesUseCase
 import com.london.domain.usecase.toprated.GetTopRatedTvSeriesUseCase
 import com.london.presentation.shared.base.BaseViewModel
@@ -28,12 +28,12 @@ import javax.inject.Inject
 @HiltViewModel
 class HomeViewModel @Inject constructor(
     private val getPopularMovies: GetPopularMovies,
-    private val getPopularTvShows: GetPopularTvShow,
+    private val manageTvShowDetailsUseCase: ManageTvShowDetailsUseCase,
     private val getUpcomingMoviesByCategoryUseCase: GetUpComingMoviesByCategoryUseCase,
     private val getTopRatedMovies: GetTopRatedMoviesUseCase,
     private val getTopRatedTvShows: GetTopRatedTvSeriesUseCase,
-    private val getRecentWatchedMovies: GetRecentWatchedMoviesUseCase,
-    private val getRecentWatchedTvShows: GetRecentWatchedTvShowsUseCase,
+    private val manageRecentMovieWatchedUseCase: ManageRecentMovieWatchedUseCase,
+    private val manageRecentTvShowWatchedUseCase: ManageRecentTvShowWatchedUseCase
 ) : BaseViewModel<HomeScreenUiState, HomeScreenEffect>(HomeScreenUiState()), HomeScreenContract {
 
     private val _upcomingMoviesFlow =
@@ -77,8 +77,8 @@ class HomeViewModel @Inject constructor(
     private fun fetchRecentWatchedMedia() {
         tryToExecute(
             block = {
-                val recentWatchedMovies = getRecentWatchedMovies.getMostRecent()
-                val recentWatchedShows = getRecentWatchedTvShows.getMostRecent()
+                val recentWatchedMovies = manageRecentMovieWatchedUseCase.getMostRecent()
+                val recentWatchedShows = manageRecentTvShowWatchedUseCase.getMostRecent()
 
                 Pair(recentWatchedMovies, recentWatchedShows)
             },
@@ -104,7 +104,7 @@ class HomeViewModel @Inject constructor(
         tryToExecute(
             block = {
                 val movies = getPopularMovies.invoke()
-                val shows = getPopularTvShows.invoke()
+                val shows = manageTvShowDetailsUseCase.getPopularTvShows()
                 Pair(movies, shows)
             },
             onStart = { updateState { copy(isTopRatedLoading = true) } },

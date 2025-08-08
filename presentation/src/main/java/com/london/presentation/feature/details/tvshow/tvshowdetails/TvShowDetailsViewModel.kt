@@ -7,10 +7,9 @@ import com.london.domain.entity.recent.RecentViewed
 import com.london.domain.usecase.GetCastById
 import com.london.domain.usecase.GetEpisodesByTvShowSeason
 import com.london.domain.usecase.GetImagesById
-import com.london.domain.usecase.GetTvShowDetails
-import com.london.domain.usecase.GetTvShowVideoProvider
-import com.london.domain.usecase.recent.viewed.AddToRecentViewedUseCase
-import com.london.domain.usecase.recent.watched.AddTvShowToRecentWatchedUseCase
+import com.london.domain.usecase.details.tvshow.ManageTvShowDetailsUseCase
+import com.london.domain.usecase.recent.viewed.ManageRecentViewedUseCase
+import com.london.domain.usecase.recent.watched.tvshow.ManageRecentTvShowWatchedUseCase
 import com.london.presentation.navigation.Screen
 import com.london.presentation.navigation.getArgs
 import com.london.presentation.shared.base.BaseViewModel
@@ -19,13 +18,12 @@ import javax.inject.Inject
 
 @HiltViewModel
 class TvShowDetailsViewModel @Inject constructor(
-    private val getTvShowDetails: GetTvShowDetails,
     private val getCastById: GetCastById,
     private val getTvShowImages: GetImagesById,
     private val getEpisodesByTvShowSeason: GetEpisodesByTvShowSeason,
-    private val getTvShowVideoProvider: GetTvShowVideoProvider,
-    private val addTvShowToRecentWatchedUseCase:AddTvShowToRecentWatchedUseCase,
-    private val addToRecentViewedUseCase:AddToRecentViewedUseCase,
+    private val manageTvShowDetailsUseCase: ManageTvShowDetailsUseCase,
+    private val manageRecentTvShowWatchedUseCase: ManageRecentTvShowWatchedUseCase,
+    private val manageRecentViewedUseCase:ManageRecentViewedUseCase,
     savedStateHandle: SavedStateHandle,
 ) : BaseViewModel<TvShowDetailsUiState, TvShowDetailsEffect>(TvShowDetailsUiState()),
     TvShowDetailsContract {
@@ -47,7 +45,7 @@ class TvShowDetailsViewModel @Inject constructor(
         tryToExecute(
             block = {
                 val episodesBySeason = getEpisodesByTvShowSeason(tvShowId, seasonNumber)
-                val videoProvider = getTvShowVideoProvider.invoke(tvShowId)
+                val videoProvider = manageTvShowDetailsUseCase.getTvShowVideoProvider(tvShowId)
                 Triple(episodesBySeason.episodes, episodesBySeason, videoProvider)
             },
             onSuccess = { (episodes, episodeCount, videoProviders) ->
@@ -116,7 +114,7 @@ class TvShowDetailsViewModel @Inject constructor(
 
     private fun initializeGetTvShowDetailsData() {
         tryToExecute(
-            block = { getTvShowDetails(tvShowId) },
+            block = { manageTvShowDetailsUseCase.getTvShowDetails(tvShowId) },
             onStart = { updateState { copy(isLoading = true) } },
             onSuccess = { tvShowDetails ->
                 updateState {
@@ -220,10 +218,12 @@ class TvShowDetailsViewModel @Inject constructor(
     override fun onBackClicked() {
         emitEffect(TvShowDetailsEffect.NavigateBack)
     }
+
     private suspend fun addToRecentWatched(tvShow: TvShow){
-        addTvShowToRecentWatchedUseCase.invoke(tvShow)
+        manageRecentTvShowWatchedUseCase.addTvShowToRecentWatched(tvShow)
     }
+
     private suspend fun addMovieToRecentViewed(tvShow: RecentViewed){
-        addToRecentViewedUseCase.invoke(tvShow)
+        manageRecentViewedUseCase.addToRecentViewed(tvShow)
     }
 }
