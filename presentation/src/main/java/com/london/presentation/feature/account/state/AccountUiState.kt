@@ -7,7 +7,8 @@ import com.london.presentation.shared.base.ErrorState
 data class AccountUiState(
     val isLoading: Boolean = false,
     val error: ErrorState? = null,
-    val username: String = "",
+    val userName: String = "",
+    val userAvatar: String? = null,
     val currentAppearance: String = "",
     val currentLanguage: String = "",
     val currentContentRestriction: ContentRestrictionLevel = ContentRestrictionLevel.MODERATE,
