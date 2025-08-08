@@ -18,9 +18,12 @@ import com.london.designsystem.theme.NovixTheme
 import com.london.presentation.R
 
 @Composable
-fun EmptyGenreLayout() {
+fun EmptyGenreLayout(
+    modifier: Modifier = Modifier,
+    message: String = stringResource(R.string.there_is_no_items_for_this_genre),
+) {
     Column(
-        modifier = Modifier
+        modifier = modifier
             .fillMaxSize()
             .padding(vertical = 12.dp),
         verticalArrangement = Arrangement.Center,
@@ -34,7 +37,7 @@ fun EmptyGenreLayout() {
         )
 
         Text(
-            text = stringResource(R.string.there_is_no_items_for_this_genre),
+            text = message,
             style = NovixTheme.typography.body.small,
             color = NovixTheme.colors.body
         )
