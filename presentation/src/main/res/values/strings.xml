@@ -150,4 +150,5 @@
     <string name="btn_delete">Delete</string>
     <string name="list_deletion_success">Deleted list successfully</string>
     <string name="list_deletion_failed">List deletion failed</string>
+    <string name="close">close</string>
 </resources>
