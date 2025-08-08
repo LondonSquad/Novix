@@ -3,19 +3,19 @@ package com.london.data.remote.source.myrating
 import com.london.data.remote.model.ApiResponse
 import com.london.data.remote.model.details.rating.RatingRemoteBody
 import com.london.data.remote.model.details.rating.RatingRemoteResponse
-import com.london.data.remote.model.myrating.RatedMediaResponse
-import com.london.data.remote.service.myrating.MyRatingApiService
+import com.london.data.remote.model.myrating.RatingMediaResponse
+import com.london.data.remote.service.myrating.RatingApiService
 import com.london.data.remote.source.base.BaseRemoteDatasource
 import javax.inject.Inject
 
-class MyRatingRemoteDataSourceImpl @Inject constructor(
-    private val myRatingApiResponse: MyRatingApiService
-) : MyRatingRemoteDataSource, BaseRemoteDatasource {
+class RatingRemoteDataSourceImpl @Inject constructor(
+    private val myRatingApiResponse: RatingApiService
+) : RatingRemoteDataSource, BaseRemoteDatasource {
 
     override suspend fun getAllRatedMovies(
         accountId: Int,
         sessionId: String,
-    ): Result<ApiResponse<RatedMediaResponse>> {
+    ): Result<ApiResponse<RatingMediaResponse>> {
         return callApiWithRetry(
             apiCall = {
                 myRatingApiResponse.getRatedMovies(
@@ -30,7 +30,7 @@ class MyRatingRemoteDataSourceImpl @Inject constructor(
     override suspend fun getAllRatedTvShows(
         accountId: Int,
         sessionId: String
-    ): Result<ApiResponse<RatedMediaResponse>> {
+    ): Result<ApiResponse<RatingMediaResponse>> {
         return callApiWithRetry(
             apiCall = {
                 myRatingApiResponse.getRatedTvShow(
