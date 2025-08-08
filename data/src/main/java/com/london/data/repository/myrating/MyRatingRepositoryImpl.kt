@@ -28,7 +28,7 @@ class MyRatingRepositoryImpl @Inject constructor(
                 sessionId = sessionId.orEmpty(),
             ).getOrThrow().items.map { it.toEntity(isMovie = false) }
             
-            (movies + tvShows).shuffled()
+            movies + tvShows
         }
     )
 }
