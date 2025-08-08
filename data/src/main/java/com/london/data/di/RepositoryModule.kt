@@ -209,15 +209,7 @@ object RepositoryModule {
         authPreferences = authPreferences
     )
 
-    @Provides
-    @Singleton
-    fun provideMyRatingRepository(
-        ratingRemoteDataSource: RatingRemoteDataSource,
-        authPreferences: AuthPreferences
-    ): com.london.domain.repository.myrating.RatingRepository = com.london.data.repository.myrating.MyRatingRepositoryImpl(
-        ratingRemoteDataSource = ratingRemoteDataSource,
-        authPreferences = authPreferences
-    )
+
 
     @Provides
     @Singleton

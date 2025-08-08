@@ -1,7 +1,7 @@
 package com.london.domain.usecase
 
 import com.london.domain.entity.RatedMedia
-import com.london.domain.repository.myrating.RatingRepository
+import com.london.domain.repository.RatingRepository
 import javax.inject.Inject
 
 class GetRatingUseCase @Inject constructor(

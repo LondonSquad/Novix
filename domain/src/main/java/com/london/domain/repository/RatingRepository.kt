@@ -1,5 +1,7 @@
 package com.london.domain.repository
 
+import com.london.domain.entity.RatedMedia
+
 interface RatingRepository {
     suspend fun addMovieRatingById(
         id: Int,
@@ -17,4 +19,6 @@ interface RatingRepository {
         episodeNumber: Int,
         rating: Int
     ): Boolean
+
+    suspend fun getAllRatedMedia(): List<RatedMedia>
 }
