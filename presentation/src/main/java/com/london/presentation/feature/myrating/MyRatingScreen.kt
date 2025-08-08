@@ -25,6 +25,7 @@ import com.london.designsystem.component.NovixChip
 import com.london.designsystem.component.TopBar
 import com.london.designsystem.theme.NovixTheme
 import com.london.designsystem.theme.ThemePreviews
+import com.london.domain.entity.myrating.MediaItem
 import com.london.domain.entity.myrating.RatedMovie
 import com.london.domain.entity.myrating.RatedTvShow
 import com.london.presentation.R
@@ -78,7 +79,6 @@ private fun MyRatingContent(
     state: MyRatingUiState = MyRatingUiState(),
     contract: MyRatingContract = defaultMyRatingContract()
 ) {
-
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -101,64 +101,55 @@ private fun MyRatingContent(
 
         when (state.selectedRatingCategory) {
             RatingCategory.All -> {
-                AllRatedContentSection(
-                    movies = state.allRated.movies,
-                    tvShows = state.allRated.tvShows,
+                val allItems = state.allRated.movies.map { it.toMediaItem() } + 
+                              state.allRated.tvShows.map { it.toMediaItem() }
+                MediaGrid(
+                    items = allItems,
                     onMovieClick = contract::onMovieClick,
-                    onTvShowClick = contract::onTvShowClick,
-                    onDeleteClick = contract::onDelete
+                    onTvShowClick = contract::onTvShowClick
                 )
             }
-
             RatingCategory.Movies -> {
-                MoviesContent(
-                    movies = state.movies,
-                    onMovieClick = contract::onMovieClick,
-                    onDeleteClick = contract::onDelete
+                val movieItems = state.movies.map { it.toMediaItem() }
+                MediaGrid(
+                    items = movieItems,
+                    onMovieClick = contract::onMovieClick
                 )
             }
-
             RatingCategory.TvShows -> {
-                TvShowsContent(
-                    tvShows = state.tvShows,
-                    onTvShowClick = contract::onTvShowClick,
-                    onDeleteClick = contract::onDelete
+                val tvShowItems = state.tvShows.map { it.toMediaItem() }
+                MediaGrid(
+                    items = tvShowItems,
+                    onTvShowClick = contract::onTvShowClick
                 )
             }
-
             null -> {
-                AllRatedContentSection(
-                    movies = state.allRated.movies,
-                    tvShows = state.allRated.tvShows,
+                val allItems = state.allRated.movies.map { it.toMediaItem() } + 
+                              state.allRated.tvShows.map { it.toMediaItem() }
+                MediaGrid(
+                    items = allItems,
                     onMovieClick = contract::onMovieClick,
-                    onTvShowClick = contract::onTvShowClick,
-                    onDeleteClick = contract::onDelete
+                    onTvShowClick = contract::onTvShowClick
                 )
             }
         }
 
         if (state.isDeleteClicked) {
             if (state.errorState is ErrorState.RequestFailed) {
-                val message = state.errorState.message
-                SnackBarAnimation(message)
+                SnackBarAnimation(state.errorState.message)
             } else {
-                val message = "Delete rating successfully"
-                SnackBarAnimation(message, dsR.drawable.ic_success)
+                SnackBarAnimation("Delete rating successfully", dsR.drawable.ic_success)
             }
         }
     }
 }
 
 @Composable
-private fun AllRatedContentSection(
-    movies: List<RatedMovie>,
-    tvShows: List<RatedTvShow>,
-    onMovieClick: (Int) -> Unit,
-    onTvShowClick: (Int) -> Unit,
-    onDeleteClick: (Int) -> Unit
+private fun MediaGrid(
+    items: List<MediaItem>,
+    onMovieClick: ((Int) -> Unit)? = null,
+    onTvShowClick: ((Int) -> Unit)? = null
 ) {
-    val allItems = movies.map { it.toMediaItem() } + tvShows.map { it.toMediaItem() }
-
     LazyVerticalGrid(
         columns = GridCells.Fixed(gridColmuns()),
         contentPadding = androidx.compose.foundation.layout.PaddingValues(
@@ -171,80 +162,17 @@ private fun AllRatedContentSection(
             .fillMaxSize()
             .padding(horizontal = 16.dp)
     ) {
-        items(allItems) { item ->
+        items(items) { item ->
             HomeCard(
                 imageUrl = item.posterPath,
                 isSaved = false,
                 onSaveClick = { },
                 modifier = Modifier.clickable {
-                    if (item.isMovie) {
-                        onMovieClick(item.id)
-                    } else {
-                        onTvShowClick(item.id)
+                    when {
+                        item.isMovie && onMovieClick != null -> onMovieClick(item.id)
+                        !item.isMovie && onTvShowClick != null -> onTvShowClick(item.id)
                     }
                 }
-            )
-        }
-    }
-}
-
-@Composable
-private fun MoviesContent(
-    movies: List<RatedMovie>,
-    onMovieClick: (Int) -> Unit,
-    onDeleteClick: (Int) -> Unit
-) {
-    val movieItems = movies.map { it.toMediaItem() }
-
-    LazyVerticalGrid(
-        columns = GridCells.Fixed(gridColmuns()),
-        contentPadding = androidx.compose.foundation.layout.PaddingValues(
-            top = 12.dp,
-            bottom = 16.dp
-        ),
-        horizontalArrangement = Arrangement.spacedBy(12.dp),
-        verticalArrangement = Arrangement.spacedBy(12.dp),
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(horizontal = 16.dp)
-    ) {
-        items(movieItems) { item ->
-            HomeCard(
-                imageUrl = item.posterPath,
-                isSaved = false,
-                onSaveClick = { },
-                modifier = Modifier.clickable { onMovieClick(item.id) }
-            )
-        }
-    }
-}
-
-@Composable
-private fun TvShowsContent(
-    tvShows: List<RatedTvShow>,
-    onTvShowClick: (Int) -> Unit,
-    onDeleteClick: (Int) -> Unit
-) {
-    val tvShowItems = tvShows.map { it.toMediaItem() }
-
-    LazyVerticalGrid(
-        columns = GridCells.Fixed(gridColmuns()),
-        contentPadding = androidx.compose.foundation.layout.PaddingValues(
-            top = 12.dp,
-            bottom = 16.dp
-        ),
-        horizontalArrangement = Arrangement.spacedBy(12.dp),
-        verticalArrangement = Arrangement.spacedBy(12.dp),
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(horizontal = 16.dp)
-    ) {
-        items(tvShowItems) { item ->
-            HomeCard(
-                imageUrl = item.posterPath,
-                isSaved = false,
-                onSaveClick = { },
-                modifier = Modifier.clickable { onTvShowClick(item.id) }
             )
         }
     }
@@ -276,33 +204,9 @@ private fun RatingChipsRow(
     }
 }
 
-private fun RatedMovie.toMediaItem(): MediaItem = MediaItem(
-    id = id,
-    posterPath = posterPath,
-    title = title,
-    rating = rating,
-    isMovie = true
-)
-
-private fun RatedTvShow.toMediaItem(): MediaItem = MediaItem(
-    id = id,
-    posterPath = posterPath,
-    title = title,
-    rating = rating,
-    isMovie = false
-)
-
-private data class MediaItem(
-    val id: Int,
-    val posterPath: String,
-    val title: String,
-    val rating: Int,
-    val isMovie: Boolean
-)
-
 @ThemePreviews
 @Composable
-private fun MyRatingScreenPreview() = NovixTheme {
+private fun Preview() = NovixTheme {
     MyRatingScreen(
         onNavigateMovie = {},
         onNavigateTvShow = {},
