@@ -18658,5 +18658,33 @@
       "deletions": 2,
       "changed_files": 13
     }
+  },
+  {
+    "pr_number": 565,
+    "url": "https://github.com/LondonSquad/Novix/pull/565",
+    "title": "feat: implement saved list functionality",
+    "opened_at": "2025-08-08T00:18:12Z",
+    "head_ref": "feature/list-screen",
+    "base_ref": "develop",
+    "creator": {
+      "login": "marwanqashwa",
+      "id": 100484790,
+      "url": "https://github.com/marwanqashwa"
+    },
+    "approvals": [],
+    "first_approved_at": null,
+    "time_to_first_approval_minutes": null,
+    "required_approvals_met_at": null,
+    "time_to_required_approvals_minutes": null,
+    "closed_at": null,
+    "merged_at": null,
+    "merged_by": null,
+    "week": "2025-W32",
+    "status": "pending",
+    "diff_stats": {
+      "additions": 153,
+      "deletions": 74,
+      "changed_files": 11
+    }
   }
 ]
