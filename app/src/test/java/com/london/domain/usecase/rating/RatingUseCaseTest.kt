@@ -22,15 +22,15 @@ class RatingUseCaseTest {
 
     @Before
     fun setup() {
-        repository = mockk()
-        tvShowRepository = mockk()
-        ratingRepository = mockk()
-        movieRepository = mockk()
+        repository = mockk(relaxed = true)
+        tvShowRepository = mockk(relaxed = true)
+        ratingRepository = mockk(relaxed = true)
+        movieRepository = mockk(relaxed = true)
         ratingUseCase = RatingUseCase(
             repository = repository,
-            tvShowRepository = mockk(),
-            ratingRepository = mockk(),
-            movieRepository = mockk()
+            tvShowRepository = tvShowRepository,
+            ratingRepository = ratingRepository,
+            movieRepository = movieRepository
         )
     }
 
