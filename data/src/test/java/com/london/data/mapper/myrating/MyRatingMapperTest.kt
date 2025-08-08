@@ -114,16 +114,29 @@ class MyRatingMapperTest {
     }
 
     @Test
-    fun `toEntity with custom timestamp returns correct addedAt value`() {
+    fun `toEntity with high rating returns correct rating value`() {
         // Given
-        val movieResponse = createSampleMovieResponse()
-        val customTimestamp = 1234567890L
+        val movieResponse = createSampleMovieResponse(rating = 9.5)
 
         // When
-        val result = movieResponse.toEntity(isMovie = true, addedAt = customTimestamp)
+        val result = movieResponse.toEntity()
 
         // Then
-        assertEquals(customTimestamp, result.addedAt)
+        assertEquals(9, result.rating)
+        assertTrue(result.isMovie)
+    }
+
+    @Test
+    fun `toEntity with decimal rating truncates correctly`() {
+        // Given
+        val movieResponse = createSampleMovieResponse(rating = 6.9)
+
+        // When
+        val result = movieResponse.toEntity()
+
+        // Then
+        assertEquals(6, result.rating)
+        assertTrue(result.isMovie)
     }
 
     companion object {
