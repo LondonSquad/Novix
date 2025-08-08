@@ -1,14 +1,13 @@
 package com.london.presentation.feature.myrating
 
-import com.london.domain.usecase.rating.GetAllRatedUseCase
+import com.london.domain.usecase.rating.GetMyRating
 import com.london.presentation.shared.base.BaseViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 
-
 @HiltViewModel
 class MyRatingViewModel @Inject constructor(
-    private val getAllRatedUseCase: GetAllRatedUseCase
+    private val getMyRating: GetMyRating
 ) : BaseViewModel<MyRatingUiState, MyRatingEffect>(MyRatingUiState()),
     MyRatingContract {
 
@@ -23,15 +22,20 @@ class MyRatingViewModel @Inject constructor(
     private fun initializeItems() {
         tryToExecute(
             block = {
-                getAllRatedUseCase.invoke()
+                val allRatedMedia = getMyRating.getAllRated()
+                val ratedMovies = getMyRating.getRatedMovies()
+                val ratedTvShows = getMyRating.getRatedTvShows()
+                RatingData(allRatedMedia, ratedMovies, ratedTvShows)
             },
             onStart = {
                 updateState { copy(isLoading = true, errorState = null) }
             },
-            onSuccess = { allRated ->
+            onSuccess = { ratingData ->
                 updateState {
                     copy(
-                        allRated = allRated,
+                        allRatedMedia = ratingData.allRatedMedia,
+                        ratedMovies = ratingData.ratedMovies,
+                        ratedTvShows = ratingData.ratedTvShows,
                         isLoading = false,
                         errorState = null
                     )

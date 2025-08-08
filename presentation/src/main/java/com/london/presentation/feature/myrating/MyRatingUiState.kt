@@ -1,10 +1,12 @@
 package com.london.presentation.feature.myrating
 
-import com.london.domain.entity.myrating.AllRatedContent
+import com.london.domain.entity.myrating.RatedMedia
 import com.london.presentation.shared.base.ErrorState
 
 data class MyRatingUiState(
-    val allRated: AllRatedContent = AllRatedContent(emptyList()),
+    val allRatedMedia: List<RatedMedia> = emptyList(),
+    val ratedMovies: List<RatedMedia> = emptyList(),
+    val ratedTvShows: List<RatedMedia> = emptyList(),
     val errorState: ErrorState? = null,
     val isLoading: Boolean = false,
     val rate: Int = 0,
