@@ -13,6 +13,7 @@ import com.london.data.local.source.home.upcoming.UpComingLocalDataSource
 import com.london.data.local.source.recent.RecentDataSource
 import com.london.data.local.source.recent.watched.RecentWatchedDataSource
 import com.london.data.remote.service.home.TrendingApiService
+import com.london.data.remote.source.account.AccountRemoteDataSource
 import com.london.data.remote.source.authentication.AuthenticationRemoteDataSource
 import com.london.data.remote.source.details.actor.ActorDetailsRemoteDataSource
 import com.london.data.remote.source.details.movie.MovieDetailsRemoteDataSource
@@ -25,9 +26,11 @@ import com.london.data.remote.source.home.trending.TrendingRemoteDataSource
 import com.london.data.remote.source.home.trending.TrendingRemoteDataSourceImpl
 import com.london.data.remote.source.home.upcoming.UpComingRemoteDataSource
 import com.london.data.remote.source.list.CustomMovieListsRemoteDataSource
+import com.london.data.remote.source.myrating.MyRatingRemoteDataSource
 import com.london.data.remote.source.reviews.ReviewsRemoteDataSource
 import com.london.data.remote.source.search.SearchRemoteDataSource
 import com.london.data.remote.source.toprated.TopRatedRemoteDataSource
+import com.london.data.repository.account.AccountRepositoryImp
 import com.london.data.repository.authentication.AuthenticationRepositoryImpl
 import com.london.data.repository.discover.DiscoverRepositoryImpl
 import com.london.data.repository.home.popular.PopularRepositoryImpl
@@ -35,6 +38,7 @@ import com.london.data.repository.home.toprated.TopRatedRepositoryImpl
 import com.london.data.repository.home.trending.TrendingRepositoryImpl
 import com.london.data.repository.home.upcoming.UpComingRepositoryImpl
 import com.london.data.repository.list.CustomMovieListRepositoryImpl
+import com.london.data.repository.myrating.MyRatingRepositoryImpl
 import com.london.data.repository.rating.RatingRepositoryImpl
 import com.london.data.repository.recent.RecentSearchRepositoryImpl
 import com.london.data.repository.recent.RecentViewedRepositoryImpl
@@ -49,6 +53,7 @@ import com.london.data.utils.FirebaseCrashReporter
 import com.london.domain.AppPreferencesService
 import com.london.domain.entity.recent.RecentSearch
 import com.london.domain.entity.recent.RecentViewed
+import com.london.domain.repository.AccountRepository
 import com.london.domain.repository.ActorRepository
 import com.london.domain.repository.AuthRepository
 import com.london.domain.repository.CustomMovieListRepository
@@ -63,6 +68,7 @@ import com.london.domain.repository.TvShowRepository
 import com.london.domain.repository.TvShowVideoProviderRepository
 import com.london.domain.repository.UpComingRepository
 import com.london.domain.repository.discover.DiscoverRepository
+import com.london.domain.repository.myrating.MyRatingRepository
 import com.london.domain.repository.toprated.TopRatedRepository
 import dagger.Module
 import dagger.Provides
@@ -234,4 +240,23 @@ object RepositoryModule {
         preferencesService = preferencesService
     )
 
+    @Provides
+    @Singleton
+    fun provideAccountRepository(
+        authPreferences: AuthPreferences,
+        accountRemoteDataSource: AccountRemoteDataSource
+    ): AccountRepository = AccountRepositoryImp(
+        authPreferences = authPreferences,
+        accountRemoteDataSource = accountRemoteDataSource
+    )
+
+    @Provides
+    @Singleton
+    fun provideMyRatingRepository(
+        myRatingRemoteDataSource: MyRatingRemoteDataSource,
+        authPreferences: AuthPreferences,
+    ): MyRatingRepository = MyRatingRepositoryImpl(
+        myRatingRemoteDataSource = myRatingRemoteDataSource,
+        authPreferences = authPreferences
+    )
 }

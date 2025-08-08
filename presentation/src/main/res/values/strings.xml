@@ -142,4 +142,6 @@
     <string name="blurs_all_sensitive_content">Blurs all sensitive content.</string>
     <string name="blurs_explicit_scenes_only">Blurs explicit scenes only.</string>
     <string name="no_content_is_blurred">No content is blurred.</string>
+    <string name="movie_removed_successfully">movie removed successffly</string>
+    <string name="movie_not_found">movie not found</string>
 </resources>

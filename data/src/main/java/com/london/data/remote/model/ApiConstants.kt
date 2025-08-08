@@ -15,5 +15,4 @@ object ApiConstants {
     const val TRENDING_MOVIES_PATH = "3/trending/movie/day"
     const val TRENDING_TV_SHOWS_PATH = "3/trending/tv/day"
     const val TRENDING_ACTORS_PATH = "3/trending/person/day"
-
 }

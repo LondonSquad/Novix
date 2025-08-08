@@ -43,6 +43,7 @@ import com.london.presentation.feature.home.trending.actor.TrendingActorsScreen
 import com.london.presentation.feature.home.trending.movie.TrendingMoviesScreen
 import com.london.presentation.feature.home.trending.tvshow.TrendingTvShowsScreen
 import com.london.presentation.feature.list.savedlist.ListScreen
+import com.london.presentation.feature.list.viewlistitems.ViewListItemsScreen
 import com.london.presentation.feature.login.LoginScreen
 import com.london.presentation.feature.onboarding.OnboardingRoute
 import com.london.presentation.feature.onboarding.WelcomeScreen
@@ -323,7 +324,10 @@ fun NavGraphBuilder.mainNavGraph(
         popExitTransition = { fadeOut(tween(500)) },
     ) {
         ListScreen(
-            onNavigateToDetails = {}
+            onNavigateToDetails = {
+                // id is dummy
+                navController.navigate(Screen.ViewListItems(8548075))
+            }
         )
     }
 
@@ -540,6 +544,20 @@ fun NavGraphBuilder.mainNavGraph(
                 navController.navigate(TvShowDetails(id))
             },
             screenTitle = stringResource(R.string.continue_watch)
+        )
+    }
+
+    composable<Screen.ViewListItems>(
+        exitTransition = { fadeOut(tween(500)) },
+        popEnterTransition = { fadeIn(tween(500)) },
+        enterTransition = { fadeIn(tween(500)) },
+        popExitTransition = { fadeOut(tween(500)) },
+    ) {
+        ViewListItemsScreen(
+            onNavigateBack = navController::navigateUp,
+            onNavigateToMovieDetails = {
+                navController.navigate(MovieDetails(it))
+            },
         )
     }
 }

@@ -29,7 +29,8 @@ fun LoggedInContent(
             .padding(horizontal = 16.dp)
     ) {
         UserProfileSection(
-            username = uiState.username,
+            username = uiState.userName,
+            avatarPath = uiState.userAvatar,
             showUserMenu = uiState.showUserMenu,
             onMenuClick = accountContract::onUserMenuClick,
             onLogoutClick = accountContract::onLogoutClick,
