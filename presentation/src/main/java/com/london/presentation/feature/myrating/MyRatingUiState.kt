@@ -1,15 +1,13 @@
 package com.london.presentation.feature.myrating
 
-import androidx.paging.PagingData
 import com.london.domain.entity.myrating.RatedMovie
 import com.london.domain.entity.myrating.RatedTvShow
 import com.london.presentation.shared.base.ErrorState
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.flow
 
 data class MyRatingUiState(
-    val movieFlow: Flow<PagingData<RatedMovie>> = flow {},
-    val tvShowFlow: Flow<PagingData<RatedTvShow>> = flow {},
+    val movies: List<RatedMovie> = emptyList(),
+    val tvShows: List<RatedTvShow> = emptyList(),
+    val allRated: Pair<List<RatedTvShow>,List<RatedMovie>> = Pair(emptyList(), emptyList()),
     val errorState: ErrorState? = null,
     val isLoading: Boolean = false,
     val rate: Int = 0,

@@ -26,13 +26,20 @@ class MyRatingViewModel @Inject constructor(
                 val movies = getRatedMovieUseCase.invoke()
                 val tvShows = getRatedTvShowUseCase.invoke()
                 val allRated = getAllRatedUseCase.invoke()
-                movies to tvShows to allRated
+                Triple(movies, tvShows, allRated)
             },
             onStart = {
                 updateState { copy(isLoading = true) }
             },
-            onSuccess = { movies, tvShows, allRated ->
-                updateState { copy(movieFlow = movies, tvShowFlow = tvShows, allRated = allRated) }
+            onSuccess = {(movies, tvShows, allRated) ->
+                updateState {
+                    copy(
+                        movies = movies,
+                        tvShows = tvShows,
+                        allRated = allRated,
+                        isLoading = false
+                    )
+                }
             },
             onError = {
 
