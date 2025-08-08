@@ -25,7 +25,7 @@ import com.london.designsystem.component.NovixChip
 import com.london.designsystem.component.TopBar
 import com.london.designsystem.theme.NovixTheme
 import com.london.designsystem.theme.ThemePreviews
-import com.london.domain.entity.myrating.RatedMedia
+import com.london.domain.entity.RatedMedia
 import com.london.presentation.R
 import com.london.presentation.shared.EmptyGenreLayout
 import com.london.presentation.shared.HomeCard

@@ -4,7 +4,7 @@ import com.london.data.remote.model.myrating.RatedMovieResponse
 import com.london.data.remote.model.myrating.RatedTvShowResponse
 import com.london.data.utils.asImageUrlOrEmpty
 import com.london.data.utils.orZero
-import com.london.domain.entity.myrating.RatedMedia
+import com.london.domain.entity.RatedMedia
 
 fun RatedMovieResponse.toEntity(isMovie: Boolean = true): RatedMedia {
     return RatedMedia(

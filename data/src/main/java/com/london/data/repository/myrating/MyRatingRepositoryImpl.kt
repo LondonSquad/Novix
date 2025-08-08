@@ -4,7 +4,7 @@ import com.london.data.local.preference.AuthPreferences
 import com.london.data.mapper.myrating.toEntity
 import com.london.data.remote.source.myrating.MyRatingRemoteDataSource
 import com.london.data.utils.fetchAndSync
-import com.london.domain.entity.myrating.RatedMedia
+import com.london.domain.entity.RatedMedia
 import com.london.domain.repository.myrating.MyRatingRepository
 import javax.inject.Inject
 

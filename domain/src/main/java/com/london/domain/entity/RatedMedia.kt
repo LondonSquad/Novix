@@ -1,4 +1,4 @@
-package com.london.domain.entity.myrating
+package com.london.domain.entity
 
 data class RatedMedia(
     val id: Int,

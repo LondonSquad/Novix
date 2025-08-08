@@ -1,6 +1,6 @@
 package com.london.presentation.feature.myrating
 
-import com.london.domain.entity.myrating.RatedMedia
+import com.london.domain.entity.RatedMedia
 
 data class RatingData(
     val allRatedMedia: List<RatedMedia>,
