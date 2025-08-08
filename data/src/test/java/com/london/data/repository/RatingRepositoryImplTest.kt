@@ -8,13 +8,12 @@ import io.mockk.coEvery
 import io.mockk.mockk
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runTest
-import kotlinx.serialization.json.Json
 import org.junit.Assert.assertThrows
 import org.junit.Assert.assertTrue
 import org.junit.Before
 import org.junit.Test
-import kotlin.test.assertEquals
 import kotlin.test.assertFalse
+
 
 @ExperimentalCoroutinesApi
 class RatingRepositoryImplTest {
@@ -36,6 +35,7 @@ class RatingRepositoryImplTest {
     @Test
     fun `given user session when addMovieRatingById called then return true on success`() =
         runTest {
+            // Given
             val movieId = 1
             val rating = 9
             val sessionId = "user-session-id"
@@ -51,14 +51,17 @@ class RatingRepositoryImplTest {
                 )
             } returns Result.success(fakeRatingResponse())
 
+            // When
             val result = repository.addMovieRatingById(movieId, rating)
 
+            // Then
             assertTrue(result)
         }
 
     @Test
     fun `given guest session when addMovieRatingById called then return true on success`() =
         runTest {
+            // Given
             val movieId = 2
             val rating = 7.0
             val guestSessionId = "guest-session-id"
@@ -74,18 +77,22 @@ class RatingRepositoryImplTest {
                 )
             } returns Result.success(fakeRatingResponse())
 
+            // When
             val result = repository.addMovieRatingById(movieId, rating.toInt())
 
+            // Then
             assertTrue(result)
         }
 
     @Test
     fun `given no session when addMovieRatingById called then return false`() = runTest {
+        // Given
         val movieId = 1
         val rating = 5
 
         coEvery { authPreferences.getSessionId() } returns null
         coEvery { authPreferences.getGuestSessionId() } returns null
+
         coEvery {
             remoteDataSource.addMovieRating(
                 movieId = movieId,
@@ -95,14 +102,17 @@ class RatingRepositoryImplTest {
             )
         } returns Result.failure(RuntimeException("No session"))
 
+        // When
         val result = repository.addMovieRatingById(movieId, rating)
 
+        // Then
         assertFalse(result)
     }
 
     @Test
     fun `given failure from remote data source when getAccountMovieStatesById called then throw`() =
         runTest {
+            // Given
             val movieId = 123
             val sessionId = "user-session"
 
@@ -117,6 +127,7 @@ class RatingRepositoryImplTest {
                 )
             } returns Result.failure(RuntimeException("Network error"))
 
+            // When && Then
             assertThrows(RuntimeException::class.java) {
                 runTest {
                     repository.addMovieRatingById(id = movieId, rating = 3)
