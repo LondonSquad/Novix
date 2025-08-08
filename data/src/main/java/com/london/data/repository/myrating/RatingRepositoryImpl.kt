@@ -1,18 +1,19 @@
-package com.london.data.repository.rating
+package com.london.data.repository.myrating
 
 import com.london.data.local.preference.AuthPreferences
-import com.london.data.remote.source.myrating.MyRatingRemoteDataSource
+import com.london.data.remote.source.myrating.RatingRemoteDataSource
 import com.london.domain.repository.RatingRepository
 import javax.inject.Inject
 
 class RatingRepositoryImpl @Inject constructor(
-    private val myRatingRemoteDataSource: MyRatingRemoteDataSource,
+    private val ratingRemoteDataSource: RatingRemoteDataSource,
     private val authPreferences: AuthPreferences
 ) : RatingRepository {
+
     override suspend fun addMovieRatingById(
         id: Int,
         rating: Int,
-    ): Boolean = myRatingRemoteDataSource.addMovieRating(
+    ): Boolean = ratingRemoteDataSource.addMovieRating(
         movieId = id,
         rating = rating.toDouble(),
         userSessionId = authPreferences.getSessionId(),
@@ -20,7 +21,7 @@ class RatingRepositoryImpl @Inject constructor(
     ).isSuccess
 
     override suspend fun addTvShowById(id: Int, rating: Int): Boolean =
-        myRatingRemoteDataSource.addTvShowRating(
+        ratingRemoteDataSource.addTvShowRating(
             tvShowId = id,
             rating = rating.toDouble(),
             userSessionId = authPreferences.getSessionId(),
@@ -32,7 +33,7 @@ class RatingRepositoryImpl @Inject constructor(
         seasonNumber: Int,
         episodeNumber: Int,
         rating: Int
-    ): Boolean = myRatingRemoteDataSource.addTvEpisode(
+    ): Boolean = ratingRemoteDataSource.addTvEpisode(
         tvShowId = tvShowId,
         seasonNumber = seasonNumber,
         episodeNumber = episodeNumber,
@@ -40,4 +41,6 @@ class RatingRepositoryImpl @Inject constructor(
         guestSessionId = authPreferences.getGuestSessionId(),
         rating = rating.toDouble()
     ).isSuccess
+
+
 }
