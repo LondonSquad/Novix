@@ -215,6 +215,7 @@ class TvShowDetailsViewModel @Inject constructor(
     }
 
     override fun onEpisodeClicked(tvShowId: Int, episodeNumber: Int, seasonNumber: Int) {
+        updateState { copy(isSuccessfullyRated = null) }
         emitEffect(
             TvShowDetailsEffect.OnNavigateToEpisodeDetails(
                 tvShowId = tvShowId,
@@ -225,10 +226,12 @@ class TvShowDetailsViewModel @Inject constructor(
     }
 
     override fun onReviewsClicked(tvShowId: Int, mediaType: Int) {
+        updateState { copy(isSuccessfullyRated = null) }
         emitEffect(TvShowDetailsEffect.NavigateToReviews(tvShowId, mediaType))
     }
 
     override fun onCastClicked(tvShowId: Int) {
+        updateState { copy(isSuccessfullyRated = null) }
         emitEffect(TvShowDetailsEffect.NavigateToCast(tvShowId))
     }
 

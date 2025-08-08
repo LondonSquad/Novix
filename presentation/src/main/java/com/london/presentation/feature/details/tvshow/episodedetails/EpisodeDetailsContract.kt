@@ -5,4 +5,5 @@ interface EpisodeDetailsContract {
     fun onLoginClick()
     fun onRateBottomSheetClick()
     fun onSelectRatingClick(rating: Int)
+    fun onNavigateToCast(actorId: Int)
 }

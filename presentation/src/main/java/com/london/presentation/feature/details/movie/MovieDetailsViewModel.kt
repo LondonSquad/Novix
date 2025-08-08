@@ -47,18 +47,22 @@ class MovieDetailsViewModel @Inject constructor(
     }
 
     override fun onMovieClick(movieId: Int) {
+        updateState { copy(isSuccessfullyRated = null) }
         emitEffect(MovieDetailsEffect.MovieNavigation(movieId))
     }
 
     override fun onActorClick(actorId: Int) {
+        updateState { copy(isSuccessfullyRated = null) }
         emitEffect(MovieDetailsEffect.ActorNavigation(actorId))
     }
 
     override fun onReviewsClick(movieId: Int, mediaNumber: Int) {
+        updateState { copy(isSuccessfullyRated = null) }
         emitEffect(MovieDetailsEffect.ReviewsNavigation(movieId, mediaNumber))
     }
 
     override fun onGenreClick(genreId: Int) {
+        updateState { copy(isSuccessfullyRated = null) }
         emitEffect(MovieDetailsEffect.GenreNavigation(genreId))
     }
 

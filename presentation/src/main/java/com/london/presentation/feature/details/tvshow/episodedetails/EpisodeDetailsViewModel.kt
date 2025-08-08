@@ -125,6 +125,7 @@ class EpisodeDetailsViewModel @Inject constructor(
 
     override fun onSelectRatingClick(rating: Int) {
         tryToExecute(
+            onStart = { updateState { copy(isSuccessfullyRated = null,error = null) } },
             block = {
                 getAccountTvEpisodeUseCase.invoke(
                     tvShowId, seasonNumber,
@@ -151,6 +152,11 @@ class EpisodeDetailsViewModel @Inject constructor(
             },
             onCompleted = { updateState { copy(isLoading = false) } },
         )
+    }
+
+    override fun onNavigateToCast(actorId: Int) {
+        updateState { copy( isSuccessfullyRated = null,error = null) }
+        emitEffect(EpisodeDetailsEffect.NavigateToCast(actorId))
     }
 
 }
