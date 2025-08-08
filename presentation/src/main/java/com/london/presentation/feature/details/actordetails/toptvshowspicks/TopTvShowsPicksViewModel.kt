@@ -49,7 +49,7 @@ class TopTvShowsPicksViewModel @Inject constructor(
         getActorTvShowsPicksData()
     }
 
-    override fun onSaveMovie(movieId: Int) {
+    override fun onSaveTvShow(tvShowId: Int) {
         updateState { copy(isSaved = !this.isSaved) }
     }
 
