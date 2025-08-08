@@ -8,7 +8,6 @@ import com.london.data.remote.model.details.rating.AccountStatesResponse
 import com.london.data.remote.model.details.videoprovider.movie.model.MovieVideoRemote
 import com.london.data.remote.model.search.MovieRemote
 
-
 interface MovieDetailsRemoteDataSource {
     suspend fun getMovieDetails(movieId: Int): Result<MovieDetailsResponse>
     suspend fun getSimilarMovies(movieId: Int): Result<ApiResponse<MovieRemote>>
@@ -19,5 +18,4 @@ interface MovieDetailsRemoteDataSource {
         movieId: Int,
         userSessionId: String?
     ): Result<AccountStatesResponse>
-
 }

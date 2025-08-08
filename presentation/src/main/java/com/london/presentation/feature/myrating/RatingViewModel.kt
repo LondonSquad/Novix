@@ -24,7 +24,7 @@ class RatingViewModel @Inject constructor(
                 RatingData(allRatedMedia, ratedMovies, ratedTvShows)
             },
             onStart = {
-                updateState { copy(isLoading = true, errorState = null) }
+                updateState { copy(isLoading = true) }
             },
             onSuccess = { ratingData ->
                 updateState {
@@ -32,8 +32,6 @@ class RatingViewModel @Inject constructor(
                         allRatedMedia = ratingData.allRatedMedia,
                         ratedMovies = ratingData.ratedMovies,
                         ratedTvShows = ratingData.ratedTvShows,
-                        isLoading = false,
-                        errorState = null
                     )
                 }
             },
@@ -41,7 +39,6 @@ class RatingViewModel @Inject constructor(
                 updateState {
                     copy(
                         errorState = errorState,
-                        isLoading = false
                     )
                 }
             },

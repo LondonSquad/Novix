@@ -13,5 +13,4 @@ sealed interface TvShowDetailsEffect {
     data class NavigateTotvShowsByCategoryId(val categoryId: Int) : TvShowDetailsEffect
 
     data object OnLoginNavigation : TvShowDetailsEffect
-
 }

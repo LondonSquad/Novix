@@ -62,7 +62,7 @@ class TvShowRepositoryImpl @Inject constructor(
         episodeNumber: Int
     ): List<String> =
         tvShowDetailsRemoteDataSource.getEpisodeVideos(
-            seriesId = seriesId, seasonNumber = seasonNumber, episodeNumber = episodeNumber
+            tvShowId = seriesId, seasonNumber = seasonNumber, episodeNumber = episodeNumber
         ).getOrThrow().results?.map { it.key.asYoutubeUrlOrEmpty() }.orEmpty()
 
     override suspend fun getTvShowReviews(
@@ -84,7 +84,7 @@ class TvShowRepositoryImpl @Inject constructor(
     override suspend fun getAccountTvShowState(
         tvShowId: Int,
     ): MediaStates = tvShowDetailsRemoteDataSource.getAccountTvShowStates(
-        seriesId = tvShowId,
+        tvShowId = tvShowId,
         guestSessionId = authPreferences.getGuestSessionId(),
         userSessionId = authPreferences.getSessionId()
     ).getOrThrow().toEntity()
@@ -94,7 +94,7 @@ class TvShowRepositoryImpl @Inject constructor(
         seasonNumber: Int,
         episodeNumber: Int,
     ): MediaStates = tvShowDetailsRemoteDataSource.getAccountTvEpisodeState(
-        seriesId = tvShowId,
+        tvShowId = tvShowId,
         seasonNumber = seasonNumber,
         episodeNumber = episodeNumber,
         guestSessionId = authPreferences.getGuestSessionId(),

@@ -3,7 +3,6 @@ package com.london.data.remote.model.myrating
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
-
 @Serializable
 data class RatingMediaResponse(
     @SerialName("id")

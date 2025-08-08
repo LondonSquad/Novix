@@ -64,14 +64,14 @@ class TvShowDetailsRemoteDataSourceImpl @Inject constructor(
         )
 
     override suspend fun getEpisodeVideos(
-        seriesId: Int,
+        tvShowId: Int,
         seasonNumber: Int,
         episodeNumber: Int
     ): Result<EpisodeVideoResponse> =
         callApiWithRetry(
             apiCall = {
                 tvShowDetailsApiService.getEpisodeVideo(
-                    seriesId = seriesId,
+                    seriesId = tvShowId,
                     seasonNumber = seasonNumber,
                     episodeNumber = episodeNumber
                 )
@@ -80,13 +80,13 @@ class TvShowDetailsRemoteDataSourceImpl @Inject constructor(
         )
 
     override suspend fun getAccountTvShowStates(
-        seriesId: Int,
+        tvShowId: Int,
         guestSessionId: String?,
         userSessionId: String?,
     ): Result<AccountStatesResponse> = callApiWithRetry(
         apiCall = {
             tvShowDetailsApiService.getAccountTvShowState(
-                seriesId = seriesId,
+                seriesId = tvShowId,
                 guestSessionId = guestSessionId,
                 userSessionId = userSessionId
             )
@@ -95,7 +95,7 @@ class TvShowDetailsRemoteDataSourceImpl @Inject constructor(
     )
 
     override suspend fun getAccountTvEpisodeState(
-        seriesId: Int,
+        tvShowId: Int,
         seasonNumber: Int,
         episodeNumber: Int,
         guestSessionId: String?,
@@ -103,7 +103,7 @@ class TvShowDetailsRemoteDataSourceImpl @Inject constructor(
     ): Result<AccountStatesResponse> = callApiWithRetry(
         apiCall = {
             tvShowDetailsApiService.getAccountTvEpisode(
-                tvShowId = seriesId,
+                tvShowId = tvShowId,
                 seasonNumber = seasonNumber,
                 episodeNumber = episodeNumber,
                 guestSessionId = guestSessionId,

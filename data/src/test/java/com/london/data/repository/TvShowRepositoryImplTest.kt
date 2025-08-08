@@ -235,7 +235,7 @@ class TvShowRepositoryImplTest {
             // Given
             coEvery {
                 tvShowDetailsRemoteDataSource.getEpisodeVideos(
-                    seriesId = TV_SHOW_ID,
+                    tvShowId = TV_SHOW_ID,
                     seasonNumber = SEASON_NUMBER,
                     episodeNumber = EPISODE_NUMBER
                 )
@@ -262,7 +262,7 @@ class TvShowRepositoryImplTest {
 
         coEvery {
             tvShowDetailsRemoteDataSource.getEpisodeVideos(
-                seriesId = TV_SHOW_ID,
+                tvShowId = TV_SHOW_ID,
                 seasonNumber = SEASON_NUMBER,
                 episodeNumber = EPISODE_NUMBER
             )
@@ -285,7 +285,7 @@ class TvShowRepositoryImplTest {
 
         coEvery {
             tvShowDetailsRemoteDataSource.getEpisodeVideos(
-                seriesId = TV_SHOW_ID,
+                tvShowId = TV_SHOW_ID,
                 seasonNumber = SEASON_NUMBER,
                 episodeNumber = EPISODE_NUMBER
             )
@@ -305,7 +305,7 @@ class TvShowRepositoryImplTest {
 
         coEvery {
             tvShowDetailsRemoteDataSource.getEpisodeVideos(
-                seriesId = TV_SHOW_ID,
+                tvShowId = TV_SHOW_ID,
                 seasonNumber = SEASON_NUMBER,
                 episodeNumber = EPISODE_NUMBER
             )
@@ -415,7 +415,7 @@ class TvShowRepositoryImplTest {
         val seriesId = 456
         coEvery {
             tvShowDetailsRemoteDataSource.getAccountTvShowStates(
-                seriesId = seriesId,
+                tvShowId = seriesId,
                 guestSessionId = GUSETSESSION,
                 userSessionId = USERSESSION
             )
@@ -439,7 +439,7 @@ class TvShowRepositoryImplTest {
 
         coEvery {
             tvShowDetailsRemoteDataSource.getAccountTvEpisodeState(
-                seriesId = seriesId,
+                tvShowId = seriesId,
                 seasonNumber = seasonNumber,
                 episodeNumber = episodeNumber,
                 guestSessionId = GUSETSESSION,

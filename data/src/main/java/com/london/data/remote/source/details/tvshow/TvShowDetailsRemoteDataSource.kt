@@ -29,19 +29,19 @@ interface TvShowDetailsRemoteDataSource {
     ): Result<TvShowEpisodeResponse>
 
     suspend fun getEpisodeVideos(
-        seriesId: Int,
+        tvShowId: Int,
         seasonNumber: Int,
         episodeNumber: Int
     ): Result<EpisodeVideoResponse>
 
     suspend fun getAccountTvShowStates(
-        seriesId: Int,
+        tvShowId: Int,
         guestSessionId: String?,
         userSessionId: String?,
     ): Result<AccountStatesResponse>
 
     suspend fun getAccountTvEpisodeState(
-        seriesId: Int,
+        tvShowId: Int,
         seasonNumber: Int,
         episodeNumber: Int,
         guestSessionId: String?,
