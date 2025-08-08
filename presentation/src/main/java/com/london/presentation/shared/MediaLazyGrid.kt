@@ -5,11 +5,13 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.asPaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.statusBarsPadding
+import androidx.compose.foundation.layout.statusBars
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
@@ -31,7 +33,8 @@ fun <T> MediaLazyGrid(
     onBack: () -> Unit,
     getImageUrl: (T) -> String,
     modifier: Modifier = Modifier,
-    onSaveClick: (T) -> Unit = {},
+    onItemClick: (T) -> Unit = {},
+    onSavedClick: (T) -> Unit = {},
     isItemSaved: (T) -> Boolean = { false },
     isLoading: Boolean = false,
     emptyTitle: String = "",
@@ -45,8 +48,10 @@ fun <T> MediaLazyGrid(
         TopBar(
             modifier = Modifier
                 .fillMaxWidth()
-                .statusBarsPadding()
-                .padding(horizontal = 16.dp, vertical = 12.dp),
+                .padding(horizontal = 16.dp)
+                .padding(
+                    top = WindowInsets.statusBars.asPaddingValues().calculateTopPadding() + 12.dp
+                ),
             title = title,
             onBackClick = onBack
         )
@@ -84,8 +89,8 @@ fun <T> MediaLazyGrid(
                         HomeCard(
                             imageUrl = getImageUrl(item),
                             isSaved = isItemSaved(item),
-                            onSaveClick = { onSaveClick(item) },
-                            modifier = Modifier.clickable { onSaveClick(item)}
+                            onSaveClick = { onSavedClick(item) },
+                            modifier = Modifier.clickable { onItemClick(item) }
                         )
                     }
                 }
