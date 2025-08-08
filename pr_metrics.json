@@ -18614,17 +18614,25 @@
           "url": "https://github.com/yusufnasserdev"
         },
         "submitted_at": "2025-08-08T00:55:03Z"
+      },
+      {
+        "reviewer": {
+          "id": 102248144,
+          "login": "BassantM",
+          "url": "https://github.com/BassantM"
+        },
+        "submitted_at": "2025-08-08T02:33:17Z"
       }
     ],
     "first_approved_at": "2025-08-08T00:55:03Z",
     "time_to_first_approval_minutes": 108.66666666666667,
-    "required_approvals_met_at": null,
-    "time_to_required_approvals_minutes": null,
+    "required_approvals_met_at": "2025-08-08T02:33:17Z",
+    "time_to_required_approvals_minutes": 206.9,
     "closed_at": null,
     "merged_at": null,
     "merged_by": null,
     "week": "2025-W32",
-    "status": "pending",
+    "status": "approved",
     "diff_stats": {
       "additions": 22,
       "deletions": 11,
