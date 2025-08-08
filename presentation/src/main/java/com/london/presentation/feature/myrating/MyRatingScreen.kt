@@ -62,9 +62,7 @@ fun MyRatingScreen(
         isLoading = state.isLoading,
         isError = state.errorState != null,
         onBack = viewModel::onBackClicked,
-        onRetry = { viewModel.refreshData() },
-        emptyLayoutMessage = R.string.no_rating_items_in_list,
-        emptyLayoutImage = R.drawable.img_no_result
+        onRetry = { viewModel.refreshData() }
     ) {
         MyRatingContent(
             state = state,
@@ -98,68 +96,24 @@ private fun MyRatingContent(
             modifier = Modifier.padding(bottom = 12.dp)
         )
 
-        when (state.selectedRatingCategory) {
-            RatingCategory.All -> {
-                val allItems = state.allRatedMedia
-                if (allItems.isEmpty()) {
-                    EmptyGenreLayout(
-                        message = stringResource(R.string.there_is_no_items),
-                        modifier = Modifier.fillMaxSize()
-                    )
-                } else {
-                    AllMediaGrid(
-                        items = allItems,
-                        onMovieClick = contract::onMovieClick,
-                        onTvShowClick = contract::onTvShowClick
-                    )
-                }
-            }
-
-            RatingCategory.Movies -> {
-                val movieItems = state.ratedMovies
-                if (movieItems.isEmpty()) {
-                    EmptyGenreLayout(
-                        message = stringResource(R.string.there_is_no_items),
-                        modifier = Modifier.fillMaxSize()
-                    )
-                } else {
-                    MediaGrid(
-                        items = movieItems,
-                        onMovieClick = contract::onMovieClick
-                    )
-                }
-            }
-
-            RatingCategory.TvShows -> {
-                val tvShowItems = state.ratedTvShows
-                if (tvShowItems.isEmpty()) {
-                    EmptyGenreLayout(
-                        message = stringResource(R.string.there_is_no_items),
-                        modifier = Modifier.fillMaxSize()
-                    )
-                } else {
-                    MediaGrid(
-                        items = tvShowItems,
-                        onTvShowClick = contract::onTvShowClick
-                    )
-                }
-            }
-
-            null -> {
-                val allItems = state.allRatedMedia
-                if (allItems.isEmpty()) {
-                    EmptyGenreLayout(
-                        message = stringResource(R.string.there_is_no_items),
-                        modifier = Modifier.fillMaxSize()
-                    )
-                } else {
-                    AllMediaGrid(
-                        items = allItems,
-                        onMovieClick = contract::onMovieClick,
-                        onTvShowClick = contract::onTvShowClick
-                    )
-                }
-            }
+        val selectedCategory = state.selectedRatingCategory ?: RatingCategory.All
+        val items = when (selectedCategory) {
+            RatingCategory.All -> state.allRatedMedia
+            RatingCategory.Movies -> state.ratedMovies
+            RatingCategory.TvShows -> state.ratedTvShows
+        }
+        
+        if (items.isEmpty()) {
+            EmptyGenreLayout(
+                message = stringResource(R.string.there_is_no_items),
+                modifier = Modifier.fillMaxSize()
+            )
+        } else {
+            MediaGrid(
+                items = items,
+                onMovieClick = if (selectedCategory == RatingCategory.All || selectedCategory == RatingCategory.Movies) contract::onMovieClick else null,
+                onTvShowClick = if (selectedCategory == RatingCategory.All || selectedCategory == RatingCategory.TvShows) contract::onTvShowClick else null
+            )
         }
 
         if (state.isDeleteClicked) {
@@ -174,40 +128,6 @@ private fun MyRatingContent(
 
 @Composable
 private fun MediaGrid(
-    items: List<RatedMedia>,
-    onMovieClick: ((Int) -> Unit)? = null,
-    onTvShowClick: ((Int) -> Unit)? = null
-) {
-    LazyVerticalGrid(
-        columns = GridCells.Fixed(gridColmuns()),
-        contentPadding = androidx.compose.foundation.layout.PaddingValues(
-            top = 12.dp,
-            bottom = 16.dp
-        ),
-        horizontalArrangement = Arrangement.spacedBy(12.dp),
-        verticalArrangement = Arrangement.spacedBy(12.dp),
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(horizontal = 16.dp)
-    ) {
-        items(items) { item ->
-            HomeCard(
-                imageUrl = item.posterPath,
-                isSaved = false,
-                onSaveClick = { },
-                modifier = Modifier.clickable {
-                    when {
-                        item.isMovie && onMovieClick != null -> onMovieClick(item.id)
-                        !item.isMovie && onTvShowClick != null -> onTvShowClick(item.id)
-                    }
-                }
-            )
-        }
-    }
-}
-
-@Composable
-private fun AllMediaGrid(
     items: List<RatedMedia>,
     onMovieClick: ((Int) -> Unit)? = null,
     onTvShowClick: ((Int) -> Unit)? = null
