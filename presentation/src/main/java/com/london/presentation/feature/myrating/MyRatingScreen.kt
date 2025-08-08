@@ -25,9 +25,7 @@ import com.london.designsystem.component.NovixChip
 import com.london.designsystem.component.TopBar
 import com.london.designsystem.theme.NovixTheme
 import com.london.designsystem.theme.ThemePreviews
-import com.london.domain.entity.myrating.MediaItem
-import com.london.domain.entity.myrating.RatedMovie
-import com.london.domain.entity.myrating.RatedTvShow
+import com.london.domain.entity.myrating.RatedMedia
 import com.london.presentation.R
 import com.london.presentation.shared.HomeCard
 import com.london.presentation.shared.SnackBarAnimation
@@ -101,31 +99,32 @@ private fun MyRatingContent(
 
         when (state.selectedRatingCategory) {
             RatingCategory.All -> {
-                val allItems = state.allRated.movies.map { it.toMediaItem() } + 
-                              state.allRated.tvShows.map { it.toMediaItem() }
+                val allItems = state.allRated.items
                 MediaGrid(
                     items = allItems,
                     onMovieClick = contract::onMovieClick,
                     onTvShowClick = contract::onTvShowClick
                 )
             }
+
             RatingCategory.Movies -> {
-                val movieItems = state.movies.map { it.toMediaItem() }
+                val movieItems = state.allRated.items.filter { it.isMovie }
                 MediaGrid(
                     items = movieItems,
                     onMovieClick = contract::onMovieClick
                 )
             }
+
             RatingCategory.TvShows -> {
-                val tvShowItems = state.tvShows.map { it.toMediaItem() }
+                val tvShowItems = state.allRated.items.filter { !it.isMovie }
                 MediaGrid(
                     items = tvShowItems,
                     onTvShowClick = contract::onTvShowClick
                 )
             }
+
             null -> {
-                val allItems = state.allRated.movies.map { it.toMediaItem() } + 
-                              state.allRated.tvShows.map { it.toMediaItem() }
+                val allItems = state.allRated.items
                 MediaGrid(
                     items = allItems,
                     onMovieClick = contract::onMovieClick,
@@ -146,7 +145,7 @@ private fun MyRatingContent(
 
 @Composable
 private fun MediaGrid(
-    items: List<MediaItem>,
+    items: List<RatedMedia>,
     onMovieClick: ((Int) -> Unit)? = null,
     onTvShowClick: ((Int) -> Unit)? = null
 ) {
