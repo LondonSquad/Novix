@@ -18636,11 +18636,15 @@
     "time_to_first_approval_minutes": 108.66666666666667,
     "required_approvals_met_at": "2025-08-08T02:33:17Z",
     "time_to_required_approvals_minutes": 206.9,
-    "closed_at": null,
-    "merged_at": null,
-    "merged_by": null,
+    "closed_at": "2025-08-08T02:45:47Z",
+    "merged_at": "2025-08-08T02:45:47Z",
+    "merged_by": {
+      "login": "Abdulrahman1890",
+      "id": 76666355,
+      "url": "https://github.com/Abdulrahman1890"
+    },
     "week": "2025-W32",
-    "status": "approved",
+    "status": "merged",
     "diff_stats": {
       "additions": 22,
       "deletions": 11,
