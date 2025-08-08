@@ -11,7 +11,6 @@ import com.london.data.remote.service.account.AccountApiService
 import com.london.data.remote.service.authentication.AuthenticationApiService
 import com.london.data.remote.service.details.actor.ActorDetailsApiService
 import com.london.data.remote.service.details.movie.MovieDetailsApiService
-import com.london.data.remote.service.details.rating.RatingApiService
 import com.london.data.remote.service.details.tvshow.TvShowDetailsApiService
 import com.london.data.remote.service.discover.DiscoverApiService
 import com.london.data.remote.service.home.PopularApiService
@@ -168,10 +167,7 @@ object NetworkModule {
     @Singleton
     fun provideCrashReporter(): CrashReporter = FirebaseCrashReporter()
 
-    @Provides
-    @Singleton
-    fun provideRatingApiService(retrofit: Retrofit): RatingApiService =
-        retrofit.create(RatingApiService::class.java)
+
 
     @Provides
     @Singleton
