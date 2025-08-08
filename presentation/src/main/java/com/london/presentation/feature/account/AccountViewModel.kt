@@ -4,6 +4,7 @@ import androidx.lifecycle.viewModelScope
 import com.london.domain.AppPreferencesService
 import com.london.domain.contentrestriction.ContentRestrictionLevel
 import com.london.domain.theme.AppTheme
+import com.london.domain.usecase.GetAccountDetails
 import com.london.domain.usecase.LoggedInUseCase
 import com.london.domain.usecase.login.LogoutUseCase
 import com.london.presentation.feature.account.state.AccountUiState
@@ -19,12 +20,14 @@ import javax.inject.Inject
 class AccountViewModel @Inject constructor(
     private val appPreferencesService: AppPreferencesService,
     private val logoutUseCase: LogoutUseCase,
-    private val loggedInUseCase: LoggedInUseCase
+    private val loggedInUseCase: LoggedInUseCase,
+    private val accountDetailsUseCase: GetAccountDetails
 ) : BaseViewModel<AccountUiState, AccountEffect>(AccountUiState()),
     AccountContract {
 
     init {
         checkUserLoginStatus()
+        fetchAndSetUsername()
         observeContentRestrictionLevel()
         initializeAppTheme()
     }
@@ -58,6 +61,20 @@ class AccountViewModel @Inject constructor(
             },
             onCompleted = {
                 updateState { copy(isLoading = false) }
+            }
+        )
+    }
+
+    private fun fetchAndSetUsername() {
+        tryToExecute(
+            block = { accountDetailsUseCase.invoke() },
+            onSuccess = { accountInfo ->
+                updateState {
+                    copy(
+                        userName = accountInfo.userName,
+                        userAvatar = accountInfo.avatarPath
+                    )
+                }
             }
         )
     }
