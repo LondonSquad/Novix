@@ -19172,5 +19172,33 @@
       "deletions": 43,
       "changed_files": 22
     }
+  },
+  {
+    "pr_number": 577,
+    "url": "https://github.com/LondonSquad/Novix/pull/577",
+    "title": "Refactor/re structure domain",
+    "opened_at": "2025-08-08T17:10:05Z",
+    "head_ref": "refactor/re-structure-domain",
+    "base_ref": "develop",
+    "creator": {
+      "login": "ahmeddsamii",
+      "id": 154278495,
+      "url": "https://github.com/ahmeddsamii"
+    },
+    "approvals": [],
+    "first_approved_at": null,
+    "time_to_first_approval_minutes": null,
+    "required_approvals_met_at": null,
+    "time_to_required_approvals_minutes": null,
+    "closed_at": null,
+    "merged_at": null,
+    "merged_by": null,
+    "week": "2025-W32",
+    "status": "pending",
+    "diff_stats": {
+      "additions": 1236,
+      "deletions": 1774,
+      "changed_files": 63
+    }
   }
 ]
