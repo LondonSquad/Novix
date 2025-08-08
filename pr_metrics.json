@@ -18691,25 +18691,25 @@
     "approvals": [
       {
         "reviewer": {
-          "id": 106277855,
-          "login": "Mostafa-alsaygh",
-          "url": "https://github.com/Mostafa-alsaygh"
-        },
-        "submitted_at": "2025-08-08T01:05:57Z"
-      },
-      {
-        "reviewer": {
           "id": 43588217,
           "login": "yusufnasserdev",
           "url": "https://github.com/yusufnasserdev"
         },
         "submitted_at": "2025-08-08T01:06:40Z"
+      },
+      {
+        "reviewer": {
+          "id": 106277855,
+          "login": "Mostafa-alsaygh",
+          "url": "https://github.com/Mostafa-alsaygh"
+        },
+        "submitted_at": "2025-08-08T01:07:17Z"
       }
     ],
-    "first_approved_at": "2025-08-08T01:05:57Z",
-    "time_to_first_approval_minutes": 47.75,
-    "required_approvals_met_at": "2025-08-08T01:06:40Z",
-    "time_to_required_approvals_minutes": 48.46666666666667,
+    "first_approved_at": "2025-08-08T01:06:40Z",
+    "time_to_first_approval_minutes": 48.46666666666667,
+    "required_approvals_met_at": "2025-08-08T01:07:17Z",
+    "time_to_required_approvals_minutes": 49.083333333333336,
     "closed_at": null,
     "merged_at": null,
     "merged_by": null,
