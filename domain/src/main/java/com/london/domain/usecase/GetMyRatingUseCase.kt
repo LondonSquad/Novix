@@ -4,7 +4,7 @@ import com.london.domain.entity.RatedMedia
 import com.london.domain.repository.myrating.MyRatingRepository
 import javax.inject.Inject
 
-class GetMyRating @Inject constructor(
+class GetMyRatingUseCase @Inject constructor(
     private val repository: MyRatingRepository
 ) {
     suspend fun getAllRated(): List<RatedMedia> {

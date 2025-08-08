@@ -10,15 +10,15 @@ import org.junit.Assert.assertTrue
 import org.junit.Before
 import org.junit.Test
 
-class GetMyRatingTest {
+class GetMyRatingUseCaseTest {
 
-    private lateinit var useCase: GetMyRating
+    private lateinit var useCase: GetMyRatingUseCase
     private lateinit var repository: MyRatingRepository
 
     @Before
     fun setup() {
         repository = mockk()
-        useCase = GetMyRating(repository)
+        useCase = GetMyRatingUseCase(repository)
     }
 
     @Test
