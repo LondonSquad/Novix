@@ -27,7 +27,6 @@ class ViewListItemsViewModel @Inject constructor(
     private val listId = args?.listId ?: 0
 
     init {
-
         getMovieListName(listId = listId)
         fetchMovieListDetails(listId = listId)
     }
@@ -51,14 +50,14 @@ class ViewListItemsViewModel @Inject constructor(
     override fun onConfirmDelete() {
 
         tryToExecute(
-            onStart = {
-                updateState { copy(isDeleteBottomSheetVisible = false) }
-            },
             block = {
                 manageMovieListUseCase.deleteMovieList(listId.toUInt())
             },
+            onCompleted = {
+                updateState { copy(isDeleteBottomSheetVisible = false) }
+            },
             onError = {
-                updateState { copy(error = ErrorState.EntryNotFound()) }
+                updateState { copy(error = ErrorState.RequestFailed()) }
             },
             onSuccess = {
                 emitEffect(ViewListItemsEffect.NavigateBack)
@@ -89,6 +88,10 @@ class ViewListItemsViewModel @Inject constructor(
         )
     }
 
+    override fun onDeleteBottomSheetDismiss() {
+        updateState { copy(isDeleteBottomSheetVisible = false) }
+    }
+
     private fun fetchMovieListDetails(listId: Int) {
 
         tryToExecute(
@@ -107,7 +110,7 @@ class ViewListItemsViewModel @Inject constructor(
             },
             onSuccess = { moviesFlow ->
                 updateState {
-                    copy(listItems = moviesFlow, listTitle = "marwan")
+                    copy(listItems = moviesFlow)
                 }
             },
             onError = { errorState ->

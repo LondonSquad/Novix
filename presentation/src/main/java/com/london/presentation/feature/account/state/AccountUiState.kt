@@ -1,6 +1,7 @@
 package com.london.presentation.feature.account.state
 
 import com.london.domain.contentrestriction.ContentRestrictionLevel
+import com.london.domain.language.AppLanguage
 import com.london.domain.theme.AppTheme
 import com.london.presentation.shared.base.ErrorState
 
@@ -21,5 +22,7 @@ data class AccountUiState(
     val appTheme: AppTheme = AppTheme.DARK,
     val isLogoutBottomSheetVisible: Boolean = false,
     val isLogoutLoading: Boolean = false,
+    // Language Bottom Sheet
     val isLanguageBottomSheetVisible: Boolean = false,
+    val appLanguage: AppLanguage = AppLanguage.ARABIC
 )

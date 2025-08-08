@@ -143,6 +143,12 @@
     <string name="no_content_is_blurred">No content is blurred.</string>
     <string name="movie_removed_successfully">movie removed successffly</string>
     <string name="movie_not_found">movie not found</string>
-    <string name="list_added_successfly">list added successfuly</string>
+    <string name="list_added_successfully">list added successfuly</string>
     <string name="can_not_delete_list">can not delete list</string>
+    <string name="delete_list">Delete list</string>
+    <string name="cancel_list_deletion">Deleting the saved list will remove all items it contains. Are you sure you want to proceed?</string>
+    <string name="btn_delete">Delete</string>
+    <string name="list_deletion_success">Deleted list successfully</string>
+    <string name="list_deletion_failed">List deletion failed</string>
+    <string name="close">close</string>
 </resources>
