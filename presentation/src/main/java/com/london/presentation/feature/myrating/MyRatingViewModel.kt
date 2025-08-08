@@ -1,8 +1,10 @@
 package com.london.presentation.feature.myrating
 
+import com.london.domain.entity.myrating.AllRatedContent
 import com.london.domain.usecase.rating.GetAllRatedUseCase
 import com.london.domain.usecase.rating.GetRatedMovieUseCase
 import com.london.domain.usecase.rating.GetRatedTvShowUseCase
+import com.london.presentation.feature.myrating.RatingCategory
 import com.london.presentation.shared.base.BaseViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
@@ -33,7 +35,7 @@ class MyRatingViewModel @Inject constructor(
                 Triple(movies, tvShows, allRated)
             },
             onStart = {
-                updateState { copy(isLoading = true) }
+                updateState { copy(isLoading = true, errorState = null) }
             },
             onSuccess = { (movies, tvShows, allRated) ->
                 updateState {
@@ -41,14 +43,22 @@ class MyRatingViewModel @Inject constructor(
                         movies = movies,
                         tvShows = tvShows,
                         allRated = allRated,
+                        isLoading = false,
+                        errorState = null
+                    )
+                }
+            },
+            onError = { errorState ->
+                updateState {
+                    copy(
+                        errorState = errorState,
                         isLoading = false
                     )
                 }
             },
-            onError = {
-
+            onCompleted = { 
+                updateState { copy(isLoading = false) } 
             },
-            onCompleted = { updateState { copy(isLoading = false) } },
         )
     }
 
