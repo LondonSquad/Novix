@@ -163,6 +163,36 @@ class MyRatingRepositoryImplTest {
         assertTrue(!tvShow.isMovie)
     }
 
+    @Test
+    fun `getAllRatedMedia returns items in correct order`() = runTest {
+        // Given
+        val accountId = 123
+        val sessionId = "session123"
+
+        val movieResponse1 = createSampleMovieResponse(id = 1, rating = 8.5)
+        val movieResponse2 = createSampleMovieResponse(id = 2, rating = 9.0)
+        val tvShowResponse = createSampleTvShowResponse(id = 3, rating = 7.5)
+
+        coEvery { authPreferences.getAccountId() } returns accountId
+        coEvery { authPreferences.getSessionId() } returns sessionId
+        coEvery {
+            remoteDataSource.getAllRatedMovies(accountId, sessionId)
+        } returns Result.success(createMovieApiResponse(listOf(movieResponse1, movieResponse2)))
+        coEvery {
+            remoteDataSource.getAllRatedTvShows(accountId, sessionId)
+        } returns Result.success(createTvShowApiResponse(listOf(tvShowResponse)))
+
+        // When
+        val result = repository.getAllRatedMedia()
+
+        // Then
+        assertEquals(3, result.size)
+        // Items should be in the order they were added (movies first, then tv shows)
+        assertEquals(1, result[0].id) // First movie
+        assertEquals(2, result[1].id) // Second movie
+        assertEquals(3, result[2].id) // TV show
+    }
+
     companion object {
         private fun createSampleMovieResponse(
             id: Int = 1,
