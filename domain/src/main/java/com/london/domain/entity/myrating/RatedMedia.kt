@@ -5,5 +5,6 @@ data class RatedMedia(
     val title: String,
     val posterPath: String,
     val rating: Int,
-    val isMovie: Boolean
+    val isMovie: Boolean,
+    val addedAt: Long = System.currentTimeMillis()
 ) 
