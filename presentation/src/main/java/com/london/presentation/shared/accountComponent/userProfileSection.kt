@@ -21,6 +21,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
@@ -28,6 +29,7 @@ import com.london.designsystem.component.Icon
 import com.london.designsystem.component.Text
 import com.london.designsystem.theme.NovixTheme
 import com.london.presentation.R
+import com.london.presentation.shared.ImageView
 import com.london.designsystem.R as dsR
 
 @Composable
@@ -36,8 +38,10 @@ fun UserProfileSection(
     showUserMenu: Boolean,
     onMenuClick: () -> Unit,
     onLogoutClick: () -> Unit,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    avatarPath: String? = null,
 ) {
+
     Box(modifier = modifier.fillMaxWidth()) {
         Row(
             modifier = Modifier.fillMaxWidth(),
@@ -47,7 +51,7 @@ fun UserProfileSection(
             Row(
                 verticalAlignment = Alignment.CenterVertically
             ) {
-                UserProfileIcon()
+                UserProfileIcon(avatarPath = avatarPath)
 
                 Text(
                     text = username,
@@ -67,7 +71,7 @@ fun UserProfileSection(
 }
 
 @Composable
-private fun UserProfileIcon() {
+private fun UserProfileIcon(avatarPath: String? = null) {
     Box(
         modifier = Modifier
             .size(48.dp)
@@ -80,12 +84,37 @@ private fun UserProfileIcon() {
             ),
         contentAlignment = Alignment.Center
     ) {
-        Icon(
-            painter = painterResource(dsR.drawable.user),
-            contentDescription = stringResource(R.string.user_profile),
-            modifier = Modifier.size(28.dp),
-            tint = NovixTheme.colors.title
-        )
+        if (!avatarPath.isNullOrEmpty()) {
+            ImageView(
+                model = avatarPath,
+                contentDescription = stringResource(R.string.user_profile),
+                modifier = Modifier.size(48.dp),
+                contentScale = ContentScale.Crop,
+                loadingContent = {
+                    Icon(
+                        painter = painterResource(dsR.drawable.user),
+                        contentDescription = stringResource(R.string.user_profile),
+                        modifier = Modifier.size(28.dp),
+                        tint = NovixTheme.colors.title
+                    )
+                },
+                errorContent = {
+                    Icon(
+                        painter = painterResource(dsR.drawable.user),
+                        contentDescription = stringResource(R.string.user_profile),
+                        modifier = Modifier.size(28.dp),
+                        tint = NovixTheme.colors.title
+                    )
+                }
+            )
+        } else {
+            Icon(
+                painter = painterResource(dsR.drawable.user),
+                contentDescription = stringResource(R.string.user_profile),
+                modifier = Modifier.size(28.dp),
+                tint = NovixTheme.colors.title
+            )
+        }
     }
 }
 
