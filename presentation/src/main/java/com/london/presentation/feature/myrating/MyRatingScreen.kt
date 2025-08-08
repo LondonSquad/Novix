@@ -137,7 +137,7 @@ private fun MyRatingContent(
             if (state.errorState is ErrorState.RequestFailed) {
                 SnackBarAnimation(state.errorState.message)
             } else {
-                SnackBarAnimation("Delete rating successfully", dsR.drawable.ic_success)
+                SnackBarAnimation(stringResource(R.string.delete_list_successfully), dsR.drawable.ic_success)
             }
         }
     }
