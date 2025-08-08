@@ -51,6 +51,7 @@ class EpisodeDetailsViewModel @Inject constructor(
             onSuccess = { (episode, images, tvShowDetails) ->
                 updateState {
                     copy(
+                        id = episode.id,
                         tvImages = images,
                         episodeGenres = tvShowDetails.tvShowGenres.map { it.name },
                         airDate = episode.airDate ?: "",
