@@ -6,8 +6,7 @@ import com.london.domain.contentrestriction.ContentRestrictionLevel
 import com.london.domain.language.AppLanguage
 import com.london.domain.theme.AppTheme
 import com.london.domain.usecase.GetAccountDetails
-import com.london.domain.usecase.LoggedInUseCase
-import com.london.domain.usecase.login.LogoutUseCase
+import com.london.domain.usecase.login.AuthenticationUseCase
 import com.london.presentation.feature.account.state.AccountUiState
 import com.london.presentation.shared.base.BaseViewModel
 import com.london.presentation.shared.base.ErrorState
@@ -19,8 +18,7 @@ import javax.inject.Inject
 @HiltViewModel
 class AccountViewModel @Inject constructor(
     private val appPreferencesService: AppPreferencesService,
-    private val logoutUseCase: LogoutUseCase,
-    private val loggedInUseCase: LoggedInUseCase,
+    private val authenticationUseCase: AuthenticationUseCase,
     private val accountDetailsUseCase: GetAccountDetails
 ) : BaseViewModel<AccountUiState, AccountEffect>(AccountUiState()),
     AccountContract {
@@ -34,7 +32,7 @@ class AccountViewModel @Inject constructor(
 
     private fun checkUserLoginStatus() {
         tryToExecute(
-            block = { loggedInUseCase.invoke() },
+            block = { authenticationUseCase.isLoggedIn() },
             onStart = {
                 updateState { copy(isLoading = true) }
             },
@@ -143,7 +141,7 @@ class AccountViewModel @Inject constructor(
     //region Logout Bottom Sheet
     override fun onLogoutConfirmed() {
         tryToExecute(
-            block = { logoutUseCase.invoke() },
+            block = { authenticationUseCase.logout() },
             onStart = {
                 updateState { copy(isLogoutLoading = true) }
             },

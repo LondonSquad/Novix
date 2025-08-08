@@ -3,7 +3,7 @@ package com.london.presentation.feature.splash
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.london.domain.AppPreferencesService
-import com.london.domain.usecase.LoggedInUseCase
+import com.london.domain.usecase.login.AuthenticationUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableSharedFlow
@@ -13,7 +13,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class SplashViewModel @Inject constructor(
-    private val loggedInUseCase: LoggedInUseCase,
+    private val authenticationUseCase: AuthenticationUseCase,
     private val appPreferencesService: AppPreferencesService
 ) : ViewModel() {
 
@@ -29,7 +29,7 @@ class SplashViewModel @Inject constructor(
             delay(1500)
             val destination = when {
                 !appPreferencesService.hasOnboardingBeenShown -> SplashEffect.Onboarding
-                loggedInUseCase.invoke() -> SplashEffect.Home
+                authenticationUseCase.isLoggedIn() -> SplashEffect.Home
                 else -> SplashEffect.Welcome
             }
 

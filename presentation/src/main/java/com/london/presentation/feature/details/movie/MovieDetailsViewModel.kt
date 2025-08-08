@@ -6,8 +6,8 @@ import com.london.domain.entity.recent.MediaType
 import com.london.domain.entity.recent.RecentViewed
 import com.london.domain.usecase.AddMovieRatingByIdUseCase
 import com.london.domain.usecase.GetAccountMovieStatesById
-import com.london.domain.usecase.LoggedInUseCase
 import com.london.domain.usecase.details.movie.ManageMovieDetailsUseCase
+import com.london.domain.usecase.login.AuthenticationUseCase
 import com.london.domain.usecase.recent.viewed.AddToRecentViewedUseCase
 import com.london.domain.usecase.recent.watched.AddMovieToRecentWatchedUseCase
 import com.london.presentation.navigation.Screen
@@ -23,7 +23,7 @@ class MovieDetailsViewModel @Inject constructor(
     private val addToRecentViewedUseCase: AddToRecentViewedUseCase,
     private val addMovieRatingByIdUseCase: AddMovieRatingByIdUseCase,
     private val getAccountMovieStatesById: GetAccountMovieStatesById,
-    private val getUserLoggedInUseCase: LoggedInUseCase,
+    private val authenticationUseCase: AuthenticationUseCase,
     savedStateHandle: SavedStateHandle
 ) : BaseViewModel<MovieDetailsUiState, MovieDetailsEffect>(MovieDetailsUiState()),
     MovieDetailsContract {
@@ -131,7 +131,7 @@ class MovieDetailsViewModel @Inject constructor(
 
     override fun onRateBottomSheetClick() {
         tryToExecute(
-            block = { getUserLoggedInUseCase.invoke() },
+            block = { authenticationUseCase.isLoggedIn() },
             onSuccess = { isLoggedIn ->
                 if (isLoggedIn)
                     updateState { copy(isRateBottomSheetVisible = isRateBottomSheetVisible.not()) }
@@ -181,7 +181,7 @@ class MovieDetailsViewModel @Inject constructor(
             block = {
                 val similarMovies = movieDetails.getSimilarMovies(movieId)
                 val movieVideos = movieDetails.getMovieVideo(movieId)
-                val movieRating = if (getUserLoggedInUseCase.invoke())
+                val movieRating = if (authenticationUseCase.isLoggedIn())
                     getAccountMovieStatesById.invoke(movieId) else 0
                 Triple(similarMovies, movieVideos, movieRating)
             },

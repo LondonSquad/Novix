@@ -2,8 +2,7 @@ package com.london.presentation.feature.login
 
 import android.app.Application
 import androidx.compose.ui.text.input.TextFieldValue
-import com.london.domain.usecase.login.LoginAsGuestUseCase
-import com.london.domain.usecase.login.LoginUseCase
+import com.london.domain.usecase.login.AuthenticationUseCase
 import com.london.presentation.R
 import com.london.presentation.shared.base.BaseViewModel
 import com.london.presentation.shared.base.ErrorState
@@ -13,8 +12,7 @@ import javax.inject.Inject
 @HiltViewModel
 class LoginViewModel @Inject constructor(
     private val context: Application,
-    private val loginUseCase: LoginUseCase,
-    private val loginAsGuestUseCase: LoginAsGuestUseCase,
+    private val authenticationUseCase: AuthenticationUseCase,
 ) : BaseViewModel<LoginUiState, LoginEffect>(LoginUiState()),
     LoginContract {
 
@@ -63,7 +61,7 @@ class LoginViewModel @Inject constructor(
         if (username.isEmpty() || password.isEmpty()) return
 
         tryToExecute(
-            block = { loginUseCase.invoke(username, password) },
+            block = { authenticationUseCase.login(username, password) },
             onStart = { updateState { copy(isLoading = true, error = null) } },
             onSuccess = { isSuccess: Boolean ->
                 if (isSuccess)
@@ -83,7 +81,7 @@ class LoginViewModel @Inject constructor(
 
     override fun onLoginAsGuestClick() {
         tryToExecute(
-            block = { loginAsGuestUseCase.invoke() },
+            block = { authenticationUseCase.loginAsGuest() },
             onStart = { updateState { copy(isGuestLoginLoading = true, error = null) } },
             onSuccess = { isSuccess: Boolean ->
                 if (isSuccess) {

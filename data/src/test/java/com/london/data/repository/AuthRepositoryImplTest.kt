@@ -168,7 +168,7 @@ class AuthenticationRepositoryImplTest {
             GuestSessionResponse(true, GUEST_SESSION_ID, "")
         )
 
-        val result = repository.loginAsGuest()
+        val result = repository.isLoginAsGuest()
 
         assertTrue(result)
         coVerify {
@@ -183,7 +183,7 @@ class AuthenticationRepositoryImplTest {
             GuestSessionResponse(false, "", "")
         )
 
-        val result = repository.loginAsGuest()
+        val result = repository.isLoginAsGuest()
 
         assertFalse(result)
     }
@@ -194,7 +194,7 @@ class AuthenticationRepositoryImplTest {
         coEvery { authRemoteDataSource.createGuestSession() } returns Result.failure(networkError)
 
         assertThrows(RuntimeException::class.java) {
-            runTest { repository.loginAsGuest() }
+            runTest { repository.isLoginAsGuest() }
         }
     }
     // endregion
@@ -299,7 +299,7 @@ class AuthenticationRepositoryImplTest {
             GuestSessionResponse(true, GUEST_SESSION_ID, "")
         )
 
-        val result = repository.loginAsGuest()
+        val result = repository.isLoginAsGuest()
 
         assertTrue(result)
         verify {
