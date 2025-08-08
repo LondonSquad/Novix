@@ -164,7 +164,7 @@ private fun Content(
         }
         if (state.isSnackBarSuccessVisible) {
             SnackBarAnimation(
-                message = stringResource(R.string.list_added_successfly),
+                message = stringResource(R.string.list_added_successfully),
                 icon = com.london.designsystem.R.drawable.ic_success
             )
         }

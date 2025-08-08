@@ -143,7 +143,12 @@
     <string name="no_content_is_blurred">لا يتم تمويه أي محتوى.</string>
     <string name="movie_removed_successfully">تم حذف الفيلم بنجاح</string>
     <string name="movie_not_found">الفيلم غير موجود</string>
-    <string name="list_added_successfly">تم اضافه القائمه بنجاح</string>
+    <string name="list_added_successfully">تم اضافه القائمه بنجاح</string>
     <string name="can_not_delete_list">حدث خطا ما لا يمكن اضافه القائمه</string>
+    <string name="delete_list">حذف المجموعة</string>
+    <string name="cancel_list_deletion">حذف المجموعة المحفوظة سيحذف جميع عناصرها. هل أنت متأكد أنك تريد المتابعة؟</string>
+    <string name="btn_delete">حذف</string>
+    <string name="list_deletion_success">تم حذف المجموعة</string>
+    <string name="list_deletion_failed">فشل حذف المجموعة</string>
     <string name="close">غلق</string>
 </resources>
