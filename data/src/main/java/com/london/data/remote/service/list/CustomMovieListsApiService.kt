@@ -51,6 +51,7 @@ interface CustomMovieListsApiService {
 
     @GET("3/account/{account_id}/lists")
     suspend fun getAllUserLists(
-        @Query("session_id") sessionId: String?
+        @Query("session_id") sessionId: String?,
+        @Query("page") page: Int
     ): Response<ApiResponse<CustomMovieListResponse>>
 }
