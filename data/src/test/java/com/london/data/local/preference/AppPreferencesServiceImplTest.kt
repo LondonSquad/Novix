@@ -69,70 +69,89 @@ class AppPreferencesServiceImplTest {
 
     @Test
     fun `appTheme returns default Dark theme true when no preference is set`() = runTest {
+        // Given
         every { sharedPreferences.getString(THEME_KEY, AppTheme.DARK.name) } returns null
 
+        // When
         service = AppPreferencesServiceImpl(sharedPreferences)
         val currentTheme = service.isAppDarkMode.first()
 
+        // Then
         assertEquals(true, currentTheme)
     }
 
     @Test
     fun `appTheme returns specific theme when preference is set`() = runTest {
+        // Given
         every { sharedPreferences.getString(THEME_KEY, AppTheme.DARK.name) } returns AppTheme.DARK.name
 
+        // When
         service = AppPreferencesServiceImpl(sharedPreferences)
         val currentTheme = service.isAppDarkMode.first()
 
+        // Then
         assertEquals(true, currentTheme)
         verify { sharedPreferences.getString(THEME_KEY, AppTheme.DARK.name) }
     }
 
     @Test
     fun `appLanguage returns default ARABIC when no preference is set`() = runTest {
+        // Given
         every { sharedPreferences.getString(LANGUAGE_KEY, AppLanguage.ARABIC.code) } returns null
 
+        // When
         service = AppPreferencesServiceImpl(sharedPreferences)
         val currentLanguage = service.appLanguage.first()
 
+        // Then
         assertEquals(AppLanguage.ARABIC, currentLanguage)
     }
 
     @Test
     fun `appLanguage returns specific language when preference is set`() = runTest {
+        // Given
         every { sharedPreferences.getString(LANGUAGE_KEY, AppLanguage.ARABIC.code) } returns AppLanguage.ENGLISH.code
 
+        // When
         service = AppPreferencesServiceImpl(sharedPreferences)
         val currentLanguage = service.appLanguage.first()
 
+        // Then
         assertEquals(AppLanguage.ENGLISH, currentLanguage)
         verify { sharedPreferences.getString(LANGUAGE_KEY, AppLanguage.ARABIC.code) }
     }
 
     @Test
     fun `appLanguage returns default language when saved code is invalid and fromCode defaults`() = runTest {
+        // Given
         val invalidCode = "xx"
         every { sharedPreferences.getString(LANGUAGE_KEY, AppLanguage.ARABIC.code) } returns invalidCode
 
+        // When
         service = AppPreferencesServiceImpl(sharedPreferences)
         val currentLanguage = service.appLanguage.first()
 
+        // Then
         assertEquals(AppLanguage.ARABIC, currentLanguage)
         verify { sharedPreferences.getString(LANGUAGE_KEY, AppLanguage.ARABIC.code) }
     }
 
     @Test
     fun `hasOnboardingBeenShown returns false when preference is not set`() {
+        // Given
         every { sharedPreferences.getBoolean(ONBOARDING_KEY, false) } returns false
 
+        // When
         val result = service.hasOnboardingBeenShown
 
+        // Then
         assertFalse(result)
         verify { sharedPreferences.getBoolean(ONBOARDING_KEY, false) }
     }
 
     @Test
     fun `hasOnboardingBeenShown returns true when preference is set`() {
+        // Given
         every { sharedPreferences.getBoolean(ONBOARDING_KEY, false) } returns true
 
         val result = service.hasOnboardingBeenShown
@@ -143,10 +162,13 @@ class AppPreferencesServiceImplTest {
 
     @Test
     fun `setOnBoardingShown sets preference to true`() = runTest {
+        // Given
         every { editor.putBoolean(ONBOARDING_KEY, true) } returns editor
 
+        // When
         service.setOnBoardingShown()
 
+        // Then
         verifyOrder {
             sharedPreferences.edit()
             editor.putBoolean(ONBOARDING_KEY, true)
@@ -156,36 +178,46 @@ class AppPreferencesServiceImplTest {
 
     @Test
     fun `contentRestrictionLevel returns default MODERATE when no preference is set`() = runTest {
+        // Given
         every { sharedPreferences.getString(CONTENT_RESTRICTION_KEY, ContentRestrictionLevel.MODERATE.name) } returns null
 
+        // When
         service = AppPreferencesServiceImpl(sharedPreferences)
         val currentLevel = service.contentRestrictionLevel.first()
 
+        // Then
         assertEquals(ContentRestrictionLevel.MODERATE, currentLevel)
     }
 
     @Test
     fun `contentRestrictionLevel returns specific level when preference is set`() = runTest {
+        // Given
         every { sharedPreferences.getString(CONTENT_RESTRICTION_KEY, ContentRestrictionLevel.MODERATE.name) } returns ContentRestrictionLevel.STRICT.name
 
+        // When
         service = AppPreferencesServiceImpl(sharedPreferences)
         val currentLevel = service.contentRestrictionLevel.first()
 
+        // Then
         assertEquals(ContentRestrictionLevel.STRICT, currentLevel)
     }
 
     @Test
     fun `setContentRestrictionLevel saves preference and updates state`() = runTest {
+        // Given
         every { editor.putString(CONTENT_RESTRICTION_KEY, ContentRestrictionLevel.OFF.name) } returns editor
 
+        // When
         service.setContentRestrictionLevel(ContentRestrictionLevel.OFF)
 
+        // Then
         verifyOrder {
             sharedPreferences.edit()
             editor.putString(CONTENT_RESTRICTION_KEY, ContentRestrictionLevel.OFF.name)
             editor.apply()
         }
 
+        // And
         val updatedLevel = service.contentRestrictionLevel.first()
         assertEquals(ContentRestrictionLevel.OFF, updatedLevel)
     }
