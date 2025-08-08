@@ -9,6 +9,7 @@ import com.london.domain.entity.myrating.RatedTvShow
 fun RatedTvShowResponse.toRatedTvShow(): RatedTvShow {
     return RatedTvShow(
         id = id.orZero(),
+        title = name.orEmpty(),
         posterPath = posterPath.asImageUrlOrEmpty(),
         rating = rating.orZero()
     )
