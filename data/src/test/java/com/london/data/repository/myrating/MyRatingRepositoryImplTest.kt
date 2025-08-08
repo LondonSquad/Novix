@@ -2,8 +2,7 @@ package com.london.data.repository.myrating
 
 import com.london.data.local.preference.AuthPreferences
 import com.london.data.remote.model.ApiResponse
-import com.london.data.remote.model.myrating.RatedMovieResponse
-import com.london.data.remote.model.myrating.RatedTvShowResponse
+import com.london.data.remote.model.myrating.RatedMediaResponse
 import com.london.data.remote.source.myrating.MyRatingRemoteDataSource
 import io.mockk.coEvery
 import io.mockk.mockk
@@ -39,10 +38,10 @@ class MyRatingRepositoryImplTest {
         coEvery { authPreferences.getSessionId() } returns sessionId
         coEvery {
             remoteDataSource.getAllRatedMovies(accountId, sessionId)
-        } returns Result.success(createMovieApiResponse(listOf(movieResponse)))
+        } returns Result.success(createApiResponse(listOf(movieResponse)))
         coEvery {
             remoteDataSource.getAllRatedTvShows(accountId, sessionId)
-        } returns Result.success(createTvShowApiResponse(listOf(tvShowResponse)))
+        } returns Result.success(createApiResponse(listOf(tvShowResponse)))
 
         // When
         val result = repository.getAllRatedMedia()
@@ -69,10 +68,10 @@ class MyRatingRepositoryImplTest {
         coEvery { authPreferences.getSessionId() } returns sessionId
         coEvery {
             remoteDataSource.getAllRatedMovies(accountId, sessionId)
-        } returns Result.success(createEmptyMovieApiResponse())
+        } returns Result.success(createEmptyApiResponse())
         coEvery {
             remoteDataSource.getAllRatedTvShows(accountId, sessionId)
-        } returns Result.success(createEmptyTvShowApiResponse())
+        } returns Result.success(createEmptyApiResponse())
 
         // When
         val result = repository.getAllRatedMedia()
@@ -91,10 +90,10 @@ class MyRatingRepositoryImplTest {
         coEvery { authPreferences.getSessionId() } returns sessionId
         coEvery {
             remoteDataSource.getAllRatedMovies(accountId, "")
-        } returns Result.success(createEmptyMovieApiResponse())
+        } returns Result.success(createEmptyApiResponse())
         coEvery {
             remoteDataSource.getAllRatedTvShows(accountId, "")
-        } returns Result.success(createEmptyTvShowApiResponse())
+        } returns Result.success(createEmptyApiResponse())
 
         // When
         val result = repository.getAllRatedMedia()
@@ -115,10 +114,10 @@ class MyRatingRepositoryImplTest {
         coEvery { authPreferences.getSessionId() } returns sessionId
         coEvery {
             remoteDataSource.getAllRatedMovies(accountId, sessionId)
-        } returns Result.success(createMovieApiResponse(listOf(movieResponse)))
+        } returns Result.success(createApiResponse(listOf(movieResponse)))
         coEvery {
             remoteDataSource.getAllRatedTvShows(accountId, sessionId)
-        } returns Result.success(createEmptyTvShowApiResponse())
+        } returns Result.success(createEmptyApiResponse())
 
         // When
         val result = repository.getAllRatedMedia()
@@ -145,10 +144,10 @@ class MyRatingRepositoryImplTest {
         coEvery { authPreferences.getSessionId() } returns sessionId
         coEvery {
             remoteDataSource.getAllRatedMovies(accountId, sessionId)
-        } returns Result.success(createEmptyMovieApiResponse())
+        } returns Result.success(createEmptyApiResponse())
         coEvery {
             remoteDataSource.getAllRatedTvShows(accountId, sessionId)
-        } returns Result.success(createTvShowApiResponse(listOf(tvShowResponse)))
+        } returns Result.success(createApiResponse(listOf(tvShowResponse)))
 
         // When
         val result = repository.getAllRatedMedia()
@@ -177,20 +176,19 @@ class MyRatingRepositoryImplTest {
         coEvery { authPreferences.getSessionId() } returns sessionId
         coEvery {
             remoteDataSource.getAllRatedMovies(accountId, sessionId)
-        } returns Result.success(createMovieApiResponse(listOf(movieResponse1, movieResponse2)))
+        } returns Result.success(createApiResponse(listOf(movieResponse1, movieResponse2)))
         coEvery {
             remoteDataSource.getAllRatedTvShows(accountId, sessionId)
-        } returns Result.success(createTvShowApiResponse(listOf(tvShowResponse)))
+        } returns Result.success(createApiResponse(listOf(tvShowResponse)))
 
         // When
         val result = repository.getAllRatedMedia()
 
         // Then
         assertEquals(3, result.size)
-        // Items should be in the order they were added (movies first, then tv shows)
-        assertEquals(1, result[0].id) // First movie
-        assertEquals(2, result[1].id) // Second movie
-        assertEquals(3, result[2].id) // TV show
+        assertEquals(1, result[0].id)
+        assertEquals(2, result[1].id)
+        assertEquals(3, result[2].id)
     }
 
     companion object {
@@ -199,7 +197,7 @@ class MyRatingRepositoryImplTest {
             title: String = "Test Movie",
             posterPath: String = "/movie-poster.jpg",
             rating: Double = 8.5
-        ) = RatedMovieResponse(
+        ) = RatedMediaResponse(
             id = id,
             adult = false,
             backdropPath = "/movie-backdrop.jpg",
@@ -211,41 +209,27 @@ class MyRatingRepositoryImplTest {
 
         private fun createSampleTvShowResponse(
             id: Int = 2,
-            name: String = "Test TV Show",
+            title: String = "Test TV Show",
             posterPath: String = "/tv-poster.jpg",
             rating: Double = 7.5
-        ) = RatedTvShowResponse(
+        ) = RatedMediaResponse(
             id = id,
             adult = false,
             backdropPath = "/tv-backdrop.jpg",
-            name = name,
+            title = title,
             posterPath = posterPath,
             voteAverage = rating,
             rating = rating
         )
 
-        private fun createMovieApiResponse(items: List<RatedMovieResponse>, totalItems: Int = items.size) = ApiResponse(
+        private fun createApiResponse(items: List<RatedMediaResponse>, totalItems: Int = items.size) = ApiResponse(
             currentPage = 1,
             items = items,
             totalPages = if (totalItems > 0) 1 else 0,
             totalItems = totalItems
         )
 
-        private fun createTvShowApiResponse(items: List<RatedTvShowResponse>, totalItems: Int = items.size) = ApiResponse(
-            currentPage = 1,
-            items = items,
-            totalPages = if (totalItems > 0) 1 else 0,
-            totalItems = totalItems
-        )
-
-        private fun createEmptyMovieApiResponse() = ApiResponse<RatedMovieResponse>(
-            currentPage = 1,
-            items = emptyList(),
-            totalPages = 0,
-            totalItems = 0
-        )
-
-        private fun createEmptyTvShowApiResponse() = ApiResponse<RatedTvShowResponse>(
+        private fun createEmptyApiResponse() = ApiResponse<RatedMediaResponse>(
             currentPage = 1,
             items = emptyList(),
             totalPages = 0,

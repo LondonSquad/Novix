@@ -1,7 +1,6 @@
 package com.london.data.mapper.myrating
 
-import com.london.data.remote.model.myrating.RatedMovieResponse
-import com.london.data.remote.model.myrating.RatedTvShowResponse
+import com.london.data.remote.model.myrating.RatedMediaResponse
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
 import org.junit.Assert.assertTrue
@@ -37,14 +36,14 @@ class MyRatingMapperTest {
         assertEquals(456, result.id)
         assertEquals("Test TV Show", result.title)
         assertEquals("https://image.tmdb.org/t/p/w500/test-poster.jpg", result.posterPath)
-        assertEquals(7, result.rating)
+        assertEquals(7, result.rating) // 7.5 -> 7 (truncated)
         assertFalse(result.isMovie)
     }
 
     @Test
     fun `toEntity with null values returns default values`() {
         // Given
-        val movieResponse = RatedMovieResponse(
+        val movieResponse = RatedMediaResponse(
             id = 0,
             adult = false,
             backdropPath = "",
@@ -145,7 +144,7 @@ class MyRatingMapperTest {
             title: String = "Test Movie",
             posterPath: String? = "/test-poster.jpg",
             rating: Double = 8.5
-        ) = RatedMovieResponse(
+        ) = RatedMediaResponse(
             id = id,
             adult = false,
             backdropPath = "/test-backdrop.jpg",
@@ -157,14 +156,14 @@ class MyRatingMapperTest {
 
         private fun createSampleTvShowResponse(
             id: Int = 456,
-            name: String = "Test TV Show",
+            title: String = "Test TV Show",
             posterPath: String? = "/test-poster.jpg",
             rating: Double = 7.5
-        ) = RatedTvShowResponse(
+        ) = RatedMediaResponse(
             id = id,
             adult = false,
             backdropPath = "/test-backdrop.jpg",
-            name = name,
+            title = title,
             posterPath = posterPath,
             voteAverage = rating,
             rating = rating

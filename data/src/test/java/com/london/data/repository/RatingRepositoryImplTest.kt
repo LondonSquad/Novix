@@ -152,37 +152,34 @@ class RatingRepositoryImplTest {
         val seasonNumber = 1
         val episodeNumber = 2
 
+        coEvery { authPreferences.getSessionId() } returns USER_SESSION
+        coEvery { authPreferences.getGuestSessionId() } returns GUEST_SESSION
         coEvery {
             remoteDataSource.addTvEpisode(
                 tvShowId = MOVIE_ID,
                 seasonNumber = seasonNumber,
                 episodeNumber = episodeNumber,
-                guestSessionId = GUEST_SESSION,
                 userSessionId = USER_SESSION,
+                guestSessionId = GUEST_SESSION,
                 rating = 8.0,
             )
         } returns Result.success(mockResponse)
 
-        val result = remoteDataSource.addTvEpisode(
+        val result = repository.addTvEpisode(
             tvShowId = MOVIE_ID,
             seasonNumber = seasonNumber,
             episodeNumber = episodeNumber,
-            rating = RATING,
-            guestSessionId = GUEST_SESSION,
-            userSessionId = USER_SESSION
+            rating = 8
         )
 
-        assertEquals(Result.success(mockResponse), result)
+        assertTrue(result)
     }
 
     @Test
-    fun `given user session when getTvShowAccountStateById is called then return correct account state`() =
+    fun `given user session when addTvShowById is called then return correct result`() =
         runTest {
             val tvShowId = 100
             val sessionId = USER_SESSION
-            val expectedAccountState = AccountStatesResponse(
-                rated = Json.parseToJsonElement("""{ "value": 7 }"""),
-            )
 
             coEvery { authPreferences.getSessionId() } returns sessionId
             coEvery { authPreferences.getGuestSessionId() } returns null
@@ -204,11 +201,10 @@ class RatingRepositoryImplTest {
         }
 
     @Test
-    fun `given guest session when getTvShowAccountStateById is called then return correct account state`() =
+    fun `given guest session when addTvShowById is called then return correct result`() =
         runTest {
             val tvShowId = 101
             val guestSessionId = GUEST_SESSION
-
 
             coEvery { authPreferences.getSessionId() } returns null
             coEvery { authPreferences.getGuestSessionId() } returns guestSessionId
@@ -217,7 +213,7 @@ class RatingRepositoryImplTest {
                     tvShowId = tvShowId,
                     userSessionId = null,
                     guestSessionId = guestSessionId,
-                    rating = 7.5,
+                    rating = 7.0,
                 )
             } returns Result.success(fakeRatingResponse())
 
@@ -227,18 +223,24 @@ class RatingRepositoryImplTest {
         }
 
     @Test
-    fun `given no session when getTvShowAccountStateById is called then throw exception`() =
+    fun `given no session when addTvShowById is called then return false`() =
         runTest {
             val tvShowId = 102
 
             coEvery { authPreferences.getSessionId() } returns null
             coEvery { authPreferences.getGuestSessionId() } returns null
+            coEvery {
+                remoteDataSource.addTvShowRating(
+                    tvShowId = tvShowId,
+                    userSessionId = null,
+                    guestSessionId = null,
+                    rating = 7.0
+                )
+            } returns Result.failure(RuntimeException("No session"))
 
-            assertThrows(IllegalStateException::class.java) {
-                runTest {
-                    repository.addTvShowById(tvShowId, 7)
-                }
-            }
+            val result = repository.addTvShowById(tvShowId, 7)
+
+            assertFalse(result)
         }
 
     companion object {

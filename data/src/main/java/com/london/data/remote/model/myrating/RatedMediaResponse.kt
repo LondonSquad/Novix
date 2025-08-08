@@ -5,7 +5,7 @@ import kotlinx.serialization.Serializable
 
 
 @Serializable
-data class RatedMovieResponse(
+data class RatedMediaResponse(
     @SerialName("id")
     val id: Int,
     @SerialName("adult")

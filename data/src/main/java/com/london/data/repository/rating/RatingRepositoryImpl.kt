@@ -36,8 +36,8 @@ class RatingRepositoryImpl @Inject constructor(
         tvShowId = tvShowId,
         seasonNumber = seasonNumber,
         episodeNumber = episodeNumber,
-        guestSessionId = authPreferences.getSessionId(),
         userSessionId = authPreferences.getSessionId(),
+        guestSessionId = authPreferences.getGuestSessionId(),
         rating = rating.toDouble()
     ).isSuccess
 }
