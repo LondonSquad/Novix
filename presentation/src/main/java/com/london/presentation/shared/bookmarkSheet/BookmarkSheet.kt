@@ -201,7 +201,8 @@ fun Preview() {
             ),
             contract = hiltViewModel<BookmarkSheetViewModel>(),
             modifier = Modifier.background(NovixTheme.colors.surface),
-            hideSheet = {}
+            hideSheet = {},
+            0u
         )
     }
 }
