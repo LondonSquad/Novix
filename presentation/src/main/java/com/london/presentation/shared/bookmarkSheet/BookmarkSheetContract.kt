@@ -1,8 +1,8 @@
-package com.london.presentation.feature.bookmark.sheet
+package com.london.presentation.shared.bookmarkSheet
 
 interface BookmarkSheetContract {
     fun onListSelected(listId: UInt)
     fun onCreateNewList()
-    fun onAddToLists(selectedListsIds: List<UInt>)
+    fun onAddToLists(bookmarkedId: UInt)
     fun onDismiss()
 }

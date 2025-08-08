@@ -1,4 +1,4 @@
-package com.london.presentation.feature.bookmark.sheet
+package com.london.presentation.shared.bookmarkSheet
 
 sealed interface BookmarkSheetEffect {
     object NewListCreation : BookmarkSheetEffect

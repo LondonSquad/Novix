@@ -1,4 +1,4 @@
-package com.london.presentation.feature.bookmark.sheet
+package com.london.presentation.shared.bookmarkSheet
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -36,7 +36,6 @@ import com.london.designsystem.component.rememberModalBottomSheetState
 import com.london.designsystem.theme.NovixTheme
 import com.london.designsystem.utils.painter
 import com.london.designsystem.utils.string
-import com.london.domain.entity.Movie
 import com.london.presentation.R
 import com.london.presentation.utils.Listen
 import kotlinx.coroutines.launch
@@ -48,7 +47,7 @@ fun BookmarkBottomSheet(
     isSheetVisible: Boolean,
     viewModel: BookmarkSheetViewModel = hiltViewModel(),
     sheetState: SheetState = rememberModalBottomSheetState(),
-    movie: Movie
+    bookmarkedMovieId: UInt
 ) {
     val coroutineScope = rememberCoroutineScope()
 
@@ -85,7 +84,8 @@ fun BookmarkBottomSheet(
                         .invokeOnCompletion { if (sheetState.isNotVisible) onSheetDismiss() }
                 },
                 contract = viewModel,
-                uiState = uiState
+                uiState = uiState,
+                bookmarkedMovieId = bookmarkedMovieId
             )
         }
     }
@@ -97,6 +97,7 @@ private fun BookmarkBottomSheetContent(
     contract: BookmarkSheetContract,
     modifier: Modifier = Modifier,
     hideSheet: () -> Unit,
+    bookmarkedMovieId: UInt
 ) {
 
     Column(
@@ -167,7 +168,7 @@ private fun BookmarkBottomSheetContent(
                 isLoading = false,
                 icon = null,
                 onClick = {
-                    contract.onAddToLists(uiState.selectedLists)
+                    contract.onAddToLists(bookmarkedId = bookmarkedMovieId)
                 }
             )
 

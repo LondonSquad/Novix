@@ -1,8 +1,11 @@
-package com.london.presentation.feature.bookmark.sheet
+package com.london.presentation.shared.bookmarkSheet
 
-import com.london.presentation.feature.base.ErrorState
+import com.london.domain.entity.Movie
+import com.london.presentation.shared.base.ErrorState
+
 
 data class BookmarkSheetUiState(
+    val listedMovies: Set<Movie> = emptySet(),
     val lists: List<BookmarkUiList> = emptyList(),
     val selectedLists: List<UInt> = emptyList(),
     val isLoading: Boolean = false,
