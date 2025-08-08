@@ -19205,6 +19205,14 @@
           "url": "https://github.com/BassantM"
         },
         "submitted_at": "2025-08-08T17:49:03Z"
+      },
+      {
+        "reviewer": {
+          "id": 81706918,
+          "login": "karimdeabes",
+          "url": "https://github.com/karimdeabes"
+        },
+        "submitted_at": "2025-08-08T18:09:14Z"
       }
     ],
     "first_approved_at": "2025-08-08T17:47:48Z",
