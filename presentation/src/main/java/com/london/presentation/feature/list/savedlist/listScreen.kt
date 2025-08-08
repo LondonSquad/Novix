@@ -43,7 +43,10 @@ import com.london.designsystem.component.button.OutlineButton
 import com.london.designsystem.theme.NovixTheme
 import com.london.designsystem.theme.ThemePreviews
 import com.london.designsystem.utils.painter
+import com.london.domain.entity.MovieList
 import com.london.presentation.R
+import com.london.presentation.feature.list.bottomsheets.AddListBottomSheet
+import com.london.presentation.shared.SnackBarAnimation
 import com.london.presentation.shared.base.ErrorState
 import com.london.presentation.shared.buildscreen.BuildScreen
 import com.london.presentation.utils.Listen
@@ -51,6 +54,7 @@ import com.london.presentation.utils.Listen
 @Composable
 fun ListScreen(
     onNavigateToDetails: (Int) -> Unit,
+    onNavigateToLogin: () -> Unit,
     viewModel: ListViewModel = hiltViewModel()
 ) {
 
@@ -60,7 +64,7 @@ fun ListScreen(
     effect?.Listen { currentEffect ->
         when (currentEffect) {
             is ListEffect.NavigateToDetails -> onNavigateToDetails(currentEffect.id)
-            ListEffect.ShowAddListSheet -> TODO()
+            ListEffect.NavigateToLogin -> onNavigateToLogin()
         }
     }
 
@@ -150,6 +154,21 @@ private fun Content(
                     )
                 }
             }
+            AddListBottomSheet(
+                addListInteractions = contract,
+                addListSheetState = state.addListSheetState
+            )
+        }
+        if (state.isSnackBarSuccessVisible){
+            SnackBarAnimation(
+                message = stringResource(R.string.list_added_successfly),
+                icon = com.london.designsystem.R.drawable.ic_success
+            )
+        }
+        if (state.error!=null){
+            SnackBarAnimation(
+                message = stringResource(R.string.can_not_delete_list)
+            )
         }
     }
 
@@ -157,14 +176,14 @@ private fun Content(
 
 @Composable
 private fun SavedListItemRow(
-    itemUi: ListItemUi,
+    itemUi: MovieList,
     onCountClick: (Int) -> Unit
 ) {
     Row(
         modifier = Modifier
             .fillMaxWidth()
             .clip(RoundedCornerShape(12.dp))
-            .clickable { onCountClick(itemUi.id) }
+            .clickable { onCountClick(itemUi.id.toInt()) }
             .background(NovixTheme.colors.surface)
             .border(
                 width = 1.dp,
@@ -174,7 +193,7 @@ private fun SavedListItemRow(
             .padding(horizontal = 12.dp, vertical = 16.dp)
     ) {
         Text(
-            text = itemUi.title,
+            text = itemUi.name,
             style = NovixTheme.typography.title.medium,
             color = NovixTheme.colors.title,
             maxLines = 1,
@@ -189,7 +208,7 @@ private fun SavedListItemRow(
 
 @Composable
 private fun ItemCount(
-    itemUi: ListItemUi,
+    itemUi: MovieList,
 ) {
     Row(
         verticalAlignment = Alignment.CenterVertically,
@@ -200,7 +219,7 @@ private fun ItemCount(
             .padding(horizontal = 8.dp, vertical = 4.dp)
     ) {
         Text(
-            text = itemUi.count.toString(),
+            text = itemUi.moviesCount.toString(),
             style = NovixTheme.typography.label.small,
             color = NovixTheme.colors.primary,
         )

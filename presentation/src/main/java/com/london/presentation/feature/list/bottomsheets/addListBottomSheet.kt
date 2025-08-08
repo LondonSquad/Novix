@@ -37,11 +37,12 @@ import com.london.presentation.feature.list.savedlist.ListContract
 import com.london.presentation.feature.list.savedlist.ListViewModel
 import com.london.presentation.feature.list.savedlist.defaultContractList
 import kotlinx.coroutines.launch
+import org.checkerframework.checker.units.qual.g
 
 @Composable
 fun AddListBottomSheet(
     modifier: Modifier = Modifier,
-    addListInteractions: ListContract = hiltViewModel<ListViewModel>(),
+    addListInteractions: ListContract = defaultContractList(),
     sheetState: SheetState = rememberModalBottomSheetState(),
     addListSheetState: AddSheetState,
 ) {
@@ -77,7 +78,7 @@ fun AddListBottomSheet(
                     }
                 },
                 onAddClicked = {
-                    addListInteractions.onAddList(addListSheetState.listName)
+                    addListInteractions.onAddList(addListSheetState.listName.text)
                 }
             )
         }
