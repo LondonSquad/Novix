@@ -1,9 +1,7 @@
 package com.london.domain.repository.myrating
 
-import com.london.domain.entity.myrating.RatedMovie
-import com.london.domain.entity.myrating.RatedTvShow
+import com.london.domain.entity.myrating.RatedMedia
 
 interface MyRatingRepository {
-    suspend fun getAllRatedMovies(): List<RatedMovie>
-    suspend fun getAllRatedTvShows(): List<RatedTvShow>
+    suspend fun getAllRatedMedia(): List<RatedMedia>
 }
