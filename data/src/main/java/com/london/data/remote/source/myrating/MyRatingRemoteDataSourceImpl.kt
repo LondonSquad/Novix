@@ -26,7 +26,7 @@ class MyRatingRemoteDataSourceImpl @Inject constructor(
         )
     }
 
-    override suspend fun getAllRatedTvShow(
+    override suspend fun getAllRatedTvShows(
         accountId: Int,
         sessionId: String
     ): Result<ApiResponse<RatedTvShowResponse>> {

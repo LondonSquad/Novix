@@ -30,7 +30,7 @@ class MyRatingRepositoryImpl @Inject constructor(
         networkBlock = {
             val accountId = 22144309 //change it
             val sessionId = authPreferences.getSessionId()
-            myRatingRemoteDataSource.getAllRatedTvShow(
+            myRatingRemoteDataSource.getAllRatedTvShows(
                 accountId = accountId,
                 sessionId = sessionId.orEmpty(),
             ).getOrThrow().items.map { it.toRatedTvShow() }

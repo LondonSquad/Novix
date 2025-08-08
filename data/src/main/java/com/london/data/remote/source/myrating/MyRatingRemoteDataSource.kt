@@ -10,7 +10,7 @@ interface MyRatingRemoteDataSource {
         sessionId: String,
     ): Result<ApiResponse<RatedMovieResponse>>
 
-    suspend fun getAllRatedTvShow(
+    suspend fun getAllRatedTvShows(
         accountId: Int,
         sessionId: String,
     ): Result<ApiResponse<RatedTvShowResponse>>
