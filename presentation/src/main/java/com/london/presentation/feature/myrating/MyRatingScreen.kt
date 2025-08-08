@@ -27,6 +27,7 @@ import com.london.designsystem.theme.NovixTheme
 import com.london.designsystem.theme.ThemePreviews
 import com.london.domain.entity.myrating.RatedMedia
 import com.london.presentation.R
+import com.london.presentation.shared.EmptyGenreLayout
 import com.london.presentation.shared.HomeCard
 import com.london.presentation.shared.SnackBarAnimation
 import com.london.presentation.shared.base.ErrorState
@@ -100,36 +101,64 @@ private fun MyRatingContent(
         when (state.selectedRatingCategory) {
             RatingCategory.All -> {
                 val allItems = state.allRated.items
-                MediaGrid(
-                    items = allItems,
-                    onMovieClick = contract::onMovieClick,
-                    onTvShowClick = contract::onTvShowClick
-                )
+                if (allItems.isEmpty()) {
+                    EmptyGenreLayout(
+                        message = stringResource(R.string.there_is_no_items),
+                        modifier = Modifier.fillMaxSize()
+                    )
+                } else {
+                    MediaGrid(
+                        items = allItems,
+                        onMovieClick = contract::onMovieClick,
+                        onTvShowClick = contract::onTvShowClick
+                    )
+                }
             }
 
             RatingCategory.Movies -> {
                 val movieItems = state.allRated.items.filter { it.isMovie }
-                MediaGrid(
-                    items = movieItems,
-                    onMovieClick = contract::onMovieClick
-                )
+                if (movieItems.isEmpty()) {
+                    EmptyGenreLayout(
+                        message = stringResource(R.string.there_is_no_items),
+                        modifier = Modifier.fillMaxSize()
+                    )
+                } else {
+                    MediaGrid(
+                        items = movieItems,
+                        onMovieClick = contract::onMovieClick
+                    )
+                }
             }
 
             RatingCategory.TvShows -> {
                 val tvShowItems = state.allRated.items.filter { !it.isMovie }
-                MediaGrid(
-                    items = tvShowItems,
-                    onTvShowClick = contract::onTvShowClick
-                )
+                if (tvShowItems.isEmpty()) {
+                    EmptyGenreLayout(
+                        message = stringResource(R.string.there_is_no_items),
+                        modifier = Modifier.fillMaxSize()
+                    )
+                } else {
+                    MediaGrid(
+                        items = tvShowItems,
+                        onTvShowClick = contract::onTvShowClick
+                    )
+                }
             }
 
             null -> {
                 val allItems = state.allRated.items
-                MediaGrid(
-                    items = allItems,
-                    onMovieClick = contract::onMovieClick,
-                    onTvShowClick = contract::onTvShowClick
-                )
+                if (allItems.isEmpty()) {
+                    EmptyGenreLayout(
+                        message = stringResource(R.string.there_is_no_items),
+                        modifier = Modifier.fillMaxSize()
+                    )
+                } else {
+                    MediaGrid(
+                        items = allItems,
+                        onMovieClick = contract::onMovieClick,
+                        onTvShowClick = contract::onTvShowClick
+                    )
+                }
             }
         }
 
