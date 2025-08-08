@@ -110,7 +110,7 @@ class ViewListItemsViewModel @Inject constructor(
             },
             onSuccess = { moviesFlow ->
                 updateState {
-                    copy(listItems = moviesFlow, listTitle = state.value.listTitle)
+                    copy(listItems = moviesFlow)
                 }
             },
             onError = { errorState ->
