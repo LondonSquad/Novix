@@ -6,10 +6,10 @@ import com.london.domain.entity.recent.MediaType
 import com.london.domain.entity.recent.RecentViewed
 import com.london.domain.usecase.AddMovieRatingByIdUseCase
 import com.london.domain.usecase.GetAccountMovieStatesById
-import com.london.domain.usecase.details.movie.ManageMovieDetailsUseCase
 import com.london.domain.usecase.authentication.AuthenticationUseCase
-import com.london.domain.usecase.recent.viewed.AddToRecentViewedUseCase
-import com.london.domain.usecase.recent.watched.AddMovieToRecentWatchedUseCase
+import com.london.domain.usecase.details.movie.ManageMovieDetailsUseCase
+import com.london.domain.usecase.recent.viewed.ManageRecentViewedUseCase
+import com.london.domain.usecase.recent.watched.movie.ManageRecentMovieWatchedUseCase
 import com.london.presentation.navigation.Screen
 import com.london.presentation.navigation.getArgs
 import com.london.presentation.shared.base.BaseViewModel
@@ -19,8 +19,8 @@ import javax.inject.Inject
 @HiltViewModel
 class MovieDetailsViewModel @Inject constructor(
     private val movieDetails: ManageMovieDetailsUseCase,
-    private val addMovieToRecentWatchedUseCase: AddMovieToRecentWatchedUseCase,
-    private val addToRecentViewedUseCase: AddToRecentViewedUseCase,
+    private val manageRecentMovieWatchedUseCase: ManageRecentMovieWatchedUseCase,
+    private val manageRecentViewedUseCase: ManageRecentViewedUseCase,
     private val addMovieRatingByIdUseCase: AddMovieRatingByIdUseCase,
     private val getAccountMovieStatesById: GetAccountMovieStatesById,
     private val authenticationUseCase: AuthenticationUseCase,
@@ -116,11 +116,11 @@ class MovieDetailsViewModel @Inject constructor(
     }
 
     private suspend fun addMovieToRecentWatched(movie: Movie) {
-        addMovieToRecentWatchedUseCase.invoke(movie)
+        manageRecentMovieWatchedUseCase.addMovieToRecentWatched(movie)
     }
 
     private suspend fun addMovieToRecentViewed(movie: RecentViewed) {
-        addToRecentViewedUseCase.invoke(movie)
+        manageRecentViewedUseCase.addToRecentViewed(movie)
     }
 
     override fun onRetry() {

@@ -1,10 +1,12 @@
-package com.london.domain.usecase
+package com.london.domain.usecase.recent.watched.tvshow
 
 import com.google.common.truth.Truth.assertThat
 import com.london.domain.entity.TvShow
 import com.london.domain.repository.RecentWatchedRepository
-import com.london.domain.usecase.recent.watched.GetRecentWatchedTvShowsUseCase
+import io.mockk.Runs
 import io.mockk.coEvery
+import io.mockk.coVerify
+import io.mockk.just
 import io.mockk.mockk
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.single
@@ -12,16 +14,40 @@ import kotlinx.coroutines.test.runTest
 import org.junit.Before
 import org.junit.Test
 
-class GetRecentWatchedTvShowsUseCaseTest {
+class ManageRecentTvShowWatchedUseCaseTest {
     private lateinit var recentWatchedRepository: RecentWatchedRepository
-    private lateinit var getRecentWatchedTvShowsUseCase: GetRecentWatchedTvShowsUseCase
+    private lateinit var manageRecentTvShowWatchedUseCase: ManageRecentTvShowWatchedUseCase
 
     @Before
     fun setUp() {
         recentWatchedRepository = mockk()
-        getRecentWatchedTvShowsUseCase = GetRecentWatchedTvShowsUseCase(recentWatchedRepository)
+        manageRecentTvShowWatchedUseCase = ManageRecentTvShowWatchedUseCase(recentWatchedRepository)
     }
 
+    // region AddTvShowToRecentWatched
+    @Test
+    fun `invoke should call recentWatchedRepository insertMovie`() = runTest {
+        // Given
+        coEvery { recentWatchedRepository.insertTvShow(tvShow) } just Runs
+        // When
+        manageRecentTvShowWatchedUseCase.addTvShowToRecentWatched(tvShow)
+        // Then
+        coVerify(exactly = 1) { recentWatchedRepository.insertTvShow(tvShow) }
+    }
+
+    @Test
+    fun `invoke should throw exception when recentWatchedRepository throws exception`() = runTest {
+        // Given
+        coEvery { recentWatchedRepository.insertTvShow(tvShow) } throws Exception()
+        // When
+        val result =
+            runCatching { manageRecentTvShowWatchedUseCase.addTvShowToRecentWatched(tvShow) }
+        // Then
+        assert(result.isFailure)
+    }
+    // endregion
+
+    // region GetTvShowRecentWatched
     @Test
     fun `invoke should return list of tv show when recentWatchedRepository returns list`() =
         runTest {
@@ -32,7 +58,7 @@ class GetRecentWatchedTvShowsUseCaseTest {
                 )
             }
             // When
-            val result = getRecentWatchedTvShowsUseCase.getAll().single()
+            val result = manageRecentTvShowWatchedUseCase.getAllRecentTvShow().single()
             // Then
             assertThat(result).isEqualTo(tvShowList)
         }
@@ -47,20 +73,10 @@ class GetRecentWatchedTvShowsUseCaseTest {
                 )
             }
             // When
-            val result = getRecentWatchedTvShowsUseCase.getAll().single()
+            val result = manageRecentTvShowWatchedUseCase.getAllRecentTvShow().single()
             // Then
             assertThat(result).isEmpty()
         }
-
-    @Test
-    fun `invoke should throw exception when recentWatchedRepository throws exception`() = runTest {
-        // Given
-        coEvery { recentWatchedRepository.getAllRecentWatchedTvShows() } throws Exception()
-        // When
-        val result = runCatching { getRecentWatchedTvShowsUseCase.getAll().single() }
-        // Then
-        assert(result.isFailure)
-    }
 
     @Test
     fun `invoke should return limited list of Movie when limit is provided`() = runTest {
@@ -71,10 +87,11 @@ class GetRecentWatchedTvShowsUseCaseTest {
             )
         }
         // When
-        val result = getRecentWatchedTvShowsUseCase.getAll(limit = 2).single()
+        val result = manageRecentTvShowWatchedUseCase.getAllRecentTvShow(limit = 2).single()
         // Then
         assertThat(result).hasSize(2)
     }
+    // endregion
 
     companion object {
         val tvShow = TvShow(
@@ -85,6 +102,6 @@ class GetRecentWatchedTvShowsUseCaseTest {
             rating = 1,
             genres = listOf(1, 2, 3),
         )
-        val tvShowList = listOf(tvShow, tvShow, tvShow)
+        private val tvShowList = listOf(tvShow, tvShow.copy(id = 2), tvShow.copy(id = 3))
     }
 }

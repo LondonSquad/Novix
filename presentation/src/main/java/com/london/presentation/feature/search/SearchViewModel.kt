@@ -7,13 +7,8 @@ import com.london.domain.usecase.GetActorsUseCase
 import com.london.domain.usecase.GetMoviesUseCase
 import com.london.domain.usecase.GetTvShowsUseCase
 import com.london.domain.usecase.IncrementGenreInterestUseCase
-import com.london.domain.usecase.recent.search.AddToRecentSearchUseCase
-import com.london.domain.usecase.recent.search.ClearRecentSearchUseCase
-import com.london.domain.usecase.recent.search.DeleteRecentSearchUseCase
-import com.london.domain.usecase.recent.search.GetRecentSearchUseCase
-import com.london.domain.usecase.recent.viewed.AddToRecentViewedUseCase
-import com.london.domain.usecase.recent.viewed.ClearRecentViewedUseCase
-import com.london.domain.usecase.recent.viewed.GetRecentViewedUseCase
+import com.london.domain.usecase.recent.search.ManageRecentSearchUseCase
+import com.london.domain.usecase.recent.viewed.ManageRecentViewedUseCase
 import com.london.presentation.shared.base.BaseViewModel
 import com.london.presentation.shared.base.createPagingSourceFlow
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -29,14 +24,10 @@ class SearchViewModel @Inject constructor(
     private val getActorsUseCase: GetActorsUseCase,
     private val getTvShowsUseCase: GetTvShowsUseCase,
     private val getMoviesUseCase: GetMoviesUseCase,
-    private val addToRecentSearchUseCase: AddToRecentSearchUseCase,
-    private val getRecentSearchUseCase: GetRecentSearchUseCase,
-    private val clearRecentSearchUseCase: ClearRecentSearchUseCase,
+    private val manageRecentSearchUseCase: ManageRecentSearchUseCase,
     private val incrementGenreInterestUseCase: IncrementGenreInterestUseCase,
-    private val getRecentViewedUseCase: GetRecentViewedUseCase,
-    private val addToRecentViewedUseCase: AddToRecentViewedUseCase,
-    private val clearRecentViewedUseCase: ClearRecentViewedUseCase,
-    private val deleteRecentSearchUseCase: DeleteRecentSearchUseCase
+    private val manageRecentViewedUseCase: ManageRecentViewedUseCase,
+
 ) : BaseViewModel<SearchUiState, SearchEffect>(SearchUiState()), SearchContract {
 
     private val _searchQuery = MutableStateFlow("")
@@ -49,8 +40,8 @@ class SearchViewModel @Inject constructor(
     fun updateRecentData() {
         tryToExecute(
             block = {
-                val recentViewed = getRecentViewedUseCase.invoke().reversed()
-                val recentSearches = getRecentSearchUseCase.invoke()
+                val recentViewed = manageRecentViewedUseCase.getRecentViewed().reversed()
+                val recentSearches = manageRecentSearchUseCase.getRecentSearch()
                 Pair(recentViewed, recentSearches)
             },
             onSuccess = { (recentViewed, recentSearches) ->
@@ -146,8 +137,8 @@ class SearchViewModel @Inject constructor(
 
         tryToExecute(
             block = {
-                addToRecentSearchUseCase.invoke(query)
-                getRecentSearchUseCase.invoke().reversed()
+                manageRecentSearchUseCase.addToRecentSearch(query)
+                manageRecentSearchUseCase.getRecentSearch().reversed()
             },
             onSuccess = { recentSearches ->
                 updateState { copy(recentSearches = recentSearches) }
@@ -163,8 +154,8 @@ class SearchViewModel @Inject constructor(
     override fun addToRecentViewed(item: RecentViewed) {
         tryToExecute(
             block = {
-                addToRecentViewedUseCase.invoke(item)
-                getRecentViewedUseCase.invoke().reversed()
+                manageRecentViewedUseCase.addToRecentViewed(item)
+                manageRecentViewedUseCase.getRecentViewed().reversed()
             },
             onSuccess = { recentViewed ->
                 updateState { copy(recentViewed = recentViewed) }
@@ -186,7 +177,7 @@ class SearchViewModel @Inject constructor(
 
         tryToExecute(
             block = {
-                clearRecentViewedUseCase.invoke()
+                manageRecentViewedUseCase.clearRecentViewed()
             },
             onSuccess = { },
             onError = { errorState ->
@@ -201,7 +192,7 @@ class SearchViewModel @Inject constructor(
 
         tryToExecute(
             block = {
-                clearRecentSearchUseCase.invoke()
+                manageRecentSearchUseCase.clearRecentSearch()
             },
             onError = { errorState ->
                 updateState { copy(error = errorState) }
@@ -216,7 +207,7 @@ class SearchViewModel @Inject constructor(
 
         tryToExecute(
             block = {
-                deleteRecentSearchUseCase.invoke(search)
+                manageRecentSearchUseCase.deleteRecentSearch(search)
             },
             onError = { errorState ->
                 updateState { copy(error = errorState) }
