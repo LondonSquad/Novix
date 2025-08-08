@@ -31,7 +31,7 @@ class MyRatingViewModel @Inject constructor(
             onStart = {
                 updateState { copy(isLoading = true) }
             },
-            onSuccess = {(movies, tvShows, allRated) ->
+            onSuccess = { (movies, tvShows, allRated) ->
                 updateState {
                     copy(
                         movies = movies,
@@ -55,7 +55,14 @@ class MyRatingViewModel @Inject constructor(
     override fun onTvShowClick(id: Int) = emitEffect(MyRatingEffect.NavigateToTvShow(id))
 
     override fun onDelete(id: Int) {
-        TODO("Not yet implemented")
+        // TODO: Implement delete functionality
     }
 
+    override fun onRatingCategorySelected(category: RatingCategory) {
+        updateState { copy(selectedRatingCategory = category) }
+    }
+
+    override fun onItemClick(id: Int) {
+        emitEffect(MyRatingEffect.NavigateToMovie(id))
+    }
 }
