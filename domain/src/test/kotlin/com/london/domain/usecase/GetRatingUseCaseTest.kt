@@ -1,7 +1,7 @@
 package com.london.domain.usecase
 
 import com.london.domain.entity.RatedMedia
-import com.london.domain.repository.myrating.MyRatingRepository
+import com.london.domain.repository.myrating.RatingRepository
 import io.mockk.coEvery
 import io.mockk.mockk
 import kotlinx.coroutines.test.runTest
@@ -10,15 +10,15 @@ import org.junit.Assert.assertTrue
 import org.junit.Before
 import org.junit.Test
 
-class GetMyRatingUseCaseTest {
+class GetRatingUseCaseTest {
 
-    private lateinit var useCase: GetMyRatingUseCase
-    private lateinit var repository: MyRatingRepository
+    private lateinit var useCase: GetRatingUseCase
+    private lateinit var repository: RatingRepository
 
     @Before
     fun setup() {
         repository = mockk()
-        useCase = GetMyRatingUseCase(repository)
+        useCase = GetRatingUseCase(repository)
     }
 
     @Test

@@ -1,11 +1,11 @@
 package com.london.domain.usecase
 
 import com.london.domain.entity.RatedMedia
-import com.london.domain.repository.myrating.MyRatingRepository
+import com.london.domain.repository.myrating.RatingRepository
 import javax.inject.Inject
 
-class GetMyRatingUseCase @Inject constructor(
-    private val repository: MyRatingRepository
+class GetRatingUseCase @Inject constructor(
+    private val repository: RatingRepository
 ) {
     suspend fun getAllRated(): List<RatedMedia> {
         return repository.getAllRatedMedia()
