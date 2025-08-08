@@ -13,6 +13,7 @@ import com.london.data.local.source.home.upcoming.UpComingLocalDataSource
 import com.london.data.local.source.recent.RecentDataSource
 import com.london.data.local.source.recent.watched.RecentWatchedDataSource
 import com.london.data.remote.service.home.TrendingApiService
+import com.london.data.remote.source.account.AccountRemoteDataSource
 import com.london.data.remote.source.authentication.AuthenticationRemoteDataSource
 import com.london.data.remote.source.details.actor.ActorDetailsRemoteDataSource
 import com.london.data.remote.source.details.movie.MovieDetailsRemoteDataSource
@@ -28,6 +29,7 @@ import com.london.data.remote.source.list.CustomMovieListsRemoteDataSource
 import com.london.data.remote.source.reviews.ReviewsRemoteDataSource
 import com.london.data.remote.source.search.SearchRemoteDataSource
 import com.london.data.remote.source.toprated.TopRatedRemoteDataSource
+import com.london.data.repository.account.AccountRepositoryImp
 import com.london.data.repository.authentication.AuthenticationRepositoryImpl
 import com.london.data.repository.discover.DiscoverRepositoryImpl
 import com.london.data.repository.home.popular.PopularRepositoryImpl
@@ -49,6 +51,7 @@ import com.london.data.utils.FirebaseCrashReporter
 import com.london.domain.AppPreferencesService
 import com.london.domain.entity.recent.RecentSearch
 import com.london.domain.entity.recent.RecentViewed
+import com.london.domain.repository.AccountRepository
 import com.london.domain.repository.ActorRepository
 import com.london.domain.repository.AuthRepository
 import com.london.domain.repository.CustomMovieListRepository
@@ -234,6 +237,16 @@ object RepositoryModule {
         remoteDataSource = dataSource,
         authPreferences = authPreferences,
         preferencesService = preferencesService
+    )
+
+    @Provides
+    @Singleton
+    fun provideAccountRepository(
+        authPreferences: AuthPreferences,
+        accountRemoteDataSource: AccountRemoteDataSource
+    ): AccountRepository = AccountRepositoryImp(
+        authPreferences = authPreferences,
+        accountRemoteDataSource = accountRemoteDataSource
     )
 
 }
