@@ -35,5 +35,5 @@ data class RatedMovieResponse(
     @SerialName("vote_count")
     val voteCount: Int? = null,
     @SerialName("rating")
-    val rating: Int? = null
+    val rating: Double? = null
 )

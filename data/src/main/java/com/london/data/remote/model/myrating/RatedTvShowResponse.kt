@@ -33,5 +33,5 @@ data class RatedTvShowResponse(
     @SerialName("vote_average")
     val voteAverage: Double?,
     @SerialName("rating")
-    val rating: Int? = null
+    val rating: Double? = null
 )

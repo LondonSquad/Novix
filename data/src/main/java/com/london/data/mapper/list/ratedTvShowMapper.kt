@@ -11,7 +11,7 @@ fun RatedTvShowResponse.toRatedTvShow(): RatedTvShow {
         id = id.orZero(),
         title = name.orEmpty(),
         posterPath = posterPath.asImageUrlOrEmpty(),
-        rating = rating.orZero()
+        rating = rating?.toInt().orZero()
     )
 }
 

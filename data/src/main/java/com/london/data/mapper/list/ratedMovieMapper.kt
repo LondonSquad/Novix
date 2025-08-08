@@ -12,7 +12,7 @@ fun RatedMovieResponse.toRatedMovie(): RatedMovie {
         id = id.orZero(),
         title = title.orEmpty(),
         posterPath = posterPath.asImageUrlOrEmpty(),
-        rating = rating.orZero()
+        rating = rating?.toInt().orZero()
     )
 }
 
