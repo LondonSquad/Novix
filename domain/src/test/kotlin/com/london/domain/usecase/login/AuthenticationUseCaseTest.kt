@@ -2,6 +2,7 @@ package com.london.domain.usecase.login
 
 import com.google.common.truth.Truth.assertThat
 import com.london.domain.repository.AuthRepository
+import com.london.domain.usecase.authentication.AuthenticationUseCase
 import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.mockk

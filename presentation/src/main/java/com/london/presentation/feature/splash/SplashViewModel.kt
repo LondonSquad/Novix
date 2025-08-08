@@ -3,7 +3,7 @@ package com.london.presentation.feature.splash
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.london.domain.AppPreferencesService
-import com.london.domain.usecase.login.AuthenticationUseCase
+import com.london.domain.usecase.authentication.AuthenticationUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableSharedFlow

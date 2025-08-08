@@ -1,7 +1,7 @@
 package com.london.presentation.feature.list.savedlist
 
 import androidx.compose.ui.text.input.TextFieldValue
-import com.london.domain.usecase.login.AuthenticationUseCase
+import com.london.domain.usecase.authentication.AuthenticationUseCase
 import com.london.domain.usecase.movielist.GetAllMovieListsUseCase
 import com.london.domain.usecase.movielist.ManageMovieListUseCase
 import com.london.presentation.shared.base.BaseViewModel

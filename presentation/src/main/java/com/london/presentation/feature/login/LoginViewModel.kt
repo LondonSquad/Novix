@@ -2,7 +2,7 @@ package com.london.presentation.feature.login
 
 import android.app.Application
 import androidx.compose.ui.text.input.TextFieldValue
-import com.london.domain.usecase.login.AuthenticationUseCase
+import com.london.domain.usecase.authentication.AuthenticationUseCase
 import com.london.presentation.R
 import com.london.presentation.shared.base.BaseViewModel
 import com.london.presentation.shared.base.ErrorState

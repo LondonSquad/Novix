@@ -1,4 +1,4 @@
-package com.london.domain.usecase.login
+package com.london.domain.usecase.authentication
 
 import com.london.domain.repository.AuthRepository
 import javax.inject.Inject

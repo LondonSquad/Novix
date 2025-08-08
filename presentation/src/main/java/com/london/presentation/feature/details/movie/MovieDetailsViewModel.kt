@@ -7,7 +7,7 @@ import com.london.domain.entity.recent.RecentViewed
 import com.london.domain.usecase.AddMovieRatingByIdUseCase
 import com.london.domain.usecase.GetAccountMovieStatesById
 import com.london.domain.usecase.details.movie.ManageMovieDetailsUseCase
-import com.london.domain.usecase.login.AuthenticationUseCase
+import com.london.domain.usecase.authentication.AuthenticationUseCase
 import com.london.domain.usecase.recent.viewed.AddToRecentViewedUseCase
 import com.london.domain.usecase.recent.watched.AddMovieToRecentWatchedUseCase
 import com.london.presentation.navigation.Screen
