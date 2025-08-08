@@ -17,6 +17,7 @@ import com.london.designsystem.component.TopBar
 import com.london.designsystem.theme.NovixTheme
 import com.london.designsystem.theme.ThemePreviews
 import com.london.presentation.R
+import com.london.presentation.feature.list.bottomsheets.DeleteListBottomSheet
 import com.london.presentation.shared.MediaLazyPagingGrid
 import com.london.presentation.shared.SnackBarAnimation
 import com.london.presentation.shared.base.ErrorState
@@ -89,9 +90,22 @@ private fun Content(
             )
         }
     }
+
+    DeleteListBottomSheet(
+        isSheetVisible = state.isDeleteBottomSheetVisible,
+        contract = contract,
+    )
+
+    if (state.error is ErrorState.RequestFailed) {
+        SnackBarAnimation(
+            stringResource(R.string.list_deletion_failed)
+        )
+    }
+
     if (state.error is ErrorState.EntryNotFound) {
         SnackBarAnimation(stringResource(R.string.movie_not_found))
     }
+
     if (state.isSnackBarSuccessVisible) {
         SnackBarAnimation(
             stringResource(R.string.movie_removed_successfully),
@@ -115,6 +129,7 @@ private fun Preview() {
                 override fun onConfirmDelete() {}
                 override fun onMovieClick(id: Int) {}
                 override fun onRemoveMovieClick(id: Int) {}
+                override fun onDeleteBottomSheetDismiss() {}
             },
         )
     }

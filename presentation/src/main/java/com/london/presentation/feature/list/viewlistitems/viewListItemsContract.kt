@@ -7,4 +7,5 @@ interface ViewListItemsContract {
     fun onConfirmDelete()
     fun onMovieClick(id: Int)
     fun onRemoveMovieClick(id: Int)
+    fun onDeleteBottomSheetDismiss()
 }
