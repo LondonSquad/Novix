@@ -22,7 +22,7 @@ class GetMyRatingTest {
     }
 
     @Test
-    fun `test getAllRated returns sorted list with timestamps`() = runTest {
+    fun `getAllRated returns sorted list with timestamps`() = runTest {
         // Given
         coEvery { repository.getAllRatedMedia() } returns mockRatedMedia
 
@@ -36,7 +36,7 @@ class GetMyRatingTest {
     }
 
     @Test
-    fun `test getRatedMovies returns only movies`() = runTest {
+    fun `getRatedMovies returns only movies`() = runTest {
         // Given
         coEvery { repository.getAllRatedMedia() } returns mockRatedMedia
 
@@ -51,7 +51,7 @@ class GetMyRatingTest {
     }
 
     @Test
-    fun `test getRatedTvShows returns only tv shows`() = runTest {
+    fun `getRatedTvShows returns only tv shows`() = runTest {
         // Given
         coEvery { repository.getAllRatedMedia() } returns mockRatedMediaWithTvShows
 
@@ -66,7 +66,7 @@ class GetMyRatingTest {
     }
 
     @Test
-    fun `test getAllRated returns empty list when repository returns empty`() = runTest {
+    fun `getAllRated returns empty list when repository returns empty`() = runTest {
         // Given
         coEvery { repository.getAllRatedMedia() } returns emptyList()
 
@@ -78,7 +78,7 @@ class GetMyRatingTest {
     }
 
     @Test
-    fun `test getRatedMovies returns empty list when no movies`() = runTest {
+    fun `getRatedMovies returns empty list when no movies`() = runTest {
         // Given
         coEvery { repository.getAllRatedMedia() } returns mockOnlyTvShows
 
@@ -90,7 +90,7 @@ class GetMyRatingTest {
     }
 
     @Test
-    fun `test getRatedTvShows returns empty list when no tv shows`() = runTest {
+    fun `getRatedTvShows returns empty list when no tv shows`() = runTest {
         // Given
         coEvery { repository.getAllRatedMedia() } returns mockOnlyMovies
 
@@ -102,7 +102,7 @@ class GetMyRatingTest {
     }
 
     @Test
-    fun `test getAllRated assigns new timestamps`() = runTest {
+    fun `getAllRated assigns new timestamps`() = runTest {
         // Given
         coEvery { repository.getAllRatedMedia() } returns mockSingleItem
 
@@ -115,7 +115,7 @@ class GetMyRatingTest {
     }
 
     @Test
-    fun `test sorting by addedAt descending`() = runTest {
+    fun `getAllRated sorts by addedAt descending`() = runTest {
         // Given
         coEvery { repository.getAllRatedMedia() } returns mockSortedItems
 
