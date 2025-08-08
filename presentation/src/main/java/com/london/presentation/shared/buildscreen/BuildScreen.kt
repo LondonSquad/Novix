@@ -52,7 +52,7 @@ fun BuildScreen(
     isLoading: Boolean = false,
     isError: Boolean = false,
     isGuest: Boolean = false,
-    onBack: () -> Unit = {},
+    onBack: (() -> Unit)? = {},
     onRetry: () -> Unit = {},
     @StringRes emptyLayoutMessage: Int? = null,
     @DrawableRes emptyLayoutImage: Int? = null,
