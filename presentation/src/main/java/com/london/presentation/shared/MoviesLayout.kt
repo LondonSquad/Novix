@@ -10,6 +10,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.paging.compose.LazyPagingItems
+import com.london.designsystem.theme.NovixTheme
 import com.london.domain.entity.Movie
 import com.london.presentation.utils.gridColmuns
 
@@ -36,7 +37,8 @@ fun MoviesLayOut(
                     onSaveClick = { onSaveClick(movie) },
                     isSaved = isMovieSaved(movie),
                     imageDescription = movie.name,
-                    modifier = Modifier.clickable { onMovieClick(movie) }
+                    modifier = Modifier.clickable { onMovieClick(movie) },
+                    isDarkMode = NovixTheme.isThemeDark
                 )
             }
         }

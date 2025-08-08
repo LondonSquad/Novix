@@ -2,7 +2,6 @@ package com.london.presentation.feature.onboarding
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -138,7 +137,7 @@ fun WelcomePoster(modifier: Modifier = Modifier) {
         modifier = modifier,
         contentAlignment = Alignment.BottomCenter
     ) {
-        val image = if (isSystemInDarkTheme()) {
+        val image = if (NovixTheme.isThemeDark) {
             painterResource(id = R.drawable.welcome_screen_dark)
         } else {
             painterResource(id = R.drawable.welcome_screen_light)

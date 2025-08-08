@@ -103,7 +103,7 @@ private fun Content(
                                 .clip(RoundedCornerShape(12.dp)),
                             contentScale = ContentScale.Crop,
                             loadingContent = { CircularLoading() },
-                            errorContent = { ErrorImage() }
+                            errorContent = { ErrorImage(NovixTheme.isThemeDark) }
                         )
                     }
                 }
@@ -111,4 +111,3 @@ private fun Content(
         }
     }
 }
-
