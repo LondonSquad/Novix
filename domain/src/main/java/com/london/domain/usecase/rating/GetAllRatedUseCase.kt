@@ -1,16 +1,18 @@
 package com.london.domain.usecase.rating
 
-import com.london.domain.entity.myrating.RatedMovie
-import com.london.domain.entity.myrating.RatedTvShow
+import com.london.domain.entity.myrating.AllRatedContent
 import com.london.domain.repository.myrating.MyRatingRepository
 import javax.inject.Inject
 
 class GetAllRatedUseCase @Inject constructor(
     private val repository: MyRatingRepository
 ) {
-    suspend fun invoke(): Pair<List<RatedTvShow>, List<RatedMovie>> {
-        val ratedTvShows = repository.getAllRatedMTvShows()
+    suspend fun invoke(): AllRatedContent {
         val ratedMovies = repository.getAllRatedMovies()
-        return Pair(ratedTvShows, ratedMovies)
+        val ratedTvShows = repository.getAllRatedTvShows()
+        return AllRatedContent(
+            movies = ratedMovies,
+            tvShows = ratedTvShows
+        )
     }
 }

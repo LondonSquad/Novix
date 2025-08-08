@@ -6,5 +6,5 @@ import javax.inject.Inject
 class GetRatedTvShowUseCase @Inject constructor(
     private val repository: MyRatingRepository
 ) {
-    suspend fun invoke() = repository.getAllRatedMTvShows()
+    suspend fun invoke() = repository.getAllRatedTvShows()
 }

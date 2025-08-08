@@ -4,6 +4,6 @@ import com.london.domain.entity.myrating.RatedMovie
 import com.london.domain.entity.myrating.RatedTvShow
 
 interface MyRatingRepository {
-    suspend fun getAllRatedMovies() : List<RatedMovie>
-    suspend fun getAllRatedMTvShows() : List<RatedTvShow>
+    suspend fun getAllRatedMovies(): List<RatedMovie>
+    suspend fun getAllRatedTvShows(): List<RatedTvShow>
 }
