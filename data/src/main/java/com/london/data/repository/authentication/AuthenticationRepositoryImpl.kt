@@ -1,12 +1,15 @@
 package com.london.data.repository.authentication
 
 import com.london.data.local.preference.AuthPreferences
+import com.london.data.mapper.account.toEntity
+import com.london.data.remote.source.account.AccountRemoteDataSource
 import com.london.data.remote.source.authentication.AuthenticationRemoteDataSource
 import com.london.domain.repository.AuthRepository
 import javax.inject.Inject
 
 class AuthenticationRepositoryImpl @Inject constructor(
     private val authRemoteDataSource: AuthenticationRemoteDataSource,
+    private val accountRemoteDataSource: AccountRemoteDataSource,
     private val authPreferences: AuthPreferences
 ) : AuthRepository {
     override suspend fun login(username: String, password: String): Boolean {
@@ -29,6 +32,11 @@ class AuthenticationRepositoryImpl @Inject constructor(
             authPreferences.saveUsername(username)
             authPreferences.saveRequestToken(sessionResponse.requestToken)
             authPreferences.setGuestMode(false)
+
+            val accountResult = accountRemoteDataSource.getAccountDetails(createdSession.sessionId)
+            val accountInfo = accountResult.getOrThrow().toEntity()
+            val accountId = accountInfo.id
+            authPreferences.saveAccountId(accountId)
             true
         } else {
             false
@@ -56,4 +64,6 @@ class AuthenticationRepositoryImpl @Inject constructor(
     }
 
     override suspend fun isLoggedIn(): Boolean = authPreferences.isLoggedIn()
+
+    override suspend fun getAccountId(): Int = authPreferences.getAccountId()
 }
