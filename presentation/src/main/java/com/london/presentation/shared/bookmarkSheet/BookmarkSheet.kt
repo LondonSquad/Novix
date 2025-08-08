@@ -126,7 +126,7 @@ private fun BookmarkBottomSheetContent(
                         color = NovixTheme.colors.stroke,
                         shape = RoundedCornerShape(8.dp)
                     )
-                    .clickable(onClick = { /*onCancelClick*/ }),
+                    .clickable(onClick = hideSheet),
                 contentAlignment = Alignment.Center
             ) {
                 Icon(
