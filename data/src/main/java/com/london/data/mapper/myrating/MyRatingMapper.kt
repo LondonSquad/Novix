@@ -6,22 +6,30 @@ import com.london.data.utils.asImageUrlOrEmpty
 import com.london.data.utils.orZero
 import com.london.domain.entity.RatedMedia
 
-fun RatedMovieResponse.toEntity(isMovie: Boolean = true): RatedMedia {
+fun RatedMovieResponse.toEntity(
+    isMovie: Boolean = true,
+    addedAt: Long = System.currentTimeMillis()
+): RatedMedia {
     return RatedMedia(
         id = id.orZero(),
         title = title.orEmpty(),
         posterPath = posterPath.asImageUrlOrEmpty(),
         rating = rating?.toInt().orZero(),
-        isMovie = isMovie
+        isMovie = isMovie,
+        addedAt = addedAt
     )
 }
 
-fun RatedTvShowResponse.toEntity(isMovie: Boolean = false): RatedMedia {
+fun RatedTvShowResponse.toEntity(
+    isMovie: Boolean = false,
+    addedAt: Long = System.currentTimeMillis()
+): RatedMedia {
     return RatedMedia(
         id = id.orZero(),
         title = name.orEmpty(),
         posterPath = posterPath.asImageUrlOrEmpty(),
         rating = rating?.toInt().orZero(),
-        isMovie = isMovie
+        isMovie = isMovie,
+        addedAt = addedAt
     )
 } 
