@@ -361,12 +361,10 @@ private fun LazyGridScope.upComingSection(
     items(count = upcomingMoviesLazyList.itemCount) { index ->
         val movie = upcomingMoviesLazyList[index]
 
-
         when {
             isLoading || movie == null -> {
                 ShimmerMovieCard()
             }
-
             else -> {
                 HomeCard(
                     imageUrl = movie.imageUrl,

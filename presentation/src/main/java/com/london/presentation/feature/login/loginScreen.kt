@@ -40,8 +40,8 @@ import com.london.designsystem.component.TopBar
 import com.london.designsystem.component.button.PrimaryButton
 import com.london.designsystem.theme.NovixTheme
 import com.london.presentation.R
-import com.london.presentation.shared.base.ErrorState
 import com.london.presentation.shared.SnackBarAnimation
+import com.london.presentation.shared.base.ErrorState
 import com.london.presentation.utils.Listen
 import com.london.designsystem.R as dsR
 

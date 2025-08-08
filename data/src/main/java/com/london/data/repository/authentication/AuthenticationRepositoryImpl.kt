@@ -65,5 +65,7 @@ class AuthenticationRepositoryImpl @Inject constructor(
 
     override suspend fun isLoggedIn(): Boolean = authPreferences.isLoggedIn()
 
-    override suspend fun getAccountId(): Int = authPreferences.getAccountId()
+    override suspend fun getAccountId(): Int {
+        return authPreferences.getAccountId()
+    }
 }

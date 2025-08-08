@@ -1,5 +1,6 @@
 package com.london.data.remote.source.details.tvshow
 
+import com.london.data.remote.model.details.rating.AccountStatesResponse
 import com.london.data.remote.model.details.tvshow.model.TvShowCastRemoteResponse
 import com.london.data.remote.model.details.tvshow.model.TvShowDetailsRemoteResponse
 import com.london.data.remote.model.details.tvshow.model.TvShowImagesRemoteResponse
@@ -63,18 +64,52 @@ class TvShowDetailsRemoteDataSourceImpl @Inject constructor(
         )
 
     override suspend fun getEpisodeVideos(
-        seriesId: Int,
+        tvShowId: Int,
         seasonNumber: Int,
         episodeNumber: Int
     ): Result<EpisodeVideoResponse> =
         callApiWithRetry(
             apiCall = {
                 tvShowDetailsApiService.getEpisodeVideo(
-                    seriesId = seriesId,
+                    seriesId = tvShowId,
                     seasonNumber = seasonNumber,
                     episodeNumber = episodeNumber
                 )
             },
             mapper = { it }
         )
+
+    override suspend fun getAccountTvShowStates(
+        tvShowId: Int,
+        guestSessionId: String?,
+        userSessionId: String?,
+    ): Result<AccountStatesResponse> = callApiWithRetry(
+        apiCall = {
+            tvShowDetailsApiService.getAccountTvShowState(
+                seriesId = tvShowId,
+                guestSessionId = guestSessionId,
+                userSessionId = userSessionId
+            )
+        },
+        mapper = { it }
+    )
+
+    override suspend fun getAccountTvEpisodeState(
+        tvShowId: Int,
+        seasonNumber: Int,
+        episodeNumber: Int,
+        guestSessionId: String?,
+        userSessionId: String?
+    ): Result<AccountStatesResponse> = callApiWithRetry(
+        apiCall = {
+            tvShowDetailsApiService.getAccountTvEpisode(
+                tvShowId = tvShowId,
+                seasonNumber = seasonNumber,
+                episodeNumber = episodeNumber,
+                guestSessionId = guestSessionId,
+                userSessionId = userSessionId
+            )
+        },
+        mapper = { it }
+    )
 }

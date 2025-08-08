@@ -85,6 +85,7 @@ firebaseCrashlyticsKtx = "19.4.4"
 
 hilt = "2.57"
 androidHiltNavigation = "1.2.0"
+junitJupiterVersion = "5.8.1"
 
 [libraries]
 # AndroidX Core
@@ -179,6 +180,7 @@ retrofit-core = { group = "com.squareup.retrofit2", name = "retrofit", version.r
 retrofit-converter-gson = { group = "com.squareup.retrofit2", name = "converter-gson", version.ref = "retrofit" }
 okhttp-core = { group = "com.squareup.okhttp3", name = "okhttp", version.ref = "okhttp" }
 okhttp-logging = { group = "com.squareup.okhttp3", name = "logging-interceptor", version.ref = "okhttp" }
+jupiter-junit-jupiter = { group = "org.junit.jupiter", name = "junit-jupiter", version.ref = "junitJupiterVersion" }
 
 
 [plugins]

@@ -45,6 +45,7 @@ import com.london.presentation.feature.home.trending.tvshow.TrendingTvShowsScree
 import com.london.presentation.feature.list.savedlist.ListScreen
 import com.london.presentation.feature.list.viewlistitems.ViewListItemsScreen
 import com.london.presentation.feature.login.LoginScreen
+import com.london.presentation.feature.myrating.MyRatingScreen
 import com.london.presentation.feature.onboarding.OnboardingRoute
 import com.london.presentation.feature.onboarding.WelcomeScreen
 import com.london.presentation.feature.register.WebViewRegistrationScreen
@@ -384,7 +385,17 @@ fun NavGraphBuilder.mainNavGraph(
         enterTransition = { fadeIn(tween(500)) },
         popExitTransition = { fadeOut(tween(500)) },
     ) {
-        // todo: Implement MyRatingScreen
+        MyRatingScreen(
+            onNavigateMovie = { movieId ->
+                navController.navigate(MovieDetails(movieId))
+            },
+            onNavigateTvShow = { tvShowId ->
+                navController.navigate(TvShowDetails(tvShowId))
+            },
+            onNavigateBack = {
+                navController.navigateUp()
+            }
+        )
     }
 
     composable<TvShowDetails>(
@@ -411,7 +422,8 @@ fun NavGraphBuilder.mainNavGraph(
             onNavigateBack = { navController.navigateUp() },
             onNavigateToGenre = { genreId ->
                 navController.navigate(Screen.TvShowsByCategory(genreId))
-            }
+            },
+            onNavigateToLogin = { navController.navigate(Screen.Login) }
         )
     }
 
@@ -521,7 +533,8 @@ fun NavGraphBuilder.mainNavGraph(
             onNavigateBack = { navController.popBackStack() },
             onNavigateToCast = { actorId ->
                 navController.navigate(ActorDetails(actorId))
-            }
+            },
+            onNavigateLogin = { navController.navigate(Screen.Login) }
         )
     }
     composable<Screen.ActorGallery> {

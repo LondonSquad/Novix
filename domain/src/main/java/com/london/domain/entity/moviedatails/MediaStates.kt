@@ -1,6 +1,6 @@
 package com.london.domain.entity.moviedatails
 
-data class MovieStates(
+data class MediaStates(
     val favorite: Boolean,
     val id: Int,
     val rate: Int,

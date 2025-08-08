@@ -13,8 +13,8 @@ import com.london.data.utils.isTrue
 import com.london.domain.entity.Actor
 import com.london.domain.entity.Movie
 import com.london.domain.entity.PagedFetchResponse
+import com.london.domain.entity.moviedatails.MediaStates
 import com.london.domain.entity.moviedatails.MovieDetails
-import com.london.domain.entity.moviedatails.MovieStates
 import com.london.domain.entity.review.ReviewEntity
 import com.london.domain.entity.videoprovider.MovieVideo
 import com.london.domain.repository.MovieDetailsRepository
@@ -80,7 +80,7 @@ class MovieDetailsRepositoryImpl @Inject constructor(
 
     override suspend fun getAccountMovieStatesById(
         id: Int,
-    ): MovieStates {
+    ): MediaStates {
          return movieDetailsRemoteDataSource.getAccountMovieStates(
             movieId = id,
             userSessionId = authPreferences.getSessionId(),

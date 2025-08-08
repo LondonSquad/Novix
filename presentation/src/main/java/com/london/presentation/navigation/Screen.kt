@@ -99,7 +99,7 @@ sealed interface Screen {
     @Serializable
     data class ViewListItems(
         val listId: Int,
-    ): Screen
+    ) : Screen
 
     @Serializable
     data object TopRated : Screen
