@@ -102,7 +102,7 @@ private fun MyRatingContent(
 
         when (state.selectedRatingCategory) {
             RatingCategory.All -> {
-                AllRatedContent(
+                AllRatedContentSection(
                     movies = state.allRated.movies,
                     tvShows = state.allRated.tvShows,
                     onMovieClick = contract::onMovieClick,
@@ -128,7 +128,7 @@ private fun MyRatingContent(
             }
 
             null -> {
-                AllRatedContent(
+                AllRatedContentSection(
                     movies = state.allRated.movies,
                     tvShows = state.allRated.tvShows,
                     onMovieClick = contract::onMovieClick,
@@ -151,7 +151,7 @@ private fun MyRatingContent(
 }
 
 @Composable
-private fun AllRatedContent(
+private fun AllRatedContentSection(
     movies: List<RatedMovie>,
     tvShows: List<RatedTvShow>,
     onMovieClick: (Int) -> Unit,
