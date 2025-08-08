@@ -22,7 +22,6 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.hilt.navigation.compose.hiltViewModel
 import com.london.designsystem.component.Icon
 import com.london.designsystem.component.ModalBottomSheet
 import com.london.designsystem.component.OutlinedTextField
@@ -34,14 +33,13 @@ import com.london.designsystem.theme.NovixTheme
 import com.london.presentation.R
 import com.london.presentation.feature.list.savedlist.AddSheetState
 import com.london.presentation.feature.list.savedlist.ListContract
-import com.london.presentation.feature.list.savedlist.ListViewModel
 import com.london.presentation.feature.list.savedlist.defaultContractList
 import kotlinx.coroutines.launch
 
 @Composable
 fun AddListBottomSheet(
     modifier: Modifier = Modifier,
-    addListInteractions: ListContract = hiltViewModel<ListViewModel>(),
+    addListInteractions: ListContract,
     sheetState: SheetState = rememberModalBottomSheetState(),
     addListSheetState: AddSheetState,
 ) {
@@ -56,7 +54,7 @@ fun AddListBottomSheet(
     if (addListSheetState.isSheetVisible) {
         ModalBottomSheet(
             onDismissRequest = {
-                addListInteractions.onAddListSheetDismiss()
+                addListInteractions.setAddListSheetVisible(false)
             },
             containerColor = NovixTheme.colors.surface,
             state = sheetState,
@@ -71,13 +69,13 @@ fun AddListBottomSheet(
                             sheetState.hide()
                         }.invokeOnCompletion {
                             if (!sheetState.isVisible) {
-                                addListInteractions.onAddListSheetDismiss()
+                                addListInteractions.setAddListSheetVisible(false)
                             }
                         }
                     }
                 },
                 onAddClicked = {
-                    addListInteractions.onAddList(addListSheetState.listName)
+                    addListInteractions.onAddList(addListSheetState.listName.text)
                 }
             )
         }

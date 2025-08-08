@@ -1,74 +1,127 @@
 package com.london.presentation.feature.list.savedlist
 
 import androidx.compose.ui.text.input.TextFieldValue
-import androidx.paging.PagingData
-import com.london.domain.entity.recent.MediaType
+import com.london.domain.usecase.LoggedInUseCase
+import com.london.domain.usecase.movielist.GetAllMovieListsUseCase
+import com.london.domain.usecase.movielist.ManageMovieListUseCase
 import com.london.presentation.shared.base.BaseViewModel
+import com.london.presentation.shared.base.createPagingSourceFlow
 import dagger.hilt.android.lifecycle.HiltViewModel
 import jakarta.inject.Inject
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.flowOf
 
 @HiltViewModel
-class ListViewModel @Inject constructor() :
-    BaseViewModel<ListUiState, ListEffect>(ListUiState()), ListContract {
+class ListViewModel @Inject constructor(
+    private val getAllMovieListsUseCase: GetAllMovieListsUseCase,
+    private val manageMovieListUseCase: ManageMovieListUseCase,
+    private val loggedInUseCase: LoggedInUseCase
+) : BaseViewModel<ListUiState, ListEffect>(ListUiState()), ListContract {
 
     init {
-        getSavedLists()
+
+        checkUserLoginStatus { isLoggedIn->
+            if (!isLoggedIn) return@checkUserLoginStatus
+            fetchSavedLists()
+        }
     }
 
-    override fun onRetry() {
-        // TODO("Not yet implemented")
-    }
+    override fun onRetry() { fetchSavedLists() }
 
-    override fun onLoginClick() {
-        // TODO("Not yet implemented")
-    }
+    override fun onFabClick() = setAddListSheetVisible(true)
+
+
+    override fun onLoginClick() { emitEffect(ListEffect.NavigateToLogin) }
 
     override fun onListClick(id: Int) {
+
+        updateState { copy(isSnackBarSuccessVisible = false) }
         emitEffect(ListEffect.NavigateToDetails(id))
     }
 
-    override fun onFabClick() {
-        /*TODO*/
-    }
+    override fun setAddListSheetVisible(visible: Boolean) {
 
-    override fun onAddList(listName: TextFieldValue) {
-        TODO("Not yet implemented")
-    }
-
-    override fun onAddListSheetDismiss() {
-        /*TODO*/
-    }
-
-    override fun onListNameChanged(listName: TextFieldValue) {
-        /*TODO*/
-    }
-
-    override fun onMediaTypeChanged(mediaType: MediaType) {
-        /*TODO*/
-    }
-
-    override fun showAddListSheet(mediaType: MediaType) {
-        /*TODO*/
-    }
-
-
-    private fun dummyItems(): Flow<PagingData<ListItemUi>> {
-        val list =  //emptyList<SavedListItemUi>()
-            List(5) { index ->
-                ListItemUi(
-                    id = index,
-                    title = "Dummy List #$index",
-                    count = (1..10).random()
-                )
-            }
-        return flowOf(PagingData.from(list))
-    }
-
-    private fun getSavedLists() {
         updateState {
-            copy(isLoading = false, items = dummyItems())
+            copy(addListSheetState = addListSheetState.copy(isSheetVisible = visible))
         }
+    }
+    override fun onListNameChanged(listName: TextFieldValue) {
+
+        updateState {
+            copy(addListSheetState = addListSheetState.copy(listName = listName))
+        }
+    }
+
+    override fun onAddList(listName: String) {
+
+        tryToExecute(
+            onStart = {
+                updateState { copy(isSnackBarSuccessVisible = false,isLoading = true) }
+            },
+            block = {
+                manageMovieListUseCase.createMovieList(listName)
+            },
+            onError = {
+                updateState { copy(error = it, isLoading = false) }
+            },
+            onSuccess = {
+                setAddListSheetVisible(false)
+                updateState {
+                    copy(
+                        isSnackBarSuccessVisible = true,
+                        isLoading = false,
+                        addListSheetState = addListSheetState.copy(
+                            listName = TextFieldValue(""),
+                        )
+                    )
+                }
+                fetchSavedLists()
+            }
+        )
+    }
+
+    private fun fetchSavedLists() {
+
+        tryToExecute(
+            block = {
+                val moviesFlow = createPagingSourceFlow(query = "") { _, pageNumber ->
+                    val movies = getAllMovieListsUseCase.invoke(
+                        pageNumber
+                    )
+                    movies.copy(items = movies.items)
+                }
+                moviesFlow
+            },
+            onStart = {
+                updateState { copy(isLoading = true) }
+            },
+            onSuccess = { moviesFlow ->
+                updateState {
+                    copy(items = moviesFlow)
+                }
+            },
+            onError = { errorState ->
+                updateState {
+                    copy(error = errorState)
+                }
+            },
+            onCompleted = { updateState { copy(isLoading = false) } },
+        )
+    }
+
+    private fun checkUserLoginStatus(onResult: (Boolean) -> Unit = {}) {
+
+        tryToExecute(
+            block = { loggedInUseCase.invoke() },
+            onStart = {
+                updateState { copy(isLoading = true) }
+            },
+            onSuccess = { isLoggedIn ->
+                updateState { copy(isGuest = !isLoggedIn, isLoading = false) }
+                onResult(isLoggedIn)
+            },
+            onError = {
+                updateState { copy(isGuest = true, isLoading = false) }
+                onResult(false)
+            },
+        )
     }
 }
