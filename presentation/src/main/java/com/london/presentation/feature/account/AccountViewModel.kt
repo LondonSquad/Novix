@@ -28,6 +28,7 @@ class AccountViewModel @Inject constructor(
         fetchAndSetUsername()
         observeContentRestrictionLevel()
         initializeAppLanguage()
+        initializeAppTheme()
     }
 
     private fun checkUserLoginStatus() {
