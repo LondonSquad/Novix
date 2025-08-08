@@ -36,7 +36,7 @@ class MyRatingMapperTest {
         assertEquals(456, result.id)
         assertEquals("Test TV Show", result.title)
         assertEquals("https://image.tmdb.org/t/p/w500/test-poster.jpg", result.posterPath)
-        assertEquals(7, result.rating) // 7.5 -> 7 (truncated)
+        assertEquals(7, result.rating)
         assertFalse(result.isMovie)
     }
 
