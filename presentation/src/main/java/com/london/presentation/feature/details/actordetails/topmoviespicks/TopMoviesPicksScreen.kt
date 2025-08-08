@@ -53,6 +53,7 @@ private fun TopMoviesPicksContent(
             onBack = contract::onBack,
             getImageUrl = { it.posterUrl },
             onItemClick = { contract.onMovieClicked(it.id) },
+            onSavedClick = { contract.onSaveMovie(it.id) },
             modifier = modifier
         )
     }

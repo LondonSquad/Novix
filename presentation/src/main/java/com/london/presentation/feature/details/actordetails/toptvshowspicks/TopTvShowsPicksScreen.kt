@@ -52,6 +52,7 @@ private fun TopTvShowsPicksContent(
             onBack = contract::onBack,
             getImageUrl = { it.posterUrl },
             onItemClick = { contract.onTvShowClicked(it.id) },
+            onSavedClick = { contract.onSaveTvShow(it.id) },
             modifier = modifier
         )
     }

@@ -34,6 +34,7 @@ fun <T> MediaLazyGrid(
     getImageUrl: (T) -> String,
     modifier: Modifier = Modifier,
     onItemClick: (T) -> Unit = {},
+    onSavedClick: (T) -> Unit = {},
     isItemSaved: (T) -> Boolean = { false },
     isLoading: Boolean = false,
     emptyTitle: String = "",
@@ -88,7 +89,7 @@ fun <T> MediaLazyGrid(
                         HomeCard(
                             imageUrl = getImageUrl(item),
                             isSaved = isItemSaved(item),
-                            onSaveClick = { /* todo on save click */ },
+                            onSaveClick = { onSavedClick(item) },
                             modifier = Modifier.clickable { onItemClick(item) }
                         )
                     }
