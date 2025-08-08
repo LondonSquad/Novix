@@ -54,6 +54,9 @@ class TopMoviesPicksViewModel @Inject constructor(
 
     override fun onSaveMovie(movieId: Int) {
         updateState { copy(isSaved = isSaved) }
+    }
+
+    override fun onMovieClicked(movieId: Int) {
         emitEffect(TopMoviesPicksEffect.NavigationToMovieDetails(movieId))
     }
 
