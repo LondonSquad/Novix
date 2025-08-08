@@ -26,11 +26,8 @@ class ListViewModel @Inject constructor(
 
     override fun onRetry() { fetchSavedLists() }
 
-    override fun onFabClick() = showAddListSheet()
+    override fun onFabClick() = setAddListSheetVisible(true)
 
-    override fun showBottomSheet() = setAddListSheetVisible(false)
-
-    override fun onAddListSheetDismiss() = setAddListSheetVisible(false)
 
     override fun onLoginClick() { emitEffect(ListEffect.NavigateToLogin) }
 
@@ -40,6 +37,12 @@ class ListViewModel @Inject constructor(
         emitEffect(ListEffect.NavigateToDetails(id))
     }
 
+    override fun setAddListSheetVisible(visible: Boolean) {
+
+        updateState {
+            copy(addListSheetState = addListSheetState.copy(isSheetVisible = visible))
+        }
+    }
     override fun onListNameChanged(listName: TextFieldValue) {
 
         updateState {
@@ -60,7 +63,7 @@ class ListViewModel @Inject constructor(
                 updateState { copy(error = it, isLoading = false) }
             },
             onSuccess = {
-                onAddListSheetDismiss()
+                setAddListSheetVisible(false)
                 updateState {
                     copy(
                         isSnackBarSuccessVisible = true,
@@ -104,8 +107,6 @@ class ListViewModel @Inject constructor(
         )
     }
 
-    private fun showAddListSheet() = setAddListSheetVisible(true)
-
     private fun checkUserLoginStatus(onResult: (Boolean) -> Unit = {}) {
 
         tryToExecute(
@@ -122,12 +123,5 @@ class ListViewModel @Inject constructor(
                 onResult(false)
             },
         )
-    }
-
-    private fun setAddListSheetVisible(visible: Boolean) {
-
-        updateState {
-            copy(addListSheetState = addListSheetState.copy(isSheetVisible = visible))
-        }
     }
 }

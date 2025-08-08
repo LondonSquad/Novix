@@ -54,7 +54,7 @@ fun AddListBottomSheet(
     if (addListSheetState.isSheetVisible) {
         ModalBottomSheet(
             onDismissRequest = {
-                addListInteractions.onAddListSheetDismiss()
+                addListInteractions.setAddListSheetVisible(false)
             },
             containerColor = NovixTheme.colors.surface,
             state = sheetState,
@@ -69,7 +69,7 @@ fun AddListBottomSheet(
                             sheetState.hide()
                         }.invokeOnCompletion {
                             if (!sheetState.isVisible) {
-                                addListInteractions.onAddListSheetDismiss()
+                                addListInteractions.setAddListSheetVisible(false)
                             }
                         }
                     }
