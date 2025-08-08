@@ -66,7 +66,7 @@ fun ImageViewFilter(
         }
     }
 
-    LaunchedEffect(model, config.enableModeration) {
+    LaunchedEffect(model, config) {
         onLoadingStateChange?.invoke(true)
         isLoading = true
         errorState = null
