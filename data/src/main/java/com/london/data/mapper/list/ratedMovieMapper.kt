@@ -10,6 +10,7 @@ import com.london.domain.entity.myrating.RatedMovie
 fun RatedMovieResponse.toRatedMovie(): RatedMovie {
     return RatedMovie(
         id = id.orZero(),
+        title = title.orEmpty(),
         posterPath = posterPath.asImageUrlOrEmpty(),
         rating = rating.orZero()
     )
