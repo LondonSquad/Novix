@@ -2,6 +2,7 @@ package com.london.data.remote.source.myrating
 
 import com.london.data.remote.model.ApiResponse
 import com.london.data.remote.model.myrating.RatedMovieResponse
+import com.london.data.remote.model.myrating.RatedTvShowResponse
 import com.london.data.remote.service.myrating.MyRatingApiService
 import com.london.data.remote.source.base.BaseRemoteDatasource
 import javax.inject.Inject
@@ -17,6 +18,21 @@ class MyRatingRemoteDataSourceImpl @Inject constructor(
         return callApiWithRetry(
             apiCall = {
                 myRatingApiResponse.getRatedMovies(
+                    accountId = accountId,
+                    sessionId = sessionId,
+                )
+            },
+            mapper = { it }
+        )
+    }
+
+    override suspend fun getAllRatedTvShow(
+        accountId: Int,
+        sessionId: String
+    ): Result<ApiResponse<RatedTvShowResponse>> {
+        return callApiWithRetry(
+            apiCall = {
+                myRatingApiResponse.getRatedTvShow(
                     accountId = accountId,
                     sessionId = sessionId,
                 )
