@@ -17,7 +17,7 @@ class MyRatingRepositoryImpl @Inject constructor(
 
     override suspend fun getAllRatedMovies(): List<RatedMovie> = fetchAndSync(
         networkBlock = {
-            val accountId = 22144309 //change it
+            val accountId = authPreferences.getAccountId()
             val sessionId = authPreferences.getSessionId()
             myRatingRemoteDataSource.getAllRatedMovies(
                 accountId = accountId,
@@ -28,7 +28,7 @@ class MyRatingRepositoryImpl @Inject constructor(
 
     override suspend fun getAllRatedMTvShows(): List<RatedTvShow> = fetchAndSync(
         networkBlock = {
-            val accountId = 22144309 //change it
+            val accountId = authPreferences.getAccountId()
             val sessionId = authPreferences.getSessionId()
             myRatingRemoteDataSource.getAllRatedTvShows(
                 accountId = accountId,
