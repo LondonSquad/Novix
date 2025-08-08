@@ -18850,5 +18850,33 @@
       "deletions": 15,
       "changed_files": 5
     }
+  },
+  {
+    "pr_number": 569,
+    "url": "https://github.com/LondonSquad/Novix/pull/569",
+    "title": "Feature/delete sheet",
+    "opened_at": "2025-08-08T02:03:25Z",
+    "head_ref": "feature/delete-sheet",
+    "base_ref": "develop",
+    "creator": {
+      "login": "yusufnasserdev",
+      "id": 43588217,
+      "url": "https://github.com/yusufnasserdev"
+    },
+    "approvals": [],
+    "first_approved_at": null,
+    "time_to_first_approval_minutes": null,
+    "required_approvals_met_at": null,
+    "time_to_required_approvals_minutes": null,
+    "closed_at": null,
+    "merged_at": null,
+    "merged_by": null,
+    "week": "2025-W32",
+    "status": "pending",
+    "diff_stats": {
+      "additions": 192,
+      "deletions": 10,
+      "changed_files": 10
+    }
   }
 ]
