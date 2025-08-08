@@ -1,14 +1,18 @@
 package com.london.presentation.feature.myrating
 
+import com.london.domain.usecase.rating.GetAllRatedUseCase
+import com.london.domain.usecase.rating.GetRatedMovieUseCase
+import com.london.domain.usecase.rating.GetRatedTvShowUseCase
 import com.london.presentation.shared.base.BaseViewModel
-import com.london.presentation.shared.base.createPagingSourceFlow
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 
 
 @HiltViewModel
 class MyRatingViewModel @Inject constructor(
-    private val getMyRatingMovies: GetMyRatingUseCase,
+    private val getAllRatedUseCase: GetAllRatedUseCase,
+    private val getRatedMovieUseCase: GetRatedMovieUseCase,
+    private val getRatedTvShowUseCase: GetRatedTvShowUseCase
 ) : BaseViewModel<MyRatingUiState, MyRatingEffect>(MyRatingUiState()),
     MyRatingContract {
 
@@ -19,25 +23,19 @@ class MyRatingViewModel @Inject constructor(
     private fun initializeItems() {
         tryToExecute(
             block = {
-                val itemsFlow = createPagingSourceFlow(query = "") { _, pageNumber ->
-                    val items = getMyRatingMovies.invoke(page = pageNumber)
-                    val filteredItems =
-                        if (state.value.selectedGenreId != null && state.value.selectedGenreId != -1) {
-                            items.items.filter { it.genreIds.contains(state.value.selectedGenreId) }
-                        } else {
-                            items.items
-                        }
-                    items.copy(items = filteredItems)
-                }
-                itemsFlow
+                val movies = getRatedMovieUseCase.invoke()
+                val tvShows = getRatedTvShowUseCase.invoke()
+                val allRated = getAllRatedUseCase.invoke()
+                movies to tvShows to allRated
             },
             onStart = {
                 updateState { copy(isLoading = true) }
             },
-            onSuccess = { itemsFlow ->
-                updateState {
-                    copy(itemsFlow = itemsFlow)
-                }
+            onSuccess = { movies, tvShows, allRated ->
+                updateState { copy(movieFlow = movies, tvShowFlow = tvShows, allRated = allRated) }
+            },
+            onError = {
+
             },
             onCompleted = { updateState { copy(isLoading = false) } },
         )
@@ -45,7 +43,9 @@ class MyRatingViewModel @Inject constructor(
 
     override fun onBackClicked() = emitEffect(MyRatingEffect.NavigateBack)
 
-    override fun onItemClick(id: Int) = emitEffect(MyRatingEffect.NavigateToItem(id))
+    override fun onMovieClick(id: Int) = emitEffect(MyRatingEffect.NavigateToMovie(id))
+
+    override fun onTvShowClick(id: Int) = emitEffect(MyRatingEffect.NavigateToTvShow(id))
 
     override fun onDelete(id: Int) {
         TODO("Not yet implemented")
