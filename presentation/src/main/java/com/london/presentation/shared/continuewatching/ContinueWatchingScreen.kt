@@ -212,7 +212,8 @@ private fun MediaGrid(
                 items(tvSeries) { series ->
                     TvSeriesCard(
                         series = series,
-                        onSeriesClick = continueWatchingContract::onNavigateToTvShow
+                        onSeriesClick = continueWatchingContract::onNavigateToTvShow,
+                        isDarkMode = NovixTheme.isThemeDark
                     )
                 }
             }
@@ -229,20 +230,23 @@ private fun MovieCard(
         imageUrl = movie.posterUrl,
         isSaved = false,
         onSaveClick = { /* TODO */ },
-        modifier = Modifier.clickable { onMovieClick(movie.id) }
+        modifier = Modifier.clickable { onMovieClick(movie.id) },
+        isDarkMode = NovixTheme.isThemeDark
     )
 }
 
 @Composable
 private fun TvSeriesCard(
     series: TvShow,
-    onSeriesClick: (Int) -> Unit
+    onSeriesClick: (Int) -> Unit,
+    isDarkMode: Boolean
 ) {
     HomeCard(
         imageUrl = series.posterPicture,
         isSaved = false,
         onSaveClick = { /* TODO */ },
-        modifier = Modifier.clickable { onSeriesClick(series.id) }
+        modifier = Modifier.clickable { onSeriesClick(series.id) },
+        isDarkMode = isDarkMode
     )
 }
 

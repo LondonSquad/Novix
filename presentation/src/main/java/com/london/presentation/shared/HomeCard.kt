@@ -24,6 +24,7 @@ import com.london.designsystem.theme.ThemePreviews
 @Composable
 fun HomeCard(
     imageUrl: Any,
+    isDarkMode: Boolean,
     modifier: Modifier = Modifier,
     isSaved: Boolean = false,
     hasSaveIcon: Boolean = true,
@@ -53,7 +54,7 @@ fun HomeCard(
             contentDescription = imageDescription,
             modifier = Modifier.matchParentSize(),
             contentScale = ContentScale.Crop,
-            errorContent = { ErrorImage() },
+            errorContent = { ErrorImage(isDarkMode = isDarkMode) },
             loadingContent = { CircularLoading(modifier = Modifier.align(Alignment.Center)) },
             moderatedContent = { UnSuitableEye() }
         )
@@ -92,7 +93,8 @@ fun HomeCardPreview() {
         HomeCard(
             imageUrl = "https://image.tmdb.org/t/p/w500/rktDFPbfHfUbArZ6OOOKsXcv0Bm.jpg",
             isSaved = false,
-            onSaveClick = {}
+            onSaveClick = {},
+            isDarkMode = true
         )
     }
 }

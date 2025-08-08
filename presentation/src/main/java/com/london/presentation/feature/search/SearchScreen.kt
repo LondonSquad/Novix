@@ -520,7 +520,8 @@ fun RecentViewedSection(
                         MediaType.Movie -> onNavigateToMovieDetails(item.id)
                         MediaType.TvShow -> onNavigateToTvShowDetails(item.id)
                     }
-                }
+                },
+                isDarkMode = NovixTheme.isThemeDark
             )
         }
     }

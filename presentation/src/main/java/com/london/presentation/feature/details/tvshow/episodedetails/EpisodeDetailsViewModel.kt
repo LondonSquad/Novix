@@ -5,8 +5,7 @@ import com.london.domain.usecase.GetAccountTvEpisodeUseCase
 import com.london.domain.usecase.GetEpisodeByTvShowId
 import com.london.domain.usecase.GetEpisodeVideoProviderUseCase
 import com.london.domain.usecase.GetImagesById
-import com.london.domain.usecase.GetTvShowDetails
-import com.london.domain.usecase.LoggedInUseCase
+import com.london.domain.usecase.details.tvshow.ManageTvShowDetailsUseCase
 import com.london.presentation.navigation.Screen
 import com.london.presentation.navigation.getArgs
 import com.london.presentation.shared.base.BaseViewModel
@@ -17,10 +16,9 @@ import javax.inject.Inject
 class EpisodeDetailsViewModel @Inject constructor(
     private val getTvShowImages: GetImagesById,
     private val getEpisodeByTvShowIdUseCase: GetEpisodeByTvShowId,
-    private val getTvShowDetails: GetTvShowDetails,
+    private val manageTvShowDetailsUseCase: ManageTvShowDetailsUseCase,
     private val getVideoProvider: GetEpisodeVideoProviderUseCase,
     private val getAccountTvEpisodeUseCase: GetAccountTvEpisodeUseCase,
-    private val getUserLoggedInUseCase: LoggedInUseCase,
     savedStateHandle: SavedStateHandle,
 ) : BaseViewModel<EpisodeDetailsUiState, EpisodeDetailsEffect>(EpisodeDetailsUiState()),
     EpisodeDetailsContract {
@@ -42,7 +40,7 @@ class EpisodeDetailsViewModel @Inject constructor(
                     tvShowId, seasonNumber, episodeNumber
                 )
                 val images = getTvShowImages(tvShowId)
-                val tvShowDetails = getTvShowDetails(tvShowId)
+                val tvShowDetails = manageTvShowDetailsUseCase.getTvShowDetails(tvShowId)
 
 
                 Triple(episode, images, tvShowDetails)

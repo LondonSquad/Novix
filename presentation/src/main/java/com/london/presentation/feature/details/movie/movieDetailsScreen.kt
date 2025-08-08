@@ -310,7 +310,8 @@ fun MovieDetailsContent(
                         modifier = Modifier
                             .clickable {
                                 movieDetailsContract.onMovieClick(movie.id)
-                            }
+                            },
+                        isDarkMode = NovixTheme.isThemeDark
                     )
                 }
             }

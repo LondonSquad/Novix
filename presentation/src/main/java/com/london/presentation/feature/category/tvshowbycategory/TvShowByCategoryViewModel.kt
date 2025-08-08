@@ -1,7 +1,7 @@
 package com.london.presentation.feature.category.tvshowbycategory
 
 import androidx.lifecycle.SavedStateHandle
-import com.london.domain.usecase.GetTvShowsByCategoryId
+import com.london.domain.usecase.details.tvshow.ManageTvShowDetailsUseCase
 import com.london.presentation.navigation.Screen
 import com.london.presentation.navigation.getArgs
 import com.london.presentation.shared.base.BaseViewModel
@@ -11,7 +11,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class TvShowByCategoryViewModel @Inject constructor(
-    private val getTvShowsByCategoryIdUseCase: GetTvShowsByCategoryId,
+    private val managerTvShowDetailsUseCase: ManageTvShowDetailsUseCase,
     savedStateHandle: SavedStateHandle
 ) : BaseViewModel<TvShowByCategoryUiState, TvShowByCategoryEffect>(TvShowByCategoryUiState()),
     TvShowByCategoryContract {
@@ -39,7 +39,7 @@ class TvShowByCategoryViewModel @Inject constructor(
         tryToExecute(
             block = {
             val tvShowFlow = createPagingSourceFlow(query = "") { _, pageNumber ->
-                val tvShows = getTvShowsByCategoryIdUseCase.invoke(
+                val tvShows = managerTvShowDetailsUseCase.getTvShowsByCategory(
                     categoryId = categoryId, pageNumber = pageNumber
                 )
                 tvShows.copy(items = tvShows.items)

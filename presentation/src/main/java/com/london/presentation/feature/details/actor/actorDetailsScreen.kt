@@ -315,7 +315,8 @@ fun TopMoviesPicksList(
                 onSaveClick = { /* TODO: Not yet implemented */ },
                 modifier = Modifier.clickable {
                     onNavigateToMoviePicks(movie[index].id)
-                }
+                },
+                isDarkMode = NovixTheme.isThemeDark
             )
         }
     }
@@ -339,7 +340,8 @@ fun TopTvShowsPicksList(
                 onSaveClick = { /* TODO: Not yet implemented */ },
                 modifier = Modifier.clickable {
                     onNavigateToTvShowPicks(tvShow[index].id)
-                }
+                },
+                isDarkMode = NovixTheme.isThemeDark
             )
         }
     }
@@ -365,7 +367,7 @@ fun ActorGallery(images: List<ImageDetails>) {
                         color = NovixTheme.colors.stroke
                     )
                     .clip(RoundedCornerShape(12.dp)),
-                errorContent = { ErrorImage() },
+                errorContent = { ErrorImage(NovixTheme.isThemeDark) },
                 loadingContent = { CircularLoading(modifier = Modifier) }
             )
         }

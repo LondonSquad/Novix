@@ -1,4 +1,4 @@
-package com.london.domain.usecase.recent.watched
+package com.london.domain.usecase.recent.watched.tvshow
 
 import com.london.domain.entity.TvShow
 import com.london.domain.repository.RecentWatchedRepository
@@ -6,10 +6,14 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import javax.inject.Inject
 
-class GetRecentWatchedTvShowsUseCase @Inject constructor(
+class ManageRecentTvShowWatchedUseCase @Inject constructor(
     private val recentWatchedRepository: RecentWatchedRepository
 ) {
-    suspend fun getAll(limit: Int? = null, genreId: Int? = null): Flow<List<TvShow>> =
+    suspend fun addTvShowToRecentWatched(item: TvShow) = recentWatchedRepository.insertTvShow(item)
+
+    suspend fun getAllRecentTvShow(
+        limit: Int? = null, genreId: Int? = null
+    ): Flow<List<TvShow>> =
         recentWatchedRepository.getAllRecentWatchedTvShows().map { shows ->
             shows.filter {
                 genreId == null || it.genres.contains(genreId)
@@ -19,7 +23,7 @@ class GetRecentWatchedTvShowsUseCase @Inject constructor(
         }
 
     suspend fun getMostRecent(limit: Int = MOST_RECENT_LIMIT): Flow<List<TvShow>> =
-        getAll(limit = limit)
+        getAllRecentTvShow(limit = limit)
 
     private companion object {
         const val MOST_RECENT_LIMIT = 10
