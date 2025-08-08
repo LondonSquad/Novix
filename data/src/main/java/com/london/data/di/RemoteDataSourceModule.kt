@@ -1,5 +1,6 @@
 package com.london.data.di
 
+import com.london.data.remote.service.account.AccountApiService
 import com.london.data.remote.service.authentication.AuthenticationApiService
 import com.london.data.remote.service.details.actor.ActorDetailsApiService
 import com.london.data.remote.service.details.movie.MovieDetailsApiService
@@ -13,6 +14,8 @@ import com.london.data.remote.service.myrating.MyRatingApiService
 import com.london.data.remote.service.reviews.ReviewsApiService
 import com.london.data.remote.service.search.SearchApiService
 import com.london.data.remote.service.toprated.TopRatedApiService
+import com.london.data.remote.source.account.AccountRemoteDataSource
+import com.london.data.remote.source.account.AccountRemoteDataSourceImp
 import com.london.data.remote.source.authentication.AuthenticationRemoteDataSource
 import com.london.data.remote.source.authentication.AuthenticationRemoteDataSourceImpl
 import com.london.data.remote.source.details.actor.ActorDetailsRemoteDataSource
@@ -136,6 +139,13 @@ object RemoteDataSourceModule {
         apiService: CustomMovieListsApiService,
     ): CustomMovieListsRemoteDataSource =
         CustomMovieListsRemoteDataSourceImpl(customMovieListsApiService = apiService)
+
+    @Provides
+    @Singleton
+    fun provideAccountRemoteDataSource(
+        accountApiService: AccountApiService
+    ): AccountRemoteDataSource =
+        AccountRemoteDataSourceImp(accountApiService = accountApiService)
 
     @Provides
     @Singleton
