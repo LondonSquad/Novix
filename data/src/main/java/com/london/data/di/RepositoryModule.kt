@@ -209,8 +209,6 @@ object RepositoryModule {
         authPreferences = authPreferences
     )
 
-
-
     @Provides
     @Singleton
     fun provideUpComingRepository(
