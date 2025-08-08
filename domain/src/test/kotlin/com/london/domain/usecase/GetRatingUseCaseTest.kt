@@ -1,7 +1,7 @@
 package com.london.domain.usecase
 
 import com.london.domain.entity.RatedMedia
-import com.london.domain.repository.myrating.RatingRepository
+import com.london.domain.repository.RatingRepository
 import io.mockk.coEvery
 import io.mockk.mockk
 import kotlinx.coroutines.test.runTest
@@ -17,7 +17,7 @@ class GetRatingUseCaseTest {
 
     @Before
     fun setup() {
-        repository = mockk()
+        repository = mockk(relaxed = true)
         useCase = GetRatingUseCase(repository)
     }
 
