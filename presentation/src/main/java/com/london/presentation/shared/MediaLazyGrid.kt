@@ -38,7 +38,10 @@ fun <T> MediaLazyGrid(
     isItemSaved: (T) -> Boolean = { false },
     isLoading: Boolean = false,
     emptyTitle: String = "",
-    emptyImage: Int? = null
+    emptyImage: Int? = null,
+    myRatingList: Boolean = false,
+    rate: Int = 5,
+    onDeleteClick: () -> Unit = {}
 ) {
     Column(
         modifier = modifier
@@ -90,6 +93,9 @@ fun <T> MediaLazyGrid(
                             imageUrl = getImageUrl(item),
                             isSaved = isItemSaved(item),
                             onSaveClick = { onSavedClick(item) },
+                            myRatingList = myRatingList,
+                            rate = rate,
+                            onDeleteClick = onDeleteClick,
                             modifier = Modifier.clickable { onItemClick(item) }
                         )
                     }
@@ -98,3 +104,4 @@ fun <T> MediaLazyGrid(
         }
     }
 }
+
