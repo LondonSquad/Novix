@@ -27,7 +27,7 @@ class MyRatingRepositoryImplTest {
     }
 
     @Test
-    fun `test getAllRatedMedia returns combined movies and tv shows`() = runTest {
+    fun `getAllRatedMedia returns combined movies and tv shows`() = runTest {
         // Given
         val accountId = 123
         val sessionId = "session123"
@@ -39,20 +39,10 @@ class MyRatingRepositoryImplTest {
         coEvery { authPreferences.getSessionId() } returns sessionId
         coEvery {
             remoteDataSource.getAllRatedMovies(accountId, sessionId)
-        } returns Result.success(ApiResponse(
-            currentPage = 1,
-            items = listOf(movieResponse),
-            totalPages = 1,
-            totalItems = 1
-        ))
+        } returns Result.success(createMovieApiResponse(listOf(movieResponse)))
         coEvery {
             remoteDataSource.getAllRatedTvShows(accountId, sessionId)
-        } returns Result.success(ApiResponse(
-            currentPage = 1,
-            items = listOf(tvShowResponse),
-            totalPages = 1,
-            totalItems = 1
-        ))
+        } returns Result.success(createTvShowApiResponse(listOf(tvShowResponse)))
 
         // When
         val result = repository.getAllRatedMedia()
@@ -70,7 +60,7 @@ class MyRatingRepositoryImplTest {
     }
 
     @Test
-    fun `test getAllRatedMedia handles empty responses`() = runTest {
+    fun `getAllRatedMedia handles empty responses`() = runTest {
         // Given
         val accountId = 123
         val sessionId = "session123"
@@ -79,20 +69,10 @@ class MyRatingRepositoryImplTest {
         coEvery { authPreferences.getSessionId() } returns sessionId
         coEvery {
             remoteDataSource.getAllRatedMovies(accountId, sessionId)
-        } returns Result.success(ApiResponse(
-            currentPage = 1,
-            items = emptyList(),
-            totalPages = 0,
-            totalItems = 0
-        ))
+        } returns Result.success(createEmptyMovieApiResponse())
         coEvery {
             remoteDataSource.getAllRatedTvShows(accountId, sessionId)
-        } returns Result.success(ApiResponse(
-            currentPage = 1,
-            items = emptyList(),
-            totalPages = 0,
-            totalItems = 0
-        ))
+        } returns Result.success(createEmptyTvShowApiResponse())
 
         // When
         val result = repository.getAllRatedMedia()
@@ -102,7 +82,7 @@ class MyRatingRepositoryImplTest {
     }
 
     @Test
-    fun `test getAllRatedMedia handles null session id`() = runTest {
+    fun `getAllRatedMedia handles null session id`() = runTest {
         // Given
         val accountId = 123
         val sessionId = null
@@ -111,20 +91,10 @@ class MyRatingRepositoryImplTest {
         coEvery { authPreferences.getSessionId() } returns sessionId
         coEvery {
             remoteDataSource.getAllRatedMovies(accountId, "")
-        } returns Result.success(ApiResponse(
-            currentPage = 1,
-            items = emptyList(),
-            totalPages = 0,
-            totalItems = 0
-        ))
+        } returns Result.success(createEmptyMovieApiResponse())
         coEvery {
             remoteDataSource.getAllRatedTvShows(accountId, "")
-        } returns Result.success(ApiResponse(
-            currentPage = 1,
-            items = emptyList(),
-            totalPages = 0,
-            totalItems = 0
-        ))
+        } returns Result.success(createEmptyTvShowApiResponse())
 
         // When
         val result = repository.getAllRatedMedia()
@@ -134,7 +104,7 @@ class MyRatingRepositoryImplTest {
     }
 
     @Test
-    fun `test getAllRatedMedia maps movies correctly`() = runTest {
+    fun `getAllRatedMedia maps movies correctly`() = runTest {
         // Given
         val accountId = 123
         val sessionId = "session123"
@@ -145,20 +115,10 @@ class MyRatingRepositoryImplTest {
         coEvery { authPreferences.getSessionId() } returns sessionId
         coEvery {
             remoteDataSource.getAllRatedMovies(accountId, sessionId)
-        } returns Result.success(ApiResponse(
-            currentPage = 1,
-            items = listOf(movieResponse),
-            totalPages = 1,
-            totalItems = 1
-        ))
+        } returns Result.success(createMovieApiResponse(listOf(movieResponse)))
         coEvery {
             remoteDataSource.getAllRatedTvShows(accountId, sessionId)
-        } returns Result.success(ApiResponse(
-            currentPage = 1,
-            items = emptyList(),
-            totalPages = 0,
-            totalItems = 0
-        ))
+        } returns Result.success(createEmptyTvShowApiResponse())
 
         // When
         val result = repository.getAllRatedMedia()
@@ -174,7 +134,7 @@ class MyRatingRepositoryImplTest {
     }
 
     @Test
-    fun `test getAllRatedMedia maps tv shows correctly`() = runTest {
+    fun `getAllRatedMedia maps tv shows correctly`() = runTest {
         // Given
         val accountId = 123
         val sessionId = "session123"
@@ -185,20 +145,10 @@ class MyRatingRepositoryImplTest {
         coEvery { authPreferences.getSessionId() } returns sessionId
         coEvery {
             remoteDataSource.getAllRatedMovies(accountId, sessionId)
-        } returns Result.success(ApiResponse(
-            currentPage = 1,
-            items = emptyList(),
-            totalPages = 0,
-            totalItems = 0
-        ))
+        } returns Result.success(createEmptyMovieApiResponse())
         coEvery {
             remoteDataSource.getAllRatedTvShows(accountId, sessionId)
-        } returns Result.success(ApiResponse(
-            currentPage = 1,
-            items = listOf(tvShowResponse),
-            totalPages = 1,
-            totalItems = 1
-        ))
+        } returns Result.success(createTvShowApiResponse(listOf(tvShowResponse)))
 
         // When
         val result = repository.getAllRatedMedia()
@@ -244,6 +194,33 @@ class MyRatingRepositoryImplTest {
             rating = rating
         )
 
+        private fun createMovieApiResponse(items: List<RatedMovieResponse>, totalItems: Int = items.size) = ApiResponse(
+            currentPage = 1,
+            items = items,
+            totalPages = if (totalItems > 0) 1 else 0,
+            totalItems = totalItems
+        )
+
+        private fun createTvShowApiResponse(items: List<RatedTvShowResponse>, totalItems: Int = items.size) = ApiResponse(
+            currentPage = 1,
+            items = items,
+            totalPages = if (totalItems > 0) 1 else 0,
+            totalItems = totalItems
+        )
+
+        private fun createEmptyMovieApiResponse() = ApiResponse<RatedMovieResponse>(
+            currentPage = 1,
+            items = emptyList(),
+            totalPages = 0,
+            totalItems = 0
+        )
+
+        private fun createEmptyTvShowApiResponse() = ApiResponse<RatedTvShowResponse>(
+            currentPage = 1,
+            items = emptyList(),
+            totalPages = 0,
+            totalItems = 0
+        )
     }
 
 } 
