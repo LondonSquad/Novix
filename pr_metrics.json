@@ -18878,5 +18878,33 @@
       "deletions": 10,
       "changed_files": 10
     }
+  },
+  {
+    "pr_number": 570,
+    "url": "https://github.com/LondonSquad/Novix/pull/570",
+    "title": "feat: implement in-app language selection",
+    "opened_at": "2025-08-08T02:18:55Z",
+    "head_ref": "feature/app-language",
+    "base_ref": "develop",
+    "creator": {
+      "login": "karimdeabes",
+      "id": 81706918,
+      "url": "https://github.com/karimdeabes"
+    },
+    "approvals": [],
+    "first_approved_at": null,
+    "time_to_first_approval_minutes": null,
+    "required_approvals_met_at": null,
+    "time_to_required_approvals_minutes": null,
+    "closed_at": null,
+    "merged_at": null,
+    "merged_by": null,
+    "week": "2025-W32",
+    "status": "pending",
+    "diff_stats": {
+      "additions": 320,
+      "deletions": 43,
+      "changed_files": 17
+    }
   }
 ]
