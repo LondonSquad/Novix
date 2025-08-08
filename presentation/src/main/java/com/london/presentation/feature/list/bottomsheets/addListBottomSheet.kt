@@ -22,7 +22,6 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.hilt.navigation.compose.hiltViewModel
 import com.london.designsystem.component.Icon
 import com.london.designsystem.component.ModalBottomSheet
 import com.london.designsystem.component.OutlinedTextField
@@ -34,15 +33,13 @@ import com.london.designsystem.theme.NovixTheme
 import com.london.presentation.R
 import com.london.presentation.feature.list.savedlist.AddSheetState
 import com.london.presentation.feature.list.savedlist.ListContract
-import com.london.presentation.feature.list.savedlist.ListViewModel
 import com.london.presentation.feature.list.savedlist.defaultContractList
 import kotlinx.coroutines.launch
-import org.checkerframework.checker.units.qual.g
 
 @Composable
 fun AddListBottomSheet(
     modifier: Modifier = Modifier,
-    addListInteractions: ListContract = defaultContractList(),
+    addListInteractions: ListContract,
     sheetState: SheetState = rememberModalBottomSheetState(),
     addListSheetState: AddSheetState,
 ) {
