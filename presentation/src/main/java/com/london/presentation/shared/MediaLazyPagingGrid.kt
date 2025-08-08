@@ -11,6 +11,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.paging.compose.LazyPagingItems
+import com.london.designsystem.theme.NovixTheme
 import com.london.presentation.utils.gridColmuns
 
 @Composable
@@ -39,7 +40,8 @@ fun <T : Any> MediaLazyPagingGrid(
                     onSaveClick = { onSaveClick(item) },
                     isSaved = isItemSaved(item),
                     imageDescription = getTitle(item),
-                    modifier = Modifier.clickable { onItemClick(item) }
+                    modifier = Modifier.clickable { onItemClick(item) },
+                    isDarkMode = NovixTheme.isThemeDark
                 )
             }
         }

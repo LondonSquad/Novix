@@ -375,7 +375,8 @@ private fun LazyGridScope.upComingSection(
                     modifier = Modifier
                         .clipToBounds()
                         .clip(RoundedCornerShape(12.dp))
-                        .clickable { contract.onMovieClick(movie.id) }
+                        .clickable { contract.onMovieClick(movie.id) },
+                    isDarkMode = NovixTheme.isThemeDark
                 )
             }
         }
