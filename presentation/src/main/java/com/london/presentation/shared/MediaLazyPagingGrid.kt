@@ -22,6 +22,9 @@ fun <T : Any> MediaLazyPagingGrid(
     modifier: Modifier = Modifier,
     onSaveClick: (T) -> Unit = {},
     isItemSaved: (T) -> Boolean = { false },
+    myRatingList: Boolean = false,
+    rate: Int = 5,
+    onDeleteClick: () -> Unit = {},
 ) {
     LazyVerticalGrid(
         state = rememberLazyGridState(),
@@ -39,6 +42,9 @@ fun <T : Any> MediaLazyPagingGrid(
                     onSaveClick = { onSaveClick(item) },
                     isSaved = isItemSaved(item),
                     imageDescription = getTitle(item),
+                    myRatingList = myRatingList,
+                    rate = rate,
+                    onDeleteClick = onDeleteClick,
                     modifier = Modifier.clickable { onItemClick(item) }
                 )
             }

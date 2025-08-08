@@ -13,6 +13,8 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.dp
 import com.london.designsystem.component.CircularLoading
+import com.london.designsystem.component.DeleteIcon
+import com.london.designsystem.component.MyRatingIcon
 import com.london.designsystem.component.SaveIcon
 import com.london.designsystem.component.UnSuitableEye
 import com.london.designsystem.component.button.ErrorImage
@@ -25,6 +27,9 @@ fun HomeCard(
     modifier: Modifier = Modifier,
     isSaved: Boolean = false,
     hasSaveIcon: Boolean = true,
+    myRatingList: Boolean = false,
+    rate: Int = 5,
+    onDeleteClick: () -> Unit = {},
     imageDescription: String? = null,
     onSaveClick: () -> Unit,
 ) {
@@ -61,6 +66,22 @@ fun HomeCard(
                     .align(Alignment.TopStart),
                 iconTint = NovixTheme.colors.onPrimary,
             )
+
+        if (myRatingList) {
+            MyRatingIcon(
+                rate = rate,
+                modifier = Modifier
+                    .padding(8.dp)
+                    .align(Alignment.TopStart),
+            )
+
+            DeleteIcon(
+                onDeleteClick = onDeleteClick,
+                modifier = Modifier
+                    .padding(8.dp)
+                    .align(Alignment.TopEnd)
+            )
+        }
     }
 }
 
