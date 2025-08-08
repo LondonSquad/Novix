@@ -325,8 +325,14 @@ fun NavGraphBuilder.mainNavGraph(
     ) {
         ListScreen(
             onNavigateToDetails = {
-                // id is dummy
-                navController.navigate(Screen.ViewListItems(8548075))
+                navController.navigate(Screen.ViewListItems(listId = it))
+            },
+            onNavigateToLogin = {
+                navController.navigate(Screen.Login) {
+                    popUpTo(NovixAppNavGraph.Main) {
+                        inclusive = true
+                    }
+                }
             }
         )
     }

@@ -96,7 +96,8 @@ class CustomMovieListsRemoteDataSourceImpl @Inject constructor(
     ): Result<ApiResponse<CustomMovieListResponse>> = callApiWithRetry(
         apiCall = {
             customMovieListsApiService.getAllUserLists(
-                sessionId = sessionId
+                sessionId = sessionId,
+                page = page
             )
         },
         mapper = { it }
