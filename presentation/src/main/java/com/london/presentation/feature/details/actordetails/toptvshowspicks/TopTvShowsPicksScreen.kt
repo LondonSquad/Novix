@@ -15,7 +15,7 @@ import com.london.presentation.utils.Listen
 
 @Composable
 fun TopTvShowsPicksScreen(
-    onNavigateTvShow: (tvShowId: Int) -> Unit,
+    onNavigateTvShow: (Int) -> Unit,
     onNavigateBack: () -> Unit,
     viewModel: TopTvShowsPicksViewModel = hiltViewModel(),
 ) {
@@ -51,7 +51,8 @@ private fun TopTvShowsPicksContent(
             items = state.tvShowDetails.cast,
             onBack = contract::onBack,
             getImageUrl = { it.posterUrl },
-            onSaveClick = { contract.onSaveMovie(it.id) },
+            onItemClick = { contract.onTvShowClicked(it.id) },
+            onSavedClick = { contract.onSaveTvShow(it.id) },
             modifier = modifier
         )
     }
