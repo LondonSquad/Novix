@@ -23,5 +23,3 @@ captures/
 .externalNativeBuild/
 .cxx/
 *.apk
-*.dm
-.idea/**/*
