@@ -1,13 +1,13 @@
 package com.london.presentation.feature.myrating
 
-import com.london.domain.usecase.GetMyRatingUseCase
+import com.london.domain.usecase.GetRatingUseCase
 import com.london.presentation.shared.base.BaseViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 
 @HiltViewModel
-class MyRatingViewModel @Inject constructor(
-    private val getMyRatingUseCase: GetMyRatingUseCase
+class RatingViewModel @Inject constructor(
+    private val getRatingUseCase: GetRatingUseCase
 ) : BaseViewModel<MyRatingUiState, MyRatingEffect>(MyRatingUiState()),
     MyRatingContract {
 
@@ -18,9 +18,9 @@ class MyRatingViewModel @Inject constructor(
     fun initializeItems() {
         tryToExecute(
             block = {
-                val allRatedMedia = getMyRatingUseCase.getAllRated()
-                val ratedMovies = getMyRatingUseCase.getRatedMovies()
-                val ratedTvShows = getMyRatingUseCase.getRatedTvShows()
+                val allRatedMedia = getRatingUseCase.getAllRated()
+                val ratedMovies = getRatingUseCase.getRatedMovies()
+                val ratedTvShows = getRatingUseCase.getRatedTvShows()
                 RatingData(allRatedMedia, ratedMovies, ratedTvShows)
             },
             onStart = {

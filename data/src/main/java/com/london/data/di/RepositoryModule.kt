@@ -25,7 +25,7 @@ import com.london.data.remote.source.home.trending.TrendingRemoteDataSource
 import com.london.data.remote.source.home.trending.TrendingRemoteDataSourceImpl
 import com.london.data.remote.source.home.upcoming.UpComingRemoteDataSource
 import com.london.data.remote.source.list.CustomMovieListsRemoteDataSource
-import com.london.data.remote.source.myrating.MyRatingRemoteDataSource
+import com.london.data.remote.source.myrating.RatingRemoteDataSource
 import com.london.data.remote.source.reviews.ReviewsRemoteDataSource
 import com.london.data.remote.source.search.SearchRemoteDataSource
 import com.london.data.remote.source.toprated.TopRatedRemoteDataSource
@@ -37,8 +37,7 @@ import com.london.data.repository.home.toprated.TopRatedRepositoryImpl
 import com.london.data.repository.home.trending.TrendingRepositoryImpl
 import com.london.data.repository.home.upcoming.UpComingRepositoryImpl
 import com.london.data.repository.list.CustomMovieListRepositoryImpl
-import com.london.data.repository.myrating.MyRatingRepositoryImpl
-import com.london.data.repository.rating.RatingRepositoryImpl
+import com.london.data.repository.myrating.RatingRepositoryImpl
 import com.london.data.repository.recent.RecentSearchRepositoryImpl
 import com.london.data.repository.recent.RecentViewedRepositoryImpl
 import com.london.data.repository.recent.RecentWatchedRepositoryIml
@@ -67,7 +66,6 @@ import com.london.domain.repository.TvShowRepository
 import com.london.domain.repository.TvShowVideoProviderRepository
 import com.london.domain.repository.UpComingRepository
 import com.london.domain.repository.discover.DiscoverRepository
-import com.london.domain.repository.myrating.MyRatingRepository
 import com.london.domain.repository.toprated.TopRatedRepository
 import dagger.Module
 import dagger.Provides
@@ -204,10 +202,20 @@ object RepositoryModule {
     @Provides
     @Singleton
     fun provideRatingRepository(
-        myRatingRemoteDataSource: MyRatingRemoteDataSource,
+        ratingRemoteDataSource: RatingRemoteDataSource,
         authPreferences: AuthPreferences
     ): RatingRepository = RatingRepositoryImpl(
-        myRatingRemoteDataSource = myRatingRemoteDataSource,
+        ratingRemoteDataSource = ratingRemoteDataSource,
+        authPreferences = authPreferences
+    )
+
+    @Provides
+    @Singleton
+    fun provideMyRatingRepository(
+        ratingRemoteDataSource: RatingRemoteDataSource,
+        authPreferences: AuthPreferences
+    ): com.london.domain.repository.myrating.RatingRepository = com.london.data.repository.myrating.MyRatingRepositoryImpl(
+        ratingRemoteDataSource = ratingRemoteDataSource,
         authPreferences = authPreferences
     )
 
@@ -253,13 +261,4 @@ object RepositoryModule {
         accountRemoteDataSource = accountRemoteDataSource
     )
 
-    @Provides
-    @Singleton
-    fun provideMyRatingRepository(
-        myRatingRemoteDataSource: MyRatingRemoteDataSource,
-        authPreferences: AuthPreferences,
-    ): MyRatingRepository = MyRatingRepositoryImpl(
-        myRatingRemoteDataSource = myRatingRemoteDataSource,
-        authPreferences = authPreferences
-    )
 }
