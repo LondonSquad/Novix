@@ -7,6 +7,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -35,12 +36,14 @@ fun AccountScreen(
 ) {
     val uiState by viewModel.state.collectAsStateWithLifecycle()
     val effect by viewModel.effect.collectAsState(null)
+    val uriHandler = LocalUriHandler.current
+
 
     effect?.Listen { currentEffect ->
         when (currentEffect) {
             is AccountEffect.NavigateToWatchingHistory -> onNavigateToWatchingHistory()
             is AccountEffect.NavigateToMyRating -> onNavigateToMyRating()
-            is AccountEffect.NavigateToChangePassword -> onNavigateToChangePassword()
+            is AccountEffect.NavigateToChangePassword -> uriHandler.openUri(currentEffect.url)
             is AccountEffect.NavigateLogout -> onNavigateToLogin()
         }
     }

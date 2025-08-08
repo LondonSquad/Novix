@@ -77,7 +77,7 @@ class AccountViewModel @Inject constructor(
     }
 
     override fun onChangePasswordClick() {
-        emitEffect(AccountEffect.NavigateToChangePassword)
+        emitEffect(AccountEffect.NavigateToChangePassword(FORGOT_PASSWORD_URL))
     }
 
     //region Content Restriction Bottom Sheet
@@ -226,5 +226,9 @@ class AccountViewModel @Inject constructor(
 
     override fun onLoginClick() {
         emitEffect(AccountEffect.NavigateLogout)
+    }
+
+    companion object {
+        private const val FORGOT_PASSWORD_URL = "https://www.themoviedb.org/reset-password"
     }
 }
