@@ -1,4 +1,4 @@
-package com.london.domain.usecase
+package com.london.domain.usecase.rating
 
 import com.london.domain.entity.RatedMedia
 import com.london.domain.repository.MovieDetailsRepository
@@ -56,31 +56,29 @@ class RatingUseCase @Inject constructor(
             .sortedByDescending { media -> media.rating }
     }
 
-    suspend fun getAccountTvEpisodeUseCase(
+    suspend fun getRateAccountTvEpisode(
         tvShowId: Int,
         seasonNumber: Int,
         episodeNumber: Int
-
     ) = tvShowRepository.getAccountTvEpisode(
         tvShowId = tvShowId,
         seasonNumber = seasonNumber,
         episodeNumber = episodeNumber
     ).rate
 
-    suspend fun addTvEpisodeRatingByIdUseCase(
+    suspend fun addTvEpisodeRatingById(
         id: Int,
         rating: Int,
         seasonNumber: Int,
         episodeNumber: Int
-    ) =
-        ratingRepository.addTvEpisode(
-            tvShowId = id,
-            rating = rating,
-            seasonNumber = seasonNumber,
-            episodeNumber = episodeNumber,
-        )
+    ) = ratingRepository.addTvEpisode(
+        tvShowId = id,
+        rating = rating,
+        seasonNumber = seasonNumber,
+        episodeNumber = episodeNumber,
+    )
 
-    suspend fun addMovieRatingByIdUseCase(
+    suspend fun addMovieRatingById(
         id: Int,
         rating: Int,
     ): Boolean = repository.addMovieRatingById(
@@ -88,18 +86,18 @@ class RatingUseCase @Inject constructor(
         rating = rating,
     )
 
-    suspend fun addTvShowRatingByIdUseCase(id: Int, rating: Int) =
+    suspend fun addTvShowRatingById(id: Int, rating: Int) =
         ratingRepository.addTvShowById(
             id = id,
             rating = rating,
         )
 
-    suspend fun getAccountMovieStatesById(id: Int): Int =
+    suspend fun getRateAccountMovieStatesById(id: Int): Int =
         movieRepository.getAccountMovieStatesById(
             id = id,
         ).rate
 
-    suspend fun getAccountTvShowStateUseCase(
+    suspend fun getRateAccountTvShowState(
         tvShowId: Int,
     ) = tvShowRepository.getAccountTvShowState(
         tvShowId = tvShowId,

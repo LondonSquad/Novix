@@ -5,9 +5,9 @@ import androidx.lifecycle.SavedStateHandle
 import com.london.domain.usecase.GetEpisodeByTvShowId
 import com.london.domain.usecase.GetEpisodeVideoProviderUseCase
 import com.london.domain.usecase.GetImagesById
-import com.london.domain.usecase.RatingUseCase
 import com.london.domain.usecase.authentication.AuthenticationUseCase
 import com.london.domain.usecase.details.tvshow.ManageTvShowDetailsUseCase
+import com.london.domain.usecase.rating.RatingUseCase
 import com.london.presentation.navigation.Screen
 import com.london.presentation.navigation.getArgs
 import com.london.presentation.shared.base.BaseViewModel
@@ -42,7 +42,7 @@ class EpisodeDetailsViewModel @Inject constructor(
        tryToExecute(
            block = {
            val data =  if (authenticationUseCase.isLoggedIn()) {
-               ratingUseCase.getAccountTvEpisodeUseCase(
+               ratingUseCase.getRateAccountTvEpisode(
                        tvShowId = tvShowId,
                        seasonNumber = seasonNumber,
                        episodeNumber =episodeNumber,
@@ -150,7 +150,7 @@ class EpisodeDetailsViewModel @Inject constructor(
     override fun onSelectRatingClick(rating: Int) {
         tryToExecute(
             block = {
-                ratingUseCase.addTvEpisodeRatingByIdUseCase(
+                ratingUseCase.addTvEpisodeRatingById(
                     id = tvShowId,
                     rating = rating,
                     episodeNumber = episodeNumber,

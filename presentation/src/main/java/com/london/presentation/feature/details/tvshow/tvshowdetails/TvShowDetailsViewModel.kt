@@ -7,9 +7,9 @@ import com.london.domain.entity.recent.RecentViewed
 import com.london.domain.usecase.GetCastById
 import com.london.domain.usecase.GetEpisodesByTvShowSeason
 import com.london.domain.usecase.GetImagesById
-import com.london.domain.usecase.RatingUseCase
 import com.london.domain.usecase.authentication.AuthenticationUseCase
 import com.london.domain.usecase.details.tvshow.ManageTvShowDetailsUseCase
+import com.london.domain.usecase.rating.RatingUseCase
 import com.london.domain.usecase.recent.viewed.ManageRecentViewedUseCase
 import com.london.domain.usecase.recent.watched.tvshow.ManageRecentTvShowWatchedUseCase
 import com.london.presentation.navigation.Screen
@@ -126,7 +126,7 @@ class TvShowDetailsViewModel @Inject constructor(
 
                 val episodes = getEpisodesByTvShowSeason(tvShowId, seasonNumber).episodes
                 val rating = if (authenticationUseCase.isLoggedIn()) {
-                    ratingUseCase.getAccountTvShowStateUseCase(
+                    ratingUseCase.getRateAccountTvShowState(
                         tvShowId = tvShowId,
                     )
                 } else 0
@@ -227,7 +227,7 @@ class TvShowDetailsViewModel @Inject constructor(
     }
 
     override fun OnGenreClicked(genreId: Int) {
-        emitEffect(TvShowDetailsEffect.NavigateTotvShowsByCategoryId(genreId))
+        emitEffect(TvShowDetailsEffect.NavigateToTvShowsByCategoryId(genreId))
     }
 
     override fun onRateBottomSheetClick() {
@@ -254,7 +254,7 @@ class TvShowDetailsViewModel @Inject constructor(
     override fun onSelectRatingClick(rating: Int) {
         tryToExecute(
             block = {
-                ratingUseCase.addTvShowRatingByIdUseCase(tvShowId, rating)
+                ratingUseCase.addTvShowRatingById(tvShowId, rating)
             },
             onSuccess = {
                 updateState {

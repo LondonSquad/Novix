@@ -1,6 +1,6 @@
 package com.london.presentation.feature.myrating
 
-import com.london.domain.usecase.RatingUseCase
+import com.london.domain.usecase.rating.RatingUseCase
 import com.london.presentation.shared.base.BaseViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject

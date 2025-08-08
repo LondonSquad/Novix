@@ -110,7 +110,7 @@ fun TvShowsDetailsScreen(
                 MediaType.TvShow.mediaNum
             )
 
-            is TvShowDetailsEffect.NavigateTotvShowsByCategoryId -> onNavigateToGenre(
+            is TvShowDetailsEffect.NavigateToTvShowsByCategoryId -> onNavigateToGenre(
                 currentEffect.categoryId
             )
 
