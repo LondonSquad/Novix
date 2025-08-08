@@ -18694,5 +18694,33 @@
       "deletions": 74,
       "changed_files": 11
     }
+  },
+  {
+    "pr_number": 566,
+    "url": "https://github.com/LondonSquad/Novix/pull/566",
+    "title": "Refactor: fix SearchScreen scrollable",
+    "opened_at": "2025-08-08T00:30:12Z",
+    "head_ref": "fix/search-scrollable",
+    "base_ref": "develop",
+    "creator": {
+      "login": "Mostafa-alsaygh",
+      "id": 106277855,
+      "url": "https://github.com/Mostafa-alsaygh"
+    },
+    "approvals": [],
+    "first_approved_at": null,
+    "time_to_first_approval_minutes": null,
+    "required_approvals_met_at": null,
+    "time_to_required_approvals_minutes": null,
+    "closed_at": null,
+    "merged_at": null,
+    "merged_by": null,
+    "week": "2025-W32",
+    "status": "pending",
+    "diff_stats": {
+      "additions": 36,
+      "deletions": 30,
+      "changed_files": 1
+    }
   }
 ]
