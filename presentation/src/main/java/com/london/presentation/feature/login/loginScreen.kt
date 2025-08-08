@@ -18,6 +18,8 @@ import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.statusBars
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -80,6 +82,7 @@ private fun Content(
     val interactionSourceUserName = remember { MutableInteractionSource() }
     val interactionSourcePassword = remember { MutableInteractionSource() }
     val isLoadingGeneral = uiState.isLoading || uiState.isGuestLoginLoading
+    val scrollState = rememberScrollState()
 
     Box(
         modifier = Modifier
@@ -100,6 +103,7 @@ private fun Content(
                 .padding(WindowInsets.statusBars.asPaddingValues())
                 .padding(horizontal = 16.dp)
                 .padding(bottom = 16.dp)
+                .verticalScroll(scrollState)
         ) {
             TopBar(
                 title = stringResource(R.string.login),
