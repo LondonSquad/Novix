@@ -1,7 +1,7 @@
 package com.london.presentation.shared.continuewatching
 
-import com.london.domain.usecase.recent.watched.GetRecentWatchedMoviesUseCase
-import com.london.domain.usecase.recent.watched.GetRecentWatchedTvShowsUseCase
+import com.london.domain.usecase.recent.watched.movie.ManageRecentMovieWatchedUseCase
+import com.london.domain.usecase.recent.watched.tvshow.ManageRecentTvShowWatchedUseCase
 import com.london.presentation.shared.MediaCategory
 import com.london.presentation.shared.base.BaseViewModel
 import com.london.presentation.utils.MovieGenre
@@ -11,8 +11,8 @@ import javax.inject.Inject
 
 @HiltViewModel
 class ContinueWatchingViewModel @Inject constructor(
-    private val getRecentWatchedMoviesUseCase: GetRecentWatchedMoviesUseCase,
-    private val getRecentWatchedTvShowsUseCase: GetRecentWatchedTvShowsUseCase,
+    private val manageRecentTvShowWatchedUseCase: ManageRecentTvShowWatchedUseCase,
+    private val manageRecentMovieWatchedUseCase: ManageRecentMovieWatchedUseCase,
 ) : BaseViewModel<ContinueWatchingUiState, ContinueWatchingEffect>(ContinueWatchingUiState()),
     ContinueWatchingContract {
 
@@ -23,11 +23,11 @@ class ContinueWatchingViewModel @Inject constructor(
     private fun fetchRecentWatchedMedia() {
         tryToExecute(
             block = {
-                val recentWatchedMovie = getRecentWatchedMoviesUseCase.getAll(
+                val recentWatchedMovie = manageRecentMovieWatchedUseCase.getAllWatchedMovies(
                     genreId = if (state.value.selectedMovieGenre == MovieGenre.All) null
                     else state.value.selectedMovieGenre.id
                 )
-                val recentWatchedTvShow = getRecentWatchedTvShowsUseCase.getAll(
+                val recentWatchedTvShow = manageRecentTvShowWatchedUseCase.getAllRecentTvShow(
                     genreId = if (state.value.selectedTvShowGenre == TvShowGenre.All) null
                     else state.value.selectedTvShowGenre.id
                 )
