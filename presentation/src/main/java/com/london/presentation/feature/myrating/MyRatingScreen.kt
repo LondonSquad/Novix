@@ -46,7 +46,6 @@ fun MyRatingScreen(
     val state by viewModel.state.collectAsStateWithLifecycle()
     val effect by viewModel.effect.collectAsState(null)
 
-    // Refresh data when screen becomes visible
     LaunchedEffect(Unit) {
         viewModel.refreshData()
     }

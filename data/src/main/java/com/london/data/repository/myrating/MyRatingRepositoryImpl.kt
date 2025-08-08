@@ -26,7 +26,7 @@ class MyRatingRepositoryImpl @Inject constructor(
         }
     )
 
-    override suspend fun getAllRatedMTvShows(): List<RatedTvShow> = fetchAndSync(
+    override suspend fun getAllRatedTvShows(): List<RatedTvShow> = fetchAndSync(
         networkBlock = {
             val accountId = authPreferences.getAccountId()
             val sessionId = authPreferences.getSessionId()
