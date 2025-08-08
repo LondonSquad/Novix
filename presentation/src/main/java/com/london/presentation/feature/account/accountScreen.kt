@@ -16,6 +16,7 @@ import com.london.designsystem.component.TopBar
 import com.london.designsystem.component.rememberModalBottomSheetState
 import com.london.presentation.R
 import com.london.presentation.feature.account.appearance.AppearanceBottomSheet
+import com.london.presentation.feature.account.language.LanguageBottomSheet
 import com.london.presentation.feature.account.logout.LogoutBottomSheet
 import com.london.presentation.feature.account.state.AccountUiState
 import com.london.presentation.shared.accountComponent.ContentRestrictionBottomSheet
@@ -103,6 +104,13 @@ internal fun AccountScreenContent(
         LogoutBottomSheet(
             logoutContract = accountContract,
             isLoading = uiState.isLogoutLoading
+        )
+    }
+
+    if (uiState.isLanguageBottomSheetVisible) {
+        LanguageBottomSheet(
+            languageContract = accountContract,
+            uiState = uiState
         )
     }
 }
