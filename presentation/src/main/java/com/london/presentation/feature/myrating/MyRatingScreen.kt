@@ -1,12 +1,13 @@
 package com.london.presentation.feature.myrating
 
-import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.lazy.grid.GridCells
@@ -25,7 +26,6 @@ import com.london.designsystem.component.NovixChip
 import com.london.designsystem.component.TopBar
 import com.london.designsystem.theme.NovixTheme
 import com.london.designsystem.theme.ThemePreviews
-import com.london.domain.entity.RatedMedia
 import com.london.presentation.R
 import com.london.presentation.shared.EmptyGenreLayout
 import com.london.presentation.shared.HomeCard
@@ -76,10 +76,15 @@ private fun MyRatingContent(
     state: MyRatingUiState = MyRatingUiState(),
     contract: MyRatingContract = defaultMyRatingContract()
 ) {
+    val selectedCategory = state.selectedRatingCategory ?: RatingCategory.All
+    val items = when (selectedCategory) {
+        RatingCategory.All -> state.allRatedMedia
+        RatingCategory.Movies -> state.ratedMovies
+        RatingCategory.TvShows -> state.ratedTvShows
+    }
+
     Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(NovixTheme.colors.surface)
+        modifier = Modifier.fillMaxSize()
     ) {
         TopBar(
             modifier = Modifier
@@ -96,75 +101,59 @@ private fun MyRatingContent(
             modifier = Modifier.padding(bottom = 12.dp)
         )
 
-        val selectedCategory = state.selectedRatingCategory ?: RatingCategory.All
-        val items = when (selectedCategory) {
-            RatingCategory.All -> state.allRatedMedia
-            RatingCategory.Movies -> state.ratedMovies
-            RatingCategory.TvShows -> state.ratedTvShows
-        }
-        
         if (items.isEmpty()) {
             EmptyGenreLayout(
                 message = stringResource(R.string.there_is_no_items),
                 modifier = Modifier.fillMaxSize()
             )
         } else {
-            MediaGrid(
-                items = items,
-                onMovieClick = if (selectedCategory == RatingCategory.All || selectedCategory == RatingCategory.Movies) contract::onMovieClick else null,
-                onTvShowClick = if (selectedCategory == RatingCategory.All || selectedCategory == RatingCategory.TvShows) contract::onTvShowClick else null
-            )
-        }
-
-        if (state.isDeleteClicked) {
-            if (state.errorState is ErrorState.RequestFailed) {
-                SnackBarAnimation(state.errorState.message)
-            } else {
-                SnackBarAnimation(stringResource(R.string.delete_list_successfully), dsR.drawable.ic_success)
+            LazyVerticalGrid(
+                columns = GridCells.Fixed(gridColmuns()),
+                contentPadding = PaddingValues(
+                    top = 12.dp,
+                    bottom = 16.dp
+                ),
+                horizontalArrangement = Arrangement.spacedBy(12.dp),
+                verticalArrangement = Arrangement.spacedBy(12.dp),
+                modifier = Modifier
+                    .fillMaxSize()
+                    .navigationBarsPadding()
+                    .padding(horizontal = 16.dp)
+            ) {
+                items(items) { item ->
+                    HomeCard(
+                        imageUrl = item.posterPath,
+                        isSaved = false,
+                        onSaveClick = { },
+                        myRatingList = true,
+                        rate = item.rating,
+                        onDeleteClick = { contract.onDelete(item.id) },
+                        modifier = Modifier.clickable {
+                            when {
+                                item.isMovie -> contract.onMovieClick(item.id)
+                                !item.isMovie -> contract.onTvShowClick(item.id)
+                            }
+                        }
+                    )
+                }
             }
         }
     }
-}
 
-@Composable
-private fun MediaGrid(
-    items: List<RatedMedia>,
-    onMovieClick: ((Int) -> Unit)? = null,
-    onTvShowClick: ((Int) -> Unit)? = null
-) {
-    LazyVerticalGrid(
-        columns = GridCells.Fixed(gridColmuns()),
-        contentPadding = androidx.compose.foundation.layout.PaddingValues(
-            top = 12.dp,
-            bottom = 16.dp
-        ),
-        horizontalArrangement = Arrangement.spacedBy(12.dp),
-        verticalArrangement = Arrangement.spacedBy(12.dp),
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(horizontal = 16.dp)
-    ) {
-        items(
-            items = items,
-            key = { item -> "${item.id}_${item.isMovie}_${item.addedAt}" }
-        ) { item ->
-            HomeCard(
-                imageUrl = item.posterPath,
-                isSaved = false,
-                onSaveClick = { },
-                modifier = Modifier.clickable {
-                    when {
-                        item.isMovie && onMovieClick != null -> onMovieClick(item.id)
-                        !item.isMovie && onTvShowClick != null -> onTvShowClick(item.id)
-                    }
-                }
+    if (state.isDeleteClicked) {
+        if (state.errorState is ErrorState.RequestFailed) {
+            SnackBarAnimation(state.errorState.message)
+        } else {
+            SnackBarAnimation(
+                stringResource(R.string.delete_list_successfully),
+                dsR.drawable.ic_success
             )
         }
     }
 }
 
 @Composable
-private fun RatingChipsRow(
+fun RatingChipsRow(
     selected: RatingCategory,
     onSelect: (RatingCategory) -> Unit,
     modifier: Modifier = Modifier
@@ -173,19 +162,23 @@ private fun RatingChipsRow(
         modifier = modifier
             .fillMaxWidth()
             .padding(horizontal = 16.dp),
-        horizontalArrangement = Arrangement.spacedBy(8.dp),
+        horizontalArrangement = Arrangement.spacedBy(8.dp)
     ) {
-        RatingCategory.entries.forEach { category ->
-            NovixChip(
-                text = stringResource(category.title),
-                isSelected = selected == category,
-                onClick = {
-                    if (selected != category) {
-                        onSelect(category)
-                    }
-                }
-            )
-        }
+        NovixChip(
+            text = "All",
+            isSelected = selected == RatingCategory.All,
+            onClick = { onSelect(RatingCategory.All) }
+        )
+        NovixChip(
+            text = "Movies",
+            isSelected = selected == RatingCategory.Movies,
+            onClick = { onSelect(RatingCategory.Movies) }
+        )
+        NovixChip(
+            text = "TV Shows",
+            isSelected = selected == RatingCategory.TvShows,
+            onClick = { onSelect(RatingCategory.TvShows) }
+        )
     }
 }
 
