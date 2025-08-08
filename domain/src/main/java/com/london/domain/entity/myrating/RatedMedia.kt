@@ -1,8 +1,9 @@
 package com.london.domain.entity.myrating
 
-data class RatedMovie(
+data class RatedMedia(
     val id: Int,
     val title: String,
     val posterPath: String,
-    val rating: Int
-)
+    val rating: Int,
+    val isMovie: Boolean
+) 
