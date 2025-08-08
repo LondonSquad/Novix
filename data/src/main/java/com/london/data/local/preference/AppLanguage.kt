@@ -1,6 +1,7 @@
 package com.london.data.local.preference
 
 import android.content.Context
+import androidx.core.content.edit
 import com.london.data.utils.APP_SHARED_PREFS_NAME
 import com.london.data.utils.LANGUAGE_KEY
 import com.london.domain.language.AppLanguage
@@ -17,9 +18,13 @@ fun readLanguageCode(context: Context): String {
     }
 
     val systemLanguage = Locale.getDefault().language
-    return if (systemLanguage.equals("ar", ignoreCase = true)) {
+    val defaultLanguage = if (systemLanguage.equals("ar", ignoreCase = true)) {
         AppLanguage.ARABIC.code
     } else {
         AppLanguage.ENGLISH.code
     }
+
+    prefs.edit { putString(LANGUAGE_KEY, defaultLanguage) }
+
+    return defaultLanguage
 }
