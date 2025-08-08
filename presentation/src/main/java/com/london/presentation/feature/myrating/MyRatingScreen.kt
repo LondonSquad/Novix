@@ -41,7 +41,7 @@ fun MyRatingScreen(
     onNavigateMovie: (Int) -> Unit,
     onNavigateTvShow: (Int) -> Unit,
     onNavigateBack: () -> Unit,
-    viewModel: MyRatingViewModel = hiltViewModel()
+    viewModel: RatingViewModel = hiltViewModel()
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
     val effect by viewModel.effect.collectAsState(null)
