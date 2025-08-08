@@ -16,7 +16,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
@@ -147,11 +146,15 @@ private fun Content(
                     .padding(horizontal = 16.dp),
                 verticalArrangement = Arrangement.spacedBy(8.dp)
             ) {
-                items(pagingItems.itemSnapshotList.items) { item ->
-                    SavedListItemRow(
-                        itemUi = item,
-                        onCountClick = contract::onListClick
-                    )
+                items(pagingItems.itemCount) { index ->
+                    val item = pagingItems[index]
+                    if (item != null) {
+                        SavedListItemRow(
+                            itemUi = item,
+                            onCountClick = contract::onListClick
+                        )
+                    }
+
                 }
             }
             AddListBottomSheet(
@@ -159,13 +162,13 @@ private fun Content(
                 addListSheetState = state.addListSheetState
             )
         }
-        if (state.isSnackBarSuccessVisible){
+        if (state.isSnackBarSuccessVisible) {
             SnackBarAnimation(
                 message = stringResource(R.string.list_added_successfly),
                 icon = com.london.designsystem.R.drawable.ic_success
             )
         }
-        if (state.error!=null){
+        if (state.error != null) {
             SnackBarAnimation(
                 message = stringResource(R.string.can_not_delete_list)
             )
