@@ -15,11 +15,7 @@ class MyRatingViewModel @Inject constructor(
         initializeItems()
     }
 
-    fun refreshData() {
-        initializeItems()
-    }
-
-    private fun initializeItems() {
+    fun initializeItems() {
         tryToExecute(
             block = {
                 val allRatedMedia = getMyRatingUseCase.getAllRated()
@@ -70,7 +66,6 @@ class MyRatingViewModel @Inject constructor(
     }
 
     override fun onItemClick(id: Int) {
-        // TODO: Implement item click functionality
         emitEffect(MyRatingEffect.NavigateToMovie(id))
     }
 }

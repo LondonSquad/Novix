@@ -51,3 +51,4 @@ enum class TvShowGenre(
     WarPolitics(id = 10768, stringResId = R.string.war_politics),
     Western(id = 37, stringResId = R.string.western),
 }
+

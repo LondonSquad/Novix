@@ -47,7 +47,8 @@ fun MyRatingScreen(
     val effect by viewModel.effect.collectAsState(null)
 
     LaunchedEffect(Unit) {
-        viewModel.refreshData()
+        viewModel.initializeItems()
+
     }
 
     effect?.Listen { currentEffect ->
@@ -62,7 +63,8 @@ fun MyRatingScreen(
         isLoading = state.isLoading,
         isError = state.errorState != null,
         onBack = viewModel::onBackClicked,
-        onRetry = { viewModel.refreshData() }
+        onRetry = { viewModel.initializeItems()
+        }
     ) {
         MyRatingContent(
             state = state,
