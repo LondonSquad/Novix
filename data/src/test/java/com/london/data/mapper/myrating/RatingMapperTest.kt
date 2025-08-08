@@ -1,12 +1,12 @@
 package com.london.data.mapper.myrating
 
-import com.london.data.remote.model.myrating.RatedMediaResponse
+import com.london.data.remote.model.myrating.RatingMediaResponse
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
 import org.junit.Assert.assertTrue
 import org.junit.Test
 
-class MyRatingMapperTest {
+class RatingMapperTest {
 
     @Test
     fun `toEntity mapping movie response returns correct rated media`() {
@@ -43,7 +43,7 @@ class MyRatingMapperTest {
     @Test
     fun `toEntity with null values returns default values`() {
         // Given
-        val movieResponse = RatedMediaResponse(
+        val movieResponse = RatingMediaResponse(
             id = 0,
             adult = false,
             backdropPath = "",
@@ -144,7 +144,7 @@ class MyRatingMapperTest {
             title: String = "Test Movie",
             posterPath: String? = "/test-poster.jpg",
             rating: Double = 8.5
-        ) = RatedMediaResponse(
+        ) = RatingMediaResponse(
             id = id,
             adult = false,
             backdropPath = "/test-backdrop.jpg",
@@ -159,7 +159,7 @@ class MyRatingMapperTest {
             title: String = "Test TV Show",
             posterPath: String? = "/test-poster.jpg",
             rating: Double = 7.5
-        ) = RatedMediaResponse(
+        ) = RatingMediaResponse(
             id = id,
             adult = false,
             backdropPath = "/test-backdrop.jpg",
