@@ -19,7 +19,6 @@ import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.runtime.Composable
@@ -157,7 +156,8 @@ fun SearchScreenContent(
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .background(NovixTheme.colors.surface), verticalArrangement = Arrangement.Top
+                .background(NovixTheme.colors.surface),
+            verticalArrangement = Arrangement.Top
         ) {
             TopBar(
                 modifier = Modifier
@@ -220,6 +220,7 @@ fun SearchScreenContent(
                                 )
                             },
                             content = {
+
                                 RecentSearchLayOut(
                                     state = state,
                                     interactionListener = interactionListener,
@@ -227,6 +228,7 @@ fun SearchScreenContent(
                                     onNavigateToTvShowDetails = interactionListener::onTvShowClick,
                                     onNavigateToMovieDetails = interactionListener::onMovieClick
                                 )
+
                             })
                     }, content = {
                         SearchChipsRow(
@@ -347,10 +349,7 @@ fun SearchScreenContent(
                     })
                 }
             }
-
         }
-
-
     }
 }
 
@@ -454,30 +453,37 @@ private fun RecentSearchLayOut(
     onNavigateToTvShowDetails: (Int) -> Unit,
     onNavigateToMovieDetails: (Int) -> Unit
 ) {
-    if (state.recentViewed.isNotEmpty()) {
+    LazyColumn(
+        modifier = Modifier.fillMaxSize()
+    ) {
+        if (state.recentViewed.isNotEmpty()) {
+            item {
+                RecentViewedSection(
+                    recentViewed = state.recentViewed,
+                    onClearAll = viewModel::clearRecentViewed,
+                    onNavigateToTvShowDetails = onNavigateToTvShowDetails,
+                    onNavigateToMovieDetails = onNavigateToMovieDetails
+                )
+            }
+        }
 
-        RecentViewedSection(
-            recentViewed = state.recentViewed,
-            onClearAll = viewModel::clearRecentViewed,
-            onNavigateToTvShowDetails = onNavigateToTvShowDetails,
-            onNavigateToMovieDetails = onNavigateToMovieDetails
-        )
-    }
+        if (state.recentSearches.isNotEmpty()) {
+            item {
+                val focusManager = LocalFocusManager.current
+                val keyboardController = LocalSoftwareKeyboardController.current
 
-    if (state.recentSearches.isNotEmpty()) {
-
-        val focusManager = LocalFocusManager.current
-        val keyboardController = LocalSoftwareKeyboardController.current
-        RecentSearchesSection(
-            recentSearches = state.recentSearches,
-            onClearAll = interactionListener::clearRecentSearches,
-            onSearchClick = { query ->
-                focusManager.clearFocus()
-                keyboardController?.hide()
-                interactionListener.onRecentSearchClick(query)
-            },
-            onRemoveClick = interactionListener::removeRecentSearch
-        )
+                RecentSearchesSection(
+                    recentSearches = state.recentSearches,
+                    onClearAll = interactionListener::clearRecentSearches,
+                    onSearchClick = { query ->
+                        focusManager.clearFocus()
+                        keyboardController?.hide()
+                        interactionListener.onRecentSearchClick(query)
+                    },
+                    onRemoveClick = interactionListener::removeRecentSearch
+                )
+            }
+        }
     }
 }
 
@@ -536,12 +542,12 @@ fun RecentSearchesSection(
         modifier = Modifier.padding(vertical = 12.dp, horizontal = 16.dp)
     )
 
-    LazyColumn(
+    Column(
         modifier = Modifier
             .background(NovixTheme.colors.surface)
             .padding(horizontal = 16.dp)
     ) {
-        itemsIndexed(recentSearches) { index, search ->
+        recentSearches.forEachIndexed { index, search ->
             val isLastItem = index == recentSearches.lastIndex
             RecentSearchItem(
                 search = search.query,
