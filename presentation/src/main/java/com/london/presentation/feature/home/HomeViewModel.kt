@@ -5,8 +5,8 @@ import androidx.paging.PagingData
 import androidx.paging.cachedIn
 import com.london.domain.entity.UpComingMovie
 import com.london.domain.usecase.GetPopularMovies
-import com.london.domain.usecase.GetPopularTvShow
 import com.london.domain.usecase.GetUpComingMoviesByCategoryUseCase
+import com.london.domain.usecase.details.tvshow.ManageTvShowDetailsUseCase
 import com.london.domain.usecase.recent.watched.movie.ManageRecentMovieWatchedUseCase
 import com.london.domain.usecase.recent.watched.tvshow.ManageRecentTvShowWatchedUseCase
 import com.london.domain.usecase.toprated.GetTopRatedMoviesUseCase
@@ -28,7 +28,7 @@ import javax.inject.Inject
 @HiltViewModel
 class HomeViewModel @Inject constructor(
     private val getPopularMovies: GetPopularMovies,
-    private val getPopularTvShows: GetPopularTvShow,
+    private val manageTvShowDetailsUseCase: ManageTvShowDetailsUseCase,
     private val getUpcomingMoviesByCategoryUseCase: GetUpComingMoviesByCategoryUseCase,
     private val getTopRatedMovies: GetTopRatedMoviesUseCase,
     private val getTopRatedTvShows: GetTopRatedTvSeriesUseCase,
@@ -104,7 +104,7 @@ class HomeViewModel @Inject constructor(
         tryToExecute(
             block = {
                 val movies = getPopularMovies.invoke()
-                val shows = getPopularTvShows.invoke()
+                val shows = manageTvShowDetailsUseCase.getPopularTvShows()
                 Pair(movies, shows)
             },
             onStart = { updateState { copy(isTopRatedLoading = true) } },

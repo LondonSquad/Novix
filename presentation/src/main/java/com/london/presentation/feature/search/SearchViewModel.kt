@@ -5,8 +5,8 @@ import com.london.domain.entity.recent.RecentSearch
 import com.london.domain.entity.recent.RecentViewed
 import com.london.domain.usecase.GetActorsUseCase
 import com.london.domain.usecase.GetMoviesUseCase
-import com.london.domain.usecase.GetTvShowsUseCase
 import com.london.domain.usecase.IncrementGenreInterestUseCase
+import com.london.domain.usecase.details.tvshow.ManageTvShowDetailsUseCase
 import com.london.domain.usecase.recent.search.ManageRecentSearchUseCase
 import com.london.domain.usecase.recent.viewed.ManageRecentViewedUseCase
 import com.london.presentation.shared.base.BaseViewModel
@@ -22,13 +22,13 @@ import javax.inject.Inject
 @HiltViewModel
 class SearchViewModel @Inject constructor(
     private val getActorsUseCase: GetActorsUseCase,
-    private val getTvShowsUseCase: GetTvShowsUseCase,
     private val getMoviesUseCase: GetMoviesUseCase,
+    private val manageTvShowDetailsUseCase: ManageTvShowDetailsUseCase,
     private val manageRecentSearchUseCase: ManageRecentSearchUseCase,
     private val incrementGenreInterestUseCase: IncrementGenreInterestUseCase,
     private val manageRecentViewedUseCase: ManageRecentViewedUseCase,
 
-) : BaseViewModel<SearchUiState, SearchEffect>(SearchUiState()), SearchContract {
+    ) : BaseViewModel<SearchUiState, SearchEffect>(SearchUiState()), SearchContract {
 
     private val _searchQuery = MutableStateFlow("")
 
@@ -343,7 +343,7 @@ class SearchViewModel @Inject constructor(
 
     private fun searchTvShows(query: String) {
         val tvShowsFlow = createPagingSourceFlow(query) { currentQuery, pageNumber ->
-            getTvShowsUseCase(
+            manageTvShowDetailsUseCase.getTvShowList(
                 name = currentQuery,
                 pageNumber = pageNumber
             )

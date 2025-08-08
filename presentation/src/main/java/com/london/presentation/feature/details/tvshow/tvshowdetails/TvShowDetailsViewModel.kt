@@ -7,8 +7,7 @@ import com.london.domain.entity.recent.RecentViewed
 import com.london.domain.usecase.GetCastById
 import com.london.domain.usecase.GetEpisodesByTvShowSeason
 import com.london.domain.usecase.GetImagesById
-import com.london.domain.usecase.GetTvShowDetails
-import com.london.domain.usecase.GetTvShowVideoProvider
+import com.london.domain.usecase.details.tvshow.ManageTvShowDetailsUseCase
 import com.london.domain.usecase.recent.viewed.ManageRecentViewedUseCase
 import com.london.domain.usecase.recent.watched.tvshow.ManageRecentTvShowWatchedUseCase
 import com.london.presentation.navigation.Screen
@@ -19,11 +18,10 @@ import javax.inject.Inject
 
 @HiltViewModel
 class TvShowDetailsViewModel @Inject constructor(
-    private val getTvShowDetails: GetTvShowDetails,
     private val getCastById: GetCastById,
     private val getTvShowImages: GetImagesById,
     private val getEpisodesByTvShowSeason: GetEpisodesByTvShowSeason,
-    private val getTvShowVideoProvider: GetTvShowVideoProvider,
+    private val manageTvShowDetailsUseCase: ManageTvShowDetailsUseCase,
     private val manageRecentTvShowWatchedUseCase: ManageRecentTvShowWatchedUseCase,
     private val manageRecentViewedUseCase:ManageRecentViewedUseCase,
     savedStateHandle: SavedStateHandle,
@@ -47,7 +45,7 @@ class TvShowDetailsViewModel @Inject constructor(
         tryToExecute(
             block = {
                 val episodesBySeason = getEpisodesByTvShowSeason(tvShowId, seasonNumber)
-                val videoProvider = getTvShowVideoProvider.invoke(tvShowId)
+                val videoProvider = manageTvShowDetailsUseCase.getTvShowVideoProvider(tvShowId)
                 Triple(episodesBySeason.episodes, episodesBySeason, videoProvider)
             },
             onSuccess = { (episodes, episodeCount, videoProviders) ->
@@ -116,7 +114,7 @@ class TvShowDetailsViewModel @Inject constructor(
 
     private fun initializeGetTvShowDetailsData() {
         tryToExecute(
-            block = { getTvShowDetails(tvShowId) },
+            block = { manageTvShowDetailsUseCase.getTvShowDetails(tvShowId) },
             onStart = { updateState { copy(isLoading = true) } },
             onSuccess = { tvShowDetails ->
                 updateState {
