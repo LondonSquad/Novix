@@ -90,7 +90,8 @@ fun <T> MediaLazyGrid(
                             imageUrl = getImageUrl(item),
                             isSaved = isItemSaved(item),
                             onSaveClick = { onSavedClick(item) },
-                            modifier = Modifier.clickable { onItemClick(item) }
+                            modifier = Modifier.clickable { onItemClick(item) },
+                            isDarkMode = NovixTheme.isThemeDark
                         )
                     }
                 }

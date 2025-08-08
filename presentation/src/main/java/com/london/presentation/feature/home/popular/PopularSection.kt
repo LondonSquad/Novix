@@ -143,7 +143,8 @@ fun PopularSection(
                             uiMediaList[page].id,
                             uiMediaList[page].mediaType
                         )
-                    }
+                    },
+                    isDarkMode = NovixTheme.isThemeDark
                 )
                 if (pagerState.currentPage == page)
                     Column(
