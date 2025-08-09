@@ -29,7 +29,7 @@ fun HomeCard(
     isSaved: Boolean = false,
     hasSaveIcon: Boolean = true,
     myRatingList: Boolean = false,
-    rate: Int = 5,
+    rate: String = "5",
     onDeleteClick: () -> Unit = {},
     imageDescription: String? = null,
     onSaveClick: () -> Unit,

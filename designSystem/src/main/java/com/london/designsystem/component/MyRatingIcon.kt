@@ -22,7 +22,7 @@ import com.london.designsystem.theme.ThemePreviews
 @Composable
 fun MyRatingIcon(
     modifier: Modifier = Modifier,
-    rate: Int
+    rate: String
 ) {
     Row(
         modifier = modifier
@@ -44,7 +44,7 @@ fun MyRatingIcon(
             tint =  NovixTheme.colors.yellowAccent,
         )
         Text(
-            text = rate.toString(),
+            text = rate,
             style = NovixTheme.typography.label.small,
             color = NovixTheme.colors.onPrimary
         )
@@ -56,7 +56,7 @@ fun MyRatingIcon(
 fun MyRatingIconPreview() {
     NovixTheme {
         MyRatingIcon(
-            rate = 4
+            rate = "4"
         )
     }
 }

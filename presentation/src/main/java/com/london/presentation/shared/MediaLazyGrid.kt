@@ -40,7 +40,7 @@ fun <T> MediaLazyGrid(
     emptyTitle: String = "",
     emptyImage: Int? = null,
     myRatingList: Boolean = false,
-    rate: Int = 5,
+    rate: String = "5",
     onDeleteClick: () -> Unit = {}
 ) {
     Column(
