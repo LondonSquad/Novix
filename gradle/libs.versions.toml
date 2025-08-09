@@ -144,7 +144,6 @@ firebase-analytics = { group = "com.google.firebase", name = "firebase-analytics
 #noinspection SimilarGradleDependency
 mockk-agent-jvm = { module = "io.mockk:mockk-agent-jvm", version.ref = "mockk" }
 turbine = { module = "app.cash.turbine:turbine", version.ref = "turbine" }
-firebase-crashlytics-ktx = { group = "com.google.firebase", name = "firebase-crashlytics-ktx", version.ref = "firebaseCrashlyticsKtx" }
 
 # Compiler and runtime dagger
 hilt-android = { group = "com.google.dagger", name = "hilt-android", version.ref = "hilt" }
