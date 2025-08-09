@@ -30,17 +30,18 @@ import com.london.designsystem.theme.NovixTheme
 import com.london.designsystem.theme.ThemePreviews
 import com.london.domain.theme.AppTheme
 import com.london.presentation.R
-import com.london.presentation.feature.account.AccountContract
-import com.london.presentation.feature.account.state.AccountUiState
 
 @Composable
 fun AppearanceBottomSheet(
-    appearanceContract: AccountContract,
-    appearanceState: AccountUiState,
+    appTheme: AppTheme,
+    onBottomSheetDismiss: () -> Unit,
+    onDarkModeSelected: () -> Unit,
+    onLightModeSelected: () -> Unit,
+    onAppearanceModeSave: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     ModalBottomSheet(
-        onDismissRequest = appearanceContract::onBottomSheetDismiss,
+        onDismissRequest = onBottomSheetDismiss,
         containerColor = NovixTheme.colors.surface,
         state = rememberModalBottomSheetState(skipPartiallyExpanded = true)
     ) {
@@ -52,11 +53,11 @@ fun AppearanceBottomSheet(
                 .padding(bottom = 24.dp)
         ) {
             AppearanceBottomSheetContent(
-                onDark = appearanceContract::onDarkModeSelected,
-                onLight = appearanceContract::onLightModeSelected,
-                onSave = appearanceContract::onAppearanceModeSave,
-                onDismiss = appearanceContract::onBottomSheetDismiss,
-                state = appearanceState
+                onDark = onDarkModeSelected,
+                onLight = onLightModeSelected,
+                onSave = onAppearanceModeSave,
+                onDismiss = onBottomSheetDismiss,
+                appTheme = appTheme
             )
         }
     }
@@ -68,7 +69,8 @@ fun AppearanceBottomSheetContent(
     onLight: () -> Unit,
     onSave: () -> Unit,
     onDismiss: () -> Unit,
-    state: AccountUiState
+    appTheme: AppTheme,
+
 ) {
     Column(
         modifier = Modifier.padding(horizontal = 16.dp),
@@ -109,7 +111,7 @@ fun AppearanceBottomSheetContent(
                 .fillMaxWidth()
                 .padding(top = 24.dp),
             isSelected =
-                (state.appTheme == AppTheme.DARK),
+                (appTheme == AppTheme.DARK),
             onClick = onDark
         )
 
@@ -119,7 +121,7 @@ fun AppearanceBottomSheetContent(
                 .fillMaxWidth()
                 .padding(top = 12.dp, bottom = 24.dp),
             isSelected =
-                (state.appTheme == AppTheme.LIGHT),
+                (appTheme == AppTheme.LIGHT),
             onClick = onLight
         )
 
@@ -139,15 +141,11 @@ fun AppearanceBottomSheetContent(
 @ThemePreviews
 @Composable
 fun AppearanceBottomSheetContentPreview() {
-    val state = AccountUiState(
-        isDarkMode = true,
-        isLightMode = false
-    )
     AppearanceBottomSheetContent(
         onDark = {},
         onLight = {},
         onSave = {},
         onDismiss = {},
-        state = state
+        appTheme = AppTheme.DARK
     )
 }

@@ -28,16 +28,16 @@ import com.london.designsystem.component.rememberModalBottomSheetState
 import com.london.designsystem.theme.NovixTheme
 import com.london.designsystem.theme.ThemePreviews
 import com.london.presentation.R
-import com.london.presentation.feature.account.AccountContract
 
 @Composable
 fun LogoutBottomSheet(
-    logoutContract: AccountContract,
+    onBottomSheetDismiss: () -> Unit,
+    onLogoutConfirmed: () -> Unit,
     isLoading: Boolean,
     modifier: Modifier = Modifier
 ) {
     ModalBottomSheet(
-        onDismissRequest = logoutContract::onBottomSheetDismiss,
+        onDismissRequest = onBottomSheetDismiss,
         containerColor = NovixTheme.colors.surface,
         state = rememberModalBottomSheetState(skipPartiallyExpanded = true)
     ) {
@@ -49,8 +49,8 @@ fun LogoutBottomSheet(
                 .padding(bottom = 24.dp)
         ) {
             LogoutBottomSheetContent(
-                onLogout = logoutContract::onLogoutConfirmed,
-                onDismiss = logoutContract::onBottomSheetDismiss,
+                onLogout = onLogoutConfirmed,
+                onDismiss = onBottomSheetDismiss,
                 isLoading = isLoading
             )
         }
