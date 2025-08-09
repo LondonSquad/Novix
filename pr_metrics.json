@@ -19241,5 +19241,33 @@
       "deletions": 1770,
       "changed_files": 62
     }
+  },
+  {
+    "pr_number": 578,
+    "url": "https://github.com/LondonSquad/Novix/pull/578",
+    "title": "refactor: account screen bottom sheets",
+    "opened_at": "2025-08-09T00:37:35Z",
+    "head_ref": "refactor/account-screen-bottomsheets",
+    "base_ref": "develop",
+    "creator": {
+      "login": "karimdeabes",
+      "id": 81706918,
+      "url": "https://github.com/karimdeabes"
+    },
+    "approvals": [],
+    "first_approved_at": null,
+    "time_to_first_approval_minutes": null,
+    "required_approvals_met_at": null,
+    "time_to_required_approvals_minutes": null,
+    "closed_at": null,
+    "merged_at": null,
+    "merged_by": null,
+    "week": "2025-W32",
+    "status": "pending",
+    "diff_stats": {
+      "additions": 107,
+      "deletions": 100,
+      "changed_files": 6
+    }
   }
 ]
