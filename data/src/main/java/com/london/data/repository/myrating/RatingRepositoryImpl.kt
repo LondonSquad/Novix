@@ -63,4 +63,28 @@ class RatingRepositoryImpl @Inject constructor(
             movies + tvShows
         }
     )
+
+    override suspend fun getAllRatedMovies(): List<RatedMedia> =
+        ratingRemoteDataSource.getAllRatedMovies(
+            accountId = authPreferences.getAccountId(),
+            sessionId = authPreferences.getSessionId().orEmpty()
+        ).getOrThrow().items.map { it.toEntity(isMovie = true) }
+
+    override suspend fun getAllRatedTvShows(): List<RatedMedia> =
+        ratingRemoteDataSource.getAllRatedTvShows(
+            accountId = authPreferences.getAccountId(),
+            sessionId = authPreferences.getSessionId().orEmpty()
+        ).getOrThrow().items.map { it.toEntity(isMovie = false) }
+
+    override suspend fun deleteMovieRating(movieId: Int): Boolean =
+        ratingRemoteDataSource.deleteMovieRating(
+            movieId = movieId,
+            sessionId = authPreferences.getSessionId()
+        ).isSuccess
+
+    override suspend fun deleteTvShowRating(tvShowId: Int): Boolean =
+        ratingRemoteDataSource.deleteTvShowRating(
+            tvShowId = tvShowId,
+            sessionId = authPreferences.getSessionId()
+        ).isSuccess
 }

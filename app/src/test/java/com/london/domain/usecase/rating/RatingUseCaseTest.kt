@@ -18,7 +18,7 @@ class RatingUseCaseTest {
     private lateinit var tvShowRepository: TvShowRepository
     private lateinit var ratingRepository: RatingRepository
     private lateinit var movieRepository: MovieDetailsRepository
-    private lateinit var ratingUseCase: RatingUseCase
+    private lateinit var ratingUseCase: ManageRatingUseCase
 
     @Before
     fun setup() {
@@ -26,7 +26,7 @@ class RatingUseCaseTest {
         tvShowRepository = mockk(relaxed = true)
         ratingRepository = mockk(relaxed = true)
         movieRepository = mockk(relaxed = true)
-        ratingUseCase = RatingUseCase(
+        ratingUseCase = ManageRatingUseCase(
             repository = repository,
             tvShowRepository = tvShowRepository,
             ratingRepository = ratingRepository,

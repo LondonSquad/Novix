@@ -6,7 +6,7 @@ import com.london.domain.repository.RatingRepository
 import com.london.domain.repository.TvShowRepository
 import javax.inject.Inject
 
-class RatingUseCase @Inject constructor(
+class ManageRatingUseCase @Inject constructor(
     private val repository: RatingRepository,
     private val tvShowRepository: TvShowRepository,
     private val ratingRepository: RatingRepository,
@@ -26,35 +26,13 @@ class RatingUseCase @Inject constructor(
             .sortedByDescending { media -> media.rating }
     }
 
-    suspend fun getRatedMovies(): List<RatedMedia> {
-        return repository.getAllRatedMedia()
-            .filter { media: RatedMedia -> media.isMovie }
-            .map { media: RatedMedia ->
-                RatedMedia(
-                    id = media.id,
-                    title = media.title,
-                    posterPath = media.posterPath,
-                    rating = media.rating,
-                    isMovie = media.isMovie
-                )
-            }
-            .sortedByDescending { media -> media.rating }
-    }
+    suspend fun getRatedMovies(movieId: Int? = null): List<RatedMedia> =
+        repository.getAllRatedMovies().filter { movieId == null || it.id != movieId }
+            .sortedByDescending { it.rating }
 
-    suspend fun getRatedTvShows(): List<RatedMedia> {
-        return repository.getAllRatedMedia()
-            .filter { media: RatedMedia -> !media.isMovie }
-            .map { media: RatedMedia ->
-                RatedMedia(
-                    id = media.id,
-                    title = media.title,
-                    posterPath = media.posterPath,
-                    rating = media.rating,
-                    isMovie = media.isMovie
-                )
-            }
-            .sortedByDescending { media -> media.rating }
-    }
+    suspend fun getRatedTvShows(tvShowId: Int? = null): List<RatedMedia> =
+        repository.getAllRatedTvShows().filter { tvShowId == null || it.id != tvShowId }
+            .sortedByDescending { it.rating }
 
     suspend fun getRateAccountTvEpisode(
         tvShowId: Int,
@@ -102,4 +80,16 @@ class RatingUseCase @Inject constructor(
     ) = tvShowRepository.getAccountTvShowState(
         tvShowId = tvShowId,
     ).rate
+
+    suspend fun deleteMovieRating(
+        movieId: Int,
+    ) = ratingRepository.deleteMovieRating(
+        movieId = movieId,
+    )
+
+    suspend fun deleteTvShowRating(
+        tvShowId: Int,
+    ) = ratingRepository.deleteTvShowRating(
+        tvShowId = tvShowId,
+    )
 }

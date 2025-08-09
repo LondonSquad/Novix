@@ -1,13 +1,13 @@
 package com.london.presentation.feature.myrating
 
-import com.london.domain.usecase.rating.RatingUseCase
+import com.london.domain.usecase.rating.ManageRatingUseCase
 import com.london.presentation.shared.base.BaseViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 
 @HiltViewModel
 class RatingViewModel @Inject constructor(
-    private val getRatingUseCase: RatingUseCase
+    private val manageRatingUseCase: ManageRatingUseCase
 ) : BaseViewModel<MyRatingUiState, MyRatingEffect>(MyRatingUiState()),
     MyRatingContract {
 
@@ -18,20 +18,22 @@ class RatingViewModel @Inject constructor(
     fun initializeItems() {
         tryToExecute(
             block = {
-                val allRatedMedia = getRatingUseCase.getAllRated()
-                val ratedMovies = getRatingUseCase.getRatedMovies()
-                val ratedTvShows = getRatingUseCase.getRatedTvShows()
-                RatingData(allRatedMedia, ratedMovies, ratedTvShows)
+                manageRatingUseCase.getRatedMovies()
+                manageRatingUseCase.getRatedTvShows()
+                RatingData(
+                    ratedMovies = manageRatingUseCase.getRatedMovies(),
+                    ratedTvShows = manageRatingUseCase.getRatedTvShows(),
+                )
             },
             onStart = {
                 updateState { copy(isLoading = true) }
             },
-            onSuccess = { ratingData ->
+            onSuccess = { ratedMedia ->
                 updateState {
                     copy(
-                        allRatedMedia = ratingData.allRatedMedia,
-                        ratedMovies = ratingData.ratedMovies,
-                        ratedTvShows = ratingData.ratedTvShows,
+                        ratedMovies = ratedMedia.ratedMovies,
+                        ratedTvShows = ratedMedia.ratedTvShows,
+                        allRatedMedia = ratedMedia.ratedMovies + ratedMedia.ratedTvShows,
                     )
                 }
             },
@@ -50,12 +52,33 @@ class RatingViewModel @Inject constructor(
 
     override fun onBackClicked() = emitEffect(MyRatingEffect.NavigateBack)
 
-    override fun onMovieClick(id: Int) = emitEffect(MyRatingEffect.NavigateToMovie(id))
+    override fun onMovieClick(id: Int) =
+        emitEffect(MyRatingEffect.NavigateToMovie(id))
 
-    override fun onTvShowClick(id: Int) = emitEffect(MyRatingEffect.NavigateToTvShow(id))
+    override fun onTvShowClick(id: Int) =
+        emitEffect(MyRatingEffect.NavigateToTvShow(id))
 
-    override fun onDelete(id: Int) {
-        // TODO: Implement delete functionality
+    override fun onDelete(id: Int, isMovie: Boolean) {
+        tryToExecute(
+            block = {
+                if (isMovie) manageRatingUseCase.deleteMovieRating(id)
+                else manageRatingUseCase.deleteTvShowRating(id)
+            },
+            onStart = { updateState { copy(isSnackBarVisible = false) } },
+            onSuccess = {
+                val updatedMovies = manageRatingUseCase.getRatedMovies(id)
+                val updatedTvShows = manageRatingUseCase.getRatedTvShows(id)
+                updateState {
+                    copy(
+                        ratedMovies = updatedMovies,
+                        ratedTvShows = updatedTvShows,
+                        allRatedMedia = updatedMovies + updatedTvShows
+                    )
+                }
+            },
+            onError = { errorState -> updateState { copy(errorState = errorState) } },
+            onCompleted = { updateState { copy(isSnackBarVisible = true) } },
+        )
     }
 
     override fun onRatingCategorySelected(category: RatingCategory) {

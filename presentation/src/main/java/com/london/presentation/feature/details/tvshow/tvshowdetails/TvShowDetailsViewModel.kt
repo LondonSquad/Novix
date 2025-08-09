@@ -9,7 +9,7 @@ import com.london.domain.usecase.GetEpisodesByTvShowSeason
 import com.london.domain.usecase.GetImagesById
 import com.london.domain.usecase.authentication.AuthenticationUseCase
 import com.london.domain.usecase.details.tvshow.ManageTvShowDetailsUseCase
-import com.london.domain.usecase.rating.RatingUseCase
+import com.london.domain.usecase.rating.ManageRatingUseCase
 import com.london.domain.usecase.recent.viewed.ManageRecentViewedUseCase
 import com.london.domain.usecase.recent.watched.tvshow.ManageRecentTvShowWatchedUseCase
 import com.london.presentation.navigation.Screen
@@ -26,7 +26,7 @@ class TvShowDetailsViewModel @Inject constructor(
     private val manageTvShowDetailsUseCase: ManageTvShowDetailsUseCase,
     private val manageRecentTvShowWatchedUseCase: ManageRecentTvShowWatchedUseCase,
     private val manageRecentViewedUseCase: ManageRecentViewedUseCase,
-    private val ratingUseCase: RatingUseCase,
+    private val ratingUseCase: ManageRatingUseCase,
     private val authenticationUseCase: AuthenticationUseCase,
     savedStateHandle: SavedStateHandle,
 ) : BaseViewModel<TvShowDetailsUiState, TvShowDetailsEffect>(TvShowDetailsUiState()),

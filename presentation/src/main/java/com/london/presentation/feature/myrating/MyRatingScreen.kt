@@ -1,5 +1,6 @@
 package com.london.presentation.feature.myrating
 
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -48,7 +49,6 @@ fun MyRatingScreen(
 
     LaunchedEffect(Unit) {
         viewModel.initializeItems()
-
     }
 
     effect?.Listen { currentEffect ->
@@ -63,7 +63,8 @@ fun MyRatingScreen(
         isLoading = state.isLoading,
         isError = state.errorState != null,
         onBack = viewModel::onBackClicked,
-        onRetry = { viewModel.initializeItems()
+        onRetry = {
+            viewModel.initializeItems()
         }
     ) {
         MyRatingContent(
@@ -122,28 +123,38 @@ private fun MyRatingContent(
                     .navigationBarsPadding()
                     .padding(horizontal = 16.dp)
             ) {
-                items(items) { item ->
-                    HomeCard(
-                        imageUrl = item.posterPath,
-                        isSaved = false,
-                        onSaveClick = { },
-                        myRatingList = true,
-                        rate = item.rating,
-                        onDeleteClick = { contract.onDelete(item.id) },
-                        modifier = Modifier.clickable {
-                            when {
-                                item.isMovie -> contract.onMovieClick(item.id)
-                                !item.isMovie -> contract.onTvShowClick(item.id)
-                            }
-                        },
-                        isDarkMode = NovixTheme.isThemeDark
-                    )
-                }
+                items(
+                    items = items,
+                    key = { it.id }
+                ) { item ->
+                        HomeCard(
+                            imageUrl = item.posterPath,
+                            isSaved = false,
+                            onSaveClick = { },
+                            myRatingList = true,
+                            rate = item.rating,
+                            onDeleteClick = {
+                                contract.onDelete(id = item.id, isMovie = item.isMovie)
+                            },
+                            modifier = Modifier.animateItem(
+                                fadeInSpec = null,
+                                fadeOutSpec = tween(500),
+                                placementSpec = tween(500)
+                            ).clickable {
+                                when {
+                                    item.isMovie -> contract.onMovieClick(item.id)
+                                    else -> contract.onTvShowClick(item.id)
+                                }
+                            },
+                            isDarkMode = NovixTheme.isThemeDark
+                        )
+                    }
+
             }
         }
     }
 
-    if (state.isDeleteClicked) {
+    if (state.isSnackBarVisible) {
         if (state.errorState is ErrorState.RequestFailed) {
             SnackBarAnimation(state.errorState.message)
         } else {

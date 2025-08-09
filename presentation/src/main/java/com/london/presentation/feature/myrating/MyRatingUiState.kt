@@ -10,8 +10,8 @@ data class MyRatingUiState(
     val errorState: ErrorState? = null,
     val isLoading: Boolean = false,
     val rate: Int = 0,
-    val isDeleteClicked: Boolean = false,
+    val isSnackBarVisible: Boolean = false,
     val backdropPath: String = "",
     val id: Int = 0,
     val selectedRatingCategory: RatingCategory? = null,
-)
+    )
