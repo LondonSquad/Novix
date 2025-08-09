@@ -19367,5 +19367,33 @@
       "deletions": 99,
       "changed_files": 15
     }
+  },
+  {
+    "pr_number": 581,
+    "url": "https://github.com/LondonSquad/Novix/pull/581",
+    "title": "Feature/remove unused dependencies in gradle",
+    "opened_at": "2025-08-09T12:30:23Z",
+    "head_ref": "feature/remove-unused-dependency",
+    "base_ref": "develop",
+    "creator": {
+      "login": "abdelrhman1002",
+      "id": 180463542,
+      "url": "https://github.com/abdelrhman1002"
+    },
+    "approvals": [],
+    "first_approved_at": null,
+    "time_to_first_approval_minutes": null,
+    "required_approvals_met_at": null,
+    "time_to_required_approvals_minutes": null,
+    "closed_at": null,
+    "merged_at": null,
+    "merged_by": null,
+    "week": "2025-W32",
+    "status": "pending",
+    "diff_stats": {
+      "additions": 3,
+      "deletions": 45,
+      "changed_files": 1
+    }
   }
 ]
