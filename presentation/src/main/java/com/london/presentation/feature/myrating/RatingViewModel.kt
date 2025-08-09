@@ -1,6 +1,7 @@
 package com.london.presentation.feature.myrating
 
 import com.london.domain.usecase.rating.ManageRatingUseCase
+import com.london.presentation.feature.reviews.MediaType
 import com.london.presentation.shared.base.BaseViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
@@ -58,11 +59,13 @@ class RatingViewModel @Inject constructor(
     override fun onTvShowClick(id: Int) =
         emitEffect(MyRatingEffect.NavigateToTvShow(id))
 
-    override fun onDelete(id: Int, isMovie: Boolean) {
+    override fun onDelete(id: Int, mediaType: MediaType) {
         tryToExecute(
             block = {
-                if (isMovie) manageRatingUseCase.deleteMovieRating(id)
-                else manageRatingUseCase.deleteTvShowRating(id)
+                if (mediaType == MediaType.Movie)
+                    manageRatingUseCase.deleteMovieRating(id)
+                else if (mediaType == MediaType.TvShow)
+                    manageRatingUseCase.deleteTvShowRating(id)
             },
             onStart = { updateState { copy(isSnackBarVisible = false) } },
             onSuccess = {
