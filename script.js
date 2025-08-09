@@ -108,6 +108,8 @@ document.addEventListener("DOMContentLoaded", () => {
         mergeProcessHealthChart = null;
     let progressCharts = [];
     let radarCharts = [];
+    let tipRotatorInterval = null; // For dynamic tip rotation
+    let menteeSkillData = {}; // For dynamic tip rotation
 
     const ICONS = {
         safe: `<svg class="icon" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path></svg>`,
@@ -259,13 +261,62 @@ document.addEventListener("DOMContentLoaded", () => {
         return `Week ${weekNum}`;
     };
 
+    // --- TIP ROTATOR LOGIC ---
+    const rotateTips = () => {
+        const lang = document.documentElement.lang || 'en';
+        const t = translations[lang];
+
+        const formatSkillName = (name) => {
+            return t[name.toLowerCase()] || name.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase());
+        };
+
+        document.querySelectorAll('.tips-box').forEach(box => {
+            const menteeId = box.dataset.menteeId;
+            if (!menteeId) return;
+
+            const skills = menteeSkillData[menteeId];
+            if (!skills || skills.length === 0) return;
+
+            let currentIndex = parseInt(box.dataset.tipIndex, 10) || 0;
+            const nextIndex = (currentIndex + 1) % skills.length;
+            box.dataset.tipIndex = nextIndex;
+
+            const nextSkillName = skills[nextIndex];
+            const tipKey = `tip_${nextSkillName}`;
+            const suggestionText = t[tipKey] || "Keep up the great work in this area!";
+
+            const contentWrapper = box.querySelector('.tip-content');
+            if (contentWrapper) {
+                contentWrapper.classList.add('is-swapping');
+                setTimeout(() => {
+                    contentWrapper.innerHTML = `
+                        <strong>${t.focusArea}: ${formatSkillName(nextSkillName)}</strong>
+                        <p>${suggestionText}</p>
+                    `;
+                    contentWrapper.classList.remove('is-swapping');
+                }, 400); // Match CSS transition duration
+            }
+        });
+    };
+
     // --- TAB SWITCHING ---
     tabButtons.forEach(button => {
         button.addEventListener("click", () => {
+            // Stop tip rotator if it's running
+            if (tipRotatorInterval) {
+                clearInterval(tipRotatorInterval);
+                tipRotatorInterval = null;
+            }
+
             tabButtons.forEach(btn => btn.classList.remove("active"));
             button.classList.add("active");
             tabContents.forEach(content => content.classList.add("hidden"));
             document.getElementById(button.dataset.tab + "-content").classList.remove("hidden");
+
+            // Start rotator if ratings tab is now active
+            if (button.dataset.tab === 'ratings' && Object.keys(menteeSkillData).length > 0) {
+                tipRotatorInterval = setInterval(rotateTips, 10000);
+            }
         });
     });
 
@@ -903,6 +954,13 @@ document.addEventListener("DOMContentLoaded", () => {
     };
 
     const renderRatings = (data, lang = 'en') => {
+        // Stop any previous interval when re-rendering
+        if (tipRotatorInterval) {
+            clearInterval(tipRotatorInterval);
+            tipRotatorInterval = null;
+        }
+        menteeSkillData = {}; // Reset on each render
+
         const t = translations[lang];
 
         const formatSkillName = (name) => {
@@ -969,7 +1027,11 @@ document.addEventListener("DOMContentLoaded", () => {
                 trendHtml = `<p class="trend ${trendClass}">${trendSign}${Math.abs(trend.toFixed(1))} ${t.fromLastEval}</p>`;
             }
 
-            const lowestSkill = Object.entries(latestScores).sort((a, b) => a[1] - b[1])[0];
+            const sortedSkills = Object.entries(latestScores).sort((a, b) => a[1] - b[1]);
+            menteeSkillData[mentee.id] = sortedSkills.map(skillEntry => skillEntry[0]);
+
+            const lowestSkill = sortedSkills[0];
+
             const peerCommentsHtml = mentee.peer_comments && mentee.peer_comments.length > 0 ?
                 mentee.peer_comments.map(comment => `<li>${comment[lang]}</li>`).join('') : `<li>${t.noPeerComments}</li>`;
             const personalNotesHtml = mentee.personal_notes && mentee.personal_notes.length > 0 ?
@@ -1031,9 +1093,11 @@ document.addEventListener("DOMContentLoaded", () => {
                                </div>
                                <div class="rating-panel">
                                     <h4>${ICONS_RATINGS.tips} ${t.suggestionBox}</h4>
-                                    <div class="tips-box">
-                                        <strong>${t.focusArea}: ${formatSkillName(lowestSkill[0])}</strong>
-                                        <p>${suggestionText}</p>
+                                    <div class="tips-box" data-mentee-id="${mentee.id}" data-tip-index="0">
+                                       <div class="tip-content">
+                                         <strong>${t.focusArea}: ${formatSkillName(lowestSkill[0])}</strong>
+                                         <p>${suggestionText}</p>
+                                       </div>
                                     </div>
                                </div>
                             </div>
@@ -1110,6 +1174,12 @@ document.addEventListener("DOMContentLoaded", () => {
             });
             progressCharts.push(progressChart);
         });
+        
+        // After rendering everything, check if the ratings tab is currently active and start the rotator
+        const activeTab = document.querySelector('.tab-button.active');
+        if (activeTab && activeTab.dataset.tab === 'ratings') {
+            tipRotatorInterval = setInterval(rotateTips, 10000);
+        }
 
         applyTheme(localStorage.getItem('theme') || 'light');
     };

@@ -1316,6 +1316,14 @@ html.dark .rating-panel {
     border-radius: 0.5rem;
 }
 
+.tip-content {
+    transition: opacity 0.4s ease-in-out;
+}
+
+.tip-content.is-swapping {
+    opacity: 0;
+}
+
 #ratings-content[dir="rtl"] .tips-box {
     border-left: none;
     border-right: 4px solid var(--primary-color);
