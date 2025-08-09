@@ -19449,5 +19449,33 @@
       "deletions": 20,
       "changed_files": 4
     }
+  },
+  {
+    "pr_number": 584,
+    "url": "https://github.com/LondonSquad/Novix/pull/584",
+    "title": "refactor: remove genre interest tracking",
+    "opened_at": "2025-08-09T22:42:39Z",
+    "head_ref": "refactor/caching",
+    "base_ref": "develop",
+    "creator": {
+      "login": "Aseel-AbuKmail",
+      "id": 189210092,
+      "url": "https://github.com/Aseel-AbuKmail"
+    },
+    "approvals": [],
+    "first_approved_at": null,
+    "time_to_first_approval_minutes": null,
+    "required_approvals_met_at": null,
+    "time_to_required_approvals_minutes": null,
+    "closed_at": null,
+    "merged_at": null,
+    "merged_by": null,
+    "week": "2025-W32",
+    "status": "pending",
+    "diff_stats": {
+      "additions": 1,
+      "deletions": 229,
+      "changed_files": 13
+    }
   }
 ]
