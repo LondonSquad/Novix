@@ -22,7 +22,8 @@ import com.london.presentation.R
 @Composable
 fun NotLoggedInContent(
     onLoginClick: () -> Unit,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    isDarkMode: Boolean = NovixTheme.isThemeDark
 ) {
     LazyColumn(
         modifier = modifier
@@ -34,7 +35,10 @@ fun NotLoggedInContent(
     ) {
         item {
             Image(
-                painter = painterResource(id = R.drawable.user_person_profile),
+                painter = when (isDarkMode) {
+                    true -> painterResource(id = R.drawable.user_person_profile_dark)
+                    else -> painterResource(id = R.drawable.user_person_profile)
+                },
                 contentDescription = null,
             )
         }
