@@ -31,7 +31,7 @@ class ManageRatingUseCase @Inject constructor(
             .sortedByDescending { it.rating }
 
     suspend fun getRatedTvShows(tvShowId: Int? = null): List<RatedMedia> =
-        repository.getAllRatedTvShows().filter { tvShowId == null || it.id != tvShowId }
+        repository.getAllRatedTvShows().filter { tvShowId == null ||  it.id != tvShowId }
             .sortedByDescending { it.rating }
 
     suspend fun getRateAccountTvEpisode(

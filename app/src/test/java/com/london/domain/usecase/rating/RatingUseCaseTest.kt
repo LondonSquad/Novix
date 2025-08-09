@@ -90,15 +90,14 @@ class RatingUseCaseTest {
         val result = ratingUseCase.getAllRated()
 
         // Then
-        Assert.assertEquals(3, result.size)
+        Assert.assertEquals(2, result.size)
         Assert.assertTrue(result[0].rating >= result[1].rating)
-        Assert.assertTrue(result[1].rating >= result[2].rating)
     }
 
     @Test
     fun `getRatedMovies returns only movies sorted by rating`() = runTest {
         // Given
-        coEvery { repository.getAllRatedMedia() } returns mockRatedMedia
+        coEvery { repository.getAllRatedMovies() } returns mockRatedMedia
 
         // When
         val result = ratingUseCase.getRatedMovies()
@@ -114,7 +113,7 @@ class RatingUseCaseTest {
     @Test
     fun `getRatedTvShows returns only tv shows sorted by rating`() = runTest {
         // Given
-        coEvery { repository.getAllRatedMedia() } returns mockRatedMediaWithTvShows
+        coEvery { repository.getAllRatedTvShows() } returns mockRatedMediaWithTvShows
 
         // When
         val result = ratingUseCase.getRatedTvShows()
@@ -123,8 +122,9 @@ class RatingUseCaseTest {
         Assert.assertEquals(2, result.size)
         Assert.assertTrue(result.all { !it.isMovie })
         Assert.assertTrue(result[0].rating >= result[1].rating)
-        Assert.assertEquals("TV Show 2", result[0].title) // rating = 9
-        Assert.assertEquals("TV Show 1", result[1].title) // rating = 7
+        Assert.assertTrue(result[0].rating >= result[1].rating)
+        Assert.assertEquals("TV Show 2", result[0].title)
+        Assert.assertEquals("TV Show 1", result[1].title)
     }
 
     @Test
@@ -206,13 +206,6 @@ class RatingUseCaseTest {
                 isMovie = true
             ),
             RatedMedia(
-                id = 2,
-                title = "TV Show 1",
-                posterPath = "/tvshow1.jpg",
-                rating = 7,
-                isMovie = false
-            ),
-            RatedMedia(
                 id = 3,
                 title = "Movie 2",
                 posterPath = "/movie2.jpg",
@@ -222,13 +215,6 @@ class RatingUseCaseTest {
         )
 
         private val mockRatedMediaWithTvShows = listOf(
-            RatedMedia(
-                id = 1,
-                title = "Movie 1",
-                posterPath = "/movie1.jpg",
-                rating = 8,
-                isMovie = true
-            ),
             RatedMedia(
                 id = 2,
                 title = "TV Show 1",
