@@ -19298,5 +19298,33 @@
       "deletions": 137,
       "changed_files": 10
     }
+  },
+  {
+    "pr_number": 579,
+    "url": "https://github.com/LondonSquad/Novix/pull/579",
+    "title": "refactor: Update rating type to String for localization",
+    "opened_at": "2025-08-09T05:45:50Z",
+    "head_ref": "fix/my-rating-Localization",
+    "base_ref": "develop",
+    "creator": {
+      "login": "ahmeddsamii",
+      "id": 154278495,
+      "url": "https://github.com/ahmeddsamii"
+    },
+    "approvals": [],
+    "first_approved_at": null,
+    "time_to_first_approval_minutes": null,
+    "required_approvals_met_at": null,
+    "time_to_required_approvals_minutes": null,
+    "closed_at": null,
+    "merged_at": null,
+    "merged_by": null,
+    "week": "2025-W32",
+    "status": "pending",
+    "diff_stats": {
+      "additions": 10,
+      "deletions": 9,
+      "changed_files": 4
+    }
   }
 ]
