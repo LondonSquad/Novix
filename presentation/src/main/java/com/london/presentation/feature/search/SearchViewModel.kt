@@ -37,6 +37,32 @@ class SearchViewModel @Inject constructor(
         setupSearchDebouncing()
     }
 
+    fun incrementGenreInterest(genreId: Int, mediaType: String) {
+        tryToExecute(
+            block = {
+                incrementGenreInterestUseCase.invoke(genreId, mediaType)
+            },
+            onStart = { },
+            onSuccess = { },
+            onError = { errorState ->
+                updateState { copy(error = errorState) }
+            },
+            onCompleted = { },
+            checkSuccess = { true }
+        )
+    }
+
+    fun performSearch(query: String, category: SearchCategory) {
+        val trimmedQuery = query.trim()
+
+        if (trimmedQuery.isEmpty()) {
+            clearSearchResults()
+            return
+        }
+
+        searchWithApi(trimmedQuery, category)
+    }
+
     fun updateRecentData() {
         tryToExecute(
             block = {
@@ -62,20 +88,6 @@ class SearchViewModel @Inject constructor(
         updateState(updater)
     }
 
-    private fun setupSearchDebouncing() {
-        tryToCollect(
-            block = {
-                _searchQuery.debounce(500)
-            },
-            onNewValue = { query ->
-                performSearch(query = query, category = state.value.selectedCategory)
-            },
-            onError = { errorState ->
-                updateState { copy(error = errorState) }
-            }
-        )
-    }
-
     override fun onSearchQueryChange(newValue: TextFieldValue) {
         updateState { copy(searchQuery = newValue) }
 
@@ -83,12 +95,6 @@ class SearchViewModel @Inject constructor(
         updateState { copy(searchQuery = limitedQuery) }
         _searchQuery.value = limitedQuery.text.trim()
     }
-
-    private fun applyLimitationOnTextFieldValue(newValue: TextFieldValue): TextFieldValue =
-        newValue.copy(
-            text = newValue.text.replace(regex = Regex("\\s{2,}"), replacement = " ")
-                .trimStart()
-        )
 
     override fun onCategorySelected(category: SearchCategory) {
         updateState {
@@ -148,8 +154,6 @@ class SearchViewModel @Inject constructor(
             },
         )
     }
-
-    private fun isQueryDuplicated(query: String) = query.equals(state.value.lastSearch, ignoreCase = true)
 
     override fun addToRecentViewed(item: RecentViewed) {
         tryToExecute(
@@ -250,34 +254,36 @@ class SearchViewModel @Inject constructor(
     }
 
     override fun onTvShowClick(tvShowId: Int) {
-        emitEffect(SearchEffect.TvNavigation(tvId = tvShowId))
+        emitEffect(SearchEffect.TvShowNavigation(tvId = tvShowId))
     }
 
-    fun incrementGenreInterest(genreId: Int, mediaType: String) {
-        tryToExecute(
+    override fun onRetry() {
+        updateState { copy(error = null) }
+        updateRecentData()
+        setupSearchDebouncing()
+    }
+
+    private fun setupSearchDebouncing() {
+        tryToCollect(
             block = {
-                incrementGenreInterestUseCase.invoke(genreId, mediaType)
+                _searchQuery.debounce(500)
             },
-            onStart = { },
-            onSuccess = { },
+            onNewValue = { query ->
+                performSearch(query = query, category = state.value.selectedCategory)
+            },
             onError = { errorState ->
                 updateState { copy(error = errorState) }
-            },
-            onCompleted = { },
-            checkSuccess = { true }
+            }
         )
     }
 
-    fun performSearch(query: String, category: SearchCategory) {
-        val trimmedQuery = query.trim()
+    private fun isQueryDuplicated(query: String) = query.equals(state.value.lastSearch, ignoreCase = true)
 
-        if (trimmedQuery.isEmpty()) {
-            clearSearchResults()
-            return
-        }
-
-        searchWithApi(trimmedQuery, category)
-    }
+    private fun applyLimitationOnTextFieldValue(newValue: TextFieldValue): TextFieldValue =
+        newValue.copy(
+            text = newValue.text.replace(regex = Regex("\\s{2,}"), replacement = " ")
+                .trimStart()
+        )
 
     private fun clearSearchResults() {
         updateState {
@@ -366,11 +372,5 @@ class SearchViewModel @Inject constructor(
                 actorsFlow = flow {}
             )
         }
-    }
-
-    override fun onRetry() {
-        updateState { copy(error = null) }
-        updateRecentData()
-        setupSearchDebouncing()
     }
 }

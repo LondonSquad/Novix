@@ -39,9 +39,9 @@ import kotlinx.coroutines.launch
 @Composable
 fun AddListBottomSheet(
     modifier: Modifier = Modifier,
+    addListSheetState: AddSheetState,
     addListInteractions: ListContract,
     sheetState: SheetState = rememberModalBottomSheetState(),
-    addListSheetState: AddSheetState,
 ) {
     val coroutineScope = rememberCoroutineScope()
 
@@ -59,7 +59,7 @@ fun AddListBottomSheet(
             containerColor = NovixTheme.colors.surface,
             state = sheetState,
         ) {
-            AddListBottomSheetContent(
+            Content(
                 modifier = modifier.padding(bottom = 24.dp),
                 addInteractions = addListInteractions,
                 addSheetState = addListSheetState,
@@ -83,12 +83,12 @@ fun AddListBottomSheet(
 }
 
 @Composable
-private fun AddListBottomSheetContent(
-    modifier: Modifier = Modifier,
-    addInteractions: ListContract,
-    onCloseClicked: () -> Unit,
+private fun Content(
     onAddClicked: () -> Unit,
+    onCloseClicked: () -> Unit,
+    addInteractions: ListContract,
     addSheetState: AddSheetState,
+    modifier: Modifier = Modifier,
 ) {
     val interactionSourceUserName = remember { MutableInteractionSource() }
 
@@ -165,7 +165,7 @@ private fun isButtonEnabled(addSheetState: AddSheetState): Boolean {
 @Composable
 @Preview
 fun Preview() {
-    AddListBottomSheetContent(
+    Content(
         addSheetState = AddSheetState(
             listName = TextFieldValue(""),
         ),

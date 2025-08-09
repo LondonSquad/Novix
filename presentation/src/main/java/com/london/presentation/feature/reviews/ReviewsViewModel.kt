@@ -25,6 +25,15 @@ class ReviewsViewModel @Inject constructor(
         initializeReviews(mediaType, mediaId)
     }
 
+    override fun onRetry(){
+        updateState { copy(error = null) }
+        initializeReviews(mediaType, mediaId)
+    }
+
+    override fun onBackClicked() {
+        emitEffect(ReviewEffect.NavigateBack)
+    }
+
     private fun initializeReviews(mediaType: Int, mediaId: Int) {
         tryToExecute(
             block = {
@@ -48,14 +57,5 @@ class ReviewsViewModel @Inject constructor(
             onError = { errorState -> updateState { copy(error = errorState) } },
             onCompleted = { updateState { copy(isLoading = false) } },
         )
-    }
-
-    override fun onRetry(){
-        updateState { copy(error = null) }
-        initializeReviews(mediaType, mediaId)
-    }
-
-    override fun onBackClicked() {
-        emitEffect(ReviewEffect.NavigateBack)
     }
 }

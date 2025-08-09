@@ -20,6 +20,47 @@ class TopRatedViewModel @Inject constructor(
         initializeTopRated()
     }
 
+    override fun onRetry() {
+        updateState { copy(errorMessage = null) }
+        initializeTopRated()
+    }
+
+    override fun movieGenre(genre: MovieGenre) {
+        if (genre == state.value.selectedMovieGenre) return
+        updateState { copy(selectedMovieGenre = genre) }
+        initializeTopMovies()
+    }
+
+
+    override fun tvShowGenre(genre: TvShowGenre) {
+        if (genre == state.value.selectedTvShowGenre) return
+        updateState { copy(selectedTvShowGenre = genre) }
+        initializeTvShow()
+    }
+
+    override fun onMediaCategoryTabSelected(selectedMediaCategory: MediaCategory) {
+        if (selectedMediaCategory == state.value.selectedMediaCategory) return
+        updateState {
+            copy(
+                selectedMediaCategory = selectedMediaCategory,
+                isMovieSelected = selectedMediaCategory == MediaCategory.MOVIES
+            )
+        }
+        initializeTopRated()
+    }
+
+    override fun onBackClicked() {
+        emitEffect(TopRatedEffect.NavigateBack)
+    }
+
+    override fun onMovieClick(id: Int) {
+        emitEffect(TopRatedEffect.NavigateToMovieDetails(id))
+    }
+
+    override fun onTvShowClick(id: Int) {
+        emitEffect(TopRatedEffect.NavigateToTvShowDetails(id))
+    }
+
     private fun initializeTopRated() {
         if (state.value.isMovieSelected) initializeTopMovies()
         else initializeTvShow()
@@ -66,45 +107,5 @@ class TopRatedViewModel @Inject constructor(
         }, onCompleted = {
             updateState { copy(isLoading = false) }
         }, checkSuccess = { true })
-    }
-
-    override fun onRetry() {
-        updateState { copy(errorMessage = null) }
-        initializeTopRated()
-    }
-
-    override fun movieGenre(genre: MovieGenre) {
-        if (genre == state.value.selectedMovieGenre) return
-        updateState { copy(selectedMovieGenre = genre) }
-        initializeTopMovies()
-    }
-
-    override fun tvShowGenre(genre: TvShowGenre) {
-        if (genre == state.value.selectedTvShowGenre) return
-        updateState { copy(selectedTvShowGenre = genre) }
-        initializeTvShow()
-    }
-
-    override fun onMediaCategoryTabSelected(selectedMediaCategory: MediaCategory) {
-        if (selectedMediaCategory == state.value.selectedMediaCategory) return
-        updateState {
-            copy(
-                selectedMediaCategory = selectedMediaCategory,
-                isMovieSelected = selectedMediaCategory == MediaCategory.MOVIES
-            )
-        }
-        initializeTopRated()
-    }
-
-    override fun onBackClicked() {
-        emitEffect(TopRatedEffect.NavigateBack)
-    }
-
-    override fun onMovieClick(id: Int) {
-        emitEffect(TopRatedEffect.NavigateToMovieDetails(id))
-    }
-
-    override fun onTvShowClick(id: Int) {
-        emitEffect(TopRatedEffect.NavigateToTvShowDetails(id))
     }
 }
