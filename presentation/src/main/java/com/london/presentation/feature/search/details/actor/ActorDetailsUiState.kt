@@ -23,7 +23,7 @@ data class ActorDetailsUiState(
     val actorPlaceOfBirth: String = "",
     val knownForDepartment: String = "",
     val actorDetails: ActorDetails = ActorDetails(),
-    val actorImageDetails: List<ImageDetails>? = null,
     val actorMovieDetails: ActorMovieDetails? = null,
+    val actorImageDetails: List<ImageDetails>? = null,
     val actorTvShowDetails: ActorTvShowDetails? = null,
 )
