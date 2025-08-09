@@ -1,4 +1,4 @@
-package com.london.presentation.feature.category.moviesbycategory
+package com.london.presentation.feature.category.movie
 
 import androidx.lifecycle.SavedStateHandle
 import com.london.domain.usecase.GetMoviesByCategoryUseCase
@@ -10,11 +10,11 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 
 @HiltViewModel
-class MoviesByCategoryViewModel @Inject constructor(
+class MovieCategoryViewModel @Inject constructor(
     private val getMoviesByCategoryUseCase: GetMoviesByCategoryUseCase,
     savedStateHandle: SavedStateHandle
-) : BaseViewModel<MoviesByCategoryUiState, MoviesByCategoryEffect>(MoviesByCategoryUiState()),
-    MoviesByCategoryContract {
+) : BaseViewModel<MovieCategoryUiState, MovieCategoryEffect>(MovieCategoryUiState()),
+    MovieCategoryContract {
 
     private val args = savedStateHandle.getArgs<Screen.MoviesByCategory>()
     private val categoryId = args?.categoryId ?: 0
@@ -24,7 +24,7 @@ class MoviesByCategoryViewModel @Inject constructor(
     }
 
 
-    fun initializeMovies(categoryId: Int) {
+    private fun initializeMovies(categoryId: Int) {
         tryToExecute(
             block = {
                 val moviesFlow = createPagingSourceFlow(query = "") { _, pageNumber ->
@@ -59,10 +59,10 @@ class MoviesByCategoryViewModel @Inject constructor(
     }
 
     override fun onMovieClick(movieId: Int) {
-        emitEffect(MoviesByCategoryEffect.NavigateToMovieDetails(movieId = movieId))
+        emitEffect(MovieCategoryEffect.NavigateToMovieDetails(movieId = movieId))
     }
 
     override fun onBack() {
-        emitEffect(MoviesByCategoryEffect.NavigateBack)
+        emitEffect(MovieCategoryEffect.NavigateBack)
     }
 }

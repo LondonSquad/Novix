@@ -30,37 +30,6 @@ class AccountViewModel @Inject constructor(
         initializeAppTheme()
     }
 
-    fun checkUserLoginStatus() {
-        tryToExecute(
-            block = { authenticationUseCase.isLoggedIn() },
-            onStart = {
-                updateState { copy(isLoading = true) }
-            },
-            onSuccess = { isLoggedIn: Boolean ->
-                updateState { copy(isUserLoggedIn = isLoggedIn) }
-            },
-            onError = {
-                updateState { copy(isUserLoggedIn = false) }
-            },
-            onCompleted = {
-                updateState { copy(isLoading = false) }
-            }
-        )
-    }
-
-    fun fetchAndSetUsername() {
-        tryToExecute(
-            block = { accountDetailsUseCase.invoke() },
-            onSuccess = { accountInfo ->
-                updateState {
-                    copy(
-                        userName = accountInfo.userName,
-                        userAvatar = accountInfo.avatarPath
-                    )
-                }
-            }
-        )
-    }
 
     //region Logout Bottom Sheet
     override fun onLogoutConfirmed() {
@@ -107,7 +76,7 @@ class AccountViewModel @Inject constructor(
         updateState { copy(activeBottomSheet = ActiveBottomSheet.ContentRestriction) }
     }
 
-    fun observeContentRestrictionLevel() {
+    private fun observeContentRestrictionLevel() {
         appPreferencesService.contentRestrictionLevel
             .onEach { level ->
                 updateState { copy(currentContentRestriction = level) }
@@ -137,7 +106,7 @@ class AccountViewModel @Inject constructor(
         }
     }
 
-    fun initializeAppTheme() {
+    private fun initializeAppTheme() {
         val isAppDarkMode = appPreferencesService.isAppDarkMode.value
         updateState {
             copy(appTheme = if (isAppDarkMode) AppTheme.DARK else AppTheme.LIGHT)
@@ -175,7 +144,7 @@ class AccountViewModel @Inject constructor(
         }
     }
 
-    fun initializeAppLanguage() {
+    private fun initializeAppLanguage() {
         updateState {
             copy(appLanguage = appPreferencesService.appLanguage.value)
         }
@@ -219,6 +188,38 @@ class AccountViewModel @Inject constructor(
 
     override fun onLoginClick() {
         emitEffect(AccountEffect.NavigateLogout)
+    }
+
+    private fun checkUserLoginStatus() {
+        tryToExecute(
+            block = { authenticationUseCase.isLoggedIn() },
+            onStart = {
+                updateState { copy(isLoading = true) }
+            },
+            onSuccess = { isLoggedIn: Boolean ->
+                updateState { copy(isUserLoggedIn = isLoggedIn) }
+            },
+            onError = {
+                updateState { copy(isUserLoggedIn = false) }
+            },
+            onCompleted = {
+                updateState { copy(isLoading = false) }
+            }
+        )
+    }
+
+    private fun fetchAndSetUsername() {
+        tryToExecute(
+            block = { accountDetailsUseCase.invoke() },
+            onSuccess = { accountInfo ->
+                updateState {
+                    copy(
+                        userName = accountInfo.userName,
+                        userAvatar = accountInfo.avatarPath
+                    )
+                }
+            }
+        )
     }
 
     companion object {

@@ -1,4 +1,4 @@
-package com.london.presentation.feature.category.tvshowbycategory
+package com.london.presentation.feature.category.tvshow
 
 import androidx.lifecycle.SavedStateHandle
 import com.london.domain.usecase.details.tvshow.ManageTvShowDetailsUseCase
@@ -10,11 +10,11 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 
 @HiltViewModel
-class TvShowByCategoryViewModel @Inject constructor(
+class TvShowCategoryViewModel @Inject constructor(
     private val managerTvShowDetailsUseCase: ManageTvShowDetailsUseCase,
     savedStateHandle: SavedStateHandle
-) : BaseViewModel<TvShowByCategoryUiState, TvShowByCategoryEffect>(TvShowByCategoryUiState()),
-    TvShowByCategoryContract {
+) : BaseViewModel<TvShowCategoryUiState, TvShowCategoryEffect>(TvShowCategoryUiState()),
+    TvShowCategoryContract {
 
     private val args = savedStateHandle.getArgs<Screen.TvShowsByCategory>()
     private val categoryId = args?.categoryId ?: 0
@@ -28,14 +28,14 @@ class TvShowByCategoryViewModel @Inject constructor(
     }
 
     override fun onTvShowClick(tvShowId: Int) {
-        emitEffect(TvShowByCategoryEffect.NavigateToTvShowDetails(tvShowId = tvShowId))
+        emitEffect(TvShowCategoryEffect.NavigateToTvShowDetails(tvShowId = tvShowId))
     }
 
     override fun onBack() {
-        emitEffect(TvShowByCategoryEffect.NavigateBack)
+        emitEffect(TvShowCategoryEffect.NavigateBack)
     }
 
-    fun initializeTvShows(categoryId: Int) {
+    private fun initializeTvShows(categoryId: Int) {
         tryToExecute(
             block = {
             val tvShowFlow = createPagingSourceFlow(query = "") { _, pageNumber ->

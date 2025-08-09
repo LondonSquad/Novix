@@ -31,8 +31,8 @@ import com.london.presentation.feature.accountinfo.rating.MyRatingScreen
 import com.london.presentation.feature.authentication.login.LoginScreen
 import com.london.presentation.feature.authentication.register.WebViewRegistrationScreen
 import com.london.presentation.feature.category.CategoriesScreen
-import com.london.presentation.feature.category.moviesbycategory.MoviesByCategoryScreen
-import com.london.presentation.feature.category.tvshowbycategory.TvShowByCategoryScreen
+import com.london.presentation.feature.category.movie.MoviesByCategoryScreen
+import com.london.presentation.feature.category.tvshow.TvShowByCategoryScreen
 import com.london.presentation.feature.details.actor.ActorDetailsScreen
 import com.london.presentation.feature.details.actor.info.gallery.ActorGalleryScreen
 import com.london.presentation.feature.details.actor.info.topmoviespicks.TopMoviesPicksScreen

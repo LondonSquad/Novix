@@ -1,4 +1,4 @@
-package com.london.presentation.feature.category.moviesbycategory
+package com.london.presentation.feature.category.movie
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -30,7 +30,7 @@ import kotlinx.coroutines.flow.flow
 @Composable
 fun MoviesByCategoryScreen(
     modifier: Modifier = Modifier,
-    viewModel: MoviesByCategoryViewModel = hiltViewModel(),
+    viewModel: MovieCategoryViewModel = hiltViewModel(),
     onNavigateToMovieDetails: (Int) -> Unit,
     onNavigateBack: () -> Unit
 ) {
@@ -40,8 +40,8 @@ fun MoviesByCategoryScreen(
 
     effect?.Listen { currentEffect ->
         when (currentEffect) {
-            MoviesByCategoryEffect.NavigateBack -> onNavigateBack()
-            is MoviesByCategoryEffect.NavigateToMovieDetails -> onNavigateToMovieDetails(
+            MovieCategoryEffect.NavigateBack -> onNavigateBack()
+            is MovieCategoryEffect.NavigateToMovieDetails -> onNavigateToMovieDetails(
                 currentEffect.movieId
             )
         }
@@ -56,8 +56,8 @@ fun MoviesByCategoryScreen(
 
 @Composable
 private fun Content(
-    state: MoviesByCategoryUiState,
-    contract: MoviesByCategoryContract,
+    state: MovieCategoryUiState,
+    contract: MovieCategoryContract,
     modifier: Modifier = Modifier
 ) {
 
@@ -101,7 +101,7 @@ private fun Content(
 @Composable
 private fun MoviesByCategoryContentPreview() {
     Content(
-        state = MoviesByCategoryUiState(
+        state = MovieCategoryUiState(
             movies = flow<PagingData<Movie>> {
                 Movie(
                     id = 1,
@@ -168,7 +168,7 @@ private fun MoviesByCategoryContentPreview() {
                     genreIds = listOf()
                 )
             }),
-        contract = object : MoviesByCategoryContract {
+        contract = object : MovieCategoryContract {
             override fun onSavedClick(movieId: Int) {}
             override fun onMovieClick(movieId: Int) {}
             override fun onBack() {}

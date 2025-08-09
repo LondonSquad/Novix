@@ -1,4 +1,4 @@
-package com.london.presentation.feature.category.tvshowbycategory
+package com.london.presentation.feature.category.tvshow
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -27,15 +27,15 @@ import com.london.presentation.utils.isLoading
 fun TvShowByCategoryScreen(
     onNavigateBack: () -> Unit,
     onNavigateToTvShowDetails: (Int) -> Unit,
-    viewModel: TvShowByCategoryViewModel = hiltViewModel(),
+    viewModel: TvShowCategoryViewModel = hiltViewModel(),
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
     val effect by viewModel.effect.collectAsState(null)
 
     effect?.Listen { currentEffect ->
         when (currentEffect) {
-            TvShowByCategoryEffect.NavigateBack -> onNavigateBack()
-            is TvShowByCategoryEffect.NavigateToTvShowDetails -> onNavigateToTvShowDetails(
+            TvShowCategoryEffect.NavigateBack -> onNavigateBack()
+            is TvShowCategoryEffect.NavigateToTvShowDetails -> onNavigateToTvShowDetails(
                 currentEffect.tvShowId
             )
         }
@@ -49,8 +49,8 @@ fun TvShowByCategoryScreen(
 
 @Composable
 private fun Content(
-    state: TvShowByCategoryUiState,
-    contract: TvShowByCategoryContract,
+    state: TvShowCategoryUiState,
+    contract: TvShowCategoryContract,
     modifier: Modifier = Modifier
 ) {
 
@@ -92,8 +92,8 @@ private fun Content(
 @Composable
 private fun Preview() {
     Content(
-        state = TvShowByCategoryUiState(),
-        contract = object : TvShowByCategoryContract {
+        state = TvShowCategoryUiState(),
+        contract = object : TvShowCategoryContract {
             override fun onSavedClick(tvShowId: Int) {}
             override fun onTvShowClick(tvShowId: Int) {}
             override fun onBack() {}

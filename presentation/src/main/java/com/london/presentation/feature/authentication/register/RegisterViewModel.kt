@@ -9,9 +9,8 @@ class RegisterViewModel @Inject constructor() :
     BaseViewModel<RegistrationUiState, RegistrationEffect>(RegistrationUiState()),
     RegistrationContract {
 
-    override fun onNavigateBack() {
-        emitEffect(RegistrationEffect.NavigateBack)
-    }
+    override fun onNavigateBack() = emitEffect(RegistrationEffect.NavigateBack)
+
 
     override fun onPageLoaded(url: String?) {
         url?.let { currentUrl ->
@@ -22,9 +21,8 @@ class RegisterViewModel @Inject constructor() :
         }
     }
 
-    override fun onUrlChanged(url: String) {
-        updateState { copy(currentUrl = url) }
-    }
+    override fun onUrlChanged(url: String) = updateState { copy(currentUrl = url) }
+
 
     override fun shouldInterceptUrl(url: String): Boolean {
         if (!isUrlAllowed(url)) return true
@@ -34,16 +32,19 @@ class RegisterViewModel @Inject constructor() :
                 emitEffect(RegistrationEffect.RegistrationComplete)
                 true
             }
+
             isAllowedRegistrationUrl(url) -> false
 
             isCancelUrl(url) -> {
                 emitEffect(RegistrationEffect.NavigateBack)
                 true
             }
+
             url.contains("login") && url.contains("success") -> {
                 emitEffect(RegistrationEffect.RegistrationComplete)
                 true
             }
+
             else -> true
         }
     }
