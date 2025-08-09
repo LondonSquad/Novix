@@ -30,17 +30,18 @@ import com.london.designsystem.theme.NovixTheme
 import com.london.designsystem.theme.ThemePreviews
 import com.london.domain.language.AppLanguage
 import com.london.presentation.R
-import com.london.presentation.feature.account.AccountContract
-import com.london.presentation.feature.account.state.AccountUiState // Use the main state
 
 @Composable
 fun LanguageBottomSheet(
-    languageContract: AccountContract,
-    uiState: AccountUiState,
+    appLanguage: AppLanguage,
+    onBottomSheetDismiss: () -> Unit,
+    onEnglishSelected: () -> Unit,
+    onArabicSelected: () -> Unit,
+    onLanguageSettingsSave: () -> Unit,
     modifier: Modifier = Modifier
 ) {
     ModalBottomSheet(
-        onDismissRequest = languageContract::onBottomSheetDismiss,
+        onDismissRequest = onBottomSheetDismiss,
         containerColor = NovixTheme.colors.surface,
         state = rememberModalBottomSheetState(skipPartiallyExpanded = true)
     ) {
@@ -52,11 +53,11 @@ fun LanguageBottomSheet(
                 .padding(bottom = 24.dp)
         ) {
             LanguageBottomSheetContent(
-                onEnglish = languageContract::onEnglishSelected,
-                onArabic = languageContract::onArabicSelected,
-                onSave = languageContract::onLanguageSettingsSave,
-                onDismiss = languageContract::onBottomSheetDismiss,
-                appLanguage = uiState.appLanguage
+                onEnglish = onEnglishSelected,
+                onArabic = onArabicSelected,
+                onSave = onLanguageSettingsSave,
+                onDismiss = onBottomSheetDismiss,
+                appLanguage = appLanguage
             )
         }
     }

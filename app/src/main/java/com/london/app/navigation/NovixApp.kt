@@ -353,10 +353,8 @@ fun NavGraphBuilder.mainNavGraph(
                         inclusive = true
                     }
                 }
-            },
-            onNavigateToChangePassword = {
-                // todo: Handle change password logic here, e.g., reset password flow
-            })
+            }
+        )
     }
 
     composable<WatchingHistory>(

@@ -8,6 +8,7 @@ import com.london.domain.theme.AppTheme
 import com.london.domain.usecase.GetAccountDetails
 import com.london.domain.usecase.authentication.AuthenticationUseCase
 import com.london.presentation.feature.account.state.AccountUiState
+import com.london.presentation.feature.account.state.ActiveBottomSheet
 import com.london.presentation.shared.base.BaseViewModel
 import com.london.presentation.shared.base.ErrorState
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -63,82 +64,6 @@ class AccountViewModel @Inject constructor(
         )
     }
 
-    override fun onWatchingHistoryClick() {
-        emitEffect(AccountEffect.NavigateToWatchingHistory)
-    }
-
-    override fun onMyRatingClick() {
-        emitEffect(AccountEffect.NavigateToMyRating)
-    }
-
-    override fun onContentRestrictionClick() {
-        updateState { copy(showContentRestrictionBottomSheet = true) }
-    }
-
-    override fun onChangePasswordClick() {
-        emitEffect(AccountEffect.NavigateToChangePassword(FORGOT_PASSWORD_URL))
-    }
-
-    //region Content Restriction Bottom Sheet
-    private fun observeContentRestrictionLevel() {
-        appPreferencesService.contentRestrictionLevel
-            .onEach { level ->
-                updateState { copy(currentContentRestriction = level) }
-            }
-            .launchIn(viewModelScope)
-    }
-
-    override fun onContentRestrictionSave(level: ContentRestrictionLevel) {
-        appPreferencesService.setContentRestrictionLevel(level)
-        updateState {
-            copy(
-                showContentRestrictionBottomSheet = false,
-                currentContentRestriction = level
-            )
-        }
-    }
-    //endregion
-
-    //region Appearance Bottom Sheet
-    private fun initializeAppTheme() {
-        val isAppDarkMode = appPreferencesService.isAppDarkMode.value
-        updateState {
-            copy(appTheme = if (isAppDarkMode) AppTheme.DARK else AppTheme.LIGHT)
-        }
-    }
-
-    override fun onAppearanceClick() {
-        updateState {
-            copy(isAppearanceBottomSheetVisible = true)
-        }
-    }
-
-    override fun onDarkModeSelected() {
-        updateState {
-            copy(appTheme = AppTheme.DARK)
-        }
-    }
-
-    override fun onLightModeSelected() {
-        updateState {
-            copy(appTheme = AppTheme.LIGHT)
-        }
-    }
-
-    override fun onAppearanceModeSave() {
-        appPreferencesService.setAppTheme(state.value.appTheme)
-        updateState {
-            copy(isAppearanceBottomSheetVisible = false)
-        }
-    }
-
-    override fun showAppearanceBottomSheet() {
-        updateState {
-            copy(isAppearanceBottomSheetVisible = true)
-        }
-    }
-    //endregion
-
     //region Logout Bottom Sheet
     override fun onLogoutConfirmed() {
         tryToExecute(
@@ -165,22 +90,96 @@ class AccountViewModel @Inject constructor(
         updateState {
             copy(
                 showUserMenu = false,
-                isLogoutBottomSheetVisible = true
+                activeBottomSheet = ActiveBottomSheet.Logout
             )
         }
     }
     //endregion
 
-    //region Language Bottom Sheet
-    private fun initializeAppLanguage() {
+    override fun onWatchingHistoryClick() {
+        emitEffect(AccountEffect.NavigateToWatchingHistory)
+    }
+
+    override fun onMyRatingClick() {
+        emitEffect(AccountEffect.NavigateToMyRating)
+    }
+
+    //region Content Restriction Bottom Sheet
+    override fun onContentRestrictionClick() {
+        updateState { copy(activeBottomSheet = ActiveBottomSheet.ContentRestriction) }
+    }
+
+    private fun observeContentRestrictionLevel() {
+        appPreferencesService.contentRestrictionLevel
+            .onEach { level ->
+                updateState { copy(currentContentRestriction = level) }
+            }
+            .launchIn(viewModelScope)
+    }
+
+    override fun onContentRestrictionSave(level: ContentRestrictionLevel) {
+        appPreferencesService.setContentRestrictionLevel(level)
         updateState {
-            copy(appLanguage = appPreferencesService.appLanguage.value)
+            copy(
+                currentContentRestriction = level,
+                activeBottomSheet = ActiveBottomSheet.None
+            )
+        }
+    }
+    //endregion
+
+    override fun onChangePasswordClick() {
+        emitEffect(AccountEffect.NavigateToChangePassword(FORGOT_PASSWORD_URL))
+    }
+
+    //region Appearance Bottom Sheet
+    override fun onAppearanceClick() {
+        updateState {
+            copy(activeBottomSheet = ActiveBottomSheet.Appearance)
         }
     }
 
+    private fun initializeAppTheme() {
+        val isAppDarkMode = appPreferencesService.isAppDarkMode.value
+        updateState {
+            copy(appTheme = if (isAppDarkMode) AppTheme.DARK else AppTheme.LIGHT)
+        }
+    }
+
+    override fun onDarkModeSelected() {
+        updateState {
+            copy(appTheme = AppTheme.DARK)
+        }
+    }
+
+    override fun onLightModeSelected() {
+        updateState {
+            copy(appTheme = AppTheme.LIGHT)
+        }
+    }
+
+    override fun onAppearanceModeSave() {
+        appPreferencesService.setAppTheme(state.value.appTheme)
+        onBottomSheetDismiss()
+    }
+
+    override fun showAppearanceBottomSheet() {
+        updateState {
+            copy(activeBottomSheet = ActiveBottomSheet.Appearance)
+        }
+    }
+    //endregion
+
+    //region Language Bottom Sheet
     override fun onLanguageClick() {
         updateState {
-            copy(isLanguageBottomSheetVisible = true)
+            copy(activeBottomSheet = ActiveBottomSheet.Language)
+        }
+    }
+
+    private fun initializeAppLanguage() {
+        updateState {
+            copy(appLanguage = appPreferencesService.appLanguage.value)
         }
     }
 
@@ -200,7 +199,7 @@ class AccountViewModel @Inject constructor(
         appPreferencesService.setAppLanguage(state.value.appLanguage)
         updateState {
             copy(
-                isLanguageBottomSheetVisible = false,
+                activeBottomSheet = ActiveBottomSheet.None,
                 appLanguage = state.value.appLanguage
             )
         }
@@ -214,10 +213,7 @@ class AccountViewModel @Inject constructor(
     override fun onBottomSheetDismiss() {
         updateState {
             copy(
-                showContentRestrictionBottomSheet = false,
-                isAppearanceBottomSheetVisible = false,
-                isLanguageBottomSheetVisible = false,
-                isLogoutBottomSheetVisible = false,
+                activeBottomSheet = ActiveBottomSheet.None,
                 showUserMenu = false
             )
         }

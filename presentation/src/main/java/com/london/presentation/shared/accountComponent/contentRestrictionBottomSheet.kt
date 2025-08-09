@@ -32,7 +32,6 @@ fun ContentRestrictionBottomSheet(
     modifier: Modifier = Modifier
 ) {
     var selectedLevel by remember(currentLevel) { mutableStateOf(currentLevel) }
-
     Column(
         modifier = modifier.padding(16.dp)
     ) {

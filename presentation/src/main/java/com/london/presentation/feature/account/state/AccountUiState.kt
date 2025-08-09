@@ -15,14 +15,18 @@ data class AccountUiState(
     val currentContentRestriction: ContentRestrictionLevel = ContentRestrictionLevel.MODERATE,
     val isUserLoggedIn: Boolean = false,
     val showUserMenu: Boolean = false,
-    val showContentRestrictionBottomSheet: Boolean = false,
     val isLightMode: Boolean = false,
     val isDarkMode: Boolean = false,
-    val isAppearanceBottomSheetVisible: Boolean = false,
     val appTheme: AppTheme = AppTheme.DARK,
-    val isLogoutBottomSheetVisible: Boolean = false,
     val isLogoutLoading: Boolean = false,
-    // Language Bottom Sheet
-    val isLanguageBottomSheetVisible: Boolean = false,
-    val appLanguage: AppLanguage = AppLanguage.ARABIC
+    val appLanguage: AppLanguage = AppLanguage.ARABIC,
+    val activeBottomSheet: ActiveBottomSheet = ActiveBottomSheet.None
 )
+
+sealed interface ActiveBottomSheet {
+    data object None : ActiveBottomSheet
+    data object Appearance : ActiveBottomSheet
+    data object Language : ActiveBottomSheet
+    data object Logout : ActiveBottomSheet
+    data object ContentRestriction : ActiveBottomSheet
+}
