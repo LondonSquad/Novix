@@ -88,13 +88,13 @@ import com.london.presentation.utils.toLocalizedNumbers
 
 @Composable
 fun MovieDetailsScreen(
-    viewModel: MovieDetailsViewModel = hiltViewModel(),
-    onNavigateBack: () -> Unit = {},
-    onNavigateGenre: (Int) -> Unit = {},
+    onNavigateBack: () -> Unit,
+    onNavigateToLogin: () -> Unit,
+    onNavigateGenre: (Int) -> Unit,
     onNavigateToMovie: (Int) -> Unit,
     onNavigateToActor: (Int) -> Unit,
     onNavigateToReviews: (Int, Int) -> Unit,
-    onNavigateToLogin: () -> Unit
+    viewModel: MovieDetailsViewModel = hiltViewModel()
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
     val effect by viewModel.effect.collectAsState(null)
@@ -115,7 +115,7 @@ fun MovieDetailsScreen(
         isError = state.error != null,
         onRetry = viewModel::onRetry
     ) {
-        MovieDetailsContent(
+        Content(
             uiState = state,
             movieDetailsContract = viewModel
         )
@@ -123,7 +123,7 @@ fun MovieDetailsScreen(
 }
 
 @Composable
-fun MovieDetailsContent(
+private fun Content(
     uiState: MovieDetailsUiState,
     movieDetailsContract: MovieDetailsContract
 ) {

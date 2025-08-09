@@ -1,4 +1,4 @@
-package com.london.presentation.feature.list.viewlistitems
+package com.london.presentation.feature.list.viewitems
 
 import androidx.paging.PagingData
 import com.london.domain.entity.Movie
@@ -6,7 +6,7 @@ import com.london.presentation.shared.base.ErrorState
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 
-data class ViewListItemsUiState(
+data class ViewItemsUiState(
     val listTitle: String = "",
     val error: ErrorState? = null,
     val isSnackBarSuccessVisible: Boolean = false,

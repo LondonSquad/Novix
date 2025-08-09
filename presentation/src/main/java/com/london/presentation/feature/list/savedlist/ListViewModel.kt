@@ -121,7 +121,7 @@ class ListViewModel @Inject constructor(
             onError = {
                 updateState { copy(isGuest = true, isLoading = false) }
                 onResult(false)
-            },
+            }
         )
     }
 }

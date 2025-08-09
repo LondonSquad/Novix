@@ -1,4 +1,4 @@
-package com.london.presentation.feature.list.viewlistitems
+package com.london.presentation.feature.list.viewitems
 
 import androidx.lifecycle.SavedStateHandle
 import com.london.domain.usecase.movielist.GetMovieListDetailsUseCase
@@ -14,13 +14,13 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 
 @HiltViewModel
-class ViewListItemsViewModel @Inject constructor(
+class ViewItemsViewModel @Inject constructor(
     private val getMovieListDetailsUseCase: GetMovieListDetailsUseCase,
     private val removeMovieFromListUseCase: RemoveMovieFromListUseCase,
     private val getMovieListNameUseCase: GetMovieListNameUseCase,
     private val manageMovieListUseCase: ManageMovieListUseCase,
     savedStateHandle: SavedStateHandle
-) : BaseViewModel<ViewListItemsUiState, ViewListItemsEffect>(ViewListItemsUiState()),
+) : BaseViewModel<ViewItemsUiState, ViewItemsEffect>(ViewItemsUiState()),
     ViewListItemsContract {
 
     private val args = savedStateHandle.getArgs<Screen.ViewListItems>()
@@ -33,7 +33,7 @@ class ViewListItemsViewModel @Inject constructor(
 
     override fun onBack() {
 
-        emitEffect(ViewListItemsEffect.NavigateBack)
+        emitEffect(ViewItemsEffect.NavigateBack)
     }
 
     override fun onRetry() {
@@ -60,14 +60,14 @@ class ViewListItemsViewModel @Inject constructor(
                 updateState { copy(error = ErrorState.RequestFailed()) }
             },
             onSuccess = {
-                emitEffect(ViewListItemsEffect.NavigateBack)
+                emitEffect(ViewItemsEffect.NavigateBack)
             }
         )
     }
 
     override fun onMovieClick(id: Int) {
 
-        emitEffect(ViewListItemsEffect.NavigationMovieDetails(id))
+        emitEffect(ViewItemsEffect.NavigationMovieDetails(id))
     }
 
     override fun onRemoveMovieClick(id: Int) {

@@ -34,7 +34,9 @@ class MovieDetailsViewModel @Inject constructor(
         loadSimilarAndVideos(movieId)
     }
 
-    override fun onBackClick() = emitEffect(MovieDetailsEffect.BackNavigation)
+    override fun onBackClick() {
+        emitEffect(MovieDetailsEffect.BackNavigation)
+    }
 
     override fun onSavedClick() {
         // TODO: implement saving logic
@@ -52,12 +54,68 @@ class MovieDetailsViewModel @Inject constructor(
         emitEffect(MovieDetailsEffect.ActorNavigation(actorId))
     }
 
+    override fun onLoginClick() {
+        emitEffect(MovieDetailsEffect.OnLoginNavigation)
+    }
+
     override fun onReviewsClick(movieId: Int, mediaNumber: Int) {
         emitEffect(MovieDetailsEffect.ReviewsNavigation(movieId, mediaNumber))
     }
 
     override fun onGenreClick(genreId: Int) {
         emitEffect(MovieDetailsEffect.GenreNavigation(genreId))
+    }
+
+    override fun onRetry() {
+        updateState { copy(error = null) }
+        loadMovieDetails(movieId)
+        loadSimilarAndVideos(movieId)
+    }
+
+    override fun onRateBottomSheetClick() {
+        tryToExecute(
+            block = { authenticationUseCase.isLoggedIn() },
+            onSuccess = { isLoggedIn ->
+                if (isLoggedIn)
+                    updateState { copy(isRateBottomSheetVisible = isRateBottomSheetVisible.not()) }
+                else
+                    updateState {
+                        copy(
+                            isGuestUserBottomSheetVisible = isGuestUserBottomSheetVisible.not(),
+                            isGuestUser = true
+                        )
+
+                    }
+            },
+            onError = { errorState ->
+                updateState { copy(error = errorState) }
+            }
+        )
+    }
+
+    override fun onSelectRatingClick(rating: Int) {
+        tryToExecute(
+            block = { ratingUseCase.addMovieRatingById(movieId, rating) },
+            onSuccess = {
+                updateState {
+                    copy(
+                        selectedRating = rating,
+                        isRated = true,
+                        isRateBottomSheetVisible = false,
+                        isSuccessfullyRated = true
+                    )
+                }
+            },
+            onError = { errorState ->
+                updateState {
+                    copy(
+                        error = errorState,
+                        isSuccessfullyRated = false
+                    )
+                }
+            },
+            onCompleted = { updateState { copy(isLoading = false) } },
+        )
     }
 
     private fun loadMovieDetails(movieId: Int) {
@@ -121,59 +179,6 @@ class MovieDetailsViewModel @Inject constructor(
         manageRecentViewedUseCase.addToRecentViewed(movie)
     }
 
-    override fun onRetry() {
-        updateState { copy(error = null) }
-        loadMovieDetails(movieId)
-        loadSimilarAndVideos(movieId)
-    }
-
-    override fun onRateBottomSheetClick() {
-        tryToExecute(
-            block = { authenticationUseCase.isLoggedIn() },
-            onSuccess = { isLoggedIn ->
-                if (isLoggedIn)
-                    updateState { copy(isRateBottomSheetVisible = isRateBottomSheetVisible.not()) }
-                else
-                    updateState {
-                        copy(
-                            isGuestUserBottomSheetVisible = isGuestUserBottomSheetVisible.not(),
-                            isGuestUser = true
-                        )
-
-                    }
-            },
-            onError = { errorState ->
-                updateState { copy(error = errorState) }
-            }
-        )
-    }
-
-    override fun onSelectRatingClick(rating: Int) {
-        tryToExecute(
-            block = { ratingUseCase.addMovieRatingById(movieId, rating) },
-            onSuccess = {
-                updateState {
-                    copy(
-                        selectedRating = rating,
-                        isRated = true,
-                        isRateBottomSheetVisible = false,
-                        isSuccessfullyRated = true
-                    )
-                }
-            },
-            onError = { errorState ->
-                updateState {
-                    copy(
-                        error = errorState,
-                        isSuccessfullyRated = false
-                    )
-                }
-            },
-            onCompleted = { updateState { copy(isLoading = false) } },
-        )
-    }
-
-    override fun onLoginClick() = emitEffect(MovieDetailsEffect.OnLoginNavigation)
     private fun loadSimilarAndVideos(movieId: Int) {
         tryToExecute(
             block = {

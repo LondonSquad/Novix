@@ -74,8 +74,8 @@ import com.london.presentation.utils.toLocalizedNumbers
 @Composable
 fun ActorDetailsScreen(
     onNavigateBack: () -> Unit,
-    onNavigateToMoviePicks: (Int) -> Unit,
     onNavigateToGallery: (Int) -> Unit,
+    onNavigateToMoviePicks: (Int) -> Unit,
     onNavigateToTvShowPicks: (Int) -> Unit,
     onNavigateToMovieScreen: (Int) -> Unit,
     onNavigateToTvShowScreen: (Int) -> Unit,
@@ -102,7 +102,7 @@ fun ActorDetailsScreen(
         onRetry = viewModel::onRetry
 
     ) {
-        ActorScreenContent(
+        Content(
             uiState = uiState,
             actorDetailsContract = viewModel
         )
@@ -111,10 +111,10 @@ fun ActorDetailsScreen(
 
 
 @Composable
-fun ActorScreenContent(
-    modifier: Modifier = Modifier,
+private fun Content(
     uiState: ActorDetailsUiState,
     actorDetailsContract: ActorDetailsContract,
+    modifier: Modifier = Modifier,
 ) {
 
     val lazyState = rememberLazyListState()

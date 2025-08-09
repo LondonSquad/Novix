@@ -1,4 +1,4 @@
-package com.london.presentation.feature.list.viewlistitems
+package com.london.presentation.feature.list.viewitems
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
@@ -28,7 +28,7 @@ import com.london.presentation.utils.Listen
 fun ViewListItemsScreen(
     onNavigateBack: () -> Unit,
     onNavigateToMovieDetails: (Int) -> Unit,
-    viewModel: ViewListItemsViewModel = hiltViewModel()
+    viewModel: ViewItemsViewModel = hiltViewModel()
 ) {
 
     val state by viewModel.state.collectAsStateWithLifecycle()
@@ -36,8 +36,8 @@ fun ViewListItemsScreen(
 
     effect?.Listen { currentEffect ->
         when (currentEffect) {
-            ViewListItemsEffect.NavigateBack -> onNavigateBack()
-            is ViewListItemsEffect.NavigationMovieDetails ->
+            ViewItemsEffect.NavigateBack -> onNavigateBack()
+            is ViewItemsEffect.NavigationMovieDetails ->
                 onNavigateToMovieDetails(currentEffect.id)
         }
     }
@@ -50,7 +50,7 @@ fun ViewListItemsScreen(
 
 @Composable
 private fun Content(
-    state: ViewListItemsUiState,
+    state: ViewItemsUiState,
     contract: ViewListItemsContract,
 ) {
     val listItems = state.listItems.collectAsLazyPagingItems()
@@ -121,7 +121,7 @@ private fun Content(
 private fun Preview() {
     NovixTheme {
         Content(
-            state = ViewListItemsUiState(),
+            state = ViewItemsUiState(),
             contract = object : ViewListItemsContract {
                 override fun onBack() {}
                 override fun onRetry() {}

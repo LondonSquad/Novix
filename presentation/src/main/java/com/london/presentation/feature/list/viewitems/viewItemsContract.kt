@@ -1,4 +1,4 @@
-package com.london.presentation.feature.list.viewlistitems
+package com.london.presentation.feature.list.viewitems
 
 interface ViewListItemsContract {
     fun onBack()
