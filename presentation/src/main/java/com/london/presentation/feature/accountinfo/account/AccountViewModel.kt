@@ -31,7 +31,6 @@ class AccountViewModel @Inject constructor(
     }
 
 
-    //region Logout Bottom Sheet
     override fun onLogoutConfirmed() {
         tryToExecute(
             block = { authenticationUseCase.logout() },
@@ -53,36 +52,25 @@ class AccountViewModel @Inject constructor(
         )
     }
 
-    override fun onLogoutClick() {
+    override fun onLogoutClick() =
         updateState {
             copy(
                 showUserMenu = false,
                 activeBottomSheet = ActiveBottomSheet.Logout
             )
         }
-    }
-    //endregion
 
-    override fun onWatchingHistoryClick() {
+    override fun onWatchingHistoryClick() =
         emitEffect(AccountEffect.NavigateToWatchingHistory)
-    }
 
-    override fun onMyRatingClick() {
+
+    override fun onMyRatingClick() =
         emitEffect(AccountEffect.NavigateToMyRating)
-    }
 
-    //region Content Restriction Bottom Sheet
-    override fun onContentRestrictionClick() {
+
+    override fun onContentRestrictionClick() =
         updateState { copy(activeBottomSheet = ActiveBottomSheet.ContentRestriction) }
-    }
 
-    private fun observeContentRestrictionLevel() {
-        appPreferencesService.contentRestrictionLevel
-            .onEach { level ->
-                updateState { copy(currentContentRestriction = level) }
-            }
-            .launchIn(viewModelScope)
-    }
 
     override fun onContentRestrictionSave(level: ContentRestrictionLevel) {
         appPreferencesService.setContentRestrictionLevel(level)
@@ -93,74 +81,49 @@ class AccountViewModel @Inject constructor(
             )
         }
     }
-    //endregion
 
-    override fun onChangePasswordClick() {
+    override fun onChangePasswordClick() =
         emitEffect(AccountEffect.NavigateToChangePassword(FORGOT_PASSWORD_URL))
-    }
 
-    //region Appearance Bottom Sheet
-    override fun onAppearanceClick() {
+    override fun onAppearanceClick() =
         updateState {
             copy(activeBottomSheet = ActiveBottomSheet.Appearance)
         }
-    }
 
-    private fun initializeAppTheme() {
-        val isAppDarkMode = appPreferencesService.isAppDarkMode.value
-        updateState {
-            copy(appTheme = if (isAppDarkMode) AppTheme.DARK else AppTheme.LIGHT)
-        }
-    }
-
-    override fun onDarkModeSelected() {
+    override fun onDarkModeSelected() =
         updateState {
             copy(appTheme = AppTheme.DARK)
         }
-    }
 
-    override fun onLightModeSelected() {
+    override fun onLightModeSelected() =
         updateState {
             copy(appTheme = AppTheme.LIGHT)
         }
-    }
 
     override fun onAppearanceModeSave() {
         appPreferencesService.setAppTheme(state.value.appTheme)
         onBottomSheetDismiss()
     }
 
-    override fun showAppearanceBottomSheet() {
+    override fun showAppearanceBottomSheet() =
         updateState {
             copy(activeBottomSheet = ActiveBottomSheet.Appearance)
         }
-    }
-    //endregion
 
-    //region Language Bottom Sheet
-    override fun onLanguageClick() {
+    override fun onLanguageClick() =
         updateState {
             copy(activeBottomSheet = ActiveBottomSheet.Language)
         }
-    }
 
-    private fun initializeAppLanguage() {
-        updateState {
-            copy(appLanguage = appPreferencesService.appLanguage.value)
-        }
-    }
-
-    override fun onEnglishSelected() {
+    override fun onEnglishSelected() =
         updateState {
             copy(appLanguage = AppLanguage.ENGLISH)
         }
-    }
 
-    override fun onArabicSelected() {
+    override fun onArabicSelected() =
         updateState {
             copy(appLanguage = AppLanguage.ARABIC)
         }
-    }
 
     override fun onLanguageSettingsSave() {
         appPreferencesService.setAppLanguage(state.value.appLanguage)
@@ -171,23 +134,40 @@ class AccountViewModel @Inject constructor(
             )
         }
     }
-    //endregion
 
-    override fun onUserMenuClick() {
+    override fun onUserMenuClick() =
         updateState { copy(showUserMenu = !showUserMenu) }
-    }
 
-    override fun onBottomSheetDismiss() {
+    override fun onBottomSheetDismiss() =
         updateState {
             copy(
                 activeBottomSheet = ActiveBottomSheet.None,
                 showUserMenu = false
             )
         }
+
+    override fun onLoginClick() =
+        emitEffect(AccountEffect.NavigateLogout)
+
+    private fun initializeAppTheme() {
+        val isAppDarkMode = appPreferencesService.isAppDarkMode.value
+        updateState {
+            copy(appTheme = if (isAppDarkMode) AppTheme.DARK else AppTheme.LIGHT)
+        }
     }
 
-    override fun onLoginClick() {
-        emitEffect(AccountEffect.NavigateLogout)
+    private fun initializeAppLanguage() {
+        updateState {
+            copy(appLanguage = appPreferencesService.appLanguage.value)
+        }
+    }
+
+    private fun observeContentRestrictionLevel() {
+        appPreferencesService.contentRestrictionLevel
+            .onEach { level ->
+                updateState { copy(currentContentRestriction = level) }
+            }
+            .launchIn(viewModelScope)
     }
 
     private fun checkUserLoginStatus() {
