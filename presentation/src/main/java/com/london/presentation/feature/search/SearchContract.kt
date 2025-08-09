@@ -18,6 +18,6 @@ interface SearchContract {
     fun onClickMovie(genresListId : List<Int>)
     fun removeRecentSearch(search: RecentSearch)
     fun addToRecentSearches(query: RecentSearch)
-    fun onSearchQueryChange(newValue: TextFieldValue)
     fun onCategorySelected(category: SearchCategory)
+    fun onSearchQueryChange(newValue: TextFieldValue)
 }
