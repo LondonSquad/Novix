@@ -73,13 +73,13 @@ import com.london.presentation.utils.gridColumns
 
 @Composable
 fun HomeScreen(
-    onNavigateMovie: (movieId: Int) -> Unit = {},
-    onNavigateTvShow: (tvShowId: Int) -> Unit = {},
     onNavigateTopRated: () -> Unit = {},
+    onNavigateTrendingActors: () -> Unit = {},
     onNavigateTrendingMovies: () -> Unit = {},
     onNavigateTrendingTvShows: () -> Unit = {},
-    onNavigateTrendingActors: () -> Unit = {},
     onNavigateContinueWatching: () -> Unit = {},
+    onNavigateMovie: (movieId: Int) -> Unit = {},
+    onNavigateTvShow: (tvShowId: Int) -> Unit = {},
     viewModel: HomeViewModel = hiltViewModel(),
 ) {
     val uiState by viewModel.state.collectAsStateWithLifecycle()
