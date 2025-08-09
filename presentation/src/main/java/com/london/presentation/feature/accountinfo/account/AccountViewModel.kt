@@ -30,7 +30,7 @@ class AccountViewModel @Inject constructor(
         initializeAppTheme()
     }
 
-    private fun checkUserLoginStatus() {
+    fun checkUserLoginStatus() {
         tryToExecute(
             block = { authenticationUseCase.isLoggedIn() },
             onStart = {
@@ -48,7 +48,7 @@ class AccountViewModel @Inject constructor(
         )
     }
 
-    private fun fetchAndSetUsername() {
+    fun fetchAndSetUsername() {
         tryToExecute(
             block = { accountDetailsUseCase.invoke() },
             onSuccess = { accountInfo ->
@@ -107,7 +107,7 @@ class AccountViewModel @Inject constructor(
         updateState { copy(activeBottomSheet = ActiveBottomSheet.ContentRestriction) }
     }
 
-    private fun observeContentRestrictionLevel() {
+    fun observeContentRestrictionLevel() {
         appPreferencesService.contentRestrictionLevel
             .onEach { level ->
                 updateState { copy(currentContentRestriction = level) }
@@ -137,7 +137,7 @@ class AccountViewModel @Inject constructor(
         }
     }
 
-    private fun initializeAppTheme() {
+    fun initializeAppTheme() {
         val isAppDarkMode = appPreferencesService.isAppDarkMode.value
         updateState {
             copy(appTheme = if (isAppDarkMode) AppTheme.DARK else AppTheme.LIGHT)
@@ -175,7 +175,7 @@ class AccountViewModel @Inject constructor(
         }
     }
 
-    private fun initializeAppLanguage() {
+    fun initializeAppLanguage() {
         updateState {
             copy(appLanguage = appPreferencesService.appLanguage.value)
         }

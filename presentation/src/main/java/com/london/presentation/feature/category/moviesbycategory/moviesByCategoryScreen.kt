@@ -47,7 +47,7 @@ fun MoviesByCategoryScreen(
         }
     }
 
-    MoviesByCategoryContent(
+    Content(
         state = state,
         contract = viewModel,
         modifier = modifier,
@@ -55,7 +55,7 @@ fun MoviesByCategoryScreen(
 }
 
 @Composable
-private fun MoviesByCategoryContent(
+private fun Content(
     state: MoviesByCategoryUiState,
     contract: MoviesByCategoryContract,
     modifier: Modifier = Modifier
@@ -100,7 +100,7 @@ private fun MoviesByCategoryContent(
 @ThemePreviews
 @Composable
 private fun MoviesByCategoryContentPreview() {
-    MoviesByCategoryContent(
+    Content(
         state = MoviesByCategoryUiState(
             movies = flow<PagingData<Movie>> {
                 Movie(

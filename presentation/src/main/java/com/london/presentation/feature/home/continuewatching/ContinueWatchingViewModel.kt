@@ -20,38 +20,6 @@ class ContinueWatchingViewModel @Inject constructor(
         fetchRecentWatchedMedia()
     }
 
-    private fun fetchRecentWatchedMedia() {
-        tryToExecute(
-            block = {
-                val recentWatchedMovie = manageRecentMovieWatchedUseCase.getAllWatchedMovies(
-                    genreId = if (state.value.selectedMovieGenre == MovieGenre.All) null
-                    else state.value.selectedMovieGenre.id
-                )
-                val recentWatchedTvShow = manageRecentTvShowWatchedUseCase.getAllRecentTvShow(
-                    genreId = if (state.value.selectedTvShowGenre == TvShowGenre.All) null
-                    else state.value.selectedTvShowGenre.id
-                )
-
-                Pair(recentWatchedMovie, recentWatchedTvShow)
-            },
-            onStart = {
-                updateState { copy(isLoading = true) }
-            },
-            onSuccess = { (movies, shows) ->
-                updateState {
-                    copy(
-                        movies = movies,
-                        tvSeries = shows
-                    )
-                }
-            },
-            onError = { errorState -> updateState { copy(error = errorState) } },
-            onCompleted = {
-                updateState { copy(isLoading = false) }
-            },
-        )
-    }
-
     override fun onMovieGenreChanged(genre: MovieGenre) {
         if (genre == state.value.selectedMovieGenre) return
         updateState { copy(selectedMovieGenre = genre) }
@@ -86,6 +54,38 @@ class ContinueWatchingViewModel @Inject constructor(
 
     override fun onRetry() {
         fetchRecentWatchedMedia()
+    }
+
+    fun fetchRecentWatchedMedia() {
+        tryToExecute(
+            block = {
+                val recentWatchedMovie = manageRecentMovieWatchedUseCase.getAllWatchedMovies(
+                    genreId = if (state.value.selectedMovieGenre == MovieGenre.All) null
+                    else state.value.selectedMovieGenre.id
+                )
+                val recentWatchedTvShow = manageRecentTvShowWatchedUseCase.getAllRecentTvShow(
+                    genreId = if (state.value.selectedTvShowGenre == TvShowGenre.All) null
+                    else state.value.selectedTvShowGenre.id
+                )
+
+                Pair(recentWatchedMovie, recentWatchedTvShow)
+            },
+            onStart = {
+                updateState { copy(isLoading = true) }
+            },
+            onSuccess = { (movies, shows) ->
+                updateState {
+                    copy(
+                        movies = movies,
+                        tvSeries = shows
+                    )
+                }
+            },
+            onError = { errorState -> updateState { copy(error = errorState) } },
+            onCompleted = {
+                updateState { copy(isLoading = false) }
+            },
+        )
     }
 
 }

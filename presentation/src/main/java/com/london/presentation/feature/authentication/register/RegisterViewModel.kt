@@ -5,19 +5,19 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 
 @HiltViewModel
-class WebViewRegistrationViewModel @Inject constructor() :
-    BaseViewModel<WebViewRegistrationUiState, WebViewRegistrationEffect>(WebViewRegistrationUiState()),
-    WebViewRegistrationContract {
+class RegisterViewModel @Inject constructor() :
+    BaseViewModel<RegistrationUiState, RegistrationEffect>(RegistrationUiState()),
+    RegistrationContract {
 
     override fun onNavigateBack() {
-        emitEffect(WebViewRegistrationEffect.NavigateBack)
+        emitEffect(RegistrationEffect.NavigateBack)
     }
 
     override fun onPageLoaded(url: String?) {
         url?.let { currentUrl ->
             updateState { copy(currentUrl = currentUrl, isLoading = false) }
             if (isRegistrationCompleteUrl(currentUrl)) {
-                emitEffect(WebViewRegistrationEffect.RegistrationComplete)
+                emitEffect(RegistrationEffect.RegistrationComplete)
             }
         }
     }
@@ -31,17 +31,17 @@ class WebViewRegistrationViewModel @Inject constructor() :
 
         return when {
             isRegistrationCompleteUrl(url) -> {
-                emitEffect(WebViewRegistrationEffect.RegistrationComplete)
+                emitEffect(RegistrationEffect.RegistrationComplete)
                 true
             }
             isAllowedRegistrationUrl(url) -> false
 
             isCancelUrl(url) -> {
-                emitEffect(WebViewRegistrationEffect.NavigateBack)
+                emitEffect(RegistrationEffect.NavigateBack)
                 true
             }
             url.contains("login") && url.contains("success") -> {
-                emitEffect(WebViewRegistrationEffect.RegistrationComplete)
+                emitEffect(RegistrationEffect.RegistrationComplete)
                 true
             }
             else -> true

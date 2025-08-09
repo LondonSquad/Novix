@@ -24,7 +24,7 @@ class MoviesByCategoryViewModel @Inject constructor(
     }
 
 
-    private fun initializeMovies(categoryId: Int) {
+    fun initializeMovies(categoryId: Int) {
         tryToExecute(
             block = {
                 val moviesFlow = createPagingSourceFlow(query = "") { _, pageNumber ->

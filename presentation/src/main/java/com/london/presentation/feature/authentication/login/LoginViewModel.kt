@@ -103,8 +103,7 @@ class LoginViewModel @Inject constructor(
         emitEffect(LoginEffect.NavigateBack)
     }
 
-    companion object {
-        private const val CREATE_ACCOUNT_URL = "https://www.themoviedb.org/signup"
-        private const val FORGOT_PASSWORD_URL = "https://www.themoviedb.org/reset-password"
+    private companion object {
+        const val FORGOT_PASSWORD_URL = "https://www.themoviedb.org/reset-password"
     }
 }

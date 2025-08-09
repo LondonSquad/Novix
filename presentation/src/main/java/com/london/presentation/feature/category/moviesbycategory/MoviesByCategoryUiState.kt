@@ -7,8 +7,8 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 
 data class MoviesByCategoryUiState(
+    val categoryId: Int = 0,
+    val error: ErrorState? = null,
     val isLoading: Boolean = false,
-    val movies: Flow<PagingData<Movie>> = flow {},
-    val categoryId: Int = 28,
-    val error: ErrorState? = null
+    val movies: Flow<PagingData<Movie>> = flow {}
 )

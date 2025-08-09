@@ -27,10 +27,10 @@ import com.london.presentation.utils.Listen
 
 @Composable
 fun AccountScreen(
-    viewModel: AccountViewModel = hiltViewModel(),
-    onNavigateToWatchingHistory: () -> Unit = {},
+    onNavigateToLogin: () -> Unit = {},
     onNavigateToMyRating: () -> Unit = {},
-    onNavigateToLogin: () -> Unit = {}
+    onNavigateToWatchingHistory: () -> Unit = {},
+    viewModel: AccountViewModel = hiltViewModel()
 ) {
     val uiState by viewModel.state.collectAsStateWithLifecycle()
     val effect by viewModel.effect.collectAsState(null)
@@ -38,8 +38,8 @@ fun AccountScreen(
 
     effect?.Listen { currentEffect ->
         when (currentEffect) {
-            is AccountEffect.NavigateToWatchingHistory -> onNavigateToWatchingHistory()
             is AccountEffect.NavigateToMyRating -> onNavigateToMyRating()
+            is AccountEffect.NavigateToWatchingHistory -> onNavigateToWatchingHistory()
             is AccountEffect.NavigateToChangePassword -> uriHandler.openUri(currentEffect.url)
             is AccountEffect.NavigateLogout -> onNavigateToLogin()
         }
@@ -51,7 +51,7 @@ fun AccountScreen(
         onRetry = {},
         onBack = {},
     ) {
-        AccountScreenContent(
+        Content(
             uiState = uiState,
             accountContract = viewModel,
         )
@@ -59,7 +59,7 @@ fun AccountScreen(
 }
 
 @Composable
-internal fun AccountScreenContent(
+private fun Content(
     uiState: AccountUiState,
     accountContract: AccountContract,
 ) {
@@ -91,6 +91,7 @@ internal fun AccountScreenContent(
                 isLoading = uiState.isLogoutLoading
             )
         }
+
         ActiveBottomSheet.ContentRestriction -> {
             ModalBottomSheet(
                 onDismissRequest = accountContract::onBottomSheetDismiss,
@@ -102,6 +103,7 @@ internal fun AccountScreenContent(
                 )
             }
         }
+
         ActiveBottomSheet.Appearance -> {
             AppearanceBottomSheet(
                 appTheme = uiState.appTheme,
@@ -111,6 +113,7 @@ internal fun AccountScreenContent(
                 onAppearanceModeSave = accountContract::onAppearanceModeSave,
             )
         }
+
         ActiveBottomSheet.Language -> {
             LanguageBottomSheet(
                 appLanguage = uiState.appLanguage,
@@ -120,6 +123,7 @@ internal fun AccountScreenContent(
                 onLanguageSettingsSave = accountContract::onLanguageSettingsSave,
             )
         }
+
         else -> {}
     }
 }

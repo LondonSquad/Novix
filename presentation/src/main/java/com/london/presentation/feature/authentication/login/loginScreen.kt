@@ -47,10 +47,10 @@ import com.london.designsystem.R as dsR
 
 @Composable
 fun LoginScreen(
-    viewModel: LoginViewModel = hiltViewModel(),
-    onNavigateToHome: () -> Unit,
     onNavigateBack: () -> Unit,
-    onNavigateToWebViewRegistration: () -> Unit
+    onNavigateToHome: () -> Unit,
+    onNavigateToWebViewRegistration: () -> Unit,
+    viewModel: LoginViewModel = hiltViewModel()
 ) {
     val uiState by viewModel.state.collectAsStateWithLifecycle()
     val effect by viewModel.effect.collectAsState(null)

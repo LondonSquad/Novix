@@ -39,9 +39,9 @@ import com.london.designsystem.R as dsR
 
 @Composable
 fun MyRatingScreen(
+    onNavigateBack: () -> Unit,
     onNavigateMovie: (Int) -> Unit,
     onNavigateTvShow: (Int) -> Unit,
-    onNavigateBack: () -> Unit,
     viewModel: RatingViewModel = hiltViewModel()
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
@@ -67,7 +67,7 @@ fun MyRatingScreen(
         onRetry = { viewModel.initializeItems()
         }
     ) {
-        MyRatingContent(
+        Content(
             state = state,
             contract = viewModel
         )
@@ -75,7 +75,7 @@ fun MyRatingScreen(
 }
 
 @Composable
-private fun MyRatingContent(
+private fun Content(
     state: MyRatingUiState = MyRatingUiState(),
     contract: MyRatingContract = defaultMyRatingContract()
 ) {

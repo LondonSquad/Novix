@@ -1,8 +1,8 @@
 package com.london.presentation.feature.authentication.register
 
-interface WebViewRegistrationContract {
+interface RegistrationContract {
     fun onNavigateBack()
-    fun onPageLoaded(url: String?)
     fun onUrlChanged(url: String)
+    fun onPageLoaded(url: String?)
     fun shouldInterceptUrl(url: String): Boolean
 }

@@ -34,9 +34,9 @@ import com.london.presentation.R
 @Composable
 fun LanguageBottomSheet(
     appLanguage: AppLanguage,
-    onBottomSheetDismiss: () -> Unit,
     onEnglishSelected: () -> Unit,
     onArabicSelected: () -> Unit,
+    onBottomSheetDismiss: () -> Unit,
     onLanguageSettingsSave: () -> Unit,
     modifier: Modifier = Modifier
 ) {
@@ -52,22 +52,22 @@ fun LanguageBottomSheet(
                 .heightIn(max = LocalWindowInfo.current.containerSize.height.dp * 0.75f)
                 .padding(bottom = 24.dp)
         ) {
-            LanguageBottomSheetContent(
-                onEnglish = onEnglishSelected,
+            Content(
+                appLanguage = appLanguage,
                 onArabic = onArabicSelected,
+                onEnglish = onEnglishSelected,
                 onSave = onLanguageSettingsSave,
-                onDismiss = onBottomSheetDismiss,
-                appLanguage = appLanguage
+                onDismiss = onBottomSheetDismiss
             )
         }
     }
 }
 
 @Composable
-fun LanguageBottomSheetContent(
-    onEnglish: () -> Unit,
-    onArabic: () -> Unit,
+private fun Content(
     onSave: () -> Unit,
+    onArabic: () -> Unit,
+    onEnglish: () -> Unit,
     onDismiss: () -> Unit,
     appLanguage: AppLanguage,
 ) {
@@ -138,7 +138,7 @@ fun LanguageBottomSheetContent(
 @ThemePreviews
 @Composable
 fun LanguageBottomSheetContentPreview() {
-    LanguageBottomSheetContent(
+    Content(
         onEnglish = {},
         onArabic = {},
         onSave = {},

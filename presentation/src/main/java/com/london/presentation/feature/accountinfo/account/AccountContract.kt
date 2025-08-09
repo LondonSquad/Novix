@@ -7,6 +7,7 @@ interface AccountContract {
     fun onMyRatingClick()
     fun onContentRestrictionClick()
     fun onChangePasswordClick()
+
     // appearance bottom sheet
     fun onAppearanceClick()
     fun onDarkModeSelected()

@@ -34,10 +34,10 @@ import com.london.presentation.R
 @Composable
 fun AppearanceBottomSheet(
     appTheme: AppTheme,
-    onBottomSheetDismiss: () -> Unit,
     onDarkModeSelected: () -> Unit,
     onLightModeSelected: () -> Unit,
     onAppearanceModeSave: () -> Unit,
+    onBottomSheetDismiss: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     ModalBottomSheet(
@@ -52,7 +52,7 @@ fun AppearanceBottomSheet(
                 .heightIn(max = LocalWindowInfo.current.containerSize.height.dp * 0.75f)
                 .padding(bottom = 24.dp)
         ) {
-            AppearanceBottomSheetContent(
+            Content(
                 onDark = onDarkModeSelected,
                 onLight = onLightModeSelected,
                 onSave = onAppearanceModeSave,
@@ -64,12 +64,12 @@ fun AppearanceBottomSheet(
 }
 
 @Composable
-fun AppearanceBottomSheetContent(
+private fun Content(
+    appTheme: AppTheme,
     onDark: () -> Unit,
     onLight: () -> Unit,
     onSave: () -> Unit,
     onDismiss: () -> Unit,
-    appTheme: AppTheme,
 
 ) {
     Column(
@@ -141,7 +141,7 @@ fun AppearanceBottomSheetContent(
 @ThemePreviews
 @Composable
 fun AppearanceBottomSheetContentPreview() {
-    AppearanceBottomSheetContent(
+    Content(
         onDark = {},
         onLight = {},
         onSave = {},

@@ -35,7 +35,7 @@ class TvShowByCategoryViewModel @Inject constructor(
         emitEffect(TvShowByCategoryEffect.NavigateBack)
     }
 
-    private fun initializeTvShows(categoryId: Int) {
+    fun initializeTvShows(categoryId: Int) {
         tryToExecute(
             block = {
             val tvShowFlow = createPagingSourceFlow(query = "") { _, pageNumber ->

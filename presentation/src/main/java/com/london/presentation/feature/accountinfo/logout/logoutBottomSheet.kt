@@ -31,9 +31,9 @@ import com.london.presentation.R
 
 @Composable
 fun LogoutBottomSheet(
-    onBottomSheetDismiss: () -> Unit,
-    onLogoutConfirmed: () -> Unit,
     isLoading: Boolean,
+    onLogoutConfirmed: () -> Unit,
+    onBottomSheetDismiss: () -> Unit,
     modifier: Modifier = Modifier
 ) {
     ModalBottomSheet(
@@ -48,7 +48,7 @@ fun LogoutBottomSheet(
                 .heightIn(max = LocalWindowInfo.current.containerSize.height.dp * 0.75f)
                 .padding(bottom = 24.dp)
         ) {
-            LogoutBottomSheetContent(
+            Content(
                 onLogout = onLogoutConfirmed,
                 onDismiss = onBottomSheetDismiss,
                 isLoading = isLoading
@@ -58,7 +58,7 @@ fun LogoutBottomSheet(
 }
 
 @Composable
-fun LogoutBottomSheetContent(
+private fun Content(
     onLogout: () -> Unit,
     onDismiss: () -> Unit,
     modifier: Modifier = Modifier,
@@ -120,7 +120,7 @@ fun LogoutBottomSheetContent(
 @Composable
 fun LogoutBottomSheetContentPreview() {
     NovixTheme {
-        LogoutBottomSheetContent(
+        Content(
             onLogout = {},
             onDismiss = {},
             isLoading = false
