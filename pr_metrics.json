@@ -19284,11 +19284,15 @@
     "time_to_first_approval_minutes": 97.7,
     "required_approvals_met_at": "2025-08-09T02:16:07Z",
     "time_to_required_approvals_minutes": 98.53333333333333,
-    "closed_at": null,
-    "merged_at": null,
-    "merged_by": null,
+    "closed_at": "2025-08-09T03:41:33Z",
+    "merged_at": "2025-08-09T03:41:33Z",
+    "merged_by": {
+      "login": "karimdeabes",
+      "id": 81706918,
+      "url": "https://github.com/karimdeabes"
+    },
     "week": "2025-W32",
-    "status": "approved",
+    "status": "merged",
     "diff_stats": {
       "additions": 143,
       "deletions": 137,
