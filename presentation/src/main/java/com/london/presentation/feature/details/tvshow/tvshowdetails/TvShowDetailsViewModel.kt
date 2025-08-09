@@ -67,7 +67,7 @@ class TvShowDetailsViewModel @Inject constructor(
         )
     }
 
-    fun initializeGetImagesData() {
+    private fun initializeGetImagesData() {
 
         tryToExecute(
             block = {
@@ -112,7 +112,7 @@ class TvShowDetailsViewModel @Inject constructor(
         )
     }
 
-    fun initializeGetTvShowDetailsData() {
+    private fun initializeGetTvShowDetailsData() {
         tryToExecute(
             block = {
                 val tvShowDetails = manageTvShowDetailsUseCase.getTvShowDetails(tvShowId)
