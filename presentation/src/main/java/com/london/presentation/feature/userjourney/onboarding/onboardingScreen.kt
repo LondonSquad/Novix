@@ -71,7 +71,7 @@ fun OnboardingScreen(
             .background(NovixTheme.colors.surface)
             .systemBarsPadding()
     ) {
-        OnboardingContent(
+        Content(
             pagerState = pagerState,
             uiState = uiState,
             viewModel = viewModel,
@@ -84,17 +84,6 @@ fun OnboardingScreen(
         )
     }
 }
-
-@Composable
-private fun HandlePagerStateChanges(
-    pagerState: PagerState,
-    viewModel: OnboardingViewModel
-) {
-    LaunchedEffect(pagerState.currentPage) {
-        viewModel.onPageChanged(pagerState.currentPage)
-    }
-}
-
 
 @Composable
 private fun HandleEffects(
@@ -120,8 +109,9 @@ private fun HandleEffects(
     }
 }
 
+
 @Composable
-private fun OnboardingContent(
+private fun Content(
     pagerState: PagerState,
     uiState: OnboardingUiState,
     viewModel: OnboardingViewModel,
@@ -150,6 +140,16 @@ private fun OnboardingContent(
             onPrevious = { viewModel.scrollPrevious(pagerState, scope) },
             onNext = { viewModel.scrollNext(pagerState, scope) }
         )
+    }
+}
+
+@Composable
+private fun HandlePagerStateChanges(
+    pagerState: PagerState,
+    viewModel: OnboardingViewModel
+) {
+    LaunchedEffect(pagerState.currentPage) {
+        viewModel.onPageChanged(pagerState.currentPage)
     }
 }
 

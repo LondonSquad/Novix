@@ -82,13 +82,13 @@ import com.london.presentation.utils.toLocalizedNumbers
 
 @Composable
 fun TvShowsDetailsScreen(
-    viewModel: TvShowDetailsViewModel = hiltViewModel(),
-    onNavigateBack: () -> Unit = {},
-    onNavigateToEpisodeDetails: (tvShowId: Int, episodeNumber: Int, seasonNumber: Int) -> Unit,
-    onNavigateToReviews: (tvShowId: Int, mediaType: Int) -> Unit,
+    onNavigateToLogin: () -> Unit,
     onNavigateToCast: (Int) -> Unit,
     onNavigateToGenre: (Int) -> Unit,
-    onNavigateToLogin: () -> Unit
+    onNavigateToReviews: (tvShowId: Int, mediaType: Int) -> Unit,
+    onNavigateBack: () -> Unit = {},
+    onNavigateToEpisodeDetails: (tvShowId: Int, episodeNumber: Int, seasonNumber: Int) -> Unit,
+    viewModel: TvShowDetailsViewModel = hiltViewModel()
 ) {
     val uiState by viewModel.state.collectAsStateWithLifecycle()
     val effect by viewModel.effect.collectAsState(null)
@@ -124,7 +124,7 @@ fun TvShowsDetailsScreen(
         isError = uiState.error != null,
         onRetry = viewModel::onRetry
     ) {
-        TvShowsDetailScreenContent(
+        Content(
             uiState = uiState,
             tvShowDetailsContract = viewModel
         )
@@ -132,10 +132,10 @@ fun TvShowsDetailsScreen(
 }
 
 @Composable
-fun TvShowsDetailScreenContent(
-    modifier: Modifier = Modifier,
+private fun Content(
     uiState: TvShowDetailsUiState,
-    tvShowDetailsContract: TvShowDetailsContract
+    tvShowDetailsContract: TvShowDetailsContract,
+    modifier: Modifier = Modifier
 ) {
     val uriHandler = LocalUriHandler.current
     val lazyListState = rememberLazyListState()

@@ -60,7 +60,7 @@ fun WelcomeScreen(
             )
         }
     }
-    WelcomeFooterSection(
+    Content(
         onNavigateLogin = onNavigateLogin,
         onNavigateContinue = onNavigateContinue,
         modifier = Modifier.padding(
@@ -71,7 +71,7 @@ fun WelcomeScreen(
 }
 
 @Composable
-private fun WelcomeFooterSection(
+private fun Content(
     onNavigateLogin: () -> Unit,
     onNavigateContinue: () -> Unit,
     modifier: Modifier = Modifier

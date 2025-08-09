@@ -37,6 +37,65 @@ class EpisodeDetailsViewModel @Inject constructor(
         loadVideoProvider()
     }
 
+    override fun onBackClicked() {
+        emitEffect(EpisodeDetailsEffect.NavigationBack)
+    }
+
+    override fun onLoginClick() = emitEffect(EpisodeDetailsEffect.OnLoginNavigation)
+
+    override fun onRateBottomSheetClick() {
+        tryToExecute(
+            block = { authenticationUseCase.isLoggedIn() },
+            onSuccess = { isLoggedIn ->
+                if (isLoggedIn)
+                    updateState { copy(isRateBottomSheetVisible = isRateBottomSheetVisible.not()) }
+                else
+                    updateState {
+                        copy(
+                            isGuestUserBottomSheetVisible = isGuestUserBottomSheetVisible.not(),
+                            isGuestUser = true
+                        )
+
+                    }
+            },
+            onError = { errorState ->
+                updateState { copy(error = errorState) }
+            }
+        )
+    }
+
+    override fun onSelectRatingClick(rating: Int) {
+        tryToExecute(
+            block = {
+                ratingUseCase.addTvEpisodeRatingById(
+                    id = tvShowId,
+                    rating = rating,
+                    episodeNumber = episodeNumber,
+                    seasonNumber = seasonNumber
+                )
+            },
+            onSuccess = {
+                updateState {
+                    copy(
+                        selectedRating = rating,
+                        isRateBottomSheetVisible = false,
+                        isSuccessfullyRated = true,
+                        isRated = true
+                    )
+                }
+            },
+            onError = { errorState ->
+                updateState {
+                    copy(
+                        error = errorState,
+                        isSuccessfullyRated = false
+                    )
+                }
+            },
+            onCompleted = { updateState { copy(isLoading = false) } },
+        )
+    }
+
     @SuppressLint("SuspiciousIndentation")
     private fun loadEpisodeRating(){
        tryToExecute(
@@ -119,64 +178,4 @@ class EpisodeDetailsViewModel @Inject constructor(
         loadEpisodeDetails()
         loadVideoProvider()
     }
-
-    override fun onBackClicked() {
-        emitEffect(EpisodeDetailsEffect.NavigationBack)
-    }
-
-    override fun onLoginClick() = emitEffect(EpisodeDetailsEffect.OnLoginNavigation)
-
-    override fun onRateBottomSheetClick() {
-        tryToExecute(
-            block = { authenticationUseCase.isLoggedIn() },
-            onSuccess = { isLoggedIn ->
-                if (isLoggedIn)
-                    updateState { copy(isRateBottomSheetVisible = isRateBottomSheetVisible.not()) }
-                else
-                    updateState {
-                        copy(
-                            isGuestUserBottomSheetVisible = isGuestUserBottomSheetVisible.not(),
-                            isGuestUser = true
-                        )
-
-                    }
-            },
-            onError = { errorState ->
-                updateState { copy(error = errorState) }
-            }
-        )
-    }
-
-    override fun onSelectRatingClick(rating: Int) {
-        tryToExecute(
-            block = {
-                ratingUseCase.addTvEpisodeRatingById(
-                    id = tvShowId,
-                    rating = rating,
-                    episodeNumber = episodeNumber,
-                    seasonNumber = seasonNumber
-                )
-            },
-            onSuccess = {
-                updateState {
-                    copy(
-                        selectedRating = rating,
-                        isRateBottomSheetVisible = false,
-                        isSuccessfullyRated = true,
-                        isRated = true
-                    )
-                }
-            },
-            onError = { errorState ->
-                updateState {
-                    copy(
-                        error = errorState,
-                        isSuccessfullyRated = false
-                    )
-                }
-            },
-            onCompleted = { updateState { copy(isLoading = false) } },
-        )
-    }
-
 }

@@ -88,7 +88,7 @@ fun EpisodeDetailsScreen(
         isError = uiState.error != null,
         onRetry = viewModel::onRetry
     ) {
-        EpisodeDetailsScreenContent(
+        Content(
             uiState = uiState,
             episodeDetailsContract = viewModel,
             onNavigateToCast = onNavigateToCast
@@ -97,7 +97,7 @@ fun EpisodeDetailsScreen(
 }
 
 @Composable
-fun EpisodeDetailsScreenContent(
+private fun Content(
     modifier: Modifier = Modifier,
     uiState: EpisodeDetailsUiState,
     episodeDetailsContract: EpisodeDetailsContract,

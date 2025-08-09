@@ -1,7 +1,7 @@
 package com.london.presentation.feature.userjourney.splash
 
 sealed class SplashEffect {
-    object Onboarding : SplashEffect()
-    object Welcome : SplashEffect()
-    object Home : SplashEffect()
+    data object Home : SplashEffect()
+    data object Welcome : SplashEffect()
+    data object Onboarding : SplashEffect()
 }
