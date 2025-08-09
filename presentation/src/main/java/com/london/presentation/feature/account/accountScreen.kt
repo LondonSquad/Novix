@@ -32,12 +32,11 @@ fun AccountScreen(
     viewModel: AccountViewModel = hiltViewModel(),
     onNavigateToWatchingHistory: () -> Unit = {},
     onNavigateToMyRating: () -> Unit = {},
-    onNavigateToLogin: () -> Unit = {},
+    onNavigateToLogin: () -> Unit = {}
 ) {
     val uiState by viewModel.state.collectAsStateWithLifecycle()
     val effect by viewModel.effect.collectAsState(null)
     val uriHandler = LocalUriHandler.current
-
 
     effect?.Listen { currentEffect ->
         when (currentEffect) {
@@ -85,14 +84,15 @@ internal fun AccountScreenContent(
             )
         }
     }
+
     when (uiState.activeBottomSheet) {
         ActiveBottomSheet.Logout -> {
             LogoutBottomSheet(
-                logoutContract = accountContract,
+                onBottomSheetDismiss = accountContract::onBottomSheetDismiss,
+                onLogoutConfirmed = accountContract::onLogoutConfirmed,
                 isLoading = uiState.isLogoutLoading
             )
         }
-
         ActiveBottomSheet.ContentRestriction -> {
             ModalBottomSheet(
                 onDismissRequest = accountContract::onBottomSheetDismiss,
@@ -104,21 +104,24 @@ internal fun AccountScreenContent(
                 )
             }
         }
-
         ActiveBottomSheet.Appearance -> {
             AppearanceBottomSheet(
-                appearanceContract = accountContract,
-                appearanceState = uiState,
+                appTheme = uiState.appTheme,
+                onBottomSheetDismiss = accountContract::onBottomSheetDismiss,
+                onDarkModeSelected = accountContract::onDarkModeSelected,
+                onLightModeSelected = accountContract::onLightModeSelected,
+                onAppearanceModeSave = accountContract::onAppearanceModeSave,
             )
         }
-
         ActiveBottomSheet.Language -> {
             LanguageBottomSheet(
-                languageContract = accountContract,
-                uiState = uiState
+                appLanguage = uiState.appLanguage,
+                onBottomSheetDismiss = accountContract::onBottomSheetDismiss,
+                onEnglishSelected = accountContract::onEnglishSelected,
+                onArabicSelected = accountContract::onArabicSelected,
+                onLanguageSettingsSave = accountContract::onLanguageSettingsSave,
             )
         }
-
         else -> {}
     }
 }
