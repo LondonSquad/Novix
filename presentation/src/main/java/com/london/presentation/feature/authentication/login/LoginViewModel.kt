@@ -1,0 +1,110 @@
+package com.london.presentation.feature.authentication.login
+
+import android.app.Application
+import androidx.compose.ui.text.input.TextFieldValue
+import com.london.domain.usecase.authentication.AuthenticationUseCase
+import com.london.presentation.R
+import com.london.presentation.shared.base.BaseViewModel
+import com.london.presentation.shared.base.ErrorState
+import dagger.hilt.android.lifecycle.HiltViewModel
+import javax.inject.Inject
+
+@HiltViewModel
+class LoginViewModel @Inject constructor(
+    private val context: Application,
+    private val authenticationUseCase: AuthenticationUseCase,
+) : BaseViewModel<LoginUiState, LoginEffect>(LoginUiState()),
+    LoginContract {
+
+    override fun onUsernameChanged(username: TextFieldValue) {
+        val trimmedUsername = username.copy(text = username.text.trim())
+        updateState {
+            copy(
+                username = trimmedUsername,
+                isLoginEnabled = username.text.isNotEmpty() && password.text.isNotEmpty(),
+                error = null
+            )
+        }
+    }
+
+    override fun onPasswordChanged(password: TextFieldValue) {
+        updateState {
+            copy(
+                password = password,
+                isLoginEnabled = username.text.isNotEmpty()
+                        && password.text.isNotEmpty() && password.text.length >= 4,
+                error = null
+            )
+        }
+    }
+
+
+    override fun onPasswordVisibilityToggled() {
+        updateState {
+            copy(passwordVisible = !passwordVisible)
+        }
+    }
+
+    override fun onCreateAccountClick() {
+        emitEffect(LoginEffect.NavigateToWebViewRegistration)
+    }
+
+    override fun onForgotPasswordClick() {
+        emitEffect(LoginEffect.NavigateToForgotPassword(FORGOT_PASSWORD_URL))
+    }
+
+    override fun onLoginClick() {
+        val currentState = state.value
+        val username = currentState.username.text
+        val password = currentState.password.text
+
+        if (username.isEmpty() || password.isEmpty()) return
+
+        tryToExecute(
+            block = { authenticationUseCase.login(username, password) },
+            onStart = { updateState { copy(isLoading = true, error = null) } },
+            onSuccess = { isSuccess: Boolean ->
+                if (isSuccess)
+                    emitEffect(LoginEffect.NavigateToHome)
+                else
+                    updateState { copy(error = ErrorState.RequestFailed(context.getString(R.string.login_failed))) }
+
+            },
+            onError = {
+                updateState { copy(error = ErrorState.RequestFailed(context.getString(R.string.login_failed))) }
+            },
+            onCompleted = {
+                updateState { copy(isLoading = false) }
+            }
+        )
+    }
+
+    override fun onLoginAsGuestClick() {
+        tryToExecute(
+            block = { authenticationUseCase.loginAsGuest() },
+            onStart = { updateState { copy(isGuestLoginLoading = true, error = null) } },
+            onSuccess = { isSuccess: Boolean ->
+                if (isSuccess) {
+                    emitEffect(LoginEffect.NavigateToHome)
+                } else {
+                    updateState { copy(error = ErrorState.RequestFailed(context.getString(R.string.guest_login_failed))) }
+                }
+            },
+            onError = {
+                updateState { copy(error = ErrorState.RequestFailed(context.getString(R.string.guest_login_failed))) }
+            },
+            onCompleted = {
+                updateState { copy(isGuestLoginLoading = false) }
+            }
+        )
+    }
+
+    override fun onNavigateBack() {
+        emitEffect(LoginEffect.NavigateBack)
+    }
+
+    companion object {
+        private const val CREATE_ACCOUNT_URL = "https://www.themoviedb.org/signup"
+        private const val FORGOT_PASSWORD_URL = "https://www.themoviedb.org/reset-password"
+    }
+}

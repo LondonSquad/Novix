@@ -13,7 +13,7 @@ import androidx.compose.ui.unit.dp
 import androidx.paging.compose.LazyPagingItems
 import com.london.designsystem.theme.NovixTheme
 import com.london.domain.entity.TvShow
-import com.london.presentation.utils.gridColmuns
+import com.london.presentation.utils.gridColumns
 
 @Composable
 fun TvShowLayOut(
@@ -23,7 +23,7 @@ fun TvShowLayOut(
     onTvShowClick: (TvShow) -> Unit
 ) {
     LazyVerticalGrid(
-        columns = GridCells.Fixed(gridColmuns()),
+        columns = GridCells.Fixed(gridColumns()),
         modifier = Modifier
             .fillMaxSize()
             .padding(horizontal = 16.dp),

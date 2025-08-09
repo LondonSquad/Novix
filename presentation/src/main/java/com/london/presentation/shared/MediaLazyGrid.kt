@@ -24,7 +24,7 @@ import com.london.designsystem.component.CircularLoading
 import com.london.designsystem.component.EmptyLayout
 import com.london.designsystem.component.TopBar
 import com.london.designsystem.theme.NovixTheme
-import com.london.presentation.utils.gridColmuns
+import com.london.presentation.utils.gridColumns
 
 @Composable
 fun <T> MediaLazyGrid(
@@ -76,7 +76,7 @@ fun <T> MediaLazyGrid(
 
             else -> {
                 LazyVerticalGrid(
-                    columns = GridCells.Fixed(gridColmuns()),
+                    columns = GridCells.Fixed(gridColumns()),
                     contentPadding = PaddingValues(
                         top = 12.dp,
                         bottom = 16.dp

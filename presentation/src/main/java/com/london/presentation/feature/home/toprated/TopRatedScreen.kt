@@ -41,7 +41,7 @@ import com.london.presentation.shared.buildscreen.BuildScreen
 import com.london.presentation.utils.Listen
 import com.london.presentation.utils.MovieGenre
 import com.london.presentation.utils.TvShowGenre
-import com.london.presentation.utils.gridColmuns
+import com.london.presentation.utils.gridColumns
 import com.london.presentation.utils.isLoading
 
 @Composable
@@ -128,7 +128,7 @@ private fun Content(
         val moviesPagingItems = state.movies.collectAsLazyPagingItems()
         val tvSeriesPagingItems = state.tvSeries.collectAsLazyPagingItems()
         LazyVerticalGrid(
-            columns = GridCells.Fixed(gridColmuns()),
+            columns = GridCells.Fixed(gridColumns()),
             contentPadding = PaddingValues(
                 top = 12.dp, bottom = 16.dp, start = 16.dp, end = 16.dp
             ),

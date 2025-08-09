@@ -69,7 +69,7 @@ import com.london.presentation.shared.GenresSection
 import com.london.presentation.shared.HomeCard
 import com.london.presentation.shared.buildscreen.NetworkErrorScreen
 import com.london.presentation.utils.Listen
-import com.london.presentation.utils.gridColmuns
+import com.london.presentation.utils.gridColumns
 
 @Composable
 fun HomeScreen(
@@ -200,7 +200,7 @@ private fun Content(
 
                     Box(modifier = modifier.fillMaxSize()) {
                         LazyVerticalGrid(
-                            columns = GridCells.Fixed(gridColmuns()),
+                            columns = GridCells.Fixed(gridColumns()),
                             contentPadding = PaddingValues(
                                 top = 8.dp,
                                 bottom = 16.dp,
