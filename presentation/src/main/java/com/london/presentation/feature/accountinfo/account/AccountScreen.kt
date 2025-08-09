@@ -30,7 +30,7 @@ fun AccountScreen(
     onNavigateToLogin: () -> Unit = {},
     onNavigateToMyRating: () -> Unit = {},
     onNavigateToWatchingHistory: () -> Unit = {},
-    viewModel: AccountViewModel = hiltViewModel()
+    viewModel: AccountViewModel = hiltViewModel(),
 ) {
     val uiState by viewModel.state.collectAsStateWithLifecycle()
     val effect by viewModel.effect.collectAsState(null)

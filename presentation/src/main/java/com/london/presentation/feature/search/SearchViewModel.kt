@@ -203,7 +203,7 @@ class SearchViewModel @Inject constructor(
     }
 
     override fun onTvShowClick(tvShowId: Int) {
-        emitEffect(SearchEffect.TvNavigation(tvId = tvShowId))
+        emitEffect(SearchEffect.TvShowNavigation(tvId = tvShowId))
     }
 
     override fun onRetry() {

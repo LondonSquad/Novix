@@ -19,6 +19,3 @@ data class TopRatedUiState(
     val tvSeries: Flow<PagingData<TopRatedTvSeries>> = emptyFlow(),
     val selectedMediaCategory: MediaCategory = MediaCategory.MOVIES
 )
-
-
-

@@ -28,11 +28,11 @@ fun WebViewRegistrationScreen(
             is RegistrationEffect.RegistrationComplete -> onRegistrationComplete()
         }
     }
+
     Content(
         state = uiState,
         contract = viewModel
     )
-
 }
 
 @Composable
