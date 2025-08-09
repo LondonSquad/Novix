@@ -11,7 +11,7 @@ import com.london.domain.usecase.GetEpisodesByTvShowSeason
 import com.london.domain.usecase.GetImagesById
 import com.london.domain.usecase.authentication.AuthenticationUseCase
 import com.london.domain.usecase.details.tvshow.ManageTvShowDetailsUseCase
-import com.london.domain.usecase.rating.RatingUseCase
+import com.london.domain.usecase.rating.ManageRatingUseCase
 import com.london.domain.usecase.recent.viewed.ManageRecentViewedUseCase
 import com.london.domain.usecase.recent.watched.tvshow.ManageRecentTvShowWatchedUseCase
 import com.london.presentation.navigation.Screen
@@ -39,7 +39,7 @@ class TvShowDetailsViewModelTest {
     private lateinit var manageTvShowDetailsUseCase: ManageTvShowDetailsUseCase
     private lateinit var manageRecentTvShowWatchedUseCase: ManageRecentTvShowWatchedUseCase
     private lateinit var manageRecentViewedUseCase: ManageRecentViewedUseCase
-    private lateinit var ratingUseCase: RatingUseCase
+    private lateinit var ratingUseCase: ManageRatingUseCase
     private lateinit var authenticationUseCase: AuthenticationUseCase
     private val savedStateHandle = mockk<SavedStateHandle>(relaxed = true)
     private var viewModel: TvShowDetailsViewModel? = null
