@@ -34,6 +34,7 @@ import com.london.presentation.shared.base.ErrorState
 import com.london.presentation.shared.buildscreen.BuildScreen
 import com.london.presentation.utils.Listen
 import com.london.presentation.utils.gridColmuns
+import com.london.presentation.utils.toLocalizedNumbers
 import com.london.designsystem.R as dsR
 
 @Composable
@@ -128,7 +129,7 @@ private fun MyRatingContent(
                         isSaved = false,
                         onSaveClick = { },
                         myRatingList = true,
-                        rate = item.rating,
+                        rate = item.rating.toLocalizedNumbers(),
                         onDeleteClick = { contract.onDelete(item.id) },
                         modifier = Modifier.clickable {
                             when {
@@ -168,17 +169,17 @@ fun RatingChipsRow(
         horizontalArrangement = Arrangement.spacedBy(8.dp)
     ) {
         NovixChip(
-            text = "All",
+            text = stringResource(R.string.all),
             isSelected = selected == RatingCategory.All,
             onClick = { onSelect(RatingCategory.All) }
         )
         NovixChip(
-            text = "Movies",
+            text = stringResource(R.string.Movies),
             isSelected = selected == RatingCategory.Movies,
             onClick = { onSelect(RatingCategory.Movies) }
         )
         NovixChip(
-            text = "TV Shows",
+            text = stringResource(R.string.TV_Shows),
             isSelected = selected == RatingCategory.TvShows,
             onClick = { onSelect(RatingCategory.TvShows) }
         )
