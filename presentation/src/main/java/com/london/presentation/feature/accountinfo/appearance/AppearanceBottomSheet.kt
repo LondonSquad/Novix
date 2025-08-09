@@ -140,7 +140,7 @@ private fun Content(
 
 @ThemePreviews
 @Composable
-fun AppearanceBottomSheetContentPreview() {
+private fun AppearanceBottomSheetContentPreview() {
     Content(
         onDark = {},
         onLight = {},

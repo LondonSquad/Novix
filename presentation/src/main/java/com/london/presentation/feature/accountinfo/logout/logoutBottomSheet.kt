@@ -118,7 +118,7 @@ private fun Content(
 
 @ThemePreviews
 @Composable
-fun LogoutBottomSheetContentPreview() {
+private fun LogoutBottomSheetContentPreview() {
     NovixTheme {
         Content(
             onLogout = {},
