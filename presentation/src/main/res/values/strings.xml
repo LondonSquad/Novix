@@ -154,5 +154,5 @@
     <string name="list_deletion_success">Deleted list successfully</string>
     <string name="list_deletion_failed">List deletion failed</string>
     <string name="close">close</string>
-    <string name="my_list_screen">My List Screen</string>
+    <string name="my_list_screen">My Lists</string>
 </resources>
