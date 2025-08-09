@@ -20,6 +20,7 @@ import com.london.presentation.feature.account.appearance.AppearanceBottomSheet
 import com.london.presentation.feature.account.language.LanguageBottomSheet
 import com.london.presentation.feature.account.logout.LogoutBottomSheet
 import com.london.presentation.feature.account.state.AccountUiState
+import com.london.presentation.feature.account.state.ActiveBottomSheet
 import com.london.presentation.shared.accountComponent.ContentRestrictionBottomSheet
 import com.london.presentation.shared.accountComponent.LoggedInContent
 import com.london.presentation.shared.accountComponent.NotLoggedInContent
@@ -31,13 +32,11 @@ fun AccountScreen(
     viewModel: AccountViewModel = hiltViewModel(),
     onNavigateToWatchingHistory: () -> Unit = {},
     onNavigateToMyRating: () -> Unit = {},
-    onNavigateToChangePassword: () -> Unit = {},
-    onNavigateToLogin: () -> Unit = {},
+    onNavigateToLogin: () -> Unit = {}
 ) {
     val uiState by viewModel.state.collectAsStateWithLifecycle()
     val effect by viewModel.effect.collectAsState(null)
     val uriHandler = LocalUriHandler.current
-
 
     effect?.Listen { currentEffect ->
         when (currentEffect) {
@@ -58,18 +57,6 @@ fun AccountScreen(
             uiState = uiState,
             accountContract = viewModel,
         )
-    }
-
-    if (uiState.showContentRestrictionBottomSheet) {
-        ModalBottomSheet(
-            onDismissRequest = viewModel::onBottomSheetDismiss,
-            state = rememberModalBottomSheetState(skipPartiallyExpanded = true),
-        ) {
-            ContentRestrictionBottomSheet(
-                currentLevel = uiState.currentContentRestriction,
-                onSaveClick = viewModel::onContentRestrictionSave
-            )
-        }
     }
 }
 
@@ -97,23 +84,44 @@ internal fun AccountScreenContent(
             )
         }
     }
-    if (uiState.isAppearanceBottomSheetVisible) {
-        AppearanceBottomSheet(
-            appearanceContract = accountContract,
-            appearanceState = uiState,
-        )
-    }
-    if (uiState.isLogoutBottomSheetVisible) {
-        LogoutBottomSheet(
-            logoutContract = accountContract,
-            isLoading = uiState.isLogoutLoading
-        )
-    }
 
-    if (uiState.isLanguageBottomSheetVisible) {
-        LanguageBottomSheet(
-            languageContract = accountContract,
-            uiState = uiState
-        )
+    when (uiState.activeBottomSheet) {
+        ActiveBottomSheet.Logout -> {
+            LogoutBottomSheet(
+                onBottomSheetDismiss = accountContract::onBottomSheetDismiss,
+                onLogoutConfirmed = accountContract::onLogoutConfirmed,
+                isLoading = uiState.isLogoutLoading
+            )
+        }
+        ActiveBottomSheet.ContentRestriction -> {
+            ModalBottomSheet(
+                onDismissRequest = accountContract::onBottomSheetDismiss,
+                state = rememberModalBottomSheetState(skipPartiallyExpanded = true),
+            ) {
+                ContentRestrictionBottomSheet(
+                    currentLevel = uiState.currentContentRestriction,
+                    onSaveClick = accountContract::onContentRestrictionSave
+                )
+            }
+        }
+        ActiveBottomSheet.Appearance -> {
+            AppearanceBottomSheet(
+                appTheme = uiState.appTheme,
+                onBottomSheetDismiss = accountContract::onBottomSheetDismiss,
+                onDarkModeSelected = accountContract::onDarkModeSelected,
+                onLightModeSelected = accountContract::onLightModeSelected,
+                onAppearanceModeSave = accountContract::onAppearanceModeSave,
+            )
+        }
+        ActiveBottomSheet.Language -> {
+            LanguageBottomSheet(
+                appLanguage = uiState.appLanguage,
+                onBottomSheetDismiss = accountContract::onBottomSheetDismiss,
+                onEnglishSelected = accountContract::onEnglishSelected,
+                onArabicSelected = accountContract::onArabicSelected,
+                onLanguageSettingsSave = accountContract::onLanguageSettingsSave,
+            )
+        }
+        else -> {}
     }
 }
