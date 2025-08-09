@@ -1,6 +1,5 @@
 package com.london.data.di
 
-import com.london.data.local.database.dao.search.GenreInterestDao
 import com.london.data.local.model.home.popular.PopularSectionLocal
 import com.london.data.local.model.home.topRated.TopRatedLocal
 import com.london.data.local.model.recent.search.RecentSearchLocal
@@ -183,11 +182,9 @@ object RepositoryModule {
     @Provides
     @Singleton
     fun provideSearchRepository(
-        genreInterestDao: GenreInterestDao,
         remoteDataSource: SearchRemoteDataSource,
         crashReporter: CrashReporter
     ): SearchRepository = SearchRepositoryImpl(
-        genreInterestDao = genreInterestDao,
         remoteDataSource = remoteDataSource,
         crashReporter = crashReporter
     )

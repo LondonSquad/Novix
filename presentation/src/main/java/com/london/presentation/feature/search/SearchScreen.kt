@@ -272,7 +272,6 @@ fun SearchScreenContent(
                                                     isMovieSaved = { false },
                                                     onMovieClick = {
                                                         viewModel.addToRecentViewed(it.toRecentViewed())
-                                                        viewModel.onClickMovie(it.genreIds)
                                                         interactionListener.onMovieClick(it.id)
                                                     },
                                                     modifier = Modifier.padding(horizontal = 16.dp)
@@ -305,12 +304,6 @@ fun SearchScreenContent(
                                                     isTvShowSaved = { false },
                                                     onTvShowClick = {
                                                         viewModel.addToRecentViewed(it.toRecentViewed())
-                                                        it.genres.forEach { genreId ->
-                                                            viewModel.incrementGenreInterest(
-                                                                genreId,
-                                                                "tv"
-                                                            )
-                                                        }
                                                         viewModel.onTvShowClick(it.id)
                                                     }
                                                 )

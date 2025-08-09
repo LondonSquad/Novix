@@ -14,7 +14,6 @@ import com.london.data.local.database.dao.recent.search.RecentSearchDao
 import com.london.data.local.database.dao.recent.viewed.RecentViewedDao
 import com.london.data.local.database.dao.recent.watched.movie.RecentWatchedMoviesDao
 import com.london.data.local.database.dao.recent.watched.tvshow.RecentWatchedTvShowsDao
-import com.london.data.local.database.dao.search.GenreInterestDao
 import com.london.data.local.model.home.popular.PopularSectionLocal
 import com.london.data.local.model.home.topRated.TopRatedLocal
 import com.london.data.local.model.home.upcoming.UpComingSectionLocal
@@ -22,7 +21,6 @@ import com.london.data.local.model.recent.search.RecentSearchLocal
 import com.london.data.local.model.recent.viewed.RecentViewedLocal
 import com.london.data.local.model.recent.watched.RecentWatchedMovieLocal
 import com.london.data.local.model.recent.watched.RecentWatchedTvShowLocal
-import com.london.data.local.model.search.GenreInterestEntity
 
 @Database(
     entities = [
@@ -32,8 +30,7 @@ import com.london.data.local.model.search.GenreInterestEntity
         RecentWatchedTvShowLocal::class,
         TopRatedLocal::class,
         UpComingSectionLocal::class,
-        PopularSectionLocal::class,
-        GenreInterestEntity::class
+        PopularSectionLocal::class
     ],
     version = 1,
     exportSchema = false
@@ -52,5 +49,4 @@ abstract class NovixDatabase : RoomDatabase() {
     abstract fun popularSectionDao(): PopularSectionDao
     abstract fun upComingSectionDao(): UpcomingSectionDao
     abstract fun topRatedDao(): TopRatedDao
-    abstract fun genreInterestDao(): GenreInterestDao
 }

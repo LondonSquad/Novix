@@ -5,7 +5,6 @@ import com.london.domain.entity.recent.RecentSearch
 import com.london.domain.entity.recent.RecentViewed
 import com.london.domain.usecase.GetActorsUseCase
 import com.london.domain.usecase.GetMoviesUseCase
-import com.london.domain.usecase.IncrementGenreInterestUseCase
 import com.london.domain.usecase.details.tvshow.ManageTvShowDetailsUseCase
 import com.london.domain.usecase.recent.search.ManageRecentSearchUseCase
 import com.london.domain.usecase.recent.viewed.ManageRecentViewedUseCase
@@ -25,7 +24,6 @@ class SearchViewModel @Inject constructor(
     private val getMoviesUseCase: GetMoviesUseCase,
     private val manageTvShowDetailsUseCase: ManageTvShowDetailsUseCase,
     private val manageRecentSearchUseCase: ManageRecentSearchUseCase,
-    private val incrementGenreInterestUseCase: IncrementGenreInterestUseCase,
     private val manageRecentViewedUseCase: ManageRecentViewedUseCase,
 
     ) : BaseViewModel<SearchUiState, SearchEffect>(SearchUiState()), SearchContract {
@@ -166,12 +164,6 @@ class SearchViewModel @Inject constructor(
         )
     }
 
-    override fun onClickMovie(genresListId: List<Int>) {
-        genresListId.forEach { genreId ->
-            incrementGenreInterest(genreId, "tv")
-        }
-    }
-
     override fun clearRecentViewed() {
         updateState { copy(recentViewed = emptyList()) }
 
@@ -251,21 +243,6 @@ class SearchViewModel @Inject constructor(
 
     override fun onTvShowClick(tvShowId: Int) {
         emitEffect(SearchEffect.TvNavigation(tvId = tvShowId))
-    }
-
-    fun incrementGenreInterest(genreId: Int, mediaType: String) {
-        tryToExecute(
-            block = {
-                incrementGenreInterestUseCase.invoke(genreId, mediaType)
-            },
-            onStart = { },
-            onSuccess = { },
-            onError = { errorState ->
-                updateState { copy(error = errorState) }
-            },
-            onCompleted = { },
-            checkSuccess = { true }
-        )
     }
 
     fun performSearch(query: String, category: SearchCategory) {

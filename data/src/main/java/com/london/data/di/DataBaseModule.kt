@@ -60,9 +60,4 @@ object DataBaseModule {
     @Singleton
     fun provideUpComingMoviesDao(database: NovixDatabase) =
         database.upComingSectionDao()
-    
-    @Provides
-    @Singleton
-    fun provideGenreInterestDao(database: NovixDatabase) =
-        database.genreInterestDao()
 }
