@@ -56,9 +56,9 @@ fun TopRatedScreen(
 
     effect?.Listen { currentEffect ->
         when (currentEffect) {
+            is TopRatedEffect.NavigateBack -> onNavigateBack()
             is TopRatedEffect.NavigateToMovieDetails -> onNavigateMovie(currentEffect.id)
             is TopRatedEffect.NavigateToTvShowDetails -> onNavigateTvShow(currentEffect.id)
-            is TopRatedEffect.NavigateBack -> onNavigateBack()
         }
     }
 

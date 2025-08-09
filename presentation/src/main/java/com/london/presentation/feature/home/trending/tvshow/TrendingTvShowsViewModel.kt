@@ -24,7 +24,8 @@ class TrendingTvShowsViewModel @Inject constructor(
         initializeTvShows()
     }
 
-    override fun onTvShowClick(id: Int) = emitEffect(TrendingTvShowsEffect.NavigateToTvShow(id))
+    override fun onTvShowClick(id: Int) =
+        emitEffect(TrendingTvShowsEffect.NavigateToTvShow(id))
 
     override fun onBack() = emitEffect(TrendingTvShowsEffect.NavigateBack)
 

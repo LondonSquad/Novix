@@ -57,13 +57,39 @@ class HomeViewModel @Inject constructor(
         initializePopularMedia()
     }
 
-    override fun onMovieClick(id: Int) {
+    override fun onMovieClick(id: Int) =
         emitEffect(HomeScreenEffect.NavigationMovieDetails(id))
+
+
+    override fun onTvShowClick(id: Int) =
+        emitEffect(HomeScreenEffect.NavigationTvShowDetails(id))
+
+
+    override fun onMovieGenreSelect(genre: MovieGenre) {
+        if (genre == state.value.selectedMovieGenre) return
+        updateState { copy(selectedMovieGenre = genre) }
+        loadUpcomingMovies(categoryId = if (genre == MovieGenre.All) null else genre.id)
     }
 
-    override fun onTvShowClick(id: Int) {
-        emitEffect(HomeScreenEffect.NavigationTvShowDetails(id))
-    }
+    override fun onTopRatedClick() =
+        emitEffect(HomeScreenEffect.NavigationTopRated)
+
+
+    override fun onContinueWatchingClick() =
+        emitEffect(HomeScreenEffect.NavigationContinueWatching)
+
+
+    override fun onTrendingMoviesCardClicked() =
+        emitEffect(HomeScreenEffect.NavigationTrendingMovie)
+
+
+    override fun onTrendingTvShowsCardClicked() =
+        emitEffect(HomeScreenEffect.NavigationTrendingTvShows)
+
+
+    override fun onTrendingActorsCardClicked() =
+        emitEffect(HomeScreenEffect.NavigationTrendingActor)
+
 
     private fun loadUpcomingMovies(categoryId: Int?) {
         runCatching {
@@ -92,32 +118,6 @@ class HomeViewModel @Inject constructor(
                 },
             )
         }
-    }
-
-    override fun onMovieGenreSelect(genre: MovieGenre) {
-        if (genre == state.value.selectedMovieGenre) return
-        updateState { copy(selectedMovieGenre = genre) }
-        loadUpcomingMovies(categoryId = if (genre == MovieGenre.All) null else genre.id)
-    }
-
-    override fun onTopRatedClick() {
-        emitEffect(HomeScreenEffect.NavigationTopRated)
-    }
-
-    override fun onContinueWatchingClick() {
-        emitEffect(HomeScreenEffect.NavigationContinueWatching)
-    }
-
-    override fun onTrendingMoviesCardClicked() {
-        emitEffect(HomeScreenEffect.NavigationTrendingMovie)
-    }
-
-    override fun onTrendingTvShowsCardClicked() {
-        emitEffect(HomeScreenEffect.NavigationTrendingTvShows)
-    }
-
-    override fun onTrendingActorsCardClicked() {
-        emitEffect(HomeScreenEffect.NavigationTrendingActor)
     }
 
     private fun initializeTopRatedMedia() {
