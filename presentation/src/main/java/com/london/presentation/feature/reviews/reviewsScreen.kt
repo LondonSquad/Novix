@@ -63,14 +63,14 @@ fun ReviewsScreen(
     val effect by viewModel.effect.collectAsState(initial = null)
 
     effect?.Listen { onNavigateBack() }
-    ReviewsScreenContent(
+    Content(
         uiState = uiState,
         reviewContract = viewModel,
     )
 }
 
 @Composable
-fun ReviewsScreenContent(
+private fun Content(
     uiState: ReviewsUiState,
     reviewContract: ReviewContract
 ) {

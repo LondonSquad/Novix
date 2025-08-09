@@ -54,15 +54,15 @@ fun TrendingActorsScreen(
         emptyLayoutImage = R.drawable.img_no_result,
         pagingFlow = actorsLazyItems
     ) {
-        TrendingActorsContent(
+        Content(
             state = state,
-            contract = viewModel,
+            contract = viewModel
         )
     }
 }
 
 @Composable
-private fun TrendingActorsContent(
+private fun Content(
     state: TrendingActorsUiState = TrendingActorsUiState(),
     contract: TrendingActorsContract = defaultTrendingActorsContract(),
 ) {
@@ -105,5 +105,5 @@ private fun TrendingActorsContent(
 @Preview
 @Composable
 private fun Preview() = NovixTheme {
-    TrendingActorsContent()
+    Content()
 }

@@ -18,6 +18,20 @@ class TrendingTvShowsViewModel @Inject constructor(
         initializeTvShows()
     }
 
+    override fun onGenreSelected(genre: TvShowGenre) {
+        if (genre.id == state.value.selectedGenreId) return
+        updateState { copy(selectedGenreId = genre.id) }
+        initializeTvShows()
+    }
+
+    override fun onTvShowClick(id: Int) =
+        emitEffect(TrendingTvShowsEffect.NavigateToTvShow(id))
+
+    override fun onBack() = emitEffect(TrendingTvShowsEffect.NavigateBack)
+
+    override fun onRetry() = initializeTvShows()
+
+
     private fun initializeTvShows() {
         tryToExecute(
             block = {
@@ -45,17 +59,4 @@ class TrendingTvShowsViewModel @Inject constructor(
         )
     }
 
-    override fun onGenreSelected(genre: TvShowGenre) {
-        if (genre.id == state.value.selectedGenreId) return
-        updateState { copy(selectedGenreId = genre.id) }
-        initializeTvShows()
-    }
-
-    override fun onTvShowClick(id: Int) = emitEffect(TrendingTvShowsEffect.NavigateToTvShow(id))
-
-    override fun onBack() = emitEffect(TrendingTvShowsEffect.NavigateBack)
-
-    override fun onRetry() {
-        initializeTvShows()
-    }
 }
