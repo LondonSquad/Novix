@@ -37,6 +37,57 @@ class SearchViewModel @Inject constructor(
         setupSearchDebouncing()
     }
 
+    fun incrementGenreInterest(genreId: Int, mediaType: String) {
+        tryToExecute(
+            block = {
+                incrementGenreInterestUseCase.invoke(genreId, mediaType)
+            },
+            onStart = { },
+            onSuccess = { },
+            onError = { errorState ->
+                updateState { copy(error = errorState) }
+            },
+            onCompleted = { },
+            checkSuccess = { true }
+        )
+    }
+
+    fun performSearch(query: String, category: SearchCategory) {
+        val trimmedQuery = query.trim()
+
+        if (trimmedQuery.isEmpty()) {
+            clearSearchResults()
+            return
+        }
+
+        searchWithApi(trimmedQuery, category)
+    }
+
+    fun updateRecentData() {
+        tryToExecute(
+            block = {
+                val recentViewed = manageRecentViewedUseCase.getRecentViewed().reversed()
+                val recentSearches = manageRecentSearchUseCase.getRecentSearch()
+                Pair(recentViewed, recentSearches)
+            },
+            onSuccess = { (recentViewed, recentSearches) ->
+                updateState {
+                    copy(
+                        recentViewed = recentViewed,
+                        recentSearches = recentSearches
+                    )
+                }
+            },
+            onError = { errorState ->
+                updateState { copy(error = errorState) }
+            },
+        )
+    }
+
+    fun updateSearchState(updater: SearchUiState.() -> SearchUiState) {
+        updateState(updater)
+    }
+
     override fun onSearchQueryChange(newValue: TextFieldValue) {
         updateState { copy(searchQuery = newValue) }
 
@@ -210,57 +261,6 @@ class SearchViewModel @Inject constructor(
         updateState { copy(error = null) }
         updateRecentData()
         setupSearchDebouncing()
-    }
-
-    fun incrementGenreInterest(genreId: Int, mediaType: String) {
-        tryToExecute(
-            block = {
-                incrementGenreInterestUseCase.invoke(genreId, mediaType)
-            },
-            onStart = { },
-            onSuccess = { },
-            onError = { errorState ->
-                updateState { copy(error = errorState) }
-            },
-            onCompleted = { },
-            checkSuccess = { true }
-        )
-    }
-
-    fun performSearch(query: String, category: SearchCategory) {
-        val trimmedQuery = query.trim()
-
-        if (trimmedQuery.isEmpty()) {
-            clearSearchResults()
-            return
-        }
-
-        searchWithApi(trimmedQuery, category)
-    }
-
-    fun updateRecentData() {
-        tryToExecute(
-            block = {
-                val recentViewed = manageRecentViewedUseCase.getRecentViewed().reversed()
-                val recentSearches = manageRecentSearchUseCase.getRecentSearch()
-                Pair(recentViewed, recentSearches)
-            },
-            onSuccess = { (recentViewed, recentSearches) ->
-                updateState {
-                    copy(
-                        recentViewed = recentViewed,
-                        recentSearches = recentSearches
-                    )
-                }
-            },
-            onError = { errorState ->
-                updateState { copy(error = errorState) }
-            },
-        )
-    }
-
-    fun updateSearchState(updater: SearchUiState.() -> SearchUiState) {
-        updateState(updater)
     }
 
     private fun setupSearchDebouncing() {
