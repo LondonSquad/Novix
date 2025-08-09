@@ -24,17 +24,3 @@ data class TvShowRoleEntity(
     val character: String,
     val episodeCount: Int
 )
-
-data class TvShowCrewMemberEntity(
-    val adult: Boolean,
-    val gender: Int,
-    val id: Int,
-    val knownForDepartment: String,
-    val name: String,
-    val originalName: String,
-    val popularity: Double,
-    val profileUrl: String?,
-    val creditId: String,
-    val department: String,
-    val job: String
-)

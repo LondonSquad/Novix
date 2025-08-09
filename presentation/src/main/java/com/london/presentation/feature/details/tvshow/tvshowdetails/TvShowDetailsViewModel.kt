@@ -64,11 +64,10 @@ class TvShowDetailsViewModel @Inject constructor(
             onError = { errorState ->
                 updateState { copy(error = errorState) }
             },
-            checkSuccess = { tvShowId != 0 }
         )
     }
 
-    private fun initializeGetImagesData() {
+    fun initializeGetImagesData() {
 
         tryToExecute(
             block = {
@@ -81,11 +80,9 @@ class TvShowDetailsViewModel @Inject constructor(
                         tvImages = images,
                     )
                 }
-
             },
             onError = { error -> updateState { copy(error = error) } },
             onCompleted = { updateState { copy(isLoading = false) } },
-            checkSuccess = { tvShowId != 0 },
         )
     }
 
@@ -112,11 +109,10 @@ class TvShowDetailsViewModel @Inject constructor(
                 }
             },
             onCompleted = { updateState { copy(isLoading = false) } },
-            checkSuccess = { tvShowId != 0 }
         )
     }
 
-    private fun initializeGetTvShowDetailsData() {
+    fun initializeGetTvShowDetailsData() {
         tryToExecute(
             block = {
                 val tvShowDetails = manageTvShowDetailsUseCase.getTvShowDetails(tvShowId)
@@ -196,7 +192,6 @@ class TvShowDetailsViewModel @Inject constructor(
                 updateState { copy(error = errorState) }
             },
             onCompleted = { updateState { copy(isLoading = false) } },
-            checkSuccess = { tvShowId != 0 }
         )
     }
 

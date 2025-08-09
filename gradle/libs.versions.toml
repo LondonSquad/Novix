@@ -86,6 +86,7 @@ firebaseCrashlyticsKtx = "19.4.4"
 hilt = "2.57"
 androidHiltNavigation = "1.2.0"
 junitJupiterVersion = "5.8.1"
+turbine = "1.2.1"
 
 [libraries]
 # AndroidX Core
@@ -167,6 +168,7 @@ firebase-crashlytics = { group = "com.google.firebase", name = "firebase-crashly
 firebase-analytics = { group = "com.google.firebase", name = "firebase-analytics", version.ref = "firebaseAnalytics" }
 #noinspection SimilarGradleDependency
 mockk-agent-jvm = { module = "io.mockk:mockk-agent-jvm", version.ref = "mockk" }
+turbine = { module = "app.cash.turbine:turbine", version.ref = "turbine" }
 firebase-crashlytics-ktx = { group = "com.google.firebase", name = "firebase-crashlytics-ktx", version.ref = "firebaseCrashlyticsKtx" }
 
 # Compiler and runtime
@@ -271,7 +273,8 @@ testing = [
     "junit-jupiter",
     "mockk",
     "truth",
-    "mockk-agent-jvm"
+    "mockk-agent-jvm",
+    "turbine"
 ]
 
 android-testing = [
