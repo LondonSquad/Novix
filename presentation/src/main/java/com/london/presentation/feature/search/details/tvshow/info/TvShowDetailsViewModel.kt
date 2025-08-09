@@ -24,8 +24,8 @@ class TvShowDetailsViewModel @Inject constructor(
     private val ratingUseCase: RatingUseCase,
     private val getTvShowImages: GetImagesById,
     private val authenticationUseCase: AuthenticationUseCase,
-    private val getEpisodesByTvShowSeason: GetEpisodesByTvShowSeason,
     private val manageRecentViewedUseCase: ManageRecentViewedUseCase,
+    private val getEpisodesByTvShowSeason: GetEpisodesByTvShowSeason,
     private val manageTvShowDetailsUseCase: ManageTvShowDetailsUseCase,
     private val manageRecentTvShowWatchedUseCase: ManageRecentTvShowWatchedUseCase,
     savedStateHandle: SavedStateHandle,
@@ -41,7 +41,36 @@ class TvShowDetailsViewModel @Inject constructor(
         initializeGetCastData()
         initializeGetImagesData()
         initializeEpisodesBySeasons()
+    }
 
+    fun initializeEpisodesBySeasons(seasonNumber: Int = 1) {
+        tryToExecute(
+            block = {
+                val episodesBySeason = getEpisodesByTvShowSeason(tvShowId, seasonNumber)
+                val videoProvider = manageTvShowDetailsUseCase.getTvShowVideoProvider(tvShowId)
+                Triple(episodesBySeason.episodes, episodesBySeason, videoProvider)
+            },
+            onSuccess = { (episodes, episodeCount, videoProviders) ->
+                updateState {
+                    copy(
+                        tvShowEpisodes = episodes,
+                        tvShowEpisodeCountBySeason = episodeCount,
+                        videoProvider = videoProviders.firstOrNull()?.videoUrl.orEmpty()
+                    )
+                }
+            },
+            onError = { errorState ->
+                updateState { copy(error = errorState) }
+            },
+        )
+    }
+
+    fun onRetry() {
+        updateState { copy(error = null) }
+        initializeGetTvShowDetailsData()
+        initializeGetCastData()
+        initializeGetImagesData()
+        initializeEpisodesBySeasons()
     }
 
     override fun onEpisodeClicked(tvShowId: Int, episodeNumber: Int, seasonNumber: Int) {
@@ -116,38 +145,27 @@ class TvShowDetailsViewModel @Inject constructor(
 
     override fun onLoginClick() = emitEffect(TvShowDetailsEffect.OnLoginNavigation)
 
-    override fun onBackClicked() = emitEffect(TvShowDetailsEffect.NavigateBack)
+    override fun onBackClicked() {
+        emitEffect(TvShowDetailsEffect.NavigateBack)
+    }
 
-    fun initializeEpisodesBySeasons(seasonNumber: Int = 1) {
+    private fun initializeGetImagesData() {
 
         tryToExecute(
             block = {
-                val episodesBySeason = getEpisodesByTvShowSeason(tvShowId, seasonNumber)
-                val videoProvider = manageTvShowDetailsUseCase.getTvShowVideoProvider(tvShowId)
-                Triple(episodesBySeason.episodes, episodesBySeason, videoProvider)
+                getTvShowImages(tvShowId)
             },
-            onSuccess = { (episodes, episodeCount, videoProviders) ->
+            onStart = { updateState { copy(isLoading = true) } },
+            onSuccess = { images ->
                 updateState {
                     copy(
-                        tvShowEpisodes = episodes,
-                        tvShowEpisodeCountBySeason = episodeCount,
-                        videoProvider = videoProviders.firstOrNull()?.videoUrl.orEmpty()
+                        tvImages = images,
                     )
                 }
             },
-            onError = { errorState ->
-                updateState { copy(error = errorState) }
-            },
-            checkSuccess = { tvShowId != 0 }
+            onError = { error -> updateState { copy(error = error) } },
+            onCompleted = { updateState { copy(isLoading = false) } },
         )
-    }
-
-    fun onRetry() {
-        updateState { copy(error = null) }
-        initializeGetTvShowDetailsData()
-        initializeGetCastData()
-        initializeGetImagesData()
-        initializeEpisodesBySeasons()
     }
 
     private fun initializeGetCastData() {
@@ -173,28 +191,6 @@ class TvShowDetailsViewModel @Inject constructor(
                 }
             },
             onCompleted = { updateState { copy(isLoading = false) } },
-            checkSuccess = { tvShowId != 0 }
-        )
-    }
-
-    private fun initializeGetImagesData() {
-
-        tryToExecute(
-            block = {
-                getTvShowImages(tvShowId)
-            },
-            onStart = { updateState { copy(isLoading = true) } },
-            onSuccess = { images ->
-                updateState {
-                    copy(
-                        tvImages = images,
-                    )
-                }
-
-            },
-            onError = { error -> updateState { copy(error = error) } },
-            onCompleted = { updateState { copy(isLoading = false) } },
-            checkSuccess = { tvShowId != 0 },
         )
     }
 
@@ -278,16 +274,12 @@ class TvShowDetailsViewModel @Inject constructor(
                 updateState { copy(error = errorState) }
             },
             onCompleted = { updateState { copy(isLoading = false) } },
-            checkSuccess = { tvShowId != 0 }
         )
     }
 
-
-    private suspend fun addToRecentWatched(tvShow: TvShow) {
+    private suspend fun addToRecentWatched(tvShow: TvShow) =
         manageRecentTvShowWatchedUseCase.addTvShowToRecentWatched(tvShow)
-    }
 
-    private suspend fun addMovieToRecentViewed(tvShow: RecentViewed) {
+    private suspend fun addMovieToRecentViewed(tvShow: RecentViewed) =
         manageRecentViewedUseCase.addToRecentViewed(tvShow)
-    }
 }

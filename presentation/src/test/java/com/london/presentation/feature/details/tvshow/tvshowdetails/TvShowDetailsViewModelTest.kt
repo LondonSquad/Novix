@@ -14,6 +14,8 @@ import com.london.domain.usecase.details.tvshow.ManageTvShowDetailsUseCase
 import com.london.domain.usecase.rating.RatingUseCase
 import com.london.domain.usecase.recent.viewed.ManageRecentViewedUseCase
 import com.london.domain.usecase.recent.watched.tvshow.ManageRecentTvShowWatchedUseCase
+import com.london.presentation.feature.search.details.tvshow.info.TvShowDetailsEffect
+import com.london.presentation.feature.search.details.tvshow.info.TvShowDetailsViewModel
 import com.london.presentation.navigation.Screen
 import com.london.presentation.navigation.getArgs
 import io.mockk.coEvery
