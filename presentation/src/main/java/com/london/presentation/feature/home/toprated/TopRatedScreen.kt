@@ -127,6 +127,7 @@ private fun Content(
 
         val moviesPagingItems = state.movies.collectAsLazyPagingItems()
         val tvSeriesPagingItems = state.tvSeries.collectAsLazyPagingItems()
+
         LazyVerticalGrid(
             columns = GridCells.Fixed(gridColumns()),
             contentPadding = PaddingValues(
@@ -173,7 +174,6 @@ private fun Content(
             }
         }
     }
-
 }
 
 @Composable

@@ -8,12 +8,12 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 
 data class TrendingMoviesUiState(
-    val moviesFlow: Flow<PagingData<Trending>> = flow {},
-    val movieGenres: List<MovieGenre> = MovieGenre.entries.toList(),
-    val errorState: ErrorState? = null,
-    val isLoading: Boolean = false,
-    val isSaved: Boolean = false,
-    val backdropPath: String = "",
     val id: Int = 0,
-    val selectedGenreId: Int? = -1
+    val isSaved: Boolean = false,
+    val selectedGenreId: Int? = 0,
+    val backdropPath: String = "",
+    val isLoading: Boolean = false,
+    val errorState: ErrorState? = null,
+    val moviesFlow: Flow<PagingData<Trending>> = flow {},
+    val movieGenres: List<MovieGenre> = MovieGenre.entries.toList()
 )

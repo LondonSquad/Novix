@@ -50,6 +50,76 @@ class HomeViewModel @Inject constructor(
         loadUpcomingMovies(categoryId = null)
     }
 
+    override fun onRetry() {
+        updateState { copy(error = null) }
+        initializeTopRatedMedia()
+        fetchRecentWatchedMedia()
+        initializePopularMedia()
+    }
+
+    override fun onMovieClick(id: Int) {
+        emitEffect(HomeScreenEffect.NavigationMovieDetails(id))
+    }
+
+    override fun onTvShowClick(id: Int) {
+        emitEffect(HomeScreenEffect.NavigationTvShowDetails(id))
+    }
+
+    private fun loadUpcomingMovies(categoryId: Int?) {
+        runCatching {
+            upcomingJob?.cancel()
+        }
+        upcomingJob = viewModelScope.launch {
+            tryToExecute(
+                block = {
+                    val pagingFlow = createPagingSourceFlow(query = "") { _, pageNumber ->
+                        getUpcomingMoviesByCategoryUseCase.invoke(
+                            categoryId = categoryId,
+                            pageNumber = pageNumber
+                        )
+                    }.cachedIn(viewModelScope)
+                    updateState { copy(isLoading = false) }
+                    pagingFlow
+                },
+                onStart = { updateState { copy(isLoading = true) } },
+                onError = { errorState -> updateState { copy(error = errorState) } },
+                onCompleted = { updateState { copy(isLoading = false) } },
+                onSuccess = { flow ->
+                    delay(70)
+                    flow.collectLatest { pagingData ->
+                        _upcomingMoviesFlow.value = pagingData
+                    }
+                },
+            )
+        }
+    }
+
+    override fun onMovieGenreSelect(genre: MovieGenre) {
+        if (genre == state.value.selectedMovieGenre) return
+        updateState { copy(selectedMovieGenre = genre) }
+        loadUpcomingMovies(categoryId = if (genre == MovieGenre.All) null else genre.id)
+    }
+
+    override fun onTopRatedClick() {
+        emitEffect(HomeScreenEffect.NavigationTopRated)
+    }
+
+    override fun onContinueWatchingClick() {
+        emitEffect(HomeScreenEffect.NavigationContinueWatching)
+    }
+
+    override fun onTrendingMoviesCardClicked() {
+        emitEffect(HomeScreenEffect.NavigationTrendingMovie)
+    }
+
+    override fun onTrendingTvShowsCardClicked() {
+        emitEffect(HomeScreenEffect.NavigationTrendingTvShows)
+    }
+
+    override fun onTrendingActorsCardClicked() {
+        emitEffect(HomeScreenEffect.NavigationTrendingActor)
+    }
+
     private fun initializeTopRatedMedia() {
         tryToExecute(
             block = {
@@ -122,75 +192,5 @@ class HomeViewModel @Inject constructor(
                 movies.isNotEmpty() || shows.isNotEmpty()
             }
         )
-    }
-
-    override fun onRetry() {
-        updateState { copy(error = null) }
-        initializeTopRatedMedia()
-        fetchRecentWatchedMedia()
-        initializePopularMedia()
-    }
-
-    override fun onMovieClick(id: Int) {
-        emitEffect(HomeScreenEffect.NavigationMovieDetails(id))
-    }
-
-    override fun onTvShowClick(id: Int) {
-        emitEffect(HomeScreenEffect.NavigationTvShowDetails(id))
-    }
-
-    private fun loadUpcomingMovies(categoryId: Int?) {
-        runCatching {
-            upcomingJob?.cancel()
-        }
-        upcomingJob = viewModelScope.launch {
-            tryToExecute(
-                block = {
-                    val pagingFlow = createPagingSourceFlow(query = "") { _, pageNumber ->
-                        getUpcomingMoviesByCategoryUseCase.invoke(
-                            categoryId = categoryId,
-                            pageNumber = pageNumber
-                        )
-                    }.cachedIn(viewModelScope)
-                    updateState { copy(isLoading = false) }
-                    pagingFlow
-                },
-                onStart = { updateState { copy(isLoading = true) } },
-                onError = { errorState -> updateState { copy(error = errorState) } },
-                onCompleted = { updateState { copy(isLoading = false) } },
-                onSuccess = { flow ->
-                    delay(70)
-                    flow.collectLatest { pagingData ->
-                        _upcomingMoviesFlow.value = pagingData
-                    }
-                },
-            )
-        }
-    }
-
-    override fun onMovieGenreSelect(genre: MovieGenre) {
-        if (genre == state.value.selectedMovieGenre) return
-        updateState { copy(selectedMovieGenre = genre) }
-        loadUpcomingMovies(categoryId = if (genre == MovieGenre.All) null else genre.id)
-    }
-
-    override fun onTopRatedClick() {
-        emitEffect(HomeScreenEffect.NavigationTopRated)
-    }
-
-    override fun onContinueWatchingClick() {
-        emitEffect(HomeScreenEffect.NavigationContinueWatching)
-    }
-
-    override fun onTrendingMoviesCardClicked() {
-        emitEffect(HomeScreenEffect.NavigationTrendingMovie)
-    }
-
-    override fun onTrendingTvShowsCardClicked() {
-        emitEffect(HomeScreenEffect.NavigationTrendingTvShows)
-    }
-
-    override fun onTrendingActorsCardClicked() {
-        emitEffect(HomeScreenEffect.NavigationTrendingActor)
     }
 }

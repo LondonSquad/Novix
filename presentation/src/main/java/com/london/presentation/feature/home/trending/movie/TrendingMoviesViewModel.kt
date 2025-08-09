@@ -17,6 +17,22 @@ class TrendingMoviesViewModel @Inject constructor(
         initializeMovies()
     }
 
+    override fun onGenreSelected(genre: MovieGenre) {
+        if (genre.id == state.value.selectedGenreId) return
+        updateState {
+            copy(selectedGenreId = genre.id)
+        }
+        initializeMovies()
+    }
+
+    override fun onBack() = emitEffect(TrendingMoviesEffect.NavigateBack)
+
+    override fun onMovieClick(id: Int) = emitEffect(TrendingMoviesEffect.NavigateToMovie(id))
+
+    override fun onRetry() {
+        initializeMovies()
+    }
+
     private fun initializeMovies() {
         tryToExecute(
             block = {
@@ -42,21 +58,5 @@ class TrendingMoviesViewModel @Inject constructor(
             },
             onCompleted = { updateState { copy(isLoading = false) } },
         )
-    }
-
-    override fun onGenreSelected(genre: MovieGenre) {
-        if (genre.id == state.value.selectedGenreId) return
-        updateState {
-            copy(selectedGenreId = genre.id)
-        }
-        initializeMovies()
-    }
-
-    override fun onBack() = emitEffect(TrendingMoviesEffect.NavigateBack)
-
-    override fun onMovieClick(id: Int) = emitEffect(TrendingMoviesEffect.NavigateToMovie(id))
-
-    override fun onRetry() {
-        initializeMovies()
     }
 }

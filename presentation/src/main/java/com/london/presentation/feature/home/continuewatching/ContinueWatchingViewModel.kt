@@ -56,7 +56,7 @@ class ContinueWatchingViewModel @Inject constructor(
         fetchRecentWatchedMedia()
     }
 
-    fun fetchRecentWatchedMedia() {
+    private fun fetchRecentWatchedMedia() {
         tryToExecute(
             block = {
                 val recentWatchedMovie = manageRecentMovieWatchedUseCase.getAllWatchedMovies(
