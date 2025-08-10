@@ -1,21 +1,21 @@
 package com.london.presentation.feature.accountinfo.rating
 
-import com.london.domain.entity.recent.MediaType
-
-interface MyRatingContract {
+interface MyRatingsContract {
     fun onBackClicked()
     fun onItemClick(id: Int)
     fun onMovieClick(id: Int)
     fun onTvShowClick(id: Int)
-    fun onDelete(id: Int , mediaType: MediaType)
     fun onRatingCategorySelected(category: RatingCategory)
+    fun onDeleteMovie(id: Int)
+    fun onDeleteShow(id: Int)
 }
 
-fun defaultMyRatingContract() = object : MyRatingContract {
+fun defaultMyRatingContract() = object : MyRatingsContract {
     override fun onBackClicked() {}
     override fun onItemClick(id: Int) {}
+    override fun onDeleteShow(id: Int) {}
     override fun onMovieClick(id: Int) {}
     override fun onTvShowClick(id: Int) {}
-    override fun onDelete(id: Int, mediaType: MediaType){}
+    override fun onDeleteMovie(id: Int) {}
     override fun onRatingCategorySelected(category: RatingCategory) {}
 }
