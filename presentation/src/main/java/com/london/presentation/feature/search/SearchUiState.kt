@@ -12,20 +12,20 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 
 data class SearchUiState(
-    val searchQuery: TextFieldValue = TextFieldValue(""),
+    val lastSearch: String = "",
     val error: ErrorState? = null,
+    val savedMovies: Set<Int> = emptySet(),
+    val savedTvShows: Set<Int> = emptySet(),
     val showNoSearchBefore: Boolean = false,
     val showNoSearchResults: Boolean = false,
     val isSearchHistoryExpanded: Boolean = false,
-    val isMovieSaved: (MovieUi) -> Boolean = { false },
     val searchHistory: List<String> = emptyList(),
     val actorsFlow: Flow<PagingData<Actor>> = flow {},
     val moviesFlow: Flow<PagingData<Movie>> = flow {},
-    val tvShowsFlow: Flow<PagingData<TvShow>> = flow {},
-    val savedMovies: Set<Int> = emptySet(),
-    val savedTvShows: Set<Int> = emptySet(),
-    val selectedCategory: SearchCategory = SearchCategory.Movies,
+    val isMovieSaved: (MovieUi) -> Boolean = { false },
     val recentViewed: List<RecentViewed> = emptyList(),
+    val tvShowsFlow: Flow<PagingData<TvShow>> = flow {},
     val recentSearches: List<RecentSearch> = emptyList(),
-    val lastSearch: String = "",
+    val searchQuery: TextFieldValue = TextFieldValue(""),
+    val selectedCategory: SearchCategory = SearchCategory.Movies,
 )

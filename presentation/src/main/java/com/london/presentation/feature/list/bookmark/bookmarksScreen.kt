@@ -10,6 +10,8 @@ import androidx.compose.ui.unit.dp
 import com.london.designsystem.component.Scaffold
 import com.london.designsystem.component.Text
 import com.london.designsystem.theme.NovixTheme
+import com.london.designsystem.utils.string
+import com.london.presentation.R
 
 @Composable
 fun BookmarksScreen(modifier: Modifier = Modifier) {
@@ -22,7 +24,7 @@ fun BookmarksScreen(modifier: Modifier = Modifier) {
             contentAlignment = Alignment.Center
         ) {
             Text(
-                text = "My List Screen",
+                text = R.string.my_list_screen.string,
                 style = NovixTheme.typography.headline.medium
             )
         }

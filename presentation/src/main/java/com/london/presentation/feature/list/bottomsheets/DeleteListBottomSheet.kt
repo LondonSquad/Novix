@@ -30,14 +30,14 @@ import com.london.designsystem.theme.NovixTheme
 import com.london.designsystem.utils.painter
 import com.london.designsystem.utils.string
 import com.london.presentation.R
-import com.london.presentation.feature.list.viewlistitems.ViewListItemsContract
+import com.london.presentation.feature.list.viewitems.ViewListItemsContract
 import kotlinx.coroutines.launch
 
 @Composable
 fun DeleteListBottomSheet(
-    modifier: Modifier = Modifier,
     isSheetVisible: Boolean,
     contract: ViewListItemsContract,
+    modifier: Modifier = Modifier,
     sheetState: SheetState = rememberModalBottomSheetState(),
 ) {
     val coroutineScope = rememberCoroutineScope()
@@ -72,9 +72,9 @@ fun DeleteListBottomSheet(
 
 @Composable
 private fun Content(
-    modifier: Modifier = Modifier,
+    hideSheet: () -> Unit,
     onConfirmDelete: () -> Unit,
-    hideSheet: () -> Unit
+    modifier: Modifier = Modifier,
 ) {
 
     Column(
