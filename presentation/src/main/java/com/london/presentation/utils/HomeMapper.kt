@@ -2,8 +2,7 @@ package com.london.presentation.utils
 
 import com.london.domain.entity.Movie
 import com.london.domain.entity.TvShow
-import com.london.domain.entity.popular.PopularMovie
-import com.london.domain.entity.popular.PopularTvShow
+import com.london.domain.entity.popular.PopularMedia
 import com.london.domain.entity.recent.MediaType
 import com.london.domain.entity.toprated.TopRatedMovie
 import com.london.domain.entity.toprated.TopRatedTvSeries
@@ -50,27 +49,14 @@ fun List<TopRatedTvSeries>.toUiMedia(): List<HomeUiMedia> =
         )
     }
 
-
 @JvmName("popularMovieToUiMedia")
-fun List<PopularMovie>.toPopularUiMedia() =
+fun List<PopularMedia>.toPopularUiMedia() =
     map { movie ->
         PopularUiMedia(
             id = movie.id,
             posterUrl = movie.posterUrl,
             mediaType = MediaType.Movie,
-            name = movie.title,
+            name = movie.name,
             rating = movie.rating.toString(),
-        )
-    }
-
-@JvmName("popularTvSeriesToUiMedia")
-fun List<PopularTvShow>.toPopularUiMedia() =
-    map { show ->
-        PopularUiMedia(
-            id = show.id,
-            posterUrl = show.posterUrl,
-            mediaType = MediaType.TvShow,
-            name = show.name,
-            rating = show.rating.toString(),
         )
     }
