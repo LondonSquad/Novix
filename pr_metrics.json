@@ -19724,5 +19724,33 @@
       "deletions": 139,
       "changed_files": 24
     }
+  },
+  {
+    "pr_number": 602,
+    "url": "https://github.com/LondonSquad/Novix/pull/602",
+    "title": "Refactor :tvShow details and Episode",
+    "opened_at": "2025-08-10T07:58:09Z",
+    "head_ref": "refactor/tvShow-and-Episode-detalis",
+    "base_ref": "develop",
+    "creator": {
+      "login": "abdelrhman1002",
+      "id": 180463542,
+      "url": "https://github.com/abdelrhman1002"
+    },
+    "approvals": [],
+    "first_approved_at": null,
+    "time_to_first_approval_minutes": null,
+    "required_approvals_met_at": null,
+    "time_to_required_approvals_minutes": null,
+    "closed_at": null,
+    "merged_at": null,
+    "merged_by": null,
+    "week": "2025-W32",
+    "status": "pending",
+    "diff_stats": {
+      "additions": 198,
+      "deletions": 1198,
+      "changed_files": 40
+    }
   }
 ]
