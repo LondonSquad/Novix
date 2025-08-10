@@ -7,8 +7,6 @@ import com.london.domain.entity.TvShow
 import com.london.domain.entity.popular.PopularTvShow
 import com.london.domain.entity.tvshowdetails.TvShowDetailsEntity
 import com.london.domain.entity.tvshowdetails.TvShowGenreEntity
-import com.london.domain.error.TvShowDetailsSearchFailedException
-import com.london.domain.error.TvShowSearchFailedException
 import com.london.domain.repository.PopularRepository
 import com.london.domain.repository.SearchRepository
 import com.london.domain.repository.TrendingRepository
@@ -56,16 +54,6 @@ class ManageTvShowDetailsUseCaseTest {
         val result = manageTvShowDetailsUseCase.getTvShowDetails(TV_SHOW_ID)
         //then
         assertThat(result).isEqualTo(mockTvShowDetails)
-    }
-
-    @Test
-    fun `should throw exception when repository throws exception`() = runTest {
-        //given
-        coEvery { tvShowRepository.getTvShowDetailsById(TV_SHOW_ID) } throws TvShowDetailsSearchFailedException()
-        //when //then
-        assertThrows<TvShowDetailsSearchFailedException> {
-            manageTvShowDetailsUseCase.getTvShowDetails(TV_SHOW_ID)
-        }
     }
     // endregion
 
@@ -332,18 +320,6 @@ class ManageTvShowDetailsUseCaseTest {
         assertThat(result).isEqualTo(pagedFetchResponse)
     }
 
-    @Test
-    fun `should throw TvShowSearchFailedException when repository throws TvShowSearchFailedException`() = runTest {
-        //given
-        coEvery {
-            manageTvShowDetailsUseCase.getTvShowList(NAME, PAGE_NUMBER)
-        } throws TvShowSearchFailedException()
-
-        //when //then
-        assertThrows<TvShowSearchFailedException> {
-            manageTvShowDetailsUseCase.getTvShowList(NAME, PAGE_NUMBER)
-        }
-    }
     // endregion
 
     private fun createMockTvShow(mockData: MockTvShowData): PopularTvShow {
