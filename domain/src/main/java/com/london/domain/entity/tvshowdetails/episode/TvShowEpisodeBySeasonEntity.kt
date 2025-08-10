@@ -7,13 +7,9 @@ data class TvShowEpisodeBySeasonEntity(
     val id: Int,
     val name: String,
     val overview: String,
-    val productionCode: String,
     val runtime: Int?,
     val seasonNumber: Int,
     val showId: Int,
-    val stillUrl: String?,
+    val imageUrl: String?,
     val voteAverage: Double,
-    val voteCount: Int,
-    val crew: List<EpisodeCrewMemberEntity>,
-    val episodeGuestStars: List<EpisodeGuestStarEntity>
 )
