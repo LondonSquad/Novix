@@ -67,6 +67,7 @@ import com.london.presentation.feature.home.trending.TrendingSection
 import com.london.presentation.shared.CarousalShimmerEffect
 import com.london.presentation.shared.GenresSection
 import com.london.presentation.shared.HomeCard
+import com.london.presentation.shared.bookmarkSheet.BookmarkBottomSheet
 import com.london.presentation.shared.buildscreen.NetworkErrorScreen
 import com.london.presentation.utils.Listen
 import com.london.presentation.utils.gridColmuns
@@ -101,7 +102,6 @@ fun HomeScreen(
         uiState = uiState,
         homeScreenContract = viewModel
     )
-
 }
 
 @Composable
@@ -110,19 +110,19 @@ private fun Content(
     modifier: Modifier = Modifier,
     homeScreenContract: HomeScreenContract = defaultHomeScreenContract(),
 ) {
-    val lazyGridState = rememberSaveable(
-        saver = LazyGridState.Saver,
-    ) {
-        LazyGridState()
-    }
+    val lazyGridState = rememberSaveable(saver = LazyGridState.Saver) { LazyGridState() }
 
     val screenWidth =
         with(LocalDensity.current) { LocalWindowInfo.current.containerSize.width.toDp() }
 
     val upcomingMoviesLazyList = uiState.upcomingMovies.collectAsLazyPagingItems()
-    val pagerState = rememberPagerState(initialPage = 0, pageCount = {
-        if (uiState.popularMediaList.isNotEmpty()) uiState.popularMediaList.size else 3
-    })
+    val pagerState = rememberPagerState(
+        initialPage = 0,
+        pageCount = {
+            if (uiState.popularMediaList.isNotEmpty()) uiState.popularMediaList.size else 3
+        }
+    )
+
     val isAtEndOfGrid by remember {
         derivedStateOf {
             val lastVisibleItem = lazyGridState.layoutInfo.visibleItemsInfo.lastOrNull()
@@ -146,18 +146,17 @@ private fun Content(
         }
     }
 
-
-
     when {
-        uiState.error != null -> NetworkErrorScreen(
-            onRetry = {
-                homeScreenContract.onRetry()
-                upcomingMoviesLazyList.retry()
-            },
-            onBack = null
-        )
+        uiState.error != null ->
+            NetworkErrorScreen(
+                onRetry = {
+                    homeScreenContract.onRetry()
+                    upcomingMoviesLazyList.retry()
+                },
+                onBack = null
+            )
 
-        else ->
+        else -> {
             Box(
                 modifier = Modifier
                     .fillMaxSize()
@@ -179,6 +178,7 @@ private fun Content(
                             )
                         )
                 )
+
                 Column(
                     modifier = Modifier
                         .fillMaxSize()
@@ -222,16 +222,14 @@ private fun Content(
                                         modifier = Modifier.requiredWidth(screenWidth),
                                         pagerState = pagerState,
                                         uiMediaList = uiState.popularMediaList,
-                                        onSaveClick = {/*TODO*/ },
+                                        onManageBookmarkClicked = homeScreenContract::onManageBookmarkClicked,
                                         onCardClick = { id, mediaType ->
                                             when (mediaType) {
-                                                MediaType.TvShow -> homeScreenContract.onTvShowClick(
-                                                    id
-                                                )
+                                                MediaType.TvShow ->
+                                                    homeScreenContract.onTvShowClick(id)
 
-                                                MediaType.Movie -> homeScreenContract.onMovieClick(
-                                                    id
-                                                )
+                                                MediaType.Movie ->
+                                                    homeScreenContract.onMovieClick(id)
                                             }
                                         }
                                     )
@@ -303,10 +301,15 @@ private fun Content(
                             )
                     }
                 }
+
+                BookmarkBottomSheet(
+                    onSheetDismiss = homeScreenContract::onBookmarkSheetDismiss,
+                    isSheetVisible = uiState.isBookmarkSheetVisible,
+                    bookmarkedMovieId = uiState.bookmarkedMovieId.toUInt()
+                )
             }
-
+        }
     }
-
 }
 
 private fun LazyGridScope.upComingSection(

@@ -46,7 +46,7 @@ fun PopularSection(
     modifier: Modifier = Modifier,
     pagerState: PagerState,
     uiMediaList: List<PopularUiMedia>,
-    onSaveClick: () -> Unit,
+    onManageBookmarkClicked: (Int) -> Unit,
     onCardClick: (Int, MediaType) -> Unit,
 ) {
     val density = LocalDensity.current
@@ -136,8 +136,8 @@ fun PopularSection(
 
                 HomeCard(
                     imageUrl = uiMediaList[page].posterUrl,
-                    onSaveClick = { onSaveClick() },
-                    hasSaveIcon = pagerState.currentPage == page,
+                    onSaveClick = { onManageBookmarkClicked(uiMediaList[page].id) },
+                    hasSaveIcon = pagerState.currentPage == page && uiMediaList[page].mediaType == MediaType.Movie,
                     modifier = Modifier.clickable {
                         if (pagerState.currentPage == page) onCardClick(
                             uiMediaList[page].id,
@@ -180,8 +180,6 @@ fun PopularSection(
         )
 
     }
-
-
 }
 
 private const val CARD_WIDTH_DP = 244
@@ -206,7 +204,7 @@ private const val SCALE_MAX_FRACTION = 1f
 private fun Preview(modifier: Modifier = Modifier) {
     PopularSection(
         pagerState = rememberPagerState(initialPage = 0, pageCount = { 4 }),
-        onSaveClick = {},
+        onManageBookmarkClicked = { 0 },
         onCardClick = { id, mediaType -> },
         uiMediaList = listOf(
             PopularUiMedia(

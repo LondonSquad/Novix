@@ -193,4 +193,22 @@ class HomeViewModel @Inject constructor(
     override fun onTrendingActorsCardClicked() {
         emitEffect(HomeScreenEffect.NavigationTrendingActor)
     }
+
+    override fun onManageBookmarkClicked(movieId: Int) {
+        updateState {
+            copy(
+                isBookmarkSheetVisible = true,
+                bookmarkedMovieId = movieId
+            )
+        }
+    }
+
+    override fun onBookmarkSheetDismiss() {
+        updateState {
+            copy(
+                isBookmarkSheetVisible = false,
+                bookmarkedMovieId = 0
+            )
+        }
+    }
 }
