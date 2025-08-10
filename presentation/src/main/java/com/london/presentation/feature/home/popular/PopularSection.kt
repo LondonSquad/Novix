@@ -57,27 +57,25 @@ import kotlin.math.abs
 @Composable
 fun PopularSection(
     pagerState: PagerState,
-    onSaveClick: () -> Unit,
     uiMediaList: List<PopularUiMedia>,
     onCardClick: (Int, MediaType) -> Unit,
     onManageBookmarkClicked: (Int) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     Content(
+        modifier = modifier,
         pagerState = pagerState,
-        onSaveClick = onSaveClick,
         uiMediaList = uiMediaList,
         onCardClick = onCardClick,
-        modifier = modifier
+        onManageBookmarkClicked = onManageBookmarkClicked
     )
 }
 
 @Composable
 private fun Content(
     pagerState: PagerState,
-    onSaveClick: () -> Unit,
     uiMediaList: List<PopularUiMedia>,
-    onManageBookmarkClicked: (Int) -> Unit
+    onManageBookmarkClicked: (Int) -> Unit,
     onCardClick: (Int, MediaType) -> Unit,
     modifier: Modifier = Modifier,
 ) {
@@ -240,7 +238,6 @@ private object PopularSection {
 private fun Preview(modifier: Modifier = Modifier) {
     PopularSection(
         pagerState = rememberPagerState(initialPage = 0, pageCount = { 4 }),
-        onSaveClick = {},
         onCardClick = { id, mediaType -> },
         uiMediaList = listOf(
             PopularUiMedia(
@@ -279,6 +276,6 @@ private fun Preview(modifier: Modifier = Modifier) {
                 mediaType = MediaType.Movie
             ),
         ),
-        onManageBookmarkClicked = {  },
+        onManageBookmarkClicked = { },
     )
 }
