@@ -40,9 +40,14 @@ interface MovieDetailsApiService {
         @Path("movie_id") movieId: Int,
     ): Response<MovieVideoRemote>
 
+    @GET("3/movie/{movie_id}/lists")
+    suspend fun getMovieLists(
+        @Path("movie_id") movieId: Int,
+    ): Response<ApiResponse<MovieRemote>>
+
     @GET("3/movie/{movie_id}/account_states")
     suspend fun getAccountMovieStates(
         @Path("movie_id") movieId: Int,
         @Query("session_id") userSessionId: String?,
-    ) : Response<AccountMovieStatesResponse>
+    ): Response<AccountMovieStatesResponse>
 }
