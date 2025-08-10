@@ -35,7 +35,7 @@ fun TvShowSeason.toEntity() = TvShowSeasonEntity(
     id = id.orZero(),
     name = name.orEmpty(),
     overview = overview.orEmpty(),
-    posterUrl = posterPath,
+    posterUrl = posterPath.asImageUrlOrEmpty(),
     seasonNumber = seasonNumber.orZero(),
     voteAverage = voteAverage.orZero().roundToDecimal(),
 )
