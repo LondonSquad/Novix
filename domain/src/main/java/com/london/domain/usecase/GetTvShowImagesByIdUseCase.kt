@@ -8,13 +8,17 @@ import javax.inject.Inject
 class GetTvShowImagesByIdUseCase @Inject constructor(
     private val repository: TvShowRepository
 ) {
-    suspend operator fun invoke(tvShowId: Int): List<String> {
+    suspend fun invoke(tvShowId: Int, limit: Int = LIMIT): List<String> {
         val images = repository.getImagesTvShowById(tvShowId)
         return when {
             images.backdropsUrl.isNotEmpty() -> images.backdropsUrl
             images.postersUrl.isNotEmpty() -> images.postersUrl
             images.logosUrl.isNotEmpty() -> images.logosUrl
             else -> emptyList()
-        }.take(10)
+        }.take(limit)
+    }
+
+    companion object {
+        const val LIMIT = 10
     }
 }

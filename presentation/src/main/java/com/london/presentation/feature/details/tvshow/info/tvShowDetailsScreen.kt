@@ -185,7 +185,7 @@ private fun Content(
             item {
                 val images = uiState.tvImages
                 CustomBackDropImagePager(
-                    images = images?.map { it } ?: emptyList(),
+                    images = images.orEmpty().map { it },
                     isVisibleDots = (images?.size ?: 0) > 1,
                 )
             }
