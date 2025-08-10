@@ -62,9 +62,9 @@ fun BookmarkBottomSheet(
 
     effect?.Listen { currentEffect ->
         when (currentEffect) {
-            BookmarkSheetEffect.NewListCreation -> TODO()
-            BookmarkSheetEffect.ItemFailedAddition -> TODO()
-            BookmarkSheetEffect.ItemSuccessfulAddition -> TODO()
+            BookmarkSheetEffect.NewListCreation -> {
+                // navigate
+            }
         }
     }
 
