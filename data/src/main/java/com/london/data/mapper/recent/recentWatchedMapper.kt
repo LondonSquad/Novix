@@ -45,4 +45,3 @@ fun TvShow.toRecentWatchedTvShowLocal() = RecentWatchedTvShowLocal(
     genres = genres,
     watchedAt = System.currentTimeMillis()
 )
-

@@ -4,9 +4,9 @@ import com.london.data.local.preference.AuthPreferences
 import com.london.data.mapper.details.movie.toEntity
 import com.london.data.mapper.search.toEntity
 import com.london.data.mapper.search.toReviewEntity
-import com.london.data.mapper.videoprovider.movie.toMovie
 import com.london.data.remote.source.details.movie.MovieDetailsRemoteDataSource
 import com.london.data.remote.source.reviews.ReviewsRemoteDataSource
+import com.london.data.utils.asImageUrlOrEmpty
 import com.london.data.utils.fetchAndSync
 import com.london.domain.entity.Actor
 import com.london.domain.entity.Movie
@@ -15,7 +15,6 @@ import com.london.domain.entity.moviedatails.MediaStates
 import com.london.domain.entity.moviedatails.MovieDetails
 import com.london.domain.entity.moviedatails.MovieImages
 import com.london.domain.entity.review.ReviewEntity
-import com.london.domain.entity.videoprovider.MovieVideo
 import com.london.domain.repository.MovieDetailsRepository
 import javax.inject.Inject
 
@@ -58,11 +57,11 @@ class MovieDetailsRepositoryImpl @Inject constructor(
         )
     }
 
-    override suspend fun getMovieVideos(movieId: Int): List<MovieVideo> =
+    override suspend fun getMovieVideos(movieId: Int): List<String> =
         movieDetailsRemoteDataSource.getMovieVideos(movieId)
-            .getOrThrow().movies?.map { movieVideoRemote ->
-                movieVideoRemote.toMovie()
-            }.orEmpty()
+            .getOrThrow().movies.orEmpty().map { movieVideoRemote ->
+                movieVideoRemote.key.asImageUrlOrEmpty()
+            }
 
     override suspend fun getAccountMovieStatesById(
         id: Int,

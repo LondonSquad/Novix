@@ -9,34 +9,34 @@ import com.london.data.utils.asImageUrlOrEmpty
 import com.london.data.utils.orZero
 import com.london.data.utils.roundToDecimal
 import com.london.domain.KoverIgnore
-import com.london.domain.entity.popular.PopularMovie
+import com.london.domain.entity.popular.PopularMedia
 import com.london.domain.entity.recent.MediaType
 
-fun PopularMovieResponse.toPopularMovie(): PopularMovie {
-    return PopularMovie(
+fun PopularMovieResponse.toPopularMovie(): PopularMedia {
+    return PopularMedia(
         id = id.orZero(),
-        title = title.orEmpty(),
+        name = title.orEmpty(),
         posterUrl = posterPath.asImageUrlOrEmpty(),
         rating = voteAverage.orZero().roundToDecimal()
     )
 }
 
-fun ApiResponse<PopularMovieResponse>.toPopularMovies(): List<PopularMovie> =
+fun ApiResponse<PopularMovieResponse>.toPopularMovies(): List<PopularMedia> =
     items.map { it.toPopularMovie() }
 
-fun PopularSectionLocal.toMovieEntity(): PopularMovie = PopularMovie(
+fun PopularSectionLocal.toMovieEntity(): PopularMedia = PopularMedia(
     id = id,
-    title = name,
+    name = name,
     posterUrl = posterPictureUrl,
     rating = rating,
 )
 
-fun PopularMovie.toPopularMovieSectionLocal(
+fun PopularMedia.toPopularMovieSectionLocal(
     mediaType: MediaType,
     date: Long = System.currentTimeMillis()
 ): PopularSectionLocal = PopularSectionLocal(
     id = id,
-    name = title,
+    name = name,
     posterPictureUrl = posterUrl,
     rating = rating,
     mediaType = mediaType,

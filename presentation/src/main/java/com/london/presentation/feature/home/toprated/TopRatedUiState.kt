@@ -1,8 +1,7 @@
 package com.london.presentation.feature.home.toprated
 
 import androidx.paging.PagingData
-import com.london.domain.entity.toprated.TopRatedMovie
-import com.london.domain.entity.toprated.TopRatedTvSeries
+import com.london.domain.entity.toprated.TopRatedMedia
 import com.london.presentation.shared.MediaCategory
 import com.london.presentation.utils.MovieGenre
 import com.london.presentation.utils.TvShowGenre
@@ -15,7 +14,7 @@ data class TopRatedUiState(
     val isMovieSelected: Boolean = true,
     val selectedMovieGenre: MovieGenre = MovieGenre.All,
     val selectedTvShowGenre: TvShowGenre = TvShowGenre.All,
-    val movies: Flow<PagingData<TopRatedMovie>> = emptyFlow(),
-    val tvSeries: Flow<PagingData<TopRatedTvSeries>> = emptyFlow(),
+    val movies: Flow<PagingData<TopRatedMedia>> = emptyFlow(),
+    val tvSeries: Flow<PagingData<TopRatedMedia>> = emptyFlow(),
     val selectedMediaCategory: MediaCategory = MediaCategory.MOVIES
 )
