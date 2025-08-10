@@ -22,7 +22,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.lifecycle.repeatOnLifecycle
 import com.london.designsystem.component.NovixChip
 import com.london.designsystem.component.TopBar
 import com.london.designsystem.theme.NovixTheme
@@ -44,13 +47,16 @@ fun MyRatingScreen(
     onNavigateBack: () -> Unit,
     onNavigateMovie: (Int) -> Unit,
     onNavigateTvShow: (Int) -> Unit,
-    viewModel: RatingViewModel = hiltViewModel()
+    viewModel: MyRatingsViewModel = hiltViewModel()
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
     val effect by viewModel.effect.collectAsState(null)
 
+    val lifecycleOwner = LocalLifecycleOwner.current
     LaunchedEffect(Unit) {
-        viewModel.initializeItems()
+        lifecycleOwner.lifecycle.repeatOnLifecycle(Lifecycle.State.RESUMED) {
+            viewModel.initializeRatedMedia()
+        }
     }
 
     effect?.Listen { currentEffect ->
@@ -65,9 +71,7 @@ fun MyRatingScreen(
         isLoading = state.isLoading,
         isError = state.errorState != null,
         onBack = viewModel::onBackClicked,
-        onRetry = {
-            viewModel.initializeItems()
-        }
+        onRetry = viewModel::initializeRatedMedia
     ) {
         Content(
             state = state,
@@ -79,7 +83,7 @@ fun MyRatingScreen(
 @Composable
 private fun Content(
     state: MyRatingUiState = MyRatingUiState(),
-    contract: MyRatingContract = defaultMyRatingContract()
+    contract: MyRatingsContract = defaultMyRatingContract()
 ) {
     val selectedCategory = state.selectedRatingCategory ?: RatingCategory.All
     val items = when (selectedCategory) {
@@ -129,31 +133,33 @@ private fun Content(
                     items = items,
                     key = { it.id }
                 ) { item ->
-                        HomeCard(
-                            imageUrl = item.posterPath,
-                            isSaved = false,
-                            onSaveClick = { },
-                            myRatingList = true,
-                            rate = item.rating.toLocalizedNumbers(),
-                            onDeleteClick = {
-                                contract.onDelete(
-                                    id = item.id,
-                                    mediaType = item.mediaType
-                                )
-                            },
-                            modifier = Modifier.animateItem(
+                    HomeCard(
+                        imageUrl = item.posterPath,
+                        isSaved = false,
+                        onSaveClick = { },
+                        myRatingList = true,
+                        rate = item.rating.toLocalizedNumbers(),
+                        onDeleteClick = {
+                            when (item.mediaType) {
+                                MediaType.Movie -> contract.onDeleteMovie(item.id)
+                                MediaType.TvShow -> contract.onDeleteShow(item.id)
+                            }
+                        },
+                        modifier = Modifier
+                            .animateItem(
                                 fadeInSpec = null,
                                 fadeOutSpec = tween(500),
                                 placementSpec = tween(500)
-                            ).clickable {
+                            )
+                            .clickable {
                                 when (item.mediaType) {
                                     MediaType.Movie -> contract.onMovieClick(item.id)
                                     MediaType.TvShow -> contract.onTvShowClick(item.id)
                                 }
                             },
-                            isDarkMode = NovixTheme.isThemeDark
-                        )
-                    }
+                        isDarkMode = NovixTheme.isThemeDark
+                    )
+                }
             }
         }
     }
