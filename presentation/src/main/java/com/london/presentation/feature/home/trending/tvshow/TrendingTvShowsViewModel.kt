@@ -22,14 +22,10 @@ class TrendingTvShowsViewModel @Inject constructor(
         tryToExecute(
             block = {
                 val tvShowsFlow = createPagingSourceFlow(query = "") { _, pageNumber ->
-                    val tvShows = manageTvShowDetailsUseCase.getTrendingTvShows(page = pageNumber)
-                    val filteredItems =
-                        if (state.value.selectedGenreId != null && state.value.selectedGenreId != -1) {
-                            tvShows.items.filter { it.genreIds.contains(state.value.selectedGenreId) }
-                        } else {
-                            tvShows.items
-                        }
-                    tvShows.copy(items = filteredItems)
+                    manageTvShowDetailsUseCase.getTrendingTvShows(
+                        page = pageNumber,
+                        genreId = state.value.selectedGenreId
+                    )
                 }
                 tvShowsFlow
             },
