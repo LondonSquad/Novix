@@ -12,5 +12,5 @@ import com.london.domain.entity.actordetails.ActorImageDetails
 fun ActorImageResponse.toEntity(): ActorImageDetails =
     ActorImageDetails(
         id = id.orZero(),
-        imageUrl = profiles?.map { it.filePath.asImageUrlOrEmpty() }.orEmpty()
+        imageUrl = profiles.orEmpty().map { it.filePath.asImageUrlOrEmpty() }
     )

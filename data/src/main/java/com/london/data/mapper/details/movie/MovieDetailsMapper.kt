@@ -9,7 +9,7 @@ import com.london.domain.entity.moviedatails.MovieDetails
 
 fun MovieDetailsResponse.toEntity(): MovieDetails = MovieDetails(
     backdropUrl = this.backdropPath.asImageUrlOrEmpty(),
-    genresId = this.genreRemote?.map { it.id.orZero() }.orEmpty(),
+    genresId = this.genreRemote.orEmpty().map { it.id.orZero() },
     id = this.id.orZero(),
     overview = this.overview.orEmpty(),
     posterUrl = this.posterPath.asImageUrlOrEmpty(),

@@ -11,7 +11,7 @@ import com.london.domain.entity.actordetails.cast.CastDetails
 fun ActorMovieDetailsResponse.toEntity(): CastDetails {
     return CastDetails(
         id = id.orZero(),
-        cast = cast?.map { it.toEntity() }.orEmpty(),
+        cast = cast.orEmpty().map { it.toEntity() },
     )
 }
 
