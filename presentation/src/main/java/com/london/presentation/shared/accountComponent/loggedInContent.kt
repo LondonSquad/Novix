@@ -13,8 +13,8 @@ import androidx.compose.ui.unit.dp
 import com.london.designsystem.component.Divider
 import com.london.designsystem.theme.NovixTheme
 import com.london.presentation.R
-import com.london.presentation.feature.account.AccountContract
-import com.london.presentation.feature.account.state.AccountUiState
+import com.london.presentation.feature.accountinfo.account.AccountContract
+import com.london.presentation.feature.accountinfo.account.AccountUiState
 import com.london.designsystem.R as dsR
 
 @Composable

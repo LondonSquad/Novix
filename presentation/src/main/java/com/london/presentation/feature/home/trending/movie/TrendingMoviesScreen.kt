@@ -55,7 +55,7 @@ fun TrendingMoviesScreen(
         emptyLayoutImage = R.drawable.img_no_result,
         pagingFlow = moviesLazyItems
     ) {
-        TrendingMoviesContent(
+        Content(
             state = state,
             contract = viewModel
         )
@@ -63,7 +63,7 @@ fun TrendingMoviesScreen(
 }
 
 @Composable
-private fun TrendingMoviesContent(
+private fun Content(
     state: TrendingMoviesUiState = TrendingMoviesUiState(),
     contract: TrendingMoviesContract = defaultTrendingMoviesContract()
 ) {
@@ -109,5 +109,5 @@ private fun TrendingMoviesContent(
 @Preview
 @Composable
 private fun Preview() = NovixTheme {
-    TrendingMoviesContent()
+    Content()
 }
