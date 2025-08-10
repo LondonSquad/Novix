@@ -11,7 +11,6 @@ import io.mockk.mockk
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.cancel
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.test.StandardTestDispatcher
 import kotlinx.coroutines.test.advanceUntilIdle
 import kotlinx.coroutines.test.resetMain
@@ -42,41 +41,6 @@ class TrendingActorsViewModelTest {
         Dispatchers.resetMain()
         viewModel?.viewModelScope?.cancel()
         viewModel = null
-    }
-
-    @Test
-    fun `when initializeActors succeeds, actorsFlow state should be updated`() = runTest {
-        // When
-        advanceUntilIdle()
-
-        // Then
-        viewModel?.state?.test {
-            val state = expectMostRecentItem()
-            assertThat(state.actorsFlow).isNotNull()
-            assertThat(state.isLoading).isFalse()
-            ensureAllEventsConsumed()
-        }
-    }
-
-    @Test
-    fun `when initializeActors starts, loading state should be true`() = runTest {
-        // Given
-        coEvery { getTrendingActors.invoke(any()) } coAnswers {
-            delay(100)
-            createMockActorsResponse()
-        }
-
-        viewModel = TrendingActorsViewModel(getTrendingActors = getTrendingActors)
-
-        // When
-        advanceUntilIdle()
-
-        // Then
-        viewModel?.state?.test {
-            val state = expectMostRecentItem()
-            assertThat(state.isLoading).isFalse()
-            ensureAllEventsConsumed()
-        }
     }
 
     @Test

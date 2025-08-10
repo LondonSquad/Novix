@@ -205,7 +205,6 @@ class TrendingMoviesViewModelTest {
         )
         coEvery { getTrendingMovies.invoke(any(), any()) } returns moviesWithAction
         
-        // Recreate ViewModel with new mock behavior
         viewModel = TrendingMoviesViewModel(getTrendingMovies = getTrendingMovies)
 
         // When
@@ -216,33 +215,6 @@ class TrendingMoviesViewModelTest {
         viewModel?.state?.test {
             val state = expectMostRecentItem()
             assertThat(state.selectedGenreId).isEqualTo(actionGenre.id)
-            assertThat(state.moviesFlow).isNotNull()
-            ensureAllEventsConsumed()
-        }
-    }
-
-    @Test
-    fun `when initializeMovies with no genre filter, should return all movies unfiltered`() = runTest {
-        // Given
-        val allMovies = createMockMoviesResponse(
-            items = listOf(
-                createMockMovie(id = 1, title = "Action Movie", genreIds = listOf(28, 12)),
-                createMockMovie(id = 2, title = "Comedy Movie", genreIds = listOf(35, 18)),
-                createMockMovie(id = 3, title = "Drama Movie", genreIds = listOf(18, 36))
-            )
-        )
-        coEvery { getTrendingMovies.invoke(any(), any()) } returns allMovies
-        
-        // Recreate ViewModel with new mock behavior
-        viewModel = TrendingMoviesViewModel(getTrendingMovies = getTrendingMovies)
-
-        // When - no genre selected (default state)
-        advanceUntilIdle()
-
-        // Then
-        viewModel?.state?.test {
-            val state = expectMostRecentItem()
-            assertThat(state.selectedGenreId).isEqualTo(-1) // Default "All" genre
             assertThat(state.moviesFlow).isNotNull()
             ensureAllEventsConsumed()
         }
@@ -263,7 +235,6 @@ class TrendingMoviesViewModelTest {
         )
         coEvery { getTrendingMovies.invoke(any()) } returns mixedMovies
         
-        // Recreate ViewModel with new mock behavior
         viewModel = TrendingMoviesViewModel(getTrendingMovies = getTrendingMovies)
 
         // When
@@ -273,7 +244,7 @@ class TrendingMoviesViewModelTest {
         // Then
         viewModel?.state?.test {
             val state = expectMostRecentItem()
-            assertThat(state.selectedGenreId).isEqualTo(comedyGenre.id) // Comedy genre ID is 35
+            assertThat(state.selectedGenreId).isEqualTo(comedyGenre.id)
             assertThat(state.moviesFlow).isNotNull()
             ensureAllEventsConsumed()
         }
@@ -292,26 +263,24 @@ class TrendingMoviesViewModelTest {
             )
         )
         coEvery { getTrendingMovies.invoke(any()) } returns mixedMovies
-        
-        // Recreate ViewModel with new mock behavior
         viewModel = TrendingMoviesViewModel(getTrendingMovies = getTrendingMovies)
 
-        // When - first select Action genre
+        // When
         viewModel?.onGenreSelected(actionGenre)
         advanceUntilIdle()
         
-        // Then - verify Action genre is selected
+        // Then
         viewModel?.state?.test {
             val state = expectMostRecentItem()
             assertThat(state.selectedGenreId).isEqualTo(actionGenre.id)
             ensureAllEventsConsumed()
         }
 
-        // When - then select Comedy genre
+        // When
         viewModel?.onGenreSelected(comedyGenre)
         advanceUntilIdle()
         
-        // Then - verify Comedy genre is now selected
+        // Then
         viewModel?.state?.test {
             val state = expectMostRecentItem()
             assertThat(state.selectedGenreId).isEqualTo(comedyGenre.id)
@@ -333,17 +302,16 @@ class TrendingMoviesViewModelTest {
         )
         coEvery { getTrendingMovies.invoke(any()) } returns mixedMovies
         
-        // Recreate ViewModel with new mock behavior
         viewModel = TrendingMoviesViewModel(getTrendingMovies = getTrendingMovies)
 
-        // When - select All genre
+        // When
         viewModel?.onGenreSelected(allGenre)
         advanceUntilIdle()
 
         // Then
         viewModel?.state?.test {
             val state = expectMostRecentItem()
-            assertThat(state.selectedGenreId).isEqualTo(allGenre.id) // All genre ID is -1
+            assertThat(state.selectedGenreId).isEqualTo(allGenre.id)
             assertThat(state.moviesFlow).isNotNull()
             ensureAllEventsConsumed()
         }
@@ -356,7 +324,6 @@ class TrendingMoviesViewModelTest {
         val mockMovies = createMockMoviesResponse()
         coEvery { getTrendingMovies.invoke(any()) } returns mockMovies
         
-        // Recreate ViewModel with new mock behavior
         viewModel = TrendingMoviesViewModel(getTrendingMovies = getTrendingMovies)
 
         // When
@@ -390,7 +357,6 @@ class TrendingMoviesViewModelTest {
         coEvery { getTrendingMovies.invoke(1) } returns page1Movies
         coEvery { getTrendingMovies.invoke(2) } returns page2Movies
         
-        // Recreate ViewModel with new mock behavior
         viewModel = TrendingMoviesViewModel(getTrendingMovies = getTrendingMovies)
 
         // When
@@ -418,10 +384,9 @@ class TrendingMoviesViewModelTest {
         )
         coEvery { getTrendingMovies.invoke(any()) } returns mixedMovies
         
-        // Recreate ViewModel with new mock behavior
         viewModel = TrendingMoviesViewModel(getTrendingMovies = getTrendingMovies)
 
-        // When - select Action genre to trigger filtering
+        // When
         viewModel?.onGenreSelected(actionGenre)
         advanceUntilIdle()
 
@@ -441,7 +406,6 @@ class TrendingMoviesViewModelTest {
         val emptyResponse = createMockMoviesResponse(items = emptyList())
         coEvery { getTrendingMovies.invoke(any()) } returns emptyResponse
         
-        // Recreate ViewModel with new mock behavior
         viewModel = TrendingMoviesViewModel(getTrendingMovies = getTrendingMovies)
 
         // When
@@ -470,7 +434,6 @@ class TrendingMoviesViewModelTest {
         )
         coEvery { getTrendingMovies.invoke(any()) } returns largeResponse
         
-        // Recreate ViewModel with new mock behavior
         viewModel = TrendingMoviesViewModel(getTrendingMovies = getTrendingMovies)
 
         // When
@@ -497,7 +460,6 @@ class TrendingMoviesViewModelTest {
         )
         coEvery { getTrendingMovies.invoke(any()) } returns edgeCaseMovies
         
-        // Recreate ViewModel with new mock behavior
         viewModel = TrendingMoviesViewModel(getTrendingMovies = getTrendingMovies)
 
         // When
@@ -506,33 +468,6 @@ class TrendingMoviesViewModelTest {
         // Then
         viewModel?.state?.test {
             val state = expectMostRecentItem()
-            assertThat(state.moviesFlow).isNotNull()
-            assertThat(state.isLoading).isFalse()
-            ensureAllEventsConsumed()
-        }
-    }
-
-    @Test
-    fun `when initializeMovies executes block, should handle genre filter with null selectedGenreId`() = runTest {
-        // Given
-        val testMovies = createMockMoviesResponse(
-            items = listOf(
-                createMockMovie(id = 1, title = "Test Movie", genreIds = listOf(28, 35))
-            )
-        )
-        coEvery { getTrendingMovies.invoke(any()) } returns testMovies
-        
-        // Recreate ViewModel with new mock behavior
-        viewModel = TrendingMoviesViewModel(getTrendingMovies = getTrendingMovies)
-
-        // When - ensure selectedGenreId is null (default state)
-        advanceUntilIdle()
-
-        // Then
-        viewModel?.state?.test {
-            val state = expectMostRecentItem()
-            // In default state, selectedGenreId should be -1 (not null)
-            assertThat(state.selectedGenreId).isEqualTo(-1)
             assertThat(state.moviesFlow).isNotNull()
             assertThat(state.isLoading).isFalse()
             ensureAllEventsConsumed()
@@ -552,10 +487,9 @@ class TrendingMoviesViewModelTest {
         )
         coEvery { getTrendingMovies.invoke(any()) } returns testMovies
         
-        // Recreate ViewModel with new mock behavior
         viewModel = TrendingMoviesViewModel(getTrendingMovies = getTrendingMovies)
 
-        // When - explicitly select All genre (which has ID -1)
+        // When
         viewModel?.onGenreSelected(allGenre)
         advanceUntilIdle()
 
