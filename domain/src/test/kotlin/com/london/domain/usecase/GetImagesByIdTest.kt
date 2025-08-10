@@ -26,7 +26,7 @@ class GetImagesByIdTest {
         // Given
         coEvery { tvShowRepository.getImagesTvShowById(TV_SHOW_ID) } returns mockTvShowImagesWithBackdrops
         // When
-        val result = getTvShowImagesByIdUseCase(TV_SHOW_ID)
+        val result = getTvShowImagesByIdUseCase.invoke(TV_SHOW_ID)
         // Then
         assertThat(result).isEqualTo(mockTvShowImagesWithBackdrops.backdropsUrl)
     }
@@ -36,7 +36,7 @@ class GetImagesByIdTest {
         // Given
         coEvery { tvShowRepository.getImagesTvShowById(TV_SHOW_ID) } returns mockTvShowImagesWithPostersOnly
         // When
-        val result = getTvShowImagesByIdUseCase(TV_SHOW_ID)
+        val result = getTvShowImagesByIdUseCase.invoke(TV_SHOW_ID)
         // Then
         assertThat(result).isEqualTo(mockTvShowImagesWithPostersOnly.postersUrl)
     }
@@ -47,7 +47,7 @@ class GetImagesByIdTest {
             // Given
             coEvery { tvShowRepository.getImagesTvShowById(TV_SHOW_ID) } returns mockTvShowImagesWithLogosOnly
             // When
-            val result = getTvShowImagesByIdUseCase(TV_SHOW_ID)
+            val result = getTvShowImagesByIdUseCase.invoke(TV_SHOW_ID)
             // Then
             assertThat(result).isEqualTo(mockTvShowImagesWithLogosOnly.logosUrl)
         }
@@ -57,7 +57,7 @@ class GetImagesByIdTest {
         // Given
         coEvery { tvShowRepository.getImagesTvShowById(TV_SHOW_ID) } returns mockTvShowImagesEmpty
         // When
-        val result = getTvShowImagesByIdUseCase(TV_SHOW_ID)
+        val result = getTvShowImagesByIdUseCase.invoke(TV_SHOW_ID)
         // Then
         assertThat(result).isEmpty()
     }
@@ -67,7 +67,7 @@ class GetImagesByIdTest {
         // Given
         coEvery { tvShowRepository.getImagesTvShowById(TV_SHOW_ID) } returns mockTvShowImagesWithManyBackdrops
         // When
-        val result = getTvShowImagesByIdUseCase(TV_SHOW_ID)
+        val result = getTvShowImagesByIdUseCase.invoke(TV_SHOW_ID)
         // Then
         assertThat(result).hasSize(10)
         assertThat(result).isEqualTo(mockTvShowImagesWithManyBackdrops.backdropsUrl.take(10))
@@ -79,7 +79,7 @@ class GetImagesByIdTest {
         coEvery { tvShowRepository.getImagesTvShowById(TV_SHOW_ID) } throws GetImagesByIdFailedException()
         // When & Then
         assertThrows<GetImagesByIdFailedException> {
-            getTvShowImagesByIdUseCase(TV_SHOW_ID)
+            getTvShowImagesByIdUseCase.invoke(TV_SHOW_ID)
         }
     }
 
