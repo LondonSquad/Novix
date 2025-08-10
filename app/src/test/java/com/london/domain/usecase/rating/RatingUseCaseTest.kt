@@ -199,32 +199,5 @@ class RatingUseCaseTest {
                 mediaType = MediaType.Movie
             )
         )
-
-        private val mockSingleItem = listOf(
-            RatedMedia(
-                id = 1,
-                title = "Movie 1",
-                posterPath = "/movie1.jpg",
-                rating = 8,
-                mediaType = MediaType.Movie
-            )
-        )
-
-        private val mockSortedItems = listOf(
-            RatedMedia(
-                id = 1,
-                title = "First",
-                posterPath = "/first.jpg",
-                rating = 8,
-                mediaType = MediaType.Movie
-            ),
-            RatedMedia(
-                id = 2,
-                title = "Second",
-                posterPath = "/second.jpg",
-                rating = 7,
-                mediaType = MediaType.TvShow
-            )
-        )
     }
 }
