@@ -7,7 +7,6 @@ import com.london.domain.repository.TvShowRepository
 import javax.inject.Inject
 
 class ManageRatingUseCase @Inject constructor(
-    private val repository: RatingRepository,
     private val tvShowRepository: TvShowRepository,
     private val ratingRepository: RatingRepository,
     private val movieRepository: MovieDetailsRepository,
@@ -15,18 +14,18 @@ class ManageRatingUseCase @Inject constructor(
 
     suspend fun getRatedMedia(): List<RatedMedia> =
         buildList {
-            addAll(repository.getAllRatedMovies())
-            addAll(repository.getAllRatedTvShows())
+            addAll(ratingRepository.getAllRatedMovies())
+            addAll(ratingRepository.getAllRatedTvShows())
         }
 
     suspend fun getRatedMediaSorted(): List<RatedMedia> =
         getRatedMedia().sortedByDescending { it.rating }
 
     suspend fun getRatedMovies(): List<RatedMedia> =
-        repository.getAllRatedMovies()
+        ratingRepository.getAllRatedMovies()
 
     suspend fun getRatedTvShows(): List<RatedMedia> =
-        repository.getAllRatedTvShows()
+        ratingRepository.getAllRatedTvShows()
 
     suspend fun getRateAccountTvEpisode(
         tvShowId: Int,
@@ -51,7 +50,7 @@ class ManageRatingUseCase @Inject constructor(
     )
 
     suspend fun addMovieRatingById(id: Int, rating: Int): Boolean =
-        repository.addMovieRatingById(id = id, rating = rating)
+        ratingRepository.addMovieRatingById(id = id, rating = rating)
 
     suspend fun addTvShowRatingById(id: Int, rating: Int) =
         ratingRepository.addTvShowById(id = id, rating = rating)
