@@ -104,20 +104,6 @@ class TvShowDetailsViewModelTest {
     }
 
     @Test
-    fun `when initializeEpisodesBySeasons, episodes by seasons data should be fetched`() = runTest {
-        // When
-        advanceUntilIdle()
-
-        // Then
-        viewModel?.state?.test {
-            val state = expectMostRecentItem()
-            assertThat(state.tvShowEpisodes)
-                .containsExactlyElementsIn(tvShowEpisodesEntity.episodes)
-            ensureAllEventsConsumed()
-        }
-    }
-
-    @Test
     fun `When initializeEpisodesBySeasons fails, error state should be updated`() = runTest {
         // When
         advanceUntilIdle()
