@@ -19561,5 +19561,33 @@
       "deletions": 22,
       "changed_files": 6
     }
+  },
+  {
+    "pr_number": 595,
+    "url": "https://github.com/LondonSquad/Novix/pull/595",
+    "title": "Hotfix/rearrange presentation packages",
+    "opened_at": "2025-08-10T02:28:47Z",
+    "head_ref": "hotfix/rearrange-presentation-packages",
+    "base_ref": "develop",
+    "creator": {
+      "login": "Abdulrahman1890",
+      "id": 76666355,
+      "url": "https://github.com/Abdulrahman1890"
+    },
+    "approvals": [],
+    "first_approved_at": null,
+    "time_to_first_approval_minutes": null,
+    "required_approvals_met_at": null,
+    "time_to_required_approvals_minutes": null,
+    "closed_at": null,
+    "merged_at": null,
+    "merged_by": null,
+    "week": "2025-W32",
+    "status": "pending",
+    "diff_stats": {
+      "additions": 57,
+      "deletions": 76,
+      "changed_files": 49
+    }
   }
 ]
