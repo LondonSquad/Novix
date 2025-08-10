@@ -18,7 +18,6 @@ class RatingUseCaseTest {
     private val tvShowRepository: TvShowRepository = mockk(relaxed = true)
     private val movieRepository: MovieDetailsRepository = mockk(relaxed = true)
     private val ratingUseCase: ManageRatingUseCase = ManageRatingUseCase(
-        repository = ratingRepository,
         tvShowRepository = tvShowRepository,
         ratingRepository = ratingRepository,
         movieRepository = movieRepository
