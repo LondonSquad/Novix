@@ -4,14 +4,12 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -21,10 +19,12 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.paging.compose.collectAsLazyPagingItems
 import com.london.designsystem.component.Icon
 import com.london.designsystem.component.ModalBottomSheet
 import com.london.designsystem.component.Selection
@@ -73,19 +73,19 @@ fun BookmarkBottomSheet(
             onDismissRequest = onSheetDismiss,
             containerColor = NovixTheme.colors.surface,
             state = sheetState,
-            modifier = modifier
-                .padding(horizontal = 16.dp)
-                .padding(bottom = 24.dp),
+            modifier = modifier,
         ) {
             BookmarkBottomSheetContent(
-                modifier = modifier,
+                modifier = Modifier
+                    .padding(horizontal = 16.dp)
+                    .padding(bottom = 24.dp),
                 hideSheet = {
                     coroutineScope.launch { sheetState.hide() }
                         .invokeOnCompletion { if (sheetState.isNotVisible) onSheetDismiss() }
                 },
                 contract = viewModel,
                 uiState = uiState,
-                bookmarkedMovieId = bookmarkedMovieId
+                bookmarkedMovieId = bookmarkedMovieId,
             )
         }
     }
@@ -99,10 +99,10 @@ private fun BookmarkBottomSheetContent(
     hideSheet: () -> Unit,
     bookmarkedMovieId: UInt
 ) {
+    val lists = uiState.lists.collectAsLazyPagingItems()
 
     Column(
-        modifier = modifier
-            .fillMaxWidth(),
+        modifier = modifier.fillMaxWidth(),
         verticalArrangement = Arrangement.spacedBy(24.dp)
     ) {
         Row(
@@ -117,43 +117,39 @@ private fun BookmarkBottomSheetContent(
                 color = NovixTheme.colors.title,
             )
 
-            Box(
-                modifier = modifier
-                    .background(color = NovixTheme.colors.iconBackgroundLow)
+            Icon(
+                modifier = Modifier
+                    .size(32.dp)
                     .clip(RoundedCornerShape(8.dp))
                     .border(
                         width = 1.dp,
                         color = NovixTheme.colors.stroke,
                         shape = RoundedCornerShape(8.dp)
                     )
-                    .clickable(onClick = hideSheet),
-                contentAlignment = Alignment.Center
-            ) {
-                Icon(
-                    modifier = Modifier
-                        .padding(8.dp)
-                        .size(16.dp),
-                    painter = com.london.designsystem.R.drawable.cancel.painter,
-                    contentDescription = R.string.cancel_addition_to_list.string,
-                    tint = NovixTheme.colors.title
-                )
-            }
+                    .clickable(onClick = hideSheet)
+                    .padding(8.dp),
+                painter = com.london.designsystem.R.drawable.cancel.painter,
+                contentDescription = R.string.cancel_addition_to_list.string,
+                tint = NovixTheme.colors.title
+            )
 
         }
 
         LazyColumn(
             modifier = Modifier.fillMaxWidth()
         ) {
-            items(uiState.lists) { list ->
-                Selection(
-                    modifier = Modifier.fillMaxWidth(),
-                    mainText = list.name,
-                    isSelected = list.id in uiState.selectedLists,
-                    subText = list.itemCount.toString(),
-                    onClick = { contract.onListSelected(list.id) }
-                )
+            items(lists.itemCount) { index ->
+                val movieList = lists[index]
+                movieList?.let {
+                    Selection(
+                        modifier = Modifier.fillMaxWidth(),
+                        mainText = movieList.name,
+                        isSelected = movieList.id in uiState.selectedLists,
+                        subText = stringResource(R.string.n_items, movieList.itemCount.toInt()),
+                        onClick = { contract.onListSelected(movieList.id) }
+                    )
+                }
             }
-
         }
 
         Column(
@@ -190,19 +186,11 @@ private fun BookmarkBottomSheetContent(
 fun Preview() {
     NovixTheme {
         BookmarkBottomSheetContent(
-            uiState = BookmarkSheetUiState(
-                lists = listOf(
-                    BookmarkUiList(
-                        id = 0u,
-                        name = "TODO()",
-                        itemCount = 12u
-                    )
-                )
-            ),
+            uiState = BookmarkSheetUiState(),
             contract = hiltViewModel<BookmarkSheetViewModel>(),
             modifier = Modifier.background(NovixTheme.colors.surface),
             hideSheet = {},
-            0u
+            bookmarkedMovieId = 0u
         )
     }
 }

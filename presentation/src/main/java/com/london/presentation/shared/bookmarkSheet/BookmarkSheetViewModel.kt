@@ -1,9 +1,12 @@
 package com.london.presentation.shared.bookmarkSheet
 
+import androidx.lifecycle.viewModelScope
+import androidx.paging.cachedIn
 import com.london.domain.usecase.movielist.AddMovieToListUseCase
 import com.london.domain.usecase.movielist.GetAllMovieListsUseCase
 import com.london.domain.usecase.movielist.GetMovieListsUseCase
 import com.london.presentation.shared.base.BaseViewModel
+import com.london.presentation.shared.base.createPagingSourceFlow
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 
@@ -15,8 +18,22 @@ class BookmarkSheetViewModel @Inject constructor(
 ) : BaseViewModel<BookmarkSheetUiState, BookmarkSheetEffect>(BookmarkSheetUiState()),
     BookmarkSheetContract {
 
-    override fun onListSelected(listId: UInt) = updateState {
-        copy(selectedLists = selectedLists.toMutableList().apply { add(listId) })
+    init {
+        initializeMovieLists()
+    }
+
+    private fun initializeMovieLists() {
+        tryToExecute(
+            block = {
+                createPagingSourceFlow(query = "") { _, pageNumber ->
+                    getAllMovieListsUseCase.invoke(pageNumber)
+                }.cachedIn(viewModelScope)
+            },
+            onStart = { updateState { copy(isLoading = true) } },
+            onSuccess = { lists -> updateState { copy(lists = lists.toBookmarkUiLists()) } },
+            onError = { error -> updateState { copy(error = error) } },
+            onCompleted = { updateState { copy(isLoading = false) } }
+        )
     }
 
     override fun onAddToLists(bookmarkedId: UInt) {
@@ -55,6 +72,10 @@ class BookmarkSheetViewModel @Inject constructor(
             isErrorSnackbarVisible = false,
             isSuccessSnackbarVisible = false
         )
+    }
+
+    override fun onListSelected(listId: UInt) = updateState {
+        copy(selectedLists = selectedLists.toMutableList().apply { add(listId) })
     }
 
     override fun onCreateNewList() = emitEffect(BookmarkSheetEffect.NewListCreation)
