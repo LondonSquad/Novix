@@ -4,9 +4,7 @@ import com.google.common.truth.Truth.assertThat
 import com.london.domain.entity.PagedFetchResponse
 import com.london.domain.entity.Trending
 import com.london.domain.entity.TvShow
-import com.london.domain.entity.popular.PopularTvShow
 import com.london.domain.entity.popular.PopularMedia
-import com.london.domain.entity.tvshowdetails.TvShowCreatorEntity
 import com.london.domain.entity.tvshowdetails.TvShowDetailsEntity
 import com.london.domain.entity.tvshowdetails.TvShowGenreEntity
 import com.london.domain.error.TvShowDetailsSearchFailedException

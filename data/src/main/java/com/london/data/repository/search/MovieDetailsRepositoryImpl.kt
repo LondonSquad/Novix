@@ -6,6 +6,7 @@ import com.london.data.mapper.search.toEntity
 import com.london.data.mapper.search.toReviewEntity
 import com.london.data.remote.source.details.movie.MovieDetailsRemoteDataSource
 import com.london.data.remote.source.reviews.ReviewsRemoteDataSource
+import com.london.data.utils.asImageUrlOrEmpty
 import com.london.data.utils.fetchAndSync
 import com.london.domain.entity.Actor
 import com.london.domain.entity.Movie
@@ -58,9 +59,9 @@ class MovieDetailsRepositoryImpl @Inject constructor(
 
     override suspend fun getMovieVideos(movieId: Int): List<String> =
         movieDetailsRemoteDataSource.getMovieVideos(movieId)
-            .getOrThrow().movies?.map { movieVideoRemote ->
+            .getOrThrow().movies.orEmpty().map { movieVideoRemote ->
                 movieVideoRemote.key.asImageUrlOrEmpty()
-            }.orEmpty()
+            }
 
     override suspend fun getAccountMovieStatesById(
         id: Int,
