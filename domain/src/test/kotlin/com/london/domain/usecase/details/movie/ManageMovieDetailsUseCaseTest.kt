@@ -253,7 +253,7 @@ class ManageMovieDetailsUseCaseTest {
             // given
             coEvery { movieRepository.getMovieImagesById(MOVIE_ID) } returns movieImages
             // when
-            val result = manageMovieDetailsUseCase.getFirstTenMovieImagesUseCase(MOVIE_ID)
+            val result = manageMovieDetailsUseCase.getMovieImagesUseCase(MOVIE_ID)
             // then
             assertThat(result).isEqualTo(movieMockImages)
         }
@@ -269,7 +269,7 @@ class ManageMovieDetailsUseCaseTest {
                 posters = emptyList()
             )
             // when
-            val result = manageMovieDetailsUseCase.getFirstTenMovieImagesUseCase(MOVIE_ID)
+            val result = manageMovieDetailsUseCase.getMovieImagesUseCase(MOVIE_ID)
             // then
             assertThat(result).isEmpty()
         }
@@ -282,7 +282,7 @@ class ManageMovieDetailsUseCaseTest {
 
             // when & then
             assertThrows<GetMovieImagesFailedException> {
-                manageMovieDetailsUseCase.getFirstTenMovieImagesUseCase(MOVIE_ID)
+                manageMovieDetailsUseCase.getMovieImagesUseCase(MOVIE_ID)
             }
         }
 
@@ -299,7 +299,7 @@ class ManageMovieDetailsUseCaseTest {
             )
 
             // when
-            val result = manageMovieDetailsUseCase.getFirstTenMovieImagesUseCase(MOVIE_ID)
+            val result = manageMovieDetailsUseCase.getMovieImagesUseCase(MOVIE_ID)
 
             // then
             assertThat(result).hasSize(10)

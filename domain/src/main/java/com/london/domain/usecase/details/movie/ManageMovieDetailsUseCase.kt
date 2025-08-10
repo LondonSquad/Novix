@@ -8,14 +8,14 @@ class ManageMovieDetailsUseCase @Inject constructor(
 ) {
     suspend fun getMovieDetails(movieId: Int) = movieRepository.getMovieById(movieId)
 
-    suspend fun getFirstTenMovieImagesUseCase(movieId: Int) : List<String> {
+    suspend fun getMovieImagesUseCase(movieId: Int, limit: Int = LIMIT) : List<String> {
            val images = movieRepository.getMovieImagesById(movieId)
             return when {
                 images.backdrops.isNotEmpty() -> images.backdrops
                 images.posters.isNotEmpty() -> images.posters
                 images.logos.isNotEmpty() -> images.logos
                 else -> emptyList()
-            }.take(IMAGE_LIMIT)
+            }.take(limit)
         }
 
     suspend fun getMovieCast(movieId: Int) = movieRepository.getMovieCastById(movieId)
@@ -25,6 +25,6 @@ class ManageMovieDetailsUseCase @Inject constructor(
     suspend fun getMovieVideo(movieId: Int) = movieRepository.getMovieVideos(movieId)
 
     companion object {
-        private const val IMAGE_LIMIT = 10
+        private const val LIMIT = 10
     }
 }
