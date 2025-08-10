@@ -27,8 +27,8 @@ import com.london.designsystem.component.NovixChip
 import com.london.designsystem.component.TopBar
 import com.london.designsystem.theme.NovixTheme
 import com.london.designsystem.theme.ThemePreviews
+import com.london.domain.entity.recent.MediaType
 import com.london.presentation.R
-import com.london.presentation.feature.reviews.MediaType
 import com.london.presentation.shared.EmptyGenreLayout
 import com.london.presentation.shared.HomeCard
 import com.london.presentation.shared.SnackBarAnimation
@@ -138,7 +138,7 @@ private fun Content(
                             onDeleteClick = {
                                 contract.onDelete(
                                     id = item.id,
-                                    mediaType = if (item.isMovie) MediaType.Movie else MediaType.TvShow
+                                    mediaType = item.mediaType
                                 )
                             },
                             modifier = Modifier.animateItem(
@@ -146,9 +146,9 @@ private fun Content(
                                 fadeOutSpec = tween(500),
                                 placementSpec = tween(500)
                             ).clickable {
-                                when {
-                                    item.isMovie -> contract.onMovieClick(item.id)
-                                    else -> contract.onTvShowClick(item.id)
+                                when (item.mediaType) {
+                                    MediaType.Movie -> contract.onMovieClick(item.id)
+                                    MediaType.TvShow -> contract.onTvShowClick(item.id)
                                 }
                             },
                             isDarkMode = NovixTheme.isThemeDark

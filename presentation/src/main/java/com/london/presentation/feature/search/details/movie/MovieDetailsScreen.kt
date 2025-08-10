@@ -60,6 +60,7 @@ import com.london.designsystem.component.Text
 import com.london.designsystem.component.TopBar
 import com.london.designsystem.theme.NovixTheme
 import com.london.designsystem.theme.noRippleClickable
+import com.london.domain.entity.recent.MediaType
 import com.london.presentation.R.drawable
 import com.london.presentation.R.string.calendar
 import com.london.presentation.R.string.more_like_this
@@ -67,7 +68,6 @@ import com.london.presentation.R.string.overview
 import com.london.presentation.R.string.star
 import com.london.presentation.R.string.time_icon
 import com.london.presentation.R.string.view_reviews
-import com.london.presentation.feature.reviews.MediaType
 import com.london.presentation.feature.search.SearchCategory
 import com.london.presentation.shared.ActorItem
 import com.london.presentation.shared.ConditionalText

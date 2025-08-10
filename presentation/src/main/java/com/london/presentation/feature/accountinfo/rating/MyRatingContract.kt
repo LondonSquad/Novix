@@ -1,6 +1,6 @@
 package com.london.presentation.feature.accountinfo.rating
 
-import com.london.presentation.feature.reviews.MediaType
+import com.london.domain.entity.recent.MediaType
 
 interface MyRatingContract {
     fun onBackClicked()

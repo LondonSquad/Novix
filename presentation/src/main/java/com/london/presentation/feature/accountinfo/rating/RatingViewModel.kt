@@ -1,7 +1,7 @@
 package com.london.presentation.feature.accountinfo.rating
 
+import com.london.domain.entity.recent.MediaType
 import com.london.domain.usecase.rating.ManageRatingUseCase
-import com.london.presentation.feature.reviews.MediaType
 import com.london.presentation.shared.base.BaseViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
