@@ -22,10 +22,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import androidx.lifecycle.repeatOnLifecycle
 import com.london.designsystem.component.NovixChip
 import com.london.designsystem.component.TopBar
 import com.london.designsystem.theme.NovixTheme
@@ -52,11 +49,8 @@ fun MyRatingScreen(
     val state by viewModel.state.collectAsStateWithLifecycle()
     val effect by viewModel.effect.collectAsState(null)
 
-    val lifecycleOwner = LocalLifecycleOwner.current
     LaunchedEffect(Unit) {
-        lifecycleOwner.lifecycle.repeatOnLifecycle(Lifecycle.State.RESUMED) {
-            viewModel.initializeRatedMedia()
-        }
+        viewModel.initializeRatedMedia()
     }
 
     effect?.Listen { currentEffect ->
