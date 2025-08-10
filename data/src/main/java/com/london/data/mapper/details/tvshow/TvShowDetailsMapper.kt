@@ -29,7 +29,6 @@ fun TvShowGenre.toEntity() = TvShowGenreEntity(
     name = name.orEmpty()
 )
 
-@KoverIgnore
 fun TvShowSeason.toEntity() = TvShowSeasonEntity(
     airDate = airDate,
     episodeCount = episodeCount.orZero(),

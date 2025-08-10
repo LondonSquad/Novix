@@ -1,5 +1,3 @@
-@file:KoverIgnore
-
 package com.london.data.mapper.details.tvshow
 
 import com.london.data.remote.model.details.tvshow.model.tvshowepisode.EpisodeGuestStar
@@ -15,7 +13,6 @@ import com.london.domain.entity.tvshowdetails.episode.TvShowEpisodeByIdEntity
 import com.london.domain.entity.tvshowdetails.episode.TvShowEpisodeBySeasonEntity
 import com.london.domain.entity.tvshowdetails.episode.TvShowEpisodesEntity
 
-@KoverIgnore
 fun TvShowEpisodesRemoteResponse.toTvShowEpisodesEntity(): TvShowEpisodesEntity =
     TvShowEpisodesEntity(
         id = id.orEmpty(),
@@ -37,7 +34,6 @@ fun TvShowEpisodeBySeason.toTvShowEpisodeBySeasonEntity(): TvShowEpisodeBySeason
         voteAverage = voteAverage.orZero().roundToDecimal(),
     )
 
-@KoverIgnore
 fun TvShowEpisodeResponse.toTvShowEpisodeEntity(): TvShowEpisodeByIdEntity =
     TvShowEpisodeByIdEntity(
         airDate = airDate,
