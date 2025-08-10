@@ -8,7 +8,7 @@ import com.london.domain.entity.tvshowdetails.TvShowCastEntity
 import com.london.domain.entity.tvshowdetails.episode.TvShowEpisodesEntity
 import com.london.domain.usecase.GetCastById
 import com.london.domain.usecase.GetEpisodesByTvShowSeason
-import com.london.domain.usecase.GetImagesById
+import com.london.domain.usecase.GetTvShowImagesByIdUseCase
 import com.london.domain.usecase.authentication.AuthenticationUseCase
 import com.london.domain.usecase.details.tvshow.ManageTvShowDetailsUseCase
 import com.london.domain.usecase.rating.RatingUseCase
@@ -34,7 +34,7 @@ import org.junit.Test
 @OptIn(ExperimentalCoroutinesApi::class)
 class TvShowDetailsViewModelTest {
     private lateinit var getCastById: GetCastById
-    private lateinit var getTvShowImages: GetImagesById
+    private lateinit var getTvShowImages: GetTvShowImagesByIdUseCase
     private lateinit var getEpisodesByTvShowSeason: GetEpisodesByTvShowSeason
     private lateinit var manageTvShowDetailsUseCase: ManageTvShowDetailsUseCase
     private lateinit var manageRecentTvShowWatchedUseCase: ManageRecentTvShowWatchedUseCase

@@ -4,7 +4,7 @@ import android.annotation.SuppressLint
 import androidx.lifecycle.SavedStateHandle
 import com.london.domain.usecase.GetEpisodeByTvShowId
 import com.london.domain.usecase.GetEpisodeVideoProviderUseCase
-import com.london.domain.usecase.GetImagesById
+import com.london.domain.usecase.GetTvShowImagesByIdUseCase
 import com.london.domain.usecase.authentication.AuthenticationUseCase
 import com.london.domain.usecase.details.tvshow.ManageTvShowDetailsUseCase
 import com.london.domain.usecase.rating.RatingUseCase
@@ -16,7 +16,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class EpisodeDetailsViewModel @Inject constructor(
-    private val getTvShowImages: GetImagesById,
+    private val getTvShowImages: GetTvShowImagesByIdUseCase,
     private val getEpisodeByTvShowIdUseCase: GetEpisodeByTvShowId,
     private val manageTvShowDetailsUseCase: ManageTvShowDetailsUseCase,
     private val getVideoProvider: GetEpisodeVideoProviderUseCase,

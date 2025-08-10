@@ -6,7 +6,7 @@ import com.london.domain.entity.recent.MediaType
 import com.london.domain.entity.recent.RecentViewed
 import com.london.domain.usecase.GetCastById
 import com.london.domain.usecase.GetEpisodesByTvShowSeason
-import com.london.domain.usecase.GetImagesById
+import com.london.domain.usecase.GetTvShowImagesByIdUseCase
 import com.london.domain.usecase.authentication.AuthenticationUseCase
 import com.london.domain.usecase.details.tvshow.ManageTvShowDetailsUseCase
 import com.london.domain.usecase.rating.RatingUseCase
@@ -22,7 +22,7 @@ import javax.inject.Inject
 class TvShowDetailsViewModel @Inject constructor(
     private val getCastById: GetCastById,
     private val ratingUseCase: RatingUseCase,
-    private val getTvShowImages: GetImagesById,
+    private val getTvShowImages: GetTvShowImagesByIdUseCase,
     private val authenticationUseCase: AuthenticationUseCase,
     private val manageRecentViewedUseCase: ManageRecentViewedUseCase,
     private val getEpisodesByTvShowSeason: GetEpisodesByTvShowSeason,
