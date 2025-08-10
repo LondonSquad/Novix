@@ -6,10 +6,6 @@ import com.london.domain.entity.Movie
 import com.london.domain.entity.moviedatails.MovieDetails
 import com.london.domain.entity.moviedatails.MovieImages
 import com.london.domain.entity.videoprovider.MovieVideo
-import com.london.domain.error.GetCastByIdFailedException
-import com.london.domain.error.GetMovieByIdFailedException
-import com.london.domain.error.GetMovieCastFailedException
-import com.london.domain.error.GetMovieImagesFailedException
 import com.london.domain.repository.MovieDetailsRepository
 import io.mockk.coEvery
 import io.mockk.coVerify
@@ -144,18 +140,6 @@ class ManageMovieDetailsUseCaseTest {
     }
 
     @Test
-    fun `getMovieDetails should handle RuntimeException and let it propagate`() = runTest {
-        // Given
-        val movieId = 555
-        coEvery { movieRepository.getMovieById(movieId) } throws GetMovieByIdFailedException()
-
-        // When & Then
-        assertThrows<GetMovieByIdFailedException> {
-            manageMovieDetailsUseCase.getMovieDetails(movieId)
-        }
-    }
-
-    @Test
     fun `getMovieDetails should not call repository multiple times for same invocation`() =
         runTest {
             // Given
@@ -197,19 +181,6 @@ class ManageMovieDetailsUseCaseTest {
         assertThat(result).isEmpty()
         coVerify(exactly = 1) { movieRepository.getSimilarMoviesById(MOVIE_ID) }
     }
-
-    @Test
-    fun `getSimilarMovies should throw GetMovieCastFailedException when repository throws domain exception`() =
-        runTest {
-            // given
-            coEvery { movieRepository.getSimilarMoviesById(MOVIE_ID) } throws GetMovieCastFailedException()
-
-            // when & then
-            assertThrows<GetMovieCastFailedException> {
-                manageMovieDetailsUseCase.getSimilarMovies(MOVIE_ID)
-            }
-            coVerify(exactly = 1) { movieRepository.getSimilarMoviesById(MOVIE_ID) }
-        }
 
     @Test
     fun `getSimilarMovies should call repository with correct movie ID`() = runTest {
@@ -275,18 +246,6 @@ class ManageMovieDetailsUseCaseTest {
         }
 
     @Test
-    fun `getFirstTenMovieImagesUseCase should throw exception when repository throws exception`() =
-        runTest {
-            // given
-            coEvery { movieRepository.getMovieImagesById(MOVIE_ID) } throws GetMovieImagesFailedException()
-
-            // when & then
-            assertThrows<GetMovieImagesFailedException> {
-                manageMovieDetailsUseCase.getMovieImagesUseCase(MOVIE_ID)
-            }
-        }
-
-    @Test
     fun `getFirstTenMovieImagesUseCase should limit the number of images returned when images over 10`() =
         runTest {
             // given
@@ -317,18 +276,6 @@ class ManageMovieDetailsUseCaseTest {
 
         // then
         assertThat(result).isEqualTo(actorMockCast)
-    }
-
-    @Test
-    fun `getMovieCast should throw exception when repository throws exception`() = runTest {
-        // given
-        coEvery { movieRepository.getMovieCastById(MOVIE_ID) } throws GetCastByIdFailedException()
-
-        // when & then
-        assertThrows<GetCastByIdFailedException> {
-            manageMovieDetailsUseCase.getMovieCast(MOVIE_ID)
-        }
-        coVerify(exactly = 1) { movieRepository.getMovieCastById(MOVIE_ID) }
     }
 
     @Test

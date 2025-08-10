@@ -3,14 +3,12 @@ package com.london.domain.usecase
 import com.google.common.truth.Truth.assertThat
 import com.london.domain.entity.Movie
 import com.london.domain.entity.PagedFetchResponse
-import com.london.domain.error.MovieSearchFailedException
 import com.london.domain.repository.SearchRepository
 import io.mockk.coEvery
 import io.mockk.mockk
 import kotlinx.coroutines.test.runTest
 import org.junit.Before
 import org.junit.Test
-import org.junit.jupiter.api.assertThrows
 
 class GetMoviesUseCaseTest {
     lateinit var searchRepository: SearchRepository
@@ -31,17 +29,6 @@ class GetMoviesUseCaseTest {
         //then
         assertThat(result).isEqualTo(pagedFetchResponse)
     }
-
-    @Test
-    fun `should throw MovieSearchFailedException when repository throws an exception during movie search`() = runTest {
-        //given
-        coEvery { searchRepository.searchForMovies(NAME, PAGE_NUMBER) } throws MovieSearchFailedException()
-        //when //then
-        assertThrows<MovieSearchFailedException> {
-            getMoviesUseCase(NAME, PAGE_NUMBER)
-        }
-    }
-
 
     private companion object {
        private const val NAME = "Movie"

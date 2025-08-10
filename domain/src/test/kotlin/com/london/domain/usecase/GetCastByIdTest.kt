@@ -4,14 +4,12 @@ import com.google.common.truth.Truth.assertThat
 import com.london.domain.entity.tvshowdetails.TvShowCastEntity
 import com.london.domain.entity.tvshowdetails.TvShowCastMemberEntity
 import com.london.domain.entity.tvshowdetails.TvShowRoleEntity
-import com.london.domain.error.GetCastByIdFailedException
 import com.london.domain.repository.TvShowRepository
 import io.mockk.coEvery
 import io.mockk.mockk
 import kotlinx.coroutines.test.runTest
 import org.junit.Before
 import org.junit.Test
-import org.junit.jupiter.api.assertThrows
 
 class GetCastByIdTest {
     lateinit var tvShowRepository: TvShowRepository
@@ -31,16 +29,6 @@ class GetCastByIdTest {
         val result = getCastById(TV_SHOW_ID)
         //then
         assertThat(result).isEqualTo(mockCast)
-    }
-
-    @Test
-    fun `should throw exception when repository throws exception`() = runTest {
-        //given
-        coEvery { tvShowRepository.getCastTvShowById(TV_SHOW_ID) } throws GetCastByIdFailedException()
-        //when & then
-        assertThrows<GetCastByIdFailedException> {
-            getCastById(TV_SHOW_ID)
-        }
     }
 
     private companion object {

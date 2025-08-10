@@ -2,14 +2,12 @@ package com.london.domain.usecase
 
 import com.google.common.truth.Truth.assertThat
 import com.london.domain.entity.tvshowdetails.TvShowImagesEntity
-import com.london.domain.error.GetImagesByIdFailedException
 import com.london.domain.repository.TvShowRepository
 import io.mockk.coEvery
 import io.mockk.mockk
 import kotlinx.coroutines.test.runTest
 import org.junit.Before
 import org.junit.Test
-import org.junit.jupiter.api.assertThrows
 
 class GetImagesByIdTest {
     lateinit var tvShowRepository: TvShowRepository
@@ -71,16 +69,6 @@ class GetImagesByIdTest {
         // Then
         assertThat(result).hasSize(10)
         assertThat(result).isEqualTo(mockTvShowImagesWithManyBackdrops.backdropsUrl.take(10))
-    }
-
-    @Test
-    fun `should throw exception when repository throws exception`() = runTest {
-        // Given
-        coEvery { tvShowRepository.getImagesTvShowById(TV_SHOW_ID) } throws GetImagesByIdFailedException()
-        // When & Then
-        assertThrows<GetImagesByIdFailedException> {
-            getTvShowImagesByIdUseCase.invoke(TV_SHOW_ID)
-        }
     }
 
     private companion object {

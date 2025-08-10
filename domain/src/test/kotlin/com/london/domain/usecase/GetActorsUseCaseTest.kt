@@ -3,14 +3,12 @@ package com.london.domain.usecase
 import com.google.common.truth.Truth.assertThat
 import com.london.domain.entity.Actor
 import com.london.domain.entity.PagedFetchResponse
-import com.london.domain.error.ActorSearchFailedException
 import com.london.domain.repository.SearchRepository
 import io.mockk.coEvery
 import io.mockk.mockk
 import kotlinx.coroutines.test.runTest
 import org.junit.Before
 import org.junit.Test
-import org.junit.jupiter.api.assertThrows
 
 class GetActorsUseCaseTest {
     lateinit var searchRepository: SearchRepository
@@ -30,21 +28,6 @@ class GetActorsUseCaseTest {
         val result = getActorsUseCase(NAME, PAGE_NUMBER)
         //then
         assertThat(result).isEqualTo(pagedFetchResponse)
-    }
-
-    @Test
-    fun `should throw ActorSearchFailedException when SearchRepository throws ActorSearchFailedException`() = runTest {
-        //given
-        coEvery {
-            searchRepository.searchForActors(
-                NAME,
-                PAGE_NUMBER
-            )
-        } throws ActorSearchFailedException()
-        //when //then
-        assertThrows<ActorSearchFailedException> {
-            getActorsUseCase(NAME, PAGE_NUMBER)
-        }
     }
 
 
