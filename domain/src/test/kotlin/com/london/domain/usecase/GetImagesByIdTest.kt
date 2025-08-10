@@ -1,7 +1,6 @@
 package com.london.domain.usecase
 
 import com.google.common.truth.Truth.assertThat
-import com.london.domain.entity.tvshowdetails.ImageItemEntity
 import com.london.domain.entity.tvshowdetails.TvShowImagesEntity
 import com.london.domain.error.GetImagesByIdFailedException
 import com.london.domain.repository.TvShowRepository
@@ -14,12 +13,12 @@ import org.junit.jupiter.api.assertThrows
 
 class GetImagesByIdTest {
     lateinit var tvShowRepository: TvShowRepository
-    lateinit var getImagesById: GetImagesById
+    lateinit var getTvShowImagesByIdUseCase: GetTvShowImagesByIdUseCase
 
     @Before
     fun setUp() {
         tvShowRepository = mockk()
-        getImagesById = GetImagesById(tvShowRepository)
+        getTvShowImagesByIdUseCase = GetTvShowImagesByIdUseCase(tvShowRepository)
     }
 
     @Test
@@ -27,9 +26,9 @@ class GetImagesByIdTest {
         // Given
         coEvery { tvShowRepository.getImagesTvShowById(TV_SHOW_ID) } returns mockTvShowImagesWithBackdrops
         // When
-        val result = getImagesById(TV_SHOW_ID)
+        val result = getTvShowImagesByIdUseCase.invoke(TV_SHOW_ID)
         // Then
-        assertThat(result).isEqualTo(mockTvShowImagesWithBackdrops.backdrops)
+        assertThat(result).isEqualTo(mockTvShowImagesWithBackdrops.backdropsUrl)
     }
 
     @Test
@@ -37,27 +36,28 @@ class GetImagesByIdTest {
         // Given
         coEvery { tvShowRepository.getImagesTvShowById(TV_SHOW_ID) } returns mockTvShowImagesWithPostersOnly
         // When
-        val result = getImagesById(TV_SHOW_ID)
+        val result = getTvShowImagesByIdUseCase.invoke(TV_SHOW_ID)
         // Then
-        assertThat(result).isEqualTo(mockTvShowImagesWithPostersOnly.posters)
+        assertThat(result).isEqualTo(mockTvShowImagesWithPostersOnly.postersUrl)
     }
 
     @Test
-    fun `should return logos when backdrops and posters are empty but logos are available`() = runTest {
-        // Given
-        coEvery { tvShowRepository.getImagesTvShowById(TV_SHOW_ID) } returns mockTvShowImagesWithLogosOnly
-        // When
-        val result = getImagesById(TV_SHOW_ID)
-        // Then
-        assertThat(result).isEqualTo(mockTvShowImagesWithLogosOnly.logos)
-    }
+    fun `should return logos when backdrops and posters are empty but logos are available`() =
+        runTest {
+            // Given
+            coEvery { tvShowRepository.getImagesTvShowById(TV_SHOW_ID) } returns mockTvShowImagesWithLogosOnly
+            // When
+            val result = getTvShowImagesByIdUseCase.invoke(TV_SHOW_ID)
+            // Then
+            assertThat(result).isEqualTo(mockTvShowImagesWithLogosOnly.logosUrl)
+        }
 
     @Test
     fun `should return empty list when all image types are empty`() = runTest {
         // Given
         coEvery { tvShowRepository.getImagesTvShowById(TV_SHOW_ID) } returns mockTvShowImagesEmpty
         // When
-        val result = getImagesById(TV_SHOW_ID)
+        val result = getTvShowImagesByIdUseCase.invoke(TV_SHOW_ID)
         // Then
         assertThat(result).isEmpty()
     }
@@ -67,10 +67,10 @@ class GetImagesByIdTest {
         // Given
         coEvery { tvShowRepository.getImagesTvShowById(TV_SHOW_ID) } returns mockTvShowImagesWithManyBackdrops
         // When
-        val result = getImagesById(TV_SHOW_ID)
+        val result = getTvShowImagesByIdUseCase.invoke(TV_SHOW_ID)
         // Then
         assertThat(result).hasSize(10)
-        assertThat(result).isEqualTo(mockTvShowImagesWithManyBackdrops.backdrops.take(10))
+        assertThat(result).isEqualTo(mockTvShowImagesWithManyBackdrops.backdropsUrl.take(10))
     }
 
     @Test
@@ -79,116 +79,45 @@ class GetImagesByIdTest {
         coEvery { tvShowRepository.getImagesTvShowById(TV_SHOW_ID) } throws GetImagesByIdFailedException()
         // When & Then
         assertThrows<GetImagesByIdFailedException> {
-            getImagesById(TV_SHOW_ID)
+            getTvShowImagesByIdUseCase.invoke(TV_SHOW_ID)
         }
     }
 
     private companion object {
         const val TV_SHOW_ID = 12345
 
-        val mockImageItem = ImageItemEntity(
-            aspectRatio = 1.78,
-            height = 1080,
-            iso6391 = "en",
-            fileUrl = "/backdrop1.jpg",
-            voteAverage = 8.5,
-            voteCount = 100,
-            width = 1920
-        )
-
         val mockTvShowImagesWithBackdrops = TvShowImagesEntity(
-            backdrops = listOf(mockImageItem),
+            backdropsUrl = listOf("/backdrop1.jpg"),
             id = TV_SHOW_ID,
-            logos = listOf(
-                ImageItemEntity(
-                    aspectRatio = 1.0,
-                    height = 500,
-                    iso6391 = null,
-                    fileUrl = "/logo1.jpg",
-                    voteAverage = 7.8,
-                    voteCount = 50,
-                    width = 500
-                )
-            ),
-            posters = listOf(
-                ImageItemEntity(
-                    aspectRatio = 0.67,
-                    height = 1500,
-                    iso6391 = "en",
-                    fileUrl = "/poster1.jpg",
-                    voteAverage = 9.0,
-                    voteCount = 200,
-                    width = 1000
-                )
-            )
+            logosUrl = listOf("/logo1.jpg"),
+            postersUrl = listOf("/poster1.jpg")
         )
-
         val mockTvShowImagesWithPostersOnly = TvShowImagesEntity(
-            backdrops = emptyList(),
+            backdropsUrl = emptyList(),
             id = TV_SHOW_ID,
-            logos = listOf(
-                ImageItemEntity(
-                    aspectRatio = 1.0,
-                    height = 500,
-                    iso6391 = null,
-                    fileUrl = "/logo1.jpg",
-                    voteAverage = 7.8,
-                    voteCount = 50,
-                    width = 500
-                )
-            ),
-            posters = listOf(
-                ImageItemEntity(
-                    aspectRatio = 0.67,
-                    height = 1500,
-                    iso6391 = "en",
-                    fileUrl = "/poster1.jpg",
-                    voteAverage = 9.0,
-                    voteCount = 200,
-                    width = 1000
-                )
-            )
+            logosUrl = listOf("/logo1.jpg"),
+            postersUrl = listOf("/poster1.jpg")
         )
 
         val mockTvShowImagesWithLogosOnly = TvShowImagesEntity(
-            backdrops = emptyList(),
+            backdropsUrl = emptyList(),
             id = TV_SHOW_ID,
-            logos = listOf(
-                ImageItemEntity(
-                    aspectRatio = 1.0,
-                    height = 500,
-                    iso6391 = null,
-                    fileUrl = "/logo1.jpg",
-                    voteAverage = 7.8,
-                    voteCount = 50,
-                    width = 500
-                )
-            ),
-            posters = emptyList()
+            logosUrl = listOf("/logo1.jpg"),
+            postersUrl = emptyList()
         )
 
         val mockTvShowImagesEmpty = TvShowImagesEntity(
-            backdrops = emptyList(),
+            backdropsUrl = emptyList(),
             id = TV_SHOW_ID,
-            logos = emptyList(),
-            posters = emptyList()
+            logosUrl = emptyList(),
+            postersUrl = emptyList()
         )
 
         val mockTvShowImagesWithManyBackdrops = TvShowImagesEntity(
-            backdrops = List(15) { index ->
-                ImageItemEntity(
-                    aspectRatio = 1.78,
-                    height = 1080,
-                    iso6391 = "en",
-                    fileUrl = "/backdrop$index.jpg",
-                    voteAverage = 8.5,
-                    voteCount = 100,
-                    width = 1920
-                )
-            },
+            backdropsUrl = List(15) { index -> "/backdrop$index.jpg" },
             id = TV_SHOW_ID,
-            logos = emptyList(),
-            posters = emptyList()
+            logosUrl = emptyList(),
+            postersUrl = emptyList()
         )
     }
 }

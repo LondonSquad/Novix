@@ -123,7 +123,7 @@ class MovieDetailsViewModel @Inject constructor(
         tryToExecute(
             block = {
                 val movie = movieDetails.getMovieDetails(movieId)
-                val movieImages = movieDetails.getFirstTenMovieImagesUseCase(movieId)
+                val movieImages = movieDetails.getMovieImagesUseCase(movieId)
                 val movieCast = movieDetails.getMovieCast(movieId)
                 Triple(movie, movieImages, movieCast)
             },

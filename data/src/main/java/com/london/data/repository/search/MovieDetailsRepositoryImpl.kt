@@ -6,14 +6,13 @@ import com.london.data.mapper.search.toEntity
 import com.london.data.mapper.search.toReviewEntity
 import com.london.data.remote.source.details.movie.MovieDetailsRemoteDataSource
 import com.london.data.remote.source.reviews.ReviewsRemoteDataSource
-import com.london.data.utils.asImageUrlOrEmpty
 import com.london.data.utils.fetchAndSync
-import com.london.data.utils.isTrue
 import com.london.domain.entity.Actor
 import com.london.domain.entity.Movie
 import com.london.domain.entity.PagedFetchResponse
 import com.london.domain.entity.moviedatails.MediaStates
 import com.london.domain.entity.moviedatails.MovieDetails
+import com.london.domain.entity.moviedatails.MovieImages
 import com.london.domain.entity.review.ReviewEntity
 import com.london.domain.repository.MovieDetailsRepository
 import javax.inject.Inject
@@ -33,21 +32,8 @@ class MovieDetailsRepositoryImpl @Inject constructor(
         movieDetailsRemoteDataSource.getSimilarMovies(id).getOrThrow().items
             .map { it.toEntity() }
 
-    override suspend fun getMovieImagesById(id: Int): List<String> {
-        val images = movieDetailsRemoteDataSource.getMovieImages(id).getOrThrow()
-        return when {
-            images.backdrops.orEmpty().isNotEmpty().isTrue -> images.backdrops.orEmpty()
-                .map { it.filePath.asImageUrlOrEmpty() }
-
-            images.posters.orEmpty().isNotEmpty().isTrue -> images.posters.orEmpty()
-                .map { it.filePath.asImageUrlOrEmpty() }
-
-            images.logos.orEmpty().isNotEmpty().isTrue -> images.logos.orEmpty()
-                .map { it.filePath.asImageUrlOrEmpty() }
-
-            else -> emptyList()
-        }
-    }
+    override suspend fun getMovieImagesById(id: Int): MovieImages =
+        movieDetailsRemoteDataSource.getMovieImages(id).getOrThrow().toEntity()
 
     override suspend fun getMovieCastById(id: Int): List<Actor> {
         val movieCast = movieDetailsRemoteDataSource.getMovieCast(id).getOrThrow()

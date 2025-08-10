@@ -4,24 +4,17 @@ import com.google.common.truth.Truth.assertThat
 import com.london.domain.entity.PagedFetchResponse
 import com.london.domain.entity.Trending
 import com.london.domain.entity.TvShow
+import com.london.domain.entity.popular.PopularTvShow
 import com.london.domain.entity.popular.PopularMedia
 import com.london.domain.entity.tvshowdetails.TvShowCreatorEntity
 import com.london.domain.entity.tvshowdetails.TvShowDetailsEntity
-import com.london.domain.entity.tvshowdetails.TvShowEpisodeEntity
 import com.london.domain.entity.tvshowdetails.TvShowGenreEntity
-import com.london.domain.entity.tvshowdetails.TvShowNetworkEntity
-import com.london.domain.entity.tvshowdetails.TvShowProductionCompanyEntity
-import com.london.domain.entity.tvshowdetails.TvShowProductionCountryEntity
-import com.london.domain.entity.tvshowdetails.TvShowSeasonEntity
-import com.london.domain.entity.tvshowdetails.TvShowSpokenLanguageEntity
-import com.london.domain.entity.videoprovider.TvShowVideo
 import com.london.domain.error.TvShowDetailsSearchFailedException
 import com.london.domain.error.TvShowSearchFailedException
 import com.london.domain.repository.PopularRepository
 import com.london.domain.repository.SearchRepository
 import com.london.domain.repository.TrendingRepository
 import com.london.domain.repository.TvShowRepository
-import com.london.domain.repository.TvShowVideoProviderRepository
 import com.london.domain.repository.discover.DiscoverRepository
 import io.mockk.coEvery
 import io.mockk.coVerify
@@ -38,7 +31,6 @@ class ManageTvShowDetailsUseCaseTest {
     private lateinit var trendingRepository: TrendingRepository
     private lateinit var searchRepository: SearchRepository
     private lateinit var discoverRepository: DiscoverRepository
-    private lateinit var tvShowVideoProviderRepository: TvShowVideoProviderRepository
     private lateinit var manageTvShowDetailsUseCase: ManageTvShowDetailsUseCase
 
     @Before
@@ -48,14 +40,12 @@ class ManageTvShowDetailsUseCaseTest {
         trendingRepository = mockk()
         searchRepository = mockk()
         discoverRepository = mockk()
-        tvShowVideoProviderRepository = mockk()
         manageTvShowDetailsUseCase = ManageTvShowDetailsUseCase(
             tvShowRepository = tvShowRepository,
             popularRepository = popularRepository,
             trendingRepository = trendingRepository,
             searchRepository = searchRepository,
             discoverRepository = discoverRepository,
-            tvShowVideoProviderRepository = tvShowVideoProviderRepository
         )
     }
 
@@ -414,124 +404,21 @@ class ManageTvShowDetailsUseCaseTest {
         )
 
         val mockVideos = listOf(
-            TvShowVideo(
-                id = "vid1",
-                iso31661 = "US",
-                iso6391 = "en",
-                videoUrl = "https://youtube.com/vid1",
-                name = "Episode 1 Trailer",
-                official = true,
-                publishedAt = "2024-07-01",
-                site = "YouTube",
-                size = 1080,
-                type = "Trailer"
-            ),
-            TvShowVideo(
-                id = "vid2",
-                iso31661 = "US",
-                iso6391 = "en",
-                videoUrl = "https://youtube.com/vid2",
-                name = "Episode 2 Teaser",
-                official = false,
-                publishedAt = "2024-07-05",
-                site = "YouTube",
-                size = 720,
-                type = "Teaser"
-            )
+            "https://youtube.com/vid1",
+            "https://youtube.com/vid2"
         )
 
         val mockTvShowDetails = TvShowDetailsEntity(
-            adult = false,
-            backdropUrl = "/backdrop.jpg",
-            createdBy = listOf(
-                TvShowCreatorEntity(
-                    id = 1,
-                    creditId = "credit1",
-                    name = "Creator Name",
-                    originalName = "Creator Name",
-                    gender = 1,
-                    profileUrl = "/profile.jpg"
-                )
-            ),
-            episodeRunTime = listOf(45),
             firstAirDate = "2020-01-01",
             tvShowGenres = listOf(TvShowGenreEntity(id = 1, name = "Drama")),
-            homepage = "https://example.com",
             id = TV_SHOW_ID,
-            inProduction = true,
-            languages = listOf("en"),
-            lastAirDate = "2023-12-31",
-            lastTvShowEpisodeToAir = TvShowEpisodeEntity(
-                id = 1,
-                name = "Episode 1",
-                overview = "Overview",
-                voteAverage = 8.5,
-                voteCount = 100,
-                airDate = "2023-12-31",
-                episodeNumber = 1,
-                episodeType = "finale",
-                productionCode = "P001",
-                runtime = 45,
-                seasonNumber = 1,
-                showId = TV_SHOW_ID,
-                stillPath = "/still.jpg"
-            ),
             name = "Test Show",
-            nextTvShowEpisodeToAir = null,
-            tvShowNetworks = listOf(
-                TvShowNetworkEntity(
-                    id = 1,
-                    logoUrl = "/network.jpg",
-                    name = "Network",
-                    originCountry = "US"
-                )
-            ),
             numberOfEpisodes = 10,
             numberOfSeasons = 2,
-            originCountry = listOf("US"),
-            originalLanguage = "en",
-            originalName = "Test Show",
             overview = "A test show overview",
-            popularity = 85.5,
             posterUrl = "/poster.jpg",
-            productionCompanies = listOf(
-                TvShowProductionCompanyEntity(
-                    id = 1,
-                    logoUrl = "/company.jpg",
-                    name = "Production Company",
-                    originCountry = "US"
-                )
-            ),
-            productionCountries = listOf(
-                TvShowProductionCountryEntity(
-                    iso31661 = "US",
-                    name = "United States"
-                )
-            ),
-            tvShowSeasons = listOf(
-                TvShowSeasonEntity(
-                    airDate = "2020-01-01",
-                    episodeCount = 10,
-                    id = 1,
-                    name = "Season 1",
-                    overview = "Season 1 overview",
-                    posterUrl = "/season1.jpg",
-                    seasonNumber = 1,
-                    voteAverage = 8.0
-                )
-            ),
-            tvShowSpokenLanguageEntities = listOf(
-                TvShowSpokenLanguageEntity(
-                    englishName = "English",
-                    iso6391 = "en",
-                    name = "English"
-                )
-            ),
-            status = "Ended",
-            tagline = "Test tagline",
-            type = "Scripted",
+            tvShowSeasons = listOf(10),
             voteAverage = 8.5,
-            voteCount = 1000
         )
 
         private val EMPTY_TV_SHOWS_LIST = emptyList<PopularMedia>()
