@@ -81,14 +81,11 @@ class TrendingActorsViewModelTest {
     @Test
     fun `when initializeActors succeeds multiple times, state should be updated correctly`() =
         runTest {
-            // When
-            advanceUntilIdle()
-
-            // Then
+            // When & Then
             viewModel?.state?.test {
-                val state = expectMostRecentItem()
-                assertThat(state.actorsFlow).isNotNull()
-                assertThat(state.isLoading).isFalse()
+                val finalState = awaitItem()
+                assertThat(finalState.actorsFlow).isNotNull()
+                assertThat(finalState.isLoading).isFalse()
                 ensureAllEventsConsumed()
             }
         }
@@ -106,14 +103,11 @@ class TrendingActorsViewModelTest {
 
         viewModel = TrendingActorsViewModel(getTrendingActors = getTrendingActors)
 
-        // When
-        advanceUntilIdle()
-
-        // Then
+        // When & Then
         viewModel?.state?.test {
-            val state = expectMostRecentItem()
-            assertThat(state.actorsFlow).isNotNull()
-            assertThat(state.isLoading).isFalse()
+            val finalState = awaitItem()
+            assertThat(finalState.actorsFlow).isNotNull()
+            assertThat(finalState.isLoading).isFalse()
             ensureAllEventsConsumed()
         }
     }
@@ -128,14 +122,11 @@ class TrendingActorsViewModelTest {
 
         viewModel = TrendingActorsViewModel(getTrendingActors = getTrendingActors)
 
-        // When
-        advanceUntilIdle()
-
-        // Then
+        // When & Then
         viewModel?.state?.test {
-            val state = expectMostRecentItem()
-            assertThat(state.actorsFlow).isNotNull()
-            assertThat(state.isLoading).isFalse()
+            val finalState = awaitItem()
+            assertThat(finalState.actorsFlow).isNotNull()
+            assertThat(finalState.isLoading).isFalse()
             ensureAllEventsConsumed()
         }
     }
