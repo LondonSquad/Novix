@@ -19498,17 +19498,25 @@
           "url": "https://github.com/ahmeddsamii"
         },
         "submitted_at": "2025-08-10T10:35:25Z"
+      },
+      {
+        "reviewer": {
+          "id": 106277855,
+          "login": "Mostafa-alsaygh",
+          "url": "https://github.com/Mostafa-alsaygh"
+        },
+        "submitted_at": "2025-08-10T10:38:38Z"
       }
     ],
     "first_approved_at": "2025-08-10T10:35:25Z",
     "time_to_first_approval_minutes": 625.1333333333333,
-    "required_approvals_met_at": null,
-    "time_to_required_approvals_minutes": null,
+    "required_approvals_met_at": "2025-08-10T10:38:38Z",
+    "time_to_required_approvals_minutes": 628.35,
     "closed_at": null,
     "merged_at": null,
     "merged_by": null,
     "week": "2025-W32",
-    "status": "pending",
+    "status": "approved",
     "diff_stats": {
       "additions": 130,
       "deletions": 72,
