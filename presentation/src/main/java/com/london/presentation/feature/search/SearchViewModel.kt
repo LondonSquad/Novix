@@ -47,8 +47,6 @@ class SearchViewModel @Inject constructor(
             onError = { errorState ->
                 updateState { copy(error = errorState) }
             },
-            onCompleted = { },
-            checkSuccess = { true }
         )
     }
 
@@ -110,7 +108,6 @@ class SearchViewModel @Inject constructor(
             onError = { errorState ->
                 updateState { copy(error = errorState) }
             },
-            checkSuccess = { true }
         )
     }
 
@@ -187,7 +184,6 @@ class SearchViewModel @Inject constructor(
             onError = { errorState ->
                 updateState { copy(error = errorState) }
             },
-            checkSuccess = { true }
         )
     }
 
@@ -201,7 +197,6 @@ class SearchViewModel @Inject constructor(
             onError = { errorState ->
                 updateState { copy(error = errorState) }
             },
-            checkSuccess = { true }
         )
     }
 
@@ -216,7 +211,6 @@ class SearchViewModel @Inject constructor(
             onError = { errorState ->
                 updateState { copy(error = errorState) }
             },
-            checkSuccess = { true }
         )
     }
 
@@ -230,7 +224,6 @@ class SearchViewModel @Inject constructor(
             onError = { errorState ->
                 updateState { copy(error = errorState) }
             },
-            checkSuccess = { true }
         )
     }
 
@@ -308,7 +301,6 @@ class SearchViewModel @Inject constructor(
                 clearAllSearchResults()
                 updateState { copy(error = errorState) }
             },
-            checkSuccess = { true }
         )
     }
 
