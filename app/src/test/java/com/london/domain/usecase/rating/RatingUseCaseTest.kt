@@ -2,6 +2,7 @@ package com.london.domain.usecase.rating
 
 import com.london.domain.entity.RatedMedia
 import com.london.domain.entity.moviedatails.MediaStates
+import com.london.domain.entity.recent.MediaType
 import com.london.domain.repository.MovieDetailsRepository
 import com.london.domain.repository.RatingRepository
 import com.london.domain.repository.TvShowRepository
@@ -82,19 +83,6 @@ class RatingUseCaseTest {
     }
 
     @Test
-    fun `getAllRated returns sorted list by rating`() = runTest {
-        // Given
-        coEvery { repository.getAllRatedMedia() } returns mockRatedMedia
-
-        // When
-        val result = ratingUseCase.getAllRated()
-
-        // Then
-        Assert.assertEquals(2, result.size)
-        Assert.assertTrue(result[0].rating >= result[1].rating)
-    }
-
-    @Test
     fun `getRatedMovies returns only movies sorted by rating`() = runTest {
         // Given
         coEvery { repository.getAllRatedMovies() } returns mockRatedMedia
@@ -104,7 +92,6 @@ class RatingUseCaseTest {
 
         // Then
         Assert.assertEquals(2, result.size)
-        Assert.assertTrue(result.all { it.isMovie })
         Assert.assertTrue(result[0].rating >= result[1].rating)
         Assert.assertEquals("Movie 2", result[0].title) // rating = 9
         Assert.assertEquals("Movie 1", result[1].title) // rating = 8
@@ -120,24 +107,12 @@ class RatingUseCaseTest {
 
         // Then
         Assert.assertEquals(2, result.size)
-        Assert.assertTrue(result.all { !it.isMovie })
         Assert.assertTrue(result[0].rating >= result[1].rating)
         Assert.assertTrue(result[0].rating >= result[1].rating)
         Assert.assertEquals("TV Show 2", result[0].title)
         Assert.assertEquals("TV Show 1", result[1].title)
     }
 
-    @Test
-    fun `getAllRated returns empty list when repository returns empty`() = runTest {
-        // Given
-        coEvery { repository.getAllRatedMedia() } returns emptyList()
-
-        // When
-        val result = ratingUseCase.getAllRated()
-
-        // Then
-        Assert.assertEquals(0, result.size)
-    }
 
     @Test
     fun `getRatedMovies returns empty list when no movies`() = runTest {
@@ -163,32 +138,6 @@ class RatingUseCaseTest {
         Assert.assertEquals(0, result.size)
     }
 
-    @Test
-    fun `getAllRated returns correct rating`() = runTest {
-        // Given
-        coEvery { repository.getAllRatedMedia() } returns mockSingleItem
-
-        // When
-        val result = ratingUseCase.getAllRated()
-
-        // Then
-        Assert.assertEquals(1, result.size)
-        Assert.assertEquals(8, result[0].rating)
-    }
-
-    @Test
-    fun `getAllRated sorts by rating descending`() = runTest {
-        // Given
-        coEvery { repository.getAllRatedMedia() } returns mockSortedItems
-
-        // When
-        val result = ratingUseCase.getAllRated()
-
-        // Then
-        Assert.assertEquals(2, result.size)
-        Assert.assertTrue(result[0].rating >= result[1].rating)
-    }
-
     private fun mockMovieStates() = MediaStates(
         id = 123,
         rate = 8,
@@ -203,14 +152,14 @@ class RatingUseCaseTest {
                 title = "Movie 1",
                 posterPath = "/movie1.jpg",
                 rating = 8,
-                isMovie = true
+                mediaType = MediaType.Movie
             ),
             RatedMedia(
                 id = 3,
                 title = "Movie 2",
                 posterPath = "/movie2.jpg",
                 rating = 9,
-                isMovie = true
+                mediaType = MediaType.Movie
             )
         )
 
@@ -220,14 +169,14 @@ class RatingUseCaseTest {
                 title = "TV Show 1",
                 posterPath = "/tvshow1.jpg",
                 rating = 7,
-                isMovie = false
+                mediaType = MediaType.TvShow
             ),
             RatedMedia(
                 id = 3,
                 title = "TV Show 2",
                 posterPath = "/tvshow2.jpg",
                 rating = 9,
-                isMovie = false
+                mediaType = MediaType.TvShow
             )
         )
 
@@ -237,7 +186,7 @@ class RatingUseCaseTest {
                 title = "TV Show 1",
                 posterPath = "/tvshow1.jpg",
                 rating = 7,
-                isMovie = false
+                mediaType = MediaType.TvShow
             )
         )
 
@@ -247,7 +196,7 @@ class RatingUseCaseTest {
                 title = "Movie 1",
                 posterPath = "/movie1.jpg",
                 rating = 8,
-                isMovie = true
+                mediaType = MediaType.Movie
             )
         )
 
@@ -257,7 +206,7 @@ class RatingUseCaseTest {
                 title = "Movie 1",
                 posterPath = "/movie1.jpg",
                 rating = 8,
-                isMovie = true
+                mediaType = MediaType.Movie
             )
         )
 
@@ -267,14 +216,14 @@ class RatingUseCaseTest {
                 title = "First",
                 posterPath = "/first.jpg",
                 rating = 8,
-                isMovie = true
+                mediaType = MediaType.Movie
             ),
             RatedMedia(
                 id = 2,
                 title = "Second",
                 posterPath = "/second.jpg",
                 rating = 7,
-                isMovie = false
+                mediaType = MediaType.TvShow
             )
         )
     }
