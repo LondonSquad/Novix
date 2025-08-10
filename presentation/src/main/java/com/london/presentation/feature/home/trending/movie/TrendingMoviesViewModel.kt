@@ -21,14 +21,10 @@ class TrendingMoviesViewModel @Inject constructor(
         tryToExecute(
             block = {
                 val moviesFlow = createPagingSourceFlow(query = "") { _, pageNumber ->
-                    val movies = getTrendingMovies.invoke(page = pageNumber)
-                    val filteredItems =
-                        if (state.value.selectedGenreId != null && state.value.selectedGenreId != -1) {
-                            movies.items.filter { it.genreIds.contains(state.value.selectedGenreId) }
-                        } else {
-                            movies.items
-                        }
-                    movies.copy(items = filteredItems)
+                    getTrendingMovies.invoke(
+                        page = pageNumber,
+                        genreId = state.value.selectedGenreId
+                    )
                 }
                 moviesFlow
             },

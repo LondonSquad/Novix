@@ -10,6 +10,14 @@ import javax.inject.Singleton
 class GetTrendingMoviesUseCase @Inject constructor(
     private val repository: TrendingRepository
 ) {
-    suspend fun invoke(page: Int): PagedFetchResponse<Trending> =
-        repository.getTrendingMovies(page)
+    suspend fun invoke(page: Int, genreId: Int? = null): PagedFetchResponse<Trending> {
+        val movies = repository.getTrendingMovies(page)
+        
+        return if (genreId != null && genreId != -1) {
+            val filteredItems = movies.items.filter { it.genreIds.contains(genreId) }
+            movies.copy(items = filteredItems)
+        } else {
+            movies
+        }
+    }
 }
