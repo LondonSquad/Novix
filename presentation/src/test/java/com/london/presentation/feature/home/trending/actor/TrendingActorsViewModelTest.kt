@@ -20,8 +20,6 @@ import kotlinx.coroutines.test.setMain
 import org.junit.After
 import org.junit.Before
 import org.junit.Test
-import java.net.ConnectException
-import java.net.SocketTimeoutException
 
 @OptIn(ExperimentalCoroutinesApi::class)
 class TrendingActorsViewModelTest {
@@ -33,9 +31,9 @@ class TrendingActorsViewModelTest {
     fun setup() {
         Dispatchers.setMain(mainDispatcher)
         getTrendingActors = mockk()
-        
+
         coEvery { getTrendingActors.invoke(any()) } returns createMockActorsResponse()
-        
+
         viewModel = TrendingActorsViewModel(getTrendingActors = getTrendingActors)
     }
 
@@ -67,7 +65,7 @@ class TrendingActorsViewModelTest {
             delay(100)
             createMockActorsResponse()
         }
-        
+
         viewModel = TrendingActorsViewModel(getTrendingActors = getTrendingActors)
 
         // When
@@ -117,18 +115,19 @@ class TrendingActorsViewModelTest {
     }
 
     @Test
-    fun `when initializeActors succeeds multiple times, state should be updated correctly`() = runTest {
-        // When
-        advanceUntilIdle()
+    fun `when initializeActors succeeds multiple times, state should be updated correctly`() =
+        runTest {
+            // When
+            advanceUntilIdle()
 
-        // Then
-        viewModel?.state?.test {
-            val state = expectMostRecentItem()
-            assertThat(state.actorsFlow).isNotNull()
-            assertThat(state.isLoading).isFalse()
-            ensureAllEventsConsumed()
+            // Then
+            viewModel?.state?.test {
+                val state = expectMostRecentItem()
+                assertThat(state.actorsFlow).isNotNull()
+                assertThat(state.isLoading).isFalse()
+                ensureAllEventsConsumed()
+            }
         }
-    }
 
     @Test
     fun `when initializeActors with empty response, state should handle empty data`() = runTest {
@@ -140,7 +139,7 @@ class TrendingActorsViewModelTest {
             totalItems = 0
         )
         coEvery { getTrendingActors.invoke(any()) } returns emptyResponse
-        
+
         viewModel = TrendingActorsViewModel(getTrendingActors = getTrendingActors)
 
         // When
@@ -162,7 +161,7 @@ class TrendingActorsViewModelTest {
             items = (1..100).map { createMockActor(id = it, name = "Actor $it") }
         )
         coEvery { getTrendingActors.invoke(any()) } returns largeResponse
-        
+
         viewModel = TrendingActorsViewModel(getTrendingActors = getTrendingActors)
 
         // When
