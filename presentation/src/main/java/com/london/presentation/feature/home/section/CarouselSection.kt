@@ -26,14 +26,14 @@ import com.london.presentation.shared.HomeCard
 
 @Composable
 fun HomeCarouselSection(
-    modifier: Modifier = Modifier,
-    uiMediaList: List<HomeUiMedia>,
-    @StringRes sectionName: Int,
-    carouselState: CarouselState = rememberCarouselState { uiMediaList.size },
+    onAllClick: () -> Unit,
     onSaveClick: (Int) -> Unit,
     onCardClick: (Int, MediaType) -> Unit,
+    @StringRes sectionName: Int,
+    uiMediaList: List<HomeUiMedia>,
+    modifier: Modifier = Modifier,
     isLoading: Boolean = false,
-    onAllClick: () -> Unit,
+    carouselState: CarouselState = rememberCarouselState { uiMediaList.size },
 ) {
     Column(
         modifier = modifier.fillMaxWidth(),
@@ -77,7 +77,8 @@ fun HomeCarouselSection(
                     },
                 imageUrl = mediaItem.posterUrl,
                 onSaveClick = { onSaveClick(mediaItem.id) },
-                hasSaveIcon = isHero
+                hasSaveIcon = isHero,
+                isDarkMode = NovixTheme.isThemeDark
             )
         }
     }

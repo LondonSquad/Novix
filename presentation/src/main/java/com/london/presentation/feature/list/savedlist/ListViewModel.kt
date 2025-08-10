@@ -1,7 +1,7 @@
 package com.london.presentation.feature.list.savedlist
 
 import androidx.compose.ui.text.input.TextFieldValue
-import com.london.domain.usecase.LoggedInUseCase
+import com.london.domain.usecase.authentication.AuthenticationUseCase
 import com.london.domain.usecase.movielist.GetAllMovieListsUseCase
 import com.london.domain.usecase.movielist.ManageMovieListUseCase
 import com.london.presentation.shared.base.BaseViewModel
@@ -13,7 +13,7 @@ import jakarta.inject.Inject
 class ListViewModel @Inject constructor(
     private val getAllMovieListsUseCase: GetAllMovieListsUseCase,
     private val manageMovieListUseCase: ManageMovieListUseCase,
-    private val loggedInUseCase: LoggedInUseCase
+    private val authenticationUseCase: AuthenticationUseCase
 ) : BaseViewModel<ListUiState, ListEffect>(ListUiState()), ListContract {
 
     init {
@@ -110,7 +110,7 @@ class ListViewModel @Inject constructor(
     private fun checkUserLoginStatus(onResult: (Boolean) -> Unit = {}) {
 
         tryToExecute(
-            block = { loggedInUseCase.invoke() },
+            block = { authenticationUseCase.isLoggedIn() },
             onStart = {
                 updateState { copy(isLoading = true) }
             },
@@ -121,7 +121,7 @@ class ListViewModel @Inject constructor(
             onError = {
                 updateState { copy(isGuest = true, isLoading = false) }
                 onResult(false)
-            },
+            }
         )
     }
 }

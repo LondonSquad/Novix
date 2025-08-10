@@ -1,12 +1,12 @@
 package com.london.data.mapper.details.movie
 
-import com.london.data.remote.model.details.movie.model.moviedetails.AccountMovieStatesResponse
+import com.london.data.remote.model.details.rating.AccountStatesResponse
 import com.london.data.utils.isTrue
 import com.london.data.utils.orZero
 import com.london.data.utils.parseRatingValue
-import com.london.domain.entity.moviedatails.MovieStates
+import com.london.domain.entity.moviedatails.MediaStates
 
-fun AccountMovieStatesResponse.toEntity() = MovieStates(
+fun AccountStatesResponse.toEntity() = MediaStates(
     favorite = favorite.isTrue,
     id = id.orZero(),
     rate  = rated.parseRatingValue()?.toInt().orZero(),

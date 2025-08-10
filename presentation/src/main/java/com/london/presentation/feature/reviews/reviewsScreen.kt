@@ -63,14 +63,14 @@ fun ReviewsScreen(
     val effect by viewModel.effect.collectAsState(initial = null)
 
     effect?.Listen { onNavigateBack() }
-    ReviewsScreenContent(
+    Content(
         uiState = uiState,
         reviewContract = viewModel,
     )
 }
 
 @Composable
-fun ReviewsScreenContent(
+private fun Content(
     uiState: ReviewsUiState,
     reviewContract: ReviewContract
 ) {
@@ -128,18 +128,6 @@ fun ReviewsScreenContent(
                     }
                 }
             }
-
-            TopBar(
-                title = stringResource(R.string.reviews),
-                onBackClick = reviewContract::onBackClicked,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(
-                        start = 16.dp,
-                        top = WindowInsets.statusBars.asPaddingValues()
-                            .calculateTopPadding() + 12.dp
-                    )
-            )
         }
     }
 
@@ -241,7 +229,7 @@ fun AuthorItem(
                 contentDescription = stringResource(R.string.author_profile),
                 contentScale = ContentScale.Crop,
                 loadingContent = { CircularLoading() },
-                errorContent = { ErrorImage() },
+                errorContent = { ErrorImage(NovixTheme.isThemeDark) },
             )
         }
         Column(

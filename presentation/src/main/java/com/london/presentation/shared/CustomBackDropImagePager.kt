@@ -45,7 +45,7 @@ fun CustomBackDropImagePager(
             contentAlignment = Alignment.Center
         ) {
             ImageVerticalGradient()
-            ErrorImage()
+            ErrorImage(NovixTheme.isThemeDark)
         }
     } else {
         Box(
@@ -85,7 +85,7 @@ fun CustomBackDropImagePager(
                     contentScale = ContentScale.Crop,
                     model = validImages[pageIndex],
                     contentDescription = "${stringResource(R.string.tv_show_image)} ${pageIndex + 1}",
-                    errorContent = { ErrorImage() },
+                    errorContent = { ErrorImage(NovixTheme.isThemeDark) },
                     loadingContent = { CircularLoading(modifier = Modifier) },
                     moderatedContent = { UnSuitableEye() }
                 )

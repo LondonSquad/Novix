@@ -3,15 +3,15 @@ package com.london.presentation.feature.home
 import com.london.presentation.utils.MovieGenre
 
 interface HomeScreenContract {
+    fun onRetry()
+    fun onTopRatedClick()
     fun onMovieClick(id: Int)
     fun onTvShowClick(id: Int)
-    fun onTopRatedClick()
     fun onContinueWatchingClick()
     fun onTrendingMoviesCardClicked()
-    fun onTrendingTvShowsCardClicked()
     fun onTrendingActorsCardClicked()
+    fun onTrendingTvShowsCardClicked()
     fun onMovieGenreSelect(genre: MovieGenre)
-    fun onRetry()
 
     fun onManageBookmarkClicked(movieId: Int)
 
@@ -19,16 +19,17 @@ interface HomeScreenContract {
 }
 
 fun defaultHomeScreenContract() = object : HomeScreenContract {
+    override fun onRetry() {}
+    override fun onTopRatedClick() {}
     override fun onMovieClick(id: Int) {}
     override fun onTvShowClick(id: Int) {}
-    override fun onTopRatedClick() {}
+    override fun onBookmarkSheetDismiss() {}
     override fun onContinueWatchingClick() {}
     override fun onTrendingMoviesCardClicked() {}
-    override fun onTrendingTvShowsCardClicked() {}
     override fun onTrendingActorsCardClicked() {}
-    override fun onMovieGenreSelect(genre: MovieGenre) {}
-    override fun onRetry() {}
+    override fun onTrendingTvShowsCardClicked() {}
     override fun onManageBookmarkClicked(movieId: Int) {}
-    override fun onBookmarkSheetDismiss() {}
+    override fun onMovieGenreSelect(genre: MovieGenre) {}
 
 }
+

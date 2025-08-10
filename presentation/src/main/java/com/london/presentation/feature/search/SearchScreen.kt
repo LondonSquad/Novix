@@ -19,7 +19,6 @@ import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.runtime.Composable
@@ -72,18 +71,6 @@ import com.london.presentation.utils.ResultOrEmpty
 import com.london.presentation.utils.toRecentViewed
 
 @Composable
-private fun HandleLoadStateError(
-    loadState: CombinedLoadStates,
-    viewModel: SearchViewModel
-) {
-    LaunchedEffect(loadState) {
-        if (loadState.refresh is LoadState.Error) {
-            viewModel.updateSearchState { copy(error = ErrorState.NoInternet) }
-        }
-    }
-}
-
-@Composable
 fun SearchScreen(
     viewModel: SearchViewModel = hiltViewModel(),
     onNavigateToActorDetails: (Int) -> Unit = { },
@@ -98,7 +85,7 @@ fun SearchScreen(
         when (currentEffect) {
             is SearchEffect.ActorNavigation -> onNavigateToActorDetails(currentEffect.actorId)
             is SearchEffect.MovieNavigation -> onNavigateToMovieDetails(currentEffect.movieId)
-            is SearchEffect.TvNavigation -> onNavigateToTvShowDetails(currentEffect.tvId)
+            is SearchEffect.TvShowNavigation -> onNavigateToTvShowDetails(currentEffect.tvId)
         }
     }
     val lifecycleOwner = LocalLifecycleOwner.current
@@ -122,7 +109,7 @@ fun SearchScreen(
         pagingFlow = currentPagingFlow,
         handlePagingLoadingAutomatically = false
     ) {
-        SearchScreenContent(
+        Content(
             state = state,
             interactionListener = viewModel,
             keyboardController = keyboardController,
@@ -132,7 +119,7 @@ fun SearchScreen(
 }
 
 @Composable
-fun SearchScreenContent(
+private fun Content(
     state: SearchUiState,
     interactionListener: SearchContract,
     viewModel: SearchViewModel,
@@ -157,7 +144,8 @@ fun SearchScreenContent(
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .background(NovixTheme.colors.surface), verticalArrangement = Arrangement.Top
+                .background(NovixTheme.colors.surface),
+            verticalArrangement = Arrangement.Top
         ) {
             TopBar(
                 modifier = Modifier
@@ -220,6 +208,7 @@ fun SearchScreenContent(
                                 )
                             },
                             content = {
+
                                 RecentSearchLayOut(
                                     state = state,
                                     interactionListener = interactionListener,
@@ -227,6 +216,7 @@ fun SearchScreenContent(
                                     onNavigateToTvShowDetails = interactionListener::onTvShowClick,
                                     onNavigateToMovieDetails = interactionListener::onMovieClick
                                 )
+
                             })
                     }, content = {
                         SearchChipsRow(
@@ -347,10 +337,19 @@ fun SearchScreenContent(
                     })
                 }
             }
-
         }
+    }
+}
 
-
+@Composable
+private fun HandleLoadStateError(
+    loadState: CombinedLoadStates,
+    viewModel: SearchViewModel
+) {
+    LaunchedEffect(loadState) {
+        if (loadState.refresh is LoadState.Error) {
+            viewModel.updateSearchState { copy(error = ErrorState.NoInternet) }
+        }
     }
 }
 
@@ -454,30 +453,37 @@ private fun RecentSearchLayOut(
     onNavigateToTvShowDetails: (Int) -> Unit,
     onNavigateToMovieDetails: (Int) -> Unit
 ) {
-    if (state.recentViewed.isNotEmpty()) {
+    LazyColumn(
+        modifier = Modifier.fillMaxSize()
+    ) {
+        if (state.recentViewed.isNotEmpty()) {
+            item {
+                RecentViewedSection(
+                    recentViewed = state.recentViewed,
+                    onClearAll = viewModel::clearRecentViewed,
+                    onNavigateToTvShowDetails = onNavigateToTvShowDetails,
+                    onNavigateToMovieDetails = onNavigateToMovieDetails
+                )
+            }
+        }
 
-        RecentViewedSection(
-            recentViewed = state.recentViewed,
-            onClearAll = viewModel::clearRecentViewed,
-            onNavigateToTvShowDetails = onNavigateToTvShowDetails,
-            onNavigateToMovieDetails = onNavigateToMovieDetails
-        )
-    }
+        if (state.recentSearches.isNotEmpty()) {
+            item {
+                val focusManager = LocalFocusManager.current
+                val keyboardController = LocalSoftwareKeyboardController.current
 
-    if (state.recentSearches.isNotEmpty()) {
-
-        val focusManager = LocalFocusManager.current
-        val keyboardController = LocalSoftwareKeyboardController.current
-        RecentSearchesSection(
-            recentSearches = state.recentSearches,
-            onClearAll = interactionListener::clearRecentSearches,
-            onSearchClick = { query ->
-                focusManager.clearFocus()
-                keyboardController?.hide()
-                interactionListener.onRecentSearchClick(query)
-            },
-            onRemoveClick = interactionListener::removeRecentSearch
-        )
+                RecentSearchesSection(
+                    recentSearches = state.recentSearches,
+                    onClearAll = interactionListener::clearRecentSearches,
+                    onSearchClick = { query ->
+                        focusManager.clearFocus()
+                        keyboardController?.hide()
+                        interactionListener.onRecentSearchClick(query)
+                    },
+                    onRemoveClick = interactionListener::removeRecentSearch
+                )
+            }
+        }
     }
 }
 
@@ -514,7 +520,8 @@ fun RecentViewedSection(
                         MediaType.Movie -> onNavigateToMovieDetails(item.id)
                         MediaType.TvShow -> onNavigateToTvShowDetails(item.id)
                     }
-                }
+                },
+                isDarkMode = NovixTheme.isThemeDark
             )
         }
     }
@@ -536,12 +543,12 @@ fun RecentSearchesSection(
         modifier = Modifier.padding(vertical = 12.dp, horizontal = 16.dp)
     )
 
-    LazyColumn(
+    Column(
         modifier = Modifier
             .background(NovixTheme.colors.surface)
             .padding(horizontal = 16.dp)
     ) {
-        itemsIndexed(recentSearches) { index, search ->
+        recentSearches.forEachIndexed { index, search ->
             val isLastItem = index == recentSearches.lastIndex
             RecentSearchItem(
                 search = search.query,

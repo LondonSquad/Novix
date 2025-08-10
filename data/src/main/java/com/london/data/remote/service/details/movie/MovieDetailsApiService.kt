@@ -3,9 +3,9 @@ package com.london.data.remote.service.details.movie
 
 import com.london.data.remote.model.ApiResponse
 import com.london.data.remote.model.details.movie.model.moviecast.MovieCastResponse
-import com.london.data.remote.model.details.movie.model.moviedetails.AccountMovieStatesResponse
 import com.london.data.remote.model.details.movie.model.moviedetails.MovieDetailsResponse
 import com.london.data.remote.model.details.movie.model.movieimages.MovieImagesResponse
+import com.london.data.remote.model.details.rating.AccountStatesResponse
 import com.london.data.remote.model.details.videoprovider.movie.model.MovieVideoRemote
 import com.london.data.remote.model.search.MovieRemote
 import retrofit2.Response
@@ -49,5 +49,5 @@ interface MovieDetailsApiService {
     suspend fun getAccountMovieStates(
         @Path("movie_id") movieId: Int,
         @Query("session_id") userSessionId: String?,
-    ): Response<AccountMovieStatesResponse>
+    ): Response<AccountStatesResponse>
 }

@@ -70,17 +70,17 @@ import com.london.presentation.shared.HomeCard
 import com.london.presentation.shared.bookmarkSheet.BookmarkBottomSheet
 import com.london.presentation.shared.buildscreen.NetworkErrorScreen
 import com.london.presentation.utils.Listen
-import com.london.presentation.utils.gridColmuns
+import com.london.presentation.utils.gridColumns
 
 @Composable
 fun HomeScreen(
-    onNavigateMovie: (movieId: Int) -> Unit = {},
-    onNavigateTvShow: (tvShowId: Int) -> Unit = {},
     onNavigateTopRated: () -> Unit = {},
+    onNavigateTrendingActors: () -> Unit = {},
     onNavigateTrendingMovies: () -> Unit = {},
     onNavigateTrendingTvShows: () -> Unit = {},
-    onNavigateTrendingActors: () -> Unit = {},
     onNavigateContinueWatching: () -> Unit = {},
+    onNavigateMovie: (movieId: Int) -> Unit = {},
+    onNavigateTvShow: (tvShowId: Int) -> Unit = {},
     viewModel: HomeViewModel = hiltViewModel(),
 ) {
     val uiState by viewModel.state.collectAsStateWithLifecycle()
@@ -200,7 +200,7 @@ private fun Content(
 
                     Box(modifier = modifier.fillMaxSize()) {
                         LazyVerticalGrid(
-                            columns = GridCells.Fixed(gridColmuns()),
+                            columns = GridCells.Fixed(gridColumns()),
                             contentPadding = PaddingValues(
                                 top = 8.dp,
                                 bottom = 16.dp,
@@ -364,12 +364,10 @@ private fun LazyGridScope.upComingSection(
     items(count = upcomingMoviesLazyList.itemCount) { index ->
         val movie = upcomingMoviesLazyList[index]
 
-
         when {
             isLoading || movie == null -> {
                 ShimmerMovieCard()
             }
-
             else -> {
                 HomeCard(
                     imageUrl = movie.imageUrl,
@@ -378,7 +376,8 @@ private fun LazyGridScope.upComingSection(
                     modifier = Modifier
                         .clipToBounds()
                         .clip(RoundedCornerShape(12.dp))
-                        .clickable { contract.onMovieClick(movie.id) }
+                        .clickable { contract.onMovieClick(movie.id) },
+                    isDarkMode = NovixTheme.isThemeDark
                 )
             }
         }

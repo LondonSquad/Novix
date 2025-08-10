@@ -33,6 +33,19 @@ import com.london.designsystem.component.Text
 import com.london.designsystem.theme.NovixTheme
 import com.london.domain.entity.recent.MediaType
 import com.london.presentation.R
+import com.london.presentation.feature.home.popular.PopularSection.CARD_HORIZONTAL_PADDING_DP
+import com.london.presentation.feature.home.popular.PopularSection.CARD_WIDTH_DP
+import com.london.presentation.feature.home.popular.PopularSection.PAGE_SPACING_DP
+import com.london.presentation.feature.home.popular.PopularSection.ROTATION_FRACTION_MULTIPLIER
+import com.london.presentation.feature.home.popular.PopularSection.ROTATION_NEXT_DEGREES
+import com.london.presentation.feature.home.popular.PopularSection.ROTATION_OFFSET_ADJUSTMENT
+import com.london.presentation.feature.home.popular.PopularSection.ROTATION_PREVIOUS_DEGREES
+import com.london.presentation.feature.home.popular.PopularSection.SCALE_CURRENT
+import com.london.presentation.feature.home.popular.PopularSection.SCALE_MAX_FRACTION
+import com.london.presentation.feature.home.popular.PopularSection.SCALE_MIN_FRACTION
+import com.london.presentation.feature.home.popular.PopularSection.SCALE_SIDE_CARDS
+import com.london.presentation.feature.home.popular.PopularSection.TRANSFORM_ORIGIN_X
+import com.london.presentation.feature.home.popular.PopularSection.TRANSFORM_ORIGIN_Y
 import com.london.presentation.shared.HomeCard
 import com.london.presentation.shared.RatingItem
 import com.london.presentation.utils.toLocalizedNumbers
@@ -43,11 +56,30 @@ import kotlin.math.abs
 
 @Composable
 fun PopularSection(
-    modifier: Modifier = Modifier,
     pagerState: PagerState,
+    onSaveClick: () -> Unit,
     uiMediaList: List<PopularUiMedia>,
-    onManageBookmarkClicked: (Int) -> Unit,
     onCardClick: (Int, MediaType) -> Unit,
+    onManageBookmarkClicked: (Int) -> Unit,
+    modifier: Modifier = Modifier,
+) {
+    Content(
+        pagerState = pagerState,
+        onSaveClick = onSaveClick,
+        uiMediaList = uiMediaList,
+        onCardClick = onCardClick,
+        modifier = modifier
+    )
+}
+
+@Composable
+private fun Content(
+    pagerState: PagerState,
+    onSaveClick: () -> Unit,
+    uiMediaList: List<PopularUiMedia>,
+    onManageBookmarkClicked: (Int) -> Unit
+    onCardClick: (Int, MediaType) -> Unit,
+    modifier: Modifier = Modifier,
 ) {
     val density = LocalDensity.current
     val layoutDirection = LocalLayoutDirection.current
@@ -137,13 +169,14 @@ fun PopularSection(
                 HomeCard(
                     imageUrl = uiMediaList[page].posterUrl,
                     onSaveClick = { onManageBookmarkClicked(uiMediaList[page].id) },
-                    hasSaveIcon = pagerState.currentPage == page && uiMediaList[page].mediaType == MediaType.Movie,
+                    hasSaveIcon = pagerState.currentPage == page,
                     modifier = Modifier.clickable {
                         if (pagerState.currentPage == page) onCardClick(
                             uiMediaList[page].id,
                             uiMediaList[page].mediaType
                         )
-                    }
+                    },
+                    isDarkMode = NovixTheme.isThemeDark
                 )
                 if (pagerState.currentPage == page)
                     Column(
@@ -180,31 +213,34 @@ fun PopularSection(
         )
 
     }
+
 }
 
-private const val CARD_WIDTH_DP = 244
-private const val CARD_HORIZONTAL_PADDING_DP = 8
-private const val PAGE_SPACING_DP = 8
+private object PopularSection {
+    const val CARD_WIDTH_DP = 244
+    const val CARD_HORIZONTAL_PADDING_DP = 8
+    const val PAGE_SPACING_DP = 8
 
-private const val ROTATION_PREVIOUS_DEGREES = 3f
-private const val ROTATION_NEXT_DEGREES = -3f
-private const val SCALE_CURRENT = 1f
-private const val SCALE_SIDE_CARDS = 0.8f
+    const val ROTATION_PREVIOUS_DEGREES = 3f
+    const val ROTATION_NEXT_DEGREES = -3f
+    const val SCALE_CURRENT = 1f
+    const val SCALE_SIDE_CARDS = 0.8f
 
-private const val TRANSFORM_ORIGIN_X = 0.5f
-private const val TRANSFORM_ORIGIN_Y = 0.9f
+    const val TRANSFORM_ORIGIN_X = 0.5f
+    const val TRANSFORM_ORIGIN_Y = 0.9f
 
-private const val ROTATION_OFFSET_ADJUSTMENT = 1f
-private const val ROTATION_FRACTION_MULTIPLIER = 0.5f
-private const val SCALE_MIN_FRACTION = 0f
-private const val SCALE_MAX_FRACTION = 1f
+    const val ROTATION_FRACTION_MULTIPLIER = 0.5f
+    const val SCALE_MIN_FRACTION = 0f
+    const val SCALE_MAX_FRACTION = 1f
+    const val ROTATION_OFFSET_ADJUSTMENT = 1f
+}
 
 @Preview
 @Composable
 private fun Preview(modifier: Modifier = Modifier) {
     PopularSection(
         pagerState = rememberPagerState(initialPage = 0, pageCount = { 4 }),
-        onManageBookmarkClicked = { 0 },
+        onSaveClick = {},
         onCardClick = { id, mediaType -> },
         uiMediaList = listOf(
             PopularUiMedia(
@@ -243,5 +279,6 @@ private fun Preview(modifier: Modifier = Modifier) {
                 mediaType = MediaType.Movie
             ),
         ),
+        onManageBookmarkClicked = {  },
     )
 }

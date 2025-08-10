@@ -26,31 +26,33 @@ import androidx.navigation.navigation
 import com.london.designsystem.component.NavBar
 import com.london.designsystem.theme.NovixTheme
 import com.london.presentation.R
-import com.london.presentation.feature.account.AccountScreen
-import com.london.presentation.feature.category.CategoriesScreen
-import com.london.presentation.feature.category.moviesbycategory.MoviesByCategoryScreen
-import com.london.presentation.feature.category.tvshowbycategory.TvShowByCategoryScreen
+import com.london.presentation.feature.accountinfo.account.AccountScreen
+import com.london.presentation.feature.accountinfo.rating.MyRatingScreen
+import com.london.presentation.feature.authentication.login.LoginScreen
+import com.london.presentation.feature.authentication.register.WebViewRegistrationScreen
+import com.london.presentation.feature.category.main.CategoriesScreen
+import com.london.presentation.feature.category.movie.MoviesByCategoryScreen
+import com.london.presentation.feature.category.tvshow.TvShowByCategoryScreen
 import com.london.presentation.feature.details.actor.ActorDetailsScreen
-import com.london.presentation.feature.details.actordetails.gallery.ActorGalleryScreen
-import com.london.presentation.feature.details.actordetails.topmoviespicks.TopMoviesPicksScreen
-import com.london.presentation.feature.details.actordetails.toptvshowspicks.TopTvShowsPicksScreen
+import com.london.presentation.feature.details.actor.info.gallery.ActorGalleryScreen
+import com.london.presentation.feature.details.actor.info.topmoviespicks.TopMoviesPicksScreen
+import com.london.presentation.feature.details.actor.info.toptvshowspicks.TopTvShowsPicksScreen
 import com.london.presentation.feature.details.movie.MovieDetailsScreen
-import com.london.presentation.feature.details.tvshow.episodedetails.EpisodeDetailsScreen
-import com.london.presentation.feature.details.tvshow.tvshowdetails.TvShowsDetailsScreen
+import com.london.presentation.feature.details.tvshow.episode.EpisodeDetailsScreen
+import com.london.presentation.feature.details.tvshow.info.TvShowsDetailsScreen
 import com.london.presentation.feature.home.HomeScreen
+import com.london.presentation.feature.home.continuewatching.ContinueWatchingScreen
 import com.london.presentation.feature.home.toprated.TopRatedScreen
 import com.london.presentation.feature.home.trending.actor.TrendingActorsScreen
 import com.london.presentation.feature.home.trending.movie.TrendingMoviesScreen
 import com.london.presentation.feature.home.trending.tvshow.TrendingTvShowsScreen
 import com.london.presentation.feature.list.savedlist.ListScreen
-import com.london.presentation.feature.list.viewlistitems.ViewListItemsScreen
-import com.london.presentation.feature.login.LoginScreen
-import com.london.presentation.feature.onboarding.OnboardingRoute
-import com.london.presentation.feature.onboarding.WelcomeScreen
-import com.london.presentation.feature.register.WebViewRegistrationScreen
+import com.london.presentation.feature.list.viewitems.ViewListItemsScreen
 import com.london.presentation.feature.reviews.ReviewsScreen
 import com.london.presentation.feature.search.SearchScreen
-import com.london.presentation.feature.splash.SplashRoute
+import com.london.presentation.feature.welcome.onboarding.OnboardingRoute
+import com.london.presentation.feature.welcome.onboarding.WelcomeScreen
+import com.london.presentation.feature.welcome.splash.SplashRoute
 import com.london.presentation.navigation.Screen
 import com.london.presentation.navigation.Screen.ActorDetails
 import com.london.presentation.navigation.Screen.MovieDetails
@@ -59,7 +61,6 @@ import com.london.presentation.navigation.Screen.TrendingMovies
 import com.london.presentation.navigation.Screen.TrendingTvShows
 import com.london.presentation.navigation.Screen.TvShowDetails
 import com.london.presentation.navigation.Screen.WatchingHistory
-import com.london.presentation.shared.continuewatching.ContinueWatchingScreen
 import kotlinx.serialization.Serializable
 import timber.log.Timber
 
@@ -352,10 +353,8 @@ fun NavGraphBuilder.mainNavGraph(
                         inclusive = true
                     }
                 }
-            },
-            onNavigateToChangePassword = {
-                // todo: Handle change password logic here, e.g., reset password flow
-            })
+            }
+        )
     }
 
     composable<WatchingHistory>(
@@ -384,7 +383,17 @@ fun NavGraphBuilder.mainNavGraph(
         enterTransition = { fadeIn(tween(500)) },
         popExitTransition = { fadeOut(tween(500)) },
     ) {
-        // todo: Implement MyRatingScreen
+        MyRatingScreen(
+            onNavigateMovie = { movieId ->
+                navController.navigate(MovieDetails(movieId))
+            },
+            onNavigateTvShow = { tvShowId ->
+                navController.navigate(TvShowDetails(tvShowId))
+            },
+            onNavigateBack = {
+                navController.navigateUp()
+            }
+        )
     }
 
     composable<TvShowDetails>(
@@ -411,7 +420,8 @@ fun NavGraphBuilder.mainNavGraph(
             onNavigateBack = { navController.navigateUp() },
             onNavigateToGenre = { genreId ->
                 navController.navigate(Screen.TvShowsByCategory(genreId))
-            }
+            },
+            onNavigateToLogin = { navController.navigate(Screen.Login) }
         )
     }
 
@@ -521,7 +531,8 @@ fun NavGraphBuilder.mainNavGraph(
             onNavigateBack = { navController.popBackStack() },
             onNavigateToCast = { actorId ->
                 navController.navigate(ActorDetails(actorId))
-            }
+            },
+            onNavigateLogin = { navController.navigate(Screen.Login) }
         )
     }
     composable<Screen.ActorGallery> {

@@ -5,11 +5,13 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.asPaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.statusBarsPadding
+import androidx.compose.foundation.layout.statusBars
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
@@ -22,7 +24,7 @@ import com.london.designsystem.component.CircularLoading
 import com.london.designsystem.component.EmptyLayout
 import com.london.designsystem.component.TopBar
 import com.london.designsystem.theme.NovixTheme
-import com.london.presentation.utils.gridColmuns
+import com.london.presentation.utils.gridColumns
 
 @Composable
 fun <T> MediaLazyGrid(
@@ -31,11 +33,15 @@ fun <T> MediaLazyGrid(
     onBack: () -> Unit,
     getImageUrl: (T) -> String,
     modifier: Modifier = Modifier,
-    onSaveClick: (T) -> Unit = {},
+    onItemClick: (T) -> Unit = {},
+    onSavedClick: (T) -> Unit = {},
     isItemSaved: (T) -> Boolean = { false },
     isLoading: Boolean = false,
     emptyTitle: String = "",
-    emptyImage: Int? = null
+    emptyImage: Int? = null,
+    myRatingList: Boolean = false,
+    rate: String = "5",
+    onDeleteClick: () -> Unit = {}
 ) {
     Column(
         modifier = modifier
@@ -45,8 +51,10 @@ fun <T> MediaLazyGrid(
         TopBar(
             modifier = Modifier
                 .fillMaxWidth()
-                .statusBarsPadding()
-                .padding(horizontal = 16.dp, vertical = 12.dp),
+                .padding(horizontal = 16.dp)
+                .padding(
+                    top = WindowInsets.statusBars.asPaddingValues().calculateTopPadding() + 12.dp
+                ),
             title = title,
             onBackClick = onBack
         )
@@ -68,7 +76,7 @@ fun <T> MediaLazyGrid(
 
             else -> {
                 LazyVerticalGrid(
-                    columns = GridCells.Fixed(gridColmuns()),
+                    columns = GridCells.Fixed(gridColumns()),
                     contentPadding = PaddingValues(
                         top = 12.dp,
                         bottom = 16.dp
@@ -84,8 +92,12 @@ fun <T> MediaLazyGrid(
                         HomeCard(
                             imageUrl = getImageUrl(item),
                             isSaved = isItemSaved(item),
-                            onSaveClick = { onSaveClick(item) },
-                            modifier = Modifier.clickable { onSaveClick(item)}
+                            onSaveClick = { onSavedClick(item) },
+                            myRatingList = myRatingList,
+                            rate = rate,
+                            onDeleteClick = onDeleteClick,
+                            modifier = Modifier.clickable { onItemClick(item) },
+                            isDarkMode = NovixTheme.isThemeDark
                         )
                     }
                 }
@@ -93,3 +105,4 @@ fun <T> MediaLazyGrid(
         }
     }
 }
+

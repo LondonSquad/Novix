@@ -5,19 +5,19 @@ import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFact
 import com.london.data.BuildConfig
 import com.london.data.local.preference.AuthPreferences
 import com.london.data.local.preference.SharedPrefsTokenProvider
-import com.london.data.local.source.device.DeviceConfigurationDataSource
+import com.london.data.local.preference.readLanguageCode
 import com.london.data.remote.interceptor.AuthInterceptor
 import com.london.data.remote.service.account.AccountApiService
 import com.london.data.remote.service.authentication.AuthenticationApiService
 import com.london.data.remote.service.details.actor.ActorDetailsApiService
 import com.london.data.remote.service.details.movie.MovieDetailsApiService
-import com.london.data.remote.service.details.rating.RatingApiService
 import com.london.data.remote.service.details.tvshow.TvShowDetailsApiService
 import com.london.data.remote.service.discover.DiscoverApiService
 import com.london.data.remote.service.home.PopularApiService
 import com.london.data.remote.service.home.TrendingApiService
 import com.london.data.remote.service.home.UpComingApiService
 import com.london.data.remote.service.list.CustomMovieListsApiService
+import com.london.data.remote.service.myrating.RatingApiService
 import com.london.data.remote.service.reviews.ReviewsApiService
 import com.london.data.remote.service.search.SearchApiService
 import com.london.data.remote.service.toprated.TopRatedApiService
@@ -67,7 +67,7 @@ object NetworkModule {
     fun provideApiInterceptor(@ApplicationContext context: Context): Interceptor =
         Interceptor { chain ->
             val original = chain.request()
-            val deviceLanguage = DeviceConfigurationDataSource(context).getCurrentLanguage()
+            val deviceLanguage = readLanguageCode(context)
 
             val newUrl = original.url.newBuilder()
                 .addQueryParameter("api_key", BuildConfig.API_KEY)
@@ -167,10 +167,7 @@ object NetworkModule {
     @Singleton
     fun provideCrashReporter(): CrashReporter = FirebaseCrashReporter()
 
-    @Provides
-    @Singleton
-    fun provideRatingApiService(retrofit: Retrofit): RatingApiService =
-        retrofit.create(RatingApiService::class.java)
+
 
     @Provides
     @Singleton
@@ -191,4 +188,10 @@ object NetworkModule {
     @Singleton
     fun provideAccountApiService(retrofit: Retrofit): AccountApiService =
         retrofit.create(AccountApiService::class.java)
+
+    @Provides
+    @Singleton
+    fun provideMyRatingApiService(retrofit: Retrofit): RatingApiService =
+        retrofit.create(RatingApiService::class.java)
+
 }

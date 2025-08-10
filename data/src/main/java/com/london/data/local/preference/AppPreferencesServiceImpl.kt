@@ -2,6 +2,7 @@ package com.london.data.local.preference
 
 import android.content.SharedPreferences
 import androidx.core.content.edit
+import com.london.data.utils.LANGUAGE_KEY
 import com.london.domain.AppPreferencesService
 import com.london.domain.contentrestriction.ContentRestrictionLevel
 import com.london.domain.language.AppLanguage
@@ -45,12 +46,19 @@ class AppPreferencesServiceImpl @Inject constructor(
 
     private fun getAppLanguage(): AppLanguage {
         val languageCode =
-            preferences.getString(PreferencesKeys.LANGUAGE_KEY, AppLanguage.ENGLISH.code)
-        return AppLanguage.fromCode(languageCode ?: AppLanguage.ENGLISH.code)
+            preferences.getString(LANGUAGE_KEY, AppLanguage.ARABIC.code)
+        return AppLanguage.fromCode(languageCode ?: AppLanguage.ARABIC.code)
     }
 
-    override fun setAppLanguage(language: AppLanguage) =
-        preferences.edit { putString(PreferencesKeys.LANGUAGE_KEY, language.code) }
+    override fun setAppLanguage(language: AppLanguage) {
+        _appLanguage.value = language
+        preferences.edit { putString(LANGUAGE_KEY, language.code) }
+    }
+
+    override fun setAppLanguageCode(languageCode: String) {
+        val language = AppLanguage.fromCode(languageCode)
+        setAppLanguage(language)
+    }
     //endregion
 
     //region Content Restriction
@@ -76,7 +84,6 @@ class AppPreferencesServiceImpl @Inject constructor(
         const val HAS_ONBOARDING_BEEN_SHOWN = "has_onboarding_been_shown"
         const val CONTENT_RESTRICTION_KEY = "content_restriction_key"
         const val THEME_KEY = "theme_key"
-        const val LANGUAGE_KEY = "language_key"
     }
 
 }

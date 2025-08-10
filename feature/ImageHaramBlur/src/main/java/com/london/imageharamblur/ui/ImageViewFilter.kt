@@ -44,7 +44,7 @@ fun ImageViewFilter(
     moderatedContent: @Composable () -> Unit = @Composable {}
 ) {
     val context = LocalContext.current
-    val imageKey = generateImageKey(model)
+    val imageKey = remember(model) { generateImageKey(model) }
 
     var moderationState by remember { mutableStateOf<ImageModerationState?>(null) }
     var errorState by remember { mutableStateOf<String?>(null) }

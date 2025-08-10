@@ -12,10 +12,8 @@ import io.mockk.verifyOrder
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.first
-import kotlinx.coroutines.test.StandardTestDispatcher
 import kotlinx.coroutines.test.resetMain
 import kotlinx.coroutines.test.runTest
-import kotlinx.coroutines.test.setMain
 import org.junit.After
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
@@ -37,12 +35,9 @@ class AppPreferencesServiceImplTest {
         private const val CONTENT_RESTRICTION_KEY = "content_restriction_key"
     }
 
-    private val testDispatcher = StandardTestDispatcher()
 
     @Before
     fun setUp() {
-        Dispatchers.setMain(testDispatcher)
-
         sharedPreferences = mockk()
         editor = mockk(relaxed = true)
         every { sharedPreferences.edit() } returns editor
@@ -52,8 +47,8 @@ class AppPreferencesServiceImplTest {
         } returns AppTheme.DARK.name
 
         every {
-            sharedPreferences.getString(LANGUAGE_KEY, AppLanguage.ENGLISH.code)
-        } returns AppLanguage.ENGLISH.code
+            sharedPreferences.getString(LANGUAGE_KEY, AppLanguage.ARABIC.code)
+        } returns AppLanguage.ARABIC.code
 
         every {
             sharedPreferences.getString(CONTENT_RESTRICTION_KEY, ContentRestrictionLevel.MODERATE.name)
@@ -83,7 +78,12 @@ class AppPreferencesServiceImplTest {
     @Test
     fun `appTheme returns specific theme when preference is set`() = runTest {
         // Given
-        every { sharedPreferences.getString(THEME_KEY, AppTheme.DARK.name) } returns AppTheme.DARK.name
+        every {
+            sharedPreferences.getString(
+                THEME_KEY,
+                AppTheme.DARK.name
+            )
+        } returns AppTheme.DARK.name
 
         // When
         service = AppPreferencesServiceImpl(sharedPreferences)
@@ -95,22 +95,9 @@ class AppPreferencesServiceImplTest {
     }
 
     @Test
-    fun `appLanguage returns default ENGLISH when no preference is set`() = runTest {
+    fun `appLanguage returns default ARABIC when no preference is set`() = runTest {
         // Given
-        every { sharedPreferences.getString(LANGUAGE_KEY, AppLanguage.ENGLISH.code) } returns null
-
-        // When
-        service = AppPreferencesServiceImpl(sharedPreferences)
-        val currentLanguage = service.appLanguage.first()
-
-        // Then
-        assertEquals(AppLanguage.ENGLISH, currentLanguage)
-    }
-
-    @Test
-    fun `appLanguage returns specific language when preference is set`() = runTest {
-        // Given
-        every { sharedPreferences.getString(LANGUAGE_KEY, AppLanguage.ENGLISH.code) } returns AppLanguage.ARABIC.code
+        every { sharedPreferences.getString(LANGUAGE_KEY, AppLanguage.ARABIC.code) } returns null
 
         // When
         service = AppPreferencesServiceImpl(sharedPreferences)
@@ -118,14 +105,12 @@ class AppPreferencesServiceImplTest {
 
         // Then
         assertEquals(AppLanguage.ARABIC, currentLanguage)
-        verify { sharedPreferences.getString(LANGUAGE_KEY, AppLanguage.ENGLISH.code) }
     }
 
     @Test
-    fun `appLanguage returns default language when saved code is invalid and fromCode defaults`() = runTest {
+    fun `appLanguage returns specific language when preference is set`() = runTest {
         // Given
-        val invalidCode = "xx"
-        every { sharedPreferences.getString(LANGUAGE_KEY, AppLanguage.ENGLISH.code) } returns invalidCode
+        every { sharedPreferences.getString(LANGUAGE_KEY, AppLanguage.ARABIC.code) } returns AppLanguage.ENGLISH.code
 
         // When
         service = AppPreferencesServiceImpl(sharedPreferences)
@@ -133,7 +118,22 @@ class AppPreferencesServiceImplTest {
 
         // Then
         assertEquals(AppLanguage.ENGLISH, currentLanguage)
-        verify { sharedPreferences.getString(LANGUAGE_KEY, AppLanguage.ENGLISH.code) }
+        verify { sharedPreferences.getString(LANGUAGE_KEY, AppLanguage.ARABIC.code) }
+    }
+
+    @Test
+    fun `appLanguage returns default language when saved code is invalid and fromCode defaults`() = runTest {
+        // Given
+        val invalidCode = "xx"
+        every { sharedPreferences.getString(LANGUAGE_KEY, AppLanguage.ARABIC.code) } returns invalidCode
+
+        // When
+        service = AppPreferencesServiceImpl(sharedPreferences)
+        val currentLanguage = service.appLanguage.first()
+
+        // Then
+        assertEquals(AppLanguage.ARABIC, currentLanguage)
+        verify { sharedPreferences.getString(LANGUAGE_KEY, AppLanguage.ARABIC.code) }
     }
 
     @Test
@@ -154,10 +154,8 @@ class AppPreferencesServiceImplTest {
         // Given
         every { sharedPreferences.getBoolean(ONBOARDING_KEY, false) } returns true
 
-        // When
         val result = service.hasOnboardingBeenShown
 
-        // Then
         assertTrue(result)
         verify { sharedPreferences.getBoolean(ONBOARDING_KEY, false) }
     }
@@ -219,8 +217,8 @@ class AppPreferencesServiceImplTest {
             editor.apply()
         }
 
+        // And
         val updatedLevel = service.contentRestrictionLevel.first()
         assertEquals(ContentRestrictionLevel.OFF, updatedLevel)
     }
-
 }

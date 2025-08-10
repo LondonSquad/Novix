@@ -5,15 +5,10 @@ import com.london.domain.entity.recent.RecentSearch
 import com.london.domain.entity.recent.RecentViewed
 import com.london.domain.usecase.GetActorsUseCase
 import com.london.domain.usecase.GetMoviesUseCase
-import com.london.domain.usecase.GetTvShowsUseCase
 import com.london.domain.usecase.IncrementGenreInterestUseCase
-import com.london.domain.usecase.recent.search.AddToRecentSearchUseCase
-import com.london.domain.usecase.recent.search.ClearRecentSearchUseCase
-import com.london.domain.usecase.recent.search.DeleteRecentSearchUseCase
-import com.london.domain.usecase.recent.search.GetRecentSearchUseCase
-import com.london.domain.usecase.recent.viewed.AddToRecentViewedUseCase
-import com.london.domain.usecase.recent.viewed.ClearRecentViewedUseCase
-import com.london.domain.usecase.recent.viewed.GetRecentViewedUseCase
+import com.london.domain.usecase.details.tvshow.ManageTvShowDetailsUseCase
+import com.london.domain.usecase.recent.search.ManageRecentSearchUseCase
+import com.london.domain.usecase.recent.viewed.ManageRecentViewedUseCase
 import com.london.presentation.shared.base.BaseViewModel
 import com.london.presentation.shared.base.createPagingSourceFlow
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -27,17 +22,13 @@ import javax.inject.Inject
 @HiltViewModel
 class SearchViewModel @Inject constructor(
     private val getActorsUseCase: GetActorsUseCase,
-    private val getTvShowsUseCase: GetTvShowsUseCase,
     private val getMoviesUseCase: GetMoviesUseCase,
-    private val addToRecentSearchUseCase: AddToRecentSearchUseCase,
-    private val getRecentSearchUseCase: GetRecentSearchUseCase,
-    private val clearRecentSearchUseCase: ClearRecentSearchUseCase,
+    private val manageTvShowDetailsUseCase: ManageTvShowDetailsUseCase,
+    private val manageRecentSearchUseCase: ManageRecentSearchUseCase,
     private val incrementGenreInterestUseCase: IncrementGenreInterestUseCase,
-    private val getRecentViewedUseCase: GetRecentViewedUseCase,
-    private val addToRecentViewedUseCase: AddToRecentViewedUseCase,
-    private val clearRecentViewedUseCase: ClearRecentViewedUseCase,
-    private val deleteRecentSearchUseCase: DeleteRecentSearchUseCase
-) : BaseViewModel<SearchUiState, SearchEffect>(SearchUiState()), SearchContract {
+    private val manageRecentViewedUseCase: ManageRecentViewedUseCase,
+
+    ) : BaseViewModel<SearchUiState, SearchEffect>(SearchUiState()), SearchContract {
 
     private val _searchQuery = MutableStateFlow("")
 
@@ -46,11 +37,37 @@ class SearchViewModel @Inject constructor(
         setupSearchDebouncing()
     }
 
+    fun incrementGenreInterest(genreId: Int, mediaType: String) {
+        tryToExecute(
+            block = {
+                incrementGenreInterestUseCase.invoke(genreId, mediaType)
+            },
+            onStart = { },
+            onSuccess = { },
+            onError = { errorState ->
+                updateState { copy(error = errorState) }
+            },
+            onCompleted = { },
+            checkSuccess = { true }
+        )
+    }
+
+    fun performSearch(query: String, category: SearchCategory) {
+        val trimmedQuery = query.trim()
+
+        if (trimmedQuery.isEmpty()) {
+            clearSearchResults()
+            return
+        }
+
+        searchWithApi(trimmedQuery, category)
+    }
+
     fun updateRecentData() {
         tryToExecute(
             block = {
-                val recentViewed = getRecentViewedUseCase.invoke().reversed()
-                val recentSearches = getRecentSearchUseCase.invoke()
+                val recentViewed = manageRecentViewedUseCase.getRecentViewed().reversed()
+                val recentSearches = manageRecentSearchUseCase.getRecentSearch()
                 Pair(recentViewed, recentSearches)
             },
             onSuccess = { (recentViewed, recentSearches) ->
@@ -71,20 +88,6 @@ class SearchViewModel @Inject constructor(
         updateState(updater)
     }
 
-    private fun setupSearchDebouncing() {
-        tryToCollect(
-            block = {
-                _searchQuery.debounce(500)
-            },
-            onNewValue = { query ->
-                performSearch(query = query, category = state.value.selectedCategory)
-            },
-            onError = { errorState ->
-                updateState { copy(error = errorState) }
-            }
-        )
-    }
-
     override fun onSearchQueryChange(newValue: TextFieldValue) {
         updateState { copy(searchQuery = newValue) }
 
@@ -92,12 +95,6 @@ class SearchViewModel @Inject constructor(
         updateState { copy(searchQuery = limitedQuery) }
         _searchQuery.value = limitedQuery.text.trim()
     }
-
-    private fun applyLimitationOnTextFieldValue(newValue: TextFieldValue): TextFieldValue =
-        newValue.copy(
-            text = newValue.text.replace(regex = Regex("\\s{2,}"), replacement = " ")
-                .trimStart()
-        )
 
     override fun onCategorySelected(category: SearchCategory) {
         updateState {
@@ -146,8 +143,8 @@ class SearchViewModel @Inject constructor(
 
         tryToExecute(
             block = {
-                addToRecentSearchUseCase.invoke(query)
-                getRecentSearchUseCase.invoke().reversed()
+                manageRecentSearchUseCase.addToRecentSearch(query)
+                manageRecentSearchUseCase.getRecentSearch().reversed()
             },
             onSuccess = { recentSearches ->
                 updateState { copy(recentSearches = recentSearches) }
@@ -158,13 +155,11 @@ class SearchViewModel @Inject constructor(
         )
     }
 
-    private fun isQueryDuplicated(query: String) = query.equals(state.value.lastSearch, ignoreCase = true)
-
     override fun addToRecentViewed(item: RecentViewed) {
         tryToExecute(
             block = {
-                addToRecentViewedUseCase.invoke(item)
-                getRecentViewedUseCase.invoke().reversed()
+                manageRecentViewedUseCase.addToRecentViewed(item)
+                manageRecentViewedUseCase.getRecentViewed().reversed()
             },
             onSuccess = { recentViewed ->
                 updateState { copy(recentViewed = recentViewed) }
@@ -186,7 +181,7 @@ class SearchViewModel @Inject constructor(
 
         tryToExecute(
             block = {
-                clearRecentViewedUseCase.invoke()
+                manageRecentViewedUseCase.clearRecentViewed()
             },
             onSuccess = { },
             onError = { errorState ->
@@ -201,7 +196,7 @@ class SearchViewModel @Inject constructor(
 
         tryToExecute(
             block = {
-                clearRecentSearchUseCase.invoke()
+                manageRecentSearchUseCase.clearRecentSearch()
             },
             onError = { errorState ->
                 updateState { copy(error = errorState) }
@@ -216,7 +211,7 @@ class SearchViewModel @Inject constructor(
 
         tryToExecute(
             block = {
-                deleteRecentSearchUseCase.invoke(search)
+                manageRecentSearchUseCase.deleteRecentSearch(search)
             },
             onError = { errorState ->
                 updateState { copy(error = errorState) }
@@ -259,34 +254,36 @@ class SearchViewModel @Inject constructor(
     }
 
     override fun onTvShowClick(tvShowId: Int) {
-        emitEffect(SearchEffect.TvNavigation(tvId = tvShowId))
+        emitEffect(SearchEffect.TvShowNavigation(tvId = tvShowId))
     }
 
-    fun incrementGenreInterest(genreId: Int, mediaType: String) {
-        tryToExecute(
+    override fun onRetry() {
+        updateState { copy(error = null) }
+        updateRecentData()
+        setupSearchDebouncing()
+    }
+
+    private fun setupSearchDebouncing() {
+        tryToCollect(
             block = {
-                incrementGenreInterestUseCase.invoke(genreId, mediaType)
+                _searchQuery.debounce(500)
             },
-            onStart = { },
-            onSuccess = { },
+            onNewValue = { query ->
+                performSearch(query = query, category = state.value.selectedCategory)
+            },
             onError = { errorState ->
                 updateState { copy(error = errorState) }
-            },
-            onCompleted = { },
-            checkSuccess = { true }
+            }
         )
     }
 
-    fun performSearch(query: String, category: SearchCategory) {
-        val trimmedQuery = query.trim()
+    private fun isQueryDuplicated(query: String) = query.equals(state.value.lastSearch, ignoreCase = true)
 
-        if (trimmedQuery.isEmpty()) {
-            clearSearchResults()
-            return
-        }
-
-        searchWithApi(trimmedQuery, category)
-    }
+    private fun applyLimitationOnTextFieldValue(newValue: TextFieldValue): TextFieldValue =
+        newValue.copy(
+            text = newValue.text.replace(regex = Regex("\\s{2,}"), replacement = " ")
+                .trimStart()
+        )
 
     private fun clearSearchResults() {
         updateState {
@@ -352,7 +349,7 @@ class SearchViewModel @Inject constructor(
 
     private fun searchTvShows(query: String) {
         val tvShowsFlow = createPagingSourceFlow(query) { currentQuery, pageNumber ->
-            getTvShowsUseCase(
+            manageTvShowDetailsUseCase.getTvShowList(
                 name = currentQuery,
                 pageNumber = pageNumber
             )
@@ -375,11 +372,5 @@ class SearchViewModel @Inject constructor(
                 actorsFlow = flow {}
             )
         }
-    }
-
-    override fun onRetry() {
-        updateState { copy(error = null) }
-        updateRecentData()
-        setupSearchDebouncing()
     }
 }

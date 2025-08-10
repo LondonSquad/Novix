@@ -41,7 +41,7 @@ import com.london.presentation.shared.buildscreen.BuildScreen
 import com.london.presentation.utils.Listen
 import com.london.presentation.utils.MovieGenre
 import com.london.presentation.utils.TvShowGenre
-import com.london.presentation.utils.gridColmuns
+import com.london.presentation.utils.gridColumns
 import com.london.presentation.utils.isLoading
 
 @Composable
@@ -56,9 +56,9 @@ fun TopRatedScreen(
 
     effect?.Listen { currentEffect ->
         when (currentEffect) {
+            is TopRatedEffect.NavigateBack -> onNavigateBack()
             is TopRatedEffect.NavigateToMovieDetails -> onNavigateMovie(currentEffect.id)
             is TopRatedEffect.NavigateToTvShowDetails -> onNavigateTvShow(currentEffect.id)
-            is TopRatedEffect.NavigateBack -> onNavigateBack()
         }
     }
 
@@ -127,8 +127,9 @@ private fun Content(
 
         val moviesPagingItems = state.movies.collectAsLazyPagingItems()
         val tvSeriesPagingItems = state.tvSeries.collectAsLazyPagingItems()
+
         LazyVerticalGrid(
-            columns = GridCells.Fixed(gridColmuns()),
+            columns = GridCells.Fixed(gridColumns()),
             contentPadding = PaddingValues(
                 top = 12.dp, bottom = 16.dp, start = 16.dp, end = 16.dp
             ),
@@ -149,7 +150,8 @@ private fun Content(
                             },
                             modifier = Modifier.clickable {
                                 topRatedContract.onMovieClick(movieItem.id)
-                            }
+                            },
+                            isDarkMode = NovixTheme.isThemeDark
                         )
                     }
                 }
@@ -165,13 +167,13 @@ private fun Content(
                         },
                         modifier = Modifier.clickable {
                             topRatedContract.onTvShowClick(seriesItem.id)
-                        }
+                        },
+                        isDarkMode = NovixTheme.isThemeDark
                     )
                 }
             }
         }
     }
-
 }
 
 @Composable

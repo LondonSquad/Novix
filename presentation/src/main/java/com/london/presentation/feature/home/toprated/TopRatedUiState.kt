@@ -10,14 +10,12 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.emptyFlow
 
 data class TopRatedUiState(
-    val movies: Flow<PagingData<TopRatedMovie>> = emptyFlow(),
-    val tvSeries: Flow<PagingData<TopRatedTvSeries>> = emptyFlow(),
     val isLoading: Boolean = false,
     val errorMessage: String? = null,
-    val selectedMediaCategory: MediaCategory = MediaCategory.MOVIES,
+    val isMovieSelected: Boolean = true,
     val selectedMovieGenre: MovieGenre = MovieGenre.All,
     val selectedTvShowGenre: TvShowGenre = TvShowGenre.All,
-    val isMovieSelected: Boolean = true
+    val movies: Flow<PagingData<TopRatedMovie>> = emptyFlow(),
+    val tvSeries: Flow<PagingData<TopRatedTvSeries>> = emptyFlow(),
+    val selectedMediaCategory: MediaCategory = MediaCategory.MOVIES
 )
-
-

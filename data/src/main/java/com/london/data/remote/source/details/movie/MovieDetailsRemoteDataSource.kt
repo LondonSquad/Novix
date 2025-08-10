@@ -2,12 +2,11 @@ package com.london.data.remote.source.details.movie
 
 import com.london.data.remote.model.ApiResponse
 import com.london.data.remote.model.details.movie.model.moviecast.MovieCastResponse
-import com.london.data.remote.model.details.movie.model.moviedetails.AccountMovieStatesResponse
 import com.london.data.remote.model.details.movie.model.moviedetails.MovieDetailsResponse
 import com.london.data.remote.model.details.movie.model.movieimages.MovieImagesResponse
+import com.london.data.remote.model.details.rating.AccountStatesResponse
 import com.london.data.remote.model.details.videoprovider.movie.model.MovieVideoRemote
 import com.london.data.remote.model.search.MovieRemote
-
 
 interface MovieDetailsRemoteDataSource {
     suspend fun getMovieDetails(movieId: Int): Result<MovieDetailsResponse>
@@ -18,6 +17,5 @@ interface MovieDetailsRemoteDataSource {
     suspend fun getAccountMovieStates(
         movieId: Int,
         userSessionId: String?
-    ) : Result<AccountMovieStatesResponse>
-
+    ): Result<AccountStatesResponse>
 }

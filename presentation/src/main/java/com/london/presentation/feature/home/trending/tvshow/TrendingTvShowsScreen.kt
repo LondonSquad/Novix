@@ -55,7 +55,7 @@ fun TrendingTvShowsScreen(
         emptyLayoutImage = R.drawable.img_no_result,
         pagingFlow = tvShowsLazyItems
     ) {
-        TrendingTvShowsContent(
+        Content(
             state = state,
             contract = viewModel,
         )
@@ -64,7 +64,7 @@ fun TrendingTvShowsScreen(
 
 
 @Composable
-private fun TrendingTvShowsContent(
+private fun Content(
     state: TrendingTvShowsUiState = TrendingTvShowsUiState(),
     contract: TrendingTvShowsContract = defaultTrendingTvShowsContract(),
 ) {
@@ -111,5 +111,5 @@ private fun TrendingTvShowsContent(
 @Preview
 @Composable
 private fun Preview() = NovixTheme {
-    TrendingTvShowsContent()
+    Content()
 }

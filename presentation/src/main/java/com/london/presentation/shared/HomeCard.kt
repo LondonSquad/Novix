@@ -13,6 +13,8 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.dp
 import com.london.designsystem.component.CircularLoading
+import com.london.designsystem.component.DeleteIcon
+import com.london.designsystem.component.MyRatingIcon
 import com.london.designsystem.component.SaveIcon
 import com.london.designsystem.component.UnSuitableEye
 import com.london.designsystem.component.button.ErrorImage
@@ -22,9 +24,13 @@ import com.london.designsystem.theme.ThemePreviews
 @Composable
 fun HomeCard(
     imageUrl: Any,
+    isDarkMode: Boolean,
     modifier: Modifier = Modifier,
     isSaved: Boolean = false,
     hasSaveIcon: Boolean = true,
+    myRatingList: Boolean = false,
+    rate: String = "5",
+    onDeleteClick: () -> Unit = {},
     imageDescription: String? = null,
     onSaveClick: () -> Unit,
 ) {
@@ -48,7 +54,7 @@ fun HomeCard(
             contentDescription = imageDescription,
             modifier = Modifier.matchParentSize(),
             contentScale = ContentScale.Crop,
-            errorContent = { ErrorImage() },
+            errorContent = { ErrorImage(isDarkMode = isDarkMode) },
             loadingContent = { CircularLoading(modifier = Modifier.align(Alignment.Center)) },
             moderatedContent = { UnSuitableEye() }
         )
@@ -61,6 +67,22 @@ fun HomeCard(
                     .align(Alignment.TopStart),
                 iconTint = NovixTheme.colors.onPrimary,
             )
+
+        if (myRatingList) {
+            MyRatingIcon(
+                rate = rate,
+                modifier = Modifier
+                    .padding(8.dp)
+                    .align(Alignment.TopStart),
+            )
+
+            DeleteIcon(
+                onDeleteClick = onDeleteClick,
+                modifier = Modifier
+                    .padding(8.dp)
+                    .align(Alignment.TopEnd)
+            )
+        }
     }
 }
 
@@ -71,7 +93,8 @@ fun HomeCardPreview() {
         HomeCard(
             imageUrl = "https://image.tmdb.org/t/p/w500/rktDFPbfHfUbArZ6OOOKsXcv0Bm.jpg",
             isSaved = false,
-            onSaveClick = {}
+            onSaveClick = {},
+            isDarkMode = true
         )
     }
 }

@@ -9,7 +9,6 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -17,12 +16,14 @@ import com.london.designsystem.component.Text
 import com.london.designsystem.component.button.OutlineButton
 import com.london.designsystem.theme.NovixTheme
 import com.london.designsystem.theme.ThemePreviews
+import com.london.designsystem.utils.painter
 import com.london.presentation.R
 
 @Composable
 fun NotLoggedInContent(
     onLoginClick: () -> Unit,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    isDarkMode: Boolean = NovixTheme.isThemeDark
 ) {
     LazyColumn(
         modifier = modifier
@@ -34,7 +35,8 @@ fun NotLoggedInContent(
     ) {
         item {
             Image(
-                painter = painterResource(id = R.drawable.user_person_profile),
+                painter = if (isDarkMode) R.drawable.user_person_profile_dark.painter
+                else R.drawable.user_person_profile.painter,
                 contentDescription = null,
             )
         }

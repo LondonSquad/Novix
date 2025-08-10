@@ -10,8 +10,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.paging.compose.LazyPagingItems
+import com.london.designsystem.theme.NovixTheme
 import com.london.domain.entity.Movie
-import com.london.presentation.utils.gridColmuns
+import com.london.presentation.utils.gridColumns
 
 @Composable
 fun MoviesLayOut(
@@ -22,7 +23,7 @@ fun MoviesLayOut(
     modifier: Modifier = Modifier
 ) {
     LazyVerticalGrid(
-        columns = GridCells.Fixed(gridColmuns()),
+        columns = GridCells.Fixed(gridColumns()),
         modifier = modifier.fillMaxSize(),
         horizontalArrangement = Arrangement.spacedBy(12.dp),
         verticalArrangement = Arrangement.spacedBy(12.dp),
@@ -36,7 +37,8 @@ fun MoviesLayOut(
                     onSaveClick = { onSaveClick(movie) },
                     isSaved = isMovieSaved(movie),
                     imageDescription = movie.name,
-                    modifier = Modifier.clickable { onMovieClick(movie) }
+                    modifier = Modifier.clickable { onMovieClick(movie) },
+                    isDarkMode = NovixTheme.isThemeDark
                 )
             }
         }
