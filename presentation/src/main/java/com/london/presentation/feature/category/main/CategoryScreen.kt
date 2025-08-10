@@ -1,4 +1,4 @@
-package com.london.presentation.feature.category
+package com.london.presentation.feature.category.main
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
