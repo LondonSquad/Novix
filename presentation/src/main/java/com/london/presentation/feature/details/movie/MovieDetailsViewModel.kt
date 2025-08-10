@@ -5,7 +5,7 @@ import com.london.domain.entity.Movie
 import com.london.domain.entity.recent.MediaType
 import com.london.domain.entity.recent.RecentViewed
 import com.london.domain.usecase.authentication.AuthenticationUseCase
-import com.london.domain.usecase.details.movie.ManageMovieDetailsUseCase
+import com.london.domain.usecase.details.movie.ManageMovieUseCase
 import com.london.domain.usecase.rating.RatingUseCase
 import com.london.domain.usecase.recent.viewed.ManageRecentViewedUseCase
 import com.london.domain.usecase.recent.watched.movie.ManageRecentMovieWatchedUseCase
@@ -17,7 +17,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class MovieDetailsViewModel @Inject constructor(
-    private val movieDetails: ManageMovieDetailsUseCase,
+    private val movieDetails: ManageMovieUseCase,
     private val manageRecentMovieWatchedUseCase: ManageRecentMovieWatchedUseCase,
     private val manageRecentViewedUseCase: ManageRecentViewedUseCase,
     private val ratingUseCase: RatingUseCase,

@@ -2,7 +2,9 @@ package com.london.domain.usecase
 
 import com.london.domain.entity.Actor
 import com.london.domain.entity.PagedFetchResponse
+import com.london.domain.repository.ActorRepository
 import com.london.domain.repository.TrendingRepository
+import com.london.domain.usecase.details.actor.ManageActorUseCase
 import io.mockk.coEvery
 import io.mockk.mockk
 import kotlinx.coroutines.test.runTest
@@ -13,21 +15,26 @@ import org.junit.Test
 
 class GetTrendingActorsUseCaseTest {
 
-    private lateinit var useCase: GetTrendingActorsUseCase
-    private lateinit var repository: TrendingRepository
+    private lateinit var manageActorUseCase: ManageActorUseCase
+    private lateinit var trendingRepository: TrendingRepository
+    private lateinit var actorRepository: ActorRepository
 
     @Before
     fun setup() {
-        repository = mockk()
-        useCase = GetTrendingActorsUseCase(repository)
+        trendingRepository = mockk()
+        actorRepository = mockk()
+        manageActorUseCase = ManageActorUseCase(
+            actorRepository = actorRepository,
+            trendingRepository = trendingRepository
+        )
     }
 
     @Test
     fun `invoke should return trending actors from repository`() = runTest {
         val mockResponse = createMockActorsResponse()
-        coEvery { repository.getTrendingActors(any()) } returns mockResponse
+        coEvery { trendingRepository.getTrendingActors(any()) } returns mockResponse
 
-        val result = useCase.invoke(page = 1)
+        val result = manageActorUseCase.getTrendingActors(page = 1)
 
         assertNotNull(result)
         assertEquals(1, result.currentPage)
@@ -45,10 +52,10 @@ class GetTrendingActorsUseCaseTest {
     @Test
     fun `invoke should handle different page numbers`() = runTest {
         val mockResponse = createMockActorsResponse()
-        coEvery { repository.getTrendingActors(any()) } returns mockResponse
+        coEvery { trendingRepository.getTrendingActors(any()) } returns mockResponse
 
-        val result1 = useCase.invoke(page = 1)
-        val result2 = useCase.invoke(page = 2)
+        val result1 = manageActorUseCase.getTrendingActors(page = 1)
+        val result2 = manageActorUseCase.getTrendingActors(page = 2)
 
         assertNotNull(result1)
         assertNotNull(result2)
@@ -64,9 +71,9 @@ class GetTrendingActorsUseCaseTest {
             totalPages = 0,
             totalItems = 0
         )
-        coEvery { repository.getTrendingActors(any()) } returns emptyResponse
+        coEvery { trendingRepository.getTrendingActors(any()) } returns emptyResponse
 
-        val result = useCase.invoke(page = 1)
+        val result = manageActorUseCase.getTrendingActors(page = 1)
 
         assertNotNull(result)
         assertEquals(1, result.currentPage)
@@ -87,9 +94,9 @@ class GetTrendingActorsUseCaseTest {
             totalPages = 10,
             totalItems = 100
         )
-        coEvery { repository.getTrendingActors(any()) } returns multipleActorsResponse
+        coEvery { trendingRepository.getTrendingActors(any()) } returns multipleActorsResponse
 
-        val result = useCase.invoke(page = 1)
+        val result = manageActorUseCase.getTrendingActors(page = 1)
 
         assertNotNull(result)
         assertEquals(3, result.items.size)
@@ -101,10 +108,10 @@ class GetTrendingActorsUseCaseTest {
     @Test
     fun `invoke should handle repository error`() = runTest {
         val error = Exception("Repository error")
-        coEvery { repository.getTrendingActors(any()) } throws error
+        coEvery { trendingRepository.getTrendingActors(any()) } throws error
 
         try {
-            useCase.invoke(page = 1)
+            manageActorUseCase.getTrendingActors(page = 1)
             assert(false)
         } catch (e: Exception) {
             assertEquals("Repository error", e.message)
@@ -114,9 +121,9 @@ class GetTrendingActorsUseCaseTest {
     @Test
     fun `invoke should handle negative page number`() = runTest {
         val mockResponse = createMockActorsResponse()
-        coEvery { repository.getTrendingActors(any()) } returns mockResponse
+        coEvery { trendingRepository.getTrendingActors(any()) } returns mockResponse
 
-        val result = useCase.invoke(page = -1)
+        val result = manageActorUseCase.getTrendingActors(page = -1)
 
         assertNotNull(result)
         assertEquals(1, result.currentPage)
@@ -125,9 +132,9 @@ class GetTrendingActorsUseCaseTest {
     @Test
     fun `invoke should handle zero page number`() = runTest {
         val mockResponse = createMockActorsResponse()
-        coEvery { repository.getTrendingActors(any()) } returns mockResponse
+        coEvery { trendingRepository.getTrendingActors(any()) } returns mockResponse
 
-        val result = useCase.invoke(page = 0)
+        val result = manageActorUseCase.getTrendingActors(page = 0)
 
         assertNotNull(result)
         assertEquals(1, result.currentPage)
@@ -136,9 +143,9 @@ class GetTrendingActorsUseCaseTest {
     @Test
     fun `invoke should handle large page number`() = runTest {
         val mockResponse = createMockActorsResponse()
-        coEvery { repository.getTrendingActors(any()) } returns mockResponse
+        coEvery { trendingRepository.getTrendingActors(any()) } returns mockResponse
 
-        val result = useCase.invoke(page = 999)
+        val result = manageActorUseCase.getTrendingActors(page = 999)
 
         assertNotNull(result)
         assertEquals(1, result.currentPage)
@@ -156,9 +163,9 @@ class GetTrendingActorsUseCaseTest {
             totalPages = 10,
             totalItems = 100
         )
-        coEvery { repository.getTrendingActors(any()) } returns actorsWithDifferentCharacterNames
+        coEvery { trendingRepository.getTrendingActors(any()) } returns actorsWithDifferentCharacterNames
 
-        val result = useCase.invoke(page = 1)
+        val result = manageActorUseCase.getTrendingActors(page = 1)
 
         assertNotNull(result)
         assertEquals(3, result.items.size)
@@ -179,9 +186,9 @@ class GetTrendingActorsUseCaseTest {
             totalPages = 10,
             totalItems = 100
         )
-        coEvery { repository.getTrendingActors(any()) } returns actorsWithDifferentProfilePictures
+        coEvery { trendingRepository.getTrendingActors(any()) } returns actorsWithDifferentProfilePictures
 
-        val result = useCase.invoke(page = 1)
+        val result = manageActorUseCase.getTrendingActors(page = 1)
 
         assertNotNull(result)
         assertEquals(3, result.items.size)

@@ -5,6 +5,7 @@ import com.london.domain.entity.tvshowdetails.TvShowCastEntity
 import com.london.domain.entity.tvshowdetails.TvShowCastMemberEntity
 import com.london.domain.entity.tvshowdetails.TvShowRoleEntity
 import com.london.domain.repository.TvShowRepository
+import com.london.domain.usecase.details.tvshow.ManageTvEpisodesUseCase
 import io.mockk.coEvery
 import io.mockk.mockk
 import kotlinx.coroutines.test.runTest
@@ -12,13 +13,15 @@ import org.junit.Before
 import org.junit.Test
 
 class GetCastByIdTest {
-    lateinit var tvShowRepository: TvShowRepository
-    lateinit var getCastById: GetCastById
+    private lateinit var tvShowRepository: TvShowRepository
+    private lateinit var manageTvEpisodesUseCase: ManageTvEpisodesUseCase
 
     @Before
     fun setUp() {
         tvShowRepository = mockk()
-        getCastById = GetCastById(tvShowRepository)
+        manageTvEpisodesUseCase = ManageTvEpisodesUseCase(
+            repository = tvShowRepository,
+        )
     }
 
     @Test
@@ -26,7 +29,7 @@ class GetCastByIdTest {
         //given
         coEvery { tvShowRepository.getCastTvShowById(TV_SHOW_ID) } returns mockCast
         //when
-        val result = getCastById(TV_SHOW_ID)
+        val result = manageTvEpisodesUseCase.getCastById(TV_SHOW_ID)
         //then
         assertThat(result).isEqualTo(mockCast)
     }

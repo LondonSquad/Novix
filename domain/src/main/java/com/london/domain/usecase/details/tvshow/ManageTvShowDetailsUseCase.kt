@@ -18,7 +18,7 @@ class ManageTvShowDetailsUseCase @Inject constructor(
 ) {
     suspend fun getTvShowDetails(tvShowId: Int) = tvShowRepository.getTvShowDetailsById(tvShowId)
 
-    suspend fun getPopularTvShows(limit: Int = LIMIT) =
+    suspend fun getPopularTvShows(limit: Int = POPULAR_LIMIT) =
         popularRepository.getPopularTvShows().take(limit)
 
     suspend fun getTrendingTvShows(page: Int): PagedFetchResponse<Trending> =
@@ -40,7 +40,18 @@ class ManageTvShowDetailsUseCase @Inject constructor(
     suspend fun getTvShowVideoProvider(tvShowId: Int) =
         tvShowRepository.getTvShowVideos(tvShowId)
 
+    suspend fun getImagesTvShowById(tvShowId: Int, limit: Int = IMAGE_LIMIT): List<String> {
+        val images = tvShowRepository.getImagesTvShowById(tvShowId)
+        return when {
+            images.backdropsUrl.isNotEmpty() -> images.backdropsUrl
+            images.postersUrl.isNotEmpty() -> images.postersUrl
+            images.logosUrl.isNotEmpty() -> images.logosUrl
+            else -> emptyList()
+        }.take(limit)
+    }
+
     companion object {
-        const val LIMIT = 5
+        const val IMAGE_LIMIT = 10
+        const val POPULAR_LIMIT = 5
     }
 }

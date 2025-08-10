@@ -3,7 +3,12 @@ package com.london.domain.usecase
 import com.google.common.truth.Truth.assertThat
 import com.london.domain.entity.Movie
 import com.london.domain.entity.PagedFetchResponse
+import com.london.domain.repository.MovieDetailsRepository
+import com.london.domain.repository.PopularRepository
+import com.london.domain.repository.TrendingRepository
+import com.london.domain.repository.TvShowRepository
 import com.london.domain.repository.discover.DiscoverRepository
+import com.london.domain.usecase.details.movie.ManageMovieUseCase
 import io.mockk.coEvery
 import io.mockk.mockk
 import kotlinx.coroutines.test.runTest
@@ -12,13 +17,26 @@ import org.junit.Test
 
 class GetMoviesByCategoryUseCaseTest {
 
-   private lateinit var repository: DiscoverRepository
-   private lateinit var getMoviesUseCase: GetMoviesByCategoryUseCase
+    private lateinit var movieDetailsRepository: MovieDetailsRepository
+    private lateinit var trendingRepository: TrendingRepository
+    private lateinit var tvShowRepository: TvShowRepository
+    private lateinit var discoverRepository: DiscoverRepository
+    private lateinit var popularRepository: PopularRepository
+    private lateinit var manageMovieUseCase: ManageMovieUseCase
 
     @Before
     fun setUp() {
-        repository = mockk()
-        getMoviesUseCase = GetMoviesByCategoryUseCase(repository)
+        movieDetailsRepository = mockk()
+        trendingRepository = mockk()
+        tvShowRepository = mockk()
+        discoverRepository = mockk()
+        popularRepository = mockk()
+        manageMovieUseCase = ManageMovieUseCase(
+            trendingRepository = trendingRepository,
+            popularRepository = popularRepository,
+            discoverRepository = discoverRepository,
+            movieRepository = movieDetailsRepository
+        )
     }
 
     @Test
@@ -26,12 +44,12 @@ class GetMoviesByCategoryUseCaseTest {
         runTest {
             //given
             coEvery {
-                repository.getMoviesByCategory(
+                discoverRepository.getMoviesByCategory(
                     CATEGORY_ID, PAGE_NUMBER
                 )
             } returns pagedFetchResponse
             //when
-            val result = getMoviesUseCase(CATEGORY_ID, PAGE_NUMBER)
+            val result = manageMovieUseCase.getMoviesByCategory(CATEGORY_ID, PAGE_NUMBER)
             //then
             assertThat(result).isEqualTo(pagedFetchResponse)
         }

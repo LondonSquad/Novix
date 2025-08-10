@@ -2,6 +2,7 @@ package com.london.domain.usecase
 
 import com.google.common.truth.Truth.assertThat
 import com.london.domain.repository.TvShowRepository
+import com.london.domain.usecase.details.tvshow.ManageTvEpisodesUseCase
 import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.mockk
@@ -13,12 +14,12 @@ import org.junit.jupiter.api.assertThrows
 class GetEpisodeVideoProviderUseCaseTest {
 
     private lateinit var repository: TvShowRepository
-    private lateinit var useCase: GetEpisodeVideoProviderUseCase
+    private lateinit var manageTvEpisodesUseCase: ManageTvEpisodesUseCase
 
     @Before
     fun setUp() {
         repository = mockk(relaxed = true)
-        useCase = GetEpisodeVideoProviderUseCase(repository)
+        manageTvEpisodesUseCase = ManageTvEpisodesUseCase(repository)
     }
 
     @Test
@@ -37,7 +38,7 @@ class GetEpisodeVideoProviderUseCaseTest {
         } returns expectedVideoUrls
 
         // When
-        val result = useCase.invoke(seriesId, seasonNumber, episodeNumber)
+        val result = manageTvEpisodesUseCase.getEpisodeVideos(seriesId, seasonNumber, episodeNumber)
 
         // Then
         assertThat(result).isEqualTo(expectedVideoUrls)
@@ -59,7 +60,7 @@ class GetEpisodeVideoProviderUseCaseTest {
         } returns expectedEmptyList
 
         // When
-        val result = useCase.invoke(seriesId, seasonNumber, episodeNumber)
+        val result = manageTvEpisodesUseCase.getEpisodeVideos(seriesId, seasonNumber, episodeNumber)
 
         // Then
         assertThat(result).isEmpty()
@@ -83,7 +84,7 @@ class GetEpisodeVideoProviderUseCaseTest {
 
         // When & Then
         val actualException = assertThrows<RuntimeException> {
-            useCase.invoke(seriesId, seasonNumber, episodeNumber)
+            manageTvEpisodesUseCase.getEpisodeVideos(seriesId, seasonNumber, episodeNumber)
         }
 
         assertThat(actualException).isEqualTo(expectedException)
@@ -106,7 +107,7 @@ class GetEpisodeVideoProviderUseCaseTest {
         } returns expectedVideoUrls
 
         // When
-        useCase.invoke(seriesId, seasonNumber, episodeNumber)
+        manageTvEpisodesUseCase.getEpisodeVideos(seriesId, seasonNumber, episodeNumber)
 
         // Then
         coVerify(exactly = 1) {
@@ -131,7 +132,7 @@ class GetEpisodeVideoProviderUseCaseTest {
         } returns expectedVideoUrls
 
         // When
-        val result = useCase.invoke(seriesId, seasonNumber, episodeNumber)
+        val result = manageTvEpisodesUseCase.getEpisodeVideos(seriesId, seasonNumber, episodeNumber)
 
         // Then
         assertThat(result).isEmpty()
@@ -157,7 +158,7 @@ class GetEpisodeVideoProviderUseCaseTest {
         } returns expectedVideoUrls
 
         // When
-        val result = useCase.invoke(seriesId, seasonNumber, episodeNumber)
+        val result = manageTvEpisodesUseCase.getEpisodeVideos(seriesId, seasonNumber, episodeNumber)
 
         // Then
         assertThat(result).isEqualTo(expectedVideoUrls)

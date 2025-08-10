@@ -4,10 +4,8 @@ import androidx.lifecycle.SavedStateHandle
 import com.london.domain.entity.TvShow
 import com.london.domain.entity.recent.MediaType
 import com.london.domain.entity.recent.RecentViewed
-import com.london.domain.usecase.GetCastById
-import com.london.domain.usecase.GetEpisodesByTvShowSeason
-import com.london.domain.usecase.GetTvShowImagesByIdUseCase
 import com.london.domain.usecase.authentication.AuthenticationUseCase
+import com.london.domain.usecase.details.tvshow.ManageTvEpisodesUseCase
 import com.london.domain.usecase.details.tvshow.ManageTvShowDetailsUseCase
 import com.london.domain.usecase.rating.RatingUseCase
 import com.london.domain.usecase.recent.viewed.ManageRecentViewedUseCase
@@ -20,12 +18,10 @@ import javax.inject.Inject
 
 @HiltViewModel
 class TvShowDetailsViewModel @Inject constructor(
-    private val getCastById: GetCastById,
     private val ratingUseCase: RatingUseCase,
-    private val getTvShowImages: GetTvShowImagesByIdUseCase,
     private val authenticationUseCase: AuthenticationUseCase,
     private val manageRecentViewedUseCase: ManageRecentViewedUseCase,
-    private val getEpisodesByTvShowSeason: GetEpisodesByTvShowSeason,
+    private val manageTvEpisodesUseCase: ManageTvEpisodesUseCase,
     private val manageTvShowDetailsUseCase: ManageTvShowDetailsUseCase,
     private val manageRecentTvShowWatchedUseCase: ManageRecentTvShowWatchedUseCase,
     savedStateHandle: SavedStateHandle,
@@ -46,7 +42,8 @@ class TvShowDetailsViewModel @Inject constructor(
     fun initializeEpisodesBySeasons(seasonNumber: Int = 1) {
         tryToExecute(
             block = {
-                val episodesBySeason = getEpisodesByTvShowSeason(tvShowId, seasonNumber)
+                val episodesBySeason =
+                    manageTvEpisodesUseCase.getTvShowEpisodesBySeason(tvShowId, seasonNumber)
                 val videoProvider = manageTvShowDetailsUseCase.getTvShowVideoProvider(tvShowId)
                 Triple(episodesBySeason.episodes, episodesBySeason, videoProvider)
             },
@@ -153,7 +150,7 @@ class TvShowDetailsViewModel @Inject constructor(
 
         tryToExecute(
             block = {
-                getTvShowImages.invoke(tvShowId)
+                manageTvShowDetailsUseCase.getImagesTvShowById(tvShowId)
             },
             onStart = { updateState { copy(isLoading = true) } },
             onSuccess = { images ->
@@ -171,7 +168,7 @@ class TvShowDetailsViewModel @Inject constructor(
     private fun initializeGetCastData() {
         tryToExecute(
             block = {
-                getCastById(tvShowId)
+                manageTvEpisodesUseCase.getCastById(tvShowId)
             },
             onStart = { updateState { copy(isLoading = true) } },
             onSuccess = { cast ->
@@ -202,7 +199,10 @@ class TvShowDetailsViewModel @Inject constructor(
                 val firstSeason = tvShowDetails.tvShowSeasons.firstOrNull()
                 val seasonNumber = firstSeason ?: 1
 
-                val episodes = getEpisodesByTvShowSeason(tvShowId, seasonNumber).episodes
+                val episodes = manageTvEpisodesUseCase.getTvShowEpisodesBySeason(
+                    tvShowId,
+                    seasonNumber
+                ).episodes
                 val rating = if (authenticationUseCase.isLoggedIn()) {
                     ratingUseCase.getRateAccountTvShowState(
                         tvShowId = tvShowId,

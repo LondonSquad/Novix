@@ -2,7 +2,11 @@ package com.london.domain.usecase
 
 import com.london.domain.entity.PagedFetchResponse
 import com.london.domain.entity.Trending
+import com.london.domain.repository.MovieDetailsRepository
+import com.london.domain.repository.PopularRepository
 import com.london.domain.repository.TrendingRepository
+import com.london.domain.repository.discover.DiscoverRepository
+import com.london.domain.usecase.details.movie.ManageMovieUseCase
 import io.mockk.coEvery
 import io.mockk.mockk
 import kotlinx.coroutines.test.runTest
@@ -13,21 +17,32 @@ import org.junit.Test
 
 class GetTrendingMoviesUseCaseTest {
 
-    private lateinit var useCase: GetTrendingMoviesUseCase
-    private lateinit var repository: TrendingRepository
+    private lateinit var manageMovieUseCase: ManageMovieUseCase
+    private lateinit var trendingRepository: TrendingRepository
+    private lateinit var popularRepository: PopularRepository
+    private lateinit var discoverRepository: DiscoverRepository
+    private lateinit var movieDetailsRepository: MovieDetailsRepository
 
     @Before
     fun setup() {
-        repository = mockk()
-        useCase = GetTrendingMoviesUseCase(repository)
+        movieDetailsRepository = mockk()
+        trendingRepository = mockk()
+        popularRepository = mockk()
+        discoverRepository = mockk()
+        manageMovieUseCase = ManageMovieUseCase(
+            movieRepository = movieDetailsRepository,
+            trendingRepository = trendingRepository,
+            popularRepository = popularRepository,
+            discoverRepository = discoverRepository
+        )
     }
 
     @Test
     fun `invoke should return trending movies from repository`() = runTest {
         val mockResponse = createMockTrendingResponse()
-        coEvery { repository.getTrendingMovies(any()) } returns mockResponse
+        coEvery { trendingRepository.getTrendingMovies(any()) } returns mockResponse
 
-        val result = useCase.invoke(page = 1)
+        val result = manageMovieUseCase.getTrendingMovies(page = 1)
 
         assertNotNull(result)
         assertEquals(1, result.currentPage)
@@ -45,10 +60,10 @@ class GetTrendingMoviesUseCaseTest {
     @Test
     fun `invoke should handle different page numbers`() = runTest {
         val mockResponse = createMockTrendingResponse()
-        coEvery { repository.getTrendingMovies(any()) } returns mockResponse
+        coEvery { trendingRepository.getTrendingMovies(any()) } returns mockResponse
 
-        val result1 = useCase.invoke(page = 1)
-        val result2 = useCase.invoke(page = 2)
+        val result1 = manageMovieUseCase.getTrendingMovies(page = 1)
+        val result2 = manageMovieUseCase.getTrendingMovies(page = 2)
 
         assertNotNull(result1)
         assertNotNull(result2)
@@ -64,9 +79,9 @@ class GetTrendingMoviesUseCaseTest {
             totalPages = 0,
             totalItems = 0
         )
-        coEvery { repository.getTrendingMovies(any()) } returns emptyResponse
+        coEvery { trendingRepository.getTrendingMovies(any()) } returns emptyResponse
 
-        val result = useCase.invoke(page = 1)
+        val result = manageMovieUseCase.getTrendingMovies(page = 1)
 
         assertNotNull(result)
         assertEquals(1, result.currentPage)
@@ -87,9 +102,9 @@ class GetTrendingMoviesUseCaseTest {
             totalPages = 10,
             totalItems = 100
         )
-        coEvery { repository.getTrendingMovies(any()) } returns multipleMoviesResponse
+        coEvery { trendingRepository.getTrendingMovies(any()) } returns multipleMoviesResponse
 
-        val result = useCase.invoke(page = 1)
+        val result = manageMovieUseCase.getTrendingMovies(page = 1)
 
         assertNotNull(result)
         assertEquals(3, result.items.size)
@@ -101,10 +116,10 @@ class GetTrendingMoviesUseCaseTest {
     @Test
     fun `invoke should handle repository error`() = runTest {
         val error = Exception("Repository error")
-        coEvery { repository.getTrendingMovies(any()) } throws error
+        coEvery { trendingRepository.getTrendingMovies(any()) } throws error
 
         try {
-            useCase.invoke(page = 1)
+            manageMovieUseCase.getTrendingMovies(page = 1)
             assert(false)
         } catch (e: Exception) {
             assertEquals("Repository error", e.message)
@@ -114,9 +129,9 @@ class GetTrendingMoviesUseCaseTest {
     @Test
     fun `invoke should handle negative page number`() = runTest {
         val mockResponse = createMockTrendingResponse()
-        coEvery { repository.getTrendingMovies(any()) } returns mockResponse
+        coEvery { trendingRepository.getTrendingMovies(any()) } returns mockResponse
 
-        val result = useCase.invoke(page = -1)
+        val result = manageMovieUseCase.getTrendingMovies(page = -1)
 
         assertNotNull(result)
         assertEquals(1, result.currentPage)
@@ -125,9 +140,9 @@ class GetTrendingMoviesUseCaseTest {
     @Test
     fun `invoke should handle zero page number`() = runTest {
         val mockResponse = createMockTrendingResponse()
-        coEvery { repository.getTrendingMovies(any()) } returns mockResponse
+        coEvery { trendingRepository.getTrendingMovies(any()) } returns mockResponse
 
-        val result = useCase.invoke(page = 0)
+        val result = manageMovieUseCase.getTrendingMovies(page = 0)
 
         assertNotNull(result)
         assertEquals(1, result.currentPage)
@@ -136,9 +151,9 @@ class GetTrendingMoviesUseCaseTest {
     @Test
     fun `invoke should handle large page number`() = runTest {
         val mockResponse = createMockTrendingResponse()
-        coEvery { repository.getTrendingMovies(any()) } returns mockResponse
+        coEvery { trendingRepository.getTrendingMovies(any()) } returns mockResponse
 
-        val result = useCase.invoke(page = 999)
+        val result = manageMovieUseCase.getTrendingMovies(page = 999)
 
         assertNotNull(result)
         assertEquals(1, result.currentPage)

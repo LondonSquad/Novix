@@ -4,8 +4,8 @@ import androidx.lifecycle.viewModelScope
 import androidx.paging.PagingData
 import androidx.paging.cachedIn
 import com.london.domain.entity.UpComingMovie
-import com.london.domain.usecase.GetPopularMovies
 import com.london.domain.usecase.GetUpComingMoviesByCategoryUseCase
+import com.london.domain.usecase.details.movie.ManageMovieUseCase
 import com.london.domain.usecase.details.tvshow.ManageTvShowDetailsUseCase
 import com.london.domain.usecase.recent.watched.movie.ManageRecentMovieWatchedUseCase
 import com.london.domain.usecase.recent.watched.tvshow.ManageRecentTvShowWatchedUseCase
@@ -27,13 +27,13 @@ import javax.inject.Inject
 
 @HiltViewModel
 class HomeViewModel @Inject constructor(
-    private val getPopularMovies: GetPopularMovies,
     private val manageTvShowDetailsUseCase: ManageTvShowDetailsUseCase,
     private val getUpcomingMoviesByCategoryUseCase: GetUpComingMoviesByCategoryUseCase,
     private val getTopRatedMovies: GetTopRatedMoviesUseCase,
     private val getTopRatedTvShows: GetTopRatedTvSeriesUseCase,
     private val manageRecentMovieWatchedUseCase: ManageRecentMovieWatchedUseCase,
-    private val manageRecentTvShowWatchedUseCase: ManageRecentTvShowWatchedUseCase
+    private val manageRecentTvShowWatchedUseCase: ManageRecentTvShowWatchedUseCase,
+    private val manageMovieUseCase: ManageMovieUseCase,
 ) : BaseViewModel<HomeScreenUiState, HomeScreenEffect>(HomeScreenUiState()), HomeScreenContract {
 
     private val _upcomingMoviesFlow =
@@ -173,7 +173,7 @@ class HomeViewModel @Inject constructor(
     private fun initializePopularMedia() {
         tryToExecute(
             block = {
-                val movies = getPopularMovies.invoke()
+                val movies = manageMovieUseCase.getPopularMovies()
                 val shows = manageTvShowDetailsUseCase.getPopularTvShows()
                 Pair(movies, shows)
             },

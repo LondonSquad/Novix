@@ -2,10 +2,8 @@ package com.london.presentation.feature.details.tvshow.episode
 
 import android.annotation.SuppressLint
 import androidx.lifecycle.SavedStateHandle
-import com.london.domain.usecase.GetEpisodeByTvShowId
-import com.london.domain.usecase.GetEpisodeVideoProviderUseCase
-import com.london.domain.usecase.GetTvShowImagesByIdUseCase
 import com.london.domain.usecase.authentication.AuthenticationUseCase
+import com.london.domain.usecase.details.tvshow.ManageTvEpisodesUseCase
 import com.london.domain.usecase.details.tvshow.ManageTvShowDetailsUseCase
 import com.london.domain.usecase.rating.RatingUseCase
 import com.london.presentation.navigation.Screen
@@ -16,10 +14,8 @@ import javax.inject.Inject
 
 @HiltViewModel
 class EpisodeDetailsViewModel @Inject constructor(
-    private val getTvShowImages: GetTvShowImagesByIdUseCase,
-    private val getEpisodeByTvShowIdUseCase: GetEpisodeByTvShowId,
     private val manageTvShowDetailsUseCase: ManageTvShowDetailsUseCase,
-    private val getVideoProvider: GetEpisodeVideoProviderUseCase,
+    private val manageTvEpisodesUseCase: ManageTvEpisodesUseCase,
     private val ratingUseCase: RatingUseCase,
     private val authenticationUseCase: AuthenticationUseCase,
     savedStateHandle: SavedStateHandle,
@@ -122,10 +118,10 @@ class EpisodeDetailsViewModel @Inject constructor(
     private fun loadEpisodeDetails() {
         tryToExecute(
             block = {
-                val episode = getEpisodeByTvShowIdUseCase(
+                val episode = manageTvEpisodesUseCase.getEpisodeByTvShowId(
                     tvShowId, seasonNumber, episodeNumber
                 )
-                val images = getTvShowImages.invoke(tvShowId)
+                val images = manageTvShowDetailsUseCase.getImagesTvShowById(tvShowId)
                 val tvShowDetails = manageTvShowDetailsUseCase.getTvShowDetails(tvShowId)
 
                 Triple(episode, images, tvShowDetails)
@@ -155,7 +151,7 @@ class EpisodeDetailsViewModel @Inject constructor(
         tryToExecute(
             block = {
                 val videoProviders =
-                    getVideoProvider.invoke(
+                    manageTvEpisodesUseCase.getEpisodeVideos(
                         tvShowId, seasonNumber, episodeNumber
                     ).first()
                 videoProviders
