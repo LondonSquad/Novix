@@ -11,43 +11,32 @@ import io.mockk.coVerify
 import io.mockk.mockk
 import kotlinx.coroutines.test.runTest
 import org.junit.Assert
-import org.junit.Before
 import org.junit.Test
 
 class RatingUseCaseTest {
-    private lateinit var repository: RatingRepository
-    private lateinit var tvShowRepository: TvShowRepository
-    private lateinit var ratingRepository: RatingRepository
-    private lateinit var movieRepository: MovieDetailsRepository
-    private lateinit var ratingUseCase: ManageRatingUseCase
-
-    @Before
-    fun setup() {
-        repository = mockk(relaxed = true)
-        tvShowRepository = mockk(relaxed = true)
-        ratingRepository = mockk(relaxed = true)
-        movieRepository = mockk(relaxed = true)
-        ratingUseCase = ManageRatingUseCase(
-            repository = repository,
-            tvShowRepository = tvShowRepository,
-            ratingRepository = ratingRepository,
-            movieRepository = movieRepository
-        )
-    }
+    private val ratingRepository: RatingRepository = mockk(relaxed = true)
+    private val tvShowRepository: TvShowRepository = mockk(relaxed = true)
+    private val movieRepository: MovieDetailsRepository = mockk(relaxed = true)
+    private val ratingUseCase: ManageRatingUseCase = ManageRatingUseCase(
+        repository = ratingRepository,
+        tvShowRepository = tvShowRepository,
+        ratingRepository = ratingRepository,
+        movieRepository = movieRepository
+    )
 
     @Test
     fun `given valid id and rating when invoked then returns true`() = runTest {
         // Given
         val movieId = 456
         val rating = 7.5
-        coEvery { repository.addMovieRatingById(movieId, rating.toInt()) } returns true
+        coEvery { ratingRepository.addMovieRatingById(movieId, rating.toInt()) } returns true
 
         // When
         val result = ratingUseCase.addMovieRatingById(movieId, rating.toInt())
 
         // Then
         Assert.assertTrue(result)
-        coVerify(exactly = 1) { repository.addMovieRatingById(movieId, rating.toInt()) }
+        coVerify(exactly = 1) { ratingRepository.addMovieRatingById(movieId, rating.toInt()) }
     }
 
     @Test
@@ -56,14 +45,14 @@ class RatingUseCaseTest {
             // Given
             val movieId = 789
             val rating = 4.0
-            coEvery { repository.addMovieRatingById(movieId, rating.toInt()) } returns false
+            coEvery { ratingRepository.addMovieRatingById(movieId, rating.toInt()) } returns false
 
             // When
             val result = ratingUseCase.addMovieRatingById(movieId, rating.toInt())
 
             // Then
             Assert.assertFalse(result)
-            coVerify(exactly = 1) { repository.addMovieRatingById(movieId, rating.toInt()) }
+            coVerify(exactly = 1) { ratingRepository.addMovieRatingById(movieId, rating.toInt()) }
         }
 
     @Test
@@ -85,7 +74,7 @@ class RatingUseCaseTest {
     @Test
     fun `getRatedMovies returns only movies sorted by rating`() = runTest {
         // Given
-        coEvery { repository.getAllRatedMovies() } returns mockRatedMedia
+        coEvery { ratingRepository.getAllRatedMovies() } returns mockRatedMedia
 
         // When
         val result = ratingUseCase.getRatedMovies()
@@ -100,7 +89,7 @@ class RatingUseCaseTest {
     @Test
     fun `getRatedTvShows returns only tv shows sorted by rating`() = runTest {
         // Given
-        coEvery { repository.getAllRatedTvShows() } returns mockRatedMediaWithTvShows
+        coEvery { ratingRepository.getAllRatedTvShows() } returns mockRatedMediaWithTvShows
 
         // When
         val result = ratingUseCase.getRatedTvShows()
@@ -117,7 +106,7 @@ class RatingUseCaseTest {
     @Test
     fun `getRatedMovies returns empty list when no movies`() = runTest {
         // Given
-        coEvery { repository.getAllRatedMedia() } returns mockOnlyTvShows
+        coEvery { ratingRepository.getAllRatedMedia() } returns mockOnlyTvShows
 
         // When
         val result = ratingUseCase.getRatedMovies()
@@ -129,7 +118,7 @@ class RatingUseCaseTest {
     @Test
     fun `getRatedTvShows returns empty list when no tv shows`() = runTest {
         // Given
-        coEvery { repository.getAllRatedMedia() } returns mockOnlyMovies
+        coEvery { ratingRepository.getAllRatedMedia() } returns mockOnlyMovies
 
         // When
         val result = ratingUseCase.getRatedTvShows()
