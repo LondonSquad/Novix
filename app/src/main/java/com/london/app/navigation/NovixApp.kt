@@ -50,9 +50,9 @@ import com.london.presentation.feature.search.details.actor.info.toptvshowspicks
 import com.london.presentation.feature.search.details.movie.MovieDetailsScreen
 import com.london.presentation.feature.search.details.tvshow.episode.EpisodeDetailsScreen
 import com.london.presentation.feature.search.details.tvshow.info.TvShowsDetailsScreen
-import com.london.presentation.feature.userjourney.onboarding.OnboardingRoute
-import com.london.presentation.feature.userjourney.onboarding.WelcomeScreen
-import com.london.presentation.feature.userjourney.splash.SplashRoute
+import com.london.presentation.feature.welcome.onboarding.OnboardingRoute
+import com.london.presentation.feature.welcome.onboarding.WelcomeScreen
+import com.london.presentation.feature.welcome.splash.SplashRoute
 import com.london.presentation.navigation.Screen
 import com.london.presentation.navigation.Screen.ActorDetails
 import com.london.presentation.navigation.Screen.MovieDetails
