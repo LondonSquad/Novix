@@ -1,7 +1,6 @@
 package com.london.domain.usecase
 
-import com.london.domain.entity.actordetails.actorimage.ActorImageDetails
-import com.london.domain.entity.actordetails.actorimage.ImageDetails
+import com.london.domain.entity.actordetails.ActorImageDetails
 import com.london.domain.repository.ActorRepository
 import io.mockk.coEvery
 import io.mockk.coVerify
@@ -31,7 +30,7 @@ class GetActorImagesByIdUseCaseTest {
             mockk<ImageDetails>()
         )
         val mockActorImageDetails = mockk<ActorImageDetails> {
-            coEvery { profiles } returns mockImageDetails
+            coEvery { imageUrl } returns mockImageDetails
         }
         coEvery { repository.getActorImagesById(actorId) } returns mockActorImageDetails
 
@@ -49,7 +48,7 @@ class GetActorImagesByIdUseCaseTest {
         val actorId = 1
         val emptyImageDetails = emptyList<ImageDetails>()
         val mockActorImageDetails = mockk<ActorImageDetails> {
-            coEvery { profiles } returns emptyImageDetails
+            coEvery { imageUrl } returns emptyImageDetails
         }
         coEvery { repository.getActorImagesById(actorId) } returns mockActorImageDetails
 
@@ -68,7 +67,7 @@ class GetActorImagesByIdUseCaseTest {
         val actorId = 999
         val mockImageDetails = listOf(mockk<ImageDetails>())
         val mockActorImageDetails = mockk<ActorImageDetails> {
-            coEvery { profiles } returns mockImageDetails
+            coEvery { imageUrl } returns mockImageDetails
         }
         coEvery { repository.getActorImagesById(actorId) } returns mockActorImageDetails
 
