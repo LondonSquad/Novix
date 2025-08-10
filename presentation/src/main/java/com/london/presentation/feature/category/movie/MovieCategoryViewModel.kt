@@ -23,17 +23,14 @@ class MovieCategoryViewModel @Inject constructor(
         initializeMovies(categoryId)
     }
 
-    override fun onMovieClick(movieId: Int) {
+    override fun onMovieClick(movieId: Int) =
         emitEffect(MovieCategoryEffect.NavigateToMovieDetails(movieId = movieId))
-    }
 
-    override fun onBack() {
+    override fun onBack() =
         emitEffect(MovieCategoryEffect.NavigateBack)
-    }
 
-    override fun onSavedClick(movieId: Int) {
-        //toDo() save movie
-    }
+    override fun onSavedClick(movieId: Int) = Unit //toDo() save movie
+
     private fun initializeMovies(categoryId: Int) {
         tryToExecute(
             block = {
