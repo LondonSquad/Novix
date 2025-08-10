@@ -5,19 +5,19 @@ import com.london.data.remote.model.details.actor.model.actormoviedetails.ActorM
 import com.london.data.utils.asImageUrlOrEmpty
 import com.london.data.utils.orZero
 import com.london.domain.KoverIgnore
-import com.london.domain.entity.actordetails.actormovie.ActorMovieCastMemberEntity
-import com.london.domain.entity.actordetails.actormovie.ActorMovieDetails
+import com.london.domain.entity.actordetails.cast.CastActorEntity
+import com.london.domain.entity.actordetails.cast.CastDetails
 
-fun ActorMovieDetailsResponse.toEntity(): ActorMovieDetails {
-    return ActorMovieDetails(
+fun ActorMovieDetailsResponse.toEntity(): CastDetails {
+    return CastDetails(
         id = id.orZero(),
         cast = cast?.map { it.toEntity() }.orEmpty(),
     )
 }
 
 @KoverIgnore
-fun ActorMovieCastMember.toEntity(): ActorMovieCastMemberEntity {
-    return ActorMovieCastMemberEntity(
+fun ActorMovieCastMember.toEntity(): CastActorEntity {
+    return CastActorEntity(
         id = id.orZero(),
         posterUrl = posterPath.asImageUrlOrEmpty(),
     )

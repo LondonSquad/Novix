@@ -3,9 +3,8 @@ package com.london.data.repository.search
 import com.london.data.mapper.details.actor.toEntity
 import com.london.data.remote.source.details.actor.ActorDetailsRemoteDataSource
 import com.london.domain.entity.actordetails.ActorDetails
-import com.london.domain.entity.actordetails.actorimage.ActorImageDetails
-import com.london.domain.entity.actordetails.actormovie.ActorMovieDetails
-import com.london.domain.entity.actordetails.actortvshow.ActorTvShowDetails
+import com.london.domain.entity.actordetails.ActorImageDetails
+import com.london.domain.entity.actordetails.cast.CastDetails
 import com.london.domain.repository.ActorRepository
 import javax.inject.Inject
 
@@ -16,11 +15,11 @@ class ActorRepositoryImpl @Inject constructor(
         dataSource.getActorDetailsById(id).getOrThrow().toEntity()
 
 
-    override suspend fun getActorMoviePicksById(id: Int): ActorMovieDetails =
+    override suspend fun getActorMoviePicksById(id: Int): CastDetails =
         dataSource.getActorMovieById(id).getOrThrow().toEntity()
 
 
-    override suspend fun getActorTvShowPicksById(id: Int): ActorTvShowDetails =
+    override suspend fun getActorTvShowPicksById(id: Int): CastDetails =
         dataSource.getActorTvShowById(id).getOrThrow().toEntity()
 
     override suspend fun getActorImagesById(id: Int): ActorImageDetails =
