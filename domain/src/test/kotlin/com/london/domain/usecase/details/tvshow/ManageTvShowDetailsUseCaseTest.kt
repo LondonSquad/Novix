@@ -243,14 +243,19 @@ class ManageTvShowDetailsUseCaseTest {
         coEvery { trendingRepository.getTrendingTvShows(any()) } returns mockResponse
 
         // When
-        val result = trendingRepository.getTrendingTvShows(page = 1)
+        val result = manageTvShowDetailsUseCase.getTrendingTvShows(page = 1)
 
         // Then
         assertThat(result).isNotNull()
+        assertThat(result.currentPage).isEqualTo(1)
+        assertThat(result.totalPages).isEqualTo(10)
+        assertThat(result.totalItems).isEqualTo(100)
+        assertThat(result.items).hasSize(1)
     }
 
     @Test
     fun `invoke should handle empty response`() = runTest {
+        // Given
         val emptyResponse = PagedFetchResponse<Trending>(
             currentPage = 1,
             items = emptyList(),
@@ -259,32 +264,127 @@ class ManageTvShowDetailsUseCaseTest {
         )
         coEvery { trendingRepository.getTrendingTvShows(any()) } returns emptyResponse
 
-        val result = trendingRepository.getTrendingTvShows(page = 1)
+        // When
+        val result = manageTvShowDetailsUseCase.getTrendingTvShows(page = 1)
 
+        // Then
+        assertThat(result).isNotNull()
         assertThat(result.totalPages).isEqualTo(0)
+        assertThat(result.items).isEmpty()
     }
 
     @Test
     fun `invoke should handle repository error`() = runTest {
+        // Given
         coEvery { trendingRepository.getTrendingTvShows(any()) } throws Exception(
-            "Failed to fetch movie details"
+            "Failed to fetch tv show details"
         )
 
+        // When & Then
         val exception = assertThrows<Exception> {
             manageTvShowDetailsUseCase.getTrendingTvShows(page = 1)
         }
 
-        assertEquals("Failed to fetch movie details", exception.message)
+        assertThat(exception.message).isEqualTo("Failed to fetch tv show details")
     }
 
     @Test
     fun `invoke should handle negative page number`() = runTest {
+        // Given
         val mockResponse = createMockTrendingResponse()
         coEvery { trendingRepository.getTrendingTvShows(any()) } returns mockResponse
 
-        val result = trendingRepository.getTrendingTvShows(page = -1)
+        // When
+        val result = manageTvShowDetailsUseCase.getTrendingTvShows(page = -1)
 
-        assertEquals(1, result.currentPage)
+        // Then
+        assertThat(result).isNotNull()
+        assertThat(result.currentPage).isEqualTo(1)
+    }
+
+    @Test
+    fun `invoke should filter tv shows by genre ID correctly`() = runTest {
+        // Given
+        val mixedGenreTvShows = createMockTrendingResponse(
+            items = listOf(
+                createMockTrending(id = 1, title = "Action TV Show", genreIds = listOf(28)),
+                createMockTrending(id = 2, title = "Comedy TV Show", genreIds = listOf(35)),
+                createMockTrending(id = 3, title = "Drama TV Show", genreIds = listOf(18)),
+                createMockTrending(id = 4, title = "Action-Comedy TV Show", genreIds = listOf(28, 35)),
+                createMockTrending(id = 5, title = "Horror TV Show", genreIds = listOf(27)),
+                createMockTrending(id = 6, title = "Action-Drama TV Show", genreIds = listOf(28, 18))
+            ),
+            totalPages = 1,
+            totalItems = 6
+        )
+        coEvery { trendingRepository.getTrendingTvShows(any()) } returns mixedGenreTvShows
+
+        // When
+        val actionGenreId = 28
+        val result = manageTvShowDetailsUseCase.getTrendingTvShows(page = 1, genreId = actionGenreId)
+        
+        // Then
+        assertThat(result).isNotNull()
+        assertThat(result.items).hasSize(3)
+        
+        result.items.forEach { tvShow ->
+            assertThat(tvShow.genreIds).contains(actionGenreId)
+        }
+        
+        val tvShowTitles = result.items.map { it.title }
+        assertThat(tvShowTitles).contains("Action TV Show")
+        assertThat(tvShowTitles).contains("Action-Comedy TV Show")
+        assertThat(tvShowTitles).contains("Action-Drama TV Show")
+
+        assertThat(tvShowTitles).doesNotContain("Comedy TV Show")
+        assertThat(tvShowTitles).doesNotContain("Drama TV Show")
+        assertThat(tvShowTitles).doesNotContain("Horror TV Show")
+    }
+
+    @Test
+    fun `invoke should return all tv shows when no genre ID is specified`() = runTest {
+        // Given
+        val allTvShows = createMockTrendingResponse(
+            items = listOf(
+                createMockTrending(id = 1, title = "Action TV Show", genreIds = listOf(28)),
+                createMockTrending(id = 2, title = "Comedy TV Show", genreIds = listOf(35)),
+                createMockTrending(id = 3, title = "Drama TV Show", genreIds = listOf(18)),
+                createMockTrending(id = 4, title = "Action-Comedy TV Show", genreIds = listOf(28, 35))
+            ),
+            totalPages = 1,
+            totalItems = 4
+        )
+        coEvery { trendingRepository.getTrendingTvShows(any()) } returns allTvShows
+
+        // When
+        val result = manageTvShowDetailsUseCase.getTrendingTvShows(page = 1)
+        
+        // Then
+        assertThat(result).isNotNull()
+        assertThat(result.items).hasSize(4)
+        assertThat(result.items).isEqualTo(allTvShows.items)
+    }
+
+    @Test
+    fun `invoke should return all tv shows when genre ID is -1`() = runTest {
+        // Given
+        val allTvShows = createMockTrendingResponse(
+            items = listOf(
+                createMockTrending(id = 1, title = "Action TV Show", genreIds = listOf(28)),
+                createMockTrending(id = 2, title = "Comedy TV Show", genreIds = listOf(35))
+            ),
+            totalPages = 1,
+            totalItems = 2
+        )
+        coEvery { trendingRepository.getTrendingTvShows(any()) } returns allTvShows
+
+        // When
+        val result = manageTvShowDetailsUseCase.getTrendingTvShows(page = 1, genreId = -1)
+        
+        // Then
+        assertThat(result).isNotNull()
+        assertThat(result.items).hasSize(2)
+        assertThat(result.items).isEqualTo(allTvShows.items)
     }
     // endregion
 
@@ -367,13 +467,19 @@ class ManageTvShowDetailsUseCaseTest {
         )
     }
 
-    private fun createMockTrendingResponse(): PagedFetchResponse<Trending> =
-        PagedFetchResponse(
-            currentPage = 1,
-            items = listOf(createMockTrending()),
-            totalPages = 10,
-            totalItems = 100
+    private fun createMockTrendingResponse(
+        currentPage: Int = 1,
+        items: List<Trending> = listOf(createMockTrending()),
+        totalPages: Int = 10,
+        totalItems: Int = 100
+    ): PagedFetchResponse<Trending> {
+        return PagedFetchResponse(
+            currentPage = currentPage,
+            items = items,
+            totalPages = totalPages,
+            totalItems = totalItems
         )
+    }
 
     private fun createMockTrending(
         id: Int = 1,
