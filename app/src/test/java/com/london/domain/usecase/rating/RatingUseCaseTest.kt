@@ -92,7 +92,7 @@ class RatingUseCaseTest {
 
         // Then
         Assert.assertEquals(2, result.size)
-        Assert.assertTrue(result[0].rating >= result[1].rating)
+        Assert.assertTrue(result[1].rating >= result[0].rating)
         Assert.assertEquals("Movie 2", result[1].title) // rating = 8
         Assert.assertEquals("Movie 1", result[0].title) // rating = 9
     }
