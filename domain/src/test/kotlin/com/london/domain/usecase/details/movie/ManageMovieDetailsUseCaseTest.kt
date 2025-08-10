@@ -12,6 +12,7 @@ import com.london.domain.repository.MovieDetailsRepository
 import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.mockk
+import junit.runner.Version.id
 import kotlinx.coroutines.test.runTest
 import org.junit.Before
 import org.junit.Test
@@ -464,19 +465,8 @@ class ManageMovieDetailsUseCaseTest {
         )
 
         val mockVideos = listOf(
-            MovieVideo(
-                id = "vid1",
-                videoUrl = "https://youtube.com/watch?v=123",
-                name = "Official Trailer",
-                official = true,
-                site = "YouTube",
-            ), MovieVideo(
-                id = "vid2",
-                videoUrl = "https://youtube.com/watch?v=456",
-                name = "Teaser",
-                official = false,
-                site = "YouTube",
-            )
+            "https://youtube.com/watch?v=123",
+            "https://youtube.com/watch?v=456",
         )
     }
 }
