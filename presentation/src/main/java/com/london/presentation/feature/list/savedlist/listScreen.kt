@@ -164,13 +164,13 @@ private fun Content(
         }
         if (state.isSnackBarSuccessVisible) {
             SnackBarAnimation(
-                message = stringResource(R.string.list_added_successfly),
+                message = stringResource(R.string.list_added_success),
                 icon = com.london.designsystem.R.drawable.ic_success
             )
         }
         if (state.error != null) {
             SnackBarAnimation(
-                message = stringResource(R.string.can_not_delete_list)
+                message = stringResource(R.string.list_added_fail)
             )
         }
     }
