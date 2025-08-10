@@ -26,8 +26,8 @@ class GetActorImagesByIdUseCaseTest {
         // Given
         val actorId = 1
         val mockImageDetails = listOf(
-            mockk<ImageDetails>(),
-            mockk<ImageDetails>()
+            "https://example.com/image1.jpg",
+            "https://example.com/image2.jpg"
         )
         val mockActorImageDetails = mockk<ActorImageDetails> {
             coEvery { imageUrl } returns mockImageDetails
@@ -46,7 +46,7 @@ class GetActorImagesByIdUseCaseTest {
     fun `should return empty list when profiles is empty`() = runTest {
         // Given
         val actorId = 1
-        val emptyImageDetails = emptyList<ImageDetails>()
+        val emptyImageDetails = emptyList<String>()
         val mockActorImageDetails = mockk<ActorImageDetails> {
             coEvery { imageUrl } returns emptyImageDetails
         }
@@ -65,7 +65,10 @@ class GetActorImagesByIdUseCaseTest {
     fun `should handle different actor ids correctly`() = runTest {
         // Given
         val actorId = 999
-        val mockImageDetails = listOf(mockk<ImageDetails>())
+        val mockImageDetails = listOf(
+            "https://test.com/image1.jpg",
+            "https://test.com/image2.jpg"
+        )
         val mockActorImageDetails = mockk<ActorImageDetails> {
             coEvery { imageUrl } returns mockImageDetails
         }
