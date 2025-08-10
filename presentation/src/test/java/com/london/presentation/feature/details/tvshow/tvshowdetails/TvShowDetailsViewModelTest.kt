@@ -221,11 +221,11 @@ class TvShowDetailsViewModelTest {
         coEvery { authenticationUseCase.isLoggedIn() } throws Exception("Authentication error")
 
         // When
-        viewModel?.onRateBottomSheetClick()
         advanceUntilIdle()
 
         // Then
         viewModel?.state?.test {
+            viewModel?.onRateBottomSheetClick()
             val state = expectMostRecentItem()
             assertThat(state.error).isNotNull()
             ensureAllEventsConsumed()
