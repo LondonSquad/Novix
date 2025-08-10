@@ -19748,8 +19748,8 @@
     "week": "2025-W32",
     "status": "pending",
     "diff_stats": {
-      "additions": 198,
-      "deletions": 1199,
+      "additions": 197,
+      "deletions": 1206,
       "changed_files": 40
     }
   }
