@@ -1,7 +1,7 @@
 package com.london.domain.usecase.toprated
 
 import com.london.domain.entity.PagedFetchResponse
-import com.london.domain.entity.toprated.TopRatedTvSeries
+import com.london.domain.entity.toprated.TopRatedMedia
 import com.london.domain.repository.toprated.TopRatedRepository
 import javax.inject.Inject
 
@@ -11,7 +11,7 @@ class GetTopRatedTvSeriesUseCase @Inject constructor(
     suspend operator fun invoke(
         pageNumber: Int,
         genreId: Int? = null
-    ) : PagedFetchResponse<TopRatedTvSeries> {
+    ) : PagedFetchResponse<TopRatedMedia> {
         val response = topRatedTvSeriesRepo.getTopRatedTvSeries(pageNumber)
 
         val filteredItems = response.items.filter { movie ->

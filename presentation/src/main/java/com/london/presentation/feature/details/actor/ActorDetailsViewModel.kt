@@ -134,7 +134,7 @@ class ActorDetailsViewModel @Inject constructor(
             onSuccess = { tvShows ->
                 updateState {
                     copy(
-                        actorTvShowDetails = tvShows,
+                        castDetails = tvShows,
                         tvShowError = false,
                         tvShowId = tvShows.id
                     )
