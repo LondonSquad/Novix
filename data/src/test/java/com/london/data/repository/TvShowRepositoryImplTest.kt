@@ -30,33 +30,16 @@ import com.london.data.remote.model.details.tvshow.model.tvshowepisode.EpisodeVi
 import com.london.data.remote.model.details.tvshow.model.tvshowepisode.EpisodeVideoResponse
 import com.london.data.remote.model.details.tvshow.model.tvshowepisode.TvShowEpisodeBySeason
 import com.london.data.remote.model.details.tvshow.model.tvshowepisode.TvShowEpisodesRemoteResponse
+import com.london.data.remote.model.details.videoprovider.tvshow.model.TvShowVideoRemote
+import com.london.data.remote.model.details.videoprovider.tvshow.model.TvShowVideoResponse
 import com.london.data.remote.model.reviews.AuthorDetailsResponse
 import com.london.data.remote.model.reviews.ReviewResponse
 import com.london.data.remote.source.details.tvshow.TvShowDetailsRemoteDataSource
 import com.london.data.remote.source.reviews.ReviewsRemoteDataSource
 import com.london.data.repository.search.TvShowRepositoryImpl
-import com.london.data.utils.asImageUrlOrEmpty
 import com.london.data.utils.asYoutubeUrlOrEmpty
 import com.london.data.utils.orZero
 import com.london.domain.entity.moviedatails.MediaStates
-import com.london.domain.entity.tvshowdetails.ImageItemEntity
-import com.london.domain.entity.tvshowdetails.TvShowCastEntity
-import com.london.domain.entity.tvshowdetails.TvShowCastMemberEntity
-import com.london.domain.entity.tvshowdetails.TvShowCreatorEntity
-import com.london.domain.entity.tvshowdetails.TvShowDetailsEntity
-import com.london.domain.entity.tvshowdetails.TvShowEpisodeEntity
-import com.london.domain.entity.tvshowdetails.TvShowGenreEntity
-import com.london.domain.entity.tvshowdetails.TvShowImagesEntity
-import com.london.domain.entity.tvshowdetails.TvShowNetworkEntity
-import com.london.domain.entity.tvshowdetails.TvShowProductionCompanyEntity
-import com.london.domain.entity.tvshowdetails.TvShowProductionCountryEntity
-import com.london.domain.entity.tvshowdetails.TvShowRoleEntity
-import com.london.domain.entity.tvshowdetails.TvShowSeasonEntity
-import com.london.domain.entity.tvshowdetails.TvShowSpokenLanguageEntity
-import com.london.domain.entity.tvshowdetails.episode.EpisodeCrewMemberEntity
-import com.london.domain.entity.tvshowdetails.episode.EpisodeGuestStarEntity
-import com.london.domain.entity.tvshowdetails.episode.TvShowEpisodeBySeasonEntity
-import com.london.domain.entity.tvshowdetails.episode.TvShowEpisodesEntity
 import io.mockk.coEvery
 import io.mockk.every
 import io.mockk.mockk
@@ -416,12 +399,12 @@ class TvShowRepositoryImplTest {
         coEvery {
             tvShowDetailsRemoteDataSource.getAccountTvShowStates(
                 tvShowId = seriesId,
-                guestSessionId = GUSETSESSION,
-                userSessionId = USERSESSION
+                guestSessionId = GUSET_SESSION,
+                userSessionId = USER_SESSION
             )
         } returns Result.success(mediaStatesDto)
-        every { authPreferences.getGuestSessionId() } returns GUSETSESSION
-        every { authPreferences.getSessionId() } returns USERSESSION
+        every { authPreferences.getGuestSessionId() } returns GUSET_SESSION
+        every { authPreferences.getSessionId() } returns USER_SESSION
 
         // When
         val result = repository.getAccountTvShowState(seriesId)
@@ -442,12 +425,12 @@ class TvShowRepositoryImplTest {
                 tvShowId = seriesId,
                 seasonNumber = seasonNumber,
                 episodeNumber = episodeNumber,
-                guestSessionId = GUSETSESSION,
-                userSessionId = USERSESSION
+                guestSessionId = GUSET_SESSION,
+                userSessionId = USER_SESSION
             )
         } returns Result.success(mediaStatesDto)
-        every { authPreferences.getGuestSessionId() } returns GUSETSESSION
-        every { authPreferences.getSessionId() } returns USERSESSION
+        every { authPreferences.getGuestSessionId() } returns GUSET_SESSION
+        every { authPreferences.getSessionId() } returns USER_SESSION
 
         // When
         val result = repository.getAccountTvEpisode(seriesId, seasonNumber, episodeNumber)
@@ -457,13 +440,100 @@ class TvShowRepositoryImplTest {
     }
 
 
+    @Test
+    fun `getTvShowVideos should map remote video list correctly`() = runTest {
+        // Given
+        val tvShowId = 123
+        coEvery { tvShowDetailsRemoteDataSource.getTvShowVideos(tvShowId) } returns Result.success(
+            fakeTvShowVideosResponse()
+        )
+
+        // When
+        val result: List<String> = repository.getTvShowVideos(tvShowId)
+
+        // Then
+        assertThat(result).hasSize(2)
+
+        val firstVideo = result.first()
+        assertThat(firstVideo).isEqualTo(fakeTvShowVideosResponse().tvShow?.get(0)?.key.asYoutubeUrlOrEmpty())
+
+        val secondVideo = result[1]
+        assertThat(secondVideo).isEqualTo(
+            fakeTvShowVideosResponse().tvShow?.get(1)?.key.asYoutubeUrlOrEmpty()
+        )
+    }
+
+    @Test
+    fun `getTvShowVideos should return empty list when API returns null list`() = runTest {
+        // Given
+        val tvShowId = 999
+        coEvery { tvShowDetailsRemoteDataSource.getTvShowVideos(tvShowId) } returns Result.success(
+            fakeNullTvShowVideosResponse()
+        )
+
+        // When
+        val result = repository.getTvShowVideos(tvShowId)
+
+        // Then
+        assertThat(result).isEmpty()
+    }
+
+    @Test
+    fun `getTvShowVideos should throw ValidationException when remote fails`() = runTest {
+
+        val tvShowId = 123
+        coEvery {
+            tvShowDetailsRemoteDataSource.getTvShowVideos(tvShowId)
+        } throws NetworkException.ValidationException("validation error")
+
+        assertThrows<NetworkException.ValidationException> {
+            repository.getTvShowVideos(tvShowId)
+        }
+    }
+
+
+    private fun fakeTvShowVideosResponse() = TvShowVideoResponse(
+        id = 1,
+        tvShow = listOf(
+            TvShowVideoRemote(
+                id = "vid1",
+                iso31661 = "US",
+                iso6391 = "en",
+                key = "123",
+                name = "Official Trailer",
+                official = true,
+                publishedAt = "2025-07-19",
+                site = "YouTube",
+                size = 1080,
+                type = "Trailer"
+            ),
+            TvShowVideoRemote(
+                id = "vid2",
+                iso31661 = "US",
+                iso6391 = "en",
+                key = "456",
+                name = "Teaser",
+                official = false,
+                publishedAt = "2025-07-18",
+                site = "YouTube",
+                size = 720,
+                type = "Teaser"
+            )
+        )
+    )
+
+    private fun fakeNullTvShowVideosResponse() = TvShowVideoResponse(
+        id = 999,
+        tvShow = null
+    )
+
     private companion object {
-        const val TV_SHOW_ID = 1
-        const val SEASON_NUMBER = 1
-        const val EPISODE_NUMBER = 2
-        const val PAGE_NUMBER = 1
-        private val GUSETSESSION = "mockGuestSessionId"
-        private const val USERSESSION = "mockUserSessionId"
+        private const val TV_SHOW_ID = 1
+        private const val SEASON_NUMBER = 1
+        private const val EPISODE_NUMBER = 2
+        private const val PAGE_NUMBER = 1
+        private const val GUSET_SESSION = "mockGuestSessionId"
+        private const val USER_SESSION = "mockUserSessionId"
         private val mediaStatesDto = AccountStatesResponse(
             id = 1,
             favorite = true,
@@ -567,99 +637,6 @@ class TvShowRepositoryImplTest {
             voteCount = 1000
         )
 
-        val TvShowDetailsEntityMock = TvShowDetailsEntity(
-            adult = false,
-            backdropUrl = "https://image.tmdb.org/t/p/w500/backdrop.jpg",
-            createdBy = listOf(
-                TvShowCreatorEntity(
-                    id = 1,
-                    creditId = "credit1",
-                    name = "Creator Name",
-                    originalName = "Creator Original Name",
-                    gender = 1,
-                    profileUrl = "/profile.jpg"
-                )
-            ),
-            episodeRunTime = listOf(45, 50),
-            firstAirDate = "2020-01-01",
-            tvShowGenres = listOf(
-                TvShowGenreEntity(id = 1, name = "Drama")
-            ),
-            homepage = "https://example.com",
-            id = TV_SHOW_ID,
-            inProduction = true,
-            languages = listOf("en", "es"),
-            lastAirDate = "2023-12-31",
-            lastTvShowEpisodeToAir = TvShowEpisodeEntity(
-                id = 1,
-                name = "Episode 1",
-                overview = "Episode overview",
-                voteAverage = 8.5,
-                voteCount = 100,
-                airDate = "2020-01-01",
-                episodeNumber = 1,
-                episodeType = "standard",
-                productionCode = "101",
-                runtime = 45.orZero(),
-                seasonNumber = 1,
-                showId = TV_SHOW_ID,
-                stillPath = "/still.jpg"
-            ),
-            name = "Test TV Show",
-            nextTvShowEpisodeToAir = null,
-            tvShowNetworks = listOf(
-                TvShowNetworkEntity(
-                    id = 1,
-                    logoUrl = "/network.jpg".asImageUrlOrEmpty(),
-                    name = "Network Name",
-                    originCountry = "US"
-                )
-            ),
-            numberOfEpisodes = 10,
-            numberOfSeasons = 1,
-            originCountry = listOf("US"),
-            originalLanguage = "en",
-            originalName = "Test TV Show Original",
-            overview = "Test overview",
-            popularity = 85.5.orZero(),
-            posterUrl = "/poster.jpg",
-            productionCompanies = listOf(
-                TvShowProductionCompanyEntity(
-                    id = 1,
-                    logoUrl = "/company.jpg",
-                    name = "Production Company",
-                    originCountry = "US"
-                )
-            ),
-            productionCountries = listOf(
-                TvShowProductionCountryEntity(
-                    iso31661 = "US", name = "United States"
-                )
-            ),
-            tvShowSeasons = listOf(
-                TvShowSeasonEntity(
-                    airDate = "2020-01-01",
-                    episodeCount = 10,
-                    id = 1,
-                    name = "Season 1",
-                    overview = "Season overview",
-                    posterUrl = "/season.jpg",
-                    seasonNumber = 1,
-                    voteAverage = 8.0
-                )
-            ),
-            tvShowSpokenLanguageEntities = listOf(
-                TvShowSpokenLanguageEntity(
-                    englishName = "English", iso6391 = "en", name = "English"
-                )
-            ),
-            status = "Returning Series",
-            tagline = "Test tagline",
-            type = "Scripted",
-            voteAverage = 8.5,
-            voteCount = 1000
-        )
-
         val TvShowCastRemoteMock = TvShowCastRemoteResponse(
             cast = listOf(
                 TvShowCastMember(
@@ -673,28 +650,6 @@ class TvShowRepositoryImplTest {
                     profilePath = "/actor.jpg",
                     roles = listOf(
                         Role(
-                            creditId = "role1", character = "Main Character", episodeCount = 10
-                        )
-                    ),
-                    totalEpisodeCount = 10,
-                    order = 1
-                )
-            ), id = TV_SHOW_ID
-        )
-
-        val TvShowCastEntityMock = TvShowCastEntity(
-            cast = listOf(
-                TvShowCastMemberEntity(
-                    adult = false,
-                    gender = 2,
-                    id = 1,
-                    knownForDepartment = "Acting",
-                    name = "Actor Name",
-                    originalName = "Actor Original Name",
-                    popularity = 75.5,
-                    profileUrl = "/actor.jpg",
-                    roles = listOf(
-                        TvShowRoleEntity(
                             creditId = "role1", character = "Main Character", episodeCount = 10
                         )
                     ),
@@ -731,40 +686,6 @@ class TvShowRepositoryImplTest {
                     height = 750,
                     iso6391 = "en",
                     filePath = "/poster1.jpg",
-                    voteAverage = 9.0,
-                    voteCount = 100,
-                    width = 500
-                )
-            )
-        )
-
-        val TvShowImagesEntityMock = TvShowImagesEntity(
-            backdrops = listOf(
-                ImageItemEntity(
-                    aspectRatio = 1.78,
-                    height = 1080,
-                    iso6391 = "en",
-                    fileUrl = "https://image.tmdb.org/t/p/w500/backdrop1.jpg",
-                    voteAverage = 8.0,
-                    voteCount = 50,
-                    width = 1920
-                )
-            ), id = TV_SHOW_ID, logos = listOf(
-                ImageItemEntity(
-                    aspectRatio = 1.0,
-                    height = 500,
-                    iso6391 = null,
-                    fileUrl = "https://image.tmdb.org/t/p/w500/logo1.jpg",
-                    voteAverage = 7.5,
-                    voteCount = 25,
-                    width = 500
-                )
-            ), posters = listOf(
-                ImageItemEntity(
-                    aspectRatio = 0.67,
-                    height = 750,
-                    iso6391 = "en",
-                    fileUrl = "https://image.tmdb.org/t/p/w500/poster1.jpg",
                     voteAverage = 9.0,
                     voteCount = 100,
                     width = 500
@@ -822,101 +743,6 @@ class TvShowRepositoryImplTest {
             )
         )
 
-        val TvShowEpisodesEntityMock = TvShowEpisodesEntity(
-            id = "season_id", airDate = "2020-01-01", episodes = listOf(
-                TvShowEpisodeBySeasonEntity(
-                    airDate = "2020-01-01",
-                    episodeNumber = 1,
-                    episodeType = "standard",
-                    id = 1,
-                    name = "Episode 1",
-                    overview = "Episode overview",
-                    productionCode = "101",
-                    runtime = 45,
-                    seasonNumber = 1,
-                    showId = TV_SHOW_ID,
-                    stillUrl = "/still.jpg",
-                    voteAverage = 8.5,
-                    voteCount = 100,
-                    crew = listOf(
-                        EpisodeCrewMemberEntity(
-                            job = "Director",
-                            department = "Directing",
-                            creditId = "crew1",
-                            adult = false,
-                            gender = 1,
-                            id = 10,
-                            knownForDepartment = "Directing",
-                            name = "Director Name",
-                            originalName = "Director Original Name",
-                            popularity = 60.0,
-                            profilePath = "/director.jpg"
-                        )
-                    ),
-                    episodeGuestStars = listOf(
-                        EpisodeGuestStarEntity(
-                            character = "Guest Character",
-                            creditId = "guest1",
-                            order = 1,
-                            adult = false,
-                            gender = 2,
-                            id = 20,
-                            knownForDepartment = "Acting",
-                            name = "Guest Actor",
-                            originalName = "Guest Actor Original",
-                            popularity = 40.0,
-                            profilePath = "/guest.jpg"
-                        )
-                    )
-                )
-            )
-        )
-
-        val TvShowEpisodeBySeasonMock = TvShowEpisodeBySeason(
-            airDate = "2020-01-01",
-            episodeNumber = 1,
-            episodeType = "standard",
-            id = 1,
-            name = "Episode 1",
-            overview = "Episode overview",
-            productionCode = "101",
-            runtime = 45,
-            seasonNumber = 1,
-            showId = TV_SHOW_ID,
-            stillPath = "/still.jpg",
-            voteAverage = 8.5,
-            voteCount = 100,
-            crew = listOf(
-                EpisodeCrewMember(
-                    job = "Director",
-                    department = "Directing",
-                    creditId = "crew1",
-                    adult = false,
-                    gender = 1,
-                    id = 10,
-                    knownForDepartment = "Directing",
-                    name = "Director Name",
-                    originalName = "Director Original Name",
-                    popularity = 60.0,
-                    profilePath = "/director.jpg"
-                )
-            ),
-            episodeGuestStars = listOf(
-                EpisodeGuestStar(
-                    character = "Guest Character",
-                    creditId = "guest1",
-                    order = 1,
-                    adult = false,
-                    gender = 2,
-                    id = 20,
-                    knownForDepartment = "Acting",
-                    name = "Guest Actor",
-                    originalName = "Guest Actor Original",
-                    popularity = 40.0,
-                    profilePath = "/guest.jpg"
-                )
-            )
-        )
 
         val EpisodeVideoResponseMock = EpisodeVideoResponse(
             id = TV_SHOW_ID,

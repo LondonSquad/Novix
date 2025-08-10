@@ -7,6 +7,7 @@ import com.london.data.remote.model.details.tvshow.model.TvShowImagesRemoteRespo
 import com.london.data.remote.model.details.tvshow.model.tvshowepisode.EpisodeVideoResponse
 import com.london.data.remote.model.details.tvshow.model.tvshowepisode.TvShowEpisodeResponse
 import com.london.data.remote.model.details.tvshow.model.tvshowepisode.TvShowEpisodesRemoteResponse
+import com.london.data.remote.model.details.videoprovider.tvshow.model.TvShowVideoResponse
 import com.london.data.remote.service.details.tvshow.TvShowDetailsApiService
 import com.london.data.remote.source.base.BaseRemoteDatasource
 import javax.inject.Inject
@@ -112,4 +113,11 @@ class TvShowDetailsRemoteDataSourceImpl @Inject constructor(
         },
         mapper = { it }
     )
+
+    override suspend fun getTvShowVideos(tvShowId: Int): Result<TvShowVideoResponse> =
+        callApiWithRetry(
+            apiCall = { tvShowDetailsApiService.getTvShowVideos(tvShowId = tvShowId) },
+            mapper = { it }
+        )
+
 }
