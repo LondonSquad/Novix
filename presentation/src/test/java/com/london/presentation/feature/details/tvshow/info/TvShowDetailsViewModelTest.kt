@@ -1,4 +1,4 @@
-package com.london.presentation.feature.search.details.tvshow.info
+package com.london.presentation.feature.details.tvshow.info
 
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope

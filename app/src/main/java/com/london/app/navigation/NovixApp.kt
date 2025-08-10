@@ -33,6 +33,13 @@ import com.london.presentation.feature.authentication.register.WebViewRegistrati
 import com.london.presentation.feature.category.CategoriesScreen
 import com.london.presentation.feature.category.movie.MoviesByCategoryScreen
 import com.london.presentation.feature.category.tvshow.TvShowByCategoryScreen
+import com.london.presentation.feature.details.actor.ActorDetailsScreen
+import com.london.presentation.feature.details.actor.info.gallery.ActorGalleryScreen
+import com.london.presentation.feature.details.actor.info.topmoviespicks.TopMoviesPicksScreen
+import com.london.presentation.feature.details.actor.info.toptvshowspicks.TopTvShowsPicksScreen
+import com.london.presentation.feature.details.movie.MovieDetailsScreen
+import com.london.presentation.feature.details.tvshow.episode.EpisodeDetailsScreen
+import com.london.presentation.feature.details.tvshow.info.TvShowsDetailsScreen
 import com.london.presentation.feature.home.HomeScreen
 import com.london.presentation.feature.home.continuewatching.ContinueWatchingScreen
 import com.london.presentation.feature.home.toprated.TopRatedScreen
@@ -43,13 +50,6 @@ import com.london.presentation.feature.list.savedlist.ListScreen
 import com.london.presentation.feature.list.viewitems.ViewListItemsScreen
 import com.london.presentation.feature.reviews.ReviewsScreen
 import com.london.presentation.feature.search.SearchScreen
-import com.london.presentation.feature.search.details.actor.ActorDetailsScreen
-import com.london.presentation.feature.search.details.actor.info.gallery.ActorGalleryScreen
-import com.london.presentation.feature.search.details.actor.info.topmoviespicks.TopMoviesPicksScreen
-import com.london.presentation.feature.search.details.actor.info.toptvshowspicks.TopTvShowsPicksScreen
-import com.london.presentation.feature.search.details.movie.MovieDetailsScreen
-import com.london.presentation.feature.search.details.tvshow.episode.EpisodeDetailsScreen
-import com.london.presentation.feature.search.details.tvshow.info.TvShowsDetailsScreen
 import com.london.presentation.feature.welcome.onboarding.OnboardingRoute
 import com.london.presentation.feature.welcome.onboarding.WelcomeScreen
 import com.london.presentation.feature.welcome.splash.SplashRoute
