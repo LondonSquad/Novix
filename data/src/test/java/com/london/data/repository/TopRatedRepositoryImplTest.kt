@@ -10,7 +10,7 @@ import com.london.data.remote.source.toprated.TopRatedRemoteDataSource
 import com.london.data.repository.home.toprated.TopRatedRepositoryImpl
 import com.london.data.utils.CrashReporter
 import com.london.domain.entity.PagedFetchResponse
-import com.london.domain.entity.toprated.TopRatedTvSeries
+import com.london.domain.entity.toprated.TopRatedMedia
 import com.london.domain.repository.toprated.TopRatedRepository
 import io.mockk.coEvery
 import io.mockk.coVerify
@@ -52,7 +52,7 @@ class TopRatedRepositoryImplTest {
         } returns emptyList()
 
         // When
-        val result: PagedFetchResponse<TopRatedTvSeries> = repository.getTopRatedTvSeries(PAGE)
+        val result: PagedFetchResponse<TopRatedMedia> = repository.getTopRatedTvSeries(PAGE)
 
         // Then
         assertThat(result.items).hasSize(2)

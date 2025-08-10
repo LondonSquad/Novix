@@ -1,9 +1,8 @@
 package com.london.presentation.feature.details.actor
 
 import com.london.domain.entity.actordetails.ActorDetails
-import com.london.domain.entity.actordetails.actorimage.ImageDetails
-import com.london.domain.entity.actordetails.actormovie.ActorMovieDetails
-import com.london.domain.entity.actordetails.actortvshow.ActorTvShowDetails
+import com.london.domain.entity.actordetails.ActorImageDetails
+import com.london.domain.entity.actordetails.cast.CastDetails
 import com.london.presentation.shared.base.ErrorState
 
 data class ActorDetailsUiState(
@@ -23,7 +22,7 @@ data class ActorDetailsUiState(
     val actorPlaceOfBirth: String = "",
     val knownForDepartment: String = "",
     val actorDetails: ActorDetails = ActorDetails(),
-    val actorMovieDetails: ActorMovieDetails? = null,
-    val actorImageDetails: List<ImageDetails>? = null,
-    val actorTvShowDetails: ActorTvShowDetails? = null,
+    val actorMovieDetails: CastDetails? = null,
+    val actorImageDetails: List<String>? = null,
+    val castDetails: CastDetails? = null,
 )

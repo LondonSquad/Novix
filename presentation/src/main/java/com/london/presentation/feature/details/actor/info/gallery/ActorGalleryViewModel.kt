@@ -31,7 +31,7 @@ class ActorGalleryViewModel @Inject constructor(
             onSuccess = { imageDetails ->
                 updateState {
                     copy(
-                        images = imageDetails.map { it.fileUrl }
+                        images = imageDetails
                     )
                 }
             },

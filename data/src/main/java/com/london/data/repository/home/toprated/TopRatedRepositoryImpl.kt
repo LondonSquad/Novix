@@ -4,15 +4,12 @@ import com.london.data.local.model.home.topRated.TopRatedLocal
 import com.london.data.local.source.home.HomeLocalDataSource
 import com.london.data.mapper.home.toprated.toEntity
 import com.london.data.mapper.home.toprated.toLocal
-import com.london.data.mapper.home.toprated.toMovieEntity
-import com.london.data.mapper.home.toprated.toTvShow
 import com.london.data.remote.source.toprated.TopRatedRemoteDataSource
 import com.london.data.utils.CrashReporter
 import com.london.data.utils.fetchAndSync
 import com.london.domain.entity.PagedFetchResponse
 import com.london.domain.entity.recent.MediaType
-import com.london.domain.entity.toprated.TopRatedMovie
-import com.london.domain.entity.toprated.TopRatedTvSeries
+import com.london.domain.entity.toprated.TopRatedMedia
 import com.london.domain.repository.toprated.TopRatedRepository
 import javax.inject.Inject
 
@@ -24,11 +21,11 @@ class TopRatedRepositoryImpl @Inject constructor(
 
     override suspend fun getTopRatedMovies(
         pageNumber: Int,
-    ): PagedFetchResponse<TopRatedMovie> = fetchAndSync(
+    ): PagedFetchResponse<TopRatedMedia> = fetchAndSync(
         cacheBlock = {
             val local = localTopRated.getAll()
                 .filter { it.mediaType == MediaType.Movie }
-                .map { it.toMovieEntity() }
+                .map { it.toEntity() }
             local.takeIf { it.isNotEmpty() }
         },
         networkBlock = {
@@ -53,11 +50,11 @@ class TopRatedRepositoryImpl @Inject constructor(
 
     override suspend fun getTopRatedTvSeries(
         pageNumber: Int
-    ): PagedFetchResponse<TopRatedTvSeries> = fetchAndSync(
+    ): PagedFetchResponse<TopRatedMedia> = fetchAndSync(
         cacheBlock = {
             val local = localTopRated.getAll()
                 .filter { it.mediaType == MediaType.TvShow }
-                .map { it.toTvShow() }
+                .map { it.toEntity() }
             local.takeIf { it.isNotEmpty() }
         },
         networkBlock = {

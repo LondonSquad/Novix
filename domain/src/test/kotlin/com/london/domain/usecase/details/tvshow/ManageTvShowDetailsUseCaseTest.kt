@@ -4,7 +4,7 @@ import com.google.common.truth.Truth.assertThat
 import com.london.domain.entity.PagedFetchResponse
 import com.london.domain.entity.Trending
 import com.london.domain.entity.TvShow
-import com.london.domain.entity.popular.PopularTvShow
+import com.london.domain.entity.popular.PopularMedia
 import com.london.domain.entity.tvshowdetails.TvShowDetailsEntity
 import com.london.domain.entity.tvshowdetails.TvShowGenreEntity
 import com.london.domain.error.TvShowDetailsSearchFailedException
@@ -419,41 +419,43 @@ class ManageTvShowDetailsUseCaseTest {
 
     // region GetTvShowList
     @Test
-    fun `should return paged fetch response when repository returns paged fetch response`() = runTest {
-        // Given
-        coEvery {
-            manageTvShowDetailsUseCase.getTvShowList(NAME, PAGE_NUMBER)
-        } returns pagedFetchResponse
+    fun `should return paged fetch response when repository returns paged fetch response`() =
+        runTest {
+            // Given
+            coEvery {
+                manageTvShowDetailsUseCase.getTvShowList(NAME, PAGE_NUMBER)
+            } returns pagedFetchResponse
 
-        // When
-        val result = manageTvShowDetailsUseCase.getTvShowList(NAME, PAGE_NUMBER)
+            // When
+            val result = manageTvShowDetailsUseCase.getTvShowList(NAME, PAGE_NUMBER)
 
-        // Then
-        assertThat(result).isEqualTo(pagedFetchResponse)
-    }
+            // Then
+            assertThat(result).isEqualTo(pagedFetchResponse)
+        }
 
     @Test
-    fun `should throw TvShowSearchFailedException when repository throws TvShowSearchFailedException`() = runTest {
-        //given
-        coEvery {
-            manageTvShowDetailsUseCase.getTvShowList(NAME, PAGE_NUMBER)
-        } throws TvShowSearchFailedException()
+    fun `should throw TvShowSearchFailedException when repository throws TvShowSearchFailedException`() =
+        runTest {
+            //given
+            coEvery {
+                manageTvShowDetailsUseCase.getTvShowList(NAME, PAGE_NUMBER)
+            } throws TvShowSearchFailedException()
 
-        //when //then
-        assertThrows<TvShowSearchFailedException> {
-            manageTvShowDetailsUseCase.getTvShowList(NAME, PAGE_NUMBER)
+            //when //then
+            assertThrows<TvShowSearchFailedException> {
+                manageTvShowDetailsUseCase.getTvShowList(NAME, PAGE_NUMBER)
+            }
         }
-    }
     // endregion
 
-    private fun createMockTvShow(mockData: MockTvShowData): PopularTvShow {
-        return PopularTvShow(
+    private fun createMockTvShow(mockData: MockPopularMedia): PopularMedia =
+        PopularMedia(
             id = mockData.id,
             name = mockData.name,
             posterUrl = mockData.posterUrl,
             rating = mockData.rating
         )
-    }
+
 
     private fun createMockTrendingResponse(
         currentPage: Int = 1,
@@ -474,14 +476,13 @@ class ManageTvShowDetailsUseCaseTest {
         title: String = "Test TV Show",
         posterPath: String = "test_poster.jpg",
         genreIds: List<Int> = listOf(18, 35)
-    ): Trending {
-        return Trending(
-            id = id,
-            title = title,
-            posterPath = posterPath,
-            genreIds = genreIds
-        )
-    }
+    ): Trending = Trending(
+        id = id,
+        title = title,
+        posterPath = posterPath,
+        genreIds = genreIds
+    )
+
 
     private companion object {
         private const val TV_SHOW_ID = 12345
@@ -524,52 +525,52 @@ class ManageTvShowDetailsUseCaseTest {
             voteAverage = 8.5,
         )
 
-        private val EMPTY_TV_SHOWS_LIST = emptyList<PopularTvShow>()
+        private val EMPTY_TV_SHOWS_LIST = emptyList<PopularMedia>()
 
         private val MOCK_TV_SHOWS_FULL_LIST = listOf(
-            MockTvShowData(
+            MockPopularMedia(
                 id = 1,
                 name = "Breaking Bad",
                 overview = "A high school chemistry teacher turned methamphetamine manufacturer",
                 posterUrl = "https://example.com/breaking-bad-poster.jpg",
                 rating = 9.5,
             ),
-            MockTvShowData(
+            MockPopularMedia(
                 id = 2,
                 name = "Stranger Things",
                 overview = "When a young boy disappears, his mother and friends must face terrifying supernatural forces",
                 posterUrl = "https://example.com/stranger-things-poster.jpg",
                 rating = 8.7
             ),
-            MockTvShowData(
+            MockPopularMedia(
                 id = 3,
                 name = "The Crown",
                 overview = "Follows the political rivalries and romance of Queen Elizabeth II's reign",
                 posterUrl = "https://example.com/the-crown-poster.jpg",
                 rating = 8.6
             ),
-            MockTvShowData(
+            MockPopularMedia(
                 id = 4,
                 name = "Game of Thrones",
                 overview = "Nine noble families fight for control over the lands of Westeros",
                 posterUrl = "https://example.com/got-poster.jpg",
                 rating = 9.2
             ),
-            MockTvShowData(
+            MockPopularMedia(
                 id = 5,
                 name = "The Office",
                 overview = "A mockumentary on a group of typical office workers",
                 posterUrl = "https://example.com/the-office-poster.jpg",
                 rating = 8.9
             ),
-            MockTvShowData(
+            MockPopularMedia(
                 id = 6,
                 name = "Friends",
                 overview = "Follows the personal and professional lives of six friends living in Manhattan",
                 posterUrl = "https://example.com/friends-poster.jpg",
                 rating = 8.8
             ),
-            MockTvShowData(
+            MockPopularMedia(
                 id = 7,
                 name = "The Mandalorian",
                 overview = "A lone bounty hunter makes his way through the outer reaches of the galaxy",
@@ -579,35 +580,35 @@ class ManageTvShowDetailsUseCaseTest {
         )
 
         private val MOCK_TV_SHOWS_LIMITED = listOf(
-            MockTvShowData(
+            MockPopularMedia(
                 id = 1,
                 name = "Breaking Bad",
                 overview = "A high school chemistry teacher turned methamphetamine manufacturer",
                 posterUrl = "https://example.com/breaking-bad-poster.jpg",
                 rating = 9.5
             ),
-            MockTvShowData(
+            MockPopularMedia(
                 id = 2,
                 name = "Stranger Things",
                 overview = "When a young boy disappears, his mother and friends must face terrifying supernatural forces",
                 posterUrl = "https://example.com/stranger-things-poster.jpg",
                 rating = 8.7
             ),
-            MockTvShowData(
+            MockPopularMedia(
                 id = 2,
                 name = "Stranger Things",
                 overview = "When a young boy disappears, his mother and friends must face terrifying supernatural forces",
                 posterUrl = "https://example.com/stranger-things-poster.jpg",
                 rating = 8.7
             ),
-            MockTvShowData(
+            MockPopularMedia(
                 id = 2,
                 name = "Stranger Things",
                 overview = "When a young boy disappears, his mother and friends must face terrifying supernatural forces",
                 posterUrl = "https://example.com/stranger-things-poster.jpg",
                 rating = 8.7
             ),
-            MockTvShowData(
+            MockPopularMedia(
                 id = 2,
                 name = "Stranger Things",
                 overview = "When a young boy disappears, his mother and friends must face terrifying supernatural forces",
@@ -616,7 +617,7 @@ class ManageTvShowDetailsUseCaseTest {
             ),
         )
 
-        data class MockTvShowData(
+        data class MockPopularMedia(
             val id: Int,
             val name: String,
             val overview: String,
