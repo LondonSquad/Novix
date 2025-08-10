@@ -38,14 +38,14 @@ class TvShowCategoryViewModel @Inject constructor(
     private fun initializeTvShows(categoryId: Int) {
         tryToExecute(
             block = {
-            val tvShowFlow = createPagingSourceFlow(query = "") { _, pageNumber ->
-                val tvShows = managerTvShowDetailsUseCase.getTvShowsByCategory(
-                    categoryId = categoryId, pageNumber = pageNumber
-                )
-                tvShows.copy(items = tvShows.items)
-            }
-            tvShowFlow
-        },
+                val tvShowFlow = createPagingSourceFlow(query = "") { _, pageNumber ->
+                    val tvShows = managerTvShowDetailsUseCase.getTvShowsByCategory(
+                        categoryId = categoryId, pageNumber = pageNumber
+                    )
+                    tvShows.copy(items = tvShows.items)
+                }
+                tvShowFlow
+            },
             onStart = {
                 updateState { copy(categoryId = categoryId, isLoading = true) }
             },

@@ -23,7 +23,17 @@ class MovieCategoryViewModel @Inject constructor(
         initializeMovies(categoryId)
     }
 
+    override fun onMovieClick(movieId: Int) {
+        emitEffect(MovieCategoryEffect.NavigateToMovieDetails(movieId = movieId))
+    }
 
+    override fun onBack() {
+        emitEffect(MovieCategoryEffect.NavigateBack)
+    }
+
+    override fun onSavedClick(movieId: Int) {
+        //toDo() save movie
+    }
     private fun initializeMovies(categoryId: Int) {
         tryToExecute(
             block = {
@@ -52,17 +62,5 @@ class MovieCategoryViewModel @Inject constructor(
             onCompleted = { updateState { copy(isLoading = false) } },
             checkSuccess = { categoryId != 0 }
         )
-    }
-
-    override fun onSavedClick(movieId: Int) {
-        //toDo() save movie
-    }
-
-    override fun onMovieClick(movieId: Int) {
-        emitEffect(MovieCategoryEffect.NavigateToMovieDetails(movieId = movieId))
-    }
-
-    override fun onBack() {
-        emitEffect(MovieCategoryEffect.NavigateBack)
     }
 }

@@ -30,7 +30,7 @@ import com.london.presentation.feature.accountinfo.account.AccountScreen
 import com.london.presentation.feature.accountinfo.rating.MyRatingScreen
 import com.london.presentation.feature.authentication.login.LoginScreen
 import com.london.presentation.feature.authentication.register.WebViewRegistrationScreen
-import com.london.presentation.feature.category.CategoriesScreen
+import com.london.presentation.feature.category.main.CategoriesScreen
 import com.london.presentation.feature.category.movie.MoviesByCategoryScreen
 import com.london.presentation.feature.category.tvshow.TvShowByCategoryScreen
 import com.london.presentation.feature.home.HomeScreen
