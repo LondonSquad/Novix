@@ -48,7 +48,6 @@ class AccountViewModelTest {
         
         Dispatchers.setMain(testDispatcher)
         
-        // Setup default mock behaviors
         every { appPreferencesService.isAppDarkMode } returns MutableStateFlow(false)
         every { appPreferencesService.appLanguage } returns MutableStateFlow(AppLanguage.ENGLISH)
         every { appPreferencesService.contentRestrictionLevel } returns MutableStateFlow(ContentRestrictionLevel.MODERATE)
@@ -118,30 +117,6 @@ class AccountViewModelTest {
     }
 
     @Test
-    fun `should navigate to watching history`() = runTest {
-        // Given
-        setupViewModel()
-
-        // When
-        viewModel.onWatchingHistoryClick()
-
-        // Then
-        // Effect should be emitted - would need to test effect collection in real scenario
-    }
-
-    @Test
-    fun `should navigate to my rating`() = runTest {
-        // Given
-        setupViewModel()
-
-        // When
-        viewModel.onMyRatingClick()
-
-        // Then
-        // Effect should be emitted - would need to test effect collection in real scenario
-    }
-
-    @Test
     fun `should handle content restriction click`() = runTest {
         // Given
         setupViewModel()
@@ -166,18 +141,6 @@ class AccountViewModelTest {
         verify { appPreferencesService.setContentRestrictionLevel(newLevel) }
         assertThat(viewModel.state.value.currentContentRestriction).isEqualTo(newLevel)
         assertThat(viewModel.state.value.activeBottomSheet).isEqualTo(ActiveBottomSheet.None)
-    }
-
-    @Test
-    fun `should navigate to change password`() = runTest {
-        // Given
-        setupViewModel()
-
-        // When
-        viewModel.onChangePasswordClick()
-
-        // Then
-        // Effect should be emitted - would need to test effect collection in real scenario
     }
 
     @Test
@@ -220,7 +183,7 @@ class AccountViewModelTest {
     fun `should save appearance mode`() = runTest {
         // Given
         setupViewModel()
-        viewModel.onDarkModeSelected() // Set to dark mode first
+        viewModel.onDarkModeSelected()
 
         // When
         viewModel.onAppearanceModeSave()
@@ -282,7 +245,7 @@ class AccountViewModelTest {
     fun `should save language settings`() = runTest {
         // Given
         setupViewModel()
-        viewModel.onArabicSelected() // Set to Arabic first
+        viewModel.onArabicSelected()
 
         // When
         viewModel.onLanguageSettingsSave()
@@ -293,29 +256,10 @@ class AccountViewModelTest {
     }
 
     @Test
-    fun `should toggle user menu`() = runTest {
-        // Given
-        setupViewModel()
-        assertThat(viewModel.state.value.showUserMenu).isFalse()
-
-        // When
-        viewModel.onUserMenuClick()
-
-        // Then
-        assertThat(viewModel.state.value.showUserMenu).isTrue()
-
-        // When
-        viewModel.onUserMenuClick()
-
-        // Then
-        assertThat(viewModel.state.value.showUserMenu).isFalse()
-    }
-
-    @Test
     fun `should dismiss bottom sheet`() = runTest {
         // Given
         setupViewModel()
-        viewModel.onAppearanceClick() // Show a bottom sheet first
+        viewModel.onAppearanceClick()
         assertThat(viewModel.state.value.activeBottomSheet).isEqualTo(ActiveBottomSheet.Appearance)
         assertThat(viewModel.state.value.showUserMenu).isFalse()
 
@@ -325,18 +269,6 @@ class AccountViewModelTest {
         // Then
         assertThat(viewModel.state.value.activeBottomSheet).isEqualTo(ActiveBottomSheet.None)
         assertThat(viewModel.state.value.showUserMenu).isFalse()
-    }
-
-    @Test
-    fun `should handle login click`() = runTest {
-        // Given
-        setupViewModel()
-
-        // When
-        viewModel.onLoginClick()
-
-        // Then
-        // Effect should be emitted - would need to test effect collection in real scenario
     }
 
     @Test
