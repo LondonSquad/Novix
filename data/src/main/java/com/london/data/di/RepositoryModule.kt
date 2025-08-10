@@ -18,7 +18,6 @@ import com.london.data.remote.source.authentication.AuthenticationRemoteDataSour
 import com.london.data.remote.source.details.actor.ActorDetailsRemoteDataSource
 import com.london.data.remote.source.details.movie.MovieDetailsRemoteDataSource
 import com.london.data.remote.source.details.tvshow.TvShowDetailsRemoteDataSource
-import com.london.data.remote.source.details.videoprovider.tvshow.TvShowVideoProviderRemote
 import com.london.data.remote.source.discover.DiscoverRemoteDataSource
 import com.london.data.remote.source.home.popular.PopularRemoteDataSource
 import com.london.data.remote.source.home.trending.TrendingRemoteDataSource
@@ -45,7 +44,6 @@ import com.london.data.repository.search.ActorRepositoryImpl
 import com.london.data.repository.search.MovieDetailsRepositoryImpl
 import com.london.data.repository.search.SearchRepositoryImpl
 import com.london.data.repository.search.TvShowRepositoryImpl
-import com.london.data.repository.search.TvShowVideoProviderRepositoryImpl
 import com.london.data.utils.CrashReporter
 import com.london.data.utils.FirebaseCrashReporter
 import com.london.domain.AppPreferencesService
@@ -63,7 +61,6 @@ import com.london.domain.repository.RecentWatchedRepository
 import com.london.domain.repository.SearchRepository
 import com.london.domain.repository.TrendingRepository
 import com.london.domain.repository.TvShowRepository
-import com.london.domain.repository.TvShowVideoProviderRepository
 import com.london.domain.repository.UpComingRepository
 import com.london.domain.repository.discover.DiscoverRepository
 import com.london.domain.repository.toprated.TopRatedRepository
@@ -191,13 +188,6 @@ object RepositoryModule {
         remoteDataSource = remoteDataSource,
         crashReporter = crashReporter
     )
-
-    @Provides
-    @Singleton
-    fun provideTvShowVideoProviderRepository(
-        dataSource: TvShowVideoProviderRemote
-    ): TvShowVideoProviderRepository =
-        TvShowVideoProviderRepositoryImpl(tvShowVideoProviderRemote = dataSource)
 
     @Provides
     @Singleton
