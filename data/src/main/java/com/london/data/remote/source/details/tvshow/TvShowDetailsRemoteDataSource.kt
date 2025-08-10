@@ -7,6 +7,7 @@ import com.london.data.remote.model.details.tvshow.model.TvShowImagesRemoteRespo
 import com.london.data.remote.model.details.tvshow.model.tvshowepisode.EpisodeVideoResponse
 import com.london.data.remote.model.details.tvshow.model.tvshowepisode.TvShowEpisodeResponse
 import com.london.data.remote.model.details.tvshow.model.tvshowepisode.TvShowEpisodesRemoteResponse
+import com.london.data.remote.model.details.videoprovider.tvshow.model.TvShowVideoResponse
 
 interface TvShowDetailsRemoteDataSource {
     suspend fun getTvShowDetailsById(
@@ -47,4 +48,6 @@ interface TvShowDetailsRemoteDataSource {
         guestSessionId: String?,
         userSessionId: String?,
     ): Result<AccountStatesResponse>
+
+    suspend fun getTvShowVideos(tvShowId: Int): Result<TvShowVideoResponse>
 }
