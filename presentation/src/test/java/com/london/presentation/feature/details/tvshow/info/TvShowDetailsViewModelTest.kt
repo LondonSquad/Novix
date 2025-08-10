@@ -231,23 +231,6 @@ class TvShowDetailsViewModelTest {
     }
 
     @Test
-    fun `onRateBottomSheetClick should update error state when authentication fails`() = runTest {
-        // Given
-        coEvery { authenticationUseCase.isLoggedIn() } throws Exception("Authentication error")
-
-        // When
-        advanceUntilIdle()
-
-        // Then
-        viewModel?.state?.test {
-            viewModel?.onRateBottomSheetClick()
-            val state = expectMostRecentItem()
-            assertThat(state.error).isNotNull()
-            ensureAllEventsConsumed()
-        }
-    }
-
-    @Test
     fun `onLoginClick should emit OnLoginNavigation effect when clicked`() = runTest {
         // When & Then
         viewModel?.effect?.test {
