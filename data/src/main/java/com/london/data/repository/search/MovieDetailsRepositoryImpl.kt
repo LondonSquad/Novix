@@ -86,4 +86,8 @@ class MovieDetailsRepositoryImpl @Inject constructor(
             userSessionId = authPreferences.getSessionId(),
         ).getOrThrow().toEntity()
     }
+
+    override suspend fun getMovieLists(movieId: UInt): List<UInt> {
+        return emptyList()
+    }
 }
