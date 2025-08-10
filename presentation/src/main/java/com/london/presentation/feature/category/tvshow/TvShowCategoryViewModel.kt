@@ -17,6 +17,7 @@ class TvShowCategoryViewModel @Inject constructor(
     TvShowCategoryContract {
 
     private val args = savedStateHandle.getArgs<Screen.TvShowsByCategory>()
+
     private val categoryId = args?.categoryId ?: 0
 
     init {
@@ -34,26 +35,21 @@ class TvShowCategoryViewModel @Inject constructor(
     private fun initializeTvShows(categoryId: Int) {
         tryToExecute(
             block = {
-                val tvShowFlow = createPagingSourceFlow(query = "") { _, pageNumber ->
+                createPagingSourceFlow(query = "") { _, pageNumber ->
                     val tvShows = managerTvShowDetailsUseCase.getTvShowsByCategory(
                         categoryId = categoryId, pageNumber = pageNumber
                     )
                     tvShows.copy(items = tvShows.items)
                 }
-                tvShowFlow
             },
             onStart = {
                 updateState { copy(categoryId = categoryId, isLoading = true) }
             },
             onSuccess = { tvShowFlow ->
-                updateState {
-                    copy(tvShowFlow = tvShowFlow)
-                }
+                updateState { copy(tvShowFlow = tvShowFlow) }
             },
             onError = { errorState ->
-                updateState {
-                    copy(error = errorState)
-                }
+                updateState { copy(error = errorState) }
             },
             onCompleted = { updateState { copy(isLoading = false) } },
             checkSuccess = { categoryId != 0 })

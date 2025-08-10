@@ -34,27 +34,22 @@ class MovieCategoryViewModel @Inject constructor(
     private fun initializeMovies(categoryId: Int) {
         tryToExecute(
             block = {
-                val moviesFlow = createPagingSourceFlow(query = "") { _, pageNumber ->
+                createPagingSourceFlow(query = "") { _, pageNumber ->
                     val movies = getMoviesByCategoryUseCase(
                         categoryId = categoryId,
                         pageNumber = pageNumber
                     )
                     movies.copy(items = movies.items)
                 }
-                moviesFlow
             },
             onStart = {
                 updateState { copy(categoryId = categoryId, isLoading = true) }
             },
             onSuccess = { moviesFlow ->
-                updateState {
-                    copy(movies = moviesFlow)
-                }
+                updateState { copy(movies = moviesFlow) }
             },
             onError = { errorState ->
-                updateState {
-                    copy(error = errorState)
-                }
+                updateState { copy(error = errorState) }
             },
             onCompleted = { updateState { copy(isLoading = false) } },
             checkSuccess = { categoryId != 0 }
