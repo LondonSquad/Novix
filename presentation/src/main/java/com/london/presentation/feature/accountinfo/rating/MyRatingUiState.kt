@@ -13,11 +13,6 @@ data class MyRatingUiState(
     val allRatedMedia: List<RatedMedia> = emptyList(),
     val ratedMovies: List<RatedMedia> = emptyList(),
     val ratedTvShows: List<RatedMedia> = emptyList(),
-    val errorState: ErrorState? = null,
-    val isLoading: Boolean = false,
-    val rate: Int = 0,
     val isSnackBarVisible: Boolean = false,
-    val backdropPath: String = "",
-    val id: Int = 0,
     val selectedRatingCategory: RatingCategory? = null,
     )

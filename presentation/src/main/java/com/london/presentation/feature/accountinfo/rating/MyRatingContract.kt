@@ -4,7 +4,6 @@ import com.london.presentation.feature.reviews.MediaType
 
 interface MyRatingContract {
     fun onBackClicked()
-    fun onDelete(id: Int)
     fun onItemClick(id: Int)
     fun onMovieClick(id: Int)
     fun onTvShowClick(id: Int)
@@ -14,7 +13,6 @@ interface MyRatingContract {
 
 fun defaultMyRatingContract() = object : MyRatingContract {
     override fun onBackClicked() {}
-    override fun onDelete(id: Int) {}
     override fun onItemClick(id: Int) {}
     override fun onMovieClick(id: Int) {}
     override fun onTvShowClick(id: Int) {}

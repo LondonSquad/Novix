@@ -21,23 +21,19 @@ import javax.inject.Inject
 @HiltViewModel
 class TvShowDetailsViewModel @Inject constructor(
     private val getCastById: GetCastById,
-    private val ratingUseCase: RatingUseCase,
+    private val ratingUseCase: ManageRatingUseCase,
     private val getTvShowImages: GetImagesById,
     private val authenticationUseCase: AuthenticationUseCase,
     private val manageRecentViewedUseCase: ManageRecentViewedUseCase,
     private val getEpisodesByTvShowSeason: GetEpisodesByTvShowSeason,
     private val manageTvShowDetailsUseCase: ManageTvShowDetailsUseCase,
     private val manageRecentTvShowWatchedUseCase: ManageRecentTvShowWatchedUseCase,
-    private val manageRecentViewedUseCase: ManageRecentViewedUseCase,
-    private val ratingUseCase: ManageRatingUseCase,
-    private val authenticationUseCase: AuthenticationUseCase,
     savedStateHandle: SavedStateHandle,
 ) : BaseViewModel<TvShowDetailsUiState, TvShowDetailsEffect>(TvShowDetailsUiState()),
     TvShowDetailsContract {
 
     private val args = savedStateHandle.getArgs<Screen.TvShowDetails>()
     private val tvShowId: Int = args?.tvShowId ?: 0
-
 
     init {
         initializeGetTvShowDetailsData()
