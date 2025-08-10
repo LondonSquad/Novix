@@ -19477,5 +19477,33 @@
       "deletions": 229,
       "changed_files": 13
     }
+  },
+  {
+    "pr_number": 590,
+    "url": "https://github.com/LondonSquad/Novix/pull/590",
+    "title": "Refactor/movie details",
+    "opened_at": "2025-08-10T00:10:17Z",
+    "head_ref": "refactor/movie-details",
+    "base_ref": "develop",
+    "creator": {
+      "login": "abdelrhman1002",
+      "id": 180463542,
+      "url": "https://github.com/abdelrhman1002"
+    },
+    "approvals": [],
+    "first_approved_at": null,
+    "time_to_first_approval_minutes": null,
+    "required_approvals_met_at": null,
+    "time_to_required_approvals_minutes": null,
+    "closed_at": null,
+    "merged_at": null,
+    "merged_by": null,
+    "week": "2025-W32",
+    "status": "pending",
+    "diff_stats": {
+      "additions": 128,
+      "deletions": 70,
+      "changed_files": 8
+    }
   }
 ]
