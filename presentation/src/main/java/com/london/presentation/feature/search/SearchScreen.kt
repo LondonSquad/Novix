@@ -71,18 +71,6 @@ import com.london.presentation.utils.ResultOrEmpty
 import com.london.presentation.utils.toRecentViewed
 
 @Composable
-private fun HandleLoadStateError(
-    loadState: CombinedLoadStates,
-    viewModel: SearchViewModel
-) {
-    LaunchedEffect(loadState) {
-        if (loadState.refresh is LoadState.Error) {
-            viewModel.updateSearchState { copy(error = ErrorState.NoInternet) }
-        }
-    }
-}
-
-@Composable
 fun SearchScreen(
     viewModel: SearchViewModel = hiltViewModel(),
     onNavigateToActorDetails: (Int) -> Unit = { },
@@ -97,7 +85,7 @@ fun SearchScreen(
         when (currentEffect) {
             is SearchEffect.ActorNavigation -> onNavigateToActorDetails(currentEffect.actorId)
             is SearchEffect.MovieNavigation -> onNavigateToMovieDetails(currentEffect.movieId)
-            is SearchEffect.TvNavigation -> onNavigateToTvShowDetails(currentEffect.tvId)
+            is SearchEffect.TvShowNavigation -> onNavigateToTvShowDetails(currentEffect.tvId)
         }
     }
     val lifecycleOwner = LocalLifecycleOwner.current
@@ -121,7 +109,7 @@ fun SearchScreen(
         pagingFlow = currentPagingFlow,
         handlePagingLoadingAutomatically = false
     ) {
-        SearchScreenContent(
+        Content(
             state = state,
             interactionListener = viewModel,
             keyboardController = keyboardController,
@@ -131,7 +119,7 @@ fun SearchScreen(
 }
 
 @Composable
-fun SearchScreenContent(
+private fun Content(
     state: SearchUiState,
     interactionListener: SearchContract,
     viewModel: SearchViewModel,
@@ -349,6 +337,18 @@ fun SearchScreenContent(
                     })
                 }
             }
+        }
+    }
+}
+
+@Composable
+private fun HandleLoadStateError(
+    loadState: CombinedLoadStates,
+    viewModel: SearchViewModel
+) {
+    LaunchedEffect(loadState) {
+        if (loadState.refresh is LoadState.Error) {
+            viewModel.updateSearchState { copy(error = ErrorState.NoInternet) }
         }
     }
 }

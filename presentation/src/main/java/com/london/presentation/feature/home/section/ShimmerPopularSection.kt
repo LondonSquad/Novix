@@ -23,24 +23,20 @@ import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.util.lerp
 import com.london.designsystem.utils.shimmerEffect
+import com.london.presentation.feature.home.section.ShimmerPopularSection.CARD_HORIZONTAL_PADDING_DP
+import com.london.presentation.feature.home.section.ShimmerPopularSection.CARD_WIDTH_DP
+import com.london.presentation.feature.home.section.ShimmerPopularSection.PAGE_SPACING_DP
+import com.london.presentation.feature.home.section.ShimmerPopularSection.ROTATION_FRACTION_MULTIPLIER
+import com.london.presentation.feature.home.section.ShimmerPopularSection.ROTATION_NEXT_DEGREES
+import com.london.presentation.feature.home.section.ShimmerPopularSection.ROTATION_OFFSET_ADJUSTMENT
+import com.london.presentation.feature.home.section.ShimmerPopularSection.ROTATION_PREVIOUS_DEGREES
+import com.london.presentation.feature.home.section.ShimmerPopularSection.SCALE_CURRENT
+import com.london.presentation.feature.home.section.ShimmerPopularSection.SCALE_MAX_FRACTION
+import com.london.presentation.feature.home.section.ShimmerPopularSection.SCALE_MIN_FRACTION
+import com.london.presentation.feature.home.section.ShimmerPopularSection.SCALE_SIDE_CARDS
+import com.london.presentation.feature.home.section.ShimmerPopularSection.TRANSFORM_ORIGIN_X
+import com.london.presentation.feature.home.section.ShimmerPopularSection.TRANSFORM_ORIGIN_Y
 import kotlin.math.abs
-
-private const val CARD_WIDTH_DP = 244
-private const val CARD_HORIZONTAL_PADDING_DP = 8
-private const val PAGE_SPACING_DP = 2
-
-private const val ROTATION_PREVIOUS_DEGREES = 3f
-private const val ROTATION_NEXT_DEGREES = -3f
-private const val SCALE_CURRENT = 1f
-private const val SCALE_SIDE_CARDS = 0.8f
-
-private const val TRANSFORM_ORIGIN_X = 0.5f
-private const val TRANSFORM_ORIGIN_Y = 0.9f
-
-private const val ROTATION_OFFSET_ADJUSTMENT = 1f
-private const val ROTATION_FRACTION_MULTIPLIER = 0.5f
-private const val SCALE_MIN_FRACTION = 0f
-private const val SCALE_MAX_FRACTION = 1f
 
 @Composable
 fun ShimmerPopularSection(
@@ -143,4 +139,23 @@ fun ShimmerPopularSection(
 
     }
 
+}
+
+private object ShimmerPopularSection {
+    const val CARD_WIDTH_DP = 244
+    const val CARD_HORIZONTAL_PADDING_DP = 8
+    const val PAGE_SPACING_DP = 2
+
+    const val ROTATION_PREVIOUS_DEGREES = 3f
+    const val ROTATION_NEXT_DEGREES = -3f
+    const val SCALE_CURRENT = 1f
+    const val SCALE_SIDE_CARDS = 0.8f
+
+    const val TRANSFORM_ORIGIN_X = 0.5f
+    const val TRANSFORM_ORIGIN_Y = 0.9f
+
+    const val ROTATION_OFFSET_ADJUSTMENT = 1f
+    const val ROTATION_FRACTION_MULTIPLIER = 0.5f
+    const val SCALE_MIN_FRACTION = 0f
+    const val SCALE_MAX_FRACTION = 1f
 }

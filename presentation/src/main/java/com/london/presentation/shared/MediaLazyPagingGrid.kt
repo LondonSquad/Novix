@@ -12,7 +12,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.paging.compose.LazyPagingItems
 import com.london.designsystem.theme.NovixTheme
-import com.london.presentation.utils.gridColmuns
+import com.london.presentation.utils.gridColumns
 
 @Composable
 fun <T : Any> MediaLazyPagingGrid(
@@ -26,7 +26,7 @@ fun <T : Any> MediaLazyPagingGrid(
 ) {
     LazyVerticalGrid(
         state = rememberLazyGridState(),
-        columns = GridCells.Fixed(gridColmuns()),
+        columns = GridCells.Fixed(gridColumns()),
         modifier = modifier.fillMaxSize(),
         horizontalArrangement = Arrangement.spacedBy(12.dp),
         verticalArrangement = Arrangement.spacedBy(12.dp),
