@@ -19505,5 +19505,33 @@
       "deletions": 70,
       "changed_files": 8
     }
+  },
+  {
+    "pr_number": 593,
+    "url": "https://github.com/LondonSquad/Novix/pull/593",
+    "title": "Refactore trending use case and add test cases to trending",
+    "opened_at": "2025-08-10T01:33:46Z",
+    "head_ref": "feature/add-trending-test-cases",
+    "base_ref": "develop",
+    "creator": {
+      "login": "AsmaaKhaledGomaa",
+      "id": 117874933,
+      "url": "https://github.com/AsmaaKhaledGomaa"
+    },
+    "approvals": [],
+    "first_approved_at": null,
+    "time_to_first_approval_minutes": null,
+    "required_approvals_met_at": null,
+    "time_to_required_approvals_minutes": null,
+    "closed_at": null,
+    "merged_at": null,
+    "merged_by": null,
+    "week": "2025-W32",
+    "status": "pending",
+    "diff_stats": {
+      "additions": 1128,
+      "deletions": 78,
+      "changed_files": 8
+    }
   }
 ]
