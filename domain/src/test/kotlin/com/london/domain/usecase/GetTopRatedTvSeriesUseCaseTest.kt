@@ -87,16 +87,16 @@ class GetTopRatedTvSeriesUseCaseTest {
             id = 1396,
             name = "Breaking Bad",
             voteAverage = 8.9,
-            firstAirDate = "2008-01-20",
             posterUrl = "/ggFHVNu6YYI5L9pCfOacjizRGt.jpg",
             genreIds = listOf(18, 80),
+            releaseDate = "2008-01-20",
         )
 
         private val mockTv2 = TopRatedMedia(
             id = 87108,
             name = "Chernobyl",
             voteAverage = 9.0,
-            firstAirDate = "2019-05-06",
+            releaseDate = "2019-05-06",
             posterUrl = "/hlLXt2tOPT6RRnjiUmoxyG1LTFi.jpg",
             genreIds = listOf(18, 36),
         )
