@@ -185,7 +185,7 @@ private fun Content(
             item {
                 val images = uiState.tvImages
                 CustomBackDropImagePager(
-                    images = images?.map { it.fileUrl } ?: emptyList(),
+                    images = images?.map { it } ?: emptyList(),
                     isVisibleDots = (images?.size ?: 0) > 1,
                 )
             }
@@ -595,7 +595,7 @@ private fun EpisodeItem(
         horizontalArrangement = Arrangement.spacedBy(12.dp)
     ) {
         ImageView(
-            model = episode.stillUrl,
+            model = episode.imageUrl,
             contentDescription = stringResource(R.string.s),
             contentScale = ContentScale.FillBounds,
             modifier = Modifier

@@ -1,7 +1,6 @@
 package com.london.domain.usecase
 
 import com.london.domain.KoverIgnore
-import com.london.domain.entity.tvshowdetails.ImageItemEntity
 import com.london.domain.repository.TvShowRepository
 import javax.inject.Inject
 
@@ -9,13 +8,13 @@ import javax.inject.Inject
 class GetImagesById @Inject constructor(
     private val tvShowRepository: TvShowRepository
 ) {
-    suspend operator fun invoke(tvShowId: Int): List<ImageItemEntity> {
+    suspend operator fun invoke(tvShowId: Int): List<String> {
         val images = tvShowRepository.getImagesTvShowById(tvShowId)
 
         return when {
-            images.backdrops.isNotEmpty() -> images.backdrops.take(10)
-            images.posters.isNotEmpty() -> images.posters.take(10)
-            images.logos.isNotEmpty() -> images.logos.take(10)
+            images.backdropsUrl.isNotEmpty() -> images.backdropsUrl.take(10)
+            images.postersUrl.isNotEmpty() -> images.postersUrl.take(10)
+            images.logosUrl.isNotEmpty() -> images.logosUrl.take(10)
             else -> emptyList()
         }
     }

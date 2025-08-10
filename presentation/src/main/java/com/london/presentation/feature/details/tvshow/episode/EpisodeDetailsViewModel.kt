@@ -136,11 +136,9 @@ class EpisodeDetailsViewModel @Inject constructor(
                     copy(
                         tvImages = images,
                         episodeGenres = tvShowDetails.tvShowGenres.map { it.name },
-                        airDate = episode.airDate ?: "",
-                        episodeTypes = episode.episodeTypes,
+                        airDate = episode.airDate.orEmpty(),
                         name = episode.name,
                         overview = episode.overview,
-                        stillPath = episode.stillPath ?: "",
                         voteAverage = episode.voteAverage,
                         voteCount = episode.voteCount,
                         guestStars = episode.guestStars,

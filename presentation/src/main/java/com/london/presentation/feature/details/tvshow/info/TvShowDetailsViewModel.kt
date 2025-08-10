@@ -55,7 +55,7 @@ class TvShowDetailsViewModel @Inject constructor(
                     copy(
                         tvShowEpisodes = episodes,
                         tvShowEpisodeCountBySeason = episodeCount,
-                        videoProvider = videoProviders.firstOrNull()?.videoUrl.orEmpty()
+                        videoProvider = videoProviders.first()
                     )
                 }
             },
@@ -215,38 +215,13 @@ class TvShowDetailsViewModel @Inject constructor(
             onSuccess = { (tvShowDetails, rating, episodes) ->
                 updateState {
                     copy(
-                        adult = tvShowDetails.adult,
-                        backdropPath = tvShowDetails.backdropUrl,
-                        createdBy = tvShowDetails.createdBy,
-                        episodeRunTime = tvShowDetails.episodeRunTime,
                         firstAirDate = tvShowDetails.firstAirDate,
                         tvShowGenres = tvShowDetails.tvShowGenres,
-                        homepage = tvShowDetails.homepage,
                         id = tvShowDetails.id,
-                        inProduction = tvShowDetails.inProduction,
-                        languages = tvShowDetails.languages,
-                        lastAirDate = tvShowDetails.lastAirDate,
-                        lastTvShowEpisodeToAir = tvShowDetails.lastTvShowEpisodeToAir,
                         name = tvShowDetails.name,
-                        nextTvShowEpisodeToAir = tvShowDetails.nextTvShowEpisodeToAir,
-                        tvShowNetworks = tvShowDetails.tvShowNetworks,
-                        numberOfEpisodes = tvShowDetails.numberOfEpisodes,
                         numberOfSeasons = tvShowDetails.numberOfSeasons,
-                        originCountry = tvShowDetails.originCountry,
-                        originalLanguage = tvShowDetails.originalLanguage,
-                        originalName = tvShowDetails.originalName,
                         overview = tvShowDetails.overview,
-                        popularity = tvShowDetails.popularity,
-                        posterPath = tvShowDetails.posterUrl,
-                        productionCompanies = tvShowDetails.productionCompanies,
-                        productionCountries = tvShowDetails.productionCountries,
-                        tvShowSeasons = tvShowDetails.tvShowSeasons,
-                        tvShowSpokenLanguages = tvShowDetails.tvShowSpokenLanguageEntities,
-                        status = tvShowDetails.status,
-                        tagline = tvShowDetails.tagline,
-                        type = tvShowDetails.type,
                         voteAverage = tvShowDetails.voteAverage,
-                        voteCount = tvShowDetails.voteCount,
                         tvShowEpisodes = episodes,
                         isRated = rating != 0 && state.value.isGuestUser.not(),
                     )

@@ -138,7 +138,7 @@ private fun Content(
                     top = WindowInsets.statusBars.asPaddingValues().calculateTopPadding() + 12.dp
                 ),
             onClickOption1 = { /*todo on click on save*/ },
-            option1Icon = com.london.designsystem.R.drawable.icon_remove,
+            option1Icon = R.drawable.icon_remove,
         )
 
         LazyColumn(
@@ -151,7 +151,7 @@ private fun Content(
                 val images = uiState.tvImages
                 if (images != null) {
                     CustomBackDropImagePager(
-                        images = images.map { it.fileUrl },
+                        images = images
                     )
                 }
             }
