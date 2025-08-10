@@ -4,7 +4,6 @@ import com.google.common.truth.Truth.assertThat
 import com.london.domain.entity.Actor
 import com.london.domain.entity.Movie
 import com.london.domain.entity.moviedatails.MovieDetails
-import com.london.domain.entity.videoprovider.MovieVideo
 import com.london.domain.error.GetCastByIdFailedException
 import com.london.domain.error.GetMovieByIdFailedException
 import com.london.domain.error.GetMovieCastFailedException

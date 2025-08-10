@@ -6,7 +6,6 @@ import com.london.domain.entity.PagedFetchResponse
 import com.london.domain.entity.moviedatails.MediaStates
 import com.london.domain.entity.moviedatails.MovieDetails
 import com.london.domain.entity.review.ReviewEntity
-import com.london.domain.entity.videoprovider.MovieVideo
 
 interface MovieDetailsRepository {
     suspend fun getMovieById(id: Int): MovieDetails
@@ -14,7 +13,7 @@ interface MovieDetailsRepository {
     suspend fun getMovieImagesById(id: Int): List<String>
     suspend fun getMovieCastById(id: Int): List<Actor>
     suspend fun getMovieReviews(movieId: Int, pageNumber: Int): PagedFetchResponse<ReviewEntity>
-    suspend fun getMovieVideos(movieId: Int): List<MovieVideo>
+    suspend fun getMovieVideos(movieId: Int): List<String>
     suspend fun getAccountMovieStatesById(
         id: Int,
     ): MediaStates

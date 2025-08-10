@@ -3,7 +3,6 @@ package com.london.data.mapper.movie
 import com.google.common.truth.Truth.assertThat
 import com.london.data.mapper.videoprovider.movie.toMovie
 import com.london.data.remote.model.details.videoprovider.movie.model.MovieVideoRemoteResponse
-import com.london.domain.entity.videoprovider.MovieVideo
 import org.junit.Test
 
 class MovieVideoMapperKtTest {
