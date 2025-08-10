@@ -17,47 +17,39 @@ class TvShowCategoryViewModel @Inject constructor(
     TvShowCategoryContract {
 
     private val args = savedStateHandle.getArgs<Screen.TvShowsByCategory>()
+
     private val categoryId = args?.categoryId ?: 0
 
     init {
         initializeTvShows(categoryId)
     }
 
-    override fun onSavedClick(tvShowId: Int) {
-        //TODO("Save Tv Show Not yet implemented")
-    }
-
-    override fun onTvShowClick(tvShowId: Int) {
+    override fun onTvShowClick(tvShowId: Int) =
         emitEffect(TvShowCategoryEffect.NavigateToTvShowDetails(tvShowId = tvShowId))
-    }
 
-    override fun onBack() {
+    override fun onBack() =
         emitEffect(TvShowCategoryEffect.NavigateBack)
-    }
+
+    override fun onSavedClick(tvShowId: Int) = Unit //TODO("Save Tv Show Not yet implemented")
 
     private fun initializeTvShows(categoryId: Int) {
         tryToExecute(
             block = {
-            val tvShowFlow = createPagingSourceFlow(query = "") { _, pageNumber ->
-                val tvShows = managerTvShowDetailsUseCase.getTvShowsByCategory(
-                    categoryId = categoryId, pageNumber = pageNumber
-                )
-                tvShows.copy(items = tvShows.items)
-            }
-            tvShowFlow
-        },
+                createPagingSourceFlow(query = "") { _, pageNumber ->
+                    val tvShows = managerTvShowDetailsUseCase.getTvShowsByCategory(
+                        categoryId = categoryId, pageNumber = pageNumber
+                    )
+                    tvShows.copy(items = tvShows.items)
+                }
+            },
             onStart = {
                 updateState { copy(categoryId = categoryId, isLoading = true) }
             },
             onSuccess = { tvShowFlow ->
-                updateState {
-                    copy(tvShowFlow = tvShowFlow)
-                }
+                updateState { copy(tvShowFlow = tvShowFlow) }
             },
             onError = { errorState ->
-                updateState {
-                    copy(error = errorState)
-                }
+                updateState { copy(error = errorState) }
             },
             onCompleted = { updateState { copy(isLoading = false) } },
             checkSuccess = { categoryId != 0 })
