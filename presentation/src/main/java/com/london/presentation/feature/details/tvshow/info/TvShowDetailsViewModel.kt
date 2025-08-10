@@ -153,7 +153,7 @@ class TvShowDetailsViewModel @Inject constructor(
 
         tryToExecute(
             block = {
-                getTvShowImages(tvShowId)
+                getTvShowImages.invoke(tvShowId)
             },
             onStart = { updateState { copy(isLoading = true) } },
             onSuccess = { images ->

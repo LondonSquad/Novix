@@ -125,7 +125,7 @@ class EpisodeDetailsViewModel @Inject constructor(
                 val episode = getEpisodeByTvShowIdUseCase(
                     tvShowId, seasonNumber, episodeNumber
                 )
-                val images = getTvShowImages(tvShowId)
+                val images = getTvShowImages.invoke(tvShowId)
                 val tvShowDetails = manageTvShowDetailsUseCase.getTvShowDetails(tvShowId)
 
                 Triple(episode, images, tvShowDetails)
