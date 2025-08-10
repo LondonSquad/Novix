@@ -11,8 +11,7 @@ import com.london.data.mapper.home.popular.toTvShowEntity
 import com.london.data.remote.source.home.popular.PopularRemoteDataSource
 import com.london.data.utils.CrashReporter
 import com.london.data.utils.fetchAndSync
-import com.london.domain.entity.popular.PopularMovie
-import com.london.domain.entity.popular.PopularTvShow
+import com.london.domain.entity.popular.PopularMedia
 import com.london.domain.entity.recent.MediaType
 import com.london.domain.repository.PopularRepository
 import javax.inject.Inject
@@ -23,7 +22,7 @@ class PopularRepositoryImpl @Inject constructor(
     private val crashReporter: CrashReporter
 ) : PopularRepository {
 
-    override suspend fun getPopularMovies(): List<PopularMovie> = fetchAndSync(
+    override suspend fun getPopularMovies(): List<PopularMedia> = fetchAndSync(
         cacheBlock = {
             val local = homeLocalDataSource.getAll()
                 .filter { it.mediaType == MediaType.Movie }
@@ -39,7 +38,7 @@ class PopularRepositoryImpl @Inject constructor(
         crashReporter = crashReporter
     )
 
-    override suspend fun getPopularTvShows(): List<PopularTvShow> = fetchAndSync(
+    override suspend fun getPopularTvShows(): List<PopularMedia> = fetchAndSync(
         cacheBlock = {
             val local = homeLocalDataSource.getAll()
                 .filter { it.mediaType == MediaType.TvShow }
