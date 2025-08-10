@@ -7,7 +7,6 @@ import com.london.domain.entity.TvShow
 import com.london.domain.entity.popular.PopularTvShow
 import com.london.domain.entity.tvshowdetails.TvShowDetailsEntity
 import com.london.domain.entity.tvshowdetails.TvShowGenreEntity
-import com.london.domain.entity.tvshowdetails.TvShowSeasonEntity
 import com.london.domain.error.TvShowDetailsSearchFailedException
 import com.london.domain.error.TvShowSearchFailedException
 import com.london.domain.repository.PopularRepository
@@ -415,18 +414,7 @@ class ManageTvShowDetailsUseCaseTest {
             numberOfSeasons = 2,
             overview = "A test show overview",
             posterUrl = "/poster.jpg",
-            tvShowSeasons = listOf(
-                TvShowSeasonEntity(
-                    airDate = "2020-01-01",
-                    episodeCount = 10,
-                    id = 1,
-                    name = "Season 1",
-                    overview = "Season 1 overview",
-                    posterUrl = "/season1.jpg",
-                    seasonNumber = 1,
-                    voteAverage = 8.0
-                )
-            ),
+            tvShowSeasons = listOf(10),
             voteAverage = 8.5,
         )
 

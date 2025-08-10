@@ -200,7 +200,7 @@ class TvShowDetailsViewModel @Inject constructor(
                 val tvShowDetails = manageTvShowDetailsUseCase.getTvShowDetails(tvShowId)
 
                 val firstSeason = tvShowDetails.tvShowSeasons.firstOrNull()
-                val seasonNumber = firstSeason?.seasonNumber ?: 1
+                val seasonNumber = firstSeason ?: 1
 
                 val episodes = getEpisodesByTvShowSeason(tvShowId, seasonNumber).episodes
                 val rating = if (authenticationUseCase.isLoggedIn()) {
