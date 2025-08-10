@@ -1,7 +1,6 @@
 package com.london.domain.usecase
 
-import com.london.domain.entity.actordetails.actorimage.ActorImageDetails
-import com.london.domain.entity.actordetails.actorimage.ImageDetails
+import com.london.domain.entity.actordetails.ActorImageDetails
 import com.london.domain.repository.ActorRepository
 import io.mockk.coEvery
 import io.mockk.coVerify
@@ -27,11 +26,11 @@ class GetActorImagesByIdUseCaseTest {
         // Given
         val actorId = 1
         val mockImageDetails = listOf(
-            mockk<ImageDetails>(),
-            mockk<ImageDetails>()
+            "https://example.com/image1.jpg",
+            "https://example.com/image2.jpg"
         )
         val mockActorImageDetails = mockk<ActorImageDetails> {
-            coEvery { profiles } returns mockImageDetails
+            coEvery { imageUrl } returns mockImageDetails
         }
         coEvery { repository.getActorImagesById(actorId) } returns mockActorImageDetails
 
@@ -47,9 +46,9 @@ class GetActorImagesByIdUseCaseTest {
     fun `should return empty list when profiles is empty`() = runTest {
         // Given
         val actorId = 1
-        val emptyImageDetails = emptyList<ImageDetails>()
+        val emptyImageDetails = emptyList<String>()
         val mockActorImageDetails = mockk<ActorImageDetails> {
-            coEvery { profiles } returns emptyImageDetails
+            coEvery { imageUrl } returns emptyImageDetails
         }
         coEvery { repository.getActorImagesById(actorId) } returns mockActorImageDetails
 
@@ -66,9 +65,12 @@ class GetActorImagesByIdUseCaseTest {
     fun `should handle different actor ids correctly`() = runTest {
         // Given
         val actorId = 999
-        val mockImageDetails = listOf(mockk<ImageDetails>())
+        val mockImageDetails = listOf(
+            "https://test.com/image1.jpg",
+            "https://test.com/image2.jpg"
+        )
         val mockActorImageDetails = mockk<ActorImageDetails> {
-            coEvery { profiles } returns mockImageDetails
+            coEvery { imageUrl } returns mockImageDetails
         }
         coEvery { repository.getActorImagesById(actorId) } returns mockActorImageDetails
 

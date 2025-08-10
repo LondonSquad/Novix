@@ -54,7 +54,7 @@ class PopularRepositoryImplTest {
         // Then
         assertThat(result).hasSize(1)
         assertThat(result[0].id).isEqualTo(101)
-        assertThat(result[0].title).isEqualTo("Test Movie")
+        assertThat(result[0].name).isEqualTo("Test Movie")
 
         coVerify(exactly = 1) { homeLocalDataSource.getAll() }
         coVerify(exactly = 1) { remoteDataSource.getPopularMovies() }
@@ -86,7 +86,7 @@ class PopularRepositoryImplTest {
         // Then
         assertThat(result).hasSize(1)
         assertThat(result[0].id).isEqualTo(101)
-        assertThat(result[0].title).isEqualTo("Cached Movie")
+        assertThat(result[0].name).isEqualTo("Cached Movie")
 
         coVerify(exactly = 1) { homeLocalDataSource.getAll() }
         coVerify(exactly = 0) { remoteDataSource.getPopularMovies() }
@@ -120,7 +120,7 @@ class PopularRepositoryImplTest {
         // Then
         assertThat(result).hasSize(1)
         assertThat(result[0].id).isEqualTo(101)
-        assertThat(result[0].title).isEqualTo("Movie")
+        assertThat(result[0].name).isEqualTo("Movie")
 
         coVerify(exactly = 0) { remoteDataSource.getPopularMovies() }
     }
@@ -153,8 +153,8 @@ class PopularRepositoryImplTest {
 
         // Then
         assertThat(result).hasSize(2)
-        assertThat(result[0].title).isEqualTo("Test Movie 1")
-        assertThat(result[1].title).isEqualTo("Test Movie 2")
+        assertThat(result[0].name).isEqualTo("Test Movie 1")
+        assertThat(result[1].name).isEqualTo("Test Movie 2")
 
         // Verify all items were synced
         assertThat(capturedItems.captured).hasSize(2)
@@ -395,7 +395,7 @@ class PopularRepositoryImplTest {
 
         // Then
         assertThat(result).hasSize(1)
-        assertThat(result[0].title).isEqualTo("Test Movie")
+        assertThat(result[0].name).isEqualTo("Test Movie")
 
         coVerify(exactly = 1) { remoteDataSource.getPopularMovies() }
     }
@@ -441,7 +441,7 @@ class PopularRepositoryImplTest {
         // Then
         val movie = result[0]
         assertThat(movie.id).isEqualTo(101)
-        assertThat(movie.title).isEqualTo("Test Movie")
+        assertThat(movie.name).isEqualTo("Test Movie")
         assertThat(movie.posterUrl).contains("/poster.jpg")
         assertThat(movie.rating).isEqualTo(7.8)
     }
@@ -507,7 +507,7 @@ class PopularRepositoryImplTest {
         // Then
         assertThat(movies).hasSize(1)
         assertThat(tvShows).hasSize(1)
-        assertThat(movies[0].title).isEqualTo("Test Movie")
+        assertThat(movies[0].name).isEqualTo("Test Movie")
         assertThat(tvShows[0].name).isEqualTo("Test TV Show")
 
         coVerify(exactly = 1) { remoteDataSource.getPopularMovies() }

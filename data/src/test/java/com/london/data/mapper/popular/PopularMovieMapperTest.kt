@@ -5,7 +5,7 @@ import com.london.data.mapper.home.popular.toPopularMovie
 import com.london.data.mapper.home.popular.toPopularMovies
 import com.london.data.remote.model.ApiResponse
 import com.london.data.remote.model.home.popular.PopularMovieResponse
-import com.london.domain.entity.popular.PopularMovie
+import com.london.domain.entity.popular.PopularMedia
 import org.junit.Test
 
 class PopularMovieMapperTest {
@@ -13,11 +13,11 @@ class PopularMovieMapperTest {
     @Test
     fun `when map toPopularMovie should map all fields correctly`() {
         // When
-        val result: PopularMovie = samplePopularMovieResponse.toPopularMovie()
+        val result: PopularMedia = samplePopularMovieResponse.toPopularMovie()
 
         // Then
         assertThat(result.id).isEqualTo(123)
-        assertThat(result.title).isEqualTo("Inception")
+        assertThat(result.name).isEqualTo("Inception")
         assertThat(result.posterUrl).contains("/poster.jpg")
         assertThat(result.rating).isEqualTo(8.7)
     }
@@ -32,12 +32,12 @@ class PopularMovieMapperTest {
             currentPage = 1
         )
         // When
-        val result: List<PopularMovie> = apiResponse.toPopularMovies()
+        val result: List<PopularMedia> = apiResponse.toPopularMovies()
 
         // Then
         assertThat(result).hasSize(2)
         assertThat(result[0].id).isEqualTo(123)
-        assertThat(result[1].title).isEqualTo("Interstellar")
+        assertThat(result[1].name).isEqualTo("Interstellar")
     }
 
     @Test
@@ -48,7 +48,7 @@ class PopularMovieMapperTest {
 
         // Then
         assertThat(result.id).isEqualTo(0)
-        assertThat(result.title).isEmpty()
+        assertThat(result.name).isEmpty()
         assertThat(result.posterUrl).isEmpty()
         assertThat(result.rating).isEqualTo(0.0)
     }

@@ -1,5 +1,6 @@
 package com.london.presentation.feature.details.movie
 
+import android.util.Log
 import androidx.lifecycle.SavedStateHandle
 import com.london.domain.entity.Movie
 import com.london.domain.entity.recent.MediaType
@@ -187,12 +188,14 @@ class MovieDetailsViewModel @Inject constructor(
                 val movieRating = if (authenticationUseCase.isLoggedIn())
                     ratingUseCase.getRateAccountMovieStatesById(movieId) else 0
                 Triple(similarMovies, movieVideos, movieRating)
+
             },
             onSuccess = { (similarMovies, videos, movieRating) ->
+                Log.d("test", "loadSimilarAndVideos: $videos")
                 updateState {
                     copy(
                         similarMovies = similarMovies,
-                        movieVideo = videos.firstOrNull()?.videoUrl.orEmpty(),
+                        movieVideo = videos.first(),
                         isRated = movieRating != 0 && state.value.isGuestUser.not()
                     )
                 }
