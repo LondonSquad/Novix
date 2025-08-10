@@ -6,7 +6,7 @@ import com.london.domain.entity.recent.MediaType
 import com.london.domain.entity.recent.RecentViewed
 import com.london.domain.usecase.GetCastById
 import com.london.domain.usecase.GetEpisodesByTvShowSeason
-import com.london.domain.usecase.GetImagesById
+import com.london.domain.usecase.GetTvShowImagesByIdUseCase
 import com.london.domain.usecase.authentication.AuthenticationUseCase
 import com.london.domain.usecase.details.tvshow.ManageTvShowDetailsUseCase
 import com.london.domain.usecase.rating.RatingUseCase
@@ -22,7 +22,7 @@ import javax.inject.Inject
 class TvShowDetailsViewModel @Inject constructor(
     private val getCastById: GetCastById,
     private val ratingUseCase: RatingUseCase,
-    private val getTvShowImages: GetImagesById,
+    private val getTvShowImages: GetTvShowImagesByIdUseCase,
     private val authenticationUseCase: AuthenticationUseCase,
     private val manageRecentViewedUseCase: ManageRecentViewedUseCase,
     private val getEpisodesByTvShowSeason: GetEpisodesByTvShowSeason,
@@ -55,7 +55,7 @@ class TvShowDetailsViewModel @Inject constructor(
                     copy(
                         tvShowEpisodes = episodes,
                         tvShowEpisodeCountBySeason = episodeCount,
-                        videoProvider = videoProviders.firstOrNull()?.videoUrl.orEmpty()
+                        videoProvider = videoProviders.first()
                     )
                 }
             },
@@ -153,7 +153,7 @@ class TvShowDetailsViewModel @Inject constructor(
 
         tryToExecute(
             block = {
-                getTvShowImages(tvShowId)
+                getTvShowImages.invoke(tvShowId)
             },
             onStart = { updateState { copy(isLoading = true) } },
             onSuccess = { images ->
@@ -200,7 +200,7 @@ class TvShowDetailsViewModel @Inject constructor(
                 val tvShowDetails = manageTvShowDetailsUseCase.getTvShowDetails(tvShowId)
 
                 val firstSeason = tvShowDetails.tvShowSeasons.firstOrNull()
-                val seasonNumber = firstSeason?.seasonNumber ?: 1
+                val seasonNumber = firstSeason ?: 1
 
                 val episodes = getEpisodesByTvShowSeason(tvShowId, seasonNumber).episodes
                 val rating = if (authenticationUseCase.isLoggedIn()) {
@@ -215,38 +215,13 @@ class TvShowDetailsViewModel @Inject constructor(
             onSuccess = { (tvShowDetails, rating, episodes) ->
                 updateState {
                     copy(
-                        adult = tvShowDetails.adult,
-                        backdropPath = tvShowDetails.backdropUrl,
-                        createdBy = tvShowDetails.createdBy,
-                        episodeRunTime = tvShowDetails.episodeRunTime,
                         firstAirDate = tvShowDetails.firstAirDate,
                         tvShowGenres = tvShowDetails.tvShowGenres,
-                        homepage = tvShowDetails.homepage,
                         id = tvShowDetails.id,
-                        inProduction = tvShowDetails.inProduction,
-                        languages = tvShowDetails.languages,
-                        lastAirDate = tvShowDetails.lastAirDate,
-                        lastTvShowEpisodeToAir = tvShowDetails.lastTvShowEpisodeToAir,
                         name = tvShowDetails.name,
-                        nextTvShowEpisodeToAir = tvShowDetails.nextTvShowEpisodeToAir,
-                        tvShowNetworks = tvShowDetails.tvShowNetworks,
-                        numberOfEpisodes = tvShowDetails.numberOfEpisodes,
                         numberOfSeasons = tvShowDetails.numberOfSeasons,
-                        originCountry = tvShowDetails.originCountry,
-                        originalLanguage = tvShowDetails.originalLanguage,
-                        originalName = tvShowDetails.originalName,
                         overview = tvShowDetails.overview,
-                        popularity = tvShowDetails.popularity,
-                        posterPath = tvShowDetails.posterUrl,
-                        productionCompanies = tvShowDetails.productionCompanies,
-                        productionCountries = tvShowDetails.productionCountries,
-                        tvShowSeasons = tvShowDetails.tvShowSeasons,
-                        tvShowSpokenLanguages = tvShowDetails.tvShowSpokenLanguageEntities,
-                        status = tvShowDetails.status,
-                        tagline = tvShowDetails.tagline,
-                        type = tvShowDetails.type,
                         voteAverage = tvShowDetails.voteAverage,
-                        voteCount = tvShowDetails.voteCount,
                         tvShowEpisodes = episodes,
                         isRated = rating != 0 && state.value.isGuestUser.not(),
                     )

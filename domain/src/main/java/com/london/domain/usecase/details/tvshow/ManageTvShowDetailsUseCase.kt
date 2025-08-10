@@ -6,7 +6,6 @@ import com.london.domain.repository.PopularRepository
 import com.london.domain.repository.SearchRepository
 import com.london.domain.repository.TrendingRepository
 import com.london.domain.repository.TvShowRepository
-import com.london.domain.repository.TvShowVideoProviderRepository
 import com.london.domain.repository.discover.DiscoverRepository
 import javax.inject.Inject
 
@@ -16,7 +15,6 @@ class ManageTvShowDetailsUseCase @Inject constructor(
     private val trendingRepository: TrendingRepository,
     private val searchRepository: SearchRepository,
     private val discoverRepository: DiscoverRepository,
-    private val tvShowVideoProviderRepository: TvShowVideoProviderRepository
 ) {
     suspend fun getTvShowDetails(tvShowId: Int) = tvShowRepository.getTvShowDetailsById(tvShowId)
 
@@ -48,8 +46,7 @@ class ManageTvShowDetailsUseCase @Inject constructor(
     )
 
     suspend fun getTvShowVideoProvider(tvShowId: Int) =
-        tvShowVideoProviderRepository.getTvShowVideos(tvShowId)
-
+        tvShowRepository.getTvShowVideos(tvShowId)
 
     companion object {
         const val LIMIT = 5
