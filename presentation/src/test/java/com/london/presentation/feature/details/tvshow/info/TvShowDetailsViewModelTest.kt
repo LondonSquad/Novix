@@ -60,14 +60,10 @@ class TvShowDetailsViewModelTest {
         every { savedStateHandle.getArgs<Screen.TvShowDetails>() } returns Screen.TvShowDetails(
             tvShowId = TV_SHOW_ID
         )
-        coEvery { manageTvShowDetailsUseCase.getTvShowDetails(TV_SHOW_ID) } returns mockk(relaxed = true)
         coEvery { getCastById.invoke(TV_SHOW_ID) } returns mockk<TvShowCastEntity>(relaxed = true)
-        coEvery { getEpisodesByTvShowSeason.invoke(TV_SHOW_ID, any()) } returns tvShowEpisodesEntity
-        coEvery { getTvShowImages.invoke(TV_SHOW_ID) } returns emptyList()
         coEvery { authenticationUseCase.isLoggedIn() } returns false
         coEvery { manageRecentViewedUseCase.addToRecentViewed(any()) } returns Unit
         coEvery { manageRecentTvShowWatchedUseCase.addTvShowToRecentWatched(any()) } returns Unit
-        coEvery { manageTvShowDetailsUseCase.getTvShowVideoProvider(TV_SHOW_ID) } returns emptyList()
         coEvery { ratingUseCase.getRateAccountTvShowState(TV_SHOW_ID) } returns 0
 
         viewModel = TvShowDetailsViewModel(
@@ -92,6 +88,10 @@ class TvShowDetailsViewModelTest {
 
     @Test
     fun `when initializeGetImagesData fails, error state should be updated`() = runTest {
+        // Given
+        val exception = Exception("error")
+        coEvery { getTvShowImages.invoke(TV_SHOW_ID) } throws exception
+
         // When
         advanceUntilIdle()
 
@@ -105,6 +105,9 @@ class TvShowDetailsViewModelTest {
 
     @Test
     fun `when initializeEpisodesBySeasons, episodes by seasons data should be fetched`() = runTest {
+        // Given
+        coEvery { getEpisodesByTvShowSeason.invoke(TV_SHOW_ID, any()) } returns tvShowEpisodesEntity
+
         // When
         advanceUntilIdle()
 
@@ -119,6 +122,11 @@ class TvShowDetailsViewModelTest {
 
     @Test
     fun `When initializeEpisodesBySeasons fails, error state should be updated`() = runTest {
+
+        // Given
+        val exception = Exception("error")
+        coEvery { getEpisodesByTvShowSeason.invoke(TV_SHOW_ID, any()) } throws exception
+
         // When
         advanceUntilIdle()
 
@@ -133,6 +141,9 @@ class TvShowDetailsViewModelTest {
     @Test
     fun `When initializeEpisodesBySeasons is called, videoProvider state should be updated`() =
         runTest {
+            // Given
+            coEvery { manageTvShowDetailsUseCase.getTvShowVideoProvider(TV_SHOW_ID) } returns emptyList()
+
             // When
             advanceUntilIdle()
 
@@ -147,6 +158,12 @@ class TvShowDetailsViewModelTest {
     @Test
     fun `When initializeGetTvShowDetailsData is called, tvShowDetails state should be updated`() =
         runTest {
+
+            // Given
+            coEvery { manageTvShowDetailsUseCase.getTvShowDetails(TV_SHOW_ID) } returns mockk(
+                relaxed = true
+            )
+
             // When
             advanceUntilIdle()
 
