@@ -20,7 +20,7 @@ class ManageRatingUseCase @Inject constructor(
                     title = media.title,
                     posterPath = media.posterPath,
                     rating = media.rating,
-                    isMovie = media.isMovie
+                    mediaType = media.mediaType
                 )
             }
             .sortedByDescending { media -> media.rating }

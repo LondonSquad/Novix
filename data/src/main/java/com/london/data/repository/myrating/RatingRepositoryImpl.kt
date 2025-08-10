@@ -5,6 +5,7 @@ import com.london.data.mapper.myrating.toEntity
 import com.london.data.remote.source.myrating.RatingRemoteDataSource
 import com.london.data.utils.fetchAndSync
 import com.london.domain.entity.RatedMedia
+import com.london.domain.entity.recent.MediaType
 import com.london.domain.repository.RatingRepository
 import javax.inject.Inject
 
@@ -53,12 +54,12 @@ class RatingRepositoryImpl @Inject constructor(
             val movies = ratingRemoteDataSource.getAllRatedMovies(
                 accountId = accountId,
                 sessionId = sessionId.orEmpty(),
-            ).getOrThrow().items.map { it.toEntity(isMovie = true) }
+            ).getOrThrow().items.map { it.toEntity(mediaType = MediaType.Movie) }
 
             val tvShows = ratingRemoteDataSource.getAllRatedTvShows(
                 accountId = accountId,
                 sessionId = sessionId.orEmpty(),
-            ).getOrThrow().items.map { it.toEntity(isMovie = false) }
+            ).getOrThrow().items.map { it.toEntity(mediaType = MediaType.TvShow) }
 
             movies + tvShows
         }
@@ -68,13 +69,13 @@ class RatingRepositoryImpl @Inject constructor(
         ratingRemoteDataSource.getAllRatedMovies(
             accountId = authPreferences.getAccountId(),
             sessionId = authPreferences.getSessionId().orEmpty()
-        ).getOrThrow().items.map { it.toEntity(isMovie = true) }
+        ).getOrThrow().items.map { it.toEntity(mediaType = MediaType.Movie) }
 
     override suspend fun getAllRatedTvShows(): List<RatedMedia> =
         ratingRemoteDataSource.getAllRatedTvShows(
             accountId = authPreferences.getAccountId(),
             sessionId = authPreferences.getSessionId().orEmpty()
-        ).getOrThrow().items.map { it.toEntity(isMovie = false) }
+        ).getOrThrow().items.map { it.toEntity(mediaType = MediaType.TvShow) }
 
     override suspend fun deleteMovieRating(movieId: Int): Boolean =
         ratingRemoteDataSource.deleteMovieRating(
