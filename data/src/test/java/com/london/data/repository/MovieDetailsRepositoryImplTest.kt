@@ -25,6 +25,7 @@ import com.london.data.remote.source.reviews.ReviewsRemoteDataSource
 import com.london.data.repository.search.MovieDetailsRepositoryImpl
 import com.london.data.utils.asImageUrlOrEmpty
 import com.london.domain.entity.PagedFetchResponse
+import com.london.domain.entity.moviedatails.MovieImages
 import com.london.domain.entity.review.ReviewEntity
 import io.mockk.coEvery
 import io.mockk.mockk
@@ -244,17 +245,23 @@ class MovieDetailsRepositoryImplTest {
 
     @Test
     fun `getMovieImages should return poster file paths`() = runTest {
-        coEvery { remoteDataSource.getMovieImages(123) } returns Result.success(
-            fakeMovieImagesRemote()
+        val expected = MovieImages(
+            backdrops = emptyList(),
+            id = 123,
+            logos = emptyList(),
+            posters = listOf(
+                "/img1.jpg".asImageUrlOrEmpty(),
+                "/img2.jpg".asImageUrlOrEmpty()
+            )
         )
+
+        coEvery { remoteDataSource.getMovieImages(123) } returns Result.success(fakeMovieImagesRemote())
 
         val result = repository.getMovieImagesById(123)
 
-        assertEquals(
-            listOf("/img1.jpg".asImageUrlOrEmpty(), "/img2.jpg".asImageUrlOrEmpty()),
-            result
-        )
+        assertEquals(expected, result)
     }
+
 
     @Test
     fun `getMovieCast should return actor list with names and characters`() = runTest {
