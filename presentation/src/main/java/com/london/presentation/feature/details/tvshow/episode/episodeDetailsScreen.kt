@@ -63,7 +63,6 @@ import com.london.presentation.utils.isNotZeroRate
 import com.london.presentation.utils.openUrl
 import com.london.presentation.utils.toLocalizedNumbers
 import com.london.designsystem.R as Res
-
 @Composable
 fun EpisodeDetailsScreen(
     viewModel: EpisodeDetailsViewModel = hiltViewModel(),
@@ -138,7 +137,7 @@ private fun Content(
                     top = WindowInsets.statusBars.asPaddingValues().calculateTopPadding() + 12.dp
                 ),
             onClickOption1 = { /*todo on click on save*/ },
-            option1Icon = com.london.designsystem.R.drawable.icon_remove,
+            option1Icon = Res.drawable.icon_remove,
         )
 
         LazyColumn(
