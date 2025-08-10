@@ -74,48 +74,6 @@ fun ListScreen(
 }
 
 @Composable
-private fun ScreenScaffold(
-    titleRes: Int,
-    showFab: Boolean = true,
-    onFabClick: (() -> Unit)? = null,
-    content: @Composable () -> Unit,
-) {
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(NovixTheme.colors.surface)
-    ) {
-        TopBar(
-            title = stringResource(titleRes),
-            modifier = Modifier
-                .statusBarsPadding()
-                .padding(horizontal = 16.dp)
-        )
-
-        Box(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(top = 8.dp)
-        ) {
-            content()
-
-            if (showFab && onFabClick != null) {
-                FloatingActionButton(
-                    modifier = Modifier
-                        .align(Alignment.BottomEnd)
-                        .padding(bottom = 16.dp, end = 16.dp),
-                    onClick = onFabClick,
-                    isLoadingIcon = false,
-                    isDisabledIcon = false,
-                    isDefaultIcon = true
-                )
-            }
-        }
-    }
-}
-
-
-@Composable
 private fun Content(
     state: ListUiState,
     contract: ListContract,
@@ -174,7 +132,47 @@ private fun Content(
             )
         }
     }
+}
 
+@Composable
+private fun ScreenScaffold(
+    titleRes: Int,
+    showFab: Boolean = true,
+    onFabClick: (() -> Unit)? = null,
+    content: @Composable () -> Unit,
+) {
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(NovixTheme.colors.surface)
+    ) {
+        TopBar(
+            title = stringResource(titleRes),
+            modifier = Modifier
+                .statusBarsPadding()
+                .padding(horizontal = 16.dp)
+        )
+
+        Box(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(top = 8.dp)
+        ) {
+            content()
+
+            if (showFab && onFabClick != null) {
+                FloatingActionButton(
+                    modifier = Modifier
+                        .align(Alignment.BottomEnd)
+                        .padding(bottom = 16.dp, end = 16.dp),
+                    onClick = onFabClick,
+                    isLoadingIcon = false,
+                    isDisabledIcon = false,
+                    isDefaultIcon = true
+                )
+            }
+        }
+    }
 }
 
 @Composable
