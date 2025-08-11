@@ -102,4 +102,32 @@ class RatingRemoteDataSourceImpl @Inject constructor(
             mapper = { it }
         )
     }
+
+    override suspend fun deleteMovieRating(
+        movieId: Int,
+        sessionId: String?
+    ): Result<RatingRemoteResponse> = callApiWithRetry(
+        apiCall = {
+            myRatingApiResponse.deleteMovieRating(
+                movieId = movieId,
+                sessionId = sessionId
+            )
+        },
+        mapper = { it }
+    )
+
+    override suspend fun deleteTvShowRating(
+        tvShowId: Int,
+        sessionId: String?
+    ): Result<RatingRemoteResponse> =callApiWithRetry(
+        apiCall = {
+            myRatingApiResponse.deleteTvShowRating(
+                tvShowId = tvShowId,
+                sessionId = sessionId
+            )
+        },
+        mapper = { it }
+    )
+
+
 }
