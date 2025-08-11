@@ -1,8 +1,10 @@
 package com.london.domain.usecase
 
 import com.london.domain.entity.actordetails.cast.CastDetails
+import com.london.domain.repository.ActorRepository
+import com.london.domain.repository.MovieRepository
 import com.london.domain.repository.TvShowRepository
-import com.london.domain.usecase.toppicks.GetActorTvShowPicksByIdUseCase
+import com.london.domain.usecase.details.actor.GetActorUseCase
 import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.mockk
@@ -13,13 +15,22 @@ import org.junit.jupiter.api.Assertions.assertEquals
 
 class GetActorTvShowPicksByIdUseCaseTest {
 
-    private lateinit var repository: TvShowRepository
-    private lateinit var useCase: GetActorTvShowPicksByIdUseCase
+
+    private lateinit var actorRepository: ActorRepository
+    private lateinit var tvShowRepository: TvShowRepository
+    private lateinit var movieRepository: MovieRepository
+    private lateinit var useCase: GetActorUseCase
 
     @Before
     fun setup() {
-        repository = mockk()
-        useCase = GetActorTvShowPicksByIdUseCase(repository)
+        actorRepository = mockk()
+        tvShowRepository = mockk()
+        movieRepository = mockk()
+        useCase = GetActorUseCase(
+            actorRepository = actorRepository,
+            tvShowRepository = tvShowRepository,
+            movieRepository = movieRepository
+        )
     }
 
     @Test
@@ -28,13 +39,13 @@ class GetActorTvShowPicksByIdUseCaseTest {
             // Given
             val actorId = 1
             val expectedResult = mockk<CastDetails>()
-            coEvery { repository.getActorTvShowPicksById(actorId) } returns expectedResult
+            coEvery { tvShowRepository.getActorTvShowPicksById(actorId) } returns expectedResult
 
             // When
-            val result = useCase.invoke(actorId)
+            val result = useCase.getActorTvShowPicksById(actorId)
 
             // Then
-            coVerify(exactly = 1) { repository.getActorTvShowPicksById(actorId) }
+            coVerify(exactly = 1) { tvShowRepository.getActorTvShowPicksById(actorId) }
             assertEquals(expectedResult, result)
         }
 }

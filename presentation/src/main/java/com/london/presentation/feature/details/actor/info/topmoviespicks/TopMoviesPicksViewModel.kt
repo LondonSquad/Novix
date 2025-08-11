@@ -1,7 +1,7 @@
 package com.london.presentation.feature.details.actor.info.topmoviespicks
 
 import androidx.lifecycle.SavedStateHandle
-import com.london.domain.usecase.toppicks.GetActorMoviePicksByIdUseCase
+import com.london.domain.usecase.details.actor.GetActorUseCase
 import com.london.presentation.navigation.Screen
 import com.london.presentation.navigation.getArgs
 import com.london.presentation.shared.base.BaseViewModel
@@ -10,7 +10,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class TopMoviesPicksViewModel @Inject constructor(
-    private val getActorMoviePicksById: GetActorMoviePicksByIdUseCase,
+    private val getActorUseCase: GetActorUseCase,
     savedStateHandle: SavedStateHandle,
 ) : BaseViewModel<TopMoviesPicksUiState, TopMoviesPicksEffect>(TopMoviesPicksUiState()),
     TopMoviesPicksContract {
@@ -27,7 +27,7 @@ class TopMoviesPicksViewModel @Inject constructor(
     private fun getActorMoviePicksData() {
 
         tryToExecute(
-            block = { getActorMoviePicksById.invoke(actorId) },
+            block = { getActorUseCase.getActorMoviePicksById(actorId) },
             onStart = { updateState { copy(isLoading = true) } },
             onSuccess = { actorMovieDetails ->
                 updateState {

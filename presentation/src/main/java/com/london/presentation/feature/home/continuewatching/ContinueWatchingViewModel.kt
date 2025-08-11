@@ -1,7 +1,7 @@
 package com.london.presentation.feature.home.continuewatching
 
-import com.london.domain.usecase.recent.watched.movie.ManageRecentMovieWatchedUseCase
-import com.london.domain.usecase.recent.watched.tvshow.ManageRecentTvShowWatchedUseCase
+import com.london.domain.usecase.search.recent.watched.movie.ManageRecentMovieWatchedUseCase
+import com.london.domain.usecase.search.recent.watched.tvshow.ManageRecentTvShowWatchedUseCase
 import com.london.presentation.shared.MediaCategory
 import com.london.presentation.shared.base.BaseViewModel
 import com.london.presentation.utils.MovieGenre

@@ -1,4 +1,4 @@
-package com.london.domain.usecase.recent.watched.tvshow
+package com.london.domain.usecase.search.recent.watched.tvshow
 
 import com.london.domain.entity.TvShow
 import com.london.domain.repository.RecentWatchedRepository

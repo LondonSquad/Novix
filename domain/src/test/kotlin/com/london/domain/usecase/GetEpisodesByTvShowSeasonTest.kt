@@ -1,8 +1,9 @@
 package com.london.domain.usecase
 
 import com.london.domain.entity.tvshowdetails.episode.TvShowEpisodesEntity
+import com.london.domain.repository.ActorRepository
 import com.london.domain.repository.TvShowRepository
-import com.london.domain.usecase.details.tvshow.ManageTvEpisodesUseCase
+import com.london.domain.usecase.details.tvshow.GetTvEpisodesUseCase
 import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.mockk
@@ -13,13 +14,18 @@ import org.junit.Test
 
 class GetEpisodesByTvShowSeasonTest {
 
-    private lateinit var repository: TvShowRepository
-    private lateinit var manageTvEpisodesUseCase: ManageTvEpisodesUseCase
+    private lateinit var tvShowRepository: TvShowRepository
+    private lateinit var actorRepository: ActorRepository
+    private lateinit var getTvEpisodesUseCase: GetTvEpisodesUseCase
 
     @Before
     fun setup() {
-        repository = mockk()
-        manageTvEpisodesUseCase = ManageTvEpisodesUseCase(repository)
+        tvShowRepository = mockk()
+        actorRepository = mockk()
+        getTvEpisodesUseCase = GetTvEpisodesUseCase(
+            tvShowRepository = tvShowRepository,
+            actorRepository = actorRepository
+        )
     }
 
     @Test
@@ -28,13 +34,18 @@ class GetEpisodesByTvShowSeasonTest {
         val tvShowId = 123
         val seasonNumber = 2
         val expectedResult = mockk<TvShowEpisodesEntity>()
-        coEvery { repository.getTvShowEpisodesBySeason(tvShowId, seasonNumber) } returns expectedResult
+        coEvery {
+            tvShowRepository.getTvShowEpisodesBySeason(
+                tvShowId,
+                seasonNumber
+            )
+        } returns expectedResult
 
         // When
-        val result = manageTvEpisodesUseCase.getTvShowEpisodesBySeason(tvShowId, seasonNumber)
+        val result = getTvEpisodesUseCase.getTvShowEpisodesBySeason(tvShowId, seasonNumber)
 
         // Then
-        coVerify(exactly = 1) { repository.getTvShowEpisodesBySeason(tvShowId, seasonNumber) }
+        coVerify(exactly = 1) { tvShowRepository.getTvShowEpisodesBySeason(tvShowId, seasonNumber) }
         assertEquals(expectedResult, result)
     }
 
@@ -44,13 +55,18 @@ class GetEpisodesByTvShowSeasonTest {
         val tvShowId = 456
         val seasonNumber = 1
         val expectedResult = mockk<TvShowEpisodesEntity>()
-        coEvery { repository.getTvShowEpisodesBySeason(tvShowId, seasonNumber) } returns expectedResult
+        coEvery {
+            tvShowRepository.getTvShowEpisodesBySeason(
+                tvShowId,
+                seasonNumber
+            )
+        } returns expectedResult
 
         // When
-        val result = manageTvEpisodesUseCase.getTvShowEpisodesBySeason(tvShowId, seasonNumber)
+        val result = getTvEpisodesUseCase.getTvShowEpisodesBySeason(tvShowId, seasonNumber)
 
         // Then
-        coVerify(exactly = 1) { repository.getTvShowEpisodesBySeason(tvShowId, seasonNumber) }
+        coVerify(exactly = 1) { tvShowRepository.getTvShowEpisodesBySeason(tvShowId, seasonNumber) }
         assertEquals(expectedResult, result)
     }
 
@@ -60,13 +76,18 @@ class GetEpisodesByTvShowSeasonTest {
         val tvShowId = 789
         val seasonNumber = 0
         val expectedResult = mockk<TvShowEpisodesEntity>()
-        coEvery { repository.getTvShowEpisodesBySeason(tvShowId, seasonNumber) } returns expectedResult
+        coEvery {
+            tvShowRepository.getTvShowEpisodesBySeason(
+                tvShowId,
+                seasonNumber
+            )
+        } returns expectedResult
 
         // When
-        val result = manageTvEpisodesUseCase.getTvShowEpisodesBySeason(tvShowId, seasonNumber)
+        val result = getTvEpisodesUseCase.getTvShowEpisodesBySeason(tvShowId, seasonNumber)
 
         // Then
-        coVerify(exactly = 1) { repository.getTvShowEpisodesBySeason(tvShowId, seasonNumber) }
+        coVerify(exactly = 1) { tvShowRepository.getTvShowEpisodesBySeason(tvShowId, seasonNumber) }
         assertEquals(expectedResult, result)
     }
 }

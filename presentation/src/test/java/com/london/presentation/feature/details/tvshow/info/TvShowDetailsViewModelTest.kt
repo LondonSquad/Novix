@@ -7,10 +7,10 @@ import com.google.common.truth.Truth.assertThat
 import com.london.domain.entity.tvshowdetails.TvShowCastEntity
 import com.london.domain.entity.tvshowdetails.episode.TvShowEpisodesEntity
 import com.london.domain.usecase.authentication.AuthenticationUseCase
-import com.london.domain.usecase.details.tvshow.ManageTvShowDetailsUseCase
+import com.london.domain.usecase.details.tvshow.GetTvShowUseCase
 import com.london.domain.usecase.rating.ManageRatingUseCase
-import com.london.domain.usecase.recent.viewed.ManageRecentViewedUseCase
-import com.london.domain.usecase.recent.watched.tvshow.ManageRecentTvShowWatchedUseCase
+import com.london.domain.usecase.search.recent.viewed.ManageRecentViewedUseCase
+import com.london.domain.usecase.search.recent.watched.tvshow.ManageRecentTvShowWatchedUseCase
 import com.london.presentation.navigation.Screen
 import com.london.presentation.navigation.getArgs
 import io.mockk.coEvery
@@ -33,7 +33,7 @@ class TvShowDetailsViewModelTest {
     private lateinit var getCastById: GetCastById
     private lateinit var getTvShowImages: GetTvShowImagesByIdUseCase
     private lateinit var getEpisodesByTvShowSeason: GetEpisodesByTvShowSeason
-    private lateinit var manageTvShowDetailsUseCase: ManageTvShowDetailsUseCase
+    private lateinit var getTvShowUseCase: GetTvShowUseCase
     private lateinit var manageRecentTvShowWatchedUseCase: ManageRecentTvShowWatchedUseCase
     private lateinit var manageRecentViewedUseCase: ManageRecentViewedUseCase
     private lateinit var ratingUseCase: ManageRatingUseCase
@@ -49,7 +49,7 @@ class TvShowDetailsViewModelTest {
         ratingUseCase = mockk()
         manageRecentViewedUseCase = mockk()
         manageRecentTvShowWatchedUseCase = mockk()
-        manageTvShowDetailsUseCase = mockk()
+        getTvShowUseCase = mockk()
         getEpisodesByTvShowSeason = mockk()
         getTvShowImages = mockk()
         getCastById = mockk()
@@ -67,7 +67,7 @@ class TvShowDetailsViewModelTest {
             getCastById = getCastById,
             getTvShowImages = getTvShowImages,
             getEpisodesByTvShowSeason = getEpisodesByTvShowSeason,
-            manageTvShowDetailsUseCase = manageTvShowDetailsUseCase,
+            getTvShowUseCase = getTvShowUseCase,
             manageRecentTvShowWatchedUseCase = manageRecentTvShowWatchedUseCase,
             manageRecentViewedUseCase = manageRecentViewedUseCase,
             ratingUseCase = ratingUseCase,
@@ -139,7 +139,7 @@ class TvShowDetailsViewModelTest {
     fun `When initializeEpisodesBySeasons is called, videoProvider state should be updated`() =
         runTest {
             // Given
-            coEvery { manageTvShowDetailsUseCase.getTvShowVideoProvider(TV_SHOW_ID) } returns emptyList()
+            coEvery { getTvShowUseCase.getTvShowVideoProvider(TV_SHOW_ID) } returns emptyList()
 
             // When
             advanceUntilIdle()
@@ -157,7 +157,7 @@ class TvShowDetailsViewModelTest {
         runTest {
 
             // Given
-            coEvery { manageTvShowDetailsUseCase.getTvShowDetails(TV_SHOW_ID) } returns mockk(
+            coEvery { getTvShowUseCase.getTvShowDetails(TV_SHOW_ID) } returns mockk(
                 relaxed = true
             )
 

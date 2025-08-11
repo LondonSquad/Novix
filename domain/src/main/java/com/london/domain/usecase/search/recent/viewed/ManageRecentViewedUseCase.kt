@@ -1,4 +1,4 @@
-package com.london.domain.usecase.recent.viewed
+package com.london.domain.usecase.search.recent.viewed
 
 import com.london.domain.entity.recent.RecentViewed
 import com.london.domain.repository.RecentRepository

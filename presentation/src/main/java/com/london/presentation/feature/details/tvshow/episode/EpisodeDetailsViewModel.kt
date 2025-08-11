@@ -3,8 +3,8 @@ package com.london.presentation.feature.details.tvshow.episode
 import android.annotation.SuppressLint
 import androidx.lifecycle.SavedStateHandle
 import com.london.domain.usecase.authentication.AuthenticationUseCase
-import com.london.domain.usecase.details.tvshow.ManageTvEpisodesUseCase
-import com.london.domain.usecase.details.tvshow.ManageTvShowDetailsUseCase
+import com.london.domain.usecase.details.tvshow.GetTvEpisodesUseCase
+import com.london.domain.usecase.details.tvshow.GetTvShowUseCase
 import com.london.domain.usecase.rating.ManageRatingUseCase
 import com.london.presentation.navigation.Screen
 import com.london.presentation.navigation.getArgs
@@ -14,8 +14,8 @@ import javax.inject.Inject
 
 @HiltViewModel
 class EpisodeDetailsViewModel @Inject constructor(
-    private val manageTvShowDetailsUseCase: ManageTvShowDetailsUseCase,
-    private val manageTvEpisodesUseCase: ManageTvEpisodesUseCase,
+    private val getTvShowUseCase: GetTvShowUseCase,
+    private val getTvEpisodesUseCase: GetTvEpisodesUseCase,
     private val ratingUseCase: ManageRatingUseCase,
     private val authenticationUseCase: AuthenticationUseCase,
     savedStateHandle: SavedStateHandle,
@@ -118,11 +118,11 @@ class EpisodeDetailsViewModel @Inject constructor(
     private fun loadEpisodeDetails() {
         tryToExecute(
             block = {
-                val episode = manageTvEpisodesUseCase.getEpisodeByTvShowId(
+                val episode = getTvEpisodesUseCase.getEpisodeByTvShowId(
                     tvShowId, seasonNumber, episodeNumber
                 )
-                val images = manageTvShowDetailsUseCase.getImagesTvShowById(tvShowId)
-                val tvShowDetails = manageTvShowDetailsUseCase.getTvShowDetails(tvShowId)
+                val images = getTvShowUseCase.getImagesTvShowById(tvShowId)
+                val tvShowDetails = getTvShowUseCase.getTvShowDetails(tvShowId)
 
                 Triple(episode, images, tvShowDetails)
             },
@@ -151,7 +151,7 @@ class EpisodeDetailsViewModel @Inject constructor(
         tryToExecute(
             block = {
                 val videoProviders =
-                    manageTvEpisodesUseCase.getEpisodeVideos(
+                    getTvEpisodesUseCase.getEpisodeVideos(
                         tvShowId, seasonNumber, episodeNumber
                     ).first()
                 videoProviders

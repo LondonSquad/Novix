@@ -3,6 +3,7 @@ package com.london.domain.usecase.recent.viewed
 import com.google.common.truth.Truth.assertThat
 import com.london.domain.entity.recent.RecentViewed
 import com.london.domain.repository.RecentRepository
+import com.london.domain.usecase.search.recent.viewed.ManageRecentViewedUseCase
 import io.mockk.Runs
 import io.mockk.coEvery
 import io.mockk.coVerify

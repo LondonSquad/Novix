@@ -2,12 +2,10 @@ package com.london.domain.usecase
 
 import com.google.common.truth.Truth.assertThat
 import com.london.domain.entity.tvshowdetails.TvShowImagesEntity
-import com.london.domain.repository.PopularRepository
 import com.london.domain.repository.SearchRepository
-import com.london.domain.repository.TrendingRepository
 import com.london.domain.repository.TvShowRepository
 import com.london.domain.repository.discover.DiscoverRepository
-import com.london.domain.usecase.details.tvshow.ManageTvShowDetailsUseCase
+import com.london.domain.usecase.details.tvshow.GetTvShowUseCase
 import io.mockk.coEvery
 import io.mockk.mockk
 import kotlinx.coroutines.test.runTest
@@ -16,25 +14,18 @@ import org.junit.Test
 
 class GetImagesByIdTest {
     lateinit var tvShowRepository: TvShowRepository
-    lateinit var popularRepository: PopularRepository
-    lateinit var trendingRepository: TrendingRepository
     lateinit var searchRepository: SearchRepository
     lateinit var discoverRepository: DiscoverRepository
-    lateinit var manageTvShowDetailsUseCase: ManageTvShowDetailsUseCase
+    lateinit var getTvShowUseCase: GetTvShowUseCase
 
     @Before
     fun setUp() {
         tvShowRepository = mockk()
-        popularRepository = mockk()
-        trendingRepository = mockk()
         searchRepository = mockk()
         discoverRepository = mockk()
-        manageTvShowDetailsUseCase = ManageTvShowDetailsUseCase(
-            tvShowRepository,
-            popularRepository = popularRepository,
-            trendingRepository = trendingRepository,
+        getTvShowUseCase = GetTvShowUseCase(
+            tvShowRepository = tvShowRepository,
             searchRepository = searchRepository,
-            discoverRepository = discoverRepository
         )
     }
 
@@ -43,7 +34,7 @@ class GetImagesByIdTest {
         // Given
         coEvery { tvShowRepository.getImagesTvShowById(TV_SHOW_ID) } returns mockTvShowImagesWithBackdrops
         // When
-        val result = manageTvShowDetailsUseCase.getImagesTvShowById(TV_SHOW_ID)
+        val result = getTvShowUseCase.getImagesTvShowById(TV_SHOW_ID)
         // Then
         assertThat(result).isEqualTo(mockTvShowImagesWithBackdrops.backdropsUrl)
     }
@@ -53,7 +44,7 @@ class GetImagesByIdTest {
         // Given
         coEvery { tvShowRepository.getImagesTvShowById(TV_SHOW_ID) } returns mockTvShowImagesWithPostersOnly
         // When
-        val result = manageTvShowDetailsUseCase.getImagesTvShowById(TV_SHOW_ID)
+        val result = getTvShowUseCase.getImagesTvShowById(TV_SHOW_ID)
         // Then
         assertThat(result).isEqualTo(mockTvShowImagesWithPostersOnly.postersUrl)
     }
@@ -64,7 +55,7 @@ class GetImagesByIdTest {
             // Given
             coEvery { tvShowRepository.getImagesTvShowById(TV_SHOW_ID) } returns mockTvShowImagesWithLogosOnly
             // When
-            val result = manageTvShowDetailsUseCase.getImagesTvShowById(TV_SHOW_ID)
+            val result = getTvShowUseCase.getImagesTvShowById(TV_SHOW_ID)
             // Then
             assertThat(result).isEqualTo(mockTvShowImagesWithLogosOnly.logosUrl)
         }
@@ -74,7 +65,7 @@ class GetImagesByIdTest {
         // Given
         coEvery { tvShowRepository.getImagesTvShowById(TV_SHOW_ID) } returns mockTvShowImagesEmpty
         // When
-        val result = manageTvShowDetailsUseCase.getImagesTvShowById(TV_SHOW_ID)
+        val result = getTvShowUseCase.getImagesTvShowById(TV_SHOW_ID)
         // Then
         assertThat(result).isEmpty()
     }
@@ -84,7 +75,7 @@ class GetImagesByIdTest {
         // Given
         coEvery { tvShowRepository.getImagesTvShowById(TV_SHOW_ID) } returns mockTvShowImagesWithManyBackdrops
         // When
-        val result = manageTvShowDetailsUseCase.getImagesTvShowById(TV_SHOW_ID)
+        val result = getTvShowUseCase.getImagesTvShowById(TV_SHOW_ID)
         // Then
         assertThat(result).hasSize(10)
         assertThat(result).isEqualTo(mockTvShowImagesWithManyBackdrops.backdropsUrl.take(10))

@@ -2,11 +2,12 @@ package com.london.domain.usecase.details.tvshow
 
 import com.london.domain.entity.PagedFetchResponse
 import com.london.domain.entity.Trending
+import com.london.domain.entity.toprated.TopRatedMedia
 import com.london.domain.repository.SearchRepository
 import com.london.domain.repository.TvShowRepository
 import javax.inject.Inject
 
-class ManageTvShowDetailsUseCase @Inject constructor(
+class GetTvShowUseCase @Inject constructor(
     private val tvShowRepository: TvShowRepository,
     private val searchRepository: SearchRepository,
 ) {
@@ -44,6 +45,24 @@ class ManageTvShowDetailsUseCase @Inject constructor(
         }.take(limit)
     }
 
+    suspend fun getTvShowReviews(movieId: Int, pageNumber: Int) =
+        tvShowRepository.getTvShowReviews(movieId, pageNumber)
+
+    suspend fun getTopRatedTvSeries(
+        pageNumber: Int,
+        genreId: Int? = null
+    ): PagedFetchResponse<TopRatedMedia> {
+        val response = tvShowRepository.getTopRatedTvShows(pageNumber)
+
+        val filteredItems = response.items.filter { movie ->
+            genreId == null || movie.genreIds.contains(genreId)
+        }
+
+        return response.copy(
+            items = filteredItems,
+            totalPages = filteredItems.size
+        )
+    }
     companion object {
         const val IMAGE_LIMIT = 10
         const val POPULAR_LIMIT = 5

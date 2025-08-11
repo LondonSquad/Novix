@@ -12,5 +12,4 @@ interface ActorRepository {
     suspend fun getMovieCastById(id: Int): List<Actor>
     suspend fun getTrendingActors(page: Int): PagedFetchResponse<Actor>
     suspend fun getCastTvShowById(id: Int): TvShowCastEntity
-
 }

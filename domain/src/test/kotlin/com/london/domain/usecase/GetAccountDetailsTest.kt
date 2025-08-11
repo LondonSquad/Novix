@@ -2,6 +2,8 @@ package com.london.domain.usecase
 
 import com.london.domain.entity.AccountInfo
 import com.london.domain.repository.AccountRepository
+import com.london.domain.repository.AuthRepository
+import com.london.domain.usecase.authentication.AuthenticationUseCase
 import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.mockk
@@ -13,12 +15,16 @@ import org.junit.Test
 class GetAccountDetailsTest {
 
     private lateinit var accountRepository: AccountRepository
-    private lateinit var getAccountDetails: GetAccountDetails
+    private lateinit var authenticationUseCase: AuthenticationUseCase
+    private lateinit var authRepository: AuthRepository
 
     @Before
     fun setUp() {
         accountRepository = mockk()
-        getAccountDetails = GetAccountDetails(accountRepository)
+        authenticationUseCase = AuthenticationUseCase(
+            authRepository = authRepository,
+            accountRepository = accountRepository
+        )
     }
 
     @Test
@@ -28,7 +34,7 @@ class GetAccountDetailsTest {
         coEvery { accountRepository.getAccountDetails() } returns expectedAccountInfo
 
         // When
-        val result = getAccountDetails.invoke()
+        val result = authenticationUseCase.getAccountDetails()
 
         // Then
         assertEquals(expectedAccountInfo, result)
@@ -42,7 +48,7 @@ class GetAccountDetailsTest {
         coEvery { accountRepository.getAccountDetails() } returns expectedAccountInfo
 
         // When
-        val result = getAccountDetails.invoke()
+        val result = authenticationUseCase.getAccountDetails()
 
         // Then
         assertEquals(expectedAccountInfo, result)

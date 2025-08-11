@@ -10,42 +10,20 @@ class ManageRatingUseCase @Inject constructor(
     private val movieRepository: MovieRepository,
 ) {
 
-    suspend fun getRatedMedia(): List<RatedMedia> =
+    suspend fun getAllRatedMedia(): List<RatedMedia> =
         buildList {
             addAll(movieRepository.getAllRatedMovies())
             addAll(tvShowRepository.getAllRatedTvShows())
         }
 
-    suspend fun getRatedMediaSorted(): List<RatedMedia> =
-        getRatedMedia().sortedByDescending { it.rating }
+    suspend fun getAllRatedMediaSorted(): List<RatedMedia> =
+        getAllRatedMedia().sortedByDescending { it.rating }
 
-    suspend fun getRatedMovies(): List<RatedMedia> =
+    suspend fun getAllRatedMovies(): List<RatedMedia> =
         movieRepository.getAllRatedMovies()
 
-    suspend fun getRatedTvShows(): List<RatedMedia> =
+    suspend fun getAllRatedTvShows(): List<RatedMedia> =
         tvShowRepository.getAllRatedTvShows()
-
-    suspend fun getRateAccountTvEpisode(
-        tvShowId: Int,
-        seasonNumber: Int,
-        episodeNumber: Int
-    ) = tvShowRepository.getAccountTvEpisode(
-        tvShowId = tvShowId,
-        seasonNumber = seasonNumber,
-        episodeNumber = episodeNumber
-    ).rate
-
-    suspend fun addTvEpisodeRatingById(
-        id: Int,
-        rating: Int,
-        seasonNumber: Int,
-        episodeNumber: Int
-    ) = tvShowRepository.addTvEpisode(
-        tvShowId = id,
-        rating = rating,
-        seasonNumber = seasonNumber,
-        episodeNumber = episodeNumber,
-    )
 
     suspend fun addMovieRatingById(id: Int, rating: Int): Boolean =
         movieRepository.addMovieRatingById(id = id, rating = rating)
@@ -64,4 +42,26 @@ class ManageRatingUseCase @Inject constructor(
 
     suspend fun deleteTvShowRating(tvShowId: Int) =
         tvShowRepository.deleteTvShowRating(tvShowId = tvShowId)
+
+    suspend fun addTvEpisodeRatingById(
+        id: Int,
+        rating: Int,
+        seasonNumber: Int,
+        episodeNumber: Int
+    ) = tvShowRepository.addTvEpisode(
+        tvShowId = id,
+        rating = rating,
+        seasonNumber = seasonNumber,
+        episodeNumber = episodeNumber,
+    )
+
+    suspend fun getRateAccountTvEpisode(
+        tvShowId: Int,
+        seasonNumber: Int,
+        episodeNumber: Int
+    ) = tvShowRepository.getAccountTvEpisode(
+        tvShowId = tvShowId,
+        seasonNumber = seasonNumber,
+        episodeNumber = episodeNumber
+    ).rate
 }

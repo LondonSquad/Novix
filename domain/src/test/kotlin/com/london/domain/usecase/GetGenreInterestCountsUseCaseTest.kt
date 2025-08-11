@@ -2,6 +2,7 @@ package com.london.domain.usecase
 
 import com.google.common.truth.Truth.assertThat
 import com.london.domain.repository.SearchRepository
+import com.london.domain.usecase.search.ManageSearchUseCase
 import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.mockk
@@ -13,12 +14,12 @@ import org.junit.Test
 class GetGenreInterestCountsUseCaseTest {
 
     private lateinit var repository: SearchRepository
-    private lateinit var useCase: GetGenreInterestCountsUseCase
+    private lateinit var searchUseCase: ManageSearchUseCase
 
     @Before
     fun setUp() {
         repository = mockk()
-        useCase = GetGenreInterestCountsUseCase(repository)
+        searchUseCase = ManageSearchUseCase(repository)
     }
 
 
@@ -29,7 +30,7 @@ class GetGenreInterestCountsUseCaseTest {
 
         coEvery { repository.getGenreInterestCounts(mediaType) } returns expected
 
-        val result = useCase.invoke(mediaType)
+        val result = searchUseCase.getGenreInterestCounts(mediaType)
 
         assertThat(result).isEqualTo(expected)
         coVerify { repository.getGenreInterestCounts(mediaType) }

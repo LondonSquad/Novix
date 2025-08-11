@@ -4,9 +4,9 @@ import com.google.common.truth.Truth.assertThat
 import com.london.domain.entity.tvshowdetails.TvShowCastEntity
 import com.london.domain.entity.tvshowdetails.TvShowCastMemberEntity
 import com.london.domain.entity.tvshowdetails.TvShowRoleEntity
-import com.london.domain.repository.TvShowRepository
-import com.london.domain.usecase.details.tvshow.ManageTvEpisodesUseCase
 import com.london.domain.repository.ActorRepository
+import com.london.domain.repository.TvShowRepository
+import com.london.domain.usecase.details.tvshow.GetTvEpisodesUseCase
 import io.mockk.coEvery
 import io.mockk.mockk
 import kotlinx.coroutines.test.runTest
@@ -14,23 +14,25 @@ import org.junit.Before
 import org.junit.Test
 
 class GetCastByIdTest {
-    private lateinit var tvShowRepository: ActorRepository
-    private lateinit var manageTvEpisodesUseCase: ManageTvEpisodesUseCase
+    private lateinit var tvShowRepository: TvShowRepository
+    private lateinit var actorRepository: ActorRepository
+    private lateinit var getTvEpisodesUseCase: GetTvEpisodesUseCase
 
     @Before
     fun setUp() {
         tvShowRepository = mockk()
-        manageTvEpisodesUseCase = ManageTvEpisodesUseCase(
-            repository = tvShowRepository,
+        getTvEpisodesUseCase = GetTvEpisodesUseCase(
+            tvShowRepository = tvShowRepository,
+            actorRepository = actorRepository,
         )
     }
 
     @Test
     fun `should return cast when repository returns cast`() = runTest {
         //given
-        coEvery { tvShowRepository.getCastTvShowById(TV_SHOW_ID) } returns mockCast
+        coEvery { actorRepository.getCastTvShowById(TV_SHOW_ID) } returns mockCast
         //when
-        val result = manageTvEpisodesUseCase.getCastById(TV_SHOW_ID)
+        val result = getTvEpisodesUseCase.getCastById(TV_SHOW_ID)
         //then
         assertThat(result).isEqualTo(mockCast)
     }

@@ -4,8 +4,7 @@ import com.london.domain.entity.Actor
 import com.london.domain.entity.PagedFetchResponse
 import com.london.domain.repository.ActorRepository
 import com.london.domain.repository.TrendingRepository
-import com.london.domain.usecase.details.actor.ManageActorUseCase
-import com.london.domain.repository.ActorRepository
+import com.london.domain.usecase.details.actor.GetActorUseCase
 import io.mockk.coEvery
 import io.mockk.mockk
 import kotlinx.coroutines.test.runTest
@@ -16,7 +15,7 @@ import org.junit.Test
 
 class GetTrendingActorsUseCaseTest {
 
-    private lateinit var manageActorUseCase: ManageActorUseCase
+    private lateinit var getActorUseCase: GetActorUseCase
     private lateinit var trendingRepository: TrendingRepository
     private lateinit var actorRepository: ActorRepository
     private lateinit var useCase: GetTrendingActorsUseCase
@@ -26,7 +25,7 @@ class GetTrendingActorsUseCaseTest {
     fun setup() {
         trendingRepository = mockk()
         actorRepository = mockk()
-        manageActorUseCase = ManageActorUseCase(
+        getActorUseCase = GetActorUseCase(
             actorRepository = actorRepository,
             trendingRepository = trendingRepository
         )
@@ -37,7 +36,7 @@ class GetTrendingActorsUseCaseTest {
         val mockResponse = createMockActorsResponse()
         coEvery { trendingRepository.getTrendingActors(any()) } returns mockResponse
 
-        val result = manageActorUseCase.getTrendingActors(page = 1)
+        val result = getActorUseCase.getTrendingActors(page = 1)
 
         assertNotNull(result)
         assertEquals(1, result.currentPage)
@@ -57,8 +56,8 @@ class GetTrendingActorsUseCaseTest {
         val mockResponse = createMockActorsResponse()
         coEvery { trendingRepository.getTrendingActors(any()) } returns mockResponse
 
-        val result1 = manageActorUseCase.getTrendingActors(page = 1)
-        val result2 = manageActorUseCase.getTrendingActors(page = 2)
+        val result1 = getActorUseCase.getTrendingActors(page = 1)
+        val result2 = getActorUseCase.getTrendingActors(page = 2)
 
         assertNotNull(result1)
         assertNotNull(result2)
@@ -76,7 +75,7 @@ class GetTrendingActorsUseCaseTest {
         )
         coEvery { trendingRepository.getTrendingActors(any()) } returns emptyResponse
 
-        val result = manageActorUseCase.getTrendingActors(page = 1)
+        val result = getActorUseCase.getTrendingActors(page = 1)
 
         assertNotNull(result)
         assertEquals(1, result.currentPage)
@@ -99,7 +98,7 @@ class GetTrendingActorsUseCaseTest {
         )
         coEvery { trendingRepository.getTrendingActors(any()) } returns multipleActorsResponse
 
-        val result = manageActorUseCase.getTrendingActors(page = 1)
+        val result = getActorUseCase.getTrendingActors(page = 1)
 
         assertNotNull(result)
         assertEquals(3, result.items.size)
@@ -114,7 +113,7 @@ class GetTrendingActorsUseCaseTest {
         coEvery { trendingRepository.getTrendingActors(any()) } throws error
 
         try {
-            manageActorUseCase.getTrendingActors(page = 1)
+            getActorUseCase.getTrendingActors(page = 1)
             assert(false)
         } catch (e: Exception) {
             assertEquals("Repository error", e.message)
@@ -126,7 +125,7 @@ class GetTrendingActorsUseCaseTest {
         val mockResponse = createMockActorsResponse()
         coEvery { trendingRepository.getTrendingActors(any()) } returns mockResponse
 
-        val result = manageActorUseCase.getTrendingActors(page = -1)
+        val result = getActorUseCase.getTrendingActors(page = -1)
 
         assertNotNull(result)
         assertEquals(1, result.currentPage)
@@ -137,7 +136,7 @@ class GetTrendingActorsUseCaseTest {
         val mockResponse = createMockActorsResponse()
         coEvery { trendingRepository.getTrendingActors(any()) } returns mockResponse
 
-        val result = manageActorUseCase.getTrendingActors(page = 0)
+        val result = getActorUseCase.getTrendingActors(page = 0)
 
         assertNotNull(result)
         assertEquals(1, result.currentPage)
@@ -148,7 +147,7 @@ class GetTrendingActorsUseCaseTest {
         val mockResponse = createMockActorsResponse()
         coEvery { trendingRepository.getTrendingActors(any()) } returns mockResponse
 
-        val result = manageActorUseCase.getTrendingActors(page = 999)
+        val result = getActorUseCase.getTrendingActors(page = 999)
 
         assertNotNull(result)
         assertEquals(1, result.currentPage)
@@ -168,7 +167,7 @@ class GetTrendingActorsUseCaseTest {
         )
         coEvery { trendingRepository.getTrendingActors(any()) } returns actorsWithDifferentCharacterNames
 
-        val result = manageActorUseCase.getTrendingActors(page = 1)
+        val result = getActorUseCase.getTrendingActors(page = 1)
 
         assertNotNull(result)
         assertEquals(3, result.items.size)
@@ -191,7 +190,7 @@ class GetTrendingActorsUseCaseTest {
         )
         coEvery { trendingRepository.getTrendingActors(any()) } returns actorsWithDifferentProfilePictures
 
-        val result = manageActorUseCase.getTrendingActors(page = 1)
+        val result = getActorUseCase.getTrendingActors(page = 1)
 
         assertNotNull(result)
         assertEquals(3, result.items.size)

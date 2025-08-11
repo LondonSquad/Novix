@@ -1,4 +1,4 @@
-package com.london.domain.usecase.recent.search
+package com.london.domain.usecase.search.recent.search
 
 import com.london.domain.entity.recent.RecentSearch
 import com.london.domain.repository.RecentRepository

@@ -5,7 +5,6 @@ import com.london.domain.AppPreferencesService
 import com.london.domain.contentrestriction.ContentRestrictionLevel
 import com.london.domain.language.AppLanguage
 import com.london.domain.theme.AppTheme
-import com.london.domain.usecase.GetAccountDetails
 import com.london.domain.usecase.authentication.AuthenticationUseCase
 import com.london.presentation.shared.base.BaseViewModel
 import com.london.presentation.shared.base.ErrorState

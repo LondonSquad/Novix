@@ -1,9 +1,7 @@
 package com.london.presentation.feature.details.actor
 
 import androidx.lifecycle.SavedStateHandle
-import com.london.domain.usecase.details.actor.ManageActorUseCase
-import com.london.domain.usecase.toppicks.GetActorMoviePicksByIdUseCase
-import com.london.domain.usecase.toppicks.GetActorTvShowPicksByIdUseCase
+import com.london.domain.usecase.details.actor.GetActorUseCase
 import com.london.presentation.navigation.Screen
 import com.london.presentation.navigation.getArgs
 import com.london.presentation.shared.base.BaseViewModel
@@ -12,9 +10,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class ActorDetailsViewModel @Inject constructor(
-    private val manageActorUseCase: ManageActorUseCase,
-    private val getActorMoviePicksByIdUseCase: GetActorMoviePicksByIdUseCase,
-    private val getActorTvShowPicksByIdUseCase: GetActorTvShowPicksByIdUseCase,
+    private val getActorUseCase: GetActorUseCase,
     savedStateHandle: SavedStateHandle,
 ) : BaseViewModel<ActorDetailsUiState, ActorEffectUiState>(ActorDetailsUiState()),
     ActorDetailsContract {
@@ -64,7 +60,7 @@ class ActorDetailsViewModel @Inject constructor(
     private fun getActorImage() {
         tryToExecute(
             block = {
-                manageActorUseCase.getActorImagesById(actorId ?: 0)
+                getActorUseCase.getActorImagesById(actorId ?: 0)
             },
             onStart = { updateState { copy(isLoading = true) } },
             onSuccess = { images -> updateState { copy(actorImageDetails = images) } },
@@ -79,7 +75,7 @@ class ActorDetailsViewModel @Inject constructor(
 
         tryToExecute(
             block = {
-                manageActorUseCase.getActorDetailsById(actorId ?: 0)
+                getActorUseCase.getActorDetailsById(actorId ?: 0)
             },
             onStart = { updateState { copy(isLoading = true) } },
             onSuccess = { actorDetails ->
@@ -105,7 +101,7 @@ class ActorDetailsViewModel @Inject constructor(
     private fun getActorMovieDetails() {
         tryToExecute(
             block = {
-                getActorMoviePicksByIdUseCase.invoke(actorId ?: 0)
+                getActorUseCase.getActorMoviePicksById(actorId ?: 0)
             },
             onStart = { updateState { copy(isLoading = true) } },
             onSuccess = { movieDetails ->
@@ -126,7 +122,7 @@ class ActorDetailsViewModel @Inject constructor(
     private fun getActorTvShowDetails() {
         tryToExecute(
             block = {
-                getActorTvShowPicksByIdUseCase.invoke(actorId ?: 0)
+                getActorUseCase.getActorTvShowPicksById(actorId ?: 0)
             },
             onStart = { updateState { copy(isLoading = true) } },
             onSuccess = { tvShows ->

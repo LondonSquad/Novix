@@ -1,6 +1,6 @@
 package com.london.presentation.feature.home.trending.actor
 
-import com.london.domain.usecase.details.actor.ManageActorUseCase
+import com.london.domain.usecase.details.actor.GetActorUseCase
 import com.london.presentation.shared.base.BaseViewModel
 import com.london.presentation.shared.base.createPagingSourceFlow
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -8,7 +8,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class TrendingActorsViewModel @Inject constructor(
-    private val manageActorUseCase: ManageActorUseCase,
+    private val getActorUseCase: GetActorUseCase,
 ) : BaseViewModel<TrendingActorsUiState, TrendingActorsEffect>(TrendingActorsUiState()),
     TrendingActorsContract {
 
@@ -26,7 +26,7 @@ class TrendingActorsViewModel @Inject constructor(
         tryToExecute(
             block = {
                 val actorsFlow = createPagingSourceFlow(query = "") { _, pageNumber ->
-                    val actors = manageActorUseCase.getTrendingActors(page = pageNumber)
+                    val actors = getActorUseCase.getTrendingActors(page = pageNumber)
                     actors.copy(items = actors.items)
                 }
                 actorsFlow

@@ -5,16 +5,14 @@ import com.london.domain.entity.actordetails.ActorDetails
 import com.london.domain.entity.moviedatails.MediaStates
 import com.london.domain.entity.recent.MediaType
 import com.london.domain.repository.ActorRepository
-import com.london.domain.repository.TrendingRepository
-import com.london.domain.usecase.details.actor.ManageActorUseCase
 import com.london.domain.repository.MovieRepository
 import com.london.domain.repository.TvShowRepository
+import com.london.domain.usecase.details.actor.GetActorUseCase
 import com.london.domain.usecase.rating.ManageRatingUseCase
 import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.mockk
 import kotlinx.coroutines.test.runTest
-import org.junit.Assert.assertEquals
 import org.junit.Assert
 import org.junit.Assert.assertEquals
 import org.junit.Before
@@ -23,16 +21,17 @@ import org.junit.Test
 class GetActorDetailsByIdUseCaseTest {
 
     private lateinit var actorRepository: ActorRepository
-    private lateinit var trendingRepository: TrendingRepository
-    private lateinit var manageActorUseCase: ManageActorUseCase
+    private lateinit var movieRepository: MovieRepository
+    private lateinit var tvShowRepository: TvShowRepository
+    private lateinit var getActorUseCase: GetActorUseCase
 
     @Before
     fun setup() {
         actorRepository = mockk()
-        trendingRepository = mockk()
-        manageActorUseCase = ManageActorUseCase(
+        getActorUseCase = GetActorUseCase(
             actorRepository = actorRepository,
-            trendingRepository = trendingRepository
+            movieRepository = movieRepository,
+            tvShowRepository = tvShowRepository
         )
     }
 
@@ -44,7 +43,7 @@ class GetActorDetailsByIdUseCaseTest {
         coEvery { actorRepository.getActorDetailsById(actorId) } returns expectedResult
 
         // When
-        val result = manageActorUseCase.getActorDetailsById(actorId)
+        val result = getActorUseCase.getActorDetailsById(actorId)
 
         // Then
         coVerify(exactly = 1) { actorRepository.getActorDetailsById(actorId) }
@@ -120,7 +119,7 @@ class RatingUseCaseTest {
         coEvery { movieRepository.getAllRatedMovies() } returns mockRatedMedia
 
         // When
-        val result = manageRatingUseCase.getRatedMovies()
+        val result = manageRatingUseCase.getAllRatedMovies()
 
         // Then
         assertEquals(2, result.size)
@@ -135,7 +134,7 @@ class RatingUseCaseTest {
         coEvery { tvShowRepository.getAllRatedTvShows() } returns mockRatedMediaWithTvShows
 
         // When
-        val result = manageRatingUseCase.getRatedTvShows()
+        val result = manageRatingUseCase.getAllRatedTvShows()
 
         // Then
         assertEquals(2, result.size)
@@ -152,7 +151,7 @@ class RatingUseCaseTest {
         coEvery { movieRepository.getAllRatedMovies() } returns emptyList()
 
         // When
-        val result = manageRatingUseCase.getRatedMovies()
+        val result = manageRatingUseCase.getAllRatedMovies()
 
         // Then
         assertEquals(0, result.size)
@@ -164,7 +163,7 @@ class RatingUseCaseTest {
         coEvery { tvShowRepository.getAllRatedTvShows() } returns emptyList()
 
         // When
-        val result = manageRatingUseCase.getRatedTvShows()
+        val result = manageRatingUseCase.getAllRatedTvShows()
 
         // Then
         assertEquals(0, result.size)

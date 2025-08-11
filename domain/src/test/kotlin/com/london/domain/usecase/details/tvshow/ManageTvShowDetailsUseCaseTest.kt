@@ -8,9 +8,6 @@ import com.london.domain.entity.popular.PopularMedia
 import com.london.domain.entity.recent.MediaType
 import com.london.domain.entity.tvshowdetails.TvShowDetailsEntity
 import com.london.domain.entity.tvshowdetails.TvShowGenreEntity
-import com.london.domain.error.TvShowDetailsSearchFailedException
-import com.london.domain.error.TvShowSearchFailedException
-import com.london.domain.repository.PopularRepository
 import com.london.domain.repository.SearchRepository
 import com.london.domain.repository.TvShowRepository
 import com.london.domain.repository.discover.DiscoverRepository
@@ -27,14 +24,14 @@ class ManageTvShowDetailsUseCaseTest {
     private lateinit var tvShowRepository: TvShowRepository
     private lateinit var searchRepository: SearchRepository
     private lateinit var discoverRepository: DiscoverRepository
-    private lateinit var manageTvShowDetailsUseCase: ManageTvShowDetailsUseCase
+    private lateinit var getTvShowUseCase: GetTvShowUseCase
 
     @Before
     fun setUp() {
         tvShowRepository = mockk()
         searchRepository = mockk()
         discoverRepository = mockk()
-        manageTvShowDetailsUseCase = ManageTvShowDetailsUseCase(
+        getTvShowUseCase = GetTvShowUseCase(
             tvShowRepository = tvShowRepository,
             searchRepository = searchRepository,
         )
@@ -46,7 +43,7 @@ class ManageTvShowDetailsUseCaseTest {
         //given
         coEvery { tvShowRepository.getTvShowDetailsById(TV_SHOW_ID) } returns mockTvShowDetails
         //when
-        val result = manageTvShowDetailsUseCase.getTvShowDetails(TV_SHOW_ID)
+        val result = getTvShowUseCase.getTvShowDetails(TV_SHOW_ID)
         //then
         assertThat(result).isEqualTo(mockTvShowDetails)
     }
@@ -60,7 +57,7 @@ class ManageTvShowDetailsUseCaseTest {
         coEvery { tvShowRepository.getPopularTvShows() } returns mockTvShows
 
         // When
-        val result = manageTvShowDetailsUseCase.getPopularTvShows()
+        val result = getTvShowUseCase.getPopularTvShows()
 
         // Then
         assertThat(result).hasSize(MOCK_TV_SHOWS_LIMITED.size)
@@ -76,7 +73,7 @@ class ManageTvShowDetailsUseCaseTest {
         coEvery { tvShowRepository.getPopularTvShows() } returns mockTvShows
 
         // When
-        val result = manageTvShowDetailsUseCase.getPopularTvShows(CUSTOM_LIMIT)
+        val result = getTvShowUseCase.getPopularTvShows(CUSTOM_LIMIT)
 
         // Then
         assertThat(result).hasSize(CUSTOM_LIMIT)
@@ -93,7 +90,7 @@ class ManageTvShowDetailsUseCaseTest {
             coEvery { tvShowRepository.getPopularTvShows() } returns mockTvShows
 
             // When
-            val result = manageTvShowDetailsUseCase.getPopularTvShows(LARGE_LIMIT)
+            val result = getTvShowUseCase.getPopularTvShows(LARGE_LIMIT)
 
             // Then
             assertThat(result).hasSize(MOCK_TV_SHOWS_LIMITED.size)
@@ -108,7 +105,7 @@ class ManageTvShowDetailsUseCaseTest {
         coEvery { tvShowRepository.getPopularTvShows() } returns EMPTY_TV_SHOWS_LIST
 
         // When
-        val result = manageTvShowDetailsUseCase.getPopularTvShows()
+        val result = getTvShowUseCase.getPopularTvShows()
 
         // Then
         assertThat(result).isEmpty()
@@ -122,7 +119,7 @@ class ManageTvShowDetailsUseCaseTest {
         coEvery { tvShowRepository.getPopularTvShows() } returns mockTvShows
 
         // When
-        val result = manageTvShowDetailsUseCase.getPopularTvShows(ZERO_LIMIT)
+        val result = getTvShowUseCase.getPopularTvShows(ZERO_LIMIT)
 
         // Then
         assertThat(result).isEmpty()
@@ -137,7 +134,7 @@ class ManageTvShowDetailsUseCaseTest {
 
         // When & Then
         try {
-            manageTvShowDetailsUseCase.getPopularTvShows()
+            getTvShowUseCase.getPopularTvShows()
             assertThat(false).isTrue()
         } catch (e: RuntimeException) {
             assertThat(e.message).isEqualTo(EXCEPTION_MESSAGE)
@@ -153,7 +150,7 @@ class ManageTvShowDetailsUseCaseTest {
         coEvery { tvShowRepository.getPopularTvShows() } returns mockTvShows
 
         // When
-        val result = manageTvShowDetailsUseCase.getPopularTvShows(1)
+        val result = getTvShowUseCase.getPopularTvShows(1)
 
         // Then
         assertThat(result).hasSize(1)
@@ -174,7 +171,7 @@ class ManageTvShowDetailsUseCaseTest {
         coEvery { tvShowRepository.getPopularTvShows() } returns mockTvShows
 
         // When
-        val result = manageTvShowDetailsUseCase.getPopularTvShows(CUSTOM_LIMIT)
+        val result = getTvShowUseCase.getPopularTvShows(CUSTOM_LIMIT)
 
         // Then
         assertThat(result).hasSize(CUSTOM_LIMIT)
@@ -192,7 +189,7 @@ class ManageTvShowDetailsUseCaseTest {
         coEvery { tvShowRepository.getPopularTvShows() } returns mockTvShows
 
         // When
-        val result = manageTvShowDetailsUseCase.getPopularTvShows()
+        val result = getTvShowUseCase.getPopularTvShows()
 
         // Then
         assertThat(result).isNotEmpty()
@@ -242,7 +239,7 @@ class ManageTvShowDetailsUseCaseTest {
         )
 
         val exception = assertThrows<Exception> {
-            manageTvShowDetailsUseCase.getTrendingTvShows(page = 1)
+            getTvShowUseCase.getTrendingTvShows(page = 1)
         }
 
         assertEquals("Failed to fetch movie details", exception.message)
@@ -263,10 +260,10 @@ class ManageTvShowDetailsUseCaseTest {
     @Test
     fun `should return tv show videos when repository returns videos`() = runTest {
         // given
-        coEvery { manageTvShowDetailsUseCase.getTvShowVideoProvider(TV_SHOW_ID) } returns mockVideos
+        coEvery { getTvShowUseCase.getTvShowVideoProvider(TV_SHOW_ID) } returns mockVideos
 
         // when
-        val result = manageTvShowDetailsUseCase.getTvShowVideoProvider(TV_SHOW_ID)
+        val result = getTvShowUseCase.getTvShowVideoProvider(TV_SHOW_ID)
 
         // then
         assertThat(result).isNotEmpty()
@@ -275,10 +272,10 @@ class ManageTvShowDetailsUseCaseTest {
     @Test
     fun `should return empty list when repository returns no videos`() = runTest {
         // given
-        coEvery { manageTvShowDetailsUseCase.getTvShowVideoProvider(TV_SHOW_ID) } returns emptyList()
+        coEvery { getTvShowUseCase.getTvShowVideoProvider(TV_SHOW_ID) } returns emptyList()
 
         // when
-        val result = manageTvShowDetailsUseCase.getTvShowVideoProvider(TV_SHOW_ID)
+        val result = getTvShowUseCase.getTvShowVideoProvider(TV_SHOW_ID)
 
         // then
         assertThat(result).isEmpty()
@@ -291,10 +288,10 @@ class ManageTvShowDetailsUseCaseTest {
         runTest {
             //given
             coEvery {
-                manageTvShowDetailsUseCase.getTvShowsByCategory(CATEGORY_ID, PAGE_NUMBER)
+                getTvShowUseCase.getTvShowsByCategory(CATEGORY_ID, PAGE_NUMBER)
             } returns pagedFetchResponse
             //when
-            val result = manageTvShowDetailsUseCase.getTvShowsByCategory(CATEGORY_ID, PAGE_NUMBER)
+            val result = getTvShowUseCase.getTvShowsByCategory(CATEGORY_ID, PAGE_NUMBER)
             //then
             assertThat(result).isEqualTo(pagedFetchResponse)
         }
@@ -306,29 +303,16 @@ class ManageTvShowDetailsUseCaseTest {
         runTest {
             // Given
             coEvery {
-                manageTvShowDetailsUseCase.getTvShowList(NAME, PAGE_NUMBER)
+                getTvShowUseCase.getTvShowList(NAME, PAGE_NUMBER)
             } returns pagedFetchResponse
 
             // When
-            val result = manageTvShowDetailsUseCase.getTvShowList(NAME, PAGE_NUMBER)
+            val result = getTvShowUseCase.getTvShowList(NAME, PAGE_NUMBER)
 
             // Then
             assertThat(result).isEqualTo(pagedFetchResponse)
         }
 
-    @Test
-    fun `should throw TvShowSearchFailedException when repository throws TvShowSearchFailedException`() =
-        runTest {
-            //given
-            coEvery {
-                manageTvShowDetailsUseCase.getTvShowList(NAME, PAGE_NUMBER)
-            } throws TvShowSearchFailedException()
-
-            //when //then
-            assertThrows<TvShowSearchFailedException> {
-                manageTvShowDetailsUseCase.getTvShowList(NAME, PAGE_NUMBER)
-            }
-        }
     // endregion
 
     private fun createMockTvShow(mockData: MockPopularMedia): PopularMedia =

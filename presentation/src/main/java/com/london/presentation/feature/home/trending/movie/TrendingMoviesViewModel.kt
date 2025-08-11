@@ -1,6 +1,6 @@
 package com.london.presentation.feature.home.trending.movie
 
-import com.london.domain.usecase.details.movie.ManageMovieUseCase
+import com.london.domain.usecase.details.movie.GetMovieUseCase
 import com.london.presentation.shared.base.BaseViewModel
 import com.london.presentation.shared.base.createPagingSourceFlow
 import com.london.presentation.utils.MovieGenre
@@ -9,7 +9,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class TrendingMoviesViewModel @Inject constructor(
-    private val manageMovieUseCase: ManageMovieUseCase,
+    private val getMovieUseCase: GetMovieUseCase,
 ) : BaseViewModel<TrendingMoviesUiState, TrendingMoviesEffect>(TrendingMoviesUiState()),
     TrendingMoviesContract {
 
@@ -39,7 +39,7 @@ class TrendingMoviesViewModel @Inject constructor(
         tryToExecute(
             block = {
                 val moviesFlow = createPagingSourceFlow(query = "") { _, pageNumber ->
-                    val movies = manageMovieUseCase.getTrendingMovies(page = pageNumber)
+                    val movies = getMovieUseCase.getTrendingMovies(page = pageNumber)
                     val filteredItems =
                         if (state.value.selectedGenreId != null && state.value.selectedGenreId != -1) {
                             movies.items.filter { it.genreIds.contains(state.value.selectedGenreId) }

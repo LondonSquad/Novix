@@ -2,8 +2,9 @@ package com.london.domain.usecase
 
 import com.london.domain.entity.actordetails.ActorImageDetails
 import com.london.domain.repository.ActorRepository
-import com.london.domain.repository.TrendingRepository
-import com.london.domain.usecase.details.actor.ManageActorUseCase
+import com.london.domain.repository.MovieRepository
+import com.london.domain.repository.TvShowRepository
+import com.london.domain.usecase.details.actor.GetActorUseCase
 import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.mockk
@@ -15,16 +16,17 @@ import org.junit.Test
 class GetActorImagesByIdUseCaseTest {
 
     private lateinit var actorRepository: ActorRepository
-    private lateinit var trendingRepository: TrendingRepository
-    private lateinit var manageActorUseCase: ManageActorUseCase
+    private lateinit var movieRepository: MovieRepository
+    private lateinit var tvShowRepository: TvShowRepository
+    private lateinit var getActorUseCase: GetActorUseCase
 
     @Before
     fun setup() {
         actorRepository = mockk()
-        trendingRepository = mockk()
-        manageActorUseCase = ManageActorUseCase(
+        getActorUseCase = GetActorUseCase(
             actorRepository = actorRepository,
-            trendingRepository = trendingRepository
+            movieRepository = movieRepository,
+            tvShowRepository = tvShowRepository
         )
     }
 
@@ -43,7 +45,7 @@ class GetActorImagesByIdUseCaseTest {
             coEvery { actorRepository.getActorImagesById(actorId) } returns mockActorImageDetails
 
             // When
-            val result = manageActorUseCase.getActorImagesById(actorId)
+            val result = getActorUseCase.getActorImagesById(actorId)
 
             // Then
             coVerify(exactly = 1) { actorRepository.getActorImagesById(actorId) }
@@ -61,7 +63,7 @@ class GetActorImagesByIdUseCaseTest {
         coEvery { actorRepository.getActorImagesById(actorId) } returns mockActorImageDetails
 
         // When
-        val result = manageActorUseCase.getActorImagesById(actorId)
+        val result = getActorUseCase.getActorImagesById(actorId)
 
         // Then
         coVerify(exactly = 1) { actorRepository.getActorImagesById(actorId) }
@@ -83,7 +85,7 @@ class GetActorImagesByIdUseCaseTest {
         coEvery { actorRepository.getActorImagesById(actorId) } returns mockActorImageDetails
 
         // When
-        val result = manageActorUseCase.getActorImagesById(actorId)
+        val result = getActorUseCase.getActorImagesById(actorId)
 
         // Then
         coVerify(exactly = 1) { actorRepository.getActorImagesById(actorId) }

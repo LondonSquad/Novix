@@ -1,7 +1,7 @@
 package com.london.presentation.feature.category.tvshow
 
 import androidx.lifecycle.SavedStateHandle
-import com.london.domain.usecase.details.tvshow.ManageTvShowDetailsUseCase
+import com.london.domain.usecase.details.tvshow.GetTvShowUseCase
 import com.london.presentation.navigation.Screen
 import com.london.presentation.navigation.getArgs
 import com.london.presentation.shared.base.BaseViewModel
@@ -11,7 +11,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class TvShowCategoryViewModel @Inject constructor(
-    private val managerTvShowDetailsUseCase: ManageTvShowDetailsUseCase,
+    private val managerTvShowDetailsUseCase: GetTvShowUseCase,
     savedStateHandle: SavedStateHandle
 ) : BaseViewModel<TvShowCategoryUiState, TvShowCategoryEffect>(TvShowCategoryUiState()),
     TvShowCategoryContract {

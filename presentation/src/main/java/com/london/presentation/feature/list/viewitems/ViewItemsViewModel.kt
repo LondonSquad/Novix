@@ -1,10 +1,7 @@
 package com.london.presentation.feature.list.viewitems
 
 import androidx.lifecycle.SavedStateHandle
-import com.london.domain.usecase.movielist.GetMovieListDetailsUseCase
-import com.london.domain.usecase.movielist.GetMovieListNameUseCase
 import com.london.domain.usecase.movielist.ManageMovieListUseCase
-import com.london.domain.usecase.movielist.RemoveMovieFromListUseCase
 import com.london.presentation.navigation.Screen
 import com.london.presentation.navigation.getArgs
 import com.london.presentation.shared.base.BaseViewModel
