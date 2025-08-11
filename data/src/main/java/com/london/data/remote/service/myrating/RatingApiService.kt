@@ -6,6 +6,7 @@ import com.london.data.remote.model.details.rating.RatingRemoteResponse
 import com.london.data.remote.model.myrating.RatingMediaResponse
 import retrofit2.Response
 import retrofit2.http.Body
+import retrofit2.http.DELETE
 import retrofit2.http.GET
 import retrofit2.http.POST
 import retrofit2.http.Path
@@ -40,7 +41,7 @@ interface RatingApiService {
         @Body ratingRequest: RatingRemoteBody
     ): Response<RatingRemoteResponse>
 
-    @POST("/tv/{series_id}/season/{season_number}/episode/{episode_number}/rating")
+    @POST("3/tv/{series_id}/season/{season_number}/episode/{episode_number}/rating")
     suspend fun addTvEpisode(
         @Path("series_id") tvShowId: Int,
         @Path("season_number") seasonNumber: Int,
@@ -48,5 +49,17 @@ interface RatingApiService {
         @Query("guest_session_id") guestSessionId: String?,
         @Query("session_id") userSessionId: String?,
         @Body ratingRequest: RatingRemoteBody
+    ): Response<RatingRemoteResponse>
+
+    @DELETE("3/movie/{movie_id}/rating")
+    suspend fun deleteMovieRating(
+        @Path("movie_id") movieId: Int,
+        @Query("session_id") sessionId: String?
+    ): Response<RatingRemoteResponse>
+
+    @DELETE("/3/tv/{series_id}/rating")
+    suspend fun deleteTvShowRating(
+        @Path("series_id") tvShowId: Int,
+        @Query("session_id") sessionId: String?
     ): Response<RatingRemoteResponse>
 }

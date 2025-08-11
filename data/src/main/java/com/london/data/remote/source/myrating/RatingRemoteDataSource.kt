@@ -37,4 +37,8 @@ interface RatingRemoteDataSource {
         userSessionId: String?,
         guestSessionId: String?
     ): Result<RatingRemoteResponse>
+
+    suspend fun deleteMovieRating(movieId: Int , sessionId: String?): Result<RatingRemoteResponse>
+
+    suspend fun deleteTvShowRating(tvShowId: Int , sessionId: String?): Result<RatingRemoteResponse>
 }
