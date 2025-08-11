@@ -4,7 +4,7 @@ import com.google.common.truth.Truth.assertThat
 import com.london.domain.entity.tvshowdetails.TvShowCastEntity
 import com.london.domain.entity.tvshowdetails.TvShowCastMemberEntity
 import com.london.domain.entity.tvshowdetails.TvShowRoleEntity
-import com.london.domain.repository.TvShowRepository
+import com.london.domain.repository.ActorRepository
 import io.mockk.coEvery
 import io.mockk.mockk
 import kotlinx.coroutines.test.runTest
@@ -12,7 +12,7 @@ import org.junit.Before
 import org.junit.Test
 
 class GetCastByIdTest {
-    lateinit var tvShowRepository: TvShowRepository
+    lateinit var tvShowRepository: ActorRepository
     lateinit var getCastById: GetCastById
 
     @Before

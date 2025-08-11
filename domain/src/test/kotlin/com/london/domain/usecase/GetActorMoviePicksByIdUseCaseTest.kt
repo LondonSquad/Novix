@@ -1,7 +1,7 @@
 package com.london.domain.usecase
 
-import com.london.domain.entity.actordetails.actormovie.ActorMovieDetails
-import com.london.domain.repository.ActorRepository
+import com.london.domain.entity.actordetails.cast.CastDetails
+import com.london.domain.repository.MovieRepository
 import com.london.domain.usecase.toppicks.GetActorMoviePicksByIdUseCase
 import io.mockk.coEvery
 import io.mockk.coVerify
@@ -13,7 +13,7 @@ import org.junit.jupiter.api.Assertions.assertEquals
 
 class GetActorMoviePicksByIdUseCaseTest {
 
-    private lateinit var repository: ActorRepository
+    private lateinit var repository: MovieRepository
     private lateinit var useCase: GetActorMoviePicksByIdUseCase
 
     @Before
@@ -26,7 +26,7 @@ class GetActorMoviePicksByIdUseCaseTest {
     fun `should call repository getActorMoviePicksById with correct id and return result`() = runTest {
         // Given
         val actorId = 1
-        val expectedResult = mockk<ActorMovieDetails>()
+        val expectedResult = mockk<CastDetails>()
         coEvery { repository.getActorMoviePicksById(actorId) } returns expectedResult
 
         // When

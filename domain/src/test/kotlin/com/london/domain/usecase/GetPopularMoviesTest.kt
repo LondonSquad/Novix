@@ -1,8 +1,9 @@
 package com.london.domain.usecase
 
 import com.google.common.truth.Truth.assertThat
-import com.london.domain.entity.popular.PopularMovie
-import com.london.domain.repository.PopularRepository
+import com.london.domain.entity.popular.PopularMedia
+import com.london.domain.entity.recent.MediaType
+import com.london.domain.repository.MovieRepository
 import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.mockk
@@ -12,7 +13,7 @@ import org.junit.Test
 
 class GetPopularMoviesTest {
 
-    private lateinit var repository: PopularRepository
+    private lateinit var repository: MovieRepository
     private lateinit var getPopularMovies: GetPopularMovies
 
     @Before
@@ -25,8 +26,20 @@ class GetPopularMoviesTest {
     fun `when call invoke should return list of popular movies from repository`() = runTest {
         // Given
         val expectedMovies = listOf(
-            PopularMovie(id = 1, title = "Movie One", posterUrl = "path1", rating = 7.5),
-            PopularMovie(id = 2, title = "Movie Two", posterUrl = "path2", rating = 8.3)
+            PopularMedia(
+                id = 1,
+                name = "Movie One",
+                posterUrl = "path1",
+                rating = 7.5,
+                mediaType = MediaType.Movie
+            ),
+            PopularMedia(
+                id = 2,
+                name = "Movie Two",
+                rating = 8.3,
+                posterUrl = "path2",
+                mediaType = MediaType.Movie
+            )
         )
         coEvery { repository.getPopularMovies() } returns expectedMovies
 

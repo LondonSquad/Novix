@@ -1,6 +1,7 @@
 package com.london.presentation.feature.reviews
 
 import androidx.lifecycle.SavedStateHandle
+import com.london.domain.entity.recent.MediaType
 import com.london.domain.usecase.reviews.GetMovieReviewsUseCase
 import com.london.domain.usecase.reviews.GetTvShowReviewsUseCase
 import com.london.presentation.navigation.Screen

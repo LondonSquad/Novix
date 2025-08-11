@@ -1,13 +1,16 @@
 package com.london.domain.repository
 
+import com.london.domain.entity.Actor
+import com.london.domain.entity.PagedFetchResponse
 import com.london.domain.entity.actordetails.ActorDetails
-import com.london.domain.entity.actordetails.actorimage.ActorImageDetails
-import com.london.domain.entity.actordetails.actormovie.ActorMovieDetails
-import com.london.domain.entity.actordetails.actortvshow.ActorTvShowDetails
+import com.london.domain.entity.actordetails.ActorImageDetails
+import com.london.domain.entity.tvshowdetails.TvShowCastEntity
 
 interface ActorRepository {
     suspend fun getActorDetailsById(id: Int): ActorDetails
-    suspend fun getActorMoviePicksById(id: Int): ActorMovieDetails
-    suspend fun getActorTvShowPicksById(id: Int): ActorTvShowDetails
     suspend fun getActorImagesById(id: Int): ActorImageDetails
+    suspend fun getMovieCastById(id: Int): List<Actor>
+    suspend fun getTrendingActors(page: Int): PagedFetchResponse<Actor>
+    suspend fun getCastTvShowById(id: Int): TvShowCastEntity
+
 }

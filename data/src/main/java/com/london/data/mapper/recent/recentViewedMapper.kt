@@ -9,11 +9,17 @@ import com.london.domain.entity.recent.MediaType
 import com.london.domain.entity.recent.RecentViewed
 
 fun RecentViewedLocal.toEntity(): RecentViewed = RecentViewed(
-    id = id, imageUrl = imageUrl, type = type.toEntity(), viewDate = viewDate
+    id = id,
+    imageUrl = imageUrl,
+    type = type.toEntity(),
+    viewDate = viewDate
 )
 
 fun RecentViewed.toLocal(): RecentViewedLocal = RecentViewedLocal(
-    id = id, imageUrl = imageUrl, type = type.toLocal(), viewDate = viewDate
+    id = id,
+    imageUrl = imageUrl,
+    type = type.toLocal(),
+    viewDate = viewDate
 )
 
 fun MediaTypeLocal.toEntity(): MediaType =
