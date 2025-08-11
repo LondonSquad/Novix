@@ -1,18 +1,16 @@
-package com.london.domain.usecase
+package com.london.domain.usecase.accountdetails
 
 import com.london.domain.entity.AccountInfo
 import com.london.domain.repository.AccountRepository
-import com.london.domain.usecase.accountdetails.GetAccountDetailsUseCase
 import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.mockk
 import kotlinx.coroutines.test.runTest
-import org.junit.Assert.assertEquals
+import org.junit.Assert
 import org.junit.Before
 import org.junit.Test
 
-class GetAccountDetailsTest {
-
+class GetAccountDetailsUseCaseTest {
     private lateinit var accountRepository: AccountRepository
     private lateinit var getAccountDetailsUseCase: GetAccountDetailsUseCase
 
@@ -35,7 +33,7 @@ class GetAccountDetailsTest {
         val result = getAccountDetailsUseCase.invoke()
 
         // Then
-        assertEquals(expectedAccountInfo, result)
+        Assert.assertEquals(expectedAccountInfo, result)
         coVerify { accountRepository.getAccountDetails() }
     }
 
@@ -50,7 +48,7 @@ class GetAccountDetailsTest {
             val result = getAccountDetailsUseCase.invoke()
 
             // Then
-            assertEquals(expectedAccountInfo, result)
+            Assert.assertEquals(expectedAccountInfo, result)
             coVerify { accountRepository.getAccountDetails() }
         }
 }
