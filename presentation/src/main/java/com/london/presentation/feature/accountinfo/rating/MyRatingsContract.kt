@@ -1,19 +1,21 @@
 package com.london.presentation.feature.accountinfo.rating
 
-interface MyRatingContract {
+interface MyRatingsContract {
     fun onBackClicked()
-    fun onDelete(id: Int)
     fun onItemClick(id: Int)
     fun onMovieClick(id: Int)
     fun onTvShowClick(id: Int)
     fun onRatingCategorySelected(category: RatingCategory)
+    fun onDeleteMovie(id: Int)
+    fun onDeleteShow(id: Int)
 }
 
-fun defaultMyRatingContract() = object : MyRatingContract {
+fun defaultMyRatingContract() = object : MyRatingsContract {
     override fun onBackClicked() {}
-    override fun onDelete(id: Int) {}
     override fun onItemClick(id: Int) {}
+    override fun onDeleteShow(id: Int) {}
     override fun onMovieClick(id: Int) {}
     override fun onTvShowClick(id: Int) {}
+    override fun onDeleteMovie(id: Int) {}
     override fun onRatingCategorySelected(category: RatingCategory) {}
 }
