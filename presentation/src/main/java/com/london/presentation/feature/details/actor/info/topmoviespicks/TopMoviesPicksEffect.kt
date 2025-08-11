@@ -2,5 +2,5 @@ package com.london.presentation.feature.details.actor.info.topmoviespicks
 
 sealed interface TopMoviesPicksEffect {
     data object NavigateBack : TopMoviesPicksEffect
-    data class NavigationToMovieDetails(val movieId: Int) : TopMoviesPicksEffect
+    data class NavigateToMovieDetails(val movieId: Int) : TopMoviesPicksEffect
 }

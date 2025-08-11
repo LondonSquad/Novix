@@ -4,10 +4,10 @@ import com.london.domain.entity.actordetails.cast.CastDetails
 import com.london.presentation.shared.base.ErrorState
 
 data class TopMoviesPicksUiState(
-    val movieDetails: CastDetails = CastDetails(),
-    val errorState: ErrorState? = null,
-    val isLoading: Boolean = false,
+    val id: Int = 0,
     val isSaved: Boolean = false,
     val backdropPath: String = "",
-    val id: Int = 0,
+    val isLoading: Boolean = false,
+    val errorState: ErrorState? = null,
+    val actorMovieDetails: CastDetails = CastDetails(),
 )

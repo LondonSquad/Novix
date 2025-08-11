@@ -1,6 +1,7 @@
 package com.london.presentation.feature.details.actor.info.topmoviespicks
 
 import androidx.lifecycle.SavedStateHandle
+import com.london.domain.entity.actordetails.cast.CastDetails
 import com.london.domain.usecase.toppicks.GetActorMoviePicksByIdUseCase
 import com.london.presentation.navigation.Screen
 import com.london.presentation.navigation.getArgs
@@ -16,7 +17,7 @@ class TopMoviesPicksViewModel @Inject constructor(
     TopMoviesPicksContract {
 
     private val args = savedStateHandle.getArgs<Screen.ActorTopMoviesPicksDetails>()
-    val actorId = args?.actorId ?: 0
+    private val actorId = args?.actorId ?: 0
 
     init {
         if (actorId != 0) {
@@ -25,26 +26,25 @@ class TopMoviesPicksViewModel @Inject constructor(
     }
 
     private fun getActorMoviePicksData() {
-
         tryToExecute(
             block = { getActorMoviePicksById.invoke(actorId) },
             onStart = { updateState { copy(isLoading = true) } },
-            onSuccess = { actorMovieDetails ->
-                updateState {
-                    copy(
-                        id = actorMovieDetails.id,
-                        movieDetails = actorMovieDetails,
-                        isSaved = isSaved,
-                        backdropPath = backdropPath,
-                    )
-                }
-            },
-            onError = { errorState ->
-                updateState { copy(errorState = errorState) }
-            },
+            onSuccess = ::handleActorMoviePicksSuccess,
+            onError = { errorState -> updateState { copy(errorState = errorState) } },
             onCompleted = { updateState { copy(isLoading = false) } },
             checkSuccess = { actorId != 0 },
         )
+    }
+
+    private fun handleActorMoviePicksSuccess(actorMovieDetails: CastDetails) {
+        updateState {
+            copy(
+                id = actorMovieDetails.id,
+                actorMovieDetails = actorMovieDetails,
+                isSaved = isSaved,
+                backdropPath = backdropPath
+            )
+        }
     }
 
     override fun onRetry(){
@@ -52,15 +52,15 @@ class TopMoviesPicksViewModel @Inject constructor(
         getActorMoviePicksData()
     }
 
-    override fun onSaveMovie(movieId: Int) {
+    override fun onSaveClick(movieId: Int) {
         updateState { copy(isSaved = isSaved) }
     }
 
-    override fun onMovieClicked(movieId: Int) {
-        emitEffect(TopMoviesPicksEffect.NavigationToMovieDetails(movieId))
+    override fun onMovieClick(movieId: Int) {
+        emitEffect(TopMoviesPicksEffect.NavigateToMovieDetails(movieId))
     }
 
-    override fun onBack() {
+    override fun onBackClick() {
         emitEffect(TopMoviesPicksEffect.NavigateBack)
     }
 }

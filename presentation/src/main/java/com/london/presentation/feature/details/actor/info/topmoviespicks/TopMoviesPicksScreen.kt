@@ -42,18 +42,18 @@ private fun TopMoviesPicksContent(
     modifier: Modifier = Modifier,
 ) {
     BuildScreen(
-        onBack = contract::onBack,
+        onBack = contract::onBackClick,
         isLoading = state.isLoading,
         isError = state.errorState is ErrorState.NoInternet,
         onRetry = contract::onRetry,
     ) {
         MediaLazyGrid(
             title = stringResource(R.string.top_movies_picks),
-            items = state.movieDetails.cast,
-            onBack = contract::onBack,
+            items = state.actorMovieDetails.cast,
+            onBack = contract::onBackClick,
             getImageUrl = { it.posterUrl },
-            onItemClick = { contract.onMovieClicked(it.id) },
-            onSavedClick = { contract.onSaveMovie(it.id) },
+            onItemClick = { contract.onMovieClick(it.id) },
+            onSavedClick = { contract.onSaveClick(it.id) },
             modifier = modifier
         )
     }
@@ -68,7 +68,7 @@ private fun HandleTopMoviesPicksEffects(
     effect?.Listen { currentEffect ->
         when (currentEffect) {
             is TopMoviesPicksEffect.NavigateBack -> onNavigateBack()
-            is TopMoviesPicksEffect.NavigationToMovieDetails -> onNavigateMovie(currentEffect.movieId)
+            is TopMoviesPicksEffect.NavigateToMovieDetails -> onNavigateMovie(currentEffect.movieId)
         }
     }
 }
