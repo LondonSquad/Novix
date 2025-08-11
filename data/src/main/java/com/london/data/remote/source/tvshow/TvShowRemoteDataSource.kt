@@ -25,12 +25,8 @@ interface TvShowRemoteDataSource {
     suspend fun deleteTvShowRating(tvShowId: Int, sessionId: String?): Result<RatingRemoteResponse>
     suspend fun getTopRatedTvShows(pageNumber: Int): Result<ApiResponse<TopRatedTvSeriesRemote>>
     suspend fun getTvShowDetailsById(id: Int): Result<TvShowDetailsRemoteResponse>
-    suspend fun getTvShowImagesById(id: Int): Result<TvShowImagesRemoteResponse>
     suspend fun getTvShowVideos(tvShowId: Int): Result<TvShowVideoResponse>
 
-    suspend fun getTopRatedTvShows(
-        pageNumber: Int,
-    ): Result<ApiResponse<TopRatedTvSeriesRemote>>
 
     suspend fun getTvShowReviews(
         tvShowId: Int,
@@ -64,11 +60,6 @@ interface TvShowRemoteDataSource {
         includeAdult: Boolean = false
     ): Result<ApiResponse<SearchTvShowRemote>>
 
-
-    suspend fun getTvShowDetailsById(
-        id: Int,
-    ): Result<TvShowDetailsRemoteResponse>
-
     suspend fun getTvShowEpisodesBySeason(
         id: Int,
         seasonNumber: Int,
@@ -101,6 +92,4 @@ interface TvShowRemoteDataSource {
         guestSessionId: String?,
         userSessionId: String?,
     ): Result<AccountStatesResponse>
-
-    suspend fun getTvShowVideos(tvShowId: Int): Result<TvShowVideoResponse>
 }

@@ -18,9 +18,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class TvShowDetailsViewModel @Inject constructor(
-    private val getCastById: GetCastById,
     private val ratingUseCase: ManageRatingUseCase,
-    private val getTvShowImages: GetTvShowImagesByIdUseCase,
     private val authenticationUseCase: AuthenticationUseCase,
     private val manageRecentViewedUseCase: ManageRecentViewedUseCase,
     private val getTvEpisodesUseCase: GetTvEpisodesUseCase,

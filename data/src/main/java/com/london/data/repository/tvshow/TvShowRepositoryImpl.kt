@@ -57,7 +57,7 @@ class TvShowRepositoryImpl @Inject constructor(
     override suspend fun getImagesTvShowById(id: Int): TvShowImagesEntity =
         tvShowRemoteDataSource.getTvShowImagesById(id).getOrThrow().toEntity()
 
-    override suspend fun getActorTvShowPicksById(id: Int): CastDetails =
+    override suspend fun getActorTvShowById(id: Int): CastDetails =
         tvShowRemoteDataSource.getActorTvShowById(id).getOrThrow().toEntity()
 
     override suspend fun getPopularTvShows(): List<PopularMedia> = fetchAndSync(

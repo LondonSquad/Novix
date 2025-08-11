@@ -63,7 +63,7 @@ class EpisodeDetailsViewModel @Inject constructor(
     override fun onSelectRatingClick(rating: Int) {
         tryToExecute(
             block = {
-                ratingUseCase.addTvShowEpisodeRatingById(
+                ratingUseCase.addTvEpisodeRatingById(
                     id = tvShowId,
                     rating = rating,
                     episodeNumber = episodeNumber,
@@ -97,7 +97,7 @@ class EpisodeDetailsViewModel @Inject constructor(
        tryToExecute(
            block = {
            val data =  if (authenticationUseCase.isLoggedIn()) {
-               ratingUseCase.getRatedAccountTvShowEpisode(
+               ratingUseCase.getRateAccountTvEpisode(
                        tvShowId = tvShowId,
                        seasonNumber = seasonNumber,
                        episodeNumber =episodeNumber,

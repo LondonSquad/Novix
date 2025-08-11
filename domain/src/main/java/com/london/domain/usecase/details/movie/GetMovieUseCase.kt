@@ -26,7 +26,7 @@ class GetMovieUseCase @Inject constructor(
     suspend fun getMovieReviews(movieId: Int, pageNumber: Int) =
         movieRepository.getMovieReviews(movieId, pageNumber)
 
-    suspend fun getMovieCast(movieId: Int) = actorRepository.getMovieCastById(movieId)
+    suspend fun getMovieCast(movieId: Int) = actorRepository.getMovieActors(movieId)
 
     suspend fun getSimilarMovies(movieId: Int) = movieRepository.getSimilarMoviesById(movieId)
 

@@ -21,7 +21,7 @@ class GetActorUseCase @Inject constructor(
         actorRepository.getTrendingActors(page)
 
     suspend fun getActorTvShowPicksById(actorId: Int) =
-        tvShowRepository.getActorTvShowPicksById(actorId)
+        tvShowRepository.getActorTvShowById(actorId)
 
     suspend fun getActorMoviePicksById(actorId: Int) =
         movieRepository.getActorMoviePicksById(actorId)

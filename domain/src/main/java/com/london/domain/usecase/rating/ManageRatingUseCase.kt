@@ -48,7 +48,7 @@ class ManageRatingUseCase @Inject constructor(
         rating: Int,
         seasonNumber: Int,
         episodeNumber: Int
-    ) = tvShowRepository.addTvEpisode(
+    ) = tvShowRepository.addTvShowEpisode(
         tvShowId = id,
         rating = rating,
         seasonNumber = seasonNumber,

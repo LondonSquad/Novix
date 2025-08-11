@@ -202,7 +202,6 @@ class TvShowRepositoryImplTest {
             val networkException = RuntimeException("Network error")
             coEvery {
                 remoteDataSource.getEpisodeDetails(
-                remoteDataSource.getEpisodeDetailsByPosition(
                     TV_SHOW_ID, SEASON_NUMBER, EPISODE_NUMBER
                 )
             } throws networkException
@@ -500,7 +499,6 @@ class TvShowRepositoryImplTest {
         }
     }
 
-
     @Test
     fun `getTrendingTvShows should handle pagination correctly`() = runTest {
         // Given
@@ -575,18 +573,19 @@ class TvShowRepositoryImplTest {
         }
 
     @Test
-    fun `getTopRatedTvSeries should propagate exceptions when remote call fails`() = runTest {
-        // Given
-        coEvery {
-            remoteDataSource.getTopRatedTvShows(PAGE)
-        } returns Result.failure(RuntimeException("Network error"))
+    fun `getTopRatedTvSeries should propagate exceptions when remote call fails`() =
+        runTest {
+            // Given
+            coEvery {
+                remoteDataSource.getTopRatedTvShows(PAGE)
+            } returns Result.failure(RuntimeException("Network error"))
 
-        coEvery { localTopRated.getAll() } returns emptyList()
+            coEvery { localTopRated.getAll() } returns emptyList()
 
-        // When & Then
-        val ex = assertThrows<RuntimeException> { repository.getTopRatedTvShows(PAGE) }
-        assertThat(ex.message).isEqualTo("Network error")
-    }
+            // When & Then
+            val ex = assertThrows<RuntimeException> { repository.getTopRatedTvShows(PAGE) }
+            assertThat(ex.message).isEqualTo("Network error")
+        }
 
     @Test
     fun `getTopRatedTvSeries should call local data source for caching`() = runTest {
@@ -623,18 +622,19 @@ class TvShowRepositoryImplTest {
         }
 
     @Test
-    fun `getTvShowsByCategory should return data from data source if available`() = runTest {
-        //Given
-        coEvery {
-            remoteDataSource.getTvShowsByCategoryId(any(), any())
-        } returns Result.success(SearchTvShowRemoteMock)
-        //When
-        val result = repository.getTvShowsByCategory(
-            categoryId = 1, PAGE_NUMBER
-        )
-        //Then
-        assertThat(result).isEqualTo(TvShowList)
-    }
+    fun `getTvShowsByCategory should return data from data source if available`() =
+        runTest {
+            //Given
+            coEvery {
+                remoteDataSource.getTvShowsByCategoryId(any(), any())
+            } returns Result.success(SearchTvShowRemoteMock)
+            //When
+            val result = repository.getTvShowsByCategory(
+                categoryId = 1, PAGE_NUMBER
+            )
+            //Then
+            assertThat(result).isEqualTo(TvShowList)
+        }
 
     @Test
     fun `searchForTvShowsByCategory should throw HttpLockedException when API returns 423`() =
@@ -761,334 +761,6 @@ class TvShowRepositoryImplTest {
 
         // When
         val result = repository.addTvShowEpisode(tvShowId, seasonNumber, episodeNumber, rating)
-
-        // Then
-        assertFalse(result)
-    }
-
-    @Test
-    fun `addTvShowById handles null guest session id`() = runTest {
-        // Given
-        val tvShowId = 456
-        val rating = 7
-        val sessionId = "session123"
-        val guestSessionId = null
-
-        coEvery { authPreferences.getSessionId() } returns sessionId
-        coEvery { authPreferences.getGuestSessionId() } returns guestSessionId
-        coEvery {
-            remoteDataSource.addTvShowRating(
-                tvShowId = tvShowId,
-                rating = rating.toDouble(),
-                userSessionId = sessionId,
-                guestSessionId = guestSessionId
-            )
-        } returns Result.success(createRatingResponse())
-
-        // When
-        val result = repository.addTvShowById(tvShowId, rating)
-
-        // Then
-        assertTrue(result)
-    }
-
-    @Test
-    fun `getPopularTvShows - when cache is empty should fetch from network and sync to cache`() =
-        runTest {
-            // Given
-            val capturedItems = slot<List<PopularSectionLocal>>()
-            coEvery { homeLocalDataSource.getAll() } returns emptyList()
-            coEvery { remoteDataSource.getPopularTvShows() } returns Result.success(
-                singleTvShowResponse
-            )
-            coEvery { homeLocalDataSource.insertAll(capture(capturedItems)) } returns Unit
-
-            // When
-            val result = repository.getPopularTvShows()
-
-            // Then
-            assertThat(result).hasSize(1)
-            assertThat(result[0].id).isEqualTo(201)
-            assertThat(result[0].name).isEqualTo("Test TV Show")
-    @Test
-    fun `getTrendingTvShows should handle error from remote data source`() = runTest {
-        // Given
-        val error = Exception("Network error")
-        coEvery { remoteDataSource.getTrendingTvShows(any()) } returns Result.failure(
-            error
-        )
-
-        // When
-        try {
-            repository.getTrendingTvShows(page = 1)
-            assert(false)
-        } catch (e: Exception) {
-            // Then
-            Assert.assertEquals("Network error", e.message)
-        }
-    }
-
-
-    @Test
-    fun `getTrendingTvShows should handle pagination correctly`() = runTest {
-        // Given
-        val mockApiResponse = createMockTrendingTvShowsApiResponse()
-        coEvery { remoteDataSource.getTrendingTvShows(any()) } returns Result.success(
-            mockApiResponse
-        )
-
-        // When
-        val result1 = repository.getTrendingTvShows(page = 1)
-        val result2 = repository.getTrendingTvShows(page = 2)
-
-        // Then
-        assertNotNull(result1)
-        assertNotNull(result2)
-        Assert.assertEquals(1, result1.currentPage)
-        Assert.assertEquals(1, result2.currentPage)
-    }
-
-
-    @Test
-    fun `getTopRatedTvSeries should return paged response with correct data`() = runTest {
-        // Given
-        val expectedApiResponse = fakeApiResponseWithTvSeries()
-        coEvery {
-            remoteDataSource.getTopRatedTvShows(PAGE)
-        } returns Result.success(expectedApiResponse)
-
-        coEvery {
-            localTopRated.getAll()
-        } returns emptyList()
-
-        // When
-        val result: PagedFetchResponse<TopRatedMedia> = repository.getTopRatedTvShows(PAGE)
-
-        // Then
-        assertThat(result.items).hasSize(2)
-        assertThat(result.currentPage).isEqualTo(PAGE)
-        assertThat(result.totalPages).isEqualTo(1)
-        assertThat(result.totalItems).isEqualTo(2)
-
-        val firstSeries = result.items.first()
-        assertThat(firstSeries).isEqualTo(
-            expectedApiResponse.items[0].toEntity()
-        )
-
-        val secondSeries = result.items[1]
-        assertThat(secondSeries).isEqualTo(
-            expectedApiResponse.items[1].toEntity()
-        )
-    }
-
-    @Test
-    fun `getTopRatedTvSeries should return empty paged response when API returns empty results`() =
-        runTest {
-            // Given
-            val emptyApiResponse = fakeEmptyApiResponse()
-            coEvery { remoteDataSource.getTopRatedTvShows(PAGE) } returns Result.success(
-                emptyApiResponse
-            )
-
-            coEvery { localTopRated.getAll() } returns emptyList()
-
-            // When
-            val result = repository.getTopRatedTvShows(PAGE)
-
-            // Then
-            assertThat(result.items).isEmpty()
-            assertThat(result.currentPage).isEqualTo(PAGE)
-            assertThat(result.totalPages).isEqualTo(1)
-            assertThat(result.totalItems).isEqualTo(0)
-        }
-
-    @Test
-    fun `getTopRatedTvSeries should propagate exceptions when remote call fails`() = runTest {
-        // Given
-        coEvery {
-            remoteDataSource.getTopRatedTvShows(PAGE)
-        } returns Result.failure(RuntimeException("Network error"))
-
-        coEvery { localTopRated.getAll() } returns emptyList()
-
-        // When & Then
-        val ex = assertThrows<RuntimeException> { repository.getTopRatedTvShows(PAGE) }
-        assertThat(ex.message).isEqualTo("Network error")
-    }
-
-    @Test
-    fun `getTopRatedTvSeries should call local data source for caching`() = runTest {
-        // Given
-        coEvery {
-            remoteDataSource.getTopRatedTvShows(PAGE)
-        } returns Result.success(fakeApiResponseWithTvSeries())
-
-        coEvery { localTopRated.getAll() } returns emptyList()
-
-        // When
-        repository.getTopRatedTvShows(PAGE)
-
-        // Then
-        coVerify { localTopRated.getAll() }
-    }
-
-    @Test
-    fun `getTopRatedTvSeries should insert data to local storage after successful fetch`() =
-        runTest {
-            // Given
-            coEvery {
-                remoteDataSource.getTopRatedTvShows(PAGE)
-            } returns Result.success(fakeApiResponseWithTvSeries())
-
-            coEvery { localTopRated.getAll() } returns emptyList()
-            coEvery { localTopRated.insertAll(any()) } returns Unit
-
-            // When
-            repository.getTopRatedTvShows(PAGE)
-
-            // Then
-            coVerify { localTopRated.insertAll(any()) }
-        }
-
-    @Test
-    fun `getTvShowsByCategory should return data from data source if available`() = runTest {
-        //Given
-        coEvery {
-            remoteDataSource.getTvShowsByCategoryId(any(), any())
-        } returns Result.success(SearchTvShowRemoteMock)
-        //When
-        val result = repository.getTvShowsByCategory(
-            categoryId = 1, PAGE_NUMBER
-        )
-        //Then
-        assertThat(result).isEqualTo(TvShowList)
-    }
-
-    @Test
-    fun `searchForTvShowsByCategory should throw HttpLockedException when API returns 423`() =
-        runTest {
-            //Given
-            coEvery {
-                remoteDataSource.getTvShowsByCategoryId(
-                    CATEGORY_ID, PAGE_NUMBER
-                )
-            } returns Result.failure(NetworkException.HttpLockedException("Resource locked"))
-            //When //Then
-            assertThrows<NetworkException.HttpLockedException> {
-                repository.getTvShowsByCategory(
-                    CATEGORY_ID, PAGE_NUMBER
-                )
-            }
-        }
-
-
-    @Test
-    fun `addTvShowById returns true on success`() = runTest {
-        // Given
-        val tvShowId = 456
-        val rating = 7
-        val sessionId = "session123"
-        val guestSessionId = "guest123"
-
-        coEvery { authPreferences.getSessionId() } returns sessionId
-        coEvery { authPreferences.getGuestSessionId() } returns guestSessionId
-        coEvery {
-            remoteDataSource.addTvShowRating(
-                tvShowId = tvShowId,
-                rating = rating.toDouble(),
-                userSessionId = sessionId,
-                guestSessionId = guestSessionId
-            )
-        } returns Result.success(createRatingResponse())
-
-        // When
-        val result = repository.addTvShowById(tvShowId, rating)
-
-        // Then
-        assertTrue(result)
-    }
-
-    @Test
-    fun `addTvShowById returns false on failure`() = runTest {
-        // Given
-        val tvShowId = 456
-        val rating = 7
-        val sessionId = "session123"
-        val guestSessionId = "guest123"
-
-        coEvery { authPreferences.getSessionId() } returns sessionId
-        coEvery { authPreferences.getGuestSessionId() } returns guestSessionId
-        coEvery {
-            remoteDataSource.addTvShowRating(
-                tvShowId = tvShowId,
-                rating = rating.toDouble(),
-                userSessionId = sessionId,
-                guestSessionId = guestSessionId
-            )
-        } returns Result.failure(RuntimeException("Network error"))
-
-        // When
-        val result = repository.addTvShowById(tvShowId, rating)
-
-        // Then
-        assertFalse(result)
-    }
-
-    @Test
-    fun `addTvEpisode returns true on success`() = runTest {
-        // Given
-        val tvShowId = 456
-        val seasonNumber = 1
-        val episodeNumber = 2
-        val rating = 9
-        val sessionId = "session123"
-        val guestSessionId = "guest123"
-
-        coEvery { authPreferences.getSessionId() } returns sessionId
-        coEvery { authPreferences.getGuestSessionId() } returns guestSessionId
-        coEvery {
-            remoteDataSource.addTvEpisode(
-                tvShowId = tvShowId,
-                seasonNumber = seasonNumber,
-                episodeNumber = episodeNumber,
-                rating = rating.toDouble(),
-                userSessionId = sessionId,
-                guestSessionId = guestSessionId
-            )
-        } returns Result.success(createRatingResponse())
-
-        // When
-        val result = repository.addTvEpisode(tvShowId, seasonNumber, episodeNumber, rating)
-
-        // Then
-        assertTrue(result)
-    }
-
-    @Test
-    fun `addTvEpisode returns false on failure`() = runTest {
-        // Given
-        val tvShowId = 456
-        val seasonNumber = 1
-        val episodeNumber = 2
-        val rating = 9
-        val sessionId = "session123"
-        val guestSessionId = "guest123"
-
-        coEvery { authPreferences.getSessionId() } returns sessionId
-        coEvery { authPreferences.getGuestSessionId() } returns guestSessionId
-        coEvery {
-            remoteDataSource.addTvEpisode(
-                tvShowId = tvShowId,
-                seasonNumber = seasonNumber,
-                episodeNumber = episodeNumber,
-                rating = rating.toDouble(),
-                userSessionId = sessionId,
-                guestSessionId = guestSessionId
-            )
-        } returns Result.failure(RuntimeException("Network error"))
-
-        // When
-        val result = repository.addTvEpisode(tvShowId, seasonNumber, episodeNumber, rating)
 
         // Then
         assertFalse(result)
@@ -1291,7 +963,9 @@ class TvShowRepositoryImplTest {
             // Given
             val exception = RuntimeException("Network error")
             coEvery { homeLocalDataSource.getAll() } returns emptyList()
-            coEvery { remoteDataSource.getPopularTvShows() } returns Result.failure(exception)
+            coEvery { remoteDataSource.getPopularTvShows() } returns Result.failure(
+                exception
+            )
 
             // When & Then
             assertThrows<RuntimeException> {
@@ -1300,30 +974,33 @@ class TvShowRepositoryImplTest {
         }
 
     @Test
-    fun `getPopularTvShows - when cache has only movies should fetch from network`() = runTest {
-        // Given
-        val movieCacheData = listOf(
-            PopularSectionLocal(
-                id = 101,
-                name = "Movie Only",
-                posterPictureUrl = "/movie_poster.jpg",
-                rating = 8.0,
-                mediaType = MediaType.Movie
+    fun `getPopularTvShows - when cache has only movies should fetch from network`() =
+        runTest {
+            // Given
+            val movieCacheData = listOf(
+                PopularSectionLocal(
+                    id = 101,
+                    name = "Movie Only",
+                    posterPictureUrl = "/movie_poster.jpg",
+                    rating = 8.0,
+                    mediaType = MediaType.Movie
+                )
             )
-        )
-        coEvery { homeLocalDataSource.getAll() } returns movieCacheData
-        coEvery { remoteDataSource.getPopularTvShows() } returns Result.success(singleTvShowResponse)
-        coEvery { homeLocalDataSource.insertAll(any()) } returns Unit
+            coEvery { homeLocalDataSource.getAll() } returns movieCacheData
+            coEvery { remoteDataSource.getPopularTvShows() } returns Result.success(
+                singleTvShowResponse
+            )
+            coEvery { homeLocalDataSource.insertAll(any()) } returns Unit
 
-        // When
-        val result = repository.getPopularTvShows()
+            // When
+            val result = repository.getPopularTvShows()
 
-        // Then
-        assertThat(result).hasSize(1)
-        assertThat(result[0].name).isEqualTo("Test TV Show")
+            // Then
+            assertThat(result).hasSize(1)
+            assertThat(result[0].name).isEqualTo("Test TV Show")
 
-        coVerify(exactly = 1) { remoteDataSource.getPopularTvShows() }
-    }
+            coVerify(exactly = 1) { remoteDataSource.getPopularTvShows() }
+        }
 
     @Test
     fun `getPopularTvShows - should correctly map all tv show fields from network response`() =
@@ -1408,7 +1085,10 @@ class TvShowRepositoryImplTest {
             nextTvShowEpisodeToAir = null,
             tvShowNetworks = listOf(
                 TvShowNetwork(
-                    id = 1, logoPath = "/network.jpg", name = "Network Name", originCountry = "US"
+                    id = 1,
+                    logoPath = "/network.jpg",
+                    name = "Network Name",
+                    originCountry = "US"
                 )
             ),
             numberOfEpisodes = 10,
