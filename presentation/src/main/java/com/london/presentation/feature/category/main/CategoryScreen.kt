@@ -26,9 +26,12 @@ import com.london.presentation.utils.TvShowGenre
 
 @Composable
 fun CategoriesScreen(
-    modifier: Modifier = Modifier
 ) {
+    Content()
+}
 
+@Composable
+private fun Content() {
     Column(
         Modifier
             .statusBarsPadding()
@@ -39,15 +42,17 @@ fun CategoriesScreen(
             modifier = Modifier.padding(horizontal = 16.dp),
         )
         CategoriesSelection(
-            onClick = {}
+            onClick = {},
+            modifier = Modifier.padding(bottom = 12.dp),
         )
         LazyVerticalGrid(
             columns = GridCells.Adaptive(minSize = 160.dp),
             modifier = Modifier
                 .fillMaxSize()
-                .padding(horizontal = 16.dp, vertical = 12.dp),
+                .padding(horizontal = 16.dp),
             horizontalArrangement = Arrangement.spacedBy(8.dp),
-            verticalArrangement = Arrangement.spacedBy(8.dp)
+            verticalArrangement = Arrangement.spacedBy(8.dp),
+            contentPadding = PaddingValues(bottom = 8.dp),
         ) {
             movieGenres(
                 genres = MovieGenre.entries.filter { it != MovieGenre.All },
@@ -63,9 +68,11 @@ fun CategoriesScreen(
 
 @Composable
 private fun CategoriesSelection(
-    onClick: (MediaCategory) -> Unit
+    onClick: (MediaCategory) -> Unit,
+    modifier: Modifier = Modifier,
 ) {
     LazyRow(
+        modifier = modifier,
         horizontalArrangement = Arrangement.spacedBy(8.dp),
         contentPadding = PaddingValues(horizontal = 16.dp),
     ) {
