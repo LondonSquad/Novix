@@ -54,7 +54,7 @@ class TvShowDetailsViewModel @Inject constructor(
                     copy(
                         tvShowEpisodes = episodes,
                         tvShowEpisodeCountBySeason = episodeCount,
-                        videoProvider = videoProviders.first()
+                        videoProvider = videoProviders.firstOrNull().orEmpty(),
                     )
                 }
             },
