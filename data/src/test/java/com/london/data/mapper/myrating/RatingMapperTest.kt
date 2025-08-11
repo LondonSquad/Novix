@@ -1,6 +1,7 @@
 package com.london.data.mapper.myrating
 
 import com.london.data.remote.model.myrating.RatingMediaResponse
+import com.london.domain.entity.recent.MediaType
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
 import org.junit.Assert.assertTrue
@@ -14,14 +15,14 @@ class RatingMapperTest {
         val movieResponse = createSampleMovieResponse()
 
         // When
-        val result = movieResponse.toEntity(isMovie = true)
+        val result = movieResponse.toEntity(mediaType = MediaType.Movie)
 
         // Then
         assertEquals(123, result.id)
         assertEquals("Test Movie", result.title)
         assertEquals("https://image.tmdb.org/t/p/w500/test-poster.jpg", result.posterPath)
         assertEquals(8, result.rating)
-        assertTrue(result.isMovie)
+        assertTrue(result.mediaType == MediaType.Movie)
     }
 
     @Test
@@ -30,14 +31,14 @@ class RatingMapperTest {
         val tvShowResponse = createSampleTvShowResponse()
 
         // When
-        val result = tvShowResponse.toEntity(isMovie = false)
+        val result = tvShowResponse.toEntity(mediaType = MediaType.TvShow)
 
         // Then
         assertEquals(456, result.id)
         assertEquals("Test TV Show", result.title)
         assertEquals("https://image.tmdb.org/t/p/w500/test-poster.jpg", result.posterPath)
         assertEquals(7, result.rating)
-        assertFalse(result.isMovie)
+        assertFalse(result.mediaType == MediaType.Movie)
     }
 
     @Test
@@ -54,14 +55,14 @@ class RatingMapperTest {
         )
 
         // When
-        val result = movieResponse.toEntity()
+        val result = movieResponse.toEntity(mediaType = MediaType.Movie)
 
         // Then
         assertEquals(0, result.id)
         assertEquals("", result.title)
         assertEquals("", result.posterPath)
         assertEquals(0, result.rating)
-        assertTrue(result.isMovie)
+        assertTrue(result.mediaType == MediaType.Movie)
     }
 
     @Test
@@ -70,7 +71,7 @@ class RatingMapperTest {
         val movieResponse = createSampleMovieResponse(posterPath = "")
 
         // When
-        val result = movieResponse.toEntity()
+        val result = movieResponse.toEntity(mediaType = MediaType.Movie)
 
         // Then
         assertEquals("https://image.tmdb.org/t/p/w500", result.posterPath)
@@ -82,7 +83,7 @@ class RatingMapperTest {
         val movieResponse = createSampleMovieResponse(posterPath = null)
 
         // When
-        val result = movieResponse.toEntity()
+        val result = movieResponse.toEntity(mediaType = MediaType.Movie)
 
         // Then
         assertEquals("", result.posterPath)
@@ -94,7 +95,7 @@ class RatingMapperTest {
         val tvShowResponse = createSampleTvShowResponse(posterPath = "")
 
         // When
-        val result = tvShowResponse.toEntity()
+        val result = tvShowResponse.toEntity(mediaType = MediaType.TvShow)
 
         // Then
         assertEquals("https://image.tmdb.org/t/p/w500", result.posterPath)
@@ -106,7 +107,7 @@ class RatingMapperTest {
         val tvShowResponse = createSampleTvShowResponse(posterPath = null)
 
         // When
-        val result = tvShowResponse.toEntity()
+        val result = tvShowResponse.toEntity(mediaType = MediaType.TvShow)
 
         // Then
         assertEquals("", result.posterPath)
@@ -118,11 +119,11 @@ class RatingMapperTest {
         val movieResponse = createSampleMovieResponse(rating = 9.5)
 
         // When
-        val result = movieResponse.toEntity()
+        val result = movieResponse.toEntity(mediaType = MediaType.Movie)
 
         // Then
         assertEquals(9, result.rating)
-        assertTrue(result.isMovie)
+        assertTrue(result.mediaType == MediaType.Movie)
     }
 
     @Test
@@ -131,11 +132,11 @@ class RatingMapperTest {
         val movieResponse = createSampleMovieResponse(rating = 6.9)
 
         // When
-        val result = movieResponse.toEntity()
+        val result = movieResponse.toEntity(mediaType = MediaType.Movie)
 
         // Then
         assertEquals(6, result.rating)
-        assertTrue(result.isMovie)
+        assertTrue(result.mediaType == MediaType.Movie)
     }
 
     companion object {
