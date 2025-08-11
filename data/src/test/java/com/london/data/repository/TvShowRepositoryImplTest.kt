@@ -34,9 +34,9 @@ import com.london.data.remote.model.details.videoprovider.tvshow.model.TvShowVid
 import com.london.data.remote.model.details.videoprovider.tvshow.model.TvShowVideoResponse
 import com.london.data.remote.model.reviews.AuthorDetailsResponse
 import com.london.data.remote.model.reviews.ReviewResponse
-import com.london.data.remote.source.details.tvshow.TvShowDetailsRemoteDataSource
+import com.london.data.remote.source.tvshow.TvShowDetailsRemoteDataSource
 import com.london.data.remote.source.reviews.ReviewsRemoteDataSource
-import com.london.data.repository.search.TvShowRepositoryImpl
+import com.london.data.repository.tvshow.TvShowRepositoryImpl
 import com.london.data.utils.asYoutubeUrlOrEmpty
 import com.london.data.utils.orZero
 import com.london.domain.entity.moviedatails.MediaStates

@@ -7,7 +7,7 @@ import com.london.data.remote.model.details.actor.model.ActorDetailsResponse
 import com.london.data.remote.model.details.actor.model.actorimage.ActorImageResponse
 import com.london.data.remote.model.details.actor.model.actormoviedetails.ActorMovieDetailsResponse
 import com.london.data.remote.model.details.actor.model.actortvshowdetails.ActorTvShowDetailsResponse
-import com.london.data.remote.source.details.actor.ActorDetailsRemoteDataSource
+import com.london.data.remote.source.actor.ActorDetailsRemoteDataSource
 import com.london.data.repository.search.ActorRepositoryImpl
 import com.london.domain.repository.ActorRepository
 import io.mockk.coEvery

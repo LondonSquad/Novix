@@ -11,7 +11,6 @@ import com.london.domain.error.TvShowDetailsSearchFailedException
 import com.london.domain.error.TvShowSearchFailedException
 import com.london.domain.repository.PopularRepository
 import com.london.domain.repository.SearchRepository
-import com.london.domain.repository.TrendingRepository
 import com.london.domain.repository.TvShowRepository
 import com.london.domain.repository.discover.DiscoverRepository
 import io.mockk.coEvery

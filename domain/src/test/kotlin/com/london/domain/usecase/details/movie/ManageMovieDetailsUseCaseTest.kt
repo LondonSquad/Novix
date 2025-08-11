@@ -9,11 +9,10 @@ import com.london.domain.error.GetCastByIdFailedException
 import com.london.domain.error.GetMovieByIdFailedException
 import com.london.domain.error.GetMovieCastFailedException
 import com.london.domain.error.GetMovieImagesFailedException
-import com.london.domain.repository.MovieDetailsRepository
+import com.london.domain.repository.MovieRepository
 import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.mockk
-import junit.runner.Version.id
 import kotlinx.coroutines.test.runTest
 import org.junit.Before
 import org.junit.Test
@@ -23,7 +22,7 @@ import org.junit.jupiter.api.assertThrows
 
 class ManageMovieDetailsUseCaseTest {
 
-    private lateinit var movieRepository: MovieDetailsRepository
+    private lateinit var movieRepository: MovieRepository
     private lateinit var manageMovieDetailsUseCase: ManageMovieDetailsUseCase
 
     @Before

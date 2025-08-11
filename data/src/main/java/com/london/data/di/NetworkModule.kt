@@ -10,7 +10,7 @@ import com.london.data.remote.interceptor.AuthInterceptor
 import com.london.data.remote.service.account.AccountApiService
 import com.london.data.remote.service.authentication.AuthenticationApiService
 import com.london.data.remote.service.details.actor.ActorDetailsApiService
-import com.london.data.remote.service.details.movie.MovieDetailsApiService
+import com.london.data.remote.service.movie.MovieService
 import com.london.data.remote.service.details.tvshow.TvShowDetailsApiService
 import com.london.data.remote.service.discover.DiscoverApiService
 import com.london.data.remote.service.home.PopularApiService
@@ -115,8 +115,8 @@ object NetworkModule {
 
     @Provides
     @Singleton
-    fun provideMovieDetailsApiService(retrofit: Retrofit): MovieDetailsApiService =
-        retrofit.create(MovieDetailsApiService::class.java)
+    fun provideMovieDetailsApiService(retrofit: Retrofit): MovieService =
+        retrofit.create(MovieService::class.java)
 
     @Provides
     @Singleton

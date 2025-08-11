@@ -4,7 +4,6 @@ import com.google.common.truth.Truth.assertThat
 import com.london.domain.entity.PagedFetchResponse
 import com.london.domain.entity.UpComingMovie
 import com.london.domain.error.MovieSearchFailedException
-import com.london.domain.repository.UpComingRepository
 import io.mockk.coEvery
 import io.mockk.mockk
 import kotlinx.coroutines.test.runTest

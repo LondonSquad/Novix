@@ -20,9 +20,9 @@ import com.london.data.remote.model.details.rating.AccountStatesResponse
 import com.london.data.remote.model.reviews.AuthorDetailsResponse
 import com.london.data.remote.model.reviews.ReviewResponse
 import com.london.data.remote.model.search.MovieRemote
-import com.london.data.remote.source.details.movie.MovieDetailsRemoteDataSource
+import com.london.data.remote.source.movie.MovieRemoteDataSource
 import com.london.data.remote.source.reviews.ReviewsRemoteDataSource
-import com.london.data.repository.search.MovieDetailsRepositoryImpl
+import com.london.data.repository.movie.MovieRepositoryImpl
 import com.london.data.utils.asImageUrlOrEmpty
 import com.london.domain.entity.PagedFetchResponse
 import com.london.domain.entity.moviedatails.MovieImages
@@ -35,17 +35,17 @@ import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.assertThrows
 import kotlin.test.Test
 
-class MovieDetailsRepositoryImplTest {
+class MovieRepositoryImplTest {
 
     private val authPreferences: AuthPreferences = mockk(relaxed = true)
-    private val remoteDataSource: MovieDetailsRemoteDataSource = mockk(relaxed = true)
+    private val remoteDataSource: MovieRemoteDataSource = mockk(relaxed = true)
     private val reviewRemoteDataSource: ReviewsRemoteDataSource = mockk(relaxed = true)
-    private lateinit var repository: MovieDetailsRepositoryImpl
+    private lateinit var repository: MovieRepositoryImpl
 
     @Before
     fun setup() {
-        repository = MovieDetailsRepositoryImpl(
-            movieDetailsRemoteDataSource = remoteDataSource,
+        repository = MovieRepositoryImpl(
+            movieRemoteDataSource = remoteDataSource,
             reviewsRemoteDataSource = reviewRemoteDataSource,
             authPreferences = authPreferences
         )

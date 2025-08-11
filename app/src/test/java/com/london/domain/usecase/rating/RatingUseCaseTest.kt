@@ -3,8 +3,7 @@ package com.london.domain.usecase.rating
 import com.london.domain.entity.RatedMedia
 import com.london.domain.entity.moviedatails.MediaStates
 import com.london.domain.entity.recent.MediaType
-import com.london.domain.repository.MovieDetailsRepository
-import com.london.domain.repository.RatingRepository
+import com.london.domain.repository.MovieRepository
 import com.london.domain.repository.TvShowRepository
 import io.mockk.coEvery
 import io.mockk.coVerify
@@ -14,6 +13,25 @@ import org.junit.Assert
 import org.junit.Test
 
 class RatingUseCaseTest {
+    private lateinit var repository: RatingRepository
+    private lateinit var tvShowRepository: TvShowRepository
+    private lateinit var ratingRepository: RatingRepository
+    private lateinit var movieRepository: MovieRepository
+    private lateinit var ratingUseCase: RatingUseCase
+
+    @Before
+    fun setup() {
+        repository = mockk(relaxed = true)
+        tvShowRepository = mockk(relaxed = true)
+        ratingRepository = mockk(relaxed = true)
+        movieRepository = mockk(relaxed = true)
+        ratingUseCase = RatingUseCase(
+            repository = repository,
+            tvShowRepository = tvShowRepository,
+            ratingRepository = ratingRepository,
+            movieRepository = movieRepository
+        )
+    }
     private val ratingRepository: RatingRepository = mockk(relaxed = true)
     private val tvShowRepository: TvShowRepository = mockk(relaxed = true)
     private val movieRepository: MovieDetailsRepository = mockk(relaxed = true)
