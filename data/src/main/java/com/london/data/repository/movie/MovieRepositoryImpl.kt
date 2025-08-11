@@ -38,26 +38,34 @@ import com.london.domain.repository.MovieRepository
 import javax.inject.Inject
 
 class MovieRepositoryImpl @Inject constructor(
-    private val movieRemoteDataSource: MovieRemoteDataSource,
+    private val crashReporter: CrashReporter,
     private val authPreferences: AuthPreferences,
-    private val homeLocalDataSource: HomeLocalDataSource<PopularSectionLocal>,
-    private val localTopRated: HomeLocalDataSource<TopRatedLocal>,
+    private val movieRemoteDataSource: MovieRemoteDataSource,
     private val upComingLocalDataSource: UpComingLocalDataSource,
-    private val crashReporter: CrashReporter
+    private val localTopRated: HomeLocalDataSource<TopRatedLocal>,
+    private val homeLocalDataSource: HomeLocalDataSource<PopularSectionLocal>
 ) : MovieRepository {
 
-    override suspend fun getMovieById(id: Int): MovieDetails {
-        val remoteDetails = movieRemoteDataSource.getMovieDetails(id)
-        return remoteDetails.getOrThrow().toEntity()
-    }
+    override suspend fun getMovieById(id: Int): MovieDetails =
+        movieRemoteDataSource.getMovieDetails(id).getOrThrow().toEntity()
+
+    override suspend fun getMovieImagesById(id: Int): MovieImages =
+        movieRemoteDataSource.getMovieImages(id).getOrThrow().toEntity()
+
+    override suspend fun getActorMoviePicksById(id: Int): CastDetails =
+        movieRemoteDataSource.getActorMovieById(id).getOrThrow().toEntity()
 
     override suspend fun getSimilarMoviesById(id: Int): List<Movie> {
         return movieRemoteDataSource.getSimilarMovies(id).getOrThrow().items
             .map { it.toEntity() }
     }
 
-    override suspend fun getMovieImagesById(id: Int): MovieImages =
-        movieRemoteDataSource.getMovieImages(id).getOrThrow().toEntity()
+    override suspend fun getMovieVideos(movieId: Int): List<String> {
+        return movieRemoteDataSource.getMovieVideos(movieId)
+            .getOrThrow().movies.orEmpty().map { movieVideoRemote ->
+                movieVideoRemote.key.asImageUrlOrEmpty()
+            }
+    }
 
     override suspend fun getMovieReviews(
         movieId: Int, pageNumber: Int
@@ -73,13 +81,6 @@ class MovieRepositoryImpl @Inject constructor(
             totalPages = totalPages,
             totalItems = totalItems
         )
-    }
-
-    override suspend fun getMovieVideos(movieId: Int): List<String> {
-        return movieRemoteDataSource.getMovieVideos(movieId)
-            .getOrThrow().movies.orEmpty().map { movieVideoRemote ->
-                movieVideoRemote.key.asImageUrlOrEmpty()
-            }
     }
 
     override suspend fun getTrendingMovies(page: Int): PagedFetchResponse<Trending> {
@@ -151,7 +152,8 @@ class MovieRepositoryImpl @Inject constructor(
         categoryId: Int,
         pageNumber: Int
     ): PagedFetchResponse<Movie> {
-        val response = movieRemoteDataSource.getMoviesByCategory(categoryId, pageNumber).getOrThrow()
+        val response =
+            movieRemoteDataSource.getMoviesByCategory(categoryId, pageNumber).getOrThrow()
         return PagedFetchResponse(
             currentPage = response.currentPage,
             items = response.items.map { it.toEntity() },
@@ -171,9 +173,6 @@ class MovieRepositoryImpl @Inject constructor(
             movieId = movieId,
             sessionId = authPreferences.getSessionId()
         ).isSuccess
-
-    override suspend fun getActorMoviePicksById(id: Int): CastDetails =
-        movieRemoteDataSource.getActorMovieById(id).getOrThrow().toEntity()
 
     override suspend fun getPopularMovies(): List<PopularMedia> = fetchAndSync(
         cacheBlock = {

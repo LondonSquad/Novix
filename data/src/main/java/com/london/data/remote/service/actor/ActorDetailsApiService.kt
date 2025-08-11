@@ -1,4 +1,4 @@
-package com.london.data.remote.service.details.actor
+package com.london.data.remote.service.actor
 
 import com.london.data.remote.model.ApiConstants
 import com.london.data.remote.model.ApiResponse

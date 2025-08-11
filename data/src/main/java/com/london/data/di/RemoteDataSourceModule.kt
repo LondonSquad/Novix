@@ -2,8 +2,8 @@ package com.london.data.di
 
 import com.london.data.remote.service.account.AccountApiService
 import com.london.data.remote.service.authentication.AuthenticationApiService
-import com.london.data.remote.service.details.actor.ActorDetailsApiService
-import com.london.data.remote.service.details.tvshow.TvShowDetailsApiService
+import com.london.data.remote.service.actor.ActorDetailsApiService
+import com.london.data.remote.service.tvshow.TvShowDetailsApiService
 import com.london.data.remote.service.list.CustomMovieListsApiService
 import com.london.data.remote.service.movie.MovieService
 import com.london.data.remote.service.search.SearchApiService

@@ -8,19 +8,12 @@ import com.london.data.local.preference.SharedPrefsTokenProvider
 import com.london.data.local.preference.readLanguageCode
 import com.london.data.remote.interceptor.AuthInterceptor
 import com.london.data.remote.service.account.AccountApiService
+import com.london.data.remote.service.actor.ActorDetailsApiService
 import com.london.data.remote.service.authentication.AuthenticationApiService
-import com.london.data.remote.service.details.actor.ActorDetailsApiService
-import com.london.data.remote.service.movie.MovieService
-import com.london.data.remote.service.details.tvshow.TvShowDetailsApiService
-import com.london.data.remote.service.discover.DiscoverApiService
-import com.london.data.remote.service.home.PopularApiService
-import com.london.data.remote.service.home.TrendingApiService
-import com.london.data.remote.service.home.UpComingApiService
 import com.london.data.remote.service.list.CustomMovieListsApiService
-import com.london.data.remote.service.myrating.RatingApiService
-import com.london.data.remote.service.reviews.ReviewsApiService
+import com.london.data.remote.service.movie.MovieService
 import com.london.data.remote.service.search.SearchApiService
-import com.london.data.remote.service.toprated.TopRatedApiService
+import com.london.data.remote.service.tvshow.TvShowDetailsApiService
 import com.london.data.utils.CrashReporter
 import com.london.data.utils.FirebaseCrashReporter
 import com.london.domain.repository.SessionTokenProvider
@@ -130,26 +123,6 @@ object NetworkModule {
 
     @Provides
     @Singleton
-    fun provideReviewsApiService(retrofit: Retrofit): ReviewsApiService =
-        retrofit.create(ReviewsApiService::class.java)
-
-    @Provides
-    @Singleton
-    fun provideTrendingApiService(retrofit: Retrofit): TrendingApiService =
-        retrofit.create(TrendingApiService::class.java)
-
-    @Provides
-    @Singleton
-    fun providePopularApiService(retrofit: Retrofit): PopularApiService =
-        retrofit.create(PopularApiService::class.java)
-
-    @Provides
-    @Singleton
-    fun provideTopRatedApiService(retrofit: Retrofit): TopRatedApiService =
-        retrofit.create(TopRatedApiService::class.java)
-
-    @Provides
-    @Singleton
     fun provideAuthApiService(retrofit: Retrofit): AuthenticationApiService =
         retrofit.create(AuthenticationApiService::class.java)
 
@@ -167,18 +140,6 @@ object NetworkModule {
     @Singleton
     fun provideCrashReporter(): CrashReporter = FirebaseCrashReporter()
 
-
-
-    @Provides
-    @Singleton
-    fun proviesUpComingMovieApiService(retrofit: Retrofit): UpComingApiService =
-        retrofit.create(UpComingApiService::class.java)
-
-    @Provides
-    @Singleton
-    fun provideDiscoverApiService(retrofit: Retrofit): DiscoverApiService =
-        retrofit.create(DiscoverApiService::class.java)
-
     @Provides
     @Singleton
     fun provideCustomMovieListsApiService(retrofit: Retrofit): CustomMovieListsApiService =
@@ -188,10 +149,4 @@ object NetworkModule {
     @Singleton
     fun provideAccountApiService(retrofit: Retrofit): AccountApiService =
         retrofit.create(AccountApiService::class.java)
-
-    @Provides
-    @Singleton
-    fun provideMyRatingApiService(retrofit: Retrofit): RatingApiService =
-        retrofit.create(RatingApiService::class.java)
-
 }

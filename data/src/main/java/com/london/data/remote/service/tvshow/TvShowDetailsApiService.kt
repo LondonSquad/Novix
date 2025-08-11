@@ -1,4 +1,4 @@
-package com.london.data.remote.service.details.tvshow
+package com.london.data.remote.service.tvshow
 
 
 import com.london.data.remote.model.ApiConstants

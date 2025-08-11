@@ -17,7 +17,7 @@ import com.london.data.remote.model.home.trending.TrendingResponse
 import com.london.data.remote.model.myrating.RatingMediaResponse
 import com.london.data.remote.model.reviews.ReviewResponse
 import com.london.data.remote.model.search.SearchTvShowRemote
-import com.london.data.remote.service.details.tvshow.TvShowDetailsApiService
+import com.london.data.remote.service.tvshow.TvShowDetailsApiService
 import com.london.data.remote.source.base.BaseRemoteDatasource
 import javax.inject.Inject
 

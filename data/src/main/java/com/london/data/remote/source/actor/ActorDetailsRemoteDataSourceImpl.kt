@@ -6,7 +6,7 @@ import com.london.data.remote.model.details.actor.model.actorimage.ActorImageRes
 import com.london.data.remote.model.details.movie.model.moviecast.MovieCastResponse
 import com.london.data.remote.model.details.tvshow.model.TvShowCastRemoteResponse
 import com.london.data.remote.model.home.trending.TrendingResponse
-import com.london.data.remote.service.details.actor.ActorDetailsApiService
+import com.london.data.remote.service.actor.ActorDetailsApiService
 import com.london.data.remote.source.base.BaseRemoteDatasource
 import javax.inject.Inject
 
