@@ -11,7 +11,6 @@ import com.london.domain.usecase.authentication.AuthenticationUseCase
 import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.every
-import io.mockk.impl.annotations.MockK
 import io.mockk.mockk
 import io.mockk.verify
 import kotlinx.coroutines.Dispatchers
@@ -26,17 +25,11 @@ import org.junit.Before
 import org.junit.Test
 
 @OptIn(ExperimentalCoroutinesApi::class)
-class AccountViewModelTest {
+class   AccountViewModelTest {
 
-    @MockK
     private lateinit var appPreferencesService: AppPreferencesService
-
-    @MockK
     private lateinit var authenticationUseCase: AuthenticationUseCase
-
-    @MockK
     private lateinit var accountDetailsUseCase: GetAccountDetails
-
     private lateinit var viewModel: AccountViewModel
     private val testDispatcher = StandardTestDispatcher()
 
