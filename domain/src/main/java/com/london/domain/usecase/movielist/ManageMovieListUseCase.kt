@@ -9,7 +9,6 @@ import javax.inject.Inject
 class ManageMovieListUseCase @Inject constructor(
     private val customMovieListRepository: CustomMovieListRepository,
 ) {
-
     suspend fun createMovieList(name: String): Boolean =
         customMovieListRepository.createMovieList(name)
 
