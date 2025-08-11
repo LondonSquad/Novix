@@ -9,11 +9,11 @@ import com.london.domain.error.GetCastByIdFailedException
 import com.london.domain.error.GetMovieByIdFailedException
 import com.london.domain.error.GetMovieCastFailedException
 import com.london.domain.error.GetMovieImagesFailedException
-import com.london.domain.repository.MovieDetailsRepository
+import com.london.domain.repository.ActorRepository
+import com.london.domain.repository.MovieRepository
 import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.mockk
-import junit.runner.Version.id
 import kotlinx.coroutines.test.runTest
 import org.junit.Before
 import org.junit.Test
@@ -23,13 +23,18 @@ import org.junit.jupiter.api.assertThrows
 
 class ManageMovieDetailsUseCaseTest {
 
-    private lateinit var movieRepository: MovieDetailsRepository
+    private lateinit var movieRepository: MovieRepository
+    private lateinit var actorRepository: ActorRepository
     private lateinit var manageMovieDetailsUseCase: ManageMovieDetailsUseCase
 
     @Before
     fun setUp() {
         movieRepository = mockk(relaxed = true)
-        manageMovieDetailsUseCase = ManageMovieDetailsUseCase(movieRepository)
+        actorRepository = mockk(relaxed = true)
+        manageMovieDetailsUseCase = ManageMovieDetailsUseCase(
+            movieRepository = movieRepository,
+            actorRepository = actorRepository
+        )
     }
 
     // region Movie Details Tests
@@ -310,7 +315,7 @@ class ManageMovieDetailsUseCaseTest {
     @Test
     fun `getMovieCast should return cast when repository returns cast`() = runTest {
         // given
-        coEvery { movieRepository.getMovieCastById(MOVIE_ID) } returns actorMockCast
+        coEvery { actorRepository.getMovieActors(MOVIE_ID) } returns actorMockCast
 
         // when
         val result = manageMovieDetailsUseCase.getMovieCast(MOVIE_ID)
@@ -322,39 +327,39 @@ class ManageMovieDetailsUseCaseTest {
     @Test
     fun `getMovieCast should throw exception when repository throws exception`() = runTest {
         // given
-        coEvery { movieRepository.getMovieCastById(MOVIE_ID) } throws GetCastByIdFailedException()
+        coEvery { actorRepository.getMovieActors(MOVIE_ID) } throws GetCastByIdFailedException()
 
         // when & then
         assertThrows<GetCastByIdFailedException> {
             manageMovieDetailsUseCase.getMovieCast(MOVIE_ID)
         }
-        coVerify(exactly = 1) { movieRepository.getMovieCastById(MOVIE_ID) }
+        coVerify(exactly = 1) { actorRepository.getMovieActors(MOVIE_ID) }
     }
 
     @Test
     fun `getMovieCast should return empty list when repository returns empty list`() = runTest {
         // given
-        coEvery { movieRepository.getMovieCastById(MOVIE_ID) } returns emptyList()
+        coEvery { actorRepository.getMovieActors(MOVIE_ID) } returns emptyList()
 
         // when
         val result = manageMovieDetailsUseCase.getMovieCast(MOVIE_ID)
 
         // then
         assertThat(result).isEmpty()
-        coVerify(exactly = 1) { movieRepository.getMovieCastById(MOVIE_ID) }
+        coVerify(exactly = 1) { actorRepository.getMovieActors(MOVIE_ID) }
     }
 
     @Test
     fun `getMovieCast should call repository with correct movie ID`() = runTest {
         // given
         val customId = 999
-        coEvery { movieRepository.getMovieCastById(customId) } returns emptyList()
+        coEvery { actorRepository.getMovieActors(customId) } returns emptyList()
 
         // when
         manageMovieDetailsUseCase.getMovieCast(customId)
 
         // then
-        coVerify(exactly = 1) { movieRepository.getMovieCastById(customId) }
+        coVerify(exactly = 1) { actorRepository.getMovieActors(customId) }
     }
 
     @Test
@@ -369,8 +374,8 @@ class ManageMovieDetailsUseCaseTest {
             )
         )
 
-        coEvery { movieRepository.getMovieCastById(123) } returns actorMockCast
-        coEvery { movieRepository.getMovieCastById(456) } returns actorCast
+        coEvery { actorRepository.getMovieActors(123) } returns actorMockCast
+        coEvery { actorRepository.getMovieActors(456) } returns actorCast
 
         // when
         val result1 = manageMovieDetailsUseCase.getMovieCast(123)
