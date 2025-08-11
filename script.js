@@ -253,7 +253,7 @@ document.addEventListener("DOMContentLoaded", () => {
         return `Week of ${datePart}, ${startDate.getFullYear()}`;
     };
 
-    const getRelativeWeekName = (index, baseWeekNumber = 19) => {
+    const getRelativeWeekName = (index, baseWeekNumber = 20) => {
         if (index === 0) {
             return "Current Week";
         }
