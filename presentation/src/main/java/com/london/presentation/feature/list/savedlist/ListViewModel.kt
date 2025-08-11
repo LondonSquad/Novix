@@ -10,7 +10,6 @@ import jakarta.inject.Inject
 
 @HiltViewModel
 class ListViewModel @Inject constructor(
-    private val getAllMovieListsUseCase: GetAllMovieListsUseCase,
     private val manageMovieListUseCase: ManageMovieListUseCase,
     private val authenticationUseCase: AuthenticationUseCase
 ) : BaseViewModel<ListUiState, ListEffect>(ListUiState()), ListContract {
@@ -82,7 +81,7 @@ class ListViewModel @Inject constructor(
         tryToExecute(
             block = {
                 val moviesFlow = createPagingSourceFlow(query = "") { _, pageNumber ->
-                    val movies = getAllMovieListsUseCase.invoke(
+                    val movies = manageMovieListUseCase.getMovieLists(
                         pageNumber
                     )
                     movies.copy(items = movies.items)

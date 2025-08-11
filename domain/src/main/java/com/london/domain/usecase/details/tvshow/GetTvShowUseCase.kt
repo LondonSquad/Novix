@@ -48,7 +48,7 @@ class GetTvShowUseCase @Inject constructor(
     suspend fun getTvShowReviews(movieId: Int, pageNumber: Int) =
         tvShowRepository.getTvShowReviews(movieId, pageNumber)
 
-    suspend fun getTopRatedTvSeries(
+    suspend fun getTopRatedTvShow(
         pageNumber: Int,
         genreId: Int? = null
     ): PagedFetchResponse<TopRatedMedia> {

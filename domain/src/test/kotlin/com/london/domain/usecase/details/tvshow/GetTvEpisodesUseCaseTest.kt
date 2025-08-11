@@ -1,18 +1,23 @@
-package com.london.domain.usecase
+package com.london.domain.usecase.details.tvshow
 
 import com.google.common.truth.Truth.assertThat
+import com.london.domain.entity.tvshowdetails.TvShowCastEntity
+import com.london.domain.entity.tvshowdetails.TvShowCastMemberEntity
+import com.london.domain.entity.tvshowdetails.TvShowRoleEntity
+import com.london.domain.entity.tvshowdetails.episode.TvShowEpisodeByIdEntity
+import com.london.domain.entity.tvshowdetails.episode.TvShowEpisodesEntity
 import com.london.domain.repository.ActorRepository
 import com.london.domain.repository.TvShowRepository
-import com.london.domain.usecase.details.tvshow.GetTvEpisodesUseCase
 import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.mockk
 import kotlinx.coroutines.test.runTest
+import org.junit.Assert
 import org.junit.Before
 import org.junit.Test
 import org.junit.jupiter.api.assertThrows
 
-class GetEpisodeVideoProviderUseCaseTest {
+class GetTvEpisodesUseCaseTest {
 
     private lateinit var tvShowRepository: TvShowRepository
     private lateinit var actorRepository: ActorRepository
@@ -27,6 +32,105 @@ class GetEpisodeVideoProviderUseCaseTest {
             actorRepository = actorRepository
         )
     }
+
+    @Test
+    fun `should return episode when repository returns episode`() = runTest {
+        // Given
+        coEvery {
+            tvShowRepository.getTvShowEpisodeByPosition(TV_SHOW_ID, SEASON_NUMBER, EPISODE_NUMBER)
+        } returns mockEpisode
+
+        // When
+        val result =
+            getTvEpisodesUseCase.getEpisodeByTvShowId(TV_SHOW_ID, SEASON_NUMBER, EPISODE_NUMBER)
+
+        // Then
+        assertThat(result).isEqualTo(mockEpisode)
+    }
+
+    @Test
+    fun `should throw exception when repository throws`() = runTest {
+        // Given
+        coEvery {
+            tvShowRepository.getTvShowEpisodeByPosition(TV_SHOW_ID, SEASON_NUMBER, EPISODE_NUMBER)
+        } throws RuntimeException("Network error")
+
+        // When / Then
+        assertThrows<RuntimeException> {
+            getTvEpisodesUseCase.getEpisodeByTvShowId(TV_SHOW_ID, SEASON_NUMBER, EPISODE_NUMBER)
+        }
+    }
+
+
+    @Test
+    fun `should call repository getTvShowEpisodesBySeason with correct parameters and return result`() =
+        runTest {
+            // Given
+            val tvShowId = 123
+            val seasonNumber = 2
+            val expectedResult = mockk<TvShowEpisodesEntity>()
+            coEvery {
+                tvShowRepository.getTvShowEpisodesBySeason(
+                    tvShowId,
+                    seasonNumber
+                )
+            } returns expectedResult
+
+            // When
+            val result = getTvEpisodesUseCase.getTvShowEpisodesBySeason(tvShowId, seasonNumber)
+
+            // Then
+            coVerify(exactly = 1) {
+                tvShowRepository.getTvShowEpisodesBySeason(
+                    tvShowId,
+                    seasonNumber
+                )
+            }
+            Assert.assertEquals(expectedResult, result)
+        }
+
+    @Test
+    fun `should work with different tvShowId and seasonNumber combinations`() = runTest {
+        // Given
+        val tvShowId = 456
+        val seasonNumber = 1
+        val expectedResult = mockk<TvShowEpisodesEntity>()
+        coEvery {
+            tvShowRepository.getTvShowEpisodesBySeason(
+                tvShowId,
+                seasonNumber
+            )
+        } returns expectedResult
+
+        // When
+        val result = getTvEpisodesUseCase.getTvShowEpisodesBySeason(tvShowId, seasonNumber)
+
+        // Then
+        coVerify(exactly = 1) { tvShowRepository.getTvShowEpisodesBySeason(tvShowId, seasonNumber) }
+        Assert.assertEquals(expectedResult, result)
+    }
+
+    @Test
+    fun `should work with season number zero`() = runTest {
+        // Given
+        val tvShowId = 789
+        val seasonNumber = 0
+        val expectedResult = mockk<TvShowEpisodesEntity>()
+        coEvery {
+            tvShowRepository.getTvShowEpisodesBySeason(
+                tvShowId,
+                seasonNumber
+            )
+        } returns expectedResult
+
+        // When
+        val result = getTvEpisodesUseCase.getTvShowEpisodesBySeason(tvShowId, seasonNumber)
+
+        // Then
+        coVerify(exactly = 1) { tvShowRepository.getTvShowEpisodesBySeason(tvShowId, seasonNumber) }
+        Assert.assertEquals(expectedResult, result)
+    }
+
 
     @Test
     fun `invoke should return list of video URLs when repository succeeds`() = runTest {
@@ -176,4 +280,62 @@ class GetEpisodeVideoProviderUseCaseTest {
             )
         }
     }
+
+    @Test
+    fun `should return cast when repository returns cast`() = runTest {
+        //given
+        coEvery { actorRepository.getCastTvShowById(TV_SHOW_ID) } returns mockCast
+        //when
+        val result = getTvEpisodesUseCase.getCastById(TV_SHOW_ID)
+        //then
+        assertThat(result).isEqualTo(mockCast)
+    }
+
+    private companion object {
+        const val TV_SHOW_ID = 12345
+        const val SEASON_NUMBER = 1
+        const val EPISODE_NUMBER = 1
+
+        val mockCast = TvShowCastEntity(
+            cast = listOf(
+                TvShowCastMemberEntity(
+                    id = 1,
+                    name = "John Doe",
+                    profileUrl = "/profile1.jpg",
+                    roles = listOf(
+                        TvShowRoleEntity(
+                            character = "Main Character",
+                            episodeCount = 24
+                        )
+                    ),
+                ),
+                TvShowCastMemberEntity(
+                    id = 2,
+                    name = "Jane Smith",
+                    profileUrl = "/profile2.jpg",
+                    roles = listOf(
+                        TvShowRoleEntity(
+                            character = "Supporting Character",
+                            episodeCount = 18
+                        )
+                    ),
+                )
+            ),
+            id = TV_SHOW_ID
+        )
+    }
+
+    val mockEpisode = TvShowEpisodeByIdEntity(
+        id = 1001,
+        name = "Pilot",
+        overview = "The very first episode.",
+        voteAverage = 8.5,
+        voteCount = 200,
+        airDate = "2025-07-01",
+        seasonNumber = SEASON_NUMBER,
+        imageUrl = "/still_pilot.jpg",
+        guestStars = emptyList(),
+        episodeTypes = "Regular",
+        tvShowId = 23,
+    )
 }

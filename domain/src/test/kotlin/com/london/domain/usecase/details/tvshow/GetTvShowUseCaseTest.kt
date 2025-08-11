@@ -1,16 +1,17 @@
 package com.london.domain.usecase.details.tvshow
 
 import com.google.common.truth.Truth.assertThat
+import com.london.domain.entity.Actor
 import com.london.domain.entity.PagedFetchResponse
 import com.london.domain.entity.Trending
 import com.london.domain.entity.TvShow
 import com.london.domain.entity.popular.PopularMedia
 import com.london.domain.entity.recent.MediaType
+import com.london.domain.entity.toprated.TopRatedMedia
 import com.london.domain.entity.tvshowdetails.TvShowDetailsEntity
 import com.london.domain.entity.tvshowdetails.TvShowGenreEntity
 import com.london.domain.repository.SearchRepository
 import com.london.domain.repository.TvShowRepository
-import com.london.domain.repository.discover.DiscoverRepository
 import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.mockk
@@ -20,24 +21,20 @@ import org.junit.Test
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.assertThrows
 
-class ManageTvShowDetailsUseCaseTest {
+class GetTvShowUseCaseTest {
     private lateinit var tvShowRepository: TvShowRepository
     private lateinit var searchRepository: SearchRepository
-    private lateinit var discoverRepository: DiscoverRepository
     private lateinit var getTvShowUseCase: GetTvShowUseCase
 
     @Before
     fun setUp() {
         tvShowRepository = mockk()
-        searchRepository = mockk()
-        discoverRepository = mockk()
         getTvShowUseCase = GetTvShowUseCase(
             tvShowRepository = tvShowRepository,
-            searchRepository = searchRepository,
+            searchRepository = searchRepository
         )
     }
 
-    // region GetDetails
     @Test
     fun `should return tv show details when repository returns tv show details`() = runTest {
         //given
@@ -313,48 +310,131 @@ class ManageTvShowDetailsUseCaseTest {
             assertThat(result).isEqualTo(pagedFetchResponse)
         }
 
-    // endregion
 
-    private fun createMockTvShow(mockData: MockPopularMedia): PopularMedia =
-        PopularMedia(
-            id = mockData.id,
-            name = mockData.name,
-            posterUrl = mockData.posterUrl,
-            rating = mockData.rating,
-            mediaType = MediaType.TvShow
+    @Test
+    fun `should return TV series when repository returns valid response`() = runTest {
+        // Given
+        val mockPagedResponse = PagedFetchResponse(
+            items = mockTopRatedTvSeries,
+            currentPage = PAGE,
+            totalPages = 2,
+            totalItems = mockTopRatedTvSeries.size
         )
 
+        coEvery {
+            tvShowRepository.getTopRatedTvShows(PAGE)
+        } returns mockPagedResponse
 
-    private fun createMockTrendingResponse(): PagedFetchResponse<Trending> =
-        PagedFetchResponse(
+        // When
+        val result = getTvShowUseCase.getTopRatedTvShow(PAGE)
+
+        // Then
+        assertThat(result).isEqualTo(mockPagedResponse)
+
+    }
+
+    @Test
+    fun `should return empty list when repository returns empty response`() = runTest {
+        // Given
+        val emptyPagedResponse = PagedFetchResponse(
+            items = emptyList<TopRatedMedia>(),
+            totalPages = PAGE,
             currentPage = 1,
-            items = listOf(createMockTrending()),
-            totalPages = 10,
-            totalItems = 100
+            totalItems = 0
         )
 
-    private fun createMockTrending(
-        id: Int = 1,
-        title: String = "Test TV Show",
-        posterPath: String = "test_poster.jpg",
-        genreIds: List<Int> = listOf(18, 35)
-    ): Trending = Trending(
-        id = id,
-        title = title,
-        posterPath = posterPath,
-        genreIds = genreIds
-    )
+        coEvery {
+            tvShowRepository.getTopRatedTvShows(PAGE)
+        } returns emptyPagedResponse
 
+        // When
+        val result = getTvShowUseCase.getTopRatedTvShow(PAGE)
 
-    private companion object {
+        // Then
+        assertThat(result.items).isEmpty()
+        assertThat(result.currentPage).isEqualTo(PAGE)
+    }
+
+    @Test
+    fun `should throw RuntimeException when repository throws`() = runTest {
+        // Given
+        coEvery {
+            tvShowRepository.getTopRatedTvShows(PAGE)
+        } throws RuntimeException("Something went wrong")
+
+        // When & Then
+        assertThrows<RuntimeException> {
+            getTvShowUseCase.getTopRatedTvShow(PAGE)
+        }
+    }
+
+    companion object {
+        private const val PAGE = 1
+        private const val PAGE_NUMBER = 1
         private const val TV_SHOW_ID = 12345
         private const val CUSTOM_LIMIT = 3
         private const val LARGE_LIMIT = 10
         private const val ZERO_LIMIT = 0
         private const val EXCEPTION_MESSAGE = "Network error"
         private const val CATEGORY_ID = 1
-        private const val PAGE_NUMBER = 1
         const val NAME = "Tv Tv"
+
+        private val mockTv1 = TopRatedMedia(
+            id = 1396,
+            name = "Breaking Bad",
+            voteAverage = 8.9,
+            posterUrl = "/ggFHVNu6YYI5L9pCfOacjizRGt.jpg",
+            genreIds = listOf(18, 80),
+            releaseDate = "2008-01-20",
+        )
+
+        private val mockTv2 = TopRatedMedia(
+            id = 87108,
+            name = "Chernobyl",
+            voteAverage = 9.0,
+            releaseDate = "2019-05-06",
+            posterUrl = "/hlLXt2tOPT6RRnjiUmoxyG1LTFi.jpg",
+            genreIds = listOf(18, 36),
+        )
+
+        val mockTopRatedTvSeries = listOf(mockTv1, mockTv2)
+
+        private val ACTOR = Actor(
+            id = 1,
+            name = "Tom Holland",
+            profilePictureUrl = "",
+            characterName = ""
+        )
+
+        private fun createMockTvShow(mockData: MockPopularMedia): PopularMedia =
+            PopularMedia(
+                id = mockData.id,
+                name = mockData.name,
+                posterUrl = mockData.posterUrl,
+                rating = mockData.rating,
+                mediaType = MediaType.TvShow
+            )
+
+
+        private fun createMockTrendingResponse(): PagedFetchResponse<Trending> =
+            PagedFetchResponse(
+                currentPage = 1,
+                items = listOf(createMockTrending()),
+                totalPages = 10,
+                totalItems = 100
+            )
+
+        private fun createMockTrending(
+            id: Int = 1,
+            title: String = "Test TV Show",
+            posterPath: String = "test_poster.jpg",
+            genreIds: List<Int> = listOf(18, 35)
+        ): Trending = Trending(
+            id = id,
+            title = title,
+            posterPath = posterPath,
+            genreIds = genreIds
+        )
 
         val tvShow = TvShow(
             id = 1,

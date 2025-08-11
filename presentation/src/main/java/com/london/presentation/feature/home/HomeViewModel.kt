@@ -6,7 +6,6 @@ import androidx.paging.cachedIn
 import com.london.domain.entity.UpComingMovie
 import com.london.domain.usecase.details.movie.GetMovieUseCase
 import com.london.domain.usecase.details.tvshow.GetTvShowUseCase
-import com.london.domain.usecase.rating.ManageRatingUseCase
 import com.london.domain.usecase.search.recent.watched.movie.ManageRecentMovieWatchedUseCase
 import com.london.domain.usecase.search.recent.watched.tvshow.ManageRecentTvShowWatchedUseCase
 import com.london.presentation.shared.base.BaseViewModel
@@ -27,7 +26,6 @@ import javax.inject.Inject
 class HomeViewModel @Inject constructor(
     private val getMovieUseCase: GetMovieUseCase,
     private val getTvShowUseCase: GetTvShowUseCase,
-    private val manageRatingUseCase: ManageRatingUseCase,
     private val manageRecentMovieWatchedUseCase: ManageRecentMovieWatchedUseCase,
     private val manageRecentTvShowWatchedUseCase: ManageRecentTvShowWatchedUseCase,
 ) : BaseViewModel<HomeScreenUiState, HomeScreenEffect>(HomeScreenUiState()), HomeScreenContract {
@@ -119,8 +117,8 @@ class HomeViewModel @Inject constructor(
     private fun initializeTopRatedMedia() {
         tryToExecute(
             block = {
-                val movies = manageRatingUseCase.getTopRatedMovies(pageNumber = 1)
-                val shows = manageRatingUseCase.getTopRatedTvSeries(pageNumber = 1)
+                val movies = getMovieUseCase.getTopRatedMovies(pageNumber = 1)
+                val shows = getTvShowUseCase.getTopRatedTvShow(pageNumber = 1)
                 Pair(movies, shows)
             },
             onStart = { updateState { copy(isTopRatedLoading = true) } },

@@ -12,9 +12,6 @@ import javax.inject.Inject
 
 @HiltViewModel
 class ViewItemsViewModel @Inject constructor(
-    private val getMovieListDetailsUseCase: GetMovieListDetailsUseCase,
-    private val removeMovieFromListUseCase: RemoveMovieFromListUseCase,
-    private val getMovieListNameUseCase: GetMovieListNameUseCase,
     private val manageMovieListUseCase: ManageMovieListUseCase,
     savedStateHandle: SavedStateHandle
 ) : BaseViewModel<ViewItemsUiState, ViewItemsEffect>(ViewItemsUiState()),
@@ -71,7 +68,10 @@ class ViewItemsViewModel @Inject constructor(
 
         tryToExecute(
             block = {
-                removeMovieFromListUseCase.invoke(listId = listId.toUInt(), movieId = id.toUInt())
+                manageMovieListUseCase.removeMovieFromList(
+                    listId = listId.toUInt(),
+                    movieId = id.toUInt()
+                )
             },
             onStart = {
                 updateState { copy(error = null, isSnackBarSuccessVisible = false) }
@@ -94,7 +94,7 @@ class ViewItemsViewModel @Inject constructor(
         tryToExecute(
             block = {
                 val moviesFlow = createPagingSourceFlow(query = "") { _, pageNumber ->
-                    val movies = getMovieListDetailsUseCase.invoke(
+                    val movies = manageMovieListUseCase.getMovieListDetails(
                         listId = listId.toUInt(),
                         pageNumber = pageNumber
                     )
@@ -123,7 +123,7 @@ class ViewItemsViewModel @Inject constructor(
 
         tryToExecute(
             block = {
-                getMovieListNameUseCase.invoke(listId.toUInt())
+                manageMovieListUseCase.getMovieListName(listId.toUInt())
             },
             onStart = {
                 updateState { copy(isLoading = true) }
