@@ -32,7 +32,7 @@ fun CategoriesScreen(
     Column(
         Modifier
             .statusBarsPadding()
-            .padding(top = 12.dp, bottom = 12.dp)
+            .padding(top = 12.dp)
     ) {
         TopBar(
             title = stringResource(R.string.categories),
