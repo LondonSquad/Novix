@@ -26,7 +26,7 @@ import com.london.data.repository.movie.MovieRepositoryImpl
 import com.london.data.repository.recent.RecentSearchRepositoryImpl
 import com.london.data.repository.recent.RecentViewedRepositoryImpl
 import com.london.data.repository.recent.RecentWatchedRepositoryIml
-import com.london.data.repository.search.ActorRepositoryImpl
+import com.london.data.repository.actor.ActorRepositoryImpl
 import com.london.data.repository.search.SearchRepositoryImpl
 import com.london.data.repository.tvshow.TvShowRepositoryImpl
 import com.london.data.utils.CrashReporter

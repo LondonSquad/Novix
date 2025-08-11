@@ -1,4 +1,4 @@
-package com.london.data.repository.search
+package com.london.data.repository.actor
 
 import com.london.data.mapper.details.actor.toEntity
 import com.london.data.mapper.details.movie.toEntity

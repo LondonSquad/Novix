@@ -5,10 +5,9 @@ import com.london.data.mapper.details.actor.toEntity
 import com.london.data.remote.exception.NetworkException
 import com.london.data.remote.model.details.actor.model.ActorDetailsResponse
 import com.london.data.remote.model.details.actor.model.actorimage.ActorImageResponse
-import com.london.data.remote.model.details.actor.model.actormoviedetails.ActorMovieDetailsResponse
-import com.london.data.remote.model.details.actor.model.actortvshowdetails.ActorTvShowDetailsResponse
+import com.london.data.remote.model.details.tvshow.model.TvShowCastRemoteResponse
 import com.london.data.remote.source.actor.ActorDetailsRemoteDataSource
-import com.london.data.repository.search.ActorRepositoryImpl
+import com.london.data.repository.actor.ActorRepositoryImpl
 import com.london.domain.repository.ActorRepository
 import io.mockk.coEvery
 import io.mockk.mockk
@@ -40,30 +39,6 @@ class ActorRepositoryImplTest {
     }
 
     @Test
-    fun `getActorMoviePicksById returns expected result`() = runTest {
-        coEvery { remoteDataSource.getActorMovieById(ACTOR_ID) } returns Result.success(
-            ActorMovieDetailsRemoteMock
-        )
-
-        val result = repository.getActorMoviePicksById(ACTOR_ID)
-
-        assertThat(result).isEqualTo(ActorMovieDetailsRemoteMock.toEntity())
-    }
-
-
-    @Test
-    fun `getActorTvShowPicksById returns expected result`() = runTest {
-        coEvery { remoteDataSource.getActorTvShowById(ACTOR_ID) } returns Result.success(
-            ActorTvShowDetailsRemoteMock
-        )
-
-        val result = repository.getActorTvShowPicksById(ACTOR_ID)
-
-        assertThat(result).isEqualTo(ActorTvShowDetailsRemoteMock.toEntity())
-    }
-
-
-    @Test
     fun `getActorImagesById returns expected result`() = runTest {
         coEvery { remoteDataSource.getActorImagePath(ACTOR_ID) } returns Result.success(
             ActorImageResponseMock
@@ -75,14 +50,26 @@ class ActorRepositoryImplTest {
     }
 
     @Test
-    fun `getActorTvShowPicksById throws UnAuthorizedException on failure`() = runTest {
-        coEvery { remoteDataSource.getActorTvShowById(ACTOR_ID) } returns Result.failure(
+    fun `getMovieCastById return expected result`() = runTest {
+        coEvery { remoteDataSource.getMovieCast(ACTOR_ID) } returns Result.failure(
             NetworkException.UnAuthorizedException("unauthorized")
         )
 
         assertThrows<NetworkException.UnAuthorizedException> {
-            repository.getActorTvShowPicksById(ACTOR_ID)
+            repository.getMovieCastById(ACTOR_ID)
         }
+    }
+
+    @Test
+    fun `getCastTvShowById return expected result`() = runTest {
+        val tvShowCastRemoteResponse = mockk<TvShowCastRemoteResponse>(relaxed = true)
+        coEvery { remoteDataSource.getCastsByTvShowId(ACTOR_ID) } returns Result.success(
+            tvShowCastRemoteResponse
+        )
+
+        val result = repository.getCastTvShowById(ACTOR_ID)
+
+        assertThat(result).isEqualTo(tvShowCastRemoteResponse)
     }
 
     @Test
@@ -108,16 +95,15 @@ class ActorRepositoryImplTest {
     }
 
     @Test
-    fun `getActorTvShowPicksById throws TimeoutException on failure`() = runTest {
-        coEvery { remoteDataSource.getActorMovieById(ACTOR_ID) } returns Result.failure(
-            NetworkException.TimeoutException("timeout")
+    fun `getTrendingActors should return expected result`() = runTest {
+        coEvery { remoteDataSource.getTrendingActors(ACTOR_ID) } returns Result.success(
+            mockk(relaxed = true)
         )
 
         assertThrows<NetworkException.TimeoutException> {
-            repository.getActorMoviePicksById(ACTOR_ID)
+            repository.getTrendingActors(ACTOR_ID)
         }
     }
-
 
     private companion object {
         const val ACTOR_ID = 123
@@ -137,18 +123,6 @@ class ActorRepositoryImplTest {
             knownForDepartment = "Acting",
             popularity = 99.9,
             profilePath = "/profile.jpg"
-        )
-
-        val ActorMovieDetailsRemoteMock = ActorMovieDetailsResponse(
-            id = ACTOR_ID,
-            cast = emptyList(),
-            crew = emptyList()
-        )
-
-        val ActorTvShowDetailsRemoteMock = ActorTvShowDetailsResponse(
-            id = ACTOR_ID,
-            cast = emptyList(),
-            crew = emptyList()
         )
 
         val ActorImageResponseMock = ActorImageResponse(
