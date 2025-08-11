@@ -785,9 +785,9 @@ document.addEventListener("DOMContentLoaded", () => {
         const sortedCollaborators = Object.entries(collaborationSummary).map(([r, d]) => ({
             reviewer: r,
             ...d
-        })).sort((a, b) => b.totalReviews - a.totalReviews).slice(0, 10);
+        })).sort((a, b) => b.totalReviews - a.totalReviews);
         document.getElementById('collaboration-list').innerHTML = sortedCollaborators.length > 0 ? sortedCollaborators.map(item => {
-            const avs = Array.from(item.collaborators).slice(0, 5).map(c => `<a href="https://github.com/${c}" target="_blank" title="${c}"><img src="https://github.com/${c}.png" class="collaborator-avatar"></a>`).join('');
+            const avs = Array.from(item.collaborators).map(c => `<a href="https://github.com/${c}" target="_blank" title="${c}"><img src="https://github.com/${c}.png" class="collaborator-avatar"></a>`).join('');
             return `<li><div class="reviewer-summary"><a href="https://github.com/${item.reviewer}" target="_blank"><img src="https://github.com/${item.reviewer}.png" class="avatar"/><span>${item.reviewer}</span></a><span class="text-secondary">reviewed</span><div class="collaborator-avatar-stack">${avs}</div></div><span class="collaboration-count">${item.totalReviews} total</span></li>`;
         }).join('') : '<li>No collaboration data available for this period.</li>';
 
