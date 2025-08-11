@@ -1,6 +1,5 @@
 package com.london.presentation.feature.details.movie
 
-import android.util.Log
 import androidx.lifecycle.SavedStateHandle
 import com.london.domain.entity.Movie
 import com.london.domain.entity.recent.MediaType
@@ -23,12 +22,13 @@ class MovieDetailsViewModel @Inject constructor(
     private val manageRecentViewedUseCase: ManageRecentViewedUseCase,
     private val ratingUseCase: RatingUseCase,
     private val authenticationUseCase: AuthenticationUseCase,
-    savedStateHandle: SavedStateHandle
+    savedStateHandle: SavedStateHandle,
+    private val movieIdOverride: Int? = null  // add this param with default null
 ) : BaseViewModel<MovieDetailsUiState, MovieDetailsEffect>(MovieDetailsUiState()),
     MovieDetailsContract {
 
-    private val args = savedStateHandle.getArgs<Screen.MovieDetails>()
-    private val movieId = args?.movieId ?: 0
+    private val movieId: Int =
+        movieIdOverride ?: savedStateHandle.getArgs<Screen.MovieDetails>()?.movieId ?: 0
 
     init {
         loadMovieDetails(movieId)
@@ -103,7 +103,8 @@ class MovieDetailsViewModel @Inject constructor(
                         selectedRating = rating,
                         isRated = true,
                         isRateBottomSheetVisible = false,
-                        isSuccessfullyRated = true
+                        isSuccessfullyRated = true,
+                        error = null
                     )
                 }
             },
@@ -123,7 +124,7 @@ class MovieDetailsViewModel @Inject constructor(
         tryToExecute(
             block = {
                 val movie = movieDetails.getMovieDetails(movieId)
-                val movieImages = movieDetails.getMovieImagesUseCase(movieId)
+                val movieImages = movieDetails.getMovieImages(movieId)
                 val movieCast = movieDetails.getMovieCast(movieId)
                 Triple(movie, movieImages, movieCast)
             },
@@ -191,11 +192,10 @@ class MovieDetailsViewModel @Inject constructor(
 
             },
             onSuccess = { (similarMovies, videos, movieRating) ->
-                Log.d("test", "loadSimilarAndVideos: $videos")
                 updateState {
                     copy(
                         similarMovies = similarMovies,
-                        movieVideo = videos.first(),
+                        movieVideo = videos.firstOrNull() ?: "",
                         isRated = movieRating != 0 && state.value.isGuestUser.not()
                     )
                 }

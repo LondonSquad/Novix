@@ -121,7 +121,7 @@ class TvShowDetailsViewModelTest {
     }
 
     @Test
-    fun `When initializeEpisodesBySeasons fails, error state should be updated`() = runTest {
+    fun `when initializeEpisodesBySeasons fails, error state should be updated`() = runTest {
 
         // Given
         val exception = Exception("error")
@@ -139,7 +139,7 @@ class TvShowDetailsViewModelTest {
     }
 
     @Test
-    fun `When initializeEpisodesBySeasons is called, videoProvider state should be updated`() =
+    fun `when initializeEpisodesBySeasons is called, videoProvider state should be updated`() =
         runTest {
             // Given
             coEvery { manageTvShowDetailsUseCase.getTvShowVideoProvider(TV_SHOW_ID) } returns emptyList()
@@ -156,7 +156,7 @@ class TvShowDetailsViewModelTest {
         }
 
     @Test
-    fun `When initializeGetTvShowDetailsData is called, tvShowDetails state should be updated`() =
+    fun `when initializeGetTvShowDetailsData is called, tvShowDetails state should be updated`() =
         runTest {
 
             // Given
@@ -216,7 +216,7 @@ class TvShowDetailsViewModelTest {
     }
 
     @Test
-    fun `OnGenreClicked should emit NavigateToTvShowsByCategoryId effect when clicked`() = runTest {
+    fun `onGenreClicked should emit NavigateToTvShowsByCategoryId effect when clicked`() = runTest {
         // Given
         val genreId = 123
 

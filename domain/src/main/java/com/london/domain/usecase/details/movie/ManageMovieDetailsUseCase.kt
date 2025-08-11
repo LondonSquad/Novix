@@ -8,7 +8,7 @@ class ManageMovieDetailsUseCase @Inject constructor(
 ) {
     suspend fun getMovieDetails(movieId: Int) = movieRepository.getMovieById(movieId)
 
-    suspend fun getMovieImagesUseCase(movieId: Int, limit: Int = LIMIT) : List<String> {
+    suspend fun getMovieImages(movieId: Int, limit: Int = LIMIT): List<String> {
            val images = movieRepository.getMovieImagesById(movieId)
             return when {
                 images.backdrops.isNotEmpty() -> images.backdrops

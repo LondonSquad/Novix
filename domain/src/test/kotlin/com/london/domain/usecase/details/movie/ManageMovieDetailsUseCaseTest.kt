@@ -13,7 +13,6 @@ import com.london.domain.repository.MovieDetailsRepository
 import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.mockk
-import junit.runner.Version.id
 import kotlinx.coroutines.test.runTest
 import org.junit.Before
 import org.junit.Test
@@ -253,7 +252,7 @@ class ManageMovieDetailsUseCaseTest {
             // given
             coEvery { movieRepository.getMovieImagesById(MOVIE_ID) } returns movieImages
             // when
-            val result = manageMovieDetailsUseCase.getMovieImagesUseCase(MOVIE_ID)
+            val result = manageMovieDetailsUseCase.getMovieImages(MOVIE_ID)
             // then
             assertThat(result).isEqualTo(movieMockImages)
         }
@@ -269,7 +268,7 @@ class ManageMovieDetailsUseCaseTest {
                 posters = emptyList()
             )
             // when
-            val result = manageMovieDetailsUseCase.getMovieImagesUseCase(MOVIE_ID)
+            val result = manageMovieDetailsUseCase.getMovieImages(MOVIE_ID)
             // then
             assertThat(result).isEmpty()
         }
@@ -282,7 +281,7 @@ class ManageMovieDetailsUseCaseTest {
 
             // when & then
             assertThrows<GetMovieImagesFailedException> {
-                manageMovieDetailsUseCase.getMovieImagesUseCase(MOVIE_ID)
+                manageMovieDetailsUseCase.getMovieImages(MOVIE_ID)
             }
         }
 
@@ -299,7 +298,7 @@ class ManageMovieDetailsUseCaseTest {
             )
 
             // when
-            val result = manageMovieDetailsUseCase.getMovieImagesUseCase(MOVIE_ID)
+            val result = manageMovieDetailsUseCase.getMovieImages(MOVIE_ID)
 
             // then
             assertThat(result).hasSize(10)
