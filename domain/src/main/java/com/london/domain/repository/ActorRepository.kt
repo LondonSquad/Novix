@@ -9,7 +9,7 @@ import com.london.domain.entity.tvshowdetails.TvShowCastEntity
 interface ActorRepository {
     suspend fun getActorDetailsById(id: Int): ActorDetails
     suspend fun getActorImagesById(id: Int): ActorImageDetails
-    suspend fun getMovieCastById(id: Int): List<Actor>
+    suspend fun getMovieActors(id: Int): List<Actor>
     suspend fun getTrendingActors(page: Int): PagedFetchResponse<Actor>
     suspend fun getCastTvShowById(id: Int): TvShowCastEntity
 

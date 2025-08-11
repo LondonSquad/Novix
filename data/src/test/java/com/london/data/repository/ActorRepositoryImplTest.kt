@@ -66,7 +66,7 @@ class ActorRepositoryImplTest {
         )
 
         assertThrows<NetworkException.UnAuthorizedException> {
-            repository.getMovieCastById(ACTOR_ID)
+            repository.getMovieActors(ACTOR_ID)
         }
     }
 
@@ -123,7 +123,7 @@ class ActorRepositoryImplTest {
             fakeMovieCastRemote
         )
 
-        val result = repository.getMovieCastById(123)
+        val result = repository.getMovieActors(123)
 
         assertEquals(2, result.size)
         assertEquals("Leonardo DiCaprio", result[0].name)
@@ -138,7 +138,7 @@ class ActorRepositoryImplTest {
                 NetworkException.ValidationException("validation error")
 
         assertThrows<NetworkException.ValidationException> {
-            repository.getMovieCastById(123)
+            repository.getMovieActors(123)
         }
     }
 

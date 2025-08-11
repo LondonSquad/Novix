@@ -12,7 +12,6 @@ import com.london.domain.error.TvShowDetailsSearchFailedException
 import com.london.domain.error.TvShowSearchFailedException
 import com.london.domain.repository.SearchRepository
 import com.london.domain.repository.TvShowRepository
-import com.london.domain.repository.discover.DiscoverRepository
 import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.mockk
@@ -25,14 +24,12 @@ import org.junit.jupiter.api.assertThrows
 class ManageTvShowDetailsUseCaseTest {
     private lateinit var tvShowRepository: TvShowRepository
     private lateinit var searchRepository: SearchRepository
-    private lateinit var discoverRepository: DiscoverRepository
     private lateinit var manageTvShowDetailsUseCase: ManageTvShowDetailsUseCase
 
     @Before
     fun setUp() {
         tvShowRepository = mockk()
         searchRepository = mockk()
-        discoverRepository = mockk()
         manageTvShowDetailsUseCase = ManageTvShowDetailsUseCase(
             tvShowRepository = tvShowRepository,
             searchRepository = searchRepository,

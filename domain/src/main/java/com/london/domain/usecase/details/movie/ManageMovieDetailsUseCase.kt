@@ -20,7 +20,7 @@ class ManageMovieDetailsUseCase @Inject constructor(
             }.take(limit)
         }
 
-    suspend fun getMovieCast(movieId: Int) = actorRepository.getMovieCastById(movieId)
+    suspend fun getMovieCast(movieId: Int) = actorRepository.getMovieActors(movieId)
 
     suspend fun getSimilarMovies(movieId: Int) = movieRepository.getSimilarMoviesById(movieId)
 

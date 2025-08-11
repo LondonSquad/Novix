@@ -22,7 +22,7 @@ class ActorRepositoryImpl @Inject constructor(
     override suspend fun getActorImagesById(id: Int): ActorImageDetails =
         dataSource.getActorImagePathById(id).getOrThrow().toEntity()
 
-    override suspend fun getMovieCastById(id: Int): List<Actor> {
+    override suspend fun getMovieActors(id: Int): List<Actor> {
         val movieCast = dataSource.getMovieActors(id).getOrThrow()
         return movieCast.actorRemote?.map { it.toEntity() }.orEmpty()
     }
