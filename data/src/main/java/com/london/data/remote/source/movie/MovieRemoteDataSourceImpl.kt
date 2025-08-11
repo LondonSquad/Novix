@@ -14,30 +14,30 @@ import com.london.data.remote.model.home.trending.TrendingResponse
 import com.london.data.remote.model.myrating.RatingMediaResponse
 import com.london.data.remote.model.reviews.ReviewResponse
 import com.london.data.remote.model.search.MovieRemote
-import com.london.data.remote.service.movie.MovieService
+import com.london.data.remote.service.movie.MovieApiService
 import com.london.data.remote.source.base.BaseRemoteDatasource
 import com.london.data.utils.getCurrentDate
 import javax.inject.Inject
 
 class MovieRemoteDataSourceImpl @Inject constructor(
-    private val movieService: MovieService,
+    private val movieApiService: MovieApiService,
 ) : MovieRemoteDataSource, BaseRemoteDatasource {
 
     override suspend fun getMovieDetails(movieId: Int): Result<MovieDetailsResponse> {
         return callApiWithRetry(
-            apiCall = { movieService.getMovieDetails(movieId = movieId) },
+            apiCall = { movieApiService.getMovieDetails(movieId = movieId) },
             mapper = { it })
     }
 
     override suspend fun getSimilarMovies(movieId: Int): Result<ApiResponse<MovieRemote>> {
         return callApiWithRetry(
-            apiCall = { movieService.getSimilarMovies(movieId = movieId) },
+            apiCall = { movieApiService.getSimilarMovies(movieId = movieId) },
             mapper = { it })
     }
 
     override suspend fun getMovieImages(movieId: Int): Result<MovieImagesResponse> {
         return callApiWithRetry(
-            { movieService.getMovieImages(movieId = movieId) },
+            { movieApiService.getMovieImages(movieId = movieId) },
             mapper = { it })
     }
 
@@ -46,7 +46,7 @@ class MovieRemoteDataSourceImpl @Inject constructor(
         userSessionId: String?
     ): Result<AccountStatesResponse> {
         return callApiWithRetry(apiCall = {
-            movieService.getAccountMovieStates(
+            movieApiService.getAccountMovieStates(
                 movieId = movieId,
                 userSessionId = userSessionId
             )
@@ -55,21 +55,21 @@ class MovieRemoteDataSourceImpl @Inject constructor(
 
     override suspend fun getMovieVideos(movieId: Int): Result<MovieVideoRemote> {
         return callApiWithRetry(
-            { movieService.getMovieVideos(movieId = movieId) },
+            { movieApiService.getMovieVideos(movieId = movieId) },
             mapper = { it }
         )
     }
 
     override suspend fun getPopularMovies(): Result<ApiResponse<PopularMovieResponse>> {
         return callApiWithRetry(
-            apiCall = { movieService.getPopularMovies() },
+            apiCall = { movieApiService.getPopularMovies() },
             mapper = { it }
         )
     }
 
     override suspend fun getTrendingMovies(page: Int): Result<ApiResponse<TrendingResponse>> {
         return callApiWithRetry(
-            apiCall = { movieService.getTrendingMovies(page = page) },
+            apiCall = { movieApiService.getTrendingMovies(page = page) },
             mapper = { it }
         )
     }
@@ -78,7 +78,7 @@ class MovieRemoteDataSourceImpl @Inject constructor(
         movieId: Int, pageNumber: Int
     ): Result<ApiResponse<ReviewResponse>> {
         return callApiWithRetry(
-            apiCall = { movieService.getMovieReviews(movieId = movieId, page = pageNumber) },
+            apiCall = { movieApiService.getMovieReviews(movieId = movieId, page = pageNumber) },
             mapper = { it }
         )
     }
@@ -87,14 +87,14 @@ class MovieRemoteDataSourceImpl @Inject constructor(
         pageNumber: Int,
     ): Result<ApiResponse<TopRatedMovieRemote>> {
         return callApiWithRetry(
-            apiCall = { movieService.getTopRatedMovies(pageNumber) },
+            apiCall = { movieApiService.getTopRatedMovies(pageNumber) },
             mapper = { it }
         )
     }
 
     override suspend fun getActorMovieById(id: Int): Result<ActorMovieDetailsResponse> {
         return callApiWithRetry(
-            apiCall = { movieService.getActorMovies(actorId = id) },
+            apiCall = { movieApiService.getActorMovies(actorId = id) },
             mapper = { it }
         )
     }
@@ -104,7 +104,7 @@ class MovieRemoteDataSourceImpl @Inject constructor(
         sessionId: String?
     ): Result<RatingRemoteResponse> = callApiWithRetry(
         apiCall = {
-            movieService.deleteMovieRating(
+            movieApiService.deleteMovieRating(
                 movieId = movieId,
                 sessionId = sessionId
             )
@@ -118,7 +118,7 @@ class MovieRemoteDataSourceImpl @Inject constructor(
     ): Result<ApiResponse<RatingMediaResponse>> {
         return callApiWithRetry(
             apiCall = {
-                movieService.getRatedMovies(
+                movieApiService.getRatedMovies(
                     accountId = accountId,
                     sessionId = sessionId,
                 )
@@ -135,7 +135,7 @@ class MovieRemoteDataSourceImpl @Inject constructor(
     ): Result<RatingRemoteResponse> {
         return callApiWithRetry(
             apiCall = {
-                movieService.addMovieRating(
+                movieApiService.addMovieRating(
                     movieId = movieId,
                     guestSessionId = guestSessionId,
                     userSessionId = userSessionId,
@@ -153,7 +153,7 @@ class MovieRemoteDataSourceImpl @Inject constructor(
     ): Result<ApiResponse<MovieRemote>> {
         return callApiWithRetry(
             {
-                movieService.getUpComingMoviesByCategory(
+                movieApiService.getUpComingMoviesByCategory(
                     genreId = categoryId,
                     releaseDate = getCurrentDate(),
                     page = pageNumber,
@@ -171,7 +171,7 @@ class MovieRemoteDataSourceImpl @Inject constructor(
     ): Result<ApiResponse<MovieRemote>> {
         return callApiWithRetry(
             apiCall = {
-                movieService.getMoviesByCategory(
+                movieApiService.getMoviesByCategory(
                     genreId = categoryId,
                     page = pageNumber,
                     includeAdult = includeAdult

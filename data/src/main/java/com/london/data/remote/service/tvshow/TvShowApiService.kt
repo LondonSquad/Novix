@@ -28,51 +28,51 @@ import retrofit2.http.POST
 import retrofit2.http.Path
 import retrofit2.http.Query
 
-interface TvShowDetailsApiService {
+interface TvShowApiService {
 
-    @GET("3/tv/{tv_id}")
+    @GET(ApiConstants.TV_SHOW_DETAILS_PATH)
     suspend fun getTvShowDetails(
         @Path("tv_id") tvShowId: Int,
     ): Response<TvShowDetailsRemoteResponse>
 
-    @GET("3/tv/{tv_id}/season/{season_number}")
+    @GET(ApiConstants.TV_SHOW_EPISODE_BY_SEASON_PATH)
     suspend fun getTvShowEpisodesBySeason(
         @Path("tv_id") tvShowId: Int,
         @Path("season_number") seasonNumber: Int,
     ): Response<TvShowEpisodesRemoteResponse>
 
-    @GET("3/tv/{tv_id}/images")
+    @GET(ApiConstants.TV_SHOW_IMAGE)
     suspend fun getTvShowImages(
         @Path("tv_id") tvShowId: Int,
     ): Response<TvShowImagesRemoteResponse>
 
-    @GET("3/tv/{tv_id}/season/{season_number}/episode/{episode_number}")
+    @GET(ApiConstants.EPISODE_DETAILS_PATH)
     suspend fun getEpisodeDetails(
         @Path("tv_id") tvShowId: Int,
         @Path("season_number") seasonNumber: Int,
         @Path("episode_number") episodeNumber: Int,
     ): Response<TvShowEpisodeResponse>
 
-    @GET("3/tv/{series_id}/season/{season_number}/episode/{episode_number}/videos")
+    @GET(ApiConstants.EPISODE_VIDEO_PATH)
     suspend fun getEpisodeVideo(
         @Path("series_id") seriesId: Int,
         @Path("season_number") seasonNumber: Int,
         @Path("episode_number") episodeNumber: Int,
     ): Response<EpisodeVideoResponse>
 
-    @GET("3/tv/{tv_id}/videos")
+    @GET(ApiConstants.TV_SHOW_VIDEO_PATH)
     suspend fun getTvShowVideos(
         @Path("tv_id") tvShowId: Int,
     ): Response<TvShowVideoResponse>
 
-    @GET("3/tv/{series_id}/account_states")
+    @GET(ApiConstants.ACCOUNT_TV_SHOW_STATES)
     suspend fun getAccountTvShowState(
         @Path("series_id") seriesId: Int,
         @Query("guest_session_id") guestSessionId: String?,
         @Query("session_id") userSessionId: String?,
     ): Response<AccountStatesResponse>
 
-    @GET("3/tv/{series_id}/season/{season_number}/episode/{episode_number}/account_states")
+    @GET(ApiConstants.ACCOUNT_TV_EPISODE)
     suspend fun getAccountTvEpisode(
         @Path("series_id") tvShowId: Int,
         @Path("season_number") seasonNumber: Int,
@@ -81,13 +81,13 @@ interface TvShowDetailsApiService {
         @Query("session_id") userSessionId: String?,
     ): Response<AccountStatesResponse>
 
-    @GET("3/person/{person_id}/tv_credits")
+    @GET(ApiConstants.ACTOR_TV_SHOWS)
     suspend fun getActorTvShows(
         @Path("person_id") actorId: Int,
     ): Response<ActorTvShowDetailsResponse>
 
     @GET(ApiConstants.TV_SHOW_DISCOVER_PATH)
-    suspend fun searchForTvShowsByCategory(
+    suspend fun getTvShowByCategory(
         @Query("with_genres") genreId: Int,
         @Query("page") page: Int,
         @Query("include_adult") includeAdult: Boolean
@@ -99,13 +99,13 @@ interface TvShowDetailsApiService {
     @GET(ApiConstants.TRENDING_TV_SHOWS_PATH)
     suspend fun getTrendingTvShows(@Query("page") page: Int): Response<ApiResponse<TrendingResponse>>
 
-    @GET("3/account/{account_id}/rated/tv")
-    suspend fun getRatedTvShow(
+    @GET(ApiConstants.RATED_TV_SHOWS_PATH)
+    suspend fun getRatedTvShows(
         @Path("account_id") accountId: Int,
         @Query("session_id") sessionId: String,
     ): Response<ApiResponse<RatingMediaResponse>>
 
-    @POST("3/tv/{series_id}/rating")
+    @POST(ApiConstants.ADD_TV_SHOW_RATING_PATH)
     suspend fun addTvShowRating(
         @Path("series_id") tvShowId: Int,
         @Query("guest_session_id") guestSessionId: String?,
@@ -113,7 +113,7 @@ interface TvShowDetailsApiService {
         @Body ratingRequest: RatingRemoteBody
     ): Response<RatingRemoteResponse>
 
-    @POST("3/tv/{series_id}/season/{season_number}/episode/{episode_number}/rating")
+    @POST(ApiConstants.ADD_TV_EPISODE_PATH)
     suspend fun addTvEpisode(
         @Path("series_id") tvShowId: Int,
         @Path("season_number") seasonNumber: Int,
@@ -123,20 +123,20 @@ interface TvShowDetailsApiService {
         @Body ratingRequest: RatingRemoteBody
     ): Response<RatingRemoteResponse>
 
-    @DELETE("/3/tv/{series_id}/rating")
+    @DELETE(ApiConstants.DELETE_TV_SHOW_RATING_PATH)
     suspend fun deleteTvShowRating(
         @Path("series_id") tvShowId: Int,
         @Query("session_id") sessionId: String?
     ): Response<RatingRemoteResponse>
 
-    @GET("3/tv/{tv_id}/reviews")
+    @GET(ApiConstants.GET_TV_SHOW_REVIEW_PATH)
     suspend fun getTvShowReviews(
         @Path("tv_id") tvShowId: Int,
         @Query("page") page: Int
     ): Response<ApiResponse<ReviewResponse>>
 
-    @GET("3/tv/top_rated")
-    suspend fun getTopRatedTvShow(
+    @GET(ApiConstants.GET_TOP_RATED_TV_SHOWS_PATH)
+    suspend fun getTopRatedTvShows(
         @Query("page") pageNumber: Int,
     ): Response<ApiResponse<TopRatedTvSeriesRemote>>
 }

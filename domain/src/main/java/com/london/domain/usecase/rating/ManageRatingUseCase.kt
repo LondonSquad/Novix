@@ -10,7 +10,7 @@ class ManageRatingUseCase @Inject constructor(
     private val movieRepository: MovieRepository,
 ) {
 
-    suspend fun getRatedMedia(): List<RatedMedia> =
+    private suspend fun getRatedMedia(): List<RatedMedia> =
         buildList {
             addAll(movieRepository.getAllRatedMovies())
             addAll(tvShowRepository.getAllRatedTvShows())
@@ -25,7 +25,7 @@ class ManageRatingUseCase @Inject constructor(
     suspend fun getRatedTvShows(): List<RatedMedia> =
         tvShowRepository.getAllRatedTvShows()
 
-    suspend fun getRateAccountTvEpisode(
+    suspend fun getRatedAccountTvShowEpisode(
         tvShowId: Int,
         seasonNumber: Int,
         episodeNumber: Int
@@ -35,12 +35,12 @@ class ManageRatingUseCase @Inject constructor(
         episodeNumber = episodeNumber
     ).rate
 
-    suspend fun addTvEpisodeRatingById(
+    suspend fun addTvShowEpisodeRatingById(
         id: Int,
         rating: Int,
         seasonNumber: Int,
         episodeNumber: Int
-    ) = tvShowRepository.addTvEpisode(
+    ) = tvShowRepository.addTvShowEpisode(
         tvShowId = id,
         rating = rating,
         seasonNumber = seasonNumber,

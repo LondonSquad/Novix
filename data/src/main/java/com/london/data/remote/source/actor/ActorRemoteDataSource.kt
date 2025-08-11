@@ -7,10 +7,10 @@ import com.london.data.remote.model.details.movie.model.moviecast.MovieCastRespo
 import com.london.data.remote.model.details.tvshow.model.TvShowCastRemoteResponse
 import com.london.data.remote.model.home.trending.TrendingResponse
 
-interface ActorDetailsRemoteDataSource {
+interface ActorRemoteDataSource {
     suspend fun getActorDetailsById(id: Int): Result<ActorDetailsResponse>
-    suspend fun getActorImagePath(id: Int): Result<ActorImageResponse>
+    suspend fun getActorImagePathById(id: Int): Result<ActorImageResponse>
     suspend fun getTrendingActors(page: Int): Result<ApiResponse<TrendingResponse>>
-    suspend fun getMovieCast(movieId: Int): Result<MovieCastResponse>
-    suspend fun getCastsByTvShowId(id: Int): Result<TvShowCastRemoteResponse>
+    suspend fun getMovieActors(movieId: Int): Result<MovieCastResponse>
+    suspend fun getTvShowActors(tvShowId: Int): Result<TvShowCastRemoteResponse>
 }

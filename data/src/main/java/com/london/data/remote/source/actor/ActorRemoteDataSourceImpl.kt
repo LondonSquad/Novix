@@ -6,40 +6,40 @@ import com.london.data.remote.model.details.actor.model.actorimage.ActorImageRes
 import com.london.data.remote.model.details.movie.model.moviecast.MovieCastResponse
 import com.london.data.remote.model.details.tvshow.model.TvShowCastRemoteResponse
 import com.london.data.remote.model.home.trending.TrendingResponse
-import com.london.data.remote.service.actor.ActorDetailsApiService
+import com.london.data.remote.service.actor.ActorApiService
 import com.london.data.remote.source.base.BaseRemoteDatasource
 import javax.inject.Inject
 
-class ActorDetailsRemoteDataSourceImpl @Inject constructor(
-    private val actorDetailsApiService: ActorDetailsApiService,
-) : ActorDetailsRemoteDataSource, BaseRemoteDatasource {
+class ActorRemoteDataSourceImpl @Inject constructor(
+    private val actorApiService: ActorApiService,
+) : ActorRemoteDataSource, BaseRemoteDatasource {
     override suspend fun getActorDetailsById(id: Int): Result<ActorDetailsResponse> =
         callApiWithRetry(
-            apiCall = { actorDetailsApiService.getActorDetails(actorId = id) },
+            apiCall = { actorApiService.getActorDetails(actorId = id) },
             mapper = { it }
         )
 
-    override suspend fun getActorImagePath(id: Int): Result<ActorImageResponse> =
+    override suspend fun getActorImagePathById(id: Int): Result<ActorImageResponse> =
         callApiWithRetry(
-            apiCall = { actorDetailsApiService.getActorImages(actorId = id) },
+            apiCall = { actorApiService.getActorImages(actorId = id) },
             mapper = { it }
         )
 
     override suspend fun getTrendingActors(page: Int): Result<ApiResponse<TrendingResponse>> =
         callApiWithRetry(
-            apiCall = { actorDetailsApiService.getTrendingActors(page = page) },
+            apiCall = { actorApiService.getTrendingActors(page = page) },
             mapper = { it }
         )
 
-    override suspend fun getMovieCast(movieId: Int): Result<MovieCastResponse> {
+    override suspend fun getMovieActors(movieId: Int): Result<MovieCastResponse> {
         return callApiWithRetry(
-            apiCall = { actorDetailsApiService.getMovieCast(movieId = movieId) },
+            apiCall = { actorApiService.getMovieActors(movieId = movieId) },
             mapper = { it })
     }
 
-    override suspend fun getCastsByTvShowId(id: Int): Result<TvShowCastRemoteResponse> =
+    override suspend fun getTvShowActors(tvShowId: Int): Result<TvShowCastRemoteResponse> =
         callApiWithRetry(
-            apiCall = { actorDetailsApiService.getTvShowCast(tvShowId = id) },
+            apiCall = { actorApiService.getTvShowActors(tvShowId = tvShowId) },
             mapper = { it }
         )
 }

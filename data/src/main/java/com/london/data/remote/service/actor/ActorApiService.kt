@@ -12,14 +12,14 @@ import retrofit2.http.GET
 import retrofit2.http.Path
 import retrofit2.http.Query
 
-interface ActorDetailsApiService {
+interface ActorApiService {
 
-    @GET("3/person/{person_id}")
+    @GET(ApiConstants.GET_ACTOR_DETAILS_PATH)
     suspend fun getActorDetails(
         @Path("person_id") actorId: Int,
     ): Response<ActorDetailsResponse>
 
-    @GET("3/person/{person_id}/images")
+    @GET(ApiConstants.GET_ACTOR_IMAGES_PATH)
     suspend fun getActorImages(
         @Path("person_id") actorId: Int,
     ): Response<ActorImageResponse>
@@ -27,13 +27,13 @@ interface ActorDetailsApiService {
     @GET(ApiConstants.TRENDING_ACTORS_PATH)
     suspend fun getTrendingActors(@Query("page") page: Int): Response<ApiResponse<TrendingResponse>>
 
-    @GET("3/tv/{tv_id}/aggregate_credits")
-    suspend fun getTvShowCast(
+    @GET(ApiConstants.GET_TV_SHOW_CAST)
+    suspend fun getTvShowActors(
         @Path("tv_id") tvShowId: Int,
     ): Response<TvShowCastRemoteResponse>
 
-    @GET("3/movie/{movie_id}/credits")
-    suspend fun getMovieCast(
+    @GET(ApiConstants.GET_MOVIE_CAST)
+    suspend fun getMovieActors(
         @Path("movie_id") movieId: Int,
     ): Response<MovieCastResponse>
 }

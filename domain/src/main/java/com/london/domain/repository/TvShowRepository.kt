@@ -33,7 +33,7 @@ interface TvShowRepository {
         pageNumber: Int
     ): PagedFetchResponse<TvShow>
 
-    suspend fun addTvEpisode(
+    suspend fun addTvShowEpisode(
         tvShowId: Int,
         seasonNumber: Int,
         episodeNumber: Int,

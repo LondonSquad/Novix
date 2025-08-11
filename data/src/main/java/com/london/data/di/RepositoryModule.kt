@@ -13,7 +13,7 @@ import com.london.data.local.source.home.upcoming.UpComingLocalDataSource
 import com.london.data.local.source.recent.RecentDataSource
 import com.london.data.local.source.recent.watched.RecentWatchedDataSource
 import com.london.data.remote.source.account.AccountRemoteDataSource
-import com.london.data.remote.source.actor.ActorDetailsRemoteDataSource
+import com.london.data.remote.source.actor.ActorRemoteDataSource
 import com.london.data.remote.source.authentication.AuthenticationRemoteDataSource
 import com.london.data.remote.source.list.CustomMovieListsRemoteDataSource
 import com.london.data.remote.source.movie.MovieRemoteDataSource
@@ -89,7 +89,7 @@ object RepositoryModule {
     @Provides
     @Singleton
     fun provideActorRepository(
-        dataSource: ActorDetailsRemoteDataSource
+        dataSource: ActorRemoteDataSource
     ): ActorRepository = ActorRepositoryImpl(dataSource = dataSource)
 
     @Provides

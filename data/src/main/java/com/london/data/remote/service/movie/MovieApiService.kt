@@ -25,35 +25,35 @@ import retrofit2.http.POST
 import retrofit2.http.Path
 import retrofit2.http.Query
 
-interface MovieService {
+interface MovieApiService {
 
-    @GET("3/movie/{movie_id}")
+    @GET(ApiConstants.MOVIE_DETAILS_PATH)
     suspend fun getMovieDetails(
         @Path("movie_id") movieId: Int,
     ): Response<MovieDetailsResponse>
 
-    @GET("3/movie/{movie_id}/similar")
+    @GET(ApiConstants.SIMILAR_MOVIES_PATH)
     suspend fun getSimilarMovies(
         @Path("movie_id") movieId: Int,
     ): Response<ApiResponse<MovieRemote>>
 
-    @GET("3/movie/{movie_id}/images")
+    @GET(ApiConstants.MOVIE_IMAGES_PATH)
     suspend fun getMovieImages(
         @Path("movie_id") movieId: Int,
     ): Response<MovieImagesResponse>
 
-    @GET("3/movie/{movie_id}/videos")
+    @GET(ApiConstants.MOVIE_VIDEOS_PATH)
     suspend fun getMovieVideos(
         @Path("movie_id") movieId: Int,
     ): Response<MovieVideoRemote>
 
-    @GET("3/movie/{movie_id}/account_states")
+    @GET(ApiConstants.ACCOUNT_MOVIE_STATES)
     suspend fun getAccountMovieStates(
         @Path("movie_id") movieId: Int,
         @Query("session_id") userSessionId: String?,
     ): Response<AccountStatesResponse>
 
-    @GET("3/person/{person_id}/movie_credits")
+    @GET(ApiConstants.ACTOR_MOVIES_PATH)
     suspend fun getActorMovies(
         @Path("person_id") actorId: Int,
     ): Response<ActorMovieDetailsResponse>
@@ -80,13 +80,13 @@ interface MovieService {
         @Query("include_adult") includeAdult: Boolean
     ): Response<ApiResponse<MovieRemote>>
 
-    @GET("3/account/{account_id}/rated/movies")
+    @GET(ApiConstants.RATED_MOVIES_PATH)
     suspend fun getRatedMovies(
         @Path("account_id") accountId: Int,
         @Query("session_id") sessionId: String,
     ): Response<ApiResponse<RatingMediaResponse>>
 
-    @POST("3/movie/{movie_id}/rating")
+    @POST(ApiConstants.ADD_MOVIE_RATING_PATH)
     suspend fun addMovieRating(
         @Path("movie_id") movieId: Int,
         @Query("guest_session_id") guestSessionId: String?,
@@ -94,19 +94,19 @@ interface MovieService {
         @Body ratingRequest: RatingRemoteBody
     ): Response<RatingRemoteResponse>
 
-    @DELETE("3/movie/{movie_id}/rating")
+    @DELETE(ApiConstants.DELETE_MOVIE_RATING_PATH)
     suspend fun deleteMovieRating(
         @Path("movie_id") movieId: Int,
         @Query("session_id") sessionId: String?
     ): Response<RatingRemoteResponse>
 
-    @GET("3/movie/{movie_id}/reviews")
+    @GET(ApiConstants.MOVIE_REVIEW_PATH)
     suspend fun getMovieReviews(
         @Path("movie_id") movieId: Int,
         @Query("page") page: Int
     ): Response<ApiResponse<ReviewResponse>>
 
-    @GET("3/movie/top_rated")
+    @GET(ApiConstants.TOP_RATED_MOVIES_PATH)
     suspend fun getTopRatedMovies(
         @Query("page") pageNumber: Int,
     ): Response<ApiResponse<TopRatedMovieRemote>>

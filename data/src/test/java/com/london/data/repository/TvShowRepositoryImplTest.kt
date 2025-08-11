@@ -159,7 +159,7 @@ class TvShowRepositoryImplTest {
     fun `getEpisodeDetailsByPosition should throw ServerErrorException when remote fails`() =
         runTest {
             coEvery {
-                remoteDataSource.getEpisodeDetailsByPosition(
+                remoteDataSource.getEpisodeDetails(
                     tvShowId = 123, seasonNumber = 0, episodeNumber = 0
                 )
             } throws NetworkException.ServerErrorException("server error")
@@ -201,7 +201,7 @@ class TvShowRepositoryImplTest {
         runTest {
             val networkException = RuntimeException("Network error")
             coEvery {
-                remoteDataSource.getEpisodeDetailsByPosition(
+                remoteDataSource.getEpisodeDetails(
                     TV_SHOW_ID, SEASON_NUMBER, EPISODE_NUMBER
                 )
             } throws networkException
@@ -718,7 +718,7 @@ class TvShowRepositoryImplTest {
         coEvery { authPreferences.getSessionId() } returns sessionId
         coEvery { authPreferences.getGuestSessionId() } returns guestSessionId
         coEvery {
-            remoteDataSource.addTvEpisode(
+            remoteDataSource.addTvShowEpisode(
                 tvShowId = tvShowId,
                 seasonNumber = seasonNumber,
                 episodeNumber = episodeNumber,
@@ -729,7 +729,7 @@ class TvShowRepositoryImplTest {
         } returns Result.success(createRatingResponse())
 
         // When
-        val result = repository.addTvEpisode(tvShowId, seasonNumber, episodeNumber, rating)
+        val result = repository.addTvShowEpisode(tvShowId, seasonNumber, episodeNumber, rating)
 
         // Then
         assertTrue(result)
@@ -748,7 +748,7 @@ class TvShowRepositoryImplTest {
         coEvery { authPreferences.getSessionId() } returns sessionId
         coEvery { authPreferences.getGuestSessionId() } returns guestSessionId
         coEvery {
-            remoteDataSource.addTvEpisode(
+            remoteDataSource.addTvShowEpisode(
                 tvShowId = tvShowId,
                 seasonNumber = seasonNumber,
                 episodeNumber = episodeNumber,
@@ -759,7 +759,7 @@ class TvShowRepositoryImplTest {
         } returns Result.failure(RuntimeException("Network error"))
 
         // When
-        val result = repository.addTvEpisode(tvShowId, seasonNumber, episodeNumber, rating)
+        val result = repository.addTvShowEpisode(tvShowId, seasonNumber, episodeNumber, rating)
 
         // Then
         assertFalse(result)

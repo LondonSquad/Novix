@@ -22,11 +22,11 @@ interface TvShowRemoteDataSource {
     suspend fun getActorTvShowById(id: Int): Result<ActorTvShowDetailsResponse>
     suspend fun getPopularTvShows(): Result<ApiResponse<PopularTvShowResponse>>
     suspend fun getTrendingTvShows(page: Int): Result<ApiResponse<TrendingResponse>>
-    suspend fun deleteTvShowRating(tvShowId: Int , sessionId: String?): Result<RatingRemoteResponse>
-
-    suspend fun getTopRatedTvShows(
-        pageNumber: Int,
-    ): Result<ApiResponse<TopRatedTvSeriesRemote>>
+    suspend fun deleteTvShowRating(tvShowId: Int, sessionId: String?): Result<RatingRemoteResponse>
+    suspend fun getTopRatedTvShows(pageNumber: Int): Result<ApiResponse<TopRatedTvSeriesRemote>>
+    suspend fun getTvShowDetailsById(id: Int): Result<TvShowDetailsRemoteResponse>
+    suspend fun getTvShowImagesById(id: Int): Result<TvShowImagesRemoteResponse>
+    suspend fun getTvShowVideos(tvShowId: Int): Result<TvShowVideoResponse>
 
     suspend fun getTvShowReviews(
         tvShowId: Int,
@@ -45,7 +45,7 @@ interface TvShowRemoteDataSource {
         guestSessionId: String?
     ): Result<RatingRemoteResponse>
 
-    suspend fun addTvEpisode(
+    suspend fun addTvShowEpisode(
         tvShowId: Int,
         seasonNumber: Int,
         episodeNumber: Int,
@@ -60,19 +60,13 @@ interface TvShowRemoteDataSource {
         includeAdult: Boolean = false
     ): Result<ApiResponse<SearchTvShowRemote>>
 
-
-    suspend fun getTvShowDetailsById(
-        id: Int,
-    ): Result<TvShowDetailsRemoteResponse>
-
     suspend fun getTvShowEpisodesBySeason(
         id: Int,
         seasonNumber: Int,
     ): Result<TvShowEpisodesRemoteResponse>
 
-    suspend fun getTvShowImagesById(id: Int): Result<TvShowImagesRemoteResponse>
 
-    suspend fun getEpisodeDetailsByPosition(
+    suspend fun getEpisodeDetails(
         tvShowId: Int,
         seasonNumber: Int,
         episodeNumber: Int
@@ -97,6 +91,4 @@ interface TvShowRemoteDataSource {
         guestSessionId: String?,
         userSessionId: String?,
     ): Result<AccountStatesResponse>
-
-    suspend fun getTvShowVideos(tvShowId: Int): Result<TvShowVideoResponse>
 }
