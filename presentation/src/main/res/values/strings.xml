@@ -89,8 +89,8 @@
     <string name="What_you_want_to_watch">What you want to watch?</string>
     <string name="popular">Popular</string>
     <string name="politics">Politics</string>
-    <string name="action_adventure">Action and Adventure</string>
-    <string name="war_politics">War and Politics</string>
+    <string name="action_adventure">Action&amp;Adventure</string>
+    <string name="war_politics">War&amp;Politics</string>
     <string name="retry">Retry</string>
     <string name="top_rated">Top rated</string>
     <string name="continue_watch">Continue Watching</string>
@@ -155,4 +155,5 @@
     <string name="list_deletion_failed">List deletion failed</string>
     <string name="close">close</string>
     <string name="my_list_screen">My Lists</string>
+    <string name="categories">categories</string>
 </resources>

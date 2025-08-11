@@ -27,14 +27,13 @@ import com.london.designsystem.component.UnSuitableEye
 import com.london.designsystem.component.button.ErrorImage
 import com.london.designsystem.theme.NovixTheme
 import com.london.designsystem.theme.ThemePreviews
-import com.london.designsystem.theme.horizontalGradient
 import com.london.designsystem.theme.noRippleClickable
 
 
 @Composable
 fun CategoriesItem(
     categoryName: List<String>,
-    categoryImage: String,
+    categoryImage: Any?,
     onClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
@@ -62,7 +61,12 @@ fun CategoriesItem(
         Box(
             modifier = Modifier
                 .fillMaxSize()
-                .background(brush = Brush.horizontalGradient(horizontalGradient))
+                .background(
+                    brush = Brush.horizontalGradient(
+                        colors = NovixTheme.colors.horizontalGradient,
+                        startX = 0f,
+                    )
+                )
         )
         Text(
             text = categoryName.joinToString(separator = " &\n"),

@@ -21,7 +21,7 @@ val RedAccentDark = Color(0xFFF75662)
 val YellowAccentDark = Color(0xFFCFC657)
 val GreenAccentDark = Color(0xFF19744D)
 val GreenVariantDark = Color(0xFF1D1F1E)
-val LinearGradientDark = Color(0x0D060800)
+val LinearGradientDark = Color(0xFF0D0608)
 val DarkCocoaDark = Color(0xFF4D1D12)
 val DeepCrimsonDark = Color(0xFF39010C)
 val TealBlueDark = Color(0xFF3B99AC)
@@ -55,5 +55,11 @@ val DarkNovixColors = NovixColors(
     oceanDark = OceanDarkDark,
     linearGradient = LinearGradientDark,
     blackLinearGradient = BlackLinearGradientDark,
-    whiteLinearGradient = WhiteLinearGradientDark
+    whiteLinearGradient = WhiteLinearGradientDark,
+    horizontalGradient = listOf(
+        LinearGradientDark,
+        LinearGradientDark.copy(alpha = 0.8f),
+        LinearGradientDark.copy(alpha = 0.7f),
+        LinearGradientDark.copy(alpha = 0.0f),
+    )
 )

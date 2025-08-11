@@ -55,5 +55,11 @@ val LightNovixColors = NovixColors(
     oceanDark = OceanDarkLight,
     linearGradient = LinearGradientLight,
     blackLinearGradient = BlackLinearGradientLight,
-    whiteLinearGradient = WhiteLinearGradientLight
+    whiteLinearGradient = WhiteLinearGradientLight,
+    horizontalGradient = listOf(
+        LinearGradientLight,
+        LinearGradientLight.copy(alpha = 0.8f),
+        LinearGradientLight.copy(alpha = 0.7f),
+        LinearGradientLight.copy(alpha = 0.0f),
+    )
 )
