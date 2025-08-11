@@ -5,6 +5,8 @@ import com.london.domain.entity.actordetails.ActorDetails
 import com.london.domain.entity.moviedatails.MediaStates
 import com.london.domain.entity.recent.MediaType
 import com.london.domain.repository.ActorRepository
+import com.london.domain.repository.TrendingRepository
+import com.london.domain.usecase.details.actor.ManageActorUseCase
 import com.london.domain.repository.MovieRepository
 import com.london.domain.repository.TvShowRepository
 import com.london.domain.usecase.rating.ManageRatingUseCase
@@ -12,6 +14,7 @@ import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.mockk
 import kotlinx.coroutines.test.runTest
+import org.junit.Assert.assertEquals
 import org.junit.Assert
 import org.junit.Assert.assertEquals
 import org.junit.Before
@@ -19,13 +22,18 @@ import org.junit.Test
 
 class GetActorDetailsByIdUseCaseTest {
 
-    private lateinit var repository: ActorRepository
-    private lateinit var useCase: GetActorDetailsByIdUseCase
+    private lateinit var actorRepository: ActorRepository
+    private lateinit var trendingRepository: TrendingRepository
+    private lateinit var manageActorUseCase: ManageActorUseCase
 
     @Before
     fun setup() {
-        repository = mockk()
-        useCase = GetActorDetailsByIdUseCase(repository)
+        actorRepository = mockk()
+        trendingRepository = mockk()
+        manageActorUseCase = ManageActorUseCase(
+            actorRepository = actorRepository,
+            trendingRepository = trendingRepository
+        )
     }
 
     @Test
@@ -33,13 +41,13 @@ class GetActorDetailsByIdUseCaseTest {
         // Given
         val actorId = 1
         val expectedResult = mockk<ActorDetails>()
-        coEvery { repository.getActorDetailsById(actorId) } returns expectedResult
+        coEvery { actorRepository.getActorDetailsById(actorId) } returns expectedResult
 
         // When
-        val result = useCase.invoke(actorId)
+        val result = manageActorUseCase.getActorDetailsById(actorId)
 
         // Then
-        coVerify(exactly = 1) { repository.getActorDetailsById(actorId) }
+        coVerify(exactly = 1) { actorRepository.getActorDetailsById(actorId) }
         assertEquals(expectedResult, result)
     }
 }

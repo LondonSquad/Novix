@@ -13,6 +13,9 @@ import com.london.domain.repository.ActorRepository
 import com.london.domain.repository.MovieRepository
 import com.london.domain.entity.videoprovider.MovieVideo
 import com.london.domain.repository.MovieDetailsRepository
+import com.london.domain.repository.PopularRepository
+import com.london.domain.repository.TrendingRepository
+import com.london.domain.repository.discover.DiscoverRepository
 import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.mockk
@@ -25,12 +28,25 @@ import org.junit.jupiter.api.assertThrows
 
 class ManageMovieDetailsUseCaseTest {
 
-    private lateinit var movieRepository: MovieRepository
+    private lateinit var movieDetailsRepository: MovieRepository
     private lateinit var actorRepository: ActorRepository
-    private lateinit var manageMovieDetailsUseCase: ManageMovieDetailsUseCase
+    private lateinit var popularRepository: PopularRepository
+    private lateinit var discoverRepository: DiscoverRepository
+    private lateinit var trendingRepository: TrendingRepository
+    private lateinit var manageMovieUseCase: ManageMovieUseCase
 
     @Before
     fun setUp() {
+        movieDetailsRepository = mockk(relaxed = true)
+        popularRepository = mockk(relaxed = true)
+        discoverRepository = mockk(relaxed = true)
+        trendingRepository = mockk(relaxed = true)
+        manageMovieUseCase = ManageMovieUseCase(
+            trendingRepository = trendingRepository,
+            popularRepository = popularRepository,
+            discoverRepository = discoverRepository,
+            movieRepository = movieDetailsRepository
+        )
         movieRepository = mockk(relaxed = true)
         actorRepository = mockk(relaxed = true)
         manageMovieDetailsUseCase = ManageMovieDetailsUseCase(
@@ -45,10 +61,10 @@ class ManageMovieDetailsUseCaseTest {
         // Given
         val movieId = 123
         val expectedMovie = fakeMovieDetailsDomain()
-        coEvery { movieRepository.getMovieById(movieId) } returns expectedMovie
+        coEvery { movieDetailsRepository.getMovieById(movieId) } returns expectedMovie
 
         // When
-        val result = manageMovieDetailsUseCase.getMovieDetails(movieId)
+        val result = manageMovieUseCase.getMovieDetails(movieId)
 
         // Then
         assertEquals(123, result.id)
@@ -59,7 +75,7 @@ class ManageMovieDetailsUseCaseTest {
         assertEquals("A skilled thief is given a chance at redemption.", result.overview)
         assertEquals(3, result.genresId.size)
 
-        coVerify(exactly = 1) { movieRepository.getMovieById(movieId) }
+        coVerify(exactly = 1) { movieDetailsRepository.getMovieById(movieId) }
     }
 
     @Test
@@ -67,15 +83,15 @@ class ManageMovieDetailsUseCaseTest {
         // Given
         val movieId = 123
         val expectedException = Exception("Failed to fetch movie details")
-        coEvery { movieRepository.getMovieById(movieId) } throws expectedException
+        coEvery { movieDetailsRepository.getMovieById(movieId) } throws expectedException
 
         // When & Then
         val exception = assertThrows<Exception> {
-            manageMovieDetailsUseCase.getMovieDetails(movieId)
+            manageMovieUseCase.getMovieDetails(movieId)
         }
 
         assertEquals("Failed to fetch movie details", exception.message)
-        coVerify(exactly = 1) { movieRepository.getMovieById(movieId) }
+        coVerify(exactly = 1) { movieDetailsRepository.getMovieById(movieId) }
     }
 
     @Test
@@ -83,15 +99,15 @@ class ManageMovieDetailsUseCaseTest {
         // Given
         val movieId = 456
         val expectedMovie = fakeMovieDetailsDomain().copy(id = movieId, title = "Inception")
-        coEvery { movieRepository.getMovieById(movieId) } returns expectedMovie
+        coEvery { movieDetailsRepository.getMovieById(movieId) } returns expectedMovie
 
         // When
-        val result = manageMovieDetailsUseCase.getMovieDetails(movieId)
+        val result = manageMovieUseCase.getMovieDetails(movieId)
 
         // Then
         assertEquals(movieId, result.id)
         assertEquals("Inception", result.title)
-        coVerify(exactly = 1) { movieRepository.getMovieById(movieId) }
+        coVerify(exactly = 1) { movieDetailsRepository.getMovieById(movieId) }
     }
 
     @Test
@@ -101,16 +117,16 @@ class ManageMovieDetailsUseCaseTest {
         val movieWithNoGenres = fakeMovieDetailsDomain().copy(
             id = movieId, genresId = emptyList()
         )
-        coEvery { movieRepository.getMovieById(movieId) } returns movieWithNoGenres
+        coEvery { movieDetailsRepository.getMovieById(movieId) } returns movieWithNoGenres
 
         // When
-        val result = manageMovieDetailsUseCase.getMovieDetails(movieId)
+        val result = manageMovieUseCase.getMovieDetails(movieId)
 
         // Then
         assertEquals(movieId, result.id)
         assertTrue(result.genresId.isEmpty())
         assertEquals(0, result.genresId.size)
-        coVerify(exactly = 1) { movieRepository.getMovieById(movieId) }
+        coVerify(exactly = 1) { movieDetailsRepository.getMovieById(movieId) }
     }
 
     @Test
@@ -120,15 +136,15 @@ class ManageMovieDetailsUseCaseTest {
         val movieWithEmptyImages = fakeMovieDetailsDomain().copy(
             id = movieId, backdropUrl = ""
         )
-        coEvery { movieRepository.getMovieById(movieId) } returns movieWithEmptyImages
+        coEvery { movieDetailsRepository.getMovieById(movieId) } returns movieWithEmptyImages
 
         // When
-        val result = manageMovieDetailsUseCase.getMovieDetails(movieId)
+        val result = manageMovieUseCase.getMovieDetails(movieId)
 
         // Then
         assertEquals(movieId, result.id)
         assertTrue(result.backdropUrl.isEmpty())
-        coVerify(exactly = 1) { movieRepository.getMovieById(movieId) }
+        coVerify(exactly = 1) { movieDetailsRepository.getMovieById(movieId) }
     }
 
     @Test
@@ -139,15 +155,15 @@ class ManageMovieDetailsUseCaseTest {
             id = movieId,
             runtime = 0
         )
-        coEvery { movieRepository.getMovieById(movieId) } returns movieWithZeroRuntime
+        coEvery { movieDetailsRepository.getMovieById(movieId) } returns movieWithZeroRuntime
 
         // When
-        val result = manageMovieDetailsUseCase.getMovieDetails(movieId)
+        val result = manageMovieUseCase.getMovieDetails(movieId)
 
         // Then
         assertEquals(movieId, result.id)
         assertEquals(0, result.runtime)
-        coVerify(exactly = 1) { movieRepository.getMovieById(movieId) }
+        coVerify(exactly = 1) { movieDetailsRepository.getMovieById(movieId) }
     }
 
     @Test
@@ -156,13 +172,13 @@ class ManageMovieDetailsUseCaseTest {
             // Given
             val movieId = 666
             val expectedMovie = fakeMovieDetailsDomain().copy(id = movieId)
-            coEvery { movieRepository.getMovieById(movieId) } returns expectedMovie
+            coEvery { movieDetailsRepository.getMovieById(movieId) } returns expectedMovie
 
             // When
-            manageMovieDetailsUseCase.getMovieDetails(movieId)
+            manageMovieUseCase.getMovieDetails(movieId)
 
             // Then
-            coVerify(exactly = 1) { movieRepository.getMovieById(movieId) }
+            coVerify(exactly = 1) { movieDetailsRepository.getMovieById(movieId) }
         }
     //endregion
 
@@ -170,40 +186,40 @@ class ManageMovieDetailsUseCaseTest {
     @Test
     fun `getSimilarMovies should return similar movies when repository returns data`() = runTest {
         // given
-        coEvery { movieRepository.getSimilarMoviesById(MOVIE_ID) } returns similarMovieMockList
+        coEvery { movieDetailsRepository.getSimilarMoviesById(MOVIE_ID) } returns similarMovieMockList
 
         // when
-        val result = manageMovieDetailsUseCase.getSimilarMovies(MOVIE_ID)
+        val result = manageMovieUseCase.getSimilarMovies(MOVIE_ID)
 
         // then
         assertThat(result).isEqualTo(similarMovieMockList)
-        coVerify(exactly = 1) { movieRepository.getSimilarMoviesById(MOVIE_ID) }
+        coVerify(exactly = 1) { movieDetailsRepository.getSimilarMoviesById(MOVIE_ID) }
     }
 
     @Test
     fun `getSimilarMovies should return empty list when repository returns empty list`() = runTest {
         // given
-        coEvery { movieRepository.getSimilarMoviesById(MOVIE_ID) } returns emptyList()
+        coEvery { movieDetailsRepository.getSimilarMoviesById(MOVIE_ID) } returns emptyList()
 
         // when
-        val result = manageMovieDetailsUseCase.getSimilarMovies(MOVIE_ID)
+        val result = manageMovieUseCase.getSimilarMovies(MOVIE_ID)
 
         // then
         assertThat(result).isEmpty()
-        coVerify(exactly = 1) { movieRepository.getSimilarMoviesById(MOVIE_ID) }
+        coVerify(exactly = 1) { movieDetailsRepository.getSimilarMoviesById(MOVIE_ID) }
     }
 
     @Test
     fun `getSimilarMovies should call repository with correct movie ID`() = runTest {
         // given
         val customId = 999
-        coEvery { movieRepository.getSimilarMoviesById(customId) } returns emptyList()
+        coEvery { movieDetailsRepository.getSimilarMoviesById(customId) } returns emptyList()
 
         // when
-        manageMovieDetailsUseCase.getSimilarMovies(customId)
+        manageMovieUseCase.getSimilarMovies(customId)
 
         // then
-        coVerify(exactly = 1) { movieRepository.getSimilarMoviesById(customId) }
+        coVerify(exactly = 1) { movieDetailsRepository.getSimilarMoviesById(customId) }
     }
 
     @Test
@@ -215,12 +231,12 @@ class ManageMovieDetailsUseCaseTest {
         val firstMovieList = listOf(createDummySimilarMovie(11, "Movie 11"))
         val secondMovieList = listOf(createDummySimilarMovie(20, "Movie 20"))
 
-        coEvery { movieRepository.getSimilarMoviesById(firstId) } returns firstMovieList
-        coEvery { movieRepository.getSimilarMoviesById(secondId) } returns secondMovieList
+        coEvery { movieDetailsRepository.getSimilarMoviesById(firstId) } returns firstMovieList
+        coEvery { movieDetailsRepository.getSimilarMoviesById(secondId) } returns secondMovieList
 
         // when
-        val resultForFirstId = manageMovieDetailsUseCase.getSimilarMovies(firstId)
-        val resultForSecondId = manageMovieDetailsUseCase.getSimilarMovies(secondId)
+        val resultForFirstId = manageMovieUseCase.getSimilarMovies(firstId)
+        val resultForSecondId = manageMovieUseCase.getSimilarMovies(secondId)
 
         // then
         assertThat(resultForFirstId).containsExactlyElementsIn(firstMovieList)
@@ -233,9 +249,9 @@ class ManageMovieDetailsUseCaseTest {
     fun `getFirstTenMovieImagesUseCase should return movie images when repository returns data`() =
         runTest {
             // given
-            coEvery { movieRepository.getMovieImagesById(MOVIE_ID) } returns movieImages
+            coEvery { movieDetailsRepository.getMovieImagesById(MOVIE_ID) } returns movieImages
             // when
-            val result = manageMovieDetailsUseCase.getMovieImagesUseCase(MOVIE_ID)
+            val result = manageMovieUseCase.getMovieImagesUseCase(MOVIE_ID)
             // then
             assertThat(result).isEqualTo(movieMockImages)
         }
@@ -244,14 +260,14 @@ class ManageMovieDetailsUseCaseTest {
     fun `getFirstTenMovieImagesUseCase should return empty list when repository returns empty list`() =
         runTest {
             // given
-            coEvery { movieRepository.getMovieImagesById(MOVIE_ID) } returns MovieImages(
+            coEvery { movieDetailsRepository.getMovieImagesById(MOVIE_ID) } returns MovieImages(
                 backdrops = emptyList(),
                 id = MOVIE_ID,
                 logos = emptyList(),
                 posters = emptyList()
             )
             // when
-            val result = manageMovieDetailsUseCase.getMovieImagesUseCase(MOVIE_ID)
+            val result = manageMovieUseCase.getMovieImagesUseCase(MOVIE_ID)
             // then
             assertThat(result).isEmpty()
         }
@@ -261,7 +277,7 @@ class ManageMovieDetailsUseCaseTest {
         runTest {
             // given
             val manyImages = (1..15).map { "/images/movie$it.jpg" }
-            coEvery { movieRepository.getMovieImagesById(MOVIE_ID) } returns MovieImages(
+            coEvery { movieDetailsRepository.getMovieImagesById(MOVIE_ID) } returns MovieImages(
                 backdrops = manyImages,
                 id = MOVIE_ID,
                 logos = emptyList(),
@@ -269,7 +285,7 @@ class ManageMovieDetailsUseCaseTest {
             )
 
             // when
-            val result = manageMovieDetailsUseCase.getMovieImagesUseCase(MOVIE_ID)
+            val result = manageMovieUseCase.getMovieImagesUseCase(MOVIE_ID)
 
             // then
             assertThat(result).hasSize(10)
@@ -280,10 +296,10 @@ class ManageMovieDetailsUseCaseTest {
     @Test
     fun `getMovieCast should return cast when repository returns cast`() = runTest {
         // given
-        coEvery { actorRepository.getMovieCastById(MOVIE_ID) } returns actorMockCast
+        coEvery { movieRepository.getMovieCastById(MOVIE_ID) } returns actorMockCast
 
         // when
-        val result = manageMovieDetailsUseCase.getMovieCast(MOVIE_ID)
+        val result = manageMovieUseCase.getMovieCast(MOVIE_ID)
 
         // then
         assertThat(result).isEqualTo(actorMockCast)
@@ -304,27 +320,27 @@ class ManageMovieDetailsUseCaseTest {
     @Test
     fun `getMovieCast should return empty list when repository returns empty list`() = runTest {
         // given
-        coEvery { actorRepository.getMovieCastById(MOVIE_ID) } returns emptyList()
+        coEvery { movieRepository.getMovieCastById(MOVIE_ID) } returns emptyList()
 
         // when
-        val result = manageMovieDetailsUseCase.getMovieCast(MOVIE_ID)
+        val result = manageMovieUseCase.getMovieCast(MOVIE_ID)
 
         // then
         assertThat(result).isEmpty()
-        coVerify(exactly = 1) { actorRepository.getMovieCastById(MOVIE_ID) }
+        coVerify(exactly = 1) { movieRepository.getMovieCastById(MOVIE_ID) }
     }
 
     @Test
     fun `getMovieCast should call repository with correct movie ID`() = runTest {
         // given
         val customId = 999
-        coEvery { actorRepository.getMovieCastById(customId) } returns emptyList()
+        coEvery { movieRepository.getMovieCastById(customId) } returns emptyList()
 
         // when
-        manageMovieDetailsUseCase.getMovieCast(customId)
+        manageMovieUseCase.getMovieCast(customId)
 
         // then
-        coVerify(exactly = 1) { actorRepository.getMovieCastById(customId) }
+        coVerify(exactly = 1) { movieRepository.getMovieCastById(customId) }
     }
 
     @Test
@@ -339,12 +355,12 @@ class ManageMovieDetailsUseCaseTest {
             )
         )
 
-        coEvery { actorRepository.getMovieCastById(123) } returns actorMockCast
-        coEvery { actorRepository.getMovieCastById(456) } returns actorCast
+        coEvery { movieRepository.getMovieCastById(123) } returns actorMockCast
+        coEvery { movieRepository.getMovieCastById(456) } returns actorCast
 
         // when
-        val result1 = manageMovieDetailsUseCase.getMovieCast(123)
-        val result2 = manageMovieDetailsUseCase.getMovieCast(456)
+        val result1 = manageMovieUseCase.getMovieCast(123)
+        val result2 = manageMovieUseCase.getMovieCast(456)
 
         // then
         assertThat(result1).hasSize(2)
@@ -356,10 +372,10 @@ class ManageMovieDetailsUseCaseTest {
     @Test
     fun `getMovieVideo should return movie videos when repository returns videos`() = runTest {
         // given
-        coEvery { movieRepository.getMovieVideos(MOVIE_ID) } returns mockVideos
+        coEvery { movieDetailsRepository.getMovieVideos(MOVIE_ID) } returns mockVideos
 
         // when
-        val result = manageMovieDetailsUseCase.getMovieVideo(MOVIE_ID)
+        val result = manageMovieUseCase.getMovieVideo(MOVIE_ID)
 
         // then
         assertThat(result[0]).isEqualTo(mockVideos[0])
@@ -369,10 +385,10 @@ class ManageMovieDetailsUseCaseTest {
     @Test
     fun `getMovieVideo should return empty list when repository returns no videos`() = runTest {
         // given
-        coEvery { movieRepository.getMovieVideos(MOVIE_ID) } returns emptyList()
+        coEvery { movieDetailsRepository.getMovieVideos(MOVIE_ID) } returns emptyList()
 
         // when
-        val result = manageMovieDetailsUseCase.getMovieVideo(MOVIE_ID)
+        val result = manageMovieUseCase.getMovieVideo(MOVIE_ID)
 
         // then
         assertThat(result).isEmpty()
@@ -381,11 +397,11 @@ class ManageMovieDetailsUseCaseTest {
     @Test
     fun `getMovieVideo should throw exception when repository throws exception`() = runTest {
         // given
-        coEvery { movieRepository.getMovieVideos(MOVIE_ID) } throws RuntimeException("Network error")
+        coEvery { movieDetailsRepository.getMovieVideos(MOVIE_ID) } throws RuntimeException("Network error")
 
         // when // then
         assertThrows<RuntimeException> {
-            manageMovieDetailsUseCase.getMovieVideo(MOVIE_ID)
+            manageMovieUseCase.getMovieVideo(MOVIE_ID)
         }
     }
     //endregion

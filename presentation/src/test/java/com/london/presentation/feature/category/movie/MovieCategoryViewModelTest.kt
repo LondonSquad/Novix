@@ -6,7 +6,6 @@ import app.cash.turbine.test
 import com.google.common.truth.Truth.assertThat
 import com.london.domain.entity.Movie
 import com.london.domain.entity.PagedFetchResponse
-import com.london.domain.usecase.GetMoviesByCategoryUseCase
 import com.london.presentation.navigation.Screen
 import com.london.presentation.navigation.getArgs
 import io.mockk.coEvery

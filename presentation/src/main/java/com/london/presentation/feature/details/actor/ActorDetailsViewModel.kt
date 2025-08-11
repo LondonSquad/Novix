@@ -1,8 +1,7 @@
 package com.london.presentation.feature.details.actor
 
 import androidx.lifecycle.SavedStateHandle
-import com.london.domain.usecase.GetActorDetailsByIdUseCase
-import com.london.domain.usecase.GetActorImagesByIdUseCase
+import com.london.domain.usecase.details.actor.ManageActorUseCase
 import com.london.domain.usecase.toppicks.GetActorMoviePicksByIdUseCase
 import com.london.domain.usecase.toppicks.GetActorTvShowPicksByIdUseCase
 import com.london.presentation.navigation.Screen
@@ -13,8 +12,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class ActorDetailsViewModel @Inject constructor(
-    private val getActorDetailsByIdUseCase: GetActorDetailsByIdUseCase,
-    private val getActorImagesByIdUseCase: GetActorImagesByIdUseCase,
+    private val manageActorUseCase: ManageActorUseCase,
     private val getActorMoviePicksByIdUseCase: GetActorMoviePicksByIdUseCase,
     private val getActorTvShowPicksByIdUseCase: GetActorTvShowPicksByIdUseCase,
     savedStateHandle: SavedStateHandle,
@@ -66,7 +64,7 @@ class ActorDetailsViewModel @Inject constructor(
     private fun getActorImage() {
         tryToExecute(
             block = {
-                getActorImagesByIdUseCase.invoke(actorId ?: 0)
+                manageActorUseCase.getActorImagesById(actorId ?: 0)
             },
             onStart = { updateState { copy(isLoading = true) } },
             onSuccess = { images -> updateState { copy(actorImageDetails = images) } },
@@ -81,7 +79,7 @@ class ActorDetailsViewModel @Inject constructor(
 
         tryToExecute(
             block = {
-                getActorDetailsByIdUseCase.invoke(actorId ?: 0)
+                manageActorUseCase.getActorDetailsById(actorId ?: 0)
             },
             onStart = { updateState { copy(isLoading = true) } },
             onSuccess = { actorDetails ->

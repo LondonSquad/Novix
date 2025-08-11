@@ -4,6 +4,12 @@ import com.google.common.truth.Truth.assertThat
 import com.london.domain.entity.popular.PopularMedia
 import com.london.domain.entity.recent.MediaType
 import com.london.domain.repository.MovieRepository
+import com.london.domain.entity.popular.PopularMovie
+import com.london.domain.repository.MovieDetailsRepository
+import com.london.domain.repository.PopularRepository
+import com.london.domain.repository.TrendingRepository
+import com.london.domain.repository.discover.DiscoverRepository
+import com.london.domain.usecase.details.movie.ManageMovieUseCase
 import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.mockk
@@ -13,13 +19,24 @@ import org.junit.Test
 
 class GetPopularMoviesTest {
 
-    private lateinit var repository: MovieRepository
-    private lateinit var getPopularMovies: GetPopularMovies
+    private lateinit var popularRepository: MovieRepository
+    private lateinit var movieDetailsRepository: MovieDetailsRepository
+    private lateinit var discoverRepository: DiscoverRepository
+    private lateinit var trendingRepository: TrendingRepository
+    private lateinit var manageMovieUseCase: ManageMovieUseCase
 
     @Before
     fun setUp() {
-        repository = mockk()
-        getPopularMovies = GetPopularMovies(repository)
+        movieDetailsRepository = mockk()
+        popularRepository = mockk()
+        discoverRepository = mockk()
+        trendingRepository = mockk()
+        manageMovieUseCase = ManageMovieUseCase(
+            movieRepository = movieDetailsRepository,
+            trendingRepository = trendingRepository,
+            popularRepository = popularRepository,
+            discoverRepository = discoverRepository
+        )
     }
 
     @Test
@@ -41,13 +58,13 @@ class GetPopularMoviesTest {
                 mediaType = MediaType.Movie
             )
         )
-        coEvery { repository.getPopularMovies() } returns expectedMovies
+        coEvery { popularRepository.getPopularMovies() } returns expectedMovies
 
         // When
-        val result = getPopularMovies.invoke()
+        val result = manageMovieUseCase.getPopularMovies()
 
         // Then
         assertThat(result).isEqualTo(expectedMovies)
-        coVerify(exactly = 1) { repository.getPopularMovies() }
+        coVerify(exactly = 1) { popularRepository.getPopularMovies() }
     }
 }

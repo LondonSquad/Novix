@@ -3,6 +3,7 @@ package com.london.domain.usecase
 import com.google.common.truth.Truth.assertThat
 import com.london.domain.entity.tvshowdetails.episode.TvShowEpisodeByIdEntity
 import com.london.domain.repository.TvShowRepository
+import com.london.domain.usecase.details.tvshow.ManageTvEpisodesUseCase
 import io.mockk.coEvery
 import io.mockk.mockk
 import kotlinx.coroutines.test.runTest
@@ -13,12 +14,12 @@ import org.junit.jupiter.api.assertThrows
 class GetEpisodeByTvShowIdTest {
 
     private lateinit var tvShowRepository: TvShowRepository
-    private lateinit var getEpisodeByTvShowId: GetEpisodeByTvShowId
+    private lateinit var manageTvEpisodesUseCase: ManageTvEpisodesUseCase
 
     @Before
     fun setUp() {
         tvShowRepository = mockk()
-        getEpisodeByTvShowId = GetEpisodeByTvShowId(tvShowRepository)
+        manageTvEpisodesUseCase = ManageTvEpisodesUseCase(tvShowRepository)
     }
 
     @Test
@@ -29,7 +30,8 @@ class GetEpisodeByTvShowIdTest {
         } returns mockEpisode
 
         // When
-        val result = getEpisodeByTvShowId(TV_SHOW_ID, SEASON_NUMBER, EPISODE_NUMBER)
+        val result =
+            manageTvEpisodesUseCase.getEpisodeByTvShowId(TV_SHOW_ID, SEASON_NUMBER, EPISODE_NUMBER)
 
         // Then
         assertThat(result).isEqualTo(mockEpisode)
@@ -44,7 +46,7 @@ class GetEpisodeByTvShowIdTest {
 
         // When / Then
         assertThrows<RuntimeException> {
-            getEpisodeByTvShowId(TV_SHOW_ID, SEASON_NUMBER, EPISODE_NUMBER)
+            manageTvEpisodesUseCase.getEpisodeByTvShowId(TV_SHOW_ID, SEASON_NUMBER, EPISODE_NUMBER)
         }
     }
 

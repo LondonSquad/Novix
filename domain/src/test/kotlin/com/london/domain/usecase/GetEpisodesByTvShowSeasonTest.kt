@@ -2,6 +2,7 @@ package com.london.domain.usecase
 
 import com.london.domain.entity.tvshowdetails.episode.TvShowEpisodesEntity
 import com.london.domain.repository.TvShowRepository
+import com.london.domain.usecase.details.tvshow.ManageTvEpisodesUseCase
 import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.mockk
@@ -13,12 +14,12 @@ import org.junit.Test
 class GetEpisodesByTvShowSeasonTest {
 
     private lateinit var repository: TvShowRepository
-    private lateinit var useCase: GetEpisodesByTvShowSeason
+    private lateinit var manageTvEpisodesUseCase: ManageTvEpisodesUseCase
 
     @Before
     fun setup() {
         repository = mockk()
-        useCase = GetEpisodesByTvShowSeason(repository)
+        manageTvEpisodesUseCase = ManageTvEpisodesUseCase(repository)
     }
 
     @Test
@@ -30,7 +31,7 @@ class GetEpisodesByTvShowSeasonTest {
         coEvery { repository.getTvShowEpisodesBySeason(tvShowId, seasonNumber) } returns expectedResult
 
         // When
-        val result = useCase.invoke(tvShowId, seasonNumber)
+        val result = manageTvEpisodesUseCase.getTvShowEpisodesBySeason(tvShowId, seasonNumber)
 
         // Then
         coVerify(exactly = 1) { repository.getTvShowEpisodesBySeason(tvShowId, seasonNumber) }
@@ -46,7 +47,7 @@ class GetEpisodesByTvShowSeasonTest {
         coEvery { repository.getTvShowEpisodesBySeason(tvShowId, seasonNumber) } returns expectedResult
 
         // When
-        val result = useCase.invoke(tvShowId, seasonNumber)
+        val result = manageTvEpisodesUseCase.getTvShowEpisodesBySeason(tvShowId, seasonNumber)
 
         // Then
         coVerify(exactly = 1) { repository.getTvShowEpisodesBySeason(tvShowId, seasonNumber) }
@@ -62,7 +63,7 @@ class GetEpisodesByTvShowSeasonTest {
         coEvery { repository.getTvShowEpisodesBySeason(tvShowId, seasonNumber) } returns expectedResult
 
         // When
-        val result = useCase.invoke(tvShowId, seasonNumber)
+        val result = manageTvEpisodesUseCase.getTvShowEpisodesBySeason(tvShowId, seasonNumber)
 
         // Then
         coVerify(exactly = 1) { repository.getTvShowEpisodesBySeason(tvShowId, seasonNumber) }
