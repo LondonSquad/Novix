@@ -18,15 +18,15 @@ import com.london.data.remote.source.authentication.AuthenticationRemoteDataSour
 import com.london.data.remote.source.list.CustomMovieListsRemoteDataSource
 import com.london.data.remote.source.movie.MovieRemoteDataSource
 import com.london.data.remote.source.search.SearchRemoteDataSource
-import com.london.data.remote.source.tvshow.TvShowDetailsRemoteDataSource
+import com.london.data.remote.source.tvshow.TvShowRemoteDataSource
 import com.london.data.repository.account.AccountRepositoryImp
+import com.london.data.repository.actor.ActorRepositoryImpl
 import com.london.data.repository.authentication.AuthenticationRepositoryImpl
 import com.london.data.repository.list.CustomMovieListRepositoryImpl
 import com.london.data.repository.movie.MovieRepositoryImpl
 import com.london.data.repository.recent.RecentSearchRepositoryImpl
 import com.london.data.repository.recent.RecentViewedRepositoryImpl
 import com.london.data.repository.recent.RecentWatchedRepositoryIml
-import com.london.data.repository.actor.ActorRepositoryImpl
 import com.london.data.repository.search.SearchRepositoryImpl
 import com.london.data.repository.tvshow.TvShowRepositoryImpl
 import com.london.data.utils.CrashReporter
@@ -95,13 +95,13 @@ object RepositoryModule {
     @Provides
     @Singleton
     fun provideDetailsRepository(
-        tvShowDetailsRemoteDataSource: TvShowDetailsRemoteDataSource,
+        tvShowDetailsRemoteDataSource: TvShowRemoteDataSource,
         @Named("topRatedLocalDataSource") localTopRated: HomeLocalDataSource<TopRatedLocal>,
         @Named("popularLocalDataSource") homeLocalDataSource: HomeLocalDataSource<PopularSectionLocal>,
         crashReporter: CrashReporter,
         authPreferences: AuthPreferences
     ): TvShowRepository = TvShowRepositoryImpl(
-        tvShowDetailsRemoteDataSource = tvShowDetailsRemoteDataSource,
+        tvShowRemoteDataSource = tvShowDetailsRemoteDataSource,
         authPreferences = authPreferences,
         homeLocalDataSource = homeLocalDataSource,
         localTopRated = localTopRated,

@@ -2,18 +2,28 @@ package com.london.data.repository
 
 import com.google.common.truth.Truth.assertThat
 import com.london.data.mapper.details.actor.toEntity
+import com.london.data.mapper.details.tvshow.toCastEntity
 import com.london.data.remote.exception.NetworkException
+import com.london.data.remote.model.ApiResponse
 import com.london.data.remote.model.details.actor.model.ActorDetailsResponse
 import com.london.data.remote.model.details.actor.model.actorimage.ActorImageResponse
+import com.london.data.remote.model.details.movie.model.moviecast.MovieActor
+import com.london.data.remote.model.details.movie.model.moviecast.MovieCastResponse
+import com.london.data.remote.model.details.tvshow.model.Role
+import com.london.data.remote.model.details.tvshow.model.TvShowCastMember
 import com.london.data.remote.model.details.tvshow.model.TvShowCastRemoteResponse
+import com.london.data.remote.model.home.trending.TrendingResponse
 import com.london.data.remote.source.actor.ActorDetailsRemoteDataSource
 import com.london.data.repository.actor.ActorRepositoryImpl
 import com.london.domain.repository.ActorRepository
 import io.mockk.coEvery
 import io.mockk.mockk
 import kotlinx.coroutines.test.runTest
+import org.junit.Assert
+import org.junit.Assert.assertNotNull
 import org.junit.Before
 import org.junit.Test
+import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.assertThrows
 
 class ActorRepositoryImplTest {
@@ -63,13 +73,15 @@ class ActorRepositoryImplTest {
     @Test
     fun `getCastTvShowById return expected result`() = runTest {
         val tvShowCastRemoteResponse = mockk<TvShowCastRemoteResponse>(relaxed = true)
+        val expectedEntity = tvShowCastRemoteResponse.toCastEntity()
+
         coEvery { remoteDataSource.getCastsByTvShowId(ACTOR_ID) } returns Result.success(
             tvShowCastRemoteResponse
         )
 
         val result = repository.getCastTvShowById(ACTOR_ID)
 
-        assertThat(result).isEqualTo(tvShowCastRemoteResponse)
+        assertThat(result).isEqualTo(expectedEntity)
     }
 
     @Test
@@ -96,8 +108,8 @@ class ActorRepositoryImplTest {
 
     @Test
     fun `getTrendingActors should return expected result`() = runTest {
-        coEvery { remoteDataSource.getTrendingActors(ACTOR_ID) } returns Result.success(
-            mockk(relaxed = true)
+        coEvery { remoteDataSource.getTrendingActors(ACTOR_ID) } returns Result.failure(
+            NetworkException.TimeoutException("timeout")
         )
 
         assertThrows<NetworkException.TimeoutException> {
@@ -105,9 +117,138 @@ class ActorRepositoryImplTest {
         }
     }
 
+    @Test
+    fun `getMovieCast should return actor list with names and characters`() = runTest {
+        coEvery { remoteDataSource.getMovieCast(123) } returns Result.success(
+            fakeMovieCastRemote
+        )
+
+        val result = repository.getMovieCastById(123)
+
+        assertEquals(2, result.size)
+        assertEquals("Leonardo DiCaprio", result[0].name)
+        assertEquals("Cobb", result[0].characterName)
+        assertEquals("Arthur", result[1].characterName)
+    }
+
+
+    @Test
+    fun `getMovieCast should throw ValidationException when remote fails`() = runTest {
+        coEvery { remoteDataSource.getMovieCast(123) } throws
+                NetworkException.ValidationException("validation error")
+
+        assertThrows<NetworkException.ValidationException> {
+            repository.getMovieCastById(123)
+        }
+    }
+
+    @Test
+    fun `getTrendingActors should handle error from remote data source`() = runTest {
+        // Given
+        val error = Exception("Network error")
+        coEvery { remoteDataSource.getTrendingActors(any()) } returns Result.failure(error)
+
+        // When
+        try {
+            repository.getTrendingActors(page = 1)
+            assert(false)
+        } catch (e: Exception) {
+            // Then
+            Assert.assertEquals("Network error", e.message)
+        }
+    }
+
+
+    @Test
+    fun `getTrendingActors should return mapped trending actors`() = runTest {
+        // Given
+        val mockApiResponse = createMockTrendingActorsApiResponse()
+        coEvery { remoteDataSource.getTrendingActors(any()) } returns Result.success(mockApiResponse)
+
+        // When
+        val result = repository.getTrendingActors(page = 1)
+
+        // Then
+        assertEquals(1, result.currentPage)
+        assertEquals(10, result.totalPages)
+        assertEquals(100, result.totalItems)
+        assertEquals(1, result.items.size)
+
+        val actor = result.items.first()
+        assertEquals(1, actor.id)
+        assertEquals("Test Actor", actor.name)
+        assertEquals("https://image.tmdb.org/t/p/w500test_profile.jpg", actor.profilePictureUrl)
+        assertEquals("", actor.characterName)
+    }
+
+    @Test
+    fun `getTrendingActors should handle pagination correctly`() = runTest {
+        // Given
+        val mockApiResponse = createMockTrendingActorsApiResponse()
+        coEvery { remoteDataSource.getTrendingActors(any()) } returns Result.success(mockApiResponse)
+
+        // When
+        val result1 = repository.getTrendingActors(page = 1)
+        val result2 = repository.getTrendingActors(page = 2)
+
+        // Then
+        assertNotNull(result1)
+        assertNotNull(result2)
+        Assert.assertEquals(1, result1.currentPage)
+        Assert.assertEquals(1, result2.currentPage)
+    }
+
+
+    @Test
+    fun `getCastTvShowById should return TvShowCastEntity when remote call succeeds`() = runTest {
+        coEvery { remoteDataSource.getCastsByTvShowId(TV_SHOW_ID) }.returns(
+            Result.success(
+                tvShowCastRemoteMock
+            )
+        )
+
+        val result = repository.getCastTvShowById(TV_SHOW_ID)
+
+        assertThat(result).isEqualTo(tvShowCastRemoteMock.toCastEntity())
+    }
+
+    @Test
+    fun `getCastsByTvShowId should throw UnAuthorizedException when remote fails`() = runTest {
+        coEvery {
+            remoteDataSource.getCastsByTvShowId(123)
+        } throws NetworkException.UnAuthorizedException("unAuthorized error")
+
+        assertThrows<NetworkException.UnAuthorizedException> {
+            repository.getCastTvShowById(123)
+        }
+    }
+
+    private val tvShowCastRemoteMock = TvShowCastRemoteResponse(
+        cast = listOf(
+            TvShowCastMember(
+                adult = false,
+                gender = 2,
+                id = 1,
+                knownForDepartment = "Acting",
+                name = "Actor Name",
+                originalName = "Actor Original Name",
+                popularity = 75.5,
+                profilePath = "/actor.jpg",
+                roles = listOf(
+                    Role(
+                        creditId = "role1", character = "Main Character", episodeCount = 10
+                    )
+                ),
+                totalEpisodeCount = 10,
+                order = 1
+            )
+        ), id = TV_SHOW_ID
+    )
+
     private companion object {
         const val ACTOR_ID = 123
-
+        private const val TV_SHOW_ID = 1
+        
         val ActorDetailsRemoteMock = ActorDetailsResponse(
             id = ACTOR_ID,
             name = "John Doe",
@@ -128,6 +269,56 @@ class ActorRepositoryImplTest {
         val ActorImageResponseMock = ActorImageResponse(
             id = ACTOR_ID,
             profiles = emptyList()
+        )
+
+        val fakeMovieCastRemote = MovieCastResponse(
+            id = 123,
+            actorRemote = listOf(
+                MovieActor(
+                    adult = false,
+                    gender = 2,
+                    id = 1,
+                    knownForDepartment = "Acting",
+                    name = "Leonardo DiCaprio",
+                    originalName = "Leonardo DiCaprio",
+                    popularity = 90.0,
+                    profilePath = "/leo.jpg",
+                    castId = 10,
+                    character = "Cobb",
+                    creditId = "abcd",
+                    order = 0
+                ),
+                MovieActor(
+                    adult = false,
+                    gender = 2,
+                    id = 2,
+                    knownForDepartment = "Acting",
+                    name = "Joseph Gordon-Levitt",
+                    originalName = "Joseph Gordon-Levitt",
+                    popularity = 80.0,
+                    profilePath = "/jgl.jpg",
+                    castId = 11,
+                    character = "Arthur",
+                    creditId = "efgh",
+                    order = 1
+                )
+            ),
+            crew = emptyList()
+        )
+    }
+
+    private fun createMockTrendingActorsApiResponse(): ApiResponse<TrendingResponse> {
+        val mockTrendingItem = TrendingResponse(
+            id = 1,
+            name = "Test Actor",
+            profilePath = "test_profile.jpg"
+        )
+
+        return ApiResponse(
+            currentPage = 1,
+            items = listOf(mockTrendingItem),
+            totalPages = 10,
+            totalItems = 100
         )
     }
 }

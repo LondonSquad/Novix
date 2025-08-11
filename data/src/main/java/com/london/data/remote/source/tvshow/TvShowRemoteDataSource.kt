@@ -17,7 +17,7 @@ import com.london.data.remote.model.myrating.RatingMediaResponse
 import com.london.data.remote.model.reviews.ReviewResponse
 import com.london.data.remote.model.search.SearchTvShowRemote
 
-interface TvShowDetailsRemoteDataSource {
+interface TvShowRemoteDataSource {
 
     suspend fun getActorTvShowById(id: Int): Result<ActorTvShowDetailsResponse>
     suspend fun getPopularTvShows(): Result<ApiResponse<PopularTvShowResponse>>

@@ -21,9 +21,9 @@ import com.london.data.remote.service.tvshow.TvShowDetailsApiService
 import com.london.data.remote.source.base.BaseRemoteDatasource
 import javax.inject.Inject
 
-class TvShowDetailsRemoteDataSourceImpl @Inject constructor(
+class TvShowRemoteDataSourceImpl @Inject constructor(
     private val tvShowDetailsApiService: TvShowDetailsApiService,
-) : TvShowDetailsRemoteDataSource, BaseRemoteDatasource {
+) : TvShowRemoteDataSource, BaseRemoteDatasource {
 
     override suspend fun getActorTvShowById(id: Int): Result<ActorTvShowDetailsResponse> =
         callApiWithRetry(

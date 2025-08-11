@@ -2,6 +2,7 @@ package com.london.domain.usecase
 
 import com.london.domain.entity.Actor
 import com.london.domain.entity.PagedFetchResponse
+import com.london.domain.repository.ActorRepository
 import io.mockk.coEvery
 import io.mockk.mockk
 import kotlinx.coroutines.test.runTest
@@ -13,7 +14,7 @@ import org.junit.Test
 class GetTrendingActorsUseCaseTest {
 
     private lateinit var useCase: GetTrendingActorsUseCase
-    private lateinit var repository: TrendingRepository
+    private lateinit var repository: ActorRepository
 
     @Before
     fun setup() {

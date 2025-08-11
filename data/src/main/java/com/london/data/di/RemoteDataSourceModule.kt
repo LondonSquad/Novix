@@ -1,12 +1,12 @@
 package com.london.data.di
 
 import com.london.data.remote.service.account.AccountApiService
-import com.london.data.remote.service.authentication.AuthenticationApiService
 import com.london.data.remote.service.actor.ActorDetailsApiService
-import com.london.data.remote.service.tvshow.TvShowDetailsApiService
+import com.london.data.remote.service.authentication.AuthenticationApiService
 import com.london.data.remote.service.list.CustomMovieListsApiService
 import com.london.data.remote.service.movie.MovieService
 import com.london.data.remote.service.search.SearchApiService
+import com.london.data.remote.service.tvshow.TvShowDetailsApiService
 import com.london.data.remote.source.account.AccountRemoteDataSource
 import com.london.data.remote.source.account.AccountRemoteDataSourceImp
 import com.london.data.remote.source.actor.ActorDetailsRemoteDataSource
@@ -19,8 +19,8 @@ import com.london.data.remote.source.movie.MovieRemoteDataSource
 import com.london.data.remote.source.movie.MovieRemoteDataSourceImpl
 import com.london.data.remote.source.search.SearchRemoteDataSource
 import com.london.data.remote.source.search.SearchRemoteDataSourceImpl
-import com.london.data.remote.source.tvshow.TvShowDetailsRemoteDataSource
-import com.london.data.remote.source.tvshow.TvShowDetailsRemoteDataSourceImpl
+import com.london.data.remote.source.tvshow.TvShowRemoteDataSource
+import com.london.data.remote.source.tvshow.TvShowRemoteDataSourceImpl
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -42,8 +42,8 @@ object RemoteDataSourceModule {
     @Singleton
     fun provideTvShowDetailsRemoteDataSource(
         apiService: TvShowDetailsApiService,
-    ): TvShowDetailsRemoteDataSource =
-        TvShowDetailsRemoteDataSourceImpl(tvShowDetailsApiService = apiService)
+    ): TvShowRemoteDataSource =
+        TvShowRemoteDataSourceImpl(tvShowDetailsApiService = apiService)
 
     @Provides
     @Singleton

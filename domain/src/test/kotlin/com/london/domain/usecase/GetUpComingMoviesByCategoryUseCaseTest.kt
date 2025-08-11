@@ -4,6 +4,7 @@ import com.google.common.truth.Truth.assertThat
 import com.london.domain.entity.PagedFetchResponse
 import com.london.domain.entity.UpComingMovie
 import com.london.domain.error.MovieSearchFailedException
+import com.london.domain.repository.MovieRepository
 import io.mockk.coEvery
 import io.mockk.mockk
 import kotlinx.coroutines.test.runTest
@@ -12,19 +13,24 @@ import org.junit.Test
 import org.junit.jupiter.api.assertThrows
 
 class GetUpComingMoviesByCategoryUseCaseTest {
-    private lateinit var upComingMoviesRepository: UpComingRepository
+    private lateinit var repository: MovieRepository
     lateinit var getMoviesUseCase: GetUpComingMoviesByCategoryUseCase
 
     @Before
     fun setUp() {
-        upComingMoviesRepository = mockk()
-        getMoviesUseCase = GetUpComingMoviesByCategoryUseCase(upComingMoviesRepository)
+        repository = mockk()
+        getMoviesUseCase = GetUpComingMoviesByCategoryUseCase(repository)
     }
 
     @Test
     fun `should return a paged fetch response of movies when repository successfully fetches movies`() = runTest {
         //given
-        coEvery { upComingMoviesRepository.getUpComingMoviesByCategory(CATEGORY_ID, PAGE_NUMBER) } returns pagedFetchResponse
+        coEvery {
+            repository.getUpcomingMoviesByCategory(
+                CATEGORY_ID,
+                PAGE_NUMBER
+            )
+        } returns pagedFetchResponse
         //when
         val result = getMoviesUseCase(CATEGORY_ID, PAGE_NUMBER)
         //then
@@ -34,7 +40,12 @@ class GetUpComingMoviesByCategoryUseCaseTest {
     @Test
     fun `should throw MovieSearchFailedException when repository throws an exception during movie search`() = runTest {
         //given
-        coEvery { upComingMoviesRepository.getUpComingMoviesByCategory(CATEGORY_ID, PAGE_NUMBER) } throws MovieSearchFailedException()
+        coEvery {
+            repository.getUpcomingMoviesByCategory(
+                CATEGORY_ID,
+                PAGE_NUMBER
+            )
+        } throws MovieSearchFailedException()
         //when //then
         assertThrows<MovieSearchFailedException> {
             getMoviesUseCase(CATEGORY_ID, PAGE_NUMBER)
