@@ -36,7 +36,6 @@ import org.junit.Test
 
 @OptIn(ExperimentalCoroutinesApi::class)
 class MovieDetailsViewModelTest {
-
     private lateinit var movieDetails: ManageMovieDetailsUseCase
     private lateinit var manageRecentMovieWatchedUseCase: ManageRecentMovieWatchedUseCase
     private lateinit var manageRecentViewedUseCase: ManageRecentViewedUseCase
@@ -106,7 +105,6 @@ class MovieDetailsViewModelTest {
                         mockMovieDetails.voteAverage
                     )
                 )
-
                 ensureAllEventsConsumed()
             }
         }
@@ -230,7 +228,6 @@ class MovieDetailsViewModelTest {
         }
     }
 
-
     @Test
     fun `should emit correct navigation effects for user actions`() = runTest {
         viewModel?.effect?.test {
@@ -344,6 +341,7 @@ class MovieDetailsViewModelTest {
         viewModel = createViewModel()
         advanceUntilIdle()
 
+        //this delay is needed cause it depend on IO dispatcher
         delay(50)
 
         viewModel!!.state.test {
