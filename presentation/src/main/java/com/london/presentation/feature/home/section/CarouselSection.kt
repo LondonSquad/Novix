@@ -21,6 +21,7 @@ import com.london.designsystem.component.carousel.m3.rememberCarouselState
 import com.london.designsystem.theme.NovixTheme
 import com.london.designsystem.utils.string
 import com.london.domain.entity.recent.MediaType
+import com.london.domain.entity.recent.MediaType.Companion.isMovie
 import com.london.presentation.feature.home.HomeUiMedia
 import com.london.presentation.shared.HomeCard
 
@@ -77,7 +78,7 @@ fun HomeCarouselSection(
                     },
                 imageUrl = mediaItem.posterUrl,
                 onSaveClick = { onSaveClick(mediaItem.id) },
-                hasSaveIcon = isHero,
+                hasSaveIcon = isHero && mediaItem.mediaType.isMovie(),
                 isDarkMode = NovixTheme.isThemeDark
             )
         }

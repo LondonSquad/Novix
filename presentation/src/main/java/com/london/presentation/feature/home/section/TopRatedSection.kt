@@ -18,7 +18,7 @@ fun TopRatedSection(
         uiMediaList = uiState.topRatedMediaList,
         isLoading = uiState.isLoading,
         sectionName = R.string.top_rated,
-        onSaveClick = {/*TODO: SAVE FUNCTIONALITY IS NOT IMPLEMENTED.*/ },
+        onSaveClick = { homeScreenContract.onManageBookmarkClicked(it) },
         onCardClick = { id, mediaType ->
             when (mediaType) {
                 MediaType.TvShow -> homeScreenContract.onTvShowClick(id)

@@ -32,6 +32,7 @@ import com.london.designsystem.component.NovixCarousalRow
 import com.london.designsystem.component.Text
 import com.london.designsystem.theme.NovixTheme
 import com.london.domain.entity.recent.MediaType
+import com.london.domain.entity.recent.MediaType.Companion.isMovie
 import com.london.presentation.R
 import com.london.presentation.feature.home.popular.PopularSection.CARD_HORIZONTAL_PADDING_DP
 import com.london.presentation.feature.home.popular.PopularSection.CARD_WIDTH_DP
@@ -167,7 +168,7 @@ private fun Content(
                 HomeCard(
                     imageUrl = uiMediaList[page].posterUrl,
                     onSaveClick = { onManageBookmarkClicked(uiMediaList[page].id) },
-                    hasSaveIcon = pagerState.currentPage == page,
+                    hasSaveIcon = pagerState.currentPage == page && uiMediaList[page].mediaType.isMovie(),
                     modifier = Modifier.clickable {
                         if (pagerState.currentPage == page) onCardClick(
                             uiMediaList[page].id,
@@ -176,6 +177,7 @@ private fun Content(
                     },
                     isDarkMode = NovixTheme.isThemeDark
                 )
+
                 if (pagerState.currentPage == page)
                     Column(
                         modifier = Modifier

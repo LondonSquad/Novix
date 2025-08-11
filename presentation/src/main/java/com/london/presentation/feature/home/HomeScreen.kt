@@ -368,11 +368,12 @@ private fun LazyGridScope.upComingSection(
             isLoading || movie == null -> {
                 ShimmerMovieCard()
             }
+
             else -> {
                 HomeCard(
                     imageUrl = movie.imageUrl,
                     isSaved = false,
-                    onSaveClick = { /*TODO*/ },
+                    onSaveClick = { contract.onManageBookmarkClicked(movieId = movie.id) },
                     modifier = Modifier
                         .clipToBounds()
                         .clip(RoundedCornerShape(12.dp))
