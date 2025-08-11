@@ -75,7 +75,7 @@ class ManageSearchUseCaseTest {
             val result =
                 manageSearchUseCase.searchForMovies(name = MOVIE_NAME, pageNumber = PAGE_NUMBER)
             //then
-            assertThat(result.items).isEqualTo(moviesPagedResponse.items)
+            assertThat(result).isEqualTo(moviesPagedResponse)
         }
 
     private companion object {
