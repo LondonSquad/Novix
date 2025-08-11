@@ -4,7 +4,6 @@ import androidx.lifecycle.viewModelScope
 import androidx.paging.cachedIn
 import com.london.domain.usecase.movielist.AddMovieToListUseCase
 import com.london.domain.usecase.movielist.GetAllMovieListsUseCase
-import com.london.domain.usecase.movielist.GetMovieListsUseCase
 import com.london.presentation.shared.base.BaseViewModel
 import com.london.presentation.shared.base.createPagingSourceFlow
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -13,7 +12,7 @@ import javax.inject.Inject
 @HiltViewModel
 class BookmarkSheetViewModel @Inject constructor(
     private val addMovieToListUseCase: AddMovieToListUseCase,
-    private val getMovieListsUseCase: GetMovieListsUseCase,
+//    private val getMovieListsUseCase: GetMovieListsUseCase,
     private val getAllMovieListsUseCase: GetAllMovieListsUseCase
 ) : BaseViewModel<BookmarkSheetUiState, BookmarkSheetEffect>(BookmarkSheetUiState()),
     BookmarkSheetContract {
@@ -47,19 +46,21 @@ class BookmarkSheetViewModel @Inject constructor(
                     )
                 }
             },
+            onSuccess = {
+                updateState {
+                    copy(
+                        isLoading = false,
+                        isSuccessSnackbarVisible = true,
+                        selectedLists = emptyList(),
+                    )
+                }
+                emitEffect(BookmarkSheetEffect.ItemSuccessfulAddition)
+            },
             onError = { error ->
                 updateState {
                     copy(
                         error = error,
                         isErrorSnackbarVisible = true
-                    )
-                }
-            },
-            onSuccess = {
-                updateState {
-                    copy(
-                        isLoading = false,
-                        isSuccessSnackbarVisible = true
                     )
                 }
             }
@@ -70,13 +71,32 @@ class BookmarkSheetViewModel @Inject constructor(
         copy(
             selectedLists = emptyList(),
             isErrorSnackbarVisible = false,
-            isSuccessSnackbarVisible = false
+            isSuccessSnackbarVisible = false,
+            error = null,
+            listError = null
         )
     }
 
     override fun onListSelected(listId: UInt) = updateState {
-        copy(selectedLists = selectedLists.toMutableList().apply { add(listId) })
+        val currentSelectedLists = selectedLists.toMutableList()
+        if (listId in currentSelectedLists) {
+            currentSelectedLists.remove(listId)
+        } else {
+            currentSelectedLists.add(listId)
+        }
+        copy(selectedLists = currentSelectedLists)
     }
 
     override fun onCreateNewList() = emitEffect(BookmarkSheetEffect.NewListCreation)
+
+    override fun onSnackbarShown() {
+        updateState {
+            copy(
+                isSuccessSnackbarVisible = false,
+                isErrorSnackbarVisible = false,
+                error = null
+            )
+        }
+    }
+
 }

@@ -15,6 +15,7 @@ interface MovieDetailsRepository {
     suspend fun getMovieCastById(id: Int): List<Actor>
     suspend fun getMovieReviews(movieId: Int, pageNumber: Int): PagedFetchResponse<ReviewEntity>
     suspend fun getMovieVideos(movieId: Int): List<MovieVideo>
+    suspend fun getMovieLists(movieId: UInt): List<UInt>
     suspend fun getAccountMovieStatesById(
         id: Int,
     ): MediaStates

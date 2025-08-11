@@ -5,4 +5,6 @@ interface BookmarkSheetContract {
     fun onCreateNewList()
     fun onAddToLists(bookmarkedId: UInt)
     fun onDismiss()
+
+    fun onSnackbarShown()
 }

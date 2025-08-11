@@ -63,7 +63,12 @@ fun BookmarkBottomSheet(
     effect?.Listen { currentEffect ->
         when (currentEffect) {
             BookmarkSheetEffect.NewListCreation -> {
-                // navigate
+                // TODO: navigate
+            }
+
+            BookmarkSheetEffect.ItemSuccessfulAddition -> {
+                coroutineScope.launch { sheetState.hide() }
+                    .invokeOnCompletion { if (sheetState.isNotVisible) onSheetDismiss() }
             }
         }
     }
