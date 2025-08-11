@@ -11,13 +11,13 @@ import org.junit.jupiter.api.assertThrows
 
 class GetMovieListNameUseCaseTest {
 
-    private lateinit var getMovieListNameUseCase: GetMovieListNameUseCase
+    private lateinit var manageMovieListUseCase: ManageMovieListUseCase
     private lateinit var customMovieListRepository: CustomMovieListRepository
 
     @Before
     fun setUp() {
         customMovieListRepository = mockk()
-        getMovieListNameUseCase = GetMovieListNameUseCase(customMovieListRepository)
+        manageMovieListUseCase = ManageMovieListUseCase(customMovieListRepository)
     }
 
     @Test
@@ -27,7 +27,7 @@ class GetMovieListNameUseCaseTest {
         val expectedName = "Movie List Name"
         coEvery { customMovieListRepository.getMovieListName(listId) } returns expectedName
         // When
-        val result = getMovieListNameUseCase.invoke(listId)
+        val result = manageMovieListUseCase.getMovieListName(listId)
         // Then
         assertThat(result).isEqualTo(expectedName)
     }
@@ -39,8 +39,7 @@ class GetMovieListNameUseCaseTest {
         coEvery { customMovieListRepository.getMovieListName(listId) } throws Exception()
         // When // Then
         assertThrows<Exception> {
-            getMovieListNameUseCase.invoke(listId)
-
+            manageMovieListUseCase.getMovieListName(listId)
         }
     }
 }

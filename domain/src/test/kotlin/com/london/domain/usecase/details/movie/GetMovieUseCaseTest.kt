@@ -31,6 +31,7 @@ class GetMovieUseCaseTest {
     @Before
     fun setUp() {
         movieRepository = mockk()
+        actorRepository = mockk()
         getMovieUseCase = GetMovieUseCase(
             movieRepository = movieRepository,
             actorRepository = actorRepository
@@ -401,7 +402,7 @@ class GetMovieUseCaseTest {
 
         // Then
         assertThat(result).isEqualTo(expectedMovies)
-        coVerify(exactly = 1) { getMovieUseCase.getPopularMovies() }
+        coVerify(exactly = 1) { movieRepository.getPopularMovies() }
     }
 
     @Test

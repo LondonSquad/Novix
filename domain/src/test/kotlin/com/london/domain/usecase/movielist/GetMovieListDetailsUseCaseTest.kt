@@ -14,20 +14,25 @@ import org.junit.jupiter.api.assertThrows
 class GetMovieListDetailsUseCaseTest {
 
     private lateinit var listRepository: CustomMovieListRepository
-    private lateinit var getMovieListDetailsUseCase: GetMovieListDetailsUseCase
+    private lateinit var manageMovieListUseCase: ManageMovieListUseCase
 
     @Before
     fun setUp() {
         listRepository = mockk()
-        getMovieListDetailsUseCase = GetMovieListDetailsUseCase(listRepository)
+        manageMovieListUseCase = ManageMovieListUseCase(listRepository)
     }
 
     @Test
     fun `invoke should return movie list of movies from repository`() = runTest {
         //Given
-        coEvery { listRepository.getMovieListDetails(any(), pageNumber = 1) } returns movieListDetails
+        coEvery {
+            listRepository.getMovieListDetails(
+                any(),
+                pageNumber = 1
+            )
+        } returns movieListDetails
         //When
-        val result = getMovieListDetailsUseCase.invoke(LIST_ID, pageNumber = 1)
+        val result = manageMovieListUseCase.getMovieListDetails(LIST_ID, pageNumber = 1)
         //Then
         assertThat(result).isEqualTo(movieListDetails)
     }
@@ -38,7 +43,7 @@ class GetMovieListDetailsUseCaseTest {
         coEvery { listRepository.getMovieListDetails(any(), pageNumber = 1) } throws Exception()
         //When //Then
         assertThrows<Exception> {
-            getMovieListDetailsUseCase.invoke(LIST_ID, pageNumber = 1)
+            manageMovieListUseCase.getMovieListDetails(LIST_ID, pageNumber = 1)
         }
     }
 

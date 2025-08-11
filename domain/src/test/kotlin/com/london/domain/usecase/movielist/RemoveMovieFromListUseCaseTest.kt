@@ -11,12 +11,12 @@ import org.junit.jupiter.api.assertThrows
 
 class RemoveMovieFromListUseCaseTest {
     private lateinit var customMovieListRepository: CustomMovieListRepository
-    private lateinit var removeMovieFromListUseCase: RemoveMovieFromListUseCase
+    private lateinit var manageMovieListUseCase: ManageMovieListUseCase
 
     @Before
     fun setUp() {
         customMovieListRepository = mockk()
-        removeMovieFromListUseCase = RemoveMovieFromListUseCase(customMovieListRepository)
+        manageMovieListUseCase = ManageMovieListUseCase(customMovieListRepository)
     }
 
     @Test
@@ -25,7 +25,7 @@ class RemoveMovieFromListUseCaseTest {
             //Given
             coEvery { customMovieListRepository.removeMovieFromList(any(), any()) } returns true
             //When
-            val result = removeMovieFromListUseCase.invoke(LIST_ID, MOVIE_ID)
+            val result = manageMovieListUseCase.removeMovieFromList(LIST_ID, MOVIE_ID)
             //Then
             assertThat(result).isTrue()
         }
@@ -36,7 +36,7 @@ class RemoveMovieFromListUseCaseTest {
             //Given
             coEvery { customMovieListRepository.removeMovieFromList(any(), any()) } returns false
             //When
-            val result = removeMovieFromListUseCase.invoke(LIST_ID, MOVIE_ID)
+            val result = manageMovieListUseCase.removeMovieFromList(LIST_ID, MOVIE_ID)
             //Then
             assertThat(result).isFalse()
         }
@@ -53,7 +53,7 @@ class RemoveMovieFromListUseCaseTest {
             } throws Exception()
             //When //Then
             assertThrows<Exception> {
-                removeMovieFromListUseCase.invoke(LIST_ID, MOVIE_ID)
+                manageMovieListUseCase.removeMovieFromList(LIST_ID, MOVIE_ID)
             }
         }
 

@@ -28,7 +28,8 @@ class GetTvShowUseCaseTest {
 
     @Before
     fun setUp() {
-        tvShowRepository = mockk()
+        tvShowRepository = mockk(relaxed = true)
+        searchRepository = mockk(relaxed = true)
         getTvShowUseCase = GetTvShowUseCase(
             tvShowRepository = tvShowRepository,
             searchRepository = searchRepository

@@ -1,12 +1,10 @@
 package com.london.domain.usecase.authentication
 
-import com.london.domain.repository.AccountRepository
 import com.london.domain.repository.AuthRepository
 import javax.inject.Inject
 
 class AuthenticationUseCase @Inject constructor(
     private val authRepository: AuthRepository,
-    private val accountRepository: AccountRepository
 ) {
     suspend fun loginAsGuest() = authRepository.loginAsGuest()
 

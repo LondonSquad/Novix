@@ -18,7 +18,7 @@ class ManageSearchUseCaseTest {
 
     @Before
     fun setUp() {
-        repository = mockk()
+        repository = mockk(relaxed = true)
         manageSearchUseCase = ManageSearchUseCase(repository)
     }
 
@@ -66,15 +66,16 @@ class ManageSearchUseCaseTest {
         runTest {
             //given
             coEvery {
-                manageSearchUseCase.searchForMovies(
-                    TvSHOW_NAME,
+                repository.searchForMovies(
+                    MOVIE_NAME,
                     PAGE_NUMBER
                 )
             } returns moviesPagedResponse
             //when
-            val result = manageSearchUseCase.searchForMovies(MOVIE_NAME, PAGE_NUMBER)
+            val result =
+                manageSearchUseCase.searchForMovies(name = MOVIE_NAME, pageNumber = PAGE_NUMBER)
             //then
-            assertThat(result).isEqualTo(moviesPagedResponse)
+            assertThat(result.items).isEqualTo(moviesPagedResponse.items)
         }
 
     private companion object {
@@ -95,13 +96,13 @@ class ManageSearchUseCaseTest {
         )
         private val movie = Movie(
             id = 1,
-            name = TvSHOW_NAME,
+            name = MOVIE_NAME,
             posterUrl = "",
             releaseYear = 2024,
             rating = 8,
             genreIds = listOf(1, 2, 3)
         )
-        val moviesPagedResponse = PagedFetchResponse(
+        val moviesPagedResponse: PagedFetchResponse<Movie> = PagedFetchResponse(
             currentPage = 1,
             items = listOf(movie),
             totalPages = 1,

@@ -12,12 +12,12 @@ import org.junit.jupiter.api.assertThrows
 class AddMovieToListUseCaseTest {
 
     private lateinit var customMovieListRepository: CustomMovieListRepository
-    private lateinit var addMovieToListUseCase: AddMovieToListUseCase
+    private lateinit var manageMovieListUseCase: ManageMovieListUseCase
 
     @Before
     fun setUp() {
         customMovieListRepository = mockk()
-        addMovieToListUseCase = AddMovieToListUseCase(customMovieListRepository)
+        manageMovieListUseCase = ManageMovieListUseCase(customMovieListRepository)
     }
 
     @Test
@@ -25,7 +25,7 @@ class AddMovieToListUseCaseTest {
         //Given
         coEvery { customMovieListRepository.addMovieToList(any(), any()) } returns true
         //When
-        val result = addMovieToListUseCase.invoke(LIST_ID, MOVIE_ID)
+        val result = manageMovieListUseCase.addMovieToList(LIST_ID, MOVIE_ID)
         //Then
         assertThat(result).isTrue()
     }
@@ -35,7 +35,7 @@ class AddMovieToListUseCaseTest {
         //Given
         coEvery { customMovieListRepository.addMovieToList(any(), any()) } returns false
         //When
-        val result = addMovieToListUseCase.invoke(LIST_ID, MOVIE_ID)
+        val result = manageMovieListUseCase.addMovieToList(LIST_ID, MOVIE_ID)
         //Then
         assertThat(result).isFalse()
     }
@@ -47,7 +47,7 @@ class AddMovieToListUseCaseTest {
             coEvery { customMovieListRepository.addMovieToList(any(), any()) } throws Exception()
             //When //Then
             assertThrows<Exception> {
-                addMovieToListUseCase.invoke(LIST_ID, MOVIE_ID)
+                manageMovieListUseCase.addMovieToList(LIST_ID, MOVIE_ID)
             }
         }
 

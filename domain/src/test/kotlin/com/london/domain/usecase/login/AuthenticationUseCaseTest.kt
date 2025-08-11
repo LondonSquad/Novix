@@ -24,7 +24,6 @@ class AuthenticationUseCaseTest {
         accountRepository = mockk()
         authenticationUseCase = AuthenticationUseCase(
             authRepository = authRepository,
-            accountRepository = accountRepository
         )
     }
 
