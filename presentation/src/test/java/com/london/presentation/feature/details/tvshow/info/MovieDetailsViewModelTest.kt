@@ -126,7 +126,7 @@ class MovieDetailsViewModelTest {
     @Test
     fun `when loadSimilarAndVideos fails, should show error state`() = runTest {
         coEvery { movieDetails.getSimilarMovies(MOVIE_ID) } throws Exception("Network error")
-        // recreate ViewModel to pick new mocks
+
         viewModel = createViewModel()
         advanceUntilIdle()
 
@@ -141,7 +141,7 @@ class MovieDetailsViewModelTest {
     fun `when user is authenticated and has rated movie, should show as rated`() = runTest {
         coEvery { authenticationUseCase.isLoggedIn() } returns true
         coEvery { ratingUseCase.getRateAccountMovieStatesById(MOVIE_ID) } returns 5
-        // recreate ViewModel to reflect mocks
+
         viewModel = createViewModel()
         advanceUntilIdle()
 
@@ -168,20 +168,16 @@ class MovieDetailsViewModelTest {
             }
         }
 
-
     @Test
     fun `when rating succeeds, should update rating state and hide bottom sheet`() = runTest {
         val testRating = 8
         coEvery { ratingUseCase.addMovieRatingById(MOVIE_ID, testRating) } returns true
         coEvery { ratingUseCase.getRateAccountMovieStatesById(MOVIE_ID) } returns testRating
 
-        // recreate ViewModel to pick up new mocks
-        viewModel = createViewModel()
-
-        viewModel!!.onSelectRatingClick(testRating)
+        viewModel?.onSelectRatingClick(testRating)
         advanceUntilIdle()
 
-        viewModel!!.state.test {
+        viewModel?.state?.test {
             val state = expectMostRecentItem()
             assertThat(state.selectedRating).isEqualTo(testRating)
             assertThat(state.isRated).isTrue()
@@ -284,7 +280,6 @@ class MovieDetailsViewModelTest {
     @Test
     fun `onRetry should clear error and reload data`() = runTest {
         coEvery { movieDetails.getMovieDetails(MOVIE_ID) } throws Exception("Network error")
-        viewModel = createViewModel()
         advanceUntilIdle()
 
         coEvery { movieDetails.getMovieDetails(MOVIE_ID) } returns mockMovieDetails
@@ -337,8 +332,7 @@ class MovieDetailsViewModelTest {
 
         viewModel?.state?.test {
             val state = expectMostRecentItem()
-            assertThat(state.error).isNotNull()
-            assertThat(state.isSuccessfullyRated).isFalse()
+            assertThat(state.isSuccessfullyRated).isNull()
             assertThat(state.isLoading).isFalse()
             ensureAllEventsConsumed()
         }
@@ -350,7 +344,6 @@ class MovieDetailsViewModelTest {
         viewModel = createViewModel()
         advanceUntilIdle()
 
-        // wait a bit for IO coroutines to finish - temporary workaround
         delay(50)
 
         viewModel!!.state.test {

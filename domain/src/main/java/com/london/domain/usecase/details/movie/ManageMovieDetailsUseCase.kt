@@ -9,14 +9,14 @@ class ManageMovieDetailsUseCase @Inject constructor(
     suspend fun getMovieDetails(movieId: Int) = movieRepository.getMovieById(movieId)
 
     suspend fun getMovieImages(movieId: Int, limit: Int = LIMIT): List<String> {
-           val images = movieRepository.getMovieImagesById(movieId)
-            return when {
-                images.backdrops.isNotEmpty() -> images.backdrops
-                images.posters.isNotEmpty() -> images.posters
-                images.logos.isNotEmpty() -> images.logos
-                else -> emptyList()
-            }.take(limit)
-        }
+        val images = movieRepository.getMovieImagesById(movieId)
+        return when {
+            images.backdrops.isNotEmpty() -> images.backdrops
+            images.posters.isNotEmpty() -> images.posters
+            images.logos.isNotEmpty() -> images.logos
+            else -> emptyList()
+        }.take(limit)
+    }
 
     suspend fun getMovieCast(movieId: Int) = movieRepository.getMovieCastById(movieId)
 

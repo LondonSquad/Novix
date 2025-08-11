@@ -23,7 +23,7 @@ class MovieDetailsViewModel @Inject constructor(
     private val ratingUseCase: RatingUseCase,
     private val authenticationUseCase: AuthenticationUseCase,
     savedStateHandle: SavedStateHandle,
-    private val movieIdOverride: Int? = null  // add this param with default null
+    movieIdOverride: Int? = null
 ) : BaseViewModel<MovieDetailsUiState, MovieDetailsEffect>(MovieDetailsUiState()),
     MovieDetailsContract {
 
