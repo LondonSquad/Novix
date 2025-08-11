@@ -22,7 +22,11 @@ interface TvShowRemoteDataSource {
     suspend fun getActorTvShowById(id: Int): Result<ActorTvShowDetailsResponse>
     suspend fun getPopularTvShows(): Result<ApiResponse<PopularTvShowResponse>>
     suspend fun getTrendingTvShows(page: Int): Result<ApiResponse<TrendingResponse>>
-    suspend fun deleteTvShowRating(tvShowId: Int , sessionId: String?): Result<RatingRemoteResponse>
+    suspend fun deleteTvShowRating(tvShowId: Int, sessionId: String?): Result<RatingRemoteResponse>
+    suspend fun getTopRatedTvShows(pageNumber: Int): Result<ApiResponse<TopRatedTvSeriesRemote>>
+    suspend fun getTvShowDetailsById(id: Int): Result<TvShowDetailsRemoteResponse>
+    suspend fun getTvShowImagesById(id: Int): Result<TvShowImagesRemoteResponse>
+    suspend fun getTvShowVideos(tvShowId: Int): Result<TvShowVideoResponse>
 
     suspend fun getTopRatedTvShows(
         pageNumber: Int,
@@ -45,7 +49,7 @@ interface TvShowRemoteDataSource {
         guestSessionId: String?
     ): Result<RatingRemoteResponse>
 
-    suspend fun addTvEpisode(
+    suspend fun addTvShowEpisode(
         tvShowId: Int,
         seasonNumber: Int,
         episodeNumber: Int,
@@ -72,7 +76,7 @@ interface TvShowRemoteDataSource {
 
     suspend fun getTvShowImagesById(id: Int): Result<TvShowImagesRemoteResponse>
 
-    suspend fun getEpisodeDetailsByPosition(
+    suspend fun getEpisodeDetails(
         tvShowId: Int,
         seasonNumber: Int,
         episodeNumber: Int

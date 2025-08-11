@@ -1,16 +1,16 @@
 package com.london.data.di
 
 import com.london.data.remote.service.account.AccountApiService
-import com.london.data.remote.service.actor.ActorDetailsApiService
+import com.london.data.remote.service.actor.ActorApiService
 import com.london.data.remote.service.authentication.AuthenticationApiService
 import com.london.data.remote.service.list.CustomMovieListsApiService
-import com.london.data.remote.service.movie.MovieService
+import com.london.data.remote.service.movie.MovieApiService
 import com.london.data.remote.service.search.SearchApiService
-import com.london.data.remote.service.tvshow.TvShowDetailsApiService
+import com.london.data.remote.service.tvshow.TvShowApiService
 import com.london.data.remote.source.account.AccountRemoteDataSource
 import com.london.data.remote.source.account.AccountRemoteDataSourceImp
-import com.london.data.remote.source.actor.ActorDetailsRemoteDataSource
-import com.london.data.remote.source.actor.ActorDetailsRemoteDataSourceImpl
+import com.london.data.remote.source.actor.ActorRemoteDataSource
+import com.london.data.remote.source.actor.ActorRemoteDataSourceImpl
 import com.london.data.remote.source.authentication.AuthenticationRemoteDataSource
 import com.london.data.remote.source.authentication.AuthenticationRemoteDataSourceImpl
 import com.london.data.remote.source.list.CustomMovieListsRemoteDataSource
@@ -34,16 +34,16 @@ object RemoteDataSourceModule {
     @Provides
     @Singleton
     fun provideActorDetailsRemoteDataSource(
-        apiService: ActorDetailsApiService,
-    ): ActorDetailsRemoteDataSource =
-        ActorDetailsRemoteDataSourceImpl(actorDetailsApiService = apiService)
+        apiService: ActorApiService,
+    ): ActorRemoteDataSource =
+        ActorRemoteDataSourceImpl(actorApiService = apiService)
 
     @Provides
     @Singleton
     fun provideTvShowDetailsRemoteDataSource(
-        apiService: TvShowDetailsApiService,
+        apiService: TvShowApiService,
     ): TvShowRemoteDataSource =
-        TvShowRemoteDataSourceImpl(tvShowDetailsApiService = apiService)
+        TvShowRemoteDataSourceImpl(tvShowApiService = apiService)
 
     @Provides
     @Singleton
@@ -61,9 +61,9 @@ object RemoteDataSourceModule {
     @Provides
     @Singleton
     fun provideMovieDetailsRemoteDataSource(
-        apiService: MovieService,
+        apiService: MovieApiService,
     ): MovieRemoteDataSource =
-        MovieRemoteDataSourceImpl(movieService = apiService)
+        MovieRemoteDataSourceImpl(movieApiService = apiService)
 
     @Provides
     @Singleton

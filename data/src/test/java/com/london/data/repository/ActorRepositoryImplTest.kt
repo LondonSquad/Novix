@@ -13,7 +13,7 @@ import com.london.data.remote.model.details.tvshow.model.Role
 import com.london.data.remote.model.details.tvshow.model.TvShowCastMember
 import com.london.data.remote.model.details.tvshow.model.TvShowCastRemoteResponse
 import com.london.data.remote.model.home.trending.TrendingResponse
-import com.london.data.remote.source.actor.ActorDetailsRemoteDataSource
+import com.london.data.remote.source.actor.ActorRemoteDataSource
 import com.london.data.repository.actor.ActorRepositoryImpl
 import com.london.domain.repository.ActorRepository
 import io.mockk.coEvery
@@ -28,7 +28,7 @@ import org.junit.jupiter.api.assertThrows
 
 class ActorRepositoryImplTest {
 
-    private lateinit var remoteDataSource: ActorDetailsRemoteDataSource
+    private lateinit var remoteDataSource: ActorRemoteDataSource
     private lateinit var repository: ActorRepository
 
     @Before
@@ -50,7 +50,7 @@ class ActorRepositoryImplTest {
 
     @Test
     fun `getActorImagesById returns expected result`() = runTest {
-        coEvery { remoteDataSource.getActorImagePath(ACTOR_ID) } returns Result.success(
+        coEvery { remoteDataSource.getActorImagePathById(ACTOR_ID) } returns Result.success(
             ActorImageResponseMock
         )
 
@@ -61,12 +61,12 @@ class ActorRepositoryImplTest {
 
     @Test
     fun `getMovieCastById return expected result`() = runTest {
-        coEvery { remoteDataSource.getMovieCast(ACTOR_ID) } returns Result.failure(
+        coEvery { remoteDataSource.getMovieActors(ACTOR_ID) } returns Result.failure(
             NetworkException.UnAuthorizedException("unauthorized")
         )
 
         assertThrows<NetworkException.UnAuthorizedException> {
-            repository.getMovieCastById(ACTOR_ID)
+            repository.getMovieActors(ACTOR_ID)
         }
     }
 
@@ -75,7 +75,7 @@ class ActorRepositoryImplTest {
         val tvShowCastRemoteResponse = mockk<TvShowCastRemoteResponse>(relaxed = true)
         val expectedEntity = tvShowCastRemoteResponse.toCastEntity()
 
-        coEvery { remoteDataSource.getCastsByTvShowId(ACTOR_ID) } returns Result.success(
+        coEvery { remoteDataSource.getTvShowActors(ACTOR_ID) } returns Result.success(
             tvShowCastRemoteResponse
         )
 
@@ -97,7 +97,7 @@ class ActorRepositoryImplTest {
 
     @Test
     fun `getActorImagePath throws ValidationException on failure`() = runTest {
-        coEvery { remoteDataSource.getActorImagePath(ACTOR_ID) } returns Result.failure(
+        coEvery { remoteDataSource.getActorImagePathById(ACTOR_ID) } returns Result.failure(
             NetworkException.ValidationException("validation failed")
         )
 
@@ -119,11 +119,11 @@ class ActorRepositoryImplTest {
 
     @Test
     fun `getMovieCast should return actor list with names and characters`() = runTest {
-        coEvery { remoteDataSource.getMovieCast(123) } returns Result.success(
+        coEvery { remoteDataSource.getMovieActors(123) } returns Result.success(
             fakeMovieCastRemote
         )
 
-        val result = repository.getMovieCastById(123)
+        val result = repository.getMovieActors(123)
 
         assertEquals(2, result.size)
         assertEquals("Leonardo DiCaprio", result[0].name)
@@ -134,11 +134,11 @@ class ActorRepositoryImplTest {
 
     @Test
     fun `getMovieCast should throw ValidationException when remote fails`() = runTest {
-        coEvery { remoteDataSource.getMovieCast(123) } throws
+        coEvery { remoteDataSource.getMovieActors(123) } throws
                 NetworkException.ValidationException("validation error")
 
         assertThrows<NetworkException.ValidationException> {
-            repository.getMovieCastById(123)
+            repository.getMovieActors(123)
         }
     }
 
@@ -201,7 +201,7 @@ class ActorRepositoryImplTest {
 
     @Test
     fun `getCastTvShowById should return TvShowCastEntity when remote call succeeds`() = runTest {
-        coEvery { remoteDataSource.getCastsByTvShowId(TV_SHOW_ID) }.returns(
+        coEvery { remoteDataSource.getTvShowActors(TV_SHOW_ID) }.returns(
             Result.success(
                 tvShowCastRemoteMock
             )
@@ -215,7 +215,7 @@ class ActorRepositoryImplTest {
     @Test
     fun `getCastsByTvShowId should throw UnAuthorizedException when remote fails`() = runTest {
         coEvery {
-            remoteDataSource.getCastsByTvShowId(123)
+            remoteDataSource.getTvShowActors(123)
         } throws NetworkException.UnAuthorizedException("unAuthorized error")
 
         assertThrows<NetworkException.UnAuthorizedException> {
@@ -248,7 +248,7 @@ class ActorRepositoryImplTest {
     private companion object {
         const val ACTOR_ID = 123
         private const val TV_SHOW_ID = 1
-        
+
         val ActorDetailsRemoteMock = ActorDetailsResponse(
             id = ACTOR_ID,
             name = "John Doe",

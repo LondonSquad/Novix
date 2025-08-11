@@ -48,11 +48,11 @@ class TvShowRepositoryImpl @Inject constructor(
     private val crashReporter: CrashReporter
 ) : TvShowRepository {
 
-    override suspend fun getTvShowDetailsById(
-        id: Int,
-    ): TvShowDetailsEntity = tvShowRemoteDataSource.getTvShowDetailsById(
-        id = id,
-    ).getOrThrow().toEntity()
+    override suspend fun getTvShowDetailsById(id: Int): TvShowDetailsEntity {
+        return tvShowRemoteDataSource.getTvShowDetailsById(
+            id = id,
+        ).getOrThrow().toEntity()
+    }
 
     override suspend fun getImagesTvShowById(id: Int): TvShowImagesEntity =
         tvShowRemoteDataSource.getTvShowImagesById(id).getOrThrow().toEntity()
@@ -151,12 +151,12 @@ class TvShowRepositoryImpl @Inject constructor(
         )
     }
 
-    override suspend fun addTvEpisode(
+    override suspend fun addTvShowEpisode(
         tvShowId: Int,
         seasonNumber: Int,
         episodeNumber: Int,
         rating: Int
-    ): Boolean = tvShowRemoteDataSource.addTvEpisode(
+    ): Boolean = tvShowRemoteDataSource.addTvShowEpisode(
         tvShowId = tvShowId,
         seasonNumber = seasonNumber,
         episodeNumber = episodeNumber,
@@ -175,9 +175,11 @@ class TvShowRepositoryImpl @Inject constructor(
 
 
     override suspend fun getTvShowEpisodeByPosition(
-        tvShowId: Int, seasonNumber: Int, episodeNumber: Int
+        tvShowId: Int,
+        seasonNumber: Int,
+        episodeNumber: Int
     ): TvShowEpisodeByIdEntity =
-        tvShowRemoteDataSource.getEpisodeDetailsByPosition(
+        tvShowRemoteDataSource.getEpisodeDetails(
             tvShowId = tvShowId, seasonNumber = seasonNumber, episodeNumber = episodeNumber
         ).getOrThrow().toTvShowEpisodeEntity()
 
@@ -187,7 +189,9 @@ class TvShowRepositoryImpl @Inject constructor(
         episodeNumber: Int
     ): List<String> =
         tvShowRemoteDataSource.getEpisodeVideos(
-            tvShowId = seriesId, seasonNumber = seasonNumber, episodeNumber = episodeNumber
+            tvShowId = seriesId,
+            seasonNumber = seasonNumber,
+            episodeNumber = episodeNumber
         ).getOrThrow().results?.map { it.key.asYoutubeUrlOrEmpty() }.orEmpty()
 
     override suspend fun getTvShowVideos(tvShowId: Int): List<String> =

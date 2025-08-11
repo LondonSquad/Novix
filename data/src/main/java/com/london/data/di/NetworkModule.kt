@@ -8,12 +8,12 @@ import com.london.data.local.preference.SharedPrefsTokenProvider
 import com.london.data.local.preference.readLanguageCode
 import com.london.data.remote.interceptor.AuthInterceptor
 import com.london.data.remote.service.account.AccountApiService
-import com.london.data.remote.service.actor.ActorDetailsApiService
+import com.london.data.remote.service.actor.ActorApiService
 import com.london.data.remote.service.authentication.AuthenticationApiService
 import com.london.data.remote.service.list.CustomMovieListsApiService
-import com.london.data.remote.service.movie.MovieService
+import com.london.data.remote.service.movie.MovieApiService
 import com.london.data.remote.service.search.SearchApiService
-import com.london.data.remote.service.tvshow.TvShowDetailsApiService
+import com.london.data.remote.service.tvshow.TvShowApiService
 import com.london.data.utils.CrashReporter
 import com.london.data.utils.FirebaseCrashReporter
 import com.london.domain.repository.SessionTokenProvider
@@ -103,18 +103,18 @@ object NetworkModule {
 
     @Provides
     @Singleton
-    fun provideActorDetailsApiService(retrofit: Retrofit): ActorDetailsApiService =
-        retrofit.create(ActorDetailsApiService::class.java)
+    fun provideActorDetailsApiService(retrofit: Retrofit): ActorApiService =
+        retrofit.create(ActorApiService::class.java)
 
     @Provides
     @Singleton
-    fun provideMovieDetailsApiService(retrofit: Retrofit): MovieService =
-        retrofit.create(MovieService::class.java)
+    fun provideMovieDetailsApiService(retrofit: Retrofit): MovieApiService =
+        retrofit.create(MovieApiService::class.java)
 
     @Provides
     @Singleton
-    fun provideTvShowDetailsApiService(retrofit: Retrofit): TvShowDetailsApiService =
-        retrofit.create(TvShowDetailsApiService::class.java)
+    fun provideTvShowDetailsApiService(retrofit: Retrofit): TvShowApiService =
+        retrofit.create(TvShowApiService::class.java)
 
     @Provides
     @Singleton
