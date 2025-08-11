@@ -143,7 +143,7 @@ class MovieDetailsViewModelTest {
         viewModel = createViewModel()
         advanceUntilIdle()
 
-        viewModel!!.state.test {
+        viewModel?.state?.test {
             val state = expectMostRecentItem()
             assertThat(state.isRated).isTrue()
             ensureAllEventsConsumed()
@@ -344,7 +344,7 @@ class MovieDetailsViewModelTest {
         //this delay is needed cause it depend on IO dispatcher
         delay(50)
 
-        viewModel!!.state.test {
+        viewModel?.state?.test {
             val state = expectMostRecentItem()
             assertThat(state.movieImages).containsExactly(mockMovieDetails.posterUrl)
             ensureAllEventsConsumed()
