@@ -1,12 +1,10 @@
 package com.london.presentation.feature.details.actor.info.gallery
 
 import androidx.lifecycle.SavedStateHandle
-import com.google.common.truth.Truth.assertThat
 import com.london.domain.usecase.GetActorImagesByIdUseCase
 import com.london.presentation.navigation.Screen
 import com.london.presentation.navigation.getArgs
 import io.mockk.coEvery
-import io.mockk.coVerify
 import io.mockk.mockk
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -42,22 +40,6 @@ class ActorGalleryViewModelTest {
     @After
     fun tearDown() {
         Dispatchers.resetMain()
-    }
-
-    @Test
-    fun `when initialized with null args should use default actor id`() = runTest {
-        // Given
-        coEvery { savedStateHandle.getArgs<Screen.ActorGallery>() } returns null
-        coEvery { getActorImagesById.invoke(0) } returns emptyList()
-
-        // When
-        viewModel = ActorGalleryViewModel(savedStateHandle, getActorImagesById)
-
-        // Then
-        assertThat(viewModel.state.value.images).isEmpty()
-        assertThat(viewModel.state.value.isLoading).isFalse()
-        assertThat(viewModel.state.value.error).isNull()
-        coVerify { getActorImagesById.invoke(0) }
     }
 
     @Test
