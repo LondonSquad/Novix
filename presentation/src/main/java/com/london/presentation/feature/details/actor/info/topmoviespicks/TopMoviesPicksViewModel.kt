@@ -19,9 +19,7 @@ class TopMoviesPicksViewModel @Inject constructor(
     private val actorId = args?.actorId ?: 0
 
     init {
-        if (actorId != 0) {
-            getActorMoviePicksData()
-        }
+        getActorMoviePicksData()
     }
 
     private fun getActorMoviePicksData() {
@@ -31,11 +29,10 @@ class TopMoviesPicksViewModel @Inject constructor(
             onSuccess = { actorMovieDetails -> updateState { copy(actorMovieDetails = actorMovieDetails) } },
             onError = { errorState -> updateState { copy(errorState = errorState) } },
             onCompleted = { updateState { copy(isLoading = false) } },
-            checkSuccess = { actorId != 0 },
         )
     }
 
-    override fun onRetry() {
+    override fun onRetryClick() {
         updateState { copy(errorState = null) }
         getActorMoviePicksData()
     }
@@ -45,10 +42,10 @@ class TopMoviesPicksViewModel @Inject constructor(
     }
 
     override fun onMovieClick(movieId: Int) {
-        emitEffect(TopMoviesPicksEffect.NavigateToMovieDetails(movieId))
+        emitEffect(TopMoviesPicksEffect.MovieDetailsNavigation(movieId))
     }
 
     override fun onBackClick() {
-        emitEffect(TopMoviesPicksEffect.NavigateBack)
+        emitEffect(TopMoviesPicksEffect.BackNavigation)
     }
 }

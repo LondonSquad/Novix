@@ -3,7 +3,6 @@ package com.london.presentation.feature.details.actor.info.topmoviespicks
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -28,7 +27,7 @@ fun TopMoviesPicksScreen(
         onNavigateMovie = onNavigateMovie,
     )
 
-    TopMoviesPicksContent(
+    Content(
         state = state,
         contract = viewModel,
     )
@@ -36,16 +35,15 @@ fun TopMoviesPicksScreen(
 }
 
 @Composable
-private fun TopMoviesPicksContent(
+private fun Content(
     state: TopMoviesPicksUiState,
     contract: TopMoviesPicksContract,
-    modifier: Modifier = Modifier,
 ) {
     BuildScreen(
         onBack = contract::onBackClick,
         isLoading = state.isLoading,
         isError = state.errorState is ErrorState.NoInternet,
-        onRetry = contract::onRetry,
+        onRetry = contract::onRetryClick,
     ) {
         MediaLazyGrid(
             title = stringResource(R.string.top_movies_picks),
@@ -54,7 +52,6 @@ private fun TopMoviesPicksContent(
             getImageUrl = { it.posterUrl },
             onItemClick = { contract.onMovieClick(it.id) },
             onSavedClick = { contract.onSaveClick(it.id) },
-            modifier = modifier
         )
     }
 }
@@ -67,8 +64,8 @@ private fun HandleTopMoviesPicksEffects(
 ) {
     effect?.Listen { currentEffect ->
         when (currentEffect) {
-            is TopMoviesPicksEffect.NavigateBack -> onNavigateBack()
-            is TopMoviesPicksEffect.NavigateToMovieDetails -> onNavigateMovie(currentEffect.movieId)
+            is TopMoviesPicksEffect.BackNavigation -> onNavigateBack()
+            is TopMoviesPicksEffect.MovieDetailsNavigation -> onNavigateMovie(currentEffect.movieId)
         }
     }
 }

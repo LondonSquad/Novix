@@ -8,14 +8,11 @@ import com.london.domain.usecase.toppicks.GetActorMoviePicksByIdUseCase
 import com.london.presentation.navigation.Screen
 import com.london.presentation.navigation.getArgs
 import io.mockk.coEvery
-import io.mockk.coVerify
 import io.mockk.every
 import io.mockk.mockk
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.test.TestCoroutineScheduler
-import kotlinx.coroutines.test.UnconfinedTestDispatcher
+import kotlinx.coroutines.test.StandardTestDispatcher
 import kotlinx.coroutines.test.resetMain
 import kotlinx.coroutines.test.runTest
 import kotlinx.coroutines.test.setMain
@@ -29,8 +26,7 @@ class TopMoviesPicksViewModelTest {
     private lateinit var viewModel: TopMoviesPicksViewModel
     private lateinit var getActorMoviePicksById: GetActorMoviePicksByIdUseCase
     private lateinit var savedStateHandle: SavedStateHandle
-    private val testScheduler = TestCoroutineScheduler()
-    private val testDispatcher = UnconfinedTestDispatcher(testScheduler)
+    private val testDispatcher = StandardTestDispatcher()
 
     private val mockCastDetails = CastDetails(
         id = 123,
@@ -57,21 +53,6 @@ class TopMoviesPicksViewModelTest {
     @After
     fun tearDown() {
         Dispatchers.resetMain()
-    }
-
-    @Test
-    fun `when data is being fetched should show loading state`() = runTest {
-        // Given
-        val actorId = 123
-        val args = Screen.ActorTopMoviesPicksDetails(actorId)
-        every { savedStateHandle.getArgs<Screen.ActorTopMoviesPicksDetails>() } returns args
-        coEvery { getActorMoviePicksById.invoke(actorId) } coAnswers {
-            delay(100)
-            mockCastDetails
-        }
-
-        // When
-        viewModel = TopMoviesPicksViewModel(savedStateHandle, getActorMoviePicksById)
     }
 
     @Test
@@ -147,9 +128,7 @@ class TopMoviesPicksViewModelTest {
 
         // Then
         with(viewModel.state.value) {
-            assertThat(id).isEqualTo(0)
             assertThat(isSaved).isFalse()
-            assertThat(backdropPath).isEmpty()
             assertThat(errorState).isNull()
         }
     }
@@ -166,70 +145,9 @@ class TopMoviesPicksViewModelTest {
         viewModel = TopMoviesPicksViewModel(savedStateHandle, getActorMoviePicksById)
 
         // Then
-        viewModel.onRetry()
+        viewModel.onRetryClick()
         viewModel.onBackClick()
         viewModel.onSaveClick(1)
         viewModel.onMovieClick(1)
     }
-
-    @Test
-    fun `when initialized with zero actor ID should not fetch data`() = runTest {
-        // Given
-        val args = Screen.ActorTopMoviesPicksDetails(0)
-        coEvery { savedStateHandle.getArgs<Screen.ActorTopMoviesPicksDetails>() } returns args
-
-        // When
-        viewModel = TopMoviesPicksViewModel(savedStateHandle, getActorMoviePicksById)
-
-        // Then
-        coVerify(exactly = 0) { getActorMoviePicksById.invoke(any()) }
-        assertThat(viewModel.state.value.isLoading).isFalse()
-        assertThat(viewModel.state.value.id).isEqualTo(0)
-    }
-
-    @Test
-    fun `when initialized with null args should not fetch data`() = runTest {
-        // Given
-        coEvery { savedStateHandle.getArgs<Screen.ActorTopMoviesPicksDetails>() } returns null
-
-        // When
-        viewModel = TopMoviesPicksViewModel(savedStateHandle, getActorMoviePicksById)
-
-        // Then
-        coVerify(exactly = 0) { getActorMoviePicksById.invoke(any()) }
-        assertThat(viewModel.state.value.isLoading).isFalse()
-        assertThat(viewModel.state.value.id).isEqualTo(0)
-    }
-
-    @Test
-    fun `when actor ID is zero should not execute use case`() = runTest {
-        // Given
-        val actorId = 0
-        val args = Screen.ActorTopMoviesPicksDetails(actorId)
-        coEvery { savedStateHandle.getArgs<Screen.ActorTopMoviesPicksDetails>() } returns args
-
-        // When
-        viewModel = TopMoviesPicksViewModel(savedStateHandle, getActorMoviePicksById)
-
-        // Then
-        coVerify(exactly = 0) { getActorMoviePicksById.invoke(any()) }
-        assertThat(viewModel.state.value.id).isEqualTo(0)
-        assertThat(viewModel.state.value.isLoading).isFalse()
-    }
-
-    @Test
-    fun `when checkSuccess returns false should not execute use case`() = runTest {
-        // Given
-        val actorId = 0
-        val args = Screen.ActorTopMoviesPicksDetails(actorId)
-        coEvery { savedStateHandle.getArgs<Screen.ActorTopMoviesPicksDetails>() } returns args
-
-        // When
-        viewModel = TopMoviesPicksViewModel(savedStateHandle, getActorMoviePicksById)
-
-        // Then
-        coVerify(exactly = 0) { getActorMoviePicksById.invoke(any()) }
-        assertThat(viewModel.state.value.isLoading).isFalse()
-    }
-
 }
