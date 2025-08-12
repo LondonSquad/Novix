@@ -42,7 +42,6 @@ fun TrendingActorsScreen(
         }
     }
 
-
     val actorsLazyItems = state.actorsFlow.collectAsLazyPagingItems()
 
     BuildScreen(
@@ -56,15 +55,15 @@ fun TrendingActorsScreen(
     ) {
         Content(
             state = state,
-            contract = viewModel
+            contract = viewModel,
         )
     }
 }
 
 @Composable
 private fun Content(
-    state: TrendingActorsUiState = TrendingActorsUiState(),
-    contract: TrendingActorsContract = defaultTrendingActorsContract(),
+    state: TrendingActorsUiState,
+    contract: TrendingActorsContract,
 ) {
     LazyColumn(
         modifier = Modifier
@@ -85,7 +84,6 @@ private fun Content(
         }
 
         item {
-
             LazyPagingColumn(
                 pagingItems = state.actorsFlow.collectAsLazyPagingItems(),
                 modifier = Modifier.fillMaxSize(),
@@ -105,5 +103,8 @@ private fun Content(
 @Preview
 @Composable
 private fun Preview() = NovixTheme {
-    Content()
+    Content(
+        state = TrendingActorsUiState(),
+        contract = defaultTrendingActorsContract()
+    )
 }

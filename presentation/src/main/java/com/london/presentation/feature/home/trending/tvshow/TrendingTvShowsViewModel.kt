@@ -1,10 +1,11 @@
 package com.london.presentation.feature.home.trending.tvshow
 
 import com.london.domain.usecase.details.tvshow.ManageTvShowDetailsUseCase
+import com.london.presentation.feature.home.shared.handlingPagingFlow
 import com.london.presentation.shared.base.BaseViewModel
-import com.london.presentation.shared.base.createPagingSourceFlow
 import com.london.presentation.utils.TvShowGenre
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.flowOf
 import javax.inject.Inject
 
 @HiltViewModel
@@ -33,30 +34,25 @@ class TrendingTvShowsViewModel @Inject constructor(
 
 
     private fun initializeTvShows() {
-        tryToExecute(
+        tryToCollect(
             block = {
-                val tvShowsFlow = createPagingSourceFlow(query = "") { _, pageNumber ->
-                    val tvShows = manageTvShowDetailsUseCase.getTrendingTvShows(page = pageNumber)
-                    val filteredItems =
-                        if (state.value.selectedGenreId != null && state.value.selectedGenreId != -1) {
-                            tvShows.items.filter { it.genreIds.contains(state.value.selectedGenreId) }
-                        } else {
-                            tvShows.items
-                        }
-                    tvShows.copy(items = filteredItems)
+                handlingPagingFlow { pageNumber ->
+                    manageTvShowDetailsUseCase.getTrendingTvShows(
+                        page = pageNumber,
+                        movieGenreId = state.value.selectedGenreId
+                    )
                 }
-                tvShowsFlow
+
             },
             onStart = {
                 updateState { copy(isLoading = true) }
             },
-            onSuccess = { tvShowsFlow ->
+            onNewValue = { tvShowsFlow ->
                 updateState {
-                    copy(tvShowsFlow = tvShowsFlow)
+                    copy(tvShowsFlow = flowOf(tvShowsFlow))
                 }
             },
             onCompleted = { updateState { copy(isLoading = false) } },
         )
     }
-
 }

@@ -64,8 +64,8 @@ fun TrendingMoviesScreen(
 
 @Composable
 private fun Content(
-    state: TrendingMoviesUiState = TrendingMoviesUiState(),
-    contract: TrendingMoviesContract = defaultTrendingMoviesContract()
+    state: TrendingMoviesUiState ,
+    contract: TrendingMoviesContract
 ) {
     val screenWidth = with(LocalDensity.current) { LocalConfiguration.current.screenWidthDp.dp }
 
@@ -109,5 +109,8 @@ private fun Content(
 @Preview
 @Composable
 private fun Preview() = NovixTheme {
-    Content()
+    Content(
+        state = TrendingMoviesUiState(),
+        contract = defaultTrendingMoviesContract()
+    )
 }

@@ -11,7 +11,6 @@ data class TrendingMoviesUiState(
     val id: Int = 0,
     val isSaved: Boolean = false,
     val selectedGenreId: Int? = 0,
-    val backdropPath: String = "",
     val isLoading: Boolean = false,
     val errorState: ErrorState? = null,
     val moviesFlow: Flow<PagingData<Trending>> = flow {},

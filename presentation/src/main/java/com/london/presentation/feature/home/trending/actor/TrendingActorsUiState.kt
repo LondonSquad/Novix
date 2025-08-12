@@ -8,7 +8,6 @@ import kotlinx.coroutines.flow.flow
 
 data class TrendingActorsUiState(
     val id: Int = 0,
-    val backdropPath: String = "",
     val isLoading: Boolean = false,
     val errorState: ErrorState? = null,
     val actorsFlow: Flow<PagingData<Actor>> = flow {}

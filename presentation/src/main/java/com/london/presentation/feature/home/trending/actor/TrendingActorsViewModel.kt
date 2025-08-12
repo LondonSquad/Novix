@@ -1,9 +1,10 @@
 package com.london.presentation.feature.home.trending.actor
 
 import com.london.domain.usecase.GetTrendingActorsUseCase
+import com.london.presentation.feature.home.shared.handlingPagingFlow
 import com.london.presentation.shared.base.BaseViewModel
-import com.london.presentation.shared.base.createPagingSourceFlow
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.flowOf
 import javax.inject.Inject
 
 @HiltViewModel
@@ -23,24 +24,15 @@ class TrendingActorsViewModel @Inject constructor(
     override fun onRetry() = initializeActors()
 
     private fun initializeActors() {
-        tryToExecute(
-            block = {
-                val actorsFlow = createPagingSourceFlow(query = "") { _, pageNumber ->
-                    val actors = getTrendingActors.invoke(page = pageNumber)
-                    actors.copy(items = actors.items)
-                }
-                actorsFlow
+        tryToCollect(
+            block = { handlingPagingFlow { getTrendingActors.invoke(page = 1) } },
+            onStart = { handlingLoadingState(true) },
+            onNewValue = { actorsPagingData ->
+                updateState { copy(actorsFlow = flowOf(actorsPagingData)) }
             },
-            onStart = {
-                updateState { copy(isLoading = true) }
-            },
-            onSuccess = { actorsFlow ->
-                updateState {
-                    copy(actorsFlow = actorsFlow)
-                }
-            },
-            onCompleted = { updateState { copy(isLoading = false) } },
+            onCompleted = { handlingLoadingState(false) },
         )
     }
 
+    fun handlingLoadingState(isLoading: Boolean) = updateState { copy(isLoading = isLoading) }
 }

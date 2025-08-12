@@ -1,10 +1,11 @@
 package com.london.presentation.feature.home.trending.movie
 
 import com.london.domain.usecase.GetTrendingMoviesUseCase
+import com.london.presentation.feature.home.shared.handlingPagingFlow
 import com.london.presentation.shared.base.BaseViewModel
-import com.london.presentation.shared.base.createPagingSourceFlow
 import com.london.presentation.utils.MovieGenre
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.flowOf
 import javax.inject.Inject
 
 @HiltViewModel
@@ -19,9 +20,7 @@ class TrendingMoviesViewModel @Inject constructor(
 
     override fun onGenreSelected(genre: MovieGenre) {
         if (genre.id == state.value.selectedGenreId) return
-        updateState {
-            copy(selectedGenreId = genre.id)
-        }
+        updateState { copy(selectedGenreId = genre.id) }
         initializeMovies()
     }
 
@@ -36,29 +35,21 @@ class TrendingMoviesViewModel @Inject constructor(
     }
 
     private fun initializeMovies() {
-        tryToExecute(
+        tryToCollect(
             block = {
-                val moviesFlow = createPagingSourceFlow(query = "") { _, pageNumber ->
-                    val movies = getTrendingMovies.invoke(page = pageNumber)
-                    val filteredItems =
-                        if (state.value.selectedGenreId != null && state.value.selectedGenreId != -1) {
-                            movies.items.filter { it.genreIds.contains(state.value.selectedGenreId) }
-                        } else {
-                            movies.items
-                        }
-                    movies.copy(items = filteredItems)
-                }
-                moviesFlow
-            },
-            onStart = {
-                updateState { copy(isLoading = true) }
-            },
-            onSuccess = { moviesFlow ->
-                updateState {
-                    copy(moviesFlow = moviesFlow)
+                handlingPagingFlow { pageNumber ->
+                    getTrendingMovies.invoke(
+                        page = 1,
+                        movieGenreId = state.value.selectedGenreId
+                    )
                 }
             },
-            onCompleted = { updateState { copy(isLoading = false) } },
+            onStart = { handlingLoadingState(false) },
+            onError = { errorState -> updateState { copy(errorState = errorState) } },
+            onNewValue = { moviesFlow -> updateState { copy(moviesFlow = flowOf(moviesFlow)) } },
+            onCompleted = { handlingLoadingState(true) },
         )
     }
+
+    fun handlingLoadingState(isLoading: Boolean) = updateState { copy(isLoading = isLoading) }
 }

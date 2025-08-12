@@ -15,8 +15,23 @@ class ManageTvShowDetailsUseCase @Inject constructor(
     suspend fun getPopularTvShows(limit: Int = LIMIT) =
         tvShowRepository.getPopularTvShows().take(limit)
 
-    suspend fun getTrendingTvShows(page: Int): PagedFetchResponse<Trending> =
-        tvShowRepository.getTrendingTvShows(page = page)
+    suspend fun getTrendingTvShows(page: Int, movieGenreId: Int?): PagedFetchResponse<Trending> {
+        val trendingTvShow = tvShowRepository.getTrendingTvShows(page)
+
+        val genreId = if (movieGenreId == -1) null else movieGenreId
+
+        val filteredItems = if (genreId != null)
+            trendingTvShow.items.filter { it.genreIds.contains(genreId) }
+        else
+            trendingTvShow.items
+
+        return PagedFetchResponse(
+            currentPage = trendingTvShow.currentPage,
+            items = filteredItems,
+            totalPages = trendingTvShow.totalPages,
+            totalItems = trendingTvShow.totalItems,
+        )
+    }
 
     suspend fun getTvShowList(name: String, pageNumber: Int) =
         searchRepository.searchForTvShows(
