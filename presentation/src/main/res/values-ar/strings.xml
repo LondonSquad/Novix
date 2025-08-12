@@ -162,4 +162,5 @@
     <string name="my_list_screen">مجموعاتي</string>
     <string name="list_added_success">تم اضافه القائمه بنجاح</string>
     <string name="list_added_fail">حدث خطا ما لا يمكن اضافه القائمه</string>
+    <string name="login_to_add_list">يرجى تسجيل الدخول للتمكن من الإضافة إالي قائمة</string>
 </resources>

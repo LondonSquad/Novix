@@ -162,4 +162,5 @@
     <string name="list_deletion_failed">List deletion failed</string>
     <string name="close">close</string>
     <string name="my_list_screen">My Lists</string>
+    <string name="login_to_add_list">Please login to save to list</string>
 </resources>
