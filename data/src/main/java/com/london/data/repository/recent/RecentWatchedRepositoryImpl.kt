@@ -14,7 +14,7 @@ import kotlinx.coroutines.flow.map
 import javax.inject.Inject
 
 
-class RecentWatchedRepositoryIml @Inject constructor(
+class RecentWatchedRepositoryImpl @Inject constructor(
     private val recentWatchedMoviesDataSource: RecentWatchedDataSource<RecentWatchedMovieLocal>,
     private val recentWatchedTvShowsDataSource: RecentWatchedDataSource<RecentWatchedTvShowLocal>
 ) : RecentWatchedRepository {

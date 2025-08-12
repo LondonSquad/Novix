@@ -3,34 +3,34 @@ package com.london.data.remote.source.authentication
 
 import com.london.data.remote.model.authentication.DeleteSessionResponse
 import com.london.data.remote.model.authentication.GuestSessionResponse
-import com.london.data.remote.model.authentication.LoginValidationRequestBody
+import com.london.data.remote.model.authentication.LoginRequestResponse
 import com.london.data.remote.model.authentication.RequestTokenResponse
 import com.london.data.remote.model.authentication.SessionId
 import com.london.data.remote.model.authentication.SessionResponse
-import com.london.data.remote.model.authentication.Token
+import com.london.data.remote.model.authentication.TokenResponse
 import com.london.data.remote.service.authentication.AuthenticationApiService
 import com.london.data.remote.source.base.BaseRemoteDatasource
 import javax.inject.Inject
 
 class AuthenticationRemoteDataSourceImpl @Inject constructor(
-    private val authApiService: AuthenticationApiService
+    private val authenticationApiService: AuthenticationApiService
 ) : AuthenticationRemoteDataSource, BaseRemoteDatasource {
 
     override suspend fun createRequestToken(): Result<RequestTokenResponse> =
         callApi(
-            apiCall = { authApiService.createRequestToken() },
+            apiCall = { authenticationApiService.createRequestToken() },
             mapper = { it }
         )
 
     override suspend fun createGuestSession(): Result<GuestSessionResponse> =
         callApi(
-            apiCall = { authApiService.createGuestSession() },
+            apiCall = { authenticationApiService.createGuestSession() },
             mapper = { it }
         )
 
     override suspend fun createSession(requestToken: String): Result<SessionResponse> =
         callApi(
-            apiCall = { authApiService.createSession(Token(requestToken)) },
+            apiCall = { authenticationApiService.createSession(TokenResponse(requestToken)) },
             mapper = { it }
         )
 
@@ -41,8 +41,8 @@ class AuthenticationRemoteDataSourceImpl @Inject constructor(
     ): Result<RequestTokenResponse> =
         callApi(
             apiCall = {
-                authApiService.createSessionWithLogin(
-                    LoginValidationRequestBody(
+                authenticationApiService.validateLoginCredentials(
+                    LoginRequestResponse(
                         username = username,
                         password = password,
                         requestToken = requestToken
@@ -56,7 +56,7 @@ class AuthenticationRemoteDataSourceImpl @Inject constructor(
         sessionId: String
     ): Result<DeleteSessionResponse> =
         callApi(
-            apiCall = { authApiService.deleteSession(SessionId(sessionId)) },
+            apiCall = { authenticationApiService.deleteSession(SessionId(sessionId)) },
             mapper = { it }
         )
 }

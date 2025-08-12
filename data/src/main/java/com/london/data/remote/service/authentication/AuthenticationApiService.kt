@@ -1,12 +1,17 @@
 package com.london.data.remote.service.authentication
 
+import com.london.data.remote.model.ApiConstants.CREATE_NEW_GUEST_SESSION
+import com.london.data.remote.model.ApiConstants.CREATE_NEW_SESSION
+import com.london.data.remote.model.ApiConstants.CREATE_NEW_TOKEN
+import com.london.data.remote.model.ApiConstants.CREATE_NEW_TOKEN_AFTER_LOGIN
+import com.london.data.remote.model.ApiConstants.CREATE_SESSION
 import com.london.data.remote.model.authentication.DeleteSessionResponse
 import com.london.data.remote.model.authentication.GuestSessionResponse
-import com.london.data.remote.model.authentication.LoginValidationRequestBody
+import com.london.data.remote.model.authentication.LoginRequestResponse
 import com.london.data.remote.model.authentication.RequestTokenResponse
 import com.london.data.remote.model.authentication.SessionId
 import com.london.data.remote.model.authentication.SessionResponse
-import com.london.data.remote.model.authentication.Token
+import com.london.data.remote.model.authentication.TokenResponse
 import retrofit2.Response
 import retrofit2.http.Body
 import retrofit2.http.GET
@@ -14,18 +19,24 @@ import retrofit2.http.HTTP
 import retrofit2.http.POST
 
 interface AuthenticationApiService {
-    @GET("3/authentication/token/new")
+    @GET(CREATE_NEW_TOKEN)
     suspend fun createRequestToken(): Response<RequestTokenResponse>
 
-    @GET("3/authentication/guest_session/new")
+    @GET(CREATE_NEW_GUEST_SESSION)
     suspend fun createGuestSession(): Response<GuestSessionResponse>
 
-    @POST("3/authentication/session/new")
-    suspend fun createSession(@Body requestBody: Token): Response<SessionResponse>
+    @POST(CREATE_NEW_SESSION)
+    suspend fun createSession(
+        @Body token: TokenResponse
+    ): Response<SessionResponse>
 
-    @POST("3/authentication/token/validate_with_login")
-    suspend fun createSessionWithLogin(@Body requestBody: LoginValidationRequestBody): Response<RequestTokenResponse>
+    @HTTP(method = "DELETE", path = CREATE_SESSION, hasBody = true)
+    suspend fun deleteSession(
+        @Body sessionId: SessionId
+    ): Response<DeleteSessionResponse>
 
-    @HTTP(method = "DELETE", path = "3/authentication/session", hasBody = true)
-    suspend fun deleteSession(@Body sessionId: SessionId): Response<DeleteSessionResponse>
+    @POST(CREATE_NEW_TOKEN_AFTER_LOGIN)
+    suspend fun validateLoginCredentials(
+        @Body request: LoginRequestResponse
+    ): Response<RequestTokenResponse>
 }

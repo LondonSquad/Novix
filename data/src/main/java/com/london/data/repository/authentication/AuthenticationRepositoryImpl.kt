@@ -1,71 +1,99 @@
 package com.london.data.repository.authentication
 
-import com.london.data.local.preference.AuthPreferences
+import com.london.data.local.preference.AuthenticationPreferences
 import com.london.data.mapper.account.toEntity
+import com.london.data.remote.model.authentication.RequestTokenResponse
+import com.london.data.remote.model.authentication.SessionResponse
 import com.london.data.remote.source.account.AccountRemoteDataSource
 import com.london.data.remote.source.authentication.AuthenticationRemoteDataSource
-import com.london.domain.repository.AuthRepository
+import com.london.domain.repository.AuthenticationRepository
 import javax.inject.Inject
 
 class AuthenticationRepositoryImpl @Inject constructor(
-    private val authRemoteDataSource: AuthenticationRemoteDataSource,
+    private val authenticationRemoteDataSource: AuthenticationRemoteDataSource,
     private val accountRemoteDataSource: AccountRemoteDataSource,
-    private val authPreferences: AuthPreferences
-) : AuthRepository {
+    private val authenticationPreferences: AuthenticationPreferences
+) : AuthenticationRepository {
     override suspend fun login(username: String, password: String): Boolean {
 
-        val tokenResponse = authRemoteDataSource.createRequestToken().getOrThrow()
-
-        val sessionResponse = authRemoteDataSource.createSessionWithLogin(
+        val sessionResponse = attemptLogin(
             username = username,
-            password = password,
-            requestToken = tokenResponse.requestToken
-        ).getOrThrow()
+            password = password
+        )
 
-        return if (sessionResponse.success) {
+        if (!sessionResponse.success) return false
 
-            val createdSession = authRemoteDataSource.createSession(
+            val createdSession = createSession(sessionResponse)
+            saveUserSession(
+                username = username,
+                session = createdSession,
                 requestToken = sessionResponse.requestToken
-            ).getOrThrow()
+            )
 
-            authPreferences.saveSessionId(createdSession.sessionId)
-            authPreferences.saveUsername(username)
-            authPreferences.saveRequestToken(sessionResponse.requestToken)
-            authPreferences.setGuestMode(false)
-
-            val accountResult = accountRemoteDataSource.getAccountDetails(createdSession.sessionId)
-            val accountInfo = accountResult.getOrThrow().toEntity()
-            val accountId = accountInfo.id
-            authPreferences.saveAccountId(accountId)
-            true
-        } else {
-            false
-        }
+            fetchAndSaveUserAccount(session = createdSession)
+            return true
     }
 
     override suspend fun loginAsGuest(): Boolean {
-        val guestResponse = authRemoteDataSource.createGuestSession().getOrThrow()
-        return if (guestResponse.success) {
-            authPreferences.saveGuestSessionId(guestResponse.guestSessionId)
-            authPreferences.setGuestMode(true)
-            true
-        } else {
-            false
-        }
-    }
+        val guestResponse = authenticationRemoteDataSource.createGuestSession().getOrThrow()
+        if (!guestResponse.success) return false
 
-    override suspend fun logout(): Boolean {
-        val sessionId = authPreferences.getSessionId()
-        if (sessionId != null && !authPreferences.isGuestMode()) {
-            authRemoteDataSource.deleteSession(sessionId).getOrThrow()
+        authenticationPreferences.apply {
+            saveGuestSessionId(guestResponse.guestSessionId)
+            setGuestMode(true)
         }
-        authPreferences.clearAuth()
         return true
     }
 
-    override suspend fun isLoggedIn(): Boolean = authPreferences.isLoggedIn()
+    override suspend fun logout(): Boolean {
+        val sessionId = authenticationPreferences.getSessionId()
+        if (sessionId != null && !authenticationPreferences.isGuestMode()) {
+            authenticationRemoteDataSource.deleteSession(sessionId).getOrThrow()
+        }
+        authenticationPreferences.clearAuthentication()
+        return true
+    }
 
-    override suspend fun getAccountId(): Int {
-        return authPreferences.getAccountId()
+    override suspend fun isLoggedIn(): Boolean = authenticationPreferences.isLoggedIn()
+
+    private suspend fun fetchRequestToken(): RequestTokenResponse {
+        return authenticationRemoteDataSource.createRequestToken().getOrThrow()
+    }
+
+    private suspend fun attemptLogin(
+        username: String,
+        password: String
+    ): RequestTokenResponse {
+        return authenticationRemoteDataSource.createSessionWithLogin(
+            username = username,
+            password = password,
+            requestToken = fetchRequestToken().requestToken
+        ).getOrThrow()
+    }
+
+    private suspend fun createSession(session: RequestTokenResponse): SessionResponse {
+        return authenticationRemoteDataSource.createSession(
+            requestToken = session.requestToken
+        ).getOrThrow()
+    }
+
+    private fun saveUserSession(
+        username: String,
+        session: SessionResponse,
+        requestToken: String
+    ) {
+        authenticationPreferences.apply {
+            saveSessionId(session.sessionId)
+            saveUsername(username)
+            saveRequestToken(requestToken)
+            setGuestMode(false)
+        }
+    }
+
+    private suspend fun fetchAndSaveUserAccount(session: SessionResponse) {
+        val accountResult = accountRemoteDataSource.getAccountDetails(session.sessionId)
+        val accountInfo = accountResult.getOrThrow().toEntity()
+        val accountId = accountInfo.id
+        authenticationPreferences.saveAccountId(accountId)
     }
 }

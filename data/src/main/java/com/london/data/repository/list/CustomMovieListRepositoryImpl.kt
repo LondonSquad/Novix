@@ -1,6 +1,6 @@
 package com.london.data.repository.list
 
-import com.london.data.local.preference.AuthPreferences
+import com.london.data.local.preference.AuthenticationPreferences
 import com.london.data.mapper.list.toEntity
 import com.london.data.mapper.search.toEntity
 import com.london.data.remote.source.list.CustomMovieListsRemoteDataSource
@@ -14,20 +14,20 @@ import javax.inject.Inject
 
 class CustomMovieListRepositoryImpl @Inject constructor(
     private val remoteDataSource: CustomMovieListsRemoteDataSource,
-    private val authPreferences: AuthPreferences,
+    private val authenticationPreferences: AuthenticationPreferences,
     private val preferencesService: AppPreferencesService
 ) : CustomMovieListRepository {
 
     override suspend fun deleteMovieList(id: UInt): Boolean =
         remoteDataSource.delete(
             listId = id.toInt(),
-            sessionId = authPreferences.getSessionId()
+            sessionId = authenticationPreferences.getSessionId()
         ).isSuccess
 
     override suspend fun createMovieList(name: String): Boolean =
         remoteDataSource.create(
             name = name,
-            sessionId = authPreferences.getSessionId(),
+            sessionId = authenticationPreferences.getSessionId(),
             languageCode = preferencesService.appLanguage.value.code
         ).isSuccess
 
@@ -40,7 +40,7 @@ class CustomMovieListRepositoryImpl @Inject constructor(
     override suspend fun getMovieLists(pageNumber: Int): PagedFetchResponse<MovieList> {
         val response = remoteDataSource.getAllMovieLists(
             page = pageNumber,
-            sessionId = authPreferences.getSessionId()
+            sessionId = authenticationPreferences.getSessionId()
         ).getOrThrow()
 
         return PagedFetchResponse(
@@ -55,7 +55,7 @@ class CustomMovieListRepositoryImpl @Inject constructor(
         remoteDataSource.addMovieToList(
             listId = listId.toInt(),
             movieId = movieId.toInt(),
-            sessionId = authPreferences.getSessionId()
+            sessionId = authenticationPreferences.getSessionId()
         ).onFailure {
             return false
         }
@@ -87,7 +87,7 @@ class CustomMovieListRepositoryImpl @Inject constructor(
         remoteDataSource.removeMovieFromList(
             listId = listId.toInt(),
             movieId = movieId.toInt(),
-            sessionId = authPreferences.getSessionId()
+            sessionId = authenticationPreferences.getSessionId()
         ).onFailure {
             return false
         }
