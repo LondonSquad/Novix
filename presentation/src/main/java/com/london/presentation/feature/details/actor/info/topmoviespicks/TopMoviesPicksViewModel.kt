@@ -1,7 +1,6 @@
 package com.london.presentation.feature.details.actor.info.topmoviespicks
 
 import androidx.lifecycle.SavedStateHandle
-import com.london.domain.entity.actordetails.cast.CastDetails
 import com.london.domain.usecase.toppicks.GetActorMoviePicksByIdUseCase
 import com.london.presentation.navigation.Screen
 import com.london.presentation.navigation.getArgs
@@ -11,8 +10,8 @@ import javax.inject.Inject
 
 @HiltViewModel
 class TopMoviesPicksViewModel @Inject constructor(
-    private val getActorMoviePicksById: GetActorMoviePicksByIdUseCase,
     savedStateHandle: SavedStateHandle,
+    private val getActorMoviePicksById: GetActorMoviePicksByIdUseCase,
 ) : BaseViewModel<TopMoviesPicksUiState, TopMoviesPicksEffect>(TopMoviesPicksUiState()),
     TopMoviesPicksContract {
 
@@ -29,31 +28,20 @@ class TopMoviesPicksViewModel @Inject constructor(
         tryToExecute(
             block = { getActorMoviePicksById.invoke(actorId) },
             onStart = { updateState { copy(isLoading = true) } },
-            onSuccess = ::handleActorMoviePicksSuccess,
+            onSuccess = { actorMovieDetails -> updateState { copy(actorMovieDetails = actorMovieDetails) } },
             onError = { errorState -> updateState { copy(errorState = errorState) } },
             onCompleted = { updateState { copy(isLoading = false) } },
             checkSuccess = { actorId != 0 },
         )
     }
 
-    private fun handleActorMoviePicksSuccess(actorMovieDetails: CastDetails) {
-        updateState {
-            copy(
-                id = actorMovieDetails.id,
-                actorMovieDetails = actorMovieDetails,
-                isSaved = isSaved,
-                backdropPath = backdropPath
-            )
-        }
-    }
-
-    override fun onRetry(){
+    override fun onRetry() {
         updateState { copy(errorState = null) }
         getActorMoviePicksData()
     }
 
     override fun onSaveClick(movieId: Int) {
-        updateState { copy(isSaved = isSaved) }
+        updateState { copy(isSaved = !this.isSaved) }
     }
 
     override fun onMovieClick(movieId: Int) {

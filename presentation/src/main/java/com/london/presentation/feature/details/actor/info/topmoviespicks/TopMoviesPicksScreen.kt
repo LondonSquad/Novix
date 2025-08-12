@@ -15,8 +15,8 @@ import com.london.presentation.utils.Listen
 
 @Composable
 fun TopMoviesPicksScreen(
-    onNavigateMovie: (Int) -> Unit,
     onNavigateBack: () -> Unit,
+    onNavigateMovie: (Int) -> Unit,
     viewModel: TopMoviesPicksViewModel = hiltViewModel()
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
@@ -24,8 +24,8 @@ fun TopMoviesPicksScreen(
 
     HandleTopMoviesPicksEffects(
         effect = effect,
+        onNavigateBack = onNavigateBack,
         onNavigateMovie = onNavigateMovie,
-        onNavigateBack = onNavigateBack
     )
 
     TopMoviesPicksContent(
@@ -61,9 +61,9 @@ private fun TopMoviesPicksContent(
 
 @Composable
 private fun HandleTopMoviesPicksEffects(
-    effect: TopMoviesPicksEffect?,
-    onNavigateMovie: (Int) -> Unit,
     onNavigateBack: () -> Unit,
+    onNavigateMovie: (Int) -> Unit,
+    effect: TopMoviesPicksEffect?,
 ) {
     effect?.Listen { currentEffect ->
         when (currentEffect) {
