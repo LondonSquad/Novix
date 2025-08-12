@@ -10,8 +10,8 @@ import javax.inject.Inject
 
 @HiltViewModel
 class TopTvShowsPicksViewModel @Inject constructor(
-    private val getActorTvShowPicksById: GetActorTvShowPicksByIdUseCase,
     savedStateHandle: SavedStateHandle,
+    private val getActorTvShowPicksById: GetActorTvShowPicksByIdUseCase,
 ) : BaseViewModel<TopTvShowsPicksUiState, TopTvShowsPicksEffect>(
     TopTvShowsPicksUiState()
 ), TopTvShowsPicksContract {
@@ -25,20 +25,10 @@ class TopTvShowsPicksViewModel @Inject constructor(
 
     private fun getActorTvShowsPicksData() {
         tryToExecute(
-            block = {
-                getActorTvShowPicksById.invoke(actorId)
-            },
+            block = { getActorTvShowPicksById.invoke(actorId) },
             onStart = { updateState { copy(isLoading = true) } },
-            onSuccess = { tvShowDetails ->
-                updateState {
-                    copy(tvShowDetails = tvShowDetails)
-                }
-            },
-            onError = { errorState ->
-                updateState {
-                    copy(errorState = errorState)
-                }
-            },
+            onSuccess = { actorTvShowDetails -> updateState { copy(actorTvShowDetails = actorTvShowDetails) } },
+            onError = { errorState -> updateState { copy(errorState = errorState) } },
             onCompleted = { updateState { copy(isLoading = false) } },
             checkSuccess = { actorId != 0 }
         )
@@ -49,15 +39,15 @@ class TopTvShowsPicksViewModel @Inject constructor(
         getActorTvShowsPicksData()
     }
 
-    override fun onSaveTvShow(tvShowId: Int) {
+    override fun onSaveClick(tvShowId: Int) {
         updateState { copy(isSaved = !this.isSaved) }
     }
 
-    override fun onBack() {
-        emitEffect(TopTvShowsPicksEffect.BackNavigation)
+    override fun onBackClick() {
+        emitEffect(TopTvShowsPicksEffect.NavigateBack)
     }
 
-    override fun onTvShowClicked(tvShowId: Int) {
-        emitEffect(TopTvShowsPicksEffect.TvShowNavigation(tvShowId))
+    override fun onTvShowClick(tvShowId: Int) {
+        emitEffect(TopTvShowsPicksEffect.NavigateToTvShowDetails(tvShowId))
     }
 }

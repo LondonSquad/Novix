@@ -15,8 +15,8 @@ import com.london.presentation.utils.Listen
 
 @Composable
 fun TopTvShowsPicksScreen(
-    onNavigateTvShow: (Int) -> Unit,
     onNavigateBack: () -> Unit,
+    onNavigateTvShow: (Int) -> Unit,
     viewModel: TopTvShowsPicksViewModel = hiltViewModel(),
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
@@ -24,8 +24,8 @@ fun TopTvShowsPicksScreen(
 
     HandleTvShowsPicksEffects(
         effect = effect,
+        onNavigateBack = onNavigateBack,
         onNavigateTvShow = onNavigateTvShow,
-        onNavigateBack = onNavigateBack
     )
 
     TopTvShowsPicksContent(
@@ -41,18 +41,18 @@ private fun TopTvShowsPicksContent(
     modifier: Modifier = Modifier,
 ) {
     BuildScreen(
-        onBack = contract::onBack,
+        onBack = contract::onBackClick,
         isLoading = state.isLoading,
         isError = state.errorState is ErrorState.NoInternet,
         onRetry = contract::onRetry
     ) {
         MediaLazyGrid(
             title = stringResource(R.string.top_tv_shows_picks),
-            items = state.tvShowDetails.cast,
-            onBack = contract::onBack,
+            items = state.actorTvShowDetails.cast,
+            onBack = contract::onBackClick,
             getImageUrl = { it.posterUrl },
-            onItemClick = { contract.onTvShowClicked(it.id) },
-            onSavedClick = { contract.onSaveTvShow(it.id) },
+            onItemClick = { contract.onTvShowClick(it.id) },
+            onSavedClick = { contract.onSaveClick(it.id) },
             modifier = modifier
         )
     }
@@ -60,14 +60,14 @@ private fun TopTvShowsPicksContent(
 
 @Composable
 private fun HandleTvShowsPicksEffects(
-    effect: TopTvShowsPicksEffect?,
+    onNavigateBack: () -> Unit,
     onNavigateTvShow: (Int) -> Unit,
-    onNavigateBack: () -> Unit
+    effect: TopTvShowsPicksEffect?,
 ) {
     effect?.Listen { currentEffect ->
         when (currentEffect) {
-            is TopTvShowsPicksEffect.TvShowNavigation -> onNavigateTvShow(currentEffect.tvShowId)
-            is TopTvShowsPicksEffect.BackNavigation -> onNavigateBack()
+            is TopTvShowsPicksEffect.NavigateBack -> onNavigateBack()
+            is TopTvShowsPicksEffect.NavigateToTvShowDetails -> onNavigateTvShow(currentEffect.tvShowId)
         }
     }
 }
