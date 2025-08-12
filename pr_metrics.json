@@ -20205,11 +20205,11 @@
     "time_to_first_approval_minutes": null,
     "required_approvals_met_at": null,
     "time_to_required_approvals_minutes": null,
-    "closed_at": null,
+    "closed_at": "2025-08-12T16:03:02Z",
     "merged_at": null,
     "merged_by": null,
     "week": "2025-W32",
-    "status": "pending",
+    "status": "closed",
     "diff_stats": {
       "additions": 1500,
       "deletions": 82,
