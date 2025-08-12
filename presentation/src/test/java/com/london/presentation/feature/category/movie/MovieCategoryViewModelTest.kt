@@ -6,6 +6,7 @@ import app.cash.turbine.test
 import com.google.common.truth.Truth.assertThat
 import com.london.domain.entity.Movie
 import com.london.domain.entity.PagedFetchResponse
+import com.london.domain.usecase.details.movie.GetMovieUseCase
 import com.london.presentation.navigation.Screen
 import com.london.presentation.navigation.getArgs
 import io.mockk.coEvery
@@ -25,7 +26,7 @@ import org.junit.Test
 
 @OptIn(ExperimentalCoroutinesApi::class)
 class MovieCategoryViewModelTest {
-    private lateinit var getMoviesByCategoryUseCase: GetMoviesByCategoryUseCase
+    private lateinit var getMovieUseCase: GetMovieUseCase
     private val savedStateHandle = mockk<SavedStateHandle>(relaxed = true)
     private var viewModel: MovieCategoryViewModel? = null
     private val mainDispatcher = StandardTestDispatcher()
@@ -33,12 +34,12 @@ class MovieCategoryViewModelTest {
     @Before
     fun setUp() {
         Dispatchers.setMain(mainDispatcher)
-        getMoviesByCategoryUseCase = mockk(relaxed = true)
+        getMovieUseCase = mockk(relaxed = true)
         every { savedStateHandle.getArgs<Screen.MoviesByCategory>() } returns Screen.MoviesByCategory(
             categoryId = CATEGORY_ID,
         )
-        viewModel = MovieCategoryViewModel(getMoviesByCategoryUseCase, savedStateHandle)
-        coEvery { getMoviesByCategoryUseCase.invoke(CATEGORY_ID, PAGE) } returns moviesPagingData
+        viewModel = MovieCategoryViewModel(getMovieUseCase, savedStateHandle)
+        coEvery { getMovieUseCase.getMoviesByCategory(CATEGORY_ID, PAGE) } returns moviesPagingData
     }
 
     @After
@@ -87,7 +88,7 @@ class MovieCategoryViewModelTest {
     @Test
     fun `when initialization should update state with error when use case throws`() = runTest {
         // Given
-        coEvery { getMoviesByCategoryUseCase.invoke(CATEGORY_ID, PAGE) } throws Exception()
+        coEvery { getMovieUseCase.getMoviesByCategory(CATEGORY_ID, PAGE) } throws Exception()
         // When
         advanceUntilIdle()
         // Then
