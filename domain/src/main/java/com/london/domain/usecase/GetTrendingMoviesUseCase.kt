@@ -14,8 +14,8 @@ class GetTrendingMoviesUseCase @Inject constructor(
         val movies = repository.getTrendingMovies(page)
         
         return if (genreId != null && genreId != -1) {
-            val filteredItems = movies.items.filter { it.genreIds.contains(genreId) }
-            movies.copy(items = filteredItems)
+            val filteredMovies = movies.items.filter { it.genreIds.contains(genreId) }
+            movies.copy(items = filteredMovies)
         } else {
             movies
         }
