@@ -57,7 +57,6 @@ private fun Content(
 ) {
 
     val moviesLazyList = state.moviesFlow.collectAsLazyPagingItems()
-    if (moviesLazyList.itemCount == 0) return EmptyGenreLayout()
     BuildScreen(
         onBack = contract::onBack,
         isLoading = moviesLazyList.isLoading(),

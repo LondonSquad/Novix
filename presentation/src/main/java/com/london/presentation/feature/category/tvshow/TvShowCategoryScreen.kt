@@ -57,7 +57,6 @@ private fun Content(
 ) {
 
     val tvShowLazyList = state.tvShowFlow.collectAsLazyPagingItems()
-    if (tvShowLazyList.itemCount == 0) return EmptyGenreLayout()
     BuildScreen(
         onBack = contract::onBack,
         isLoading = tvShowLazyList.isLoading(),
