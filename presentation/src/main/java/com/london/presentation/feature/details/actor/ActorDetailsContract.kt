@@ -1,8 +1,8 @@
 package com.london.presentation.feature.details.actor
 
 interface ActorDetailsContract {
-    fun onRetry()
     fun onBackClick()
+    fun onRetryClick()
     fun onActorGalleryClick(actorId: Int)
     fun onTopMoviePicksClick(actorId: Int)
     fun onMovieScreenClick(movieId: Int)

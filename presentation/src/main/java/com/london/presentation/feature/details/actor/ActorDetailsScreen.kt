@@ -97,7 +97,7 @@ fun ActorDetailsScreen(
         isLoading = uiState.isLoading,
         isError = uiState.error != null,
         onBack = viewModel::onBackClick,
-        onRetry = viewModel::onRetry
+        onRetry = viewModel::onRetryClick
     ) {
         Content(
             uiState = uiState,
@@ -157,20 +157,20 @@ private fun Content(
             item {
                 GallerySection(
                     images = uiState.actorImageDetails,
-                    onGalleryClick = { actorDetailsContract.onActorGalleryClick(uiState.actorId) }
+                    onGalleryClick = { actorDetailsContract.onActorGalleryClick(uiState.actorDetails.id) }
                 )
             }
             item {
                 MoviesSection(
                     movies = uiState.actorMovieDetails?.cast,
-                    onTopMoviePicksClick = { actorDetailsContract.onTopMoviePicksClick(uiState.actorId) },
+                    onTopMoviePicksClick = { actorDetailsContract.onTopMoviePicksClick(uiState.actorDetails.id) },
                     onMovieScreenClick = actorDetailsContract::onMovieScreenClick
                 )
             }
             item {
                 TvShowsSection(
-                    tvShows = uiState.castDetails?.cast,
-                    onTopTvShowPicksClick = { actorDetailsContract.onTopTvShowPicksClick(uiState.actorId) },
+                    tvShows = uiState.actorTvShowDetails?.cast,
+                    onTopTvShowPicksClick = { actorDetailsContract.onTopTvShowPicksClick(uiState.actorDetails.id) },
                     onTvShowScreenClick = actorDetailsContract::onTvShowScreenClick
                 )
             }
@@ -194,17 +194,17 @@ private fun Content(
 @Composable
 private fun ActorInfoSectionItem(uiState: ActorDetailsUiState) {
     with(uiState) {
-        if (actorName.isNotEmpty()
-            || actorBirthday.isNotBlank()
-            || actorPlaceOfBirth.isNotBlank()
-            || knownForDepartment.isNotBlank()
+        if (actorDetails.name.isNotEmpty()
+            || actorDetails.birthday.isNotBlank()
+            || actorDetails.placeOfBirth.isNotBlank()
+            || actorDetails.knownForDepartment.isNotBlank()
         ) {
             ActorInfoSection(
-                job = knownForDepartment,
-                name = actorName,
-                birthday = actorBirthday,
-                deathDay = actorDeathDay ?: "",
-                placeOfBirth = actorPlaceOfBirth,
+                job = actorDetails.knownForDepartment,
+                name = actorDetails.name,
+                birthday = actorDetails.birthday,
+                deathDay = actorDetails.deathDay ?: "",
+                placeOfBirth = actorDetails.placeOfBirth,
             )
         }
     }
@@ -212,7 +212,7 @@ private fun ActorInfoSectionItem(uiState: ActorDetailsUiState) {
 
 @Composable
 private fun BiographySection(uiState: ActorDetailsUiState) {
-    if (uiState.actorBiography.isNotBlank()) {
+    if (uiState.actorDetails.biography.isNotBlank()) {
         Text(
             text = stringResource(R.string.biography),
             style = NovixTheme.typography.title.medium,
@@ -221,7 +221,7 @@ private fun BiographySection(uiState: ActorDetailsUiState) {
         )
         var isExpanded by remember { mutableStateOf(false) }
         ConditionalText(
-            text = uiState.actorBiography,
+            text = uiState.actorDetails.biography,
             expandedState = isExpanded,
             modifier = Modifier.padding(start = 16.dp, end = 16.dp, top = 4.dp, bottom = 16.dp)
         ) {
@@ -463,10 +463,10 @@ private fun EmptyScreen(uiState: ActorDetailsUiState) {
 
     val hasNoContent = uiState.actorImageDetails.isNullOrEmpty() &&
             uiState.actorMovieDetails?.cast.isNullOrEmpty() &&
-            uiState.castDetails?.cast.isNullOrEmpty() &&
-            uiState.actorBiography.isBlank() &&
-            (uiState.actorName.isBlank() && uiState.actorBirthday.isBlank() &&
-                    uiState.actorPlaceOfBirth.isBlank() && uiState.knownForDepartment.isBlank())
+            uiState.actorTvShowDetails?.cast.isNullOrEmpty() &&
+            uiState.actorDetails.biography.isBlank() &&
+            (uiState.actorDetails.name.isBlank() && uiState.actorDetails.birthday.isBlank() &&
+                    uiState.actorDetails.placeOfBirth.isBlank() && uiState.actorDetails.knownForDepartment.isBlank())
 
     if (hasNoContent) {
         EmptyLayout(
@@ -490,24 +490,24 @@ private fun HandleEffect(
 ) {
     effect?.Listen { currentEffect ->
         when (currentEffect) {
-            is ActorEffect.NavigateBack -> onNavigateBack()
-            is ActorEffect.NavigateToGallery -> onNavigateToGallery(currentEffect.actorId)
-            is ActorEffect.NavigateToTopMoviePicks -> onNavigateToTopMoviePicks(uiState.actorId)
-            is ActorEffect.NavigateToMovieScreen -> onNavigateToMovieScreen(currentEffect.movieId)
-            is ActorEffect.NavigateToTopTvShowPicks -> onNavigateToTopTvShowPicks(uiState.actorId)
-            is ActorEffect.NavigateToTvShowScreen -> onNavigateToTvShowScreen(currentEffect.tvShowId)
+            is ActorEffect.BackNavigation -> onNavigateBack()
+            is ActorEffect.GalleryNavigation -> onNavigateToGallery(currentEffect.actorId)
+            is ActorEffect.TopMoviePicksNavigation -> onNavigateToTopMoviePicks(uiState.actorDetails.id)
+            is ActorEffect.MovieScreenNavigation -> onNavigateToMovieScreen(currentEffect.movieId)
+            is ActorEffect.TopTvShowPicksNavigation -> onNavigateToTopTvShowPicks(uiState.actorDetails.id)
+            is ActorEffect.TvShowScreenNavigation -> onNavigateToTvShowScreen(currentEffect.tvShowId)
         }
     }
 }
 
 private fun hasOtherContent(uiState: ActorDetailsUiState): Boolean {
-    return uiState.actorName.isNotBlank() ||
-            uiState.actorBirthday.isNotBlank() ||
-            uiState.actorPlaceOfBirth.isNotBlank() ||
-            uiState.knownForDepartment.isNotBlank() ||
-            uiState.actorBiography.isNotBlank() ||
+    return uiState.actorDetails.name.isNotBlank() ||
+            uiState.actorDetails.birthday.isNotBlank() ||
+            uiState.actorDetails.placeOfBirth.isNotBlank() ||
+            uiState.actorDetails.knownForDepartment.isNotBlank() ||
+            uiState.actorDetails.biography.isNotBlank() ||
             !uiState.actorMovieDetails?.cast.isNullOrEmpty() ||
-            !uiState.castDetails?.cast.isNullOrEmpty()
+            !uiState.actorTvShowDetails?.cast.isNullOrEmpty()
 }
 
 @Preview
