@@ -9,6 +9,7 @@ import androidx.paging.compose.LazyPagingItems
 import com.london.designsystem.theme.NovixTheme
 import com.london.designsystem.theme.ThemePreviews
 import com.london.domain.entity.Movie
+import com.london.presentation.shared.EmptyGenreLayout
 import com.london.presentation.shared.MediaGenreFilters
 import com.london.presentation.utils.MovieGenre
 import com.london.presentation.utils.TvShowGenre
@@ -46,7 +47,7 @@ fun <T : Any> MediaLazyGridWithFilter(
         )
 
         when {
-            items != null -> {
+            !items.isNullOrEmpty() -> {
                 MediaLazyVerticalGrid(
                     items = items,
                     imageUrl = imageUrl,
@@ -65,7 +66,7 @@ fun <T : Any> MediaLazyGridWithFilter(
                 )
             }
 
-            pagingItems != null -> {
+            pagingItems != null && pagingItems.itemCount > 0 -> {
                 MediaLazyVerticalGrid(
                     pagingItems = pagingItems,
                     imageUrl = imageUrl,
@@ -82,6 +83,10 @@ fun <T : Any> MediaLazyGridWithFilter(
                     onNavigateToMovie = config.onNavigateToMovie,
                     onNavigateToTvShow = config.onNavigateToTvShow
                 )
+            }
+
+            else -> {
+                EmptyGenreLayout()
             }
         }
     }
@@ -111,6 +116,30 @@ private fun Preview() {
 
     MediaLazyGridWithFilter(
         items = sampleMovies,
+        onSaveClick = {},
+        isItemSaved = { false },
+        onMovieGenreClick = {},
+        onTvShowGenreClick = {},
+        config = MediaGridConfig(
+            showSaveIcon = true,
+            isDarkMode = true,
+            myRatingList = false,
+            rate = "3",
+            isMovieSelected = true,
+            isTvShowSelected = false,
+            selectedMovieGenre = MovieGenre.Action,
+            selectedTvShowGenre = TvShowGenre.All,
+            onNavigateToMovie = {},
+            onNavigateToTvShow = {}
+        )
+    )
+}
+
+@ThemePreviews
+@Composable
+private fun EmptyPreview() {
+    MediaLazyGridWithFilter(
+        items = emptyList<Movie>(),
         onSaveClick = {},
         isItemSaved = { false },
         onMovieGenreClick = {},

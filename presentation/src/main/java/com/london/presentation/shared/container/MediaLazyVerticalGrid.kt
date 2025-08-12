@@ -45,36 +45,32 @@ fun <T : Any> MediaLazyVerticalGrid(
     ) {
         topBar?.invoke()
 
-        if (items.isEmpty()) {
-            EmptyGenreLayout()
-        } else {
-            LazyVerticalGrid(
-                state = rememberLazyGridState(),
-                columns = GridCells.Fixed(2),
-                modifier = Modifier.fillMaxSize(),
-                horizontalArrangement = Arrangement.spacedBy(12.dp),
-                verticalArrangement = Arrangement.spacedBy(12.dp),
-                contentPadding = PaddingValues(bottom = 16.dp)
-            ) {
-                items(items) { item ->
-                    HomeCard(
-                        imageUrl = imageUrl(item),
-                        modifier = Modifier.clickable {
-                            when (item) {
-                                is Movie -> onNavigateToMovie(item.id)
-                                is TvShow -> onNavigateToTvShow(item.id)
-                            }
-                        },
-                        imageDescription = name(item),
-                        isSaved = isItemSaved(item),
-                        hasSaveIcon = hasSaveIcon,
-                        onSaveClick = { onSaveClick(item) },
-                        onDeleteClick = { onDeleteClick(item) },
-                        isDarkMode = isDarkMode,
-                        myRatingList = myRatingList,
-                        rate = rate
-                    )
-                }
+        LazyVerticalGrid(
+            state = rememberLazyGridState(),
+            columns = GridCells.Fixed(2),
+            modifier = Modifier.fillMaxSize(),
+            horizontalArrangement = Arrangement.spacedBy(12.dp),
+            verticalArrangement = Arrangement.spacedBy(12.dp),
+            contentPadding = PaddingValues(bottom = 16.dp)
+        ) {
+            items(items) { item ->
+                HomeCard(
+                    imageUrl = imageUrl(item),
+                    modifier = Modifier.clickable {
+                        when (item) {
+                            is Movie -> onNavigateToMovie(item.id)
+                            is TvShow -> onNavigateToTvShow(item.id)
+                        }
+                    },
+                    imageDescription = name(item),
+                    isSaved = isItemSaved(item),
+                    hasSaveIcon = hasSaveIcon,
+                    onSaveClick = { onSaveClick(item) },
+                    onDeleteClick = { onDeleteClick(item) },
+                    isDarkMode = isDarkMode,
+                    myRatingList = myRatingList,
+                    rate = rate
+                )
             }
         }
     }
