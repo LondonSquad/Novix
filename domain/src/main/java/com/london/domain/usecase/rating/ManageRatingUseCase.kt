@@ -10,7 +10,7 @@ class ManageRatingUseCase @Inject constructor(
     private val movieRepository: MovieRepository,
 ) {
 
-    suspend fun getAllRatedMedia(): List<RatedMedia> =
+   private suspend fun getAllRatedMedia(): List<RatedMedia> =
         buildList {
             addAll(movieRepository.getAllRatedMovies())
             addAll(tvShowRepository.getAllRatedTvShows())
