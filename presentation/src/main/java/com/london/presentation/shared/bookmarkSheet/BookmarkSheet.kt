@@ -2,8 +2,6 @@ package com.london.presentation.shared.bookmarkSheet
 
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.gestures.Orientation
-import androidx.compose.foundation.gestures.scrollable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -13,7 +11,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.requiredHeight
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -24,12 +21,12 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.LocalWindowInfo
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.paging.compose.collectAsLazyPagingItems
+import com.london.designsystem.component.CircularLoading
 import com.london.designsystem.component.Icon
 import com.london.designsystem.component.ModalBottomSheet
 import com.london.designsystem.component.Selection
@@ -45,6 +42,7 @@ import com.london.presentation.R
 import com.london.presentation.navigation.LocalNavController
 import com.london.presentation.navigation.Screen
 import com.london.presentation.utils.Listen
+import com.london.presentation.utils.isLoading
 import kotlinx.coroutines.launch
 
 @Composable
@@ -123,12 +121,7 @@ private fun BookmarkBottomSheetContent(
         modifier = modifier
             .padding(horizontal = 16.dp)
             .padding(bottom = 24.dp)
-            .fillMaxWidth()
-            .heightIn(max = LocalWindowInfo.current.containerSize.height.dp * 0.5f)
-            .scrollable(
-                state = rememberScrollState(),
-                orientation = Orientation.Vertical
-            ),
+            .fillMaxWidth(),
         verticalArrangement = Arrangement.spacedBy(24.dp),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
@@ -193,22 +186,34 @@ private fun UserListsView(
 ) {
     val lists = uiState.lists.collectAsLazyPagingItems()
 
-    LazyColumn(
-        modifier = Modifier
-            .fillMaxWidth()
-            .heightIn(max = 148.dp),
-        verticalArrangement = Arrangement.spacedBy(12.dp)
-    ) {
-        items(lists.itemCount) { index ->
-            val movieList = lists[index]
-            movieList?.let {
-                Selection(
-                    modifier = Modifier.fillMaxWidth(),
-                    mainText = movieList.name,
-                    isSelected = movieList.id in uiState.selectedLists,
-                    subText = stringResource(R.string.n_items, movieList.itemCount.toInt()),
-                    onClick = { contract.onListSelected(movieList.id) }
-                )
+    when {
+        lists.isLoading() -> {
+            CircularLoading()
+        }
+
+        lists.itemCount == 0 -> {
+            EmptyListsState()
+        }
+
+        else -> {
+            LazyColumn(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .heightIn(max = 148.dp),
+                verticalArrangement = Arrangement.spacedBy(12.dp)
+            ) {
+                items(lists.itemCount) { index ->
+                    val movieList = lists[index]
+                    movieList?.let {
+                        Selection(
+                            modifier = Modifier.fillMaxWidth(),
+                            mainText = movieList.name,
+                            isSelected = movieList.id in uiState.selectedLists,
+                            subText = stringResource(R.string.n_items, movieList.itemCount.toInt()),
+                            onClick = { contract.onListSelected(movieList.id) }
+                        )
+                    }
+                }
             }
         }
     }
@@ -281,12 +286,21 @@ private fun LoginButton(
 ) {
     OutlineButton(
         modifier = Modifier.fillMaxWidth(),
-        text = R.string.login.string,
         hasLabel = true,
-        icon = R.drawable.app_icon,
-        hasIcon = false,
-        isLoading = false,
+        text = R.string.login.string,
         onClick = onLoginClick,
         enabled = true,
+        icon = null,
+        hasIcon = false,
+        isLoading = false,
+    )
+}
+
+@Composable
+private fun EmptyListsState() {
+    Text(
+        text = "No lists found! Create one now.",
+        style = NovixTheme.typography.body.small,
+        color = NovixTheme.colors.body
     )
 }

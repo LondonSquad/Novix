@@ -22,7 +22,6 @@ class ListViewModel @Inject constructor(
 
     private val args = savedStateHandle.getArgs<Screen.Lists>()
 
-
     init {
 
         checkUserLoginStatus { isLoggedIn ->
