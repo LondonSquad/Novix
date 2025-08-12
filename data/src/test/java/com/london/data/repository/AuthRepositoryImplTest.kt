@@ -45,7 +45,7 @@ class AuthenticationRepositoryImplTest {
             RequestTokenResponse(true, EXPIRES_AT, REQUEST_TOKEN)
         )
         coEvery {
-            authRemoteDataSource.createSessionWithLogin(
+            authRemoteDataSource.validateLoginCredentials(
                 any(),
                 any(),
                 any()
@@ -84,7 +84,7 @@ class AuthenticationRepositoryImplTest {
             RequestTokenResponse(true, EXPIRES_AT, REQUEST_TOKEN)
         )
         coEvery {
-            authRemoteDataSource.createSessionWithLogin(
+            authRemoteDataSource.validateLoginCredentials(
                 any(),
                 any(),
                 any()
@@ -117,7 +117,7 @@ class AuthenticationRepositoryImplTest {
             RequestTokenResponse(true, EXPIRES_AT, REQUEST_TOKEN)
         )
         coEvery {
-            authRemoteDataSource.createSessionWithLogin(
+            authRemoteDataSource.validateLoginCredentials(
                 any(),
                 any(),
                 any()
@@ -140,7 +140,7 @@ class AuthenticationRepositoryImplTest {
             RequestTokenResponse(true, EXPIRES_AT, REQUEST_TOKEN)
         )
         coEvery {
-            authRemoteDataSource.createSessionWithLogin(
+            authRemoteDataSource.validateLoginCredentials(
                 any(),
                 any(),
                 any()

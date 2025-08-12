@@ -64,7 +64,7 @@ class AuthenticationRepositoryImpl @Inject constructor(
         username: String,
         password: String
     ): RequestTokenResponse {
-        return authenticationRemoteDataSource.createSessionWithLogin(
+        return authenticationRemoteDataSource.validateLoginCredentials(
             username = username,
             password = password,
             requestToken = fetchRequestToken().requestToken

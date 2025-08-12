@@ -16,30 +16,33 @@ class AuthenticationRemoteDataSourceImpl @Inject constructor(
     private val authenticationApiService: AuthenticationApiService
 ) : AuthenticationRemoteDataSource, BaseRemoteDatasource {
 
-    override suspend fun createRequestToken(): Result<RequestTokenResponse> =
-        callApi(
+    override suspend fun createRequestToken(): Result<RequestTokenResponse> {
+        return callApi(
             apiCall = { authenticationApiService.createRequestToken() },
             mapper = { it }
         )
+    }
 
-    override suspend fun createGuestSession(): Result<GuestSessionResponse> =
-        callApi(
+    override suspend fun createGuestSession(): Result<GuestSessionResponse> {
+        return callApi(
             apiCall = { authenticationApiService.createGuestSession() },
             mapper = { it }
         )
+    }
 
-    override suspend fun createSession(requestToken: String): Result<SessionResponse> =
-        callApi(
+    override suspend fun createSession(requestToken: String): Result<SessionResponse> {
+        return callApi(
             apiCall = { authenticationApiService.createSession(TokenResponse(requestToken)) },
             mapper = { it }
         )
+    }
 
-    override suspend fun createSessionWithLogin(
+    override suspend fun validateLoginCredentials(
         username: String,
         password: String,
         requestToken: String
-    ): Result<RequestTokenResponse> =
-        callApi(
+    ): Result<RequestTokenResponse> {
+        return callApi(
             apiCall = {
                 authenticationApiService.validateLoginCredentials(
                     LoginRequestResponse(
@@ -51,12 +54,14 @@ class AuthenticationRemoteDataSourceImpl @Inject constructor(
             },
             mapper = { it }
         )
+    }
 
     override suspend fun deleteSession(
         sessionId: String
-    ): Result<DeleteSessionResponse> =
-        callApi(
+    ): Result<DeleteSessionResponse> {
+        return callApi(
             apiCall = { authenticationApiService.deleteSession(SessionId(sessionId)) },
             mapper = { it }
         )
+    }
 }
