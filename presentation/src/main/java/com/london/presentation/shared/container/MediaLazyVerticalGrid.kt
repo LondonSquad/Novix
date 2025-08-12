@@ -18,6 +18,7 @@ import com.london.designsystem.theme.NovixTheme
 import com.london.designsystem.theme.ThemePreviews
 import com.london.domain.entity.Movie
 import com.london.domain.entity.TvShow
+import com.london.presentation.shared.EmptyGenreLayout
 import com.london.presentation.shared.HomeCard
 
 @Composable
@@ -44,32 +45,36 @@ fun <T : Any> MediaLazyVerticalGrid(
     ) {
         topBar?.invoke()
 
-        LazyVerticalGrid(
-            state = rememberLazyGridState(),
-            columns = GridCells.Fixed(2),
-            modifier = Modifier.fillMaxSize(),
-            horizontalArrangement = Arrangement.spacedBy(12.dp),
-            verticalArrangement = Arrangement.spacedBy(12.dp),
-            contentPadding = PaddingValues(bottom = 16.dp)
-        ) {
-            items(items) { item ->
-                HomeCard(
-                    imageUrl = imageUrl(item),
-                    modifier = Modifier.clickable {
-                        when (item) {
-                            is Movie -> onNavigateToMovie(item.id)
-                            is TvShow -> onNavigateToTvShow(item.id)
-                        }
-                    },
-                    imageDescription = name(item),
-                    isSaved = isItemSaved(item),
-                    hasSaveIcon = hasSaveIcon,
-                    onSaveClick = { onSaveClick(item) },
-                    onDeleteClick = { onDeleteClick(item) },
-                    isDarkMode = isDarkMode,
-                    myRatingList = myRatingList,
-                    rate = rate
-                )
+        if (items.isEmpty()) {
+            EmptyGenreLayout()
+        } else {
+            LazyVerticalGrid(
+                state = rememberLazyGridState(),
+                columns = GridCells.Fixed(2),
+                modifier = Modifier.fillMaxSize(),
+                horizontalArrangement = Arrangement.spacedBy(12.dp),
+                verticalArrangement = Arrangement.spacedBy(12.dp),
+                contentPadding = PaddingValues(bottom = 16.dp)
+            ) {
+                items(items) { item ->
+                    HomeCard(
+                        imageUrl = imageUrl(item),
+                        modifier = Modifier.clickable {
+                            when (item) {
+                                is Movie -> onNavigateToMovie(item.id)
+                                is TvShow -> onNavigateToTvShow(item.id)
+                            }
+                        },
+                        imageDescription = name(item),
+                        isSaved = isItemSaved(item),
+                        hasSaveIcon = hasSaveIcon,
+                        onSaveClick = { onSaveClick(item) },
+                        onDeleteClick = { onDeleteClick(item) },
+                        isDarkMode = isDarkMode,
+                        myRatingList = myRatingList,
+                        rate = rate
+                    )
+                }
             }
         }
     }
@@ -98,33 +103,38 @@ fun <T : Any> MediaLazyVerticalGrid(
             .background(color = NovixTheme.colors.surface)
     ) {
         topBar?.invoke()
-        LazyVerticalGrid(
-            state = rememberLazyGridState(),
-            columns = GridCells.Fixed(2),
-            modifier = modifier.fillMaxSize(),
-            horizontalArrangement = Arrangement.spacedBy(12.dp),
-            verticalArrangement = Arrangement.spacedBy(12.dp),
-            contentPadding = PaddingValues(bottom = 16.dp)
-        ) {
-            items(pagingItems.itemCount) { index ->
-                pagingItems[index]?.let { item ->
-                    HomeCard(
-                        imageUrl = imageUrl(item),
-                        modifier = Modifier.clickable {
-                            when (item) {
-                                is Movie -> onNavigateToMovie(item.id)
-                                is TvShow -> onNavigateToTvShow(item.id)
-                            }
-                        },
-                        imageDescription = name(item),
-                        isSaved = isItemSaved(item),
-                        hasSaveIcon = hasSaveIcon,
-                        onSaveClick = { onSaveClick(item) },
-                        onDeleteClick = { onDeleteClick(item) },
-                        isDarkMode = isDarkMode,
-                        myRatingList = myRatingList,
-                        rate = rate
-                    )
+
+        if (pagingItems.itemCount == 0) {
+            EmptyGenreLayout()
+        } else {
+            LazyVerticalGrid(
+                state = rememberLazyGridState(),
+                columns = GridCells.Fixed(2),
+                modifier = modifier.fillMaxSize(),
+                horizontalArrangement = Arrangement.spacedBy(12.dp),
+                verticalArrangement = Arrangement.spacedBy(12.dp),
+                contentPadding = PaddingValues(bottom = 16.dp)
+            ) {
+                items(pagingItems.itemCount) { index ->
+                    pagingItems[index]?.let { item ->
+                        HomeCard(
+                            imageUrl = imageUrl(item),
+                            modifier = Modifier.clickable {
+                                when (item) {
+                                    is Movie -> onNavigateToMovie(item.id)
+                                    is TvShow -> onNavigateToTvShow(item.id)
+                                }
+                            },
+                            imageDescription = name(item),
+                            isSaved = isItemSaved(item),
+                            hasSaveIcon = hasSaveIcon,
+                            onSaveClick = { onSaveClick(item) },
+                            onDeleteClick = { onDeleteClick(item) },
+                            isDarkMode = isDarkMode,
+                            myRatingList = myRatingList,
+                            rate = rate
+                        )
+                    }
                 }
             }
         }
@@ -156,6 +166,20 @@ private fun Preview() {
 
     MediaLazyVerticalGrid(
         items = sampleMovies,
+        imageUrl = { it.posterUrl },
+        name = { it.name },
+        onSaveClick = {},
+        isItemSaved = { false },
+        onNavigateToMovie = {},
+        onNavigateToTvShow = {}
+    )
+}
+
+@ThemePreviews
+@Composable
+private fun EmptyPreview() {
+    MediaLazyVerticalGrid(
+        items = emptyList<Movie>(),
         imageUrl = { it.posterUrl },
         name = { it.name },
         onSaveClick = {},
