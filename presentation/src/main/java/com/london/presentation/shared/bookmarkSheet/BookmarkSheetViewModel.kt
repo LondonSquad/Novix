@@ -26,7 +26,6 @@ class BookmarkSheetViewModel @Inject constructor(
     }
 
     override fun onSheetShown(movieId: UInt) {
-        // Don't run this for guest users or if the movie ID is invalid
         if (state.value.isGuestSession || movieId == 0u) return
 
         tryToExecute(

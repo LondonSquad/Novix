@@ -65,8 +65,9 @@ fun BookmarkBottomSheet(
         }
     }
 
-    LaunchedEffect(isSheetVisible) {
+    LaunchedEffect(isSheetVisible, bookmarkedMovieId) {
         if (isSheetVisible) {
+            viewModel.onSheetShown(bookmarkedMovieId)
             coroutineScope.launch { sheetState.show() }
         }
     }
