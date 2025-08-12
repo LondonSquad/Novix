@@ -51,7 +51,7 @@ fun <T : Any> MediaLazyVerticalGrid(
             modifier = Modifier.fillMaxSize(),
             horizontalArrangement = Arrangement.spacedBy(12.dp),
             verticalArrangement = Arrangement.spacedBy(12.dp),
-            contentPadding = PaddingValues(bottom = 16.dp)
+            contentPadding = PaddingValues(start = 16.dp, end = 16.dp, bottom = 16.dp)
         ) {
             items(items) { item ->
                 HomeCard(
@@ -109,7 +109,7 @@ fun <T : Any> MediaLazyVerticalGrid(
                 modifier = modifier.fillMaxSize(),
                 horizontalArrangement = Arrangement.spacedBy(12.dp),
                 verticalArrangement = Arrangement.spacedBy(12.dp),
-                contentPadding = PaddingValues(bottom = 16.dp)
+                contentPadding = PaddingValues(start = 16.dp, end = 16.dp, bottom = 16.dp)
             ) {
                 items(pagingItems.itemCount) { index ->
                     pagingItems[index]?.let { item ->
