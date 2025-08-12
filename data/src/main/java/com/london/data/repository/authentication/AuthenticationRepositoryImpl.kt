@@ -30,7 +30,7 @@ class AuthenticationRepositoryImpl @Inject constructor(
             requestToken = sessionResponse.requestToken
         )
 
-        fetchAndSaveUserAccount(session = createdSession)
+        getUserAccount(session = createdSession)
         return true
     }
 
@@ -90,10 +90,14 @@ class AuthenticationRepositoryImpl @Inject constructor(
         }
     }
 
-    private suspend fun fetchAndSaveUserAccount(session: SessionResponse) {
+    private suspend fun getUserAccount(session: SessionResponse) {
         val accountResult = accountRemoteDataSource.getAccountDetails(session.sessionId)
         val accountInfo = accountResult.getOrThrow().toEntity()
         val accountId = accountInfo.id
-        authenticationPreferences.saveAccountId(accountId)
+        saveUserAccount(id = accountId)
+    }
+
+    private fun saveUserAccount(id: Int) {
+        authenticationPreferences.saveAccountId(id)
     }
 }
