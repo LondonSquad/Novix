@@ -7,11 +7,11 @@ import com.london.data.remote.model.ApiConstants.CREATE_NEW_TOKEN_AFTER_LOGIN
 import com.london.data.remote.model.ApiConstants.CREATE_SESSION
 import com.london.data.remote.model.authentication.DeleteSessionResponse
 import com.london.data.remote.model.authentication.GuestSessionResponse
-import com.london.data.remote.model.authentication.LoginRequestResponse
+import com.london.data.remote.model.authentication.LoginRequest
+import com.london.data.remote.model.authentication.RequestToken
 import com.london.data.remote.model.authentication.RequestTokenResponse
 import com.london.data.remote.model.authentication.SessionId
 import com.london.data.remote.model.authentication.SessionResponse
-import com.london.data.remote.model.authentication.TokenResponse
 import retrofit2.Response
 import retrofit2.http.Body
 import retrofit2.http.GET
@@ -27,7 +27,7 @@ interface AuthenticationApiService {
 
     @POST(CREATE_NEW_SESSION)
     suspend fun createSession(
-        @Body token: TokenResponse
+        @Body token: RequestToken
     ): Response<SessionResponse>
 
     @HTTP(method = "DELETE", path = CREATE_SESSION, hasBody = true)
@@ -37,6 +37,6 @@ interface AuthenticationApiService {
 
     @POST(CREATE_NEW_TOKEN_AFTER_LOGIN)
     suspend fun validateLoginCredentials(
-        @Body request: LoginRequestResponse
+        @Body request: LoginRequest
     ): Response<RequestTokenResponse>
 }

@@ -3,11 +3,11 @@ package com.london.data.remote.source.authentication
 
 import com.london.data.remote.model.authentication.DeleteSessionResponse
 import com.london.data.remote.model.authentication.GuestSessionResponse
-import com.london.data.remote.model.authentication.LoginRequestResponse
+import com.london.data.remote.model.authentication.LoginRequest
+import com.london.data.remote.model.authentication.RequestToken
 import com.london.data.remote.model.authentication.RequestTokenResponse
 import com.london.data.remote.model.authentication.SessionId
 import com.london.data.remote.model.authentication.SessionResponse
-import com.london.data.remote.model.authentication.TokenResponse
 import com.london.data.remote.service.authentication.AuthenticationApiService
 import com.london.data.remote.source.base.BaseRemoteDatasource
 import javax.inject.Inject
@@ -32,7 +32,7 @@ class AuthenticationRemoteDataSourceImpl @Inject constructor(
 
     override suspend fun createSession(requestToken: String): Result<SessionResponse> {
         return callApi(
-            apiCall = { authenticationApiService.createSession(TokenResponse(requestToken)) },
+            apiCall = { authenticationApiService.createSession(RequestToken(requestToken)) },
             mapper = { it }
         )
     }
@@ -45,7 +45,7 @@ class AuthenticationRemoteDataSourceImpl @Inject constructor(
         return callApi(
             apiCall = {
                 authenticationApiService.validateLoginCredentials(
-                    LoginRequestResponse(
+                    LoginRequest(
                         username = username,
                         password = password,
                         requestToken = requestToken
