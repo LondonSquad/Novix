@@ -55,6 +55,7 @@ fun CategoriesItem(
             contentDescription = "Image of $categoryName",
             modifier = Modifier.fillMaxSize(),
             contentScale = Crop,
+            contentRestrictionLevel = null,
             loadingContent = { CircularLoading(modifier = Modifier.align(Alignment.Center)) },
             moderatedContent = { UnSuitableEye() }
         )
