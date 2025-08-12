@@ -72,7 +72,7 @@ private fun Content(
         CategoriesSelection(
             onClick = contract::onCategoryClick,
             selectedCategory = state.selectedCategory,
-            modifier = Modifier.padding(bottom = 12.dp),
+            modifier = Modifier.padding(bottom = 8.dp),
         )
         LazyVerticalGrid(
             columns = GridCells.Fixed(gridColumns(itemWidth = 160)),
@@ -81,7 +81,7 @@ private fun Content(
                 .padding(horizontal = 16.dp),
             horizontalArrangement = Arrangement.spacedBy(8.dp),
             verticalArrangement = Arrangement.spacedBy(8.dp),
-            contentPadding = PaddingValues(bottom = 8.dp),
+            contentPadding = PaddingValues(bottom = 8.dp, top = 12.dp),
         ) {
             if (state.selectedCategory == MediaCategory.Movies) {
                 movieGenres(
