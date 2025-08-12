@@ -13,6 +13,7 @@ import io.mockk.every
 import io.mockk.mockk
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.test.TestCoroutineScheduler
 import kotlinx.coroutines.test.UnconfinedTestDispatcher
 import kotlinx.coroutines.test.resetMain
@@ -129,6 +130,21 @@ class TopTvShowsPicksViewModelTest {
         // Then
         assertThat(firstToggleState).isTrue()
         assertThat(secondToggleState).isFalse()
+    }
+
+    @Test
+    fun `should show loading state when data is being fetched`() = runTest {
+        // Given
+        val actorId = 123
+        val args = Screen.TopTvShowsPicksDetails(actorId)
+        every { savedStateHandle.getArgs<Screen.TopTvShowsPicksDetails>() } returns args
+        coEvery { getActorTvShowPicksById.invoke(actorId) } coAnswers {
+            delay(100)
+            mockCastDetails
+        }
+
+        // When
+        viewModel = TopTvShowsPicksViewModel(savedStateHandle, getActorTvShowPicksById)
     }
 
     @Test
