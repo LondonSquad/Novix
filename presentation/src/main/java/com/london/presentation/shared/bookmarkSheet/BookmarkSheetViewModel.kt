@@ -1,43 +1,27 @@
 package com.london.presentation.shared.bookmarkSheet
 
-import androidx.lifecycle.viewModelScope
-import androidx.paging.cachedIn
 import com.london.domain.usecase.authentication.AuthenticationUseCase
 import com.london.domain.usecase.movielist.AddMovieToListUseCase
 import com.london.domain.usecase.movielist.GetAllListedMovies
-import com.london.domain.usecase.movielist.GetAllMovieListsUseCase
 import com.london.presentation.shared.base.BaseViewModel
-import com.london.presentation.shared.base.createPagingSourceFlow
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 
 @HiltViewModel
 class BookmarkSheetViewModel @Inject constructor(
     private val addMovieToListUseCase: AddMovieToListUseCase,
-    private val getAllMovieListsUseCase: GetAllMovieListsUseCase,
     private val getAllListedMovies: GetAllListedMovies,
     private val authenticationUseCase: AuthenticationUseCase
 ) : BaseViewModel<BookmarkSheetUiState, BookmarkSheetEffect>(BookmarkSheetUiState()),
     BookmarkSheetContract {
 
     init {
-        initializeMovieLists()
         initializeSessionStatus()
     }
 
     override fun onSheetShown(movieId: UInt) {
         if (state.value.isGuestSession || movieId == 0u) return
-
-        tryToExecute(
-            block = { getAllListedMovies.invoke() },
-            onSuccess = { movieToListsMap ->
-                val preSelectedLists =
-                    movieToListsMap.getOrDefault(movieId, emptySet())
-                        .toList()
-                updateState { copy(selectedLists = preSelectedLists) }
-            },
-            onError = { updateState { copy(listError = it) } }
-        )
+        initializeMovieLists(movieId)
     }
 
     override fun onAddToLists(bookmarkedId: UInt) {
@@ -74,6 +58,7 @@ class BookmarkSheetViewModel @Inject constructor(
 
     override fun onDismiss() = updateState {
         copy(
+            lists = emptyList(),
             selectedLists = emptyList(),
             isErrorSnackbarVisible = false,
             isSuccessSnackbarVisible = false,
@@ -108,13 +93,9 @@ class BookmarkSheetViewModel @Inject constructor(
         emitEffect(BookmarkSheetEffect.LoginNavigation)
     }
 
-    private fun initializeMovieLists() {
+    private fun initializeMovieLists(movieId: UInt) {
         tryToExecute(
-            block = {
-                createPagingSourceFlow(query = "") { _, pageNumber ->
-                    getAllMovieListsUseCase.invoke(pageNumber)
-                }.cachedIn(viewModelScope)
-            },
+            block = { getAllListedMovies.getAvailableListsForMovie(movieId = movieId) },
             onStart = { updateState { copy(isLoading = true) } },
             onSuccess = { lists -> updateState { copy(lists = lists.toBookmarkUiLists()) } },
             onError = { error -> updateState { copy(error = error) } },

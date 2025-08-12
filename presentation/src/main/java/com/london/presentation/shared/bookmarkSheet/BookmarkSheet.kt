@@ -11,6 +11,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.requiredHeight
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -25,7 +26,6 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import androidx.paging.compose.collectAsLazyPagingItems
 import com.london.designsystem.component.CircularLoading
 import com.london.designsystem.component.Icon
 import com.london.designsystem.component.ModalBottomSheet
@@ -42,17 +42,16 @@ import com.london.presentation.R
 import com.london.presentation.navigation.LocalNavController
 import com.london.presentation.navigation.Screen
 import com.london.presentation.utils.Listen
-import com.london.presentation.utils.isLoading
 import kotlinx.coroutines.launch
 
 @Composable
 fun BookmarkBottomSheet(
-    modifier: Modifier = Modifier,
-    onSheetDismiss: () -> Unit,
     isSheetVisible: Boolean,
+    bookmarkedMovieId: UInt,
+    onSheetDismiss: () -> Unit,
+    modifier: Modifier = Modifier,
     viewModel: BookmarkSheetViewModel = hiltViewModel(),
     sheetState: SheetState = rememberModalBottomSheetState(),
-    bookmarkedMovieId: UInt
 ) {
     val coroutineScope = rememberCoroutineScope()
     val navController = LocalNavController.current
@@ -185,14 +184,12 @@ private fun UserListsView(
     uiState: BookmarkSheetUiState,
     contract: BookmarkSheetContract
 ) {
-    val lists = uiState.lists.collectAsLazyPagingItems()
-
     when {
-        lists.isLoading() -> {
+        uiState.isLoading -> {
             CircularLoading()
         }
 
-        lists.itemCount == 0 -> {
+        uiState.lists.isEmpty() -> {
             NoListsMessage()
         }
 
@@ -203,17 +200,14 @@ private fun UserListsView(
                     .heightIn(max = 148.dp),
                 verticalArrangement = Arrangement.spacedBy(12.dp)
             ) {
-                items(lists.itemCount) { index ->
-                    val movieList = lists[index]
-                    movieList?.let {
-                        Selection(
-                            modifier = Modifier.fillMaxWidth(),
-                            mainText = movieList.name,
-                            isSelected = movieList.id in uiState.selectedLists,
-                            subText = stringResource(R.string.n_items, movieList.itemCount.toInt()),
-                            onClick = { contract.onListSelected(movieList.id) }
-                        )
-                    }
+                items(uiState.lists) { movieList ->
+                    Selection(
+                        modifier = Modifier.fillMaxWidth(),
+                        mainText = movieList.name,
+                        isSelected = movieList.id in uiState.selectedLists,
+                        subText = stringResource(R.string.n_items, movieList.itemCount.toInt()),
+                        onClick = { contract.onListSelected(movieList.id) }
+                    )
                 }
             }
         }
@@ -300,7 +294,7 @@ private fun LoginButton(
 @Composable
 private fun NoListsMessage() {
     Text(
-        text = R.string.no_lists_found.string,
+        text = R.string.no_lists_available.string,
         style = NovixTheme.typography.body.small,
         color = NovixTheme.colors.body
     )

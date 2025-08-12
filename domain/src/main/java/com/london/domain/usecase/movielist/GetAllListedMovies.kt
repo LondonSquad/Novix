@@ -58,4 +58,18 @@ class GetAllListedMovies @Inject constructor(
 
         return allMovies
     }
+
+    suspend fun getAvailableListsForMovie(movieId: MovieId): List<MovieList> {
+        val allLists = getAllLists()
+        val listsContainingMovie = mutableSetOf<ListId>()
+
+        allLists.forEach { movieList ->
+            val moviesInList = getAllMovies(movieList.id)
+            if (moviesInList.any { it.id.toUInt() == movieId }) {
+                listsContainingMovie.add(movieList.id)
+            }
+        }
+
+        return allLists.filterNot { it.id in listsContainingMovie }
+    }
 }
