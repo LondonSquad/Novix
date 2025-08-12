@@ -3,7 +3,6 @@ package com.london.presentation.feature.details.actor.info.toptvshowspicks
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -38,7 +37,6 @@ fun TopTvShowsPicksScreen(
 private fun Content(
     state: TopTvShowsPicksUiState,
     contract: TopTvShowsPicksContract,
-    modifier: Modifier = Modifier,
 ) {
     BuildScreen(
         onBack = contract::onBackClick,
@@ -53,7 +51,6 @@ private fun Content(
             getImageUrl = { it.posterUrl },
             onItemClick = { contract.onTvShowClick(it.id) },
             onSavedClick = { contract.onSaveClick(it.id) },
-            modifier = modifier
         )
     }
 }
