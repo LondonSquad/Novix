@@ -23,15 +23,15 @@ class AuthenticationRepositoryImpl @Inject constructor(
 
         if (!sessionResponse.success) return false
 
-            val createdSession = createSession(sessionResponse)
-            saveUserSession(
-                username = username,
-                session = createdSession,
-                requestToken = sessionResponse.requestToken
-            )
+        val createdSession = createSession(sessionResponse)
+        saveUserSession(
+            username = username,
+            session = createdSession,
+            requestToken = sessionResponse.requestToken
+        )
 
-            fetchAndSaveUserAccount(session = createdSession)
-            return true
+        fetchAndSaveUserAccount(session = createdSession)
+        return true
     }
 
     override suspend fun loginAsGuest(): Boolean {
