@@ -1,26 +1,17 @@
-package com.london.presentation.shared.accountComponent
+package com.london.presentation.feature.account.bottomsheet
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.london.designsystem.component.Text
-import com.london.designsystem.component.button.PrimaryButton
 import com.london.designsystem.theme.NovixTheme
 import com.london.domain.contentrestriction.ContentRestrictionLevel
 import com.london.presentation.R
@@ -29,18 +20,20 @@ import com.london.presentation.R
 fun ContentRestrictionBottomSheet(
     currentLevel: ContentRestrictionLevel,
     onSaveClick: (ContentRestrictionLevel) -> Unit,
+    onDismiss: () -> Unit,
     modifier: Modifier = Modifier
 ) {
     var selectedLevel by remember(currentLevel) { mutableStateOf(currentLevel) }
-    Column(
-        modifier = modifier.padding(16.dp)
-    ) {
-        Text(
-            text = stringResource(R.string.content_restriction),
-            style = NovixTheme.typography.title.large,
-            color = NovixTheme.colors.title
-        )
 
+    BaseBottomSheet(
+        title = stringResource(R.string.content_restriction),
+        onDismiss = onDismiss,
+        modifier = modifier,
+        button = BottomSheetButton(
+            text = stringResource(R.string.save),
+            onClick = { onSaveClick(selectedLevel) }
+        )
+    ) {
         ContentRestrictionOption(
             level = ContentRestrictionLevel.STRICT,
             title = stringResource(R.string.strict),
@@ -62,22 +55,11 @@ fun ContentRestrictionBottomSheet(
         ContentRestrictionOption(
             level = ContentRestrictionLevel.OFF,
             title = stringResource(R.string.off),
+            // Updated ContentRestrictionBottomSheet.kt (continued)
             description = stringResource(R.string.no_content_is_blurred),
             isSelected = selectedLevel == ContentRestrictionLevel.OFF,
             onSelected = { selectedLevel = it },
             modifier = Modifier.padding(top = 16.dp, bottom = 32.dp)
-        )
-
-        PrimaryButton(
-            text = stringResource(R.string.save),
-            onClick = { onSaveClick(selectedLevel) },
-            modifier = Modifier
-                .fillMaxWidth(),
-            hasLabel = true,
-            hasIcon = false,
-            icon = null,
-            enabled = true,
-            isLoading = false
         )
     }
 }
