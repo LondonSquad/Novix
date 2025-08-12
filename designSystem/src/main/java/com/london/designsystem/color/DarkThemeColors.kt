@@ -56,10 +56,4 @@ val DarkNovixColors = NovixColors(
     linearGradient = LinearGradientDark,
     blackLinearGradient = BlackLinearGradientDark,
     whiteLinearGradient = WhiteLinearGradientDark,
-    horizontalGradient = listOf(
-        LinearGradientDark,
-        LinearGradientDark.copy(alpha = 0.8f),
-        LinearGradientDark.copy(alpha = 0.7f),
-        LinearGradientDark.copy(alpha = 0.0f),
-    )
 )

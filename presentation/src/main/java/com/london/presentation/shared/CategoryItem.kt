@@ -63,7 +63,12 @@ fun CategoriesItem(
                 .fillMaxSize()
                 .background(
                     brush = Brush.horizontalGradient(
-                        colors = NovixTheme.colors.horizontalGradient,
+                        colors = listOf(
+                            NovixTheme.colors.linearGradient,
+                            NovixTheme.colors.linearGradient.copy(alpha = 0.8f),
+                            NovixTheme.colors.linearGradient.copy(alpha = 0.7f),
+                            NovixTheme.colors.linearGradient.copy(alpha = 0.0f),
+                        ),
                         startX = 0f,
                     )
                 )
