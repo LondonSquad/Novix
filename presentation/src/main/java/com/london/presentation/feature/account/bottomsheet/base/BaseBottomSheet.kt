@@ -41,16 +41,13 @@ fun BaseBottomSheet(
                 modifier = Modifier.padding(horizontal = 16.dp),
                 horizontalAlignment = Alignment.Start
             ) {
-                // Header
                 BottomSheetHeader(
                     title = title,
                     onDismiss = onDismiss
                 )
 
-                // Content
                 content()
 
-                // Button (if provided)
                 button?.let {
                     when (it.type) {
                         BottomSheetButtonType.PRIMARY -> {
