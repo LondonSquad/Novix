@@ -1,5 +1,10 @@
 package com.london.presentation.feature.category.main
 
+import androidx.compose.animation.AnimatedContent
+import androidx.compose.animation.core.tween
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
+import androidx.compose.animation.togetherWith
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -74,22 +79,42 @@ private fun Content(
             selectedCategory = state.selectedCategory,
             modifier = Modifier.padding(bottom = 8.dp),
         )
-        LazyVerticalGrid(
-            columns = GridCells.Fixed(gridColumns(itemWidth = 160)),
+        GenresGrid(
+            state = state,
+            contract = contract,
             modifier = Modifier
                 .fillMaxSize()
                 .padding(horizontal = 16.dp),
+        )
+    }
+}
+
+@Composable
+private fun GenresGrid(
+    state: CategoriesUiState,
+    contract: CategoriesContract,
+    modifier: Modifier = Modifier
+) {
+
+    AnimatedContent(
+        targetState = state.selectedCategory,
+        transitionSpec = { fadeIn(tween(500)) togetherWith fadeOut(tween(500)) }
+    ) { category ->
+
+        LazyVerticalGrid(
+            columns = GridCells.Fixed(gridColumns(itemWidth = 160)),
+            modifier = modifier,
             horizontalArrangement = Arrangement.spacedBy(8.dp),
             verticalArrangement = Arrangement.spacedBy(8.dp),
             contentPadding = PaddingValues(bottom = 8.dp, top = 12.dp),
         ) {
-            if (state.selectedCategory == MediaCategory.Movies) {
-                movieGenres(
+            when (category) {
+                MediaCategory.Movies -> movieGenres(
                     genres = state.movieGenres,
                     onClick = contract::onMovieGenreClick,
                 )
-            } else {
-                tvShowGenres(
+
+                else -> tvShowGenres(
                     genres = state.tvShowGenres,
                     onClick = contract::onTvShowGenreClick,
                 )
@@ -128,6 +153,7 @@ private fun LazyGridScope.movieGenres(
             categoryName = it.stringResId.string,
             categoryImage = it.backgroundResId,
             onClick = { onClick(it) },
+            modifier = Modifier.animateItem()
         )
     }
 }
@@ -141,6 +167,7 @@ private fun LazyGridScope.tvShowGenres(
             categoryName = stringResource(it.stringResId),
             categoryImage = it.backgroundResId,
             onClick = { onClick(it) },
+            modifier = Modifier.animateItem()
         )
     }
 }
