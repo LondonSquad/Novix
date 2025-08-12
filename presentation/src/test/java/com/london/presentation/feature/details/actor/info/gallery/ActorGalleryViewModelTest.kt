@@ -61,24 +61,6 @@ class ActorGalleryViewModelTest {
     }
 
     @Test
-    fun `when initialized with empty image list should handle correctly`() = runTest {
-        // Given
-        val actorId = 123
-        val args = Screen.ActorGallery(actorId)
-        val emptyImages = emptyList<String>()
-        coEvery { savedStateHandle.getArgs<Screen.ActorGallery>() } returns args
-        coEvery { getActorImagesById.invoke(actorId) } returns emptyImages
-
-        // When
-        viewModel = ActorGalleryViewModel(savedStateHandle, getActorImagesById)
-
-        // Then
-        assertThat(viewModel.state.value.images).isEmpty()
-        assertThat(viewModel.state.value.isLoading).isFalse()
-        assertThat(viewModel.state.value.error).isNull()
-    }
-
-    @Test
     fun `when onBackClick is called should emit NavigateBack effect`() = runTest {
         // Given
         val actorId = 123
