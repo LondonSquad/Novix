@@ -14,6 +14,34 @@ import androidx.paging.compose.LazyPagingItems
 import com.london.designsystem.theme.NovixTheme
 import com.london.presentation.utils.gridColumns
 
+@Deprecated(
+    message = "Use MediaLazyVerticalGrid instead. This composable will be removed in a future version. Note: MediaLazyVerticalGrid has two overloads - one for List<T> and one for LazyPagingItems<T>.",
+    replaceWith = ReplaceWith(
+        expression = "MediaLazyVerticalGrid(" +
+                "items = items, " +
+                "modifier = modifier, " +
+                "imageUrl = getImageUrl, " +
+                "name = { it.getName() }, " +
+                "hasSaveIcon = hasSaveIcon, " +
+                "onSaveClick = onSaveClick, " +
+                "isItemSaved = isItemSaved, " +
+                "onDeleteClick = onDeleteClick, " +
+                "isDarkMode = isDarkMode, " +
+                "myRatingList = myRatingList, " +
+                "rate = rate, " +
+                "onNavigateToMovie = onItemClick, " +
+                "topBar = {" +
+                "    DefaultAppTopBar(" +
+                "        title = title," +
+                "        onBack = onBack" +
+                "    )" +
+                "}" +
+                ")",
+        imports = ["com.london.presentation.shared.container.MediaLazyVerticalGrid"]
+    ),
+    level = DeprecationLevel.WARNING
+)
+
 @Composable
 fun <T : Any> MediaLazyPagingGrid(
     pagingFlow: LazyPagingItems<T>,
