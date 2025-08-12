@@ -1,6 +1,5 @@
 package com.london.presentation.shared.bookmarkSheet
 
-import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -20,7 +19,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -37,6 +35,8 @@ import com.london.designsystem.theme.NovixTheme
 import com.london.designsystem.utils.painter
 import com.london.designsystem.utils.string
 import com.london.presentation.R
+import com.london.presentation.navigation.LocalNavController
+import com.london.presentation.navigation.Screen
 import com.london.presentation.utils.Listen
 import kotlinx.coroutines.launch
 
@@ -50,6 +50,7 @@ fun BookmarkBottomSheet(
     bookmarkedMovieId: UInt
 ) {
     val coroutineScope = rememberCoroutineScope()
+    val navController = LocalNavController.current
 
     LaunchedEffect(isSheetVisible) {
         if (isSheetVisible) {
@@ -62,23 +63,29 @@ fun BookmarkBottomSheet(
 
     effect?.Listen { currentEffect ->
         when (currentEffect) {
-            BookmarkSheetEffect.NewListCreation -> {
-                // TODO: navigate
-            }
-
             BookmarkSheetEffect.ItemSuccessfulAddition -> {
                 coroutineScope.launch { sheetState.hide() }
                     .invokeOnCompletion { if (sheetState.isNotVisible) onSheetDismiss() }
+            }
+
+            BookmarkSheetEffect.NewListCreation -> {
+                coroutineScope.launch { sheetState.hide() }
+                    .invokeOnCompletion {
+                        if (sheetState.isNotVisible) {
+                            onSheetDismiss()
+                            navController.navigate(Screen.Lists(createList = true))
+                        }
+                    }
             }
         }
     }
 
     if (isSheetVisible) {
         ModalBottomSheet(
-            onDismissRequest = onSheetDismiss,
-            containerColor = NovixTheme.colors.surface,
             state = sheetState,
             modifier = modifier,
+            onDismissRequest = onSheetDismiss,
+            containerColor = NovixTheme.colors.surface,
         ) {
             BookmarkBottomSheetContent(
                 modifier = Modifier
@@ -90,7 +97,7 @@ fun BookmarkBottomSheet(
                 },
                 contract = viewModel,
                 uiState = uiState,
-                bookmarkedMovieId = bookmarkedMovieId,
+                bookmarkedMovieId = bookmarkedMovieId
             )
         }
     }
@@ -168,9 +175,7 @@ private fun BookmarkBottomSheetContent(
                 hasIcon = false,
                 isLoading = false,
                 icon = null,
-                onClick = {
-                    contract.onAddToLists(bookmarkedId = bookmarkedMovieId)
-                }
+                onClick = { contract.onAddToLists(bookmarkedId = bookmarkedMovieId) }
             )
 
             OutlineButton(
@@ -183,19 +188,5 @@ private fun BookmarkBottomSheetContent(
                 isLoading = false
             )
         }
-    }
-}
-
-@Preview
-@Composable
-fun Preview() {
-    NovixTheme {
-        BookmarkBottomSheetContent(
-            uiState = BookmarkSheetUiState(),
-            contract = hiltViewModel<BookmarkSheetViewModel>(),
-            modifier = Modifier.background(NovixTheme.colors.surface),
-            hideSheet = {},
-            bookmarkedMovieId = 0u
-        )
     }
 }
