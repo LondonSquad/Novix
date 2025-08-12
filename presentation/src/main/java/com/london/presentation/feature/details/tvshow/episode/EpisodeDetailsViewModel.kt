@@ -7,7 +7,7 @@ import com.london.domain.usecase.GetEpisodeVideoProviderUseCase
 import com.london.domain.usecase.GetTvShowImagesByIdUseCase
 import com.london.domain.usecase.authentication.AuthenticationUseCase
 import com.london.domain.usecase.details.tvshow.ManageTvShowDetailsUseCase
-import com.london.domain.usecase.rating.RatingUseCase
+import com.london.domain.usecase.rating.ManageRatingUseCase
 import com.london.presentation.navigation.Screen
 import com.london.presentation.navigation.getArgs
 import com.london.presentation.shared.base.BaseViewModel
@@ -20,7 +20,7 @@ class EpisodeDetailsViewModel @Inject constructor(
     private val getEpisodeByTvShowIdUseCase: GetEpisodeByTvShowId,
     private val manageTvShowDetailsUseCase: ManageTvShowDetailsUseCase,
     private val getVideoProvider: GetEpisodeVideoProviderUseCase,
-    private val ratingUseCase: RatingUseCase,
+    private val ratingUseCase: ManageRatingUseCase,
     private val authenticationUseCase: AuthenticationUseCase,
     savedStateHandle: SavedStateHandle,
 ) : BaseViewModel<EpisodeDetailsUiState, EpisodeDetailsEffect>(EpisodeDetailsUiState()),
@@ -67,7 +67,7 @@ class EpisodeDetailsViewModel @Inject constructor(
     override fun onSelectRatingClick(rating: Int) {
         tryToExecute(
             block = {
-                ratingUseCase.addTvEpisodeRatingById(
+                ratingUseCase.addTvShowEpisodeRatingById(
                     id = tvShowId,
                     rating = rating,
                     episodeNumber = episodeNumber,
@@ -101,7 +101,7 @@ class EpisodeDetailsViewModel @Inject constructor(
        tryToExecute(
            block = {
            val data =  if (authenticationUseCase.isLoggedIn()) {
-               ratingUseCase.getRateAccountTvEpisode(
+               ratingUseCase.getRatedAccountTvShowEpisode(
                        tvShowId = tvShowId,
                        seasonNumber = seasonNumber,
                        episodeNumber =episodeNumber,

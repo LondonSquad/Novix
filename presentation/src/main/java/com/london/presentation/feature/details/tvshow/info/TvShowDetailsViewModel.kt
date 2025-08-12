@@ -9,7 +9,7 @@ import com.london.domain.usecase.GetEpisodesByTvShowSeason
 import com.london.domain.usecase.GetTvShowImagesByIdUseCase
 import com.london.domain.usecase.authentication.AuthenticationUseCase
 import com.london.domain.usecase.details.tvshow.ManageTvShowDetailsUseCase
-import com.london.domain.usecase.rating.RatingUseCase
+import com.london.domain.usecase.rating.ManageRatingUseCase
 import com.london.domain.usecase.recent.viewed.ManageRecentViewedUseCase
 import com.london.domain.usecase.recent.watched.tvshow.ManageRecentTvShowWatchedUseCase
 import com.london.presentation.navigation.Screen
@@ -21,7 +21,7 @@ import javax.inject.Inject
 @HiltViewModel
 class TvShowDetailsViewModel @Inject constructor(
     private val getCastById: GetCastById,
-    private val ratingUseCase: RatingUseCase,
+    private val ratingUseCase: ManageRatingUseCase,
     private val getTvShowImages: GetTvShowImagesByIdUseCase,
     private val authenticationUseCase: AuthenticationUseCase,
     private val manageRecentViewedUseCase: ManageRecentViewedUseCase,
@@ -34,7 +34,6 @@ class TvShowDetailsViewModel @Inject constructor(
 
     private val args = savedStateHandle.getArgs<Screen.TvShowDetails>()
     private val tvShowId: Int = args?.tvShowId ?: 0
-
 
     init {
         initializeGetTvShowDetailsData()
@@ -55,7 +54,7 @@ class TvShowDetailsViewModel @Inject constructor(
                     copy(
                         tvShowEpisodes = episodes,
                         tvShowEpisodeCountBySeason = episodeCount,
-                        videoProvider = videoProviders.first()
+                        videoProvider = videoProviders.firstOrNull().orEmpty(),
                     )
                 }
             },

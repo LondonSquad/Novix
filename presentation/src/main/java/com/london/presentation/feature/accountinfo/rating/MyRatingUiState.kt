@@ -13,5 +13,6 @@ data class MyRatingUiState(
     val allRatedMedia: List<RatedMedia> = emptyList(),
     val ratedMovies: List<RatedMedia> = emptyList(),
     val ratedTvShows: List<RatedMedia> = emptyList(),
+    val isSnackBarVisible: Boolean = false,
     val selectedRatingCategory: RatingCategory? = null,
 )

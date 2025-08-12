@@ -1,5 +1,6 @@
 package com.london.presentation.feature.accountinfo.rating
 
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -26,6 +27,7 @@ import com.london.designsystem.component.NovixChip
 import com.london.designsystem.component.TopBar
 import com.london.designsystem.theme.NovixTheme
 import com.london.designsystem.theme.ThemePreviews
+import com.london.domain.entity.recent.MediaType
 import com.london.presentation.R
 import com.london.presentation.shared.EmptyGenreLayout
 import com.london.presentation.shared.HomeCard
@@ -42,14 +44,13 @@ fun MyRatingScreen(
     onNavigateBack: () -> Unit,
     onNavigateMovie: (Int) -> Unit,
     onNavigateTvShow: (Int) -> Unit,
-    viewModel: RatingViewModel = hiltViewModel()
+    viewModel: MyRatingsViewModel = hiltViewModel()
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
     val effect by viewModel.effect.collectAsState(null)
 
     LaunchedEffect(Unit) {
-        viewModel.initializeItems()
-
+        viewModel.initializeRatedMedia()
     }
 
     effect?.Listen { currentEffect ->
@@ -64,8 +65,7 @@ fun MyRatingScreen(
         isLoading = state.isLoading,
         isError = state.errorState != null,
         onBack = viewModel::onBackClicked,
-        onRetry = { viewModel.initializeItems()
-        }
+        onRetry = viewModel::initializeRatedMedia
     ) {
         Content(
             state = state,
@@ -77,7 +77,7 @@ fun MyRatingScreen(
 @Composable
 private fun Content(
     state: MyRatingUiState = MyRatingUiState(),
-    contract: MyRatingContract = defaultMyRatingContract()
+    contract: MyRatingsContract = defaultMyRatingContract()
 ) {
     val selectedCategory = state.selectedRatingCategory ?: RatingCategory.All
     val items = when (selectedCategory) {
@@ -123,20 +123,34 @@ private fun Content(
                     .navigationBarsPadding()
                     .padding(horizontal = 16.dp)
             ) {
-                items(items) { item ->
+                items(
+                    items = items,
+                    key = { it.id }
+                ) { item ->
                     HomeCard(
                         imageUrl = item.posterPath,
                         isSaved = false,
                         onSaveClick = { },
                         myRatingList = true,
                         rate = item.rating.toLocalizedNumbers(),
-                        onDeleteClick = { contract.onDelete(item.id) },
-                        modifier = Modifier.clickable {
-                            when {
-                                item.isMovie -> contract.onMovieClick(item.id)
-                                !item.isMovie -> contract.onTvShowClick(item.id)
+                        onDeleteClick = {
+                            when (item.mediaType) {
+                                MediaType.Movie -> contract.onDeleteMovie(item.id)
+                                MediaType.TvShow -> contract.onDeleteShow(item.id)
                             }
                         },
+                        modifier = Modifier
+                            .animateItem(
+                                fadeInSpec = null,
+                                fadeOutSpec = tween(500),
+                                placementSpec = tween(500)
+                            )
+                            .clickable {
+                                when (item.mediaType) {
+                                    MediaType.Movie -> contract.onMovieClick(item.id)
+                                    MediaType.TvShow -> contract.onTvShowClick(item.id)
+                                }
+                            },
                         isDarkMode = NovixTheme.isThemeDark
                     )
                 }
@@ -144,7 +158,7 @@ private fun Content(
         }
     }
 
-    if (state.isDeleteClicked) {
+    if (state.isSnackBarVisible) {
         if (state.errorState is ErrorState.RequestFailed) {
             SnackBarAnimation(state.errorState.message)
         } else {

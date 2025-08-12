@@ -1,7 +1,7 @@
 package com.london.domain.usecase
 
 import com.london.domain.entity.actordetails.cast.CastDetails
-import com.london.domain.repository.ActorRepository
+import com.london.domain.repository.TvShowRepository
 import com.london.domain.usecase.toppicks.GetActorTvShowPicksByIdUseCase
 import io.mockk.coEvery
 import io.mockk.coVerify
@@ -13,7 +13,7 @@ import org.junit.jupiter.api.Assertions.assertEquals
 
 class GetActorTvShowPicksByIdUseCaseTest {
 
-    private lateinit var repository: ActorRepository
+    private lateinit var repository: TvShowRepository
     private lateinit var useCase: GetActorTvShowPicksByIdUseCase
 
     @Before
