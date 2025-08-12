@@ -13,25 +13,53 @@ import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.lazy.items
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.london.designsystem.component.NovixChip
 import com.london.designsystem.component.TopBar
+import com.london.designsystem.theme.ThemePreviews
 import com.london.designsystem.utils.string
 import com.london.presentation.R
 import com.london.presentation.shared.CategoriesItem
+import com.london.presentation.shared.MediaCategory
+import com.london.presentation.utils.Listen
 import com.london.presentation.utils.MovieGenre
 import com.london.presentation.utils.TvShowGenre
+import com.london.presentation.utils.gridColumns
 
 @Composable
 fun CategoriesScreen(
+    onMovieGenreClick: (MovieGenre) -> Unit,
+    onTvShowGenreClick: (TvShowGenre) -> Unit,
+    viewModel: CategoriesViewModel = hiltViewModel()
 ) {
-    Content()
+
+    val state by viewModel.state.collectAsStateWithLifecycle()
+    val effect by viewModel.effect.collectAsState(null)
+
+    effect?.Listen { currentEffect ->
+        when (currentEffect) {
+            is CategoriesEffect.NavigateToMovieCategory ->
+                onMovieGenreClick(currentEffect.movieGenre)
+
+            is CategoriesEffect.NavigateToTvShowCategory ->
+                onTvShowGenreClick(currentEffect.tvShowGenre)
+        }
+    }
+
+    Content(state = state, contract = viewModel)
 }
 
 @Composable
-private fun Content() {
+private fun Content(
+    state: CategoriesUiState,
+    contract: CategoriesContract,
+) {
     Column(
         Modifier
             .statusBarsPadding()
@@ -42,11 +70,12 @@ private fun Content() {
             modifier = Modifier.padding(horizontal = 16.dp),
         )
         CategoriesSelection(
-            onClick = {},
+            onClick = contract::onCategoryClick,
+            selectedCategory = state.selectedCategory,
             modifier = Modifier.padding(bottom = 12.dp),
         )
         LazyVerticalGrid(
-            columns = GridCells.Adaptive(minSize = 160.dp),
+            columns = GridCells.Fixed(gridColumns(itemWidth = 160)),
             modifier = Modifier
                 .fillMaxSize()
                 .padding(horizontal = 16.dp),
@@ -54,22 +83,26 @@ private fun Content() {
             verticalArrangement = Arrangement.spacedBy(8.dp),
             contentPadding = PaddingValues(bottom = 8.dp),
         ) {
-            movieGenres(
-                genres = MovieGenre.entries.filter { it != MovieGenre.All },
-                onClick = {},
-            )
-            tvShowGenres(
-                genres = TvShowGenre.entries.filter { it != TvShowGenre.All },
-                onClick = {},
-            )
+            if (state.selectedCategory == MediaCategory.Movies) {
+                movieGenres(
+                    genres = state.movieGenres,
+                    onClick = contract::onMovieGenreClick,
+                )
+            } else {
+                tvShowGenres(
+                    genres = state.tvShowGenres,
+                    onClick = contract::onTvShowGenreClick,
+                )
+            }
         }
     }
 }
 
 @Composable
 private fun CategoriesSelection(
+    selectedCategory: MediaCategory,
     onClick: (MediaCategory) -> Unit,
-    modifier: Modifier = Modifier,
+    modifier: Modifier = Modifier
 ) {
     LazyRow(
         modifier = modifier,
@@ -78,17 +111,17 @@ private fun CategoriesSelection(
     ) {
         items(MediaCategory.entries) {
             NovixChip(
-                text = stringResource(it.title),
+                text = stringResource(it.tabTextResId),
                 onClick = { onClick(it) },
-                isSelected = true
+                isSelected = it == selectedCategory,
             )
         }
     }
 }
 
 private fun LazyGridScope.movieGenres(
-    genres: List<MovieGenre>,
     onClick: (MovieGenre) -> Unit,
+    genres: List<MovieGenre>,
 ) {
     items(genres) {
         CategoriesItem(
@@ -100,8 +133,8 @@ private fun LazyGridScope.movieGenres(
 }
 
 private fun LazyGridScope.tvShowGenres(
-    genres: List<TvShowGenre>,
     onClick: (TvShowGenre) -> Unit,
+    genres: List<TvShowGenre>,
 ) {
     items(genres) {
         CategoriesItem(
@@ -110,4 +143,21 @@ private fun LazyGridScope.tvShowGenres(
             onClick = { onClick(it) },
         )
     }
+}
+
+@ThemePreviews
+@Composable
+private fun Preview() {
+    Content(
+        state = CategoriesUiState(
+            selectedCategory = MediaCategory.Movies,
+            movieGenres = MovieGenre.entries.filter { it != MovieGenre.All },
+            tvShowGenres = TvShowGenre.entries.filter { it != TvShowGenre.All },
+        ),
+        contract = object : CategoriesContract {
+            override fun onMovieGenreClick(genre: MovieGenre) {}
+            override fun onTvShowGenreClick(genre: TvShowGenre) {}
+            override fun onCategoryClick(category: MediaCategory) {}
+        },
+    )
 }
