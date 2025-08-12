@@ -44,7 +44,7 @@ private fun TopTvShowsPicksContent(
         onBack = contract::onBackClick,
         isLoading = state.isLoading,
         isError = state.errorState is ErrorState.NoInternet,
-        onRetry = contract::onRetry
+        onRetry = contract::onRetryClick
     ) {
         MediaLazyGrid(
             title = stringResource(R.string.top_tv_shows_picks),
@@ -66,8 +66,8 @@ private fun HandleTvShowsPicksEffects(
 ) {
     effect?.Listen { currentEffect ->
         when (currentEffect) {
-            is TopTvShowsPicksEffect.NavigateBack -> onNavigateBack()
-            is TopTvShowsPicksEffect.NavigateToTvShowDetails -> onNavigateTvShow(currentEffect.tvShowId)
+            is TopTvShowsPicksEffect.BackNavigation -> onNavigateBack()
+            is TopTvShowsPicksEffect.TvShowDetailsNavigation -> onNavigateTvShow(currentEffect.tvShowId)
         }
     }
 }

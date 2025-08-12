@@ -159,7 +159,7 @@ class TopTvShowsPicksViewModelTest {
         viewModel = TopTvShowsPicksViewModel(savedStateHandle, getActorTvShowPicksById)
 
         // Then
-        viewModel.onRetry()
+        viewModel.onRetryClick()
         viewModel.onBackClick()
         viewModel.onSaveClick(1)
         viewModel.onTvShowClick(1)

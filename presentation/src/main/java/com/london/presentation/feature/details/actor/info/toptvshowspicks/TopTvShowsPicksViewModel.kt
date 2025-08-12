@@ -30,11 +30,10 @@ class TopTvShowsPicksViewModel @Inject constructor(
             onSuccess = { actorTvShowDetails -> updateState { copy(actorTvShowDetails = actorTvShowDetails) } },
             onError = { errorState -> updateState { copy(errorState = errorState) } },
             onCompleted = { updateState { copy(isLoading = false) } },
-            checkSuccess = { actorId != 0 }
         )
     }
 
-    override fun onRetry(){
+    override fun onRetryClick() {
         updateState { copy(errorState = null) }
         getActorTvShowsPicksData()
     }
@@ -44,10 +43,10 @@ class TopTvShowsPicksViewModel @Inject constructor(
     }
 
     override fun onBackClick() {
-        emitEffect(TopTvShowsPicksEffect.NavigateBack)
+        emitEffect(TopTvShowsPicksEffect.BackNavigation)
     }
 
     override fun onTvShowClick(tvShowId: Int) {
-        emitEffect(TopTvShowsPicksEffect.NavigateToTvShowDetails(tvShowId))
+        emitEffect(TopTvShowsPicksEffect.TvShowDetailsNavigation(tvShowId))
     }
 }
