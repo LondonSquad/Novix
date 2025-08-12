@@ -80,7 +80,7 @@ class MovieCategoryViewModelTest {
         // Then
         viewModel?.state?.test {
             val state = expectMostRecentItem()
-            assertThat(state.movies).isNotNull()
+            assertThat(state.moviesFlow).isNotNull()
             ensureAllEventsConsumed()
         }
     }

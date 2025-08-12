@@ -1,6 +1,7 @@
 package com.london.presentation.feature.category.tvshow
 
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.statusBarsPadding
@@ -17,6 +18,7 @@ import androidx.paging.compose.collectAsLazyPagingItems
 import com.london.designsystem.component.TopBar
 import com.london.designsystem.theme.ThemePreviews
 import com.london.presentation.feature.search.SearchCategory
+import com.london.presentation.shared.EmptyGenreLayout
 import com.london.presentation.shared.MediaLazyPagingGrid
 import com.london.presentation.shared.buildscreen.BuildScreen
 import com.london.presentation.utils.Listen
@@ -29,6 +31,7 @@ fun TvShowByCategoryScreen(
     onNavigateToTvShowDetails: (Int) -> Unit,
     viewModel: TvShowCategoryViewModel = hiltViewModel(),
 ) {
+
     val state by viewModel.state.collectAsStateWithLifecycle()
     val effect by viewModel.effect.collectAsState(null)
 
@@ -51,27 +54,33 @@ fun TvShowByCategoryScreen(
 private fun Content(
     state: TvShowCategoryUiState,
     contract: TvShowCategoryContract,
-    modifier: Modifier = Modifier
 ) {
 
     val tvShowLazyList = state.tvShowFlow.collectAsLazyPagingItems()
+    if (tvShowLazyList.itemCount == 0) return EmptyGenreLayout()
     BuildScreen(
         onBack = contract::onBack,
         isLoading = tvShowLazyList.isLoading(),
         isError = tvShowLazyList.loadState.refresh is LoadState.Error,
         onRetry = tvShowLazyList::refresh
     ) {
-        Column {
+
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .statusBarsPadding()
+                .padding(top = 12.dp)
+        ) {
             TopBar(
                 title = stringResource(
                     convertGenreCodeToString(
                         genreId = state.categoryId, searchCategory = SearchCategory.TvShows
                     )
-                ), onBackClick = contract::onBack,
-                modifier = modifier
-                    .statusBarsPadding()
-                    .padding(horizontal = 16.dp, vertical = 12.dp)
+                ),
+                onBackClick = contract::onBack,
+                modifier = Modifier.padding(start = 16.dp, end = 16.dp, bottom = 12.dp)
             )
+
             MediaLazyPagingGrid(
                 pagingFlow = tvShowLazyList,
                 onItemClick = { contract.onTvShowClick(it.id) },
@@ -91,6 +100,7 @@ private fun Content(
 @ThemePreviews
 @Composable
 private fun Preview() {
+
     Content(
         state = TvShowCategoryUiState(),
         contract = object : TvShowCategoryContract {

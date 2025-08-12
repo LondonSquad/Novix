@@ -1,12 +1,16 @@
 package com.london.presentation.feature.category.tvshow
 
 import androidx.lifecycle.SavedStateHandle
+import androidx.paging.PagingData
+import com.london.domain.entity.TvShow
 import com.london.domain.usecase.details.tvshow.ManageTvShowDetailsUseCase
 import com.london.presentation.navigation.Screen
 import com.london.presentation.navigation.getArgs
 import com.london.presentation.shared.base.BaseViewModel
+import com.london.presentation.shared.base.ErrorState
 import com.london.presentation.shared.base.createPagingSourceFlow
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 
 @HiltViewModel
@@ -18,10 +22,10 @@ class TvShowCategoryViewModel @Inject constructor(
 
     private val args = savedStateHandle.getArgs<Screen.TvShowsByCategory>()
 
-    private val categoryId = args?.categoryId ?: 0
+    private val categoryId = args?.categoryId ?: 0 //toDo() category id will replace with enum
 
     init {
-        initializeTvShows(categoryId)
+        initializeTvShows()
     }
 
     override fun onTvShowClick(tvShowId: Int) =
@@ -32,26 +36,36 @@ class TvShowCategoryViewModel @Inject constructor(
 
     override fun onSavedClick(tvShowId: Int) = Unit //TODO("Save Tv Show Not yet implemented")
 
-    private fun initializeTvShows(categoryId: Int) {
+    private fun initializeTvShows() {
         tryToExecute(
-            block = {
-                createPagingSourceFlow(query = "") { _, pageNumber ->
-                    val tvShows = managerTvShowDetailsUseCase.getTvShowsByCategory(
-                        categoryId = categoryId, pageNumber = pageNumber
-                    )
-                    tvShows.copy(items = tvShows.items)
-                }
-            },
-            onStart = {
-                updateState { copy(categoryId = categoryId, isLoading = true) }
-            },
-            onSuccess = { tvShowFlow ->
-                updateState { copy(tvShowFlow = tvShowFlow) }
-            },
-            onError = { errorState ->
-                updateState { copy(error = errorState) }
-            },
-            onCompleted = { updateState { copy(isLoading = false) } },
-            checkSuccess = { categoryId != 0 })
+            onStart = ::onInitializeTvShowsStarted,
+            block = ::createTvShowsPagingSourceFlow,
+            onSuccess = ::onInitializeTvShowSuccess,
+            checkSuccess = { categoryId != 0 },
+            onError = ::onInitializeTvShowsFailed,
+            onCompleted = ::onInitializeTvShowsCompleted
+        )
     }
+
+    private fun createTvShowsPagingSourceFlow(): Flow<PagingData<TvShow>> {
+
+        return createPagingSourceFlow(query = "") { _, pageNumber ->
+            val tvShows = managerTvShowDetailsUseCase.getTvShowsByCategory(
+                categoryId = categoryId, pageNumber = pageNumber
+            )
+            tvShows.copy(items = tvShows.items)
+        }
+    }
+
+    private fun onInitializeTvShowsStarted() =
+        updateState { copy(categoryId = categoryId, isLoading = true) }
+
+    private fun onInitializeTvShowSuccess(tvShowFlow: Flow<PagingData<TvShow>>) =
+        updateState { copy(tvShowFlow = tvShowFlow) }
+
+    private fun onInitializeTvShowsCompleted() =
+        updateState { copy(isLoading = false) }
+
+    private fun onInitializeTvShowsFailed(errorState: ErrorState) =
+        updateState { copy(error = errorState) }
 }
