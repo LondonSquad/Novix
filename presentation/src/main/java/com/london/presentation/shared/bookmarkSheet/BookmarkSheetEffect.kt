@@ -3,4 +3,5 @@ package com.london.presentation.shared.bookmarkSheet
 sealed interface BookmarkSheetEffect {
     object NewListCreation : BookmarkSheetEffect
     object ItemSuccessfulAddition : BookmarkSheetEffect
+    object LoginNavigation : BookmarkSheetEffect
 }

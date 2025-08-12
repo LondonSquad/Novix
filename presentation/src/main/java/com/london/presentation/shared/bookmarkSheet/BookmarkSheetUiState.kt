@@ -12,7 +12,8 @@ data class BookmarkSheetUiState(
     val isErrorSnackbarVisible: Boolean = false,
     val isLoading: Boolean = false,
     val error: ErrorState? = null,
-    val listError: ErrorState? = null
+    val listError: ErrorState? = null,
+    val isGuestSession: Boolean = false,
 )
 
 data class BookmarkUiList(

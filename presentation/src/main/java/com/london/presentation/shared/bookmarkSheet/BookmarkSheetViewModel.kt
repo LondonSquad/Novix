@@ -2,6 +2,7 @@ package com.london.presentation.shared.bookmarkSheet
 
 import androidx.lifecycle.viewModelScope
 import androidx.paging.cachedIn
+import com.london.domain.usecase.authentication.AuthenticationUseCase
 import com.london.domain.usecase.movielist.AddMovieToListUseCase
 import com.london.domain.usecase.movielist.GetAllMovieListsUseCase
 import com.london.presentation.shared.base.BaseViewModel
@@ -13,12 +14,14 @@ import javax.inject.Inject
 class BookmarkSheetViewModel @Inject constructor(
     private val addMovieToListUseCase: AddMovieToListUseCase,
 //    private val getMovieListsUseCase: GetMovieListsUseCase,
-    private val getAllMovieListsUseCase: GetAllMovieListsUseCase
+    private val getAllMovieListsUseCase: GetAllMovieListsUseCase,
+    private val authenticationUseCase: AuthenticationUseCase
 ) : BaseViewModel<BookmarkSheetUiState, BookmarkSheetEffect>(BookmarkSheetUiState()),
     BookmarkSheetContract {
 
     init {
         initializeMovieLists()
+        initializeSessionStatus()
     }
 
     private fun initializeMovieLists() {
@@ -32,6 +35,14 @@ class BookmarkSheetViewModel @Inject constructor(
             onSuccess = { lists -> updateState { copy(lists = lists.toBookmarkUiLists()) } },
             onError = { error -> updateState { copy(error = error) } },
             onCompleted = { updateState { copy(isLoading = false) } }
+        )
+    }
+
+    private fun initializeSessionStatus() {
+        tryToExecute(
+            block = { authenticationUseCase.isLoggedIn() },
+            onSuccess = { isLoggedIn -> updateState { copy(isGuestSession = isLoggedIn.not()) } },
+            onError = { errorState -> updateState { copy(error = errorState) } }
         )
     }
 
@@ -97,6 +108,10 @@ class BookmarkSheetViewModel @Inject constructor(
                 error = null
             )
         }
+    }
+
+    override fun onLoginClick() {
+        emitEffect(BookmarkSheetEffect.LoginNavigation)
     }
 
 }

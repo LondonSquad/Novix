@@ -7,4 +7,6 @@ interface BookmarkSheetContract {
     fun onDismiss()
 
     fun onSnackbarShown()
+
+    fun onLoginClick()
 }
