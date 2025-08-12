@@ -13,12 +13,12 @@ import javax.inject.Inject
 
 @HiltViewModel
 class ActorDetailsViewModel @Inject constructor(
-    private val getActorDetailsByIdUseCase: GetActorDetailsByIdUseCase,
-    private val getActorImagesByIdUseCase: GetActorImagesByIdUseCase,
-    private val getActorMoviePicksByIdUseCase: GetActorMoviePicksByIdUseCase,
-    private val getActorTvShowPicksByIdUseCase: GetActorTvShowPicksByIdUseCase,
     savedStateHandle: SavedStateHandle,
-) : BaseViewModel<ActorDetailsUiState, ActorEffectUiState>(ActorDetailsUiState()),
+    private val getActorDetailsById: GetActorDetailsByIdUseCase,
+    private val getActorImagesById: GetActorImagesByIdUseCase,
+    private val getActorMoviePicksById: GetActorMoviePicksByIdUseCase,
+    private val getActorTvShowPicksById: GetActorTvShowPicksByIdUseCase,
+) : BaseViewModel<ActorDetailsUiState, ActorEffect>(ActorDetailsUiState()),
     ActorDetailsContract {
 
     private val args = savedStateHandle.getArgs<Screen.ActorDetails>()
@@ -39,76 +39,64 @@ class ActorDetailsViewModel @Inject constructor(
         getActorTvShowDetails()
     }
 
-    override fun onNavigateBack() {
-        emitEffect(ActorEffectUiState.NavigationBack)
+    override fun onBackClick() {
+        emitEffect(ActorEffect.NavigateBack)
     }
 
-    override fun onGalleryClick(actorId: Int) {
-        emitEffect(ActorEffectUiState.NavigateToGallery(actorId))
+    override fun onActorGalleryClick(actorId: Int) {
+        emitEffect(ActorEffect.NavigateToGallery(actorId))
     }
 
-    override fun onTvShowPicksClick(actorId: Int) {
-        emitEffect(ActorEffectUiState.NavigateToTvShowPicks(actorId))
-    }
-
-    override fun onMoviePicksClick(actorId: Int) {
-        emitEffect(ActorEffectUiState.NavigateToMoviePicks(actorId))
-    }
-
-    override fun onTvShowScreenClick(tvShowId: Int) {
-        emitEffect(ActorEffectUiState.NavigateToTvShowScreen(tvShowId))
+    override fun onTopMoviePicksClick(actorId: Int) {
+        emitEffect(ActorEffect.NavigateToTopMoviePicks(actorId))
     }
 
     override fun onMovieScreenClick(movieId: Int) {
-        emitEffect(ActorEffectUiState.NavigateToMovieScreen(movieId))
+        emitEffect(ActorEffect.NavigateToMovieScreen(movieId))
+    }
+
+    override fun onTopTvShowPicksClick(actorId: Int) {
+        emitEffect(ActorEffect.NavigateToTopTvShowPicks(actorId))
+    }
+    override fun onTvShowScreenClick(tvShowId: Int) {
+        emitEffect(ActorEffect.NavigateToTvShowScreen(tvShowId))
     }
 
     private fun getActorImage() {
         tryToExecute(
-            block = {
-                getActorImagesByIdUseCase.invoke(actorId ?: 0)
-            },
+            block = { getActorImagesById.invoke(actorId ?: 0) },
             onStart = { updateState { copy(isLoading = true) } },
             onSuccess = { images -> updateState { copy(actorImageDetails = images) } },
-            onError = { errorState ->
-                updateState { copy(error = errorState) }
-            },
+            onError = { errorState -> updateState { copy(error = errorState) } },
             onCompleted = { updateState { copy(isLoading = false) } },
         )
     }
 
     private fun getActorDetails() {
-
         tryToExecute(
-            block = {
-                getActorDetailsByIdUseCase.invoke(actorId ?: 0)
-            },
+            block = { getActorDetailsById.invoke(actorId ?: 0) },
             onStart = { updateState { copy(isLoading = true) } },
             onSuccess = { actorDetails ->
                 updateState {
                     copy(
+                        actorId = actorDetails.id,
                         actorName = actorDetails.name,
                         actorBirthday = actorDetails.birthday,
                         actorDeathDay = actorDetails.deathDay,
                         actorPlaceOfBirth = actorDetails.placeOfBirth,
                         actorBiography = actorDetails.biography,
                         knownForDepartment = actorDetails.knownForDepartment,
-                        actorId = actorDetails.id
                     )
                 }
             },
-            onError = { errorState ->
-                updateState { copy(error = errorState) }
-            },
+            onError = { errorState -> updateState { copy(error = errorState) } },
             onCompleted = { updateState { copy(isLoading = false) } },
         )
     }
 
     private fun getActorMovieDetails() {
         tryToExecute(
-            block = {
-                getActorMoviePicksByIdUseCase.invoke(actorId ?: 0)
-            },
+            block = { getActorMoviePicksById.invoke(actorId ?: 0) },
             onStart = { updateState { copy(isLoading = true) } },
             onSuccess = { movieDetails ->
                 updateState {
@@ -118,18 +106,14 @@ class ActorDetailsViewModel @Inject constructor(
                     )
                 }
             },
-            onError = { errorState ->
-                updateState { copy(error = errorState) }
-            },
+            onError = { errorState -> updateState { copy(error = errorState) } },
             onCompleted = { updateState { copy(isLoading = false) } },
         )
     }
 
     private fun getActorTvShowDetails() {
         tryToExecute(
-            block = {
-                getActorTvShowPicksByIdUseCase.invoke(actorId ?: 0)
-            },
+            block = { getActorTvShowPicksById.invoke(actorId ?: 0) },
             onStart = { updateState { copy(isLoading = true) } },
             onSuccess = { tvShows ->
                 updateState {
@@ -140,9 +124,7 @@ class ActorDetailsViewModel @Inject constructor(
                     )
                 }
             },
-            onError = { errorState ->
-                updateState { copy(error = errorState) }
-            },
+            onError = { errorState -> updateState { copy(error = errorState) } },
             onCompleted = { updateState { copy(isLoading = false) } },
             checkSuccess = { actorId != null },
         )
