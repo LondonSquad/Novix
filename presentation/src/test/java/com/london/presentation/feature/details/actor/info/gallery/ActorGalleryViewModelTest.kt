@@ -43,7 +43,7 @@ class ActorGalleryViewModelTest {
     }
 
     @Test
-    fun `when onBackClick is called should emit NavigateBack effect`() = runTest {
+    fun `onBackClick should emit NavigateBack effect when it is called`() = runTest {
         // Given
         val actorId = 123
         val args = Screen.ActorGallery(actorId)
