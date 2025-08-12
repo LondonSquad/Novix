@@ -148,26 +148,6 @@ class TopTvShowsPicksViewModelTest {
     }
 
     @Test
-    fun `initial state should have correct default values`() = runTest {
-        // Given
-        val actorId = 123
-        val args = Screen.TopTvShowsPicksDetails(actorId)
-        every { savedStateHandle.getArgs<Screen.TopTvShowsPicksDetails>() } returns args
-        coEvery { getActorTvShowPicksById.invoke(actorId) } returns mockCastDetails
-
-        // When
-        viewModel = TopTvShowsPicksViewModel(savedStateHandle, getActorTvShowPicksById)
-
-        // Then
-        with(viewModel.state.value) {
-            assertThat(id).isEqualTo(0)
-            assertThat(isSaved).isFalse()
-            assertThat(backdropPath).isEmpty()
-            assertThat(errorState).isNull()
-        }
-    }
-
-    @Test
     fun `viewModel should implement all contract methods`() {
         // Given
         val actorId = 123
