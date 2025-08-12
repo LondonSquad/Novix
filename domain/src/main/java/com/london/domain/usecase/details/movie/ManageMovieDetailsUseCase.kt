@@ -1,10 +1,12 @@
 package com.london.domain.usecase.details.movie
 
-import com.london.domain.repository.MovieDetailsRepository
+import com.london.domain.repository.ActorRepository
+import com.london.domain.repository.MovieRepository
 import javax.inject.Inject
 
 class ManageMovieDetailsUseCase @Inject constructor(
-    private val movieRepository: MovieDetailsRepository
+    private val movieRepository: MovieRepository,
+    private val actorRepository: ActorRepository,
 ) {
     suspend fun getMovieDetails(movieId: Int) = movieRepository.getMovieById(movieId)
 
@@ -18,7 +20,7 @@ class ManageMovieDetailsUseCase @Inject constructor(
             }.take(limit)
         }
 
-    suspend fun getMovieCast(movieId: Int) = movieRepository.getMovieCastById(movieId)
+    suspend fun getMovieCast(movieId: Int) = actorRepository.getMovieActors(movieId)
 
     suspend fun getSimilarMovies(movieId: Int) = movieRepository.getSimilarMoviesById(movieId)
 

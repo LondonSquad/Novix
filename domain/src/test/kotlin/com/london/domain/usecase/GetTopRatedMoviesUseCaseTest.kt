@@ -3,7 +3,7 @@ package com.london.domain.usecase
 import com.google.common.truth.Truth.assertThat
 import com.london.domain.entity.PagedFetchResponse
 import com.london.domain.entity.toprated.TopRatedMedia
-import com.london.domain.repository.toprated.TopRatedRepository
+import com.london.domain.repository.MovieRepository
 import com.london.domain.usecase.toprated.GetTopRatedMoviesUseCase
 import io.mockk.coEvery
 import io.mockk.mockk
@@ -14,7 +14,7 @@ import org.junit.jupiter.api.assertThrows
 
 class GetTopRatedMoviesUseCaseTest {
 
-    private lateinit var repository: TopRatedRepository
+    private lateinit var repository: MovieRepository
     private lateinit var getTopRatedMovies: GetTopRatedMoviesUseCase
 
     @Before

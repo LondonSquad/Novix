@@ -1,10 +1,10 @@
 package com.london.domain.usecase
 
-import com.london.domain.repository.PopularRepository
+import com.london.domain.repository.MovieRepository
 import javax.inject.Inject
 
 class GetPopularMovies @Inject constructor(
-    private val popularRepository: PopularRepository
+    private val popularRepository: MovieRepository
 ) {
     suspend fun invoke(limit: Int = LIMIT) = popularRepository.getPopularMovies().take(limit)
 

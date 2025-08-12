@@ -12,7 +12,7 @@ import org.junit.Test
 class GetTrendingMoviesUseCaseTest {
 
     private lateinit var useCase: GetTrendingMoviesUseCase
-    private lateinit var repository: TrendingRepository
+    private lateinit var repository: MovieRepository
 
     @Before
     fun setup() {
@@ -214,20 +214,20 @@ class GetTrendingMoviesUseCaseTest {
         // When
         val comedyGenreId = 35
         val result = useCase.invoke(page = 1, genreId = comedyGenreId)
-        
+
         // Then
         assertThat(result).isNotNull()
         assertThat(result.items).hasSize(3)
-        
+
         result.items.forEach { movie ->
             assertThat(movie.genreIds).contains(comedyGenreId)
         }
-        
+
         val movieTitles = result.items.map { it.title }
         assertThat(movieTitles).contains("Comedy Movie")
         assertThat(movieTitles).contains("Action-Comedy")
         assertThat(movieTitles).contains("Comedy-Drama")
-        
+
         assertThat(movieTitles).doesNotContain("Action Movie")
         assertThat(movieTitles).doesNotContain("Action-Drama")
     }
@@ -249,7 +249,7 @@ class GetTrendingMoviesUseCaseTest {
         // When
         val horrorGenreId = 27
         val result = useCase.invoke(page = 1, genreId = horrorGenreId)
-        
+
         // Then
         assertThat(result).isNotNull()
         assertThat(result.items).isEmpty()
@@ -272,7 +272,7 @@ class GetTrendingMoviesUseCaseTest {
 
         // When
         val result = useCase.invoke(page = 1)
-        
+
         // Then
         assertThat(result).isNotNull()
         assertThat(result.items).hasSize(4)
@@ -304,4 +304,4 @@ class GetTrendingMoviesUseCaseTest {
         totalPages = totalPages,
         totalItems = totalItems
     )
-} 
+}
