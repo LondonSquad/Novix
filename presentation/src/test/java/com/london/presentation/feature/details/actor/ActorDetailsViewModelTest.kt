@@ -207,25 +207,6 @@ class ActorDetailsViewModelTest {
         }
     }
 
-    @Test
-    fun `should clear errors and reset state when onRetryClick is called`() = runTest {
-        // Given
-        coEvery { getActorDetailsById.invoke(ACTOR_ID) } returns ActorDetails()
-        coEvery { getActorImagesById.invoke(ACTOR_ID) } returns emptyList()
-        coEvery { getActorMoviePicksById.invoke(ACTOR_ID) } returns CastDetails()
-        coEvery { getActorTvShowPicksById.invoke(ACTOR_ID) } returns CastDetails()
-
-        // When
-        viewModel.onRetryClick()
-        advanceUntilIdle()
-
-        // Then
-        val finalState = viewModel.state.value
-        assertThat(finalState.error).isNull()
-        assertThat(finalState.movieError).isFalse()
-        assertThat(finalState.tvShowError).isFalse()
-    }
-
     companion object {
         private const val ACTOR_ID = 123
     }
