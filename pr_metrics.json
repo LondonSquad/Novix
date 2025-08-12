@@ -20702,5 +20702,33 @@
       "deletions": 44,
       "changed_files": 6
     }
+  },
+  {
+    "pr_number": 611,
+    "url": "https://github.com/LondonSquad/Novix/pull/611",
+    "title": "Feature/categories screen",
+    "opened_at": "2025-08-12T01:30:43Z",
+    "head_ref": "feature/categories-screen",
+    "base_ref": "develop",
+    "creator": {
+      "login": "marwanqashwa",
+      "id": 100484790,
+      "url": "https://github.com/marwanqashwa"
+    },
+    "approvals": [],
+    "first_approved_at": null,
+    "time_to_first_approval_minutes": null,
+    "required_approvals_met_at": null,
+    "time_to_required_approvals_minutes": null,
+    "closed_at": null,
+    "merged_at": null,
+    "merged_by": null,
+    "week": "2025-W33",
+    "status": "pending",
+    "diff_stats": {
+      "additions": 474,
+      "deletions": 98,
+      "changed_files": 50
+    }
   }
 ]
