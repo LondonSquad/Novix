@@ -75,7 +75,7 @@ class TopMoviesPicksViewModelTest {
     }
 
     @Test
-    fun `when save state is toggled multiple times should maintain consistency`() = runTest {
+    fun `save state should toggled multiple times to maintain consistency`() = runTest {
         // Given
         val actorId = 123
         val args = Screen.ActorTopMoviesPicksDetails(actorId)
@@ -94,7 +94,7 @@ class TopMoviesPicksViewModelTest {
     }
 
     @Test
-    fun `when onSaveClick called with different movieIds should still toggle same saved state`() = runTest {
+    fun `onSaveClick should still toggle same saved state when it is called with different movieIds `() = runTest {
         // Given
         val actorId = 123
         val args = Screen.ActorTopMoviesPicksDetails(actorId)
