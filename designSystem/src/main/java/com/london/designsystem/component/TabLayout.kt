@@ -1,6 +1,9 @@
 package com.london.designsystem.component
 
 import androidx.annotation.StringRes
+import androidx.compose.animation.animateColorAsState
+import androidx.compose.animation.core.animateFloatAsState
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
@@ -15,10 +18,12 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.scale
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.london.designsystem.R
@@ -74,8 +79,45 @@ fun NovixTab(
 ) {
     val interactionSource = remember { MutableInteractionSource() }
 
+    val textColor by animateColorAsState(
+        targetValue = if (isSelected) NovixTheme.colors.title else NovixTheme.colors.hint,
+        animationSpec = tween(
+            durationMillis = 300,
+            easing = androidx.compose.animation.core.FastOutSlowInEasing
+        ),
+        label = "text_color"
+    )
+
+    val scale by animateFloatAsState(
+        targetValue = if (isSelected) 1.08f else 1f,
+        animationSpec = tween(
+            durationMillis = 350,
+            easing = androidx.compose.animation.core.FastOutSlowInEasing
+        ),
+        label = "scale"
+    )
+
+    val indicatorWidth by animateFloatAsState(
+        targetValue = if (isSelected) 0.7f else 0f,
+        animationSpec = tween(
+            durationMillis = 350,
+            easing = androidx.compose.animation.core.FastOutSlowInEasing
+        ),
+        label = "indicator_width"
+    )
+
+    val indicatorAlpha by animateFloatAsState(
+        targetValue = if (isSelected) 1f else 0f,
+        animationSpec = tween(
+            durationMillis = 350,
+            easing = androidx.compose.animation.core.FastOutSlowInEasing
+        ),
+        label = "indicator_alpha"
+    )
+
     Column(
         modifier = modifier
+            .scale(scale)
             .clickable(
                 interactionSource = interactionSource,
                 indication = null,
@@ -88,22 +130,18 @@ fun NovixTab(
         Text(
             text = stringResource(text),
             style = NovixTheme.typography.label.medium,
-            color = if (isSelected) NovixTheme.colors.title else NovixTheme.colors.hint
+            color = textColor
         )
 
-        if (isSelected) {
-            Spacer(modifier = Modifier.height(8.dp))
-            Box(
-                modifier = Modifier
-                    .fillMaxWidth(0.7f)
-                    .height(3.dp)
-                    .clip(RoundedCornerShape(topStart = 8.dp, topEnd = 8.dp))
-                    .background(NovixTheme.colors.primary)
+        Spacer(modifier = Modifier.height(8.dp))
 
-            )
-        } else
-            Spacer(modifier = Modifier.height(8.dp))
-
+        Box(
+            modifier = Modifier
+                .fillMaxWidth(indicatorWidth)
+                .height(3.dp)
+                .clip(RoundedCornerShape(topStart = 8.dp, topEnd = 8.dp))
+                .background(NovixTheme.colors.primary.copy(alpha = indicatorAlpha))
+        )
     }
 }
 
