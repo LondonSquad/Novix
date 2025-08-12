@@ -24,13 +24,15 @@ import org.junit.Test
 class LoginViewModelTest {
 
     private val testDispatcher = StandardTestDispatcher()
-    private val authenticationUseCase: AuthenticationUseCase = mockk()
-    private val context: Application = mockk()
+    private lateinit var authenticationUseCase: AuthenticationUseCase
+    private lateinit var context: Application
     private lateinit var viewModel: LoginViewModel
 
     @Before
     fun setup() {
         Dispatchers.setMain(testDispatcher)
+        authenticationUseCase = mockk()
+        context = mockk()
         every { context.getString(R.string.login_failed) } returns "Login failed"
         every { context.getString(R.string.guest_login_failed) } returns "Guest login failed"
         viewModel = LoginViewModel(context, authenticationUseCase)
@@ -82,10 +84,19 @@ class LoginViewModelTest {
     }
 
     @Test
-    fun `onForgotPasswordClick emits NavigateToForgotPassword effect`() = runTest {
+    fun `onForgotPasswordClick emits NavigateToForgotPassword effect on first call`() = runTest {
         viewModel.effect.test {
             viewModel.onForgotPasswordClick()
-            assertThat(awaitItem()).isEqualTo(LoginEffect.NavigateToForgotPassword("https://www.themoviedb.org/reset-password"))
+
+            val emittedEffect = awaitItem()
+            assertThat(emittedEffect).isInstanceOf(LoginEffect.NavigateToForgotPassword::class.java)
+
+            val url = (emittedEffect as LoginEffect.NavigateToForgotPassword).url
+            assertThat(url).startsWith("$FORGOT_PASSWORD_URL?t=")
+
+            val timestampPart = url.substringAfter("?t=")
+            assertThat(timestampPart.toLongOrNull()).isNotNull()
+
             cancelAndIgnoreRemainingEvents()
         }
     }
@@ -138,5 +149,9 @@ class LoginViewModelTest {
         }
 
         assertThat(viewModel.state.value.isGuestLoginLoading).isFalse()
+    }
+
+    private companion object {
+        const val FORGOT_PASSWORD_URL = "https://www.themoviedb.org/reset-password"
     }
 }
