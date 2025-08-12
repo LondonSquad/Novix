@@ -34,8 +34,8 @@ import com.london.presentation.utils.gridColumns
 
 @Composable
 fun CategoriesScreen(
-    onMovieGenreClick: (MovieGenre) -> Unit,
-    onTvShowGenreClick: (TvShowGenre) -> Unit,
+    onNavigateToMovieCategory: (MovieGenre) -> Unit,
+    onNavigateToTvShowCategory: (TvShowGenre) -> Unit,
     viewModel: CategoriesViewModel = hiltViewModel()
 ) {
 
@@ -45,10 +45,10 @@ fun CategoriesScreen(
     effect?.Listen { currentEffect ->
         when (currentEffect) {
             is CategoriesEffect.NavigateToMovieCategory ->
-                onMovieGenreClick(currentEffect.movieGenre)
+                onNavigateToMovieCategory(currentEffect.movieGenre)
 
             is CategoriesEffect.NavigateToTvShowCategory ->
-                onTvShowGenreClick(currentEffect.tvShowGenre)
+                onNavigateToTvShowCategory(currentEffect.tvShowGenre)
         }
     }
 

@@ -316,10 +316,10 @@ fun NavGraphBuilder.mainNavGraph(
         popExitTransition = { fadeOut(tween(500)) },
     ) {
         CategoriesScreen(
-            onMovieGenreClick = {
+            onNavigateToMovieCategory = {
                 navController.navigate(Screen.MoviesByCategory(it.id))
             },
-            onTvShowGenreClick = {
+            onNavigateToTvShowCategory = {
                 navController.navigate(Screen.TvShowsByCategory(it.id))
             }
         )
