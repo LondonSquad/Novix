@@ -1,6 +1,6 @@
 package com.london.data.repository
 
-import com.london.data.local.preference.AuthPreferences
+import com.london.data.local.preference.AuthenticationPreferences
 import com.london.data.remote.model.account.AccountInfoResponse
 import com.london.data.remote.model.authentication.DeleteSessionResponse
 import com.london.data.remote.model.authentication.GuestSessionResponse
@@ -26,7 +26,7 @@ class AuthenticationRepositoryImplTest {
     private lateinit var repository: AuthenticationRepositoryImpl
     private val authRemoteDataSource: AuthenticationRemoteDataSource = mockk()
     private val accountRemoteDataSource: AccountRemoteDataSource = mockk()
-    private val authPreferences: AuthPreferences = mockk(relaxed = true)
+    private val authenticationPreferences: AuthenticationPreferences = mockk(relaxed = true)
 
 
     @Before
@@ -34,7 +34,7 @@ class AuthenticationRepositoryImplTest {
         repository = AuthenticationRepositoryImpl(
             authRemoteDataSource,
             accountRemoteDataSource,
-            authPreferences
+            authenticationPreferences
         )
     }
 
@@ -45,7 +45,7 @@ class AuthenticationRepositoryImplTest {
             RequestTokenResponse(true, EXPIRES_AT, REQUEST_TOKEN)
         )
         coEvery {
-            authRemoteDataSource.createSessionWithLogin(
+            authRemoteDataSource.validateLoginCredentials(
                 any(),
                 any(),
                 any()
@@ -69,11 +69,11 @@ class AuthenticationRepositoryImplTest {
 
         assertTrue(result)
         coVerify {
-            authPreferences.saveSessionId(SESSION_ID)
-            authPreferences.saveUsername(USERNAME)
-            authPreferences.saveRequestToken(REQUEST_TOKEN)
-            authPreferences.setGuestMode(false)
-            authPreferences.saveAccountId(ACCOUNT_ID)
+            authenticationPreferences.saveSessionId(SESSION_ID)
+            authenticationPreferences.saveUsername(USERNAME)
+            authenticationPreferences.saveRequestToken(REQUEST_TOKEN)
+            authenticationPreferences.setGuestMode(false)
+            authenticationPreferences.saveAccountId(ACCOUNT_ID)
         }
         coVerify { accountRemoteDataSource.getAccountDetails(SESSION_ID) }
     }
@@ -84,7 +84,7 @@ class AuthenticationRepositoryImplTest {
             RequestTokenResponse(true, EXPIRES_AT, REQUEST_TOKEN)
         )
         coEvery {
-            authRemoteDataSource.createSessionWithLogin(
+            authRemoteDataSource.validateLoginCredentials(
                 any(),
                 any(),
                 any()
@@ -96,7 +96,7 @@ class AuthenticationRepositoryImplTest {
         val result = repository.login(USERNAME, WRONG_PASSWORD)
 
         assertFalse(result)
-        coVerify(exactly = 0) { authPreferences.saveSessionId(any()) }
+        coVerify(exactly = 0) { authenticationPreferences.saveSessionId(any()) }
         coVerify(exactly = 0) { accountRemoteDataSource.getAccountDetails(any()) }
     }
 
@@ -117,7 +117,7 @@ class AuthenticationRepositoryImplTest {
             RequestTokenResponse(true, EXPIRES_AT, REQUEST_TOKEN)
         )
         coEvery {
-            authRemoteDataSource.createSessionWithLogin(
+            authRemoteDataSource.validateLoginCredentials(
                 any(),
                 any(),
                 any()
@@ -140,7 +140,7 @@ class AuthenticationRepositoryImplTest {
             RequestTokenResponse(true, EXPIRES_AT, REQUEST_TOKEN)
         )
         coEvery {
-            authRemoteDataSource.createSessionWithLogin(
+            authRemoteDataSource.validateLoginCredentials(
                 any(),
                 any(),
                 any()
@@ -172,8 +172,8 @@ class AuthenticationRepositoryImplTest {
 
         assertTrue(result)
         coVerify {
-            authPreferences.saveGuestSessionId(GUEST_SESSION_ID)
-            authPreferences.setGuestMode(true)
+            authenticationPreferences.saveGuestSessionId(GUEST_SESSION_ID)
+            authenticationPreferences.setGuestMode(true)
         }
     }
 
@@ -202,8 +202,8 @@ class AuthenticationRepositoryImplTest {
     // region: logout()
     @Test
     fun `logout clears auth and returns true when session exists`() = runTest {
-        every { authPreferences.getSessionId() } returns SESSION_ID
-        every { authPreferences.isGuestMode() } returns false
+        every { authenticationPreferences.getSessionId() } returns SESSION_ID
+        every { authenticationPreferences.isGuestMode() } returns false
         coEvery { authRemoteDataSource.deleteSession(SESSION_ID) } returns Result.success(
             DeleteSessionResponse(true)
         )
@@ -212,24 +212,24 @@ class AuthenticationRepositoryImplTest {
 
         assertTrue(result)
         coVerify { authRemoteDataSource.deleteSession(SESSION_ID) }
-        verify { authPreferences.clearAuth() }
+        verify { authenticationPreferences.clearAuthentication() }
     }
 
     @Test
     fun `logout still returns true when no session exists`() = runTest {
-        every { authPreferences.getSessionId() } returns null
+        every { authenticationPreferences.getSessionId() } returns null
 
         val result = repository.logout()
 
         assertTrue(result)
-        verify { authPreferences.clearAuth() }
+        verify { authenticationPreferences.clearAuthentication() }
     }
 
     @Test
     fun `logout throws exception on delete session failure but still clears preferences`() =
         runTest {
-            every { authPreferences.getSessionId() } returns SESSION_ID
-            every { authPreferences.isGuestMode() } returns false
+            every { authenticationPreferences.getSessionId() } returns SESSION_ID
+            every { authenticationPreferences.isGuestMode() } returns false
             val error = RuntimeException("delete failed")
             coEvery { authRemoteDataSource.deleteSession(SESSION_ID) } returns Result.failure(error)
 
@@ -240,21 +240,21 @@ class AuthenticationRepositoryImplTest {
 
     @Test
     fun `logout skips delete session when in guest mode`() = runTest {
-        every { authPreferences.getSessionId() } returns SESSION_ID
-        every { authPreferences.isGuestMode() } returns true
+        every { authenticationPreferences.getSessionId() } returns SESSION_ID
+        every { authenticationPreferences.isGuestMode() } returns true
 
         val result = repository.logout()
 
         assertTrue(result)
         coVerify(exactly = 0) { authRemoteDataSource.deleteSession(SESSION_ID) }
-        verify { authPreferences.clearAuth() }
+        verify { authenticationPreferences.clearAuthentication() }
     }
     // endregion
 
     // region: isLoggedIn()
     @Test
     fun `isLoggedIn returns true when user is logged in`() = runTest {
-        every { authPreferences.isLoggedIn() } returns true
+        every { authenticationPreferences.isLoggedIn() } returns true
 
         val result = repository.isLoggedIn()
 
@@ -263,33 +263,11 @@ class AuthenticationRepositoryImplTest {
 
     @Test
     fun `isLoggedIn returns false when user is not logged in`() = runTest {
-        every { authPreferences.isLoggedIn() } returns false
+        every { authenticationPreferences.isLoggedIn() } returns false
 
         val result = repository.isLoggedIn()
 
         assertFalse(result)
-    }
-    // endregion
-
-    // region: getAccountId()
-    @Test
-    fun `getAccountId returns account ID from preferences`() = runTest {
-        every { authPreferences.getAccountId() } returns ACCOUNT_ID
-
-        val result = repository.getAccountId()
-
-        assertTrue(result == ACCOUNT_ID)
-        verify { authPreferences.getAccountId() }
-    }
-
-    @Test
-    fun `getAccountId returns default value when no account ID stored`() = runTest {
-        every { authPreferences.getAccountId() } returns -1
-
-        val result = repository.getAccountId()
-
-        assertTrue(result == -1)
-        verify { authPreferences.getAccountId() }
     }
     // endregion
 
@@ -303,14 +281,14 @@ class AuthenticationRepositoryImplTest {
 
         assertTrue(result)
         verify {
-            authPreferences.setGuestMode(true)
+            authenticationPreferences.setGuestMode(true)
         }
     }
 
     @Test
     fun `logout deletes session when session exists and not in guest mode`() = runTest {
-        every { authPreferences.getSessionId() } returns SESSION_ID
-        every { authPreferences.isGuestMode() } returns false
+        every { authenticationPreferences.getSessionId() } returns SESSION_ID
+        every { authenticationPreferences.isGuestMode() } returns false
         coEvery { authRemoteDataSource.deleteSession(SESSION_ID) } returns Result.success(
             DeleteSessionResponse(true)
         )

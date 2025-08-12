@@ -62,22 +62,18 @@ fun LoginScreen(
             is LoginEffect.NavigateToCreateAccount -> uriHandler.openUri(currentEffect.url)
             is LoginEffect.NavigateToForgotPassword -> uriHandler.openUri(currentEffect.url)
             is LoginEffect.NavigateBack -> onNavigateBack()
-            is LoginEffect.NavigateToWebViewRegistration -> onNavigateToWebViewRegistration()
+            is LoginEffect.NavigateToRegistration -> onNavigateToWebViewRegistration()
         }
     }
 
-    Box(modifier = Modifier.fillMaxSize()) {
-        Content(
-            uiState = uiState,
-            loginContract = viewModel
-        )
-    }
+    Content(
+        uiState = uiState, loginContract = viewModel
+    )
 }
 
 @Composable
 private fun Content(
-    uiState: LoginUiState,
-    loginContract: LoginContract
+    uiState: LoginUiState, loginContract: LoginContract
 ) {
     val interactionSourceUserName = remember { MutableInteractionSource() }
     val interactionSourcePassword = remember { MutableInteractionSource() }
@@ -132,7 +128,7 @@ private fun Content(
                 label = stringResource(R.string.username),
                 interactionSource = interactionSourceUserName,
                 onValueChange = loginContract::onUsernameChanged,
-                leadingIcon = if(uiState.username.text.isNotEmpty()){
+                leadingIcon = if (uiState.username.text.isNotEmpty()) {
                     painterResource(dsR.drawable.icon_user)
                 } else {
                     painterResource(dsR.drawable.light_icon_user)
@@ -149,7 +145,7 @@ private fun Content(
                 passwordVisibleIcon = painterResource(id = dsR.drawable.icon_show_password),
                 passwordHiddenIcon = painterResource(id = dsR.drawable.icon_hide_password),
                 interactionSource = interactionSourcePassword,
-                leadingIcon = if(uiState.password.text.isNotEmpty()){
+                leadingIcon = if (uiState.password.text.isNotEmpty()) {
                     painterResource(dsR.drawable.lock_key)
                 } else {
                     painterResource(dsR.drawable.light_lock_key)
@@ -182,8 +178,7 @@ private fun Content(
                         enabled = !isLoadingGeneral
                     ) {
                         loginContract.onForgotPasswordClick()
-                    }
-            )
+                    })
 
             Spacer(modifier = Modifier.weight(1f))
 
@@ -210,8 +205,7 @@ private fun Content(
                         enabled = !isLoadingGeneral
                     ) {
                         loginContract.onCreateAccountClick()
-                    }
-                )
+                    })
             }
         }
         if (uiState.error is ErrorState.RequestFailed) {
