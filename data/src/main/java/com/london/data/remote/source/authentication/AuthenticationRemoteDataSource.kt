@@ -8,7 +8,7 @@ interface AuthenticationRemoteDataSource {
     suspend fun createRequestToken(): Result<RequestTokenResponse>
     suspend fun createGuestSession(): Result<GuestSessionResponse>
     suspend fun createSession(requestToken: String): Result<SessionResponse>
-    suspend fun createSessionWithLogin(
+    suspend fun validateLoginCredentials(
         username: String,
         password: String,
         requestToken: String

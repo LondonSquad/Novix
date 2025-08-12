@@ -7,7 +7,7 @@ import com.london.data.local.model.recent.search.RecentSearchLocal
 import com.london.data.local.model.recent.viewed.RecentViewedLocal
 import com.london.data.local.model.recent.watched.RecentWatchedMovieLocal
 import com.london.data.local.model.recent.watched.RecentWatchedTvShowLocal
-import com.london.data.local.preference.AuthPreferences
+import com.london.data.local.preference.AuthenticationPreferences
 import com.london.data.local.source.home.HomeLocalDataSource
 import com.london.data.local.source.home.upcoming.UpComingLocalDataSource
 import com.london.data.local.source.recent.RecentDataSource
@@ -19,14 +19,14 @@ import com.london.data.remote.source.list.CustomMovieListsRemoteDataSource
 import com.london.data.remote.source.movie.MovieRemoteDataSource
 import com.london.data.remote.source.search.SearchRemoteDataSource
 import com.london.data.remote.source.tvshow.TvShowRemoteDataSource
-import com.london.data.repository.account.AccountRepositoryImp
+import com.london.data.repository.account.AccountRepositoryImpl
 import com.london.data.repository.actor.ActorRepositoryImpl
 import com.london.data.repository.authentication.AuthenticationRepositoryImpl
 import com.london.data.repository.list.CustomMovieListRepositoryImpl
 import com.london.data.repository.movie.MovieRepositoryImpl
 import com.london.data.repository.recent.RecentSearchRepositoryImpl
 import com.london.data.repository.recent.RecentViewedRepositoryImpl
-import com.london.data.repository.recent.RecentWatchedRepositoryIml
+import com.london.data.repository.recent.RecentWatchedRepositoryImpl
 import com.london.data.repository.search.SearchRepositoryImpl
 import com.london.data.repository.tvshow.TvShowRepositoryImpl
 import com.london.data.utils.CrashReporter
@@ -35,7 +35,7 @@ import com.london.domain.entity.recent.RecentSearch
 import com.london.domain.entity.recent.RecentViewed
 import com.london.domain.repository.AccountRepository
 import com.london.domain.repository.ActorRepository
-import com.london.domain.repository.AuthRepository
+import com.london.domain.repository.AuthenticationRepository
 import com.london.domain.repository.CustomMovieListRepository
 import com.london.domain.repository.MovieRepository
 import com.london.domain.repository.RecentRepository
@@ -58,9 +58,9 @@ object RepositoryModule {
     fun provideAuthenticationRepository(
         authRemoteDataSource: AuthenticationRemoteDataSource,
         accountRemoteDataSource: AccountRemoteDataSource,
-        authPreferences: AuthPreferences
-    ): AuthRepository =
-        AuthenticationRepositoryImpl(authRemoteDataSource, accountRemoteDataSource, authPreferences)
+        authenticationPreferences: AuthenticationPreferences
+    ): AuthenticationRepository =
+        AuthenticationRepositoryImpl(authRemoteDataSource, accountRemoteDataSource, authenticationPreferences)
 
     @Provides
     @Singleton
@@ -81,7 +81,7 @@ object RepositoryModule {
     fun provideRecentWatchedRepository(
         recentWatchedMoviesDataSource: RecentWatchedDataSource<RecentWatchedMovieLocal>,
         recentWatchedTvShowsDataSource: RecentWatchedDataSource<RecentWatchedTvShowLocal>
-    ): RecentWatchedRepository = RecentWatchedRepositoryIml(
+    ): RecentWatchedRepository = RecentWatchedRepositoryImpl(
         recentWatchedMoviesDataSource = recentWatchedMoviesDataSource,
         recentWatchedTvShowsDataSource = recentWatchedTvShowsDataSource
     )
@@ -99,10 +99,10 @@ object RepositoryModule {
         @Named("topRatedLocalDataSource") localTopRated: HomeLocalDataSource<TopRatedLocal>,
         @Named("popularLocalDataSource") homeLocalDataSource: HomeLocalDataSource<PopularSectionLocal>,
         crashReporter: CrashReporter,
-        authPreferences: AuthPreferences
+        authenticationPreferences: AuthenticationPreferences
     ): TvShowRepository = TvShowRepositoryImpl(
         tvShowRemoteDataSource = tvShowDetailsRemoteDataSource,
-        authPreferences = authPreferences,
+        authenticationPreferences = authenticationPreferences,
         homeLocalDataSource = homeLocalDataSource,
         localTopRated = localTopRated,
         crashReporter = crashReporter
@@ -112,7 +112,7 @@ object RepositoryModule {
     @Singleton
     fun provideMovieDetailsRepository(
         dataSource: MovieRemoteDataSource,
-        authPreferences: AuthPreferences,
+        authenticationPreferences: AuthenticationPreferences,
         upComingLocalDataSource: UpComingLocalDataSource,
         @Named("topRatedLocalDataSource") localTopRated: HomeLocalDataSource<TopRatedLocal>,
         @Named("popularLocalDataSource") homeLocalDataSource: HomeLocalDataSource<PopularSectionLocal>,
@@ -120,7 +120,7 @@ object RepositoryModule {
     ): MovieRepository =
         MovieRepositoryImpl(
             movieRemoteDataSource = dataSource,
-            authPreferences = authPreferences,
+            authenticationPreferences = authenticationPreferences,
             homeLocalDataSource = homeLocalDataSource,
             localTopRated = localTopRated,
             upComingLocalDataSource = upComingLocalDataSource,
@@ -143,21 +143,21 @@ object RepositoryModule {
     @Singleton
     fun provideCustomMovieListsRepository(
         dataSource: CustomMovieListsRemoteDataSource,
-        authPreferences: AuthPreferences,
+        authenticationPreferences: AuthenticationPreferences,
         preferencesService: AppPreferencesService
     ): CustomMovieListRepository = CustomMovieListRepositoryImpl(
         remoteDataSource = dataSource,
-        authPreferences = authPreferences,
+        authenticationPreferences = authenticationPreferences,
         preferencesService = preferencesService
     )
 
     @Provides
     @Singleton
     fun provideAccountRepository(
-        authPreferences: AuthPreferences,
+        authenticationPreferences: AuthenticationPreferences,
         accountRemoteDataSource: AccountRemoteDataSource
-    ): AccountRepository = AccountRepositoryImp(
-        authPreferences = authPreferences,
+    ): AccountRepository = AccountRepositoryImpl(
+        authenticationPreferences = authenticationPreferences,
         accountRemoteDataSource = accountRemoteDataSource
     )
 
