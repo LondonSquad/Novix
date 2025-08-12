@@ -16,19 +16,6 @@ import com.london.designsystem.component.button.OutlineButton
 import com.london.designsystem.component.button.PrimaryButton
 import com.london.designsystem.theme.NovixTheme
 
-enum class BottomSheetButtonType {
-    PRIMARY,
-    OUTLINE,
-    NONE
-}
-
-data class BottomSheetButton(
-    val text: String,
-    val onClick: () -> Unit,
-    val type: BottomSheetButtonType = BottomSheetButtonType.PRIMARY,
-    val isLoading: Boolean = false
-)
-
 @Composable
 fun BaseBottomSheet(
     title: String,
@@ -131,3 +118,16 @@ private fun BottomSheetHeader(
         )
     }
 }
+
+enum class BottomSheetButtonType {
+    PRIMARY,
+    OUTLINE,
+    NONE
+}
+
+data class BottomSheetButton(
+    val text: String,
+    val onClick: () -> Unit,
+    val type: BottomSheetButtonType = BottomSheetButtonType.PRIMARY,
+    val isLoading: Boolean = false
+)
