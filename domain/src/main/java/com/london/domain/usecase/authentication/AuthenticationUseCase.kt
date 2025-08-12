@@ -4,14 +4,18 @@ import com.london.domain.repository.AuthenticationRepository
 import javax.inject.Inject
 
 class AuthenticationUseCase @Inject constructor(
-    private val authenticationRepository: AuthenticationRepository
+    private val repository: AuthenticationRepository
 ) {
-    suspend fun loginAsGuest() = authenticationRepository.loginAsGuest()
+    suspend fun logout() = repository.logout()
 
-    suspend fun login(username: String, password: String) =
-        authenticationRepository.login(username, password)
+    suspend fun isLoggedIn() = repository.isLoggedIn()
 
-    suspend fun logout() = authenticationRepository.logout()
+    suspend fun loginAsGuest() = repository.loginAsGuest()
 
-    suspend fun isLoggedIn() = authenticationRepository.isLoggedIn()
+    suspend fun login(username: String, password: String) {
+        repository.login(
+            username = username,
+            password = password
+        )
+    }
 }
