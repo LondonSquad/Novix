@@ -56,7 +56,7 @@ object RemoteDataSourceModule {
     fun provideAuthenticationRemoteDataSource(
         apiService: AuthenticationApiService,
     ): AuthenticationRemoteDataSource =
-        AuthenticationRemoteDataSourceImpl(authApiService = apiService)
+        AuthenticationRemoteDataSourceImpl(authenticationApiService = apiService)
 
     @Provides
     @Singleton
