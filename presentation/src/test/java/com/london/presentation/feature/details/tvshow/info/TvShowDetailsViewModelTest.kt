@@ -5,7 +5,6 @@ import androidx.lifecycle.viewModelScope
 import app.cash.turbine.test
 import com.google.common.truth.Truth.assertThat
 import com.london.domain.entity.actordetails.cast.CastDetails
-import com.london.domain.entity.tvshowdetails.TvShowCastEntity
 import com.london.domain.entity.tvshowdetails.episode.TvShowEpisodesEntity
 import com.london.domain.usecase.authentication.AuthenticationUseCase
 import com.london.domain.usecase.details.actor.GetActorUseCase
