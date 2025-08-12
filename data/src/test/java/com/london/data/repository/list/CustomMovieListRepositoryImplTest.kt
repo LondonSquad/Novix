@@ -1,7 +1,7 @@
 package com.london.data.repository.list
 
 import com.google.common.truth.Truth.assertThat
-import com.london.data.local.preference.AuthPreferences
+import com.london.data.local.preference.AuthenticationPreferences
 import com.london.data.remote.exception.NetworkException
 import com.london.data.remote.model.ApiResponse
 import com.london.data.remote.model.list.CustomListResponse
@@ -23,7 +23,7 @@ import org.junit.jupiter.api.assertThrows
 class CustomMovieListRepositoryImplTest {
 
     private lateinit var remoteDataSource: CustomMovieListsRemoteDataSource
-    private lateinit var authPreferences: AuthPreferences
+    private lateinit var authenticationPreferences: AuthenticationPreferences
     private lateinit var preferencesService: AppPreferencesService
     private lateinit var repository: CustomMovieListRepositoryImpl
 
@@ -31,12 +31,12 @@ class CustomMovieListRepositoryImplTest {
     fun setUp() {
 
         remoteDataSource = mockk(relaxed = true)
-        authPreferences = mockk(relaxed = true)
+        authenticationPreferences = mockk(relaxed = true)
         preferencesService = mockk(relaxed = true)
-        every { authPreferences.getSessionId() } returns "session_123"
+        every { authenticationPreferences.getSessionId() } returns "session_123"
         every { preferencesService.appLanguage } returns MutableStateFlow(AppLanguage.ENGLISH)
         repository =
-            CustomMovieListRepositoryImpl(remoteDataSource, authPreferences, preferencesService)
+            CustomMovieListRepositoryImpl(remoteDataSource, authenticationPreferences, preferencesService)
     }
 
     @Test

@@ -3,46 +3,49 @@ package com.london.data.remote.source.authentication
 
 import com.london.data.remote.model.authentication.DeleteSessionResponse
 import com.london.data.remote.model.authentication.GuestSessionResponse
-import com.london.data.remote.model.authentication.LoginValidationRequestBody
+import com.london.data.remote.model.authentication.LoginRequest
+import com.london.data.remote.model.authentication.RequestToken
 import com.london.data.remote.model.authentication.RequestTokenResponse
 import com.london.data.remote.model.authentication.SessionId
 import com.london.data.remote.model.authentication.SessionResponse
-import com.london.data.remote.model.authentication.Token
 import com.london.data.remote.service.authentication.AuthenticationApiService
 import com.london.data.remote.source.base.BaseRemoteDatasource
 import javax.inject.Inject
 
 class AuthenticationRemoteDataSourceImpl @Inject constructor(
-    private val authApiService: AuthenticationApiService
+    private val authenticationApiService: AuthenticationApiService
 ) : AuthenticationRemoteDataSource, BaseRemoteDatasource {
 
-    override suspend fun createRequestToken(): Result<RequestTokenResponse> =
-        callApi(
-            apiCall = { authApiService.createRequestToken() },
+    override suspend fun createRequestToken(): Result<RequestTokenResponse> {
+        return callApi(
+            apiCall = { authenticationApiService.createRequestToken() },
             mapper = { it }
         )
+    }
 
-    override suspend fun createGuestSession(): Result<GuestSessionResponse> =
-        callApi(
-            apiCall = { authApiService.createGuestSession() },
+    override suspend fun createGuestSession(): Result<GuestSessionResponse> {
+        return callApi(
+            apiCall = { authenticationApiService.createGuestSession() },
             mapper = { it }
         )
+    }
 
-    override suspend fun createSession(requestToken: String): Result<SessionResponse> =
-        callApi(
-            apiCall = { authApiService.createSession(Token(requestToken)) },
+    override suspend fun createSession(requestToken: String): Result<SessionResponse> {
+        return callApi(
+            apiCall = { authenticationApiService.createSession(RequestToken(requestToken)) },
             mapper = { it }
         )
+    }
 
-    override suspend fun createSessionWithLogin(
+    override suspend fun validateLoginCredentials(
         username: String,
         password: String,
         requestToken: String
-    ): Result<RequestTokenResponse> =
-        callApi(
+    ): Result<RequestTokenResponse> {
+        return callApi(
             apiCall = {
-                authApiService.createSessionWithLogin(
-                    LoginValidationRequestBody(
+                authenticationApiService.validateLoginCredentials(
+                    LoginRequest(
                         username = username,
                         password = password,
                         requestToken = requestToken
@@ -51,12 +54,14 @@ class AuthenticationRemoteDataSourceImpl @Inject constructor(
             },
             mapper = { it }
         )
+    }
 
     override suspend fun deleteSession(
         sessionId: String
-    ): Result<DeleteSessionResponse> =
-        callApi(
-            apiCall = { authApiService.deleteSession(SessionId(sessionId)) },
+    ): Result<DeleteSessionResponse> {
+        return callApi(
+            apiCall = { authenticationApiService.deleteSession(SessionId(sessionId)) },
             mapper = { it }
         )
+    }
 }
