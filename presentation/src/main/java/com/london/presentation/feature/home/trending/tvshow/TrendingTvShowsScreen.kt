@@ -26,7 +26,6 @@ import com.london.presentation.shared.GenresSection
 import com.london.presentation.shared.MediaLazyPagingGrid
 import com.london.presentation.shared.buildscreen.BuildScreen
 import com.london.presentation.utils.Listen
-import com.london.presentation.utils.isLoading
 
 @Composable
 fun TrendingTvShowsScreen(
@@ -47,10 +46,9 @@ fun TrendingTvShowsScreen(
     val tvShowsLazyItems = state.tvShowsFlow.collectAsLazyPagingItems()
 
     BuildScreen(
-        isLoading = tvShowsLazyItems.isLoading(),
+        isLoading = state.isLoading.not(),
         isError = tvShowsLazyItems.loadState.refresh is LoadState.Error,
         onBack = viewModel::onBack,
-        onRetry = viewModel::onRetry,
         emptyLayoutMessage = R.string.no_trending_tvshows_in_genre,
         emptyLayoutImage = R.drawable.img_no_result,
         pagingFlow = tvShowsLazyItems
