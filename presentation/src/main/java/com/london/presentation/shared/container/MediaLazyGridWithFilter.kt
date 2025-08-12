@@ -9,15 +9,12 @@ import androidx.paging.compose.LazyPagingItems
 import com.london.designsystem.theme.NovixTheme
 import com.london.designsystem.theme.ThemePreviews
 import com.london.domain.entity.Movie
-import com.london.domain.entity.TvShow
 import com.london.presentation.shared.MediaGenreFilters
 import com.london.presentation.utils.MovieGenre
 import com.london.presentation.utils.TvShowGenre
-import com.london.presentation.shared.container.MediaGridConfig
 
 @Composable
 fun <T : Any> MediaLazyGridWithFilter(
-    onItemClick: (T) -> Unit,
     modifier: Modifier = Modifier,
     imageUrl: (T) -> String = { it.getImageUrl() },
     name: (T) -> String = { it.getName() },
@@ -28,8 +25,8 @@ fun <T : Any> MediaLazyGridWithFilter(
     onDeleteClick: (T) -> Unit = {},
     onMovieGenreClick: (MovieGenre) -> Unit = {},
     onTvShowGenreClick: (TvShowGenre) -> Unit = {},
-    topBar: @Composable (() -> Unit)? = null,
-    config: MediaGridConfig = MediaGridConfig()
+    config: MediaGridConfig = MediaGridConfig(),
+    topBar: @Composable (() -> Unit)? = null
 ) {
 
     Column(
@@ -52,8 +49,6 @@ fun <T : Any> MediaLazyGridWithFilter(
             items != null -> {
                 MediaLazyVerticalGrid(
                     items = items,
-                    onNavigateToMovie = { id -> onItemClick(items.first { it is Movie && it.id == id }) },
-                    onNavigateToTvShow = { id -> onItemClick(items.first { it is TvShow && it.id == id }) },
                     imageUrl = imageUrl,
                     name = name,
                     hasSaveIcon = config.showSaveIcon,
@@ -65,20 +60,14 @@ fun <T : Any> MediaLazyGridWithFilter(
                     rate = config.rate,
                     topBar = topBar,
                     modifier = Modifier.fillMaxSize(),
+                    onNavigateToMovie = config.onNavigateToMovie,
+                    onNavigateToTvShow = config.onNavigateToTvShow
                 )
             }
 
             pagingItems != null -> {
                 MediaLazyVerticalGrid(
                     pagingItems = pagingItems,
-                    onNavigateToMovie = { id -> 
-                        val item = pagingItems.itemSnapshotList.find { it is Movie && it.id == id }
-                        item?.let { onItemClick(it) }
-                    },
-                    onNavigateToTvShow = { id -> 
-                        val item = pagingItems.itemSnapshotList.find { it is TvShow && it.id == id }
-                        item?.let { onItemClick(it) }
-                    },
                     imageUrl = imageUrl,
                     name = name,
                     hasSaveIcon = config.showSaveIcon,
@@ -90,6 +79,8 @@ fun <T : Any> MediaLazyGridWithFilter(
                     rate = config.rate,
                     topBar = topBar,
                     modifier = Modifier.fillMaxSize(),
+                    onNavigateToMovie = config.onNavigateToMovie,
+                    onNavigateToTvShow = config.onNavigateToTvShow
                 )
             }
         }
@@ -120,7 +111,6 @@ private fun Preview() {
 
     MediaLazyGridWithFilter(
         items = sampleMovies,
-        onItemClick = {},
         onSaveClick = {},
         isItemSaved = { false },
         onMovieGenreClick = {},
@@ -133,7 +123,9 @@ private fun Preview() {
             isMovieSelected = true,
             isTvShowSelected = false,
             selectedMovieGenre = MovieGenre.Action,
-            selectedTvShowGenre = TvShowGenre.All
+            selectedTvShowGenre = TvShowGenre.All,
+            onNavigateToMovie = {},
+            onNavigateToTvShow = {}
         )
     )
 }

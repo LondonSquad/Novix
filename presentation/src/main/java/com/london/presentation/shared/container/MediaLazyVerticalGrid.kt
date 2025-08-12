@@ -55,7 +55,7 @@ fun <T : Any> MediaLazyVerticalGrid(
             items(items) { item ->
                 HomeCard(
                     imageUrl = imageUrl(item),
-                    modifier = Modifier.clickable { 
+                    modifier = Modifier.clickable {
                         when (item) {
                             is Movie -> onNavigateToMovie(item.id)
                             is TvShow -> onNavigateToTvShow(item.id)
@@ -88,9 +88,9 @@ fun <T : Any> MediaLazyVerticalGrid(
     isDarkMode: Boolean = true,
     myRatingList: Boolean = false,
     rate: String = "3",
+    topBar: @Composable (() -> Unit)? = null,
     onNavigateToMovie: (Int) -> Unit = {},
-    onNavigateToTvShow: (Int) -> Unit = {},
-    topBar: @Composable (() -> Unit)? = null
+    onNavigateToTvShow: (Int) -> Unit = {}
 ) {
     Column(
         modifier = modifier
@@ -110,7 +110,7 @@ fun <T : Any> MediaLazyVerticalGrid(
                 pagingItems[index]?.let { item ->
                     HomeCard(
                         imageUrl = imageUrl(item),
-                        modifier = Modifier.clickable { 
+                        modifier = Modifier.clickable {
                             when (item) {
                                 is Movie -> onNavigateToMovie(item.id)
                                 is TvShow -> onNavigateToTvShow(item.id)
@@ -156,11 +156,11 @@ private fun Preview() {
 
     MediaLazyVerticalGrid(
         items = sampleMovies,
-        onNavigateToMovie = {},
-        onNavigateToTvShow = {},
         imageUrl = { it.posterUrl },
         name = { it.name },
         onSaveClick = {},
-        isItemSaved = { false }
+        isItemSaved = { false },
+        onNavigateToMovie = {},
+        onNavigateToTvShow = {}
     )
 }

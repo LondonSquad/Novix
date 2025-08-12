@@ -21,7 +21,6 @@ import com.london.presentation.utils.TvShowGenre
 
 @Composable
 fun <T : Any> MediaLazyGridWithTabs(
-    onItemClick: (T) -> Unit,
     modifier: Modifier = Modifier,
     imageUrl: (T) -> String = { it.getImageUrl() },
     name: (T) -> String = { it.getName() },
@@ -34,8 +33,8 @@ fun <T : Any> MediaLazyGridWithTabs(
     onTabSelected: (MediaCategory) -> Unit = {},
     onMovieGenreClick: (MovieGenre) -> Unit = {},
     onTvShowGenreClick: (TvShowGenre) -> Unit = {},
-    topBar: @Composable (() -> Unit)? = null,
-    config: MediaGridConfig = MediaGridConfig()
+    config: MediaGridConfig = MediaGridConfig(),
+    topBar: @Composable (() -> Unit)? = null
 ) {
 
     val tabs = listOf(
@@ -70,7 +69,6 @@ fun <T : Any> MediaLazyGridWithTabs(
             pagingItems = pagingItems,
             imageUrl = imageUrl,
             name = name,
-            onItemClick = onItemClick,
             modifier = Modifier.fillMaxSize(),
             onSaveClick = onSaveClick,
             isItemSaved = isItemSaved,
@@ -113,7 +111,6 @@ private fun Preview() {
 
     MediaLazyGridWithTabs(
         items = combinedItems,
-        onItemClick = {},
         onSaveClick = {},
         isItemSaved = { false },
         onDeleteClick = {},
@@ -129,7 +126,9 @@ private fun Preview() {
             isMovieSelected = true,
             isTvShowSelected = false,
             selectedMovieGenre = MovieGenre.All,
-            selectedTvShowGenre = TvShowGenre.All
+            selectedTvShowGenre = TvShowGenre.All,
+            onNavigateToMovie = {},
+            onNavigateToTvShow = {}
         )
     )
 }

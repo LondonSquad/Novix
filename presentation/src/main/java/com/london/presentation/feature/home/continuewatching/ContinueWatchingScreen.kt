@@ -16,8 +16,6 @@ import androidx.compose.ui.res.stringResource
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.london.designsystem.theme.NovixTheme
-import com.london.domain.entity.Movie
-import com.london.domain.entity.TvShow
 import com.london.presentation.R
 import com.london.presentation.shared.DefaultAppTopBar
 import com.london.presentation.shared.base.ErrorState
@@ -77,12 +75,6 @@ fun Content(
                     state.isMovieSelected -> state.movies.collectAsStateWithLifecycle(emptyList()).value
                     else -> state.tvSeries.collectAsStateWithLifecycle(emptyList()).value
                 },
-                onItemClick = { item ->
-                    when (item) {
-                        is Movie -> contract.onNavigateToMovie(item.id)
-                        is TvShow -> contract.onNavigateToTvShow(item.id)
-                    }
-                },
                 onSaveClick = { /* TODO: Implement save functionality */ },
                 isItemSaved = { false },
                 tabSelected = if (state.isMovieSelected) 0 else 1,
@@ -95,7 +87,9 @@ fun Content(
                     isMovieSelected = state.isMovieSelected,
                     isTvShowSelected = state.isTvSelected,
                     selectedMovieGenre = state.selectedMovieGenre,
-                    selectedTvShowGenre = state.selectedTvShowGenre
+                    selectedTvShowGenre = state.selectedTvShowGenre,
+                    onNavigateToMovie = contract::onNavigateToMovie,
+                    onNavigateToTvShow = contract::onNavigateToTvShow
                 ),
                 topBar = {
                     DefaultAppTopBar(
