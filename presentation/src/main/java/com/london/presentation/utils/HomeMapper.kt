@@ -38,14 +38,14 @@ fun List<TvShow>.toUiMedia(): List<HomeUiMedia> =
         )
     }
 
-@JvmName("popularMovieToUiMedia")
+@JvmName("popularMediaToPopularUiMedia")
 fun List<PopularMedia>.toPopularUiMedia() =
-    map { movie ->
+    map { media ->
         PopularUiMedia(
-            id = movie.id,
-            posterUrl = movie.posterUrl,
-            mediaType = MediaType.Movie,
-            name = movie.name,
-            rating = movie.rating.toString(),
+            id = media.id,
+            posterUrl = media.posterUrl,
+            mediaType = media.mediaType,
+            name = media.name,
+            rating = media.rating.toString(),
         )
     }

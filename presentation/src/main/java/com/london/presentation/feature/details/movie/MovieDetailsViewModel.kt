@@ -195,7 +195,7 @@ class MovieDetailsViewModel @Inject constructor(
                 updateState {
                     copy(
                         similarMovies = similarMovies,
-                        movieVideo = videos.firstOrNull() ?: "",
+                        movieVideo = videos.firstOrNull().orEmpty(),
                         isRated = movieRating != 0 && state.value.isGuestUser.not()
                     )
                 }

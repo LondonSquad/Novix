@@ -4,7 +4,7 @@ import com.google.common.truth.Truth.assertThat
 import com.london.domain.entity.Movie
 import com.london.domain.entity.PagedFetchResponse
 import com.london.domain.error.MovieSearchFailedException
-import com.london.domain.repository.discover.DiscoverRepository
+import com.london.domain.repository.MovieRepository
 import io.mockk.coEvery
 import io.mockk.mockk
 import kotlinx.coroutines.test.runTest
@@ -14,7 +14,7 @@ import org.junit.jupiter.api.assertThrows
 
 class GetMoviesByCategoryUseCaseTest {
 
-   private lateinit var repository: DiscoverRepository
+    private lateinit var repository: MovieRepository
    private lateinit var getMoviesUseCase: GetMoviesByCategoryUseCase
 
     @Before

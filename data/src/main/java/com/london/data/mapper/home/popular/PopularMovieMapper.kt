@@ -17,7 +17,8 @@ fun PopularMovieResponse.toPopularMovie(): PopularMedia {
         id = id.orZero(),
         name = title.orEmpty(),
         posterUrl = posterPath.asImageUrlOrEmpty(),
-        rating = voteAverage.orZero().roundToDecimal()
+        rating = voteAverage.orZero().roundToDecimal(),
+        mediaType = MediaType.Movie
     )
 }
 
@@ -29,6 +30,7 @@ fun PopularSectionLocal.toMovieEntity(): PopularMedia = PopularMedia(
     name = name,
     posterUrl = posterPictureUrl,
     rating = rating,
+    mediaType = mediaType
 )
 
 fun PopularMedia.toPopularMovieSectionLocal(
