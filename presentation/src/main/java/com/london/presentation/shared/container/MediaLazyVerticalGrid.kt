@@ -17,15 +17,15 @@ import androidx.paging.compose.LazyPagingItems
 import com.london.designsystem.theme.NovixTheme
 import com.london.designsystem.theme.ThemePreviews
 import com.london.domain.entity.Movie
+import com.london.domain.entity.TvShow
 import com.london.presentation.shared.HomeCard
 
 @Composable
 fun <T : Any> MediaLazyVerticalGrid(
     items: List<T>,
-    imageUrl: (T) -> String,
-    name: (T) -> String,
-    onItemClick: (T) -> Unit,
     modifier: Modifier = Modifier,
+    imageUrl: (T) -> String = { it.getImageUrl() },
+    name: (T) -> String = { it.getName() },
     hasSaveIcon: Boolean = true,
     onSaveClick: (T) -> Unit = {},
     isItemSaved: (T) -> Boolean = { false },
@@ -33,6 +33,8 @@ fun <T : Any> MediaLazyVerticalGrid(
     isDarkMode: Boolean = true,
     myRatingList: Boolean = false,
     rate: String = "3",
+    onNavigateToMovie: (Int) -> Unit = {},
+    onNavigateToTvShow: (Int) -> Unit = {},
     topBar: @Composable (() -> Unit)? = null
 ) {
     Column(
@@ -53,7 +55,12 @@ fun <T : Any> MediaLazyVerticalGrid(
             items(items) { item ->
                 HomeCard(
                     imageUrl = imageUrl(item),
-                    modifier = Modifier.clickable { onItemClick(item) },
+                    modifier = Modifier.clickable { 
+                        when (item) {
+                            is Movie -> onNavigateToMovie(item.id)
+                            is TvShow -> onNavigateToTvShow(item.id)
+                        }
+                    },
                     imageDescription = name(item),
                     isSaved = isItemSaved(item),
                     hasSaveIcon = hasSaveIcon,
@@ -71,10 +78,9 @@ fun <T : Any> MediaLazyVerticalGrid(
 @Composable
 fun <T : Any> MediaLazyVerticalGrid(
     pagingItems: LazyPagingItems<T>,
-    imageUrl: (T) -> String,
-    name: (T) -> String,
-    onItemClick: (T) -> Unit,
     modifier: Modifier = Modifier,
+    imageUrl: (T) -> String = { it.getImageUrl() },
+    name: (T) -> String = { it.getName() },
     hasSaveIcon: Boolean = true,
     onSaveClick: (T) -> Unit = {},
     isItemSaved: (T) -> Boolean = { false },
@@ -82,6 +88,8 @@ fun <T : Any> MediaLazyVerticalGrid(
     isDarkMode: Boolean = true,
     myRatingList: Boolean = false,
     rate: String = "3",
+    onNavigateToMovie: (Int) -> Unit = {},
+    onNavigateToTvShow: (Int) -> Unit = {},
     topBar: @Composable (() -> Unit)? = null
 ) {
     Column(
@@ -102,7 +110,12 @@ fun <T : Any> MediaLazyVerticalGrid(
                 pagingItems[index]?.let { item ->
                     HomeCard(
                         imageUrl = imageUrl(item),
-                        modifier = Modifier.clickable { onItemClick(item) },
+                        modifier = Modifier.clickable { 
+                            when (item) {
+                                is Movie -> onNavigateToMovie(item.id)
+                                is TvShow -> onNavigateToTvShow(item.id)
+                            }
+                        },
                         imageDescription = name(item),
                         isSaved = isItemSaved(item),
                         hasSaveIcon = hasSaveIcon,
@@ -143,9 +156,10 @@ private fun Preview() {
 
     MediaLazyVerticalGrid(
         items = sampleMovies,
+        onNavigateToMovie = {},
+        onNavigateToTvShow = {},
         imageUrl = { it.posterUrl },
         name = { it.name },
-        onItemClick = {},
         onSaveClick = {},
         isItemSaved = { false }
     )

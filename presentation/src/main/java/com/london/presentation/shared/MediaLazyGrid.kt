@@ -26,6 +26,28 @@ import com.london.designsystem.component.TopBar
 import com.london.designsystem.theme.NovixTheme
 import com.london.presentation.utils.gridColumns
 
+@Deprecated(
+    message = "Use MediaLazyVerticalGrid instead. This composable will be removed in a future version.",
+    replaceWith = ReplaceWith(
+        expression = "MediaLazyVerticalGrid(" +
+                "items = items, " +
+                "imageUrl = getImageUrl, " +
+                "name = title, " +
+                "onItemClick = onItemClick, " +
+                "modifier = modifier, " +
+                "hasSaveIcon = hasSaveIcon, " +
+                "onSaveClick = onSavedClick, " +
+                "isItemSaved = isItemSaved, " +
+                "onDeleteClick = onDeleteClick, " +
+                "isDarkMode = isDarkMode, " +
+                "myRatingList = myRatingList, " +
+                "rate = rate" +
+                ")",
+        imports = ["com.london.presentation.shared.container.MediaLazyVerticalGrid"]
+    ),
+    level = DeprecationLevel.WARNING
+)
+
 @Composable
 fun <T> MediaLazyGrid(
     title: String,

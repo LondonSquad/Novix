@@ -3,47 +3,39 @@ package com.london.presentation.shared.container
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.paging.compose.LazyPagingItems
 import com.london.designsystem.component.TabLayout
 import com.london.designsystem.component.Tabbable
-import com.london.designsystem.component.TopBar
 import com.london.designsystem.theme.NovixTheme
 import com.london.designsystem.theme.ThemePreviews
 import com.london.domain.entity.Movie
 import com.london.domain.entity.TvShow
 import com.london.presentation.R
+import com.london.presentation.shared.MediaCategory
 import com.london.presentation.utils.MovieGenre
 import com.london.presentation.utils.TvShowGenre
 
 @Composable
 fun <T : Any> MediaLazyGridWithTabs(
-    imageUrl: (T) -> String,
-    name: (T) -> String,
     onItemClick: (T) -> Unit,
     modifier: Modifier = Modifier,
+    imageUrl: (T) -> String = { it.getImageUrl() },
+    name: (T) -> String = { it.getName() },
     items: List<T>? = null,
     pagingItems: LazyPagingItems<T>? = null,
-    hasSaveIcon: Boolean = true,
     onSaveClick: (T) -> Unit = {},
     isItemSaved: (T) -> Boolean = { false },
     onDeleteClick: (T) -> Unit = {},
-    isDarkMode: Boolean = true,
-    myRatingList: Boolean = false,
-    rate: String = "3",
     tabSelected: Int = 0,
-    onTabSelected: (Int) -> Unit = {},
-    selectedMovieGenre: MovieGenre = MovieGenre.All,
-    selectedTvShowGenre: TvShowGenre = TvShowGenre.All,
+    onTabSelected: (MediaCategory) -> Unit = {},
     onMovieGenreClick: (MovieGenre) -> Unit = {},
     onTvShowGenreClick: (TvShowGenre) -> Unit = {},
-    topBar: @Composable (() -> Unit)? = null
+    topBar: @Composable (() -> Unit)? = null,
+    config: MediaGridConfig = MediaGridConfig()
 ) {
 
     val tabs = listOf(
@@ -52,9 +44,6 @@ fun <T : Any> MediaLazyGridWithTabs(
     )
 
     val selectedTab = tabs.getOrNull(tabSelected)
-
-    val isMovieSelected = tabSelected == 0
-    val isTvShowSelected = tabSelected == 1
 
     Column(
         modifier = modifier
@@ -68,7 +57,10 @@ fun <T : Any> MediaLazyGridWithTabs(
             selectedTab = selectedTab,
             onTabSelected = { tab ->
                 val index = tabs.indexOf(tab)
-                if (index != -1) onTabSelected(index)
+                if (index != -1) {
+                    val category = if (index == 0) MediaCategory.MOVIES else MediaCategory.TV_SHOWS
+                    onTabSelected(category)
+                }
             },
             modifier = Modifier.padding(top = 4.dp)
         )
@@ -80,19 +72,12 @@ fun <T : Any> MediaLazyGridWithTabs(
             name = name,
             onItemClick = onItemClick,
             modifier = Modifier.fillMaxSize(),
-            hasSaveIcon = hasSaveIcon,
             onSaveClick = onSaveClick,
             isItemSaved = isItemSaved,
             onDeleteClick = onDeleteClick,
-            isDarkMode = isDarkMode,
-            myRatingList = myRatingList,
-            rate = rate,
-            isMovieSelected = isMovieSelected,
-            isTvShowSelected = isTvShowSelected,
-            selectedMovieGenre = selectedMovieGenre,
-            selectedTvShowGenre = selectedTvShowGenre,
             onMovieGenreClick = onMovieGenreClick,
-            onTvShowGenreClick = onTvShowGenreClick
+            onTvShowGenreClick = onTvShowGenreClick,
+            config = config
         )
     }
 }
@@ -128,33 +113,23 @@ private fun Preview() {
 
     MediaLazyGridWithTabs(
         items = combinedItems,
-        imageUrl = {
-            when (it) {
-                is Movie -> it.posterUrl
-                is TvShow -> it.posterPicture
-                else -> ""
-            }
-        },
-        name = { 
-            when (it) {
-                is Movie -> it.name
-                is TvShow -> it.name
-                else -> it.toString()
-            }
-        },
         onItemClick = {},
-        hasSaveIcon = true,
         onSaveClick = {},
         isItemSaved = { false },
         onDeleteClick = {},
-        isDarkMode = true,
-        myRatingList = false,
-        rate = "3",
         tabSelected = 0,
-        selectedMovieGenre = MovieGenre.All,
-        selectedTvShowGenre = TvShowGenre.All,
         onTabSelected = {},
         onMovieGenreClick = {},
-        onTvShowGenreClick = {}
+        onTvShowGenreClick = {},
+        config = MediaGridConfig(
+            showSaveIcon = true,
+            isDarkMode = true,
+            myRatingList = false,
+            rate = "3",
+            isMovieSelected = true,
+            isTvShowSelected = false,
+            selectedMovieGenre = MovieGenre.All,
+            selectedTvShowGenre = TvShowGenre.All
+        )
     )
 }
