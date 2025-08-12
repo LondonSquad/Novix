@@ -1,10 +1,8 @@
-package com.london.presentation.feature.register
+package com.london.presentation.feature.authentication.register
 
 import androidx.lifecycle.viewModelScope
 import app.cash.turbine.test
 import com.google.common.truth.Truth.assertThat
-import com.london.presentation.feature.authentication.register.RegistrationEffect
-import com.london.presentation.feature.authentication.register.RegistrationViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.cancel
