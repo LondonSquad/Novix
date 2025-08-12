@@ -28,14 +28,14 @@ fun TopTvShowsPicksScreen(
         onNavigateTvShow = onNavigateTvShow,
     )
 
-    TopTvShowsPicksContent(
+    Content(
         state = state,
         contract = viewModel,
     )
 }
 
 @Composable
-private fun TopTvShowsPicksContent(
+private fun Content(
     state: TopTvShowsPicksUiState,
     contract: TopTvShowsPicksContract,
     modifier: Modifier = Modifier,
