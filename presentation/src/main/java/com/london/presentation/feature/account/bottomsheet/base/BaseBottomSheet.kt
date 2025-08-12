@@ -74,8 +74,7 @@ fun BaseBottomSheet(
                             )
                         }
 
-                        BottomSheetButtonType.NONE -> { /* No button */
-                        }
+                        BottomSheetButtonType.NONE -> {}
                     }
                 }
             }
