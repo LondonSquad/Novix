@@ -25,7 +25,7 @@ class TvShowCategoryViewModel @Inject constructor(
     private val categoryId = args?.categoryId ?: 0 //toDo() category id will replace with enum
 
     init {
-        initializeTvShows()
+        initializeTvShows(categoryId = categoryId)
     }
 
     override fun onTvShowClick(tvShowId: Int) =
@@ -36,10 +36,10 @@ class TvShowCategoryViewModel @Inject constructor(
 
     override fun onSavedClick(tvShowId: Int) = Unit //TODO("Save Tv Show Not yet implemented")
 
-    private fun initializeTvShows() {
+    private fun initializeTvShows(categoryId: Int) {
         tryToExecute(
-            onStart = ::onInitializeTvShowsStarted,
-            block = ::createTvShowsPagingSourceFlow,
+            onStart = { onInitializeTvShowsStarted(categoryId = categoryId) },
+            block = { createTvShowsPagingSourceFlow(categoryId = categoryId) },
             onSuccess = ::onInitializeTvShowSuccess,
             checkSuccess = { categoryId != 0 },
             onError = ::onInitializeTvShowsFailed,
@@ -47,7 +47,7 @@ class TvShowCategoryViewModel @Inject constructor(
         )
     }
 
-    private fun createTvShowsPagingSourceFlow(): Flow<PagingData<TvShow>> {
+    private fun createTvShowsPagingSourceFlow(categoryId: Int): Flow<PagingData<TvShow>> {
 
         return createPagingSourceFlow(query = "") { _, pageNumber ->
             val tvShows = managerTvShowDetailsUseCase.getTvShowsByCategory(
@@ -57,7 +57,7 @@ class TvShowCategoryViewModel @Inject constructor(
         }
     }
 
-    private fun onInitializeTvShowsStarted() =
+    private fun onInitializeTvShowsStarted(categoryId: Int) =
         updateState { copy(categoryId = categoryId, isLoading = true) }
 
     private fun onInitializeTvShowSuccess(tvShowFlow: Flow<PagingData<TvShow>>) =

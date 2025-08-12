@@ -24,7 +24,7 @@ class MovieCategoryViewModel @Inject constructor(
     private val categoryId = args?.categoryId ?: 0 //toDo() category id will replace with enum
 
     init {
-        initializeMovies()
+        initializeMovies(categoryId)
     }
 
     override fun onMovieClick(movieId: Int) =
@@ -35,10 +35,10 @@ class MovieCategoryViewModel @Inject constructor(
 
     override fun onSavedClick(movieId: Int) = Unit //toDo() save movie
 
-    private fun initializeMovies() {
+    private fun initializeMovies(categoryId: Int) {
         tryToExecute(
-            onStart = ::onInitializeMoviesStarted,
-            block = ::createMoviesPagingSourceFlow,
+            onStart = { onInitializeMoviesStarted(categoryId = categoryId) },
+            block = { createMoviesPagingSourceFlow(categoryId = categoryId) },
             onSuccess = ::onInitializeMoviesSuccess,
             checkSuccess = { categoryId != 0 },
             onError = ::onInitializeMoviesFailed,
@@ -46,7 +46,7 @@ class MovieCategoryViewModel @Inject constructor(
         )
     }
 
-    private fun createMoviesPagingSourceFlow(): Flow<PagingData<Movie>> {
+    private fun createMoviesPagingSourceFlow(categoryId: Int): Flow<PagingData<Movie>> {
 
         return createPagingSourceFlow(query = "") { _, pageNumber ->
             val movies = getMoviesByCategoryUseCase(
@@ -57,7 +57,7 @@ class MovieCategoryViewModel @Inject constructor(
         }
     }
 
-    private fun onInitializeMoviesStarted() =
+    private fun onInitializeMoviesStarted(categoryId: Int) =
         updateState { copy(categoryId = categoryId, isLoading = true) }
 
     private fun onInitializeMoviesSuccess(moviesFlow: Flow<PagingData<Movie>>) =
