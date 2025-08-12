@@ -29,7 +29,7 @@ sealed interface Screen {
     data object Categories : Screen
 
     @Serializable
-    data class Lists(val createNewList: Boolean = false) : Screen
+    data class Lists(val createList: Boolean = false) : Screen
 
     @Serializable
     data object Account : Screen
