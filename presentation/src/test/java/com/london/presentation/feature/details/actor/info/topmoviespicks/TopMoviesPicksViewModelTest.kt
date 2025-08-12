@@ -56,7 +56,7 @@ class TopMoviesPicksViewModelTest {
     }
 
     @Test
-    fun `when onSaveClick called should toggle saved state`() = runTest {
+    fun `onSaveClick should toggle saved state when it is called`() = runTest {
         // Given
         val actorId = 123
         val args = Screen.ActorTopMoviesPicksDetails(actorId)
