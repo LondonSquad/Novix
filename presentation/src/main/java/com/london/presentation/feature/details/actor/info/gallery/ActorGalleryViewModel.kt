@@ -29,16 +29,15 @@ class ActorGalleryViewModel @Inject constructor(
             onSuccess = { imageDetails -> updateState { copy(images = imageDetails) } },
             onError = { errorState -> updateState { copy(error = errorState) } },
             onCompleted = { updateState { copy(isLoading = false) } },
-            checkSuccess = { actorId != 0 },
         )
     }
 
-    override fun onRetry() {
+    override fun onRetryClick() {
         updateState { copy(error = null) }
         loadImages(actorId)
     }
 
     override fun onBackClick() {
-        emitEffect(ActorGalleryEffect.NavigateBack)
+        emitEffect(ActorGalleryEffect.BackNavigation)
     }
 }

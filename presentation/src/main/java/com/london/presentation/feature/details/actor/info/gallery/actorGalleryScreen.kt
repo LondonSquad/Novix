@@ -48,7 +48,7 @@ fun ActorGalleryScreen(
         onBack = viewModel::onBackClick,
         isLoading = uiState.isLoading,
         isError = uiState.error != null,
-        onRetry = viewModel::onRetry
+        onRetry = viewModel::onRetryClick
     ) {
         Content(
             uiState = uiState,
