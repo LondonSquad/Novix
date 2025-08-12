@@ -15,7 +15,7 @@ import com.london.presentation.utils.Listen
 
 @Composable
 fun WebViewRegistrationScreen(
-    viewModel: RegisterViewModel = hiltViewModel(),
+    viewModel: RegistrationViewModel = hiltViewModel(),
     onNavigateBack: () -> Unit,
     onRegistrationComplete: () -> Unit
 ) {

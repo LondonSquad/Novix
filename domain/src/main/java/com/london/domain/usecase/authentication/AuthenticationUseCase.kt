@@ -12,8 +12,8 @@ class AuthenticationUseCase @Inject constructor(
 
     suspend fun loginAsGuest() = repository.loginAsGuest()
 
-    suspend fun login(username: String, password: String) {
-        repository.login(
+    suspend fun login(username: String, password: String) : Boolean {
+        return repository.login(
             username = username,
             password = password
         )

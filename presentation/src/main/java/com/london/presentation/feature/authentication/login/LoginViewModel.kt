@@ -28,25 +28,22 @@ class LoginViewModel @Inject constructor(
     }
 
     override fun onPasswordChanged(password: TextFieldValue) {
+        val currentUsername = state.value.username.text
         updateState {
             copy(
                 password = password,
-                isLoginEnabled = username.text.isNotEmpty()
-                        && password.text.isNotEmpty() && password.text.length >= 4,
+                isLoginEnabled = isLoginEnabled(currentUsername, password.text),
                 error = null
             )
         }
     }
 
-
     override fun onPasswordVisibilityToggled() {
-        updateState {
-            copy(passwordVisible = !passwordVisible)
-        }
+        updateState { copy(passwordVisible = !passwordVisible) }
     }
 
     override fun onCreateAccountClick() {
-        emitEffect(LoginEffect.NavigateToWebViewRegistration)
+        emitEffect(LoginEffect.NavigateToRegistration)
     }
 
     override fun onForgotPasswordClick() {
@@ -60,6 +57,43 @@ class LoginViewModel @Inject constructor(
 
         if (username.isEmpty() || password.isEmpty()) return
 
+        performLogin(username = username,password = password)
+    }
+
+    override fun onLoginAsGuestClick() {
+        tryToExecute(
+            block = { authenticationUseCase.loginAsGuest() },
+            onStart = { updateState { copy(isGuestLoginLoading = true, error = null) } },
+            onSuccess = { isSuccess -> checkLoginAsGuest(isSuccess) },
+            onError = { handleLoginAsGuestError() },
+            onCompleted = { updateState { copy(isGuestLoginLoading = false) } }
+        )
+    }
+
+    override fun onNavigateBack() {
+        emitEffect(LoginEffect.NavigateBack)
+    }
+
+    private fun handleLoginAsGuestError() {
+        updateState { copy(error = ErrorState.RequestFailed(context.getString(R.string.guest_login_failed))) }
+    }
+
+    private fun handleLoginError() {
+        updateState { copy(error = ErrorState.RequestFailed(context.getString(R.string.login_failed))) }
+    }
+
+    private fun checkLoginAsGuest(isSuccess: Boolean) {
+        when (isSuccess) {
+            true -> emitEffect(LoginEffect.NavigateToHome)
+            false -> handleLoginAsGuestError()
+        }
+    }
+
+    private fun isLoginEnabled(username: String, password: String): Boolean {
+        return username.isNotEmpty() && password.isNotEmpty() && password.length >= 4
+    }
+
+    private fun performLogin(username: String, password: String) {
         tryToExecute(
             block = { authenticationUseCase.login(username, password) },
             onStart = { updateState { copy(isLoading = true, error = null) } },
@@ -67,40 +101,12 @@ class LoginViewModel @Inject constructor(
                 if (isSuccess)
                     emitEffect(LoginEffect.NavigateToHome)
                 else
-                    updateState { copy(error = ErrorState.RequestFailed(context.getString(R.string.login_failed))) }
-
+                    handleLoginError()
             },
-            onError = {
-                updateState { copy(error = ErrorState.RequestFailed(context.getString(R.string.login_failed))) }
-            },
-            onCompleted = {
-                updateState { copy(isLoading = false) }
+            onError = { handleLoginError() },
+            onCompleted = { updateState { copy(isLoading = false) }
             }
         )
-    }
-
-    override fun onLoginAsGuestClick() {
-        tryToExecute(
-            block = { authenticationUseCase.loginAsGuest() },
-            onStart = { updateState { copy(isGuestLoginLoading = true, error = null) } },
-            onSuccess = { isSuccess: Boolean ->
-                if (isSuccess) {
-                    emitEffect(LoginEffect.NavigateToHome)
-                } else {
-                    updateState { copy(error = ErrorState.RequestFailed(context.getString(R.string.guest_login_failed))) }
-                }
-            },
-            onError = {
-                updateState { copy(error = ErrorState.RequestFailed(context.getString(R.string.guest_login_failed))) }
-            },
-            onCompleted = {
-                updateState { copy(isGuestLoginLoading = false) }
-            }
-        )
-    }
-
-    override fun onNavigateBack() {
-        emitEffect(LoginEffect.NavigateBack)
     }
 
     private companion object {
