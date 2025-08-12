@@ -26,9 +26,6 @@ fun <T : Any> MediaLazyGridWithTabs(
     name: (T) -> String = { it.getName() },
     items: List<T>? = null,
     pagingItems: LazyPagingItems<T>? = null,
-    onSaveClick: (T) -> Unit = {},
-    isItemSaved: (T) -> Boolean = { false },
-    onDeleteClick: (T) -> Unit = {},
     tabSelected: Int = 0,
     onTabSelected: (MediaCategory) -> Unit = {},
     onMovieGenreClick: (MovieGenre) -> Unit = {},
@@ -70,9 +67,6 @@ fun <T : Any> MediaLazyGridWithTabs(
             imageUrl = imageUrl,
             name = name,
             modifier = Modifier.fillMaxSize(),
-            onSaveClick = onSaveClick,
-            isItemSaved = isItemSaved,
-            onDeleteClick = onDeleteClick,
             onMovieGenreClick = onMovieGenreClick,
             onTvShowGenreClick = onTvShowGenreClick,
             config = config
@@ -111,9 +105,6 @@ private fun Preview() {
 
     MediaLazyGridWithTabs(
         items = combinedItems,
-        onSaveClick = {},
-        isItemSaved = { false },
-        onDeleteClick = {},
         tabSelected = 0,
         onTabSelected = {},
         onMovieGenreClick = {},
@@ -128,7 +119,10 @@ private fun Preview() {
             selectedMovieGenre = MovieGenre.All,
             selectedTvShowGenre = TvShowGenre.All,
             onNavigateToMovie = {},
-            onNavigateToTvShow = {}
+            onNavigateToTvShow = {},
+            onSaveClick = {},
+            isItemSaved = { false },
+            onDeleteClick = {}
         )
     )
 }

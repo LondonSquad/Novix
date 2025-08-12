@@ -13,5 +13,8 @@ data class MediaGridConfig(
     val selectedMovieGenre: MovieGenre = MovieGenre.All,
     val selectedTvShowGenre: TvShowGenre = TvShowGenre.All,
     val onNavigateToMovie: (Int) -> Unit = {},
-    val onNavigateToTvShow: (Int) -> Unit = {}
+    val onNavigateToTvShow: (Int) -> Unit = {},
+    val onSaveClick: (Any) -> Unit = {},
+    val isItemSaved: (Any) -> Boolean = { false },
+    val onDeleteClick: (Any) -> Unit = {}
 )

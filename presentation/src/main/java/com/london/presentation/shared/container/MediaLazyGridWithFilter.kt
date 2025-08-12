@@ -21,9 +21,6 @@ fun <T : Any> MediaLazyGridWithFilter(
     name: (T) -> String = { it.getName() },
     items: List<T>? = null,
     pagingItems: LazyPagingItems<T>? = null,
-    onSaveClick: (T) -> Unit = {},
-    isItemSaved: (T) -> Boolean = { false },
-    onDeleteClick: (T) -> Unit = {},
     onMovieGenreClick: (MovieGenre) -> Unit = {},
     onTvShowGenreClick: (TvShowGenre) -> Unit = {},
     config: MediaGridConfig = MediaGridConfig(),
@@ -53,9 +50,9 @@ fun <T : Any> MediaLazyGridWithFilter(
                     imageUrl = imageUrl,
                     name = name,
                     hasSaveIcon = config.showSaveIcon,
-                    onSaveClick = onSaveClick,
-                    isItemSaved = isItemSaved,
-                    onDeleteClick = onDeleteClick,
+                    onSaveClick = { config.onSaveClick(it) },
+                    isItemSaved = { config.isItemSaved(it) },
+                    onDeleteClick = { config.onDeleteClick(it) },
                     isDarkMode = config.isDarkMode,
                     myRatingList = config.myRatingList,
                     rate = config.rate,
@@ -72,9 +69,9 @@ fun <T : Any> MediaLazyGridWithFilter(
                     imageUrl = imageUrl,
                     name = name,
                     hasSaveIcon = config.showSaveIcon,
-                    onSaveClick = onSaveClick,
-                    isItemSaved = isItemSaved,
-                    onDeleteClick = onDeleteClick,
+                    onSaveClick = { config.onSaveClick(it) },
+                    isItemSaved = { config.isItemSaved(it) },
+                    onDeleteClick = { config.onDeleteClick(it) },
                     isDarkMode = config.isDarkMode,
                     myRatingList = config.myRatingList,
                     rate = config.rate,
@@ -116,8 +113,6 @@ private fun Preview() {
 
     MediaLazyGridWithFilter(
         items = sampleMovies,
-        onSaveClick = {},
-        isItemSaved = { false },
         onMovieGenreClick = {},
         onTvShowGenreClick = {},
         config = MediaGridConfig(
@@ -130,31 +125,10 @@ private fun Preview() {
             selectedMovieGenre = MovieGenre.Action,
             selectedTvShowGenre = TvShowGenre.All,
             onNavigateToMovie = {},
-            onNavigateToTvShow = {}
-        )
-    )
-}
-
-@ThemePreviews
-@Composable
-private fun EmptyPreview() {
-    MediaLazyGridWithFilter(
-        items = emptyList<Movie>(),
-        onSaveClick = {},
-        isItemSaved = { false },
-        onMovieGenreClick = {},
-        onTvShowGenreClick = {},
-        config = MediaGridConfig(
-            showSaveIcon = true,
-            isDarkMode = true,
-            myRatingList = false,
-            rate = "3",
-            isMovieSelected = true,
-            isTvShowSelected = false,
-            selectedMovieGenre = MovieGenre.Action,
-            selectedTvShowGenre = TvShowGenre.All,
-            onNavigateToMovie = {},
-            onNavigateToTvShow = {}
+            onNavigateToTvShow = {},
+            onSaveClick = {},
+            isItemSaved = { false },
+            onDeleteClick = {}
         )
     )
 }

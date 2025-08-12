@@ -75,8 +75,6 @@ fun Content(
                     state.isMovieSelected -> state.movies.collectAsStateWithLifecycle(emptyList()).value
                     else -> state.tvSeries.collectAsStateWithLifecycle(emptyList()).value
                 },
-                onSaveClick = { /* TODO: Implement save functionality */ },
-                isItemSaved = { false },
                 tabSelected = if (state.isMovieSelected) 0 else 1,
                 onTabSelected = contract::onMediaCategoryTabSelected,
                 onMovieGenreClick = contract::onMovieGenreChanged,
@@ -89,7 +87,9 @@ fun Content(
                     selectedMovieGenre = state.selectedMovieGenre,
                     selectedTvShowGenre = state.selectedTvShowGenre,
                     onNavigateToMovie = contract::onNavigateToMovie,
-                    onNavigateToTvShow = contract::onNavigateToTvShow
+                    onNavigateToTvShow = contract::onNavigateToTvShow,
+                    onSaveClick = { /* TODO: Implement save functionality */ },
+                    isItemSaved = { false },
                 ),
                 topBar = {
                     DefaultAppTopBar(
