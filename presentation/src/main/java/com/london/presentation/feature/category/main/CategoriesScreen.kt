@@ -67,7 +67,7 @@ private fun Content(
     ) {
         TopBar(
             title = stringResource(R.string.categories),
-            modifier = Modifier.padding(horizontal = 16.dp),
+            modifier = Modifier.padding(horizontal = 16.dp, vertical = 12.dp),
         )
         CategoriesSelection(
             onClick = contract::onCategoryClick,
