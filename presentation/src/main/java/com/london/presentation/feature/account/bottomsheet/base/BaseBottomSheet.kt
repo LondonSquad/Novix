@@ -1,14 +1,17 @@
 package com.london.presentation.feature.account.bottomsheet.base
 
+import android.content.res.Configuration
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.platform.LocalWindowInfo
+import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import com.london.designsystem.R
@@ -16,6 +19,7 @@ import com.london.designsystem.component.*
 import com.london.designsystem.component.button.OutlineButton
 import com.london.designsystem.component.button.PrimaryButton
 import com.london.designsystem.theme.NovixTheme
+
 
 @Composable
 fun BaseBottomSheet(
@@ -25,30 +29,55 @@ fun BaseBottomSheet(
     button: BottomSheetButton? = null,
     content: @Composable ColumnScope.() -> Unit
 ) {
+    val configuration = LocalConfiguration.current
+    val isLandscape = configuration.orientation == Configuration.ORIENTATION_LANDSCAPE
+    val screenHeight = configuration.screenHeightDp.dp
+
+    val maxHeight = if (isLandscape) {
+        screenHeight * 0.85f
+    } else {
+        screenHeight * 0.75f
+    }
+
     ModalBottomSheet(
         onDismissRequest = onDismiss,
         containerColor = NovixTheme.colors.surface,
         state = rememberModalBottomSheetState(skipPartiallyExpanded = true)
     ) {
-        Box(
+        Column(
             modifier = modifier
                 .fillMaxWidth()
-                .wrapContentHeight()
-                .heightIn(max = LocalWindowInfo.current.containerSize.height.dp * 0.75f)
-                .padding(bottom = 24.dp)
+                .heightIn(max = maxHeight)
+                .padding(bottom = if (isLandscape) 8.dp else 24.dp)
         ) {
+            BottomSheetHeader(
+                title = title,
+                onDismiss = onDismiss,
+                modifier = Modifier.padding(horizontal = 16.dp)
+            )
+
             Column(
-                modifier = Modifier.padding(horizontal = 16.dp),
+                modifier = Modifier
+                    .weight(1f, fill = false)
+                    .verticalScroll(rememberScrollState())
+                    .padding(horizontal = 16.dp)
+                    .padding(top = 16.dp),
                 horizontalAlignment = Alignment.Start
             ) {
-                BottomSheetHeader(
-                    title = title,
-                    onDismiss = onDismiss
-                )
-
                 content()
 
-                button?.let {
+                if (button != null) {
+                    Spacer(modifier = Modifier.height(16.dp))
+                }
+            }
+
+            button?.let {
+                Box(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = 16.dp)
+                        .padding(top = 8.dp)
+                ) {
                     when (it.type) {
                         BottomSheetButtonType.PRIMARY -> {
                             PrimaryButton(
@@ -61,7 +90,6 @@ fun BaseBottomSheet(
                                 icon = null
                             )
                         }
-
                         BottomSheetButtonType.OUTLINE -> {
                             OutlineButton(
                                 text = it.text,
@@ -73,7 +101,6 @@ fun BaseBottomSheet(
                                 icon = null
                             )
                         }
-
                         BottomSheetButtonType.NONE -> {}
                     }
                 }
@@ -85,10 +112,11 @@ fun BaseBottomSheet(
 @Composable
 private fun BottomSheetHeader(
     title: String,
-    onDismiss: () -> Unit
+    onDismiss: () -> Unit,
+    modifier: Modifier = Modifier
 ) {
     Row(
-        modifier = Modifier.fillMaxWidth(),
+        modifier = modifier.fillMaxWidth(),
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.SpaceBetween
     ) {
@@ -115,6 +143,7 @@ private fun BottomSheetHeader(
         )
     }
 }
+
 
 enum class BottomSheetButtonType {
     PRIMARY,
