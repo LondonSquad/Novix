@@ -28,6 +28,7 @@ import com.london.designsystem.component.button.ErrorImage
 import com.london.designsystem.theme.NovixTheme
 import com.london.designsystem.theme.ThemePreviews
 import com.london.designsystem.theme.noRippleClickable
+import com.london.domain.contentrestriction.ContentRestrictionLevel
 
 
 @Composable
@@ -55,7 +56,7 @@ fun CategoriesItem(
             contentDescription = "Image of $categoryName",
             modifier = Modifier.fillMaxSize(),
             contentScale = Crop,
-            contentRestrictionLevel = null,
+            contentRestrictionLevel = ContentRestrictionLevel.OFF,
             loadingContent = { CircularLoading(modifier = Modifier.align(Alignment.Center)) },
             moderatedContent = { UnSuitableEye() }
         )
