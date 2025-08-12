@@ -15,7 +15,7 @@ class CategoriesViewModelTest {
     fun `onMovieGenreClick should emit NavigateToMovieCategory effect`() = runTest {
         // Given
         val genre = MovieGenre.Action
-        // When // Then
+        // When & Then
         viewModel?.effect?.test {
             viewModel?.onMovieGenreClick(genre)
             assertThat(awaitItem()).isInstanceOf(CategoriesEffect.NavigateToMovieCategory::class.java)
@@ -27,7 +27,7 @@ class CategoriesViewModelTest {
     fun `onTvShowGenreClick should emit NavigateToTvShowCategory effect`() = runTest {
         // Given
         val genre = TvShowGenre.Animation
-        // When // Then
+        // When & Then
         viewModel?.effect?.test {
             viewModel?.onTvShowGenreClick(genre)
             assertThat(awaitItem()).isInstanceOf(CategoriesEffect.NavigateToTvShowCategory::class.java)
