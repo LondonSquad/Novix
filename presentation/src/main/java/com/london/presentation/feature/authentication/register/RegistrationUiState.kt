@@ -3,9 +3,9 @@ package com.london.presentation.feature.authentication.register
 import com.london.presentation.feature.authentication.register.Register.REGISTER_URL
 
 data class RegistrationUiState(
-    val registrationUrl: String = REGISTER_URL,
+    val currentUrl: String = "",
     val isLoading: Boolean = false,
-    val currentUrl: String = ""
+    val registrationUrl: String = REGISTER_URL
 )
 
 private object Register {

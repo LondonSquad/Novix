@@ -29,7 +29,7 @@ import com.london.presentation.R
 import com.london.presentation.feature.accountinfo.account.AccountScreen
 import com.london.presentation.feature.accountinfo.rating.MyRatingScreen
 import com.london.presentation.feature.authentication.login.LoginScreen
-import com.london.presentation.feature.authentication.register.WebViewRegistrationScreen
+import com.london.presentation.feature.authentication.register.RegistrationScreen
 import com.london.presentation.feature.category.main.CategoriesScreen
 import com.london.presentation.feature.category.movie.MoviesByCategoryScreen
 import com.london.presentation.feature.category.tvshow.TvShowByCategoryScreen
@@ -213,7 +213,7 @@ fun NavGraphBuilder.authNavGraph(
         enterTransition = { fadeIn(tween(500)) },
         popExitTransition = { fadeOut(tween(500)) },
     ) {
-        WebViewRegistrationScreen(
+        RegistrationScreen(
             onNavigateBack = {
                 navController.popBackStack()
             },
