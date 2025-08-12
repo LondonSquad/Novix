@@ -163,4 +163,5 @@
     <string name="close">close</string>
     <string name="my_list_screen">My Lists</string>
     <string name="login_to_add_list">Please login to save to list</string>
+    <string name="no_lists_found">No lists found! Create one now.</string>
 </resources>

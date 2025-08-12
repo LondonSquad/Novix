@@ -192,7 +192,7 @@ private fun UserListsView(
         }
 
         lists.itemCount == 0 -> {
-            EmptyListsState()
+            NoListsMessage()
         }
 
         else -> {
@@ -297,9 +297,9 @@ private fun LoginButton(
 }
 
 @Composable
-private fun EmptyListsState() {
+private fun NoListsMessage() {
     Text(
-        text = "No lists found! Create one now.",
+        text = R.string.no_lists_found.string,
         style = NovixTheme.typography.body.small,
         color = NovixTheme.colors.body
     )
