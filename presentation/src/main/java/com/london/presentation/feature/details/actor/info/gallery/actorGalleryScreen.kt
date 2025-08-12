@@ -39,10 +39,10 @@ fun ActorGalleryScreen(
     onNavigateBack: () -> Unit,
     viewModel: ActorGalleryViewModel = hiltViewModel()
 ) {
-    val uiState by viewModel.state.collectAsStateWithLifecycle()
     val effect by viewModel.effect.collectAsState(null)
+    val uiState by viewModel.state.collectAsStateWithLifecycle()
 
-    effect.Listen<ActorGalleryEffectUiState> { onNavigateBack() }
+    effect.Listen<ActorGalleryEffect> { onNavigateBack() }
 
     BuildScreen(
         onBack = viewModel::onBackClick,
@@ -51,17 +51,17 @@ fun ActorGalleryScreen(
         onRetry = viewModel::onRetry
     ) {
         Content(
-            actorGalleryContract = viewModel,
-            uiState = uiState
+            uiState = uiState,
+            actorGalleryContract = viewModel
         )
     }
 }
 
 @Composable
 private fun Content(
-    modifier: Modifier = Modifier,
+    uiState: ActorGalleryUiState,
     actorGalleryContract: ActorGalleryContract,
-    uiState: ActorGalleryUiState
+    modifier: Modifier = Modifier,
 ) {
     Column(
         modifier = modifier
