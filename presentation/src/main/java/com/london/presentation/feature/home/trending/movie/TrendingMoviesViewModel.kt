@@ -39,7 +39,7 @@ class TrendingMoviesViewModel @Inject constructor(
             block = {
                 handlingPagingFlow { pageNumber ->
                     getTrendingMovies.invoke(
-                        page = 1,
+                        page = pageNumber,
                         movieGenreId = state.value.selectedGenreId
                     )
                 }

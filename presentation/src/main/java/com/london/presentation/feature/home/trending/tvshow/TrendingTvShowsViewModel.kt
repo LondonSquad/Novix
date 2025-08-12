@@ -22,7 +22,7 @@ class TrendingTvShowsViewModel @Inject constructor(
     override fun onGenreSelected(genre: TvShowGenre) {
         if (genre.id == state.value.selectedGenreId) return
         updateState { copy(selectedGenreId = genre.id) }
-        onRefresh()
+        initializeTvShows()
     }
 
     override fun onTvShowClick(id: Int) =
@@ -30,24 +30,6 @@ class TrendingTvShowsViewModel @Inject constructor(
 
     override fun onBack() = emitEffect(TrendingTvShowsEffect.NavigateBack)
     override fun onRetry() = initializeTvShows()
-    private fun onRefresh() {
-        tryToCollect(
-            block = {
-                handlingPagingFlow { pageNumber ->
-                    manageTvShowDetailsUseCase.getTrendingTvShows(
-                        page = pageNumber,
-                        movieGenreId = state.value.selectedGenreId
-                    )
-                }
-            },
-            onNewValue = { tvShowsFlow ->
-                updateState {
-                    copy(tvShowsFlow = flowOf(tvShowsFlow))
-                }
-            },
-        )
-    }
-
     private fun initializeTvShows() {
         tryToCollect(
             block = {
@@ -58,13 +40,9 @@ class TrendingTvShowsViewModel @Inject constructor(
                     )
                 }
             },
-            onStart = {
-                updateState { copy(isLoading = true) }
-            },
+            onStart = { updateState { copy(isLoading = true) } },
             onNewValue = { tvShowsFlow ->
-                updateState {
-                    copy(tvShowsFlow = flowOf(tvShowsFlow))
-                }
+                updateState { copy(tvShowsFlow = flowOf(tvShowsFlow)) }
             },
             onCompleted = { updateState { copy(isLoading = false) } },
         )

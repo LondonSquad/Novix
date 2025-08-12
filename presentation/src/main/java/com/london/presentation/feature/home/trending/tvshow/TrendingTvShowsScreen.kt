@@ -26,6 +26,7 @@ import com.london.presentation.shared.GenresSection
 import com.london.presentation.shared.MediaLazyPagingGrid
 import com.london.presentation.shared.buildscreen.BuildScreen
 import com.london.presentation.utils.Listen
+import com.london.presentation.utils.isLoading
 
 @Composable
 fun TrendingTvShowsScreen(
@@ -46,7 +47,7 @@ fun TrendingTvShowsScreen(
     val tvShowsLazyItems = state.tvShowsFlow.collectAsLazyPagingItems()
 
     BuildScreen(
-        isLoading = state.isLoading.not(),
+        isLoading = tvShowsLazyItems.isLoading(),
         isError = tvShowsLazyItems.loadState.refresh is LoadState.Error,
         onBack = viewModel::onBack,
         emptyLayoutMessage = R.string.no_trending_tvshows_in_genre,
@@ -63,8 +64,8 @@ fun TrendingTvShowsScreen(
 
 @Composable
 private fun Content(
-    state: TrendingTvShowsUiState = TrendingTvShowsUiState(),
-    contract: TrendingTvShowsContract = defaultTrendingTvShowsContract(),
+    state: TrendingTvShowsUiState,
+    contract: TrendingTvShowsContract,
 ) {
     val screenWidth = with(LocalDensity.current) { LocalConfiguration.current.screenWidthDp.dp }
     val tvShowsLazyItems = state.tvShowsFlow.collectAsLazyPagingItems()
@@ -109,5 +110,8 @@ private fun Content(
 @Preview
 @Composable
 private fun Preview() = NovixTheme {
-    Content()
+    Content(
+        state = TrendingTvShowsUiState(),
+        contract = defaultTrendingTvShowsContract()
+    )
 }
