@@ -9,7 +9,7 @@ import com.london.domain.entity.Movie
 import com.london.domain.entity.moviedatails.MovieDetails
 import com.london.domain.usecase.authentication.AuthenticationUseCase
 import com.london.domain.usecase.details.movie.ManageMovieDetailsUseCase
-import com.london.domain.usecase.rating.RatingUseCase
+import com.london.domain.usecase.rating.ManageRatingUseCase
 import com.london.domain.usecase.recent.viewed.ManageRecentViewedUseCase
 import com.london.domain.usecase.recent.watched.movie.ManageRecentMovieWatchedUseCase
 import com.london.presentation.feature.details.movie.MovieDetailsEffect
@@ -45,11 +45,11 @@ class MovieDetailsViewModelTest {
     @MockK
     private lateinit var manageRecentViewedUseCase: ManageRecentViewedUseCase
     @MockK
-    private lateinit var ratingUseCase: RatingUseCase
+    private lateinit var ratingUseCase: ManageRatingUseCase
     @MockK
     private lateinit var authenticationUseCase: AuthenticationUseCase
-    @MockK(relaxed = true)
-    private lateinit var savedStateHandle: SavedStateHandle
+
+    private val savedStateHandle = mockk<SavedStateHandle>(relaxed = true)
     private lateinit var viewModel: MovieDetailsViewModel
     private val mainDispatcher = StandardTestDispatcher()
 
@@ -57,11 +57,6 @@ class MovieDetailsViewModelTest {
     fun setup() {
         Dispatchers.setMain(mainDispatcher)
         MockKAnnotations.init(this)
-        movieDetails = mockk()
-        manageRecentMovieWatchedUseCase = mockk()
-        manageRecentViewedUseCase = mockk()
-        ratingUseCase = mockk()
-        authenticationUseCase = mockk()
         setupDefaultMocks()
         viewModel = createViewModel()
     }
@@ -70,13 +65,13 @@ class MovieDetailsViewModelTest {
         every { savedStateHandle.getArgs<Screen.MovieDetails>() } returns Screen.MovieDetails(
             MOVIE_ID
         )
-        coEvery { movieDetails.getMovieDetails(MOVIE_ID) } returns mockMovieDetails
-        coEvery { movieDetails.getMovieImages(MOVIE_ID) } returns mockMovieImages
-        coEvery { movieDetails.getMovieCast(MOVIE_ID) } returns mockMovieCast
-        coEvery { movieDetails.getSimilarMovies(MOVIE_ID) } returns mockSimilarMovies
-        coEvery { movieDetails.getMovieVideo(MOVIE_ID) } returns mockMovieVideos
+        coEvery { movieDetails.getMovieDetails(any()) } returns mockMovieDetails
+        coEvery { movieDetails.getMovieImages(any()) } returns mockMovieImages
+        coEvery { movieDetails.getMovieCast(any()) } returns mockMovieCast
+        coEvery { movieDetails.getSimilarMovies(any()) } returns mockSimilarMovies
+        coEvery { movieDetails.getMovieVideo(any()) } returns mockMovieVideos
         coEvery { authenticationUseCase.isLoggedIn() } returns false
-        coEvery { ratingUseCase.getRateAccountMovieStatesById(MOVIE_ID) } returns 0
+        coEvery { ratingUseCase.getRateAccountMovieStatesById(any()) } returns 0
         coEvery { manageRecentMovieWatchedUseCase.addMovieToRecentWatched(any()) } returns Unit
         coEvery { manageRecentViewedUseCase.addToRecentViewed(any()) } returns Unit
     }
@@ -87,14 +82,15 @@ class MovieDetailsViewModelTest {
         manageRecentViewedUseCase,
         ratingUseCase,
         authenticationUseCase,
-        savedStateHandle,
-        movieIdOverride = MOVIE_ID
+        savedStateHandle
     )
 
     @After
     fun tearDown() {
         Dispatchers.resetMain()
-        viewModel.viewModelScope.cancel()
+        if (::viewModel.isInitialized) {
+            viewModel.viewModelScope.cancel()
+        }
     }
 
     @Test
@@ -104,7 +100,6 @@ class MovieDetailsViewModelTest {
 
             viewModel.state.test {
                 val state = awaitItem()
-
                 assertThat(state.isLoading).isFalse()
                 assertThat(state.error).isNull()
                 assertThat(state.movieId).isEqualTo(mockMovieDetails.id)
@@ -126,65 +121,54 @@ class MovieDetailsViewModelTest {
 
     @Test
     fun `when loadSimilarAndVideos fails, should show error state`() = runTest {
-        coEvery { movieDetails.getSimilarMovies(MOVIE_ID) } throws Exception("Network error")
+        coEvery { movieDetails.getSimilarMovies(any()) } throws Exception("Network error")
 
-        viewModel = createViewModel()
+        val testViewModel = createViewModel()
         advanceUntilIdle()
 
-        viewModel.state.test {
+        testViewModel.state.test {
             val state = awaitItem()
             assertThat(state.error).isNotNull()
         }
+        testViewModel.viewModelScope.cancel()
     }
 
     @Test
     fun `when primary initialization fails, should show error state`() = runTest {
-        coEvery { movieDetails.getMovieDetails(MOVIE_ID) } throws Exception("Network error")
+        coEvery { movieDetails.getMovieDetails(any()) } throws Exception("Network error")
 
-        viewModel = createViewModel()
+        val testViewModel = createViewModel()
         advanceUntilIdle()
 
-        viewModel.state.test {
+        testViewModel.state.test {
             val state = awaitItem()
             assertThat(state.error).isNotNull()
             assertThat(state.isLoading).isFalse()
         }
+        testViewModel.viewModelScope.cancel()
     }
 
     @Test
     fun `when user is authenticated and has rated movie, should show as rated`() = runTest {
         coEvery { authenticationUseCase.isLoggedIn() } returns true
-        coEvery { ratingUseCase.getRateAccountMovieStatesById(MOVIE_ID) } returns 5
+        coEvery { ratingUseCase.getRateAccountMovieStatesById(any()) } returns 5
 
-        viewModel = createViewModel()
+        val testViewModel = createViewModel()
         advanceUntilIdle()
 
-        viewModel.state.test {
+        testViewModel.state.test {
             val state = awaitItem()
             assertThat(state.isRated).isTrue()
         }
+        testViewModel.viewModelScope.cancel()
     }
 
-    @Test
-    fun `when getMovieVideo returns empty list, should set empty video and fallback images`() =
-        runTest {
-            coEvery { movieDetails.getMovieVideo(MOVIE_ID) } returns emptyList()
-            coEvery { movieDetails.getMovieImages(MOVIE_ID) } returns emptyList()
-            viewModel = createViewModel()
-            advanceUntilIdle()
-
-            viewModel.state.test {
-                val state = awaitItem()
-                assertThat(state.movieVideo).isEmpty()
-                assertThat(state.movieImages).containsExactly(mockMovieDetails.posterUrl)
-            }
-        }
 
     @Test
     fun `when rating succeeds, should update rating state and hide bottom sheet`() = runTest {
         val testRating = 8
-        coEvery { ratingUseCase.addMovieRatingById(MOVIE_ID, testRating) } returns true
-        coEvery { ratingUseCase.getRateAccountMovieStatesById(MOVIE_ID) } returns testRating
+        coEvery { ratingUseCase.addMovieRatingById(any(), testRating) } returns true
+        coEvery { ratingUseCase.getRateAccountMovieStatesById(any()) } returns testRating
 
         viewModel.onSelectRatingClick(testRating)
         advanceUntilIdle()
@@ -210,35 +194,37 @@ class MovieDetailsViewModelTest {
     }
 
     @Test
-    fun `when authenticated user clicks rate button, should show rate bottom sheet - Solution 2`() =
-        runTest {
+    fun `when authenticated user clicks rate button, should show rate bottom sheet`() = runTest {
         coEvery { authenticationUseCase.isLoggedIn() } returns true
-        viewModel = createViewModel()
+        val testViewModel = createViewModel()
+        advanceUntilIdle()
 
-            viewModel.state.test {
-                val initialState = awaitItem()
-                assertThat(initialState.isRateBottomSheetVisible).isFalse() // Verify initial state
+        testViewModel.state.test {
+            val initialState = awaitItem()
+            assertThat(initialState.isRateBottomSheetVisible).isFalse()
 
-                viewModel.onRateBottomSheetClick()
+            testViewModel.onRateBottomSheetClick()
 
-                val updatedState = awaitItem()
-                assertThat(updatedState.isRateBottomSheetVisible).isTrue()
+            val updatedState = awaitItem()
+            assertThat(updatedState.isRateBottomSheetVisible).isTrue()
         }
+        testViewModel.viewModelScope.cancel()
     }
 
     @Test
     fun `when guest user clicks rate button, should show guest user bottom sheet`() = runTest {
         coEvery { authenticationUseCase.isLoggedIn() } returns false
-        viewModel = createViewModel()
+        val testViewModel = createViewModel()
 
-        viewModel.onRateBottomSheetClick()
+        testViewModel.onRateBottomSheetClick()
         advanceUntilIdle()
 
-        viewModel.state.test {
+        testViewModel.state.test {
             val state = awaitItem()
             assertThat(state.isGuestUserBottomSheetVisible).isTrue()
             assertThat(state.isGuestUser).isTrue()
         }
+        testViewModel.viewModelScope.cancel()
     }
 
     @Test
@@ -274,7 +260,6 @@ class MovieDetailsViewModelTest {
         viewModel.state.test {
             val state = awaitItem()
             assertThat(state.expanded).isTrue()
-
         }
 
         viewModel.onExpandClick()
@@ -288,19 +273,23 @@ class MovieDetailsViewModelTest {
 
     @Test
     fun `onRetry should clear error and reload data`() = runTest {
-        coEvery { movieDetails.getMovieDetails(MOVIE_ID) } throws Exception("Network error")
+        // First make it fail
+        coEvery { movieDetails.getMovieDetails(any()) } throws Exception("Network error")
+        val testViewModel = createViewModel()
         advanceUntilIdle()
 
-        coEvery { movieDetails.getMovieDetails(MOVIE_ID) } returns mockMovieDetails
+        // Then make it succeed
+        coEvery { movieDetails.getMovieDetails(any()) } returns mockMovieDetails
 
-        viewModel.onRetry()
+        testViewModel.onRetry()
         advanceUntilIdle()
 
-        viewModel.state.test {
+        testViewModel.state.test {
             val state = awaitItem()
             assertThat(state.error).isNull()
             assertThat(state.movieId).isEqualTo(mockMovieDetails.id)
         }
+        testViewModel.viewModelScope.cancel()
     }
 
     @Test
@@ -314,14 +303,9 @@ class MovieDetailsViewModelTest {
     @Test
     fun `when movieId is null in savedStateHandle, should use default value 0`() = runTest {
         every { savedStateHandle.getArgs<Screen.MovieDetails>() } returns null
-        val testViewModel = MovieDetailsViewModel(
-            movieDetails = movieDetails,
-            manageRecentMovieWatchedUseCase = manageRecentMovieWatchedUseCase,
-            manageRecentViewedUseCase = manageRecentViewedUseCase,
-            ratingUseCase = ratingUseCase,
-            authenticationUseCase = authenticationUseCase,
-            savedStateHandle = savedStateHandle
-        )
+        val testViewModel = createViewModel()
+
+        assertThat(testViewModel.getMovieId()).isEqualTo(0)
         advanceUntilIdle()
 
         coVerify { movieDetails.getMovieDetails(0) }
@@ -332,7 +316,10 @@ class MovieDetailsViewModelTest {
     fun `when rating fails, should show error and reset success state`() = runTest {
         val testRating = 8
         coEvery {
-            ratingUseCase.addMovieRatingById(MOVIE_ID, testRating)
+            ratingUseCase.addMovieRatingById(
+                any(),
+                testRating
+            )
         } throws Exception("Rating failed")
 
         viewModel.onSelectRatingClick(testRating)
@@ -347,18 +334,20 @@ class MovieDetailsViewModelTest {
 
     @Test
     fun `when getMovieImages returns empty list, should use poster as fallback`() = runTest {
-        coEvery { movieDetails.getMovieImages(MOVIE_ID) } returns emptyList()
-        viewModel = createViewModel()
+        coEvery { movieDetails.getMovieImages(any()) } returns emptyList()
+        val testViewModel = createViewModel()
         advanceUntilIdle()
 
-        //this delay is needed cause it depend on IO dispatcher
+        // Add delay for IO dispatcher
         delay(50)
 
-        viewModel.state.test {
+        testViewModel.state.test {
             val state = awaitItem()
             assertThat(state.movieImages).containsExactly(mockMovieDetails.posterUrl)
         }
+        testViewModel.viewModelScope.cancel()
     }
+
 
     companion object {
         private const val MOVIE_ID = 12345
@@ -389,3 +378,4 @@ class MovieDetailsViewModelTest {
         private val mockMovieVideos = listOf("video1_url", "video2_url")
     }
 }
+

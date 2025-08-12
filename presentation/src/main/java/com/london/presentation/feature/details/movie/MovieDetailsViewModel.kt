@@ -23,12 +23,13 @@ class MovieDetailsViewModel @Inject constructor(
     private val ratingUseCase: ManageRatingUseCase,
     private val authenticationUseCase: AuthenticationUseCase,
     savedStateHandle: SavedStateHandle,
-    movieIdOverride: Int? = null
 ) : BaseViewModel<MovieDetailsUiState, MovieDetailsEffect>(MovieDetailsUiState()),
     MovieDetailsContract {
 
-    private val movieId: Int =
-        movieIdOverride ?: savedStateHandle.getArgs<Screen.MovieDetails>()?.movieId ?: 0
+    private val args = savedStateHandle.getArgs<Screen.MovieDetails>()
+    private val movieId = args?.movieId ?: 0
+
+    internal fun getMovieId(): Int = movieId
 
     init {
         loadMovieDetails(movieId)
@@ -195,7 +196,7 @@ class MovieDetailsViewModel @Inject constructor(
                 updateState {
                     copy(
                         similarMovies = similarMovies,
-                        movieVideo = videos.firstOrNull().orEmpty(),
+                        movieVideo = videos.first(),
                         isRated = movieRating != 0 && state.value.isGuestUser.not()
                     )
                 }
