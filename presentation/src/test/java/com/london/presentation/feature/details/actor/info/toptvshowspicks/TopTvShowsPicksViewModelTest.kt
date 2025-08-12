@@ -13,6 +13,7 @@ import io.mockk.every
 import io.mockk.mockk
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.test.TestCoroutineScheduler
 import kotlinx.coroutines.test.UnconfinedTestDispatcher
 import kotlinx.coroutines.test.resetMain
@@ -78,7 +79,7 @@ class TopTvShowsPicksViewModelTest {
         val args = Screen.TopTvShowsPicksDetails(actorId)
         every { savedStateHandle.getArgs<Screen.TopTvShowsPicksDetails>() } returns args
         coEvery { getActorTvShowPicksById.invoke(actorId) } coAnswers {
-            kotlinx.coroutines.delay(100)
+            delay(100)
             mockCastDetails
         }
 
@@ -115,7 +116,7 @@ class TopTvShowsPicksViewModelTest {
 
         viewModel = TopTvShowsPicksViewModel(savedStateHandle, getActorTvShowPicksById)
 
-        // When - toggle multiple times
+        // When
         viewModel.onSaveClick(1)
         viewModel.onSaveClick(1)
         viewModel.onSaveClick(1)
@@ -138,7 +139,7 @@ class TopTvShowsPicksViewModelTest {
         viewModel.onSaveClick(1)
         val firstToggleState = viewModel.state.value.isSaved
 
-        viewModel.onSaveClick(999) // Different ID
+        viewModel.onSaveClick(999)
         val secondToggleState = viewModel.state.value.isSaved
 
         // Then
