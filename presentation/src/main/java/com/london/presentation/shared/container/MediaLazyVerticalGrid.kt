@@ -45,7 +45,7 @@ fun <T : Any> MediaLazyVerticalGrid(
         LazyVerticalGrid(
             state = rememberLazyGridState(),
             columns = GridCells.Fixed(2),
-            modifier = modifier.fillMaxSize(),
+            modifier = Modifier.fillMaxSize(),
             horizontalArrangement = Arrangement.spacedBy(12.dp),
             verticalArrangement = Arrangement.spacedBy(12.dp),
             contentPadding = PaddingValues(bottom = 16.dp)
@@ -53,35 +53,43 @@ fun <T : Any> MediaLazyVerticalGrid(
             items(items) { item ->
                 HomeCard(
                     imageUrl = imageUrl(item),
-                    isDarkMode = isDarkMode,
                     modifier = Modifier.clickable { onItemClick(item) },
+                    imageDescription = name(item),
                     isSaved = isItemSaved(item),
                     hasSaveIcon = hasSaveIcon,
-                    myRatingList = myRatingList,
-                    rate = rate,
+                    onSaveClick = { onSaveClick(item) },
                     onDeleteClick = { onDeleteClick(item) },
-                    imageDescription = name(item),
-                    onSaveClick = { onSaveClick(item) }
+                    isDarkMode = isDarkMode,
+                    myRatingList = myRatingList,
+                    rate = rate
                 )
             }
         }
     }
+}
 
-    @Composable
-    fun <T : Any> MediaLazyVerticalGrid(
-        pagingItems: LazyPagingItems<T>,
-        imageUrl: (T) -> String,
-        name: (T) -> String,
-        onItemClick: (T) -> Unit,
-        modifier: Modifier = Modifier,
-        hasSaveIcon: Boolean = true,
-        onSaveClick: (T) -> Unit = {},
-        isItemSaved: (T) -> Boolean = { false },
-        onDeleteClick: (T) -> Unit = {},
-        isDarkMode: Boolean = true,
-        myRatingList: Boolean = false,
-        rate: String = "5"
+@Composable
+fun <T : Any> MediaLazyVerticalGrid(
+    pagingItems: LazyPagingItems<T>,
+    imageUrl: (T) -> String,
+    name: (T) -> String,
+    onItemClick: (T) -> Unit,
+    modifier: Modifier = Modifier,
+    hasSaveIcon: Boolean = true,
+    onSaveClick: (T) -> Unit = {},
+    isItemSaved: (T) -> Boolean = { false },
+    onDeleteClick: (T) -> Unit = {},
+    isDarkMode: Boolean = true,
+    myRatingList: Boolean = false,
+    rate: String = "3",
+    topBar: @Composable (() -> Unit)? = null
+) {
+    Column(
+        modifier = modifier
+            .fillMaxSize()
+            .background(color = NovixTheme.colors.surface)
     ) {
+        topBar?.invoke()
         LazyVerticalGrid(
             state = rememberLazyGridState(),
             columns = GridCells.Fixed(2),
@@ -102,7 +110,7 @@ fun <T : Any> MediaLazyVerticalGrid(
                         onDeleteClick = { onDeleteClick(item) },
                         isDarkMode = isDarkMode,
                         myRatingList = myRatingList,
-                        rate = rate,
+                        rate = rate
                     )
                 }
             }

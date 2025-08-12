@@ -1,4 +1,4 @@
-package com.london.presentation.shared
+package com.london.presentation.shared.container
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
@@ -24,21 +24,26 @@ import com.london.presentation.utils.TvShowGenre
 
 @Composable
 fun <T : Any> MediaLazyGridWithTabs(
-    title: String,
-    onBack: () -> Unit,
-    getImageUrl: (T) -> String,
+    imageUrl: (T) -> String,
+    name: (T) -> String,
     onItemClick: (T) -> Unit,
     modifier: Modifier = Modifier,
     items: List<T>? = null,
     pagingItems: LazyPagingItems<T>? = null,
+    hasSaveIcon: Boolean = true,
     onSaveClick: (T) -> Unit = {},
     isItemSaved: (T) -> Boolean = { false },
+    onDeleteClick: (T) -> Unit = {},
+    isDarkMode: Boolean = true,
+    myRatingList: Boolean = false,
+    rate: String = "3",
     tabSelected: Int = 0,
+    onTabSelected: (Int) -> Unit = {},
     selectedMovieGenre: MovieGenre = MovieGenre.All,
     selectedTvShowGenre: TvShowGenre = TvShowGenre.All,
-    onTabSelected: (Int) -> Unit = {},
     onMovieGenreClick: (MovieGenre) -> Unit = {},
-    onTvShowGenreClick: (TvShowGenre) -> Unit = {}
+    onTvShowGenreClick: (TvShowGenre) -> Unit = {},
+    topBar: @Composable (() -> Unit)? = null
 ) {
 
     val tabs = listOf(
@@ -56,14 +61,7 @@ fun <T : Any> MediaLazyGridWithTabs(
             .fillMaxSize()
             .background(color = NovixTheme.colors.surface)
     ) {
-        TopBar(
-            modifier = Modifier
-                .fillMaxWidth()
-                .statusBarsPadding()
-                .padding(start = 16.dp, end = 16.dp, top = 12.dp),
-            title = title,
-            onBackClick = onBack
-        )
+        topBar?.invoke()
 
         TabLayout(
             tabs = tabs,
@@ -78,11 +76,17 @@ fun <T : Any> MediaLazyGridWithTabs(
         MediaLazyGridWithFilter(
             items = items,
             pagingItems = pagingItems,
-            getImageUrl = getImageUrl,
+            imageUrl = imageUrl,
+            name = name,
             onItemClick = onItemClick,
             modifier = Modifier.fillMaxSize(),
+            hasSaveIcon = hasSaveIcon,
             onSaveClick = onSaveClick,
             isItemSaved = isItemSaved,
+            onDeleteClick = onDeleteClick,
+            isDarkMode = isDarkMode,
+            myRatingList = myRatingList,
+            rate = rate,
             isMovieSelected = isMovieSelected,
             isTvShowSelected = isTvShowSelected,
             selectedMovieGenre = selectedMovieGenre,
@@ -123,19 +127,29 @@ private fun Preview() {
     val combinedItems = sampleMovies + sampleTvShows
 
     MediaLazyGridWithTabs(
-        title = stringResource(R.string.continue_watch),
-        onBack = {},
         items = combinedItems,
-        getImageUrl = {
+        imageUrl = {
             when (it) {
                 is Movie -> it.posterUrl
                 is TvShow -> it.posterPicture
                 else -> ""
             }
         },
+        name = { 
+            when (it) {
+                is Movie -> it.name
+                is TvShow -> it.name
+                else -> it.toString()
+            }
+        },
         onItemClick = {},
+        hasSaveIcon = true,
         onSaveClick = {},
         isItemSaved = { false },
+        onDeleteClick = {},
+        isDarkMode = true,
+        myRatingList = false,
+        rate = "3",
         tabSelected = 0,
         selectedMovieGenre = MovieGenre.All,
         selectedTvShowGenre = TvShowGenre.All,

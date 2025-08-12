@@ -1,70 +1,96 @@
-package com.london.presentation.shared
+package com.london.presentation.shared.container
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.unit.dp
 import androidx.paging.compose.LazyPagingItems
-import com.london.designsystem.component.TopBar
 import com.london.designsystem.theme.NovixTheme
 import com.london.designsystem.theme.ThemePreviews
 import com.london.domain.entity.Movie
-import com.london.presentation.R
+import com.london.presentation.shared.MediaGenreFilters
 import com.london.presentation.utils.MovieGenre
 import com.london.presentation.utils.TvShowGenre
 
 @Composable
-fun <T : Any> MediaLazyGridWithFilterTopBar(
-    title: String,
-    onBack: () -> Unit,
-    getImageUrl: (T) -> String,
+fun <T : Any> MediaLazyGridWithFilter(
+    imageUrl: (T) -> String,
+    name: (T) -> String,
     onItemClick: (T) -> Unit,
     modifier: Modifier = Modifier,
     items: List<T>? = null,
     pagingItems: LazyPagingItems<T>? = null,
+    hasSaveIcon: Boolean = true,
     onSaveClick: (T) -> Unit = {},
     isItemSaved: (T) -> Boolean = { false },
+    onDeleteClick: (T) -> Unit = {},
+    isDarkMode: Boolean = true,
+    myRatingList: Boolean = false,
+    rate: String = "3",
     isMovieSelected: Boolean = true,
     isTvShowSelected: Boolean = false,
     selectedMovieGenre: MovieGenre = MovieGenre.All,
     selectedTvShowGenre: TvShowGenre = TvShowGenre.All,
     onMovieGenreClick: (MovieGenre) -> Unit = {},
-    onTvShowGenreClick: (TvShowGenre) -> Unit = {}
-
+    onTvShowGenreClick: (TvShowGenre) -> Unit = {},
+    topBar: @Composable (() -> Unit)? = null
 ) {
+
     Column(
         modifier = modifier
             .fillMaxSize()
             .background(color = NovixTheme.colors.surface)
     ) {
-        TopBar(
-            modifier = Modifier
-                .fillMaxWidth()
-                .statusBarsPadding()
-                .padding(start = 16.dp, end = 16.dp, top = 12.dp),
-            title = title,
-            onBackClick = onBack
-        )
-        MediaLazyGridWithFilter(
-            items = items,
-            pagingItems = pagingItems,
-            getImageUrl = getImageUrl,
-            onItemClick = onItemClick,
-            onSaveClick = onSaveClick,
-            isItemSaved = isItemSaved,
+
+        topBar?.invoke()
+
+        MediaGenreFilters(
             isMovieSelected = isMovieSelected,
             isTvShowSelected = isTvShowSelected,
             selectedMovieGenre = selectedMovieGenre,
             selectedTvShowGenre = selectedTvShowGenre,
             onMovieGenreClick = onMovieGenreClick,
-            onTvShowGenreClick = onTvShowGenreClick
+            onTvShowGenreClick = onTvShowGenreClick,
         )
+
+        when {
+            items != null -> {
+                MediaLazyVerticalGrid(
+                    items = items,
+                    imageUrl = imageUrl,
+                    name = name,
+                    onItemClick = onItemClick,
+                    hasSaveIcon = hasSaveIcon,
+                    onSaveClick = onSaveClick,
+                    isItemSaved = isItemSaved,
+                    onDeleteClick = onDeleteClick,
+                    isDarkMode = isDarkMode,
+                    myRatingList = myRatingList,
+                    rate = rate,
+                    topBar = topBar,
+                    modifier = Modifier.fillMaxSize(),
+                )
+            }
+
+            pagingItems != null -> {
+                MediaLazyVerticalGrid(
+                    pagingItems = pagingItems,
+                    imageUrl = imageUrl,
+                    name = { it.toString() },
+                    onItemClick = onItemClick,
+                    hasSaveIcon = hasSaveIcon,
+                    onSaveClick = onSaveClick,
+                    isItemSaved = isItemSaved,
+                    onDeleteClick = onDeleteClick,
+                    isDarkMode = isDarkMode,
+                    myRatingList = myRatingList,
+                    rate = rate,
+                    topBar = topBar,
+                    modifier = Modifier.fillMaxSize(),
+                )
+            }
+        }
     }
 }
 
@@ -90,17 +116,21 @@ private fun Preview() {
         )
     )
 
-    MediaLazyGridWithFilterTopBar(
-        title = stringResource(R.string.continue_watch),
-        onBack = {},
+    MediaLazyGridWithFilter(
         items = sampleMovies,
-        getImageUrl = { it.posterUrl },
+        imageUrl = { it.posterUrl },
+        name = { it.name },
         onItemClick = {},
+        hasSaveIcon = true,
         onSaveClick = {},
         isItemSaved = { false },
+        onDeleteClick = {},
+        isDarkMode = true,
+        myRatingList = false,
+        rate = "3",
         isMovieSelected = true,
         isTvShowSelected = false,
-        selectedMovieGenre = MovieGenre.All,
+        selectedMovieGenre = MovieGenre.Action,
         selectedTvShowGenre = TvShowGenre.All,
         onMovieGenreClick = {},
         onTvShowGenreClick = {}
