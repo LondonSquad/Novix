@@ -9,8 +9,11 @@ import com.london.data.remote.source.account.AccountRemoteDataSource
 import com.london.domain.repository.AccountRepository
 import io.mockk.coEvery
 import io.mockk.coVerify
+import io.mockk.every
 import io.mockk.mockk
+import io.mockk.verify
 import kotlinx.coroutines.test.runTest
+import org.junit.Assert.assertTrue
 import org.junit.Before
 import org.junit.Test
 
@@ -518,5 +521,31 @@ class AccountRepositoryImplTest {
         // Verify
         coVerify { authenticationPreferences.getSessionId() }
         coVerify { remoteDataSource.getAccountDetails(sessionId) }
+    }
+
+    // region: getAccountId()
+    @Test
+    fun `getAccountId returns account ID from preferences`() = runTest {
+        every { authenticationPreferences.getAccountId() } returns ACCOUNT_ID
+
+        val result = repository.getAccountId()
+
+        assertTrue(result == ACCOUNT_ID)
+        verify { authenticationPreferences.getAccountId() }
+    }
+
+    @Test
+    fun `getAccountId returns default value when no account ID stored`() = runTest {
+        every { authenticationPreferences.getAccountId() } returns -1
+
+        val result = repository.getAccountId()
+
+        assertTrue(result == -1)
+        verify { authenticationPreferences.getAccountId() }
+    }
+    // endregion
+
+    private companion object Account {
+        const val ACCOUNT_ID = 12345
     }
 }

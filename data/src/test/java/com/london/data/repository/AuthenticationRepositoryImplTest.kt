@@ -271,28 +271,6 @@ class AuthenticationRepositoryImplTest {
     }
     // endregion
 
-    // region: getAccountId()
-    @Test
-    fun `getAccountId returns account ID from preferences`() = runTest {
-        every { authenticationPreferences.getAccountId() } returns ACCOUNT_ID
-
-        val result = repository.getAccountId()
-
-        assertTrue(result == ACCOUNT_ID)
-        verify { authenticationPreferences.getAccountId() }
-    }
-
-    @Test
-    fun `getAccountId returns default value when no account ID stored`() = runTest {
-        every { authenticationPreferences.getAccountId() } returns -1
-
-        val result = repository.getAccountId()
-
-        assertTrue(result == -1)
-        verify { authenticationPreferences.getAccountId() }
-    }
-    // endregion
-
     @Test
     fun `loginAsGuest sets guest mode to true when successful`() = runTest {
         coEvery { authRemoteDataSource.createGuestSession() } returns Result.success(
