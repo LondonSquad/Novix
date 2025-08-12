@@ -13,7 +13,6 @@ import io.mockk.every
 import io.mockk.mockk
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.test.TestCoroutineScheduler
 import kotlinx.coroutines.test.UnconfinedTestDispatcher
 import kotlinx.coroutines.test.resetMain
@@ -60,7 +59,7 @@ class TopTvShowsPicksViewModelTest {
     }
 
     @Test
-    fun `when viewModel is initialized with null args should use default actorId`() = runTest {
+    fun `viewModel should use default actorId when it is initialized with null args`() = runTest {
         // Given
         every { savedStateHandle.getArgs<Screen.TopTvShowsPicksDetails>() } returns null
         coEvery { getActorTvShowPicksById.invoke(0) } returns CastDetails()
@@ -73,22 +72,7 @@ class TopTvShowsPicksViewModelTest {
     }
 
     @Test
-    fun `when data is being fetched should show loading state`() = runTest {
-        // Given
-        val actorId = 123
-        val args = Screen.TopTvShowsPicksDetails(actorId)
-        every { savedStateHandle.getArgs<Screen.TopTvShowsPicksDetails>() } returns args
-        coEvery { getActorTvShowPicksById.invoke(actorId) } coAnswers {
-            delay(100)
-            mockCastDetails
-        }
-
-        // When
-        viewModel = TopTvShowsPicksViewModel(savedStateHandle, getActorTvShowPicksById)
-    }
-
-    @Test
-    fun `when onSaveClick called should toggle saved state`() = runTest {
+    fun `onSaveClick should toggle saved state when it is called`() = runTest {
         // Given
         val actorId = 123
         val args = Screen.TopTvShowsPicksDetails(actorId)
@@ -107,7 +91,7 @@ class TopTvShowsPicksViewModelTest {
     }
 
     @Test
-    fun `when save state is toggled multiple times should maintain consistency`() = runTest {
+    fun `save state should maintain consistency when it is toggled multiple times`() = runTest {
         // Given
         val actorId = 123
         val args = Screen.TopTvShowsPicksDetails(actorId)
@@ -126,7 +110,7 @@ class TopTvShowsPicksViewModelTest {
     }
 
     @Test
-    fun `when onSaveClick called with different tvShowIds should still toggle same saved state`() = runTest {
+    fun `onSaveClick should still toggle same saved state when called with different tvShowIds `() = runTest {
         // Given
         val actorId = 123
         val args = Screen.TopTvShowsPicksDetails(actorId)
