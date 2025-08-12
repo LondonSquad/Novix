@@ -2,10 +2,10 @@ package com.london.domain.usecase
 
 import com.london.domain.entity.PagedFetchResponse
 import com.london.domain.entity.Trending
-import com.london.domain.repository.TrendingRepository
 import io.mockk.*
 import kotlinx.coroutines.test.runTest
 import com.google.common.truth.Truth.assertThat
+import com.london.domain.repository.MovieRepository
 import org.junit.Before
 import org.junit.Test
 

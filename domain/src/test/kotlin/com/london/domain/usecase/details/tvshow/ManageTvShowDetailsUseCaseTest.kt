@@ -18,7 +18,6 @@ import io.mockk.mockk
 import kotlinx.coroutines.test.runTest
 import org.junit.Before
 import org.junit.Test
-import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.assertThrows
 
 class ManageTvShowDetailsUseCaseTest {
@@ -28,8 +27,8 @@ class ManageTvShowDetailsUseCaseTest {
 
     @Before
     fun setUp() {
-        tvShowRepository = mockk()
-        searchRepository = mockk()
+        tvShowRepository = mockk(relaxed = true)
+        searchRepository = mockk(relaxed = true)
         manageTvShowDetailsUseCase = ManageTvShowDetailsUseCase(
             tvShowRepository = tvShowRepository,
             searchRepository = searchRepository,
@@ -221,7 +220,6 @@ class ManageTvShowDetailsUseCaseTest {
 
         // When
         val result = tvShowRepository.getTrendingTvShows(page = 1)
-        val result = manageTvShowDetailsUseCase.getTrendingTvShows(page = 1)
 
         // Then
         assertThat(result).isNotNull()
@@ -242,7 +240,6 @@ class ManageTvShowDetailsUseCaseTest {
         )
         coEvery { tvShowRepository.getTrendingTvShows(any()) } returns emptyResponse
 
-        val result = tvShowRepository.getTrendingTvShows(page = 1)
         // When
         val result = manageTvShowDetailsUseCase.getTrendingTvShows(page = 1)
 
@@ -273,7 +270,6 @@ class ManageTvShowDetailsUseCaseTest {
         val mockResponse = createMockTrendingResponse()
         coEvery { tvShowRepository.getTrendingTvShows(any()) } returns mockResponse
 
-        val result = tvShowRepository.getTrendingTvShows(page = -1)
         // When
         val result = manageTvShowDetailsUseCase.getTrendingTvShows(page = -1)
 
@@ -290,18 +286,27 @@ class ManageTvShowDetailsUseCaseTest {
                 createMockTrending(id = 1, title = "Action TV Show", genreIds = listOf(28)),
                 createMockTrending(id = 2, title = "Comedy TV Show", genreIds = listOf(35)),
                 createMockTrending(id = 3, title = "Drama TV Show", genreIds = listOf(18)),
-                createMockTrending(id = 4, title = "Action-Comedy TV Show", genreIds = listOf(28, 35)),
+                createMockTrending(
+                    id = 4,
+                    title = "Action-Comedy TV Show",
+                    genreIds = listOf(28, 35)
+                ),
                 createMockTrending(id = 5, title = "Horror TV Show", genreIds = listOf(27)),
-                createMockTrending(id = 6, title = "Action-Drama TV Show", genreIds = listOf(28, 18))
+                createMockTrending(
+                    id = 6,
+                    title = "Action-Drama TV Show",
+                    genreIds = listOf(28, 18)
+                )
             ),
             totalPages = 1,
             totalItems = 6
         )
-        coEvery { trendingRepository.getTrendingTvShows(any()) } returns mixedGenreTvShows
+        coEvery { tvShowRepository.getTrendingTvShows(any()) } returns mixedGenreTvShows
 
         // When
         val actionGenreId = 28
-        val result = manageTvShowDetailsUseCase.getTrendingTvShows(page = 1, genreId = actionGenreId)
+        val result =
+            manageTvShowDetailsUseCase.getTrendingTvShows(page = 1, genreId = actionGenreId)
 
         // Then
         assertThat(result).isNotNull()
@@ -329,12 +334,16 @@ class ManageTvShowDetailsUseCaseTest {
                 createMockTrending(id = 1, title = "Action TV Show", genreIds = listOf(28)),
                 createMockTrending(id = 2, title = "Comedy TV Show", genreIds = listOf(35)),
                 createMockTrending(id = 3, title = "Drama TV Show", genreIds = listOf(18)),
-                createMockTrending(id = 4, title = "Action-Comedy TV Show", genreIds = listOf(28, 35))
+                createMockTrending(
+                    id = 4,
+                    title = "Action-Comedy TV Show",
+                    genreIds = listOf(28, 35)
+                )
             ),
             totalPages = 1,
             totalItems = 4
         )
-        coEvery { trendingRepository.getTrendingTvShows(any()) } returns allTvShows
+        coEvery { tvShowRepository.getTrendingTvShows(any()) } returns allTvShows
 
         // When
         val result = manageTvShowDetailsUseCase.getTrendingTvShows(page = 1)
@@ -356,7 +365,7 @@ class ManageTvShowDetailsUseCaseTest {
             totalPages = 1,
             totalItems = 2
         )
-        coEvery { trendingRepository.getTrendingTvShows(any()) } returns allTvShows
+        coEvery { tvShowRepository.getTrendingTvShows(any()) } returns allTvShows
 
         // When
         val result = manageTvShowDetailsUseCase.getTrendingTvShows(page = 1, genreId = -1)
