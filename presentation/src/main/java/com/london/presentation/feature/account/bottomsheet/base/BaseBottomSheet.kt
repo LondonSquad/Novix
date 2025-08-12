@@ -1,4 +1,4 @@
-package com.london.presentation.feature.account.bottomsheet
+package com.london.presentation.feature.account.bottomsheet.base
 
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -11,6 +11,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.platform.LocalWindowInfo
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
+import com.london.designsystem.R
 import com.london.designsystem.component.*
 import com.london.designsystem.component.button.OutlineButton
 import com.london.designsystem.component.button.PrimaryButton
@@ -112,7 +113,7 @@ private fun BottomSheetHeader(
                 )
                 .clickable(onClick = onDismiss)
                 .padding(6.dp),
-            painter = painterResource(com.london.designsystem.R.drawable.cancel),
+            painter = painterResource(R.drawable.cancel),
             contentDescription = "Close",
             tint = NovixTheme.colors.title
         )

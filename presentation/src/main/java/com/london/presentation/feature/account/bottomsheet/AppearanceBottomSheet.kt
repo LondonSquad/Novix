@@ -9,6 +9,8 @@ import androidx.compose.ui.unit.dp
 import com.london.designsystem.component.Selection
 import com.london.domain.theme.AppTheme
 import com.london.presentation.R
+import com.london.presentation.feature.account.bottomsheet.base.BaseBottomSheet
+import com.london.presentation.feature.account.bottomsheet.base.BottomSheetButton
 
 @Composable
 fun AppearanceBottomSheet(

@@ -15,6 +15,8 @@ import com.london.designsystem.component.Text
 import com.london.designsystem.theme.NovixTheme
 import com.london.domain.contentrestriction.ContentRestrictionLevel
 import com.london.presentation.R
+import com.london.presentation.feature.account.bottomsheet.base.BaseBottomSheet
+import com.london.presentation.feature.account.bottomsheet.base.BottomSheetButton
 
 @Composable
 fun ContentRestrictionBottomSheet(

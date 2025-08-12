@@ -8,6 +8,9 @@ import androidx.compose.ui.unit.dp
 import com.london.designsystem.component.Text
 import com.london.designsystem.theme.NovixTheme
 import com.london.presentation.R
+import com.london.presentation.feature.account.bottomsheet.base.BaseBottomSheet
+import com.london.presentation.feature.account.bottomsheet.base.BottomSheetButton
+import com.london.presentation.feature.account.bottomsheet.base.BottomSheetButtonType
 
 @Composable
 fun LogoutBottomSheet(
