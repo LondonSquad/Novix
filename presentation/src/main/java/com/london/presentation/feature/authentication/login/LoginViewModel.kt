@@ -16,6 +16,8 @@ class LoginViewModel @Inject constructor(
 ) : BaseViewModel<LoginUiState, LoginEffect>(LoginUiState()),
     LoginContract {
 
+    private var lastForgotPasswordEffect: LoginEffect.NavigateToForgotPassword? = null
+
     override fun onUsernameChanged(username: TextFieldValue) {
         val trimmedUsername = username.copy(text = username.text.trim())
         updateState {
@@ -47,7 +49,11 @@ class LoginViewModel @Inject constructor(
     }
 
     override fun onForgotPasswordClick() {
-        emitEffect(LoginEffect.NavigateToForgotPassword(FORGOT_PASSWORD_URL))
+        val newEffect = LoginEffect.NavigateToForgotPassword("$FORGOT_PASSWORD_URL?t=${System.currentTimeMillis()}")
+        if (newEffect != lastForgotPasswordEffect) {
+            lastForgotPasswordEffect = newEffect
+            emitEffect(newEffect)
+        }
     }
 
     override fun onLoginClick() {
