@@ -16,21 +16,28 @@ import com.london.domain.entity.TvShow
 import com.london.presentation.utils.gridColumns
 
 @Deprecated(
-    message = "Use MediaLazyVerticalGrid instead. This composable will be removed in a future version. Note: MediaLazyVerticalGrid has two overloads - one for List<T> and one for LazyPagingItems<T>.",
+    message = "Use MediaLazyVerticalGrid or MediaLazyGridWithFilter instead. This composable will be removed in a future version. Note: Both have two overloads - one for List<T> and one for LazyPagingItems<T>.",
     replaceWith = ReplaceWith(
-        expression = "MediaLazyVerticalGrid(" +
+        expression = "MediaLazyGridWithFilter(" +
                 "items = items, " +
                 "modifier = modifier, " +
                 "imageUrl = getImageUrl, " +
                 "name = { it.getName() }, " +
-                "hasSaveIcon = hasSaveIcon, " +
-                "onSaveClick = onSaveClick, " +
+                "onSaveClick = onSavedClick, " +
                 "isItemSaved = isItemSaved, " +
                 "onDeleteClick = onDeleteClick, " +
-                "isDarkMode = isDarkMode, " +
-                "myRatingList = myRatingList, " +
-                "rate = rate, " +
-                "onNavigateToMovie = onItemClick, " +
+                "onMovieGenreClick = {}, " +
+                "onTvShowGenreClick = {}, " +
+                "config = MediaGridConfig(" +
+                "    showSaveIcon = hasSaveIcon, " +
+                "    isDarkMode = isDarkMode, " +
+                "    myRatingList = myRatingList, " +
+                "    rate = rate, " +
+                "    isMovieSelected = true, " +
+                "    isTvShowSelected = false, " +
+                "    selectedTvShowGenre = TvShowGenre.All, " +
+                "    onNavigateToMovie = onItemClick, " +
+                "), " +
                 "topBar = {" +
                 "    DefaultAppTopBar(" +
                 "        title = title," +
@@ -38,7 +45,7 @@ import com.london.presentation.utils.gridColumns
                 "    )" +
                 "}" +
                 ")",
-        imports = ["com.london.presentation.shared.container.MediaLazyVerticalGrid"]
+        imports = ["com.london.presentation.shared.container.MediaLazyGridWithFilter", "com.london.presentation.shared.container.MediaGridConfig", "com.london.presentation.utils.MovieGenre", "com.london.presentation.utils.TvShowGenre"]
     ),
     level = DeprecationLevel.WARNING
 )
