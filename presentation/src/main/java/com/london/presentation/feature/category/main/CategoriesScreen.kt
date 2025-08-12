@@ -125,7 +125,7 @@ private fun LazyGridScope.movieGenres(
 ) {
     items(genres) {
         CategoriesItem(
-            categoryName = listOf(it.stringResId.string),
+            categoryName = it.stringResId.string,
             categoryImage = it.backgroundResId,
             onClick = { onClick(it) },
         )
@@ -138,7 +138,7 @@ private fun LazyGridScope.tvShowGenres(
 ) {
     items(genres) {
         CategoriesItem(
-            categoryName = stringResource(it.stringResId).split('&'),
+            categoryName = stringResource(it.stringResId),
             categoryImage = it.backgroundResId,
             onClick = { onClick(it) },
         )

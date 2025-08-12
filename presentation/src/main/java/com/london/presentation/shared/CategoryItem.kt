@@ -32,7 +32,7 @@ import com.london.designsystem.theme.noRippleClickable
 
 @Composable
 fun CategoriesItem(
-    categoryName: List<String>,
+    categoryName: String,
     categoryImage: Any?,
     onClick: () -> Unit,
     modifier: Modifier = Modifier
@@ -52,7 +52,7 @@ fun CategoriesItem(
         ImageView(
             model = categoryImage,
             errorContent = { ErrorImage(NovixTheme.isThemeDark) },
-            contentDescription = "Image of ${categoryName.joinToString()}",
+            contentDescription = "Image of $categoryName",
             modifier = Modifier.fillMaxSize(),
             contentScale = Crop,
             loadingContent = { CircularLoading(modifier = Modifier.align(Alignment.Center)) },
@@ -69,11 +69,11 @@ fun CategoriesItem(
                 )
         )
         Text(
-            text = categoryName.joinToString(separator = " &\n"),
+            text = categoryName,
             style = NovixTheme.typography.label.large,
             color = NovixTheme.colors.onPrimary,
             overflow = TextOverflow.Ellipsis,
-            modifier = Modifier.padding(8.dp)
+            modifier = Modifier.padding(start = 8.dp, end = 52.dp, top = 8.dp)
         )
     }
 }
@@ -106,11 +106,11 @@ fun CategoryGridPreview() {
 
     val categories = listOf(
         CategoryItem(
-            categoryName = listOf("Action", "Adventure"),
+            categoryName = "Adventure",
             categoryImage = ""
         ),
         CategoryItem(
-            categoryName = listOf("Drama"),
+            categoryName = "Drama",
             categoryImage = ""
         ),
 
@@ -133,6 +133,6 @@ fun CategoryGridPreview() {
 
 // Fake Data class to represent a category item
 data class CategoryItem(
-    val categoryName: List<String>,
+    val categoryName: String,
     val categoryImage: String,
 )
