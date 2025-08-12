@@ -55,7 +55,6 @@ fun ContentRestrictionBottomSheet(
         ContentRestrictionOption(
             level = ContentRestrictionLevel.OFF,
             title = stringResource(R.string.off),
-            // Updated ContentRestrictionBottomSheet.kt (continued)
             description = stringResource(R.string.no_content_is_blurred),
             isSelected = selectedLevel == ContentRestrictionLevel.OFF,
             onSelected = { selectedLevel = it },
