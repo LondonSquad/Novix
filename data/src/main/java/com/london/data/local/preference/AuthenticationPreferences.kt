@@ -5,8 +5,8 @@ import androidx.core.content.edit
 import com.london.data.BuildConfig
 import javax.inject.Inject
 
-class AuthPreferences @Inject constructor(
-    private val sharedPreferences: SharedPreferences,
+class AuthenticationPreferences @Inject constructor(
+    private val sharedPreferences: SharedPreferences
 ) {
     fun getAuthKey(): String {
         return BuildConfig.AUTHORIZATION_KEY
@@ -52,7 +52,7 @@ class AuthPreferences @Inject constructor(
         return sharedPreferences.getString(GUEST_SESSION_ID, null)
     }
 
-    fun clearAuth() {
+    fun clearAuthentication() {
         sharedPreferences.edit {
             remove(SESSION_ID)
             remove(REQUEST_TOKEN)

@@ -17,16 +17,16 @@ import kotlinx.coroutines.test.runTest
 import org.junit.Before
 import kotlin.test.Test
 
-class RecentWatchedRepositoryImlTest {
+class RecentWatchedRepositoryImplTest {
     private lateinit var recentWatchedMoviesDataSource: RecentWatchedDataSource<RecentWatchedMovieLocal>
     private lateinit var recentWatchedTvShowsDataSource: RecentWatchedDataSource<RecentWatchedTvShowLocal>
-    private lateinit var recentWatchedRepositoryIml: RecentWatchedRepositoryIml
+    private lateinit var recentWatchedRepositoryImpl: RecentWatchedRepositoryImpl
 
     @Before
     fun setUp() {
         recentWatchedMoviesDataSource = mockk()
         recentWatchedTvShowsDataSource = mockk()
-        recentWatchedRepositoryIml = RecentWatchedRepositoryIml(
+        recentWatchedRepositoryImpl = RecentWatchedRepositoryImpl(
             recentWatchedMoviesDataSource, recentWatchedTvShowsDataSource
         )
     }
@@ -39,7 +39,7 @@ class RecentWatchedRepositoryImlTest {
                 recentWatchedMovieLocalList
             )
             // When
-            val result = recentWatchedRepositoryIml.getAllRecentWatchedMovies().first()
+            val result = recentWatchedRepositoryImpl.getAllRecentWatchedMovies().first()
             // Then
             assertThat(result).isEqualTo(movieList)
         }
@@ -50,7 +50,7 @@ class RecentWatchedRepositoryImlTest {
             // Given
             coEvery { recentWatchedMoviesDataSource.getAll() } returns flowOf(emptyList())
             // When
-            val result = recentWatchedRepositoryIml.getAllRecentWatchedMovies().first()
+            val result = recentWatchedRepositoryImpl.getAllRecentWatchedMovies().first()
             // Then
             assertThat(result).isEmpty()
         }
@@ -63,7 +63,7 @@ class RecentWatchedRepositoryImlTest {
                 recentWatchedTvShowLocalList
             )
             // When
-            val result = recentWatchedRepositoryIml.getAllRecentWatchedTvShows().first()
+            val result = recentWatchedRepositoryImpl.getAllRecentWatchedTvShows().first()
             // Then
             assertThat(result).isEqualTo(tvShowList)
         }
@@ -74,7 +74,7 @@ class RecentWatchedRepositoryImlTest {
             // Given
             coEvery { recentWatchedTvShowsDataSource.getAll() } returns flowOf(emptyList())
             // When
-            val result = recentWatchedRepositoryIml.getAllRecentWatchedTvShows().first()
+            val result = recentWatchedRepositoryImpl.getAllRecentWatchedTvShows().first()
             // Then
             assertThat(result).isEmpty()
         }
@@ -84,7 +84,7 @@ class RecentWatchedRepositoryImlTest {
         // Given
         coEvery { recentWatchedMoviesDataSource.insert(any()) } just Runs
         // When
-        recentWatchedRepositoryIml.insertMovie(movie)
+        recentWatchedRepositoryImpl.insertMovie(movie)
         // Then
         coVerify(exactly = 1) { recentWatchedMoviesDataSource.insert(any()) }
     }
@@ -94,7 +94,7 @@ class RecentWatchedRepositoryImlTest {
         // Given
         coEvery { recentWatchedTvShowsDataSource.insert(any()) } just Runs
         // When
-        recentWatchedRepositoryIml.insertTvShow(tvShow)
+        recentWatchedRepositoryImpl.insertTvShow(tvShow)
         // Then
         coVerify(exactly = 1) { recentWatchedTvShowsDataSource.insert(any()) }
     }
