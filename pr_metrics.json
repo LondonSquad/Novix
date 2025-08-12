@@ -20854,18 +20854,9 @@
       "id": 102248144,
       "url": "https://github.com/BassantM"
     },
-    "approvals": [
-      {
-        "reviewer": {
-          "id": 92235360,
-          "login": "abdo-essam",
-          "url": "https://github.com/abdo-essam"
-        },
-        "submitted_at": "2025-08-12T22:56:40Z"
-      }
-    ],
-    "first_approved_at": "2025-08-12T22:56:40Z",
-    "time_to_first_approval_minutes": 291.71666666666664,
+    "approvals": [],
+    "first_approved_at": null,
+    "time_to_first_approval_minutes": null,
     "required_approvals_met_at": null,
     "time_to_required_approvals_minutes": null,
     "closed_at": null,
@@ -20874,7 +20865,7 @@
     "week": "2025-W33",
     "status": "pending",
     "diff_stats": {
-      "additions": 929,
+      "additions": 933,
       "deletions": 519,
       "changed_files": 39
     }
