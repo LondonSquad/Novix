@@ -3,7 +3,7 @@ package com.london.data.repository
 import com.google.common.truth.Truth.assertThat
 import com.london.data.local.model.home.popular.PopularSectionLocal
 import com.london.data.local.model.home.topRated.TopRatedLocal
-import com.london.data.local.preference.AuthPreferences
+import com.london.data.local.preference.AuthenticationPreferences
 import com.london.data.local.source.home.HomeLocalDataSource
 import com.london.data.local.source.home.upcoming.UpComingLocalDataSource
 import com.london.data.mapper.details.movie.toEntity
@@ -54,7 +54,7 @@ import org.junit.jupiter.api.assertThrows
 
 class MovieRepositoryImplTest {
 
-    private val authPreferences: AuthPreferences = mockk(relaxed = true)
+    private val authenticationPreferences: AuthenticationPreferences = mockk(relaxed = true)
     private val movieRemoteDataSource: MovieRemoteDataSource = mockk(relaxed = true)
     private val crashReporter: CrashReporter = mockk(relaxed = true)
     private val upComingLocalDataSource: UpComingLocalDataSource = mockk(relaxed = true)
@@ -68,7 +68,7 @@ class MovieRepositoryImplTest {
     fun setup() {
         repository = MovieRepositoryImpl(
             movieRemoteDataSource = movieRemoteDataSource,
-            authPreferences = authPreferences,
+            authenticationPreferences = authenticationPreferences,
             crashReporter = crashReporter,
             upComingLocalDataSource = upComingLocalDataSource,
             localTopRated = localTopRated,
@@ -228,8 +228,8 @@ class MovieRepositoryImplTest {
             val guestSessionId = "guest123"
             val remoteMovieStates = fakeMovieStatesRemote()
 
-            coEvery { authPreferences.getSessionId() } returns null
-            coEvery { authPreferences.getGuestSessionId() } returns guestSessionId
+            coEvery { authenticationPreferences.getSessionId() } returns null
+            coEvery { authenticationPreferences.getGuestSessionId() } returns guestSessionId
 
             coEvery {
                 movieRemoteDataSource.getAccountMovieStates(any(), any())
@@ -350,8 +350,8 @@ class MovieRepositoryImplTest {
         val sessionId = "session123"
         val guestSessionId = "guest123"
 
-        coEvery { authPreferences.getSessionId() } returns sessionId
-        coEvery { authPreferences.getGuestSessionId() } returns guestSessionId
+        coEvery { authenticationPreferences.getSessionId() } returns sessionId
+        coEvery { authenticationPreferences.getGuestSessionId() } returns guestSessionId
         coEvery {
             movieRemoteDataSource.addMovieRating(
                 movieId = movieId,
@@ -376,8 +376,8 @@ class MovieRepositoryImplTest {
         val sessionId = "session123"
         val guestSessionId = "guest123"
 
-        coEvery { authPreferences.getSessionId() } returns sessionId
-        coEvery { authPreferences.getGuestSessionId() } returns guestSessionId
+        coEvery { authenticationPreferences.getSessionId() } returns sessionId
+        coEvery { authenticationPreferences.getGuestSessionId() } returns guestSessionId
         coEvery {
             movieRemoteDataSource.addMovieRating(
                 movieId = movieId,
@@ -403,8 +403,8 @@ class MovieRepositoryImplTest {
         val sessionId = null
         val guestSessionId = "guest123"
 
-        coEvery { authPreferences.getSessionId() } returns sessionId
-        coEvery { authPreferences.getGuestSessionId() } returns guestSessionId
+        coEvery { authenticationPreferences.getSessionId() } returns sessionId
+        coEvery { authenticationPreferences.getGuestSessionId() } returns guestSessionId
         coEvery {
             movieRemoteDataSource.addMovieRating(
                 movieId = movieId,
