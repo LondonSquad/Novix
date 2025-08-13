@@ -79,41 +79,70 @@ fun TrendingSection(
             horizontalArrangement = Arrangement.spacedBy(8.dp),
             verticalAlignment = Alignment.Bottom
         ) {
+            TrendingSection(
+                onMoviesClick = onMoviesClick,
+                onTvShowsClick = onTvShowsClick,
+                onActorsClick = onActorsClick
+            ).forEach { category ->
                 CategoryCard(
-                    title = stringResource(R.string.Movies),
-                    icon = painterResource(id = R.drawable.icon_movie),
-                    startColor = NovixTheme.colors.primary,
-                    endColor = NovixTheme.colors.darkCocoa,
-                    imageWidth = 60.dp,
-                    imageHeight = 64.dp,
-                    onClick = onMoviesClick,
-                    modifier = Modifier.weight(1f)
-                )
+                    title = category.title,
+                    icon = category.icon,
+                    startColor = category.startColor,
+                    endColor = category.endColor,
+                    imageWidth = category.imageWidth,
+                    imageHeight = category.imageHeight,
+                    onClick = category.onClick,
 
-                CategoryCard(
-                    title = stringResource(R.string.TV_Shows),
-                    icon = painterResource(id = R.drawable.icon_tvshow),
-                    startColor = NovixTheme.colors.secondary,
-                    endColor = NovixTheme.colors.deepCrimson,
-                    imageWidth = 88.46.dp,
-                    imageHeight = 64.dp,
-                    onClick = onTvShowsClick,
-                    modifier = Modifier.weight(1f)
                 )
-
-                CategoryCard(
-                    title = stringResource(R.string.actors),
-                    icon = painterResource(id = R.drawable.icon_actor),
-                    startColor = NovixTheme.colors.tealBlue,
-                    endColor = NovixTheme.colors.oceanDark,
-                    imageWidth = 56.49.dp,
-                    imageHeight = 64.dp,
-                    onClick = onActorsClick,
-                    modifier = Modifier.weight(1f)
-                )
+            }
         }
     }
 }
+@Composable
+fun TrendingSection(
+    onMoviesClick: () -> Unit,
+    onTvShowsClick: () -> Unit,
+    onActorsClick: () -> Unit,
+): List<CategoryUi> {
+    return listOf(
+        CategoryUi(
+            title = "Movies",
+            icon = painterResource(id = R.drawable.icon_movie),
+            startColor = NovixTheme.colors.primary,
+            endColor = NovixTheme.colors.darkCocoa,
+            imageWidth = 60.dp,
+            imageHeight = 64.dp,
+            onClick = onMoviesClick
+        ),
+        CategoryUi(
+            title = "TV Shows",
+            icon = painterResource(id = R.drawable.icon_tvshow),
+            startColor = NovixTheme.colors.secondary,
+            endColor = NovixTheme.colors.deepCrimson,
+            imageWidth = 88.46.dp,
+            imageHeight = 64.dp,
+            onClick = onTvShowsClick
+        ),
+        CategoryUi(
+            title = "Actors",
+            icon = painterResource(id = R.drawable.icon_actor),
+            startColor = NovixTheme.colors.tealBlue,
+            endColor = NovixTheme.colors.oceanDark,
+            imageWidth = 56.49.dp,
+            imageHeight = 64.dp,
+            onClick = onActorsClick
+        )
+    )
+}
+data class CategoryUi(
+    val title: String,
+    val icon: Painter,
+    val startColor: Color,
+    val endColor: Color,
+    val imageWidth: Dp,
+    val imageHeight: Dp,
+    val onClick: () -> Unit,
+)
 
 @Composable
 private fun CategoryCard(
