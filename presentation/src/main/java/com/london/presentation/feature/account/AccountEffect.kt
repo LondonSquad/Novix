@@ -1,4 +1,4 @@
-package com.london.presentation.feature.accountinfo.account
+package com.london.presentation.feature.account
 
 sealed interface AccountEffect {
     data object NavigateLogout : AccountEffect

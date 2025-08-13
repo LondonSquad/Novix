@@ -1,4 +1,4 @@
-package com.london.presentation.feature.accountinfo.account
+package com.london.presentation.feature.account.account
 
 import com.google.common.truth.Truth.assertThat
 import com.london.domain.AppPreferencesService
@@ -8,6 +8,8 @@ import com.london.domain.language.AppLanguage
 import com.london.domain.theme.AppTheme
 import com.london.domain.usecase.accountdetails.GetAccountDetailsUseCase
 import com.london.domain.usecase.authentication.AuthenticationUseCase
+import com.london.presentation.feature.account.AccountViewModel
+import com.london.presentation.feature.account.ActiveBottomSheet
 import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.every
@@ -60,7 +62,8 @@ class   AccountViewModelTest {
         coEvery { accountDetailsUseCase.invoke() } returns AccountInfo(1, "", "")
 
         // When
-        viewModel = AccountViewModel(appPreferencesService, authenticationUseCase, accountDetailsUseCase)
+        viewModel =
+            AccountViewModel(appPreferencesService, authenticationUseCase, accountDetailsUseCase)
         testDispatcher.scheduler.advanceUntilIdle()
 
         // Then
@@ -75,7 +78,8 @@ class   AccountViewModelTest {
         coEvery { accountDetailsUseCase.invoke() } returns AccountInfo(1, "", "")
 
         // When
-        viewModel = AccountViewModel(appPreferencesService, authenticationUseCase, accountDetailsUseCase)
+        viewModel =
+            AccountViewModel(appPreferencesService, authenticationUseCase, accountDetailsUseCase)
         testDispatcher.scheduler.advanceUntilIdle()
 
         // Then
@@ -104,10 +108,12 @@ class   AccountViewModelTest {
 
         // When
         viewModel.onLogoutConfirmed()
+
         testDispatcher.scheduler.advanceUntilIdle()
 
         // Then
         assertThat(viewModel.state.value.isLogoutLoading).isFalse()
+        assertThat(viewModel.state.value.activeBottomSheet).isEqualTo(ActiveBottomSheet.None) // Also check this
         coVerify { authenticationUseCase.logout() }
     }
 
@@ -273,7 +279,8 @@ class   AccountViewModelTest {
         coEvery { accountDetailsUseCase.invoke() } returns AccountInfo(1, "", "")
 
         // When
-        viewModel = AccountViewModel(appPreferencesService, authenticationUseCase, accountDetailsUseCase)
+        viewModel =
+            AccountViewModel(appPreferencesService, authenticationUseCase, accountDetailsUseCase)
         testDispatcher.scheduler.advanceUntilIdle()
 
         // Then
@@ -290,7 +297,8 @@ class   AccountViewModelTest {
         coEvery { accountDetailsUseCase.invoke() } returns AccountInfo(1, "", "")
 
         // When
-        viewModel = AccountViewModel(appPreferencesService, authenticationUseCase, accountDetailsUseCase)
+        viewModel =
+            AccountViewModel(appPreferencesService, authenticationUseCase, accountDetailsUseCase)
         testDispatcher.scheduler.advanceUntilIdle()
         
         contentRestrictionFlow.value = ContentRestrictionLevel.STRICT
@@ -303,8 +311,9 @@ class   AccountViewModelTest {
     private fun setupViewModel() {
         coEvery { authenticationUseCase.isLoggedIn() } returns true
         coEvery { accountDetailsUseCase.invoke() } returns AccountInfo(1, "TestUser", "avatar.jpg")
-        
-        viewModel = AccountViewModel(appPreferencesService, authenticationUseCase, accountDetailsUseCase)
+
+        viewModel =
+            AccountViewModel(appPreferencesService, authenticationUseCase, accountDetailsUseCase)
         testDispatcher.scheduler.advanceUntilIdle()
     }
 }
