@@ -87,7 +87,7 @@ class TvShowDetailsViewModelTest {
     }
 
     @Test
-    fun `when initializeGetImagesData fails, error state should be updated`() = runTest {
+    fun `error state should be updated, when initializeGetImagesData fails`() = runTest {
         // Given
         val exception = Exception("error")
         coEvery { getTvShowImages.invoke(TV_SHOW_ID) } throws exception
@@ -104,7 +104,7 @@ class TvShowDetailsViewModelTest {
     }
 
     @Test
-    fun `when initializeEpisodesBySeasons, episodes by seasons data should be fetched`() = runTest {
+    fun `episodes by seasons data should be fetched, when initializeEpisodesBySeasons`() = runTest {
         // Given
         coEvery { getEpisodesByTvShowSeason.invoke(TV_SHOW_ID, any()) } returns tvShowEpisodesEntity
 
@@ -121,7 +121,7 @@ class TvShowDetailsViewModelTest {
     }
 
     @Test
-    fun `when initializeEpisodesBySeasons fails, error state should be updated`() = runTest {
+    fun `error state should be updated, when initializeEpisodesBySeasons fails`() = runTest {
 
         // Given
         val exception = Exception("error")
@@ -139,7 +139,7 @@ class TvShowDetailsViewModelTest {
     }
 
     @Test
-    fun `when initializeEpisodesBySeasons is called, videoProvider state should be updated`() =
+    fun ` videoProvider state should be updated, when initializeEpisodesBySeasons is called`() =
         runTest {
             // Given
             coEvery { manageTvShowDetailsUseCase.getTvShowVideoProvider(TV_SHOW_ID) } returns emptyList()
@@ -156,7 +156,7 @@ class TvShowDetailsViewModelTest {
         }
 
     @Test
-    fun `when initializeGetTvShowDetailsData is called, tvShowDetails state should be updated`() =
+    fun `tvShowDetails state should be updated, when initializeGetTvShowDetailsData is called`() =
         runTest {
 
             // Given
