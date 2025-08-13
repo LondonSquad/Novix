@@ -13,6 +13,7 @@ import com.london.presentation.shared.EmptyGenreLayout
 import com.london.presentation.shared.MediaGenreFilters
 import com.london.presentation.utils.MovieGenre
 import com.london.presentation.utils.TvShowGenre
+import com.london.presentation.utils.isEmpty
 
 @Composable
 fun <T : Any> MediaLazyGridWithFilter(
@@ -20,6 +21,7 @@ fun <T : Any> MediaLazyGridWithFilter(
     imageUrl: (T) -> String = { it.getImageUrl() },
     name: (T) -> String = { it.getName() },
     items: List<T>? = null,
+    isLoading: Boolean = false,
     pagingItems: LazyPagingItems<T>? = null,
     onMovieGenreClick: (MovieGenre) -> Unit = {},
     onTvShowGenreClick: (TvShowGenre) -> Unit = {},
@@ -83,7 +85,9 @@ fun <T : Any> MediaLazyGridWithFilter(
             }
 
             else -> {
-                EmptyGenreLayout()
+                if ((items.isNullOrEmpty() && pagingItems?.isEmpty() == true) && !isLoading) {
+                    EmptyGenreLayout()
+                }
             }
         }
     }

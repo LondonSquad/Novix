@@ -18,7 +18,6 @@ import com.london.designsystem.theme.NovixTheme
 import com.london.designsystem.theme.ThemePreviews
 import com.london.domain.entity.Movie
 import com.london.domain.entity.TvShow
-import com.london.presentation.shared.EmptyGenreLayout
 import com.london.presentation.shared.HomeCard
 
 @Composable
@@ -100,37 +99,33 @@ fun <T : Any> MediaLazyVerticalGrid(
     ) {
         topBar?.invoke()
 
-        if (pagingItems.itemCount == 0) {
-            EmptyGenreLayout()
-        } else {
-            LazyVerticalGrid(
-                state = rememberLazyGridState(),
-                columns = GridCells.Fixed(2),
-                modifier = modifier.fillMaxSize(),
-                horizontalArrangement = Arrangement.spacedBy(12.dp),
-                verticalArrangement = Arrangement.spacedBy(12.dp),
-                contentPadding = PaddingValues(start = 16.dp, end = 16.dp, bottom = 16.dp)
-            ) {
-                items(pagingItems.itemCount) { index ->
-                    pagingItems[index]?.let { item ->
-                        HomeCard(
-                            imageUrl = imageUrl(item),
-                            modifier = Modifier.clickable {
-                                when (item) {
-                                    is Movie -> onNavigateToMovie(item.id)
-                                    is TvShow -> onNavigateToTvShow(item.id)
-                                }
-                            },
-                            imageDescription = name(item),
-                            isSaved = isItemSaved(item),
-                            hasSaveIcon = hasSaveIcon,
-                            onSaveClick = { onSaveClick(item) },
-                            onDeleteClick = { onDeleteClick(item) },
-                            isDarkMode = isDarkMode,
-                            myRatingList = myRatingList,
-                            rate = rate
-                        )
-                    }
+        LazyVerticalGrid(
+            state = rememberLazyGridState(),
+            columns = GridCells.Fixed(2),
+            modifier = modifier.fillMaxSize(),
+            horizontalArrangement = Arrangement.spacedBy(12.dp),
+            verticalArrangement = Arrangement.spacedBy(12.dp),
+            contentPadding = PaddingValues(start = 16.dp, end = 16.dp, bottom = 16.dp)
+        ) {
+            items(pagingItems.itemCount) { index ->
+                pagingItems[index]?.let { item ->
+                    HomeCard(
+                        imageUrl = imageUrl(item),
+                        modifier = Modifier.clickable {
+                            when (item) {
+                                is Movie -> onNavigateToMovie(item.id)
+                                is TvShow -> onNavigateToTvShow(item.id)
+                            }
+                        },
+                        imageDescription = name(item),
+                        isSaved = isItemSaved(item),
+                        hasSaveIcon = hasSaveIcon,
+                        onSaveClick = { onSaveClick(item) },
+                        onDeleteClick = { onDeleteClick(item) },
+                        isDarkMode = isDarkMode,
+                        myRatingList = myRatingList,
+                        rate = rate
+                    )
                 }
             }
         }
