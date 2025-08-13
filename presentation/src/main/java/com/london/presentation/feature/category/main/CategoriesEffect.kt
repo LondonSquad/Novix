@@ -5,6 +5,6 @@ import com.london.presentation.utils.TvShowGenre
 
 interface CategoriesEffect {
 
-    data class NavigateToMovieCategory(val movieGenre: MovieGenre) : CategoriesEffect
-    data class NavigateToTvShowCategory(val tvShowGenre: TvShowGenre) : CategoriesEffect
+    data class MovieCategoryNavigation(val movieGenre: MovieGenre) : CategoriesEffect
+    data class TvShowCategoryNavigation(val tvShowGenre: TvShowGenre) : CategoriesEffect
 }

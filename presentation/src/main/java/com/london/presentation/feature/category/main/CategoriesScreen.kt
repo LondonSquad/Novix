@@ -49,10 +49,10 @@ fun CategoriesScreen(
 
     effect?.Listen { currentEffect ->
         when (currentEffect) {
-            is CategoriesEffect.NavigateToMovieCategory ->
+            is CategoriesEffect.MovieCategoryNavigation ->
                 onNavigateToMovieCategory(currentEffect.movieGenre)
 
-            is CategoriesEffect.NavigateToTvShowCategory ->
+            is CategoriesEffect.TvShowCategoryNavigation ->
                 onNavigateToTvShowCategory(currentEffect.tvShowGenre)
         }
     }

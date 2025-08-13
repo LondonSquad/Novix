@@ -18,7 +18,7 @@ class CategoriesViewModelTest {
         // When & Then
         viewModel?.effect?.test {
             viewModel?.onMovieGenreClick(genre)
-            assertThat(awaitItem()).isInstanceOf(CategoriesEffect.NavigateToMovieCategory::class.java)
+            assertThat(awaitItem()).isInstanceOf(CategoriesEffect.MovieCategoryNavigation::class.java)
             cancelAndIgnoreRemainingEvents()
         }
     }
@@ -30,7 +30,7 @@ class CategoriesViewModelTest {
         // When & Then
         viewModel?.effect?.test {
             viewModel?.onTvShowGenreClick(genre)
-            assertThat(awaitItem()).isInstanceOf(CategoriesEffect.NavigateToTvShowCategory::class.java)
+            assertThat(awaitItem()).isInstanceOf(CategoriesEffect.TvShowCategoryNavigation::class.java)
             cancelAndIgnoreRemainingEvents()
         }
     }
