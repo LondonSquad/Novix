@@ -9,11 +9,11 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 
 @HiltViewModel
-class ActorGalleryViewModel @Inject constructor(
-    private val getActorImagesByIdUseCase: GetActorImagesByIdUseCase,
-    savedStateHandle: SavedStateHandle
-) : BaseViewModel<ActorGalleryUiState, ActorGalleryEffectUiState>(ActorGalleryUiState()),
-    ActorGalleryContract {
+class ActorsGalleryViewModel @Inject constructor(
+    savedStateHandle: SavedStateHandle,
+    private val getActorImagesById: GetActorImagesByIdUseCase
+) : BaseViewModel<ActorsGalleryUiState, ActorsGalleryEffect>(ActorsGalleryUiState()),
+    ActorsGalleryContract {
 
     private val args = savedStateHandle.getArgs<Screen.ActorGallery>()
     private val actorId = args?.actorId ?: 0
@@ -24,31 +24,20 @@ class ActorGalleryViewModel @Inject constructor(
 
     private fun loadImages(actorId: Int) {
         tryToExecute(
-            block = {
-                getActorImagesByIdUseCase.invoke(actorId)
-            },
+            block = { getActorImagesById.invoke(actorId) },
             onStart = { updateState { copy(isLoading = true) } },
-            onSuccess = { imageDetails ->
-                updateState {
-                    copy(
-                        images = imageDetails
-                    )
-                }
-            },
-            onError = { errorState ->
-                updateState { copy(error = errorState) }
-            },
+            onSuccess = { imageDetails -> updateState { copy(images = imageDetails) } },
+            onError = { errorState -> updateState { copy(error = errorState) } },
             onCompleted = { updateState { copy(isLoading = false) } },
-            checkSuccess = { actorId != 0 },
         )
     }
 
-    override fun onRetry(){
+    override fun onRetryClick() {
         updateState { copy(error = null) }
         loadImages(actorId)
     }
 
     override fun onBackClick() {
-        emitEffect(ActorGalleryEffectUiState.NavigationBack)
+        emitEffect(ActorsGalleryEffect.BackNavigation)
     }
 }

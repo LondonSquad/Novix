@@ -29,12 +29,12 @@ import com.london.presentation.R
 import com.london.presentation.feature.accountinfo.account.AccountScreen
 import com.london.presentation.feature.accountinfo.rating.MyRatingScreen
 import com.london.presentation.feature.authentication.login.LoginScreen
-import com.london.presentation.feature.authentication.register.WebViewRegistrationScreen
+import com.london.presentation.feature.authentication.register.RegistrationScreen
 import com.london.presentation.feature.category.main.CategoriesScreen
 import com.london.presentation.feature.category.movie.MoviesByCategoryScreen
 import com.london.presentation.feature.category.tvshow.TvShowByCategoryScreen
 import com.london.presentation.feature.details.actor.ActorDetailsScreen
-import com.london.presentation.feature.details.actor.info.gallery.ActorGalleryScreen
+import com.london.presentation.feature.details.actor.info.gallery.ActorsGalleryScreen
 import com.london.presentation.feature.details.actor.info.topmoviespicks.TopMoviesPicksScreen
 import com.london.presentation.feature.details.actor.info.toptvshowspicks.TopTvShowsPicksScreen
 import com.london.presentation.feature.details.movie.MovieDetailsScreen
@@ -213,7 +213,7 @@ fun NavGraphBuilder.authNavGraph(
         enterTransition = { fadeIn(tween(500)) },
         popExitTransition = { fadeOut(tween(500)) },
     ) {
-        WebViewRegistrationScreen(
+        RegistrationScreen(
             onNavigateBack = {
                 navController.popBackStack()
             },
@@ -536,7 +536,7 @@ fun NavGraphBuilder.mainNavGraph(
         )
     }
     composable<Screen.ActorGallery> {
-        ActorGalleryScreen(
+        ActorsGalleryScreen(
             onNavigateBack = { navController.popBackStack() }
         )
     }
