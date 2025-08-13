@@ -16,9 +16,9 @@ import org.junit.Before
 import org.junit.Test
 
 @OptIn(ExperimentalCoroutinesApi::class)
-class ActorGalleryViewModelTest {
+class ActorsGalleryViewModelTest {
 
-    private lateinit var viewModel: ActorGalleryViewModel
+    private lateinit var viewModel: ActorsGalleryViewModel
     private lateinit var getActorImagesById: GetActorImagesByIdUseCase
     private lateinit var savedStateHandle: SavedStateHandle
 
@@ -50,7 +50,7 @@ class ActorGalleryViewModelTest {
         coEvery { savedStateHandle.getArgs<Screen.ActorGallery>() } returns args
         coEvery { getActorImagesById.invoke(actorId) } returns mockImages
 
-        viewModel = ActorGalleryViewModel(savedStateHandle, getActorImagesById)
+        viewModel = ActorsGalleryViewModel(savedStateHandle, getActorImagesById)
 
         // When
         viewModel.onBackClick()
