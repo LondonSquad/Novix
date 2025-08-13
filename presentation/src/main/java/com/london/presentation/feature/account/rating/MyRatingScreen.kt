@@ -55,9 +55,9 @@ fun MyRatingScreen(
 
     effect?.Listen { currentEffect ->
         when (currentEffect) {
-            is MyRatingEffect.NavigateToMovie -> onNavigateMovie(currentEffect.movieId)
-            is MyRatingEffect.NavigateToTvShow -> onNavigateTvShow(currentEffect.tvShowId)
-            is MyRatingEffect.NavigateBack -> onNavigateBack()
+            is MyRatingEffect.ToMovieNavigation -> onNavigateMovie(currentEffect.id)
+            is MyRatingEffect.ToTvShowNavigation -> onNavigateTvShow(currentEffect.id)
+            is MyRatingEffect.BackNavigation -> onNavigateBack()
         }
     }
 

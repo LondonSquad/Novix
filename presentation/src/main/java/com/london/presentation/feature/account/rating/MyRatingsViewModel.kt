@@ -72,13 +72,13 @@ class MyRatingsViewModel @Inject constructor(
         updateState { copy(selectedRatingCategory = category) }
 
     override fun onItemClick(id: Int) =
-        emitEffect(MyRatingEffect.NavigateToMovie(id))
+        emitEffect(MyRatingEffect.ToMovieNavigation(id))
 
-    override fun onBackClicked() = emitEffect(MyRatingEffect.NavigateBack)
+    override fun onBackClicked() = emitEffect(MyRatingEffect.BackNavigation)
 
     override fun onMovieClick(id: Int) =
-        emitEffect(MyRatingEffect.NavigateToMovie(id))
+        emitEffect(MyRatingEffect.ToMovieNavigation(id))
 
     override fun onTvShowClick(id: Int) =
-        emitEffect(MyRatingEffect.NavigateToTvShow(id))
+        emitEffect(MyRatingEffect.ToTvShowNavigation(id))
 }
