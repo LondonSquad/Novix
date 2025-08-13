@@ -21,7 +21,7 @@ val RedAccentLight = Color(0xFFF75662)
 val YellowAccentLight = Color(0xFFFFC74D)
 val GreenAccentLight = Color(0xFF19744D)
 val GreenVariantLight = Color(0xFFCFE5DC)
-val LinearGradientLight = Color(0x0D060800)
+val LinearGradientLight = Color(0xFF0D0608)
 val DarkCocoaLight = Color(0xFFBF4C33)
 val DeepCrimsonLight = Color(0xFF5B0113)
 val TealBlueLight = Color(0xFF3B99AC)
@@ -55,5 +55,5 @@ val LightNovixColors = NovixColors(
     oceanDark = OceanDarkLight,
     linearGradient = LinearGradientLight,
     blackLinearGradient = BlackLinearGradientLight,
-    whiteLinearGradient = WhiteLinearGradientLight
+    whiteLinearGradient = WhiteLinearGradientLight,
 )
