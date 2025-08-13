@@ -44,7 +44,7 @@ fun TrendingActorsScreen(
     val actorsLazyItems = state.actorsFlow.collectAsLazyPagingItems()
 
     BuildScreen(
-        isLoading = state.isLoading,
+        isLoading = state.isLoading.not(),
         isError = actorsLazyItems.loadState.refresh is LoadState.Error,
         onBack = viewModel::onBack,
         onRetry = viewModel::onRetry,

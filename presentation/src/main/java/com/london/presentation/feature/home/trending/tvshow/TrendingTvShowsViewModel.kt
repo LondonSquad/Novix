@@ -1,6 +1,8 @@
 package com.london.presentation.feature.home.trending.tvshow
 
+import androidx.lifecycle.viewModelScope
 import androidx.paging.PagingData
+import androidx.paging.cachedIn
 import com.london.domain.entity.Trending
 import com.london.domain.usecase.details.tvshow.ManageTvShowDetailsUseCase
 import com.london.presentation.shared.base.BaseViewModel
@@ -57,7 +59,7 @@ class TrendingTvShowsViewModel @Inject constructor(
                     movieGenreId = state.value.selectedGenreId,
                 )
             }
-        )
+        ).cachedIn(viewModelScope)
     }
 
     fun handlingLoadingState(isLoading: Boolean) = updateState { copy(isLoading = isLoading) }
