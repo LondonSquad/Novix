@@ -1,4 +1,4 @@
-package com.london.presentation.feature.accountinfo.account
+package com.london.presentation.feature.account
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
@@ -12,16 +12,14 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.london.designsystem.component.ModalBottomSheet
 import com.london.designsystem.component.TopBar
-import com.london.designsystem.component.rememberModalBottomSheetState
 import com.london.presentation.R
-import com.london.presentation.feature.accountinfo.appearance.AppearanceBottomSheet
-import com.london.presentation.feature.accountinfo.language.LanguageBottomSheet
-import com.london.presentation.feature.accountinfo.logout.LogoutBottomSheet
-import com.london.presentation.shared.accountComponent.ContentRestrictionBottomSheet
-import com.london.presentation.shared.accountComponent.LoggedInContent
-import com.london.presentation.shared.accountComponent.NotLoggedInContent
+import com.london.presentation.feature.account.bottomsheet.AppearanceBottomSheet
+import com.london.presentation.feature.account.bottomsheet.ContentRestrictionBottomSheet
+import com.london.presentation.feature.account.bottomsheet.LanguageBottomSheet
+import com.london.presentation.feature.account.bottomsheet.LogoutBottomSheet
+import com.london.presentation.feature.account.components.LoggedInContent
+import com.london.presentation.feature.account.components.NotLoggedInContent
 import com.london.presentation.shared.buildscreen.BuildScreen
 import com.london.presentation.utils.Listen
 
@@ -93,15 +91,11 @@ private fun Content(
         }
 
         ActiveBottomSheet.ContentRestriction -> {
-            ModalBottomSheet(
-                onDismissRequest = accountContract::onBottomSheetDismiss,
-                state = rememberModalBottomSheetState(skipPartiallyExpanded = true),
-            ) {
-                ContentRestrictionBottomSheet(
-                    currentLevel = uiState.currentContentRestriction,
-                    onSaveClick = accountContract::onContentRestrictionSave
-                )
-            }
+            ContentRestrictionBottomSheet(
+                currentLevel = uiState.currentContentRestriction,
+                onSaveClick = accountContract::onContentRestrictionSave,
+                onDismiss = accountContract::onBottomSheetDismiss
+            )
         }
 
         ActiveBottomSheet.Appearance -> {
