@@ -9,11 +9,11 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 
 @HiltViewModel
-class ActorGalleryViewModel @Inject constructor(
+class ActorsGalleryViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle,
     private val getActorImagesById: GetActorImagesByIdUseCase
-) : BaseViewModel<ActorGalleryUiState, ActorGalleryEffect>(ActorGalleryUiState()),
-    ActorGalleryContract {
+) : BaseViewModel<ActorsGalleryUiState, ActorsGalleryEffect>(ActorsGalleryUiState()),
+    ActorsGalleryContract {
 
     private val args = savedStateHandle.getArgs<Screen.ActorGallery>()
     private val actorId = args?.actorId ?: 0
@@ -38,6 +38,6 @@ class ActorGalleryViewModel @Inject constructor(
     }
 
     override fun onBackClick() {
-        emitEffect(ActorGalleryEffect.BackNavigation)
+        emitEffect(ActorsGalleryEffect.BackNavigation)
     }
 }

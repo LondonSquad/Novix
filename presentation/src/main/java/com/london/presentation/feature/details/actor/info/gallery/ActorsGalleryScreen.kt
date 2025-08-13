@@ -35,14 +35,14 @@ import com.london.presentation.shared.buildscreen.BuildScreen
 import com.london.presentation.utils.Listen
 
 @Composable
-fun ActorGalleryScreen(
+fun ActorsGalleryScreen(
     onNavigateBack: () -> Unit,
-    viewModel: ActorGalleryViewModel = hiltViewModel()
+    viewModel: ActorsGalleryViewModel = hiltViewModel()
 ) {
     val effect by viewModel.effect.collectAsState(null)
     val uiState by viewModel.state.collectAsStateWithLifecycle()
 
-    effect.Listen<ActorGalleryEffect> { onNavigateBack() }
+    effect.Listen<ActorsGalleryEffect> { onNavigateBack() }
 
     BuildScreen(
         onBack = viewModel::onBackClick,
@@ -52,15 +52,15 @@ fun ActorGalleryScreen(
     ) {
         Content(
             uiState = uiState,
-            actorGalleryContract = viewModel
+            actorsGalleryContract = viewModel
         )
     }
 }
 
 @Composable
 private fun Content(
-    uiState: ActorGalleryUiState,
-    actorGalleryContract: ActorGalleryContract
+    uiState: ActorsGalleryUiState,
+    actorsGalleryContract: ActorsGalleryContract
 ) {
     Column(
         modifier = Modifier
@@ -73,7 +73,7 @@ private fun Content(
         TopBar(
             modifier = Modifier.padding(bottom = 16.dp),
             title = stringResource(R.string.gallery),
-            onBackClick = actorGalleryContract::onBackClick
+            onBackClick = actorsGalleryContract::onBackClick
         )
 
         Box(modifier = Modifier.weight(1f)) {
@@ -88,7 +88,7 @@ private fun Content(
 
 @Composable
 private fun GalleryContent(
-    uiState: ActorGalleryUiState
+    uiState: ActorsGalleryUiState
 ){
     LazyVerticalGrid(
         columns = GridCells.Adaptive(minSize = 104.dp),
