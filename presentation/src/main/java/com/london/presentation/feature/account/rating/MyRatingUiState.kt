@@ -1,4 +1,4 @@
-package com.london.presentation.feature.accountinfo.rating
+package com.london.presentation.feature.account.rating
 
 import com.london.domain.entity.RatedMedia
 import com.london.presentation.shared.base.ErrorState

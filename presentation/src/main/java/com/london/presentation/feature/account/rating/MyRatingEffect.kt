@@ -1,4 +1,4 @@
-package com.london.presentation.feature.accountinfo.rating
+package com.london.presentation.feature.account.rating
 
 sealed interface MyRatingEffect {
     data object NavigateBack : MyRatingEffect

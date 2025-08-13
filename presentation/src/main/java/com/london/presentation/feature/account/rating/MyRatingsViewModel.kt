@@ -1,4 +1,4 @@
-package com.london.presentation.feature.accountinfo.rating
+package com.london.presentation.feature.account.rating
 
 import com.london.domain.entity.recent.MediaType
 import com.london.domain.usecase.rating.ManageRatingUseCase
