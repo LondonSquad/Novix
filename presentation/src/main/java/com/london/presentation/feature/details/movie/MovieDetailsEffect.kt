@@ -1,10 +1,10 @@
 package com.london.presentation.feature.details.movie
 
 sealed interface MovieDetailsEffect {
-    data object BackNavigation : MovieDetailsEffect
-    data object OnLoginNavigation : MovieDetailsEffect
-    data class MovieNavigation(val movieId: Int) : MovieDetailsEffect
-    data class ActorNavigation(val actorId: Int) : MovieDetailsEffect
-    data class GenreNavigation(val genreId: Int) : MovieDetailsEffect
-    data class ReviewsNavigation(val movieId: Int, val mediaNumber: Int) : MovieDetailsEffect
+    data object NavigateBack : MovieDetailsEffect
+    data object NavigateToLogin : MovieDetailsEffect
+    data class NavigateToMovie(val movieId: Int) : MovieDetailsEffect
+    data class NavigateToActor(val actorId: Int) : MovieDetailsEffect
+    data class NavigateToGenreMovies(val genreId: Int) : MovieDetailsEffect
+    data class NavigateToReviews(val movieId: Int, val mediaNumber: Int) : MovieDetailsEffect
 }

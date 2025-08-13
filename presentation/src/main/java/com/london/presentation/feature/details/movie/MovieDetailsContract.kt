@@ -1,7 +1,7 @@
 package com.london.presentation.feature.details.movie
 
 interface MovieDetailsContract {
-    fun onRetry()
+    fun onRetryClick()
     fun onBackClick()
     fun onLoginClick()
     fun onSavedClick()
@@ -11,5 +11,5 @@ interface MovieDetailsContract {
     fun onActorClick(actorId: Int)
     fun onGenreClick(genreId: Int)
     fun onSelectRatingClick(rating: Int)
-    fun onReviewsClick(movieId: Int, mediaNumber: Int)
+    fun onReviewsClick(movieId: Int, mediaId: Int)
 }

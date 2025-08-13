@@ -52,6 +52,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.navigation.NavController
 import com.london.designsystem.R
 import com.london.designsystem.component.GuestUserLoginBottomSheet
 import com.london.designsystem.component.Icon
@@ -69,6 +70,9 @@ import com.london.presentation.R.string.star
 import com.london.presentation.R.string.time_icon
 import com.london.presentation.R.string.view_reviews
 import com.london.presentation.feature.search.SearchCategory
+import com.london.presentation.navigation.Screen
+import com.london.presentation.navigation.Screen.ActorDetails
+import com.london.presentation.navigation.Screen.MovieDetails
 import com.london.presentation.shared.ActorItem
 import com.london.presentation.shared.ConditionalText
 import com.london.presentation.shared.CustomBackDropImagePager
@@ -88,32 +92,28 @@ import com.london.presentation.utils.toLocalizedNumbers
 
 @Composable
 fun MovieDetailsScreen(
-    onNavigateBack: () -> Unit,
-    onNavigateToLogin: () -> Unit,
-    onNavigateGenre: (Int) -> Unit,
-    onNavigateToMovie: (Int) -> Unit,
-    onNavigateToActor: (Int) -> Unit,
-    onNavigateToReviews: (Int, Int) -> Unit,
+    navController: NavController,
     viewModel: MovieDetailsViewModel = hiltViewModel()
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
     val effect by viewModel.effect.collectAsState(null)
 
-    HandleMovieDetailsEffects(
-        effect = effect,
-        onNavigateBack = onNavigateBack,
-        onNavigateGenre = onNavigateGenre,
-        onNavigateToMovie = onNavigateToMovie,
-        onNavigateToActor = onNavigateToActor,
-        onNavigateToReviews = onNavigateToReviews,
-        onNavigateToLogin = onNavigateToLogin
-    )
+    effect?.Listen { currentEffect ->
+        when (currentEffect) {
+            is MovieDetailsEffect.NavigateToActor -> navController.navigate(ActorDetails(currentEffect.actorId))
+            MovieDetailsEffect.NavigateBack -> navController.navigateUp()
+            is MovieDetailsEffect.NavigateToGenreMovies -> navController.navigate(Screen.MoviesByCategory(currentEffect.genreId))
+            is MovieDetailsEffect.NavigateToMovie -> navController.navigate(MovieDetails(currentEffect.movieId))
+            is MovieDetailsEffect.NavigateToReviews -> navController.navigate(Screen.Reviews(currentEffect.movieId, currentEffect.mediaNumber))
+            is MovieDetailsEffect.NavigateToLogin -> navController.navigate(Screen.Login)
+        }
+    }
 
     BuildScreen(
         onBack = viewModel::onBackClick,
         isLoading = state.isLoading,
         isError = state.error != null,
-        onRetry = viewModel::onRetry
+        onRetry = viewModel::onRetryClick
     ) {
         Content(
             uiState = state,
@@ -317,7 +317,7 @@ private fun Content(
             }
         }
         FooterSection(
-            haveTrailer = uiState.movieHaveTrailer,
+            haveTrailer = uiState.hasTrailer,
             modifier = Modifier
                 .onGloballyPositioned { coordinates ->
                     footerHeight = with(density) { coordinates.size.height.toDp() }
@@ -423,33 +423,6 @@ private fun RatingAndMetaRow(
     }
 }
 
-
-@Composable
-private fun HandleMovieDetailsEffects(
-    effect: MovieDetailsEffect?,
-    onNavigateBack: () -> Unit,
-    onNavigateGenre: (Int) -> Unit,
-    onNavigateToMovie: (Int) -> Unit,
-    onNavigateToActor: (Int) -> Unit,
-    onNavigateToReviews: (Int, Int) -> Unit,
-    onNavigateToLogin: () -> Unit
-) {
-    effect?.Listen { currentEffect ->
-        when (currentEffect) {
-            is MovieDetailsEffect.ActorNavigation -> onNavigateToActor(currentEffect.actorId)
-            MovieDetailsEffect.BackNavigation -> onNavigateBack()
-            is MovieDetailsEffect.GenreNavigation -> onNavigateGenre(currentEffect.genreId)
-            is MovieDetailsEffect.MovieNavigation -> onNavigateToMovie(currentEffect.movieId)
-            is MovieDetailsEffect.ReviewsNavigation -> onNavigateToReviews(
-                currentEffect.movieId,
-                currentEffect.mediaNumber
-            )
-            is MovieDetailsEffect.OnLoginNavigation -> onNavigateToLogin()
-        }
-    }
-}
-
-
 @Composable
 private fun IconWithText(
     icon: Int,
@@ -469,7 +442,6 @@ private fun IconWithText(
         color = textColor
     )
 }
-
 
 @Composable
 private fun GenreRow(
