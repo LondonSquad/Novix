@@ -2,6 +2,7 @@ package com.london.domain.usecase
 
 import com.google.common.truth.Truth.assertThat
 import com.london.domain.entity.PagedFetchResponse
+import com.london.domain.entity.recent.MediaType
 import com.london.domain.entity.toprated.TopRatedMedia
 import com.london.domain.repository.MovieRepository
 import com.london.domain.usecase.toprated.GetTopRatedMoviesUseCase
@@ -93,6 +94,7 @@ class GetTopRatedMoviesUseCaseTest {
             releaseDate = "1994-09-23",
             posterUrl = "/q6y0Go1tsGEsmtFryDOJo3dEmqu.jpg",
             genreIds = listOf(18, 80),
+            mediaType = MediaType.Movie
         )
 
         private val mockMovie2 = TopRatedMedia(
@@ -101,6 +103,7 @@ class GetTopRatedMoviesUseCaseTest {
             voteAverage = 8.7, releaseDate = "1972-03-14",
             posterUrl = "/3bhkrj58Vtu7enYsRolD1fZdja1.jpg",
             genreIds = listOf(18, 80),
+            mediaType = MediaType.Movie
         )
 
         val mockTopRatedMovies = listOf(mockMovie1, mockMovie2)
