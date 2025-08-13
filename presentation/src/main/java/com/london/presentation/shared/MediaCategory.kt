@@ -4,11 +4,11 @@ import com.london.designsystem.component.Tabbable
 import com.london.presentation.R
 
 enum class MediaCategory : Tabbable {
-    MOVIES {
+    Movies {
         override val tabTextResId: Int
             get() = R.string.Movies
     },
-    TV_SHOWS {
+    TvShows {
         override val tabTextResId: Int
             get() = R.string.TV_Shows
     }
