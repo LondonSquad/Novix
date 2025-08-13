@@ -20813,18 +20813,9 @@
       "id": 76666355,
       "url": "https://github.com/Abdulrahman1890"
     },
-    "approvals": [
-      {
-        "reviewer": {
-          "id": 106277855,
-          "login": "Mostafa-alsaygh",
-          "url": "https://github.com/Mostafa-alsaygh"
-        },
-        "submitted_at": "2025-08-13T16:24:17Z"
-      }
-    ],
-    "first_approved_at": "2025-08-13T16:24:17Z",
-    "time_to_first_approval_minutes": 1351,
+    "approvals": [],
+    "first_approved_at": null,
+    "time_to_first_approval_minutes": null,
     "required_approvals_met_at": null,
     "time_to_required_approvals_minutes": null,
     "closed_at": null,
