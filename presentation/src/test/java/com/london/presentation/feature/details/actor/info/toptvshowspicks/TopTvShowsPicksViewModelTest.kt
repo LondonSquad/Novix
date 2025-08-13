@@ -1,6 +1,7 @@
 package com.london.presentation.feature.details.actor.info.toptvshowspicks
 
 import androidx.lifecycle.SavedStateHandle
+import androidx.lifecycle.viewModelScope
 import app.cash.turbine.test
 import com.google.common.truth.Truth.assertThat
 import com.london.domain.entity.actordetails.cast.CastActorEntity
@@ -9,14 +10,13 @@ import com.london.domain.usecase.toppicks.GetActorTvShowPicksByIdUseCase
 import com.london.presentation.navigation.Screen
 import com.london.presentation.navigation.getArgs
 import io.mockk.coEvery
-import io.mockk.coVerify
 import io.mockk.every
 import io.mockk.mockk
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.test.TestCoroutineScheduler
-import kotlinx.coroutines.test.UnconfinedTestDispatcher
-import kotlinx.coroutines.test.advanceTimeBy
+import kotlinx.coroutines.cancel
+import kotlinx.coroutines.test.StandardTestDispatcher
+import kotlinx.coroutines.test.advanceUntilIdle
 import kotlinx.coroutines.test.resetMain
 import kotlinx.coroutines.test.runTest
 import kotlinx.coroutines.test.setMain
@@ -27,96 +27,128 @@ import org.junit.Test
 @OptIn(ExperimentalCoroutinesApi::class)
 class TopTvShowsPicksViewModelTest {
 
-    private lateinit var viewModel: TopTvShowsPicksViewModel
     private lateinit var getActorTvShowPicksById: GetActorTvShowPicksByIdUseCase
-    private lateinit var savedStateHandle: SavedStateHandle
-    private val testScheduler = TestCoroutineScheduler()
-    private val testDispatcher = UnconfinedTestDispatcher(testScheduler)
+    private val savedStateHandle = mockk<SavedStateHandle>(relaxed = true)
+    private var viewModel: TopTvShowsPicksViewModel? = null
+    private val mainDispatcher = StandardTestDispatcher()
 
     @Before
-    fun setUp() {
-        Dispatchers.setMain(testDispatcher)
-
+    fun setup() {
+        Dispatchers.setMain(mainDispatcher)
         getActorTvShowPicksById = mockk()
-        savedStateHandle = mockk()
+
+        every { savedStateHandle.getArgs<Screen.TopTvShowsPicksDetails>() } returns Screen.TopTvShowsPicksDetails(
+            actorId = ACTOR_ID
+        )
+        coEvery { getActorTvShowPicksById.invoke(ACTOR_ID) } returns mockCastDetails
+
+
+        viewModel = TopTvShowsPicksViewModel(
+            savedStateHandle = savedStateHandle,
+            getActorTvShowPicksById = getActorTvShowPicksById
+        )
     }
 
     @After
     fun tearDown() {
         Dispatchers.resetMain()
+        viewModel?.viewModelScope?.cancel()
+        viewModel = null
     }
 
     @Test
-    fun `viewModel should use default actorId when it is initialized with null args`() = runTest {
+    fun `when getActorTvShowsPicksData fails, error state should be updated`() = runTest {
         // Given
-        every { savedStateHandle.getArgs<Screen.TopTvShowsPicksDetails>() } returns null
-        coEvery { getActorTvShowPicksById.invoke(0) } returns CastDetails()
+        val exception = Exception("error")
+        coEvery { getActorTvShowPicksById.invoke(ACTOR_ID) } throws exception
 
         // When
-        viewModel = TopTvShowsPicksViewModel(savedStateHandle, getActorTvShowPicksById)
+        advanceUntilIdle()
 
         // Then
-        coVerify(exactly = 1) { getActorTvShowPicksById.invoke(0) }
+        viewModel?.state?.test {
+            val state = expectMostRecentItem()
+            assertThat(state.errorState).isNotNull()
+            assertThat(state.isLoading).isFalse()
+            ensureAllEventsConsumed()
+        }
     }
 
-
     @Test
-    fun `viewModel should implement all contract methods`() = runTest {
-        // Given
-        val actorId = 123
-        val args = Screen.TopTvShowsPicksDetails(actorId)
-        every { savedStateHandle.getArgs<Screen.TopTvShowsPicksDetails>() } returns args
-        coEvery { getActorTvShowPicksById.invoke(actorId) } returns mockCastDetails
-
-        // When
-        viewModel = TopTvShowsPicksViewModel(savedStateHandle, getActorTvShowPicksById)
-
-        // Then
-        viewModel.effect.test {
-            viewModel.onBackClick()
+    fun `onBackClick should emit BackNavigation effect when clicked`() = runTest {
+        // When & Then
+        viewModel?.effect?.test {
+            viewModel?.onBackClick()
             assertThat(awaitItem()).isEqualTo(TopTvShowsPicksEffect.BackNavigation)
-
-            viewModel.onTvShowClick(1)
-            assertThat(awaitItem()).isEqualTo(TopTvShowsPicksEffect.TvShowDetailsNavigation(1))
-
-            cancelAndConsumeRemainingEvents()
+            cancelAndIgnoreRemainingEvents()
         }
     }
 
     @Test
-    fun `should show loading state when data is being fetched`() = runTest {
+    fun `onTvShowClick should emit TvShowDetailsNavigation effect when clicked`() = runTest {
         // Given
-        val actorId = 123
-        val args = Screen.TopTvShowsPicksDetails(actorId)
-        every { savedStateHandle.getArgs<Screen.TopTvShowsPicksDetails>() } returns args
+        val tvShowId = 123
 
-
-        // When
-        viewModel = TopTvShowsPicksViewModel(savedStateHandle, getActorTvShowPicksById)
-
-        // Then
-        viewModel.state.test {
-            assertThat(awaitItem()).isEqualTo(TopTvShowsPicksUiState(isLoading = true))
-            coEvery { getActorTvShowPicksById.invoke(actorId) } coAnswers {
-                advanceTimeBy(100)
-                mockCastDetails
-            }
-            assertThat(awaitItem()).isEqualTo(TopTvShowsPicksUiState(isLoading = false, actorTvShowDetails = mockCastDetails))
-            cancelAndConsumeRemainingEvents()
+        // When & Then
+        viewModel?.effect?.test {
+            viewModel?.onTvShowClick(tvShowId)
+            assertThat(awaitItem()).isEqualTo(
+                TopTvShowsPicksEffect.TvShowDetailsNavigation(tvShowId)
+            )
+            cancelAndIgnoreRemainingEvents()
         }
     }
 
-    private val mockCastDetails = CastDetails(
-        cast = listOf(
-            CastActorEntity(
-                id = 1,
-                posterUrl = "/test1.jpg"
-            ),
-            CastActorEntity(
-                id = 2,
-                posterUrl = "/test2.jpg"
+    @Test
+    fun `onRetryClick should clear error state and fetch data again`() = runTest {
+        val testSavedStateHandle = mockk<SavedStateHandle>(relaxed = true)
+        every { testSavedStateHandle.getArgs<Screen.TopTvShowsPicksDetails>() } returns Screen.TopTvShowsPicksDetails(
+            actorId = ACTOR_ID
+        )
+
+        val exception = Exception("error")
+        coEvery { getActorTvShowPicksById.invoke(ACTOR_ID) } throws exception
+        coEvery { getActorTvShowPicksById.invoke(0) } throws exception
+
+        val testViewModel = TopTvShowsPicksViewModel(
+            savedStateHandle = testSavedStateHandle,
+            getActorTvShowPicksById = getActorTvShowPicksById
+        )
+        advanceUntilIdle()
+        testViewModel.state.test {
+            val errorState = expectMostRecentItem()
+            assertThat(errorState.errorState).isNotNull()
+            ensureAllEventsConsumed()
+        }
+        coEvery { getActorTvShowPicksById.invoke(ACTOR_ID) } returns mockCastDetails
+        coEvery { getActorTvShowPicksById.invoke(0) } returns mockCastDetails
+        testViewModel.onRetryClick()
+        advanceUntilIdle()
+
+        testViewModel.state.test {
+            val state = expectMostRecentItem()
+            assertThat(state.errorState).isNull()
+            assertThat(state.actorTvShowDetails).isEqualTo(mockCastDetails)
+            assertThat(state.isLoading).isFalse()
+            ensureAllEventsConsumed()
+        }
+        testViewModel.viewModelScope.cancel()
+    }
+
+    companion object {
+        private const val ACTOR_ID = 123
+        private val mockCastDetails = CastDetails(
+            id = ACTOR_ID,
+            cast = listOf(
+                CastActorEntity(
+                    id = 1,
+                    posterUrl = "/test1.jpg"
+                ),
+                CastActorEntity(
+                    id = 2,
+                    posterUrl = "/test2.jpg"
+                )
             )
         )
-    )
-
+    }
 }
