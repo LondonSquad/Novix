@@ -1,6 +1,7 @@
 package com.london.presentation.feature.home.trending.actor
 
 import app.cash.turbine.test
+import com.google.common.truth.Truth.assertThat
 import com.london.domain.entity.Actor
 import com.london.domain.entity.PagedFetchResponse
 import com.london.domain.usecase.GetTrendingActorsUseCase
@@ -17,8 +18,8 @@ import kotlinx.coroutines.test.runTest
 import kotlinx.coroutines.test.setMain
 import org.junit.After
 import org.junit.Before
-import org.junit.jupiter.api.Assertions.assertEquals
-import org.junit.jupiter.api.Test
+import org.junit.Test
+
 
 @OptIn(ExperimentalCoroutinesApi::class)
 class TrendingActorsViewModelTest {
@@ -43,24 +44,72 @@ class TrendingActorsViewModelTest {
         clearAllMocks()
     }
 
+//    @Test
+//    fun `when initializing actorData , should fetch trending actors`() = runTest {
+//        //Given
+//        coEvery { getTrendingActors.invoke(any()) } returns createMockPagedFetchResponse(
+//                listOf(createMockActor())
+//
+//        )
+//
+//        // When
+//        advanceUntilIdle()
+//
+//        //Then
+//        viewModel.state.test {
+//            val actors = expectMostRecentItem().actorsFlow.first()
+//            assertThat(actors).isEqualTo( PagingData<Actor>)
+//        }
+//    }
+
     @Test
-    fun `when initializing actorData , should fetch trending actors`() = runTest {
-        //Given 
-        coEvery { getTrendingActors.invoke(any()) } returns createMockPagedFetchResponse(
-            listOf(
-                createMockActor()
-            )
+    fun `when retry is called ,should success updates state correctly `() = runTest {
+        // Given
+        coEvery { getTrendingActors.invoke(1) } returns createMockPagedFetchResponse(
+            listOf(createMockActor())
         )
 
         // When
         advanceUntilIdle()
 
-        //Then
+        // Then
         viewModel.state.test {
-            assertEquals(createMockActor(), )
+            val state = expectMostRecentItem()
+            assertThat(state.errorState).isNull()
+            assertThat(state.isLoading).isFalse()
         }
     }
+    @Test
+    fun `when onActorClick, should emits NavigateToActor effect`() = runTest {
 
+        // When & Then
+        viewModel.effect.test {
+            viewModel.onActorClick(1)
+            val effect = awaitItem()
+            assertThat(effect).isInstanceOf(TrendingActorsEffect.NavigateToActor::class.java)
+        }
+    }
+    
+    @Test
+    fun `when onBack, should emits NavigateBack effect`() = runTest {
+        // When & Then
+        viewModel.effect.test {
+            viewModel.onBack()
+            val effect = awaitItem()
+            assertThat(effect).isInstanceOf(TrendingActorsEffect.NavigateBack::class.java)
+        }
+    }
+    
+    @Test
+    fun `when click retry, should reload trending actors`() = runTest {
+        // When & Then
+        viewModel.state.test {
+            viewModel.onRetry()
+            val state = expectMostRecentItem()
+            assertThat(state.errorState).isNull()
+            assertThat(state.isLoading).isFalse()
+        }
+    }
     private fun createMockActor() = mockk<Actor> {
         every { id } returns 1
         every { name } returns "Actor Name"

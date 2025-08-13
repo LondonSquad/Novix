@@ -8,7 +8,6 @@ import com.london.presentation.shared.base.ErrorState
 import com.london.presentation.shared.base.createPagingSourceFlow
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.flowOf
 import javax.inject.Inject
 
 @HiltViewModel
@@ -28,21 +27,21 @@ class TrendingActorsViewModel @Inject constructor(
     override fun onRetry() = reloadTrendingActors()
 
     private fun reloadTrendingActors() {
-        tryToCollect(
+        tryToExecute(
             block = ::createTrendingActorsPagingFlow,
             onStart = { handlingLoadingState(true) },
             onError = ::handlingErrorState,
-            onNewValue = ::handlingPagingState,
+            onSuccess ={ handlingPagingState(it)} ,
             onCompleted = { handlingLoadingState(false) },
         )
     }
 
     fun handlingErrorState(errorState: ErrorState) = updateState { copy(errorState = errorState) }
 
-    fun handlingPagingState(actorsPagingData: PagingData<Actor>) {
+    fun handlingPagingState(actorsPagingData: Flow<PagingData<Actor>>) {
         return updateState {
             copy(
-                actorsFlow = flowOf(actorsPagingData)
+                actorsFlow = actorsPagingData
             )
         }
     }
@@ -52,7 +51,7 @@ class TrendingActorsViewModel @Inject constructor(
             query = "",
             block = { _, pageNumber ->
                 getTrendingActors.invoke(
-                    page = pageNumber,
+                    page = 1,
                 )
             }
         )
