@@ -493,9 +493,9 @@ fun NavGraphBuilder.mainNavGraph(
 
     composable<ActorDetails> {
         ActorDetailsScreen(
-            onNavigateToMoviePicks = { actorId ->
+            onNavigateToTopMoviePicks = { actorId ->
                 navController.navigate(Screen.ActorTopMoviesPicksDetails(actorId))
-            }, onNavigateToTvShowPicks = { actorId ->
+            }, onNavigateToTopTvShowPicks = { actorId ->
                 navController.navigate(Screen.TopTvShowsPicksDetails(actorId))
             },
             onNavigateToGallery = { actorId ->
