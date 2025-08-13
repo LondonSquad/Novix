@@ -15,7 +15,7 @@ import com.london.presentation.utils.Listen
 @Composable
 fun TopMoviesPicksScreen(
     onNavigateBack: () -> Unit,
-    onNavigateMovie: (Int) -> Unit,
+    onNavigateToMovieDetails: (Int) -> Unit,
     viewModel: TopMoviesPicksViewModel = hiltViewModel()
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
@@ -24,7 +24,7 @@ fun TopMoviesPicksScreen(
     HandleTopMoviesPicksEffects(
         effect = effect,
         onNavigateBack = onNavigateBack,
-        onNavigateMovie = onNavigateMovie,
+        onNavigateMovie = onNavigateToMovieDetails,
     )
 
     Content(
@@ -51,7 +51,7 @@ private fun Content(
             onBack = contract::onBackClick,
             getImageUrl = { it.posterUrl },
             onItemClick = { contract.onMovieClick(it.id) },
-            onSavedClick = { contract.onSaveClick(it.id) },
+            onSavedClick = { contract.onSaveMovieClick(it.id) },
         )
     }
 }
