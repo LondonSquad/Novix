@@ -7,7 +7,7 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 
 data class TvShowCategoryUiState(
-    val categoryId: Int = 0,
+    val categoryId: Int = 0, //toDo() category id will replace with enum
     val error: ErrorState? = null,
     val isLoading: Boolean = false,
     val tvShowFlow: Flow<PagingData<TvShow>> = flow {}
