@@ -44,7 +44,7 @@ subprojects {
 dependencies {
     kover(projects.domain)
     kover(projects.data)
-    kover(projects.presentation)
+//    kover(projects.presentation)
 }
 
 kover {
