@@ -105,8 +105,8 @@ private fun Content(
 
         TabLayout(
             tabs = listOf(
-                MediaCategory.MOVIES,
-                MediaCategory.TV_SHOWS
+                MediaCategory.Movies,
+                MediaCategory.TvShows
             ),
             selectedTab = state.selectedMediaCategory,
             onTabSelected = topRatedContract::onMediaCategoryTabSelected,
