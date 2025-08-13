@@ -262,10 +262,10 @@ class GetTvShowUseCaseTest {
     @Test
     fun `should return tv show videos when repository returns videos`() = runTest {
         // given
-        coEvery { getTvShowUseCase.getTvShowVideoProvider(TV_SHOW_ID) } returns mockVideos
+        coEvery { getTvShowUseCase.getTvShowVideo(TV_SHOW_ID) } returns mockVideos
 
         // when
-        val result = getTvShowUseCase.getTvShowVideoProvider(TV_SHOW_ID)
+        val result = getTvShowUseCase.getTvShowVideo(TV_SHOW_ID)
 
         // then
         assertThat(result).isNotEmpty()
@@ -274,10 +274,10 @@ class GetTvShowUseCaseTest {
     @Test
     fun `should return empty list when repository returns no videos`() = runTest {
         // given
-        coEvery { getTvShowUseCase.getTvShowVideoProvider(TV_SHOW_ID) } returns emptyList()
+        coEvery { getTvShowUseCase.getTvShowVideo(TV_SHOW_ID) } returns emptyList()
 
         // when
-        val result = getTvShowUseCase.getTvShowVideoProvider(TV_SHOW_ID)
+        val result = getTvShowUseCase.getTvShowVideo(TV_SHOW_ID)
 
         // then
         assertThat(result).isEmpty()

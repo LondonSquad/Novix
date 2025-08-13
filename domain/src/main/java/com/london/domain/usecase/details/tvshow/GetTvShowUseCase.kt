@@ -40,7 +40,7 @@ class GetTvShowUseCase @Inject constructor(
         pageNumber = pageNumber
     )
 
-    suspend fun getTvShowVideoProvider(tvShowId: Int) : List<String> =
+    suspend fun getTvShowVideo(tvShowId: Int) : List<String> =
         tvShowRepository.getTvShowVideos(tvShowId)
 
     suspend fun getImagesTvShowById(tvShowId: Int, limit: Int = IMAGE_LIMIT): List<String> {

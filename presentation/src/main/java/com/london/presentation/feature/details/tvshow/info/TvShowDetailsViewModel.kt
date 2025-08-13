@@ -43,7 +43,7 @@ class TvShowDetailsViewModel @Inject constructor(
             block = {
                 val episodesBySeason =
                     getTvEpisodesUseCase.getTvShowEpisodesBySeason(tvShowId, seasonNumber)
-                val videoProvider = getTvShowUseCase.getTvShowVideoProvider(tvShowId)
+                val videoProvider = getTvShowUseCase.getTvShowVideo(tvShowId)
                 Triple(episodesBySeason.episodes, episodesBySeason, videoProvider)
             },
             onSuccess = { (episodes, episodeCount, videoProviders) ->

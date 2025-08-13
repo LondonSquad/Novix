@@ -138,7 +138,7 @@ class TvShowDetailsViewModelTest {
     fun `When initializeEpisodesBySeasons is called, videoProvider state should be updated`() =
         runTest {
             // Given
-            coEvery { getTvShowUseCase.getTvShowVideoProvider(TV_SHOW_ID) } returns emptyList()
+            coEvery { getTvShowUseCase.getTvShowVideo(TV_SHOW_ID) } returns emptyList()
 
             // When
             advanceUntilIdle()
