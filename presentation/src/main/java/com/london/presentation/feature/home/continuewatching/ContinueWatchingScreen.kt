@@ -18,6 +18,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.london.designsystem.theme.NovixTheme
 import com.london.presentation.R
 import com.london.presentation.shared.DefaultAppTopBar
+import com.london.presentation.shared.MediaCategory
 import com.london.presentation.shared.base.ErrorState
 import com.london.presentation.shared.buildscreen.BuildScreen
 import com.london.presentation.shared.container.MediaGridConfig
@@ -75,7 +76,7 @@ fun Content(
                     state.isMovieSelected -> state.movies.collectAsStateWithLifecycle(emptyList()).value
                     else -> state.tvSeries.collectAsStateWithLifecycle(emptyList()).value
                 },
-                tabSelected = if (state.isMovieSelected) 0 else 1,
+                tabSelected = if (state.isMovieSelected) MediaCategory.MOVIES.ordinal else MediaCategory.TV_SHOWS.ordinal,
                 onTabSelected = contract::onMediaCategoryTabSelected,
                 onMovieGenreClick = contract::onMovieGenreChanged,
                 onTvShowGenreClick = contract::onTvShowGenreChanged,
