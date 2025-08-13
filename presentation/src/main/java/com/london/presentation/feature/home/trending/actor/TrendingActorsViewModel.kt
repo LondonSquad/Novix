@@ -1,9 +1,13 @@
 package com.london.presentation.feature.home.trending.actor
 
+import androidx.paging.PagingData
+import com.london.domain.entity.Actor
 import com.london.domain.usecase.GetTrendingActorsUseCase
 import com.london.presentation.shared.base.BaseViewModel
+import com.london.presentation.shared.base.ErrorState
 import com.london.presentation.shared.base.createPagingSourceFlow
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flowOf
 import javax.inject.Inject
 
@@ -14,33 +18,45 @@ class TrendingActorsViewModel @Inject constructor(
     TrendingActorsContract {
 
     init {
-        initializeActors()
+        reloadTrendingActors()
     }
 
     override fun onActorClick(id: Int) = emitEffect(TrendingActorsEffect.NavigateToActor(id))
 
     override fun onBack() = emitEffect(TrendingActorsEffect.NavigateBack)
 
-    override fun onRetry() = initializeActors()
+    override fun onRetry() = reloadTrendingActors()
 
-    private fun initializeActors() {
+    private fun reloadTrendingActors() {
         tryToCollect(
-            block = { createTrendingActorsPagingFlow() },
+            block = ::createTrendingActorsPagingFlow,
             onStart = { handlingLoadingState(true) },
-            onNewValue = { actorsPagingData ->
-                updateState { copy(actorsFlow = flowOf(actorsPagingData)) }
-            },
+            onError = ::handlingErrorState,
+            onNewValue = ::handlingPagingState,
             onCompleted = { handlingLoadingState(false) },
         )
     }
 
-    private fun createTrendingActorsPagingFlow() = createPagingSourceFlow(
-        query = "",
-        block = { _, _ ->
-            getTrendingActors.invoke(
-                page = 1,
+    fun handlingErrorState(errorState: ErrorState) = updateState { copy(errorState = errorState) }
+
+    fun handlingPagingState(actorsPagingData: PagingData<Actor>) {
+        return updateState {
+            copy(
+                actorsFlow = flowOf(actorsPagingData)
             )
         }
-    )
+    }
+
+    private fun createTrendingActorsPagingFlow() : Flow<PagingData<Actor>> {
+        return createPagingSourceFlow(
+            query = "",
+            block = { _, pageNumber ->
+                getTrendingActors.invoke(
+                    page = pageNumber,
+                )
+            }
+        )
+    }
+
     fun handlingLoadingState(isLoading: Boolean) = updateState { copy(isLoading = isLoading) }
 }
