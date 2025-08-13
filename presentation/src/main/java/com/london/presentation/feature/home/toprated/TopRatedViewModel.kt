@@ -43,7 +43,7 @@ class TopRatedViewModel @Inject constructor(
         updateState {
             copy(
                 selectedMediaCategory = selectedMediaCategory,
-                isMovieSelected = selectedMediaCategory == MediaCategory.MOVIES
+                isMovieSelected = selectedMediaCategory == MediaCategory.Movies
             )
         }
         initializeTopRated()

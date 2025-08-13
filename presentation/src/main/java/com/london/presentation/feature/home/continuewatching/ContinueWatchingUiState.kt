@@ -18,5 +18,5 @@ data class ContinueWatchingUiState(
     val tvSeries: Flow<List<TvShow>> = emptyFlow(),
     val selectedMovieGenre: MovieGenre = MovieGenre.All,
     val selectedTvShowGenre: TvShowGenre = TvShowGenre.All,
-    val selectedMediaCategory: MediaCategory = MediaCategory.MOVIES
+    val selectedMediaCategory: MediaCategory = MediaCategory.Movies
 )
