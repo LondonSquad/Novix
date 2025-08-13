@@ -39,32 +39,31 @@ fun ActorGalleryScreen(
     onNavigateBack: () -> Unit,
     viewModel: ActorGalleryViewModel = hiltViewModel()
 ) {
-    val uiState by viewModel.state.collectAsStateWithLifecycle()
     val effect by viewModel.effect.collectAsState(null)
+    val uiState by viewModel.state.collectAsStateWithLifecycle()
 
-    effect.Listen<ActorGalleryEffectUiState> { onNavigateBack() }
+    effect.Listen<ActorGalleryEffect> { onNavigateBack() }
 
     BuildScreen(
         onBack = viewModel::onBackClick,
         isLoading = uiState.isLoading,
         isError = uiState.error != null,
-        onRetry = viewModel::onRetry
+        onRetry = viewModel::onRetryClick
     ) {
         Content(
-            actorGalleryContract = viewModel,
-            uiState = uiState
+            uiState = uiState,
+            actorGalleryContract = viewModel
         )
     }
 }
 
 @Composable
 private fun Content(
-    modifier: Modifier = Modifier,
-    actorGalleryContract: ActorGalleryContract,
-    uiState: ActorGalleryUiState
+    uiState: ActorGalleryUiState,
+    actorGalleryContract: ActorGalleryContract
 ) {
     Column(
-        modifier = modifier
+        modifier = Modifier
             .fillMaxSize()
             .background(NovixTheme.colors.surface)
             .statusBarsPadding()
@@ -81,33 +80,40 @@ private fun Content(
             if (uiState.isLoading) {
                 CircularLoading(modifier = Modifier.align(Alignment.Center))
             } else {
-                LazyVerticalGrid(
-                    columns = GridCells.Adaptive(minSize = 104.dp),
-                    horizontalArrangement = Arrangement.spacedBy(8.dp),
-                    verticalArrangement = Arrangement.spacedBy(12.dp),
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .background(NovixTheme.colors.surface)
-                ) {
-                    items(uiState.images) { imageUrl ->
-                        ImageView(
-                            model = imageUrl,
-                            contentDescription = stringResource(R.string.actor_photos),
-                            modifier = Modifier
-                                .size(width = 104.dp, height = 101.dp)
-                                .border(
-                                    width = 1.dp,
-                                    color = NovixTheme.colors.stroke,
-                                    shape = RoundedCornerShape(12.dp)
-                                )
-                                .clip(RoundedCornerShape(12.dp)),
-                            contentScale = ContentScale.Crop,
-                            loadingContent = { CircularLoading() },
-                            errorContent = { ErrorImage(NovixTheme.isThemeDark) }
-                        )
-                    }
-                }
+                GalleryContent(uiState = uiState)
             }
+        }
+    }
+}
+
+@Composable
+private fun GalleryContent(
+    uiState: ActorGalleryUiState
+){
+    LazyVerticalGrid(
+        columns = GridCells.Adaptive(minSize = 104.dp),
+        horizontalArrangement = Arrangement.spacedBy(8.dp),
+        verticalArrangement = Arrangement.spacedBy(12.dp),
+        modifier = Modifier
+            .fillMaxSize()
+            .background(NovixTheme.colors.surface)
+    ) {
+        items(uiState.images) { imageUrl ->
+            ImageView(
+                model = imageUrl,
+                contentDescription = stringResource(R.string.actor_photos),
+                modifier = Modifier
+                    .size(width = 104.dp, height = 101.dp)
+                    .border(
+                        width = 1.dp,
+                        color = NovixTheme.colors.stroke,
+                        shape = RoundedCornerShape(12.dp)
+                    )
+                    .clip(RoundedCornerShape(12.dp)),
+                contentScale = ContentScale.Crop,
+                loadingContent = { CircularLoading() },
+                errorContent = { ErrorImage(NovixTheme.isThemeDark) }
+            )
         }
     }
 }
