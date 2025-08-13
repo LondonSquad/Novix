@@ -100,12 +100,33 @@ fun MovieDetailsScreen(
 
     effect?.Listen { currentEffect ->
         when (currentEffect) {
-            is MovieDetailsEffect.NavigateToActor -> navController.navigate(ActorDetails(currentEffect.actorId))
-            MovieDetailsEffect.NavigateBack -> navController.navigateUp()
-            is MovieDetailsEffect.NavigateToGenreMovies -> navController.navigate(Screen.MoviesByCategory(currentEffect.genreId))
-            is MovieDetailsEffect.NavigateToMovie -> navController.navigate(MovieDetails(currentEffect.movieId))
-            is MovieDetailsEffect.NavigateToReviews -> navController.navigate(Screen.Reviews(currentEffect.movieId, currentEffect.mediaNumber))
-            is MovieDetailsEffect.NavigateToLogin -> navController.navigate(Screen.Login)
+            is MovieDetailsEffect.ActorNavigation -> navController.navigate(
+                ActorDetails(
+                    currentEffect.actorId
+                )
+            )
+
+            MovieDetailsEffect.BackNavigation -> navController.navigateUp()
+            is MovieDetailsEffect.GenreMoviesNavigation -> navController.navigate(
+                Screen.MoviesByCategory(
+                    currentEffect.genreId
+                )
+            )
+
+            is MovieDetailsEffect.MovieNavigation -> navController.navigate(
+                MovieDetails(
+                    currentEffect.movieId
+                )
+            )
+
+            is MovieDetailsEffect.ReviewsNavigation -> navController.navigate(
+                Screen.Reviews(
+                    currentEffect.movieId,
+                    currentEffect.mediaNumber
+                )
+            )
+
+            is MovieDetailsEffect.LoginNavigation -> navController.navigate(Screen.Login)
         }
     }
 

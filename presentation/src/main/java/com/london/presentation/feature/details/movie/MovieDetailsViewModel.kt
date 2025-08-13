@@ -37,7 +37,7 @@ class MovieDetailsViewModel @Inject constructor(
     }
 
     override fun onBackClick() {
-        emitEffect(MovieDetailsEffect.NavigateBack)
+        emitEffect(MovieDetailsEffect.BackNavigation)
     }
 
     override fun onSavedClick() {
@@ -49,23 +49,23 @@ class MovieDetailsViewModel @Inject constructor(
     }
 
     override fun onMovieClick(movieId: Int) {
-        emitEffect(MovieDetailsEffect.NavigateToMovie(movieId))
+        emitEffect(MovieDetailsEffect.MovieNavigation(movieId))
     }
 
     override fun onActorClick(actorId: Int) {
-        emitEffect(MovieDetailsEffect.NavigateToActor(actorId))
+        emitEffect(MovieDetailsEffect.ActorNavigation(actorId))
     }
 
     override fun onLoginClick() {
-        emitEffect(MovieDetailsEffect.NavigateToLogin)
+        emitEffect(MovieDetailsEffect.LoginNavigation)
     }
 
     override fun onReviewsClick(movieId: Int, mediaId: Int) {
-        emitEffect(MovieDetailsEffect.NavigateToReviews(movieId, mediaId))
+        emitEffect(MovieDetailsEffect.ReviewsNavigation(movieId, mediaId))
     }
 
     override fun onGenreClick(genreId: Int) {
-        emitEffect(MovieDetailsEffect.NavigateToGenreMovies(genreId))
+        emitEffect(MovieDetailsEffect.GenreMoviesNavigation(genreId))
     }
 
     override fun onRetryClick() {
