@@ -18,7 +18,6 @@ import androidx.paging.compose.collectAsLazyPagingItems
 import com.london.designsystem.component.TopBar
 import com.london.designsystem.theme.ThemePreviews
 import com.london.presentation.feature.search.SearchCategory
-import com.london.presentation.shared.EmptyGenreLayout
 import com.london.presentation.shared.MediaLazyPagingGrid
 import com.london.presentation.shared.buildscreen.BuildScreen
 import com.london.presentation.utils.Listen
@@ -37,8 +36,8 @@ fun TvShowByCategoryScreen(
 
     effect?.Listen { currentEffect ->
         when (currentEffect) {
-            TvShowCategoryEffect.NavigateBack -> onNavigateBack()
-            is TvShowCategoryEffect.NavigateToTvShowDetails -> onNavigateToTvShowDetails(
+            TvShowCategoryEffect.NavigationBack -> onNavigateBack()
+            is TvShowCategoryEffect.TvShowDetailsNavigation -> onNavigateToTvShowDetails(
                 currentEffect.tvShowId
             )
         }

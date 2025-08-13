@@ -29,10 +29,10 @@ class TvShowCategoryViewModel @Inject constructor(
     }
 
     override fun onTvShowClick(tvShowId: Int) =
-        emitEffect(TvShowCategoryEffect.NavigateToTvShowDetails(tvShowId = tvShowId))
+        emitEffect(TvShowCategoryEffect.TvShowDetailsNavigation(tvShowId = tvShowId))
 
     override fun onBack() =
-        emitEffect(TvShowCategoryEffect.NavigateBack)
+        emitEffect(TvShowCategoryEffect.NavigationBack)
 
     override fun onSavedClick(tvShowId: Int) = Unit //TODO("Save Tv Show Not yet implemented")
 
