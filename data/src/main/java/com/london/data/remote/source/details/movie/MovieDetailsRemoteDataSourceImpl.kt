@@ -6,6 +6,7 @@ import com.london.data.remote.model.details.movie.model.moviedetails.MovieDetail
 import com.london.data.remote.model.details.movie.model.movieimages.MovieImagesResponse
 import com.london.data.remote.model.details.rating.AccountStatesResponse
 import com.london.data.remote.model.details.videoprovider.movie.model.MovieVideoRemote
+import com.london.data.remote.model.list.CustomMovieListResponse
 import com.london.data.remote.model.search.MovieRemote
 import com.london.data.remote.service.details.movie.MovieDetailsApiService
 import com.london.data.remote.source.base.BaseRemoteDatasource
@@ -50,4 +51,10 @@ class MovieDetailsRemoteDataSourceImpl @Inject constructor(
             mapper = { it }
         )
 
+    override suspend fun getMovieLists(movieId: Int): Result<ApiResponse<CustomMovieListResponse>> {
+        return callApiWithRetry(
+            apiCall = { movieDetailsApiService.getMovieLists(movieId = movieId) },
+            mapper = { it }
+        )
+    }
 }

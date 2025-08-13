@@ -6,6 +6,7 @@ import com.london.data.remote.model.details.movie.model.moviedetails.MovieDetail
 import com.london.data.remote.model.details.movie.model.movieimages.MovieImagesResponse
 import com.london.data.remote.model.details.rating.AccountStatesResponse
 import com.london.data.remote.model.details.videoprovider.movie.model.MovieVideoRemote
+import com.london.data.remote.model.list.CustomMovieListResponse
 import com.london.data.remote.model.search.MovieRemote
 
 interface MovieDetailsRemoteDataSource {
@@ -18,4 +19,6 @@ interface MovieDetailsRemoteDataSource {
         movieId: Int,
         userSessionId: String?
     ): Result<AccountStatesResponse>
+
+    suspend fun getMovieLists(movieId: Int): Result<ApiResponse<CustomMovieListResponse>>
 }

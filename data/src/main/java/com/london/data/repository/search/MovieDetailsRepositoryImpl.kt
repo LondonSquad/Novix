@@ -2,6 +2,7 @@ package com.london.data.repository.search
 
 import com.london.data.local.preference.AuthPreferences
 import com.london.data.mapper.details.movie.toEntity
+import com.london.data.mapper.list.toEntity
 import com.london.data.mapper.search.toEntity
 import com.london.data.mapper.search.toReviewEntity
 import com.london.data.mapper.videoprovider.movie.toMovie
@@ -12,6 +13,7 @@ import com.london.data.utils.fetchAndSync
 import com.london.data.utils.isTrue
 import com.london.domain.entity.Actor
 import com.london.domain.entity.Movie
+import com.london.domain.entity.MovieList
 import com.london.domain.entity.PagedFetchResponse
 import com.london.domain.entity.moviedatails.MediaStates
 import com.london.domain.entity.moviedatails.MovieDetails
@@ -81,13 +83,16 @@ class MovieDetailsRepositoryImpl @Inject constructor(
     override suspend fun getAccountMovieStatesById(
         id: Int,
     ): MediaStates {
-         return movieDetailsRemoteDataSource.getAccountMovieStates(
+        return movieDetailsRemoteDataSource.getAccountMovieStates(
             movieId = id,
             userSessionId = authPreferences.getSessionId(),
         ).getOrThrow().toEntity()
     }
 
-    override suspend fun getMovieLists(movieId: UInt): List<UInt> {
-        return emptyList()
+    override suspend fun getMovieLists(movieId: UInt): List<MovieList> {
+        return movieDetailsRemoteDataSource.getMovieLists(movieId.toInt())
+            .getOrThrow().items.map {
+                it.toEntity()
+            }
     }
 }

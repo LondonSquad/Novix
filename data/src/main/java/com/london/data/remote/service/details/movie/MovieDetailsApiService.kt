@@ -7,6 +7,7 @@ import com.london.data.remote.model.details.movie.model.moviedetails.MovieDetail
 import com.london.data.remote.model.details.movie.model.movieimages.MovieImagesResponse
 import com.london.data.remote.model.details.rating.AccountStatesResponse
 import com.london.data.remote.model.details.videoprovider.movie.model.MovieVideoRemote
+import com.london.data.remote.model.list.CustomMovieListResponse
 import com.london.data.remote.model.search.MovieRemote
 import retrofit2.Response
 import retrofit2.http.GET
@@ -43,7 +44,7 @@ interface MovieDetailsApiService {
     @GET("3/movie/{movie_id}/lists")
     suspend fun getMovieLists(
         @Path("movie_id") movieId: Int,
-    ): Response<ApiResponse<MovieRemote>>
+    ): Response<ApiResponse<CustomMovieListResponse>>
 
     @GET("3/movie/{movie_id}/account_states")
     suspend fun getAccountMovieStates(
