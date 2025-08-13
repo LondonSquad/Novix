@@ -26,8 +26,8 @@ import androidx.navigation.navigation
 import com.london.designsystem.component.NavBar
 import com.london.designsystem.theme.NovixTheme
 import com.london.presentation.R
-import com.london.presentation.feature.accountinfo.account.AccountScreen
-import com.london.presentation.feature.accountinfo.rating.MyRatingScreen
+import com.london.presentation.feature.account.AccountScreen
+import com.london.presentation.feature.account.rating.MyRatingScreen
 import com.london.presentation.feature.authentication.login.LoginScreen
 import com.london.presentation.feature.authentication.register.RegistrationScreen
 import com.london.presentation.feature.category.main.CategoriesScreen
