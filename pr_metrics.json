@@ -21059,5 +21059,33 @@
       "deletions": 408,
       "changed_files": 19
     }
+  },
+  {
+    "pr_number": 630,
+    "url": "https://github.com/LondonSquad/Novix/pull/630",
+    "title": "refactor: MovieDetailsScreen",
+    "opened_at": "2025-08-13T15:59:20Z",
+    "head_ref": "refactor/movie-details",
+    "base_ref": "develop",
+    "creator": {
+      "login": "Mostafa-alsaygh",
+      "id": 106277855,
+      "url": "https://github.com/Mostafa-alsaygh"
+    },
+    "approvals": [],
+    "first_approved_at": null,
+    "time_to_first_approval_minutes": null,
+    "required_approvals_met_at": null,
+    "time_to_required_approvals_minutes": null,
+    "closed_at": null,
+    "merged_at": null,
+    "merged_by": null,
+    "week": "2025-W33",
+    "status": "pending",
+    "diff_stats": {
+      "additions": 128,
+      "deletions": 160,
+      "changed_files": 6
+    }
   }
 ]
