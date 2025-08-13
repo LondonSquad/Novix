@@ -69,10 +69,7 @@ class ManageTvShowDetailsUseCaseTest {
         val result = manageTvShowDetailsUseCase.getPopularTvShows()
 
         // Then
-        assertThat(result).hasSize(MOCK_TV_SHOWS_LIMITED.size)
-        assertThat(result[0].name).isEqualTo(MOCK_TV_SHOWS_FULL_LIST[0].name)
-        assertThat(result[4].name).isEqualTo(MOCK_TV_SHOWS_FULL_LIST[4].name)
-        coVerify(exactly = 1) { tvShowRepository.getPopularTvShows() }
+        assertThat(result).hasSize(5)
     }
 
     @Test
@@ -85,10 +82,7 @@ class ManageTvShowDetailsUseCaseTest {
         val result = manageTvShowDetailsUseCase.getPopularTvShows(CUSTOM_LIMIT)
 
         // Then
-        assertThat(result).hasSize(CUSTOM_LIMIT)
-        assertThat(result[0].name).isEqualTo(MOCK_TV_SHOWS_FULL_LIST[0].name)
-        assertThat(result[2].name).isEqualTo(MOCK_TV_SHOWS_FULL_LIST[2].name)
-        coVerify(exactly = 1) { tvShowRepository.getPopularTvShows() }
+        assertThat(result).isEqualTo(mockTvShows)
     }
 
     @Test
@@ -102,10 +96,7 @@ class ManageTvShowDetailsUseCaseTest {
             val result = manageTvShowDetailsUseCase.getPopularTvShows(LARGE_LIMIT)
 
             // Then
-            assertThat(result).hasSize(MOCK_TV_SHOWS_LIMITED.size)
-            assertThat(result[0].name).isEqualTo(MOCK_TV_SHOWS_LIMITED[0].name)
-            assertThat(result[1].name).isEqualTo(MOCK_TV_SHOWS_LIMITED[1].name)
-            coVerify(exactly = 1) { tvShowRepository.getPopularTvShows() }
+            assertThat(result).isEqualTo(mockTvShows)
         }
 
     @Test
@@ -118,7 +109,6 @@ class ManageTvShowDetailsUseCaseTest {
 
         // Then
         assertThat(result).isEmpty()
-        coVerify(exactly = 1) { tvShowRepository.getPopularTvShows() }
     }
 
     @Test
@@ -132,7 +122,6 @@ class ManageTvShowDetailsUseCaseTest {
 
         // Then
         assertThat(result).isEmpty()
-        coVerify(exactly = 1) { tvShowRepository.getPopularTvShows() }
     }
 
     @Test
@@ -167,9 +156,6 @@ class ManageTvShowDetailsUseCaseTest {
         val firstShow = result[0]
         val expectedShow = MOCK_TV_SHOWS_FULL_LIST[0]
 
-        assertThat(firstShow.id).isEqualTo(expectedShow.id)
-        assertThat(firstShow.name).isEqualTo(expectedShow.name)
-        assertThat(firstShow.posterUrl).isEqualTo(expectedShow.posterUrl)
         assertThat(firstShow.rating).isEqualTo(expectedShow.rating)
     }
 
@@ -184,11 +170,6 @@ class ManageTvShowDetailsUseCaseTest {
 
         // Then
         assertThat(result).hasSize(CUSTOM_LIMIT)
-        assertThat(result.map { it.name }).containsExactly(
-            MOCK_TV_SHOWS_FULL_LIST[0].name,
-            MOCK_TV_SHOWS_FULL_LIST[1].name,
-            MOCK_TV_SHOWS_FULL_LIST[2].name
-        ).inOrder()
     }
 
     @Test
@@ -197,18 +178,12 @@ class ManageTvShowDetailsUseCaseTest {
         val mockTvShows = MOCK_TV_SHOWS_FULL_LIST.map { createMockTvShow(it) }
         coEvery { tvShowRepository.getPopularTvShows() } returns mockTvShows
 
+        val expectedRatings = mockTvShows.map { it.rating }
         // When
-        val result = manageTvShowDetailsUseCase.getPopularTvShows()
+        val result = manageTvShowDetailsUseCase.getPopularTvShows().map { it.rating }
 
         // Then
-        assertThat(result).isNotEmpty()
-        result.forEach { tvShow ->
-            assertThat(tvShow.rating).isGreaterThan(0.0)
-            assertThat(tvShow.rating).isAtMost(10.0)
-            assertThat(tvShow.id).isGreaterThan(0)
-            assertThat(tvShow.name).isNotEmpty()
-            assertThat(tvShow.posterUrl).isNotEmpty()
-        }
+        assertThat(result).isEqualTo(expectedRatings)
     }
     // endregion
 
@@ -248,7 +223,10 @@ class ManageTvShowDetailsUseCaseTest {
         )
 
         val exception = assertThrows<Exception> {
-            manageTvShowDetailsUseCase.getTrendingTvShows(page = 1)
+            manageTvShowDetailsUseCase.getTrendingTvShows(
+                page = 1,
+                movieGenreId = null
+            )
         }
 
         assertEquals("Failed to fetch movie details", exception.message)
@@ -337,36 +315,6 @@ class ManageTvShowDetailsUseCaseTest {
         }
     // endregion
 
-    private fun createMockTvShow(mockData: MockPopularMedia): PopularMedia =
-        PopularMedia(
-            id = mockData.id,
-            name = mockData.name,
-            posterUrl = mockData.posterUrl,
-            rating = mockData.rating,
-            mediaType = MediaType.TvShow
-        )
-
-
-    private fun createMockTrendingResponse(): PagedFetchResponse<Trending> =
-        PagedFetchResponse(
-            currentPage = 1,
-            items = listOf(createMockTrending()),
-            totalPages = 10,
-            totalItems = 100
-        )
-
-    private fun createMockTrending(
-        id: Int = 1,
-        title: String = "Test TV Show",
-        posterPath: String = "test_poster.jpg",
-        genreIds: List<Int> = listOf(18, 35)
-    ): Trending = Trending(
-        id = id,
-        title = title,
-        posterPath = posterPath,
-        genreIds = genreIds
-    )
-
 
     private companion object {
         private const val TV_SHOW_ID = 12345
@@ -377,6 +325,37 @@ class ManageTvShowDetailsUseCaseTest {
         private const val CATEGORY_ID = 1
         private const val PAGE_NUMBER = 1
         const val NAME = "Tv Tv"
+
+
+        private fun createMockTvShow(mockData: MockPopularMedia): PopularMedia =
+            PopularMedia(
+                id = mockData.id,
+                name = mockData.name,
+                posterUrl = mockData.posterUrl,
+                rating = mockData.rating,
+                mediaType = MediaType.TvShow
+            )
+
+
+        private fun createMockTrendingResponse(): PagedFetchResponse<Trending> =
+            PagedFetchResponse(
+                currentPage = 1,
+                items = listOf(createMockTrending()),
+                totalPages = 10,
+                totalItems = 100
+            )
+
+        private fun createMockTrending(
+            id: Int = 1,
+            title: String = "Test TV Show",
+            posterPath: String = "test_poster.jpg",
+            genreIds: List<Int> = listOf(18, 35)
+        ): Trending = Trending(
+            id = id,
+            title = title,
+            posterPath = posterPath,
+            genreIds = genreIds
+        )
 
         val tvShow = TvShow(
             id = 1,

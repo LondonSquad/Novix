@@ -44,10 +44,10 @@ class TrendingMoviesViewModel @Inject constructor(
                     )
                 }
             },
-            onStart = { handlingLoadingState(false) },
+            onStart = { handlingLoadingState(true) },
             onError = { errorState -> updateState { copy(errorState = errorState) } },
             onNewValue = { moviesFlow -> updateState { copy(moviesFlow = flowOf(moviesFlow)) } },
-            onCompleted = { handlingLoadingState(true) },
+            onCompleted = { handlingLoadingState(false) },
         )
     }
 

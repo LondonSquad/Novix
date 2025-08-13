@@ -41,9 +41,7 @@ class TrendingTvShowsViewModel @Inject constructor(
                 }
             },
             onStart = { updateState { copy(isLoading = true) } },
-            onNewValue = { tvShowsFlow ->
-                updateState { copy(tvShowsFlow = flowOf(tvShowsFlow)) }
-            },
+            onNewValue = { tvShowsFlow -> updateState { copy(tvShowsFlow = flowOf(tvShowsFlow)) } },
             onCompleted = { updateState { copy(isLoading = false) } },
         )
     }

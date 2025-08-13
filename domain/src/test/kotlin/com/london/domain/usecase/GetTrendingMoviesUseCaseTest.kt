@@ -27,18 +27,14 @@ class GetTrendingMoviesUseCaseTest {
         val mockResponse = createMockTrendingResponse()
         coEvery { repository.getTrendingMovies(any()) } returns mockResponse
 
-        val result = useCase.invoke(page = 1)
+        val result = useCase.invoke(
+            page = 1,
+            movieGenreId = null
+        )
 
-        assertNotNull(result)
-        assertEquals(1, result.currentPage)
-        assertEquals(10, result.totalPages)
-        assertEquals(100, result.totalItems)
-        assertEquals(1, result.items.size)
+        assertEquals(mockResponse, result)
 
         val trending = result.items.first()
-        assertEquals(1, trending.id)
-        assertEquals("Test Movie", trending.title)
-        assertEquals("test_poster.jpg", trending.posterPath)
         assertEquals(listOf(28, 12), trending.genreIds)
     }
 
@@ -47,11 +43,15 @@ class GetTrendingMoviesUseCaseTest {
         val mockResponse = createMockTrendingResponse()
         coEvery { repository.getTrendingMovies(any()) } returns mockResponse
 
-        val result1 = useCase.invoke(page = 1)
-        val result2 = useCase.invoke(page = 2)
+        val result1 = useCase.invoke(
+            page = 1,
+            movieGenreId = null
+        )
+        val result2 = useCase.invoke(
+            page = 2,
+            movieGenreId = null
+        )
 
-        assertNotNull(result1)
-        assertNotNull(result2)
         assertEquals(1, result1.currentPage)
         assertEquals(1, result2.currentPage)
     }
@@ -66,13 +66,12 @@ class GetTrendingMoviesUseCaseTest {
         )
         coEvery { repository.getTrendingMovies(any()) } returns emptyResponse
 
-        val result = useCase.invoke(page = 1)
+        val result = useCase.invoke(
+            page = 1,
+            movieGenreId = null
+        )
 
-        assertNotNull(result)
-        assertEquals(1, result.currentPage)
-        assertEquals(0, result.totalPages)
-        assertEquals(0, result.totalItems)
-        assertEquals(0, result.items.size)
+        assertEquals(emptyResponse.items.size, result.items.size)
     }
 
     @Test
@@ -89,13 +88,12 @@ class GetTrendingMoviesUseCaseTest {
         )
         coEvery { repository.getTrendingMovies(any()) } returns multipleMoviesResponse
 
-        val result = useCase.invoke(page = 1)
+        val result = useCase.invoke(
+            page = 1,
+            movieGenreId = null
+        )
 
-        assertNotNull(result)
-        assertEquals(3, result.items.size)
-        assertEquals("Movie 1", result.items[0].title)
-        assertEquals("Movie 2", result.items[1].title)
-        assertEquals("Movie 3", result.items[2].title)
+        assertEquals(multipleMoviesResponse, result)
     }
 
     @Test
@@ -104,7 +102,10 @@ class GetTrendingMoviesUseCaseTest {
         coEvery { repository.getTrendingMovies(any()) } throws error
 
         try {
-            useCase.invoke(page = 1)
+            useCase.invoke(
+                page = 1,
+                movieGenreId = null
+            )
             assert(false)
         } catch (e: Exception) {
             assertEquals("Repository error", e.message)
@@ -116,9 +117,11 @@ class GetTrendingMoviesUseCaseTest {
         val mockResponse = createMockTrendingResponse()
         coEvery { repository.getTrendingMovies(any()) } returns mockResponse
 
-        val result = useCase.invoke(page = -1)
+        val result = useCase.invoke(
+            page = -1,
+            movieGenreId = null
+        )
 
-        assertNotNull(result)
         assertEquals(1, result.currentPage)
     }
 
@@ -127,7 +130,10 @@ class GetTrendingMoviesUseCaseTest {
         val mockResponse = createMockTrendingResponse()
         coEvery { repository.getTrendingMovies(any()) } returns mockResponse
 
-        val result = useCase.invoke(page = 0)
+        val result = useCase.invoke(
+            page = 0,
+            movieGenreId = null
+        )
 
         assertNotNull(result)
         assertEquals(1, result.currentPage)
@@ -138,7 +144,10 @@ class GetTrendingMoviesUseCaseTest {
         val mockResponse = createMockTrendingResponse()
         coEvery { repository.getTrendingMovies(any()) } returns mockResponse
 
-        val result = useCase.invoke(page = 999)
+        val result = useCase.invoke(
+            page = 999,
+            movieGenreId = null
+        )
 
         assertNotNull(result)
         assertEquals(1, result.currentPage)

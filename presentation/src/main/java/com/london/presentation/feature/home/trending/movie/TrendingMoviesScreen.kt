@@ -26,7 +26,6 @@ import com.london.presentation.shared.GenresSection
 import com.london.presentation.shared.MediaLazyPagingGrid
 import com.london.presentation.shared.buildscreen.BuildScreen
 import com.london.presentation.utils.Listen
-import com.london.presentation.utils.isLoading
 
 @Composable
 fun TrendingMoviesScreen(
@@ -44,16 +43,13 @@ fun TrendingMoviesScreen(
         }
     }
 
-    val moviesLazyItems = state.moviesFlow.collectAsLazyPagingItems()
-
     BuildScreen(
-        isLoading = moviesLazyItems.isLoading(),
-        isError = moviesLazyItems.loadState.refresh is LoadState.Error,
+        isLoading = state.isLoading.not(),
+        isError = state.moviesFlow.collectAsLazyPagingItems().loadState.refresh is LoadState.Error,
         onBack = viewModel::onBack,
         onRetry = viewModel::onRetry,
         emptyLayoutMessage = R.string.no_trending_movies_in_genre,
         emptyLayoutImage = R.drawable.img_no_result,
-        pagingFlow = moviesLazyItems
     ) {
         Content(
             state = state,
@@ -64,7 +60,7 @@ fun TrendingMoviesScreen(
 
 @Composable
 private fun Content(
-    state: TrendingMoviesUiState ,
+    state: TrendingMoviesUiState,
     contract: TrendingMoviesContract
 ) {
     val screenWidth = with(LocalDensity.current) { LocalConfiguration.current.screenWidthDp.dp }

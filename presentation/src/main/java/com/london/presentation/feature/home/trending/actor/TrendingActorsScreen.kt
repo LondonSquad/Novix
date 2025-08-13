@@ -24,7 +24,6 @@ import com.london.presentation.shared.ActorItem
 import com.london.presentation.shared.LazyPagingColumn
 import com.london.presentation.shared.buildscreen.BuildScreen
 import com.london.presentation.utils.Listen
-import com.london.presentation.utils.isLoading
 
 @Composable
 fun TrendingActorsScreen(
@@ -45,13 +44,12 @@ fun TrendingActorsScreen(
     val actorsLazyItems = state.actorsFlow.collectAsLazyPagingItems()
 
     BuildScreen(
-        isLoading = actorsLazyItems.isLoading(),
+        isLoading = state.isLoading.not(),
         isError = actorsLazyItems.loadState.refresh is LoadState.Error,
         onBack = viewModel::onBack,
         onRetry = viewModel::onRetry,
         emptyLayoutMessage = R.string.no_trending_actors_in_genre,
         emptyLayoutImage = R.drawable.img_no_result,
-        pagingFlow = actorsLazyItems
     ) {
         Content(
             state = state,
