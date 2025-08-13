@@ -114,7 +114,7 @@ class TvShowCategoryViewModelTest {
         // When & Then
         viewModel?.effect?.test {
             viewModel?.onTvShowClick(tvShowId = 1)
-            assertThat(awaitItem()).isInstanceOf(TvShowCategoryEffect.NavigateToTvShowDetails::class.java)
+            assertThat(awaitItem()).isInstanceOf(TvShowCategoryEffect.TvShowDetailsNavigation::class.java)
             cancelAndIgnoreRemainingEvents()
         }
     }
@@ -124,7 +124,7 @@ class TvShowCategoryViewModelTest {
         // When & Then
         viewModel?.effect?.test {
             viewModel?.onBack()
-            assertThat(awaitItem()).isInstanceOf(TvShowCategoryEffect.NavigateBack::class.java)
+            assertThat(awaitItem()).isInstanceOf(TvShowCategoryEffect.BackNavigation::class.java)
             cancelAndIgnoreRemainingEvents()
         }
     }
