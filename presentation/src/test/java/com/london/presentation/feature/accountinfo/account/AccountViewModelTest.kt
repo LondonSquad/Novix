@@ -17,6 +17,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.test.StandardTestDispatcher
+import kotlinx.coroutines.test.advanceUntilIdle
 import kotlinx.coroutines.test.resetMain
 import kotlinx.coroutines.test.runTest
 import kotlinx.coroutines.test.setMain
@@ -90,6 +91,7 @@ class   AccountViewModelTest {
         viewModel.onLogoutClick()
 
         // Then
+        advanceUntilIdle()
         assertThat(viewModel.state.value.showUserMenu).isFalse()
         assertThat(viewModel.state.value.activeBottomSheet).isEqualTo(ActiveBottomSheet.Logout)
     }
