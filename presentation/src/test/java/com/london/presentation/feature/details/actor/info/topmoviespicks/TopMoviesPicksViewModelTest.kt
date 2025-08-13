@@ -56,66 +56,6 @@ class TopMoviesPicksViewModelTest {
     }
 
     @Test
-    fun `onSaveClick should toggle saved state when it is called`() = runTest {
-        // Given
-        val actorId = 123
-        val args = Screen.ActorTopMoviesPicksDetails(actorId)
-        every { savedStateHandle.getArgs<Screen.ActorTopMoviesPicksDetails>() } returns args
-        coEvery { getActorMoviePicksById.invoke(actorId) } returns mockCastDetails
-
-        viewModel = TopMoviesPicksViewModel(savedStateHandle, getActorMoviePicksById)
-
-        val initialSavedState = viewModel.state.value.isSaved
-
-        // When
-        viewModel.onSaveClick(1)
-
-        // Then
-        assertThat(viewModel.state.value.isSaved).isEqualTo(!initialSavedState)
-    }
-
-    @Test
-    fun `save state should toggled multiple times to maintain consistency`() = runTest {
-        // Given
-        val actorId = 123
-        val args = Screen.ActorTopMoviesPicksDetails(actorId)
-        every { savedStateHandle.getArgs<Screen.ActorTopMoviesPicksDetails>() } returns args
-        coEvery { getActorMoviePicksById.invoke(actorId) } returns mockCastDetails
-
-        viewModel = TopMoviesPicksViewModel(savedStateHandle, getActorMoviePicksById)
-
-        // When
-        viewModel.onSaveClick(1)
-        viewModel.onSaveClick(1)
-        viewModel.onSaveClick(1)
-
-        // Then
-        assertThat(viewModel.state.value.isSaved).isTrue()
-    }
-
-    @Test
-    fun `onSaveClick should still toggle same saved state when it is called with different movieIds `() = runTest {
-        // Given
-        val actorId = 123
-        val args = Screen.ActorTopMoviesPicksDetails(actorId)
-        every { savedStateHandle.getArgs<Screen.ActorTopMoviesPicksDetails>() } returns args
-        coEvery { getActorMoviePicksById.invoke(actorId) } returns mockCastDetails
-
-        viewModel = TopMoviesPicksViewModel(savedStateHandle, getActorMoviePicksById)
-
-        // When
-        viewModel.onSaveClick(1)
-        val firstToggleState = viewModel.state.value.isSaved
-
-        viewModel.onSaveClick(999)
-        val secondToggleState = viewModel.state.value.isSaved
-
-        // Then
-        assertThat(firstToggleState).isTrue()
-        assertThat(secondToggleState).isFalse()
-    }
-
-    @Test
     fun `initial state should have correct default values`() = runTest {
         // Given
         val actorId = 123
@@ -128,7 +68,6 @@ class TopMoviesPicksViewModelTest {
 
         // Then
         with(viewModel.state.value) {
-            assertThat(isSaved).isFalse()
             assertThat(errorState).isNull()
         }
     }
@@ -147,7 +86,7 @@ class TopMoviesPicksViewModelTest {
         // Then
         viewModel.onRetryClick()
         viewModel.onBackClick()
-        viewModel.onSaveClick(1)
+        viewModel.onSaveMovieClick(1)
         viewModel.onMovieClick(1)
     }
 }

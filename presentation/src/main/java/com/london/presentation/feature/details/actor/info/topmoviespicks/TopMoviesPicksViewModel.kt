@@ -37,8 +37,8 @@ class TopMoviesPicksViewModel @Inject constructor(
         getActorMoviePicksData()
     }
 
-    override fun onSaveClick(movieId: Int) {
-        updateState { copy(isSaved = !this.isSaved) }
+    override fun onSaveMovieClick(movieId: Int) {
+        // TODO: Handle save click
     }
 
     override fun onMovieClick(movieId: Int) {
