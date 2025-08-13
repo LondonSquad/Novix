@@ -148,6 +148,7 @@ class LoginViewModelTest {
             cancelAndIgnoreRemainingEvents()
         }
 
+        assertThat(viewModel.state.value.isGuestLoginLoading).isFalse()
     }
 
     private companion object {
