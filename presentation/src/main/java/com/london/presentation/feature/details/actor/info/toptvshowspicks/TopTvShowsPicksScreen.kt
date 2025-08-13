@@ -15,7 +15,7 @@ import com.london.presentation.utils.Listen
 @Composable
 fun TopTvShowsPicksScreen(
     onNavigateBack: () -> Unit,
-    onNavigateTvShow: (Int) -> Unit,
+    onNavigateToTvShowDetails: (Int) -> Unit,
     viewModel: TopTvShowsPicksViewModel = hiltViewModel(),
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
@@ -24,7 +24,7 @@ fun TopTvShowsPicksScreen(
     HandleTvShowsPicksEffects(
         effect = effect,
         onNavigateBack = onNavigateBack,
-        onNavigateTvShow = onNavigateTvShow,
+        onNavigateToTvShowDetails = onNavigateToTvShowDetails,
     )
 
     Content(
@@ -50,7 +50,7 @@ private fun Content(
             onBack = contract::onBackClick,
             getImageUrl = { it.posterUrl },
             onItemClick = { contract.onTvShowClick(it.id) },
-            onSavedClick = { contract.onSaveClick(it.id) },
+            onSavedClick = { contract.onSaveTvShowClick(it.id) },
         )
     }
 }
@@ -58,13 +58,13 @@ private fun Content(
 @Composable
 private fun HandleTvShowsPicksEffects(
     onNavigateBack: () -> Unit,
-    onNavigateTvShow: (Int) -> Unit,
+    onNavigateToTvShowDetails: (Int) -> Unit,
     effect: TopTvShowsPicksEffect?,
 ) {
     effect?.Listen { currentEffect ->
         when (currentEffect) {
             is TopTvShowsPicksEffect.BackNavigation -> onNavigateBack()
-            is TopTvShowsPicksEffect.TvShowDetailsNavigation -> onNavigateTvShow(currentEffect.tvShowId)
+            is TopTvShowsPicksEffect.TvShowDetailsNavigation -> onNavigateToTvShowDetails(currentEffect.tvShowId)
         }
     }
 }

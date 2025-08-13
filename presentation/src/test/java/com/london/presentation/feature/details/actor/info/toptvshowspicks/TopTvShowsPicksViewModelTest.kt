@@ -1,7 +1,6 @@
 package com.london.presentation.feature.details.actor.info.toptvshowspicks
 
 import androidx.lifecycle.SavedStateHandle
-import com.google.common.truth.Truth.assertThat
 import com.london.domain.entity.actordetails.cast.CastActorEntity
 import com.london.domain.entity.actordetails.cast.CastDetails
 import com.london.domain.usecase.toppicks.GetActorTvShowPicksByIdUseCase
@@ -73,66 +72,6 @@ class TopTvShowsPicksViewModelTest {
     }
 
     @Test
-    fun `onSaveClick should toggle saved state when it is called`() = runTest {
-        // Given
-        val actorId = 123
-        val args = Screen.TopTvShowsPicksDetails(actorId)
-        every { savedStateHandle.getArgs<Screen.TopTvShowsPicksDetails>() } returns args
-        coEvery { getActorTvShowPicksById.invoke(actorId) } returns mockCastDetails
-
-        viewModel = TopTvShowsPicksViewModel(savedStateHandle, getActorTvShowPicksById)
-
-        val initialSavedState = viewModel.state.value.isSaved
-
-        // When
-        viewModel.onSaveClick(1)
-
-        // Then
-        assertThat(viewModel.state.value.isSaved).isEqualTo(!initialSavedState)
-    }
-
-    @Test
-    fun `save state should maintain consistency when it is toggled multiple times`() = runTest {
-        // Given
-        val actorId = 123
-        val args = Screen.TopTvShowsPicksDetails(actorId)
-        every { savedStateHandle.getArgs<Screen.TopTvShowsPicksDetails>() } returns args
-        coEvery { getActorTvShowPicksById.invoke(actorId) } returns mockCastDetails
-
-        viewModel = TopTvShowsPicksViewModel(savedStateHandle, getActorTvShowPicksById)
-
-        // When
-        viewModel.onSaveClick(1)
-        viewModel.onSaveClick(1)
-        viewModel.onSaveClick(1)
-
-        // Then
-        assertThat(viewModel.state.value.isSaved).isTrue()
-    }
-
-    @Test
-    fun `onSaveClick should still toggle same saved state when called with different tvShowIds `() = runTest {
-        // Given
-        val actorId = 123
-        val args = Screen.TopTvShowsPicksDetails(actorId)
-        every { savedStateHandle.getArgs<Screen.TopTvShowsPicksDetails>() } returns args
-        coEvery { getActorTvShowPicksById.invoke(actorId) } returns mockCastDetails
-
-        viewModel = TopTvShowsPicksViewModel(savedStateHandle, getActorTvShowPicksById)
-
-        // When
-        viewModel.onSaveClick(1)
-        val firstToggleState = viewModel.state.value.isSaved
-
-        viewModel.onSaveClick(999)
-        val secondToggleState = viewModel.state.value.isSaved
-
-        // Then
-        assertThat(firstToggleState).isTrue()
-        assertThat(secondToggleState).isFalse()
-    }
-
-    @Test
     fun `should show loading state when data is being fetched`() = runTest {
         // Given
         val actorId = 123
@@ -161,7 +100,7 @@ class TopTvShowsPicksViewModelTest {
         // Then
         viewModel.onRetryClick()
         viewModel.onBackClick()
-        viewModel.onSaveClick(1)
+        viewModel.onSaveTvShowClick(1)
         viewModel.onTvShowClick(1)
     }
 }

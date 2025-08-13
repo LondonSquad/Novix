@@ -432,7 +432,7 @@ fun NavGraphBuilder.mainNavGraph(
         popExitTransition = { fadeOut(tween(500)) },
     ) {
         TopTvShowsPicksScreen(
-            onNavigateTvShow = { tvShowId ->
+            onNavigateToTvShowDetails = { tvShowId ->
                 navController.navigate(TvShowDetails(tvShowId))
             },
             onNavigateBack = {
