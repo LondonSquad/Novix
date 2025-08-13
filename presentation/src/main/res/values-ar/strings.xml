@@ -164,4 +164,6 @@
     <string name="list_added_fail">حدث خطا ما لا يمكن اضافه القائمه</string>
     <string name="login_to_add_list">يرجى تسجيل الدخول للتمكن من الإضافة إالي قائمة</string>
     <string name="no_lists_available">لا يوجد قوائم متاحة! قم بإنشاء واحدة الآن.</string>
+    <string name="item_added_success">تمت الإضافة إلى القائمة بنجاح</string>
+    <string name="item_added_fail">حدث خطأ ما، فشلت إضافة العنصر</string>
 </resources>
