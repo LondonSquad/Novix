@@ -44,7 +44,7 @@ class TopMoviesPicksViewModel @Inject constructor(
         tryToExecute(
             block = { getActorMoviePicksById.invoke(actorId) },
             onStart = { updateState { copy(isLoading = true) } },
-            onSuccess = { actorMovieDetails -> updateState { copy(mediaDetails = actorMovieDetails) } },
+            onSuccess = { actorMovieDetails -> updateState { copy(movieDetails = actorMovieDetails) } },
             onError = { errorState -> updateState { copy(errorState = errorState) } },
             onCompleted = { updateState { copy(isLoading = false) } },
         )

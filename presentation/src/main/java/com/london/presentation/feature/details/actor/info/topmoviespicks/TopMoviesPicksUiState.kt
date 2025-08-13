@@ -6,5 +6,5 @@ import com.london.presentation.shared.base.ErrorState
 data class TopMoviesPicksUiState(
     val isLoading: Boolean = false,
     val errorState: ErrorState? = null,
-    val mediaDetails: ActorMediaDetails = ActorMediaDetails(),
+    val movieDetails: ActorMediaDetails = ActorMediaDetails(),
 )
