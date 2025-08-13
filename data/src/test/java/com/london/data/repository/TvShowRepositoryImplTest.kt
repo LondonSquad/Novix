@@ -124,7 +124,10 @@ class TvShowRepositoryImplTest {
     fun `getTvShowDetailsById should throw ValidationException when remote fails`() = runTest {
         coEvery {
             remoteDataSource.getTvShowDetailsById(123)
-        } throws NetworkException.ValidationException("validation error")
+        } throws NetworkException.ValidationException(
+                message = "validation error",
+            status = 422
+        )
 
         assertThrows<NetworkException.ValidationException> {
             repository.getTvShowDetailsById(123)
@@ -135,7 +138,10 @@ class TvShowRepositoryImplTest {
     fun `getTvShowImagesById should throw TimeoutException when remote fails`() = runTest {
         coEvery {
             remoteDataSource.getTvShowImagesById(123)
-        } throws NetworkException.TimeoutException("timeout error")
+        } throws NetworkException.TimeoutException(
+            message = "timeout error",
+            status = 408
+        )
 
         assertThrows<NetworkException.TimeoutException> {
             repository.getImagesTvShowById(123)
@@ -148,7 +154,10 @@ class TvShowRepositoryImplTest {
             remoteDataSource.getTvShowEpisodesBySeason(
                 seasonNumber = 0, id = 123
             )
-        } throws NetworkException.HttpLockedException("HttpLocked error")
+        } throws NetworkException.HttpLockedException(
+            message = "HttpLocked error",
+            status = 423
+        )
 
         assertThrows<NetworkException.HttpLockedException> {
             repository.getTvShowEpisodesBySeason(123, 0)
@@ -162,7 +171,10 @@ class TvShowRepositoryImplTest {
                 remoteDataSource.getEpisodeDetails(
                     tvShowId = 123, seasonNumber = 0, episodeNumber = 0
                 )
-            } throws NetworkException.ServerErrorException("server error")
+            } throws NetworkException.ServerErrorException(
+                message = "server error",
+                status = 500
+            )
 
             assertThrows<NetworkException.ServerErrorException> {
                 repository.getTvShowEpisodeByPosition(123, 0, 0)
@@ -278,7 +290,10 @@ class TvShowRepositoryImplTest {
     @Test
     fun `getEpisodeVideos should throw NetworkException when remote call fails`() = runTest {
         // Given
-        val networkException = NetworkException.ServerErrorException("Server error")
+        val networkException = NetworkException.ServerErrorException(
+            message = "Server error",
+            status = 500
+        )
 
         coEvery {
             remoteDataSource.getEpisodeVideos(
@@ -301,7 +316,10 @@ class TvShowRepositoryImplTest {
 
         coEvery {
             remoteDataSource.getTvShowReviews(tvShowId, page)
-        } throws NetworkException.UnAuthorizedException("401 Unauthorized")
+        } throws NetworkException.UnAuthorizedException(
+            message = "401 Unauthorized",
+            status = 401
+        )
 
         assertThrows<NetworkException.UnAuthorizedException> {
             repository.getTvShowReviews(tvShowId, page)
@@ -315,7 +333,10 @@ class TvShowRepositoryImplTest {
 
         coEvery {
             remoteDataSource.getTvShowReviews(tvShowId, page)
-        } throws NetworkException.TimeoutException("Request timed out")
+        } throws NetworkException.TimeoutException(
+            message = "Request timed out",
+            status = 408
+        )
 
         assertThrows<NetworkException.TimeoutException> {
             repository.getTvShowReviews(tvShowId, page)
@@ -329,7 +350,10 @@ class TvShowRepositoryImplTest {
 
         coEvery {
             remoteDataSource.getTvShowReviews(tvShowId, page)
-        } throws NetworkException.HttpLockedException("Resource locked")
+        } throws NetworkException.HttpLockedException(
+            message = "Resource locked",
+            status = 423
+        )
 
         assertThrows<NetworkException.HttpLockedException> {
             repository.getTvShowReviews(tvShowId, page)
@@ -343,7 +367,10 @@ class TvShowRepositoryImplTest {
 
         coEvery {
             remoteDataSource.getTvShowReviews(tvShowId, page)
-        } throws NetworkException.ValidationException("Invalid data")
+        } throws NetworkException.ValidationException(
+            message = "Invalid data",
+            status = 422
+        )
 
         assertThrows<NetworkException.ValidationException> {
             repository.getTvShowReviews(tvShowId, page)
@@ -474,7 +501,10 @@ class TvShowRepositoryImplTest {
         val tvShowId = 123
         coEvery {
             remoteDataSource.getTvShowVideos(tvShowId)
-        } throws NetworkException.ValidationException("validation error")
+        } throws NetworkException.ValidationException(
+            message = "validation error",
+            status = 422
+        )
 
         assertThrows<NetworkException.ValidationException> {
             repository.getTvShowVideos(tvShowId)
@@ -644,7 +674,10 @@ class TvShowRepositoryImplTest {
                 remoteDataSource.getTvShowsByCategoryId(
                     CATEGORY_ID, PAGE_NUMBER
                 )
-            } returns Result.failure(NetworkException.HttpLockedException("Resource locked"))
+            } returns Result.failure(NetworkException.HttpLockedException(
+                message = "Resource locked",
+                status = 423
+            ))
             //When //Then
             assertThrows<NetworkException.HttpLockedException> {
                 repository.getTvShowsByCategory(
@@ -928,7 +961,10 @@ class TvShowRepositoryImplTest {
     fun `getPopularTvShows - when network throws HttpLockedException should propagate exception and log crash`() =
         runTest {
             // Given
-            val exception = NetworkException.HttpLockedException("Resource locked")
+            val exception = NetworkException.HttpLockedException(
+                message = "Resource locked",
+                status = 423
+            )
             coEvery { homeLocalDataSource.getAll() } returns emptyList()
             coEvery { remoteDataSource.getPopularTvShows() } throws exception
 
@@ -945,7 +981,10 @@ class TvShowRepositoryImplTest {
     fun `getPopularTvShows - when network throws ValidationException should propagate exception and log crash`() =
         runTest {
             // Given
-            val exception = NetworkException.ValidationException("Invalid data")
+            val exception = NetworkException.ValidationException(
+                message = "Invalid data",
+                status = 422
+            )
             coEvery { homeLocalDataSource.getAll() } returns emptyList()
             coEvery { remoteDataSource.getPopularTvShows() } throws exception
 
