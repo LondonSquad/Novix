@@ -151,7 +151,6 @@ class LoginViewModelTest {
 
             advanceUntilIdle()
 
-            // Now, the coroutine has finished. We can safely assert the effect.
             assertThat(awaitItem()).isEqualTo(LoginEffect.NavigateToHome)
             cancelAndIgnoreRemainingEvents()
         }
