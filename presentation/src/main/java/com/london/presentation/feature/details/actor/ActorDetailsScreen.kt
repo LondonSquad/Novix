@@ -82,16 +82,16 @@ fun ActorDetailsScreen(
     val effect by viewModel.effect.collectAsState(null)
     val uiState by viewModel.state.collectAsStateWithLifecycle()
 
-    HandleEffect(
-        effect = effect,
-        uiState = uiState,
-        onNavigateBack = onNavigateBack,
-        onNavigateToGallery = onNavigateToGallery,
-        onNavigateToTopMoviePicks = onNavigateToTopMoviePicks,
-        onNavigateToMovieScreen = onNavigateToMovieScreen,
-        onNavigateToTopTvShowPicks = onNavigateToTopTvShowPicks,
-        onNavigateToTvShowScreen = onNavigateToTvShowScreen,
-    )
+    effect?.Listen { currentEffect ->
+        when (currentEffect) {
+            is ActorEffect.BackNavigation -> onNavigateBack()
+            is ActorEffect.GalleryNavigation -> onNavigateToGallery(currentEffect.actorId)
+            is ActorEffect.TopMoviePicksNavigation -> onNavigateToTopMoviePicks(uiState.actorDetails.id)
+            is ActorEffect.MovieScreenNavigation -> onNavigateToMovieScreen(currentEffect.movieId)
+            is ActorEffect.TopTvShowPicksNavigation -> onNavigateToTopTvShowPicks(uiState.actorDetails.id)
+            is ActorEffect.TvShowScreenNavigation -> onNavigateToTvShowScreen(currentEffect.tvShowId)
+        }
+    }
 
     BuildScreen(
         isLoading = uiState.isLoading,
@@ -481,29 +481,6 @@ private fun EmptyScreen(uiState: ActorDetailsUiState) {
             image = R.drawable.img_no_result,
             modifier = Modifier.fillMaxSize()
         )
-    }
-}
-
-@Composable
-private fun HandleEffect(
-    effect: ActorEffect?,
-    uiState: ActorDetailsUiState,
-    onNavigateBack: () -> Unit,
-    onNavigateToGallery: (Int) -> Unit,
-    onNavigateToTopMoviePicks: (Int) -> Unit,
-    onNavigateToMovieScreen: (Int) -> Unit,
-    onNavigateToTopTvShowPicks: (Int) -> Unit,
-    onNavigateToTvShowScreen: (Int) -> Unit
-) {
-    effect?.Listen { currentEffect ->
-        when (currentEffect) {
-            is ActorEffect.BackNavigation -> onNavigateBack()
-            is ActorEffect.GalleryNavigation -> onNavigateToGallery(currentEffect.actorId)
-            is ActorEffect.TopMoviePicksNavigation -> onNavigateToTopMoviePicks(uiState.actorDetails.id)
-            is ActorEffect.MovieScreenNavigation -> onNavigateToMovieScreen(currentEffect.movieId)
-            is ActorEffect.TopTvShowPicksNavigation -> onNavigateToTopTvShowPicks(uiState.actorDetails.id)
-            is ActorEffect.TvShowScreenNavigation -> onNavigateToTvShowScreen(currentEffect.tvShowId)
-        }
     }
 }
 
