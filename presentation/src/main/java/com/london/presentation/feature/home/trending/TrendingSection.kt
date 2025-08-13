@@ -92,7 +92,6 @@ fun TrendingSection(
                     imageWidth = category.imageWidth,
                     imageHeight = category.imageHeight,
                     onClick = category.onClick,
-
                 )
             }
         }
