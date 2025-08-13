@@ -101,7 +101,7 @@ class MovieCategoryViewModelTest {
 
     @Test
     fun `onMovieClick should emit navigateToMovieDetails effect`() = runTest {
-        // When // Then
+        // When & Then
         viewModel?.effect?.test {
             viewModel?.onMovieClick(movieId = 1)
             assertThat(awaitItem()).isInstanceOf(MovieCategoryEffect.NavigateToMovieDetails::class.java)
@@ -111,7 +111,7 @@ class MovieCategoryViewModelTest {
 
     @Test
     fun `onMovieClick should emit NavigateBack effect`() = runTest {
-        // When // Then
+        // When & Then
         viewModel?.effect?.test {
             viewModel?.onBack()
             assertThat(awaitItem()).isInstanceOf(MovieCategoryEffect.NavigateBack::class.java)

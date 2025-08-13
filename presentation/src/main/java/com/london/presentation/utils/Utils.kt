@@ -140,9 +140,9 @@ fun rememberContainerSize(): DpSize {
 }
 
 @Composable
-fun gridColumns(): Int = runCatching {
+fun gridColumns(itemWidth: Int = 158): Int = runCatching {
     val screenWidth = LocalWindowInfo.current.containerSize.width
-    val itemWidthPx = with(LocalDensity.current) { 158.dp.toPx() }
+    val itemWidthPx = with(LocalDensity.current) { itemWidth.dp.toPx() }
     val screenPaddingPx = with(LocalDensity.current) { 16.dp.toPx() }
     ((screenWidth - screenPaddingPx) / itemWidthPx).toInt().coerceAtLeast(2)
 }.getOrDefault(1)

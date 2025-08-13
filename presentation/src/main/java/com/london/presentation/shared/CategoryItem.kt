@@ -27,14 +27,14 @@ import com.london.designsystem.component.UnSuitableEye
 import com.london.designsystem.component.button.ErrorImage
 import com.london.designsystem.theme.NovixTheme
 import com.london.designsystem.theme.ThemePreviews
-import com.london.designsystem.theme.horizontalGradient
 import com.london.designsystem.theme.noRippleClickable
+import com.london.domain.contentrestriction.ContentRestrictionLevel
 
 
 @Composable
 fun CategoriesItem(
-    categoryName: List<String>,
-    categoryImage: String,
+    categoryName: String,
+    categoryImage: Any?,
     onClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
@@ -53,23 +53,34 @@ fun CategoriesItem(
         ImageView(
             model = categoryImage,
             errorContent = { ErrorImage(NovixTheme.isThemeDark) },
-            contentDescription = "Image of ${categoryName.joinToString()}",
+            contentDescription = "Image of $categoryName",
             modifier = Modifier.fillMaxSize(),
             contentScale = Crop,
+            contentRestrictionLevel = ContentRestrictionLevel.OFF,
             loadingContent = { CircularLoading(modifier = Modifier.align(Alignment.Center)) },
             moderatedContent = { UnSuitableEye() }
         )
         Box(
             modifier = Modifier
                 .fillMaxSize()
-                .background(brush = Brush.horizontalGradient(horizontalGradient))
+                .background(
+                    brush = Brush.horizontalGradient(
+                        colors = listOf(
+                            NovixTheme.colors.linearGradient,
+                            NovixTheme.colors.linearGradient.copy(alpha = 0.8f),
+                            NovixTheme.colors.linearGradient.copy(alpha = 0.7f),
+                            NovixTheme.colors.linearGradient.copy(alpha = 0.0f),
+                        ),
+                        startX = 0f,
+                    )
+                )
         )
         Text(
-            text = categoryName.joinToString(separator = " &\n"),
+            text = categoryName,
             style = NovixTheme.typography.label.large,
             color = NovixTheme.colors.onPrimary,
             overflow = TextOverflow.Ellipsis,
-            modifier = Modifier.padding(8.dp)
+            modifier = Modifier.padding(start = 8.dp, end = 52.dp, top = 8.dp)
         )
     }
 }
@@ -102,11 +113,11 @@ fun CategoryGridPreview() {
 
     val categories = listOf(
         CategoryItem(
-            categoryName = listOf("Action", "Adventure"),
+            categoryName = "Adventure",
             categoryImage = ""
         ),
         CategoryItem(
-            categoryName = listOf("Drama"),
+            categoryName = "Drama",
             categoryImage = ""
         ),
 
@@ -129,6 +140,6 @@ fun CategoryGridPreview() {
 
 // Fake Data class to represent a category item
 data class CategoryItem(
-    val categoryName: List<String>,
+    val categoryName: String,
     val categoryImage: String,
 )

@@ -3,7 +3,7 @@ package com.london.data.repository
 import com.google.common.truth.Truth.assertThat
 import com.london.data.local.model.home.popular.PopularSectionLocal
 import com.london.data.local.model.home.topRated.TopRatedLocal
-import com.london.data.local.preference.AuthPreferences
+import com.london.data.local.preference.AuthenticationPreferences
 import com.london.data.local.source.home.HomeLocalDataSource
 import com.london.data.mapper.details.tvshow.TvShowImagesMapper.toEntity
 import com.london.data.mapper.details.tvshow.toEntity
@@ -74,12 +74,12 @@ class TvShowRepositoryImplTest {
     private lateinit var homeLocalDataSource: HomeLocalDataSource<PopularSectionLocal>
     private lateinit var localTopRated: HomeLocalDataSource<TopRatedLocal>
     private lateinit var crashReporter: CrashReporter
-    private lateinit var authPreferences: AuthPreferences
+    private lateinit var authenticationPreferences: AuthenticationPreferences
 
     @Before
     fun setUp() {
         remoteDataSource = mockk(relaxed = true)
-        authPreferences = mockk(relaxed = true)
+        authenticationPreferences = mockk(relaxed = true)
         homeLocalDataSource = mockk(relaxed = true)
         localTopRated = mockk(relaxed = true)
         crashReporter = mockk(relaxed = true)
@@ -87,7 +87,7 @@ class TvShowRepositoryImplTest {
 
         repository = TvShowRepositoryImpl(
             remoteDataSource,
-            authPreferences = authPreferences,
+            authenticationPreferences = authenticationPreferences,
             homeLocalDataSource = homeLocalDataSource,
             localTopRated = localTopRated,
             crashReporter = crashReporter,
@@ -393,8 +393,8 @@ class TvShowRepositoryImplTest {
                 tvShowId = seriesId, guestSessionId = GUSET_SESSION, userSessionId = USER_SESSION
             )
         } returns Result.success(mediaStatesDto)
-        every { authPreferences.getGuestSessionId() } returns GUSET_SESSION
-        every { authPreferences.getSessionId() } returns USER_SESSION
+        every { authenticationPreferences.getGuestSessionId() } returns GUSET_SESSION
+        every { authenticationPreferences.getSessionId() } returns USER_SESSION
 
         // When
         val result = repository.getAccountTvShowState(seriesId)
@@ -419,8 +419,8 @@ class TvShowRepositoryImplTest {
                 userSessionId = USER_SESSION
             )
         } returns Result.success(mediaStatesDto)
-        every { authPreferences.getGuestSessionId() } returns GUSET_SESSION
-        every { authPreferences.getSessionId() } returns USER_SESSION
+        every { authenticationPreferences.getGuestSessionId() } returns GUSET_SESSION
+        every { authenticationPreferences.getSessionId() } returns USER_SESSION
 
         // When
         val result = repository.getAccountTvEpisode(seriesId, seasonNumber, episodeNumber)
@@ -662,8 +662,8 @@ class TvShowRepositoryImplTest {
         val sessionId = "session123"
         val guestSessionId = "guest123"
 
-        coEvery { authPreferences.getSessionId() } returns sessionId
-        coEvery { authPreferences.getGuestSessionId() } returns guestSessionId
+        coEvery { authenticationPreferences.getSessionId() } returns sessionId
+        coEvery { authenticationPreferences.getGuestSessionId() } returns guestSessionId
         coEvery {
             remoteDataSource.addTvShowRating(
                 tvShowId = tvShowId,
@@ -688,8 +688,8 @@ class TvShowRepositoryImplTest {
         val sessionId = "session123"
         val guestSessionId = "guest123"
 
-        coEvery { authPreferences.getSessionId() } returns sessionId
-        coEvery { authPreferences.getGuestSessionId() } returns guestSessionId
+        coEvery { authenticationPreferences.getSessionId() } returns sessionId
+        coEvery { authenticationPreferences.getGuestSessionId() } returns guestSessionId
         coEvery {
             remoteDataSource.addTvShowRating(
                 tvShowId = tvShowId,
@@ -716,8 +716,8 @@ class TvShowRepositoryImplTest {
         val sessionId = "session123"
         val guestSessionId = "guest123"
 
-        coEvery { authPreferences.getSessionId() } returns sessionId
-        coEvery { authPreferences.getGuestSessionId() } returns guestSessionId
+        coEvery { authenticationPreferences.getSessionId() } returns sessionId
+        coEvery { authenticationPreferences.getGuestSessionId() } returns guestSessionId
         coEvery {
             remoteDataSource.addTvShowEpisode(
                 tvShowId = tvShowId,
@@ -746,8 +746,8 @@ class TvShowRepositoryImplTest {
         val sessionId = "session123"
         val guestSessionId = "guest123"
 
-        coEvery { authPreferences.getSessionId() } returns sessionId
-        coEvery { authPreferences.getGuestSessionId() } returns guestSessionId
+        coEvery { authenticationPreferences.getSessionId() } returns sessionId
+        coEvery { authenticationPreferences.getGuestSessionId() } returns guestSessionId
         coEvery {
             remoteDataSource.addTvShowEpisode(
                 tvShowId = tvShowId,
@@ -774,8 +774,8 @@ class TvShowRepositoryImplTest {
         val sessionId = "session123"
         val guestSessionId = null
 
-        coEvery { authPreferences.getSessionId() } returns sessionId
-        coEvery { authPreferences.getGuestSessionId() } returns guestSessionId
+        coEvery { authenticationPreferences.getSessionId() } returns sessionId
+        coEvery { authenticationPreferences.getGuestSessionId() } returns guestSessionId
         coEvery {
             remoteDataSource.addTvShowRating(
                 tvShowId = tvShowId,

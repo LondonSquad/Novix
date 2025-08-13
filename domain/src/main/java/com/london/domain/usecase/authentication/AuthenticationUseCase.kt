@@ -1,17 +1,21 @@
 package com.london.domain.usecase.authentication
 
-import com.london.domain.repository.AuthRepository
+import com.london.domain.repository.AuthenticationRepository
 import javax.inject.Inject
 
 class AuthenticationUseCase @Inject constructor(
-    private val authRepository: AuthRepository,
+    private val repository: AuthenticationRepository
 ) {
-    suspend fun loginAsGuest() = authRepository.loginAsGuest()
+    suspend fun logout() = repository.logout()
 
-    suspend fun login(username: String, password: String) =
-        authRepository.login(username, password)
+    suspend fun isLoggedIn() = repository.isLoggedIn()
 
-    suspend fun logout() = authRepository.logout()
+    suspend fun loginAsGuest() = repository.loginAsGuest()
 
-    suspend fun isLoggedIn() = authRepository.isLoggedIn()
+    suspend fun login(username: String, password: String) : Boolean {
+        return repository.login(
+            username = username,
+            password = password
+        )
+    }
 }
