@@ -14,7 +14,7 @@ import org.junit.Test
 class AuthenticationUseCaseTest {
 
     private lateinit var authenticationRepository: AuthenticationRepository
-    private lateinit var authRepository: AuthRepository
+    private lateinit var authRepository: AuthenticationRepository
     private lateinit var accountRepository: AccountRepository
     private lateinit var authenticationUseCase: AuthenticationUseCase
 
@@ -26,7 +26,7 @@ class AuthenticationUseCaseTest {
         authRepository = mockk()
         accountRepository = mockk()
         authenticationUseCase = AuthenticationUseCase(
-            authRepository = authRepository,
+            repository = authenticationRepository,
         )
     }
 

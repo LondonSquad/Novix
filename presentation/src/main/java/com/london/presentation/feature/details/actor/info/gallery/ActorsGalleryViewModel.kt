@@ -9,15 +9,10 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 
 @HiltViewModel
-class ActorGalleryViewModel @Inject constructor(
-    private val getActorUseCase: GetActorUseCase,
-    savedStateHandle: SavedStateHandle
-) : BaseViewModel<ActorGalleryUiState, ActorGalleryEffectUiState>(ActorGalleryUiState()),
-    ActorGalleryContract {
 class ActorsGalleryViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle,
-    private val getActorImagesById: GetActorImagesByIdUseCase
-) : BaseViewModel<ActorsGalleryUiState, ActorsGalleryEffect>(ActorsGalleryUiState()),
+    private val getActorUseCase: GetActorUseCase,
+    ) : BaseViewModel<ActorsGalleryUiState, ActorsGalleryEffect>(ActorsGalleryUiState()),
     ActorsGalleryContract {
 
     private val args = savedStateHandle.getArgs<Screen.ActorGallery>()
