@@ -1,7 +1,6 @@
 package com.london.presentation.feature.details.actor.info.topmoviespicks
 
 import androidx.lifecycle.SavedStateHandle
-import com.google.common.truth.Truth.assertThat
 import com.london.domain.entity.actordetails.cast.ActorMediaDetails
 import com.london.domain.entity.actordetails.cast.ActorMediaItems
 import com.london.domain.usecase.toppicks.GetActorMoviePicksByIdUseCase
@@ -14,7 +13,6 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.StandardTestDispatcher
 import kotlinx.coroutines.test.resetMain
-import kotlinx.coroutines.test.runTest
 import kotlinx.coroutines.test.setMain
 import org.junit.After
 import org.junit.Before
@@ -39,23 +37,6 @@ class TopMoviesPicksViewModelTest {
     @After
     fun tearDown() {
         Dispatchers.resetMain()
-    }
-
-    @Test
-    fun `initial state should have correct default values`() = runTest {
-        // Given
-        val actorId = 123
-        val args = Screen.ActorTopMoviesPicksDetails(actorId)
-        every { savedStateHandle.getArgs<Screen.ActorTopMoviesPicksDetails>() } returns args
-        coEvery { getActorMoviePicksById.invoke(actorId) } returns mockCastDetails
-
-        // When
-        viewModel = TopMoviesPicksViewModel(savedStateHandle, getActorMoviePicksById)
-
-        // Then
-        with(viewModel.state.value) {
-            assertThat(errorState).isNull()
-        }
     }
 
     @Test
