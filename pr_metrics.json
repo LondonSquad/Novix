@@ -20938,11 +20938,15 @@
     "time_to_first_approval_minutes": 1598.5166666666667,
     "required_approvals_met_at": "2025-08-13T20:37:29Z",
     "time_to_required_approvals_minutes": 1599.8666666666666,
-    "closed_at": null,
-    "merged_at": null,
-    "merged_by": null,
+    "closed_at": "2025-08-13T23:26:35Z",
+    "merged_at": "2025-08-13T23:26:35Z",
+    "merged_by": {
+      "login": "marwanqashwa",
+      "id": 100484790,
+      "url": "https://github.com/marwanqashwa"
+    },
     "week": "2025-W33",
-    "status": "approved",
+    "status": "merged",
     "diff_stats": {
       "additions": 127,
       "deletions": 155,
