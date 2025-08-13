@@ -27,7 +27,7 @@ import com.london.domain.entity.PagedFetchResponse
 import com.london.domain.entity.RatedMedia
 import com.london.domain.entity.Trending
 import com.london.domain.entity.TvShow
-import com.london.domain.entity.actordetails.cast.CastDetails
+import com.london.domain.entity.actordetails.cast.ActorMediaDetails
 import com.london.domain.entity.moviedatails.MediaStates
 import com.london.domain.entity.popular.PopularMedia
 import com.london.domain.entity.recent.MediaType
@@ -57,7 +57,7 @@ class TvShowRepositoryImpl @Inject constructor(
     override suspend fun getImagesTvShowById(id: Int): TvShowImagesEntity =
         tvShowRemoteDataSource.getTvShowImagesById(id).getOrThrow().toEntity()
 
-    override suspend fun getActorTvShowPicksById(id: Int): CastDetails =
+    override suspend fun getActorTvShowPicksById(id: Int): ActorMediaDetails =
         tvShowRemoteDataSource.getActorTvShowById(id).getOrThrow().toEntity()
 
     override suspend fun getPopularTvShows(): List<PopularMedia> = fetchAndSync(
