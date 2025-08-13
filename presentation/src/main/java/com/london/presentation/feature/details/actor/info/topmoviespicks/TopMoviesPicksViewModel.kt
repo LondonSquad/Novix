@@ -26,7 +26,7 @@ class TopMoviesPicksViewModel @Inject constructor(
         tryToExecute(
             block = { getActorMoviePicksById.invoke(actorId) },
             onStart = { updateState { copy(isLoading = true) } },
-            onSuccess = { actorMovieDetails -> updateState { copy(actorMovieDetails = actorMovieDetails) } },
+            onSuccess = { actorMovieDetails -> updateState { copy(mediaDetails = actorMovieDetails) } },
             onError = { errorState -> updateState { copy(errorState = errorState) } },
             onCompleted = { updateState { copy(isLoading = false) } },
         )
@@ -48,4 +48,5 @@ class TopMoviesPicksViewModel @Inject constructor(
     override fun onBackClick() {
         emitEffect(TopMoviesPicksEffect.BackNavigation)
     }
+
 }

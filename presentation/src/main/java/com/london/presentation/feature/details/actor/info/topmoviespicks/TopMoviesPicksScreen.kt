@@ -21,11 +21,12 @@ fun TopMoviesPicksScreen(
     val state by viewModel.state.collectAsStateWithLifecycle()
     val effect by viewModel.effect.collectAsState(null)
 
-    HandleTopMoviesPicksEffects(
-        effect = effect,
-        onNavigateBack = onNavigateBack,
-        onNavigateToMovieDetails = onNavigateToMovieDetails,
-    )
+    effect?.Listen { currentEffect ->
+        when (currentEffect) {
+            is TopMoviesPicksEffect.BackNavigation -> onNavigateBack()
+            is TopMoviesPicksEffect.MovieDetailsNavigation -> onNavigateToMovieDetails(currentEffect.movieId)
+        }
+    }
 
     Content(
         state = state,
@@ -47,25 +48,11 @@ private fun Content(
     ) {
         MediaLazyGrid(
             title = stringResource(R.string.top_movies_picks),
-            items = state.actorMovieDetails.mediaItems,
+            items = state.mediaDetails.mediaItems,
             onBack = contract::onBackClick,
             getImageUrl = { it.posterUrl },
             onItemClick = { contract.onMovieClick(it.id) },
             onSavedClick = { contract.onSaveMovieClick(it.id) },
         )
-    }
-}
-
-@Composable
-private fun HandleTopMoviesPicksEffects(
-    onNavigateBack: () -> Unit,
-    onNavigateToMovieDetails: (Int) -> Unit,
-    effect: TopMoviesPicksEffect?,
-) {
-    effect?.Listen { currentEffect ->
-        when (currentEffect) {
-            is TopMoviesPicksEffect.BackNavigation -> onNavigateBack()
-            is TopMoviesPicksEffect.MovieDetailsNavigation -> onNavigateToMovieDetails(currentEffect.movieId)
-        }
     }
 }

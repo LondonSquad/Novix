@@ -2,8 +2,8 @@ package com.london.presentation.feature.details.actor.info.topmoviespicks
 
 import androidx.lifecycle.SavedStateHandle
 import com.google.common.truth.Truth.assertThat
-import com.london.domain.entity.actordetails.cast.CastActorEntity
-import com.london.domain.entity.actordetails.cast.CastDetails
+import com.london.domain.entity.actordetails.cast.ActorMediaDetails
+import com.london.domain.entity.actordetails.cast.ActorMediaItems
 import com.london.domain.usecase.toppicks.GetActorMoviePicksByIdUseCase
 import com.london.presentation.navigation.Screen
 import com.london.presentation.navigation.getArgs
@@ -76,14 +76,13 @@ class TopMoviesPicksViewModelTest {
         viewModel.onMovieClick(1)
     }
 
-    private val mockCastDetails = CastDetails(
-        id = 123,
-        cast = listOf(
-            CastActorEntity(
+    private val mockCastDetails = ActorMediaDetails(
+        mediaItems = listOf(
+            ActorMediaItems(
                 id = 1,
                 posterUrl = "/test1.jpg"
             ),
-            CastActorEntity(
+            ActorMediaItems(
                 id = 2,
                 posterUrl = "/test2.jpg"
             )
