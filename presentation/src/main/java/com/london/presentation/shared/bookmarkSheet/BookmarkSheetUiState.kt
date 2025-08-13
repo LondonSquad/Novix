@@ -7,10 +7,10 @@ data class BookmarkSheetUiState(
     val selectedLists: List<UInt> = emptyList(),
     val error: ErrorState? = null,
     val isLoading: Boolean = false,
-    val listError: ErrorState? = null,
     val isGuestSession: Boolean = false,
     val isErrorSnackbarVisible: Boolean = false,
     val isSuccessSnackbarVisible: Boolean = false,
+    val shouldDismiss: Boolean = false
 )
 
 data class BookmarkUiList(

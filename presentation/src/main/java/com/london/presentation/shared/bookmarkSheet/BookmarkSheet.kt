@@ -1,5 +1,7 @@
 package com.london.presentation.shared.bookmarkSheet
 
+import androidx.compose.animation.animateContentSize
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -41,6 +43,7 @@ import com.london.designsystem.utils.string
 import com.london.presentation.R
 import com.london.presentation.navigation.LocalNavController
 import com.london.presentation.navigation.Screen
+import com.london.presentation.shared.SnackBarAnimation
 import com.london.presentation.utils.Listen
 import kotlinx.coroutines.launch
 
@@ -56,14 +59,6 @@ fun BookmarkBottomSheet(
     val coroutineScope = rememberCoroutineScope()
     val navController = LocalNavController.current
 
-    val hideSheet: () -> Unit = {
-        coroutineScope.launch {
-            sheetState.hide()
-        }.invokeOnCompletion {
-            if (sheetState.isNotVisible) onSheetDismiss()
-        }
-    }
-
     LaunchedEffect(isSheetVisible, bookmarkedMovieId) {
         if (isSheetVisible) {
             viewModel.onSheetShown(bookmarkedMovieId)
@@ -74,12 +69,19 @@ fun BookmarkBottomSheet(
     val uiState by viewModel.state.collectAsStateWithLifecycle()
     val effect by viewModel.effect.collectAsState(null)
 
+    val hideSheet: () -> Unit = {
+        coroutineScope.launch {
+            sheetState.hide()
+        }.invokeOnCompletion {
+            if (sheetState.isNotVisible) {
+                onSheetDismiss()
+                viewModel.onDismiss()
+            }
+        }
+    }
+
     effect?.Listen { currentEffect ->
         when (currentEffect) {
-            BookmarkSheetEffect.ItemSuccessfulAddition -> {
-                hideSheet()
-            }
-
             BookmarkSheetEffect.NewListCreation -> {
                 hideSheet()
                 navController.navigate(Screen.Lists(createList = true))
@@ -89,6 +91,13 @@ fun BookmarkBottomSheet(
                 hideSheet()
                 navController.navigate(Screen.Login)
             }
+        }
+    }
+
+    LaunchedEffect(uiState.shouldDismiss) {
+        if (uiState.shouldDismiss) {
+            hideSheet()
+            viewModel.onDismiss()
         }
     }
 
@@ -102,7 +111,7 @@ fun BookmarkBottomSheet(
             BookmarkBottomSheetContent(
                 hideSheet = hideSheet,
                 contract = viewModel,
-                uiState = uiState,
+                state = uiState,
                 bookmarkedMovieId = bookmarkedMovieId
             )
         }
@@ -111,7 +120,7 @@ fun BookmarkBottomSheet(
 
 @Composable
 private fun BookmarkBottomSheetContent(
-    uiState: BookmarkSheetUiState,
+    state: BookmarkSheetUiState,
     contract: BookmarkSheetContract,
     modifier: Modifier = Modifier,
     hideSheet: () -> Unit,
@@ -126,22 +135,38 @@ private fun BookmarkBottomSheetContent(
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         SheetHeader(hideSheet = hideSheet)
-        if (uiState.isGuestSession) {
+        if (state.isGuestSession) {
             GuestLoginView()
             LoginButton(onLoginClick = contract::onLoginClick)
         } else {
             UserListsView(
-                uiState = uiState,
+                uiState = state,
                 contract = contract,
             )
 
             UserActions(
                 contract = contract,
                 bookmarkedMovieId = bookmarkedMovieId,
-                uiState = uiState
+                uiState = state
             )
         }
     }
+
+    // Add success and failure snackbars
+
+    if (state.isSuccessSnackbarVisible) {
+        SnackBarAnimation(
+            message = R.string.item_added_success.string,
+            icon = com.london.designsystem.R.drawable.ic_success
+        )
+    }
+
+    if (state.isErrorSnackbarVisible) {
+        SnackBarAnimation(
+            message = R.string.item_added_fail.string
+        )
+    }
+
 }
 
 @Composable
@@ -184,34 +209,37 @@ private fun UserListsView(
     uiState: BookmarkSheetUiState,
     contract: BookmarkSheetContract
 ) {
-    when {
-        uiState.isLoading -> {
-            CircularLoading()
-        }
+    Column(modifier = Modifier.animateContentSize(tween())) {
+        when {
+            uiState.isLoading -> {
+                CircularLoading()
+            }
 
-        uiState.lists.isEmpty() -> {
-            NoListsMessage()
-        }
+            uiState.lists.isEmpty() -> {
+                NoListsMessage()
+            }
 
-        else -> {
-            LazyColumn(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .heightIn(max = 148.dp),
-                verticalArrangement = Arrangement.spacedBy(12.dp)
-            ) {
-                items(uiState.lists) { movieList ->
-                    Selection(
-                        modifier = Modifier.fillMaxWidth(),
-                        mainText = movieList.name,
-                        isSelected = movieList.id in uiState.selectedLists,
-                        subText = stringResource(R.string.n_items, movieList.itemCount.toInt()),
-                        onClick = { contract.onListSelected(movieList.id) }
-                    )
+            else -> {
+                LazyColumn(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .heightIn(max = 160.dp),
+                    verticalArrangement = Arrangement.spacedBy(12.dp)
+                ) {
+                    items(uiState.lists) { movieList ->
+                        Selection(
+                            modifier = Modifier.fillMaxWidth(),
+                            mainText = movieList.name,
+                            isSelected = movieList.id in uiState.selectedLists,
+                            subText = stringResource(R.string.n_items, movieList.itemCount.toInt()),
+                            onClick = { contract.onListSelected(movieList.id) }
+                        )
+                    }
                 }
             }
         }
     }
+
 }
 
 @Composable
