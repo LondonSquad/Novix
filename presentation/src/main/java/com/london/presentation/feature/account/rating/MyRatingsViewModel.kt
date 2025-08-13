@@ -1,5 +1,6 @@
 package com.london.presentation.feature.account.rating
 
+import com.london.domain.entity.RatedMedia
 import com.london.domain.entity.recent.MediaType
 import com.london.domain.usecase.rating.ManageRatingUseCase
 import com.london.presentation.shared.base.BaseViewModel
@@ -20,49 +21,27 @@ class MyRatingsViewModel @Inject constructor(
         tryToExecute(
             block = { manageRatingUseCase.getRatedMediaSorted() },
             onStart = { updateState { copy(isLoading = true) } },
-            onSuccess = { ratedMedia ->
-                updateState {
-                    copy(
-                        ratedMovies = ratedMedia.filter { it.mediaType == MediaType.Movie },
-                        ratedTvShows = ratedMedia.filter { it.mediaType == MediaType.TvShow },
-                        allRatedMedia = ratedMedia,
-                    )
-                }
-            },
+            onSuccess = { ratedMedia -> updateStateRatedMedia(ratedMedia) },
             onError = { errorState -> updateState { copy(errorState = errorState) } },
             onCompleted = { updateState { copy(isLoading = false) } },
         )
     }
 
-    override fun onDeleteMovie(id: Int) {
+    override fun onDeleteMovieClick(id: Int) {
         tryToExecute(
             block = { manageRatingUseCase.deleteMovieRating(id) },
             onStart = { updateState { copy(isSnackBarVisible = false) } },
-            onSuccess = {
-                updateState {
-                    copy(
-                        ratedMovies = ratedMovies.filter { it.id != id },
-                        allRatedMedia = allRatedMedia.filter { it.id != id }
-                    )
-                }
-            },
+            onSuccess = { updateStateAfterMediaDeletion(id) },
             onError = { errorState -> updateState { copy(errorState = errorState) } },
             onCompleted = { updateState { copy(isSnackBarVisible = true) } },
         )
     }
 
-    override fun onDeleteShow(id: Int) {
+    override fun onDeleteTVShowClick(id: Int) {
         tryToExecute(
             block = { manageRatingUseCase.deleteTvShowRating(id) },
             onStart = { updateState { copy(isSnackBarVisible = false) } },
-            onSuccess = {
-                updateState {
-                    copy(
-                        ratedTvShows = ratedTvShows.filter { it.id != id },
-                        allRatedMedia = allRatedMedia.filter { it.id != id }
-                    )
-                }
-            },
+            onSuccess = { updateStateAfterMediaDeletion(id) },
             onError = { errorState -> updateState { copy(errorState = errorState) } },
             onCompleted = { updateState { copy(isSnackBarVisible = true) } },
         )
@@ -71,14 +50,32 @@ class MyRatingsViewModel @Inject constructor(
     override fun onRatingCategorySelected(category: RatingCategory) =
         updateState { copy(selectedRatingCategory = category) }
 
-    override fun onItemClick(id: Int) =
-        emitEffect(MyRatingEffect.ToMovieNavigation(id))
+    override fun onItemClick(id: Int) = emitEffect(MyRatingEffect.ToMovieNavigation(id))
 
-    override fun onBackClicked() = emitEffect(MyRatingEffect.BackNavigation)
+    override fun onRetryClick() = initializeRatedMedia()
 
-    override fun onMovieClick(id: Int) =
-        emitEffect(MyRatingEffect.ToMovieNavigation(id))
+    override fun onBackClick() = emitEffect(MyRatingEffect.BackNavigation)
 
-    override fun onTvShowClick(id: Int) =
-        emitEffect(MyRatingEffect.ToTvShowNavigation(id))
+    override fun onMovieClick(id: Int) = emitEffect(MyRatingEffect.ToMovieNavigation(id))
+
+    override fun onTvShowClick(id: Int) = emitEffect(MyRatingEffect.ToTvShowNavigation(id))
+
+    private fun updateStateRatedMedia(ratedMedia: List<RatedMedia>) {
+        updateState {
+            copy(
+                ratedMovies = ratedMedia.filter { it.mediaType == MediaType.Movie },
+                ratedTvShows = ratedMedia.filter { it.mediaType == MediaType.TvShow },
+                allRatedMedia = ratedMedia,
+            )
+        }
+    }
+
+    private fun updateStateAfterMediaDeletion(id: Int) {
+        updateState {
+            copy(
+                ratedMovies = ratedMovies.filter { it.id != id },
+                allRatedMedia = allRatedMedia.filter { it.id != id }
+            )
+        }
+    }
 }

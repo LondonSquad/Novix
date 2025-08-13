@@ -61,23 +61,18 @@ fun MyRatingScreen(
         }
     }
 
-    BuildScreen(
-        isLoading = state.isLoading,
-        isError = state.errorState != null,
-        onBack = viewModel::onBackClicked,
-        onRetry = viewModel::initializeRatedMedia
-    ) {
-        Content(
-            state = state,
-            contract = viewModel
-        )
-    }
+
+    Content(
+        state = state,
+        contract = viewModel
+    )
+
 }
 
 @Composable
 private fun Content(
     state: MyRatingUiState = MyRatingUiState(),
-    contract: MyRatingsContract = defaultMyRatingContract()
+    contract: MyRatingsContract
 ) {
     val selectedCategory = state.selectedRatingCategory ?: RatingCategory.All
     val items = when (selectedCategory) {
@@ -86,86 +81,94 @@ private fun Content(
         RatingCategory.TvShows -> state.ratedTvShows
     }
 
-    Column(
-        modifier = Modifier.fillMaxSize()
+    BuildScreen(
+        isLoading = state.isLoading,
+        isError = state.errorState is ErrorState.NoInternet,
+        onBack = contract::onBackClick,
+        onRetry = contract::onRetryClick
     ) {
-        TopBar(
-            modifier = Modifier
-                .statusBarsPadding()
-                .fillMaxWidth()
-                .padding(horizontal = 16.dp, vertical = 12.dp),
-            title = stringResource(R.string.my_rating),
-            onBackClick = contract::onBackClicked
-        )
-
-        RatingChipsRow(
-            selected = state.selectedRatingCategory ?: RatingCategory.All,
-            onSelect = contract::onRatingCategorySelected,
-            modifier = Modifier.padding(bottom = 12.dp)
-        )
-
-        if (items.isEmpty()) {
-            EmptyGenreLayout(
-                message = stringResource(R.string.there_is_no_items),
-                modifier = Modifier.fillMaxSize()
-            )
-        } else {
-            LazyVerticalGrid(
-                columns = GridCells.Fixed(gridColumns()),
-                contentPadding = PaddingValues(
-                    top = 12.dp,
-                    bottom = 16.dp
-                ),
-                horizontalArrangement = Arrangement.spacedBy(12.dp),
-                verticalArrangement = Arrangement.spacedBy(12.dp),
+        Column(
+            modifier = Modifier.fillMaxSize()
+        ) {
+            TopBar(
                 modifier = Modifier
-                    .fillMaxSize()
-                    .navigationBarsPadding()
-                    .padding(horizontal = 16.dp)
-            ) {
-                items(
-                    items = items,
-                    key = { it.id }
-                ) { item ->
-                    HomeCard(
-                        imageUrl = item.posterPath,
-                        isSaved = false,
-                        onSaveClick = { },
-                        myRatingList = true,
-                        rate = item.rating.toLocalizedNumbers(),
-                        onDeleteClick = {
-                            when (item.mediaType) {
-                                MediaType.Movie -> contract.onDeleteMovie(item.id)
-                                MediaType.TvShow -> contract.onDeleteShow(item.id)
-                            }
-                        },
-                        modifier = Modifier
-                            .animateItem(
-                                fadeInSpec = null,
-                                fadeOutSpec = tween(500),
-                                placementSpec = tween(500)
-                            )
-                            .clickable {
+                    .statusBarsPadding()
+                    .fillMaxWidth()
+                    .padding(horizontal = 16.dp, vertical = 12.dp),
+                title = stringResource(R.string.my_rating),
+                onBackClick = contract::onBackClick
+            )
+
+            RatingChipsRow(
+                selected = state.selectedRatingCategory ?: RatingCategory.All,
+                onSelect = contract::onRatingCategorySelected,
+                modifier = Modifier.padding(bottom = 12.dp)
+            )
+
+            if (items.isEmpty()) {
+                EmptyGenreLayout(
+                    message = stringResource(R.string.there_is_no_items),
+                    modifier = Modifier.fillMaxSize()
+                )
+            } else {
+                LazyVerticalGrid(
+                    columns = GridCells.Fixed(gridColumns()),
+                    contentPadding = PaddingValues(
+                        top = 12.dp,
+                        bottom = 16.dp
+                    ),
+                    horizontalArrangement = Arrangement.spacedBy(12.dp),
+                    verticalArrangement = Arrangement.spacedBy(12.dp),
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .navigationBarsPadding()
+                        .padding(horizontal = 16.dp)
+                ) {
+                    items(
+                        items = items,
+                        key = { it.id }
+                    ) { item ->
+                        HomeCard(
+                            imageUrl = item.posterPath,
+                            isSaved = false,
+                            onSaveClick = { },
+                            myRatingList = true,
+                            rate = item.rating.toLocalizedNumbers(),
+                            onDeleteClick = {
                                 when (item.mediaType) {
-                                    MediaType.Movie -> contract.onMovieClick(item.id)
-                                    MediaType.TvShow -> contract.onTvShowClick(item.id)
+                                    MediaType.Movie -> contract.onDeleteMovieClick(item.id)
+                                    MediaType.TvShow -> contract.onDeleteTVShowClick(item.id)
                                 }
                             },
-                        isDarkMode = NovixTheme.isThemeDark
-                    )
+                            modifier = Modifier
+                                .animateItem(
+                                    fadeInSpec = null,
+                                    fadeOutSpec = tween(500),
+                                    placementSpec = tween(500)
+                                )
+                                .clickable {
+                                    when (item.mediaType) {
+                                        MediaType.Movie -> contract.onMovieClick(item.id)
+                                        MediaType.TvShow -> contract.onTvShowClick(item.id)
+                                    }
+                                },
+                            isDarkMode = NovixTheme.isThemeDark,
+                            hasSaveIcon = false
+                        )
+                    }
                 }
             }
         }
-    }
 
-    if (state.isSnackBarVisible) {
-        if (state.errorState is ErrorState.RequestFailed) {
-            SnackBarAnimation(state.errorState.message)
-        } else {
-            SnackBarAnimation(
-                stringResource(R.string.delete_list_successfully),
-                dsR.drawable.ic_success
-            )
+        if (state.isSnackBarVisible) {
+            if (state.errorState is ErrorState.RequestFailed) {
+                SnackBarAnimation(state.errorState.message)
+            } else {
+                SnackBarAnimation(
+                    stringResource(R.string.delete_list_successfully),
+                    dsR.drawable.ic_success
+                )
+            }
         }
     }
 }
