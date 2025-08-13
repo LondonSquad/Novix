@@ -35,14 +35,14 @@ import com.london.presentation.shared.buildscreen.BuildScreen
 import com.london.presentation.utils.Listen
 
 @Composable
-fun ActorGalleryScreen(
+fun ActorsGalleryScreen(
     onNavigateBack: () -> Unit,
-    viewModel: ActorGalleryViewModel = hiltViewModel()
+    viewModel: ActorsGalleryViewModel = hiltViewModel()
 ) {
     val effect by viewModel.effect.collectAsState(null)
     val uiState by viewModel.state.collectAsStateWithLifecycle()
 
-    effect.Listen<ActorGalleryEffect> { onNavigateBack() }
+    effect.Listen<ActorsGalleryEffect> { onNavigateBack() }
 
     BuildScreen(
         onBack = viewModel::onBackClick,
@@ -52,15 +52,15 @@ fun ActorGalleryScreen(
     ) {
         Content(
             uiState = uiState,
-            actorGalleryContract = viewModel
+            actorsGalleryContract = viewModel
         )
     }
 }
 
 @Composable
 private fun Content(
-    uiState: ActorGalleryUiState,
-    actorGalleryContract: ActorGalleryContract
+    uiState: ActorsGalleryUiState,
+    actorsGalleryContract: ActorsGalleryContract
 ) {
     Column(
         modifier = Modifier
@@ -73,47 +73,40 @@ private fun Content(
         TopBar(
             modifier = Modifier.padding(bottom = 16.dp),
             title = stringResource(R.string.gallery),
-            onBackClick = actorGalleryContract::onBackClick
+            onBackClick = actorsGalleryContract::onBackClick
         )
 
         Box(modifier = Modifier.weight(1f)) {
             if (uiState.isLoading) {
                 CircularLoading(modifier = Modifier.align(Alignment.Center))
             } else {
-                GalleryContent(uiState = uiState)
+                LazyVerticalGrid(
+                    columns = GridCells.Adaptive(minSize = 104.dp),
+                    horizontalArrangement = Arrangement.spacedBy(8.dp),
+                    verticalArrangement = Arrangement.spacedBy(12.dp),
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .background(NovixTheme.colors.surface)
+                ) {
+                    items(uiState.images) { imageUrl ->
+                        ImageView(
+                            model = imageUrl,
+                            contentDescription = stringResource(R.string.actor_photos),
+                            modifier = Modifier
+                                .size(width = 104.dp, height = 101.dp)
+                                .border(
+                                    width = 1.dp,
+                                    color = NovixTheme.colors.stroke,
+                                    shape = RoundedCornerShape(12.dp)
+                                )
+                                .clip(RoundedCornerShape(12.dp)),
+                            contentScale = ContentScale.Crop,
+                            loadingContent = { CircularLoading() },
+                            errorContent = { ErrorImage(NovixTheme.isThemeDark) }
+                        )
+                    }
+                }
             }
-        }
-    }
-}
-
-@Composable
-private fun GalleryContent(
-    uiState: ActorGalleryUiState
-){
-    LazyVerticalGrid(
-        columns = GridCells.Adaptive(minSize = 104.dp),
-        horizontalArrangement = Arrangement.spacedBy(8.dp),
-        verticalArrangement = Arrangement.spacedBy(12.dp),
-        modifier = Modifier
-            .fillMaxSize()
-            .background(NovixTheme.colors.surface)
-    ) {
-        items(uiState.images) { imageUrl ->
-            ImageView(
-                model = imageUrl,
-                contentDescription = stringResource(R.string.actor_photos),
-                modifier = Modifier
-                    .size(width = 104.dp, height = 101.dp)
-                    .border(
-                        width = 1.dp,
-                        color = NovixTheme.colors.stroke,
-                        shape = RoundedCornerShape(12.dp)
-                    )
-                    .clip(RoundedCornerShape(12.dp)),
-                contentScale = ContentScale.Crop,
-                loadingContent = { CircularLoading() },
-                errorContent = { ErrorImage(NovixTheme.isThemeDark) }
-            )
         }
     }
 }
