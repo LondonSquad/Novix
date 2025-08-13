@@ -28,19 +28,19 @@ class ManageRatingUseCase @Inject constructor(
     suspend fun addMovieRatingById(id: Int, rating: Int): Boolean =
         movieRepository.addMovieRatingById(id = id, rating = rating)
 
-    suspend fun addTvShowRatingById(id: Int, rating: Int) =
+    suspend fun addTvShowRatingById(id: Int, rating: Int) : Boolean =
         tvShowRepository.addTvShowById(id = id, rating = rating)
 
     suspend fun getRateAccountMovieStatesById(id: Int): Int =
         movieRepository.getAccountMovieStatesById(id = id).rate
 
-    suspend fun getRateAccountTvShowState(tvShowId: Int) =
+    suspend fun getRateAccountTvShowState(tvShowId: Int) : Int=
         tvShowRepository.getAccountTvShowState(tvShowId = tvShowId).rate
 
-    suspend fun deleteMovieRating(movieId: Int) =
+    suspend fun deleteMovieRating(movieId: Int) : Boolean =
         movieRepository.deleteMovieRating(movieId = movieId)
 
-    suspend fun deleteTvShowRating(tvShowId: Int) =
+    suspend fun deleteTvShowRating(tvShowId: Int) : Boolean =
         tvShowRepository.deleteTvShowRating(tvShowId = tvShowId)
 
     suspend fun addTvEpisodeRatingById(
@@ -48,7 +48,7 @@ class ManageRatingUseCase @Inject constructor(
         rating: Int,
         seasonNumber: Int,
         episodeNumber: Int
-    ) = tvShowRepository.addTvShowEpisode(
+    ) : Boolean = tvShowRepository.addTvShowEpisode(
         tvShowId = id,
         rating = rating,
         seasonNumber = seasonNumber,
@@ -59,7 +59,7 @@ class ManageRatingUseCase @Inject constructor(
         tvShowId: Int,
         seasonNumber: Int,
         episodeNumber: Int
-    ) = tvShowRepository.getAccountTvEpisode(
+    ) : Int = tvShowRepository.getAccountTvEpisode(
         tvShowId = tvShowId,
         seasonNumber = seasonNumber,
         episodeNumber = episodeNumber

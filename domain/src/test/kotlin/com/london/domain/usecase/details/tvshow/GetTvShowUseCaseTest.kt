@@ -10,6 +10,7 @@ import com.london.domain.entity.recent.MediaType
 import com.london.domain.entity.toprated.TopRatedMedia
 import com.london.domain.entity.tvshowdetails.TvShowDetailsEntity
 import com.london.domain.entity.tvshowdetails.TvShowGenreEntity
+import com.london.domain.repository.ActorRepository
 import com.london.domain.repository.SearchRepository
 import com.london.domain.repository.TvShowRepository
 import io.mockk.coEvery
@@ -26,13 +27,16 @@ class GetTvShowUseCaseTest {
     private lateinit var searchRepository: SearchRepository
     private lateinit var getTvShowUseCase: GetTvShowUseCase
 
+    private lateinit var actorRepository: ActorRepository
     @Before
     fun setUp() {
         tvShowRepository = mockk(relaxed = true)
         searchRepository = mockk(relaxed = true)
+        actorRepository = mockk(relaxed = true)
         getTvShowUseCase = GetTvShowUseCase(
             tvShowRepository = tvShowRepository,
-            searchRepository = searchRepository
+            searchRepository = searchRepository,
+            actorRepository = actorRepository
         )
     }
 

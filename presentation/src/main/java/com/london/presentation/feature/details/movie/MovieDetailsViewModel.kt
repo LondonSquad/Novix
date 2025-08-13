@@ -7,8 +7,8 @@ import com.london.domain.entity.recent.RecentViewed
 import com.london.domain.usecase.authentication.AuthenticationUseCase
 import com.london.domain.usecase.details.movie.GetMovieUseCase
 import com.london.domain.usecase.rating.ManageRatingUseCase
-import com.london.domain.usecase.search.recent.viewed.ManageRecentViewedUseCase
-import com.london.domain.usecase.search.recent.watched.movie.ManageRecentMovieWatchedUseCase
+import com.london.domain.usecase.recent.viewed.ManageRecentViewedUseCase
+import com.london.domain.usecase.recent.watched.movie.ManageRecentMovieWatchedUseCase
 import com.london.presentation.navigation.Screen
 import com.london.presentation.navigation.getArgs
 import com.london.presentation.shared.base.BaseViewModel

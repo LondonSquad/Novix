@@ -8,8 +8,8 @@ import com.london.domain.usecase.authentication.AuthenticationUseCase
 import com.london.domain.usecase.details.tvshow.GetTvEpisodesUseCase
 import com.london.domain.usecase.details.tvshow.GetTvShowUseCase
 import com.london.domain.usecase.rating.ManageRatingUseCase
-import com.london.domain.usecase.search.recent.viewed.ManageRecentViewedUseCase
-import com.london.domain.usecase.search.recent.watched.tvshow.ManageRecentTvShowWatchedUseCase
+import com.london.domain.usecase.recent.viewed.ManageRecentViewedUseCase
+import com.london.domain.usecase.recent.watched.tvshow.ManageRecentTvShowWatchedUseCase
 import com.london.presentation.navigation.Screen
 import com.london.presentation.navigation.getArgs
 import com.london.presentation.shared.base.BaseViewModel
@@ -167,7 +167,7 @@ class TvShowDetailsViewModel @Inject constructor(
     private fun initializeGetCastData() {
         tryToExecute(
             block = {
-                getTvEpisodesUseCase.getCastById(tvShowId)
+                getTvShowUseCase.getTvShowCastById(tvShowId)
             },
             onStart = { updateState { copy(isLoading = true) } },
             onSuccess = { cast ->

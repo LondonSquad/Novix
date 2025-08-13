@@ -7,6 +7,7 @@ import com.london.domain.entity.tvshowdetails.TvShowRoleEntity
 import com.london.domain.entity.tvshowdetails.episode.TvShowEpisodeByIdEntity
 import com.london.domain.entity.tvshowdetails.episode.TvShowEpisodesEntity
 import com.london.domain.repository.ActorRepository
+import com.london.domain.repository.SearchRepository
 import com.london.domain.repository.TvShowRepository
 import io.mockk.coEvery
 import io.mockk.coVerify
@@ -22,13 +23,21 @@ class GetTvEpisodesUseCaseTest {
     private lateinit var tvShowRepository: TvShowRepository
     private lateinit var actorRepository: ActorRepository
     private lateinit var getTvEpisodesUseCase: GetTvEpisodesUseCase
+    private lateinit var searchRepository: SearchRepository
+    private lateinit var gettTvShowUseCase: GetTvShowUseCase
 
     @Before
     fun setUp() {
         tvShowRepository = mockk()
         actorRepository = mockk()
+        searchRepository = mockk()
         getTvEpisodesUseCase = GetTvEpisodesUseCase(
             tvShowRepository = tvShowRepository,
+            actorRepository = actorRepository
+        )
+        gettTvShowUseCase = GetTvShowUseCase(
+            tvShowRepository = tvShowRepository,
+            searchRepository = searchRepository,
             actorRepository = actorRepository
         )
     }
@@ -286,7 +295,7 @@ class GetTvEpisodesUseCaseTest {
         //given
         coEvery { actorRepository.getCastTvShowById(TV_SHOW_ID) } returns mockCast
         //when
-        val result = getTvEpisodesUseCase.getCastById(TV_SHOW_ID)
+        val result = gettTvShowUseCase.getTvShowCastById(TV_SHOW_ID)
         //then
         assertThat(result).isEqualTo(mockCast)
     }

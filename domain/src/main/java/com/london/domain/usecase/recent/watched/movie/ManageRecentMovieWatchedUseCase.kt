@@ -1,4 +1,4 @@
-package com.london.domain.usecase.search.recent.watched.movie
+package com.london.domain.usecase.recent.watched.movie
 
 import com.london.domain.entity.Movie
 import com.london.domain.repository.RecentWatchedRepository

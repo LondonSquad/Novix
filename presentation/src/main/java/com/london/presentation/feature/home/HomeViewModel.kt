@@ -6,8 +6,8 @@ import androidx.paging.cachedIn
 import com.london.domain.entity.UpComingMovie
 import com.london.domain.usecase.details.movie.GetMovieUseCase
 import com.london.domain.usecase.details.tvshow.GetTvShowUseCase
-import com.london.domain.usecase.search.recent.watched.movie.ManageRecentMovieWatchedUseCase
-import com.london.domain.usecase.search.recent.watched.tvshow.ManageRecentTvShowWatchedUseCase
+import com.london.domain.usecase.recent.watched.movie.ManageRecentMovieWatchedUseCase
+import com.london.domain.usecase.recent.watched.tvshow.ManageRecentTvShowWatchedUseCase
 import com.london.presentation.shared.base.BaseViewModel
 import com.london.presentation.shared.base.createPagingSourceFlow
 import com.london.presentation.utils.MovieGenre

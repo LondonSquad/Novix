@@ -11,8 +11,8 @@ import com.london.domain.usecase.details.actor.GetActorUseCase
 import com.london.domain.usecase.details.tvshow.GetTvEpisodesUseCase
 import com.london.domain.usecase.details.tvshow.GetTvShowUseCase
 import com.london.domain.usecase.rating.ManageRatingUseCase
-import com.london.domain.usecase.search.recent.viewed.ManageRecentViewedUseCase
-import com.london.domain.usecase.search.recent.watched.tvshow.ManageRecentTvShowWatchedUseCase
+import com.london.domain.usecase.recent.viewed.ManageRecentViewedUseCase
+import com.london.domain.usecase.recent.watched.tvshow.ManageRecentTvShowWatchedUseCase
 import com.london.presentation.navigation.Screen
 import com.london.presentation.navigation.getArgs
 import io.mockk.coEvery

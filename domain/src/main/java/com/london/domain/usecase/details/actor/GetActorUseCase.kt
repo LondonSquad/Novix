@@ -2,6 +2,8 @@ package com.london.domain.usecase.details.actor
 
 import com.london.domain.entity.Actor
 import com.london.domain.entity.PagedFetchResponse
+import com.london.domain.entity.actordetails.ActorDetails
+import com.london.domain.entity.actordetails.cast.CastDetails
 import com.london.domain.repository.ActorRepository
 import com.london.domain.repository.MovieRepository
 import com.london.domain.repository.TvShowRepository
@@ -12,7 +14,7 @@ class GetActorUseCase @Inject constructor(
     private val movieRepository: MovieRepository,
     private val tvShowRepository: TvShowRepository,
 ) {
-    suspend fun getActorDetailsById(id: Int) = actorRepository.getActorDetailsById(id)
+    suspend fun getActorDetailsById(id: Int) : ActorDetails = actorRepository.getActorDetailsById(id)
 
     suspend fun getActorImagesById(id: Int): List<String> =
         actorRepository.getActorImagesById(id).imageUrl
@@ -20,9 +22,9 @@ class GetActorUseCase @Inject constructor(
     suspend fun getTrendingActors(page: Int): PagedFetchResponse<Actor> =
         actorRepository.getTrendingActors(page)
 
-    suspend fun getActorTvShowPicksById(id: Int) =
+    suspend fun getActorTvShowPicksById(id: Int) : CastDetails =
         tvShowRepository.getActorTvShowPicksById(id)
 
-    suspend fun getActorMoviePicksById(id: Int) =
+    suspend fun getActorMoviePicksById(id: Int) : CastDetails =
         movieRepository.getActorMoviePicksById(id)
 }

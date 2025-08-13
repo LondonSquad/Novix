@@ -3,9 +3,9 @@ package com.london.presentation.feature.search
 import androidx.compose.ui.text.input.TextFieldValue
 import com.london.domain.entity.recent.RecentSearch
 import com.london.domain.entity.recent.RecentViewed
+import com.london.domain.usecase.recent.search.ManageRecentSearchUseCase
+import com.london.domain.usecase.recent.viewed.ManageRecentViewedUseCase
 import com.london.domain.usecase.search.ManageSearchUseCase
-import com.london.domain.usecase.search.recent.search.ManageRecentSearchUseCase
-import com.london.domain.usecase.search.recent.viewed.ManageRecentViewedUseCase
 import com.london.presentation.shared.base.BaseViewModel
 import com.london.presentation.shared.base.createPagingSourceFlow
 import dagger.hilt.android.lifecycle.HiltViewModel

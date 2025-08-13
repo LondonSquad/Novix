@@ -1,7 +1,12 @@
 package com.london.domain.usecase.details.movie
 
+import com.london.domain.entity.Actor
+import com.london.domain.entity.Movie
 import com.london.domain.entity.PagedFetchResponse
 import com.london.domain.entity.Trending
+import com.london.domain.entity.UpComingMovie
+import com.london.domain.entity.popular.PopularMedia
+import com.london.domain.entity.review.ReviewEntity
 import com.london.domain.entity.toprated.TopRatedMedia
 import com.london.domain.repository.ActorRepository
 import com.london.domain.repository.MovieRepository
@@ -23,31 +28,32 @@ class GetMovieUseCase @Inject constructor(
         }.take(limit)
     }
 
-    suspend fun getMovieReviews(movieId: Int, pageNumber: Int) =
+    suspend fun getMovieReviews(movieId: Int, pageNumber: Int): PagedFetchResponse<ReviewEntity> =
         movieRepository.getMovieReviews(movieId, pageNumber)
 
-    suspend fun getMovieCast(movieId: Int) = actorRepository.getMovieActors(movieId)
+    suspend fun getMovieCast(movieId: Int): List<Actor> = actorRepository.getMovieActors(movieId)
 
-    suspend fun getSimilarMovies(movieId: Int) = movieRepository.getSimilarMoviesById(movieId)
+    suspend fun getSimilarMovies(movieId: Int): List<Movie> =
+        movieRepository.getSimilarMoviesById(movieId)
 
-    suspend fun getMovieVideo(movieId: Int) = movieRepository.getMovieVideos(movieId)
+    suspend fun getMovieVideo(movieId: Int): List<String> = movieRepository.getMovieVideos(movieId)
 
     suspend fun getTrendingMovies(page: Int): PagedFetchResponse<Trending> =
         movieRepository.getTrendingMovies(page)
 
-    suspend fun getPopularMovies(limit: Int = POPULAR_LIMIT) =
+    suspend fun getPopularMovies(limit: Int = POPULAR_LIMIT) : List<PopularMedia> =
         movieRepository.getPopularMovies().take(limit)
 
     suspend fun getMoviesByCategory(
         categoryId: Int, pageNumber: Int
-    ) = movieRepository.getMoviesByCategory(
+    ): PagedFetchResponse<Movie> = movieRepository.getMoviesByCategory(
         categoryId = categoryId,
         pageNumber = pageNumber
     )
 
     suspend fun getUpcomingMoviesByCategory(
         categoryId: Int?, pageNumber: Int
-    ) = movieRepository.getUpcomingMoviesByCategory(
+    ) : PagedFetchResponse<UpComingMovie> = movieRepository.getUpcomingMoviesByCategory(
         categoryId = categoryId,
         pageNumber = pageNumber
     )
@@ -67,6 +73,7 @@ class GetMovieUseCase @Inject constructor(
             totalPages = filteredItems.size
         )
     }
+
     companion object {
         private const val IMAGE_LIMIT = 10
         private const val POPULAR_LIMIT = 5
