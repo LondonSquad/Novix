@@ -33,6 +33,29 @@ class ActorDetailsViewModel @Inject constructor(
         getActorInformation()
     }
 
+    override fun onBackClick() {
+        emitEffect(ActorEffect.BackNavigation)
+    }
+
+    override fun onActorGalleryClick(actorId: Int) {
+        emitEffect(ActorEffect.GalleryNavigation(actorId))
+    }
+
+    override fun onTopMoviePicksClick(actorId: Int) {
+        emitEffect(ActorEffect.TopMoviePicksNavigation(actorId))
+    }
+
+    override fun onMovieScreenClick(movieId: Int) {
+        emitEffect(ActorEffect.MovieScreenNavigation(movieId))
+    }
+
+    override fun onTopTvShowPicksClick(actorId: Int) {
+        emitEffect(ActorEffect.TopTvShowPicksNavigation(actorId))
+    }
+    override fun onTvShowScreenClick(tvShowId: Int) {
+        emitEffect(ActorEffect.TvShowScreenNavigation(tvShowId))
+    }
+
     private fun getActorInformation(){
         getActorImage()
         getActorDetails()
@@ -80,26 +103,4 @@ class ActorDetailsViewModel @Inject constructor(
         )
     }
 
-    override fun onBackClick() {
-        emitEffect(ActorEffect.BackNavigation)
-    }
-
-    override fun onActorGalleryClick(actorId: Int) {
-        emitEffect(ActorEffect.GalleryNavigation(actorId))
-    }
-
-    override fun onTopMoviePicksClick(actorId: Int) {
-        emitEffect(ActorEffect.TopMoviePicksNavigation(actorId))
-    }
-
-    override fun onMovieScreenClick(movieId: Int) {
-        emitEffect(ActorEffect.MovieScreenNavigation(movieId))
-    }
-
-    override fun onTopTvShowPicksClick(actorId: Int) {
-        emitEffect(ActorEffect.TopTvShowPicksNavigation(actorId))
-    }
-    override fun onTvShowScreenClick(tvShowId: Int) {
-        emitEffect(ActorEffect.TvShowScreenNavigation(tvShowId))
-    }
 }
