@@ -73,7 +73,6 @@ fun <T : Any> MediaLazyGridWithFilter(
                         onNavigateToTvShow = config.onNavigateToTvShow
                     )
                 } else {
-                    // Show empty screen when filtered items are empty for current tab
                     EmptyGenreLayout()
                 }
             }
