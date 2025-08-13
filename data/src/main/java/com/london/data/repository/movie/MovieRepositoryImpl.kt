@@ -26,7 +26,7 @@ import com.london.domain.entity.PagedFetchResponse
 import com.london.domain.entity.RatedMedia
 import com.london.domain.entity.Trending
 import com.london.domain.entity.UpComingMovie
-import com.london.domain.entity.actordetails.cast.CastDetails
+import com.london.domain.entity.actordetails.cast.ActorMediaDetails
 import com.london.domain.entity.moviedatails.MediaStates
 import com.london.domain.entity.moviedatails.MovieDetails
 import com.london.domain.entity.moviedatails.MovieImages
@@ -52,7 +52,7 @@ class MovieRepositoryImpl @Inject constructor(
     override suspend fun getMovieImagesById(id: Int): MovieImages =
         movieRemoteDataSource.getMovieImages(id).getOrThrow().toEntity()
 
-    override suspend fun getActorMoviePicksById(id: Int): CastDetails =
+    override suspend fun getActorMoviePicksById(id: Int): ActorMediaDetails =
         movieRemoteDataSource.getActorMovieById(id).getOrThrow().toEntity()
 
     override suspend fun getSimilarMoviesById(id: Int): List<Movie> {

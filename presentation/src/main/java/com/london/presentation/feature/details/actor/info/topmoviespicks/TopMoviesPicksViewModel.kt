@@ -32,7 +32,6 @@ class TopMoviesPicksViewModel @Inject constructor(
             onSuccess = { actorMovieDetails ->
                 updateState {
                     copy(
-                        id = actorMovieDetails.id,
                         movieDetails = actorMovieDetails,
                         isSaved = isSaved,
                         backdropPath = backdropPath,
