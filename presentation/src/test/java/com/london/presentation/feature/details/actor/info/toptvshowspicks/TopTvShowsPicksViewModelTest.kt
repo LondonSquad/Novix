@@ -1,6 +1,8 @@
 package com.london.presentation.feature.details.actor.info.toptvshowspicks
 
 import androidx.lifecycle.SavedStateHandle
+import app.cash.turbine.test
+import com.google.common.truth.Truth.assertThat
 import com.london.domain.entity.actordetails.cast.CastActorEntity
 import com.london.domain.entity.actordetails.cast.CastDetails
 import com.london.domain.usecase.toppicks.GetActorTvShowPicksByIdUseCase
@@ -12,9 +14,9 @@ import io.mockk.every
 import io.mockk.mockk
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.test.TestCoroutineScheduler
 import kotlinx.coroutines.test.UnconfinedTestDispatcher
+import kotlinx.coroutines.test.advanceTimeBy
 import kotlinx.coroutines.test.resetMain
 import kotlinx.coroutines.test.runTest
 import kotlinx.coroutines.test.setMain
@@ -30,20 +32,6 @@ class TopTvShowsPicksViewModelTest {
     private lateinit var savedStateHandle: SavedStateHandle
     private val testScheduler = TestCoroutineScheduler()
     private val testDispatcher = UnconfinedTestDispatcher(testScheduler)
-
-    private val mockCastDetails = CastDetails(
-        id = 123,
-        cast = listOf(
-            CastActorEntity(
-                id = 1,
-                posterUrl = "/test1.jpg"
-            ),
-            CastActorEntity(
-                id = 2,
-                posterUrl = "/test2.jpg"
-            )
-        )
-    )
 
     @Before
     fun setUp() {
@@ -71,23 +59,9 @@ class TopTvShowsPicksViewModelTest {
         coVerify(exactly = 1) { getActorTvShowPicksById.invoke(0) }
     }
 
-    @Test
-    fun `should show loading state when data is being fetched`() = runTest {
-        // Given
-        val actorId = 123
-        val args = Screen.TopTvShowsPicksDetails(actorId)
-        every { savedStateHandle.getArgs<Screen.TopTvShowsPicksDetails>() } returns args
-        coEvery { getActorTvShowPicksById.invoke(actorId) } coAnswers {
-            delay(100)
-            mockCastDetails
-        }
-
-        // When
-        viewModel = TopTvShowsPicksViewModel(savedStateHandle, getActorTvShowPicksById)
-    }
 
     @Test
-    fun `viewModel should implement all contract methods`() {
+    fun `viewModel should implement all contract methods`() = runTest {
         // Given
         val actorId = 123
         val args = Screen.TopTvShowsPicksDetails(actorId)
@@ -98,9 +72,51 @@ class TopTvShowsPicksViewModelTest {
         viewModel = TopTvShowsPicksViewModel(savedStateHandle, getActorTvShowPicksById)
 
         // Then
-        viewModel.onRetryClick()
-        viewModel.onBackClick()
-        viewModel.onSaveTvShowClick(1)
-        viewModel.onTvShowClick(1)
+        viewModel.effect.test {
+            viewModel.onBackClick()
+            assertThat(awaitItem()).isEqualTo(TopTvShowsPicksEffect.BackNavigation)
+
+            viewModel.onTvShowClick(1)
+            assertThat(awaitItem()).isEqualTo(TopTvShowsPicksEffect.TvShowDetailsNavigation(1))
+
+            cancelAndConsumeRemainingEvents()
+        }
     }
+
+    @Test
+    fun `should show loading state when data is being fetched`() = runTest {
+        // Given
+        val actorId = 123
+        val args = Screen.TopTvShowsPicksDetails(actorId)
+        every { savedStateHandle.getArgs<Screen.TopTvShowsPicksDetails>() } returns args
+
+
+        // When
+        viewModel = TopTvShowsPicksViewModel(savedStateHandle, getActorTvShowPicksById)
+
+        // Then
+        viewModel.state.test {
+            assertThat(awaitItem()).isEqualTo(TopTvShowsPicksUiState(isLoading = true))
+            coEvery { getActorTvShowPicksById.invoke(actorId) } coAnswers {
+                advanceTimeBy(100)
+                mockCastDetails
+            }
+            assertThat(awaitItem()).isEqualTo(TopTvShowsPicksUiState(isLoading = false, actorTvShowDetails = mockCastDetails))
+            cancelAndConsumeRemainingEvents()
+        }
+    }
+
+    private val mockCastDetails = CastDetails(
+        cast = listOf(
+            CastActorEntity(
+                id = 1,
+                posterUrl = "/test1.jpg"
+            ),
+            CastActorEntity(
+                id = 2,
+                posterUrl = "/test2.jpg"
+            )
+        )
+    )
+
 }
