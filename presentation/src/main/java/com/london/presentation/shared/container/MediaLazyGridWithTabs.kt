@@ -68,6 +68,7 @@ fun <T : Any> MediaLazyGridWithTabs(
             imageUrl = imageUrl,
             name = name,
             isLoading = isLoading,
+            tabSelected = tabSelected,
             modifier = Modifier.fillMaxSize(),
             onMovieGenreClick = onMovieGenreClick,
             onTvShowGenreClick = onTvShowGenreClick,

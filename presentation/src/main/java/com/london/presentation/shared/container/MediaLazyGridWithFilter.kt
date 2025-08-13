@@ -9,11 +9,12 @@ import androidx.paging.compose.LazyPagingItems
 import com.london.designsystem.theme.NovixTheme
 import com.london.designsystem.theme.ThemePreviews
 import com.london.domain.entity.Movie
+import com.london.domain.entity.TvShow
 import com.london.presentation.shared.EmptyGenreLayout
+import com.london.presentation.shared.MediaCategory
 import com.london.presentation.shared.MediaGenreFilters
 import com.london.presentation.utils.MovieGenre
 import com.london.presentation.utils.TvShowGenre
-import com.london.presentation.utils.isEmpty
 
 @Composable
 fun <T : Any> MediaLazyGridWithFilter(
@@ -23,6 +24,7 @@ fun <T : Any> MediaLazyGridWithFilter(
     items: List<T>? = null,
     isLoading: Boolean = false,
     pagingItems: LazyPagingItems<T>? = null,
+    tabSelected: Int = MediaCategory.MOVIES.ordinal,
     onMovieGenreClick: (MovieGenre) -> Unit = {},
     onTvShowGenreClick: (TvShowGenre) -> Unit = {},
     config: MediaGridConfig = MediaGridConfig(),
@@ -47,22 +49,33 @@ fun <T : Any> MediaLazyGridWithFilter(
 
         when {
             !items.isNullOrEmpty() -> {
-                MediaLazyVerticalGrid(
-                    items = items,
-                    imageUrl = imageUrl,
-                    name = name,
-                    hasSaveIcon = config.showSaveIcon,
-                    onSaveClick = { config.onSaveClick(it) },
-                    isItemSaved = { config.isItemSaved(it) },
-                    onDeleteClick = { config.onDeleteClick(it) },
-                    isDarkMode = config.isDarkMode,
-                    myRatingList = config.myRatingList,
-                    rate = config.rate,
-                    topBar = topBar,
-                    modifier = Modifier.fillMaxSize(),
-                    onNavigateToMovie = config.onNavigateToMovie,
-                    onNavigateToTvShow = config.onNavigateToTvShow
-                )
+                val filteredItems = when (tabSelected) {
+                    0 -> items.filter { it is Movie }
+                    1 -> items.filter { it is TvShow }
+                    else -> items
+                }
+
+                if (filteredItems.isNotEmpty()) {
+                    MediaLazyVerticalGrid(
+                        items = filteredItems,
+                        imageUrl = imageUrl,
+                        name = name,
+                        hasSaveIcon = config.showSaveIcon,
+                        onSaveClick = { config.onSaveClick(it) },
+                        isItemSaved = { config.isItemSaved(it) },
+                        onDeleteClick = { config.onDeleteClick(it) },
+                        isDarkMode = config.isDarkMode,
+                        myRatingList = config.myRatingList,
+                        rate = config.rate,
+                        topBar = topBar,
+                        modifier = Modifier.fillMaxSize(),
+                        onNavigateToMovie = config.onNavigateToMovie,
+                        onNavigateToTvShow = config.onNavigateToTvShow
+                    )
+                } else {
+                    // Show empty screen when filtered items are empty for current tab
+                    EmptyGenreLayout()
+                }
             }
 
             pagingItems != null && pagingItems.itemCount > 0 -> {
@@ -85,7 +98,7 @@ fun <T : Any> MediaLazyGridWithFilter(
             }
 
             else -> {
-                if ((items.isNullOrEmpty() || pagingItems?.isEmpty() == true) && !isLoading) {
+                if (!isLoading && items.isNullOrEmpty() && (pagingItems == null || pagingItems.itemCount == 0)) {
                     EmptyGenreLayout()
                 }
             }
