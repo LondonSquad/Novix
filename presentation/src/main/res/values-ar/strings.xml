@@ -155,4 +155,5 @@
     <string name="list_deletion_failed">فشل حذف المجموعة</string>
     <string name="close">غلق</string>
     <string name="my_list_screen">مجموعاتي</string>
+    <string name="categories">التصنيفات</string>
 </resources>
