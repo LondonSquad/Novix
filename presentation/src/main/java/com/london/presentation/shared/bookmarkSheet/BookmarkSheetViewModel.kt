@@ -2,7 +2,7 @@ package com.london.presentation.shared.bookmarkSheet
 
 import com.london.domain.usecase.authentication.AuthenticationUseCase
 import com.london.domain.usecase.movielist.AddMovieToListUseCase
-import com.london.domain.usecase.movielist.GetAllListedMovies
+import com.london.domain.usecase.movielist.GetAvailableListsForMovie
 import com.london.presentation.shared.base.BaseViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
@@ -10,7 +10,7 @@ import javax.inject.Inject
 @HiltViewModel
 class BookmarkSheetViewModel @Inject constructor(
     private val addMovieToListUseCase: AddMovieToListUseCase,
-    private val getAllListedMovies: GetAllListedMovies,
+    private val getAvailableListsForMovie: GetAvailableListsForMovie,
     private val authenticationUseCase: AuthenticationUseCase
 ) : BaseViewModel<BookmarkSheetUiState, BookmarkSheetEffect>(BookmarkSheetUiState()),
     BookmarkSheetContract {
@@ -40,10 +40,11 @@ class BookmarkSheetViewModel @Inject constructor(
                     copy(
                         isLoading = false,
                         isSuccessSnackbarVisible = true,
+                        lists = lists.filterNot { it.id in state.value.selectedLists },
                         selectedLists = emptyList(),
+                        shouldDismiss = true
                     )
                 }
-                emitEffect(BookmarkSheetEffect.ItemSuccessfulAddition)
             },
             onError = { error ->
                 updateState {
@@ -58,12 +59,11 @@ class BookmarkSheetViewModel @Inject constructor(
 
     override fun onDismiss() = updateState {
         copy(
-            lists = emptyList(),
             selectedLists = emptyList(),
             isErrorSnackbarVisible = false,
             isSuccessSnackbarVisible = false,
+            shouldDismiss = false,
             error = null,
-            listError = null
         )
     }
 
@@ -95,11 +95,11 @@ class BookmarkSheetViewModel @Inject constructor(
 
     private fun initializeMovieLists(movieId: UInt) {
         tryToExecute(
-            block = { getAllListedMovies.getAvailableListsForMovie(movieId = movieId) },
             onStart = { updateState { copy(isLoading = true) } },
+            block = { getAvailableListsForMovie.invoke(movieId = movieId) },
             onSuccess = { lists -> updateState { copy(lists = lists.toBookmarkUiLists()) } },
+            onCompleted = { updateState { copy(isLoading = false) } },
             onError = { error -> updateState { copy(error = error) } },
-            onCompleted = { updateState { copy(isLoading = false) } }
         )
     }
 
@@ -107,8 +107,7 @@ class BookmarkSheetViewModel @Inject constructor(
         tryToExecute(
             block = { authenticationUseCase.isLoggedIn() },
             onSuccess = { isLoggedIn -> updateState { copy(isGuestSession = isLoggedIn.not()) } },
-            onError = { errorState -> updateState { copy(error = errorState) } }
+            onError = { errorState -> updateState { copy(error = errorState) } },
         )
     }
-
 }
