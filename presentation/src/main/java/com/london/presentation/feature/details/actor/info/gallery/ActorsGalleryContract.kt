@@ -1,6 +1,6 @@
 package com.london.presentation.feature.details.actor.info.gallery
 
-interface ActorGalleryContract {
+interface ActorsGalleryContract {
     fun onBackClick()
     fun onRetryClick()
 }
