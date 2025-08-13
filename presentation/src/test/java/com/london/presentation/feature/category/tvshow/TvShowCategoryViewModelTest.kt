@@ -35,7 +35,7 @@ class TvShowCategoryViewModelTest {
     fun setUp() {
         Dispatchers.setMain(mainDispatcher)
         manageTvShowDetailsUseCase = mockk(relaxed = true)
-        every { savedStateHandle.getArgs<Screen.MoviesByCategory>() } returns Screen.MoviesByCategory(
+        every { savedStateHandle.getArgs<Screen.TvShowsByCategory>() } returns Screen.TvShowsByCategory(
             categoryId = CATEGORY_ID,
         )
         viewModel = TvShowCategoryViewModel(manageTvShowDetailsUseCase, savedStateHandle)

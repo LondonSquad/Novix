@@ -13,6 +13,7 @@ import io.mockk.mockk
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.StandardTestDispatcher
+import kotlinx.coroutines.test.advanceUntilIdle
 import kotlinx.coroutines.test.resetMain
 import kotlinx.coroutines.test.runTest
 import kotlinx.coroutines.test.setMain
@@ -128,6 +129,9 @@ class LoginViewModelTest {
         // Act & Assert
         viewModel.effect.test {
             viewModel.onLoginClick()
+
+            advanceUntilIdle()
+
             assertThat(awaitItem()).isEqualTo(LoginEffect.NavigateToHome)
             cancelAndIgnoreRemainingEvents()
         }
@@ -144,6 +148,10 @@ class LoginViewModelTest {
         // When & Then
         viewModel.effect.test {
             viewModel.onLoginAsGuestClick()
+
+            advanceUntilIdle()
+
+            // Now, the coroutine has finished. We can safely assert the effect.
             assertThat(awaitItem()).isEqualTo(LoginEffect.NavigateToHome)
             cancelAndIgnoreRemainingEvents()
         }
