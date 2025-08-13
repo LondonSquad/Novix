@@ -114,7 +114,7 @@ class MovieCategoryViewModelTest {
         // When // Then
         viewModel?.effect?.test {
             viewModel?.onBack()
-            assertThat(awaitItem()).isInstanceOf(MovieCategoryEffect.NavigationBack::class.java)
+            assertThat(awaitItem()).isInstanceOf(MovieCategoryEffect.BackNavigation::class.java)
             cancelAndIgnoreRemainingEvents()
         }
     }

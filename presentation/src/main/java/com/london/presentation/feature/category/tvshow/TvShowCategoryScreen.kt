@@ -17,6 +17,7 @@ import androidx.paging.LoadState
 import androidx.paging.compose.collectAsLazyPagingItems
 import com.london.designsystem.component.TopBar
 import com.london.designsystem.theme.ThemePreviews
+import com.london.presentation.R
 import com.london.presentation.feature.search.SearchCategory
 import com.london.presentation.shared.MediaLazyPagingGrid
 import com.london.presentation.shared.buildscreen.BuildScreen
@@ -36,7 +37,7 @@ fun TvShowByCategoryScreen(
 
     effect?.Listen { currentEffect ->
         when (currentEffect) {
-            TvShowCategoryEffect.NavigationBack -> onNavigateBack()
+            TvShowCategoryEffect.BackNavigation -> onNavigateBack()
             is TvShowCategoryEffect.TvShowDetailsNavigation -> onNavigateToTvShowDetails(
                 currentEffect.tvShowId
             )
@@ -60,7 +61,9 @@ private fun Content(
         onBack = contract::onBack,
         isLoading = tvShowLazyList.isLoading(),
         isError = tvShowLazyList.loadState.refresh is LoadState.Error,
-        onRetry = tvShowLazyList::refresh
+        onRetry = tvShowLazyList::refresh,
+        emptyLayoutMessage = R.string.there_is_no_items_for_this_genre,
+        emptyLayoutImage = R.drawable.empty
     ) {
 
         Column(

@@ -17,6 +17,7 @@ import androidx.paging.LoadState
 import androidx.paging.compose.collectAsLazyPagingItems
 import com.london.designsystem.component.TopBar
 import com.london.designsystem.theme.ThemePreviews
+import com.london.presentation.R
 import com.london.presentation.feature.search.SearchCategory
 import com.london.presentation.shared.MediaLazyPagingGrid
 import com.london.presentation.shared.buildscreen.BuildScreen
@@ -36,7 +37,7 @@ fun MoviesByCategoryScreen(
 
     effect?.Listen { currentEffect ->
         when (currentEffect) {
-            MovieCategoryEffect.NavigationBack -> onNavigateBack()
+            MovieCategoryEffect.BackNavigation -> onNavigateBack()
             is MovieCategoryEffect.MovieDetailsNavigation -> onNavigateToMovieDetails(
                 currentEffect.movieId
             )
@@ -60,7 +61,9 @@ private fun Content(
         onBack = contract::onBack,
         isLoading = moviesLazyList.isLoading(),
         isError = moviesLazyList.loadState.refresh is LoadState.Error,
-        onRetry = moviesLazyList::refresh
+        onRetry = moviesLazyList::refresh,
+        emptyLayoutMessage = R.string.there_is_no_items_for_this_genre,
+        emptyLayoutImage = R.drawable.empty
     ) {
 
         Column(

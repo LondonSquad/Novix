@@ -31,7 +31,7 @@ class MovieCategoryViewModel @Inject constructor(
         emitEffect(MovieCategoryEffect.MovieDetailsNavigation(movieId = movieId))
 
     override fun onBack() =
-        emitEffect(MovieCategoryEffect.NavigationBack)
+        emitEffect(MovieCategoryEffect.BackNavigation)
 
     override fun onSavedClick(movieId: Int) = Unit //toDo() save movie
 

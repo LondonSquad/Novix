@@ -124,7 +124,7 @@ class TvShowCategoryViewModelTest {
         // When // Then
         viewModel?.effect?.test {
             viewModel?.onBack()
-            assertThat(awaitItem()).isInstanceOf(TvShowCategoryEffect.NavigationBack::class.java)
+            assertThat(awaitItem()).isInstanceOf(TvShowCategoryEffect.BackNavigation::class.java)
             cancelAndIgnoreRemainingEvents()
         }
     }
