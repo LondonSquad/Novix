@@ -4,7 +4,7 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
 import app.cash.turbine.test
 import com.google.common.truth.Truth.assertThat
-import com.london.domain.entity.actordetails.cast.CastDetails
+import com.london.domain.entity.actordetails.cast.ActorMediaDetails
 import com.london.domain.entity.tvshowdetails.episode.TvShowEpisodesEntity
 import com.london.domain.usecase.authentication.AuthenticationUseCase
 import com.london.domain.usecase.details.actor.GetActorUseCase
@@ -58,7 +58,7 @@ class TvShowDetailsViewModelTest {
         every { savedStateHandle.getArgs<Screen.TvShowDetails>() } returns Screen.TvShowDetails(
             tvShowId = TV_SHOW_ID
         )
-        coEvery { getActorUseCase.getActorTvShowPicksById(TV_SHOW_ID) } returns mockk<CastDetails>(relaxed = true)
+        coEvery { getActorUseCase.getActorTvShowPicksById(TV_SHOW_ID) } returns mockk<ActorMediaDetails>(relaxed = true)
         coEvery { authenticationUseCase.isLoggedIn() } returns false
         coEvery { manageRecentViewedUseCase.addToRecentViewed(any()) } returns Unit
         coEvery { manageRecentTvShowWatchedUseCase.addTvShowToRecentWatched(any()) } returns Unit
