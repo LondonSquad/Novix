@@ -77,7 +77,7 @@ class ViewItemsViewModel @Inject constructor(
                 updateState { copy(error = null, isSnackBarSuccessVisible = false) }
             },
             onError = {
-                updateState { copy(error = ErrorState.EntryNotFound()) }
+                updateState { copy(error = error) }
             },
             onSuccess = {
                 updateState { copy(isSnackBarSuccessVisible = true) }

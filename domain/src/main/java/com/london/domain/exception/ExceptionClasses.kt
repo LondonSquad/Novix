@@ -11,6 +11,8 @@ class EmptyBodyException(message: String? = "Response body is empty") : Exceptio
 
 class ValidationException(message: String? = "Validation failed") : Exception(message)
 
+class EntryNotFoundException(message: String? = "Entry not found") : Exception(message)
+
 class ResponseException(
     val code: Int,
     message: String? = "Response error"
