@@ -28,20 +28,6 @@ class TopMoviesPicksViewModelTest {
     private lateinit var savedStateHandle: SavedStateHandle
     private val testDispatcher = StandardTestDispatcher()
 
-    private val mockCastDetails = CastDetails(
-        id = 123,
-        cast = listOf(
-            CastActorEntity(
-                id = 1,
-                posterUrl = "/test1.jpg"
-            ),
-            CastActorEntity(
-                id = 2,
-                posterUrl = "/test2.jpg"
-            )
-        )
-    )
-
     @Before
     fun setUp() {
         Dispatchers.setMain(testDispatcher)
@@ -89,4 +75,19 @@ class TopMoviesPicksViewModelTest {
         viewModel.onSaveMovieClick(1)
         viewModel.onMovieClick(1)
     }
+
+    private val mockCastDetails = CastDetails(
+        id = 123,
+        cast = listOf(
+            CastActorEntity(
+                id = 1,
+                posterUrl = "/test1.jpg"
+            ),
+            CastActorEntity(
+                id = 2,
+                posterUrl = "/test2.jpg"
+            )
+        )
+    )
+
 }
