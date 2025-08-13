@@ -24,7 +24,7 @@ fun TopMoviesPicksScreen(
     HandleTopMoviesPicksEffects(
         effect = effect,
         onNavigateBack = onNavigateBack,
-        onNavigateMovie = onNavigateToMovieDetails,
+        onNavigateToMovieDetails = onNavigateToMovieDetails,
     )
 
     Content(
@@ -59,13 +59,13 @@ private fun Content(
 @Composable
 private fun HandleTopMoviesPicksEffects(
     onNavigateBack: () -> Unit,
-    onNavigateMovie: (Int) -> Unit,
+    onNavigateToMovieDetails: (Int) -> Unit,
     effect: TopMoviesPicksEffect?,
 ) {
     effect?.Listen { currentEffect ->
         when (currentEffect) {
             is TopMoviesPicksEffect.BackNavigation -> onNavigateBack()
-            is TopMoviesPicksEffect.MovieDetailsNavigation -> onNavigateMovie(currentEffect.movieId)
+            is TopMoviesPicksEffect.MovieDetailsNavigation -> onNavigateToMovieDetails(currentEffect.movieId)
         }
     }
 }
