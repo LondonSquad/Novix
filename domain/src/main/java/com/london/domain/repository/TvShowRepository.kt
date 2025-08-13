@@ -17,7 +17,7 @@ import com.london.domain.entity.tvshowdetails.episode.TvShowEpisodesEntity
 interface TvShowRepository {
     suspend fun getTvShowDetailsById(id: Int): TvShowDetailsEntity
     suspend fun getImagesTvShowById(id: Int): TvShowImagesEntity
-    suspend fun getActorTvShowById(id: Int): CastDetails
+    suspend fun getActorTvShowPicksById(id: Int): CastDetails
     suspend fun getPopularTvShows(): List<PopularMedia>
     suspend fun addTvShowById(id: Int, rating: Int): Boolean
     suspend fun getAllRatedTvShows(): List<RatedMedia>

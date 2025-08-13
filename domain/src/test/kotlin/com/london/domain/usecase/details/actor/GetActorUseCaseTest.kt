@@ -135,13 +135,13 @@ class GetActorUseCaseTest {
             // Given
             val actorId = 1
             val expectedResult = mockk<CastDetails>()
-            coEvery { tvShowRepository.getActorTvShowById(actorId) } returns expectedResult
+            coEvery { tvShowRepository.getActorTvShowPicksById(actorId) } returns expectedResult
 
             // When
             val result = getActorUseCase.getActorTvShowPicksById(actorId)
 
             // Then
-            coVerify(exactly = 1) { tvShowRepository.getActorTvShowById(actorId) }
+            coVerify(exactly = 1) { tvShowRepository.getActorTvShowPicksById(actorId) }
             assertEquals(expectedResult, result)
         }
 
