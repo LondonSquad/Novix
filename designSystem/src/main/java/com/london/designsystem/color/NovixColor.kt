@@ -28,5 +28,5 @@ data class NovixColors(
     val oceanDark: Color,
     val linearGradient: Color,
     val blackLinearGradient: Color,
-    val whiteLinearGradient: Color
+    val whiteLinearGradient: Color,
 )

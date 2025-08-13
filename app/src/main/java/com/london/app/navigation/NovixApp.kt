@@ -315,7 +315,14 @@ fun NavGraphBuilder.mainNavGraph(
         enterTransition = { fadeIn(tween(500)) },
         popExitTransition = { fadeOut(tween(500)) },
     ) {
-        CategoriesScreen()
+        CategoriesScreen(
+            onNavigateToMovieCategory = {
+                navController.navigate(Screen.MoviesByCategory(it.id))
+            },
+            onNavigateToTvShowCategory = {
+                navController.navigate(Screen.TvShowsByCategory(it.id))
+            }
+        )
     }
 
     composable<Screen.Lists>(

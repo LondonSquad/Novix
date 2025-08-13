@@ -39,10 +39,3 @@ fun Modifier.noRippleClickable(onClick: () -> Unit): Modifier = composed {
 val LocalNovixColors = staticCompositionLocalOf { LightNovixColors }
 val LocalNovixTypography = staticCompositionLocalOf { NovixTypography }
 val LocalAppTheme = staticCompositionLocalOf { true }
-
-val horizontalGradient = listOf(
-    LinearGradientLight.copy(alpha = 1f),
-    LinearGradientLight.copy(alpha = 0.8f),
-    LinearGradientLight.copy(alpha = 0.7f),
-    LinearGradientDark
-)
