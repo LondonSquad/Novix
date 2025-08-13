@@ -33,7 +33,7 @@ class TrendingActorsViewModel @Inject constructor(
             block = ::createTrendingActorsPagingFlow,
             onStart = { handlingLoadingState(true) },
             onError = ::handlingErrorState,
-            onSuccess ={ handlingPagingState(it)} ,
+            onSuccess = { handlingPagingState(it) },
             onCompleted = { handlingLoadingState(false) },
         )
     }
@@ -53,7 +53,7 @@ class TrendingActorsViewModel @Inject constructor(
             query = "",
             block = { _, pageNumber ->
                 getTrendingActors.invoke(
-                    page = pageNumber,
+                    page = pageNumber
                 )
             }
         ).cachedIn(viewModelScope)
