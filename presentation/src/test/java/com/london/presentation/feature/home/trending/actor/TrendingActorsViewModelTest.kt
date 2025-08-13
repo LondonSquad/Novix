@@ -1,5 +1,6 @@
 package com.london.presentation.feature.home.trending.actor
 
+import androidx.paging.PagingData
 import app.cash.turbine.test
 import com.google.common.truth.Truth.assertThat
 import com.london.domain.entity.Actor
@@ -11,6 +12,7 @@ import io.mockk.every
 import io.mockk.mockk
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.test.UnconfinedTestDispatcher
 import kotlinx.coroutines.test.advanceUntilIdle
 import kotlinx.coroutines.test.resetMain
@@ -44,23 +46,23 @@ class TrendingActorsViewModelTest {
         clearAllMocks()
     }
 
-//    @Test
-//    fun `when initializing actorData , should fetch trending actors`() = runTest {
-//        //Given
-//        coEvery { getTrendingActors.invoke(any()) } returns createMockPagedFetchResponse(
-//                listOf(createMockActor())
-//
-//        )
-//
-//        // When
-//        advanceUntilIdle()
-//
-//        //Then
-//        viewModel.state.test {
-//            val actors = expectMostRecentItem().actorsFlow.first()
-//            assertThat(actors).isEqualTo( PagingData<Actor>)
-//        }
-//    }
+    @Test
+    fun `when initializing actorData , should fetch trending actors`() = runTest {
+        //Given
+        coEvery { getTrendingActors.invoke(any()) } returns createMockPagedFetchResponse(
+                listOf(createMockActor())
+
+        )
+
+        // When
+        advanceUntilIdle()
+
+        //Then
+        viewModel.state.test {
+            val actors = expectMostRecentItem().actorsFlow.first()
+            assertThat(actors).isEqualTo(PagingData<Actor>)
+        }
+    }
 
     @Test
     fun `when retry is called ,should success updates state correctly `() = runTest {
