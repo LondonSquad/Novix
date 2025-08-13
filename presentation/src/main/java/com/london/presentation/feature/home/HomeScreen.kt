@@ -106,7 +106,6 @@ fun HomeScreen(
 @Composable
 private fun HomeScreenContent(
     uiState: HomeScreenUiState,
-    modifier: Modifier = Modifier,
     homeScreenContract: HomeScreenContract,
 ) {
     val screenDimensions = rememberScreenDimensions()
@@ -122,7 +121,6 @@ private fun HomeScreenContent(
 
     HandleScreenState(
         uiState = uiState,
-        modifier = modifier,
         screenDimensions = screenDimensions,
         lazyGridState = lazyGridState,
         pagerState = pagerState,
@@ -136,7 +134,6 @@ private fun HomeScreenContent(
 @Composable
 private fun HandleScreenState(
     uiState: HomeScreenUiState,
-    modifier: Modifier,
     screenDimensions: ScreenDimensions,
     lazyGridState: LazyGridState,
     pagerState: androidx.compose.foundation.pager.PagerState,
@@ -156,7 +153,7 @@ private fun HandleScreenState(
         }
         else -> {
             HomeScreenLayout(
-                modifier = modifier,
+                modifier = Modifier,
                 screenWidth = screenDimensions.width,
                 lazyGridState = lazyGridState,
                 uiState = uiState,
