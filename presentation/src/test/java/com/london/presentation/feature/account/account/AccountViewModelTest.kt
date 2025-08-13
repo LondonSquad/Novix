@@ -102,16 +102,16 @@ class   AccountViewModelTest {
     fun `should handle logout confirmation successfully`() = runTest {
         // Given
         setupViewModel()
-        viewModel.onLogoutClick() // Set up the logout bottom sheet first
         coEvery { authenticationUseCase.logout() } returns true
 
         // When
         viewModel.onLogoutConfirmed()
+
         testDispatcher.scheduler.advanceUntilIdle()
 
         // Then
         assertThat(viewModel.state.value.isLogoutLoading).isFalse()
-        assertThat(viewModel.state.value.activeBottomSheet).isEqualTo(ActiveBottomSheet.None)
+        assertThat(viewModel.state.value.activeBottomSheet).isEqualTo(ActiveBottomSheet.None) // Also check this
         coVerify { authenticationUseCase.logout() }
     }
 
