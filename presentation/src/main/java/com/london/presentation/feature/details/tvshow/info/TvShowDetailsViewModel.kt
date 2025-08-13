@@ -203,8 +203,8 @@ class TvShowDetailsViewModel @Inject constructor(
 
                 val episodes = getEpisodesByTvShowSeason(tvShowId, seasonNumber).episodes
                 val rating = if (authenticationUseCase.isLoggedIn()) {
-                    ratingUseCase.getRateAccountTvShowState(
-                        tvShowId = tvShowId,
+                    ratingUseCase.getRateAccountTvShowStatesById(
+                        id = tvShowId,
                     )
                 } else 0
 

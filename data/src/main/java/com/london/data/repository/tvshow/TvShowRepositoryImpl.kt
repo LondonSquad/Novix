@@ -90,9 +90,9 @@ class TvShowRepositoryImpl @Inject constructor(
             sessionId = authenticationPreferences.getSessionId().orEmpty()
         ).getOrThrow().items.map { it.toEntity(mediaType = MediaType.TvShow) }
 
-    override suspend fun deleteTvShowRating(tvShowId: Int): Boolean =
+    override suspend fun deleteTvShowRating(id: Int): Boolean =
         tvShowRemoteDataSource.deleteTvShowRating(
-            tvShowId = tvShowId,
+            tvShowId = id,
             sessionId = authenticationPreferences.getSessionId()
         ).isSuccess
 
@@ -152,12 +152,12 @@ class TvShowRepositoryImpl @Inject constructor(
     }
 
     override suspend fun addTvShowEpisode(
-        tvShowId: Int,
+        id: Int,
         seasonNumber: Int,
         episodeNumber: Int,
         rating: Int
     ): Boolean = tvShowRemoteDataSource.addTvShowEpisode(
-        tvShowId = tvShowId,
+        tvShowId = id,
         seasonNumber = seasonNumber,
         episodeNumber = episodeNumber,
         userSessionId = authenticationPreferences.getSessionId(),
@@ -166,21 +166,21 @@ class TvShowRepositoryImpl @Inject constructor(
     ).isSuccess
 
     override suspend fun getTvShowEpisodesBySeason(
-        tvShowId: Int, seasonNumber: Int
+        id: Int, seasonNumber: Int
     ): TvShowEpisodesEntity =
 
         tvShowRemoteDataSource.getTvShowEpisodesBySeason(
-            id = tvShowId, seasonNumber = seasonNumber
+            id = id, seasonNumber = seasonNumber
         ).getOrThrow().toTvShowEpisodesEntity()
 
 
     override suspend fun getTvShowEpisodeByPosition(
-        tvShowId: Int,
+        id: Int,
         seasonNumber: Int,
         episodeNumber: Int
     ): TvShowEpisodeByIdEntity =
         tvShowRemoteDataSource.getEpisodeDetails(
-            tvShowId = tvShowId, seasonNumber = seasonNumber, episodeNumber = episodeNumber
+            tvShowId = id, seasonNumber = seasonNumber, episodeNumber = episodeNumber
         ).getOrThrow().toTvShowEpisodeEntity()
 
     override suspend fun getEpisodeVideos(
@@ -194,16 +194,16 @@ class TvShowRepositoryImpl @Inject constructor(
             episodeNumber = episodeNumber
         ).getOrThrow().results?.map { it.key.asYoutubeUrlOrEmpty() }.orEmpty()
 
-    override suspend fun getTvShowVideos(tvShowId: Int): List<String> =
-        tvShowRemoteDataSource.getTvShowVideos(tvShowId)
+    override suspend fun getTvShowVideos(id: Int): List<String> =
+        tvShowRemoteDataSource.getTvShowVideos(id)
             .getOrThrow().tvShow?.map { it.key.asYoutubeUrlOrEmpty() }.orEmpty()
 
     override suspend fun getTvShowReviews(
-        tvShowId: Int,
+        id: Int,
         pageNumber: Int
     ): PagedFetchResponse<ReviewEntity> = fetchAndSync(
         networkBlock = {
-            tvShowRemoteDataSource.getTvShowReviews(tvShowId, pageNumber).getOrThrow()
+            tvShowRemoteDataSource.getTvShowReviews(id, pageNumber).getOrThrow()
                 .toReviewEntity()
         }).run {
         PagedFetchResponse(
@@ -214,20 +214,20 @@ class TvShowRepositoryImpl @Inject constructor(
         )
     }
 
-    override suspend fun getAccountTvShowState(
-        tvShowId: Int,
+    override suspend fun getAccountTvShowStateById(
+        id: Int,
     ): MediaStates = tvShowRemoteDataSource.getAccountTvShowStates(
-        tvShowId = tvShowId,
+        tvShowId = id,
         guestSessionId = authenticationPreferences.getGuestSessionId(),
         userSessionId = authenticationPreferences.getSessionId()
     ).getOrThrow().toEntity()
 
     override suspend fun getAccountTvEpisode(
-        tvShowId: Int,
+        id: Int,
         seasonNumber: Int,
         episodeNumber: Int,
     ): MediaStates = tvShowRemoteDataSource.getAccountTvEpisodeState(
-        tvShowId = tvShowId,
+        tvShowId = id,
         seasonNumber = seasonNumber,
         episodeNumber = episodeNumber,
         guestSessionId = authenticationPreferences.getGuestSessionId(),

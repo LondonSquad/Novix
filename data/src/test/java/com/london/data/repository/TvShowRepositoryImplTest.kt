@@ -397,7 +397,7 @@ class TvShowRepositoryImplTest {
         every { authenticationPreferences.getSessionId() } returns USER_SESSION
 
         // When
-        val result = repository.getAccountTvShowState(seriesId)
+        val result = repository.getAccountTvShowStateById(seriesId)
 
         // Then
         assertEquals(expectedEntity, result)
