@@ -3,7 +3,6 @@ package com.london.presentation.feature.details.actor.info.toptvshowspicks
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -15,59 +14,44 @@ import com.london.presentation.utils.Listen
 
 @Composable
 fun TopTvShowsPicksScreen(
-    onNavigateTvShow: (Int) -> Unit,
     onNavigateBack: () -> Unit,
+    onNavigateToTvShowDetails: (Int) -> Unit,
     viewModel: TopTvShowsPicksViewModel = hiltViewModel(),
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
     val effect by viewModel.effect.collectAsState(initial = null)
 
-    HandleTvShowsPicksEffects(
-        effect = effect,
-        onNavigateTvShow = onNavigateTvShow,
-        onNavigateBack = onNavigateBack
-    )
+    effect?.Listen { currentEffect ->
+        when (currentEffect) {
+            is TopTvShowsPicksEffect.BackNavigation -> onNavigateBack()
+            is TopTvShowsPicksEffect.TvShowDetailsNavigation -> onNavigateToTvShowDetails(currentEffect.tvShowId)
+        }
+    }
 
-    TopTvShowsPicksContent(
+    Content(
         state = state,
         contract = viewModel,
     )
 }
 
 @Composable
-private fun TopTvShowsPicksContent(
+private fun Content(
     state: TopTvShowsPicksUiState,
     contract: TopTvShowsPicksContract,
-    modifier: Modifier = Modifier,
 ) {
     BuildScreen(
-        onBack = contract::onBack,
+        onBack = contract::onBackClick,
         isLoading = state.isLoading,
         isError = state.errorState is ErrorState.NoInternet,
-        onRetry = contract::onRetry
+        onRetry = contract::onRetryClick
     ) {
         MediaLazyGrid(
             title = stringResource(R.string.top_tv_shows_picks),
             items = state.tvShowDetails.mediaItems,
-            onBack = contract::onBack,
+            onBack = contract::onBackClick,
             getImageUrl = { it.posterUrl },
-            onItemClick = { contract.onTvShowClicked(it.id) },
-            onSavedClick = { contract.onSaveTvShow(it.id) },
-            modifier = modifier
+            onItemClick = { contract.onTvShowClick(it.id) },
+            onSavedClick = { contract.onSaveTvShowClick(it.id) },
         )
-    }
-}
-
-@Composable
-private fun HandleTvShowsPicksEffects(
-    effect: TopTvShowsPicksEffect?,
-    onNavigateTvShow: (Int) -> Unit,
-    onNavigateBack: () -> Unit
-) {
-    effect?.Listen { currentEffect ->
-        when (currentEffect) {
-            is TopTvShowsPicksEffect.TvShowNavigation -> onNavigateTvShow(currentEffect.tvShowId)
-            is TopTvShowsPicksEffect.BackNavigation -> onNavigateBack()
-        }
     }
 }

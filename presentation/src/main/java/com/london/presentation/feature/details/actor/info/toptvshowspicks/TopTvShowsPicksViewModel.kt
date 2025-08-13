@@ -10,8 +10,8 @@ import javax.inject.Inject
 
 @HiltViewModel
 class TopTvShowsPicksViewModel @Inject constructor(
-    private val getActorTvShowPicksById: GetActorTvShowPicksByIdUseCase,
     savedStateHandle: SavedStateHandle,
+    private val getActorTvShowPicksById: GetActorTvShowPicksByIdUseCase,
 ) : BaseViewModel<TopTvShowsPicksUiState, TopTvShowsPicksEffect>(
     TopTvShowsPicksUiState()
 ), TopTvShowsPicksContract {
@@ -23,41 +23,31 @@ class TopTvShowsPicksViewModel @Inject constructor(
         getActorTvShowsPicksData()
     }
 
-    private fun getActorTvShowsPicksData() {
-        tryToExecute(
-            block = {
-                getActorTvShowPicksById.invoke(actorId)
-            },
-            onStart = { updateState { copy(isLoading = true) } },
-            onSuccess = { tvShowDetails ->
-                updateState {
-                    copy(tvShowDetails = tvShowDetails)
-                }
-            },
-            onError = { errorState ->
-                updateState {
-                    copy(errorState = errorState)
-                }
-            },
-            onCompleted = { updateState { copy(isLoading = false) } },
-            checkSuccess = { actorId != 0 }
-        )
-    }
-
-    override fun onRetry(){
+    override fun onRetryClick() {
         updateState { copy(errorState = null) }
         getActorTvShowsPicksData()
     }
 
-    override fun onSaveTvShow(tvShowId: Int) {
-        updateState { copy(isSaved = !this.isSaved) }
+    override fun onSaveTvShowClick(tvShowId: Int) {
+        // TODO: Handle save tv show
     }
 
-    override fun onBack() {
+    override fun onBackClick() {
         emitEffect(TopTvShowsPicksEffect.BackNavigation)
     }
 
-    override fun onTvShowClicked(tvShowId: Int) {
-        emitEffect(TopTvShowsPicksEffect.TvShowNavigation(tvShowId))
+    override fun onTvShowClick(tvShowId: Int) {
+        emitEffect(TopTvShowsPicksEffect.TvShowDetailsNavigation(tvShowId))
     }
+
+    private fun getActorTvShowsPicksData() {
+        tryToExecute(
+            block = { getActorTvShowPicksById.invoke(actorId) },
+            onStart = { updateState { copy(isLoading = true) } },
+            onSuccess = { actorTvShowDetails -> updateState { copy(tvShowDetails = actorTvShowDetails) } },
+            onError = { errorState -> updateState { copy(errorState = errorState) } },
+            onCompleted = { updateState { copy(isLoading = false) } },
+        )
+    }
+
 }
