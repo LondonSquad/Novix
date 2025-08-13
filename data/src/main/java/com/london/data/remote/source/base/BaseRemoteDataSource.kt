@@ -1,6 +1,8 @@
 package com.london.data.remote.source.base
 
 import com.london.data.remote.exception.NetworkException
+import com.london.data.remote.model.list.CustomListResponse
+import com.london.domain.exception.EntryNotFoundException
 import kotlinx.coroutines.delay
 import retrofit2.Response
 import java.net.HttpURLConnection
@@ -47,6 +49,11 @@ interface BaseRemoteDatasource {
     ): Result<R> {
         return when {
             result.isSuccessful -> {
+
+                if (result.body() is CustomListResponse &&
+                    (result.body() as CustomListResponse).statusCode == 21
+                ) throw result.toEntryNotFoundException()
+
                 getOrEmptyResult(result = result, mapper = mapper).map {
                     it ?: throw NetworkException.EmptyResponseException(
                         "Empty response", result.code()
@@ -105,4 +112,5 @@ private fun <T> Response<T>.toTimeoutException() = NetworkException.TimeoutExcep
 private fun <T> Response<T>.toBadRequestException() = NetworkException.BadRequestException(
     message = errorBody()?.string(), status = code()
 )
+    private fun <T> Response<T>.toEntryNotFoundException() = EntryNotFoundException()
 }

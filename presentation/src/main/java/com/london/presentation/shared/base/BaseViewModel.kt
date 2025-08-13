@@ -4,6 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.london.domain.exception.ConnectionException
 import com.london.domain.exception.EmptyBodyException
+import com.london.domain.exception.EntryNotFoundException
 import com.london.domain.exception.InternetDisconnectedException
 import com.london.domain.exception.ResponseException
 import com.london.domain.exception.UnAuthorizedException
@@ -121,7 +122,6 @@ abstract class BaseViewModel<S, E : Any>(initState: S) : ViewModel() {
             is ConnectException -> ConnectionException()
             is SocketTimeoutException,
             is TimeoutCancellationException -> TimeoutException()
-
             is UnknownHostException -> InternetDisconnectedException()
             else -> throwable
         }
@@ -132,6 +132,7 @@ abstract class BaseViewModel<S, E : Any>(initState: S) : ViewModel() {
             is EmptyBodyException -> ErrorState.EmptyBody
             is TimeoutException -> ErrorState.Timeout
             is ValidationException -> ErrorState.Validation
+            is EntryNotFoundException -> ErrorState.EntryNotFound()
             is ResponseException -> {
                 when (exception.code) {
                     HttpStatus.SC_UNAUTHORIZED -> ErrorState.UnAuthorized
