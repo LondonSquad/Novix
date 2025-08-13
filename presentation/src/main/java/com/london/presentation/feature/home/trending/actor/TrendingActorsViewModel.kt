@@ -1,6 +1,8 @@
 package com.london.presentation.feature.home.trending.actor
 
+import androidx.lifecycle.viewModelScope
 import androidx.paging.PagingData
+import androidx.paging.cachedIn
 import com.london.domain.entity.Actor
 import com.london.domain.usecase.GetTrendingActorsUseCase
 import com.london.presentation.shared.base.BaseViewModel
@@ -51,10 +53,10 @@ class TrendingActorsViewModel @Inject constructor(
             query = "",
             block = { _, pageNumber ->
                 getTrendingActors.invoke(
-                    page = 1,
+                    page = pageNumber,
                 )
             }
-        )
+        ).cachedIn(viewModelScope)
     }
 
     fun handlingLoadingState(isLoading: Boolean) = updateState { copy(isLoading = isLoading) }
