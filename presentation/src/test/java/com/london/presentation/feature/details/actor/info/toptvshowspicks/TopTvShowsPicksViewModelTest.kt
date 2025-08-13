@@ -4,8 +4,8 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
 import app.cash.turbine.test
 import com.google.common.truth.Truth.assertThat
-import com.london.domain.entity.actordetails.cast.CastActorEntity
-import com.london.domain.entity.actordetails.cast.CastDetails
+import com.london.domain.entity.actordetails.cast.ActorMediaDetails
+import com.london.domain.entity.actordetails.cast.ActorMediaItems
 import com.london.domain.usecase.toppicks.GetActorTvShowPicksByIdUseCase
 import com.london.presentation.navigation.Screen
 import com.london.presentation.navigation.getArgs
@@ -128,7 +128,7 @@ class TopTvShowsPicksViewModelTest {
         testViewModel.state.test {
             val state = expectMostRecentItem()
             assertThat(state.errorState).isNull()
-            assertThat(state.actorTvShowDetails).isEqualTo(mockCastDetails)
+            assertThat(state.tvShowDetails).isEqualTo(mockCastDetails)
             assertThat(state.isLoading).isFalse()
             ensureAllEventsConsumed()
         }
@@ -137,14 +137,13 @@ class TopTvShowsPicksViewModelTest {
 
     companion object {
         private const val ACTOR_ID = 123
-        private val mockCastDetails = CastDetails(
-            id = ACTOR_ID,
-            cast = listOf(
-                CastActorEntity(
+        private val mockCastDetails = ActorMediaDetails(
+            mediaItems = listOf(
+                ActorMediaItems(
                     id = 1,
                     posterUrl = "/test1.jpg"
                 ),
-                CastActorEntity(
+                ActorMediaItems(
                     id = 2,
                     posterUrl = "/test2.jpg"
                 )

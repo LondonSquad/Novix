@@ -23,16 +23,6 @@ class TopTvShowsPicksViewModel @Inject constructor(
         getActorTvShowsPicksData()
     }
 
-    private fun getActorTvShowsPicksData() {
-        tryToExecute(
-            block = { getActorTvShowPicksById.invoke(actorId) },
-            onStart = { updateState { copy(isLoading = true) } },
-            onSuccess = { actorTvShowDetails -> updateState { copy(actorTvShowDetails = actorTvShowDetails) } },
-            onError = { errorState -> updateState { copy(errorState = errorState) } },
-            onCompleted = { updateState { copy(isLoading = false) } },
-        )
-    }
-
     override fun onRetryClick() {
         updateState { copy(errorState = null) }
         getActorTvShowsPicksData()
@@ -49,4 +39,15 @@ class TopTvShowsPicksViewModel @Inject constructor(
     override fun onTvShowClick(tvShowId: Int) {
         emitEffect(TopTvShowsPicksEffect.TvShowDetailsNavigation(tvShowId))
     }
+
+    private fun getActorTvShowsPicksData() {
+        tryToExecute(
+            block = { getActorTvShowPicksById.invoke(actorId) },
+            onStart = { updateState { copy(isLoading = true) } },
+            onSuccess = { actorTvShowDetails -> updateState { copy(tvShowDetails = actorTvShowDetails) } },
+            onError = { errorState -> updateState { copy(errorState = errorState) } },
+            onCompleted = { updateState { copy(isLoading = false) } },
+        )
+    }
+
 }

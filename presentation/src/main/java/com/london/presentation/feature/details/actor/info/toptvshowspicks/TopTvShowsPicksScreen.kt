@@ -21,11 +21,12 @@ fun TopTvShowsPicksScreen(
     val state by viewModel.state.collectAsStateWithLifecycle()
     val effect by viewModel.effect.collectAsState(initial = null)
 
-    HandleTvShowsPicksEffects(
-        effect = effect,
-        onNavigateBack = onNavigateBack,
-        onNavigateToTvShowDetails = onNavigateToTvShowDetails,
-    )
+    effect?.Listen { currentEffect ->
+        when (currentEffect) {
+            is TopTvShowsPicksEffect.BackNavigation -> onNavigateBack()
+            is TopTvShowsPicksEffect.TvShowDetailsNavigation -> onNavigateToTvShowDetails(currentEffect.tvShowId)
+        }
+    }
 
     Content(
         state = state,
@@ -46,25 +47,11 @@ private fun Content(
     ) {
         MediaLazyGrid(
             title = stringResource(R.string.top_tv_shows_picks),
-            items = state.actorTvShowDetails.mediaItems,
+            items = state.tvShowDetails.mediaItems,
             onBack = contract::onBackClick,
             getImageUrl = { it.posterUrl },
             onItemClick = { contract.onTvShowClick(it.id) },
             onSavedClick = { contract.onSaveTvShowClick(it.id) },
         )
-    }
-}
-
-@Composable
-private fun HandleTvShowsPicksEffects(
-    onNavigateBack: () -> Unit,
-    onNavigateToTvShowDetails: (Int) -> Unit,
-    effect: TopTvShowsPicksEffect?,
-) {
-    effect?.Listen { currentEffect ->
-        when (currentEffect) {
-            is TopTvShowsPicksEffect.BackNavigation -> onNavigateBack()
-            is TopTvShowsPicksEffect.TvShowDetailsNavigation -> onNavigateToTvShowDetails(currentEffect.tvShowId)
-        }
     }
 }
