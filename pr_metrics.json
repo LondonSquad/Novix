@@ -20964,5 +20964,33 @@
       "deletions": 503,
       "changed_files": 25
     }
+  },
+  {
+    "pr_number": 627,
+    "url": "https://github.com/LondonSquad/Novix/pull/627",
+    "title": "fix: actorgalleryscreen naming conflict",
+    "opened_at": "2025-08-13T02:05:08Z",
+    "head_ref": "hotfix/actor-gallery-conflict",
+    "base_ref": "develop",
+    "creator": {
+      "login": "Abdulrahman1890",
+      "id": 76666355,
+      "url": "https://github.com/Abdulrahman1890"
+    },
+    "approvals": [],
+    "first_approved_at": null,
+    "time_to_first_approval_minutes": null,
+    "required_approvals_met_at": null,
+    "time_to_required_approvals_minutes": null,
+    "closed_at": null,
+    "merged_at": null,
+    "merged_by": null,
+    "week": "2025-W33",
+    "status": "pending",
+    "diff_stats": {
+      "additions": 49,
+      "deletions": 56,
+      "changed_files": 8
+    }
   }
 ]
