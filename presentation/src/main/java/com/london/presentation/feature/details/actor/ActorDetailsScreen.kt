@@ -111,7 +111,6 @@ fun ActorDetailsScreen(
 private fun Content(
     uiState: ActorDetailsUiState,
     actorDetailsContract: ActorDetailsContract,
-    modifier: Modifier = Modifier,
 ) {
 
     val lazyState = rememberLazyListState()
@@ -127,7 +126,7 @@ private fun Content(
     )
 
     Box(
-        modifier = modifier
+        modifier = Modifier
             .fillMaxSize()
             .background(NovixTheme.colors.surface)
     ) {
