@@ -29,7 +29,7 @@ subprojects {
         }
     }
 
-    plugins.withId("org.jetbrains.kotlinx.kover"){
+    plugins.withId("org.jetbrains.kotlinx.kover") {
         extensions.configure<KoverProjectExtension> {
             currentProject {
                 createVariant("custom") {
@@ -59,8 +59,7 @@ kover {
                         "com.london.data.datasource.local.search",
                         "com.london.data.datasource.local.recent",
                     )
-                    // TODO: Uncomment this line to cover viewModels
-                    // classes("**.*ViewModel")
+                    classes("**.*ViewModel")
                 }
 
                 excludes {
