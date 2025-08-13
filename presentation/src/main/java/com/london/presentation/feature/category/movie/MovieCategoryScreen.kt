@@ -1,6 +1,7 @@
 package com.london.presentation.feature.category.movie
 
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.statusBarsPadding
@@ -13,26 +14,22 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.paging.LoadState
-import androidx.paging.PagingData
 import androidx.paging.compose.collectAsLazyPagingItems
 import com.london.designsystem.component.TopBar
 import com.london.designsystem.theme.ThemePreviews
-import com.london.domain.entity.Movie
+import com.london.presentation.R
 import com.london.presentation.feature.search.SearchCategory
-import com.london.presentation.shared.EmptyGenreLayout
 import com.london.presentation.shared.MediaLazyPagingGrid
 import com.london.presentation.shared.buildscreen.BuildScreen
 import com.london.presentation.utils.Listen
 import com.london.presentation.utils.convertGenreCodeToString
 import com.london.presentation.utils.isLoading
-import kotlinx.coroutines.flow.flow
 
 @Composable
 fun MoviesByCategoryScreen(
-    modifier: Modifier = Modifier,
-    viewModel: MovieCategoryViewModel = hiltViewModel(),
+    onNavigateBack: () -> Unit,
     onNavigateToMovieDetails: (Int) -> Unit,
-    onNavigateBack: () -> Unit
+    viewModel: MovieCategoryViewModel = hiltViewModel()
 ) {
 
     val state by viewModel.state.collectAsStateWithLifecycle()
@@ -40,8 +37,8 @@ fun MoviesByCategoryScreen(
 
     effect?.Listen { currentEffect ->
         when (currentEffect) {
-            MovieCategoryEffect.NavigateBack -> onNavigateBack()
-            is MovieCategoryEffect.NavigateToMovieDetails -> onNavigateToMovieDetails(
+            MovieCategoryEffect.BackNavigation -> onNavigateBack()
+            is MovieCategoryEffect.MovieDetailsNavigation -> onNavigateToMovieDetails(
                 currentEffect.movieId
             )
         }
@@ -50,7 +47,6 @@ fun MoviesByCategoryScreen(
     Content(
         state = state,
         contract = viewModel,
-        modifier = modifier,
     )
 }
 
@@ -58,29 +54,34 @@ fun MoviesByCategoryScreen(
 private fun Content(
     state: MovieCategoryUiState,
     contract: MovieCategoryContract,
-    modifier: Modifier = Modifier
 ) {
 
-    val moviesLazyList = state.movies.collectAsLazyPagingItems()
-    if (moviesLazyList.itemCount == 0) return EmptyGenreLayout()
+    val moviesLazyList = state.moviesFlow.collectAsLazyPagingItems()
     BuildScreen(
         onBack = contract::onBack,
         isLoading = moviesLazyList.isLoading(),
         isError = moviesLazyList.loadState.refresh is LoadState.Error,
-        onRetry = moviesLazyList::refresh
+        onRetry = moviesLazyList::refresh,
+        emptyLayoutMessage = R.string.there_is_no_items_for_this_genre,
+        emptyLayoutImage = R.drawable.empty
     ) {
-        Column {
+
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .statusBarsPadding()
+                .padding(top = 12.dp)
+        ) {
             TopBar(
                 title = stringResource(
                     convertGenreCodeToString(
                         genreId = state.categoryId, searchCategory = SearchCategory.Movies
                     )
-                ), onBackClick = contract::onBack,
-                modifier = modifier
-                    .statusBarsPadding()
-                    .padding(horizontal = 16.dp, vertical = 12.dp)
-
+                ),
+                onBackClick = contract::onBack,
+                modifier = Modifier.padding(start = 16.dp, end = 16.dp, bottom = 12.dp)
             )
+
             MediaLazyPagingGrid(
                 pagingFlow = moviesLazyList,
                 onItemClick = { contract.onMovieClick(it.id) },
@@ -100,74 +101,9 @@ private fun Content(
 @ThemePreviews
 @Composable
 private fun MoviesByCategoryContentPreview() {
+
     Content(
-        state = MovieCategoryUiState(
-            movies = flow<PagingData<Movie>> {
-                Movie(
-                    id = 1,
-                    name = "",
-                    posterUrl = "",
-                    releaseYear = 1,
-                    rating = 3,
-                    genreIds = listOf()
-                )
-                Movie(
-                    id = 1,
-                    name = "",
-                    posterUrl = "",
-                    releaseYear = 1,
-                    rating = 3,
-                    genreIds = listOf()
-                )
-                Movie(
-                    id = 1,
-                    name = "",
-                    posterUrl = "",
-                    releaseYear = 1,
-                    rating = 3,
-                    genreIds = listOf()
-                )
-                Movie(
-                    id = 1,
-                    name = "",
-                    posterUrl = "",
-                    releaseYear = 1,
-                    rating = 3,
-                    genreIds = listOf()
-                )
-                Movie(
-                    id = 1,
-                    name = "",
-                    posterUrl = "",
-                    releaseYear = 1,
-                    rating = 3,
-                    genreIds = listOf()
-                )
-                Movie(
-                    id = 1,
-                    name = "",
-                    posterUrl = "",
-                    releaseYear = 1,
-                    rating = 3,
-                    genreIds = listOf()
-                )
-                Movie(
-                    id = 1,
-                    name = "",
-                    posterUrl = "",
-                    releaseYear = 1,
-                    rating = 3,
-                    genreIds = listOf()
-                )
-                Movie(
-                    id = 1,
-                    name = "",
-                    posterUrl = "",
-                    releaseYear = 1,
-                    rating = 3,
-                    genreIds = listOf()
-                )
-            }),
+        state = MovieCategoryUiState(),
         contract = object : MovieCategoryContract {
             override fun onSavedClick(movieId: Int) {}
             override fun onMovieClick(movieId: Int) {}
