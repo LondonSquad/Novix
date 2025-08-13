@@ -1,7 +1,7 @@
 package com.london.presentation.feature.home.toprated
 
 import com.london.domain.usecase.toprated.GetTopRatedMoviesUseCase
-import com.london.domain.usecase.toprated.GetTopRatedTvSeriesUseCase
+import com.london.domain.usecase.toprated.GetTopRatedTvShowUseCase
 import com.london.presentation.shared.MediaCategory
 import com.london.presentation.shared.base.BaseViewModel
 import com.london.presentation.shared.base.createPagingSourceFlow
@@ -13,7 +13,7 @@ import javax.inject.Inject
 @HiltViewModel
 class TopRatedViewModel @Inject constructor(
     private val getTopRatedMoviesUseCase: GetTopRatedMoviesUseCase,
-    private val getTopRatedTvSeriesUseCase: GetTopRatedTvSeriesUseCase,
+    private val getTopRatedTvShowUseCase: GetTopRatedTvShowUseCase,
 ) : BaseViewModel<TopRatedUiState, TopRatedEffect>(TopRatedUiState()), TopRatedContract {
 
     init {
@@ -69,7 +69,7 @@ class TopRatedViewModel @Inject constructor(
     private fun initializeTopMovies() {
         tryToExecute(block = {
             val moviesFlow = createPagingSourceFlow(query = "") { _, pageNumber ->
-                getTopRatedMoviesUseCase.invoke(
+                getTopRatedMoviesUseCase.getTopRatedMovies(
                     pageNumber,
                     if (state.value.selectedMovieGenre == MovieGenre.All) null
                     else state.value.selectedMovieGenre.id
@@ -91,7 +91,7 @@ class TopRatedViewModel @Inject constructor(
     private fun initializeTvShow() {
         tryToExecute(block = {
             val tvSeriesFlow = createPagingSourceFlow(query = "") { _, pageNumber ->
-                getTopRatedTvSeriesUseCase.invoke(
+                getTopRatedTvShowUseCase.getTopRatedTvShows(
                     pageNumber,
                     if (state.value.selectedTvShowGenre == TvShowGenre.All) null
                     else state.value.selectedTvShowGenre.id

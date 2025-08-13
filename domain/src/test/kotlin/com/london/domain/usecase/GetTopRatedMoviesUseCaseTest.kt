@@ -39,7 +39,7 @@ class GetTopRatedMoviesUseCaseTest {
         } returns mockPagedResponse
 
         // When
-        val result = getTopRatedMovies(PAGE)
+        val result = getTopRatedMovies.getTopRatedMovies(PAGE)
 
         // Then
         assertThat(result).isEqualTo(mockPagedResponse)
@@ -62,7 +62,7 @@ class GetTopRatedMoviesUseCaseTest {
         } returns emptyPagedResponse
 
         // When
-        val result = getTopRatedMovies(PAGE)
+        val result = getTopRatedMovies.getTopRatedMovies(PAGE)
 
         // Then
         assertThat(result.items).isEmpty()
@@ -77,7 +77,7 @@ class GetTopRatedMoviesUseCaseTest {
 
         // When & Then
         assertThrows<RuntimeException> {
-            getTopRatedMovies(PAGE)
+            getTopRatedMovies.getTopRatedMovies(PAGE)
         }
     }
 

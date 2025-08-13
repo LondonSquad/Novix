@@ -148,6 +148,26 @@ class MovieRepositoryImpl @Inject constructor(
         )
     }
 
+    override suspend fun getFirstPageTopRatedMovies() = fetchAndSync(
+        cacheBlock = {
+            val local = localTopRated.getAll()
+                .filter { it.mediaType == MediaType.Movie }
+                .map { it.toEntity() }
+            local.takeIf { it.isNotEmpty() }
+        },
+        networkBlock = {
+            movieRemoteDataSource
+                .getTopRatedMovies(pageNumber = PAGE_NUMBER)
+                .getOrThrow()
+                .items.map { it.toEntity() }
+        },
+        syncBlock = { topRatedMovies ->
+            localTopRated.insertAll(topRatedMovies.map { it.toLocal() })
+        },
+        crashReporter = crashReporter
+    )
+
+
     override suspend fun getMoviesByCategory(
         categoryId: Int,
         pageNumber: Int
@@ -207,5 +227,9 @@ class MovieRepositoryImpl @Inject constructor(
             movieId = id,
             userSessionId = authenticationPreferences.getSessionId(),
         ).getOrThrow().toEntity()
+    }
+
+    companion object {
+        const val PAGE_NUMBER = 1
     }
 }

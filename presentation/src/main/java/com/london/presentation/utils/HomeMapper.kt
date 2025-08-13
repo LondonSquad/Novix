@@ -10,11 +10,11 @@ import com.london.presentation.feature.home.popular.PopularUiMedia
 
 @JvmName("topRatedMovieToUiMedia")
 fun List<TopRatedMedia>.toUiMedia(): List<HomeUiMedia> =
-    map { movie ->
+    map { media ->
         HomeUiMedia(
-            id = movie.id,
-            posterUrl = movie.posterUrl,
-            mediaType = MediaType.Movie
+            id = media.id,
+            posterUrl = media.posterUrl,
+            mediaType = media.mediaType
         )
     }
 

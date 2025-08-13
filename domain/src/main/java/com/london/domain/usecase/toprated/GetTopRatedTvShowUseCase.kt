@@ -5,10 +5,10 @@ import com.london.domain.entity.toprated.TopRatedMedia
 import com.london.domain.repository.TvShowRepository
 import javax.inject.Inject
 
-class GetTopRatedTvSeriesUseCase @Inject constructor(
+class GetTopRatedTvShowUseCase @Inject constructor(
     private val repository: TvShowRepository
 ) {
-    suspend operator fun invoke(
+    suspend fun getTopRatedTvShows(
         pageNumber: Int,
         genreId: Int? = null
     ) : PagedFetchResponse<TopRatedMedia> {
@@ -23,4 +23,12 @@ class GetTopRatedTvSeriesUseCase @Inject constructor(
             totalPages = filteredItems.size
         )
     }
+
+    suspend fun getMostRecentTopRatedTvShow(limit: Int = LIMIT) =
+        repository.getFirstPageTopRatedTvShows().take(limit)
+
+    companion object {
+        const val LIMIT = 10
+    }
+
 }

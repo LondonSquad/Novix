@@ -4,7 +4,7 @@ import com.google.common.truth.Truth.assertThat
 import com.london.domain.entity.PagedFetchResponse
 import com.london.domain.entity.toprated.TopRatedMedia
 import com.london.domain.repository.TvShowRepository
-import com.london.domain.usecase.toprated.GetTopRatedTvSeriesUseCase
+import com.london.domain.usecase.toprated.GetTopRatedTvShowUseCase
 import io.mockk.coEvery
 import io.mockk.mockk
 import kotlinx.coroutines.test.runTest
@@ -12,15 +12,15 @@ import org.junit.Before
 import org.junit.Test
 import org.junit.jupiter.api.assertThrows
 
-class GetTopRatedTvSeriesUseCaseTest {
+class GetTopRatedTvShowUseCaseTest {
 
     private lateinit var repository: TvShowRepository
-    private lateinit var getTopRatedTvSeries: GetTopRatedTvSeriesUseCase
+    private lateinit var getTopRatedTvSeries: GetTopRatedTvShowUseCase
 
     @Before
     fun setUp() {
         repository = mockk()
-        getTopRatedTvSeries = GetTopRatedTvSeriesUseCase(repository)
+        getTopRatedTvSeries = GetTopRatedTvShowUseCase(repository)
     }
 
     @Test
@@ -38,7 +38,7 @@ class GetTopRatedTvSeriesUseCaseTest {
         } returns mockPagedResponse
 
         // When
-        val result = getTopRatedTvSeries(PAGE)
+        val result = getTopRatedTvSeries.getTopRatedTvShows(PAGE)
 
         // Then
         assertThat(result).isEqualTo(mockPagedResponse)
@@ -60,7 +60,7 @@ class GetTopRatedTvSeriesUseCaseTest {
         } returns emptyPagedResponse
 
         // When
-        val result = getTopRatedTvSeries(PAGE)
+        val result = getTopRatedTvSeries.getTopRatedTvShows(PAGE)
 
         // Then
         assertThat(result.items).isEmpty()
@@ -76,7 +76,7 @@ class GetTopRatedTvSeriesUseCaseTest {
 
         // When & Then
         assertThrows<RuntimeException> {
-            getTopRatedTvSeries(PAGE)
+            getTopRatedTvSeries.getTopRatedTvShows(PAGE)
         }
     }
 
