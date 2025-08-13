@@ -20,11 +20,12 @@ fun <T : Any> MediaLazyGridWithFilter(
     imageUrl: (T) -> String = { it.getImageUrl() },
     name: (T) -> String = { it.getName() },
     items: List<T>? = null,
+    tabSelected: Int = 0,
     pagingItems: LazyPagingItems<T>? = null,
     onMovieGenreClick: (MovieGenre) -> Unit = {},
     onTvShowGenreClick: (TvShowGenre) -> Unit = {},
     config: MediaGridConfig = MediaGridConfig(),
-    topBar: @Composable (() -> Unit)? = null
+    topBar: @Composable (() -> Unit)? = null,
 ) {
 
     Column(
@@ -83,7 +84,11 @@ fun <T : Any> MediaLazyGridWithFilter(
             }
 
             else -> {
-                EmptyGenreLayout()
+                if (tabSelected == 0 && (items.isNullOrEmpty() || pagingItems == null)) {
+                    EmptyGenreLayout()
+                } else if (tabSelected == 1 && (items.isNullOrEmpty() || pagingItems == null)) {
+                    EmptyGenreLayout()
+                }
             }
         }
     }

@@ -31,7 +31,8 @@ fun <T : Any> MediaLazyGridWithTabs(
     onMovieGenreClick: (MovieGenre) -> Unit = {},
     onTvShowGenreClick: (TvShowGenre) -> Unit = {},
     config: MediaGridConfig = MediaGridConfig(),
-    topBar: @Composable (() -> Unit)? = null
+    topBar: @Composable (() -> Unit)? = null,
+    isLoading: Boolean = false
 ) {
 
     val tabs = listOf(
@@ -69,7 +70,9 @@ fun <T : Any> MediaLazyGridWithTabs(
             modifier = Modifier.fillMaxSize(),
             onMovieGenreClick = onMovieGenreClick,
             onTvShowGenreClick = onTvShowGenreClick,
-            config = config
+            config = config,
+            isLoading = isLoading,
+            tabSelected = tabSelected
         )
     }
 }

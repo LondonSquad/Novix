@@ -96,7 +96,8 @@ fun Content(
                         title = screenTitle,
                         onBack = contract::onBack
                     )
-                }
+                },
+                isLoading = state.isLoading
             )
         }
     }

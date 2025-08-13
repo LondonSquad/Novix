@@ -166,7 +166,9 @@ private fun Content(
 
             when {
                 state.error != null && state.error != ErrorState.NoInternet -> {
-                    ResultOrEmpty(items = state.searchQuery.text.toList(), emptyContent = {
+                    ResultOrEmpty(
+                        items = state.searchQuery.text.toList(),
+                        emptyContent = {
                         ResultOrEmpty(
                             items = state.recentSearches,
                             otherItems = state.recentViewed,
@@ -186,7 +188,8 @@ private fun Content(
                                     onNavigateToMovieDetails = interactionListener::onMovieClick
                                 )
                             })
-                    }, content = {
+                        },
+                        content = {
                         SearchChipsRow(
                             selected = state.selectedCategory,
                             onSelect = interactionListener::onCategorySelected,
@@ -196,7 +199,9 @@ private fun Content(
                 }
 
                 else -> {
-                    ResultOrEmpty(items = state.searchQuery.text.toList(), emptyContent = {
+                    ResultOrEmpty(
+                        items = state.searchQuery.text.toList(),
+                        emptyContent = {
                         ResultOrEmpty(
                             items = state.recentSearches,
                             otherItems = state.recentViewed,
