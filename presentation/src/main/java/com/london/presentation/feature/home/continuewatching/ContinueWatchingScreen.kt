@@ -128,7 +128,7 @@ private fun MediaCategoryTabs(
     onTabSelected: (MediaCategory) -> Unit
 ) {
     TabLayout(
-        tabs = listOf(MediaCategory.MOVIES, MediaCategory.TV_SHOWS),
+        tabs = listOf(MediaCategory.Movies, MediaCategory.TvShows),
         selectedTab = selectedCategory,
         onTabSelected = onTabSelected,
         modifier = Modifier.background(NovixTheme.colors.surface)

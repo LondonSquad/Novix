@@ -2,7 +2,7 @@ package com.london.data.repository.movie
 
 import com.london.data.local.model.home.popular.PopularSectionLocal
 import com.london.data.local.model.home.topRated.TopRatedLocal
-import com.london.data.local.preference.AuthPreferences
+import com.london.data.local.preference.AuthenticationPreferences
 import com.london.data.local.source.home.HomeLocalDataSource
 import com.london.data.local.source.home.upcoming.UpComingLocalDataSource
 import com.london.data.mapper.details.actor.toEntity
@@ -26,7 +26,7 @@ import com.london.domain.entity.PagedFetchResponse
 import com.london.domain.entity.RatedMedia
 import com.london.domain.entity.Trending
 import com.london.domain.entity.UpComingMovie
-import com.london.domain.entity.actordetails.cast.CastDetails
+import com.london.domain.entity.actordetails.cast.ActorMediaDetails
 import com.london.domain.entity.moviedatails.MediaStates
 import com.london.domain.entity.moviedatails.MovieDetails
 import com.london.domain.entity.moviedatails.MovieImages
@@ -39,7 +39,7 @@ import javax.inject.Inject
 
 class MovieRepositoryImpl @Inject constructor(
     private val crashReporter: CrashReporter,
-    private val authPreferences: AuthPreferences,
+    private val authenticationPreferences: AuthenticationPreferences,
     private val movieRemoteDataSource: MovieRemoteDataSource,
     private val upComingLocalDataSource: UpComingLocalDataSource,
     private val localTopRated: HomeLocalDataSource<TopRatedLocal>,
@@ -52,7 +52,7 @@ class MovieRepositoryImpl @Inject constructor(
     override suspend fun getMovieImagesById(id: Int): MovieImages =
         movieRemoteDataSource.getMovieImages(id).getOrThrow().toEntity()
 
-    override suspend fun getActorMoviePicksById(id: Int): CastDetails =
+    override suspend fun getActorMoviePicksById(id: Int): ActorMediaDetails =
         movieRemoteDataSource.getActorMovieById(id).getOrThrow().toEntity()
 
     override suspend fun getSimilarMoviesById(id: Int): List<Movie> {
@@ -164,14 +164,14 @@ class MovieRepositoryImpl @Inject constructor(
 
     override suspend fun getAllRatedMovies(): List<RatedMedia> =
         movieRemoteDataSource.getAllRatedMovies(
-            accountId = authPreferences.getAccountId(),
-            sessionId = authPreferences.getSessionId().orEmpty()
+            accountId = authenticationPreferences.getAccountId(),
+            sessionId = authenticationPreferences.getSessionId().orEmpty()
         ).getOrThrow().items.map { it.toEntity(mediaType = MediaType.Movie) }
 
     override suspend fun deleteMovieRating(movieId: Int): Boolean =
         movieRemoteDataSource.deleteMovieRating(
             movieId = movieId,
-            sessionId = authPreferences.getSessionId()
+            sessionId = authenticationPreferences.getSessionId()
         ).isSuccess
 
     override suspend fun getPopularMovies(): List<PopularMedia> = fetchAndSync(
@@ -196,8 +196,8 @@ class MovieRepositoryImpl @Inject constructor(
     ): Boolean = movieRemoteDataSource.addMovieRating(
         movieId = id,
         rating = rating.toDouble(),
-        userSessionId = authPreferences.getSessionId(),
-        guestSessionId = authPreferences.getGuestSessionId()
+        userSessionId = authenticationPreferences.getSessionId(),
+        guestSessionId = authenticationPreferences.getGuestSessionId()
     ).isSuccess
 
     override suspend fun getAccountMovieStatesById(
@@ -205,7 +205,7 @@ class MovieRepositoryImpl @Inject constructor(
     ): MediaStates {
         return movieRemoteDataSource.getAccountMovieStates(
             movieId = id,
-            userSessionId = authPreferences.getSessionId(),
+            userSessionId = authenticationPreferences.getSessionId(),
         ).getOrThrow().toEntity()
     }
 }

@@ -1,6 +1,6 @@
 package com.london.domain.usecase
 
-import com.london.domain.entity.actordetails.cast.CastDetails
+import com.london.domain.entity.actordetails.cast.ActorMediaDetails
 import com.london.domain.repository.MovieRepository
 import com.london.domain.usecase.toppicks.GetActorMoviePicksByIdUseCase
 import io.mockk.coEvery
@@ -26,7 +26,7 @@ class GetActorMoviePicksByIdUseCaseTest {
     fun `should call repository getActorMoviePicksById with correct id and return result`() = runTest {
         // Given
         val actorId = 1
-        val expectedResult = mockk<CastDetails>()
+        val expectedResult = mockk<ActorMediaDetails>()
         coEvery { repository.getActorMoviePicksById(actorId) } returns expectedResult
 
         // When

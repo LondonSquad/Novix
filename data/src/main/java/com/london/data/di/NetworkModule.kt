@@ -3,10 +3,10 @@ package com.london.data.di
 import android.content.Context
 import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory
 import com.london.data.BuildConfig
-import com.london.data.local.preference.AuthPreferences
+import com.london.data.local.preference.AuthenticationPreferences
 import com.london.data.local.preference.SharedPrefsTokenProvider
 import com.london.data.local.preference.readLanguageCode
-import com.london.data.remote.interceptor.AuthInterceptor
+import com.london.data.remote.interceptor.AuthenticationInterceptor
 import com.london.data.remote.service.account.AccountApiService
 import com.london.data.remote.service.actor.ActorApiService
 import com.london.data.remote.service.authentication.AuthenticationApiService
@@ -79,7 +79,7 @@ object NetworkModule {
     fun provideOkHttpClient(
         logging: HttpLoggingInterceptor,
         api: Interceptor,
-        auth: AuthInterceptor,
+        auth: AuthenticationInterceptor,
         @ApplicationContext context: Context
     ): OkHttpClient = OkHttpClient.Builder()
         .addInterceptor(api)
@@ -128,13 +128,13 @@ object NetworkModule {
 
     @Provides
     @Singleton
-    fun provideAuthPreferences(@ApplicationContext context: Context): AuthPreferences =
-        AuthPreferences(context.getSharedPreferences("auth", Context.MODE_PRIVATE))
+    fun provideAuthPreferences(@ApplicationContext context: Context): AuthenticationPreferences =
+        AuthenticationPreferences(context.getSharedPreferences("auth", Context.MODE_PRIVATE))
 
     @Provides
     @Singleton
-    fun provideSessionTokenProvider(authPreferences: AuthPreferences): SessionTokenProvider =
-        SharedPrefsTokenProvider(authPreferences = authPreferences)
+    fun provideSessionTokenProvider(authenticationPreferences: AuthenticationPreferences): SessionTokenProvider =
+        SharedPrefsTokenProvider(authenticationPreferences = authenticationPreferences)
 
     @Provides
     @Singleton

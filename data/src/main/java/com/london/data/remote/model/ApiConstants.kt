@@ -49,4 +49,10 @@ object ApiConstants {
 
     const val ACCOUNT_TV_EPISODE =
         "3/tv/{series_id}/season/{season_number}/episode/{episode_number}/account_states"
+
+    const val CREATE_NEW_TOKEN = "3/authentication/token/new"
+    const val CREATE_NEW_GUEST_SESSION = "3/authentication/guest_session/new"
+    const val CREATE_NEW_SESSION = "3/authentication/session/new"
+    const val CREATE_SESSION = "3/authentication/session"
+    const val CREATE_NEW_TOKEN_AFTER_LOGIN = "3/authentication/token/validate_with_login"
 }
