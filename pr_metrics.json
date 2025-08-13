@@ -20990,5 +20990,33 @@
       "deletions": 56,
       "changed_files": 8
     }
+  },
+  {
+    "pr_number": 628,
+    "url": "https://github.com/LondonSquad/Novix/pull/628",
+    "title": "fix: update CI workflow to run Kover reports",
+    "opened_at": "2025-08-13T10:01:42Z",
+    "head_ref": "fix/ci-coverage",
+    "base_ref": "develop",
+    "creator": {
+      "login": "yusufnasserdev",
+      "id": 43588217,
+      "url": "https://github.com/yusufnasserdev"
+    },
+    "approvals": [],
+    "first_approved_at": null,
+    "time_to_first_approval_minutes": null,
+    "required_approvals_met_at": null,
+    "time_to_required_approvals_minutes": null,
+    "closed_at": null,
+    "merged_at": null,
+    "merged_by": null,
+    "week": "2025-W33",
+    "status": "pending",
+    "diff_stats": {
+      "additions": 76,
+      "deletions": 84,
+      "changed_files": 2
+    }
   }
 ]
