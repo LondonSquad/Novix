@@ -58,7 +58,7 @@ import com.london.designsystem.component.Text
 import com.london.designsystem.component.TopBar
 import com.london.designsystem.component.button.ErrorImage
 import com.london.designsystem.theme.NovixTheme
-import com.london.domain.entity.actordetails.cast.CastActorEntity
+import com.london.domain.entity.actordetails.cast.ActorMediaItems
 import com.london.presentation.R
 import com.london.presentation.shared.ConditionalText
 import com.london.presentation.shared.CustomBackDropImagePager
@@ -156,20 +156,26 @@ private fun Content(
             item {
                 GallerySection(
                     images = uiState.actorImageDetails,
-                    onGalleryClick = { actorDetailsContract.onActorGalleryClick(uiState.actorDetails.id) }
+                    onGalleryClick = {
+                        actorDetailsContract.onActorGalleryClick(uiState.actorDetails.id)
+                    }
                 )
             }
             item {
                 MoviesSection(
-                    movies = uiState.actorMovieDetails?.cast,
-                    onTopMoviePicksClick = { actorDetailsContract.onTopMoviePicksClick(uiState.actorDetails.id) },
+                    movies = uiState.actorMovieDetails?.mediaItems,
+                    onTopMoviePicksClick = {
+                        actorDetailsContract.onTopMoviePicksClick(uiState.actorDetails.id)
+                    },
                     onMovieScreenClick = actorDetailsContract::onMovieScreenClick
                 )
             }
             item {
                 TvShowsSection(
-                    tvShows = uiState.actorTvShowDetails?.cast,
-                    onTopTvShowPicksClick = { actorDetailsContract.onTopTvShowPicksClick(uiState.actorDetails.id) },
+                    tvShows = uiState.actorTvShowDetails?.mediaItems,
+                    onTopTvShowPicksClick = {
+                        actorDetailsContract.onTopTvShowPicksClick(uiState.actorDetails.id)
+                    },
                     onTvShowScreenClick = actorDetailsContract::onTvShowScreenClick
                 )
             }
@@ -249,7 +255,7 @@ private fun GallerySection(
 
 @Composable
 private fun MoviesSection(
-    movies: List<CastActorEntity>?,
+    movies: List<ActorMediaItems>?,
     onTopMoviePicksClick: () -> Unit,
     onMovieScreenClick: (Int) -> Unit
 ) {
@@ -272,7 +278,7 @@ private fun MoviesSection(
 
 @Composable
 private fun TvShowsSection(
-    tvShows: List<CastActorEntity>?,
+    tvShows: List<ActorMediaItems>?,
     onTopTvShowPicksClick: () -> Unit,
     onTvShowScreenClick: (Int) -> Unit
 ) {
@@ -295,7 +301,7 @@ private fun TvShowsSection(
 
 @Composable
 fun TopMoviesPicksList(
-    movie: List<CastActorEntity>,
+    movie: List<ActorMediaItems>,
     onNavigateToMoviePicks: (Int) -> Unit
 ) {
     LazyHorizontalGrid(
@@ -320,7 +326,7 @@ fun TopMoviesPicksList(
 
 @Composable
 fun TopTvShowsPicksList(
-    tvShow: List<CastActorEntity>,
+    tvShow: List<ActorMediaItems>,
     onNavigateToTvShowPicks: (Int) -> Unit
 ) {
     LazyHorizontalGrid(
@@ -461,11 +467,13 @@ private fun EmptyScreen(uiState: ActorDetailsUiState) {
     if (uiState.isLoading || uiState.error != null) return
 
     val hasNoContent = uiState.actorImageDetails.isNullOrEmpty() &&
-            uiState.actorMovieDetails?.cast.isNullOrEmpty() &&
-            uiState.actorTvShowDetails?.cast.isNullOrEmpty() &&
+            uiState.actorMovieDetails?.mediaItems.isNullOrEmpty() &&
+            uiState.actorTvShowDetails?.mediaItems.isNullOrEmpty() &&
             uiState.actorDetails.biography.isBlank() &&
-            (uiState.actorDetails.name.isBlank() && uiState.actorDetails.birthday.isBlank() &&
-                    uiState.actorDetails.placeOfBirth.isBlank() && uiState.actorDetails.knownForDepartment.isBlank())
+            (uiState.actorDetails.name.isBlank() &&
+                    uiState.actorDetails.birthday.isBlank() &&
+                    uiState.actorDetails.placeOfBirth.isBlank() &&
+                    uiState.actorDetails.knownForDepartment.isBlank())
 
     if (hasNoContent) {
         EmptyLayout(
@@ -505,8 +513,8 @@ private fun hasOtherContent(uiState: ActorDetailsUiState): Boolean {
             uiState.actorDetails.placeOfBirth.isNotBlank() ||
             uiState.actorDetails.knownForDepartment.isNotBlank() ||
             uiState.actorDetails.biography.isNotBlank() ||
-            !uiState.actorMovieDetails?.cast.isNullOrEmpty() ||
-            !uiState.actorTvShowDetails?.cast.isNullOrEmpty()
+            !uiState.actorMovieDetails?.mediaItems.isNullOrEmpty() ||
+            !uiState.actorTvShowDetails?.mediaItems.isNullOrEmpty()
 }
 
 @Preview
