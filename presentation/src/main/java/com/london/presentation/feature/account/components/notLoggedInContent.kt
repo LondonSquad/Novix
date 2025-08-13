@@ -1,4 +1,4 @@
-package com.london.presentation.shared.accountComponent
+package com.london.presentation.feature.account.components
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background

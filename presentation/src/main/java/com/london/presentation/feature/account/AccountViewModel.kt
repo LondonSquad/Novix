@@ -1,4 +1,4 @@
-package com.london.presentation.feature.accountinfo.account
+package com.london.presentation.feature.account
 
 import androidx.lifecycle.viewModelScope
 import com.london.domain.AppPreferencesService
