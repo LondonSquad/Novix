@@ -27,7 +27,7 @@ fun <T : Any> MediaLazyGridWithTabs(
     items: List<T>? = null,
     isLoading: Boolean = false,
     pagingItems: LazyPagingItems<T>? = null,
-    tabSelected: Int = 0,
+    tabSelected: Int = MediaCategory.MOVIES.ordinal,
     onTabSelected: (MediaCategory) -> Unit = {},
     onMovieGenreClick: (MovieGenre) -> Unit = {},
     onTvShowGenreClick: (TvShowGenre) -> Unit = {},
@@ -55,7 +55,7 @@ fun <T : Any> MediaLazyGridWithTabs(
             onTabSelected = { tab ->
                 val index = tabs.indexOf(tab)
                 if (index != -1) {
-                    val category = if (index == 0) MediaCategory.MOVIES else MediaCategory.TV_SHOWS
+                    val category = if (index == MediaCategory.MOVIES.ordinal) MediaCategory.MOVIES else MediaCategory.TV_SHOWS
                     onTabSelected(category)
                 }
             },

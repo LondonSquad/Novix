@@ -85,7 +85,7 @@ fun <T : Any> MediaLazyGridWithFilter(
             }
 
             else -> {
-                if ((items.isNullOrEmpty() && pagingItems?.isEmpty() == true) && !isLoading) {
+                if ((items.isNullOrEmpty() || pagingItems?.isEmpty() == true) && !isLoading) {
                     EmptyGenreLayout()
                 }
             }
