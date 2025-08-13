@@ -12,10 +12,6 @@ import javax.inject.Inject
 class ActorDetailsViewModel @Inject constructor(
     private val getActorUseCase: GetActorUseCase,
     savedStateHandle: SavedStateHandle,
-    private val getActorDetailsById: GetActorDetailsByIdUseCase,
-    private val getActorImagesById: GetActorImagesByIdUseCase,
-    private val getActorMoviePicksById: GetActorMoviePicksByIdUseCase,
-    private val getActorTvShowPicksById: GetActorTvShowPicksByIdUseCase,
 ) : BaseViewModel<ActorDetailsUiState, ActorEffect>(ActorDetailsUiState()),
     ActorDetailsContract {
 
@@ -91,7 +87,7 @@ class ActorDetailsViewModel @Inject constructor(
                 getActorUseCase.getActorMoviePicksById(actorId ?: 0)
             },
             onStart = { updateState { copy(isLoading = true) } },
-            onSuccess = { movieDetails -> updateState { copy(actorMovieDetails = movieDetails,) } },
+            onSuccess = { movieDetails -> updateState { copy(actorMovieDetails = movieDetails) } },
             onError = { errorState -> updateState { copy(error = errorState) } },
             onCompleted = { updateState { copy(isLoading = false) } },
         )

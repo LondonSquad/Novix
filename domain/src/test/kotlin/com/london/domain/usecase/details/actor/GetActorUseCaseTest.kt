@@ -4,7 +4,7 @@ import com.london.domain.entity.Actor
 import com.london.domain.entity.PagedFetchResponse
 import com.london.domain.entity.actordetails.ActorDetails
 import com.london.domain.entity.actordetails.ActorImageDetails
-import com.london.domain.entity.actordetails.cast.CastDetails
+import com.london.domain.entity.actordetails.cast.ActorMediaDetails
 import com.london.domain.repository.ActorRepository
 import com.london.domain.repository.MovieRepository
 import com.london.domain.repository.TvShowRepository
@@ -118,7 +118,7 @@ class GetActorUseCaseTest {
         runTest {
             // Given
             val actorId = 1
-            val expectedResult = mockk<CastDetails>()
+            val expectedResult = mockk<ActorMediaDetails>()
             coEvery { movieRepository.getActorMoviePicksById(actorId) } returns expectedResult
 
             // When
@@ -134,7 +134,7 @@ class GetActorUseCaseTest {
         runTest {
             // Given
             val actorId = 1
-            val expectedResult = mockk<CastDetails>()
+            val expectedResult = mockk<ActorMediaDetails>()
             coEvery { tvShowRepository.getActorTvShowPicksById(actorId) } returns expectedResult
 
             // When
