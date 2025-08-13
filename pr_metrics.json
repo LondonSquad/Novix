@@ -20928,17 +20928,25 @@
           "url": "https://github.com/karimdeabes"
         },
         "submitted_at": "2025-08-12T22:57:48Z"
+      },
+      {
+        "reviewer": {
+          "id": 117874933,
+          "login": "AsmaaKhaledGomaa",
+          "url": "https://github.com/AsmaaKhaledGomaa"
+        },
+        "submitted_at": "2025-08-13T00:52:47Z"
       }
     ],
     "first_approved_at": "2025-08-12T22:57:48Z",
     "time_to_first_approval_minutes": 224.55,
-    "required_approvals_met_at": null,
-    "time_to_required_approvals_minutes": null,
+    "required_approvals_met_at": "2025-08-13T00:52:47Z",
+    "time_to_required_approvals_minutes": 339.53333333333336,
     "closed_at": null,
     "merged_at": null,
     "merged_by": null,
     "week": "2025-W33",
-    "status": "pending",
+    "status": "approved",
     "diff_stats": {
       "additions": 360,
       "deletions": 503,
