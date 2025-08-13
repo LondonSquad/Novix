@@ -1,4 +1,4 @@
-package com.london.presentation.feature.accountinfo.rating
+package com.london.presentation.feature.account.rating
 
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.clickable
