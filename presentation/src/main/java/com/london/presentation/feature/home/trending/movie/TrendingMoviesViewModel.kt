@@ -1,8 +1,8 @@
 package com.london.presentation.feature.home.trending.movie
 
 import com.london.domain.usecase.GetTrendingMoviesUseCase
-import com.london.presentation.feature.home.shared.handlingPagingFlow
 import com.london.presentation.shared.base.BaseViewModel
+import com.london.presentation.shared.base.createPagingSourceFlow
 import com.london.presentation.utils.MovieGenre
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.flowOf
@@ -36,14 +36,7 @@ class TrendingMoviesViewModel @Inject constructor(
 
     private fun initializeMovies() {
         tryToCollect(
-            block = {
-                handlingPagingFlow { pageNumber ->
-                    getTrendingMovies.invoke(
-                        page = pageNumber,
-                        movieGenreId = state.value.selectedGenreId
-                    )
-                }
-            },
+            block = { createTrendingMoviesPagingFlow() },
             onStart = { handlingLoadingState(true) },
             onError = { errorState -> updateState { copy(errorState = errorState) } },
             onNewValue = { moviesFlow -> updateState { copy(moviesFlow = flowOf(moviesFlow)) } },
@@ -51,5 +44,14 @@ class TrendingMoviesViewModel @Inject constructor(
         )
     }
 
+    fun createTrendingMoviesPagingFlow() = createPagingSourceFlow(
+        query = "",
+        block = { _, pageNumber ->
+            getTrendingMovies.invoke(
+                page = pageNumber,
+                movieGenreId = state.value.selectedGenreId
+            )
+        }
+    )
     fun handlingLoadingState(isLoading: Boolean) = updateState { copy(isLoading = isLoading) }
 }

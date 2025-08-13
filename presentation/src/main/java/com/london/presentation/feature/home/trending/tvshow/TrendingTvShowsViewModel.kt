@@ -1,8 +1,8 @@
 package com.london.presentation.feature.home.trending.tvshow
 
 import com.london.domain.usecase.details.tvshow.ManageTvShowDetailsUseCase
-import com.london.presentation.feature.home.shared.handlingPagingFlow
 import com.london.presentation.shared.base.BaseViewModel
+import com.london.presentation.shared.base.createPagingSourceFlow
 import com.london.presentation.utils.TvShowGenre
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.flowOf
@@ -32,17 +32,21 @@ class TrendingTvShowsViewModel @Inject constructor(
     override fun onRetry() = initializeTvShows()
     private fun initializeTvShows() {
         tryToCollect(
-            block = {
-                handlingPagingFlow { pageNumber ->
-                    manageTvShowDetailsUseCase.getTrendingTvShows(
-                        page = pageNumber,
-                        movieGenreId = state.value.selectedGenreId
-                    )
-                }
-            },
+            block = { createTrendingTvShowsPagingFlow() },
             onStart = { updateState { copy(isLoading = true) } },
             onNewValue = { tvShowsFlow -> updateState { copy(tvShowsFlow = flowOf(tvShowsFlow)) } },
             onCompleted = { updateState { copy(isLoading = false) } },
         )
     }
-}
+
+    private fun createTrendingTvShowsPagingFlow() =
+        createPagingSourceFlow(
+            query = "",
+            block = { _, pageNumber ->
+                manageTvShowDetailsUseCase.getTrendingTvShows(
+                    page = pageNumber,
+                    movieGenreId = state.value.selectedGenreId,
+                )
+            }
+        )
+    }

@@ -1,8 +1,8 @@
 package com.london.presentation.feature.home.trending.actor
 
 import com.london.domain.usecase.GetTrendingActorsUseCase
-import com.london.presentation.feature.home.shared.handlingPagingFlow
 import com.london.presentation.shared.base.BaseViewModel
+import com.london.presentation.shared.base.createPagingSourceFlow
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.flowOf
 import javax.inject.Inject
@@ -25,7 +25,7 @@ class TrendingActorsViewModel @Inject constructor(
 
     private fun initializeActors() {
         tryToCollect(
-            block = { handlingPagingFlow { getTrendingActors.invoke(page = 1) } },
+            block = { createTrendingActorsPagingFlow() },
             onStart = { handlingLoadingState(true) },
             onNewValue = { actorsPagingData ->
                 updateState { copy(actorsFlow = flowOf(actorsPagingData)) }
@@ -34,5 +34,13 @@ class TrendingActorsViewModel @Inject constructor(
         )
     }
 
+    private fun createTrendingActorsPagingFlow() = createPagingSourceFlow(
+        query = "",
+        block = { _, _ ->
+            getTrendingActors.invoke(
+                page = 1,
+            )
+        }
+    )
     fun handlingLoadingState(isLoading: Boolean) = updateState { copy(isLoading = isLoading) }
 }

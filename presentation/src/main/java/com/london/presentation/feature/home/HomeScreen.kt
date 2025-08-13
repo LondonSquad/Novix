@@ -63,7 +63,7 @@ import com.london.presentation.feature.home.popular.PopularSection
 import com.london.presentation.feature.home.section.ContinueWatchingSection
 import com.london.presentation.feature.home.section.ShimmerPopularSection
 import com.london.presentation.feature.home.section.TopRatedSection
-import com.london.presentation.feature.home.trending.TrendingSection
+import com.london.presentation.feature.home.trending.TrendingCategories
 import com.london.presentation.shared.CarousalShimmerEffect
 import com.london.presentation.shared.GenresSection
 import com.london.presentation.shared.HomeCard
@@ -244,7 +244,7 @@ private fun Content(
                             }
 
                             item(span = { GridItemSpan(maxLineSpan) }) {
-                                TrendingSection(
+                                TrendingCategories(
                                     isLoading = isLoading,
                                     onMoviesClick = homeScreenContract::onTrendingMoviesCardClicked,
                                     onTvShowsClick = homeScreenContract::onTrendingTvShowsCardClicked,

@@ -39,7 +39,7 @@ import com.london.designsystem.utils.shimmerEffect
 import com.london.presentation.R
 
 @Composable
-fun TrendingSection(
+fun TrendingCategories(
     onMoviesClick: () -> Unit,
     onTvShowsClick: () -> Unit,
     onActorsClick: () -> Unit,
@@ -79,7 +79,7 @@ fun TrendingSection(
             horizontalArrangement = Arrangement.spacedBy(8.dp),
             verticalAlignment = Alignment.Bottom
         ) {
-            TrendingSection(
+            TrendingCategories(
                 onMoviesClick = onMoviesClick,
                 onTvShowsClick = onTvShowsClick,
                 onActorsClick = onActorsClick
@@ -98,7 +98,7 @@ fun TrendingSection(
     }
 }
 @Composable
-fun TrendingSection(
+fun TrendingCategories(
     onMoviesClick: () -> Unit,
     onTvShowsClick: () -> Unit,
     onActorsClick: () -> Unit,
@@ -198,7 +198,7 @@ private fun CategoryCard(
 @Preview
 @Composable
 private fun Preview() {
-    TrendingSection(
+    TrendingCategories(
         onMoviesClick = {},
         onTvShowsClick = {},
         onActorsClick = {}
