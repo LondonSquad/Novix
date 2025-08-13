@@ -50,10 +50,9 @@ class TvShowCategoryViewModel @Inject constructor(
     private fun createTvShowsPagingSourceFlow(categoryId: Int): Flow<PagingData<TvShow>> {
 
         return createPagingSourceFlow(query = "") { _, pageNumber ->
-            val tvShows = managerTvShowDetailsUseCase.getTvShowsByCategory(
+            managerTvShowDetailsUseCase.getTvShowsByCategory(
                 categoryId = categoryId, pageNumber = pageNumber
             )
-            tvShows.copy(items = tvShows.items)
         }
     }
 
