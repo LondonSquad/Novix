@@ -11,7 +11,6 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.asPaddingValues
 import androidx.compose.foundation.layout.defaultMinSize
@@ -28,7 +27,6 @@ import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyHorizontalGrid
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.lazy.rememberLazyListState
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
@@ -40,9 +38,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
@@ -52,7 +48,6 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.london.designsystem.component.CircularLoading
 import com.london.designsystem.component.EmptyLayout
-import com.london.designsystem.component.Icon
 import com.london.designsystem.component.SectionHeader
 import com.london.designsystem.component.Text
 import com.london.designsystem.component.TopBar
@@ -64,6 +59,7 @@ import com.london.presentation.shared.ConditionalText
 import com.london.presentation.shared.CustomBackDropImagePager
 import com.london.presentation.shared.HomeCard
 import com.london.presentation.shared.ImageView
+import com.london.presentation.shared.TextWithIcon
 import com.london.presentation.shared.buildscreen.BuildScreen
 import com.london.presentation.utils.Listen
 import com.london.presentation.utils.offsetLayout
@@ -424,41 +420,6 @@ private fun ActorInfoSection(
                 text = if (deathDay.isNotEmpty()) "${birthday.toLocalizedNumbers()}  -  ${deathDay.toLocalizedNumbers()}" else birthday.toLocalizedNumbers(),
             )
         }
-    }
-}
-
-@Composable
-private fun TextWithIcon(
-    text: String,
-    icon: Painter
-) {
-    if (text.isEmpty()) return
-    Row(
-        verticalAlignment = Alignment.CenterVertically,
-        horizontalArrangement = Arrangement.spacedBy(4.dp)
-    ) {
-        val scale = LocalDensity.current.fontScale
-        val baseIconSize = 12.dp
-
-        Box(
-            modifier = Modifier
-                .padding(4.dp)
-                .size(3.dp)
-                .clip(CircleShape)
-                .background(NovixTheme.colors.body)
-                .align(alignment = Alignment.CenterVertically)
-        )
-        Icon(
-            painter = icon,
-            contentDescription = stringResource(R.string.imagr_dot),
-            tint = NovixTheme.colors.body,
-            modifier = Modifier.size(baseIconSize * scale)
-        )
-        Text(
-            text = text,
-            style = NovixTheme.typography.label.small,
-            color = NovixTheme.colors.body,
-        )
     }
 }
 
