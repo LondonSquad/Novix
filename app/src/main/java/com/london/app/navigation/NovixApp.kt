@@ -34,7 +34,7 @@ import com.london.presentation.feature.category.main.CategoriesScreen
 import com.london.presentation.feature.category.movie.MoviesByCategoryScreen
 import com.london.presentation.feature.category.tvshow.TvShowByCategoryScreen
 import com.london.presentation.feature.details.actor.ActorDetailsScreen
-import com.london.presentation.feature.details.actor.info.gallery.ActorGalleryScreen
+import com.london.presentation.feature.details.actor.info.gallery.ActorsGalleryScreen
 import com.london.presentation.feature.details.actor.info.topmoviespicks.TopMoviesPicksScreen
 import com.london.presentation.feature.details.actor.info.toptvshowspicks.TopTvShowsPicksScreen
 import com.london.presentation.feature.details.movie.MovieDetailsScreen
@@ -536,7 +536,7 @@ fun NavGraphBuilder.mainNavGraph(
         )
     }
     composable<Screen.ActorGallery> {
-        ActorGalleryScreen(
+        ActorsGalleryScreen(
             onNavigateBack = { navController.popBackStack() }
         )
     }
