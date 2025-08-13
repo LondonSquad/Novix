@@ -19,5 +19,3 @@ fun ActorDetailsResponse.toEntity(): ActorDetails {
         profileUrl = profilePath.asImageUrlOrEmpty()
     )
 }
-
-

@@ -47,7 +47,7 @@ private fun Content(
     ) {
         MediaLazyGrid(
             title = stringResource(R.string.top_movies_picks),
-            items = state.actorMovieDetails.cast,
+            items = state.actorMovieDetails.mediaItems,
             onBack = contract::onBackClick,
             getImageUrl = { it.posterUrl },
             onItemClick = { contract.onMovieClick(it.id) },

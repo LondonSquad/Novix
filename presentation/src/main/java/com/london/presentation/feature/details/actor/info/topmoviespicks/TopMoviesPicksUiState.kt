@@ -1,10 +1,10 @@
 package com.london.presentation.feature.details.actor.info.topmoviespicks
 
-import com.london.domain.entity.actordetails.cast.CastDetails
+import com.london.domain.entity.actordetails.cast.ActorMediaDetails
 import com.london.presentation.shared.base.ErrorState
 
 data class TopMoviesPicksUiState(
     val isLoading: Boolean = false,
     val errorState: ErrorState? = null,
-    val actorMovieDetails: CastDetails = CastDetails(),
+    val movieDetails: ActorMediaDetails = ActorMediaDetails(),
 )
