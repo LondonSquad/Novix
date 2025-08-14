@@ -5,10 +5,7 @@ import app.cash.turbine.test
 import com.google.common.truth.Truth.assertThat
 import com.london.domain.entity.actordetails.ActorDetails
 import com.london.domain.entity.actordetails.cast.ActorMediaDetails
-import com.london.domain.usecase.GetActorDetailsByIdUseCase
-import com.london.domain.usecase.GetActorImagesByIdUseCase
-import com.london.domain.usecase.toppicks.GetActorMoviePicksByIdUseCase
-import com.london.domain.usecase.toppicks.GetActorTvShowPicksByIdUseCase
+import com.london.domain.usecase.details.actor.GetActorUseCase
 import com.london.presentation.navigation.Screen
 import com.london.presentation.navigation.getArgs
 import io.mockk.coEvery
@@ -29,39 +26,29 @@ import org.junit.Test
 class ActorDetailsViewModelTest {
 
     private lateinit var viewModel: ActorDetailsViewModel
-    private lateinit var getActorDetailsById: GetActorDetailsByIdUseCase
-    private lateinit var getActorImagesById: GetActorImagesByIdUseCase
-    private lateinit var getActorMoviePicksById: GetActorMoviePicksByIdUseCase
-    private lateinit var getActorTvShowPicksById: GetActorTvShowPicksByIdUseCase
     private lateinit var savedStateHandle: SavedStateHandle
 
+    private lateinit var getActorUseCase: GetActorUseCase 
     private val testDispatcher = StandardTestDispatcher()
 
     @Before
     fun setUp() {
         Dispatchers.setMain(testDispatcher)
-        
-        getActorDetailsById = mockk()
-        getActorImagesById = mockk()
-        getActorMoviePicksById = mockk()
-        getActorTvShowPicksById = mockk()
+        getActorUseCase = mockk()
         savedStateHandle = mockk(relaxed = true)
         
         every { savedStateHandle.getArgs<Screen.ActorDetails>() } returns Screen.ActorDetails(
             actorId = ACTOR_ID
         )
         
-        coEvery { getActorDetailsById.invoke(ACTOR_ID) } returns ActorDetails()
-        coEvery { getActorImagesById.invoke(ACTOR_ID) } returns emptyList()
-        coEvery { getActorMoviePicksById.invoke(ACTOR_ID) } returns ActorMediaDetails()
-        coEvery { getActorTvShowPicksById.invoke(ACTOR_ID) } returns ActorMediaDetails()
+        coEvery { getActorUseCase.getActorDetailsById(ACTOR_ID) } returns ActorDetails()
+        coEvery { getActorUseCase.getActorImagesById(ACTOR_ID) } returns emptyList()
+        coEvery { getActorUseCase.getActorMoviePicksById(ACTOR_ID) } returns ActorMediaDetails()
+        coEvery { getActorUseCase.getActorTvShowPicksById(ACTOR_ID) } returns ActorMediaDetails()
         
         viewModel = ActorDetailsViewModel(
             savedStateHandle = savedStateHandle,
-            getActorDetailsById = getActorDetailsById,
-            getActorImagesById = getActorImagesById,
-            getActorMoviePicksById = getActorMoviePicksById,
-            getActorTvShowPicksById = getActorTvShowPicksById
+            getActorUseCase = getActorUseCase
         )
     }
 
@@ -74,10 +61,10 @@ class ActorDetailsViewModelTest {
     fun `should handle actor details loading error`() = runTest {
         // Given
         val mockError = RuntimeException("Network error")
-        coEvery { getActorDetailsById.invoke(ACTOR_ID) } throws mockError
-        coEvery { getActorImagesById.invoke(ACTOR_ID) } returns emptyList()
-        coEvery { getActorMoviePicksById.invoke(ACTOR_ID) } returns ActorMediaDetails()
-        coEvery { getActorTvShowPicksById.invoke(ACTOR_ID) } returns ActorMediaDetails()
+        coEvery { getActorUseCase.getActorDetailsById(ACTOR_ID) } throws mockError
+        coEvery { getActorUseCase.getActorImagesById(ACTOR_ID) } returns emptyList()
+        coEvery { getActorUseCase.getActorMoviePicksById(ACTOR_ID) } returns ActorMediaDetails()
+        coEvery { getActorUseCase.getActorTvShowPicksById(ACTOR_ID) } returns ActorMediaDetails()
 
         // When
         advanceUntilIdle()
@@ -92,10 +79,10 @@ class ActorDetailsViewModelTest {
     fun `should handle actor images loading error`() = runTest {
         // Given
         val mockError = RuntimeException("Image loading error")
-        coEvery { getActorDetailsById.invoke(ACTOR_ID) } returns ActorDetails()
-        coEvery { getActorImagesById.invoke(ACTOR_ID) } throws mockError
-        coEvery { getActorMoviePicksById.invoke(ACTOR_ID) } returns ActorMediaDetails()
-        coEvery { getActorTvShowPicksById.invoke(ACTOR_ID) } returns ActorMediaDetails()
+        coEvery { getActorUseCase.getActorDetailsById(ACTOR_ID) } returns ActorDetails()
+        coEvery { getActorUseCase.getActorImagesById(ACTOR_ID) } throws mockError
+        coEvery { getActorUseCase.getActorMoviePicksById(ACTOR_ID) } returns ActorMediaDetails()
+        coEvery { getActorUseCase.getActorTvShowPicksById(ACTOR_ID) } returns ActorMediaDetails()
 
         // When
         advanceUntilIdle()
@@ -110,10 +97,10 @@ class ActorDetailsViewModelTest {
     fun `should handle movie picks loading error`() = runTest {
         // Given
         val mockError = RuntimeException("Movie loading error")
-        coEvery { getActorDetailsById.invoke(ACTOR_ID) } returns ActorDetails()
-        coEvery { getActorImagesById.invoke(ACTOR_ID) } returns emptyList()
-        coEvery { getActorMoviePicksById.invoke(ACTOR_ID) } throws mockError
-        coEvery { getActorTvShowPicksById.invoke(ACTOR_ID) } returns ActorMediaDetails()
+        coEvery { getActorUseCase.getActorDetailsById(ACTOR_ID) } returns ActorDetails()
+        coEvery { getActorUseCase.getActorImagesById(ACTOR_ID) } returns emptyList()
+        coEvery { getActorUseCase.getActorMoviePicksById(ACTOR_ID) } throws mockError
+        coEvery { getActorUseCase.getActorTvShowPicksById(ACTOR_ID) } returns ActorMediaDetails()
 
         // When
         advanceUntilIdle()
@@ -127,10 +114,10 @@ class ActorDetailsViewModelTest {
     @Test
     fun `should handle tv show picks loading error`() = runTest {
         // Given
-        coEvery { getActorDetailsById.invoke(ACTOR_ID) } returns ActorDetails()
-        coEvery { getActorImagesById.invoke(ACTOR_ID) } returns emptyList()
-        coEvery { getActorMoviePicksById.invoke(ACTOR_ID) } returns ActorMediaDetails()
-        coEvery { getActorTvShowPicksById.invoke(ACTOR_ID) } returns ActorMediaDetails()
+        coEvery { getActorUseCase.getActorDetailsById(ACTOR_ID) } returns ActorDetails()
+        coEvery { getActorUseCase.getActorImagesById(ACTOR_ID) } returns emptyList()
+        coEvery { getActorUseCase.getActorMoviePicksById(ACTOR_ID) } returns ActorMediaDetails()
+        coEvery { getActorUseCase.getActorTvShowPicksById(ACTOR_ID) } returns ActorMediaDetails()
 
         // When
         advanceUntilIdle()

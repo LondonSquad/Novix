@@ -5,7 +5,7 @@ import com.london.domain.AppPreferencesService
 import com.london.domain.contentrestriction.ContentRestrictionLevel
 import com.london.domain.language.AppLanguage
 import com.london.domain.theme.AppTheme
-import com.london.domain.usecase.GetAccountDetails
+import com.london.domain.usecase.accountdetails.GetAccountDetailsUseCase
 import com.london.domain.usecase.authentication.AuthenticationUseCase
 import com.london.presentation.shared.base.BaseViewModel
 import com.london.presentation.shared.base.ErrorState
@@ -18,7 +18,7 @@ import javax.inject.Inject
 class AccountViewModel @Inject constructor(
     private val appPreferencesService: AppPreferencesService,
     private val authenticationUseCase: AuthenticationUseCase,
-    private val accountDetailsUseCase: GetAccountDetails
+    private val accountDetailsUseCase: GetAccountDetailsUseCase
 ) : BaseViewModel<AccountUiState, AccountEffect>(AccountUiState()),
     AccountContract {
 

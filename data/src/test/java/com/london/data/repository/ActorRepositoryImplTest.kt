@@ -62,7 +62,10 @@ class ActorRepositoryImplTest {
     @Test
     fun `getMovieCastById return expected result`() = runTest {
         coEvery { remoteDataSource.getMovieActors(ACTOR_ID) } returns Result.failure(
-            NetworkException.UnAuthorizedException("unauthorized")
+            NetworkException.UnAuthorizedException(
+                message = "unauthorized",
+                status = 401
+            )
         )
 
         assertThrows<NetworkException.UnAuthorizedException> {
@@ -87,7 +90,10 @@ class ActorRepositoryImplTest {
     @Test
     fun `getActorDetailsById throws HttpLockedException on failure`() = runTest {
         coEvery { remoteDataSource.getActorDetailsById(ACTOR_ID) } returns Result.failure(
-            NetworkException.HttpLockedException("locked")
+            NetworkException.HttpLockedException(
+                message = "locked",
+                status = 423
+            )
         )
 
         assertThrows<NetworkException.HttpLockedException> {
@@ -98,7 +104,10 @@ class ActorRepositoryImplTest {
     @Test
     fun `getActorImagePath throws ValidationException on failure`() = runTest {
         coEvery { remoteDataSource.getActorImagePathById(ACTOR_ID) } returns Result.failure(
-            NetworkException.ValidationException("validation failed")
+            NetworkException.ValidationException(
+                message = "validation failed",
+                status = 400
+            )
         )
 
         assertThrows<NetworkException.ValidationException> {
@@ -109,7 +118,10 @@ class ActorRepositoryImplTest {
     @Test
     fun `getTrendingActors should return expected result`() = runTest {
         coEvery { remoteDataSource.getTrendingActors(ACTOR_ID) } returns Result.failure(
-            NetworkException.TimeoutException("timeout")
+            NetworkException.TimeoutException(
+                message = "timeout",
+                status = 408
+            )
         )
 
         assertThrows<NetworkException.TimeoutException> {
@@ -135,7 +147,10 @@ class ActorRepositoryImplTest {
     @Test
     fun `getMovieCast should throw ValidationException when remote fails`() = runTest {
         coEvery { remoteDataSource.getMovieActors(123) } throws
-                NetworkException.ValidationException("validation error")
+                NetworkException.ValidationException(
+                    message = "validation error",
+                    status = 400
+                )
 
         assertThrows<NetworkException.ValidationException> {
             repository.getMovieActors(123)
@@ -216,7 +231,10 @@ class ActorRepositoryImplTest {
     fun `getCastsByTvShowId should throw UnAuthorizedException when remote fails`() = runTest {
         coEvery {
             remoteDataSource.getTvShowActors(123)
-        } throws NetworkException.UnAuthorizedException("unAuthorized error")
+        } throws NetworkException.UnAuthorizedException(
+            message = "unAuthorized error",
+            status = 401
+        )
 
         assertThrows<NetworkException.UnAuthorizedException> {
             repository.getCastTvShowById(123)
@@ -248,7 +266,7 @@ class ActorRepositoryImplTest {
     private companion object {
         const val ACTOR_ID = 123
         private const val TV_SHOW_ID = 1
-        
+
         val ActorDetailsRemoteMock = ActorDetailsResponse(
             id = ACTOR_ID,
             name = "John Doe",
