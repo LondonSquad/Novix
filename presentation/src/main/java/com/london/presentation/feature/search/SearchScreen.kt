@@ -68,7 +68,6 @@ import com.london.presentation.shared.buildscreen.NetworkErrorScreen
 import com.london.presentation.utils.Listen
 import com.london.presentation.utils.ResultOrEmpty
 import com.london.presentation.utils.toRecentViewed
-import kotlin.contracts.contract
 
 @Composable
 fun SearchScreen(
@@ -98,7 +97,7 @@ fun SearchScreen(
 
         Content(
             state = state,
-            interactionListener = viewModel,
+            contract = viewModel,
             keyboardController = keyboardController,
         )
 
@@ -107,7 +106,7 @@ fun SearchScreen(
 @Composable
 private fun Content(
     state: SearchUiState,
-    interactionListener: SearchContract,
+    contract: SearchContract,
     keyboardController: SoftwareKeyboardController?,
 ) {
     val interactionSource = remember { MutableInteractionSource() }
@@ -123,7 +122,7 @@ private fun Content(
         isLoading = false,
         isError = currentPagingFlow.loadState.refresh is LoadState.Error,
         onBack = {},
-        onRetry = interactionListener::onRetryClick,
+        onRetry = contract::onRetryClick,
         pagingFlow = currentPagingFlow,
         handlePagingLoadingAutomatically = false
     ) {
@@ -156,7 +155,7 @@ private fun Content(
 
                 SearchBar(
                     uiState = state,
-                    interactionListener = interactionListener,
+                    contract = contract,
                     interactionSource = interactionSource,
                     keyboardController = keyboardController,
                     modifier = Modifier
@@ -180,15 +179,15 @@ private fun Content(
                                 content = {
                                     RecentSearchLayOut(
                                         state = state,
-                                        interactionListener = interactionListener,
-                                        onNavigateToTvShowDetails = interactionListener::onTvShowClick,
-                                        onNavigateToMovieDetails = interactionListener::onMovieClick
+                                        contract = contract,
+                                        onNavigateToTvShowDetails = contract::onTvShowClick,
+                                        onNavigateToMovieDetails = contract::onMovieClick
                                     )
                                 })
                         }, content = {
                             SearchChipsRow(
                                 selected = state.selectedCategory,
-                                onSelect = interactionListener::onCategorySelected,
+                                onSelect = contract::onCategorySelected,
                                 modifier = Modifier.padding(bottom = 12.dp)
                             )
                         })
@@ -210,24 +209,24 @@ private fun Content(
 
                                     RecentSearchLayOut(
                                         state = state,
-                                        interactionListener = interactionListener,
-                                        onNavigateToTvShowDetails = interactionListener::onTvShowClick,
-                                        onNavigateToMovieDetails = interactionListener::onMovieClick
+                                        contract = contract,
+                                        onNavigateToTvShowDetails = contract::onTvShowClick,
+                                        onNavigateToMovieDetails = contract::onMovieClick
                                     )
 
                                 })
                         }, content = {
                             SearchChipsRow(
                                 selected = state.selectedCategory,
-                                onSelect = interactionListener::onCategorySelected,
+                                onSelect = contract::onCategorySelected,
                                 modifier = Modifier.padding(bottom = 12.dp)
                             )
 
                             if (state.error == ErrorState.NoInternet) {
                                 NetworkErrorScreen(
                                     onRetry = {
-                                        interactionListener.updateSearchState { copy(error = null) }
-                                        interactionListener.performSearch(
+                                        contract.updateSearchState { copy(error = null) }
+                                        contract.performSearch(
                                             state.searchQuery.text,
                                             state.selectedCategory
                                         )
@@ -242,7 +241,7 @@ private fun Content(
 
                                         SearchContentWithErrorHandling(
                                             moviesLazyList,
-                                            interactionListener,
+                                            contract,
                                             state
                                         ) { isLoading ->
                                             ResultOrEmpty(
@@ -258,9 +257,9 @@ private fun Content(
                                                         onSaveClick = { /* Handle save click */ },
                                                         isMovieSaved = { false },
                                                         onMovieClick = {
-                                                            interactionListener.addToRecentViewed(it.toRecentViewed())
-                                                            interactionListener.onMovieGenreClick(it.genreIds)
-                                                            interactionListener.onMovieClick(it.id)
+                                                            contract.addToRecentViewed(it.toRecentViewed())
+                                                            contract.onMovieGenreClick(it.genreIds)
+                                                            contract.onMovieClick(it.id)
                                                         },
                                                         modifier = Modifier.padding(horizontal = 16.dp)
                                                     )
@@ -275,7 +274,7 @@ private fun Content(
 
                                         SearchContentWithErrorHandling(
                                             tvShowsLazyList,
-                                            interactionListener,
+                                            contract,
                                             state
                                         ) { isLoading ->
                                             ResultOrEmpty(
@@ -291,14 +290,14 @@ private fun Content(
                                                         onSaveClick = { /* Handle save click */ },
                                                         isTvShowSaved = { false },
                                                         onTvShowClick = {
-                                                            interactionListener.addToRecentViewed(it.toRecentViewed())
+                                                            contract.addToRecentViewed(it.toRecentViewed())
                                                             it.genres.forEach { genreId ->
-                                                                interactionListener.incrementGenreInterest(
+                                                                contract.incrementGenreInterest(
                                                                     genreId,
                                                                     "tv"
                                                                 )
                                                             }
-                                                            interactionListener.onTvShowClick(it.id)
+                                                            contract.onTvShowClick(it.id)
                                                         }
                                                     )
                                                 }
@@ -312,7 +311,7 @@ private fun Content(
 
                                         SearchContentWithErrorHandling(
                                             actorsLazyList,
-                                            interactionListener,
+                                            contract,
                                             state
                                         ) { isLoading ->
                                             ResultOrEmpty(
@@ -325,7 +324,7 @@ private fun Content(
                                                 content = {
                                                     ActorsLayout(
                                                         items = actorsLazyList, onActorClick = {
-                                                            interactionListener.onActorClick(it.id)
+                                                            contract.onActorClick(it.id)
                                                         }
                                                     )
                                                 }
@@ -357,7 +356,7 @@ private fun HandleLoadStateError(
 @Composable
 private fun SearchBar(
     uiState: SearchUiState,
-    interactionListener: SearchContract,
+    contract: SearchContract,
     interactionSource: MutableInteractionSource,
     keyboardController: SoftwareKeyboardController?,
     modifier: Modifier = Modifier
@@ -372,7 +371,7 @@ private fun SearchBar(
     ) {
         OutlinedTextField(
             value = uiState.searchQuery,
-            onValueChange = { interactionListener.onSearchQueryChange(it) },
+            onValueChange = { contract.onSearchQueryChange(it) },
             placeholder = {
                 Text(
                     stringResource(R.string.search_placeholder),
@@ -394,7 +393,7 @@ private fun SearchBar(
                                 .clickable(
                                     interactionSource = remember { MutableInteractionSource() },
                                     indication = null
-                                ) { interactionListener.clearSearch() })
+                                ) { contract.clearSearch() })
                     }
                 }
 
@@ -407,7 +406,7 @@ private fun SearchBar(
                 onSearch = {
                     focusManager.clearFocus()
                     keyboardController?.hide()
-                    interactionListener.addToRecentSearches(
+                    contract.addToRecentSearches(
                         RecentSearch(
                             query = uiState.searchQuery.text,
                             timestamp = System.currentTimeMillis(),
@@ -449,7 +448,7 @@ private fun SearchChipsRow(
 @Composable
 private fun RecentSearchLayOut(
     state: SearchUiState,
-    interactionListener: SearchContract,
+    contract: SearchContract,
     onNavigateToTvShowDetails: (Int) -> Unit,
     onNavigateToMovieDetails: (Int) -> Unit
 ) {
@@ -460,7 +459,7 @@ private fun RecentSearchLayOut(
             item {
                 RecentViewedSection(
                     recentViewed = state.recentViewed,
-                    onClearAll = interactionListener::clearRecentViewed,
+                    onClearAll = contract::clearRecentViewed,
                     onNavigateToTvShowDetails = onNavigateToTvShowDetails,
                     onNavigateToMovieDetails = onNavigateToMovieDetails
                 )
@@ -474,13 +473,13 @@ private fun RecentSearchLayOut(
 
                 RecentSearchesSection(
                     recentSearches = state.recentSearches,
-                    onClearAll = interactionListener::clearRecentSearches,
+                    onClearAll = contract::clearRecentSearches,
                     onSearchClick = { query ->
                         focusManager.clearFocus()
                         keyboardController?.hide()
-                        interactionListener.onRecentSearchClick(query)
+                        contract.onRecentSearchClick(query)
                     },
-                    onRemoveClick = interactionListener::removeRecentSearch
+                    onRemoveClick = contract::removeRecentSearch
                 )
             }
         }
