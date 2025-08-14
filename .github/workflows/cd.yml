@@ -54,7 +54,7 @@ jobs:
           echo "keyAlias=${{ secrets.SIGNING_KEY_ALIAS }}" >> local.properties
           echo "keyPassword=${{ secrets.SIGNING_KEY_PASSWORD }}" >> local.properties
           echo "storePassword=${{ secrets.SIGNING_STORE_PASSWORD }}" >> local.properties
-          echo "storeFile=release-keystore.jks" >> local.properties
+          echo "storeFile=novix-release.jks" >> local.properties
 
       - name: Decode Firebase Config
         run: |
@@ -62,7 +62,7 @@ jobs:
 
       - name: Decode Keystore
         run: |
-          echo "${{ secrets.SIGNING_KEYSTORE }}" | base64 --decode > app/release-keystore.jks
+          echo "${{ secrets.SIGNING_KEYSTORE }}" | base64 --decode > app/novix-release.jks
 
       - name: Set PR metadata as outputs
         id: set-pr-metadata
