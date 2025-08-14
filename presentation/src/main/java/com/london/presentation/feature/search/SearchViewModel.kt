@@ -37,7 +37,7 @@ class SearchViewModel @Inject constructor(
         setupSearchDebouncing()
     }
 
-    fun incrementGenreInterest(genreId: Int, mediaType: String) {
+    override fun incrementGenreInterest(genreId: Int, mediaType: String) {
         tryToExecute(
             block = { incrementGenreInterestUseCase.invoke(genreId, mediaType) },
             onStart = { },
@@ -48,7 +48,7 @@ class SearchViewModel @Inject constructor(
         )
     }
 
-    fun performSearch(query: String, category: SearchCategory) {
+    override fun performSearch(query: String, category: SearchCategory) {
         val trimmedQuery = query.trim()
 
         if (trimmedQuery.isEmpty()) {
@@ -59,7 +59,7 @@ class SearchViewModel @Inject constructor(
         searchWithApi(trimmedQuery, category)
     }
 
-    fun updateRecentData() {
+    override fun updateRecentData() {
         tryToExecute(
             block = {
                 val recentViewed = manageRecentViewedUseCase.getRecentViewed().reversed()
@@ -80,7 +80,7 @@ class SearchViewModel @Inject constructor(
         )
     }
 
-    fun updateSearchState(updater: SearchUiState.() -> SearchUiState) {
+    override fun updateSearchState(updater: SearchUiState.() -> SearchUiState) {
         updateState(updater)
     }
 

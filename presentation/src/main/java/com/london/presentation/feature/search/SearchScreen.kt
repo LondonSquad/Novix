@@ -53,7 +53,6 @@ import com.london.designsystem.component.SectionHeader
 import com.london.designsystem.component.Text
 import com.london.designsystem.component.TopBar
 import com.london.designsystem.theme.NovixTheme
-import com.london.designsystem.theme.ThemePreviews
 import com.london.domain.entity.recent.MediaType
 import com.london.domain.entity.recent.RecentSearch
 import com.london.domain.entity.recent.RecentViewed
@@ -69,6 +68,7 @@ import com.london.presentation.shared.buildscreen.NetworkErrorScreen
 import com.london.presentation.utils.Listen
 import com.london.presentation.utils.ResultOrEmpty
 import com.london.presentation.utils.toRecentViewed
+import kotlin.contracts.contract
 
 @Composable
 fun SearchScreen(
@@ -95,6 +95,24 @@ fun SearchScreen(
         }
     }
 
+
+        Content(
+            state = state,
+            interactionListener = viewModel,
+            keyboardController = keyboardController,
+        )
+
+}
+
+@Composable
+private fun Content(
+    state: SearchUiState,
+    interactionListener: SearchContract,
+    keyboardController: SoftwareKeyboardController?,
+) {
+    val interactionSource = remember { MutableInteractionSource() }
+    val focusManager = LocalFocusManager.current
+
     val currentPagingFlow = when (state.selectedCategory) {
         SearchCategory.Movies -> state.moviesFlow.collectAsLazyPagingItems()
         SearchCategory.TvShows -> state.tvShowsFlow.collectAsLazyPagingItems()
@@ -105,236 +123,219 @@ fun SearchScreen(
         isLoading = false,
         isError = currentPagingFlow.loadState.refresh is LoadState.Error,
         onBack = {},
-        onRetry = viewModel::onRetryClick,
+        onRetry = interactionListener::onRetryClick,
         pagingFlow = currentPagingFlow,
         handlePagingLoadingAutomatically = false
     ) {
-        Content(
-            state = state,
-            interactionListener = viewModel,
-            keyboardController = keyboardController,
-            viewModel = viewModel,
-        )
-    }
-}
 
-@Composable
-private fun Content(
-    state: SearchUiState,
-    interactionListener: SearchContract,
-    viewModel: SearchViewModel,
-    keyboardController: SoftwareKeyboardController?,
-) {
-    val interactionSource = remember { MutableInteractionSource() }
-    val focusManager = LocalFocusManager.current
-
-    Box(
-        modifier = Modifier
-            .fillMaxSize()
-            .pointerInput(Unit) {
-                detectTapGestures(onTap = {
-                    focusManager.clearFocus()
-                })
-            }
-            .background(color = NovixTheme.colors.surface)
-    ) {
-
-        TriangleBlurredShape()
-
-        Column(
+        Box(
             modifier = Modifier
                 .fillMaxSize()
-                .background(NovixTheme.colors.surface),
-            verticalArrangement = Arrangement.Top
-        ) {
-            TopBar(
-                modifier = Modifier
-                    .statusBarsPadding()
-                    .padding(horizontal = 16.dp),
-                title = stringResource(R.string.search),
-            )
-
-            SearchBar(
-                uiState = state,
-                viewModel = viewModel,
-                interactionSource = interactionSource,
-                keyboardController = keyboardController,
-                modifier = Modifier
-                    .padding(start = 16.dp, end = 16.dp, bottom = 12.dp)
-                    .fillMaxWidth()
-            )
-
-            when {
-                state.error != null && state.error != ErrorState.NoInternet -> {
-                    ResultOrEmpty(items = state.searchQuery.text.toList(), emptyContent = {
-                        ResultOrEmpty(
-                            items = state.recentSearches,
-                            otherItems = state.recentViewed,
-                            emptyContent = {
-                                NoEarlierSearchLayout(
-                                    modifier = Modifier
-                                        .fillMaxSize()
-                                        .background(NovixTheme.colors.surface)
-                                )
-                            },
-                            content = {
-                                RecentSearchLayOut(
-                                    state = state,
-                                    interactionListener = interactionListener,
-                                    viewModel = viewModel,
-                                    onNavigateToTvShowDetails = interactionListener::onTvShowClick,
-                                    onNavigateToMovieDetails = interactionListener::onMovieClick
-                                )
-                            })
-                    }, content = {
-                        SearchChipsRow(
-                            selected = state.selectedCategory,
-                            onSelect = interactionListener::onCategorySelected,
-                            modifier = Modifier.padding(bottom = 12.dp)
-                        )
+                .pointerInput(Unit) {
+                    detectTapGestures(onTap = {
+                        focusManager.clearFocus()
                     })
                 }
+                .background(color = NovixTheme.colors.surface)
+        ) {
 
-                else -> {
-                    ResultOrEmpty(items = state.searchQuery.text.toList(), emptyContent = {
-                        ResultOrEmpty(
-                            items = state.recentSearches,
-                            otherItems = state.recentViewed,
-                            emptyContent = {
-                                NoEarlierSearchLayout(
-                                    modifier = Modifier
-                                        .fillMaxSize()
-                                        .background(NovixTheme.colors.surface)
-                                )
-                            },
-                            content = {
+            TriangleBlurredShape()
 
-                                RecentSearchLayOut(
-                                    state = state,
-                                    interactionListener = interactionListener,
-                                    viewModel = viewModel,
-                                    onNavigateToTvShowDetails = interactionListener::onTvShowClick,
-                                    onNavigateToMovieDetails = interactionListener::onMovieClick
-                                )
+            Column(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .background(NovixTheme.colors.surface),
+                verticalArrangement = Arrangement.Top
+            ) {
+                TopBar(
+                    modifier = Modifier
+                        .statusBarsPadding()
+                        .padding(horizontal = 16.dp),
+                    title = stringResource(R.string.search),
+                )
 
-                            })
-                    }, content = {
-                        SearchChipsRow(
-                            selected = state.selectedCategory,
-                            onSelect = interactionListener::onCategorySelected,
-                            modifier = Modifier.padding(bottom = 12.dp)
-                        )
+                SearchBar(
+                    uiState = state,
+                    interactionListener = interactionListener,
+                    interactionSource = interactionSource,
+                    keyboardController = keyboardController,
+                    modifier = Modifier
+                        .padding(start = 16.dp, end = 16.dp, bottom = 12.dp)
+                        .fillMaxWidth()
+                )
 
-                        if (state.error == ErrorState.NoInternet) {
-                            NetworkErrorScreen(
-                                onRetry = {
-                                    viewModel.updateSearchState { copy(error = null) }
-                                    viewModel.performSearch(
-                                        state.searchQuery.text,
-                                        state.selectedCategory
+                when {
+                    state.error != null && state.error != ErrorState.NoInternet -> {
+                        ResultOrEmpty(items = state.searchQuery.text.toList(), emptyContent = {
+                            ResultOrEmpty(
+                                items = state.recentSearches,
+                                otherItems = state.recentViewed,
+                                emptyContent = {
+                                    NoEarlierSearchLayout(
+                                        modifier = Modifier
+                                            .fillMaxSize()
+                                            .background(NovixTheme.colors.surface)
                                     )
                                 },
-                                onBack = null
+                                content = {
+                                    RecentSearchLayOut(
+                                        state = state,
+                                        interactionListener = interactionListener,
+                                        onNavigateToTvShowDetails = interactionListener::onTvShowClick,
+                                        onNavigateToMovieDetails = interactionListener::onMovieClick
+                                    )
+                                })
+                        }, content = {
+                            SearchChipsRow(
+                                selected = state.selectedCategory,
+                                onSelect = interactionListener::onCategorySelected,
+                                modifier = Modifier.padding(bottom = 12.dp)
                             )
-                        } else {
-                            when (state.selectedCategory) {
-                                SearchCategory.Movies -> {
-                                    val moviesLazyList = state.moviesFlow.collectAsLazyPagingItems()
+                        })
+                    }
 
-                                    SearchContentWithErrorHandling(
-                                        moviesLazyList,
-                                        viewModel,
-                                        state
-                                    ) { isLoading ->
-                                        ResultOrEmpty(
-                                            items = moviesLazyList.itemSnapshotList.items,
-                                            emptyContent = {
-                                                if (!isLoading) {
-                                                    NoSearchResultLayOut(modifier = Modifier.fillMaxSize())
-                                                }
-                                            },
-                                            content = {
-                                                MoviesLayOut(
-                                                    movieUis = moviesLazyList,
-                                                    onSaveClick = { /* Handle save click */ },
-                                                    isMovieSaved = { false },
-                                                    onMovieClick = {
-                                                        viewModel.addToRecentViewed(it.toRecentViewed())
-                                                        viewModel.onMovieGenreClick(it.genreIds)
-                                                        interactionListener.onMovieClick(it.id)
-                                                    },
-                                                    modifier = Modifier.padding(horizontal = 16.dp)
-                                                )
-                                            }
+                    else -> {
+                        ResultOrEmpty(items = state.searchQuery.text.toList(), emptyContent = {
+                            ResultOrEmpty(
+                                items = state.recentSearches,
+                                otherItems = state.recentViewed,
+                                emptyContent = {
+                                    NoEarlierSearchLayout(
+                                        modifier = Modifier
+                                            .fillMaxSize()
+                                            .background(NovixTheme.colors.surface)
+                                    )
+                                },
+                                content = {
+
+                                    RecentSearchLayOut(
+                                        state = state,
+                                        interactionListener = interactionListener,
+                                        onNavigateToTvShowDetails = interactionListener::onTvShowClick,
+                                        onNavigateToMovieDetails = interactionListener::onMovieClick
+                                    )
+
+                                })
+                        }, content = {
+                            SearchChipsRow(
+                                selected = state.selectedCategory,
+                                onSelect = interactionListener::onCategorySelected,
+                                modifier = Modifier.padding(bottom = 12.dp)
+                            )
+
+                            if (state.error == ErrorState.NoInternet) {
+                                NetworkErrorScreen(
+                                    onRetry = {
+                                        interactionListener.updateSearchState { copy(error = null) }
+                                        interactionListener.performSearch(
+                                            state.searchQuery.text,
+                                            state.selectedCategory
                                         )
-                                    }
-                                }
+                                    },
+                                    onBack = null
+                                )
+                            } else {
+                                when (state.selectedCategory) {
+                                    SearchCategory.Movies -> {
+                                        val moviesLazyList =
+                                            state.moviesFlow.collectAsLazyPagingItems()
 
-                                SearchCategory.TvShows -> {
-                                    val tvShowsLazyList =
-                                        state.tvShowsFlow.collectAsLazyPagingItems()
-
-                                    SearchContentWithErrorHandling(
-                                        tvShowsLazyList,
-                                        viewModel,
-                                        state
-                                    ) { isLoading ->
-                                        ResultOrEmpty(
-                                            items = tvShowsLazyList.itemSnapshotList.items,
-                                            emptyContent = {
-                                                if (!isLoading) {
-                                                    NoSearchResultLayOut(modifier = Modifier.fillMaxSize())
+                                        SearchContentWithErrorHandling(
+                                            moviesLazyList,
+                                            interactionListener,
+                                            state
+                                        ) { isLoading ->
+                                            ResultOrEmpty(
+                                                items = moviesLazyList.itemSnapshotList.items,
+                                                emptyContent = {
+                                                    if (!isLoading) {
+                                                        NoSearchResultLayOut(modifier = Modifier.fillMaxSize())
+                                                    }
+                                                },
+                                                content = {
+                                                    MoviesLayOut(
+                                                        movieUis = moviesLazyList,
+                                                        onSaveClick = { /* Handle save click */ },
+                                                        isMovieSaved = { false },
+                                                        onMovieClick = {
+                                                            interactionListener.addToRecentViewed(it.toRecentViewed())
+                                                            interactionListener.onMovieGenreClick(it.genreIds)
+                                                            interactionListener.onMovieClick(it.id)
+                                                        },
+                                                        modifier = Modifier.padding(horizontal = 16.dp)
+                                                    )
                                                 }
-                                            },
-                                            content = {
-                                                TvShowLayOut(
-                                                    tvShowUis = tvShowsLazyList,
-                                                    onSaveClick = { /* Handle save click */ },
-                                                    isTvShowSaved = { false },
-                                                    onTvShowClick = {
-                                                        viewModel.addToRecentViewed(it.toRecentViewed())
-                                                        it.genres.forEach { genreId ->
-                                                            viewModel.incrementGenreInterest(
-                                                                genreId,
-                                                                "tv"
-                                                            )
+                                            )
+                                        }
+                                    }
+
+                                    SearchCategory.TvShows -> {
+                                        val tvShowsLazyList =
+                                            state.tvShowsFlow.collectAsLazyPagingItems()
+
+                                        SearchContentWithErrorHandling(
+                                            tvShowsLazyList,
+                                            interactionListener,
+                                            state
+                                        ) { isLoading ->
+                                            ResultOrEmpty(
+                                                items = tvShowsLazyList.itemSnapshotList.items,
+                                                emptyContent = {
+                                                    if (!isLoading) {
+                                                        NoSearchResultLayOut(modifier = Modifier.fillMaxSize())
+                                                    }
+                                                },
+                                                content = {
+                                                    TvShowLayOut(
+                                                        tvShowUis = tvShowsLazyList,
+                                                        onSaveClick = { /* Handle save click */ },
+                                                        isTvShowSaved = { false },
+                                                        onTvShowClick = {
+                                                            interactionListener.addToRecentViewed(it.toRecentViewed())
+                                                            it.genres.forEach { genreId ->
+                                                                interactionListener.incrementGenreInterest(
+                                                                    genreId,
+                                                                    "tv"
+                                                                )
+                                                            }
+                                                            interactionListener.onTvShowClick(it.id)
                                                         }
-                                                        viewModel.onTvShowClick(it.id)
-                                                    }
-                                                )
-                                            }
-                                        )
-                                    }
-                                }
-
-                                SearchCategory.Actors -> {
-                                    val actorsLazyList = state.actorsFlow.collectAsLazyPagingItems()
-
-                                    SearchContentWithErrorHandling(
-                                        actorsLazyList,
-                                        viewModel,
-                                        state
-                                    ) { isLoading ->
-                                        ResultOrEmpty(
-                                            items = actorsLazyList.itemSnapshotList.items,
-                                            emptyContent = {
-                                                if (!isLoading) {
-                                                    NoSearchResultLayOut(modifier = Modifier.fillMaxSize())
+                                                    )
                                                 }
-                                            },
-                                            content = {
-                                                ActorsLayout(
-                                                    items = actorsLazyList, onActorClick = {
-                                                        interactionListener.onActorClick(it.id)
+                                            )
+                                        }
+                                    }
+
+                                    SearchCategory.Actors -> {
+                                        val actorsLazyList =
+                                            state.actorsFlow.collectAsLazyPagingItems()
+
+                                        SearchContentWithErrorHandling(
+                                            actorsLazyList,
+                                            interactionListener,
+                                            state
+                                        ) { isLoading ->
+                                            ResultOrEmpty(
+                                                items = actorsLazyList.itemSnapshotList.items,
+                                                emptyContent = {
+                                                    if (!isLoading) {
+                                                        NoSearchResultLayOut(modifier = Modifier.fillMaxSize())
                                                     }
-                                                )
-                                            }
-                                        )
+                                                },
+                                                content = {
+                                                    ActorsLayout(
+                                                        items = actorsLazyList, onActorClick = {
+                                                            interactionListener.onActorClick(it.id)
+                                                        }
+                                                    )
+                                                }
+                                            )
+                                        }
                                     }
                                 }
                             }
-                        }
-                    })
+                        })
+                    }
                 }
             }
         }
@@ -344,11 +345,11 @@ private fun Content(
 @Composable
 private fun HandleLoadStateError(
     loadState: CombinedLoadStates,
-    viewModel: SearchViewModel
+    contract: SearchContract
 ) {
     LaunchedEffect(loadState) {
         if (loadState.refresh is LoadState.Error) {
-            viewModel.updateSearchState { copy(error = ErrorState.NoInternet) }
+            contract.updateSearchState { copy(error = ErrorState.NoInternet) }
         }
     }
 }
@@ -356,7 +357,7 @@ private fun HandleLoadStateError(
 @Composable
 private fun SearchBar(
     uiState: SearchUiState,
-    viewModel: SearchViewModel,
+    interactionListener: SearchContract,
     interactionSource: MutableInteractionSource,
     keyboardController: SoftwareKeyboardController?,
     modifier: Modifier = Modifier
@@ -371,7 +372,7 @@ private fun SearchBar(
     ) {
         OutlinedTextField(
             value = uiState.searchQuery,
-            onValueChange = { viewModel.onSearchQueryChange(it) },
+            onValueChange = { interactionListener.onSearchQueryChange(it) },
             placeholder = {
                 Text(
                     stringResource(R.string.search_placeholder),
@@ -393,7 +394,7 @@ private fun SearchBar(
                                 .clickable(
                                     interactionSource = remember { MutableInteractionSource() },
                                     indication = null
-                                ) { viewModel.clearSearch() })
+                                ) { interactionListener.clearSearch() })
                     }
                 }
 
@@ -406,7 +407,7 @@ private fun SearchBar(
                 onSearch = {
                     focusManager.clearFocus()
                     keyboardController?.hide()
-                    viewModel.addToRecentSearches(
+                    interactionListener.addToRecentSearches(
                         RecentSearch(
                             query = uiState.searchQuery.text,
                             timestamp = System.currentTimeMillis(),
@@ -449,7 +450,6 @@ private fun SearchChipsRow(
 private fun RecentSearchLayOut(
     state: SearchUiState,
     interactionListener: SearchContract,
-    viewModel: SearchViewModel,
     onNavigateToTvShowDetails: (Int) -> Unit,
     onNavigateToMovieDetails: (Int) -> Unit
 ) {
@@ -460,7 +460,7 @@ private fun RecentSearchLayOut(
             item {
                 RecentViewedSection(
                     recentViewed = state.recentViewed,
-                    onClearAll = viewModel::clearRecentViewed,
+                    onClearAll = interactionListener::clearRecentViewed,
                     onNavigateToTvShowDetails = onNavigateToTvShowDetails,
                     onNavigateToMovieDetails = onNavigateToMovieDetails
                 )
@@ -636,11 +636,11 @@ private fun NoSearchResultLayOut(
 @Composable
 private fun SearchContentWithErrorHandling(
     lazyPagingItems: LazyPagingItems<*>,
-    viewModel: SearchViewModel,
+    contract: SearchContract,
     state: SearchUiState,
     content: @Composable (Boolean) -> Unit
 ) {
-    HandleLoadStateError(lazyPagingItems.loadState, viewModel)
+    HandleLoadStateError(lazyPagingItems.loadState, contract)
 
     val isLoading = lazyPagingItems.loadState.refresh is LoadState.Loading
     val hasError = lazyPagingItems.loadState.refresh is LoadState.Error
@@ -648,11 +648,7 @@ private fun SearchContentWithErrorHandling(
     if (hasError) {
         NetworkErrorScreen(
             onRetry = {
-                viewModel.updateSearchState { copy(error = null) }
-                viewModel.performSearch(
-                    state.searchQuery.text,
-                    state.selectedCategory
-                )
+                contract.onRetryClick()
             },
             onBack = null
         )

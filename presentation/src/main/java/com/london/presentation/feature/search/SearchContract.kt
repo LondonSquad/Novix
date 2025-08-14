@@ -8,7 +8,6 @@ interface SearchContract {
     fun onSearchQueryChange(newValue: TextFieldValue)
     fun onCategorySelected(category: SearchCategory)
     fun clearSearch()
-    fun onRetryClick()
     fun addToRecentSearches(query: RecentSearch)
     fun removeRecentSearch(search: RecentSearch)
     fun onRecentSearchClick(search: String)
@@ -20,5 +19,11 @@ interface SearchContract {
     fun onTvShowClick(tvShowId: Int)
     fun onMovieGenreClick(genresListId : List<Int>)
     fun onSavedMovieClick(movie: MovieUi)
+    
+    fun onRetryClick()
+    fun updateSearchState(updater: SearchUiState.() -> SearchUiState)
+    fun performSearch(query: String, category: SearchCategory)
+    fun incrementGenreInterest(genreId: Int, type: String)
+    fun updateRecentData()
 }
 
