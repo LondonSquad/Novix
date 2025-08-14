@@ -24,7 +24,7 @@ fun <T : Any> MediaLazyGridWithFilter(
     items: List<T>? = null,
     isLoading: Boolean = false,
     pagingItems: LazyPagingItems<T>? = null,
-    tabSelected: Int = MediaCategory.MOVIES.ordinal,
+    tabSelected: Int = MediaCategory.Movies.ordinal,
     onMovieGenreClick: (MovieGenre) -> Unit = {},
     onTvShowGenreClick: (TvShowGenre) -> Unit = {},
     config: MediaGridConfig = MediaGridConfig(),

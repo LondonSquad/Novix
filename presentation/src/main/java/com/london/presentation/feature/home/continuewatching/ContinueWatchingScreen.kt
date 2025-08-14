@@ -74,7 +74,7 @@ fun Content(
             MediaLazyGridWithTabs(
                 items = state.movies.collectAsStateWithLifecycle(emptyList()).value +
                         state.tvSeries.collectAsStateWithLifecycle(emptyList()).value,
-                tabSelected = if (state.isMovieSelected) MediaCategory.MOVIES.ordinal else MediaCategory.TV_SHOWS.ordinal,
+                tabSelected = if (state.isMovieSelected) MediaCategory.Movies.ordinal else MediaCategory.TvShows.ordinal,
                 onTabSelected = contract::onMediaCategoryTabSelected,
                 onMovieGenreClick = contract::onMovieGenreChanged,
                 onTvShowGenreClick = contract::onTvShowGenreChanged,
