@@ -72,10 +72,10 @@ import com.london.presentation.utils.toRecentViewed
 
 @Composable
 fun SearchScreen(
-    viewModel: SearchViewModel = hiltViewModel(),
-    onNavigateToActorDetails: (Int) -> Unit = { },
-    onNavigateToTvShowDetails: (Int) -> Unit = { },
-    onNavigateToMovieDetails: (Int) -> Unit = { }
+    onNavigateToActorDetails: (Int) -> Unit,
+    onNavigateToTvShowDetails: (Int) -> Unit,
+    onNavigateToMovieDetails: (Int) -> Unit,
+    viewModel: SearchViewModel = hiltViewModel()
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
     val effect by viewModel.effect.collectAsState(initial = null)
@@ -260,7 +260,7 @@ private fun Content(
                                                     isMovieSaved = { false },
                                                     onMovieClick = {
                                                         viewModel.addToRecentViewed(it.toRecentViewed())
-                                                        viewModel.onClickMovie(it.genreIds)
+                                                        viewModel.onMovieGenreClick(it.genreIds)
                                                         interactionListener.onMovieClick(it.id)
                                                     },
                                                     modifier = Modifier.padding(horizontal = 16.dp)
@@ -661,8 +661,8 @@ private fun SearchContentWithErrorHandling(
     }
 }
 
-@ThemePreviews
-@Composable
-fun SearchScreenPreview() {
-    SearchScreen()
-}
+//@ThemePreviews
+//@Composable
+//fun SearchScreenPreview() {
+//    SearchScreen()
+//}

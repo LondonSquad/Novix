@@ -39,9 +39,7 @@ class SearchViewModel @Inject constructor(
 
     fun incrementGenreInterest(genreId: Int, mediaType: String) {
         tryToExecute(
-            block = {
-                incrementGenreInterestUseCase.invoke(genreId, mediaType)
-            },
+            block = { incrementGenreInterestUseCase.invoke(genreId, mediaType) },
             onStart = { },
             onSuccess = { },
             onError = { errorState ->
@@ -167,7 +165,7 @@ class SearchViewModel @Inject constructor(
         )
     }
 
-    override fun onClickMovie(genresListId: List<Int>) {
+    override fun onMovieGenreClick(genresListId: List<Int>) {
         genresListId.forEach { genreId ->
             incrementGenreInterest(genreId, "tv")
         }
@@ -250,7 +248,7 @@ class SearchViewModel @Inject constructor(
         emitEffect(SearchEffect.ToTvShowNavigation(tvId = tvShowId))
     }
 
-    override fun onRetry() {
+    override fun onRetryClick() {
         updateState { copy(error = null) }
         updateRecentData()
         setupSearchDebouncing()
