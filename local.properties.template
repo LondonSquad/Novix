@@ -10,6 +10,7 @@ COPY THE FILE CONTENTS BELOW INTO YOUR local.properties and update the values
 keyAlias=YOUR_KEY_ALIAS
 keyPassword=YOUR_KEY_PASSWORD
 storePassword=YOUR_STORE_PASSWORD
+# NOTE: this should be in the app root directory, not the project.
 storeFile=your_keystore.jks
 
 ###############
