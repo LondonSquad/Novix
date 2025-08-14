@@ -64,6 +64,7 @@ class TrendingMoviesViewModelTest {
 
     @Test
     fun `when click onBack, should emits NavigateBack effect`() = runTest {
+
         // When & Then
         viewModel.effect.test {
             viewModel.onBackClick()
@@ -74,6 +75,7 @@ class TrendingMoviesViewModelTest {
     
     @Test
     fun `when onMovieClick, should emits NavigateToMovie effect`() = runTest {
+
         //Given 
         val movieId = 1
         
@@ -86,6 +88,7 @@ class TrendingMoviesViewModelTest {
     }
     @Test
     fun `when onRetryClick is called, should update state successfully`() = runTest {
+
         // Given
         val movie = createMockMovie()
         coEvery { getTrendingMovies.invoke(any(), any()) } returns
@@ -105,6 +108,7 @@ class TrendingMoviesViewModelTest {
 
     @Test
     fun `when click onGenre, should update selectedGenreId and reload trending movies`() = runTest {
+
         // Given
         val movieGenre = MovieGenre.Action
         // When
@@ -116,6 +120,7 @@ class TrendingMoviesViewModelTest {
 
     @Test
     fun `when fetching trending movies and an error occurs,should update error state and loading state correctly`() = runTest {
+
         viewModel.handlingErrorState(ErrorState.NoInternet)
 
         // When & Then

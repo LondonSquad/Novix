@@ -48,7 +48,8 @@ class TrendingActorsViewModelTest {
     }
 
     @Test
-    fun `when initializing actorData , should fetch trending actors`() = runTest {
+    fun `when initializing actorData ,should fetch trending actors`() = runTest {
+
         //Given
         coEvery { getTrendingActors.invoke(any()) } returns createMockPagedFetchResponse(
                 listOf(createMockActor())
@@ -67,6 +68,7 @@ class TrendingActorsViewModelTest {
 
     @Test
     fun `when retry is called ,should success updates state correctly `() = runTest {
+
         // Given
         coEvery { getTrendingActors.invoke(1) } returns createMockPagedFetchResponse(
             listOf(createMockActor())
@@ -95,6 +97,7 @@ class TrendingActorsViewModelTest {
     
     @Test
     fun `when onBack, should emits NavigateBack effect`() = runTest {
+
         // When & Then
         viewModel.effect.test {
             viewModel.onBackClick()
@@ -116,6 +119,7 @@ class TrendingActorsViewModelTest {
 
     @Test
     fun `when fetching trending actors and an error occurs,should update error state and loading state correctly`() = runTest {
+
        viewModel.handlingErrorState(ErrorState.NoInternet)
        
             // When & Then

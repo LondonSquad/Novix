@@ -38,9 +38,10 @@ class TrendingTvShowsViewModelTest {
 
     @Test
     fun `when creating mock tvShow, should return correct values`() = runTest {
-       val pageNumber = 1
-        val movieGenreId = -1
+        
         //Given
+        val pageNumber = 1
+        val movieGenreId = -1
         coEvery {
             mockManageTvShowDetailsUseCase.getTrendingTvShows(
                 page = pageNumber,
@@ -61,6 +62,7 @@ class TrendingTvShowsViewModelTest {
 
     @Test
     fun `when click onBack, should emits NavigateBack effect`() = runTest {
+        // When & Then
         viewModel.effect.test {
             viewModel.onBackClick()
             val effect = awaitItem()
@@ -70,8 +72,9 @@ class TrendingTvShowsViewModelTest {
 
     @Test
     fun `when click onTvShow, should emits NavigateToTvShow effect`() = runTest {
+        // Given
         val movieId = 1
-
+        // When & Then
         viewModel.effect.test {
             viewModel.onTvShowClick(movieId)
             val effect = awaitItem()
