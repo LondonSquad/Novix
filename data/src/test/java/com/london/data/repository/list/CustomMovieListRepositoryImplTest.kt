@@ -2,6 +2,7 @@ package com.london.data.repository.list
 
 import com.google.common.truth.Truth.assertThat
 import com.london.data.local.preference.AuthPreferences
+import com.london.data.local.source.customLists.CustomMovieListLocalDataSource
 import com.london.data.remote.exception.NetworkException
 import com.london.data.remote.model.ApiResponse
 import com.london.data.remote.model.list.CustomListResponse
@@ -23,9 +24,11 @@ import org.junit.jupiter.api.assertThrows
 class CustomMovieListRepositoryImplTest {
 
     private lateinit var remoteDataSource: CustomMovieListsRemoteDataSource
+    private lateinit var localDataSource: CustomMovieListLocalDataSource
     private lateinit var authPreferences: AuthPreferences
     private lateinit var preferencesService: AppPreferencesService
     private lateinit var repository: CustomMovieListRepositoryImpl
+//    private lateinit var workManager: WorkManager
 
     @Before
     fun setUp() {
@@ -33,10 +36,18 @@ class CustomMovieListRepositoryImplTest {
         remoteDataSource = mockk(relaxed = true)
         authPreferences = mockk(relaxed = true)
         preferencesService = mockk(relaxed = true)
+        repository = mockk(relaxed = true)
+//        workManager = mockk(relaxed = true)
+
         every { authPreferences.getSessionId() } returns "session_123"
         every { preferencesService.appLanguage } returns MutableStateFlow(AppLanguage.ENGLISH)
-        repository =
-            CustomMovieListRepositoryImpl(remoteDataSource, authPreferences, preferencesService)
+        repository = CustomMovieListRepositoryImpl(
+            remoteDataSource = remoteDataSource,
+            localDataSource = localDataSource,
+            authPreferences = authPreferences,
+            preferencesService = preferencesService,
+//            workManager = workManager
+        )
     }
 
     @Test
@@ -50,7 +61,7 @@ class CustomMovieListRepositoryImplTest {
             )
         )
         //When
-        val result = repository.deleteMovieList(1u)
+        val result = repository.deleteMovieList(1)
         //Then
         assertThat(result).isTrue()
     }
@@ -61,7 +72,7 @@ class CustomMovieListRepositoryImplTest {
         //Given
         coEvery { remoteDataSource.delete(any(), any()) } returns Result.failure(Exception("error"))
         //When
-        val result = repository.deleteMovieList(1u)
+        val result = repository.deleteMovieList(1)
         //Then
         assertThat(result).isFalse()
     }
@@ -132,7 +143,7 @@ class CustomMovieListRepositoryImplTest {
             CustomListResponse("", 1)
         )
         //When
-        val result = repository.addMovieToList(1u, 100u)
+        val result = repository.addMovieToList(1, 100)
         //Then
         assertThat(result).isTrue()
     }
@@ -145,7 +156,7 @@ class CustomMovieListRepositoryImplTest {
             Exception("error")
         )
         //When
-        val result = repository.addMovieToList(1u, 100u)
+        val result = repository.addMovieToList(1, 100)
         //Then
         assertThat(result).isFalse()
     }
@@ -164,7 +175,7 @@ class CustomMovieListRepositoryImplTest {
             CustomListResponse("", 1)
         )
         //When
-        val result = repository.removeMovieFromList(1u, 100u)
+        val result = repository.removeMovieFromList(1, 100)
         //Then
         assertThat(result).isTrue()
     }
@@ -177,23 +188,24 @@ class CustomMovieListRepositoryImplTest {
             Exception("error")
         )
         //When
-        val result = repository.addMovieToList(1u, 100u)
+        val result = repository.addMovieToList(1, 100)
         //Then
         assertThat(result).isFalse()
     }
 
     @Test
-    fun `getMovieListDetails should return paged data when data source returns success`() = runTest {
+    fun `getMovieListDetails should return paged data when data source returns success`() =
+        runTest {
 
-        //Given
-        coEvery { remoteDataSource.getDetails(any(), any()) } returns Result.success(
-            MovieListDetailsMock
-        )
-        //When
-        val result = repository.getMovieListDetails(1u, 1)
-        //Then
-        assertThat(result.totalItems).isEqualTo(1)
-    }
+            //Given
+            coEvery { remoteDataSource.getDetails(any(), any()) } returns Result.success(
+                MovieListDetailsMock
+            )
+            //When
+            val result = repository.getMovieListDetails(1, 1)
+            //Then
+            assertThat(result.totalItems).isEqualTo(1)
+        }
 
     @Test
     fun `getMovieListDetails should throw exception when data source returns failure`() = runTest {
@@ -204,7 +216,7 @@ class CustomMovieListRepositoryImplTest {
         )
         //When //Then
         assertThrows<NetworkException.HttpLockedException> {
-            repository.getMovieListDetails(1u, 1)
+            repository.getMovieListDetails(1, 1)
         }
     }
 
@@ -216,7 +228,7 @@ class CustomMovieListRepositoryImplTest {
                 MovieListDetailsMock
             )
             //When
-            val result = repository.getMovieListName(1u)
+            val result = repository.getMovieListName(1)
             //Then
             assertThat(result).isEqualTo(MovieListDetailsMock.name)
         }
@@ -229,7 +241,7 @@ class CustomMovieListRepositoryImplTest {
         )
         //When //Then
         assertThrows<NetworkException.HttpLockedException> {
-            repository.getMovieListName(1u)
+            repository.getMovieListName(1)
         }
     }
 

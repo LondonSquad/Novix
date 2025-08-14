@@ -5,7 +5,7 @@ import com.london.data.utils.orZero
 import com.london.domain.entity.MovieList
 
 fun CustomMovieListResponse.toEntity(): MovieList = MovieList(
-    id = this.id.orZero().toUInt(),
+    id = this.id.orZero(),
     name = this.name.orEmpty(),
-    moviesCount = this.itemCount.orZero().toUInt()
+    moviesCount = this.itemCount.orZero()
 )

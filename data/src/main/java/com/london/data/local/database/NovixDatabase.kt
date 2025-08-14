@@ -7,6 +7,9 @@ import com.london.data.local.database.convertor.CommonConverter
 import com.london.data.local.database.convertor.MediaTypeConverter
 import com.london.data.local.database.convertor.RecentViewedConverter
 import com.london.data.local.database.convertor.UpComingMovieTypeConverter
+import com.london.data.local.database.dao.customLists.ListMembershipDao
+import com.london.data.local.database.dao.customLists.MovieListDao
+import com.london.data.local.database.dao.customLists.SyncMetadataDao
 import com.london.data.local.database.dao.home.popular.PopularSectionDao
 import com.london.data.local.database.dao.home.toprated.TopRatedDao
 import com.london.data.local.database.dao.home.upcoming.UpcomingSectionDao
@@ -15,6 +18,9 @@ import com.london.data.local.database.dao.recent.viewed.RecentViewedDao
 import com.london.data.local.database.dao.recent.watched.movie.RecentWatchedMoviesDao
 import com.london.data.local.database.dao.recent.watched.tvshow.RecentWatchedTvShowsDao
 import com.london.data.local.database.dao.search.GenreInterestDao
+import com.london.data.local.model.customLists.MovieListLocal
+import com.london.data.local.model.customLists.MovieListMembershipLocal
+import com.london.data.local.model.customLists.SyncMetadataLocal
 import com.london.data.local.model.home.popular.PopularSectionLocal
 import com.london.data.local.model.home.topRated.TopRatedLocal
 import com.london.data.local.model.home.upcoming.UpComingSectionLocal
@@ -33,7 +39,10 @@ import com.london.data.local.model.search.GenreInterestEntity
         TopRatedLocal::class,
         UpComingSectionLocal::class,
         PopularSectionLocal::class,
-        GenreInterestEntity::class
+        GenreInterestEntity::class,
+        MovieListMembershipLocal::class,
+        MovieListLocal::class,
+        SyncMetadataLocal::class
     ],
     version = 1,
     exportSchema = false
@@ -53,4 +62,8 @@ abstract class NovixDatabase : RoomDatabase() {
     abstract fun upComingSectionDao(): UpcomingSectionDao
     abstract fun topRatedDao(): TopRatedDao
     abstract fun genreInterestDao(): GenreInterestDao
+    abstract fun listMembershipDao(): ListMembershipDao
+    abstract fun movieListDao(): MovieListDao
+    abstract fun syncMetadataDao(): SyncMetadataDao
+
 }

@@ -1,15 +1,32 @@
 package com.london.app
 
 import android.app.Application
+import androidx.hilt.work.HiltWorkerFactory
+import androidx.work.Configuration
+import androidx.work.WorkManager
 import com.london.data.BuildConfig
+import com.london.data.worker.MovieListSyncWorker
 import dagger.hilt.android.HiltAndroidApp
 import timber.log.Timber
+import javax.inject.Inject
 
 @HiltAndroidApp
-class NovixApplication : Application() {
+class NovixApplication() : Application(), Configuration.Provider {
+
+    @Inject
+    lateinit var workerFactory: HiltWorkerFactory
+
+    override val workManagerConfiguration: Configuration
+        get() = Configuration.Builder()
+            .setWorkerFactory(workerFactory)
+            .setMinimumLoggingLevel(android.util.Log.INFO)
+            .build()
+
     override fun onCreate() {
         super.onCreate()
         timberConfig()
+
+        MovieListSyncWorker.schedulePeriodicSync(WorkManager.getInstance(applicationContext))
     }
 
     private fun timberConfig() {
