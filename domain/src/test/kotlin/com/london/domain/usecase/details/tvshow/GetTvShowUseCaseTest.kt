@@ -353,16 +353,19 @@ class GetTvShowUseCaseTest {
         }
     }
 
-    companion object {
-        private const val PAGE = 1
-        private const val PAGE_NUMBER = 1
+    private companion object {
         private const val TV_SHOW_ID = 12345
         private const val CUSTOM_LIMIT = 3
         private const val LARGE_LIMIT = 10
         private const val ZERO_LIMIT = 0
         private const val EXCEPTION_MESSAGE = "Network error"
         private const val CATEGORY_ID = 1
+        private const val PAGE_NUMBER = 1
+
+        private const val POPULAR_LIMIT = 5
         const val NAME = "Tv Tv"
+
+        private const val PAGE = 1
 
         private val mockTv1 = TopRatedMedia(
             id = 1396,
@@ -392,18 +395,7 @@ class GetTvShowUseCaseTest {
             profilePictureUrl = "",
             characterName = ""
         )
-
-    private companion object {
-        private const val TV_SHOW_ID = 12345
-        private const val CUSTOM_LIMIT = 3
-        private const val LARGE_LIMIT = 10
-        private const val ZERO_LIMIT = 0
-        private const val EXCEPTION_MESSAGE = "Network error"
-        private const val CATEGORY_ID = 1
-        private const val PAGE_NUMBER = 1
-
-        private const val POPULAR_LIMIT = 5
-        const val NAME = "Tv Tv"    private fun createMockTvShow(mockData: MockPopularMedia): PopularMedia =
+        private fun createMockTvShow(mockData: MockPopularMedia): PopularMedia =
             PopularMedia(
                 id = mockData.id,
                 name = mockData.name,

@@ -33,7 +33,6 @@ class GetTvEpisodesUseCaseTest {
         searchRepository = mockk()
         getTvEpisodesUseCase = GetTvEpisodesUseCase(
             tvShowRepository = tvShowRepository,
-            actorRepository = actorRepository
         )
         gettTvShowUseCase = GetTvShowUseCase(
             tvShowRepository = tvShowRepository,

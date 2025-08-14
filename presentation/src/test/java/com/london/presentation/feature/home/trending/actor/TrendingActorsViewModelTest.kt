@@ -5,7 +5,7 @@ import app.cash.turbine.test
 import com.google.common.truth.Truth.assertThat
 import com.london.domain.entity.Actor
 import com.london.domain.entity.PagedFetchResponse
-import com.london.domain.usecase.GetTrendingActorsUseCase
+import com.london.domain.usecase.details.actor.GetActorUseCase
 import com.london.presentation.shared.base.ErrorState
 import io.mockk.clearAllMocks
 import io.mockk.coEvery
@@ -27,7 +27,7 @@ import org.junit.Test
 @OptIn(ExperimentalCoroutinesApi::class)
 class TrendingActorsViewModelTest {
     private lateinit var viewModel: TrendingActorsViewModel
-    private val getTrendingActors: GetTrendingActorsUseCase = mockk()
+    private val getActorUseCase: GetActorUseCase = mockk()
 
     private val testDispatcher = UnconfinedTestDispatcher()
 
@@ -35,11 +35,11 @@ class TrendingActorsViewModelTest {
     fun setup() {
         Dispatchers.setMain(testDispatcher)
 
-        coEvery { getTrendingActors.invoke(any()) } returns createMockPagedFetchResponse(emptyList())
+        coEvery { getActorUseCase.getTrendingActors(any()) } returns createMockPagedFetchResponse(emptyList())
         viewModel = createViewModel()
     }
 
-    private fun createViewModel() = TrendingActorsViewModel(getTrendingActors)
+    private fun createViewModel() = TrendingActorsViewModel(getActorUseCase)
 
     @After
     fun tearDown() {
@@ -51,7 +51,7 @@ class TrendingActorsViewModelTest {
     fun `when initializing actorData ,should fetch trending actors`() = runTest {
 
         //Given
-        coEvery { getTrendingActors.invoke(any()) } returns createMockPagedFetchResponse(
+        coEvery { getActorUseCase.getTrendingActors(any()) } returns createMockPagedFetchResponse(
                 listOf(createMockActor())
 
         )
@@ -70,7 +70,7 @@ class TrendingActorsViewModelTest {
     fun `when retry is called ,should success updates state correctly `() = runTest {
 
         // Given
-        coEvery { getTrendingActors.invoke(1) } returns createMockPagedFetchResponse(
+        coEvery { getActorUseCase.getTrendingActors(1) } returns createMockPagedFetchResponse(
             listOf(createMockActor())
         )
 

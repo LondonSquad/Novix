@@ -61,7 +61,7 @@ class TrendingMoviesViewModel @Inject constructor(
     fun createTrendingMoviesPagingFlow() = createPagingSourceFlow(
         query = "",
         block = { _, pageNumber ->
-            getTrendingMovies.invoke(
+            getMovieUseCase.getTrendingMovies(
                 page = pageNumber,
                 movieGenreId = state.value.selectedGenreId
             )

@@ -4,7 +4,7 @@ import app.cash.turbine.test
 import com.google.common.truth.Truth.assertThat
 import com.london.domain.entity.PagedFetchResponse
 import com.london.domain.entity.Trending
-import com.london.domain.usecase.details.tvshow.ManageTvShowDetailsUseCase
+import com.london.domain.usecase.details.tvshow.GetTvShowUseCase
 import com.london.presentation.shared.base.ErrorState
 import com.london.presentation.utils.TvShowGenre
 import io.mockk.coEvery
@@ -23,19 +23,19 @@ import org.junit.Test
 class TrendingTvShowsViewModelTest {
 
     private lateinit var viewModel: TrendingTvShowsViewModel
-    private val mockManageTvShowDetailsUseCase: ManageTvShowDetailsUseCase = mockk()
+    private val getTvShowUseCase: GetTvShowUseCase = mockk()
     private val testDispatcher = UnconfinedTestDispatcher()
 
     @Before
     fun setup() {
         Dispatchers.setMain(testDispatcher)
         coEvery {
-            mockManageTvShowDetailsUseCase.getTrendingTvShows(
+            getTvShowUseCase.getTrendingTvShows(
                 any(),
                 any()
             )
         } returns createMockPagedFetchResponse(emptyList())
-        viewModel = TrendingTvShowsViewModel(mockManageTvShowDetailsUseCase)
+        viewModel = TrendingTvShowsViewModel(getTvShowUseCase)
     }
 
     @Test
@@ -45,7 +45,7 @@ class TrendingTvShowsViewModelTest {
         val pageNumber = 1
         val movieGenreId = -1
         coEvery {
-            mockManageTvShowDetailsUseCase.getTrendingTvShows(
+            getTvShowUseCase.getTrendingTvShows(
                 page = pageNumber,
                 movieGenreId = movieGenreId
             )
@@ -88,7 +88,7 @@ class TrendingTvShowsViewModelTest {
     fun `when onRetryClick is called, should update state successfully`() = runTest {
         // Given
         coEvery {
-            mockManageTvShowDetailsUseCase.getTrendingTvShows(
+            getTvShowUseCase.getTrendingTvShows(
                 any(),
                 any()
             )

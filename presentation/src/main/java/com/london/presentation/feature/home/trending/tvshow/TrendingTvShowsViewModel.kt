@@ -59,7 +59,7 @@ class TrendingTvShowsViewModel @Inject constructor(
         return createPagingSourceFlow(
             query = "",
             block = { _, pageNumber ->
-                manageTvShowDetailsUseCase.getTrendingTvShows(
+                getTvShowUseCase.getTrendingTvShows(
                     page = pageNumber,
                     movieGenreId = state.value.selectedGenreId,
                 )

@@ -48,7 +48,7 @@ class TrendingActorsViewModel @Inject constructor(
         return createPagingSourceFlow(
             query = "",
             block = { _, pageNumber ->
-                getTrendingActors.invoke(
+                getActorUseCase.getTrendingActors(
                     page = pageNumber
                 )
             }

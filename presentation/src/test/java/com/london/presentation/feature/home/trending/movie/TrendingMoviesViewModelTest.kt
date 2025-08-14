@@ -5,7 +5,7 @@ import app.cash.turbine.test
 import com.google.common.truth.Truth.assertThat
 import com.london.domain.entity.PagedFetchResponse
 import com.london.domain.entity.Trending
-import com.london.domain.usecase.GetTrendingMoviesUseCase
+import com.london.domain.usecase.details.movie.GetMovieUseCase
 import com.london.presentation.shared.base.ErrorState
 import com.london.presentation.utils.MovieGenre
 import io.mockk.clearAllMocks
@@ -26,17 +26,17 @@ import org.junit.Test
 @OptIn(ExperimentalCoroutinesApi::class)
 class TrendingMoviesViewModelTest {
     private lateinit var viewModel: TrendingMoviesViewModel
-    private val getTrendingMovies: GetTrendingMoviesUseCase = mockk()
+    private val getMovieUseCase: GetMovieUseCase = mockk()
     private val testDispatcher = UnconfinedTestDispatcher()
 
     @Before
     fun setup() {
         Dispatchers.setMain(testDispatcher)
-        coEvery { getTrendingMovies.invoke(any(), any()) } returns createMockPagedFetchResponse(emptyList())
+        coEvery { getMovieUseCase.getTrendingMovies(any(), any()) } returns createMockPagedFetchResponse(emptyList())
         viewModel = createViewModel()
     }
 
-    private fun createViewModel() = TrendingMoviesViewModel(getTrendingMovies)
+    private fun createViewModel() = TrendingMoviesViewModel(getMovieUseCase)
 
     @After
     fun tearDown() {
@@ -48,7 +48,7 @@ class TrendingMoviesViewModelTest {
 
         //Given
         coEvery {
-            getTrendingMovies.invoke(
+            getMovieUseCase.getTrendingMovies(
                 page = any(),
                 movieGenreId = any()
             )
@@ -93,7 +93,7 @@ class TrendingMoviesViewModelTest {
 
         // Given
         val movie = createMockMovie()
-        coEvery { getTrendingMovies.invoke(any(), any()) } returns
+        coEvery { getMovieUseCase.getTrendingMovies(any(), any()) } returns
                 createMockPagedFetchResponse(listOf(movie))
 
         // When

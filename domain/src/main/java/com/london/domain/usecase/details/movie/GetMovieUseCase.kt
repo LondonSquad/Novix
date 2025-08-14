@@ -38,8 +38,23 @@ class GetMovieUseCase @Inject constructor(
 
     suspend fun getMovieVideo(movieId: Int): List<String> = movieRepository.getMovieVideos(movieId)
 
-    suspend fun getTrendingMovies(page: Int): PagedFetchResponse<Trending> =
-        movieRepository.getTrendingMovies(page)
+    suspend fun getTrendingMovies(page: Int, movieGenreId: Int?): PagedFetchResponse<Trending> {
+        val trendingMovies = movieRepository.getTrendingMovies(page)
+
+        val genreId = if (movieGenreId == -1) null else movieGenreId
+
+        val filteredItems = if (genreId != null)
+            trendingMovies.items.filter { it.genreIds.contains(genreId) }
+        else
+            trendingMovies.items
+
+        return PagedFetchResponse(
+            currentPage = trendingMovies.currentPage,
+            items = filteredItems,
+            totalPages = trendingMovies.totalPages,
+            totalItems = trendingMovies.totalItems,
+        )
+    }
 
     suspend fun getPopularMovies(limit: Int = POPULAR_LIMIT) : List<PopularMedia> =
         movieRepository.getPopularMovies().take(limit)
