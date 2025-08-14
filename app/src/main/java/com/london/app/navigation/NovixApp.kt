@@ -439,7 +439,7 @@ fun NavGraphBuilder.mainNavGraph(
         popExitTransition = { fadeOut(tween(500)) },
     ) {
         TopTvShowsPicksScreen(
-            onNavigateTvShow = { tvShowId ->
+            onNavigateToTvShowDetails = { tvShowId ->
                 navController.navigate(TvShowDetails(tvShowId))
             },
             onNavigateBack = {
@@ -510,9 +510,9 @@ fun NavGraphBuilder.mainNavGraph(
 
     composable<ActorDetails> {
         ActorDetailsScreen(
-            onNavigateToMoviePicks = { actorId ->
+            onNavigateToTopMoviePicks = { actorId ->
                 navController.navigate(Screen.ActorTopMoviesPicksDetails(actorId))
-            }, onNavigateToTvShowPicks = { actorId ->
+            }, onNavigateToTopTvShowPicks = { actorId ->
                 navController.navigate(Screen.TopTvShowsPicksDetails(actorId))
             },
             onNavigateToGallery = { actorId ->
