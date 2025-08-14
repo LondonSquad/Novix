@@ -13,7 +13,7 @@ import org.junit.Before
 import org.junit.Test
 import org.junit.jupiter.api.assertThrows
 
-class GetTopRatedMoviesUseCaseTest {
+class GetAllUseCaseTest {
 
     private lateinit var repository: MovieRepository
     private lateinit var getTopRatedMovies: GetTopRatedMoviesUseCase
@@ -40,7 +40,7 @@ class GetTopRatedMoviesUseCaseTest {
         } returns mockPagedResponse
 
         // When
-        val result = getTopRatedMovies.getTopRatedMovies(PAGE)
+        val result = getTopRatedMovies.getAll(PAGE)
 
         // Then
         assertThat(result).isEqualTo(mockPagedResponse)
@@ -63,7 +63,7 @@ class GetTopRatedMoviesUseCaseTest {
         } returns emptyPagedResponse
 
         // When
-        val result = getTopRatedMovies.getTopRatedMovies(PAGE)
+        val result = getTopRatedMovies.getAll(PAGE)
 
         // Then
         assertThat(result.items).isEmpty()
@@ -78,7 +78,7 @@ class GetTopRatedMoviesUseCaseTest {
 
         // When & Then
         assertThrows<RuntimeException> {
-            getTopRatedMovies.getTopRatedMovies(PAGE)
+            getTopRatedMovies.getAll(PAGE)
         }
     }
 

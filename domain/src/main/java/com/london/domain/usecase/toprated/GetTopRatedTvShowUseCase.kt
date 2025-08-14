@@ -8,7 +8,7 @@ import javax.inject.Inject
 class GetTopRatedTvShowUseCase @Inject constructor(
     private val repository: TvShowRepository
 ) {
-    suspend fun getTopRatedTvShows(
+    suspend fun getAll(
         pageNumber: Int,
         genreId: Int? = null
     ) : PagedFetchResponse<TopRatedMedia> {
@@ -24,7 +24,7 @@ class GetTopRatedTvShowUseCase @Inject constructor(
         )
     }
 
-    suspend fun getMostRecentTopRatedTvShow(limit: Int = LIMIT) =
+    suspend fun getMostRecent(limit: Int = LIMIT) =
         repository.getFirstPageTopRatedTvShows().take(limit)
 
     companion object {

@@ -53,8 +53,8 @@ class HomeViewModelTest {
 
         coEvery { getPopularMovies.invoke() } returns emptyList()
         coEvery { manageTvShowDetailsUseCase.getPopularTvShows() } returns emptyList()
-        coEvery { getTopRatedMovies.getMostRecentTopRatedMovies() } returns emptyList()
-        coEvery { getTopRatedTvShows.getMostRecentTopRatedTvShow() } returns emptyList()
+        coEvery { getTopRatedMovies.getMostRecent() } returns emptyList()
+        coEvery { getTopRatedTvShows.getMostRecent() } returns emptyList()
         coEvery { manageRecentMovieWatchedUseCase.getMostRecent() } returns flowOf(emptyList())
         coEvery { manageRecentTvShowWatchedUseCase.getMostRecent() } returns flowOf(emptyList())
         coEvery {
@@ -118,8 +118,8 @@ class HomeViewModelTest {
             createMockTopRatedMedia(4, MediaType.TvShow)
         )
 
-        coEvery { getTopRatedMovies.getMostRecentTopRatedMovies() } returns mockTopRatedMovies
-        coEvery { getTopRatedTvShows.getMostRecentTopRatedTvShow() } returns mockTopRatedTvShows
+        coEvery { getTopRatedMovies.getMostRecent() } returns mockTopRatedMovies
+        coEvery { getTopRatedTvShows.getMostRecent() } returns mockTopRatedTvShows
 
         // When
         advanceUntilIdle()

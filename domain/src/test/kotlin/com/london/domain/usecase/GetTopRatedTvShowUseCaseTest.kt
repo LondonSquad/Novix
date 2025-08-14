@@ -39,7 +39,7 @@ class GetTopRatedTvShowUseCaseTest {
         } returns mockPagedResponse
 
         // When
-        val result = getTopRatedTvSeries.getTopRatedTvShows(PAGE)
+        val result = getTopRatedTvSeries.getAll(PAGE)
 
         // Then
         assertThat(result).isEqualTo(mockPagedResponse)
@@ -61,7 +61,7 @@ class GetTopRatedTvShowUseCaseTest {
         } returns emptyPagedResponse
 
         // When
-        val result = getTopRatedTvSeries.getTopRatedTvShows(PAGE)
+        val result = getTopRatedTvSeries.getAll(PAGE)
 
         // Then
         assertThat(result.items).isEmpty()
@@ -77,7 +77,7 @@ class GetTopRatedTvShowUseCaseTest {
 
         // When & Then
         assertThrows<RuntimeException> {
-            getTopRatedTvSeries.getTopRatedTvShows(PAGE)
+            getTopRatedTvSeries.getAll(PAGE)
         }
     }
 

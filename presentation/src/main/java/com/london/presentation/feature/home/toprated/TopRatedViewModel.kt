@@ -69,7 +69,7 @@ class TopRatedViewModel @Inject constructor(
     private fun initializeTopMovies() {
         tryToExecute(block = {
             val moviesFlow = createPagingSourceFlow(query = "") { _, pageNumber ->
-                getTopRatedMoviesUseCase.getTopRatedMovies(
+                getTopRatedMoviesUseCase.getAll(
                     pageNumber,
                     if (state.value.selectedMovieGenre == MovieGenre.All) null
                     else state.value.selectedMovieGenre.id
@@ -91,7 +91,7 @@ class TopRatedViewModel @Inject constructor(
     private fun initializeTvShow() {
         tryToExecute(block = {
             val tvSeriesFlow = createPagingSourceFlow(query = "") { _, pageNumber ->
-                getTopRatedTvShowUseCase.getTopRatedTvShows(
+                getTopRatedTvShowUseCase.getAll(
                     pageNumber,
                     if (state.value.selectedTvShowGenre == TvShowGenre.All) null
                     else state.value.selectedTvShowGenre.id

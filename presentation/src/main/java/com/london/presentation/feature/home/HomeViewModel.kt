@@ -89,8 +89,8 @@ class HomeViewModel @Inject constructor(
         updateState { copy(topRatedMediaList = topRatedMediaList.toUiMedia().shuffled()) }
 
     private suspend fun fetchTopRatedMedia(): List<TopRatedMedia> {
-        val movies = getTopRatedMovies.getMostRecentTopRatedMovies()
-        val tvShows = getTopRatedTvShows.getMostRecentTopRatedTvShow()
+        val movies = getTopRatedMovies.getMostRecent()
+        val tvShows = getTopRatedTvShows.getMostRecent()
 
         return movies + tvShows
     }
