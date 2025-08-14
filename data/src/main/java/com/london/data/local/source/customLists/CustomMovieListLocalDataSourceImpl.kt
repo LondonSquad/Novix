@@ -15,6 +15,7 @@ class CustomMovieListLocalDataSourceImpl @Inject constructor(
     private val syncMetadataDao: SyncMetadataDao
 ) : CustomMovieListLocalDataSource {
 
+    // Existing methods...
     override suspend fun isMovieListed(movieId: Int): Boolean {
         return membershipDao.isMovieListed(movieId)
     }
@@ -39,6 +40,22 @@ class CustomMovieListLocalDataSourceImpl @Inject constructor(
         return membershipDao.getAllListedMovieIdsFlow()
     }
 
+    override suspend fun getMovieIdsForList(listId: Int, limit: Int, offset: Int): List<Int> {
+        return membershipDao.getMovieIdsForList(listId, limit, offset)
+    }
+
+    override fun getMovieIdsForListFlow(listId: Int): Flow<List<Int>> {
+        return membershipDao.getMovieIdsForListFlow(listId)
+    }
+
+    override suspend fun getMovieCountForList(listId: Int): Int {
+        return membershipDao.getMovieCountForList(listId)
+    }
+
+    override fun getMovieCountForListFlow(listId: Int): Flow<Int> {
+        return membershipDao.getMovieCountForListFlow(listId)
+    }
+
     override suspend fun getAllUserLists(): List<MovieListLocal> {
         return movieListDao.getAllLists()
     }
@@ -47,14 +64,45 @@ class CustomMovieListLocalDataSourceImpl @Inject constructor(
         return movieListDao.getAllListsFlow()
     }
 
+    override suspend fun getMovieList(listId: Int): MovieListLocal? {
+        return movieListDao.getList(listId)
+    }
+
+    override fun getMovieListFlow(listId: Int): Flow<MovieListLocal?> {
+        return movieListDao.getListFlow(listId)
+    }
+
+    override suspend fun getMovieListsPaged(limit: Int, offset: Int): List<MovieListLocal> {
+        return movieListDao.getListsPaged(limit, offset)
+    }
+
     override suspend fun cacheMovieListMemberships(memberships: List<MovieListMembershipLocal>) {
         membershipDao.replaceAllMemberships(memberships)
     }
 
     override suspend fun addMovieToListCache(movieId: Int, listId: Int) {
-        membershipDao.insertMemberships(
-            listOf(MovieListMembershipLocal(movieId = movieId, listId = listId))
+        membershipDao.insertMembership(
+            MovieListMembershipLocal(movieId = movieId, listId = listId)
         )
+    }
+
+    override suspend fun removeMovieFromListCache(movieId: Int, listId: Int) {
+        membershipDao.removeMembership(movieId, listId)
+    }
+
+    override suspend fun replaceMembershipsForList(
+        listId: Int,
+        memberships: List<MovieListMembershipLocal>
+    ) {
+        membershipDao.replaceMembershipsForList(listId, memberships)
+    }
+
+    override suspend fun cacheMovieListsMetadata(lists: List<MovieListLocal>) {
+        movieListDao.insertLists(lists)
+    }
+
+    override suspend fun addMovieListCache(movieList: MovieListLocal) {
+        movieListDao.insertList(movieList)
     }
 
     override suspend fun removeMovieListCache(listId: Int) {
@@ -62,12 +110,8 @@ class CustomMovieListLocalDataSourceImpl @Inject constructor(
         movieListDao.removeList(listId)
     }
 
-    override suspend fun addMovieListCache(movieList: MovieListLocal) {
-        movieListDao.insertList(movieList)
-    }
-
-    override suspend fun removeMovieFromListCache(movieId: Int, listId: Int) {
-        membershipDao.removeMembership(movieId, listId)
+    override suspend fun updateMovieListItemCount(listId: Int, itemCount: Int) {
+        movieListDao.updateItemCount(listId, itemCount)
     }
 
     override suspend fun shouldRefreshCache(): Boolean {
@@ -96,5 +140,4 @@ class CustomMovieListLocalDataSourceImpl @Inject constructor(
         private const val CACHE_VALIDITY_MS = 30 * 60 * 1000L // 30 minutes
         private const val SYNC_KEY = SyncMetadataDao.MOVIE_LISTS_SYNC_KEY
     }
-
 }

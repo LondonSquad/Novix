@@ -1,6 +1,5 @@
 package com.london.data.di
 
-import androidx.work.WorkManager
 import com.london.data.local.database.dao.search.GenreInterestDao
 import com.london.data.local.model.home.popular.PopularSectionLocal
 import com.london.data.local.model.home.topRated.TopRatedLocal
@@ -238,13 +237,13 @@ object RepositoryModule {
         remoteDataSource: CustomMovieListsRemoteDataSource,
         preferencesService: AppPreferencesService,
         authPreferences: AuthPreferences,
-        workManager: WorkManager
+        crashReporter: CrashReporter
     ): CustomMovieListRepository = CustomMovieListRepositoryImpl(
         localDataSource = localDataSource,
         remoteDataSource = remoteDataSource,
         preferencesService = preferencesService,
         authPreferences = authPreferences,
-        workManager = workManager
+        crashReporter = crashReporter
     )
 
     @Provides
