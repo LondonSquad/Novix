@@ -1,6 +1,7 @@
 package com.london.domain.usecase.login
 
 import com.google.common.truth.Truth.assertThat
+import com.london.domain.repository.AccountRepository
 import com.london.domain.repository.AuthenticationRepository
 import com.london.domain.usecase.authentication.AuthenticationUseCase
 import io.mockk.coEvery
@@ -13,6 +14,8 @@ import org.junit.Test
 class AuthenticationUseCaseTest {
 
     private lateinit var authenticationRepository: AuthenticationRepository
+    private lateinit var authRepository: AuthenticationRepository
+    private lateinit var accountRepository: AccountRepository
     private lateinit var authenticationUseCase: AuthenticationUseCase
 
     // region LoginAsGuest
@@ -20,6 +23,11 @@ class AuthenticationUseCaseTest {
     fun setUp() {
         authenticationRepository = mockk()
         authenticationUseCase = AuthenticationUseCase(authenticationRepository)
+        authRepository = mockk()
+        accountRepository = mockk()
+        authenticationUseCase = AuthenticationUseCase(
+            repository = authenticationRepository,
+        )
     }
 
     @Test
