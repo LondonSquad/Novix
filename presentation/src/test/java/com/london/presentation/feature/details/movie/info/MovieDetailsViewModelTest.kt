@@ -1,4 +1,4 @@
-package com.london.presentation.feature.details.tvshow.info
+package com.london.presentation.feature.details.movie.info
 
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
@@ -8,7 +8,7 @@ import com.london.domain.entity.Actor
 import com.london.domain.entity.Movie
 import com.london.domain.entity.moviedatails.MovieDetails
 import com.london.domain.usecase.authentication.AuthenticationUseCase
-import com.london.domain.usecase.details.movie.ManageMovieDetailsUseCase
+import com.london.domain.usecase.details.movie.GetMovieUseCase
 import com.london.domain.usecase.rating.ManageRatingUseCase
 import com.london.domain.usecase.recent.viewed.ManageRecentViewedUseCase
 import com.london.domain.usecase.recent.watched.movie.ManageRecentMovieWatchedUseCase
@@ -36,8 +36,7 @@ import org.junit.Test
 
 @OptIn(ExperimentalCoroutinesApi::class)
 class MovieDetailsViewModelTest {
-
-    private lateinit var movieDetails: ManageMovieDetailsUseCase
+    private lateinit var getMovieUseCase: GetMovieUseCase
     private lateinit var manageRecentMovieWatchedUseCase: ManageRecentMovieWatchedUseCase
     private lateinit var manageRecentViewedUseCase: ManageRecentViewedUseCase
     private lateinit var ratingUseCase: ManageRatingUseCase
@@ -59,15 +58,15 @@ class MovieDetailsViewModelTest {
         ratingUseCase = mockk()
         manageRecentViewedUseCase = mockk()
         manageRecentMovieWatchedUseCase = mockk()
-        movieDetails = mockk()
+        getMovieUseCase = mockk()
         every { savedStateHandle.getArgs<Screen.MovieDetails>() } returns Screen.MovieDetails(
             MOVIE_ID
         )
-        coEvery { movieDetails.getMovieDetails(any()) } returns mockMovieDetails
-        coEvery { movieDetails.getMovieImages(any()) } returns mockMovieImages
-        coEvery { movieDetails.getMovieCast(any()) } returns mockMovieCast
-        coEvery { movieDetails.getSimilarMovies(any()) } returns mockSimilarMovies
-        coEvery { movieDetails.getMovieVideo(any()) } returns mockMovieVideos
+        coEvery { getMovieUseCase.getMovieDetails(any()) } returns mockMovieDetails
+        coEvery { getMovieUseCase.getMovieImages(any()) } returns mockMovieImages
+        coEvery { getMovieUseCase.getMovieCast(any()) } returns mockMovieCast
+        coEvery { getMovieUseCase.getSimilarMovies(any()) } returns mockSimilarMovies
+        coEvery { getMovieUseCase.getMovieVideo(any()) } returns mockMovieVideos
         coEvery { authenticationUseCase.isLoggedIn() } returns false
         coEvery { ratingUseCase.getRateAccountMovieStatesById(any()) } returns 0
         coEvery { manageRecentMovieWatchedUseCase.addMovieToRecentWatched(any()) } returns Unit
@@ -75,7 +74,7 @@ class MovieDetailsViewModelTest {
     }
 
     private fun createViewModel() = MovieDetailsViewModel(
-        movieDetails,
+        getMovieUseCase,
         manageRecentMovieWatchedUseCase,
         manageRecentViewedUseCase,
         ratingUseCase,
@@ -118,7 +117,7 @@ class MovieDetailsViewModelTest {
 
     @Test
     fun `loadSimilarAndVideos should show error state when fails`() = runTest {
-        coEvery { movieDetails.getSimilarMovies(any()) } throws Exception("Network error")
+        coEvery { getMovieUseCase.getSimilarMovies(any()) } throws Exception("Network error")
 
         val testViewModel = createViewModel()
         advanceUntilIdle()
@@ -132,7 +131,7 @@ class MovieDetailsViewModelTest {
 
     @Test
     fun `should show error state, when primary initialization fails`() = runTest {
-        coEvery { movieDetails.getMovieDetails(any()) } throws Exception("Network error")
+        coEvery { getMovieUseCase.getMovieDetails(any()) } throws Exception("Network error")
 
         val testViewModel = createViewModel()
         advanceUntilIdle()
@@ -275,11 +274,11 @@ class MovieDetailsViewModelTest {
 
     @Test
     fun `onRetry should clear error and reload data`() = runTest {
-        coEvery { movieDetails.getMovieDetails(any()) } throws Exception("Network error")
+        coEvery { getMovieUseCase.getMovieDetails(any()) } throws Exception("Network error")
         val testViewModel = createViewModel()
         advanceUntilIdle()
 
-        coEvery { movieDetails.getMovieDetails(any()) } returns mockMovieDetails
+        coEvery { getMovieUseCase.getMovieDetails(any()) } returns mockMovieDetails
 
         testViewModel.onRetry()
         advanceUntilIdle()
@@ -309,13 +308,13 @@ class MovieDetailsViewModelTest {
             assertThat(testViewModel.getMovieId()).isEqualTo(0)
             advanceUntilIdle()
 
-            coVerify { movieDetails.getMovieDetails(0) }
+            coVerify { getMovieUseCase.getMovieDetails(0) }
             testViewModel.viewModelScope.cancel()
         }
 
     @Test
     fun `getMovieImages should use poster as fallback when returns empty list`() = runTest {
-        coEvery { movieDetails.getMovieImages(any()) } returns emptyList()
+        coEvery { getMovieUseCase.getMovieImages(any()) } returns emptyList()
         val testViewModel = createViewModel()
         advanceUntilIdle()
 

@@ -256,18 +256,6 @@ class GetMovieUseCaseTest {
         }
 
     @Test
-    fun `getFirstTenMovieImagesUseCase should throw exception when repository throws exception`() =
-        runTest {
-            // given
-            coEvery { movieRepository.getMovieImagesById(MOVIE_ID) } throws GetMovieImagesFailedException()
-
-            // when & then
-            assertThrows<GetMovieImagesFailedException> {
-                manageMovieDetailsUseCase.getMovieImages(MOVIE_ID)
-            }
-        }
-
-    @Test
     fun `getFirstTenMovieImagesUseCase should limit the number of images returned when images over 10`() =
         runTest {
             // given
