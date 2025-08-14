@@ -21247,5 +21247,33 @@
       "deletions": 286,
       "changed_files": 80
     }
+  },
+  {
+    "pr_number": 635,
+    "url": "https://github.com/LondonSquad/Novix/pull/635",
+    "title": "Refactor: remove release key from git & add to secrets",
+    "opened_at": "2025-08-14T13:49:01Z",
+    "head_ref": "refactor/release-key",
+    "base_ref": "develop",
+    "creator": {
+      "login": "yusufnasserdev",
+      "id": 43588217,
+      "url": "https://github.com/yusufnasserdev"
+    },
+    "approvals": [],
+    "first_approved_at": null,
+    "time_to_first_approval_minutes": null,
+    "required_approvals_met_at": null,
+    "time_to_required_approvals_minutes": null,
+    "closed_at": null,
+    "merged_at": null,
+    "merged_by": null,
+    "week": "2025-W33",
+    "status": "pending",
+    "diff_stats": {
+      "additions": 40,
+      "deletions": 18,
+      "changed_files": 6
+    }
   }
 ]
