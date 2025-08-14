@@ -463,7 +463,24 @@ fun NavGraphBuilder.mainNavGraph(
         popExitTransition = { fadeOut(tween(500)) },
     ) {
         MovieDetailsScreen(
-            navController = navController
+            onNavigateBack = {
+                navController.navigateUp()
+            },
+            onNavigateGenre = { genreId ->
+                navController.navigate(Screen.MoviesByCategory(genreId))
+            },
+            onNavigateToMovie = { movieId ->
+                navController.navigate(MovieDetails(movieId))
+            },
+            onNavigateToActor = { actorId ->
+                navController.navigate(ActorDetails(actorId))
+            },
+            onNavigateToReviews = { movieId, mediaType ->
+                navController.navigate(Screen.Reviews(movieId, mediaType))
+            },
+            onNavigateToLogin = {
+                navController.navigate(Screen.Login)
+            }
         )
     }
 
