@@ -106,6 +106,25 @@ class TvShowRepositoryImpl @Inject constructor(
         )
     }
 
+    override suspend fun getFirstPageTopRatedTvShows() = fetchAndSync(
+        cacheBlock = {
+            val local = localTopRated.getAll()
+                .filter { it.mediaType == MediaType.TvShow }
+                .map { it.toEntity() }
+            local.takeIf { it.isNotEmpty() }
+        },
+        networkBlock = {
+            tvShowRemoteDataSource
+                .getTopRatedTvShows(pageNumber = PAGE_NUMBER)
+                .getOrThrow()
+                .items.map { it.toEntity() }
+        },
+        syncBlock = { topRatedTvShows ->
+            localTopRated.insertAll(topRatedTvShows.map { it.toLocal() })
+        },
+        crashReporter = crashReporter
+    )
+
     override suspend fun getTopRatedTvShows(
         pageNumber: Int
     ): PagedFetchResponse<TopRatedMedia> = fetchAndSync(
@@ -233,4 +252,8 @@ class TvShowRepositoryImpl @Inject constructor(
         guestSessionId = authenticationPreferences.getGuestSessionId(),
         userSessionId = authenticationPreferences.getSessionId(),
     ).getOrThrow().toEntity()
+
+    companion object {
+        const val PAGE_NUMBER = 1
+    }
 }
