@@ -8,7 +8,7 @@
 .gradle
 .DS_Store
 .kotlin
-local.properties
+*.properties
 
 .idea/
 .idea/caches
