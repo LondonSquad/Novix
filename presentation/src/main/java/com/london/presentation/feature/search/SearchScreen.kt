@@ -8,17 +8,13 @@ import androidx.compose.foundation.interaction.collectIsFocusedAsState
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.LazyRow
-import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.runtime.Composable
@@ -26,7 +22,6 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.LocalFocusManager
@@ -49,16 +44,12 @@ import com.london.designsystem.component.EmptyLayout
 import com.london.designsystem.component.Icon
 import com.london.designsystem.component.NovixChip
 import com.london.designsystem.component.OutlinedTextField
-import com.london.designsystem.component.SectionHeader
 import com.london.designsystem.component.Text
 import com.london.designsystem.component.TopBar
 import com.london.designsystem.theme.NovixTheme
-import com.london.domain.entity.recent.MediaType
 import com.london.domain.entity.recent.RecentSearch
-import com.london.domain.entity.recent.RecentViewed
 import com.london.presentation.R
 import com.london.presentation.shared.ActorsLayout
-import com.london.presentation.shared.HomeCard
 import com.london.presentation.shared.MoviesLayOut
 import com.london.presentation.shared.TriangleBlurredShape
 import com.london.presentation.shared.TvShowLayOut
@@ -93,14 +84,11 @@ fun SearchScreen(
             viewModel.updateRecentData()
         }
     }
-
-
-        Content(
-            state = state,
-            contract = viewModel,
-            keyboardController = keyboardController,
-        )
-
+    Content(
+        state = state,
+        contract = viewModel,
+        keyboardController = keyboardController,
+    )
 }
 
 @Composable
@@ -242,7 +230,6 @@ private fun Content(
                                         SearchContentWithErrorHandling(
                                             moviesLazyList,
                                             contract,
-                                            state
                                         ) { isLoading ->
                                             ResultOrEmpty(
                                                 items = moviesLazyList.itemSnapshotList.items,
@@ -275,7 +262,6 @@ private fun Content(
                                         SearchContentWithErrorHandling(
                                             tvShowsLazyList,
                                             contract,
-                                            state
                                         ) { isLoading ->
                                             ResultOrEmpty(
                                                 items = tvShowsLazyList.itemSnapshotList.items,
@@ -312,7 +298,6 @@ private fun Content(
                                         SearchContentWithErrorHandling(
                                             actorsLazyList,
                                             contract,
-                                            state
                                         ) { isLoading ->
                                             ResultOrEmpty(
                                                 items = actorsLazyList.itemSnapshotList.items,
@@ -446,7 +431,7 @@ private fun SearchChipsRow(
 }
 
 @Composable
-private fun RecentSearchLayOut(
+fun RecentSearchLayOut(
     state: SearchUiState,
     contract: SearchContract,
     onNavigateToTvShowDetails: (Int) -> Unit,
@@ -487,129 +472,6 @@ private fun RecentSearchLayOut(
 }
 
 @Composable
-fun RecentViewedSection(
-    recentViewed: List<RecentViewed>,
-    onClearAll: () -> Unit,
-    onNavigateToTvShowDetails: (Int) -> Unit,
-    onNavigateToMovieDetails: (Int) -> Unit,
-) {
-    SectionHeader(
-        text = stringResource(R.string.recent_viewed),
-        hasGetAll = true,
-        hasIcon = false,
-        getAllText = stringResource(R.string.clear_all),
-        onClick = onClearAll,
-        modifier = Modifier.padding(vertical = 12.dp, horizontal = 16.dp)
-    )
-
-    LazyRow(
-        modifier = Modifier
-            .fillMaxWidth()
-            .height(210.dp),
-        horizontalArrangement = Arrangement.spacedBy(8.dp),
-        contentPadding = PaddingValues(horizontal = 16.dp),
-    ) {
-        items(recentViewed) { item ->
-            HomeCard(
-                imageUrl = item.imageUrl,
-                isSaved = false,
-                onSaveClick = { },
-                modifier = Modifier.clickable {
-                    when (item.type) {
-                        MediaType.Movie -> onNavigateToMovieDetails(item.id)
-                        MediaType.TvShow -> onNavigateToTvShowDetails(item.id)
-                    }
-                },
-                isDarkMode = NovixTheme.isThemeDark
-            )
-        }
-    }
-}
-
-@Composable
-fun RecentSearchesSection(
-    recentSearches: List<RecentSearch>,
-    onClearAll: () -> Unit,
-    onSearchClick: (String) -> Unit,
-    onRemoveClick: (RecentSearch) -> Unit
-) {
-    SectionHeader(
-        text = stringResource(R.string.recent_search),
-        hasGetAll = true,
-        hasIcon = false,
-        getAllText = stringResource(R.string.clear_all),
-        onClick = onClearAll,
-        modifier = Modifier.padding(vertical = 12.dp, horizontal = 16.dp)
-    )
-
-    Column(
-        modifier = Modifier
-            .background(NovixTheme.colors.surface)
-            .padding(horizontal = 16.dp)
-    ) {
-        recentSearches.forEachIndexed { index, search ->
-            val isLastItem = index == recentSearches.lastIndex
-            RecentSearchItem(
-                search = search.query,
-                onSearchClick = { onSearchClick(search.query) },
-                onRemoveClick = { onRemoveClick(search) },
-                showDivider = !isLastItem
-            )
-        }
-    }
-}
-
-@Composable
-private fun RecentSearchItem(
-    search: String,
-    onSearchClick: () -> Unit,
-    onRemoveClick: () -> Unit,
-    modifier: Modifier = Modifier,
-    showDivider: Boolean = true
-) {
-    Row(
-        modifier = modifier
-            .fillMaxWidth()
-            .clickable { onSearchClick() }
-            .padding(vertical = 8.dp),
-        verticalAlignment = Alignment.CenterVertically) {
-        Icon(
-            painter = painterResource(id = R.drawable.icon_clock),
-            contentDescription = stringResource(R.string.clock),
-            tint = NovixTheme.colors.hint,
-            modifier = Modifier
-                .padding(end = 8.dp)
-                .size(20.dp)
-        )
-        Text(
-            text = search,
-            style = NovixTheme.typography.body.medium,
-            color = NovixTheme.colors.title,
-            modifier = Modifier
-                .padding(end = 4.dp)
-                .weight(1f)
-        )
-        Icon(
-            painter = painterResource(id = R.drawable.icon_remove_filled),
-            contentDescription = stringResource(R.string.clear),
-            tint = NovixTheme.colors.hint,
-            modifier = Modifier
-                .size(16.dp)
-                .clickable { onRemoveClick() })
-    }
-
-    if (showDivider) {
-        Box(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(horizontal = 7.5.dp)
-                .height(1.dp)
-                .background(NovixTheme.colors.stroke)
-        )
-    }
-}
-
-@Composable
 private fun NoEarlierSearchLayout(
     modifier: Modifier = Modifier
 ) {
@@ -636,7 +498,6 @@ private fun NoSearchResultLayOut(
 private fun SearchContentWithErrorHandling(
     lazyPagingItems: LazyPagingItems<*>,
     contract: SearchContract,
-    state: SearchUiState,
     content: @Composable (Boolean) -> Unit
 ) {
     HandleLoadStateError(lazyPagingItems.loadState, contract)
@@ -646,9 +507,7 @@ private fun SearchContentWithErrorHandling(
 
     if (hasError) {
         NetworkErrorScreen(
-            onRetry = {
-                contract.onRetryClick()
-            },
+            onRetry = { contract.onRetryClick() },
             onBack = null
         )
     } else {
