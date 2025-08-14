@@ -30,7 +30,6 @@ fun <T : Any> MediaLazyVerticalGrid(
     onSaveClick: (T) -> Unit = {},
     isItemSaved: (T) -> Boolean = { false },
     onDeleteClick: (T) -> Unit = {},
-    isDarkMode: Boolean = true,
     myRatingList: Boolean = false,
     rate: String = "3",
     onNavigateToMovie: (Int) -> Unit = {},
