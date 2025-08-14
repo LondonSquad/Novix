@@ -8,7 +8,7 @@ import javax.inject.Inject
 class GetTopRatedMoviesUseCase @Inject constructor(
     private val topRatedMovieRepo: MovieRepository
 ) {
-    suspend operator fun invoke(
+    suspend fun getAll(
         pageNumber: Int,
         genreId: Int? = null
     ): PagedFetchResponse<TopRatedMedia> {
@@ -22,5 +22,12 @@ class GetTopRatedMoviesUseCase @Inject constructor(
             items = filteredItems,
             totalPages = filteredItems.size
         )
+    }
+
+    suspend fun getMostRecent(limit: Int = LIMIT): List<TopRatedMedia> =
+        topRatedMovieRepo.getFirstPageTopRatedMovies().take(limit)
+
+    companion object {
+        const val LIMIT = 10
     }
 }
