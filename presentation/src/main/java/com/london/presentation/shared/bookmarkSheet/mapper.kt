@@ -7,6 +7,6 @@ fun List<MovieList>.toBookmarkUiLists(): List<BookmarkUiList> =
         BookmarkUiList(
             id = movieList.id,
             name = movieList.name,
-            itemCount = movieList.moviesCount.toUShort()
+            itemCount = movieList.moviesCount
         )
     }

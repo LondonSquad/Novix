@@ -305,7 +305,7 @@ private fun Content(
                 BookmarkBottomSheet(
                     onSheetDismiss = homeScreenContract::onBookmarkSheetDismiss,
                     isSheetVisible = uiState.isBookmarkSheetVisible,
-                    bookmarkedMovieId = uiState.bookmarkedMovieId.toUInt()
+                    bookmarkedMovieId = uiState.bookmarkedMovieId
                 )
             }
         }
