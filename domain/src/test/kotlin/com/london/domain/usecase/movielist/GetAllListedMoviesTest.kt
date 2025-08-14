@@ -84,7 +84,7 @@ class GetAllListedMoviesTest {
                     posterUrl = "none",
                     releaseYear = 1,
                     rating = 1,
-                    genreIds = listOf(1, 2, 3)
+                    genres = listOf(1, 2, 3)
                 ),
                 Movie(
                     id = 2,
@@ -92,7 +92,7 @@ class GetAllListedMoviesTest {
                     posterUrl = "none",
                     releaseYear = 1,
                     rating = 1,
-                    genreIds = listOf(1, 6, 3)
+                    genres = listOf(1, 6, 3)
                 )
             )
         )
@@ -107,7 +107,7 @@ class GetAllListedMoviesTest {
                     posterUrl = "none",
                     releaseYear = 1,
                     rating = 1,
-                    genreIds = listOf(1, 2, 3)
+                    genres = listOf(1, 2, 3)
                 ),
                 Movie(
                     id = 4,
@@ -115,7 +115,7 @@ class GetAllListedMoviesTest {
                     posterUrl = "none",
                     releaseYear = 1,
                     rating = 1,
-                    genreIds = listOf(1, 6, 3)
+                    genres = listOf(1, 6, 3)
                 )
             )
         )
@@ -126,7 +126,7 @@ class GetAllListedMoviesTest {
                 posterUrl = "none",
                 releaseYear = 1,
                 rating = 1,
-                genreIds = listOf(1, 2, 3)
+                genres = listOf(1, 2, 3)
             ),
             Movie(
                 id = 2,
@@ -134,7 +134,7 @@ class GetAllListedMoviesTest {
                 posterUrl = "none",
                 releaseYear = 1,
                 rating = 1,
-                genreIds = listOf(1, 6, 3)
+                genres = listOf(1, 6, 3)
             ),
             Movie(
                 id = 3,
@@ -142,7 +142,7 @@ class GetAllListedMoviesTest {
                 posterUrl = "none",
                 releaseYear = 1,
                 rating = 1,
-                genreIds = listOf(1, 2, 3)
+                genres = listOf(1, 2, 3)
             ),
             Movie(
                 id = 4,
@@ -150,7 +150,7 @@ class GetAllListedMoviesTest {
                 posterUrl = "none",
                 releaseYear = 1,
                 rating = 1,
-                genreIds = listOf(1, 6, 3)
+                genres = listOf(1, 6, 3)
             )
         )
     }

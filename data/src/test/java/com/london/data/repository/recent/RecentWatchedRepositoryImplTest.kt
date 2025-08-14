@@ -128,7 +128,7 @@ class RecentWatchedRepositoryImplTest {
             posterUrl = "none",
             releaseYear = 1,
             rating = 1,
-            genreIds = listOf(1, 2, 3)
+            genres = listOf(1, 2, 3)
         )
         val tvShow = TvShow(
             id = 1,

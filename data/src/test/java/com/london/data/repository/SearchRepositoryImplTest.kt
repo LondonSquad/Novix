@@ -322,7 +322,7 @@ class SearchRepositoryImplTest {
                     posterUrl = "https://image.tmdb.org/t/p/w500",
                     releaseYear = 2020,
                     rating = 8,
-                    genreIds = listOf(),
+                    genres = listOf(),
                 )
             ),
             totalItems = 1,

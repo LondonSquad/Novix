@@ -103,7 +103,7 @@ private fun UpcomingStickyHeader(
     GenresSection(
         isLoading = isLoading,
         genres = state.movieGenres,
-        selectedGenreId = state.selectedMovieGenre.id,
+        selectedGenreId = state.selectedMovieGenre,
         screenWidth = screenWidth,
         onGenreClick = contract::onMovieGenreSelect,
         modifier = Modifier

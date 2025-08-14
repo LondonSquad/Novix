@@ -100,7 +100,7 @@ class ManageSearchUseCaseTest {
             posterUrl = "",
             releaseYear = 2024,
             rating = 8,
-            genreIds = listOf(1, 2, 3)
+            genres = listOf(1, 2, 3)
         )
         val moviesPagedResponse: PagedFetchResponse<Movie> = PagedFetchResponse(
             currentPage = 1,

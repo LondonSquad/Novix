@@ -3,7 +3,7 @@ package com.london.presentation.feature.home.trending.movie
 import com.london.domain.usecase.details.movie.GetMovieUseCase
 import com.london.presentation.shared.base.BaseViewModel
 import com.london.presentation.shared.base.createPagingSourceFlow
-import com.london.presentation.utils.MovieGenre
+import com.london.presentation.shared.genre.MovieGenreUi
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 
@@ -17,7 +17,7 @@ class TrendingMoviesViewModel @Inject constructor(
         initializeMovies()
     }
 
-    override fun onGenreSelected(genre: MovieGenre) {
+    override fun onGenreSelected(genre: MovieGenreUi) {
         if (genre.id == state.value.selectedGenreId) return
         updateState {
             copy(selectedGenreId = genre.id)
@@ -42,7 +42,7 @@ class TrendingMoviesViewModel @Inject constructor(
                     val movies = getMovieUseCase.getTrendingMovies(page = pageNumber)
                     val filteredItems =
                         if (state.value.selectedGenreId != null && state.value.selectedGenreId != -1) {
-                            movies.items.filter { it.genreIds.contains(state.value.selectedGenreId) }
+                            movies.items.filter { it.genres.contains(state.value.selectedGenreId) }
                         } else {
                             movies.items
                         }

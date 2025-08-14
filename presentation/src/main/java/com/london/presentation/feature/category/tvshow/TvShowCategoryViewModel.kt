@@ -50,7 +50,7 @@ class TvShowCategoryViewModel @Inject constructor(
     private fun createTvShowsPagingSourceFlow(categoryId: Int): Flow<PagingData<TvShow>> {
 
         return createPagingSourceFlow(query = "") { _, pageNumber ->
-            managerTvShowDetailsUseCase.getTvShowsByCategory(
+            managerTvShowDetailsUseCase.getTvShowsByGenre(
                 categoryId = categoryId, pageNumber = pageNumber
             )
         }

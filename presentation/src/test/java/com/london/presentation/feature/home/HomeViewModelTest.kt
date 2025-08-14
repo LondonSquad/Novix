@@ -52,7 +52,7 @@ class HomeViewModelTest {
         coEvery { manageRecentMovieWatchedUseCase.getMostRecent() } returns flowOf(emptyList())
         coEvery { manageRecentTvShowWatchedUseCase.getMostRecent() } returns flowOf(emptyList())
         coEvery {
-            getMovieUseCase.getUpcomingMoviesByCategory(
+            getMovieUseCase.getUpcomingMoviesByGenre(
                 any(),
                 any()
             )
@@ -132,7 +132,7 @@ class HomeViewModelTest {
             val mockResponse = createMockPagedFetchResponse(mockUpcomingMovies)
 
             coEvery {
-                getMovieUseCase.getUpcomingMoviesByCategory(categoryId, 1)
+                getMovieUseCase.getUpcomingMoviesByGenre(categoryId, 1)
             } returns mockResponse
             advanceUntilIdle()
 
@@ -310,14 +310,14 @@ class HomeViewModelTest {
         every { posterUrl } returns "/poster$id.jpg"
         every { voteAverage } returns 9.0
         every { releaseDate } returns "2023-01-01"
-        every { genreIds } returns listOf(1, 2)
+        every { genres } returns listOf(1, 2)
         every { this@mockk.mediaType } returns mediaType
     }
 
     private fun createMockUpComingMovie(id: Int) = mockk<UpComingMovie> {
         every { this@mockk.id } returns id
         every { imageUrl } returns "/poster$id.jpg"
-        every { genreIds } returns listOf(1, 2)
+        every { genres } returns listOf(1, 2)
     }
 
     private fun <T> createMockPagedFetchResponse(data: List<T>) = mockk<PagedFetchResponse<T>> {

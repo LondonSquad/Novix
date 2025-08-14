@@ -4,7 +4,7 @@ import androidx.paging.PagingData
 import com.london.domain.entity.UpComingMovie
 import com.london.presentation.feature.home.popular.PopularUiMedia
 import com.london.presentation.shared.base.ErrorState
-import com.london.presentation.utils.MovieGenre
+import com.london.presentation.shared.genre.MovieGenreUi
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.emptyFlow
@@ -14,11 +14,12 @@ data class HomeScreenUiState(
     val isLoading: Boolean = false,
     val isPopularLoading: Boolean = false,
     val isTopRatedLoading: Boolean = false,
-    val selectedMovieGenre: MovieGenre = MovieGenre.All,
+    val selectedMovieGenre: MovieGenreUi = MovieGenreUi.All,
     val topRatedMediaList: List<HomeUiMedia> = emptyList(),
     val popularMediaList: List<PopularUiMedia> = emptyList(),
     val recentWatchedMediaFlow: Flow<List<HomeUiMedia>> = emptyFlow(),
-    val movieGenres: List<MovieGenre> = MovieGenre.entries.toList(),
+    val movieGenres: List<MovieGenreUi> = MovieGenreUi.entries.toList()
+        .filter { it != MovieGenreUi.Unknown },
     val upcomingMovies: Flow<PagingData<UpComingMovie>> = emptyFlow(),
     val selectedCategoryFlow: MutableStateFlow<Int?> = MutableStateFlow(null)
 )

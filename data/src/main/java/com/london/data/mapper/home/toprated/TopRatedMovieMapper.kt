@@ -1,5 +1,6 @@
 package com.london.data.mapper.home.toprated
 
+import com.london.data.mapper.genre.toGenre
 import com.london.data.remote.model.home.toprated.TopRatedMovieRemote
 import com.london.data.utils.asImageUrlOrEmpty
 import com.london.data.utils.orZero
@@ -13,6 +14,6 @@ fun TopRatedMovieRemote.toEntity(): TopRatedMedia =
         releaseDate = releaseDate.orEmpty(),
         name = title.orEmpty(),
         voteAverage = voteAverage.orZero(),
-        genreIds = genreIds.orEmpty(),
+        genres = genreIds.orEmpty().map { it.toGenre(MediaType.Movie) },
         mediaType = MediaType.Movie
     )

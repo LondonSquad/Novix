@@ -3,7 +3,7 @@ package com.london.presentation.feature.home.trending.tvshow
 import com.london.domain.usecase.details.tvshow.GetTvShowUseCase
 import com.london.presentation.shared.base.BaseViewModel
 import com.london.presentation.shared.base.createPagingSourceFlow
-import com.london.presentation.utils.TvShowGenre
+import com.london.presentation.shared.genre.TvShowGenreUi
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 
@@ -18,9 +18,9 @@ class TrendingTvShowsViewModel @Inject constructor(
         initializeTvShows()
     }
 
-    override fun onGenreSelected(genre: TvShowGenre) {
-        if (genre.id == state.value.selectedGenreId) return
-        updateState { copy(selectedGenreId = genre.id) }
+    override fun onGenreSelected(genre: TvShowGenreUi) {
+        if (genre == state.value.selectedGenreId) return
+        updateState { copy(selectedGenreId = genre) }
         initializeTvShows()
     }
 
@@ -39,7 +39,7 @@ class TrendingTvShowsViewModel @Inject constructor(
                     val tvShows = getTvShowUseCase.getTrendingTvShows(page = pageNumber)
                     val filteredItems =
                         if (state.value.selectedGenreId != null && state.value.selectedGenreId != -1) {
-                            tvShows.items.filter { it.genreIds.contains(state.value.selectedGenreId) }
+                            tvShows.items.filter { it.genres.contains(state.value.selectedGenreId) }
                         } else {
                             tvShows.items
                         }

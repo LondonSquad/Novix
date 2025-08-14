@@ -4,8 +4,8 @@ import com.london.domain.usecase.recent.watched.movie.ManageRecentMovieWatchedUs
 import com.london.domain.usecase.recent.watched.tvshow.ManageRecentTvShowWatchedUseCase
 import com.london.presentation.shared.MediaCategory
 import com.london.presentation.shared.base.BaseViewModel
-import com.london.presentation.utils.MovieGenre
-import com.london.presentation.utils.TvShowGenre
+import com.london.presentation.shared.genre.MovieGenreUi
+import com.london.presentation.shared.genre.TvShowGenreUi
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 
@@ -20,13 +20,13 @@ class ContinueWatchingViewModel @Inject constructor(
         fetchRecentWatchedMedia()
     }
 
-    override fun onMovieGenreChanged(genre: MovieGenre) {
+    override fun onMovieGenreChanged(genre: MovieGenreUi) {
         if (genre == state.value.selectedMovieGenre) return
         updateState { copy(selectedMovieGenre = genre) }
         fetchRecentWatchedMedia()
     }
 
-    override fun onTvShowGenreChanged(genre: TvShowGenre) {
+    override fun onTvShowGenreChanged(genre: TvShowGenreUi) {
         if (genre == state.value.selectedTvShowGenre) return
         updateState { copy(selectedTvShowGenre = genre) }
         fetchRecentWatchedMedia()
@@ -60,11 +60,11 @@ class ContinueWatchingViewModel @Inject constructor(
         tryToExecute(
             block = {
                 val recentWatchedMovie = manageRecentMovieWatchedUseCase.getAllWatchedMovies(
-                    genreId = if (state.value.selectedMovieGenre == MovieGenre.All) null
+                    genreId = if (state.value.selectedMovieGenre == MovieGenreUi.All) null
                     else state.value.selectedMovieGenre.id
                 )
                 val recentWatchedTvShow = manageRecentTvShowWatchedUseCase.getAllRecentTvShow(
-                    genreId = if (state.value.selectedTvShowGenre == TvShowGenre.All) null
+                    genreId = if (state.value.selectedTvShowGenre == TvShowGenreUi.All) null
                     else state.value.selectedTvShowGenre.id
                 )
 

@@ -2,6 +2,7 @@ package com.london.data.repository.search
 
 import com.london.data.local.database.dao.search.GenreInterestDao
 import com.london.data.local.model.search.GenreInterestEntity
+import com.london.data.mapper.genre.toGenreId
 import com.london.data.mapper.search.toEntity
 import com.london.data.remote.source.search.SearchRemoteDataSource
 import com.london.data.utils.CrashReporter
@@ -9,6 +10,7 @@ import com.london.domain.entity.Actor
 import com.london.domain.entity.Movie
 import com.london.domain.entity.PagedFetchResponse
 import com.london.domain.entity.TvShow
+import com.london.domain.entity.genre.Genre
 import com.london.domain.repository.SearchRepository
 import javax.inject.Inject
 
@@ -72,12 +74,12 @@ class SearchRepositoryImpl @Inject constructor(
         )
     }
 
-    override suspend fun incrementGenreInterest(genreId: Int, mediaType: String) {
+    override suspend fun incrementGenreInterest(genre: Genre, mediaType: String) {
         try {
-            val current = genreInterestDao.getGenreInterest(genreId, mediaType)
+            val current = genreInterestDao.getGenreInterest(genre.toGenreId(), mediaType)
             if (current == null) {
                 genreInterestDao.insertGenreInterest(
-                    GenreInterestEntity(genreId = genreId, mediaType = mediaType, count = 1)
+                    GenreInterestEntity(genreId = genre.toGenreId(), mediaType = mediaType, count = 1)
                 )
             } else {
                 genreInterestDao.updateGenreInterest(

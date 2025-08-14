@@ -290,10 +290,10 @@ class GetTvShowUseCaseTest {
         runTest {
             //given
             coEvery {
-                getTvShowUseCase.getTvShowsByCategory(CATEGORY_ID, PAGE_NUMBER)
+                getTvShowUseCase.getTvShowsByGenre(CATEGORY_ID, PAGE_NUMBER)
             } returns pagedFetchResponse
             //when
-            val result = getTvShowUseCase.getTvShowsByCategory(CATEGORY_ID, PAGE_NUMBER)
+            val result = getTvShowUseCase.getTvShowsByGenre(CATEGORY_ID, PAGE_NUMBER)
             //then
             assertThat(result).isEqualTo(pagedFetchResponse)
         }
@@ -389,7 +389,7 @@ class GetTvShowUseCaseTest {
             name = "Breaking Bad",
             voteAverage = 8.9,
             posterUrl = "/ggFHVNu6YYI5L9pCfOacjizRGt.jpg",
-            genreIds = listOf(18, 80),
+            genres = listOf(18, 80),
             releaseDate = "2008-01-20",
             mediaType = MediaType.TvShow,
         )
@@ -400,7 +400,7 @@ class GetTvShowUseCaseTest {
             voteAverage = 9.0,
             releaseDate = "2019-05-06",
             posterUrl = "/hlLXt2tOPT6RRnjiUmoxyG1LTFi.jpg",
-            genreIds = listOf(18, 36),
+            genres = listOf(18, 36),
             mediaType = MediaType.TvShow,
         )
 
@@ -440,7 +440,7 @@ class GetTvShowUseCaseTest {
             id = id,
             title = title,
             posterPath = posterPath,
-            genreIds = genreIds
+            genres = genreIds
         )
 
         val tvShow = TvShow(

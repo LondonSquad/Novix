@@ -1,5 +1,6 @@
 package com.london.data.mapper.details.movie
 
+import com.london.data.mapper.genre.toMovieGenre
 import com.london.data.remote.model.details.movie.model.moviedetails.MovieDetailsResponse
 import com.london.data.utils.asImageUrlOrEmpty
 import com.london.data.utils.isTrue
@@ -9,7 +10,7 @@ import com.london.domain.entity.moviedatails.MovieDetails
 
 fun MovieDetailsResponse.toEntity(): MovieDetails = MovieDetails(
     backdropUrl = this.backdropPath.asImageUrlOrEmpty(),
-    genresId = this.genreRemote.orEmpty().map { it.id.orZero() },
+    genres = this.genreRemote.orEmpty().map { it.id.orZero().toMovieGenre() },
     id = this.id.orZero(),
     overview = this.overview.orEmpty(),
     posterUrl = this.posterPath.asImageUrlOrEmpty(),

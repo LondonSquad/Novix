@@ -260,7 +260,7 @@ private fun Content(
                                                     isMovieSaved = { false },
                                                     onMovieClick = {
                                                         viewModel.addToRecentViewed(it.toRecentViewed())
-                                                        viewModel.onClickMovie(it.genreIds)
+                                                        viewModel.onClickMovie(it.genres)
                                                         interactionListener.onMovieClick(it.id)
                                                     },
                                                     modifier = Modifier.padding(horizontal = 16.dp)

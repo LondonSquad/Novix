@@ -24,7 +24,7 @@ class MediaTrendingMapperTest {
         assertEquals(123, result.id)
         assertEquals("Test Movie", result.title)
         assertEquals("https://image.tmdb.org/t/p/w500test_poster.jpg", result.posterPath)
-        assertEquals(listOf(28, 12), result.genreIds)
+        assertEquals(listOf(28, 12), result.genres)
     }
 
     @Test
@@ -44,7 +44,7 @@ class MediaTrendingMapperTest {
         assertEquals(456, result.id)
         assertEquals("Test TV Show", result.title)
         assertEquals("https://image.tmdb.org/t/p/w500test_poster.jpg", result.posterPath)
-        assertEquals(listOf(18, 35), result.genreIds)
+        assertEquals(listOf(18, 35), result.genres)
     }
 
     @Test
@@ -64,7 +64,7 @@ class MediaTrendingMapperTest {
         assertEquals(789, result.id)
         assertEquals("Test Movie", result.title)
         assertEquals("https://image.tmdb.org/t/p/w500test_profile.jpg", result.posterPath)
-        assertEquals(listOf(28, 12), result.genreIds)
+        assertEquals(listOf(28, 12), result.genres)
     }
 
     @Test
@@ -86,7 +86,7 @@ class MediaTrendingMapperTest {
         assertEquals(0, result.id)
         assertEquals("", result.title)
         assertEquals("", result.posterPath)
-        assertEquals(emptyList<Int>(), result.genreIds)
+        assertEquals(emptyList<Int>(), result.genres)
     }
 
     @Test
@@ -144,7 +144,7 @@ class MediaTrendingMapperTest {
         assertEquals(123, result.id)
         assertEquals("", result.title)
         assertEquals("https://image.tmdb.org/t/p/w500", result.posterPath)
-        assertEquals(emptyList<Int>(), result.genreIds)
+        assertEquals(emptyList<Int>(), result.genres)
     }
 
     @Test
@@ -164,6 +164,6 @@ class MediaTrendingMapperTest {
         assertEquals(0, result.id)
         assertEquals("Test Movie", result.title)
         assertEquals("https://image.tmdb.org/t/p/w500test_poster.jpg", result.posterPath)
-        assertEquals(listOf(28, 12), result.genreIds)
+        assertEquals(listOf(28, 12), result.genres)
     }
 } 

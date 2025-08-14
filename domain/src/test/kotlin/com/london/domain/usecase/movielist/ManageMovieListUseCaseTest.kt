@@ -268,7 +268,7 @@ class ManageMovieListUseCaseTest {
                     posterUrl = "none",
                     releaseYear = 1,
                     rating = 1,
-                    genreIds = listOf(1, 2, 3)
+                    genres = listOf(1, 2, 3)
                 ),
             ),
             totalPages = 1

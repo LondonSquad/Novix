@@ -659,8 +659,8 @@ class TvShowRepositoryImplTest {
                 remoteDataSource.getTvShowsByCategoryId(any(), any())
             } returns Result.success(SearchTvShowRemoteMock)
             //When
-            val result = repository.getTvShowsByCategory(
-                categoryId = 1, PAGE_NUMBER
+            val result = repository.getTvShowsByGenre(
+                genre = 1, PAGE_NUMBER
             )
             //Then
             assertThat(result).isEqualTo(TvShowList)
@@ -680,7 +680,7 @@ class TvShowRepositoryImplTest {
             ))
             //When //Then
             assertThrows<NetworkException.HttpLockedException> {
-                repository.getTvShowsByCategory(
+                repository.getTvShowsByGenre(
                     CATEGORY_ID, PAGE_NUMBER
                 )
             }

@@ -72,6 +72,7 @@ import com.london.presentation.shared.ImageView
 import com.london.presentation.shared.RatingItem
 import com.london.presentation.shared.SnackBarAnimation
 import com.london.presentation.shared.buildscreen.BuildScreen
+import com.london.presentation.shared.genre.TvShowGenreUi
 import com.london.presentation.utils.Listen
 import com.london.presentation.utils.convertDate
 import com.london.presentation.utils.isNotZeroRate
@@ -214,7 +215,7 @@ private fun Content(
                     rating = uiState.voteAverage.toString(),
                     date = uiState.firstAirDate,
                     numberOfSeasons = uiState.numberOfSeasons,
-                    onGenreClick = tvShowDetailsContract::OnGenreClicked
+                    onGenreClick = tvShowDetailsContract::onGenreClicked
                 )
             }
 
@@ -336,7 +337,7 @@ fun HeaderDetailsCard(
     modifier: Modifier = Modifier,
     uiState: TvShowDetailsUiState,
     onReviewClick: (tvShowId: Int) -> Unit,
-    onGenreClick: (genreId: Int) -> Unit,
+    onGenreClick: (genreUi: TvShowGenreUi) -> Unit,
     tvShowId: Int,
     rating: String,
     date: String,
@@ -383,7 +384,7 @@ fun HeaderDetailsCard(
 fun GenreNames(
     modifier: Modifier = Modifier,
     uiState: TvShowDetailsUiState,
-    onGenreClick: (genreId: Int) -> Unit
+    onGenreClick: (genreUi: TvShowGenreUi) -> Unit
 ) {
     FlowRow(
         modifier = modifier
@@ -398,9 +399,9 @@ fun GenreNames(
                     color = NovixTheme.colors.body,
                     modifier = if (index != uiState.tvShowGenres.lastIndex)
                         Modifier
-                            .noRippleClickable { onGenreClick(genre.id) }
+                            .noRippleClickable { onGenreClick(genre) }
                             .padding(end = 8.dp)
-                    else Modifier.noRippleClickable { onGenreClick(genre.id) }
+                    else Modifier.noRippleClickable { onGenreClick(genre) }
                 )
 
                 if (index != uiState.tvShowGenres.lastIndex) {

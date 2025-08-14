@@ -39,7 +39,7 @@ class MovieCategoryViewModelTest {
             categoryId = CATEGORY_ID,
         )
         viewModel = MovieCategoryViewModel(getMovieUseCase, savedStateHandle)
-        coEvery { getMovieUseCase.getMoviesByCategory(CATEGORY_ID, PAGE) } returns moviesPagingData
+        coEvery { getMovieUseCase.getMoviesByGenre(CATEGORY_ID, PAGE) } returns moviesPagingData
     }
 
     @After
@@ -88,7 +88,7 @@ class MovieCategoryViewModelTest {
     @Test
     fun `when initialization should update state with error when use case throws`() = runTest {
         // Given
-        coEvery { getMovieUseCase.getMoviesByCategory(CATEGORY_ID, PAGE) } throws Exception()
+        coEvery { getMovieUseCase.getMoviesByGenre(CATEGORY_ID, PAGE) } throws Exception()
         // When
         advanceUntilIdle()
         // Then

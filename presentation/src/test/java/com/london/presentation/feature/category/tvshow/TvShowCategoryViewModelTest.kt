@@ -40,7 +40,7 @@ class TvShowCategoryViewModelTest {
         )
         viewModel = TvShowCategoryViewModel(getTvShowUseCase, savedStateHandle)
         coEvery {
-            getTvShowUseCase.getTvShowsByCategory(
+            getTvShowUseCase.getTvShowsByGenre(
                 CATEGORY_ID,
                 PAGE
             )
@@ -94,7 +94,7 @@ class TvShowCategoryViewModelTest {
     fun `when initialization should update state with error when use case throws`() = runTest {
         // Given
         coEvery {
-            getTvShowUseCase.getTvShowsByCategory(
+            getTvShowUseCase.getTvShowsByGenre(
                 CATEGORY_ID,
                 PAGE
             )

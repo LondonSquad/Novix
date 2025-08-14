@@ -95,7 +95,7 @@ class ManageRecentMovieWatchedUseCaseTest{
             posterUrl = "none",
             releaseYear = 1,
             rating = 1,
-            genreIds = listOf(1, 2, 3)
+            genres = listOf(1, 2, 3)
         )
         private val movieList = listOf(movie, movie, movie)
     }

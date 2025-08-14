@@ -6,6 +6,7 @@ import androidx.paging.cachedIn
 import com.london.domain.entity.Movie
 import com.london.domain.entity.TvShow
 import com.london.domain.entity.UpComingMovie
+import com.london.domain.entity.genre.MovieGenre
 import com.london.domain.entity.toprated.TopRatedMedia
 import com.london.domain.usecase.details.movie.GetMovieUseCase
 import com.london.domain.usecase.details.tvshow.GetTvShowUseCase
@@ -15,7 +16,7 @@ import com.london.presentation.feature.home.popular.PopularUiMedia
 import com.london.presentation.shared.base.BaseViewModel
 import com.london.presentation.shared.base.ErrorState
 import com.london.presentation.shared.base.createPagingSourceFlow
-import com.london.presentation.utils.MovieGenre
+import com.london.presentation.shared.genre.MovieGenreUi
 import com.london.presentation.utils.toPopularUiMedia
 import com.london.presentation.utils.toUiMedia
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -62,7 +63,7 @@ class HomeViewModel @Inject constructor(
 
     private fun createUpcomingPagingFlow(categoryId: Int?): Flow<PagingData<UpComingMovie>> {
         return createPagingSourceFlow(query = "") { _, pageNumber ->
-            getMovieUseCase.getUpcomingMoviesByCategory(
+            getMovieUseCase.getUpcomingMoviesByGenre(
                 categoryId = categoryId,
                 pageNumber = pageNumber
             )
@@ -158,7 +159,7 @@ class HomeViewModel @Inject constructor(
     override fun onTvShowClick(id: Int) =
         emitEffect(HomeScreenEffect.NavigationTvShowDetails(id))
 
-    override fun onMovieGenreSelect(genre: MovieGenre) {
+    override fun onMovieGenreSelect(genre: MovieGenreUi) {
         if (genre == state.value.selectedMovieGenre) return
         updateState { copy(selectedMovieGenre = genre) }
         loadUpcomingMoviesClick(categoryId = if (genre == MovieGenre.All) null else genre.id)

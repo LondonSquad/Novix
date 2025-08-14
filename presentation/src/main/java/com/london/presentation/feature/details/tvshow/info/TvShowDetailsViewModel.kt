@@ -13,6 +13,7 @@ import com.london.domain.usecase.recent.watched.tvshow.ManageRecentTvShowWatched
 import com.london.presentation.navigation.Screen
 import com.london.presentation.navigation.getArgs
 import com.london.presentation.shared.base.BaseViewModel
+import com.london.presentation.shared.genre.toUi
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 
@@ -215,7 +216,9 @@ class TvShowDetailsViewModel @Inject constructor(
                 updateState {
                     copy(
                         firstAirDate = tvShowDetails.firstAirDate,
-                        tvShowGenres = tvShowDetails.tvShowGenres,
+                        tvShowGenres = tvShowDetails.tvShowGenres.map {
+                            it.toUi()
+                        },
                         id = tvShowDetails.id,
                         name = tvShowDetails.name,
                         numberOfSeasons = tvShowDetails.numberOfSeasons,
@@ -240,7 +243,7 @@ class TvShowDetailsViewModel @Inject constructor(
                         posterPicture = tvShowDetails.posterUrl.toString(),
                         releaseYear = 2025,
                         rating = 1,
-                        genres = tvShowDetails.tvShowGenres.map { it.id },
+                        genres = tvShowDetails.tvShowGenres,
                     )
                 )
             },

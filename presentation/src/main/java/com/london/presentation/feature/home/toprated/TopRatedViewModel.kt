@@ -1,12 +1,13 @@
 package com.london.presentation.feature.home.toprated
 
+import com.london.domain.entity.genre.TvShowGenre
 import com.london.domain.usecase.details.movie.GetMovieUseCase
 import com.london.domain.usecase.details.tvshow.GetTvShowUseCase
 import com.london.presentation.shared.MediaCategory
 import com.london.presentation.shared.base.BaseViewModel
 import com.london.presentation.shared.base.createPagingSourceFlow
-import com.london.presentation.utils.MovieGenre
-import com.london.presentation.utils.TvShowGenre
+import com.london.presentation.shared.genre.MovieGenreUi
+import com.london.presentation.shared.genre.TvShowGenreUi
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 
@@ -25,14 +26,14 @@ class TopRatedViewModel @Inject constructor(
         initializeTopRated()
     }
 
-    override fun movieGenre(genre: MovieGenre) {
+    override fun movieGenre(genre: MovieGenreUi) {
         if (genre == state.value.selectedMovieGenre) return
         updateState { copy(selectedMovieGenre = genre) }
         initializeTopMovies()
     }
 
 
-    override fun tvShowGenre(genre: TvShowGenre) {
+    override fun tvShowGenre(genre: TvShowGenreUi) {
         if (genre == state.value.selectedTvShowGenre) return
         updateState { copy(selectedTvShowGenre = genre) }
         initializeTvShow()
@@ -71,7 +72,7 @@ class TopRatedViewModel @Inject constructor(
             val moviesFlow = createPagingSourceFlow(query = "") { _, pageNumber ->
                 getMoviesUseCase.getAllTopRatedMovies(
                     pageNumber,
-                    if (state.value.selectedMovieGenre == MovieGenre.All) null
+                    if (state.value.selectedMovieGenre == MovieGenreUi.All) null
                     else state.value.selectedMovieGenre.id
                 )
             }
