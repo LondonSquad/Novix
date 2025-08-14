@@ -60,7 +60,7 @@ fun BookmarkBottomSheet(
     val navController = LocalNavController.current
 
     LaunchedEffect(isSheetVisible, bookmarkedMovieId) {
-        if (isSheetVisible) {
+        if (isSheetVisible && bookmarkedMovieId != 0u) {
             viewModel.onSheetShown(bookmarkedMovieId)
             coroutineScope.launch { sheetState.show() }
         }
@@ -97,14 +97,16 @@ fun BookmarkBottomSheet(
     LaunchedEffect(uiState.shouldDismiss) {
         if (uiState.shouldDismiss) {
             hideSheet()
-            viewModel.onDismiss()
         }
     }
 
     if (isSheetVisible) {
         ModalBottomSheet(
             state = sheetState,
-            onDismissRequest = onSheetDismiss,
+            onDismissRequest = {
+                onSheetDismiss()
+                viewModel.onDismiss()
+            },
             modifier = modifier,
             containerColor = NovixTheme.colors.surface,
         ) {
@@ -152,7 +154,11 @@ private fun BookmarkBottomSheetContent(
         }
     }
 
-    // Add success and failure snackbars
+    /**
+     * Currently, these snack-bars aren't showing as the sheet goes out of the
+     * composition before they start to show, to fix this, we need a snack-bar
+     * host to manage and show snack-bars across screens regardless of the parent lifecycle.
+     */
 
     if (state.isSuccessSnackbarVisible) {
         SnackBarAnimation(

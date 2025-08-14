@@ -20,15 +20,31 @@ class BookmarkSheetViewModel @Inject constructor(
     }
 
     override fun onSheetShown(movieId: UInt) {
-        if (state.value.isGuestSession || movieId == 0u) return
-        initializeMovieLists(movieId)
+        if (movieId == 0u) return
+
+        updateState {
+            copy(
+                selectedLists = emptyList(),
+                isErrorSnackbarVisible = false,
+                isSuccessSnackbarVisible = false,
+                shouldDismiss = false,
+                error = null,
+                lists = emptyList()
+            )
+        }
+
+        if (!state.value.isGuestSession) {
+            initializeMovieLists(movieId)
+        }
     }
 
     override fun onAddToLists(bookmarkedId: UInt) {
+        val listsToAdd = state.value.selectedLists.toList() // Capture current selection
+
         tryToExecute(
             onStart = { updateState { copy(isLoading = true) } },
             block = {
-                state.value.selectedLists.forEach { listId ->
+                listsToAdd.forEach { listId ->
                     addMovieToListUseCase.invoke(
                         listId = listId,
                         movieId = bookmarkedId
@@ -38,9 +54,8 @@ class BookmarkSheetViewModel @Inject constructor(
             onSuccess = {
                 updateState {
                     copy(
-                        isLoading = false,
                         isSuccessSnackbarVisible = true,
-                        lists = lists.filterNot { it.id in state.value.selectedLists },
+                        lists = lists.filterNot { it.id in listsToAdd },
                         selectedLists = emptyList(),
                         shouldDismiss = true
                     )
@@ -53,18 +68,21 @@ class BookmarkSheetViewModel @Inject constructor(
                         isErrorSnackbarVisible = true
                     )
                 }
-            }
+            },
+            onCompleted = { updateState { copy(isLoading = false) } }
         )
     }
 
-    override fun onDismiss() = updateState {
-        copy(
-            selectedLists = emptyList(),
-            isErrorSnackbarVisible = false,
-            isSuccessSnackbarVisible = false,
-            shouldDismiss = false,
-            error = null,
-        )
+    override fun onDismiss() {
+        updateState {
+            copy(
+                selectedLists = emptyList(),
+                isErrorSnackbarVisible = false,
+                isSuccessSnackbarVisible = false,
+                shouldDismiss = false,
+                error = null,
+            )
+        }
     }
 
     override fun onListSelected(listId: UInt) = updateState {
