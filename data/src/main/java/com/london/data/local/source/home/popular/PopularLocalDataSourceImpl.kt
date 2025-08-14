@@ -41,5 +41,4 @@ class PopularLocalDataSourceImpl @Inject constructor(
             }
         }
     }
-
 }
