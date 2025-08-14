@@ -15,6 +15,8 @@ import androidx.compose.foundation.layout.requiredWidth
 import androidx.compose.foundation.layout.statusBars
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.grid.GridCells
+import androidx.compose.foundation.lazy.grid.GridItemSpan
+import androidx.compose.foundation.lazy.grid.LazyGridScope
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.lazy.items
@@ -36,6 +38,10 @@ import com.london.designsystem.theme.NovixTheme
 import com.london.domain.entity.Movie
 import com.london.domain.entity.TvShow
 import com.london.presentation.R
+import com.london.presentation.feature.home.HomeScreenContract
+import com.london.presentation.feature.home.HomeUiMedia
+import com.london.presentation.feature.home.section.ContinueWatchingSection
+import com.london.presentation.shared.CarousalShimmerEffect
 import com.london.presentation.shared.EmptyGenreLayout
 import com.london.presentation.shared.HomeCard
 import com.london.presentation.shared.MediaCategory
@@ -46,8 +52,27 @@ import com.london.presentation.utils.MovieGenre
 import com.london.presentation.utils.TvShowGenre
 import com.london.presentation.utils.gridColumns
 
+fun LazyGridScope.continueWatchingSection(
+    screenWidth: Dp,
+    recentWatchedMedia: List<HomeUiMedia>,
+    isLoading: Boolean,
+    homeScreenContract: HomeScreenContract
+) {
+    item(span = { GridItemSpan(maxLineSpan) }) {
+        if (!isLoading) {
+            ContinueWatchingSection(
+                recentWatchedMediaList = recentWatchedMedia,
+                homeScreenContract = homeScreenContract,
+                modifier = Modifier.requiredWidth(screenWidth)
+            )
+        } else {
+            CarousalShimmerEffect()
+        }
+    }
+}
+
 @Composable
-fun ContinueWatchingScreen(
+private fun ContinueWatchingScreen(
     screenTitle: String,
     onBackClick: () -> Unit = {},
     onMovieClick: (Int) -> Unit = {},

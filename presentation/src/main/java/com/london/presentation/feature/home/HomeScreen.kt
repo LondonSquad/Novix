@@ -1,10 +1,6 @@
 package com.london.presentation.feature.home
 
-import androidx.compose.animation.core.FastOutSlowInEasing
-import androidx.compose.animation.core.animateDpAsState
-import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -13,21 +9,15 @@ import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.asPaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.requiredWidth
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.statusBars
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.lazy.grid.GridCells
-import androidx.compose.foundation.lazy.grid.GridItemSpan
-import androidx.compose.foundation.lazy.grid.LazyGridScope
 import androidx.compose.foundation.lazy.grid.LazyGridState
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.pager.rememberPagerState
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.derivedStateOf
@@ -36,14 +26,11 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
-import androidx.compose.ui.draw.clipToBounds
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalWindowInfo
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -51,22 +38,16 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.paging.compose.LazyPagingItems
 import androidx.paging.compose.collectAsLazyPagingItems
 import com.london.designsystem.component.DefaultTopBar
-import com.london.designsystem.component.Text
 import com.london.designsystem.component.button.PrimaryButton
 import com.london.designsystem.theme.NovixTheme
-import com.london.designsystem.utils.shimmerEffect
 import com.london.designsystem.utils.string
 import com.london.domain.entity.UpComingMovie
-import com.london.domain.entity.recent.MediaType
 import com.london.presentation.R
-import com.london.presentation.feature.home.popular.PopularSection
-import com.london.presentation.feature.home.section.ContinueWatchingSection
-import com.london.presentation.feature.home.section.ShimmerPopularSection
-import com.london.presentation.feature.home.section.TopRatedSection
-import com.london.presentation.feature.home.trending.TrendingSection
-import com.london.presentation.shared.CarousalShimmerEffect
-import com.london.presentation.shared.GenresSection
-import com.london.presentation.shared.HomeCard
+import com.london.presentation.feature.home.continuewatching.continueWatchingSection
+import com.london.presentation.feature.home.popular.popularSection
+import com.london.presentation.feature.home.toprated.topRatedSection
+import com.london.presentation.feature.home.trending.trendingSection
+import com.london.presentation.feature.home.upcoming.upcomingSection
 import com.london.presentation.shared.buildscreen.NetworkErrorScreen
 import com.london.presentation.utils.Listen
 import com.london.presentation.utils.gridColumns
@@ -346,203 +327,6 @@ private fun FloatingRetryButton(
     )
 }
 
-private fun LazyGridScope.popularSection(
-    screenWidth: Dp,
-    uiState: HomeScreenUiState,
-    pagerState: androidx.compose.foundation.pager.PagerState,
-    homeScreenContract: HomeScreenContract
-) {
-    item(span = { GridItemSpan(maxLineSpan) }) {
-        if (uiState.popularMediaList.isNotEmpty()) {
-            PopularSection(
-                modifier = Modifier.requiredWidth(screenWidth),
-                pagerState = pagerState,
-                uiMediaList = uiState.popularMediaList,
-                onSaveClick = { /* TODO */ },
-                onCardClick = { id, mediaType ->
-                    when (mediaType) {
-                        MediaType.TvShow -> homeScreenContract.onTvShowClick(id)
-                        MediaType.Movie -> homeScreenContract.onMovieClick(id)
-                    }
-                }
-            )
-        } else {
-            ShimmerPopularSection(
-                modifier = Modifier.requiredWidth(screenWidth),
-                pagerState = pagerState,
-            )
-        }
-    }
-}
-
-private fun LazyGridScope.trendingSection(
-    isLoading: Boolean,
-    homeScreenContract: HomeScreenContract
-) {
-    item(span = { GridItemSpan(maxLineSpan) }) {
-        TrendingSection(
-            isLoading = isLoading,
-            onMoviesClick = homeScreenContract::onTrendingMoviesCardClick,
-            onTvShowsClick = homeScreenContract::onTrendingTvShowsCardClick,
-            onActorsClick = homeScreenContract::onTrendingActorsCardClick
-        )
-    }
-}
-
-private fun LazyGridScope.topRatedSection(
-    screenWidth: Dp,
-    uiState: HomeScreenUiState,
-    homeScreenContract: HomeScreenContract
-) {
-    item(span = { GridItemSpan(maxLineSpan) }) {
-        if (!uiState.isTopRatedLoading) {
-            TopRatedSection(
-                uiState = uiState,
-                homeScreenContract = homeScreenContract,
-                modifier = Modifier.requiredWidth(screenWidth)
-            )
-        } else {
-            CarousalShimmerEffect()
-        }
-    }
-}
-
-private fun LazyGridScope.continueWatchingSection(
-    screenWidth: Dp,
-    recentWatchedMedia: List<HomeUiMedia>,
-    isLoading: Boolean,
-    homeScreenContract: HomeScreenContract
-) {
-    item(span = { GridItemSpan(maxLineSpan) }) {
-        if (!isLoading) {
-            ContinueWatchingSection(
-                recentWatchedMediaList = recentWatchedMedia,
-                homeScreenContract = homeScreenContract,
-                modifier = Modifier.requiredWidth(screenWidth)
-            )
-        } else {
-            CarousalShimmerEffect()
-        }
-    }
-}
-
-private fun LazyGridScope.upcomingSection(
-    contract: HomeScreenContract,
-    isHeaderStuck: Boolean = false,
-    screenWidth: Dp,
-    state: HomeScreenUiState,
-    upcomingMoviesLazyList: LazyPagingItems<UpComingMovie>,
-    isLoading: Boolean = false
-) {
-    item(span = { GridItemSpan(maxLineSpan) }) {
-        UpcomingSectionTitle(isLoading = isLoading)
-    }
-
-    stickyHeader {
-        UpcomingStickyHeader(
-            isLoading = isLoading,
-            isHeaderStuck = isHeaderStuck,
-            screenWidth = screenWidth,
-            state = state,
-            contract = contract
-        )
-    }
-
-    items(count = upcomingMoviesLazyList.itemCount) { index ->
-        val movie = upcomingMoviesLazyList[index]
-
-        UpcomingMovieItem(
-            movie = movie,
-            isLoading = isLoading,
-            onMovieClick = { contract.onMovieClick(movie?.id ?: 0) }
-        )
-    }
-}
-
-@Composable
-private fun UpcomingSectionTitle(isLoading: Boolean) {
-    if (!isLoading) {
-        Text(
-            text = stringResource(R.string.upcoming),
-            style = NovixTheme.typography.headline.small,
-            color = NovixTheme.colors.title,
-        )
-    } else {
-        Box(
-            modifier = Modifier
-                .height(20.dp)
-                .padding(bottom = 4.dp)
-                .wrapContentWidth()
-                .shimmerEffect()
-        )
-    }
-}
-
-@Composable
-private fun UpcomingStickyHeader(
-    isLoading: Boolean,
-    isHeaderStuck: Boolean,
-    screenWidth: Dp,
-    state: HomeScreenUiState,
-    contract: HomeScreenContract
-) {
-    val animatedPadding by animateDpAsState(
-        targetValue = if (isHeaderStuck) 8.dp else 0.dp,
-        animationSpec = tween(
-            durationMillis = 300,
-            easing = FastOutSlowInEasing
-        ),
-        label = "header_padding"
-    )
-
-    GenresSection(
-        isLoading = isLoading,
-        genres = state.movieGenres,
-        selectedGenreId = state.selectedMovieGenre.id,
-        screenWidth = screenWidth,
-        onGenreClick = contract::onMovieGenreSelect,
-        modifier = Modifier
-            .background(NovixTheme.colors.surface)
-            .padding(bottom = animatedPadding),
-        getGenreId = { it.id },
-        getGenreName = { stringResource(it.stringResId) }
-    )
-}
-
-@Composable
-private fun UpcomingMovieItem(
-    movie: UpComingMovie?,
-    isLoading: Boolean,
-    onMovieClick: () -> Unit
-) {
-    when {
-        isLoading || movie == null -> {
-            ShimmerMovieCard()
-        }
-        else -> {
-            HomeCard(
-                imageUrl = movie.imageUrl,
-                isSaved = false,
-                onSaveClick = { /* TODO */ },
-                modifier = Modifier
-                    .clipToBounds()
-                    .clip(RoundedCornerShape(12.dp))
-                    .clickable { onMovieClick() },
-                isDarkMode = NovixTheme.isThemeDark
-            )
-        }
-    }
-}
-
-@Composable
-private fun ShimmerMovieCard() {
-    Box(
-        modifier = Modifier
-            .height(240.dp)
-            .clip(RoundedCornerShape(12.dp))
-            .shimmerEffect()
-    )
-}
 
 @Composable
 private fun rememberScreenDimensions(): ScreenDimensions {
