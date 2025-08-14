@@ -55,42 +55,22 @@ fun <T : Any> MediaLazyGridWithFilter(
                     else -> items
                 }
 
-                if (filteredItems.isNotEmpty()) {
-                    MediaLazyVerticalGrid(
-                        items = filteredItems,
-                        imageUrl = imageUrl,
-                        name = name,
-                        hasSaveIcon = config.showSaveIcon,
-                        onSaveClick = { config.onSaveClick(it) },
-                        isItemSaved = { config.isItemSaved(it) },
-                        onDeleteClick = { config.onDeleteClick(it) },
-                        myRatingList = config.myRatingList,
-                        rate = config.rate,
-                        topBar = topBar,
-                        modifier = Modifier.fillMaxSize(),
-                        onNavigateToMovie = config.onNavigateToMovie,
-                        onNavigateToTvShow = config.onNavigateToTvShow
-                    )
-                } else {
-                    EmptyGenreLayout()
-                }
+                RenderFilteredItemsGrid(
+                    filteredItems = filteredItems,
+                    imageUrl = imageUrl,
+                    name = name,
+                    config = config,
+                    topBar = topBar
+                )
             }
 
             pagingItems != null && pagingItems.itemCount > 0 -> {
-                MediaLazyVerticalGrid(
+                RenderPagingItemsGrid(
                     pagingItems = pagingItems,
                     imageUrl = imageUrl,
                     name = name,
-                    hasSaveIcon = config.showSaveIcon,
-                    onSaveClick = { config.onSaveClick(it) },
-                    isItemSaved = { config.isItemSaved(it) },
-                    onDeleteClick = { config.onDeleteClick(it) },
-                    myRatingList = config.myRatingList,
-                    rate = config.rate,
-                    topBar = topBar,
-                    modifier = Modifier.fillMaxSize(),
-                    onNavigateToMovie = config.onNavigateToMovie,
-                    onNavigateToTvShow = config.onNavigateToTvShow
+                    config = config,
+                    topBar = topBar
                 )
             }
 
@@ -101,6 +81,60 @@ fun <T : Any> MediaLazyGridWithFilter(
             }
         }
     }
+}
+
+@Composable
+private fun <T : Any> RenderFilteredItemsGrid(
+    filteredItems: List<T>,
+    imageUrl: (T) -> String?,
+    name: (T) -> String,
+    config: MediaGridConfig,
+    topBar: @Composable (() -> Unit)?
+) {
+    if (filteredItems.isNotEmpty()) {
+        MediaLazyVerticalGrid(
+            items = filteredItems,
+            imageUrl = imageUrl,
+            name = name,
+            hasSaveIcon = config.showSaveIcon,
+            onSaveClick = { config.onSaveClick(it) },
+            isItemSaved = { config.isItemSaved(it) },
+            onDeleteClick = { config.onDeleteClick(it) },
+            myRatingList = config.myRatingList,
+            rate = config.rate,
+            topBar = topBar,
+            modifier = Modifier.fillMaxSize(),
+            onNavigateToMovie = config.onNavigateToMovie,
+            onNavigateToTvShow = config.onNavigateToTvShow
+        )
+    } else {
+        EmptyGenreLayout()
+    }
+}
+
+@Composable
+private fun <T : Any> RenderPagingItemsGrid(
+    pagingItems: LazyPagingItems<T>,
+    imageUrl: (T) -> String?,
+    name: (T) -> String,
+    config: MediaGridConfig,
+    topBar: @Composable (() -> Unit)?
+) {
+    MediaLazyVerticalGrid(
+        pagingItems = pagingItems,
+        imageUrl = imageUrl,
+        name = name,
+        hasSaveIcon = config.showSaveIcon,
+        onSaveClick = { config.onSaveClick(it) },
+        isItemSaved = { config.isItemSaved(it) },
+        onDeleteClick = { config.onDeleteClick(it) },
+        myRatingList = config.myRatingList,
+        rate = config.rate,
+        topBar = topBar,
+        modifier = Modifier.fillMaxSize(),
+        onNavigateToMovie = config.onNavigateToMovie,
+        onNavigateToTvShow = config.onNavigateToTvShow
+    )
 }
 
 @ThemePreviews
