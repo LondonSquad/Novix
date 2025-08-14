@@ -4,9 +4,10 @@ import com.london.presentation.shared.base.ErrorState
 
 data class BookmarkSheetUiState(
     val lists: List<BookmarkUiList> = emptyList(),
-    val selectedLists: List<UInt> = emptyList(),
+    val selectedLists: List<Int> = emptyList(),
     val error: ErrorState? = null,
     val isLoading: Boolean = false,
+    val isAddingToList: Boolean = false,
     val isGuestSession: Boolean = false,
     val isErrorSnackbarVisible: Boolean = false,
     val isSuccessSnackbarVisible: Boolean = false,
@@ -14,7 +15,7 @@ data class BookmarkSheetUiState(
 )
 
 data class BookmarkUiList(
-    val id: UInt,
+    val id: Int,
     val name: String,
-    val itemCount: UShort
+    val itemCount: Int
 )

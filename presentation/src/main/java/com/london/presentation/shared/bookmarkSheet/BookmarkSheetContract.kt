@@ -1,10 +1,10 @@
 package com.london.presentation.shared.bookmarkSheet
 
 interface BookmarkSheetContract {
-    fun onSheetShown(movieId: UInt)
-    fun onListSelected(listId: UInt)
+    fun onSheetShown(movieId: Int)
+    fun onListSelected(listId: Int)
     fun onCreateNewList()
-    fun onAddToLists(bookmarkedId: UInt)
+    fun onAddToLists(bookmarkedId: Int)
     fun onDismiss()
     fun onSnackbarShown()
     fun onLoginClick()

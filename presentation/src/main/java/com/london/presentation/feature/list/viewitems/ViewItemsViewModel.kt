@@ -51,7 +51,7 @@ class ViewItemsViewModel @Inject constructor(
 
         tryToExecute(
             block = {
-                manageMovieListUseCase.deleteMovieList(listId.toUInt())
+                manageMovieListUseCase.deleteMovieList(listId)
             },
             onCompleted = {
                 updateState { copy(isDeleteBottomSheetVisible = false) }
@@ -74,7 +74,7 @@ class ViewItemsViewModel @Inject constructor(
 
         tryToExecute(
             block = {
-                removeMovieFromListUseCase.invoke(listId = listId.toUInt(), movieId = id.toUInt())
+                removeMovieFromListUseCase.invoke(listId = listId, movieId = id)
             },
             onStart = {
                 updateState { copy(error = null, isSnackBarSuccessVisible = false) }
@@ -98,7 +98,7 @@ class ViewItemsViewModel @Inject constructor(
             block = {
                 val moviesFlow = createPagingSourceFlow(query = "") { _, pageNumber ->
                     val movies = getMovieListDetailsUseCase.invoke(
-                        listId = listId.toUInt(),
+                        listId = listId,
                         pageNumber = pageNumber
                     )
                     movies.copy(items = movies.items)
@@ -126,7 +126,7 @@ class ViewItemsViewModel @Inject constructor(
 
         tryToExecute(
             block = {
-                getMovieListNameUseCase.invoke(listId.toUInt())
+                getMovieListNameUseCase.invoke(listId)
             },
             onStart = {
                 updateState { copy(isLoading = true) }

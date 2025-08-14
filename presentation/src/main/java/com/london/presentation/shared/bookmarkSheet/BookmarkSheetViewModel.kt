@@ -19,8 +19,8 @@ class BookmarkSheetViewModel @Inject constructor(
         initializeSessionStatus()
     }
 
-    override fun onSheetShown(movieId: UInt) {
-        if (movieId == 0u) return
+    override fun onSheetShown(movieId: Int) {
+        if (movieId == 0) return
 
         updateState {
             copy(
@@ -38,11 +38,11 @@ class BookmarkSheetViewModel @Inject constructor(
         }
     }
 
-    override fun onAddToLists(bookmarkedId: UInt) {
+    override fun onAddToLists(bookmarkedId: Int) {
         val listsToAdd = state.value.selectedLists.toList() // Capture current selection
 
         tryToExecute(
-            onStart = { updateState { copy(isLoading = true) } },
+            onStart = { updateState { copy(isAddingToList = true) } },
             block = {
                 listsToAdd.forEach { listId ->
                     addMovieToListUseCase.invoke(
@@ -55,8 +55,6 @@ class BookmarkSheetViewModel @Inject constructor(
                 updateState {
                     copy(
                         isSuccessSnackbarVisible = true,
-                        lists = lists.filterNot { it.id in listsToAdd },
-                        selectedLists = emptyList(),
                         shouldDismiss = true
                     )
                 }
@@ -69,7 +67,7 @@ class BookmarkSheetViewModel @Inject constructor(
                     )
                 }
             },
-            onCompleted = { updateState { copy(isLoading = false) } }
+            onCompleted = { updateState { copy(isAddingToList = false) } }
         )
     }
 
@@ -85,7 +83,7 @@ class BookmarkSheetViewModel @Inject constructor(
         }
     }
 
-    override fun onListSelected(listId: UInt) = updateState {
+    override fun onListSelected(listId: Int) = updateState {
         val currentSelectedLists = selectedLists.toMutableList()
         if (listId in currentSelectedLists) {
             currentSelectedLists.remove(listId)
@@ -111,7 +109,7 @@ class BookmarkSheetViewModel @Inject constructor(
         emitEffect(BookmarkSheetEffect.LoginNavigation)
     }
 
-    private fun initializeMovieLists(movieId: UInt) {
+    private fun initializeMovieLists(movieId: Int) {
         tryToExecute(
             onStart = { updateState { copy(isLoading = true) } },
             block = { getAvailableListsForMovie.invoke(movieId = movieId) },
