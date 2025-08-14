@@ -331,7 +331,7 @@ class GetTvShowUseCaseTest {
         } returns mockPagedResponse
 
         // When
-        val result = getTvShowUseCase.getTopRatedTvShow(PAGE)
+        val result = getTvShowUseCase.getAllTopRatedTvShows(PAGE)
 
         // Then
         assertThat(result).isEqualTo(mockPagedResponse)
@@ -353,7 +353,7 @@ class GetTvShowUseCaseTest {
         } returns emptyPagedResponse
 
         // When
-        val result = getTvShowUseCase.getTopRatedTvShow(PAGE)
+        val result = getTvShowUseCase.getAllTopRatedTvShows(PAGE)
 
         // Then
         assertThat(result.items).isEmpty()
@@ -369,7 +369,7 @@ class GetTvShowUseCaseTest {
 
         // When & Then
         assertThrows<RuntimeException> {
-            getTvShowUseCase.getTopRatedTvShow(PAGE)
+            getTvShowUseCase.getAllTopRatedTvShows(PAGE)
         }
     }
 
@@ -391,6 +391,7 @@ class GetTvShowUseCaseTest {
             posterUrl = "/ggFHVNu6YYI5L9pCfOacjizRGt.jpg",
             genreIds = listOf(18, 80),
             releaseDate = "2008-01-20",
+            mediaType = MediaType.TvShow,
         )
 
         private val mockTv2 = TopRatedMedia(
@@ -400,6 +401,7 @@ class GetTvShowUseCaseTest {
             releaseDate = "2019-05-06",
             posterUrl = "/hlLXt2tOPT6RRnjiUmoxyG1LTFi.jpg",
             genreIds = listOf(18, 36),
+            mediaType = MediaType.TvShow,
         )
 
         val mockTopRatedTvSeries = listOf(mockTv1, mockTv2)

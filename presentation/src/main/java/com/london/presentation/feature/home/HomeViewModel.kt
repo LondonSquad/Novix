@@ -11,8 +11,6 @@ import com.london.domain.usecase.details.movie.GetMovieUseCase
 import com.london.domain.usecase.details.tvshow.GetTvShowUseCase
 import com.london.domain.usecase.recent.watched.movie.ManageRecentMovieWatchedUseCase
 import com.london.domain.usecase.recent.watched.tvshow.ManageRecentTvShowWatchedUseCase
-import com.london.domain.usecase.toprated.GetTopRatedMoviesUseCase
-import com.london.domain.usecase.toprated.GetTopRatedTvShowUseCase
 import com.london.presentation.feature.home.popular.PopularUiMedia
 import com.london.presentation.shared.base.BaseViewModel
 import com.london.presentation.shared.base.ErrorState
@@ -31,11 +29,6 @@ import javax.inject.Inject
 @HiltViewModel
 @OptIn(ExperimentalCoroutinesApi::class)
 class HomeViewModel @Inject constructor(
-    private val getPopularMovies: GetPopularMovies,
-    private val manageTvShowDetailsUseCase: ManageTvShowDetailsUseCase,
-    private val getUpcomingMoviesByCategoryUseCase: GetUpComingMoviesByCategoryUseCase,
-    private val getTopRatedMovies: GetTopRatedMoviesUseCase,
-    private val getTopRatedTvShows: GetTopRatedTvShowUseCase,
     private val getMovieUseCase: GetMovieUseCase,
     private val getTvShowUseCase: GetTvShowUseCase,
     private val manageRecentMovieWatchedUseCase: ManageRecentMovieWatchedUseCase,
@@ -69,7 +62,7 @@ class HomeViewModel @Inject constructor(
 
     private fun createUpcomingPagingFlow(categoryId: Int?): Flow<PagingData<UpComingMovie>> {
         return createPagingSourceFlow(query = "") { _, pageNumber ->
-            getUpcomingMoviesByCategoryUseCase.invoke(
+            getMovieUseCase.getUpcomingMoviesByCategory(
                 categoryId = categoryId,
                 pageNumber = pageNumber
             )
@@ -90,8 +83,8 @@ class HomeViewModel @Inject constructor(
         updateState { copy(topRatedMediaList = topRatedMediaList.toUiMedia().shuffled()) }
 
     private suspend fun fetchTopRatedMedia(): List<TopRatedMedia> {
-        val movies = getTopRatedMovies.getMostRecent()
-        val tvShows = getTopRatedTvShows.getMostRecent()
+        val movies = getMovieUseCase.getMostRecentMovies()
+        val tvShows = getTvShowUseCase.getMostRecentTvShows()
 
         return movies + tvShows
     }
@@ -146,8 +139,8 @@ class HomeViewModel @Inject constructor(
         updateState { copy(isPopularLoading = isLoading) }
 
     private suspend fun fetchPopularMediaList(): List<PopularUiMedia> {
-        val movies = getPopularMovies.invoke()
-        val tvShows = manageTvShowDetailsUseCase.getPopularTvShows()
+        val movies = getMovieUseCase.getPopularMovies()
+        val tvShows = getTvShowUseCase.getPopularTvShows()
 
         return movies.toPopularUiMedia() + tvShows.toPopularUiMedia()
     }

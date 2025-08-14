@@ -57,8 +57,8 @@ class GetMovieUseCase @Inject constructor(
         categoryId = categoryId,
         pageNumber = pageNumber
     )
-
-    suspend fun getTopRatedMovies(
+    
+    suspend fun getAllTopRatedMovies(
         pageNumber: Int,
         genreId: Int? = null
     ): PagedFetchResponse<TopRatedMedia> {
@@ -74,8 +74,13 @@ class GetMovieUseCase @Inject constructor(
         )
     }
 
+    suspend fun getMostRecentMovies(limit: Int = TOP_RATED_LIMIT): List<TopRatedMedia> =
+        movieRepository.getFirstPageTopRatedMovies().take(limit)
+
+    
     companion object {
         private const val IMAGE_LIMIT = 10
         private const val POPULAR_LIMIT = 5
+        private const val TOP_RATED_LIMIT = 10
     }
 }

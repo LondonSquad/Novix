@@ -559,7 +559,7 @@ class GetMovieUseCaseTest {
         } returns mockPagedResponse
 
         // When
-        val result = getMovieUseCase.getTopRatedMovies(PAGE)
+        val result = getMovieUseCase.getAllTopRatedMovies(PAGE)
 
         // Then
         assertThat(result).isEqualTo(mockPagedResponse)
@@ -582,7 +582,7 @@ class GetMovieUseCaseTest {
         } returns emptyPagedResponse
 
         // When
-        val result = getMovieUseCase.getTopRatedMovies(PAGE)
+        val result = getMovieUseCase.getAllTopRatedMovies(PAGE)
 
         // Then
         assertThat(result.items).isEmpty()
@@ -597,7 +597,7 @@ class GetMovieUseCaseTest {
 
         // When & Then
         assertThrows<RuntimeException> {
-            getMovieUseCase.getTopRatedMovies(PAGE)
+            getMovieUseCase.getAllTopRatedMovies(PAGE)
         }
     }
 
@@ -618,6 +618,7 @@ class GetMovieUseCaseTest {
             releaseDate = "1994-09-23",
             posterUrl = "/q6y0Go1tsGEsmtFryDOJo3dEmqu.jpg",
             genreIds = listOf(18, 80),
+            mediaType = MediaType.Movie,
         )
 
         private val mockMovie2 = TopRatedMedia(
@@ -626,6 +627,7 @@ class GetMovieUseCaseTest {
             voteAverage = 8.7, releaseDate = "1972-03-14",
             posterUrl = "/3bhkrj58Vtu7enYsRolD1fZdja1.jpg",
             genreIds = listOf(18, 80),
+            mediaType = MediaType.Movie,
         )
 
         val mockTopRatedMovies = listOf(mockMovie1, mockMovie2)

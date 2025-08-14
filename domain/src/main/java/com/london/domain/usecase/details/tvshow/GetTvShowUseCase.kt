@@ -59,7 +59,7 @@ class GetTvShowUseCase @Inject constructor(
     suspend fun getTvShowCastById(tvShowId: Int): TvShowCastEntity =
         actorRepository.getCastTvShowById(tvShowId)
 
-    suspend fun getTopRatedTvShow(
+    suspend fun getAllTopRatedTvShows(
         pageNumber: Int,
         genreId: Int? = null
     ): PagedFetchResponse<TopRatedMedia> {
@@ -75,8 +75,12 @@ class GetTvShowUseCase @Inject constructor(
         )
     }
 
+    suspend fun getMostRecentTvShows(limit: Int = TOP_RATED_LIMIT) =
+        tvShowRepository.getFirstPageTopRatedTvShows().take(limit)
+
     companion object {
         const val IMAGE_LIMIT = 10
         const val POPULAR_LIMIT = 5
+        const val TOP_RATED_LIMIT = 10
     }
 }
