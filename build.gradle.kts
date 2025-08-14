@@ -2,7 +2,6 @@
 
 import com.london.buildsrc.AppConfig
 import com.london.buildsrc.configureGitHooks
-import kotlinx.kover.gradle.plugin.dsl.KoverProjectExtension
 import org.jetbrains.kotlin.gradle.dsl.KotlinAndroidProjectExtension
 
 // Top-level build file where you can add configuration options common to all sub-projects/modules.
@@ -17,7 +16,7 @@ plugins {
     alias(libs.plugins.google.firebase.firebase.perf) apply false
     alias(libs.plugins.google.gms.google.services) apply false
     alias(libs.plugins.google.firebase.crashlytics) apply false
-    alias(libs.plugins.kotlinx.kover) apply true
+    alias(libs.plugins.kotlinx.kover)
 }
 
 subprojects {
@@ -28,33 +27,24 @@ subprojects {
             }
         }
     }
-
-    plugins.withId("org.jetbrains.kotlinx.kover") {
-        extensions.configure<KoverProjectExtension> {
-            currentProject {
-                createVariant("custom") {
-                    add("jvm", optional = true)
-                    add("debug", optional = true)
-                }
-            }
-        }
-    }
 }
 
 dependencies {
     kover(projects.domain)
     kover(projects.data)
-//    kover(projects.presentation)
+    kover(projects.presentation)
 }
 
 kover {
+    apply(plugin = "org.jetbrains.kotlinx.kover")
+
     reports {
         total {
             filters {
                 includes {
                     packages(
-                        "com.london.data.mapper",
                         "com.london.domain.usecase",
+                        "com.london.data.mapper",
                         "com.london.data.repository",
                         "com.london.data.datasource.local.search",
                         "com.london.data.datasource.local.recent",
