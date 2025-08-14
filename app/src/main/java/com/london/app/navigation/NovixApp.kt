@@ -27,15 +27,15 @@ import androidx.navigation.navigation
 import com.london.designsystem.component.NavBar
 import com.london.designsystem.theme.NovixTheme
 import com.london.presentation.R
-import com.london.presentation.feature.accountinfo.account.AccountScreen
-import com.london.presentation.feature.accountinfo.rating.MyRatingScreen
+import com.london.presentation.feature.account.AccountScreen
+import com.london.presentation.feature.account.rating.MyRatingScreen
 import com.london.presentation.feature.authentication.login.LoginScreen
-import com.london.presentation.feature.authentication.register.WebViewRegistrationScreen
+import com.london.presentation.feature.authentication.register.RegistrationScreen
 import com.london.presentation.feature.category.main.CategoriesScreen
 import com.london.presentation.feature.category.movie.MoviesByCategoryScreen
 import com.london.presentation.feature.category.tvshow.TvShowByCategoryScreen
 import com.london.presentation.feature.details.actor.ActorDetailsScreen
-import com.london.presentation.feature.details.actor.info.gallery.ActorGalleryScreen
+import com.london.presentation.feature.details.actor.info.gallery.ActorsGalleryScreen
 import com.london.presentation.feature.details.actor.info.topmoviespicks.TopMoviesPicksScreen
 import com.london.presentation.feature.details.actor.info.toptvshowspicks.TopTvShowsPicksScreen
 import com.london.presentation.feature.details.movie.MovieDetailsScreen
@@ -218,7 +218,7 @@ fun NavGraphBuilder.authNavGraph(
         enterTransition = { fadeIn(tween(500)) },
         popExitTransition = { fadeOut(tween(500)) },
     ) {
-        WebViewRegistrationScreen(
+        RegistrationScreen(
             onNavigateBack = {
                 navController.popBackStack()
             },
@@ -320,7 +320,14 @@ fun NavGraphBuilder.mainNavGraph(
         enterTransition = { fadeIn(tween(500)) },
         popExitTransition = { fadeOut(tween(500)) },
     ) {
-        CategoriesScreen()
+        CategoriesScreen(
+            onNavigateToMovieCategory = {
+                navController.navigate(Screen.MoviesByCategory(it.id))
+            },
+            onNavigateToTvShowCategory = {
+                navController.navigate(Screen.TvShowsByCategory(it.id))
+            }
+        )
     }
 
     composable<Screen.Lists>(
@@ -437,7 +444,7 @@ fun NavGraphBuilder.mainNavGraph(
         popExitTransition = { fadeOut(tween(500)) },
     ) {
         TopTvShowsPicksScreen(
-            onNavigateTvShow = { tvShowId ->
+            onNavigateToTvShowDetails = { tvShowId ->
                 navController.navigate(TvShowDetails(tvShowId))
             },
             onNavigateBack = {
@@ -447,7 +454,7 @@ fun NavGraphBuilder.mainNavGraph(
     }
     composable<Screen.ActorTopMoviesPicksDetails> {
         TopMoviesPicksScreen(
-            onNavigateMovie = { movieId ->
+            onNavigateToMovieDetails = { movieId ->
                 navController.navigate(MovieDetails(movieId))
             },
             onNavigateBack = { navController.navigateUp() },
@@ -508,9 +515,9 @@ fun NavGraphBuilder.mainNavGraph(
 
     composable<ActorDetails> {
         ActorDetailsScreen(
-            onNavigateToMoviePicks = { actorId ->
+            onNavigateToTopMoviePicks = { actorId ->
                 navController.navigate(Screen.ActorTopMoviesPicksDetails(actorId))
-            }, onNavigateToTvShowPicks = { actorId ->
+            }, onNavigateToTopTvShowPicks = { actorId ->
                 navController.navigate(Screen.TopTvShowsPicksDetails(actorId))
             },
             onNavigateToGallery = { actorId ->
@@ -541,7 +548,7 @@ fun NavGraphBuilder.mainNavGraph(
         )
     }
     composable<Screen.ActorGallery> {
-        ActorGalleryScreen(
+        ActorsGalleryScreen(
             onNavigateBack = { navController.popBackStack() }
         )
     }

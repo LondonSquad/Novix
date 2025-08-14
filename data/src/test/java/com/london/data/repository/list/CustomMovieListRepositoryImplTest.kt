@@ -44,7 +44,7 @@ class CustomMovieListRepositoryImplTest {
         repository = CustomMovieListRepositoryImpl(
             remoteDataSource = remoteDataSource,
             localDataSource = localDataSource,
-            authPreferences = authPreferences,
+            authenticationPreferences = authPreferences,
             preferencesService = preferencesService,
 //            workManager = workManager
         )

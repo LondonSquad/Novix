@@ -7,8 +7,8 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 
 data class MovieCategoryUiState(
-    val categoryId: Int = 0,
+    val categoryId: Int = 0, //toDo() category id will replace with enum
     val error: ErrorState? = null,
     val isLoading: Boolean = false,
-    val movies: Flow<PagingData<Movie>> = flow {}
+    val moviesFlow: Flow<PagingData<Movie>> = flow {}
 )

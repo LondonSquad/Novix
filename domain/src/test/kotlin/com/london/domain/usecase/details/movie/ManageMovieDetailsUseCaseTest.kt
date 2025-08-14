@@ -4,12 +4,13 @@ import com.google.common.truth.Truth.assertThat
 import com.london.domain.entity.Actor
 import com.london.domain.entity.Movie
 import com.london.domain.entity.moviedatails.MovieDetails
-import com.london.domain.entity.videoprovider.MovieVideo
+import com.london.domain.entity.moviedatails.MovieImages
 import com.london.domain.error.GetCastByIdFailedException
 import com.london.domain.error.GetMovieByIdFailedException
 import com.london.domain.error.GetMovieCastFailedException
 import com.london.domain.error.GetMovieImagesFailedException
-import com.london.domain.repository.MovieDetailsRepository
+import com.london.domain.repository.ActorRepository
+import com.london.domain.repository.MovieRepository
 import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.mockk
@@ -22,13 +23,18 @@ import org.junit.jupiter.api.assertThrows
 
 class ManageMovieDetailsUseCaseTest {
 
-    private lateinit var movieRepository: MovieDetailsRepository
+    private lateinit var movieRepository: MovieRepository
+    private lateinit var actorRepository: ActorRepository
     private lateinit var manageMovieDetailsUseCase: ManageMovieDetailsUseCase
 
     @Before
     fun setUp() {
         movieRepository = mockk(relaxed = true)
-        manageMovieDetailsUseCase = ManageMovieDetailsUseCase(movieRepository)
+        actorRepository = mockk(relaxed = true)
+        manageMovieDetailsUseCase = ManageMovieDetailsUseCase(
+            movieRepository = movieRepository,
+            actorRepository = actorRepository
+        )
     }
 
     // region Movie Details Tests
@@ -155,18 +161,19 @@ class ManageMovieDetailsUseCaseTest {
     }
 
     @Test
-    fun `getMovieDetails should not call repository multiple times for same invocation`() = runTest {
-        // Given
-        val movieId = 666
-        val expectedMovie = fakeMovieDetailsDomain().copy(id = movieId)
-        coEvery { movieRepository.getMovieById(movieId) } returns expectedMovie
+    fun `getMovieDetails should not call repository multiple times for same invocation`() =
+        runTest {
+            // Given
+            val movieId = 666
+            val expectedMovie = fakeMovieDetailsDomain().copy(id = movieId)
+            coEvery { movieRepository.getMovieById(movieId) } returns expectedMovie
 
-        // When
-        manageMovieDetailsUseCase.getMovieDetails(movieId)
+            // When
+            manageMovieDetailsUseCase.getMovieDetails(movieId)
 
-        // Then
-        coVerify(exactly = 1) { movieRepository.getMovieById(movieId) }
-    }
+            // Then
+            coVerify(exactly = 1) { movieRepository.getMovieById(movieId) }
+        }
     //endregion
 
     // region Similar Movies Tests
@@ -246,53 +253,69 @@ class ManageMovieDetailsUseCaseTest {
 
     // region Movie Images Tests
     @Test
-    fun `getFirstTenMovieImagesUseCase should return movie images when repository returns data`() = runTest {
-        // given
-        coEvery { movieRepository.getMovieImagesById(MOVIE_ID) } returns movieMockImages
-        // when
-        val result = manageMovieDetailsUseCase.getFirstTenMovieImagesUseCase(MOVIE_ID)
-        // then
-        assertThat(result).isEqualTo(movieMockImages)
-    }
-
-    @Test
-    fun `getFirstTenMovieImagesUseCase should return empty list when repository returns empty list`() = runTest {
-        // given
-        coEvery { movieRepository.getMovieImagesById(MOVIE_ID) } returns emptyList()
-        // when
-        val result = manageMovieDetailsUseCase.getFirstTenMovieImagesUseCase(MOVIE_ID)
-        // then
-        assertThat(result).isEmpty()
-    }
-
-    @Test
-    fun `getFirstTenMovieImagesUseCase should throw exception when repository throws exception`() = runTest {
-        // given
-        coEvery { movieRepository.getMovieImagesById(MOVIE_ID) } throws GetMovieImagesFailedException()
-
-        // when & then
-        assertThrows<GetMovieImagesFailedException> {
-            manageMovieDetailsUseCase.getFirstTenMovieImagesUseCase(MOVIE_ID)
+    fun `getFirstTenMovieImagesUseCase should return movie images when repository returns data`() =
+        runTest {
+            // given
+            coEvery { movieRepository.getMovieImagesById(MOVIE_ID) } returns movieImages
+            // when
+            val result = manageMovieDetailsUseCase.getMovieImagesUseCase(MOVIE_ID)
+            // then
+            assertThat(result).isEqualTo(movieMockImages)
         }
-    }
 
     @Test
-    fun `getFirstTenMovieImagesUseCase should limit the number of images returned when images over 10`() = runTest {
-        // given
-        val manyImages = (1..15).map { "/images/movie$it.jpg" }
-        coEvery { movieRepository.getMovieImagesById(MOVIE_ID) } returns manyImages
-        // when
-        val result = manageMovieDetailsUseCase.getFirstTenMovieImagesUseCase(MOVIE_ID)
-        // then
-        assertThat(result).hasSize(10)
-    }
+    fun `getFirstTenMovieImagesUseCase should return empty list when repository returns empty list`() =
+        runTest {
+            // given
+            coEvery { movieRepository.getMovieImagesById(MOVIE_ID) } returns MovieImages(
+                backdrops = emptyList(),
+                id = MOVIE_ID,
+                logos = emptyList(),
+                posters = emptyList()
+            )
+            // when
+            val result = manageMovieDetailsUseCase.getMovieImagesUseCase(MOVIE_ID)
+            // then
+            assertThat(result).isEmpty()
+        }
+
+    @Test
+    fun `getFirstTenMovieImagesUseCase should throw exception when repository throws exception`() =
+        runTest {
+            // given
+            coEvery { movieRepository.getMovieImagesById(MOVIE_ID) } throws GetMovieImagesFailedException()
+
+            // when & then
+            assertThrows<GetMovieImagesFailedException> {
+                manageMovieDetailsUseCase.getMovieImagesUseCase(MOVIE_ID)
+            }
+        }
+
+    @Test
+    fun `getFirstTenMovieImagesUseCase should limit the number of images returned when images over 10`() =
+        runTest {
+            // given
+            val manyImages = (1..15).map { "/images/movie$it.jpg" }
+            coEvery { movieRepository.getMovieImagesById(MOVIE_ID) } returns MovieImages(
+                backdrops = manyImages,
+                id = MOVIE_ID,
+                logos = emptyList(),
+                posters = emptyList()
+            )
+
+            // when
+            val result = manageMovieDetailsUseCase.getMovieImagesUseCase(MOVIE_ID)
+
+            // then
+            assertThat(result).hasSize(10)
+        }
     //endregion
 
     // region Movie Cast Tests
     @Test
     fun `getMovieCast should return cast when repository returns cast`() = runTest {
         // given
-        coEvery { movieRepository.getMovieCastById(MOVIE_ID) } returns actorMockCast
+        coEvery { actorRepository.getMovieActors(MOVIE_ID) } returns actorMockCast
 
         // when
         val result = manageMovieDetailsUseCase.getMovieCast(MOVIE_ID)
@@ -304,50 +327,55 @@ class ManageMovieDetailsUseCaseTest {
     @Test
     fun `getMovieCast should throw exception when repository throws exception`() = runTest {
         // given
-        coEvery { movieRepository.getMovieCastById(MOVIE_ID) } throws GetCastByIdFailedException()
+        coEvery { actorRepository.getMovieActors(MOVIE_ID) } throws GetCastByIdFailedException()
 
         // when & then
         assertThrows<GetCastByIdFailedException> {
             manageMovieDetailsUseCase.getMovieCast(MOVIE_ID)
         }
-        coVerify(exactly = 1) { movieRepository.getMovieCastById(MOVIE_ID) }
+        coVerify(exactly = 1) { actorRepository.getMovieActors(MOVIE_ID) }
     }
 
     @Test
     fun `getMovieCast should return empty list when repository returns empty list`() = runTest {
         // given
-        coEvery { movieRepository.getMovieCastById(MOVIE_ID) } returns emptyList()
+        coEvery { actorRepository.getMovieActors(MOVIE_ID) } returns emptyList()
 
         // when
         val result = manageMovieDetailsUseCase.getMovieCast(MOVIE_ID)
 
         // then
         assertThat(result).isEmpty()
-        coVerify(exactly = 1) { movieRepository.getMovieCastById(MOVIE_ID) }
+        coVerify(exactly = 1) { actorRepository.getMovieActors(MOVIE_ID) }
     }
 
     @Test
     fun `getMovieCast should call repository with correct movie ID`() = runTest {
         // given
         val customId = 999
-        coEvery { movieRepository.getMovieCastById(customId) } returns emptyList()
+        coEvery { actorRepository.getMovieActors(customId) } returns emptyList()
 
         // when
         manageMovieDetailsUseCase.getMovieCast(customId)
 
         // then
-        coVerify(exactly = 1) { movieRepository.getMovieCastById(customId) }
+        coVerify(exactly = 1) { actorRepository.getMovieActors(customId) }
     }
 
     @Test
     fun `getMovieCast should return different results for different movie IDs`() = runTest {
         // given
         val actorCast = listOf(
-            Actor(id = 3, name = "Tom Hardy", characterName = "Eames", profilePictureUrl = "/hardy.jpg")
+            Actor(
+                id = 3,
+                name = "Tom Hardy",
+                characterName = "Eames",
+                profilePictureUrl = "/hardy.jpg"
+            )
         )
 
-        coEvery { movieRepository.getMovieCastById(123) } returns actorMockCast
-        coEvery { movieRepository.getMovieCastById(456) } returns actorCast
+        coEvery { actorRepository.getMovieActors(123) } returns actorMockCast
+        coEvery { actorRepository.getMovieActors(456) } returns actorCast
 
         // when
         val result1 = manageMovieDetailsUseCase.getMovieCast(123)
@@ -436,6 +464,7 @@ class ManageMovieDetailsUseCaseTest {
             rating = 7,
         )
 
+
         val movieMockImages = listOf(
             "/images/movie1.jpg",
             "/images/movie2.jpg",
@@ -447,6 +476,13 @@ class ManageMovieDetailsUseCaseTest {
             "/images/movie9.jpg",
             "/images/movie10.jpg",
             "/images/movie11.jpg",
+        )
+
+        val movieImages = MovieImages(
+            backdrops = movieMockImages,
+            posters = emptyList(),
+            id = 0,
+            logos = emptyList()
         )
 
         val actorMockCast = listOf(
@@ -465,19 +501,8 @@ class ManageMovieDetailsUseCaseTest {
         )
 
         val mockVideos = listOf(
-            MovieVideo(
-                id = "vid1",
-                videoUrl = "https://youtube.com/watch?v=123",
-                name = "Official Trailer",
-                official = true,
-                site = "YouTube",
-            ), MovieVideo(
-                id = "vid2",
-                videoUrl = "https://youtube.com/watch?v=456",
-                name = "Teaser",
-                official = false,
-                site = "YouTube",
-            )
+            "https://youtube.com/watch?v=123",
+            "https://youtube.com/watch?v=456",
         )
     }
 }

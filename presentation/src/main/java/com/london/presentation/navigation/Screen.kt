@@ -1,5 +1,6 @@
 package com.london.presentation.navigation
 
+import com.london.domain.entity.recent.MediaType
 import kotlinx.serialization.Serializable
 
 @Serializable
@@ -77,7 +78,7 @@ sealed interface Screen {
     @Serializable
     data class Reviews(
         val mediaId: Int,
-        val mediaType: Int
+        val mediaType: MediaType
     ) : Screen
 
     @Serializable

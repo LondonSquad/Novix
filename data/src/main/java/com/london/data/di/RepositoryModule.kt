@@ -7,67 +7,42 @@ import com.london.data.local.model.recent.search.RecentSearchLocal
 import com.london.data.local.model.recent.viewed.RecentViewedLocal
 import com.london.data.local.model.recent.watched.RecentWatchedMovieLocal
 import com.london.data.local.model.recent.watched.RecentWatchedTvShowLocal
-import com.london.data.local.preference.AuthPreferences
+import com.london.data.local.preference.AuthenticationPreferences
 import com.london.data.local.source.customLists.CustomMovieListLocalDataSource
 import com.london.data.local.source.home.HomeLocalDataSource
 import com.london.data.local.source.home.upcoming.UpComingLocalDataSource
 import com.london.data.local.source.recent.RecentDataSource
 import com.london.data.local.source.recent.watched.RecentWatchedDataSource
-import com.london.data.remote.service.home.TrendingApiService
 import com.london.data.remote.source.account.AccountRemoteDataSource
+import com.london.data.remote.source.actor.ActorRemoteDataSource
 import com.london.data.remote.source.authentication.AuthenticationRemoteDataSource
-import com.london.data.remote.source.details.actor.ActorDetailsRemoteDataSource
-import com.london.data.remote.source.details.movie.MovieDetailsRemoteDataSource
-import com.london.data.remote.source.details.tvshow.TvShowDetailsRemoteDataSource
-import com.london.data.remote.source.details.videoprovider.tvshow.TvShowVideoProviderRemote
-import com.london.data.remote.source.discover.DiscoverRemoteDataSource
-import com.london.data.remote.source.home.popular.PopularRemoteDataSource
-import com.london.data.remote.source.home.trending.TrendingRemoteDataSource
-import com.london.data.remote.source.home.trending.TrendingRemoteDataSourceImpl
-import com.london.data.remote.source.home.upcoming.UpComingRemoteDataSource
 import com.london.data.remote.source.list.CustomMovieListsRemoteDataSource
-import com.london.data.remote.source.myrating.RatingRemoteDataSource
-import com.london.data.remote.source.reviews.ReviewsRemoteDataSource
+import com.london.data.remote.source.movie.MovieRemoteDataSource
 import com.london.data.remote.source.search.SearchRemoteDataSource
-import com.london.data.remote.source.toprated.TopRatedRemoteDataSource
-import com.london.data.repository.account.AccountRepositoryImp
+import com.london.data.remote.source.tvshow.TvShowRemoteDataSource
+import com.london.data.repository.account.AccountRepositoryImpl
+import com.london.data.repository.actor.ActorRepositoryImpl
 import com.london.data.repository.authentication.AuthenticationRepositoryImpl
-import com.london.data.repository.discover.DiscoverRepositoryImpl
-import com.london.data.repository.home.popular.PopularRepositoryImpl
-import com.london.data.repository.home.toprated.TopRatedRepositoryImpl
-import com.london.data.repository.home.trending.TrendingRepositoryImpl
-import com.london.data.repository.home.upcoming.UpComingRepositoryImpl
 import com.london.data.repository.list.CustomMovieListRepositoryImpl
-import com.london.data.repository.myrating.RatingRepositoryImpl
+import com.london.data.repository.movie.MovieRepositoryImpl
 import com.london.data.repository.recent.RecentSearchRepositoryImpl
 import com.london.data.repository.recent.RecentViewedRepositoryImpl
-import com.london.data.repository.recent.RecentWatchedRepositoryIml
-import com.london.data.repository.search.ActorRepositoryImpl
-import com.london.data.repository.search.MovieDetailsRepositoryImpl
+import com.london.data.repository.recent.RecentWatchedRepositoryImpl
 import com.london.data.repository.search.SearchRepositoryImpl
-import com.london.data.repository.search.TvShowRepositoryImpl
-import com.london.data.repository.search.TvShowVideoProviderRepositoryImpl
+import com.london.data.repository.tvshow.TvShowRepositoryImpl
 import com.london.data.utils.CrashReporter
-import com.london.data.utils.FirebaseCrashReporter
 import com.london.domain.AppPreferencesService
 import com.london.domain.entity.recent.RecentSearch
 import com.london.domain.entity.recent.RecentViewed
 import com.london.domain.repository.AccountRepository
 import com.london.domain.repository.ActorRepository
-import com.london.domain.repository.AuthRepository
+import com.london.domain.repository.AuthenticationRepository
 import com.london.domain.repository.CustomMovieListRepository
-import com.london.domain.repository.MovieDetailsRepository
-import com.london.domain.repository.PopularRepository
-import com.london.domain.repository.RatingRepository
+import com.london.domain.repository.MovieRepository
 import com.london.domain.repository.RecentRepository
 import com.london.domain.repository.RecentWatchedRepository
 import com.london.domain.repository.SearchRepository
-import com.london.domain.repository.TrendingRepository
 import com.london.domain.repository.TvShowRepository
-import com.london.domain.repository.TvShowVideoProviderRepository
-import com.london.domain.repository.UpComingRepository
-import com.london.domain.repository.discover.DiscoverRepository
-import com.london.domain.repository.toprated.TopRatedRepository
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -84,21 +59,9 @@ object RepositoryModule {
     fun provideAuthenticationRepository(
         authRemoteDataSource: AuthenticationRemoteDataSource,
         accountRemoteDataSource: AccountRemoteDataSource,
-        authPreferences: AuthPreferences
-    ): AuthRepository =
-        AuthenticationRepositoryImpl(authRemoteDataSource, accountRemoteDataSource, authPreferences)
-
-    @Provides
-    @Singleton
-    fun providePopularRepository(
-        dataSource: PopularRemoteDataSource,
-        @Named("popularLocalDataSource") homeLocalDataSource: HomeLocalDataSource<PopularSectionLocal>,
-        crashReporter: CrashReporter
-    ): PopularRepository = PopularRepositoryImpl(
-        popularRemoteDataSource = dataSource,
-        homeLocalDataSource = homeLocalDataSource,
-        crashReporter = crashReporter
-    )
+        authenticationPreferences: AuthenticationPreferences
+    ): AuthenticationRepository =
+        AuthenticationRepositoryImpl(authRemoteDataSource, accountRemoteDataSource, authenticationPreferences)
 
     @Provides
     @Singleton
@@ -119,66 +82,50 @@ object RepositoryModule {
     fun provideRecentWatchedRepository(
         recentWatchedMoviesDataSource: RecentWatchedDataSource<RecentWatchedMovieLocal>,
         recentWatchedTvShowsDataSource: RecentWatchedDataSource<RecentWatchedTvShowLocal>
-    ): RecentWatchedRepository = RecentWatchedRepositoryIml(
+    ): RecentWatchedRepository = RecentWatchedRepositoryImpl(
         recentWatchedMoviesDataSource = recentWatchedMoviesDataSource,
         recentWatchedTvShowsDataSource = recentWatchedTvShowsDataSource
     )
 
     @Provides
     @Singleton
-    fun provideTopRatedRepository(
-        dataSource: TopRatedRemoteDataSource,
-        @Named("topRatedLocalDataSource") localTopRated: HomeLocalDataSource<TopRatedLocal>,
-        crashReporter: CrashReporter
-    ): TopRatedRepository =
-        TopRatedRepositoryImpl(
-            topRatedRemoteDataSource = dataSource,
-            localTopRated = localTopRated,
-            crashReporter = crashReporter
-        )
-
-    @Provides
-    @Singleton
-    fun provideTrendingRemoteDataSource(
-        trendingApiService: TrendingApiService
-    ): TrendingRemoteDataSource =
-        TrendingRemoteDataSourceImpl(trendingApiService = trendingApiService)
-
-    @Provides
-    @Singleton
-    fun provideTrendingRepository(
-        dataSource: TrendingRemoteDataSource
-    ): TrendingRepository = TrendingRepositoryImpl(trendingRemoteDataSource = dataSource)
-
-    @Provides
-    @Singleton
     fun provideActorRepository(
-        dataSource: ActorDetailsRemoteDataSource
+        dataSource: ActorRemoteDataSource
     ): ActorRepository = ActorRepositoryImpl(dataSource = dataSource)
 
     @Provides
     @Singleton
     fun provideDetailsRepository(
-        tvShowDetailsRemoteDataSource: TvShowDetailsRemoteDataSource,
-        reviewsRemoteDataSource: ReviewsRemoteDataSource,
-        authPreferences: AuthPreferences
+        tvShowDetailsRemoteDataSource: TvShowRemoteDataSource,
+        @Named("topRatedLocalDataSource") localTopRated: HomeLocalDataSource<TopRatedLocal>,
+        @Named("popularLocalDataSource") homeLocalDataSource: HomeLocalDataSource<PopularSectionLocal>,
+        crashReporter: CrashReporter,
+        authenticationPreferences: AuthenticationPreferences
     ): TvShowRepository = TvShowRepositoryImpl(
-        tvShowDetailsRemoteDataSource = tvShowDetailsRemoteDataSource,
-        reviewsRemoteDataSource = reviewsRemoteDataSource,
-        authPreferences = authPreferences
+        tvShowRemoteDataSource = tvShowDetailsRemoteDataSource,
+        authenticationPreferences = authenticationPreferences,
+        homeLocalDataSource = homeLocalDataSource,
+        localTopRated = localTopRated,
+        crashReporter = crashReporter
     )
 
     @Provides
     @Singleton
     fun provideMovieDetailsRepository(
-        dataSource: MovieDetailsRemoteDataSource,
-        reviewsRemoteDataSource: ReviewsRemoteDataSource,
-        authPreferences: AuthPreferences
-    ): MovieDetailsRepository =
-        MovieDetailsRepositoryImpl(
-            movieDetailsRemoteDataSource = dataSource,
-            authPreferences = authPreferences,
-            reviewsRemoteDataSource = reviewsRemoteDataSource
+        dataSource: MovieRemoteDataSource,
+        authenticationPreferences: AuthenticationPreferences,
+        upComingLocalDataSource: UpComingLocalDataSource,
+        @Named("topRatedLocalDataSource") localTopRated: HomeLocalDataSource<TopRatedLocal>,
+        @Named("popularLocalDataSource") homeLocalDataSource: HomeLocalDataSource<PopularSectionLocal>,
+        crashReporter: CrashReporter
+    ): MovieRepository =
+        MovieRepositoryImpl(
+            movieRemoteDataSource = dataSource,
+            authenticationPreferences = authenticationPreferences,
+            homeLocalDataSource = homeLocalDataSource,
+            localTopRated = localTopRated,
+            upComingLocalDataSource = upComingLocalDataSource,
+            crashReporter = crashReporter
         )
 
     @Provides
@@ -195,64 +142,27 @@ object RepositoryModule {
 
     @Provides
     @Singleton
-    fun provideTvShowVideoProviderRepository(
-        dataSource: TvShowVideoProviderRemote
-    ): TvShowVideoProviderRepository =
-        TvShowVideoProviderRepositoryImpl(tvShowVideoProviderRemote = dataSource)
-
-    @Provides
-    @Singleton
-    fun provideRatingRepository(
-        ratingRemoteDataSource: RatingRemoteDataSource,
-        authPreferences: AuthPreferences
-    ): RatingRepository = RatingRepositoryImpl(
-        ratingRemoteDataSource = ratingRemoteDataSource,
-        authPreferences = authPreferences
-    )
-
-    @Provides
-    @Singleton
-    fun provideUpComingRepository(
-        upComingLocalDataSource: UpComingLocalDataSource,
-        upComingRemoteDataSource: UpComingRemoteDataSource,
-        crashReporter: FirebaseCrashReporter
-    ): UpComingRepository = UpComingRepositoryImpl(
-        upComingLocalDataSource = upComingLocalDataSource,
-        upComingRemoteDataSource = upComingRemoteDataSource,
-        crashReporter = crashReporter
-    )
-
-    @Provides
-    @Singleton
-    fun provideDisCoverRepository(
-        dataSource: DiscoverRemoteDataSource
-    ): DiscoverRepository = DiscoverRepositoryImpl(
-        remoteDataSource = dataSource
-    )
-
-    @Provides
-    @Singleton
     fun provideCustomMovieListsRepository(
         localDataSource: CustomMovieListLocalDataSource,
         remoteDataSource: CustomMovieListsRemoteDataSource,
         preferencesService: AppPreferencesService,
-        authPreferences: AuthPreferences,
+        authenticationPreferences: AuthenticationPreferences,
         crashReporter: CrashReporter
     ): CustomMovieListRepository = CustomMovieListRepositoryImpl(
         localDataSource = localDataSource,
         remoteDataSource = remoteDataSource,
         preferencesService = preferencesService,
-        authPreferences = authPreferences,
+        authenticationPreferences = authenticationPreferences,
         crashReporter = crashReporter
     )
 
     @Provides
     @Singleton
     fun provideAccountRepository(
-        authPreferences: AuthPreferences,
+        authenticationPreferences: AuthenticationPreferences,
         accountRemoteDataSource: AccountRemoteDataSource
-    ): AccountRepository = AccountRepositoryImp(
-        authPreferences = authPreferences,
+    ): AccountRepository = AccountRepositoryImpl(
+        authenticationPreferences = authenticationPreferences,
         accountRemoteDataSource = accountRemoteDataSource
     )
 

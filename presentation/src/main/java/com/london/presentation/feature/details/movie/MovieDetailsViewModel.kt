@@ -6,7 +6,7 @@ import com.london.domain.entity.recent.MediaType
 import com.london.domain.entity.recent.RecentViewed
 import com.london.domain.usecase.authentication.AuthenticationUseCase
 import com.london.domain.usecase.details.movie.ManageMovieDetailsUseCase
-import com.london.domain.usecase.rating.RatingUseCase
+import com.london.domain.usecase.rating.ManageRatingUseCase
 import com.london.domain.usecase.recent.viewed.ManageRecentViewedUseCase
 import com.london.domain.usecase.recent.watched.movie.ManageRecentMovieWatchedUseCase
 import com.london.presentation.navigation.Screen
@@ -20,7 +20,7 @@ class MovieDetailsViewModel @Inject constructor(
     private val movieDetails: ManageMovieDetailsUseCase,
     private val manageRecentMovieWatchedUseCase: ManageRecentMovieWatchedUseCase,
     private val manageRecentViewedUseCase: ManageRecentViewedUseCase,
-    private val ratingUseCase: RatingUseCase,
+    private val ratingUseCase: ManageRatingUseCase,
     private val authenticationUseCase: AuthenticationUseCase,
     savedStateHandle: SavedStateHandle
 ) : BaseViewModel<MovieDetailsUiState, MovieDetailsEffect>(MovieDetailsUiState()),
@@ -58,8 +58,8 @@ class MovieDetailsViewModel @Inject constructor(
         emitEffect(MovieDetailsEffect.OnLoginNavigation)
     }
 
-    override fun onReviewsClick(movieId: Int, mediaNumber: Int) {
-        emitEffect(MovieDetailsEffect.ReviewsNavigation(movieId, mediaNumber))
+    override fun onReviewsClick(movieId: Int, mediaType: MediaType) {
+        emitEffect(MovieDetailsEffect.ReviewsNavigation(movieId, mediaType))
     }
 
     override fun onGenreClick(genreId: Int) {
@@ -122,7 +122,7 @@ class MovieDetailsViewModel @Inject constructor(
         tryToExecute(
             block = {
                 val movie = movieDetails.getMovieDetails(movieId)
-                val movieImages = movieDetails.getFirstTenMovieImagesUseCase(movieId)
+                val movieImages = movieDetails.getMovieImagesUseCase(movieId)
                 val movieCast = movieDetails.getMovieCast(movieId)
                 Triple(movie, movieImages, movieCast)
             },
@@ -187,12 +187,13 @@ class MovieDetailsViewModel @Inject constructor(
                 val movieRating = if (authenticationUseCase.isLoggedIn())
                     ratingUseCase.getRateAccountMovieStatesById(movieId) else 0
                 Triple(similarMovies, movieVideos, movieRating)
+
             },
             onSuccess = { (similarMovies, videos, movieRating) ->
                 updateState {
                     copy(
                         similarMovies = similarMovies,
-                        movieVideo = videos.firstOrNull()?.videoUrl.orEmpty(),
+                        movieVideo = videos.firstOrNull().orEmpty(),
                         isRated = movieRating != 0 && state.value.isGuestUser.not()
                     )
                 }

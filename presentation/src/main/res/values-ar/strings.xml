@@ -60,7 +60,7 @@
     <string name="cast">طاقم العمل</string>
     <string name="biography">السيرة</string>
     <string name="gallery">المعرض</string>
-    <string name="image_dot">نقطه</string>
+    <string name="image_dot">نقطة</string>
     <string name="actor_photos">صور الممثلين</string>
     <string name="author_profile">صورة الممثل</string>
     <string name="tv_show_image">صور مسلسلات</string>
@@ -166,4 +166,5 @@
     <string name="no_lists_available">لا يوجد قوائم متاحة! قم بإنشاء واحدة الآن.</string>
     <string name="item_added_success">تمت الإضافة إلى القائمة بنجاح</string>
     <string name="item_added_fail">حدث خطأ ما، فشلت إضافة العنصر</string>
+    <string name="categories">التصنيفات</string>
 </resources>

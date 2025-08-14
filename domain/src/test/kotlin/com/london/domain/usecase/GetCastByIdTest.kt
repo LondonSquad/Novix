@@ -5,7 +5,7 @@ import com.london.domain.entity.tvshowdetails.TvShowCastEntity
 import com.london.domain.entity.tvshowdetails.TvShowCastMemberEntity
 import com.london.domain.entity.tvshowdetails.TvShowRoleEntity
 import com.london.domain.error.GetCastByIdFailedException
-import com.london.domain.repository.TvShowRepository
+import com.london.domain.repository.ActorRepository
 import io.mockk.coEvery
 import io.mockk.mockk
 import kotlinx.coroutines.test.runTest
@@ -14,7 +14,7 @@ import org.junit.Test
 import org.junit.jupiter.api.assertThrows
 
 class GetCastByIdTest {
-    lateinit var tvShowRepository: TvShowRepository
+    lateinit var tvShowRepository: ActorRepository
     lateinit var getCastById: GetCastById
 
     @Before
@@ -48,42 +48,26 @@ class GetCastByIdTest {
         val mockCast = TvShowCastEntity(
             cast = listOf(
                 TvShowCastMemberEntity(
-                    adult = false,
-                    gender = 1,
                     id = 1,
-                    knownForDepartment = "Acting",
                     name = "John Doe",
-                    originalName = "John Doe",
-                    popularity = 85.5,
                     profileUrl = "/profile1.jpg",
                     roles = listOf(
                         TvShowRoleEntity(
-                            creditId = "credit1",
                             character = "Main Character",
                             episodeCount = 24
                         )
                     ),
-                    totalEpisodeCount = 24,
-                    order = 0
                 ),
                 TvShowCastMemberEntity(
-                    adult = false,
-                    gender = 2,
                     id = 2,
-                    knownForDepartment = "Acting",
                     name = "Jane Smith",
-                    originalName = "Jane Smith",
-                    popularity = 78.2,
                     profileUrl = "/profile2.jpg",
                     roles = listOf(
                         TvShowRoleEntity(
-                            creditId = "credit2",
                             character = "Supporting Character",
                             episodeCount = 18
                         )
                     ),
-                    totalEpisodeCount = 18,
-                    order = 1
                 )
             ),
             id = TV_SHOW_ID

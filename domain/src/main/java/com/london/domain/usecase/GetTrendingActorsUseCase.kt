@@ -2,12 +2,12 @@ package com.london.domain.usecase
 
 import com.london.domain.entity.Actor
 import com.london.domain.entity.PagedFetchResponse
-import com.london.domain.repository.TrendingRepository
+import com.london.domain.repository.ActorRepository
 import javax.inject.Inject
 
 class GetTrendingActorsUseCase @Inject constructor(
-    private val trending: TrendingRepository
+    private val repository: ActorRepository
 ) {
     suspend fun invoke(page: Int): PagedFetchResponse<Actor> =
-        trending.getTrendingActors(page)
+        repository.getTrendingActors(page)
 }

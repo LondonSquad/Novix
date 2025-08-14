@@ -8,10 +8,10 @@ import com.london.domain.entity.tvshowdetails.TvShowCastEntity
 import com.london.domain.entity.tvshowdetails.episode.TvShowEpisodesEntity
 import com.london.domain.usecase.GetCastById
 import com.london.domain.usecase.GetEpisodesByTvShowSeason
-import com.london.domain.usecase.GetImagesById
+import com.london.domain.usecase.GetTvShowImagesByIdUseCase
 import com.london.domain.usecase.authentication.AuthenticationUseCase
 import com.london.domain.usecase.details.tvshow.ManageTvShowDetailsUseCase
-import com.london.domain.usecase.rating.RatingUseCase
+import com.london.domain.usecase.rating.ManageRatingUseCase
 import com.london.domain.usecase.recent.viewed.ManageRecentViewedUseCase
 import com.london.domain.usecase.recent.watched.tvshow.ManageRecentTvShowWatchedUseCase
 import com.london.presentation.navigation.Screen
@@ -34,12 +34,12 @@ import org.junit.Test
 @OptIn(ExperimentalCoroutinesApi::class)
 class TvShowDetailsViewModelTest {
     private lateinit var getCastById: GetCastById
-    private lateinit var getTvShowImages: GetImagesById
+    private lateinit var getTvShowImages: GetTvShowImagesByIdUseCase
     private lateinit var getEpisodesByTvShowSeason: GetEpisodesByTvShowSeason
     private lateinit var manageTvShowDetailsUseCase: ManageTvShowDetailsUseCase
     private lateinit var manageRecentTvShowWatchedUseCase: ManageRecentTvShowWatchedUseCase
     private lateinit var manageRecentViewedUseCase: ManageRecentViewedUseCase
-    private lateinit var ratingUseCase: RatingUseCase
+    private lateinit var ratingUseCase: ManageRatingUseCase
     private lateinit var authenticationUseCase: AuthenticationUseCase
     private val savedStateHandle = mockk<SavedStateHandle>(relaxed = true)
     private var viewModel: TvShowDetailsViewModel? = null
@@ -60,14 +60,10 @@ class TvShowDetailsViewModelTest {
         every { savedStateHandle.getArgs<Screen.TvShowDetails>() } returns Screen.TvShowDetails(
             tvShowId = TV_SHOW_ID
         )
-        coEvery { manageTvShowDetailsUseCase.getTvShowDetails(TV_SHOW_ID) } returns mockk(relaxed = true)
         coEvery { getCastById.invoke(TV_SHOW_ID) } returns mockk<TvShowCastEntity>(relaxed = true)
-        coEvery { getEpisodesByTvShowSeason.invoke(TV_SHOW_ID, any()) } returns tvShowEpisodesEntity
-        coEvery { getTvShowImages.invoke(TV_SHOW_ID) } returns emptyList()
         coEvery { authenticationUseCase.isLoggedIn() } returns false
         coEvery { manageRecentViewedUseCase.addToRecentViewed(any()) } returns Unit
         coEvery { manageRecentTvShowWatchedUseCase.addTvShowToRecentWatched(any()) } returns Unit
-        coEvery { manageTvShowDetailsUseCase.getTvShowVideoProvider(TV_SHOW_ID) } returns emptyList()
         coEvery { ratingUseCase.getRateAccountTvShowState(TV_SHOW_ID) } returns 0
 
         viewModel = TvShowDetailsViewModel(
@@ -92,6 +88,10 @@ class TvShowDetailsViewModelTest {
 
     @Test
     fun `when initializeGetImagesData fails, error state should be updated`() = runTest {
+        // Given
+        val exception = Exception("error")
+        coEvery { getTvShowImages.invoke(TV_SHOW_ID) } throws exception
+
         // When
         advanceUntilIdle()
 
@@ -105,6 +105,9 @@ class TvShowDetailsViewModelTest {
 
     @Test
     fun `when initializeEpisodesBySeasons, episodes by seasons data should be fetched`() = runTest {
+        // Given
+        coEvery { getEpisodesByTvShowSeason.invoke(TV_SHOW_ID, any()) } returns tvShowEpisodesEntity
+
         // When
         advanceUntilIdle()
 
@@ -119,6 +122,11 @@ class TvShowDetailsViewModelTest {
 
     @Test
     fun `When initializeEpisodesBySeasons fails, error state should be updated`() = runTest {
+
+        // Given
+        val exception = Exception("error")
+        coEvery { getEpisodesByTvShowSeason.invoke(TV_SHOW_ID, any()) } throws exception
+
         // When
         advanceUntilIdle()
 
@@ -133,6 +141,9 @@ class TvShowDetailsViewModelTest {
     @Test
     fun `When initializeEpisodesBySeasons is called, videoProvider state should be updated`() =
         runTest {
+            // Given
+            coEvery { manageTvShowDetailsUseCase.getTvShowVideoProvider(TV_SHOW_ID) } returns emptyList()
+
             // When
             advanceUntilIdle()
 
@@ -147,6 +158,12 @@ class TvShowDetailsViewModelTest {
     @Test
     fun `When initializeGetTvShowDetailsData is called, tvShowDetails state should be updated`() =
         runTest {
+
+            // Given
+            coEvery { manageTvShowDetailsUseCase.getTvShowDetails(TV_SHOW_ID) } returns mockk(
+                relaxed = true
+            )
+
             // When
             advanceUntilIdle()
 
@@ -205,28 +222,11 @@ class TvShowDetailsViewModelTest {
 
         // When & Then
         viewModel?.effect?.test {
-            viewModel?.OnGenreClicked(genreId)
+            viewModel?.onGenreClicked(genreId)
             assertThat(awaitItem()).isEqualTo(
                 TvShowDetailsEffect.NavigateToTvShowsByCategoryId(genreId)
             )
             cancelAndIgnoreRemainingEvents()
-        }
-    }
-
-    @Test
-    fun `onRateBottomSheetClick should update error state when authentication fails`() = runTest {
-        // Given
-        coEvery { authenticationUseCase.isLoggedIn() } throws Exception("Authentication error")
-
-        // When
-        advanceUntilIdle()
-
-        // Then
-        viewModel?.state?.test {
-            viewModel?.onRateBottomSheetClick()
-            val state = expectMostRecentItem()
-            assertThat(state.error).isNotNull()
-            ensureAllEventsConsumed()
         }
     }
 

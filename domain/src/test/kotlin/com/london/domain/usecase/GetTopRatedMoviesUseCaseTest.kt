@@ -2,8 +2,8 @@ package com.london.domain.usecase
 
 import com.google.common.truth.Truth.assertThat
 import com.london.domain.entity.PagedFetchResponse
-import com.london.domain.entity.toprated.TopRatedMovie
-import com.london.domain.repository.toprated.TopRatedRepository
+import com.london.domain.entity.toprated.TopRatedMedia
+import com.london.domain.repository.MovieRepository
 import com.london.domain.usecase.toprated.GetTopRatedMoviesUseCase
 import io.mockk.coEvery
 import io.mockk.mockk
@@ -14,7 +14,7 @@ import org.junit.jupiter.api.assertThrows
 
 class GetTopRatedMoviesUseCaseTest {
 
-    private lateinit var repository: TopRatedRepository
+    private lateinit var repository: MovieRepository
     private lateinit var getTopRatedMovies: GetTopRatedMoviesUseCase
 
     @Before
@@ -43,8 +43,8 @@ class GetTopRatedMoviesUseCaseTest {
 
         // Then
         assertThat(result).isEqualTo(mockPagedResponse)
-        assertThat(result.items[0].title).isEqualTo("The Shawshank Redemption")
-        assertThat(result.items[1].title).isEqualTo("The Godfather")
+        assertThat(result.items[0].name).isEqualTo("The Shawshank Redemption")
+        assertThat(result.items[1].name).isEqualTo("The Godfather")
     }
 
     @Test
@@ -54,7 +54,7 @@ class GetTopRatedMoviesUseCaseTest {
             currentPage = PAGE,
             totalPages = TOTAL_PAGES,
             totalItems = TOTAL_PAGES,
-            items = emptyList<TopRatedMovie>()
+            items = emptyList<TopRatedMedia>()
         )
 
         coEvery {
@@ -86,18 +86,18 @@ class GetTopRatedMoviesUseCaseTest {
         private const val TOTAL_PAGES = 2
         private const val TOTAL_ITEMS = 100
 
-        private val mockMovie1 = TopRatedMovie(
+        private val mockMovie1 = TopRatedMedia(
             id = 278,
-            title = "The Shawshank Redemption",
+            name = "The Shawshank Redemption",
             voteAverage = 8.712,
             releaseDate = "1994-09-23",
             posterUrl = "/q6y0Go1tsGEsmtFryDOJo3dEmqu.jpg",
             genreIds = listOf(18, 80),
         )
 
-        private val mockMovie2 = TopRatedMovie(
+        private val mockMovie2 = TopRatedMedia(
             id = 238,
-            title = "The Godfather",
+            name = "The Godfather",
             voteAverage = 8.7, releaseDate = "1972-03-14",
             posterUrl = "/3bhkrj58Vtu7enYsRolD1fZdja1.jpg",
             genreIds = listOf(18, 80),

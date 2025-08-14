@@ -1,0 +1,112 @@
+package com.london.presentation.feature.account.bottomsheet
+
+import androidx.compose.foundation.background
+import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.runtime.*
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.unit.dp
+import com.london.designsystem.component.Text
+import com.london.designsystem.theme.NovixTheme
+import com.london.domain.contentrestriction.ContentRestrictionLevel
+import com.london.presentation.R
+import com.london.presentation.feature.account.bottomsheet.base.BaseBottomSheet
+import com.london.presentation.feature.account.bottomsheet.base.BottomSheetButton
+
+@Composable
+fun ContentRestrictionBottomSheet(
+    currentLevel: ContentRestrictionLevel,
+    onSaveClick: (ContentRestrictionLevel) -> Unit,
+    onDismiss: () -> Unit,
+    modifier: Modifier = Modifier
+) {
+    var selectedLevel by remember(currentLevel) { mutableStateOf(currentLevel) }
+
+    BaseBottomSheet(
+        title = stringResource(R.string.content_restriction),
+        onDismiss = onDismiss,
+        modifier = modifier,
+        button = BottomSheetButton(
+            text = stringResource(R.string.save),
+            onClick = { onSaveClick(selectedLevel) }
+        )
+    ) {
+        ContentRestrictionOption(
+            level = ContentRestrictionLevel.STRICT,
+            title = stringResource(R.string.strict),
+            description = stringResource(R.string.blurs_all_sensitive_content),
+            isSelected = selectedLevel == ContentRestrictionLevel.STRICT,
+            onSelected = { selectedLevel = it },
+            modifier = Modifier.padding(top = 24.dp)
+        )
+
+        ContentRestrictionOption(
+            level = ContentRestrictionLevel.MODERATE,
+            title = stringResource(R.string.moderate),
+            description = stringResource(R.string.blurs_explicit_scenes_only),
+            isSelected = selectedLevel == ContentRestrictionLevel.MODERATE,
+            onSelected = { selectedLevel = it },
+            modifier = Modifier.padding(top = 16.dp)
+        )
+
+        ContentRestrictionOption(
+            level = ContentRestrictionLevel.OFF,
+            title = stringResource(R.string.off),
+            description = stringResource(R.string.no_content_is_blurred),
+            isSelected = selectedLevel == ContentRestrictionLevel.OFF,
+            onSelected = { selectedLevel = it },
+            modifier = Modifier.padding(top = 16.dp, bottom = 32.dp)
+        )
+    }
+}
+
+@Composable
+private fun ContentRestrictionOption(
+    level: ContentRestrictionLevel,
+    title: String,
+    description: String,
+    isSelected: Boolean,
+    onSelected: (ContentRestrictionLevel) -> Unit,
+    modifier: Modifier = Modifier
+) {
+    Row(
+        modifier = modifier
+            .fillMaxWidth()
+            .clip(RoundedCornerShape(12.dp))
+            .background(
+                if (isSelected) NovixTheme.colors.primaryVariant
+                else NovixTheme.colors.surface
+            )
+            .border(
+                width = if (isSelected) 1.5.dp else 1.dp,
+                color = if (isSelected) NovixTheme.colors.primary else NovixTheme.colors.stroke,
+                shape = RoundedCornerShape(12.dp)
+            )
+            .clickable { onSelected(level) }
+            .padding(12.dp),
+        horizontalArrangement = Arrangement.SpaceBetween,
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        Column(
+            modifier = Modifier.weight(1f)
+        ) {
+            Text(
+                text = title,
+                style = NovixTheme.typography.label.large,
+                color = NovixTheme.colors.body
+            )
+
+            Text(
+                text = description,
+                style = NovixTheme.typography.label.small,
+                color = NovixTheme.colors.hint,
+                modifier = Modifier.padding(top = 4.dp)
+            )
+        }
+    }
+}

@@ -4,25 +4,14 @@ import com.google.common.truth.Truth.assertThat
 import com.london.domain.entity.PagedFetchResponse
 import com.london.domain.entity.Trending
 import com.london.domain.entity.TvShow
-import com.london.domain.entity.popular.PopularTvShow
-import com.london.domain.entity.tvshowdetails.TvShowCreatorEntity
+import com.london.domain.entity.popular.PopularMedia
+import com.london.domain.entity.recent.MediaType
 import com.london.domain.entity.tvshowdetails.TvShowDetailsEntity
-import com.london.domain.entity.tvshowdetails.TvShowEpisodeEntity
 import com.london.domain.entity.tvshowdetails.TvShowGenreEntity
-import com.london.domain.entity.tvshowdetails.TvShowNetworkEntity
-import com.london.domain.entity.tvshowdetails.TvShowProductionCompanyEntity
-import com.london.domain.entity.tvshowdetails.TvShowProductionCountryEntity
-import com.london.domain.entity.tvshowdetails.TvShowSeasonEntity
-import com.london.domain.entity.tvshowdetails.TvShowSpokenLanguageEntity
-import com.london.domain.entity.videoprovider.TvShowVideo
 import com.london.domain.error.TvShowDetailsSearchFailedException
 import com.london.domain.error.TvShowSearchFailedException
-import com.london.domain.repository.PopularRepository
 import com.london.domain.repository.SearchRepository
-import com.london.domain.repository.TrendingRepository
 import com.london.domain.repository.TvShowRepository
-import com.london.domain.repository.TvShowVideoProviderRepository
-import com.london.domain.repository.discover.DiscoverRepository
 import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.mockk
@@ -34,28 +23,16 @@ import org.junit.jupiter.api.assertThrows
 
 class ManageTvShowDetailsUseCaseTest {
     private lateinit var tvShowRepository: TvShowRepository
-    private lateinit var popularRepository: PopularRepository
-    private lateinit var trendingRepository: TrendingRepository
     private lateinit var searchRepository: SearchRepository
-    private lateinit var discoverRepository: DiscoverRepository
-    private lateinit var tvShowVideoProviderRepository: TvShowVideoProviderRepository
     private lateinit var manageTvShowDetailsUseCase: ManageTvShowDetailsUseCase
 
     @Before
     fun setUp() {
         tvShowRepository = mockk()
-        popularRepository = mockk()
-        trendingRepository = mockk()
         searchRepository = mockk()
-        discoverRepository = mockk()
-        tvShowVideoProviderRepository = mockk()
         manageTvShowDetailsUseCase = ManageTvShowDetailsUseCase(
             tvShowRepository = tvShowRepository,
-            popularRepository = popularRepository,
-            trendingRepository = trendingRepository,
             searchRepository = searchRepository,
-            discoverRepository = discoverRepository,
-            tvShowVideoProviderRepository = tvShowVideoProviderRepository
         )
     }
 
@@ -86,7 +63,7 @@ class ManageTvShowDetailsUseCaseTest {
     fun `getPopular default limit should return 5 tv shows`() = runTest {
         // Given
         val mockTvShows = MOCK_TV_SHOWS_FULL_LIST.map { createMockTvShow(it) }
-        coEvery { popularRepository.getPopularTvShows() } returns mockTvShows
+        coEvery { tvShowRepository.getPopularTvShows() } returns mockTvShows
 
         // When
         val result = manageTvShowDetailsUseCase.getPopularTvShows()
@@ -95,14 +72,14 @@ class ManageTvShowDetailsUseCaseTest {
         assertThat(result).hasSize(MOCK_TV_SHOWS_LIMITED.size)
         assertThat(result[0].name).isEqualTo(MOCK_TV_SHOWS_FULL_LIST[0].name)
         assertThat(result[4].name).isEqualTo(MOCK_TV_SHOWS_FULL_LIST[4].name)
-        coVerify(exactly = 1) { popularRepository.getPopularTvShows() }
+        coVerify(exactly = 1) { tvShowRepository.getPopularTvShows() }
     }
 
     @Test
     fun `getPopular with custom limit should return specified number of tv shows`() = runTest {
         // Given
         val mockTvShows = MOCK_TV_SHOWS_FULL_LIST.map { createMockTvShow(it) }
-        coEvery { popularRepository.getPopularTvShows() } returns mockTvShows
+        coEvery { tvShowRepository.getPopularTvShows() } returns mockTvShows
 
         // When
         val result = manageTvShowDetailsUseCase.getPopularTvShows(CUSTOM_LIMIT)
@@ -111,7 +88,7 @@ class ManageTvShowDetailsUseCaseTest {
         assertThat(result).hasSize(CUSTOM_LIMIT)
         assertThat(result[0].name).isEqualTo(MOCK_TV_SHOWS_FULL_LIST[0].name)
         assertThat(result[2].name).isEqualTo(MOCK_TV_SHOWS_FULL_LIST[2].name)
-        coVerify(exactly = 1) { popularRepository.getPopularTvShows() }
+        coVerify(exactly = 1) { tvShowRepository.getPopularTvShows() }
     }
 
     @Test
@@ -119,7 +96,7 @@ class ManageTvShowDetailsUseCaseTest {
         runTest {
             // Given
             val mockTvShows = MOCK_TV_SHOWS_LIMITED.map { createMockTvShow(it) }
-            coEvery { popularRepository.getPopularTvShows() } returns mockTvShows
+            coEvery { tvShowRepository.getPopularTvShows() } returns mockTvShows
 
             // When
             val result = manageTvShowDetailsUseCase.getPopularTvShows(LARGE_LIMIT)
@@ -128,41 +105,41 @@ class ManageTvShowDetailsUseCaseTest {
             assertThat(result).hasSize(MOCK_TV_SHOWS_LIMITED.size)
             assertThat(result[0].name).isEqualTo(MOCK_TV_SHOWS_LIMITED[0].name)
             assertThat(result[1].name).isEqualTo(MOCK_TV_SHOWS_LIMITED[1].name)
-            coVerify(exactly = 1) { popularRepository.getPopularTvShows() }
+            coVerify(exactly = 1) { tvShowRepository.getPopularTvShows() }
         }
 
     @Test
     fun `getPopular with empty repository should return empty list`() = runTest {
         // Given
-        coEvery { popularRepository.getPopularTvShows() } returns EMPTY_TV_SHOWS_LIST
+        coEvery { tvShowRepository.getPopularTvShows() } returns EMPTY_TV_SHOWS_LIST
 
         // When
         val result = manageTvShowDetailsUseCase.getPopularTvShows()
 
         // Then
         assertThat(result).isEmpty()
-        coVerify(exactly = 1) { popularRepository.getPopularTvShows() }
+        coVerify(exactly = 1) { tvShowRepository.getPopularTvShows() }
     }
 
     @Test
     fun `getPopular with zero limit should return empty list`() = runTest {
         // Given
         val mockTvShows = MOCK_TV_SHOWS_LIMITED.map { createMockTvShow(it) }
-        coEvery { popularRepository.getPopularTvShows() } returns mockTvShows
+        coEvery { tvShowRepository.getPopularTvShows() } returns mockTvShows
 
         // When
         val result = manageTvShowDetailsUseCase.getPopularTvShows(ZERO_LIMIT)
 
         // Then
         assertThat(result).isEmpty()
-        coVerify(exactly = 1) { popularRepository.getPopularTvShows() }
+        coVerify(exactly = 1) { tvShowRepository.getPopularTvShows() }
     }
 
     @Test
     fun `getPopular should propagate repository exceptions`() = runTest {
         // Given
         val exception = RuntimeException(EXCEPTION_MESSAGE)
-        coEvery { popularRepository.getPopularTvShows() } throws exception
+        coEvery { tvShowRepository.getPopularTvShows() } throws exception
 
         // When & Then
         try {
@@ -172,14 +149,14 @@ class ManageTvShowDetailsUseCaseTest {
             assertThat(e.message).isEqualTo(EXCEPTION_MESSAGE)
         }
 
-        coVerify(exactly = 1) { popularRepository.getPopularTvShows() }
+        coVerify(exactly = 1) { tvShowRepository.getPopularTvShows() }
     }
 
     @Test
     fun `getPopular should return tv shows with correct properties`() = runTest {
         // Given
         val mockTvShows = MOCK_TV_SHOWS_FULL_LIST.map { createMockTvShow(it) }
-        coEvery { popularRepository.getPopularTvShows() } returns mockTvShows
+        coEvery { tvShowRepository.getPopularTvShows() } returns mockTvShows
 
         // When
         val result = manageTvShowDetailsUseCase.getPopularTvShows(1)
@@ -200,7 +177,7 @@ class ManageTvShowDetailsUseCaseTest {
     fun `getPopular should return tv shows in correct order`() = runTest {
         // Given
         val mockTvShows = MOCK_TV_SHOWS_FULL_LIST.map { createMockTvShow(it) }
-        coEvery { popularRepository.getPopularTvShows() } returns mockTvShows
+        coEvery { tvShowRepository.getPopularTvShows() } returns mockTvShows
 
         // When
         val result = manageTvShowDetailsUseCase.getPopularTvShows(CUSTOM_LIMIT)
@@ -218,7 +195,7 @@ class ManageTvShowDetailsUseCaseTest {
     fun `getPopular should return tv shows with valid ratings`() = runTest {
         // Given
         val mockTvShows = MOCK_TV_SHOWS_FULL_LIST.map { createMockTvShow(it) }
-        coEvery { popularRepository.getPopularTvShows() } returns mockTvShows
+        coEvery { tvShowRepository.getPopularTvShows() } returns mockTvShows
 
         // When
         val result = manageTvShowDetailsUseCase.getPopularTvShows()
@@ -240,10 +217,10 @@ class ManageTvShowDetailsUseCaseTest {
     fun `invoke should return trending tv shows from repository`() = runTest {
         // Given
         val mockResponse = createMockTrendingResponse()
-        coEvery { trendingRepository.getTrendingTvShows(any()) } returns mockResponse
+        coEvery { tvShowRepository.getTrendingTvShows(any()) } returns mockResponse
 
         // When
-        val result = trendingRepository.getTrendingTvShows(page = 1)
+        val result = tvShowRepository.getTrendingTvShows(page = 1)
 
         // Then
         assertThat(result).isNotNull()
@@ -257,16 +234,16 @@ class ManageTvShowDetailsUseCaseTest {
             totalPages = 0,
             totalItems = 0
         )
-        coEvery { trendingRepository.getTrendingTvShows(any()) } returns emptyResponse
+        coEvery { tvShowRepository.getTrendingTvShows(any()) } returns emptyResponse
 
-        val result = trendingRepository.getTrendingTvShows(page = 1)
+        val result = tvShowRepository.getTrendingTvShows(page = 1)
 
         assertThat(result.totalPages).isEqualTo(0)
     }
 
     @Test
     fun `invoke should handle repository error`() = runTest {
-        coEvery { trendingRepository.getTrendingTvShows(any()) } throws Exception(
+        coEvery { tvShowRepository.getTrendingTvShows(any()) } throws Exception(
             "Failed to fetch movie details"
         )
 
@@ -280,9 +257,9 @@ class ManageTvShowDetailsUseCaseTest {
     @Test
     fun `invoke should handle negative page number`() = runTest {
         val mockResponse = createMockTrendingResponse()
-        coEvery { trendingRepository.getTrendingTvShows(any()) } returns mockResponse
+        coEvery { tvShowRepository.getTrendingTvShows(any()) } returns mockResponse
 
-        val result = trendingRepository.getTrendingTvShows(page = -1)
+        val result = tvShowRepository.getTrendingTvShows(page = -1)
 
         assertEquals(1, result.currentPage)
     }
@@ -331,41 +308,44 @@ class ManageTvShowDetailsUseCaseTest {
 
     // region GetTvShowList
     @Test
-    fun `should return paged fetch response when repository returns paged fetch response`() = runTest {
-        // Given
-        coEvery {
-            manageTvShowDetailsUseCase.getTvShowList(NAME, PAGE_NUMBER)
-        } returns pagedFetchResponse
+    fun `should return paged fetch response when repository returns paged fetch response`() =
+        runTest {
+            // Given
+            coEvery {
+                manageTvShowDetailsUseCase.getTvShowList(NAME, PAGE_NUMBER)
+            } returns pagedFetchResponse
 
-        // When
-        val result = manageTvShowDetailsUseCase.getTvShowList(NAME, PAGE_NUMBER)
+            // When
+            val result = manageTvShowDetailsUseCase.getTvShowList(NAME, PAGE_NUMBER)
 
-        // Then
-        assertThat(result).isEqualTo(pagedFetchResponse)
-    }
+            // Then
+            assertThat(result).isEqualTo(pagedFetchResponse)
+        }
 
     @Test
-    fun `should throw TvShowSearchFailedException when repository throws TvShowSearchFailedException`() = runTest {
-        //given
-        coEvery {
-            manageTvShowDetailsUseCase.getTvShowList(NAME, PAGE_NUMBER)
-        } throws TvShowSearchFailedException()
+    fun `should throw TvShowSearchFailedException when repository throws TvShowSearchFailedException`() =
+        runTest {
+            //given
+            coEvery {
+                manageTvShowDetailsUseCase.getTvShowList(NAME, PAGE_NUMBER)
+            } throws TvShowSearchFailedException()
 
-        //when //then
-        assertThrows<TvShowSearchFailedException> {
-            manageTvShowDetailsUseCase.getTvShowList(NAME, PAGE_NUMBER)
+            //when //then
+            assertThrows<TvShowSearchFailedException> {
+                manageTvShowDetailsUseCase.getTvShowList(NAME, PAGE_NUMBER)
+            }
         }
-    }
     // endregion
 
-    private fun createMockTvShow(mockData: MockTvShowData): PopularTvShow {
-        return PopularTvShow(
+    private fun createMockTvShow(mockData: MockPopularMedia): PopularMedia =
+        PopularMedia(
             id = mockData.id,
             name = mockData.name,
             posterUrl = mockData.posterUrl,
-            rating = mockData.rating
+            rating = mockData.rating,
+            mediaType = MediaType.TvShow
         )
-    }
+
 
     private fun createMockTrendingResponse(): PagedFetchResponse<Trending> =
         PagedFetchResponse(
@@ -380,14 +360,13 @@ class ManageTvShowDetailsUseCaseTest {
         title: String = "Test TV Show",
         posterPath: String = "test_poster.jpg",
         genreIds: List<Int> = listOf(18, 35)
-    ): Trending {
-        return Trending(
-            id = id,
-            title = title,
-            posterPath = posterPath,
-            genreIds = genreIds
-        )
-    }
+    ): Trending = Trending(
+        id = id,
+        title = title,
+        posterPath = posterPath,
+        genreIds = genreIds
+    )
+
 
     private companion object {
         private const val TV_SHOW_ID = 12345
@@ -413,172 +392,69 @@ class ManageTvShowDetailsUseCaseTest {
         )
 
         val mockVideos = listOf(
-            TvShowVideo(
-                id = "vid1",
-                iso31661 = "US",
-                iso6391 = "en",
-                videoUrl = "https://youtube.com/vid1",
-                name = "Episode 1 Trailer",
-                official = true,
-                publishedAt = "2024-07-01",
-                site = "YouTube",
-                size = 1080,
-                type = "Trailer"
-            ),
-            TvShowVideo(
-                id = "vid2",
-                iso31661 = "US",
-                iso6391 = "en",
-                videoUrl = "https://youtube.com/vid2",
-                name = "Episode 2 Teaser",
-                official = false,
-                publishedAt = "2024-07-05",
-                site = "YouTube",
-                size = 720,
-                type = "Teaser"
-            )
+            "https://youtube.com/vid1",
+            "https://youtube.com/vid2"
         )
 
         val mockTvShowDetails = TvShowDetailsEntity(
-            adult = false,
-            backdropUrl = "/backdrop.jpg",
-            createdBy = listOf(
-                TvShowCreatorEntity(
-                    id = 1,
-                    creditId = "credit1",
-                    name = "Creator Name",
-                    originalName = "Creator Name",
-                    gender = 1,
-                    profileUrl = "/profile.jpg"
-                )
-            ),
-            episodeRunTime = listOf(45),
             firstAirDate = "2020-01-01",
             tvShowGenres = listOf(TvShowGenreEntity(id = 1, name = "Drama")),
-            homepage = "https://example.com",
             id = TV_SHOW_ID,
-            inProduction = true,
-            languages = listOf("en"),
-            lastAirDate = "2023-12-31",
-            lastTvShowEpisodeToAir = TvShowEpisodeEntity(
-                id = 1,
-                name = "Episode 1",
-                overview = "Overview",
-                voteAverage = 8.5,
-                voteCount = 100,
-                airDate = "2023-12-31",
-                episodeNumber = 1,
-                episodeType = "finale",
-                productionCode = "P001",
-                runtime = 45,
-                seasonNumber = 1,
-                showId = TV_SHOW_ID,
-                stillPath = "/still.jpg"
-            ),
             name = "Test Show",
-            nextTvShowEpisodeToAir = null,
-            tvShowNetworks = listOf(
-                TvShowNetworkEntity(
-                    id = 1,
-                    logoUrl = "/network.jpg",
-                    name = "Network",
-                    originCountry = "US"
-                )
-            ),
             numberOfEpisodes = 10,
             numberOfSeasons = 2,
-            originCountry = listOf("US"),
-            originalLanguage = "en",
-            originalName = "Test Show",
             overview = "A test show overview",
-            popularity = 85.5,
             posterUrl = "/poster.jpg",
-            productionCompanies = listOf(
-                TvShowProductionCompanyEntity(
-                    id = 1,
-                    logoUrl = "/company.jpg",
-                    name = "Production Company",
-                    originCountry = "US"
-                )
-            ),
-            productionCountries = listOf(
-                TvShowProductionCountryEntity(
-                    iso31661 = "US",
-                    name = "United States"
-                )
-            ),
-            tvShowSeasons = listOf(
-                TvShowSeasonEntity(
-                    airDate = "2020-01-01",
-                    episodeCount = 10,
-                    id = 1,
-                    name = "Season 1",
-                    overview = "Season 1 overview",
-                    posterUrl = "/season1.jpg",
-                    seasonNumber = 1,
-                    voteAverage = 8.0
-                )
-            ),
-            tvShowSpokenLanguageEntities = listOf(
-                TvShowSpokenLanguageEntity(
-                    englishName = "English",
-                    iso6391 = "en",
-                    name = "English"
-                )
-            ),
-            status = "Ended",
-            tagline = "Test tagline",
-            type = "Scripted",
+            tvShowSeasons = listOf(10),
             voteAverage = 8.5,
-            voteCount = 1000
         )
 
-        private val EMPTY_TV_SHOWS_LIST = emptyList<PopularTvShow>()
+        private val EMPTY_TV_SHOWS_LIST = emptyList<PopularMedia>()
 
         private val MOCK_TV_SHOWS_FULL_LIST = listOf(
-            MockTvShowData(
+            MockPopularMedia(
                 id = 1,
                 name = "Breaking Bad",
                 overview = "A high school chemistry teacher turned methamphetamine manufacturer",
                 posterUrl = "https://example.com/breaking-bad-poster.jpg",
                 rating = 9.5,
             ),
-            MockTvShowData(
+            MockPopularMedia(
                 id = 2,
                 name = "Stranger Things",
                 overview = "When a young boy disappears, his mother and friends must face terrifying supernatural forces",
                 posterUrl = "https://example.com/stranger-things-poster.jpg",
                 rating = 8.7
             ),
-            MockTvShowData(
+            MockPopularMedia(
                 id = 3,
                 name = "The Crown",
                 overview = "Follows the political rivalries and romance of Queen Elizabeth II's reign",
                 posterUrl = "https://example.com/the-crown-poster.jpg",
                 rating = 8.6
             ),
-            MockTvShowData(
+            MockPopularMedia(
                 id = 4,
                 name = "Game of Thrones",
                 overview = "Nine noble families fight for control over the lands of Westeros",
                 posterUrl = "https://example.com/got-poster.jpg",
                 rating = 9.2
             ),
-            MockTvShowData(
+            MockPopularMedia(
                 id = 5,
                 name = "The Office",
                 overview = "A mockumentary on a group of typical office workers",
                 posterUrl = "https://example.com/the-office-poster.jpg",
                 rating = 8.9
             ),
-            MockTvShowData(
+            MockPopularMedia(
                 id = 6,
                 name = "Friends",
                 overview = "Follows the personal and professional lives of six friends living in Manhattan",
                 posterUrl = "https://example.com/friends-poster.jpg",
                 rating = 8.8
             ),
-            MockTvShowData(
+            MockPopularMedia(
                 id = 7,
                 name = "The Mandalorian",
                 overview = "A lone bounty hunter makes his way through the outer reaches of the galaxy",
@@ -588,35 +464,35 @@ class ManageTvShowDetailsUseCaseTest {
         )
 
         private val MOCK_TV_SHOWS_LIMITED = listOf(
-            MockTvShowData(
+            MockPopularMedia(
                 id = 1,
                 name = "Breaking Bad",
                 overview = "A high school chemistry teacher turned methamphetamine manufacturer",
                 posterUrl = "https://example.com/breaking-bad-poster.jpg",
                 rating = 9.5
             ),
-            MockTvShowData(
+            MockPopularMedia(
                 id = 2,
                 name = "Stranger Things",
                 overview = "When a young boy disappears, his mother and friends must face terrifying supernatural forces",
                 posterUrl = "https://example.com/stranger-things-poster.jpg",
                 rating = 8.7
             ),
-            MockTvShowData(
+            MockPopularMedia(
                 id = 2,
                 name = "Stranger Things",
                 overview = "When a young boy disappears, his mother and friends must face terrifying supernatural forces",
                 posterUrl = "https://example.com/stranger-things-poster.jpg",
                 rating = 8.7
             ),
-            MockTvShowData(
+            MockPopularMedia(
                 id = 2,
                 name = "Stranger Things",
                 overview = "When a young boy disappears, his mother and friends must face terrifying supernatural forces",
                 posterUrl = "https://example.com/stranger-things-poster.jpg",
                 rating = 8.7
             ),
-            MockTvShowData(
+            MockPopularMedia(
                 id = 2,
                 name = "Stranger Things",
                 overview = "When a young boy disappears, his mother and friends must face terrifying supernatural forces",
@@ -625,7 +501,7 @@ class ManageTvShowDetailsUseCaseTest {
             ),
         )
 
-        data class MockTvShowData(
+        data class MockPopularMedia(
             val id: Int,
             val name: String,
             val overview: String,

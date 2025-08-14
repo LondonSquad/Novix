@@ -2,7 +2,7 @@ package com.london.data.repository.list
 
 import com.london.data.local.model.customLists.MovieListLocal
 import com.london.data.local.model.customLists.MovieListMembershipLocal
-import com.london.data.local.preference.AuthPreferences
+import com.london.data.local.preference.AuthenticationPreferences
 import com.london.data.local.source.customLists.CustomMovieListLocalDataSource
 import com.london.data.mapper.list.toEntity
 import com.london.data.mapper.list.toLocal
@@ -24,7 +24,7 @@ import javax.inject.Inject
 class CustomMovieListRepositoryImpl @Inject constructor(
     private val remoteDataSource: CustomMovieListsRemoteDataSource,
     private val localDataSource: CustomMovieListLocalDataSource,
-    private val authPreferences: AuthPreferences,
+    private val authenticationPreferences: AuthenticationPreferences,
     private val preferencesService: AppPreferencesService,
     private val crashReporter: CrashReporter
 ) : CustomMovieListRepository {
@@ -69,7 +69,7 @@ class CustomMovieListRepositoryImpl @Inject constructor(
         return try {
             val success = remoteDataSource.delete(
                 listId = id,
-                sessionId = authPreferences.getSessionId()
+                sessionId = authenticationPreferences.getSessionId()
             ).isSuccess
 
             if (success) {
@@ -96,7 +96,7 @@ class CustomMovieListRepositoryImpl @Inject constructor(
         return try {
             val result = remoteDataSource.create(
                 name = name,
-                sessionId = authPreferences.getSessionId(),
+                sessionId = authenticationPreferences.getSessionId(),
                 languageCode = preferencesService.appLanguage.value.code
             )
 
@@ -147,7 +147,7 @@ class CustomMovieListRepositoryImpl @Inject constructor(
         return if (localDataSource.shouldRefreshCache()) {
             val response = remoteDataSource.getAllMovieLists(
                 page = pageNumber,
-                sessionId = authPreferences.getSessionId()
+                sessionId = authenticationPreferences.getSessionId()
             ).getOrThrow()
 
             val localLists = response.items.map { it.toLocal() }
@@ -185,7 +185,7 @@ class CustomMovieListRepositoryImpl @Inject constructor(
             val result = remoteDataSource.addMovieToList(
                 listId = listId,
                 movieId = movieId,
-                sessionId = authPreferences.getSessionId()
+                sessionId = authenticationPreferences.getSessionId()
             )
 
             if (result.isSuccess) {
@@ -228,7 +228,7 @@ class CustomMovieListRepositoryImpl @Inject constructor(
             val result = remoteDataSource.removeMovieFromList(
                 listId = listId,
                 movieId = movieId,
-                sessionId = authPreferences.getSessionId()
+                sessionId = authenticationPreferences.getSessionId()
             )
 
             if (result.isSuccess) {
@@ -260,7 +260,7 @@ class CustomMovieListRepositoryImpl @Inject constructor(
                 do {
                     val listsResponse = remoteDataSource.getAllMovieLists(
                         page = page,
-                        sessionId = authPreferences.getSessionId()
+                        sessionId = authenticationPreferences.getSessionId()
                     ).getOrThrow()
 
                     lists.addAll(listsResponse.items.map { it.toLocal() })

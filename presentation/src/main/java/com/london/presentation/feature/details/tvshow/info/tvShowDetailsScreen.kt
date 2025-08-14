@@ -61,9 +61,9 @@ import com.london.designsystem.component.UnSuitableEye
 import com.london.designsystem.component.button.ErrorImage
 import com.london.designsystem.theme.NovixTheme
 import com.london.designsystem.theme.noRippleClickable
+import com.london.domain.entity.recent.MediaType
 import com.london.domain.entity.tvshowdetails.TvShowCastMemberEntity
 import com.london.domain.entity.tvshowdetails.episode.TvShowEpisodeBySeasonEntity
-import com.london.presentation.feature.reviews.MediaType
 import com.london.presentation.shared.ActorItem
 import com.london.presentation.shared.ConditionalText
 import com.london.presentation.shared.CustomBackDropImagePager
@@ -85,7 +85,7 @@ fun TvShowsDetailsScreen(
     onNavigateToLogin: () -> Unit,
     onNavigateToCast: (Int) -> Unit,
     onNavigateToGenre: (Int) -> Unit,
-    onNavigateToReviews: (tvShowId: Int, mediaType: Int) -> Unit,
+    onNavigateToReviews: (tvShowId: Int, mediaType: MediaType) -> Unit,
     onNavigateBack: () -> Unit = {},
     onNavigateToEpisodeDetails: (tvShowId: Int, episodeNumber: Int, seasonNumber: Int) -> Unit,
     viewModel: TvShowDetailsViewModel = hiltViewModel()
@@ -107,7 +107,7 @@ fun TvShowsDetailsScreen(
             is TvShowDetailsEffect.NavigateToCast -> onNavigateToCast(currentEffect.tvShowId)
             is TvShowDetailsEffect.NavigateToReviews -> onNavigateToReviews(
                 currentEffect.tvShowId,
-                MediaType.TvShow.mediaNum
+                MediaType.TvShow
             )
 
             is TvShowDetailsEffect.NavigateToTvShowsByCategoryId -> onNavigateToGenre(
@@ -185,7 +185,7 @@ private fun Content(
             item {
                 val images = uiState.tvImages
                 CustomBackDropImagePager(
-                    images = images?.map { it.fileUrl } ?: emptyList(),
+                    images = images.orEmpty().map { it },
                     isVisibleDots = (images?.size ?: 0) > 1,
                 )
             }
@@ -207,14 +207,14 @@ private fun Content(
                     onReviewClick = {
                         tvShowDetailsContract.onReviewsClicked(
                             uiState.id,
-                            MediaType.TvShow.mediaNum
+                            MediaType.TvShow
                         )
                     },
                     tvShowId = uiState.id,
                     rating = uiState.voteAverage.toString(),
                     date = uiState.firstAirDate,
                     numberOfSeasons = uiState.numberOfSeasons,
-                    onGenreClick = tvShowDetailsContract::OnGenreClicked
+                    onGenreClick = tvShowDetailsContract::onGenreClicked
                 )
             }
 
@@ -595,7 +595,7 @@ private fun EpisodeItem(
         horizontalArrangement = Arrangement.spacedBy(12.dp)
     ) {
         ImageView(
-            model = episode.stillUrl,
+            model = episode.imageUrl,
             contentDescription = stringResource(R.string.s),
             contentScale = ContentScale.FillBounds,
             modifier = Modifier
