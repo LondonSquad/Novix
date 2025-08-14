@@ -17,7 +17,3 @@ storeFile=your_keystore.jks
 #   API KEYS  #
 ###############
 API_KEY="your_api_key"
-IMAGE_URL="https://image.tmdb.org/t/p/w500"
-BASE_URL="https://api.themoviedb.org/"
-AUTHORIZATION_KEY=""
-YOUTUBE_URL = "https://www.youtube.com/watch?v="
