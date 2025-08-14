@@ -69,7 +69,7 @@ fun LazyGridScope.topRatedSection(
 }
 
 @Composable
-private fun TopRatedScreen(
+fun TopRatedScreen(
     viewModel: TopRatedViewModel = hiltViewModel(),
     onNavigateBack: () -> Unit = {},
     onNavigateMovie: (Int) -> Unit = {},

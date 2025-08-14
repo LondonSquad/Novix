@@ -72,7 +72,7 @@ fun LazyGridScope.continueWatchingSection(
 }
 
 @Composable
-private fun ContinueWatchingScreen(
+fun ContinueWatchingScreen(
     screenTitle: String,
     onBackClick: () -> Unit = {},
     onMovieClick: (Int) -> Unit = {},
