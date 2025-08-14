@@ -1,7 +1,7 @@
 package com.london.presentation.feature.details.actor.info.gallery
 
 import androidx.lifecycle.SavedStateHandle
-import com.london.domain.usecase.GetActorImagesByIdUseCase
+import com.london.domain.usecase.details.actor.GetActorUseCase
 import com.london.presentation.navigation.Screen
 import com.london.presentation.navigation.getArgs
 import io.mockk.coEvery
@@ -19,14 +19,14 @@ import org.junit.Test
 class ActorsGalleryViewModelTest {
 
     private lateinit var viewModel: ActorsGalleryViewModel
-    private lateinit var getActorImagesById: GetActorImagesByIdUseCase
+    private lateinit var getActorUseCase: GetActorUseCase
     private lateinit var savedStateHandle: SavedStateHandle
 
     @Before
     fun setUp() {
         Dispatchers.setMain(Dispatchers.Unconfined)
 
-        getActorImagesById = mockk()
+        getActorUseCase = mockk()
         savedStateHandle = mockk()
     }
 
@@ -41,9 +41,9 @@ class ActorsGalleryViewModelTest {
         val actorId = 123
         val args = Screen.ActorGallery(actorId)
         coEvery { savedStateHandle.getArgs<Screen.ActorGallery>() } returns args
-        coEvery { getActorImagesById.invoke(actorId) } returns mockImages
+        coEvery { getActorUseCase.getActorImagesById(actorId) } returns mockImages
 
-        viewModel = ActorsGalleryViewModel(savedStateHandle, getActorImagesById)
+        viewModel = ActorsGalleryViewModel(savedStateHandle, getActorUseCase)
 
         // When
         viewModel.onBackClick()
