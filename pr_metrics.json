@@ -21215,5 +21215,33 @@
       "deletions": 181,
       "changed_files": 11
     }
+  },
+  {
+    "pr_number": 633,
+    "url": "https://github.com/LondonSquad/Novix/pull/633",
+    "title": "Feat: Implement Offline Caching for Movie Lists & Add Bookmark Flow",
+    "opened_at": "2025-08-14T11:04:28Z",
+    "head_ref": "feature/add-bookmark-sheet",
+    "base_ref": "develop",
+    "creator": {
+      "login": "yusufnasserdev",
+      "id": 43588217,
+      "url": "https://github.com/yusufnasserdev"
+    },
+    "approvals": [],
+    "first_approved_at": null,
+    "time_to_first_approval_minutes": null,
+    "required_approvals_met_at": null,
+    "time_to_required_approvals_minutes": null,
+    "closed_at": null,
+    "merged_at": null,
+    "merged_by": null,
+    "week": "2025-W33",
+    "status": "pending",
+    "diff_stats": {
+      "additions": 1774,
+      "deletions": 286,
+      "changed_files": 80
+    }
   }
 ]
