@@ -13,7 +13,8 @@ fun TopRatedLocal.toEntity(): TopRatedMedia =
         releaseDate = releaseYear,
         name = name,
         voteAverage = rating.orZero(),
-        genreIds = genre
+        genreIds = genre,
+        mediaType = mediaType
     )
 fun TopRatedMedia.toLocal(): TopRatedLocal =
     TopRatedLocal(

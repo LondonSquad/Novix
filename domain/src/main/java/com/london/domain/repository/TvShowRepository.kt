@@ -23,6 +23,7 @@ interface TvShowRepository {
     suspend fun getAllRatedTvShows(): List<RatedMedia>
     suspend fun deleteTvShowRating(tvShowId: Int): Boolean
     suspend fun getTrendingTvShows(page: Int): PagedFetchResponse<Trending>
+    suspend fun getFirstPageTopRatedTvShows(): List<TopRatedMedia>
 
     suspend fun getTopRatedTvShows(
         pageNumber: Int,
