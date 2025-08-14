@@ -108,6 +108,7 @@ class TrendingActorsViewModelTest {
     
     @Test
     fun `when click retry, should reload trending actors`() = runTest {
+
         // When & Then
         viewModel.state.test {
             viewModel.onRetryClick()
