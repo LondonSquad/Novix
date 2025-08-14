@@ -83,9 +83,9 @@ fun SearchScreen(
 
     effect?.Listen { currentEffect ->
         when (currentEffect) {
-            is SearchEffect.ActorNavigation -> onNavigateToActorDetails(currentEffect.actorId)
-            is SearchEffect.MovieNavigation -> onNavigateToMovieDetails(currentEffect.movieId)
-            is SearchEffect.TvShowNavigation -> onNavigateToTvShowDetails(currentEffect.tvId)
+            is SearchEffect.ToActorNavigation -> onNavigateToActorDetails(currentEffect.actorId)
+            is SearchEffect.ToMovieNavigation -> onNavigateToMovieDetails(currentEffect.movieId)
+            is SearchEffect.ToTvShowNavigation -> onNavigateToTvShowDetails(currentEffect.tvId)
         }
     }
     val lifecycleOwner = LocalLifecycleOwner.current
@@ -105,7 +105,7 @@ fun SearchScreen(
         isLoading = false,
         isError = currentPagingFlow.loadState.refresh is LoadState.Error,
         onBack = {},
-        onRetry = viewModel::onRetry,
+        onRetry = viewModel::onRetryClick,
         pagingFlow = currentPagingFlow,
         handlePagingLoadingAutomatically = false
     ) {
