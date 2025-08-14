@@ -1,5 +1,6 @@
 package com.london.presentation.feature.home.trending.movie
 
+import android.util.Log
 import androidx.lifecycle.viewModelScope
 import androidx.paging.PagingData
 import androidx.paging.cachedIn
@@ -23,7 +24,7 @@ class TrendingMoviesViewModel @Inject constructor(
         reloadTrendingMovies()
     }
 
-    override fun onGenreSelected(genre: MovieGenre) {
+    override fun onGenreClick(genre: MovieGenre) {
         if (genre.id == state.value.selectedGenreId) return
         updateState {
             copy(selectedGenreId = genre.id)
@@ -31,15 +32,13 @@ class TrendingMoviesViewModel @Inject constructor(
         reloadTrendingMovies()
     }
 
-    override fun onBack() =
+    override fun onBackClick() =
         emitEffect(TrendingMoviesEffect.NavigateBack)
 
     override fun onMovieClick(id: Int) =
         emitEffect(TrendingMoviesEffect.NavigateToMovie(id))
 
-    override fun onRetry() {
-        reloadTrendingMovies()
-    }
+    override fun onRetryClick() = reloadTrendingMovies()
 
     private fun reloadTrendingMovies() {
         tryToCollect(
@@ -47,7 +46,10 @@ class TrendingMoviesViewModel @Inject constructor(
             onStart = { handlingLoadingState(true) },
             onError = ::handlingErrorState,
             onNewValue = ::handlingPagingState,
-            onCompleted = { handlingLoadingState(false) },
+            onCompleted = {
+                Log.d("TrendingMoviesViewModel", "reloadTrendingMovies: onCompleted")
+                updateState { copy(isLoading = false)
+                } },
         )
     }
 

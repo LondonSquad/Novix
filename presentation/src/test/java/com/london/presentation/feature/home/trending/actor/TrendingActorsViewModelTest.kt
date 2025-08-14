@@ -97,7 +97,7 @@ class TrendingActorsViewModelTest {
     fun `when onBack, should emits NavigateBack effect`() = runTest {
         // When & Then
         viewModel.effect.test {
-            viewModel.onBack()
+            viewModel.onBackClick()
             val effect = awaitItem()
             assertThat(effect).isInstanceOf(TrendingActorsEffect.NavigateBack::class.java)
         }
@@ -107,7 +107,7 @@ class TrendingActorsViewModelTest {
     fun `when click retry, should reload trending actors`() = runTest {
         // When & Then
         viewModel.state.test {
-            viewModel.onRetry()
+            viewModel.onRetryClick()
             val state = expectMostRecentItem()
             assertThat(state.errorState).isNull()
             assertThat(state.isLoading).isFalse()
@@ -120,7 +120,7 @@ class TrendingActorsViewModelTest {
        
             // When & Then
             viewModel.state.test {
-                viewModel.onRetry()
+                viewModel.onRetryClick()
                 val state = expectMostRecentItem()
                 assertThat(state.errorState).isNotNull()
                 assertThat(state.isLoading).isFalse()

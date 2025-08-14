@@ -46,8 +46,8 @@ fun TrendingActorsScreen(
     BuildScreen(
         isLoading = state.isLoading.not(),
         isError = actorsLazyItems.loadState.refresh is LoadState.Error,
-        onBack = viewModel::onBack,
-        onRetry = viewModel::onRetry,
+        onBack = viewModel::onBackClick,
+        onRetry = viewModel::onRetryClick,
         emptyLayoutMessage = R.string.no_trending_actors_in_genre,
         emptyLayoutImage = R.drawable.img_no_result,
     ) {
@@ -72,7 +72,7 @@ private fun Content(
         stickyHeader {
             TopBar(
                 title = stringResource(R.string.trending_people),
-                onBackClick = contract::onBack,
+                onBackClick = contract::onBackClick,
                 modifier = Modifier
                     .fillMaxWidth()
                     .background(NovixTheme.colors.surface)

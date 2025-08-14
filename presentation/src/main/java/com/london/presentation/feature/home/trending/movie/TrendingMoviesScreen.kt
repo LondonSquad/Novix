@@ -1,5 +1,6 @@
 package com.london.presentation.feature.home.trending.movie
 
+import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -16,7 +17,6 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.paging.LoadState
 import androidx.paging.compose.collectAsLazyPagingItems
 import com.london.designsystem.component.TopBar
@@ -33,7 +33,7 @@ fun TrendingMoviesScreen(
     onNavigateBack: () -> Unit,
     viewModel: TrendingMoviesViewModel = hiltViewModel()
 ) {
-    val state by viewModel.state.collectAsStateWithLifecycle()
+    val state by viewModel.state.collectAsState()
     val effect by viewModel.effect.collectAsState(null)
 
     effect?.Listen { currentEffect ->
@@ -43,11 +43,13 @@ fun TrendingMoviesScreen(
         }
     }
 
+
+    Log.d("TrendingMoviesScreen", "TrendingMoviesScreen: state = ${state.isLoading}")
     BuildScreen(
         isLoading = state.isLoading.not(),
         isError = state.moviesFlow.collectAsLazyPagingItems().loadState.refresh is LoadState.Error,
-        onBack = viewModel::onBack,
-        onRetry = viewModel::onRetry,
+        onBack = viewModel::onBackClick,
+        onRetry = viewModel::onRetryClick,
         emptyLayoutMessage = R.string.no_trending_movies_in_genre,
         emptyLayoutImage = R.drawable.img_no_result,
     ) {
@@ -76,13 +78,13 @@ private fun Content(
                 .fillMaxWidth()
                 .padding(horizontal = 16.dp, vertical = 12.dp),
             title = stringResource(R.string.trending_movies),
-            onBackClick = contract::onBack
+            onBackClick = contract::onBackClick
         )
         GenresSection(
             genres = state.movieGenres,
             selectedGenreId = state.selectedGenreId,
             screenWidth = screenWidth,
-            onGenreClick = contract::onGenreSelected,
+            onGenreClick = contract::onGenreClick,
             modifier = Modifier.padding(bottom = 12.dp),
             getGenreId = { it.id },
             getGenreName = { stringResource(it.stringResId) }
