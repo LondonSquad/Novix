@@ -1,22 +1,16 @@
 package com.london.presentation.feature.search
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.interaction.MutableInteractionSource
-import androidx.compose.foundation.interaction.collectIsFocusedAsState
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.text.KeyboardActions
-import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
@@ -27,9 +21,7 @@ import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.platform.SoftwareKeyboardController
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.Lifecycle
@@ -41,14 +33,13 @@ import androidx.paging.LoadState
 import androidx.paging.compose.LazyPagingItems
 import androidx.paging.compose.collectAsLazyPagingItems
 import com.london.designsystem.component.EmptyLayout
-import com.london.designsystem.component.Icon
-import com.london.designsystem.component.NovixChip
-import com.london.designsystem.component.OutlinedTextField
-import com.london.designsystem.component.Text
 import com.london.designsystem.component.TopBar
 import com.london.designsystem.theme.NovixTheme
-import com.london.domain.entity.recent.RecentSearch
 import com.london.presentation.R
+import com.london.presentation.feature.search.composable.RecentSearchesSection
+import com.london.presentation.feature.search.composable.RecentViewedSection
+import com.london.presentation.feature.search.composable.SearchBar
+import com.london.presentation.feature.search.composable.SearchChipsRow
 import com.london.presentation.shared.ActorsLayout
 import com.london.presentation.shared.MoviesLayOut
 import com.london.presentation.shared.TriangleBlurredShape
@@ -223,99 +214,11 @@ private fun Content(
                                 )
                             } else {
                                 when (state.selectedCategory) {
-                                    SearchCategory.Movies -> {
-                                        val moviesLazyList =
-                                            state.moviesFlow.collectAsLazyPagingItems()
+                                    SearchCategory.Movies -> MovieSearchContent(state, contract)
 
-                                        SearchContentWithErrorHandling(
-                                            moviesLazyList,
-                                            contract,
-                                        ) { isLoading ->
-                                            ResultOrEmpty(
-                                                items = moviesLazyList.itemSnapshotList.items,
-                                                emptyContent = {
-                                                    if (!isLoading) {
-                                                        NoSearchResultLayOut(modifier = Modifier.fillMaxSize())
-                                                    }
-                                                },
-                                                content = {
-                                                    MoviesLayOut(
-                                                        movieUis = moviesLazyList,
-                                                        onSaveClick = { /* Handle save click */ },
-                                                        isMovieSaved = { false },
-                                                        onMovieClick = {
-                                                            contract.addToRecentViewed(it.toRecentViewed())
-                                                            contract.onMovieGenreClick(it.genreIds)
-                                                            contract.onMovieClick(it.id)
-                                                        },
-                                                        modifier = Modifier.padding(horizontal = 16.dp)
-                                                    )
-                                                }
-                                            )
-                                        }
-                                    }
+                                    SearchCategory.TvShows -> TvShowSearchContent(state, contract)
 
-                                    SearchCategory.TvShows -> {
-                                        val tvShowsLazyList =
-                                            state.tvShowsFlow.collectAsLazyPagingItems()
-
-                                        SearchContentWithErrorHandling(
-                                            tvShowsLazyList,
-                                            contract,
-                                        ) { isLoading ->
-                                            ResultOrEmpty(
-                                                items = tvShowsLazyList.itemSnapshotList.items,
-                                                emptyContent = {
-                                                    if (!isLoading) {
-                                                        NoSearchResultLayOut(modifier = Modifier.fillMaxSize())
-                                                    }
-                                                },
-                                                content = {
-                                                    TvShowLayOut(
-                                                        tvShowUis = tvShowsLazyList,
-                                                        onSaveClick = { /* Handle save click */ },
-                                                        isTvShowSaved = { false },
-                                                        onTvShowClick = {
-                                                            contract.addToRecentViewed(it.toRecentViewed())
-                                                            it.genres.forEach { genreId ->
-                                                                contract.incrementGenreInterest(
-                                                                    genreId,
-                                                                    "tv"
-                                                                )
-                                                            }
-                                                            contract.onTvShowClick(it.id)
-                                                        }
-                                                    )
-                                                }
-                                            )
-                                        }
-                                    }
-
-                                    SearchCategory.Actors -> {
-                                        val actorsLazyList =
-                                            state.actorsFlow.collectAsLazyPagingItems()
-
-                                        SearchContentWithErrorHandling(
-                                            actorsLazyList,
-                                            contract,
-                                        ) { isLoading ->
-                                            ResultOrEmpty(
-                                                items = actorsLazyList.itemSnapshotList.items,
-                                                emptyContent = {
-                                                    if (!isLoading) {
-                                                        NoSearchResultLayOut(modifier = Modifier.fillMaxSize())
-                                                    }
-                                                },
-                                                content = {
-                                                    ActorsLayout(
-                                                        items = actorsLazyList, onActorClick = {
-                                                            contract.onActorClick(it.id)
-                                                        }
-                                                    )
-                                                }
-                                            )
-                                        }
-                                    }
+                                    SearchCategory.Actors -> ActorSearchContent(state, contract)
                                 }
                             }
                         })
@@ -327,6 +230,103 @@ private fun Content(
 }
 
 @Composable
+private fun MovieSearchContent(state: SearchUiState, contract: SearchContract) {
+    val moviesLazyList =
+        state.moviesFlow.collectAsLazyPagingItems()
+
+    SearchContentWithErrorHandling(
+        moviesLazyList,
+        contract,
+    ) { isLoading ->
+        ResultOrEmpty(
+            items = moviesLazyList.itemSnapshotList.items,
+            emptyContent = {
+                if (!isLoading) {
+                    NoSearchResultLayOut(modifier = Modifier.fillMaxSize())
+                }
+            },
+            content = {
+                MoviesLayOut(
+                    movieUis = moviesLazyList,
+                    onSaveClick = { /* Handle save click */ },
+                    isMovieSaved = { false },
+                    onMovieClick = {
+                        contract.addToRecentViewed(it.toRecentViewed())
+                        contract.onMovieGenreClick(it.genreIds)
+                        contract.onMovieClick(it.id)
+                    },
+                    modifier = Modifier.padding(horizontal = 16.dp)
+                )
+            }
+        )
+    }
+}
+
+@Composable
+private fun TvShowSearchContent(state: SearchUiState, contract: SearchContract) {
+    val tvShowsLazyList =
+        state.tvShowsFlow.collectAsLazyPagingItems()
+
+    SearchContentWithErrorHandling(
+        tvShowsLazyList,
+        contract,
+    ) { isLoading ->
+        ResultOrEmpty(
+            items = tvShowsLazyList.itemSnapshotList.items,
+            emptyContent = {
+                if (!isLoading) {
+                    NoSearchResultLayOut(modifier = Modifier.fillMaxSize())
+                }
+            },
+            content = {
+                TvShowLayOut(
+                    tvShowUis = tvShowsLazyList,
+                    onSaveClick = { /* Handle save click */ },
+                    isTvShowSaved = { false },
+                    onTvShowClick = {
+                        contract.addToRecentViewed(it.toRecentViewed())
+                        it.genres.forEach { genreId ->
+                            contract.incrementGenreInterest(
+                                genreId,
+                                "tv"
+                            )
+                        }
+                        contract.onTvShowClick(it.id)
+                    }
+                )
+            }
+        )
+    }
+}
+
+@Composable
+private fun ActorSearchContent(state: SearchUiState, contract: SearchContract) {
+    val actorsLazyList =
+        state.actorsFlow.collectAsLazyPagingItems()
+
+    SearchContentWithErrorHandling(
+        actorsLazyList,
+        contract,
+    ) { isLoading ->
+        ResultOrEmpty(
+            items = actorsLazyList.itemSnapshotList.items,
+            emptyContent = {
+                if (!isLoading) {
+                    NoSearchResultLayOut(modifier = Modifier.fillMaxSize())
+                }
+            },
+            content = {
+                ActorsLayout(
+                    items = actorsLazyList, onActorClick = {
+                        contract.onActorClick(it.id)
+                    }
+                )
+            }
+        )
+    }
+}
+
+@Composable
 private fun HandleLoadStateError(
     loadState: CombinedLoadStates,
     contract: SearchContract
@@ -334,98 +334,6 @@ private fun HandleLoadStateError(
     LaunchedEffect(loadState) {
         if (loadState.refresh is LoadState.Error) {
             contract.updateSearchState { copy(error = ErrorState.NoInternet) }
-        }
-    }
-}
-
-@Composable
-private fun SearchBar(
-    uiState: SearchUiState,
-    contract: SearchContract,
-    interactionSource: MutableInteractionSource,
-    keyboardController: SoftwareKeyboardController?,
-    modifier: Modifier = Modifier
-) {
-
-    val focusManager = LocalFocusManager.current
-    val focusedState = interactionSource.collectIsFocusedAsState().value
-
-    Row(
-        modifier = modifier.fillMaxWidth(),
-        horizontalArrangement = Arrangement.spacedBy(8.dp)
-    ) {
-        OutlinedTextField(
-            value = uiState.searchQuery,
-            onValueChange = { contract.onSearchQueryChange(it) },
-            placeholder = {
-                Text(
-                    stringResource(R.string.search_placeholder),
-                    style = NovixTheme.typography.body.small,
-                    modifier = Modifier.padding(end = 4.dp)
-                )
-            },
-            leadingIcon = painterResource(id = R.drawable.icon_search_normal),
-            trailingIcon = when {
-                uiState.searchQuery.text.isNotEmpty()
-                        && focusedState -> {
-                    {
-                        Icon(
-                            painter = painterResource(id = R.drawable.icon_remove_filled),
-                            contentDescription = stringResource(R.string.clear),
-                            tint = NovixTheme.colors.hint,
-                            modifier = Modifier
-                                .size(20.dp)
-                                .clickable(
-                                    interactionSource = remember { MutableInteractionSource() },
-                                    indication = null
-                                ) { contract.clearSearch() })
-                    }
-                }
-
-                else -> null
-            },
-            keyboardOptions = KeyboardOptions(
-                imeAction = ImeAction.Search
-            ),
-            keyboardActions = KeyboardActions(
-                onSearch = {
-                    focusManager.clearFocus()
-                    keyboardController?.hide()
-                    contract.addToRecentSearches(
-                        RecentSearch(
-                            query = uiState.searchQuery.text,
-                            timestamp = System.currentTimeMillis(),
-                            id = 0
-                        )
-                    )
-                }),
-            interactionSource = interactionSource,
-            modifier = Modifier.weight(1f)
-        )
-    }
-
-}
-
-@Composable
-private fun SearchChipsRow(
-    selected: SearchCategory, onSelect: (SearchCategory) -> Unit, modifier: Modifier = Modifier
-) {
-    Row(
-        modifier = modifier
-            .fillMaxWidth()
-            .padding(horizontal = 16.dp),
-        horizontalArrangement = Arrangement.spacedBy(8.dp),
-    ) {
-        SearchCategory.entries.forEach { category ->
-            NovixChip(
-                text = stringResource(category.title),
-                isSelected = selected == category,
-                onClick = {
-                    if (selected != category) {
-                        onSelect(category)
-                    }
-                }
-            )
         }
     }
 }
