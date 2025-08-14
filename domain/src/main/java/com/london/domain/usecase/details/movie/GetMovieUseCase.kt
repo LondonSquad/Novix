@@ -41,13 +41,11 @@ class GetMovieUseCase @Inject constructor(
     suspend fun getTrendingMovies(page: Int, movieGenreId: Int?): PagedFetchResponse<Trending> {
         val trendingMovies = movieRepository.getTrendingMovies(page)
 
-        val genreId = if (movieGenreId == -1) null else movieGenreId
-
-        val filteredItems = if (genreId != null)
-            trendingMovies.items.filter { it.genreIds.contains(genreId) }
-        else
+        val filteredItems = if (movieGenreId == null)
             trendingMovies.items
-
+        else
+            trendingMovies.items.filter { it.genreIds.contains(movieGenreId) }
+        
         return PagedFetchResponse(
             currentPage = trendingMovies.currentPage,
             items = filteredItems,

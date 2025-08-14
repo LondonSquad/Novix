@@ -27,12 +27,9 @@ class GetTvShowUseCase @Inject constructor(
     suspend fun getTrendingTvShows(page: Int, movieGenreId: Int?): PagedFetchResponse<Trending> {
         val trendingMovies = tvShowRepository.getTrendingTvShows(page)
 
-        val genreId = if (movieGenreId == -1) null else movieGenreId
-
-        val filteredItems = if (genreId != null)
-            trendingMovies.items.filter { it.genreIds.contains(genreId) }
-        else
-            trendingMovies.items
+        val filteredItems = if (movieGenreId != null)
+            trendingMovies.items.filter { it.genreIds.contains(movieGenreId) }
+        else trendingMovies.items
 
         return PagedFetchResponse(
             currentPage = trendingMovies.currentPage,
