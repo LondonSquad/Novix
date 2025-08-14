@@ -53,11 +53,7 @@ fun <T : Any> MediaLazyGridWithTabs(
             tabs = tabs,
             selectedTab = selectedTab,
             onTabSelected = { tab ->
-                val index = tabs.indexOf(tab)
-                if (index != -1) {
-                    val category = if (index == MediaCategory.Movies.ordinal) MediaCategory.Movies else MediaCategory.TvShows
-                    onTabSelected(category)
-                }
+                handleTabSelection(tab, tabs, onTabSelected)
             },
             modifier = Modifier.padding(top = 4.dp)
         )
@@ -74,6 +70,18 @@ fun <T : Any> MediaLazyGridWithTabs(
             onTvShowGenreClick = onTvShowGenreClick,
             config = config
         )
+    }
+}
+
+private fun handleTabSelection(
+    tab: Tabbable,
+    tabs: List<Tabbable>,
+    onTabSelected: (MediaCategory) -> Unit
+) {
+    val index = tabs.indexOf(tab)
+    if (index != -1) {
+        val category = if (index == MediaCategory.Movies.ordinal) MediaCategory.Movies else MediaCategory.TvShows
+        onTabSelected(category)
     }
 }
 
