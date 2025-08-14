@@ -25,7 +25,7 @@ class TrendingTvShowsViewModel @Inject constructor(
         reloadTrendingTvShows()
     }
 
-    override fun onGenreSelected(genre: TvShowGenre) {
+    override fun onGenreClick(genre: TvShowGenre) {
         if (genre.id == state.value.selectedGenreId) return
         updateState { copy(selectedGenreId = genre.id) }
         reloadTrendingTvShows()
@@ -34,22 +34,27 @@ class TrendingTvShowsViewModel @Inject constructor(
     override fun onTvShowClick(id: Int) =
         emitEffect(TrendingTvShowsEffect.NavigateToTvShow(id))
 
-    override fun onBack() = emitEffect(TrendingTvShowsEffect.NavigateBack)
-    override fun onRetry() = reloadTrendingTvShows()
+    override fun onBackClick() = emitEffect(TrendingTvShowsEffect.NavigateBack)
+    override fun onRetryClick() = reloadTrendingTvShows()
     private fun reloadTrendingTvShows() {
         tryToCollect(
             block = ::createTrendingTvShowsPagingFlow,
-            onStart = {handlingLoadingState(true)},
+            onStart = { handlingLoadingState(true) },
             onError = ::handlingErrorState,
             onNewValue = ::handlingPagingState,
-            onCompleted = { handlingLoadingState(false) },
         )
     }
 
     fun handlingErrorState(errorState: ErrorState) = updateState { copy(errorState = errorState) }
     fun handlingPagingState(tvShowsPagingData: PagingData<Trending>) {
-        updateState { copy(tvShowsFlow = flowOf(tvShowsPagingData)) }
+        updateState {
+            copy(
+                tvShowsFlow = flowOf(tvShowsPagingData),
+                isLoading = false
+            )
+        }
     }
+
     private fun createTrendingTvShowsPagingFlow(): Flow<PagingData<Trending>> {
         return createPagingSourceFlow(
             query = "",

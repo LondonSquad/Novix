@@ -44,9 +44,9 @@ fun TrendingTvShowsScreen(
     }
 
     BuildScreen(
-        isLoading = state.isLoading.not(),
+        isLoading = state.isLoading,
         isError = state.tvShowsFlow.collectAsLazyPagingItems().loadState.refresh is LoadState.Error,
-        onBack = viewModel::onBack,
+        onBack = viewModel::onBackClick,
         emptyLayoutMessage = R.string.no_trending_tvshows_in_genre,
         emptyLayoutImage = R.drawable.img_no_result,
     ) {
@@ -77,13 +77,13 @@ private fun Content(
                 .fillMaxWidth()
                 .padding(horizontal = 16.dp, vertical = 12.dp),
             title = stringResource(R.string.trending_tv_shows),
-            onBackClick = contract::onBack
+            onBackClick = contract::onBackClick
         )
         GenresSection(
             genres = state.tvShowsGenres,
             selectedGenreId = state.selectedGenreId,
             screenWidth = screenWidth,
-            onGenreClick = contract::onGenreSelected,
+            onGenreClick = contract::onGenreClick,
             modifier = Modifier.padding(bottom = 12.dp),
             getGenreId = { it.id },
             getGenreName = { stringResource(it.stringResId) }

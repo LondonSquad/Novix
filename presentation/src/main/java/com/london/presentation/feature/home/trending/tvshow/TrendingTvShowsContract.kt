@@ -3,15 +3,15 @@ package com.london.presentation.feature.home.trending.tvshow
 import com.london.presentation.utils.TvShowGenre
 
 interface TrendingTvShowsContract {
-    fun onBack()
-    fun onRetry()
+    fun onBackClick()
+    fun onRetryClick()
     fun onTvShowClick(id: Int)
-    fun onGenreSelected(genre: TvShowGenre)
+    fun onGenreClick(genre: TvShowGenre)
 }
 
 fun defaultTrendingTvShowsContract() = object : TrendingTvShowsContract {
-    override fun onBack() {}
-    override fun onRetry() {}
+    override fun onBackClick() {}
+    override fun onRetryClick() {}
     override fun onTvShowClick(id: Int) {}
-    override fun onGenreSelected(genre: TvShowGenre) {}
+    override fun onGenreClick(genre: TvShowGenre) {}
 }

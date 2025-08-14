@@ -1,6 +1,5 @@
 package com.london.presentation.feature.home.trending.movie
 
-import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -42,11 +41,8 @@ fun TrendingMoviesScreen(
             is TrendingMoviesEffect.NavigateBack -> onNavigateBack()
         }
     }
-
-
-    Log.d("TrendingMoviesScreen", "TrendingMoviesScreen: state = ${state.isLoading}")
     BuildScreen(
-        isLoading = state.isLoading.not(),
+        isLoading = state.isLoading,
         isError = state.moviesFlow.collectAsLazyPagingItems().loadState.refresh is LoadState.Error,
         onBack = viewModel::onBackClick,
         onRetry = viewModel::onRetryClick,

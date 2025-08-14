@@ -1,6 +1,5 @@
 package com.london.presentation.feature.home.trending.movie
 
-import android.util.Log
 import androidx.lifecycle.viewModelScope
 import androidx.paging.PagingData
 import androidx.paging.cachedIn
@@ -46,10 +45,6 @@ class TrendingMoviesViewModel @Inject constructor(
             onStart = { handlingLoadingState(true) },
             onError = ::handlingErrorState,
             onNewValue = ::handlingPagingState,
-            onCompleted = {
-                Log.d("TrendingMoviesViewModel", "reloadTrendingMovies: onCompleted")
-                updateState { copy(isLoading = false)
-                } },
         )
     }
 
@@ -57,7 +52,8 @@ class TrendingMoviesViewModel @Inject constructor(
     fun handlingPagingState(moviesPagingData: PagingData<Trending>) {
         return updateState {
             copy(
-                moviesFlow = flowOf(moviesPagingData)
+                moviesFlow = flowOf(moviesPagingData),
+                isLoading = false
             )
         }
     }

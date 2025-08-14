@@ -34,7 +34,6 @@ class TrendingActorsViewModel @Inject constructor(
             onStart = { handlingLoadingState(true) },
             onError = ::handlingErrorState,
             onSuccess = { handlingPagingState(it) },
-            onCompleted = { handlingLoadingState(false) },
         )
     }
 
@@ -43,7 +42,8 @@ class TrendingActorsViewModel @Inject constructor(
     fun handlingPagingState(actorsPagingData: Flow<PagingData<Actor>>) {
         return updateState {
             copy(
-                actorsFlow = actorsPagingData
+                actorsFlow = actorsPagingData,
+                isLoading = false
             )
         }
     }

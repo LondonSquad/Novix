@@ -1,95 +1,93 @@
-package com.london.presentation.feature.home.trending.movie
+package com.london.presentation.feature.home.trending.tvshow
 
-import androidx.paging.PagingData
 import app.cash.turbine.test
 import com.google.common.truth.Truth.assertThat
 import com.london.domain.entity.PagedFetchResponse
 import com.london.domain.entity.Trending
-import com.london.domain.usecase.GetTrendingMoviesUseCase
+import com.london.domain.usecase.details.tvshow.ManageTvShowDetailsUseCase
 import com.london.presentation.shared.base.ErrorState
-import com.london.presentation.utils.MovieGenre
-import io.mockk.clearAllMocks
+import com.london.presentation.utils.TvShowGenre
 import io.mockk.coEvery
 import io.mockk.every
 import io.mockk.mockk
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.test.UnconfinedTestDispatcher
 import kotlinx.coroutines.test.advanceUntilIdle
 import kotlinx.coroutines.test.runTest
 import kotlinx.coroutines.test.setMain
-import org.junit.After
 import org.junit.Before
 import org.junit.Test
 
-class TrendingMoviesViewModelTest {
-    private lateinit var viewModel: TrendingMoviesViewModel
-    private val getTrendingMovies: GetTrendingMoviesUseCase = mockk()
+class TrendingTvShowsViewModelTest {
+
+    private lateinit var viewModel: TrendingTvShowsViewModel
+    private val mockManageTvShowDetailsUseCase: ManageTvShowDetailsUseCase = mockk()
     private val testDispatcher = UnconfinedTestDispatcher()
 
     @Before
     fun setup() {
         Dispatchers.setMain(testDispatcher)
-        coEvery { getTrendingMovies.invoke(any(), any()) } returns createMockPagedFetchResponse(emptyList())
-        viewModel = createViewModel()
-    }
-
-    private fun createViewModel() = TrendingMoviesViewModel(getTrendingMovies)
-
-    @After
-    fun tearDown() {
-        clearAllMocks()
+        coEvery {
+            mockManageTvShowDetailsUseCase.getTrendingTvShows(
+                any(),
+                any()
+            )
+        } returns createMockPagedFetchResponse(emptyList())
+        viewModel = TrendingTvShowsViewModel(mockManageTvShowDetailsUseCase)
     }
 
     @Test
-    fun `when creating mock movie, should return correct values`() = runTest {
-
+    fun `when creating mock tvShow, should return correct values`() = runTest {
+       val pageNumber = 1
+        val movieGenreId = -1
         //Given
         coEvery {
-            getTrendingMovies.invoke(
-                page = any(),
-                movieGenreId = any()
+            mockManageTvShowDetailsUseCase.getTrendingTvShows(
+                page = pageNumber,
+                movieGenreId = movieGenreId
             )
-        } returns createMockPagedFetchResponse(listOf(createMockMovie()))
+        } returns createMockPagedFetchResponse(listOf(createMockTvShow()))
 
         //When
         advanceUntilIdle()
 
         //Then
         viewModel.state.test {
-            val actors = expectMostRecentItem().moviesFlow.first()
-            assertThat(actors).isInstanceOf(PagingData::class.java)
+            val state = awaitItem()
+            assertThat(state.isLoading).isFalse()
+            assertThat(state.errorState).isNull()
         }
     }
 
     @Test
     fun `when click onBack, should emits NavigateBack effect`() = runTest {
-        // When & Then
         viewModel.effect.test {
             viewModel.onBackClick()
             val effect = awaitItem()
-            assertThat(effect).isInstanceOf(TrendingMoviesEffect.NavigateBack::class.java)
+            assertThat(effect).isInstanceOf(TrendingTvShowsEffect.NavigateBack::class.java)
         }
     }
-    
+
     @Test
-    fun `when onMovieClick, should emits NavigateToMovie effect`() = runTest {
-        //Given 
+    fun `when click onTvShow, should emits NavigateToTvShow effect`() = runTest {
         val movieId = 1
-        
-        // When & Then
+
         viewModel.effect.test {
-            viewModel.onMovieClick(movieId)
+            viewModel.onTvShowClick(movieId)
             val effect = awaitItem()
-            assertThat(effect).isInstanceOf(TrendingMoviesEffect.NavigateToMovie::class.java)
+            assertThat(effect).isInstanceOf(TrendingTvShowsEffect.NavigateToTvShow::class.java)
         }
     }
+
     @Test
     fun `when onRetryClick is called, should update state successfully`() = runTest {
         // Given
-        val movie = createMockMovie()
-        coEvery { getTrendingMovies.invoke(any(), any()) } returns
-                createMockPagedFetchResponse(listOf(movie))
+        coEvery {
+            mockManageTvShowDetailsUseCase.getTrendingTvShows(
+                any(),
+                any()
+            )
+        } returns createMockPagedFetchResponse(emptyList())
 
         // When
         viewModel.onRetryClick()
@@ -106,17 +104,19 @@ class TrendingMoviesViewModelTest {
     @Test
     fun `when click onGenre, should update selectedGenreId and reload trending movies`() = runTest {
         // Given
-        val movieGenre = MovieGenre.Action
+        val tvShowGenre = TvShowGenre.ActionAdventure
         // When
-        viewModel.onGenreClick(movieGenre)
-        
+        viewModel.onGenreClick(tvShowGenre)
+        advanceUntilIdle()
+
         // Then
-        assertThat(viewModel.state.value.selectedGenreId).isEqualTo(movieGenre.id)
+        assertThat(viewModel.state.value.selectedGenreId).isEqualTo(tvShowGenre.id)
     }
 
     @Test
-    fun `when fetching trending movies and an error occurs,should update error state and loading state correctly`() = runTest {
+    fun `when fetching trending tv shows and an error occurs,should update error state and loading state correctly`() = runTest {
         viewModel.handlingErrorState(ErrorState.NoInternet)
+        advanceUntilIdle()
 
         // When & Then
         viewModel.state.test {
@@ -127,9 +127,10 @@ class TrendingMoviesViewModelTest {
             cancelAndIgnoreRemainingEvents()
         }
     }
-    private fun createMockMovie() = mockk<Trending> {
+
+    private fun createMockTvShow() = mockk<Trending> {
         every { id } returns 1
-        every { title } returns "Movie Title"
+        every { title } returns "tvShow Title"
         every { posterPath } returns "https://example.com/poster.jpg"
         every { genreIds } returns listOf(1, 2, 3)
     }
