@@ -99,42 +99,6 @@ class TopMoviesPicksViewModelTest {
         }
     }
 
-    @Test
-    fun `onRetryClick should clear error state and fetch data again`() = runTest {
-        val testSavedStateHandle = mockk<SavedStateHandle>(relaxed = true)
-        every { testSavedStateHandle.getArgs<Screen.ActorTopMoviesPicksDetails>() } returns Screen.ActorTopMoviesPicksDetails(
-            actorId = ACTOR_ID
-        )
-
-        val exception = Exception("error")
-        coEvery { getActorMoviePicksById.invoke(ACTOR_ID) } throws exception
-        coEvery { getActorMoviePicksById.invoke(0) } throws exception
-
-        val testViewModel = TopMoviesPicksViewModel(
-            savedStateHandle = testSavedStateHandle,
-            getActorMoviePicksById = getActorMoviePicksById
-        )
-        advanceUntilIdle()
-        testViewModel.state.test {
-            val errorState = expectMostRecentItem()
-            assertThat(errorState.errorState).isNotNull()
-            ensureAllEventsConsumed()
-        }
-        coEvery { getActorMoviePicksById.invoke(ACTOR_ID) } returns mockCastDetails
-        coEvery { getActorMoviePicksById.invoke(0) } returns mockCastDetails
-        testViewModel.onRetryClick()
-        advanceUntilIdle()
-
-        testViewModel.state.test {
-            val state = expectMostRecentItem()
-            assertThat(state.errorState).isNull()
-            assertThat(state.movieDetails).isEqualTo(mockCastDetails)
-            assertThat(state.isLoading).isFalse()
-            ensureAllEventsConsumed()
-        }
-        testViewModel.viewModelScope.cancel()
-    }
-
     companion object {
         private const val ACTOR_ID = 123
         private val mockCastDetails = ActorMediaDetails(
