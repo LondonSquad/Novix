@@ -21018,12 +21018,20 @@
           "url": "https://github.com/Abdulrahman1890"
         },
         "submitted_at": "2025-08-13T13:54:42Z"
+      },
+      {
+        "reviewer": {
+          "id": 117874933,
+          "login": "AsmaaKhaledGomaa",
+          "url": "https://github.com/AsmaaKhaledGomaa"
+        },
+        "submitted_at": "2025-08-13T15:24:30Z"
       }
     ],
     "first_approved_at": "2025-08-13T13:54:42Z",
     "time_to_first_approval_minutes": 1121.45,
-    "required_approvals_met_at": null,
-    "time_to_required_approvals_minutes": null,
+    "required_approvals_met_at": "2025-08-13T15:24:30Z",
+    "time_to_required_approvals_minutes": 1211.25,
     "closed_at": "2025-08-13T15:24:32Z",
     "merged_at": "2025-08-13T15:24:32Z",
     "merged_by": {
@@ -21091,8 +21099,8 @@
     "week": "2025-W33",
     "status": "merged",
     "diff_stats": {
-      "additions": 49,
-      "deletions": 56,
+      "additions": 24,
+      "deletions": 24,
       "changed_files": 8
     }
   },
@@ -21202,6 +21210,38 @@
     }
   },
   {
+    "pr_number": 631,
+    "url": "https://github.com/LondonSquad/Novix/pull/631",
+    "title": "fix/tv-shows-picks-testing",
+    "opened_at": "2025-08-13T21:05:22Z",
+    "head_ref": "fix/tv-shows-picks-testing",
+    "base_ref": "hotfix/top-tv-shows-picks",
+    "creator": {
+      "login": "Mostafa-alsaygh",
+      "id": 106277855,
+      "url": "https://github.com/Mostafa-alsaygh"
+    },
+    "approvals": [],
+    "first_approved_at": null,
+    "time_to_first_approval_minutes": null,
+    "required_approvals_met_at": null,
+    "time_to_required_approvals_minutes": null,
+    "closed_at": "2025-08-13T21:07:56Z",
+    "merged_at": "2025-08-13T21:07:56Z",
+    "merged_by": {
+      "login": "Mostafa-alsaygh",
+      "id": 106277855,
+      "url": "https://github.com/Mostafa-alsaygh"
+    },
+    "week": "2025-W33",
+    "status": "merged",
+    "diff_stats": {
+      "additions": 95,
+      "deletions": 63,
+      "changed_files": 1
+    }
+  },
+  {
     "pr_number": 632,
     "url": "https://github.com/LondonSquad/Novix/pull/632",
     "title": "Refactor my rating feature",
@@ -21255,6 +21295,34 @@
       "additions": 1774,
       "deletions": 286,
       "changed_files": 80
+    }
+  },
+  {
+    "pr_number": 634,
+    "url": "https://github.com/LondonSquad/Novix/pull/634",
+    "title": "refactor/trending",
+    "opened_at": "2025-08-14T13:07:16Z",
+    "head_ref": "refactor/trending",
+    "base_ref": "develop",
+    "creator": {
+      "login": "abdelrhman1002",
+      "id": 180463542,
+      "url": "https://github.com/abdelrhman1002"
+    },
+    "approvals": [],
+    "first_approved_at": null,
+    "time_to_first_approval_minutes": null,
+    "required_approvals_met_at": null,
+    "time_to_required_approvals_minutes": null,
+    "closed_at": null,
+    "merged_at": null,
+    "merged_by": null,
+    "week": "2025-W33",
+    "status": "pending",
+    "diff_stats": {
+      "additions": 797,
+      "deletions": 361,
+      "changed_files": 23
     }
   },
   {
