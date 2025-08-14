@@ -1,5 +1,6 @@
 package com.london.app.navigation
 
+import androidx.activity.compose.BackHandler
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
@@ -296,6 +297,15 @@ fun NavGraphBuilder.mainNavGraph(
         enterTransition = { fadeIn(tween(500)) },
         popExitTransition = { fadeOut(tween(500)) },
     ) {
+        BackHandler {
+            navController.navigate(Screen.Home) {
+                popUpTo(NovixAppNavGraph.Main) {
+                    inclusive = false
+                }
+                launchSingleTop = true
+            }
+        }
+
         SearchScreen(
             onNavigateToTvShowDetails = { tvShowId ->
                 navController.navigate(TvShowDetails(tvShowId))
@@ -315,13 +325,22 @@ fun NavGraphBuilder.mainNavGraph(
         enterTransition = { fadeIn(tween(500)) },
         popExitTransition = { fadeOut(tween(500)) },
     ) {
+        BackHandler {
+            navController.navigate(Screen.Home) {
+                popUpTo(NovixAppNavGraph.Main) {
+                    inclusive = false
+                }
+                launchSingleTop = true
+            }
+        }
+
         CategoriesScreen(
             onNavigateToMovieCategory = {
                 navController.navigate(Screen.MoviesByCategory(it.id))
             },
             onNavigateToTvShowCategory = {
                 navController.navigate(Screen.TvShowsByCategory(it.id))
-            }
+            },
         )
     }
 
@@ -331,6 +350,14 @@ fun NavGraphBuilder.mainNavGraph(
         enterTransition = { fadeIn(tween(500)) },
         popExitTransition = { fadeOut(tween(500)) },
     ) {
+        BackHandler {
+            navController.navigate(Screen.Home) {
+                popUpTo(NovixAppNavGraph.Main) {
+                    inclusive = false
+                }
+                launchSingleTop = true
+            }
+        }
         ListScreen(
             onNavigateToDetails = {
                 navController.navigate(Screen.ViewListItems(listId = it))
@@ -351,6 +378,15 @@ fun NavGraphBuilder.mainNavGraph(
         enterTransition = { fadeIn(tween(500)) },
         popExitTransition = { fadeOut(tween(500)) },
     ) {
+        BackHandler {
+            navController.navigate(Screen.Home) {
+                popUpTo(NovixAppNavGraph.Main) {
+                    inclusive = false
+                }
+                launchSingleTop = true
+            }
+        }
+
         AccountScreen(
             onNavigateToWatchingHistory = { navController.navigate(WatchingHistory) },
             onNavigateToMyRating = { navController.navigate(Screen.MyRating) },
