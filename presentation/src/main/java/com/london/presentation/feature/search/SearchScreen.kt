@@ -144,32 +144,7 @@ private fun Content(
 
                 when {
                     state.error != null && state.error != ErrorState.NoInternet -> {
-                        ResultOrEmpty(items = state.searchQuery.text.toList(), emptyContent = {
-                            ResultOrEmpty(
-                                items = state.recentSearches,
-                                otherItems = state.recentViewed,
-                                emptyContent = {
-                                    NoEarlierSearchLayout(
-                                        modifier = Modifier
-                                            .fillMaxSize()
-                                            .background(NovixTheme.colors.surface)
-                                    )
-                                },
-                                content = {
-                                    RecentSearchLayOut(
-                                        state = state,
-                                        contract = contract,
-                                        onNavigateToTvShowDetails = contract::onTvShowClick,
-                                        onNavigateToMovieDetails = contract::onMovieClick
-                                    )
-                                })
-                        }, content = {
-                            SearchChipsRow(
-                                selected = state.selectedCategory,
-                                onSelect = contract::onCategorySelected,
-                                modifier = Modifier.padding(bottom = 12.dp)
-                            )
-                        })
+                        SearchContentWithError(state = state, contract = contract)
                     }
 
                     else -> {
@@ -182,6 +157,44 @@ private fun Content(
             }
         }
     }
+}
+
+@Composable
+private fun SearchContentWithError(
+    state: SearchUiState,
+    contract: SearchContract
+) {
+    ResultOrEmpty(
+        items = state.searchQuery.text.toList(),
+        emptyContent = {
+            ResultOrEmpty(
+                items = state.recentSearches,
+                otherItems = state.recentViewed,
+                emptyContent = {
+                    NoEarlierSearchLayout(
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .background(NovixTheme.colors.surface)
+                    )
+                },
+                content = {
+                    RecentSearchLayOut(
+                        state = state,
+                        contract = contract,
+                        onNavigateToTvShowDetails = contract::onTvShowClick,
+                        onNavigateToMovieDetails = contract::onMovieClick
+                    )
+                }
+            )
+        },
+        content = {
+            SearchChipsRow(
+                selected = state.selectedCategory,
+                onSelect = contract::onCategorySelected,
+                modifier = Modifier.padding(bottom = 12.dp)
+            )
+        }
+    )
 }
 
 @Composable
