@@ -9,7 +9,7 @@ import java.util.Properties
 
 fun getLocalProperty(key: String, file: String? = null, root: String = "."): String {
     val properties = Properties()
-    val defaultFiles = listOf("$root/local.properties", "$root/defaults.properties")
+    val defaultFiles = listOf("$root/local.properties", "$root/constants.properties")
     val files = (defaultFiles + file).mapNotNull { it }
 
     files.forEach {
