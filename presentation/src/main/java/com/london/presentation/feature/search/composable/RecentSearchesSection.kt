@@ -1,4 +1,4 @@
-package com.london.presentation.feature.search
+package com.london.presentation.feature.search.composable
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
