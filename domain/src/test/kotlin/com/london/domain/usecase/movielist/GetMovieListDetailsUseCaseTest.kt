@@ -43,7 +43,7 @@ class GetMovieListDetailsUseCaseTest {
     }
 
     private companion object {
-        const val LIST_ID = 10u
+        const val LIST_ID = 10
         val movieListDetails = PagedFetchResponse(
             currentPage = 1,
             totalPages = 1,

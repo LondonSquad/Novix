@@ -2,25 +2,19 @@ package com.london.domain.usecase.movielist
 
 import com.london.domain.entity.MovieList
 import com.london.domain.repository.CustomMovieListRepository
-import com.london.domain.repository.MovieDetailsRepository
 import javax.inject.Inject
 
 class GetAvailableListsForMovie @Inject constructor(
-    private val customMovieListRepository: CustomMovieListRepository,
-    private val movieDetailsRepository: MovieDetailsRepository
+    private val repository: CustomMovieListRepository
 ) {
 
-    suspend fun invoke(movieId: UInt): List<MovieList> {
+    suspend fun invoke(movieId: Int): List<MovieList> {
         val allLists = getAllLists()
-        val movieLists = getMovieLists(movieId = movieId)
+        val movieLists = repository.getMovieListIds(movieId)
 
         return allLists.filterNot { movieList ->
-            movieLists.any { it.id == movieList.id }
+            movieLists.any { it == movieList.id }
         }
-    }
-
-    private suspend fun getMovieLists(movieId: UInt): List<MovieList> {
-        return movieDetailsRepository.getMovieLists(movieId = movieId)
     }
 
     private suspend fun getAllLists(): List<MovieList> {
@@ -28,7 +22,7 @@ class GetAvailableListsForMovie @Inject constructor(
         var currentPage = 1
 
         do {
-            val response = customMovieListRepository.getMovieLists(currentPage)
+            val response = repository.getMovieLists(currentPage)
             allLists.addAll(response.items)
             currentPage++
         } while (currentPage <= response.totalPages)

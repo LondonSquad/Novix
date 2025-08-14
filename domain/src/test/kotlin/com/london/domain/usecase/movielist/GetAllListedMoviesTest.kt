@@ -29,13 +29,13 @@ class GetAllListedMoviesTest {
         coEvery { customMovieListRepository.getMovieLists(pageNumber = 1) } returns movieLists
         coEvery {
             customMovieListRepository.getMovieListDetails(
-                listId = 1u,
+                listId = 1,
                 pageNumber = 1
             )
         } returns listDetails1
         coEvery {
             customMovieListRepository.getMovieListDetails(
-                listId = 2u,
+                listId = 2,
                 pageNumber = 1
             )
         } returns listDetails2
@@ -62,14 +62,14 @@ class GetAllListedMoviesTest {
             totalItems = 1,
             items = listOf(
                 MovieList(
-                    id = 1u,
+                    id = 1,
                     name = "list1",
-                    moviesCount = 1u
+                    moviesCount = 1
                 ),
                 MovieList(
-                    id = 2u,
+                    id = 2,
                     name = "list2",
-                    moviesCount = 1u
+                    moviesCount = 1
                 ),
             )
         )

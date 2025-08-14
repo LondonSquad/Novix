@@ -53,7 +53,7 @@ class AddMovieToListUseCaseTest {
 
 
     private companion object {
-        const val LIST_ID = 10u
-        const val MOVIE_ID = 20u
+        const val LIST_ID = 10
+        const val MOVIE_ID = 20
     }
 }
