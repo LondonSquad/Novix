@@ -49,7 +49,7 @@ class MovieCategoryViewModel @Inject constructor(
     private fun createMoviesPagingSourceFlow(categoryId: Int): Flow<PagingData<Movie>> {
 
         return createPagingSourceFlow(query = "") { _, pageNumber ->
-            getMoviesByCategoryUseCase(
+            getMovieUseCase.getMoviesByCategory(
                 categoryId = categoryId,
                 pageNumber = pageNumber
             )

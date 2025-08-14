@@ -12,7 +12,6 @@ import javax.inject.Inject
 class TopMoviesPicksViewModel @Inject constructor(
     private val getActorUseCase: GetActorUseCase,
     savedStateHandle: SavedStateHandle,
-    private val getActorMoviePicksById: GetActorMoviePicksByIdUseCase,
 ) : BaseViewModel<TopMoviesPicksUiState, TopMoviesPicksEffect>(TopMoviesPicksUiState()),
     TopMoviesPicksContract {
 
