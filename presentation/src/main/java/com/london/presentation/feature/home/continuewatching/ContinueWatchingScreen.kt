@@ -99,9 +99,8 @@ fun Content(
             onRetry = contract::onRetry,
         ) {
             MediaLazyGridWithTabs(
-                items = state.movies.collectAsStateWithLifecycle(emptyList()).value +
-                        state.tvSeries.collectAsStateWithLifecycle(emptyList()).value,
-                tabSelected = if (state.isMovieSelected) MediaCategory.Movies.ordinal else MediaCategory.TvShows.ordinal,
+                items = getCombinedItems(state),
+                tabSelected = getSelectedTabIndex(state),
                 onTabSelected = contract::onMediaCategoryTabSelected,
                 onMovieGenreClick = contract::onMovieGenreChanged,
                 onTvShowGenreClick = contract::onTvShowGenreChanged,
@@ -128,3 +127,11 @@ fun Content(
         }
     }
 }
+
+@Composable
+private fun getCombinedItems(state: ContinueWatchingUiState): List<Any> =
+    state.movies.collectAsStateWithLifecycle(emptyList()).value +
+            state.tvSeries.collectAsStateWithLifecycle(emptyList()).value
+
+private fun getSelectedTabIndex(state: ContinueWatchingUiState): Int =
+    if (state.isMovieSelected) MediaCategory.Movies.ordinal else MediaCategory.TvShows.ordinal

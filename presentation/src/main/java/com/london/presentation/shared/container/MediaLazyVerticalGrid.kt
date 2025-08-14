@@ -107,27 +107,58 @@ fun <T : Any> MediaLazyVerticalGrid(
             contentPadding = PaddingValues(start = 16.dp, end = 16.dp, bottom = 16.dp)
         ) {
             items(pagingItems.itemCount) { index ->
-                pagingItems[index]?.let { item ->
-                    imageUrl(item)?.let {
-                        HomeCard(
-                            imageUrl = it,
-                            modifier = Modifier.clickable {
-                                when (item) {
-                                    is Movie -> onNavigateToMovie(item.id)
-                                    is TvShow -> onNavigateToTvShow(item.id)
-                                }
-                            },
-                            imageDescription = name(item),
-                            isSaved = isItemSaved(item),
-                            hasSaveIcon = hasSaveIcon,
-                            onSaveClick = { onSaveClick(item) },
-                            onDeleteClick = { onDeleteClick(item) },
-                            myRatingList = myRatingList,
-                            rate = rate
-                        )
-                    }
-                }
+                RenderPagingItem(
+                    index = index,
+                    pagingItems = pagingItems,
+                    imageUrl = imageUrl,
+                    name = name,
+                    isItemSaved = isItemSaved,
+                    hasSaveIcon = hasSaveIcon,
+                    onSaveClick = onSaveClick,
+                    onDeleteClick = onDeleteClick,
+                    myRatingList = myRatingList,
+                    rate = rate,
+                    onNavigateToMovie = onNavigateToMovie,
+                    onNavigateToTvShow = onNavigateToTvShow
+                )
             }
+        }
+    }
+}
+
+@Composable
+private fun <T : Any> RenderPagingItem(
+    index: Int,
+    pagingItems: LazyPagingItems<T>,
+    imageUrl: (T) -> String?,
+    name: (T) -> String,
+    isItemSaved: (T) -> Boolean,
+    hasSaveIcon: Boolean,
+    onSaveClick: (T) -> Unit,
+    onDeleteClick: (T) -> Unit,
+    myRatingList: Boolean,
+    rate: String,
+    onNavigateToMovie: (Int) -> Unit,
+    onNavigateToTvShow: (Int) -> Unit
+) {
+    pagingItems[index]?.let { item ->
+        imageUrl(item)?.let {
+            HomeCard(
+                imageUrl = it,
+                modifier = Modifier.clickable {
+                    when (item) {
+                        is Movie -> onNavigateToMovie(item.id)
+                        is TvShow -> onNavigateToTvShow(item.id)
+                    }
+                },
+                imageDescription = name(item),
+                isSaved = isItemSaved(item),
+                hasSaveIcon = hasSaveIcon,
+                onSaveClick = { onSaveClick(item) },
+                onDeleteClick = { onDeleteClick(item) },
+                myRatingList = myRatingList,
+                rate = rate
+            )
         }
     }
 }
