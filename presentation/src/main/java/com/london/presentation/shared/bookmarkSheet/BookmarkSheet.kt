@@ -1,7 +1,11 @@
 package com.london.presentation.shared.bookmarkSheet
 
-import androidx.compose.animation.animateContentSize
+import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.core.tween
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
+import androidx.compose.animation.slideInVertically
+import androidx.compose.animation.togetherWith
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -50,7 +54,7 @@ import kotlinx.coroutines.launch
 @Composable
 fun BookmarkBottomSheet(
     isSheetVisible: Boolean,
-    bookmarkedMovieId: UInt,
+    bookmarkedMovieId: Int,
     onSheetDismiss: () -> Unit,
     modifier: Modifier = Modifier,
     viewModel: BookmarkSheetViewModel = hiltViewModel(),
@@ -60,7 +64,7 @@ fun BookmarkBottomSheet(
     val navController = LocalNavController.current
 
     LaunchedEffect(isSheetVisible, bookmarkedMovieId) {
-        if (isSheetVisible && bookmarkedMovieId != 0u) {
+        if (isSheetVisible) {
             viewModel.onSheetShown(bookmarkedMovieId)
             coroutineScope.launch { sheetState.show() }
         }
@@ -126,7 +130,7 @@ private fun BookmarkBottomSheetContent(
     contract: BookmarkSheetContract,
     modifier: Modifier = Modifier,
     hideSheet: () -> Unit,
-    bookmarkedMovieId: UInt
+    bookmarkedMovieId: Int
 ) {
     Column(
         modifier = modifier
@@ -209,23 +213,40 @@ private fun SheetHeader(
     }
 }
 
+private enum class UserListState {
+    Loading,
+    Empty,
+    Success
+}
 
 @Composable
 private fun UserListsView(
     uiState: BookmarkSheetUiState,
     contract: BookmarkSheetContract
 ) {
-    Column(modifier = Modifier.animateContentSize(tween())) {
-        when {
-            uiState.isLoading -> {
+    val userListState = when {
+        uiState.isLoading -> UserListState.Loading
+        uiState.lists.isEmpty() -> UserListState.Empty
+        else -> UserListState.Success
+    }
+
+    AnimatedContent(
+        targetState = userListState,
+        transitionSpec = {
+            fadeIn(animationSpec = tween(220, delayMillis = 90)) +
+                    slideInVertically(initialOffsetY = { it / 2 }) togetherWith
+                    fadeOut(animationSpec = tween(90))
+        },
+        label = "UserListAnimation"
+    ) { state ->
+        when (state) {
+            UserListState.Loading -> {
                 CircularLoading()
             }
-
-            uiState.lists.isEmpty() -> {
+            UserListState.Empty -> {
                 NoListsMessage()
             }
-
-            else -> {
+            UserListState.Success -> {
                 LazyColumn(
                     modifier = Modifier
                         .fillMaxWidth()
@@ -237,7 +258,7 @@ private fun UserListsView(
                             modifier = Modifier.fillMaxWidth(),
                             mainText = movieList.name,
                             isSelected = movieList.id in uiState.selectedLists,
-                            subText = stringResource(R.string.n_items, movieList.itemCount.toInt()),
+                            subText = stringResource(R.string.n_items, movieList.itemCount),
                             onClick = { contract.onListSelected(movieList.id) }
                         )
                     }
@@ -245,14 +266,13 @@ private fun UserListsView(
             }
         }
     }
-
 }
 
 @Composable
 fun UserActions(
     contract: BookmarkSheetContract,
     uiState: BookmarkSheetUiState,
-    bookmarkedMovieId: UInt
+    bookmarkedMovieId: Int
 ) {
     Column(
         modifier = Modifier.fillMaxWidth(),
@@ -263,10 +283,10 @@ fun UserActions(
             text = R.string.add.string,
             hasLabel = true,
             hasIcon = false,
-            isLoading = false,
+            isLoading = uiState.isAddingToList,
             icon = null,
             onClick = { contract.onAddToLists(bookmarkedId = bookmarkedMovieId) },
-            enabled = uiState.selectedLists.isNotEmpty()
+            enabled = uiState.selectedLists.isNotEmpty() && !uiState.isAddingToList
         )
 
         OutlineButton(
