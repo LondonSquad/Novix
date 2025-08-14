@@ -4,7 +4,7 @@ import androidx.lifecycle.viewModelScope
 import androidx.paging.PagingData
 import androidx.paging.cachedIn
 import com.london.domain.entity.Trending
-import com.london.domain.usecase.details.tvshow.ManageTvShowDetailsUseCase
+import com.london.domain.usecase.details.tvshow.GetTvShowUseCase
 import com.london.presentation.shared.base.BaseViewModel
 import com.london.presentation.shared.base.ErrorState
 import com.london.presentation.shared.base.createPagingSourceFlow
@@ -16,7 +16,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class TrendingTvShowsViewModel @Inject constructor(
-    private val manageTvShowDetailsUseCase: ManageTvShowDetailsUseCase,
+    private val getTvShowUseCase: GetTvShowUseCase,
 ) :
     BaseViewModel<TrendingTvShowsUiState, TrendingTvShowsEffect>(TrendingTvShowsUiState()),
     TrendingTvShowsContract {

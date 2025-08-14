@@ -18,7 +18,7 @@ class MyRatingsViewModel @Inject constructor(
 
     fun initializeRatedMedia() {
         tryToExecute(
-            block = { manageRatingUseCase.getRatedMediaSorted() },
+            block = { manageRatingUseCase.getAllRatedMediaSorted() },
             onStart = { updateState { copy(isLoading = true) } },
             onSuccess = { ratedMedia ->
                 updateState {

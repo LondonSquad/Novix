@@ -4,7 +4,7 @@ import androidx.lifecycle.viewModelScope
 import androidx.paging.PagingData
 import androidx.paging.cachedIn
 import com.london.domain.entity.Actor
-import com.london.domain.usecase.GetTrendingActorsUseCase
+import com.london.domain.usecase.details.actor.GetActorUseCase
 import com.london.presentation.shared.base.BaseViewModel
 import com.london.presentation.shared.base.ErrorState
 import com.london.presentation.shared.base.createPagingSourceFlow
@@ -14,7 +14,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class TrendingActorsViewModel @Inject constructor(
-    private val getTrendingActors: GetTrendingActorsUseCase,
+    private val getActorUseCase: GetActorUseCase,
 ) : BaseViewModel<TrendingActorsUiState, TrendingActorsEffect>(TrendingActorsUiState()),
     TrendingActorsContract {
 

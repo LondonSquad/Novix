@@ -2,6 +2,13 @@ package com.london.presentation.shared.base
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.london.domain.exception.ConnectionException
+import com.london.domain.exception.EmptyBodyException
+import com.london.domain.exception.EntryNotFoundException
+import com.london.domain.exception.InternetDisconnectedException
+import com.london.domain.exception.ResponseException
+import com.london.domain.exception.UnAuthorizedException
+import com.london.domain.exception.ValidationException
 import com.london.presentation.utils.getValueOf
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -115,18 +122,17 @@ abstract class BaseViewModel<S, E : Any>(initState: S) : ViewModel() {
             is ConnectException -> ConnectionException()
             is SocketTimeoutException,
             is TimeoutCancellationException -> TimeoutException()
-
             is UnknownHostException -> InternetDisconnectedException()
             else -> throwable
         }
 
         when (exception) {
             is UnAuthorizedException -> ErrorState.UnAuthorized
-            is ConnectionException -> ErrorState.NoInternet
-            is InternetDisconnectedException -> ErrorState.NoInternet
+            is ConnectionException, is InternetDisconnectedException -> ErrorState.NoInternet
             is EmptyBodyException -> ErrorState.EmptyBody
             is TimeoutException -> ErrorState.Timeout
             is ValidationException -> ErrorState.Validation
+            is EntryNotFoundException -> ErrorState.EntryNotFound()
             is ResponseException -> {
                 when (exception.code) {
                     HttpStatus.SC_UNAUTHORIZED -> ErrorState.UnAuthorized
