@@ -14,6 +14,8 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.layout.wrapContentHeight
+import androidx.compose.foundation.lazy.grid.GridItemSpan
+import androidx.compose.foundation.lazy.grid.LazyGridScope
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -37,9 +39,24 @@ import com.london.designsystem.theme.NovixTheme
 import com.london.designsystem.theme.noRippleClickable
 import com.london.designsystem.utils.shimmerEffect
 import com.london.presentation.R
+import com.london.presentation.feature.home.HomeScreenContract
+
+fun LazyGridScope.trendingSection(
+    isLoading: Boolean,
+    homeScreenContract: HomeScreenContract
+) {
+    item(span = { GridItemSpan(maxLineSpan) }) {
+        TrendingSection(
+            isLoading = isLoading,
+            onMoviesClick = homeScreenContract::onTrendingMoviesCardClick,
+            onTvShowsClick = homeScreenContract::onTrendingTvShowsCardClick,
+            onActorsClick = homeScreenContract::onTrendingActorsCardClick
+        )
+    }
+}
 
 @Composable
-fun TrendingSection(
+private fun TrendingSection(
     onMoviesClick: () -> Unit,
     onTvShowsClick: () -> Unit,
     onActorsClick: () -> Unit,

@@ -8,6 +8,13 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.navigationBars
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.statusBars
+import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.lazy.grid.GridCells
+import androidx.compose.foundation.lazy.grid.GridItemSpan
+import androidx.compose.foundation.lazy.grid.LazyGridScope
+import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
+import androidx.compose.foundation.lazy.grid.items
+import androidx.compose.foundation.lazy.items
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -17,6 +24,12 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.london.designsystem.theme.NovixTheme
 import com.london.presentation.R
+import com.london.presentation.feature.home.HomeScreenContract
+import com.london.presentation.feature.home.HomeUiMedia
+import com.london.presentation.feature.home.section.ContinueWatchingSection
+import com.london.presentation.shared.CarousalShimmerEffect
+import com.london.presentation.shared.EmptyGenreLayout
+import com.london.presentation.shared.HomeCard
 import com.london.presentation.shared.DefaultAppTopBar
 import com.london.presentation.shared.MediaCategory
 import com.london.presentation.shared.base.ErrorState
@@ -54,7 +67,7 @@ fun ContinueWatchingScreen(
 @Composable
 fun Content(
     state: ContinueWatchingUiState = ContinueWatchingUiState(),
-    contract: ContinueWatchingContract = defaultContinueWatchingContract(),
+    contract: ContinueWatchingContract,
     screenTitle: String = stringResource(R.string.continue_watch)
 ) {
 

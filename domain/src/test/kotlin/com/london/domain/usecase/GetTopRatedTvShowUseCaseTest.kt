@@ -2,9 +2,10 @@ package com.london.domain.usecase
 
 import com.google.common.truth.Truth.assertThat
 import com.london.domain.entity.PagedFetchResponse
+import com.london.domain.entity.recent.MediaType
 import com.london.domain.entity.toprated.TopRatedMedia
 import com.london.domain.repository.TvShowRepository
-import com.london.domain.usecase.toprated.GetTopRatedTvSeriesUseCase
+import com.london.domain.usecase.toprated.GetTopRatedTvShowUseCase
 import io.mockk.coEvery
 import io.mockk.mockk
 import kotlinx.coroutines.test.runTest
@@ -12,15 +13,15 @@ import org.junit.Before
 import org.junit.Test
 import org.junit.jupiter.api.assertThrows
 
-class GetTopRatedTvSeriesUseCaseTest {
+class GetTopRatedTvShowUseCaseTest {
 
     private lateinit var repository: TvShowRepository
-    private lateinit var getTopRatedTvSeries: GetTopRatedTvSeriesUseCase
+    private lateinit var getTopRatedTvSeries: GetTopRatedTvShowUseCase
 
     @Before
     fun setUp() {
         repository = mockk()
-        getTopRatedTvSeries = GetTopRatedTvSeriesUseCase(repository)
+        getTopRatedTvSeries = GetTopRatedTvShowUseCase(repository)
     }
 
     @Test
@@ -38,7 +39,7 @@ class GetTopRatedTvSeriesUseCaseTest {
         } returns mockPagedResponse
 
         // When
-        val result = getTopRatedTvSeries(PAGE)
+        val result = getTopRatedTvSeries.getAll(PAGE)
 
         // Then
         assertThat(result).isEqualTo(mockPagedResponse)
@@ -60,7 +61,7 @@ class GetTopRatedTvSeriesUseCaseTest {
         } returns emptyPagedResponse
 
         // When
-        val result = getTopRatedTvSeries(PAGE)
+        val result = getTopRatedTvSeries.getAll(PAGE)
 
         // Then
         assertThat(result.items).isEmpty()
@@ -76,7 +77,7 @@ class GetTopRatedTvSeriesUseCaseTest {
 
         // When & Then
         assertThrows<RuntimeException> {
-            getTopRatedTvSeries(PAGE)
+            getTopRatedTvSeries.getAll(PAGE)
         }
     }
 
@@ -90,6 +91,7 @@ class GetTopRatedTvSeriesUseCaseTest {
             posterUrl = "/ggFHVNu6YYI5L9pCfOacjizRGt.jpg",
             genreIds = listOf(18, 80),
             releaseDate = "2008-01-20",
+            mediaType = MediaType.Movie
         )
 
         private val mockTv2 = TopRatedMedia(
@@ -99,6 +101,7 @@ class GetTopRatedTvSeriesUseCaseTest {
             releaseDate = "2019-05-06",
             posterUrl = "/hlLXt2tOPT6RRnjiUmoxyG1LTFi.jpg",
             genreIds = listOf(18, 36),
+            mediaType = MediaType.Movie
         )
 
         val mockTopRatedTvSeries = listOf(mockTv1, mockTv2)
