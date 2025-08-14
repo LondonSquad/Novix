@@ -22,7 +22,8 @@ interface MovieRepository {
     suspend fun getActorMoviePicksById(id: Int): ActorMediaDetails
     suspend fun getPopularMovies(): List<PopularMedia>
     suspend fun getTrendingMovies(page: Int): PagedFetchResponse<Trending>
-    suspend fun getTopRatedMovies(pageNumber: Int, ): PagedFetchResponse<TopRatedMedia>
+    suspend fun getTopRatedMovies(pageNumber: Int): PagedFetchResponse<TopRatedMedia>
+    suspend fun getFirstPageTopRatedMovies(): List<TopRatedMedia>
     suspend fun getMoviesByCategory(categoryId: Int, pageNumber: Int): PagedFetchResponse<Movie>
     suspend fun getAllRatedMovies(): List<RatedMedia>
     suspend fun deleteMovieRating(movieId: Int): Boolean

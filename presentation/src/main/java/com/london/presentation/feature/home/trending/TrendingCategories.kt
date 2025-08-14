@@ -14,6 +14,8 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.layout.wrapContentHeight
+import androidx.compose.foundation.lazy.grid.GridItemSpan
+import androidx.compose.foundation.lazy.grid.LazyGridScope
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -37,9 +39,24 @@ import com.london.designsystem.theme.NovixTheme
 import com.london.designsystem.theme.noRippleClickable
 import com.london.designsystem.utils.shimmerEffect
 import com.london.presentation.R
+import com.london.presentation.feature.home.HomeScreenContract
+
+fun LazyGridScope.trendingSection(
+    isLoading: Boolean,
+    homeScreenContract: HomeScreenContract
+) {
+    item(span = { GridItemSpan(maxLineSpan) }) {
+        TrendingSection(
+            isLoading = isLoading,
+            onMoviesClick = homeScreenContract::onTrendingMoviesCardClick,
+            onTvShowsClick = homeScreenContract::onTrendingTvShowsCardClick,
+            onActorsClick = homeScreenContract::onTrendingActorsCardClick
+        )
+    }
+}
 
 @Composable
-fun TrendingCategories(
+private fun TrendingSection(
     onMoviesClick: () -> Unit,
     onTvShowsClick: () -> Unit,
     onActorsClick: () -> Unit,
@@ -79,69 +96,41 @@ fun TrendingCategories(
             horizontalArrangement = Arrangement.spacedBy(8.dp),
             verticalAlignment = Alignment.Bottom
         ) {
-            TrendingCategories(
-                onMoviesClick = onMoviesClick,
-                onTvShowsClick = onTvShowsClick,
-                onActorsClick = onActorsClick
-            ).forEach { category ->
                 CategoryCard(
-                    title = category.title,
-                    icon = category.icon,
-                    startColor = category.startColor,
-                    endColor = category.endColor,
-                    imageWidth = category.imageWidth,
-                    imageHeight = category.imageHeight,
-                    onClick = category.onClick,
+                    title = stringResource(R.string.Movies),
+                    icon = painterResource(id = R.drawable.icon_movie),
+                    startColor = NovixTheme.colors.primary,
+                    endColor = NovixTheme.colors.darkCocoa,
+                    imageWidth = 60.dp,
+                    imageHeight = 64.dp,
+                    onClick = onMoviesClick,
+                    modifier = Modifier.weight(1f)
                 )
-            }
+
+                CategoryCard(
+                    title = stringResource(R.string.TV_Shows),
+                    icon = painterResource(id = R.drawable.icon_tvshow),
+                    startColor = NovixTheme.colors.secondary,
+                    endColor = NovixTheme.colors.deepCrimson,
+                    imageWidth = 88.46.dp,
+                    imageHeight = 64.dp,
+                    onClick = onTvShowsClick,
+                    modifier = Modifier.weight(1f)
+                )
+
+                CategoryCard(
+                    title = stringResource(R.string.actors),
+                    icon = painterResource(id = R.drawable.icon_actor),
+                    startColor = NovixTheme.colors.tealBlue,
+                    endColor = NovixTheme.colors.oceanDark,
+                    imageWidth = 56.49.dp,
+                    imageHeight = 64.dp,
+                    onClick = onActorsClick,
+                    modifier = Modifier.weight(1f)
+                )
         }
     }
 }
-@Composable
-fun TrendingCategories(
-    onMoviesClick: () -> Unit,
-    onTvShowsClick: () -> Unit,
-    onActorsClick: () -> Unit,
-): List<CategoryUi> {
-    return listOf(
-        CategoryUi(
-            title = "Movies",
-            icon = painterResource(id = R.drawable.icon_movie),
-            startColor = NovixTheme.colors.primary,
-            endColor = NovixTheme.colors.darkCocoa,
-            imageWidth = 60.dp,
-            imageHeight = 64.dp,
-            onClick = onMoviesClick
-        ),
-        CategoryUi(
-            title = "TV Shows",
-            icon = painterResource(id = R.drawable.icon_tvshow),
-            startColor = NovixTheme.colors.secondary,
-            endColor = NovixTheme.colors.deepCrimson,
-            imageWidth = 88.46.dp,
-            imageHeight = 64.dp,
-            onClick = onTvShowsClick
-        ),
-        CategoryUi(
-            title = "Actors",
-            icon = painterResource(id = R.drawable.icon_actor),
-            startColor = NovixTheme.colors.tealBlue,
-            endColor = NovixTheme.colors.oceanDark,
-            imageWidth = 56.49.dp,
-            imageHeight = 64.dp,
-            onClick = onActorsClick
-        )
-    )
-}
-data class CategoryUi(
-    val title: String,
-    val icon: Painter,
-    val startColor: Color,
-    val endColor: Color,
-    val imageWidth: Dp,
-    val imageHeight: Dp,
-    val onClick: () -> Unit,
-)
 
 @Composable
 private fun CategoryCard(
@@ -198,7 +187,7 @@ private fun CategoryCard(
 @Preview
 @Composable
 private fun Preview() {
-    TrendingCategories(
+    TrendingSection(
         onMoviesClick = {},
         onTvShowsClick = {},
         onActorsClick = {}
