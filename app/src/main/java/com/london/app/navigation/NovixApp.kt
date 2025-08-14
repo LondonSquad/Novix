@@ -449,7 +449,7 @@ fun NavGraphBuilder.mainNavGraph(
     }
     composable<Screen.ActorTopMoviesPicksDetails> {
         TopMoviesPicksScreen(
-            onNavigateMovie = { movieId ->
+            onNavigateToMovieDetails = { movieId ->
                 navController.navigate(MovieDetails(movieId))
             },
             onNavigateBack = { navController.navigateUp() },
