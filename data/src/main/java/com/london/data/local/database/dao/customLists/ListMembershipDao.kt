@@ -23,11 +23,27 @@ interface ListMembershipDao {
     @Query("SELECT listId FROM movie_list_membership WHERE movieId = :movieId")
     fun getMovieListIdsFlow(movieId: Int): Flow<List<Int>>
 
+    // Get movies for a specific list with pagination
+    @Query("SELECT movieId FROM movie_list_membership WHERE listId = :listId ORDER BY addedAt DESC LIMIT :limit OFFSET :offset")
+    suspend fun getMovieIdsForList(listId: Int, limit: Int, offset: Int): List<Int>
+
+    @Query("SELECT movieId FROM movie_list_membership WHERE listId = :listId ORDER BY addedAt DESC")
+    fun getMovieIdsForListFlow(listId: Int): Flow<List<Int>>
+
+    @Query("SELECT COUNT(*) FROM movie_list_membership WHERE listId = :listId")
+    suspend fun getMovieCountForList(listId: Int): Int
+
+    @Query("SELECT COUNT(*) FROM movie_list_membership WHERE listId = :listId")
+    fun getMovieCountForListFlow(listId: Int): Flow<Int>
+
     @Query("SELECT DISTINCT movieId FROM movie_list_membership")
     suspend fun getAllListedMovieIds(): List<Int>
 
     @Query("SELECT DISTINCT movieId FROM movie_list_membership")
     fun getAllListedMovieIdsFlow(): Flow<List<Int>>
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun insertMembership(membership: MovieListMembershipLocal)
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertMemberships(memberships: List<MovieListMembershipLocal>)
@@ -44,6 +60,12 @@ interface ListMembershipDao {
     @Transaction
     suspend fun replaceAllMemberships(memberships: List<MovieListMembershipLocal>) {
         clearAll()
+        insertMemberships(memberships)
+    }
+
+    @Transaction
+    suspend fun replaceMembershipsForList(listId: Int, memberships: List<MovieListMembershipLocal>) {
+        removeAllMembershipsForList(listId)
         insertMemberships(memberships)
     }
 
