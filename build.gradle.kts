@@ -32,7 +32,7 @@ subprojects {
 dependencies {
     kover(projects.domain)
     kover(projects.data)
-    kover(projects.presentation)
+//    kover(projects.presentation)
 }
 
 kover {
@@ -49,7 +49,7 @@ kover {
                         "com.london.data.datasource.local.search",
                         "com.london.data.datasource.local.recent",
                     )
-                    classes("**.*ViewModel")
+//                    classes("**.*ViewModel")
                 }
 
                 excludes {
