@@ -21296,5 +21296,33 @@
       "deletions": 19,
       "changed_files": 8
     }
+  },
+  {
+    "pr_number": 636,
+    "url": "https://github.com/LondonSquad/Novix/pull/636",
+    "title": "refactor: add back handler to main screens for home navigation",
+    "opened_at": "2025-08-14T15:01:29Z",
+    "head_ref": "refactor/navigation-in-main-screens",
+    "base_ref": "develop",
+    "creator": {
+      "login": "BassantM",
+      "id": 102248144,
+      "url": "https://github.com/BassantM"
+    },
+    "approvals": [],
+    "first_approved_at": null,
+    "time_to_first_approval_minutes": null,
+    "required_approvals_met_at": null,
+    "time_to_required_approvals_minutes": null,
+    "closed_at": null,
+    "merged_at": null,
+    "merged_by": null,
+    "week": "2025-W33",
+    "status": "pending",
+    "diff_stats": {
+      "additions": 37,
+      "deletions": 1,
+      "changed_files": 1
+    }
   }
 ]
