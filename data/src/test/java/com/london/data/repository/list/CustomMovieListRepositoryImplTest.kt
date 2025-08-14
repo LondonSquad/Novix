@@ -116,7 +116,10 @@ class CustomMovieListRepositoryImplTest {
 
         //Given
         coEvery { remoteDataSource.getAllMovieLists(any(), any()) } returns Result.failure(
-            NetworkException.HttpLockedException("locked")
+            NetworkException.HttpLockedException(
+                message = "locked",
+                status = 423
+            )
         )
         //When //Then
         assertThrows<NetworkException.HttpLockedException> {
@@ -200,7 +203,10 @@ class CustomMovieListRepositoryImplTest {
 
         //Given
         coEvery { remoteDataSource.getDetails(any(), any()) } returns Result.failure(
-            NetworkException.HttpLockedException("locked")
+            NetworkException.HttpLockedException(
+                message = "locked",
+                status = 423
+            )
         )
         //When //Then
         assertThrows<NetworkException.HttpLockedException> {
@@ -225,7 +231,10 @@ class CustomMovieListRepositoryImplTest {
     fun `getMovieListName should throw exception when data source returns failure`() = runTest {
         //Given
         coEvery { remoteDataSource.getDetails(any(), any()) } returns Result.failure(
-            NetworkException.HttpLockedException("locked")
+            NetworkException.HttpLockedException(
+                message = "locked",
+                status = 423
+            )
         )
         //When //Then
         assertThrows<NetworkException.HttpLockedException> {

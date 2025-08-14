@@ -3,7 +3,7 @@ package com.london.presentation.feature.category.movie
 import androidx.lifecycle.SavedStateHandle
 import androidx.paging.PagingData
 import com.london.domain.entity.Movie
-import com.london.domain.usecase.GetMoviesByCategoryUseCase
+import com.london.domain.usecase.details.movie.GetMovieUseCase
 import com.london.presentation.navigation.Screen
 import com.london.presentation.navigation.getArgs
 import com.london.presentation.shared.base.BaseViewModel
@@ -15,7 +15,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class MovieCategoryViewModel @Inject constructor(
-    private val getMoviesByCategoryUseCase: GetMoviesByCategoryUseCase,
+    private val getMovieUseCase: GetMovieUseCase,
     savedStateHandle: SavedStateHandle
 ) : BaseViewModel<MovieCategoryUiState, MovieCategoryEffect>(MovieCategoryUiState()),
     MovieCategoryContract {
@@ -49,7 +49,7 @@ class MovieCategoryViewModel @Inject constructor(
     private fun createMoviesPagingSourceFlow(categoryId: Int): Flow<PagingData<Movie>> {
 
         return createPagingSourceFlow(query = "") { _, pageNumber ->
-            getMoviesByCategoryUseCase(
+            getMovieUseCase.getMoviesByCategory(
                 categoryId = categoryId,
                 pageNumber = pageNumber
             )

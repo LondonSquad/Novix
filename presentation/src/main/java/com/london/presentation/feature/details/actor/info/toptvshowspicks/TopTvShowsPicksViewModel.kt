@@ -1,7 +1,7 @@
 package com.london.presentation.feature.details.actor.info.toptvshowspicks
 
 import androidx.lifecycle.SavedStateHandle
-import com.london.domain.usecase.toppicks.GetActorTvShowPicksByIdUseCase
+import com.london.domain.usecase.details.actor.GetActorUseCase
 import com.london.presentation.navigation.Screen
 import com.london.presentation.navigation.getArgs
 import com.london.presentation.shared.base.BaseViewModel
@@ -11,7 +11,7 @@ import javax.inject.Inject
 @HiltViewModel
 class TopTvShowsPicksViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle,
-    private val getActorTvShowPicksById: GetActorTvShowPicksByIdUseCase,
+    private val getActorUseCase: GetActorUseCase,
 ) : BaseViewModel<TopTvShowsPicksUiState, TopTvShowsPicksEffect>(
     TopTvShowsPicksUiState()
 ), TopTvShowsPicksContract {
@@ -42,7 +42,7 @@ class TopTvShowsPicksViewModel @Inject constructor(
 
     private fun getActorTvShowsPicksData() {
         tryToExecute(
-            block = { getActorTvShowPicksById.invoke(actorId) },
+            block = { getActorUseCase.getActorTvShowPicksById(actorId) },
             onStart = { updateState { copy(isLoading = true) } },
             onSuccess = { actorTvShowDetails -> updateState { copy(tvShowDetails = actorTvShowDetails) } },
             onError = { errorState -> updateState { copy(errorState = errorState) } },
