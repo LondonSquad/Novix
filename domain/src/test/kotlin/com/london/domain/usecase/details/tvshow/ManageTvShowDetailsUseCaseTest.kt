@@ -75,7 +75,9 @@ class ManageTvShowDetailsUseCaseTest {
     @Test
     fun `getPopular with custom limit should return specified number of tv shows`() = runTest {
         // Given
-        val mockTvShows = MOCK_TV_SHOWS_FULL_LIST.map { createMockTvShow(it) }
+        val mockTvShows = MOCK_TV_SHOWS_FULL_LIST.map {
+            createMockTvShow(it)
+        }.take(CUSTOM_LIMIT)
         coEvery { tvShowRepository.getPopularTvShows() } returns mockTvShows
 
         // When
@@ -183,7 +185,7 @@ class ManageTvShowDetailsUseCaseTest {
         val result = manageTvShowDetailsUseCase.getPopularTvShows().map { it.rating }
 
         // Then
-        assertThat(result).isEqualTo(expectedRatings)
+        assertThat(result).isEqualTo(expectedRatings.take(POPULAR_LIMIT))
     }
     // endregion
 
@@ -324,6 +326,8 @@ class ManageTvShowDetailsUseCaseTest {
         private const val EXCEPTION_MESSAGE = "Network error"
         private const val CATEGORY_ID = 1
         private const val PAGE_NUMBER = 1
+
+        private const val POPULAR_LIMIT = 5
         const val NAME = "Tv Tv"
 
 
