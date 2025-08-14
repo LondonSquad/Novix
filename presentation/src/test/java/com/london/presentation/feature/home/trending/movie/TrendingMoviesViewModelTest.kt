@@ -13,6 +13,7 @@ import io.mockk.coEvery
 import io.mockk.every
 import io.mockk.mockk
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.test.UnconfinedTestDispatcher
 import kotlinx.coroutines.test.advanceUntilIdle
@@ -22,6 +23,7 @@ import org.junit.After
 import org.junit.Before
 import org.junit.Test
 
+@OptIn(ExperimentalCoroutinesApi::class)
 class TrendingMoviesViewModelTest {
     private lateinit var viewModel: TrendingMoviesViewModel
     private val getTrendingMovies: GetTrendingMoviesUseCase = mockk()
