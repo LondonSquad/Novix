@@ -51,10 +51,18 @@ jobs:
         run: |
           echo "sdk.dir=$ANDROID_SDK_ROOT" > local.properties
           echo "API_KEY=\"${{ secrets.TMDB_API_KEY }}\"" >> local.properties
+          echo "keyAlias=${{ secrets.SIGNING_KEY_ALIAS }}" >> local.properties
+          echo "keyPassword=${{ secrets.SIGNING_KEY_PASSWORD }}" >> local.properties
+          echo "storePassword=${{ secrets.SIGNING_STORE_PASSWORD }}" >> local.properties
+          echo "storeFile=release-keystore.jks" >> local.properties
 
       - name: Decode Firebase Config
         run: |
           echo "${{ secrets.GOOGLE_SERVICES_JSON }}" | base64 --decode > app/google-services.json
+
+      - name: Decode Keystore
+        run: |
+          echo "${{ secrets.SIGNING_KEYSTORE }}" | base64 --decode > app/release-keystore.jks
 
       - name: Set PR metadata as outputs
         id: set-pr-metadata
