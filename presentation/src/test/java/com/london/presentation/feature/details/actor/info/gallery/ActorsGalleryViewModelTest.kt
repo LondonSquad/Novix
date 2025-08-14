@@ -22,13 +22,6 @@ class ActorsGalleryViewModelTest {
     private lateinit var getActorImagesById: GetActorImagesByIdUseCase
     private lateinit var savedStateHandle: SavedStateHandle
 
-    private val mockImages = listOf(
-        "/image1.jpg",
-        "/image2.jpg",
-        "/image3.jpg",
-        "/image4.jpg"
-    )
-
     @Before
     fun setUp() {
         Dispatchers.setMain(Dispatchers.Unconfined)
@@ -55,5 +48,12 @@ class ActorsGalleryViewModelTest {
         // When
         viewModel.onBackClick()
     }
+
+    private val mockImages = listOf(
+        "/image1.jpg",
+        "/image2.jpg",
+        "/image3.jpg",
+        "/image4.jpg"
+    )
 
 }
