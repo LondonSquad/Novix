@@ -11,10 +11,10 @@ fun <T : Any> T.getName(): String {
     }
 }
 
-fun <T : Any> T.getImageUrl(): String {
+fun <T : Any> T.getImageUrl(): String? {
     return when (this) {
         is Movie -> this.posterUrl
         is TvShow -> this.posterPicture
-        else -> ""
+        else -> null
     }
 }

@@ -19,7 +19,7 @@ import com.london.presentation.utils.TvShowGenre
 @Composable
 fun <T : Any> MediaLazyGridWithFilter(
     modifier: Modifier = Modifier,
-    imageUrl: (T) -> String = { it.getImageUrl() },
+    imageUrl: (T) -> String? = { it.getImageUrl() },
     name: (T) -> String = { it.getName() },
     items: List<T>? = null,
     isLoading: Boolean = false,

@@ -24,7 +24,7 @@ import com.london.presentation.shared.HomeCard
 fun <T : Any> MediaLazyVerticalGrid(
     items: List<T>,
     modifier: Modifier = Modifier,
-    imageUrl: (T) -> String = { it.getImageUrl() },
+    imageUrl: (T) -> String? = { it.getImageUrl() },
     name: (T) -> String = { it.getName() },
     hasSaveIcon: Boolean = true,
     onSaveClick: (T) -> Unit = {},
@@ -53,23 +53,25 @@ fun <T : Any> MediaLazyVerticalGrid(
             contentPadding = PaddingValues(start = 16.dp, end = 16.dp, bottom = 16.dp)
         ) {
             items(items) { item ->
-                HomeCard(
-                    imageUrl = imageUrl(item),
-                    modifier = Modifier.clickable {
-                        when (item) {
-                            is Movie -> onNavigateToMovie(item.id)
-                            is TvShow -> onNavigateToTvShow(item.id)
-                        }
-                    },
-                    imageDescription = name(item),
-                    isSaved = isItemSaved(item),
-                    hasSaveIcon = hasSaveIcon,
-                    onSaveClick = { onSaveClick(item) },
-                    onDeleteClick = { onDeleteClick(item) },
-                    isDarkMode = isDarkMode,
-                    myRatingList = myRatingList,
-                    rate = rate
-                )
+                imageUrl(item)?.let {
+                    HomeCard(
+                        imageUrl = it,
+                        modifier = Modifier.clickable {
+                            when (item) {
+                                is Movie -> onNavigateToMovie(item.id)
+                                is TvShow -> onNavigateToTvShow(item.id)
+                            }
+                        },
+                        imageDescription = name(item),
+                        isSaved = isItemSaved(item),
+                        hasSaveIcon = hasSaveIcon,
+                        onSaveClick = { onSaveClick(item) },
+                        onDeleteClick = { onDeleteClick(item) },
+                        isDarkMode = isDarkMode,
+                        myRatingList = myRatingList,
+                        rate = rate
+                    )
+                }
             }
         }
     }
@@ -79,7 +81,7 @@ fun <T : Any> MediaLazyVerticalGrid(
 fun <T : Any> MediaLazyVerticalGrid(
     pagingItems: LazyPagingItems<T>,
     modifier: Modifier = Modifier,
-    imageUrl: (T) -> String = { it.getImageUrl() },
+    imageUrl: (T) -> String? = { it.getImageUrl() },
     name: (T) -> String = { it.getName() },
     hasSaveIcon: Boolean = true,
     onSaveClick: (T) -> Unit = {},
@@ -109,23 +111,25 @@ fun <T : Any> MediaLazyVerticalGrid(
         ) {
             items(pagingItems.itemCount) { index ->
                 pagingItems[index]?.let { item ->
-                    HomeCard(
-                        imageUrl = imageUrl(item),
-                        modifier = Modifier.clickable {
-                            when (item) {
-                                is Movie -> onNavigateToMovie(item.id)
-                                is TvShow -> onNavigateToTvShow(item.id)
-                            }
-                        },
-                        imageDescription = name(item),
-                        isSaved = isItemSaved(item),
-                        hasSaveIcon = hasSaveIcon,
-                        onSaveClick = { onSaveClick(item) },
-                        onDeleteClick = { onDeleteClick(item) },
-                        isDarkMode = isDarkMode,
-                        myRatingList = myRatingList,
-                        rate = rate
-                    )
+                    imageUrl(item)?.let {
+                        HomeCard(
+                            imageUrl = it,
+                            modifier = Modifier.clickable {
+                                when (item) {
+                                    is Movie -> onNavigateToMovie(item.id)
+                                    is TvShow -> onNavigateToTvShow(item.id)
+                                }
+                            },
+                            imageDescription = name(item),
+                            isSaved = isItemSaved(item),
+                            hasSaveIcon = hasSaveIcon,
+                            onSaveClick = { onSaveClick(item) },
+                            onDeleteClick = { onDeleteClick(item) },
+                            isDarkMode = isDarkMode,
+                            myRatingList = myRatingList,
+                            rate = rate
+                        )
+                    }
                 }
             }
         }
