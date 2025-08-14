@@ -173,59 +173,104 @@ private fun Content(
                     }
 
                     else -> {
-                        ResultOrEmpty(items = state.searchQuery.text.toList(), emptyContent = {
-                            ResultOrEmpty(
-                                items = state.recentSearches,
-                                otherItems = state.recentViewed,
-                                emptyContent = {
-                                    NoEarlierSearchLayout(
-                                        modifier = Modifier
-                                            .fillMaxSize()
-                                            .background(NovixTheme.colors.surface)
-                                    )
-                                },
-                                content = {
-
-                                    RecentSearchLayOut(
-                                        state = state,
-                                        contract = contract,
-                                        onNavigateToTvShowDetails = contract::onTvShowClick,
-                                        onNavigateToMovieDetails = contract::onMovieClick
-                                    )
-
-                                })
-                        }, content = {
-                            SearchChipsRow(
-                                selected = state.selectedCategory,
-                                onSelect = contract::onCategorySelected,
-                                modifier = Modifier.padding(bottom = 12.dp)
-                            )
-
-                            if (state.error == ErrorState.NoInternet) {
-                                NetworkErrorScreen(
-                                    onRetry = {
-                                        contract.updateSearchState { copy(error = null) }
-                                        contract.performSearch(
-                                            state.searchQuery.text,
-                                            state.selectedCategory
-                                        )
-                                    },
-                                    onBack = null
-                                )
-                            } else {
-                                when (state.selectedCategory) {
-                                    SearchCategory.Movies -> MovieSearchContent(state, contract)
-
-                                    SearchCategory.TvShows -> TvShowSearchContent(state, contract)
-
-                                    SearchCategory.Actors -> ActorSearchContent(state, contract)
-                                }
-                            }
-                        })
+                        SearchResultsContent(
+                            state = state,
+                            contract = contract
+                        )
                     }
                 }
             }
         }
+    }
+}
+
+@Composable
+private fun SearchResultsContent(
+    state: SearchUiState,
+    contract: SearchContract
+) {
+    ResultOrEmpty(
+        items = state.searchQuery.text.toList(),
+        emptyContent = {
+            RecentSearchesContent(
+                state = state,
+                contract = contract
+            )
+        },
+        content = {
+            SearchResultsWithCategory(
+                state = state,
+                contract = contract
+            )
+        }
+    )
+}
+
+@Composable
+private fun RecentSearchesContent(
+    state: SearchUiState,
+    contract: SearchContract
+) {
+    ResultOrEmpty(
+        items = state.recentSearches,
+        otherItems = state.recentViewed,
+        emptyContent = {
+            NoEarlierSearchLayout(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .background(NovixTheme.colors.surface)
+            )
+        },
+        content = {
+            RecentSearchLayOut(
+                state = state,
+                contract = contract,
+                onNavigateToTvShowDetails = contract::onTvShowClick,
+                onNavigateToMovieDetails = contract::onMovieClick
+            )
+        }
+    )
+}
+
+@Composable
+private fun SearchResultsWithCategory(
+    state: SearchUiState,
+    contract: SearchContract
+) {
+    SearchChipsRow(
+        selected = state.selectedCategory,
+        onSelect = contract::onCategorySelected,
+        modifier = Modifier.padding(bottom = 12.dp)
+    )
+
+    if (state.error == ErrorState.NoInternet) {
+        NetworkErrorScreen(
+            onRetry = {
+                contract.updateSearchState { copy(error = null) }
+                contract.performSearch(
+                    state.searchQuery.text,
+                    state.selectedCategory
+                )
+            },
+            onBack = null
+        )
+    } else {
+        SearchContentByCategory(
+            state = state,
+            contract = contract
+        )
+    }
+}
+
+@Composable
+private fun SearchContentByCategory(
+    state: SearchUiState,
+    contract: SearchContract
+) {
+    when (state.selectedCategory) {
+        SearchCategory.Movies -> MovieSearchContent(state, contract)
+        SearchCategory.TvShows -> TvShowSearchContent(state, contract)
+        SearchCategory.Actors -> ActorSearchContent(state, contract)
     }
 }
 
