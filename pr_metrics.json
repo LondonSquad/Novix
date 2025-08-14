@@ -21166,5 +21166,33 @@
       "deletions": 153,
       "changed_files": 6
     }
+  },
+  {
+    "pr_number": 632,
+    "url": "https://github.com/LondonSquad/Novix/pull/632",
+    "title": "Refactor my rating feature",
+    "opened_at": "2025-08-14T00:17:07Z",
+    "head_ref": "refactor/my-rating-feautre",
+    "base_ref": "develop",
+    "creator": {
+      "login": "AsmaaKhaledGomaa",
+      "id": 117874933,
+      "url": "https://github.com/AsmaaKhaledGomaa"
+    },
+    "approvals": [],
+    "first_approved_at": null,
+    "time_to_first_approval_minutes": null,
+    "required_approvals_met_at": null,
+    "time_to_required_approvals_minutes": null,
+    "closed_at": null,
+    "merged_at": null,
+    "merged_by": null,
+    "week": "2025-W33",
+    "status": "pending",
+    "diff_stats": {
+      "additions": 486,
+      "deletions": 181,
+      "changed_files": 11
+    }
   }
 ]
