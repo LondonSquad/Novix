@@ -12,12 +12,12 @@ import com.london.designsystem.component.TopBar
 fun DefaultAppTopBar(
     title: String,
     onBack: () -> Unit,
-){
+) {
     TopBar(
         modifier = Modifier
             .fillMaxWidth()
             .statusBarsPadding()
-            .padding(start = 16.dp, end = 16.dp, top = 12.dp),
+            .padding(start = 16.dp, end = 16.dp),
         title = title,
         onBackClick = onBack
     )
