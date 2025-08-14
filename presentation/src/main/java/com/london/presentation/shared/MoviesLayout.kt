@@ -72,8 +72,7 @@ fun MoviesLayOut(
                     onSaveClick = { onSaveClick(movie) },
                     isSaved = isMovieSaved(movie),
                     imageDescription = movie.name,
-                    modifier = Modifier.clickable { onMovieClick(movie) },
-                    isDarkMode = NovixTheme.isThemeDark
+                    modifier = Modifier.clickable { onMovieClick(movie) }
                 )
             }
         }

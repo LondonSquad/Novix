@@ -76,8 +76,7 @@ fun <T : Any> MediaLazyPagingGrid(
                     onSaveClick = { onSaveClick(item) },
                     isSaved = isItemSaved(item),
                     imageDescription = getTitle(item),
-                    modifier = Modifier.clickable { onItemClick(item) },
-                    isDarkMode = NovixTheme.isThemeDark
+                    modifier = Modifier.clickable { onItemClick(item) }
                 )
             }
         }

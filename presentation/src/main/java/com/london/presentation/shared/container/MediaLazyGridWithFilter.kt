@@ -86,7 +86,6 @@ fun <T : Any> MediaLazyGridWithFilter(
                     onSaveClick = { config.onSaveClick(it) },
                     isItemSaved = { config.isItemSaved(it) },
                     onDeleteClick = { config.onDeleteClick(it) },
-                    isDarkMode = config.isDarkMode,
                     myRatingList = config.myRatingList,
                     rate = config.rate,
                     topBar = topBar,

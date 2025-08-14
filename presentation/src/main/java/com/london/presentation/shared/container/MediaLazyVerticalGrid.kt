@@ -67,7 +67,6 @@ fun <T : Any> MediaLazyVerticalGrid(
                         hasSaveIcon = hasSaveIcon,
                         onSaveClick = { onSaveClick(item) },
                         onDeleteClick = { onDeleteClick(item) },
-                        isDarkMode = isDarkMode,
                         myRatingList = myRatingList,
                         rate = rate
                     )
@@ -87,7 +86,6 @@ fun <T : Any> MediaLazyVerticalGrid(
     onSaveClick: (T) -> Unit = {},
     isItemSaved: (T) -> Boolean = { false },
     onDeleteClick: (T) -> Unit = {},
-    isDarkMode: Boolean = true,
     myRatingList: Boolean = false,
     rate: String = "3",
     topBar: @Composable (() -> Unit)? = null,
@@ -125,7 +123,6 @@ fun <T : Any> MediaLazyVerticalGrid(
                             hasSaveIcon = hasSaveIcon,
                             onSaveClick = { onSaveClick(item) },
                             onDeleteClick = { onDeleteClick(item) },
-                            isDarkMode = isDarkMode,
                             myRatingList = myRatingList,
                             rate = rate
                         )

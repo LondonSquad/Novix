@@ -74,8 +74,7 @@ fun TvShowLayOut(
                     onSaveClick = { onSaveClick(tvShow) },
                     isSaved = isTvShowSaved(tvShow),
                     imageDescription = tvShow.name,
-                    modifier = Modifier.clickable { onTvShowClick(tvShow) },
-                    isDarkMode = NovixTheme.isThemeDark
+                    modifier = Modifier.clickable { onTvShowClick(tvShow) }
                 )
             }
         }

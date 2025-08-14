@@ -132,8 +132,7 @@ fun <T> MediaLazyGrid(
                             myRatingList = myRatingList,
                             rate = rate,
                             onDeleteClick = onDeleteClick,
-                            modifier = Modifier.clickable { onItemClick(item) },
-                            isDarkMode = NovixTheme.isThemeDark
+                            modifier = Modifier.clickable { onItemClick(item) }
                         )
                     }
                 }
