@@ -28,7 +28,6 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.repeatOnLifecycle
-import androidx.paging.CombinedLoadStates
 import androidx.paging.LoadState
 import androidx.paging.compose.LazyPagingItems
 import androidx.paging.compose.collectAsLazyPagingItems
@@ -385,18 +384,6 @@ private fun ActorSearchContent(state: SearchUiState, contract: SearchContract) {
 }
 
 @Composable
-private fun HandleLoadStateError(
-    loadState: CombinedLoadStates,
-    contract: SearchContract
-) {
-    LaunchedEffect(loadState) {
-        if (loadState.refresh is LoadState.Error) {
-            contract.updateSearchState { copy(error = ErrorState.NoInternet) }
-        }
-    }
-}
-
-@Composable
 fun RecentSearchLayOut(
     state: SearchUiState,
     contract: SearchContract,
@@ -466,7 +453,11 @@ private fun SearchContentWithErrorHandling(
     contract: SearchContract,
     content: @Composable (Boolean) -> Unit
 ) {
-    HandleLoadStateError(lazyPagingItems.loadState, contract)
+    LaunchedEffect(lazyPagingItems.loadState) {
+        if (lazyPagingItems.loadState.refresh is LoadState.Error) {
+            contract.updateSearchState { copy(error = ErrorState.NoInternet) }
+        }
+    }
 
     val isLoading = lazyPagingItems.loadState.refresh is LoadState.Loading
     val hasError = lazyPagingItems.loadState.refresh is LoadState.Error
