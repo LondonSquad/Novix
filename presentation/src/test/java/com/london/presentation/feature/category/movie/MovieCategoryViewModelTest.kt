@@ -80,7 +80,7 @@ class MovieCategoryViewModelTest {
         // Then
         viewModel?.state?.test {
             val state = expectMostRecentItem()
-            assertThat(state.movies).isNotNull()
+            assertThat(state.moviesFlow).isNotNull()
             ensureAllEventsConsumed()
         }
     }
@@ -104,7 +104,7 @@ class MovieCategoryViewModelTest {
         // When & Then
         viewModel?.effect?.test {
             viewModel?.onMovieClick(movieId = 1)
-            assertThat(awaitItem()).isInstanceOf(MovieCategoryEffect.NavigateToMovieDetails::class.java)
+            assertThat(awaitItem()).isInstanceOf(MovieCategoryEffect.MovieDetailsNavigation::class.java)
             cancelAndIgnoreRemainingEvents()
         }
     }
@@ -114,7 +114,7 @@ class MovieCategoryViewModelTest {
         // When & Then
         viewModel?.effect?.test {
             viewModel?.onBack()
-            assertThat(awaitItem()).isInstanceOf(MovieCategoryEffect.NavigateBack::class.java)
+            assertThat(awaitItem()).isInstanceOf(MovieCategoryEffect.BackNavigation::class.java)
             cancelAndIgnoreRemainingEvents()
         }
     }

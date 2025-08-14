@@ -12,54 +12,42 @@ import javax.inject.Inject
 class TopMoviesPicksViewModel @Inject constructor(
     private val getActorUseCase: GetActorUseCase,
     savedStateHandle: SavedStateHandle,
+    private val getActorMoviePicksById: GetActorMoviePicksByIdUseCase,
 ) : BaseViewModel<TopMoviesPicksUiState, TopMoviesPicksEffect>(TopMoviesPicksUiState()),
     TopMoviesPicksContract {
 
     private val args = savedStateHandle.getArgs<Screen.ActorTopMoviesPicksDetails>()
-    val actorId = args?.actorId ?: 0
+    private val actorId = args?.actorId ?: 0
 
     init {
-        if (actorId != 0) {
-            getActorMoviePicksData()
-        }
+        getActorMoviePicksData()
     }
 
-    private fun getActorMoviePicksData() {
 
-        tryToExecute(
-            block = { getActorUseCase.getActorMoviePicksById(actorId) },
-            onStart = { updateState { copy(isLoading = true) } },
-            onSuccess = { actorMovieDetails ->
-                updateState {
-                    copy(
-                        movieDetails = actorMovieDetails,
-                        isSaved = isSaved,
-                        backdropPath = backdropPath,
-                    )
-                }
-            },
-            onError = { errorState ->
-                updateState { copy(errorState = errorState) }
-            },
-            onCompleted = { updateState { copy(isLoading = false) } },
-            checkSuccess = { actorId != 0 },
-        )
-    }
-
-    override fun onRetry(){
+    override fun onRetryClick() {
         updateState { copy(errorState = null) }
         getActorMoviePicksData()
     }
 
-    override fun onSaveMovie(movieId: Int) {
-        updateState { copy(isSaved = isSaved) }
+    override fun onSaveMovieClick(movieId: Int) {
+        // TODO: Handle save click
     }
 
-    override fun onMovieClicked(movieId: Int) {
-        emitEffect(TopMoviesPicksEffect.NavigationToMovieDetails(movieId))
+    override fun onMovieClick(movieId: Int) {
+        emitEffect(TopMoviesPicksEffect.MovieDetailsNavigation(movieId))
     }
 
-    override fun onBack() {
-        emitEffect(TopMoviesPicksEffect.NavigateBack)
+    override fun onBackClick() {
+        emitEffect(TopMoviesPicksEffect.BackNavigation)
+    }
+
+    private fun getActorMoviePicksData() {
+        tryToExecute(
+            block = { getActorUseCase.getActorMoviePicksById(actorId) },
+            onStart = { updateState { copy(isLoading = true) } },
+            onSuccess = { actorMovieDetails -> updateState { copy(movieDetails = actorMovieDetails) } },
+            onError = { errorState -> updateState { copy(errorState = errorState) } },
+            onCompleted = { updateState { copy(isLoading = false) } },
+        )
     }
 }
