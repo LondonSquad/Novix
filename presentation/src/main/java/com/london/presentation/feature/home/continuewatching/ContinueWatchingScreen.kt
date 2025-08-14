@@ -72,7 +72,7 @@ fun Content(
             onRetry = contract::onRetry,
         ) {
             MediaLazyGridWithTabs(
-                items = state.movies.collectAsStateWithLifecycle(emptyList()).value + 
+                items = state.movies.collectAsStateWithLifecycle(emptyList()).value +
                         state.tvSeries.collectAsStateWithLifecycle(emptyList()).value,
                 tabSelected = if (state.isMovieSelected) MediaCategory.MOVIES.ordinal else MediaCategory.TV_SHOWS.ordinal,
                 onTabSelected = contract::onMediaCategoryTabSelected,

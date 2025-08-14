@@ -1,8 +1,8 @@
 package com.london.presentation.feature.details.actor.info.toptvshowspicks
 
 interface TopTvShowsPicksContract {
-    fun onSaveTvShow(tvShowId: Int)
-    fun onTvShowClicked(tvShowId: Int)
-    fun onBack()
-    fun onRetry()
+    fun onBackClick()
+    fun onRetryClick()
+    fun onTvShowClick(tvShowId: Int)
+    fun onSaveTvShowClick(tvShowId: Int)
 }

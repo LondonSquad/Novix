@@ -37,8 +37,8 @@ class ContinueWatchingViewModel @Inject constructor(
         updateState {
             copy(
                 selectedMediaCategory = selectedMediaCategory,
-                isMovieSelected = selectedMediaCategory == MediaCategory.MOVIES,
-                isTvSelected = selectedMediaCategory == MediaCategory.TV_SHOWS
+                isMovieSelected = selectedMediaCategory == MediaCategory.Movies,
+                isTvSelected = selectedMediaCategory == MediaCategory.TvShows
             )
         }
     }
