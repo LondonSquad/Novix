@@ -4,9 +4,9 @@ import com.london.domain.repository.CustomMovieListRepository
 import javax.inject.Inject
 
 class AddMovieToListUseCase @Inject constructor(
-    private val customMovieListRepository: CustomMovieListRepository,
+    private val repository: CustomMovieListRepository,
 ) {
 
-    suspend fun invoke(listId: UInt, movieId: UInt): Boolean =
-        customMovieListRepository.addMovieToList(listId, movieId)
+    suspend fun invoke(listId: Int, movieId: Int): Boolean =
+        repository.addMovieToList(listId, movieId)
 }

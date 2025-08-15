@@ -2,8 +2,8 @@ package com.london.presentation.feature.reviews
 
 import androidx.lifecycle.SavedStateHandle
 import com.london.domain.entity.recent.MediaType
-import com.london.domain.usecase.reviews.GetMovieReviewsUseCase
-import com.london.domain.usecase.reviews.GetTvShowReviewsUseCase
+import com.london.domain.usecase.details.movie.GetMovieUseCase
+import com.london.domain.usecase.details.tvshow.GetTvShowUseCase
 import com.london.presentation.navigation.Screen
 import com.london.presentation.navigation.getArgs
 import com.london.presentation.shared.base.BaseViewModel
@@ -13,20 +13,20 @@ import javax.inject.Inject
 
 @HiltViewModel
 class ReviewsViewModel @Inject constructor(
-    private val getMovieReviewsUseCase: GetMovieReviewsUseCase,
-    private val getTvShowReviewsUseCase: GetTvShowReviewsUseCase,
+    private val getMovieUseCase: GetMovieUseCase,
+    private val getTvShowUseCase: GetTvShowUseCase,
     savedStateHandle: SavedStateHandle
 ) : BaseViewModel<ReviewsUiState, ReviewEffect>(ReviewsUiState()), ReviewContract {
 
     private val args = savedStateHandle.getArgs<Screen.Reviews>()
-    private val mediaType = args?.mediaType ?: 0
+    private val mediaType = args?.mediaType ?: MediaType.Movie
     private val mediaId = args?.mediaId ?: 0
 
     init {
         initializeReviews(mediaType, mediaId)
     }
 
-    override fun onRetry(){
+    override fun onRetry() {
         updateState { copy(error = null) }
         initializeReviews(mediaType, mediaId)
     }
@@ -35,17 +35,17 @@ class ReviewsViewModel @Inject constructor(
         emitEffect(ReviewEffect.NavigateBack)
     }
 
-    private fun initializeReviews(mediaType: Int, mediaId: Int) {
+    private fun initializeReviews(mediaType: MediaType, mediaId: Int) {
         tryToExecute(
             block = {
                 createPagingSourceFlow("") { _, pageNumber ->
                     when (mediaType) {
-                        MediaType.Movie.mediaNum -> getMovieReviewsUseCase.invoke(
+                        MediaType.Movie -> getMovieUseCase.getMovieReviews(
                             mediaId,
                             pageNumber
                         )
 
-                        else -> getTvShowReviewsUseCase.invoke(mediaId, pageNumber)
+                        else -> getTvShowUseCase.getTvShowReviews(mediaId, pageNumber)
                     }
                 }
             },

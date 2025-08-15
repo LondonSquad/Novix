@@ -3,12 +3,9 @@ package com.london.presentation.feature.search
 import androidx.compose.ui.text.input.TextFieldValue
 import com.london.domain.entity.recent.RecentSearch
 import com.london.domain.entity.recent.RecentViewed
-import com.london.domain.usecase.GetActorsUseCase
-import com.london.domain.usecase.GetMoviesUseCase
-import com.london.domain.usecase.IncrementGenreInterestUseCase
-import com.london.domain.usecase.details.tvshow.ManageTvShowDetailsUseCase
 import com.london.domain.usecase.recent.search.ManageRecentSearchUseCase
 import com.london.domain.usecase.recent.viewed.ManageRecentViewedUseCase
+import com.london.domain.usecase.search.ManageSearchUseCase
 import com.london.presentation.shared.base.BaseViewModel
 import com.london.presentation.shared.base.createPagingSourceFlow
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -21,11 +18,8 @@ import javax.inject.Inject
 @OptIn(FlowPreview::class)
 @HiltViewModel
 class SearchViewModel @Inject constructor(
-    private val getActorsUseCase: GetActorsUseCase,
-    private val getMoviesUseCase: GetMoviesUseCase,
-    private val manageTvShowDetailsUseCase: ManageTvShowDetailsUseCase,
+    private val manageSearchUseCase: ManageSearchUseCase,
     private val manageRecentSearchUseCase: ManageRecentSearchUseCase,
-    private val incrementGenreInterestUseCase: IncrementGenreInterestUseCase,
     private val manageRecentViewedUseCase: ManageRecentViewedUseCase,
 
     ) : BaseViewModel<SearchUiState, SearchEffect>(SearchUiState()), SearchContract {
@@ -39,7 +33,9 @@ class SearchViewModel @Inject constructor(
 
     override fun incrementGenreInterest(genreId: Int, mediaType: String) {
         tryToExecute(
-            block = { incrementGenreInterestUseCase.invoke(genreId, mediaType) },
+            block = {
+                manageSearchUseCase.incrementGenreInterest(genreId, mediaType)
+            },
             onStart = { },
             onSuccess = { },
             onError = { errorState ->
@@ -304,7 +300,7 @@ class SearchViewModel @Inject constructor(
 
     private fun searchMovies(query: String) {
         val moviesFlow = createPagingSourceFlow(query) { currentQuery, pageNumber ->
-            getMoviesUseCase(
+            manageSearchUseCase.searchForMovies(
                 name = currentQuery,
                 pageNumber = pageNumber
             )
@@ -321,7 +317,7 @@ class SearchViewModel @Inject constructor(
 
     private fun searchActors(query: String) {
         val actorsFlow = createPagingSourceFlow(query) { currentQuery, pageNumber ->
-            val actors = getActorsUseCase(
+            val actors = manageSearchUseCase.searchForActors(
                 name = currentQuery,
                 pageNumber = pageNumber
             )
@@ -339,7 +335,7 @@ class SearchViewModel @Inject constructor(
 
     private fun searchTvShows(query: String) {
         val tvShowsFlow = createPagingSourceFlow(query) { currentQuery, pageNumber ->
-            manageTvShowDetailsUseCase.getTvShowList(
+            manageSearchUseCase.searchForTvShows(
                 name = currentQuery,
                 pageNumber = pageNumber
             )

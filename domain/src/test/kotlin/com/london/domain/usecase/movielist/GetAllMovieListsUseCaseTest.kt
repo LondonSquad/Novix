@@ -44,8 +44,8 @@ class GetAllMovieListsUseCaseTest {
 
 
    private companion object {
-        const val LIST_ID = 10u
-        const val MOVIE_ID = 20u
+        const val LIST_ID = 10
+        const val MOVIE_ID = 20
         val movieLists = PagedFetchResponse(
             currentPage = 1,
             totalPages = 1,
@@ -54,12 +54,12 @@ class GetAllMovieListsUseCaseTest {
                 MovieList(
                     id = LIST_ID,
                     name = "list1",
-                    moviesCount = 1u
+                    moviesCount = 1
                 ),
                 MovieList(
                     id = LIST_ID,
                     name = "list1",
-                    moviesCount = 1u
+                    moviesCount = 1
                 )
             )
         )
