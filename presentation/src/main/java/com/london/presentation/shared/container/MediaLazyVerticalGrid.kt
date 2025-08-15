@@ -36,13 +36,13 @@ import com.london.presentation.utils.gridColumns
 fun <T : Any> MediaLazyVerticalGrid(
     items: List<T>,
     modifier: Modifier = Modifier,
-    imageUrl: (T) -> String? = { it.getImageUrl() },
+    rate: (T) -> String? = { null },
     name: (T) -> String = { it.getName() },
+    imageUrl: (T) -> String? = { it.getImageUrl() },
     hasSaveIcon: Boolean = true,
     onSaveClick: (T) -> Unit = {},
     isItemSaved: (T) -> Boolean = { false },
     onDeleteClick: (T) -> Unit = {},
-    rate: (T) -> String? = { null },
     onNavigateToMovie: (Int) -> Unit = {},
     onNavigateToTvShow: (Int) -> Unit = {},
     topBar: @Composable (() -> Unit)? = null
@@ -84,9 +84,9 @@ fun <T : Any> MediaLazyVerticalGrid(
 fun <T : Any> MediaLazyVerticalGrid(
     pagingItems: LazyPagingItems<T>,
     modifier: Modifier = Modifier,
-    imageUrl: (T) -> String? = { it.getImageUrl() },
-    name: (T) -> String = { it.getName() },
     rate: (T) -> String? = { null },
+    name: (T) -> String = { it.getName() },
+    imageUrl: (T) -> String? = { it.getImageUrl() },
     hasSaveIcon: Boolean = true,
     onSaveClick: (T) -> Unit = {},
     isItemSaved: (T) -> Boolean = { false },
@@ -119,7 +119,7 @@ fun <T : Any> MediaLazyVerticalGrid(
                 hasSaveIcon = hasSaveIcon,
                 onSaveClick = onSaveClick,
                 onDeleteClick = onDeleteClick,
-                rate = it,
+                rate = rate,
                 onNavigateToMovie = onNavigateToMovie,
                 onNavigateToTvShow = onNavigateToTvShow,
             )
@@ -137,7 +137,7 @@ private fun <T : Any> RenderPagingItem(
     hasSaveIcon: Boolean,
     onSaveClick: (T) -> Unit,
     onDeleteClick: (T) -> Unit,
-    rate: String,
+    rate: (T) -> String?,
     onNavigateToMovie: (Int) -> Unit,
     onNavigateToTvShow: (Int) -> Unit
 ) {
@@ -156,7 +156,7 @@ private fun <T : Any> RenderPagingItem(
                 hasSaveIcon = hasSaveIcon,
                 onSaveClick = { onSaveClick(item) },
                 onDeleteClick = { onDeleteClick(item) },
-                rate = rate
+                rate = rate(item)
             )
         }
     }
@@ -204,7 +204,7 @@ private fun <T : Any> HomeGridCard(
     hasSaveIcon: Boolean,
     onSaveClick: (T) -> Unit,
     onDeleteClick: (T) -> Unit,
-    rate: String,
+    rate: String?,
     onNavigateToMovie: (Int) -> Unit,
     onNavigateToTvShow: (Int) -> Unit
 ) {
