@@ -77,7 +77,19 @@ enum class MovieGenreUi(
         stringResId = R.string.western,
         backgroundResId = R.drawable.img_western_background
     ),
-    Unknown(stringResId = R.string.unknown)
+    Unknown(stringResId = R.string.unknown);
+
+    companion object {
+
+        fun getMovieGenresListWithoutAllAndUnknown(): List<MovieGenreUi> {
+            return MovieGenreUi.entries.filter { it != MovieGenreUi.All && it != MovieGenreUi.Unknown }
+        }
+
+        fun getMovieGenresListWithoutUnknown(): List<MovieGenreUi> {
+            return MovieGenreUi.entries.filter { it != MovieGenreUi.Unknown }
+        }
+    }
+
 }
 
 fun MovieGenre.toUi(): MovieGenreUi = when (this) {
@@ -126,12 +138,4 @@ fun MovieGenreUi.toDomain(): MovieGenre = when (this) {
     MovieGenreUi.War -> MovieGenre.WAR
     MovieGenreUi.Western -> MovieGenre.WESTERN
     MovieGenreUi.Unknown -> MovieGenre.UNKNOWN
-}
-
-fun getMovieGenresListWithoutAllAndUnknown(): List<MovieGenreUi> {
-    return MovieGenreUi.entries.filter { it != MovieGenreUi.All && it != MovieGenreUi.Unknown }
-}
-
-fun getMovieGenresListWithoutUnknown(): List<MovieGenreUi> {
-    return MovieGenreUi.entries.filter { it != MovieGenreUi.Unknown }
 }

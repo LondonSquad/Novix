@@ -56,9 +56,20 @@ enum class TvShowGenreUi(
         stringResId = R.string.western,
         backgroundResId = R.drawable.img_western_background
     ),
-    Unknown(stringResId = R.string.unknown)
-}
+    Unknown(stringResId = R.string.unknown);
 
+    companion object{
+
+        fun getTvShowGenresListWithoutAllAndUnknown(): List<TvShowGenreUi> {
+            return TvShowGenreUi.entries.filter { it != TvShowGenreUi.All && it != TvShowGenreUi.Unknown }
+        }
+
+        fun getTvShowGenresListWithoutUnknown(): List<TvShowGenreUi> {
+            return TvShowGenreUi.entries.filter { it != TvShowGenreUi.Unknown }
+        }
+    }
+
+}
 fun TvShowGenre.toUi(): TvShowGenreUi {
     return when (this) {
         TvShowGenre.ALL -> TvShowGenreUi.All
@@ -103,12 +114,4 @@ fun TvShowGenreUi.toDomain(): TvShowGenre {
         TvShowGenreUi.Western -> TvShowGenre.WESTERN
         TvShowGenreUi.Unknown -> TvShowGenre.UNKNOWN
     }
-}
-
-fun getTvShowGenresListWithoutAllAndUnknown(): List<TvShowGenreUi> {
-    return TvShowGenreUi.entries.filter { it != TvShowGenreUi.All && it != TvShowGenreUi.Unknown }
-}
-
-fun getTvShowGenresListWithoutUnknown(): List<TvShowGenreUi> {
-    return TvShowGenreUi.entries.filter { it != TvShowGenreUi.Unknown }
 }
