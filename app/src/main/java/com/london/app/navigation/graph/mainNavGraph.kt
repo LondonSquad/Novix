@@ -13,6 +13,7 @@ import com.london.app.navigation.navigateToContinueWatching
 import com.london.app.navigation.navigateToEpisodeDetails
 import com.london.app.navigation.navigateToListDetails
 import com.london.app.navigation.navigateToLogin
+import com.london.app.navigation.navigateToLoginWithPopUp
 import com.london.app.navigation.navigateToMovieCategory
 import com.london.app.navigation.navigateToMovieDetails
 import com.london.app.navigation.navigateToMyRating
@@ -133,7 +134,7 @@ fun NavGraphBuilder.mainNavGraph(
         appComposable<Lists> {
             ListScreen(
                 onNavigateToListDetails = ::navigateToListDetails,
-                onNavigateToLogin = ::navigateToLogin,
+                onNavigateToLogin = ::navigateToLoginWithPopUp,
             )
         }
 
@@ -141,7 +142,7 @@ fun NavGraphBuilder.mainNavGraph(
             AccountScreen(
                 onNavigateToWatchingHistory = ::navigateToWatchingHistory,
                 onNavigateToMyRating = ::navigateToMyRating,
-                onNavigateToLogin = ::navigateToLogin
+                onNavigateToLogin = ::navigateToLoginWithPopUp
             )
         }
 

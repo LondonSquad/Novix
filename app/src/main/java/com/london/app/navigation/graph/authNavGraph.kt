@@ -5,7 +5,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.navigation
 import com.london.app.navigation.AppNavGraph
 import com.london.app.navigation.appComposable
-import com.london.app.navigation.navigateToLogin
+import com.london.app.navigation.navigateToLoginWithPopUp
 import com.london.app.navigation.navigateToMainGraph
 import com.london.app.navigation.navigateToRegister
 import com.london.app.navigation.navigateToWelcome
@@ -28,7 +28,7 @@ fun NavGraphBuilder.authNavGraph(
     appComposable<Register> {
         RegistrationScreen(
             onNavigateBack = navController::navigateUp,
-            onRegisterComplete = navController::navigateToLogin
+            onRegisterComplete = navController::navigateToLoginWithPopUp
         )
     }
 }

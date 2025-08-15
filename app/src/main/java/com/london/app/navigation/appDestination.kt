@@ -57,7 +57,7 @@ fun NavController.navigateToMovieCategory(genreId: Int) =
 fun NavController.navigateToReviews(movieId: Int, mediaType: MediaType) =
     navigate(Reviews(movieId, mediaType))
 
-fun NavController.navigateToLogin() {
+fun NavController.navigateToLoginWithPopUp() {
     navigate(Login) {
         popUpTo(AppNavGraph.Main) {
             inclusive = true
@@ -65,6 +65,7 @@ fun NavController.navigateToLogin() {
     }
 }
 
+fun NavController.navigateToLogin() = navigate(Login)
 fun NavController.navigateToWatchingHistory() = navigate(WatchingHistory)
 fun NavController.navigateToMyRating() = navigate(MyRating)
 
@@ -83,7 +84,6 @@ fun NavController.navigateToOnboardingGraph() = navigateTo(AppNavGraph.OnBoardin
 fun NavController.navigateToWelcome() = navigateTo(OnBoarding.Welcome)
 
 fun NavController.navigateToListDetails(listId: Int) = navigateTo(Screen.ViewListItems(listId))
-
 
  fun navigateToBottomBarDestination(
     navController: NavHostController,
