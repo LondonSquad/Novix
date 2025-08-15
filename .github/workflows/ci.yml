@@ -16,14 +16,14 @@ permissions:
   pull-requests: write
 
 jobs:
-  build_and_test:
-    name: Build & Run Unit Tests
+  build:
+    name: Build Application
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Install JDK 17
+      - name: Install JDK
         uses: actions/setup-java@v4
         with:
           distribution: temurin
@@ -43,14 +43,6 @@ jobs:
       - name: Setup Gradlew
         run: chmod +x ./gradlew
 
-      - name: Decode Firebase Config
-        run: |
-          echo "${{ secrets.GOOGLE_SERVICES_JSON }}" | base64 --decode > app/google-services.json
-
-      - name: Decode Keystore
-        run: |
-          echo "${{ secrets.SIGNING_KEYSTORE }}" | base64 --decode > app/novix-release.jks
-
       - name: Create local.properties
         run: |
           echo "sdk.dir=$ANDROID_SDK_ROOT" > local.properties
@@ -60,27 +52,27 @@ jobs:
           echo "storePassword=${{ secrets.SIGNING_STORE_PASSWORD }}" >> local.properties
           echo "storeFile=novix-release.jks" >> local.properties
 
-      - name: Build and Test
-        # This command runs the `test` task on all subprojects, which triggers Kover
-        # Gradle will use its cache to only run tests on modules affected by changes.
-        run: ./gradlew testDebugUnitTest
+      - name: Decode Firebase Config
+        run: |
+          echo "${{ secrets.GOOGLE_SERVICES_JSON }}" | base64 --decode > app/google-services.json
 
-      - name: Upload Kover binary report
-        # We upload the raw coverage data for the next job to use
-        uses: actions/upload-artifact@v4
-        with:
-          name: kover-binary-report
-          path: '**/build/kover/*.kover'
+      - name: Decode Keystore
+        run: |
+          echo "${{ secrets.SIGNING_KEYSTORE }}" | base64 --decode > app/novix-release.jks
 
-  coverage_report_and_verify:
-    name: Analyze Code Coverage
-    needs: build_and_test # This job only runs if build_and_test succeeds
+      - name: Build with Gradle
+        run: ./gradlew build -x test -x koverVerify
+
+
+  test:
+    name: Test Coverage
+    needs: build
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Install JDK 17
+      - name: Install JDK
         uses: actions/setup-java@v4
         with:
           distribution: temurin
@@ -94,38 +86,61 @@ jobs:
             ~/.gradle/wrapper
           key: gradle-cache-${{ hashFiles('**/gradle-wrapper.properties', '**/*.gradle*', '**/settings.gradle*', '**/libs.versions.toml') }}
           restore-keys: |
+            gradle-cache-${{ runner.os }}-
             gradle-cache-
 
       - name: Setup Gradlew
         run: chmod +x ./gradlew
 
-      - name: Download Kover binary report
+      - name: Create local.properties
+        run: |
+          echo "sdk.dir=$ANDROID_SDK_ROOT" > local.properties
+          echo "API_KEY=\"${{ secrets.TMDB_API_KEY }}\"" >> local.properties
+          echo "keyAlias=${{ secrets.SIGNING_KEY_ALIAS }}" >> local.properties
+          echo "keyPassword=${{ secrets.SIGNING_KEY_PASSWORD }}" >> local.properties
+          echo "storePassword=${{ secrets.SIGNING_STORE_PASSWORD }}" >> local.properties
+          echo "storeFile=novix-release.jks" >> local.properties
+
+      - name: Decode Firebase Config
+        run: |
+          echo "${{ secrets.GOOGLE_SERVICES_JSON }}" | base64 --decode > app/google-services.json
+
+      - name: Decode Keystore
+        run: |
+          echo "${{ secrets.SIGNING_KEYSTORE }}" | base64 --decode > app/novix-release.jks
+
+      - name: Generate Coverage Reports
+        run: ./gradlew koverXmlReport
+
+      - name: Upload Coverage Report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: kover-coverage-report
+          path: build/reports/kover/report.xml
+
+      - name: Run Coverage Check
+        run: ./gradlew koverVerify
+
+  analyze-pr:
+    name: Analyze PR Code Coverage
+    needs: test
+    if: github.event_name == 'pull_request' && always()
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Download Kover Report
         uses: actions/download-artifact@v4
         with:
-          name: kover-binary-report
-          path: build/kover-temp
+          name: kover-coverage-report
+          path: build/reports/kover/
 
-      - name: Move binary reports to expected location
-        # Kover needs the binary reports to be in their original paths to work
-        run: |
-          find build/kover-temp -type f -name '*.kover' | while read file; do
-            # Extract the original module path from the artifact structure
-            # e.g., from 'build/kover-temp/data/build/kover/debug.kover' -> 'data/build/kover/debug.kover'
-            original_path=$(echo "$file" | sed -e 's|build/kover-temp/||')
-            # Ensure the directory exists and move the file
-            mkdir -p "$(dirname "$original_path")"
-            mv "$file" "$original_path"
-          done
-          echo "Kover binary reports restored."
-
-      - name: Generate Coverage Reports and Verify
-        run: ./gradlew koverXmlReport koverVerify
-
-      - name: Comment on PR with Code Coverage
-        if: github.event_name == 'pull_request'
+      - name: Comment PR with Overall Coverage
         uses: mi-kas/kover-report@v1
         with:
-          path: build/reports/kover/report.xml # Path to the XML report generated above
+          path: build/reports/kover/report.xml
           token: ${{ secrets.GITHUB_TOKEN }}
           min-coverage-overall: 80
           min-coverage-changed-files: 80
