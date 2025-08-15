@@ -5,8 +5,9 @@ import com.london.domain.usecase.details.tvshow.GetTvShowUseCase
 import com.london.presentation.shared.MediaCategory
 import com.london.presentation.shared.base.BaseViewModel
 import com.london.presentation.shared.base.createPagingSourceFlow
-import com.london.presentation.utils.MovieGenre
-import com.london.presentation.utils.TvShowGenre
+import com.london.presentation.shared.genre.MovieGenreUi
+import com.london.presentation.shared.genre.TvShowGenreUi
+import com.london.presentation.shared.genre.toDomain
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 
@@ -25,14 +26,14 @@ class TopRatedViewModel @Inject constructor(
         initializeTopRated()
     }
 
-    override fun movieGenre(genre: MovieGenre) {
+    override fun movieGenre(genre: MovieGenreUi) {
         if (genre == state.value.selectedMovieGenre) return
         updateState { copy(selectedMovieGenre = genre) }
         initializeTopMovies()
     }
 
 
-    override fun tvShowGenre(genre: TvShowGenre) {
+    override fun tvShowGenre(genre: TvShowGenreUi) {
         if (genre == state.value.selectedTvShowGenre) return
         updateState { copy(selectedTvShowGenre = genre) }
         initializeTvShow()
@@ -70,9 +71,8 @@ class TopRatedViewModel @Inject constructor(
         tryToExecute(block = {
             val moviesFlow = createPagingSourceFlow(query = "") { _, pageNumber ->
                 getMoviesUseCase.getAllTopRatedMovies(
-                    pageNumber,
-                    if (state.value.selectedMovieGenre == MovieGenre.All) null
-                    else state.value.selectedMovieGenre.id
+                    pageNumber = pageNumber,
+                    genre = state.value.selectedMovieGenre.toDomain()
                 )
             }
 
@@ -92,9 +92,8 @@ class TopRatedViewModel @Inject constructor(
         tryToExecute(block = {
             val tvSeriesFlow = createPagingSourceFlow(query = "") { _, pageNumber ->
                 getTvShowUseCase.getAllTopRatedTvShows(
-                    pageNumber,
-                    if (state.value.selectedTvShowGenre == TvShowGenre.All) null
-                    else state.value.selectedTvShowGenre.id
+                    pageNumber = pageNumber,
+                    genre = state.value.selectedTvShowGenre.toDomain()
                 )
             }
             tvSeriesFlow

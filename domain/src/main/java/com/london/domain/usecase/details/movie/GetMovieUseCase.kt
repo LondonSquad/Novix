@@ -5,6 +5,7 @@ import com.london.domain.entity.Movie
 import com.london.domain.entity.PagedFetchResponse
 import com.london.domain.entity.Trending
 import com.london.domain.entity.UpComingMovie
+import com.london.domain.entity.genre.MovieGenre
 import com.london.domain.entity.popular.PopularMedia
 import com.london.domain.entity.review.ReviewEntity
 import com.london.domain.entity.toprated.TopRatedMedia
@@ -41,31 +42,31 @@ class GetMovieUseCase @Inject constructor(
     suspend fun getTrendingMovies(page: Int): PagedFetchResponse<Trending> =
         movieRepository.getTrendingMovies(page)
 
-    suspend fun getPopularMovies(limit: Int = POPULAR_LIMIT) : List<PopularMedia> =
+    suspend fun getPopularMovies(limit: Int = POPULAR_LIMIT): List<PopularMedia> =
         movieRepository.getPopularMovies().take(limit)
 
-    suspend fun getMoviesByCategory(
-        categoryId: Int, pageNumber: Int
-    ): PagedFetchResponse<Movie> = movieRepository.getMoviesByCategory(
-        categoryId = categoryId,
+    suspend fun getMoviesByGenre(
+        genre: MovieGenre, pageNumber: Int
+    ): PagedFetchResponse<Movie> = movieRepository.getMoviesByGenre(
+        genre = genre,
         pageNumber = pageNumber
     )
 
-    suspend fun getUpcomingMoviesByCategory(
-        categoryId: Int?, pageNumber: Int
-    ) : PagedFetchResponse<UpComingMovie> = movieRepository.getUpcomingMoviesByCategory(
-        categoryId = categoryId,
+    suspend fun getUpcomingMoviesByGenre(
+        genre: MovieGenre, pageNumber: Int
+    ): PagedFetchResponse<UpComingMovie> = movieRepository.getUpcomingMoviesByGenre(
+        genre = genre,
         pageNumber = pageNumber
     )
-    
+
     suspend fun getAllTopRatedMovies(
         pageNumber: Int,
-        genreId: Int? = null
+        genre: MovieGenre = MovieGenre.ALL
     ): PagedFetchResponse<TopRatedMedia> {
         val response = movieRepository.getTopRatedMovies(pageNumber)
 
         val filteredItems = response.items.filter { movie ->
-            genreId == null || movie.genreIds.contains(genreId)
+            genre == MovieGenre.ALL || movie.genres.contains(genre)
         }
 
         return response.copy(
@@ -77,7 +78,6 @@ class GetMovieUseCase @Inject constructor(
     suspend fun getMostRecentMovies(limit: Int = TOP_RATED_LIMIT): List<TopRatedMedia> =
         movieRepository.getFirstPageTopRatedMovies().take(limit)
 
-    
     companion object {
         private const val IMAGE_LIMIT = 10
         private const val POPULAR_LIMIT = 5
