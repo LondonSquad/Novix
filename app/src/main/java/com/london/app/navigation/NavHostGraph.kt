@@ -11,7 +11,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
-import androidx.navigation.NavDestination.Companion.hasRoute
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
@@ -33,23 +32,23 @@ import com.london.presentation.navigation.Screen.Search
 fun NavHostGraph() {
     val navController = rememberNavController()
     val navBackStackEntry by navController.currentBackStackEntryAsState()
-    val currentDestination = navBackStackEntry?.destination
+
 
     val currentScreen = when {
-        currentDestination?.hasRoute<Home>() == true -> Home
-        currentDestination?.hasRoute<Search>() == true -> Search
-        currentDestination?.hasRoute<Categories>() == true -> Categories
-        currentDestination?.hasRoute<Lists>() == true -> Lists()
-        currentDestination?.hasRoute<Account>() == true -> Account
-        currentDestination?.hasRoute<Login>() == true -> Login
+        navBackStackEntry.hasRoute(Home::class) -> Home
+        navBackStackEntry.hasRoute(Search::class) -> Search
+        navBackStackEntry.hasRoute(Categories::class) -> Categories
+        navBackStackEntry.hasRoute(Lists::class) -> Lists()
+        navBackStackEntry.hasRoute(Account::class) -> Account
+        navBackStackEntry.hasRoute(Login::class) -> Login
         else -> Home
     }
 
-    val showBottomNav = currentDestination?.hasRoute<Home>() == true ||
-            currentDestination?.hasRoute<Search>() == true ||
-            currentDestination?.hasRoute<Categories>() == true ||
-            currentDestination?.hasRoute<Lists>() == true ||
-            currentDestination?.hasRoute<Account>() == true
+    val showBottomNav = navBackStackEntry.hasRoute(Home::class) ||
+            navBackStackEntry.hasRoute(Search::class) ||
+            navBackStackEntry.hasRoute(Categories::class) ||
+            navBackStackEntry.hasRoute(Lists::class) ||
+            navBackStackEntry.hasRoute(Account::class)
 
     Scaffold(
         backgroundColor = NovixTheme.colors.surface,

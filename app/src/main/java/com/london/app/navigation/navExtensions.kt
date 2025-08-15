@@ -10,6 +10,7 @@ import androidx.navigation.NavController
 import androidx.navigation.NavDestination.Companion.hasRoute
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
+import com.london.data.utils.isTrue
 import timber.log.Timber
 
 fun NavController.navigateTo(
@@ -40,3 +41,7 @@ inline fun <reified T : Any> NavGraphBuilder.appComposable(
     popExitTransition = { fadeOut(tween(500)) },
     content = content
 )
+
+fun NavBackStackEntry?.hasRoute(vararg routes: Any): Boolean = routes.any {
+    this?.destination?.hasRoute(it::class).isTrue
+ }
