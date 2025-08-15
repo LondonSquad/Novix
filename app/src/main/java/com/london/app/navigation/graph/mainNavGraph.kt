@@ -117,10 +117,7 @@ fun NavGraphBuilder.mainNavGraph(
             )
         }
 
-        composable<Reviews> {
-            ReviewsScreen(
-                onNavigateBack = ::navigateUp
-            )
+        composable<Reviews> { ReviewsScreen(onNavigateBack = ::navigateUp)
         }
     }
 }
@@ -128,7 +125,7 @@ fun NavGraphBuilder.mainNavGraph(
 fun NavGraphBuilder.homeNavGraph(navController: NavHostController) =
     with(navController) {
         trendingNavGraph(navController)
-
+        continueWatchingNavGraph(navController)
         appComposable<Home> {
             HomeScreen(
                 onNavigateToMovieDetails = ::navigateToMovieDetails,
@@ -147,7 +144,10 @@ fun NavGraphBuilder.homeNavGraph(navController: NavHostController) =
                 onNaviagteToTvShowDetalis = ::navigateToTvShowDetails
             )
         }
+    }
 
+fun NavGraphBuilder.continueWatchingNavGraph(navController: NavHostController) =
+    with(navController) {
         composable<ContinueWatching> {
             ContinueWatchingScreen(
                 onNavigateBack = ::navigateUp,
