@@ -428,6 +428,14 @@ fun RecentSearchLayOut(
     onNavigateToTvShowDetails: (Int) -> Unit,
     onNavigateToMovieDetails: (Int) -> Unit
 ) {
+    val focusManager = LocalFocusManager.current
+    val keyboardController = LocalSoftwareKeyboardController.current
+    val handleRecentSearchClick: (String) -> Unit = { query ->
+        focusManager.clearFocus()
+        keyboardController?.hide()
+        contract.onRecentSearchClick(query)
+    }
+
     LazyColumn(
         modifier = Modifier.fillMaxSize()
     ) {
@@ -444,17 +452,10 @@ fun RecentSearchLayOut(
 
         if (state.recentSearches.isNotEmpty()) {
             item {
-                val focusManager = LocalFocusManager.current
-                val keyboardController = LocalSoftwareKeyboardController.current
-
                 RecentSearchesSection(
                     recentSearches = state.recentSearches,
                     onClearAll = contract::clearRecentSearches,
-                    onSearchClick = { query ->
-                        focusManager.clearFocus()
-                        keyboardController?.hide()
-                        contract.onRecentSearchClick(query)
-                    },
+                    onSearchClick = handleRecentSearchClick,
                     onRemoveClick = contract::removeRecentSearch
                 )
             }
