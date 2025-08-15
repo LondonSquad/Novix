@@ -132,8 +132,7 @@ private fun UpcomingMovieItem(
                 modifier = Modifier
                     .clipToBounds()
                     .clip(RoundedCornerShape(12.dp))
-                    .clickable { onMovieClick() },
-                isDarkMode = NovixTheme.isThemeDark
+                    .clickable { onMovieClick() }
             )
         }
     }

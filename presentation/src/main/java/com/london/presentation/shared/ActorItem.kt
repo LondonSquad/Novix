@@ -82,7 +82,7 @@ private fun ActorImage(
                 ),
             contentScale = ContentScale.Crop,
             loadingContent = { CircularLoading(modifier = Modifier.align(Alignment.Center)) },
-            errorContent = { ErrorImage(NovixTheme.isThemeDark) },
+            errorContent = { ErrorImage() },
             moderatedContent = { UnSuitableEye(isSmallPicture = true) }
         )
     }

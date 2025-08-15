@@ -112,7 +112,7 @@ private fun GalleryContent(
                     .clip(RoundedCornerShape(12.dp)),
                 contentScale = ContentScale.Crop,
                 loadingContent = { CircularLoading() },
-                errorContent = { ErrorImage(NovixTheme.isThemeDark) }
+                errorContent = { ErrorImage() }
             )
         }
     }
