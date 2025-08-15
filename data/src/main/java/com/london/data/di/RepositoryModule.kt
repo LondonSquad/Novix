@@ -8,6 +8,7 @@ import com.london.data.local.model.recent.viewed.RecentViewedLocal
 import com.london.data.local.model.recent.watched.RecentWatchedMovieLocal
 import com.london.data.local.model.recent.watched.RecentWatchedTvShowLocal
 import com.london.data.local.preference.AuthenticationPreferences
+import com.london.data.local.source.customLists.CustomMovieListLocalDataSource
 import com.london.data.local.source.home.HomeLocalDataSource
 import com.london.data.local.source.home.upcoming.UpComingLocalDataSource
 import com.london.data.local.source.recent.RecentDataSource
@@ -142,13 +143,17 @@ object RepositoryModule {
     @Provides
     @Singleton
     fun provideCustomMovieListsRepository(
-        dataSource: CustomMovieListsRemoteDataSource,
+        localDataSource: CustomMovieListLocalDataSource,
+        remoteDataSource: CustomMovieListsRemoteDataSource,
+        preferencesService: AppPreferencesService,
         authenticationPreferences: AuthenticationPreferences,
-        preferencesService: AppPreferencesService
+        crashReporter: CrashReporter
     ): CustomMovieListRepository = CustomMovieListRepositoryImpl(
-        remoteDataSource = dataSource,
+        localDataSource = localDataSource,
+        remoteDataSource = remoteDataSource,
+        preferencesService = preferencesService,
         authenticationPreferences = authenticationPreferences,
-        preferencesService = preferencesService
+        crashReporter = crashReporter
     )
 
     @Provides

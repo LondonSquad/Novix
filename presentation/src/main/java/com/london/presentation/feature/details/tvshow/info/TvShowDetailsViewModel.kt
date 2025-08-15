@@ -79,7 +79,7 @@ class TvShowDetailsViewModel @Inject constructor(
         )
     }
 
-    override fun onReviewsClicked(tvShowId: Int, mediaType: Int) {
+    override fun onReviewsClicked(tvShowId: Int, mediaType: MediaType) {
         emitEffect(TvShowDetailsEffect.NavigateToReviews(tvShowId, mediaType))
     }
 
@@ -87,7 +87,7 @@ class TvShowDetailsViewModel @Inject constructor(
         emitEffect(TvShowDetailsEffect.NavigateToCast(tvShowId))
     }
 
-    override fun OnGenreClicked(genreId: Int) {
+    override fun onGenreClicked(genreId: Int) {
         emitEffect(TvShowDetailsEffect.NavigateToTvShowsByCategoryId(genreId))
     }
 

@@ -93,7 +93,7 @@ fun MovieDetailsScreen(
     onNavigateGenre: (Int) -> Unit,
     onNavigateToMovie: (Int) -> Unit,
     onNavigateToActor: (Int) -> Unit,
-    onNavigateToReviews: (Int, Int) -> Unit,
+    onNavigateToReviews: (Int, MediaType) -> Unit,
     viewModel: MovieDetailsViewModel = hiltViewModel()
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
@@ -232,7 +232,7 @@ private fun Content(
                                 modifier = Modifier.noRippleClickable {
                                     movieDetailsContract.onReviewsClick(
                                         uiState.movieId,
-                                        MediaType.Movie.mediaNum
+                                        MediaType.Movie
                                     )
                                 }
                             )
@@ -430,7 +430,7 @@ private fun HandleMovieDetailsEffects(
     onNavigateGenre: (Int) -> Unit,
     onNavigateToMovie: (Int) -> Unit,
     onNavigateToActor: (Int) -> Unit,
-    onNavigateToReviews: (Int, Int) -> Unit,
+    onNavigateToReviews: (Int, MediaType) -> Unit,
     onNavigateToLogin: () -> Unit
 ) {
     effect?.Listen { currentEffect ->
@@ -441,7 +441,7 @@ private fun HandleMovieDetailsEffects(
             is MovieDetailsEffect.MovieNavigation -> onNavigateToMovie(currentEffect.movieId)
             is MovieDetailsEffect.ReviewsNavigation -> onNavigateToReviews(
                 currentEffect.movieId,
-                currentEffect.mediaNumber
+                currentEffect.mediaType
             )
             is MovieDetailsEffect.OnLoginNavigation -> onNavigateToLogin()
         }
