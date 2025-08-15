@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.Scaffold
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavDestination.Companion.hasRoute
@@ -20,6 +21,7 @@ import com.london.app.navigation.graph.onboardingNavGraph
 import com.london.app.navigation.graph.splashNavGraph
 import com.london.designsystem.component.NavBar
 import com.london.designsystem.theme.NovixTheme
+import com.london.presentation.navigation.LocalNavController
 import com.london.presentation.navigation.Screen.Account
 import com.london.presentation.navigation.Screen.Categories
 import com.london.presentation.navigation.Screen.Home
@@ -68,15 +70,17 @@ fun NavHostGraph() {
             }
         }
     ) { innerPadding ->
-        NavHost(
-            navController = navController,
-            startDestination = AppNavGraph.Splash,
-            modifier = Modifier.padding(innerPadding)
-        ) {
-            onboardingNavGraph(navController)
-            splashNavGraph(navController)
-            authNavGraph(navController)
-            mainNavGraph(navController)
+        CompositionLocalProvider(LocalNavController provides navController) {
+            NavHost(
+                navController = navController,
+                startDestination = AppNavGraph.Splash,
+                modifier = Modifier.padding(innerPadding)
+            ) {
+                onboardingNavGraph(navController)
+                splashNavGraph(navController)
+                authNavGraph(navController)
+                mainNavGraph(navController)
+            }
         }
     }
 }
