@@ -104,56 +104,81 @@ private fun Content(
         pagingFlow = currentPagingFlow,
         handlePagingLoadingAutomatically = false
     ) {
+        SearchBody(
+            state = state,
+            contract = contract,
+            interactionSource = interactionSource,
+            keyboardController = keyboardController,
+            onClearFocus = { focusManager.clearFocus() }
+        )
+    }
+}
 
-        Box(
+@Composable
+private fun SearchBody(
+    state: SearchUiState,
+    contract: SearchContract,
+    interactionSource: MutableInteractionSource,
+    keyboardController: SoftwareKeyboardController?,
+    onClearFocus: () -> Unit,
+) {
+    Box(
+        modifier = Modifier
+            .fillMaxSize()
+            .pointerInput(Unit) { detectTapGestures(onTap = { onClearFocus() }) }
+            .background(color = NovixTheme.colors.surface)
+    ) {
+        TriangleBlurredShape()
+        Column(
             modifier = Modifier
                 .fillMaxSize()
-                .pointerInput(Unit) {
-                    detectTapGestures(onTap = {
-                        focusManager.clearFocus()
-                    })
-                }
-                .background(color = NovixTheme.colors.surface)
+                .background(NovixTheme.colors.surface),
+            verticalArrangement = Arrangement.Top
         ) {
+            SearchMainContent(
+                state = state,
+                contract = contract,
+                interactionSource = interactionSource,
+                keyboardController = keyboardController
+            )
+        }
+    }
+}
 
-            TriangleBlurredShape()
+@Composable
+private fun SearchMainContent(
+    state: SearchUiState,
+    contract: SearchContract,
+    interactionSource: MutableInteractionSource,
+    keyboardController: SoftwareKeyboardController?,
+) {
+    TopBar(
+        modifier = Modifier
+            .statusBarsPadding()
+            .padding(horizontal = 16.dp),
+        title = stringResource(R.string.search),
+    )
 
-            Column(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .background(NovixTheme.colors.surface),
-                verticalArrangement = Arrangement.Top
-            ) {
-                TopBar(
-                    modifier = Modifier
-                        .statusBarsPadding()
-                        .padding(horizontal = 16.dp),
-                    title = stringResource(R.string.search),
-                )
+    SearchBar(
+        uiState = state,
+        contract = contract,
+        interactionSource = interactionSource,
+        keyboardController = keyboardController,
+        modifier = Modifier
+            .padding(start = 16.dp, end = 16.dp, bottom = 12.dp)
+            .fillMaxWidth()
+    )
 
-                SearchBar(
-                    uiState = state,
-                    contract = contract,
-                    interactionSource = interactionSource,
-                    keyboardController = keyboardController,
-                    modifier = Modifier
-                        .padding(start = 16.dp, end = 16.dp, bottom = 12.dp)
-                        .fillMaxWidth()
-                )
+    when {
+        state.error != null && state.error != ErrorState.NoInternet -> {
+            SearchContentWithError(state = state, contract = contract)
+        }
 
-                when {
-                    state.error != null && state.error != ErrorState.NoInternet -> {
-                        SearchContentWithError(state = state, contract = contract)
-                    }
-
-                    else -> {
-                        SearchResultsContent(
-                            state = state,
-                            contract = contract
-                        )
-                    }
-                }
-            }
+        else -> {
+            SearchResultsContent(
+                state = state,
+                contract = contract
+            )
         }
     }
 }
