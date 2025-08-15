@@ -8,10 +8,6 @@ import com.london.presentation.shared.genre.TvShowGenreUi
 data class CategoriesUiState(
 
     val selectedCategory: MediaCategory = MediaCategory.Movies,
-    val movieGenres: List<MovieGenreUi> = MovieGenreUi.entries.filter {
-        it != MovieGenreUi.All && it != MovieGenreUi.Unknown
-    },
-    val tvShowGenres: List<TvShowGenreUi> = TvShowGenreUi.entries.filter {
-        it != TvShowGenreUi.All && it != TvShowGenreUi.Unknown
-    },
+    val movieGenres: List<MovieGenreUi> = MovieGenreUi.getListWithoutAll(),
+    val tvShowGenres: List<TvShowGenreUi> = TvShowGenreUi.getListWithoutAll(),
 )

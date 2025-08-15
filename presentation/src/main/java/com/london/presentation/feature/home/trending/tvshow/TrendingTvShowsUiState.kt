@@ -12,5 +12,5 @@ data class TrendingTvShowsUiState(
     val isLoading: Boolean = false,
     val errorState: ErrorState? = null,
     val tvShowsFlow: Flow<PagingData<Trending>> = flow {},
-    val tvShowsGenres: List<TvShowGenreUi> = TvShowGenreUi.entries.toList().filter { it!= TvShowGenreUi.Unknown }
+    val tvShowsGenres: List<TvShowGenreUi> = TvShowGenreUi.getList()
 )

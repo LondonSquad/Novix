@@ -15,6 +15,5 @@ data class TrendingMoviesUiState(
     val isLoading: Boolean = false,
     val errorState: ErrorState? = null,
     val moviesFlow: Flow<PagingData<Trending>> = flow {},
-    val movieGenres: List<MovieGenreUi> = MovieGenreUi.entries.toList()
-        .filter { it != MovieGenreUi.Unknown }
+    val movieGenres: List<MovieGenreUi> = MovieGenreUi.getList()
 )

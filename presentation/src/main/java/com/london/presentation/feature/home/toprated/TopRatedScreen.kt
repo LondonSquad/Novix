@@ -212,7 +212,7 @@ private fun MovieGenreRow(
             .requiredWidth(screenWidth)
             .padding(vertical = 12.dp)
     ) {
-        items(MovieGenreUi.entries.toTypedArray().filter { it != MovieGenreUi.Unknown }) { genre ->
+        items(MovieGenreUi.getList()) { genre ->
             NovixChip(
                 text = stringResource(genre.stringResId),
                 isSelected = genre == state.selectedMovieGenre,
@@ -236,7 +236,7 @@ private fun TvShowRow(
             .padding(vertical = 12.dp)
     ) {
         items(
-            TvShowGenreUi.entries.toTypedArray().filter { it != TvShowGenreUi.Unknown }) { genre ->
+            TvShowGenreUi.getList()) { genre ->
             NovixChip(
                 text = stringResource(genre.stringResId),
                 isSelected = genre == state.selectedTvShowGenre,
