@@ -1,6 +1,7 @@
 package com.london.presentation.feature.search
 
 import androidx.compose.ui.text.input.TextFieldValue
+import com.london.domain.entity.genre.Genre
 import com.london.domain.entity.recent.RecentSearch
 import com.london.domain.entity.recent.RecentViewed
 import com.london.domain.usecase.recent.search.ManageRecentSearchUseCase
@@ -31,10 +32,10 @@ class SearchViewModel @Inject constructor(
         setupSearchDebouncing()
     }
 
-    override fun incrementGenreInterest(genreId: Int, mediaType: String) {
+    override fun incrementGenreInterest(genre: Genre, mediaType: String) {
         tryToExecute(
             block = {
-                manageSearchUseCase.incrementGenreInterest(genreId, mediaType)
+                manageSearchUseCase.incrementGenreInterest(genre, mediaType)
             },
             onStart = { },
             onSuccess = { },
@@ -161,9 +162,9 @@ class SearchViewModel @Inject constructor(
         )
     }
 
-    override fun onMovieGenreClick(genresListId: List<Int>) {
-        genresListId.forEach { genreId ->
-            incrementGenreInterest(genreId, "tv")
+    override fun onMovieGenreClick(genresList: List<Genre>) {
+        genresListId.forEach { genre ->
+            incrementGenreInterest(genre, "tv")
         }
     }
 
@@ -264,7 +265,8 @@ class SearchViewModel @Inject constructor(
         )
     }
 
-    private fun isQueryDuplicated(query: String) = query.equals(state.value.lastSearch, ignoreCase = true)
+    private fun isQueryDuplicated(query: String) =
+        query.equals(state.value.lastSearch, ignoreCase = true)
 
     private fun applyLimitationOnTextFieldValue(newValue: TextFieldValue): TextFieldValue =
         newValue.copy(

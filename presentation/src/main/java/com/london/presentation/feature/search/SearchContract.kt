@@ -1,6 +1,7 @@
 package com.london.presentation.feature.search
 
 import androidx.compose.ui.text.input.TextFieldValue
+import com.london.domain.entity.genre.Genre
 import com.london.domain.entity.recent.RecentSearch
 import com.london.domain.entity.recent.RecentViewed
 
@@ -17,9 +18,8 @@ interface SearchContract {
     fun onActorClick(actorId: Int)
     fun onMovieClick(movieId: Int)
     fun onTvShowClick(tvShowId: Int)
-    fun onMovieGenreClick(genresListId : List<Int>)
+    fun onMovieGenreClick(genresListId: List<Genre>)
     fun onSavedMovieClick(movie: MovieUi)
-    
     fun onRetryClick()
     fun updateSearchState(updater: SearchUiState.() -> SearchUiState)
     fun performSearch(query: String, category: SearchCategory)
