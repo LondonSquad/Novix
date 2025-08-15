@@ -1,26 +1,41 @@
 package com.london.presentation.feature.search
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.interaction.MutableInteractionSource
+import androidx.compose.foundation.interaction.collectIsFocusedAsState
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.statusBarsPadding
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.text.KeyboardActions
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.focus.FocusManager
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.platform.SoftwareKeyboardController
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.Lifecycle
@@ -31,13 +46,20 @@ import androidx.paging.LoadState
 import androidx.paging.compose.LazyPagingItems
 import androidx.paging.compose.collectAsLazyPagingItems
 import com.london.designsystem.component.EmptyLayout
+import com.london.designsystem.component.Icon
+import com.london.designsystem.component.NovixChip
+import com.london.designsystem.component.OutlinedTextField
+import com.london.designsystem.component.SectionHeader
+import com.london.designsystem.component.Text
 import com.london.designsystem.component.TopBar
 import com.london.designsystem.theme.NovixTheme
 import com.london.designsystem.theme.ThemePreviews
+import com.london.domain.entity.recent.MediaType
+import com.london.domain.entity.recent.RecentSearch
+import com.london.domain.entity.recent.RecentViewed
 import com.london.presentation.R
-import com.london.presentation.feature.search.composable.SearchBar
-import com.london.presentation.feature.search.composable.SearchChipsRow
 import com.london.presentation.shared.ActorsLayout
+import com.london.presentation.shared.HomeCard
 import com.london.presentation.shared.TriangleBlurredShape
 import com.london.presentation.shared.base.ErrorState
 import com.london.presentation.shared.buildscreen.BuildScreen
@@ -96,7 +118,6 @@ private fun Content(
     BuildScreen(
         isLoading = false,
         isError = currentPagingFlow.loadState.refresh is LoadState.Error,
-        onBack = {},
         onRetry = contract::onRetryClick,
         pagingFlow = currentPagingFlow,
         handlePagingLoadingAutomatically = false
@@ -445,9 +466,307 @@ private fun SearchContentWithErrorHandling(
     }
 }
 
+
+@Composable
+private fun SearchBar(
+    uiState: SearchUiState,
+    contract: SearchContract,
+    interactionSource: MutableInteractionSource,
+    keyboardController: SoftwareKeyboardController?,
+    modifier: Modifier = Modifier
+) {
+
+    val focusManager = LocalFocusManager.current
+    val focusedState = interactionSource.collectIsFocusedAsState().value
+
+    Row(
+        modifier = modifier.fillMaxWidth(),
+        horizontalArrangement = Arrangement.spacedBy(8.dp)
+    ) {
+        OutlinedTextField(
+            value = uiState.searchQuery,
+            onValueChange = { contract.onSearchQueryChange(it) },
+            placeholder = {
+                Text(
+                    stringResource(R.string.search_placeholder),
+                    style = NovixTheme.typography.body.small,
+                    modifier = Modifier.padding(end = 4.dp)
+                )
+            },
+            leadingIcon = painterResource(id = R.drawable.icon_search_normal),
+            trailingIcon = trailingClearIcon(
+                isVisible = uiState.searchQuery.text.isNotEmpty() && focusedState,
+                onClear = contract::clearSearch
+            ),
+            keyboardOptions = KeyboardOptions(
+                imeAction = ImeAction.Search
+            ),
+            keyboardActions = onSearchKeyboardAction(
+                focusManager = focusManager,
+                keyboardController = keyboardController,
+                query = uiState.searchQuery.text,
+                onAddRecent = contract::addToRecentSearches
+            ),
+            interactionSource = interactionSource,
+            modifier = Modifier.weight(1f)
+        )
+    }
+
+}
+
+@Composable
+private fun trailingClearIcon(
+    isVisible: Boolean,
+    onClear: () -> Unit
+): (@Composable (() -> Unit))? {
+    if (!isVisible) return null
+    return {
+        Icon(
+            painter = painterResource(id = R.drawable.icon_remove_filled),
+            contentDescription = stringResource(R.string.clear),
+            tint = NovixTheme.colors.hint,
+            modifier = Modifier
+                .size(20.dp)
+                .clickable(
+                    interactionSource = remember { MutableInteractionSource() },
+                    indication = null
+                ) { onClear() }
+        )
+    }
+}
+
+private fun onSearchKeyboardAction(
+    focusManager: FocusManager,
+    keyboardController: SoftwareKeyboardController?,
+    query: String,
+    onAddRecent: (RecentSearch) -> Unit
+): KeyboardActions {
+    return KeyboardActions(
+        onSearch = {
+            focusManager.clearFocus()
+            keyboardController?.hide()
+            onAddRecent(
+                RecentSearch(
+                    query = query,
+                    timestamp = System.currentTimeMillis()
+                )
+            )
+        }
+    )
+}
+
+@Composable
+private fun RecentViewedSection(
+    recentViewed: List<RecentViewed>,
+    onClearAll: () -> Unit,
+    onNavigateToTvShowDetails: (Int) -> Unit,
+    onNavigateToMovieDetails: (Int) -> Unit,
+) {
+    SectionHeader(
+        text = stringResource(R.string.recent_viewed),
+        hasGetAll = true,
+        hasIcon = false,
+        getAllText = stringResource(R.string.clear_all),
+        onClick = onClearAll,
+        modifier = Modifier.padding(vertical = 12.dp, horizontal = 16.dp)
+    )
+
+    LazyRow(
+        modifier = Modifier
+            .fillMaxWidth()
+            .height(210.dp),
+        horizontalArrangement = Arrangement.spacedBy(8.dp),
+        contentPadding = PaddingValues(horizontal = 16.dp),
+    ) {
+        items(recentViewed) { item ->
+            HomeCard(
+                imageUrl = item.imageUrl,
+                isSaved = false,
+                onSaveClick = { },
+                modifier = Modifier.clickable {
+                    when (item.type) {
+                        MediaType.Movie -> onNavigateToMovieDetails(item.id)
+                        MediaType.TvShow -> onNavigateToTvShowDetails(item.id)
+                    }
+                }
+            )
+        }
+    }
+}
+
+@Composable
+private fun RecentSearchesSection(
+    recentSearches: List<RecentSearch>,
+    onClearAll: () -> Unit,
+    onSearchClick: (String) -> Unit,
+    onRemoveClick: (RecentSearch) -> Unit
+) {
+    SectionHeader(
+        text = stringResource(R.string.recent_search),
+        hasGetAll = true,
+        hasIcon = false,
+        getAllText = stringResource(R.string.clear_all),
+        onClick = onClearAll,
+        modifier = Modifier.padding(vertical = 12.dp, horizontal = 16.dp)
+    )
+
+    Column(
+        modifier = Modifier
+            .background(NovixTheme.colors.surface)
+            .padding(horizontal = 16.dp)
+    ) {
+        RecentSearchList(
+            recentSearches = recentSearches,
+            onSearchClick = onSearchClick,
+            onRemoveClick = onRemoveClick
+        )
+    }
+}
+
+@Composable
+private fun RecentSearchItem(
+    search: String,
+    onSearchClick: () -> Unit,
+    onRemoveClick: () -> Unit,
+    modifier: Modifier = Modifier,
+    showDivider: Boolean = true
+) {
+    Row(
+        modifier = modifier
+            .fillMaxWidth()
+            .clickable { onSearchClick() }
+            .padding(vertical = 8.dp),
+        verticalAlignment = Alignment.CenterVertically) {
+        Icon(
+            painter = painterResource(id = R.drawable.icon_clock),
+            contentDescription = stringResource(R.string.clock),
+            tint = NovixTheme.colors.hint,
+            modifier = Modifier
+                .padding(end = 8.dp)
+                .size(20.dp)
+        )
+        Text(
+            text = search,
+            style = NovixTheme.typography.body.medium,
+            color = NovixTheme.colors.title,
+            modifier = Modifier
+                .padding(end = 4.dp)
+                .weight(1f)
+        )
+        Icon(
+            painter = painterResource(id = R.drawable.icon_remove_filled),
+            contentDescription = stringResource(R.string.clear),
+            tint = NovixTheme.colors.hint,
+            modifier = Modifier
+                .size(16.dp)
+                .clickable { onRemoveClick() })
+    }
+
+    if (showDivider) {
+        RecentSearchSeparator()
+    }
+}
+
+@Composable
+private fun RecentSearchList(
+    recentSearches: List<RecentSearch>,
+    onSearchClick: (String) -> Unit,
+    onRemoveClick: (RecentSearch) -> Unit
+) {
+    val lastIndex = recentSearches.lastIndex
+    recentSearches.forEachIndexed { index, search ->
+        RecentSearchItem(
+            search = search.query,
+            onSearchClick = { onSearchClick(search.query) },
+            onRemoveClick = { onRemoveClick(search) },
+            showDivider = index != lastIndex
+        )
+    }
+}
+
+@Composable
+private fun SearchChipsRow(
+    selected: SearchCategory,
+    onSelect: (SearchCategory) -> Unit,
+    modifier: Modifier = Modifier
+) {
+    Row(
+        modifier = modifier
+            .fillMaxWidth()
+            .padding(horizontal = 16.dp),
+        horizontalArrangement = Arrangement.spacedBy(8.dp),
+    ) {
+        SearchCategory.entries.forEach { category ->
+            NovixChip(
+                text = stringResource(category.title),
+                isSelected = selected == category,
+                onClick = {
+                    if (selected != category) {
+                        onSelect(category)
+                    }
+                }
+            )
+        }
+    }
+}
+
+
+@Composable
+fun RecentSearchSection(
+    state: SearchUiState,
+    contract: SearchContract,
+    onNavigateToTvShowDetails: (Int) -> Unit,
+    onNavigateToMovieDetails: (Int) -> Unit
+) {
+    val focusManager = LocalFocusManager.current
+    val keyboardController = LocalSoftwareKeyboardController.current
+    val handleRecentSearchClick: (String) -> Unit = { query ->
+        focusManager.clearFocus()
+        keyboardController?.hide()
+        contract.onRecentSearchClick(query)
+    }
+
+    LazyColumn(
+        modifier = Modifier.fillMaxSize()
+    ) {
+        if (state.recentViewed.isNotEmpty()) {
+            item {
+                RecentViewedSection(
+                    recentViewed = state.recentViewed,
+                    onClearAll = contract::clearRecentViewed,
+                    onNavigateToTvShowDetails = onNavigateToTvShowDetails,
+                    onNavigateToMovieDetails = onNavigateToMovieDetails
+                )
+            }
+        }
+
+        if (state.recentSearches.isNotEmpty()) {
+            item {
+                RecentSearchesSection(
+                    recentSearches = state.recentSearches,
+                    onClearAll = contract::clearRecentSearches,
+                    onSearchClick = handleRecentSearchClick,
+                    onRemoveClick = contract::removeRecentSearch
+                )
+            }
+        }
+    }
+}
+
+@Composable
+private fun RecentSearchSeparator() {
+    Box(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(horizontal = 7.5.dp)
+            .height(1.dp)
+            .background(NovixTheme.colors.stroke)
+    )
+}
+
 @ThemePreviews
 @Composable
-fun SearchScreenPreview() {
+private fun Preview() {
     SearchScreen(
         onNavigateToActorDetails = {},
         onNavigateToTvShowDetails = {},

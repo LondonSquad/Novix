@@ -29,3 +29,10 @@ data class SearchUiState(
     val searchQuery: TextFieldValue = TextFieldValue(""),
     val selectedCategory: SearchCategory = SearchCategory.Movies,
 )
+
+data class MovieUi(
+    val id: Int,
+    val title: String,
+    val isSaved: Boolean,
+    val posterUrl: String,
+)
