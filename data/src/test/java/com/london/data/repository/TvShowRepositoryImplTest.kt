@@ -14,25 +14,25 @@ import com.london.data.remote.exception.NetworkException
 import com.london.data.remote.model.ApiResponse
 import com.london.data.remote.model.details.rating.AccountStatesResponse
 import com.london.data.remote.model.details.rating.RatingRemoteResponse
-import com.london.data.remote.model.details.tvshow.model.ImageItem
-import com.london.data.remote.model.details.tvshow.model.TvShowCreator
-import com.london.data.remote.model.details.tvshow.model.TvShowDetailsRemoteResponse
-import com.london.data.remote.model.details.tvshow.model.TvShowEpisode
-import com.london.data.remote.model.details.tvshow.model.TvShowGenre
-import com.london.data.remote.model.details.tvshow.model.TvShowImagesRemoteResponse
-import com.london.data.remote.model.details.tvshow.model.TvShowNetwork
-import com.london.data.remote.model.details.tvshow.model.TvShowProductionCompany
-import com.london.data.remote.model.details.tvshow.model.TvShowProductionCountry
-import com.london.data.remote.model.details.tvshow.model.TvShowSeason
-import com.london.data.remote.model.details.tvshow.model.TvShowSpokenLanguage
-import com.london.data.remote.model.details.tvshow.model.tvshowepisode.EpisodeCrewMember
-import com.london.data.remote.model.details.tvshow.model.tvshowepisode.EpisodeGuestStar
-import com.london.data.remote.model.details.tvshow.model.tvshowepisode.EpisodeVideoProviderRemote
-import com.london.data.remote.model.details.tvshow.model.tvshowepisode.EpisodeVideoResponse
-import com.london.data.remote.model.details.tvshow.model.tvshowepisode.TvShowEpisodeBySeason
-import com.london.data.remote.model.details.tvshow.model.tvshowepisode.TvShowEpisodesRemoteResponse
-import com.london.data.remote.model.details.videoprovider.tvshow.model.TvShowVideoRemote
-import com.london.data.remote.model.details.videoprovider.tvshow.model.TvShowVideoResponse
+import com.london.data.remote.model.details.tvshow.ImageItem
+import com.london.data.remote.model.details.tvshow.TvShowCreator
+import com.london.data.remote.model.details.tvshow.TvShowDetailsRemoteResponse
+import com.london.data.remote.model.details.tvshow.TvShowEpisode
+import com.london.data.remote.model.details.tvshow.TvShowGenre
+import com.london.data.remote.model.details.tvshow.TvShowImagesRemoteResponse
+import com.london.data.remote.model.details.tvshow.TvShowNetwork
+import com.london.data.remote.model.details.tvshow.TvShowProductionCompany
+import com.london.data.remote.model.details.tvshow.TvShowProductionCountry
+import com.london.data.remote.model.details.tvshow.TvShowSeason
+import com.london.data.remote.model.details.tvshow.TvShowSpokenLanguage
+import com.london.data.remote.model.details.tvshow.tvshowepisode.EpisodeCrewMember
+import com.london.data.remote.model.details.tvshow.tvshowepisode.EpisodeGuestStar
+import com.london.data.remote.model.details.tvshow.tvshowepisode.EpisodeVideoProviderRemote
+import com.london.data.remote.model.details.tvshow.tvshowepisode.EpisodeVideoResponse
+import com.london.data.remote.model.details.tvshow.tvshowepisode.TvShowEpisodeBySeason
+import com.london.data.remote.model.details.tvshow.tvshowepisode.TvShowEpisodesRemoteResponse
+import com.london.data.remote.model.details.videoprovider.tvshow.TvShowVideoRemote
+import com.london.data.remote.model.details.videoprovider.tvshow.TvShowVideoResponse
 import com.london.data.remote.model.home.popular.PopularTvShowResponse
 import com.london.data.remote.model.home.toprated.TopRatedTvSeriesRemote
 import com.london.data.remote.model.home.trending.TrendingResponse
@@ -1350,26 +1350,12 @@ class TvShowRepositoryImplTest {
             id = 1, tvShow = listOf(
                 TvShowVideoRemote(
                     id = "vid1",
-                    iso31661 = "US",
-                    iso6391 = "en",
                     key = "123",
-                    name = "Official Trailer",
-                    official = true,
-                    publishedAt = "2025-07-19",
-                    site = "YouTube",
-                    size = 1080,
-                    type = "Trailer"
+                    name = "Official Trailer"
                 ), TvShowVideoRemote(
                     id = "vid2",
-                    iso31661 = "US",
-                    iso6391 = "en",
                     key = "456",
-                    name = "Teaser",
-                    official = false,
-                    publishedAt = "2025-07-18",
-                    site = "YouTube",
-                    size = 720,
-                    type = "Teaser"
+                    name = "Teaser"
                 )
             )
         )
