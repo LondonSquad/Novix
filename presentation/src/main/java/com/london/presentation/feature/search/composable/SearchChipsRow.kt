@@ -13,7 +13,9 @@ import com.london.presentation.feature.search.SearchCategory
 
 @Composable
 fun SearchChipsRow(
-    selected: SearchCategory, onSelect: (SearchCategory) -> Unit, modifier: Modifier = Modifier
+    selected: SearchCategory,
+    onSelect: (SearchCategory) -> Unit,
+    modifier: Modifier = Modifier
 ) {
     Row(
         modifier = modifier
