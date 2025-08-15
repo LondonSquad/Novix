@@ -326,52 +326,55 @@ private fun SearchContentByCategory(
 
 @Composable
 private fun MovieSearchContent(state: SearchUiState, contract: SearchContract) {
-    val moviesLazyList =
-        state.moviesFlow.collectAsLazyPagingItems()
+    val moviesLazyList = state.moviesFlow.collectAsLazyPagingItems()
 
-    SearchContentWithErrorHandling(
-        moviesLazyList,
-        contract,
-    ) { isLoading ->
-        ResultOrEmpty(
-            items = moviesLazyList.itemSnapshotList.items,
-            emptyContent = {
-                if (!isLoading) {
-                    NoSearchResultLayOut(modifier = Modifier.fillMaxSize())
-                }
-            },
-            content = {
-                MediaLazyVerticalGrid(
-                    pagingItems = moviesLazyList,
-                    hasSaveIcon = true,
-                    onSaveClick = { /* Handle save click */ },
-                    isItemSaved = { false },
-                    onNavigateToMovie = { id ->
-                        val movie =
-                            moviesLazyList.itemSnapshotList.items.firstOrNull { it.id == id }
-                        movie?.let {
-                            contract.addToRecentViewed(it.toRecentViewed())
-                            contract.onMovieGenreClick(it.genreIds)
-                        }
-                        contract.onMovieClick(id)
-                    }
-                )
+    MediaSearchContent(
+        pagingItems = moviesLazyList,
+        contract = contract,
+        onNavigateToMovie = { id ->
+            val movie = moviesLazyList.itemSnapshotList.items.firstOrNull { it.id == id }
+            movie?.let {
+                contract.addToRecentViewed(it.toRecentViewed())
+                contract.onMovieGenreClick(it.genreIds)
             }
-        )
-    }
+            contract.onMovieClick(id)
+        }
+    )
 }
 
 @Composable
 private fun TvShowSearchContent(state: SearchUiState, contract: SearchContract) {
-    val tvShowsLazyList =
-        state.tvShowsFlow.collectAsLazyPagingItems()
+    val tvShowsLazyList = state.tvShowsFlow.collectAsLazyPagingItems()
 
+    MediaSearchContent(
+        pagingItems = tvShowsLazyList,
+        contract = contract,
+        onNavigateToTvShow = { id ->
+            val tvShow = tvShowsLazyList.itemSnapshotList.items.firstOrNull { it.id == id }
+            tvShow?.let {
+                contract.addToRecentViewed(it.toRecentViewed())
+                it.genres.forEach { genreId ->
+                    contract.incrementGenreInterest(genreId, "tv")
+                }
+            }
+            contract.onTvShowClick(id)
+        }
+    )
+}
+
+@Composable
+private fun <T : Any> MediaSearchContent(
+    pagingItems: LazyPagingItems<T>,
+    contract: SearchContract,
+    onNavigateToMovie: (Int) -> Unit = {},
+    onNavigateToTvShow: (Int) -> Unit = {}
+) {
     SearchContentWithErrorHandling(
-        tvShowsLazyList,
+        pagingItems,
         contract,
     ) { isLoading ->
         ResultOrEmpty(
-            items = tvShowsLazyList.itemSnapshotList.items,
+            items = pagingItems.itemSnapshotList.items,
             emptyContent = {
                 if (!isLoading) {
                     NoSearchResultLayOut(modifier = Modifier.fillMaxSize())
@@ -379,20 +382,12 @@ private fun TvShowSearchContent(state: SearchUiState, contract: SearchContract) 
             },
             content = {
                 MediaLazyVerticalGrid(
-                    pagingItems = tvShowsLazyList,
+                    pagingItems = pagingItems,
                     hasSaveIcon = true,
                     onSaveClick = { /* Handle save click */ },
                     isItemSaved = { false },
-                    onNavigateToTvShow = { id ->
-                        val tv = tvShowsLazyList.itemSnapshotList.items.firstOrNull { it.id == id }
-                        tv?.let {
-                            contract.addToRecentViewed(it.toRecentViewed())
-                            it.genres.forEach { genreId ->
-                                contract.incrementGenreInterest(genreId, "tv")
-                            }
-                        }
-                        contract.onTvShowClick(id)
-                    }
+                    onNavigateToMovie = onNavigateToMovie,
+                    onNavigateToTvShow = onNavigateToTvShow
                 )
             }
         )
