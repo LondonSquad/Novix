@@ -1,6 +1,9 @@
 package com.london.data.di
 
 import android.content.SharedPreferences
+import com.london.data.local.database.dao.customLists.ListMembershipDao
+import com.london.data.local.database.dao.customLists.MovieListDao
+import com.london.data.local.database.dao.customLists.SyncMetadataDao
 import com.london.data.local.database.dao.home.popular.PopularSectionDao
 import com.london.data.local.database.dao.home.toprated.TopRatedDao
 import com.london.data.local.database.dao.home.upcoming.UpcomingSectionDao
@@ -15,6 +18,8 @@ import com.london.data.local.model.recent.viewed.RecentViewedLocal
 import com.london.data.local.model.recent.watched.RecentWatchedMovieLocal
 import com.london.data.local.model.recent.watched.RecentWatchedTvShowLocal
 import com.london.data.local.preference.AppPreferencesServiceImpl
+import com.london.data.local.source.customLists.CustomMovieListLocalDataSource
+import com.london.data.local.source.customLists.CustomMovieListLocalDataSourceImpl
 import com.london.data.local.source.home.HomeLocalDataSource
 import com.london.data.local.source.home.popular.PopularLocalDataSourceImpl
 import com.london.data.local.source.home.toprated.TopRatedDataSourceImpl
@@ -91,4 +96,17 @@ object LocalDataSourceModule {
         @Named("topRatedDao") topRatedDao: TopRatedDao
     ): HomeLocalDataSource<TopRatedLocal> =
         TopRatedDataSourceImpl(topRatedDao)
+
+    @Provides
+    @Singleton
+    fun provideCustomMovieListLocalDataSource(
+        membershipDao: ListMembershipDao,
+        movieListDao: MovieListDao,
+        syncMetadataDao: SyncMetadataDao
+    ): CustomMovieListLocalDataSource =
+        CustomMovieListLocalDataSourceImpl(
+            membershipDao = membershipDao,
+            movieListDao = movieListDao,
+            syncMetadataDao = syncMetadataDao
+        )
 }

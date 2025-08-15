@@ -19,7 +19,7 @@ class ReviewsViewModel @Inject constructor(
 ) : BaseViewModel<ReviewsUiState, ReviewEffect>(ReviewsUiState()), ReviewContract {
 
     private val args = savedStateHandle.getArgs<Screen.Reviews>()
-    private val mediaType = args?.mediaType ?: 0
+    private val mediaType = args?.mediaType ?: MediaType.Movie
     private val mediaId = args?.mediaId ?: 0
 
     init {
@@ -35,12 +35,12 @@ class ReviewsViewModel @Inject constructor(
         emitEffect(ReviewEffect.NavigateBack)
     }
 
-    private fun initializeReviews(mediaType: Int, mediaId: Int) {
+    private fun initializeReviews(mediaType: MediaType, mediaId: Int) {
         tryToExecute(
             block = {
                 createPagingSourceFlow("") { _, pageNumber ->
                     when (mediaType) {
-                        MediaType.Movie.mediaNum -> getMovieUseCase.getMovieReviews(
+                        MediaType.Movie -> getMovieUseCase.getMovieReviews(
                             mediaId,
                             pageNumber
                         )
