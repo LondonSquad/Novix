@@ -22,10 +22,9 @@ import com.london.designsystem.utils.shimmerEffect
 fun <T> GenresSection(
     genres: List<T>,
     screenWidth: Dp,
-    selectedGenreId: Int?,
+    selectedGenre: T?,
     onGenreClick: (T) -> Unit,
     modifier: Modifier = Modifier,
-    getGenreId: (T) -> Int,
     isLoading: Boolean = false,
     getGenreName: @Composable (T) -> String
 ) {
@@ -38,7 +37,7 @@ fun <T> GenresSection(
             if (!isLoading)
                 NovixChip(
                     text = getGenreName(genre),
-                    isSelected = (getGenreId(genre) == selectedGenreId),
+                    isSelected = (genre == selectedGenre),
                     onClick = { onGenreClick(genre) }
                 )
             else

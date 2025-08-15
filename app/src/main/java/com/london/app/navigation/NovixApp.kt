@@ -322,10 +322,10 @@ fun NavGraphBuilder.mainNavGraph(
     ) {
         CategoriesScreen(
             onNavigateToMovieCategory = {
-                navController.navigate(Screen.MoviesByCategory(it.id))
+                navController.navigate(Screen.MoviesByCategory(it))
             },
             onNavigateToTvShowCategory = {
-                navController.navigate(Screen.TvShowsByCategory(it.id))
+                navController.navigate(Screen.TvShowsByCategory(it))
             }
         )
     }

@@ -33,6 +33,7 @@ import com.london.data.utils.asImageUrlOrEmpty
 import com.london.domain.entity.Movie
 import com.london.domain.entity.PagedFetchResponse
 import com.london.domain.entity.TvShow
+import com.london.domain.entity.genre.MovieGenre
 import com.london.domain.entity.moviedatails.MovieImages
 import com.london.domain.entity.recent.MediaType
 import com.london.domain.entity.review.ReviewEntity
@@ -91,7 +92,7 @@ class MovieRepositoryImplTest {
         val result = repository.getMovieById(123)
 
         assertEquals("Inception", result.title)
-        assertEquals(2, result.genresId.size)
+        assertEquals(2, result.genres.size)
     }
 
     @Test
@@ -272,7 +273,6 @@ class MovieRepositoryImplTest {
         Assert.assertEquals(1, trending.id)
         Assert.assertEquals("Test Movie", trending.title)
         Assert.assertEquals("https://image.tmdb.org/t/p/w500test_poster.jpg", trending.posterPath)
-        Assert.assertEquals(listOf(28, 12), trending.genreIds)
     }
 
 
@@ -320,13 +320,13 @@ class MovieRepositoryImplTest {
         //Given
         coEvery {
             movieRemoteDataSource.getMoviesByCategory(
-                CATEGORY_ID,
+                any(),
                 PAGE_NUMBER
             )
         } returns Result.success(SearchMoviesRemoteMock)
         //When
-        val result = repository.getMoviesByCategory(
-            CATEGORY_ID,
+        val result = repository.getMoviesByGenre(
+            MovieGenre.TV_MOVIE,
             PAGE_NUMBER
         )
         //Then
@@ -338,7 +338,7 @@ class MovieRepositoryImplTest {
         //Given
         coEvery {
             movieRemoteDataSource.getMoviesByCategory(
-                CATEGORY_ID,
+                any(),
                 PAGE_NUMBER
             )
         } returns Result.failure(NetworkException.HttpLockedException(
@@ -347,8 +347,8 @@ class MovieRepositoryImplTest {
         ))
         //When //Then
         assertThrows<NetworkException.HttpLockedException> {
-            repository.getMoviesByCategory(
-                CATEGORY_ID,
+            repository.getMoviesByGenre(
+                MovieGenre.TV_MOVIE,
                 PAGE_NUMBER
             )
         }
@@ -683,7 +683,7 @@ class MovieRepositoryImplTest {
                     posterUrl = "https://image.tmdb.org/t/p/w500",
                     releaseYear = 2020,
                     rating = 8,
-                    genreIds = listOf(),
+                    genres = listOf(),
                 )
             ),
             totalItems = 1,
