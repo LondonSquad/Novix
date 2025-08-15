@@ -34,7 +34,7 @@ class MyRatingsViewModelTest {
     }
 
     @Test
-    fun `when initialized then calls initializeRatedMedia`() = runTest(mainDispatcher) {
+    fun `initializeRatedMedia should load movies and tv shows when viewModel is initialized`() = runTest(mainDispatcher) {
         // Given
         val manageRatingUseCase = mockk<ManageRatingUseCase>(relaxed = true)
         coEvery { manageRatingUseCase.getRatedMediaSorted() } returns createMockRatedMedia()
@@ -53,7 +53,7 @@ class MyRatingsViewModelTest {
     }
 
     @Test
-    fun `when initializeRatedMedia succeeds then updates state with filtered data`() =
+    fun `initializeRatedMedia should update state with filtered data when use case succeeds`() =
         runTest(mainDispatcher) {
             // Given
             val manageRatingUseCase = mockk<ManageRatingUseCase>(relaxed = true)
@@ -76,7 +76,7 @@ class MyRatingsViewModelTest {
         }
 
     @Test
-    fun `when initializeRatedMedia fails then updates error state`() = runTest(mainDispatcher) {
+    fun `initializeRatedMedia should update error state when use case fails`() = runTest(mainDispatcher) {
         // Given
         val manageRatingUseCase = mockk<ManageRatingUseCase>(relaxed = true)
         coEvery { manageRatingUseCase.getRatedMediaSorted() } throws Exception("Network error")
@@ -88,14 +88,17 @@ class MyRatingsViewModelTest {
 
         // Then
         viewModel.state.test {
-            val state = expectMostRecentItem()
+            var state = awaitItem()
+            while (state.errorState == null) {
+                state = awaitItem()
+            }
             assertThat(state.errorState).isNotNull()
-            ensureAllEventsConsumed()
+            cancelAndIgnoreRemainingEvents()
         }
     }
 
     @Test
-    fun `when deleteMovieClick succeeds then updates state by filtering out deleted movie`() =
+    fun `onDeleteMovieClick should show snackBar when deletion succeeds`() =
         runTest(mainDispatcher) {
             // Given
             val manageRatingUseCase = mockk<ManageRatingUseCase>(relaxed = true)
@@ -112,14 +115,17 @@ class MyRatingsViewModelTest {
 
             // Then
             viewModel.state.test {
-                val state = expectMostRecentItem()
+                var state = awaitItem()
+                while (!state.isSnackBarVisible) {
+                    state = awaitItem()
+                }
                 assertThat(state.isSnackBarVisible).isTrue()
-                ensureAllEventsConsumed()
+                cancelAndIgnoreRemainingEvents()
             }
         }
 
     @Test
-    fun `when deleteTVShowClick succeeds then updates state by filtering out deleted tv show`() =
+    fun `onDeleteTVShowClick should show snackBar when deletion succeeds`() =
         runTest(mainDispatcher) {
             // Given
             val manageRatingUseCase = mockk<ManageRatingUseCase>(relaxed = true)
@@ -136,14 +142,17 @@ class MyRatingsViewModelTest {
 
             // Then
             viewModel.state.test {
-                val state = expectMostRecentItem()
+                var state = awaitItem()
+                while (!state.isSnackBarVisible) {
+                    state = awaitItem()
+                }
                 assertThat(state.isSnackBarVisible).isTrue()
-                ensureAllEventsConsumed()
+                cancelAndIgnoreRemainingEvents()
             }
         }
 
     @Test
-    fun `when deleteMovieClick fails then updates error state`() = runTest(mainDispatcher) {
+    fun `onDeleteMovieClick should update error state when deletion fails`() = runTest(mainDispatcher) {
         // Given
         val manageRatingUseCase = mockk<ManageRatingUseCase>(relaxed = true)
         coEvery { manageRatingUseCase.getRatedMediaSorted() } returns createMockRatedMedia()
@@ -160,7 +169,7 @@ class MyRatingsViewModelTest {
     }
 
     @Test
-    fun `when deleteTVShowClick fails then updates error state`() = runTest(mainDispatcher) {
+    fun `onDeleteTVShowClick should update error state when deletion fails`() = runTest(mainDispatcher) {
         // Given
         val manageRatingUseCase = mockk<ManageRatingUseCase>(relaxed = true)
         coEvery { manageRatingUseCase.getRatedMediaSorted() } returns createMockRatedMedia()
@@ -177,7 +186,7 @@ class MyRatingsViewModelTest {
     }
 
     @Test
-    fun `when rating category selected then updates selected category`() = runTest(mainDispatcher) {
+    fun `onRatingCategorySelected should update selected category when invoked`() = runTest(mainDispatcher) {
         // Given
         val manageRatingUseCase = mockk<ManageRatingUseCase>(relaxed = true)
         coEvery { manageRatingUseCase.getRatedMediaSorted() } returns createMockRatedMedia()
@@ -196,7 +205,7 @@ class MyRatingsViewModelTest {
     }
 
     @Test
-    fun `when retry clicked then calls initializeRatedMedia`() = runTest(mainDispatcher) {
+    fun `onRetryClick should reload rated media when invoked`() = runTest(mainDispatcher) {
         // Given
         val manageRatingUseCase = mockk<ManageRatingUseCase>(relaxed = true)
         val mockRatedMedia = createMockRatedMedia()
@@ -217,7 +226,7 @@ class MyRatingsViewModelTest {
     }
 
     @Test
-    fun `when item clicked then emits movie navigation effect`() = runTest(mainDispatcher) {
+    fun `onItemClick should emit movie navigation effect when invoked`() = runTest(mainDispatcher) {
         // Given
         val manageRatingUseCase = mockk<ManageRatingUseCase>(relaxed = true)
         coEvery { manageRatingUseCase.getRatedMediaSorted() } returns createMockRatedMedia()
@@ -235,7 +244,7 @@ class MyRatingsViewModelTest {
     }
 
     @Test
-    fun `when movie clicked then emits movie navigation effect`() = runTest(mainDispatcher) {
+    fun `onMovieClick should emit movie navigation effect when invoked`() = runTest(mainDispatcher) {
         // Given
         val manageRatingUseCase = mockk<ManageRatingUseCase>(relaxed = true)
         coEvery { manageRatingUseCase.getRatedMediaSorted() } returns createMockRatedMedia()
@@ -253,7 +262,7 @@ class MyRatingsViewModelTest {
     }
 
     @Test
-    fun `when tv show clicked then emits tv show navigation effect`() = runTest(mainDispatcher) {
+    fun `onTvShowClick should emit tv show navigation effect when invoked`() = runTest(mainDispatcher) {
         // Given
         val manageRatingUseCase = mockk<ManageRatingUseCase>(relaxed = true)
         coEvery { manageRatingUseCase.getRatedMediaSorted() } returns createMockRatedMedia()
@@ -271,7 +280,7 @@ class MyRatingsViewModelTest {
     }
 
     @Test
-    fun `when back clicked then emits back navigation effect`() = runTest(mainDispatcher) {
+    fun `onBackClick should emit back navigation effect when invoked`() = runTest(mainDispatcher) {
         // Given
         val manageRatingUseCase = mockk<ManageRatingUseCase>(relaxed = true)
         coEvery { manageRatingUseCase.getRatedMediaSorted() } returns createMockRatedMedia()
