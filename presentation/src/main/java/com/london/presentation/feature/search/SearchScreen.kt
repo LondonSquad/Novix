@@ -168,6 +168,14 @@ private fun SearchMainContent(
             .fillMaxWidth()
     )
 
+    SearchErrorOrResults(state = state, contract = contract)
+}
+
+@Composable
+private fun SearchErrorOrResults(
+    state: SearchUiState,
+    contract: SearchContract
+) {
     when {
         state.error != null && state.error != ErrorState.NoInternet -> {
             SearchContentWithError(state = state, contract = contract)
@@ -189,32 +197,38 @@ private fun SearchContentWithError(
 ) {
     ResultOrEmpty(
         items = state.searchQuery.text.toList(),
-        emptyContent = {
-            ResultOrEmpty(
-                items = state.recentSearches,
-                otherItems = state.recentViewed,
-                emptyContent = {
-                    NoEarlierSearchLayout(
-                        modifier = Modifier
-                            .fillMaxSize()
-                            .background(NovixTheme.colors.surface)
-                    )
-                },
-                content = {
-                    RecentSearchLayOut(
-                        state = state,
-                        contract = contract,
-                        onNavigateToTvShowDetails = contract::onTvShowClick,
-                        onNavigateToMovieDetails = contract::onMovieClick
-                    )
-                }
-            )
-        },
+        emptyContent = { SearchRecentArea(state = state, contract = contract) },
         content = {
             SearchChipsRow(
                 selected = state.selectedCategory,
                 onSelect = contract::onCategorySelected,
                 modifier = Modifier.padding(bottom = 12.dp)
+            )
+        }
+    )
+}
+
+@Composable
+private fun SearchRecentArea(
+    state: SearchUiState,
+    contract: SearchContract
+) {
+    ResultOrEmpty(
+        items = state.recentSearches,
+        otherItems = state.recentViewed,
+        emptyContent = {
+            NoEarlierSearchLayout(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .background(NovixTheme.colors.surface)
+            )
+        },
+        content = {
+            RecentSearchLayOut(
+                state = state,
+                contract = contract,
+                onNavigateToTvShowDetails = contract::onTvShowClick,
+                onNavigateToMovieDetails = contract::onMovieClick
             )
         }
     )
