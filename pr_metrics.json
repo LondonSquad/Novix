@@ -21426,5 +21426,33 @@
       "deletions": 1,
       "changed_files": 1
     }
+  },
+  {
+    "pr_number": 638,
+    "url": "https://github.com/LondonSquad/Novix/pull/638",
+    "title": "hotfix: home top rated section duplication ",
+    "opened_at": "2025-08-15T05:13:56Z",
+    "head_ref": "hotfix/top-rated-mapping",
+    "base_ref": "develop",
+    "creator": {
+      "login": "yusufnasserdev",
+      "id": 43588217,
+      "url": "https://github.com/yusufnasserdev"
+    },
+    "approvals": [],
+    "first_approved_at": null,
+    "time_to_first_approval_minutes": null,
+    "required_approvals_met_at": null,
+    "time_to_required_approvals_minutes": null,
+    "closed_at": null,
+    "merged_at": null,
+    "merged_by": null,
+    "week": "2025-W33",
+    "status": "pending",
+    "diff_stats": {
+      "additions": 8,
+      "deletions": 11,
+      "changed_files": 1
+    }
   }
 ]
