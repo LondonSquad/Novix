@@ -74,10 +74,61 @@ import com.london.presentation.navigation.Screen.TvShowsByCategory
 import com.london.presentation.navigation.Screen.ViewListItems
 import com.london.presentation.navigation.Screen.WatchingHistory
 
+
 fun NavGraphBuilder.mainNavGraph(
     navController: NavHostController
 ) = navigation<AppNavGraph.Main>(startDestination = Home) {
     with(navController) {
+
+        homeNavGraph(navController)
+        tvShowDetailsNavGraph(navController)
+        movieDetailsNavGraph(navController)
+        onListNavGraph(navController)
+        actorDetailsNavGraph(navController)
+
+        appComposable<Search> {
+            SearchScreen(
+                onNavigateToTvShowDetails = ::navigateToTvShowDetails,
+                onNavigateToActorDetails = ::navigateToActorDetails,
+                onNavigateToMovieDetails = ::navigateToMovieDetails
+            )
+        }
+
+        appComposable<Categories> {
+            CategoriesScreen(
+                onNavigateToMovieCategory = ::navigateToMovieCategory,
+                onNavigateToTvShowCategory = ::navigateToTvShowsByCategory
+            )
+        }
+
+        appComposable<Account> {
+            AccountScreen(
+                onNavigateToWatchingHistory = ::navigateToWatchingHistory,
+                onNavigateToMyRating = ::navigateToMyRating,
+                onNavigateToLogin = ::navigateToLoginWithPopUp
+            )
+        }
+
+        appComposable<MyRating> {
+            MyRatingScreen(
+                onNavigateToMovieDetails = ::navigateToMovieDetails,
+                onNavigateToTvShowDetails = ::navigateToTvShowDetails,
+                onNavigateBack = ::navigateUp
+            )
+        }
+
+        composable<Reviews> {
+            ReviewsScreen(
+                onNavigateBack = ::navigateUp
+            )
+        }
+    }
+}
+
+fun NavGraphBuilder.homeNavGraph(navController: NavHostController) =
+    with(navController) {
+        trendingNavGraph(navController)
+
         appComposable<Home> {
             HomeScreen(
                 onNavigateToMovieDetails = ::navigateToMovieDetails,
@@ -89,7 +140,130 @@ fun NavGraphBuilder.mainNavGraph(
                 onNavigateToContinueWatching = ::navigateToContinueWatching
             )
         }
+        composable<TopRated> {
+            TopRatedScreen(
+                onNavigateBack = ::navigateUp,
+                onNaviagteToMovieDetalis = ::navigateToMovieDetails,
+                onNaviagteToTvShowDetalis = ::navigateToTvShowDetails
+            )
+        }
 
+        composable<ContinueWatching> {
+            ContinueWatchingScreen(
+                onNavigateBack = ::navigateUp,
+                onNaviagteToMovieDetalis = ::navigateToMovieDetails,
+                onNaviagteToTvShowDetalis = ::navigateToTvShowDetails,
+                screenTitle = stringResource(R.string.continue_watch)
+            )
+        }
+
+        appComposable<WatchingHistory> {
+            ContinueWatchingScreen(
+                onNavigateBack = ::navigateUp,
+                onNaviagteToMovieDetalis = ::navigateToMovieDetails,
+                onNaviagteToTvShowDetalis = ::navigateToTvShowDetails,
+                screenTitle = stringResource(R.string.watching_history)
+            )
+        }
+    }
+
+fun NavGraphBuilder.onListNavGraph(navController: NavHostController) =
+    with(navController) {
+        appComposable<Lists> {
+            ListScreen(
+                onNavigateToListDetails = ::navigateToListDetails,
+                onNavigateToLogin = ::navigateToLoginWithPopUp,
+            )
+        }
+        appComposable<ViewListItems> {
+            ViewListItemsScreen(
+                onNavigateBack = ::navigateUp,
+                onNavigateToMovieDetails = ::navigateToMovieDetails,
+            )
+        }
+    }
+
+fun NavGraphBuilder.movieDetailsNavGraph(navController: NavHostController) =
+    with(navController) {
+        appComposable<MovieDetails> {
+            MovieDetailsScreen(
+                onNavigateBack = ::navigateUp,
+                onNavigateToMovieCategory = ::navigateToMovieCategory,
+                onNavigateToMovieDetails = ::navigateToMovieDetails,
+                navigateToActorDetails = ::navigateToActorDetails,
+                onNavigateToReviews = ::navigateToReviews,
+                onNavigateToLogin = ::navigateToLogin,
+            )
+        }
+
+        appComposable<MoviesByCategory> {
+            MoviesByCategoryScreen(
+                onNavigateToMovieDetails = ::navigateToMovieDetails,
+                onNavigateBack = ::navigateUp,
+            )
+        }
+    }
+
+
+fun NavGraphBuilder.tvShowDetailsNavGraph(navController: NavHostController) =
+    with(navController) {
+        appComposable<TvShowDetails> {
+            TvShowsDetailsScreen(
+                onNavigateToEpisodeDetails = ::navigateToEpisodeDetails,
+                onNavigateToReviews = ::navigateToReviews,
+                onNavigateToActorDetails = ::navigateToActorDetails,
+                onNavigateBack = ::navigateUp,
+                onNavigateToTvShowCategory = ::navigateToTvShowsByCategory,
+                onNavigateToLogin = ::navigateToLogin
+            )
+        }
+
+        appComposable<EpisodeDetails> {
+            EpisodeDetailsScreen(
+                onNavigateBack = ::navigateUp,
+                onNaviagteToActorDetalis = ::navigateToActorDetails,
+                onNavigateToLogin = ::navigateToLogin
+            )
+
+            appComposable<TvShowsByCategory> {
+                TvShowByCategoryScreen(
+                    onNavigateBack = ::navigateUp,
+                    onNavigateToTvShowDetails = ::navigateToTvShowDetails
+                )
+            }
+        }
+    }
+
+fun NavGraphBuilder.actorDetailsNavGraph(navController: NavHostController) =
+    with(navController) {
+        appComposable<TopTvShowsPicksDetails> {
+            TopTvShowsPicksScreen(
+                onNavigateToTvShowDetails = ::navigateToTvShowDetails,
+                onNavigateBack = ::navigateUp,
+            )
+        }
+
+        composable<ActorTopMoviesPicksDetails> {
+            TopMoviesPicksScreen(
+                onNavigateToMovieDetails = ::navigateToMovieDetails,
+                onNavigateBack = ::navigateUp,
+            )
+        }
+        composable<ActorDetails> {
+            ActorDetailsScreen(
+                onNavigateToTopMoviePicks = ::navigateToTopMoviesPicks,
+                onNavigateToTopTvShowPicks = ::navigateToTopTvShowsPicks,
+                onNavigateToGallery = ::navigateToActorGallery,
+                onNavigateToMovieDetails = ::navigateToMovieDetails,
+                onNavigateToTvShowDetails = ::navigateToTvShowDetails,
+                onNavigateBack = ::navigateUp
+            )
+        }
+        composable<ActorGallery> { ActorsGalleryScreen(onNavigateBack = ::navigateUp) }
+    }
+
+fun NavGraphBuilder.trendingNavGraph(navController: NavHostController) =
+    with(navController) {
         composable<TrendingMovies> {
             TrendingMoviesScreen(
                 onNavigateToMovieToDetails = ::navigateToMovieDetails,
@@ -108,152 +282,4 @@ fun NavGraphBuilder.mainNavGraph(
                 onNavigateBack = ::navigateUp
             )
         }
-
-        appComposable<TvShowsByCategory> {
-            TvShowByCategoryScreen(
-                onNavigateBack = ::navigateUp,
-                onNavigateToTvShowDetails = ::navigateToTvShowDetails
-            )
-        }
-
-        appComposable<Search> {
-            SearchScreen(
-                onNavigateToTvShowDetails = ::navigateToTvShowDetails,
-                onNavigateToActorDetails = ::navigateToActorDetails,
-                onNavigateToMovieDetails = ::navigateToMovieDetails
-            )
-        }
-
-        appComposable<Categories> {
-            CategoriesScreen(
-                onNavigateToMovieCategory = ::navigateToMovieCategory,
-                onNavigateToTvShowCategory = ::navigateToTvShowsByCategory
-            )
-        }
-
-        appComposable<Lists> {
-            ListScreen(
-                onNavigateToListDetails = ::navigateToListDetails,
-                onNavigateToLogin = ::navigateToLoginWithPopUp,
-            )
-        }
-
-        appComposable<Account> {
-            AccountScreen(
-                onNavigateToWatchingHistory = ::navigateToWatchingHistory,
-                onNavigateToMyRating = ::navigateToMyRating,
-                onNavigateToLogin = ::navigateToLoginWithPopUp
-            )
-        }
-
-        appComposable<WatchingHistory> {
-            ContinueWatchingScreen(
-                onNavigateBack = ::navigateUp,
-                onNaviagteToMovieDetalis = ::navigateToMovieDetails,
-                onNaviagteToTvShowDetalis = ::navigateToTvShowDetails,
-                screenTitle = stringResource(R.string.watching_history)
-            )
-        }
-
-        appComposable<MyRating> {
-            MyRatingScreen(
-                onNavigateToMovieDetails = ::navigateToMovieDetails,
-                onNavigateToTvShowDetails = ::navigateToTvShowDetails,
-                onNavigateBack = ::navigateUp
-            )
-        }
-
-        appComposable<TvShowDetails> {
-            TvShowsDetailsScreen(
-                onNavigateToEpisodeDetails = ::navigateToEpisodeDetails,
-                onNavigateToReviews = ::navigateToReviews,
-                onNavigateToActorDetails = ::navigateToActorDetails,
-                onNavigateBack = ::navigateUp,
-                onNavigateToTvShowCategory = ::navigateToTvShowsByCategory,
-                onNavigateToLogin = ::navigateToLogin
-            )
-        }
-
-        appComposable<TopTvShowsPicksDetails> {
-            TopTvShowsPicksScreen(
-                onNavigateToTvShowDetails = ::navigateToTvShowDetails,
-                onNavigateBack = ::navigateUp,
-            )
-        }
-
-        composable<ActorTopMoviesPicksDetails> {
-            TopMoviesPicksScreen(
-                onNavigateToMovieDetails = ::navigateToMovieDetails,
-                onNavigateBack = ::navigateUp,
-            )
-        }
-
-        appComposable<MovieDetails> {
-            MovieDetailsScreen(
-                onNavigateBack = ::navigateUp,
-                onNavigateToMovieCategory = ::navigateToMovieCategory,
-                onNavigateToMovieDetails = ::navigateToMovieDetails,
-                navigateToActorDetails = ::navigateToActorDetails,
-                onNavigateToReviews = ::navigateToReviews,
-                onNavigateToLogin = ::navigateToLogin,
-            )
-        }
-
-        composable<Reviews> {
-            ReviewsScreen(
-                onNavigateBack = ::navigateUp
-            )
-        }
-
-        appComposable<MoviesByCategory> {
-            MoviesByCategoryScreen(
-                onNavigateToMovieDetails = ::navigateToMovieDetails,
-                onNavigateBack = ::navigateUp,
-            )
-        }
-
-        composable<ActorDetails> {
-            ActorDetailsScreen(
-                onNavigateToTopMoviePicks = ::navigateToTopMoviesPicks,
-                onNavigateToTopTvShowPicks = ::navigateToTopTvShowsPicks,
-                onNavigateToGallery = ::navigateToActorGallery,
-                onNavigateToMovieDetails = ::navigateToMovieDetails,
-                onNavigateToTvShowDetails = ::navigateToTvShowDetails,
-                onNavigateBack = ::navigateUp
-            )
-        }
-
-        appComposable<EpisodeDetails> {
-            EpisodeDetailsScreen(
-                onNavigateBack = ::navigateUp,
-                onNaviagteToActorDetalis = ::navigateToActorDetails,
-                onNavigateToLogin = ::navigateToLogin
-            )
-        }
-        composable<ActorGallery> { ActorsGalleryScreen(onNavigateBack = ::navigateUp) }
-
-        composable<TopRated> {
-            TopRatedScreen(
-                onNavigateBack = ::navigateUp,
-                onNaviagteToMovieDetalis = ::navigateToMovieDetails,
-                onNaviagteToTvShowDetalis = ::navigateToTvShowDetails
-            )
-        }
-
-        composable<ContinueWatching> {
-            ContinueWatchingScreen(
-                onNavigateBack = ::navigateUp,
-                onNaviagteToMovieDetalis = ::navigateToMovieDetails,
-                onNaviagteToTvShowDetalis = ::navigateToTvShowDetails,
-                screenTitle = stringResource(R.string.continue_watch)
-            )
-        }
-
-        appComposable<ViewListItems> {
-            ViewListItemsScreen(
-                onNavigateBack = ::navigateUp,
-                onNavigateToMovieDetails = ::navigateToMovieDetails,
-            )
-        }
     }
-}
