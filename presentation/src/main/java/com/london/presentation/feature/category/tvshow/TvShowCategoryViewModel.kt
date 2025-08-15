@@ -9,6 +9,8 @@ import com.london.presentation.navigation.getArgs
 import com.london.presentation.shared.base.BaseViewModel
 import com.london.presentation.shared.base.ErrorState
 import com.london.presentation.shared.base.createPagingSourceFlow
+import com.london.presentation.shared.genre.TvShowGenreUi
+import com.london.presentation.shared.genre.toDomain
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
@@ -36,10 +38,10 @@ class TvShowCategoryViewModel @Inject constructor(
 
     override fun onSavedClick(tvShowId: Int) = Unit //TODO("Save Tv Show Not yet implemented")
 
-    private fun initializeTvShows(categoryId: Int) {
+    private fun initializeTvShows(genreUi: TvShowGenreUi) {
         tryToExecute(
             onStart = { onInitializeTvShowsStarted(categoryId = categoryId) },
-            block = { createTvShowsPagingSourceFlow(categoryId = categoryId) },
+            block = { createTvShowsPagingSourceFlow(genreUi = genreUi) },
             onSuccess = ::onInitializeTvShowSuccess,
             checkSuccess = { categoryId != 0 },
             onError = ::onInitializeTvShowsFailed,
@@ -47,17 +49,17 @@ class TvShowCategoryViewModel @Inject constructor(
         )
     }
 
-    private fun createTvShowsPagingSourceFlow(categoryId: Int): Flow<PagingData<TvShow>> {
+    private fun createTvShowsPagingSourceFlow(genreUi: TvShowGenreUi): Flow<PagingData<TvShow>> {
 
         return createPagingSourceFlow(query = "") { _, pageNumber ->
             managerTvShowDetailsUseCase.getTvShowsByGenre(
-                categoryId = categoryId, pageNumber = pageNumber
+                genre = genreUi.toDomain(), pageNumber = pageNumber
             )
         }
     }
 
     private fun onInitializeTvShowsStarted(categoryId: Int) =
-        updateState { copy(categoryId = categoryId, isLoading = true) }
+        updateState { copy(categoryId = categoryId, isLoading = true) }//////////////////////////////
 
     private fun onInitializeTvShowSuccess(tvShowFlow: Flow<PagingData<TvShow>>) =
         updateState { copy(tvShowFlow = tvShowFlow) }

@@ -17,6 +17,7 @@ import com.london.presentation.shared.base.BaseViewModel
 import com.london.presentation.shared.base.ErrorState
 import com.london.presentation.shared.base.createPagingSourceFlow
 import com.london.presentation.shared.genre.MovieGenreUi
+import com.london.presentation.shared.genre.toDomain
 import com.london.presentation.utils.toPopularUiMedia
 import com.london.presentation.utils.toUiMedia
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -25,6 +26,7 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.flowOf
+import org.checkerframework.checker.units.qual.g
 import javax.inject.Inject
 
 @HiltViewModel
@@ -46,25 +48,25 @@ class HomeViewModel @Inject constructor(
     private fun initializeUpcomingMoviesFlow() =
         updateState { copy(upcomingMovies = createUpComingFlow()) }
 
-    override fun loadUpcomingMoviesClick(categoryId: Int?) {
+    override fun loadUpcomingMoviesClick(genre: MovieGenreUi) {
         updateState {
-            copy(selectedCategoryFlow = selectedCategoryFlow.apply { value = categoryId })
+            copy(selectedCategoryFlow = selectedCategoryFlow.apply { value = categoryId })//////////////////////
         }
     }
 
     private fun createUpComingFlow(): Flow<PagingData<UpComingMovie>> {
         val upcomingMoviesFlow: Flow<PagingData<UpComingMovie>> =
             state.value.selectedCategoryFlow
-                .flatMapLatest { categoryId -> createUpcomingPagingFlow(categoryId) }
+                .flatMapLatest { categoryId -> createUpcomingPagingFlow(categoryId) }//////////////////////////////////
                 .cachedIn(viewModelScope)
 
         return upcomingMoviesFlow
     }
 
-    private fun createUpcomingPagingFlow(categoryId: Int?): Flow<PagingData<UpComingMovie>> {
+    private fun createUpcomingPagingFlow(genre: MovieGenreUi): Flow<PagingData<UpComingMovie>> {
         return createPagingSourceFlow(query = "") { _, pageNumber ->
             getMovieUseCase.getUpcomingMoviesByGenre(
-                categoryId = categoryId,
+                genre = genre.toDomain(),
                 pageNumber = pageNumber
             )
         }
@@ -162,7 +164,7 @@ class HomeViewModel @Inject constructor(
     override fun onMovieGenreSelect(genre: MovieGenreUi) {
         if (genre == state.value.selectedMovieGenre) return
         updateState { copy(selectedMovieGenre = genre) }
-        loadUpcomingMoviesClick(categoryId = if (genre == MovieGenre.All) null else genre.id)
+        loadUpcomingMoviesClick(genre)
     }
 
     override fun onTopRatedClick() =

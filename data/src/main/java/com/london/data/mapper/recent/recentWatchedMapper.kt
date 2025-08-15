@@ -5,8 +5,6 @@ package com.london.data.mapper.recent
 import com.london.data.local.model.recent.watched.RecentWatchedMovieLocal
 import com.london.data.local.model.recent.watched.RecentWatchedTvShowLocal
 import com.london.data.mapper.genre.getId
-import com.london.data.mapper.genre.toMovieGenre
-import com.london.data.mapper.genre.toTvShowGenre
 import com.london.domain.KoverIgnore
 import com.london.domain.entity.Movie
 import com.london.domain.entity.TvShow
@@ -18,7 +16,7 @@ fun RecentWatchedMovieLocal.toEntity() = Movie(
     posterUrl = posterPictureUrl,
     releaseYear = releaseYear,
     rating = rating,
-    genres = genreIds.map { it.toMovieGenre() }
+    genres = genreIds.toMovieGenre()
 )
 
 fun Movie.toRecentWatchedMovieLocal() = RecentWatchedMovieLocal(
@@ -37,7 +35,7 @@ fun RecentWatchedTvShowLocal.toEntity() = TvShow(
     posterPicture = posterPictureUrl,
     releaseYear = releaseYear,
     rating = rating,
-    genres = genres.map { it.toTvShowGenre() }
+    genres = genres.toTvShowGenre()
 )
 
 fun TvShow.toRecentWatchedTvShowLocal() = RecentWatchedTvShowLocal(

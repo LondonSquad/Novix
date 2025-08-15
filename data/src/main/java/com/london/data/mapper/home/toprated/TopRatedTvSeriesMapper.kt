@@ -1,6 +1,5 @@
 package com.london.data.mapper.home.toprated
 
-import com.london.data.mapper.genre.toGenre
 import com.london.data.remote.model.home.toprated.TopRatedTvSeriesRemote
 import com.london.data.utils.asImageUrlOrEmpty
 import com.london.data.utils.orZero
@@ -12,7 +11,7 @@ fun TopRatedTvSeriesRemote.toEntity(): TopRatedMedia =
         id = id.orZero(),
         name = name.orEmpty(),
         releaseDate = firstAirDate.orEmpty(),
-        genres = genreIds.orEmpty().map { it.toGenre(MediaType.TvShow) },
+        genres = genreIds.orEmpty().toGenre(MediaType.TvShow),
         posterUrl = posterPath.asImageUrlOrEmpty(),
         voteAverage = voteAverage.orZero(),
         mediaType = MediaType.TvShow

@@ -13,6 +13,7 @@ import com.london.domain.usecase.recent.watched.tvshow.ManageRecentTvShowWatched
 import com.london.presentation.navigation.Screen
 import com.london.presentation.navigation.getArgs
 import com.london.presentation.shared.base.BaseViewModel
+import com.london.presentation.shared.genre.MovieGenreUi
 import com.london.presentation.shared.genre.toUi
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
@@ -88,8 +89,8 @@ class TvShowDetailsViewModel @Inject constructor(
         emitEffect(TvShowDetailsEffect.NavigateToCast(tvShowId))
     }
 
-    override fun OnGenreClicked(genreId: Int) {
-        emitEffect(TvShowDetailsEffect.NavigateToTvShowsByCategoryId(genreId))
+    override fun OnGenreClicked(genre: MovieGenreUi) {
+        emitEffect(TvShowDetailsEffect.NavigateToTvShowsByCategoryId(genre))/////////////////////////////////
     }
 
     override fun onRateBottomSheetClick() {

@@ -76,6 +76,7 @@ import com.london.presentation.shared.FooterSection
 import com.london.presentation.shared.HomeCard
 import com.london.presentation.shared.SnackBarAnimation
 import com.london.presentation.shared.buildscreen.BuildScreen
+import com.london.presentation.shared.genre.MovieGenreUi
 import com.london.presentation.utils.Listen
 import com.london.presentation.utils.convertGenreCodeToString
 import com.london.presentation.utils.getLocalizedTimeUnit
@@ -85,6 +86,8 @@ import com.london.presentation.utils.offsetLayout
 import com.london.presentation.utils.openUrl
 import com.london.presentation.utils.reverseDateFormat
 import com.london.presentation.utils.toLocalizedNumbers
+import kotlin.collections.forEachIndexed
+import kotlin.collections.lastIndex
 
 @Composable
 fun MovieDetailsScreen(
@@ -473,8 +476,8 @@ private fun IconWithText(
 
 @Composable
 private fun GenreRow(
-    genres: List<Int>,
-    onGenreClick: (Int) -> Unit
+    genres: List<MovieGenreUi>,
+    onGenreClick: (MovieGenreUi) -> Unit
 ) {
     Row(
         horizontalArrangement = Arrangement.spacedBy(8.dp),
@@ -483,7 +486,7 @@ private fun GenreRow(
     ) {
         genres.forEachIndexed { index, genre ->
             Text(
-                stringResource(convertGenreCodeToString(genre, SearchCategory.Movies)),
+                text = genre.name,
                 style = NovixTheme.typography.label.small,
                 color = NovixTheme.colors.body,
                 modifier = Modifier.noRippleClickable {

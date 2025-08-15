@@ -4,7 +4,6 @@ package com.london.data.mapper.search
 
 import com.london.data.local.model.home.upcoming.UpComingMovieLocal
 import com.london.data.local.model.home.upcoming.UpComingSectionLocal
-import com.london.data.mapper.genre.toMovieGenre
 import com.london.data.remote.model.ApiResponse
 import com.london.data.remote.model.search.MovieRemote
 import com.london.data.utils.asImageUrlOrEmpty
@@ -26,7 +25,7 @@ fun ApiResponse<MovieRemote>.toLocal(categoryId: Int?) = UpComingSectionLocal(
 fun UpComingMovieLocal.toEntity() = UpComingMovie(
     id = id,
     imageUrl = imageUrl,
-    genres = genreIds.map { it.toMovieGenre() },
+    genres = genreIds.toMovieGenre(),
 )
 
 private fun MovieRemote.toUpComingLocal() = UpComingMovieLocal(
@@ -41,5 +40,5 @@ fun MovieRemote.toEntity() = Movie(
     posterUrl = posterPath.asImageUrlOrEmpty(),
     releaseYear = releaseDate?.extractYear().orZero(),
     rating = voteAverage?.toInt().orZero(),
-    genres = genreIds.orEmpty().map { it.toMovieGenre() }
+    genres = genreIds.toMovieGenre()
 )

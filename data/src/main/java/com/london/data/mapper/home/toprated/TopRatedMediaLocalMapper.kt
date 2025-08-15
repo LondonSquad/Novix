@@ -1,7 +1,6 @@
 package com.london.data.mapper.home.toprated
 
 import com.london.data.local.model.home.topRated.TopRatedLocal
-import com.london.data.mapper.genre.toGenre
 import com.london.data.mapper.genre.toGenreId
 import com.london.data.utils.asImageUrlOrEmpty
 import com.london.data.utils.orZero
@@ -15,9 +14,10 @@ fun TopRatedLocal.toEntity(): TopRatedMedia =
         releaseDate = releaseYear,
         name = name,
         voteAverage = rating.orZero(),
-        genres = genre.map { it.orZero().toGenre(mediaType) },
+        genres = genre.map { it.orZero() }.toGenre(mediaType),
         mediaType = mediaType
     )
+
 fun TopRatedMedia.toLocal(): TopRatedLocal =
     TopRatedLocal(
         id = id,

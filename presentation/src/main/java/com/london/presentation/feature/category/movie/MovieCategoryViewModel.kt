@@ -9,6 +9,8 @@ import com.london.presentation.navigation.getArgs
 import com.london.presentation.shared.base.BaseViewModel
 import com.london.presentation.shared.base.ErrorState
 import com.london.presentation.shared.base.createPagingSourceFlow
+import com.london.presentation.shared.genre.MovieGenreUi
+import com.london.presentation.shared.genre.toDomain
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
@@ -24,7 +26,7 @@ class MovieCategoryViewModel @Inject constructor(
     private val categoryId = args?.categoryId ?: 0 //toDo() category id will replace with enum
 
     init {
-        initializeMovies(categoryId)
+        initializeMovies(categoryId)//////////////////////////////////////
     }
 
     override fun onMovieClick(movieId: Int) =
@@ -35,10 +37,10 @@ class MovieCategoryViewModel @Inject constructor(
 
     override fun onSavedClick(movieId: Int) = Unit //toDo() save movie
 
-    private fun initializeMovies(categoryId: Int) {
+    private fun initializeMovies(genreUi: MovieGenreUi) {
         tryToExecute(
             onStart = { onInitializeMoviesStarted(categoryId = categoryId) },
-            block = { createMoviesPagingSourceFlow(categoryId = categoryId) },
+            block = { createMoviesPagingSourceFlow(genreUi = genreUi) },
             onSuccess = ::onInitializeMoviesSuccess,
             checkSuccess = { categoryId != 0 },
             onError = ::onInitializeMoviesFailed,
@@ -46,11 +48,11 @@ class MovieCategoryViewModel @Inject constructor(
         )
     }
 
-    private fun createMoviesPagingSourceFlow(categoryId: Int): Flow<PagingData<Movie>> {
+    private fun createMoviesPagingSourceFlow(genreUi: MovieGenreUi): Flow<PagingData<Movie>> {
 
         return createPagingSourceFlow(query = "") { _, pageNumber ->
             getMovieUseCase.getMoviesByGenre(
-                categoryId = categoryId,
+                genre = genreUi.toDomain(),
                 pageNumber = pageNumber
             )
         }

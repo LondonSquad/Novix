@@ -102,7 +102,7 @@ class TvShowRepositoryImpl @Inject constructor(
         val response = tvShowRemoteDataSource.getTrendingTvShows(page).getOrThrow()
         return PagedFetchResponse(
             currentPage = response.currentPage,
-            items = response.items.map { it.toEntityMedia() },
+            items = response.items.map { it.toEntityMedia(MediaType.TvShow) },
             totalPages = response.totalPages,
             totalItems = response.totalItems
         )

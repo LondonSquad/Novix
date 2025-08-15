@@ -1,6 +1,5 @@
 package com.london.data.mapper.details.tvshow
 
-import com.london.data.mapper.genre.toTvShowGenre
 import com.london.data.remote.model.details.tvshow.model.TvShowDetailsRemoteResponse
 import com.london.data.utils.asImageUrlOrEmpty
 import com.london.data.utils.orZero
@@ -9,7 +8,7 @@ import com.london.domain.entity.tvshowdetails.TvShowDetailsEntity
 
 fun TvShowDetailsRemoteResponse.toEntity() = TvShowDetailsEntity(
     firstAirDate = firstAirDate.orEmpty(),
-    tvShowGenres = tvShowGenres?.map { it.id.orZero().toTvShowGenre() }.orEmpty(),
+    tvShowGenres = tvShowGenres?.map { it.id.orZero() }.toTvShowGenre(),
     id = id.orZero(),
     name = name.orEmpty(),
     numberOfEpisodes = numberOfEpisodes.orZero(),

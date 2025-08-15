@@ -89,7 +89,7 @@ class MovieRepositoryImpl @Inject constructor(
         val response = movieRemoteDataSource.getTrendingMovies(page).getOrThrow()
         return PagedFetchResponse(
             currentPage = response.currentPage,
-            items = response.items.map { it.toEntityMedia() },
+            items = response.items.map { it.toEntityMedia(MediaType.Movie) },
             totalPages = response.totalPages,
             totalItems = response.totalItems
         )

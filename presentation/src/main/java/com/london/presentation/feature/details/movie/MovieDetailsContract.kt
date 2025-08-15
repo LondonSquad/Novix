@@ -1,5 +1,7 @@
 package com.london.presentation.feature.details.movie
 
+import com.london.presentation.shared.genre.MovieGenreUi
+
 interface MovieDetailsContract {
     fun onRetry()
     fun onBackClick()
@@ -9,7 +11,7 @@ interface MovieDetailsContract {
     fun onRateBottomSheetClick()
     fun onMovieClick(movieId: Int)
     fun onActorClick(actorId: Int)
-    fun onGenreClick(genreId: Int)
     fun onSelectRatingClick(rating: Int)
+    fun onGenreClick(genre: MovieGenreUi)
     fun onReviewsClick(movieId: Int, mediaNumber: Int)
 }
