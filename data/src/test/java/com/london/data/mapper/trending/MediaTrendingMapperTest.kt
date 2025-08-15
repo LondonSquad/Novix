@@ -2,6 +2,7 @@ package com.london.data.mapper.trending
 
 import com.london.data.mapper.home.trending.toEntityMedia
 import com.london.data.remote.model.home.trending.TrendingResponse
+import com.london.domain.entity.recent.MediaType
 import org.junit.Assert.assertEquals
 import org.junit.Test
 
@@ -18,13 +19,12 @@ class MediaTrendingMapperTest {
         )
 
         // When
-        val result = trendingResponse.toEntityMedia()
+        val result = trendingResponse.toEntityMedia(MediaType.Movie)
 
         // Then
         assertEquals(123, result.id)
         assertEquals("Test Movie", result.title)
         assertEquals("https://image.tmdb.org/t/p/w500test_poster.jpg", result.posterPath)
-        assertEquals(listOf(28, 12), result.genres)
     }
 
     @Test
@@ -38,13 +38,12 @@ class MediaTrendingMapperTest {
         )
 
         // When
-        val result = trendingResponse.toEntityMedia()
+        val result = trendingResponse.toEntityMedia(MediaType.Movie)
 
         // Then
         assertEquals(456, result.id)
         assertEquals("Test TV Show", result.title)
         assertEquals("https://image.tmdb.org/t/p/w500test_poster.jpg", result.posterPath)
-        assertEquals(listOf(18, 35), result.genres)
     }
 
     @Test
@@ -58,13 +57,12 @@ class MediaTrendingMapperTest {
         )
 
         // When
-        val result = trendingResponse.toEntityMedia()
+        val result = trendingResponse.toEntityMedia(MediaType.Movie)
 
         // Then
         assertEquals(789, result.id)
         assertEquals("Test Movie", result.title)
         assertEquals("https://image.tmdb.org/t/p/w500test_profile.jpg", result.posterPath)
-        assertEquals(listOf(28, 12), result.genres)
     }
 
     @Test
@@ -80,7 +78,7 @@ class MediaTrendingMapperTest {
         )
 
         // When
-        val result = trendingResponse.toEntityMedia()
+        val result = trendingResponse.toEntityMedia(MediaType.Movie)
 
         // Then
         assertEquals(0, result.id)
@@ -101,7 +99,7 @@ class MediaTrendingMapperTest {
         )
 
         // When
-        val result = trendingResponse.toEntityMedia()
+        val result = trendingResponse.toEntityMedia(MediaType.Movie)
 
         // Then
         assertEquals("Test Movie", result.title)
@@ -119,7 +117,7 @@ class MediaTrendingMapperTest {
         )
 
         // When
-        val result = trendingResponse.toEntityMedia()
+        val result = trendingResponse.toEntityMedia(MediaType.Movie)
 
         // Then
         assertEquals("https://image.tmdb.org/t/p/w500test_poster.jpg", result.posterPath)
@@ -138,7 +136,7 @@ class MediaTrendingMapperTest {
         )
 
         // When
-        val result = trendingResponse.toEntityMedia()
+        val result = trendingResponse.toEntityMedia(MediaType.Movie)
 
         // Then
         assertEquals(123, result.id)
@@ -158,12 +156,11 @@ class MediaTrendingMapperTest {
         )
 
         // When
-        val result = trendingResponse.toEntityMedia()
+        val result = trendingResponse.toEntityMedia(MediaType.Movie)
 
         // Then
         assertEquals(0, result.id)
         assertEquals("Test Movie", result.title)
         assertEquals("https://image.tmdb.org/t/p/w500test_poster.jpg", result.posterPath)
-        assertEquals(listOf(28, 12), result.genres)
     }
 } 

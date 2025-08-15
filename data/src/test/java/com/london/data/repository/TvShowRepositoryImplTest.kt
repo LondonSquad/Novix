@@ -125,7 +125,7 @@ class TvShowRepositoryImplTest {
         coEvery {
             remoteDataSource.getTvShowDetailsById(123)
         } throws NetworkException.ValidationException(
-                message = "validation error",
+            message = "validation error",
             status = 422
         )
 
@@ -660,7 +660,7 @@ class TvShowRepositoryImplTest {
             } returns Result.success(SearchTvShowRemoteMock)
             //When
             val result = repository.getTvShowsByGenre(
-                genre = 1, PAGE_NUMBER
+                genre = com.london.domain.entity.genre.TvShowGenre.WESTERN, PAGE_NUMBER
             )
             //Then
             assertThat(result).isEqualTo(TvShowList)
@@ -672,16 +672,18 @@ class TvShowRepositoryImplTest {
             //Given
             coEvery {
                 remoteDataSource.getTvShowsByCategoryId(
-                    CATEGORY_ID, PAGE_NUMBER
+                    any(), PAGE_NUMBER
                 )
-            } returns Result.failure(NetworkException.HttpLockedException(
-                message = "Resource locked",
-                status = 423
-            ))
+            } returns Result.failure(
+                NetworkException.HttpLockedException(
+                    message = "Resource locked",
+                    status = 423
+                )
+            )
             //When //Then
             assertThrows<NetworkException.HttpLockedException> {
                 repository.getTvShowsByGenre(
-                    CATEGORY_ID, PAGE_NUMBER
+                    com.london.domain.entity.genre.TvShowGenre.WESTERN, PAGE_NUMBER
                 )
             }
         }

@@ -5,6 +5,8 @@ import com.london.domain.entity.Actor
 import com.london.domain.entity.Movie
 import com.london.domain.entity.PagedFetchResponse
 import com.london.domain.entity.Trending
+import com.london.domain.entity.genre.Genre
+import com.london.domain.entity.genre.MovieGenre
 import com.london.domain.entity.moviedatails.MovieDetails
 import com.london.domain.entity.moviedatails.MovieImages
 import com.london.domain.entity.popular.PopularMedia
@@ -422,7 +424,7 @@ class GetMovieUseCaseTest {
         Assert.assertEquals(1, trending.id)
         Assert.assertEquals("Test Movie", trending.title)
         Assert.assertEquals("test_poster.jpg", trending.posterPath)
-        Assert.assertEquals(listOf(28, 12), trending.genres)
+        Assert.assertEquals(listOf(MovieGenre.ACTION, MovieGenre.ACTION), trending.genres)
     }
 
     @Test
@@ -534,11 +536,11 @@ class GetMovieUseCaseTest {
             //given
             coEvery {
                 movieRepository.getMoviesByGenre(
-                    CATEGORY_ID, PAGE_NUMBER
+                    CATEGORY, PAGE_NUMBER
                 )
             } returns pagedFetchResponse
             //when
-            val result = getMovieUseCase.getMoviesByGenre(CATEGORY_ID, PAGE_NUMBER)
+            val result = getMovieUseCase.getMoviesByGenre(CATEGORY, PAGE_NUMBER)
             //then
             assertThat(result).isEqualTo(pagedFetchResponse)
         }
@@ -603,7 +605,7 @@ class GetMovieUseCaseTest {
 
 
     private companion object {
-        private const val CATEGORY_ID = 1
+        private val CATEGORY = MovieGenre.ACTION
         private const val PAGE_NUMBER = 1
         private const val PAGE = 1
         private const val TOTAL_PAGES = 2
@@ -617,7 +619,7 @@ class GetMovieUseCaseTest {
             voteAverage = 8.712,
             releaseDate = "1994-09-23",
             posterUrl = "/q6y0Go1tsGEsmtFryDOJo3dEmqu.jpg",
-            genres = listOf(18, 80),
+            genres = listOf(MovieGenre.ACTION, MovieGenre.ACTION),
             mediaType = MediaType.Movie,
         )
 
@@ -626,7 +628,7 @@ class GetMovieUseCaseTest {
             name = "The Godfather",
             voteAverage = 8.7, releaseDate = "1972-03-14",
             posterUrl = "/3bhkrj58Vtu7enYsRolD1fZdja1.jpg",
-            genres = listOf(18, 80),
+            genres = listOf(MovieGenre.ACTION, MovieGenre.ACTION),
             mediaType = MediaType.Movie,
         )
 
@@ -638,7 +640,7 @@ class GetMovieUseCaseTest {
             posterUrl = "",
             releaseYear = 2024,
             rating = 8,
-            genres = listOf(1, 2, 3)
+            genres = listOf(MovieGenre.ACTION, MovieGenre.ACTION, MovieGenre.ACTION)
         )
         private val pagedFetchResponse = PagedFetchResponse(
             currentPage = 1, items = listOf(movie), totalPages = 1, totalItems = 1
@@ -656,7 +658,7 @@ class GetMovieUseCaseTest {
             id: Int = 1,
             title: String = "Test Movie",
             posterPath: String = "test_poster.jpg",
-            genreIds: List<Int> = listOf(28, 12)
+            genreIds: List<Genre> = listOf(MovieGenre.ACTION, MovieGenre.ACTION)
         ): Trending {
             return Trending(
                 id = id,
@@ -668,7 +670,7 @@ class GetMovieUseCaseTest {
 
         private fun fakeMovieDetailsDomain() = MovieDetails(
             backdropUrl = "/inception_backdrop.jpg",
-            genres = listOf(1, 2, 3),
+            genres = listOf(MovieGenre.ACTION, MovieGenre.ACTION, MovieGenre.ACTION),
             id = 123,
             overview = "A skilled thief is given a chance at redemption.",
             posterUrl = "/inception_poster.jpg",
@@ -683,7 +685,7 @@ class GetMovieUseCaseTest {
             id = id,
             name = title,
             posterUrl = "/backdrop_$id.jpg",
-            genres = listOf(1, 2, 3),
+            genres = listOf(MovieGenre.ACTION, MovieGenre.ACTION, MovieGenre.ACTION),
             releaseYear = 2025,
             rating = 7,
         )

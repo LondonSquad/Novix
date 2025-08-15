@@ -6,6 +6,8 @@ import com.london.data.local.model.recent.watched.RecentWatchedTvShowLocal
 import com.london.data.local.source.recent.watched.RecentWatchedDataSource
 import com.london.domain.entity.Movie
 import com.london.domain.entity.TvShow
+import com.london.domain.entity.genre.MovieGenre
+import com.london.domain.entity.genre.TvShowGenre
 import io.mockk.Runs
 import io.mockk.coEvery
 import io.mockk.coVerify
@@ -106,7 +108,7 @@ class RecentWatchedRepositoryImplTest {
             posterPictureUrl = "none",
             releaseYear = 1,
             rating = 1,
-            genreIds = listOf(1, 2, 3),
+            genreIds = listOf(28, 28, 28),
             watchedAt = 1111
         )
         val recentWatchedTvShowLocal = RecentWatchedTvShowLocal(
@@ -115,7 +117,7 @@ class RecentWatchedRepositoryImplTest {
             posterPictureUrl = "none",
             releaseYear = 1,
             rating = 1,
-            genres = listOf(1, 2, 3),
+            genres = listOf(37, 37, 37),
             watchedAt = 111111
         )
         val recentWatchedMovieLocalList =
@@ -128,7 +130,7 @@ class RecentWatchedRepositoryImplTest {
             posterUrl = "none",
             releaseYear = 1,
             rating = 1,
-            genres = listOf(1, 2, 3)
+            genres = listOf(MovieGenre.ACTION,MovieGenre.ACTION,MovieGenre.ACTION)
         )
         val tvShow = TvShow(
             id = 1,
@@ -136,7 +138,7 @@ class RecentWatchedRepositoryImplTest {
             posterPicture = "none",
             releaseYear = 1,
             rating = 1,
-            genres = listOf(1, 2, 3)
+            genres = listOf(TvShowGenre.WESTERN,TvShowGenre.WESTERN,TvShowGenre.WESTERN)
         )
         val movieList = listOf(movie, movie, movie)
         val tvShowList = listOf(tvShow, tvShow, tvShow)

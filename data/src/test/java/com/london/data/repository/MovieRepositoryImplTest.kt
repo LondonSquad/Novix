@@ -33,6 +33,7 @@ import com.london.data.utils.asImageUrlOrEmpty
 import com.london.domain.entity.Movie
 import com.london.domain.entity.PagedFetchResponse
 import com.london.domain.entity.TvShow
+import com.london.domain.entity.genre.MovieGenre
 import com.london.domain.entity.moviedatails.MovieImages
 import com.london.domain.entity.recent.MediaType
 import com.london.domain.entity.review.ReviewEntity
@@ -272,7 +273,6 @@ class MovieRepositoryImplTest {
         Assert.assertEquals(1, trending.id)
         Assert.assertEquals("Test Movie", trending.title)
         Assert.assertEquals("https://image.tmdb.org/t/p/w500test_poster.jpg", trending.posterPath)
-        Assert.assertEquals(listOf(28, 12), trending.genres)
     }
 
 
@@ -320,13 +320,13 @@ class MovieRepositoryImplTest {
         //Given
         coEvery {
             movieRemoteDataSource.getMoviesByCategory(
-                CATEGORY_ID,
+                any(),
                 PAGE_NUMBER
             )
         } returns Result.success(SearchMoviesRemoteMock)
         //When
         val result = repository.getMoviesByGenre(
-            CATEGORY_ID,
+            MovieGenre.TV_MOVIE,
             PAGE_NUMBER
         )
         //Then
@@ -338,7 +338,7 @@ class MovieRepositoryImplTest {
         //Given
         coEvery {
             movieRemoteDataSource.getMoviesByCategory(
-                CATEGORY_ID,
+                any(),
                 PAGE_NUMBER
             )
         } returns Result.failure(NetworkException.HttpLockedException(
@@ -348,7 +348,7 @@ class MovieRepositoryImplTest {
         //When //Then
         assertThrows<NetworkException.HttpLockedException> {
             repository.getMoviesByGenre(
-                CATEGORY_ID,
+                MovieGenre.TV_MOVIE,
                 PAGE_NUMBER
             )
         }

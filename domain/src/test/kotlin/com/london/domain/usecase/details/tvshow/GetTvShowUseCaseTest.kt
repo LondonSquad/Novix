@@ -5,11 +5,11 @@ import com.london.domain.entity.Actor
 import com.london.domain.entity.PagedFetchResponse
 import com.london.domain.entity.Trending
 import com.london.domain.entity.TvShow
+import com.london.domain.entity.genre.TvShowGenre
 import com.london.domain.entity.popular.PopularMedia
 import com.london.domain.entity.recent.MediaType
 import com.london.domain.entity.toprated.TopRatedMedia
 import com.london.domain.entity.tvshowdetails.TvShowDetailsEntity
-import com.london.domain.entity.tvshowdetails.TvShowGenreEntity
 import com.london.domain.repository.ActorRepository
 import com.london.domain.repository.SearchRepository
 import com.london.domain.repository.TvShowRepository
@@ -290,10 +290,10 @@ class GetTvShowUseCaseTest {
         runTest {
             //given
             coEvery {
-                getTvShowUseCase.getTvShowsByGenre(CATEGORY_ID, PAGE_NUMBER)
+                getTvShowUseCase.getTvShowsByGenre(CATEGORY, PAGE_NUMBER)
             } returns pagedFetchResponse
             //when
-            val result = getTvShowUseCase.getTvShowsByGenre(CATEGORY_ID, PAGE_NUMBER)
+            val result = getTvShowUseCase.getTvShowsByGenre(CATEGORY, PAGE_NUMBER)
             //then
             assertThat(result).isEqualTo(pagedFetchResponse)
         }
@@ -381,7 +381,7 @@ class GetTvShowUseCaseTest {
         private const val LARGE_LIMIT = 10
         private const val ZERO_LIMIT = 0
         private const val EXCEPTION_MESSAGE = "Network error"
-        private const val CATEGORY_ID = 1
+        private val CATEGORY = TvShowGenre.TALK
         const val NAME = "Tv Tv"
 
         private val mockTv1 = TopRatedMedia(
@@ -389,7 +389,7 @@ class GetTvShowUseCaseTest {
             name = "Breaking Bad",
             voteAverage = 8.9,
             posterUrl = "/ggFHVNu6YYI5L9pCfOacjizRGt.jpg",
-            genres = listOf(18, 80),
+            genres = listOf(TvShowGenre.TALK, TvShowGenre.TALK),
             releaseDate = "2008-01-20",
             mediaType = MediaType.TvShow,
         )
@@ -400,7 +400,7 @@ class GetTvShowUseCaseTest {
             voteAverage = 9.0,
             releaseDate = "2019-05-06",
             posterUrl = "/hlLXt2tOPT6RRnjiUmoxyG1LTFi.jpg",
-            genres = listOf(18, 36),
+            genres = listOf(TvShowGenre.TALK, TvShowGenre.TALK),
             mediaType = MediaType.TvShow,
         )
 
@@ -435,7 +435,7 @@ class GetTvShowUseCaseTest {
             id: Int = 1,
             title: String = "Test TV Show",
             posterPath: String = "test_poster.jpg",
-            genreIds: List<Int> = listOf(18, 35)
+            genreIds: List<TvShowGenre> = listOf(TvShowGenre.TALK, TvShowGenre.TALK)
         ): Trending = Trending(
             id = id,
             title = title,
@@ -449,7 +449,7 @@ class GetTvShowUseCaseTest {
             posterPicture = "",
             releaseYear = 2024,
             rating = 8,
-            genres = listOf(1, 2, 3)
+            genres = listOf(TvShowGenre.TALK, TvShowGenre.TALK, TvShowGenre.TALK)
         )
 
         val pagedFetchResponse = PagedFetchResponse(
@@ -463,7 +463,7 @@ class GetTvShowUseCaseTest {
 
         val mockTvShowDetails = TvShowDetailsEntity(
             firstAirDate = "2020-01-01",
-            tvShowGenres = listOf(TvShowGenreEntity(id = 1, name = "Drama")),
+            tvShowGenres = listOf(TvShowGenre.TALK),
             id = TV_SHOW_ID,
             name = "Test Show",
             numberOfEpisodes = 10,

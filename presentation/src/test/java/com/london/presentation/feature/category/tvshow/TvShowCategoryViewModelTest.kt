@@ -9,6 +9,8 @@ import com.london.domain.entity.TvShow
 import com.london.domain.usecase.details.tvshow.GetTvShowUseCase
 import com.london.presentation.navigation.Screen
 import com.london.presentation.navigation.getArgs
+import com.london.presentation.shared.genre.TvShowGenreUi
+import com.london.presentation.shared.genre.toDomain
 import io.mockk.coEvery
 import io.mockk.every
 import io.mockk.mockk
@@ -35,13 +37,13 @@ class TvShowCategoryViewModelTest {
     fun setUp() {
         Dispatchers.setMain(mainDispatcher)
         getTvShowUseCase = mockk(relaxed = true)
-        every { savedStateHandle.getArgs<Screen.MoviesByCategory>() } returns Screen.MoviesByCategory(
-            categoryId = CATEGORY_ID,
+        every { savedStateHandle.getArgs<Screen.TvShowsByCategory>() } returns Screen.TvShowsByCategory(
+            category = CATEGORY,
         )
         viewModel = TvShowCategoryViewModel(getTvShowUseCase, savedStateHandle)
         coEvery {
             getTvShowUseCase.getTvShowsByGenre(
-                CATEGORY_ID,
+                CATEGORY.toDomain(),
                 PAGE
             )
         } returns tvShowsPagingData
@@ -61,7 +63,7 @@ class TvShowCategoryViewModelTest {
         //Then
         viewModel?.state?.test {
             val state = expectMostRecentItem()
-            assertThat(state.categoryId).isEqualTo(CATEGORY_ID)
+            assertThat(state.genre).isEqualTo(CATEGORY)
             ensureAllEventsConsumed()
         }
     }
@@ -95,7 +97,7 @@ class TvShowCategoryViewModelTest {
         // Given
         coEvery {
             getTvShowUseCase.getTvShowsByGenre(
-                CATEGORY_ID,
+                CATEGORY.toDomain(),
                 PAGE
             )
         } throws Exception()
@@ -130,7 +132,7 @@ class TvShowCategoryViewModelTest {
     }
 
     private companion object {
-        const val CATEGORY_ID = 0
+        val CATEGORY = TvShowGenreUi.All
         const val PAGE = 1
         val tvShowsPagingData = PagedFetchResponse(
             items = listOf<TvShow>(),

@@ -4,6 +4,7 @@ import app.cash.turbine.test
 import com.google.common.truth.Truth.assertThat
 import com.london.domain.entity.PagedFetchResponse
 import com.london.domain.entity.UpComingMovie
+import com.london.domain.entity.genre.MovieGenre
 import com.london.domain.entity.popular.PopularMedia
 import com.london.domain.entity.recent.MediaType
 import com.london.domain.entity.toprated.TopRatedMedia
@@ -11,7 +12,8 @@ import com.london.domain.usecase.details.movie.GetMovieUseCase
 import com.london.domain.usecase.details.tvshow.GetTvShowUseCase
 import com.london.domain.usecase.recent.watched.movie.ManageRecentMovieWatchedUseCase
 import com.london.domain.usecase.recent.watched.tvshow.ManageRecentTvShowWatchedUseCase
-import com.london.presentation.utils.MovieGenre
+import com.london.presentation.shared.genre.MovieGenreUi
+import com.london.presentation.shared.genre.toDomain
 import io.mockk.clearAllMocks
 import io.mockk.coEvery
 import io.mockk.every
@@ -127,22 +129,22 @@ class HomeViewModelTest {
     fun `when loadUpcomingMoviesClick, should updates selectedCategoryFlow and loads upcoming movies`() =
         runTest {
             // Given
-            val categoryId = 123
+            val category = MovieGenreUi.Action
             val mockUpcomingMovies = listOf(createMockUpComingMovie(1), createMockUpComingMovie(2))
             val mockResponse = createMockPagedFetchResponse(mockUpcomingMovies)
 
             coEvery {
-                getMovieUseCase.getUpcomingMoviesByGenre(categoryId, 1)
+                getMovieUseCase.getUpcomingMoviesByGenre(category.toDomain(), 1)
             } returns mockResponse
             advanceUntilIdle()
 
             // When
-            viewModel.loadUpcomingMoviesClick(categoryId)
+            viewModel.loadUpcomingMoviesClick(category)
 
             // Then
             viewModel.state.test {
                 val state = expectMostRecentItem()
-                assertThat(state.selectedCategoryFlow.value).isEqualTo(categoryId)
+                assertThat(state.selectedCategoryFlow.value).isEqualTo(category)
             }
         }
 
@@ -151,7 +153,7 @@ class HomeViewModelTest {
         runTest {
             // Given
             advanceUntilIdle()
-            val genre = MovieGenre.Action
+            val genre = MovieGenreUi.Action
 
             // When
             viewModel.onMovieGenreSelect(genre)
@@ -169,12 +171,12 @@ class HomeViewModelTest {
         advanceUntilIdle()
 
         // When
-        viewModel.onMovieGenreSelect(MovieGenre.All)
+        viewModel.onMovieGenreSelect(MovieGenreUi.All)
 
         // Then
         viewModel.state.test {
             val state = expectMostRecentItem()
-            assertThat(state.selectedMovieGenre).isEqualTo(MovieGenre.All)
+            assertThat(state.selectedMovieGenre).isEqualTo(MovieGenreUi.All)
         }
     }
 
@@ -310,14 +312,14 @@ class HomeViewModelTest {
         every { posterUrl } returns "/poster$id.jpg"
         every { voteAverage } returns 9.0
         every { releaseDate } returns "2023-01-01"
-        every { genres } returns listOf(1, 2)
+        every { genres } returns listOf(MovieGenre.ACTION, MovieGenre.ACTION)
         every { this@mockk.mediaType } returns mediaType
     }
 
     private fun createMockUpComingMovie(id: Int) = mockk<UpComingMovie> {
         every { this@mockk.id } returns id
         every { imageUrl } returns "/poster$id.jpg"
-        every { genres } returns listOf(1, 2)
+        every { genres } returns listOf(MovieGenre.ACTION, MovieGenre.ACTION)
     }
 
     private fun <T> createMockPagedFetchResponse(data: List<T>) = mockk<PagedFetchResponse<T>> {
