@@ -59,7 +59,8 @@ fun LazyGridScope.upcomingSection(
         UpcomingMovieItem(
             movie = movie,
             isLoading = isLoading,
-            onMovieClick = { contract.onMovieClick(movie?.id ?: 0) }
+            onMovieClick = { contract.onMovieClick(movie?.id ?: 0) },
+            onManageBookmarkClick = contract::onManageBookmarkClicked
         )
     }
 }
@@ -118,22 +119,23 @@ private fun UpcomingStickyHeader(
 private fun UpcomingMovieItem(
     movie: UpComingMovie?,
     isLoading: Boolean,
-    onMovieClick: () -> Unit
+    onMovieClick: () -> Unit,
+    onManageBookmarkClick: (Int) -> Unit
 ) {
     when {
         isLoading || movie == null -> {
             ShimmerMovieCard()
         }
+
         else -> {
             HomeCard(
                 imageUrl = movie.imageUrl,
                 isSaved = false,
-                onSaveClick = { /* TODO */ },
+                onSaveClick = { onManageBookmarkClick(movie.id) },
                 modifier = Modifier
                     .clipToBounds()
                     .clip(RoundedCornerShape(12.dp))
-                    .clickable { onMovieClick() },
-                isDarkMode = NovixTheme.isThemeDark
+                    .clickable { onMovieClick() }
             )
         }
     }

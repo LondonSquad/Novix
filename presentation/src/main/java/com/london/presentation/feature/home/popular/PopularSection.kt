@@ -36,6 +36,7 @@ import com.london.designsystem.component.NovixCarousalRow
 import com.london.designsystem.component.Text
 import com.london.designsystem.theme.NovixTheme
 import com.london.domain.entity.recent.MediaType
+import com.london.domain.entity.recent.MediaType.Companion.isMovie
 import com.london.presentation.R
 import com.london.presentation.feature.home.HomeScreenContract
 import com.london.presentation.feature.home.HomeScreenUiState
@@ -64,7 +65,7 @@ import kotlin.math.abs
 fun LazyGridScope.popularSection(
     screenWidth: Dp,
     uiState: HomeScreenUiState,
-    pagerState: androidx.compose.foundation.pager.PagerState,
+    pagerState: PagerState,
     homeScreenContract: HomeScreenContract
 ) {
     item(span = { GridItemSpan(maxLineSpan) }) {
@@ -73,7 +74,9 @@ fun LazyGridScope.popularSection(
                 modifier = Modifier.requiredWidth(screenWidth),
                 pagerState = pagerState,
                 uiMediaList = uiState.popularMediaList,
-                onSaveClick = { /* TODO */ },
+                onManageBookmarkClicked = { movieId ->
+                    homeScreenContract.onManageBookmarkClicked(movieId)
+                },
                 onCardClick = { id, mediaType ->
                     when (mediaType) {
                         MediaType.TvShow -> homeScreenContract.onTvShowClick(id)
@@ -94,25 +97,25 @@ fun LazyGridScope.popularSection(
 @Composable
 private fun PopularSection(
     pagerState: PagerState,
-    onSaveClick: () -> Unit,
     uiMediaList: List<PopularUiMedia>,
     onCardClick: (Int, MediaType) -> Unit,
+    onManageBookmarkClicked: (Int) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     Content(
+        modifier = modifier,
         pagerState = pagerState,
-        onSaveClick = onSaveClick,
         uiMediaList = uiMediaList,
         onCardClick = onCardClick,
-        modifier = modifier
+        onManageBookmarkClicked = onManageBookmarkClicked
     )
 }
 
 @Composable
 private fun Content(
     pagerState: PagerState,
-    onSaveClick: () -> Unit,
     uiMediaList: List<PopularUiMedia>,
+    onManageBookmarkClicked: (Int) -> Unit,
     onCardClick: (Int, MediaType) -> Unit,
     modifier: Modifier = Modifier,
 ) {
@@ -203,16 +206,16 @@ private fun Content(
 
                 HomeCard(
                     imageUrl = uiMediaList[page].posterUrl,
-                    onSaveClick = { onSaveClick() },
-                    hasSaveIcon = pagerState.currentPage == page,
+                    onSaveClick = { onManageBookmarkClicked(uiMediaList[page].id) },
+                    hasSaveIcon = pagerState.currentPage == page && uiMediaList[page].mediaType.isMovie(),
                     modifier = Modifier.clickable {
                         if (pagerState.currentPage == page) onCardClick(
                             uiMediaList[page].id,
                             uiMediaList[page].mediaType
                         )
-                    },
-                    isDarkMode = NovixTheme.isThemeDark
+                    }
                 )
+
                 if (pagerState.currentPage == page)
                     Column(
                         modifier = Modifier
@@ -249,7 +252,6 @@ private fun Content(
 
     }
 
-
 }
 
 private object PopularSection {
@@ -276,7 +278,6 @@ private object PopularSection {
 private fun Preview(modifier: Modifier = Modifier) {
     PopularSection(
         pagerState = rememberPagerState(initialPage = 0, pageCount = { 4 }),
-        onSaveClick = {},
         onCardClick = { id, mediaType -> },
         uiMediaList = listOf(
             PopularUiMedia(
@@ -315,5 +316,6 @@ private fun Preview(modifier: Modifier = Modifier) {
                 mediaType = MediaType.Movie
             ),
         ),
+        onManageBookmarkClicked = { },
     )
 }

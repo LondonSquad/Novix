@@ -24,31 +24,24 @@ class GetAllListedMoviesTest {
     }
 
     @Test
-    fun `invoke should return all listed movies`() = runTest {
+    fun `invoke should return all listed movie IDs`() = runTest {
         //Given
-        coEvery { customMovieListRepository.getMovieLists(pageNumber = 1) } returns movieLists
-        coEvery {
-            customMovieListRepository.getMovieListDetails(
-                listId = 1u,
-                pageNumber = 1
-            )
-        } returns listDetails1
-        coEvery {
-            customMovieListRepository.getMovieListDetails(
-                listId = 2u,
-                pageNumber = 1
-            )
-        } returns listDetails2
+        val movieIds = listOf(1, 2, 3, 4)
+        coEvery { customMovieListRepository.getAllListedMovieIds() } returns movieIds
+
         //When
         val result = getAllListedMovies.invoke()
+
         //Then
-        assertThat(result).isEqualTo(listedMovies)
+        val expectedResult = setOf(1, 2, 3, 4)
+        assertThat(result).isEqualTo(expectedResult)
     }
 
     @Test
-    fun `invoke throws exception when movieListRepository throws exception`() = runTest {
+    fun `invoke throws exception when repository throws exception`() = runTest {
         //Given
-        coEvery { customMovieListRepository.getMovieLists(pageNumber = 1) } throws Exception()
+        coEvery { customMovieListRepository.getAllListedMovieIds() } throws Exception()
+
         //When //Then
         assertThrows<Exception> {
             getAllListedMovies.invoke()
@@ -62,14 +55,14 @@ class GetAllListedMoviesTest {
             totalItems = 1,
             items = listOf(
                 MovieList(
-                    id = 1u,
+                    id = 1,
                     name = "list1",
-                    moviesCount = 1u
+                    moviesCount = 1
                 ),
                 MovieList(
-                    id = 2u,
+                    id = 2,
                     name = "list2",
-                    moviesCount = 1u
+                    moviesCount = 1
                 ),
             )
         )

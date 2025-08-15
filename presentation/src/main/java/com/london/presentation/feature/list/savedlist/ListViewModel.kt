@@ -1,8 +1,12 @@
 package com.london.presentation.feature.list.savedlist
 
 import androidx.compose.ui.text.input.TextFieldValue
+import androidx.lifecycle.SavedStateHandle
 import com.london.domain.usecase.authentication.AuthenticationUseCase
+import com.london.domain.usecase.movielist.GetAllMovieListsUseCase
 import com.london.domain.usecase.movielist.ManageMovieListUseCase
+import com.london.presentation.navigation.Screen
+import com.london.presentation.navigation.getArgs
 import com.london.presentation.shared.base.BaseViewModel
 import com.london.presentation.shared.base.createPagingSourceFlow
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -10,39 +14,42 @@ import jakarta.inject.Inject
 
 @HiltViewModel
 class ListViewModel @Inject constructor(
+    private val getAllMovieListsUseCase: GetAllMovieListsUseCase,
     private val manageMovieListUseCase: ManageMovieListUseCase,
-    private val authenticationUseCase: AuthenticationUseCase
+    private val authenticationUseCase: AuthenticationUseCase,
+    savedStateHandle: SavedStateHandle,
 ) : BaseViewModel<ListUiState, ListEffect>(ListUiState()), ListContract {
+
+    private val args = savedStateHandle.getArgs<Screen.Lists>()
 
     init {
 
-        checkUserLoginStatus { isLoggedIn->
+        checkUserLoginStatus { isLoggedIn ->
             if (!isLoggedIn) return@checkUserLoginStatus
             fetchSavedLists()
         }
+
+        setAddListSheetVisible(args?.createList ?: false)
     }
 
     override fun onRetry() { fetchSavedLists() }
 
     override fun onFabClick() = setAddListSheetVisible(true)
 
-
     override fun onLoginClick() { emitEffect(ListEffect.NavigateToLogin) }
 
     override fun onListClick(id: Int) {
-
         updateState { copy(isSnackBarSuccessVisible = false) }
         emitEffect(ListEffect.NavigateToDetails(id))
     }
 
     override fun setAddListSheetVisible(visible: Boolean) {
-
         updateState {
             copy(addListSheetState = addListSheetState.copy(isSheetVisible = visible))
         }
     }
-    override fun onListNameChanged(listName: TextFieldValue) {
 
+    override fun onListNameChanged(listName: TextFieldValue) {
         updateState {
             copy(addListSheetState = addListSheetState.copy(listName = listName))
         }
@@ -52,7 +59,7 @@ class ListViewModel @Inject constructor(
 
         tryToExecute(
             onStart = {
-                updateState { copy(isSnackBarSuccessVisible = false,isLoading = true) }
+                updateState { copy(isSnackBarSuccessVisible = false, isLoading = true) }
             },
             block = {
                 manageMovieListUseCase.createMovieList(listName)
@@ -81,7 +88,7 @@ class ListViewModel @Inject constructor(
         tryToExecute(
             block = {
                 val moviesFlow = createPagingSourceFlow(query = "") { _, pageNumber ->
-                    val movies = manageMovieListUseCase.getMovieLists(
+                    val movies = getAllMovieListsUseCase.invoke(
                         pageNumber
                     )
                     movies.copy(items = movies.items)

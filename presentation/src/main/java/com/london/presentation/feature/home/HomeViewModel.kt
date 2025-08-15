@@ -155,6 +155,24 @@ class HomeViewModel @Inject constructor(
         initializePopularMedia()
     }
 
+    override fun onManageBookmarkClicked(movieId: Int) {
+        updateState {
+            copy(
+                isBookmarkSheetVisible = true,
+                bookmarkedMovieId = movieId
+            )
+        }
+    }
+
+    override fun onBookmarkSheetDismiss() {
+        updateState {
+            copy(
+                isBookmarkSheetVisible = false,
+                bookmarkedMovieId = 0
+            )
+        }
+    }
+
     override fun onMovieClick(id: Int) =
         emitEffect(HomeScreenEffect.NavigationMovieDetails(id))
 

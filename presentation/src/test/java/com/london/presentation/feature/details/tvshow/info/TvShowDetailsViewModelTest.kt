@@ -5,6 +5,7 @@ import androidx.lifecycle.viewModelScope
 import app.cash.turbine.test
 import com.google.common.truth.Truth.assertThat
 import com.london.domain.entity.actordetails.cast.ActorMediaDetails
+import com.london.domain.entity.recent.MediaType
 import com.london.domain.entity.tvshowdetails.episode.TvShowEpisodesEntity
 import com.london.domain.usecase.authentication.AuthenticationUseCase
 import com.london.domain.usecase.details.actor.GetActorUseCase
@@ -191,9 +192,9 @@ class TvShowDetailsViewModelTest {
     fun `onReviewsClicked should emit NavigateToReviews effect when clicked`() = runTest {
         // When & Then
         viewModel?.effect?.test {
-            viewModel?.onReviewsClicked(TV_SHOW_ID, 1)
+            viewModel?.onReviewsClicked(TV_SHOW_ID, MediaType.TvShow)
             assertThat(awaitItem()).isEqualTo(
-                TvShowDetailsEffect.NavigateToReviews(TV_SHOW_ID, 1)
+                TvShowDetailsEffect.NavigateToReviews(TV_SHOW_ID, MediaType.TvShow)
             )
             cancelAndIgnoreRemainingEvents()
         }
@@ -218,7 +219,7 @@ class TvShowDetailsViewModelTest {
 
         // When & Then
         viewModel?.effect?.test {
-            viewModel?.OnGenreClicked(genreId)
+            viewModel?.onGenreClicked(genreId)
             assertThat(awaitItem()).isEqualTo(
                 TvShowDetailsEffect.NavigateToTvShowsByCategoryId(genreId)
             )

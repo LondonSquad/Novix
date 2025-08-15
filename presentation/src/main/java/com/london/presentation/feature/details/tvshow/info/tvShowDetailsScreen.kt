@@ -86,7 +86,7 @@ fun TvShowsDetailsScreen(
     onNavigateToLogin: () -> Unit,
     onNavigateToCast: (Int) -> Unit,
     onNavigateToGenre: (Int) -> Unit,
-    onNavigateToReviews: (tvShowId: Int, mediaType: Int) -> Unit,
+    onNavigateToReviews: (tvShowId: Int, mediaType: MediaType) -> Unit,
     onNavigateBack: () -> Unit = {},
     onNavigateToEpisodeDetails: (tvShowId: Int, episodeNumber: Int, seasonNumber: Int) -> Unit,
     viewModel: TvShowDetailsViewModel = hiltViewModel()
@@ -108,7 +108,7 @@ fun TvShowsDetailsScreen(
             is TvShowDetailsEffect.NavigateToCast -> onNavigateToCast(currentEffect.tvShowId)
             is TvShowDetailsEffect.NavigateToReviews -> onNavigateToReviews(
                 currentEffect.tvShowId,
-                MediaType.TvShow.mediaNum
+                MediaType.TvShow
             )
 
             is TvShowDetailsEffect.NavigateToTvShowsByCategoryId -> onNavigateToGenre(
@@ -208,7 +208,7 @@ private fun Content(
                     onReviewClick = {
                         tvShowDetailsContract.onReviewsClicked(
                             uiState.id,
-                            MediaType.TvShow.mediaNum
+                            MediaType.TvShow
                         )
                     },
                     tvShowId = uiState.id,
@@ -604,7 +604,7 @@ private fun EpisodeItem(
                 .height(78.dp)
                 .weight(0.35f),
             loadingContent = { CircularLoading() },
-            errorContent = { ErrorImage(NovixTheme.isThemeDark) },
+            errorContent = { ErrorImage() },
             moderatedContent = { UnSuitableEye() }
         )
 

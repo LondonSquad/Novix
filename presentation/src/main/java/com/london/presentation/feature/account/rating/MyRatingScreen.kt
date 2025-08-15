@@ -150,8 +150,7 @@ private fun Content(
                                     MediaType.Movie -> contract.onMovieClick(item.id)
                                     MediaType.TvShow -> contract.onTvShowClick(item.id)
                                 }
-                            },
-                        isDarkMode = NovixTheme.isThemeDark
+                            }
                     )
                 }
             }

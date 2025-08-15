@@ -11,6 +11,10 @@
 # Keep ViewModels
 -keep class * extends androidx.lifecycle.ViewModel { *; }
 
+# Keep the names of Hilt-injected Workers.
+# Hilt uses the class name as a key to find the correct worker factory.
+-keepnames @androidx.hilt.work.HiltWorker class * extends androidx.work.ListenableWorker
+
 # Keep Koin generated
 #-keep class org.koin.ksp.generated.** { *; }
 

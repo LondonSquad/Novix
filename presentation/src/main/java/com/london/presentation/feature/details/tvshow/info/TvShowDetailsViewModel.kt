@@ -13,8 +13,6 @@ import com.london.domain.usecase.recent.watched.tvshow.ManageRecentTvShowWatched
 import com.london.presentation.navigation.Screen
 import com.london.presentation.navigation.getArgs
 import com.london.presentation.shared.base.BaseViewModel
-import com.london.presentation.shared.genre.MovieGenreUi
-import com.london.presentation.shared.genre.toUi
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 
@@ -81,7 +79,7 @@ class TvShowDetailsViewModel @Inject constructor(
         )
     }
 
-    override fun onReviewsClicked(tvShowId: Int, mediaType: Int) {
+    override fun onReviewsClicked(tvShowId: Int, mediaType: MediaType) {
         emitEffect(TvShowDetailsEffect.NavigateToReviews(tvShowId, mediaType))
     }
 
@@ -89,8 +87,8 @@ class TvShowDetailsViewModel @Inject constructor(
         emitEffect(TvShowDetailsEffect.NavigateToCast(tvShowId))
     }
 
-    override fun OnGenreClicked(genre: MovieGenreUi) {
-        emitEffect(TvShowDetailsEffect.NavigateToTvShowsByCategoryId(genre))/////////////////////////////////
+    override fun onGenreClicked(genreId: Int) {
+        emitEffect(TvShowDetailsEffect.NavigateToTvShowsByCategoryId(genreId))
     }
 
     override fun onRateBottomSheetClick() {
@@ -217,9 +215,7 @@ class TvShowDetailsViewModel @Inject constructor(
                 updateState {
                     copy(
                         firstAirDate = tvShowDetails.firstAirDate,
-                        tvShowGenres = tvShowDetails.tvShowGenres.map {
-                            it.toUi()
-                        },
+                        tvShowGenres = tvShowDetails.tvShowGenres,
                         id = tvShowDetails.id,
                         name = tvShowDetails.name,
                         numberOfSeasons = tvShowDetails.numberOfSeasons,
@@ -244,7 +240,7 @@ class TvShowDetailsViewModel @Inject constructor(
                         posterPicture = tvShowDetails.posterUrl.toString(),
                         releaseYear = 2025,
                         rating = 1,
-                        genres = tvShowDetails.tvShowGenres,
+                        genres = tvShowDetails.tvShowGenres.map { it.id },
                     )
                 )
             },
