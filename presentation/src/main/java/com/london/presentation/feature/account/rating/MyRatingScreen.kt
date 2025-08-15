@@ -53,12 +53,10 @@ fun MyRatingScreen(
         }
     }
 
-
     Content(
         state = state,
         contract = viewModel
     )
-
 }
 
 @Composable
@@ -118,21 +116,25 @@ private fun Content(
                         }
                     },
                     onNavigateToMovie = contract::onMovieClick,
-                    onNavigateToTvShow = contract::onTvShowClick
+                    onNavigateToTvShow = contract::onTvShowClick,
                 )
             }
         }
 
-        if (state.isSnackBarVisible) {
-            if (state.errorState is ErrorState.RequestFailed) {
-                SnackBarAnimation(state.errorState.message)
-            } else {
-                SnackBarAnimation(
-                    stringResource(R.string.delete_list_successfully),
-                    dsR.drawable.ic_success
-                )
-            }
-        }
+        RatingSnackBar(state)
+    }
+}
+
+@Composable
+private fun RatingSnackBar(state: MyRatingUiState) {
+    if (!state.isSnackBarVisible) return
+    if (state.errorState is ErrorState.RequestFailed) {
+        SnackBarAnimation(state.errorState.message)
+    } else {
+        SnackBarAnimation(
+            stringResource(R.string.delete_list_successfully),
+            dsR.drawable.ic_success
+        )
     }
 }
 
