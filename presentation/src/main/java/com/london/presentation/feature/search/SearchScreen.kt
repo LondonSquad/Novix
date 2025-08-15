@@ -40,7 +40,6 @@ import com.london.presentation.feature.search.composable.RecentViewedSection
 import com.london.presentation.feature.search.composable.SearchBar
 import com.london.presentation.feature.search.composable.SearchChipsRow
 import com.london.presentation.shared.ActorsLayout
-import com.london.presentation.shared.MoviesLayOut
 import com.london.presentation.shared.TriangleBlurredShape
 import com.london.presentation.shared.base.ErrorState
 import com.london.presentation.shared.buildscreen.BuildScreen
@@ -328,16 +327,20 @@ private fun MovieSearchContent(state: SearchUiState, contract: SearchContract) {
                 }
             },
             content = {
-                MoviesLayOut(
-                    movieUis = moviesLazyList,
+                MediaLazyVerticalGrid(
+                    pagingItems = moviesLazyList,
+                    hasSaveIcon = true,
                     onSaveClick = { /* Handle save click */ },
-                    isMovieSaved = { false },
-                    onMovieClick = {
-                        contract.addToRecentViewed(it.toRecentViewed())
-                        contract.onMovieGenreClick(it.genreIds)
-                        contract.onMovieClick(it.id)
-                    },
-                    modifier = Modifier.padding(horizontal = 16.dp)
+                    isItemSaved = { false },
+                    onNavigateToMovie = { id ->
+                        val movie =
+                            moviesLazyList.itemSnapshotList.items.firstOrNull { it.id == id }
+                        movie?.let {
+                            contract.addToRecentViewed(it.toRecentViewed())
+                            contract.onMovieGenreClick(it.genreIds)
+                        }
+                        contract.onMovieClick(id)
+                    }
                 )
             }
         )
