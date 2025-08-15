@@ -13,6 +13,7 @@ import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.focus.FocusManager
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.platform.SoftwareKeyboardController
 import androidx.compose.ui.res.painterResource
@@ -55,43 +56,64 @@ fun SearchBar(
                 )
             },
             leadingIcon = painterResource(id = R.drawable.icon_search_normal),
-            trailingIcon = when {
-                uiState.searchQuery.text.isNotEmpty()
-                        && focusedState -> {
-                    {
-                        Icon(
-                            painter = painterResource(id = R.drawable.icon_remove_filled),
-                            contentDescription = stringResource(R.string.clear),
-                            tint = NovixTheme.colors.hint,
-                            modifier = Modifier
-                                .size(20.dp)
-                                .clickable(
-                                    interactionSource = remember { MutableInteractionSource() },
-                                    indication = null
-                                ) { contract.clearSearch() })
-                    }
-                }
-
-                else -> null
-            },
+            trailingIcon = trailingClearIcon(
+                isVisible = uiState.searchQuery.text.isNotEmpty() && focusedState,
+                onClear = contract::clearSearch
+            ),
             keyboardOptions = KeyboardOptions(
                 imeAction = ImeAction.Search
             ),
-            keyboardActions = KeyboardActions(
-                onSearch = {
-                    focusManager.clearFocus()
-                    keyboardController?.hide()
-                    contract.addToRecentSearches(
-                        RecentSearch(
-                            query = uiState.searchQuery.text,
-                            timestamp = System.currentTimeMillis(),
-                            id = 0
-                        )
-                    )
-                }),
+            keyboardActions = onSearchKeyboardAction(
+                focusManager = focusManager,
+                keyboardController = keyboardController,
+                query = uiState.searchQuery.text,
+                onAddRecent = contract::addToRecentSearches
+            ),
             interactionSource = interactionSource,
             modifier = Modifier.weight(1f)
         )
     }
 
+}
+
+@Composable
+private fun trailingClearIcon(
+    isVisible: Boolean,
+    onClear: () -> Unit
+): (@Composable (() -> Unit))? {
+    if (!isVisible) return null
+    return {
+        Icon(
+            painter = painterResource(id = R.drawable.icon_remove_filled),
+            contentDescription = stringResource(R.string.clear),
+            tint = NovixTheme.colors.hint,
+            modifier = Modifier
+                .size(20.dp)
+                .clickable(
+                    interactionSource = remember { MutableInteractionSource() },
+                    indication = null
+                ) { onClear() }
+        )
+    }
+}
+
+private fun onSearchKeyboardAction(
+    focusManager: FocusManager,
+    keyboardController: SoftwareKeyboardController?,
+    query: String,
+    onAddRecent: (RecentSearch) -> Unit
+): KeyboardActions {
+    return KeyboardActions(
+        onSearch = {
+            focusManager.clearFocus()
+            keyboardController?.hide()
+            onAddRecent(
+                RecentSearch(
+                    query = query,
+                    timestamp = System.currentTimeMillis(),
+                    id = 0
+                )
+            )
+        }
+    )
 }
