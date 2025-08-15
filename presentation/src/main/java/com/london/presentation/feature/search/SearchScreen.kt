@@ -10,7 +10,6 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.statusBarsPadding
-import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
@@ -35,8 +34,6 @@ import com.london.designsystem.component.EmptyLayout
 import com.london.designsystem.component.TopBar
 import com.london.designsystem.theme.NovixTheme
 import com.london.presentation.R
-import com.london.presentation.feature.search.composable.RecentSearchesSection
-import com.london.presentation.feature.search.composable.RecentViewedSection
 import com.london.presentation.feature.search.composable.SearchBar
 import com.london.presentation.feature.search.composable.SearchChipsRow
 import com.london.presentation.shared.ActorsLayout
@@ -168,26 +165,7 @@ private fun SearchMainContent(
             .fillMaxWidth()
     )
 
-    SearchErrorOrResults(state = state, contract = contract)
-}
-
-@Composable
-private fun SearchErrorOrResults(
-    state: SearchUiState,
-    contract: SearchContract
-) {
-    when {
-        state.error != null && state.error != ErrorState.NoInternet -> {
-            SearchContentWithError(state = state, contract = contract)
-        }
-
-        else -> {
-            SearchResultsContent(
-                state = state,
-                contract = contract
-            )
-        }
-    }
+    SearchContentWithError(state = state, contract = contract)
 }
 
 @Composable
@@ -195,17 +173,24 @@ private fun SearchContentWithError(
     state: SearchUiState,
     contract: SearchContract
 ) {
-    ResultOrEmpty(
-        items = state.searchQuery.text.toList(),
-        emptyContent = { SearchRecentArea(state = state, contract = contract) },
-        content = {
-            SearchChipsRow(
-                selected = state.selectedCategory,
-                onSelect = contract::onCategorySelected,
-                modifier = Modifier.padding(bottom = 12.dp)
-            )
-        }
-    )
+    if (state.error != null && state.error != ErrorState.NoInternet) {
+        ResultOrEmpty(
+            items = state.searchQuery.text.toList(),
+            emptyContent = { SearchRecentArea(state = state, contract = contract) },
+            content = {
+                SearchChipsRow(
+                    selected = state.selectedCategory,
+                    onSelect = contract::onCategorySelected,
+                    modifier = Modifier.padding(bottom = 12.dp)
+                )
+            }
+        )
+    } else {
+        SearchResultsContent(
+            state = state,
+            contract = contract
+        )
+    }
 }
 
 @Composable
