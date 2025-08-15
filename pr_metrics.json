@@ -20634,7 +20634,7 @@
   {
     "pr_number": 608,
     "url": "https://github.com/LondonSquad/Novix/pull/608",
-    "title": "refactor/unused-expansion",
+    "title": "refactor/use-cases",
     "opened_at": "2025-08-11T22:54:59Z",
     "head_ref": "refactor/unused-expansion",
     "base_ref": "develop",
@@ -20651,12 +20651,20 @@
           "url": "https://github.com/yusufnasserdev"
         },
         "submitted_at": "2025-08-14T16:32:57Z"
+      },
+      {
+        "reviewer": {
+          "id": 100484790,
+          "login": "marwanqashwa",
+          "url": "https://github.com/marwanqashwa"
+        },
+        "submitted_at": "2025-08-14T16:33:24Z"
       }
     ],
     "first_approved_at": "2025-08-14T16:32:57Z",
     "time_to_first_approval_minutes": 3937.9666666666667,
-    "required_approvals_met_at": null,
-    "time_to_required_approvals_minutes": null,
+    "required_approvals_met_at": "2025-08-14T16:33:24Z",
+    "time_to_required_approvals_minutes": 3938.4166666666665,
     "closed_at": "2025-08-14T16:33:26Z",
     "merged_at": "2025-08-14T16:33:26Z",
     "merged_by": {
@@ -21517,12 +21525,20 @@
           "url": "https://github.com/BassantM"
         },
         "submitted_at": "2025-08-15T19:41:24Z"
+      },
+      {
+        "reviewer": {
+          "id": 76666355,
+          "login": "Abdulrahman1890",
+          "url": "https://github.com/Abdulrahman1890"
+        },
+        "submitted_at": "2025-08-15T20:03:34Z"
       }
     ],
     "first_approved_at": "2025-08-15T19:41:24Z",
     "time_to_first_approval_minutes": 648.3333333333334,
-    "required_approvals_met_at": null,
-    "time_to_required_approvals_minutes": null,
+    "required_approvals_met_at": "2025-08-15T20:03:34Z",
+    "time_to_required_approvals_minutes": 670.5,
     "closed_at": "2025-08-15T20:03:36Z",
     "merged_at": "2025-08-15T20:03:36Z",
     "merged_by": {
@@ -21592,6 +21608,55 @@
       "additions": 508,
       "deletions": 406,
       "changed_files": 9
+    }
+  },
+  {
+    "pr_number": 642,
+    "url": "https://github.com/LondonSquad/Novix/pull/642",
+    "title": "Refactor/genres",
+    "opened_at": "2025-08-15T21:31:51Z",
+    "head_ref": "refactor/genres",
+    "base_ref": "develop",
+    "creator": {
+      "login": "marwanqashwa",
+      "id": 100484790,
+      "url": "https://github.com/marwanqashwa"
+    },
+    "approvals": [
+      {
+        "reviewer": {
+          "id": 180463542,
+          "login": "abdelrhman1002",
+          "url": "https://github.com/abdelrhman1002"
+        },
+        "submitted_at": "2025-08-15T22:22:11Z"
+      },
+      {
+        "reviewer": {
+          "id": 92235360,
+          "login": "abdo-essam",
+          "url": "https://github.com/abdo-essam"
+        },
+        "submitted_at": "2025-08-15T22:22:30Z"
+      }
+    ],
+    "first_approved_at": "2025-08-15T22:22:11Z",
+    "time_to_first_approval_minutes": 50.333333333333336,
+    "required_approvals_met_at": "2025-08-15T22:22:30Z",
+    "time_to_required_approvals_minutes": 50.65,
+    "closed_at": "2025-08-15T22:22:31Z",
+    "merged_at": "2025-08-15T22:22:31Z",
+    "merged_by": {
+      "login": "marwanqashwa",
+      "id": 100484790,
+      "url": "https://github.com/marwanqashwa"
+    },
+    "week": "2025-W33",
+    "status": "merged",
+    "diff_stats": {
+      "additions": 1132,
+      "deletions": 775,
+      "changed_files": 115
     }
   },
   {
