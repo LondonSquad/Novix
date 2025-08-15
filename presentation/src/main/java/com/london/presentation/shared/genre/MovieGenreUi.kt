@@ -127,3 +127,11 @@ fun MovieGenreUi.toDomain(): MovieGenre = when (this) {
     MovieGenreUi.Western -> MovieGenre.WESTERN
     MovieGenreUi.Unknown -> MovieGenre.UNKNOWN
 }
+
+fun getMovieGenresListWithoutAllAndUnknown(): List<MovieGenreUi> {
+    return MovieGenreUi.entries.filter { it != MovieGenreUi.All && it != MovieGenreUi.Unknown }
+}
+
+fun getMovieGenresListWithoutUnknown(): List<MovieGenreUi> {
+    return MovieGenreUi.entries.filter { it != MovieGenreUi.Unknown }
+}

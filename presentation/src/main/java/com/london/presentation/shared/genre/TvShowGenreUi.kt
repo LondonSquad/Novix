@@ -104,3 +104,11 @@ fun TvShowGenreUi.toDomain(): TvShowGenre {
         TvShowGenreUi.Unknown -> TvShowGenre.UNKNOWN
     }
 }
+
+fun getTvShowGenresListWithoutAllAndUnknown(): List<TvShowGenreUi> {
+    return TvShowGenreUi.entries.filter { it != TvShowGenreUi.All && it != TvShowGenreUi.Unknown }
+}
+
+fun getTvShowGenresListWithoutUnknown(): List<TvShowGenreUi> {
+    return TvShowGenreUi.entries.filter { it != TvShowGenreUi.Unknown }
+}
