@@ -364,7 +364,11 @@ private fun <T : Any> MediaSearchContent(
             items = pagingItems.itemSnapshotList.items,
             emptyContent = {
                 if (!isLoading) {
-                    NoSearchResultLayOut(modifier = Modifier.fillMaxSize())
+                    EmptyLayout(
+                        text = stringResource(R.string.no_search_result_msg),
+                        image = R.drawable.img_no_search_result,
+                        modifier = Modifier.fillMaxSize().padding(horizontal = 16.dp)
+                    )
                 }
             },
             content = {
@@ -394,7 +398,11 @@ private fun ActorSearchContent(state: SearchUiState, contract: SearchContract) {
             items = actorsLazyList.itemSnapshotList.items,
             emptyContent = {
                 if (!isLoading) {
-                    NoSearchResultLayOut(modifier = Modifier.fillMaxSize())
+                    EmptyLayout(
+                        text = stringResource(R.string.no_search_result_msg),
+                        image = R.drawable.img_no_search_result,
+                        modifier = Modifier.fillMaxSize().padding(horizontal = 16.dp)
+                    )
                 }
             },
             content = {
@@ -406,17 +414,6 @@ private fun ActorSearchContent(state: SearchUiState, contract: SearchContract) {
             }
         )
     }
-}
-
-@Composable
-private fun NoSearchResultLayOut(
-    modifier: Modifier = Modifier
-) {
-    EmptyLayout(
-        text = stringResource(R.string.no_search_result_msg),
-        image = R.drawable.img_no_search_result,
-        modifier = modifier.padding(horizontal = 16.dp)
-    )
 }
 
 @Composable
