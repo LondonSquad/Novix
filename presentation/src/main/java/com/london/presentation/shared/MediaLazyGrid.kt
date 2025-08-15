@@ -129,7 +129,6 @@ fun <T> MediaLazyGrid(
                             imageUrl = getImageUrl(item),
                             isSaved = isItemSaved(item),
                             onSaveClick = { onSavedClick(item) },
-                            myRatingList = myRatingList,
                             rate = rate,
                             onDeleteClick = onDeleteClick,
                             modifier = Modifier.clickable { onItemClick(item) }

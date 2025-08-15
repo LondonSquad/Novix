@@ -117,7 +117,6 @@ private fun Content(
                             MediaType.TvShow -> contract.onDeleteTVShowClick(rated.id)
                         }
                     },
-                    myRatingList = true,
                     onNavigateToMovie = contract::onMovieClick,
                     onNavigateToTvShow = contract::onTvShowClick
                 )

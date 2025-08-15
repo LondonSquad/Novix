@@ -30,8 +30,7 @@ fun <T : Any> MediaLazyVerticalGrid(
     onSaveClick: (T) -> Unit = {},
     isItemSaved: (T) -> Boolean = { false },
     onDeleteClick: (T) -> Unit = {},
-    myRatingList: Boolean = false,
-    rate: (T) -> String = { "" },
+    rate: (T) -> String? = { null },
     onNavigateToMovie: (Int) -> Unit = {},
     onNavigateToTvShow: (Int) -> Unit = {},
     topBar: @Composable (() -> Unit)? = null
@@ -66,7 +65,6 @@ fun <T : Any> MediaLazyVerticalGrid(
                         hasSaveIcon = hasSaveIcon,
                         onSaveClick = { onSaveClick(item) },
                         onDeleteClick = { onDeleteClick(item) },
-                        myRatingList = myRatingList,
                         rate = rate(item)
                     )
                 }
@@ -81,12 +79,11 @@ fun <T : Any> MediaLazyVerticalGrid(
     modifier: Modifier = Modifier,
     imageUrl: (T) -> String? = { it.getImageUrl() },
     name: (T) -> String = { it.getName() },
-    rate: (T) -> String = { "" },
+    rate: (T) -> String? = { null },
     hasSaveIcon: Boolean = true,
     onSaveClick: (T) -> Unit = {},
     isItemSaved: (T) -> Boolean = { false },
     onDeleteClick: (T) -> Unit = {},
-    myRatingList: Boolean = false,
     topBar: @Composable (() -> Unit)? = null,
     onNavigateToMovie: (Int) -> Unit = {},
     onNavigateToTvShow: (Int) -> Unit = {}
@@ -108,20 +105,21 @@ fun <T : Any> MediaLazyVerticalGrid(
         ) {
             items(pagingItems.itemCount) { index ->
                 val item = pagingItems[index] ?: return@items
-                RenderPagingItem(
-                    index = index,
-                    pagingItems = pagingItems,
-                    imageUrl = imageUrl,
-                    name = name,
-                    isItemSaved = isItemSaved,
-                    hasSaveIcon = hasSaveIcon,
-                    onSaveClick = onSaveClick,
-                    onDeleteClick = onDeleteClick,
-                    myRatingList = myRatingList,
-                    rate = rate(item),
-                    onNavigateToMovie = onNavigateToMovie,
-                    onNavigateToTvShow = onNavigateToTvShow
-                )
+                rate(item)?.let {
+                    RenderPagingItem(
+                        index = index,
+                        pagingItems = pagingItems,
+                        imageUrl = imageUrl,
+                        name = name,
+                        isItemSaved = isItemSaved,
+                        hasSaveIcon = hasSaveIcon,
+                        onSaveClick = onSaveClick,
+                        onDeleteClick = onDeleteClick,
+                        rate = it,
+                        onNavigateToMovie = onNavigateToMovie,
+                        onNavigateToTvShow = onNavigateToTvShow
+                    )
+                }
             }
         }
     }
@@ -137,7 +135,6 @@ private fun <T : Any> RenderPagingItem(
     hasSaveIcon: Boolean,
     onSaveClick: (T) -> Unit,
     onDeleteClick: (T) -> Unit,
-    myRatingList: Boolean,
     rate: String,
     onNavigateToMovie: (Int) -> Unit,
     onNavigateToTvShow: (Int) -> Unit
@@ -157,7 +154,6 @@ private fun <T : Any> RenderPagingItem(
                 hasSaveIcon = hasSaveIcon,
                 onSaveClick = { onSaveClick(item) },
                 onDeleteClick = { onDeleteClick(item) },
-                myRatingList = myRatingList,
                 rate = rate
             )
         }
