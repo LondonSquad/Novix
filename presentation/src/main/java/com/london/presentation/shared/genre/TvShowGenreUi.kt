@@ -58,18 +58,19 @@ enum class TvShowGenreUi(
     ),
     Unknown(stringResId = R.string.unknown);
 
-    companion object{
+    companion object {
 
-        fun getTvShowGenresListWithoutAllAndUnknown(): List<TvShowGenreUi> {
+        fun getListWithoutAllAndUnknown(): List<TvShowGenreUi> {
             return TvShowGenreUi.entries.filter { it != TvShowGenreUi.All && it != TvShowGenreUi.Unknown }
         }
 
-        fun getTvShowGenresListWithoutUnknown(): List<TvShowGenreUi> {
+        fun getListWithoutUnknown(): List<TvShowGenreUi> {
             return TvShowGenreUi.entries.filter { it != TvShowGenreUi.Unknown }
         }
     }
 
 }
+
 fun TvShowGenre.toUi(): TvShowGenreUi {
     return when (this) {
         TvShowGenre.ALL -> TvShowGenreUi.All

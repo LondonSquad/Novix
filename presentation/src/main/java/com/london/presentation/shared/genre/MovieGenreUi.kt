@@ -81,11 +81,11 @@ enum class MovieGenreUi(
 
     companion object {
 
-        fun getMovieGenresListWithoutAllAndUnknown(): List<MovieGenreUi> {
+        fun getListWithoutAllAndUnknown(): List<MovieGenreUi> {
             return MovieGenreUi.entries.filter { it != MovieGenreUi.All && it != MovieGenreUi.Unknown }
         }
 
-        fun getMovieGenresListWithoutUnknown(): List<MovieGenreUi> {
+        fun getListWithoutUnknown(): List<MovieGenreUi> {
             return MovieGenreUi.entries.filter { it != MovieGenreUi.Unknown }
         }
     }
