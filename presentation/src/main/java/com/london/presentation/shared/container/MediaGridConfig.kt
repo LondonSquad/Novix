@@ -5,7 +5,6 @@ import com.london.presentation.utils.TvShowGenre
 
 data class MediaGridConfig(
     val showSaveIcon: Boolean = true,
-    val myRatingList: Boolean = false,
     val rate: String = "",
     val isDarkMode: Boolean = true,
     val isMovieSelected: Boolean = true,
