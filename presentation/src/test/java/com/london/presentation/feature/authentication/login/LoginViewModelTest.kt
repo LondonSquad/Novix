@@ -128,9 +128,6 @@ class LoginViewModelTest {
         // Act & Assert
         viewModel.effect.test {
             viewModel.onLoginClick()
-
-            advanceUntilIdle()
-
             assertThat(awaitItem()).isEqualTo(LoginEffect.NavigateToHome)
             cancelAndIgnoreRemainingEvents()
         }
