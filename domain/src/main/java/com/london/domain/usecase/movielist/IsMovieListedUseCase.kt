@@ -7,11 +7,10 @@ import javax.inject.Inject
 class IsMovieListedUseCase @Inject constructor(
     private val repository: CustomMovieListRepository
 ) {
-    suspend fun invoke(movieId: Int, forceRefresh: Boolean = false): Boolean {
-        return repository.isMovieListed(movieId, forceRefresh)
-    }
+    suspend fun invoke(
+        movieId: Int,
+        forceRefresh: Boolean = false
+    ): Boolean = repository.isMovieListed(movieId = movieId, forceRefresh = forceRefresh)
 
-    fun flow(movieId: Int): Flow<Boolean> {
-        return repository.isMovieListedFlow(movieId)
-    }
+    fun flow(movieId: Int): Flow<Boolean> = repository.isMovieListedFlow(movieId = movieId)
 }

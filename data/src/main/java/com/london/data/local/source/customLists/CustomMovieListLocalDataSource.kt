@@ -11,32 +11,23 @@ interface CustomMovieListLocalDataSource {
     fun getMovieListIdsFlow(movieId: Int): Flow<List<Int>>
     suspend fun getAllListedMovieIds(): List<Int>
     fun getAllListedMovieIdsFlow(): Flow<List<Int>>
-
-    // List-specific movie queries (MISSING FUNCTIONALITY)
     suspend fun getMovieIdsForList(listId: Int, limit: Int, offset: Int): List<Int>
     fun getMovieIdsForListFlow(listId: Int): Flow<List<Int>>
     suspend fun getMovieCountForList(listId: Int): Int
     fun getMovieCountForListFlow(listId: Int): Flow<Int>
-
-    // Movie list metadata queries
     suspend fun getAllUserLists(): List<MovieListLocal>
     fun getAllUserListsFlow(): Flow<List<MovieListLocal>>
     suspend fun getMovieList(listId: Int): MovieListLocal?
     fun getMovieListFlow(listId: Int): Flow<MovieListLocal?>
-
     suspend fun getMovieListsPaged(limit: Int, offset: Int): List<MovieListLocal>
-
-    // Cache management - memberships
     suspend fun cacheMovieListMemberships(memberships: List<MovieListMembershipLocal>)
     suspend fun addMovieToListCache(movieId: Int, listId: Int)
     suspend fun removeMovieFromListCache(movieId: Int, listId: Int)
     suspend fun replaceMembershipsForList(listId: Int, memberships: List<MovieListMembershipLocal>)
-
     suspend fun cacheMovieListsMetadata(lists: List<MovieListLocal>)
     suspend fun addMovieListCache(movieList: MovieListLocal)
     suspend fun removeMovieListCache(listId: Int)
     suspend fun updateMovieListItemCount(listId: Int, itemCount: Int)
-
     suspend fun shouldRefreshCache(): Boolean
     suspend fun markCacheRefreshed(success: Boolean)
     suspend fun clearAllCache()

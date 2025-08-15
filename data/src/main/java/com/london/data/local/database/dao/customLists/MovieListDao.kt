@@ -23,7 +23,6 @@ interface MovieListDao {
     @Query("SELECT * FROM cached_movie_lists WHERE id = :listId")
     fun getListFlow(listId: Int): Flow<MovieListLocal?>
 
-    // Pagination support
     @Query("SELECT * FROM cached_movie_lists ORDER BY cachedAt DESC LIMIT :limit OFFSET :offset")
     suspend fun getListsPaged(limit: Int, offset: Int): List<MovieListLocal>
 

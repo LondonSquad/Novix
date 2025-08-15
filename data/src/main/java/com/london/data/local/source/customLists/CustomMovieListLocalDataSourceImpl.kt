@@ -15,7 +15,6 @@ class CustomMovieListLocalDataSourceImpl @Inject constructor(
     private val syncMetadataDao: SyncMetadataDao
 ) : CustomMovieListLocalDataSource {
 
-    // Existing methods...
     override suspend fun isMovieListed(movieId: Int): Boolean {
         return membershipDao.isMovieListed(movieId)
     }

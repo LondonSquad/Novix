@@ -11,7 +11,7 @@ import timber.log.Timber
 import javax.inject.Inject
 
 @HiltAndroidApp
-class NovixApplication() : Application(), Configuration.Provider {
+class NovixApplication : Application(), Configuration.Provider {
 
     @Inject
     lateinit var workerFactory: HiltWorkerFactory

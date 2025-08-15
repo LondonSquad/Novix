@@ -23,7 +23,6 @@ interface ListMembershipDao {
     @Query("SELECT listId FROM movie_list_membership WHERE movieId = :movieId")
     fun getMovieListIdsFlow(movieId: Int): Flow<List<Int>>
 
-    // Get movies for a specific list with pagination
     @Query("SELECT movieId FROM movie_list_membership WHERE listId = :listId ORDER BY addedAt DESC LIMIT :limit OFFSET :offset")
     suspend fun getMovieIdsForList(listId: Int, limit: Int, offset: Int): List<Int>
 

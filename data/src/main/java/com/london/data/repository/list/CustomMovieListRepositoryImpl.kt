@@ -305,7 +305,6 @@ class CustomMovieListRepositoryImpl @Inject constructor(
         }
     }
 
-
     private suspend fun refreshMovieListCacheIfNecessary(forceRefresh: Boolean) {
         if (forceRefresh || localDataSource.shouldRefreshCache()) {
             refreshMovieListCache()
