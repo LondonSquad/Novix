@@ -13,6 +13,6 @@ fun TopRatedMovieRemote.toEntity(): TopRatedMedia =
         releaseDate = releaseDate.orEmpty(),
         name = title.orEmpty(),
         voteAverage = voteAverage.orZero(),
-        genreIds = genreIds.orEmpty(),
+        genres = genreIds.orEmpty().toGenre(MediaType.Movie),
         mediaType = MediaType.Movie
     )

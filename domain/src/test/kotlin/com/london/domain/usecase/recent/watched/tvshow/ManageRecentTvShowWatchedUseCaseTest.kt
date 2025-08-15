@@ -2,6 +2,7 @@ package com.london.domain.usecase.recent.watched.tvshow
 
 import com.google.common.truth.Truth.assertThat
 import com.london.domain.entity.TvShow
+import com.london.domain.entity.genre.TvShowGenre
 import com.london.domain.repository.RecentWatchedRepository
 import io.mockk.Runs
 import io.mockk.coEvery
@@ -100,7 +101,7 @@ class ManageRecentTvShowWatchedUseCaseTest {
             posterPicture = "none",
             releaseYear = 1,
             rating = 1,
-            genres = listOf(1, 2, 3),
+            genres = listOf(TvShowGenre.TALK, TvShowGenre.TALK, TvShowGenre.TALK),
         )
         private val tvShowList = listOf(tvShow, tvShow.copy(id = 2), tvShow.copy(id = 3))
     }

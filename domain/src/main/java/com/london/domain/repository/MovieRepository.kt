@@ -6,6 +6,7 @@ import com.london.domain.entity.RatedMedia
 import com.london.domain.entity.Trending
 import com.london.domain.entity.UpComingMovie
 import com.london.domain.entity.actordetails.cast.ActorMediaDetails
+import com.london.domain.entity.genre.MovieGenre
 import com.london.domain.entity.moviedatails.MediaStates
 import com.london.domain.entity.moviedatails.MovieDetails
 import com.london.domain.entity.moviedatails.MovieImages
@@ -24,12 +25,12 @@ interface MovieRepository {
     suspend fun getTrendingMovies(page: Int): PagedFetchResponse<Trending>
     suspend fun getTopRatedMovies(pageNumber: Int): PagedFetchResponse<TopRatedMedia>
     suspend fun getFirstPageTopRatedMovies(): List<TopRatedMedia>
-    suspend fun getMoviesByCategory(categoryId: Int, pageNumber: Int): PagedFetchResponse<Movie>
+    suspend fun getMoviesByGenre(genre: MovieGenre, pageNumber: Int): PagedFetchResponse<Movie>
     suspend fun getAllRatedMovies(): List<RatedMedia>
     suspend fun deleteMovieRating(movieId: Int): Boolean
 
-    suspend fun getUpcomingMoviesByCategory(
-        categoryId: Int?,
+    suspend fun getUpcomingMoviesByGenre(
+        genre: MovieGenre,
         pageNumber: Int
     ): PagedFetchResponse<UpComingMovie>
 
