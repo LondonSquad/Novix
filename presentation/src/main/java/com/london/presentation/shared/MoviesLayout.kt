@@ -14,6 +14,41 @@ import com.london.designsystem.theme.NovixTheme
 import com.london.domain.entity.Movie
 import com.london.presentation.utils.gridColumns
 
+@Deprecated(
+    message = "Use MediaLazyVerticalGrid or MediaLazyGridWithFilter instead. This composable will be removed in a future version. Note: Both have two overloads - one for List<T> and one for LazyPagingItems<T>.",
+    replaceWith = ReplaceWith(
+        expression = "MediaLazyGridWithFilter(" +
+                "items = items, " +
+                "modifier = modifier, " +
+                "imageUrl = getImageUrl, " +
+                "name = { it.getName() }, " +
+                "onSaveClick = onSavedClick, " +
+                "isItemSaved = isItemSaved, " +
+                "onDeleteClick = onDeleteClick, " +
+                "onMovieGenreClick = {}, " +
+                "onTvShowGenreClick = {}, " +
+                "config = MediaGridConfig(" +
+                "    showSaveIcon = hasSaveIcon, " +
+                "    isDarkMode = isDarkMode, " +
+                "    myRatingList = myRatingList, " +
+                "    rate = rate, " +
+                "    isMovieSelected = true, " +
+                "    isTvShowSelected = false, " +
+                "    selectedMovieGenre = MovieGenre.All, " +
+                "    onNavigateToMovie = onItemClick, " +
+                "), " +
+                "topBar = {" +
+                "    DefaultAppTopBar(" +
+                "        title = title," +
+                "        onBack = onBack" +
+                "    )" +
+                "}" +
+                ")",
+        imports = ["com.london.presentation.shared.container.MediaLazyGridWithFilter", "com.london.presentation.shared.container.MediaGridConfig", "com.london.presentation.utils.MovieGenre", "com.london.presentation.utils.TvShowGenre"]
+    ),
+    level = DeprecationLevel.WARNING
+)
+
 @Composable
 fun MoviesLayOut(
     movieUis: LazyPagingItems<Movie>,
@@ -37,8 +72,7 @@ fun MoviesLayOut(
                     onSaveClick = { onSaveClick(movie) },
                     isSaved = isMovieSaved(movie),
                     imageDescription = movie.name,
-                    modifier = Modifier.clickable { onMovieClick(movie) },
-                    isDarkMode = NovixTheme.isThemeDark
+                    modifier = Modifier.clickable { onMovieClick(movie) }
                 )
             }
         }

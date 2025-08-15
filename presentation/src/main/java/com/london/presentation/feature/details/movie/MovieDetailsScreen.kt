@@ -314,8 +314,7 @@ private fun Content(
                         modifier = Modifier
                             .clickable {
                                 movieDetailsContract.onMovieClick(movie.id)
-                            },
-                        isDarkMode = NovixTheme.isThemeDark
+                            }
                     )
                 }
             }
