@@ -18,13 +18,11 @@ import com.london.presentation.utils.TvShowGenre
 
 @Composable
 fun <T : Any> MediaLazyGridWithFilter(
+    items: List<T>,
     modifier: Modifier = Modifier,
-    imageUrl: (T) -> String? = { it.getImageUrl() },
-    name: (T) -> String = { it.getName() },
-    items: List<T>? = null,
     isLoading: Boolean = false,
-    pagingItems: LazyPagingItems<T>? = null,
-    tabSelected: Int = MediaCategory.Movies.ordinal,
+    name: (T) -> String = { it.getName() },
+    imageUrl: (T) -> String? = { it.getImageUrl() },
     onMovieGenreClick: (MovieGenre) -> Unit = {},
     onTvShowGenreClick: (TvShowGenre) -> Unit = {},
     config: MediaGridConfig = MediaGridConfig(),
@@ -48,13 +46,8 @@ fun <T : Any> MediaLazyGridWithFilter(
         )
 
         when {
-            !items.isNullOrEmpty() -> {
-                val filteredItems = when (tabSelected) {
-                    0 -> items.filter { it is Movie }
-                    1 -> items.filter { it is TvShow }
-                    else -> items
-                }
-
+            items.isNotEmpty() -> {
+                val filteredItems = filterItemsByCategory(items, config)
                 RenderFilteredItemsGrid(
                     filteredItems = filteredItems,
                     imageUrl = imageUrl,
@@ -64,21 +57,53 @@ fun <T : Any> MediaLazyGridWithFilter(
                 )
             }
 
-            pagingItems != null && pagingItems.itemCount > 0 -> {
-                RenderPagingItemsGrid(
-                    pagingItems = pagingItems,
-                    imageUrl = imageUrl,
-                    name = name,
-                    config = config,
-                    topBar = topBar
-                )
-            }
-
             else -> {
-                if (!isLoading && items.isNullOrEmpty() && (pagingItems == null || pagingItems.itemCount == 0)) {
+                if (!isLoading) {
                     EmptyGenreLayout()
                 }
             }
+        }
+    }
+}
+
+@Composable
+fun <T : Any> MediaLazyGridWithFilter(
+    pagingItems: LazyPagingItems<T>,
+    modifier: Modifier = Modifier,
+    isLoading: Boolean = false,
+    name: (T) -> String = { it.getName() },
+    imageUrl: (T) -> String? = { it.getImageUrl() },
+    onMovieGenreClick: (MovieGenre) -> Unit = {},
+    onTvShowGenreClick: (TvShowGenre) -> Unit = {},
+    config: MediaGridConfig = MediaGridConfig(),
+    topBar: @Composable (() -> Unit)? = null
+) {
+    Column(
+        modifier = modifier
+            .fillMaxSize()
+            .background(color = NovixTheme.colors.surface)
+    ) {
+        topBar?.invoke()
+
+        MediaGenreFilters(
+            isMovieSelected = config.isMovieSelected,
+            isTvShowSelected = config.isTvShowSelected,
+            selectedMovieGenre = config.selectedMovieGenre,
+            selectedTvShowGenre = config.selectedTvShowGenre,
+            onMovieGenreClick = onMovieGenreClick,
+            onTvShowGenreClick = onTvShowGenreClick,
+        )
+
+    	if (pagingItems.itemCount > 0) {
+            RenderPagingItemsGrid(
+                pagingItems = pagingItems,
+                imageUrl = imageUrl,
+                name = name,
+                config = config,
+                topBar = topBar
+            )
+        } else if (!isLoading) {
+            EmptyGenreLayout()
         }
     }
 }
