@@ -233,6 +233,17 @@ private fun <T : Any> HomeGridCard(
     )
 }
 
+private fun gridTransitionSpec(): AnimatedContentTransitionScope<Int>.() -> ContentTransform = {
+    (slideInVertically(
+        animationSpec = tween(1100),
+        initialOffsetY = { it }
+    ) + fadeIn(tween(1100))) togetherWith
+            (slideOutVertically(
+                animationSpec = tween(1000),
+                targetOffsetY = { -it }
+            ) + fadeOut(tween(1000)))
+}
+
 @ThemePreviews
 @Composable
 private fun Preview() {
@@ -265,17 +276,6 @@ private fun Preview() {
         onNavigateToMovie = {},
         onNavigateToTvShow = {}
     )
-}
-
-private fun gridTransitionSpec(): AnimatedContentTransitionScope<Int>.() -> ContentTransform = {
-    (slideInVertically(
-        animationSpec = tween(1100),
-        initialOffsetY = { it }
-    ) + fadeIn(tween(1100))) togetherWith
-            (slideOutVertically(
-                animationSpec = tween(1000),
-                targetOffsetY = { -it }
-            ) + fadeOut(tween(1000)))
 }
 
 @ThemePreviews
