@@ -33,6 +33,7 @@ import androidx.paging.compose.collectAsLazyPagingItems
 import com.london.designsystem.component.EmptyLayout
 import com.london.designsystem.component.TopBar
 import com.london.designsystem.theme.NovixTheme
+import com.london.designsystem.theme.ThemePreviews
 import com.london.presentation.R
 import com.london.presentation.feature.search.composable.SearchBar
 import com.london.presentation.feature.search.composable.SearchChipsRow
@@ -367,7 +368,9 @@ private fun <T : Any> MediaSearchContent(
                     EmptyLayout(
                         text = stringResource(R.string.no_search_result_msg),
                         image = R.drawable.img_no_search_result,
-                        modifier = Modifier.fillMaxSize().padding(horizontal = 16.dp)
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .padding(horizontal = 16.dp)
                     )
                 }
             },
@@ -387,8 +390,7 @@ private fun <T : Any> MediaSearchContent(
 
 @Composable
 private fun ActorSearchContent(state: SearchUiState, contract: SearchContract) {
-    val actorsLazyList =
-        state.actorsFlow.collectAsLazyPagingItems()
+    val actorsLazyList = state.actorsFlow.collectAsLazyPagingItems()
 
     SearchContentWithErrorHandling(
         actorsLazyList,
@@ -401,7 +403,9 @@ private fun ActorSearchContent(state: SearchUiState, contract: SearchContract) {
                     EmptyLayout(
                         text = stringResource(R.string.no_search_result_msg),
                         image = R.drawable.img_no_search_result,
-                        modifier = Modifier.fillMaxSize().padding(horizontal = 16.dp)
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .padding(horizontal = 16.dp)
                     )
                 }
             },
@@ -441,8 +445,12 @@ private fun SearchContentWithErrorHandling(
     }
 }
 
-//@ThemePreviews
-//@Composable
-//fun SearchScreenPreview() {
-//    SearchScreen()
-//}
+@ThemePreviews
+@Composable
+fun SearchScreenPreview() {
+    SearchScreen(
+        onNavigateToActorDetails = {},
+        onNavigateToTvShowDetails = {},
+        onNavigateToMovieDetails = {}
+    )
+}
