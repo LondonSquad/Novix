@@ -6,7 +6,7 @@ import app.cash.turbine.test
 import com.google.common.truth.Truth.assertThat
 import com.london.domain.entity.actordetails.cast.ActorMediaDetails
 import com.london.domain.entity.actordetails.cast.ActorMediaItems
-import com.london.domain.usecase.toppicks.GetActorMoviePicksByIdUseCase
+import com.london.domain.usecase.details.actor.GetActorUseCase
 import com.london.presentation.navigation.Screen
 import com.london.presentation.navigation.getArgs
 import io.mockk.coEvery
@@ -27,7 +27,7 @@ import org.junit.Test
 @OptIn(ExperimentalCoroutinesApi::class)
 class TopMoviesPicksViewModelTest {
 
-    private lateinit var getActorMoviePicksById: GetActorMoviePicksByIdUseCase
+    private lateinit var getActorUseCase: GetActorUseCase
     private val savedStateHandle = mockk<SavedStateHandle>(relaxed = true)
     private var viewModel: TopMoviesPicksViewModel? = null
     private val mainDispatcher = StandardTestDispatcher()
@@ -35,17 +35,17 @@ class TopMoviesPicksViewModelTest {
     @Before
     fun setup() {
         Dispatchers.setMain(mainDispatcher)
-        getActorMoviePicksById = mockk()
+        getActorUseCase = mockk()
 
         every { savedStateHandle.getArgs<Screen.ActorTopMoviesPicksDetails>() } returns Screen.ActorTopMoviesPicksDetails(
             actorId = ACTOR_ID
         )
-        coEvery { getActorMoviePicksById.invoke(ACTOR_ID) } returns mockCastDetails
+        coEvery { getActorUseCase.getActorMoviePicksById(ACTOR_ID) } returns mockCastDetails
 
 
         viewModel = TopMoviesPicksViewModel(
             savedStateHandle = savedStateHandle,
-            getActorMoviePicksById = getActorMoviePicksById
+            getActorUseCase = getActorUseCase
         )
     }
 
@@ -60,7 +60,7 @@ class TopMoviesPicksViewModelTest {
     fun `error state should be updated when getActorMoviesPicksData fails`() = runTest {
         // Given
         val exception = Exception("error")
-        coEvery { getActorMoviePicksById.invoke(ACTOR_ID) } throws exception
+        coEvery { getActorUseCase.getActorMoviePicksById(ACTOR_ID) } throws exception
 
         // When
         advanceUntilIdle()

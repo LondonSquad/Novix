@@ -10,7 +10,10 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.requiredWidth
 import androidx.compose.foundation.layout.wrapContentSize
+import androidx.compose.foundation.lazy.grid.GridItemSpan
+import androidx.compose.foundation.lazy.grid.LazyGridScope
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.PagerState
 import androidx.compose.foundation.pager.rememberPagerState
@@ -25,6 +28,7 @@ import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.util.lerp
@@ -34,6 +38,8 @@ import com.london.designsystem.theme.NovixTheme
 import com.london.domain.entity.recent.MediaType
 import com.london.domain.entity.recent.MediaType.Companion.isMovie
 import com.london.presentation.R
+import com.london.presentation.feature.home.HomeScreenContract
+import com.london.presentation.feature.home.HomeScreenUiState
 import com.london.presentation.feature.home.popular.PopularSection.CARD_HORIZONTAL_PADDING_DP
 import com.london.presentation.feature.home.popular.PopularSection.CARD_WIDTH_DP
 import com.london.presentation.feature.home.popular.PopularSection.PAGE_SPACING_DP
@@ -47,6 +53,7 @@ import com.london.presentation.feature.home.popular.PopularSection.SCALE_MIN_FRA
 import com.london.presentation.feature.home.popular.PopularSection.SCALE_SIDE_CARDS
 import com.london.presentation.feature.home.popular.PopularSection.TRANSFORM_ORIGIN_X
 import com.london.presentation.feature.home.popular.PopularSection.TRANSFORM_ORIGIN_Y
+import com.london.presentation.feature.home.section.ShimmerPopularSection
 import com.london.presentation.shared.HomeCard
 import com.london.presentation.shared.RatingItem
 import com.london.presentation.utils.toLocalizedNumbers
@@ -55,8 +62,40 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.isActive
 import kotlin.math.abs
 
+fun LazyGridScope.popularSection(
+    screenWidth: Dp,
+    uiState: HomeScreenUiState,
+    pagerState: PagerState,
+    homeScreenContract: HomeScreenContract
+) {
+    item(span = { GridItemSpan(maxLineSpan) }) {
+        if (uiState.popularMediaList.isNotEmpty()) {
+            PopularSection(
+                modifier = Modifier.requiredWidth(screenWidth),
+                pagerState = pagerState,
+                uiMediaList = uiState.popularMediaList,
+                onManageBookmarkClicked = { movieId ->
+                    homeScreenContract.onManageBookmarkClicked(movieId)
+                },
+                onCardClick = { id, mediaType ->
+                    when (mediaType) {
+                        MediaType.TvShow -> homeScreenContract.onTvShowClick(id)
+                        MediaType.Movie -> homeScreenContract.onMovieClick(id)
+                    }
+                }
+            )
+        } else {
+            ShimmerPopularSection(
+                modifier = Modifier.requiredWidth(screenWidth),
+                pagerState = pagerState,
+            )
+        }
+    }
+}
+
+
 @Composable
-fun PopularSection(
+private fun PopularSection(
     pagerState: PagerState,
     uiMediaList: List<PopularUiMedia>,
     onCardClick: (Int, MediaType) -> Unit,
@@ -174,8 +213,7 @@ private fun Content(
                             uiMediaList[page].id,
                             uiMediaList[page].mediaType
                         )
-                    },
-                    isDarkMode = NovixTheme.isThemeDark
+                    }
                 )
 
                 if (pagerState.currentPage == page)

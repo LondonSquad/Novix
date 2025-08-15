@@ -2,8 +2,8 @@ package com.london.presentation.feature.reviews
 
 import androidx.lifecycle.SavedStateHandle
 import com.london.domain.entity.recent.MediaType
-import com.london.domain.usecase.reviews.GetMovieReviewsUseCase
-import com.london.domain.usecase.reviews.GetTvShowReviewsUseCase
+import com.london.domain.usecase.details.movie.GetMovieUseCase
+import com.london.domain.usecase.details.tvshow.GetTvShowUseCase
 import com.london.presentation.navigation.Screen
 import com.london.presentation.navigation.getArgs
 import com.london.presentation.shared.base.BaseViewModel
@@ -13,8 +13,8 @@ import javax.inject.Inject
 
 @HiltViewModel
 class ReviewsViewModel @Inject constructor(
-    private val getMovieReviewsUseCase: GetMovieReviewsUseCase,
-    private val getTvShowReviewsUseCase: GetTvShowReviewsUseCase,
+    private val getMovieUseCase: GetMovieUseCase,
+    private val getTvShowUseCase: GetTvShowUseCase,
     savedStateHandle: SavedStateHandle
 ) : BaseViewModel<ReviewsUiState, ReviewEffect>(ReviewsUiState()), ReviewContract {
 
@@ -40,12 +40,12 @@ class ReviewsViewModel @Inject constructor(
             block = {
                 createPagingSourceFlow("") { _, pageNumber ->
                     when (mediaType) {
-                        MediaType.Movie -> getMovieReviewsUseCase.invoke(
+                        MediaType.Movie -> getMovieUseCase.getMovieReviews(
                             mediaId,
                             pageNumber
                         )
 
-                        else -> getTvShowReviewsUseCase.invoke(mediaId, pageNumber)
+                        else -> getTvShowUseCase.getTvShowReviews(mediaId, pageNumber)
                     }
                 }
             },

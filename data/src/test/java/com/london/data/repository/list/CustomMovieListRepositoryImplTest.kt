@@ -154,7 +154,7 @@ class CustomMovieListRepositoryImplTest {
     fun `getMovieListDetails should throw exception and not touch cache on remote failure`() = runTest {
         // Given
         coEvery { remoteDataSource.getDetails(any(), any()) } returns Result.failure(
-            NetworkException.HttpLockedException("locked")
+            NetworkException.HttpLockedException(status = 1, message = "error")
         )
 
         // When & Then

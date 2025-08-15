@@ -52,7 +52,7 @@ fun CategoriesItem(
     ) {
         ImageView(
             model = categoryImage,
-            errorContent = { ErrorImage(NovixTheme.isThemeDark) },
+            errorContent = { ErrorImage() },
             contentDescription = "Image of $categoryName",
             modifier = Modifier.fillMaxSize(),
             contentScale = Crop,

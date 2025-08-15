@@ -120,7 +120,7 @@ class SearchRepositoryImplTest {
         val networkException = RuntimeException("Network failed")
 
         // Need to create a repository instance with a null crash reporter for this specific test
-        val repositoryWithNullCrashReporter = SearchRepositoryImpl(
+        SearchRepositoryImpl(
             genreInterestDao,
             searchRemoteDataSource,
             mockCrashReporter
@@ -264,7 +264,10 @@ class SearchRepositoryImplTest {
 
         coEvery {
             searchRemoteDataSource.searchForTvShows(query, false, page)
-        } throws NetworkException.UnAuthorizedException("401 Unauthorized")
+        } throws NetworkException.UnAuthorizedException(
+            "401 Unauthorized",
+            status = 401
+        )
 
         assertThrows<NetworkException.UnAuthorizedException> {
             repository.searchForTvShows(query, page)
@@ -278,7 +281,10 @@ class SearchRepositoryImplTest {
 
         coEvery {
             searchRemoteDataSource.searchForTvShows(query, false, page)
-        } throws NetworkException.TimeoutException("Request timed out")
+        } throws NetworkException.TimeoutException(
+            "Request timed out",
+            status = 408
+        )
 
         assertThrows<NetworkException.TimeoutException> {
             repository.searchForTvShows(query, page)
@@ -292,7 +298,10 @@ class SearchRepositoryImplTest {
 
         coEvery {
             searchRemoteDataSource.searchForActors(query, false, page)
-        } throws NetworkException.ValidationException("Invalid query")
+        } throws NetworkException.ValidationException(
+            "Invalid query",
+            status = 422
+        )
 
         assertThrows<NetworkException.ValidationException> {
             repository.searchForActors(query, page)
