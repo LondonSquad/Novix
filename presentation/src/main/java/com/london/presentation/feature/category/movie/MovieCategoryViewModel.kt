@@ -9,6 +9,8 @@ import com.london.presentation.navigation.getArgs
 import com.london.presentation.shared.base.BaseViewModel
 import com.london.presentation.shared.base.ErrorState
 import com.london.presentation.shared.base.createPagingSourceFlow
+import com.london.presentation.shared.genre.MovieGenreUi
+import com.london.presentation.shared.genre.toDomain
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
@@ -21,10 +23,11 @@ class MovieCategoryViewModel @Inject constructor(
     MovieCategoryContract {
 
     private val args = savedStateHandle.getArgs<Screen.MoviesByCategory>()
-    private val categoryId = args?.categoryId ?: 0 //toDo() category id will replace with enum
+    private val genre =
+        args?.category ?: MovieGenreUi.All
 
     init {
-        initializeMovies(categoryId)
+        initializeMovies(genre)
     }
 
     override fun onMovieClick(movieId: Int) =
@@ -35,29 +38,29 @@ class MovieCategoryViewModel @Inject constructor(
 
     override fun onSavedClick(movieId: Int) = Unit //toDo() save movie
 
-    private fun initializeMovies(categoryId: Int) {
+    private fun initializeMovies(genreUi: MovieGenreUi) {
         tryToExecute(
-            onStart = { onInitializeMoviesStarted(categoryId = categoryId) },
-            block = { createMoviesPagingSourceFlow(categoryId = categoryId) },
+            onStart = { onInitializeMoviesStarted(genre = genreUi) },
+            block = { createMoviesPagingSourceFlow(genreUi = genreUi) },
             onSuccess = ::onInitializeMoviesSuccess,
-            checkSuccess = { categoryId != 0 },
+            checkSuccess = { genreUi != MovieGenreUi.All },
             onError = ::onInitializeMoviesFailed,
             onCompleted = ::onInitializeMoviesCompleted
         )
     }
 
-    private fun createMoviesPagingSourceFlow(categoryId: Int): Flow<PagingData<Movie>> {
+    private fun createMoviesPagingSourceFlow(genreUi: MovieGenreUi): Flow<PagingData<Movie>> {
 
         return createPagingSourceFlow(query = "") { _, pageNumber ->
-            getMovieUseCase.getMoviesByCategory(
-                categoryId = categoryId,
+            getMovieUseCase.getMoviesByGenre(
+                genre = genreUi.toDomain(),
                 pageNumber = pageNumber
             )
         }
     }
 
-    private fun onInitializeMoviesStarted(categoryId: Int) =
-        updateState { copy(categoryId = categoryId, isLoading = true) }
+    private fun onInitializeMoviesStarted(genre: MovieGenreUi) =
+        updateState { copy(genre = genre, isLoading = true) }
 
     private fun onInitializeMoviesSuccess(moviesFlow: Flow<PagingData<Movie>>) =
         updateState { copy(moviesFlow = moviesFlow) }

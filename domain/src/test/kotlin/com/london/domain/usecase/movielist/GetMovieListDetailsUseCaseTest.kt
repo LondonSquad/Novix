@@ -3,6 +3,7 @@ package com.london.domain.usecase.movielist
 import com.google.common.truth.Truth.assertThat
 import com.london.domain.entity.Movie
 import com.london.domain.entity.PagedFetchResponse
+import com.london.domain.entity.genre.MovieGenre
 import com.london.domain.repository.CustomMovieListRepository
 import io.mockk.coEvery
 import io.mockk.mockk
@@ -55,7 +56,7 @@ class GetMovieListDetailsUseCaseTest {
                     posterUrl = "none",
                     releaseYear = 1,
                     rating = 1,
-                    genreIds = listOf(1, 2, 3)
+                    genres = listOf(MovieGenre.ACTION, MovieGenre.ACTION, MovieGenre.ACTION)
                 ),
             )
         )

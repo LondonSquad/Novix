@@ -9,6 +9,8 @@ import com.london.presentation.navigation.getArgs
 import com.london.presentation.shared.base.BaseViewModel
 import com.london.presentation.shared.base.ErrorState
 import com.london.presentation.shared.base.createPagingSourceFlow
+import com.london.presentation.shared.genre.TvShowGenreUi
+import com.london.presentation.shared.genre.toDomain
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
@@ -22,10 +24,10 @@ class TvShowCategoryViewModel @Inject constructor(
 
     private val args = savedStateHandle.getArgs<Screen.TvShowsByCategory>()
 
-    private val categoryId = args?.categoryId ?: 0 //toDo() category id will replace with enum
+    private val genre = args?.category ?: TvShowGenreUi.All
 
     init {
-        initializeTvShows(categoryId = categoryId)
+        initializeTvShows(genreUi = genre)
     }
 
     override fun onTvShowClick(tvShowId: Int) =
@@ -36,28 +38,28 @@ class TvShowCategoryViewModel @Inject constructor(
 
     override fun onSavedClick(tvShowId: Int) = Unit //TODO("Save Tv Show Not yet implemented")
 
-    private fun initializeTvShows(categoryId: Int) {
+    private fun initializeTvShows(genreUi: TvShowGenreUi) {
         tryToExecute(
-            onStart = { onInitializeTvShowsStarted(categoryId = categoryId) },
-            block = { createTvShowsPagingSourceFlow(categoryId = categoryId) },
+            onStart = { onInitializeTvShowsStarted(genreUi = genreUi) },
+            block = { createTvShowsPagingSourceFlow(genreUi = genreUi) },
             onSuccess = ::onInitializeTvShowSuccess,
-            checkSuccess = { categoryId != 0 },
+            checkSuccess = { genreUi != TvShowGenreUi.All },
             onError = ::onInitializeTvShowsFailed,
             onCompleted = ::onInitializeTvShowsCompleted
         )
     }
 
-    private fun createTvShowsPagingSourceFlow(categoryId: Int): Flow<PagingData<TvShow>> {
+    private fun createTvShowsPagingSourceFlow(genreUi: TvShowGenreUi): Flow<PagingData<TvShow>> {
 
         return createPagingSourceFlow(query = "") { _, pageNumber ->
-            managerTvShowDetailsUseCase.getTvShowsByCategory(
-                categoryId = categoryId, pageNumber = pageNumber
+            managerTvShowDetailsUseCase.getTvShowsByGenre(
+                genre = genreUi.toDomain(), pageNumber = pageNumber
             )
         }
     }
 
-    private fun onInitializeTvShowsStarted(categoryId: Int) =
-        updateState { copy(categoryId = categoryId, isLoading = true) }
+    private fun onInitializeTvShowsStarted(genreUi: TvShowGenreUi) =
+        updateState { copy(genre = genreUi, isLoading = true) }
 
     private fun onInitializeTvShowSuccess(tvShowFlow: Flow<PagingData<TvShow>>) =
         updateState { copy(tvShowFlow = tvShowFlow) }

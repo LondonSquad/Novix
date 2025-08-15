@@ -1,8 +1,10 @@
 package com.london.domain.entity.moviedatails
 
+import com.london.domain.entity.genre.MovieGenre
+
 data class MovieDetails(
     val backdropUrl: String,
-    val genresId: List<Int>,
+    val genres: List<MovieGenre>,
     val id: Int,
     val overview: String,
     val posterUrl: String,
