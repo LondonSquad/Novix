@@ -78,7 +78,7 @@ class TvShowRepositoryImpl @Inject constructor(
 
     override suspend fun addTvShowById(id: Int, rating: Int): Boolean =
         tvShowRemoteDataSource.addTvShowRating(
-            tvShowId = id,
+            id = id,
             rating = rating.toDouble(),
             userSessionId = authenticationPreferences.getSessionId(),
             guestSessionId = authenticationPreferences.getGuestSessionId()
@@ -176,7 +176,7 @@ class TvShowRepositoryImpl @Inject constructor(
         episodeNumber: Int,
         rating: Int
     ): Boolean = tvShowRemoteDataSource.addTvShowEpisode(
-        tvShowId = id,
+        id = id,
         seasonNumber = seasonNumber,
         episodeNumber = episodeNumber,
         userSessionId = authenticationPreferences.getSessionId(),
@@ -199,7 +199,9 @@ class TvShowRepositoryImpl @Inject constructor(
         episodeNumber: Int
     ): TvShowEpisodeByIdEntity =
         tvShowRemoteDataSource.getEpisodeDetails(
-            tvShowId = id, seasonNumber = seasonNumber, episodeNumber = episodeNumber
+            tvShowId = id,
+            seasonNumber = seasonNumber,
+            episodeNumber = episodeNumber
         ).getOrThrow().toTvShowEpisodeEntity()
 
     override suspend fun getEpisodeVideos(

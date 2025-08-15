@@ -19,7 +19,7 @@ class MyRatingsViewModel @Inject constructor(
 
     fun initializeRatedMedia() {
         tryToExecute(
-            block = { manageRatingUseCase.getAllRatedMediaSorted() },
+            block = { manageRatingUseCase.getRatedMediaSorted() },
             onStart = { updateState { copy(isLoading = true) } },
             onSuccess = { ratedMedia -> updateStateRatedMedia(ratedMedia) },
             onError = { errorState -> updateState { copy(errorState = errorState) } },
@@ -74,6 +74,7 @@ class MyRatingsViewModel @Inject constructor(
         updateState {
             copy(
                 ratedMovies = ratedMovies.filter { it.id != id },
+                ratedTvShows = ratedTvShows.filter { it.id != id },
                 allRatedMedia = allRatedMedia.filter { it.id != id }
             )
         }

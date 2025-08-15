@@ -699,7 +699,7 @@ class TvShowRepositoryImplTest {
         coEvery { authenticationPreferences.getGuestSessionId() } returns guestSessionId
         coEvery {
             remoteDataSource.addTvShowRating(
-                tvShowId = tvShowId,
+                id = tvShowId,
                 rating = rating.toDouble(),
                 userSessionId = sessionId,
                 guestSessionId = guestSessionId
@@ -725,7 +725,7 @@ class TvShowRepositoryImplTest {
         coEvery { authenticationPreferences.getGuestSessionId() } returns guestSessionId
         coEvery {
             remoteDataSource.addTvShowRating(
-                tvShowId = tvShowId,
+                id = tvShowId,
                 rating = rating.toDouble(),
                 userSessionId = sessionId,
                 guestSessionId = guestSessionId
@@ -753,7 +753,7 @@ class TvShowRepositoryImplTest {
         coEvery { authenticationPreferences.getGuestSessionId() } returns guestSessionId
         coEvery {
             remoteDataSource.addTvShowEpisode(
-                tvShowId = tvShowId,
+                id = tvShowId,
                 seasonNumber = seasonNumber,
                 episodeNumber = episodeNumber,
                 rating = rating.toDouble(),
@@ -783,7 +783,7 @@ class TvShowRepositoryImplTest {
         coEvery { authenticationPreferences.getGuestSessionId() } returns guestSessionId
         coEvery {
             remoteDataSource.addTvShowEpisode(
-                tvShowId = tvShowId,
+                id = tvShowId,
                 seasonNumber = seasonNumber,
                 episodeNumber = episodeNumber,
                 rating = rating.toDouble(),
@@ -811,7 +811,7 @@ class TvShowRepositoryImplTest {
         coEvery { authenticationPreferences.getGuestSessionId() } returns guestSessionId
         coEvery {
             remoteDataSource.addTvShowRating(
-                tvShowId = tvShowId,
+                id = tvShowId,
                 rating = rating.toDouble(),
                 userSessionId = sessionId,
                 guestSessionId = guestSessionId

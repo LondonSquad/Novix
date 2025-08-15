@@ -152,7 +152,6 @@ private fun Content(
                                         MediaType.TvShow -> contract.onTvShowClick(item.id)
                                     }
                                 },
-                            isDarkMode = NovixTheme.isThemeDark,
                             hasSaveIcon = false
                         )
                     }
