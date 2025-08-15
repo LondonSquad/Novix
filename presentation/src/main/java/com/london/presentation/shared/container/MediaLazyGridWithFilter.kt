@@ -9,9 +9,7 @@ import androidx.paging.compose.LazyPagingItems
 import com.london.designsystem.theme.NovixTheme
 import com.london.designsystem.theme.ThemePreviews
 import com.london.domain.entity.Movie
-import com.london.domain.entity.TvShow
 import com.london.presentation.shared.EmptyGenreLayout
-import com.london.presentation.shared.MediaCategory
 import com.london.presentation.shared.MediaGenreFilters
 import com.london.presentation.utils.MovieGenre
 import com.london.presentation.utils.TvShowGenre
@@ -94,7 +92,7 @@ fun <T : Any> MediaLazyGridWithFilter(
             onTvShowGenreClick = onTvShowGenreClick,
         )
 
-    	if (pagingItems.itemCount > 0) {
+        if (pagingItems.itemCount > 0) {
             RenderPagingItemsGrid(
                 pagingItems = pagingItems,
                 imageUrl = imageUrl,
