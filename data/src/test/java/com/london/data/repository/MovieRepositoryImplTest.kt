@@ -129,7 +129,10 @@ class MovieRepositoryImplTest {
     @Test
     fun `getMovieCast should throw UnAuthorizedException when remote fails`() = runTest {
         coEvery { movieRemoteDataSource.getMovieDetails(123) } throws
-                NetworkException.UnAuthorizedException("unauthorized")
+                NetworkException.UnAuthorizedException(
+                    message = "unauthorized",
+                    status = 401
+                )
 
         assertThrows<NetworkException.UnAuthorizedException> {
             repository.getMovieById(123)
@@ -139,7 +142,10 @@ class MovieRepositoryImplTest {
     @Test
     fun `getMovieImages should throw HttpLockedException when remote fails`() = runTest {
         coEvery { movieRemoteDataSource.getMovieImages(123) } throws
-                NetworkException.HttpLockedException("locked")
+                NetworkException.HttpLockedException(
+                    "locked",
+                    status = 423
+                )
 
         assertThrows<NetworkException.HttpLockedException> {
             repository.getMovieImagesById(123)
@@ -149,7 +155,10 @@ class MovieRepositoryImplTest {
     @Test
     fun `getSimilarMovies should throw TimeoutException when remote fails`() = runTest {
         coEvery { movieRemoteDataSource.getSimilarMovies(123) } throws
-                NetworkException.TimeoutException("timeout")
+                NetworkException.TimeoutException(
+                    message = "timeout",
+                    status = 408
+                )
 
         assertThrows<NetworkException.TimeoutException> {
             repository.getSimilarMoviesById(123)
@@ -332,7 +341,10 @@ class MovieRepositoryImplTest {
                 CATEGORY_ID,
                 PAGE_NUMBER
             )
-        } returns Result.failure(NetworkException.HttpLockedException("Resource locked"))
+        } returns Result.failure(NetworkException.HttpLockedException(
+            message = "Resource locked",
+            status = 423
+        ))
         //When //Then
         assertThrows<NetworkException.HttpLockedException> {
             repository.getMoviesByCategory(
@@ -557,7 +569,10 @@ class MovieRepositoryImplTest {
     fun `getPopularMovies - when network throws UnAuthorizedException should propagate exception and log crash`() =
         runTest {
             // Given
-            val exception = NetworkException.UnAuthorizedException("401 Unauthorized")
+            val exception = NetworkException.UnAuthorizedException(
+                message = "401 Unauthorized",
+                status = 401
+            )
             coEvery { homeLocalDataSource.getAll() } returns emptyList()
             coEvery { movieRemoteDataSource.getPopularMovies() } throws exception
 
@@ -574,7 +589,10 @@ class MovieRepositoryImplTest {
     fun `getPopularMovies - when network throws TimeoutException should propagate exception and log crash`() =
         runTest {
             // Given
-            val exception = NetworkException.TimeoutException("Request timed out")
+            val exception = NetworkException.TimeoutException(
+                message = "Request timed out",
+                status = 408
+            )
             coEvery { homeLocalDataSource.getAll() } returns emptyList()
             coEvery { movieRemoteDataSource.getPopularMovies() } throws exception
 

@@ -1,7 +1,7 @@
 package com.london.presentation.feature.details.actor.info.gallery
 
 import androidx.lifecycle.SavedStateHandle
-import com.london.domain.usecase.GetActorImagesByIdUseCase
+import com.london.domain.usecase.details.actor.GetActorUseCase
 import com.london.presentation.navigation.Screen
 import com.london.presentation.navigation.getArgs
 import com.london.presentation.shared.base.BaseViewModel
@@ -11,8 +11,8 @@ import javax.inject.Inject
 @HiltViewModel
 class ActorsGalleryViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle,
-    private val getActorImagesById: GetActorImagesByIdUseCase
-) : BaseViewModel<ActorsGalleryUiState, ActorsGalleryEffect>(ActorsGalleryUiState()),
+    private val getActorUseCase: GetActorUseCase,
+    ) : BaseViewModel<ActorsGalleryUiState, ActorsGalleryEffect>(ActorsGalleryUiState()),
     ActorsGalleryContract {
 
     private val args = savedStateHandle.getArgs<Screen.ActorGallery>()
@@ -24,7 +24,9 @@ class ActorsGalleryViewModel @Inject constructor(
 
     private fun loadImages(actorId: Int) {
         tryToExecute(
-            block = { getActorImagesById.invoke(actorId) },
+            block = {
+                getActorUseCase.getActorImagesById(actorId)
+            },
             onStart = { updateState { copy(isLoading = true) } },
             onSuccess = { imageDetails -> updateState { copy(images = imageDetails) } },
             onError = { errorState -> updateState { copy(error = errorState) } },

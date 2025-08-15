@@ -7,13 +7,10 @@ import com.london.domain.entity.UpComingMovie
 import com.london.domain.entity.popular.PopularMedia
 import com.london.domain.entity.recent.MediaType
 import com.london.domain.entity.toprated.TopRatedMedia
-import com.london.domain.usecase.GetPopularMovies
-import com.london.domain.usecase.GetUpComingMoviesByCategoryUseCase
-import com.london.domain.usecase.details.tvshow.ManageTvShowDetailsUseCase
+import com.london.domain.usecase.details.movie.GetMovieUseCase
+import com.london.domain.usecase.details.tvshow.GetTvShowUseCase
 import com.london.domain.usecase.recent.watched.movie.ManageRecentMovieWatchedUseCase
 import com.london.domain.usecase.recent.watched.tvshow.ManageRecentTvShowWatchedUseCase
-import com.london.domain.usecase.toprated.GetTopRatedMoviesUseCase
-import com.london.domain.usecase.toprated.GetTopRatedTvShowUseCase
 import com.london.presentation.utils.MovieGenre
 import io.mockk.clearAllMocks
 import io.mockk.coEvery
@@ -36,11 +33,8 @@ class HomeViewModelTest {
 
     private val testDispatcher = UnconfinedTestDispatcher()
 
-    private val getPopularMovies = mockk<GetPopularMovies>()
-    private val manageTvShowDetailsUseCase = mockk<ManageTvShowDetailsUseCase>()
-    private val getUpcomingMoviesByCategoryUseCase = mockk<GetUpComingMoviesByCategoryUseCase>()
-    private val getTopRatedMovies = mockk<GetTopRatedMoviesUseCase>()
-    private val getTopRatedTvShows = mockk<GetTopRatedTvShowUseCase>()
+    private val getMovieUseCase = mockk<GetMovieUseCase>()
+    private val getTvShowUseCase = mockk<GetTvShowUseCase>()
     private val manageRecentMovieWatchedUseCase = mockk<ManageRecentMovieWatchedUseCase>()
     private val manageRecentTvShowWatchedUseCase = mockk<ManageRecentTvShowWatchedUseCase>()
 
@@ -51,14 +45,14 @@ class HomeViewModelTest {
 
         Dispatchers.setMain(testDispatcher)
 
-        coEvery { getPopularMovies.invoke() } returns emptyList()
-        coEvery { manageTvShowDetailsUseCase.getPopularTvShows() } returns emptyList()
-        coEvery { getTopRatedMovies.getMostRecent() } returns emptyList()
-        coEvery { getTopRatedTvShows.getMostRecent() } returns emptyList()
+        coEvery { getMovieUseCase.getPopularMovies() } returns emptyList()
+        coEvery { getTvShowUseCase.getPopularTvShows() } returns emptyList()
+        coEvery { getMovieUseCase.getMostRecentMovies() } returns emptyList()
+        coEvery { getTvShowUseCase.getMostRecentTvShows() } returns emptyList()
         coEvery { manageRecentMovieWatchedUseCase.getMostRecent() } returns flowOf(emptyList())
         coEvery { manageRecentTvShowWatchedUseCase.getMostRecent() } returns flowOf(emptyList())
         coEvery {
-            getUpcomingMoviesByCategoryUseCase.invoke(
+            getMovieUseCase.getUpcomingMoviesByCategory(
                 any(),
                 any()
             )
@@ -76,11 +70,8 @@ class HomeViewModelTest {
 
     private fun createViewModel(): HomeViewModel {
         return HomeViewModel(
-            getPopularMovies = getPopularMovies,
-            manageTvShowDetailsUseCase = manageTvShowDetailsUseCase,
-            getUpcomingMoviesByCategoryUseCase = getUpcomingMoviesByCategoryUseCase,
-            getTopRatedMovies = getTopRatedMovies,
-            getTopRatedTvShows = getTopRatedTvShows,
+            getMovieUseCase = getMovieUseCase,
+            getTvShowUseCase = getTvShowUseCase,
             manageRecentMovieWatchedUseCase = manageRecentMovieWatchedUseCase,
             manageRecentTvShowWatchedUseCase = manageRecentTvShowWatchedUseCase
         )
@@ -92,8 +83,8 @@ class HomeViewModelTest {
         val mockMovies = listOf(createPopularMovieMedia())
         val mockTvShows = listOf(createPopularTvShowMedia())
 
-        coEvery { getPopularMovies.invoke() } returns mockMovies
-        coEvery { manageTvShowDetailsUseCase.getPopularTvShows() } returns mockTvShows
+        coEvery { getMovieUseCase.getPopularMovies() } returns mockMovies
+        coEvery { getTvShowUseCase.getPopularTvShows() } returns mockTvShows
 
         // When
         advanceUntilIdle()
@@ -118,8 +109,8 @@ class HomeViewModelTest {
             createMockTopRatedMedia(4, MediaType.TvShow)
         )
 
-        coEvery { getTopRatedMovies.getMostRecent() } returns mockTopRatedMovies
-        coEvery { getTopRatedTvShows.getMostRecent() } returns mockTopRatedTvShows
+        coEvery { getMovieUseCase.getMostRecentMovies() } returns mockTopRatedMovies
+        coEvery { getTvShowUseCase.getMostRecentTvShows() } returns mockTopRatedTvShows
 
         // When
         advanceUntilIdle()
@@ -141,7 +132,7 @@ class HomeViewModelTest {
             val mockResponse = createMockPagedFetchResponse(mockUpcomingMovies)
 
             coEvery {
-                getUpcomingMoviesByCategoryUseCase.invoke(categoryId, 1)
+                getMovieUseCase.getUpcomingMoviesByCategory(categoryId, 1)
             } returns mockResponse
             advanceUntilIdle()
 

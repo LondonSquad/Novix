@@ -9,6 +9,6 @@ class GetMovieListDetailsUseCase @Inject constructor(
     private val customMovieListRepository: CustomMovieListRepository,
 ) {
 
-    suspend fun invoke(listId: UInt, pageNumber: Int): PagedFetchResponse<Movie> =
+    suspend fun invoke(listId: Int, pageNumber: Int): PagedFetchResponse<Movie> =
         customMovieListRepository.getMovieListDetails(listId, pageNumber)
 }

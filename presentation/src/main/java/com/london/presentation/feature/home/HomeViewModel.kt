@@ -7,13 +7,10 @@ import com.london.domain.entity.Movie
 import com.london.domain.entity.TvShow
 import com.london.domain.entity.UpComingMovie
 import com.london.domain.entity.toprated.TopRatedMedia
-import com.london.domain.usecase.GetPopularMovies
-import com.london.domain.usecase.GetUpComingMoviesByCategoryUseCase
-import com.london.domain.usecase.details.tvshow.ManageTvShowDetailsUseCase
+import com.london.domain.usecase.details.movie.GetMovieUseCase
+import com.london.domain.usecase.details.tvshow.GetTvShowUseCase
 import com.london.domain.usecase.recent.watched.movie.ManageRecentMovieWatchedUseCase
 import com.london.domain.usecase.recent.watched.tvshow.ManageRecentTvShowWatchedUseCase
-import com.london.domain.usecase.toprated.GetTopRatedMoviesUseCase
-import com.london.domain.usecase.toprated.GetTopRatedTvShowUseCase
 import com.london.presentation.feature.home.popular.PopularUiMedia
 import com.london.presentation.shared.base.BaseViewModel
 import com.london.presentation.shared.base.ErrorState
@@ -32,11 +29,8 @@ import javax.inject.Inject
 @HiltViewModel
 @OptIn(ExperimentalCoroutinesApi::class)
 class HomeViewModel @Inject constructor(
-    private val getPopularMovies: GetPopularMovies,
-    private val manageTvShowDetailsUseCase: ManageTvShowDetailsUseCase,
-    private val getUpcomingMoviesByCategoryUseCase: GetUpComingMoviesByCategoryUseCase,
-    private val getTopRatedMovies: GetTopRatedMoviesUseCase,
-    private val getTopRatedTvShows: GetTopRatedTvShowUseCase,
+    private val getMovieUseCase: GetMovieUseCase,
+    private val getTvShowUseCase: GetTvShowUseCase,
     private val manageRecentMovieWatchedUseCase: ManageRecentMovieWatchedUseCase,
     private val manageRecentTvShowWatchedUseCase: ManageRecentTvShowWatchedUseCase
 ) : BaseViewModel<HomeScreenUiState, HomeScreenEffect>(HomeScreenUiState()), HomeScreenContract {
@@ -68,7 +62,7 @@ class HomeViewModel @Inject constructor(
 
     private fun createUpcomingPagingFlow(categoryId: Int?): Flow<PagingData<UpComingMovie>> {
         return createPagingSourceFlow(query = "") { _, pageNumber ->
-            getUpcomingMoviesByCategoryUseCase.invoke(
+            getMovieUseCase.getUpcomingMoviesByCategory(
                 categoryId = categoryId,
                 pageNumber = pageNumber
             )
@@ -89,8 +83,8 @@ class HomeViewModel @Inject constructor(
         updateState { copy(topRatedMediaList = topRatedMediaList.toUiMedia().shuffled()) }
 
     private suspend fun fetchTopRatedMedia(): List<TopRatedMedia> {
-        val movies = getTopRatedMovies.getMostRecent()
-        val tvShows = getTopRatedTvShows.getMostRecent()
+        val movies = getMovieUseCase.getMostRecentMovies()
+        val tvShows = getTvShowUseCase.getMostRecentTvShows()
 
         return movies + tvShows
     }
@@ -145,8 +139,8 @@ class HomeViewModel @Inject constructor(
         updateState { copy(isPopularLoading = isLoading) }
 
     private suspend fun fetchPopularMediaList(): List<PopularUiMedia> {
-        val movies = getPopularMovies.invoke()
-        val tvShows = manageTvShowDetailsUseCase.getPopularTvShows()
+        val movies = getMovieUseCase.getPopularMovies()
+        val tvShows = getTvShowUseCase.getPopularTvShows()
 
         return movies.toPopularUiMedia() + tvShows.toPopularUiMedia()
     }
@@ -156,6 +150,24 @@ class HomeViewModel @Inject constructor(
         initializeTopRatedMedia()
         handleRecentWatchedMedia()
         initializePopularMedia()
+    }
+
+    override fun onManageBookmarkClicked(movieId: Int) {
+        updateState {
+            copy(
+                isBookmarkSheetVisible = true,
+                bookmarkedMovieId = movieId
+            )
+        }
+    }
+
+    override fun onBookmarkSheetDismiss() {
+        updateState {
+            copy(
+                isBookmarkSheetVisible = false,
+                bookmarkedMovieId = 0
+            )
+        }
     }
 
     override fun onMovieClick(id: Int) =
