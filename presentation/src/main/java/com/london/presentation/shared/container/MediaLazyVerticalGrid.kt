@@ -1,6 +1,12 @@
 package com.london.presentation.shared.container
 
+import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.core.tween
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
+import androidx.compose.animation.slideInVertically
+import androidx.compose.animation.slideOutVertically
+import androidx.compose.animation.togetherWith
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -12,6 +18,7 @@ import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.lazy.grid.rememberLazyGridState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.key
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.paging.compose.LazyPagingItems
@@ -44,47 +51,64 @@ fun <T : Any> MediaLazyVerticalGrid(
     ) {
         topBar?.invoke()
 
-        LazyVerticalGrid(
-            state = rememberLazyGridState(),
-            columns = GridCells.Fixed(2),
-            modifier = Modifier.fillMaxSize(),
-            horizontalArrangement = Arrangement.spacedBy(12.dp),
-            verticalArrangement = Arrangement.spacedBy(12.dp),
-            contentPadding = PaddingValues(start = 16.dp, end = 16.dp, bottom = 16.dp)
-        ) {
-            items(
-                items = items,
-                key = { item ->
-                    when (item) {
-                        is Movie -> item.id
-                        is TvShow -> item.id
-                        else -> item.hashCode()
-                    }
-                }
-            ) { item ->
-                imageUrl(item)?.let {
-                    HomeCard(
-                        imageUrl = it,
-                        imageDescription = name(item),
-                        isSaved = isItemSaved(item),
-                        hasSaveIcon = hasSaveIcon,
-                        onSaveClick = { onSaveClick(item) },
-                        onDeleteClick = { onDeleteClick(item) },
-                        myRatingList = myRatingList,
-                        rate = rate,
-                        modifier = Modifier
-                            .animateItem(
-                                fadeInSpec = null,
-                                fadeOutSpec = tween(500),
-                                placementSpec = tween(500)
+        AnimatedContent(
+            targetState = items.size,
+            transitionSpec = {
+                (slideInVertically(
+                    animationSpec = tween(1200),
+                    initialOffsetY = { it }
+                ) + fadeIn(tween(1200))) togetherWith
+                        (slideOutVertically(
+                            animationSpec = tween(1200),
+                            targetOffsetY = { -it }
+                        ) + fadeOut(tween(1200)))
+            }
+        ) { itemCount ->
+            key(itemCount) {
+
+                LazyVerticalGrid(
+                    state = rememberLazyGridState(),
+                    columns = GridCells.Fixed(2),
+                    modifier = Modifier.fillMaxSize(),
+                    horizontalArrangement = Arrangement.spacedBy(12.dp),
+                    verticalArrangement = Arrangement.spacedBy(12.dp),
+                    contentPadding = PaddingValues(start = 16.dp, end = 16.dp, bottom = 16.dp)
+                ) {
+                    items(
+                        items = items,
+                        key = { item ->
+                            when (item) {
+                                is Movie -> item.id
+                                is TvShow -> item.id
+                                else -> item.hashCode()
+                            }
+                        }
+                    ) { item ->
+                        imageUrl(item)?.let {
+                            HomeCard(
+                                imageUrl = it,
+                                imageDescription = name(item),
+                                isSaved = isItemSaved(item),
+                                hasSaveIcon = hasSaveIcon,
+                                onSaveClick = { onSaveClick(item) },
+                                onDeleteClick = { onDeleteClick(item) },
+                                myRatingList = myRatingList,
+                                rate = rate,
+                                modifier = Modifier
+                                    .animateItem(
+                                        fadeInSpec = null,
+                                        fadeOutSpec = tween(1000),
+                                        placementSpec = tween(1000)
+                                    )
+                                    .clickable {
+                                        when (item) {
+                                            is Movie -> onNavigateToMovie(item.id)
+                                            is TvShow -> onNavigateToTvShow(item.id)
+                                        }
+                                    },
                             )
-                            .clickable {
-                                when (item) {
-                                    is Movie -> onNavigateToMovie(item.id)
-                                    is TvShow -> onNavigateToTvShow(item.id)
-                                }
-                            },
-                    )
+                        }
+                    }
                 }
             }
         }
@@ -114,43 +138,59 @@ fun <T : Any> MediaLazyVerticalGrid(
     ) {
         topBar?.invoke()
 
-        LazyVerticalGrid(
-            state = rememberLazyGridState(),
-            columns = GridCells.Fixed(2),
-            modifier = modifier.fillMaxSize(),
-            horizontalArrangement = Arrangement.spacedBy(12.dp),
-            verticalArrangement = Arrangement.spacedBy(12.dp),
-            contentPadding = PaddingValues(start = 16.dp, end = 16.dp, bottom = 16.dp)
-        ) {
-            items(
-                count = pagingItems.itemCount,
-                key = { index ->
-                    when (val item = pagingItems[index]) {
-                        is Movie -> item.id
-                        is TvShow -> item.id
-                        else -> index
+        AnimatedContent(
+            targetState = pagingItems.itemSnapshotList.items.size,
+            transitionSpec = {
+                (slideInVertically(
+                    animationSpec = tween(1200),
+                    initialOffsetY = { it }
+                ) + fadeIn(tween(1200))) togetherWith
+                        (slideOutVertically(
+                            animationSpec = tween(1200),
+                            targetOffsetY = { -it }
+                        ) + fadeOut(tween(1200)))
+            }
+        ) { itemCount ->
+            key(itemCount) {
+                LazyVerticalGrid(
+                    state = rememberLazyGridState(),
+                    columns = GridCells.Fixed(2),
+                    modifier = modifier.fillMaxSize(),
+                    horizontalArrangement = Arrangement.spacedBy(12.dp),
+                    verticalArrangement = Arrangement.spacedBy(12.dp),
+                    contentPadding = PaddingValues(start = 16.dp, end = 16.dp, bottom = 16.dp)
+                ) {
+                    items(
+                        count = pagingItems.itemCount,
+                        key = { index ->
+                            when (val item = pagingItems[index]) {
+                                is Movie -> item.id
+                                is TvShow -> item.id
+                                else -> index
+                            }
+                        }
+                    ) { index ->
+                        RenderPagingItem(
+                            index = index,
+                            pagingItems = pagingItems,
+                            imageUrl = imageUrl,
+                            name = name,
+                            isItemSaved = isItemSaved,
+                            hasSaveIcon = hasSaveIcon,
+                            onSaveClick = onSaveClick,
+                            onDeleteClick = onDeleteClick,
+                            myRatingList = myRatingList,
+                            rate = rate,
+                            onNavigateToMovie = onNavigateToMovie,
+                            onNavigateToTvShow = onNavigateToTvShow,
+                            modifier = Modifier.animateItem(
+                                fadeInSpec = null,
+                                fadeOutSpec = tween(1000),
+                                placementSpec = tween(1000)
+                            )
+                        )
                     }
                 }
-            ) { index ->
-                RenderPagingItem(
-                    index = index,
-                    pagingItems = pagingItems,
-                    imageUrl = imageUrl,
-                    name = name,
-                    isItemSaved = isItemSaved,
-                    hasSaveIcon = hasSaveIcon,
-                    onSaveClick = onSaveClick,
-                    onDeleteClick = onDeleteClick,
-                    myRatingList = myRatingList,
-                    rate = rate,
-                    onNavigateToMovie = onNavigateToMovie,
-                    onNavigateToTvShow = onNavigateToTvShow,
-                    modifier = Modifier.animateItem(
-                        fadeInSpec = null,
-                        fadeOutSpec = tween(500),
-                        placementSpec = tween(500)
-                    )
-                )
             }
         }
     }
