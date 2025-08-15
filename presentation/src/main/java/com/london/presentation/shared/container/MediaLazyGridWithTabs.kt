@@ -21,12 +21,11 @@ import com.london.presentation.utils.TvShowGenre
 
 @Composable
 fun <T : Any> MediaLazyGridWithTabs(
+    items: List<T>,
     modifier: Modifier = Modifier,
-    imageUrl: (T) -> String? = { it.getImageUrl() },
-    name: (T) -> String = { it.getName() },
-    items: List<T>? = null,
     isLoading: Boolean = false,
-    pagingItems: LazyPagingItems<T>? = null,
+    name: (T) -> String = { it.getName() },
+    imageUrl: (T) -> String? = { it.getImageUrl() },
     tabSelected: Int = MediaCategory.Movies.ordinal,
     onTabSelected: (MediaCategory) -> Unit = {},
     onMovieGenreClick: (MovieGenre) -> Unit = {},
@@ -60,11 +59,59 @@ fun <T : Any> MediaLazyGridWithTabs(
 
         MediaLazyGridWithFilter(
             items = items,
+            imageUrl = imageUrl,
+            name = name,
+            isLoading = isLoading,
+            modifier = Modifier.fillMaxSize(),
+            onMovieGenreClick = onMovieGenreClick,
+            onTvShowGenreClick = onTvShowGenreClick,
+            config = config
+        )
+    }
+}
+
+@Composable
+fun <T : Any> MediaLazyGridWithTabs(
+    pagingItems: LazyPagingItems<T>,
+    modifier: Modifier = Modifier,
+    isLoading: Boolean = false,
+    name: (T) -> String = { it.getName() },
+    imageUrl: (T) -> String? = { it.getImageUrl() },
+    tabSelected: Int = MediaCategory.Movies.ordinal,
+    onTabSelected: (MediaCategory) -> Unit = {},
+    onMovieGenreClick: (MovieGenre) -> Unit = {},
+    onTvShowGenreClick: (TvShowGenre) -> Unit = {},
+    config: MediaGridConfig = MediaGridConfig(),
+    topBar: @Composable (() -> Unit)? = null,
+) {
+    val tabs = listOf(
+        TabbableItem(R.string.Movies),
+        TabbableItem(R.string.TV_Shows)
+    )
+
+    val selectedTab = tabs.getOrNull(tabSelected)
+
+    Column(
+        modifier = modifier
+            .fillMaxSize()
+            .background(color = NovixTheme.colors.surface)
+    ) {
+        topBar?.invoke()
+
+        TabLayout(
+            tabs = tabs,
+            selectedTab = selectedTab,
+            onTabSelected = { tab ->
+                handleTabSelection(tab, tabs, onTabSelected)
+            },
+            modifier = Modifier.padding(top = 4.dp)
+        )
+
+        MediaLazyGridWithFilter(
             pagingItems = pagingItems,
             imageUrl = imageUrl,
             name = name,
             isLoading = isLoading,
-            tabSelected = tabSelected,
             modifier = Modifier.fillMaxSize(),
             onMovieGenreClick = onMovieGenreClick,
             onTvShowGenreClick = onTvShowGenreClick,
