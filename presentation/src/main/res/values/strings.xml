@@ -58,7 +58,7 @@
     <string name="read_more">" Read more"</string>
     <string name="read_less">" Read less"</string>
     <string name="cast">Cast</string>
-    <string name="imagr_dot">dot</string>
+    <string name="image_dot">dot</string>
     <string name="biography">Biography</string>
     <string name="gallery">Gallery</string>
     <string name="actor_photos">Actor Photos</string>
@@ -99,7 +99,7 @@
     <string name="trending_people">Trending People</string>
     <string name="no_trending_movies_in_genre">No movies found in this genre.</string>
     <string name="no_rating_items_in_list">No items found in my rating list.</string>
-    <string name="no_trending_tvshows_in_genre">No tv shows found in this genre.</string>
+    <string name="no_trending_shows_in_genre">No tv shows found in this genre.</string>
     <string name="no_trending_actors_in_genre">No people found in this genre.</string>
     <string name="no_tv_shows_found">no tv shows found in this category</string>
     <string name="no_actor_details">No actor details available</string>
@@ -111,6 +111,10 @@
     <string name="edit_list">Edit list</string>
     <string name="list_title">List title</string>
     <string name="no_items_found">There is no items</string>
+    <string name="save_to_list">Save to list</string>
+    <string name="cancel_addition_to_list">Cancel addition to list</string>
+    <string name="create_new_list">Create new list</string>
+    <string name="n_items">%1$d items</string>
     <string name="saved_list_title">My Lists</string>
     <string name="no_saved_list">There is no saved list yet, click on + button to add a new list!</string>
     <string name="login_to_create_list">Please login to create lists and add your favorite items to it!</string>
@@ -142,8 +146,10 @@
     <string name="blurs_all_sensitive_content">Blurs all sensitive content.</string>
     <string name="blurs_explicit_scenes_only">Blurs explicit scenes only.</string>
     <string name="no_content_is_blurred">No content is blurred.</string>
-    <string name="movie_removed_successfully">movie removed successffly</string>
+    <string name="movie_removed_successfully">movie removed successfully</string>
     <string name="movie_not_found">movie not found</string>
+    <string name="list_added_success">List added successfully</string>
+    <string name="list_added_fail">Something went wrong, can not delete list</string>
     <string name="list_added_successfully">list added successfuly</string>
     <string name="can_not_delete_list">can not delete list</string>
     <string name="delete_list_successfully">delete list successfully</string>">
@@ -155,5 +161,9 @@
     <string name="list_deletion_failed">List deletion failed</string>
     <string name="close">close</string>
     <string name="my_list_screen">My Lists</string>
+    <string name="login_to_add_list">Please login to save to list</string>
+    <string name="no_lists_available">No lists available! Create one now.</string>
+    <string name="item_added_success">Added to list successfully</string>
+    <string name="item_added_fail">Something went wrong, item addition failed</string>
     <string name="categories">Categories</string>
 </resources>
