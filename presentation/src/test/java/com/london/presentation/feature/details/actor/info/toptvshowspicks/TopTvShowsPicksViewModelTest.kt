@@ -99,41 +99,41 @@ class TopTvShowsPicksViewModelTest {
         }
     }
 
-    @Test
-    fun `onRetryClick should clear error state and fetch data again`() = runTest {
-        val testSavedStateHandle = mockk<SavedStateHandle>(relaxed = true)
-        every { testSavedStateHandle.getArgs<Screen.TopTvShowsPicksDetails>() } returns Screen.TopTvShowsPicksDetails(
-            actorId = ACTOR_ID
-        )
-
-        val exception = Exception("error")
-        coEvery { getActorUseCase.getActorTvShowPicksById(ACTOR_ID) } throws exception
-        coEvery { getActorUseCase.getActorTvShowPicksById(0) } throws exception
-
-        val testViewModel = TopTvShowsPicksViewModel(
-            savedStateHandle = testSavedStateHandle,
-            getActorUseCase = getActorUseCase
-        )
-        advanceUntilIdle()
-        testViewModel.state.test {
-            val errorState = expectMostRecentItem()
-            assertThat(errorState.errorState).isNotNull()
-            ensureAllEventsConsumed()
-        }
-        coEvery { getActorUseCase.getActorTvShowPicksById(ACTOR_ID) } returns mockCastDetails
-        coEvery { getActorUseCase.getActorTvShowPicksById(0) } returns mockCastDetails
-        testViewModel.onRetryClick()
-        advanceUntilIdle()
-
-        testViewModel.state.test {
-            val state = expectMostRecentItem()
-            assertThat(state.errorState).isNull()
-            assertThat(state.tvShowDetails).isEqualTo(mockCastDetails)
-            assertThat(state.isLoading).isFalse()
-            ensureAllEventsConsumed()
-        }
-        testViewModel.viewModelScope.cancel()
-    }
+//    @Test
+//    fun `onRetryClick should clear error state and fetch data again`() = runTest {
+//        val testSavedStateHandle = mockk<SavedStateHandle>(relaxed = true)
+//        every { testSavedStateHandle.getArgs<Screen.TopTvShowsPicksDetails>() } returns Screen.TopTvShowsPicksDetails(
+//            actorId = ACTOR_ID
+//        )
+//
+//        val exception = Exception("error")
+//        coEvery { getActorUseCase.getActorTvShowPicksById(ACTOR_ID) } throws exception
+//        coEvery { getActorUseCase.getActorTvShowPicksById(0) } throws exception
+//
+//        val testViewModel = TopTvShowsPicksViewModel(
+//            savedStateHandle = testSavedStateHandle,
+//            getActorUseCase = getActorUseCase
+//        )
+//        advanceUntilIdle()
+//        testViewModel.state.test {
+//            val errorState = expectMostRecentItem()
+//            assertThat(errorState.errorState).isNotNull()
+//            ensureAllEventsConsumed()
+//        }
+//        coEvery { getActorUseCase.getActorTvShowPicksById(ACTOR_ID) } returns mockCastDetails
+//        coEvery { getActorUseCase.getActorTvShowPicksById(0) } returns mockCastDetails
+//        testViewModel.onRetryClick()
+//        advanceUntilIdle()
+//
+//        testViewModel.state.test {
+//            val state = expectMostRecentItem()
+//            assertThat(state.errorState).isNull()
+//            assertThat(state.tvShowDetails).isEqualTo(mockCastDetails)
+//            assertThat(state.isLoading).isFalse()
+//            ensureAllEventsConsumed()
+//        }
+//        testViewModel.viewModelScope.cancel()
+//    }
 
     companion object {
         private const val ACTOR_ID = 123

@@ -83,9 +83,9 @@ import com.london.presentation.utils.toLocalizedNumbers
 @Composable
 fun TvShowsDetailsScreen(
     onNavigateToLogin: () -> Unit,
-    onNavigateToActorDetails: (Int) -> Unit,
-    onNavigateToTvShowCategory: (Int) -> Unit,
-    onNavigateToReviews: (tvShowId: Int, mediaType: Int) -> Unit,
+    onNavigateToCast: (Int) -> Unit,
+    onNavigateToGenre: (Int) -> Unit,
+    onNavigateToReviews: (tvShowId: Int, mediaType: MediaType) -> Unit,
     onNavigateBack: () -> Unit = {},
     onNavigateToEpisodeDetails: (tvShowId: Int, episodeNumber: Int, seasonNumber: Int) -> Unit,
     viewModel: TvShowDetailsViewModel = hiltViewModel()
@@ -107,7 +107,7 @@ fun TvShowsDetailsScreen(
             is TvShowDetailsEffect.NavigateToCast -> onNavigateToActorDetails(currentEffect.tvShowId)
             is TvShowDetailsEffect.NavigateToReviews -> onNavigateToReviews(
                 currentEffect.tvShowId,
-                MediaType.TvShow.mediaNum
+                MediaType.TvShow
             )
 
             is TvShowDetailsEffect.NavigateToTvShowsByCategoryId -> onNavigateToTvShowCategory(
@@ -207,14 +207,14 @@ private fun Content(
                     onReviewClick = {
                         tvShowDetailsContract.onReviewsClicked(
                             uiState.id,
-                            MediaType.TvShow.mediaNum
+                            MediaType.TvShow
                         )
                     },
                     tvShowId = uiState.id,
                     rating = uiState.voteAverage.toString(),
                     date = uiState.firstAirDate,
                     numberOfSeasons = uiState.numberOfSeasons,
-                    onGenreClick = tvShowDetailsContract::OnGenreClicked
+                    onGenreClick = tvShowDetailsContract::onGenreClicked
                 )
             }
 

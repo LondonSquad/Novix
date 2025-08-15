@@ -12,8 +12,10 @@ import kotlinx.coroutines.flow.emptyFlow
 data class HomeScreenUiState(
     val error: ErrorState? = null,
     val isLoading: Boolean = false,
+    val bookmarkedMovieId: Int = 0,
     val isPopularLoading: Boolean = false,
     val isTopRatedLoading: Boolean = false,
+    val isBookmarkSheetVisible: Boolean = false,
     val selectedMovieGenre: MovieGenre = MovieGenre.All,
     val topRatedMediaList: List<HomeUiMedia> = emptyList(),
     val popularMediaList: List<PopularUiMedia> = emptyList(),

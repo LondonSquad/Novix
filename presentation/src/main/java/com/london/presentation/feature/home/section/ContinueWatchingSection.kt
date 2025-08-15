@@ -17,7 +17,7 @@ fun ContinueWatchingSection(
         modifier = modifier,
         uiMediaList = recentWatchedMediaList,
         sectionName = R.string.continue_watch,
-        onSaveClick = {/*TODO: SAVE FUNCTIONALITY IS NOT IMPLEMENTED.*/ },
+        onSaveClick = { homeScreenContract.onManageBookmarkClicked(it) },
         onCardClick = { id, mediaType ->
             when (mediaType) {
                 MediaType.TvShow -> homeScreenContract.onTvShowClick(id)

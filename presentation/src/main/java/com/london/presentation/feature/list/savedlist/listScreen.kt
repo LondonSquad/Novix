@@ -91,7 +91,7 @@ private fun Content(
             )
         },
         emptyContent = {
-            EmptyList(contract = contract)
+            EmptyList(contract = contract, addListSheetState = state.addListSheetState)
         }
     ) {
         ScreenScaffold(
@@ -106,29 +106,31 @@ private fun Content(
             ) {
                 items(pagingItems.itemCount) { index ->
                     val item = pagingItems[index]
-                    if (item != null) {
+                    item?.let {
                         SavedListItemRow(
                             itemUi = item,
                             onCountClick = contract::onListClick
                         )
                     }
-
                 }
             }
+
             AddListBottomSheet(
                 addListInteractions = contract,
                 addListSheetState = state.addListSheetState
             )
         }
+
         if (state.isSnackBarSuccessVisible) {
             SnackBarAnimation(
-                message = stringResource(R.string.list_added_successfully),
+                message = stringResource(R.string.list_added_success),
                 icon = com.london.designsystem.R.drawable.ic_success
             )
         }
+
         if (state.error != null) {
             SnackBarAnimation(
-                message = stringResource(R.string.can_not_delete_list)
+                message = stringResource(R.string.list_added_fail)
             )
         }
     }
@@ -233,7 +235,10 @@ private fun ItemCount(
 }
 
 @Composable
-private fun EmptyList(contract: ListContract) {
+private fun EmptyList(
+    contract: ListContract,
+    addListSheetState: AddSheetState
+) {
     ScreenScaffold(
         titleRes = R.string.saved_list_title,
         onFabClick = contract::onFabClick,
@@ -252,6 +257,11 @@ private fun EmptyList(contract: ListContract) {
                 },
             )
         }
+
+        AddListBottomSheet(
+            addListInteractions = contract,
+            addListSheetState = addListSheetState
+        )
     }
 }
 
