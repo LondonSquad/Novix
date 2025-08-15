@@ -21617,8 +21617,8 @@
     "week": "2025-W33",
     "status": "pending",
     "diff_stats": {
-      "additions": 178,
-      "deletions": 1505,
+      "additions": 175,
+      "deletions": 1496,
       "changed_files": 65
     }
   }
