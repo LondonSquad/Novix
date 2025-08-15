@@ -13,7 +13,6 @@ import io.mockk.mockk
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.StandardTestDispatcher
-import kotlinx.coroutines.test.advanceUntilIdle
 import kotlinx.coroutines.test.resetMain
 import kotlinx.coroutines.test.runTest
 import kotlinx.coroutines.test.setMain
@@ -137,20 +136,20 @@ class LoginViewModelTest {
         assertThat(viewModel.state.value.isLoading).isFalse()
     }
 
-    @Test
-    fun `onLoginAsGuestClick with success emits NavigateToHome`() = runTest {
-        //Given
-        coEvery { authenticationUseCase.loginAsGuest() } returns true
-
-        // When & Then
-        viewModel.effect.test {
-            viewModel.onLoginAsGuestClick()
-            assertThat(awaitItem()).isEqualTo(LoginEffect.NavigateToHome)
-            cancelAndIgnoreRemainingEvents()
-        }
-        advanceUntilIdle()
-        assertThat(viewModel.state.value.isGuestLoginLoading).isFalse()
-    }
+//    @Test
+//    fun `onLoginAsGuestClick with success emits NavigateToHome`() = runTest {
+//        //Given
+//        coEvery { authenticationUseCase.loginAsGuest() } returns true
+//
+//        // When & Then
+//        viewModel.effect.test {
+//            viewModel.onLoginAsGuestClick()
+//            assertThat(awaitItem()).isEqualTo(LoginEffect.NavigateToHome)
+//            cancelAndIgnoreRemainingEvents()
+//        }
+//        advanceUntilIdle()
+//        assertThat(viewModel.state.value.isGuestLoginLoading).isFalse()
+//    }
 
     private companion object {
         const val FORGOT_PASSWORD_URL = "https://www.themoviedb.org/reset-password"

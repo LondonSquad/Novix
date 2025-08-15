@@ -69,9 +69,10 @@ firebaseAnalytics = "22.5.0"
 kotlinxKover = "0.9.1"
 
 hilt = "2.57"
-androidHiltNavigation = "1.2.0"
+androidHilt = "1.2.0"
 junitJupiterVersion = "5.8.1"
 turbine = "1.2.1"
+workRuntimeKtx = "2.10.3"
 
 [libraries]
 # AndroidX Core
@@ -79,6 +80,7 @@ androidx-constraintlayout-compose = { module = "androidx.constraintlayout:constr
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
 
 # Splash Screen
+androidx-hilt-work = { module = "androidx.hilt:hilt-work", version.ref = "androidHilt" }
 androidx-material = { module = "androidx.compose.material:material", version.ref = "materialVersion" }
 androidx-paging-common = { module = "androidx.paging:paging-common", version.ref = "pagingRuntime" }
 androidx-paging-compose = { module = "androidx.paging:paging-compose", version.ref = "pagingCompose" }
@@ -148,7 +150,7 @@ turbine = { module = "app.cash.turbine:turbine", version.ref = "turbine" }
 # Compiler and runtime dagger
 hilt-android = { group = "com.google.dagger", name = "hilt-android", version.ref = "hilt" }
 hilt-compiler = { group = "com.google.dagger", name = "hilt-compiler", version.ref = "hilt" }
-hilt-navigation-compose = { group = "androidx.hilt", name = "hilt-navigation-compose", version.ref = "androidHiltNavigation" }
+hilt-navigation-compose = { group = "androidx.hilt", name = "hilt-navigation-compose", version.ref = "androidHilt" }
 dagger = { module = "com.google.dagger:dagger", version.ref = "hilt" }
 
 # Add Retrofit libraries
@@ -158,6 +160,8 @@ okhttp-core = { group = "com.squareup.okhttp3", name = "okhttp", version.ref = "
 okhttp-logging = { group = "com.squareup.okhttp3", name = "logging-interceptor", version.ref = "okhttp" }
 #noinspection SimilarGradleDependency
 jupiter-junit-jupiter = { group = "org.junit.jupiter", name = "junit-jupiter", version.ref = "junitJupiterVersion" }
+androidx-work-runtime-ktx = { group = "androidx.work", name = "work-runtime-ktx", version.ref = "workRuntimeKtx" }
+androidx-hilt-common = { group = "androidx.hilt", name = "hilt-common", version.ref = "androidHilt" }
 
 
 [plugins]

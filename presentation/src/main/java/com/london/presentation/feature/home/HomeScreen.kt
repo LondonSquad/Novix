@@ -48,6 +48,7 @@ import com.london.presentation.feature.home.popular.popularSection
 import com.london.presentation.feature.home.toprated.topRatedSection
 import com.london.presentation.feature.home.trending.trendingSection
 import com.london.presentation.feature.home.upcoming.upcomingSection
+import com.london.presentation.shared.bookmarkSheet.BookmarkBottomSheet
 import com.london.presentation.shared.buildscreen.NetworkErrorScreen
 import com.london.presentation.utils.Listen
 import com.london.presentation.utils.gridColumns
@@ -204,6 +205,12 @@ private fun HomeScreenLayout(
             }
         }
     }
+
+    BookmarkBottomSheet(
+        onSheetDismiss = homeScreenContract::onBookmarkSheetDismiss,
+        isSheetVisible = uiState.isBookmarkSheetVisible,
+        bookmarkedMovieId = uiState.bookmarkedMovieId
+    )
 }
 
 @Composable
