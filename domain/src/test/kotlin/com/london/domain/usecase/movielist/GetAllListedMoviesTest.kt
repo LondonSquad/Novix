@@ -24,31 +24,24 @@ class GetAllListedMoviesTest {
     }
 
     @Test
-    fun `invoke should return all listed movies`() = runTest {
+    fun `invoke should return all listed movie IDs`() = runTest {
         //Given
-        coEvery { customMovieListRepository.getMovieLists(pageNumber = 1) } returns movieLists
-        coEvery {
-            customMovieListRepository.getMovieListDetails(
-                listId = 1,
-                pageNumber = 1
-            )
-        } returns listDetails1
-        coEvery {
-            customMovieListRepository.getMovieListDetails(
-                listId = 2,
-                pageNumber = 1
-            )
-        } returns listDetails2
+        val movieIds = listOf(1, 2, 3, 4)
+        coEvery { customMovieListRepository.getAllListedMovieIds() } returns movieIds
+
         //When
         val result = getAllListedMovies.invoke()
+
         //Then
-        assertThat(result).isEqualTo(listedMovies)
+        val expectedResult = setOf(1, 2, 3, 4)
+        assertThat(result).isEqualTo(expectedResult)
     }
 
     @Test
-    fun `invoke throws exception when movieListRepository throws exception`() = runTest {
+    fun `invoke throws exception when repository throws exception`() = runTest {
         //Given
-        coEvery { customMovieListRepository.getMovieLists(pageNumber = 1) } throws Exception()
+        coEvery { customMovieListRepository.getAllListedMovieIds() } throws Exception()
+
         //When //Then
         assertThrows<Exception> {
             getAllListedMovies.invoke()
