@@ -4,6 +4,7 @@ import androidx.navigation.NavController
 import androidx.navigation.NavDestination.Companion.hasRoute
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
+import com.london.domain.entity.recent.MediaType
 import com.london.presentation.navigation.Screen
 import com.london.presentation.navigation.Screen.ActorDetails
 import com.london.presentation.navigation.Screen.ActorGallery
@@ -53,8 +54,8 @@ fun NavController.navigateToTvShowsByCategory(genreId: Int) =
 fun NavController.navigateToMovieCategory(genreId: Int) =
     navigate(MoviesByCategory(genreId))
 
-fun NavController.navigateToReviews(movieId: Int, media: Int) =
-    navigate(Reviews(movieId, media))
+fun NavController.navigateToReviews(movieId: Int, mediaType: MediaType) =
+    navigate(Reviews(movieId, mediaType))
 
 fun NavController.navigateToLogin() {
     navigate(Login) {

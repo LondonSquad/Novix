@@ -28,7 +28,7 @@ import com.london.presentation.navigation.Screen.Login
 import com.london.presentation.navigation.Screen.Search
 
 @Composable
-fun NovixApp() {
+fun NavHostGraph() {
     val navController = rememberNavController()
     val navBackStackEntry by navController.currentBackStackEntryAsState()
     val currentDestination = navBackStackEntry?.destination
@@ -37,7 +37,7 @@ fun NovixApp() {
         currentDestination?.hasRoute<Home>() == true -> Home
         currentDestination?.hasRoute<Search>() == true -> Search
         currentDestination?.hasRoute<Categories>() == true -> Categories
-        currentDestination?.hasRoute<Lists>() == true -> Lists
+        currentDestination?.hasRoute<Lists>() == true -> Lists()
         currentDestination?.hasRoute<Account>() == true -> Account
         currentDestination?.hasRoute<Login>() == true -> Login
         else -> Home

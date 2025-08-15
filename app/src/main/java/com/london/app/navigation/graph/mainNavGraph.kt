@@ -194,8 +194,8 @@ fun NavGraphBuilder.mainNavGraph(
                 onNavigateToMovieDetails = ::navigateToMovieDetails,
                 navigateToActorDetails = ::navigateToActorDetails,
                 onNavigateToReviews = ::navigateToReviews,
-                onNavigateToLogin = ::navigateToLogin
-            )
+                onNavigateToLogin = ::navigateToLogin,
+                )
         }
 
         composable<Reviews> {

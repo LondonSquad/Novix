@@ -83,8 +83,8 @@ import com.london.presentation.utils.toLocalizedNumbers
 @Composable
 fun TvShowsDetailsScreen(
     onNavigateToLogin: () -> Unit,
-    onNavigateToCast: (Int) -> Unit,
-    onNavigateToGenre: (Int) -> Unit,
+    onNavigateToActorDetails: (Int) -> Unit,
+    onNavigateToTvShowCategory: (Int) -> Unit,
     onNavigateToReviews: (tvShowId: Int, mediaType: MediaType) -> Unit,
     onNavigateBack: () -> Unit = {},
     onNavigateToEpisodeDetails: (tvShowId: Int, episodeNumber: Int, seasonNumber: Int) -> Unit,

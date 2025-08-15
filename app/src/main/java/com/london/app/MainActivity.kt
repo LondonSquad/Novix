@@ -20,7 +20,7 @@ import androidx.compose.ui.platform.LocalView
 import androidx.core.graphics.toColorInt
 import androidx.core.view.WindowCompat
 import androidx.core.view.WindowInsetsControllerCompat
-import com.london.app.navigation.NovixApp
+import com.london.app.navigation.NavHostGraph
 import com.london.data.local.preference.readLanguageCode
 import com.london.designsystem.theme.NovixTheme
 import com.london.domain.AppPreferencesService
@@ -76,7 +76,7 @@ class MainActivity : ComponentActivity() {
                     CompositionLocalProvider(
                         LocalContentRestrictionLevel provides contentRestrictionLevel
                     ) {
-                        NovixApp()
+                        NavHostGraph()
                     }
                 }
             }
