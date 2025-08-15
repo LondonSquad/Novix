@@ -224,7 +224,7 @@ private fun SearchRecentArea(
             )
         },
         content = {
-            RecentSearchLayOut(
+            RecentSearchSection(
                 state = state,
                 contract = contract,
                 onNavigateToTvShowDetails = contract::onTvShowClick,
@@ -272,7 +272,7 @@ private fun RecentSearchesContent(
             )
         },
         content = {
-            RecentSearchLayOut(
+            RecentSearchSection(
                 state = state,
                 contract = contract,
                 onNavigateToTvShowDetails = contract::onTvShowClick,
@@ -418,48 +418,6 @@ private fun ActorSearchContent(state: SearchUiState, contract: SearchContract) {
                 )
             }
         )
-    }
-}
-
-@Composable
-fun RecentSearchLayOut(
-    state: SearchUiState,
-    contract: SearchContract,
-    onNavigateToTvShowDetails: (Int) -> Unit,
-    onNavigateToMovieDetails: (Int) -> Unit
-) {
-    val focusManager = LocalFocusManager.current
-    val keyboardController = LocalSoftwareKeyboardController.current
-    val handleRecentSearchClick: (String) -> Unit = { query ->
-        focusManager.clearFocus()
-        keyboardController?.hide()
-        contract.onRecentSearchClick(query)
-    }
-
-    LazyColumn(
-        modifier = Modifier.fillMaxSize()
-    ) {
-        if (state.recentViewed.isNotEmpty()) {
-            item {
-                RecentViewedSection(
-                    recentViewed = state.recentViewed,
-                    onClearAll = contract::clearRecentViewed,
-                    onNavigateToTvShowDetails = onNavigateToTvShowDetails,
-                    onNavigateToMovieDetails = onNavigateToMovieDetails
-                )
-            }
-        }
-
-        if (state.recentSearches.isNotEmpty()) {
-            item {
-                RecentSearchesSection(
-                    recentSearches = state.recentSearches,
-                    onClearAll = contract::clearRecentSearches,
-                    onSearchClick = handleRecentSearchClick,
-                    onRemoveClick = contract::removeRecentSearch
-                )
-            }
-        }
     }
 }
 
