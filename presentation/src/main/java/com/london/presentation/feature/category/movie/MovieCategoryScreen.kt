@@ -97,7 +97,6 @@ private fun Content(
 @ThemePreviews
 @Composable
 private fun MoviesByCategoryContentPreview() {
-
     Content(
         state = MovieCategoryUiState(),
         contract = object : MovieCategoryContract {
