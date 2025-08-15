@@ -19,6 +19,4 @@ data class TopRatedTvSeriesRemote(
     val posterPath: String? = null,
     @SerialName("vote_average")
     val voteAverage: Double?,
-    @SerialName("vote_count")
-    val voteCount: Int?
 ) : GenreMapper
