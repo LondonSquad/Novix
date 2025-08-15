@@ -83,8 +83,8 @@ import com.london.presentation.utils.toLocalizedNumbers
 @Composable
 fun TvShowsDetailsScreen(
     onNavigateToLogin: () -> Unit,
-    onNavigateToCast: (Int) -> Unit,
-    onNavigateToGenre: (Int) -> Unit,
+    onNavigateToActorDetails: (Int) -> Unit,
+    onNavigateToTvShowCategory: (Int) -> Unit,
     onNavigateToReviews: (tvShowId: Int, mediaType: Int) -> Unit,
     onNavigateBack: () -> Unit = {},
     onNavigateToEpisodeDetails: (tvShowId: Int, episodeNumber: Int, seasonNumber: Int) -> Unit,
@@ -104,13 +104,13 @@ fun TvShowsDetailsScreen(
             }
 
             TvShowDetailsEffect.NavigateBack -> onNavigateBack()
-            is TvShowDetailsEffect.NavigateToCast -> onNavigateToCast(currentEffect.tvShowId)
+            is TvShowDetailsEffect.NavigateToCast -> onNavigateToActorDetails(currentEffect.tvShowId)
             is TvShowDetailsEffect.NavigateToReviews -> onNavigateToReviews(
                 currentEffect.tvShowId,
                 MediaType.TvShow.mediaNum
             )
 
-            is TvShowDetailsEffect.NavigateToTvShowsByCategoryId -> onNavigateToGenre(
+            is TvShowDetailsEffect.NavigateToTvShowsByCategoryId -> onNavigateToTvShowCategory(
                 currentEffect.categoryId
             )
 

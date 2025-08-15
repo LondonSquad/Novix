@@ -9,10 +9,10 @@ class CategoriesViewModel : BaseViewModel<CategoriesUiState, CategoriesEffect>(C
     CategoriesContract {
 
     override fun onMovieGenreClick(genre: MovieGenre) =
-        emitEffect(CategoriesEffect.MovieCategoryNavigation(genre))
+        emitEffect(CategoriesEffect.MovieCategoryNavigation(genre.id))
 
     override fun onTvShowGenreClick(genre: TvShowGenre) =
-        emitEffect(CategoriesEffect.TvShowCategoryNavigation(genre))
+        emitEffect(CategoriesEffect.TvShowCategoryNavigation(genre.id))
 
     override fun onCategoryClick(category: MediaCategory) {
         if (category == state.value.selectedCategory) return

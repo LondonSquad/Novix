@@ -74,9 +74,9 @@ fun LazyGridScope.continueWatchingSection(
 @Composable
 fun ContinueWatchingScreen(
     screenTitle: String,
-    onBackClick: () -> Unit = {},
-    onMovieClick: (Int) -> Unit = {},
-    onTvShowClick: (Int) -> Unit = {},
+    onNavigateBack: () -> Unit = {},
+    onNaviagteToMovieDetalis: (Int) -> Unit = {},
+    onNaviagteToTvShowDetalis: (Int) -> Unit = {},
     viewModel: ContinueWatchingViewModel = hiltViewModel(),
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
@@ -84,9 +84,9 @@ fun ContinueWatchingScreen(
 
     effect?.Listen {
         when (it) {
-            is ContinueWatchingEffect.NavigateToMovieDetails -> onMovieClick(it.id)
-            is ContinueWatchingEffect.NavigateToTvShowDetails -> onTvShowClick(it.id)
-            is ContinueWatchingEffect.NavigateBack -> onBackClick()
+            is ContinueWatchingEffect.NavigateToMovieDetails -> onNaviagteToMovieDetalis(it.id)
+            is ContinueWatchingEffect.NavigateToTvShowDetails -> onNaviagteToTvShowDetalis(it.id)
+            is ContinueWatchingEffect.NavigateBack -> onNavigateBack()
         }
     }
 
