@@ -196,16 +196,17 @@ private fun SearchContentWithError(
 @Composable
 private fun SearchRecentArea(
     state: SearchUiState,
-    contract: SearchContract
+    contract: SearchContract,
+    modifier: Modifier = Modifier
 ) {
     ResultOrEmpty(
         items = state.recentSearches,
         otherItems = state.recentViewed,
         emptyContent = {
-            NoEarlierSearchLayout(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .background(NovixTheme.colors.surface)
+            EmptyLayout(
+                text = stringResource(R.string.start_exploring_msg),
+                image = R.drawable.imge_explore,
+                modifier = modifier.padding(horizontal = 16.dp)
             )
         },
         content = {
@@ -244,16 +245,17 @@ private fun SearchResultsContent(
 @Composable
 private fun RecentSearchesContent(
     state: SearchUiState,
-    contract: SearchContract
+    contract: SearchContract,
+    modifier: Modifier = Modifier
 ) {
     ResultOrEmpty(
         items = state.recentSearches,
         otherItems = state.recentViewed,
         emptyContent = {
-            NoEarlierSearchLayout(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .background(NovixTheme.colors.surface)
+            EmptyLayout(
+                text = stringResource(R.string.start_exploring_msg),
+                image = R.drawable.imge_explore,
+                modifier = modifier.padding(horizontal = 16.dp)
             )
         },
         content = {
@@ -405,18 +407,6 @@ private fun ActorSearchContent(state: SearchUiState, contract: SearchContract) {
         )
     }
 }
-
-@Composable
-private fun NoEarlierSearchLayout(
-    modifier: Modifier = Modifier
-) {
-    EmptyLayout(
-        text = stringResource(R.string.start_exploring_msg),
-        image = R.drawable.imge_explore,
-        modifier = modifier.padding(horizontal = 16.dp)
-    )
-}
-
 
 @Composable
 private fun NoSearchResultLayOut(
