@@ -1,6 +1,7 @@
 package com.london.presentation.feature.details.tvshow.info
 
 import com.london.domain.entity.recent.MediaType
+import com.london.presentation.shared.genre.TvShowGenreUi
 
 sealed interface TvShowDetailsEffect {
     data class OnNavigateToEpisodeDetails(
@@ -12,6 +13,6 @@ sealed interface TvShowDetailsEffect {
     data object NavigateBack : TvShowDetailsEffect
     data object OnLoginNavigation : TvShowDetailsEffect
     data class NavigateToCast(val tvShowId: Int) : TvShowDetailsEffect
-    data class NavigateToTvShowsByCategoryId(val categoryId: Int) : TvShowDetailsEffect
+    data class NavigateToTvShowsByCategoryId(val category: TvShowGenreUi) : TvShowDetailsEffect
     data class NavigateToReviews(val tvShowId: Int, val mediaType: MediaType) : TvShowDetailsEffect
 }

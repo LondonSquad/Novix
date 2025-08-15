@@ -1,6 +1,8 @@
 package com.london.presentation.navigation
 
 import com.london.domain.entity.recent.MediaType
+import com.london.presentation.shared.genre.MovieGenreUi
+import com.london.presentation.shared.genre.TvShowGenreUi
 import kotlinx.serialization.Serializable
 
 @Serializable
@@ -60,10 +62,10 @@ sealed interface Screen {
     data class TopTvShowsPicksDetails(val actorId: Int) : Screen
 
     @Serializable
-    data class MoviesByCategory(val categoryId: Int) : Screen
+    data class MoviesByCategory(val category: MovieGenreUi) : Screen
 
     @Serializable
-    data class TvShowsByCategory(val categoryId: Int) : Screen
+    data class TvShowsByCategory(val category: TvShowGenreUi) : Screen
 
     @Serializable
     data class EpisodeDetails(

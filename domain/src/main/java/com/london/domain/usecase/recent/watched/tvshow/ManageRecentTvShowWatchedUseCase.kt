@@ -1,6 +1,7 @@
 package com.london.domain.usecase.recent.watched.tvshow
 
 import com.london.domain.entity.TvShow
+import com.london.domain.entity.genre.TvShowGenre
 import com.london.domain.repository.RecentWatchedRepository
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
@@ -12,11 +13,11 @@ class ManageRecentTvShowWatchedUseCase @Inject constructor(
     suspend fun addTvShowToRecentWatched(item: TvShow) = recentWatchedRepository.insertTvShow(item)
 
     suspend fun getAllRecentTvShow(
-        limit: Int? = null, genreId: Int? = null
+        limit: Int? = null, genre: TvShowGenre = TvShowGenre.ALL
     ): Flow<List<TvShow>> =
         recentWatchedRepository.getAllRecentWatchedTvShows().map { shows ->
             shows.filter {
-                genreId == null || it.genres.contains(genreId)
+                genre == TvShowGenre.ALL || it.genres.contains(genre)
             }.let { filtered ->
                 if (limit != null) filtered.take(limit) else filtered
             }

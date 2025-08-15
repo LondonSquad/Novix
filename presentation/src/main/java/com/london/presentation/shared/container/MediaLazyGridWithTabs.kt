@@ -14,10 +14,12 @@ import com.london.designsystem.theme.NovixTheme
 import com.london.designsystem.theme.ThemePreviews
 import com.london.domain.entity.Movie
 import com.london.domain.entity.TvShow
+import com.london.domain.entity.genre.MovieGenre
+import com.london.domain.entity.genre.TvShowGenre
 import com.london.presentation.R
 import com.london.presentation.shared.MediaCategory
-import com.london.presentation.utils.MovieGenre
-import com.london.presentation.utils.TvShowGenre
+import com.london.presentation.shared.genre.MovieGenreUi
+import com.london.presentation.shared.genre.TvShowGenreUi
 
 @Composable
 fun <T : Any> MediaLazyGridWithTabs(
@@ -28,8 +30,8 @@ fun <T : Any> MediaLazyGridWithTabs(
     imageUrl: (T) -> String? = { it.getImageUrl() },
     tabSelected: Int = MediaCategory.Movies.ordinal,
     onTabSelected: (MediaCategory) -> Unit = {},
-    onMovieGenreClick: (MovieGenre) -> Unit = {},
-    onTvShowGenreClick: (TvShowGenre) -> Unit = {},
+    onMovieGenreClick: (MovieGenreUi) -> Unit = {},
+    onTvShowGenreClick: (TvShowGenreUi) -> Unit = {},
     config: MediaGridConfig = MediaGridConfig(),
     topBar: @Composable (() -> Unit)? = null,
 ) {
@@ -79,8 +81,8 @@ fun <T : Any> MediaLazyGridWithTabs(
     imageUrl: (T) -> String? = { it.getImageUrl() },
     tabSelected: Int = MediaCategory.Movies.ordinal,
     onTabSelected: (MediaCategory) -> Unit = {},
-    onMovieGenreClick: (MovieGenre) -> Unit = {},
-    onTvShowGenreClick: (TvShowGenre) -> Unit = {},
+    onMovieGenreClick: (MovieGenreUi) -> Unit = {},
+    onTvShowGenreClick: (TvShowGenreUi) -> Unit = {},
     config: MediaGridConfig = MediaGridConfig(),
     topBar: @Composable (() -> Unit)? = null,
 ) {
@@ -127,7 +129,8 @@ private fun handleTabSelection(
 ) {
     val index = tabs.indexOf(tab)
     if (index != -1) {
-        val category = if (index == MediaCategory.Movies.ordinal) MediaCategory.Movies else MediaCategory.TvShows
+        val category =
+            if (index == MediaCategory.Movies.ordinal) MediaCategory.Movies else MediaCategory.TvShows
         onTabSelected(category)
     }
 }
@@ -144,7 +147,7 @@ private fun Preview() {
             posterUrl = "https://example.com/movie1.jpg",
             releaseYear = 2023,
             rating = 8,
-            genreIds = listOf(28, 12)
+            genres = listOf(MovieGenre.TV_MOVIE)
         )
     )
 
@@ -155,7 +158,7 @@ private fun Preview() {
             posterPicture = "https://example.com/tvshow1.jpg",
             releaseYear = 2023,
             rating = 8,
-            genres = listOf(18, 80)
+            genres = listOf(TvShowGenre.ACTION_ADVENTURE)
         )
     )
 
@@ -173,8 +176,8 @@ private fun Preview() {
             rate = "3",
             isMovieSelected = true,
             isTvShowSelected = false,
-            selectedMovieGenre = MovieGenre.All,
-            selectedTvShowGenre = TvShowGenre.All,
+            selectedMovieGenre = MovieGenreUi.All,
+            selectedTvShowGenre = TvShowGenreUi.All,
             onNavigateToMovie = {},
             onNavigateToTvShow = {},
             onSaveClick = {},

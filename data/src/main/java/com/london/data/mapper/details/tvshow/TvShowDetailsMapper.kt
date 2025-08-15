@@ -1,16 +1,14 @@
 package com.london.data.mapper.details.tvshow
 
 import com.london.data.remote.model.details.tvshow.model.TvShowDetailsRemoteResponse
-import com.london.data.remote.model.details.tvshow.model.TvShowGenre
 import com.london.data.utils.asImageUrlOrEmpty
 import com.london.data.utils.orZero
 import com.london.data.utils.roundToDecimal
 import com.london.domain.entity.tvshowdetails.TvShowDetailsEntity
-import com.london.domain.entity.tvshowdetails.TvShowGenreEntity
 
 fun TvShowDetailsRemoteResponse.toEntity() = TvShowDetailsEntity(
     firstAirDate = firstAirDate.orEmpty(),
-    tvShowGenres = tvShowGenres?.map { it.toEntity() }.orEmpty(),
+    tvShowGenres = tvShowGenres?.map { it.id.orZero() }.toTvShowGenre(),
     id = id.orZero(),
     name = name.orEmpty(),
     numberOfEpisodes = numberOfEpisodes.orZero(),
@@ -21,7 +19,3 @@ fun TvShowDetailsRemoteResponse.toEntity() = TvShowDetailsEntity(
     voteAverage = voteAverage.orZero().roundToDecimal(),
 )
 
-fun TvShowGenre.toEntity() = TvShowGenreEntity(
-    id = id.orZero(),
-    name = name.orEmpty()
-)

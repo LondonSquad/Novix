@@ -4,8 +4,8 @@ import com.london.domain.entity.Movie
 import com.london.domain.entity.TvShow
 import com.london.presentation.shared.MediaCategory
 import com.london.presentation.shared.base.ErrorState
-import com.london.presentation.utils.MovieGenre
-import com.london.presentation.utils.TvShowGenre
+import com.london.presentation.shared.genre.MovieGenreUi
+import com.london.presentation.shared.genre.TvShowGenreUi
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.emptyFlow
 
@@ -16,7 +16,7 @@ data class ContinueWatchingUiState(
     val isMovieSelected: Boolean = true,
     val movies: Flow<List<Movie>> = emptyFlow(),
     val tvSeries: Flow<List<TvShow>> = emptyFlow(),
-    val selectedMovieGenre: MovieGenre = MovieGenre.All,
-    val selectedTvShowGenre: TvShowGenre = TvShowGenre.All,
+    val selectedMovieGenre: MovieGenreUi = MovieGenreUi.All,
+    val selectedTvShowGenre: TvShowGenreUi = TvShowGenreUi.All,
     val selectedMediaCategory: MediaCategory = MediaCategory.Movies
 )

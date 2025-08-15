@@ -1,10 +1,11 @@
 package com.london.presentation.feature.category.main
 
-import com.london.presentation.utils.MovieGenre
-import com.london.presentation.utils.TvShowGenre
+import com.london.presentation.shared.genre.MovieGenreUi
+import com.london.presentation.shared.genre.TvShowGenreUi
+
 
 interface CategoriesEffect {
 
-    data class MovieCategoryNavigation(val movieGenre: MovieGenre) : CategoriesEffect
-    data class TvShowCategoryNavigation(val tvShowGenre: TvShowGenre) : CategoriesEffect
+    data class MovieCategoryNavigation(val movieGenre: MovieGenreUi) : CategoriesEffect
+    data class TvShowCategoryNavigation(val tvShowGenre: TvShowGenreUi) : CategoriesEffect
 }

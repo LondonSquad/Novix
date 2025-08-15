@@ -18,11 +18,9 @@ import androidx.paging.compose.collectAsLazyPagingItems
 import com.london.designsystem.component.TopBar
 import com.london.designsystem.theme.ThemePreviews
 import com.london.presentation.R
-import com.london.presentation.feature.search.SearchCategory
 import com.london.presentation.shared.MediaLazyPagingGrid
 import com.london.presentation.shared.buildscreen.BuildScreen
 import com.london.presentation.utils.Listen
-import com.london.presentation.utils.convertGenreCodeToString
 import com.london.presentation.utils.isLoading
 
 @Composable
@@ -74,9 +72,7 @@ private fun Content(
         ) {
             TopBar(
                 title = stringResource(
-                    convertGenreCodeToString(
-                        genreId = state.categoryId, searchCategory = SearchCategory.Movies
-                    )
+                    state.genre.stringResId
                 ),
                 onBackClick = contract::onBack,
                 modifier = Modifier.padding(start = 16.dp, end = 16.dp, bottom = 12.dp)
@@ -101,7 +97,6 @@ private fun Content(
 @ThemePreviews
 @Composable
 private fun MoviesByCategoryContentPreview() {
-
     Content(
         state = MovieCategoryUiState(),
         contract = object : MovieCategoryContract {

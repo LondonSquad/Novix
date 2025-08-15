@@ -1,6 +1,7 @@
 package com.london.domain.usecase.recent.watched.movie
 
 import com.london.domain.entity.Movie
+import com.london.domain.entity.genre.MovieGenre
 import com.london.domain.repository.RecentWatchedRepository
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
@@ -15,10 +16,10 @@ class ManageRecentMovieWatchedUseCase @Inject constructor(
         getAllWatchedMovies(limit = limit)
 
     suspend fun getAllWatchedMovies(
-        limit: Int? = null, genreId: Int? = null
+        limit: Int? = null, genre: MovieGenre = MovieGenre.ALL
     ) = recentWatchedRepository.getAllRecentWatchedMovies().map { shows ->
         shows.filter {
-            genreId == null || it.genreIds.contains(genreId)
+            genre == MovieGenre.ALL || it.genres.contains(genre)
         }.let { filtered ->
             if (limit != null) filtered.take(limit) else filtered
         }
