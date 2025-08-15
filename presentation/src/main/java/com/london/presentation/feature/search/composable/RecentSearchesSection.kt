@@ -43,15 +43,11 @@ fun RecentSearchesSection(
             .background(NovixTheme.colors.surface)
             .padding(horizontal = 16.dp)
     ) {
-        recentSearches.forEachIndexed { index, search ->
-            val isLastItem = index == recentSearches.lastIndex
-            RecentSearchItem(
-                search = search.query,
-                onSearchClick = { onSearchClick(search.query) },
-                onRemoveClick = { onRemoveClick(search) },
-                showDivider = !isLastItem
-            )
-        }
+        RecentSearchList(
+            recentSearches = recentSearches,
+            onSearchClick = onSearchClick,
+            onRemoveClick = onRemoveClick
+        )
     }
 }
 
@@ -95,12 +91,34 @@ private fun RecentSearchItem(
     }
 
     if (showDivider) {
-        Box(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(horizontal = 7.5.dp)
-                .height(1.dp)
-                .background(NovixTheme.colors.stroke)
+        RecentSearchSeparator()
+    }
+}
+
+@Composable
+private fun RecentSearchList(
+    recentSearches: List<RecentSearch>,
+    onSearchClick: (String) -> Unit,
+    onRemoveClick: (RecentSearch) -> Unit
+) {
+    val lastIndex = recentSearches.lastIndex
+    recentSearches.forEachIndexed { index, search ->
+        RecentSearchItem(
+            search = search.query,
+            onSearchClick = { onSearchClick(search.query) },
+            onRemoveClick = { onRemoveClick(search) },
+            showDivider = index != lastIndex
         )
     }
+}
+
+@Composable
+private fun RecentSearchSeparator() {
+    Box(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(horizontal = 7.5.dp)
+            .height(1.dp)
+            .background(NovixTheme.colors.stroke)
+    )
 }
