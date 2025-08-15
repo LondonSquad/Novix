@@ -174,8 +174,7 @@ private fun Content(
                             },
                             modifier = Modifier.clickable {
                                 topRatedContract.onMovieClick(movieItem.id)
-                            },
-                            isDarkMode = NovixTheme.isThemeDark
+                            }
                         )
                     }
                 }
@@ -191,8 +190,7 @@ private fun Content(
                         },
                         modifier = Modifier.clickable {
                             topRatedContract.onTvShowClick(seriesItem.id)
-                        },
-                        isDarkMode = NovixTheme.isThemeDark
+                        }
                     )
                 }
             }
