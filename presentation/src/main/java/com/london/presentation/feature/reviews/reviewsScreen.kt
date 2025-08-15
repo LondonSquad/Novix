@@ -229,7 +229,7 @@ fun AuthorItem(
                 contentDescription = stringResource(R.string.author_profile),
                 contentScale = ContentScale.Crop,
                 loadingContent = { CircularLoading() },
-                errorContent = { ErrorImage(NovixTheme.isThemeDark) },
+                errorContent = { ErrorImage() },
             )
         }
         Column(

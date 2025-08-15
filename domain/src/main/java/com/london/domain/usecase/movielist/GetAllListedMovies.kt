@@ -8,7 +8,6 @@ import javax.inject.Inject
 class GetAllListedMovies @Inject constructor(
     private val customMovieListRepository: CustomMovieListRepository,
 ) {
-
     suspend fun invoke(): Set<Movie> =
         getAllLists(page = 1).flatMap { movieList ->
             getAllMovies(movieList.id, page =  1)

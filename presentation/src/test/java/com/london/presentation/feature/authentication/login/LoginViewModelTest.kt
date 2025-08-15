@@ -154,7 +154,7 @@ class LoginViewModelTest {
             assertThat(awaitItem()).isEqualTo(LoginEffect.NavigateToHome)
             cancelAndIgnoreRemainingEvents()
         }
-
+        advanceUntilIdle()
         assertThat(viewModel.state.value.isGuestLoginLoading).isFalse()
     }
 

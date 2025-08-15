@@ -6,7 +6,7 @@ import app.cash.turbine.test
 import com.google.common.truth.Truth.assertThat
 import com.london.domain.entity.PagedFetchResponse
 import com.london.domain.entity.TvShow
-import com.london.domain.usecase.details.tvshow.ManageTvShowDetailsUseCase
+import com.london.domain.usecase.details.tvshow.GetTvShowUseCase
 import com.london.presentation.navigation.Screen
 import com.london.presentation.navigation.getArgs
 import io.mockk.coEvery
@@ -26,7 +26,7 @@ import org.junit.Test
 
 @OptIn(ExperimentalCoroutinesApi::class)
 class TvShowCategoryViewModelTest {
-    private lateinit var manageTvShowDetailsUseCase: ManageTvShowDetailsUseCase
+    private lateinit var getTvShowUseCase: GetTvShowUseCase
     private val savedStateHandle = mockk<SavedStateHandle>(relaxed = true)
     private var viewModel: TvShowCategoryViewModel? = null
     private val mainDispatcher = StandardTestDispatcher()
@@ -34,13 +34,13 @@ class TvShowCategoryViewModelTest {
     @Before
     fun setUp() {
         Dispatchers.setMain(mainDispatcher)
-        manageTvShowDetailsUseCase = mockk(relaxed = true)
-        every { savedStateHandle.getArgs<Screen.TvShowsByCategory>() } returns Screen.TvShowsByCategory(
+        getTvShowUseCase = mockk(relaxed = true)
+        every { savedStateHandle.getArgs<Screen.MoviesByCategory>() } returns Screen.MoviesByCategory(
             categoryId = CATEGORY_ID,
         )
-        viewModel = TvShowCategoryViewModel(manageTvShowDetailsUseCase, savedStateHandle)
+        viewModel = TvShowCategoryViewModel(getTvShowUseCase, savedStateHandle)
         coEvery {
-            manageTvShowDetailsUseCase.getTvShowsByCategory(
+            getTvShowUseCase.getTvShowsByCategory(
                 CATEGORY_ID,
                 PAGE
             )
@@ -94,7 +94,7 @@ class TvShowCategoryViewModelTest {
     fun `when initialization should update state with error when use case throws`() = runTest {
         // Given
         coEvery {
-            manageTvShowDetailsUseCase.getTvShowsByCategory(
+            getTvShowUseCase.getTvShowsByCategory(
                 CATEGORY_ID,
                 PAGE
             )

@@ -8,12 +8,13 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.london.designsystem.R
+import com.london.designsystem.theme.NovixTheme
 
 @Composable
-fun ErrorImage(isDarkMode: Boolean) {
+fun ErrorImage() {
     Image(
         painter = painterResource(
-            if (isDarkMode) R.drawable.img_error_dark else R.drawable.img_error_light
+            if (NovixTheme.isThemeDark) R.drawable.img_error_dark else R.drawable.img_error_light
         ),
         contentDescription = stringResource(R.string.error_image),
         modifier = Modifier.size(56.dp)
