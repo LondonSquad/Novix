@@ -42,10 +42,10 @@ import com.london.presentation.feature.search.composable.SearchChipsRow
 import com.london.presentation.shared.ActorsLayout
 import com.london.presentation.shared.MoviesLayOut
 import com.london.presentation.shared.TriangleBlurredShape
-import com.london.presentation.shared.TvShowLayOut
 import com.london.presentation.shared.base.ErrorState
 import com.london.presentation.shared.buildscreen.BuildScreen
 import com.london.presentation.shared.buildscreen.NetworkErrorScreen
+import com.london.presentation.shared.container.MediaLazyVerticalGrid
 import com.london.presentation.utils.Listen
 import com.london.presentation.utils.ResultOrEmpty
 import com.london.presentation.utils.toRecentViewed
@@ -361,19 +361,20 @@ private fun TvShowSearchContent(state: SearchUiState, contract: SearchContract) 
                 }
             },
             content = {
-                TvShowLayOut(
-                    tvShowUis = tvShowsLazyList,
+                MediaLazyVerticalGrid(
+                    pagingItems = tvShowsLazyList,
+                    hasSaveIcon = true,
                     onSaveClick = { /* Handle save click */ },
-                    isTvShowSaved = { false },
-                    onTvShowClick = {
-                        contract.addToRecentViewed(it.toRecentViewed())
-                        it.genres.forEach { genreId ->
-                            contract.incrementGenreInterest(
-                                genreId,
-                                "tv"
-                            )
+                    isItemSaved = { false },
+                    onNavigateToTvShow = { id ->
+                        val tv = tvShowsLazyList.itemSnapshotList.items.firstOrNull { it.id == id }
+                        tv?.let {
+                            contract.addToRecentViewed(it.toRecentViewed())
+                            it.genres.forEach { genreId ->
+                                contract.incrementGenreInterest(genreId, "tv")
+                            }
                         }
-                        contract.onTvShowClick(it.id)
+                        contract.onTvShowClick(id)
                     }
                 )
             }
