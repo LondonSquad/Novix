@@ -81,8 +81,8 @@ fun <T : Any> MediaLazyGridWithTabs(
     imageUrl: (T) -> String? = { it.getImageUrl() },
     tabSelected: Int = MediaCategory.Movies.ordinal,
     onTabSelected: (MediaCategory) -> Unit = {},
-    onMovieGenreClick: (MovieGenre) -> Unit = {},
-    onTvShowGenreClick: (TvShowGenre) -> Unit = {},
+    onMovieGenreClick: (MovieGenreUi) -> Unit = {},
+    onTvShowGenreClick: (TvShowGenreUi) -> Unit = {},
     config: MediaGridConfig = MediaGridConfig(),
     topBar: @Composable (() -> Unit)? = null,
 ) {
