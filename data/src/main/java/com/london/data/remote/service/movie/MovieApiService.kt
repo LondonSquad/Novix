@@ -4,13 +4,13 @@ package com.london.data.remote.service.movie
 import com.london.data.remote.model.ApiConstants
 import com.london.data.remote.model.ApiConstants.POPULAR_MOVIES_PATH
 import com.london.data.remote.model.ApiResponse
-import com.london.data.remote.model.details.actor.model.actormoviedetails.ActorMovieDetailsResponse
-import com.london.data.remote.model.details.movie.model.moviedetails.MovieDetailsResponse
-import com.london.data.remote.model.details.movie.model.movieimages.MovieImagesResponse
+import com.london.data.remote.model.details.actor.actormoviedetails.ActorMovieDetailsResponse
+import com.london.data.remote.model.details.movie.moviedetails.MovieDetailsResponse
+import com.london.data.remote.model.details.movie.movieimages.MovieImagesResponse
 import com.london.data.remote.model.details.rating.AccountStatesResponse
 import com.london.data.remote.model.details.rating.RatingRemoteBody
 import com.london.data.remote.model.details.rating.RatingRemoteResponse
-import com.london.data.remote.model.details.videoprovider.movie.model.MovieVideoRemote
+import com.london.data.remote.model.details.videoprovider.movie.MovieVideoRemote
 import com.london.data.remote.model.home.popular.PopularMovieResponse
 import com.london.data.remote.model.home.toprated.TopRatedMovieRemote
 import com.london.data.remote.model.home.trending.TrendingResponse

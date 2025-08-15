@@ -1,7 +1,7 @@
 package com.london.data.mapper.details.actor
 
-import com.london.data.remote.model.details.actor.model.actormoviedetails.ActorMovieCastMember
-import com.london.data.remote.model.details.actor.model.actormoviedetails.ActorMovieDetailsResponse
+import com.london.data.remote.model.details.actor.actormoviedetails.ActorMovieCastMember
+import com.london.data.remote.model.details.actor.actormoviedetails.ActorMovieDetailsResponse
 import com.london.data.utils.asImageUrlOrEmpty
 import com.london.data.utils.orZero
 import com.london.domain.KoverIgnore

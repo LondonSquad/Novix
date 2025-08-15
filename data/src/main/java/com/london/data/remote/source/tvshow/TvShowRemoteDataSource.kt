@@ -1,15 +1,15 @@
 package com.london.data.remote.source.tvshow
 
 import com.london.data.remote.model.ApiResponse
-import com.london.data.remote.model.details.actor.model.actortvshowdetails.ActorTvShowDetailsResponse
+import com.london.data.remote.model.details.actor.actortvshowdetails.ActorTvShowDetailsResponse
 import com.london.data.remote.model.details.rating.AccountStatesResponse
 import com.london.data.remote.model.details.rating.RatingRemoteResponse
-import com.london.data.remote.model.details.tvshow.model.TvShowDetailsRemoteResponse
-import com.london.data.remote.model.details.tvshow.model.TvShowImagesRemoteResponse
-import com.london.data.remote.model.details.tvshow.model.tvshowepisode.EpisodeVideoResponse
-import com.london.data.remote.model.details.tvshow.model.tvshowepisode.TvShowEpisodeResponse
-import com.london.data.remote.model.details.tvshow.model.tvshowepisode.TvShowEpisodesRemoteResponse
-import com.london.data.remote.model.details.videoprovider.tvshow.model.TvShowVideoResponse
+import com.london.data.remote.model.details.tvshow.TvShowDetailsRemoteResponse
+import com.london.data.remote.model.details.tvshow.TvShowImagesRemoteResponse
+import com.london.data.remote.model.details.tvshow.tvshowepisode.EpisodeVideoResponse
+import com.london.data.remote.model.details.tvshow.tvshowepisode.TvShowEpisodeResponse
+import com.london.data.remote.model.details.tvshow.tvshowepisode.TvShowEpisodesRemoteResponse
+import com.london.data.remote.model.details.videoprovider.tvshow.TvShowVideoResponse
 import com.london.data.remote.model.home.popular.PopularTvShowResponse
 import com.london.data.remote.model.home.toprated.TopRatedTvSeriesRemote
 import com.london.data.remote.model.home.trending.TrendingResponse

@@ -1,13 +1,12 @@
 package com.london.data.mapper.details.tvshow
 
-import com.london.data.remote.model.details.tvshow.model.tvshowepisode.EpisodeGuestStar
-import com.london.data.remote.model.details.tvshow.model.tvshowepisode.TvShowEpisodeBySeason
-import com.london.data.remote.model.details.tvshow.model.tvshowepisode.TvShowEpisodeResponse
-import com.london.data.remote.model.details.tvshow.model.tvshowepisode.TvShowEpisodesRemoteResponse
+import com.london.data.remote.model.details.tvshow.tvshowepisode.EpisodeGuestStar
+import com.london.data.remote.model.details.tvshow.tvshowepisode.TvShowEpisodeBySeason
+import com.london.data.remote.model.details.tvshow.tvshowepisode.TvShowEpisodeResponse
+import com.london.data.remote.model.details.tvshow.tvshowepisode.TvShowEpisodesRemoteResponse
 import com.london.data.utils.asImageUrlOrEmpty
 import com.london.data.utils.orZero
 import com.london.data.utils.roundToDecimal
-import com.london.domain.KoverIgnore
 import com.london.domain.entity.Actor
 import com.london.domain.entity.tvshowdetails.episode.TvShowEpisodeByIdEntity
 import com.london.domain.entity.tvshowdetails.episode.TvShowEpisodeBySeasonEntity
