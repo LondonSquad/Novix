@@ -4,7 +4,7 @@ import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class ProfileDto(
+data class ProfileRemote(
     @SerialName("file_path")
     val filePath: String? = null,
 )

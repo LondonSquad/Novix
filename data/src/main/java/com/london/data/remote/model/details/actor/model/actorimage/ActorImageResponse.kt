@@ -8,5 +8,5 @@ data class ActorImageResponse(
     @SerialName("id")
     val id: Int? = null,
     @SerialName("profiles")
-    val profiles: List<ProfileDto>? = null
+    val profiles: List<ProfileRemote>? = null
 )
