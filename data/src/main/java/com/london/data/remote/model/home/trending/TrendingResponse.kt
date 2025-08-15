@@ -15,8 +15,6 @@ data class TrendingResponse(
     val posterPath: String? = null,
     @SerialName("profile_path")
     val profilePath: String? = null,
-    @SerialName("backdrop_path")
-    val backdropPath: String? = null,
     @SerialName("genre_ids")
     val genreIds: List<Int>? = null
 )

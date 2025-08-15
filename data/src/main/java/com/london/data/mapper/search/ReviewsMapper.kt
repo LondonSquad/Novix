@@ -11,27 +11,25 @@ import com.london.domain.entity.review.ReviewEntity
 
 fun ApiResponse<ReviewResponse>.toReviewEntity(): PagedFetchResponse<ReviewEntity> =
     PagedFetchResponse(
-        items = this.items.map { it.toReviewEntity() },
-        currentPage = this.currentPage,
-        totalPages = if (totalPages!= 0) this.totalPages else 1,
-        totalItems = this.totalItems
+        items = items.map { it.toReviewEntity() },
+        currentPage = currentPage,
+        totalPages = if (totalPages != 0) totalPages else 1,
+        totalItems = totalItems
     )
 
 fun ReviewResponse.toReviewEntity(): ReviewEntity =
     ReviewEntity(
-        authorName = this.author.orEmpty(),
+        authorName = author.orEmpty(),
         authorDetails = authorDetailsResponse.toAuthorDetails(),
         content = content.orEmpty(),
         createdAt = createdAt.orEmpty(),
         id = id.orEmpty(),
-        updatedAt = updatedAt.orEmpty(),
-        url = url.asImageUrlOrEmpty()
     )
 
 fun AuthorDetailsResponse.toAuthorDetails(): AuthorDetails =
     AuthorDetails(
-        name = this.authorName.orEmpty(),
-        username = this.authorUsername.orEmpty(),
+        name = authorName.orEmpty(),
+        username = authorUsername.orEmpty(),
         profileUrl = authorPictureUrl.asImageUrlOrEmpty(),
-        rating = this.rating.orZero()
+        rating = rating.orZero()
     )

@@ -6,7 +6,5 @@ import kotlinx.serialization.Serializable
 @Serializable
 data class GenreRemote(
     @SerialName("id")
-    val id: Int?,
-    @SerialName("name")
-    val name: String?
+    val id: Int? = null,
 )

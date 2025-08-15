@@ -6,32 +6,16 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class TopRatedTvSeriesRemote(
-    @SerialName("adult")
-    val adult: Boolean?,
-    @SerialName("backdrop_path")
-    val backdropPath: String?,
     @SerialName("first_air_date")
-    val firstAirDate: String?,
+    val firstAirDate: String? = null,
     @SerialName("genre_ids")
-    val genreIds: List<Int>?,
+    val genreIds: List<Int>? = null,
     @SerialName("id")
-    val id: Int?,
+    val id: Int? = null,
     @SerialName("name")
-    val name: String?,
-    @SerialName("origin_country")
-    val originCountry: List<String>?,
-    @SerialName("original_language")
-    val originalLanguage: String?,
-    @SerialName("original_name")
-    val originalName: String?,
-    @SerialName("overview")
-    val overview: String?,
-    @SerialName("popularity")
-    val popularity: Double?,
+    val name: String? = null,
     @SerialName("poster_path")
-    val posterPath: String?,
+    val posterPath: String? = null,
     @SerialName("vote_average")
-    val voteAverage: Double?,
-    @SerialName("vote_count")
-    val voteCount: Int?
+    val voteAverage: Double? = null,
 )

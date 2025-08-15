@@ -17,18 +17,6 @@ data class TvShowImagesRemoteResponse(
 
 @Serializable
 data class ImageItem(
-    @SerialName("aspect_ratio")
-    val aspectRatio: Double,
-    @SerialName("height")
-    val height: Int,
-    @SerialName("iso_639_1")
-    val iso6391: String?,
     @SerialName("file_path")
-    val filePath: String,
-    @SerialName("vote_average")
-    val voteAverage: Double,
-    @SerialName("vote_count")
-    val voteCount: Int,
-    @SerialName("width")
-    val width: Int
+    val filePath: String? = null,
 )

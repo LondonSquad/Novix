@@ -12,10 +12,6 @@ import com.london.data.remote.exception.NetworkException
 import com.london.data.remote.model.ApiResponse
 import com.london.data.remote.model.details.movie.model.moviedetails.GenreRemote
 import com.london.data.remote.model.details.movie.model.moviedetails.MovieDetailsResponse
-import com.london.data.remote.model.details.movie.model.moviedetails.ProductionCompanyRemote
-import com.london.data.remote.model.details.movie.model.moviedetails.ProductionCountryRemote
-import com.london.data.remote.model.details.movie.model.moviedetails.RemoteCollectionDetails
-import com.london.data.remote.model.details.movie.model.moviedetails.SpokenLanguageRemote
 import com.london.data.remote.model.details.movie.model.movieimages.MovieImagesResponse
 import com.london.data.remote.model.details.movie.model.movieimages.Poster
 import com.london.data.remote.model.details.rating.AccountStatesResponse
@@ -175,14 +171,12 @@ class MovieRepositoryImplTest {
                     author = "Author 1",
                     content = "This is review 1",
                     createdAt = "2024-01-01",
-                    updatedAt = "2024-01-02",
                     authorDetailsResponse = AuthorDetailsResponse(
                         authorName = "John Doe",
                         authorUsername = "johndoe",
                         authorPictureUrl = "https://image.tmdb.org/t/p/w500/profile.jpg",
                         rating = 4.5
                     ),
-                    url = "https://example.com/review1"
                 )
             ), totalPages = 1, totalItems = 1
         )
@@ -708,23 +702,11 @@ class MovieRepositoryImplTest {
             currentPage = PAGE_NUMBER,
             items = listOf(
                 MovieRemote(
-                    adult = false,
-                    backdropPath = null,
                     genreIds = emptyList(),
                     id = 1,
-                    originalLanguage = "en",
-                    originalTitle = "",
-                    overview = "",
-                    popularity = 0.0,
                     posterPath = "",
                     releaseDate = "2020-06-15",
-                    title = "",
-                    video = false,
                     voteAverage = 8.0,
-                    voteCount = 0,
-                    originCountry = listOf(""),
-                    originalName = "",
-                    firstAirDate = "",
                     name = "",
                 )
             ),
@@ -736,20 +718,12 @@ class MovieRepositoryImplTest {
             currentPage = PAGE_NUMBER,
             items = listOf(
                 SearchTvShowRemote(
-                    adult = false,
-                    backdropPath = "",
                     genreIds = emptyList(),
                     id = 2,
-                    originCountry = emptyList(),
-                    originalLanguage = "en",
-                    originalName = "",
-                    overview = "",
-                    popularity = 0.0,
                     posterPath = "",
                     firstAirDate = "2020-07-20",
                     name = "",
                     voteAverage = 10.0,
-                    voteCount = 0
                 )
             ),
             totalPages = 1,
@@ -760,84 +734,38 @@ class MovieRepositoryImplTest {
 
 
     private fun fakeMovieDetailsRemote() = MovieDetailsResponse(
-        adult = false,
         backdropPath = "/b.jpg",
-        remoteBelongsToCollection = RemoteCollectionDetails(1, "Coll"),
-        budget = 1,
         genreRemote = listOf(
-            GenreRemote(1, "Sci-Fi"),
-            GenreRemote(2, "Thriller")
+            GenreRemote(1),
+            GenreRemote(2)
         ),
-        homepage = "url",
         id = 123,
-        imdbId = "tt1",
-        originCountry = listOf("US"),
-        originalLanguage = "en",
-        originalTitle = "Inception",
         overview = "dream",
-        popularity = 1.0,
         posterPath = "/p.jpg",
-        productionCompanies = listOf(
-            ProductionCompanyRemote(1, null, "WB", "US")
-        ),
-        productionCountries = listOf(
-            ProductionCountryRemote("US", "USA")
-        ),
         releaseDate = "2010-07-16",
-        revenue = 1,
         runtime = 148,
-        status = "Released",
-        tagline = "Mind crime",
         title = "Inception",
         video = false,
         voteAverage = 8.8,
-        voteCount = 100,
-        spokenLanguages = listOf(
-            SpokenLanguageRemote("English", "en", "English")
-        ),
     )
 
     private fun fakeSimilarMoviesRemote() = ApiResponse(
         currentPage = 1,
         items = listOf(
             MovieRemote(
-                adult = false,
-                backdropPath = null,
                 genreIds = listOf(1, 2, 3),
                 id = 1,
-                originalLanguage = "en",
-                originalTitle = "",
-                overview = "",
-                popularity = 0.0,
                 posterPath = "",
                 releaseDate = "2020-06-15",
-                title = "",
-                video = false,
                 voteAverage = 8.0,
-                voteCount = 0,
-                originCountry = listOf(""),
-                originalName = "",
-                firstAirDate = "",
                 name = "",
             ),
             MovieRemote(
-                adult = false,
-                backdropPath = null,
                 genreIds = listOf(1, 2, 3),
                 id = 1,
-                originalLanguage = "en",
-                originalTitle = "",
-                overview = "",
-                popularity = 0.0,
                 posterPath = "",
                 releaseDate = "2020-06-15",
-                title = "",
-                video = false,
                 voteAverage = 8.0,
-                voteCount = 0,
-                originCountry = listOf(""),
-                originalName = "",
-                firstAirDate = "",
                 name = "",
             )
         ),
@@ -851,22 +779,10 @@ class MovieRepositoryImplTest {
         logos = emptyList(),
         posters = listOf(
             Poster(
-                aspectRatio = 0.67,
                 filePath = "/img1.jpg",
-                height = 100,
-                iso6391 = "en",
-                voteAverage = 8.0,
-                voteCount = 10,
-                width = 50
             ),
             Poster(
-                aspectRatio = 0.67,
                 filePath = "/img2.jpg",
-                height = 100,
-                iso6391 = "en",
-                voteAverage = 7.5,
-                voteCount = 8,
-                width = 50
             )
         )
     )
@@ -909,20 +825,10 @@ class MovieRepositoryImplTest {
         totalPages = 200,
         items = listOf(
             PopularMovieResponse(
-                adult = false,
-                backdropPath = "/backdrop.jpg",
-                genreIds = listOf(1, 2),
                 id = 101,
-                originalLanguage = "en",
-                originalTitle = "Original Title",
-                overview = "Some overview",
-                popularity = 100.0,
                 posterPath = "/poster.jpg",
-                releaseDate = "2024-01-01",
                 title = "Test Movie",
-                video = false,
                 voteAverage = 7.8,
-                voteCount = 2000
             )
         )
     )
@@ -940,36 +846,16 @@ class MovieRepositoryImplTest {
         totalPages = 1,
         items = listOf(
             PopularMovieResponse(
-                adult = false,
-                backdropPath = "/backdrop1.jpg",
-                genreIds = listOf(1, 2),
                 id = 101,
-                originalLanguage = "en",
-                originalTitle = "Original Title 1",
-                overview = "Overview 1",
-                popularity = 100.0,
                 posterPath = "/poster1.jpg",
-                releaseDate = "2024-01-01",
                 title = "Test Movie 1",
-                video = false,
                 voteAverage = 7.8,
-                voteCount = 2000
             ),
             PopularMovieResponse(
-                adult = false,
-                backdropPath = "/backdrop2.jpg",
-                genreIds = listOf(3, 4),
                 id = 102,
-                originalLanguage = "fr",
-                originalTitle = "Original Title 2",
-                overview = "Overview 2",
-                popularity = 90.0,
                 posterPath = "/poster2.jpg",
-                releaseDate = "2024-02-01",
                 title = "Test Movie 2",
-                video = false,
                 voteAverage = 8.2,
-                voteCount = 1500
             )
         )
     )

@@ -15,18 +15,10 @@ import com.london.data.remote.model.ApiResponse
 import com.london.data.remote.model.details.rating.AccountStatesResponse
 import com.london.data.remote.model.details.rating.RatingRemoteResponse
 import com.london.data.remote.model.details.tvshow.model.ImageItem
-import com.london.data.remote.model.details.tvshow.model.TvShowCreator
 import com.london.data.remote.model.details.tvshow.model.TvShowDetailsRemoteResponse
-import com.london.data.remote.model.details.tvshow.model.TvShowEpisode
 import com.london.data.remote.model.details.tvshow.model.TvShowGenre
 import com.london.data.remote.model.details.tvshow.model.TvShowImagesRemoteResponse
-import com.london.data.remote.model.details.tvshow.model.TvShowNetwork
-import com.london.data.remote.model.details.tvshow.model.TvShowProductionCompany
-import com.london.data.remote.model.details.tvshow.model.TvShowProductionCountry
 import com.london.data.remote.model.details.tvshow.model.TvShowSeason
-import com.london.data.remote.model.details.tvshow.model.TvShowSpokenLanguage
-import com.london.data.remote.model.details.tvshow.model.tvshowepisode.EpisodeCrewMember
-import com.london.data.remote.model.details.tvshow.model.tvshowepisode.EpisodeGuestStar
 import com.london.data.remote.model.details.tvshow.model.tvshowepisode.EpisodeVideoProviderRemote
 import com.london.data.remote.model.details.tvshow.model.tvshowepisode.EpisodeVideoResponse
 import com.london.data.remote.model.details.tvshow.model.tvshowepisode.TvShowEpisodeBySeason
@@ -387,14 +379,12 @@ class TvShowRepositoryImplTest {
                     author = "Author 1",
                     content = "This is review 1",
                     createdAt = "2024-01-01",
-                    updatedAt = "2024-01-02",
                     authorDetailsResponse = AuthorDetailsResponse(
                         authorName = "John Doe",
                         authorUsername = "johndoe",
                         authorPictureUrl = "/profile.jpg",
                         rating = 4.5
                     ),
-                    url = "https://example.com/review1"
                 )
             ), totalPages = 1, totalItems = 1
         )
@@ -1083,134 +1073,43 @@ class TvShowRepositoryImplTest {
             id = 1, favorite = true, rate = 7, watchlist = false
         )
         val TvShowDetailsRemoteMock = TvShowDetailsRemoteResponse(
-            adult = false,
-            backdropPath = "https://image.tmdb.org/t/p/w500/backdrop.jpg",
-            createdBy = listOf(
-                TvShowCreator(
-                    id = 1,
-                    creditId = "credit1",
-                    name = "Creator Name",
-                    originalName = "Creator Original Name",
-                    gender = 1,
-                    profilePath = "/profile.jpg"
-                )
-            ),
-            episodeRunTime = listOf(45, 50),
             firstAirDate = "2020-01-01",
             tvShowGenres = listOf(
                 TvShowGenre(id = 1, name = "Drama")
             ),
-            homepage = "https://example.com",
             id = TV_SHOW_ID,
-            inProduction = true,
-            languages = listOf("en", "es"),
-            lastAirDate = "2023-12-31",
-            lastTvShowEpisodeToAir = TvShowEpisode(
-                id = 1,
-                name = "Episode 1",
-                overview = "Episode overview",
-                voteAverage = 8.5.orZero(),
-                voteCount = 100,
-                airDate = "2020-01-01",
-                episodeNumber = 1,
-                episodeType = "standard",
-                productionCode = "101",
-                runtime = 45.orZero(),
-                seasonNumber = 1,
-                showId = TV_SHOW_ID,
-                stillPath = "/still.jpg"
-            ),
             name = "Test TV Show",
-            nextTvShowEpisodeToAir = null,
-            tvShowNetworks = listOf(
-                TvShowNetwork(
-                    id = 1,
-                    logoPath = "/network.jpg",
-                    name = "Network Name",
-                    originCountry = "US"
-                )
-            ),
             numberOfEpisodes = 10,
             numberOfSeasons = 1,
-            originCountry = listOf("US"),
-            originalLanguage = "en",
-            originalName = "Test TV Show Original",
             overview = "Test overview",
-            popularity = 85.5.orZero(),
             posterPath = "https://image.tmdb.org/t/p/w500/poster1.jpg",
-            productionCompanies = listOf(
-                TvShowProductionCompany(
-                    id = 1,
-                    logoPath = "/company.jpg",
-                    name = "Production Company",
-                    originCountry = "US"
-                )
-            ),
-            productionCountries = listOf(
-                TvShowProductionCountry(
-                    iso31661 = "US", name = "United States"
-                )
-            ),
             tvShowSeasons = listOf(
                 TvShowSeason(
-                    airDate = "2020-01-01",
-                    episodeCount = 10,
-                    id = 1,
-                    name = "Season 1",
-                    overview = "Season overview",
-                    posterPath = "/season.jpg",
                     seasonNumber = 1,
-                    voteAverage = 8.0.orZero()
                 )
             ),
-            tvShowSpokenLanguages = listOf(
-                TvShowSpokenLanguage(
-                    englishName = "English", iso6391 = "en", name = "English"
-                )
-            ),
-            status = "Returning Series",
-            tagline = "Test tagline",
-            type = "Scripted",
             voteAverage = 8.5.orZero(),
-            voteCount = 1000
         )
 
         val TvShowImagesRemoteMock = TvShowImagesRemoteResponse(
             backdrops = listOf(
                 ImageItem(
-                    aspectRatio = 1.78,
-                    height = 1080,
-                    iso6391 = "en",
                     filePath = "https://image.tmdb.org/t/p/w500/backdrop1.jpg",
-                    voteAverage = 8.0,
-                    voteCount = 50,
-                    width = 1920
                 )
             ), id = TV_SHOW_ID, logos = listOf(
                 ImageItem(
-                    aspectRatio = 1.0,
-                    height = 500,
-                    iso6391 = null,
                     filePath = "/logo1.jpg",
-                    voteAverage = 7.5,
-                    voteCount = 25,
-                    width = 500
                 )
             ), posters = listOf(
                 ImageItem(
-                    aspectRatio = 0.67,
-                    height = 750,
-                    iso6391 = "en",
                     filePath = "/poster1.jpg",
-                    voteAverage = 9.0,
-                    voteCount = 100,
-                    width = 500
                 )
             )
         )
 
         val TvShowEpisodesRemoteMock = TvShowEpisodesRemoteResponse(
-            id = "season_id", airDate = "2020-01-01", episodes = listOf(
+            id = "season_id",
+            episodes = listOf(
                 TvShowEpisodeBySeason(
                     airDate = "2020-01-01",
                     episodeNumber = 1,
@@ -1218,72 +1117,23 @@ class TvShowRepositoryImplTest {
                     id = 1,
                     name = "Episode 1",
                     overview = "Episode overview",
-                    productionCode = "101",
                     runtime = 45,
                     seasonNumber = 1,
                     showId = TV_SHOW_ID,
                     stillPath = "/still.jpg",
                     voteAverage = 8.5,
-                    voteCount = 100,
-                    crew = listOf(
-                        EpisodeCrewMember(
-                            job = "Director",
-                            department = "Directing",
-                            creditId = "crew1",
-                            adult = false,
-                            gender = 1,
-                            id = 10,
-                            knownForDepartment = "Directing",
-                            name = "Director Name",
-                            originalName = "Director Original Name",
-                            popularity = 60.0,
-                            profilePath = "/director.jpg"
-                        )
-                    ),
-                    episodeGuestStars = listOf(
-                        EpisodeGuestStar(
-                            character = "Guest Character",
-                            creditId = "guest1",
-                            order = 1,
-                            adult = false,
-                            gender = 2,
-                            id = 20,
-                            knownForDepartment = "Acting",
-                            name = "Guest Actor",
-                            originalName = "Guest Actor Original",
-                            popularity = 40.0,
-                            profilePath = "/guest.jpg"
-                        )
-                    )
                 )
             )
         )
 
 
         val EpisodeVideoResponseMock = EpisodeVideoResponse(
-            id = TV_SHOW_ID, results = listOf(
+            id = TV_SHOW_ID,
+            results = listOf(
                 EpisodeVideoProviderRemote(
-                    id = "video1",
                     key = "dQw4w9WgXcQ",
-                    name = "Episode Trailer",
-                    site = "YouTube",
-                    type = "Trailer",
-                    official = true,
-                    publishedAt = "2024-01-01T00:00:00.000Z",
-                    iso31661 = "US",
-                    iso6391 = "en",
-                    size = 1080
                 ), EpisodeVideoProviderRemote(
-                    id = "video2",
                     key = "abc123def456",
-                    name = "Behind the Scenes",
-                    site = "YouTube",
-                    type = "Behind the Scenes",
-                    official = false,
-                    publishedAt = "2024-01-02T00:00:00.000Z",
-                    iso31661 = "US",
-                    iso6391 = "en",
-                    size = 720
                 )
             )
         )
@@ -1291,35 +1141,19 @@ class TvShowRepositoryImplTest {
         private fun fakeApiResponseWithTvSeries() = ApiResponse(
             currentPage = PAGE, totalPages = 1, totalItems = 2, items = listOf(
                 TopRatedTvSeriesRemote(
-                    adult = false,
-                    backdropPath = "/tsRy63Mu5cu8etL1X7ZLyf7UP1M.jpg",
                     genreIds = listOf(18, 80),
                     id = 1396,
-                    originalLanguage = "en",
-                    originalName = "Breaking Bad",
-                    overview = "A chemistry teacher diagnosed with cancer starts manufacturing meth.",
-                    popularity = 100.0,
                     posterPath = "/ggFHVNu6YYI5L9pCfOacjizRGt.jpg",
                     firstAirDate = "2008-01-20",
                     name = "Breaking Bad",
-                    originCountry = listOf("US"),
                     voteAverage = 8.9,
-                    voteCount = 18000
                 ), TopRatedTvSeriesRemote(
-                    adult = false,
-                    backdropPath = "/scZlQQYnDVlnpxFTxaIv2g0BWnL.jpg",
                     genreIds = listOf(18, 36),
                     id = 87108,
-                    originalLanguage = "en",
-                    originalName = "Chernobyl",
-                    overview = "A dramatization of the true story of the Chernobyl disaster.",
-                    popularity = 75.5,
                     posterPath = "/hlLXt2tOPT6RRnjiUmoxyG1LTFi.jpg",
                     firstAirDate = "2019-05-06",
                     name = "Chernobyl",
-                    originCountry = listOf("US", "GB"),
                     voteAverage = 9.0,
-                    voteCount = 12000
                 )
             )
         )
@@ -1349,27 +1183,9 @@ class TvShowRepositoryImplTest {
         private fun fakeTvShowVideosResponse() = TvShowVideoResponse(
             id = 1, tvShow = listOf(
                 TvShowVideoRemote(
-                    id = "vid1",
-                    iso31661 = "US",
-                    iso6391 = "en",
                     key = "123",
-                    name = "Official Trailer",
-                    official = true,
-                    publishedAt = "2025-07-19",
-                    site = "YouTube",
-                    size = 1080,
-                    type = "Trailer"
                 ), TvShowVideoRemote(
-                    id = "vid2",
-                    iso31661 = "US",
-                    iso6391 = "en",
                     key = "456",
-                    name = "Teaser",
-                    official = false,
-                    publishedAt = "2025-07-18",
-                    site = "YouTube",
-                    size = 720,
-                    type = "Teaser"
                 )
             )
         )
@@ -1394,22 +1210,16 @@ class TvShowRepositoryImplTest {
         private val SearchTvShowRemoteMock = ApiResponse(
             currentPage = PAGE_NUMBER, items = listOf(
                 SearchTvShowRemote(
-                    adult = false,
-                    backdropPath = "",
                     genreIds = emptyList(),
                     id = 2,
-                    originCountry = emptyList(),
-                    originalLanguage = "en",
-                    originalName = "",
-                    overview = "",
-                    popularity = 0.0,
                     posterPath = "",
                     firstAirDate = "2020-07-20",
                     name = "",
                     voteAverage = 10.0,
-                    voteCount = 0
                 )
-            ), totalPages = 1, totalItems = 1
+            ),
+            totalPages = 1,
+            totalItems = 1
         )
 
         private fun createRatingResponse() = RatingRemoteResponse(
@@ -1424,20 +1234,10 @@ class TvShowRepositoryImplTest {
             totalPages = 100,
             items = listOf(
                 PopularTvShowResponse(
-                    adult = false,
-                    backdropPath = "/tv_backdrop.jpg",
-                    genreIds = listOf(5, 6),
                     id = 201,
-                    originCountry = listOf("US"),
-                    originalLanguage = "en",
-                    originalName = "Original TV Show",
-                    overview = "TV Show overview",
-                    popularity = 85.0,
                     posterPath = "/tv_poster.jpg",
-                    firstAirDate = "2024-03-01",
                     name = "Test TV Show",
                     voteAverage = 8.5,
-                    voteCount = 1200
                 )
             )
         )
@@ -1455,36 +1255,16 @@ class TvShowRepositoryImplTest {
             totalPages = 1,
             items = listOf(
                 PopularTvShowResponse(
-                    adult = false,
-                    backdropPath = "/tv_backdrop1.jpg",
-                    genreIds = listOf(5, 6),
                     id = 201,
-                    originCountry = listOf("US"),
-                    originalLanguage = "en",
-                    originalName = "Original TV Show 1",
-                    overview = "TV Show overview 1",
-                    popularity = 85.0,
                     posterPath = "/tv_poster1.jpg",
-                    firstAirDate = "2024-03-01",
                     name = "Test TV Show 1",
                     voteAverage = 8.5,
-                    voteCount = 1200
                 ),
                 PopularTvShowResponse(
-                    adult = false,
-                    backdropPath = "/tv_backdrop2.jpg",
-                    genreIds = listOf(7, 8),
                     id = 202,
-                    originCountry = listOf("UK"),
-                    originalLanguage = "en",
-                    originalName = "Original TV Show 2",
-                    overview = "TV Show overview 2",
-                    popularity = 75.0,
                     posterPath = "/tv_poster2.jpg",
-                    firstAirDate = "2024-04-01",
                     name = "Test TV Show 2",
                     voteAverage = 9.0,
-                    voteCount = 800
                 )
             )
         )

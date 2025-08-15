@@ -7,7 +7,6 @@ import com.london.data.remote.model.details.tvshow.model.tvshowepisode.TvShowEpi
 import com.london.data.utils.asImageUrlOrEmpty
 import com.london.data.utils.orZero
 import com.london.data.utils.roundToDecimal
-import com.london.domain.KoverIgnore
 import com.london.domain.entity.Actor
 import com.london.domain.entity.tvshowdetails.episode.TvShowEpisodeByIdEntity
 import com.london.domain.entity.tvshowdetails.episode.TvShowEpisodeBySeasonEntity
@@ -16,7 +15,7 @@ import com.london.domain.entity.tvshowdetails.episode.TvShowEpisodesEntity
 fun TvShowEpisodesRemoteResponse.toTvShowEpisodesEntity(): TvShowEpisodesEntity =
     TvShowEpisodesEntity(
         id = id.orEmpty(),
-        episodes = episodes?.map { it.toTvShowEpisodeBySeasonEntity() }.orEmpty()
+        episodes = episodes.orEmpty().map { it.toTvShowEpisodeBySeasonEntity() }
     )
 
 fun TvShowEpisodeBySeason.toTvShowEpisodeBySeasonEntity(): TvShowEpisodeBySeasonEntity =
@@ -45,7 +44,7 @@ fun TvShowEpisodeResponse.toTvShowEpisodeEntity(): TvShowEpisodeByIdEntity =
         imageUrl = stillPath.orEmpty(),
         voteAverage = voteAverage.orZero().roundToDecimal(),
         voteCount = voteCount.orZero(),
-        guestStars = guestStars?.map { it.toActorEntity() }.orEmpty(),
+        guestStars = guestStars.orEmpty().map { it.toActorEntity() },
         id = id.orZero()
     )
 
