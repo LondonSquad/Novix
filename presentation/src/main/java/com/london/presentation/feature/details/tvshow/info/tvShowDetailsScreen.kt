@@ -603,7 +603,7 @@ private fun EpisodeItem(
                 .height(78.dp)
                 .weight(0.35f),
             loadingContent = { CircularLoading() },
-            errorContent = { ErrorImage(NovixTheme.isThemeDark) },
+            errorContent = { ErrorImage() },
             moderatedContent = { UnSuitableEye() }
         )
 
