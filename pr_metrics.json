@@ -18028,17 +18028,25 @@
           "url": "https://github.com/BassantM"
         },
         "submitted_at": "2025-08-14T23:50:44Z"
+      },
+      {
+        "reviewer": {
+          "id": 43588217,
+          "login": "yusufnasserdev",
+          "url": "https://github.com/yusufnasserdev"
+        },
+        "submitted_at": "2025-08-15T00:23:48Z"
       }
     ],
     "first_approved_at": "2025-08-14T23:50:44Z",
     "time_to_first_approval_minutes": 12346.216666666667,
-    "required_approvals_met_at": null,
-    "time_to_required_approvals_minutes": null,
+    "required_approvals_met_at": "2025-08-15T00:23:48Z",
+    "time_to_required_approvals_minutes": 12379.283333333333,
     "closed_at": null,
     "merged_at": null,
     "merged_by": null,
     "week": "2025-W32",
-    "status": "pending",
+    "status": "approved",
     "diff_stats": {
       "additions": 948,
       "deletions": 279,
