@@ -77,8 +77,7 @@ fun HomeCarouselSection(
                     },
                 imageUrl = mediaItem.posterUrl,
                 onSaveClick = { onSaveClick(mediaItem.id) },
-                hasSaveIcon = isHero,
-                isDarkMode = NovixTheme.isThemeDark
+                hasSaveIcon = isHero
             )
         }
     }
