@@ -24,6 +24,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.statusBars
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.GridItemSpan
+import androidx.compose.foundation.lazy.grid.LazyGridState
 import androidx.compose.foundation.lazy.grid.LazyHorizontalGrid
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
@@ -49,6 +50,7 @@ import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.platform.LocalWindowInfo
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -65,7 +67,6 @@ import com.london.presentation.R.drawable
 import com.london.presentation.R.string.calendar
 import com.london.presentation.R.string.more_like_this
 import com.london.presentation.R.string.overview
-import com.london.presentation.R.string.star
 import com.london.presentation.R.string.time_icon
 import com.london.presentation.R.string.view_reviews
 import com.london.presentation.feature.search.SearchCategory
@@ -75,6 +76,7 @@ import com.london.presentation.shared.CustomBackDropImagePager
 import com.london.presentation.shared.FooterSection
 import com.london.presentation.shared.HomeCard
 import com.london.presentation.shared.SnackBarAnimation
+import com.london.presentation.shared.TextWithIcon
 import com.london.presentation.shared.buildscreen.BuildScreen
 import com.london.presentation.utils.Listen
 import com.london.presentation.utils.convertGenreCodeToString
@@ -176,149 +178,14 @@ private fun Content(
             option1Icon = R.drawable.icon_remove,
         )
 
-        LazyVerticalGrid(
-            modifier = Modifier
-                .padding(horizontal = 16.dp)
-                .fillMaxSize(),
-            contentPadding = PaddingValues(bottom = 16.dp + footerHeight),
-            state = lazyState,
-            horizontalArrangement = Arrangement.spacedBy(12.dp),
-            verticalArrangement = Arrangement.spacedBy(12.dp),
-            columns = GridCells.Fixed(gridColumns()),
-        ) {
-            item(span = { GridItemSpan(maxLineSpan) }) {
-                Box(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .defaultMinSize(minHeight = 370.dp)
+        HomeLazyVerticalGrid(
+            uiState = uiState,
+            movieDetailsContract = movieDetailsContract,
+            lazyState = lazyState,
+            footerHeight = footerHeight,
+            screenWidthDp = screenWidthDp
+        )
 
-                ) {
-                    Column(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .align(Alignment.BottomCenter),
-                        verticalArrangement = Arrangement.spacedBy(4.dp),
-                        horizontalAlignment = Alignment.CenterHorizontally
-                    ) {
-
-                        CustomBackDropImagePager(
-                            images = uiState.movieImages,
-                            modifier = Modifier.requiredWidth(screenWidthDp)
-                        )
-
-                        Column(
-                            modifier = Modifier
-                                .offsetLayout()
-                                .fillMaxWidth()
-                                .defaultMinSize(minHeight = 158.dp)
-                                .clip(RoundedCornerShape(12.dp))
-                                .background(NovixTheme.colors.surface)
-                                .border(1.dp, NovixTheme.colors.stroke, RoundedCornerShape(12.dp))
-                                .padding(12.dp),
-                            verticalArrangement = Arrangement.spacedBy(8.dp)
-                        ) {
-                            Text(
-                                text = uiState.movieName,
-                                style = NovixTheme.typography.title.medium,
-                                color = NovixTheme.colors.title,
-                                modifier = Modifier.defaultMinSize(minHeight = 56.dp)
-                            )
-                            GenreRow(uiState.movieGenres, movieDetailsContract::onGenreClick)
-                            RatingAndMetaRow(
-                                rate = uiState.movieRating,
-                                time = uiState.movieDuration,
-                                date = uiState.releaseDate
-                            )
-                            Text(
-                                text = stringResource(view_reviews),
-                                style = NovixTheme.typography.label.medium,
-                                color = NovixTheme.colors.primary,
-                                modifier = Modifier.noRippleClickable {
-                                    movieDetailsContract.onReviewsClick(
-                                        uiState.movieId,
-                                        MediaType.Movie.mediaNum
-                                    )
-                                }
-                            )
-                        }
-                    }
-                }
-            }
-
-            if (uiState.movieOverview.isNotBlank()) {
-                item(span = { GridItemSpan(maxLineSpan) }) {
-                    Text(
-                        text = stringResource(overview),
-                        style = NovixTheme.typography.title.medium,
-                        color = NovixTheme.colors.title,
-                    )
-                }
-
-                item(span = { GridItemSpan(maxLineSpan) }) {
-                    ConditionalText(
-                        uiState.movieOverview,
-                        uiState.expanded,
-                        onExpandedChange = movieDetailsContract::onExpandClick
-                    )
-                }
-            }
-
-            if (uiState.actors.isNotEmpty()) {
-                item(span = { GridItemSpan(maxLineSpan) }) {
-                    Text(
-                        text = stringResource(com.london.presentation.R.string.cast),
-                        style = NovixTheme.typography.title.medium,
-                        color = NovixTheme.colors.title,
-                    )
-
-                    LazyHorizontalGrid(
-                        modifier = Modifier
-                            .padding(top = 16.dp)
-                            .requiredWidth(screenWidthDp)
-                            .height(100.dp),
-                        rows = GridCells.Fixed(1),
-                        horizontalArrangement = Arrangement.spacedBy(12.dp),
-                        contentPadding = PaddingValues(vertical = 8.dp, horizontal = 16.dp)
-                    ) {
-                        itemsIndexed(uiState.actors) { _, actor ->
-                            ActorItem(
-                                actorName = actor.name,
-                                characterName = actor.characterName,
-                                imageRes = actor.profilePictureUrl,
-                                modifier = Modifier
-                                    .defaultMinSize(minWidth = 296.dp),
-                                onClick = {
-                                    movieDetailsContract.onActorClick(actor.id)
-                                }
-                            )
-                        }
-                    }
-                }
-            }
-
-            if (uiState.similarMovies.isNotEmpty()) {
-                item(span = { GridItemSpan(maxLineSpan) }) {
-                    Text(
-                        text = stringResource(more_like_this),
-                        style = NovixTheme.typography.title.medium,
-                        color = NovixTheme.colors.title,
-                        modifier = Modifier.padding(top = 4.dp)
-                    )
-                }
-
-                items(uiState.similarMovies) { movie ->
-                    HomeCard(
-                        imageUrl = movie.posterUrl,
-                        isSaved = false,
-                        onSaveClick = {},
-                        modifier = Modifier
-                            .clickable {
-                                movieDetailsContract.onMovieClick(movie.id)
-                            }
-                    )
-                }
-            }
-        }
         FooterSection(
             haveTrailer = uiState.hasTrailer,
             modifier = Modifier
@@ -331,14 +198,7 @@ private fun Content(
             isRateEnabled = !uiState.isRated && (uiState.movieRating.isBlank() || uiState.movieRating.isNotZeroRate())
         )
 
-        if (uiState.isRateBottomSheetVisible) RatingBottomSheet(
-            onDismissClick = movieDetailsContract::onRateBottomSheetClick,
-            onSubmitClick = movieDetailsContract::onSelectRatingClick,
-        )
-        else if (uiState.isGuestUserBottomSheetVisible) GuestUserLoginBottomSheet(
-            onDismissClick = movieDetailsContract::onRateBottomSheetClick,
-            onLoginClick = movieDetailsContract::onLoginClick,
-        )
+        BottomSheetsHandler(uiState, movieDetailsContract)
     }
 
     uiState.isSuccessfullyRated?.let { isSuccessful ->
@@ -357,6 +217,174 @@ private fun Content(
 }
 
 @Composable
+private fun HomeLazyVerticalGrid(
+    uiState: MovieDetailsUiState,
+    movieDetailsContract: MovieDetailsContract,
+    lazyState: LazyGridState,
+    footerHeight: Dp,
+    screenWidthDp: Dp
+) {
+    LazyVerticalGrid(
+        modifier = Modifier
+            .padding(horizontal = 16.dp)
+            .fillMaxSize(),
+        contentPadding = PaddingValues(bottom = 16.dp + footerHeight),
+        state = lazyState,
+        horizontalArrangement = Arrangement.spacedBy(12.dp),
+        verticalArrangement = Arrangement.spacedBy(12.dp),
+        columns = GridCells.Fixed(gridColumns()),
+    ) {
+        item(span = { GridItemSpan(maxLineSpan) }) {
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .defaultMinSize(minHeight = 370.dp)
+
+            ) {
+                Column(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .align(Alignment.BottomCenter),
+                    verticalArrangement = Arrangement.spacedBy(4.dp),
+                    horizontalAlignment = Alignment.CenterHorizontally
+                ) {
+
+                    CustomBackDropImagePager(
+                        images = uiState.movieImages,
+                        modifier = Modifier.requiredWidth(screenWidthDp)
+                    )
+
+                    Column(
+                        modifier = Modifier
+                            .offsetLayout()
+                            .fillMaxWidth()
+                            .defaultMinSize(minHeight = 158.dp)
+                            .clip(RoundedCornerShape(12.dp))
+                            .background(NovixTheme.colors.surface)
+                            .border(1.dp, NovixTheme.colors.stroke, RoundedCornerShape(12.dp))
+                            .padding(12.dp),
+                        verticalArrangement = Arrangement.spacedBy(8.dp)
+                    ) {
+                        Text(
+                            text = uiState.movieName,
+                            style = NovixTheme.typography.title.medium,
+                            color = NovixTheme.colors.title,
+                            modifier = Modifier.defaultMinSize(minHeight = 56.dp)
+                        )
+                        GenreRow(uiState.movieGenres, movieDetailsContract::onGenreClick)
+                        RatingAndMetaRow(
+                            rate = uiState.movieRating,
+                            time = uiState.movieDuration,
+                            date = uiState.releaseDate
+                        )
+                        Text(
+                            text = stringResource(view_reviews),
+                            style = NovixTheme.typography.label.medium,
+                            color = NovixTheme.colors.primary,
+                            modifier = Modifier.noRippleClickable {
+                                movieDetailsContract.onReviewsClick(
+                                    uiState.movieId,
+                                    MediaType.Movie.mediaNum
+                                )
+                            }
+                        )
+                    }
+                }
+            }
+        }
+
+        if (uiState.movieOverview.isNotBlank()) {
+            item(span = { GridItemSpan(maxLineSpan) }) {
+                Text(
+                    text = stringResource(overview),
+                    style = NovixTheme.typography.title.medium,
+                    color = NovixTheme.colors.title,
+                )
+            }
+
+            item(span = { GridItemSpan(maxLineSpan) }) {
+                ConditionalText(
+                    uiState.movieOverview,
+                    uiState.expanded,
+                    onExpandedChange = movieDetailsContract::onExpandClick
+                )
+            }
+        }
+
+        if (uiState.actors.isNotEmpty()) {
+            item(span = { GridItemSpan(maxLineSpan) }) {
+                Text(
+                    text = stringResource(com.london.presentation.R.string.cast),
+                    style = NovixTheme.typography.title.medium,
+                    color = NovixTheme.colors.title,
+                )
+
+                LazyHorizontalGrid(
+                    modifier = Modifier
+                        .padding(top = 16.dp)
+                        .requiredWidth(screenWidthDp)
+                        .height(100.dp),
+                    rows = GridCells.Fixed(1),
+                    horizontalArrangement = Arrangement.spacedBy(12.dp),
+                    contentPadding = PaddingValues(vertical = 8.dp, horizontal = 16.dp)
+                ) {
+                    itemsIndexed(uiState.actors) { _, actor ->
+                        ActorItem(
+                            actorName = actor.name,
+                            characterName = actor.characterName,
+                            imageRes = actor.profilePictureUrl,
+                            modifier = Modifier
+                                .defaultMinSize(minWidth = 296.dp),
+                            onClick = {
+                                movieDetailsContract.onActorClick(actor.id)
+                            }
+                        )
+                    }
+                }
+            }
+        }
+
+        if (uiState.similarMovies.isNotEmpty()) {
+            item(span = { GridItemSpan(maxLineSpan) }) {
+                Text(
+                    text = stringResource(more_like_this),
+                    style = NovixTheme.typography.title.medium,
+                    color = NovixTheme.colors.title,
+                    modifier = Modifier.padding(top = 4.dp)
+                )
+            }
+
+            items(uiState.similarMovies) { movie ->
+                HomeCard(
+                    imageUrl = movie.posterUrl,
+                    isSaved = false,
+                    onSaveClick = {},
+                    modifier = Modifier
+                        .clickable {
+                            movieDetailsContract.onMovieClick(movie.id)
+                        }
+                )
+            }
+        }
+    }
+}
+
+@Composable
+private fun BottomSheetsHandler(
+    uiState: MovieDetailsUiState,
+    movieDetailsContract: MovieDetailsContract
+) {
+    if (uiState.isRateBottomSheetVisible) RatingBottomSheet(
+        onDismissClick = movieDetailsContract::onRateBottomSheetClick,
+        onSubmitClick = movieDetailsContract::onSelectRatingClick,
+    )
+    else if (uiState.isGuestUserBottomSheetVisible) GuestUserLoginBottomSheet(
+        onDismissClick = movieDetailsContract::onRateBottomSheetClick,
+        onLoginClick = movieDetailsContract::onLoginClick,
+    )
+}
+
+@Composable
 private fun RatingAndMetaRow(
     rate: String?,
     time: String?,
@@ -367,12 +395,9 @@ private fun RatingAndMetaRow(
         verticalAlignment = Alignment.CenterVertically
     ) {
         if (!rate.isNullOrBlank() && rate.isNotZeroRate()) {
-            IconWithText(
-                icon = drawable.star,
-                contentDesc = stringResource(star),
-                tint = NovixTheme.colors.yellowAccent,
+            TextWithIcon(
                 text = rate.toLocalizedNumbers(),
-                textColor = NovixTheme.colors.body
+                icon = painterResource(drawable.star),
             )
             Box(
                 modifier = Modifier
