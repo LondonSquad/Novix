@@ -1,6 +1,5 @@
 package com.london.presentation.feature.home.toprated
 
-import com.london.domain.entity.genre.TvShowGenre
 import com.london.domain.usecase.details.movie.GetMovieUseCase
 import com.london.domain.usecase.details.tvshow.GetTvShowUseCase
 import com.london.presentation.shared.MediaCategory
@@ -8,6 +7,7 @@ import com.london.presentation.shared.base.BaseViewModel
 import com.london.presentation.shared.base.createPagingSourceFlow
 import com.london.presentation.shared.genre.MovieGenreUi
 import com.london.presentation.shared.genre.TvShowGenreUi
+import com.london.presentation.shared.genre.toDomain
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 
@@ -71,9 +71,8 @@ class TopRatedViewModel @Inject constructor(
         tryToExecute(block = {
             val moviesFlow = createPagingSourceFlow(query = "") { _, pageNumber ->
                 getMoviesUseCase.getAllTopRatedMovies(
-                    pageNumber,
-                    if (state.value.selectedMovieGenre == MovieGenreUi.All) null
-                    else state.value.selectedMovieGenre.id
+                    pageNumber = pageNumber,
+                    genre = state.value.selectedMovieGenre.toDomain()
                 )
             }
 
@@ -93,9 +92,8 @@ class TopRatedViewModel @Inject constructor(
         tryToExecute(block = {
             val tvSeriesFlow = createPagingSourceFlow(query = "") { _, pageNumber ->
                 getTvShowUseCase.getAllTopRatedTvShows(
-                    pageNumber,
-                    if (state.value.selectedTvShowGenre == TvShowGenre.All) null
-                    else state.value.selectedTvShowGenre.id
+                    pageNumber = pageNumber,
+                    genre = state.value.selectedTvShowGenre.toDomain()
                 )
             }
             tvSeriesFlow

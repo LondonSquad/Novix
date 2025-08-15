@@ -10,7 +10,7 @@ import kotlinx.coroutines.flow.flow
 data class TrendingMoviesUiState(
     val id: Int = 0,
     val isSaved: Boolean = false,
-    val selectedGenreId: Int? = 0,
+    val selectedGenre: MovieGenreUi? = MovieGenreUi.All,
     val backdropPath: String = "",
     val isLoading: Boolean = false,
     val errorState: ErrorState? = null,

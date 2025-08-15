@@ -101,14 +101,14 @@ class MovieRepositoryImpl @Inject constructor(
         cacheBlock = {
             upComingLocalDataSource.getUpComingMoviesPage(
                 page = pageNumber,
-                categoryId = genre.getId()
+                categoryId = if (genre == MovieGenre.ALL) null else genre.getId()
             )
         },
         crashReporter = crashReporter,
         syncBlock = { upComingLocalDataSource.insert(it) },
         networkBlock = {
             movieRemoteDataSource.getUpComingMoviesByCategory(
-                categoryId = genre.getId(),
+                categoryId = if (genre == MovieGenre.ALL) null else genre.getId(),
                 pageNumber = pageNumber,
             ).getOrThrow().toLocal(genre.getId())
         }).run {

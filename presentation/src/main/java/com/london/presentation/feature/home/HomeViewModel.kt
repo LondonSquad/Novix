@@ -6,7 +6,6 @@ import androidx.paging.cachedIn
 import com.london.domain.entity.Movie
 import com.london.domain.entity.TvShow
 import com.london.domain.entity.UpComingMovie
-import com.london.domain.entity.genre.MovieGenre
 import com.london.domain.entity.toprated.TopRatedMedia
 import com.london.domain.usecase.details.movie.GetMovieUseCase
 import com.london.domain.usecase.details.tvshow.GetTvShowUseCase
@@ -26,7 +25,6 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.flowOf
-import org.checkerframework.checker.units.qual.g
 import javax.inject.Inject
 
 @HiltViewModel
@@ -50,14 +48,14 @@ class HomeViewModel @Inject constructor(
 
     override fun loadUpcomingMoviesClick(genre: MovieGenreUi) {
         updateState {
-            copy(selectedCategoryFlow = selectedCategoryFlow.apply { value = categoryId })//////////////////////
+            copy(selectedCategoryFlow = selectedCategoryFlow.apply { value = genre })
         }
     }
 
     private fun createUpComingFlow(): Flow<PagingData<UpComingMovie>> {
         val upcomingMoviesFlow: Flow<PagingData<UpComingMovie>> =
             state.value.selectedCategoryFlow
-                .flatMapLatest { categoryId -> createUpcomingPagingFlow(categoryId) }//////////////////////////////////
+                .flatMapLatest { category -> createUpcomingPagingFlow(category?: MovieGenreUi.All) }
                 .cachedIn(viewModelScope)
 
         return upcomingMoviesFlow

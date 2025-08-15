@@ -1,9 +1,11 @@
 package com.london.presentation.feature.home.trending.tvshow
 
+import com.london.domain.entity.genre.TvShowGenre
 import com.london.domain.usecase.details.tvshow.GetTvShowUseCase
 import com.london.presentation.shared.base.BaseViewModel
 import com.london.presentation.shared.base.createPagingSourceFlow
 import com.london.presentation.shared.genre.TvShowGenreUi
+import com.london.presentation.shared.genre.toUi
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 
@@ -19,8 +21,8 @@ class TrendingTvShowsViewModel @Inject constructor(
     }
 
     override fun onGenreSelected(genre: TvShowGenreUi) {
-        if (genre == state.value.selectedGenreId) return
-        updateState { copy(selectedGenreId = genre) }
+        if (genre == state.value.selectedGenre) return
+        updateState { copy(selectedGenre = genre) }
         initializeTvShows()
     }
 
@@ -38,8 +40,12 @@ class TrendingTvShowsViewModel @Inject constructor(
                 val tvShowsFlow = createPagingSourceFlow(query = "") { _, pageNumber ->
                     val tvShows = getTvShowUseCase.getTrendingTvShows(page = pageNumber)
                     val filteredItems =
-                        if (state.value.selectedGenreId != null && state.value.selectedGenreId != -1) {
-                            tvShows.items.filter { it.genres.contains(state.value.selectedGenreId) }
+                        if (state.value.selectedGenre != null && state.value.selectedGenre != TvShowGenreUi.All) {
+                            tvShows.items.filter { movie ->
+                                movie.genres.map {
+                                    (it as TvShowGenre).toUi()
+                                }.contains(state.value.selectedGenre)
+                            }
                         } else {
                             tvShows.items
                         }

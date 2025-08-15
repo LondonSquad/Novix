@@ -6,6 +6,7 @@ import com.london.presentation.shared.MediaCategory
 import com.london.presentation.shared.base.BaseViewModel
 import com.london.presentation.shared.genre.MovieGenreUi
 import com.london.presentation.shared.genre.TvShowGenreUi
+import com.london.presentation.shared.genre.toDomain
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 
@@ -60,12 +61,10 @@ class ContinueWatchingViewModel @Inject constructor(
         tryToExecute(
             block = {
                 val recentWatchedMovie = manageRecentMovieWatchedUseCase.getAllWatchedMovies(
-                    genreId = if (state.value.selectedMovieGenre == MovieGenreUi.All) null
-                    else state.value.selectedMovieGenre.id
+                    genre = state.value.selectedMovieGenre.toDomain()
                 )
                 val recentWatchedTvShow = manageRecentTvShowWatchedUseCase.getAllRecentTvShow(
-                    genreId = if (state.value.selectedTvShowGenre == TvShowGenreUi.All) null
-                    else state.value.selectedTvShowGenre.id
+                    genre = state.value.selectedTvShowGenre.toDomain()
                 )
 
                 Pair(recentWatchedMovie, recentWatchedTvShow)

@@ -23,10 +23,11 @@ class MovieCategoryViewModel @Inject constructor(
     MovieCategoryContract {
 
     private val args = savedStateHandle.getArgs<Screen.MoviesByCategory>()
-    private val categoryId = args?.categoryId ?: 0 //toDo() category id will replace with enum
+    private val genre =
+        args?.category ?: MovieGenreUi.All
 
     init {
-        initializeMovies(categoryId)//////////////////////////////////////
+        initializeMovies(genre)
     }
 
     override fun onMovieClick(movieId: Int) =
@@ -39,10 +40,10 @@ class MovieCategoryViewModel @Inject constructor(
 
     private fun initializeMovies(genreUi: MovieGenreUi) {
         tryToExecute(
-            onStart = { onInitializeMoviesStarted(categoryId = categoryId) },
+            onStart = { onInitializeMoviesStarted(genre = genreUi) },
             block = { createMoviesPagingSourceFlow(genreUi = genreUi) },
             onSuccess = ::onInitializeMoviesSuccess,
-            checkSuccess = { categoryId != 0 },
+            checkSuccess = { genreUi != MovieGenreUi.All },
             onError = ::onInitializeMoviesFailed,
             onCompleted = ::onInitializeMoviesCompleted
         )
@@ -58,8 +59,8 @@ class MovieCategoryViewModel @Inject constructor(
         }
     }
 
-    private fun onInitializeMoviesStarted(categoryId: Int) =
-        updateState { copy(categoryId = categoryId, isLoading = true) }
+    private fun onInitializeMoviesStarted(genre: MovieGenreUi) =
+        updateState { copy(genre = genre, isLoading = true) }
 
     private fun onInitializeMoviesSuccess(moviesFlow: Flow<PagingData<Movie>>) =
         updateState { copy(moviesFlow = moviesFlow) }

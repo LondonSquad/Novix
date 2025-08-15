@@ -12,6 +12,7 @@ import com.london.domain.usecase.recent.watched.movie.ManageRecentMovieWatchedUs
 import com.london.presentation.navigation.Screen
 import com.london.presentation.navigation.getArgs
 import com.london.presentation.shared.base.BaseViewModel
+import com.london.presentation.shared.genre.MovieGenreUi
 import com.london.presentation.shared.genre.toUi
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
@@ -63,8 +64,8 @@ class MovieDetailsViewModel @Inject constructor(
         emitEffect(MovieDetailsEffect.ReviewsNavigation(movieId, mediaType))
     }
 
-    override fun onGenreClick(genreId: Int) {
-        emitEffect(MovieDetailsEffect.GenreNavigation(genreId))
+    override fun onGenreClick(genre: MovieGenreUi) {
+        emitEffect(MovieDetailsEffect.GenreNavigation(genre))
     }
 
     override fun onRetry() {

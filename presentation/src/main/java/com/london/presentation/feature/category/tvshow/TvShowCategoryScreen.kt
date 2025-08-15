@@ -74,9 +74,7 @@ private fun Content(
         ) {
             TopBar(
                 title = stringResource(
-                    convertGenreCodeToString(
-                        genreId = state.categoryId, searchCategory = SearchCategory.TvShows
-                    )
+                    state.genre.stringResId
                 ),
                 onBackClick = contract::onBack,
                 modifier = Modifier.padding(start = 16.dp, end = 16.dp, bottom = 12.dp)

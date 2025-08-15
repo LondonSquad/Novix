@@ -85,7 +85,7 @@ import com.london.presentation.utils.toLocalizedNumbers
 fun TvShowsDetailsScreen(
     onNavigateToLogin: () -> Unit,
     onNavigateToCast: (Int) -> Unit,
-    onNavigateToGenre: (Int) -> Unit,
+    onNavigateToGenre: (TvShowGenreUi) -> Unit,
     onNavigateToReviews: (tvShowId: Int, mediaType: MediaType) -> Unit,
     onNavigateBack: () -> Unit = {},
     onNavigateToEpisodeDetails: (tvShowId: Int, episodeNumber: Int, seasonNumber: Int) -> Unit,
@@ -112,7 +112,7 @@ fun TvShowsDetailsScreen(
             )
 
             is TvShowDetailsEffect.NavigateToTvShowsByCategoryId -> onNavigateToGenre(
-                currentEffect.categoryId
+                currentEffect.category
             )
 
             is TvShowDetailsEffect.OnLoginNavigation -> onNavigateToLogin()
@@ -394,7 +394,7 @@ fun GenreNames(
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Text(
-                    text = genre.name,
+                    text = stringResource(genre.stringResId),
                     style = NovixTheme.typography.label.small,
                     color = NovixTheme.colors.body,
                     modifier = if (index != uiState.tvShowGenres.lastIndex)

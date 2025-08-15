@@ -60,11 +60,11 @@ enum class TvShowGenreUi(
 
     companion object {
 
-        fun getListWithoutAllAndUnknown(): List<TvShowGenreUi> {
+        fun getListWithoutAll(): List<TvShowGenreUi> {
             return TvShowGenreUi.entries.filter { it != TvShowGenreUi.All && it != TvShowGenreUi.Unknown }
         }
 
-        fun getListWithoutUnknown(): List<TvShowGenreUi> {
+        fun getList(): List<TvShowGenreUi> {
             return TvShowGenreUi.entries.filter { it != TvShowGenreUi.Unknown }
         }
     }

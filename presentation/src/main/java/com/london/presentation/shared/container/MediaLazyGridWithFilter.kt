@@ -10,11 +10,12 @@ import com.london.designsystem.theme.NovixTheme
 import com.london.designsystem.theme.ThemePreviews
 import com.london.domain.entity.Movie
 import com.london.domain.entity.TvShow
+import com.london.domain.entity.genre.MovieGenre
 import com.london.presentation.shared.EmptyGenreLayout
 import com.london.presentation.shared.MediaCategory
 import com.london.presentation.shared.MediaGenreFilters
-import com.london.presentation.utils.MovieGenre
-import com.london.presentation.utils.TvShowGenre
+import com.london.presentation.shared.genre.MovieGenreUi
+import com.london.presentation.shared.genre.TvShowGenreUi
 
 @Composable
 fun <T : Any> MediaLazyGridWithFilter(
@@ -25,8 +26,8 @@ fun <T : Any> MediaLazyGridWithFilter(
     isLoading: Boolean = false,
     pagingItems: LazyPagingItems<T>? = null,
     tabSelected: Int = MediaCategory.Movies.ordinal,
-    onMovieGenreClick: (MovieGenre) -> Unit = {},
-    onTvShowGenreClick: (TvShowGenre) -> Unit = {},
+    onMovieGenreClick: (MovieGenreUi) -> Unit = {},
+    onTvShowGenreClick: (TvShowGenreUi) -> Unit = {},
     config: MediaGridConfig = MediaGridConfig(),
     topBar: @Composable (() -> Unit)? = null
 ) {
@@ -147,7 +148,7 @@ private fun Preview() {
             posterUrl = "https://example.com/movie1.jpg",
             releaseYear = 2023,
             rating = 8,
-            genreIds = listOf(28, 12)
+            genres = listOf(MovieGenre.TV_MOVIE)
         ),
         Movie(
             id = 2,
@@ -155,7 +156,7 @@ private fun Preview() {
             posterUrl = "https://example.com/movie2.jpg",
             releaseYear = 2024,
             rating = 7,
-            genreIds = listOf(18, 35)
+            genres = listOf(MovieGenre.TV_MOVIE)
         )
     )
 
@@ -170,8 +171,8 @@ private fun Preview() {
             rate = "3",
             isMovieSelected = true,
             isTvShowSelected = false,
-            selectedMovieGenre = MovieGenre.Action,
-            selectedTvShowGenre = TvShowGenre.All,
+            selectedMovieGenre = MovieGenreUi.Action,
+            selectedTvShowGenre = TvShowGenreUi.All,
             onNavigateToMovie = {},
             onNavigateToTvShow = {},
             onSaveClick = {},

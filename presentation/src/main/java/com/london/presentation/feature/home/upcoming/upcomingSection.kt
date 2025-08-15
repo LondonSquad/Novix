@@ -104,13 +104,12 @@ private fun UpcomingStickyHeader(
     GenresSection(
         isLoading = isLoading,
         genres = state.movieGenres,
-        selectedGenreId = state.selectedMovieGenre,
+        selectedGenre = state.selectedMovieGenre,
         screenWidth = screenWidth,
         onGenreClick = contract::onMovieGenreSelect,
         modifier = Modifier
             .background(NovixTheme.colors.surface)
             .padding(bottom = animatedPadding),
-        getGenreId = { it.id },
         getGenreName = { stringResource(it.stringResId) }
     )
 }
