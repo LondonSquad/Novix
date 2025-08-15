@@ -1,6 +1,7 @@
 package com.london.data.remote.model.home.toprated
 
 
+import com.london.data.mapper.genre.GenreMapper
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
@@ -17,5 +18,7 @@ data class TopRatedTvSeriesRemote(
     @SerialName("poster_path")
     val posterPath: String? = null,
     @SerialName("vote_average")
-    val voteAverage: Double? = null,
-)
+    val voteAverage: Double?,
+    @SerialName("vote_count")
+    val voteCount: Int?
+) : GenreMapper

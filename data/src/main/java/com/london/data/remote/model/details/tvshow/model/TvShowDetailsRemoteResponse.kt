@@ -1,5 +1,6 @@
 package com.london.data.remote.model.details.tvshow.model
 
+import com.london.data.mapper.genre.GenreMapper
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
@@ -25,7 +26,9 @@ data class TvShowDetailsRemoteResponse(
     val tvShowSeasons: List<TvShowSeason>? = null,
     @SerialName("vote_average")
     val voteAverage: Double? = null,
-)
+    @SerialName("vote_count")
+    val voteCount: Int? = null
+) : GenreMapper
 
 @Serializable
 data class TvShowGenre(

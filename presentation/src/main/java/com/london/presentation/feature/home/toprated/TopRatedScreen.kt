@@ -44,9 +44,9 @@ import com.london.presentation.shared.CarousalShimmerEffect
 import com.london.presentation.shared.HomeCard
 import com.london.presentation.shared.MediaCategory
 import com.london.presentation.shared.buildscreen.BuildScreen
+import com.london.presentation.shared.genre.MovieGenreUi
+import com.london.presentation.shared.genre.TvShowGenreUi
 import com.london.presentation.utils.Listen
-import com.london.presentation.utils.MovieGenre
-import com.london.presentation.utils.TvShowGenre
 import com.london.presentation.utils.gridColumns
 import com.london.presentation.utils.isLoading
 
@@ -200,7 +200,7 @@ private fun Content(
 
 @Composable
 private fun MovieGenreRow(
-    onGenreClick: (MovieGenre) -> Unit,
+    onGenreClick: (MovieGenreUi) -> Unit,
     state: TopRatedUiState,
     screenWidth: Dp,
     modifier: Modifier = Modifier
@@ -212,7 +212,7 @@ private fun MovieGenreRow(
             .requiredWidth(screenWidth)
             .padding(vertical = 12.dp)
     ) {
-        items(MovieGenre.entries.toTypedArray()) { genre ->
+        items(MovieGenreUi.getList()) { genre ->
             NovixChip(
                 text = stringResource(genre.stringResId),
                 isSelected = genre == state.selectedMovieGenre,
@@ -223,7 +223,7 @@ private fun MovieGenreRow(
 
 @Composable
 private fun TvShowRow(
-    onGenreClick: (TvShowGenre) -> Unit,
+    onGenreClick: (TvShowGenreUi) -> Unit,
     state: TopRatedUiState,
     screenWidth: Dp,
     modifier: Modifier = Modifier
@@ -235,7 +235,8 @@ private fun TvShowRow(
             .requiredWidth(screenWidth)
             .padding(vertical = 12.dp)
     ) {
-        items(TvShowGenre.entries.toTypedArray()) { genre ->
+        items(
+            TvShowGenreUi.getList()) { genre ->
             NovixChip(
                 text = stringResource(genre.stringResId),
                 isSelected = genre == state.selectedTvShowGenre,

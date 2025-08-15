@@ -4,6 +4,7 @@ import com.google.common.truth.Truth.assertThat
 import com.london.domain.entity.Actor
 import com.london.domain.entity.Movie
 import com.london.domain.entity.PagedFetchResponse
+import com.london.domain.entity.genre.MovieGenre
 import com.london.domain.repository.SearchRepository
 import io.mockk.coEvery
 import io.mockk.coVerify
@@ -56,9 +57,9 @@ class ManageSearchUseCaseTest {
         val genreId = 28
         val mediaType = "tv"
 
-        manageSearchUseCase.incrementGenreInterest(genreId, mediaType)
+        manageSearchUseCase.incrementGenreInterest(MovieGenre.ACTION, mediaType)
 
-        coVerify { repository.incrementGenreInterest(genreId, mediaType) }
+        coVerify { repository.incrementGenreInterest(MovieGenre.ACTION, mediaType) }
     }
 
     @Test
@@ -100,7 +101,7 @@ class ManageSearchUseCaseTest {
             posterUrl = "",
             releaseYear = 2024,
             rating = 8,
-            genreIds = listOf(1, 2, 3)
+            genres = listOf(MovieGenre.ACTION, MovieGenre.ACTION, MovieGenre.ACTION)
         )
         val moviesPagedResponse: PagedFetchResponse<Movie> = PagedFetchResponse(
             currentPage = 1,
