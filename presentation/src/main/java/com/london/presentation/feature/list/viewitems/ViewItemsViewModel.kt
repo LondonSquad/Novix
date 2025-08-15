@@ -1,7 +1,10 @@
 package com.london.presentation.feature.list.viewitems
 
 import androidx.lifecycle.SavedStateHandle
+import com.london.domain.usecase.movielist.GetMovieListDetailsUseCase
+import com.london.domain.usecase.movielist.GetMovieListNameUseCase
 import com.london.domain.usecase.movielist.ManageMovieListUseCase
+import com.london.domain.usecase.movielist.RemoveMovieFromListUseCase
 import com.london.presentation.navigation.Screen
 import com.london.presentation.navigation.getArgs
 import com.london.presentation.shared.base.BaseViewModel
@@ -12,6 +15,9 @@ import javax.inject.Inject
 
 @HiltViewModel
 class ViewItemsViewModel @Inject constructor(
+    private val getMovieListDetailsUseCase: GetMovieListDetailsUseCase,
+    private val removeMovieFromListUseCase: RemoveMovieFromListUseCase,
+    private val getMovieListNameUseCase: GetMovieListNameUseCase,
     private val manageMovieListUseCase: ManageMovieListUseCase,
     savedStateHandle: SavedStateHandle
 ) : BaseViewModel<ViewItemsUiState, ViewItemsEffect>(ViewItemsUiState()),
@@ -45,7 +51,7 @@ class ViewItemsViewModel @Inject constructor(
 
         tryToExecute(
             block = {
-                manageMovieListUseCase.deleteMovieList(listId.toUInt())
+                manageMovieListUseCase.deleteMovieList(listId)
             },
             onCompleted = {
                 updateState { copy(isDeleteBottomSheetVisible = false) }
@@ -68,16 +74,13 @@ class ViewItemsViewModel @Inject constructor(
 
         tryToExecute(
             block = {
-                manageMovieListUseCase.removeMovieFromList(
-                    listId = listId.toUInt(),
-                    movieId = id.toUInt()
-                )
+                removeMovieFromListUseCase.invoke(listId = listId, movieId = id)
             },
             onStart = {
                 updateState { copy(error = null, isSnackBarSuccessVisible = false) }
             },
             onError = {
-                updateState { copy(error = error) }
+                updateState { copy(error = ErrorState.EntryNotFound()) }
             },
             onSuccess = {
                 updateState { copy(isSnackBarSuccessVisible = true) }
@@ -94,8 +97,8 @@ class ViewItemsViewModel @Inject constructor(
         tryToExecute(
             block = {
                 val moviesFlow = createPagingSourceFlow(query = "") { _, pageNumber ->
-                    val movies = manageMovieListUseCase.getMovieListDetails(
-                        listId = listId.toUInt(),
+                    val movies = getMovieListDetailsUseCase.invoke(
+                        listId = listId,
                         pageNumber = pageNumber
                     )
                     movies.copy(items = movies.items)
@@ -123,7 +126,7 @@ class ViewItemsViewModel @Inject constructor(
 
         tryToExecute(
             block = {
-                manageMovieListUseCase.getMovieListName(listId.toUInt())
+                getMovieListNameUseCase.invoke(listId)
             },
             onStart = {
                 updateState { copy(isLoading = true) }

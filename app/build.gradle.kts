@@ -101,6 +101,10 @@ dependencies {
     ksp(libs.bundles.room.ksp)
     implementation(libs.timber)
 
+    implementation(libs.androidx.hilt.work)
+    implementation(libs.androidx.work.runtime.ktx)
+    implementation(libs.androidx.hilt.common)
+
     ksp(libs.bundles.hilt.ksp)
     implementation(libs.bundles.hilt.runtime)
 }
