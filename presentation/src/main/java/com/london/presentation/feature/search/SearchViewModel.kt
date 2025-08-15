@@ -22,7 +22,6 @@ class SearchViewModel @Inject constructor(
     private val manageSearchUseCase: ManageSearchUseCase,
     private val manageRecentSearchUseCase: ManageRecentSearchUseCase,
     private val manageRecentViewedUseCase: ManageRecentViewedUseCase,
-
     ) : BaseViewModel<SearchUiState, SearchEffect>(SearchUiState()), SearchContract {
 
     private val _searchQuery = MutableStateFlow("")
@@ -163,7 +162,7 @@ class SearchViewModel @Inject constructor(
     }
 
     override fun onMovieGenreClick(genresList: List<Genre>) {
-        genresListId.forEach { genre ->
+        genresList.forEach { genre ->
             incrementGenreInterest(genre, "tv")
         }
     }

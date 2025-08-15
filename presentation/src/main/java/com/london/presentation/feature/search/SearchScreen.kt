@@ -344,7 +344,7 @@ private fun MovieSearchContent(state: SearchUiState, contract: SearchContract) {
             val movie = moviesLazyList.itemSnapshotList.items.firstOrNull { it.id == id }
             movie?.let {
                 contract.addToRecentViewed(it.toRecentViewed())
-                contract.onMovieGenreClick(it.genreIds)
+                contract.onMovieGenreClick(it.genres)
             }
             contract.onMovieClick(id)
         }
@@ -362,8 +362,8 @@ private fun TvShowSearchContent(state: SearchUiState, contract: SearchContract) 
             val tvShow = tvShowsLazyList.itemSnapshotList.items.firstOrNull { it.id == id }
             tvShow?.let {
                 contract.addToRecentViewed(it.toRecentViewed())
-                it.genres.forEach { genreId ->
-                    contract.incrementGenreInterest(genreId, "tv")
+                it.genres.forEach { genre ->
+                    contract.incrementGenreInterest(genre, "tv")
                 }
             }
             contract.onTvShowClick(id)
