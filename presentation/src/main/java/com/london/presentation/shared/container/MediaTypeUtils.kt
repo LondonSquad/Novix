@@ -18,3 +18,14 @@ fun <T : Any> T.getImageUrl(): String? {
         else -> null
     }
 }
+
+fun <T : Any> filterItemsByCategory(
+    items: List<T>,
+    config: MediaGridConfig
+): List<T> {
+    return when {
+        config.isMovieSelected -> items.filter { it is Movie }
+        config.isTvShowSelected -> items.filter { it is TvShow }
+        else -> items
+    }
+}
