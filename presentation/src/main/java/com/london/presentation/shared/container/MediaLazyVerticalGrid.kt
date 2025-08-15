@@ -1,6 +1,8 @@
 package com.london.presentation.shared.container
 
 import androidx.compose.animation.AnimatedContent
+import androidx.compose.animation.AnimatedContentTransitionScope
+import androidx.compose.animation.ContentTransform
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
@@ -53,16 +55,7 @@ fun <T : Any> MediaLazyVerticalGrid(
 
         AnimatedContent(
             targetState = items.size,
-            transitionSpec = {
-                (slideInVertically(
-                    animationSpec = tween(1200),
-                    initialOffsetY = { it }
-                ) + fadeIn(tween(1200))) togetherWith
-                        (slideOutVertically(
-                            animationSpec = tween(1200),
-                            targetOffsetY = { -it }
-                        ) + fadeOut(tween(1200)))
-            }
+            transitionSpec = gridTransitionSpec()
         ) { itemCount ->
             key(itemCount) {
 
@@ -94,13 +87,7 @@ fun <T : Any> MediaLazyVerticalGrid(
                                 onDeleteClick = { onDeleteClick(item) },
                                 myRatingList = myRatingList,
                                 rate = rate,
-                                modifier = Modifier
-                                    .animateItem(
-                                        fadeInSpec = null,
-                                        fadeOutSpec = tween(1000),
-                                        placementSpec = tween(1000)
-                                    )
-                                    .clickable {
+                                modifier = Modifier.clickable {
                                         when (item) {
                                             is Movie -> onNavigateToMovie(item.id)
                                             is TvShow -> onNavigateToTvShow(item.id)
@@ -140,16 +127,7 @@ fun <T : Any> MediaLazyVerticalGrid(
 
         AnimatedContent(
             targetState = pagingItems.itemSnapshotList.items.size,
-            transitionSpec = {
-                (slideInVertically(
-                    animationSpec = tween(1200),
-                    initialOffsetY = { it }
-                ) + fadeIn(tween(1200))) togetherWith
-                        (slideOutVertically(
-                            animationSpec = tween(1200),
-                            targetOffsetY = { -it }
-                        ) + fadeOut(tween(1200)))
-            }
+            transitionSpec = gridTransitionSpec()
         ) { itemCount ->
             key(itemCount) {
                 LazyVerticalGrid(
@@ -183,11 +161,6 @@ fun <T : Any> MediaLazyVerticalGrid(
                             rate = rate,
                             onNavigateToMovie = onNavigateToMovie,
                             onNavigateToTvShow = onNavigateToTvShow,
-                            modifier = Modifier.animateItem(
-                                fadeInSpec = null,
-                                fadeOutSpec = tween(1000),
-                                placementSpec = tween(1000)
-                            )
                         )
                     }
                 }
@@ -198,7 +171,6 @@ fun <T : Any> MediaLazyVerticalGrid(
 
 @Composable
 private fun <T : Any> RenderPagingItem(
-    modifier: Modifier,
     index: Int,
     pagingItems: LazyPagingItems<T>,
     imageUrl: (T) -> String?,
@@ -216,7 +188,7 @@ private fun <T : Any> RenderPagingItem(
         imageUrl(item)?.let {
             HomeCard(
                 imageUrl = it,
-                modifier = modifier.clickable {
+                modifier = Modifier.clickable {
                     when (item) {
                         is Movie -> onNavigateToMovie(item.id)
                         is TvShow -> onNavigateToTvShow(item.id)
@@ -232,6 +204,17 @@ private fun <T : Any> RenderPagingItem(
             )
         }
     }
+}
+
+private fun gridTransitionSpec(): AnimatedContentTransitionScope<Int>.() -> ContentTransform = {
+    (slideInVertically(
+        animationSpec = tween(1200),
+        initialOffsetY = { it }
+    ) + fadeIn(tween(1200))) togetherWith
+            (slideOutVertically(
+                animationSpec = tween(1200),
+                targetOffsetY = { -it }
+            ) + fadeOut(tween(1200)))
 }
 
 @ThemePreviews
