@@ -38,13 +38,14 @@ class TrendingActorsViewModel @Inject constructor(
         )
     }
 
-    fun handlingErrorState(errorState: ErrorState) = updateState { copy(errorState = errorState) }
+    private fun handlingErrorState(errorState: ErrorState) =
+        updateState { copy(errorState = errorState) }
 
-    fun handlingPagingState(actorsPagingData: Flow<PagingData<Actor>>) {
+    private fun handlingPagingState(actorsPagingData: Flow<PagingData<Actor>>) {
         return updateState { copy(actorsFlow = actorsPagingData) }
     }
 
-    private fun createTrendingActorsPagingFlow() : Flow<PagingData<Actor>> {
+    private fun createTrendingActorsPagingFlow(): Flow<PagingData<Actor>> {
         return createPagingSourceFlow(
             query = "",
             block = { _, pageNumber ->
@@ -55,5 +56,6 @@ class TrendingActorsViewModel @Inject constructor(
         ).cachedIn(viewModelScope)
     }
 
-    fun handlingLoadingState(isLoading: Boolean) = updateState { copy(isLoading = isLoading) }
+    private fun handlingLoadingState(isLoading: Boolean) =
+        updateState { copy(isLoading = isLoading) }
 }

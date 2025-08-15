@@ -45,8 +45,10 @@ class TrendingTvShowsViewModel @Inject constructor(
         )
     }
 
-    fun handlingErrorState(errorState: ErrorState) = updateState { copy(errorState = errorState) }
-    fun handlingPagingState(tvShowsPagingData: PagingData<Trending>) {
+    private fun handlingErrorState(errorState: ErrorState) =
+        updateState { copy(errorState = errorState) }
+
+    private fun handlingPagingState(tvShowsPagingData: PagingData<Trending>) {
         updateState {
             copy(
                 tvShowsFlow = flowOf(tvShowsPagingData),
@@ -67,5 +69,6 @@ class TrendingTvShowsViewModel @Inject constructor(
         ).cachedIn(viewModelScope)
     }
 
-    fun handlingLoadingState(isLoading: Boolean) = updateState { copy(isLoading = isLoading) }
+    private fun handlingLoadingState(isLoading: Boolean) =
+        updateState { copy(isLoading = isLoading) }
 }

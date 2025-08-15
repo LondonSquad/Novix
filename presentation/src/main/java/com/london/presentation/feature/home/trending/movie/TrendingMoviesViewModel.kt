@@ -48,8 +48,10 @@ class TrendingMoviesViewModel @Inject constructor(
         )
     }
 
-    fun handlingErrorState(errorState: ErrorState) = updateState { copy(errorState = errorState) }
-    fun handlingPagingState(moviesPagingData: PagingData<Trending>) {
+    private fun handlingErrorState(errorState: ErrorState) =
+        updateState { copy(errorState = errorState) }
+
+    private fun handlingPagingState(moviesPagingData: PagingData<Trending>) {
         return updateState {
             copy(
                 moviesFlow = flowOf(moviesPagingData),
@@ -58,7 +60,7 @@ class TrendingMoviesViewModel @Inject constructor(
         }
     }
 
-    fun createTrendingMoviesPagingFlow() = createPagingSourceFlow(
+    private fun createTrendingMoviesPagingFlow() = createPagingSourceFlow(
         query = "",
         block = { _, pageNumber ->
             getMovieUseCase.getTrendingMovies(
@@ -68,5 +70,6 @@ class TrendingMoviesViewModel @Inject constructor(
         }
     ).cachedIn(viewModelScope)
 
-    fun handlingLoadingState(isLoading: Boolean) = updateState { copy(isLoading = isLoading) }
+    private fun handlingLoadingState(isLoading: Boolean) =
+        updateState { copy(isLoading = isLoading) }
 }
