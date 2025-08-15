@@ -1,19 +1,12 @@
 package com.london.presentation.feature.account.rating
 
-import androidx.compose.animation.core.tween
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.statusBarsPadding
-import androidx.compose.foundation.lazy.grid.GridCells
-import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
-import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
@@ -30,12 +23,11 @@ import com.london.designsystem.theme.ThemePreviews
 import com.london.domain.entity.recent.MediaType
 import com.london.presentation.R
 import com.london.presentation.shared.EmptyGenreLayout
-import com.london.presentation.shared.HomeCard
 import com.london.presentation.shared.SnackBarAnimation
 import com.london.presentation.shared.base.ErrorState
 import com.london.presentation.shared.buildscreen.BuildScreen
+import com.london.presentation.shared.container.MediaLazyVerticalGrid
 import com.london.presentation.utils.Listen
-import com.london.presentation.utils.gridColumns
 import com.london.presentation.utils.toLocalizedNumbers
 import com.london.designsystem.R as dsR
 
@@ -111,51 +103,24 @@ private fun Content(
                     modifier = Modifier.fillMaxSize()
                 )
             } else {
-                LazyVerticalGrid(
-                    columns = GridCells.Fixed(gridColumns()),
-                    contentPadding = PaddingValues(
-                        top = 12.dp,
-                        bottom = 16.dp
-                    ),
-                    horizontalArrangement = Arrangement.spacedBy(12.dp),
-                    verticalArrangement = Arrangement.spacedBy(12.dp),
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .navigationBarsPadding()
-                        .padding(horizontal = 16.dp)
-                ) {
-                    items(
-                        items = items,
-                        key = { it.id }
-                    ) { item ->
-                        HomeCard(
-                            imageUrl = item.posterPath,
-                            isSaved = false,
-                            onSaveClick = { },
-                            myRatingList = true,
-                            rate = item.rating.toLocalizedNumbers(),
-                            onDeleteClick = {
-                                when (item.mediaType) {
-                                    MediaType.Movie -> contract.onDeleteMovieClick(item.id)
-                                    MediaType.TvShow -> contract.onDeleteTVShowClick(item.id)
-                                }
-                            },
-                            modifier = Modifier
-                                .animateItem(
-                                    fadeInSpec = null,
-                                    fadeOutSpec = tween(500),
-                                    placementSpec = tween(500)
-                                )
-                                .clickable {
-                                    when (item.mediaType) {
-                                        MediaType.Movie -> contract.onMovieClick(item.id)
-                                        MediaType.TvShow -> contract.onTvShowClick(item.id)
-                                    }
-                                },
-                            hasSaveIcon = false
-                        )
-                    }
-                }
+                MediaLazyVerticalGrid(
+                    items = items,
+                    imageUrl = { it.posterPath },
+                    name = { it.title },
+                    rate = { it.rating.toLocalizedNumbers() },
+                    hasSaveIcon = false,
+                    isItemSaved = { false },
+                    onSaveClick = {},
+                    onDeleteClick = { rated ->
+                        when (rated.mediaType) {
+                            MediaType.Movie -> contract.onDeleteMovieClick(rated.id)
+                            MediaType.TvShow -> contract.onDeleteTVShowClick(rated.id)
+                        }
+                    },
+                    myRatingList = true,
+                    onNavigateToMovie = contract::onMovieClick,
+                    onNavigateToTvShow = contract::onTvShowClick
+                )
             }
         }
 

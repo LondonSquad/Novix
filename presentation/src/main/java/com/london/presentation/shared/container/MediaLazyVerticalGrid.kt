@@ -31,7 +31,7 @@ fun <T : Any> MediaLazyVerticalGrid(
     isItemSaved: (T) -> Boolean = { false },
     onDeleteClick: (T) -> Unit = {},
     myRatingList: Boolean = false,
-    rate: String = "3",
+    rate: (T) -> String = { "" },
     onNavigateToMovie: (Int) -> Unit = {},
     onNavigateToTvShow: (Int) -> Unit = {},
     topBar: @Composable (() -> Unit)? = null
@@ -67,7 +67,7 @@ fun <T : Any> MediaLazyVerticalGrid(
                         onSaveClick = { onSaveClick(item) },
                         onDeleteClick = { onDeleteClick(item) },
                         myRatingList = myRatingList,
-                        rate = rate
+                        rate = rate(item)
                     )
                 }
             }
@@ -81,12 +81,12 @@ fun <T : Any> MediaLazyVerticalGrid(
     modifier: Modifier = Modifier,
     imageUrl: (T) -> String? = { it.getImageUrl() },
     name: (T) -> String = { it.getName() },
+    rate: (T) -> String = { "" },
     hasSaveIcon: Boolean = true,
     onSaveClick: (T) -> Unit = {},
     isItemSaved: (T) -> Boolean = { false },
     onDeleteClick: (T) -> Unit = {},
     myRatingList: Boolean = false,
-    rate: String = "3",
     topBar: @Composable (() -> Unit)? = null,
     onNavigateToMovie: (Int) -> Unit = {},
     onNavigateToTvShow: (Int) -> Unit = {}
@@ -107,6 +107,7 @@ fun <T : Any> MediaLazyVerticalGrid(
             contentPadding = PaddingValues(start = 16.dp, end = 16.dp, bottom = 16.dp)
         ) {
             items(pagingItems.itemCount) { index ->
+                val item = pagingItems[index] ?: return@items
                 RenderPagingItem(
                     index = index,
                     pagingItems = pagingItems,
@@ -117,7 +118,7 @@ fun <T : Any> MediaLazyVerticalGrid(
                     onSaveClick = onSaveClick,
                     onDeleteClick = onDeleteClick,
                     myRatingList = myRatingList,
-                    rate = rate,
+                    rate = rate(item),
                     onNavigateToMovie = onNavigateToMovie,
                     onNavigateToTvShow = onNavigateToTvShow
                 )
