@@ -20,6 +20,8 @@ plugins {
 }
 
 subprojects {
+    apply(plugin = "org.jetbrains.kotlinx.kover")
+
     plugins.withId("org.jetbrains.kotlin.android") {
         extensions.configure<KotlinAndroidProjectExtension> {
             compilerOptions {
@@ -36,38 +38,57 @@ dependencies {
 }
 
 kover {
-    apply(plugin = "org.jetbrains.kotlinx.kover")
-
     reports {
         total {
             filters {
                 includes {
                     packages(
-                        "com.london.domain.usecase",
-                        "com.london.data.mapper",
-                        "com.london.data.repository",
-                        "com.london.data.datasource.local.search",
-                        "com.london.data.datasource.local.recent",
+                        "com.london.domain.**",
+                        "com.london.data.**",
+                        "com.london.presentation.**"
                     )
                     classes("**.*ViewModel")
                 }
 
                 excludes {
+                    // Annotation-based exclusions
                     annotatedBy("com.london.domain.KoverIgnore")
+
+                    // Package exclusions
                     packages(
                         "com.london.data.datasource.remote.**",
+                        "com.london.imageharamblur.**",
+                        "**.*di.*",
+                        "**.di.**"
                     )
-                    classes("*di.*")
-                    classes("com.london.imageharamblur.**")
+
+                    // Class pattern exclusions
+                    classes(
+                        "*di.*",
+                        "**.di.**",
+                        "**.*Activity",
+                        "**.*Fragment",
+                        "**.*Application",
+                        "**.*Module",
+                        "**.*Component",
+                        "**.*_Factory",
+                        "**.*_HiltModules*",
+                        "**.BuildConfig",
+                        "**.*ComposableSingletons*",
+                        "**.*_Impl*"
+                    )
                 }
             }
+
             verify {
                 rule {
-                    bound {
-                        minValue = 80
-                    }
+                    bound { minValue = 80 }
                 }
             }
+
+            xml { onCheck = false }
+
+            html { onCheck = false }
         }
     }
 }
