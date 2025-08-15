@@ -21496,5 +21496,33 @@
       "deletions": 11,
       "changed_files": 1
     }
+  },
+  {
+    "pr_number": 639,
+    "url": "https://github.com/LondonSquad/Novix/pull/639",
+    "title": "Add animation to MediaLazyVerticalGrid",
+    "opened_at": "2025-08-15T08:53:04Z",
+    "head_ref": "refactor/clear-duplicate-code-presentation",
+    "base_ref": "develop",
+    "creator": {
+      "login": "AsmaaKhaledGomaa",
+      "id": 117874933,
+      "url": "https://github.com/AsmaaKhaledGomaa"
+    },
+    "approvals": [],
+    "first_approved_at": null,
+    "time_to_first_approval_minutes": null,
+    "required_approvals_met_at": null,
+    "time_to_required_approvals_minutes": null,
+    "closed_at": null,
+    "merged_at": null,
+    "merged_by": null,
+    "week": "2025-W33",
+    "status": "pending",
+    "diff_stats": {
+      "additions": 142,
+      "deletions": 61,
+      "changed_files": 1
+    }
   }
 ]
