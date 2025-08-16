@@ -6,7 +6,7 @@ import com.london.data.local.model.home.topRated.TopRatedLocal
 import com.london.data.local.preference.AuthenticationPreferences
 import com.london.data.local.source.home.HomeLocalDataSource
 import com.london.data.local.source.home.upcoming.UpComingLocalDataSource
-import com.london.data.mapper.details.movie.toEntity
+import com.london.data.mapper.details.toEntity
 import com.london.data.mapper.search.toAuthorDetails
 import com.london.data.remote.exception.NetworkException
 import com.london.data.remote.model.ApiResponse

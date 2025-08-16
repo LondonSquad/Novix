@@ -5,7 +5,6 @@ import com.london.data.local.model.home.topRated.TopRatedLocal
 import com.london.data.local.preference.AuthenticationPreferences
 import com.london.data.local.source.home.HomeLocalDataSource
 import com.london.data.mapper.details.actor.toEntity
-import com.london.data.mapper.details.movie.toEntity
 import com.london.data.mapper.details.toEntity
 import com.london.data.mapper.details.tvshow.toEntity
 import com.london.data.mapper.details.tvshow.toTvShowEpisodeEntity
@@ -25,13 +24,13 @@ import com.london.data.utils.CrashReporter
 import com.london.data.utils.asYoutubeUrlOrEmpty
 import com.london.data.utils.fetchAndSync
 import com.london.domain.entity.ImagesEntity
+import com.london.domain.entity.MediaStates
 import com.london.domain.entity.PagedFetchResponse
 import com.london.domain.entity.RatedMedia
 import com.london.domain.entity.Trending
 import com.london.domain.entity.TvShow
 import com.london.domain.entity.actordetails.cast.ActorMediaDetails
 import com.london.domain.entity.genre.TvShowGenre
-import com.london.domain.entity.moviedatails.MediaStates
 import com.london.domain.entity.popular.PopularMedia
 import com.london.domain.entity.recent.MediaType
 import com.london.domain.entity.review.ReviewEntity

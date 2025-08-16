@@ -34,10 +34,10 @@ import com.london.data.repository.tvshow.TvShowRepositoryImpl
 import com.london.data.utils.CrashReporter
 import com.london.data.utils.asYoutubeUrlOrEmpty
 import com.london.data.utils.orZero
+import com.london.domain.entity.MediaStates
 import com.london.domain.entity.PagedFetchResponse
 import com.london.domain.entity.TvShow
 import com.london.domain.entity.genre.TvShowGenre
-import com.london.domain.entity.moviedatails.MediaStates
 import com.london.domain.entity.recent.MediaType
 import com.london.domain.entity.toprated.TopRatedMedia
 import io.mockk.coEvery

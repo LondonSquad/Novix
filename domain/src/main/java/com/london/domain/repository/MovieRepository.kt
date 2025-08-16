@@ -1,6 +1,7 @@
 package com.london.domain.repository
 
 import com.london.domain.entity.ImagesEntity
+import com.london.domain.entity.MediaStates
 import com.london.domain.entity.Movie
 import com.london.domain.entity.PagedFetchResponse
 import com.london.domain.entity.RatedMedia
@@ -8,7 +9,6 @@ import com.london.domain.entity.Trending
 import com.london.domain.entity.UpComingMovie
 import com.london.domain.entity.actordetails.cast.ActorMediaDetails
 import com.london.domain.entity.genre.MovieGenre
-import com.london.domain.entity.moviedatails.MediaStates
 import com.london.domain.entity.moviedatails.MovieDetails
 import com.london.domain.entity.popular.PopularMedia
 import com.london.domain.entity.review.ReviewEntity
