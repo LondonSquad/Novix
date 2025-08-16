@@ -14,6 +14,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const filterButtons = document.querySelectorAll(".filter-btn");
     const searchInput = document.getElementById("pr-search");
     const authorFilter = document.getElementById("author-filter");
+    const assigneeFilter = document.getElementById("assignee-filter");
     const analyticsWeekFilter = document.getElementById("analytics-week-filter");
     const themeToggleBtn = document.getElementById('theme-toggle-btn');
     const sunIcon = document.getElementById('theme-icon-sun');
@@ -372,8 +373,10 @@ document.addEventListener("DOMContentLoaded", () => {
             if (pr.merged_at) { subMetaHtml = `<div class="pr-sub-meta status-merged-text">Merged on ${formatDate(pr.merged_at)}</div>`; }
             else if (pr.status === 'closed') { subMetaHtml = `<div class="pr-sub-meta status-closed-text">Closed</div>`; }
 
+            const assigneeLogins = (pr.assignees || []).map(a => a.login).join(',');
+
             return `
-                <div class="pr-row" data-status="${filterStatus}" data-author="${pr.creator.login}" data-text="${pr.title.toLowerCase()} #${pr.pr_number}">
+                <div class="pr-row" data-status="${filterStatus}" data-author="${pr.creator.login}" data-assignees="${assigneeLogins}" data-text="${pr.title.toLowerCase()} #${pr.pr_number}">
                     <div class="pr-row-main">
                         <div class="pr-info-cell">
                             <div class="pr-title"><a href="${pr.url}" target="_blank">#${pr.pr_number} ${pr.title}</a></div>
@@ -536,14 +539,17 @@ document.addEventListener("DOMContentLoaded", () => {
     const applyFilters = () => {
         const activeStatus = document.querySelector('.filter-btn.active').dataset.status;
         const activeAuthor = authorFilter.value;
+        const activeAssignee = assigneeFilter.value;
         const searchText = searchInput.value.toLowerCase();
 
         const allRows = Array.from(prMetricsContainer.querySelectorAll('.pr-row'));
 
         const baseFilteredRows = allRows.filter(item => {
             const isAuthorMatch = activeAuthor === 'all' || item.dataset.author === activeAuthor;
+            const assignees = item.dataset.assignees.split(',');
+            const isAssigneeMatch = activeAssignee === 'all' || assignees.includes(activeAssignee);
             const isTextMatch = item.dataset.text.includes(searchText);
-            return isAuthorMatch && isTextMatch;
+            return isAuthorMatch && isAssigneeMatch && isTextMatch;
         });
 
         const counts = {
@@ -572,7 +578,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
         finalVisibleRows.forEach(item => item.style.display = 'flex');
 
-        // ** START OF FIX **
         // Recalculate counts for each week group based on visible rows.
         prMetricsContainer.querySelectorAll('.pr-week-group').forEach(group => {
             // Find all rows inside this specific group that are currently visible
@@ -588,7 +593,6 @@ document.addEventListener("DOMContentLoaded", () => {
             // Hide or show the entire week group based on whether it has visible PRs
             group.style.display = count > 0 ? 'block' : 'none';
         });
-        // ** END OF FIX **
     };
 
     const setupEventListeners = () => {
@@ -601,11 +605,14 @@ document.addEventListener("DOMContentLoaded", () => {
             }
         });
         authorFilter.addEventListener('change', applyFilters);
+        assigneeFilter.addEventListener('change', applyFilters);
         searchInput.addEventListener('keyup', applyFilters);
     };
 
     const renderPrMetrics = (data) => {
         allPrData = data;
+
+        // Populate authors
         const authors = [...new Set(data.map(pr => pr.creator.login))].sort((a, b) => a.toLowerCase().localeCompare(b.toLowerCase()));
         authorFilter.innerHTML = `<option value="all">All Authors</option>`;
         authors.forEach(author => {
@@ -614,6 +621,17 @@ document.addEventListener("DOMContentLoaded", () => {
             option.textContent = author;
             authorFilter.appendChild(option);
         });
+
+        // Populate assignees
+        const assignees = [...new Set(data.flatMap(pr => (pr.assignees || []).map(a => a.login)))].sort((a, b) => a.toLowerCase().localeCompare(b.toLowerCase()));
+        assigneeFilter.innerHTML = `<option value="all">All Assignees</option>`;
+        assignees.forEach(assignee => {
+            const option = document.createElement('option');
+            option.value = assignee;
+            option.textContent = assignee;
+            assigneeFilter.appendChild(option);
+        });
+
         setupEventListeners();
         updatePrView();
     };
@@ -1055,7 +1073,7 @@ document.addEventListener("DOMContentLoaded", () => {
             categories: `<svg class="panel-header-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h7"></path></svg>`,
             comments: `<svg class="panel-header-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"></path></svg>`,
             progress: `<svg class="panel-header-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"></path></svg>`,
-            notes: `<svg class="panel-header-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path></svg>`,
+            notes: `<svg class="panel-header-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002 2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path></svg>`,
             tips: `<svg class="panel-header-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"></path></svg>`
         };
 
