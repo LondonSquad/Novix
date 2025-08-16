@@ -3381,3 +3381,54 @@ html.dark .feedback-summary {
     text-align: right;
     margin-top: auto;
 }
+
+/* --- PR DETAILS PARTICIPANTS SECTION --- */
+.participants-sections {
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+}
+
+.participant-group h5 {
+    font-weight: 600;
+    font-size: 0.9rem;
+    color: var(--text-secondary);
+    margin-bottom: 0.5rem;
+}
+
+.participants-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.participants-list.avatar-stack {
+    flex-direction: row;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+.avatar-sm {
+    width: 2rem;
+    height: 2rem;
+}
+
+/* Reusing collaborator avatar stack styles for commenters */
+.participants-list.avatar-stack a {
+    transition: transform 0.2s ease-in-out;
+}
+.participants-list.avatar-stack a:hover {
+    transform: translateY(-3px) scale(1.1);
+    z-index: 1;
+}
+.participants-list.avatar-stack a:not(:first-child) {
+    margin-left: -10px;
+}
+.participants-list.avatar-stack img {
+    border: 2px solid var(--bg-secondary);
+}
+
+.details-grid {
+    /* Adjust grid for potentially 4 columns on large screens */
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+}
