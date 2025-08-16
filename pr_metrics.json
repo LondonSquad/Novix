@@ -21595,12 +21595,20 @@
           "url": "https://github.com/yusufnasserdev"
         },
         "submitted_at": "2025-08-16T13:39:29Z"
+      },
+      {
+        "reviewer": {
+          "id": 100484790,
+          "login": "marwanqashwa",
+          "url": "https://github.com/marwanqashwa"
+        },
+        "submitted_at": "2025-08-16T17:26:32Z"
       }
     ],
     "first_approved_at": "2025-08-16T13:39:29Z",
     "time_to_first_approval_minutes": 1473.7166666666667,
-    "required_approvals_met_at": null,
-    "time_to_required_approvals_minutes": null,
+    "required_approvals_met_at": "2025-08-16T17:26:32Z",
+    "time_to_required_approvals_minutes": 1700.7666666666667,
     "closed_at": "2025-08-16T17:26:33Z",
     "merged_at": "2025-08-16T17:26:33Z",
     "merged_by": {
@@ -21974,12 +21982,20 @@
           "url": "https://github.com/Aseel-AbuKmail"
         },
         "submitted_at": "2025-08-16T12:17:27Z"
+      },
+      {
+        "reviewer": {
+          "id": 92235360,
+          "login": "abdo-essam",
+          "url": "https://github.com/abdo-essam"
+        },
+        "submitted_at": "2025-08-16T16:34:26Z"
       }
     ],
     "first_approved_at": "2025-08-16T12:17:27Z",
     "time_to_first_approval_minutes": 68.13333333333334,
-    "required_approvals_met_at": null,
-    "time_to_required_approvals_minutes": null,
+    "required_approvals_met_at": "2025-08-16T16:34:26Z",
+    "time_to_required_approvals_minutes": 325.1166666666667,
     "closed_at": "2025-08-16T16:34:27Z",
     "merged_at": "2025-08-16T16:34:27Z",
     "merged_by": {
