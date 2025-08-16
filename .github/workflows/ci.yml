@@ -6,7 +6,6 @@ on:
       - develop
   workflow_dispatch:
 
-# Ensure that only the latest commit is tested for PRs
 concurrency:
   group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.sha }}
   cancel-in-progress: true
@@ -21,56 +20,7 @@ env:
 
 jobs:
   setup:
-    name: Setup Environment
-    runs-on: ubuntu-latest
-    outputs:
-      project-setup-key: project-setup-${{ github.sha }}
-    steps:
-      - name: ⬇️ Checkout repository
-        uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
-
-      - name: ☕ Setup JDK
-        uses: actions/setup-java@v4
-        with:
-          distribution: ${{ env.JAVA_DISTRIBUTION }}
-          java-version: ${{ env.JAVA_VERSION }}
-
-      - name:  Cache Gradle dependencies
-        uses: actions/cache@v4
-        with:
-          path: |
-            ~/.gradle/caches
-            ~/.gradle/wrapper
-          key: gradle-cache-${{ hashFiles('**/gradle-wrapper.properties', '**/*.gradle*', '**/settings.gradle*', '**/libs.versions.toml') }}
-          restore-keys: |
-            gradle-cache-${{ runner.os }}-
-            gradle-cache-
-
-      - name: 🔑 Create local.properties from secrets
-        run: |
-          echo "sdk.dir=$ANDROID_SDK_ROOT" > local.properties
-          echo "API_KEY=\"${{ secrets.TMDB_API_KEY }}\"" >> local.properties
-          echo "keyAlias=${{ secrets.SIGNING_KEY_ALIAS }}" >> local.properties
-          echo "keyPassword=${{ secrets.SIGNING_KEY_PASSWORD }}" >> local.properties
-          echo "storePassword=${{ secrets.SIGNING_STORE_PASSWORD }}" >> local.properties
-          echo "storeFile=novix-release.jks" >> local.properties
-
-      - name: 🔑 Decode Firebase Config from secrets
-        run: echo "${{ secrets.GOOGLE_SERVICES_JSON }}" | base64 --decode > app/google-services.json
-
-      - name: 🔑 Decode Keystore from secrets
-        run: echo "${{ secrets.SIGNING_KEYSTORE }}" | base64 --decode > app/novix-release.jks
-
-      - name:  cache project setup files
-        uses: actions/cache@v4
-        with:
-          path: |
-            local.properties
-            app/google-services.json
-            app/novix-release.jks
-          key: project-setup-${{ github.sha }}
+    uses: ./.github/workflows/setup.yml
 
   build:
     name: Build Application
@@ -86,7 +36,7 @@ jobs:
           distribution: ${{ env.JAVA_DISTRIBUTION }}
           java-version: ${{ env.JAVA_VERSION }}
 
-      - name: ♻️ Restore Gradle Cache
+      - name: Restore Gradle Cache
         uses: actions/cache@v4
         with:
           path: |
@@ -97,7 +47,7 @@ jobs:
             gradle-cache-${{ runner.os }}-
             gradle-cache-
 
-      - name: ♻️ Restore Project Setup
+      - name: Restore Project Setup
         uses: actions/cache@v4
         with:
           path: |
@@ -117,16 +67,16 @@ jobs:
     needs: setup
     runs-on: ubuntu-latest
     steps:
-      - name: ⬇️ Checkout repository
+      - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: ☕ Setup JDK
+      - name: Setup JDK
         uses: actions/setup-java@v4
         with:
           distribution: ${{ env.JAVA_DISTRIBUTION }}
           java-version: ${{ env.JAVA_VERSION }}
 
-      - name: ♻️ Restore Gradle Cache
+      - name: Restore Gradle Cache
         uses: actions/cache@v4
         with:
           path: |
@@ -137,7 +87,7 @@ jobs:
             gradle-cache-${{ runner.os }}-
             gradle-cache-
 
-      - name: ♻️ Restore Project Setup
+      - name: Restore Project Setup
         uses: actions/cache@v4
         with:
           path: |
@@ -146,16 +96,16 @@ jobs:
             app/novix-release.jks
           key: ${{ needs.setup.outputs.project-setup-key }}
 
-      - name:  Grant execute permission for gradlew
+      - name: Grant execute permission for gradlew
         run: chmod +x ./gradlew
 
-      - name: 🛠️ Run tests, and Kover report generation
+      - name: Run tests, and Kover report generation
         run: ./gradlew test koverHtmlReport --build-cache
 
       - name: Verify Coverage Threshold
         run: ./gradlew :koverVerify --build-cache
 
-      - name: 📤 Upload HTML Coverage Report
+      - name: Upload HTML Coverage Report
         if: always()
         uses: actions/upload-artifact@v4
         with:
