@@ -39326,7 +39326,13 @@
       "id": 180463542,
       "url": "https://github.com/abdelrhman1002"
     },
-    "assignees": [],
+    "assignees": [
+      {
+        "id": 180463542,
+        "login": "abdelrhman1002",
+        "url": "https://github.com/abdelrhman1002"
+      }
+    ],
     "comments": [],
     "approvals": [],
     "required_approvals": 2,
