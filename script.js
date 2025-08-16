@@ -814,8 +814,46 @@ document.addEventListener("DOMContentLoaded", () => {
             });
             return acc
         }, {});
-        const allDays = Object.keys(dailyActivity).sort((a, b) => new Date(b) - new Date(a));
-        document.getElementById('daily-breakdown-container').innerHTML = allDays.length > 0 ? `<div class="daily-breakdown-grid">${allDays.map(day => { const { created, merged, approvals } = dailyActivity[day]; const isToday = day === todayString; const dateObj = new Date(day); return `<div class="day-card ${isToday ? 'today' : ''}" title="${dateObj.toLocaleDateString()}"><div class="day-label">${dateObj.toLocaleString('en-US', { weekday: 'short' })}</div><div class="day-number"><span class="text-lg text-secondary">${dateObj.toLocaleString('en-US', { month: 'numeric'})} / </span>${dateObj.getDate()}</div><div class="day-stats">${created.length > 0 ? `<div class="day-stat-item created"><strong>${created.length}</strong> <span>Opened</span></div>` : ''}${merged > 0 ? `<div class="day-stat-item merged"><strong>${merged}</strong> <span>Merged</span></div>` : ''}${approvals > 0 ? `<div class="day-stat-item approvals"><strong>${approvals}</strong> <span>Reviews</span></div>` : ''}</div></div>` }).join('')}</div>` : `<div class="p-4 text-center">No daily activity data for this period.</div>`;
+
+        // --- NEW: Group daily activity by week ---
+        const dailyActivityByWeek = Object.keys(dailyActivity).sort((a, b) => new Date(b) - new Date(a))
+            .reduce((acc, dayString) => {
+                const weekStartDate = getWeekStartDate(dayString);
+                const weekKey = weekStartDate.toISOString();
+                if (!acc[weekKey]) {
+                    acc[weekKey] = [];
+                }
+                acc[weekKey].push(dayString);
+                return acc;
+            }, {});
+
+        const sortedWeeks = Object.keys(dailyActivityByWeek).sort((a, b) => new Date(b) - new Date(a));
+
+        let dailyBreakdownHtml = '';
+        if (sortedWeeks.length > 0) {
+            sortedWeeks.forEach((weekKey, index) => {
+                const weekDays = dailyActivityByWeek[weekKey];
+                const weekTitle = getRelativeWeekName(index);
+
+                const dayCardsHtml = weekDays.map(day => {
+                    const { created, merged, approvals } = dailyActivity[day];
+                    const isToday = day === todayString;
+                    const dateObj = new Date(day);
+                    return `<div class="day-card ${isToday ? 'today' : ''}" title="${dateObj.toLocaleDateString()}"><div class="day-label">${dateObj.toLocaleString('en-US', { weekday: 'short' })}</div><div class="day-number"><span class="text-lg text-secondary">${dateObj.toLocaleString('en-US', { month: 'numeric'})} / </span>${dateObj.getDate()}</div><div class="day-stats">${created.length > 0 ? `<div class="day-stat-item created"><strong>${created.length}</strong> <span>Opened</span></div>` : ''}${merged > 0 ? `<div class="day-stat-item merged"><strong>${merged}</strong> <span>Merged</span></div>` : ''}${approvals > 0 ? `<div class="day-stat-item approvals"><strong>${approvals}</strong> <span>Reviews</span></div>` : ''}</div></div>`;
+                }).join('');
+
+                dailyBreakdownHtml += `
+                    <div class="daily-week-group">
+                        <h4 class="daily-week-header">${weekTitle}</h4>
+                        <div class="daily-breakdown-grid">${dayCardsHtml}</div>
+                    </div>
+                `;
+            });
+        } else {
+            dailyBreakdownHtml = `<div class="p-4 text-center">No daily activity data for this period.</div>`;
+        }
+        document.getElementById('daily-breakdown-container').innerHTML = dailyBreakdownHtml;
+        // --- END: NEW Daily Activity rendering ---
 
         const prTypes = data.reduce((acc, pr) => {
             const title = pr.title.toLowerCase();
