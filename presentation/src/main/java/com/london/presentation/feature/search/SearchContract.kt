@@ -9,7 +9,7 @@ interface SearchContract {
     fun onSearchQueryChange(newValue: TextFieldValue)
     fun onCategorySelected(category: SearchCategory)
     fun clearSearch()
-    fun addToRecentSearches(query: RecentSearch)
+    fun addToRecentSearches(query: String)
     fun removeRecentSearch(search: RecentSearch)
     fun onRecentSearchClick(search: String)
     fun clearRecentSearches()

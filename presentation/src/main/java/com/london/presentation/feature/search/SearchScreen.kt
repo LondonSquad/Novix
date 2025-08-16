@@ -446,46 +446,15 @@ private fun onSearchKeyboardAction(
     focusManager: FocusManager,
     keyboardController: SoftwareKeyboardController?,
     query: String,
-    onAddRecent: (RecentSearch) -> Unit
+    onAddRecent: (String) -> Unit
 ): KeyboardActions {
     return KeyboardActions(
         onSearch = {
             focusManager.clearFocus()
             keyboardController?.hide()
-            onAddRecent(
-                RecentSearch(
-                    query = query,
-                    timestamp = System.currentTimeMillis()
-                )
-            )
+            onAddRecent(query)
         }
     )
-}
-
-@Composable
-private fun SearchChipsRow(
-    selected: SearchCategory,
-    onSelect: (SearchCategory) -> Unit,
-    modifier: Modifier = Modifier
-) {
-    Row(
-        modifier = modifier
-            .fillMaxWidth()
-            .padding(horizontal = 16.dp),
-        horizontalArrangement = Arrangement.spacedBy(8.dp),
-    ) {
-        SearchCategory.entries.forEach { category ->
-            NovixChip(
-                text = stringResource(category.title),
-                isSelected = selected == category,
-                onClick = {
-                    if (selected != category) {
-                        onSelect(category)
-                    }
-                }
-            )
-        }
-    }
 }
 
 @Composable
@@ -670,6 +639,32 @@ private fun RecentSearchItem(
 
     if (showDivider) {
         RecentSearchSeparator()
+    }
+}
+
+@Composable
+private fun SearchChipsRow(
+    selected: SearchCategory,
+    onSelect: (SearchCategory) -> Unit,
+    modifier: Modifier = Modifier
+) {
+    Row(
+        modifier = modifier
+            .fillMaxWidth()
+            .padding(horizontal = 16.dp),
+        horizontalArrangement = Arrangement.spacedBy(8.dp),
+    ) {
+        SearchCategory.entries.forEach { category ->
+            NovixChip(
+                text = stringResource(category.title),
+                isSelected = selected == category,
+                onClick = {
+                    if (selected != category) {
+                        onSelect(category)
+                    }
+                }
+            )
+        }
     }
 }
 

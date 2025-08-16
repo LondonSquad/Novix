@@ -22,7 +22,7 @@ class SearchViewModel @Inject constructor(
     private val manageSearchUseCase: ManageSearchUseCase,
     private val manageRecentSearchUseCase: ManageRecentSearchUseCase,
     private val manageRecentViewedUseCase: ManageRecentViewedUseCase,
-    ) : BaseViewModel<SearchUiState, SearchEffect>(SearchUiState()), SearchContract {
+) : BaseViewModel<SearchUiState, SearchEffect>(SearchUiState()), SearchContract {
 
     private val _searchQuery = MutableStateFlow("")
 
@@ -126,15 +126,15 @@ class SearchViewModel @Inject constructor(
         )
     }
 
-    override fun addToRecentSearches(query: RecentSearch) {
-        if (query.query.isBlank() || query.query == state.value.lastSearch) return
-        if (isQueryDuplicated(query.query)) return
+    override fun addToRecentSearches(query: String) {
+        if (query.isBlank() || query == state.value.lastSearch) return
+        if (isQueryDuplicated(query)) return
 
-        updateState { copy(lastSearch = query.query) }
+        updateState { copy(lastSearch = query) }
 
         tryToExecute(
             block = {
-                manageRecentSearchUseCase.addToRecentSearch(query)
+                manageRecentSearchUseCase.addToRecentSearch(RecentSearch(query = query))
                 manageRecentSearchUseCase.getRecentSearch().reversed()
             },
             onSuccess = { recentSearches ->
