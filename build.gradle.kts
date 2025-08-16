@@ -20,8 +20,6 @@ plugins {
 }
 
 subprojects {
-    apply(plugin = "org.jetbrains.kotlinx.kover")
-
     plugins.withId("org.jetbrains.kotlin.android") {
         extensions.configure<KotlinAndroidProjectExtension> {
             compilerOptions {
@@ -29,6 +27,10 @@ subprojects {
             }
         }
     }
+}
+
+subprojects {
+    apply(plugin = "org.jetbrains.kotlinx.kover")
 
     kover {
         reports {
@@ -88,11 +90,14 @@ subprojects {
                 }
             }
 
-            verify {
-                rule {
-                    bound { minValue = 80 }
+            total {
+                verify {
+                    rule {
+                        bound { minValue = 80 }
+                    }
                 }
             }
+
         }
     }
 }
@@ -102,6 +107,5 @@ dependencies {
     kover(projects.data)
     kover(projects.presentation)
 }
-
 
 configureGitHooks()
