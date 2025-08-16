@@ -1,5 +1,7 @@
+# Workflow name
 name: Build And Test Coverage Checks
 
+# Triggers for the workflow
 on:
   pull_request:
     branches:
@@ -21,19 +23,23 @@ env:
 
 jobs:
   setup:
-    name: Setup Cache
+    name: ⚙️ Setup Environment
     runs-on: ubuntu-latest
+    outputs:
+      project-setup-key: project-setup-${{ github.sha }}
     steps:
-      - name: Checkout
+      - name: ⬇️ Checkout repository
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
-      - name: Install JDK
+      - name: ☕ Setup JDK
         uses: actions/setup-java@v4
         with:
           distribution: ${{ env.JAVA_DISTRIBUTION }}
           java-version: ${{ env.JAVA_VERSION }}
 
-      - name: Cache Gradle
+      - name:  Cache Gradle dependencies
         uses: actions/cache@v4
         with:
           path: |
@@ -44,10 +50,7 @@ jobs:
             gradle-cache-${{ runner.os }}-
             gradle-cache-
 
-      - name: Setup Gradlew
-        run: chmod +x ./gradlew
-
-      - name: Create local.properties
+      - name: 🔑 Create local.properties from secrets
         run: |
           echo "sdk.dir=$ANDROID_SDK_ROOT" > local.properties
           echo "API_KEY=\"${{ secrets.TMDB_API_KEY }}\"" >> local.properties
@@ -56,38 +59,36 @@ jobs:
           echo "storePassword=${{ secrets.SIGNING_STORE_PASSWORD }}" >> local.properties
           echo "storeFile=novix-release.jks" >> local.properties
 
-      - name: Decode Firebase Config
-        run: |
-          echo "${{ secrets.GOOGLE_SERVICES_JSON }}" | base64 --decode > app/google-services.json
+      - name: 🔑 Decode Firebase Config from secrets
+        run: echo "${{ secrets.GOOGLE_SERVICES_JSON }}" | base64 --decode > app/google-services.json
 
-      - name: Decode Keystore
-        run: |
-          echo "${{ secrets.SIGNING_KEYSTORE }}" | base64 --decode > app/novix-release.jks
+      - name: 🔑 Decode Keystore from secrets
+        run: echo "${{ secrets.SIGNING_KEYSTORE }}" | base64 --decode > app/novix-release.jks
 
-      - name: Cache Project Setup
+      - name:  cache project setup files
         uses: actions/cache@v4
         with:
           path: |
             local.properties
             app/google-services.json
             app/novix-release.jks
-          key: project-setup-${{ github.sha }}
+          key: ${{ steps.cache-key.outputs.project-setup-key }}
 
-  build:
-    name: Build Application
+  build_and_test:
+    name: 🏗️ Build, Test & Verify Coverage
     needs: setup
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout
+      - name: ⬇️ Checkout repository
         uses: actions/checkout@v4
 
-      - name: Install JDK
+      - name: ☕ Setup JDK
         uses: actions/setup-java@v4
         with:
           distribution: ${{ env.JAVA_DISTRIBUTION }}
           java-version: ${{ env.JAVA_VERSION }}
 
-      - name: Restore Gradle Cache
+      - name: ♻️ Restore Gradle Cache
         uses: actions/cache@v4
         with:
           path: |
@@ -98,116 +99,57 @@ jobs:
             gradle-cache-${{ runner.os }}-
             gradle-cache-
 
-      - name: Restore Project Setup
+      - name: ♻️ Restore Project Setup
         uses: actions/cache@v4
         with:
           path: |
             local.properties
             app/google-services.json
             app/novix-release.jks
-          key: project-setup-${{ github.sha }}
+          key: ${{ needs.setup.outputs.project-setup-key }}
 
-      - name: Setup Gradlew
+      - name:  Grant execute permission for gradlew
         run: chmod +x ./gradlew
 
-      - name: Build with Gradle
-        run: ./gradlew build -x test -x koverVerify --continue
+      - name: 🛠️ Run build, tests, and Kover report generation
+        run: ./gradlew koverXmlReportDebug koverVerifyDebug --build-cache
 
-  test:
-    name: Test Coverage
-    needs: build
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-
-      - name: Install JDK
-        uses: actions/setup-java@v4
-        with:
-          distribution: ${{ env.JAVA_DISTRIBUTION }}
-          java-version: ${{ env.JAVA_VERSION }}
-
-      - name: Restore Gradle Cache
-        uses: actions/cache@v4
-        with:
-          path: |
-            ~/.gradle/caches
-            ~/.gradle/wrapper
-          key: gradle-cache-${{ hashFiles('**/gradle-wrapper.properties', '**/*.gradle*', '**/settings.gradle*', '**/libs.versions.toml') }}
-          restore-keys: |
-            gradle-cache-${{ runner.os }}-
-            gradle-cache-
-
-      - name: Restore Project Setup
-        uses: actions/cache@v4
-        with:
-          path: |
-            local.properties
-            app/google-services.json
-            app/novix-release.jks
-          key: project-setup-${{ github.sha }}
-
-      - name: Setup Gradlew
-        run: chmod +x ./gradlew
-
-      - name: Clean Previous Reports
-        run: |
-          rm -rf build/reports/kover/
-          find . -name "*.exec" -delete
-          find . -name "kover" -type d -exec rm -rf {} + 2>/dev/null || true
-
-      - name: Run Tests
-        run: ./gradlew test --continue
-
-      - name: Generate Kover Coverage Report
-        run: ./gradlew koverXmlReport --info
-
-      - name: Upload Coverage Reports
+      - name: 📤 Upload HTML Coverage Report
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: coverage-reports
-          path: |
-            build/reports/kover/report.xml
-            **/build/reports/kover/**/*.xml
-          retention-days: 30
+          name: coverage-report-html
+          path: '**/build/reports/kover/htmlDebug/'
 
-      - name: Run Coverage Verification
-        continue-on-error: true
-        run: ./gradlew koverVerify
+      - name: 📤 Upload XML Coverage Report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: coverage-report-xml
+          path: '**/build/reports/kover/xml/debug/report.xml'
 
-  analyze-pr:
-    name: Analyze PR Code Coverage
-    needs: test
+  comment_on_pr:
+    name: 📊 Report Code Coverage
+    needs: build_and_test
     if: github.event_name == 'pull_request' && always()
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout
+      - name: ⬇️ Checkout repository
         uses: actions/checkout@v4
 
-      - name: Download Coverage Reports
-        uses: actions/download-artifact@v4
+      - name: 📥 Download XML Coverage Report
+        uses: actions/download-artifact@vv4
         with:
-          name: coverage-reports
+          name: coverage-report-xml
           path: coverage/
 
-      - name: Find Coverage Report
-        id: find-report
-        run: |
-          REPORT_PATH=$(find coverage/ -name "report.xml" -path "*/build/reports/kover/*" | head -1)
-          if [ -z "$REPORT_PATH" ]; then
-            echo "No coverage report found"
-            exit 1
-          fi
-          echo "report-path=$REPORT_PATH" >> $GITHUB_OUTPUT
-          echo "Found coverage report at: $REPORT_PATH"
-
-      - name: Comment PR with Overall Coverage
+      - name: 📝 Comment on PR with Coverage
         uses: mi-kas/kover-report@v1
         with:
-          path: ${{ steps.find-report.outputs.report-path }}
+          path: coverage/report.xml
           token: ${{ secrets.GITHUB_TOKEN }}
+          title: "📊 Code Coverage Report"
+          update-comment: true
+          # Minimum coverage percentages to pass the check.
           min-coverage-overall: 80
           min-coverage-changed-files: 80
-          update-comment: true
-          title: "📊 Code Coverage Report"
