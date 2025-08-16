@@ -220,7 +220,6 @@ class GetTvShowUseCaseTest {
         val exception = assertThrows<Exception> {
             getTvShowUseCase.getTrendingTvShows(
                 page = 1,
-                movieGenreId = null
             )
         }
 

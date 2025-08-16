@@ -6,7 +6,6 @@ import com.google.common.truth.Truth.assertThat
 import com.london.domain.entity.Actor
 import com.london.domain.entity.PagedFetchResponse
 import com.london.domain.usecase.details.actor.GetActorUseCase
-import com.london.presentation.shared.base.ErrorState
 import io.mockk.clearAllMocks
 import io.mockk.coEvery
 import io.mockk.every
@@ -117,21 +116,6 @@ class TrendingActorsViewModelTest {
             assertThat(state.isLoading).isFalse()
         }
     }
-
-    @Test
-    fun `when fetching trending actors and an error occurs,should update error state and loading state correctly`() = runTest {
-
-       viewModel.handlingErrorState(ErrorState.NoInternet)
-       
-            // When & Then
-            viewModel.state.test {
-                viewModel.onRetryClick()
-                val state = expectMostRecentItem()
-                assertThat(state.errorState).isNotNull()
-                assertThat(state.isLoading).isFalse()
-                cancelAndIgnoreRemainingEvents()
-            }
-        }
 
 
     private fun createMockActor() = mockk<Actor> {

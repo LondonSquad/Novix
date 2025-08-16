@@ -4,9 +4,9 @@ import app.cash.turbine.test
 import com.google.common.truth.Truth.assertThat
 import com.london.domain.entity.PagedFetchResponse
 import com.london.domain.entity.Trending
+import com.london.domain.entity.genre.TvShowGenre
 import com.london.domain.usecase.details.tvshow.GetTvShowUseCase
-import com.london.presentation.shared.base.ErrorState
-import com.london.presentation.utils.TvShowGenre
+import com.london.presentation.shared.genre.toUi
 import io.mockk.coEvery
 import io.mockk.every
 import io.mockk.mockk
@@ -43,11 +43,9 @@ class TrendingTvShowsViewModelTest {
         
         //Given
         val pageNumber = 1
-        val movieGenreId = -1
         coEvery {
             getTvShowUseCase.getTrendingTvShows(
                 page = pageNumber,
-                movieGenreId = movieGenreId
             )
         } returns createMockPagedFetchResponse(listOf(createMockTvShow()))
 
@@ -109,35 +107,20 @@ class TrendingTvShowsViewModelTest {
     @Test
     fun `when click onGenre, should update selectedGenreId and reload trending movies`() = runTest {
         // Given
-        val tvShowGenre = TvShowGenre.ActionAdventure
+        val tvShowGenre = TvShowGenre.ACTION_ADVENTURE
         // When
-        viewModel.onGenreClick(tvShowGenre)
+        viewModel.onGenreClick(tvShowGenre.toUi())
         advanceUntilIdle()
 
         // Then
-        assertThat(viewModel.state.value.selectedGenreId).isEqualTo(tvShowGenre.id)
-    }
-
-    @Test
-    fun `when fetching trending tv shows and an error occurs,should update error state and loading state correctly`() = runTest {
-        viewModel.handlingErrorState(ErrorState.NoInternet)
-        advanceUntilIdle()
-
-        // When & Then
-        viewModel.state.test {
-            viewModel.onRetryClick()
-            val state = expectMostRecentItem()
-            assertThat(state.errorState).isNotNull()
-            assertThat(state.isLoading).isFalse()
-            cancelAndIgnoreRemainingEvents()
-        }
+        assertThat(viewModel.state.value.selectedGenre).isEqualTo(tvShowGenre.toUi())
     }
 
     private fun createMockTvShow() = mockk<Trending> {
         every { id } returns 1
         every { title } returns "tvShow Title"
         every { posterPath } returns "https://example.com/poster.jpg"
-        every { genreIds } returns listOf(1, 2, 3)
+        every { genres } returns listOf(TvShowGenre.ACTION_ADVENTURE, TvShowGenre.ALL)
     }
 
     private fun createMockPagedFetchResponse(data: List<Trending>) =

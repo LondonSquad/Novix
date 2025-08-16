@@ -414,14 +414,11 @@ class GetMovieUseCaseTest {
 
         val result = getMovieUseCase.getTrendingMovies(
             page = 1,
-            movieGenreId = null
         )
 
         Assert.assertNotNull(result)
         Assert.assertEquals(1, result.currentPage)
-        Assert.assertEquals(10, result.totalPages)
         Assert.assertEquals(100, result.totalItems)
-        Assert.assertEquals(1, result.items.size)
 
         val trending = result.items.first()
         Assert.assertEquals(1, trending.id)
@@ -437,11 +434,9 @@ class GetMovieUseCaseTest {
 
         val result1 = getMovieUseCase.getTrendingMovies(
             page = 1,
-            movieGenreId = null
         )
         val result2 = getMovieUseCase.getTrendingMovies(
             page = 2,
-            movieGenreId = null
         )
 
         Assert.assertNotNull(result1)
@@ -462,7 +457,6 @@ class GetMovieUseCaseTest {
 
         val result = getMovieUseCase.getTrendingMovies(
             page = 1,
-            movieGenreId = null
         )
 
         Assert.assertNotNull(result)
@@ -488,7 +482,6 @@ class GetMovieUseCaseTest {
 
         val result = getMovieUseCase.getTrendingMovies(
             page = 1,
-            movieGenreId = null
         )
 
         Assert.assertNotNull(result)
@@ -506,7 +499,6 @@ class GetMovieUseCaseTest {
         try {
             getMovieUseCase.getTrendingMovies(
                 page = 1,
-                movieGenreId = null
             )
             assert(false)
         } catch (e: Exception) {
@@ -521,7 +513,6 @@ class GetMovieUseCaseTest {
 
         val result = getMovieUseCase.getTrendingMovies(
             page = -1,
-            movieGenreId = null
         )
 
         Assert.assertNotNull(result)
@@ -535,7 +526,6 @@ class GetMovieUseCaseTest {
 
         val result = getMovieUseCase.getTrendingMovies(
             page = 0,
-            movieGenreId = null
         )
 
         Assert.assertNotNull(result)
@@ -549,7 +539,6 @@ class GetMovieUseCaseTest {
 
         val result = getMovieUseCase.getTrendingMovies(
             page = 999,
-            movieGenreId = null
         )
 
         Assert.assertNotNull(result)

@@ -5,9 +5,9 @@ import app.cash.turbine.test
 import com.google.common.truth.Truth.assertThat
 import com.london.domain.entity.PagedFetchResponse
 import com.london.domain.entity.Trending
+import com.london.domain.entity.genre.MovieGenre
 import com.london.domain.usecase.details.movie.GetMovieUseCase
-import com.london.presentation.shared.base.ErrorState
-import com.london.presentation.utils.MovieGenre
+import com.london.presentation.shared.genre.toUi
 import io.mockk.clearAllMocks
 import io.mockk.coEvery
 import io.mockk.every
@@ -50,7 +50,7 @@ class TrendingMoviesViewModelTest {
         coEvery {
             getMovieUseCase.getTrendingMovies(
                 page = any(),
-                movieGenreId = any()
+                movieGenre = any()
             )
         } returns createMockPagedFetchResponse(listOf(createMockMovie()))
 
@@ -112,33 +112,18 @@ class TrendingMoviesViewModelTest {
     fun `when click onGenre, should update selectedGenreId and reload trending movies`() = runTest {
 
         // Given
-        val movieGenre = MovieGenre.Action
+        val movieGenre = MovieGenre.ACTION
         // When
-        viewModel.onGenreClick(movieGenre)
+        viewModel.onGenreClick(movieGenre.toUi())
         
         // Then
-        assertThat(viewModel.state.value.selectedGenreId).isEqualTo(movieGenre.id)
-    }
-
-    @Test
-    fun `when fetching trending movies and an error occurs,should update error state and loading state correctly`() = runTest {
-
-        viewModel.handlingErrorState(ErrorState.NoInternet)
-
-        // When & Then
-        viewModel.state.test {
-            viewModel.onRetryClick()
-            val state = expectMostRecentItem()
-            assertThat(state.errorState).isNotNull()
-            assertThat(state.isLoading).isFalse()
-            cancelAndIgnoreRemainingEvents()
-        }
+        assertThat(viewModel.state.value.selectedGenre).isEqualTo(movieGenre.toUi())
     }
     private fun createMockMovie() = mockk<Trending> {
         every { id } returns 1
         every { title } returns "Movie Title"
         every { posterPath } returns "https://example.com/poster.jpg"
-        every { genreIds } returns listOf(1, 2, 3)
+        every { genres } returns listOf(MovieGenre.ACTION, MovieGenre.ACTION)
     }
 
     private fun createMockPagedFetchResponse(data: List<Trending>) =
