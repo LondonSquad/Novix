@@ -2,6 +2,19 @@ name: Shared Setup Workflow
 
 on:
   workflow_call:
+    secrets:
+      TMDB_API_KEY:
+        required: true
+      SIGNING_KEY_ALIAS:
+        required: true
+      SIGNING_KEY_PASSWORD:
+        required: true
+      SIGNING_STORE_PASSWORD:
+        required: true
+      GOOGLE_SERVICES_JSON:
+        required: true
+      SIGNING_KEYSTORE:
+        required: true
 
 jobs:
   setup:
@@ -19,9 +32,6 @@ jobs:
         with:
           java-version: '17'
           distribution: 'temurin'
-
-      - name: Setup Android SDK
-        uses: android-actions/setup-android@v3
 
       - name: Cache Gradle dependencies
         uses: actions/cache@v4
