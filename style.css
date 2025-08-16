@@ -3292,3 +3292,92 @@ html.dark .feedback-summary {
     border-radius: 0.5rem;
     margin: 1rem 0;
 }
+/* --- KUDOS TAB STYLES --- */
+.kudos-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    gap: 1.5rem;
+}
+
+.kudos-card {
+    background-color: var(--bg-secondary);
+    border: 1px solid var(--border-color);
+    border-radius: 0.75rem;
+    padding: 1.5rem;
+    display: flex;
+    flex-direction: column;
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.kudos-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.08);
+}
+
+.kudos-header {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+    text-align: center;
+}
+
+.kudos-user {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.5rem;
+    text-decoration: none;
+    color: var(--text-primary);
+    font-weight: 600;
+}
+
+.kudos-user:hover {
+    color: var(--primary-color);
+}
+
+.kudos-header .avatar {
+    width: 4rem;
+    height: 4rem;
+    border-radius: 50%;
+    border: 3px solid var(--border-color);
+}
+
+.kudos-arrow {
+    color: var(--primary-color);
+    flex-shrink: 0;
+}
+
+.kudos-message {
+    flex-grow: 1;
+    position: relative;
+    padding: 1rem 1rem 1rem 2rem;
+    margin-bottom: 1rem;
+    background-color: var(--bg-primary);
+    border-radius: 0.5rem;
+    border-left: 4px solid var(--primary-color);
+}
+
+.kudos-message p {
+    color: var(--text-secondary);
+    font-style: italic;
+}
+
+.kudos-message::before {
+    content: '“';
+    position: absolute;
+    left: 0.75rem;
+    top: 0.5rem;
+    font-size: 2rem;
+    font-weight: bold;
+    color: var(--primary-color);
+    opacity: 0.5;
+}
+
+.kudos-date {
+    font-size: 0.8rem;
+    color: var(--text-secondary);
+    text-align: right;
+    margin-top: auto;
+}

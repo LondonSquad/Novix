@@ -4,9 +4,11 @@ document.addEventListener("DOMContentLoaded", () => {
     const contentArea = document.getElementById('content-area');
     const prMetricsContainer = document.getElementById("pr-metrics-container");
     const analyticsContainer = document.getElementById("analytics-content");
+    const analyticsDeveloperFilter = document.getElementById("analytics-developer-filter");
     const ratingsContainer = document.getElementById("ratings-content");
+    const kudosContainer = document.getElementById("kudos-content");
     const feedbackContainer = document.getElementById("feedback-content");
-    const projectsContainer = document.getElementById("projects-content"); // Added
+    const projectsContainer = document.getElementById("projects-content");
     const tabButtons = document.querySelectorAll(".tab-button");
     const tabContents = document.querySelectorAll(".tab-content");
     const filterButtons = document.querySelectorAll(".filter-btn");
@@ -924,7 +926,35 @@ document.addEventListener("DOMContentLoaded", () => {
         applyTheme(localStorage.getItem('theme') || 'light');
     };
 
+    // --- NEW CENTRAL FUNCTION TO CONTROL ANALYTICS VIEW ---
+    const updateAnalyticsView = () => {
+        const selectedWeek = analyticsWeekFilter.value;
+        const selectedDeveloper = analyticsDeveloperFilter.value;
+
+        // 1. Filter by Week
+        let filteredByWeek = allPrData;
+        if (selectedWeek !== 'all') {
+            filteredByWeek = allPrData.filter(pr => getWeekStartDate(pr.opened_at).toISOString() === selectedWeek);
+        }
+
+        // 2. Filter by Developer (based on week-filtered data)
+        let finalFilteredData = filteredByWeek;
+        if (selectedDeveloper !== 'all') {
+            finalFilteredData = filteredByWeek.filter(pr => {
+                // An individual's data includes any PR they created, approved, or merged.
+                const isCreator = pr.creator.login === selectedDeveloper;
+                const isMerger = pr.merged_by && pr.merged_by.login === selectedDeveloper;
+                const isApprover = (pr.approvals || []).some(approval => approval.reviewer.login === selectedDeveloper);
+                return isCreator || isMerger || isApprover;
+            });
+        }
+
+        // 3. Render the analytics with the final, filtered data
+        recalculateAndRenderAnalytics(finalFilteredData);
+    };
+
     const renderAnalytics = (data) => {
+        // --- Populate Week Filter ---
         const weekKeys = [...new Set(data.map(pr => getWeekStartDate(pr.opened_at).toISOString()))]
             .sort((a, b) => new Date(b) - new Date(a));
 
@@ -936,22 +966,33 @@ document.addEventListener("DOMContentLoaded", () => {
             analyticsWeekFilter.appendChild(option);
         });
 
-        analyticsWeekFilter.addEventListener('change', () => {
-            const selectedWeek = analyticsWeekFilter.value;
-            if (selectedWeek === 'all') {
-                recalculateAndRenderAnalytics(allPrData);
-            } else {
-                const filteredData = allPrData.filter(pr => getWeekStartDate(pr.opened_at).toISOString() === selectedWeek);
-                recalculateAndRenderAnalytics(filteredData);
+        // --- Populate Developer Filter ---
+        const allDevelopers = new Set();
+        data.forEach(pr => {
+            allDevelopers.add(pr.creator.login);
+            if (pr.merged_by) {
+                allDevelopers.add(pr.merged_by.login);
             }
+            (pr.approvals || []).forEach(approval => {
+                allDevelopers.add(approval.reviewer.login);
+            });
+        });
+        const sortedDevelopers = [...allDevelopers].sort((a, b) => a.toLowerCase().localeCompare(b.toLowerCase()));
+
+        analyticsDeveloperFilter.innerHTML = `<option value="all">All Team</option>`;
+        sortedDevelopers.forEach(dev => {
+            const option = document.createElement('option');
+            option.value = dev;
+            option.textContent = dev;
+            analyticsDeveloperFilter.appendChild(option);
         });
 
-        if (weekKeys.length > 0) {
-            analyticsWeekFilter.value = weekKeys[0];
-            analyticsWeekFilter.dispatchEvent(new Event('change'));
-        } else {
-            recalculateAndRenderAnalytics(data);
-        }
+        // --- Add Event Listeners to both filters ---
+        analyticsWeekFilter.addEventListener('change', updateAnalyticsView);
+        analyticsDeveloperFilter.addEventListener('change', updateAnalyticsView);
+
+        // --- Initial Render ---
+        updateAnalyticsView(); // Call the central controller to render the initial view
     };
 
     const renderRatings = (data, lang = 'en') => {
@@ -1199,6 +1240,51 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     };
 
+    // --- NEW KUDOS RENDER FUNCTION ---
+    const renderKudos = (data) => {
+        if (!data || data.length === 0) {
+            kudosContainer.innerHTML = `<div class="p-4 text-center text-secondary">No kudos have been given yet. Be the first!</div>`;
+            return;
+        }
+
+        // Sort by date, newest first
+        const sortedData = data.sort((a, b) => new Date(b.date) - new Date(a.date));
+
+        const kudosHtml = sortedData.map(kudo => {
+            const date = new Date(kudo.date).toLocaleDateString('en-US', {
+                year: 'numeric',
+                month: 'long',
+                day: 'numeric'
+            });
+
+            return `
+                <div class="kudos-card">
+                    <div class="kudos-header">
+                        <a href="https://github.com/${kudo.from.login}" target="_blank" class="kudos-user">
+                            <img src="https://github.com/${kudo.from.login}.png" alt="${kudo.from.login}" class="avatar">
+                            <span>${kudo.from.name}</span>
+                        </a>
+                        <div class="kudos-arrow">
+                            <svg fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="w-8 h-8">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M17.25 8.25L21 12m0 0l-3.75 3.75M21 12H3" />
+                            </svg>
+                        </div>
+                        <a href="https://github.com/${kudo.to.login}" target="_blank" class="kudos-user">
+                            <img src="https://github.com/${kudo.to.login}.png" alt="${kudo.to.login}" class="avatar">
+                            <span>${kudo.to.name}</span>
+                        </a>
+                    </div>
+                    <div class="kudos-message">
+                        <p>${kudo.message}</p>
+                    </div>
+                    <div class="kudos-date">${date}</div>
+                </div>
+            `;
+        }).join('');
+
+        kudosContainer.innerHTML = `<div class="kudos-grid">${kudosHtml}</div>`;
+    };
+
     const main = async () => {
         const initialLang = localStorage.getItem('language') || 'en';
         setLanguage(initialLang);
@@ -1207,20 +1293,22 @@ document.addEventListener("DOMContentLoaded", () => {
         applyTheme(theme);
         var baseUrl = "https://raw.githubusercontent.com/LondonSquad/Novix/refs/heads/metrics/";
         try {
-            const [pr, fb, ratings, readme] = await Promise.all([
+            const [prs, ratings, kudos, feedbacks, projects] = await Promise.all([
                 fetch(baseUrl + "pr_metrics.json").then(r => r.ok ? r.json() : Promise.reject(r)),
-                fetch(baseUrl + "feedbacks.json").then(r => r.ok ? r.json() : Promise.reject(r)),
                 fetch(baseUrl + "mentees_ratings.json").then(r => r.ok ? r.json() : Promise.reject(r)),
-                fetch("https://raw.githubusercontent.com/LondonSquad/Novix/refs/heads/develop/README.md").then(r => r.ok ? r.text() : Promise.reject(r))
+                fetch(baseUrl + "kudos.json").then(r => r.ok ? r.json() : Promise.reject(r)),
+                fetch(baseUrl + "feedbacks.json").then(r => r.ok ? r.json() : Promise.reject(r)),
+                fetch(baseUrl.replace("metrics", "develop") + "README.md").then(r => r.ok ? r.text() : Promise.reject(r)),
             ]);
             allRatingsData = ratings; // Store globally
             statusArea.style.display = 'none';
             contentArea.classList.remove("hidden");
-            renderPrMetrics(pr);
-            renderAnalytics(pr);
+            renderPrMetrics(prs);
+            renderAnalytics(prs);
             renderRatings(ratings, initialLang); // Initial render with correct language
-            renderFeedback(fb);
-            renderProjects(readme); // Render the new Projects tab
+            renderKudos(kudos);
+            renderFeedback(feedbacks);
+            renderProjects(projects);
         } catch (e) {
             console.error("Error fetching dashboard data:", e);
             statusArea.innerHTML = `<div class="bg-red-100 border-l-4 border-red-500 text-red-700 p-4" role="alert"><p class="font-bold">Loading Failed</p><p>Could not fetch required data. Ensure files are accessible.</p></div>`
