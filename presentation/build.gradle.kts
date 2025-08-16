@@ -51,7 +51,7 @@ dependencies {
     implementation(libs.androidx.paging.compose)
     testImplementation(libs.androidx.paging.common)
 
-    // = module for image blur
+    // module for image blur
     implementation(projects.imageHaramBlur)
 
     testImplementation(libs.bundles.testing)

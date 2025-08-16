@@ -117,15 +117,15 @@ maintainability.
 
 ### 🏗️ Module Structure
 
-| Module                       | Description                                          |
-|------------------------------|------------------------------------------------------|
-| **`app`**                    | Application entry point and dependency injection     |
-| **`presentation`**           | UI layer with Jetpack Compose screens and ViewModels |
-| **`domain`**                 | Business logic, use cases, and domain entities       |
-| **`data`**                   | Data management, repositories, and API communication |
-| **`designSystem`**           | Reusable UI components and theming                   |
-| **`feature/ImageHaramBlur`** | Content moderation with ML-based image filtering     |
-| **`buildSrc`**               | Build configuration                                  |
+| Module               | Description                                          |
+|----------------------|------------------------------------------------------|
+| **`app`**            | Application entry point and dependency injection     |
+| **`presentation`**   | UI layer with Jetpack Compose screens and ViewModels |
+| **`domain`**         | Business logic, use cases, and domain entities       |
+| **`data`**           | Data management, repositories, and API communication |
+| **`designSystem`**   | Reusable UI components and theming                   |
+| **`ImageHaramBlur`** | Content moderation with ML-based image filtering     |
+| **`buildSrc`**       | Build configuration                                  |
 
 ---
 
