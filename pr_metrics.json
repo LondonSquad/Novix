@@ -39347,7 +39347,7 @@
     "status": "pending",
     "diff_stats": {
       "additions": 373,
-      "deletions": 0,
+      "deletions": 114,
       "changed_files": 5
     }
   }
