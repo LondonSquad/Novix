@@ -31,17 +31,17 @@ class TrendingActorsViewModel @Inject constructor(
     private fun getTrendingActors() {
         tryToExecute(
             block = ::createTrendingActorsPagingFlow,
-            onStart = { handlingLoadingState(true) },
-            onError = ::handlingErrorState,
-            onSuccess = ::handlingPagingState,
-            onCompleted = { handlingLoadingState(false) }
+            onStart = { setLoadingState(true) },
+            onError = ::setErrorState,
+            onSuccess = ::setPagingState,
+            onCompleted = { setLoadingState(false) }
         )
     }
 
-    private fun handlingErrorState(errorState: ErrorState) =
+    private fun setErrorState(errorState: ErrorState) =
         updateState { copy(errorState = errorState) }
 
-    private fun handlingPagingState(actorsPagingData: Flow<PagingData<Actor>>) {
+    private fun setPagingState(actorsPagingData: Flow<PagingData<Actor>>) {
         return updateState { copy(actorsFlow = actorsPagingData) }
     }
 
@@ -56,6 +56,6 @@ class TrendingActorsViewModel @Inject constructor(
         ).cachedIn(viewModelScope)
     }
 
-    private fun handlingLoadingState(isLoading: Boolean) =
+    private fun setLoadingState(isLoading: Boolean) =
         updateState { copy(isLoading = isLoading) }
 }

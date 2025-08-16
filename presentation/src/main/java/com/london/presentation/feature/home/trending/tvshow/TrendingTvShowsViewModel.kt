@@ -40,16 +40,16 @@ class TrendingTvShowsViewModel @Inject constructor(
     private fun reloadTrendingTvShows() {
         tryToCollect(
             block = ::createTrendingTvShowsPagingFlow,
-            onStart = { updateState { copy(isLoading = true) } },
-            onError = ::handlingErrorState,
-            onNewValue = ::handlingPagingState,
+            onStart = { setLoadingState(true) },
+            onError = ::setErrorState,
+            onNewValue = ::setPagingState,
         )
     }
 
-    private fun handlingErrorState(errorState: ErrorState) =
+    private fun setErrorState(errorState: ErrorState) =
         updateState { copy(errorState = errorState) }
 
-    private fun handlingPagingState(tvShowsPagingData: PagingData<Trending>) {
+    private fun setPagingState(tvShowsPagingData: PagingData<Trending>) {
         updateState {
             copy(
                 tvShowsFlow = flowOf(tvShowsPagingData),
@@ -69,4 +69,7 @@ class TrendingTvShowsViewModel @Inject constructor(
             }
         ).cachedIn(viewModelScope)
     }
+
+    private fun setLoadingState(isLoading: Boolean) =
+        updateState { copy(isLoading = isLoading) }
 }
