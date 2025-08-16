@@ -108,4 +108,8 @@ dependencies {
 
     ksp(libs.bundles.hilt.ksp)
     implementation(libs.bundles.hilt.runtime)
+
+    implementation(libs.bundles.retrofit)
+    implementation(libs.retrofit2.kotlinx.serialization.converter)
+    implementation(libs.kotlinx.serialization.json)
 }
