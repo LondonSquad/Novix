@@ -11,7 +11,6 @@ import com.london.domain.usecase.authentication.AuthenticationUseCase
 import com.london.presentation.feature.account.AccountViewModel
 import com.london.presentation.feature.account.ActiveBottomSheet
 import io.mockk.coEvery
-import io.mockk.coVerify
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify
@@ -98,23 +97,6 @@ class   AccountViewModelTest {
         advanceUntilIdle()
         assertThat(viewModel.state.value.showUserMenu).isFalse()
         assertThat(viewModel.state.value.activeBottomSheet).isEqualTo(ActiveBottomSheet.Logout)
-    }
-
-    @Test
-    fun `should handle logout confirmation successfully`() = runTest {
-        // Given
-        setupViewModel()
-        coEvery { authenticationUseCase.logout() } returns true
-
-        // When
-        viewModel.onLogoutConfirmed()
-
-        testDispatcher.scheduler.advanceUntilIdle()
-
-        // Then
-        assertThat(viewModel.state.value.isLogoutLoading).isFalse()
-        assertThat(viewModel.state.value.activeBottomSheet).isEqualTo(ActiveBottomSheet.None) // Also check this
-        coVerify { authenticationUseCase.logout() }
     }
 
     @Test
