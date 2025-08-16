@@ -50,10 +50,10 @@ fun CategoriesScreen(
     effect?.Listen { currentEffect ->
         when (currentEffect) {
             is CategoriesEffect.MovieCategoryNavigation ->
-                onNavigateToMovieCategory(currentEffect.genreId)
+                onNavigateToMovieCategory(currentEffect.movieGenre)
 
             is CategoriesEffect.TvShowCategoryNavigation ->
-                onNavigateToTvShowCategory(currentEffect.genreId)
+                onNavigateToTvShowCategory(currentEffect.tvShowGenre)
         }
     }
 

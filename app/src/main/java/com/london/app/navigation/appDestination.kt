@@ -26,6 +26,8 @@ import com.london.presentation.navigation.Screen.TrendingTvShows
 import com.london.presentation.navigation.Screen.TvShowDetails
 import com.london.presentation.navigation.Screen.TvShowsByCategory
 import com.london.presentation.navigation.Screen.WatchingHistory
+import com.london.presentation.shared.genre.MovieGenreUi
+import com.london.presentation.shared.genre.TvShowGenreUi
 
 fun NavController.navigateToEpisodeDetails(tvShowId: Int, seasonNumber: Int, episodeNumber: Int) =
     navigate(EpisodeDetails(tvShowId, seasonNumber, episodeNumber))
@@ -48,11 +50,11 @@ fun NavController.navigateToTopMoviesPicks(actorId: Int) =
 fun NavController.navigateToTopTvShowsPicks(actorId: Int) =
     navigate(TopTvShowsPicksDetails(actorId))
 
-fun NavController.navigateToTvShowsByCategory(genreId: Int) =
-    navigate(TvShowsByCategory(genreId))
+fun NavController.navigateToTvShowsByCategory(genre: TvShowGenreUi) =
+    navigate(TvShowsByCategory(genre))
 
-fun NavController.navigateToMovieCategory(genreId: Int) =
-    navigate(MoviesByCategory(genreId))
+fun NavController.navigateToMovieCategory(genre: MovieGenreUi) =
+    navigate(MoviesByCategory(genre))
 
 fun NavController.navigateToReviews(movieId: Int, mediaType: MediaType) =
     navigate(Reviews(movieId, mediaType))

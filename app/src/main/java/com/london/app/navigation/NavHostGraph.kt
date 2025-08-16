@@ -35,20 +35,20 @@ fun NavHostGraph() {
 
 
     val currentScreen = when {
-        navBackStackEntry.hasRoute(Home::class) -> Home
-        navBackStackEntry.hasRoute(Search::class) -> Search
-        navBackStackEntry.hasRoute(Categories::class) -> Categories
-        navBackStackEntry.hasRoute(Lists::class) -> Lists()
-        navBackStackEntry.hasRoute(Account::class) -> Account
-        navBackStackEntry.hasRoute(Login::class) -> Login
+        navBackStackEntry.hasRoute(Home) -> Home
+        navBackStackEntry.hasRoute(Search) -> Search
+        navBackStackEntry.hasRoute(Categories) -> Categories
+        navBackStackEntry.hasRoute(Lists()) -> Lists()
+        navBackStackEntry.hasRoute(Account) -> Account
+        navBackStackEntry.hasRoute(Login) -> Login
         else -> Home
     }
 
-    val showBottomNav = navBackStackEntry.hasRoute(Home::class) ||
-            navBackStackEntry.hasRoute(Search::class) ||
-            navBackStackEntry.hasRoute(Categories::class) ||
-            navBackStackEntry.hasRoute(Lists::class) ||
-            navBackStackEntry.hasRoute(Account::class)
+    val showBottomNav = navBackStackEntry.hasRoute(Home) ||
+            navBackStackEntry.hasRoute(Search) ||
+            navBackStackEntry.hasRoute(Categories) ||
+            navBackStackEntry.hasRoute(Lists()) ||
+            navBackStackEntry.hasRoute(Account)
 
     Scaffold(
         backgroundColor = NovixTheme.colors.surface,
