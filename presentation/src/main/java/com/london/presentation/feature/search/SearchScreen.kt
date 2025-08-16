@@ -310,7 +310,7 @@ private fun TvShowSearchContent(state: SearchUiState, contract: SearchContract) 
 private fun ActorSearchContent(state: SearchUiState, contract: SearchContract) {
     val actorsLazyList = state.actorsFlow.collectAsLazyPagingItems()
 
-    SearchContentWithErrorHandling(
+    EmptyContent(
         actorsLazyList,
         contract,
     ) { isLoading ->
@@ -345,7 +345,7 @@ private fun <T : Any> MediaSearchContent(
     onNavigateToMovie: (Int) -> Unit = {},
     onNavigateToTvShow: (Int) -> Unit = {}
 ) {
-    SearchContentWithErrorHandling(
+    EmptyContent(
         pagingItems,
         contract,
     ) { isLoading ->
@@ -377,7 +377,7 @@ private fun <T : Any> MediaSearchContent(
 }
 
 @Composable
-private fun SearchContentWithErrorHandling(
+private fun EmptyContent(
     lazyPagingItems: LazyPagingItems<*>,
     contract: SearchContract,
     content: @Composable (Boolean) -> Unit
@@ -456,16 +456,16 @@ private fun TrailingClearIcon(
 ) {
     if (!isVisible) return
     Icon(
-            painter = painterResource(id = R.drawable.icon_remove_filled),
-            contentDescription = stringResource(R.string.clear),
-            tint = NovixTheme.colors.hint,
-            modifier = Modifier
-                .size(20.dp)
-                .clickable(
-                    interactionSource = remember { MutableInteractionSource() },
-                    indication = null
-                ) { onClear() }
-        )
+        painter = painterResource(id = R.drawable.icon_remove_filled),
+        contentDescription = stringResource(R.string.clear),
+        tint = NovixTheme.colors.hint,
+        modifier = Modifier
+            .size(20.dp)
+            .clickable(
+                interactionSource = remember { MutableInteractionSource() },
+                indication = null
+            ) { onClear() }
+    )
 }
 
 private fun onSearchKeyboardAction(
