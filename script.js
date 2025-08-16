@@ -337,41 +337,58 @@ document.addEventListener("DOMContentLoaded", () => {
                 sortedApprovals.map(a => `<a href="https://github.com/${a.reviewer.login}" target="_blank" class="approver-link"><img src="https://github.com/${a.reviewer.login}.png" alt="${a.reviewer.login}" class="avatar rounded-full"/><span class="font-medium text-sm">${a.reviewer.login}</span></a>`).join('') :
                 '<span class="text-sm text-secondary">No approvals yet.</span>';
 
-            // --- NEW: ASSIGNEES ---
+            // --- ASSIGNEES ---
             const assigneesHtml = (pr.assignees && pr.assignees.length > 0) ?
                 pr.assignees.map(a => `<a href="${a.url}" target="_blank" class="approver-link"><img src="https://github.com/${a.login}.png" alt="${a.login}" class="avatar rounded-full"/><span class="font-medium text-sm">${a.login}</span></a>`).join('') :
                 '<span class="text-sm text-secondary">Not assigned.</span>';
 
-            // --- NEW: COMMENTS ---
+            // --- COMMENTS WITH COUNTS ---
             const commentsCount = pr.comments ? pr.comments.length : 0;
-            const uniqueCommenters = pr.comments ? [...new Set(pr.comments.map(c => c.author.login))] : [];
-            const commentersHtml = uniqueCommenters.length > 0 ?
-            uniqueCommenters.map(login => `<a href="https://github.com/${login}" target="_blank" title="${login}"><img src="https://github.com/${login}.png" alt="${login}" class="avatar-sm rounded-full"/></a>`).join('') :
-            '';
+            const commenterCounts = (pr.comments || []).reduce((acc, comment) => {
+                const login = comment.author.login;
+                acc[login] = (acc[login] || 0) + 1;
+                return acc;
+            }, {});
+            // Sort commenters by count, descending
+            const sortedCommenters = Object.entries(commenterCounts).sort((a, b) => b[1] - a[1]);
 
-            // --- TIMELINE ---
+            const commentersHtml = sortedCommenters.length > 0 ?
+                sortedCommenters.map(([login, count]) => `
+                    <a href="https://github.com/${login}" target="_blank" title="${login} (${count} comments)" class="commenter-item">
+                        <img src="https://github.com/${login}.png" alt="${login}" class="avatar-sm rounded-full"/>
+                        <span class="commenter-count">${count}</span>
+                    </a>
+                `).join('') : '';
+
+            // --- TIMELINE & META (Unchanged) ---
             let timelineItems = [{ status: 'created', date: pr.opened_at, text: 'Created' }];
-            // ... (rest of timeline logic is unchanged) ...
+            if (firstApproval) timelineItems.push({ status: 'approved', date: firstApproval.submitted_at, text: '1st Approval' });
+            if (secondApproval) timelineItems.push({ status: 'approved', date: secondApproval.submitted_at, text: '2nd Approval' });
+            if (pr.merged_at) timelineItems.push({ status: 'merged', date: pr.merged_at, text: 'Merged' });
             timelineItems.sort((a, b) => new Date(a.date) - new Date(b.date));
 
         // --- META ---
             let subMetaHtml = '';
-            if (pr.merged_at) {
-                subMetaHtml = `<div class="pr-sub-meta status-merged-text">Merged on ${formatDate(pr.merged_at)}</div>`;
-            } else if (pr.status === 'closed') {
-                subMetaHtml = `<div class="pr-sub-meta status-closed-text">Closed</div>`;
-            }
+            if (pr.merged_at) { subMetaHtml = `<div class="pr-sub-meta status-merged-text">Merged on ${formatDate(pr.merged_at)}</div>`; }
+            else if (pr.status === 'closed') { subMetaHtml = `<div class="pr-sub-meta status-closed-text">Closed</div>`; }
 
             return `
                 <div class="pr-row" data-status="${filterStatus}" data-author="${pr.creator.login}" data-text="${pr.title.toLowerCase()} #${pr.pr_number}">
                     <div class="pr-row-main">
-                        <!-- ... (main row content is unchanged) ... -->
+                        <div class="pr-info-cell">
+                            <div class="pr-title"><a href="${pr.url}" target="_blank">#${pr.pr_number} ${pr.title}</a></div>
+                            <div class="pr-meta">Opened on ${formatDate(pr.opened_at)}</div>
+                            ${subMetaHtml}
+                        </div>
+                        <div class="pr-author-cell"><img src="https://github.com/${pr.creator.login}.png" alt="${pr.creator.login}" class="avatar"/><span class="text-secondary">${pr.creator.login}</span></div>
+                        <div class="pr-status-badge status-${pr.status}">${pr.status}</div>
+                        <div class="stats-item"><span class="added">+${pr.diff_stats.additions || 0}</span><span class="removed">-${pr.diff_stats.deletions || 0}</span><span class="changed"><svg fill="none" viewBox="0 0 24 24" stroke-width="1.7" stroke="currentColor" class="size-4"><path stroke-linecap="round" stroke-linejoin="round" d="M19.5 14.25v-2.625a3.375 3.375 0 0 0-3.375-3.375h-1.5A1.125 1.125 0 0 1 13.5 7.125v-1.5a3.375 3.375 0 0 0-3.375-3.375H8.25m0 12.75h7.5m-7.5 3H12M10.5 2.25H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 0 0-9-9Z" /></svg>${pr.diff_stats.changed_files || 0}</span></div>
+                        <div class="pr-details-toggle"><svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg></div>
                     </div>
                     <div class="pr-row-details">
                         <div class="details-grid">
                             <div class="detail-section"><h4>Timeline</h4><div class="relative pt-2">${timelineItems.map(item => `<div class="timeline-item" data-status="${item.status}"><div class="timeline-line"></div><div class="timeline-marker"></div><strong>${item.text}</strong><div class="text-sm text-secondary">${formatDate(item.date)}</div></div>`).join('')}</div></div>
 
-                            <!-- START OF MODIFICATION -->
                             <div class="detail-section">
                                 <h4>Participants</h4>
                                 <div class="participants-sections">
@@ -384,15 +401,15 @@ document.addEventListener("DOMContentLoaded", () => {
                                         <div class="participants-list">${approversHtml}</div>
                                     </div>
                                     <div class="participant-group">
-                                        <h5>Commenters (${commentsCount})</h5>
+                                        <h5>Commenters (Total: ${commentsCount})</h5>
                                         <div class="participants-list avatar-stack">${commentersHtml}</div>
                                     </div>
                                 </div>
                             </div>
-                            <!-- END OF MODIFICATION -->
-
                             <div class="detail-section"><h4>Key Metrics</h4><div class="space-y-3 text-sm">
-                                <!-- ... (metrics items are unchanged) ... -->
+                                <div class="metric-item"><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm.75-13a.75.75 0 00-1.5 0v5c0 .414.336.75.75.75h4a.75.75 0 000-1.5h-3.25V5z" clip-rule="evenodd" /></svg><div><strong>Time to 1st Approval:</strong><br>${formatDuration(pr.time_to_first_approval_minutes)}</div></div>
+                                <div class="metric-item"><svg viewBox="0 0 20 20" fill="currentColor"><path d="M10 2a.75.75 0 01.75.75v1.5a.75.75 0 01-1.5 0v-1.5A.75.75 0 0110 2zM10 15a.75.75 0 01.75.75v1.5a.75.75 0 01-1.5 0v-1.5A.75.75 0 0110 15zM10 7a3 3 0 100 6 3 3 0 000-6z" /></svg><div><strong>1st → 2nd Approval:</strong><br>${formatDuration(timeBetweenApprovals)}</div></div>
+                                <div class="metric-item"><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.857-9.809a.75.75 0 00-1.214-.882l-3.483 4.79-1.88-1.88a.75.75 0 10-1.06 1.061l2.5 2.5a.75.75 0 001.137-.089l4-5.5z" clip-rule="evenodd" /></svg><div><strong>Time to Merge:</strong><br>${formatDuration(pr.merged_at ? (new Date(pr.merged_at) - new Date(pr.opened_at)) / 60000 : null)}</div></div>
                             </div></div>
                         </div>
                     </div>

@@ -3432,3 +3432,25 @@ html.dark .feedback-summary {
     /* Adjust grid for potentially 4 columns on large screens */
     grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
 }
+
+.commenter-item {
+    position: relative;
+    display: block;
+}
+
+.commenter-count {
+    position: absolute;
+    bottom: -4px;
+    right: -4px;
+    background-color: var(--primary-color);
+    color: white;
+    font-size: 0.7rem;
+    font-weight: 700;
+    width: 1.25rem;
+    height: 1.25rem;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 2px solid var(--bg-secondary);
+}
