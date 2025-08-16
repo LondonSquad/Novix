@@ -150,21 +150,13 @@ fun RatingChipsRow(
             .padding(horizontal = 16.dp),
         horizontalArrangement = Arrangement.spacedBy(8.dp)
     ) {
-        NovixChip(
-            text = stringResource(R.string.all),
-            isSelected = selected == RatingCategory.All,
-            onClick = { onSelect(RatingCategory.All) }
-        )
-        NovixChip(
-            text = stringResource(R.string.Movies),
-            isSelected = selected == RatingCategory.Movies,
-            onClick = { onSelect(RatingCategory.Movies) }
-        )
-        NovixChip(
-            text = stringResource(R.string.TV_Shows),
-            isSelected = selected == RatingCategory.TvShows,
-            onClick = { onSelect(RatingCategory.TvShows) }
-        )
+        RatingCategory.entries.forEach { category ->
+            NovixChip(
+                text = stringResource(category.title),
+                isSelected = selected == category,
+                onClick = { onSelect(category) }
+            )
+        }
     }
 }
 
