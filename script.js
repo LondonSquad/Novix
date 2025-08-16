@@ -674,7 +674,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
         document.getElementById('most-discussed-prs-list').innerHTML = mostDiscussedPRs.length > 0 ? mostDiscussedPRs.map(pr => {
             const commenters = [...new Set((pr.comments || []).map(c => c.author.login))];
-            const commenterAvatarsHtml = commenters.map(c => 
+            const commenterAvatarsHtml = commenters.map(c =>
                 `<a href="https://github.com/${c}" target="_blank" title="${c}">
                     <img src="https://github.com/${c}.png" class="collaborator-avatar">
                  </a>`
@@ -692,8 +692,23 @@ document.addEventListener("DOMContentLoaded", () => {
         // --- END: Comment Metrics ---
 
         const recentActivity = data.reduce((acc, pr) => {
+            // Action: Creating a PR
             acc[pr.creator.login] = (acc[pr.creator.login] || 0) + 1;
-            if (pr.merged_by) acc[pr.merged_by.login] = (acc[pr.merged_by.login] || 0) + 1;
+            // Action: Merging a PR
+            if (pr.merged_by) {
+                acc[pr.merged_by.login] = (acc[pr.merged_by.login] || 0) + 1;
+            }
+            // Action: Reviewing a PR (counts as one action per PR reviewed)
+            const uniqueReviewersForThisPR = new Set();
+            (pr.approvals || []).forEach(a => uniqueReviewersForThisPR.add(a.reviewer.login));
+            (pr.comments || []).forEach(c => uniqueReviewersForThisPR.add(c.author.login));
+            uniqueReviewersForThisPR.forEach(login => {
+                // We don't count commenting on your own PR as a separate "review" action
+                // since "creating" is already counted.
+                if (login !== pr.creator.login) {
+                    acc[login] = (acc[login] || 0) + 1;
+                }
+            });
             return acc;
         }, {});
         const hotStreakUser = Object.entries(recentActivity).sort((a, b) => b[1] - a[1])[0];
@@ -849,20 +864,44 @@ document.addEventListener("DOMContentLoaded", () => {
             return acc;
         }, {});
         const chartLabels = Object.keys(contributions).sort();
-        const reviewers = data.flatMap(pr => pr.approvals || []).reduce((acc, a) => {
-            (acc[a.reviewer.login] = (acc[a.reviewer.login] || 0) + 1);
+        const reviewers = data.reduce((acc, pr) => {
+            // Use a Set to find the unique reviewers for this specific PR
+            const uniqueReviewersForThisPR = new Set();
+
+            // Add everyone who approved
+            (pr.approvals || []).forEach(approval => {
+                uniqueReviewersForThisPR.add(approval.reviewer.login);
+            });
+
+            // Add everyone who commented
+            (pr.comments || []).forEach(comment => {
+                uniqueReviewersForThisPR.add(comment.author.login);
+            });
+
+            // For each unique reviewer on this PR, increment their total review count by 1
+            uniqueReviewersForThisPR.forEach(login => {
+                acc[login] = (acc[login] || 0) + 1;
+            });
+
             return acc;
         }, {});
         const collaborationSummary = data.reduce((acc, pr) => {
-            (pr.approvals || []).forEach(a => {
-                const r = a.reviewer.login;
-                if (pr.creator.login === r) return;
-                if (!acc[r]) acc[r] = {
-                    totalReviews: 0,
-                    collaborators: new Set()
-                };
-                acc[r].totalReviews++;
-                acc[r].collaborators.add(pr.creator.login)
+            const uniqueReviewersForThisPR = new Set();
+            (pr.approvals || []).forEach(a => uniqueReviewersForThisPR.add(a.reviewer.login));
+            (pr.comments || []).forEach(c => uniqueReviewersForThisPR.add(c.author.login));
+
+            uniqueReviewersForThisPR.forEach(reviewerLogin => {
+                // A collaboration is when you review someone else's PR
+                if (pr.creator.login === reviewerLogin) return;
+
+                if (!acc[reviewerLogin]) {
+                    acc[reviewerLogin] = {
+                        totalReviews: 0,
+                        collaborators: new Set()
+                    };
+                }
+                acc[reviewerLogin].totalReviews++;
+                acc[reviewerLogin].collaborators.add(pr.creator.login)
             });
             return acc;
         }, {});
@@ -948,7 +987,7 @@ document.addEventListener("DOMContentLoaded", () => {
             data: {
                 labels: sortedReviewers.map(r => r[0]),
                 datasets: [{
-                    label: 'Approvals',
+                    label: 'PRs Reviewed',
                     data: sortedReviewers.map(r => r[1]),
                     backgroundColor: 'rgba(2,132,199,0.7)'
                 }]
