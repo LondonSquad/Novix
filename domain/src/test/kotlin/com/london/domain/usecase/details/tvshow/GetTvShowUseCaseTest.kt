@@ -387,7 +387,6 @@ class GetTvShowUseCaseTest {
         private val mockTv1 = TopRatedMedia(
             id = 1396,
             name = "Breaking Bad",
-            voteAverage = 8.9,
             posterUrl = "/ggFHVNu6YYI5L9pCfOacjizRGt.jpg",
             genres = listOf(TvShowGenre.TALK, TvShowGenre.TALK),
             mediaType = MediaType.TvShow,
@@ -396,7 +395,6 @@ class GetTvShowUseCaseTest {
         private val mockTv2 = TopRatedMedia(
             id = 87108,
             name = "Chernobyl",
-            voteAverage = 9.0,
             posterUrl = "/hlLXt2tOPT6RRnjiUmoxyG1LTFi.jpg",
             genres = listOf(TvShowGenre.TALK, TvShowGenre.TALK),
             mediaType = MediaType.TvShow,

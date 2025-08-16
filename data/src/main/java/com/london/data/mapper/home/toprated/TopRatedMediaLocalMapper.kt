@@ -9,7 +9,6 @@ fun TopRatedLocal.toEntity(): TopRatedMedia =
         id = id,
         name = name,
         genres = genre.toGenre(mediaType),
-        voteAverage = rating,
         mediaType = mediaType,
         posterUrl = posterPictureUrl,
     )
@@ -19,7 +18,6 @@ fun TopRatedMedia.toLocal(): TopRatedLocal =
         id = id,
         name = name,
         genre = genres.map { it.toGenreId() },
-        rating = voteAverage,
         mediaType = mediaType,
         posterPictureUrl = posterUrl,
     )

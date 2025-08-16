@@ -616,7 +616,6 @@ class GetMovieUseCaseTest {
         private val mockMovie1 = TopRatedMedia(
             id = 278,
             name = "The Shawshank Redemption",
-            voteAverage = 8.712,
             posterUrl = "/q6y0Go1tsGEsmtFryDOJo3dEmqu.jpg",
             genres = listOf(MovieGenre.ACTION, MovieGenre.ACTION),
             mediaType = MediaType.Movie,
@@ -625,7 +624,6 @@ class GetMovieUseCaseTest {
         private val mockMovie2 = TopRatedMedia(
             id = 238,
             name = "The Godfather",
-            voteAverage = 8.7,
             posterUrl = "/3bhkrj58Vtu7enYsRolD1fZdja1.jpg",
             genres = listOf(MovieGenre.ACTION, MovieGenre.ACTION),
             mediaType = MediaType.Movie,

@@ -17,6 +17,4 @@ data class TopRatedMovieRemote(
     val releaseDate: String? = null ,
     @SerialName("title")
     val title: String? = null,
-    @SerialName("vote_average")
-    val voteAverage: Double?,
 ) : GenreMapper

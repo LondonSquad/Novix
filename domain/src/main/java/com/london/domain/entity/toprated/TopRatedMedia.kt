@@ -7,7 +7,6 @@ data class TopRatedMedia(
     val id: Int,
     val posterUrl: String,
     val name: String,
-    val voteAverage: Double,
     val genres: List<Genre>,
     val mediaType: MediaType
 )
