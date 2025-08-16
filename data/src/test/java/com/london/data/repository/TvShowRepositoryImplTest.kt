@@ -21,8 +21,8 @@ import com.london.data.remote.model.details.tvshow.model.TvShowDetailsRemoteResp
 import com.london.data.remote.model.details.tvshow.model.TvShowSeason
 import com.london.data.remote.model.details.tvshow.model.tvshowepisode.TvShowEpisodeBySeason
 import com.london.data.remote.model.details.tvshow.model.tvshowepisode.TvShowEpisodesRemoteResponse
-import com.london.data.remote.model.details.videoprovider.VideoRemote
 import com.london.data.remote.model.details.videoprovider.VideoResponse
+import com.london.data.remote.model.details.videoprovider.VideoTrailerRemote
 import com.london.data.remote.model.home.popular.PopularTvShowResponse
 import com.london.data.remote.model.home.toprated.TopRatedTvSeriesRemote
 import com.london.data.remote.model.home.trending.TrendingResponse
@@ -461,11 +461,11 @@ class TvShowRepositoryImplTest {
         assertThat(result).hasSize(2)
 
         val firstVideo = result.first()
-        assertThat(firstVideo).isEqualTo(fakeTvShowVideosResponse().videos?.get(0)?.key.asYoutubeUrlOrEmpty())
+        assertThat(firstVideo).isEqualTo(fakeTvShowVideosResponse().videos?.get(0)?.youtubeKey.asYoutubeUrlOrEmpty())
 
         val secondVideo = result[1]
         assertThat(secondVideo).isEqualTo(
-            fakeTvShowVideosResponse().videos?.get(1)?.key.asYoutubeUrlOrEmpty()
+            fakeTvShowVideosResponse().videos?.get(1)?.youtubeKey.asYoutubeUrlOrEmpty()
         )
     }
 
@@ -1131,10 +1131,10 @@ class TvShowRepositoryImplTest {
         val EpisodeVideoResponseMock = VideoResponse(
             id = TV_SHOW_ID,
             videos = listOf(
-                VideoRemote(
-                    key = "dQw4w9WgXcQ",
-                ), VideoRemote(
-                    key = "abc123def456",
+                VideoTrailerRemote(
+                    youtubeKey = "dQw4w9WgXcQ",
+                ), VideoTrailerRemote(
+                    youtubeKey = "abc123def456",
                 )
             )
         )
@@ -1183,10 +1183,10 @@ class TvShowRepositoryImplTest {
 
         private fun fakeTvShowVideosResponse() = VideoResponse(
             id = 1, videos = listOf(
-                VideoRemote(
-                    key = "123",
-                ), VideoRemote(
-                    key = "456",
+                VideoTrailerRemote(
+                    youtubeKey = "123",
+                ), VideoTrailerRemote(
+                    youtubeKey = "456",
                 )
             )
         )

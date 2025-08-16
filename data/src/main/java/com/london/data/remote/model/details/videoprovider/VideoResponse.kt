@@ -8,5 +8,5 @@ data class VideoResponse(
     @SerialName("id")
     val id: Int? = null,
     @SerialName("results")
-    val videos: List<VideoRemote>? = null
+    val videos: List<VideoTrailerRemote>? = null
 )

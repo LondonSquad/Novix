@@ -4,7 +4,6 @@ import com.london.data.remote.model.details.ImageItem
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
-
 @Serializable
 data class ImagesResponse(
     @SerialName("backdrops")

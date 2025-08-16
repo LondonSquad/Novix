@@ -4,7 +4,7 @@ import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class VideoRemote(
+data class VideoTrailerRemote(
     @SerialName("key")
-    val key: String? = null,
+    val youtubeKey: String? = null,
 )
