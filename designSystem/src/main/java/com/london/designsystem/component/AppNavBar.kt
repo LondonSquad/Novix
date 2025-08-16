@@ -1,6 +1,7 @@
 package com.london.designsystem.component
 
 import android.os.Build
+import androidx.annotation.DrawableRes
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.Crossfade
 import androidx.compose.animation.animateContentSize
@@ -16,19 +17,17 @@ import androidx.compose.animation.scaleOut
 import androidx.compose.animation.slideInVertically
 import androidx.compose.animation.slideOutVertically
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.offset
-import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.material3.Icon
+import androidx.compose.material3.NavigationBar
+import androidx.compose.material3.NavigationBarItem
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -43,15 +42,19 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavBackStackEntry
+import androidx.navigation.NavController
+import androidx.navigation.NavDestination.Companion.hasRoute
 import com.london.designsystem.R
 import com.london.designsystem.theme.NovixTheme
 import com.london.designsystem.theme.ThemePreviews
 import com.london.designsystem.utils.painter
-import com.london.designsystem.utils.topBorder
 
-data class NavigationTab<T>(
-    val idleIcon: Painter,
-    val selectedIcon: Painter,
+data class NavigationTab<out T>(
+    @DrawableRes
+    val unselectedIcon: Int,
+    @DrawableRes
+    val selectedIcon: Int,
     val destination: T,
 )
 
@@ -64,38 +67,27 @@ data class NavBarColors(
 )
 
 @Composable
-fun <T> NavBar(
-    modifier: Modifier = Modifier,
-    navDestinations: List<NavigationTab<T>>,
-    currentSelectedDestination: T,
-    onNavDestinationClicked: (T) -> Unit,
-    navBarColors: NavBarColors = NavBarColors(
-        backgroundColor = NovixTheme.colors.surface,
-        selectedIconColor = NovixTheme.colors.primary,
-        idleIconColor = NovixTheme.colors.hint,
-        topBorderColor = NovixTheme.colors.stroke
-    )
-) {
+fun NavBackStackEntry?.hasRoute(vararg routes: NavigationTab<Any>): Boolean = remember {
+    routes.any { this?.destination?.hasRoute(it.destination::class) == true }
+}
 
-    Row(
-        modifier = modifier
-            .fillMaxWidth()
-            .topBorder(navBarColors.topBorderColor, 1.dp)
-            .background(color = navBarColors.backgroundColor)
-            .padding(vertical = 7.dp),
-        horizontalArrangement = Arrangement.SpaceEvenly,
-        verticalAlignment = Alignment.CenterVertically
-    ) {
-        navDestinations.forEach { item ->
-            NavBarItem(
-                item = item,
-                isSelected = currentSelectedDestination == item.destination,
-                selectedIconColor = navBarColors.selectedIconColor,
-                idleIconColor = navBarColors.idleIconColor,
-                onClick = {
-                    onNavDestinationClicked(item.destination)
-                }
-            )
+@Composable
+fun NavBar(
+    vararg destinations: NavigationTab<Any>,
+    navController: NavController,
+    backStackEntry: NavBackStackEntry?
+) {
+    AnimatedVisibility(visible = backStackEntry.hasRoute(*destinations)) {
+        NavigationBar {
+            destinations.forEach { screen ->
+                AppNavigationBarItem(
+                    unselectedIcon = painterResource(screen.unselectedIcon),
+                    selectedIcon = painterResource(screen.selectedIcon),
+                    screen = screen.destination,
+                    navController = navController,
+                    backStackEntry = backStackEntry
+                )
+            }
         }
     }
 }
@@ -209,7 +201,7 @@ private fun <T> AnimatedNavIcon(
         label = "iconCrossfade"
     ) { selected ->
         Icon(
-            painter = if (selected) item.selectedIcon else item.idleIcon,
+            painter = if (selected) item.selectedIcon else item.unselectedIcon,
             modifier = Modifier
                 .size(24.dp)
                 .animateContentSize(
@@ -252,6 +244,29 @@ private fun AnimatedSelectionDot(
     }
 }
 
+@Composable
+fun RowScope.AppNavigationBarItem(
+    unselectedIcon: Painter,
+    selectedIcon: Painter,
+    label: String? = null,
+    screen: Any,
+    navController: NavController,
+    backStackEntry: NavBackStackEntry?
+) {
+    val selected = backStackEntry?.destination?.hasRoute(screen::class) == true,
+    NavigationBarItem(
+        label = label?.let { { Text(text = label) } },
+        selected = selected,
+        icon = {
+            Icon(
+                painter = if (selected) selectedIcon else unselectedIcon,
+                contentDescription = null
+            )
+        },
+        onClick = { navController.navigate(screen) }
+    )
+}
+
 @ThemePreviews
 @Composable
 private fun NavBarPreview() {
@@ -263,27 +278,27 @@ private fun NavBarPreview() {
         NavBar(
             navDestinations = listOf(
                 NavigationTab(
-                    idleIcon = R.drawable.icon_home.painter,
+                    unselectedIcon = R.drawable.icon_home.painter,
                     selectedIcon = R.drawable.icon_home_filled.painter,
                     destination = MockDestination("home"),
                 ),
                 NavigationTab(
-                    idleIcon = R.drawable.icon_search.painter,
+                    unselectedIcon = R.drawable.icon_search.painter,
                     selectedIcon = R.drawable.icon_search_filled.painter,
                     destination = MockDestination("search"),
                 ),
                 NavigationTab(
-                    idleIcon = R.drawable.icon_masks.painter,
+                    unselectedIcon = R.drawable.icon_masks.painter,
                     selectedIcon = R.drawable.icon_masks_filled.painter,
                     destination = MockDestination("categories"),
                 ),
                 NavigationTab(
-                    idleIcon = R.drawable.icon_bookmark.painter,
+                    unselectedIcon = R.drawable.icon_bookmark.painter,
                     selectedIcon = R.drawable.icon_bookmark_filled.painter,
                     destination = MockDestination("bookmarks"),
                 ),
                 NavigationTab(
-                    idleIcon = R.drawable.icon_user.painter,
+                    unselectedIcon = R.drawable.icon_user.painter,
                     selectedIcon = R.drawable.icon_user_filled.painter,
                     destination = MockDestination("account"),
                 )

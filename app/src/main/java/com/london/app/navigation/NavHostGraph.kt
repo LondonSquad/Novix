@@ -1,10 +1,5 @@
 package com.london.app.navigation
 
-import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.animation.core.tween
-import androidx.compose.animation.slideInVertically
-import androidx.compose.animation.slideOutVertically
-import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.Scaffold
 import androidx.compose.runtime.Composable
@@ -21,52 +16,20 @@ import com.london.app.navigation.graph.splashNavGraph
 import com.london.designsystem.component.NavBar
 import com.london.designsystem.theme.NovixTheme
 import com.london.presentation.navigation.LocalNavController
-import com.london.presentation.navigation.Screen.Account
-import com.london.presentation.navigation.Screen.Categories
-import com.london.presentation.navigation.Screen.Home
-import com.london.presentation.navigation.Screen.Lists
-import com.london.presentation.navigation.Screen.Login
-import com.london.presentation.navigation.Screen.Search
 
 @Composable
 fun NavHostGraph() {
     val navController = rememberNavController()
     val navBackStackEntry by navController.currentBackStackEntryAsState()
 
-
-    val currentScreen = when {
-        navBackStackEntry.hasRoute(Home::class) -> Home
-        navBackStackEntry.hasRoute(Search::class) -> Search
-        navBackStackEntry.hasRoute(Categories::class) -> Categories
-        navBackStackEntry.hasRoute(Lists::class) -> Lists()
-        navBackStackEntry.hasRoute(Account::class) -> Account
-        navBackStackEntry.hasRoute(Login::class) -> Login
-        else -> Home
-    }
-
-    val showBottomNav = navBackStackEntry.hasRoute(Home::class) ||
-            navBackStackEntry.hasRoute(Search::class) ||
-            navBackStackEntry.hasRoute(Categories::class) ||
-            navBackStackEntry.hasRoute(Lists::class) ||
-            navBackStackEntry.hasRoute(Account::class)
-
     Scaffold(
         backgroundColor = NovixTheme.colors.surface,
         bottomBar = {
-            AnimatedVisibility(
-                visible = showBottomNav,
-                enter = slideInVertically(animationSpec = tween(), initialOffsetY = { it }),
-                exit = slideOutVertically(animationSpec = tween(), targetOffsetY = { it })
-            ) {
-                NavBar(
-                    modifier = Modifier.navigationBarsPadding(),
-                    navDestinations = NavigationHelper.getNavigationTabs(),
-                    currentSelectedDestination = currentScreen,
-                    onNavDestinationClicked = { destination ->
-                        navigateToBottomBarDestination(navController, destination)
-                    }
-                )
-            }
+            NavBar(
+                destinations = NavigationHelper.destinations,
+                navController = navController,
+                backStackEntry = navBackStackEntry
+            )
         }
     ) { innerPadding ->
         CompositionLocalProvider(LocalNavController provides navController) {
