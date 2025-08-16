@@ -13,8 +13,8 @@
     <!-- External Libraries -->
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
     <!-- Added Markdown Parser -->
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -141,7 +141,7 @@
                 <label for="analytics-developer-filter" class="font-semibold">View as:</label>
                 <select id="analytics-developer-filter" class="control-input"></select>
             </div>
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                 <div class="kpi-card">
                     <div class="kpi-icon bg-fuchsia-500">
                         <svg viewBox="0 0 24 24" fill="currentColor">
@@ -186,9 +186,31 @@
                         <div class="kpi-label">Avg. PR Size</div>
                     </div>
                 </div>
+                <div class="kpi-card">
+                    <div class="kpi-icon bg-cyan-500">
+                        <svg viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M18,14H19V15H18V14M18,11H21V12H18V11M18,8H21V9H18V8M5,14H6V15H5V14M5,11H8V12H5V11M5,8H8V9H5V8M12,4C7.58,4 4,7.58 4,12C4,16.42 7.58,20 12,20C16.42,20 20,16.42 20,12C20,7.58 16.42,4 12,4Z" />
+                        </svg>
+                    </div>
+                    <div>
+                        <div id="kpi-total-comments" class="kpi-value">-</div>
+                        <div class="kpi-label">Total Comments</div>
+                    </div>
+                </div>
+                <div class="kpi-card">
+                    <div class="kpi-icon bg-pink-500">
+                        <svg viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M9,22A1,1 0 0,1 8,21V18H4A2,2 0 0,1 2,16V4C2,2.89 2.9,2 4,2H20A2,2 0 0,1 22,4V16A2,2 0 0,1 20,18H13.9L10.2,21.71C10,21.9 9.75,22 9.5,22V22H9M10,16V19.08L13.08,16H20V4H4V16H10M6,7H18V9H6V7M6,11H15V13H6V11Z" />
+                        </svg>
+                    </div>
+                    <div>
+                        <div id="kpi-avg-comments" class="kpi-value">-</div>
+                        <div class="kpi-label">Avg. Comments / PR</div>
+                    </div>
+                </div>
             </div>
             <div id="merge-process-health-container" class="panel"></div>
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                 <div class="kpi-card">
                     <div class="kpi-icon bg-sky-500">
                         <svg viewBox="0 0 24 24" fill="currentColor">
@@ -213,6 +235,7 @@
                 </div>
                 <div id="hot-streak-card" class="kpi-card spotlight-card"></div>
                 <div id="fastest-reviewer-card" class="kpi-card spotlight-card"></div>
+                <div id="top-commenter-card" class="kpi-card spotlight-card"></div>
             </div>
             <div class="panel">
                 <h3 class="panel-header panel-title">Daily Activity Breakdown</h3>
@@ -238,6 +261,12 @@
                     <h3 class="panel-header panel-title">Top Collaboration Pairs</h3>
                     <div class="panel-body">
                         <ul id="collaboration-list" class="collaboration-list"></ul>
+                    </div>
+                </div>
+                <div class="panel lg:col-span-2">
+                    <h3 class="panel-header panel-title">Most Discussed PRs</h3>
+                    <div class="panel-body">
+                        <ul id="most-discussed-prs-list" class="discussed-prs-list"></ul>
                     </div>
                 </div>
             </div>

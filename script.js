@@ -655,6 +655,42 @@ document.addEventListener("DOMContentLoaded", () => {
         const lifespans = mergedPRs.map(pr => (new Date(pr.merged_at) - new Date(pr.opened_at)) / 60000).filter(t => t > 0);
         document.getElementById('kpi-avg-lifespan').textContent = formatDuration(lifespans.length ? lifespans.reduce((a, b) => a + b, 0) / lifespans.length : null);
 
+        // --- Comment Metrics Calculation ---
+        const totalComments = data.reduce((sum, pr) => sum + (pr.comments || []).length, 0);
+        document.getElementById('kpi-total-comments').textContent = totalComments;
+        document.getElementById('kpi-avg-comments').textContent = data.length > 0 ? (totalComments / data.length).toFixed(1) : '0.0';
+
+        const commentCounts = data.flatMap(pr => (pr.comments || []).map(c => c.author.login))
+                                  .reduce((acc, login) => {
+                                      acc[login] = (acc[login] || 0) + 1;
+                                      return acc;
+                                  }, {});
+        const topCommenter = Object.entries(commentCounts).sort((a, b) => b[1] - a[1])[0];
+        document.getElementById('top-commenter-card').innerHTML = topCommenter ? `<div class="kpi-icon bg-yellow-500"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M9,22A1,1 0 0,1 8,21V18H4A2,2 0 0,1 2,16V4C2,2.89 2.9,2 4,2H20A2,2 0 0,1 22,4V16A2,2 0 0,1 20,18H13.9L10.2,21.71C10,21.9 9.75,22 9.5,22V22H9M10,16V19.08L13.08,16H20V4H4V16H10Z" /></svg></div><div class="overflow-hidden"><div class="kpi-value"><img src="https://github.com/${topCommenter[0]}.png" class="avatar"/> <span class="truncate">${topCommenter[0]}</span></div><div class="kpi-label">Top Commenter (${topCommenter[1]} comments)</div></div>` : `<div class="p-4 text-center">No comments.</div>`;
+
+        const mostDiscussedPRs = data.filter(pr => (pr.comments || []).length > 0)
+                                    .sort((a, b) => (b.comments || []).length - (a.comments || []).length)
+                                    .slice(0, 5);
+
+        document.getElementById('most-discussed-prs-list').innerHTML = mostDiscussedPRs.length > 0 ? mostDiscussedPRs.map(pr => {
+            const commenters = [...new Set((pr.comments || []).map(c => c.author.login))];
+            const commenterAvatarsHtml = commenters.map(c => 
+                `<a href="https://github.com/${c}" target="_blank" title="${c}">
+                    <img src="https://github.com/${c}.png" class="collaborator-avatar">
+                 </a>`
+            ).join('');
+
+            return `
+                <li>
+                    <div class="discussed-pr-summary">
+                        <a href="${pr.url}" target="_blank" class="discussed-pr-link">#${pr.pr_number} ${pr.title}</a>
+                        <div class="collaborator-avatar-stack">${commenterAvatarsHtml}</div>
+                    </div>
+                    <span class="discussed-pr-count">${(pr.comments || []).length} comments</span>
+                </li>`;
+        }).join('') : `<li>No discussed PRs in this period.</li>`;
+        // --- END: Comment Metrics ---
+
         const recentActivity = data.reduce((acc, pr) => {
             acc[pr.creator.login] = (acc[pr.creator.login] || 0) + 1;
             if (pr.merged_by) acc[pr.merged_by.login] = (acc[pr.merged_by.login] || 0) + 1;

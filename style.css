@@ -678,7 +678,6 @@ html.dark .pr-week-count {
     border: 1px solid var(--border-color);
     border-radius: 0.75rem;
     overflow: hidden;
-    margin-bottom: 1.5rem;
     transition: background-color 0.3s, transform 0.2s, box-shadow 0.2s;
 }
 
@@ -999,7 +998,7 @@ html.dark .pr-type-bar {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding: 0.75rem 0.25rem;
+    padding: 0.75rem 0;
     border-bottom: 1px solid var(--border-color);
 }
 
@@ -1615,7 +1614,9 @@ html.dark .feedback-summary {
         padding-left: 1rem;
         padding-right: 1rem;
     }
-}:root {
+}
+
+:root {
      --primary-color: #4f46e5;
      --primary-light: #eef2ff;
      --danger-color: #be123c;
@@ -2260,7 +2261,6 @@ html.dark .feedback-summary {
      border: 1px solid var(--border-color);
      border-radius: 0.75rem;
      overflow: hidden;
-     margin-bottom: 1.5rem;
      transition: background-color 0.3s, transform 0.2s, box-shadow 0.2s;
  }
 
@@ -3460,4 +3460,46 @@ html.dark .feedback-summary {
     align-items: center;
     justify-content: center;
     border: 2px solid var(--bg-secondary);
+}
+
+/* NEW: Styles for Most Discussed PRs list */
+.discussed-prs-list {
+    list-style: none;
+    padding: 0;
+}
+.discussed-prs-list li {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0.75rem 0;
+    border-bottom: 1px solid var(--border-color);
+    gap: 1rem;
+}
+.discussed-prs-list li:last-child {
+    border-bottom: none;
+}
+.discussed-pr-summary {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    flex-grow: 1;
+    min-width: 0; /* Crucial for text truncation in flexbox */
+}
+.discussed-pr-link {
+    font-weight: 600;
+    color: var(--text-primary);
+    text-decoration: none;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    flex-shrink: 1;
+}
+.discussed-pr-link:hover {
+    color: var(--primary-color);
+    text-decoration: underline;
+}
+.discussed-pr-count {
+    font-weight: 700;
+    color: var(--primary-color);
+    flex-shrink: 0;
 }
