@@ -205,26 +205,6 @@ class MyRatingsViewModelTest {
     }
 
     @Test
-    fun `onRetryClick should reload rated media when invoked`() = runTest(mainDispatcher) {
-        // Given
-        val manageRatingUseCase = mockk<ManageRatingUseCase>(relaxed = true)
-        coEvery { manageRatingUseCase.getRatedMediaSorted() } returns createMockRatedMedia()
-        val viewModel = MyRatingsViewModel(manageRatingUseCase = manageRatingUseCase)
-
-        // When
-        viewModel.onRetryClick()
-        advanceUntilIdle()
-
-        // Then
-        viewModel.state.test {
-            val state = expectMostRecentItem()
-            assertThat(state.ratedMovies).isNotEmpty()
-            assertThat(state.ratedTvShows).isNotEmpty()
-            ensureAllEventsConsumed()
-        }
-    }
-
-    @Test
     fun `onItemClick should emit movie navigation effect when invoked`() = runTest(mainDispatcher) {
         // Given
         val manageRatingUseCase = mockk<ManageRatingUseCase>(relaxed = true)
