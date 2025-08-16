@@ -21695,5 +21695,33 @@
       "deletions": 1498,
       "changed_files": 65
     }
+  },
+  {
+    "pr_number": 644,
+    "url": "https://github.com/LondonSquad/Novix/pull/644",
+    "title": "refactor: Move DI modules from data to app module",
+    "opened_at": "2025-08-16T07:35:45Z",
+    "head_ref": "refactor/move-di-package",
+    "base_ref": "develop",
+    "creator": {
+      "login": "ahmeddsamii",
+      "id": 154278495,
+      "url": "https://github.com/ahmeddsamii"
+    },
+    "approvals": [],
+    "first_approved_at": null,
+    "time_to_first_approval_minutes": null,
+    "required_approvals_met_at": null,
+    "time_to_required_approvals_minutes": null,
+    "closed_at": null,
+    "merged_at": null,
+    "merged_by": null,
+    "week": "2025-W33",
+    "status": "pending",
+    "diff_stats": {
+      "additions": 11,
+      "deletions": 7,
+      "changed_files": 8
+    }
   }
 ]
