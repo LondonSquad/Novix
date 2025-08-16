@@ -4,9 +4,9 @@ package com.london.data.remote.service.movie
 import com.london.data.remote.model.ApiConstants
 import com.london.data.remote.model.ApiConstants.POPULAR_MOVIES_PATH
 import com.london.data.remote.model.ApiResponse
+import com.london.data.remote.model.details.ImagesResponse
 import com.london.data.remote.model.details.actor.model.actormoviedetails.ActorMovieDetailsResponse
 import com.london.data.remote.model.details.movie.model.moviedetails.MovieDetailsResponse
-import com.london.data.remote.model.details.movie.model.movieimages.ImagesResponse
 import com.london.data.remote.model.details.rating.AccountStatesResponse
 import com.london.data.remote.model.details.rating.RatingRemoteBody
 import com.london.data.remote.model.details.rating.RatingRemoteResponse

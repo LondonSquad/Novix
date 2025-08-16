@@ -13,8 +13,8 @@ import com.london.data.mapper.search.toReviewEntity
 import com.london.data.remote.exception.NetworkException
 import com.london.data.remote.model.ApiResponse
 import com.london.data.remote.model.details.ImageItem
+import com.london.data.remote.model.details.ImagesResponse
 import com.london.data.remote.model.details.movie.model.moviedetails.GenreRemote
-import com.london.data.remote.model.details.movie.model.movieimages.ImagesResponse
 import com.london.data.remote.model.details.rating.AccountStatesResponse
 import com.london.data.remote.model.details.rating.RatingRemoteResponse
 import com.london.data.remote.model.details.tvshow.model.TvShowDetailsRemoteResponse

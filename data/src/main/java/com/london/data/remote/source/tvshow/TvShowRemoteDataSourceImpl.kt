@@ -1,8 +1,8 @@
 package com.london.data.remote.source.tvshow
 
 import com.london.data.remote.model.ApiResponse
+import com.london.data.remote.model.details.ImagesResponse
 import com.london.data.remote.model.details.actor.model.actortvshowdetails.ActorTvShowDetailsResponse
-import com.london.data.remote.model.details.movie.model.movieimages.ImagesResponse
 import com.london.data.remote.model.details.rating.AccountStatesResponse
 import com.london.data.remote.model.details.rating.RatingRemoteBody
 import com.london.data.remote.model.details.rating.RatingRemoteResponse
