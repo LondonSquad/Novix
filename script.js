@@ -6,6 +6,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const analyticsContainer = document.getElementById("analytics-content");
     const ratingsContainer = document.getElementById("ratings-content");
     const feedbackContainer = document.getElementById("feedback-content");
+    const projectsContainer = document.getElementById("projects-content"); // Added
     const tabButtons = document.querySelectorAll(".tab-button");
     const tabContents = document.querySelectorAll(".tab-content");
     const filterButtons = document.querySelectorAll(".filter-btn");
@@ -1174,7 +1175,7 @@ document.addEventListener("DOMContentLoaded", () => {
             });
             progressCharts.push(progressChart);
         });
-        
+
         // After rendering everything, check if the ratings tab is currently active and start the rotator
         const activeTab = document.querySelector('.tab-button.active');
         if (activeTab && activeTab.dataset.tab === 'ratings') {
@@ -1188,6 +1189,16 @@ document.addEventListener("DOMContentLoaded", () => {
         feedbackContainer.innerHTML = data.improvement_topics.map(t => `<div class="panel feedback-topic-card"><h2 class="panel-header panel-title">${t.topic_title}</h2><div class="content-pair"><div class="problem-section feedback-section"><h3>${ICONS.warning} ${t.problem_section.title}</h3><ul>${t.problem_section.points.map(p => `<li>${p}</li>`).join('')}</ul></div>${t.solution_section ? `<div class="solution-section feedback-section"><h3>${ICONS.lightbulb} ${t.solution_section.title}</h3><ul>${t.solution_section.points.map(p => `<li>${p}</li>`).join('')}</ul></div>` : ''}</div></div>`).join('') + `<div class="feedback-summary">${data.summary}</div>`
     };
 
+    const renderProjects = (markdown) => {
+        if (window.marked) {
+            projectsContainer.innerHTML = marked.parse(markdown);
+        } else {
+            console.error("marked.js library not loaded. Displaying raw markdown.");
+            // Fallback to a simple preformatted block if the library fails to load
+            projectsContainer.innerHTML = `<pre style="white-space: pre-wrap; word-break: break-all;">${markdown}</pre>`;
+        }
+    };
+
     const main = async () => {
         const initialLang = localStorage.getItem('language') || 'en';
         setLanguage(initialLang);
@@ -1196,10 +1207,11 @@ document.addEventListener("DOMContentLoaded", () => {
         applyTheme(theme);
         var baseUrl = "https://raw.githubusercontent.com/LondonSquad/Novix/refs/heads/metrics/";
         try {
-            const [pr, fb, ratings] = await Promise.all([
+            const [pr, fb, ratings, readme] = await Promise.all([
                 fetch(baseUrl + "pr_metrics.json").then(r => r.ok ? r.json() : Promise.reject(r)),
                 fetch(baseUrl + "feedbacks.json").then(r => r.ok ? r.json() : Promise.reject(r)),
-                fetch(baseUrl + "mentees_ratings.json").then(r => r.ok ? r.json() : Promise.reject(r))
+                fetch(baseUrl + "mentees_ratings.json").then(r => r.ok ? r.json() : Promise.reject(r)),
+                fetch("https://raw.githubusercontent.com/LondonSquad/Novix/refs/heads/develop/README.md").then(r => r.ok ? r.text() : Promise.reject(r))
             ]);
             allRatingsData = ratings; // Store globally
             statusArea.style.display = 'none';
@@ -1207,7 +1219,8 @@ document.addEventListener("DOMContentLoaded", () => {
             renderPrMetrics(pr);
             renderAnalytics(pr);
             renderRatings(ratings, initialLang); // Initial render with correct language
-            renderFeedback(fb)
+            renderFeedback(fb);
+            renderProjects(readme); // Render the new Projects tab
         } catch (e) {
             console.error("Error fetching dashboard data:", e);
             statusArea.innerHTML = `<div class="bg-red-100 border-l-4 border-red-500 text-red-700 p-4" role="alert"><p class="font-bold">Loading Failed</p><p>Could not fetch required data. Ensure files are accessible.</p></div>`
