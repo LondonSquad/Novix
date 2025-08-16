@@ -1,4 +1,4 @@
-package com.london.data.di
+package com.london.app.di
 
 import com.london.data.remote.service.account.AccountApiService
 import com.london.data.remote.service.actor.ActorApiService
