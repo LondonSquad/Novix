@@ -89,9 +89,9 @@ import com.london.presentation.utils.toLocalizedNumbers
 fun MovieDetailsScreen(
     onNavigateBack: () -> Unit,
     onNavigateToLogin: () -> Unit,
-    onNavigateGenre: (MovieGenreUi) -> Unit,
-    onNavigateToMovie: (Int) -> Unit,
-    onNavigateToActor: (Int) -> Unit,
+    onNavigateToMovieCategory: (MovieGenreUi) -> Unit,
+    onNavigateToMovieDetails: (Int) -> Unit,
+    navigateToActorDetails: (Int) -> Unit,
     onNavigateToReviews: (Int, MediaType) -> Unit,
     viewModel: MovieDetailsViewModel = hiltViewModel()
 ) {
@@ -101,9 +101,9 @@ fun MovieDetailsScreen(
     HandleMovieDetailsEffects(
         effect = effect,
         onNavigateBack = onNavigateBack,
-        onNavigateGenre = onNavigateGenre,
-        onNavigateToMovie = onNavigateToMovie,
-        onNavigateToActor = onNavigateToActor,
+        onNavigateGenre = onNavigateToMovieCategory,
+        onNavigateToMovie = onNavigateToMovieDetails,
+        onNavigateToActor = navigateToActorDetails,
         onNavigateToReviews = onNavigateToReviews,
         onNavigateToLogin = onNavigateToLogin
     )

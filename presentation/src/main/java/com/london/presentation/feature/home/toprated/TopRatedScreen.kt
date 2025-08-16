@@ -48,8 +48,8 @@ import com.london.presentation.utils.isLoading
 fun TopRatedScreen(
     viewModel: TopRatedViewModel = hiltViewModel(),
     onNavigateBack: () -> Unit = {},
-    onNavigateMovie: (Int) -> Unit = {},
-    onNavigateTvShow: (Int) -> Unit = {}
+    onNaviagteToMovieDetalis: (Int) -> Unit = {},
+    onNaviagteToTvShowDetalis: (Int) -> Unit = {}
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
     val effect by viewModel.effect.collectAsState(null)
@@ -57,8 +57,8 @@ fun TopRatedScreen(
     effect?.Listen { currentEffect ->
         when (currentEffect) {
             is TopRatedEffect.NavigateBack -> onNavigateBack()
-            is TopRatedEffect.NavigateToMovieDetails -> onNavigateMovie(currentEffect.id)
-            is TopRatedEffect.NavigateToTvShowDetails -> onNavigateTvShow(currentEffect.id)
+            is TopRatedEffect.NavigateToMovieDetails -> onNaviagteToMovieDetalis(currentEffect.id)
+            is TopRatedEffect.NavigateToTvShowDetails -> onNaviagteToTvShowDetalis(currentEffect.id)
         }
     }
 

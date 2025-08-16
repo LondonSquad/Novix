@@ -70,9 +70,9 @@ fun ActorDetailsScreen(
     onNavigateBack: () -> Unit,
     onNavigateToGallery: (Int) -> Unit,
     onNavigateToTopMoviePicks: (Int) -> Unit,
-    onNavigateToMovieScreen: (Int) -> Unit,
+    onNavigateToMovieDetails: (Int) -> Unit,
     onNavigateToTopTvShowPicks: (Int) -> Unit,
-    onNavigateToTvShowScreen: (Int) -> Unit,
+    onNavigateToTvShowDetails: (Int) -> Unit,
     viewModel: ActorDetailsViewModel = hiltViewModel(),
 ) {
     val effect by viewModel.effect.collectAsState(null)
@@ -83,9 +83,9 @@ fun ActorDetailsScreen(
             is ActorEffect.BackNavigation -> onNavigateBack()
             is ActorEffect.GalleryNavigation -> onNavigateToGallery(currentEffect.actorId)
             is ActorEffect.TopMoviePicksNavigation -> onNavigateToTopMoviePicks(uiState.actorDetails.id)
-            is ActorEffect.MovieScreenNavigation -> onNavigateToMovieScreen(currentEffect.movieId)
+            is ActorEffect.MovieScreenNavigation -> onNavigateToMovieDetails(currentEffect.movieId)
             is ActorEffect.TopTvShowPicksNavigation -> onNavigateToTopTvShowPicks(uiState.actorDetails.id)
-            is ActorEffect.TvShowScreenNavigation -> onNavigateToTvShowScreen(currentEffect.tvShowId)
+            is ActorEffect.TvShowScreenNavigation -> onNavigateToTvShowDetails(currentEffect.tvShowId)
         }
     }
 
@@ -462,8 +462,8 @@ fun Preview() {
             onNavigateToTopMoviePicks = {},
             onNavigateToGallery = {},
             onNavigateToTopTvShowPicks = {},
-            onNavigateToMovieScreen = {},
-            onNavigateToTvShowScreen = {}
+            onNavigateToMovieDetails = {},
+            onNavigateToTvShowDetails = {}
         )
     }
 }
