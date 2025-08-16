@@ -27,7 +27,7 @@ import com.london.presentation.utils.Listen
 
 @Composable
 fun TrendingActorsScreen(
-    onNavigateActor: (Int) -> Unit,
+    onNavigateToActorDetails: (Int) -> Unit,
     onNavigateBack: () -> Unit,
     viewModel: TrendingActorsViewModel = hiltViewModel()
 ) {
@@ -36,7 +36,7 @@ fun TrendingActorsScreen(
 
     effect?.Listen { currentEffect ->
         when (currentEffect) {
-            is TrendingActorsEffect.NavigateToActor -> onNavigateActor(currentEffect.actorId)
+            is TrendingActorsEffect.NavigateToActor -> onNavigateToActorDetails(currentEffect.actorId)
             is TrendingActorsEffect.NavigateBack -> onNavigateBack()
         }
     }
