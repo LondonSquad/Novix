@@ -15,8 +15,6 @@ import androidx.compose.foundation.layout.requiredWidth
 import androidx.compose.foundation.layout.statusBars
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.grid.GridCells
-import androidx.compose.foundation.lazy.grid.GridItemSpan
-import androidx.compose.foundation.lazy.grid.LazyGridScope
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.items
 import androidx.compose.runtime.Composable
@@ -37,10 +35,6 @@ import com.london.designsystem.component.TabLayout
 import com.london.designsystem.component.TopBar
 import com.london.designsystem.theme.NovixTheme
 import com.london.designsystem.utils.string
-import com.london.presentation.feature.home.HomeScreenContract
-import com.london.presentation.feature.home.HomeScreenUiState
-import com.london.presentation.feature.home.section.TopRatedSection
-import com.london.presentation.shared.CarousalShimmerEffect
 import com.london.presentation.shared.HomeCard
 import com.london.presentation.shared.MediaCategory
 import com.london.presentation.shared.buildscreen.BuildScreen
@@ -49,24 +43,6 @@ import com.london.presentation.shared.genre.TvShowGenreUi
 import com.london.presentation.utils.Listen
 import com.london.presentation.utils.gridColumns
 import com.london.presentation.utils.isLoading
-
-fun LazyGridScope.topRatedSection(
-    screenWidth: Dp,
-    uiState: HomeScreenUiState,
-    homeScreenContract: HomeScreenContract
-) {
-    item(span = { GridItemSpan(maxLineSpan) }) {
-        if (!uiState.isTopRatedLoading) {
-            TopRatedSection(
-                uiState = uiState,
-                homeScreenContract = homeScreenContract,
-                modifier = Modifier.requiredWidth(screenWidth)
-            )
-        } else {
-            CarousalShimmerEffect()
-        }
-    }
-}
 
 @Composable
 fun TopRatedScreen(
