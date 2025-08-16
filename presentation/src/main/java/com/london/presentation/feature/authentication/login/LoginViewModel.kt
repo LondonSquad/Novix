@@ -49,11 +49,7 @@ class LoginViewModel @Inject constructor(
     }
 
     override fun onForgotPasswordClick() {
-        val newEffect = LoginEffect.NavigateToForgotPassword("$FORGOT_PASSWORD_URL?t=${System.currentTimeMillis()}")
-        if (newEffect != lastForgotPasswordEffect) {
-            lastForgotPasswordEffect = newEffect
-            emitEffect(newEffect)
-        }
+        emitEffect(LoginEffect.NavigateToForgotPassword())
     }
 
     override fun onLoginClick() {
@@ -63,7 +59,7 @@ class LoginViewModel @Inject constructor(
 
         if (username.isEmpty() || password.isEmpty()) return
 
-        performLogin(username = username,password = password)
+        performLogin(username = username, password = password)
     }
 
     override fun onLoginAsGuestClick() {
@@ -110,12 +106,9 @@ class LoginViewModel @Inject constructor(
                     handleLoginError()
             },
             onError = { handleLoginError() },
-            onCompleted = { updateState { copy(isLoading = false) }
+            onCompleted = {
+                updateState { copy(isLoading = false) }
             }
         )
-    }
-
-    private companion object {
-        const val FORGOT_PASSWORD_URL = "https://www.themoviedb.org/reset-password"
     }
 }
