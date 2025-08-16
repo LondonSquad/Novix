@@ -44,9 +44,9 @@ kover {
             includes {
                 packages(
                     "com.london.domain.usecase.**",
-                    "com.london.data.repository.**",
+//                    "com.london.data.repository.**",
                 )
-                classes("**ViewModel")
+//                classes("**ViewModel")
             }
 
             excludes {
