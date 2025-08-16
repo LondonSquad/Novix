@@ -14,6 +14,7 @@ pluginManagement {
         gradlePluginPortal()
     }
 }
+
 dependencyResolutionManagement {
     repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
     repositories {
@@ -28,4 +29,4 @@ include(":domain")
 include(":data")
 include(":presentation")
 include(":designSystem")
-include(":feature:ImageHaramBlur")
+include(":ImageHaramBlur")
