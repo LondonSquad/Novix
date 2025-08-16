@@ -21148,17 +21148,25 @@
           "url": "https://github.com/abdo-essam"
         },
         "submitted_at": "2025-08-16T10:02:34Z"
+      },
+      {
+        "reviewer": {
+          "id": 154278495,
+          "login": "ahmeddsamii",
+          "url": "https://github.com/ahmeddsamii"
+        },
+        "submitted_at": "2025-08-16T10:04:48Z"
       }
     ],
     "first_approved_at": "2025-08-16T10:02:34Z",
     "time_to_first_approval_minutes": 4320.866666666667,
-    "required_approvals_met_at": null,
-    "time_to_required_approvals_minutes": null,
+    "required_approvals_met_at": "2025-08-16T10:04:48Z",
+    "time_to_required_approvals_minutes": 4323.1,
     "closed_at": null,
     "merged_at": null,
     "merged_by": null,
     "week": "2025-W33",
-    "status": "pending",
+    "status": "approved",
     "diff_stats": {
       "additions": 183,
       "deletions": 223,
