@@ -72,7 +72,7 @@ jobs:
             local.properties
             app/google-services.json
             app/novix-release.jks
-          key: ${{ steps.cache-key.outputs.project-setup-key }}
+          key: project-setup-${{ github.sha }}
 
   build_and_test:
     name: 🏗️ Build, Test & Verify Coverage
