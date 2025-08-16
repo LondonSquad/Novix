@@ -219,6 +219,11 @@ jobs:
               PR_STATUS="closed"
             fi
           
+            # Fetch assignees and comments data
+            ASSIGNEES_JSON=$(echo "$PR_DATA" | jq '[.assignees[] | {login: .login, id: .id, url: .html_url}]')
+            COMMENTS_JSON=$(gh api "repos/${{ github.repository }}/issues/$pr_number/comments" \
+              --jq '[.[] | select(.user.type != "Bot")] | map({ author: { login: .user.login, id: .user.id, url: .user.html_url }, created_at: .created_at })')
+          
             # Create new PR entry with all data
             NEW_PR_DATA=$(jq -n \
               --argjson pr_number "$pr_number" \
@@ -250,6 +255,8 @@ jobs:
               --arg merged_at "$PR_MERGED_AT" \
               --argjson merged_by "$PR_MERGED_BY" \
               --arg status "$PR_STATUS" \
+              --argjson assignees "$ASSIGNEES_JSON" \
+              --argjson comments "$COMMENTS_JSON" \
               '
               def recalculate_approval_metrics($required_approvals):
                 def parse_time(ts): (if ts then (ts | strptime("%Y-%m-%dT%H:%M:%SZ") | mktime) else null end);
@@ -272,6 +279,8 @@ jobs:
                   "id": $creator_id,
                   "url": $creator_html_url
                 },
+                "assignees": $assignees,
+                "comments": $comments,
                 "approvals": $current_approvals,
                 "first_approved_at": null,
                 "time_to_first_approval_minutes": null,
@@ -374,25 +383,29 @@ jobs:
           fi
 
           if [[ "$UPDATE_TYPE" == "PR_STATE_REFRESH" ]]; then
-            echo "Fetching current approval state from GitHub API..."
+            echo "Fetching current state from GitHub API for refresh..."
             PR_HEAD_SHA=$(gh api "repos/${{ github.repository }}/pulls/$PR_NUMBER" --jq '.head.sha')
             CURRENT_APPROVALS_JSON=$(gh api "repos/${{ github.repository }}/pulls/$PR_NUMBER/reviews" \
-            --jq '[.[] | select(.state == "APPROVED" and .commit_id == "'"$PR_HEAD_SHA"'")] |
-            group_by(.user.id) | map(sort_by(.submitted_at) | .[-1]) |
-            map({
-              reviewer: {
-                login: .user.login,
-                id: .user.id,
-                url: .user.html_url
-              },
-              submitted_at: .submitted_at
-            })'
+              --jq '[.[] | select(.state == "APPROVED" and .commit_id == "'"$PR_HEAD_SHA"'")] |
+              group_by(.user.id) | map(sort_by(.submitted_at) | .[-1]) |
+              map({
+                reviewer: {
+                  login: .user.login,
+                  id: .user.id,
+                  url: .user.html_url
+                },
+                submitted_at: .submitted_at
+              })'
             )
             echo "VALID approvals from API: $CURRENT_APPROVALS_JSON"
           
             # Only update diff stats if we have valid values from the PR event
+            CURRENT_ASSIGNEES_JSON=$(gh api "repos/${{ github.repository }}/pulls/$PR_NUMBER" --jq '[.assignees[] | {login: .login, id: .id, url: .html_url}]')
+            CURRENT_COMMENTS_JSON=$(gh api "repos/${{ github.repository }}/issues/$PR_NUMBER/comments" \
+              --jq '[.[] | select(.user.type != "Bot")] | map({ author: { login: .user.login, id: .user.id, url: .user.html_url }, created_at: .created_at })')
+
             if [[ "$HAS_VALID_DIFF_STATS" == "true" ]]; then
-              echo "Updating diff stats for PR #$PR_NUMBER"
+              echo "Updating diff stats and participant data for PR #$PR_NUMBER"
               UPDATED_JQ_DATA=$(echo "$JQ_DATA" | jq \
                 --argjson pr_number "$PR_NUMBER" \
                 --arg pr_action "$PR_ACTION" \
@@ -401,6 +414,8 @@ jobs:
                 --argjson deletions "$PR_DELETIONS" \
                 --argjson changed_files "$PR_CHANGED_FILES" \
                 --argjson current_approvals "$CURRENT_APPROVALS_JSON" \
+                --argjson current_assignees "$CURRENT_ASSIGNEES_JSON" \
+                --argjson current_comments "$CURRENT_COMMENTS_JSON" \
                 --argjson required_approvals "$REQUIRED_APPROVALS" \
                 "$JQ_RECALCULATE_FUNCTION
                  map(if .pr_number == \$pr_number then
@@ -409,20 +424,26 @@ jobs:
                      | .diff_stats.deletions = \$deletions
                      | .diff_stats.changed_files = \$changed_files
                      | .approvals = \$current_approvals
+                     | .assignees = \$current_assignees
+                     | .comments = \$current_comments
                      | recalculate_approval_metrics(\$required_approvals)
                    else . end)")
             else
-              echo "Skipping diff stats update, only updating approvals for PR #$PR_NUMBER"
+              echo "Skipping diff stats, only updating participant data for PR #$PR_NUMBER"
               UPDATED_JQ_DATA=$(echo "$JQ_DATA" | jq \
                 --argjson pr_number "$PR_NUMBER" \
                 --arg pr_action "$PR_ACTION" \
                 --arg reopen_action "reopened" \
                 --argjson current_approvals "$CURRENT_APPROVALS_JSON" \
+                --argjson current_assignees "$CURRENT_ASSIGNEES_JSON" \
+                --argjson current_comments "$CURRENT_COMMENTS_JSON" \
                 --argjson required_approvals "$REQUIRED_APPROVALS" \
                 "$JQ_RECALCULATE_FUNCTION
                  map(if .pr_number == \$pr_number then
                      (if \$pr_action == \$reopen_action then .closed_at = null | .merged_at = null | .merged_by = null else . end)
                      | .approvals = \$current_approvals
+                     | .assignees = \$current_assignees
+                     | .comments = \$current_comments
                      | recalculate_approval_metrics(\$required_approvals)
                    else . end)")
             fi
@@ -470,6 +491,8 @@ jobs:
                   "url": $creator_html_url
                 },
                 "approvals": [],
+                "assignees": [], 
+                "comments": [],
                 "first_approved_at": null,
                 "time_to_first_approval_minutes": null,
                 "required_approvals_met_at": null,
