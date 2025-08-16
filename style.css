@@ -3398,12 +3398,18 @@ html.dark .feedback-summary {
 
 .participants-list {
     display: flex;
-    flex-direction: column;
+    flex-direction: column; /* This ensures Assignees and Approvers are listed vertically */
     gap: 0.5rem;
 }
 
+/* FIX: Added this rule to correctly size avatars in the Assignee/Approver lists */
+.participants-list .avatar {
+    width: 2rem;
+    height: 2rem;
+}
+
 .participants-list.avatar-stack {
-    flex-direction: row;
+    flex-direction: row; /* Overrides for the horizontal commenter stack */
     align-items: center;
     flex-wrap: wrap;
 }
