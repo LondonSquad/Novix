@@ -9,13 +9,17 @@ import androidx.compose.animation.togetherWith
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.requiredHeight
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -63,10 +67,10 @@ fun BookmarkBottomSheet(
     val coroutineScope = rememberCoroutineScope()
     val navController = LocalNavController.current
 
-    LaunchedEffect(isSheetVisible, bookmarkedMovieId) {
+    LaunchedEffect(isSheetVisible) {
         if (isSheetVisible) {
             viewModel.onSheetShown(bookmarkedMovieId)
-            coroutineScope.launch { sheetState.show() }
+            sheetState.show()
         }
     }
 
@@ -76,7 +80,6 @@ fun BookmarkBottomSheet(
     val hideSheet: () -> Unit = {
         coroutineScope.launch {
             sheetState.hide()
-        }.invokeOnCompletion {
             if (sheetState.isNotVisible) {
                 onSheetDismiss()
                 viewModel.onDismiss()
@@ -213,49 +216,40 @@ private fun SheetHeader(
     }
 }
 
-private enum class UserListState {
-    Loading,
-    Empty,
-    Success
-}
-
 @Composable
 private fun UserListsView(
     uiState: BookmarkSheetUiState,
     contract: BookmarkSheetContract
 ) {
-    val userListState = when {
-        uiState.isLoading -> UserListState.Loading
-        uiState.lists.isEmpty() -> UserListState.Empty
-        else -> UserListState.Success
-    }
+    Box(
+        modifier = Modifier
+            .fillMaxWidth()
+            .height(160.dp)
+            .wrapContentHeight(),
+        contentAlignment = Alignment.Center
 
-    AnimatedContent(
-        targetState = userListState,
-        transitionSpec = {
-            fadeIn(animationSpec = tween(220, delayMillis = 90)) +
-                    slideInVertically(initialOffsetY = { it / 2 }) togetherWith
-                    fadeOut(animationSpec = tween(90))
-        },
-        label = "UserListAnimation"
-    ) { state ->
-        when (state) {
-            UserListState.Loading -> {
+    ) {
+        when {
+            uiState.isLoading -> {
                 CircularLoading()
             }
-            UserListState.Empty -> {
+
+            uiState.lists.isEmpty() -> {
                 NoListsMessage()
             }
-            UserListState.Success -> {
+
+            else -> {
                 LazyColumn(
                     modifier = Modifier
-                        .fillMaxWidth()
-                        .heightIn(max = 160.dp),
-                    verticalArrangement = Arrangement.spacedBy(12.dp)
+                        .fillMaxWidth(),
+                    verticalArrangement = Arrangement.spacedBy(12.dp),
+                    contentPadding = PaddingValues(vertical = 8.dp)
                 ) {
                     items(uiState.lists) { movieList ->
                         Selection(
-                            modifier = Modifier.fillMaxWidth(),
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .animateItem(),
                             mainText = movieList.name,
                             isSelected = movieList.id in uiState.selectedLists,
                             subText = stringResource(R.string.n_items, movieList.itemCount),
@@ -349,7 +343,7 @@ private fun LoginButton(
 private fun NoListsMessage() {
     Text(
         text = R.string.no_lists_available.string,
-        style = NovixTheme.typography.body.small,
+        style = NovixTheme.typography.body.large,
         color = NovixTheme.colors.body
     )
 }
