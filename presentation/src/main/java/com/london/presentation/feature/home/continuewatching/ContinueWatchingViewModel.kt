@@ -4,6 +4,7 @@ import com.london.domain.usecase.recent.watched.movie.ManageRecentMovieWatchedUs
 import com.london.domain.usecase.recent.watched.tvshow.ManageRecentTvShowWatchedUseCase
 import com.london.presentation.shared.MediaCategory
 import com.london.presentation.shared.base.BaseViewModel
+import com.london.presentation.shared.base.ErrorState
 import com.london.presentation.shared.genre.MovieGenreUi
 import com.london.presentation.shared.genre.TvShowGenreUi
 import com.london.presentation.shared.genre.toDomain
@@ -18,46 +19,50 @@ class ContinueWatchingViewModel @Inject constructor(
     ContinueWatchingContract {
 
     init {
-        fetchRecentWatchedMedia()
+        getRecentWatchedMedia()
     }
 
-    override fun onMovieGenreChanged(genre: MovieGenreUi) {
+    override fun onMovieGenreClick(genre: MovieGenreUi) {
         if (genre == state.value.selectedMovieGenre) return
         updateState { copy(selectedMovieGenre = genre) }
-        fetchRecentWatchedMedia()
+        getRecentWatchedMedia()
     }
 
-    override fun onTvShowGenreChanged(genre: TvShowGenreUi) {
+    override fun onTvShowGenreClick(genre: TvShowGenreUi) {
         if (genre == state.value.selectedTvShowGenre) return
         updateState { copy(selectedTvShowGenre = genre) }
-        fetchRecentWatchedMedia()
+        getRecentWatchedMedia()
     }
 
-    override fun onMediaCategoryTabSelected(selectedMediaCategory: MediaCategory) {
-        if (selectedMediaCategory == state.value.selectedMediaCategory) return
+    override fun onMediaCategoryTabClick(selectedMediaCategory: MediaCategory) {
+        isNotSelectedMediaCategory(selectedMediaCategory)
         updateState {
             copy(
                 selectedMediaCategory = selectedMediaCategory,
-                isMovieSelected = selectedMediaCategory == MediaCategory.Movies,
-                isTvSelected = selectedMediaCategory == MediaCategory.TvShows
+                isMovieSelected = isSelectedMediaCategory(MediaCategory.Movies),
+                isTvSelected = isSelectedMediaCategory(MediaCategory.TvShows)
             )
         }
     }
 
-    override fun onBack() = emitEffect(ContinueWatchingEffect.NavigateBack)
+    private fun <T : Any> isNotSelectedMediaCategory(mediaCategory: T) =
+        mediaCategory != state.value.selectedMediaCategory
+
+    fun isSelectedMediaCategory(mediaCategory: MediaCategory) =
+        mediaCategory == state.value.selectedMediaCategory
+
+    override fun onBackClick() = emitEffect(ContinueWatchingEffect.NavigateBack)
 
     override fun onNavigateToMovie(id: Int) =
         emitEffect(ContinueWatchingEffect.NavigateToMovieDetails(id))
 
-
     override fun onNavigateToTvShow(id: Int) =
         emitEffect(ContinueWatchingEffect.NavigateToTvShowDetails(id))
 
-    override fun onRetry() {
-        fetchRecentWatchedMedia()
-    }
+    override fun onRetryCLick() = getRecentWatchedMedia()
 
-    private fun fetchRecentWatchedMedia() {
+
+    private fun getRecentWatchedMedia() {
         tryToExecute(
             block = {
                 val recentWatchedMovie = manageRecentMovieWatchedUseCase.getAllWatchedMovies(
@@ -66,12 +71,9 @@ class ContinueWatchingViewModel @Inject constructor(
                 val recentWatchedTvShow = manageRecentTvShowWatchedUseCase.getAllRecentTvShow(
                     genre = state.value.selectedTvShowGenre.toDomain()
                 )
-
-                Pair(recentWatchedMovie, recentWatchedTvShow)
+                recentWatchedMovie to recentWatchedTvShow
             },
-            onStart = {
-                updateState { copy(isLoading = true) }
-            },
+            onStart = { setLoadingState(true) },
             onSuccess = { (movies, shows) ->
                 updateState {
                     copy(
@@ -80,11 +82,11 @@ class ContinueWatchingViewModel @Inject constructor(
                     )
                 }
             },
-            onError = { errorState -> updateState { copy(error = errorState) } },
-            onCompleted = {
-                updateState { copy(isLoading = false) }
-            },
+            onError = ::setErrorState,
+            onCompleted = { setLoadingState(false) },
         )
     }
 
+    private fun setErrorState(errorState: ErrorState) = updateState { copy(error = errorState) }
+    private fun setLoadingState(isLoading: Boolean) = updateState { copy(isLoading = isLoading) }
 }

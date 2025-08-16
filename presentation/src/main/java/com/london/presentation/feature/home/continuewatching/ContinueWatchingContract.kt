@@ -5,21 +5,21 @@ import com.london.presentation.shared.genre.MovieGenreUi
 import com.london.presentation.shared.genre.TvShowGenreUi
 
 interface ContinueWatchingContract {
-    fun onBack()
-    fun onRetry()
+    fun onBackClick()
+    fun onRetryCLick()
     fun onNavigateToMovie(id: Int)
     fun onNavigateToTvShow(id: Int)
-    fun onMovieGenreChanged(genre: MovieGenreUi)
-    fun onTvShowGenreChanged(genre: TvShowGenreUi)
-    fun onMediaCategoryTabSelected(selectedMediaCategory: MediaCategory)
+    fun onMovieGenreClick(genre: MovieGenreUi)
+    fun onTvShowGenreClick(genre: TvShowGenreUi)
+    fun onMediaCategoryTabClick(selectedMediaCategory: MediaCategory)
 }
 
 fun defaultContinueWatchingContract() = object : ContinueWatchingContract {
-    override fun onBack() {}
-    override fun onRetry() {}
+    override fun onBackClick() {}
+    override fun onRetryCLick() {}
     override fun onNavigateToMovie(id: Int) {}
     override fun onNavigateToTvShow(id: Int) {}
-    override fun onMovieGenreChanged(genre: MovieGenreUi) {}
-    override fun onTvShowGenreChanged(genre: TvShowGenreUi) {}
-    override fun onMediaCategoryTabSelected(selectedMediaCategory: MediaCategory) {}
+    override fun onMovieGenreClick(genre: MovieGenreUi) {}
+    override fun onTvShowGenreClick(genre: TvShowGenreUi) {}
+    override fun onMediaCategoryTabClick(selectedMediaCategory: MediaCategory) {}
 }
