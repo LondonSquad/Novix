@@ -1,7 +1,5 @@
-# Workflow name
 name: Build And Test Coverage Checks
 
-# Triggers for the workflow
 on:
   pull_request:
     branches:
@@ -114,8 +112,8 @@ jobs:
       - name: Run build
         run: ./gradlew assembleDebug --build-cache
 
-  build_and_test:
-    name: Build, Test & Verify Coverage
+  test:
+    name: Test & Verify Coverage
     needs: setup
     runs-on: ubuntu-latest
     steps:

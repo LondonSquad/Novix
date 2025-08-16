@@ -46,7 +46,7 @@ kover {
                     "com.london.domain.usecase.**",
                     "com.london.data.repository.**",
                 )
-                classes("**.*ViewModel")
+                classes("**ViewModel")
             }
 
             excludes {
