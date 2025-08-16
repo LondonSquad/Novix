@@ -832,6 +832,7 @@ document.addEventListener("DOMContentLoaded", () => {
         let dailyBreakdownHtml = '';
         if (sortedWeeks.length > 0) {
             sortedWeeks.forEach((weekKey, index) => {
+                const isCollapsed = index > 0; // First week is open, others are collapsed
                 const weekDays = dailyActivityByWeek[weekKey];
                 const weekTitle = getRelativeWeekName(index);
 
@@ -843,9 +844,11 @@ document.addEventListener("DOMContentLoaded", () => {
                 }).join('');
 
                 dailyBreakdownHtml += `
-                    <div class="daily-week-group">
+                    <div class="daily-week-group ${isCollapsed ? 'collapsed' : ''}">
                         <h4 class="daily-week-header">${weekTitle}</h4>
-                        <div class="daily-breakdown-grid">${dayCardsHtml}</div>
+                        <div class="daily-week-content">
+                            <div class="daily-breakdown-grid">${dayCardsHtml}</div>
+                        </div>
                     </div>
                 `;
             });
@@ -853,6 +856,13 @@ document.addEventListener("DOMContentLoaded", () => {
             dailyBreakdownHtml = `<div class="p-4 text-center">No daily activity data for this period.</div>`;
         }
         document.getElementById('daily-breakdown-container').innerHTML = dailyBreakdownHtml;
+
+        // Add event listeners for the new collapsible headers
+        document.querySelectorAll('.daily-week-header').forEach(header => {
+            header.addEventListener('click', () => {
+                header.parentElement.classList.toggle('collapsed');
+            });
+        });
         // --- END: NEW Daily Activity rendering ---
 
         const prTypes = data.reduce((acc, pr) => {

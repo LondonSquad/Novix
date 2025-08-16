@@ -827,7 +827,7 @@ html.dark .health-indicator.info {
     color: var(--success-color);
 }
 
-/* --- NEW STYLES: Daily Breakdown Weekly Grouping --- */
+/* --- STYLES: Daily Breakdown Weekly Grouping --- */
 .daily-week-group {
     margin-bottom: 2rem;
 }
@@ -835,14 +835,47 @@ html.dark .health-indicator.info {
     margin-bottom: 0;
 }
 .daily-week-header {
+    display: flex; /* ADDED: Enables flexbox layout */
+    align-items: center; /* ADDED: Vertically centers the text and arrow */
     font-size: 0.8rem;
     font-weight: 600;
     color: var(--text-secondary);
     text-transform: uppercase;
     letter-spacing: 0.05em;
-    padding: 0 0 0.75rem 0.25rem;
+    padding: 0.25rem 1.5rem 0.75rem 0.25rem; /* Consolidated padding */
     border-bottom: 1px solid var(--border-color);
     margin-bottom: 1rem;
+    cursor: pointer;
+    user-select: none;
+    position: relative;
+}
+
+.daily-week-header::after {
+    content: '';
+    position: absolute;
+    right: 0.25rem;
+    top: 50%; /* This now works correctly due to flexbox centering */
+    width: 0.5rem;
+    height: 0.5rem;
+    border-style: solid;
+    border-color: var(--text-secondary);
+    border-width: 0 2px 2px 0;
+    transform: translateY(-50%) rotate(45deg);
+    transition: transform 0.3s ease-out;
+}
+
+.daily-week-group.collapsed .daily-week-header::after {
+    transform: translateY(-50%) rotate(-45deg);
+}
+
+.daily-week-content {
+    max-height: 2000px;
+    overflow: hidden;
+    transition: max-height 0.4s ease-in-out;
+}
+
+.daily-week-group.collapsed .daily-week-content {
+    max-height: 0;
 }
 
 /* Daily Breakdown Grid (Now nested inside week groups) */
