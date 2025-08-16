@@ -39246,125 +39246,12 @@
     },
     "assignees": [
       {
-        "login": "abdelrhman1002",
         "id": 180463542,
+        "login": "abdelrhman1002",
         "url": "https://github.com/abdelrhman1002"
       }
     ],
-    "comments": [
-      {
-        "author": {
-          "login": "yusufnasserdev",
-          "id": 43588217,
-          "url": "https://github.com/yusufnasserdev"
-        },
-        "created_at": "2025-08-16T13:04:52Z"
-      },
-      {
-        "author": {
-          "login": "yusufnasserdev",
-          "id": 43588217,
-          "url": "https://github.com/yusufnasserdev"
-        },
-        "created_at": "2025-08-16T13:06:26Z"
-      },
-      {
-        "author": {
-          "login": "yusufnasserdev",
-          "id": 43588217,
-          "url": "https://github.com/yusufnasserdev"
-        },
-        "created_at": "2025-08-16T13:08:16Z"
-      },
-      {
-        "author": {
-          "login": "yusufnasserdev",
-          "id": 43588217,
-          "url": "https://github.com/yusufnasserdev"
-        },
-        "created_at": "2025-08-16T13:12:45Z"
-      },
-      {
-        "author": {
-          "login": "yusufnasserdev",
-          "id": 43588217,
-          "url": "https://github.com/yusufnasserdev"
-        },
-        "created_at": "2025-08-16T13:14:22Z"
-      },
-      {
-        "author": {
-          "login": "yusufnasserdev",
-          "id": 43588217,
-          "url": "https://github.com/yusufnasserdev"
-        },
-        "created_at": "2025-08-16T13:14:49Z"
-      },
-      {
-        "author": {
-          "login": "yusufnasserdev",
-          "id": 43588217,
-          "url": "https://github.com/yusufnasserdev"
-        },
-        "created_at": "2025-08-16T13:16:33Z"
-      },
-      {
-        "author": {
-          "login": "yusufnasserdev",
-          "id": 43588217,
-          "url": "https://github.com/yusufnasserdev"
-        },
-        "created_at": "2025-08-16T13:16:48Z"
-      },
-      {
-        "author": {
-          "login": "yusufnasserdev",
-          "id": 43588217,
-          "url": "https://github.com/yusufnasserdev"
-        },
-        "created_at": "2025-08-16T13:19:03Z"
-      },
-      {
-        "author": {
-          "login": "yusufnasserdev",
-          "id": 43588217,
-          "url": "https://github.com/yusufnasserdev"
-        },
-        "created_at": "2025-08-16T13:20:36Z"
-      },
-      {
-        "author": {
-          "login": "abdelrhman1002",
-          "id": 180463542,
-          "url": "https://github.com/abdelrhman1002"
-        },
-        "created_at": "2025-08-16T13:44:30Z"
-      },
-      {
-        "author": {
-          "login": "abdelrhman1002",
-          "id": 180463542,
-          "url": "https://github.com/abdelrhman1002"
-        },
-        "created_at": "2025-08-16T13:46:48Z"
-      },
-      {
-        "author": {
-          "login": "abdelrhman1002",
-          "id": 180463542,
-          "url": "https://github.com/abdelrhman1002"
-        },
-        "created_at": "2025-08-16T13:52:58Z"
-      },
-      {
-        "author": {
-          "login": "abdelrhman1002",
-          "id": 180463542,
-          "url": "https://github.com/abdelrhman1002"
-        },
-        "created_at": "2025-08-16T13:54:53Z"
-      }
-    ],
+    "comments": [],
     "approvals": [],
     "required_approvals": 2,
     "first_approved_at": null,
