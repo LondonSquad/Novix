@@ -17,7 +17,7 @@ import com.london.presentation.utils.Listen
 @Composable
 fun RegistrationScreen(
     onNavigateBack: () -> Unit,
-    onRegistrationComplete: () -> Unit,
+    onRegisterComplete: () -> Unit,
     viewModel: RegistrationViewModel = hiltViewModel()
 ) {
     val uiState by viewModel.state.collectAsStateWithLifecycle()
@@ -26,7 +26,7 @@ fun RegistrationScreen(
     effect?.Listen { currentEffect ->
         when (currentEffect) {
             is RegistrationEffect.NavigateBack -> onNavigateBack()
-            is RegistrationEffect.RegistrationComplete -> onRegistrationComplete()
+            is RegistrationEffect.RegistrationComplete -> onRegisterComplete()
         }
     }
 

@@ -52,7 +52,7 @@ import com.london.presentation.utils.Listen
 
 @Composable
 fun ListScreen(
-    onNavigateToDetails: (Int) -> Unit,
+    onNavigateToListDetails: (Int) -> Unit,
     onNavigateToLogin: () -> Unit,
     viewModel: ListViewModel = hiltViewModel()
 ) {
@@ -62,7 +62,7 @@ fun ListScreen(
 
     effect?.Listen { currentEffect ->
         when (currentEffect) {
-            is ListEffect.NavigateToDetails -> onNavigateToDetails(currentEffect.id)
+            is ListEffect.NavigateToDetails -> onNavigateToListDetails(currentEffect.id)
             ListEffect.NavigateToLogin -> onNavigateToLogin()
         }
     }
