@@ -17,11 +17,11 @@
 
 ### 🎯 Brand Identity
 
-<img src="assets/app-branding.png" alt="Novix Brand Identity" width="400"/>
+<img src="https://github.com/LondonSquad/Novix/blob/develop/assets/app-branding.png?raw=true" alt="Novix Brand Identity" width="400"/>
 
 ### 🗺 Navigation Flow
 
-<img src="assets/navigation-flow.png" alt="Novix Navigation Flow" width="800"/>
+<img src="https://github.com/LondonSquad/Novix/blob/develop/assets/navigation-flow.png?raw=true" alt="Novix Navigation Flow" width="800"/>
 
 <sub>From onboarding to binge-watching — see the full journey!</sub>
 
@@ -51,17 +51,17 @@
   <table>
     <tr>
       <td align="center">
-        <img src="assets/home_screen.png" width="250" style="border: 2px solid #ddd; border-radius: 10px; padding: 5px;"/>
+        <img src="https://github.com/LondonSquad/Novix/blob/develop/assets/home_screen.png?raw=true" width="250" style="border: 2px solid #ddd; border-radius: 10px; padding: 5px;"/>
         <br>
         <sub><b>Home Screen</b></sub>
       </td>
       <td align="center">
-        <img src="assets/search_screen.png" width="250" style="border: 2px solid #ddd; border-radius: 10px; padding: 5px;"/>
+        <img src="https://github.com/LondonSquad/Novix/blob/develop/assets/search_screen.png?raw=true" width="250" style="border: 2px solid #ddd; border-radius: 10px; padding: 5px;"/>
         <br>
         <sub><b>Search</b></sub>
       </td>
       <td align="center">
-        <img src="assets/movie_details.png" width="250" style="border: 2px solid #ddd; border-radius: 10px; padding: 5px;"/>
+        <img src="https://github.com/LondonSquad/Novix/blob/develop/assets/movie_details.png?raw=true" width="250" style="border: 2px solid #ddd; border-radius: 10px; padding: 5px;"/>
         <br>
         <sub><b>Movie Details</b></sub>
       </td>
@@ -73,17 +73,17 @@
   <table>
     <tr>
       <td align="center">
-        <img src="assets/profile_screen.png" width="250" style="border: 2px solid #ddd; border-radius: 10px; padding: 5px;"/>
+        <img src="https://github.com/LondonSquad/Novix/blob/develop/assets/profile_screen.png?raw=true" width="250" style="border: 2px solid #ddd; border-radius: 10px; padding: 5px;"/>
         <br>
         <sub><b>Profile</b></sub>
       </td>
       <td align="center">
-        <img src="assets/categories.png" width="250" style="border: 2px solid #ddd; border-radius: 10px; padding: 5px;"/>
+        <img src="https://github.com/LondonSquad/Novix/blob/develop/assets/categories.png?raw=true" width="250" style="border: 2px solid #ddd; border-radius: 10px; padding: 5px;"/>
         <br>
         <sub><b>Categories</b></sub>
       </td>
       <td align="center">
-        <img src="assets/recent_viewed.png" width="250" style="border: 2px solid #ddd; border-radius: 10px; padding: 5px;"/>
+        <img src="https://github.com/LondonSquad/Novix/blob/develop/assets/recent_viewed.png?raw=true" width="250" style="border: 2px solid #ddd; border-radius: 10px; padding: 5px;"/>
         <br>
         <sub><b>Recently Viewed</b></sub>
       </td>
@@ -340,7 +340,7 @@ cd Novix
 ## 📄 Third-Party Libraries
 
 <details>
-<summary>📄 **Complete Third-Party Dependencies** (Click to expand)</summary>
+<summary>📄 <b>Complete Third-Party Dependencies</b> (Click to expand)</summary>
 
 ### UI & Compose Framework
 
