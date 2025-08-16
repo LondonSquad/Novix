@@ -153,7 +153,7 @@ jobs:
         run: ./gradlew test koverHtmlReport --build-cache
 
       - name: Verify Coverage Threshold
-        run: ./gradlew koverVerify --build-cache
+        run: ./gradlew :koverVerify --build-cache
 
       - name: 📤 Upload HTML Coverage Report
         if: always()
