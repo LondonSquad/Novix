@@ -38,21 +38,22 @@ fun ContinueWatchingScreen(
 
     effect?.Listen { currentEffect ->
         when (currentEffect) {
-            is ContinueWatchingEffect.NavigateToMovieDetails -> onNaviagteToMovieDetalis(
-                currentEffect.id
-            )
+            is ContinueWatchingEffect.NavigateToMovieDetails ->
+                onNaviagteToMovieDetalis(currentEffect.id)
 
-            is ContinueWatchingEffect.NavigateToTvShowDetails -> onNaviagteToTvShowDetalis(
-                currentEffect.id
-            )
-            is ContinueWatchingEffect.NavigateBack -> onNavigateBack()
+            is ContinueWatchingEffect.NavigateToTvShowDetails ->
+                onNaviagteToTvShowDetalis(currentEffect.id)
+
+            is ContinueWatchingEffect.NavigateBack ->
+                onNavigateBack()
         }
     }
+
     BuildScreen(
         onBack = viewModel::onBackClick,
         isLoading = state.isLoading,
         isError = state.error is ErrorState.NoInternet,
-        onRetry = viewModel::onRetryCLick,
+        onRetry = viewModel::onRetryClick,
     ) {
         Content(
             state = state,
@@ -86,6 +87,8 @@ fun Content(
                 isDarkMode = NovixTheme.isThemeDark,
                 selectedMovieGenre = state.selectedMovieGenre,
                 selectedTvShowGenre = state.selectedTvShowGenre,
+                isMovieSelected = MediaCategory.Movies == state.selectedMediaCategory,
+                isTvShowSelected = MediaCategory.TvShows == state.selectedMediaCategory,
                 onNavigateToMovie = contract::onNavigateToMovie,
                 onNavigateToTvShow = contract::onNavigateToTvShow,
                 onSaveClick = { /* TODO: Implement save functionality */ },

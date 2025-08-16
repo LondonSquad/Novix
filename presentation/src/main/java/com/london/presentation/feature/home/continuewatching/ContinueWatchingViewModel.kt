@@ -1,14 +1,16 @@
 package com.london.presentation.feature.home.continuewatching
 
+import com.london.domain.entity.Movie
+import com.london.domain.entity.TvShow
 import com.london.domain.usecase.recent.watched.movie.ManageRecentMovieWatchedUseCase
 import com.london.domain.usecase.recent.watched.tvshow.ManageRecentTvShowWatchedUseCase
 import com.london.presentation.shared.MediaCategory
 import com.london.presentation.shared.base.BaseViewModel
-import com.london.presentation.shared.base.ErrorState
 import com.london.presentation.shared.genre.MovieGenreUi
 import com.london.presentation.shared.genre.TvShowGenreUi
 import com.london.presentation.shared.genre.toDomain
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 
 @HiltViewModel
@@ -23,22 +25,26 @@ class ContinueWatchingViewModel @Inject constructor(
     }
 
     override fun onMovieGenreClick(genre: MovieGenreUi) {
-        if (genre == state.value.selectedMovieGenre) return
-        updateState { copy(selectedMovieGenre = genre) }
-        getRecentWatchedMedia()
+        isNotCurrentGenreSelected(genre) {
+            updateState { copy(selectedMovieGenre = genre) }
+            getRecentWatchedMedia()
+        }
     }
 
     override fun onTvShowGenreClick(genre: TvShowGenreUi) {
-        if (genre == state.value.selectedTvShowGenre) return
-        updateState { copy(selectedTvShowGenre = genre) }
-        getRecentWatchedMedia()
+        isNotCurrentGenreSelected(genre) {
+            updateState { copy(selectedTvShowGenre = genre) }
+            getRecentWatchedMedia()
+        }
     }
 
     override fun onMediaCategoryTabClick(selectedMediaCategory: MediaCategory) {
-        updateState {
-            copy(
-                selectedMediaCategory = selectedMediaCategory
-            )
+        if (isNotCurrentTabSelected(selectedMediaCategory)) {
+            updateState {
+                copy(
+                    selectedMediaCategory = selectedMediaCategory
+                )
+            }
         }
     }
 
@@ -50,34 +56,45 @@ class ContinueWatchingViewModel @Inject constructor(
     override fun onNavigateToTvShow(id: Int) =
         emitEffect(ContinueWatchingEffect.NavigateToTvShowDetails(id))
 
-    override fun onRetryCLick() = getRecentWatchedMedia()
+    override fun onRetryClick() = getRecentWatchedMedia()
 
+    private inline fun <reified T : Enum<T>> isNotCurrentGenreSelected(
+        genre: T,
+        onNotSelected: () -> Unit
+    ) {
+        val alreadySelected = when (genre) {
+            is MovieGenreUi -> genre == state.value.selectedMovieGenre
+            is TvShowGenreUi -> genre == state.value.selectedTvShowGenre
+            else -> false
+        }
 
-    private fun getRecentWatchedMedia() {
+        if (!alreadySelected) onNotSelected()
+    }
+
+    fun getRecentWatchedMedia() {
         tryToExecute(
-            block = {
-                val recentWatchedMovie = manageRecentMovieWatchedUseCase.getAllWatchedMovies(
-                    genre = state.value.selectedMovieGenre.toDomain()
-                )
-                val recentWatchedTvShow = manageRecentTvShowWatchedUseCase.getAllRecentTvShow(
-                    genre = state.value.selectedTvShowGenre.toDomain()
-                )
-                recentWatchedMovie to recentWatchedTvShow
-            },
+            block = ::fetchRecentWatchedMedia,
             onStart = { setLoadingState(true) },
-            onSuccess = { (movies, shows) ->
-                updateState {
-                    copy(
-                        movies = movies,
-                        tvSeries = shows
-                    )
-                }
-            },
-            onError = ::setErrorState,
+            onSuccess = { (movies, tvSeries) -> setContinueWatchingMedia(movies, tvSeries) },
             onCompleted = { setLoadingState(false) },
         )
     }
 
-    private fun setErrorState(errorState: ErrorState) = updateState { copy(error = errorState) }
+    private fun isNotCurrentTabSelected(mediaCategory: MediaCategory): Boolean =
+        mediaCategory != state.value.selectedMediaCategory
+
+    private suspend fun fetchRecentWatchedMedia(): Pair<Flow<List<Movie>>, Flow<List<TvShow>>> {
+        val recentWatchedMovie = manageRecentMovieWatchedUseCase.getAllWatchedMovies(
+            genre = state.value.selectedMovieGenre.toDomain()
+        )
+        val recentWatchedTvShow = manageRecentTvShowWatchedUseCase.getAllRecentTvShow(
+            genre = state.value.selectedTvShowGenre.toDomain()
+        )
+        return recentWatchedMovie to recentWatchedTvShow
+    }
+
+    private fun setContinueWatchingMedia(movies: Flow<List<Movie>>, tvSeries: Flow<List<TvShow>>) =
+        updateState { copy(movies = movies, tvSeries = tvSeries) }
+
     private fun setLoadingState(isLoading: Boolean) = updateState { copy(isLoading = isLoading) }
 }

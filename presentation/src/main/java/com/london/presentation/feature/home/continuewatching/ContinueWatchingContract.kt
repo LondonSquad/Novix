@@ -6,7 +6,7 @@ import com.london.presentation.shared.genre.TvShowGenreUi
 
 interface ContinueWatchingContract {
     fun onBackClick()
-    fun onRetryCLick()
+    fun onRetryClick()
     fun onNavigateToMovie(id: Int)
     fun onNavigateToTvShow(id: Int)
     fun onMovieGenreClick(genre: MovieGenreUi)
@@ -16,7 +16,7 @@ interface ContinueWatchingContract {
 
 fun defaultContinueWatchingContract() = object : ContinueWatchingContract {
     override fun onBackClick() {}
-    override fun onRetryCLick() {}
+    override fun onRetryClick() {}
     override fun onNavigateToMovie(id: Int) {}
     override fun onNavigateToTvShow(id: Int) {}
     override fun onMovieGenreClick(genre: MovieGenreUi) {}
