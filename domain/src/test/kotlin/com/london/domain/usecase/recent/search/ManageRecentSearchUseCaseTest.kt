@@ -26,7 +26,7 @@ class ManageRecentSearchUseCaseTest {
     @Test
     fun `should call the repository add to recent search`() = runTest {
         // given
-        val recentSearch = RecentSearch("name", 1)
+        val recentSearch = RecentSearch(1, "name", 1)
         coEvery { recentSearchRepository.insert(recentSearch) } just Runs
 
         // when
@@ -39,7 +39,7 @@ class ManageRecentSearchUseCaseTest {
     @Test
     fun `should handle empty query string`() = runTest {
         // given
-        val recentSearch = RecentSearch("", System.currentTimeMillis())
+        val recentSearch = RecentSearch(2, "", System.currentTimeMillis())
         coEvery { recentSearchRepository.insert(recentSearch) } just Runs
 
         // when
@@ -54,7 +54,7 @@ class ManageRecentSearchUseCaseTest {
     @Test
     fun `should call the repository delete from recent search`() = runTest {
         //given
-        val recentSearch = RecentSearch("name", 1)
+        val recentSearch = RecentSearch(1,"name",1)
         coEvery { recentSearchRepository.delete(recentSearch) } just Runs
         //when
         manageRecentSearchUseCase.deleteRecentSearch(recentSearch)
@@ -67,7 +67,7 @@ class ManageRecentSearchUseCaseTest {
     @Test
     fun `should return a list of string when repository return a list of string`() = runTest {
         //given
-        val recentSearch = RecentSearch("name", 1)
+        val recentSearch = RecentSearch(1,"name",1)
         coEvery { recentSearchRepository.getAll() } returns listOf(recentSearch)
         //when
         val result = manageRecentSearchUseCase.getRecentSearch()

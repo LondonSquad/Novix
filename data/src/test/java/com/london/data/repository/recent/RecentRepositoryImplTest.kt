@@ -32,7 +32,7 @@ class RecentRepositoryImplTest {
         // when
         val result = recentSearchRepository.getAll()
         // then
-        assert(result == listOf(RecentSearch("name",1)))
+        assert(result == listOf(RecentSearch(1,"name",1)))
     }
 
     @Test
@@ -50,7 +50,7 @@ class RecentRepositoryImplTest {
         // given
         coEvery { recentSearchLocalDataSource.insertAndKeepLastTen(any()) } just Runs
         // when
-        recentSearchRepository.insert(RecentSearch("name",1))
+        recentSearchRepository.insert(RecentSearch(1,"name",1))
         // then
         coVerify(exactly = 1) {
             recentSearchLocalDataSource.insertAndKeepLastTen(ofType<RecentSearchLocal>())
@@ -63,7 +63,7 @@ class RecentRepositoryImplTest {
         coEvery { recentSearchLocalDataSource.delete(any()) } just Runs
 
         // when
-        recentSearchRepository.delete(RecentSearch("name", 1))
+        recentSearchRepository.delete(RecentSearch(1, "name", 1))
 
         // then
         coVerify(exactly = 1) {
