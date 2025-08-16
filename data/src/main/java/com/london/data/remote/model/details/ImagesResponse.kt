@@ -6,11 +6,11 @@ import kotlinx.serialization.Serializable
 @Serializable
 data class ImagesResponse(
     @SerialName("backdrops")
-    val backdrops: List<ImageItem>?,
+    val backdrops: List<ImageItem>? = null,
     @SerialName("id")
-    val id: Int?,
+    val id: Int? = null,
     @SerialName("logos")
-    val logos: List<ImageItem>?,
+    val logos: List<ImageItem>? = null,
     @SerialName("posters")
-    val posters: List<ImageItem>?
+    val posters: List<ImageItem>? = null
 )
