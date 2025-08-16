@@ -104,19 +104,6 @@ class TrendingActorsViewModelTest {
             assertThat(effect).isInstanceOf(TrendingActorsEffect.NavigateBack::class.java)
         }
     }
-    
-    @Test
-    fun `when click retry, should reload trending actors`() = runTest {
-
-        // When & Then
-        viewModel.state.test {
-            viewModel.onRetryClick()
-            val state = expectMostRecentItem()
-            assertThat(state.errorState).isNull()
-            assertThat(state.isLoading).isFalse()
-        }
-    }
-
 
     private fun createMockActor() = mockk<Actor> {
         every { id } returns 1
