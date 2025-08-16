@@ -39313,5 +39313,36 @@
       "deletions": 18,
       "changed_files": 4
     }
+  },
+  {
+    "pr_number": 658,
+    "url": "https://github.com/LondonSquad/Novix/pull/658",
+    "title": "refactor/contiune-watching",
+    "opened_at": "2025-08-16T21:39:57Z",
+    "head_ref": "refactor/contiune-watching",
+    "base_ref": "develop",
+    "creator": {
+      "login": "abdelrhman1002",
+      "id": 180463542,
+      "url": "https://github.com/abdelrhman1002"
+    },
+    "assignees": [],
+    "comments": [],
+    "approvals": [],
+    "required_approvals": 2,
+    "first_approved_at": null,
+    "time_to_first_approval_minutes": null,
+    "required_approvals_met_at": null,
+    "time_to_required_approvals_minutes": null,
+    "closed_at": null,
+    "merged_at": null,
+    "merged_by": null,
+    "week": "2025-W33",
+    "status": "pending",
+    "diff_stats": {
+      "additions": 373,
+      "deletions": 0,
+      "changed_files": 5
+    }
   }
 ]
