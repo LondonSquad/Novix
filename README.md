@@ -92,7 +92,7 @@ maintainability.
 | **`data`**                   | Data management, repositories, and API communication |
 | **`designSystem`**           | Reusable UI components and theming                   |
 | **`feature/ImageHaramBlur`** | Content moderation with ML-based image filtering     |
-| **`buildSrc`**               | Build configuration and dependency management        |
+| **`buildSrc`**               | Build configuration                                  |
 
 ---
 
@@ -119,13 +119,6 @@ maintainability.
    ```properties
    # TMDb API Configuration
    API_KEY="your_tmdb_api_key_here"
-   IMAGE_URL="https://image.tmdb.org/t/p/w500"
-   BASE_URL="https://api.themoviedb.org/"
-   AUTHORIZATION_KEY="Bearer your_auth_token_here"
-   YOUTUBE_URL="https://www.youtube.com/watch?v="
-   
-   # Android SDK path (auto-generated)
-   sdk.dir=/path/to/your/android/sdk
    ```
 
 3. **Release Signing Configuration (Optional)**
