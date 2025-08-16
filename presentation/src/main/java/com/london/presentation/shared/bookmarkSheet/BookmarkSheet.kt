@@ -1,11 +1,5 @@
 package com.london.presentation.shared.bookmarkSheet
 
-import androidx.compose.animation.AnimatedContent
-import androidx.compose.animation.core.tween
-import androidx.compose.animation.fadeIn
-import androidx.compose.animation.fadeOut
-import androidx.compose.animation.slideInVertically
-import androidx.compose.animation.togetherWith
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -15,7 +9,6 @@ import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.requiredHeight
 import androidx.compose.foundation.layout.size
@@ -67,10 +60,10 @@ fun BookmarkBottomSheet(
     val coroutineScope = rememberCoroutineScope()
     val navController = LocalNavController.current
 
-    LaunchedEffect(isSheetVisible) {
+    LaunchedEffect(isSheetVisible, bookmarkedMovieId) {
         if (isSheetVisible) {
             viewModel.onSheetShown(bookmarkedMovieId)
-            sheetState.show()
+            coroutineScope.launch { sheetState.show() }
         }
     }
 
@@ -80,6 +73,7 @@ fun BookmarkBottomSheet(
     val hideSheet: () -> Unit = {
         coroutineScope.launch {
             sheetState.hide()
+        }.invokeOnCompletion {
             if (sheetState.isNotVisible) {
                 onSheetDismiss()
                 viewModel.onDismiss()
@@ -224,8 +218,7 @@ private fun UserListsView(
     Box(
         modifier = Modifier
             .fillMaxWidth()
-            .height(160.dp)
-            .wrapContentHeight(),
+            .height(160.dp),
         contentAlignment = Alignment.Center
 
     ) {
@@ -242,8 +235,7 @@ private fun UserListsView(
                 LazyColumn(
                     modifier = Modifier
                         .fillMaxWidth(),
-                    verticalArrangement = Arrangement.spacedBy(12.dp),
-                    contentPadding = PaddingValues(vertical = 8.dp)
+                    verticalArrangement = Arrangement.spacedBy(12.dp)
                 ) {
                     items(uiState.lists) { movieList ->
                         Selection(
