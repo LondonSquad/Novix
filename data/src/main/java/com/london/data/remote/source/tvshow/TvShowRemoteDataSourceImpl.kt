@@ -2,12 +2,11 @@ package com.london.data.remote.source.tvshow
 
 import com.london.data.remote.model.ApiResponse
 import com.london.data.remote.model.details.actor.model.actortvshowdetails.ActorTvShowDetailsResponse
+import com.london.data.remote.model.details.movie.model.movieimages.ImagesResponse
 import com.london.data.remote.model.details.rating.AccountStatesResponse
 import com.london.data.remote.model.details.rating.RatingRemoteBody
 import com.london.data.remote.model.details.rating.RatingRemoteResponse
 import com.london.data.remote.model.details.tvshow.model.TvShowDetailsRemoteResponse
-import com.london.data.remote.model.details.tvshow.model.TvShowImagesRemoteResponse
-import com.london.data.remote.model.details.tvshow.model.tvshowepisode.EpisodeVideoResponse
 import com.london.data.remote.model.details.tvshow.model.tvshowepisode.TvShowEpisodeResponse
 import com.london.data.remote.model.details.tvshow.model.tvshowepisode.TvShowEpisodesRemoteResponse
 import com.london.data.remote.model.details.videoprovider.VideoResponse
@@ -162,9 +161,7 @@ class TvShowRemoteDataSourceImpl @Inject constructor(
             mapper = { it }
         )
 
-
-
-    override suspend fun getTvShowImagesById(id: Int): Result<TvShowImagesRemoteResponse> =
+    override suspend fun getTvShowImagesById(id: Int): Result<ImagesResponse> =
         callApiWithRetry(
             apiCall = { tvShowApiService.getTvShowImages(tvShowId = id) },
             mapper = { it }
@@ -190,7 +187,7 @@ class TvShowRemoteDataSourceImpl @Inject constructor(
         tvShowId: Int,
         seasonNumber: Int,
         episodeNumber: Int
-    ): Result<EpisodeVideoResponse> =
+    ): Result<VideoResponse> =
         callApiWithRetry(
             apiCall = {
                 tvShowApiService.getEpisodeVideo(

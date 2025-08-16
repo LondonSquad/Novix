@@ -13,7 +13,7 @@ import com.london.data.remote.model.ApiResponse
 import com.london.data.remote.model.details.ImageItem
 import com.london.data.remote.model.details.movie.model.moviedetails.GenreRemote
 import com.london.data.remote.model.details.movie.model.moviedetails.MovieDetailsResponse
-import com.london.data.remote.model.details.movie.model.movieimages.MovieImagesResponse
+import com.london.data.remote.model.details.movie.model.movieimages.ImagesResponse
 import com.london.data.remote.model.details.rating.AccountStatesResponse
 import com.london.data.remote.model.details.rating.RatingRemoteResponse
 import com.london.data.remote.model.home.popular.PopularMovieResponse
@@ -26,11 +26,11 @@ import com.london.data.remote.source.movie.MovieRemoteDataSource
 import com.london.data.repository.movie.MovieRepositoryImpl
 import com.london.data.utils.CrashReporter
 import com.london.data.utils.asImageUrlOrEmpty
+import com.london.domain.entity.ImagesEntity
 import com.london.domain.entity.Movie
 import com.london.domain.entity.PagedFetchResponse
 import com.london.domain.entity.TvShow
 import com.london.domain.entity.genre.MovieGenre
-import com.london.domain.entity.moviedatails.MovieImages
 import com.london.domain.entity.recent.MediaType
 import com.london.domain.entity.review.ReviewEntity
 import com.london.domain.repository.MovieRepository
@@ -104,11 +104,11 @@ class MovieRepositoryImplTest {
 
     @Test
     fun `getMovieImages should return poster file paths`() = runTest {
-        val expected = MovieImages(
-            backdrops = emptyList(),
+        val expected = ImagesEntity(
+            backdropsUrl = emptyList(),
             id = 123,
-            logos = emptyList(),
-            posters = listOf(
+            logosUrl = emptyList(),
+            postersUrl = listOf(
                 "/img1.jpg".asImageUrlOrEmpty(),
                 "/img2.jpg".asImageUrlOrEmpty()
             )
@@ -773,7 +773,7 @@ class MovieRepositoryImplTest {
         totalItems = 1
     )
 
-    private fun fakeMovieImagesRemote() = MovieImagesResponse(
+    private fun fakeMovieImagesRemote() = ImagesResponse(
         backdrops = emptyList(),
         id = 123,
         logos = emptyList(),

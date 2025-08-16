@@ -5,12 +5,11 @@ import com.london.data.remote.model.ApiConstants
 import com.london.data.remote.model.ApiConstants.POPULAR_TV_SHOWS_PATH
 import com.london.data.remote.model.ApiResponse
 import com.london.data.remote.model.details.actor.model.actortvshowdetails.ActorTvShowDetailsResponse
+import com.london.data.remote.model.details.movie.model.movieimages.ImagesResponse
 import com.london.data.remote.model.details.rating.AccountStatesResponse
 import com.london.data.remote.model.details.rating.RatingRemoteBody
 import com.london.data.remote.model.details.rating.RatingRemoteResponse
 import com.london.data.remote.model.details.tvshow.model.TvShowDetailsRemoteResponse
-import com.london.data.remote.model.details.tvshow.model.TvShowImagesRemoteResponse
-import com.london.data.remote.model.details.tvshow.model.tvshowepisode.EpisodeVideoResponse
 import com.london.data.remote.model.details.tvshow.model.tvshowepisode.TvShowEpisodeResponse
 import com.london.data.remote.model.details.tvshow.model.tvshowepisode.TvShowEpisodesRemoteResponse
 import com.london.data.remote.model.details.videoprovider.VideoResponse
@@ -44,7 +43,7 @@ interface TvShowApiService {
     @GET(ApiConstants.TV_SHOW_IMAGE)
     suspend fun getTvShowImages(
         @Path("tv_id") tvShowId: Int,
-    ): Response<TvShowImagesRemoteResponse>
+    ): Response<ImagesResponse>
 
     @GET(ApiConstants.EPISODE_DETAILS_PATH)
     suspend fun getEpisodeDetails(
@@ -58,7 +57,7 @@ interface TvShowApiService {
         @Path("series_id") seriesId: Int,
         @Path("season_number") seasonNumber: Int,
         @Path("episode_number") episodeNumber: Int,
-    ): Response<EpisodeVideoResponse>
+    ): Response<VideoResponse>
 
     @GET(ApiConstants.TV_SHOW_VIDEO_PATH)
     suspend fun getTvShowVideos(

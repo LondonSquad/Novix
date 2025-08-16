@@ -5,7 +5,7 @@ import com.london.data.local.model.home.popular.PopularSectionLocal
 import com.london.data.local.model.home.topRated.TopRatedLocal
 import com.london.data.local.preference.AuthenticationPreferences
 import com.london.data.local.source.home.HomeLocalDataSource
-import com.london.data.mapper.details.tvshow.TvShowImagesMapper.toEntity
+import com.london.data.mapper.details.toEntity
 import com.london.data.mapper.details.tvshow.toEntity
 import com.london.data.mapper.details.tvshow.toTvShowEpisodesEntity
 import com.london.data.mapper.home.toprated.toEntity
@@ -14,13 +14,11 @@ import com.london.data.remote.exception.NetworkException
 import com.london.data.remote.model.ApiResponse
 import com.london.data.remote.model.details.ImageItem
 import com.london.data.remote.model.details.movie.model.moviedetails.GenreRemote
+import com.london.data.remote.model.details.movie.model.movieimages.ImagesResponse
 import com.london.data.remote.model.details.rating.AccountStatesResponse
 import com.london.data.remote.model.details.rating.RatingRemoteResponse
 import com.london.data.remote.model.details.tvshow.model.TvShowDetailsRemoteResponse
-import com.london.data.remote.model.details.tvshow.model.TvShowImagesRemoteResponse
 import com.london.data.remote.model.details.tvshow.model.TvShowSeason
-import com.london.data.remote.model.details.tvshow.model.tvshowepisode.EpisodeVideoProviderRemote
-import com.london.data.remote.model.details.tvshow.model.tvshowepisode.EpisodeVideoResponse
 import com.london.data.remote.model.details.tvshow.model.tvshowepisode.TvShowEpisodeBySeason
 import com.london.data.remote.model.details.tvshow.model.tvshowepisode.TvShowEpisodesRemoteResponse
 import com.london.data.remote.model.details.videoprovider.VideoRemote
@@ -38,6 +36,7 @@ import com.london.data.utils.asYoutubeUrlOrEmpty
 import com.london.data.utils.orZero
 import com.london.domain.entity.PagedFetchResponse
 import com.london.domain.entity.TvShow
+import com.london.domain.entity.genre.TvShowGenre
 import com.london.domain.entity.moviedatails.MediaStates
 import com.london.domain.entity.recent.MediaType
 import com.london.domain.entity.toprated.TopRatedMedia
@@ -242,8 +241,8 @@ class TvShowRepositoryImplTest {
     @Test
     fun `getEpisodeVideos should return empty list when remote returns null results`() = runTest {
         // Given
-        val mockVideoResponse = EpisodeVideoResponse(
-            id = TV_SHOW_ID, results = null
+        val mockVideoResponse = VideoResponse(
+            id = TV_SHOW_ID, videos = null
         )
 
         coEvery {
@@ -262,8 +261,8 @@ class TvShowRepositoryImplTest {
     @Test
     fun `getEpisodeVideos should return empty list when remote returns empty results`() = runTest {
         // Given
-        val mockVideoResponse = EpisodeVideoResponse(
-            id = TV_SHOW_ID, results = emptyList()
+        val mockVideoResponse = VideoResponse(
+            id = TV_SHOW_ID, videos = emptyList()
         )
 
         coEvery {
@@ -650,7 +649,7 @@ class TvShowRepositoryImplTest {
             } returns Result.success(SearchTvShowRemoteMock)
             //When
             val result = repository.getTvShowsByGenre(
-                genre = com.london.domain.entity.genre.TvShowGenre.WESTERN, PAGE_NUMBER
+                genre = TvShowGenre.WESTERN, PAGE_NUMBER
             )
             //Then
             assertThat(result).isEqualTo(TvShowList)
@@ -673,7 +672,7 @@ class TvShowRepositoryImplTest {
             //When //Then
             assertThrows<NetworkException.HttpLockedException> {
                 repository.getTvShowsByGenre(
-                    com.london.domain.entity.genre.TvShowGenre.WESTERN, PAGE_NUMBER
+                    TvShowGenre.WESTERN, PAGE_NUMBER
                 )
             }
         }
@@ -1093,7 +1092,7 @@ class TvShowRepositoryImplTest {
             voteAverage = 8.5.orZero(),
         )
 
-        val TvShowImagesRemoteMock = TvShowImagesRemoteResponse(
+        val TvShowImagesRemoteMock = ImagesResponse(
             backdrops = listOf(
                 ImageItem(
                     filePath = "https://image.tmdb.org/t/p/w500/backdrop1.jpg",
@@ -1129,12 +1128,12 @@ class TvShowRepositoryImplTest {
         )
 
 
-        val EpisodeVideoResponseMock = EpisodeVideoResponse(
+        val EpisodeVideoResponseMock = VideoResponse(
             id = TV_SHOW_ID,
-            results = listOf(
-                EpisodeVideoProviderRemote(
+            videos = listOf(
+                VideoRemote(
                     key = "dQw4w9WgXcQ",
-                ), EpisodeVideoProviderRemote(
+                ), VideoRemote(
                     key = "abc123def456",
                 )
             )

@@ -6,7 +6,7 @@ import com.london.data.local.preference.AuthenticationPreferences
 import com.london.data.local.source.home.HomeLocalDataSource
 import com.london.data.mapper.details.actor.toEntity
 import com.london.data.mapper.details.movie.toEntity
-import com.london.data.mapper.details.tvshow.TvShowImagesMapper.toEntity
+import com.london.data.mapper.details.toEntity
 import com.london.data.mapper.details.tvshow.toEntity
 import com.london.data.mapper.details.tvshow.toTvShowEpisodeEntity
 import com.london.data.mapper.details.tvshow.toTvShowEpisodesEntity
@@ -24,6 +24,7 @@ import com.london.data.remote.source.tvshow.TvShowRemoteDataSource
 import com.london.data.utils.CrashReporter
 import com.london.data.utils.asYoutubeUrlOrEmpty
 import com.london.data.utils.fetchAndSync
+import com.london.domain.entity.ImagesEntity
 import com.london.domain.entity.PagedFetchResponse
 import com.london.domain.entity.RatedMedia
 import com.london.domain.entity.Trending
@@ -36,7 +37,6 @@ import com.london.domain.entity.recent.MediaType
 import com.london.domain.entity.review.ReviewEntity
 import com.london.domain.entity.toprated.TopRatedMedia
 import com.london.domain.entity.tvshowdetails.TvShowDetailsEntity
-import com.london.domain.entity.tvshowdetails.TvShowImagesEntity
 import com.london.domain.entity.tvshowdetails.episode.TvShowEpisodeByIdEntity
 import com.london.domain.entity.tvshowdetails.episode.TvShowEpisodesEntity
 import com.london.domain.repository.TvShowRepository
@@ -56,7 +56,7 @@ class TvShowRepositoryImpl @Inject constructor(
         ).getOrThrow().toEntity()
     }
 
-    override suspend fun getImagesTvShowById(id: Int): TvShowImagesEntity =
+    override suspend fun getImagesTvShowById(id: Int): ImagesEntity =
         tvShowRemoteDataSource.getTvShowImagesById(id).getOrThrow().toEntity()
 
     override suspend fun getActorTvShowPicksById(id: Int): ActorMediaDetails =
@@ -213,7 +213,7 @@ class TvShowRepositoryImpl @Inject constructor(
             tvShowId = seriesId,
             seasonNumber = seasonNumber,
             episodeNumber = episodeNumber
-        ).getOrThrow().results?.map { it.key.asYoutubeUrlOrEmpty() }.orEmpty()
+        ).getOrThrow().videos?.map { it.key.asYoutubeUrlOrEmpty() }.orEmpty()
 
     override suspend fun getTvShowVideos(tvShowId: Int): List<String> =
         tvShowRemoteDataSource.getTvShowVideos(tvShowId)

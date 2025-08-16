@@ -3,7 +3,7 @@ package com.london.data.remote.source.movie
 import com.london.data.remote.model.ApiResponse
 import com.london.data.remote.model.details.actor.model.actormoviedetails.ActorMovieDetailsResponse
 import com.london.data.remote.model.details.movie.model.moviedetails.MovieDetailsResponse
-import com.london.data.remote.model.details.movie.model.movieimages.MovieImagesResponse
+import com.london.data.remote.model.details.movie.model.movieimages.ImagesResponse
 import com.london.data.remote.model.details.rating.AccountStatesResponse
 import com.london.data.remote.model.details.rating.RatingRemoteResponse
 import com.london.data.remote.model.details.videoprovider.VideoResponse
@@ -17,7 +17,7 @@ import com.london.data.remote.model.search.MovieRemote
 interface MovieRemoteDataSource {
     suspend fun getMovieDetails(movieId: Int): Result<MovieDetailsResponse>
     suspend fun getSimilarMovies(movieId: Int): Result<ApiResponse<MovieRemote>>
-    suspend fun getMovieImages(movieId: Int): Result<MovieImagesResponse>
+    suspend fun getMovieImages(movieId: Int): Result<ImagesResponse>
     suspend fun getMovieVideos(movieId: Int): Result<VideoResponse>
     suspend fun getPopularMovies(): Result<ApiResponse<PopularMovieResponse>>
     suspend fun getTrendingMovies(page: Int): Result<ApiResponse<TrendingResponse>>

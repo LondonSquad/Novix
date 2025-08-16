@@ -6,7 +6,7 @@ import kotlinx.serialization.Serializable
 
 
 @Serializable
-data class MovieImagesResponse(
+data class ImagesResponse(
     @SerialName("backdrops")
     val backdrops: List<ImageItem>?,
     @SerialName("id")

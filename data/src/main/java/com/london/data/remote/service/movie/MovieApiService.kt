@@ -6,7 +6,7 @@ import com.london.data.remote.model.ApiConstants.POPULAR_MOVIES_PATH
 import com.london.data.remote.model.ApiResponse
 import com.london.data.remote.model.details.actor.model.actormoviedetails.ActorMovieDetailsResponse
 import com.london.data.remote.model.details.movie.model.moviedetails.MovieDetailsResponse
-import com.london.data.remote.model.details.movie.model.movieimages.MovieImagesResponse
+import com.london.data.remote.model.details.movie.model.movieimages.ImagesResponse
 import com.london.data.remote.model.details.rating.AccountStatesResponse
 import com.london.data.remote.model.details.rating.RatingRemoteBody
 import com.london.data.remote.model.details.rating.RatingRemoteResponse
@@ -40,7 +40,7 @@ interface MovieApiService {
     @GET(ApiConstants.MOVIE_IMAGES_PATH)
     suspend fun getMovieImages(
         @Path("movie_id") movieId: Int,
-    ): Response<MovieImagesResponse>
+    ): Response<ImagesResponse>
 
     @GET(ApiConstants.MOVIE_VIDEOS_PATH)
     suspend fun getMovieVideos(

@@ -7,6 +7,7 @@ import com.london.data.local.source.home.HomeLocalDataSource
 import com.london.data.local.source.home.upcoming.UpComingLocalDataSource
 import com.london.data.mapper.details.actor.toEntity
 import com.london.data.mapper.details.movie.toEntity
+import com.london.data.mapper.details.toEntity
 import com.london.data.mapper.genre.getId
 import com.london.data.mapper.home.popular.toMovieEntity
 import com.london.data.mapper.home.popular.toPopularMovieSectionLocal
@@ -22,6 +23,7 @@ import com.london.data.remote.source.movie.MovieRemoteDataSource
 import com.london.data.utils.CrashReporter
 import com.london.data.utils.asImageUrlOrEmpty
 import com.london.data.utils.fetchAndSync
+import com.london.domain.entity.ImagesEntity
 import com.london.domain.entity.Movie
 import com.london.domain.entity.PagedFetchResponse
 import com.london.domain.entity.RatedMedia
@@ -31,7 +33,6 @@ import com.london.domain.entity.actordetails.cast.ActorMediaDetails
 import com.london.domain.entity.genre.MovieGenre
 import com.london.domain.entity.moviedatails.MediaStates
 import com.london.domain.entity.moviedatails.MovieDetails
-import com.london.domain.entity.moviedatails.MovieImages
 import com.london.domain.entity.popular.PopularMedia
 import com.london.domain.entity.recent.MediaType
 import com.london.domain.entity.review.ReviewEntity
@@ -51,7 +52,7 @@ class MovieRepositoryImpl @Inject constructor(
     override suspend fun getMovieById(id: Int): MovieDetails =
         movieRemoteDataSource.getMovieDetails(id).getOrThrow().toEntity()
 
-    override suspend fun getMovieImagesById(id: Int): MovieImages =
+    override suspend fun getMovieImagesById(id: Int): ImagesEntity =
         movieRemoteDataSource.getMovieImages(id).getOrThrow().toEntity()
 
     override suspend fun getActorMoviePicksById(id: Int): ActorMediaDetails =

@@ -2,11 +2,10 @@ package com.london.data.remote.source.tvshow
 
 import com.london.data.remote.model.ApiResponse
 import com.london.data.remote.model.details.actor.model.actortvshowdetails.ActorTvShowDetailsResponse
+import com.london.data.remote.model.details.movie.model.movieimages.ImagesResponse
 import com.london.data.remote.model.details.rating.AccountStatesResponse
 import com.london.data.remote.model.details.rating.RatingRemoteResponse
 import com.london.data.remote.model.details.tvshow.model.TvShowDetailsRemoteResponse
-import com.london.data.remote.model.details.tvshow.model.TvShowImagesRemoteResponse
-import com.london.data.remote.model.details.tvshow.model.tvshowepisode.EpisodeVideoResponse
 import com.london.data.remote.model.details.tvshow.model.tvshowepisode.TvShowEpisodeResponse
 import com.london.data.remote.model.details.tvshow.model.tvshowepisode.TvShowEpisodesRemoteResponse
 import com.london.data.remote.model.details.videoprovider.VideoResponse
@@ -65,7 +64,7 @@ interface TvShowRemoteDataSource {
         seasonNumber: Int,
     ): Result<TvShowEpisodesRemoteResponse>
 
-    suspend fun getTvShowImagesById(id: Int): Result<TvShowImagesRemoteResponse>
+    suspend fun getTvShowImagesById(id: Int): Result<ImagesResponse>
 
     suspend fun getEpisodeDetails(
         tvShowId: Int,
@@ -77,7 +76,7 @@ interface TvShowRemoteDataSource {
         tvShowId: Int,
         seasonNumber: Int,
         episodeNumber: Int
-    ): Result<EpisodeVideoResponse>
+    ): Result<VideoResponse>
 
     suspend fun getAccountTvShowStates(
         tvShowId: Int,
