@@ -207,7 +207,8 @@ jobs:
           
           echo "PRs to process (add or update): $PRS_TO_PROCESS"
 
-          JQ_DATA=$(cat "$PR_FILE")
+          # Create a temporary directory for per-PR JSON files
+          TEMP_DIR=$(mktemp -d)
 
           # Process each PR
           for pr_number in $PRS_TO_PROCESS; do
@@ -274,7 +275,6 @@ jobs:
 
             # Step 2: Pipe the INPUT_JSON into the main jq command to construct the final PR data.
             NEW_PR_DATA=$(echo "$INPUT_JSON" | jq '
-              # This function is now correct and robust.
               def recalculate_approval_metrics:
                 def parse_time(ts): (if ts then (ts | strptime("%Y-%m-%dT%H:%M:%SZ") | mktime) else null end);
                 .approvals |= sort_by(.submitted_at)
@@ -284,7 +284,6 @@ jobs:
                 | .time_to_required_approvals_minutes = (if .required_approvals_met_at and .opened_at then ((parse_time(.required_approvals_met_at) - parse_time(.opened_at)) / 60) else null end)
                 | .status = (if .status == "merged" or .status == "closed" then .status elif .required_approvals_met_at != null then "approved" else "pending" end);
           
-              # The main object construction now includes the required_approvals field.
               {
                 "pr_number": .pr_number,
                 "url": .url,
@@ -318,24 +317,27 @@ jobs:
               } | recalculate_approval_metrics
               ')
 
-            # Update the main JSON data: add if new, or replace if existing
-            JQ_DATA=$(echo "$JQ_DATA" | jq \
-              --argjson pr_number "$pr_number" \
-              --argjson new_pr_data "$NEW_PR_DATA" \
-              '
-              if any(.[]; .pr_number == $pr_number) then
-                map(if .pr_number == $pr_number then $new_pr_data else . end)
-              else
-                . + [$new_pr_data]
-              end
-              ')
-          
-            echo "Updated/added metrics for PR #$pr_number"
+            # Write this single PR's data to a temporary file
+            echo "$NEW_PR_DATA" > "$TEMP_DIR/$pr_number.json"
+            echo "Generated temp file for PR #$pr_number"
           done
 
-          # Write updated data, sorted by PR number
-          echo "$JQ_DATA" | jq 'sort_by(.pr_number)' > "$PR_FILE"
-          echo "Backfill completed. Processed $(echo $PRS_TO_PROCESS | wc -w) PRs from the last $BACKFILL_DAYS days."
+          # Now, merge all the temporary files with the main pr_metrics.json file in one go
+          echo "Merging all processed PRs into $PR_FILE..."
+          jq -s '
+            # $ARGS.positional[0] is the original pr_metrics.json content
+            # .[0] is the array of new/updated PRs from the temp files
+            (.[0] + $ARGS.positional[0])
+            | group_by(.pr_number) 
+            | map(.[-1]) # For each group, take the last one (the newest one from temp files)
+            | sort_by(.pr_number)
+          ' "$TEMP_DIR"/*.json --slurpfile pr_metrics "$PR_FILE" > "new_$PR_FILE"
+
+          # Replace the old file with the new, merged file
+          mv "new_$PR_FILE" "$PR_FILE"
+          rm -rf "$TEMP_DIR" # Clean up temporary files
+          
+          echo "Backfill completed. Processed $(echo $PRS_TO_PROCESS | wc -w) PRs."
 
       - name: Update pr_metrics.json
         if: steps.prepare_data.outputs.UPDATE_TYPE != 'BACKFILL_EXISTING_PRS'
