@@ -37,20 +37,20 @@ allprojects {
             filters {
                 includes {
                     classes(
-                        "**/*UseCase.kt",
-                        "**/*ViewModel.kt",
-                        "**/*RepositoryImpl.kt",
+                        "*UseCase",
+                        "*ViewModel",
+                        "*RepositoryImpl",
                     )
                 }
 
                 excludes {
                     annotatedBy("com.london.domain.KoverIgnore")
                     annotatedBy("*Composable")
-                    projects.addAll(
-                        "com.london.buildsrc",
-                        "com.london.designsystem",
-                        "com.london.imageharamblur",
-                    )
+//                    projects.addAll(
+//                        "com.london.buildsrc",
+//                        "com.london.designsystem",
+//                        "com.london.imageharamblur",
+//                    )
 
                     classes(
                         "**.model.**",
