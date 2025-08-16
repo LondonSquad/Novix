@@ -36,17 +36,6 @@ jobs:
           distribution: ${{ env.JAVA_DISTRIBUTION }}
           java-version: ${{ env.JAVA_VERSION }}
 
-      - name: Restore Gradle Cache
-        uses: actions/cache@v4
-        with:
-          path: |
-            ~/.gradle/caches
-            ~/.gradle/wrapper
-          key: gradle-cache-${{ hashFiles('**/gradle-wrapper.properties', '**/*.gradle*', '**/settings.gradle*', '**/libs.versions.toml') }}
-          restore-keys: |
-            gradle-cache-${{ runner.os }}-
-            gradle-cache-
-
       - name: Restore Project Setup
         uses: actions/cache@v4
         with:
@@ -76,17 +65,6 @@ jobs:
           distribution: ${{ env.JAVA_DISTRIBUTION }}
           java-version: ${{ env.JAVA_VERSION }}
 
-      - name: Restore Gradle Cache
-        uses: actions/cache@v4
-        with:
-          path: |
-            ~/.gradle/caches
-            ~/.gradle/wrapper
-          key: gradle-cache-${{ hashFiles('**/gradle-wrapper.properties', '**/*.gradle*', '**/settings.gradle*', '**/libs.versions.toml') }}
-          restore-keys: |
-            gradle-cache-${{ runner.os }}-
-            gradle-cache-
-
       - name: Restore Project Setup
         uses: actions/cache@v4
         with:
@@ -94,7 +72,7 @@ jobs:
             local.properties
             app/google-services.json
             app/novix-release.jks
-          key: ${{ needs.setup.outputs.project-setup-key }}
+          key: project-setup-${{ github.sha }}
 
       - name: Grant execute permission for gradlew
         run: chmod +x ./gradlew
