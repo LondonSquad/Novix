@@ -39,13 +39,8 @@ class ContinueWatchingViewModel @Inject constructor(
     }
 
     override fun onMediaCategoryTabClick(selectedMediaCategory: MediaCategory) {
-        if (isNotCurrentTabSelected(selectedMediaCategory)) {
-            updateState {
-                copy(
-                    selectedMediaCategory = selectedMediaCategory
-                )
-            }
-        }
+        if (isNotCurrentTabSelected(selectedMediaCategory))
+            setSelectedCategory(selectedMediaCategory)
     }
 
     override fun onBackClick() = emitEffect(ContinueWatchingEffect.NavigateBack)
@@ -57,6 +52,9 @@ class ContinueWatchingViewModel @Inject constructor(
         emitEffect(ContinueWatchingEffect.NavigateToTvShowDetails(id))
 
     override fun onRetryClick() = getRecentWatchedMedia()
+
+    private fun setSelectedCategory(category: MediaCategory) =
+        updateState { copy(selectedMediaCategory = category) }
 
     private inline fun <reified T : Enum<T>> isNotCurrentGenreSelected(
         genre: T,
