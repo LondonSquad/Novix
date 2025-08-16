@@ -1,0 +1,59 @@
+name: Shared Setup Workflow
+
+on:
+  workflow_call:
+
+jobs:
+  setup:
+    runs-on: ubuntu-latest
+    outputs:
+      project-setup-key: project-setup-${{ github.sha }}
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: ☕ Setup JDK 17
+        uses: actions/setup-java@v4
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+
+      - name: Setup Android SDK
+        uses: android-actions/setup-android@v3
+
+      - name: Cache Gradle dependencies
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.gradle/caches
+            ~/.gradle/wrapper
+          key: gradle-cache-${{ hashFiles('**/gradle-wrapper.properties', '**/*.gradle*', '**/settings.gradle*', '**/libs.versions.toml') }}
+          restore-keys: |
+            gradle-cache-${{ runner.os }}-
+            gradle-cache-
+
+      - name: Create local.properties from secrets
+        run: |
+          echo "sdk.dir=$ANDROID_SDK_ROOT" > local.properties
+          echo "API_KEY=\"${{ secrets.TMDB_API_KEY }}\"" >> local.properties
+          echo "keyAlias=${{ secrets.SIGNING_KEY_ALIAS }}" >> local.properties
+          echo "keyPassword=${{ secrets.SIGNING_KEY_PASSWORD }}" >> local.properties
+          echo "storePassword=${{ secrets.SIGNING_STORE_PASSWORD }}" >> local.properties
+          echo "storeFile=novix-release.jks" >> local.properties
+
+      - name: Decode Firebase Config from secrets
+        run: echo "${{ secrets.GOOGLE_SERVICES_JSON }}" | base64 --decode > app/google-services.json
+
+      - name: Decode Keystore from secrets
+        run: echo "${{ secrets.SIGNING_KEYSTORE }}" | base64 --decode > app/novix-release.jks
+
+      - name: Cache project setup files
+        uses: actions/cache@v4
+        with:
+          path: |
+            local.properties
+            app/google-services.json
+            app/novix-release.jks
+          key: project-setup-${{ github.sha }}
