@@ -21606,7 +21606,7 @@
   {
     "pr_number": 641,
     "url": "https://github.com/LondonSquad/Novix/pull/641",
-    "title": "Refactor search ",
+    "title": "Refactor Search Feature",
     "opened_at": "2025-08-15T13:15:53Z",
     "head_ref": "refactor/search-feature",
     "base_ref": "develop",
@@ -21737,12 +21737,20 @@
           "url": "https://github.com/yusufnasserdev"
         },
         "submitted_at": "2025-08-16T07:47:21Z"
+      },
+      {
+        "reviewer": {
+          "id": 92235360,
+          "login": "abdo-essam",
+          "url": "https://github.com/abdo-essam"
+        },
+        "submitted_at": "2025-08-16T08:25:45Z"
       }
     ],
     "first_approved_at": "2025-08-16T07:47:21Z",
     "time_to_first_approval_minutes": 11.6,
-    "required_approvals_met_at": null,
-    "time_to_required_approvals_minutes": null,
+    "required_approvals_met_at": "2025-08-16T08:25:45Z",
+    "time_to_required_approvals_minutes": 50,
     "closed_at": "2025-08-16T08:25:47Z",
     "merged_at": "2025-08-16T08:25:47Z",
     "merged_by": {
@@ -21827,12 +21835,20 @@
           "url": "https://github.com/yusufnasserdev"
         },
         "submitted_at": "2025-08-16T08:52:13Z"
+      },
+      {
+        "reviewer": {
+          "id": 92235360,
+          "login": "abdo-essam",
+          "url": "https://github.com/abdo-essam"
+        },
+        "submitted_at": "2025-08-16T09:04:45Z"
       }
     ],
     "first_approved_at": "2025-08-16T08:52:13Z",
     "time_to_first_approval_minutes": 5.55,
-    "required_approvals_met_at": null,
-    "time_to_required_approvals_minutes": null,
+    "required_approvals_met_at": "2025-08-16T09:04:45Z",
+    "time_to_required_approvals_minutes": 18.083333333333332,
     "closed_at": "2025-08-16T09:04:47Z",
     "merged_at": "2025-08-16T09:04:47Z",
     "merged_by": {
@@ -21868,12 +21884,20 @@
           "url": "https://github.com/yusufnasserdev"
         },
         "submitted_at": "2025-08-16T09:51:59Z"
+      },
+      {
+        "reviewer": {
+          "id": 154278495,
+          "login": "ahmeddsamii",
+          "url": "https://github.com/ahmeddsamii"
+        },
+        "submitted_at": "2025-08-16T10:19:38Z"
       }
     ],
     "first_approved_at": "2025-08-16T09:51:59Z",
     "time_to_first_approval_minutes": 8.666666666666666,
-    "required_approvals_met_at": null,
-    "time_to_required_approvals_minutes": null,
+    "required_approvals_met_at": "2025-08-16T10:19:38Z",
+    "time_to_required_approvals_minutes": 36.31666666666667,
     "closed_at": "2025-08-16T10:19:40Z",
     "merged_at": "2025-08-16T10:19:40Z",
     "merged_by": {
@@ -21887,6 +21911,34 @@
       "additions": 22,
       "deletions": 12,
       "changed_files": 27
+    }
+  },
+  {
+    "pr_number": 648,
+    "url": "https://github.com/LondonSquad/Novix/pull/648",
+    "title": "Refactor/tv show details screen",
+    "opened_at": "2025-08-16T11:02:04Z",
+    "head_ref": "refactor/tv-show-details-screen",
+    "base_ref": "develop",
+    "creator": {
+      "login": "Aseel-AbuKmail",
+      "id": 189210092,
+      "url": "https://github.com/Aseel-AbuKmail"
+    },
+    "approvals": [],
+    "first_approved_at": null,
+    "time_to_first_approval_minutes": null,
+    "required_approvals_met_at": null,
+    "time_to_required_approvals_minutes": null,
+    "closed_at": null,
+    "merged_at": null,
+    "merged_by": null,
+    "week": "2025-W33",
+    "status": "pending",
+    "diff_stats": {
+      "additions": 145,
+      "deletions": 175,
+      "changed_files": 59
     }
   },
   {
