@@ -14,6 +14,7 @@ jobs:
   setup:
     if: github.event.pull_request.merged == true || github.event_name == 'workflow_dispatch'
     uses: ./.github/workflows/setup.yml
+    secrets: inherit
 
   build:
     needs: setup
@@ -47,6 +48,15 @@ jobs:
           restore-keys: |
             gradle-cache-${{ runner.os }}-
             gradle-cache-
+
+      - name: ♻️ Restore Project Setup
+        uses: actions/cache@v4
+        with:
+          path: |
+            local.properties
+            app/google-services.json
+            app/novix-release.jks
+          key: ${{ needs.setup.outputs.project-setup-key }}
 
       - name: Grant execute permission for gradlew
         run: chmod +x gradlew

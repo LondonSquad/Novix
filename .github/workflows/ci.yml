@@ -21,6 +21,7 @@ env:
 jobs:
   setup:
     uses: ./.github/workflows/setup.yml
+    secrets: inherit
 
   build:
     name: Build Application
@@ -43,7 +44,7 @@ jobs:
             local.properties
             app/google-services.json
             app/novix-release.jks
-          key: project-setup-${{ github.sha }}
+          key: ${{ needs.setup.outputs.project-setup-key }}
 
       - name: Grant execute permission for gradlew
         run: chmod +x ./gradlew
@@ -72,7 +73,7 @@ jobs:
             local.properties
             app/google-services.json
             app/novix-release.jks
-          key: project-setup-${{ github.sha }}
+          key: ${{ needs.setup.outputs.project-setup-key }}
 
       - name: Grant execute permission for gradlew
         run: chmod +x ./gradlew
