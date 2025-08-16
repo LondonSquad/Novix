@@ -35,21 +35,12 @@ class ContinueWatchingViewModel @Inject constructor(
     }
 
     override fun onMediaCategoryTabClick(selectedMediaCategory: MediaCategory) {
-        isNotSelectedMediaCategory(selectedMediaCategory)
         updateState {
             copy(
-                selectedMediaCategory = selectedMediaCategory,
-                isMovieSelected = isSelectedMediaCategory(MediaCategory.Movies),
-                isTvSelected = isSelectedMediaCategory(MediaCategory.TvShows)
+                selectedMediaCategory = selectedMediaCategory
             )
         }
     }
-
-    private fun <T : Any> isNotSelectedMediaCategory(mediaCategory: T) =
-        mediaCategory != state.value.selectedMediaCategory
-
-    fun isSelectedMediaCategory(mediaCategory: MediaCategory) =
-        mediaCategory == state.value.selectedMediaCategory
 
     override fun onBackClick() = emitEffect(ContinueWatchingEffect.NavigateBack)
 

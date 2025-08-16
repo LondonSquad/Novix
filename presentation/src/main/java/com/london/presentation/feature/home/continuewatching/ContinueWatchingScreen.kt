@@ -36,10 +36,15 @@ fun ContinueWatchingScreen(
     val state by viewModel.state.collectAsStateWithLifecycle()
     val effect by viewModel.effect.collectAsState(null)
 
-    effect?.Listen {
-        when (it) {
-            is ContinueWatchingEffect.NavigateToMovieDetails -> onNaviagteToMovieDetalis(it.id)
-            is ContinueWatchingEffect.NavigateToTvShowDetails -> onNaviagteToTvShowDetalis(it.id)
+    effect?.Listen { currentEffect ->
+        when (currentEffect) {
+            is ContinueWatchingEffect.NavigateToMovieDetails -> onNaviagteToMovieDetalis(
+                currentEffect.id
+            )
+
+            is ContinueWatchingEffect.NavigateToTvShowDetails -> onNaviagteToTvShowDetalis(
+                currentEffect.id
+            )
             is ContinueWatchingEffect.NavigateBack -> onNavigateBack()
         }
     }
@@ -70,34 +75,32 @@ fun Content(
             .padding(WindowInsets.statusBars.asPaddingValues())
             .padding(WindowInsets.navigationBars.asPaddingValues())
     ) {
-            MediaLazyGridWithTabs(
-                items = getCombinedItems(state),
-                tabSelected = getSelectedTabIndex(state),
-                onTabSelected = contract::onMediaCategoryTabClick,
-                onMovieGenreClick = contract::onMovieGenreClick,
-                onTvShowGenreClick = contract::onTvShowGenreClick,
-                config = MediaGridConfig(
-                    showSaveIcon = true,
-                    isDarkMode = NovixTheme.isThemeDark,
-                    isMovieSelected = state.isMovieSelected,
-                    isTvShowSelected = state.isTvSelected,
-                    selectedMovieGenre = state.selectedMovieGenre,
-                    selectedTvShowGenre = state.selectedTvShowGenre,
-                    onNavigateToMovie = contract::onNavigateToMovie,
-                    onNavigateToTvShow = contract::onNavigateToTvShow,
-                    onSaveClick = { /* TODO: Implement save functionality */ },
-                    isItemSaved = { false },
-                ),
-                topBar = {
-                    DefaultAppTopBar(
-                        title = screenTitle,
-                        onBack = contract::onBackClick
-                    )
-                },
-                isLoading = state.isLoading
-            )
-        }
+        MediaLazyGridWithTabs(
+            items = getCombinedItems(state),
+            tabSelected = getSelectedTabIndex(state),
+            onTabSelected = contract::onMediaCategoryTabClick,
+            onMovieGenreClick = contract::onMovieGenreClick,
+            onTvShowGenreClick = contract::onTvShowGenreClick,
+            config = MediaGridConfig(
+                showSaveIcon = true,
+                isDarkMode = NovixTheme.isThemeDark,
+                selectedMovieGenre = state.selectedMovieGenre,
+                selectedTvShowGenre = state.selectedTvShowGenre,
+                onNavigateToMovie = contract::onNavigateToMovie,
+                onNavigateToTvShow = contract::onNavigateToTvShow,
+                onSaveClick = { /* TODO: Implement save functionality */ },
+                isItemSaved = { false },
+            ),
+            topBar = {
+                DefaultAppTopBar(
+                    title = screenTitle,
+                    onBack = contract::onBackClick
+                )
+            },
+            isLoading = state.isLoading
+        )
     }
+}
 
 @Composable
 private fun getCombinedItems(state: ContinueWatchingUiState): List<Any> =
@@ -105,4 +108,5 @@ private fun getCombinedItems(state: ContinueWatchingUiState): List<Any> =
             state.tvSeries.collectAsStateWithLifecycle(emptyList()).value
 
 private fun getSelectedTabIndex(state: ContinueWatchingUiState): Int =
-    if (state.isMovieSelected) MediaCategory.Movies.ordinal else MediaCategory.TvShows.ordinal
+    if (state.selectedMediaCategory == MediaCategory.Movies)
+        MediaCategory.Movies.ordinal else MediaCategory.TvShows.ordinal
