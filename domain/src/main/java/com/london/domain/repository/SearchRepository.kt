@@ -4,7 +4,7 @@ import com.london.domain.entity.Actor
 import com.london.domain.entity.Movie
 import com.london.domain.entity.PagedFetchResponse
 import com.london.domain.entity.TvShow
-
+import com.london.domain.entity.genre.Genre
 
 interface SearchRepository {
 
@@ -23,6 +23,6 @@ interface SearchRepository {
         pageNumber: Int
     ): PagedFetchResponse<Actor>
 
-    suspend fun incrementGenreInterest(genreId: Int, mediaType: String)
+    suspend fun incrementGenreInterest(genre: Genre, mediaType: String)
     suspend fun getGenreInterestCounts(mediaType: String): List<Pair<Int, Int>>
 }

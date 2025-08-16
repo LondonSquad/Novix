@@ -1,7 +1,7 @@
 package com.london.domain.entity
 
 data class MovieList(
-    val id: UInt,
+    val id: Int,
     val name: String,
-    val moviesCount: UInt = 0u
+    val moviesCount: Int = 0
 )

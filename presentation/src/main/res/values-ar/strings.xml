@@ -60,7 +60,7 @@
     <string name="cast">طاقم العمل</string>
     <string name="biography">السيرة</string>
     <string name="gallery">المعرض</string>
-    <string name="imagr_dot">نقطه</string>
+    <string name="image_dot">نقطة</string>
     <string name="actor_photos">صور الممثلين</string>
     <string name="author_profile">صورة الممثل</string>
     <string name="tv_show_image">صور مسلسلات</string>
@@ -98,8 +98,8 @@
     <string name="trending_tv_shows">المسلسلات الرائجة</string>
     <string name="trending_people">الأشخاص الرائجون</string>
     <string name="no_trending_movies_in_genre">لا يوجد أفلام في هذا التصنيف حالياً</string>
+    <string name="no_trending_shows_in_genre">لا يوجد مسلسلات في هذا التصنيف حالياً</string>
     <string name="no_rating_items_in_list">لا توجد عناصر في هذا التصنيف حالياً</string>
-    <string name="no_trending_tvshows_in_genre">لا يوجد مسلسلات في هذا التصنيف حالياً</string>
     <string name="no_trending_actors_in_genre">لا يوجد أشخاص في هذا التصنيف حالياً</string>
     <string name="no_actor_details">لا توجد تفاصيل متاحة للممثل</string>
     <string name="reviews">المراجعات</string>
@@ -108,10 +108,14 @@
     <string name="no_reviews">لا يوجد مراجعات!</string>
     <string name="login_failed">فشل تسجيل الدخول. يرجى التحقق من بيانات التسجيل الخاصة بك.</string>
     <string name="guest_login_failed">فشل تسجيل الدخول كضيف.</string>
-    <string name="edit_list">تعديل المجموعة</string>
+    <string name="edit_list">تعديل القائمة</string>
     <string name="save">حفظ</string>
-    <string name="list_title">عنوان المجموعة</string>
+    <string name="list_title">عنوان القائمة</string>
     <string name="no_items_found">لا يوجد محتوى</string>
+    <string name="save_to_list">أضف إلى قائمة</string>
+    <string name="cancel_addition_to_list">ألغي الإضافة إلي قائمة</string>
+    <string name="create_new_list">انشئ قائمة جديدة</string>
+    <string name="n_items">%1$d عناصر</string>
     <string name="saved_list_title">القوائم المحفوظة</string>
     <string name="no_saved_list">لا توجد أي قوائم حتي الان، اضغط علي زر + لاضافة قائمة جديدة</string>
     <string name="login_to_create_list">سجل دخول اولاً حتي تتمكن من استعراض او اضافة قوائم جديدة</string>
@@ -131,7 +135,7 @@
     <string name="language">اللغة</string>
     <string name="english">الانجليزية</string>
     <string name="arabic">العربية</string>
-    <string name="add_new_list">اضافة مجموعة جديدة</string>
+    <string name="add_new_list">اضافة قائمة جديدة</string>
     <string name="add">اضافة</string>
     <string name="app_name">نوفيكس</string>
     <string name="app_name_description">مشتق من نوفا، مُصمم من أجل الأفلام</string>
@@ -148,12 +152,18 @@
     <string name="can_not_delete_list">حدث خطا ما لا يمكن اضافه القائمه</string>
     <string name="delete_list_successfully">تم حذف القائمة بنجاح</string>
     <string name="there_is_no_items">لا توجد عناصر هنا!</string>
-    <string name="delete_list">حذف المجموعة</string>
-    <string name="cancel_list_deletion">حذف المجموعة المحفوظة سيحذف جميع عناصرها. هل أنت متأكد أنك تريد المتابعة؟</string>
+    <string name="delete_list">حذف القائمة</string>
+    <string name="cancel_list_deletion">حذف القائمة المحفوظة سيحذف جميع عناصرها. هل أنت متأكد أنك تريد المتابعة؟</string>
     <string name="btn_delete">حذف</string>
-    <string name="list_deletion_success">تم حذف المجموعة</string>
-    <string name="list_deletion_failed">فشل حذف المجموعة</string>
+    <string name="list_deletion_success">تم حذف القائمة</string>
+    <string name="list_deletion_failed">فشل حذف القائمة</string>
     <string name="close">غلق</string>
     <string name="my_list_screen">مجموعاتي</string>
+    <string name="list_added_success">تم اضافه القائمه بنجاح</string>
+    <string name="list_added_fail">حدث خطا ما لا يمكن اضافه القائمه</string>
+    <string name="login_to_add_list">يرجى تسجيل الدخول للتمكن من الإضافة إالي قائمة</string>
+    <string name="no_lists_available">لا يوجد قوائم متاحة! قم بإنشاء واحدة الآن.</string>
+    <string name="item_added_success">تمت الإضافة إلى القائمة بنجاح</string>
+    <string name="item_added_fail">حدث خطأ ما، فشلت إضافة العنصر</string>
     <string name="categories">التصنيفات</string>
 </resources>

@@ -1,10 +1,10 @@
 package com.london.presentation.feature.details.tvshow.info
 
 import com.london.domain.entity.tvshowdetails.TvShowCastEntity
-import com.london.domain.entity.tvshowdetails.TvShowGenreEntity
 import com.london.domain.entity.tvshowdetails.episode.TvShowEpisodeBySeasonEntity
 import com.london.domain.entity.tvshowdetails.episode.TvShowEpisodesEntity
 import com.london.presentation.shared.base.ErrorState
+import com.london.presentation.shared.genre.TvShowGenreUi
 
 data class TvShowDetailsUiState(
     val id: Int = 0,
@@ -26,7 +26,7 @@ data class TvShowDetailsUiState(
     val isRateBottomSheetVisible: Boolean = false,
     val tvImages: List<String>? = listOf(),
     val isGuestUserBottomSheetVisible: Boolean = false,
-    val tvShowGenres: List<TvShowGenreEntity> = listOf(),
+    val tvShowGenres: List<TvShowGenreUi> = listOf(),
     val tvShowEpisodeCountBySeason: TvShowEpisodesEntity? = null,
     val tvShowEpisodes: List<TvShowEpisodeBySeasonEntity> = listOf(),
 ) {

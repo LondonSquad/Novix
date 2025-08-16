@@ -51,7 +51,7 @@ fun TrendingTvShowsScreen(
         isError = tvShowsLazyItems.loadState.refresh is LoadState.Error,
         onBack = viewModel::onBack,
         onRetry = viewModel::onRetry,
-        emptyLayoutMessage = R.string.no_trending_tvshows_in_genre,
+        emptyLayoutMessage = R.string.no_trending_shows_in_genre,
         emptyLayoutImage = R.drawable.img_no_result,
         pagingFlow = tvShowsLazyItems
     ) {
@@ -86,11 +86,10 @@ private fun Content(
         )
         GenresSection(
             genres = state.tvShowsGenres,
-            selectedGenreId = state.selectedGenreId,
+            selectedGenre = state.selectedGenre,
             screenWidth = screenWidth,
             onGenreClick = contract::onGenreSelected,
             modifier = Modifier.padding(bottom = 12.dp),
-            getGenreId = { it.id },
             getGenreName = { stringResource(it.stringResId) }
         )
         MediaLazyPagingGrid(

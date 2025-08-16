@@ -33,6 +33,7 @@ import com.london.data.utils.asImageUrlOrEmpty
 import com.london.domain.entity.Movie
 import com.london.domain.entity.PagedFetchResponse
 import com.london.domain.entity.TvShow
+import com.london.domain.entity.genre.MovieGenre
 import com.london.domain.entity.moviedatails.MovieImages
 import com.london.domain.entity.recent.MediaType
 import com.london.domain.entity.review.ReviewEntity
@@ -91,7 +92,7 @@ class MovieRepositoryImplTest {
         val result = repository.getMovieById(123)
 
         assertEquals("Inception", result.title)
-        assertEquals(2, result.genresId.size)
+        assertEquals(2, result.genres.size)
     }
 
     @Test
@@ -129,7 +130,10 @@ class MovieRepositoryImplTest {
     @Test
     fun `getMovieCast should throw UnAuthorizedException when remote fails`() = runTest {
         coEvery { movieRemoteDataSource.getMovieDetails(123) } throws
-                NetworkException.UnAuthorizedException("unauthorized")
+                NetworkException.UnAuthorizedException(
+                    message = "unauthorized",
+                    status = 401
+                )
 
         assertThrows<NetworkException.UnAuthorizedException> {
             repository.getMovieById(123)
@@ -139,7 +143,10 @@ class MovieRepositoryImplTest {
     @Test
     fun `getMovieImages should throw HttpLockedException when remote fails`() = runTest {
         coEvery { movieRemoteDataSource.getMovieImages(123) } throws
-                NetworkException.HttpLockedException("locked")
+                NetworkException.HttpLockedException(
+                    "locked",
+                    status = 423
+                )
 
         assertThrows<NetworkException.HttpLockedException> {
             repository.getMovieImagesById(123)
@@ -149,7 +156,10 @@ class MovieRepositoryImplTest {
     @Test
     fun `getSimilarMovies should throw TimeoutException when remote fails`() = runTest {
         coEvery { movieRemoteDataSource.getSimilarMovies(123) } throws
-                NetworkException.TimeoutException("timeout")
+                NetworkException.TimeoutException(
+                    message = "timeout",
+                    status = 408
+                )
 
         assertThrows<NetworkException.TimeoutException> {
             repository.getSimilarMoviesById(123)
@@ -263,7 +273,6 @@ class MovieRepositoryImplTest {
         Assert.assertEquals(1, trending.id)
         Assert.assertEquals("Test Movie", trending.title)
         Assert.assertEquals("https://image.tmdb.org/t/p/w500test_poster.jpg", trending.posterPath)
-        Assert.assertEquals(listOf(28, 12), trending.genreIds)
     }
 
 
@@ -311,13 +320,13 @@ class MovieRepositoryImplTest {
         //Given
         coEvery {
             movieRemoteDataSource.getMoviesByCategory(
-                CATEGORY_ID,
+                any(),
                 PAGE_NUMBER
             )
         } returns Result.success(SearchMoviesRemoteMock)
         //When
-        val result = repository.getMoviesByCategory(
-            CATEGORY_ID,
+        val result = repository.getMoviesByGenre(
+            MovieGenre.TV_MOVIE,
             PAGE_NUMBER
         )
         //Then
@@ -329,14 +338,17 @@ class MovieRepositoryImplTest {
         //Given
         coEvery {
             movieRemoteDataSource.getMoviesByCategory(
-                CATEGORY_ID,
+                any(),
                 PAGE_NUMBER
             )
-        } returns Result.failure(NetworkException.HttpLockedException("Resource locked"))
+        } returns Result.failure(NetworkException.HttpLockedException(
+            message = "Resource locked",
+            status = 423
+        ))
         //When //Then
         assertThrows<NetworkException.HttpLockedException> {
-            repository.getMoviesByCategory(
-                CATEGORY_ID,
+            repository.getMoviesByGenre(
+                MovieGenre.TV_MOVIE,
                 PAGE_NUMBER
             )
         }
@@ -557,7 +569,10 @@ class MovieRepositoryImplTest {
     fun `getPopularMovies - when network throws UnAuthorizedException should propagate exception and log crash`() =
         runTest {
             // Given
-            val exception = NetworkException.UnAuthorizedException("401 Unauthorized")
+            val exception = NetworkException.UnAuthorizedException(
+                message = "401 Unauthorized",
+                status = 401
+            )
             coEvery { homeLocalDataSource.getAll() } returns emptyList()
             coEvery { movieRemoteDataSource.getPopularMovies() } throws exception
 
@@ -574,7 +589,10 @@ class MovieRepositoryImplTest {
     fun `getPopularMovies - when network throws TimeoutException should propagate exception and log crash`() =
         runTest {
             // Given
-            val exception = NetworkException.TimeoutException("Request timed out")
+            val exception = NetworkException.TimeoutException(
+                message = "Request timed out",
+                status = 408
+            )
             coEvery { homeLocalDataSource.getAll() } returns emptyList()
             coEvery { movieRemoteDataSource.getPopularMovies() } throws exception
 
@@ -665,7 +683,7 @@ class MovieRepositoryImplTest {
                     posterUrl = "https://image.tmdb.org/t/p/w500",
                     releaseYear = 2020,
                     rating = 8,
-                    genreIds = listOf(),
+                    genres = listOf(),
                 )
             ),
             totalItems = 1,

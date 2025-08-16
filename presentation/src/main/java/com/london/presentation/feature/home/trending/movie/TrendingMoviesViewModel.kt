@@ -1,15 +1,17 @@
 package com.london.presentation.feature.home.trending.movie
 
-import com.london.domain.usecase.GetTrendingMoviesUseCase
+import com.london.domain.entity.genre.MovieGenre
+import com.london.domain.usecase.details.movie.GetMovieUseCase
 import com.london.presentation.shared.base.BaseViewModel
 import com.london.presentation.shared.base.createPagingSourceFlow
-import com.london.presentation.utils.MovieGenre
+import com.london.presentation.shared.genre.MovieGenreUi
+import com.london.presentation.shared.genre.toUi
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 
 @HiltViewModel
 class TrendingMoviesViewModel @Inject constructor(
-    private val getTrendingMovies: GetTrendingMoviesUseCase,
+    private val getMovieUseCase: GetMovieUseCase,
 ) : BaseViewModel<TrendingMoviesUiState, TrendingMoviesEffect>(TrendingMoviesUiState()),
     TrendingMoviesContract {
 
@@ -17,10 +19,10 @@ class TrendingMoviesViewModel @Inject constructor(
         initializeMovies()
     }
 
-    override fun onGenreSelected(genre: MovieGenre) {
-        if (genre.id == state.value.selectedGenreId) return
+    override fun onGenreSelected(genre: MovieGenreUi) {
+        if (genre == state.value.selectedGenre) return
         updateState {
-            copy(selectedGenreId = genre.id)
+            copy(selectedGenre = genre)
         }
         initializeMovies()
     }
@@ -39,10 +41,13 @@ class TrendingMoviesViewModel @Inject constructor(
         tryToExecute(
             block = {
                 val moviesFlow = createPagingSourceFlow(query = "") { _, pageNumber ->
-                    val movies = getTrendingMovies.invoke(page = pageNumber)
+                    val movies = getMovieUseCase.getTrendingMovies(page = pageNumber)
                     val filteredItems =
-                        if (state.value.selectedGenreId != null && state.value.selectedGenreId != -1) {
-                            movies.items.filter { it.genreIds.contains(state.value.selectedGenreId) }
+                        if (state.value.selectedGenre != null && state.value.selectedGenre != MovieGenreUi.All) {
+                            movies.items.filter { movie ->
+                                movie.genres.map { (it as MovieGenre).toUi() }
+                                    .contains(state.value.selectedGenre)
+                            }
                         } else {
                             movies.items
                         }

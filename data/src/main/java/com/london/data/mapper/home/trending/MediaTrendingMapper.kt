@@ -4,10 +4,11 @@ import com.london.data.remote.model.home.trending.TrendingResponse
 import com.london.data.utils.asImageUrlOrEmpty
 import com.london.data.utils.orZero
 import com.london.domain.entity.Trending
+import com.london.domain.entity.recent.MediaType
 
-fun TrendingResponse.toEntityMedia(): Trending = Trending(
+fun TrendingResponse.toEntityMedia(mediaType: MediaType): Trending = Trending(
     id = id.orZero(),
     title = (title ?: name).orEmpty(),
     posterPath = (posterPath ?: profilePath).asImageUrlOrEmpty(),
-    genreIds = genreIds.orEmpty()
+    genres = genreIds.toGenre(mediaType),
 )

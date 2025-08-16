@@ -6,9 +6,12 @@ import app.cash.turbine.test
 import com.google.common.truth.Truth.assertThat
 import com.london.domain.entity.Movie
 import com.london.domain.entity.PagedFetchResponse
-import com.london.domain.usecase.GetMoviesByCategoryUseCase
+import com.london.domain.entity.genre.MovieGenre
+import com.london.domain.usecase.details.movie.GetMovieUseCase
 import com.london.presentation.navigation.Screen
 import com.london.presentation.navigation.getArgs
+import com.london.presentation.shared.genre.MovieGenreUi
+import com.london.presentation.shared.genre.toDomain
 import io.mockk.coEvery
 import io.mockk.every
 import io.mockk.mockk
@@ -26,7 +29,7 @@ import org.junit.Test
 
 @OptIn(ExperimentalCoroutinesApi::class)
 class MovieCategoryViewModelTest {
-    private lateinit var getMoviesByCategoryUseCase: GetMoviesByCategoryUseCase
+    private lateinit var getMovieUseCase: GetMovieUseCase
     private val savedStateHandle = mockk<SavedStateHandle>(relaxed = true)
     private var viewModel: MovieCategoryViewModel? = null
     private val mainDispatcher = StandardTestDispatcher()
@@ -34,12 +37,12 @@ class MovieCategoryViewModelTest {
     @Before
     fun setUp() {
         Dispatchers.setMain(mainDispatcher)
-        getMoviesByCategoryUseCase = mockk(relaxed = true)
+        getMovieUseCase = mockk(relaxed = true)
         every { savedStateHandle.getArgs<Screen.MoviesByCategory>() } returns Screen.MoviesByCategory(
-            categoryId = CATEGORY_ID,
+            category = CATEGORY,
         )
-        viewModel = MovieCategoryViewModel(getMoviesByCategoryUseCase, savedStateHandle)
-        coEvery { getMoviesByCategoryUseCase.invoke(CATEGORY_ID, PAGE) } returns moviesPagingData
+        viewModel = MovieCategoryViewModel(getMovieUseCase, savedStateHandle)
+        coEvery { getMovieUseCase.getMoviesByGenre(CATEGORY.toDomain(), PAGE) } returns moviesPagingData
     }
 
     @After
@@ -56,7 +59,7 @@ class MovieCategoryViewModelTest {
         //Then
         viewModel?.state?.test {
             val state = expectMostRecentItem()
-            assertThat(state.categoryId).isEqualTo(CATEGORY_ID)
+            assertThat(state.genre).isEqualTo(CATEGORY)
             ensureAllEventsConsumed()
         }
     }
@@ -80,7 +83,7 @@ class MovieCategoryViewModelTest {
         // Then
         viewModel?.state?.test {
             val state = expectMostRecentItem()
-            assertThat(state.movies).isNotNull()
+            assertThat(state.moviesFlow).isNotNull()
             ensureAllEventsConsumed()
         }
     }
@@ -88,7 +91,7 @@ class MovieCategoryViewModelTest {
     @Test
     fun `when initialization should update state with error when use case throws`() = runTest {
         // Given
-        coEvery { getMoviesByCategoryUseCase.invoke(CATEGORY_ID, PAGE) } throws Exception()
+        coEvery { getMovieUseCase.getMoviesByGenre(CATEGORY.toDomain(), PAGE) } throws Exception()
         // When
         advanceUntilIdle()
         // Then
@@ -104,7 +107,7 @@ class MovieCategoryViewModelTest {
         // When & Then
         viewModel?.effect?.test {
             viewModel?.onMovieClick(movieId = 1)
-            assertThat(awaitItem()).isInstanceOf(MovieCategoryEffect.NavigateToMovieDetails::class.java)
+            assertThat(awaitItem()).isInstanceOf(MovieCategoryEffect.MovieDetailsNavigation::class.java)
             cancelAndIgnoreRemainingEvents()
         }
     }
@@ -114,13 +117,13 @@ class MovieCategoryViewModelTest {
         // When & Then
         viewModel?.effect?.test {
             viewModel?.onBack()
-            assertThat(awaitItem()).isInstanceOf(MovieCategoryEffect.NavigateBack::class.java)
+            assertThat(awaitItem()).isInstanceOf(MovieCategoryEffect.BackNavigation::class.java)
             cancelAndIgnoreRemainingEvents()
         }
     }
 
     private companion object {
-        const val CATEGORY_ID = 0
+        val CATEGORY = MovieGenreUi.All
         const val PAGE = 1
         val moviesPagingData = PagedFetchResponse(
             items = listOf<Movie>(),

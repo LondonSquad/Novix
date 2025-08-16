@@ -23,7 +23,7 @@ class GetMovieListNameUseCaseTest {
     @Test
     fun `invoke should return movie list name when repository returns name`() = runTest {
         // Given
-        val listId = 1u
+        val listId = 1
         val expectedName = "Movie List Name"
         coEvery { customMovieListRepository.getMovieListName(listId) } returns expectedName
         // When
@@ -35,7 +35,7 @@ class GetMovieListNameUseCaseTest {
     @Test
     fun `invoke should throw exception when repository throws exception`() = runTest {
         // Given
-        val listId = 1u
+        val listId = 1
         coEvery { customMovieListRepository.getMovieListName(listId) } throws Exception()
         // When // Then
         assertThrows<Exception> {

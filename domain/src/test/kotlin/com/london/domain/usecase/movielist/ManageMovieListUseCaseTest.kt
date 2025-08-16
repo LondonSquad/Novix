@@ -84,7 +84,7 @@ class ManageMovieListUseCaseTest {
         }
 
     private companion object {
-        const val LIST_ID = 10u
+        const val LIST_ID = 10
         const val LIST_NAME = "Movie List"
     }
 }

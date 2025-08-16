@@ -8,5 +8,5 @@ class ManageMovieListUseCase @Inject constructor(
 ) {
 
     suspend fun createMovieList(name: String): Boolean = customMovieListRepository.createMovieList(name)
-    suspend fun deleteMovieList(id: UInt): Boolean = customMovieListRepository.deleteMovieList(id)
+    suspend fun deleteMovieList(id: Int): Boolean = customMovieListRepository.deleteMovieList(id)
 }

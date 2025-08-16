@@ -26,6 +26,42 @@ import com.london.designsystem.component.TopBar
 import com.london.designsystem.theme.NovixTheme
 import com.london.presentation.utils.gridColumns
 
+@Deprecated(
+    message = "Use MediaLazyVerticalGrid or MediaLazyGridWithFilter instead. This composable will be removed in a future version. Note: Both have two overloads - one for List<T> and one for LazyPagingItems<T>.",
+    replaceWith = ReplaceWith(
+        expression = "MediaLazyGridWithFilter(" +
+                "items = items, " +
+                "modifier = modifier, " +
+                "imageUrl = getImageUrl, " +
+                "name = { it.getName() }, " +
+                "onSaveClick = onSavedClick, " +
+                "isItemSaved = isItemSaved, " +
+                "onDeleteClick = onDeleteClick, " +
+                "onMovieGenreClick = {}, " +
+                "onTvShowGenreClick = {}, " +
+                "config = MediaGridConfig(" +
+                "    showSaveIcon = hasSaveIcon, " +
+                "    isDarkMode = isDarkMode, " +
+                "    myRatingList = myRatingList, " +
+                "    rate = rate, " +
+                "    isMovieSelected = true, " +
+                "    isTvShowSelected = false, " +
+                "    selectedMovieGenre = MovieGenre.All, " +
+                "    selectedTvShowGenre = TvShowGenre.All, " +
+                "    onNavigateToMovie = onItemClick, " +
+                "), " +
+                "topBar = {" +
+                "    DefaultAppTopBar(" +
+                "        title = title," +
+                "        onBack = onBack" +
+                "    )" +
+                "}" +
+                ")",
+        imports = ["com.london.presentation.shared.container.MediaLazyGridWithFilter", "com.london.presentation.shared.container.MediaGridConfig", "com.london.presentation.utils.MovieGenre", "com.london.presentation.utils.TvShowGenre"]
+    ),
+    level = DeprecationLevel.WARNING
+)
+
 @Composable
 fun <T> MediaLazyGrid(
     title: String,
@@ -96,8 +132,7 @@ fun <T> MediaLazyGrid(
                             myRatingList = myRatingList,
                             rate = rate,
                             onDeleteClick = onDeleteClick,
-                            modifier = Modifier.clickable { onItemClick(item) },
-                            isDarkMode = NovixTheme.isThemeDark
+                            modifier = Modifier.clickable { onItemClick(item) }
                         )
                     }
                 }

@@ -2,31 +2,30 @@ package com.london.presentation.feature.details.tvshow.info
 
 import androidx.lifecycle.SavedStateHandle
 import com.london.domain.entity.TvShow
+import com.london.domain.entity.genre.TvShowGenre
 import com.london.domain.entity.recent.MediaType
 import com.london.domain.entity.recent.RecentViewed
-import com.london.domain.usecase.GetCastById
-import com.london.domain.usecase.GetEpisodesByTvShowSeason
-import com.london.domain.usecase.GetTvShowImagesByIdUseCase
 import com.london.domain.usecase.authentication.AuthenticationUseCase
-import com.london.domain.usecase.details.tvshow.ManageTvShowDetailsUseCase
+import com.london.domain.usecase.details.tvshow.GetTvEpisodesUseCase
+import com.london.domain.usecase.details.tvshow.GetTvShowUseCase
 import com.london.domain.usecase.rating.ManageRatingUseCase
 import com.london.domain.usecase.recent.viewed.ManageRecentViewedUseCase
 import com.london.domain.usecase.recent.watched.tvshow.ManageRecentTvShowWatchedUseCase
 import com.london.presentation.navigation.Screen
 import com.london.presentation.navigation.getArgs
 import com.london.presentation.shared.base.BaseViewModel
+import com.london.presentation.shared.genre.TvShowGenreUi
+import com.london.presentation.shared.genre.toUi
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 
 @HiltViewModel
 class TvShowDetailsViewModel @Inject constructor(
-    private val getCastById: GetCastById,
     private val ratingUseCase: ManageRatingUseCase,
-    private val getTvShowImages: GetTvShowImagesByIdUseCase,
     private val authenticationUseCase: AuthenticationUseCase,
     private val manageRecentViewedUseCase: ManageRecentViewedUseCase,
-    private val getEpisodesByTvShowSeason: GetEpisodesByTvShowSeason,
-    private val manageTvShowDetailsUseCase: ManageTvShowDetailsUseCase,
+    private val getTvEpisodesUseCase: GetTvEpisodesUseCase,
+    private val getTvShowUseCase: GetTvShowUseCase,
     private val manageRecentTvShowWatchedUseCase: ManageRecentTvShowWatchedUseCase,
     savedStateHandle: SavedStateHandle,
 ) : BaseViewModel<TvShowDetailsUiState, TvShowDetailsEffect>(TvShowDetailsUiState()),
@@ -45,8 +44,9 @@ class TvShowDetailsViewModel @Inject constructor(
     fun initializeEpisodesBySeasons(seasonNumber: Int = 1) {
         tryToExecute(
             block = {
-                val episodesBySeason = getEpisodesByTvShowSeason(tvShowId, seasonNumber)
-                val videoProvider = manageTvShowDetailsUseCase.getTvShowVideoProvider(tvShowId)
+                val episodesBySeason =
+                    getTvEpisodesUseCase.getTvShowEpisodesBySeason(tvShowId, seasonNumber)
+                val videoProvider = getTvShowUseCase.getTvShowVideo(tvShowId)
                 Triple(episodesBySeason.episodes, episodesBySeason, videoProvider)
             },
             onSuccess = { (episodes, episodeCount, videoProviders) ->
@@ -82,7 +82,7 @@ class TvShowDetailsViewModel @Inject constructor(
         )
     }
 
-    override fun onReviewsClicked(tvShowId: Int, mediaType: Int) {
+    override fun onReviewsClicked(tvShowId: Int, mediaType: MediaType) {
         emitEffect(TvShowDetailsEffect.NavigateToReviews(tvShowId, mediaType))
     }
 
@@ -90,8 +90,8 @@ class TvShowDetailsViewModel @Inject constructor(
         emitEffect(TvShowDetailsEffect.NavigateToCast(tvShowId))
     }
 
-    override fun OnGenreClicked(genreId: Int) {
-        emitEffect(TvShowDetailsEffect.NavigateToTvShowsByCategoryId(genreId))
+    override fun onGenreClicked(genre: TvShowGenreUi) {
+        emitEffect(TvShowDetailsEffect.NavigateToTvShowsByCategoryId(genre))
     }
 
     override fun onRateBottomSheetClick() {
@@ -152,7 +152,7 @@ class TvShowDetailsViewModel @Inject constructor(
 
         tryToExecute(
             block = {
-                getTvShowImages.invoke(tvShowId)
+                getTvShowUseCase.getImagesTvShowById(tvShowId)
             },
             onStart = { updateState { copy(isLoading = true) } },
             onSuccess = { images ->
@@ -170,7 +170,7 @@ class TvShowDetailsViewModel @Inject constructor(
     private fun initializeGetCastData() {
         tryToExecute(
             block = {
-                getCastById(tvShowId)
+                getTvShowUseCase.getTvShowCastById(tvShowId)
             },
             onStart = { updateState { copy(isLoading = true) } },
             onSuccess = { cast ->
@@ -196,12 +196,15 @@ class TvShowDetailsViewModel @Inject constructor(
     private fun initializeGetTvShowDetailsData() {
         tryToExecute(
             block = {
-                val tvShowDetails = manageTvShowDetailsUseCase.getTvShowDetails(tvShowId)
+                val tvShowDetails = getTvShowUseCase.getTvShowDetails(tvShowId)
 
                 val firstSeason = tvShowDetails.tvShowSeasons.firstOrNull()
                 val seasonNumber = firstSeason ?: 1
 
-                val episodes = getEpisodesByTvShowSeason(tvShowId, seasonNumber).episodes
+                val episodes = getTvEpisodesUseCase.getTvShowEpisodesBySeason(
+                    tvShowId,
+                    seasonNumber
+                ).episodes
                 val rating = if (authenticationUseCase.isLoggedIn()) {
                     ratingUseCase.getRateAccountTvShowState(
                         tvShowId = tvShowId,
@@ -215,7 +218,7 @@ class TvShowDetailsViewModel @Inject constructor(
                 updateState {
                     copy(
                         firstAirDate = tvShowDetails.firstAirDate,
-                        tvShowGenres = tvShowDetails.tvShowGenres,
+                        tvShowGenres = tvShowDetails.tvShowGenres.map { it.toUi() },
                         id = tvShowDetails.id,
                         name = tvShowDetails.name,
                         numberOfSeasons = tvShowDetails.numberOfSeasons,
@@ -240,7 +243,7 @@ class TvShowDetailsViewModel @Inject constructor(
                         posterPicture = tvShowDetails.posterUrl.toString(),
                         releaseYear = 2025,
                         rating = 1,
-                        genres = tvShowDetails.tvShowGenres.map { it.id },
+                        genres = tvShowDetails.tvShowGenres.map { it },
                     )
                 )
             },

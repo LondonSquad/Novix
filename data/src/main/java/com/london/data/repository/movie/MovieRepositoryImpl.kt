@@ -7,6 +7,7 @@ import com.london.data.local.source.home.HomeLocalDataSource
 import com.london.data.local.source.home.upcoming.UpComingLocalDataSource
 import com.london.data.mapper.details.actor.toEntity
 import com.london.data.mapper.details.movie.toEntity
+import com.london.data.mapper.genre.getId
 import com.london.data.mapper.home.popular.toMovieEntity
 import com.london.data.mapper.home.popular.toPopularMovieSectionLocal
 import com.london.data.mapper.home.popular.toPopularMovies
@@ -26,7 +27,8 @@ import com.london.domain.entity.PagedFetchResponse
 import com.london.domain.entity.RatedMedia
 import com.london.domain.entity.Trending
 import com.london.domain.entity.UpComingMovie
-import com.london.domain.entity.actordetails.cast.CastDetails
+import com.london.domain.entity.actordetails.cast.ActorMediaDetails
+import com.london.domain.entity.genre.MovieGenre
 import com.london.domain.entity.moviedatails.MediaStates
 import com.london.domain.entity.moviedatails.MovieDetails
 import com.london.domain.entity.moviedatails.MovieImages
@@ -52,7 +54,7 @@ class MovieRepositoryImpl @Inject constructor(
     override suspend fun getMovieImagesById(id: Int): MovieImages =
         movieRemoteDataSource.getMovieImages(id).getOrThrow().toEntity()
 
-    override suspend fun getActorMoviePicksById(id: Int): CastDetails =
+    override suspend fun getActorMoviePicksById(id: Int): ActorMediaDetails =
         movieRemoteDataSource.getActorMovieById(id).getOrThrow().toEntity()
 
     override suspend fun getSimilarMoviesById(id: Int): List<Movie> {
@@ -87,28 +89,28 @@ class MovieRepositoryImpl @Inject constructor(
         val response = movieRemoteDataSource.getTrendingMovies(page).getOrThrow()
         return PagedFetchResponse(
             currentPage = response.currentPage,
-            items = response.items.map { it.toEntityMedia() },
+            items = response.items.map { it.toEntityMedia(MediaType.Movie) },
             totalPages = response.totalPages,
             totalItems = response.totalItems
         )
     }
 
-    override suspend fun getUpcomingMoviesByCategory(
-        categoryId: Int?, pageNumber: Int
+    override suspend fun getUpcomingMoviesByGenre(
+        genre: MovieGenre, pageNumber: Int
     ): PagedFetchResponse<UpComingMovie> = fetchAndSync(
         cacheBlock = {
             upComingLocalDataSource.getUpComingMoviesPage(
                 page = pageNumber,
-                categoryId = categoryId
+                categoryId = if (genre == MovieGenre.ALL) null else genre.getId()
             )
         },
         crashReporter = crashReporter,
         syncBlock = { upComingLocalDataSource.insert(it) },
         networkBlock = {
             movieRemoteDataSource.getUpComingMoviesByCategory(
-                categoryId = categoryId,
+                categoryId = if (genre == MovieGenre.ALL) null else genre.getId(),
                 pageNumber = pageNumber,
-            ).getOrThrow().toLocal(categoryId)
+            ).getOrThrow().toLocal(genre.getId())
         }).run {
         PagedFetchResponse(
             currentPage = page,
@@ -148,12 +150,31 @@ class MovieRepositoryImpl @Inject constructor(
         )
     }
 
-    override suspend fun getMoviesByCategory(
-        categoryId: Int,
+    override suspend fun getFirstPageTopRatedMovies() = fetchAndSync(
+        cacheBlock = {
+            val local = localTopRated.getAll()
+                .filter { it.mediaType == MediaType.Movie }
+                .map { it.toEntity() }
+            local.takeIf { it.isNotEmpty() }
+        },
+        networkBlock = {
+            movieRemoteDataSource
+                .getTopRatedMovies(pageNumber = PAGE_NUMBER)
+                .getOrThrow()
+                .items.map { it.toEntity() }
+        },
+        syncBlock = { topRatedMovies ->
+            localTopRated.insertAll(topRatedMovies.map { it.toLocal() })
+        },
+        crashReporter = crashReporter
+    )
+
+    override suspend fun getMoviesByGenre(
+        genre: MovieGenre,
         pageNumber: Int
     ): PagedFetchResponse<Movie> {
         val response =
-            movieRemoteDataSource.getMoviesByCategory(categoryId, pageNumber).getOrThrow()
+            movieRemoteDataSource.getMoviesByCategory(genre.getId(), pageNumber).getOrThrow()
         return PagedFetchResponse(
             currentPage = response.currentPage,
             items = response.items.map { it.toEntity() },
@@ -207,5 +228,9 @@ class MovieRepositoryImpl @Inject constructor(
             movieId = id,
             userSessionId = authenticationPreferences.getSessionId(),
         ).getOrThrow().toEntity()
+    }
+
+    companion object {
+        const val PAGE_NUMBER = 1
     }
 }

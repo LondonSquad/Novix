@@ -1,19 +1,20 @@
 package com.london.presentation.feature.home.toprated
 
-import com.london.domain.usecase.toprated.GetTopRatedMoviesUseCase
-import com.london.domain.usecase.toprated.GetTopRatedTvSeriesUseCase
+import com.london.domain.usecase.details.movie.GetMovieUseCase
+import com.london.domain.usecase.details.tvshow.GetTvShowUseCase
 import com.london.presentation.shared.MediaCategory
 import com.london.presentation.shared.base.BaseViewModel
 import com.london.presentation.shared.base.createPagingSourceFlow
-import com.london.presentation.utils.MovieGenre
-import com.london.presentation.utils.TvShowGenre
+import com.london.presentation.shared.genre.MovieGenreUi
+import com.london.presentation.shared.genre.TvShowGenreUi
+import com.london.presentation.shared.genre.toDomain
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 
 @HiltViewModel
 class TopRatedViewModel @Inject constructor(
-    private val getTopRatedMoviesUseCase: GetTopRatedMoviesUseCase,
-    private val getTopRatedTvSeriesUseCase: GetTopRatedTvSeriesUseCase,
+    private val getMoviesUseCase: GetMovieUseCase,
+    private val getTvShowUseCase: GetTvShowUseCase,
 ) : BaseViewModel<TopRatedUiState, TopRatedEffect>(TopRatedUiState()), TopRatedContract {
 
     init {
@@ -25,14 +26,14 @@ class TopRatedViewModel @Inject constructor(
         initializeTopRated()
     }
 
-    override fun movieGenre(genre: MovieGenre) {
+    override fun movieGenre(genre: MovieGenreUi) {
         if (genre == state.value.selectedMovieGenre) return
         updateState { copy(selectedMovieGenre = genre) }
         initializeTopMovies()
     }
 
 
-    override fun tvShowGenre(genre: TvShowGenre) {
+    override fun tvShowGenre(genre: TvShowGenreUi) {
         if (genre == state.value.selectedTvShowGenre) return
         updateState { copy(selectedTvShowGenre = genre) }
         initializeTvShow()
@@ -69,10 +70,9 @@ class TopRatedViewModel @Inject constructor(
     private fun initializeTopMovies() {
         tryToExecute(block = {
             val moviesFlow = createPagingSourceFlow(query = "") { _, pageNumber ->
-                getTopRatedMoviesUseCase.invoke(
-                    pageNumber,
-                    if (state.value.selectedMovieGenre == MovieGenre.All) null
-                    else state.value.selectedMovieGenre.id
+                getMoviesUseCase.getAllTopRatedMovies(
+                    pageNumber = pageNumber,
+                    genre = state.value.selectedMovieGenre.toDomain()
                 )
             }
 
@@ -91,10 +91,9 @@ class TopRatedViewModel @Inject constructor(
     private fun initializeTvShow() {
         tryToExecute(block = {
             val tvSeriesFlow = createPagingSourceFlow(query = "") { _, pageNumber ->
-                getTopRatedTvSeriesUseCase.invoke(
-                    pageNumber,
-                    if (state.value.selectedTvShowGenre == TvShowGenre.All) null
-                    else state.value.selectedTvShowGenre.id
+                getTvShowUseCase.getAllTopRatedTvShows(
+                    pageNumber = pageNumber,
+                    genre = state.value.selectedTvShowGenre.toDomain()
                 )
             }
             tvSeriesFlow
