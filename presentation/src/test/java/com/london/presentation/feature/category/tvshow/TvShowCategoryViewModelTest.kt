@@ -6,9 +6,11 @@ import app.cash.turbine.test
 import com.google.common.truth.Truth.assertThat
 import com.london.domain.entity.PagedFetchResponse
 import com.london.domain.entity.TvShow
-import com.london.domain.usecase.details.tvshow.ManageTvShowDetailsUseCase
+import com.london.domain.usecase.details.tvshow.GetTvShowUseCase
 import com.london.presentation.navigation.Screen
 import com.london.presentation.navigation.getArgs
+import com.london.presentation.shared.genre.TvShowGenreUi
+import com.london.presentation.shared.genre.toDomain
 import io.mockk.coEvery
 import io.mockk.every
 import io.mockk.mockk
@@ -26,7 +28,7 @@ import org.junit.Test
 
 @OptIn(ExperimentalCoroutinesApi::class)
 class TvShowCategoryViewModelTest {
-    private lateinit var manageTvShowDetailsUseCase: ManageTvShowDetailsUseCase
+    private lateinit var getTvShowUseCase: GetTvShowUseCase
     private val savedStateHandle = mockk<SavedStateHandle>(relaxed = true)
     private var viewModel: TvShowCategoryViewModel? = null
     private val mainDispatcher = StandardTestDispatcher()
@@ -34,14 +36,14 @@ class TvShowCategoryViewModelTest {
     @Before
     fun setUp() {
         Dispatchers.setMain(mainDispatcher)
-        manageTvShowDetailsUseCase = mockk(relaxed = true)
-        every { savedStateHandle.getArgs<Screen.MoviesByCategory>() } returns Screen.MoviesByCategory(
-            categoryId = CATEGORY_ID,
+        getTvShowUseCase = mockk(relaxed = true)
+        every { savedStateHandle.getArgs<Screen.TvShowsByCategory>() } returns Screen.TvShowsByCategory(
+            category = CATEGORY,
         )
-        viewModel = TvShowCategoryViewModel(manageTvShowDetailsUseCase, savedStateHandle)
+        viewModel = TvShowCategoryViewModel(getTvShowUseCase, savedStateHandle)
         coEvery {
-            manageTvShowDetailsUseCase.getTvShowsByCategory(
-                CATEGORY_ID,
+            getTvShowUseCase.getTvShowsByGenre(
+                CATEGORY.toDomain(),
                 PAGE
             )
         } returns tvShowsPagingData
@@ -61,7 +63,7 @@ class TvShowCategoryViewModelTest {
         //Then
         viewModel?.state?.test {
             val state = expectMostRecentItem()
-            assertThat(state.categoryId).isEqualTo(CATEGORY_ID)
+            assertThat(state.genre).isEqualTo(CATEGORY)
             ensureAllEventsConsumed()
         }
     }
@@ -94,8 +96,8 @@ class TvShowCategoryViewModelTest {
     fun `when initialization should update state with error when use case throws`() = runTest {
         // Given
         coEvery {
-            manageTvShowDetailsUseCase.getTvShowsByCategory(
-                CATEGORY_ID,
+            getTvShowUseCase.getTvShowsByGenre(
+                CATEGORY.toDomain(),
                 PAGE
             )
         } throws Exception()
@@ -114,7 +116,7 @@ class TvShowCategoryViewModelTest {
         // When & Then
         viewModel?.effect?.test {
             viewModel?.onTvShowClick(tvShowId = 1)
-            assertThat(awaitItem()).isInstanceOf(TvShowCategoryEffect.NavigateToTvShowDetails::class.java)
+            assertThat(awaitItem()).isInstanceOf(TvShowCategoryEffect.TvShowDetailsNavigation::class.java)
             cancelAndIgnoreRemainingEvents()
         }
     }
@@ -124,13 +126,13 @@ class TvShowCategoryViewModelTest {
         // When & Then
         viewModel?.effect?.test {
             viewModel?.onBack()
-            assertThat(awaitItem()).isInstanceOf(TvShowCategoryEffect.NavigateBack::class.java)
+            assertThat(awaitItem()).isInstanceOf(TvShowCategoryEffect.BackNavigation::class.java)
             cancelAndIgnoreRemainingEvents()
         }
     }
 
     private companion object {
-        const val CATEGORY_ID = 0
+        val CATEGORY = TvShowGenreUi.All
         const val PAGE = 1
         val tvShowsPagingData = PagedFetchResponse(
             items = listOf<TvShow>(),

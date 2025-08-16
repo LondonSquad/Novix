@@ -6,7 +6,7 @@ import com.london.domain.contentrestriction.ContentRestrictionLevel
 import com.london.domain.entity.AccountInfo
 import com.london.domain.language.AppLanguage
 import com.london.domain.theme.AppTheme
-import com.london.domain.usecase.GetAccountDetails
+import com.london.domain.usecase.accountdetails.GetAccountDetailsUseCase
 import com.london.domain.usecase.authentication.AuthenticationUseCase
 import com.london.presentation.feature.account.AccountViewModel
 import com.london.presentation.feature.account.ActiveBottomSheet
@@ -19,6 +19,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.test.StandardTestDispatcher
+import kotlinx.coroutines.test.advanceUntilIdle
 import kotlinx.coroutines.test.resetMain
 import kotlinx.coroutines.test.runTest
 import kotlinx.coroutines.test.setMain
@@ -31,7 +32,7 @@ class   AccountViewModelTest {
 
     private lateinit var appPreferencesService: AppPreferencesService
     private lateinit var authenticationUseCase: AuthenticationUseCase
-    private lateinit var accountDetailsUseCase: GetAccountDetails
+    private lateinit var accountDetailsUseCase: GetAccountDetailsUseCase
     private lateinit var viewModel: AccountViewModel
     private val testDispatcher = StandardTestDispatcher()
 
@@ -94,6 +95,7 @@ class   AccountViewModelTest {
         viewModel.onLogoutClick()
 
         // Then
+        advanceUntilIdle()
         assertThat(viewModel.state.value.showUserMenu).isFalse()
         assertThat(viewModel.state.value.activeBottomSheet).isEqualTo(ActiveBottomSheet.Logout)
     }

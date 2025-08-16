@@ -1,5 +1,6 @@
 package com.london.data.remote.model.search
 
+import com.london.data.mapper.genre.GenreMapper
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
@@ -33,4 +34,4 @@ data class SearchTvShowRemote(
     val voteAverage: Double? = null,
     @SerialName("vote_count")
     val voteCount: Int? = null
-)
+) : GenreMapper

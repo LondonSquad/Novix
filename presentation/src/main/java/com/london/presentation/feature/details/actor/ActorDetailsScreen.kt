@@ -11,7 +11,6 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.asPaddingValues
 import androidx.compose.foundation.layout.defaultMinSize
@@ -28,7 +27,6 @@ import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyHorizontalGrid
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.lazy.rememberLazyListState
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
@@ -40,9 +38,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
@@ -52,56 +48,52 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.london.designsystem.component.CircularLoading
 import com.london.designsystem.component.EmptyLayout
-import com.london.designsystem.component.Icon
 import com.london.designsystem.component.SectionHeader
 import com.london.designsystem.component.Text
 import com.london.designsystem.component.TopBar
 import com.london.designsystem.component.button.ErrorImage
 import com.london.designsystem.theme.NovixTheme
-import com.london.domain.entity.actordetails.ActorImageDetails
-import com.london.domain.entity.actordetails.cast.CastActorEntity
+import com.london.domain.entity.actordetails.cast.ActorMediaItems
 import com.london.presentation.R
 import com.london.presentation.shared.ConditionalText
 import com.london.presentation.shared.CustomBackDropImagePager
 import com.london.presentation.shared.HomeCard
 import com.london.presentation.shared.ImageView
+import com.london.presentation.shared.TextWithIcon
 import com.london.presentation.shared.buildscreen.BuildScreen
 import com.london.presentation.utils.Listen
 import com.london.presentation.utils.offsetLayout
 import com.london.presentation.utils.toLocalizedNumbers
-import kotlin.collections.isNullOrEmpty
-import kotlin.collections.map
 
 @Composable
 fun ActorDetailsScreen(
     onNavigateBack: () -> Unit,
     onNavigateToGallery: (Int) -> Unit,
-    onNavigateToMoviePicks: (Int) -> Unit,
-    onNavigateToTvShowPicks: (Int) -> Unit,
+    onNavigateToTopMoviePicks: (Int) -> Unit,
     onNavigateToMovieScreen: (Int) -> Unit,
+    onNavigateToTopTvShowPicks: (Int) -> Unit,
     onNavigateToTvShowScreen: (Int) -> Unit,
     viewModel: ActorDetailsViewModel = hiltViewModel(),
 ) {
-    val uiState by viewModel.state.collectAsStateWithLifecycle()
     val effect by viewModel.effect.collectAsState(null)
+    val uiState by viewModel.state.collectAsStateWithLifecycle()
 
-    HandleEffect(
-        effect = effect,
-        uiState = uiState,
-        onNavigateBack = onNavigateBack,
-        onNavigateToGallery = onNavigateToGallery,
-        onNavigateToMovieScreen = onNavigateToMovieScreen,
-        onNavigateToTvShowPicks = onNavigateToTvShowPicks,
-        onNavigateToTvShowScreen = onNavigateToTvShowScreen,
-        onNavigateToMoviePicks = onNavigateToMoviePicks
-    )
+    effect?.Listen { currentEffect ->
+        when (currentEffect) {
+            is ActorEffect.BackNavigation -> onNavigateBack()
+            is ActorEffect.GalleryNavigation -> onNavigateToGallery(currentEffect.actorId)
+            is ActorEffect.TopMoviePicksNavigation -> onNavigateToTopMoviePicks(uiState.actorDetails.id)
+            is ActorEffect.MovieScreenNavigation -> onNavigateToMovieScreen(currentEffect.movieId)
+            is ActorEffect.TopTvShowPicksNavigation -> onNavigateToTopTvShowPicks(uiState.actorDetails.id)
+            is ActorEffect.TvShowScreenNavigation -> onNavigateToTvShowScreen(currentEffect.tvShowId)
+        }
+    }
 
     BuildScreen(
         isLoading = uiState.isLoading,
         isError = uiState.error != null,
-        onBack = viewModel::onNavigateBack,
-        onRetry = viewModel::onRetry
-
+        onBack = viewModel::onBackClick,
+        onRetry = viewModel::onRetryClick
     ) {
         Content(
             uiState = uiState,
@@ -115,7 +107,6 @@ fun ActorDetailsScreen(
 private fun Content(
     uiState: ActorDetailsUiState,
     actorDetailsContract: ActorDetailsContract,
-    modifier: Modifier = Modifier,
 ) {
 
     val lazyState = rememberLazyListState()
@@ -131,7 +122,7 @@ private fun Content(
     )
 
     Box(
-        modifier = modifier
+        modifier = Modifier
             .fillMaxSize()
             .background(NovixTheme.colors.surface)
     ) {
@@ -161,27 +152,33 @@ private fun Content(
             item {
                 GallerySection(
                     images = uiState.actorImageDetails,
-                    onGalleryClick = { actorDetailsContract.onGalleryClick(uiState.actorId) }
+                    onGalleryClick = {
+                        actorDetailsContract.onActorGalleryClick(uiState.actorDetails.id)
+                    }
                 )
             }
             item {
                 MoviesSection(
-                    movies = uiState.actorMovieDetails?.cast,
-                    onMoviePicksClick = { actorDetailsContract.onMoviePicksClick(uiState.actorId) },
+                    movies = uiState.actorMovieDetails?.mediaItems,
+                    onTopMoviePicksClick = {
+                        actorDetailsContract.onTopMoviePicksClick(uiState.actorDetails.id)
+                    },
                     onMovieScreenClick = actorDetailsContract::onMovieScreenClick
                 )
             }
             item {
                 TvShowsSection(
-                    tvShows = uiState.castDetails?.cast,
-                    onTvShowPicksClick = { actorDetailsContract.onTvShowPicksClick(uiState.actorId) },
+                    tvShows = uiState.actorTvShowDetails?.mediaItems,
+                    onTopTvShowPicksClick = {
+                        actorDetailsContract.onTopTvShowPicksClick(uiState.actorDetails.id)
+                    },
                     onTvShowScreenClick = actorDetailsContract::onTvShowScreenClick
                 )
             }
         }
 
         TopBar(
-            onBackClick = actorDetailsContract::onNavigateBack,
+            onBackClick = actorDetailsContract::onBackClick,
             modifier = Modifier
                 .fillMaxWidth()
                 .background(NovixTheme.colors.surface.copy(alpha = backgroundAlpha))
@@ -198,17 +195,17 @@ private fun Content(
 @Composable
 private fun ActorInfoSectionItem(uiState: ActorDetailsUiState) {
     with(uiState) {
-        if (actorName.isNotEmpty()
-            || actorBirthday.isNotBlank()
-            || actorPlaceOfBirth.isNotBlank()
-            || knownForDepartment.isNotBlank()
+        if (actorDetails.name.isNotEmpty()
+            || actorDetails.birthday.isNotBlank()
+            || actorDetails.placeOfBirth.isNotBlank()
+            || actorDetails.knownForDepartment.isNotBlank()
         ) {
             ActorInfoSection(
-                job = knownForDepartment,
-                name = actorName,
-                birthday = actorBirthday,
-                deathDay = actorDeathDay ?: "",
-                placeOfBirth = actorPlaceOfBirth,
+                job = actorDetails.knownForDepartment,
+                name = actorDetails.name,
+                birthday = actorDetails.birthday,
+                deathDay = actorDetails.deathDay ?: "",
+                placeOfBirth = actorDetails.placeOfBirth,
             )
         }
     }
@@ -216,7 +213,7 @@ private fun ActorInfoSectionItem(uiState: ActorDetailsUiState) {
 
 @Composable
 private fun BiographySection(uiState: ActorDetailsUiState) {
-    if (uiState.actorBiography.isNotBlank()) {
+    if (uiState.actorDetails.biography.isNotBlank()) {
         Text(
             text = stringResource(R.string.biography),
             style = NovixTheme.typography.title.medium,
@@ -225,7 +222,7 @@ private fun BiographySection(uiState: ActorDetailsUiState) {
         )
         var isExpanded by remember { mutableStateOf(false) }
         ConditionalText(
-            text = uiState.actorBiography,
+            text = uiState.actorDetails.biography,
             expandedState = isExpanded,
             modifier = Modifier.padding(start = 16.dp, end = 16.dp, top = 4.dp, bottom = 16.dp)
         ) {
@@ -254,8 +251,8 @@ private fun GallerySection(
 
 @Composable
 private fun MoviesSection(
-    movies: List<CastActorEntity>?,
-    onMoviePicksClick: () -> Unit,
+    movies: List<ActorMediaItems>?,
+    onTopMoviePicksClick: () -> Unit,
     onMovieScreenClick: (Int) -> Unit
 ) {
     movies?.takeIf { it.isNotEmpty() }?.let { movieCast ->
@@ -266,7 +263,7 @@ private fun MoviesSection(
             modifier = Modifier
                 .padding(top = 16.dp, bottom = 12.dp)
                 .padding(horizontal = 16.dp),
-            onClick = onMoviePicksClick
+            onClick = onTopMoviePicksClick
         )
         TopMoviesPicksList(
             movie = movieCast,
@@ -277,8 +274,8 @@ private fun MoviesSection(
 
 @Composable
 private fun TvShowsSection(
-    tvShows: List<CastActorEntity>?,
-    onTvShowPicksClick: () -> Unit,
+    tvShows: List<ActorMediaItems>?,
+    onTopTvShowPicksClick: () -> Unit,
     onTvShowScreenClick: (Int) -> Unit
 ) {
     tvShows?.takeIf { it.isNotEmpty() }?.let { shows ->
@@ -289,7 +286,7 @@ private fun TvShowsSection(
             modifier = Modifier
                 .padding(top = 16.dp, bottom = 12.dp)
                 .padding(horizontal = 16.dp),
-            onClick = onTvShowPicksClick
+            onClick = onTopTvShowPicksClick
         )
         TopTvShowsPicksList(
             tvShow = shows,
@@ -300,7 +297,7 @@ private fun TvShowsSection(
 
 @Composable
 fun TopMoviesPicksList(
-    movie: List<CastActorEntity>,
+    movie: List<ActorMediaItems>,
     onNavigateToMoviePicks: (Int) -> Unit
 ) {
     LazyHorizontalGrid(
@@ -316,8 +313,7 @@ fun TopMoviesPicksList(
                 onSaveClick = { /* TODO: Not yet implemented */ },
                 modifier = Modifier.clickable {
                     onNavigateToMoviePicks(movie[index].id)
-                },
-                isDarkMode = NovixTheme.isThemeDark
+                }
             )
         }
     }
@@ -325,7 +321,7 @@ fun TopMoviesPicksList(
 
 @Composable
 fun TopTvShowsPicksList(
-    tvShow: List<CastActorEntity>,
+    tvShow: List<ActorMediaItems>,
     onNavigateToTvShowPicks: (Int) -> Unit
 ) {
     LazyHorizontalGrid(
@@ -341,8 +337,7 @@ fun TopTvShowsPicksList(
                 onSaveClick = { /* TODO: Not yet implemented */ },
                 modifier = Modifier.clickable {
                     onNavigateToTvShowPicks(tvShow[index].id)
-                },
-                isDarkMode = NovixTheme.isThemeDark
+                }
             )
         }
     }
@@ -368,7 +363,7 @@ fun ActorGallery(images: List<String>) {
                         color = NovixTheme.colors.stroke
                     )
                     .clip(RoundedCornerShape(12.dp)),
-                errorContent = { ErrorImage(NovixTheme.isThemeDark) },
+                errorContent = { ErrorImage() },
                 loadingContent = { CircularLoading(modifier = Modifier) }
             )
         }
@@ -427,50 +422,17 @@ private fun ActorInfoSection(
 }
 
 @Composable
-private fun TextWithIcon(
-    text: String,
-    icon: Painter
-) {
-    if (text.isEmpty()) return
-    Row(
-        verticalAlignment = Alignment.CenterVertically,
-        horizontalArrangement = Arrangement.spacedBy(4.dp)
-    ) {
-        val scale = LocalDensity.current.fontScale
-        val baseIconSize = 12.dp
-
-        Box(
-            modifier = Modifier
-                .padding(4.dp)
-                .size(3.dp)
-                .clip(CircleShape)
-                .background(NovixTheme.colors.body)
-                .align(alignment = Alignment.CenterVertically)
-        )
-        Icon(
-            painter = icon,
-            contentDescription = stringResource(R.string.imagr_dot),
-            tint = NovixTheme.colors.body,
-            modifier = Modifier.size(baseIconSize * scale)
-        )
-        Text(
-            text = text,
-            style = NovixTheme.typography.label.small,
-            color = NovixTheme.colors.body,
-        )
-    }
-}
-
-@Composable
 private fun EmptyScreen(uiState: ActorDetailsUiState) {
     if (uiState.isLoading || uiState.error != null) return
 
     val hasNoContent = uiState.actorImageDetails.isNullOrEmpty() &&
-            uiState.actorMovieDetails?.cast.isNullOrEmpty() &&
-            uiState.castDetails?.cast.isNullOrEmpty() &&
-            uiState.actorBiography.isBlank() &&
-            (uiState.actorName.isBlank() && uiState.actorBirthday.isBlank() &&
-                    uiState.actorPlaceOfBirth.isBlank() && uiState.knownForDepartment.isBlank())
+            uiState.actorMovieDetails?.mediaItems.isNullOrEmpty() &&
+            uiState.actorTvShowDetails?.mediaItems.isNullOrEmpty() &&
+            uiState.actorDetails.biography.isBlank() &&
+            (uiState.actorDetails.name.isBlank() &&
+                    uiState.actorDetails.birthday.isBlank() &&
+                    uiState.actorDetails.placeOfBirth.isBlank() &&
+                    uiState.actorDetails.knownForDepartment.isBlank())
 
     if (hasNoContent) {
         EmptyLayout(
@@ -481,37 +443,14 @@ private fun EmptyScreen(uiState: ActorDetailsUiState) {
     }
 }
 
-@Composable
-private fun HandleEffect(
-    effect: ActorEffectUiState?,
-    uiState: ActorDetailsUiState,
-    onNavigateBack: () -> Unit,
-    onNavigateToGallery: (Int) -> Unit,
-    onNavigateToMovieScreen: (Int) -> Unit,
-    onNavigateToTvShowPicks: (Int) -> Unit,
-    onNavigateToTvShowScreen: (Int) -> Unit,
-    onNavigateToMoviePicks: (Int) -> Unit
-) {
-    effect?.Listen { currentEffect ->
-        when (currentEffect) {
-            is ActorEffectUiState.NavigationBack -> onNavigateBack()
-            is ActorEffectUiState.NavigateToGallery -> onNavigateToGallery(currentEffect.actorId)
-            is ActorEffectUiState.NavigateToMovieScreen -> onNavigateToMovieScreen(currentEffect.movieId)
-            is ActorEffectUiState.NavigateToTvShowPicks -> onNavigateToTvShowPicks(uiState.actorId)
-            is ActorEffectUiState.NavigateToTvShowScreen -> onNavigateToTvShowScreen(currentEffect.tvShowId)
-            is ActorEffectUiState.NavigateToMoviePicks -> onNavigateToMoviePicks(uiState.actorId)
-        }
-    }
-}
-
 private fun hasOtherContent(uiState: ActorDetailsUiState): Boolean {
-    return uiState.actorName.isNotBlank() ||
-            uiState.actorBirthday.isNotBlank() ||
-            uiState.actorPlaceOfBirth.isNotBlank() ||
-            uiState.knownForDepartment.isNotBlank() ||
-            uiState.actorBiography.isNotBlank() ||
-            !uiState.actorMovieDetails?.cast.isNullOrEmpty() ||
-            !uiState.castDetails?.cast.isNullOrEmpty()
+    return uiState.actorDetails.name.isNotBlank() ||
+            uiState.actorDetails.birthday.isNotBlank() ||
+            uiState.actorDetails.placeOfBirth.isNotBlank() ||
+            uiState.actorDetails.knownForDepartment.isNotBlank() ||
+            uiState.actorDetails.biography.isNotBlank() ||
+            !uiState.actorMovieDetails?.mediaItems.isNullOrEmpty() ||
+            !uiState.actorTvShowDetails?.mediaItems.isNullOrEmpty()
 }
 
 @Preview
@@ -520,9 +459,9 @@ fun Preview() {
     NovixTheme {
         ActorDetailsScreen(
             onNavigateBack = {},
-            onNavigateToMoviePicks = {},
+            onNavigateToTopMoviePicks = {},
             onNavigateToGallery = {},
-            onNavigateToTvShowPicks = {},
+            onNavigateToTopTvShowPicks = {},
             onNavigateToMovieScreen = {},
             onNavigateToTvShowScreen = {}
         )

@@ -1,6 +1,7 @@
 package com.london.data.remote.model.home.toprated
 
 
+import com.london.data.mapper.genre.GenreMapper
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
@@ -34,4 +35,4 @@ data class TopRatedMovieRemote(
     val voteAverage: Double?,
     @SerialName("vote_count")
     val voteCount: Int?
-)
+): GenreMapper

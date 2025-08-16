@@ -10,6 +10,7 @@ import com.london.data.mapper.details.tvshow.TvShowImagesMapper.toEntity
 import com.london.data.mapper.details.tvshow.toEntity
 import com.london.data.mapper.details.tvshow.toTvShowEpisodeEntity
 import com.london.data.mapper.details.tvshow.toTvShowEpisodesEntity
+import com.london.data.mapper.genre.getId
 import com.london.data.mapper.home.popular.toPopularTvShowSectionLocal
 import com.london.data.mapper.home.popular.toPopularTvShows
 import com.london.data.mapper.home.popular.toTvShowEntity
@@ -27,7 +28,8 @@ import com.london.domain.entity.PagedFetchResponse
 import com.london.domain.entity.RatedMedia
 import com.london.domain.entity.Trending
 import com.london.domain.entity.TvShow
-import com.london.domain.entity.actordetails.cast.CastDetails
+import com.london.domain.entity.actordetails.cast.ActorMediaDetails
+import com.london.domain.entity.genre.TvShowGenre
 import com.london.domain.entity.moviedatails.MediaStates
 import com.london.domain.entity.popular.PopularMedia
 import com.london.domain.entity.recent.MediaType
@@ -57,7 +59,7 @@ class TvShowRepositoryImpl @Inject constructor(
     override suspend fun getImagesTvShowById(id: Int): TvShowImagesEntity =
         tvShowRemoteDataSource.getTvShowImagesById(id).getOrThrow().toEntity()
 
-    override suspend fun getActorTvShowPicksById(id: Int): CastDetails =
+    override suspend fun getActorTvShowPicksById(id: Int): ActorMediaDetails =
         tvShowRemoteDataSource.getActorTvShowById(id).getOrThrow().toEntity()
 
     override suspend fun getPopularTvShows(): List<PopularMedia> = fetchAndSync(
@@ -100,11 +102,30 @@ class TvShowRepositoryImpl @Inject constructor(
         val response = tvShowRemoteDataSource.getTrendingTvShows(page).getOrThrow()
         return PagedFetchResponse(
             currentPage = response.currentPage,
-            items = response.items.map { it.toEntityMedia() },
+            items = response.items.map { it.toEntityMedia(MediaType.TvShow) },
             totalPages = response.totalPages,
             totalItems = response.totalItems
         )
     }
+
+    override suspend fun getFirstPageTopRatedTvShows() = fetchAndSync(
+        cacheBlock = {
+            val local = localTopRated.getAll()
+                .filter { it.mediaType == MediaType.TvShow }
+                .map { it.toEntity() }
+            local.takeIf { it.isNotEmpty() }
+        },
+        networkBlock = {
+            tvShowRemoteDataSource
+                .getTopRatedTvShows(pageNumber = PAGE_NUMBER)
+                .getOrThrow()
+                .items.map { it.toEntity() }
+        },
+        syncBlock = { topRatedTvShows ->
+            localTopRated.insertAll(topRatedTvShows.map { it.toLocal() })
+        },
+        crashReporter = crashReporter
+    )
 
     override suspend fun getTopRatedTvShows(
         pageNumber: Int
@@ -137,11 +158,11 @@ class TvShowRepositoryImpl @Inject constructor(
         )
     }
 
-    override suspend fun getTvShowsByCategory(
-        categoryId: Int,
+    override suspend fun getTvShowsByGenre(
+        genre: TvShowGenre,
         pageNumber: Int
     ): PagedFetchResponse<TvShow> {
-        val response = tvShowRemoteDataSource.getTvShowsByCategoryId(categoryId, pageNumber)
+        val response = tvShowRemoteDataSource.getTvShowsByCategoryId(genre.getId(), pageNumber)
             .getOrThrow()
         return PagedFetchResponse(
             currentPage = response.currentPage,
@@ -233,4 +254,8 @@ class TvShowRepositoryImpl @Inject constructor(
         guestSessionId = authenticationPreferences.getGuestSessionId(),
         userSessionId = authenticationPreferences.getSessionId(),
     ).getOrThrow().toEntity()
+
+    companion object {
+        const val PAGE_NUMBER = 1
+    }
 }

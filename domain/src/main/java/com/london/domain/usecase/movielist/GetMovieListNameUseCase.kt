@@ -7,6 +7,6 @@ class GetMovieListNameUseCase @Inject constructor(
     private val customMovieListRepository: CustomMovieListRepository,
 ) {
 
-    suspend fun invoke(listId: UInt): String =
+    suspend fun invoke(listId: Int): String =
         customMovieListRepository.getMovieListName(listId)
 }

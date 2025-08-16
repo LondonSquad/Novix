@@ -1,5 +1,8 @@
 package com.london.presentation.navigation
 
+import com.london.domain.entity.recent.MediaType
+import com.london.presentation.shared.genre.MovieGenreUi
+import com.london.presentation.shared.genre.TvShowGenreUi
 import kotlinx.serialization.Serializable
 
 @Serializable
@@ -29,7 +32,7 @@ sealed interface Screen {
     data object Categories : Screen
 
     @Serializable
-    data object Lists : Screen
+    data class Lists(val createList: Boolean = false) : Screen
 
     @Serializable
     data object Account : Screen
@@ -44,39 +47,25 @@ sealed interface Screen {
     data object TrendingActors : Screen
 
     @Serializable
-    data class TvShowDetails(
-        val tvShowId: Int,
-    ) : Screen
+    data class TvShowDetails(val tvShowId: Int) : Screen
 
     @Serializable
-    data class MovieDetails(
-        val movieId: Int,
-    ) : Screen
+    data class MovieDetails(val movieId: Int) : Screen
 
     @Serializable
-    data class ActorDetails(
-        val actorId: Int,
-    ) : Screen
+    data class ActorDetails(val actorId: Int) : Screen
 
     @Serializable
-    data class ActorTopMoviesPicksDetails(
-        val actorId: Int,
-    ) : Screen
+    data class ActorTopMoviesPicksDetails(val actorId: Int) : Screen
 
     @Serializable
-    data class TopTvShowsPicksDetails(
-        val actorId: Int,
-    ) : Screen
+    data class TopTvShowsPicksDetails(val actorId: Int) : Screen
 
     @Serializable
-    data class MoviesByCategory(
-        val categoryId: Int,
-    )
+    data class MoviesByCategory(val category: MovieGenreUi) : Screen
 
     @Serializable
-    data class TvShowsByCategory(
-        val categoryId: Int,
-    ) : Screen
+    data class TvShowsByCategory(val category: TvShowGenreUi) : Screen
 
     @Serializable
     data class EpisodeDetails(
@@ -86,20 +75,16 @@ sealed interface Screen {
     ) : Screen
 
     @Serializable
-    data class ActorGallery(
-        val actorId: Int,
-    ) : Screen
+    data class ActorGallery(val actorId: Int) : Screen
 
     @Serializable
     data class Reviews(
         val mediaId: Int,
-        val mediaType: Int
+        val mediaType: MediaType
     ) : Screen
 
     @Serializable
-    data class ViewListItems(
-        val listId: Int,
-    ) : Screen
+    data class ViewListItems(val listId: Int) : Screen
 
     @Serializable
     data object TopRated : Screen
@@ -107,11 +92,9 @@ sealed interface Screen {
     @Serializable
     data object ContinueWatching : Screen
 
-
     @Serializable
     data object WatchingHistory : Screen
 
     @Serializable
     data object MyRating : Screen
-
 }

@@ -7,7 +7,6 @@ import kotlinx.serialization.json.JsonPrimitive
 import kotlinx.serialization.json.booleanOrNull
 import kotlinx.serialization.json.doubleOrNull
 import kotlinx.serialization.json.jsonPrimitive
-import java.security.MessageDigest
 import java.util.Locale
 
 fun Int?.orZero() = this ?: 0
@@ -28,9 +27,6 @@ fun Double?.roundToDecimal(): Double = runCatching {
 fun String?.asImageUrlOrEmpty() = this?.let { BuildConfig.IMAGE_URL + it }.orEmpty()
 
 fun String?.asYoutubeUrlOrEmpty(): String = this?.let { BuildConfig.YOUTUBE_URL + it }.orEmpty()
-
-fun String.generateHash(): String =
-    MessageDigest.getInstance("MD5").digest(toByteArray()).joinToString("") { "%02x".format(it) }
 
 fun String.extractYear() =
     takeIf { isNotEmpty() }?.split("-")?.first()?.toInt() ?: 0

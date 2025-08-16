@@ -15,6 +15,8 @@ import com.london.domain.entity.Actor
 import com.london.domain.entity.Movie
 import com.london.domain.entity.PagedFetchResponse
 import com.london.domain.entity.TvShow
+import com.london.domain.entity.genre.MovieGenre
+import com.london.domain.entity.genre.TvShowGenre
 import io.mockk.coEvery
 import io.mockk.coJustRun
 import io.mockk.coVerify
@@ -120,7 +122,7 @@ class SearchRepositoryImplTest {
         val networkException = RuntimeException("Network failed")
 
         // Need to create a repository instance with a null crash reporter for this specific test
-        val repositoryWithNullCrashReporter = SearchRepositoryImpl(
+        SearchRepositoryImpl(
             genreInterestDao,
             searchRemoteDataSource,
             mockCrashReporter
@@ -171,12 +173,12 @@ class SearchRepositoryImplTest {
 
     @Test
     fun `incrementGenreInterest should insert when no existing record`() = runTest {
-        val genreId = 10
+        val genreId = 28
         val mediaType = "movie"
 
-        coEvery { genreInterestDao.getGenreInterest(genreId, mediaType) } returns null
+        coEvery { genreInterestDao.getGenreInterest(any(), mediaType) } returns null
 
-        repository.incrementGenreInterest(genreId, mediaType)
+        repository.incrementGenreInterest(MovieGenre.ACTION, mediaType)
 
         coVerify {
             genreInterestDao.insertGenreInterest(match {
@@ -188,14 +190,14 @@ class SearchRepositoryImplTest {
 
     @Test
     fun `incrementGenreInterest should update when record exists`() = runTest {
-        val genreId = 20
+        val genre = 20
         val mediaType = "tv"
-        val existing = GenreInterestEntity(genreId, mediaType, count = 5)
-        coEvery { genreInterestDao.getGenreInterest(genreId, mediaType) } returns existing
-        repository.incrementGenreInterest(genreId, mediaType)
+        val existing = GenreInterestEntity(genre, mediaType, count = 5)
+        coEvery { genreInterestDao.getGenreInterest(any(), mediaType) } returns existing
+        repository.incrementGenreInterest(TvShowGenre.WESTERN, mediaType)
         coVerify {
             genreInterestDao.updateGenreInterest(match {
-                it.genreId == genreId && it.mediaType == mediaType && it.count == existing.count + 1
+                it.genreId == genre && it.mediaType == mediaType && it.count == existing.count + 1
             }
             )
         }
@@ -228,26 +230,26 @@ class SearchRepositoryImplTest {
 
     @Test
     fun `incrementGenreInterest should log exception on dao error`() = runTest {
-        val genreId = 99
+        val genreId = 28
         val mediaType = "movie"
         val exception = RuntimeException("DAO failure")
 
         coEvery { genreInterestDao.getGenreInterest(genreId, mediaType) } throws exception
 
-        repository.incrementGenreInterest(genreId, mediaType)
+        repository.incrementGenreInterest(MovieGenre.ACTION, mediaType)
 
         coVerify { mockCrashReporter.logException(exception) }
     }
 
     @Test
     fun `incrementGenreInterest inserts new genre when not existing`() = runTest {
-        val genreId = 1
+        val genreId = 28
         val mediaType = "movie"
 
         coEvery { genreInterestDao.getGenreInterest(genreId, mediaType) } returns null
         coJustRun { genreInterestDao.insertGenreInterest(any()) }
 
-        repository.incrementGenreInterest(genreId, mediaType)
+        repository.incrementGenreInterest(MovieGenre.ACTION, mediaType)
 
         coVerify {
             genreInterestDao.insertGenreInterest(
@@ -264,7 +266,10 @@ class SearchRepositoryImplTest {
 
         coEvery {
             searchRemoteDataSource.searchForTvShows(query, false, page)
-        } throws NetworkException.UnAuthorizedException("401 Unauthorized")
+        } throws NetworkException.UnAuthorizedException(
+            "401 Unauthorized",
+            status = 401
+        )
 
         assertThrows<NetworkException.UnAuthorizedException> {
             repository.searchForTvShows(query, page)
@@ -278,7 +283,10 @@ class SearchRepositoryImplTest {
 
         coEvery {
             searchRemoteDataSource.searchForTvShows(query, false, page)
-        } throws NetworkException.TimeoutException("Request timed out")
+        } throws NetworkException.TimeoutException(
+            "Request timed out",
+            status = 408
+        )
 
         assertThrows<NetworkException.TimeoutException> {
             repository.searchForTvShows(query, page)
@@ -292,7 +300,10 @@ class SearchRepositoryImplTest {
 
         coEvery {
             searchRemoteDataSource.searchForActors(query, false, page)
-        } throws NetworkException.ValidationException("Invalid query")
+        } throws NetworkException.ValidationException(
+            "Invalid query",
+            status = 422
+        )
 
         assertThrows<NetworkException.ValidationException> {
             repository.searchForActors(query, page)
@@ -313,7 +324,7 @@ class SearchRepositoryImplTest {
                     posterUrl = "https://image.tmdb.org/t/p/w500",
                     releaseYear = 2020,
                     rating = 8,
-                    genreIds = listOf(),
+                    genres = listOf(),
                 )
             ),
             totalItems = 1,
