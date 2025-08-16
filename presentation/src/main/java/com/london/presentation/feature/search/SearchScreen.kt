@@ -198,7 +198,7 @@ private fun SearchContentWithError(
     if (state.error != null && state.error != ErrorState.NoInternet) {
         ResultOrEmpty(
             items = state.searchQuery.text.toList(),
-            emptyContent = { SearchRecentArea(state = state, contract = contract) },
+            emptyContent = { RecentSection(state = state, contract = contract) },
             content = {
                 SearchChipsRow(
                     selected = state.selectedCategory,
@@ -216,33 +216,6 @@ private fun SearchContentWithError(
 }
 
 @Composable
-private fun SearchRecentArea(
-    state: SearchUiState,
-    contract: SearchContract,
-    modifier: Modifier = Modifier
-) {
-    ResultOrEmpty(
-        items = state.recentSearches,
-        otherItems = state.recentViewed,
-        emptyContent = {
-            EmptyLayout(
-                text = stringResource(R.string.start_exploring_msg),
-                image = R.drawable.imge_explore,
-                modifier = modifier.padding(horizontal = 16.dp)
-            )
-        },
-        content = {
-            RecentSection(
-                state = state,
-                contract = contract,
-                onNavigateToTvShowDetails = contract::onTvShowClick,
-                onNavigateToMovieDetails = contract::onMovieClick
-            )
-        }
-    )
-}
-
-@Composable
 private fun SearchResultsContent(
     state: SearchUiState,
     contract: SearchContract
@@ -250,7 +223,7 @@ private fun SearchResultsContent(
     ResultOrEmpty(
         items = state.searchQuery.text.toList(),
         emptyContent = {
-            RecentSearchesContent(
+            RecentSection(
                 state = state,
                 contract = contract
             )
@@ -259,33 +232,6 @@ private fun SearchResultsContent(
             SearchResultsWithCategory(
                 state = state,
                 contract = contract
-            )
-        }
-    )
-}
-
-@Composable
-private fun RecentSearchesContent(
-    state: SearchUiState,
-    contract: SearchContract,
-    modifier: Modifier = Modifier
-) {
-    ResultOrEmpty(
-        items = state.recentSearches,
-        otherItems = state.recentViewed,
-        emptyContent = {
-            EmptyLayout(
-                text = stringResource(R.string.start_exploring_msg),
-                image = R.drawable.imge_explore,
-                modifier = modifier.padding(horizontal = 16.dp)
-            )
-        },
-        content = {
-            RecentSection(
-                state = state,
-                contract = contract,
-                onNavigateToTvShowDetails = contract::onTvShowClick,
-                onNavigateToMovieDetails = contract::onMovieClick
             )
         }
     )
@@ -569,7 +515,34 @@ private fun SearchChipsRow(
 }
 
 @Composable
-fun RecentSection(
+private fun RecentSection(
+    state: SearchUiState,
+    contract: SearchContract,
+    modifier: Modifier = Modifier
+) {
+    ResultOrEmpty(
+        items = state.recentSearches,
+        otherItems = state.recentViewed,
+        emptyContent = {
+            EmptyLayout(
+                text = stringResource(R.string.start_exploring_msg),
+                image = R.drawable.imge_explore,
+                modifier = modifier.padding(horizontal = 16.dp)
+            )
+        },
+        content = {
+            RecentSectionContent(
+                state = state,
+                contract = contract,
+                onNavigateToTvShowDetails = contract::onTvShowClick,
+                onNavigateToMovieDetails = contract::onMovieClick
+            )
+        }
+    )
+}
+
+@Composable
+fun RecentSectionContent(
     state: SearchUiState,
     contract: SearchContract,
     onNavigateToTvShowDetails: (Int) -> Unit,
