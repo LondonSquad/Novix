@@ -1,4 +1,4 @@
-package com.london.data.di
+package com.london.app.di
 
 import android.content.Context
 import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory

@@ -3,6 +3,7 @@ package com.london.domain.usecase.details.tvshow
 import com.london.domain.entity.PagedFetchResponse
 import com.london.domain.entity.Trending
 import com.london.domain.entity.TvShow
+import com.london.domain.entity.genre.TvShowGenre
 import com.london.domain.entity.popular.PopularMedia
 import com.london.domain.entity.review.ReviewEntity
 import com.london.domain.entity.toprated.TopRatedMedia
@@ -21,7 +22,7 @@ class GetTvShowUseCase @Inject constructor(
     suspend fun getTvShowDetails(tvShowId: Int): TvShowDetailsEntity =
         tvShowRepository.getTvShowDetailsById(tvShowId)
 
-    suspend fun getPopularTvShows(limit: Int = POPULAR_LIMIT) : List<PopularMedia> =
+    suspend fun getPopularTvShows(limit: Int = POPULAR_LIMIT): List<PopularMedia> =
         tvShowRepository.getPopularTvShows().take(limit)
 
     suspend fun getTrendingTvShows(page: Int, movieGenreId: Int?): PagedFetchResponse<Trending> {
@@ -39,20 +40,20 @@ class GetTvShowUseCase @Inject constructor(
         )
     }
 
-    suspend fun getTvShowList(name: String, pageNumber: Int) : PagedFetchResponse<TvShow> =
+    suspend fun getTvShowList(name: String, pageNumber: Int): PagedFetchResponse<TvShow> =
         searchRepository.searchForTvShows(
             name = name,
             pageNumber = pageNumber
         )
 
-    suspend fun getTvShowsByCategory(
-        categoryId: Int, pageNumber: Int
-    ) : PagedFetchResponse<TvShow> = tvShowRepository.getTvShowsByCategory(
-        categoryId = categoryId,
+    suspend fun getTvShowsByGenre(
+        genre: TvShowGenre, pageNumber: Int
+    ): PagedFetchResponse<TvShow> = tvShowRepository.getTvShowsByGenre(
+        genre = genre,
         pageNumber = pageNumber
     )
 
-    suspend fun getTvShowVideo(tvShowId: Int) : List<String> =
+    suspend fun getTvShowVideo(tvShowId: Int): List<String> =
         tvShowRepository.getTvShowVideos(tvShowId)
 
     suspend fun getImagesTvShowById(tvShowId: Int, limit: Int = IMAGE_LIMIT): List<String> {
@@ -65,7 +66,7 @@ class GetTvShowUseCase @Inject constructor(
         }.take(limit)
     }
 
-    suspend fun getTvShowReviews(movieId: Int, pageNumber: Int) : PagedFetchResponse<ReviewEntity> =
+    suspend fun getTvShowReviews(movieId: Int, pageNumber: Int): PagedFetchResponse<ReviewEntity> =
         tvShowRepository.getTvShowReviews(movieId, pageNumber)
 
     suspend fun getTvShowCastById(tvShowId: Int): TvShowCastEntity =
@@ -73,12 +74,12 @@ class GetTvShowUseCase @Inject constructor(
 
     suspend fun getAllTopRatedTvShows(
         pageNumber: Int,
-        genreId: Int? = null
+        genre: TvShowGenre = TvShowGenre.ALL
     ): PagedFetchResponse<TopRatedMedia> {
         val response = tvShowRepository.getTopRatedTvShows(pageNumber)
 
         val filteredItems = response.items.filter { movie ->
-            genreId == null || movie.genreIds.contains(genreId)
+            genre == TvShowGenre.ALL || movie.genres.contains(genre)
         }
 
         return response.copy(

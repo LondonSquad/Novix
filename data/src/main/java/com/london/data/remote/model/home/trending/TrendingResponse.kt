@@ -1,5 +1,6 @@
 package com.london.data.remote.model.home.trending
 
+import com.london.data.mapper.genre.GenreMapper
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
@@ -19,4 +20,4 @@ data class TrendingResponse(
     val backdropPath: String? = null,
     @SerialName("genre_ids")
     val genreIds: List<Int>? = null
-)
+) : GenreMapper

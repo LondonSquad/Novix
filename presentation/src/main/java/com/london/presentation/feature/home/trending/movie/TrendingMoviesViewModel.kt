@@ -1,14 +1,11 @@
 package com.london.presentation.feature.home.trending.movie
 
-import androidx.lifecycle.viewModelScope
-import androidx.paging.PagingData
-import androidx.paging.cachedIn
-import com.london.domain.entity.Trending
 import com.london.domain.usecase.details.movie.GetMovieUseCase
 import com.london.presentation.shared.base.BaseViewModel
 import com.london.presentation.shared.base.ErrorState
 import com.london.presentation.shared.base.createPagingSourceFlow
-import com.london.presentation.utils.MovieGenre
+import com.london.presentation.shared.genre.MovieGenreUi
+import com.london.presentation.shared.genre.toUi
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.flowOf
 import javax.inject.Inject
@@ -23,10 +20,10 @@ class TrendingMoviesViewModel @Inject constructor(
         reloadTrendingMovies()
     }
 
-    override fun onGenreClick(genre: MovieGenre) {
-        if (genre.id == state.value.selectedGenreId) return
+    override fun onGenreClick(genre: MovieGenreUi) {
+        if (genre == state.value.selectedGenre) return
         updateState {
-            copy(selectedGenreId = genre.id)
+            copy(selectedGenre = genre)
         }
         reloadTrendingMovies()
     }

@@ -6,9 +6,12 @@ import app.cash.turbine.test
 import com.google.common.truth.Truth.assertThat
 import com.london.domain.entity.Movie
 import com.london.domain.entity.PagedFetchResponse
+import com.london.domain.entity.genre.MovieGenre
 import com.london.domain.usecase.details.movie.GetMovieUseCase
 import com.london.presentation.navigation.Screen
 import com.london.presentation.navigation.getArgs
+import com.london.presentation.shared.genre.MovieGenreUi
+import com.london.presentation.shared.genre.toDomain
 import io.mockk.coEvery
 import io.mockk.every
 import io.mockk.mockk
@@ -36,10 +39,10 @@ class MovieCategoryViewModelTest {
         Dispatchers.setMain(mainDispatcher)
         getMovieUseCase = mockk(relaxed = true)
         every { savedStateHandle.getArgs<Screen.MoviesByCategory>() } returns Screen.MoviesByCategory(
-            categoryId = CATEGORY_ID,
+            category = CATEGORY,
         )
         viewModel = MovieCategoryViewModel(getMovieUseCase, savedStateHandle)
-        coEvery { getMovieUseCase.getMoviesByCategory(CATEGORY_ID, PAGE) } returns moviesPagingData
+        coEvery { getMovieUseCase.getMoviesByGenre(CATEGORY.toDomain(), PAGE) } returns moviesPagingData
     }
 
     @After
@@ -56,7 +59,7 @@ class MovieCategoryViewModelTest {
         //Then
         viewModel?.state?.test {
             val state = expectMostRecentItem()
-            assertThat(state.categoryId).isEqualTo(CATEGORY_ID)
+            assertThat(state.genre).isEqualTo(CATEGORY)
             ensureAllEventsConsumed()
         }
     }
@@ -88,7 +91,7 @@ class MovieCategoryViewModelTest {
     @Test
     fun `when initialization should update state with error when use case throws`() = runTest {
         // Given
-        coEvery { getMovieUseCase.getMoviesByCategory(CATEGORY_ID, PAGE) } throws Exception()
+        coEvery { getMovieUseCase.getMoviesByGenre(CATEGORY.toDomain(), PAGE) } throws Exception()
         // When
         advanceUntilIdle()
         // Then
@@ -120,7 +123,7 @@ class MovieCategoryViewModelTest {
     }
 
     private companion object {
-        const val CATEGORY_ID = 0
+        val CATEGORY = MovieGenreUi.All
         const val PAGE = 1
         val moviesPagingData = PagedFetchResponse(
             items = listOf<Movie>(),

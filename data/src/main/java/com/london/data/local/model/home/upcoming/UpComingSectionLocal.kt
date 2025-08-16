@@ -2,6 +2,7 @@ package com.london.data.local.model.home.upcoming
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey
+import com.london.data.mapper.genre.GenreMapper
 
 @Entity(tableName = "upcoming_section_table")
 data class UpComingSectionLocal(
@@ -18,4 +19,4 @@ data class UpComingMovieLocal(
     val id: Int,
     val imageUrl: String,
     val genreIds: List<Int>,
-)
+) : GenreMapper

@@ -5,6 +5,7 @@ import com.london.domain.entity.RatedMedia
 import com.london.domain.entity.Trending
 import com.london.domain.entity.TvShow
 import com.london.domain.entity.actordetails.cast.ActorMediaDetails
+import com.london.domain.entity.genre.TvShowGenre
 import com.london.domain.entity.moviedatails.MediaStates
 import com.london.domain.entity.popular.PopularMedia
 import com.london.domain.entity.review.ReviewEntity
@@ -29,8 +30,8 @@ interface TvShowRepository {
         pageNumber: Int,
     ): PagedFetchResponse<TopRatedMedia>
 
-    suspend fun getTvShowsByCategory(
-        categoryId: Int,
+    suspend fun getTvShowsByGenre(
+        genre: TvShowGenre,
         pageNumber: Int
     ): PagedFetchResponse<TvShow>
 

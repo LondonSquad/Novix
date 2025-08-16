@@ -15,7 +15,8 @@ import com.london.presentation.feature.home.popular.PopularUiMedia
 import com.london.presentation.shared.base.BaseViewModel
 import com.london.presentation.shared.base.ErrorState
 import com.london.presentation.shared.base.createPagingSourceFlow
-import com.london.presentation.utils.MovieGenre
+import com.london.presentation.shared.genre.MovieGenreUi
+import com.london.presentation.shared.genre.toDomain
 import com.london.presentation.utils.toPopularUiMedia
 import com.london.presentation.utils.toUiMedia
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -45,25 +46,25 @@ class HomeViewModel @Inject constructor(
     private fun initializeUpcomingMoviesFlow() =
         updateState { copy(upcomingMovies = createUpComingFlow()) }
 
-    override fun loadUpcomingMoviesClick(categoryId: Int?) {
+    override fun loadUpcomingMoviesClick(genre: MovieGenreUi) {
         updateState {
-            copy(selectedCategoryFlow = selectedCategoryFlow.apply { value = categoryId })
+            copy(selectedCategoryFlow = selectedCategoryFlow.apply { value = genre })
         }
     }
 
     private fun createUpComingFlow(): Flow<PagingData<UpComingMovie>> {
         val upcomingMoviesFlow: Flow<PagingData<UpComingMovie>> =
             state.value.selectedCategoryFlow
-                .flatMapLatest { categoryId -> createUpcomingPagingFlow(categoryId) }
+                .flatMapLatest { category -> createUpcomingPagingFlow(category?: MovieGenreUi.All) }
                 .cachedIn(viewModelScope)
 
         return upcomingMoviesFlow
     }
 
-    private fun createUpcomingPagingFlow(categoryId: Int?): Flow<PagingData<UpComingMovie>> {
+    private fun createUpcomingPagingFlow(genre: MovieGenreUi): Flow<PagingData<UpComingMovie>> {
         return createPagingSourceFlow(query = "") { _, pageNumber ->
-            getMovieUseCase.getUpcomingMoviesByCategory(
-                categoryId = categoryId,
+            getMovieUseCase.getUpcomingMoviesByGenre(
+                genre = genre.toDomain(),
                 pageNumber = pageNumber
             )
         }
@@ -176,10 +177,10 @@ class HomeViewModel @Inject constructor(
     override fun onTvShowClick(id: Int) =
         emitEffect(HomeScreenEffect.NavigationTvShowDetails(id))
 
-    override fun onMovieGenreSelect(genre: MovieGenre) {
+    override fun onMovieGenreSelect(genre: MovieGenreUi) {
         if (genre == state.value.selectedMovieGenre) return
         updateState { copy(selectedMovieGenre = genre) }
-        loadUpcomingMoviesClick(categoryId = if (genre == MovieGenre.All) null else genre.id)
+        loadUpcomingMoviesClick(genre)
     }
 
     override fun onTopRatedClick() =

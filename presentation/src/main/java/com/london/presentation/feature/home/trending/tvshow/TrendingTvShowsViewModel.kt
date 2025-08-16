@@ -1,14 +1,11 @@
 package com.london.presentation.feature.home.trending.tvshow
 
-import androidx.lifecycle.viewModelScope
-import androidx.paging.PagingData
-import androidx.paging.cachedIn
-import com.london.domain.entity.Trending
 import com.london.domain.usecase.details.tvshow.GetTvShowUseCase
 import com.london.presentation.shared.base.BaseViewModel
 import com.london.presentation.shared.base.ErrorState
 import com.london.presentation.shared.base.createPagingSourceFlow
-import com.london.presentation.utils.TvShowGenre
+import com.london.presentation.shared.genre.TvShowGenreUi
+import com.london.presentation.shared.genre.toUi
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flowOf
@@ -25,9 +22,9 @@ class TrendingTvShowsViewModel @Inject constructor(
         reloadTrendingTvShows()
     }
 
-    override fun onGenreClick(genre: TvShowGenre) {
-        if (genre.id == state.value.selectedGenreId) return
-        updateState { copy(selectedGenreId = genre.id) }
+    override fun onGenreClick(genre: TvShowGenreUi) {
+        if (genre == state.value.selectedGenre) return
+        updateState { copy(selectedGenre = genre) }
         reloadTrendingTvShows()
     }
 

@@ -19,13 +19,13 @@ fun ApiResponse<MovieRemote>.toLocal(categoryId: Int?) = UpComingSectionLocal(
     results = items.map { it.toUpComingLocal() },
     totalPages = totalPages,
     totalResults = totalItems,
-    categoryId = categoryId?: 0
+    categoryId = categoryId ?: 0
 )
 
 fun UpComingMovieLocal.toEntity() = UpComingMovie(
     id = id,
     imageUrl = imageUrl,
-    genreIds = genreIds,
+    genres = genreIds.toMovieGenre(),
 )
 
 private fun MovieRemote.toUpComingLocal() = UpComingMovieLocal(
@@ -40,5 +40,5 @@ fun MovieRemote.toEntity() = Movie(
     posterUrl = posterPath.asImageUrlOrEmpty(),
     releaseYear = releaseDate?.extractYear().orZero(),
     rating = voteAverage?.toInt().orZero(),
-    genreIds = genreIds.orEmpty()
+    genres = genreIds.toMovieGenre()
 )
