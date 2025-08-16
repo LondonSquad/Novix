@@ -27,7 +27,7 @@ jobs:
     needs: setup
     runs-on: ubuntu-latest
     steps:
-      - name: ⬇️ Checkout repository
+      - name: Checkout repository
         uses: actions/checkout@v4
 
       - name: ☕ Setup JDK
@@ -54,7 +54,7 @@ jobs:
             local.properties
             app/google-services.json
             app/novix-release.jks
-          key: ${{ needs.setup.outputs.project-setup-key }}
+          key: project-setup-${{ github.sha }}
 
       - name: Grant execute permission for gradlew
         run: chmod +x ./gradlew
