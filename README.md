@@ -48,19 +48,50 @@
 ## 📸 UI Showcase
 
 <div align="center">
-  <img src="assets/home_screen.png" width="250"/>  
-  <img src="assets/search_screen.png" width="250"/>  
-  <img src="assets/movie_details.png" width="250"/>  
+  <table>
+    <tr>
+      <td align="center">
+        <img src="assets/home_screen.png" width="250" style="border: 2px solid #ddd; border-radius: 10px; padding: 5px;"/>
+        <br>
+        <sub><b>Home Screen</b></sub>
+      </td>
+      <td align="center">
+        <img src="assets/search_screen.png" width="250" style="border: 2px solid #ddd; border-radius: 10px; padding: 5px;"/>
+        <br>
+        <sub><b>Search</b></sub>
+      </td>
+      <td align="center">
+        <img src="assets/movie_details.png" width="250" style="border: 2px solid #ddd; border-radius: 10px; padding: 5px;"/>
+        <br>
+        <sub><b>Movie Details</b></sub>
+      </td>
+    </tr>
+  </table>
 </div>
 
 <div align="center">
-  <img src="assets/profile_screen.png" width="250"/>  
-  <img src="assets/categories.png" width="250"/>  
-  <img src="assets/recent_viewed.png" width="250"/>  
+  <table>
+    <tr>
+      <td align="center">
+        <img src="assets/profile_screen.png" width="250" style="border: 2px solid #ddd; border-radius: 10px; padding: 5px;"/>
+        <br>
+        <sub><b>Profile</b></sub>
+      </td>
+      <td align="center">
+        <img src="assets/categories.png" width="250" style="border: 2px solid #ddd; border-radius: 10px; padding: 5px;"/>
+        <br>
+        <sub><b>Categories</b></sub>
+      </td>
+      <td align="center">
+        <img src="assets/recent_viewed.png" width="250" style="border: 2px solid #ddd; border-radius: 10px; padding: 5px;"/>
+        <br>
+        <sub><b>Recently Viewed</b></sub>
+      </td>
+    </tr>
+  </table>
 </div>
 
 ---
-
 ## 🏗️ Architecture
 
 Novix follows **Clean Architecture** principles with a multi-module approach for scalability and
