@@ -112,7 +112,7 @@ jobs:
         run: chmod +x ./gradlew
 
       - name: 🛠️ Run build, tests, and Kover report generation
-        run: ./gradlew koverXmlReport koverHtmlReport koverVerify --build-cache
+        run: ./gradlew koverHtmlReport koverVerify --build-cache
 
       - name: 📤 Upload HTML Coverage Report
         if: always()
@@ -120,35 +120,3 @@ jobs:
         with:
           name: coverage-report-html
           path: '**/build/reports/kover/html/'
-
-      - name: 📤 Upload XML Coverage Report
-        if: always()
-        uses: actions/upload-artifact@v4
-        with:
-          name: coverage-report-xml
-          path: 'build/reports/kover/report.xml'
-
-  comment_on_pr:
-    name: Report Code Coverage
-    needs: build_and_test
-    if: github.event_name == 'pull_request' && always()
-    runs-on: ubuntu-latest
-    steps:
-      - name: ⬇️ Checkout repository
-        uses: actions/checkout@v4
-
-      - name: 📥 Download XML Coverage Report
-        uses: actions/download-artifact@v4
-        with:
-          name: coverage-report-xml
-          path: coverage/
-
-      - name: 📝 Comment on PR with Coverage
-        uses: mi-kas/kover-report@v1
-        with:
-          path: coverage/report.xml
-          token: ${{ secrets.GITHUB_TOKEN }}
-          title: "📊 Code Coverage Report"
-          update-comment: true
-          min-coverage-overall: 80
-          min-coverage-changed-files: 80
