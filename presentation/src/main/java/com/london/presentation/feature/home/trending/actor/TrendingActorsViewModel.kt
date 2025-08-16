@@ -19,21 +19,21 @@ class TrendingActorsViewModel @Inject constructor(
     TrendingActorsContract {
 
     init {
-        reloadTrendingActors()
+        getTrendingActors()
     }
 
     override fun onActorClick(id: Int) = emitEffect(TrendingActorsEffect.NavigateToActor(id))
 
     override fun onBackClick() = emitEffect(TrendingActorsEffect.NavigateBack)
 
-    override fun onRetryClick() = reloadTrendingActors()
+    override fun onRetryClick() = getTrendingActors()
 
-    private fun reloadTrendingActors() {
+    private fun getTrendingActors() {
         tryToExecute(
             block = ::createTrendingActorsPagingFlow,
             onStart = { handlingLoadingState(true) },
             onError = ::handlingErrorState,
-            onSuccess = { handlingPagingState(it) },
+            onSuccess = ::handlingPagingState,
             onCompleted = { handlingLoadingState(false) }
         )
     }

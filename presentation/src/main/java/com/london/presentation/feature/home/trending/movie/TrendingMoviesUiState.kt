@@ -9,7 +9,7 @@ import kotlinx.coroutines.flow.emptyFlow
 
 data class TrendingMoviesUiState(
     val isSaved: Boolean = false,
-    val selectedGenre: MovieGenreUi? = MovieGenreUi.All,
+    val selectedGenre: MovieGenreUi = MovieGenreUi.All,
     val backdropPath: String = "",
     val isLoading: Boolean = false,
     val errorState: ErrorState? = null,

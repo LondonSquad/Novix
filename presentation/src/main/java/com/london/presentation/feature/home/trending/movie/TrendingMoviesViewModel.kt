@@ -1,11 +1,15 @@
 package com.london.presentation.feature.home.trending.movie
 
+import androidx.lifecycle.viewModelScope
+import androidx.paging.PagingData
+import androidx.paging.cachedIn
+import com.london.domain.entity.Trending
 import com.london.domain.usecase.details.movie.GetMovieUseCase
 import com.london.presentation.shared.base.BaseViewModel
 import com.london.presentation.shared.base.ErrorState
 import com.london.presentation.shared.base.createPagingSourceFlow
 import com.london.presentation.shared.genre.MovieGenreUi
-import com.london.presentation.shared.genre.toUi
+import com.london.presentation.shared.genre.toDomain
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.flowOf
 import javax.inject.Inject
@@ -17,7 +21,7 @@ class TrendingMoviesViewModel @Inject constructor(
     TrendingMoviesContract {
 
     init {
-        reloadTrendingMovies()
+        getTrendingMovies()
     }
 
     override fun onGenreClick(genre: MovieGenreUi) {
@@ -25,7 +29,7 @@ class TrendingMoviesViewModel @Inject constructor(
         updateState {
             copy(selectedGenre = genre)
         }
-        reloadTrendingMovies()
+        getTrendingMovies()
     }
 
     override fun onBackClick() =
@@ -34,12 +38,12 @@ class TrendingMoviesViewModel @Inject constructor(
     override fun onMovieClick(id: Int) =
         emitEffect(TrendingMoviesEffect.NavigateToMovie(id))
 
-    override fun onRetryClick() = reloadTrendingMovies()
+    override fun onRetryClick() = getTrendingMovies()
 
-    private fun reloadTrendingMovies() {
+    private fun getTrendingMovies() {
         tryToCollect(
             block = ::createTrendingMoviesPagingFlow,
-            onStart = { handlingLoadingState(true) },
+            onStart = { updateState { copy(isLoading = true) } },
             onError = ::handlingErrorState,
             onNewValue = ::handlingPagingState,
         )
@@ -62,11 +66,8 @@ class TrendingMoviesViewModel @Inject constructor(
         block = { _, pageNumber ->
             getMovieUseCase.getTrendingMovies(
                 page = pageNumber,
-                movieGenreId = state.value.selectedGenreId
+                movieGenre = state.value.selectedGenre.toDomain()
             )
         }
     ).cachedIn(viewModelScope)
-
-    private fun handlingLoadingState(isLoading: Boolean) =
-        updateState { copy(isLoading = isLoading) }
 }
