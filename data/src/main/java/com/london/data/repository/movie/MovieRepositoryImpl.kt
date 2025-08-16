@@ -64,7 +64,7 @@ class MovieRepositoryImpl @Inject constructor(
 
     override suspend fun getMovieVideos(movieId: Int): List<String> {
         return movieRemoteDataSource.getMovieVideos(movieId)
-            .getOrThrow().movies.orEmpty().map { movieVideoRemote ->
+            .getOrThrow().videos.orEmpty().map { movieVideoRemote ->
                 movieVideoRemote.key.asImageUrlOrEmpty()
             }
     }

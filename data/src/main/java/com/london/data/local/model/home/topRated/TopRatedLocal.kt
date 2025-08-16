@@ -13,7 +13,6 @@ data class TopRatedLocal(
     val name: String,
     val posterPictureUrl: String,
     val rating: Double,
-    val releaseYear: String,
     val mediaType: MediaType,
     val date: Long = System.currentTimeMillis(),
     val genre: List<Int>

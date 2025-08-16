@@ -10,7 +10,7 @@ import com.london.data.remote.model.details.movie.model.movieimages.MovieImagesR
 import com.london.data.remote.model.details.rating.AccountStatesResponse
 import com.london.data.remote.model.details.rating.RatingRemoteBody
 import com.london.data.remote.model.details.rating.RatingRemoteResponse
-import com.london.data.remote.model.details.videoprovider.movie.model.MovieVideoRemote
+import com.london.data.remote.model.details.videoprovider.VideoResponse
 import com.london.data.remote.model.home.popular.PopularMovieResponse
 import com.london.data.remote.model.home.toprated.TopRatedMovieRemote
 import com.london.data.remote.model.home.trending.TrendingResponse
@@ -45,7 +45,7 @@ interface MovieApiService {
     @GET(ApiConstants.MOVIE_VIDEOS_PATH)
     suspend fun getMovieVideos(
         @Path("movie_id") movieId: Int,
-    ): Response<MovieVideoRemote>
+    ): Response<VideoResponse>
 
     @GET(ApiConstants.ACCOUNT_MOVIE_STATES)
     suspend fun getAccountMovieStates(

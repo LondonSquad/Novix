@@ -13,7 +13,7 @@ import com.london.data.remote.model.details.tvshow.model.TvShowImagesRemoteRespo
 import com.london.data.remote.model.details.tvshow.model.tvshowepisode.EpisodeVideoResponse
 import com.london.data.remote.model.details.tvshow.model.tvshowepisode.TvShowEpisodeResponse
 import com.london.data.remote.model.details.tvshow.model.tvshowepisode.TvShowEpisodesRemoteResponse
-import com.london.data.remote.model.details.videoprovider.tvshow.model.TvShowVideoResponse
+import com.london.data.remote.model.details.videoprovider.VideoResponse
 import com.london.data.remote.model.home.popular.PopularTvShowResponse
 import com.london.data.remote.model.home.toprated.TopRatedTvSeriesRemote
 import com.london.data.remote.model.home.trending.TrendingResponse
@@ -63,7 +63,7 @@ interface TvShowApiService {
     @GET(ApiConstants.TV_SHOW_VIDEO_PATH)
     suspend fun getTvShowVideos(
         @Path("tv_id") tvShowId: Int,
-    ): Response<TvShowVideoResponse>
+    ): Response<VideoResponse>
 
     @GET(ApiConstants.ACCOUNT_TV_SHOW_STATES)
     suspend fun getAccountTvShowState(

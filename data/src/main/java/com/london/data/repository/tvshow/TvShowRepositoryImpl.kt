@@ -217,7 +217,7 @@ class TvShowRepositoryImpl @Inject constructor(
 
     override suspend fun getTvShowVideos(tvShowId: Int): List<String> =
         tvShowRemoteDataSource.getTvShowVideos(tvShowId)
-            .getOrThrow().tvShow?.map { it.key.asYoutubeUrlOrEmpty() }.orEmpty()
+            .getOrThrow().videos?.map { it.key.asYoutubeUrlOrEmpty() }.orEmpty()
 
     override suspend fun getTvShowReviews(
         tvShowId: Int,

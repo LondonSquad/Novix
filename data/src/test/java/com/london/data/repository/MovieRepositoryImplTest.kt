@@ -10,10 +10,10 @@ import com.london.data.mapper.details.movie.toEntity
 import com.london.data.mapper.search.toAuthorDetails
 import com.london.data.remote.exception.NetworkException
 import com.london.data.remote.model.ApiResponse
+import com.london.data.remote.model.details.ImageItem
 import com.london.data.remote.model.details.movie.model.moviedetails.GenreRemote
 import com.london.data.remote.model.details.movie.model.moviedetails.MovieDetailsResponse
 import com.london.data.remote.model.details.movie.model.movieimages.MovieImagesResponse
-import com.london.data.remote.model.details.movie.model.movieimages.Poster
 import com.london.data.remote.model.details.rating.AccountStatesResponse
 import com.london.data.remote.model.details.rating.RatingRemoteResponse
 import com.london.data.remote.model.home.popular.PopularMovieResponse
@@ -778,10 +778,10 @@ class MovieRepositoryImplTest {
         id = 123,
         logos = emptyList(),
         posters = listOf(
-            Poster(
+            ImageItem(
                 filePath = "/img1.jpg",
             ),
-            Poster(
+            ImageItem(
                 filePath = "/img2.jpg",
             )
         )

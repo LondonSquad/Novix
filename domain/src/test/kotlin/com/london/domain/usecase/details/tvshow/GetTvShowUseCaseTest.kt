@@ -390,7 +390,6 @@ class GetTvShowUseCaseTest {
             voteAverage = 8.9,
             posterUrl = "/ggFHVNu6YYI5L9pCfOacjizRGt.jpg",
             genres = listOf(TvShowGenre.TALK, TvShowGenre.TALK),
-            releaseDate = "2008-01-20",
             mediaType = MediaType.TvShow,
         )
 
@@ -398,7 +397,6 @@ class GetTvShowUseCaseTest {
             id = 87108,
             name = "Chernobyl",
             voteAverage = 9.0,
-            releaseDate = "2019-05-06",
             posterUrl = "/hlLXt2tOPT6RRnjiUmoxyG1LTFi.jpg",
             genres = listOf(TvShowGenre.TALK, TvShowGenre.TALK),
             mediaType = MediaType.TvShow,

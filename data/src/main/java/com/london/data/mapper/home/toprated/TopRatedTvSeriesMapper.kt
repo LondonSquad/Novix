@@ -10,7 +10,6 @@ fun TopRatedTvSeriesRemote.toEntity(): TopRatedMedia =
     TopRatedMedia(
         id = id.orZero(),
         name = name.orEmpty(),
-        releaseDate = firstAirDate.orEmpty(),
         genres = genreIds.orEmpty().toGenre(MediaType.TvShow),
         posterUrl = posterPath.asImageUrlOrEmpty(),
         voteAverage = voteAverage.orZero(),

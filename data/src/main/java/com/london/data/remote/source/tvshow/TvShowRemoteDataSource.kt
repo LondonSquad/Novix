@@ -9,7 +9,7 @@ import com.london.data.remote.model.details.tvshow.model.TvShowImagesRemoteRespo
 import com.london.data.remote.model.details.tvshow.model.tvshowepisode.EpisodeVideoResponse
 import com.london.data.remote.model.details.tvshow.model.tvshowepisode.TvShowEpisodeResponse
 import com.london.data.remote.model.details.tvshow.model.tvshowepisode.TvShowEpisodesRemoteResponse
-import com.london.data.remote.model.details.videoprovider.tvshow.model.TvShowVideoResponse
+import com.london.data.remote.model.details.videoprovider.VideoResponse
 import com.london.data.remote.model.home.popular.PopularTvShowResponse
 import com.london.data.remote.model.home.toprated.TopRatedTvSeriesRemote
 import com.london.data.remote.model.home.trending.TrendingResponse
@@ -25,7 +25,7 @@ interface TvShowRemoteDataSource {
     suspend fun deleteTvShowRating(tvShowId: Int, sessionId: String?): Result<RatingRemoteResponse>
     suspend fun getTopRatedTvShows(pageNumber: Int): Result<ApiResponse<TopRatedTvSeriesRemote>>
     suspend fun getTvShowDetailsById(id: Int): Result<TvShowDetailsRemoteResponse>
-    suspend fun getTvShowVideos(tvShowId: Int): Result<TvShowVideoResponse>
+    suspend fun getTvShowVideos(tvShowId: Int): Result<VideoResponse>
 
 
     suspend fun getTvShowReviews(

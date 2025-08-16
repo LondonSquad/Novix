@@ -12,19 +12,19 @@ import com.london.data.mapper.home.toprated.toEntity
 import com.london.data.mapper.search.toReviewEntity
 import com.london.data.remote.exception.NetworkException
 import com.london.data.remote.model.ApiResponse
+import com.london.data.remote.model.details.ImageItem
+import com.london.data.remote.model.details.movie.model.moviedetails.GenreRemote
 import com.london.data.remote.model.details.rating.AccountStatesResponse
 import com.london.data.remote.model.details.rating.RatingRemoteResponse
-import com.london.data.remote.model.details.tvshow.model.ImageItem
 import com.london.data.remote.model.details.tvshow.model.TvShowDetailsRemoteResponse
-import com.london.data.remote.model.details.tvshow.model.TvShowGenre
 import com.london.data.remote.model.details.tvshow.model.TvShowImagesRemoteResponse
 import com.london.data.remote.model.details.tvshow.model.TvShowSeason
 import com.london.data.remote.model.details.tvshow.model.tvshowepisode.EpisodeVideoProviderRemote
 import com.london.data.remote.model.details.tvshow.model.tvshowepisode.EpisodeVideoResponse
 import com.london.data.remote.model.details.tvshow.model.tvshowepisode.TvShowEpisodeBySeason
 import com.london.data.remote.model.details.tvshow.model.tvshowepisode.TvShowEpisodesRemoteResponse
-import com.london.data.remote.model.details.videoprovider.tvshow.model.TvShowVideoRemote
-import com.london.data.remote.model.details.videoprovider.tvshow.model.TvShowVideoResponse
+import com.london.data.remote.model.details.videoprovider.VideoRemote
+import com.london.data.remote.model.details.videoprovider.VideoResponse
 import com.london.data.remote.model.home.popular.PopularTvShowResponse
 import com.london.data.remote.model.home.toprated.TopRatedTvSeriesRemote
 import com.london.data.remote.model.home.trending.TrendingResponse
@@ -462,11 +462,11 @@ class TvShowRepositoryImplTest {
         assertThat(result).hasSize(2)
 
         val firstVideo = result.first()
-        assertThat(firstVideo).isEqualTo(fakeTvShowVideosResponse().tvShow?.get(0)?.key.asYoutubeUrlOrEmpty())
+        assertThat(firstVideo).isEqualTo(fakeTvShowVideosResponse().videos?.get(0)?.key.asYoutubeUrlOrEmpty())
 
         val secondVideo = result[1]
         assertThat(secondVideo).isEqualTo(
-            fakeTvShowVideosResponse().tvShow?.get(1)?.key.asYoutubeUrlOrEmpty()
+            fakeTvShowVideosResponse().videos?.get(1)?.key.asYoutubeUrlOrEmpty()
         )
     }
 
@@ -1077,7 +1077,7 @@ class TvShowRepositoryImplTest {
         val TvShowDetailsRemoteMock = TvShowDetailsRemoteResponse(
             firstAirDate = "2020-01-01",
             tvShowGenres = listOf(
-                TvShowGenre(id = 1, name = "Drama")
+                GenreRemote(id = 1, name = "Drama")
             ),
             id = TV_SHOW_ID,
             name = "Test TV Show",
@@ -1182,18 +1182,18 @@ class TvShowRepositoryImplTest {
             )
         }
 
-        private fun fakeTvShowVideosResponse() = TvShowVideoResponse(
-            id = 1, tvShow = listOf(
-                TvShowVideoRemote(
+        private fun fakeTvShowVideosResponse() = VideoResponse(
+            id = 1, videos = listOf(
+                VideoRemote(
                     key = "123",
-                ), TvShowVideoRemote(
+                ), VideoRemote(
                     key = "456",
                 )
             )
         )
 
-        private fun fakeNullTvShowVideosResponse() = TvShowVideoResponse(
-            id = 999, tvShow = null
+        private fun fakeNullTvShowVideosResponse() = VideoResponse(
+            id = 999, videos = null
         )
 
         val TvShowList = PagedFetchResponse(

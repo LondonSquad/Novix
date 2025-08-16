@@ -1,5 +1,6 @@
 package com.london.data.remote.model.details.tvshow.model
 
+import com.london.data.remote.model.details.ImageItem
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
@@ -13,10 +14,4 @@ data class TvShowImagesRemoteResponse(
     val logos: List<ImageItem>?,
     @SerialName("posters")
     val posters: List<ImageItem>?
-)
-
-@Serializable
-data class ImageItem(
-    @SerialName("file_path")
-    val filePath: String? = null,
 )

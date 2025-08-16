@@ -4,6 +4,7 @@ import com.london.data.remote.model.ApiResponse
 import com.london.data.remote.model.reviews.AuthorDetailsResponse
 import com.london.data.remote.model.reviews.ReviewResponse
 import com.london.data.utils.asImageUrlOrEmpty
+import com.london.data.utils.orDefault
 import com.london.data.utils.orZero
 import com.london.domain.entity.PagedFetchResponse
 import com.london.domain.entity.review.AuthorDetails
@@ -13,7 +14,7 @@ fun ApiResponse<ReviewResponse>.toReviewEntity(): PagedFetchResponse<ReviewEntit
     PagedFetchResponse(
         items = items.map { it.toReviewEntity() },
         currentPage = currentPage,
-        totalPages = if (totalPages != 0) totalPages else 1,
+        totalPages = totalPages.orDefault(),
         totalItems = totalItems
     )
 

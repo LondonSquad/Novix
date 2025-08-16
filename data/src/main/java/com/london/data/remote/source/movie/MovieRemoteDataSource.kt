@@ -6,7 +6,7 @@ import com.london.data.remote.model.details.movie.model.moviedetails.MovieDetail
 import com.london.data.remote.model.details.movie.model.movieimages.MovieImagesResponse
 import com.london.data.remote.model.details.rating.AccountStatesResponse
 import com.london.data.remote.model.details.rating.RatingRemoteResponse
-import com.london.data.remote.model.details.videoprovider.movie.model.MovieVideoRemote
+import com.london.data.remote.model.details.videoprovider.VideoResponse
 import com.london.data.remote.model.home.popular.PopularMovieResponse
 import com.london.data.remote.model.home.toprated.TopRatedMovieRemote
 import com.london.data.remote.model.home.trending.TrendingResponse
@@ -18,7 +18,7 @@ interface MovieRemoteDataSource {
     suspend fun getMovieDetails(movieId: Int): Result<MovieDetailsResponse>
     suspend fun getSimilarMovies(movieId: Int): Result<ApiResponse<MovieRemote>>
     suspend fun getMovieImages(movieId: Int): Result<MovieImagesResponse>
-    suspend fun getMovieVideos(movieId: Int): Result<MovieVideoRemote>
+    suspend fun getMovieVideos(movieId: Int): Result<VideoResponse>
     suspend fun getPopularMovies(): Result<ApiResponse<PopularMovieResponse>>
     suspend fun getTrendingMovies(page: Int): Result<ApiResponse<TrendingResponse>>
     suspend fun getMovieReviews(movieId: Int, pageNumber: Int): Result<ApiResponse<ReviewResponse>>

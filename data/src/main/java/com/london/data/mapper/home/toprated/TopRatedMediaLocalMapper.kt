@@ -11,7 +11,6 @@ fun TopRatedLocal.toEntity(): TopRatedMedia =
         genres = genre.toGenre(mediaType),
         voteAverage = rating,
         mediaType = mediaType,
-        releaseDate = releaseYear,
         posterUrl = posterPictureUrl,
     )
 
@@ -22,6 +21,5 @@ fun TopRatedMedia.toLocal(): TopRatedLocal =
         genre = genres.map { it.toGenreId() },
         rating = voteAverage,
         mediaType = mediaType,
-        releaseYear = releaseDate,
         posterPictureUrl = posterUrl,
     )
