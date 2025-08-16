@@ -112,7 +112,7 @@ jobs:
         run: chmod +x ./gradlew
 
       - name: 🛠️ Run build, tests, and Kover report generation
-        run: ./gradlew koverXmlReportDebug koverVerifyDebug --build-cache
+        run: ./gradlew koverXmlReport koverHtmlReport koverVerify --build-cache
 
       - name: 📤 Upload HTML Coverage Report
         if: always()
