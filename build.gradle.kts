@@ -29,7 +29,7 @@ subprojects {
     }
 }
 
-subprojects {
+allprojects {
     apply(plugin = "org.jetbrains.kotlinx.kover")
 
     kover {
@@ -46,6 +46,11 @@ subprojects {
                 excludes {
                     annotatedBy("com.london.domain.KoverIgnore")
                     annotatedBy("*Composable")
+                    projects.addAll(
+                        "com.london.buildsrc",
+                        "com.london.designsystem",
+                        "com.london.imageharamblur",
+                    )
 
                     classes(
                         "**.model.**",
