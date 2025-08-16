@@ -23,7 +23,7 @@ env:
 
 jobs:
   setup:
-    name: ⚙️ Setup Environment
+    name: Setup Environment
     runs-on: ubuntu-latest
     outputs:
       project-setup-key: project-setup-${{ github.sha }}
@@ -75,7 +75,7 @@ jobs:
           key: project-setup-${{ github.sha }}
 
   build_and_test:
-    name: 🏗️ Build, Test & Verify Coverage
+    name: Build, Test & Verify Coverage
     needs: setup
     runs-on: ubuntu-latest
     steps:
@@ -119,17 +119,17 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: coverage-report-html
-          path: '**/build/reports/kover/htmlDebug/'
+          path: '**/build/reports/kover/html/'
 
       - name: 📤 Upload XML Coverage Report
         if: always()
         uses: actions/upload-artifact@v4
         with:
           name: coverage-report-xml
-          path: '**/build/reports/kover/xml/debug/report.xml'
+          path: 'build/reports/kover/report.xml'
 
   comment_on_pr:
-    name: 📊 Report Code Coverage
+    name: Report Code Coverage
     needs: build_and_test
     if: github.event_name == 'pull_request' && always()
     runs-on: ubuntu-latest
@@ -138,7 +138,7 @@ jobs:
         uses: actions/checkout@v4
 
       - name: 📥 Download XML Coverage Report
-        uses: actions/download-artifact@vv4
+        uses: actions/download-artifact@v4
         with:
           name: coverage-report-xml
           path: coverage/
@@ -150,6 +150,5 @@ jobs:
           token: ${{ secrets.GITHUB_TOKEN }}
           title: "📊 Code Coverage Report"
           update-comment: true
-          # Minimum coverage percentages to pass the check.
           min-coverage-overall: 80
           min-coverage-changed-files: 80
