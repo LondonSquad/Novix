@@ -111,6 +111,7 @@ jobs:
       github.event_name == 'workflow_dispatch' ||
       github.event_name == 'pull_request_review' ||
       (github.event_name == 'issue_comment' && github.event.issue.pull_request) ||
+      (github.event_name == 'pull_request_review_comment' && (github.event.action == 'created' || github.event.action == 'edited')) ||
       (
         github.event_name == 'pull_request' &&
         (
@@ -149,7 +150,12 @@ jobs:
           PR_ACTION="${{ github.event.action }}"
           BACKFILL="${{ github.event.inputs.backfill_existing_prs }}"
           # Special handling for issue_comment to get the PR number
-          PR_NUMBER_FROM_EVENT="${{ github.event.pull_request.number || github.event.issue.number }}"
+          PR_NUMBER_FROM_EVENT=""
+          if [[ "$EVENT_NAME" == "issue_comment" ]]; then
+            PR_NUMBER_FROM_EVENT="${{ github.event.issue.number }}"
+          else
+            PR_NUMBER_FROM_EVENT="${{ github.event.pull_request.number }}"
+          fi
           UPDATE_TYPE=""
 
           if [[ "$EVENT_NAME" == "workflow_dispatch" && "$BACKFILL" == "true" ]]; then
@@ -163,12 +169,13 @@ jobs:
             [[ "$PR_ACTION" == "synchronize" ]] || \
             [[ "$PR_ACTION" == "dismissed" ]] || \
             [[ "$EVENT_NAME" == "issue_comment" ]] || \
+            [[ "$EVENT_NAME" == "pull_request_review_comment" ]] || \
             [[ "$PR_ACTION" == "submitted" && "${{ github.event.review.state }}" == "approved" ]]; then
             UPDATE_TYPE="PR_STATE_REFRESH"
           fi
           
           echo "UPDATE_TYPE=$UPDATE_TYPE" >> $GITHUB_OUTPUT
-          echo "PR_NUMBER=${{ github.event.pull_request.number }}" >> $GITHUB_OUTPUT
+          echo "PR_NUMBER=$PR_NUMBER_FROM_EVENT" >> $GITHUB_OUTPUT
           echo "PR_ACTION=$PR_ACTION" >> $GITHUB_OUTPUT
 
       - name: Backfill Existing PRs
@@ -222,11 +229,11 @@ jobs:
               PR_STATUS="closed"
             fi
           
-            # Fetch assignees and comments data
+            # Fetch assignees and ALL comment types, then merge them
             ASSIGNEES_JSON=$(echo "$PR_DATA" | jq '[.assignees[] | {login: .login, id: .id, url: .html_url}]')
             ISSUE_COMMENTS=$(gh api "repos/${{ github.repository }}/issues/$pr_number/comments" --paginate --jq '[.[] | select(.user.type != "Bot")]')
             REVIEW_COMMENTS=$(gh api "repos/${{ github.repository }}/pulls/$pr_number/comments" --paginate --jq '[.[] | select(.user.type != "Bot")]')
-            ALL_COMMENTS_JSON=$(echo "[$ISSUE_COMMENTS, $REVIEW_COMMENTS]" | jq -s 'add | map({ author: { login: .user.login, id: .user.id, url: .user.html_url }, created_at: .created_at })')
+            ALL_COMMENTS_JSON=$(jq -n --argjson issueComments "$ISSUE_COMMENTS" --argjson reviewComments "$REVIEW_COMMENTS" '($issueComments + $reviewComments) | map({ author: { login: .user.login, id: .id, url: .user.html_url }, created_at: .created_at })')
 
             # Create new PR entry with all data
             NEW_PR_DATA=$(jq -n \
@@ -260,7 +267,7 @@ jobs:
               --argjson merged_by "$PR_MERGED_BY" \
               --arg status "$PR_STATUS" \
               --argjson assignees "$ASSIGNEES_JSON" \
-              --argjson comments "$COMMENTS_JSON" \
+              --argjson comments "ALL_COMMENTS_JSON" \
               '
               def recalculate_approval_metrics($required_approvals):
                 def parse_time(ts): (if ts then (ts | strptime("%Y-%m-%dT%H:%M:%SZ") | mktime) else null end);
@@ -327,7 +334,7 @@ jobs:
         env:
           GH_TOKEN: ${{ steps.app-token.outputs.token }}
           # Common variables
-          PR_NUMBER: ${{ github.event.pull_request.number }}
+          PR_NUMBER: ${{ steps.prepare_data.outputs.PR_NUMBER }}
           PR_ACTION: ${{ github.event.action }}
           # For PR_OPENED
           PR_URL: ${{ github.event.pull_request.html_url }}
@@ -407,7 +414,7 @@ jobs:
             CURRENT_ASSIGNEES_JSON=$(gh api "repos/${{ github.repository }}/pulls/$PR_NUMBER" --jq '[.assignees[] | {login: .login, id: .id, url: .html_url}]')
             ISSUE_COMMENTS=$(gh api "repos/${{ github.repository }}/issues/$PR_NUMBER/comments" --paginate --jq '[.[] | select(.user.type != "Bot")]')
             REVIEW_COMMENTS=$(gh api "repos/${{ github.repository }}/pulls/$PR_NUMBER/comments" --paginate --jq '[.[] | select(.user.type != "Bot")]')
-            CURRENT_COMMENTS_JSON=$(echo "[$ISSUE_COMMENTS, $REVIEW_COMMENTS]" | jq -s 'add | map({ author: { login: .user.login, id: .user.id, url: .user.html_url }, created_at: .created_at })')
+            CURRENT_COMMENTS_JSON=$(jq -n --argjson issueComments "$ISSUE_COMMENTS" --argjson reviewComments "$REVIEW_COMMENTS" '($issueComments + $reviewComments) | map({ author: { login: .user.login, id: .user.id, url: .user.html_url }, created_at: .created_at })')
 
             if [[ "$HAS_VALID_DIFF_STATS" == "true" ]]; then
               echo "Updating diff stats and participant data for PR #$PR_NUMBER"
