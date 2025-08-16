@@ -232,7 +232,7 @@ private fun SearchRecentArea(
             )
         },
         content = {
-            RecentSearchSection(
+            RecentSection(
                 state = state,
                 contract = contract,
                 onNavigateToTvShowDetails = contract::onTvShowClick,
@@ -281,7 +281,7 @@ private fun RecentSearchesContent(
             )
         },
         content = {
-            RecentSearchSection(
+            RecentSection(
                 state = state,
                 contract = contract,
                 onNavigateToTvShowDetails = contract::onTvShowClick,
@@ -314,22 +314,11 @@ private fun SearchResultsWithCategory(
             onBack = null
         )
     } else {
-        SearchContentByCategory(
-            state = state,
-            contract = contract
-        )
-    }
-}
-
-@Composable
-private fun SearchContentByCategory(
-    state: SearchUiState,
-    contract: SearchContract
-) {
-    when (state.selectedCategory) {
-        SearchCategory.Movies -> MovieSearchContent(state, contract)
-        SearchCategory.TvShows -> TvShowSearchContent(state, contract)
-        SearchCategory.Actors -> ActorSearchContent(state, contract)
+        when (state.selectedCategory) {
+            SearchCategory.Movies -> MovieSearchContent(state, contract)
+            SearchCategory.TvShows -> TvShowSearchContent(state, contract)
+            SearchCategory.Actors -> ActorSearchContent(state, contract)
+        }
     }
 }
 
@@ -372,6 +361,38 @@ private fun TvShowSearchContent(state: SearchUiState, contract: SearchContract) 
 }
 
 @Composable
+private fun ActorSearchContent(state: SearchUiState, contract: SearchContract) {
+    val actorsLazyList = state.actorsFlow.collectAsLazyPagingItems()
+
+    SearchContentWithErrorHandling(
+        actorsLazyList,
+        contract,
+    ) { isLoading ->
+        ResultOrEmpty(
+            items = actorsLazyList.itemSnapshotList.items,
+            emptyContent = {
+                if (!isLoading) {
+                    EmptyLayout(
+                        text = stringResource(R.string.no_search_result_msg),
+                        image = R.drawable.img_no_search_result,
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .padding(horizontal = 16.dp)
+                    )
+                }
+            },
+            content = {
+                ActorsLayout(
+                    items = actorsLazyList, onActorClick = {
+                        contract.onActorClick(it.id)
+                    }
+                )
+            }
+        )
+    }
+}
+
+@Composable
 private fun <T : Any> MediaSearchContent(
     pagingItems: LazyPagingItems<T>,
     contract: SearchContract,
@@ -410,38 +431,6 @@ private fun <T : Any> MediaSearchContent(
 }
 
 @Composable
-private fun ActorSearchContent(state: SearchUiState, contract: SearchContract) {
-    val actorsLazyList = state.actorsFlow.collectAsLazyPagingItems()
-
-    SearchContentWithErrorHandling(
-        actorsLazyList,
-        contract,
-    ) { isLoading ->
-        ResultOrEmpty(
-            items = actorsLazyList.itemSnapshotList.items,
-            emptyContent = {
-                if (!isLoading) {
-                    EmptyLayout(
-                        text = stringResource(R.string.no_search_result_msg),
-                        image = R.drawable.img_no_search_result,
-                        modifier = Modifier
-                            .fillMaxSize()
-                            .padding(horizontal = 16.dp)
-                    )
-                }
-            },
-            content = {
-                ActorsLayout(
-                    items = actorsLazyList, onActorClick = {
-                        contract.onActorClick(it.id)
-                    }
-                )
-            }
-        )
-    }
-}
-
-@Composable
 private fun SearchContentWithErrorHandling(
     lazyPagingItems: LazyPagingItems<*>,
     contract: SearchContract,
@@ -465,7 +454,6 @@ private fun SearchContentWithErrorHandling(
         content(isLoading)
     }
 }
-
 
 @Composable
 private fun SearchBar(
@@ -494,10 +482,12 @@ private fun SearchBar(
                 )
             },
             leadingIcon = painterResource(id = R.drawable.icon_search_normal),
-            trailingIcon = trailingClearIcon(
-                isVisible = uiState.searchQuery.text.isNotEmpty() && focusedState,
-                onClear = contract::clearSearch
-            ),
+            trailingIcon = {
+                TrailingClearIcon(
+                    isVisible = uiState.searchQuery.text.isNotEmpty() && focusedState,
+                    onClear = contract::clearSearch
+                )
+            },
             keyboardOptions = KeyboardOptions(
                 imeAction = ImeAction.Search
             ),
@@ -511,17 +501,15 @@ private fun SearchBar(
             modifier = Modifier.weight(1f)
         )
     }
-
 }
 
 @Composable
-private fun trailingClearIcon(
+private fun TrailingClearIcon(
     isVisible: Boolean,
     onClear: () -> Unit
-): (@Composable (() -> Unit))? {
-    if (!isVisible) return null
-    return {
-        Icon(
+) {
+    if (!isVisible) return
+    Icon(
             painter = painterResource(id = R.drawable.icon_remove_filled),
             contentDescription = stringResource(R.string.clear),
             tint = NovixTheme.colors.hint,
@@ -532,7 +520,6 @@ private fun trailingClearIcon(
                     indication = null
                 ) { onClear() }
         )
-    }
 }
 
 private fun onSearchKeyboardAction(
@@ -553,6 +540,74 @@ private fun onSearchKeyboardAction(
             )
         }
     )
+}
+
+@Composable
+private fun SearchChipsRow(
+    selected: SearchCategory,
+    onSelect: (SearchCategory) -> Unit,
+    modifier: Modifier = Modifier
+) {
+    Row(
+        modifier = modifier
+            .fillMaxWidth()
+            .padding(horizontal = 16.dp),
+        horizontalArrangement = Arrangement.spacedBy(8.dp),
+    ) {
+        SearchCategory.entries.forEach { category ->
+            NovixChip(
+                text = stringResource(category.title),
+                isSelected = selected == category,
+                onClick = {
+                    if (selected != category) {
+                        onSelect(category)
+                    }
+                }
+            )
+        }
+    }
+}
+
+@Composable
+fun RecentSection(
+    state: SearchUiState,
+    contract: SearchContract,
+    onNavigateToTvShowDetails: (Int) -> Unit,
+    onNavigateToMovieDetails: (Int) -> Unit
+) {
+    val focusManager = LocalFocusManager.current
+    val keyboardController = LocalSoftwareKeyboardController.current
+    val handleRecentSearchClick: (String) -> Unit = { query ->
+        focusManager.clearFocus()
+        keyboardController?.hide()
+        contract.onRecentSearchClick(query)
+    }
+
+    LazyColumn(
+        modifier = Modifier.fillMaxSize()
+    ) {
+        if (state.recentViewed.isNotEmpty()) {
+            item {
+                RecentViewedSection(
+                    recentViewed = state.recentViewed,
+                    onClearAll = contract::clearRecentViewed,
+                    onNavigateToTvShowDetails = onNavigateToTvShowDetails,
+                    onNavigateToMovieDetails = onNavigateToMovieDetails
+                )
+            }
+        }
+
+        if (state.recentSearches.isNotEmpty()) {
+            item {
+                RecentSearchSection(
+                    recentSearches = state.recentSearches,
+                    onClearAll = contract::clearRecentSearches,
+                    onSearchClick = handleRecentSearchClick,
+                    onRemoveClick = contract::removeRecentSearch
+                )
+            }
+        }
+    }
 }
 
 @Composable
@@ -595,7 +650,7 @@ private fun RecentViewedSection(
 }
 
 @Composable
-private fun RecentSearchesSection(
+private fun RecentSearchSection(
     recentSearches: List<RecentSearch>,
     onClearAll: () -> Unit,
     onSearchClick: (String) -> Unit,
@@ -615,11 +670,15 @@ private fun RecentSearchesSection(
             .background(NovixTheme.colors.surface)
             .padding(horizontal = 16.dp)
     ) {
-        RecentSearchList(
-            recentSearches = recentSearches,
-            onSearchClick = onSearchClick,
-            onRemoveClick = onRemoveClick
-        )
+        val lastIndex = recentSearches.lastIndex
+        recentSearches.forEachIndexed { index, search ->
+            RecentSearchItem(
+                search = search.query,
+                onSearchClick = { onSearchClick(search.query) },
+                onRemoveClick = { onRemoveClick(search) },
+                showDivider = index != lastIndex
+            )
+        }
     }
 }
 
@@ -664,92 +723,6 @@ private fun RecentSearchItem(
 
     if (showDivider) {
         RecentSearchSeparator()
-    }
-}
-
-@Composable
-private fun RecentSearchList(
-    recentSearches: List<RecentSearch>,
-    onSearchClick: (String) -> Unit,
-    onRemoveClick: (RecentSearch) -> Unit
-) {
-    val lastIndex = recentSearches.lastIndex
-    recentSearches.forEachIndexed { index, search ->
-        RecentSearchItem(
-            search = search.query,
-            onSearchClick = { onSearchClick(search.query) },
-            onRemoveClick = { onRemoveClick(search) },
-            showDivider = index != lastIndex
-        )
-    }
-}
-
-@Composable
-private fun SearchChipsRow(
-    selected: SearchCategory,
-    onSelect: (SearchCategory) -> Unit,
-    modifier: Modifier = Modifier
-) {
-    Row(
-        modifier = modifier
-            .fillMaxWidth()
-            .padding(horizontal = 16.dp),
-        horizontalArrangement = Arrangement.spacedBy(8.dp),
-    ) {
-        SearchCategory.entries.forEach { category ->
-            NovixChip(
-                text = stringResource(category.title),
-                isSelected = selected == category,
-                onClick = {
-                    if (selected != category) {
-                        onSelect(category)
-                    }
-                }
-            )
-        }
-    }
-}
-
-
-@Composable
-fun RecentSearchSection(
-    state: SearchUiState,
-    contract: SearchContract,
-    onNavigateToTvShowDetails: (Int) -> Unit,
-    onNavigateToMovieDetails: (Int) -> Unit
-) {
-    val focusManager = LocalFocusManager.current
-    val keyboardController = LocalSoftwareKeyboardController.current
-    val handleRecentSearchClick: (String) -> Unit = { query ->
-        focusManager.clearFocus()
-        keyboardController?.hide()
-        contract.onRecentSearchClick(query)
-    }
-
-    LazyColumn(
-        modifier = Modifier.fillMaxSize()
-    ) {
-        if (state.recentViewed.isNotEmpty()) {
-            item {
-                RecentViewedSection(
-                    recentViewed = state.recentViewed,
-                    onClearAll = contract::clearRecentViewed,
-                    onNavigateToTvShowDetails = onNavigateToTvShowDetails,
-                    onNavigateToMovieDetails = onNavigateToMovieDetails
-                )
-            }
-        }
-
-        if (state.recentSearches.isNotEmpty()) {
-            item {
-                RecentSearchesSection(
-                    recentSearches = state.recentSearches,
-                    onClearAll = contract::clearRecentSearches,
-                    onSearchClick = handleRecentSearchClick,
-                    onRemoveClick = contract::removeRecentSearch
-                )
-            }
-        }
     }
 }
 
