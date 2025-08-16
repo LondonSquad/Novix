@@ -21659,7 +21659,15 @@
       "additions": 439,
       "deletions": 480,
       "changed_files": 11
-    }
+    },
+    "assignees": [
+      {
+        "id": 117874933,
+        "login": "AsmaaKhaledGomaa",
+        "url": "https://github.com/AsmaaKhaledGomaa"
+      }
+    ],
+    "comments": []
   },
   {
     "pr_number": 642,
