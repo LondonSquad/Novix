@@ -122,7 +122,7 @@ private fun Content(
         pagingFlow = currentPagingFlow,
         handlePagingLoadingAutomatically = false
     ) {
-        SearchBody(
+        SearchMainContent(
             state = state,
             contract = contract,
             interactionSource = interactionSource,
@@ -133,7 +133,7 @@ private fun Content(
 }
 
 @Composable
-private fun SearchBody(
+private fun SearchMainContent(
     state: SearchUiState,
     contract: SearchContract,
     interactionSource: MutableInteractionSource,
@@ -153,45 +153,30 @@ private fun SearchBody(
                 .background(NovixTheme.colors.surface),
             verticalArrangement = Arrangement.Top
         ) {
-            SearchMainContent(
-                state = state,
+            TopBar(
+                modifier = Modifier
+                    .statusBarsPadding()
+                    .padding(horizontal = 16.dp),
+                title = stringResource(R.string.search),
+            )
+
+            SearchBar(
+                uiState = state,
                 contract = contract,
                 interactionSource = interactionSource,
-                keyboardController = keyboardController
+                keyboardController = keyboardController,
+                modifier = Modifier
+                    .padding(start = 16.dp, end = 16.dp, bottom = 12.dp)
+                    .fillMaxWidth()
             )
+
+            SearchBody(state = state, contract = contract)
         }
     }
 }
 
 @Composable
-private fun SearchMainContent(
-    state: SearchUiState,
-    contract: SearchContract,
-    interactionSource: MutableInteractionSource,
-    keyboardController: SoftwareKeyboardController?,
-) {
-    TopBar(
-        modifier = Modifier
-            .statusBarsPadding()
-            .padding(horizontal = 16.dp),
-        title = stringResource(R.string.search),
-    )
-
-    SearchBar(
-        uiState = state,
-        contract = contract,
-        interactionSource = interactionSource,
-        keyboardController = keyboardController,
-        modifier = Modifier
-            .padding(start = 16.dp, end = 16.dp, bottom = 12.dp)
-            .fillMaxWidth()
-    )
-
-    SearchContentWithError(state = state, contract = contract)
-}
-
-@Composable
-private fun SearchContentWithError(
+private fun SearchBody(
     state: SearchUiState,
     contract: SearchContract
 ) {
@@ -208,33 +193,22 @@ private fun SearchContentWithError(
             }
         )
     } else {
-        SearchResultsContent(
-            state = state,
-            contract = contract
+        ResultOrEmpty(
+            items = state.searchQuery.text.toList(),
+            emptyContent = {
+                RecentSection(
+                    state = state,
+                    contract = contract
+                )
+            },
+            content = {
+                SearchResultsWithCategory(
+                    state = state,
+                    contract = contract
+                )
+            }
         )
     }
-}
-
-@Composable
-private fun SearchResultsContent(
-    state: SearchUiState,
-    contract: SearchContract
-) {
-    ResultOrEmpty(
-        items = state.searchQuery.text.toList(),
-        emptyContent = {
-            RecentSection(
-                state = state,
-                contract = contract
-            )
-        },
-        content = {
-            SearchResultsWithCategory(
-                state = state,
-                contract = contract
-            )
-        }
-    )
 }
 
 @Composable
