@@ -215,6 +215,11 @@ jobs:
 
             # Fetch PR details from the API
             PR_DATA=$(gh api "repos/${{ github.repository }}/pulls/$pr_number")
+            # ADDED: Safety check to skip PR if data fetch fails
+            if [[ -z "$PR_DATA" ]]; then
+              echo "Warning: Failed to fetch data for PR #$pr_number. Skipping."
+              continue
+            fi
 
             # Extract all needed PR information
             PR_CLOSED_AT=$(echo "$PR_DATA" | jq -r '.closed_at // empty')
@@ -231,9 +236,11 @@ jobs:
           
             # Fetch assignees and ALL comment types, then merge them
             ASSIGNEES_JSON=$(echo "$PR_DATA" | jq '[.assignees[] | {login: .login, id: .id, url: .html_url}]')
-            ISSUE_COMMENTS=$(gh api "repos/${{ github.repository }}/issues/$pr_number/comments" --paginate --jq '[.[] | select(.user.type != "Bot")]')
-            REVIEW_COMMENTS=$(gh api "repos/${{ github.repository }}/pulls/$pr_number/comments" --paginate --jq '[.[] | select(.user.type != "Bot")]')
-            ALL_COMMENTS_JSON=$(jq -n --argjson issueComments "$ISSUE_COMMENTS" --argjson reviewComments "$REVIEW_COMMENTS" '($issueComments + $reviewComments) | map({ author: { login: .user.login, id: .id, url: .user.html_url }, created_at: .created_at })')
+            # ADDED: '|| echo "[]"' for resilience
+            ISSUE_COMMENTS=$(gh api "repos/${{ github.repository }}/issues/$pr_number/comments" --paginate --jq '[.[] | select(.user.type != "Bot")]' || echo "[]")
+            REVIEW_COMMENTS=$(gh api "repos/${{ github.repository }}/pulls/$pr_number/comments" --paginate --jq '[.[] | select(.user.type != "Bot")]' || echo "[]")
+            ALL_COMMENTS_JSON=$(jq -n --argjson issueComments "$ISSUE_COMMENTS" --argjson reviewComments "$REVIEW_COMMENTS" '($issueComments + $reviewComments) | map({ author: { login: .user.login, id: .user.id, url: .user.html_url }, created_at: .created_at })')
+            CURRENT_APPROVALS_JSON=$(gh api "repos/${{ github.repository }}/pulls/$pr_number/reviews" --jq '[.[] | select(.state == "APPROVED" and .commit_id == "'$(echo "$PR_DATA" | jq -r '.head.sha')'")] | group_by(.user.id) | map(sort_by(.submitted_at) | .[-1]) | map({reviewer: {login: .user.login, id: .user.id, url: .user.html_url}, submitted_at: .submitted_at})' || echo "[]")
 
             # Create new PR entry with all data
             NEW_PR_DATA=$(jq -n \
@@ -250,24 +257,14 @@ jobs:
               --argjson deletions "$(echo "$PR_DATA" | jq -r '.deletions // 0')" \
               --argjson changed_files "$(echo "$PR_DATA" | jq -r '.changed_files // 0')" \
               --arg week "$(date -d "$(echo "$PR_DATA" | jq -r '.created_at')" +%G-W%V)" \
-              --argjson current_approvals "$(gh api "repos/${{ github.repository }}/pulls/$pr_number/reviews" \
-                --jq '[.[] | select(.state == "APPROVED" and .commit_id == "'$(echo "$PR_DATA" | jq -r '.head.sha')'")] |
-                group_by(.user.id) | map(sort_by(.submitted_at) | .[-1]) |
-                map({
-                  reviewer: {
-                    login: .user.login,
-                    id: .user.id,
-                    url: .user.html_url
-                  },
-                  submitted_at: .submitted_at
-                })')" \
+              --argjson current_approvals "$CURRENT_APPROVALS_JSON" \
               --argjson required_approvals "$REQUIRED_APPROVALS" \
               --arg closed_at "$PR_CLOSED_AT" \
               --arg merged_at "$PR_MERGED_AT" \
               --argjson merged_by "$PR_MERGED_BY" \
               --arg status "$PR_STATUS" \
               --argjson assignees "$ASSIGNEES_JSON" \
-              --argjson comments "ALL_COMMENTS_JSON" \
+              --argjson comments "$ALL_COMMENTS_JSON" \
               '
               def recalculate_approval_metrics($required_approvals):
                 def parse_time(ts): (if ts then (ts | strptime("%Y-%m-%dT%H:%M:%SZ") | mktime) else null end);
