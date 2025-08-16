@@ -1,7 +1,7 @@
 package com.london.data.repository.actor
 
 import com.london.data.mapper.details.actor.toEntity
-import com.london.data.mapper.details.toEntity
+import com.london.data.mapper.details.movie.toEntity
 import com.london.data.mapper.details.tvshow.toCastEntity
 import com.london.data.mapper.home.trending.toEntityActor
 import com.london.data.remote.source.actor.ActorRemoteDataSource
