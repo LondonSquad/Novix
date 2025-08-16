@@ -470,19 +470,10 @@ jobs:
 
           elif [[ "$UPDATE_TYPE" == "PR_OPENED" ]]; then
             WEEK_NUMBER=$(date -d "$PR_CREATED_AT" +%G-W%V)
+            SAFE_ADDITIONS=${PR_ADDITIONS:-0}; SAFE_DELETions=${PR_DELETIONS:-0}; SAFE_CHANGED_FILES=${PR_CHANGED_FILES:-0}
+            if ! [[ "$SAFE_ADDITIONS" =~ ^[0-9]+$ ]]; then SAFE_ADDITIONS=0; fi; if ! [[ "$SAFE_DELETIONS" =~ ^[0-9]+$ ]]; then SAFE_DELETIONS=0; fi; if ! [[ "$SAFE_CHANGED_FILES" =~ ^[0-9]+$ ]]; then SAFE_CHANGED_FILES=0; fi
           
-            # For new PRs, we need valid diff stats or default to 0
-            SAFE_ADDITIONS=${PR_ADDITIONS:-0}
-            SAFE_DELETIONS=${PR_DELETIONS:-0}
-            SAFE_CHANGED_FILES=${PR_CHANGED_FILES:-0}
-          
-            # Validate that values are numeric for new PRs
-            if ! [[ "$SAFE_ADDITIONS" =~ ^[0-9]+$ ]]; then SAFE_ADDITIONS=0; fi
-            if ! [[ "$SAFE_DELETIONS" =~ ^[0-9]+$ ]]; then SAFE_DELETIONS=0; fi
-            if ! [[ "$SAFE_CHANGED_FILES" =~ ^[0-9]+$ ]]; then SAFE_CHANGED_FILES=0; fi
-          
-            echo "Debug: New PR - ADDITIONS=$SAFE_ADDITIONS, DELETIONS=$SAFE_DELETIONS, CHANGED_FILES=$SAFE_CHANGED_FILES"
-          
+            # This is the corrected NEW_PR_DATA construction
             NEW_PR_DATA=$(jq -n \
               --argjson pr_number "$PR_NUMBER" \
               --arg url "$PR_URL" \
@@ -497,6 +488,7 @@ jobs:
               --argjson deletions "$SAFE_DELETIONS" \
               --argjson changed_files "$SAFE_CHANGED_FILES" \
               --arg week "$WEEK_NUMBER" \
+              --argjson required_approvals "$REQUIRED_APPROVALS" \
               '
               {
                 "pr_number": $pr_number,
@@ -510,9 +502,10 @@ jobs:
                   "id": $creator_id,
                   "url": $creator_html_url
                 },
-                "approvals": [],
                 "assignees": [], 
                 "comments": [],
+                "approvals": [],
+                "required_approvals": $required_approvals,
                 "first_approved_at": null,
                 "time_to_first_approval_minutes": null,
                 "required_approvals_met_at": null,
