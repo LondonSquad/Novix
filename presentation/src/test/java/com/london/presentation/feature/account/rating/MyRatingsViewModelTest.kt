@@ -208,8 +208,7 @@ class MyRatingsViewModelTest {
     fun `onRetryClick should reload rated media when invoked`() = runTest(mainDispatcher) {
         // Given
         val manageRatingUseCase = mockk<ManageRatingUseCase>(relaxed = true)
-        val mockRatedMedia = createMockRatedMedia()
-        coEvery { manageRatingUseCase.getRatedMediaSorted() } returns mockRatedMedia
+        coEvery { manageRatingUseCase.getRatedMediaSorted() } returns createMockRatedMedia()
         val viewModel = MyRatingsViewModel(manageRatingUseCase = manageRatingUseCase)
 
         // When
