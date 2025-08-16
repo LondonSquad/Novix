@@ -1,4 +1,4 @@
-package com.london.data.di
+package com.london.app.di
 
 import android.content.SharedPreferences
 import com.london.data.local.database.dao.customLists.ListMembershipDao
