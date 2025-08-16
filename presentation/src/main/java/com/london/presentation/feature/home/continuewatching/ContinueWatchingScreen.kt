@@ -33,25 +33,6 @@ import com.london.presentation.shared.container.MediaGridConfig
 import com.london.presentation.shared.container.MediaLazyGridWithTabs
 import com.london.presentation.utils.Listen
 
-fun LazyGridScope.continueWatchingSection(
-    screenWidth: Dp,
-    recentWatchedMedia: List<HomeUiMedia>,
-    isLoading: Boolean,
-    homeScreenContract: HomeScreenContract
-) {
-    item(span = { GridItemSpan(maxLineSpan) }) {
-        if (!isLoading) {
-            ContinueWatchingSection(
-                recentWatchedMediaList = recentWatchedMedia,
-                homeScreenContract = homeScreenContract,
-                modifier = Modifier.requiredWidth(screenWidth)
-            )
-        } else {
-            CarousalShimmerEffect()
-        }
-    }
-}
-
 @Composable
 fun ContinueWatchingScreen(
     screenTitle: String,

@@ -1,5 +1,6 @@
 package com.london.data.remote.model.search
 
+import com.london.data.mapper.genre.GenreMapper
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
@@ -41,4 +42,4 @@ data class MovieRemote(
     val firstAirDate: String? = null,
     @SerialName("name")
     val name: String? = null
-)
+) : GenreMapper

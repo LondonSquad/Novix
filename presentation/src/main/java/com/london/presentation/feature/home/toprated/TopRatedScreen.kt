@@ -15,8 +15,6 @@ import androidx.compose.foundation.layout.requiredWidth
 import androidx.compose.foundation.layout.statusBars
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.grid.GridCells
-import androidx.compose.foundation.lazy.grid.GridItemSpan
-import androidx.compose.foundation.lazy.grid.LazyGridScope
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.items
 import androidx.compose.runtime.Composable
@@ -37,36 +35,14 @@ import com.london.designsystem.component.TabLayout
 import com.london.designsystem.component.TopBar
 import com.london.designsystem.theme.NovixTheme
 import com.london.designsystem.utils.string
-import com.london.presentation.feature.home.HomeScreenContract
-import com.london.presentation.feature.home.HomeScreenUiState
-import com.london.presentation.feature.home.section.TopRatedSection
-import com.london.presentation.shared.CarousalShimmerEffect
 import com.london.presentation.shared.HomeCard
 import com.london.presentation.shared.MediaCategory
 import com.london.presentation.shared.buildscreen.BuildScreen
+import com.london.presentation.shared.genre.MovieGenreUi
+import com.london.presentation.shared.genre.TvShowGenreUi
 import com.london.presentation.utils.Listen
-import com.london.presentation.utils.MovieGenre
-import com.london.presentation.utils.TvShowGenre
 import com.london.presentation.utils.gridColumns
 import com.london.presentation.utils.isLoading
-
-fun LazyGridScope.topRatedSection(
-    screenWidth: Dp,
-    uiState: HomeScreenUiState,
-    homeScreenContract: HomeScreenContract
-) {
-    item(span = { GridItemSpan(maxLineSpan) }) {
-        if (!uiState.isTopRatedLoading) {
-            TopRatedSection(
-                uiState = uiState,
-                homeScreenContract = homeScreenContract,
-                modifier = Modifier.requiredWidth(screenWidth)
-            )
-        } else {
-            CarousalShimmerEffect()
-        }
-    }
-}
 
 @Composable
 fun TopRatedScreen(
@@ -200,7 +176,7 @@ private fun Content(
 
 @Composable
 private fun MovieGenreRow(
-    onGenreClick: (MovieGenre) -> Unit,
+    onGenreClick: (MovieGenreUi) -> Unit,
     state: TopRatedUiState,
     screenWidth: Dp,
     modifier: Modifier = Modifier
@@ -212,7 +188,7 @@ private fun MovieGenreRow(
             .requiredWidth(screenWidth)
             .padding(vertical = 12.dp)
     ) {
-        items(MovieGenre.entries.toTypedArray()) { genre ->
+        items(MovieGenreUi.getList()) { genre ->
             NovixChip(
                 text = stringResource(genre.stringResId),
                 isSelected = genre == state.selectedMovieGenre,
@@ -223,7 +199,7 @@ private fun MovieGenreRow(
 
 @Composable
 private fun TvShowRow(
-    onGenreClick: (TvShowGenre) -> Unit,
+    onGenreClick: (TvShowGenreUi) -> Unit,
     state: TopRatedUiState,
     screenWidth: Dp,
     modifier: Modifier = Modifier
@@ -235,7 +211,8 @@ private fun TvShowRow(
             .requiredWidth(screenWidth)
             .padding(vertical = 12.dp)
     ) {
-        items(TvShowGenre.entries.toTypedArray()) { genre ->
+        items(
+            TvShowGenreUi.getList()) { genre ->
             NovixChip(
                 text = stringResource(genre.stringResId),
                 isSelected = genre == state.selectedTvShowGenre,

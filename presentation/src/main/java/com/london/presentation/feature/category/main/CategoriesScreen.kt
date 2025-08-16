@@ -32,15 +32,15 @@ import com.london.designsystem.utils.string
 import com.london.presentation.R
 import com.london.presentation.shared.CategoriesItem
 import com.london.presentation.shared.MediaCategory
+import com.london.presentation.shared.genre.MovieGenreUi
+import com.london.presentation.shared.genre.TvShowGenreUi
 import com.london.presentation.utils.Listen
-import com.london.presentation.utils.MovieGenre
-import com.london.presentation.utils.TvShowGenre
 import com.london.presentation.utils.gridColumns
 
 @Composable
 fun CategoriesScreen(
-    onNavigateToMovieCategory: (genreId: Int) -> Unit,
-    onNavigateToTvShowCategory: (genreId: Int) -> Unit,
+    onNavigateToMovieCategory: (MovieGenreUi) -> Unit,
+    onNavigateToTvShowCategory: (TvShowGenreUi) -> Unit,
     viewModel: CategoriesViewModel = hiltViewModel()
 ) {
 
@@ -145,8 +145,8 @@ private fun CategoriesSelection(
 }
 
 private fun LazyGridScope.movieGenres(
-    onClick: (MovieGenre) -> Unit,
-    genres: List<MovieGenre>,
+    onClick: (MovieGenreUi) -> Unit,
+    genres: List<MovieGenreUi>,
 ) {
     items(genres) {
         CategoriesItem(
@@ -159,8 +159,8 @@ private fun LazyGridScope.movieGenres(
 }
 
 private fun LazyGridScope.tvShowGenres(
-    onClick: (TvShowGenre) -> Unit,
-    genres: List<TvShowGenre>,
+    onClick: (TvShowGenreUi) -> Unit,
+    genres: List<TvShowGenreUi>,
 ) {
     items(genres) {
         CategoriesItem(
@@ -178,12 +178,12 @@ private fun Preview() {
     Content(
         state = CategoriesUiState(
             selectedCategory = MediaCategory.Movies,
-            movieGenres = MovieGenre.entries.filter { it != MovieGenre.All },
-            tvShowGenres = TvShowGenre.entries.filter { it != TvShowGenre.All },
+            movieGenres = MovieGenreUi.entries.filter { it != MovieGenreUi.All && it != MovieGenreUi.Unknown },
+            tvShowGenres = TvShowGenreUi.entries.filter { it != TvShowGenreUi.All && it != TvShowGenreUi.Unknown },
         ),
         contract = object : CategoriesContract {
-            override fun onMovieGenreClick(genre: MovieGenre) {}
-            override fun onTvShowGenreClick(genre: TvShowGenre) {}
+            override fun onMovieGenreClick(genre: MovieGenreUi) {}
+            override fun onTvShowGenreClick(genre: TvShowGenreUi) {}
             override fun onCategoryClick(category: MediaCategory) {}
         },
     )

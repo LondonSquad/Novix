@@ -11,12 +11,16 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.requiredWidth
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.statusBars
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.grid.GridCells
+import androidx.compose.foundation.lazy.grid.GridItemSpan
+import androidx.compose.foundation.lazy.grid.LazyGridScope
 import androidx.compose.foundation.lazy.grid.LazyGridState
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
+import androidx.compose.foundation.pager.PagerState
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
@@ -42,12 +46,17 @@ import com.london.designsystem.component.button.PrimaryButton
 import com.london.designsystem.theme.NovixTheme
 import com.london.designsystem.utils.string
 import com.london.domain.entity.UpComingMovie
+import com.london.domain.entity.recent.MediaType
 import com.london.presentation.R
-import com.london.presentation.feature.home.continuewatching.continueWatchingSection
-import com.london.presentation.feature.home.popular.popularSection
-import com.london.presentation.feature.home.toprated.topRatedSection
-import com.london.presentation.feature.home.trending.trendingSection
-import com.london.presentation.feature.home.upcoming.upcomingSection
+import com.london.presentation.feature.home.popular.PopularSection
+import com.london.presentation.feature.home.section.ContinueWatchingSection
+import com.london.presentation.feature.home.section.ShimmerPopularSection
+import com.london.presentation.feature.home.section.TopRatedSection
+import com.london.presentation.feature.home.trending.TrendingSection
+import com.london.presentation.feature.home.upcoming.UpcomingMovieItem
+import com.london.presentation.feature.home.upcoming.UpcomingSectionTitle
+import com.london.presentation.feature.home.upcoming.UpcomingStickyHeader
+import com.london.presentation.shared.CarousalShimmerEffect
 import com.london.presentation.shared.bookmarkSheet.BookmarkBottomSheet
 import com.london.presentation.shared.buildscreen.NetworkErrorScreen
 import com.london.presentation.utils.Listen
@@ -118,7 +127,7 @@ private fun HandleScreenState(
     uiState: HomeScreenUiState,
     screenDimensions: ScreenDimensions,
     lazyGridState: LazyGridState,
-    pagerState: androidx.compose.foundation.pager.PagerState,
+    pagerState: PagerState,
     recentWatchedMedia: List<HomeUiMedia>,
     upcomingMoviesLazyList: LazyPagingItems<UpComingMovie>,
     scrollState: ScrollState,
@@ -133,6 +142,7 @@ private fun HandleScreenState(
                 }
             )
         }
+
         else -> {
             HomeScreenLayout(
                 modifier = Modifier,
@@ -165,7 +175,7 @@ private fun HomeScreenLayout(
     screenWidth: Dp,
     lazyGridState: LazyGridState,
     uiState: HomeScreenUiState,
-    pagerState: androidx.compose.foundation.pager.PagerState,
+    pagerState: PagerState,
     recentWatchedMedia: List<HomeUiMedia>,
     upcomingMoviesLazyList: LazyPagingItems<UpComingMovie>,
     scrollState: ScrollState,
@@ -256,7 +266,7 @@ private fun HomeContentGrid(
     lazyGridState: LazyGridState,
     screenWidth: Dp,
     uiState: HomeScreenUiState,
-    pagerState: androidx.compose.foundation.pager.PagerState,
+    pagerState: PagerState,
     recentWatchedMedia: List<HomeUiMedia>,
     upcomingMoviesLazyList: LazyPagingItems<UpComingMovie>,
     scrollState: ScrollState,
@@ -315,6 +325,122 @@ private fun HomeContentGrid(
     }
 }
 
+private fun LazyGridScope.popularSection(
+    screenWidth: Dp,
+    uiState: HomeScreenUiState,
+    pagerState: PagerState,
+    homeScreenContract: HomeScreenContract
+) {
+    item(span = { GridItemSpan(maxLineSpan) }) {
+        if (uiState.popularMediaList.isNotEmpty()) {
+            PopularSection(
+                modifier = Modifier.requiredWidth(screenWidth),
+                pagerState = pagerState,
+                uiMediaList = uiState.popularMediaList,
+                onManageBookmarkClicked = { movieId ->
+                    homeScreenContract.onManageBookmarkClicked(movieId)
+                },
+                onCardClick = { id, mediaType ->
+                    when (mediaType) {
+                        MediaType.TvShow -> homeScreenContract.onTvShowClick(id)
+                        MediaType.Movie -> homeScreenContract.onMovieClick(id)
+                    }
+                }
+            )
+        } else {
+            ShimmerPopularSection(
+                modifier = Modifier.requiredWidth(screenWidth),
+                pagerState = pagerState,
+            )
+        }
+    }
+}
+
+private fun LazyGridScope.trendingSection(
+    isLoading: Boolean,
+    homeScreenContract: HomeScreenContract
+) {
+    item(span = { GridItemSpan(maxLineSpan) }) {
+        TrendingSection(
+            isLoading = isLoading,
+            onMoviesClick = homeScreenContract::onTrendingMoviesCardClick,
+            onTvShowsClick = homeScreenContract::onTrendingTvShowsCardClick,
+            onActorsClick = homeScreenContract::onTrendingActorsCardClick
+        )
+    }
+}
+
+private fun LazyGridScope.topRatedSection(
+    screenWidth: Dp,
+    uiState: HomeScreenUiState,
+    homeScreenContract: HomeScreenContract
+) {
+    item(span = { GridItemSpan(maxLineSpan) }) {
+        if (!uiState.isTopRatedLoading) {
+            TopRatedSection(
+                uiState = uiState,
+                homeScreenContract = homeScreenContract,
+                modifier = Modifier.requiredWidth(screenWidth)
+            )
+        } else {
+            CarousalShimmerEffect()
+        }
+    }
+}
+
+private fun LazyGridScope.continueWatchingSection(
+    screenWidth: Dp,
+    recentWatchedMedia: List<HomeUiMedia>,
+    isLoading: Boolean,
+    homeScreenContract: HomeScreenContract
+) {
+    item(span = { GridItemSpan(maxLineSpan) }) {
+        if (!isLoading) {
+            ContinueWatchingSection(
+                recentWatchedMediaList = recentWatchedMedia,
+                homeScreenContract = homeScreenContract,
+                modifier = Modifier.requiredWidth(screenWidth)
+            )
+        } else {
+            CarousalShimmerEffect()
+        }
+    }
+}
+
+private fun LazyGridScope.upcomingSection(
+    contract: HomeScreenContract,
+    isHeaderStuck: Boolean = false,
+    screenWidth: Dp,
+    state: HomeScreenUiState,
+    upcomingMoviesLazyList: LazyPagingItems<UpComingMovie>,
+    isLoading: Boolean = false
+) {
+    item(span = { GridItemSpan(maxLineSpan) }) {
+        UpcomingSectionTitle(isLoading = isLoading)
+    }
+
+    stickyHeader {
+        UpcomingStickyHeader(
+            isLoading = isLoading,
+            isHeaderStuck = isHeaderStuck,
+            screenWidth = screenWidth,
+            state = state,
+            contract = contract
+        )
+    }
+
+    items(count = upcomingMoviesLazyList.itemCount) { index ->
+        val movie = upcomingMoviesLazyList[index]
+
+        UpcomingMovieItem(
+            movie = movie,
+            isLoading = isLoading,
+            onMovieClick = { contract.onMovieClick(movie?.id ?: 0) },
+            onManageBookmarkClick = contract::onManageBookmarkClicked
+        )
+    }
+}
+
 @Composable
 private fun FloatingRetryButton(
     onRetry: () -> Unit,
@@ -333,7 +459,6 @@ private fun FloatingRetryButton(
             .width(52.dp)
     )
 }
-
 
 @Composable
 private fun rememberScreenDimensions(): ScreenDimensions {
@@ -359,7 +484,9 @@ private fun rememberScrollState(
     lazyGridState: LazyGridState,
     uiState: HomeScreenUiState
 ): ScrollState {
-    val recentWatchedMediaFlow by uiState.recentWatchedMediaFlow.collectAsStateWithLifecycle(emptyList())
+    val recentWatchedMediaFlow by uiState.recentWatchedMediaFlow.collectAsStateWithLifecycle(
+        emptyList()
+    )
 
     val isAtEndOfGrid by remember {
         derivedStateOf {

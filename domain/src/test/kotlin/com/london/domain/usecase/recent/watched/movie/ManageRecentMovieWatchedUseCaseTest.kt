@@ -2,6 +2,7 @@ package com.london.domain.usecase.recent.watched.movie
 
 import com.google.common.truth.Truth.assertThat
 import com.london.domain.entity.Movie
+import com.london.domain.entity.genre.MovieGenre
 import com.london.domain.repository.RecentWatchedRepository
 import io.mockk.Runs
 import io.mockk.coEvery
@@ -95,7 +96,7 @@ class ManageRecentMovieWatchedUseCaseTest{
             posterUrl = "none",
             releaseYear = 1,
             rating = 1,
-            genreIds = listOf(1, 2, 3)
+            genres = listOf(MovieGenre.ACTION, MovieGenre.ACTION,MovieGenre.ACTION)
         )
         private val movieList = listOf(movie, movie, movie)
     }
