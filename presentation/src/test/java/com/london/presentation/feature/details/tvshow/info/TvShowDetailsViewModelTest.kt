@@ -5,6 +5,7 @@ import androidx.lifecycle.viewModelScope
 import app.cash.turbine.test
 import com.google.common.truth.Truth.assertThat
 import com.london.domain.entity.actordetails.cast.ActorMediaDetails
+import com.london.domain.entity.recent.MediaType
 import com.london.domain.entity.tvshowdetails.episode.TvShowEpisodesEntity
 import com.london.domain.usecase.authentication.AuthenticationUseCase
 import com.london.domain.usecase.details.actor.GetActorUseCase
@@ -15,6 +16,7 @@ import com.london.domain.usecase.recent.viewed.ManageRecentViewedUseCase
 import com.london.domain.usecase.recent.watched.tvshow.ManageRecentTvShowWatchedUseCase
 import com.london.presentation.navigation.Screen
 import com.london.presentation.navigation.getArgs
+import com.london.presentation.shared.genre.TvShowGenreUi
 import io.mockk.coEvery
 import io.mockk.every
 import io.mockk.mockk
@@ -58,7 +60,9 @@ class TvShowDetailsViewModelTest {
         every { savedStateHandle.getArgs<Screen.TvShowDetails>() } returns Screen.TvShowDetails(
             tvShowId = TV_SHOW_ID
         )
-        coEvery { getActorUseCase.getActorTvShowPicksById(TV_SHOW_ID) } returns mockk<ActorMediaDetails>(relaxed = true)
+        coEvery { getActorUseCase.getActorTvShowPicksById(TV_SHOW_ID) } returns mockk<ActorMediaDetails>(
+            relaxed = true
+        )
         coEvery { authenticationUseCase.isLoggedIn() } returns false
         coEvery { manageRecentViewedUseCase.addToRecentViewed(any()) } returns Unit
         coEvery { manageRecentTvShowWatchedUseCase.addTvShowToRecentWatched(any()) } returns Unit
@@ -102,7 +106,12 @@ class TvShowDetailsViewModelTest {
     @Test
     fun `when initializeEpisodesBySeasons, episodes by seasons data should be fetched`() = runTest {
         // Given
-        coEvery { getTvEpisodesUseCase.getTvShowEpisodesBySeason(TV_SHOW_ID, any()) } returns tvShowEpisodesEntity
+        coEvery {
+            getTvEpisodesUseCase.getTvShowEpisodesBySeason(
+                TV_SHOW_ID,
+                any()
+            )
+        } returns tvShowEpisodesEntity
 
         // When
         advanceUntilIdle()
@@ -121,7 +130,12 @@ class TvShowDetailsViewModelTest {
 
         // Given
         val exception = Exception("error")
-        coEvery { getTvEpisodesUseCase.getTvShowEpisodesBySeason(TV_SHOW_ID, any()) } throws exception
+        coEvery {
+            getTvEpisodesUseCase.getTvShowEpisodesBySeason(
+                TV_SHOW_ID,
+                any()
+            )
+        } throws exception
 
         // When
         advanceUntilIdle()
@@ -191,9 +205,9 @@ class TvShowDetailsViewModelTest {
     fun `onReviewsClicked should emit NavigateToReviews effect when clicked`() = runTest {
         // When & Then
         viewModel?.effect?.test {
-            viewModel?.onReviewsClicked(TV_SHOW_ID, 1)
+            viewModel?.onReviewsClicked(TV_SHOW_ID, MediaType.TvShow)
             assertThat(awaitItem()).isEqualTo(
-                TvShowDetailsEffect.NavigateToReviews(TV_SHOW_ID, 1)
+                TvShowDetailsEffect.NavigateToReviews(TV_SHOW_ID, MediaType.TvShow)
             )
             cancelAndIgnoreRemainingEvents()
         }
@@ -214,13 +228,13 @@ class TvShowDetailsViewModelTest {
     @Test
     fun `OnGenreClicked should emit NavigateToTvShowsByCategoryId effect when clicked`() = runTest {
         // Given
-        val genreId = 123
+        val genre = TvShowGenreUi.ActionAdventure
 
         // When & Then
         viewModel?.effect?.test {
-            viewModel?.OnGenreClicked(genreId)
+            viewModel?.onGenreClicked(genre)
             assertThat(awaitItem()).isEqualTo(
-                TvShowDetailsEffect.NavigateToTvShowsByCategoryId(genreId)
+                TvShowDetailsEffect.NavigateToTvShowsByCategoryId(genre)
             )
             cancelAndIgnoreRemainingEvents()
         }

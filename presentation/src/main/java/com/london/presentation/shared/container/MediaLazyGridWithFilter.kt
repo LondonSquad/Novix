@@ -9,24 +9,21 @@ import androidx.paging.compose.LazyPagingItems
 import com.london.designsystem.theme.NovixTheme
 import com.london.designsystem.theme.ThemePreviews
 import com.london.domain.entity.Movie
-import com.london.domain.entity.TvShow
+import com.london.domain.entity.genre.MovieGenre
 import com.london.presentation.shared.EmptyGenreLayout
-import com.london.presentation.shared.MediaCategory
 import com.london.presentation.shared.MediaGenreFilters
-import com.london.presentation.utils.MovieGenre
-import com.london.presentation.utils.TvShowGenre
+import com.london.presentation.shared.genre.MovieGenreUi
+import com.london.presentation.shared.genre.TvShowGenreUi
 
 @Composable
 fun <T : Any> MediaLazyGridWithFilter(
+    items: List<T>,
     modifier: Modifier = Modifier,
-    imageUrl: (T) -> String? = { it.getImageUrl() },
-    name: (T) -> String = { it.getName() },
-    items: List<T>? = null,
     isLoading: Boolean = false,
-    pagingItems: LazyPagingItems<T>? = null,
-    tabSelected: Int = MediaCategory.Movies.ordinal,
-    onMovieGenreClick: (MovieGenre) -> Unit = {},
-    onTvShowGenreClick: (TvShowGenre) -> Unit = {},
+    name: (T) -> String = { it.getName() },
+    imageUrl: (T) -> String? = { it.getImageUrl() },
+    onMovieGenreClick: (MovieGenreUi) -> Unit = {},
+    onTvShowGenreClick: (TvShowGenreUi) -> Unit = {},
     config: MediaGridConfig = MediaGridConfig(),
     topBar: @Composable (() -> Unit)? = null
 ) {
@@ -48,13 +45,8 @@ fun <T : Any> MediaLazyGridWithFilter(
         )
 
         when {
-            !items.isNullOrEmpty() -> {
-                val filteredItems = when (tabSelected) {
-                    0 -> items.filter { it is Movie }
-                    1 -> items.filter { it is TvShow }
-                    else -> items
-                }
-
+            items.isNotEmpty() -> {
+                val filteredItems = filterItemsByCategory(items, config)
                 RenderFilteredItemsGrid(
                     filteredItems = filteredItems,
                     imageUrl = imageUrl,
@@ -64,21 +56,53 @@ fun <T : Any> MediaLazyGridWithFilter(
                 )
             }
 
-            pagingItems != null && pagingItems.itemCount > 0 -> {
-                RenderPagingItemsGrid(
-                    pagingItems = pagingItems,
-                    imageUrl = imageUrl,
-                    name = name,
-                    config = config,
-                    topBar = topBar
-                )
-            }
-
             else -> {
-                if (!isLoading && items.isNullOrEmpty() && (pagingItems == null || pagingItems.itemCount == 0)) {
+                if (!isLoading) {
                     EmptyGenreLayout()
                 }
             }
+        }
+    }
+}
+
+@Composable
+fun <T : Any> MediaLazyGridWithFilter(
+    pagingItems: LazyPagingItems<T>,
+    modifier: Modifier = Modifier,
+    isLoading: Boolean = false,
+    name: (T) -> String = { it.getName() },
+    imageUrl: (T) -> String? = { it.getImageUrl() },
+    onMovieGenreClick: (MovieGenreUi) -> Unit = {},
+    onTvShowGenreClick: (TvShowGenreUi) -> Unit = {},
+    config: MediaGridConfig = MediaGridConfig(),
+    topBar: @Composable (() -> Unit)? = null
+) {
+    Column(
+        modifier = modifier
+            .fillMaxSize()
+            .background(color = NovixTheme.colors.surface)
+    ) {
+        topBar?.invoke()
+
+        MediaGenreFilters(
+            isMovieSelected = config.isMovieSelected,
+            isTvShowSelected = config.isTvShowSelected,
+            selectedMovieGenre = config.selectedMovieGenre,
+            selectedTvShowGenre = config.selectedTvShowGenre,
+            onMovieGenreClick = onMovieGenreClick,
+            onTvShowGenreClick = onTvShowGenreClick,
+        )
+
+        if (pagingItems.itemCount > 0) {
+            RenderPagingItemsGrid(
+                pagingItems = pagingItems,
+                imageUrl = imageUrl,
+                name = name,
+                config = config,
+                topBar = topBar
+            )
+        } else if (!isLoading) {
+            EmptyGenreLayout()
         }
     }
 }
@@ -147,7 +171,7 @@ private fun Preview() {
             posterUrl = "https://example.com/movie1.jpg",
             releaseYear = 2023,
             rating = 8,
-            genreIds = listOf(28, 12)
+            genres = listOf(MovieGenre.ACTION, MovieGenre.ACTION)
         ),
         Movie(
             id = 2,
@@ -155,7 +179,7 @@ private fun Preview() {
             posterUrl = "https://example.com/movie2.jpg",
             releaseYear = 2024,
             rating = 7,
-            genreIds = listOf(18, 35)
+            genres = listOf(MovieGenre.ACTION, MovieGenre.ACTION)
         )
     )
 
@@ -170,8 +194,8 @@ private fun Preview() {
             rate = "3",
             isMovieSelected = true,
             isTvShowSelected = false,
-            selectedMovieGenre = MovieGenre.Action,
-            selectedTvShowGenre = TvShowGenre.All,
+            selectedMovieGenre = MovieGenreUi.Action,
+            selectedTvShowGenre = TvShowGenreUi.All,
             onNavigateToMovie = {},
             onNavigateToTvShow = {},
             onSaveClick = {},

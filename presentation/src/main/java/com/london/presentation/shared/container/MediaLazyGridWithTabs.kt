@@ -14,23 +14,24 @@ import com.london.designsystem.theme.NovixTheme
 import com.london.designsystem.theme.ThemePreviews
 import com.london.domain.entity.Movie
 import com.london.domain.entity.TvShow
+import com.london.domain.entity.genre.MovieGenre
+import com.london.domain.entity.genre.TvShowGenre
 import com.london.presentation.R
 import com.london.presentation.shared.MediaCategory
-import com.london.presentation.utils.MovieGenre
-import com.london.presentation.utils.TvShowGenre
+import com.london.presentation.shared.genre.MovieGenreUi
+import com.london.presentation.shared.genre.TvShowGenreUi
 
 @Composable
 fun <T : Any> MediaLazyGridWithTabs(
+    items: List<T>,
     modifier: Modifier = Modifier,
-    imageUrl: (T) -> String? = { it.getImageUrl() },
-    name: (T) -> String = { it.getName() },
-    items: List<T>? = null,
     isLoading: Boolean = false,
-    pagingItems: LazyPagingItems<T>? = null,
+    name: (T) -> String = { it.getName() },
+    imageUrl: (T) -> String? = { it.getImageUrl() },
     tabSelected: Int = MediaCategory.Movies.ordinal,
     onTabSelected: (MediaCategory) -> Unit = {},
-    onMovieGenreClick: (MovieGenre) -> Unit = {},
-    onTvShowGenreClick: (TvShowGenre) -> Unit = {},
+    onMovieGenreClick: (MovieGenreUi) -> Unit = {},
+    onTvShowGenreClick: (TvShowGenreUi) -> Unit = {},
     config: MediaGridConfig = MediaGridConfig(),
     topBar: @Composable (() -> Unit)? = null,
 ) {
@@ -60,11 +61,59 @@ fun <T : Any> MediaLazyGridWithTabs(
 
         MediaLazyGridWithFilter(
             items = items,
+            imageUrl = imageUrl,
+            name = name,
+            isLoading = isLoading,
+            modifier = Modifier.fillMaxSize(),
+            onMovieGenreClick = onMovieGenreClick,
+            onTvShowGenreClick = onTvShowGenreClick,
+            config = config
+        )
+    }
+}
+
+@Composable
+fun <T : Any> MediaLazyGridWithTabs(
+    pagingItems: LazyPagingItems<T>,
+    modifier: Modifier = Modifier,
+    isLoading: Boolean = false,
+    name: (T) -> String = { it.getName() },
+    imageUrl: (T) -> String? = { it.getImageUrl() },
+    tabSelected: Int = MediaCategory.Movies.ordinal,
+    onTabSelected: (MediaCategory) -> Unit = {},
+    onMovieGenreClick: (MovieGenreUi) -> Unit = {},
+    onTvShowGenreClick: (TvShowGenreUi) -> Unit = {},
+    config: MediaGridConfig = MediaGridConfig(),
+    topBar: @Composable (() -> Unit)? = null,
+) {
+    val tabs = listOf(
+        TabbableItem(R.string.Movies),
+        TabbableItem(R.string.TV_Shows)
+    )
+
+    val selectedTab = tabs.getOrNull(tabSelected)
+
+    Column(
+        modifier = modifier
+            .fillMaxSize()
+            .background(color = NovixTheme.colors.surface)
+    ) {
+        topBar?.invoke()
+
+        TabLayout(
+            tabs = tabs,
+            selectedTab = selectedTab,
+            onTabSelected = { tab ->
+                handleTabSelection(tab, tabs, onTabSelected)
+            },
+            modifier = Modifier.padding(top = 4.dp)
+        )
+
+        MediaLazyGridWithFilter(
             pagingItems = pagingItems,
             imageUrl = imageUrl,
             name = name,
             isLoading = isLoading,
-            tabSelected = tabSelected,
             modifier = Modifier.fillMaxSize(),
             onMovieGenreClick = onMovieGenreClick,
             onTvShowGenreClick = onTvShowGenreClick,
@@ -80,7 +129,8 @@ private fun handleTabSelection(
 ) {
     val index = tabs.indexOf(tab)
     if (index != -1) {
-        val category = if (index == MediaCategory.Movies.ordinal) MediaCategory.Movies else MediaCategory.TvShows
+        val category =
+            if (index == MediaCategory.Movies.ordinal) MediaCategory.Movies else MediaCategory.TvShows
         onTabSelected(category)
     }
 }
@@ -97,7 +147,7 @@ private fun Preview() {
             posterUrl = "https://example.com/movie1.jpg",
             releaseYear = 2023,
             rating = 8,
-            genreIds = listOf(28, 12)
+            genres = listOf(MovieGenre.TV_MOVIE)
         )
     )
 
@@ -108,7 +158,7 @@ private fun Preview() {
             posterPicture = "https://example.com/tvshow1.jpg",
             releaseYear = 2023,
             rating = 8,
-            genres = listOf(18, 80)
+            genres = listOf(TvShowGenre.ACTION_ADVENTURE)
         )
     )
 
@@ -127,8 +177,8 @@ private fun Preview() {
             rate = "3",
             isMovieSelected = true,
             isTvShowSelected = false,
-            selectedMovieGenre = MovieGenre.All,
-            selectedTvShowGenre = TvShowGenre.All,
+            selectedMovieGenre = MovieGenreUi.All,
+            selectedTvShowGenre = TvShowGenreUi.All,
             onNavigateToMovie = {},
             onNavigateToTvShow = {},
             onSaveClick = {},

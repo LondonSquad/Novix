@@ -5,7 +5,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Text
@@ -36,15 +36,15 @@ fun Selection(
     )
     val borderWidth = if (isSelected) (1.5).dp else 1.dp
 
-    Row(
+    Column(
         modifier = modifier
             .clip(RoundedCornerShape(12.dp))
             .background(color = backgroundColor)
             .border(width = borderWidth, color = borderColor, shape = RoundedCornerShape(12.dp))
             .clickable(onClick = onClick, indication = null, interactionSource = null)
             .padding(horizontal = 12.dp, vertical = 16.dp),
-        verticalAlignment = Alignment.CenterVertically,
-        horizontalArrangement = Arrangement.SpaceBetween
+        horizontalAlignment = Alignment.Start,
+        verticalArrangement = Arrangement.SpaceBetween
     ) {
         Text(
             text = mainText,

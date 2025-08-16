@@ -3,8 +3,8 @@ package com.london.presentation.feature.category.main
 import app.cash.turbine.test
 import com.google.common.truth.Truth.assertThat
 import com.london.presentation.shared.MediaCategory
-import com.london.presentation.utils.MovieGenre
-import com.london.presentation.utils.TvShowGenre
+import com.london.presentation.shared.genre.MovieGenreUi
+import com.london.presentation.shared.genre.TvShowGenreUi
 import kotlinx.coroutines.test.runTest
 import org.junit.Test
 
@@ -14,7 +14,7 @@ class CategoriesViewModelTest {
     @Test
     fun `onMovieGenreClick should emit NavigateToMovieCategory effect`() = runTest {
         // Given
-        val genre = MovieGenre.Action
+        val genre = MovieGenreUi.Action
         // When & Then
         viewModel?.effect?.test {
             viewModel?.onMovieGenreClick(genre)
@@ -26,7 +26,7 @@ class CategoriesViewModelTest {
     @Test
     fun `onTvShowGenreClick should emit NavigateToTvShowCategory effect`() = runTest {
         // Given
-        val genre = TvShowGenre.Animation
+        val genre = TvShowGenreUi.Animation
         // When & Then
         viewModel?.effect?.test {
             viewModel?.onTvShowGenreClick(genre)

@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.Scaffold
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
@@ -53,6 +54,7 @@ import com.london.presentation.feature.search.SearchScreen
 import com.london.presentation.feature.welcome.onboarding.OnboardingRoute
 import com.london.presentation.feature.welcome.onboarding.WelcomeScreen
 import com.london.presentation.feature.welcome.splash.SplashRoute
+import com.london.presentation.navigation.LocalNavController
 import com.london.presentation.navigation.Screen
 import com.london.presentation.navigation.Screen.ActorDetails
 import com.london.presentation.navigation.Screen.MovieDetails
@@ -74,7 +76,7 @@ fun NovixApp() {
         currentDestination?.hasRoute<Screen.Home>() == true -> Screen.Home
         currentDestination?.hasRoute<Screen.Search>() == true -> Screen.Search
         currentDestination?.hasRoute<Screen.Categories>() == true -> Screen.Categories
-        currentDestination?.hasRoute<Screen.Lists>() == true -> Screen.Lists
+        currentDestination?.hasRoute<Screen.Lists>() == true -> Screen.Lists()
         currentDestination?.hasRoute<Screen.Account>() == true -> Screen.Account
         currentDestination?.hasRoute<Screen.Login>() == true -> Screen.Login
         else -> Screen.Home
@@ -105,17 +107,20 @@ fun NovixApp() {
             }
         }
     ) { innerPadding ->
-        NavHost(
-            navController = navController,
-            startDestination = NovixAppNavGraph.Splash,
-            modifier = Modifier.padding(innerPadding)
-        ) {
-            onboardingNavGraph(navController)
-            splashNavGraph(navController)
-            authNavGraph(navController)
-            mainNavGraph(navController)
+        CompositionLocalProvider(LocalNavController provides navController) {
+            NavHost(
+                navController = navController,
+                startDestination = NovixAppNavGraph.Splash,
+                modifier = Modifier.padding(innerPadding)
+            ) {
+                onboardingNavGraph(navController)
+                splashNavGraph(navController)
+                authNavGraph(navController)
+                mainNavGraph(navController)
+            }
         }
     }
+
 }
 
 fun NavController.navigateToAuthGraph() = navigateTo(NovixAppNavGraph.Auth)
@@ -317,10 +322,10 @@ fun NavGraphBuilder.mainNavGraph(
     ) {
         CategoriesScreen(
             onNavigateToMovieCategory = {
-                navController.navigate(Screen.MoviesByCategory(it.id))
+                navController.navigate(Screen.MoviesByCategory(it))
             },
             onNavigateToTvShowCategory = {
-                navController.navigate(Screen.TvShowsByCategory(it.id))
+                navController.navigate(Screen.TvShowsByCategory(it))
             }
         )
     }

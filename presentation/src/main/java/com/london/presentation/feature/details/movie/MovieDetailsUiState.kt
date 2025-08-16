@@ -3,6 +3,7 @@ package com.london.presentation.feature.details.movie
 import com.london.domain.entity.Actor
 import com.london.domain.entity.Movie
 import com.london.presentation.shared.base.ErrorState
+import com.london.presentation.shared.genre.MovieGenreUi
 
 data class MovieDetailsUiState(
     val movieId: Int = 0,
@@ -22,7 +23,7 @@ data class MovieDetailsUiState(
     val imageSlideDirection: Int = 1,
     val isGuestUser: Boolean = false,
     val actors: List<Actor> = listOf(),
-    val movieGenres: List<Int> = listOf(),
+    val movieGenres: List<MovieGenreUi> = listOf(),
     val movieImages: List<String> = listOf(),
     val isSuccessfullyRated: Boolean? = null,
     val similarMovies: List<Movie> = listOf(),

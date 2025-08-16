@@ -12,6 +12,8 @@ import com.london.domain.usecase.recent.watched.movie.ManageRecentMovieWatchedUs
 import com.london.presentation.navigation.Screen
 import com.london.presentation.navigation.getArgs
 import com.london.presentation.shared.base.BaseViewModel
+import com.london.presentation.shared.genre.MovieGenreUi
+import com.london.presentation.shared.genre.toUi
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 
@@ -58,12 +60,12 @@ class MovieDetailsViewModel @Inject constructor(
         emitEffect(MovieDetailsEffect.OnLoginNavigation)
     }
 
-    override fun onReviewsClick(movieId: Int, mediaNumber: Int) {
-        emitEffect(MovieDetailsEffect.ReviewsNavigation(movieId, mediaNumber))
+    override fun onReviewsClick(movieId: Int, mediaType: MediaType) {
+        emitEffect(MovieDetailsEffect.ReviewsNavigation(movieId, mediaType))
     }
 
-    override fun onGenreClick(genreId: Int) {
-        emitEffect(MovieDetailsEffect.GenreNavigation(genreId))
+    override fun onGenreClick(genre: MovieGenreUi) {
+        emitEffect(MovieDetailsEffect.GenreNavigation(genre))
     }
 
     override fun onRetry() {
@@ -133,7 +135,7 @@ class MovieDetailsViewModel @Inject constructor(
                     copy(
                         movieId = details.id,
                         movieName = details.title,
-                        movieGenres = details.genresId,
+                        movieGenres = details.genres.map { genre -> genre.toUi() },
                         movieRating = details.voteAverage,
                         movieDuration = details.runtime.toString(),
                         releaseDate = details.releaseDate,
@@ -158,7 +160,7 @@ class MovieDetailsViewModel @Inject constructor(
                         posterUrl = details.posterUrl,
                         releaseYear = 2025,
                         rating = 1,
-                        genreIds = details.genresId,
+                        genres = details.genres,
                     )
                 )
             },

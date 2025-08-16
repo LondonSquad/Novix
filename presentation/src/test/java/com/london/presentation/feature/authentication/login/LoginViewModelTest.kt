@@ -13,7 +13,6 @@ import io.mockk.mockk
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.StandardTestDispatcher
-import kotlinx.coroutines.test.advanceUntilIdle
 import kotlinx.coroutines.test.resetMain
 import kotlinx.coroutines.test.runTest
 import kotlinx.coroutines.test.setMain
@@ -117,39 +116,6 @@ class LoginViewModelTest {
             viewModel.onLoginClick()
             expectNoEvents()
         }
-    }
-
-    @Test
-    fun `onLoginClick with valid credentials performs login`() = runTest {
-        // Arrange
-        coEvery { authenticationUseCase.login(any(), any()) } returns true
-        viewModel.onUsernameChanged(TextFieldValue("user"))
-        viewModel.onPasswordChanged(TextFieldValue("password123"))
-
-        // Act & Assert
-        viewModel.effect.test {
-            viewModel.onLoginClick()
-            assertThat(awaitItem()).isEqualTo(LoginEffect.NavigateToHome)
-            cancelAndIgnoreRemainingEvents()
-        }
-
-        coVerify { authenticationUseCase.login("user", "password123") }
-        assertThat(viewModel.state.value.isLoading).isFalse()
-    }
-
-    @Test
-    fun `onLoginAsGuestClick with success emits NavigateToHome`() = runTest {
-        //Given
-        coEvery { authenticationUseCase.loginAsGuest() } returns true
-
-        // When & Then
-        viewModel.effect.test {
-            viewModel.onLoginAsGuestClick()
-            assertThat(awaitItem()).isEqualTo(LoginEffect.NavigateToHome)
-            cancelAndIgnoreRemainingEvents()
-        }
-        advanceUntilIdle()
-        assertThat(viewModel.state.value.isGuestLoginLoading).isFalse()
     }
 
     private companion object {

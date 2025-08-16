@@ -1,4 +1,4 @@
-package com.london.data.di
+package com.london.app.di
 
 import android.content.Context
 import androidx.room.Room
@@ -60,9 +60,25 @@ object DataBaseModule {
     @Singleton
     fun provideUpComingMoviesDao(database: NovixDatabase) =
         database.upComingSectionDao()
-    
+
     @Provides
     @Singleton
     fun provideGenreInterestDao(database: NovixDatabase) =
         database.genreInterestDao()
+
+    @Provides
+    @Singleton
+    fun provideMovieListDao(database: NovixDatabase) =
+        database.movieListDao()
+
+    @Provides
+    @Singleton
+    fun provideMovieListMembershipDao(database: NovixDatabase) =
+        database.listMembershipDao()
+
+    @Provides
+    @Singleton
+    fun provideSyncMetadataDao(database: NovixDatabase) =
+        database.syncMetadataDao()
+
 }

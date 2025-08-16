@@ -15,5 +15,5 @@ fun SearchTvShowRemote.toEntity(): TvShow = TvShow(
     posterPicture = posterPath.asImageUrlOrEmpty(),
     releaseYear = firstAirDate.orEmpty().extractYear(),
     rating = voteAverage.orZero().toInt(),
-    genres = genreIds.orEmpty()
+    genres = genreIds.toTvShowGenre()
 )

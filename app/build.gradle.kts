@@ -11,7 +11,6 @@ plugins {
     alias(libs.plugins.google.firebase.firebase.perf)
     alias(libs.plugins.google.gms.google.services)
     alias(libs.plugins.google.firebase.crashlytics)
-    alias(libs.plugins.kotlinx.kover)
     alias(libs.plugins.hilt)
 }
 
@@ -102,6 +101,14 @@ dependencies {
     ksp(libs.bundles.room.ksp)
     implementation(libs.timber)
 
+    implementation(libs.androidx.hilt.work)
+    implementation(libs.androidx.work.runtime.ktx)
+    implementation(libs.androidx.hilt.common)
+
     ksp(libs.bundles.hilt.ksp)
     implementation(libs.bundles.hilt.runtime)
+
+    implementation(libs.bundles.retrofit)
+    implementation(libs.retrofit2.kotlinx.serialization.converter)
+    implementation(libs.kotlinx.serialization.json)
 }

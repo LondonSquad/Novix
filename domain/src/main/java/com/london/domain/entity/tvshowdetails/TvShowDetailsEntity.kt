@@ -1,8 +1,10 @@
 package com.london.domain.entity.tvshowdetails
 
+import com.london.domain.entity.genre.TvShowGenre
+
 data class TvShowDetailsEntity(
     val firstAirDate: String,
-    val tvShowGenres: List<TvShowGenreEntity>,
+    val tvShowGenres: List<TvShowGenre>,
     val id: Int,
     val name: String,
     val numberOfEpisodes: Int,
@@ -11,9 +13,4 @@ data class TvShowDetailsEntity(
     val posterUrl: String?,
     val tvShowSeasons: List<Int>,
     val voteAverage: Double,
-)
-
-data class TvShowGenreEntity(
-    val id: Int,
-    val name: String
 )
