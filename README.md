@@ -531,6 +531,16 @@ hilt = "2.57"
 
 ---
 
+## 📈 Star History
+
+<div align="center">
+
+[![Star History Chart](https://api.star-history.com/svg?repos=LondonSquad/Novix&type=Date)](https://star-history.com/#LondonSquad/Novix&Date)
+
+</div>
+
+---
+
 ## 📜 License
 
 ```
