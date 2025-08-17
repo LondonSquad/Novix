@@ -29,5 +29,5 @@ fun TvShowCastMember.toCastMember(): TvShowCastMemberEntity =
 fun Role.toRoleEntity(): TvShowRoleEntity =
     TvShowRoleEntity(
         character = character.orEmpty(),
-        episodeCount = episodeCount
+        episodeCount = episodeCount.orZero()
     )

@@ -6,9 +6,9 @@ import kotlinx.serialization.Serializable
 @Serializable
 data class GuestSessionResponse(
     @SerialName("success")
-    val success: Boolean,
+    val success: Boolean? = null,
     @SerialName("guest_session_id")
-    val guestSessionId: String,
+    val guestSessionId: String? = null,
     @SerialName("expires_at")
-    val expiresAt: String?
+    val expiresAt: String? = null
 )
