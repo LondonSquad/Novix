@@ -640,7 +640,6 @@ document.addEventListener("DOMContentLoaded", () => {
         // --- CORRECTED KPI CALCULATIONS ---
         if (selectedDeveloper !== 'all') {
             // --- Developer-specific View ---
-            // These KPIs now reflect stats for PRs *created by* the selected developer.
             const prsCreatedByDeveloper = data.filter(pr => pr.creator.login === selectedDeveloper);
             document.getElementById('kpi-total-prs').textContent = prsCreatedByDeveloper.length;
             document.getElementById('kpi-total-closed').textContent = prsCreatedByDeveloper.filter(pr => pr.status === 'closed').length;
@@ -678,7 +677,6 @@ document.addEventListener("DOMContentLoaded", () => {
         // --- CORRECTED "Top Commenter" LOGIC ---
         if (selectedDeveloper !== 'all') {
             // --- Developer-specific View ---
-            // Counts the number of PRs the selected developer commented on.
             const developerPrCommentCount = data.reduce((sum, pr) => {
                  const hasCommented = (pr.comments || []).some(c => c.author.login === selectedDeveloper);
                  return sum + (hasCommented ? 1 : 0);
@@ -686,11 +684,10 @@ document.addEventListener("DOMContentLoaded", () => {
             document.getElementById('top-commenter-card').innerHTML = `<div class="kpi-icon bg-yellow-500"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M9,22A1,1 0 0,1 8,21V18H4A2,2 0 0,1 2,16V4C2,2.89 2.9,2 4,2H20A2,2 0 0,1 22,4V16A2,2 0 0,1 20,18H13.9L10.2,21.71C10,21.9 9.75,22 9.5,22V22H9M10,16V19.08L13.08,16H20V4H4V16H10M6,7H18V9H6V7M6,11H15V13H6V11Z" /></svg></div><div class="overflow-hidden"><div class="kpi-value"><img src="https://github.com/${selectedDeveloper}.png" class="avatar"/> <span class="truncate">${selectedDeveloper}</span></div><div class="kpi-label">Commented on ${developerPrCommentCount} PRs</div></div>`;
         } else {
             // --- "All Team" View ---
-            // Counts how many distinct PRs each person commented on, then finds the max.
             const commenterPrCounts = data.reduce((acc, pr) => {
                 (pr.comments || []).forEach(commenter => {
                     const login = commenter.author.login;
-                    acc[login] = (acc[login] || 0) + 1; // Increment by 1 for each PR they appear in
+                    acc[login] = (acc[login] || 0) + 1;
                 });
                 return acc;
             }, {});
@@ -934,21 +931,38 @@ document.addEventListener("DOMContentLoaded", () => {
         }, {});
         const chartLabels = Object.keys(contributions).sort();
 
+        // --- FIXED REVIEWERS CALCULATION ---
         const reviewers = data.reduce((acc, pr) => {
             const uniqueReviewersForThisPR = new Set();
+
+            // Collect approvers with proper null checking
             (pr.approvals || []).forEach(approval => {
-                uniqueReviewersForThisPR.add(approval.reviewer.login);
+                if (approval && approval.reviewer && approval.reviewer.login) {
+                    uniqueReviewersForThisPR.add(approval.reviewer.login);
+                }
             });
+
+            // Collect commenters with proper null checking
             (pr.comments || []).forEach(comment => {
-                uniqueReviewersForThisPR.add(comment.author.login);
+                if (comment && comment.author && comment.author.login) {
+                    uniqueReviewersForThisPR.add(comment.author.login);
+                }
             });
+
+            // Add to accumulator, excluding the PR creator
             uniqueReviewersForThisPR.forEach(login => {
-                if (pr.creator.login !== login) {
+                if (login && pr.creator && pr.creator.login && pr.creator.login !== login) {
                     acc[login] = (acc[login] || 0) + 1;
                 }
             });
+
             return acc;
         }, {});
+
+        // Sort and filter out any invalid entries
+        const sortedReviewers = Object.entries(reviewers)
+            .filter(([login, count]) => login && login.trim() !== '' && count > 0)
+            .sort((a, b) => b[1] - a[1]);
 
         const collaborationSummary = data.reduce((acc, pr) => {
             const uniqueReviewersForThisPR = new Set();
@@ -1006,6 +1020,7 @@ document.addEventListener("DOMContentLoaded", () => {
             el.style.left = pos.left + window.scrollX + tooltip.caretX + 'px';
             el.style.top = pos.top + window.scrollY + tooltip.caretY + 'px'
         };
+
         if (contributionsChart) contributionsChart.destroy();
         contributionsChart = new Chart(document.getElementById('contributionsChart'), {
             type: 'bar',
@@ -1044,33 +1059,58 @@ document.addEventListener("DOMContentLoaded", () => {
                 }
             }
         });
-        const sortedReviewers = Object.entries(reviewers).sort((a, b) => b[1] - a[1]);
+
+        // --- FIXED REVIEWERS CHART ---
         if (reviewersChart) reviewersChart.destroy();
-        reviewersChart = new Chart(document.getElementById('reviewersChart'), {
-            type: 'bar',
-            data: {
-                labels: sortedReviewers.map(r => r[0]),
-                datasets: [{
-                    label: 'PRs Reviewed',
-                    data: sortedReviewers.map(r => r[1]),
-                    backgroundColor: 'rgba(2,132,199,0.7)'
-                }]
-            },
-            options: {
-                indexAxis: 'y',
-                responsive: true,
-                maintainAspectRatio: false,
-                plugins: {
-                    legend: {
-                        display: false
+
+        if (sortedReviewers.length > 0) {
+            reviewersChart = new Chart(document.getElementById('reviewersChart'), {
+                type: 'bar',
+                data: {
+                    labels: sortedReviewers.map(r => r[0] || 'Unknown'),
+                    datasets: [{
+                        label: 'PRs Reviewed',
+                        data: sortedReviewers.map(r => r[1]),
+                        backgroundColor: 'rgba(2,132,199,0.7)'
+                    }]
+                },
+                options: {
+                    indexAxis: 'y',
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        x: {
+                            beginAtZero: true,
+                            ticks: {
+                                precision: 0
+                            }
+                        },
+                        y: {
+                            ticks: {
+                                autoSkip: false, // Ensure all labels are shown
+                                callback: function(value, index) {
+                                    const label = this.getLabelForValue(value);
+                                    return label || 'Unknown';
+                                }
+                            }
+                        }
                     },
-                    tooltip: {
-                        enabled: false,
-                        external: externalTooltipHandler
+                    plugins: {
+                        legend: {
+                            display: false
+                        },
+                        tooltip: {
+                            enabled: false,
+                            external: externalTooltipHandler
+                        }
                     }
                 }
-            }
-        });
+            });
+        } else {
+            // If no data, show a message instead of an empty chart
+            const chartContainer = document.getElementById('reviewersChart').parentElement;
+            chartContainer.innerHTML = '<div class="text-center text-secondary p-4">No review data available for this period.</div>';
+        }
 
         if (mergeProcessHealthChart) mergeProcessHealthChart.destroy();
         if (chartAvgMergeTimes.length > 0) {
