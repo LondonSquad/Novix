@@ -13,7 +13,7 @@ fun RecentSearchLocal.toEntity(): RecentSearch = RecentSearch(
 )
 
 fun RecentSearch.toRecentSearch(): RecentSearchLocal = RecentSearchLocal(
+    id = id,
     query = query,
-    date = System.currentTimeMillis(),
-    id = id
+    date = timestamp
 )

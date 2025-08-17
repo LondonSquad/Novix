@@ -19,7 +19,7 @@ import org.junit.Before
 import org.junit.Test
 
 @OptIn(ExperimentalCoroutinesApi::class)
-class MyRatingsViewModelTest {
+class MyRatingViewModelTest {
     private val mainDispatcher = StandardTestDispatcher()
 
     @Before
@@ -38,7 +38,7 @@ class MyRatingsViewModelTest {
         // Given
         val manageRatingUseCase = mockk<ManageRatingUseCase>(relaxed = true)
         coEvery { manageRatingUseCase.getRatedMediaSorted() } returns createMockRatedMedia()
-        val viewModel = MyRatingsViewModel(manageRatingUseCase = manageRatingUseCase)
+        val viewModel = MyRatingViewModel(manageRatingUseCase = manageRatingUseCase)
 
         // When
         advanceUntilIdle()
@@ -59,7 +59,7 @@ class MyRatingsViewModelTest {
             val manageRatingUseCase = mockk<ManageRatingUseCase>(relaxed = true)
             val mockRatedMedia = createMockRatedMedia()
             coEvery { manageRatingUseCase.getRatedMediaSorted() } returns mockRatedMedia
-            val viewModel = MyRatingsViewModel(manageRatingUseCase = manageRatingUseCase)
+            val viewModel = MyRatingViewModel(manageRatingUseCase = manageRatingUseCase)
 
             // When
             viewModel.initializeRatedMedia()
@@ -80,7 +80,7 @@ class MyRatingsViewModelTest {
         // Given
         val manageRatingUseCase = mockk<ManageRatingUseCase>(relaxed = true)
         coEvery { manageRatingUseCase.getRatedMediaSorted() } throws Exception("Network error")
-        val viewModel = MyRatingsViewModel(manageRatingUseCase = manageRatingUseCase)
+        val viewModel = MyRatingViewModel(manageRatingUseCase = manageRatingUseCase)
 
         // When
         viewModel.initializeRatedMedia()
@@ -103,7 +103,7 @@ class MyRatingsViewModelTest {
             // Given
             val manageRatingUseCase = mockk<ManageRatingUseCase>(relaxed = true)
             coEvery { manageRatingUseCase.getRatedMediaSorted() } returns createMockRatedMedia()
-            val viewModel = MyRatingsViewModel(manageRatingUseCase = manageRatingUseCase)
+            val viewModel = MyRatingViewModel(manageRatingUseCase = manageRatingUseCase)
             val movieId = 1
             coEvery { manageRatingUseCase.deleteMovieRating(movieId) } returns true
 
@@ -130,7 +130,7 @@ class MyRatingsViewModelTest {
             // Given
             val manageRatingUseCase = mockk<ManageRatingUseCase>(relaxed = true)
             coEvery { manageRatingUseCase.getRatedMediaSorted() } returns createMockRatedMedia()
-            val viewModel = MyRatingsViewModel(manageRatingUseCase = manageRatingUseCase)
+            val viewModel = MyRatingViewModel(manageRatingUseCase = manageRatingUseCase)
             val tvShowId = 3
             coEvery { manageRatingUseCase.deleteTvShowRating(tvShowId) } returns true
 
@@ -157,7 +157,7 @@ class MyRatingsViewModelTest {
         val manageRatingUseCase = mockk<ManageRatingUseCase>(relaxed = true)
         coEvery { manageRatingUseCase.getRatedMediaSorted() } returns createMockRatedMedia()
         coEvery { manageRatingUseCase.deleteMovieRating(1) } throws RuntimeException("Delete failed")
-        val viewModel = MyRatingsViewModel(manageRatingUseCase = manageRatingUseCase)
+        val viewModel = MyRatingViewModel(manageRatingUseCase = manageRatingUseCase)
 
         advanceUntilIdle()
 
@@ -174,7 +174,7 @@ class MyRatingsViewModelTest {
         val manageRatingUseCase = mockk<ManageRatingUseCase>(relaxed = true)
         coEvery { manageRatingUseCase.getRatedMediaSorted() } returns createMockRatedMedia()
         coEvery { manageRatingUseCase.deleteTvShowRating(3) } throws RuntimeException("Delete failed")
-        val viewModel = MyRatingsViewModel(manageRatingUseCase = manageRatingUseCase)
+        val viewModel = MyRatingViewModel(manageRatingUseCase = manageRatingUseCase)
 
         advanceUntilIdle()
 
@@ -190,7 +190,7 @@ class MyRatingsViewModelTest {
         // Given
         val manageRatingUseCase = mockk<ManageRatingUseCase>(relaxed = true)
         coEvery { manageRatingUseCase.getRatedMediaSorted() } returns createMockRatedMedia()
-        val viewModel = MyRatingsViewModel(manageRatingUseCase = manageRatingUseCase)
+        val viewModel = MyRatingViewModel(manageRatingUseCase = manageRatingUseCase)
         val category = RatingCategory.Movies
 
         // When
@@ -209,7 +209,7 @@ class MyRatingsViewModelTest {
         // Given
         val manageRatingUseCase = mockk<ManageRatingUseCase>(relaxed = true)
         coEvery { manageRatingUseCase.getRatedMediaSorted() } returns createMockRatedMedia()
-        val viewModel = MyRatingsViewModel(manageRatingUseCase = manageRatingUseCase)
+        val viewModel = MyRatingViewModel(manageRatingUseCase = manageRatingUseCase)
         val movieId = 1
 
         advanceUntilIdle()
@@ -217,7 +217,7 @@ class MyRatingsViewModelTest {
         // When & Then
         viewModel.effect.test {
             viewModel.onMovieClick(movieId)
-            assertThat(awaitItem()).isEqualTo(MyRatingEffect.NavigationMovieDetails(movieId))
+            assertThat(awaitItem()).isEqualTo(MyRatingEffect.MovieDetailsNavigation(movieId))
             cancelAndIgnoreRemainingEvents()
         }
     }
@@ -227,7 +227,7 @@ class MyRatingsViewModelTest {
         // Given
         val manageRatingUseCase = mockk<ManageRatingUseCase>(relaxed = true)
         coEvery { manageRatingUseCase.getRatedMediaSorted() } returns createMockRatedMedia()
-        val viewModel = MyRatingsViewModel(manageRatingUseCase = manageRatingUseCase)
+        val viewModel = MyRatingViewModel(manageRatingUseCase = manageRatingUseCase)
         val tvShowId = 3
 
         advanceUntilIdle()
@@ -235,7 +235,7 @@ class MyRatingsViewModelTest {
         // When & Then
         viewModel.effect.test {
             viewModel.onTvShowClick(tvShowId)
-            assertThat(awaitItem()).isEqualTo(MyRatingEffect.NavigationTvShowDetails(tvShowId))
+            assertThat(awaitItem()).isEqualTo(MyRatingEffect.TvShowDetailsNavigation(tvShowId))
             cancelAndIgnoreRemainingEvents()
         }
     }
@@ -245,14 +245,14 @@ class MyRatingsViewModelTest {
         // Given
         val manageRatingUseCase = mockk<ManageRatingUseCase>(relaxed = true)
         coEvery { manageRatingUseCase.getRatedMediaSorted() } returns createMockRatedMedia()
-        val viewModel = MyRatingsViewModel(manageRatingUseCase = manageRatingUseCase)
+        val viewModel = MyRatingViewModel(manageRatingUseCase = manageRatingUseCase)
 
         advanceUntilIdle()
 
         // When & Then
         viewModel.effect.test {
             viewModel.onBackClick()
-            assertThat(awaitItem()).isEqualTo(MyRatingEffect.NavigationBack)
+            assertThat(awaitItem()).isEqualTo(MyRatingEffect.BackNavigation)
             cancelAndIgnoreRemainingEvents()
         }
     }
@@ -262,7 +262,7 @@ class MyRatingsViewModelTest {
         // Given
         val manageRatingUseCase = mockk<ManageRatingUseCase>(relaxed = true)
         coEvery { manageRatingUseCase.getRatedMediaSorted() } returns createMockRatedMedia()
-        val viewModel = MyRatingsViewModel(manageRatingUseCase = manageRatingUseCase)
+        val viewModel = MyRatingViewModel(manageRatingUseCase = manageRatingUseCase)
         val movieId = 1
         val mockMovie = RatedMedia(
             id = movieId,
@@ -278,7 +278,7 @@ class MyRatingsViewModelTest {
         // When & Then
         viewModel.effect.test {
             viewModel.onItemClick(movieId)
-            assertThat(awaitItem()).isEqualTo(MyRatingEffect.NavigationMovieDetails(movieId))
+            assertThat(awaitItem()).isEqualTo(MyRatingEffect.MovieDetailsNavigation(movieId))
             cancelAndIgnoreRemainingEvents()
         }
     }
@@ -288,7 +288,7 @@ class MyRatingsViewModelTest {
         // Given
         val manageRatingUseCase = mockk<ManageRatingUseCase>(relaxed = true)
         coEvery { manageRatingUseCase.getRatedMediaSorted() } returns createMockRatedMedia()
-        val viewModel = MyRatingsViewModel(manageRatingUseCase = manageRatingUseCase)
+        val viewModel = MyRatingViewModel(manageRatingUseCase = manageRatingUseCase)
         val tvShowId = 3
         val mockTvShow = RatedMedia(
             id = tvShowId,
@@ -304,7 +304,7 @@ class MyRatingsViewModelTest {
         // When & Then
         viewModel.effect.test {
             viewModel.onItemClick(tvShowId)
-            assertThat(awaitItem()).isEqualTo(MyRatingEffect.NavigationTvShowDetails(tvShowId))
+            assertThat(awaitItem()).isEqualTo(MyRatingEffect.TvShowDetailsNavigation(tvShowId))
             cancelAndIgnoreRemainingEvents()
         }
     }
@@ -314,7 +314,7 @@ class MyRatingsViewModelTest {
         // Given
         val manageRatingUseCase = mockk<ManageRatingUseCase>(relaxed = true)
         coEvery { manageRatingUseCase.getRatedMediaSorted() } returns createMockRatedMedia()
-        val viewModel = MyRatingsViewModel(manageRatingUseCase = manageRatingUseCase)
+        val viewModel = MyRatingViewModel(manageRatingUseCase = manageRatingUseCase)
         val nonExistentId = 999
         coEvery { manageRatingUseCase.getRatedMediaById(nonExistentId) } returns null
 
@@ -332,7 +332,7 @@ class MyRatingsViewModelTest {
         // Given
         val manageRatingUseCase = mockk<ManageRatingUseCase>(relaxed = true)
         coEvery { manageRatingUseCase.getRatedMediaSorted() } returns createMockRatedMedia()
-        val viewModel = MyRatingsViewModel(manageRatingUseCase = manageRatingUseCase)
+        val viewModel = MyRatingViewModel(manageRatingUseCase = manageRatingUseCase)
         val mediaId = 1
         coEvery { manageRatingUseCase.getRatedMediaById(mediaId) } throws RuntimeException("Network error")
 
