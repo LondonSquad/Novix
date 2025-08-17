@@ -19,44 +19,57 @@ class ReviewsViewModel @Inject constructor(
 ) : BaseViewModel<ReviewsUiState, ReviewEffect>(ReviewsUiState()), ReviewContract {
 
     private val args = savedStateHandle.getArgs<Screen.Reviews>()
-    private val mediaType = args?.mediaType ?: MediaType.Movie
-    private val mediaId = args?.mediaId ?: 0
+    private val mediaType: MediaType = args?.mediaType ?: MediaType.Movie
+    private val mediaId: Int = args?.mediaId ?: 0
 
     init {
-        initializeReviews(mediaType, mediaId)
+        loadReviews()
     }
 
     override fun onRetry() {
         updateState { copy(error = null) }
-        initializeReviews(mediaType, mediaId)
+        loadReviews()
     }
 
     override fun onBackClicked() {
         emitEffect(ReviewEffect.NavigateBack)
     }
 
-    private fun initializeReviews(mediaType: MediaType, mediaId: Int) {
+    private fun loadReviews() {
         tryToExecute(
             block = {
-                createPagingSourceFlow("") { _, pageNumber ->
-                    when (mediaType) {
-                        MediaType.Movie -> getMovieUseCase.getMovieReviews(
-                            mediaId,
-                            pageNumber
-                        )
-
-                        else -> getTvShowUseCase.getTvShowReviews(mediaId, pageNumber)
-                    }
+                createPagingSourceFlow { _, pageNumber ->
+                    fetchReviewsByMediaType(pageNumber)
                 }
             },
-            onStart = { updateState { copy(isLoading = true) } },
+            onStart = {
+                updateState { copy(isLoading = true) }
+            },
             onSuccess = { pagingFlow ->
                 updateState {
-                    copy(reviews = pagingFlow)
+                    copy(
+                        reviews = pagingFlow,
+                        isLoading = false,
+                        error = null
+                    )
                 }
             },
-            onError = { errorState -> updateState { copy(error = errorState) } },
-            onCompleted = { updateState { copy(isLoading = false) } },
+            onError = { errorState ->
+                updateState {
+                    copy(
+                        error = errorState,
+                        isLoading = false
+                    )
+                }
+            },
+            onCompleted = {
+                updateState { copy(isLoading = false) }
+            }
         )
+    }
+
+    private suspend fun fetchReviewsByMediaType(pageNumber: Int) = when (mediaType) {
+        MediaType.Movie -> getMovieUseCase.getMovieReviews(mediaId, pageNumber)
+        MediaType.TvShow -> getTvShowUseCase.getTvShowReviews(mediaId, pageNumber)
     }
 }
