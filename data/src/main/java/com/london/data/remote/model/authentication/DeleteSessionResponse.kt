@@ -6,5 +6,5 @@ import kotlinx.serialization.Serializable
 @Serializable
 data class DeleteSessionResponse(
     @SerialName("success")
-    val success: Boolean?
+    val success: Boolean? = null
 )
