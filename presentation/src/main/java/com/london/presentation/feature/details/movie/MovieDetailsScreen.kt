@@ -43,7 +43,6 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalUriHandler
@@ -56,7 +55,6 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.london.designsystem.R
 import com.london.designsystem.component.GuestUserLoginBottomSheet
-import com.london.designsystem.component.Icon
 import com.london.designsystem.component.RatingBottomSheet
 import com.london.designsystem.component.Text
 import com.london.designsystem.component.TopBar
@@ -64,13 +62,9 @@ import com.london.designsystem.theme.NovixTheme
 import com.london.designsystem.theme.noRippleClickable
 import com.london.domain.entity.recent.MediaType
 import com.london.presentation.R.drawable
-import com.london.presentation.R.string.calendar
 import com.london.presentation.R.string.more_like_this
 import com.london.presentation.R.string.overview
-import com.london.presentation.R.string.star
-import com.london.presentation.R.string.time_icon
 import com.london.presentation.R.string.view_reviews
-import com.london.presentation.feature.search.SearchCategory
 import com.london.presentation.shared.ActorItem
 import com.london.presentation.shared.ConditionalText
 import com.london.presentation.shared.CustomBackDropImagePager
@@ -94,23 +88,28 @@ fun MovieDetailsScreen(
     onNavigateBack: () -> Unit,
     onNavigateToLogin: () -> Unit,
     onNavigateToMovieCategory: (MovieGenreUi) -> Unit,
-    onNavigateToMovieDetails: (Int) -> Unit,
-    navigateToActorDetails: (Int) -> Unit,
+    onNavigateToMovie: (Int) -> Unit,
+    onNavigateToActor: (Int) -> Unit,
     onNavigateToReviews: (Int, MediaType) -> Unit,
     viewModel: MovieDetailsViewModel = hiltViewModel()
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
     val effect by viewModel.effect.collectAsState(null)
 
-    HandleMovieDetailsEffects(
-        effect = effect,
-        onNavigateBack = onNavigateBack,
-        onNavigateGenre = onNavigateToMovieCategory,
-        onNavigateToMovie = onNavigateToMovieDetails,
-        onNavigateToActor = navigateToActorDetails,
-        onNavigateToReviews = onNavigateToReviews,
-        onNavigateToLogin = onNavigateToLogin
-    )
+    effect?.Listen { currentEffect ->
+        when (currentEffect) {
+            is MovieDetailsEffect.ActorNavigation -> onNavigateToActor(currentEffect.actorId)
+            MovieDetailsEffect.BackNavigation -> onNavigateBack()
+            is MovieDetailsEffect.GenreNavigation -> onNavigateToMovieCategory(currentEffect.genre)
+            is MovieDetailsEffect.MovieNavigation -> onNavigateToMovie(currentEffect.movieId)
+            is MovieDetailsEffect.ReviewsNavigation -> onNavigateToReviews(
+                currentEffect.movieId,
+                currentEffect.mediaType
+            )
+
+            is MovieDetailsEffect.LoginNavigation -> onNavigateToLogin()
+        }
+    }
 
     BuildScreen(
         onBack = viewModel::onBackClick,
@@ -281,7 +280,7 @@ private fun HomeLazyVerticalGrid(
                             modifier = Modifier.noRippleClickable {
                                 movieDetailsContract.onReviewsClick(
                                     uiState.movieId,
-                                    MediaType.Movie.mediaNum
+                                    MediaType.Movie
                                 )
                             }
                         )
@@ -396,13 +395,6 @@ private fun RatingAndMetaRow(
                 text = rate.toLocalizedNumbers(),
                 icon = painterResource(drawable.star),
             )
-            Box(
-                modifier = Modifier
-                    .padding(4.dp)
-                    .size(3.dp)
-                    .clip(CircleShape)
-                    .background(NovixTheme.colors.body)
-            )
         }
 
         if (!time.isNullOrBlank() && time != "0") {
@@ -413,86 +405,20 @@ private fun RatingAndMetaRow(
 
                 append("${(timeInt % 60).toLocalizedNumbers()}${getLocalizedTimeUnit("m")}")
             }
-
-            IconWithText(
-                icon = drawable.time_04,
-                contentDesc = stringResource(time_icon),
-                tint = NovixTheme.colors.body,
+            TextWithIcon(
+                icon = painterResource(drawable.time_04),
                 text = text,
-                textColor = NovixTheme.colors.body
-            )
-        }
-        val showDot =
-            !time.isNullOrBlank() && time != "0" && !date.isNullOrBlank() && !rate.isNullOrBlank()
 
-        if (showDot) {
-            Box(
-                modifier = Modifier
-                    .padding(4.dp)
-                    .size(3.dp)
-                    .clip(CircleShape)
-                    .background(NovixTheme.colors.body)
-            )
-        }
+                )
 
-
-        if (!date.isNullOrBlank()) {
-            IconWithText(
-                icon = drawable.calendar_03,
-                contentDesc = stringResource(calendar),
-                tint = NovixTheme.colors.body,
-                text = reverseDateFormat(date),
-                textColor = NovixTheme.colors.body
-            )
+            if (!date.isNullOrBlank()) {
+                TextWithIcon(
+                    text = reverseDateFormat(date),
+                    icon = painterResource(drawable.calendar_03),
+                )
+            }
         }
     }
-}
-
-
-@Composable
-private fun HandleMovieDetailsEffects(
-    effect: MovieDetailsEffect?,
-    onNavigateBack: () -> Unit,
-    onNavigateGenre: (Int) -> Unit,
-    onNavigateToMovie: (Int) -> Unit,
-    onNavigateToActor: (Int) -> Unit,
-    onNavigateToReviews: (Int, MediaType) -> Unit,
-    onNavigateToLogin: () -> Unit
-) {
-    effect?.Listen { currentEffect ->
-        when (currentEffect) {
-            is MovieDetailsEffect.ActorNavigation -> onNavigateToActor(currentEffect.actorId)
-            MovieDetailsEffect.BackNavigation -> onNavigateBack()
-            is MovieDetailsEffect.GenreNavigation -> onNavigateGenre(currentEffect.genreId)
-            is MovieDetailsEffect.MovieNavigation -> onNavigateToMovie(currentEffect.movieId)
-            is MovieDetailsEffect.ReviewsNavigation -> onNavigateToReviews(
-                currentEffect.movieId,
-                currentEffect.mediaType
-            )
-            is MovieDetailsEffect.OnLoginNavigation -> onNavigateToLogin()
-        }
-    }
-}
-
-
-@Composable
-private fun IconWithText(
-    icon: Int,
-    contentDesc: String,
-    tint: Color,
-    text: String,
-    textColor: Color
-) {
-    Icon(
-        painter = painterResource(icon),
-        contentDescription = contentDesc,
-        tint = tint
-    )
-    Text(
-        text,
-        style = NovixTheme.typography.label.small,
-        color = textColor
-    )
 }
 
 @Composable

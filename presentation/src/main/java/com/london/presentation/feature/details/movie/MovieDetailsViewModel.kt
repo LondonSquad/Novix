@@ -175,17 +175,20 @@ class MovieDetailsViewModel @Inject constructor(
     }
 
     private suspend fun onMovieDataLoaded(triple: Triple<MovieDetails, List<String>, List<Actor>>) {
-        updateMovieDetailsState(triple)
+        updateMovieDetailsState(triple.first, triple.second, triple.third)
         addMovieToRecentHistory(triple.first)
     }
 
-    private fun updateMovieDetailsState(triple: Triple<MovieDetails, List<String>, List<Actor>>) {
-        val (details, images, cast) = triple
+    private fun updateMovieDetailsState(
+        details: MovieDetails,
+        images: List<String>,
+        cast: List<Actor>
+    ) {
         updateState {
             copy(
                 movieId = details.id,
                 movieName = details.title,
-                movieGenres = details.genresId,
+                movieGenres = details.genres.map { genre -> genre.toUi() },
                 movieRating = details.voteAverage,
                 movieDuration = details.runtime.toString(),
                 releaseDate = details.releaseDate,
@@ -213,7 +216,7 @@ class MovieDetailsViewModel @Inject constructor(
                 posterUrl = details.posterUrl,
                 releaseYear = 2025,
                 rating = 1,
-                genreIds = details.genresId,
+                genres = details.genres,
             )
         )
     }
