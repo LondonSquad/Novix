@@ -26,7 +26,7 @@ class ManageRatingUseCase @Inject constructor(
         seasonNumber: Int,
         episodeNumber: Int
     ): Int = tvShowRepository.getAccountTvEpisode(
-        id = tvShowId,
+        tvShowId = tvShowId,
         seasonNumber = seasonNumber,
         episodeNumber = episodeNumber
     ).rate
@@ -43,7 +43,7 @@ class ManageRatingUseCase @Inject constructor(
         seasonNumber: Int,
         episodeNumber: Int
     ): Boolean = tvShowRepository.addTvShowEpisode(
-        id = id,
+        tvShowId = id,
         rating = rating,
         seasonNumber = seasonNumber,
         episodeNumber = episodeNumber,
@@ -53,7 +53,7 @@ class ManageRatingUseCase @Inject constructor(
         movieRepository.deleteMovieRating(movieId = movieId)
 
     suspend fun deleteTvShowRating(tvShowId: Int) =
-        tvShowRepository.deleteTvShowRating(id = tvShowId)
+        tvShowRepository.deleteTvShowRating(tvShowId = tvShowId)
 
     private suspend fun getRatedMedia(): List<RatedMedia> =
         buildList {
