@@ -764,30 +764,6 @@ class MovieRepositoryImplTest {
         coVerify(exactly = 1) { crashReporter.logException(error) }
     }
 
-    //    @Test
-//    fun `getUpcomingMoviesByGenre should return data from remote source`() = runTest {
-//        // Given
-//        val genre = MovieGenre.ALL
-//        val page = 1
-//
-//        coEvery {
-//            movieRemoteDataSource.getUpComingMoviesByCategory(
-//                pageNumber = page,
-//            )
-//        } returns Result.success(fakeUpcomingMoviesRemoteResponse())
-//
-//        // When
-//       repository.getUpcomingMoviesByGenre(genre = genre, pageNumber = page)
-//
-//        // Then
-//        coVerify {
-//            movieRemoteDataSource.getUpComingMoviesByCategory(
-//                pageNumber = page,
-//            )
-//        }
-//        coVerify { upComingLocalDataSource.insert(any()) }
-//    }
-//
     @Test
     fun `getUpcomingMoviesByGenre should return cached data when remote fails but local has data`() =
         runTest {
@@ -934,10 +910,10 @@ class MovieRepositoryImplTest {
         assertEquals(fakeActorMovieDetailsResponse().toEntity(), result)
         coVerify { movieRemoteDataSource.getActorMovieById(actorId) }
     }
+
     private companion object {
         private const val MOVIE_ID = 1
         private const val PAGE_NUMBER = 1
-
         private fun fakeActorMovieDetailsResponse() = ActorMovieDetailsResponse(
             id = 101,
             cast = listOf(
