@@ -125,7 +125,7 @@ class TvShowCategoryViewModelTest {
     fun `onMovieClick should emit NavigateBack effect`() = runTest {
         // When & Then
         viewModel?.effect?.test {
-            viewModel?.onBack()
+            viewModel?.onBackClick()
             assertThat(awaitItem()).isInstanceOf(TvShowCategoryEffect.BackNavigation::class.java)
             cancelAndIgnoreRemainingEvents()
         }
