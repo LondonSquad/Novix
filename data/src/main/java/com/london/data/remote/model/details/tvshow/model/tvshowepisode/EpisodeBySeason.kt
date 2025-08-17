@@ -1,14 +1,14 @@
 package com.london.data.remote.model.details.tvshow.model.tvshowepisode
 
-import com.london.domain.KoverIgnore
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
-@KoverIgnore
 @Serializable
-data class TvShowEpisodeResponse(
+data class EpisodeBySeason(
     @SerialName("air_date")
     val airDate: String? = null,
+    @SerialName("episode_number")
+    val episodeNumber: Int? = null,
     @SerialName("episode_type")
     val episodeType: String? = null,
     @SerialName("id")
@@ -17,14 +17,14 @@ data class TvShowEpisodeResponse(
     val name: String? = null,
     @SerialName("overview")
     val overview: String? = null,
+    @SerialName("runtime")
+    val runtime: Int? = null,
     @SerialName("season_number")
     val seasonNumber: Int? = null,
+    @SerialName("show_id")
+    val showId: Int? = null ,
     @SerialName("still_path")
-    val stillPath: String? = null,
+    val stillPath: String? = null   ,
     @SerialName("vote_average")
-    val voteAverage: Double? = null,
-    @SerialName("vote_count")
-    val voteCount: Int? = null,
-    @SerialName("guest_stars")
-    val guestStars: List<EpisodeGuestStar>? = null  ,
+    val voteAverage: Double? = null
 )

@@ -83,7 +83,7 @@ fun EpisodeDetailsScreen(
     }
 
     BuildScreen(
-        onBack = viewModel::onBackClicked,
+        onBack = viewModel::onBackClick,
         isLoading = uiState.isLoading,
         isError = uiState.error != null,
         onRetry = viewModel::onRetry
@@ -141,7 +141,7 @@ private fun Content(
             contentPadding = PaddingValues(bottom = 80.dp)
         ) {
             item {
-                val images = uiState.tvImages
+                val images = uiState.images
                 if (images != null) {
                     CustomBackDropImagePager(images = images)
                 }

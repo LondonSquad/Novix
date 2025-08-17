@@ -12,8 +12,8 @@ import com.london.domain.entity.popular.PopularMedia
 import com.london.domain.entity.review.ReviewEntity
 import com.london.domain.entity.toprated.TopRatedMedia
 import com.london.domain.entity.tvshowdetails.TvShowDetailsEntity
-import com.london.domain.entity.tvshowdetails.episode.TvShowEpisodeByIdEntity
-import com.london.domain.entity.tvshowdetails.episode.TvShowEpisodesEntity
+import com.london.domain.entity.tvshowdetails.episode.EpisodeByIdEntity
+import com.london.domain.entity.tvshowdetails.episode.EpisodesEntity
 
 interface TvShowRepository {
     suspend fun getTvShowDetailsById(id: Int): TvShowDetailsEntity
@@ -45,15 +45,15 @@ interface TvShowRepository {
     suspend fun getTvShowEpisodesBySeason(
         tvShowId: Int,
         seasonNumber: Int,
-    ): TvShowEpisodesEntity
+    ): EpisodesEntity
 
     suspend fun getTvShowEpisodeByPosition(
         tvShowId: Int,
         seasonNumber: Int,
         episodeNumber: Int
-    ): TvShowEpisodeByIdEntity
+    ): EpisodeByIdEntity
 
-    suspend fun getEpisodeVideos(seriesId: Int, seasonNumber: Int, episodeNumber: Int): List<String>
+    suspend fun getEpisodeVideos(tvShowId: Int, seasonNumber: Int, episodeNumber: Int): List<String>
     suspend fun getTvShowVideos(tvShowId: Int): List<String>
     suspend fun getTvShowReviews(tvShowId: Int, pageNumber: Int): PagedFetchResponse<ReviewEntity>
     suspend fun getAccountTvShowStateById(

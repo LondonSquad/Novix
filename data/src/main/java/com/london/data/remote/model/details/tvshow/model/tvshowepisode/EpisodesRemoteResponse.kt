@@ -4,9 +4,9 @@ import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class TvShowEpisodesRemoteResponse(
+data class EpisodesRemoteResponse(
     @SerialName("_id")
     val id: String? = null,
     @SerialName("episodes")
-    val episodes: List<TvShowEpisodeBySeason>? = null
+    val episodes: List<EpisodeBySeason>? = null
 )

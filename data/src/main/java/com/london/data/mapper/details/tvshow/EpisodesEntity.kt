@@ -1,25 +1,25 @@
 package com.london.data.mapper.details.tvshow
 
+import com.london.data.remote.model.details.tvshow.model.tvshowepisode.EpisodeBySeason
 import com.london.data.remote.model.details.tvshow.model.tvshowepisode.EpisodeGuestStar
-import com.london.data.remote.model.details.tvshow.model.tvshowepisode.TvShowEpisodeBySeason
-import com.london.data.remote.model.details.tvshow.model.tvshowepisode.TvShowEpisodeResponse
-import com.london.data.remote.model.details.tvshow.model.tvshowepisode.TvShowEpisodesRemoteResponse
+import com.london.data.remote.model.details.tvshow.model.tvshowepisode.EpisodeResponse
+import com.london.data.remote.model.details.tvshow.model.tvshowepisode.EpisodesRemoteResponse
 import com.london.data.utils.asImageUrlOrEmpty
 import com.london.data.utils.orZero
 import com.london.data.utils.roundToDecimal
 import com.london.domain.entity.Actor
-import com.london.domain.entity.tvshowdetails.episode.TvShowEpisodeByIdEntity
-import com.london.domain.entity.tvshowdetails.episode.TvShowEpisodeBySeasonEntity
-import com.london.domain.entity.tvshowdetails.episode.TvShowEpisodesEntity
+import com.london.domain.entity.tvshowdetails.episode.EpisodeByIdEntity
+import com.london.domain.entity.tvshowdetails.episode.EpisodeBySeasonEntity
+import com.london.domain.entity.tvshowdetails.episode.EpisodesEntity
 
-fun TvShowEpisodesRemoteResponse.toTvShowEpisodesEntity(): TvShowEpisodesEntity =
-    TvShowEpisodesEntity(
+fun EpisodesRemoteResponse.toEpisodesEntity(): EpisodesEntity =
+    EpisodesEntity(
         id = id.orEmpty(),
-        episodes = episodes.orEmpty().map { it.toTvShowEpisodeBySeasonEntity() }
+        episodes = episodes.orEmpty().map { it.toEpisodeBySeasonEntity() }
     )
 
-fun TvShowEpisodeBySeason.toTvShowEpisodeBySeasonEntity(): TvShowEpisodeBySeasonEntity =
-    TvShowEpisodeBySeasonEntity(
+fun EpisodeBySeason.toEpisodeBySeasonEntity(): EpisodeBySeasonEntity =
+    EpisodeBySeasonEntity(
         airDate = airDate,
         episodeNumber = episodeNumber.orZero(),
         episodeType = episodeType.orEmpty(),
@@ -33,8 +33,8 @@ fun TvShowEpisodeBySeason.toTvShowEpisodeBySeasonEntity(): TvShowEpisodeBySeason
         voteAverage = voteAverage.orZero().roundToDecimal(),
     )
 
-fun TvShowEpisodeResponse.toTvShowEpisodeEntity(): TvShowEpisodeByIdEntity =
-    TvShowEpisodeByIdEntity(
+fun EpisodeResponse.toEpisodeEntity(): EpisodeByIdEntity =
+    EpisodeByIdEntity(
         airDate = airDate,
         seasonNumber = seasonNumber.orZero(),
         episodeTypes = episodeType.orEmpty(),

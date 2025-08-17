@@ -63,7 +63,7 @@ import com.london.designsystem.theme.NovixTheme
 import com.london.designsystem.theme.noRippleClickable
 import com.london.domain.entity.recent.MediaType
 import com.london.domain.entity.tvshowdetails.TvShowCastMemberEntity
-import com.london.domain.entity.tvshowdetails.episode.TvShowEpisodeBySeasonEntity
+import com.london.domain.entity.tvshowdetails.episode.EpisodeBySeasonEntity
 import com.london.presentation.shared.ActorItem
 import com.london.presentation.shared.ConditionalText
 import com.london.presentation.shared.CustomBackDropImagePager
@@ -584,7 +584,7 @@ fun SeasonEpisodesDetails(
 
 @Composable
 private fun EpisodeItem(
-    episode: TvShowEpisodeBySeasonEntity,
+    episode: EpisodeBySeasonEntity,
     onEpisodeClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {

@@ -6,8 +6,8 @@ import com.london.data.remote.model.details.actor.model.actortvshowdetails.Actor
 import com.london.data.remote.model.details.rating.AccountStatesResponse
 import com.london.data.remote.model.details.rating.RatingRemoteResponse
 import com.london.data.remote.model.details.tvshow.model.TvShowDetailsRemoteResponse
-import com.london.data.remote.model.details.tvshow.model.tvshowepisode.TvShowEpisodeResponse
-import com.london.data.remote.model.details.tvshow.model.tvshowepisode.TvShowEpisodesRemoteResponse
+import com.london.data.remote.model.details.tvshow.model.tvshowepisode.EpisodeResponse
+import com.london.data.remote.model.details.tvshow.model.tvshowepisode.EpisodesRemoteResponse
 import com.london.data.remote.model.details.videoprovider.VideoResponse
 import com.london.data.remote.model.home.popular.PopularTvShowResponse
 import com.london.data.remote.model.home.toprated.TopRatedTvSeriesRemote
@@ -62,7 +62,7 @@ interface TvShowRemoteDataSource {
     suspend fun getTvShowEpisodesBySeason(
         id: Int,
         seasonNumber: Int,
-    ): Result<TvShowEpisodesRemoteResponse>
+    ): Result<EpisodesRemoteResponse>
 
     suspend fun getTvShowImagesById(id: Int): Result<ImagesResponse>
 
@@ -70,7 +70,7 @@ interface TvShowRemoteDataSource {
         tvShowId: Int,
         seasonNumber: Int,
         episodeNumber: Int
-    ): Result<TvShowEpisodeResponse>
+    ): Result<EpisodeResponse>
 
     suspend fun getEpisodeVideos(
         tvShowId: Int,

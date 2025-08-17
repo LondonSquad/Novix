@@ -8,8 +8,8 @@ import com.london.data.local.source.home.HomeLocalDataSource
 import com.london.data.mapper.details.actor.toEntity
 import com.london.data.mapper.details.toEntity
 import com.london.data.mapper.details.tvshow.toEntity
-import com.london.data.mapper.details.tvshow.toTvShowEpisodeEntity
-import com.london.data.mapper.details.tvshow.toTvShowEpisodesEntity
+import com.london.data.mapper.details.tvshow.toEpisodeEntity
+import com.london.data.mapper.details.tvshow.toEpisodesEntity
 import com.london.data.mapper.home.toprated.toEntity
 import com.london.data.mapper.myrating.toEntity
 import com.london.data.mapper.search.toReviewEntity
@@ -24,10 +24,10 @@ import com.london.data.remote.model.details.rating.AccountStatesResponse
 import com.london.data.remote.model.details.rating.RatingRemoteResponse
 import com.london.data.remote.model.details.tvshow.model.TvShowDetailsRemoteResponse
 import com.london.data.remote.model.details.tvshow.model.TvShowSeason
+import com.london.data.remote.model.details.tvshow.model.tvshowepisode.EpisodeBySeason
 import com.london.data.remote.model.details.tvshow.model.tvshowepisode.EpisodeGuestStar
-import com.london.data.remote.model.details.tvshow.model.tvshowepisode.TvShowEpisodeBySeason
-import com.london.data.remote.model.details.tvshow.model.tvshowepisode.TvShowEpisodeResponse
-import com.london.data.remote.model.details.tvshow.model.tvshowepisode.TvShowEpisodesRemoteResponse
+import com.london.data.remote.model.details.tvshow.model.tvshowepisode.EpisodeResponse
+import com.london.data.remote.model.details.tvshow.model.tvshowepisode.EpisodesRemoteResponse
 import com.london.data.remote.model.details.videoprovider.VideoResponse
 import com.london.data.remote.model.details.videoprovider.VideoTrailerRemote
 import com.london.data.remote.model.home.popular.PopularTvShowResponse
@@ -187,7 +187,7 @@ class TvShowRepositoryImplTest {
 
             val result = repository.getTvShowEpisodesBySeason(TV_SHOW_ID, SEASON_NUMBER)
 
-            assertThat(result).isEqualTo(TvShowEpisodesRemoteMock.toTvShowEpisodesEntity())
+            assertThat(result).isEqualTo(TvShowEpisodesRemoteMock.toEpisodesEntity())
         }
 
     @Test
@@ -205,7 +205,7 @@ class TvShowRepositoryImplTest {
         val result =
             repository.getTvShowEpisodeByPosition(TV_SHOW_ID, SEASON_NUMBER, EPISODE_NUMBER)
 
-        assertThat(result).isEqualTo(fakeResponse.toTvShowEpisodeEntity())
+        assertThat(result).isEqualTo(fakeResponse.toEpisodeEntity())
     }
 
     @Test
@@ -1197,7 +1197,7 @@ class TvShowRepositoryImplTest {
             voteCount: Int = 100,
             guestStars: List<EpisodeGuestStar> = emptyList(),
             episodeType: String = "standard"
-        ): TvShowEpisodeResponse = TvShowEpisodeResponse(
+        ): EpisodeResponse = EpisodeResponse(
             id = id,
             name = name,
             seasonNumber = seasonNumber,
@@ -1310,10 +1310,10 @@ class TvShowRepositoryImplTest {
             )
         )
 
-        val TvShowEpisodesRemoteMock = TvShowEpisodesRemoteResponse(
+        val TvShowEpisodesRemoteMock = EpisodesRemoteResponse(
             id = "season_id",
             episodes = listOf(
-                TvShowEpisodeBySeason(
+                EpisodeBySeason(
                     airDate = "2020-01-01",
                     episodeNumber = 1,
                     episodeType = "standard",

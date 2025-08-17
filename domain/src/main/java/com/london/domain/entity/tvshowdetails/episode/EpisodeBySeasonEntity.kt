@@ -1,6 +1,6 @@
 package com.london.domain.entity.tvshowdetails.episode
 
-data class TvShowEpisodeBySeasonEntity(
+data class EpisodeBySeasonEntity(
     val airDate: String?,
     val episodeNumber: Int,
     val episodeType: String,

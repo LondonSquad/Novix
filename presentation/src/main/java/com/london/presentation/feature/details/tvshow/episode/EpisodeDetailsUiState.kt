@@ -1,10 +1,11 @@
 package com.london.presentation.feature.details.tvshow.episode
 
 import com.london.domain.entity.Actor
+import com.london.domain.entity.tvshowdetails.episode.EpisodeByIdEntity
 import com.london.presentation.shared.base.ErrorState
 
 data class EpisodeDetailsUiState(
-    val tvImages: List<String>? = listOf(),
+    val images: List<String>? = listOf(),
     val isLoading: Boolean = true,
     val error: ErrorState? = null,
     val episodeGenres: List<String> = listOf(),
@@ -25,7 +26,8 @@ data class EpisodeDetailsUiState(
     val isSuccessfullyRated: Boolean? = null,
     val isGuestUserBottomSheetVisible: Boolean = false,
     val isGuestUser: Boolean = false,
-    val isRated: Boolean = false
+    val isRated: Boolean = false,
+    val episode: EpisodeByIdEntity? = null,
 ){
     val episodeHaveTrailer: Boolean
         get() = videoProvider.isNotEmpty()
