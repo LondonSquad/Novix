@@ -14,8 +14,8 @@ import org.junit.Before
 import org.junit.Test
 
 class RecentRepositoryImplTest {
-    lateinit var recentSearchLocalDataSource: RecentDataSource<RecentSearchLocal>
-    lateinit var recentSearchRepository: RecentRepository<RecentSearch>
+    private lateinit var recentSearchLocalDataSource: RecentDataSource<RecentSearchLocal>
+    private lateinit var recentSearchRepository: RecentRepository<RecentSearch>
     @Before
     fun setUp() {
         recentSearchLocalDataSource = mockk()
