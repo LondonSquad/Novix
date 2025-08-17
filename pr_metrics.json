@@ -32119,5 +32119,42 @@
       "deletions": 316,
       "changed_files": 13
     }
+  },
+  {
+    "pr_number": 660,
+    "url": "https://github.com/LondonSquad/Novix/pull/660",
+    "title": "Refactor/restructure repositories",
+    "opened_at": "2025-08-17T19:35:41Z",
+    "head_ref": "refactor/restructure-repositories",
+    "base_ref": "develop",
+    "creator": {
+      "login": "ahmeddsamii",
+      "id": 154278495,
+      "url": "https://github.com/ahmeddsamii"
+    },
+    "assignees": [
+      {
+        "login": "ahmeddsamii",
+        "id": 154278495,
+        "url": "https://github.com/ahmeddsamii"
+      }
+    ],
+    "comments": [],
+    "approvals": [],
+    "required_approvals": 2,
+    "first_approved_at": null,
+    "time_to_first_approval_minutes": null,
+    "required_approvals_met_at": null,
+    "time_to_required_approvals_minutes": null,
+    "closed_at": null,
+    "merged_at": null,
+    "merged_by": null,
+    "week": "2025-W33",
+    "status": "pending",
+    "diff_stats": {
+      "additions": 295,
+      "deletions": 225,
+      "changed_files": 9
+    }
   }
 ]
