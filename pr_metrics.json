@@ -31322,7 +31322,7 @@
           "url": "https://github.com/marwanqashwa"
         },
         "submitted_at": "2025-08-16T03:29:55Z",
-        "commit_id": "018c3d0e4b19b2217b790be54306a00a6cb39abf"
+        "commit_id": "359aa5b565be43c4016fe1fa4fbfb5d45c55d22e"
       }
     ],
     "required_approvals": 2,
@@ -31428,8 +31428,8 @@
           "url": "https://github.com/yusufnasserdev"
         },
         "first_comment_at": "2025-08-16T13:04:52Z",
-        "last_comment_at": "2025-08-16T13:20:36Z",
-        "count": 10
+        "last_comment_at": "2025-08-17T04:42:05Z",
+        "count": 11
       },
       {
         "author": {
@@ -31442,10 +31442,20 @@
         "count": 4
       }
     ],
-    "approvals": [],
+    "approvals": [
+      {
+        "reviewer": {
+          "login": "yusufnasserdev",
+          "id": 43588217,
+          "url": "https://github.com/yusufnasserdev"
+        },
+        "submitted_at": "2025-08-17T04:44:22Z",
+        "commit_id": "1ee8882c6f8a5e31106c888115dfe23e8d5b4a56"
+      }
+    ],
     "required_approvals": 2,
-    "first_approved_at": null,
-    "time_to_first_approval_minutes": null,
+    "first_approved_at": "2025-08-17T04:44:22Z",
+    "time_to_first_approval_minutes": 1839.05,
     "required_approvals_met_at": null,
     "time_to_required_approvals_minutes": null,
     "closed_at": null,
