@@ -58,25 +58,6 @@ class TvShowRepositoryImpl @Inject constructor(
     override suspend fun getActorTvShowPicksById(id: Int): ActorMediaDetails =
         tvShowRemoteDataSource.getActorTvShowById(id).getOrThrow().toEntity()
 
-    override suspend fun getTvShowVideos(tvShowId: Int): List<String> =
-        tvShowRemoteDataSource.getTvShowVideos(tvShowId)
-            .getOrThrow().tvShow?.map { it.key.asYoutubeUrlOrEmpty() }.orEmpty()
-
-    override suspend fun getTvShowReviews(
-        tvShowId: Int,
-        pageNumber: Int
-    ): PagedFetchResponse<ReviewEntity> = fetchAndSync(
-        networkBlock = {
-            getTvShowReviewsFromRemote(tvShowId = tvShowId, pageNumber = pageNumber)
-        }).run {
-        PagedFetchResponse(
-            currentPage = currentPage,
-            items = items,
-            totalPages = totalPages,
-            totalItems = totalItems
-        )
-    }
-
     override suspend fun getTrendingTvShows(page: Int): PagedFetchResponse<Trending> {
         val response = tvShowRemoteDataSource.getTrendingTvShows(page).getOrThrow()
         return PagedFetchResponse(
@@ -152,13 +133,6 @@ class TvShowRepositoryImpl @Inject constructor(
             guestSessionId = authenticationPreferences.getGuestSessionId()
         ).isSuccess
 
-    override suspend fun getAccountTvShowState(tvShowId: Int): MediaStates =
-        tvShowRemoteDataSource.getAccountTvShowStates(
-            tvShowId = tvShowId,
-            guestSessionId = authenticationPreferences.getGuestSessionId(),
-            userSessionId = authenticationPreferences.getSessionId()
-        ).getOrThrow().toEntity()
-
     override suspend fun addTvShowEpisode(
         tvShowId: Int,
         seasonNumber: Int,
@@ -213,8 +187,7 @@ class TvShowRepositoryImpl @Inject constructor(
         pageNumber: Int
     ): PagedFetchResponse<ReviewEntity> = fetchAndSync(
         networkBlock = {
-            tvShowRemoteDataSource.getTvShowReviews(tvShowId, pageNumber).getOrThrow()
-                .toReviewEntity()
+            getTvShowReviewsFromRemote(tvShowId = tvShowId, pageNumber = pageNumber)
         }).run {
         PagedFetchResponse(
             currentPage = currentPage,
