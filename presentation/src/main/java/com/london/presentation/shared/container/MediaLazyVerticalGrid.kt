@@ -27,14 +27,14 @@ import com.london.presentation.utils.gridColumns
 fun <T : Any> MediaLazyVerticalGrid(
     items: List<T>,
     modifier: Modifier = Modifier,
-    imageUrl: (T) -> String? = { it.getImageUrl() },
+    rate: (T) -> String? = { null },
     name: (T) -> String = { it.getName() },
+    imageUrl: (T) -> String? = { it.getImageUrl() },
     hasSaveIcon: Boolean = true,
     onSaveClick: (T) -> Unit = {},
     isItemSaved: (T) -> Boolean = { false },
+    onItemClick: ((T) -> Unit)? = null,
     onDeleteClick: (T) -> Unit = {},
-    myRatingList: Boolean = false,
-    rate: String = "3",
     onNavigateToMovie: (Int) -> Unit = {},
     onNavigateToTvShow: (Int) -> Unit = {},
     topBar: @Composable (() -> Unit)? = null
@@ -55,20 +55,19 @@ fun <T : Any> MediaLazyVerticalGrid(
         ) { item ->
             imageUrl(item)?.let { url ->
                 HomeCard(
-                    imageUrl = imageUrl,
+                    imageUrl = url,
                     imageDescription = name(item),
                     isSaved = isItemSaved(item),
                     hasSaveIcon = hasSaveIcon,
                     onSaveClick = { onSaveClick(item) },
                     onDeleteClick = { onDeleteClick(item) },
-                    myRatingList = myRatingList,
-                    rate = rate,
-                    modifier = Modifier.clickable {
-                        when (item) {
-                            is Movie -> onNavigateToMovie(item.id)
-                            is TvShow -> onNavigateToTvShow(item.id)
-                        }
-                    }
+                    rate = rate(item),
+                    modifier = Modifier.navigationClickable(
+                        item = item,
+                        onItemClick = onItemClick,
+                        onNavigateToMovie = onNavigateToMovie,
+                        onNavigateToTvShow = onNavigateToTvShow
+                    )
                 )
             }
         }
@@ -79,14 +78,13 @@ fun <T : Any> MediaLazyVerticalGrid(
 fun <T : Any> MediaLazyVerticalGrid(
     pagingItems: LazyPagingItems<T>,
     modifier: Modifier = Modifier,
-    imageUrl: (T) -> String? = { it.getImageUrl() },
+    rate: (T) -> String? = { null },
     name: (T) -> String = { it.getName() },
+    imageUrl: (T) -> String? = { it.getImageUrl() },
     hasSaveIcon: Boolean = true,
     onSaveClick: (T) -> Unit = {},
     isItemSaved: (T) -> Boolean = { false },
     onDeleteClick: (T) -> Unit = {},
-    myRatingList: Boolean = false,
-    rate: String = "3",
     topBar: @Composable (() -> Unit)? = null,
     onNavigateToMovie: (Int) -> Unit = {},
     onNavigateToTvShow: (Int) -> Unit = {}
@@ -114,8 +112,7 @@ fun <T : Any> MediaLazyVerticalGrid(
                 hasSaveIcon = hasSaveIcon,
                 onSaveClick = onSaveClick,
                 onDeleteClick = onDeleteClick,
-                myRatingList = myRatingList,
-                ratingText = rate,
+                rate = rate,
                 onNavigateToMovie = onNavigateToMovie,
                 onNavigateToTvShow = onNavigateToTvShow,
             )
@@ -158,8 +155,7 @@ private fun <T : Any> RenderPagingGridItem(
     hasSaveIcon: Boolean,
     onSaveClick: (T) -> Unit,
     onDeleteClick: (T) -> Unit,
-    myRatingList: Boolean,
-    ratingText: String,
+    rate: (T) -> String?,
     onNavigateToMovie: (Int) -> Unit,
     onNavigateToTvShow: (Int) -> Unit
 ) {
@@ -178,8 +174,7 @@ private fun <T : Any> RenderPagingGridItem(
                 hasSaveIcon = hasSaveIcon,
                 onSaveClick = { onSaveClick(item) },
                 onDeleteClick = { onDeleteClick(item) },
-                myRatingList = myRatingList,
-                rate = ratingText
+                rate = rate(item)
             )
         }
     }
