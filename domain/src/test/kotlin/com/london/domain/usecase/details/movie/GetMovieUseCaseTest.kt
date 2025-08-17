@@ -52,13 +52,7 @@ class GetMovieUseCaseTest {
         val result = getMovieUseCase.getMovieDetails(movieId)
 
         // Then
-        assertEquals(123, result.id)
-        assertEquals("Inception", result.title)
-        assertEquals("8.8", result.voteAverage)
-        assertEquals(148, result.runtime)
-        assertEquals("2010-07-16", result.releaseDate)
-        assertEquals("A skilled thief is given a chance at redemption.", result.overview)
-        assertEquals(3, result.genres.size)
+        assertThat(fakeMovieDetailsDomain()).isEqualTo(result)
 
         coVerify(exactly = 1) { movieRepository.getMovieById(movieId) }
     }
