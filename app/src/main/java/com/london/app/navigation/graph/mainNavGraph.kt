@@ -151,8 +151,8 @@ fun NavGraphBuilder.continueWatchingNavGraph(navController: NavHostController) =
         composable<ContinueWatching> {
             ContinueWatchingScreen(
                 onNavigateBack = ::navigateUp,
-                onNaviagteToMovieDetalis = ::navigateToMovieDetails,
-                onNaviagteToTvShowDetalis = ::navigateToTvShowDetails,
+                onNavigateToMovieDetails = ::navigateToMovieDetails,
+                onNavigateToTvShowDetails = ::navigateToTvShowDetails,
                 screenTitle = stringResource(R.string.continue_watch)
             )
         }
@@ -160,8 +160,8 @@ fun NavGraphBuilder.continueWatchingNavGraph(navController: NavHostController) =
         appComposable<WatchingHistory> {
             ContinueWatchingScreen(
                 onNavigateBack = ::navigateUp,
-                onNaviagteToMovieDetalis = ::navigateToMovieDetails,
-                onNaviagteToTvShowDetalis = ::navigateToTvShowDetails,
+                onNavigateToMovieDetails = ::navigateToMovieDetails,
+                onNavigateToTvShowDetails = ::navigateToTvShowDetails,
                 screenTitle = stringResource(R.string.watching_history)
             )
         }
@@ -189,8 +189,8 @@ fun NavGraphBuilder.movieDetailsNavGraph(navController: NavHostController) =
             MovieDetailsScreen(
                 onNavigateBack = ::navigateUp,
                 onNavigateToMovieCategory = ::navigateToMovieCategory,
-                onNavigateToMovieDetails = ::navigateToMovieDetails,
-                navigateToActorDetails = ::navigateToActorDetails,
+                onNavigateToMovie = ::navigateToMovieDetails,
+                onNavigateToActor = ::navigateToActorDetails,
                 onNavigateToReviews = ::navigateToReviews,
                 onNavigateToLogin = ::navigateToLogin,
             )

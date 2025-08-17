@@ -1,19 +1,12 @@
 package com.london.presentation.feature.account.rating
 
-import androidx.compose.animation.core.tween
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.statusBarsPadding
-import androidx.compose.foundation.lazy.grid.GridCells
-import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
-import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
@@ -30,12 +23,11 @@ import com.london.designsystem.theme.ThemePreviews
 import com.london.domain.entity.recent.MediaType
 import com.london.presentation.R
 import com.london.presentation.shared.EmptyGenreLayout
-import com.london.presentation.shared.HomeCard
 import com.london.presentation.shared.SnackBarAnimation
 import com.london.presentation.shared.base.ErrorState
 import com.london.presentation.shared.buildscreen.BuildScreen
+import com.london.presentation.shared.container.MediaLazyVerticalGrid
 import com.london.presentation.utils.Listen
-import com.london.presentation.utils.gridColumns
 import com.london.presentation.utils.toLocalizedNumbers
 import com.london.designsystem.R as dsR
 
@@ -55,29 +47,22 @@ fun MyRatingScreen(
 
     effect?.Listen { currentEffect ->
         when (currentEffect) {
-            is MyRatingEffect.NavigateToMovie -> onNavigateToMovieDetails(currentEffect.movieId)
-            is MyRatingEffect.NavigateToTvShow -> onNavigateToTvShowDetails(currentEffect.tvShowId)
-            is MyRatingEffect.NavigateBack -> onNavigateBack()
+            is MyRatingEffect.NavigationMovieDetails -> onNavigateToMovieDetails(currentEffect.id)
+            is MyRatingEffect.NavigationTvShowDetails -> onNavigateToTvShowDetails(currentEffect.id)
+            is MyRatingEffect.NavigationBack -> onNavigateBack()
         }
     }
 
-    BuildScreen(
-        isLoading = state.isLoading,
-        isError = state.errorState != null,
-        onBack = viewModel::onBackClicked,
-        onRetry = viewModel::initializeRatedMedia
-    ) {
-        Content(
-            state = state,
-            contract = viewModel
-        )
-    }
+    Content(
+        state = state,
+        contract = viewModel
+    )
 }
 
 @Composable
 private fun Content(
     state: MyRatingUiState = MyRatingUiState(),
-    contract: MyRatingsContract = defaultMyRatingContract()
+    contract: MyRatingsContract
 ) {
     val selectedCategory = state.selectedRatingCategory ?: RatingCategory.All
     val items = when (selectedCategory) {
@@ -86,86 +71,75 @@ private fun Content(
         RatingCategory.TvShows -> state.ratedTvShows
     }
 
-    Column(
-        modifier = Modifier.fillMaxSize()
+    BuildScreen(
+        isLoading = state.isLoading,
+        isError = state.errorState is ErrorState.NoInternet,
+        onBack = contract::onBackClick,
+        onRetry = contract::onRetryClick
     ) {
-        TopBar(
-            modifier = Modifier
-                .statusBarsPadding()
-                .fillMaxWidth()
-                .padding(horizontal = 16.dp, vertical = 12.dp),
-            title = stringResource(R.string.my_rating),
-            onBackClick = contract::onBackClicked
-        )
-
-        RatingChipsRow(
-            selected = state.selectedRatingCategory ?: RatingCategory.All,
-            onSelect = contract::onRatingCategorySelected,
-            modifier = Modifier.padding(bottom = 12.dp)
-        )
-
-        if (items.isEmpty()) {
-            EmptyGenreLayout(
-                message = stringResource(R.string.there_is_no_items),
-                modifier = Modifier.fillMaxSize()
-            )
-        } else {
-            LazyVerticalGrid(
-                columns = GridCells.Fixed(gridColumns()),
-                contentPadding = PaddingValues(
-                    top = 12.dp,
-                    bottom = 16.dp
-                ),
-                horizontalArrangement = Arrangement.spacedBy(12.dp),
-                verticalArrangement = Arrangement.spacedBy(12.dp),
+        Column(
+            modifier = Modifier.fillMaxSize()
+        ) {
+            TopBar(
                 modifier = Modifier
-                    .fillMaxSize()
-                    .navigationBarsPadding()
-                    .padding(horizontal = 16.dp)
-            ) {
-                items(
+                    .statusBarsPadding()
+                    .fillMaxWidth()
+                    .padding(horizontal = 16.dp, vertical = 12.dp),
+                title = stringResource(R.string.my_rating),
+                onBackClick = contract::onBackClick
+            )
+
+            RatingChipsRow(
+                selected = selectedCategory,
+                onSelect = contract::onRatingCategorySelected,
+                modifier = Modifier.padding(bottom = 12.dp)
+            )
+
+            if (items.isEmpty()) {
+                EmptyGenreLayout(
+                    message = stringResource(R.string.there_is_no_items),
+                    modifier = Modifier.fillMaxSize()
+                )
+            } else {
+                MediaLazyVerticalGrid(
                     items = items,
-                    key = { it.id }
-                ) { item ->
-                    HomeCard(
-                        imageUrl = item.posterPath,
-                        isSaved = false,
-                        onSaveClick = { },
-                        myRatingList = true,
-                        rate = item.rating.toLocalizedNumbers(),
-                        onDeleteClick = {
-                            when (item.mediaType) {
-                                MediaType.Movie -> contract.onDeleteMovie(item.id)
-                                MediaType.TvShow -> contract.onDeleteShow(item.id)
-                            }
-                        },
-                        modifier = Modifier
-                            .animateItem(
-                                fadeInSpec = null,
-                                fadeOutSpec = tween(500),
-                                placementSpec = tween(500)
-                            )
-                            .clickable {
-                                when (item.mediaType) {
-                                    MediaType.Movie -> contract.onMovieClick(item.id)
-                                    MediaType.TvShow -> contract.onTvShowClick(item.id)
-                                }
-                            }
-                    )
-                }
+                    imageUrl = { it.posterPath },
+                    name = { it.title },
+                    rate = { rated -> rated.rating.toLocalizedNumbers() },
+                    hasSaveIcon = false,
+                    isItemSaved = { false },
+                    onSaveClick = {},
+                    onDeleteClick = { rated ->
+                        when (rated.mediaType) {
+                            MediaType.Movie -> contract.onDeleteMovieClick(rated.id)
+                            MediaType.TvShow -> contract.onDeleteTVShowClick(rated.id)
+                        }
+                    },
+                    onItemClick = { rated ->
+                        when (rated.mediaType) {
+                            MediaType.Movie -> contract.onMovieClick(rated.id)
+                            MediaType.TvShow -> contract.onTvShowClick(rated.id)
+                        }
+                    }
+                )
             }
         }
-    }
 
-    if (state.isSnackBarVisible) {
-        if (state.errorState is ErrorState.RequestFailed) {
-            SnackBarAnimation(state.errorState.message)
-        } else {
-            SnackBarAnimation(
-                stringResource(R.string.delete_list_successfully),
-                dsR.drawable.ic_success
-            )
-        }
+        RatingSnackBar(state)
+    }
+}
+
+@Composable
+private fun RatingSnackBar(state: MyRatingUiState) {
+    if (!state.isSnackBarVisible) return
+
+    if (state.errorState is ErrorState.RequestFailed) {
+        SnackBarAnimation(state.errorState.message)
+    } else {
+        SnackBarAnimation(
+            stringResource(R.string.delete_list_successfully),
+            dsR.drawable.ic_success
+        )
     }
 }
 
@@ -181,21 +155,13 @@ fun RatingChipsRow(
             .padding(horizontal = 16.dp),
         horizontalArrangement = Arrangement.spacedBy(8.dp)
     ) {
-        NovixChip(
-            text = stringResource(R.string.all),
-            isSelected = selected == RatingCategory.All,
-            onClick = { onSelect(RatingCategory.All) }
-        )
-        NovixChip(
-            text = stringResource(R.string.Movies),
-            isSelected = selected == RatingCategory.Movies,
-            onClick = { onSelect(RatingCategory.Movies) }
-        )
-        NovixChip(
-            text = stringResource(R.string.TV_Shows),
-            isSelected = selected == RatingCategory.TvShows,
-            onClick = { onSelect(RatingCategory.TvShows) }
-        )
+        RatingCategory.entries.forEach { category ->
+            NovixChip(
+                text = stringResource(category.title),
+                isSelected = selected == category,
+                onClick = { onSelect(category) }
+            )
+        }
     }
 }
 

@@ -173,7 +173,6 @@ private fun Preview() {
         config = MediaGridConfig(
             showSaveIcon = true,
             isDarkMode = true,
-            myRatingList = false,
             rate = "3",
             isMovieSelected = true,
             isTvShowSelected = false,

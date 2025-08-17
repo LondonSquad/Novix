@@ -7,7 +7,6 @@ import com.london.data.remote.model.authentication.SessionResponse
 import com.london.data.remote.source.account.AccountRemoteDataSource
 import com.london.data.remote.source.authentication.AuthenticationRemoteDataSource
 import com.london.data.utils.isFailure
-import com.london.data.utils.isTrue
 import com.london.domain.repository.AuthenticationRepository
 import javax.inject.Inject
 
@@ -38,7 +37,7 @@ class AuthenticationRepositoryImpl @Inject constructor(
 
     override suspend fun loginAsGuest(): Boolean {
         val guestResponse = authenticationRemoteDataSource.createGuestSession().getOrThrow()
-        if (!guestResponse.success.isTrue) return false
+        if (guestResponse.isFailure()) return false
 
         authenticationPreferences.apply {
             saveGuestSessionId(guestResponse.guestSessionId.orEmpty())

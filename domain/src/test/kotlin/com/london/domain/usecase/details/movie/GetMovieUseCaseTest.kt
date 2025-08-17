@@ -239,7 +239,7 @@ class GetMovieUseCaseTest {
             // given
             coEvery { movieRepository.getMovieImagesById(MOVIE_ID) } returns movieImages
             // when
-            val result = getMovieUseCase.getMovieImagesUseCase(MOVIE_ID)
+            val result = getMovieUseCase.getMovieImages(MOVIE_ID)
             // then
             assertThat(result).isEqualTo(movieMockImages)
         }
@@ -255,7 +255,7 @@ class GetMovieUseCaseTest {
                 postersUrl = emptyList()
             )
             // when
-            val result = getMovieUseCase.getMovieImagesUseCase(MOVIE_ID)
+            val result = getMovieUseCase.getMovieImages(MOVIE_ID)
             // then
             assertThat(result).isEmpty()
         }
@@ -273,7 +273,7 @@ class GetMovieUseCaseTest {
             )
 
             // when
-            val result = getMovieUseCase.getMovieImagesUseCase(MOVIE_ID)
+            val result = getMovieUseCase.getMovieImages(MOVIE_ID)
 
             // then
             assertThat(result).hasSize(10)

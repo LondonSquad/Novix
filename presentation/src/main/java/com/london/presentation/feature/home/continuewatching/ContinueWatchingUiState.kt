@@ -12,8 +12,6 @@ import kotlinx.coroutines.flow.emptyFlow
 data class ContinueWatchingUiState(
     val error: ErrorState? = null,
     val isLoading: Boolean = false,
-    val isTvSelected: Boolean = false,
-    val isMovieSelected: Boolean = true,
     val movies: Flow<List<Movie>> = emptyFlow(),
     val tvSeries: Flow<List<TvShow>> = emptyFlow(),
     val selectedMovieGenre: MovieGenreUi = MovieGenreUi.All,
