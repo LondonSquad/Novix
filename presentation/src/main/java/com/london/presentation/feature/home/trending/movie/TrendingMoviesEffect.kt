@@ -1,6 +1,6 @@
 package com.london.presentation.feature.home.trending.movie
 
 sealed interface TrendingMoviesEffect {
-    data object OnNavigateBack : TrendingMoviesEffect
-    data class OnNavigateToMovieClick(val movieId: Int) : TrendingMoviesEffect
+    data object BackNavigationClick : TrendingMoviesEffect
+    data class MovieDetailsNavigation(val movieId: Int) : TrendingMoviesEffect
 }

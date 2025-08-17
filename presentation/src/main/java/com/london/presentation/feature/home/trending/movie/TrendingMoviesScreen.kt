@@ -29,7 +29,7 @@ import com.london.presentation.utils.Listen
 @Composable
 fun TrendingMoviesScreen(
     onNavigateToMovieDetailsClick: (Int) -> Unit,
-    onNavigateBack: () -> Unit,
+    onNavigateBackClick: () -> Unit,
     viewModel: TrendingMoviesViewModel = hiltViewModel()
 ) {
     val state by viewModel.state.collectAsState()
@@ -37,11 +37,11 @@ fun TrendingMoviesScreen(
 
     effect?.Listen { currentEffect ->
         when (currentEffect) {
-            is TrendingMoviesEffect.OnNavigateToMovieClick -> onNavigateToMovieDetailsClick(
+            is TrendingMoviesEffect.MovieDetailsNavigation -> onNavigateToMovieDetailsClick(
                 currentEffect.movieId
             )
 
-            is TrendingMoviesEffect.OnNavigateBack -> onNavigateBack()
+            is TrendingMoviesEffect.BackNavigationClick -> onNavigateBackClick()
         }
     }
     BuildScreen(

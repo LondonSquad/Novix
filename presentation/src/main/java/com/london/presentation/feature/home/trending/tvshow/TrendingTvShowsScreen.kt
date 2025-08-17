@@ -38,11 +38,11 @@ fun TrendingTvShowsScreen(
 
     effect?.Listen { currentEffect ->
         when (currentEffect) {
-            is TrendingTvShowsEffect.OnNavigateToTvShowClick -> onNavigateToTvShowDetailsClick(
+            is TrendingTvShowsEffect.TvShowDetailsNavigation -> onNavigateToTvShowDetailsClick(
                 currentEffect.tvShowId
             )
 
-            is TrendingTvShowsEffect.OnNavigateBackClick -> onNavigateBack()
+            is TrendingTvShowsEffect.BackClickNavigation -> onNavigateBack()
         }
     }
 

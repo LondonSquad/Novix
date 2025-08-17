@@ -267,7 +267,7 @@ fun NavGraphBuilder.trendingNavGraph(navController: NavHostController) =
         composable<TrendingMovies> {
             TrendingMoviesScreen(
                 onNavigateToMovieDetailsClick = ::navigateToMovieDetails,
-                onNavigateBack = ::navigateUp
+                onNavigateBackClick = ::navigateUp
             )
         }
         composable<TrendingTvShows> {

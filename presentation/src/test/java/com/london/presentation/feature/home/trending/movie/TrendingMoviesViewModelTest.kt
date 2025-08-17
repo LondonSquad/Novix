@@ -72,7 +72,7 @@ class TrendingMoviesViewModelTest {
         viewModel.effect.test {
             viewModel.onBackClick()
             val effect = awaitItem()
-            assertThat(effect).isInstanceOf(TrendingMoviesEffect.OnNavigateBack::class.java)
+            assertThat(effect).isInstanceOf(TrendingMoviesEffect.BackNavigationClick::class.java)
         }
     }
     
@@ -86,7 +86,7 @@ class TrendingMoviesViewModelTest {
         viewModel.effect.test {
             viewModel.onMovieClick(movieId)
             val effect = awaitItem()
-            assertThat(effect).isInstanceOf(TrendingMoviesEffect.OnNavigateToMovieClick::class.java)
+            assertThat(effect).isInstanceOf(TrendingMoviesEffect.MovieDetailsNavigation::class.java)
         }
     }
     @Test
