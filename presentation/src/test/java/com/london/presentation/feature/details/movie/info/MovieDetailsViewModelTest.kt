@@ -280,11 +280,11 @@ class MovieDetailsViewModelTest {
 
     @Test
     fun `onRetry should clear error and reload data`() = runTest {
-        coEvery { getMovieUseCase.getMovieDetails(any()) } throws Exception("Network error")
+        coEvery { getMovieUseCase.getMovieDetails(MOVIE_ID) } throws Exception("Network error")
         val testViewModel = createViewModel()
         advanceUntilIdle()
 
-        coEvery { getMovieUseCase.getMovieDetails(any()) } returns mockMovieDetails
+        coEvery { getMovieUseCase.getMovieDetails(MOVIE_ID) } returns mockMovieDetails
 
         testViewModel.onRetryClick()
         advanceUntilIdle()
