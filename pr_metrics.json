@@ -32189,20 +32189,10 @@
         "count": 4
       }
     ],
-    "approvals": [
-      {
-        "reviewer": {
-          "login": "abdo-essam",
-          "id": 92235360,
-          "url": "https://github.com/abdo-essam"
-        },
-        "submitted_at": "2025-08-17T20:01:57Z",
-        "commit_id": "d14a5c2b2236eb953a8f989c0bd632585ee5fe7a"
-      }
-    ],
+    "approvals": [],
     "required_approvals": 2,
-    "first_approved_at": "2025-08-17T20:01:57Z",
-    "time_to_first_approval_minutes": 26.266666666666666,
+    "first_approved_at": null,
+    "time_to_first_approval_minutes": null,
     "required_approvals_met_at": null,
     "time_to_required_approvals_minutes": null,
     "closed_at": null,
@@ -32211,9 +32201,9 @@
     "week": "2025-W33",
     "status": "pending",
     "diff_stats": {
-      "additions": 294,
-      "deletions": 224,
-      "changed_files": 9
+      "additions": 293,
+      "deletions": 232,
+      "changed_files": 10
     }
   },
   {
