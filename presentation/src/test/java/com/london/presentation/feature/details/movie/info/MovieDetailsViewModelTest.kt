@@ -7,6 +7,7 @@ import com.google.common.truth.Truth.assertThat
 import com.london.domain.entity.Actor
 import com.london.domain.entity.Movie
 import com.london.domain.entity.moviedatails.MovieDetails
+import com.london.domain.entity.recent.MediaType
 import com.london.domain.usecase.authentication.AuthenticationUseCase
 import com.london.domain.usecase.details.movie.GetMovieUseCase
 import com.london.domain.usecase.rating.ManageRatingUseCase
@@ -16,6 +17,7 @@ import com.london.presentation.feature.details.movie.MovieDetailsEffect
 import com.london.presentation.feature.details.movie.MovieDetailsViewModel
 import com.london.presentation.navigation.Screen
 import com.london.presentation.navigation.getArgs
+import com.london.presentation.shared.genre.MovieGenreUi
 import io.mockk.MockKAnnotations
 import io.mockk.coEvery
 import io.mockk.coVerify
@@ -241,13 +243,18 @@ class MovieDetailsViewModelTest {
             assertThat(awaitItem()).isEqualTo(MovieDetailsEffect.ActorNavigation(456))
 
             viewModel?.onLoginClick()
-            assertThat(awaitItem()).isEqualTo(MovieDetailsEffect.OnLoginNavigation)
+            assertThat(awaitItem()).isEqualTo(MovieDetailsEffect.LoginNavigation)
 
-            viewModel?.onReviewsClick(789, 1)
-            assertThat(awaitItem()).isEqualTo(MovieDetailsEffect.ReviewsNavigation(789, 1))
+            viewModel?.onReviewsClick(789, MediaType.Movie)
+            assertThat(awaitItem()).isEqualTo(
+                MovieDetailsEffect.ReviewsNavigation(
+                    789,
+                    MediaType.Movie
+                )
+            )
 
-            viewModel?.onGenreClick(28)
-            assertThat(awaitItem()).isEqualTo(MovieDetailsEffect.GenreNavigation(28))
+            viewModel?.onGenreClick(MovieGenreUi.Action)
+            assertThat(awaitItem()).isEqualTo(MovieDetailsEffect.GenreNavigation(MovieGenreUi.Action))
 
             cancelAndIgnoreRemainingEvents()
         }
@@ -280,7 +287,7 @@ class MovieDetailsViewModelTest {
 
         coEvery { getMovieUseCase.getMovieDetails(any()) } returns mockMovieDetails
 
-        testViewModel.onRetry()
+        testViewModel.onRetryClick()
         advanceUntilIdle()
 
         testViewModel.state.test {
@@ -298,19 +305,6 @@ class MovieDetailsViewModelTest {
         coVerify { manageRecentMovieWatchedUseCase.addMovieToRecentWatched(any()) }
         coVerify { manageRecentViewedUseCase.addToRecentViewed(any()) }
     }
-
-    @Test
-    fun `getMovieId should return default value 0 when movieId is null in savedStateHandle`() =
-        runTest {
-            every { savedStateHandle.getArgs<Screen.MovieDetails>() } returns null
-            val testViewModel = createViewModel()
-
-            assertThat(testViewModel.getMovieId()).isEqualTo(0)
-            advanceUntilIdle()
-
-            coVerify { getMovieUseCase.getMovieDetails(0) }
-            testViewModel.viewModelScope.cancel()
-        }
 
     @Test
     fun `getMovieImages should use poster as fallback when returns empty list`() = runTest {
@@ -354,7 +348,6 @@ class MovieDetailsViewModelTest {
         private val mockMovieDetails = mockk<MovieDetails>(relaxed = true) {
             every { id } returns MOVIE_ID
             every { title } returns "Test Movie"
-            every { genresId } returns listOf(1, 2, 3)
             every { voteAverage } returns "8.5"
             every { runtime } returns 120
             every { releaseDate } returns "2023-01-01"
