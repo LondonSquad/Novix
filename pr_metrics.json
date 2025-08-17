@@ -32185,14 +32185,24 @@
           "url": "https://github.com/abdelrhman1002"
         },
         "first_comment_at": "2025-08-17T19:47:04Z",
-        "last_comment_at": "2025-08-17T19:47:04Z",
-        "count": 1
+        "last_comment_at": "2025-08-17T20:01:31Z",
+        "count": 4
       }
     ],
-    "approvals": [],
+    "approvals": [
+      {
+        "reviewer": {
+          "login": "abdo-essam",
+          "id": 92235360,
+          "url": "https://github.com/abdo-essam"
+        },
+        "submitted_at": "2025-08-17T20:01:57Z",
+        "commit_id": "d14a5c2b2236eb953a8f989c0bd632585ee5fe7a"
+      }
+    ],
     "required_approvals": 2,
-    "first_approved_at": null,
-    "time_to_first_approval_minutes": null,
+    "first_approved_at": "2025-08-17T20:01:57Z",
+    "time_to_first_approval_minutes": 26.266666666666666,
     "required_approvals_met_at": null,
     "time_to_required_approvals_minutes": null,
     "closed_at": null,
