@@ -5,27 +5,35 @@ import com.london.data.local.model.home.popular.PopularSectionLocal
 import com.london.data.local.model.home.topRated.TopRatedLocal
 import com.london.data.local.preference.AuthenticationPreferences
 import com.london.data.local.source.home.HomeLocalDataSource
+import com.london.data.mapper.details.actor.toEntity
 import com.london.data.mapper.details.toEntity
 import com.london.data.mapper.details.tvshow.toEntity
+import com.london.data.mapper.details.tvshow.toTvShowEpisodeEntity
 import com.london.data.mapper.details.tvshow.toTvShowEpisodesEntity
 import com.london.data.mapper.home.toprated.toEntity
+import com.london.data.mapper.myrating.toEntity
 import com.london.data.mapper.search.toReviewEntity
 import com.london.data.remote.exception.NetworkException
 import com.london.data.remote.model.ApiResponse
 import com.london.data.remote.model.details.ImageRemote
 import com.london.data.remote.model.details.ImagesResponse
+import com.london.data.remote.model.details.actor.model.actortvshowdetails.ActorTvShowCastMember
+import com.london.data.remote.model.details.actor.model.actortvshowdetails.ActorTvShowDetailsResponse
 import com.london.data.remote.model.details.movie.model.moviedetails.GenreRemote
 import com.london.data.remote.model.details.rating.AccountStatesResponse
 import com.london.data.remote.model.details.rating.RatingRemoteResponse
 import com.london.data.remote.model.details.tvshow.model.TvShowDetailsRemoteResponse
 import com.london.data.remote.model.details.tvshow.model.TvShowSeason
+import com.london.data.remote.model.details.tvshow.model.tvshowepisode.EpisodeGuestStar
 import com.london.data.remote.model.details.tvshow.model.tvshowepisode.TvShowEpisodeBySeason
+import com.london.data.remote.model.details.tvshow.model.tvshowepisode.TvShowEpisodeResponse
 import com.london.data.remote.model.details.tvshow.model.tvshowepisode.TvShowEpisodesRemoteResponse
 import com.london.data.remote.model.details.videoprovider.VideoResponse
 import com.london.data.remote.model.details.videoprovider.VideoTrailerRemote
 import com.london.data.remote.model.home.popular.PopularTvShowResponse
 import com.london.data.remote.model.home.toprated.TopRatedTvSeriesRemote
 import com.london.data.remote.model.home.trending.TrendingResponse
+import com.london.data.remote.model.myrating.RatingMediaResponse
 import com.london.data.remote.model.reviews.AuthorDetailsResponse
 import com.london.data.remote.model.reviews.ReviewResponse
 import com.london.data.remote.model.search.SearchTvShowRemote
@@ -61,7 +69,6 @@ class TvShowRepositoryImplTest {
 
     private lateinit var remoteDataSource: TvShowRemoteDataSource
     private lateinit var repository: TvShowRepositoryImpl
-    private lateinit var tvShowRemoteDataSource: TvShowRemoteDataSource
     private lateinit var homeLocalDataSource: HomeLocalDataSource<PopularSectionLocal>
     private lateinit var localTopRated: HomeLocalDataSource<TopRatedLocal>
     private lateinit var crashReporter: CrashReporter
@@ -74,10 +81,9 @@ class TvShowRepositoryImplTest {
         homeLocalDataSource = mockk(relaxed = true)
         localTopRated = mockk(relaxed = true)
         crashReporter = mockk(relaxed = true)
-        tvShowRemoteDataSource = mockk(relaxed = true)
 
         repository = TvShowRepositoryImpl(
-            remoteDataSource,
+            tvShowRemoteDataSource = remoteDataSource,
             authenticationPreferences = authenticationPreferences,
             homeLocalDataSource = homeLocalDataSource,
             localTopRated = localTopRated,
@@ -183,6 +189,24 @@ class TvShowRepositoryImplTest {
 
             assertThat(result).isEqualTo(TvShowEpisodesRemoteMock.toTvShowEpisodesEntity())
         }
+
+    @Test
+    fun `getTvShowEpisodeByPosition returns correct entity`() = runTest {
+        val fakeResponse = fakeTvShowEpisodeResponse()
+
+        coEvery {
+            remoteDataSource.getEpisodeDetails(
+                tvShowId = TV_SHOW_ID,
+                seasonNumber = SEASON_NUMBER,
+                episodeNumber = EPISODE_NUMBER
+            )
+        } returns Result.success(fakeResponse)
+
+        val result =
+            repository.getTvShowEpisodeByPosition(TV_SHOW_ID, SEASON_NUMBER, EPISODE_NUMBER)
+
+        assertThat(result).isEqualTo(fakeResponse.toTvShowEpisodeEntity())
+    }
 
     @Test
     fun `getTvShowEpisodesBySeason should throw original exception when remote call fails`() =
@@ -1053,6 +1077,105 @@ class TvShowRepositoryImplTest {
             assertThat(tvShow.rating).isEqualTo(8.5)
         }
 
+
+    @Test
+    fun `getAllRatedTvShows should return mapped RatedMedia from remote`() = runTest {
+        // Given
+        every { authenticationPreferences.getAccountId() } returns 123
+        every { authenticationPreferences.getSessionId() } returns "fake_session"
+
+        coEvery {
+            remoteDataSource.getAllRatedTvShows(
+                123,
+                "fake_session"
+            )
+        } returns Result.success(
+            fakeRatedTvResponse()
+        )
+
+        // When
+        val result = repository.getAllRatedTvShows()
+
+        // Then
+        assertEquals(
+            result.first(),
+            fakeRatedTvResponse().items.first().toEntity(mediaType = MediaType.TvShow)
+        )
+        coVerify { remoteDataSource.getAllRatedTvShows(123, "fake_session") }
+    }
+
+    @Test
+    fun `deleteTvShowRating should return true when remote call succeeds`() = runTest {
+        // Given
+        val tvShowId = 201
+        every { authenticationPreferences.getSessionId() } returns "fake_session"
+
+        coEvery {
+            remoteDataSource.deleteTvShowRating(
+                tvShowId,
+                "fake_session"
+            )
+        } returns Result.success(
+            fakeDeleteTvSuccessResponse()
+        )
+
+        // When
+        val result = repository.deleteTvShowRating(tvShowId)
+
+        // Then
+        assertTrue(result)
+        coVerify { remoteDataSource.deleteTvShowRating(tvShowId, "fake_session") }
+    }
+
+    @Test
+    fun `deleteTvShowRating should return false when remote call fails`() = runTest {
+        // Given
+        val tvShowId = 202
+        every { authenticationPreferences.getSessionId() } returns "fake_session"
+
+        coEvery {
+            remoteDataSource.deleteTvShowRating(
+                tvShowId,
+                "fake_session"
+            )
+        } returns Result.failure(
+            RuntimeException("Network error")
+        )
+
+        // When
+        val result = repository.deleteTvShowRating(tvShowId)
+
+        // Then
+        assertFalse(result)
+        coVerify { remoteDataSource.deleteTvShowRating(tvShowId, "fake_session") }
+    }
+
+    @Test
+    fun `getFirstPageTopRatedTvShows should return data from remote`() = runTest {
+        // Given
+        coEvery { remoteDataSource.getTopRatedTvShows(PAGE_NUMBER) } returns
+                Result.success(fakeTopRatedTvSeriesRemoteResponse())
+
+        // When
+        val result = repository.getFirstPageTopRatedTvShows()
+
+        // Then
+        assertEquals(fakeTopRatedTvSeriesRemoteResponse().items.first().toEntity(), result.first())
+        coVerify { remoteDataSource.getTopRatedTvShows(PAGE_NUMBER) }
+        coVerify { localTopRated.insertAll(any()) }
+    }
+
+    @Test
+    fun `getActorTvShowPicksById returns correct ActorMediaDetails`() = runTest {
+        val fakeResponse = fakeActorTvShowDetailsResponse()
+
+        coEvery { remoteDataSource.getActorTvShowById(101) } returns Result.success(fakeResponse)
+
+        val result = repository.getActorTvShowPicksById(101)
+
+        assertThat(result).isEqualTo(fakeResponse.toEntity())
+    }
+
     private companion object {
         private const val TV_SHOW_ID = 1
         private const val SEASON_NUMBER = 1
@@ -1063,6 +1186,85 @@ class TvShowRepositoryImplTest {
         private const val PAGE = 1
         private const val CATEGORY_ID = 2
 
+        fun fakeTvShowEpisodeResponse(
+            id: Int = 1,
+            seasonNumber: Int = 1,
+            name: String = "Episode 1",
+            overview: String = "Episode overview",
+            airDate: String = "2025-01-01",
+            stillPath: String? = "/still.jpg",
+            voteAverage: Double = 8.5,
+            voteCount: Int = 100,
+            guestStars: List<EpisodeGuestStar> = emptyList(),
+            episodeType: String = "standard"
+        ): TvShowEpisodeResponse = TvShowEpisodeResponse(
+            id = id,
+            name = name,
+            seasonNumber = seasonNumber,
+            episodeType = episodeType,
+            airDate = airDate,
+            overview = overview,
+            stillPath = stillPath,
+            voteAverage = voteAverage,
+            voteCount = voteCount,
+            guestStars = guestStars
+        )
+
+        fun fakeTopRatedTvSeriesRemoteResponse(
+            items: List<TopRatedTvSeriesRemote> = listOf(
+                TopRatedTvSeriesRemote(
+                    id = 301,
+                    name = "Fake Top Rated TV Show",
+                    posterPath = "/fake_tv_poster.jpg",
+                    firstAirDate = "2025-01-01",
+                    genreIds = listOf(1, 2, 3),
+                    voteAverage = 9.5
+                )
+            )
+        ): ApiResponse<TopRatedTvSeriesRemote> =
+            ApiResponse(
+                currentPage = 1,
+                totalPages = 5,
+                totalItems = 100,
+                items = items
+            )
+
+        private fun fakeRatedTvResponse() = ApiResponse(
+            currentPage = 1,
+            totalPages = 1,
+            totalItems = 2,
+            items = listOf(
+                RatingMediaResponse(
+                    id = 301,
+                    title = "Rated TV Show 1",
+                    posterPath = "/tv_poster1.jpg",
+                    rating = 9.0
+                ),
+                RatingMediaResponse(
+                    id = 302,
+                    title = "Rated TV Show 2",
+                    posterPath = "/tv_poster2.jpg",
+                    rating = 8.5
+                )
+            )
+        )
+
+        private fun fakeDeleteTvSuccessResponse() = RatingRemoteResponse(
+            statusCode = 1,
+            statusMessage = "Deleted successfully",
+            success = true
+        )
+
+        fun fakeActorTvShowDetailsResponse(
+            actorId: Int = 101,
+            cast: List<ActorTvShowCastMember> = listOf(
+                ActorTvShowCastMember(id = 1, posterPath = "/poster1.jpg"),
+                ActorTvShowCastMember(id = 2, posterPath = "/poster2.jpg")
+            )
+        ): ActorTvShowDetailsResponse = ActorTvShowDetailsResponse(
+            id = actorId,
+            cast = cast
+        )
         private val mediaStatesDto = AccountStatesResponse(
             id = 1,
             favorite = true,
