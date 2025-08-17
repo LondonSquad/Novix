@@ -199,14 +199,10 @@ class CustomMovieListRepositoryImplTest {
             items = listOf(
                 CustomMovieListResponse(
                     description = "desc",
-                    favoriteCount = 0,
                     id = 1,
                     itemCount = 1,
-                    iso6391 = "en",
-                    listType = "movie",
-                    name = "My List",
-                    posterPath = ""
-                )
+                    name = "My List"
+                    )
             ),
             totalPages = 1,
             totalItems = 1
@@ -215,33 +211,16 @@ class CustomMovieListRepositoryImplTest {
             itemCount = 1,
             items = listOf(
                 MovieRemote(
-                    adult = false,
-                    backdropPath = "",
                     genreIds = emptyList(),
                     id = 100,
-                    originalLanguage = "en",
-                    originalTitle = "",
-                    overview = "",
-                    popularity = 0.0,
                     posterPath = "",
                     releaseDate = "2021-01-01",
-                    title = "Test Movie",
-                    video = false,
                     voteAverage = 7.5,
-                    voteCount = 10,
-                    originCountry = listOf(""),
-                    originalName = "",
-                    firstAirDate = "",
                     name = ""
                 )
             ),
-            createdBy = "",
-            description = "",
-            favoriteCount = 0,
             id = "1",
-            iso6391 = "en",
             name = "My Detailed List",
-            posterPath = ""
         )
         val MovieListLocalMock = MovieListLocal(
             id = 1,

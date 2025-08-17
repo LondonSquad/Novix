@@ -55,55 +55,25 @@ class PopularMovieMapperTest {
 
     companion object {
         val nullFieldsResponse = PopularMovieResponse(
-            adult = null,
-            backdropPath = null,
-            genreIds = null,
             id = null,
-            originalLanguage = null,
-            originalTitle = null,
-            overview = null,
-            popularity = null,
             posterPath = null,
-            releaseDate = null,
             title = null,
-            video = null,
             voteAverage = null,
-            voteCount = null
         )
 
 
         val samplePopularMovieResponse = PopularMovieResponse(
-            adult = false,
-            backdropPath = "/backdrop.jpg",
-            genreIds = listOf(1, 2, 3),
             id = 123,
-            originalLanguage = "en",
-            originalTitle = "Inception",
-            overview = "A mind-bending thriller",
-            popularity = 500.0,
             posterPath = "/poster.jpg",
-            releaseDate = "2010-07-16",
             title = "Inception",
-            video = false,
             voteAverage = 8.7,
-            voteCount = 15000
         )
 
         val anotherPopularMovieResponse = PopularMovieResponse(
-            adult = false,
-            backdropPath = "/backdrop2.jpg",
-            genreIds = listOf(4, 5),
             id = 456,
-            originalLanguage = "en",
-            originalTitle = "Interstellar",
-            overview = "A journey through space and time",
-            popularity = 600.0,
             posterPath = "/poster2.jpg",
-            releaseDate = "2014-11-07",
             title = "Interstellar",
-            video = false,
             voteAverage = 8.6,
-            voteCount = 20000
         )
     }
 }
