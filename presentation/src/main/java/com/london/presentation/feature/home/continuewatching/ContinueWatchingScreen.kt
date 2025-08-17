@@ -7,7 +7,6 @@ import androidx.compose.foundation.layout.asPaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.navigationBars
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.statusBars
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -73,7 +72,6 @@ private fun Content(
         modifier = Modifier
             .fillMaxSize()
             .background(color = NovixTheme.colors.surface)
-            .padding(WindowInsets.statusBars.asPaddingValues())
             .padding(WindowInsets.navigationBars.asPaddingValues())
     ) {
         MediaLazyGridWithTabs(
@@ -98,7 +96,7 @@ private fun Content(
             topBar = {
                 DefaultAppTopBar(
                     title = screenTitle,
-                    onBack = contract::onBackClick
+                    onBackClick = contract::onBackClick
                 )
             },
             isLoading = state.isLoading
