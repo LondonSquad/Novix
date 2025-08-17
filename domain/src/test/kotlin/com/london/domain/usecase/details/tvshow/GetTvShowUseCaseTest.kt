@@ -2,12 +2,15 @@ package com.london.domain.usecase.details.tvshow
 
 import com.google.common.truth.Truth.assertThat
 import com.london.domain.entity.Actor
+import com.london.domain.entity.ImagesEntity
 import com.london.domain.entity.PagedFetchResponse
 import com.london.domain.entity.Trending
 import com.london.domain.entity.TvShow
 import com.london.domain.entity.genre.TvShowGenre
 import com.london.domain.entity.popular.PopularMedia
 import com.london.domain.entity.recent.MediaType
+import com.london.domain.entity.review.AuthorDetails
+import com.london.domain.entity.review.ReviewEntity
 import com.london.domain.entity.toprated.TopRatedMedia
 import com.london.domain.entity.tvshowdetails.TvShowDetailsEntity
 import com.london.domain.repository.ActorRepository
@@ -28,6 +31,7 @@ class GetTvShowUseCaseTest {
     private lateinit var getTvShowUseCase: GetTvShowUseCase
 
     private lateinit var actorRepository: ActorRepository
+
     @Before
     fun setUp() {
         tvShowRepository = mockk(relaxed = true)
@@ -373,6 +377,93 @@ class GetTvShowUseCaseTest {
         }
     }
 
+    @Test
+    fun `should return tv show images when repository returns images`() = runTest {
+        // Given
+        val expectedImages = listOf("https://example.com/image1.jpg")
+        coEvery { tvShowRepository.getImagesTvShowById(TV_SHOW_ID) } returns fakeMockImages(
+            id = TV_SHOW_ID,
+            backdropsUrl = listOf("https://example.com/image1.jpg"),
+        )
+
+        // When
+        val result = getTvShowUseCase.getImagesTvShowById(TV_SHOW_ID)
+
+        // Then
+        assertThat(result).isEqualTo(expectedImages)
+    }
+
+    @Test
+    fun `should return empty list when repository returns empty images`() = runTest {
+        // Given
+        coEvery { tvShowRepository.getImagesTvShowById(TV_SHOW_ID) } returns fakeMockImages()
+
+        // When
+        val result = getTvShowUseCase.getImagesTvShowById(TV_SHOW_ID)
+
+        // Then
+        assertThat(result).isEmpty()
+    }
+
+    @Test
+    fun `should return images in logosUrl when available`() = runTest {
+        // Given
+        val expectedImages = listOf("https://example.com/logos1.jpg")
+        coEvery { tvShowRepository.getImagesTvShowById(TV_SHOW_ID) } returns fakeMockImages(
+            logosUrl = listOf("https://example.com/logos1.jpg")
+        )
+
+        // When
+        val result = getTvShowUseCase.getImagesTvShowById(TV_SHOW_ID)
+
+        // Then
+        assertThat(result).isEqualTo(expectedImages)
+    }
+
+    @Test
+    fun `should return images in postersUrl when available`() = runTest {
+        // Given
+        val expectedImages = listOf("https://example.com/poster1.jpg")
+        coEvery { tvShowRepository.getImagesTvShowById(TV_SHOW_ID) } returns fakeMockImages(
+            postersUrl = listOf("https://example.com/poster1.jpg")
+        )
+
+        // When
+        val result = getTvShowUseCase.getImagesTvShowById(TV_SHOW_ID)
+
+        // Then
+        assertThat(result).isEqualTo(expectedImages)
+    }
+
+    @Test
+    fun `should return tv show reviews when repository returns reviews`() = runTest {
+        // Given
+        coEvery {
+            tvShowRepository.getTvShowReviews(
+                TV_SHOW_ID,
+                PAGE_NUMBER
+            )
+        } returns pagedFetchReviewResponse()
+
+        // When
+        val result = getTvShowUseCase.getTvShowReviews(TV_SHOW_ID, PAGE_NUMBER)
+
+        // Then
+        assertThat(result).isEqualTo(pagedFetchReviewResponse())
+    }
+
+    @Test
+    fun `should return recent tv shows when repository returns recent tv shows`() = runTest {
+        // Given
+        coEvery { tvShowRepository.getFirstPageTopRatedTvShows() } returns mockTopRatedTvSeries
+
+        // When
+        val result = getTvShowUseCase.getMostRecentTvShows()
+
+        // Then
+        assertThat(result).isEqualTo(mockTopRatedTvSeries)
+    }
+
     companion object {
         private const val PAGE = 1
         private const val PAGE_NUMBER = 1
@@ -384,6 +475,38 @@ class GetTvShowUseCaseTest {
         private val CATEGORY = TvShowGenre.TALK
         const val NAME = "Tv Tv"
 
+        private fun pagedFetchReviewResponse(items: List<ReviewEntity> = mockReviews) =
+            PagedFetchResponse(
+                currentPage = 1,
+                items = items,
+                totalPages = 1,
+                totalItems = items.size
+            )
+
+        private val mockReviews = listOf(
+            ReviewEntity(
+                id = "1",
+                content = "Great show!",
+                authorName = "John Doe",
+                authorDetails = AuthorDetails(
+                    "John Doe", "john_doe",
+                    profileUrl = "https://example.com/john.jpg",
+                    rating = 8.5
+                ),
+                createdAt = "2023-09-01"
+            ),
+            ReviewEntity(
+                id = "2",
+                content = "I loved it!",
+                authorName = "Jane Smith",
+                authorDetails = AuthorDetails(
+                    "Jane Smith", "jane_smith",
+                    profileUrl = "https://example.com/jane.jpg",
+                    rating = 8.5
+                ),
+                createdAt = "2023-09-01"
+            )
+        )
         private val mockTv1 = TopRatedMedia(
             id = 1396,
             name = "Breaking Bad",
@@ -417,7 +540,6 @@ class GetTvShowUseCaseTest {
                 rating = mockData.rating,
                 mediaType = MediaType.TvShow
             )
-
 
         private fun createMockTrendingResponse(): PagedFetchResponse<Trending> =
             PagedFetchResponse(
@@ -455,6 +577,18 @@ class GetTvShowUseCaseTest {
         val mockVideos = listOf(
             "https://youtube.com/vid1",
             "https://youtube.com/vid2"
+        )
+
+        private fun fakeMockImages(
+            id: Int = 1,
+            backdropsUrl: List<String> = emptyList(),
+            logosUrl: List<String> = emptyList(),
+            postersUrl: List<String> = emptyList()
+        ) = ImagesEntity(
+            backdropsUrl = backdropsUrl,
+            id = id,
+            logosUrl = logosUrl,
+            postersUrl = postersUrl
         )
 
         val mockTvShowDetails = TvShowDetailsEntity(
