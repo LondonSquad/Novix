@@ -19,6 +19,8 @@ jobs:
   build:
     needs: setup
     runs-on: ubuntu-latest
+    env:
+      VERSION_OFFSET: 400
     outputs:
       pr_title: ${{ steps.set-pr-metadata.outputs.title }}
       pr_number: ${{ steps.set-pr-metadata.outputs.number }}
@@ -70,7 +72,7 @@ jobs:
           echo "sha=${{ github.sha }}" >> "$GITHUB_OUTPUT"
 
       - name: Build ABI-split Release APKs
-        run: ./gradlew -PversionCode=${{ github.run_number }} -PversionName="1.0.${{ github.run_number }}" assembleRelease
+        run: ./gradlew -PversionCode=${{ github.run_number }} -PversionName="1.1.${{ github.run_number - env.VERSION_OFFSET }}" assembleRelease
 
       - name: Upload APKs as artifact
         uses: actions/upload-artifact@v4
