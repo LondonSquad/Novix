@@ -28,7 +28,7 @@ import com.london.presentation.utils.Listen
 
 @Composable
 fun TrendingMoviesScreen(
-    onNavigateToMovieToDetails: (Int) -> Unit,
+    onNavigateToMovieToDetailsClick: (Int) -> Unit,
     onNavigateBack: () -> Unit,
     viewModel: TrendingMoviesViewModel = hiltViewModel()
 ) {
@@ -37,8 +37,11 @@ fun TrendingMoviesScreen(
 
     effect?.Listen { currentEffect ->
         when (currentEffect) {
-            is TrendingMoviesEffect.NavigateToMovie -> onNavigateToMovieToDetails(currentEffect.movieId)
-            is TrendingMoviesEffect.NavigateBack -> onNavigateBack()
+            is TrendingMoviesEffect.OnNavigateToMovieClick -> onNavigateToMovieToDetailsClick(
+                currentEffect.movieId
+            )
+
+            is TrendingMoviesEffect.OnNavigateBack -> onNavigateBack()
         }
     }
     BuildScreen(

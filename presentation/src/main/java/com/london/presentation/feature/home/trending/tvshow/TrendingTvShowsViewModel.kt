@@ -33,9 +33,9 @@ class TrendingTvShowsViewModel @Inject constructor(
     }
 
     override fun onTvShowClick(id: Int) =
-        emitEffect(TrendingTvShowsEffect.NavigateToTvShow(id))
+        emitEffect(TrendingTvShowsEffect.OnNavigateToTvShowClick(id))
 
-    override fun onBackClick() = emitEffect(TrendingTvShowsEffect.NavigateBack)
+    override fun onBackClick() = emitEffect(TrendingTvShowsEffect.OnNavigateBackClick)
     override fun onRetryClick() = reloadTrendingTvShows()
     private fun reloadTrendingTvShows() {
         tryToCollect(

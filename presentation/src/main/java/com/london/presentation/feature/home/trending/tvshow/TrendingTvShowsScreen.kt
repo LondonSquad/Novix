@@ -29,7 +29,7 @@ import com.london.presentation.utils.Listen
 
 @Composable
 fun TrendingTvShowsScreen(
-    onNavigateToTvShowDetails: (Int) -> Unit,
+    onNavigateToTvShowDetailsClick: (Int) -> Unit,
     onNavigateBack: () -> Unit,
     viewModel: TrendingTvShowsViewModel = hiltViewModel()
 ) {
@@ -38,8 +38,11 @@ fun TrendingTvShowsScreen(
 
     effect?.Listen { currentEffect ->
         when (currentEffect) {
-            is TrendingTvShowsEffect.NavigateToTvShow -> onNavigateToTvShowDetails(currentEffect.tvShowId)
-            is TrendingTvShowsEffect.NavigateBack -> onNavigateBack()
+            is TrendingTvShowsEffect.OnNavigateToTvShowClick -> onNavigateToTvShowDetailsClick(
+                currentEffect.tvShowId
+            )
+
+            is TrendingTvShowsEffect.OnNavigateBackClick -> onNavigateBack()
         }
     }
 

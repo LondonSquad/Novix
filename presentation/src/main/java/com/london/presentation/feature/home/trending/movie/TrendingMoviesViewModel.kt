@@ -33,10 +33,10 @@ class TrendingMoviesViewModel @Inject constructor(
     }
 
     override fun onBackClick() =
-        emitEffect(TrendingMoviesEffect.NavigateBack)
+        emitEffect(TrendingMoviesEffect.OnNavigateBack)
 
     override fun onMovieClick(id: Int) =
-        emitEffect(TrendingMoviesEffect.NavigateToMovie(id))
+        emitEffect(TrendingMoviesEffect.OnNavigateToMovieClick(id))
 
     override fun onRetryClick() = getTrendingMovies()
 
