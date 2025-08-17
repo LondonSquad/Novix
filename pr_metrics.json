@@ -29488,17 +29488,17 @@
     "approvals": [
       {
         "reviewer": {
-          "login": "Abdulrahman1890",
-          "id": 76666355,
-          "url": "https://github.com/Abdulrahman1890"
+          "login": "marwanqashwa",
+          "id": 100484790,
+          "url": "https://github.com/marwanqashwa"
         },
-        "submitted_at": "2025-08-17T19:07:52Z",
-        "commit_id": "14f973b7cc757ded19da98527f9c25501fe6522e"
+        "submitted_at": "2025-08-17T19:28:19Z",
+        "commit_id": "3fb736216433c1046219c274b8007d8512153fb0"
       }
     ],
     "required_approvals": 2,
-    "first_approved_at": "2025-08-17T19:07:52Z",
-    "time_to_first_approval_minutes": 8653.883333333333,
+    "first_approved_at": "2025-08-17T19:28:19Z",
+    "time_to_first_approval_minutes": 8674.333333333334,
     "required_approvals_met_at": null,
     "time_to_required_approvals_minutes": null,
     "closed_at": null,
