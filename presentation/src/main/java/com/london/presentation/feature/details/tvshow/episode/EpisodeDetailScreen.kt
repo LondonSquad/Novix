@@ -38,7 +38,6 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.london.designsystem.component.GuestUserLoginBottomSheet
-import com.london.designsystem.component.Icon
 import com.london.designsystem.component.RatingBottomSheet
 import com.london.designsystem.component.Text
 import com.london.designsystem.component.TopBar
@@ -50,6 +49,7 @@ import com.london.presentation.shared.CustomBackDropImagePager
 import com.london.presentation.shared.FooterSection
 import com.london.presentation.shared.RatingItem
 import com.london.presentation.shared.SnackBarAnimation
+import com.london.presentation.shared.TextWithIcon
 import com.london.presentation.shared.buildscreen.BuildScreen
 import com.london.presentation.utils.Listen
 import com.london.presentation.utils.episodeTopBar
@@ -137,7 +137,6 @@ private fun Content(
 
             item { OverviewSection(uiState = uiState) }
 
-            // Guests of honor section
             uiState.episode?.let {
                 val guestStars = uiState.episode.guestStars
                 if (guestStars.isNotEmpty()) {
@@ -153,17 +152,13 @@ private fun Content(
                     }
                 }
 
-                items(
-                    items = guestStars,
-                ) { member ->
+                items(items = guestStars) { member ->
                     ActorItem(
                         actorName = member.name,
                         imageRes = member.profilePictureUrl,
                         characterName = member.characterName,
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(horizontal = 16.dp, vertical = 6.dp),
-                        onClick = { onNavigateToCast(member.id) }
+                        onClick = { onNavigateToCast(member.id) },
+                        modifier = Modifier.padding(horizontal = 16.dp, vertical = 6.dp)
                     )
                 }
 
@@ -185,17 +180,17 @@ private fun Content(
             onDismissClick = contract::onRateEpisodeClick,
             onSubmitClick = contract::onSelectRatingClick,
         )
-        else if (uiState.isGuestUserBottomSheetVisible) GuestUserLoginBottomSheet(
+        if (uiState.isGuestUserBottomSheetVisible) GuestUserLoginBottomSheet(
             onDismissClick = contract::onRateEpisodeClick,
             onLoginClick = contract::onLoginClick,
         )
     }
 
-    uiState.isSuccessfullyRated?.let { isSuccessful ->
-        if (isSuccessful) {
+    uiState.isSuccessfullyRated?.let { isRateAddedSuccessfully ->
+        if (isRateAddedSuccessfully) {
             SnackBarAnimation(
                 message = stringResource(Res.string.rated_successfully),
-                icon = Res.drawable.ic_success,
+                icon = Res.drawable.ic_success
             )
         } else {
             SnackBarAnimation(
@@ -221,8 +216,7 @@ private fun HeaderDetailsCard(
                 text = uiState.episode.name,
                 color = NovixTheme.colors.title,
                 style = NovixTheme.typography.title.medium,
-                modifier = Modifier
-                    .padding(start = 12.dp, top = 12.dp, bottom = 8.dp)
+                modifier = Modifier.padding(start = 12.dp, top = 12.dp, bottom = 8.dp)
             )
         }
 
@@ -230,14 +224,8 @@ private fun HeaderDetailsCard(
             verticalArrangement = Arrangement.spacedBy(8.dp),
             modifier = Modifier.padding(start = 12.dp, bottom = 12.dp)
         ) {
-            GenreNames(
-                uiState = uiState,
-                modifier = Modifier.fillMaxWidth()
-            )
-            TvShowBasicDetails(
-                modifier = Modifier,
-                uiState = uiState
-            )
+            GenreNames(uiState = uiState)
+            TvShowBasicDetails(uiState = uiState)
         }
     }
 }
@@ -261,23 +249,7 @@ private fun TvShowBasicDetails(
             }
         }
 
-        Box(
-            modifier = Modifier
-                .padding(horizontal = 4.dp)
-                .size(3.dp)
-                .clip(CircleShape)
-                .background(NovixTheme.colors.hint)
-        )
-
         TvShowDate(uiState)
-
-        Box(
-            modifier = Modifier
-                .padding(horizontal = 4.dp)
-                .size(3.dp)
-                .clip(CircleShape)
-                .background(NovixTheme.colors.hint)
-        )
 
         Seasons(uiState)
     }
@@ -287,24 +259,11 @@ private fun TvShowBasicDetails(
 private fun TvShowDate(
     uiState: EpisodeDetailsUiState
 ) {
-    Row(
-        verticalAlignment = Alignment.CenterVertically,
-        horizontalArrangement = Arrangement.spacedBy(4.dp)
-    ) {
-        Icon(
-            painter = painterResource(Res.drawable.icon_calender),
-            contentDescription = "Calender icon",
-            tint = NovixTheme.colors.body,
-            modifier = Modifier.size(11.dp)
+    uiState.episode?.let {
+        TextWithIcon(
+            icon = painterResource(Res.drawable.icon_calender),
+            text = uiState.episode.airDate.toLocalizedNumbers()
         )
-
-        uiState.episode?.let {
-            Text(
-                text = uiState.episode.airDate.toLocalizedNumbers(),
-                style = NovixTheme.typography.label.small,
-                color = NovixTheme.colors.body
-            )
-        }
     }
 }
 
@@ -314,12 +273,10 @@ private fun GenreNames(
     modifier: Modifier = Modifier,
     uiState: EpisodeDetailsUiState
 ) {
-    FlowRow(
-        modifier = modifier
-    ) {
-        Row(
-            verticalAlignment = Alignment.CenterVertically
-        ) {
+    FlowRow(modifier = modifier.fillMaxWidth())
+    {
+        Row(verticalAlignment = Alignment.CenterVertically)
+        {
             uiState.episodeGenres.forEachIndexed { index, genre ->
                 Text(
                     text = genre,
@@ -343,25 +300,11 @@ private fun GenreNames(
 
 @Composable
 private fun Seasons(uiState: EpisodeDetailsUiState) {
-
-    Row(
-        verticalAlignment = Alignment.CenterVertically,
-        horizontalArrangement = Arrangement.spacedBy(4.dp)
-    ) {
-        Icon(
-            painter = painterResource(Res.drawable.icon_tv),
-            contentDescription = stringResource(R.string.tv_icon),
-            tint = NovixTheme.colors.body,
-            modifier = Modifier.size(11.dp)
+    uiState.episode?.let {
+        TextWithIcon(
+            icon = painterResource(Res.drawable.icon_tv),
+            text = "${stringResource(Res.string.s)}${uiState.episode.seasonNumber.toLocalizedNumbers()}"
         )
-
-        uiState.episode?.let {
-            Text(
-                text = "${stringResource(Res.string.s)}${uiState.episode.seasonNumber.toLocalizedNumbers()}",
-                style = NovixTheme.typography.label.small,
-                color = NovixTheme.colors.body,
-            )
-        }
     }
 }
 
@@ -373,19 +316,13 @@ private fun OverviewSection(
     var isTextCollapsed by rememberSaveable { mutableStateOf(false) }
     uiState.episode?.let {
         if (uiState.episode.overview.isNotBlank()) {
-            Column(
-                modifier = modifier.padding(
-                    top = 16.dp,
-                    start = 16.dp,
-                    end = 16.dp
-                )
-            ) {
+            Column(modifier = modifier.padding(top = 16.dp, start = 16.dp, end = 16.dp))
+            {
                 Text(
                     text = stringResource(Res.string.overview),
                     style = NovixTheme.typography.title.medium,
                     color = NovixTheme.colors.title
                 )
-
                 ConditionalText(
                     text = it.overview,
                     expandedState = isTextCollapsed
