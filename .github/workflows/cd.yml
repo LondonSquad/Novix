@@ -19,11 +19,14 @@ jobs:
   build:
     needs: setup
     runs-on: ubuntu-latest
+    env:
+      VERSION_OFFSET: 400
     outputs:
       pr_title: ${{ steps.set-pr-metadata.outputs.title }}
       pr_number: ${{ steps.set-pr-metadata.outputs.number }}
       ref_name: ${{ steps.set-pr-metadata.outputs.ref }}
       sha: ${{ steps.set-pr-metadata.outputs.sha }}
+      version_name: ${{ steps.set-version.outputs.version_name }}
 
     steps:
       - name: Checkout code
@@ -69,8 +72,14 @@ jobs:
           echo "ref=${{ github.ref_name }}" >> "$GITHUB_OUTPUT"
           echo "sha=${{ github.sha }}" >> "$GITHUB_OUTPUT"
 
+      - name: Calculate versionName
+        id: set-version
+        run: |
+          VERSION_NAME="1.1.$(( ${{ github.run_number }} - ${{ env.VERSION_OFFSET }} ))"
+          echo "version_name=$VERSION_NAME" >> "$GITHUB_OUTPUT"
+
       - name: Build ABI-split Release APKs
-        run: ./gradlew -PversionCode=${{ github.run_number }} -PversionName="1.0.${{ github.run_number }}" assembleRelease
+        run: ./gradlew -PversionCode=${{ github.run_number }} -PversionName="${{ steps.set-version.outputs.version_name }}" assembleRelease
 
       - name: Upload APKs as artifact
         uses: actions/upload-artifact@v4
