@@ -87,7 +87,7 @@ class TvShowDetailsViewModelTest {
     }
 
     @Test
-    fun `when initializeGetImagesData fails, error state should be updated`() = runTest {
+    fun `error state should be updated, when initializeGetImagesData fails`() = runTest {
         // Given
         val exception = Exception("error")
         coEvery { getActorUseCase.getActorTvShowPicksById(TV_SHOW_ID) } throws exception
@@ -104,7 +104,7 @@ class TvShowDetailsViewModelTest {
     }
 
     @Test
-    fun `when initializeEpisodesBySeasons, episodes by seasons data should be fetched`() = runTest {
+    fun `episodes by seasons data should be fetched, when initializeEpisodesBySeasons`() = runTest {
         // Given
         coEvery {
             getTvEpisodesUseCase.getTvShowEpisodesBySeason(
@@ -126,7 +126,7 @@ class TvShowDetailsViewModelTest {
     }
 
     @Test
-    fun `When initializeEpisodesBySeasons fails, error state should be updated`() = runTest {
+    fun `error state should be updated, when initializeEpisodesBySeasons fails`() = runTest {
 
         // Given
         val exception = Exception("error")
@@ -149,7 +149,7 @@ class TvShowDetailsViewModelTest {
     }
 
     @Test
-    fun `When initializeEpisodesBySeasons is called, videoProvider state should be updated`() =
+    fun ` videoProvider state should be updated, when initializeEpisodesBySeasons is called`() =
         runTest {
             // Given
             coEvery { getTvShowUseCase.getTvShowVideo(TV_SHOW_ID) } returns emptyList()
@@ -166,7 +166,7 @@ class TvShowDetailsViewModelTest {
         }
 
     @Test
-    fun `When initializeGetTvShowDetailsData is called, tvShowDetails state should be updated`() =
+    fun `tvShowDetails state should be updated, when initializeGetTvShowDetailsData is called`() =
         runTest {
 
             // Given
@@ -226,7 +226,7 @@ class TvShowDetailsViewModelTest {
     }
 
     @Test
-    fun `OnGenreClicked should emit NavigateToTvShowsByCategoryId effect when clicked`() = runTest {
+    fun `onGenreClicked should emit NavigateToTvShowsByCategoryId effect when clicked`() = runTest {
         // Given
         val genre = TvShowGenreUi.ActionAdventure
 
