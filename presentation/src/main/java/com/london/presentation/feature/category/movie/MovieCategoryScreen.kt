@@ -51,7 +51,7 @@ private fun Content(
     val moviesLazyList = state.moviesFlow.collectAsLazyPagingItems()
 
     BuildScreen(
-        onBack = contract::onBack,
+        onBack = contract::onBackClick,
         isLoading = moviesLazyList.isLoading(),
         isError = moviesLazyList.loadState.refresh is LoadState.Error,
         onRetry = moviesLazyList::refresh,
@@ -69,7 +69,7 @@ private fun Content(
             topBar = {
                 DefaultAppTopBar(
                     title = stringResource(state.genre.stringResId),
-                    onBackClick = contract::onBack
+                    onBackClick = contract::onBackClick
                 )
             },
             modifier = Modifier.fillMaxWidth()
@@ -85,7 +85,7 @@ private fun MoviesByCategoryContentPreview() {
         contract = object : MovieCategoryContract {
             override fun onSavedClick(movieId: Int) {}
             override fun onMovieClick(movieId: Int) {}
-            override fun onBack() {}
+            override fun onBackClick() {}
         },
     )
 }

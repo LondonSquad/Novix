@@ -6,7 +6,6 @@ import app.cash.turbine.test
 import com.google.common.truth.Truth.assertThat
 import com.london.domain.entity.Movie
 import com.london.domain.entity.PagedFetchResponse
-import com.london.domain.entity.genre.MovieGenre
 import com.london.domain.usecase.details.movie.GetMovieUseCase
 import com.london.presentation.navigation.Screen
 import com.london.presentation.navigation.getArgs
@@ -116,7 +115,7 @@ class MovieCategoryViewModelTest {
     fun `onMovieClick should emit NavigateBack effect`() = runTest {
         // When & Then
         viewModel?.effect?.test {
-            viewModel?.onBack()
+            viewModel?.onBackClick()
             assertThat(awaitItem()).isInstanceOf(MovieCategoryEffect.BackNavigation::class.java)
             cancelAndIgnoreRemainingEvents()
         }
