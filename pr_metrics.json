@@ -30740,6 +30740,16 @@
     "comments": [
       {
         "author": {
+          "login": "Abdulrahman1890",
+          "id": 76666355,
+          "url": "https://github.com/Abdulrahman1890"
+        },
+        "first_comment_at": "2025-08-17T14:00:03Z",
+        "last_comment_at": "2025-08-17T14:00:03Z",
+        "count": 1
+      },
+      {
+        "author": {
           "login": "abdo-essam",
           "id": 92235360,
           "url": "https://github.com/abdo-essam"
@@ -30779,36 +30789,17 @@
         "count": 3
       }
     ],
-    "approvals": [
-      {
-        "reviewer": {
-          "login": "marwanqashwa",
-          "id": 100484790,
-          "url": "https://github.com/marwanqashwa"
-        },
-        "submitted_at": "2025-08-16T17:27:14Z",
-        "commit_id": "87b168a4536295332857c3913fe60bfb9ab9a6fb"
-      },
-      {
-        "reviewer": {
-          "login": "Mostafa-alsaygh",
-          "id": 106277855,
-          "url": "https://github.com/Mostafa-alsaygh"
-        },
-        "submitted_at": "2025-08-16T17:36:01Z",
-        "commit_id": "87b168a4536295332857c3913fe60bfb9ab9a6fb"
-      }
-    ],
+    "approvals": [],
     "required_approvals": 2,
-    "first_approved_at": "2025-08-16T17:27:14Z",
-    "time_to_first_approval_minutes": 3910.116666666667,
-    "required_approvals_met_at": "2025-08-16T17:36:01Z",
-    "time_to_required_approvals_minutes": 3918.9,
+    "first_approved_at": null,
+    "time_to_first_approval_minutes": null,
+    "required_approvals_met_at": null,
+    "time_to_required_approvals_minutes": null,
     "closed_at": null,
     "merged_at": null,
     "merged_by": null,
     "week": "2025-W33",
-    "status": "approved",
+    "status": "pending",
     "diff_stats": {
       "additions": 609,
       "deletions": 303,
