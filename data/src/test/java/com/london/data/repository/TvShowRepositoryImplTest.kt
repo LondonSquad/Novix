@@ -425,7 +425,7 @@ class TvShowRepositoryImplTest {
     }
 
     @Test
-    fun `getAccountTvShowState returns correct MediaStates`() = runTest {
+    fun `getAccountTvShowStateById returns correct MediaStates`() = runTest {
         // Given
         val seriesId = 456
         coEvery {
@@ -714,7 +714,7 @@ class TvShowRepositoryImplTest {
         coEvery { authenticationPreferences.getGuestSessionId() } returns guestSessionId
         coEvery {
             remoteDataSource.addTvShowRating(
-                id = tvShowId,
+                tvShowId = tvShowId,
                 rating = rating.toDouble(),
                 userSessionId = sessionId,
                 guestSessionId = guestSessionId
@@ -740,7 +740,7 @@ class TvShowRepositoryImplTest {
         coEvery { authenticationPreferences.getGuestSessionId() } returns guestSessionId
         coEvery {
             remoteDataSource.addTvShowRating(
-                id = tvShowId,
+                tvShowId = tvShowId,
                 rating = rating.toDouble(),
                 userSessionId = sessionId,
                 guestSessionId = guestSessionId
@@ -768,7 +768,7 @@ class TvShowRepositoryImplTest {
         coEvery { authenticationPreferences.getGuestSessionId() } returns guestSessionId
         coEvery {
             remoteDataSource.addTvShowEpisode(
-                id = tvShowId,
+                tvShowId = tvShowId,
                 seasonNumber = seasonNumber,
                 episodeNumber = episodeNumber,
                 rating = rating.toDouble(),
@@ -798,7 +798,7 @@ class TvShowRepositoryImplTest {
         coEvery { authenticationPreferences.getGuestSessionId() } returns guestSessionId
         coEvery {
             remoteDataSource.addTvShowEpisode(
-                id = tvShowId,
+                tvShowId = tvShowId,
                 seasonNumber = seasonNumber,
                 episodeNumber = episodeNumber,
                 rating = rating.toDouble(),
@@ -826,7 +826,7 @@ class TvShowRepositoryImplTest {
         coEvery { authenticationPreferences.getGuestSessionId() } returns guestSessionId
         coEvery {
             remoteDataSource.addTvShowRating(
-                id = tvShowId,
+                tvShowId = tvShowId,
                 rating = rating.toDouble(),
                 userSessionId = sessionId,
                 guestSessionId = guestSessionId
