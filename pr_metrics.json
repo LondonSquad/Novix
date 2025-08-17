@@ -32185,5 +32185,42 @@
       "deletions": 224,
       "changed_files": 9
     }
+  },
+  {
+    "pr_number": 661,
+    "url": "https://github.com/LondonSquad/Novix/pull/661",
+    "title": "fix: Rename HomeScreenEffect navigation classes",
+    "opened_at": "2025-08-17T19:50:11Z",
+    "head_ref": "fix/home-navigation-names",
+    "base_ref": "develop",
+    "creator": {
+      "login": "marwanqashwa",
+      "id": 100484790,
+      "url": "https://github.com/marwanqashwa"
+    },
+    "assignees": [
+      {
+        "login": "marwanqashwa",
+        "id": 100484790,
+        "url": "https://github.com/marwanqashwa"
+      }
+    ],
+    "comments": [],
+    "approvals": [],
+    "required_approvals": 2,
+    "first_approved_at": null,
+    "time_to_first_approval_minutes": null,
+    "required_approvals_met_at": null,
+    "time_to_required_approvals_minutes": null,
+    "closed_at": null,
+    "merged_at": null,
+    "merged_by": null,
+    "week": "2025-W33",
+    "status": "pending",
+    "diff_stats": {
+      "additions": 28,
+      "deletions": 28,
+      "changed_files": 4
+    }
   }
 ]
