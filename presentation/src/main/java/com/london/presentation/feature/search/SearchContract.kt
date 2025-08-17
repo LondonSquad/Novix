@@ -19,6 +19,7 @@ interface SearchContract {
     fun onMovieClick(movieId: Int)
     fun onTvShowClick(tvShowId: Int)
     fun onMovieGenreClick(genresList: List<Genre>)
+    fun onTvShowGenreClick(genresList: List<Genre>)
     fun onSavedMovieClick(movie: MovieUi)
     fun onRetryClick()
     fun updateSearchState(updater: SearchUiState.() -> SearchUiState)
