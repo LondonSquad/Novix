@@ -169,7 +169,7 @@ class MovieDetailsViewModel @Inject constructor(
 
     private suspend fun fetchMovieData(movieId: Int): Triple<MovieDetails, List<String>, List<Actor>> {
         val movie = movieDetails.getMovieDetails(movieId)
-        val movieImages = movieDetails.getMovieImagesUseCase(movieId)
+        val movieImages = movieDetails.getMovieImages(movieId)
         val movieCast = movieDetails.getMovieCast(movieId)
         return Triple(movie, movieImages, movieCast)
     }
