@@ -343,21 +343,15 @@ document.addEventListener("DOMContentLoaded", () => {
                 pr.assignees.map(a => `<a href="${a.url}" target="_blank" class="approver-link"><img src="https://github.com/${a.login}.png" alt="${a.login}" class="avatar rounded-full"/><span class="font-medium text-sm">${a.login}</span></a>`).join('') :
                 '<span class="text-sm text-secondary">Not assigned.</span>';
 
-            // --- COMMENTS WITH COUNTS ---
-            const commentsCount = pr.comments ? pr.comments.length : 0;
-            const commenterCounts = (pr.comments || []).reduce((acc, comment) => {
-                const login = comment.author.login;
-                acc[login] = (acc[login] || 0) + 1;
-                return acc;
-            }, {});
-            // Sort commenters by count, descending
-            const sortedCommenters = Object.entries(commenterCounts).sort((a, b) => b[1] - a[1]);
+            // --- COMMENTS WITH COUNTS (UPDATED) ---
+            const commentsCount = (pr.comments || []).reduce((sum, c) => sum + c.count, 0);
+            const sortedCommenters = [...(pr.comments || [])].sort((a, b) => b.count - a.count);
 
             const commentersHtml = sortedCommenters.length > 0 ?
-                sortedCommenters.map(([login, count]) => `
-                    <a href="https://github.com/${login}" target="_blank" title="${login} (${count} comments)" class="commenter-item">
-                        <img src="https://github.com/${login}.png" alt="${login}" class="avatar-sm rounded-full"/>
-                        <span class="commenter-count">${count}</span>
+                sortedCommenters.map(commenter => `
+                    <a href="https://github.com/${commenter.author.login}" target="_blank" title="${commenter.author.login} (${commenter.count} comments)" class="commenter-item">
+                        <img src="https://github.com/${commenter.author.login}.png" alt="${commenter.author.login}" class="avatar-sm rounded-full"/>
+                        <span class="commenter-count">${commenter.count}</span>
                     </a>
                 `).join('') : '';
 
@@ -655,25 +649,32 @@ document.addEventListener("DOMContentLoaded", () => {
         const lifespans = mergedPRs.map(pr => (new Date(pr.merged_at) - new Date(pr.opened_at)) / 60000).filter(t => t > 0);
         document.getElementById('kpi-avg-lifespan').textContent = formatDuration(lifespans.length ? lifespans.reduce((a, b) => a + b, 0) / lifespans.length : null);
 
-        // --- Comment Metrics Calculation ---
-        const totalComments = data.reduce((sum, pr) => sum + (pr.comments || []).length, 0);
+        // --- Comment Metrics Calculation (UPDATED) ---
+        const totalComments = data.reduce((sum, pr) => sum + (pr.comments || []).reduce((prSum, c) => prSum + c.count, 0), 0);
         document.getElementById('kpi-total-comments').textContent = totalComments;
         document.getElementById('kpi-avg-comments').textContent = data.length > 0 ? (totalComments / data.length).toFixed(1) : '0.0';
 
-        const commentCounts = data.flatMap(pr => (pr.comments || []).map(c => c.author.login))
-                                  .reduce((acc, login) => {
-                                      acc[login] = (acc[login] || 0) + 1;
-                                      return acc;
-                                  }, {});
+        const commentCounts = data.reduce((acc, pr) => {
+            (pr.comments || []).forEach(commenter => {
+                const login = commenter.author.login;
+                acc[login] = (acc[login] || 0) + commenter.count;
+            });
+            return acc;
+        }, {});
         const topCommenter = Object.entries(commentCounts).sort((a, b) => b[1] - a[1])[0];
         document.getElementById('top-commenter-card').innerHTML = topCommenter ? `<div class="kpi-icon bg-yellow-500"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M9,22A1,1 0 0,1 8,21V18H4A2,2 0 0,1 2,16V4C2,2.89 2.9,2 4,2H20A2,2 0 0,1 22,4V16A2,2 0 0,1 20,18H13.9L10.2,21.71C10,21.9 9.75,22 9.5,22V22H9M10,16V19.08L13.08,16H20V4H4V16H10Z" /></svg></div><div class="overflow-hidden"><div class="kpi-value"><img src="https://github.com/${topCommenter[0]}.png" class="avatar"/> <span class="truncate">${topCommenter[0]}</span></div><div class="kpi-label">Top Commenter (${topCommenter[1]} comments)</div></div>` : `<div class="p-4 text-center">No comments.</div>`;
 
-        const mostDiscussedPRs = data.filter(pr => (pr.comments || []).length > 0)
-                                    .sort((a, b) => (b.comments || []).length - (a.comments || []).length)
-                                    .slice(0, 5);
+        const mostDiscussedPRs = data
+            .map(pr => ({
+                ...pr,
+                total_comments: (pr.comments || []).reduce((sum, c) => sum + c.count, 0)
+            }))
+            .filter(pr => pr.total_comments > 0)
+            .sort((a, b) => b.total_comments - a.total_comments)
+            .slice(0, 5);
 
         document.getElementById('most-discussed-prs-list').innerHTML = mostDiscussedPRs.length > 0 ? mostDiscussedPRs.map(pr => {
-            const commenters = [...new Set((pr.comments || []).map(c => c.author.login))];
+            const commenters = (pr.comments || []).map(c => c.author.login);
             const commenterAvatarsHtml = commenters.map(c =>
                 `<a href="https://github.com/${c}" target="_blank" title="${c}">
                     <img src="https://github.com/${c}.png" class="collaborator-avatar">
@@ -686,7 +687,7 @@ document.addEventListener("DOMContentLoaded", () => {
                         <a href="${pr.url}" target="_blank" class="discussed-pr-link">#${pr.pr_number} ${pr.title}</a>
                         <div class="collaborator-avatar-stack">${commenterAvatarsHtml}</div>
                     </div>
-                    <span class="discussed-pr-count">${(pr.comments || []).length} comments</span>
+                    <span class="discussed-pr-count">${pr.total_comments} comments</span>
                 </li>`;
         }).join('') : `<li>No discussed PRs in this period.</li>`;
         // --- END: Comment Metrics ---
@@ -912,27 +913,26 @@ document.addEventListener("DOMContentLoaded", () => {
             return acc;
         }, {});
         const chartLabels = Object.keys(contributions).sort();
-        const reviewers = data.reduce((acc, pr) => {
-            // Use a Set to find the unique reviewers for this specific PR
-            const uniqueReviewersForThisPR = new Set();
 
-            // Add everyone who approved
+        // --- CORRECTED reviewers logic ---
+        const reviewers = data.reduce((acc, pr) => {
+            const uniqueReviewersForThisPR = new Set();
             (pr.approvals || []).forEach(approval => {
                 uniqueReviewersForThisPR.add(approval.reviewer.login);
             });
-
-            // Add everyone who commented
             (pr.comments || []).forEach(comment => {
                 uniqueReviewersForThisPR.add(comment.author.login);
             });
-
-            // For each unique reviewer on this PR, increment their total review count by 1
             uniqueReviewersForThisPR.forEach(login => {
-                acc[login] = (acc[login] || 0) + 1;
+                // A review is only counted if it's on someone else's PR
+                if (pr.creator.login !== login) {
+                    acc[login] = (acc[login] || 0) + 1;
+                }
             });
-
             return acc;
         }, {});
+
+        // --- CORRECTED collaborationSummary logic ---
         const collaborationSummary = data.reduce((acc, pr) => {
             const uniqueReviewersForThisPR = new Set();
             (pr.approvals || []).forEach(a => uniqueReviewersForThisPR.add(a.reviewer.login));
