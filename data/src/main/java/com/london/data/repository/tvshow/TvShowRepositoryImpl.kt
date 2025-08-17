@@ -234,7 +234,7 @@ class TvShowRepositoryImpl @Inject constructor(
         )
     }
 
-    override suspend fun getAccountTvShowState(
+    override suspend fun getAccountTvShowStateById(
         tvShowId: Int,
     ): MediaStates = tvShowRemoteDataSource.getAccountTvShowStates(
         tvShowId = tvShowId,

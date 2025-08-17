@@ -206,8 +206,8 @@ class TvShowDetailsViewModel @Inject constructor(
                     seasonNumber
                 ).episodes
                 val rating = if (authenticationUseCase.isLoggedIn()) {
-                    ratingUseCase.getRateAccountTvShowState(
-                        tvShowId = tvShowId,
+                    ratingUseCase.getRateAccountTvShowStatesById(
+                        id = tvShowId,
                     )
                 } else 0
 

@@ -9,59 +9,55 @@ class ManageRatingUseCase @Inject constructor(
     private val tvShowRepository: TvShowRepository,
     private val movieRepository: MovieRepository,
 ) {
+    suspend fun getRatedMediaById(id: Int): RatedMedia? =
+        getRatedMedia().find { it.id == id }
 
-   private suspend fun getAllRatedMedia(): List<RatedMedia> =
-        buildList {
-            addAll(movieRepository.getAllRatedMovies())
-            addAll(tvShowRepository.getAllRatedTvShows())
-        }
-
-    suspend fun getAllRatedMediaSorted(): List<RatedMedia> =
-        getAllRatedMedia().sortedByDescending { it.rating }
-
-    suspend fun getAllRatedMovies(): List<RatedMedia> =
-        movieRepository.getAllRatedMovies()
-
-    suspend fun getAllRatedTvShows(): List<RatedMedia> =
-        tvShowRepository.getAllRatedTvShows()
-
-    suspend fun addMovieRatingById(id: Int, rating: Int): Boolean =
-        movieRepository.addMovieRatingById(id = id, rating = rating)
-
-    suspend fun addTvShowRatingById(id: Int, rating: Int) : Boolean =
-        tvShowRepository.addTvShowById(id = id, rating = rating)
+    suspend fun getRatedMediaSorted(): List<RatedMedia> =
+        getRatedMedia().sortedByDescending { it.rating }
 
     suspend fun getRateAccountMovieStatesById(id: Int): Int =
         movieRepository.getAccountMovieStatesById(id = id).rate
 
-    suspend fun getRateAccountTvShowState(tvShowId: Int) : Int=
-        tvShowRepository.getAccountTvShowState(tvShowId = tvShowId).rate
+    suspend fun getRateAccountTvShowStatesById(id: Int) =
+        tvShowRepository.getAccountTvShowStateById(id = id).rate
 
-    suspend fun deleteMovieRating(movieId: Int) : Boolean =
-        movieRepository.deleteMovieRating(movieId = movieId)
+    suspend fun getRateAccountTvEpisode(
+        tvShowId: Int,
+        seasonNumber: Int,
+        episodeNumber: Int
+    ): Int = tvShowRepository.getAccountTvEpisode(
+        id = tvShowId,
+        seasonNumber = seasonNumber,
+        episodeNumber = episodeNumber
+    ).rate
 
-    suspend fun deleteTvShowRating(tvShowId: Int) : Boolean =
-        tvShowRepository.deleteTvShowRating(tvShowId = tvShowId)
+    suspend fun addMovieRatingById(id: Int, rating: Int): Boolean =
+        movieRepository.addMovieRatingById(id = id, rating = rating)
+
+    suspend fun addTvShowRatingById(id: Int, rating: Int) =
+        tvShowRepository.addTvShowById(id = id, rating = rating)
 
     suspend fun addTvEpisodeRatingById(
         id: Int,
         rating: Int,
         seasonNumber: Int,
         episodeNumber: Int
-    ) : Boolean = tvShowRepository.addTvShowEpisode(
-        tvShowId = id,
+    ): Boolean = tvShowRepository.addTvShowEpisode(
+        id = id,
         rating = rating,
         seasonNumber = seasonNumber,
         episodeNumber = episodeNumber,
     )
 
-    suspend fun getRateAccountTvEpisode(
-        tvShowId: Int,
-        seasonNumber: Int,
-        episodeNumber: Int
-    ) : Int = tvShowRepository.getAccountTvEpisode(
-        tvShowId = tvShowId,
-        seasonNumber = seasonNumber,
-        episodeNumber = episodeNumber
-    ).rate
+    suspend fun deleteMovieRating(movieId: Int) =
+        movieRepository.deleteMovieRating(movieId = movieId)
+
+    suspend fun deleteTvShowRating(tvShowId: Int) =
+        tvShowRepository.deleteTvShowRating(id = tvShowId)
+
+    private suspend fun getRatedMedia(): List<RatedMedia> =
+        buildList {
+            addAll(movieRepository.getAllRatedMovies())
+            addAll(tvShowRepository.getAllRatedTvShows())
+        }
 }

@@ -1,14 +1,5 @@
 package com.london.presentation.shared.container
 
-import androidx.compose.animation.AnimatedContent
-import androidx.compose.animation.AnimatedContentTransitionScope
-import androidx.compose.animation.ContentTransform
-import androidx.compose.animation.core.tween
-import androidx.compose.animation.fadeIn
-import androidx.compose.animation.fadeOut
-import androidx.compose.animation.slideInVertically
-import androidx.compose.animation.slideOutVertically
-import androidx.compose.animation.togetherWith
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -21,7 +12,6 @@ import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.lazy.grid.rememberLazyGridState
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.key
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.paging.compose.LazyPagingItems
@@ -37,22 +27,21 @@ import com.london.presentation.utils.gridColumns
 fun <T : Any> MediaLazyVerticalGrid(
     items: List<T>,
     modifier: Modifier = Modifier,
-    imageUrl: (T) -> String? = { it.getImageUrl() },
+    rate: (T) -> String? = { null },
     name: (T) -> String = { it.getName() },
+    imageUrl: (T) -> String? = { it.getImageUrl() },
     hasSaveIcon: Boolean = true,
     onSaveClick: (T) -> Unit = {},
     isItemSaved: (T) -> Boolean = { false },
+    onItemClick: ((T) -> Unit)? = null,
     onDeleteClick: (T) -> Unit = {},
-    myRatingList: Boolean = false,
-    rate: String = "3",
     onNavigateToMovie: (Int) -> Unit = {},
     onNavigateToTvShow: (Int) -> Unit = {},
     topBar: @Composable (() -> Unit)? = null
 ) {
-    AnimatedGrid(
+    MediaGridContainer(
         modifier = modifier,
         topBar = topBar,
-        targetKey = items.size
     ) {
         items(
             items = items,
@@ -65,18 +54,20 @@ fun <T : Any> MediaLazyVerticalGrid(
             }
         ) { item ->
             imageUrl(item)?.let { url ->
-                HomeGridCard(
-                    item = item,
+                HomeCard(
                     imageUrl = url,
-                    name = name,
-                    isItemSaved = isItemSaved,
+                    imageDescription = name(item),
+                    isSaved = isItemSaved(item),
                     hasSaveIcon = hasSaveIcon,
-                    onSaveClick = onSaveClick,
-                    onDeleteClick = onDeleteClick,
-                    myRatingList = myRatingList,
-                    rate = rate,
-                    onNavigateToMovie = onNavigateToMovie,
-                    onNavigateToTvShow = onNavigateToTvShow
+                    onSaveClick = { onSaveClick(item) },
+                    onDeleteClick = { onDeleteClick(item) },
+                    rate = rate(item),
+                    modifier = Modifier.navigationClickable(
+                        item = item,
+                        onItemClick = onItemClick,
+                        onNavigateToMovie = onNavigateToMovie,
+                        onNavigateToTvShow = onNavigateToTvShow
+                    )
                 )
             }
         }
@@ -87,22 +78,20 @@ fun <T : Any> MediaLazyVerticalGrid(
 fun <T : Any> MediaLazyVerticalGrid(
     pagingItems: LazyPagingItems<T>,
     modifier: Modifier = Modifier,
-    imageUrl: (T) -> String? = { it.getImageUrl() },
+    rate: (T) -> String? = { null },
     name: (T) -> String = { it.getName() },
+    imageUrl: (T) -> String? = { it.getImageUrl() },
     hasSaveIcon: Boolean = true,
     onSaveClick: (T) -> Unit = {},
     isItemSaved: (T) -> Boolean = { false },
     onDeleteClick: (T) -> Unit = {},
-    myRatingList: Boolean = false,
-    rate: String = "3",
     topBar: @Composable (() -> Unit)? = null,
     onNavigateToMovie: (Int) -> Unit = {},
     onNavigateToTvShow: (Int) -> Unit = {}
 ) {
-    AnimatedGrid(
+    MediaGridContainer(
         modifier = modifier,
         topBar = topBar,
-        targetKey = pagingItems.itemSnapshotList.items.size
     ) {
         items(
             count = pagingItems.itemCount,
@@ -114,7 +103,7 @@ fun <T : Any> MediaLazyVerticalGrid(
                 }
             }
         ) { index ->
-            RenderPagingItem(
+            RenderPagingGridItem(
                 index = index,
                 pagingItems = pagingItems,
                 imageUrl = imageUrl,
@@ -123,7 +112,6 @@ fun <T : Any> MediaLazyVerticalGrid(
                 hasSaveIcon = hasSaveIcon,
                 onSaveClick = onSaveClick,
                 onDeleteClick = onDeleteClick,
-                myRatingList = myRatingList,
                 rate = rate,
                 onNavigateToMovie = onNavigateToMovie,
                 onNavigateToTvShow = onNavigateToTvShow,
@@ -133,7 +121,32 @@ fun <T : Any> MediaLazyVerticalGrid(
 }
 
 @Composable
-private fun <T : Any> RenderPagingItem(
+private fun MediaGridContainer(
+    modifier: Modifier,
+    topBar: @Composable (() -> Unit)?,
+    content: LazyGridScope.() -> Unit
+) {
+    Column(
+        modifier = modifier
+            .fillMaxSize()
+            .background(color = NovixTheme.colors.surface)
+    ) {
+        topBar?.invoke()
+
+        LazyVerticalGrid(
+            state = rememberLazyGridState(),
+            columns = GridCells.Fixed(gridColumns()),
+            modifier = Modifier.fillMaxSize(),
+            horizontalArrangement = Arrangement.spacedBy(12.dp),
+            verticalArrangement = Arrangement.spacedBy(12.dp),
+            contentPadding = PaddingValues(start = 16.dp, end = 16.dp, bottom = 16.dp),
+            content = content
+        )
+    }
+}
+
+@Composable
+private fun <T : Any> RenderPagingGridItem(
     index: Int,
     pagingItems: LazyPagingItems<T>,
     imageUrl: (T) -> String?,
@@ -142,8 +155,7 @@ private fun <T : Any> RenderPagingItem(
     hasSaveIcon: Boolean,
     onSaveClick: (T) -> Unit,
     onDeleteClick: (T) -> Unit,
-    myRatingList: Boolean,
-    rate: String,
+    rate: (T) -> String?,
     onNavigateToMovie: (Int) -> Unit,
     onNavigateToTvShow: (Int) -> Unit
 ) {
@@ -162,87 +174,10 @@ private fun <T : Any> RenderPagingItem(
                 hasSaveIcon = hasSaveIcon,
                 onSaveClick = { onSaveClick(item) },
                 onDeleteClick = { onDeleteClick(item) },
-                myRatingList = myRatingList,
-                rate = rate
+                rate = rate(item)
             )
         }
     }
-}
-
-@Composable
-private fun AnimatedGrid(
-    modifier: Modifier,
-    topBar: @Composable (() -> Unit)?,
-    targetKey: Int,
-    content: LazyGridScope.() -> Unit
-) {
-    Column(
-        modifier = modifier
-            .fillMaxSize()
-            .background(color = NovixTheme.colors.surface)
-    ) {
-        topBar?.invoke()
-
-        AnimatedContent(
-            targetState = targetKey,
-            transitionSpec = gridTransitionSpec()
-        ) { keyValue ->
-            key(keyValue) {
-                LazyVerticalGrid(
-                    state = rememberLazyGridState(),
-                    columns = GridCells.Fixed(gridColumns()),
-                    modifier = Modifier.fillMaxSize(),
-                    horizontalArrangement = Arrangement.spacedBy(12.dp),
-                    verticalArrangement = Arrangement.spacedBy(12.dp),
-                    contentPadding = PaddingValues(start = 16.dp, end = 16.dp, bottom = 16.dp),
-                    content = content
-                )
-            }
-        }
-    }
-}
-
-@Composable
-private fun <T : Any> HomeGridCard(
-    item: T,
-    imageUrl: String,
-    name: (T) -> String,
-    isItemSaved: (T) -> Boolean,
-    hasSaveIcon: Boolean,
-    onSaveClick: (T) -> Unit,
-    onDeleteClick: (T) -> Unit,
-    myRatingList: Boolean,
-    rate: String,
-    onNavigateToMovie: (Int) -> Unit,
-    onNavigateToTvShow: (Int) -> Unit
-) {
-    HomeCard(
-        imageUrl = imageUrl,
-        imageDescription = name(item),
-        isSaved = isItemSaved(item),
-        hasSaveIcon = hasSaveIcon,
-        onSaveClick = { onSaveClick(item) },
-        onDeleteClick = { onDeleteClick(item) },
-        myRatingList = myRatingList,
-        rate = rate,
-        modifier = Modifier.clickable {
-            when (item) {
-                is Movie -> onNavigateToMovie(item.id)
-                is TvShow -> onNavigateToTvShow(item.id)
-            }
-        }
-    )
-}
-
-private fun gridTransitionSpec(): AnimatedContentTransitionScope<Int>.() -> ContentTransform = {
-    (slideInVertically(
-        animationSpec = tween(1100),
-        initialOffsetY = { it }
-    ) + fadeIn(tween(1100))) togetherWith
-            (slideOutVertically(
-                animationSpec = tween(1000),
-                targetOffsetY = { -it }
-            ) + fadeOut(tween(1000)))
 }
 
 @ThemePreviews

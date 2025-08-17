@@ -25,10 +25,9 @@ import com.london.designsystem.theme.ThemePreviews
 fun HomeCard(
     imageUrl: Any,
     modifier: Modifier = Modifier,
+    rate: String? = null,
     isSaved: Boolean = false,
     hasSaveIcon: Boolean = true,
-    myRatingList: Boolean = false,
-    rate: String = "5",
     onDeleteClick: () -> Unit = {},
     imageDescription: String? = null,
     onSaveClick: () -> Unit,
@@ -67,7 +66,7 @@ fun HomeCard(
                 iconTint = NovixTheme.colors.onPrimary,
             )
 
-        if (myRatingList) {
+        if (rate != null) {
             MyRatingIcon(
                 rate = rate,
                 modifier = Modifier
