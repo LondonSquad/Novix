@@ -226,6 +226,7 @@ jobs:
             # Extract basic info for status determination
             PR_CLOSED_AT=$(jq -r '.closed_at // empty' < "$TEMP_DIR/pr_${pr_number}_data.json")
             PR_MERGED_AT=$(jq -r '.merged_at // empty' < "$TEMP_DIR/pr_${pr_number}_data.json")
+            PR_HEAD_SHA=$(jq -r '.head.sha' < "$TEMP_DIR/pr_${pr_number}_data.json")
 
             # Determine status
             PR_STATUS="pending"
@@ -235,16 +236,46 @@ jobs:
               PR_STATUS="closed"
             fi
           
-            # Fetch additional data and save to files
-            echo '[]' > "$TEMP_DIR/pr_${pr_number}_assignees.json"
-            jq '[.assignees[] | {login: .login, id: .id, url: .html_url}]' < "$TEMP_DIR/pr_${pr_number}_data.json" > "$TEMP_DIR/pr_${pr_number}_assignees.json" 2>/dev/null || true
+            # Fetch assignees - use PR author as fallback if no assignees
+            jq '
+              if (.assignees | length) > 0 then
+                [.assignees[] | {login: .login, id: .id, url: .html_url}]
+              else
+                [{login: .user.login, id: .user.id, url: .user.html_url}]
+              end
+            ' < "$TEMP_DIR/pr_${pr_number}_data.json" > "$TEMP_DIR/pr_${pr_number}_assignees.json"
           
+            # Fetch comments (excluding bots)
             gh api "repos/${{ github.repository }}/issues/$pr_number/comments" --paginate --jq '[.[] | select(.user.type != "Bot")]' > "$TEMP_DIR/pr_${pr_number}_issue_comments.json" 2>/dev/null || echo "[]" > "$TEMP_DIR/pr_${pr_number}_issue_comments.json"
-          
             gh api "repos/${{ github.repository }}/pulls/$pr_number/comments" --paginate --jq '[.[] | select(.user.type != "Bot")]' > "$TEMP_DIR/pr_${pr_number}_review_comments.json" 2>/dev/null || echo "[]" > "$TEMP_DIR/pr_${pr_number}_review_comments.json"
           
-            PR_HEAD_SHA=$(jq -r '.head.sha' < "$TEMP_DIR/pr_${pr_number}_data.json")
-            gh api "repos/${{ github.repository }}/pulls/$pr_number/reviews" --jq '[.[] | select(.state == "APPROVED" and .commit_id == "'$PR_HEAD_SHA'")] | group_by(.user.id) | map(sort_by(.submitted_at) | .[-1]) | map({reviewer: {login: .user.login, id: .user.id, url: .user.html_url}, submitted_at: .submitted_at})' > "$TEMP_DIR/pr_${pr_number}_approvals.json" 2>/dev/null || echo "[]" > "$TEMP_DIR/pr_${pr_number}_approvals.json"
+            # Fetch ALL reviews first
+            gh api "repos/${{ github.repository }}/pulls/$pr_number/reviews" --paginate > "$TEMP_DIR/pr_${pr_number}_all_reviews.json" 2>/dev/null || echo "[]" > "$TEMP_DIR/pr_${pr_number}_all_reviews.json"
+          
+            # Process approvals with fallback logic
+            jq --arg head_sha "$PR_HEAD_SHA" '
+              # First try to get approvals for current commit
+              ([.[] | select(.state == "APPROVED" and .commit_id == $head_sha)] |
+                group_by(.user.id) | 
+                map(sort_by(.submitted_at) | .[-1])
+              ) as $current_approvals |
+              # If no approvals for current commit, get latest approvals regardless of commit
+              ([.[] | select(.state == "APPROVED")] |
+                group_by(.user.id) | 
+                map(sort_by(.submitted_at) | .[-1])
+              ) as $all_approvals |
+              # Use current approvals if available, otherwise use all approvals
+              (if ($current_approvals | length) > 0 then $current_approvals else $all_approvals end) |
+              map({
+                reviewer: {
+                  login: .user.login,
+                  id: .user.id,
+                  url: .user.html_url
+                },
+                submitted_at: .submitted_at,
+                commit_id: .commit_id
+              })
+            ' < "$TEMP_DIR/pr_${pr_number}_all_reviews.json" > "$TEMP_DIR/pr_${pr_number}_approvals.json"
 
             # Build the final PR data using slurpfile to avoid command line length issues
             jq \
@@ -267,12 +298,20 @@ jobs:
           
               ($pr_data[0]) as $pr |
               ($issue_comments[0] + $review_comments[0]) as $all_comments |
-              # If no assignees, use the PR author as the assignee
-              (if ($assignees[0] | length) > 0 then 
-                $assignees[0] 
-              else 
-                [{login: $pr.user.login, id: $pr.user.id, url: $pr.user.html_url}]
-              end) as $final_assignees |
+              # Group comments by author and count them
+              ($all_comments | 
+                group_by(.user.id) | 
+                map({
+                  author: {
+                    login: .[0].user.login,
+                    id: .[0].user.id,
+                    url: .[0].user.html_url
+                  },
+                  first_comment_at: (map(.created_at) | sort | .[0]),
+                  last_comment_at: (map(.created_at) | sort | .[-1]),
+                  count: length
+                })
+              ) as $grouped_comments |
               {
                 "pr_number": $pr.number,
                 "url": $pr.html_url,
@@ -285,8 +324,8 @@ jobs:
                   "id": $pr.user.id,
                   "url": $pr.user.html_url
                 },
-                "assignees": $final_assignees,
-                "comments": ($all_comments | map({ author: { login: .user.login, id: .user.id, url: .user.html_url }, created_at: .created_at })),
+                "assignees": $assignees[0],
+                "comments": $grouped_comments,
                 "approvals": $approvals[0],
                 "required_approvals": $required_approvals,
                 "first_approved_at": null,
@@ -403,24 +442,68 @@ jobs:
           if [[ "$UPDATE_TYPE" == "PR_STATE_REFRESH" ]]; then
             echo "Fetching current state from GitHub API for refresh..."
           
-            # Fetch PR data for assignees and other info
+            # Fetch PR data once for all needed information
             PR_DATA_FULL=$(gh api "repos/${{ github.repository }}/pulls/$PR_NUMBER")
             PR_HEAD_SHA=$(echo "$PR_DATA_FULL" | jq -r '.head.sha')
           
-            # Get current approvals for this specific commit
-            CURRENT_APPROVALS_JSON=$(gh api "repos/${{ github.repository }}/pulls/$PR_NUMBER/reviews" \
-              --jq '[.[] | select(.state == "APPROVED" and .commit_id == "'"$PR_HEAD_SHA"'")] |
-              group_by(.user.id) | map(sort_by(.submitted_at) | .[-1]) |
-              map({
-                reviewer: {
-                  login: .user.login,
-                  id: .user.id,
-                  url: .user.html_url
-                },
-                submitted_at: .submitted_at
-              })'
-            )
-            echo "VALID approvals from API: $CURRENT_APPROVALS_JSON"
+            echo "Current HEAD SHA: $PR_HEAD_SHA"
+          
+            # Try multiple methods to get approvals
+            echo "Attempting to fetch approvals..."
+          
+            # Method 1: Get all reviews and filter client-side (most reliable)
+            ALL_REVIEWS=$(gh api "repos/${{ github.repository }}/pulls/$PR_NUMBER/reviews" --paginate || echo "[]")
+          
+            # Method 2: Try to filter for APPROVED reviews for current commit
+            if [[ "$ALL_REVIEWS" != "[]" && -n "$ALL_REVIEWS" ]]; then
+              CURRENT_APPROVALS_JSON=$(echo "$ALL_REVIEWS" | jq \
+                --arg head_sha "$PR_HEAD_SHA" \
+                '[.[] | select(.state == "APPROVED")] |
+                group_by(.user.id) | 
+                map(
+                  sort_by(.submitted_at) | 
+                  .[-1] | 
+                  select(.commit_id == $head_sha or .commit_id == null)
+                ) |
+                map({
+                  reviewer: {
+                    login: .user.login,
+                    id: .user.id,
+                    url: .user.html_url
+                  },
+                  submitted_at: .submitted_at,
+                  commit_id: .commit_id
+                })'
+              )
+          
+              # If no approvals for current commit, try getting the latest approvals regardless of commit
+              if [[ "$CURRENT_APPROVALS_JSON" == "[]" || -z "$CURRENT_APPROVALS_JSON" ]]; then
+                echo "No approvals for current commit, checking for any approvals..."
+                CURRENT_APPROVALS_JSON=$(echo "$ALL_REVIEWS" | jq \
+                  '[.[] | select(.state == "APPROVED")] |
+                  group_by(.user.id) | 
+                  map(
+                    sort_by(.submitted_at) | 
+                    .[-1]
+                  ) |
+                  map({
+                    reviewer: {
+                      login: .user.login,
+                      id: .user.id,
+                      url: .user.html_url
+                    },
+                    submitted_at: .submitted_at,
+                    commit_id: .commit_id,
+                    note: "May be for different commit"
+                  })'
+                )
+              fi
+            else
+              CURRENT_APPROVALS_JSON="[]"
+            fi
+          
+            echo "Found $(echo "$CURRENT_APPROVALS_JSON" | jq 'length') approvals"
+            echo "Approvals data: $CURRENT_APPROVALS_JSON"
           
             # Get assignees, using PR author as fallback if no assignees
             CURRENT_ASSIGNEES_JSON=$(echo "$PR_DATA_FULL" | jq '
@@ -431,10 +514,23 @@ jobs:
               end
             ')
           
-            # Get comments (excluding bots)
+            # Get comments (excluding bots) and group by author with count
             ISSUE_COMMENTS=$(gh api "repos/${{ github.repository }}/issues/$PR_NUMBER/comments" --paginate --jq '[.[] | select(.user.type != "Bot")]' || echo "[]")
             REVIEW_COMMENTS=$(gh api "repos/${{ github.repository }}/pulls/$PR_NUMBER/comments" --paginate --jq '[.[] | select(.user.type != "Bot")]' || echo "[]")
-            CURRENT_COMMENTS_JSON=$(jq -n --argjson issueComments "$ISSUE_COMMENTS" --argjson reviewComments "$REVIEW_COMMENTS" '($issueComments + $reviewComments) | map({ author: { login: .user.login, id: .user.id, url: .user.html_url }, created_at: .created_at })')
+            CURRENT_COMMENTS_JSON=$(jq -n --argjson issueComments "$ISSUE_COMMENTS" --argjson reviewComments "$REVIEW_COMMENTS" '
+              ($issueComments + $reviewComments) |
+              group_by(.user.id) |
+              map({
+                author: {
+                  login: .[0].user.login,
+                  id: .[0].user.id,
+                  url: .[0].user.html_url
+                },
+                first_comment_at: (map(.created_at) | sort | .[0]),
+                last_comment_at: (map(.created_at) | sort | .[-1]),
+                count: length
+              })
+            ')
 
             if [[ "$HAS_VALID_DIFF_STATS" == "true" ]]; then
               echo "Updating diff stats and participant data for PR #$PR_NUMBER"
@@ -482,13 +578,21 @@ jobs:
 
           elif [[ "$UPDATE_TYPE" == "PR_OPENED" ]]; then
             WEEK_NUMBER=$(date -d "$PR_CREATED_AT" +%G-W%V)
-            SAFE_ADDITIONS=${PR_ADDITIONS:-0}; SAFE_DELETIONS=${PR_DELETIONS:-0}; SAFE_CHANGED_FILES=${PR_CHANGED_FILES:-0}
+          
+            # For new PRs, we need valid diff stats or default to 0
+            SAFE_ADDITIONS=${PR_ADDITIONS:-0}
+            SAFE_DELETIONS=${PR_DELETIONS:-0}
+            SAFE_CHANGED_FILES=${PR_CHANGED_FILES:-0}
+          
+            # Validate that values are numeric for new PRs
             if ! [[ "$SAFE_ADDITIONS" =~ ^[0-9]+$ ]]; then SAFE_ADDITIONS=0; fi
             if ! [[ "$SAFE_DELETIONS" =~ ^[0-9]+$ ]]; then SAFE_DELETIONS=0; fi
             if ! [[ "$SAFE_CHANGED_FILES" =~ ^[0-9]+$ ]]; then SAFE_CHANGED_FILES=0; fi
           
+            echo "Debug: New PR - ADDITIONS=$SAFE_ADDITIONS, DELETIONS=$SAFE_DELETIONS, CHANGED_FILES=$SAFE_CHANGED_FILES"
+          
             # For new PRs, fetch assignees from API (in case they were set immediately)
-            PR_DATA_FOR_NEW=$(gh api "repos/${{ github.repository }}/pulls/$PR_NUMBER" || echo '{}')
+            PR_DATA_FOR_NEW=$(gh api "repos/${{ github.repository }}/pulls/$PR_NUMBER" 2>/dev/null || echo '{}')
             if [[ -n "$PR_DATA_FOR_NEW" && "$PR_DATA_FOR_NEW" != '{}' ]]; then
               INITIAL_ASSIGNEES=$(echo "$PR_DATA_FOR_NEW" | jq '
                 if (.assignees | length) > 0 then
@@ -574,6 +678,24 @@ jobs:
                 [{login: .user.login, id: .user.id, url: .user.html_url}]
               end
             ')
+          
+            # Get final comments state (grouped by author)
+            ISSUE_COMMENTS_FINAL=$(gh api "repos/${{ github.repository }}/issues/$PR_NUMBER/comments" --paginate --jq '[.[] | select(.user.type != "Bot")]' || echo "[]")
+            REVIEW_COMMENTS_FINAL=$(gh api "repos/${{ github.repository }}/pulls/$PR_NUMBER/comments" --paginate --jq '[.[] | select(.user.type != "Bot")]' || echo "[]")
+            FINAL_COMMENTS_JSON=$(jq -n --argjson issueComments "$ISSUE_COMMENTS_FINAL" --argjson reviewComments "$REVIEW_COMMENTS_FINAL" '
+              ($issueComments + $reviewComments) |
+              group_by(.user.id) |
+              map({
+                author: {
+                  login: .[0].user.login,
+                  id: .[0].user.id,
+                  url: .[0].user.html_url
+                },
+                first_comment_at: (map(.created_at) | sort | .[0]),
+                last_comment_at: (map(.created_at) | sort | .[-1]),
+                count: length
+              })
+            ')
 
             UPDATED_JQ_DATA=$(echo "$JQ_DATA" | jq \
               --argjson pr_number "$PR_NUMBER" \
@@ -581,9 +703,11 @@ jobs:
               --arg merged_at "$PR_MERGED_AT_API" \
               --argjson merged_by "$MERGED_BY_JSON" \
               --argjson final_assignees "$FINAL_ASSIGNEES" \
+              --argjson final_comments "$FINAL_COMMENTS_JSON" \
               'map(if .pr_number == $pr_number then
                  .closed_at = $closed_at
                  | .assignees = $final_assignees
+                 | .comments = $final_comments
                  | (if ($merged_at != null and $merged_at != "") then
                       .merged_at = $merged_at
                       | .merged_by = (if $merged_by != null then {login: $merged_by.login, id: $merged_by.id, url: $merged_by.html_url} else null end)
