@@ -82,7 +82,7 @@ class ActorRepositoryImplTest {
             tvShowCastRemoteResponse
         )
 
-        val result = repository.getCastTvShowById(ACTOR_ID)
+        val result = repository.getTvShowActors(ACTOR_ID)
 
         assertThat(result).isEqualTo(expectedEntity)
     }
@@ -222,7 +222,7 @@ class ActorRepositoryImplTest {
             )
         )
 
-        val result = repository.getCastTvShowById(TV_SHOW_ID)
+        val result = repository.getTvShowActors(TV_SHOW_ID)
 
         assertThat(result).isEqualTo(tvShowCastRemoteMock.toCastEntity())
     }
@@ -237,28 +237,21 @@ class ActorRepositoryImplTest {
         )
 
         assertThrows<NetworkException.UnAuthorizedException> {
-            repository.getCastTvShowById(123)
+            repository.getTvShowActors(123)
         }
     }
 
     private val tvShowCastRemoteMock = TvShowCastRemoteResponse(
         cast = listOf(
             TvShowCastMember(
-                adult = false,
-                gender = 2,
                 id = 1,
-                knownForDepartment = "Acting",
                 name = "Actor Name",
-                originalName = "Actor Original Name",
-                popularity = 75.5,
                 profilePath = "/actor.jpg",
                 roles = listOf(
                     Role(
-                        creditId = "role1", character = "Main Character", episodeCount = 10
+                       character = "Main Character", episodeCount = 10
                     )
                 ),
-                totalEpisodeCount = 10,
-                order = 1
             )
         ), id = TV_SHOW_ID
     )
@@ -270,17 +263,11 @@ class ActorRepositoryImplTest {
         val ActorDetailsRemoteMock = ActorDetailsResponse(
             id = ACTOR_ID,
             name = "John Doe",
-            gender = 2,
-            adult = false,
             birthday = "1980-01-01",
             deathDay = null,
             placeOfBirth = "London",
             biography = "An amazing actor",
-            alsoKnownAs = listOf("JD", "Johnny D"),
-            homePage = "https://john-doe.com",
-            imdbId = "nm1234567",
             knownForDepartment = "Acting",
-            popularity = 99.9,
             profilePath = "/profile.jpg"
         )
 
@@ -293,35 +280,18 @@ class ActorRepositoryImplTest {
             id = 123,
             actorRemote = listOf(
                 MovieActor(
-                    adult = false,
-                    gender = 2,
                     id = 1,
-                    knownForDepartment = "Acting",
-                    name = "Leonardo DiCaprio",
                     originalName = "Leonardo DiCaprio",
-                    popularity = 90.0,
                     profilePath = "/leo.jpg",
-                    castId = 10,
                     character = "Cobb",
-                    creditId = "abcd",
-                    order = 0
                 ),
                 MovieActor(
-                    adult = false,
-                    gender = 2,
                     id = 2,
-                    knownForDepartment = "Acting",
-                    name = "Joseph Gordon-Levitt",
                     originalName = "Joseph Gordon-Levitt",
-                    popularity = 80.0,
                     profilePath = "/jgl.jpg",
-                    castId = 11,
                     character = "Arthur",
-                    creditId = "efgh",
-                    order = 1
                 )
             ),
-            crew = emptyList()
         )
     }
 

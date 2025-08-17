@@ -4,7 +4,7 @@ import com.london.domain.entity.recent.MediaType
 import com.london.presentation.shared.genre.MovieGenreUi
 
 interface MovieDetailsContract {
-    fun onRetry()
+    fun onRetryClick()
     fun onBackClick()
     fun onLoginClick()
     fun onSavedClick()

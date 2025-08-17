@@ -36,10 +36,10 @@ fun AccountScreen(
 
     effect?.Listen { currentEffect ->
         when (currentEffect) {
-            is AccountEffect.NavigateToMyRating -> onNavigateToMyRating()
-            is AccountEffect.NavigateToWatchingHistory -> onNavigateToWatchingHistory()
-            is AccountEffect.NavigateToChangePassword -> uriHandler.openUri(currentEffect.url)
-            is AccountEffect.NavigateLogout -> onNavigateToLogin()
+            is AccountEffect.MyRatingNavigation -> onNavigateToMyRating()
+            is AccountEffect.WatchingHistoryNavigation -> onNavigateToWatchingHistory()
+            is AccountEffect.ChangePasswordNavigation -> uriHandler.openUri(currentEffect.url)
+            is AccountEffect.LoginNavigation -> onNavigateToLogin()
         }
     }
 

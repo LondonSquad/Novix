@@ -6,19 +6,11 @@ import kotlinx.serialization.Serializable
 @Serializable
 data class CustomMovieListResponse(
     @SerialName("description")
-    val description: String?,
-    @SerialName("favorite_count")
-    val favoriteCount: Int?,
+    val description: String? = null,
     @SerialName("id")
-    val id: Int?,
-    @SerialName("iso_639_1")
-    val iso6391: String?,
+    val id: Int? = null,
     @SerialName("item_count")
-    val itemCount: Int?,
-    @SerialName("list_type")
-    val listType: String?,
+    val itemCount: Int? = null,
     @SerialName("name")
-    val name: String?,
-    @SerialName("poster_path")
-    val posterPath: String?
+    val name: String? = null,
 )

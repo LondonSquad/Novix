@@ -19,12 +19,12 @@ class GetMovieUseCase @Inject constructor(
 ) {
     suspend fun getMovieDetails(movieId: Int) = movieRepository.getMovieById(movieId)
 
-    suspend fun getMovieImagesUseCase(movieId: Int, limit: Int = IMAGE_LIMIT): List<String> {
+    suspend fun getMovieImages(movieId: Int, limit: Int = IMAGE_LIMIT): List<String> {
         val images = movieRepository.getMovieImagesById(movieId)
         return when {
-            images.backdrops.isNotEmpty() -> images.backdrops
-            images.posters.isNotEmpty() -> images.posters
-            images.logos.isNotEmpty() -> images.logos
+            images.backdropsUrl.isNotEmpty() -> images.backdropsUrl
+            images.postersUrl.isNotEmpty() -> images.postersUrl
+            images.logosUrl.isNotEmpty() -> images.logosUrl
             else -> emptyList()
         }.take(limit)
     }
