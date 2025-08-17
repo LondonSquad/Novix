@@ -10,7 +10,7 @@ import com.london.data.mapper.details.toEntity
 import com.london.data.mapper.search.toAuthorDetails
 import com.london.data.remote.exception.NetworkException
 import com.london.data.remote.model.ApiResponse
-import com.london.data.remote.model.details.ImageItem
+import com.london.data.remote.model.details.ImageRemote
 import com.london.data.remote.model.details.ImagesResponse
 import com.london.data.remote.model.details.movie.model.moviedetails.GenreRemote
 import com.london.data.remote.model.details.movie.model.moviedetails.MovieDetailsResponse
@@ -778,10 +778,10 @@ class MovieRepositoryImplTest {
         id = 123,
         logos = emptyList(),
         posters = listOf(
-            ImageItem(
+            ImageRemote(
                 filePath = "/img1.jpg",
             ),
-            ImageItem(
+            ImageRemote(
                 filePath = "/img2.jpg",
             )
         )

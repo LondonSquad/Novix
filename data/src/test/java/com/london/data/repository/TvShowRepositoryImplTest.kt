@@ -12,7 +12,7 @@ import com.london.data.mapper.home.toprated.toEntity
 import com.london.data.mapper.search.toReviewEntity
 import com.london.data.remote.exception.NetworkException
 import com.london.data.remote.model.ApiResponse
-import com.london.data.remote.model.details.ImageItem
+import com.london.data.remote.model.details.ImageRemote
 import com.london.data.remote.model.details.ImagesResponse
 import com.london.data.remote.model.details.movie.model.moviedetails.GenreRemote
 import com.london.data.remote.model.details.rating.AccountStatesResponse
@@ -1094,15 +1094,15 @@ class TvShowRepositoryImplTest {
 
         val TvShowImagesRemoteMock = ImagesResponse(
             backdrops = listOf(
-                ImageItem(
+                ImageRemote(
                     filePath = "https://image.tmdb.org/t/p/w500/backdrop1.jpg",
                 )
             ), id = TV_SHOW_ID, logos = listOf(
-                ImageItem(
+                ImageRemote(
                     filePath = "/logo1.jpg",
                 )
             ), posters = listOf(
-                ImageItem(
+                ImageRemote(
                     filePath = "/poster1.jpg",
                 )
             )

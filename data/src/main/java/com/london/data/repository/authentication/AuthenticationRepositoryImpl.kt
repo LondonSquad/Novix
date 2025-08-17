@@ -6,6 +6,7 @@ import com.london.data.remote.model.authentication.RequestTokenResponse
 import com.london.data.remote.model.authentication.SessionResponse
 import com.london.data.remote.source.account.AccountRemoteDataSource
 import com.london.data.remote.source.authentication.AuthenticationRemoteDataSource
+import com.london.data.utils.isFailure
 import com.london.data.utils.isTrue
 import com.london.domain.repository.AuthenticationRepository
 import javax.inject.Inject
@@ -22,7 +23,7 @@ class AuthenticationRepositoryImpl @Inject constructor(
             password = password
         )
 
-        if (!sessionResponse.success.isTrue) return false
+        if (sessionResponse.isFailure()) return false
 
         val createdSession = createSession(sessionResponse)
         saveUserSession(

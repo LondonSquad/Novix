@@ -4,9 +4,7 @@ import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class ImageItem(
-    @SerialName("id")
-    val id: Int? = null,
+data class ImageRemote(
     @SerialName("file_path")
     val filePath: String? = null,
 )
