@@ -73,35 +73,14 @@ class SearchViewModel @Inject constructor(
     }
 
     override fun onCategorySelected(category: SearchCategory) {
-        updateState {
-            copy(
-                selectedCategory = category
-            )
-        }
-
-        tryToExecute(
-            block = {
-                performSearch(state.value.searchQuery.text, category)
-            },
-            onError = { errorState ->
-                updateState { copy(error = errorState) }
-            },
-        )
+        updateSelectedCategoryState(category)
+        executeSearchForCategory(category)
     }
 
     override fun onSavedMovieClick(movie: MovieUi) {
         tryToExecute(
-            block = {
-                val currentState = state.value
-                val isNowSaved = !currentState.savedMovies.contains(movie.id)
-                val updatedSavedMovies = if (isNowSaved) {
-                    currentState.savedMovies + movie.id
-                } else {
-                    currentState.savedMovies - movie.id
-                }
-                updatedSavedMovies
-            },
-            onSuccess = { updatedSavedMovies -> updateState { copy(savedMovies = updatedSavedMovies) } },
+            block = { updateSavedMoviesList(movie.id) },
+            onSuccess = { updatedSavedMovies -> updateSavedMoviesState(updatedSavedMovies) },
             onError = { errorState -> updateState { copy(error = errorState) } },
         )
     }
@@ -134,15 +113,11 @@ class SearchViewModel @Inject constructor(
     }
 
     override fun onMovieGenreClick(genresList: List<Genre>) {
-        genresList.forEach { genre ->
-            incrementGenreInterest(genre, "movie")
-        }
+        genresList.forEach { genre -> incrementGenreInterest(genre, "movie") }
     }
 
     override fun onTvShowGenreClick(genresList: List<Genre>) {
-        genresList.forEach { genre ->
-            incrementGenreInterest(genre, "tv")
-        }
+        genresList.forEach { genre -> incrementGenreInterest(genre, "tv") }
     }
 
     override fun clearRecentViewed() {
@@ -220,12 +195,7 @@ class SearchViewModel @Inject constructor(
     private fun setupSearchDebouncing() {
         tryToCollect(
             block = { _searchQuery.debounce(500) },
-            onNewValue = { query ->
-                performSearch(
-                    query = query,
-                    category = state.value.selectedCategory
-                )
-            },
+            onNewValue = { query -> executeDebouncedSearch(query) },
             onError = { errorState -> updateState { copy(error = errorState) } }
         )
     }
@@ -327,12 +297,43 @@ class SearchViewModel @Inject constructor(
         }
     }
 
-    // ✅ Separated functions for updating state
     private fun updateRecentViewedState(recentViewed: List<RecentViewed>) {
         updateState { copy(recentViewed = recentViewed) }
     }
 
     private fun updateRecentSearchesState(recentSearches: List<RecentSearch>) {
         updateState { copy(recentSearches = recentSearches) }
+    }
+
+    private fun updateSelectedCategoryState(category: SearchCategory) {
+        updateState { copy(selectedCategory = category) }
+    }
+
+    private fun updateSavedMoviesList(movieId: Int): Set<Int> {
+        val currentState = state.value
+        val isNowSaved = !currentState.savedMovies.contains(movieId)
+        return if (isNowSaved) {
+            currentState.savedMovies + movieId
+        } else {
+            currentState.savedMovies - movieId
+        }
+    }
+
+    private fun updateSavedMoviesState(updatedSavedMovies: Set<Int>) {
+        updateState { copy(savedMovies = updatedSavedMovies) }
+    }
+
+    private fun executeSearchForCategory(category: SearchCategory) {
+        tryToExecute(
+            block = { performSearch(state.value.searchQuery.text, category) },
+            onError = { errorState -> updateState { copy(error = errorState) } },
+        )
+    }
+
+    private fun executeDebouncedSearch(query: String) {
+        performSearch(
+            query = query,
+            category = state.value.selectedCategory
+        )
     }
 }
