@@ -172,10 +172,10 @@ class HomeViewModel @Inject constructor(
     }
 
     override fun onMovieClick(id: Int) =
-        emitEffect(HomeScreenEffect.NavigationMovieDetails(id))
+        emitEffect(HomeScreenEffect.MovieDetailsNavigation(id))
 
     override fun onTvShowClick(id: Int) =
-        emitEffect(HomeScreenEffect.NavigationTvShowDetails(id))
+        emitEffect(HomeScreenEffect.TvShowDetailsNavigation(id))
 
     override fun onMovieGenreSelect(genre: MovieGenreUi) {
         if (genre == state.value.selectedMovieGenre) return
@@ -184,17 +184,17 @@ class HomeViewModel @Inject constructor(
     }
 
     override fun onTopRatedClick() =
-        emitEffect(HomeScreenEffect.NavigationTopRated)
+        emitEffect(HomeScreenEffect.TopRatedNavigation)
 
     override fun onContinueWatchingClick() =
-        emitEffect(HomeScreenEffect.NavigationContinueWatching)
+        emitEffect(HomeScreenEffect.ContinueWatchingNavigation)
 
     override fun onTrendingMoviesCardClick() =
-        emitEffect(HomeScreenEffect.NavigationTrendingMovie)
+        emitEffect(HomeScreenEffect.TrendingMovieNavigation)
 
     override fun onTrendingTvShowsCardClick() =
-        emitEffect(HomeScreenEffect.NavigationTrendingTvShows)
+        emitEffect(HomeScreenEffect.TrendingTvShowsNavigation)
 
     override fun onTrendingActorsCardClick() =
-        emitEffect(HomeScreenEffect.NavigationTrendingActor)
+        emitEffect(HomeScreenEffect.TrendingActorNavigation)
 }
