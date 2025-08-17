@@ -43,7 +43,7 @@ class TrendingMoviesViewModel @Inject constructor(
     private fun getTrendingMovies() {
         tryToCollect(
             block = ::createTrendingMoviesPagingFlow,
-            onStart = { setLoadingState(true) },
+            onStart = { updateState { copy(isLoading = true) } },
             onError = ::setErrorState,
             onNewValue = ::setPagingState,
         )
@@ -70,7 +70,4 @@ class TrendingMoviesViewModel @Inject constructor(
             )
         }
     ).cachedIn(viewModelScope)
-
-    private fun setLoadingState(isLoading: Boolean) =
-        updateState { copy(isLoading = isLoading) }
 }
