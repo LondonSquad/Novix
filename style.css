@@ -1401,6 +1401,12 @@ html.dark .tips-box p {
 }
 
 /* Feedback Styles */
+#feedback-content {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
 .feedback-topic-card .content-pair {
     display: flex;
     flex-direction: row;
@@ -1476,7 +1482,6 @@ html.dark .tips-box p {
 }
 
 .feedback-summary {
-    margin-top: 1.5rem;
     background-color: var(--primary-light);
     color: var(--primary-color);
     padding: 1.5rem;
@@ -1673,7 +1678,6 @@ html.dark .feedback-summary {
     line-height: 1.7;
 }
 
-/* NEW: Header for the Projects tab */
 .projects-header {
     display: flex;
     justify-content: flex-end;
