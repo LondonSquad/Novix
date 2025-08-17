@@ -63,7 +63,8 @@ class ContinueWatchingViewModelTest {
     }
 
     @Test
-    fun `when fetchContinueWatchingList, should success updates state correctly`() = runTest {
+    fun `onFetchContinueWatchingList should return success when updates state correctly`() =
+        runTest {
 
         // Given
         val mockMovies = listOf(createMockRecentMovie())
@@ -84,7 +85,7 @@ class ContinueWatchingViewModelTest {
     }
 
     @Test
-    fun `when onMovieGenreSelect with same genre, should does not update state`() = runTest {
+    fun `onMovieGenreClick should not update selectedMovieGenre when same genre`() = runTest {
 
         // Given
         advanceUntilIdle()
@@ -101,7 +102,7 @@ class ContinueWatchingViewModelTest {
     }
 
     @Test
-    fun `when onMovieGenreClick with different genre, should update state and call getRecentWatchedMedia`() =
+    fun `onMovieGenreClick should update state and call getRecentWatchedMedia when different genre`() =
         runTest {
             // Given
             advanceUntilIdle()
@@ -119,7 +120,7 @@ class ContinueWatchingViewModelTest {
         }
 
     @Test
-    fun `when onTvShowGenreSelect with same genre, should does not update state`() = runTest {
+    fun `onTvShowGenreClick should not update selectedTvShowGenre when same genre`() = runTest {
 
         // Given
         advanceUntilIdle()
@@ -136,7 +137,7 @@ class ContinueWatchingViewModelTest {
     }
 
     @Test
-    fun `when onTvShowGenreClick with different genre, should update state and call getRecentWatchedMedia`() =
+    fun `onTvShowGenreClick should update state and call getRecentWatchedMedia when different genre`() =
         runTest {
             // Given
             advanceUntilIdle()
@@ -154,7 +155,8 @@ class ContinueWatchingViewModelTest {
         }
 
     @Test
-    fun `when onMediaCategoryTabClick with same tab, should does not update state`() = runTest {
+    fun `onMediaCategoryTabClick should not update selectedMediaCategory when same tab`() =
+        runTest {
 
         // Given
         advanceUntilIdle()
@@ -171,7 +173,8 @@ class ContinueWatchingViewModelTest {
     }
 
     @Test
-    fun `when onMediaCategoryTabClick with different tab, should update state`() = runTest {
+    fun `onMediaCategoryTabClick should update selectedMediaCategory when different tab`() =
+        runTest {
         // Given
         advanceUntilIdle()
         val initialTab = viewModel.state.value.selectedMediaCategory
@@ -187,7 +190,7 @@ class ContinueWatchingViewModelTest {
     }
 
     @Test
-    fun `when onBackClick, should emit NavigateBack effect`() = runTest {
+    fun `onBackClick should emit NavigateBack effect`() = runTest {
 
         // When & Then
         viewModel.effect.test {
@@ -197,7 +200,7 @@ class ContinueWatchingViewModelTest {
     }
 
     @Test
-    fun `when onNavigateToMovie, should emit NavigateToMovieDetails effect`() = runTest {
+    fun `onNavigateToMovieClick should emit when NavigateToMovieDetails effect`() = runTest {
 
         // Given
         val movieId = 1
@@ -210,7 +213,7 @@ class ContinueWatchingViewModelTest {
     }
 
     @Test
-    fun `when onNavigateToTvShow, should emit NavigateToTvShowDetails effect`() = runTest {
+    fun `onNavigateToTvShowClick should emit when NavigateToTvShowDetails effect`() = runTest {
 
         // Given
         val tvShowId = 2
@@ -222,7 +225,7 @@ class ContinueWatchingViewModelTest {
     }
 
     @Test
-    fun `when onRetryClick, should call getRecentWatchedMedia`() = runTest {
+    fun `when onRetryClick should call getRecentWatchedMedia`() = runTest {
 
         // Given
         advanceUntilIdle()

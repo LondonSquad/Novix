@@ -16,7 +16,6 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.paging.LoadState
 import androidx.paging.compose.collectAsLazyPagingItems
 import com.london.designsystem.component.TopBar
@@ -26,34 +25,32 @@ import com.london.presentation.shared.GenresSection
 import com.london.presentation.shared.MediaLazyPagingGrid
 import com.london.presentation.shared.buildscreen.BuildScreen
 import com.london.presentation.utils.Listen
-import com.london.presentation.utils.isLoading
 
 @Composable
 fun TrendingMoviesScreen(
-    onNavigateToMovieToDetails: (Int) -> Unit,
-    onNavigateBack: () -> Unit,
+    onNavigateToMovieDetailsClick: (Int) -> Unit,
+    onNavigateBackClick: () -> Unit,
     viewModel: TrendingMoviesViewModel = hiltViewModel()
 ) {
-    val state by viewModel.state.collectAsStateWithLifecycle()
+    val state by viewModel.state.collectAsState()
     val effect by viewModel.effect.collectAsState(null)
 
     effect?.Listen { currentEffect ->
         when (currentEffect) {
-            is TrendingMoviesEffect.NavigateToMovie -> onNavigateToMovieToDetails(currentEffect.movieId)
-            is TrendingMoviesEffect.NavigateBack -> onNavigateBack()
+            is TrendingMoviesEffect.MovieDetailsNavigation -> onNavigateToMovieDetailsClick(
+                currentEffect.movieId
+            )
+
+            is TrendingMoviesEffect.BackNavigation -> onNavigateBackClick()
         }
     }
-
-    val moviesLazyItems = state.moviesFlow.collectAsLazyPagingItems()
-
     BuildScreen(
-        isLoading = moviesLazyItems.isLoading(),
-        isError = moviesLazyItems.loadState.refresh is LoadState.Error,
-        onBack = viewModel::onBack,
-        onRetry = viewModel::onRetry,
+        isLoading = state.isLoading,
+        isError = state.moviesFlow.collectAsLazyPagingItems().loadState.refresh is LoadState.Error,
+        onBack = viewModel::onBackClick,
+        onRetry = viewModel::onRetryClick,
         emptyLayoutMessage = R.string.no_trending_movies_in_genre,
         emptyLayoutImage = R.drawable.img_no_result,
-        pagingFlow = moviesLazyItems
     ) {
         Content(
             state = state,
@@ -64,8 +61,8 @@ fun TrendingMoviesScreen(
 
 @Composable
 private fun Content(
-    state: TrendingMoviesUiState = TrendingMoviesUiState(),
-    contract: TrendingMoviesContract = defaultTrendingMoviesContract()
+    state: TrendingMoviesUiState,
+    contract: TrendingMoviesContract
 ) {
     val screenWidth = with(LocalDensity.current) { LocalConfiguration.current.screenWidthDp.dp }
 
@@ -80,13 +77,13 @@ private fun Content(
                 .fillMaxWidth()
                 .padding(horizontal = 16.dp, vertical = 12.dp),
             title = stringResource(R.string.trending_movies),
-            onBackClick = contract::onBack
+            onBackClick = contract::onBackClick
         )
         GenresSection(
             genres = state.movieGenres,
             selectedGenre = state.selectedGenre,
             screenWidth = screenWidth,
-            onGenreClick = contract::onGenreSelected,
+            onGenreClick = contract::onGenreClick,
             modifier = Modifier.padding(bottom = 12.dp),
             getGenreName = { stringResource(it.stringResId) }
         )
@@ -108,5 +105,8 @@ private fun Content(
 @Preview
 @Composable
 private fun Preview() = NovixTheme {
-    Content()
+    Content(
+        state = TrendingMoviesUiState(),
+        contract = defaultTrendingMoviesContract()
+    )
 }
