@@ -82,7 +82,7 @@ class ActorRepositoryImplTest {
             tvShowCastRemoteResponse
         )
 
-        val result = repository.getCastTvShowById(ACTOR_ID)
+        val result = repository.getTvShowActors(ACTOR_ID)
 
         assertThat(result).isEqualTo(expectedEntity)
     }
@@ -222,7 +222,7 @@ class ActorRepositoryImplTest {
             )
         )
 
-        val result = repository.getCastTvShowById(TV_SHOW_ID)
+        val result = repository.getTvShowActors(TV_SHOW_ID)
 
         assertThat(result).isEqualTo(tvShowCastRemoteMock.toCastEntity())
     }
@@ -237,7 +237,7 @@ class ActorRepositoryImplTest {
         )
 
         assertThrows<NetworkException.UnAuthorizedException> {
-            repository.getCastTvShowById(123)
+            repository.getTvShowActors(123)
         }
     }
 
