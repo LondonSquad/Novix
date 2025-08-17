@@ -226,6 +226,7 @@ jobs:
             # Extract basic info for status determination
             PR_CLOSED_AT=$(jq -r '.closed_at // empty' < "$TEMP_DIR/pr_${pr_number}_data.json")
             PR_MERGED_AT=$(jq -r '.merged_at // empty' < "$TEMP_DIR/pr_${pr_number}_data.json")
+            PR_HEAD_SHA=$(jq -r '.head.sha' < "$TEMP_DIR/pr_${pr_number}_data.json")
 
             # Determine status
             PR_STATUS="pending"
@@ -235,16 +236,31 @@ jobs:
               PR_STATUS="closed"
             fi
           
-            # Fetch additional data and save to files
-            echo '[]' > "$TEMP_DIR/pr_${pr_number}_assignees.json"
-            jq '[.assignees[] | {login: .login, id: .id, url: .html_url}]' < "$TEMP_DIR/pr_${pr_number}_data.json" > "$TEMP_DIR/pr_${pr_number}_assignees.json" 2>/dev/null || true
+            # Fetch assignees - use PR author as fallback if no assignees
+            jq '
+              if (.assignees | length) > 0 then
+                [.assignees[] | {login: .login, id: .id, url: .html_url}]
+              else
+                [{login: .user.login, id: .user.id, url: .user.html_url}]
+              end
+            ' < "$TEMP_DIR/pr_${pr_number}_data.json" > "$TEMP_DIR/pr_${pr_number}_assignees.json"
           
+            # Fetch comments (excluding bots)
             gh api "repos/${{ github.repository }}/issues/$pr_number/comments" --paginate --jq '[.[] | select(.user.type != "Bot")]' > "$TEMP_DIR/pr_${pr_number}_issue_comments.json" 2>/dev/null || echo "[]" > "$TEMP_DIR/pr_${pr_number}_issue_comments.json"
-          
             gh api "repos/${{ github.repository }}/pulls/$pr_number/comments" --paginate --jq '[.[] | select(.user.type != "Bot")]' > "$TEMP_DIR/pr_${pr_number}_review_comments.json" 2>/dev/null || echo "[]" > "$TEMP_DIR/pr_${pr_number}_review_comments.json"
           
-            PR_HEAD_SHA=$(jq -r '.head.sha' < "$TEMP_DIR/pr_${pr_number}_data.json")
-            gh api "repos/${{ github.repository }}/pulls/$pr_number/reviews" --jq '[.[] | select(.state == "APPROVED" and .commit_id == "'$PR_HEAD_SHA'")] | group_by(.user.id) | map(sort_by(.submitted_at) | .[-1]) | map({reviewer: {login: .user.login, id: .user.id, url: .user.html_url}, submitted_at: .submitted_at})' > "$TEMP_DIR/pr_${pr_number}_approvals.json" 2>/dev/null || echo "[]" > "$TEMP_DIR/pr_${pr_number}_approvals.json"
+            # Fetch approvals for the current HEAD commit (using the working logic from old version)
+            gh api "repos/${{ github.repository }}/pulls/$pr_number/reviews" \
+              --jq '[.[] | select(.state == "APPROVED" and .commit_id == "'"$PR_HEAD_SHA"'")] |
+              group_by(.user.id) | map(sort_by(.submitted_at) | .[-1]) |
+              map({
+                reviewer: {
+                  login: .user.login,
+                  id: .user.id,
+                  url: .user.html_url
+                },
+                submitted_at: .submitted_at
+              })' > "$TEMP_DIR/pr_${pr_number}_approvals.json" 2>/dev/null || echo "[]" > "$TEMP_DIR/pr_${pr_number}_approvals.json"
 
             # Build the final PR data using slurpfile to avoid command line length issues
             jq \
@@ -281,12 +297,6 @@ jobs:
                   count: length
                 })
               ) as $grouped_comments |
-              # If no assignees, use the PR author as the assignee
-              (if ($assignees[0] | length) > 0 then 
-                $assignees[0] 
-              else 
-                [{login: $pr.user.login, id: $pr.user.id, url: $pr.user.html_url}]
-              end) as $final_assignees |
               {
                 "pr_number": $pr.number,
                 "url": $pr.html_url,
@@ -299,7 +309,7 @@ jobs:
                   "id": $pr.user.id,
                   "url": $pr.user.html_url
                 },
-                "assignees": $final_assignees,
+                "assignees": $assignees[0],
                 "comments": $grouped_comments,
                 "approvals": $approvals[0],
                 "required_approvals": $required_approvals,
@@ -417,11 +427,13 @@ jobs:
           if [[ "$UPDATE_TYPE" == "PR_STATE_REFRESH" ]]; then
             echo "Fetching current state from GitHub API for refresh..."
           
-            # Fetch PR data for assignees and other info
+            # Fetch PR data once for all needed information
             PR_DATA_FULL=$(gh api "repos/${{ github.repository }}/pulls/$PR_NUMBER")
             PR_HEAD_SHA=$(echo "$PR_DATA_FULL" | jq -r '.head.sha')
           
-            # Get current approvals for this specific commit
+            echo "Current HEAD SHA: $PR_HEAD_SHA"
+          
+            # Get current approvals for this specific commit (using the working logic from old version)
             CURRENT_APPROVALS_JSON=$(gh api "repos/${{ github.repository }}/pulls/$PR_NUMBER/reviews" \
               --jq '[.[] | select(.state == "APPROVED" and .commit_id == "'"$PR_HEAD_SHA"'")] |
               group_by(.user.id) | map(sort_by(.submitted_at) | .[-1]) |
@@ -509,12 +521,18 @@ jobs:
 
           elif [[ "$UPDATE_TYPE" == "PR_OPENED" ]]; then
             WEEK_NUMBER=$(date -d "$PR_CREATED_AT" +%G-W%V)
+          
+            # For new PRs, we need valid diff stats or default to 0
             SAFE_ADDITIONS=${PR_ADDITIONS:-0}
             SAFE_DELETIONS=${PR_DELETIONS:-0}
             SAFE_CHANGED_FILES=${PR_CHANGED_FILES:-0}
+          
+            # Validate that values are numeric for new PRs
             if ! [[ "$SAFE_ADDITIONS" =~ ^[0-9]+$ ]]; then SAFE_ADDITIONS=0; fi
             if ! [[ "$SAFE_DELETIONS" =~ ^[0-9]+$ ]]; then SAFE_DELETIONS=0; fi
             if ! [[ "$SAFE_CHANGED_FILES" =~ ^[0-9]+$ ]]; then SAFE_CHANGED_FILES=0; fi
+          
+            echo "Debug: New PR - ADDITIONS=$SAFE_ADDITIONS, DELETIONS=$SAFE_DELETIONS, CHANGED_FILES=$SAFE_CHANGED_FILES"
           
             # For new PRs, fetch assignees from API (in case they were set immediately)
             PR_DATA_FOR_NEW=$(gh api "repos/${{ github.repository }}/pulls/$PR_NUMBER" 2>/dev/null || echo '{}')
