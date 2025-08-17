@@ -30,7 +30,7 @@ import com.london.presentation.shared.genre.MovieGenreUi
 import com.london.presentation.shared.genre.TvShowGenreUi
 
 fun NavController.navigateToEpisodeDetails(tvShowId: Int, seasonNumber: Int, episodeNumber: Int) =
-    navigate(EpisodeDetails(tvShowId, seasonNumber, episodeNumber))
+    navigate(EpisodeDetails(tvShowId, episodeNumber, seasonNumber))
 fun NavController.navigateToMovieDetails(movieId: Int) =
     navigate(MovieDetails(movieId))
 
