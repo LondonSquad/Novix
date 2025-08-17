@@ -665,7 +665,7 @@ document.addEventListener("DOMContentLoaded", () => {
             return acc;
         }, {});
         const topCommenter = Object.entries(commentCounts).sort((a, b) => b[1] - a[1])[0];
-        document.getElementById('top-commenter-card').innerHTML = topCommenter ? `<div class="kpi-icon bg-yellow-500"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M9,22A1,1 0 0,1 8,21V18H4A2,2 0 0,1 2,16V4C2,2.89 2.9,2 4,2H20A2,2 0 0,1 22,4V16A2,2 0 0,1 20,18H13.9L10.2,21.71C10,21.9 9.75,22 9.5,22V22H9M10,16V19.08L13.08,16H20V4H4V16H10Z" /></svg></div><div class="overflow-hidden"><div class="kpi-value"><img src="https://github.com/${topCommenter[0]}.png" class="avatar"/> <span class="truncate">${topCommenter[0]}</span></div><div class="kpi-label">Top Commenter (${topCommenter[1]} comments)</div></div>` : `<div class="p-4 text-center">No comments.</div>`;
+        document.getElementById('top-commenter-card').innerHTML = topCommenter ? `<div class="kpi-icon bg-yellow-500"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M9,22A1,1 0 0,1 8,21V18H4A2,2 0 0,1 2,16V4C2,2.89 2.9,2 4,2H20A2,2 0 0,1 22,4V16A2,2 0 0,1 20,18H13.9L10.2,21.71C10,21.9 9.75,22 9.5,22V22H9M10,16V19.08L13.08,16H20V4H4V16H10M6,7H18V9H6V7M6,11H15V13H6V11Z" /></svg></div><div class="overflow-hidden"><div class="kpi-value"><img src="https://github.com/${topCommenter[0]}.png" class="avatar"/> <span class="truncate">${topCommenter[0]}</span></div><div class="kpi-label">Top Commenter (${topCommenter[1]} comments)</div></div>` : `<div class="p-4 text-center">No comments.</div>`;
 
         const mostDiscussedPRs = data
             .map(pr => ({
@@ -716,7 +716,8 @@ document.addEventListener("DOMContentLoaded", () => {
             return acc;
         }, {});
         const hotStreakUser = Object.entries(recentActivity).sort((a, b) => b[1] - a[1])[0];
-        document.getElementById('hot-streak-card').innerHTML = hotStreakUser ? `<div class="kpi-icon bg-orange-500"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M11.163 2.006a2.008 2.008 0 0 1 1.674 0 23.33 23.33 0 0 0 3.332.943c.42.115.823.383 1.12.756.298.373.473.85.49 1.349.02.535-.118 1.063-.393 1.503-.276.44-.678.78-1.144 1.004a25.34 25.34 0 0 1-4.242 1.445c-.486.136-1.003.136-1.489 0a25.34 25.34 0 0 1-4.242-1.445c-.466-.223-.868-.564-1.144-1.004-.275-.44-.413-1.028-.393-1.563.017-.499.192-.976.49-1.349.297-.373.7-.64 1.12-.756a23.33 23.33 0 0 0 3.332-.943ZM12 11a3 3 0 0 1 3 3c0 1.25-.75 3.5-3 5.25-2.25-1.75-3-4-3-5.25a3 3 0 0 1 3-3Z"></path></svg></div><div class="overflow-hidden"><div class="kpi-value"><img src="https://github.com/${hotStreakUser[0]}.png" class="avatar"/> <span class="truncate">${hotStreakUser[0]}</span></div><div class="kpi-label">Top Contributor (${hotStreakUser[1]} actions)</div></div>` : `<div class="p-4 text-center">No activity.</div>`;
+        // UPDATED: Replaced "Top Contributor" SVG with a complete, standard star icon
+        document.getElementById('hot-streak-card').innerHTML = hotStreakUser ? `<div class="kpi-icon bg-orange-500"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12,17.27L18.18,21L17,14.64L22,9.24L14.81,8.62L12,2L9.19,8.62L2,9.24L7,14.64L5.82,21L12,17.27Z" /></svg></div><div class="overflow-hidden"><div class="kpi-value"><img src="https://github.com/${hotStreakUser[0]}.png" class="avatar"/> <span class="truncate">${hotStreakUser[0]}</span></div><div class="kpi-label">Top Contributor (${hotStreakUser[1]} actions)</div></div>` : `<div class="p-4 text-center">No activity.</div>`;
 
         const recentReviews = data.reduce((acc, pr) => {
             if (pr.time_to_first_approval_minutes !== null) {
@@ -729,7 +730,7 @@ document.addEventListener("DOMContentLoaded", () => {
             user: u,
             avg: t.reduce((a, b) => a + b, 0) / t.length
         })).sort((a, b) => a.avg - b.avg)[0];
-        document.getElementById('fastest-reviewer-card').innerHTML = fastestData ? `<div class="kpi-icon bg-teal-500"><svg viewBox="0 0 24 24" fill="currentColor"><path fill-rule="evenodd" d="M12.963 2.286a.75.75 0 0 0-1.071 1.052A32.11 32.11 0 0 1 12 11.897a.75.75 0 0 1-1.5 0 33.61 33.61 0 0 0-1.433-8.56A.75.75 0 0 0 7.963 2.286 33.337 33.337 0 0 0 3 11.25a.75.75 0 0 0 1.5 0c0-1.88.243-3.727.712-5.522A31.838 31.838 0 0 1 12 21.75c2.784 0 5.488-.344 8.088-.98a.75.75 0 0 0-.21-1.474c-1.92.44-3.926.654-5.978.654-3.776 0-7.398-1.026-10.68-2.852A31.838 31.838 0 0 1 2.288 5.728a.75.75 0 0 0-1.052-1.07C.4 5.478 0 6.474 0 7.5c0 1.573.493 3.091 1.369 4.417.876 1.326 2.087 2.41 3.533 3.193a.75.75 0 0 0 .937-.587c.106-.49.227-.978.362-1.463a.75.75 0 0 0-.584-.863 15.65 15.65 0 0 1-1.123-.424c.2-.55.43-1.096.683-1.636.76 1.11 1.835 1.99 3.167 2.61a.75.75 0 0 0 .93-.593c.08-.39.15-.783.21-1.179a.75.75 0 0 0-.55-.838c-.375-.123-.74-.25-1.091-.383.612-.953 1.08-2.01 1.38-3.155a.75.75 0 0 0-.68-.82 14.89 14.89 0 0 1-1.28-.21C9.69 6.27 11.27 3.5 12.963 2.286Z" clip-rule="evenodd"></path></svg></div><div class="overflow-hidden"><div class="kpi-value"><img src="https://github.com/${fastestData.user}.png" class="avatar"/> <span class="truncate">${fastestData.user}</span></div><div class="kpi-label">Fastest Reviewer (${formatDuration(fastestData.avg)})</div></div>` : `<div class="p-4 text-center">No recent reviews.</div>`;
+        document.getElementById('fastest-reviewer-card').innerHTML = fastestData ? `<div class="kpi-icon bg-teal-500"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M11,15H6L13,1V9H18L11,23V15Z" /></svg></div><div class="overflow-hidden"><div class="kpi-value"><img src="https://github.com/${fastestData.user}.png" class="avatar"/> <span class="truncate">${fastestData.user}</span></div><div class="kpi-label">Fastest Reviewer (${formatDuration(fastestData.avg)})</div></div>` : `<div class="p-4 text-center">No recent reviews.</div>`;
 
         // --- HEALTH LOGIC ---
         // Chart data is always based on the filtered data set (`data` parameter)
@@ -1402,12 +1403,22 @@ document.addEventListener("DOMContentLoaded", () => {
     };
 
     const renderProjects = (markdown) => {
+        const headerButtonHtml = `
+            <div class="projects-header">
+                <a href="https://github.com/LondonSquad/Novix/releases" target="_blank" class="projects-header-action">
+                    <!-- UPDATED: Replaced the corrupted SVG with a clean, standard tag icon -->
+                    <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.568 3H5.25A2.25 2.25 0 003 5.25v4.318c0 .597.237 1.17.659 1.591l9.581 9.581c.699.699 1.78.872 2.607.33a18.095 18.095 0 005.223-5.223c.542-.827.369-1.908-.33-2.607L11.16 3.66A2.25 2.25 0 009.568 3z"></path><path stroke-linecap="round" stroke-linejoin="round" d="M6 6h.008v.008H6V6z"></path></svg>
+                    <span>View All Releases on GitHub</span>
+                </a>
+            </div>
+        `;
+
         if (window.marked) {
-            projectsContainer.innerHTML = marked.parse(markdown);
+            projectsContainer.innerHTML = headerButtonHtml + marked.parse(markdown);
         } else {
             console.error("marked.js library not loaded. Displaying raw markdown.");
             // Fallback to a simple preformatted block if the library fails to load
-            projectsContainer.innerHTML = `<pre style="white-space: pre-wrap; word-break: break-all;">${markdown}</pre>`;
+            projectsContainer.innerHTML = headerButtonHtml + `<pre style="white-space: pre-wrap; word-break: break-all;">${markdown}</pre>`;
         }
     };
 

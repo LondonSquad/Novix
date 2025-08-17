@@ -69,7 +69,6 @@ body {
 
 .main-header h1 {
     padding: 0 3.5rem;
-    /* Add padding to prevent overlap with absolute positioned elements */
 }
 
 /* --- LANGUAGE SWITCHER --- */
@@ -100,7 +99,6 @@ body {
     background-color: var(--primary-color);
     color: white;
 }
-
 
 .theme-toggle-btn {
     position: absolute;
@@ -1602,13 +1600,11 @@ html.dark .feedback-summary {
     .main-header h1 {
         font-size: 1.75rem;
         padding: 0;
-        /* Reset padding for mobile */
     }
 
     .theme-toggle-btn,
     .lang-switcher {
         position: static;
-        /* Remove absolute positioning */
         transform: none;
         margin: 0 auto;
     }
@@ -1631,7 +1627,6 @@ html.dark .feedback-summary {
         padding: 1.5rem 1rem;
     }
 
-    /* UPDATED: Grouped selectors for consistent responsive behavior */
     .collaboration-list li,
     .discussed-prs-list li {
         flex-wrap: wrap;
@@ -1641,7 +1636,6 @@ html.dark .feedback-summary {
     .reviewer-summary,
     .discussed-pr-summary {
         min-width: 100%;
-        /* UPDATED: Allow inner items to wrap on small screens */
         flex-wrap: wrap;
         gap: 0.5rem;
     }
@@ -1677,6 +1671,42 @@ html.dark .feedback-summary {
     padding: 1rem 1.5rem;
     line-height: 1.7;
 }
+
+/* NEW: Header for the Projects tab */
+.projects-header {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    margin-bottom: 1rem;
+    padding-bottom: 1rem;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.projects-header-action {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.5rem 1rem;
+    border: 1px solid var(--border-color);
+    border-radius: 0.5rem;
+    font-weight: 600;
+    font-size: 0.875rem;
+    color: var(--text-secondary);
+    text-decoration: none;
+    transition: all 0.2s;
+}
+
+.projects-header-action:hover {
+    color: var(--primary-color);
+    background-color: var(--primary-light);
+    border-color: var(--primary-color);
+}
+
+.projects-header-action svg {
+    width: 1.1rem;
+    height: 1.1rem;
+}
+
 
 .markdown-body h1,
 .markdown-body h2,
