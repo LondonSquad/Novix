@@ -21,7 +21,7 @@ import com.london.data.mapper.search.toLocal
 import com.london.data.mapper.search.toReviewEntity
 import com.london.data.remote.source.movie.MovieRemoteDataSource
 import com.london.data.utils.CrashReporter
-import com.london.data.utils.asImageUrlOrEmpty
+import com.london.data.utils.asYoutubeUrlOrEmpty
 import com.london.data.utils.fetchAndSync
 import com.london.domain.entity.ImagesEntity
 import com.london.domain.entity.MediaStates
@@ -66,7 +66,7 @@ class MovieRepositoryImpl @Inject constructor(
     override suspend fun getMovieVideos(movieId: Int): List<String> {
         return movieRemoteDataSource.getMovieVideos(movieId)
             .getOrThrow().videos.orEmpty().map { movieVideoRemote ->
-                movieVideoRemote.youtubeKey.asImageUrlOrEmpty()
+                movieVideoRemote.youtubeKey.asYoutubeUrlOrEmpty()
             }
     }
 
@@ -97,7 +97,8 @@ class MovieRepositoryImpl @Inject constructor(
     }
 
     override suspend fun getUpcomingMoviesByGenre(
-        genre: MovieGenre, pageNumber: Int
+        genre: MovieGenre,
+        pageNumber: Int
     ): PagedFetchResponse<UpComingMovie> = fetchAndSync(
         cacheBlock = {
             upComingLocalDataSource.getUpComingMoviesPage(
