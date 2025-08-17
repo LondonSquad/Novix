@@ -22,8 +22,7 @@ class SearchViewModel @Inject constructor(
     private val manageSearchUseCase: ManageSearchUseCase,
     private val manageRecentSearchUseCase: ManageRecentSearchUseCase,
     private val manageRecentViewedUseCase: ManageRecentViewedUseCase,
-
-    ) : BaseViewModel<SearchUiState, SearchEffect>(SearchUiState()), SearchContract {
+) : BaseViewModel<SearchUiState, SearchEffect>(SearchUiState()), SearchContract {
 
     private val _searchQuery = MutableStateFlow("")
 
@@ -32,44 +31,28 @@ class SearchViewModel @Inject constructor(
         setupSearchDebouncing()
     }
 
-    fun incrementGenreInterest(genre: Genre, mediaType: String) {
+    override fun incrementGenreInterest(genre: Genre, mediaType: String) {
         tryToExecute(
-            block = {
-                manageSearchUseCase.incrementGenreInterest(genre, mediaType)
-            },
-            onStart = { },
-            onSuccess = { },
-            onError = { errorState ->
-                updateState { copy(error = errorState) }
-            },
+            block = { manageSearchUseCase.incrementGenreInterest(genre, mediaType) },
+            onError = { errorState -> updateState { copy(error = errorState) } },
         )
     }
 
-    fun performSearch(query: String, category: SearchCategory) {
+    override fun performSearch(query: String, category: SearchCategory) {
         val trimmedQuery = query.trim()
-
         if (trimmedQuery.isEmpty()) {
             clearSearchResults()
             return
         }
-
         searchWithApi(trimmedQuery, category)
     }
 
-    fun updateRecentData() {
+    override fun updateRecentData() {
         tryToExecute(
-            block = {
-                val recentViewed = manageRecentViewedUseCase.getRecentViewed().reversed()
-                val recentSearches = manageRecentSearchUseCase.getRecentSearch()
-                Pair(recentViewed, recentSearches)
-            },
+            block = { getRecentData() },
             onSuccess = { (recentViewed, recentSearches) ->
-                updateState {
-                    copy(
-                        recentViewed = recentViewed,
-                        recentSearches = recentSearches
-                    )
-                }
+                updateRecentViewedState(recentViewed)
+                updateRecentSearchesState(recentSearches)
             },
             onError = { errorState ->
                 updateState { copy(error = errorState) }
@@ -77,7 +60,7 @@ class SearchViewModel @Inject constructor(
         )
     }
 
-    fun updateSearchState(updater: SearchUiState.() -> SearchUiState) {
+    override fun updateSearchState(updater: SearchUiState.() -> SearchUiState) {
         updateState(updater)
     }
 
@@ -90,60 +73,31 @@ class SearchViewModel @Inject constructor(
     }
 
     override fun onCategorySelected(category: SearchCategory) {
-        updateState {
-            copy(
-                selectedCategory = category
-            )
-        }
-
-        tryToExecute(
-            block = {
-                performSearch(state.value.searchQuery.text, category)
-            },
-            onError = { errorState ->
-                updateState { copy(error = errorState) }
-            },
-        )
+        updateSelectedCategoryState(category)
+        executeSearchForCategory(category)
     }
 
     override fun onSavedMovieClick(movie: MovieUi) {
         tryToExecute(
-            block = {
-                val currentState = state.value
-                val isNowSaved = !currentState.savedMovies.contains(movie.id)
-                val updatedSavedMovies = if (isNowSaved) {
-                    currentState.savedMovies + movie.id
-                } else {
-                    currentState.savedMovies - movie.id
-                }
-                updatedSavedMovies
-            },
-            onSuccess = { updatedSavedMovies ->
-                updateState { copy(savedMovies = updatedSavedMovies) }
-            },
-            onError = { errorState ->
-                updateState { copy(error = errorState) }
-            },
+            block = { updateSavedMoviesList(movie.id) },
+            onSuccess = { updatedSavedMovies -> updateSavedMoviesState(updatedSavedMovies) },
+            onError = { errorState -> updateState { copy(error = errorState) } },
         )
     }
 
-    override fun addToRecentSearches(query: RecentSearch) {
-        if (query.query.isBlank() || query.query == state.value.lastSearch) return
-        if (isQueryDuplicated(query.query)) return
+    override fun addToRecentSearches(query: String) {
+        if (query.isBlank() || query == state.value.lastSearch) return
+        if (isQueryDuplicated(query)) return
 
-        updateState { copy(lastSearch = query.query) }
+        updateState { copy(lastSearch = query) }
 
         tryToExecute(
             block = {
-                manageRecentSearchUseCase.addToRecentSearch(query)
+                manageRecentSearchUseCase.addToRecentSearch(RecentSearch(query = query))
                 manageRecentSearchUseCase.getRecentSearch().reversed()
             },
-            onSuccess = { recentSearches ->
-                updateState { copy(recentSearches = recentSearches) }
-            },
-            onError = { errorState ->
-                updateState { copy(error = errorState) }
-            },
+            onSuccess = { recentSearches -> updateState { copy(recentSearches = recentSearches) } },
+            onError = { errorState -> updateState { copy(error = errorState) } },
         )
     }
 
@@ -153,32 +107,25 @@ class SearchViewModel @Inject constructor(
                 manageRecentViewedUseCase.addToRecentViewed(item)
                 manageRecentViewedUseCase.getRecentViewed().reversed()
             },
-            onSuccess = { recentViewed ->
-                updateState { copy(recentViewed = recentViewed) }
-            },
-            onError = { errorState ->
-                updateState { copy(error = errorState) }
-            },
+            onSuccess = { recentViewed -> updateState { copy(recentViewed = recentViewed) } },
+            onError = { errorState -> updateState { copy(error = errorState) } },
         )
     }
 
-    override fun onClickMovie(genresList: List<Genre>) {
-        genresList.forEach { genre ->
-            incrementGenreInterest(genre, "tv")
-        }
+    override fun onMovieGenreClick(genresList: List<Genre>) {
+        genresList.forEach { genre -> incrementGenreInterest(genre, "movie") }
+    }
+
+    override fun onTvShowGenreClick(genresList: List<Genre>) {
+        genresList.forEach { genre -> incrementGenreInterest(genre, "tv") }
     }
 
     override fun clearRecentViewed() {
         updateState { copy(recentViewed = emptyList()) }
 
         tryToExecute(
-            block = {
-                manageRecentViewedUseCase.clearRecentViewed()
-            },
-            onSuccess = { },
-            onError = { errorState ->
-                updateState { copy(error = errorState) }
-            },
+            block = { manageRecentViewedUseCase.clearRecentViewed() },
+            onError = { errorState -> updateState { copy(error = errorState) } },
         )
     }
 
@@ -186,12 +133,8 @@ class SearchViewModel @Inject constructor(
         updateState { copy(recentSearches = emptyList()) }
 
         tryToExecute(
-            block = {
-                manageRecentSearchUseCase.clearRecentSearch()
-            },
-            onError = { errorState ->
-                updateState { copy(error = errorState) }
-            },
+            block = { manageRecentSearchUseCase.clearRecentSearch() },
+            onError = { errorState -> updateState { copy(error = errorState) } },
         )
     }
 
@@ -200,12 +143,8 @@ class SearchViewModel @Inject constructor(
         updateState { copy(recentSearches = updatedSearches) }
 
         tryToExecute(
-            block = {
-                manageRecentSearchUseCase.deleteRecentSearch(search)
-            },
-            onError = { errorState ->
-                updateState { copy(error = errorState) }
-            },
+            block = { manageRecentSearchUseCase.deleteRecentSearch(search) },
+            onError = { errorState -> updateState { copy(error = errorState) } },
         )
     }
 
@@ -213,12 +152,8 @@ class SearchViewModel @Inject constructor(
         updateState { copy(searchQuery = TextFieldValue(search)) }
 
         tryToExecute(
-            block = {
-                performSearch(search, state.value.selectedCategory)
-            },
-            onError = { errorState ->
-                updateState { copy(error = errorState) }
-            },
+            block = { performSearch(search, state.value.selectedCategory) },
+            onError = { errorState -> updateState { copy(error = errorState) } },
         )
     }
 
@@ -234,34 +169,34 @@ class SearchViewModel @Inject constructor(
     }
 
     override fun onMovieClick(movieId: Int) {
-        emitEffect(SearchEffect.MovieNavigation(movieId = movieId))
+        emitEffect(SearchEffect.MovieDetailsNavigation(movieId = movieId))
     }
 
     override fun onActorClick(actorId: Int) {
-        emitEffect(SearchEffect.ActorNavigation(actorId = actorId))
+        emitEffect(SearchEffect.ActorDetailsNavigation(actorId = actorId))
     }
 
     override fun onTvShowClick(tvShowId: Int) {
-        emitEffect(SearchEffect.TvShowNavigation(tvId = tvShowId))
+        emitEffect(SearchEffect.TvShowDetailsNavigation(tvId = tvShowId))
     }
 
-    override fun onRetry() {
+    override fun onRetryClick() {
         updateState { copy(error = null) }
         updateRecentData()
         setupSearchDebouncing()
     }
 
+    private suspend fun getRecentData(): Pair<List<RecentViewed>, List<RecentSearch>> {
+        val recentViewed = manageRecentViewedUseCase.getRecentViewed().reversed()
+        val recentSearches = manageRecentSearchUseCase.getRecentSearch()
+        return Pair(recentViewed, recentSearches)
+    }
+
     private fun setupSearchDebouncing() {
         tryToCollect(
-            block = {
-                _searchQuery.debounce(500)
-            },
-            onNewValue = { query ->
-                performSearch(query = query, category = state.value.selectedCategory)
-            },
-            onError = { errorState ->
-                updateState { copy(error = errorState) }
-            }
+            block = { _searchQuery.debounce(500) },
+            onNewValue = { query -> executeDebouncedSearch(query) },
+            onError = { errorState -> updateState { copy(error = errorState) } }
         )
     }
 
@@ -360,5 +295,45 @@ class SearchViewModel @Inject constructor(
                 actorsFlow = flow {}
             )
         }
+    }
+
+    private fun updateRecentViewedState(recentViewed: List<RecentViewed>) {
+        updateState { copy(recentViewed = recentViewed) }
+    }
+
+    private fun updateRecentSearchesState(recentSearches: List<RecentSearch>) {
+        updateState { copy(recentSearches = recentSearches) }
+    }
+
+    private fun updateSelectedCategoryState(category: SearchCategory) {
+        updateState { copy(selectedCategory = category) }
+    }
+
+    private fun updateSavedMoviesList(movieId: Int): Set<Int> {
+        val currentState = state.value
+        val isNowSaved = !currentState.savedMovies.contains(movieId)
+        return if (isNowSaved) {
+            currentState.savedMovies + movieId
+        } else {
+            currentState.savedMovies - movieId
+        }
+    }
+
+    private fun updateSavedMoviesState(updatedSavedMovies: Set<Int>) {
+        updateState { copy(savedMovies = updatedSavedMovies) }
+    }
+
+    private fun executeSearchForCategory(category: SearchCategory) {
+        tryToExecute(
+            block = { performSearch(state.value.searchQuery.text, category) },
+            onError = { errorState -> updateState { copy(error = errorState) } },
+        )
+    }
+
+    private fun executeDebouncedSearch(query: String) {
+        performSearch(
+            query = query,
+            category = state.value.selectedCategory
+        )
     }
 }
