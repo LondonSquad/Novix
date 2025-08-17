@@ -635,10 +635,33 @@ document.addEventListener("DOMContentLoaded", () => {
 
     const recalculateAndRenderAnalytics = (data) => {
         const todayString = new Date().toLocaleDateString('en-CA');
+        const selectedDeveloper = analyticsDeveloperFilter.value;
+
+        // --- CORRECTED KPI CALCULATIONS ---
+        if (selectedDeveloper !== 'all') {
+            // --- Developer-specific View ---
+            // These KPIs now reflect stats for PRs *created by* the selected developer.
+            const prsCreatedByDeveloper = data.filter(pr => pr.creator.login === selectedDeveloper);
+            document.getElementById('kpi-total-prs').textContent = prsCreatedByDeveloper.length;
+            document.getElementById('kpi-total-closed').textContent = prsCreatedByDeveloper.filter(pr => pr.status === 'closed').length;
+            document.getElementById('kpi-total-merged').textContent = prsCreatedByDeveloper.filter(pr => pr.status === 'merged').length;
+
+            const totalCommentsOnAuthoredPRs = prsCreatedByDeveloper.reduce((sum, pr) => sum + (pr.comments || []).reduce((prSum, c) => prSum + c.count, 0), 0);
+            document.getElementById('kpi-total-comments').textContent = totalCommentsOnAuthoredPRs;
+            document.getElementById('kpi-avg-comments').textContent = prsCreatedByDeveloper.length > 0 ? (totalCommentsOnAuthoredPRs / prsCreatedByDeveloper.length).toFixed(1) : '0.0';
+
+        } else {
+            // --- "All Team" View (Original Logic) ---
+            document.getElementById('kpi-total-prs').textContent = data.length;
+            document.getElementById('kpi-total-closed').textContent = data.filter(pr => pr.status === 'closed').length;
+            document.getElementById('kpi-total-merged').textContent = data.filter(pr => pr.status === 'merged').length;
+
+            const totalComments = data.reduce((sum, pr) => sum + (pr.comments || []).reduce((prSum, c) => prSum + c.count, 0), 0);
+            document.getElementById('kpi-total-comments').textContent = totalComments;
+            document.getElementById('kpi-avg-comments').textContent = data.length > 0 ? (totalComments / data.length).toFixed(1) : '0.0';
+        }
+
         const mergedPRs = data.filter(pr => pr.status === 'merged');
-        document.getElementById('kpi-total-prs').textContent = data.length;
-        document.getElementById('kpi-total-closed').textContent = data.filter(pr => pr.status === 'closed').length;
-        document.getElementById('kpi-total-merged').textContent = mergedPRs.length;
 
         const totalAdditions = data.reduce((sum, pr) => sum + (pr.diff_stats.additions || 0), 0);
         const totalDeletions = data.reduce((sum, pr) => sum + (pr.diff_stats.deletions || 0), 0);
@@ -652,20 +675,28 @@ document.addEventListener("DOMContentLoaded", () => {
         const lifespans = mergedPRs.map(pr => (new Date(pr.merged_at) - new Date(pr.opened_at)) / 60000).filter(t => t > 0);
         document.getElementById('kpi-avg-lifespan').textContent = formatDuration(lifespans.length ? lifespans.reduce((a, b) => a + b, 0) / lifespans.length : null);
 
-        // --- Comment Metrics Calculation (UPDATED) ---
-        const totalComments = data.reduce((sum, pr) => sum + (pr.comments || []).reduce((prSum, c) => prSum + c.count, 0), 0);
-        document.getElementById('kpi-total-comments').textContent = totalComments;
-        document.getElementById('kpi-avg-comments').textContent = data.length > 0 ? (totalComments / data.length).toFixed(1) : '0.0';
-
-        const commentCounts = data.reduce((acc, pr) => {
-            (pr.comments || []).forEach(commenter => {
-                const login = commenter.author.login;
-                acc[login] = (acc[login] || 0) + commenter.count;
-            });
-            return acc;
-        }, {});
-        const topCommenter = Object.entries(commentCounts).sort((a, b) => b[1] - a[1])[0];
-        document.getElementById('top-commenter-card').innerHTML = topCommenter ? `<div class="kpi-icon bg-yellow-500"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M9,22A1,1 0 0,1 8,21V18H4A2,2 0 0,1 2,16V4C2,2.89 2.9,2 4,2H20A2,2 0 0,1 22,4V16A2,2 0 0,1 20,18H13.9L10.2,21.71C10,21.9 9.75,22 9.5,22V22H9M10,16V19.08L13.08,16H20V4H4V16H10M6,7H18V9H6V7M6,11H15V13H6V11Z" /></svg></div><div class="overflow-hidden"><div class="kpi-value"><img src="https://github.com/${topCommenter[0]}.png" class="avatar"/> <span class="truncate">${topCommenter[0]}</span></div><div class="kpi-label">Top Commenter (${topCommenter[1]} comments)</div></div>` : `<div class="p-4 text-center">No comments.</div>`;
+        // --- CORRECTED "Top Commenter" LOGIC ---
+        if (selectedDeveloper !== 'all') {
+            // --- Developer-specific View ---
+            // Counts the number of PRs the selected developer commented on.
+            const developerPrCommentCount = data.reduce((sum, pr) => {
+                 const hasCommented = (pr.comments || []).some(c => c.author.login === selectedDeveloper);
+                 return sum + (hasCommented ? 1 : 0);
+            }, 0);
+            document.getElementById('top-commenter-card').innerHTML = `<div class="kpi-icon bg-yellow-500"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M9,22A1,1 0 0,1 8,21V18H4A2,2 0 0,1 2,16V4C2,2.89 2.9,2 4,2H20A2,2 0 0,1 22,4V16A2,2 0 0,1 20,18H13.9L10.2,21.71C10,21.9 9.75,22 9.5,22V22H9M10,16V19.08L13.08,16H20V4H4V16H10M6,7H18V9H6V7M6,11H15V13H6V11Z" /></svg></div><div class="overflow-hidden"><div class="kpi-value"><img src="https://github.com/${selectedDeveloper}.png" class="avatar"/> <span class="truncate">${selectedDeveloper}</span></div><div class="kpi-label">Commented on ${developerPrCommentCount} PRs</div></div>`;
+        } else {
+            // --- "All Team" View ---
+            // Counts how many distinct PRs each person commented on, then finds the max.
+            const commenterPrCounts = data.reduce((acc, pr) => {
+                (pr.comments || []).forEach(commenter => {
+                    const login = commenter.author.login;
+                    acc[login] = (acc[login] || 0) + 1; // Increment by 1 for each PR they appear in
+                });
+                return acc;
+            }, {});
+            const topCommenterByPrs = Object.entries(commenterPrCounts).sort((a, b) => b[1] - a[1])[0];
+            document.getElementById('top-commenter-card').innerHTML = topCommenterByPrs ? `<div class="kpi-icon bg-yellow-500"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M9,22A1,1 0 0,1 8,21V18H4A2,2 0 0,1 2,16V4C2,2.89 2.9,2 4,2H20A2,2 0 0,1 22,4V16A2,2 0 0,1 20,18H13.9L10.2,21.71C10,21.9 9.75,22 9.5,22V22H9M10,16V19.08L13.08,16H20V4H4V16H10M6,7H18V9H6V7M6,11H15V13H6V11Z" /></svg></div><div class="overflow-hidden"><div class="kpi-value"><img src="https://github.com/${topCommenterByPrs[0]}.png" class="avatar"/> <span class="truncate">${topCommenterByPrs[0]}</span></div><div class="kpi-label">Most Active Commenter (${topCommenterByPrs[1]} PRs)</div></div>` : `<div class="p-4 text-center">No comments.</div>`;
+        }
 
         const mostDiscussedPRs = data
             .map(pr => ({
@@ -693,22 +724,16 @@ document.addEventListener("DOMContentLoaded", () => {
                     <span class="discussed-pr-count">${pr.total_comments} comments</span>
                 </li>`;
         }).join('') : `<li>No discussed PRs in this period.</li>`;
-        // --- END: Comment Metrics ---
 
         const recentActivity = data.reduce((acc, pr) => {
-            // Action: Creating a PR
             acc[pr.creator.login] = (acc[pr.creator.login] || 0) + 1;
-            // Action: Merging a PR
             if (pr.merged_by) {
                 acc[pr.merged_by.login] = (acc[pr.merged_by.login] || 0) + 1;
             }
-            // Action: Reviewing a PR (counts as one action per PR reviewed)
             const uniqueReviewersForThisPR = new Set();
             (pr.approvals || []).forEach(a => uniqueReviewersForThisPR.add(a.reviewer.login));
             (pr.comments || []).forEach(c => uniqueReviewersForThisPR.add(c.author.login));
             uniqueReviewersForThisPR.forEach(login => {
-                // We don't count commenting on your own PR as a separate "review" action
-                // since "creating" is already counted.
                 if (login !== pr.creator.login) {
                     acc[login] = (acc[login] || 0) + 1;
                 }
@@ -716,7 +741,6 @@ document.addEventListener("DOMContentLoaded", () => {
             return acc;
         }, {});
         const hotStreakUser = Object.entries(recentActivity).sort((a, b) => b[1] - a[1])[0];
-        // UPDATED: Replaced "Top Contributor" SVG with a complete, standard star icon
         document.getElementById('hot-streak-card').innerHTML = hotStreakUser ? `<div class="kpi-icon bg-orange-500"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12,17.27L18.18,21L17,14.64L22,9.24L14.81,8.62L12,2L9.19,8.62L2,9.24L7,14.64L5.82,21L12,17.27Z" /></svg></div><div class="overflow-hidden"><div class="kpi-value"><img src="https://github.com/${hotStreakUser[0]}.png" class="avatar"/> <span class="truncate">${hotStreakUser[0]}</span></div><div class="kpi-label">Top Contributor (${hotStreakUser[1]} actions)</div></div>` : `<div class="p-4 text-center">No activity.</div>`;
 
         const recentReviews = data.reduce((acc, pr) => {
@@ -732,8 +756,6 @@ document.addEventListener("DOMContentLoaded", () => {
         })).sort((a, b) => a.avg - b.avg)[0];
         document.getElementById('fastest-reviewer-card').innerHTML = fastestData ? `<div class="kpi-icon bg-teal-500"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M11,15H6L13,1V9H18L11,23V15Z" /></svg></div><div class="overflow-hidden"><div class="kpi-value"><img src="https://github.com/${fastestData.user}.png" class="avatar"/> <span class="truncate">${fastestData.user}</span></div><div class="kpi-label">Fastest Reviewer (${formatDuration(fastestData.avg)})</div></div>` : `<div class="p-4 text-center">No recent reviews.</div>`;
 
-        // --- HEALTH LOGIC ---
-        // Chart data is always based on the filtered data set (`data` parameter)
         const chartMergeTimes = mergedPRs
             .filter(pr => pr.merged_at && pr.required_approvals_met_at)
             .reduce((acc, pr) => {
@@ -754,12 +776,10 @@ document.addEventListener("DOMContentLoaded", () => {
         let healthMessage = `<div class="health-indicator info">${ICONS.safe}<span>Merge process times for this period are stable.</span></div>`;
         const isAllTimeView = analyticsWeekFilter.value === 'all';
 
-        // Trend analysis message is only calculated for "All Time" view
         if (isAllTimeView) {
-            // Use the full dataset (`allPrData`) specifically for this trend calculation
             const allMergeTimes = allPrData
                 .filter(pr => pr.status === 'merged' && pr.merged_at && pr.required_approvals_met_at)
-                .reduce((acc, pr) => { /* ... same reduce logic ... */
+                .reduce((acc, pr) => {
                     const day = new Date(pr.merged_at).toLocaleDateString('en-CA');
                     const time = (new Date(pr.merged_at) - new Date(pr.required_approvals_met_at)) / 60000;
                     if (time >= 0) {
@@ -790,7 +810,6 @@ document.addEventListener("DOMContentLoaded", () => {
         } else {
             document.getElementById('merge-process-health-container').innerHTML = `<h3 class="panel-header panel-title">Merge Process Health</h3><div class="panel-body"><div class="health-indicator info">No merge data for this period.</div></div>`;
         }
-        // --- END OF CORRECTED LOGIC ---
 
         const dailyActivity = data.reduce((acc, pr) => {
             const day = new Date(pr.opened_at).toLocaleDateString('en-CA');
@@ -820,7 +839,6 @@ document.addEventListener("DOMContentLoaded", () => {
             return acc
         }, {});
 
-        // --- NEW: Group daily activity by week ---
         const dailyActivityByWeek = Object.keys(dailyActivity).sort((a, b) => new Date(b) - new Date(a))
             .reduce((acc, dayString) => {
                 const weekStartDate = getWeekStartDate(dayString);
@@ -837,7 +855,7 @@ document.addEventListener("DOMContentLoaded", () => {
         let dailyBreakdownHtml = '';
         if (sortedWeeks.length > 0) {
             sortedWeeks.forEach((weekKey, index) => {
-                const isCollapsed = index > 0; // First week is open, others are collapsed
+                const isCollapsed = index > 0;
                 const weekDays = dailyActivityByWeek[weekKey];
                 const weekTitle = getRelativeWeekName(index);
 
@@ -862,13 +880,11 @@ document.addEventListener("DOMContentLoaded", () => {
         }
         document.getElementById('daily-breakdown-container').innerHTML = dailyBreakdownHtml;
 
-        // Add event listeners for the new collapsible headers
         document.querySelectorAll('.daily-week-header').forEach(header => {
             header.addEventListener('click', () => {
                 header.parentElement.classList.toggle('collapsed');
             });
         });
-        // --- END: NEW Daily Activity rendering ---
 
         const prTypes = data.reduce((acc, pr) => {
             const title = pr.title.toLowerCase();
@@ -918,7 +934,6 @@ document.addEventListener("DOMContentLoaded", () => {
         }, {});
         const chartLabels = Object.keys(contributions).sort();
 
-        // --- CORRECTED reviewers logic ---
         const reviewers = data.reduce((acc, pr) => {
             const uniqueReviewersForThisPR = new Set();
             (pr.approvals || []).forEach(approval => {
@@ -928,7 +943,6 @@ document.addEventListener("DOMContentLoaded", () => {
                 uniqueReviewersForThisPR.add(comment.author.login);
             });
             uniqueReviewersForThisPR.forEach(login => {
-                // A review is only counted if it's on someone else's PR
                 if (pr.creator.login !== login) {
                     acc[login] = (acc[login] || 0) + 1;
                 }
@@ -936,14 +950,12 @@ document.addEventListener("DOMContentLoaded", () => {
             return acc;
         }, {});
 
-        // --- CORRECTED collaborationSummary logic ---
         const collaborationSummary = data.reduce((acc, pr) => {
             const uniqueReviewersForThisPR = new Set();
             (pr.approvals || []).forEach(a => uniqueReviewersForThisPR.add(a.reviewer.login));
             (pr.comments || []).forEach(c => uniqueReviewersForThisPR.add(c.author.login));
 
             uniqueReviewersForThisPR.forEach(reviewerLogin => {
-                // A collaboration is when you review someone else's PR
                 if (pr.creator.login === reviewerLogin) return;
 
                 if (!acc[reviewerLogin]) {
@@ -1113,11 +1125,14 @@ document.addEventListener("DOMContentLoaded", () => {
         let finalFilteredData = filteredByWeek;
         if (selectedDeveloper !== 'all') {
             finalFilteredData = filteredByWeek.filter(pr => {
-                // An individual's data includes any PR they created, approved, or merged.
+                // An individual's data includes any PR they created, approved, merged, or commented on.
                 const isCreator = pr.creator.login === selectedDeveloper;
                 const isMerger = pr.merged_by && pr.merged_by.login === selectedDeveloper;
                 const isApprover = (pr.approvals || []).some(approval => approval.reviewer.login === selectedDeveloper);
-                return isCreator || isMerger || isApprover;
+                // CORRECTED: Added check for being a commenter
+                const isCommenter = (pr.comments || []).some(comment => comment.author.login === selectedDeveloper);
+
+                return isCreator || isMerger || isApprover || isCommenter;
             });
         }
 
