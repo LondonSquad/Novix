@@ -31894,7 +31894,18 @@
         "url": "https://github.com/abdelrhman1002"
       }
     ],
-    "comments": [],
+    "comments": [
+      {
+        "author": {
+          "login": "ahmeddsamii",
+          "id": 154278495,
+          "url": "https://github.com/ahmeddsamii"
+        },
+        "first_comment_at": "2025-08-17T16:01:30Z",
+        "last_comment_at": "2025-08-17T16:02:03Z",
+        "count": 3
+      }
+    ],
     "approvals": [],
     "required_approvals": 2,
     "first_approved_at": null,
