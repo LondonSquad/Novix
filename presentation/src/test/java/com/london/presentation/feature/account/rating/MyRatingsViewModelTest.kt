@@ -257,6 +257,99 @@ class MyRatingsViewModelTest {
         }
     }
 
+    @Test
+    fun `onItemClick should emit movie navigation effect when movie is found`() = runTest(mainDispatcher) {
+        // Given
+        val manageRatingUseCase = mockk<ManageRatingUseCase>(relaxed = true)
+        coEvery { manageRatingUseCase.getRatedMediaSorted() } returns createMockRatedMedia()
+        val viewModel = MyRatingsViewModel(manageRatingUseCase = manageRatingUseCase)
+        val movieId = 1
+        val mockMovie = RatedMedia(
+            id = movieId,
+            title = "Test Movie",
+            posterPath = "/test.jpg",
+            rating = 8,
+            mediaType = MediaType.Movie
+        )
+        coEvery { manageRatingUseCase.getRatedMediaById(movieId) } returns mockMovie
+
+        advanceUntilIdle()
+
+        // When & Then
+        viewModel.effect.test {
+            viewModel.onItemClick(movieId)
+            assertThat(awaitItem()).isEqualTo(MyRatingEffect.NavigationMovieDetails(movieId))
+            cancelAndIgnoreRemainingEvents()
+        }
+    }
+
+    @Test
+    fun `onItemClick should emit tv show navigation effect when tv show is found`() = runTest(mainDispatcher) {
+        // Given
+        val manageRatingUseCase = mockk<ManageRatingUseCase>(relaxed = true)
+        coEvery { manageRatingUseCase.getRatedMediaSorted() } returns createMockRatedMedia()
+        val viewModel = MyRatingsViewModel(manageRatingUseCase = manageRatingUseCase)
+        val tvShowId = 3
+        val mockTvShow = RatedMedia(
+            id = tvShowId,
+            title = "Test TV Show",
+            posterPath = "/test.jpg",
+            rating = 9,
+            mediaType = MediaType.TvShow
+        )
+        coEvery { manageRatingUseCase.getRatedMediaById(tvShowId) } returns mockTvShow
+
+        advanceUntilIdle()
+
+        // When & Then
+        viewModel.effect.test {
+            viewModel.onItemClick(tvShowId)
+            assertThat(awaitItem()).isEqualTo(MyRatingEffect.NavigationTvShowDetails(tvShowId))
+            cancelAndIgnoreRemainingEvents()
+        }
+    }
+
+    @Test
+    fun `onItemClick should not emit effect when media is not found`() = runTest(mainDispatcher) {
+        // Given
+        val manageRatingUseCase = mockk<ManageRatingUseCase>(relaxed = true)
+        coEvery { manageRatingUseCase.getRatedMediaSorted() } returns createMockRatedMedia()
+        val viewModel = MyRatingsViewModel(manageRatingUseCase = manageRatingUseCase)
+        val nonExistentId = 999
+        coEvery { manageRatingUseCase.getRatedMediaById(nonExistentId) } returns null
+
+        advanceUntilIdle()
+
+        // When & Then
+        viewModel.effect.test {
+            viewModel.onItemClick(nonExistentId)
+            expectNoEvents()
+        }
+    }
+
+    @Test
+    fun `onItemClick should handle error when use case throws exception`() = runTest(mainDispatcher) {
+        // Given
+        val manageRatingUseCase = mockk<ManageRatingUseCase>(relaxed = true)
+        coEvery { manageRatingUseCase.getRatedMediaSorted() } returns createMockRatedMedia()
+        val viewModel = MyRatingsViewModel(manageRatingUseCase = manageRatingUseCase)
+        val mediaId = 1
+        coEvery { manageRatingUseCase.getRatedMediaById(mediaId) } throws RuntimeException("Network error")
+
+        advanceUntilIdle()
+
+        // When & Then
+        viewModel.state.test {
+            viewModel.onItemClick(mediaId)
+            var state = awaitItem()
+            while (state.errorState == null) {
+                state = awaitItem()
+            }
+            assertThat(state.errorState).isNotNull()
+            cancelAndIgnoreRemainingEvents()
+        }
+    }
+
     private fun createMockRatedMedia(): List<RatedMedia> {
         return listOf(
             RatedMedia(
