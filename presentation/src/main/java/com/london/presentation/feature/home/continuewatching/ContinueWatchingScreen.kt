@@ -29,8 +29,8 @@ import com.london.presentation.utils.Listen
 fun ContinueWatchingScreen(
     screenTitle: String,
     onNavigateBack: () -> Unit = {},
-    onNaviagteToMovieDetalis: (Int) -> Unit = {},
-    onNaviagteToTvShowDetalis: (Int) -> Unit = {},
+    onNavigateToMovieDetails: (Int) -> Unit = {},
+    onNavigateToTvShowDetails: (Int) -> Unit = {},
     viewModel: ContinueWatchingViewModel = hiltViewModel(),
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
@@ -39,10 +39,10 @@ fun ContinueWatchingScreen(
     effect?.Listen { currentEffect ->
         when (currentEffect) {
             is ContinueWatchingEffect.NavigateToMovieDetails ->
-                onNaviagteToMovieDetalis(currentEffect.id)
+                onNavigateToMovieDetails(currentEffect.id)
 
             is ContinueWatchingEffect.NavigateToTvShowDetails ->
-                onNaviagteToTvShowDetalis(currentEffect.id)
+                onNavigateToTvShowDetails(currentEffect.id)
 
             is ContinueWatchingEffect.NavigateBack ->
                 onNavigateBack()
