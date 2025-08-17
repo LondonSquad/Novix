@@ -47,9 +47,9 @@ fun MyRatingScreen(
 
     effect?.Listen { currentEffect ->
         when (currentEffect) {
-            is MyRatingEffect.NavigateToMovie -> onNavigateToMovieDetails(currentEffect.movieId)
-            is MyRatingEffect.NavigateToTvShow -> onNavigateToTvShowDetails(currentEffect.tvShowId)
-            is MyRatingEffect.NavigateBack -> onNavigateBack()
+            is MyRatingEffect.NavigationMovieDetails -> onNavigateToMovieDetails(currentEffect.id)
+            is MyRatingEffect.NavigationTvShowDetails -> onNavigateToTvShowDetails(currentEffect.id)
+            is MyRatingEffect.NavigationBack -> onNavigateBack()
         }
     }
 
@@ -105,7 +105,7 @@ private fun Content(
                     items = items,
                     imageUrl = { it.posterPath },
                     name = { it.title },
-                    rate = { it.rating.toLocalizedNumbers() },
+                    rate = { rated -> rated.rating.toLocalizedNumbers() },
                     hasSaveIcon = false,
                     isItemSaved = { false },
                     onSaveClick = {},
@@ -115,8 +115,12 @@ private fun Content(
                             MediaType.TvShow -> contract.onDeleteTVShowClick(rated.id)
                         }
                     },
-                    onNavigateToMovie = contract::onMovieClick,
-                    onNavigateToTvShow = contract::onTvShowClick,
+                    onItemClick = { rated ->
+                        when (rated.mediaType) {
+                            MediaType.Movie -> contract.onMovieClick(rated.id)
+                            MediaType.TvShow -> contract.onTvShowClick(rated.id)
+                        }
+                    }
                 )
             }
         }

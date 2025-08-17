@@ -205,24 +205,6 @@ class MyRatingsViewModelTest {
     }
 
     @Test
-    fun `onItemClick should emit movie navigation effect when invoked`() = runTest(mainDispatcher) {
-        // Given
-        val manageRatingUseCase = mockk<ManageRatingUseCase>(relaxed = true)
-        coEvery { manageRatingUseCase.getRatedMediaSorted() } returns createMockRatedMedia()
-        val viewModel = MyRatingsViewModel(manageRatingUseCase = manageRatingUseCase)
-        val movieId = 1
-
-        advanceUntilIdle()
-
-        // When & Then
-        viewModel.effect.test {
-            viewModel.onItemClick(movieId)
-            assertThat(awaitItem()).isEqualTo(MyRatingEffect.ToMovieNavigation(movieId))
-            cancelAndIgnoreRemainingEvents()
-        }
-    }
-
-    @Test
     fun `onMovieClick should emit movie navigation effect when invoked`() = runTest(mainDispatcher) {
         // Given
         val manageRatingUseCase = mockk<ManageRatingUseCase>(relaxed = true)
@@ -235,7 +217,7 @@ class MyRatingsViewModelTest {
         // When & Then
         viewModel.effect.test {
             viewModel.onMovieClick(movieId)
-            assertThat(awaitItem()).isEqualTo(MyRatingEffect.ToMovieNavigation(movieId))
+            assertThat(awaitItem()).isEqualTo(MyRatingEffect.NavigationMovieDetails(movieId))
             cancelAndIgnoreRemainingEvents()
         }
     }
@@ -253,7 +235,7 @@ class MyRatingsViewModelTest {
         // When & Then
         viewModel.effect.test {
             viewModel.onTvShowClick(tvShowId)
-            assertThat(awaitItem()).isEqualTo(MyRatingEffect.ToTvShowNavigation(tvShowId))
+            assertThat(awaitItem()).isEqualTo(MyRatingEffect.NavigationTvShowDetails(tvShowId))
             cancelAndIgnoreRemainingEvents()
         }
     }
@@ -270,7 +252,7 @@ class MyRatingsViewModelTest {
         // When & Then
         viewModel.effect.test {
             viewModel.onBackClick()
-            assertThat(awaitItem()).isEqualTo(MyRatingEffect.BackNavigation)
+            assertThat(awaitItem()).isEqualTo(MyRatingEffect.NavigationBack)
             cancelAndIgnoreRemainingEvents()
         }
     }

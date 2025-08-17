@@ -33,6 +33,7 @@ fun <T : Any> MediaLazyVerticalGrid(
     hasSaveIcon: Boolean = true,
     onSaveClick: (T) -> Unit = {},
     isItemSaved: (T) -> Boolean = { false },
+    onItemClick: ((T) -> Unit)? = null,
     onDeleteClick: (T) -> Unit = {},
     onNavigateToMovie: (Int) -> Unit = {},
     onNavigateToTvShow: (Int) -> Unit = {},
@@ -61,12 +62,12 @@ fun <T : Any> MediaLazyVerticalGrid(
                     onSaveClick = { onSaveClick(item) },
                     onDeleteClick = { onDeleteClick(item) },
                     rate = rate(item),
-                    modifier = Modifier.clickable {
-                        when (item) {
-                            is Movie -> onNavigateToMovie(item.id)
-                            is TvShow -> onNavigateToTvShow(item.id)
-                        }
-                    }
+                    modifier = Modifier.navigationClickable(
+                        item = item,
+                        onItemClick = onItemClick,
+                        onNavigateToMovie = onNavigateToMovie,
+                        onNavigateToTvShow = onNavigateToTvShow
+                    )
                 )
             }
         }
