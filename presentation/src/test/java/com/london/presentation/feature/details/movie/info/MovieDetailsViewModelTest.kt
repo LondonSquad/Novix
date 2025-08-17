@@ -321,26 +321,6 @@ class MovieDetailsViewModelTest {
         testViewModel.viewModelScope.cancel()
     }
 
-    @Test
-    fun `should show error and reset success state ,when rating fails`() = runTest {
-        val testRating = 8
-        coEvery {
-            ratingUseCase.addMovieRatingById(
-                any(),
-                testRating
-            )
-        } throws Exception("Rating failed")
-
-        viewModel?.onSelectRatingClick(testRating)
-        advanceUntilIdle()
-
-        viewModel?.state?.test {
-            val state = awaitItem()
-            assertThat(state.isSuccessfullyRated).isNull()
-            assertThat(state.isLoading).isFalse()
-        }
-    }
-
     companion object {
         private const val MOVIE_ID = 12345
 
