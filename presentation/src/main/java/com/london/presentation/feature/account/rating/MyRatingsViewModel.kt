@@ -50,16 +50,8 @@ class MyRatingsViewModel @Inject constructor(
     override fun onItemClick(id: Int) {
         tryToExecute(
             block = { manageRatingUseCase.findRatedMediaById(id) },
-            onSuccess = { ratedMedia ->
-                ratedMedia?.let { rated ->
-                    val effect = when (rated.mediaType) {
-                        MediaType.Movie -> MyRatingEffect.NavigationMovieDetails(id)
-                        MediaType.TvShow -> MyRatingEffect.NavigationTvShowDetails(id)
-                    }
-                    emitEffect(effect)
-                }
-            },
-            onError = { errorState -> updateState { copy(errorState = errorState) } },
+            onSuccess = { ratedMedia -> handleRatedMediaNavigation(ratedMedia, id) },
+            onError = { errorState -> updateState { copy(errorState = errorState) } }
         )
     }
 
@@ -91,6 +83,16 @@ class MyRatingsViewModel @Inject constructor(
                 ratedTvShows = ratedTvShows.filter { it.id != id },
                 allRatedMedia = allRatedMedia.filter { it.id != id }
             )
+        }
+    }
+
+    private fun handleRatedMediaNavigation(ratedMedia: RatedMedia?, id: Int) {
+        ratedMedia?.let { rated ->
+            val effect = when (rated.mediaType) {
+                MediaType.Movie -> MyRatingEffect.NavigationMovieDetails(id)
+                MediaType.TvShow -> MyRatingEffect.NavigationTvShowDetails(id)
+            }
+            emitEffect(effect)
         }
     }
 }
