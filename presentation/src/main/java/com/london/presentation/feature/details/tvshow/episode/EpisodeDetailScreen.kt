@@ -4,7 +4,6 @@ import androidx.compose.animation.core.FastOutSlowInEasing
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
-import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -12,20 +11,15 @@ import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.WindowInsets
-import androidx.compose.foundation.layout.asPaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.statusBars
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.derivedStateOf
@@ -58,7 +52,8 @@ import com.london.presentation.shared.RatingItem
 import com.london.presentation.shared.SnackBarAnimation
 import com.london.presentation.shared.buildscreen.BuildScreen
 import com.london.presentation.utils.Listen
-import com.london.presentation.utils.episodeLayout
+import com.london.presentation.utils.episodeTopBar
+import com.london.presentation.utils.headerDetailsCard
 import com.london.presentation.utils.isNotZeroRate
 import com.london.presentation.utils.openUrl
 import com.london.presentation.utils.toLocalizedNumbers
@@ -126,13 +121,7 @@ private fun Content(
     ) {
         TopBar(
             onBackClick = contract::onBackClick,
-            modifier = Modifier
-                .fillMaxWidth()
-                .background(NovixTheme.colors.surface.copy(alpha = backgroundAlpha))
-                .padding(horizontal = 16.dp)
-                .padding(
-                    top = WindowInsets.statusBars.asPaddingValues().calculateTopPadding() + 12.dp
-                ),
+            modifier = Modifier.episodeTopBar(backgroundAlpha),
             onClickOption1 = { /*todo on click on save*/ },
             option1Icon = Res.drawable.icon_remove,
         )
@@ -142,30 +131,9 @@ private fun Content(
             modifier = Modifier.fillMaxSize(),
             contentPadding = PaddingValues(bottom = 80.dp)
         ) {
-            item {
-                val images = uiState.images
-                if (images != null) {
-                    CustomBackDropImagePager(images = images)
-                }
-            }
+            item { uiState.images?.let { CustomBackDropImagePager(images = it) } }
 
-            item {
-                HeaderDetailsCard(
-                    uiState = uiState,
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .episodeLayout()
-                        .padding(start = 16.dp, end = 16.dp)
-                        .heightIn(min = 158.dp)
-                        .border(
-                            width = 1.dp,
-                            color = NovixTheme.colors.stroke,
-                            shape = RoundedCornerShape(16.dp)
-                        )
-                        .clip(RoundedCornerShape(16.dp))
-                        .background(NovixTheme.colors.surface)
-                )
-            }
+            item { HeaderDetailsCard(uiState = uiState) }
 
             item { OverviewSection(uiState = uiState) }
 
@@ -190,8 +158,8 @@ private fun Content(
                 ) { member ->
                     ActorItem(
                         actorName = member.name,
-                        characterName = member.characterName,
                         imageRes = member.profilePictureUrl,
+                        characterName = member.characterName,
                         modifier = Modifier
                             .fillMaxWidth()
                             .padding(horizontal = 16.dp, vertical = 6.dp),
@@ -235,18 +203,17 @@ private fun Content(
                 icon = Res.drawable.ic_failed
             )
         }
-
     }
 }
 
 @Composable
-fun HeaderDetailsCard(
+private fun HeaderDetailsCard(
     modifier: Modifier = Modifier,
     uiState: EpisodeDetailsUiState
 ) {
 
     Column(
-        modifier = modifier,
+        modifier = modifier.headerDetailsCard(),
         verticalArrangement = Arrangement.SpaceBetween
     ) {
         uiState.episode?.let {
@@ -276,7 +243,7 @@ fun HeaderDetailsCard(
 }
 
 @Composable
-fun TvShowBasicDetails(
+private fun TvShowBasicDetails(
     modifier: Modifier = Modifier,
     uiState: EpisodeDetailsUiState
 ) {
@@ -317,7 +284,7 @@ fun TvShowBasicDetails(
 }
 
 @Composable
-fun TvShowDate(
+private fun TvShowDate(
     uiState: EpisodeDetailsUiState
 ) {
     Row(
@@ -343,7 +310,7 @@ fun TvShowDate(
 
 
 @Composable
-fun GenreNames(
+private fun GenreNames(
     modifier: Modifier = Modifier,
     uiState: EpisodeDetailsUiState
 ) {
@@ -370,14 +337,12 @@ fun GenreNames(
                             .background(NovixTheme.colors.hint)
                     )
             }
-
         }
-
     }
 }
 
 @Composable
-fun Seasons(uiState: EpisodeDetailsUiState) {
+private fun Seasons(uiState: EpisodeDetailsUiState) {
 
     Row(
         verticalAlignment = Alignment.CenterVertically,
@@ -385,7 +350,7 @@ fun Seasons(uiState: EpisodeDetailsUiState) {
     ) {
         Icon(
             painter = painterResource(Res.drawable.icon_tv),
-            contentDescription = "Tv icon",
+            contentDescription = stringResource(R.string.tv_icon),
             tint = NovixTheme.colors.body,
             modifier = Modifier.size(11.dp)
         )
@@ -401,7 +366,7 @@ fun Seasons(uiState: EpisodeDetailsUiState) {
 }
 
 @Composable
-fun OverviewSection(
+private fun OverviewSection(
     modifier: Modifier = Modifier,
     uiState: EpisodeDetailsUiState
 ) {
