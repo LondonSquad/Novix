@@ -353,7 +353,7 @@ document.addEventListener("DOMContentLoaded", () => {
                         <img src="https://github.com/${commenter.author.login}.png" alt="${commenter.author.login}" class="avatar-sm rounded-full"/>
                         <span class="commenter-count">${commenter.count}</span>
                     </a>
-                `).join('') : '';
+                `).join('') : '<span class="text-sm text-secondary">No comments yet.</span>';
 
             // --- TIMELINE & META (Unchanged) ---
             let timelineItems = [{ status: 'created', date: pr.opened_at, text: 'Created' }];
@@ -398,16 +398,19 @@ document.addEventListener("DOMContentLoaded", () => {
                                         <div class="participants-list">${approversHtml}</div>
                                     </div>
                                     <div class="participant-group">
-                                        <h5>Commenters (Total: ${commentsCount})</h5>
+                                        <h5>Commenters</h5>
                                         <div class="participants-list avatar-stack">${commentersHtml}</div>
                                     </div>
                                 </div>
                             </div>
-                            <div class="detail-section"><h4>Key Metrics</h4><div class="space-y-3 text-sm">
-                                <div class="metric-item"><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm.75-13a.75.75 0 00-1.5 0v5c0 .414.336.75.75.75h4a.75.75 0 000-1.5h-3.25V5z" clip-rule="evenodd" /></svg><div><strong>Time to 1st Approval:</strong><br>${formatDuration(pr.time_to_first_approval_minutes)}</div></div>
-                                <div class="metric-item"><svg viewBox="0 0 20 20" fill="currentColor"><path d="M10 2a.75.75 0 01.75.75v1.5a.75.75 0 01-1.5 0v-1.5A.75.75 0 0110 2zM10 15a.75.75 0 01.75.75v1.5a.75.75 0 01-1.5 0v-1.5A.75.75 0 0110 15zM10 7a3 3 0 100 6 3 3 0 000-6z" /></svg><div><strong>1st → 2nd Approval:</strong><br>${formatDuration(timeBetweenApprovals)}</div></div>
-                                <div class="metric-item"><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.857-9.809a.75.75 0 00-1.214-.882l-3.483 4.79-1.88-1.88a.75.75 0 10-1.06 1.061l2.5 2.5a.75.75 0 001.137-.089l4-5.5z" clip-rule="evenodd" /></svg><div><strong>Time to Merge:</strong><br>${formatDuration(pr.merged_at ? (new Date(pr.merged_at) - new Date(pr.opened_at)) / 60000 : null)}</div></div>
-                            </div></div>
+                            <div class="detail-section"><h4>Key Metrics</h4>
+                                <div class="space-y-3 text-sm">
+                                    <div class="metric-item"><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm.75-13a.75.75 0 00-1.5 0v5c0 .414.336.75.75.75h4a.75.75 0 000-1.5h-3.25V5z" clip-rule="evenodd" /></svg><div><strong>Time to 1st Approval:</strong><br>${formatDuration(pr.time_to_first_approval_minutes)}</div></div>
+                                    <div class="metric-item"><svg viewBox="0 0 20 20" fill="currentColor"><path d="M10 2a.75.75 0 01.75.75v1.5a.75.75 0 01-1.5 0v-1.5A.75.75 0 0110 2zM10 15a.75.75 0 01.75.75v1.5a.75.75 0 01-1.5 0v-1.5A.75.75 0 0110 15zM10 7a3 3 0 100 6 3 3 0 000-6z" /></svg><div><strong>1st → 2nd Approval:</strong><br>${formatDuration(timeBetweenApprovals)}</div></div>
+                                    <div class="metric-item"><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.857-9.809a.75.75 0 00-1.214-.882l-3.483 4.79-1.88-1.88a.75.75 0 10-1.06 1.061l2.5 2.5a.75.75 0 001.137-.089l4-5.5z" clip-rule="evenodd" /></svg><div><strong>Time to Merge:</strong><br>${formatDuration(pr.merged_at ? (new Date(pr.merged_at) - new Date(pr.opened_at)) / 60000 : null)}</div></div>
+                                    <div class="metric-item"><svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor"><path d="M20,2H4A2,2 0 0,0 2,4V16A2,2 0 0,0 4,18H8V21A1,1 0 0,0 9,22H9.5C9.75,22 10,21.9 10.2,21.71L13.9,18H20A2,2 0 0,0 22,16V4A2,2 0 0,0 20,2M18,7V9H6V7H18M15,11V13H6V11H15Z"/></svg><div><strong>Total Comments:</strong><br>${commentsCount}</div></div>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>`;
