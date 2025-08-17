@@ -62,7 +62,7 @@ class GetTvShowUseCaseTest {
         val result = getTvShowUseCase.getPopularTvShows()
 
         // Then
-        assertThat(result).hasSize(5)
+        assertThat(result).hasSize(POPULAR_LIMIT)
     }
 
     @Test
