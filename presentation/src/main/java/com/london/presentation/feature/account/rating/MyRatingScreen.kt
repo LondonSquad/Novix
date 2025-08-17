@@ -90,7 +90,7 @@ private fun Content(
             )
 
             RatingChipsRow(
-                selected = state.selectedRatingCategory ?: RatingCategory.All,
+                selected = selectedCategory,
                 onSelect = contract::onRatingCategorySelected,
                 modifier = Modifier.padding(bottom = 12.dp)
             )
@@ -132,6 +132,7 @@ private fun Content(
 @Composable
 private fun RatingSnackBar(state: MyRatingUiState) {
     if (!state.isSnackBarVisible) return
+
     if (state.errorState is ErrorState.RequestFailed) {
         SnackBarAnimation(state.errorState.message)
     } else {
