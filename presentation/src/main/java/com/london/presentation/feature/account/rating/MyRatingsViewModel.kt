@@ -49,7 +49,7 @@ class MyRatingsViewModel @Inject constructor(
 
     override fun onItemClick(id: Int) {
         tryToExecute(
-            block = { manageRatingUseCase.findRatedMediaById(id) },
+            block = { manageRatingUseCase.getRatedMediaById(id) },
             onSuccess = { ratedMedia -> handleRatedMediaNavigation(ratedMedia, id) },
             onError = { errorState -> updateState { copy(errorState = errorState) } }
         )

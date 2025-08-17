@@ -9,7 +9,7 @@ class ManageRatingUseCase @Inject constructor(
     private val tvShowRepository: TvShowRepository,
     private val movieRepository: MovieRepository,
 ) {
-    suspend fun findRatedMediaById(id: Int): RatedMedia? =
+    suspend fun getRatedMediaById(id: Int): RatedMedia? =
         getRatedMedia().find { it.id == id }
 
     suspend fun getRatedMediaSorted(): List<RatedMedia> =
