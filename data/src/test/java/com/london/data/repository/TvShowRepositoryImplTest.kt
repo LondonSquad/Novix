@@ -425,7 +425,7 @@ class TvShowRepositoryImplTest {
     }
 
     @Test
-    fun `getAccountTvShowState returns correct MediaStates`() = runTest {
+    fun `getAccountTvShowStateById returns correct MediaStates`() = runTest {
         // Given
         val seriesId = 456
         coEvery {
@@ -437,7 +437,7 @@ class TvShowRepositoryImplTest {
         every { authenticationPreferences.getSessionId() } returns USER_SESSION
 
         // When
-        val result = repository.getAccountTvShowState(seriesId)
+        val result = repository.getAccountTvShowStateById(seriesId)
 
         // Then
         assertEquals(expectedEntity, result)

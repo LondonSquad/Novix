@@ -66,7 +66,7 @@ class TvShowDetailsViewModelTest {
         coEvery { authenticationUseCase.isLoggedIn() } returns false
         coEvery { manageRecentViewedUseCase.addToRecentViewed(any()) } returns Unit
         coEvery { manageRecentTvShowWatchedUseCase.addTvShowToRecentWatched(any()) } returns Unit
-        coEvery { ratingUseCase.getRateAccountTvShowState(TV_SHOW_ID) } returns 0
+        coEvery { ratingUseCase.getRateAccountTvShowStatesById(TV_SHOW_ID) } returns 0
 
         viewModel = TvShowDetailsViewModel(
             getTvShowUseCase = getTvShowUseCase,
