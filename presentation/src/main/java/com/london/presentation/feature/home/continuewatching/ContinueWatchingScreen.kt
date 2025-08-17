@@ -64,7 +64,7 @@ fun ContinueWatchingScreen(
 }
 
 @Composable
-fun Content(
+private fun Content(
     state: ContinueWatchingUiState,
     contract: ContinueWatchingContract,
     screenTitle: String = stringResource(R.string.continue_watch)
@@ -89,8 +89,8 @@ fun Content(
                 selectedTvShowGenre = state.selectedTvShowGenre,
                 isMovieSelected = MediaCategory.Movies == state.selectedMediaCategory,
                 isTvShowSelected = MediaCategory.TvShows == state.selectedMediaCategory,
-                onNavigateToMovie = contract::onNavigateToMovie,
-                onNavigateToTvShow = contract::onNavigateToTvShow,
+                onNavigateToMovie = contract::onNavigateToMovieClick,
+                onNavigateToTvShow = contract::onNavigateToTvShowClick,
                 onSaveClick = { /* TODO: Implement save functionality */ },
                 isItemSaved = { false },
             ),
@@ -106,10 +106,12 @@ fun Content(
 }
 
 @Composable
-private fun getCombinedItems(state: ContinueWatchingUiState): List<Any> =
-    state.movies.collectAsStateWithLifecycle(emptyList()).value +
+private fun getCombinedItems(state: ContinueWatchingUiState): List<Any> {
+    return state.movies.collectAsStateWithLifecycle(emptyList()).value +
             state.tvSeries.collectAsStateWithLifecycle(emptyList()).value
+}
 
-private fun getSelectedTabIndex(state: ContinueWatchingUiState): Int =
-    if (state.selectedMediaCategory == MediaCategory.Movies)
-        MediaCategory.Movies.ordinal else MediaCategory.TvShows.ordinal
+private fun getSelectedTabIndex(state: ContinueWatchingUiState): Int {
+    if (state.selectedMediaCategory == MediaCategory.Movies) return MediaCategory.Movies.ordinal
+    return MediaCategory.TvShows.ordinal
+}

@@ -45,10 +45,10 @@ class ContinueWatchingViewModel @Inject constructor(
 
     override fun onBackClick() = emitEffect(ContinueWatchingEffect.NavigateBack)
 
-    override fun onNavigateToMovie(id: Int) =
+    override fun onNavigateToMovieClick(id: Int) =
         emitEffect(ContinueWatchingEffect.NavigateToMovieDetails(id))
 
-    override fun onNavigateToTvShow(id: Int) =
+    override fun onNavigateToTvShowClick(id: Int) =
         emitEffect(ContinueWatchingEffect.NavigateToTvShowDetails(id))
 
     override fun onRetryClick() = getRecentWatchedMedia()

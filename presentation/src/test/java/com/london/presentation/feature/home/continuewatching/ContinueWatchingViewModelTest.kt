@@ -204,7 +204,7 @@ class ContinueWatchingViewModelTest {
 
         // When & Then
         viewModel.effect.test {
-            viewModel.onNavigateToMovie(movieId)
+            viewModel.onNavigateToMovieClick(movieId)
             assertThat(awaitItem()).isInstanceOf(ContinueWatchingEffect.NavigateToMovieDetails::class.java)
         }
     }
@@ -216,7 +216,7 @@ class ContinueWatchingViewModelTest {
         val tvShowId = 2
         // When & Then
         viewModel.effect.test {
-            viewModel.onNavigateToTvShow(tvShowId)
+            viewModel.onNavigateToTvShowClick(tvShowId)
             assertThat(awaitItem()).isInstanceOf(ContinueWatchingEffect.NavigateToTvShowDetails::class.java)
         }
     }
