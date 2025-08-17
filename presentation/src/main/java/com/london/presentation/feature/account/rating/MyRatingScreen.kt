@@ -34,8 +34,8 @@ import com.london.designsystem.R as dsR
 @Composable
 fun MyRatingScreen(
     onNavigateBack: () -> Unit,
-    onNavigateMovie: (Int) -> Unit,
-    onNavigateTvShow: (Int) -> Unit,
+    onNavigateToMovieDetails: (Int) -> Unit,
+    onNavigateToTvShowDetails: (Int) -> Unit,
     viewModel: MyRatingsViewModel = hiltViewModel()
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
@@ -47,9 +47,9 @@ fun MyRatingScreen(
 
     effect?.Listen { currentEffect ->
         when (currentEffect) {
-            is MyRatingEffect.ToMovieNavigation -> onNavigateMovie(currentEffect.id)
-            is MyRatingEffect.ToTvShowNavigation -> onNavigateTvShow(currentEffect.id)
-            is MyRatingEffect.BackNavigation -> onNavigateBack()
+            is MyRatingEffect.NavigateToMovie -> onNavigateToMovieDetails(currentEffect.movieId)
+            is MyRatingEffect.NavigateToTvShow -> onNavigateToTvShowDetails(currentEffect.tvShowId)
+            is MyRatingEffect.NavigateBack -> onNavigateBack()
         }
     }
 
@@ -164,8 +164,8 @@ fun RatingChipsRow(
 @Composable
 private fun Preview() = NovixTheme {
     MyRatingScreen(
-        onNavigateMovie = {},
-        onNavigateTvShow = {},
+        onNavigateToMovieDetails = {},
+        onNavigateToTvShowDetails = {},
         onNavigateBack = {}
     )
 }
