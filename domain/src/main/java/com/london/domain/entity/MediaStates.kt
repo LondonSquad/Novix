@@ -1,4 +1,4 @@
-package com.london.domain.entity.moviedatails
+package com.london.domain.entity
 
 data class MediaStates(
     val favorite: Boolean,
