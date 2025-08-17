@@ -6,5 +6,5 @@ import kotlinx.serialization.Serializable
 @Serializable
 data class RequestToken(
     @SerialName("request_token")
-    val requestToken: String
+    val requestToken: String? = null
 )

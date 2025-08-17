@@ -5,8 +5,7 @@ import com.london.data.local.model.home.topRated.TopRatedLocal
 import com.london.data.local.preference.AuthenticationPreferences
 import com.london.data.local.source.home.HomeLocalDataSource
 import com.london.data.mapper.details.actor.toEntity
-import com.london.data.mapper.details.movie.toEntity
-import com.london.data.mapper.details.tvshow.TvShowImagesMapper.toEntity
+import com.london.data.mapper.details.toEntity
 import com.london.data.mapper.details.tvshow.toEntity
 import com.london.data.mapper.details.tvshow.toTvShowEpisodeEntity
 import com.london.data.mapper.details.tvshow.toTvShowEpisodesEntity
@@ -24,19 +23,19 @@ import com.london.data.remote.source.tvshow.TvShowRemoteDataSource
 import com.london.data.utils.CrashReporter
 import com.london.data.utils.asYoutubeUrlOrEmpty
 import com.london.data.utils.fetchAndSync
+import com.london.domain.entity.ImagesEntity
+import com.london.domain.entity.MediaStates
 import com.london.domain.entity.PagedFetchResponse
 import com.london.domain.entity.RatedMedia
 import com.london.domain.entity.Trending
 import com.london.domain.entity.TvShow
 import com.london.domain.entity.actordetails.cast.ActorMediaDetails
 import com.london.domain.entity.genre.TvShowGenre
-import com.london.domain.entity.moviedatails.MediaStates
 import com.london.domain.entity.popular.PopularMedia
 import com.london.domain.entity.recent.MediaType
 import com.london.domain.entity.review.ReviewEntity
 import com.london.domain.entity.toprated.TopRatedMedia
 import com.london.domain.entity.tvshowdetails.TvShowDetailsEntity
-import com.london.domain.entity.tvshowdetails.TvShowImagesEntity
 import com.london.domain.entity.tvshowdetails.episode.TvShowEpisodeByIdEntity
 import com.london.domain.entity.tvshowdetails.episode.TvShowEpisodesEntity
 import com.london.domain.repository.TvShowRepository
@@ -53,7 +52,7 @@ class TvShowRepositoryImpl @Inject constructor(
     override suspend fun getTvShowDetailsById(id: Int): TvShowDetailsEntity =
         tvShowRemoteDataSource.getTvShowDetailsById(id).getOrThrow().toEntity()
 
-    override suspend fun getImagesTvShowById(id: Int): TvShowImagesEntity =
+    override suspend fun getImagesTvShowById(id: Int): ImagesEntity =
         tvShowRemoteDataSource.getTvShowImagesById(id).getOrThrow().toEntity()
 
     override suspend fun getActorTvShowPicksById(id: Int): ActorMediaDetails =
@@ -203,7 +202,35 @@ class TvShowRepositoryImpl @Inject constructor(
             tvShowId = seriesId,
             seasonNumber = seasonNumber,
             episodeNumber = episodeNumber
-        ).getOrThrow().results?.map { it.key.asYoutubeUrlOrEmpty() }.orEmpty()
+        ).getOrThrow().videos?.map { it.youtubeKey.asYoutubeUrlOrEmpty() }.orEmpty()
+
+    override suspend fun getTvShowVideos(tvShowId: Int): List<String> =
+        tvShowRemoteDataSource.getTvShowVideos(tvShowId)
+            .getOrThrow().videos?.map { it.youtubeKey.asYoutubeUrlOrEmpty() }.orEmpty()
+
+    override suspend fun getTvShowReviews(
+        tvShowId: Int,
+        pageNumber: Int
+    ): PagedFetchResponse<ReviewEntity> = fetchAndSync(
+        networkBlock = {
+            tvShowRemoteDataSource.getTvShowReviews(tvShowId, pageNumber).getOrThrow()
+                .toReviewEntity()
+        }).run {
+        PagedFetchResponse(
+            currentPage = currentPage,
+            items = items,
+            totalPages = totalPages,
+            totalItems = totalItems
+        )
+    }
+
+    override suspend fun getAccountTvShowState(
+        tvShowId: Int,
+    ): MediaStates = tvShowRemoteDataSource.getAccountTvShowStates(
+        tvShowId = tvShowId,
+        guestSessionId = authenticationPreferences.getGuestSessionId(),
+        userSessionId = authenticationPreferences.getSessionId()
+    ).getOrThrow().toEntity()
 
     override suspend fun getAccountTvEpisode(
         tvShowId: Int,

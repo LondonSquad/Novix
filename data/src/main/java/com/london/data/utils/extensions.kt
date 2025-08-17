@@ -1,6 +1,8 @@
 package com.london.data.utils
 
 import com.london.data.BuildConfig
+import com.london.data.remote.model.authentication.GuestSessionResponse
+import com.london.data.remote.model.authentication.RequestTokenResponse
 import kotlinx.serialization.json.JsonElement
 import kotlinx.serialization.json.JsonObject
 import kotlinx.serialization.json.JsonPrimitive
@@ -31,6 +33,7 @@ fun String?.asYoutubeUrlOrEmpty(): String = this?.let { BuildConfig.YOUTUBE_URL 
 fun String.extractYear() =
     takeIf { isNotEmpty() }?.split("-")?.first()?.toInt() ?: 0
 
+fun Int.orDefault(default: Int = 1): Int = if (this != 0) this else default
 fun Long.isDayExpired(): Boolean {
     val oneDayInMillis = 24 * 60 * 60 * 1000L
     val oneDayAgo = System.currentTimeMillis() - oneDayInMillis
@@ -43,3 +46,6 @@ fun JsonElement?.parseRatingValue(): Double? = when {
     this is JsonPrimitive && this.booleanOrNull == false -> null
     else -> null
 }
+
+fun RequestTokenResponse.isFailure() = success.isTrue.not()
+fun GuestSessionResponse.isFailure() = success.isTrue.not()

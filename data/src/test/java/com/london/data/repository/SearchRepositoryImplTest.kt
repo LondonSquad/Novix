@@ -365,23 +365,11 @@ class SearchRepositoryImplTest {
             currentPage = PAGE_NUMBER,
             items = listOf(
                 MovieRemote(
-                    adult = false,
-                    backdropPath = null,
                     genreIds = emptyList(),
                     id = 1,
-                    originalLanguage = "en",
-                    originalTitle = "",
-                    overview = "",
-                    popularity = 0.0,
                     posterPath = "",
                     releaseDate = "2020-06-15",
-                    title = "",
-                    video = false,
                     voteAverage = 8.0,
-                    voteCount = 0,
-                    originCountry = listOf(""),
-                    originalName = "",
-                    firstAirDate = "",
                     name = "",
                 )
             ),
@@ -393,20 +381,12 @@ class SearchRepositoryImplTest {
             currentPage = PAGE_NUMBER,
             items = listOf(
                 SearchTvShowRemote(
-                    adult = false,
-                    backdropPath = "",
                     genreIds = emptyList(),
                     id = 2,
-                    originCountry = emptyList(),
-                    originalLanguage = "en",
-                    originalName = "",
-                    overview = "",
-                    popularity = 0.0,
                     posterPath = "",
                     firstAirDate = "2020-07-20",
                     name = "",
                     voteAverage = 10.0,
-                    voteCount = 0
                 )
             ),
             totalPages = 1,
