@@ -1,6 +1,6 @@
 package com.london.presentation.feature.account.rating
 
-interface MyRatingsContract {
+interface MyRatingContract {
     fun onRetryClick()
     fun onBackClick()
     fun onItemClick(id: Int)
