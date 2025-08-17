@@ -29,35 +29,46 @@ import com.london.presentation.utils.Listen
 fun ContinueWatchingScreen(
     screenTitle: String,
     onNavigateBack: () -> Unit = {},
-    onNaviagteToMovieDetalis: (Int) -> Unit = {},
-    onNaviagteToTvShowDetalis: (Int) -> Unit = {},
+    onNavigateToMovieDetails: (Int) -> Unit = {},
+    onNavigateToTvShowDetails: (Int) -> Unit = {},
     viewModel: ContinueWatchingViewModel = hiltViewModel(),
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
     val effect by viewModel.effect.collectAsState(null)
 
-    effect?.Listen {
-        when (it) {
-            is ContinueWatchingEffect.NavigateToMovieDetails -> onNaviagteToMovieDetalis(it.id)
-            is ContinueWatchingEffect.NavigateToTvShowDetails -> onNaviagteToTvShowDetalis(it.id)
-            is ContinueWatchingEffect.NavigateBack -> onNavigateBack()
+    effect?.Listen { currentEffect ->
+        when (currentEffect) {
+            is ContinueWatchingEffect.NavigateToMovieDetails ->
+                onNavigateToMovieDetails(currentEffect.id)
+
+            is ContinueWatchingEffect.NavigateToTvShowDetails ->
+                onNavigateToTvShowDetails(currentEffect.id)
+
+            is ContinueWatchingEffect.NavigateBack ->
+                onNavigateBack()
         }
     }
 
-    Content(
-        state = state,
-        contract = viewModel,
-        screenTitle = screenTitle
-    )
+    BuildScreen(
+        onBack = viewModel::onBackClick,
+        isLoading = state.isLoading,
+        isError = state.error is ErrorState.NoInternet,
+        onRetry = viewModel::onRetryClick,
+    ) {
+        Content(
+            state = state,
+            contract = viewModel,
+            screenTitle = screenTitle
+        )
+    }
 }
 
 @Composable
-fun Content(
-    state: ContinueWatchingUiState = ContinueWatchingUiState(),
+private fun Content(
+    state: ContinueWatchingUiState,
     contract: ContinueWatchingContract,
     screenTitle: String = stringResource(R.string.continue_watch)
 ) {
-
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -65,47 +76,42 @@ fun Content(
             .padding(WindowInsets.statusBars.asPaddingValues())
             .padding(WindowInsets.navigationBars.asPaddingValues())
     ) {
-        BuildScreen(
-            onBack = contract::onBack,
-            isLoading = state.isLoading,
-            isError = state.error is ErrorState.NoInternet,
-            onRetry = contract::onRetry,
-        ) {
-            MediaLazyGridWithTabs(
-                items = getCombinedItems(state),
-                tabSelected = getSelectedTabIndex(state),
-                onTabSelected = contract::onMediaCategoryTabSelected,
-                onMovieGenreClick = contract::onMovieGenreChanged,
-                onTvShowGenreClick = contract::onTvShowGenreChanged,
-                config = MediaGridConfig(
-                    showSaveIcon = true,
-                    isDarkMode = NovixTheme.isThemeDark,
-                    isMovieSelected = state.isMovieSelected,
-                    isTvShowSelected = state.isTvSelected,
-                    selectedMovieGenre = state.selectedMovieGenre,
-                    selectedTvShowGenre = state.selectedTvShowGenre,
-                    onNavigateToMovie = contract::onNavigateToMovie,
-                    onNavigateToTvShow = contract::onNavigateToTvShow,
-                    onSaveClick = { /* TODO: Implement save functionality */ },
-                    isItemSaved = { false },
-                    rate = null
-                ),
-                topBar = {
-                    DefaultAppTopBar(
-                        title = screenTitle,
-                        onBack = contract::onBack
-                    )
-                },
-                isLoading = state.isLoading
-            )
-        }
+        MediaLazyGridWithTabs(
+            items = getCombinedItems(state),
+            tabSelected = getSelectedTabIndex(state),
+            onTabSelected = contract::onMediaCategoryTabClick,
+            onMovieGenreClick = contract::onMovieGenreClick,
+            onTvShowGenreClick = contract::onTvShowGenreClick,
+            config = MediaGridConfig(
+                showSaveIcon = true,
+                isDarkMode = NovixTheme.isThemeDark,
+                selectedMovieGenre = state.selectedMovieGenre,
+                selectedTvShowGenre = state.selectedTvShowGenre,
+                isMovieSelected = MediaCategory.Movies == state.selectedMediaCategory,
+                isTvShowSelected = MediaCategory.TvShows == state.selectedMediaCategory,
+                onNavigateToMovie = contract::onNavigateToMovieClick,
+                onNavigateToTvShow = contract::onNavigateToTvShowClick,
+                onSaveClick = { /* TODO: Implement save functionality */ },
+                isItemSaved = { false },
+            ),
+            topBar = {
+                DefaultAppTopBar(
+                    title = screenTitle,
+                    onBack = contract::onBackClick
+                )
+            },
+            isLoading = state.isLoading
+        )
     }
 }
 
 @Composable
-private fun getCombinedItems(state: ContinueWatchingUiState): List<Any> =
-    state.movies.collectAsStateWithLifecycle(emptyList()).value +
+private fun getCombinedItems(state: ContinueWatchingUiState): List<Any> {
+    return state.movies.collectAsStateWithLifecycle(emptyList()).value +
             state.tvSeries.collectAsStateWithLifecycle(emptyList()).value
+}
 
-private fun getSelectedTabIndex(state: ContinueWatchingUiState): Int =
-    if (state.isMovieSelected) MediaCategory.Movies.ordinal else MediaCategory.TvShows.ordinal
+private fun getSelectedTabIndex(state: ContinueWatchingUiState): Int {
+    if (state.selectedMediaCategory == MediaCategory.Movies) return MediaCategory.Movies.ordinal
+    return MediaCategory.TvShows.ordinal
+}
