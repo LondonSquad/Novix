@@ -30,7 +30,7 @@ import com.london.presentation.utils.isLoading
 
 @Composable
 fun TrendingTvShowsScreen(
-    onNavigateTvShow: (Int) -> Unit,
+    onNavigateToTvShowDetails: (Int) -> Unit,
     onNavigateBack: () -> Unit,
     viewModel: TrendingTvShowsViewModel = hiltViewModel()
 ) {
@@ -39,7 +39,7 @@ fun TrendingTvShowsScreen(
 
     effect?.Listen { currentEffect ->
         when (currentEffect) {
-            is TrendingTvShowsEffect.NavigateToTvShow -> onNavigateTvShow(currentEffect.tvShowId)
+            is TrendingTvShowsEffect.NavigateToTvShow -> onNavigateToTvShowDetails(currentEffect.tvShowId)
             is TrendingTvShowsEffect.NavigateBack -> onNavigateBack()
         }
     }
@@ -86,11 +86,10 @@ private fun Content(
         )
         GenresSection(
             genres = state.tvShowsGenres,
-            selectedGenreId = state.selectedGenreId,
+            selectedGenre = state.selectedGenre,
             screenWidth = screenWidth,
             onGenreClick = contract::onGenreSelected,
             modifier = Modifier.padding(bottom = 12.dp),
-            getGenreId = { it.id },
             getGenreName = { stringResource(it.stringResId) }
         )
         MediaLazyPagingGrid(

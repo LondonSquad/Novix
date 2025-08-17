@@ -30,7 +30,7 @@ import com.london.presentation.utils.isLoading
 
 @Composable
 fun TrendingMoviesScreen(
-    onNavigateMovie: (Int) -> Unit,
+    onNavigateToMovieToDetails: (Int) -> Unit,
     onNavigateBack: () -> Unit,
     viewModel: TrendingMoviesViewModel = hiltViewModel()
 ) {
@@ -39,7 +39,7 @@ fun TrendingMoviesScreen(
 
     effect?.Listen { currentEffect ->
         when (currentEffect) {
-            is TrendingMoviesEffect.NavigateToMovie -> onNavigateMovie(currentEffect.movieId)
+            is TrendingMoviesEffect.NavigateToMovie -> onNavigateToMovieToDetails(currentEffect.movieId)
             is TrendingMoviesEffect.NavigateBack -> onNavigateBack()
         }
     }
@@ -84,11 +84,10 @@ private fun Content(
         )
         GenresSection(
             genres = state.movieGenres,
-            selectedGenreId = state.selectedGenreId,
+            selectedGenre = state.selectedGenre,
             screenWidth = screenWidth,
             onGenreClick = contract::onGenreSelected,
             modifier = Modifier.padding(bottom = 12.dp),
-            getGenreId = { it.id },
             getGenreName = { stringResource(it.stringResId) }
         )
         MediaLazyPagingGrid(

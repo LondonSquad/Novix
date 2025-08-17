@@ -67,6 +67,7 @@ import com.london.presentation.R.drawable
 import com.london.presentation.R.string.calendar
 import com.london.presentation.R.string.more_like_this
 import com.london.presentation.R.string.overview
+import com.london.presentation.R.string.star
 import com.london.presentation.R.string.time_icon
 import com.london.presentation.R.string.view_reviews
 import com.london.presentation.feature.search.SearchCategory
@@ -78,8 +79,8 @@ import com.london.presentation.shared.HomeCard
 import com.london.presentation.shared.SnackBarAnimation
 import com.london.presentation.shared.TextWithIcon
 import com.london.presentation.shared.buildscreen.BuildScreen
+import com.london.presentation.shared.genre.MovieGenreUi
 import com.london.presentation.utils.Listen
-import com.london.presentation.utils.convertGenreCodeToString
 import com.london.presentation.utils.getLocalizedTimeUnit
 import com.london.presentation.utils.gridColumns
 import com.london.presentation.utils.isNotZeroRate
@@ -92,29 +93,25 @@ import com.london.presentation.utils.toLocalizedNumbers
 fun MovieDetailsScreen(
     onNavigateBack: () -> Unit,
     onNavigateToLogin: () -> Unit,
-    onNavigateGenre: (Int) -> Unit,
-    onNavigateToMovie: (Int) -> Unit,
-    onNavigateToActor: (Int) -> Unit,
-    onNavigateToReviews: (Int, Int) -> Unit,
+    onNavigateToMovieCategory: (MovieGenreUi) -> Unit,
+    onNavigateToMovieDetails: (Int) -> Unit,
+    navigateToActorDetails: (Int) -> Unit,
+    onNavigateToReviews: (Int, MediaType) -> Unit,
     viewModel: MovieDetailsViewModel = hiltViewModel()
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
     val effect by viewModel.effect.collectAsState(null)
 
-    effect?.Listen { currentEffect ->
-        when (currentEffect) {
-            is MovieDetailsEffect.ActorNavigation -> onNavigateToActor(currentEffect.actorId)
-            MovieDetailsEffect.BackNavigation -> onNavigateBack()
-            is MovieDetailsEffect.GenreMoviesNavigation -> onNavigateGenre(currentEffect.genreId)
-            is MovieDetailsEffect.MovieNavigation -> onNavigateToMovie(currentEffect.movieId)
-            is MovieDetailsEffect.ReviewsNavigation -> onNavigateToReviews(
-                currentEffect.movieId,
-                currentEffect.mediaNumber
-            )
+    HandleMovieDetailsEffects(
+        effect = effect,
+        onNavigateBack = onNavigateBack,
+        onNavigateGenre = onNavigateToMovieCategory,
+        onNavigateToMovie = onNavigateToMovieDetails,
+        onNavigateToActor = navigateToActorDetails,
+        onNavigateToReviews = onNavigateToReviews,
+        onNavigateToLogin = onNavigateToLogin
+    )
 
-            is MovieDetailsEffect.LoginNavigation -> onNavigateToLogin()
-        }
-    }
     BuildScreen(
         onBack = viewModel::onBackClick,
         isLoading = state.isLoading,
@@ -451,6 +448,33 @@ private fun RatingAndMetaRow(
     }
 }
 
+
+@Composable
+private fun HandleMovieDetailsEffects(
+    effect: MovieDetailsEffect?,
+    onNavigateBack: () -> Unit,
+    onNavigateGenre: (Int) -> Unit,
+    onNavigateToMovie: (Int) -> Unit,
+    onNavigateToActor: (Int) -> Unit,
+    onNavigateToReviews: (Int, MediaType) -> Unit,
+    onNavigateToLogin: () -> Unit
+) {
+    effect?.Listen { currentEffect ->
+        when (currentEffect) {
+            is MovieDetailsEffect.ActorNavigation -> onNavigateToActor(currentEffect.actorId)
+            MovieDetailsEffect.BackNavigation -> onNavigateBack()
+            is MovieDetailsEffect.GenreNavigation -> onNavigateGenre(currentEffect.genreId)
+            is MovieDetailsEffect.MovieNavigation -> onNavigateToMovie(currentEffect.movieId)
+            is MovieDetailsEffect.ReviewsNavigation -> onNavigateToReviews(
+                currentEffect.movieId,
+                currentEffect.mediaType
+            )
+            is MovieDetailsEffect.OnLoginNavigation -> onNavigateToLogin()
+        }
+    }
+}
+
+
 @Composable
 private fun IconWithText(
     icon: Int,
@@ -473,8 +497,8 @@ private fun IconWithText(
 
 @Composable
 private fun GenreRow(
-    genres: List<Int>,
-    onGenreClick: (Int) -> Unit
+    genres: List<MovieGenreUi>,
+    onGenreClick: (MovieGenreUi) -> Unit
 ) {
     Row(
         horizontalArrangement = Arrangement.spacedBy(8.dp),
@@ -483,7 +507,7 @@ private fun GenreRow(
     ) {
         genres.forEachIndexed { index, genre ->
             Text(
-                stringResource(convertGenreCodeToString(genre, SearchCategory.Movies)),
+                text = genre.name,
                 style = NovixTheme.typography.label.small,
                 color = NovixTheme.colors.body,
                 modifier = Modifier.noRippleClickable {

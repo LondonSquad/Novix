@@ -15,24 +15,24 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.london.designsystem.component.NovixChip
 import com.london.designsystem.theme.ThemePreviews
-import com.london.presentation.utils.MovieGenre
-import com.london.presentation.utils.TvShowGenre
+import com.london.presentation.shared.genre.MovieGenreUi
+import com.london.presentation.shared.genre.TvShowGenreUi
 
 @Composable
 fun MediaGenreFilters(
     isMovieSelected: Boolean,
     isTvShowSelected: Boolean,
-    selectedMovieGenre: MovieGenre,
-    selectedTvShowGenre: TvShowGenre,
-    onMovieGenreClick: (MovieGenre) -> Unit,
-    onTvShowGenreClick: (TvShowGenre) -> Unit,
+    selectedMovieGenre: MovieGenreUi,
+    selectedTvShowGenre: TvShowGenreUi,
+    onMovieGenreClick: (MovieGenreUi) -> Unit,
+    onTvShowGenreClick: (TvShowGenreUi) -> Unit,
 ) {
     val screenWidth = with(LocalDensity.current) {
         LocalWindowInfo.current.containerSize.width.toDp()
     }
     when {
         isMovieSelected -> GenreChipsRow(
-            genres = MovieGenre.entries,
+            genres = MovieGenreUi.getList(),
             selectedGenre = selectedMovieGenre,
             onGenreClick = onMovieGenreClick,
             screenWidth = screenWidth,
@@ -40,7 +40,7 @@ fun MediaGenreFilters(
         )
 
         isTvShowSelected -> GenreChipsRow(
-            genres = TvShowGenre.entries,
+            genres = TvShowGenreUi.getList(),
             selectedGenre = selectedTvShowGenre,
             onGenreClick = onTvShowGenreClick,
             screenWidth = screenWidth,
@@ -81,8 +81,8 @@ private fun Preview() {
     MediaGenreFilters(
         isMovieSelected = true,
         isTvShowSelected = false,
-        selectedMovieGenre = MovieGenre.All,
-        selectedTvShowGenre = TvShowGenre.All,
+        selectedMovieGenre = MovieGenreUi.All,
+        selectedTvShowGenre = TvShowGenreUi.All,
         onMovieGenreClick = {},
         onTvShowGenreClick = {}
     )

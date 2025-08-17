@@ -1,4 +1,4 @@
-package com.london.data.di
+package com.london.app.di
 
 import com.london.data.local.database.dao.search.GenreInterestDao
 import com.london.data.local.model.home.popular.PopularSectionLocal

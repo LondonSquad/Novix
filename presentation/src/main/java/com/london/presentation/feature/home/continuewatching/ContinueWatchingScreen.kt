@@ -33,31 +33,12 @@ import com.london.presentation.shared.container.MediaGridConfig
 import com.london.presentation.shared.container.MediaLazyGridWithTabs
 import com.london.presentation.utils.Listen
 
-fun LazyGridScope.continueWatchingSection(
-    screenWidth: Dp,
-    recentWatchedMedia: List<HomeUiMedia>,
-    isLoading: Boolean,
-    homeScreenContract: HomeScreenContract
-) {
-    item(span = { GridItemSpan(maxLineSpan) }) {
-        if (!isLoading) {
-            ContinueWatchingSection(
-                recentWatchedMediaList = recentWatchedMedia,
-                homeScreenContract = homeScreenContract,
-                modifier = Modifier.requiredWidth(screenWidth)
-            )
-        } else {
-            CarousalShimmerEffect()
-        }
-    }
-}
-
 @Composable
 fun ContinueWatchingScreen(
     screenTitle: String,
-    onBackClick: () -> Unit = {},
-    onMovieClick: (Int) -> Unit = {},
-    onTvShowClick: (Int) -> Unit = {},
+    onNavigateBack: () -> Unit = {},
+    onNaviagteToMovieDetalis: (Int) -> Unit = {},
+    onNaviagteToTvShowDetalis: (Int) -> Unit = {},
     viewModel: ContinueWatchingViewModel = hiltViewModel(),
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
@@ -65,9 +46,9 @@ fun ContinueWatchingScreen(
 
     effect?.Listen {
         when (it) {
-            is ContinueWatchingEffect.NavigateToMovieDetails -> onMovieClick(it.id)
-            is ContinueWatchingEffect.NavigateToTvShowDetails -> onTvShowClick(it.id)
-            is ContinueWatchingEffect.NavigateBack -> onBackClick()
+            is ContinueWatchingEffect.NavigateToMovieDetails -> onNaviagteToMovieDetalis(it.id)
+            is ContinueWatchingEffect.NavigateToTvShowDetails -> onNaviagteToTvShowDetalis(it.id)
+            is ContinueWatchingEffect.NavigateBack -> onNavigateBack()
         }
     }
 

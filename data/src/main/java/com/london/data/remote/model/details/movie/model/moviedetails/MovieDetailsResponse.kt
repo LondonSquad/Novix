@@ -1,5 +1,6 @@
 package com.london.data.remote.model.details.movie.model.moviedetails
 
+import com.london.data.mapper.genre.GenreMapper
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
@@ -57,4 +58,4 @@ data class MovieDetailsResponse(
     val voteAverage: Double?,
     @SerialName("vote_count")
     val voteCount: Int?
-)
+) : GenreMapper

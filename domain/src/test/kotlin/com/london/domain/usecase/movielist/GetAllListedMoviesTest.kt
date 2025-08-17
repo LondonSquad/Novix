@@ -4,6 +4,7 @@ import com.google.common.truth.Truth.assertThat
 import com.london.domain.entity.Movie
 import com.london.domain.entity.MovieList
 import com.london.domain.entity.PagedFetchResponse
+import com.london.domain.entity.genre.MovieGenre
 import com.london.domain.repository.CustomMovieListRepository
 import io.mockk.coEvery
 import io.mockk.mockk
@@ -77,7 +78,7 @@ class GetAllListedMoviesTest {
                     posterUrl = "none",
                     releaseYear = 1,
                     rating = 1,
-                    genreIds = listOf(1, 2, 3)
+                    genres = listOf(MovieGenre.ACTION, MovieGenre.ACTION, MovieGenre.ACTION)
                 ),
                 Movie(
                     id = 2,
@@ -85,7 +86,7 @@ class GetAllListedMoviesTest {
                     posterUrl = "none",
                     releaseYear = 1,
                     rating = 1,
-                    genreIds = listOf(1, 6, 3)
+                    genres = listOf(MovieGenre.ACTION, MovieGenre.ACTION, MovieGenre.ACTION)
                 )
             )
         )
@@ -100,7 +101,7 @@ class GetAllListedMoviesTest {
                     posterUrl = "none",
                     releaseYear = 1,
                     rating = 1,
-                    genreIds = listOf(1, 2, 3)
+                    genres = listOf(MovieGenre.ACTION, MovieGenre.ACTION, MovieGenre.ACTION)
                 ),
                 Movie(
                     id = 4,
@@ -108,7 +109,7 @@ class GetAllListedMoviesTest {
                     posterUrl = "none",
                     releaseYear = 1,
                     rating = 1,
-                    genreIds = listOf(1, 6, 3)
+                    genres = listOf(MovieGenre.ACTION, MovieGenre.ACTION, MovieGenre.ACTION)
                 )
             )
         )
@@ -119,7 +120,7 @@ class GetAllListedMoviesTest {
                 posterUrl = "none",
                 releaseYear = 1,
                 rating = 1,
-                genreIds = listOf(1, 2, 3)
+                genres = listOf(MovieGenre.ACTION, MovieGenre.ACTION, MovieGenre.ACTION)
             ),
             Movie(
                 id = 2,
@@ -127,7 +128,7 @@ class GetAllListedMoviesTest {
                 posterUrl = "none",
                 releaseYear = 1,
                 rating = 1,
-                genreIds = listOf(1, 6, 3)
+                genres = listOf(MovieGenre.ACTION, MovieGenre.ACTION, MovieGenre.ACTION)
             ),
             Movie(
                 id = 3,
@@ -135,7 +136,7 @@ class GetAllListedMoviesTest {
                 posterUrl = "none",
                 releaseYear = 1,
                 rating = 1,
-                genreIds = listOf(1, 2, 3)
+                genres = listOf(MovieGenre.ACTION, MovieGenre.ACTION, MovieGenre.ACTION)
             ),
             Movie(
                 id = 4,
@@ -143,7 +144,7 @@ class GetAllListedMoviesTest {
                 posterUrl = "none",
                 releaseYear = 1,
                 rating = 1,
-                genreIds = listOf(1, 6, 3)
+                genres = listOf(MovieGenre.ACTION, MovieGenre.ACTION, MovieGenre.ACTION)
             )
         )
     }

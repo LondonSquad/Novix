@@ -72,6 +72,7 @@ import com.london.presentation.shared.ImageView
 import com.london.presentation.shared.RatingItem
 import com.london.presentation.shared.SnackBarAnimation
 import com.london.presentation.shared.buildscreen.BuildScreen
+import com.london.presentation.shared.genre.TvShowGenreUi
 import com.london.presentation.utils.Listen
 import com.london.presentation.utils.convertDate
 import com.london.presentation.utils.isNotZeroRate
@@ -83,8 +84,8 @@ import com.london.presentation.utils.toLocalizedNumbers
 @Composable
 fun TvShowsDetailsScreen(
     onNavigateToLogin: () -> Unit,
-    onNavigateToCast: (Int) -> Unit,
-    onNavigateToGenre: (Int) -> Unit,
+    onNavigateToActorDetails: (Int) -> Unit,
+    onNavigateToTvShowCategory: (TvShowGenreUi) -> Unit,
     onNavigateToReviews: (tvShowId: Int, mediaType: MediaType) -> Unit,
     onNavigateBack: () -> Unit = {},
     onNavigateToEpisodeDetails: (tvShowId: Int, episodeNumber: Int, seasonNumber: Int) -> Unit,
@@ -104,14 +105,14 @@ fun TvShowsDetailsScreen(
             }
 
             TvShowDetailsEffect.NavigateBack -> onNavigateBack()
-            is TvShowDetailsEffect.NavigateToCast -> onNavigateToCast(currentEffect.tvShowId)
+            is TvShowDetailsEffect.NavigateToCast -> onNavigateToActorDetails(currentEffect.tvShowId)
             is TvShowDetailsEffect.NavigateToReviews -> onNavigateToReviews(
                 currentEffect.tvShowId,
                 MediaType.TvShow
             )
 
-            is TvShowDetailsEffect.NavigateToTvShowsByCategoryId -> onNavigateToGenre(
-                currentEffect.categoryId
+            is TvShowDetailsEffect.NavigateToTvShowsByCategoryId -> onNavigateToTvShowCategory(
+                currentEffect.category
             )
 
             is TvShowDetailsEffect.OnLoginNavigation -> onNavigateToLogin()
@@ -336,7 +337,7 @@ fun HeaderDetailsCard(
     modifier: Modifier = Modifier,
     uiState: TvShowDetailsUiState,
     onReviewClick: (tvShowId: Int) -> Unit,
-    onGenreClick: (genreId: Int) -> Unit,
+    onGenreClick: (genreUi: TvShowGenreUi) -> Unit,
     tvShowId: Int,
     rating: String,
     date: String,
@@ -383,7 +384,7 @@ fun HeaderDetailsCard(
 fun GenreNames(
     modifier: Modifier = Modifier,
     uiState: TvShowDetailsUiState,
-    onGenreClick: (genreId: Int) -> Unit
+    onGenreClick: (genreUi: TvShowGenreUi) -> Unit
 ) {
     FlowRow(
         modifier = modifier
@@ -393,14 +394,14 @@ fun GenreNames(
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Text(
-                    text = genre.name,
+                    text = stringResource(genre.stringResId),
                     style = NovixTheme.typography.label.small,
                     color = NovixTheme.colors.body,
                     modifier = if (index != uiState.tvShowGenres.lastIndex)
                         Modifier
-                            .noRippleClickable { onGenreClick(genre.id) }
+                            .noRippleClickable { onGenreClick(genre) }
                             .padding(end = 8.dp)
-                    else Modifier.noRippleClickable { onGenreClick(genre.id) }
+                    else Modifier.noRippleClickable { onGenreClick(genre) }
                 )
 
                 if (index != uiState.tvShowGenres.lastIndex) {
