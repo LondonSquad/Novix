@@ -99,7 +99,7 @@ class MovieRepositoryImpl @Inject constructor(
         genre: MovieGenre,
         pageNumber: Int
     ): PagedFetchResponse<UpComingMovie> = fetchAndSync(
-        cacheBlock = { getUpComingCashedMovies(pageNumber = pageNumber, genre = genre) },
+        cacheBlock = { getUpComingCachedMovies(pageNumber = pageNumber, genre = genre) },
         crashReporter = crashReporter,
         syncBlock = { upComingLocalDataSource.insert(it) },
         networkBlock = { getUpcomingMovies(pageNumber = pageNumber, genre = genre) })
@@ -160,7 +160,7 @@ class MovieRepositoryImpl @Inject constructor(
     }
 
     override suspend fun getPopularMovies(): List<PopularMedia> = fetchAndSync(
-        cacheBlock = { getCashedPopularMovies() },
+        cacheBlock = { getCachedPopularMovies() },
         networkBlock = {
             movieRemoteDataSource.getPopularMovies().getOrThrow().toPopularMovies()
         },
@@ -203,7 +203,7 @@ class MovieRepositoryImpl @Inject constructor(
         ).getOrThrow().toLocal(genre.getId())
     }
 
-    private suspend fun getUpComingCashedMovies(
+    private suspend fun getUpComingCachedMovies(
         pageNumber: Int, genre: MovieGenre
     ): UpComingSectionLocal {
         return upComingLocalDataSource.getUpComingMoviesPage(
@@ -244,7 +244,7 @@ class MovieRepositoryImpl @Inject constructor(
         return local.takeIf { it.isNotEmpty() }
     }
 
-    private suspend fun getCashedPopularMovies(): List<PopularMedia>? {
+    private suspend fun getCachedPopularMovies(): List<PopularMedia>? {
         val local = homeLocalDataSource.getAll()
             .filter { it.mediaType == MediaType.Movie }
             .map { it.toMovieEntity() }
