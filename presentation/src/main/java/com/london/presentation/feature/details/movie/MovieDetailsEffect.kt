@@ -5,7 +5,7 @@ import com.london.presentation.shared.genre.MovieGenreUi
 
 sealed interface MovieDetailsEffect {
     data object BackNavigation : MovieDetailsEffect
-    data object OnLoginNavigation : MovieDetailsEffect
+    data object LoginNavigation : MovieDetailsEffect
     data class MovieNavigation(val movieId: Int) : MovieDetailsEffect
     data class ActorNavigation(val actorId: Int) : MovieDetailsEffect
     data class GenreNavigation(val genre: MovieGenreUi) : MovieDetailsEffect

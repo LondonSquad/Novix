@@ -189,8 +189,8 @@ fun NavGraphBuilder.movieDetailsNavGraph(navController: NavHostController) =
             MovieDetailsScreen(
                 onNavigateBack = ::navigateUp,
                 onNavigateToMovieCategory = ::navigateToMovieCategory,
-                onNavigateToMovieDetails = ::navigateToMovieDetails,
-                navigateToActorDetails = ::navigateToActorDetails,
+                onNavigateToMovie = ::navigateToMovieDetails,
+                onNavigateToActor = ::navigateToActorDetails,
                 onNavigateToReviews = ::navigateToReviews,
                 onNavigateToLogin = ::navigateToLogin,
             )
