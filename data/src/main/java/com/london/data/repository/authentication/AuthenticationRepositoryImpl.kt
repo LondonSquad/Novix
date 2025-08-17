@@ -6,6 +6,7 @@ import com.london.data.remote.model.authentication.RequestTokenResponse
 import com.london.data.remote.model.authentication.SessionResponse
 import com.london.data.remote.source.account.AccountRemoteDataSource
 import com.london.data.remote.source.authentication.AuthenticationRemoteDataSource
+import com.london.data.utils.isFailure
 import com.london.domain.repository.AuthenticationRepository
 import javax.inject.Inject
 
@@ -21,13 +22,13 @@ class AuthenticationRepositoryImpl @Inject constructor(
             password = password
         )
 
-        if (!sessionResponse.success) return false
+        if (sessionResponse.isFailure()) return false
 
         val createdSession = createSession(sessionResponse)
         saveUserSession(
             username = username,
             session = createdSession,
-            requestToken = sessionResponse.requestToken
+            requestToken = sessionResponse.requestToken.orEmpty()
         )
 
         getUserAccount(session = createdSession)
@@ -36,10 +37,10 @@ class AuthenticationRepositoryImpl @Inject constructor(
 
     override suspend fun loginAsGuest(): Boolean {
         val guestResponse = authenticationRemoteDataSource.createGuestSession().getOrThrow()
-        if (!guestResponse.success) return false
+        if (guestResponse.isFailure()) return false
 
         authenticationPreferences.apply {
-            saveGuestSessionId(guestResponse.guestSessionId)
+            saveGuestSessionId(guestResponse.guestSessionId.orEmpty())
             setGuestMode(true)
         }
         return true
@@ -67,13 +68,13 @@ class AuthenticationRepositoryImpl @Inject constructor(
         return authenticationRemoteDataSource.validateLoginCredentials(
             username = username,
             password = password,
-            requestToken = fetchRequestToken().requestToken
+            requestToken = fetchRequestToken().requestToken.orEmpty()
         ).getOrThrow()
     }
 
     private suspend fun createSession(session: RequestTokenResponse): SessionResponse {
         return authenticationRemoteDataSource.createSession(
-            requestToken = session.requestToken
+            requestToken = session.requestToken.orEmpty()
         ).getOrThrow()
     }
 
@@ -83,7 +84,7 @@ class AuthenticationRepositoryImpl @Inject constructor(
         requestToken: String
     ) {
         authenticationPreferences.apply {
-            saveSessionId(session.sessionId)
+            saveSessionId(session.sessionId.orEmpty())
             saveUsername(username)
             saveRequestToken(requestToken)
             setGuestMode(false)
@@ -91,7 +92,7 @@ class AuthenticationRepositoryImpl @Inject constructor(
     }
 
     private suspend fun getUserAccount(session: SessionResponse) {
-        val accountResult = accountRemoteDataSource.getAccountDetails(session.sessionId)
+        val accountResult = accountRemoteDataSource.getAccountDetails(session.sessionId.orEmpty())
         val accountInfo = accountResult.getOrThrow().toEntity()
         val accountId = accountInfo.id
         saveUserAccount(id = accountId)

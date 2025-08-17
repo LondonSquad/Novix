@@ -6,13 +6,13 @@ import kotlinx.serialization.Serializable
 @Serializable
 data class AccountInfoResponse(
     @SerialName("id")
-    val id: Int?,
+    val id: Int? = null,
     @SerialName("username")
-    val userName: String?,
+    val userName: String? = null,
     @SerialName("name")
-    val name: String?,
+    val name: String? = null,
     @SerialName("avatar")
-    val avatar: AvatarInfo?
+    val avatar: AvatarInfo? = null
 )
 
 @Serializable
@@ -24,5 +24,5 @@ data class AvatarInfo(
 @Serializable
 data class AvatarDetails(
     @SerialName("avatar_path")
-    val avatarPath: String?
+    val avatarPath: String? = null
 )
