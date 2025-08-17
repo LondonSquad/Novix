@@ -35685,12 +35685,31 @@
         "count": 27
       }
     ],
-    "approvals": [],
+    "approvals": [
+      {
+        "reviewer": {
+          "login": "BassantM",
+          "id": 102248144,
+          "url": "https://github.com/BassantM"
+        },
+        "submitted_at": "2025-08-11T20:50:47Z",
+        "commit_id": "c1896dcceaf30b6b2b8bd3b5fe6269c8ba7a529c"
+      },
+      {
+        "reviewer": {
+          "login": "Abdulrahman1890",
+          "id": 76666355,
+          "url": "https://github.com/Abdulrahman1890"
+        },
+        "submitted_at": "2025-08-11T20:53:34Z",
+        "commit_id": "c1896dcceaf30b6b2b8bd3b5fe6269c8ba7a529c"
+      }
+    ],
     "required_approvals": 2,
-    "first_approved_at": null,
-    "time_to_first_approval_minutes": null,
-    "required_approvals_met_at": null,
-    "time_to_required_approvals_minutes": null,
+    "first_approved_at": "2025-08-11T20:50:47Z",
+    "time_to_first_approval_minutes": 468.7,
+    "required_approvals_met_at": "2025-08-11T20:53:34Z",
+    "time_to_required_approvals_minutes": 471.48333333333335,
     "closed_at": "2025-08-11T20:54:19Z",
     "merged_at": "2025-08-11T20:54:19Z",
     "merged_by": {
@@ -35828,19 +35847,21 @@
     "approvals": [
       {
         "reviewer": {
-          "id": 43588217,
           "login": "yusufnasserdev",
+          "id": 43588217,
           "url": "https://github.com/yusufnasserdev"
         },
-        "submitted_at": "2025-08-14T16:32:57Z"
+        "submitted_at": "2025-08-14T16:32:57Z",
+        "commit_id": "017c0987b808a06f21eeba86d477319ed33626db"
       },
       {
         "reviewer": {
-          "id": 100484790,
           "login": "marwanqashwa",
+          "id": 100484790,
           "url": "https://github.com/marwanqashwa"
         },
-        "submitted_at": "2025-08-14T16:33:24Z"
+        "submitted_at": "2025-08-14T16:33:24Z",
+        "commit_id": "017c0987b808a06f21eeba86d477319ed33626db"
       }
     ],
     "required_approvals": 2,
@@ -35934,12 +35955,31 @@
         "count": 7
       }
     ],
-    "approvals": [],
+    "approvals": [
+      {
+        "reviewer": {
+          "login": "marwanqashwa",
+          "id": 100484790,
+          "url": "https://github.com/marwanqashwa"
+        },
+        "submitted_at": "2025-08-14T00:32:44Z",
+        "commit_id": "43200e64d967568970eadee49b2d9e6d2813fad3"
+      },
+      {
+        "reviewer": {
+          "login": "AsmaaKhaledGomaa",
+          "id": 117874933,
+          "url": "https://github.com/AsmaaKhaledGomaa"
+        },
+        "submitted_at": "2025-08-14T00:43:19Z",
+        "commit_id": "43200e64d967568970eadee49b2d9e6d2813fad3"
+      }
+    ],
     "required_approvals": 2,
-    "first_approved_at": null,
-    "time_to_first_approval_minutes": null,
-    "required_approvals_met_at": null,
-    "time_to_required_approvals_minutes": null,
+    "first_approved_at": "2025-08-14T00:32:44Z",
+    "time_to_first_approval_minutes": 2913.983333333333,
+    "required_approvals_met_at": "2025-08-14T00:43:19Z",
+    "time_to_required_approvals_minutes": 2924.5666666666666,
     "closed_at": "2025-08-14T00:43:21Z",
     "merged_at": "2025-08-14T00:43:21Z",
     "merged_by": {
@@ -36039,19 +36079,21 @@
     "approvals": [
       {
         "reviewer": {
-          "id": 117874933,
           "login": "AsmaaKhaledGomaa",
+          "id": 117874933,
           "url": "https://github.com/AsmaaKhaledGomaa"
         },
-        "submitted_at": "2025-08-13T21:26:10Z"
+        "submitted_at": "2025-08-13T21:26:10Z",
+        "commit_id": "a7b434bafa2a9c7610f50ac9086a80a7da5085fa"
       },
       {
         "reviewer": {
-          "id": 106277855,
           "login": "Mostafa-alsaygh",
+          "id": 106277855,
           "url": "https://github.com/Mostafa-alsaygh"
         },
-        "submitted_at": "2025-08-13T21:35:49Z"
+        "submitted_at": "2025-08-13T21:35:49Z",
+        "commit_id": "a7b434bafa2a9c7610f50ac9086a80a7da5085fa"
       }
     ],
     "required_approvals": 2,
@@ -36128,19 +36170,21 @@
     "approvals": [
       {
         "reviewer": {
-          "id": 76666355,
           "login": "Abdulrahman1890",
+          "id": 76666355,
           "url": "https://github.com/Abdulrahman1890"
         },
-        "submitted_at": "2025-08-13T02:46:12Z"
+        "submitted_at": "2025-08-13T02:46:12Z",
+        "commit_id": "a3e9db548a596d71236d9ca4863a05e3bf4f3bdc"
       },
       {
         "reviewer": {
-          "id": 43588217,
           "login": "yusufnasserdev",
+          "id": 43588217,
           "url": "https://github.com/yusufnasserdev"
         },
-        "submitted_at": "2025-08-13T02:54:04Z"
+        "submitted_at": "2025-08-13T02:54:04Z",
+        "commit_id": "a3e9db548a596d71236d9ca4863a05e3bf4f3bdc"
       }
     ],
     "required_approvals": 2,
@@ -36207,19 +36251,21 @@
     "approvals": [
       {
         "reviewer": {
-          "id": 102248144,
           "login": "BassantM",
+          "id": 102248144,
           "url": "https://github.com/BassantM"
         },
-        "submitted_at": "2025-08-13T00:46:52Z"
+        "submitted_at": "2025-08-13T00:46:52Z",
+        "commit_id": "115b6d7846e8972177d6fdc45f2b587365da5c5a"
       },
       {
         "reviewer": {
-          "id": 117874933,
           "login": "AsmaaKhaledGomaa",
+          "id": 117874933,
           "url": "https://github.com/AsmaaKhaledGomaa"
         },
-        "submitted_at": "2025-08-13T00:47:23Z"
+        "submitted_at": "2025-08-13T00:47:23Z",
+        "commit_id": "115b6d7846e8972177d6fdc45f2b587365da5c5a"
       }
     ],
     "required_approvals": 2,
@@ -36296,19 +36342,21 @@
     "approvals": [
       {
         "reviewer": {
-          "id": 102248144,
           "login": "BassantM",
+          "id": 102248144,
           "url": "https://github.com/BassantM"
         },
-        "submitted_at": "2025-08-13T20:44:14Z"
+        "submitted_at": "2025-08-13T20:44:14Z",
+        "commit_id": "0714e2feacb88951512a4697cce729663009ee1f"
       },
       {
         "reviewer": {
-          "id": 106277855,
           "login": "Mostafa-alsaygh",
+          "id": 106277855,
           "url": "https://github.com/Mostafa-alsaygh"
         },
-        "submitted_at": "2025-08-13T20:46:40Z"
+        "submitted_at": "2025-08-13T20:46:40Z",
+        "commit_id": "0714e2feacb88951512a4697cce729663009ee1f"
       }
     ],
     "required_approvals": 2,
@@ -36395,35 +36443,39 @@
     "approvals": [
       {
         "reviewer": {
-          "id": 76666355,
           "login": "Abdulrahman1890",
+          "id": 76666355,
           "url": "https://github.com/Abdulrahman1890"
         },
-        "submitted_at": "2025-08-13T20:36:08Z"
+        "submitted_at": "2025-08-13T20:36:08Z",
+        "commit_id": "85b9ee039ae02a5104ce09500ca79f7fcfe9be7b"
       },
       {
         "reviewer": {
-          "id": 154278495,
           "login": "ahmeddsamii",
+          "id": 154278495,
           "url": "https://github.com/ahmeddsamii"
         },
-        "submitted_at": "2025-08-13T20:37:29Z"
+        "submitted_at": "2025-08-13T20:37:29Z",
+        "commit_id": "85b9ee039ae02a5104ce09500ca79f7fcfe9be7b"
       },
       {
         "reviewer": {
-          "id": 102248144,
           "login": "BassantM",
+          "id": 102248144,
           "url": "https://github.com/BassantM"
         },
-        "submitted_at": "2025-08-13T20:48:36Z"
+        "submitted_at": "2025-08-13T20:48:36Z",
+        "commit_id": "85b9ee039ae02a5104ce09500ca79f7fcfe9be7b"
       },
       {
         "reviewer": {
-          "id": 106277855,
           "login": "Mostafa-alsaygh",
+          "id": 106277855,
           "url": "https://github.com/Mostafa-alsaygh"
         },
-        "submitted_at": "2025-08-13T21:30:13Z"
+        "submitted_at": "2025-08-13T21:30:13Z",
+        "commit_id": "85b9ee039ae02a5104ce09500ca79f7fcfe9be7b"
       }
     ],
     "required_approvals": 2,
@@ -36500,19 +36552,21 @@
     "approvals": [
       {
         "reviewer": {
-          "id": 81706918,
           "login": "karimdeabes",
+          "id": 81706918,
           "url": "https://github.com/karimdeabes"
         },
-        "submitted_at": "2025-08-12T23:15:00Z"
+        "submitted_at": "2025-08-12T23:15:00Z",
+        "commit_id": "1ff5a6c32cd914fc1edc25c45af0722f974dcaf3"
       },
       {
         "reviewer": {
-          "id": 92235360,
           "login": "abdo-essam",
+          "id": 92235360,
           "url": "https://github.com/abdo-essam"
         },
-        "submitted_at": "2025-08-12T23:38:11Z"
+        "submitted_at": "2025-08-12T23:38:11Z",
+        "commit_id": "1ff5a6c32cd914fc1edc25c45af0722f974dcaf3"
       }
     ],
     "required_approvals": 2,
@@ -36569,19 +36623,21 @@
     "approvals": [
       {
         "reviewer": {
-          "id": 76666355,
           "login": "Abdulrahman1890",
+          "id": 76666355,
           "url": "https://github.com/Abdulrahman1890"
         },
-        "submitted_at": "2025-08-13T13:54:42Z"
+        "submitted_at": "2025-08-13T13:54:42Z",
+        "commit_id": "d3ece547f3b65939882e5e4bd6f7b00eb690280e"
       },
       {
         "reviewer": {
-          "id": 117874933,
           "login": "AsmaaKhaledGomaa",
+          "id": 117874933,
           "url": "https://github.com/AsmaaKhaledGomaa"
         },
-        "submitted_at": "2025-08-13T15:24:30Z"
+        "submitted_at": "2025-08-13T15:24:30Z",
+        "commit_id": "d3ece547f3b65939882e5e4bd6f7b00eb690280e"
       }
     ],
     "required_approvals": 2,
@@ -36627,27 +36683,30 @@
     "approvals": [
       {
         "reviewer": {
-          "id": 100484790,
           "login": "marwanqashwa",
+          "id": 100484790,
           "url": "https://github.com/marwanqashwa"
         },
-        "submitted_at": "2025-08-13T02:09:04Z"
+        "submitted_at": "2025-08-13T02:09:04Z",
+        "commit_id": "bd30c1fee52d44992d3a6953801dcecf943b9454"
       },
       {
         "reviewer": {
-          "id": 117874933,
           "login": "AsmaaKhaledGomaa",
+          "id": 117874933,
           "url": "https://github.com/AsmaaKhaledGomaa"
         },
-        "submitted_at": "2025-08-13T02:09:09Z"
+        "submitted_at": "2025-08-13T02:09:09Z",
+        "commit_id": "bd30c1fee52d44992d3a6953801dcecf943b9454"
       },
       {
         "reviewer": {
-          "id": 43588217,
           "login": "yusufnasserdev",
+          "id": 43588217,
           "url": "https://github.com/yusufnasserdev"
         },
-        "submitted_at": "2025-08-13T02:09:36Z"
+        "submitted_at": "2025-08-13T02:09:36Z",
+        "commit_id": "bd30c1fee52d44992d3a6953801dcecf943b9454"
       }
     ],
     "required_approvals": 2,
@@ -36693,19 +36752,21 @@
     "approvals": [
       {
         "reviewer": {
-          "id": 92235360,
           "login": "abdo-essam",
+          "id": 92235360,
           "url": "https://github.com/abdo-essam"
         },
-        "submitted_at": "2025-08-16T10:02:34Z"
+        "submitted_at": "2025-08-16T10:02:34Z",
+        "commit_id": "d5c23dc23ef89afc3318dc516576dc9c440098cb"
       },
       {
         "reviewer": {
-          "id": 154278495,
           "login": "ahmeddsamii",
+          "id": 154278495,
           "url": "https://github.com/ahmeddsamii"
         },
-        "submitted_at": "2025-08-16T10:04:48Z"
+        "submitted_at": "2025-08-16T10:04:48Z",
+        "commit_id": "d5c23dc23ef89afc3318dc516576dc9c440098cb"
       }
     ],
     "required_approvals": 2,
@@ -36782,19 +36843,21 @@
     "approvals": [
       {
         "reviewer": {
-          "id": 43588217,
           "login": "yusufnasserdev",
+          "id": 43588217,
           "url": "https://github.com/yusufnasserdev"
         },
-        "submitted_at": "2025-08-14T06:19:27Z"
+        "submitted_at": "2025-08-14T06:19:27Z",
+        "commit_id": "cb4e219f8f49bf196b61bec5476335264ba843d5"
       },
       {
         "reviewer": {
-          "id": 76666355,
           "login": "Abdulrahman1890",
+          "id": 76666355,
           "url": "https://github.com/Abdulrahman1890"
         },
-        "submitted_at": "2025-08-14T09:19:59Z"
+        "submitted_at": "2025-08-14T09:19:59Z",
+        "commit_id": "cb4e219f8f49bf196b61bec5476335264ba843d5"
       }
     ],
     "required_approvals": 2,
@@ -37000,19 +37063,21 @@
     "approvals": [
       {
         "reviewer": {
-          "id": 100484790,
           "login": "marwanqashwa",
+          "id": 100484790,
           "url": "https://github.com/marwanqashwa"
         },
-        "submitted_at": "2025-08-16T17:27:14Z"
+        "submitted_at": "2025-08-16T17:27:14Z",
+        "commit_id": "87b168a4536295332857c3913fe60bfb9ab9a6fb"
       },
       {
         "reviewer": {
-          "id": 106277855,
           "login": "Mostafa-alsaygh",
+          "id": 106277855,
           "url": "https://github.com/Mostafa-alsaygh"
         },
-        "submitted_at": "2025-08-16T17:36:01Z"
+        "submitted_at": "2025-08-16T17:36:01Z",
+        "commit_id": "87b168a4536295332857c3913fe60bfb9ab9a6fb"
       }
     ],
     "required_approvals": 2,
@@ -37075,19 +37140,21 @@
     "approvals": [
       {
         "reviewer": {
-          "id": 102248144,
           "login": "BassantM",
+          "id": 102248144,
           "url": "https://github.com/BassantM"
         },
-        "submitted_at": "2025-08-15T06:39:52Z"
+        "submitted_at": "2025-08-15T06:39:52Z",
+        "commit_id": "f5737b566a5b99edfcd8c0bd46092626ac687dd4"
       },
       {
         "reviewer": {
-          "id": 154278495,
           "login": "ahmeddsamii",
+          "id": 154278495,
           "url": "https://github.com/ahmeddsamii"
         },
-        "submitted_at": "2025-08-15T08:39:26Z"
+        "submitted_at": "2025-08-15T08:39:26Z",
+        "commit_id": "f5737b566a5b99edfcd8c0bd46092626ac687dd4"
       }
     ],
     "required_approvals": 2,
@@ -37201,19 +37268,21 @@
     "approvals": [
       {
         "reviewer": {
-          "id": 154278495,
           "login": "ahmeddsamii",
+          "id": 154278495,
           "url": "https://github.com/ahmeddsamii"
         },
-        "submitted_at": "2025-08-14T14:22:45Z"
+        "submitted_at": "2025-08-14T14:22:45Z",
+        "commit_id": "82ccd728aa3b3a7713e11771b3412224368fcbce"
       },
       {
         "reviewer": {
-          "id": 180463542,
           "login": "abdelrhman1002",
+          "id": 180463542,
           "url": "https://github.com/abdelrhman1002"
         },
-        "submitted_at": "2025-08-14T14:23:13Z"
+        "submitted_at": "2025-08-14T14:23:13Z",
+        "commit_id": "82ccd728aa3b3a7713e11771b3412224368fcbce"
       }
     ],
     "required_approvals": 2,
@@ -37270,11 +37339,12 @@
     "approvals": [
       {
         "reviewer": {
-          "id": 106277855,
           "login": "Mostafa-alsaygh",
+          "id": 106277855,
           "url": "https://github.com/Mostafa-alsaygh"
         },
-        "submitted_at": "2025-08-14T16:33:28Z"
+        "submitted_at": "2025-08-14T16:33:28Z",
+        "commit_id": "d21783bd467ae12d7b74f39c55ca32751c27aeed"
       }
     ],
     "required_approvals": 2,
@@ -37316,19 +37386,21 @@
     "approvals": [
       {
         "reviewer": {
-          "id": 76666355,
           "login": "Abdulrahman1890",
+          "id": 76666355,
           "url": "https://github.com/Abdulrahman1890"
         },
-        "submitted_at": "2025-08-15T05:14:57Z"
+        "submitted_at": "2025-08-15T05:14:57Z",
+        "commit_id": "74908b720ea1824688c286f6a0a2f9f64412d7f1"
       },
       {
         "reviewer": {
-          "id": 102248144,
           "login": "BassantM",
+          "id": 102248144,
           "url": "https://github.com/BassantM"
         },
-        "submitted_at": "2025-08-15T05:14:58Z"
+        "submitted_at": "2025-08-15T05:14:58Z",
+        "commit_id": "74908b720ea1824688c286f6a0a2f9f64412d7f1"
       }
     ],
     "required_approvals": 2,
@@ -37385,19 +37457,21 @@
     "approvals": [
       {
         "reviewer": {
-          "id": 102248144,
           "login": "BassantM",
+          "id": 102248144,
           "url": "https://github.com/BassantM"
         },
-        "submitted_at": "2025-08-15T19:41:24Z"
+        "submitted_at": "2025-08-15T19:41:24Z",
+        "commit_id": "598e0e3355973bbf75be369eab8bbb2550d4b8a7"
       },
       {
         "reviewer": {
-          "id": 76666355,
           "login": "Abdulrahman1890",
+          "id": 76666355,
           "url": "https://github.com/Abdulrahman1890"
         },
-        "submitted_at": "2025-08-15T20:03:34Z"
+        "submitted_at": "2025-08-15T20:03:34Z",
+        "commit_id": "598e0e3355973bbf75be369eab8bbb2550d4b8a7"
       }
     ],
     "required_approvals": 2,
@@ -37443,19 +37517,21 @@
     "approvals": [
       {
         "reviewer": {
-          "id": 43588217,
           "login": "yusufnasserdev",
+          "id": 43588217,
           "url": "https://github.com/yusufnasserdev"
         },
-        "submitted_at": "2025-08-16T13:39:29Z"
+        "submitted_at": "2025-08-16T13:39:29Z",
+        "commit_id": "b1ce0be879ad732db3413c6edb9df7ccedcea715"
       },
       {
         "reviewer": {
-          "id": 100484790,
           "login": "marwanqashwa",
+          "id": 100484790,
           "url": "https://github.com/marwanqashwa"
         },
-        "submitted_at": "2025-08-16T17:26:32Z"
+        "submitted_at": "2025-08-16T17:26:32Z",
+        "commit_id": "b1ce0be879ad732db3413c6edb9df7ccedcea715"
       }
     ],
     "required_approvals": 2,
@@ -37532,11 +37608,12 @@
     "approvals": [
       {
         "reviewer": {
-          "id": 100484790,
           "login": "marwanqashwa",
+          "id": 100484790,
           "url": "https://github.com/marwanqashwa"
         },
-        "submitted_at": "2025-08-16T03:29:55Z"
+        "submitted_at": "2025-08-16T03:29:55Z",
+        "commit_id": "018c3d0e4b19b2217b790be54306a00a6cb39abf"
       }
     ],
     "required_approvals": 2,
@@ -37578,19 +37655,21 @@
     "approvals": [
       {
         "reviewer": {
-          "id": 180463542,
           "login": "abdelrhman1002",
+          "id": 180463542,
           "url": "https://github.com/abdelrhman1002"
         },
-        "submitted_at": "2025-08-15T22:22:11Z"
+        "submitted_at": "2025-08-15T22:22:11Z",
+        "commit_id": "4fbc3e92b4064b984cbd2b9a5bff5c568fd27d41"
       },
       {
         "reviewer": {
-          "id": 92235360,
           "login": "abdo-essam",
+          "id": 92235360,
           "url": "https://github.com/abdo-essam"
         },
-        "submitted_at": "2025-08-15T22:22:30Z"
+        "submitted_at": "2025-08-15T22:22:30Z",
+        "commit_id": "4fbc3e92b4064b984cbd2b9a5bff5c568fd27d41"
       }
     ],
     "required_approvals": 2,
@@ -37694,19 +37773,21 @@
     "approvals": [
       {
         "reviewer": {
-          "id": 43588217,
           "login": "yusufnasserdev",
+          "id": 43588217,
           "url": "https://github.com/yusufnasserdev"
         },
-        "submitted_at": "2025-08-16T07:47:21Z"
+        "submitted_at": "2025-08-16T07:47:21Z",
+        "commit_id": "ec5217399a75ed4b0552ba7620bd2421c8a633db"
       },
       {
         "reviewer": {
-          "id": 92235360,
           "login": "abdo-essam",
+          "id": 92235360,
           "url": "https://github.com/abdo-essam"
         },
-        "submitted_at": "2025-08-16T08:25:45Z"
+        "submitted_at": "2025-08-16T08:25:45Z",
+        "commit_id": "ec5217399a75ed4b0552ba7620bd2421c8a633db"
       }
     ],
     "required_approvals": 2,
@@ -37752,19 +37833,21 @@
     "approvals": [
       {
         "reviewer": {
-          "id": 43588217,
           "login": "yusufnasserdev",
+          "id": 43588217,
           "url": "https://github.com/yusufnasserdev"
         },
-        "submitted_at": "2025-08-16T08:24:38Z"
+        "submitted_at": "2025-08-16T08:24:38Z",
+        "commit_id": "3f05c86d7225b92ba0bd59ff894d81a3e1c5f2eb"
       },
       {
         "reviewer": {
-          "id": 154278495,
           "login": "ahmeddsamii",
+          "id": 154278495,
           "url": "https://github.com/ahmeddsamii"
         },
-        "submitted_at": "2025-08-16T08:26:10Z"
+        "submitted_at": "2025-08-16T08:26:10Z",
+        "commit_id": "3f05c86d7225b92ba0bd59ff894d81a3e1c5f2eb"
       }
     ],
     "required_approvals": 2,
@@ -37810,19 +37893,21 @@
     "approvals": [
       {
         "reviewer": {
-          "id": 43588217,
           "login": "yusufnasserdev",
+          "id": 43588217,
           "url": "https://github.com/yusufnasserdev"
         },
-        "submitted_at": "2025-08-16T08:52:13Z"
+        "submitted_at": "2025-08-16T08:52:13Z",
+        "commit_id": "af9180003bc8e4cfbfbc35d4311f46630e087faf"
       },
       {
         "reviewer": {
-          "id": 92235360,
           "login": "abdo-essam",
+          "id": 92235360,
           "url": "https://github.com/abdo-essam"
         },
-        "submitted_at": "2025-08-16T09:04:45Z"
+        "submitted_at": "2025-08-16T09:04:45Z",
+        "commit_id": "af9180003bc8e4cfbfbc35d4311f46630e087faf"
       }
     ],
     "required_approvals": 2,
@@ -37868,19 +37953,21 @@
     "approvals": [
       {
         "reviewer": {
-          "id": 43588217,
           "login": "yusufnasserdev",
+          "id": 43588217,
           "url": "https://github.com/yusufnasserdev"
         },
-        "submitted_at": "2025-08-16T09:51:59Z"
+        "submitted_at": "2025-08-16T09:51:59Z",
+        "commit_id": "b721e985e27ede92dafefa5b8cec3a4babf510af"
       },
       {
         "reviewer": {
-          "id": 154278495,
           "login": "ahmeddsamii",
+          "id": 154278495,
           "url": "https://github.com/ahmeddsamii"
         },
-        "submitted_at": "2025-08-16T10:19:38Z"
+        "submitted_at": "2025-08-16T10:19:38Z",
+        "commit_id": "b721e985e27ede92dafefa5b8cec3a4babf510af"
       }
     ],
     "required_approvals": 2,
@@ -37963,19 +38050,21 @@
     "approvals": [
       {
         "reviewer": {
-          "id": 189210092,
           "login": "Aseel-AbuKmail",
+          "id": 189210092,
           "url": "https://github.com/Aseel-AbuKmail"
         },
-        "submitted_at": "2025-08-16T12:17:27Z"
+        "submitted_at": "2025-08-16T12:17:27Z",
+        "commit_id": "0084d7781ecc8dcf468b1f3e6bee3d65d1dad719"
       },
       {
         "reviewer": {
-          "id": 92235360,
           "login": "abdo-essam",
+          "id": 92235360,
           "url": "https://github.com/abdo-essam"
         },
-        "submitted_at": "2025-08-16T16:34:26Z"
+        "submitted_at": "2025-08-16T16:34:26Z",
+        "commit_id": "0084d7781ecc8dcf468b1f3e6bee3d65d1dad719"
       }
     ],
     "required_approvals": 2,
