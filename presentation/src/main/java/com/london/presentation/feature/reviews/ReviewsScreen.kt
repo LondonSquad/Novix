@@ -114,7 +114,7 @@ private fun ReviewsTopBar(
 }
 
 @Composable
-fun EmptyReviewsState(
+private fun EmptyReviewsState(
     modifier: Modifier = Modifier,
     text: String = stringResource(R.string.no_reviews)
 ) {
@@ -151,7 +151,7 @@ fun EmptyReviewsState(
 }
 
 @Composable
-fun ReviewsList(
+private fun ReviewsList(
     reviewsList: LazyPagingItems<ReviewEntity>,
     modifier: Modifier = Modifier
 ) {
@@ -173,7 +173,7 @@ fun ReviewsList(
 }
 
 @Composable
-fun ReviewItem(
+private fun ReviewItem(
     review: ReviewEntity,
     date: String,
     modifier: Modifier = Modifier
@@ -217,7 +217,7 @@ fun ReviewItem(
 }
 
 @Composable
-fun ReviewHeader(
+private fun ReviewHeader(
     profileUrl: Any,
     authorName: String,
     authorUserName: String,
@@ -239,7 +239,7 @@ fun ReviewHeader(
 }
 
 @Composable
-fun AuthorInfo(
+private fun AuthorInfo(
     profileUrl: Any,
     authorName: String,
     authorUserName: String,
@@ -308,7 +308,7 @@ private fun AuthorDetails(
 }
 
 @Composable
-fun ReviewsDate(
+private fun ReviewsDate(
     date: String,
     modifier: Modifier = Modifier,
 ) {
