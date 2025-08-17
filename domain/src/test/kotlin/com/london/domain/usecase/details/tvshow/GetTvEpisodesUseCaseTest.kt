@@ -292,7 +292,7 @@ class GetTvEpisodesUseCaseTest {
     @Test
     fun `should return cast when repository returns cast`() = runTest {
         //given
-        coEvery { actorRepository.getCastTvShowById(TV_SHOW_ID) } returns mockCast
+        coEvery { actorRepository.getTvShowActors(TV_SHOW_ID) } returns mockCast
         //when
         val result = gettTvShowUseCase.getTvShowCastById(TV_SHOW_ID)
         //then

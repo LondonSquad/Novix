@@ -16,6 +16,7 @@ import javax.inject.Inject
 class ActorRepositoryImpl @Inject constructor(
     private val dataSource: ActorRemoteDataSource
 ) : ActorRepository {
+
     override suspend fun getActorDetailsById(id: Int): ActorDetails =
         dataSource.getActorDetailsById(id).getOrThrow().toEntity()
 
@@ -23,20 +24,20 @@ class ActorRepositoryImpl @Inject constructor(
         dataSource.getActorImagePathById(id).getOrThrow().toEntity()
 
     override suspend fun getMovieActors(id: Int): List<Actor> {
-        val movieCast = dataSource.getMovieActors(id).getOrThrow()
-        return movieCast.actorRemote?.map { it.toEntity() }.orEmpty()
+        val remoteMovieCast = dataSource.getMovieActors(id).getOrThrow()
+        return remoteMovieCast.actorRemote?.map { it.toEntity() }.orEmpty()
     }
 
     override suspend fun getTrendingActors(page: Int): PagedFetchResponse<Actor> {
-        val response = dataSource.getTrendingActors(page).getOrThrow()
+        val remoteTrendingActorsResponse = dataSource.getTrendingActors(page).getOrThrow()
         return PagedFetchResponse(
-            currentPage = response.currentPage,
-            items = response.items.map { it.toEntityActor() },
-            totalPages = response.totalPages,
-            totalItems = response.totalItems
+            currentPage = remoteTrendingActorsResponse.currentPage,
+            items = remoteTrendingActorsResponse.items.map { it.toEntityActor() },
+            totalPages = remoteTrendingActorsResponse.totalPages,
+            totalItems = remoteTrendingActorsResponse.totalItems
         )
     }
 
-    override suspend fun getCastTvShowById(id: Int): TvShowCastEntity =
+    override suspend fun getTvShowActors(id: Int): TvShowCastEntity =
         dataSource.getTvShowActors(id).getOrThrow().toCastEntity()
 }

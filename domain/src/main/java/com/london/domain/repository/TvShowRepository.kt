@@ -22,7 +22,7 @@ interface TvShowRepository {
     suspend fun getPopularTvShows(): List<PopularMedia>
     suspend fun addTvShowById(id: Int, rating: Int): Boolean
     suspend fun getAllRatedTvShows(): List<RatedMedia>
-    suspend fun deleteTvShowRating(id: Int): Boolean
+    suspend fun deleteTvShowRating(tvShowId: Int): Boolean
     suspend fun getTrendingTvShows(page: Int): PagedFetchResponse<Trending>
     suspend fun getFirstPageTopRatedTvShows(): List<TopRatedMedia>
 
@@ -36,32 +36,32 @@ interface TvShowRepository {
     ): PagedFetchResponse<TvShow>
 
     suspend fun addTvShowEpisode(
-        id: Int,
+        tvShowId: Int,
         seasonNumber: Int,
         episodeNumber: Int,
         rating: Int
     ): Boolean
 
     suspend fun getTvShowEpisodesBySeason(
-        id: Int,
+        tvShowId: Int,
         seasonNumber: Int,
     ): TvShowEpisodesEntity
 
     suspend fun getTvShowEpisodeByPosition(
-        id: Int,
+        tvShowId: Int,
         seasonNumber: Int,
         episodeNumber: Int
     ): TvShowEpisodeByIdEntity
 
     suspend fun getEpisodeVideos(seriesId: Int, seasonNumber: Int, episodeNumber: Int): List<String>
-    suspend fun getTvShowVideos(id: Int): List<String>
-    suspend fun getTvShowReviews(id: Int, pageNumber: Int): PagedFetchResponse<ReviewEntity>
+    suspend fun getTvShowVideos(tvShowId: Int): List<String>
+    suspend fun getTvShowReviews(tvShowId: Int, pageNumber: Int): PagedFetchResponse<ReviewEntity>
     suspend fun getAccountTvShowStateById(
         id: Int,
     ): MediaStates
 
     suspend fun getAccountTvEpisode(
-        id: Int,
+        tvShowId: Int,
         seasonNumber: Int,
         episodeNumber: Int,
     ): MediaStates
