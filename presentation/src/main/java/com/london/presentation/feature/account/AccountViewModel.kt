@@ -47,7 +47,7 @@ class AccountViewModel @Inject constructor(
                 }
             },
             onCompleted = {
-                emitEffect(AccountEffect.NavigateLogout)
+                emitEffect(AccountEffect.LogoutNavigation)
             }
         )
     }
@@ -61,11 +61,11 @@ class AccountViewModel @Inject constructor(
         }
 
     override fun onWatchingHistoryClick() =
-        emitEffect(AccountEffect.NavigateToWatchingHistory)
+        emitEffect(AccountEffect.WatchingHistoryNavigation)
 
 
     override fun onMyRatingClick() =
-        emitEffect(AccountEffect.NavigateToMyRating)
+        emitEffect(AccountEffect.MyRatingNavigation)
 
 
     override fun onContentRestrictionClick() =
@@ -83,7 +83,7 @@ class AccountViewModel @Inject constructor(
     }
 
     override fun onChangePasswordClick() =
-        emitEffect(AccountEffect.NavigateToChangePassword())
+        emitEffect(AccountEffect.ChangePasswordNavigation())
 
     override fun onAppearanceClick() =
         updateState {
@@ -147,7 +147,7 @@ class AccountViewModel @Inject constructor(
         }
 
     override fun onLoginClick() =
-        emitEffect(AccountEffect.NavigateLogout)
+        emitEffect(AccountEffect.LogoutNavigation)
 
     private fun initializeAppTheme() {
         val isAppDarkMode = appPreferencesService.isAppDarkMode.value

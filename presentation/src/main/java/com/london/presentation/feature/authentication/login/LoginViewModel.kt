@@ -16,8 +16,6 @@ class LoginViewModel @Inject constructor(
 ) : BaseViewModel<LoginUiState, LoginEffect>(LoginUiState()),
     LoginContract {
 
-    private var lastForgotPasswordEffect: LoginEffect.NavigateToForgotPassword? = null
-
     override fun onUsernameChanged(username: TextFieldValue) {
         val trimmedUsername = username.copy(text = username.text.trim())
         updateState {
@@ -45,7 +43,7 @@ class LoginViewModel @Inject constructor(
     }
 
     override fun onCreateAccountClick() {
-        emitEffect(LoginEffect.NavigateToRegistration)
+        emitEffect(LoginEffect.RegistrationNavigation)
     }
 
     override fun onForgotPasswordClick() {
@@ -73,7 +71,7 @@ class LoginViewModel @Inject constructor(
     }
 
     override fun onNavigateBack() {
-        emitEffect(LoginEffect.NavigateBack)
+        emitEffect(LoginEffect.BackNavigation)
     }
 
     private fun handleLoginAsGuestError() {
@@ -86,7 +84,7 @@ class LoginViewModel @Inject constructor(
 
     private fun checkLoginAsGuest(isSuccess: Boolean) {
         when (isSuccess) {
-            true -> emitEffect(LoginEffect.NavigateToHome)
+            true -> emitEffect(LoginEffect.HomeNavigation)
             false -> handleLoginAsGuestError()
         }
     }
@@ -101,13 +99,12 @@ class LoginViewModel @Inject constructor(
             onStart = { updateState { copy(isLoading = true, error = null) } },
             onSuccess = { isSuccess: Boolean ->
                 if (isSuccess)
-                    emitEffect(LoginEffect.NavigateToHome)
+                    emitEffect(LoginEffect.HomeNavigation)
                 else
                     handleLoginError()
             },
             onError = { handleLoginError() },
-            onCompleted = {
-                updateState { copy(isLoading = false) }
+            onCompleted = { updateState { copy(isLoading = false) }
             }
         )
     }

@@ -6,8 +6,6 @@ import app.cash.turbine.test
 import com.google.common.truth.Truth.assertThat
 import com.london.domain.usecase.authentication.AuthenticationUseCase
 import com.london.presentation.R
-import io.mockk.coEvery
-import io.mockk.coVerify
 import io.mockk.every
 import io.mockk.mockk
 import kotlinx.coroutines.Dispatchers
@@ -78,7 +76,7 @@ class LoginViewModelTest {
     fun `onCreateAccountClick emits NavigateToRegistration effect`() = runTest {
         viewModel.effect.test {
             viewModel.onCreateAccountClick()
-            assertThat(awaitItem()).isEqualTo(LoginEffect.NavigateToRegistration)
+            assertThat(awaitItem()).isEqualTo(LoginEffect.RegistrationNavigation)
             cancelAndIgnoreRemainingEvents()
         }
     }
@@ -105,7 +103,7 @@ class LoginViewModelTest {
     fun `onNavigateBack emits NavigateBack effect`() = runTest {
         viewModel.effect.test {
             viewModel.onNavigateBack()
-            assertThat(awaitItem()).isEqualTo(LoginEffect.NavigateBack)
+            assertThat(awaitItem()).isEqualTo(LoginEffect.BackNavigation)
             cancelAndIgnoreRemainingEvents()
         }
     }
