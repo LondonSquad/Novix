@@ -1,14 +1,18 @@
 package com.london.presentation.feature.reviews
 
 import androidx.lifecycle.SavedStateHandle
+import androidx.paging.PagingData
 import com.london.domain.entity.recent.MediaType
+import com.london.domain.entity.review.ReviewEntity
 import com.london.domain.usecase.details.movie.GetMovieUseCase
 import com.london.domain.usecase.details.tvshow.GetTvShowUseCase
 import com.london.presentation.navigation.Screen
 import com.london.presentation.navigation.getArgs
 import com.london.presentation.shared.base.BaseViewModel
+import com.london.presentation.shared.base.ErrorState
 import com.london.presentation.shared.base.createPagingSourceFlow
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 
 @HiltViewModel
@@ -19,44 +23,61 @@ class ReviewsViewModel @Inject constructor(
 ) : BaseViewModel<ReviewsUiState, ReviewEffect>(ReviewsUiState()), ReviewContract {
 
     private val args = savedStateHandle.getArgs<Screen.Reviews>()
-    private val mediaType = args?.mediaType ?: MediaType.Movie
-    private val mediaId = args?.mediaId ?: 0
+    private val mediaType: MediaType = args?.mediaType ?: MediaType.Movie
+    private val mediaId: Int = args?.mediaId ?: 0
 
     init {
-        initializeReviews(mediaType, mediaId)
+        loadReviews()
     }
 
     override fun onRetry() {
         updateState { copy(error = null) }
-        initializeReviews(mediaType, mediaId)
+        loadReviews()
     }
 
     override fun onBackClicked() {
         emitEffect(ReviewEffect.NavigateBack)
     }
 
-    private fun initializeReviews(mediaType: MediaType, mediaId: Int) {
+    private fun loadReviews() {
         tryToExecute(
             block = {
-                createPagingSourceFlow("") { _, pageNumber ->
-                    when (mediaType) {
-                        MediaType.Movie -> getMovieUseCase.getMovieReviews(
-                            mediaId,
-                            pageNumber
-                        )
-
-                        else -> getTvShowUseCase.getTvShowReviews(mediaId, pageNumber)
-                    }
+                createPagingSourceFlow { _, pageNumber ->
+                    fetchReviewsByMediaType(pageNumber)
                 }
             },
-            onStart = { updateState { copy(isLoading = true) } },
-            onSuccess = { pagingFlow ->
-                updateState {
-                    copy(reviews = pagingFlow)
-                }
+            onStart = {
+                updateState { copy(isLoading = true) }
             },
-            onError = { errorState -> updateState { copy(error = errorState) } },
-            onCompleted = { updateState { copy(isLoading = false) } },
+            onSuccess = ::handleLoadReviewsSuccess,
+            onError = ::handleLoadReviewsError,
+            onCompleted = {
+                updateState { copy(isLoading = false) }
+            }
         )
+    }
+
+    private fun handleLoadReviewsSuccess(pagingFlow: Flow<PagingData<ReviewEntity>>) {
+        updateState {
+            copy(
+                reviews = pagingFlow,
+                isLoading = false,
+                error = null
+            )
+        }
+    }
+
+    private fun handleLoadReviewsError(errorState: ErrorState) {
+        updateState {
+            copy(
+                error = errorState,
+                isLoading = false
+            )
+        }
+    }
+
+    private suspend fun fetchReviewsByMediaType(pageNumber: Int) = when (mediaType) {
+        MediaType.Movie -> getMovieUseCase.getMovieReviews(mediaId, pageNumber)
+        MediaType.TvShow -> getTvShowUseCase.getTvShowReviews(mediaId, pageNumber)
     }
 }
