@@ -835,14 +835,14 @@ html.dark .health-indicator.info {
     margin-bottom: 0;
 }
 .daily-week-header {
-    display: flex; /* ADDED: Enables flexbox layout */
-    align-items: center; /* ADDED: Vertically centers the text and arrow */
+    display: flex;
+    align-items: center;
     font-size: 0.8rem;
     font-weight: 600;
     color: var(--text-secondary);
     text-transform: uppercase;
     letter-spacing: 0.05em;
-    padding: 0.25rem 1.5rem 0.75rem 0.25rem; /* Consolidated padding */
+    padding: 0.25rem 1.5rem 0.75rem 0.25rem;
     border-bottom: 1px solid var(--border-color);
     margin-bottom: 1rem;
     cursor: pointer;
@@ -854,7 +854,7 @@ html.dark .health-indicator.info {
     content: '';
     position: absolute;
     right: 0.25rem;
-    top: 50%; /* This now works correctly due to flexbox centering */
+    top: 50%;
     width: 0.5rem;
     height: 0.5rem;
     border-style: solid;
@@ -1631,18 +1631,23 @@ html.dark .feedback-summary {
         padding: 1.5rem 1rem;
     }
 
-    .collaboration-list li {
+    /* UPDATED: Grouped selectors for consistent responsive behavior */
+    .collaboration-list li,
+    .discussed-prs-list li {
         flex-wrap: wrap;
-        /* Allow wrapping */
         gap: 0.5rem;
     }
 
-    .reviewer-summary {
+    .reviewer-summary,
+    .discussed-pr-summary {
         min-width: 100%;
-        /* Ensure it takes full width on its line */
+        /* UPDATED: Allow inner items to wrap on small screens */
+        flex-wrap: wrap;
+        gap: 0.5rem;
     }
 
-    .collaboration-count {
+    .collaboration-count,
+    .discussed-pr-count {
         width: 100%;
         text-align: right;
     }
@@ -1941,7 +1946,7 @@ html.dark .feedback-summary {
     border: 2px solid var(--bg-secondary);
 }
 
-/* NEW: Styles for Most Discussed PRs list */
+/* --- Styles for Most Discussed PRs list --- */
 .discussed-prs-list {
     list-style: none;
     padding: 0;
