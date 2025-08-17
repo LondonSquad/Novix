@@ -41,7 +41,7 @@ fun TrendingMoviesScreen(
                 currentEffect.movieId
             )
 
-            is TrendingMoviesEffect.BackNavigationClick -> onNavigateBackClick()
+            is TrendingMoviesEffect.BackNavigation -> onNavigateBackClick()
         }
     }
     BuildScreen(

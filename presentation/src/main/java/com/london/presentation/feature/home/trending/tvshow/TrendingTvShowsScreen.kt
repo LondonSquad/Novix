@@ -42,7 +42,7 @@ fun TrendingTvShowsScreen(
                 currentEffect.tvShowId
             )
 
-            is TrendingTvShowsEffect.BackClickNavigation -> onNavigateBack()
+            is TrendingTvShowsEffect.BackNavigation -> onNavigateBack()
         }
     }
 

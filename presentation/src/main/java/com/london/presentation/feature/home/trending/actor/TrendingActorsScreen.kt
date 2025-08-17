@@ -36,11 +36,11 @@ fun TrendingActorsScreen(
 
     effect?.Listen { currentEffect ->
         when (currentEffect) {
-            is TrendingActorsEffect.ActorClickNavigation -> onNavigateToActorDetailsClick(
+            is TrendingActorsEffect.ActorDetailsNavigation -> onNavigateToActorDetailsClick(
                 currentEffect.actorId
             )
 
-            is TrendingActorsEffect.BackClickNavigation -> onNavigateBackClick()
+            is TrendingActorsEffect.BackNavigation -> onNavigateBackClick()
         }
     }
 

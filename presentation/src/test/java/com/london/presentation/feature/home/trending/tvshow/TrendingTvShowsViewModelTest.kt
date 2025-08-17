@@ -66,7 +66,7 @@ class TrendingTvShowsViewModelTest {
         viewModel.effect.test {
             viewModel.onBackClick()
             val effect = awaitItem()
-            assertThat(effect).isInstanceOf(TrendingTvShowsEffect.BackClickNavigation::class.java)
+            assertThat(effect).isInstanceOf(TrendingTvShowsEffect.BackNavigation::class.java)
         }
     }
 
