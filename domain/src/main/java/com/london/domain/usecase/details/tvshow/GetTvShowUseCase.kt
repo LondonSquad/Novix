@@ -58,7 +58,7 @@ class GetTvShowUseCase @Inject constructor(
         tvShowRepository.getTvShowReviews(movieId, pageNumber)
 
     suspend fun getTvShowCastById(tvShowId: Int): TvShowCastEntity =
-        actorRepository.getCastTvShowById(tvShowId)
+        actorRepository.getTvShowActors(tvShowId)
 
     suspend fun getAllTopRatedTvShows(
         pageNumber: Int,

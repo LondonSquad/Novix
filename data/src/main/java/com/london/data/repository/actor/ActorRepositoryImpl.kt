@@ -1,7 +1,7 @@
 package com.london.data.repository.actor
 
 import com.london.data.mapper.details.actor.toEntity
-import com.london.data.mapper.details.movie.toEntity
+import com.london.data.mapper.details.movie.toEntity // Assuming this is actor mapping for movies
 import com.london.data.mapper.details.tvshow.toCastEntity
 import com.london.data.mapper.home.trending.toEntityActor
 import com.london.data.remote.source.actor.ActorRemoteDataSource
@@ -16,27 +16,34 @@ import javax.inject.Inject
 class ActorRepositoryImpl @Inject constructor(
     private val dataSource: ActorRemoteDataSource
 ) : ActorRepository {
-    override suspend fun getActorDetailsById(id: Int): ActorDetails =
-        dataSource.getActorDetailsById(id).getOrThrow().toEntity()
 
-    override suspend fun getActorImagesById(id: Int): ActorImageDetails =
-        dataSource.getActorImagePathById(id).getOrThrow().toEntity()
+    override suspend fun getActorDetailsById(id: Int): ActorDetails {
+        val remoteActorDetails = dataSource.getActorDetailsById(id).getOrThrow()
+        return remoteActorDetails.toEntity()
+    }
+
+    override suspend fun getActorImagesById(id: Int): ActorImageDetails {
+        val remoteActorImages = dataSource.getActorImagePathById(id).getOrThrow()
+        return remoteActorImages.toEntity()
+    }
 
     override suspend fun getMovieActors(id: Int): List<Actor> {
-        val movieCast = dataSource.getMovieActors(id).getOrThrow()
-        return movieCast.actorRemote?.map { it.toEntity() }.orEmpty()
+        val remoteMovieCast = dataSource.getMovieActors(id).getOrThrow()
+        return remoteMovieCast.actorRemote?.map { it.toEntity() }.orEmpty()
     }
 
     override suspend fun getTrendingActors(page: Int): PagedFetchResponse<Actor> {
-        val response = dataSource.getTrendingActors(page).getOrThrow()
+        val remoteTrendingActorsResponse = dataSource.getTrendingActors(page).getOrThrow()
         return PagedFetchResponse(
-            currentPage = response.currentPage,
-            items = response.items.map { it.toEntityActor() },
-            totalPages = response.totalPages,
-            totalItems = response.totalItems
+            currentPage = remoteTrendingActorsResponse.currentPage,
+            items = remoteTrendingActorsResponse.items.map { it.toEntityActor() },
+            totalPages = remoteTrendingActorsResponse.totalPages,
+            totalItems = remoteTrendingActorsResponse.totalItems
         )
     }
 
-    override suspend fun getCastTvShowById(id: Int): TvShowCastEntity =
-        dataSource.getTvShowActors(id).getOrThrow().toCastEntity()
+    override suspend fun getTvShowActors(id: Int): TvShowCastEntity {
+        val remoteTvShowCast = dataSource.getTvShowActors(id).getOrThrow()
+        return remoteTvShowCast.toCastEntity()
+    }
 }
