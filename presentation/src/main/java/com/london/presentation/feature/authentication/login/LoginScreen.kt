@@ -58,11 +58,11 @@ fun LoginScreen(
 
     effect?.Listen { currentEffect ->
         when (currentEffect) {
-            is LoginEffect.NavigateToHome -> onNavigateToHome()
-            is LoginEffect.NavigateToCreateAccount -> uriHandler.openUri(currentEffect.url)
+            is LoginEffect.HomeNavigation -> onNavigateToHome()
+            is LoginEffect.CreateAccountNavigation -> uriHandler.openUri(currentEffect.url)
             is LoginEffect.NavigateToForgotPassword -> uriHandler.openUri(currentEffect.url)
-            is LoginEffect.NavigateBack -> onNavigateBack()
-            is LoginEffect.NavigateToRegistration -> onNavigateToRegister()
+            is LoginEffect.BackNavigation -> onNavigateBack()
+            is LoginEffect.RegistrationNavigation -> onNavigateToRegister()
         }
     }
 
