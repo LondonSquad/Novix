@@ -7,24 +7,16 @@ import androidx.compose.foundation.layout.asPaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.navigationBars
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.requiredWidth
 import androidx.compose.foundation.layout.statusBars
-import androidx.compose.foundation.lazy.grid.GridItemSpan
-import androidx.compose.foundation.lazy.grid.LazyGridScope
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.unit.Dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.london.designsystem.theme.NovixTheme
 import com.london.presentation.R
-import com.london.presentation.feature.home.HomeScreenContract
-import com.london.presentation.feature.home.HomeUiMedia
-import com.london.presentation.feature.home.section.ContinueWatchingSection
-import com.london.presentation.shared.CarousalShimmerEffect
 import com.london.presentation.shared.DefaultAppTopBar
 import com.london.presentation.shared.MediaCategory
 import com.london.presentation.shared.base.ErrorState
@@ -96,6 +88,7 @@ fun Content(
                     onNavigateToTvShow = contract::onNavigateToTvShow,
                     onSaveClick = { /* TODO: Implement save functionality */ },
                     isItemSaved = { false },
+                    rate = null
                 ),
                 topBar = {
                     DefaultAppTopBar(
