@@ -82,9 +82,9 @@ fun SearchScreen(
 
     effect?.Listen { currentEffect ->
         when (currentEffect) {
-            is SearchEffect.ActorNavigation -> onNavigateToActorDetails(currentEffect.actorId)
-            is SearchEffect.MovieNavigation -> onNavigateToMovieDetails(currentEffect.movieId)
-            is SearchEffect.TvShowNavigation -> onNavigateToTvShowDetails(currentEffect.tvId)
+            is SearchEffect.ActorDetailsNavigation -> onNavigateToActorDetails(currentEffect.actorId)
+            is SearchEffect.MovieDetailsNavigation -> onNavigateToMovieDetails(currentEffect.movieId)
+            is SearchEffect.TvShowDetailsNavigation -> onNavigateToTvShowDetails(currentEffect.tvId)
         }
     }
     val lifecycleOwner = LocalLifecycleOwner.current
