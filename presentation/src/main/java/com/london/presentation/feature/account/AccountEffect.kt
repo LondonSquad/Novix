@@ -1,7 +1,7 @@
 package com.london.presentation.feature.account
 
 sealed interface AccountEffect {
-    data object LogoutNavigation : AccountEffect
+    data object LoginNavigation : AccountEffect
     data object MyRatingNavigation : AccountEffect
     data object WatchingHistoryNavigation : AccountEffect
     class ChangePasswordNavigation(val url: String = FORGOT_PASSWORD_URL) : AccountEffect {

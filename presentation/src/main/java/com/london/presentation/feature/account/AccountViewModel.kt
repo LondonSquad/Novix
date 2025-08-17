@@ -47,7 +47,7 @@ class AccountViewModel @Inject constructor(
                 }
             },
             onCompleted = {
-                emitEffect(AccountEffect.LogoutNavigation)
+                emitEffect(AccountEffect.LoginNavigation)
             }
         )
     }
@@ -147,7 +147,7 @@ class AccountViewModel @Inject constructor(
         }
 
     override fun onLoginClick() =
-        emitEffect(AccountEffect.LogoutNavigation)
+        emitEffect(AccountEffect.LoginNavigation)
 
     private fun initializeAppTheme() {
         val isAppDarkMode = appPreferencesService.isAppDarkMode.value

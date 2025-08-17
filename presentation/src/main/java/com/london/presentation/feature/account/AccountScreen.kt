@@ -39,7 +39,7 @@ fun AccountScreen(
             is AccountEffect.MyRatingNavigation -> onNavigateToMyRating()
             is AccountEffect.WatchingHistoryNavigation -> onNavigateToWatchingHistory()
             is AccountEffect.ChangePasswordNavigation -> uriHandler.openUri(currentEffect.url)
-            is AccountEffect.LogoutNavigation -> onNavigateToLogin()
+            is AccountEffect.LoginNavigation -> onNavigateToLogin()
         }
     }
 
