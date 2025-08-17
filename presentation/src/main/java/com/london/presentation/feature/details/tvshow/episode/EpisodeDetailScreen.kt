@@ -161,9 +161,9 @@ private fun Content(
                         modifier = Modifier.padding(horizontal = 16.dp, vertical = 6.dp)
                     )
                 }
-
-                item { Spacer(Modifier.height(30.dp)) }
             }
+
+            item { Spacer(Modifier.height(30.dp)) }
         }
 
         uiState.episode?.let {
@@ -315,19 +315,17 @@ private fun OverviewSection(
 ) {
     var isTextCollapsed by rememberSaveable { mutableStateOf(false) }
     uiState.episode?.let {
-        if (uiState.episode.overview.isNotBlank()) {
-            Column(modifier = modifier.padding(top = 16.dp, start = 16.dp, end = 16.dp))
-            {
-                Text(
-                    text = stringResource(Res.string.overview),
-                    style = NovixTheme.typography.title.medium,
-                    color = NovixTheme.colors.title
-                )
-                ConditionalText(
-                    text = it.overview,
-                    expandedState = isTextCollapsed
-                ) { isTextCollapsed = !isTextCollapsed }
-            }
+        Column(modifier = modifier.padding(top = 16.dp, start = 16.dp, end = 16.dp))
+        {
+            Text(
+                text = stringResource(Res.string.overview),
+                style = NovixTheme.typography.title.medium,
+                color = NovixTheme.colors.title
+            )
+            ConditionalText(
+                text = it.overview,
+                expandedState = isTextCollapsed
+            ) { isTextCollapsed = !isTextCollapsed }
         }
     }
 }
