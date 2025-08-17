@@ -9,6 +9,5 @@ import kotlinx.coroutines.flow.emptyFlow
 data class TrendingActorsUiState(
     val isLoading: Boolean = false,
     val errorState: ErrorState? = null,
-    val isSaved: Boolean = false,
     val actorsFlow: Flow<PagingData<Actor>> = emptyFlow()
 )
