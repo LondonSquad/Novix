@@ -51,47 +51,56 @@ fun ReviewsScreen(
         }
     }
 
-    Content(
-        uiState = uiState,
-        reviewContract = viewModel,
-    )
-}
-
-@Composable
-private fun Content(
-    uiState: ReviewsUiState,
-    reviewContract: ReviewContract
-) {
     val reviewsList = uiState.reviews.collectAsLazyPagingItems()
 
     BuildScreen(
         isLoading = reviewsList.isLoading(),
         isError = reviewsList.loadState.refresh is LoadState.Error,
-        onBack = reviewContract::onBackClicked,
-        onRetry = reviewContract::onRetry
+        onBack = viewModel::onBackClicked,
+        onRetry = viewModel::onRetry
     ) {
-        Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .background(NovixTheme.colors.surface)
-        ) {
-            ReviewsTopBar(
-                onBackClick = reviewContract::onBackClicked
-            )
+        Content(
+            reviewsList = reviewsList,
+            reviewContract = viewModel,
+        )
+    }
+}
 
-            if (reviewsList.itemSnapshotList.isEmpty()) {
-                EmptyReviewsState(
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .weight(1f)
-                )
-            } else {
-                ReviewsList(
-                    reviewsList = reviewsList,
-                    modifier = Modifier.fillMaxSize()
-                )
-            }
-        }
+@Composable
+private fun Content(
+    reviewsList: LazyPagingItems<ReviewEntity>,
+    reviewContract: ReviewContract
+) {
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(NovixTheme.colors.surface)
+    ) {
+        ReviewsTopBar(
+            onBackClick = reviewContract::onBackClicked
+        )
+
+        ReviewsContent(
+            reviewsList = reviewsList,
+            modifier = Modifier.weight(1f)
+        )
+    }
+}
+
+@Composable
+private fun ReviewsContent(
+    reviewsList: LazyPagingItems<ReviewEntity>,
+    modifier: Modifier = Modifier
+) {
+    if (reviewsList.itemSnapshotList.isEmpty()) {
+        EmptyReviewsState(
+            modifier = modifier.fillMaxSize()
+        )
+    } else {
+        ReviewsList(
+            reviewsList = reviewsList,
+            modifier = modifier.fillMaxSize()
+        )
     }
 }
 
@@ -129,7 +138,6 @@ private fun EmptyReviewsState(
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Center
         ) {
-
             Image(
                 painter = painterResource(id = R.drawable.img),
                 contentDescription = null,
