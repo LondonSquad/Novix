@@ -24,12 +24,11 @@ import com.london.presentation.shared.ActorItem
 import com.london.presentation.shared.LazyPagingColumn
 import com.london.presentation.shared.buildscreen.BuildScreen
 import com.london.presentation.utils.Listen
-import com.london.presentation.utils.isLoading
 
 @Composable
 fun TrendingActorsScreen(
-    onNavigateToActorDetails: (Int) -> Unit,
-    onNavigateBack: () -> Unit,
+    onNavigateToActorDetailsClick: (Int) -> Unit,
+    onNavigateBackClick: () -> Unit,
     viewModel: TrendingActorsViewModel = hiltViewModel()
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
@@ -37,34 +36,35 @@ fun TrendingActorsScreen(
 
     effect?.Listen { currentEffect ->
         when (currentEffect) {
-            is TrendingActorsEffect.NavigateToActor -> onNavigateToActorDetails(currentEffect.actorId)
-            is TrendingActorsEffect.NavigateBack -> onNavigateBack()
+            is TrendingActorsEffect.ActorDetailsNavigation -> onNavigateToActorDetailsClick(
+                currentEffect.actorId
+            )
+
+            is TrendingActorsEffect.BackNavigation -> onNavigateBackClick()
         }
     }
-
 
     val actorsLazyItems = state.actorsFlow.collectAsLazyPagingItems()
 
     BuildScreen(
-        isLoading = actorsLazyItems.isLoading(),
+        isLoading = state.isLoading,
         isError = actorsLazyItems.loadState.refresh is LoadState.Error,
-        onBack = viewModel::onBack,
-        onRetry = viewModel::onRetry,
+        onBack = viewModel::onBackClick,
+        onRetry = viewModel::onRetryClick,
         emptyLayoutMessage = R.string.no_trending_actors_in_genre,
         emptyLayoutImage = R.drawable.img_no_result,
-        pagingFlow = actorsLazyItems
     ) {
         Content(
             state = state,
-            contract = viewModel
+            contract = viewModel,
         )
     }
 }
 
 @Composable
 private fun Content(
-    state: TrendingActorsUiState = TrendingActorsUiState(),
-    contract: TrendingActorsContract = defaultTrendingActorsContract(),
+    state: TrendingActorsUiState,
+    contract: TrendingActorsContract,
 ) {
     LazyColumn(
         modifier = Modifier
@@ -75,7 +75,7 @@ private fun Content(
         stickyHeader {
             TopBar(
                 title = stringResource(R.string.trending_people),
-                onBackClick = contract::onBack,
+                onBackClick = contract::onBackClick,
                 modifier = Modifier
                     .fillMaxWidth()
                     .background(NovixTheme.colors.surface)
@@ -85,7 +85,6 @@ private fun Content(
         }
 
         item {
-
             LazyPagingColumn(
                 pagingItems = state.actorsFlow.collectAsLazyPagingItems(),
                 modifier = Modifier.fillMaxSize(),
@@ -105,5 +104,8 @@ private fun Content(
 @Preview
 @Composable
 private fun Preview() = NovixTheme {
-    Content()
+    Content(
+        state = TrendingActorsUiState(),
+        contract = defaultTrendingActorsContract()
+    )
 }
