@@ -4,13 +4,13 @@ package com.london.data.remote.service.movie
 import com.london.data.remote.model.ApiConstants
 import com.london.data.remote.model.ApiConstants.POPULAR_MOVIES_PATH
 import com.london.data.remote.model.ApiResponse
+import com.london.data.remote.model.details.ImagesResponse
 import com.london.data.remote.model.details.actor.model.actormoviedetails.ActorMovieDetailsResponse
 import com.london.data.remote.model.details.movie.model.moviedetails.MovieDetailsResponse
-import com.london.data.remote.model.details.movie.model.movieimages.MovieImagesResponse
 import com.london.data.remote.model.details.rating.AccountStatesResponse
 import com.london.data.remote.model.details.rating.RatingRemoteBody
 import com.london.data.remote.model.details.rating.RatingRemoteResponse
-import com.london.data.remote.model.details.videoprovider.movie.model.MovieVideoRemote
+import com.london.data.remote.model.details.videoprovider.VideoResponse
 import com.london.data.remote.model.home.popular.PopularMovieResponse
 import com.london.data.remote.model.home.toprated.TopRatedMovieRemote
 import com.london.data.remote.model.home.trending.TrendingResponse
@@ -40,12 +40,12 @@ interface MovieApiService {
     @GET(ApiConstants.MOVIE_IMAGES_PATH)
     suspend fun getMovieImages(
         @Path("movie_id") movieId: Int,
-    ): Response<MovieImagesResponse>
+    ): Response<ImagesResponse>
 
     @GET(ApiConstants.MOVIE_VIDEOS_PATH)
     suspend fun getMovieVideos(
         @Path("movie_id") movieId: Int,
-    ): Response<MovieVideoRemote>
+    ): Response<VideoResponse>
 
     @GET(ApiConstants.ACCOUNT_MOVIE_STATES)
     suspend fun getAccountMovieStates(
