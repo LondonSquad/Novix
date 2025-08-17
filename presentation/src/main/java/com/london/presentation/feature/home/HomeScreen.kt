@@ -78,13 +78,13 @@ fun HomeScreen(
 
     effect?.Listen { currentEffect ->
         when (currentEffect) {
-            is HomeScreenEffect.NavigationMovieDetails -> onNavigateToMovieDetails(currentEffect.id)
-            is HomeScreenEffect.NavigationTvShowDetails -> onNavigateToTvShowDetails(currentEffect.id)
-            is HomeScreenEffect.NavigationTrendingMovie -> onNavigateToTrendingMovies()
-            is HomeScreenEffect.NavigationTrendingTvShows -> onNavigateToTrendingTvShows()
-            is HomeScreenEffect.NavigationTrendingActor -> onNavigateToTrendingActors()
-            is HomeScreenEffect.NavigationTopRated -> onNavigateToTopRated()
-            is HomeScreenEffect.NavigationContinueWatching -> onNavigateToContinueWatching()
+            is HomeScreenEffect.MovieDetailsNavigation -> onNavigateToMovieDetails(currentEffect.id)
+            is HomeScreenEffect.TvShowDetailsNavigation -> onNavigateToTvShowDetails(currentEffect.id)
+            is HomeScreenEffect.TrendingMovieNavigation -> onNavigateToTrendingMovies()
+            is HomeScreenEffect.TrendingTvShowsNavigation -> onNavigateToTrendingTvShows()
+            is HomeScreenEffect.TrendingActorNavigation -> onNavigateToTrendingActors()
+            is HomeScreenEffect.TopRatedNavigation -> onNavigateToTopRated()
+            is HomeScreenEffect.ContinueWatchingNavigation -> onNavigateToContinueWatching()
         }
     }
 
