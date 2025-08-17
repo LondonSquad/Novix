@@ -34,12 +34,12 @@ class EpisodeDetailsViewModel @Inject constructor(
     }
 
     override fun onBackClicked() {
-        emitEffect(EpisodeDetailsEffect.NavigationBack)
+        emitEffect(EpisodeDetailsEffect.BackNavigation)
     }
 
-    override fun onLoginClick() = emitEffect(EpisodeDetailsEffect.OnLoginNavigation)
+    override fun onLoginClick() = emitEffect(EpisodeDetailsEffect.LoginNavigation)
 
-    override fun onRateBottomSheetClick() {
+    override fun onRateEpisodeClick() {
         tryToExecute(
             block = { authenticationUseCase.isLoggedIn() },
             onSuccess = { isLoggedIn ->

@@ -75,9 +75,9 @@ fun EpisodeDetailsScreen(
 
     effect?.Listen { currentEffect ->
         when (currentEffect) {
-            EpisodeDetailsEffect.NavigationBack -> onNavigateBack()
-            is EpisodeDetailsEffect.NavigateToCast -> onNaviagteToActorDetalis(currentEffect.episodeId)
-            is EpisodeDetailsEffect.OnLoginNavigation -> onNavigateToLogin()
+            EpisodeDetailsEffect.BackNavigation -> onNavigateBack()
+            is EpisodeDetailsEffect.CastNavigation -> onNaviagteToActorDetalis(currentEffect.episodeId)
+            is EpisodeDetailsEffect.LoginNavigation -> onNavigateToLogin()
         }
     }
 
@@ -126,7 +126,7 @@ private fun Content(
     ) {
 
         TopBar(
-            onBackClick = episodeDetailsContract::onBackClicked,
+            onBackClick = episodeDetailsContract::onBackClick,
             modifier = Modifier
                 .fillMaxWidth()
                 .background(
@@ -232,16 +232,16 @@ private fun Content(
             onVideoClick = {
                 uriHandler.openUrl(uiState.videoProvider)
             },
-            onRateClick = episodeDetailsContract::onRateBottomSheetClick,
+            onRateClick = episodeDetailsContract::onRateEpisodeClick,
             isRateEnabled = uiState.isRated.not() && (uiState.voteAverage.isNotZeroRate()),
 
             )
         if (uiState.isRateBottomSheetVisible) RatingBottomSheet(
-            onDismissClick = episodeDetailsContract::onRateBottomSheetClick,
+            onDismissClick = episodeDetailsContract::onRateEpisodeClick,
             onSubmitClick = episodeDetailsContract::onSelectRatingClick,
         )
         else if (uiState.isGuestUserBottomSheetVisible) GuestUserLoginBottomSheet(
-            onDismissClick = episodeDetailsContract::onRateBottomSheetClick,
+            onDismissClick = episodeDetailsContract::onRateEpisodeClick,
             onLoginClick = episodeDetailsContract::onLoginClick,
         )
     }
