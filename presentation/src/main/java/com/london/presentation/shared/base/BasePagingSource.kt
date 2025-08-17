@@ -52,7 +52,7 @@ abstract class BasePagingSource<T : Any> : PagingSource<Int, T>() {
 }
 
 fun <T : Any> createPagingSourceFlow(
-    query: String,
+    query: String = "",
     block: suspend (query: String, pageNumber: Int) -> PagedFetchResponse<T>
 ): Flow<PagingData<T>> {
     return Pager(
