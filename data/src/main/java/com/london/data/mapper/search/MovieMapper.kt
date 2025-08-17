@@ -19,7 +19,7 @@ fun ApiResponse<MovieRemote>.toLocal(categoryId: Int?) = UpComingSectionLocal(
     results = items.map { it.toUpComingLocal() },
     totalPages = totalPages,
     totalResults = totalItems,
-    categoryId = categoryId ?: 0
+    categoryId = categoryId.orZero()
 )
 
 fun UpComingMovieLocal.toEntity() = UpComingMovie(

@@ -5,13 +5,12 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class CreateCustomListResponse(
-
     @SerialName("list_id")
-    val id: Int?,
+    val id: Int? = null,
     @SerialName("status_message")
-    val statusMessage: String?,
+    val statusMessage: String? = null,
     @SerialName("success")
-    val success: Boolean?,
+    val success: Boolean? = null,
     @SerialName("status_code")
-    val statusCode: Int?,
+    val statusCode: Int? = null,
 )

@@ -6,9 +6,7 @@ import kotlinx.serialization.Serializable
 @Serializable
 data class ActorTvShowDetailsResponse(
     @SerialName("cast")
-    val cast: List<ActorTvShowCastMember>?,
-    @SerialName("crew")
-    val crew: List<ActorTvShowCrewMember>?,
+    val cast: List<ActorTvShowCastMember>? = null,
     @SerialName("id")
-    val id: Int?
+    val id: Int? = null,
 )
