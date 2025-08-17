@@ -47,21 +47,24 @@ class MyRatingsViewModel @Inject constructor(
         )
     }
 
+    override fun onItemClick(id: Int) {
+        tryToExecute(
+            block = { manageRatingUseCase.findRatedMediaById(id) },
+            onSuccess = { ratedMedia ->
+                ratedMedia?.let { rated ->
+                    val effect = when (rated.mediaType) {
+                        MediaType.Movie -> MyRatingEffect.NavigationMovieDetails(id)
+                        MediaType.TvShow -> MyRatingEffect.NavigationTvShowDetails(id)
+                    }
+                    emitEffect(effect)
+                }
+            },
+            onError = { errorState -> updateState { copy(errorState = errorState) } },
+        )
+    }
+
     override fun onRatingCategorySelected(category: RatingCategory) =
         updateState { copy(selectedRatingCategory = category) }
-
-    override fun onItemClick(id: Int) {
-        val ratedMedia = state.value.allRatedMedia.find { it.id == id }
-            ?: state.value.ratedMovies.find { it.id == id }
-            ?: state.value.ratedTvShows.find { it.id == id }
-        
-        ratedMedia?.let { rated ->
-            when (rated.mediaType) {
-                MediaType.Movie -> emitEffect(MyRatingEffect.NavigationMovieDetails(id))
-                MediaType.TvShow -> emitEffect(MyRatingEffect.NavigationTvShowDetails(id))
-            }
-        }
-    }
 
     override fun onRetryClick() = initializeRatedMedia()
 
