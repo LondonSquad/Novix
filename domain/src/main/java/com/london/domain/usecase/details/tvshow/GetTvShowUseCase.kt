@@ -55,7 +55,7 @@ class GetTvShowUseCase @Inject constructor(
     }
 
     suspend fun getTvShowReviews(tvShowId: Int, pageNumber: Int): PagedFetchResponse<ReviewEntity> =
-        tvShowRepository.getTvShowReviews(id = tvShowId, pageNumber = pageNumber)
+        tvShowRepository.getTvShowReviews(tvShowId = tvShowId, pageNumber = pageNumber)
 
     suspend fun getTvShowCastById(id: Int): TvShowCastEntity =
         actorRepository.getTvShowActors(id)
