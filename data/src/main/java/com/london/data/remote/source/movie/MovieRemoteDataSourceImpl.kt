@@ -1,13 +1,13 @@
 package com.london.data.remote.source.movie
 
 import com.london.data.remote.model.ApiResponse
+import com.london.data.remote.model.details.ImagesResponse
 import com.london.data.remote.model.details.actor.model.actormoviedetails.ActorMovieDetailsResponse
 import com.london.data.remote.model.details.movie.model.moviedetails.MovieDetailsResponse
-import com.london.data.remote.model.details.movie.model.movieimages.MovieImagesResponse
 import com.london.data.remote.model.details.rating.AccountStatesResponse
 import com.london.data.remote.model.details.rating.RatingRemoteBody
 import com.london.data.remote.model.details.rating.RatingRemoteResponse
-import com.london.data.remote.model.details.videoprovider.movie.model.MovieVideoRemote
+import com.london.data.remote.model.details.videoprovider.VideoResponse
 import com.london.data.remote.model.home.popular.PopularMovieResponse
 import com.london.data.remote.model.home.toprated.TopRatedMovieRemote
 import com.london.data.remote.model.home.trending.TrendingResponse
@@ -35,7 +35,7 @@ class MovieRemoteDataSourceImpl @Inject constructor(
             mapper = { it })
     }
 
-    override suspend fun getMovieImages(movieId: Int): Result<MovieImagesResponse> {
+    override suspend fun getMovieImages(movieId: Int): Result<ImagesResponse> {
         return callApiWithRetry(
             { movieApiService.getMovieImages(movieId = movieId) },
             mapper = { it })
@@ -53,7 +53,7 @@ class MovieRemoteDataSourceImpl @Inject constructor(
         }, mapper = { it })
     }
 
-    override suspend fun getMovieVideos(movieId: Int): Result<MovieVideoRemote> {
+    override suspend fun getMovieVideos(movieId: Int): Result<VideoResponse> {
         return callApiWithRetry(
             { movieApiService.getMovieVideos(movieId = movieId) },
             mapper = { it }
