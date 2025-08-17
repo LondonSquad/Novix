@@ -47,7 +47,8 @@ class TrendingActorsViewModelTest {
     }
 
     @Test
-    fun `when initializing actorData ,should fetch trending actors`() = runTest {
+    fun `getTrendingActors should return initializing actorData when fetch trending actors`() =
+        runTest {
 
         //Given
         coEvery { getActorUseCase.getTrendingActors(any()) } returns createMockPagedFetchResponse(
@@ -66,7 +67,7 @@ class TrendingActorsViewModelTest {
     }
 
     @Test
-    fun `when retry is called ,should success updates state correctly `() = runTest {
+    fun `getTrendingActors should return success when updates state correctly `() = runTest {
 
         // Given
         coEvery { getActorUseCase.getTrendingActors(1) } returns createMockPagedFetchResponse(
@@ -84,7 +85,7 @@ class TrendingActorsViewModelTest {
         }
     }
     @Test
-    fun `when onActorClick, should emits NavigateToActor effect`() = runTest {
+    fun `onActorClick should return emits when NavigateToActor effect`() = runTest {
 
         // When & Then
         viewModel.effect.test {
@@ -95,7 +96,7 @@ class TrendingActorsViewModelTest {
     }
     
     @Test
-    fun `when onBack, should emits NavigateBack effect`() = runTest {
+    fun `onBackClick should return emits when NavigateBack effect`() = runTest {
 
         // When & Then
         viewModel.effect.test {

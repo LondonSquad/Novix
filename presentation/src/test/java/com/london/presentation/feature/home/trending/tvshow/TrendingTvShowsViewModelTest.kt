@@ -39,7 +39,7 @@ class TrendingTvShowsViewModelTest {
     }
 
     @Test
-    fun `when creating mock tvShow, should return correct values`() = runTest {
+    fun `getTrendingTvShows should return tvShows when fetch trending tvShows`() = runTest {
         
         //Given
         val pageNumber = 1
@@ -61,7 +61,7 @@ class TrendingTvShowsViewModelTest {
     }
 
     @Test
-    fun `when click onBack, should emits NavigateBack effect`() = runTest {
+    fun `onBackClick should return emits when NavigateBack effect`() = runTest {
         // When & Then
         viewModel.effect.test {
             viewModel.onBackClick()
@@ -71,7 +71,7 @@ class TrendingTvShowsViewModelTest {
     }
 
     @Test
-    fun `when click onTvShow, should emits NavigateToTvShow effect`() = runTest {
+    fun `onTvShowClick should return emits when NavigateToTvShow effect`() = runTest {
         // Given
         val movieId = 1
         // When & Then
@@ -83,7 +83,7 @@ class TrendingTvShowsViewModelTest {
     }
 
     @Test
-    fun `when onRetryClick is called, should update state successfully`() = runTest {
+    fun `onRetryClick should return updates successfully`() = runTest {
         // Given
         coEvery {
             getTvShowUseCase.getTrendingTvShows(
@@ -105,7 +105,8 @@ class TrendingTvShowsViewModelTest {
     }
 
     @Test
-    fun `when click onGenre, should update selectedGenreId and reload trending movies`() = runTest {
+    fun `onGenreClick should return updates selectedGenreId and reload trending tvShows`() =
+        runTest {
         // Given
         val tvShowGenre = TvShowGenre.ACTION_ADVENTURE
         // When
