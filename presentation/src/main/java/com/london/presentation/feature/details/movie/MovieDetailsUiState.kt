@@ -13,23 +13,20 @@ data class MovieDetailsUiState(
     val movieRating: String = "",
     val releaseDate: String = "",
     val isRated: Boolean = false,
-    val isSaved: Boolean = false,
     val isLoading: Boolean = true,
     val expanded: Boolean = false,
     val error: ErrorState? = null,
-    val currentImageIndex: Int = 0,
     val movieDuration: String = "",
     val movieOverview: String = "",
-    val imageSlideDirection: Int = 1,
     val isGuestUser: Boolean = false,
     val actors: List<Actor> = listOf(),
     val movieGenres: List<MovieGenreUi> = listOf(),
-    val movieImages: List<String> = listOf(),
     val isSuccessfullyRated: Boolean? = null,
+    val movieImages: List<String> = listOf(),
     val similarMovies: List<Movie> = listOf(),
     val isRateBottomSheetVisible: Boolean = false,
     val isGuestUserBottomSheetVisible: Boolean = false,
 ){
-    val movieHaveTrailer: Boolean
+    val hasTrailer: Boolean
         get() = movieVideo.isNotEmpty()
 }
