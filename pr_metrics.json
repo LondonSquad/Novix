@@ -32143,7 +32143,28 @@
         "url": "https://github.com/ahmeddsamii"
       }
     ],
-    "comments": [],
+    "comments": [
+      {
+        "author": {
+          "login": "abdo-essam",
+          "id": 92235360,
+          "url": "https://github.com/abdo-essam"
+        },
+        "first_comment_at": "2025-08-17T19:45:04Z",
+        "last_comment_at": "2025-08-17T19:45:04Z",
+        "count": 1
+      },
+      {
+        "author": {
+          "login": "abdelrhman1002",
+          "id": 180463542,
+          "url": "https://github.com/abdelrhman1002"
+        },
+        "first_comment_at": "2025-08-17T19:47:04Z",
+        "last_comment_at": "2025-08-17T19:47:04Z",
+        "count": 1
+      }
+    ],
     "approvals": [],
     "required_approvals": 2,
     "first_approved_at": null,
