@@ -36,7 +36,7 @@ fun MyRatingScreen(
     onNavigateBack: () -> Unit,
     onNavigateToMovieDetails: (Int) -> Unit,
     onNavigateToTvShowDetails: (Int) -> Unit,
-    viewModel: MyRatingsViewModel = hiltViewModel()
+    viewModel: MyRatingViewModel = hiltViewModel()
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
     val effect by viewModel.effect.collectAsState(null)
@@ -47,9 +47,9 @@ fun MyRatingScreen(
 
     effect?.Listen { currentEffect ->
         when (currentEffect) {
-            is MyRatingEffect.NavigationMovieDetails -> onNavigateToMovieDetails(currentEffect.id)
-            is MyRatingEffect.NavigationTvShowDetails -> onNavigateToTvShowDetails(currentEffect.id)
-            is MyRatingEffect.NavigationBack -> onNavigateBack()
+            is MyRatingEffect.MovieDetailsNavigation -> onNavigateToMovieDetails(currentEffect.id)
+            is MyRatingEffect.TvShowDetailsNavigation -> onNavigateToTvShowDetails(currentEffect.id)
+            is MyRatingEffect.BackNavigation -> onNavigateBack()
         }
     }
 
@@ -62,7 +62,7 @@ fun MyRatingScreen(
 @Composable
 private fun Content(
     state: MyRatingUiState = MyRatingUiState(),
-    contract: MyRatingsContract
+    contract: MyRatingContract
 ) {
     val selectedCategory = state.selectedRatingCategory ?: RatingCategory.All
     val items = when (selectedCategory) {
