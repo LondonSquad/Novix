@@ -30831,20 +30831,10 @@
         "count": 3
       }
     ],
-    "approvals": [
-      {
-        "reviewer": {
-          "login": "marwanqashwa",
-          "id": 100484790,
-          "url": "https://github.com/marwanqashwa"
-        },
-        "submitted_at": "2025-08-17T17:00:59Z",
-        "commit_id": "41a032cd8fdaba8ca931c2c717ca8106c45cb40a"
-      }
-    ],
+    "approvals": [],
     "required_approvals": 2,
-    "first_approved_at": "2025-08-17T17:00:59Z",
-    "time_to_first_approval_minutes": 5323.866666666667,
+    "first_approved_at": null,
+    "time_to_first_approval_minutes": null,
     "required_approvals_met_at": null,
     "time_to_required_approvals_minutes": null,
     "closed_at": null,
@@ -30853,8 +30843,8 @@
     "week": "2025-W33",
     "status": "pending",
     "diff_stats": {
-      "additions": 606,
-      "deletions": 300,
+      "additions": 851,
+      "deletions": 382,
       "changed_files": 22
     }
   },
