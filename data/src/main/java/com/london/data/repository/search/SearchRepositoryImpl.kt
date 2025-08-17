@@ -53,7 +53,8 @@ class SearchRepositoryImpl @Inject constructor(
     }
 
     private suspend fun getTvShowSearchResult(
-        name: String, pageNumber: Int
+        name: String,
+        pageNumber: Int
     ): ApiResponse<SearchTvShowRemote> {
         return remoteDataSource.searchForTvShows(
             query = name,
@@ -109,7 +110,8 @@ class SearchRepositoryImpl @Inject constructor(
     }
 
     private suspend fun getActorsSearchResult(
-        name: String, pageNumber: Int
+        name: String,
+        pageNumber: Int
     ): ApiResponse<SearchActorRemote> {
         return remoteDataSource.searchForActors(
             query = name,
@@ -127,9 +129,7 @@ class SearchRepositoryImpl @Inject constructor(
     private suspend fun insertGenreInterest(genre: Genre, mediaType: String) {
         genreInterestDao.insertGenreInterest(
             GenreInterestEntity(
-                genreId = genre.toGenreId(),
-                mediaType = mediaType,
-                count = 1
+                genreId = genre.toGenreId(), mediaType = mediaType, count = 1
             )
         )
     }

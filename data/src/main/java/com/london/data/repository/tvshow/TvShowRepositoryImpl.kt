@@ -198,9 +198,9 @@ class TvShowRepositoryImpl @Inject constructor(
     }
 
     override suspend fun getAccountTvShowStateById(
-        tvShowId: Int,
+        id: Int,
     ): MediaStates = tvShowRemoteDataSource.getAccountTvShowStates(
-        tvShowId = tvShowId,
+        tvShowId = id,
         guestSessionId = authenticationPreferences.getGuestSessionId(),
         userSessionId = authenticationPreferences.getSessionId()
     ).getOrThrow().toEntity()
@@ -220,11 +220,9 @@ class TvShowRepositoryImpl @Inject constructor(
     private suspend fun getTvShowReviewsFromRemote(
         tvShowId: Int,
         pageNumber: Int
-    ): PagedFetchResponse<ReviewEntity> {
-        return tvShowRemoteDataSource.getTvShowReviews(tvShowId, pageNumber)
-            .getOrThrow()
-            .toReviewEntity()
-    }
+    ): PagedFetchResponse<ReviewEntity> =
+        tvShowRemoteDataSource.getTvShowReviews(tvShowId, pageNumber).getOrThrow().toReviewEntity()
+
 
     private suspend fun getTopRatedPages(pageNumber: Int): PagedFetchResponse<TopRatedMedia> {
         val remoteResult = tvShowRemoteDataSource.getTopRatedTvShows(pageNumber).getOrThrow()

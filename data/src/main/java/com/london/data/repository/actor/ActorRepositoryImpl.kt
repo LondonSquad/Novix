@@ -17,15 +17,11 @@ class ActorRepositoryImpl @Inject constructor(
     private val dataSource: ActorRemoteDataSource
 ) : ActorRepository {
 
-    override suspend fun getActorDetailsById(id: Int): ActorDetails {
-        val remoteActorDetails = dataSource.getActorDetailsById(id).getOrThrow()
-        return remoteActorDetails.toEntity()
-    }
+    override suspend fun getActorDetailsById(id: Int): ActorDetails =
+        dataSource.getActorDetailsById(id).getOrThrow().toEntity()
 
-    override suspend fun getActorImagesById(id: Int): ActorImageDetails {
-        val remoteActorImages = dataSource.getActorImagePathById(id).getOrThrow()
-        return remoteActorImages.toEntity()
-    }
+    override suspend fun getActorImagesById(id: Int): ActorImageDetails =
+        dataSource.getActorImagePathById(id).getOrThrow().toEntity()
 
     override suspend fun getMovieActors(id: Int): List<Actor> {
         val remoteMovieCast = dataSource.getMovieActors(id).getOrThrow()
@@ -42,8 +38,6 @@ class ActorRepositoryImpl @Inject constructor(
         )
     }
 
-    override suspend fun getTvShowActors(id: Int): TvShowCastEntity {
-        val remoteTvShowCast = dataSource.getTvShowActors(id).getOrThrow()
-        return remoteTvShowCast.toCastEntity()
-    }
+    override suspend fun getTvShowActors(id: Int): TvShowCastEntity =
+        dataSource.getTvShowActors(id).getOrThrow().toCastEntity()
 }

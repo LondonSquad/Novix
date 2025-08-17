@@ -59,10 +59,9 @@ class MovieRepositoryImpl @Inject constructor(
     override suspend fun getActorMoviePicksById(id: Int): ActorMediaDetails =
         movieRemoteDataSource.getActorMovieById(id).getOrThrow().toEntity()
 
-    override suspend fun getSimilarMoviesById(id: Int): List<Movie> {
-        return movieRemoteDataSource.getSimilarMovies(id).getOrThrow().items
-            .map { it.toEntity() }
-    }
+    override suspend fun getSimilarMoviesById(id: Int) =
+        movieRemoteDataSource.getSimilarMovies(id).getOrThrow().items.map { it.toEntity() }
+
 
     override suspend fun getMovieVideos(movieId: Int): List<String> {
         return movieRemoteDataSource.getMovieVideos(movieId)
