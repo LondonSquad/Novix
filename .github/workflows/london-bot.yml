@@ -249,18 +249,33 @@ jobs:
             gh api "repos/${{ github.repository }}/issues/$pr_number/comments" --paginate --jq '[.[] | select(.user.type != "Bot")]' > "$TEMP_DIR/pr_${pr_number}_issue_comments.json" 2>/dev/null || echo "[]" > "$TEMP_DIR/pr_${pr_number}_issue_comments.json"
             gh api "repos/${{ github.repository }}/pulls/$pr_number/comments" --paginate --jq '[.[] | select(.user.type != "Bot")]' > "$TEMP_DIR/pr_${pr_number}_review_comments.json" 2>/dev/null || echo "[]" > "$TEMP_DIR/pr_${pr_number}_review_comments.json"
           
-            # Fetch approvals for the current HEAD commit (using the working logic from old version)
-            gh api "repos/${{ github.repository }}/pulls/$pr_number/reviews" \
-              --jq '[.[] | select(.state == "APPROVED" and .commit_id == "'"$PR_HEAD_SHA"'")] |
-              group_by(.user.id) | map(sort_by(.submitted_at) | .[-1]) |
+            # Fetch ALL reviews first
+            gh api "repos/${{ github.repository }}/pulls/$pr_number/reviews" --paginate > "$TEMP_DIR/pr_${pr_number}_all_reviews.json" 2>/dev/null || echo "[]" > "$TEMP_DIR/pr_${pr_number}_all_reviews.json"
+          
+            # Process approvals with fallback logic
+            jq --arg head_sha "$PR_HEAD_SHA" '
+              # First try to get approvals for current commit
+              ([.[] | select(.state == "APPROVED" and .commit_id == $head_sha)] |
+                group_by(.user.id) | 
+                map(sort_by(.submitted_at) | .[-1])
+              ) as $current_approvals |
+              # If no approvals for current commit, get latest approvals regardless of commit
+              ([.[] | select(.state == "APPROVED")] |
+                group_by(.user.id) | 
+                map(sort_by(.submitted_at) | .[-1])
+              ) as $all_approvals |
+              # Use current approvals if available, otherwise use all approvals
+              (if ($current_approvals | length) > 0 then $current_approvals else $all_approvals end) |
               map({
                 reviewer: {
                   login: .user.login,
                   id: .user.id,
                   url: .user.html_url
                 },
-                submitted_at: .submitted_at
-              })' > "$TEMP_DIR/pr_${pr_number}_approvals.json" 2>/dev/null || echo "[]" > "$TEMP_DIR/pr_${pr_number}_approvals.json"
+                submitted_at: .submitted_at,
+                commit_id: .commit_id
+              })
+            ' < "$TEMP_DIR/pr_${pr_number}_all_reviews.json" > "$TEMP_DIR/pr_${pr_number}_approvals.json"
 
             # Build the final PR data using slurpfile to avoid command line length issues
             jq \
@@ -433,20 +448,62 @@ jobs:
           
             echo "Current HEAD SHA: $PR_HEAD_SHA"
           
-            # Get current approvals for this specific commit (using the working logic from old version)
-            CURRENT_APPROVALS_JSON=$(gh api "repos/${{ github.repository }}/pulls/$PR_NUMBER/reviews" \
-              --jq '[.[] | select(.state == "APPROVED" and .commit_id == "'"$PR_HEAD_SHA"'")] |
-              group_by(.user.id) | map(sort_by(.submitted_at) | .[-1]) |
-              map({
-                reviewer: {
-                  login: .user.login,
-                  id: .user.id,
-                  url: .user.html_url
-                },
-                submitted_at: .submitted_at
-              })'
-            )
-            echo "VALID approvals from API: $CURRENT_APPROVALS_JSON"
+            # Try multiple methods to get approvals
+            echo "Attempting to fetch approvals..."
+          
+            # Method 1: Get all reviews and filter client-side (most reliable)
+            ALL_REVIEWS=$(gh api "repos/${{ github.repository }}/pulls/$PR_NUMBER/reviews" --paginate || echo "[]")
+          
+            # Method 2: Try to filter for APPROVED reviews for current commit
+            if [[ "$ALL_REVIEWS" != "[]" && -n "$ALL_REVIEWS" ]]; then
+              CURRENT_APPROVALS_JSON=$(echo "$ALL_REVIEWS" | jq \
+                --arg head_sha "$PR_HEAD_SHA" \
+                '[.[] | select(.state == "APPROVED")] |
+                group_by(.user.id) | 
+                map(
+                  sort_by(.submitted_at) | 
+                  .[-1] | 
+                  select(.commit_id == $head_sha or .commit_id == null)
+                ) |
+                map({
+                  reviewer: {
+                    login: .user.login,
+                    id: .user.id,
+                    url: .user.html_url
+                  },
+                  submitted_at: .submitted_at,
+                  commit_id: .commit_id
+                })'
+              )
+          
+              # If no approvals for current commit, try getting the latest approvals regardless of commit
+              if [[ "$CURRENT_APPROVALS_JSON" == "[]" || -z "$CURRENT_APPROVALS_JSON" ]]; then
+                echo "No approvals for current commit, checking for any approvals..."
+                CURRENT_APPROVALS_JSON=$(echo "$ALL_REVIEWS" | jq \
+                  '[.[] | select(.state == "APPROVED")] |
+                  group_by(.user.id) | 
+                  map(
+                    sort_by(.submitted_at) | 
+                    .[-1]
+                  ) |
+                  map({
+                    reviewer: {
+                      login: .user.login,
+                      id: .user.id,
+                      url: .user.html_url
+                    },
+                    submitted_at: .submitted_at,
+                    commit_id: .commit_id,
+                    note: "May be for different commit"
+                  })'
+                )
+              fi
+            else
+              CURRENT_APPROVALS_JSON="[]"
+            fi
+          
+            echo "Found $(echo "$CURRENT_APPROVALS_JSON" | jq 'length') approvals"
+            echo "Approvals data: $CURRENT_APPROVALS_JSON"
           
             # Get assignees, using PR author as fallback if no assignees
             CURRENT_ASSIGNEES_JSON=$(echo "$PR_DATA_FULL" | jq '
