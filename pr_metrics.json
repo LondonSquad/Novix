@@ -32140,17 +32140,36 @@
         "count": 10
       }
     ],
-    "approvals": [],
+    "approvals": [
+      {
+        "reviewer": {
+          "login": "marwanqashwa",
+          "id": 100484790,
+          "url": "https://github.com/marwanqashwa"
+        },
+        "submitted_at": "2025-08-17T20:37:55Z",
+        "commit_id": "b07990f8ffd52d95e6074c1b9a4fa1fb83b4664a"
+      },
+      {
+        "reviewer": {
+          "login": "BassantM",
+          "id": 102248144,
+          "url": "https://github.com/BassantM"
+        },
+        "submitted_at": "2025-08-17T20:37:56Z",
+        "commit_id": "b07990f8ffd52d95e6074c1b9a4fa1fb83b4664a"
+      }
+    ],
     "required_approvals": 2,
-    "first_approved_at": null,
-    "time_to_first_approval_minutes": null,
-    "required_approvals_met_at": null,
-    "time_to_required_approvals_minutes": null,
+    "first_approved_at": "2025-08-17T20:37:55Z",
+    "time_to_first_approval_minutes": 169.78333333333333,
+    "required_approvals_met_at": "2025-08-17T20:37:56Z",
+    "time_to_required_approvals_minutes": 169.8,
     "closed_at": null,
     "merged_at": null,
     "merged_by": null,
     "week": "2025-W33",
-    "status": "pending",
+    "status": "approved",
     "diff_stats": {
       "additions": 655,
       "deletions": 357,
