@@ -32192,25 +32192,42 @@
     "approvals": [
       {
         "reviewer": {
+          "login": "abdo-essam",
+          "id": 92235360,
+          "url": "https://github.com/abdo-essam"
+        },
+        "submitted_at": "2025-08-17T20:16:23Z",
+        "commit_id": "a06cd5e990d70fe94199dee1d68841b9e64a79dd"
+      },
+      {
+        "reviewer": {
           "login": "abdelrhman1002",
           "id": 180463542,
           "url": "https://github.com/abdelrhman1002"
         },
-        "submitted_at": "2025-08-17T20:09:21Z",
-        "commit_id": "902a9a4bfc5278dbf68af4291e9d6d56ba81a22a",
-        "note": "May be for different commit"
+        "submitted_at": "2025-08-17T20:16:27Z",
+        "commit_id": "a06cd5e990d70fe94199dee1d68841b9e64a79dd"
+      },
+      {
+        "reviewer": {
+          "login": "marwanqashwa",
+          "id": 100484790,
+          "url": "https://github.com/marwanqashwa"
+        },
+        "submitted_at": "2025-08-17T20:16:37Z",
+        "commit_id": "a06cd5e990d70fe94199dee1d68841b9e64a79dd"
       }
     ],
     "required_approvals": 2,
-    "first_approved_at": "2025-08-17T20:09:21Z",
-    "time_to_first_approval_minutes": 33.666666666666664,
-    "required_approvals_met_at": null,
-    "time_to_required_approvals_minutes": null,
+    "first_approved_at": "2025-08-17T20:16:23Z",
+    "time_to_first_approval_minutes": 40.7,
+    "required_approvals_met_at": "2025-08-17T20:16:27Z",
+    "time_to_required_approvals_minutes": 40.766666666666666,
     "closed_at": null,
     "merged_at": null,
     "merged_by": null,
     "week": "2025-W33",
-    "status": "pending",
+    "status": "approved",
     "diff_stats": {
       "additions": 296,
       "deletions": 235,
