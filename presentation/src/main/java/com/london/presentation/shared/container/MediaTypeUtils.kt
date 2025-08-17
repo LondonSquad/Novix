@@ -1,5 +1,7 @@
 package com.london.presentation.shared.container
 
+import androidx.compose.foundation.clickable
+import androidx.compose.ui.Modifier
 import com.london.domain.entity.Movie
 import com.london.domain.entity.TvShow
 
@@ -27,5 +29,18 @@ fun <T : Any> filterItemsByCategory(
         config.isMovieSelected -> items.filter { it is Movie }
         config.isTvShowSelected -> items.filter { it is TvShow }
         else -> items
+    }
+}
+
+fun <T : Any> Modifier.navigationClickable(
+    item: T,
+    onItemClick: ((T) -> Unit)? = null,
+    onNavigateToMovie: (Int) -> Unit = {},
+    onNavigateToTvShow: (Int) -> Unit = {}
+): Modifier = this.clickable {
+    onItemClick?.invoke(item) ?: when (item) {
+        is Movie -> onNavigateToMovie(item.id)
+        is TvShow -> onNavigateToTvShow(item.id)
+        else -> Unit
     }
 }

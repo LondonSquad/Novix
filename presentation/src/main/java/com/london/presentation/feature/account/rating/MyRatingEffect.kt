@@ -1,7 +1,7 @@
 package com.london.presentation.feature.account.rating
 
 sealed interface MyRatingEffect {
-    data object NavigateBack : MyRatingEffect
-    data class NavigateToMovie(val movieId: Int) : MyRatingEffect
-    data class NavigateToTvShow(val tvShowId: Int) : MyRatingEffect
+    data object NavigationBack : MyRatingEffect
+    data class NavigationMovieDetails(val id: Int) : MyRatingEffect
+    data class NavigationTvShowDetails(val id: Int) : MyRatingEffect
 }
