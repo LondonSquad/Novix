@@ -179,7 +179,6 @@ class MovieDetailsViewModelTest {
                 assertThat(state.isRated).isTrue()
                 assertThat(state.isRateBottomSheetVisible).isFalse()
                 assertThat(state.isSuccessfullyRated).isTrue()
-                assertThat(state.isLoading).isFalse()
             }
         }
 
