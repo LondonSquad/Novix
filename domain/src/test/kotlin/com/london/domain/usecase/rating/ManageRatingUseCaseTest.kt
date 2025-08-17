@@ -78,65 +78,53 @@ class ManageRatingUseCaseTest {
     }
 
     @Test
-    fun `getRatedMovies returns empty list when no movies`() = runTest {
+    fun `getRatedMediaSorted returns empty list when no rated movies exist`() = runTest {
         // Given
         coEvery { movieRepository.getAllRatedMovies() } returns emptyList()
 
         // When
-        val result = manageRatingUseCase.getAllRatedMovies()
+        val result = manageRatingUseCase.getRatedMediaSorted()
 
         // Then
-        assertEquals(0, result.size)
+        assertThat(result).isEmpty()
     }
 
     @Test
-    fun `getRatedTvShows returns empty list when no tv shows`() = runTest {
+    fun `getRatedMediaSorted returns empty list when no rated tv shows exist`() = runTest {
         // Given
         coEvery { tvShowRepository.getAllRatedTvShows() } returns emptyList()
 
         // When
-        val result = manageRatingUseCase.getAllRatedTvShows()
+        val result = manageRatingUseCase.getRatedMediaSorted()
 
         // Then
-        assertEquals(0, result.size)
+        assertThat(result).isEmpty()
     }
 
     @Test
-    fun `getRatedMovies returns only movies rated`() = runTest {
+    fun `getRatedMediaSorted returns only movies sorted by rating when rated movies exist`() =
+        runTest {
         // Given
         coEvery { movieRepository.getAllRatedMovies() } returns mockRatedMedia
 
         // When
-        val result = manageRatingUseCase.getAllRatedMovies()
+            val result = manageRatingUseCase.getRatedMediaSorted()
 
         // Then
-        assertEquals(mockRatedMedia, result)
+            assertEquals(mockRatedMedia.sortedByDescending { it.rating }, result)
     }
 
     @Test
-    fun `getRatedTvShows returns only tv shows rated`() = runTest {
+    fun `getRatedMediaSorted returns only tv shows sorted by rating when rated tv shows exist`() =
+        runTest {
         // Given
         coEvery { tvShowRepository.getAllRatedTvShows() } returns mockRatedMediaWithTvShows
 
         // When
-        val result = manageRatingUseCase.getAllRatedTvShows()
+            val result = manageRatingUseCase.getRatedMediaSorted()
 
         // Then
-        assertEquals(mockRatedMediaWithTvShows, result)
-    }
-
-    @Test
-    fun `getRatedMediaSorted returns movies and tv shows sorted by rating`() = runTest {
-        // Given
-        coEvery { movieRepository.getAllRatedMovies() } returns mockRatedMedia
-        coEvery { tvShowRepository.getAllRatedTvShows() } returns mockRatedMediaWithTvShows
-
-        // When
-        val result = manageRatingUseCase.getAllRatedMediaSorted()
-
-        // Then
-        val sorted = result.sortedByDescending { it.rating }
-        assertEquals(sorted, result)
+            assertEquals(mockRatedMediaWithTvShows.sortedByDescending { it.rating }, result)
     }
 
     @Test
@@ -277,10 +265,10 @@ class ManageRatingUseCaseTest {
     fun `getAccountTvShowState returns rating when repository returns rating`() = runTest {
         // Given
         coEvery {
-            tvShowRepository.getAccountTvShowState(TV_SHOW_ID)
+            tvShowRepository.getAccountTvShowStateById(TV_SHOW_ID)
         } returns mockMovieStates()
         // When
-        val result = manageRatingUseCase.getRateAccountTvShowState(TV_SHOW_ID)
+        val result = manageRatingUseCase.getRateAccountTvShowStatesById(TV_SHOW_ID)
 
         // Then
         assertEquals(RATING, result)
@@ -320,6 +308,31 @@ class ManageRatingUseCaseTest {
         coVerify(exactly = 1) { tvShowRepository.deleteTvShowRating(TV_SHOW_ID) }
     }
 
+    @Test
+    fun `getRatedMediaById should return null when id is not found`() = runTest {
+        // Given
+        coEvery { movieRepository.getAllRatedMovies() } returns mockOnlyMovies
+        coEvery { tvShowRepository.getAllRatedTvShows() } returns mockOnlyTvShows
+
+        // When
+        val result = manageRatingUseCase.getRatedMediaById(123)
+
+        // Then
+        assertThat(result).isNull()
+    }
+
+    @Test
+    fun `getRatedMediaById should return rated media when id is found`() = runTest {
+        // Given
+        coEvery { movieRepository.getAllRatedMovies() } returns mockOnlyMovies
+        coEvery { tvShowRepository.getAllRatedTvShows() } returns mockOnlyTvShows
+
+        // When
+        val result = manageRatingUseCase.getRatedMediaById(1)
+
+        // Then
+        assertThat(result).isNotNull()
+    }
     companion object {
         private const val MOVIE_ID = 456
         private const val TV_SHOW_ID = 456
