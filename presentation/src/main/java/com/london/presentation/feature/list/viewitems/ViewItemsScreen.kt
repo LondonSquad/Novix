@@ -87,8 +87,7 @@ private fun Content(
                 },
                 isItemSaved = { true },
                 onNavigateToMovie = { id -> contract.onMovieClick(id) },
-                onNavigateToTvShow = { },
-                modifier = Modifier.padding(horizontal = 16.dp)
+                onNavigateToTvShow = { }
             )
         }
     }

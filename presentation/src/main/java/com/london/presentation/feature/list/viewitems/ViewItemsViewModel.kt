@@ -69,11 +69,11 @@ class ViewItemsViewModel @Inject constructor(
 
     private fun fetchMovieListDetails(listId: Int) {
         tryToExecute(
-            block = { createMoviesPagingFlow(listId, getMovieListDetailsUseCase) },
+            block = { createMoviesPagingFlow(listId) },
             onStart = { updateState { copy(isLoading = true) } },
             onSuccess = { moviesFlow -> updateState { copy(listItems = moviesFlow) } },
             onError = { errorState -> updateState { copy(error = errorState) } },
-            onCompleted = { updateState { copy(isLoading = false) } },
+            onCompleted = { updateState { copy(isLoading = false) } }
         )
     }
 
@@ -87,16 +87,12 @@ class ViewItemsViewModel @Inject constructor(
         )
     }
 
-    private fun createMoviesPagingFlow(
-        listId: Int,
-        getMovieListDetailsUseCase: GetMovieListDetailsUseCase
-    ): Flow<PagingData<Movie>> {
-        return createPagingSourceFlow(query = "") { query, pageNumber ->
+    private fun createMoviesPagingFlow(listId: Int): Flow<PagingData<Movie>> =
+        createPagingSourceFlow(query = "") { _, pageNumber ->
             val movies = getMovieListDetailsUseCase.invoke(
                 listId = listId,
                 pageNumber = pageNumber
             )
             movies.copy(items = movies.items)
         }
-    }
 }
