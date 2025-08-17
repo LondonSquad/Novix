@@ -1,6 +1,7 @@
 package com.london.data.utils
 
 import com.london.data.BuildConfig
+import com.london.data.remote.model.authentication.GuestSessionResponse
 import com.london.data.remote.model.authentication.RequestTokenResponse
 import kotlinx.serialization.json.JsonElement
 import kotlinx.serialization.json.JsonObject
@@ -47,3 +48,4 @@ fun JsonElement?.parseRatingValue(): Double? = when {
 }
 
 fun RequestTokenResponse.isFailure() = success.isTrue.not()
+fun GuestSessionResponse.isFailure() = success.isTrue.not()
