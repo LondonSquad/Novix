@@ -2,13 +2,13 @@ package com.london.domain.usecase.details.movie
 
 import com.google.common.truth.Truth.assertThat
 import com.london.domain.entity.Actor
+import com.london.domain.entity.ImagesEntity
 import com.london.domain.entity.Movie
 import com.london.domain.entity.PagedFetchResponse
 import com.london.domain.entity.Trending
 import com.london.domain.entity.genre.Genre
 import com.london.domain.entity.genre.MovieGenre
 import com.london.domain.entity.moviedatails.MovieDetails
-import com.london.domain.entity.moviedatails.MovieImages
 import com.london.domain.entity.popular.PopularMedia
 import com.london.domain.entity.recent.MediaType
 import com.london.domain.entity.toprated.TopRatedMedia
@@ -245,11 +245,11 @@ class GetMovieUseCaseTest {
     fun `getFirstTenMovieImagesUseCase should return empty list when repository returns empty list`() =
         runTest {
             // given
-            coEvery { movieRepository.getMovieImagesById(MOVIE_ID) } returns MovieImages(
-                backdrops = emptyList(),
+            coEvery { movieRepository.getMovieImagesById(MOVIE_ID) } returns ImagesEntity(
+                backdropsUrl = emptyList(),
                 id = MOVIE_ID,
-                logos = emptyList(),
-                posters = emptyList()
+                logosUrl = emptyList(),
+                postersUrl = emptyList()
             )
             // when
             val result = getMovieUseCase.getMovieImagesUseCase(MOVIE_ID)
@@ -262,11 +262,11 @@ class GetMovieUseCaseTest {
         runTest {
             // given
             val manyImages = (1..15).map { "/images/movie$it.jpg" }
-            coEvery { movieRepository.getMovieImagesById(MOVIE_ID) } returns MovieImages(
-                backdrops = manyImages,
+            coEvery { movieRepository.getMovieImagesById(MOVIE_ID) } returns ImagesEntity(
+                backdropsUrl = manyImages,
                 id = MOVIE_ID,
-                logos = emptyList(),
-                posters = emptyList()
+                logosUrl = emptyList(),
+                postersUrl = emptyList()
             )
 
             // when
@@ -616,8 +616,6 @@ class GetMovieUseCaseTest {
         private val mockMovie1 = TopRatedMedia(
             id = 278,
             name = "The Shawshank Redemption",
-            voteAverage = 8.712,
-            releaseDate = "1994-09-23",
             posterUrl = "/q6y0Go1tsGEsmtFryDOJo3dEmqu.jpg",
             genres = listOf(MovieGenre.ACTION, MovieGenre.ACTION),
             mediaType = MediaType.Movie,
@@ -626,7 +624,6 @@ class GetMovieUseCaseTest {
         private val mockMovie2 = TopRatedMedia(
             id = 238,
             name = "The Godfather",
-            voteAverage = 8.7, releaseDate = "1972-03-14",
             posterUrl = "/3bhkrj58Vtu7enYsRolD1fZdja1.jpg",
             genres = listOf(MovieGenre.ACTION, MovieGenre.ACTION),
             mediaType = MediaType.Movie,
@@ -708,11 +705,11 @@ class GetMovieUseCaseTest {
             "/images/movie11.jpg",
         )
 
-        val movieImages = MovieImages(
-            backdrops = movieMockImages,
-            posters = emptyList(),
+        val movieImages = ImagesEntity(
+            backdropsUrl = movieMockImages,
+            postersUrl = emptyList(),
             id = 0,
-            logos = emptyList()
+            logosUrl = emptyList()
         )
 
         val actorMockCast = listOf(

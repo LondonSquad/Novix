@@ -1,7 +1,7 @@
 package com.london.domain.usecase.rating
 
+import com.london.domain.entity.MediaStates
 import com.london.domain.entity.RatedMedia
-import com.london.domain.entity.moviedatails.MediaStates
 import com.london.domain.entity.recent.MediaType
 import com.london.domain.repository.MovieRepository
 import com.london.domain.repository.TvShowRepository

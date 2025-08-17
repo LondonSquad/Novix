@@ -310,9 +310,7 @@ class HomeViewModelTest {
         every { this@mockk.id } returns id
         every { name } returns "Top Rated $id"
         every { posterUrl } returns "/poster$id.jpg"
-        every { voteAverage } returns 9.0
-        every { releaseDate } returns "2023-01-01"
-        every { genres } returns listOf(MovieGenre.ACTION, MovieGenre.ACTION)
+        every { genres } returns listOf(MovieGenre.ACTION)
         every { this@mockk.mediaType } returns mediaType
     }
 

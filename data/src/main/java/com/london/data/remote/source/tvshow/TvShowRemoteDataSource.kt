@@ -1,15 +1,14 @@
 package com.london.data.remote.source.tvshow
 
 import com.london.data.remote.model.ApiResponse
+import com.london.data.remote.model.details.ImagesResponse
 import com.london.data.remote.model.details.actor.model.actortvshowdetails.ActorTvShowDetailsResponse
 import com.london.data.remote.model.details.rating.AccountStatesResponse
 import com.london.data.remote.model.details.rating.RatingRemoteResponse
 import com.london.data.remote.model.details.tvshow.model.TvShowDetailsRemoteResponse
-import com.london.data.remote.model.details.tvshow.model.TvShowImagesRemoteResponse
-import com.london.data.remote.model.details.tvshow.model.tvshowepisode.EpisodeVideoResponse
 import com.london.data.remote.model.details.tvshow.model.tvshowepisode.TvShowEpisodeResponse
 import com.london.data.remote.model.details.tvshow.model.tvshowepisode.TvShowEpisodesRemoteResponse
-import com.london.data.remote.model.details.videoprovider.tvshow.model.TvShowVideoResponse
+import com.london.data.remote.model.details.videoprovider.VideoResponse
 import com.london.data.remote.model.home.popular.PopularTvShowResponse
 import com.london.data.remote.model.home.toprated.TopRatedTvSeriesRemote
 import com.london.data.remote.model.home.trending.TrendingResponse
@@ -25,11 +24,11 @@ interface TvShowRemoteDataSource {
     suspend fun deleteTvShowRating(tvShowId: Int, sessionId: String?): Result<RatingRemoteResponse>
     suspend fun getTopRatedTvShows(pageNumber: Int): Result<ApiResponse<TopRatedTvSeriesRemote>>
     suspend fun getTvShowDetailsById(id: Int): Result<TvShowDetailsRemoteResponse>
-    suspend fun getTvShowVideos(id: Int): Result<TvShowVideoResponse>
+    suspend fun getTvShowVideos(tvShowId: Int): Result<VideoResponse>
 
 
     suspend fun getTvShowReviews(
-        id: Int,
+        tvShowId: Int,
         pageNumber: Int
     ): Result<ApiResponse<ReviewResponse>>
 
@@ -39,14 +38,14 @@ interface TvShowRemoteDataSource {
     ): Result<ApiResponse<RatingMediaResponse>>
 
     suspend fun addTvShowRating(
-        id: Int,
+        tvShowId: Int,
         rating: Double,
         userSessionId: String?,
         guestSessionId: String?
     ): Result<RatingRemoteResponse>
 
     suspend fun addTvShowEpisode(
-        id: Int,
+        tvShowId: Int,
         seasonNumber: Int,
         episodeNumber: Int,
         rating: Double,
@@ -65,7 +64,7 @@ interface TvShowRemoteDataSource {
         seasonNumber: Int,
     ): Result<TvShowEpisodesRemoteResponse>
 
-    suspend fun getTvShowImagesById(id: Int): Result<TvShowImagesRemoteResponse>
+    suspend fun getTvShowImagesById(id: Int): Result<ImagesResponse>
 
     suspend fun getEpisodeDetails(
         tvShowId: Int,
@@ -77,7 +76,7 @@ interface TvShowRemoteDataSource {
         tvShowId: Int,
         seasonNumber: Int,
         episodeNumber: Int
-    ): Result<EpisodeVideoResponse>
+    ): Result<VideoResponse>
 
     suspend fun getAccountTvShowStates(
         tvShowId: Int,

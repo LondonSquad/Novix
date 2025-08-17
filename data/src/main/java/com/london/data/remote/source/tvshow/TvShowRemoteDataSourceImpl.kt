@@ -1,16 +1,15 @@
 package com.london.data.remote.source.tvshow
 
 import com.london.data.remote.model.ApiResponse
+import com.london.data.remote.model.details.ImagesResponse
 import com.london.data.remote.model.details.actor.model.actortvshowdetails.ActorTvShowDetailsResponse
 import com.london.data.remote.model.details.rating.AccountStatesResponse
 import com.london.data.remote.model.details.rating.RatingRemoteBody
 import com.london.data.remote.model.details.rating.RatingRemoteResponse
 import com.london.data.remote.model.details.tvshow.model.TvShowDetailsRemoteResponse
-import com.london.data.remote.model.details.tvshow.model.TvShowImagesRemoteResponse
-import com.london.data.remote.model.details.tvshow.model.tvshowepisode.EpisodeVideoResponse
 import com.london.data.remote.model.details.tvshow.model.tvshowepisode.TvShowEpisodeResponse
 import com.london.data.remote.model.details.tvshow.model.tvshowepisode.TvShowEpisodesRemoteResponse
-import com.london.data.remote.model.details.videoprovider.tvshow.model.TvShowVideoResponse
+import com.london.data.remote.model.details.videoprovider.VideoResponse
 import com.london.data.remote.model.home.popular.PopularTvShowResponse
 import com.london.data.remote.model.home.toprated.TopRatedTvSeriesRemote
 import com.london.data.remote.model.home.trending.TrendingResponse
@@ -73,7 +72,7 @@ class TvShowRemoteDataSourceImpl @Inject constructor(
     }
 
     override suspend fun addTvShowRating(
-        id: Int,
+        tvShowId: Int,
         rating: Double,
         userSessionId: String?,
         guestSessionId: String?
@@ -81,7 +80,7 @@ class TvShowRemoteDataSourceImpl @Inject constructor(
         return callApiWithRetry(
             apiCall = {
                 tvShowApiService.addTvShowRating(
-                    tvShowId = id,
+                    tvShowId = tvShowId,
                     guestSessionId = guestSessionId,
                     userSessionId = userSessionId,
                     ratingRequest = RatingRemoteBody(value = rating.toInt())
@@ -92,7 +91,7 @@ class TvShowRemoteDataSourceImpl @Inject constructor(
     }
 
     override suspend fun addTvShowEpisode(
-        id: Int,
+        tvShowId: Int,
         seasonNumber: Int,
         episodeNumber: Int,
         rating: Double,
@@ -102,7 +101,7 @@ class TvShowRemoteDataSourceImpl @Inject constructor(
         return callApiWithRetry(
             apiCall = {
                 tvShowApiService.addTvEpisode(
-                    tvShowId = id,
+                    tvShowId = tvShowId,
                     seasonNumber = seasonNumber,
                     episodeNumber = episodeNumber,
                     guestSessionId = guestSessionId,
@@ -115,9 +114,9 @@ class TvShowRemoteDataSourceImpl @Inject constructor(
     }
 
     override suspend fun getTvShowReviews(
-        id: Int, pageNumber: Int
+        tvShowId: Int, pageNumber: Int
     ): Result<ApiResponse<ReviewResponse>> = callApiWithRetry(
-        apiCall = { tvShowApiService.getTvShowReviews(tvShowId = id, page = pageNumber) },
+        apiCall = { tvShowApiService.getTvShowReviews(tvShowId = tvShowId, page = pageNumber) },
         mapper = { it }
     )
 
@@ -162,9 +161,7 @@ class TvShowRemoteDataSourceImpl @Inject constructor(
             mapper = { it }
         )
 
-
-
-    override suspend fun getTvShowImagesById(id: Int): Result<TvShowImagesRemoteResponse> =
+    override suspend fun getTvShowImagesById(id: Int): Result<ImagesResponse> =
         callApiWithRetry(
             apiCall = { tvShowApiService.getTvShowImages(tvShowId = id) },
             mapper = { it }
@@ -190,7 +187,7 @@ class TvShowRemoteDataSourceImpl @Inject constructor(
         tvShowId: Int,
         seasonNumber: Int,
         episodeNumber: Int
-    ): Result<EpisodeVideoResponse> =
+    ): Result<VideoResponse> =
         callApiWithRetry(
             apiCall = {
                 tvShowApiService.getEpisodeVideo(
@@ -236,9 +233,9 @@ class TvShowRemoteDataSourceImpl @Inject constructor(
         mapper = { it }
     )
 
-    override suspend fun getTvShowVideos(id: Int): Result<TvShowVideoResponse> =
+    override suspend fun getTvShowVideos(tvShowId: Int): Result<VideoResponse> =
         callApiWithRetry(
-            apiCall = { tvShowApiService.getTvShowVideos(tvShowId = id) },
+            apiCall = { tvShowApiService.getTvShowVideos(tvShowId = tvShowId) },
             mapper = { it }
         )
 
