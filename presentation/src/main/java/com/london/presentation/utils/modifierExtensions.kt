@@ -13,3 +13,14 @@ fun Modifier.offsetLayout() = layout { measurable, constraints ->
         placeable.placeRelative(0, -yOffsetPx)
     }
 }
+
+fun Modifier.episodeLayout() = layout { measurable, constraints ->
+    val placeable = measurable.measure(constraints)
+
+    val yOffsetPx = with(this) { 44.dp.roundToPx() }
+    val adjustedHeight = (placeable.height - yOffsetPx).coerceAtLeast(0)
+
+    layout(placeable.width, adjustedHeight) {
+        placeable.placeRelative(0, -yOffsetPx)
+    }
+}

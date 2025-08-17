@@ -37,7 +37,6 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.layout.layout
 import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -59,16 +58,18 @@ import com.london.presentation.shared.RatingItem
 import com.london.presentation.shared.SnackBarAnimation
 import com.london.presentation.shared.buildscreen.BuildScreen
 import com.london.presentation.utils.Listen
+import com.london.presentation.utils.episodeLayout
 import com.london.presentation.utils.isNotZeroRate
 import com.london.presentation.utils.openUrl
 import com.london.presentation.utils.toLocalizedNumbers
 import com.london.designsystem.R as Res
+
 @Composable
 fun EpisodeDetailsScreen(
-    viewModel: EpisodeDetailsViewModel = hiltViewModel(),
     onNavigateBack: () -> Unit,
-    onNaviagteToActorDetalis: (Int) -> Unit,
-    onNavigateToLogin: () -> Unit
+    onNavigateToLogin: () -> Unit,
+    onNavigateToActorDetails: (Int) -> Unit,
+    viewModel: EpisodeDetailsViewModel = hiltViewModel()
 ) {
     val uiState by viewModel.state.collectAsStateWithLifecycle()
     val effect by viewModel.effect.collectAsState(null)
@@ -76,7 +77,7 @@ fun EpisodeDetailsScreen(
     effect?.Listen { currentEffect ->
         when (currentEffect) {
             EpisodeDetailsEffect.BackNavigation -> onNavigateBack()
-            is EpisodeDetailsEffect.CastNavigation -> onNaviagteToActorDetalis(currentEffect.episodeId)
+            is EpisodeDetailsEffect.CastNavigation -> onNavigateToActorDetails(currentEffect.episodeId)
             is EpisodeDetailsEffect.LoginNavigation -> onNavigateToLogin()
         }
     }
@@ -89,18 +90,17 @@ fun EpisodeDetailsScreen(
     ) {
         Content(
             uiState = uiState,
-            episodeDetailsContract = viewModel,
-            onNavigateToCast = onNaviagteToActorDetalis
+            contract = viewModel,
+            onNavigateToCast = onNavigateToActorDetails
         )
     }
 }
 
 @Composable
 private fun Content(
-    modifier: Modifier = Modifier,
     uiState: EpisodeDetailsUiState,
-    episodeDetailsContract: EpisodeDetailsContract,
-    onNavigateToCast: (Int) -> Unit
+    onNavigateToCast: (Int) -> Unit,
+    contract: EpisodeDetailsContract
 ) {
     val uriHandler = LocalUriHandler.current
     val lazyListState = rememberLazyListState()
@@ -116,42 +116,34 @@ private fun Content(
         animationSpec = tween(
             durationMillis = 400,
             easing = FastOutSlowInEasing
-        ),
+        )
     )
 
     Box(
-        modifier = modifier
+        modifier = Modifier
             .fillMaxSize()
             .background(NovixTheme.colors.surface)
     ) {
-
         TopBar(
-            onBackClick = episodeDetailsContract::onBackClick,
+            onBackClick = contract::onBackClick,
             modifier = Modifier
                 .fillMaxWidth()
-                .background(
-                    NovixTheme.colors.surface.copy(alpha = backgroundAlpha)
-                )
+                .background(NovixTheme.colors.surface.copy(alpha = backgroundAlpha))
                 .padding(horizontal = 16.dp)
-                .padding(
-                    top = WindowInsets.statusBars.asPaddingValues().calculateTopPadding() + 12.dp
-                ),
+                .padding(top = WindowInsets.statusBars.asPaddingValues().calculateTopPadding() + 12.dp),
             onClickOption1 = { /*todo on click on save*/ },
             option1Icon = Res.drawable.icon_remove,
         )
 
         LazyColumn(
             state = lazyListState,
-            modifier = Modifier
-                .fillMaxSize(),
+            modifier = Modifier.fillMaxSize(),
             contentPadding = PaddingValues(bottom = 80.dp)
         ) {
             item {
                 val images = uiState.tvImages
                 if (images != null) {
-                    CustomBackDropImagePager(
-                        images = images
-                    )
+                    CustomBackDropImagePager(images = images)
                 }
             }
 
@@ -160,16 +152,7 @@ private fun Content(
                     uiState = uiState,
                     modifier = Modifier
                         .fillMaxWidth()
-                        .layout { measurable, constraints ->
-                            val placeable = measurable.measure(constraints)
-
-                            val yOffsetPx = with(this) { 44.dp.roundToPx() }
-                            val adjustedHeight = (placeable.height - yOffsetPx).coerceAtLeast(0)
-
-                            layout(placeable.width, adjustedHeight) {
-                                placeable.placeRelative(0, -yOffsetPx)
-                            }
-                        }
+                        .episodeLayout()
                         .padding(start = 16.dp, end = 16.dp)
                         .heightIn(min = 158.dp)
                         .border(
@@ -184,13 +167,7 @@ private fun Content(
 
             item {
                 OverviewSection(
-                    uiState = uiState,
-                    modifier = Modifier.padding(
-                        top = 16.dp,
-                        start = 16.dp,
-                        end = 16.dp
-                    )
-                )
+                    uiState = uiState)
             }
 
             // Guests of honor section
@@ -221,9 +198,7 @@ private fun Content(
                     )
                 }
 
-                item {
-                    Spacer(Modifier.height(30.dp))
-                }
+                item { Spacer(Modifier.height(30.dp)) }
             }
         }
         FooterSection(
@@ -232,17 +207,17 @@ private fun Content(
             onVideoClick = {
                 uriHandler.openUrl(uiState.videoProvider)
             },
-            onRateClick = episodeDetailsContract::onRateEpisodeClick,
+            onRateClick = contract::onRateEpisodeClick,
             isRateEnabled = uiState.isRated.not() && (uiState.voteAverage.isNotZeroRate()),
 
             )
         if (uiState.isRateBottomSheetVisible) RatingBottomSheet(
-            onDismissClick = episodeDetailsContract::onRateEpisodeClick,
-            onSubmitClick = episodeDetailsContract::onSelectRatingClick,
+            onDismissClick = contract::onRateEpisodeClick,
+            onSubmitClick = contract::onSelectRatingClick,
         )
         else if (uiState.isGuestUserBottomSheetVisible) GuestUserLoginBottomSheet(
-            onDismissClick = episodeDetailsContract::onRateEpisodeClick,
-            onLoginClick = episodeDetailsContract::onLoginClick,
+            onDismissClick = contract::onRateEpisodeClick,
+            onLoginClick = contract::onLoginClick,
         )
     }
 
@@ -423,7 +398,11 @@ fun OverviewSection(
     var isTextCollapsed by rememberSaveable { mutableStateOf(false) }
     if (uiState.overview.isNotBlank()) {
         Column(
-            modifier = modifier
+            modifier = modifier.padding(
+                top = 16.dp,
+                start = 16.dp,
+                end = 16.dp
+            )
         ) {
             Text(
                 text = stringResource(Res.string.overview),
