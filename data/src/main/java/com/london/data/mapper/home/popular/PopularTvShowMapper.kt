@@ -12,7 +12,7 @@ import com.london.domain.KoverIgnore
 import com.london.domain.entity.popular.PopularMedia
 import com.london.domain.entity.recent.MediaType
 
-fun PopularTvShowResponse.toMovieEntity(): PopularMedia =
+fun PopularTvShowResponse.toTvShowEntity(): PopularMedia =
     PopularMedia(
         id = id.orZero(),
         name = name.orEmpty(),
@@ -23,7 +23,7 @@ fun PopularTvShowResponse.toMovieEntity(): PopularMedia =
 
 
 fun ApiResponse<PopularTvShowResponse>.toPopularTvShows(): List<PopularMedia> =
-    items.map { it.toMovieEntity() }
+    items.map { it.toTvShowEntity() }
 
 fun PopularSectionLocal.toTvShowEntity(): PopularMedia = PopularMedia(
     id = id,
