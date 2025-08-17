@@ -91,7 +91,7 @@ class TrendingActorsViewModelTest {
         viewModel.effect.test {
             viewModel.onActorClick(1)
             val effect = awaitItem()
-            assertThat(effect).isInstanceOf(TrendingActorsEffect.OnNavigateToActorClick::class.java)
+            assertThat(effect).isInstanceOf(TrendingActorsEffect.ActorClickNavigation::class.java)
         }
     }
     
@@ -102,7 +102,7 @@ class TrendingActorsViewModelTest {
         viewModel.effect.test {
             viewModel.onBackClick()
             val effect = awaitItem()
-            assertThat(effect).isInstanceOf(TrendingActorsEffect.OnNavigateBackClick::class.java)
+            assertThat(effect).isInstanceOf(TrendingActorsEffect.BackClickNavigation::class.java)
         }
     }
 

@@ -22,9 +22,9 @@ class TrendingActorsViewModel @Inject constructor(
         getTrendingActors()
     }
 
-    override fun onActorClick(id: Int) = emitEffect(TrendingActorsEffect.OnNavigateToActorClick(id))
+    override fun onActorClick(id: Int) = emitEffect(TrendingActorsEffect.ActorClickNavigation(id))
 
-    override fun onBackClick() = emitEffect(TrendingActorsEffect.OnNavigateBackClick)
+    override fun onBackClick() = emitEffect(TrendingActorsEffect.BackClickNavigation)
 
     override fun onRetryClick() = getTrendingActors()
 
