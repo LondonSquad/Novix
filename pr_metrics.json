@@ -30939,6 +30939,16 @@
       },
       {
         "author": {
+          "login": "marwanqashwa",
+          "id": 100484790,
+          "url": "https://github.com/marwanqashwa"
+        },
+        "first_comment_at": "2025-08-17T18:34:33Z",
+        "last_comment_at": "2025-08-17T18:37:49Z",
+        "count": 2
+      },
+      {
+        "author": {
           "login": "BassantM",
           "id": 102248144,
           "url": "https://github.com/BassantM"
@@ -30968,20 +30978,10 @@
         "count": 4
       }
     ],
-    "approvals": [
-      {
-        "reviewer": {
-          "login": "Abdulrahman1890",
-          "id": 76666355,
-          "url": "https://github.com/Abdulrahman1890"
-        },
-        "submitted_at": "2025-08-17T18:11:35Z",
-        "commit_id": "9e212a71e1eab723e2c716ff8e0ed7b9dab0c87b"
-      }
-    ],
+    "approvals": [],
     "required_approvals": 2,
-    "first_approved_at": "2025-08-17T18:11:35Z",
-    "time_to_first_approval_minutes": 4624.316666666667,
+    "first_approved_at": null,
+    "time_to_first_approval_minutes": null,
     "required_approvals_met_at": null,
     "time_to_required_approvals_minutes": null,
     "closed_at": null,
@@ -30990,9 +30990,9 @@
     "week": "2025-W33",
     "status": "pending",
     "diff_stats": {
-      "additions": 668,
-      "deletions": 230,
-      "changed_files": 25
+      "additions": 702,
+      "deletions": 261,
+      "changed_files": 29
     }
   },
   {
@@ -32010,7 +32010,18 @@
         "url": "https://github.com/abdo-essam"
       }
     ],
-    "comments": [],
+    "comments": [
+      {
+        "author": {
+          "login": "Abdulrahman1890",
+          "id": 76666355,
+          "url": "https://github.com/Abdulrahman1890"
+        },
+        "first_comment_at": "2025-08-17T18:13:47Z",
+        "last_comment_at": "2025-08-17T18:14:26Z",
+        "count": 2
+      }
+    ],
     "approvals": [],
     "required_approvals": 2,
     "first_approved_at": null,
@@ -32023,8 +32034,8 @@
     "week": "2025-W33",
     "status": "pending",
     "diff_stats": {
-      "additions": 415,
-      "deletions": 313,
+      "additions": 426,
+      "deletions": 316,
       "changed_files": 12
     }
   }
