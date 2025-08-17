@@ -62,21 +62,17 @@ private fun Content(
                 onBackClick = reviewContract::onBackClicked
             )
 
-            when {
-                reviewsList.itemSnapshotList.isEmpty() -> {
-                    EmptyReviewsState(
-                        modifier = Modifier
-                            .fillMaxSize()
-                            .weight(1f)
-                    )
-                }
-
-                else -> {
-                    ReviewsList(
-                        reviewsList = reviewsList,
-                        modifier = Modifier.fillMaxSize()
-                    )
-                }
+            if (reviewsList.itemSnapshotList.isEmpty()) {
+                EmptyReviewsState(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .weight(1f)
+                )
+            } else {
+                ReviewsList(
+                    reviewsList = reviewsList,
+                    modifier = Modifier.fillMaxSize()
+                )
             }
         }
     }
