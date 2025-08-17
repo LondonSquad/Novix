@@ -7,6 +7,7 @@ import com.london.data.local.source.home.HomeLocalDataSource
 import com.london.data.local.source.home.upcoming.UpComingLocalDataSource
 import com.london.data.mapper.details.actor.toEntity
 import com.london.data.mapper.details.movie.toEntity
+import com.london.data.mapper.details.toEntity
 import com.london.data.mapper.genre.getId
 import com.london.data.mapper.home.popular.toMovieEntity
 import com.london.data.mapper.home.popular.toPopularMovieSectionLocal
@@ -20,8 +21,10 @@ import com.london.data.mapper.search.toLocal
 import com.london.data.mapper.search.toReviewEntity
 import com.london.data.remote.source.movie.MovieRemoteDataSource
 import com.london.data.utils.CrashReporter
-import com.london.data.utils.asImageUrlOrEmpty
+import com.london.data.utils.asYoutubeUrlOrEmpty
 import com.london.data.utils.fetchAndSync
+import com.london.domain.entity.ImagesEntity
+import com.london.domain.entity.MediaStates
 import com.london.domain.entity.Movie
 import com.london.domain.entity.PagedFetchResponse
 import com.london.domain.entity.RatedMedia
@@ -29,9 +32,7 @@ import com.london.domain.entity.Trending
 import com.london.domain.entity.UpComingMovie
 import com.london.domain.entity.actordetails.cast.ActorMediaDetails
 import com.london.domain.entity.genre.MovieGenre
-import com.london.domain.entity.moviedatails.MediaStates
 import com.london.domain.entity.moviedatails.MovieDetails
-import com.london.domain.entity.moviedatails.MovieImages
 import com.london.domain.entity.popular.PopularMedia
 import com.london.domain.entity.recent.MediaType
 import com.london.domain.entity.review.ReviewEntity
@@ -51,7 +52,7 @@ class MovieRepositoryImpl @Inject constructor(
     override suspend fun getMovieById(id: Int): MovieDetails =
         movieRemoteDataSource.getMovieDetails(id).getOrThrow().toEntity()
 
-    override suspend fun getMovieImagesById(id: Int): MovieImages =
+    override suspend fun getMovieImagesById(id: Int): ImagesEntity =
         movieRemoteDataSource.getMovieImages(id).getOrThrow().toEntity()
 
     override suspend fun getActorMoviePicksById(id: Int): ActorMediaDetails =
@@ -64,8 +65,8 @@ class MovieRepositoryImpl @Inject constructor(
 
     override suspend fun getMovieVideos(movieId: Int): List<String> {
         return movieRemoteDataSource.getMovieVideos(movieId)
-            .getOrThrow().movies.orEmpty().map { movieVideoRemote ->
-                movieVideoRemote.key.asImageUrlOrEmpty()
+            .getOrThrow().videos.orEmpty().map { movieVideoRemote ->
+                movieVideoRemote.youtubeKey.asYoutubeUrlOrEmpty()
             }
     }
 
@@ -96,7 +97,8 @@ class MovieRepositoryImpl @Inject constructor(
     }
 
     override suspend fun getUpcomingMoviesByGenre(
-        genre: MovieGenre, pageNumber: Int
+        genre: MovieGenre,
+        pageNumber: Int
     ): PagedFetchResponse<UpComingMovie> = fetchAndSync(
         cacheBlock = {
             upComingLocalDataSource.getUpComingMoviesPage(

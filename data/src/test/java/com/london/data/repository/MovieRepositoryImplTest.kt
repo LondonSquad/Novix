@@ -3,43 +3,54 @@ package com.london.data.repository
 import com.google.common.truth.Truth.assertThat
 import com.london.data.local.model.home.popular.PopularSectionLocal
 import com.london.data.local.model.home.topRated.TopRatedLocal
+import com.london.data.local.model.home.upcoming.UpComingMovieLocal
+import com.london.data.local.model.home.upcoming.UpComingSectionLocal
 import com.london.data.local.preference.AuthenticationPreferences
 import com.london.data.local.source.home.HomeLocalDataSource
 import com.london.data.local.source.home.upcoming.UpComingLocalDataSource
+import com.london.data.mapper.details.actor.toEntity
 import com.london.data.mapper.details.movie.toEntity
+import com.london.data.mapper.details.toEntity
+import com.london.data.mapper.home.toprated.toEntity
+import com.london.data.mapper.myrating.toEntity
 import com.london.data.mapper.search.toAuthorDetails
+import com.london.data.mapper.search.toEntity
 import com.london.data.remote.exception.NetworkException
 import com.london.data.remote.model.ApiResponse
+import com.london.data.remote.model.details.ImageRemote
+import com.london.data.remote.model.details.ImagesResponse
+import com.london.data.remote.model.details.actor.model.actormoviedetails.ActorMovieCastMember
+import com.london.data.remote.model.details.actor.model.actormoviedetails.ActorMovieDetailsResponse
 import com.london.data.remote.model.details.movie.model.moviedetails.GenreRemote
 import com.london.data.remote.model.details.movie.model.moviedetails.MovieDetailsResponse
-import com.london.data.remote.model.details.movie.model.moviedetails.ProductionCompanyRemote
-import com.london.data.remote.model.details.movie.model.moviedetails.ProductionCountryRemote
-import com.london.data.remote.model.details.movie.model.moviedetails.RemoteCollectionDetails
-import com.london.data.remote.model.details.movie.model.moviedetails.SpokenLanguageRemote
-import com.london.data.remote.model.details.movie.model.movieimages.MovieImagesResponse
-import com.london.data.remote.model.details.movie.model.movieimages.Poster
 import com.london.data.remote.model.details.rating.AccountStatesResponse
 import com.london.data.remote.model.details.rating.RatingRemoteResponse
+import com.london.data.remote.model.details.videoprovider.VideoResponse
+import com.london.data.remote.model.details.videoprovider.VideoTrailerRemote
 import com.london.data.remote.model.home.popular.PopularMovieResponse
+import com.london.data.remote.model.home.toprated.TopRatedMovieRemote
 import com.london.data.remote.model.home.trending.TrendingResponse
+import com.london.data.remote.model.myrating.RatingMediaResponse
 import com.london.data.remote.model.reviews.AuthorDetailsResponse
 import com.london.data.remote.model.reviews.ReviewResponse
 import com.london.data.remote.model.search.MovieRemote
-import com.london.data.remote.model.search.SearchTvShowRemote
 import com.london.data.remote.source.movie.MovieRemoteDataSource
 import com.london.data.repository.movie.MovieRepositoryImpl
 import com.london.data.utils.CrashReporter
 import com.london.data.utils.asImageUrlOrEmpty
+import com.london.data.utils.asYoutubeUrlOrEmpty
+import com.london.domain.entity.ImagesEntity
 import com.london.domain.entity.Movie
 import com.london.domain.entity.PagedFetchResponse
-import com.london.domain.entity.TvShow
 import com.london.domain.entity.genre.MovieGenre
-import com.london.domain.entity.moviedatails.MovieImages
 import com.london.domain.entity.recent.MediaType
 import com.london.domain.entity.review.ReviewEntity
 import com.london.domain.repository.MovieRepository
+import io.mockk.Runs
 import io.mockk.coEvery
 import io.mockk.coVerify
+import io.mockk.every
+import io.mockk.just
 import io.mockk.mockk
 import io.mockk.slot
 import io.mockk.verify
@@ -52,6 +63,7 @@ import org.junit.Before
 import org.junit.Test
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.assertThrows
+import kotlin.test.assertFailsWith
 
 class MovieRepositoryImplTest {
 
@@ -91,8 +103,7 @@ class MovieRepositoryImplTest {
 
         val result = repository.getMovieById(123)
 
-        assertEquals("Inception", result.title)
-        assertEquals(2, result.genres.size)
+        assertEquals(fakeMovieDetailsRemote().toEntity(), result)
     }
 
     @Test
@@ -108,11 +119,11 @@ class MovieRepositoryImplTest {
 
     @Test
     fun `getMovieImages should return poster file paths`() = runTest {
-        val expected = MovieImages(
-            backdrops = emptyList(),
+        val expected = ImagesEntity(
+            backdropsUrl = emptyList(),
             id = 123,
-            logos = emptyList(),
-            posters = listOf(
+            logosUrl = emptyList(),
+            postersUrl = listOf(
                 "/img1.jpg".asImageUrlOrEmpty(),
                 "/img2.jpg".asImageUrlOrEmpty()
             )
@@ -169,26 +180,9 @@ class MovieRepositoryImplTest {
     @Test
     fun `getMovieReviews should return paged reviews when remote succeeds`() = runTest {
         // Given
-        val fakeRemoteResponse = ApiResponse(
-            currentPage = 1, items = listOf(
-                ReviewResponse(
-                    id = "review1",
-                    author = "Author 1",
-                    content = "This is review 1",
-                    createdAt = "2024-01-01",
-                    updatedAt = "2024-01-02",
-                    authorDetailsResponse = AuthorDetailsResponse(
-                        authorName = "John Doe",
-                        authorUsername = "johndoe",
-                        authorPictureUrl = "https://image.tmdb.org/t/p/w500/profile.jpg",
-                        rating = 4.5
-                    ),
-                    url = "https://example.com/review1"
-                )
-            ), totalPages = 1, totalItems = 1
-        )
+
         coEvery { movieRemoteDataSource.getMovieReviews(MOVIE_ID, PAGE_NUMBER) }.returns(
-            Result.success(fakeRemoteResponse)
+            Result.success(fakeRemoteResponse())
         )
 
         // When
@@ -196,7 +190,7 @@ class MovieRepositoryImplTest {
             repository.getMovieReviews(MOVIE_ID, PAGE_NUMBER)
 
         //Then
-        assertThat(result.items.first().authorDetails).isEqualTo(fakeRemoteResponse.items.first().authorDetailsResponse.toAuthorDetails())
+        assertThat(result.items.first().authorDetails).isEqualTo(fakeRemoteResponse().items.first().authorDetailsResponse.toAuthorDetails())
     }
 
     @Test
@@ -263,11 +257,7 @@ class MovieRepositoryImplTest {
         val result = repository.getTrendingMovies(page = 1)
 
         // Then
-        assertNotNull(result)
-        Assert.assertEquals(1, result.currentPage)
-        Assert.assertEquals(10, result.totalPages)
-        Assert.assertEquals(100, result.totalItems)
-        Assert.assertEquals(1, result.items.size)
+        assertThat(result).isEqualTo(result)
 
         val trending = result.items.first()
         Assert.assertEquals(1, trending.id)
@@ -293,7 +283,6 @@ class MovieRepositoryImplTest {
             Assert.assertEquals("Network error", e.message)
         }
     }
-
 
     @Test
     fun `getTrendingMovies should handle pagination correctly`() = runTest {
@@ -323,14 +312,14 @@ class MovieRepositoryImplTest {
                 any(),
                 PAGE_NUMBER
             )
-        } returns Result.success(SearchMoviesRemoteMock)
+        } returns Result.success(searchMoviesRemoteMock)
         //When
         val result = repository.getMoviesByGenre(
             MovieGenre.TV_MOVIE,
             PAGE_NUMBER
         )
         //Then
-        assertThat(result).isEqualTo(MovieList)
+        assertThat(result).isEqualTo(movieList)
     }
 
     @Test
@@ -341,10 +330,12 @@ class MovieRepositoryImplTest {
                 any(),
                 PAGE_NUMBER
             )
-        } returns Result.failure(NetworkException.HttpLockedException(
-            message = "Resource locked",
-            status = 423
-        ))
+        } returns Result.failure(
+            NetworkException.HttpLockedException(
+                message = "Resource locked",
+                status = 423
+            )
+        )
         //When //Then
         assertThrows<NetworkException.HttpLockedException> {
             repository.getMoviesByGenre(
@@ -663,20 +654,367 @@ class MovieRepositoryImplTest {
         val result = repository.getPopularMovies()
 
         // Then
-        assertThat(result).hasSize(1)
         assertThat(result[0].name).isEqualTo("Test Movie")
 
         coVerify(exactly = 1) { movieRemoteDataSource.getPopularMovies() }
     }
 
-    private companion object {
-        const val CATEGORY_ID = 2
-        const val MOVIE_ID = 1
-        const val PAGE_NUMBER = 1
+    @Test
+    fun `getMovieVideos should return mapped youtube keys`() = runTest {
+        // Given
+        val response = VideoResponse(id = 1, videos = trailers)
 
-        val MovieList = PagedFetchResponse(
-            PAGE_NUMBER,
-            listOf(
+        coEvery { movieRemoteDataSource.getMovieVideos(1) } returns Result.success(response)
+
+        // When
+        val result = repository.getMovieVideos(1)
+
+        // Then
+        assertEquals(response.videos?.map { it.youtubeKey.asYoutubeUrlOrEmpty() }, result)
+    }
+
+    @Test
+    fun `getMovieVideos should return empty list when videos is null`() = runTest {
+        // Given
+        val response = VideoResponse(id = 1, videos = null)
+        coEvery { movieRemoteDataSource.getMovieVideos(1) } returns Result.success(response)
+
+        // When
+        val result = repository.getMovieVideos(1)
+
+        // Then
+        assertTrue(result.isEmpty())
+    }
+
+    @Test
+    fun `getMovieVideos should propagate exception when remote fails`() = runTest {
+        // Given
+        val error = RuntimeException("Network error")
+        coEvery { movieRemoteDataSource.getMovieVideos(1) } returns Result.failure(error)
+
+        // When - Then
+        assertThrows<RuntimeException> {
+            repository.getMovieVideos(1)
+        }
+        assertEquals("Network error", error.message)
+    }
+
+    @Test
+    fun `getTopRatedMovies returns cached movies when available`() = runTest {
+        // Given
+        val cachedEntities = listOf(
+            TopRatedLocal(
+                id = 101,
+                name = "Fake Top Rated Movie",
+                mediaType = MediaType.Movie,
+                posterPictureUrl = "/fake_poster.jpg",
+                date = System.currentTimeMillis(),
+                genre = listOf(1, 2, 3)
+            )
+        )
+        coEvery { localTopRated.getAll() } returns cachedEntities
+        coEvery { movieRemoteDataSource.getTopRatedMovies(any()) } returns Result.success(
+            topRatedMoviesResponse()
+        )
+
+        // When
+        val result = repository.getTopRatedMovies(pageNumber = 1)
+
+        // Then
+        assertEquals(cachedEntities.first().toEntity(), result.items.first())
+
+        coVerify(exactly = 1) { localTopRated.getAll() }
+        coVerify(exactly = 0) { localTopRated.insertAll(any()) }
+    }
+
+    @Test
+    fun `getTopRatedMovies fetches from remote when cache is empty`() = runTest {
+
+        // Given
+        coEvery { localTopRated.getAll() } returns emptyList()
+        val remoteResponse = topRatedMoviesResponse(
+            items = listOf(
+                TopRatedMovieRemote(id = 1, title = "Remote Movie"),
+                TopRatedMovieRemote(id = 10, title = "Remote Movie")
+            )
+        )
+        coEvery { movieRemoteDataSource.getTopRatedMovies(1) } returns Result.success(remoteResponse)
+        coEvery { localTopRated.insertAll(any()) } just Runs
+
+        // When
+        val result = repository.getTopRatedMovies(pageNumber = 1)
+
+        // Then
+        assertEquals(remoteResponse.items.first().toEntity(), result.items.first())
+
+        coVerify(exactly = 1) { localTopRated.insertAll(any()) }
+    }
+
+    @Test
+    fun `getTopRatedMovies throws when remote fails`() = runTest {
+        // Given
+        coEvery { localTopRated.getAll() } returns emptyList()
+        val error = Exception("Network error")
+        coEvery { movieRemoteDataSource.getTopRatedMovies(any()) } returns Result.failure(error)
+
+        // When && Then
+        assertFailsWith<Exception> {
+            repository.getTopRatedMovies(pageNumber = 1)
+        }
+        coVerify(exactly = 1) { crashReporter.logException(error) }
+    }
+
+    @Test
+    fun `getUpcomingMoviesByGenre should return cached data when remote fails but local has data`() =
+        runTest {
+            // Given
+            val error = RuntimeException("Network error")
+            coEvery {
+                movieRemoteDataSource.getUpComingMoviesByCategory(any(), any())
+            } returns Result.failure(error)
+
+            coEvery {
+                upComingLocalDataSource.getUpComingMoviesPage(
+                    any(),
+                    any()
+                )
+            } returns cachedSection
+
+            // When
+            val result = repository.getUpcomingMoviesByGenre(MovieGenre.ALL, 1)
+
+            // Then
+            assertEquals(cachedSection.results.map { it.toEntity() }, result.items)
+            coVerify { upComingLocalDataSource.getUpComingMoviesPage(any(), any()) }
+            coVerify(exactly = 0) { upComingLocalDataSource.insert(any()) }
+        }
+
+    @Test
+    fun `getUpcomingMoviesByGenre should return cached data when remote fails`() = runTest {
+        coEvery {
+            movieRemoteDataSource.getUpComingMoviesByCategory(
+                any(),
+                any()
+            )
+        } throws Exception("Network error")
+        coEvery {
+            upComingLocalDataSource.getUpComingMoviesPage(
+                any(),
+                any()
+            )
+        } returns cachedSection
+
+        // When
+        val result = repository.getUpcomingMoviesByGenre(MovieGenre.ALL, 1)
+
+        // Then
+        assertEquals(cachedSection.results.map { it.toEntity() }, result.items)
+        coVerify(exactly = 0) { movieRemoteDataSource.getUpComingMoviesByCategory(any(), any()) }
+    }
+
+    @Test
+    fun `getFirstPageTopRatedMovies should return data from remote source`() = runTest {
+        // Given
+        coEvery { localTopRated.getAll() } returns emptyList()
+        coEvery { movieRemoteDataSource.getTopRatedMovies(1) } returns Result.success(
+            topRatedMoviesResponse()
+        )
+
+        // When
+        val result = repository.getFirstPageTopRatedMovies()
+
+        // Then
+        assertEquals(topRatedMoviesResponse().items.map { it.toEntity() }, result)
+        coVerify { movieRemoteDataSource.getTopRatedMovies(1) }
+    }
+
+    @Test
+    fun `getAllRatedMovies should return mapped rated movies from remote source`() = runTest {
+        // Given
+        every { authenticationPreferences.getAccountId() } returns 123
+        every { authenticationPreferences.getSessionId() } returns "fake_session"
+
+        coEvery {
+            movieRemoteDataSource.getAllRatedMovies(
+                123,
+                "fake_session"
+            )
+        } returns Result.success(
+            ratedMoviesResponse()
+        )
+
+        // When
+        val result = repository.getAllRatedMovies()
+
+        // Then
+        assertEquals(ratedMoviesResponse().items.map { it.toEntity(MediaType.Movie) }, result)
+        coVerify { movieRemoteDataSource.getAllRatedMovies(123, "fake_session") }
+    }
+
+    @Test
+    fun `deleteMovieRating should return true when remote call succeeds`() = runTest {
+        // Given
+        val movieId = 101
+        every { authenticationPreferences.getSessionId() } returns "fake_session"
+        coEvery {
+            movieRemoteDataSource.deleteMovieRating(
+                movieId,
+                "fake_session"
+            )
+        } returns Result.success(
+            fakeDeleteSuccessResponse()
+        )
+
+        // When
+        val result = repository.deleteMovieRating(movieId)
+
+        // Then
+        assertTrue(result)
+        coVerify { movieRemoteDataSource.deleteMovieRating(movieId, "fake_session") }
+    }
+
+    @Test
+    fun `deleteMovieRating should return false when remote call fails`() = runTest {
+        // Given
+        val movieId = 102
+        every { authenticationPreferences.getSessionId() } returns "fake_session"
+        coEvery {
+            movieRemoteDataSource.deleteMovieRating(
+                movieId,
+                "fake_session"
+            )
+        } returns Result.failure(
+            Exception("Network error")
+        )
+
+        // When
+        val result = repository.deleteMovieRating(movieId)
+
+        // Then
+        assertFalse(result)
+        coVerify { movieRemoteDataSource.deleteMovieRating(movieId, "fake_session") }
+    }
+
+    @Test
+    fun `getActorMovieById should return mapped ActorMediaItems from remote`() = runTest {
+        // Given
+        val actorId = 101
+        coEvery { movieRemoteDataSource.getActorMovieById(actorId) } returns Result.success(
+            fakeActorMovieDetailsResponse()
+        )
+
+        // When
+        val result = repository.getActorMoviePicksById(actorId)
+
+        // Then
+        assertEquals(fakeActorMovieDetailsResponse().toEntity(), result)
+        coVerify { movieRemoteDataSource.getActorMovieById(actorId) }
+    }
+
+    private companion object {
+        private const val MOVIE_ID = 1
+        private const val PAGE_NUMBER = 1
+        private fun fakeActorMovieDetailsResponse() = ActorMovieDetailsResponse(
+            id = 101,
+            cast = listOf(
+                ActorMovieCastMember(
+                    id = 201,
+                    overview = "Sample overview",
+                    posterPath = "/sample_poster.jpg"
+                ),
+                ActorMovieCastMember(
+                    id = 202,
+                    overview = "Another overview",
+                    posterPath = "/poster2.jpg"
+                )
+            )
+        )
+
+        private fun fakeDeleteSuccessResponse() = RatingRemoteResponse(
+            statusCode = 1,
+            statusMessage = "Deleted successfully",
+            success = true
+        )
+
+        private fun ratedMoviesResponse(
+            items: List<RatingMediaResponse> = listOf(
+                RatingMediaResponse(
+                    id = 201,
+                    title = "Rated Movie 1",
+                    posterPath = "/rated_poster1.jpg",
+                    rating = 8.5
+                ),
+                RatingMediaResponse(
+                    id = 202,
+                    title = "Rated Movie 2",
+                    posterPath = "/rated_poster2.jpg",
+                    rating = 7.0
+                )
+            )
+        ): ApiResponse<RatingMediaResponse> =
+            ApiResponse(
+                currentPage = 1,
+                totalPages = 1,
+                totalItems = items.size,
+                items = items
+            )
+
+        val cachedSection = UpComingSectionLocal(
+            categoryId = 1,
+            page = 1,
+            results = listOf(
+                UpComingMovieLocal(
+                    id = 201,
+                    imageUrl = "/fake_upcoming.jpg",
+                    genreIds = listOf(1, 2),
+                )
+            ),
+            totalPages = 1,
+            totalResults = 50
+        )
+
+        private fun fakeRemoteResponse(): ApiResponse<ReviewResponse> =
+            ApiResponse(
+                currentPage = 1,
+                items = listOf(
+                    ReviewResponse(
+                        id = "review1",
+                        author = "Author 1",
+                        content = "This is review 1",
+                        createdAt = "2024-01-01",
+                        authorDetailsResponse = AuthorDetailsResponse(
+                            authorName = "John Doe",
+                            authorUsername = "johndoe",
+                            authorPictureUrl = "https://image.tmdb.org/t/p/w500/profile.jpg",
+                            rating = 4.5
+                        ),
+                    )
+                ),
+                totalPages = 1,
+                totalItems = 1
+            )
+
+        private fun topRatedMoviesResponse(
+            items: List<TopRatedMovieRemote> = listOf(
+                TopRatedMovieRemote(
+                    id = 101,
+                    title = "Fake Top Rated Movie",
+                    posterPath = "/fake_poster.jpg",
+                    releaseDate = "2025-01-01",
+                    genreIds = listOf(1, 2, 3)
+                )
+            )
+        ): ApiResponse<TopRatedMovieRemote> =
+            ApiResponse(
+                currentPage = 1,
+                totalPages = 5,
+                totalItems = 100,
+                items = items
+            )
+
+        val movieList = PagedFetchResponse(
+            currentPage = PAGE_NUMBER,
+            items = listOf(
                 Movie(
                     id = 1,
                     name = "",
@@ -689,155 +1027,17 @@ class MovieRepositoryImplTest {
             totalItems = 1,
             totalPages = 1
         )
-        val TvShowList = PagedFetchResponse(
-            PAGE_NUMBER,
-            listOf(
-                TvShow(
-                    id = 2,
-                    name = "",
-                    posterPicture = "https://image.tmdb.org/t/p/w500",
-                    releaseYear = 2020,
-                    rating = 10,
-                    genres = listOf(),
-                )
-            ),
-            totalItems = 1,
-            totalPages = 1
-        )
-        private val SearchMoviesRemoteMock = ApiResponse(
-            currentPage = PAGE_NUMBER,
-            items = listOf(
-                MovieRemote(
-                    adult = false,
-                    backdropPath = null,
-                    genreIds = emptyList(),
-                    id = 1,
-                    originalLanguage = "en",
-                    originalTitle = "",
-                    overview = "",
-                    popularity = 0.0,
-                    posterPath = "",
-                    releaseDate = "2020-06-15",
-                    title = "",
-                    video = false,
-                    voteAverage = 8.0,
-                    voteCount = 0,
-                    originCountry = listOf(""),
-                    originalName = "",
-                    firstAirDate = "",
-                    name = "",
-                )
-            ),
-            totalPages = 1,
-            totalItems = 1
-        )
-
-        private val SearchTvShowRemoteMock = ApiResponse(
-            currentPage = PAGE_NUMBER,
-            items = listOf(
-                SearchTvShowRemote(
-                    adult = false,
-                    backdropPath = "",
-                    genreIds = emptyList(),
-                    id = 2,
-                    originCountry = emptyList(),
-                    originalLanguage = "en",
-                    originalName = "",
-                    overview = "",
-                    popularity = 0.0,
-                    posterPath = "",
-                    firstAirDate = "2020-07-20",
-                    name = "",
-                    voteAverage = 10.0,
-                    voteCount = 0
-                )
-            ),
-            totalPages = 1,
-            totalItems = 1
-        )
-
     }
 
-
-    private fun fakeMovieDetailsRemote() = MovieDetailsResponse(
-        adult = false,
-        backdropPath = "/b.jpg",
-        remoteBelongsToCollection = RemoteCollectionDetails(1, "Coll"),
-        budget = 1,
-        genreRemote = listOf(
-            GenreRemote(1, "Sci-Fi"),
-            GenreRemote(2, "Thriller")
-        ),
-        homepage = "url",
-        id = 123,
-        imdbId = "tt1",
-        originCountry = listOf("US"),
-        originalLanguage = "en",
-        originalTitle = "Inception",
-        overview = "dream",
-        popularity = 1.0,
-        posterPath = "/p.jpg",
-        productionCompanies = listOf(
-            ProductionCompanyRemote(1, null, "WB", "US")
-        ),
-        productionCountries = listOf(
-            ProductionCountryRemote("US", "USA")
-        ),
-        releaseDate = "2010-07-16",
-        revenue = 1,
-        runtime = 148,
-        status = "Released",
-        tagline = "Mind crime",
-        title = "Inception",
-        video = false,
-        voteAverage = 8.8,
-        voteCount = 100,
-        spokenLanguages = listOf(
-            SpokenLanguageRemote("English", "en", "English")
-        ),
-    )
-
-    private fun fakeSimilarMoviesRemote() = ApiResponse(
-        currentPage = 1,
+    private val searchMoviesRemoteMock = ApiResponse(
+        currentPage = PAGE_NUMBER,
         items = listOf(
             MovieRemote(
-                adult = false,
-                backdropPath = null,
-                genreIds = listOf(1, 2, 3),
+                genreIds = emptyList(),
                 id = 1,
-                originalLanguage = "en",
-                originalTitle = "",
-                overview = "",
-                popularity = 0.0,
                 posterPath = "",
                 releaseDate = "2020-06-15",
-                title = "",
-                video = false,
                 voteAverage = 8.0,
-                voteCount = 0,
-                originCountry = listOf(""),
-                originalName = "",
-                firstAirDate = "",
-                name = "",
-            ),
-            MovieRemote(
-                adult = false,
-                backdropPath = null,
-                genreIds = listOf(1, 2, 3),
-                id = 1,
-                originalLanguage = "en",
-                originalTitle = "",
-                overview = "",
-                popularity = 0.0,
-                posterPath = "",
-                releaseDate = "2020-06-15",
-                title = "",
-                video = false,
-                voteAverage = 8.0,
-                voteCount = 0,
-                originCountry = listOf(""),
-                originalName = "",
-                firstAirDate = "",
                 name = "",
             )
         ),
@@ -845,28 +1045,56 @@ class MovieRepositoryImplTest {
         totalItems = 1
     )
 
-    private fun fakeMovieImagesRemote() = MovieImagesResponse(
+    private fun fakeMovieDetailsRemote() = MovieDetailsResponse(
+        backdropPath = "/b.jpg",
+        genreRemote = listOf(
+            GenreRemote(1),
+            GenreRemote(2)
+        ),
+        id = 123,
+        overview = "dream",
+        posterPath = "/p.jpg",
+        releaseDate = "2010-07-16",
+        runtime = 148,
+        title = "Inception",
+        video = false,
+        voteAverage = 8.8,
+    )
+
+    private fun fakeSimilarMoviesRemote() = ApiResponse(
+        currentPage = 1,
+        items = listOf(
+            MovieRemote(
+                genreIds = listOf(1, 2, 3),
+                id = 1,
+                posterPath = "",
+                releaseDate = "2020-06-15",
+                voteAverage = 8.0,
+                name = "",
+            ),
+            MovieRemote(
+                genreIds = listOf(1, 2, 3),
+                id = 1,
+                posterPath = "",
+                releaseDate = "2020-06-15",
+                voteAverage = 8.0,
+                name = "",
+            )
+        ),
+        totalPages = 1,
+        totalItems = 1
+    )
+
+    private fun fakeMovieImagesRemote() = ImagesResponse(
         backdrops = emptyList(),
         id = 123,
         logos = emptyList(),
         posters = listOf(
-            Poster(
-                aspectRatio = 0.67,
+            ImageRemote(
                 filePath = "/img1.jpg",
-                height = 100,
-                iso6391 = "en",
-                voteAverage = 8.0,
-                voteCount = 10,
-                width = 50
             ),
-            Poster(
-                aspectRatio = 0.67,
+            ImageRemote(
                 filePath = "/img2.jpg",
-                height = 100,
-                iso6391 = "en",
-                voteAverage = 7.5,
-                voteCount = 8,
-                width = 50
             )
         )
     )
@@ -877,14 +1105,6 @@ class MovieRepositoryImplTest {
             favorite = true,
             watchlist = true
         )
-
-    private fun secondFakeMovieStatesRemote(): AccountStatesResponse {
-        return AccountStatesResponse(
-            favorite = true,
-            id = 5,
-            watchlist = false
-        )
-    }
 
     private fun createMockTrendingMoviesApiResponse(): ApiResponse<TrendingResponse> {
         val mockTrendingItem = TrendingResponse(
@@ -903,73 +1123,43 @@ class MovieRepositoryImplTest {
 
     }
 
-    val singleMovieResponse = ApiResponse(
+    private val singleMovieResponse = ApiResponse(
         currentPage = 1,
         totalItems = 100,
         totalPages = 200,
         items = listOf(
             PopularMovieResponse(
-                adult = false,
-                backdropPath = "/backdrop.jpg",
-                genreIds = listOf(1, 2),
                 id = 101,
-                originalLanguage = "en",
-                originalTitle = "Original Title",
-                overview = "Some overview",
-                popularity = 100.0,
                 posterPath = "/poster.jpg",
-                releaseDate = "2024-01-01",
                 title = "Test Movie",
-                video = false,
                 voteAverage = 7.8,
-                voteCount = 2000
             )
         )
     )
 
-    val emptyMovieResponse = ApiResponse<PopularMovieResponse>(
+    private val emptyMovieResponse = ApiResponse<PopularMovieResponse>(
         currentPage = 1,
         totalItems = 0,
         totalPages = 0,
         items = emptyList()
     )
 
-    val multipleMoviesResponse = ApiResponse(
+    private val multipleMoviesResponse = ApiResponse(
         currentPage = 1,
         totalItems = 2,
         totalPages = 1,
         items = listOf(
             PopularMovieResponse(
-                adult = false,
-                backdropPath = "/backdrop1.jpg",
-                genreIds = listOf(1, 2),
                 id = 101,
-                originalLanguage = "en",
-                originalTitle = "Original Title 1",
-                overview = "Overview 1",
-                popularity = 100.0,
                 posterPath = "/poster1.jpg",
-                releaseDate = "2024-01-01",
                 title = "Test Movie 1",
-                video = false,
                 voteAverage = 7.8,
-                voteCount = 2000
             ),
             PopularMovieResponse(
-                adult = false,
-                backdropPath = "/backdrop2.jpg",
-                genreIds = listOf(3, 4),
                 id = 102,
-                originalLanguage = "fr",
-                originalTitle = "Original Title 2",
-                overview = "Overview 2",
-                popularity = 90.0,
                 posterPath = "/poster2.jpg",
-                releaseDate = "2024-02-01",
                 title = "Test Movie 2",
-                video = false,
                 voteAverage = 8.2,
-                voteCount = 1500
             )
         )
     )
@@ -977,5 +1167,10 @@ class MovieRepositoryImplTest {
     private fun createRatingResponse() = RatingRemoteResponse(
         statusCode = 1,
         statusMessage = "Success"
+    )
+
+    private val trailers = listOf(
+        VideoTrailerRemote(youtubeKey = "abc123"),
+        VideoTrailerRemote(youtubeKey = "xyz789")
     )
 }

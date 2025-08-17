@@ -1,6 +1,6 @@
-package com.london.domain.entity.tvshowdetails
+package com.london.domain.entity
 
-data class TvShowImagesEntity(
+data class ImagesEntity(
     val backdropsUrl: List<String>,
     val id: Int,
     val logosUrl: List<String>,

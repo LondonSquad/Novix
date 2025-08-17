@@ -6,9 +6,7 @@ import kotlinx.serialization.Serializable
 @Serializable
 data class MovieCastResponse(
     @SerialName("id")
-    val id: Int?,
+    val id: Int? = null,
     @SerialName("cast")
-    val actorRemote: List<MovieActor>?,
-    @SerialName("crew")
-    val crew: List<Crew>?
+    val actorRemote: List<MovieActor>? = null,
 )

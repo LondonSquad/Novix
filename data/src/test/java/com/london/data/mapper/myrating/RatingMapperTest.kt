@@ -46,11 +46,8 @@ class RatingMapperTest {
         // Given
         val movieResponse = RatingMediaResponse(
             id = 0,
-            adult = false,
-            backdropPath = "",
             title = null,
             posterPath = null,
-            voteAverage = null,
             rating = null
         )
 
@@ -147,11 +144,8 @@ class RatingMapperTest {
             rating: Double = 8.5
         ) = RatingMediaResponse(
             id = id,
-            adult = false,
-            backdropPath = "/test-backdrop.jpg",
             title = title,
             posterPath = posterPath,
-            voteAverage = rating,
             rating = rating
         )
 
@@ -162,13 +156,9 @@ class RatingMapperTest {
             rating: Double = 7.5
         ) = RatingMediaResponse(
             id = id,
-            adult = false,
-            backdropPath = "/test-backdrop.jpg",
             title = title,
             posterPath = posterPath,
-            voteAverage = rating,
             rating = rating
         )
     }
-
 } 
