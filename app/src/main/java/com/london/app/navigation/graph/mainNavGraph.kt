@@ -47,7 +47,7 @@ import com.london.presentation.feature.home.trending.actor.TrendingActorsScreen
 import com.london.presentation.feature.home.trending.movie.TrendingMoviesScreen
 import com.london.presentation.feature.home.trending.tvshow.TrendingTvShowsScreen
 import com.london.presentation.feature.list.savedlist.ListScreen
-import com.london.presentation.feature.list.viewitems.ViewListItemsScreen
+import com.london.presentation.feature.list.viewitems.ViewItemsScreen
 import com.london.presentation.feature.reviews.ReviewsScreen
 import com.london.presentation.feature.search.SearchScreen
 import com.london.presentation.navigation.Screen.Account
@@ -117,7 +117,8 @@ fun NavGraphBuilder.mainNavGraph(
             )
         }
 
-        composable<Reviews> { ReviewsScreen(onNavigateBack = ::navigateUp)
+        composable<Reviews> {
+            ReviewsScreen(onNavigateBack = ::navigateUp)
         }
     }
 }
@@ -176,7 +177,7 @@ fun NavGraphBuilder.onListNavGraph(navController: NavHostController) =
             )
         }
         appComposable<ViewListItems> {
-            ViewListItemsScreen(
+            ViewItemsScreen(
                 onNavigateBack = ::navigateUp,
                 onNavigateToMovieDetails = ::navigateToMovieDetails,
             )

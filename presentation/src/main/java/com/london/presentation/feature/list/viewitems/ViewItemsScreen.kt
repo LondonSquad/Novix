@@ -18,14 +18,14 @@ import com.london.designsystem.theme.NovixTheme
 import com.london.designsystem.theme.ThemePreviews
 import com.london.presentation.R
 import com.london.presentation.feature.list.bottomsheets.DeleteListBottomSheet
-import com.london.presentation.shared.MediaLazyPagingGrid
 import com.london.presentation.shared.SnackBarAnimation
 import com.london.presentation.shared.base.ErrorState
 import com.london.presentation.shared.buildscreen.BuildScreen
+import com.london.presentation.shared.container.MediaLazyVerticalGrid
 import com.london.presentation.utils.Listen
 
 @Composable
-fun ViewListItemsScreen(
+fun ViewItemsScreen(
     onNavigateBack: () -> Unit,
     onNavigateToMovieDetails: (Int) -> Unit,
     viewModel: ViewItemsViewModel = hiltViewModel()
@@ -51,13 +51,13 @@ fun ViewListItemsScreen(
 @Composable
 private fun Content(
     state: ViewItemsUiState,
-    contract: ViewListItemsContract,
+    contract: ViewItemsContract,
 ) {
     val listItems = state.listItems.collectAsLazyPagingItems()
     Column {
         TopBar(
             title = state.listTitle,
-            onBackClick = contract::onBack,
+            onBackClick = contract::onBackClick,
             option2Icon = R.drawable.ic_delete,
             onClickOption2 = contract::onDeleteClick,
             option2IconTint = NovixTheme.colors.redAccent,
@@ -76,17 +76,19 @@ private fun Content(
             pagingFlow = listItems,
             handlePagingLoadingAutomatically = false
         ) {
-            MediaLazyPagingGrid(
-                pagingFlow = listItems,
-                modifier = Modifier.padding(horizontal = 16.dp),
-                onItemClick = { contract.onMovieClick(it.id.toInt()) },
-                getImageUrl = { it.posterUrl },
-                getTitle = { "${it.id} media img" },
+            MediaLazyVerticalGrid(
+                pagingItems = listItems,
+                imageUrl = { it.posterUrl },
+                name = { it.id.toString() },
+                hasSaveIcon = true,
                 onSaveClick = {
-                    contract.onRemoveMovieClick(it.id.toInt())
-                    contract.onRetry()
+                    contract.onRemoveMovieClick(it.id)
+                    contract.onRetryClick()
                 },
                 isItemSaved = { true },
+                onNavigateToMovie = { id -> contract.onMovieClick(id) },
+                onNavigateToTvShow = { },
+                modifier = Modifier.padding(horizontal = 16.dp)
             )
         }
     }
@@ -96,24 +98,30 @@ private fun Content(
         contract = contract,
     )
 
-    if (state.error is ErrorState.RequestFailed) {
-        SnackBarAnimation(
-            stringResource(R.string.list_deletion_failed)
-        )
-    }
-
-    if (state.error is ErrorState.EntryNotFound) {
-        SnackBarAnimation(stringResource(R.string.movie_not_found))
-    }
-
-    if (state.isSnackBarSuccessVisible) {
-        SnackBarAnimation(
-            stringResource(R.string.movie_removed_successfully),
-            icon = com.london.designsystem.R.drawable.ic_success
-        )
-    }
+    SnackBarSection(state)
 }
 
+@Composable
+private fun SnackBarSection(state: ViewItemsUiState) {
+    when {
+        state.error is ErrorState.RequestFailed -> {
+            SnackBarAnimation(
+                stringResource(R.string.list_deletion_failed)
+            )
+        }
+
+        state.error is ErrorState.EntryNotFound -> {
+            SnackBarAnimation(stringResource(R.string.movie_not_found))
+        }
+
+        state.isSnackBarSuccessVisible -> {
+            SnackBarAnimation(
+                stringResource(R.string.movie_removed_successfully),
+                icon = com.london.designsystem.R.drawable.ic_success
+            )
+        }
+    }
+}
 
 @Composable
 @Preview
@@ -122,14 +130,14 @@ private fun Preview() {
     NovixTheme {
         Content(
             state = ViewItemsUiState(),
-            contract = object : ViewListItemsContract {
-                override fun onBack() {}
-                override fun onRetry() {}
+            contract = object : ViewItemsContract {
+                override fun onBackClick() {}
+                override fun onRetryClick() {}
                 override fun onDeleteClick() {}
-                override fun onConfirmDelete() {}
+                override fun onConfirmDeleteClick() {}
                 override fun onMovieClick(id: Int) {}
                 override fun onRemoveMovieClick(id: Int) {}
-                override fun onDeleteBottomSheetDismiss() {}
+                override fun onDeleteBottomSheetDismissClick() {}
             },
         )
     }

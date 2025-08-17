@@ -30,13 +30,13 @@ import com.london.designsystem.theme.NovixTheme
 import com.london.designsystem.utils.painter
 import com.london.designsystem.utils.string
 import com.london.presentation.R
-import com.london.presentation.feature.list.viewitems.ViewListItemsContract
+import com.london.presentation.feature.list.viewitems.ViewItemsContract
 import kotlinx.coroutines.launch
 
 @Composable
 fun DeleteListBottomSheet(
     isSheetVisible: Boolean,
-    contract: ViewListItemsContract,
+    contract: ViewItemsContract,
     modifier: Modifier = Modifier,
     sheetState: SheetState = rememberModalBottomSheetState(),
 ) {
@@ -50,18 +50,18 @@ fun DeleteListBottomSheet(
 
     if (isSheetVisible) {
         ModalBottomSheet(
-            onDismissRequest = contract::onDeleteBottomSheetDismiss,
+            onDismissRequest = contract::onDeleteBottomSheetDismissClick,
             containerColor = NovixTheme.colors.surface,
             state = sheetState
         ) {
             Content(
                 modifier = modifier,
-                onConfirmDelete = contract::onConfirmDelete,
+                onConfirmDelete = contract::onConfirmDeleteClick,
                 hideSheet = {
                     coroutineScope.launch { sheetState.hide() }
                         .invokeOnCompletion {
                             if (!sheetState.isVisible) {
-                                contract.onDeleteBottomSheetDismiss()
+                                contract.onDeleteBottomSheetDismissClick()
                             }
                         }
                 },
