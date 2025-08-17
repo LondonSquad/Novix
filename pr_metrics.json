@@ -30944,8 +30944,8 @@
           "url": "https://github.com/marwanqashwa"
         },
         "first_comment_at": "2025-08-17T18:34:33Z",
-        "last_comment_at": "2025-08-17T18:41:42Z",
-        "count": 5
+        "last_comment_at": "2025-08-17T18:45:57Z",
+        "count": 6
       },
       {
         "author": {
@@ -30966,6 +30966,16 @@
         "first_comment_at": "2025-08-14T18:41:00Z",
         "last_comment_at": "2025-08-14T18:42:12Z",
         "count": 3
+      },
+      {
+        "author": {
+          "login": "ahmeddsamii",
+          "id": 154278495,
+          "url": "https://github.com/ahmeddsamii"
+        },
+        "first_comment_at": "2025-08-17T18:50:29Z",
+        "last_comment_at": "2025-08-17T18:50:29Z",
+        "count": 1
       },
       {
         "author": {
@@ -30991,7 +31001,7 @@
     "status": "pending",
     "diff_stats": {
       "additions": 700,
-      "deletions": 261,
+      "deletions": 265,
       "changed_files": 29
     }
   },
@@ -31924,9 +31934,9 @@
     "week": "2025-W33",
     "status": "pending",
     "diff_stats": {
-      "additions": 15,
-      "deletions": 18,
-      "changed_files": 4
+      "additions": 42,
+      "deletions": 56,
+      "changed_files": 7
     }
   },
   {
@@ -32022,10 +32032,20 @@
         "count": 2
       }
     ],
-    "approvals": [],
+    "approvals": [
+      {
+        "reviewer": {
+          "login": "Abdulrahman1890",
+          "id": 76666355,
+          "url": "https://github.com/Abdulrahman1890"
+        },
+        "submitted_at": "2025-08-17T18:58:54Z",
+        "commit_id": "e9518416c850967ef29b66a807848c12fab13aa4"
+      }
+    ],
     "required_approvals": 2,
-    "first_approved_at": null,
-    "time_to_first_approval_minutes": null,
+    "first_approved_at": "2025-08-17T18:58:54Z",
+    "time_to_first_approval_minutes": 70.76666666666667,
     "required_approvals_met_at": null,
     "time_to_required_approvals_minutes": null,
     "closed_at": null,
