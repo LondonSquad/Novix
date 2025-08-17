@@ -233,15 +233,15 @@ class SearchViewModel @Inject constructor(
     }
 
     override fun onMovieClick(movieId: Int) {
-        emitEffect(SearchEffect.NavigationMovieDetails(movieId = movieId))
+        emitEffect(SearchEffect.MovieNavigation(movieId = movieId))
     }
 
     override fun onActorClick(actorId: Int) {
-        emitEffect(SearchEffect.NavigationActorDetails(actorId = actorId))
+        emitEffect(SearchEffect.ActorNavigation(actorId = actorId))
     }
 
     override fun onTvShowClick(tvShowId: Int) {
-        emitEffect(SearchEffect.NavigationTvShowDetails(tvId = tvShowId))
+        emitEffect(SearchEffect.TvShowNavigation(tvId = tvShowId))
     }
 
     override fun onRetryClick() {

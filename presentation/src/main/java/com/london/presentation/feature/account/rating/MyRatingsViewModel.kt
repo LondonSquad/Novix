@@ -60,11 +60,11 @@ class MyRatingsViewModel @Inject constructor(
 
     override fun onRetryClick() = initializeRatedMedia()
 
-    override fun onBackClick() = emitEffect(MyRatingEffect.NavigationBack)
+    override fun onBackClick() = emitEffect(MyRatingEffect.BackNavigation)
 
-    override fun onMovieClick(id: Int) = emitEffect(MyRatingEffect.NavigationMovieDetails(id))
+    override fun onMovieClick(id: Int) = emitEffect(MyRatingEffect.MovieNavigation(id))
 
-    override fun onTvShowClick(id: Int) = emitEffect(MyRatingEffect.NavigationTvShowDetails(id))
+    override fun onTvShowClick(id: Int) = emitEffect(MyRatingEffect.TvShowNavigation(id))
 
     private fun updateStateRatedMedia(ratedMedia: List<RatedMedia>) {
         updateState {
@@ -89,8 +89,8 @@ class MyRatingsViewModel @Inject constructor(
     private fun handleRatedMediaNavigation(ratedMedia: RatedMedia?, id: Int) {
         ratedMedia?.let { rated ->
             val effect = when (rated.mediaType) {
-                MediaType.Movie -> MyRatingEffect.NavigationMovieDetails(id)
-                MediaType.TvShow -> MyRatingEffect.NavigationTvShowDetails(id)
+                MediaType.Movie -> MyRatingEffect.MovieNavigation(id)
+                MediaType.TvShow -> MyRatingEffect.TvShowNavigation(id)
             }
             emitEffect(effect)
         }

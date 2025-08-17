@@ -217,7 +217,7 @@ class MyRatingsViewModelTest {
         // When & Then
         viewModel.effect.test {
             viewModel.onMovieClick(movieId)
-            assertThat(awaitItem()).isEqualTo(MyRatingEffect.NavigationMovieDetails(movieId))
+            assertThat(awaitItem()).isEqualTo(MyRatingEffect.MovieNavigation(movieId))
             cancelAndIgnoreRemainingEvents()
         }
     }
@@ -235,7 +235,7 @@ class MyRatingsViewModelTest {
         // When & Then
         viewModel.effect.test {
             viewModel.onTvShowClick(tvShowId)
-            assertThat(awaitItem()).isEqualTo(MyRatingEffect.NavigationTvShowDetails(tvShowId))
+            assertThat(awaitItem()).isEqualTo(MyRatingEffect.TvShowNavigation(tvShowId))
             cancelAndIgnoreRemainingEvents()
         }
     }
@@ -252,7 +252,7 @@ class MyRatingsViewModelTest {
         // When & Then
         viewModel.effect.test {
             viewModel.onBackClick()
-            assertThat(awaitItem()).isEqualTo(MyRatingEffect.NavigationBack)
+            assertThat(awaitItem()).isEqualTo(MyRatingEffect.BackNavigation)
             cancelAndIgnoreRemainingEvents()
         }
     }
@@ -278,7 +278,7 @@ class MyRatingsViewModelTest {
         // When & Then
         viewModel.effect.test {
             viewModel.onItemClick(movieId)
-            assertThat(awaitItem()).isEqualTo(MyRatingEffect.NavigationMovieDetails(movieId))
+            assertThat(awaitItem()).isEqualTo(MyRatingEffect.MovieNavigation(movieId))
             cancelAndIgnoreRemainingEvents()
         }
     }
@@ -304,7 +304,7 @@ class MyRatingsViewModelTest {
         // When & Then
         viewModel.effect.test {
             viewModel.onItemClick(tvShowId)
-            assertThat(awaitItem()).isEqualTo(MyRatingEffect.NavigationTvShowDetails(tvShowId))
+            assertThat(awaitItem()).isEqualTo(MyRatingEffect.TvShowNavigation(tvShowId))
             cancelAndIgnoreRemainingEvents()
         }
     }
