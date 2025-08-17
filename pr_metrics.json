@@ -32165,11 +32165,15 @@
     "time_to_first_approval_minutes": 169.78333333333333,
     "required_approvals_met_at": "2025-08-17T20:37:56Z",
     "time_to_required_approvals_minutes": 169.8,
-    "closed_at": null,
-    "merged_at": null,
-    "merged_by": null,
+    "closed_at": "2025-08-17T20:45:32Z",
+    "merged_at": "2025-08-17T20:45:32Z",
+    "merged_by": {
+      "login": "abdo-essam",
+      "id": 92235360,
+      "url": "https://github.com/abdo-essam"
+    },
     "week": "2025-W33",
-    "status": "approved",
+    "status": "merged",
     "diff_stats": {
       "additions": 655,
       "deletions": 357,
