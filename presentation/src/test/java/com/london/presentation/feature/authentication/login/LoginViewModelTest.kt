@@ -85,16 +85,10 @@ class LoginViewModelTest {
     fun `onForgotPasswordClick emits NavigateToForgotPassword effect on first call`() = runTest {
         viewModel.effect.test {
             viewModel.onForgotPasswordClick()
-
-            val emittedEffect = awaitItem()
-            assertThat(emittedEffect).isInstanceOf(LoginEffect.NavigateToForgotPassword::class.java)
-
-            val url = (emittedEffect as LoginEffect.NavigateToForgotPassword).url
-            assertThat(url).startsWith("$FORGOT_PASSWORD_URL?t=")
-
-            val timestampPart = url.substringAfter("?t=")
-            assertThat(timestampPart.toLongOrNull()).isNotNull()
-
+            val effect = awaitItem()
+            assertThat(effect).isInstanceOf(LoginEffect.NavigateToForgotPassword::class.java)
+            assertThat((effect as LoginEffect.NavigateToForgotPassword).url)
+                .isEqualTo(FORGOT_PASSWORD_URL)
             cancelAndIgnoreRemainingEvents()
         }
     }
