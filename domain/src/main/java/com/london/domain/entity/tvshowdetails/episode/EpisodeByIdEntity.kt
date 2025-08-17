@@ -3,7 +3,7 @@ package com.london.domain.entity.tvshowdetails.episode
 import com.london.domain.entity.Actor
 
 data class EpisodeByIdEntity(
-    val airDate: String?,
+    val airDate: String,
     val seasonNumber: Int,
     val tvShowId: Int,
     val name: String,

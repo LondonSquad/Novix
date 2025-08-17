@@ -35,13 +35,11 @@ fun EpisodeBySeason.toEpisodeBySeasonEntity(): EpisodeBySeasonEntity =
 
 fun EpisodeResponse.toEpisodeEntity(): EpisodeByIdEntity =
     EpisodeByIdEntity(
-        airDate = airDate,
+        airDate = airDate.orEmpty(),
         seasonNumber = seasonNumber.orZero(),
-        episodeTypes = episodeType.orEmpty(),
         tvShowId = id.orZero(),
         name = name.orEmpty(),
         overview = overview.orEmpty(),
-        imageUrl = stillPath.orEmpty(),
         voteAverage = voteAverage.orZero().roundToDecimal(),
         voteCount = voteCount.orZero(),
         guestStars = guestStars.orEmpty().map { it.toActorEntity() },

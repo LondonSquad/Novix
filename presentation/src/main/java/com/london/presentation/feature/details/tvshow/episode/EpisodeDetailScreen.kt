@@ -130,7 +130,9 @@ private fun Content(
                 .fillMaxWidth()
                 .background(NovixTheme.colors.surface.copy(alpha = backgroundAlpha))
                 .padding(horizontal = 16.dp)
-                .padding(top = WindowInsets.statusBars.asPaddingValues().calculateTopPadding() + 12.dp),
+                .padding(
+                    top = WindowInsets.statusBars.asPaddingValues().calculateTopPadding() + 12.dp
+                ),
             onClickOption1 = { /*todo on click on save*/ },
             option1Icon = Res.drawable.icon_remove,
         )
@@ -165,23 +167,22 @@ private fun Content(
                 )
             }
 
-            item {
-                OverviewSection(
-                    uiState = uiState)
-            }
+            item { OverviewSection(uiState = uiState) }
 
             // Guests of honor section
-            val guestStars = uiState.guestStars
-            if (guestStars.isNotEmpty()) {
-                item {
-                    Text(
-                        text = stringResource(R.string.guests_of_honor),
-                        style = NovixTheme.typography.title.medium,
-                        color = NovixTheme.colors.title,
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(top = 16.dp, start = 16.dp, end = 16.dp, bottom = 9.dp)
-                    )
+            uiState.episode?.let {
+                val guestStars = uiState.episode.guestStars
+                if (guestStars.isNotEmpty()) {
+                    item {
+                        Text(
+                            text = stringResource(R.string.guests_of_honor),
+                            style = NovixTheme.typography.title.medium,
+                            color = NovixTheme.colors.title,
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(top = 16.dp, start = 16.dp, end = 16.dp, bottom = 9.dp)
+                        )
+                    }
                 }
 
                 items(
@@ -201,16 +202,17 @@ private fun Content(
                 item { Spacer(Modifier.height(30.dp)) }
             }
         }
-        FooterSection(
-            haveTrailer = uiState.episodeHaveTrailer,
-            modifier = Modifier.align(Alignment.BottomCenter),
-            onVideoClick = {
-                uriHandler.openUrl(uiState.videoProvider)
-            },
-            onRateClick = contract::onRateEpisodeClick,
-            isRateEnabled = uiState.isRated.not() && (uiState.voteAverage.isNotZeroRate()),
 
+        uiState.episode?.let {
+            FooterSection(
+                haveTrailer = uiState.episodeHaveTrailer,
+                modifier = Modifier.align(Alignment.BottomCenter),
+                onVideoClick = { uriHandler.openUrl(uiState.videoProvider) },
+                onRateClick = contract::onRateEpisodeClick,
+                isRateEnabled = uiState.isRated.not() && (uiState.episode.voteAverage.isNotZeroRate()),
             )
+        }
+
         if (uiState.isRateBottomSheetVisible) RatingBottomSheet(
             onDismissClick = contract::onRateEpisodeClick,
             onSubmitClick = contract::onSelectRatingClick,
@@ -247,13 +249,15 @@ fun HeaderDetailsCard(
         modifier = modifier,
         verticalArrangement = Arrangement.SpaceBetween
     ) {
-        Text(
-            text = uiState.name,
-            color = NovixTheme.colors.title,
-            style = NovixTheme.typography.title.medium,
-            modifier = Modifier
-                .padding(start = 12.dp, top = 12.dp, bottom = 8.dp)
-        )
+        uiState.episode?.let {
+            Text(
+                text = uiState.episode.name,
+                color = NovixTheme.colors.title,
+                style = NovixTheme.typography.title.medium,
+                modifier = Modifier
+                    .padding(start = 12.dp, top = 12.dp, bottom = 8.dp)
+            )
+        }
 
         Column(
             verticalArrangement = Arrangement.spacedBy(8.dp),
@@ -281,11 +285,13 @@ fun TvShowBasicDetails(
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.spacedBy(4.dp)
     ) {
-        if (uiState.voteAverage.isNotZeroRate()) {
-            RatingItem(
-                modifier = Modifier,
-                rating = uiState.voteAverage.toLocalizedNumbers(),
-            )
+        uiState.episode?.let {
+            if (uiState.episode.voteAverage.isNotZeroRate()) {
+                RatingItem(
+                    modifier = Modifier,
+                    rating = uiState.episode.voteAverage.toLocalizedNumbers(),
+                )
+            }
         }
 
         Box(
@@ -325,11 +331,13 @@ fun TvShowDate(
             modifier = Modifier.size(11.dp)
         )
 
-        Text(
-            text = uiState.airDate.toLocalizedNumbers(),
-            style = NovixTheme.typography.label.small,
-            color = NovixTheme.colors.body
-        )
+        uiState.episode?.let {
+            Text(
+                text = uiState.episode.airDate.toLocalizedNumbers(),
+                style = NovixTheme.typography.label.small,
+                color = NovixTheme.colors.body
+            )
+        }
     }
 }
 
@@ -382,11 +390,13 @@ fun Seasons(uiState: EpisodeDetailsUiState) {
             modifier = Modifier.size(11.dp)
         )
 
-        Text(
-            text = "${stringResource(Res.string.s)}${uiState.seasonNumber.toLocalizedNumbers()}",
-            style = NovixTheme.typography.label.small,
-            color = NovixTheme.colors.body,
-        )
+        uiState.episode?.let {
+            Text(
+                text = "${stringResource(Res.string.s)}${uiState.episode.seasonNumber.toLocalizedNumbers()}",
+                style = NovixTheme.typography.label.small,
+                color = NovixTheme.colors.body,
+            )
+        }
     }
 }
 
@@ -396,24 +406,27 @@ fun OverviewSection(
     uiState: EpisodeDetailsUiState
 ) {
     var isTextCollapsed by rememberSaveable { mutableStateOf(false) }
-    if (uiState.overview.isNotBlank()) {
-        Column(
-            modifier = modifier.padding(
-                top = 16.dp,
-                start = 16.dp,
-                end = 16.dp
-            )
-        ) {
-            Text(
-                text = stringResource(Res.string.overview),
-                style = NovixTheme.typography.title.medium,
-                color = NovixTheme.colors.title
-            )
+    uiState.episode?.let {
+        if (uiState.episode.overview.isNotBlank()) {
+            Column(
+                modifier = modifier.padding(
+                    top = 16.dp,
+                    start = 16.dp,
+                    end = 16.dp
+                )
+            ) {
+                Text(
+                    text = stringResource(Res.string.overview),
+                    style = NovixTheme.typography.title.medium,
+                    color = NovixTheme.colors.title
+                )
 
-            ConditionalText(
-                text = uiState.overview,
-                expandedState = isTextCollapsed
-            ) { isTextCollapsed = !isTextCollapsed }
+                ConditionalText(
+                    text = it.overview,
+                    expandedState = isTextCollapsed
+                ) { isTextCollapsed = !isTextCollapsed }
+            }
         }
     }
 }
+
