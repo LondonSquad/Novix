@@ -94,12 +94,10 @@ class MovieDetailsViewModelTest {
     @Test
     fun `when main movie data loads successfully, movie details should be populated`() = runTest {
 
-        // When
-        advanceUntilIdle()
-
-        // Then
+        // When & Then
         viewModel?.state?.test {
             val state = expectMostRecentItem()
+            advanceUntilIdle()
             assertThat(state.movieId).isEqualTo(mockMovieDetails.id)
             assertThat(state.movieName).isEqualTo(mockMovieDetails.title)
             cancelAndIgnoreRemainingEvents()
