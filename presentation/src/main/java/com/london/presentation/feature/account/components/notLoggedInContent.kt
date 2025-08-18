@@ -35,8 +35,8 @@ fun NotLoggedInContent(
     ) {
         item {
             Image(
-                painter = if (isDarkMode) R.drawable.user_person_profile_dark.painter
-                else R.drawable.user_person_profile.painter,
+                painter = if (isDarkMode) R.drawable.user_person_dark.painter
+                else R.drawable.user_person_light.painter,
                 contentDescription = null,
             )
         }
