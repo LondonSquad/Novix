@@ -239,7 +239,7 @@ class TvShowRemoteDataSourceImpl @Inject constructor(
     ): Result<VideoResponse> =
         callApiWithRetry(
             apiCall = {
-                tvShowApiService.getTvsSeasonTrailer(
+                tvShowApiService.getTvSeasonTrailer(
                     tvShowId = tvShowId,
                     seasonNumber = seasonNumber
                 )
