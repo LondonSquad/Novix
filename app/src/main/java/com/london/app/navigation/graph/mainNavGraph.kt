@@ -224,13 +224,13 @@ fun NavGraphBuilder.tvShowDetailsNavGraph(navController: NavHostController) =
                 onNaviagteToActorDetalis = ::navigateToActorDetails,
                 onNavigateToLogin = ::navigateToLogin
             )
+        }
 
-            appComposable<TvShowsByCategory> {
-                TvShowByCategoryScreen(
-                    onNavigateBack = ::navigateUp,
-                    onNavigateToTvShowDetails = ::navigateToTvShowDetails
-                )
-            }
+        appComposable<TvShowsByCategory> {
+            TvShowByCategoryScreen(
+                onNavigateBack = ::navigateUp,
+                onNavigateToTvShowDetails = ::navigateToTvShowDetails
+            )
         }
     }
 
