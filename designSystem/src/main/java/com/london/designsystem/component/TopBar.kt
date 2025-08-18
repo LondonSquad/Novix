@@ -39,10 +39,7 @@ fun TopBar(
     option2IconTint: Color? = null
 ) {
     Row(
-        modifier = modifier
-            .fillMaxWidth()
-            .heightIn(56.dp)
-            .zIndex(1f),
+        modifier = modifier.fillMaxWidth(),
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.SpaceBetween
     ) {

@@ -115,10 +115,7 @@ private fun ReviewsTopBar(
         modifier = modifier
             .fillMaxWidth()
             .padding(horizontal = ReviewsDimens.HorizontalPadding)
-            .padding(
-                top = WindowInsets.statusBars.asPaddingValues()
-                    .calculateTopPadding() + ReviewsDimens.TopBarTopPadding
-            )
+            .padding(top = ReviewsDimens.TopBarTopPadding)
     )
 }
 
