@@ -1,9 +1,9 @@
 package com.london.data.mapper.details.tvshow
 
 import com.london.data.remote.model.details.tvshow.model.tvshowepisode.Episode
-import com.london.data.remote.model.details.tvshow.model.tvshowepisode.EpisodeBySeasonResponse
 import com.london.data.remote.model.details.tvshow.model.tvshowepisode.EpisodeDetailsResponse
 import com.london.data.remote.model.details.tvshow.model.tvshowepisode.EpisodeGuestStar
+import com.london.data.remote.model.details.tvshow.model.tvshowepisode.SeasonEpisodesResponse
 import com.london.data.utils.asImageUrlOrEmpty
 import com.london.data.utils.orZero
 import com.london.data.utils.roundToDecimal
@@ -12,7 +12,7 @@ import com.london.domain.entity.tvshowdetails.episode.EpisodeBySeason
 import com.london.domain.entity.tvshowdetails.episode.EpisodeDetails
 import com.london.domain.entity.tvshowdetails.episode.Episodes
 
-fun EpisodeBySeasonResponse.toEpisodesEntity(): EpisodeBySeason =
+fun SeasonEpisodesResponse.toEpisodesEntity(): EpisodeBySeason =
     EpisodeBySeason(
         id = seasonId.orEmpty(),
         episodes = episodes.orEmpty().map { it.toEpisodeBySeasonEntity() }

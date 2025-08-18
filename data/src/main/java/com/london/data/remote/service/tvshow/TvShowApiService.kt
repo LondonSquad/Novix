@@ -10,8 +10,8 @@ import com.london.data.remote.model.details.rating.AccountStatesResponse
 import com.london.data.remote.model.details.rating.RatingRemoteBody
 import com.london.data.remote.model.details.rating.RatingRemoteResponse
 import com.london.data.remote.model.details.tvshow.model.TvShowDetailsRemoteResponse
-import com.london.data.remote.model.details.tvshow.model.tvshowepisode.EpisodeBySeasonResponse
 import com.london.data.remote.model.details.tvshow.model.tvshowepisode.EpisodeDetailsResponse
+import com.london.data.remote.model.details.tvshow.model.tvshowepisode.SeasonEpisodesResponse
 import com.london.data.remote.model.details.videoprovider.VideoResponse
 import com.london.data.remote.model.home.popular.PopularTvShowResponse
 import com.london.data.remote.model.home.toprated.TopRatedTvSeriesRemote
@@ -35,10 +35,10 @@ interface TvShowApiService {
     ): Response<TvShowDetailsRemoteResponse>
 
     @GET(ApiConstants.TV_SHOW_SEASON_PATH)
-    suspend fun getTvShowEpisodesBySeason(
+    suspend fun getTvShowSeasonEpisodes(
         @Path("tv_id") tvShowId: Int,
         @Path("season_number") seasonNumber: Int,
-    ): Response<EpisodeBySeasonResponse>
+    ): Response<SeasonEpisodesResponse>
 
     @GET(ApiConstants.TV_SHOW_IMAGE)
     suspend fun getTvShowImages(

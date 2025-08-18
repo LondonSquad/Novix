@@ -25,7 +25,7 @@ import com.london.data.remote.model.details.rating.RatingRemoteResponse
 import com.london.data.remote.model.details.tvshow.model.TvShowDetailsRemoteResponse
 import com.london.data.remote.model.details.tvshow.model.TvShowSeason
 import com.london.data.remote.model.details.tvshow.model.tvshowepisode.Episode
-import com.london.data.remote.model.details.tvshow.model.tvshowepisode.EpisodeBySeasonResponse
+import com.london.data.remote.model.details.tvshow.model.tvshowepisode.SeasonEpisodesResponse
 import com.london.data.remote.model.details.tvshow.model.tvshowepisode.EpisodeDetailsResponse
 import com.london.data.remote.model.details.tvshow.model.tvshowepisode.EpisodeGuestStar
 import com.london.data.remote.model.details.videoprovider.VideoResponse
@@ -148,7 +148,7 @@ class TvShowRepositoryImplTest {
     @Test
     fun `getTvShowEpisodesBySeason should throw HttpLockedException when remote fails`() = runTest {
         coEvery {
-            remoteDataSource.getTvShowEpisodesBySeason(
+            remoteDataSource.getTvShowSeasonEpisodes(
                 seasonNumber = 0, id = 123
             )
         } throws NetworkException.HttpLockedException(
@@ -157,7 +157,7 @@ class TvShowRepositoryImplTest {
         )
 
         assertThrows<NetworkException.HttpLockedException> {
-            repository.getTvShowEpisodesBySeason(123, 0)
+            repository.getTvShowSeasonEpisodes(123, 0)
         }
     }
 
@@ -182,10 +182,10 @@ class TvShowRepositoryImplTest {
     fun `getTvShowEpisodesBySeason should return TvShowEpisodesEntity when remote call succeeds`() =
         runTest {
             coEvery {
-                remoteDataSource.getTvShowEpisodesBySeason(TV_SHOW_ID, SEASON_NUMBER)
+                remoteDataSource.getTvShowSeasonEpisodes(TV_SHOW_ID, SEASON_NUMBER)
             }.returns(Result.success(TvShowEpisodesRemoteMock))
 
-            val result = repository.getTvShowEpisodesBySeason(TV_SHOW_ID, SEASON_NUMBER)
+            val result = repository.getTvShowSeasonEpisodes(TV_SHOW_ID, SEASON_NUMBER)
 
             assertThat(result).isEqualTo(TvShowEpisodesRemoteMock.toEpisodesEntity())
         }
@@ -213,11 +213,11 @@ class TvShowRepositoryImplTest {
         runTest {
             val networkException = RuntimeException("Network error")
             coEvery {
-                remoteDataSource.getTvShowEpisodesBySeason(TV_SHOW_ID, SEASON_NUMBER)
+                remoteDataSource.getTvShowSeasonEpisodes(TV_SHOW_ID, SEASON_NUMBER)
             }.throws(networkException)
 
             val actualException = assertThrows<RuntimeException> {
-                repository.getTvShowEpisodesBySeason(TV_SHOW_ID, SEASON_NUMBER)
+                repository.getTvShowSeasonEpisodes(TV_SHOW_ID, SEASON_NUMBER)
             }
 
             assertThat(actualException).isEqualTo(networkException)
@@ -1310,7 +1310,7 @@ class TvShowRepositoryImplTest {
             )
         )
 
-        val TvShowEpisodesRemoteMock = EpisodeBySeasonResponse(
+        val TvShowEpisodesRemoteMock = SeasonEpisodesResponse(
             seasonId = "season_id",
             episodes = listOf(
                 Episode(

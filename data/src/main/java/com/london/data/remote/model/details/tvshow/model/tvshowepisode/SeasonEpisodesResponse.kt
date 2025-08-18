@@ -4,7 +4,7 @@ import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class EpisodeBySeasonResponse(
+data class SeasonEpisodesResponse(
     @SerialName("_id")
     val seasonId: String? = null,
     @SerialName("episodes")

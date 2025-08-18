@@ -147,11 +147,11 @@ class TvShowRepositoryImpl @Inject constructor(
         rating = rating.toDouble()
     ).isSuccess
 
-    override suspend fun getTvShowEpisodesBySeason(
+    override suspend fun getTvShowSeasonEpisodes(
         tvShowId: Int,
         seasonNumber: Int
     ): EpisodeBySeason =
-        tvShowRemoteDataSource.getTvShowEpisodesBySeason(
+        tvShowRemoteDataSource.getTvShowSeasonEpisodes(
             id = tvShowId,
             seasonNumber = seasonNumber
         ).getOrThrow().toEpisodesEntity()

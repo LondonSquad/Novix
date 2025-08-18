@@ -42,7 +42,7 @@ interface TvShowRepository {
         rating: Int
     ): Boolean
 
-    suspend fun getTvShowEpisodesBySeason(
+    suspend fun getTvShowSeasonEpisodes(
         tvShowId: Int,
         seasonNumber: Int,
     ): EpisodeBySeason

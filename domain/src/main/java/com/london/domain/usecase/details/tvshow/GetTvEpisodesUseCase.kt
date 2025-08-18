@@ -19,11 +19,11 @@ class GetTvEpisodesUseCase @Inject constructor(
             episodeNumber = episodeNumber
         )
 
-    suspend fun getTvShowEpisodesBySeason(
+    suspend fun getTvShowSeasonEpisodes(
         tvShowId: Int,
         seasonNumber: Int
     ): EpisodeBySeason =
-        tvShowRepository.getTvShowEpisodesBySeason(
+        tvShowRepository.getTvShowSeasonEpisodes(
             tvShowId = tvShowId,
             seasonNumber = seasonNumber
         )

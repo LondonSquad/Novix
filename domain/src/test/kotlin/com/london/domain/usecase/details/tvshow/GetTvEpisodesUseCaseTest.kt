@@ -78,18 +78,18 @@ class GetTvEpisodesUseCaseTest {
             val seasonNumber = 2
             val expectedResult = mockk<EpisodeBySeason>()
             coEvery {
-                tvShowRepository.getTvShowEpisodesBySeason(
+                tvShowRepository.getTvShowSeasonEpisodes(
                     tvShowId,
                     seasonNumber
                 )
             } returns expectedResult
 
             // When
-            val result = getTvEpisodesUseCase.getTvShowEpisodesBySeason(tvShowId, seasonNumber)
+            val result = getTvEpisodesUseCase.getTvShowSeasonEpisodes(tvShowId, seasonNumber)
 
             // Then
             coVerify(exactly = 1) {
-                tvShowRepository.getTvShowEpisodesBySeason(
+                tvShowRepository.getTvShowSeasonEpisodes(
                     tvShowId,
                     seasonNumber
                 )
@@ -104,17 +104,17 @@ class GetTvEpisodesUseCaseTest {
         val seasonNumber = 1
         val expectedResult = mockk<EpisodeBySeason>()
         coEvery {
-            tvShowRepository.getTvShowEpisodesBySeason(
+            tvShowRepository.getTvShowSeasonEpisodes(
                 tvShowId,
                 seasonNumber
             )
         } returns expectedResult
 
         // When
-        val result = getTvEpisodesUseCase.getTvShowEpisodesBySeason(tvShowId, seasonNumber)
+        val result = getTvEpisodesUseCase.getTvShowSeasonEpisodes(tvShowId, seasonNumber)
 
         // Then
-        coVerify(exactly = 1) { tvShowRepository.getTvShowEpisodesBySeason(tvShowId, seasonNumber) }
+        coVerify(exactly = 1) { tvShowRepository.getTvShowSeasonEpisodes(tvShowId, seasonNumber) }
         Assert.assertEquals(expectedResult, result)
     }
 
@@ -125,17 +125,17 @@ class GetTvEpisodesUseCaseTest {
         val seasonNumber = 0
         val expectedResult = mockk<EpisodeBySeason>()
         coEvery {
-            tvShowRepository.getTvShowEpisodesBySeason(
+            tvShowRepository.getTvShowSeasonEpisodes(
                 tvShowId,
                 seasonNumber
             )
         } returns expectedResult
 
         // When
-        val result = getTvEpisodesUseCase.getTvShowEpisodesBySeason(tvShowId, seasonNumber)
+        val result = getTvEpisodesUseCase.getTvShowSeasonEpisodes(tvShowId, seasonNumber)
 
         // Then
-        coVerify(exactly = 1) { tvShowRepository.getTvShowEpisodesBySeason(tvShowId, seasonNumber) }
+        coVerify(exactly = 1) { tvShowRepository.getTvShowSeasonEpisodes(tvShowId, seasonNumber) }
         Assert.assertEquals(expectedResult, result)
     }
 

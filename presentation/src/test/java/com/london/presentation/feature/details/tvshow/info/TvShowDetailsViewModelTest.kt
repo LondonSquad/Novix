@@ -107,7 +107,7 @@ class TvShowDetailsViewModelTest {
     fun `episodes by seasons data should be fetched, when initializeEpisodesBySeasons`() = runTest {
         // Given
         coEvery {
-            getTvEpisodesUseCase.getTvShowEpisodesBySeason(
+            getTvEpisodesUseCase.getTvShowSeasonEpisodes(
                 TV_SHOW_ID,
                 any()
             )
@@ -131,7 +131,7 @@ class TvShowDetailsViewModelTest {
         // Given
         val exception = Exception("error")
         coEvery {
-            getTvEpisodesUseCase.getTvShowEpisodesBySeason(
+            getTvEpisodesUseCase.getTvShowSeasonEpisodes(
                 TV_SHOW_ID,
                 any()
             )
