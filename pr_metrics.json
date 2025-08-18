@@ -32877,11 +32877,15 @@
     "time_to_first_approval_minutes": 33.18333333333333,
     "required_approvals_met_at": "2025-08-18T19:28:05Z",
     "time_to_required_approvals_minutes": 56.05,
-    "closed_at": null,
-    "merged_at": null,
-    "merged_by": null,
+    "closed_at": "2025-08-18T19:52:50Z",
+    "merged_at": "2025-08-18T19:52:50Z",
+    "merged_by": {
+      "login": "abdelrhman1002",
+      "id": 180463542,
+      "url": "https://github.com/abdelrhman1002"
+    },
     "week": "2025-W34",
-    "status": "approved",
+    "status": "merged",
     "diff_stats": {
       "additions": 2,
       "deletions": 0,
