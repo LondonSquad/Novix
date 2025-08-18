@@ -32919,18 +32919,27 @@
         },
         "submitted_at": "2025-08-18T19:20:19Z",
         "commit_id": "954b83071659e9ff2449fe1e2ea48f7f962d7645"
+      },
+      {
+        "reviewer": {
+          "login": "ahmeddsamii",
+          "id": 154278495,
+          "url": "https://github.com/ahmeddsamii"
+        },
+        "submitted_at": "2025-08-18T19:27:38Z",
+        "commit_id": "954b83071659e9ff2449fe1e2ea48f7f962d7645"
       }
     ],
     "required_approvals": 2,
     "first_approved_at": "2025-08-18T19:20:19Z",
     "time_to_first_approval_minutes": 27.066666666666666,
-    "required_approvals_met_at": null,
-    "time_to_required_approvals_minutes": null,
+    "required_approvals_met_at": "2025-08-18T19:27:38Z",
+    "time_to_required_approvals_minutes": 34.38333333333333,
     "closed_at": null,
     "merged_at": null,
     "merged_by": null,
     "week": "2025-W34",
-    "status": "pending",
+    "status": "approved",
     "diff_stats": {
       "additions": 12,
       "deletions": 44,
