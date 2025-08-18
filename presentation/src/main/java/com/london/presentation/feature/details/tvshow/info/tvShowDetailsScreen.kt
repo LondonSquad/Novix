@@ -167,7 +167,7 @@ private fun Content(
                 .background(
                     NovixTheme.colors.surface.copy(alpha = backgroundAlpha)
                 )
-                .padding(horizontal = 16.dp, vertical = 12.dp),
+                .padding(horizontal = 16.dp, vertical = 8.dp),
             onClickOption1 = { /*todo on click on save*/ },
             option1Icon = R.drawable.icon_remove,
         )
