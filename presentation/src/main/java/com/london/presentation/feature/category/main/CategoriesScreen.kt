@@ -10,7 +10,6 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyGridScope
@@ -65,11 +64,7 @@ private fun Content(
     state: CategoriesUiState,
     contract: CategoriesContract,
 ) {
-    Column(
-        Modifier
-            .statusBarsPadding()
-            .padding(top = 12.dp)
-    ) {
+    Column {
         TopBar(
             title = stringResource(R.string.categories),
             modifier = Modifier.padding(horizontal = 16.dp, vertical = 12.dp),

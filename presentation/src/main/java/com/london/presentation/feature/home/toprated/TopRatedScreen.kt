@@ -5,14 +5,10 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.WindowInsets
-import androidx.compose.foundation.layout.asPaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.navigationBars
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.requiredWidth
-import androidx.compose.foundation.layout.statusBars
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
@@ -90,8 +86,6 @@ private fun Content(
         modifier = Modifier
             .fillMaxSize()
             .background(color = NovixTheme.colors.surface)
-            .padding(WindowInsets.statusBars.asPaddingValues())
-            .padding(WindowInsets.navigationBars.asPaddingValues())
 
     ) {
         TopBar(
@@ -212,7 +206,8 @@ private fun TvShowRow(
             .padding(vertical = 12.dp)
     ) {
         items(
-            TvShowGenreUi.getList()) { genre ->
+            TvShowGenreUi.getList()
+        ) { genre ->
             NovixChip(
                 text = stringResource(genre.stringResId),
                 isSelected = genre == state.selectedTvShowGenre,
