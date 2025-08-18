@@ -25,8 +25,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.painter.Painter
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -48,6 +46,7 @@ import com.london.presentation.navigation.LocalNavController
 import com.london.presentation.navigation.Screen
 import com.london.presentation.shared.SnackBarAnimation
 import com.london.presentation.utils.Listen
+import com.london.presentation.utils.getThemeAwarePainter
 import kotlinx.coroutines.launch
 
 @Composable
@@ -132,13 +131,13 @@ private fun BookmarkBottomSheetContent(
 ) {
     Column(
         modifier = modifier
-            .padding(horizontal = 16.dp)
-            .padding(bottom = 24.dp)
+            .padding(start = 16.dp, end = 16.dp, bottom = 24.dp)
             .fillMaxWidth(),
         verticalArrangement = Arrangement.spacedBy(24.dp),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         SheetHeader(hideSheet = hideSheet)
+
         if (state.isGuestSession) {
             GuestLoginView()
             LoginButton(onLoginClick = contract::onLoginClick)
@@ -147,6 +146,7 @@ private fun BookmarkBottomSheetContent(
                 uiState = state,
                 contract = contract,
                 isContentReady = isContentReady,
+                modifier = Modifier.weight(1f, fill = false)
             )
 
             UserActions(
@@ -220,6 +220,7 @@ private enum class UserListState {
 
 @Composable
 private fun UserListsView(
+    modifier: Modifier = Modifier,
     uiState: BookmarkSheetUiState,
     contract: BookmarkSheetContract,
     isContentReady: Boolean
@@ -232,12 +233,11 @@ private fun UserListsView(
     }
 
     Box(
-        modifier = Modifier
+        modifier = modifier
             .fillMaxWidth()
             .animateContentSize()
             .heightIn(min = 60.dp, max = 160.dp),
-        contentAlignment = if (uiState.isLoading || uiState.lists.isEmpty()) Alignment.Center
-        else Alignment.TopCenter
+        contentAlignment = Alignment.Center
     ) {
         when (userListState) {
             UserListState.Loading -> {
@@ -307,25 +307,16 @@ fun UserActions(
 }
 
 @Composable
-private fun getThemeAwarePainter(lightThemeRes: Int, darkThemeRes: Int): Painter {
-    return painterResource(
-        if (NovixTheme.isThemeDark) darkThemeRes
-        else lightThemeRes
-    )
-}
-
-@Composable
-private fun GuestLoginView(
-    isDarkTheme: Boolean = NovixTheme.isThemeDark
-) {
+private fun GuestLoginView() {
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.spacedBy(12.dp)
     ) {
         Icon(
-            painter =
-                if (isDarkTheme) R.drawable.guest_login_dark.painter
-                else R.drawable.guest_login_light.painter,
+            painter = getThemeAwarePainter(
+                lightThemeRes = R.drawable.guest_login_light,
+                darkThemeRes = R.drawable.guest_login_dark
+            ),
             contentDescription = null,
             tint = Color.Unspecified,
             modifier = Modifier
@@ -363,9 +354,10 @@ private fun NoListsMessage() {
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
         Image(
-            painter = if (NovixTheme.isThemeDark)
-                R.drawable.ic_folder_dark.painter
-            else R.drawable.ic_folder_light.painter,
+            painter = getThemeAwarePainter(
+                lightThemeRes = R.drawable.ic_folder_light,
+                darkThemeRes = R.drawable.ic_folder_dark
+            ),
             contentDescription = null,
             modifier = Modifier.size(64.dp)
         )
