@@ -1,23 +1,18 @@
 package com.london.app.di
 
-import android.content.Context
 import com.london.data.local.source.device.DeviceConfigurationDataSource
+import dagger.Binds
 import dagger.Module
-import dagger.Provides
 import dagger.hilt.InstallIn
-import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import javax.inject.Singleton
 
 @Module
 @InstallIn(SingletonComponent::class)
-object AppModule {
-
-    @Provides
+abstract class AppModule {
+    @Binds
     @Singleton
-    fun provideDeviceConfigurationDataSource(
-        @ApplicationContext context: Context
+    abstract fun provideDeviceConfigurationDataSource(
+        implementation: DeviceConfigurationDataSource
     ): DeviceConfigurationDataSource
-        = DeviceConfigurationDataSource(context)
-
 }

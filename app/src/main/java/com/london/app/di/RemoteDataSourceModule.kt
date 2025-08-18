@@ -1,12 +1,5 @@
 package com.london.app.di
 
-import com.london.data.remote.service.account.AccountApiService
-import com.london.data.remote.service.actor.ActorApiService
-import com.london.data.remote.service.authentication.AuthenticationApiService
-import com.london.data.remote.service.list.CustomMovieListsApiService
-import com.london.data.remote.service.movie.MovieApiService
-import com.london.data.remote.service.search.SearchApiService
-import com.london.data.remote.service.tvshow.TvShowApiService
 import com.london.data.remote.source.account.AccountRemoteDataSource
 import com.london.data.remote.source.account.AccountRemoteDataSourceImp
 import com.london.data.remote.source.actor.ActorRemoteDataSource
@@ -21,61 +14,55 @@ import com.london.data.remote.source.search.SearchRemoteDataSource
 import com.london.data.remote.source.search.SearchRemoteDataSourceImpl
 import com.london.data.remote.source.tvshow.TvShowRemoteDataSource
 import com.london.data.remote.source.tvshow.TvShowRemoteDataSourceImpl
+import dagger.Binds
 import dagger.Module
-import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
 import javax.inject.Singleton
 
 @Module
 @InstallIn(SingletonComponent::class)
-object RemoteDataSourceModule {
+abstract class RemoteDataSourceModule {
 
-    @Provides
+    @Binds
     @Singleton
-    fun provideActorDetailsRemoteDataSource(
-        apiService: ActorApiService,
-    ): ActorRemoteDataSource =
-        ActorRemoteDataSourceImpl(actorApiService = apiService)
+    abstract fun provideActorDetailsRemoteDataSource(
+        implementation: ActorRemoteDataSourceImpl
+    ): ActorRemoteDataSource
 
-    @Provides
+    @Binds
     @Singleton
-    fun provideTvShowDetailsRemoteDataSource(
-        apiService: TvShowApiService,
-    ): TvShowRemoteDataSource =
-        TvShowRemoteDataSourceImpl(tvShowApiService = apiService)
+    abstract fun provideTvShowDetailsRemoteDataSource(
+        implementation: TvShowRemoteDataSourceImpl
+    ): TvShowRemoteDataSource
 
-    @Provides
+    @Binds
     @Singleton
-    fun provideSearchRemoteDataSource(
-        apiService: SearchApiService,
-    ): SearchRemoteDataSource = SearchRemoteDataSourceImpl(searchApiService = apiService)
+    abstract fun provideSearchRemoteDataSource(
+        implementation: SearchRemoteDataSourceImpl
+    ): SearchRemoteDataSource
 
-    @Provides
+    @Binds
     @Singleton
-    fun provideAuthenticationRemoteDataSource(
-        apiService: AuthenticationApiService,
-    ): AuthenticationRemoteDataSource =
-        AuthenticationRemoteDataSourceImpl(authenticationApiService = apiService)
+    abstract fun provideAuthenticationRemoteDataSource(
+        implementation: AuthenticationRemoteDataSourceImpl
+    ): AuthenticationRemoteDataSource
 
-    @Provides
+    @Binds
     @Singleton
-    fun provideMovieDetailsRemoteDataSource(
-        apiService: MovieApiService,
-    ): MovieRemoteDataSource =
-        MovieRemoteDataSourceImpl(movieApiService = apiService)
+    abstract fun provideMovieDetailsRemoteDataSource(
+        implementation: MovieRemoteDataSourceImpl
+    ): MovieRemoteDataSource
 
-    @Provides
+    @Binds
     @Singleton
-    fun provideCustomMovieListsRemoteDataSource(
-        apiService: CustomMovieListsApiService,
-    ): CustomMovieListsRemoteDataSource =
-        CustomMovieListsRemoteDataSourceImpl(customMovieListsApiService = apiService)
+    abstract fun provideCustomMovieListsRemoteDataSource(
+        implementation: CustomMovieListsRemoteDataSourceImpl
+    ): CustomMovieListsRemoteDataSource
 
-    @Provides
+    @Binds
     @Singleton
-    fun provideAccountRemoteDataSource(
-        accountApiService: AccountApiService
-    ): AccountRemoteDataSource =
-        AccountRemoteDataSourceImp(accountApiService = accountApiService)
+    abstract fun provideAccountRemoteDataSource(
+        implementation: AccountRemoteDataSourceImp
+    ): AccountRemoteDataSource
 }

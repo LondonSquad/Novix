@@ -8,7 +8,6 @@ import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
-import javax.inject.Named
 import javax.inject.Singleton
 
 @Module
@@ -46,13 +45,11 @@ object DataBaseModule {
 
     @Provides
     @Singleton
-    @Named("popularSectionDao")
     fun providePopularSectionDao(database: NovixDatabase) =
         database.popularSectionDao()
 
     @Provides
     @Singleton
-    @Named("topRatedDao")
     fun provideTopRatedDao(database: NovixDatabase) =
         database.topRatedDao()
 

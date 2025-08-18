@@ -1,16 +1,5 @@
 package com.london.app.di
 
-import android.content.SharedPreferences
-import com.london.data.local.database.dao.customLists.ListMembershipDao
-import com.london.data.local.database.dao.customLists.MovieListDao
-import com.london.data.local.database.dao.customLists.SyncMetadataDao
-import com.london.data.local.database.dao.home.popular.PopularSectionDao
-import com.london.data.local.database.dao.home.toprated.TopRatedDao
-import com.london.data.local.database.dao.home.upcoming.UpcomingSectionDao
-import com.london.data.local.database.dao.recent.search.RecentSearchDao
-import com.london.data.local.database.dao.recent.viewed.RecentViewedDao
-import com.london.data.local.database.dao.recent.watched.movie.RecentWatchedMoviesDao
-import com.london.data.local.database.dao.recent.watched.tvshow.RecentWatchedTvShowsDao
 import com.london.data.local.model.home.popular.PopularSectionLocal
 import com.london.data.local.model.home.topRated.TopRatedLocal
 import com.london.data.local.model.recent.search.RecentSearchLocal
@@ -32,81 +21,69 @@ import com.london.data.local.source.recent.watched.RecentWatchedDataSource
 import com.london.data.local.source.recent.watched.RecentWatchedMoviesDataSource
 import com.london.data.local.source.recent.watched.RecentWatchedTvShowsDataSource
 import com.london.domain.AppPreferencesService
+import dagger.Binds
 import dagger.Module
-import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
-import javax.inject.Named
 import javax.inject.Singleton
 
 @Module
 @InstallIn(SingletonComponent::class)
-object LocalDataSourceModule {
-    @Provides
-    @Singleton
-    fun provideRecentWatchedTvShowsDataSource(
-        dao: RecentWatchedTvShowsDao
-    ): RecentWatchedDataSource<RecentWatchedTvShowLocal> =
-        RecentWatchedTvShowsDataSource(recentWatchedTvShowsDao = dao)
+abstract class LocalDataSourceModule {
 
-    @Provides
+    @Binds
     @Singleton
-    fun provideRecentWatchedMovieDataSource(
-        dao: RecentWatchedMoviesDao
-    ): RecentWatchedDataSource<RecentWatchedMovieLocal> =
-        RecentWatchedMoviesDataSource(recentWatchedMoviesDao = dao)
+    abstract fun provideRecentWatchedTvShowsDataSource(
+        implementation: RecentWatchedTvShowsDataSource
+    ): RecentWatchedDataSource<RecentWatchedTvShowLocal>
+
+    @Binds
+    @Singleton
+    abstract fun provideRecentWatchedMovieDataSource(
+        implementation: RecentWatchedMoviesDataSource
+    ): RecentWatchedDataSource<RecentWatchedMovieLocal>
 
 
-    @Provides
+    @Binds
     @Singleton
-    fun provideRecentSearchDataSource(
-        dao: RecentSearchDao
-    ): RecentDataSource<RecentSearchLocal> = RecentSearchDataSourceImpl(recentSearchDao = dao)
+    abstract fun provideRecentSearchDataSource(
+        implementation: RecentSearchDataSourceImpl
+    ): RecentDataSource<RecentSearchLocal>
 
-    @Provides
-    @Singleton
-    fun provideRecentViewedDataSource(
-        dao: RecentViewedDao
-    ): RecentDataSource<RecentViewedLocal> = RecentViewedDataSourceImpl(recentViewedDao = dao)
 
-    @Provides
+    @Binds
     @Singleton
-    fun provideAppPreferencesService(
-        sharedPreferences: SharedPreferences
-    ): AppPreferencesService = AppPreferencesServiceImpl(preferences = sharedPreferences)
+    abstract fun provideRecentViewedDataSource(
+        implementation: RecentViewedDataSourceImpl
+    ): RecentDataSource<RecentViewedLocal>
 
-    @Provides
+    @Binds
     @Singleton
-    @Named("popularLocalDataSource")
-    fun providePopularLocalDataSource(
-        @Named("popularSectionDao") popularSectionDao: PopularSectionDao
-    ): HomeLocalDataSource<PopularSectionLocal> =
-        PopularLocalDataSourceImpl(popularSectionDao)
+    abstract fun provideAppPreferencesService(
+        implementation: AppPreferencesServiceImpl
+    ): AppPreferencesService
 
-    @Provides
+    @Binds
     @Singleton
-    fun provideUpComingLocalDataSource(
-        upComingSectionDao: UpcomingSectionDao
-    ): UpComingLocalDataSource = UpComingLocalDataSourceImpl(upComingSectionDao)
+    abstract fun providePopularLocalDataSource(
+        implementation: PopularLocalDataSourceImpl
+    ): HomeLocalDataSource<PopularSectionLocal>
 
-    @Provides
+    @Binds
     @Singleton
-    @Named("topRatedLocalDataSource")
-    fun provideTopRatedLocalDataSource(
-        @Named("topRatedDao") topRatedDao: TopRatedDao
-    ): HomeLocalDataSource<TopRatedLocal> =
-        TopRatedDataSourceImpl(topRatedDao)
+    abstract fun provideUpComingLocalDataSource(
+        implementation: UpComingLocalDataSourceImpl
+    ): UpComingLocalDataSource
 
-    @Provides
+    @Binds
     @Singleton
-    fun provideCustomMovieListLocalDataSource(
-        membershipDao: ListMembershipDao,
-        movieListDao: MovieListDao,
-        syncMetadataDao: SyncMetadataDao
-    ): CustomMovieListLocalDataSource =
-        CustomMovieListLocalDataSourceImpl(
-            membershipDao = membershipDao,
-            movieListDao = movieListDao,
-            syncMetadataDao = syncMetadataDao
-        )
+    abstract fun provideTopRatedLocalDataSource(
+        implementation: TopRatedDataSourceImpl
+    ): HomeLocalDataSource<TopRatedLocal>
+
+    @Binds
+    @Singleton
+    abstract fun provideCustomMovieListLocalDataSource(
+        implementation: CustomMovieListLocalDataSourceImpl
+    ): CustomMovieListLocalDataSource
 }
