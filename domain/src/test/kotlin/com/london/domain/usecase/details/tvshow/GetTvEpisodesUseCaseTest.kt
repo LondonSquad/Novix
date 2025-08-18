@@ -333,7 +333,7 @@ class GetTvEpisodesUseCaseTest {
         )
     }
 
-    val mockEpisode = EpisodeDetails(
+    private val mockEpisode = EpisodeDetails(
         id = 1001,
         name = "Pilot",
         overview = "The very first episode.",
@@ -341,9 +341,7 @@ class GetTvEpisodesUseCaseTest {
         voteCount = 200,
         airDate = "2025-07-01",
         seasonNumber = SEASON_NUMBER,
-        imageUrl = "/still_pilot.jpg",
         guestStars = emptyList(),
-        episodeTypes = "Regular",
         tvShowId = 23,
     )
 }
