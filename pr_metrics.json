@@ -33009,5 +33009,42 @@
       "deletions": 6,
       "changed_files": 4
     }
+  },
+  {
+    "pr_number": 691,
+    "url": "https://github.com/LondonSquad/Novix/pull/691",
+    "title": "refactor/data and domain according to review",
+    "opened_at": "2025-08-18T23:36:51Z",
+    "head_ref": "refactor/data",
+    "base_ref": "develop",
+    "creator": {
+      "login": "BassantM",
+      "id": 102248144,
+      "url": "https://github.com/BassantM"
+    },
+    "assignees": [
+      {
+        "login": "BassantM",
+        "id": 102248144,
+        "url": "https://github.com/BassantM"
+      }
+    ],
+    "comments": [],
+    "approvals": [],
+    "required_approvals": 2,
+    "first_approved_at": null,
+    "time_to_first_approval_minutes": null,
+    "required_approvals_met_at": null,
+    "time_to_required_approvals_minutes": null,
+    "closed_at": null,
+    "merged_at": null,
+    "merged_by": null,
+    "week": "2025-W34",
+    "status": "pending",
+    "diff_stats": {
+      "additions": 535,
+      "deletions": 605,
+      "changed_files": 189
+    }
   }
 ]
