@@ -2,6 +2,7 @@ package com.london.presentation.feature.details.movie
 
 import com.london.domain.entity.Actor
 import com.london.domain.entity.Movie
+import com.london.domain.entity.moviedatails.MovieDetails
 import com.london.presentation.shared.base.ErrorState
 import com.london.presentation.shared.genre.MovieGenreUi
 
@@ -30,3 +31,15 @@ data class MovieDetailsUiState(
     val hasTrailer: Boolean
         get() = movieVideo.isNotEmpty()
 }
+
+data class AdditionalMovieDetailsData(
+    val similarMovies: List<Movie>,
+    val movieVideoUrl: List<String>,
+    val movieRating: Int
+)
+
+data class MainMovieData(
+    val details: MovieDetails,
+    val images: List<String>,
+    val cast: List<Actor>
+)

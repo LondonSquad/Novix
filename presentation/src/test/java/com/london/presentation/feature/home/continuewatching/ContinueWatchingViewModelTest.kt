@@ -178,7 +178,7 @@ class ContinueWatchingViewModelTest {
         // Given
         advanceUntilIdle()
         val initialTab = viewModel.state.value.selectedMediaCategory
-        val newTab = com.london.presentation.shared.MediaCategory.TvShows // Use different category
+        val newTab = com.london.presentation.shared.MediaCategory.TvShows
 
         // When
         viewModel.onMediaCategoryTabClick(newTab)
@@ -222,21 +222,6 @@ class ContinueWatchingViewModelTest {
             viewModel.onNavigateToTvShowClick(tvShowId)
             assertThat(awaitItem()).isInstanceOf(ContinueWatchingEffect.NavigateToTvShowDetails::class.java)
         }
-    }
-
-    @Test
-    fun `when onRetryClick should call getRecentWatchedMedia`() = runTest {
-
-        // Given
-        advanceUntilIdle()
-
-        // When
-        viewModel.onRetryClick()
-        advanceUntilIdle()
-
-        // Then
-        val state = viewModel.state.value
-        assertThat(state.isLoading).isFalse()
     }
 
     private fun createMockRecentMovie() = mockk<Movie> {

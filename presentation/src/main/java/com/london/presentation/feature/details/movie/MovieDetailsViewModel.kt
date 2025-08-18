@@ -34,8 +34,169 @@ class MovieDetailsViewModel @Inject constructor(
     private val movieId = args?.movieId ?: 0
 
     init {
-        handleMovieDetailsData(movieId)
-        loadSimilarAndVideos(movieId)
+        loadMovieDetails()
+    }
+
+    private fun loadMovieDetails() {
+        loadMainMovieData()
+        loadAdditionalMovieData()
+    }
+
+    private fun loadMainMovieData() {
+        tryToExecute(
+            block = { fetchMainMovieData() },
+            onStart = { setLoadingState(true) },
+            onSuccess = { movieData -> handleMainMovieDataSuccess(movieData) },
+            onError = { errorState -> updateState { copy(error = errorState) } },
+            onCompleted = { setLoadingState(false) }
+        )
+    }
+
+    private fun loadAdditionalMovieData() {
+        tryToExecute(
+            block = { fetchAdditionalMovieData() },
+            onSuccess = { additionalData -> handleAdditionalMovieDataSuccess(additionalData) },
+            onError = { errorState -> updateState { copy(error = errorState) } },
+            onCompleted = { setLoadingState(false) }
+        )
+    }
+
+    private suspend fun fetchMainMovieData(): MainMovieData {
+        val details = movieDetails.getMovieDetails(movieId)
+        val images = movieDetails.getMovieImages(movieId)
+        val cast = movieDetails.getMovieCast(movieId)
+        return MainMovieData(details, images, cast)
+    }
+
+    private suspend fun fetchAdditionalMovieData(): AdditionalMovieDetailsData {
+        val similarMovies = movieDetails.getSimilarMovies(movieId)
+        val movieVideos = movieDetails.getMovieVideo(movieId)
+        val movieRating = getUserMovieRating()
+
+        return AdditionalMovieDetailsData(
+            similarMovies = similarMovies,
+            movieVideoUrl = movieVideos,
+            movieRating = movieRating
+        )
+    }
+
+    private suspend fun getUserMovieRating(): Int {
+        return if (authenticationUseCase.isLoggedIn())
+            ratingUseCase.getRateAccountMovieStatesById(movieId) else 0
+    }
+
+    private suspend fun handleMainMovieDataSuccess(movieData: MainMovieData) {
+        val (details, images, cast) = movieData
+        updateMovieDetailsState(details, images, cast)
+        addMovieToRecentHistory(details)
+    }
+
+    private fun handleAdditionalMovieDataSuccess(additionalData: AdditionalMovieDetailsData) {
+        updateState {
+            copy(
+                similarMovies = additionalData.similarMovies,
+                movieVideo = additionalData.movieVideoUrl.firstOrNull().orEmpty(),
+                isRated = additionalData.movieRating != 0 && !state.value.isGuestUser
+            )
+        }
+    }
+
+    private fun updateMovieDetailsState(
+        details: MovieDetails,
+        images: List<String>,
+        cast: List<Actor>
+    ) {
+        updateState {
+            copy(
+                movieId = details.id,
+                movieName = details.title,
+                movieGenres = details.genres.map { it.toUi() },
+                movieRating = details.voteAverage,
+                movieDuration = details.runtime.toString(),
+                releaseDate = details.releaseDate,
+                movieOverview = details.overview,
+                movieImages = images.ifEmpty { listOf(details.posterUrl) },
+                actors = cast
+            )
+        }
+    }
+
+    private fun resetErrorState() =
+        updateState { copy(error = null) }
+
+    private fun setLoadingState(isLoading: Boolean) =
+        updateState { copy(isLoading = isLoading) }
+
+    private fun checkUserAuthenticationForRating() {
+        tryToExecute(
+            block = { authenticationUseCase.isLoggedIn() },
+            onSuccess = { isLoggedIn -> handleRatingAuthenticationResult(isLoggedIn) },
+            onError = { errorState -> updateState { copy(error = errorState) } }
+        )
+    }
+
+    private fun handleRatingAuthenticationResult(isLoggedIn: Boolean) =
+        if (isLoggedIn) showRatingBottomSheet() else showGuestUserBottomSheet()
+
+    private fun showRatingBottomSheet() =
+        updateState { copy(isRateBottomSheetVisible = !isRateBottomSheetVisible) }
+
+    private fun showGuestUserBottomSheet() {
+        updateState {
+            copy(
+                isGuestUserBottomSheetVisible = !isGuestUserBottomSheetVisible,
+                isGuestUser = true
+            )
+        }
+    }
+
+    private fun submitMovieRating(rating: Int) {
+        tryToExecute(
+            block = { ratingUseCase.addMovieRatingById(movieId, rating) },
+            onSuccess = { handleRatingSuccess(rating) },
+            onError = { errorState ->
+                updateState { copy(error = errorState, isSuccessfullyRated = false) }
+            },
+            onCompleted = { setLoadingState(false) }
+        )
+    }
+
+    private fun handleRatingSuccess(rating: Int) {
+        updateState {
+            copy(
+                selectedRating = rating,
+                isRated = true,
+                isRateBottomSheetVisible = false,
+                isSuccessfullyRated = true
+            )
+        }
+    }
+
+    private suspend fun addMovieToRecentHistory(details: MovieDetails) {
+        addMovieToRecentViewed(details)
+        addMovieToRecentWatched(details)
+    }
+
+    private suspend fun addMovieToRecentViewed(details: MovieDetails) {
+        val recentViewed = RecentViewed(
+            id = details.id,
+            imageUrl = details.posterUrl,
+            type = MediaType.Movie,
+            viewDate = System.currentTimeMillis()
+        )
+        manageRecentViewedUseCase.addToRecentViewed(recentViewed)
+    }
+
+    private suspend fun addMovieToRecentWatched(details: MovieDetails) {
+        val movie = Movie(
+            id = details.id,
+            name = details.title,
+            posterUrl = details.posterUrl,
+            releaseYear = 2025,
+            rating = 1,
+            genres = details.genres
+        )
+        manageRecentMovieWatchedUseCase.addMovieToRecentWatched(movie)
     }
 
     override fun onBackClick() {
@@ -71,157 +232,15 @@ class MovieDetailsViewModel @Inject constructor(
     }
 
     override fun onRetryClick() {
-        updateState { copy(error = null) }
-        handleMovieDetailsData(movieId)
-        loadSimilarAndVideos(movieId)
+        resetErrorState()
+        loadMovieDetails()
     }
 
     override fun onRateBottomSheetClick() {
-        tryToExecute(
-            block = { authenticationUseCase.isLoggedIn() },
-            onSuccess = { isLoggedIn -> onRateClickSuccess(isLoggedIn) },
-            onError = { errorState ->
-                updateState { copy(error = errorState) }
-            }
-        )
+        checkUserAuthenticationForRating()
     }
 
     override fun onSelectRatingClick(rating: Int) {
-        tryToExecute(
-            block = { ratingUseCase.addMovieRatingById(movieId, rating) },
-            onSuccess = { onRatingSuccess(rating) },
-            onError = { errorState ->
-                updateState { copy(error = errorState, isSuccessfullyRated = false) }
-            },
-            onCompleted = { setLoadingState(false) },
-        )
-    }
-
-    private fun handleMovieDetailsData(movieId: Int) {
-        tryToExecute(
-            block = { fetchMovieData(movieId) },
-            onStart = { setLoadingState(true) },
-            onSuccess = { triple -> onMovieDataLoaded(triple) },
-            onError = { errorState -> updateState { copy(error = errorState) } },
-            onCompleted = { setLoadingState(false) }
-        )
-    }
-
-    private fun onRateClickSuccess(isLoggedIn: Boolean) {
-        if (isLoggedIn)
-            updateState { copy(isRateBottomSheetVisible = isRateBottomSheetVisible.not()) }
-        else
-            updateState {
-                copy(
-                    isGuestUserBottomSheetVisible = isGuestUserBottomSheetVisible.not(),
-                    isGuestUser = true
-                )
-
-            }
-    }
-
-    private fun onRatingSuccess(rating: Int) {
-        updateState {
-            copy(
-                selectedRating = rating,
-                isRated = true,
-                isRateBottomSheetVisible = false,
-                isSuccessfullyRated = true
-            )
-        }
-    }
-
-    private suspend fun addMovieToRecentWatched(movie: Movie) {
-        manageRecentMovieWatchedUseCase.addMovieToRecentWatched(movie)
-    }
-
-    private suspend fun addMovieToRecentViewed(movie: RecentViewed) {
-        manageRecentViewedUseCase.addToRecentViewed(movie)
-    }
-
-    private fun loadSimilarAndVideos(movieId: Int) {
-        tryToExecute(
-            block = {
-                val similarMovies = movieDetails.getSimilarMovies(movieId)
-                val movieVideos = movieDetails.getMovieVideo(movieId)
-                val movieRating = if (authenticationUseCase.isLoggedIn())
-                    ratingUseCase.getRateAccountMovieStatesById(movieId) else 0
-                Triple(similarMovies, movieVideos, movieRating)
-
-            },
-            onSuccess = { (similarMovies, videos, movieRating) ->
-                updateState {
-                    copy(
-                        similarMovies = similarMovies,
-                        movieVideo = videos.firstOrNull().orEmpty(),
-                        isRated = movieRating != 0 && state.value.isGuestUser.not()
-                    )
-                }
-            },
-            onError = { errorState ->
-                updateState { copy(error = errorState) }
-            },
-            onCompleted = {
-                setLoadingState(false)
-            }
-        )
-    }
-
-    private suspend fun fetchMovieData(movieId: Int): Triple<MovieDetails, List<String>, List<Actor>> {
-        val movie = movieDetails.getMovieDetails(movieId)
-        val movieImages = movieDetails.getMovieImages(movieId)
-        val movieCast = movieDetails.getMovieCast(movieId)
-        return Triple(movie, movieImages, movieCast)
-    }
-
-    private suspend fun onMovieDataLoaded(triple: Triple<MovieDetails, List<String>, List<Actor>>) {
-        updateMovieDetailsState(triple.first, triple.second, triple.third)
-        addMovieToRecentHistory(triple.first)
-    }
-
-    private fun updateMovieDetailsState(
-        details: MovieDetails,
-        images: List<String>,
-        cast: List<Actor>
-    ) {
-        updateState {
-            copy(
-                movieId = details.id,
-                movieName = details.title,
-                movieGenres = details.genres.map { genre -> genre.toUi() },
-                movieRating = details.voteAverage,
-                movieDuration = details.runtime.toString(),
-                releaseDate = details.releaseDate,
-                movieOverview = details.overview,
-                movieImages = images.ifEmpty { listOf(details.posterUrl) },
-                actors = cast
-            )
-        }
-    }
-
-    private suspend fun addMovieToRecentHistory(details: MovieDetails) {
-        addMovieToRecentViewed(
-            RecentViewed(
-                id = details.id,
-                imageUrl = details.posterUrl,
-                type = MediaType.Movie,
-                viewDate = System.currentTimeMillis()
-            )
-        )
-
-        addMovieToRecentWatched(
-            Movie(
-                id = details.id,
-                name = details.title,
-                posterUrl = details.posterUrl,
-                releaseYear = 2025,
-                rating = 1,
-                genres = details.genres,
-            )
-        )
-    }
-
-    private fun setLoadingState(isLoading: Boolean) {
-        updateState { copy(isLoading = isLoading) }
+        submitMovieRating(rating)
     }
 }
