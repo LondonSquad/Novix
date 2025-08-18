@@ -63,7 +63,7 @@ inline fun <reified T : Enum<T>> GenreChipsRow(
         contentPadding = PaddingValues(horizontal = 16.dp),
         modifier = modifier
             .requiredWidth(screenWidth)
-            .padding(vertical = 12.dp)
+            .padding(top = 12.dp)
     ) {
         items(genres) { genre ->
             NovixChip(

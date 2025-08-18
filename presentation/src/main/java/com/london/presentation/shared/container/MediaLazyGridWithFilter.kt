@@ -52,7 +52,6 @@ fun <T : Any> MediaLazyGridWithFilter(
                     imageUrl = imageUrl,
                     name = name,
                     config = config,
-                    topBar = topBar
                 )
             }
 
@@ -90,7 +89,7 @@ fun <T : Any> MediaLazyGridWithFilter(
             selectedMovieGenre = config.selectedMovieGenre,
             selectedTvShowGenre = config.selectedTvShowGenre,
             onMovieGenreClick = onMovieGenreClick,
-            onTvShowGenreClick = onTvShowGenreClick,
+            onTvShowGenreClick = onTvShowGenreClick
         )
 
         if (pagingItems.itemCount > 0) {
@@ -98,8 +97,7 @@ fun <T : Any> MediaLazyGridWithFilter(
                 pagingItems = pagingItems,
                 imageUrl = imageUrl,
                 name = name,
-                config = config,
-                topBar = topBar
+                config = config
             )
         } else if (!isLoading) {
             EmptyGenreLayout()
@@ -112,8 +110,7 @@ private fun <T : Any> RenderFilteredItemsGrid(
     filteredItems: List<T>,
     imageUrl: (T) -> String?,
     name: (T) -> String,
-    config: MediaGridConfig,
-    topBar: @Composable (() -> Unit)?
+    config: MediaGridConfig
 ) {
     if (filteredItems.isNotEmpty()) {
         MediaLazyVerticalGrid(
@@ -124,8 +121,8 @@ private fun <T : Any> RenderFilteredItemsGrid(
             onSaveClick = { config.onSaveClick(it) },
             isItemSaved = { config.isItemSaved(it) },
             onDeleteClick = { config.onDeleteClick(it) },
-            rate = { config.rate },
-            topBar = topBar,
+            rate = { null },
+            topBar = null,
             modifier = Modifier.fillMaxSize(),
             onNavigateToMovie = config.onNavigateToMovie,
             onNavigateToTvShow = config.onNavigateToTvShow
@@ -140,8 +137,7 @@ private fun <T : Any> RenderPagingItemsGrid(
     pagingItems: LazyPagingItems<T>,
     imageUrl: (T) -> String?,
     name: (T) -> String,
-    config: MediaGridConfig,
-    topBar: @Composable (() -> Unit)?
+    config: MediaGridConfig
 ) {
     MediaLazyVerticalGrid(
         pagingItems = pagingItems,
@@ -151,8 +147,8 @@ private fun <T : Any> RenderPagingItemsGrid(
         onSaveClick = { config.onSaveClick(it) },
         isItemSaved = { config.isItemSaved(it) },
         onDeleteClick = { config.onDeleteClick(it) },
-        rate = { config.rate },
-        topBar = topBar,
+        rate = { null },
+        topBar = null,
         modifier = Modifier.fillMaxSize(),
         onNavigateToMovie = config.onNavigateToMovie,
         onNavigateToTvShow = config.onNavigateToTvShow
@@ -188,7 +184,6 @@ private fun Preview() {
         config = MediaGridConfig(
             showSaveIcon = true,
             isDarkMode = true,
-            rate = "3",
             isMovieSelected = true,
             isTvShowSelected = false,
             selectedMovieGenre = MovieGenreUi.Action,
