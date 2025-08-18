@@ -63,7 +63,7 @@ import com.london.designsystem.theme.NovixTheme
 import com.london.designsystem.theme.noRippleClickable
 import com.london.domain.entity.recent.MediaType
 import com.london.domain.entity.tvshowdetails.TvShowCastMemberEntity
-import com.london.domain.entity.tvshowdetails.episode.EpisodeBySeasonEntity
+import com.london.domain.entity.tvshowdetails.episode.Episodes
 import com.london.presentation.shared.ActorItem
 import com.london.presentation.shared.ConditionalText
 import com.london.presentation.shared.CustomBackDropImagePager
@@ -282,7 +282,7 @@ private fun Content(
                 key = { episode -> "${episode.showId}_${episode.seasonNumber}_${episode.episodeNumber}" }
             ) { episode ->
                 EpisodeItem(
-                    episode = episode,
+                    episodes = episode,
                     onEpisodeClick = {
                         tvShowDetailsContract.onEpisodeClicked(
                             episode.showId,
@@ -584,7 +584,7 @@ fun SeasonEpisodesDetails(
 
 @Composable
 private fun EpisodeItem(
-    episode: EpisodeBySeasonEntity,
+    episodes: Episodes,
     onEpisodeClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
@@ -596,7 +596,7 @@ private fun EpisodeItem(
         horizontalArrangement = Arrangement.spacedBy(12.dp)
     ) {
         ImageView(
-            model = episode.imageUrl,
+            model = episodes.imageUrl,
             contentDescription = stringResource(R.string.s),
             contentScale = ContentScale.FillBounds,
             modifier = Modifier
@@ -613,13 +613,13 @@ private fun EpisodeItem(
             modifier = Modifier.weight(0.65f)
         ) {
             Text(
-                text = episode.name,
+                text = episodes.name,
                 style = NovixTheme.typography.label.large,
                 color = NovixTheme.colors.title
             )
 
             Text(
-                text = episode.episodeType,
+                text = episodes.episodeType,
                 style = NovixTheme.typography.label.small,
                 color = NovixTheme.colors.hint
             )
@@ -628,13 +628,13 @@ private fun EpisodeItem(
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.spacedBy(4.dp)
             ) {
-                if (episode.voteAverage.isNotZeroRate()) {
+                if (episodes.voteAverage.isNotZeroRate()) {
                     RatingItem(
-                        rating = episode.voteAverage.toLocalizedNumbers(),
+                        rating = episodes.voteAverage.toLocalizedNumbers(),
                         color = NovixTheme.colors.hint
                     )
 
-                    if (episode.runtime != null) {
+                    if (episodes.runtime != null) {
                         Box(
                             modifier = Modifier
                                 .padding(horizontal = 8.dp)
@@ -642,10 +642,10 @@ private fun EpisodeItem(
                                 .clip(CircleShape)
                                 .background(NovixTheme.colors.hint)
                         )
-                        EpisodeDuration(episode.runtime.toString().toLocalizedNumbers())
+                        EpisodeDuration(episodes.runtime.toString().toLocalizedNumbers())
                     }
 
-                    if (episode.airDate != null) {
+                    if (episodes.airDate != null) {
                         Box(
                             modifier = Modifier
                                 .padding(horizontal = 8.dp)
@@ -654,7 +654,7 @@ private fun EpisodeItem(
                                 .background(NovixTheme.colors.hint)
                         )
                         Text(
-                            text = convertDate(episode.airDate.toString()),
+                            text = convertDate(episodes.airDate.toString()),
                             style = NovixTheme.typography.label.small,
                             color = NovixTheme.colors.hint
                         )
