@@ -4,8 +4,8 @@ import com.google.common.truth.Truth.assertThat
 import com.london.domain.entity.tvshowdetails.TvShowCastEntity
 import com.london.domain.entity.tvshowdetails.TvShowCastMemberEntity
 import com.london.domain.entity.tvshowdetails.TvShowRoleEntity
-import com.london.domain.entity.tvshowdetails.episode.TvShowEpisodeByIdEntity
-import com.london.domain.entity.tvshowdetails.episode.TvShowEpisodesEntity
+import com.london.domain.entity.tvshowdetails.episode.EpisodeDetails
+import com.london.domain.entity.tvshowdetails.episode.SeasonEpisodes
 import com.london.domain.repository.ActorRepository
 import com.london.domain.repository.SearchRepository
 import com.london.domain.repository.TvShowRepository
@@ -76,20 +76,20 @@ class GetTvEpisodesUseCaseTest {
             // Given
             val tvShowId = 123
             val seasonNumber = 2
-            val expectedResult = mockk<TvShowEpisodesEntity>()
+            val expectedResult = mockk<SeasonEpisodes>()
             coEvery {
-                tvShowRepository.getTvShowEpisodesBySeason(
+                tvShowRepository.getTvShowSeasonEpisodes(
                     tvShowId,
                     seasonNumber
                 )
             } returns expectedResult
 
             // When
-            val result = getTvEpisodesUseCase.getTvShowEpisodesBySeason(tvShowId, seasonNumber)
+            val result = getTvEpisodesUseCase.getTvShowSeasonEpisodes(tvShowId, seasonNumber)
 
             // Then
             coVerify(exactly = 1) {
-                tvShowRepository.getTvShowEpisodesBySeason(
+                tvShowRepository.getTvShowSeasonEpisodes(
                     tvShowId,
                     seasonNumber
                 )
@@ -102,19 +102,19 @@ class GetTvEpisodesUseCaseTest {
         // Given
         val tvShowId = 456
         val seasonNumber = 1
-        val expectedResult = mockk<TvShowEpisodesEntity>()
+        val expectedResult = mockk<SeasonEpisodes>()
         coEvery {
-            tvShowRepository.getTvShowEpisodesBySeason(
+            tvShowRepository.getTvShowSeasonEpisodes(
                 tvShowId,
                 seasonNumber
             )
         } returns expectedResult
 
         // When
-        val result = getTvEpisodesUseCase.getTvShowEpisodesBySeason(tvShowId, seasonNumber)
+        val result = getTvEpisodesUseCase.getTvShowSeasonEpisodes(tvShowId, seasonNumber)
 
         // Then
-        coVerify(exactly = 1) { tvShowRepository.getTvShowEpisodesBySeason(tvShowId, seasonNumber) }
+        coVerify(exactly = 1) { tvShowRepository.getTvShowSeasonEpisodes(tvShowId, seasonNumber) }
         Assert.assertEquals(expectedResult, result)
     }
 
@@ -123,19 +123,19 @@ class GetTvEpisodesUseCaseTest {
         // Given
         val tvShowId = 789
         val seasonNumber = 0
-        val expectedResult = mockk<TvShowEpisodesEntity>()
+        val expectedResult = mockk<SeasonEpisodes>()
         coEvery {
-            tvShowRepository.getTvShowEpisodesBySeason(
+            tvShowRepository.getTvShowSeasonEpisodes(
                 tvShowId,
                 seasonNumber
             )
         } returns expectedResult
 
         // When
-        val result = getTvEpisodesUseCase.getTvShowEpisodesBySeason(tvShowId, seasonNumber)
+        val result = getTvEpisodesUseCase.getTvShowSeasonEpisodes(tvShowId, seasonNumber)
 
         // Then
-        coVerify(exactly = 1) { tvShowRepository.getTvShowEpisodesBySeason(tvShowId, seasonNumber) }
+        coVerify(exactly = 1) { tvShowRepository.getTvShowSeasonEpisodes(tvShowId, seasonNumber) }
         Assert.assertEquals(expectedResult, result)
     }
 
@@ -230,7 +230,7 @@ class GetTvEpisodesUseCaseTest {
         // Then
         coVerify(exactly = 1) {
             tvShowRepository.getEpisodeVideos(
-                seriesId = 456,
+                tvShowId = 456,
                 seasonNumber = 2,
                 episodeNumber = 10
             )
@@ -256,7 +256,7 @@ class GetTvEpisodesUseCaseTest {
         assertThat(result).isEmpty()
         coVerify(exactly = 1) {
             tvShowRepository.getEpisodeVideos(
-                seriesId = 0,
+                tvShowId = 0,
                 seasonNumber = -1,
                 episodeNumber = 0
             )
@@ -282,7 +282,7 @@ class GetTvEpisodesUseCaseTest {
         assertThat(result).isEqualTo(expectedVideoUrls)
         coVerify(exactly = 1) {
             tvShowRepository.getEpisodeVideos(
-                seriesId = Int.MAX_VALUE,
+                tvShowId = Int.MAX_VALUE,
                 seasonNumber = 999,
                 episodeNumber = 999
             )
@@ -333,7 +333,7 @@ class GetTvEpisodesUseCaseTest {
         )
     }
 
-    val mockEpisode = TvShowEpisodeByIdEntity(
+    private val mockEpisode = EpisodeDetails(
         id = 1001,
         name = "Pilot",
         overview = "The very first episode.",
@@ -341,9 +341,7 @@ class GetTvEpisodesUseCaseTest {
         voteCount = 200,
         airDate = "2025-07-01",
         seasonNumber = SEASON_NUMBER,
-        imageUrl = "/still_pilot.jpg",
         guestStars = emptyList(),
-        episodeTypes = "Regular",
         tvShowId = 23,
     )
 }

@@ -6,7 +6,7 @@ import app.cash.turbine.test
 import com.google.common.truth.Truth.assertThat
 import com.london.domain.entity.actordetails.cast.ActorMediaDetails
 import com.london.domain.entity.recent.MediaType
-import com.london.domain.entity.tvshowdetails.episode.TvShowEpisodesEntity
+import com.london.domain.entity.tvshowdetails.episode.SeasonEpisodes
 import com.london.domain.usecase.authentication.AuthenticationUseCase
 import com.london.domain.usecase.details.actor.GetActorUseCase
 import com.london.domain.usecase.details.tvshow.GetTvEpisodesUseCase
@@ -107,11 +107,11 @@ class TvShowDetailsViewModelTest {
     fun `episodes by seasons data should be fetched, when initializeEpisodesBySeasons`() = runTest {
         // Given
         coEvery {
-            getTvEpisodesUseCase.getTvShowEpisodesBySeason(
+            getTvEpisodesUseCase.getTvShowSeasonEpisodes(
                 TV_SHOW_ID,
                 any()
             )
-        } returns tvShowEpisodesEntity
+        } returns seasonEpisodes
 
         // When
         advanceUntilIdle()
@@ -120,7 +120,7 @@ class TvShowDetailsViewModelTest {
         viewModel?.state?.test {
             val state = expectMostRecentItem()
             assertThat(state.tvShowEpisodes)
-                .containsExactlyElementsIn(tvShowEpisodesEntity.episodes)
+                .containsExactlyElementsIn(seasonEpisodes.episodes)
             ensureAllEventsConsumed()
         }
     }
@@ -131,7 +131,7 @@ class TvShowDetailsViewModelTest {
         // Given
         val exception = Exception("error")
         coEvery {
-            getTvEpisodesUseCase.getTvShowEpisodesBySeason(
+            getTvEpisodesUseCase.getTvShowSeasonEpisodes(
                 TV_SHOW_ID,
                 any()
             )
@@ -269,6 +269,6 @@ class TvShowDetailsViewModelTest {
         private const val TV_SHOW_ID = 12345
         private const val SEASON_NUMBER = 1
 
-        private val tvShowEpisodesEntity = mockk<TvShowEpisodesEntity>(relaxed = true)
+        private val seasonEpisodes = mockk<SeasonEpisodes>(relaxed = true)
     }
 }

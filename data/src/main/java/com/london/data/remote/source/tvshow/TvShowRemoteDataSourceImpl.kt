@@ -7,8 +7,8 @@ import com.london.data.remote.model.details.rating.AccountStatesResponse
 import com.london.data.remote.model.details.rating.RatingRemoteBody
 import com.london.data.remote.model.details.rating.RatingRemoteResponse
 import com.london.data.remote.model.details.tvshow.model.TvShowDetailsRemoteResponse
-import com.london.data.remote.model.details.tvshow.model.tvshowepisode.TvShowEpisodeResponse
-import com.london.data.remote.model.details.tvshow.model.tvshowepisode.TvShowEpisodesRemoteResponse
+import com.london.data.remote.model.details.tvshow.model.tvshowepisode.SeasonEpisodesResponse
+import com.london.data.remote.model.details.tvshow.model.tvshowepisode.EpisodeDetailsResponse
 import com.london.data.remote.model.details.videoprovider.VideoResponse
 import com.london.data.remote.model.home.popular.PopularTvShowResponse
 import com.london.data.remote.model.home.toprated.TopRatedTvSeriesRemote
@@ -147,13 +147,13 @@ class TvShowRemoteDataSourceImpl @Inject constructor(
             mapper = { it }
         )
 
-    override suspend fun getTvShowEpisodesBySeason(
+    override suspend fun getTvShowSeasonEpisodes(
         id: Int,
         seasonNumber: Int
-    ): Result<TvShowEpisodesRemoteResponse> =
+    ): Result<SeasonEpisodesResponse> =
         callApiWithRetry(
             apiCall = {
-                tvShowApiService.getTvShowEpisodesBySeason(
+                tvShowApiService.getTvShowSeasonEpisodes(
                     tvShowId = id,
                     seasonNumber = seasonNumber
                 )
@@ -171,7 +171,7 @@ class TvShowRemoteDataSourceImpl @Inject constructor(
         tvShowId: Int,
         seasonNumber: Int,
         episodeNumber: Int
-    ): Result<TvShowEpisodeResponse> =
+    ): Result<EpisodeDetailsResponse> =
         callApiWithRetry(
             apiCall = {
                 tvShowApiService.getEpisodeDetails(
