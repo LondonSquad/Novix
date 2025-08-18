@@ -12,8 +12,8 @@ import com.london.domain.entity.popular.PopularMedia
 import com.london.domain.entity.review.ReviewEntity
 import com.london.domain.entity.toprated.TopRatedMedia
 import com.london.domain.entity.tvshowdetails.TvShowDetailsEntity
-import com.london.domain.entity.tvshowdetails.episode.EpisodeBySeason
 import com.london.domain.entity.tvshowdetails.episode.EpisodeDetails
+import com.london.domain.entity.tvshowdetails.episode.SeasonEpisodes
 
 interface TvShowRepository {
     suspend fun getTvShowDetailsById(id: Int): TvShowDetailsEntity
@@ -45,7 +45,7 @@ interface TvShowRepository {
     suspend fun getTvShowSeasonEpisodes(
         tvShowId: Int,
         seasonNumber: Int,
-    ): EpisodeBySeason
+    ): SeasonEpisodes
 
     suspend fun getTvShowEpisodeByPosition(
         tvShowId: Int,

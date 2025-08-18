@@ -8,13 +8,13 @@ import com.london.data.utils.asImageUrlOrEmpty
 import com.london.data.utils.orZero
 import com.london.data.utils.roundToDecimal
 import com.london.domain.entity.Actor
-import com.london.domain.entity.tvshowdetails.episode.EpisodeBySeason
 import com.london.domain.entity.tvshowdetails.episode.EpisodeDetails
 import com.london.domain.entity.tvshowdetails.episode.Episodes
+import com.london.domain.entity.tvshowdetails.episode.SeasonEpisodes
 
-fun SeasonEpisodesResponse.toEpisodesEntity(): EpisodeBySeason =
-    EpisodeBySeason(
-        id = seasonId.orEmpty(),
+fun SeasonEpisodesResponse.toEpisodesEntity(): SeasonEpisodes =
+    SeasonEpisodes(
+        seasonId = seasonId.orEmpty(),
         episodes = episodes.orEmpty().map { it.toEpisodeBySeasonEntity() }
     )
 

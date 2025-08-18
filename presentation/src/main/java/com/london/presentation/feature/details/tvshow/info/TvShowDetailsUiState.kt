@@ -1,8 +1,8 @@
 package com.london.presentation.feature.details.tvshow.info
 
 import com.london.domain.entity.tvshowdetails.TvShowCastEntity
-import com.london.domain.entity.tvshowdetails.episode.EpisodeBySeason
 import com.london.domain.entity.tvshowdetails.episode.Episodes
+import com.london.domain.entity.tvshowdetails.episode.SeasonEpisodes
 import com.london.presentation.shared.base.ErrorState
 import com.london.presentation.shared.genre.TvShowGenreUi
 
@@ -27,7 +27,7 @@ data class TvShowDetailsUiState(
     val tvImages: List<String>? = listOf(),
     val isGuestUserBottomSheetVisible: Boolean = false,
     val tvShowGenres: List<TvShowGenreUi> = listOf(),
-    val tvShowEpisodeCountBySeason: EpisodeBySeason? = null,
+    val tvShowEpisodeCountBySeason: SeasonEpisodes? = null,
     val tvShowEpisodes: List<Episodes> = listOf(),
 ) {
     val movieHaveTrailer: Boolean

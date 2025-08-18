@@ -36,8 +36,8 @@ import com.london.domain.entity.recent.MediaType
 import com.london.domain.entity.review.ReviewEntity
 import com.london.domain.entity.toprated.TopRatedMedia
 import com.london.domain.entity.tvshowdetails.TvShowDetailsEntity
-import com.london.domain.entity.tvshowdetails.episode.EpisodeBySeason
 import com.london.domain.entity.tvshowdetails.episode.EpisodeDetails
+import com.london.domain.entity.tvshowdetails.episode.SeasonEpisodes
 import com.london.domain.repository.TvShowRepository
 import javax.inject.Inject
 
@@ -150,7 +150,7 @@ class TvShowRepositoryImpl @Inject constructor(
     override suspend fun getTvShowSeasonEpisodes(
         tvShowId: Int,
         seasonNumber: Int
-    ): EpisodeBySeason =
+    ): SeasonEpisodes =
         tvShowRemoteDataSource.getTvShowSeasonEpisodes(
             id = tvShowId,
             seasonNumber = seasonNumber
