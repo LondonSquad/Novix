@@ -12,8 +12,8 @@ import com.london.domain.entity.popular.PopularMedia
 import com.london.domain.entity.review.ReviewEntity
 import com.london.domain.entity.toprated.TopRatedMedia
 import com.london.domain.entity.tvshowdetails.TvShowDetailsEntity
-import com.london.domain.entity.tvshowdetails.episode.EpisodeByIdEntity
-import com.london.domain.entity.tvshowdetails.episode.EpisodesEntity
+import com.london.domain.entity.tvshowdetails.episode.EpisodeBySeason
+import com.london.domain.entity.tvshowdetails.episode.EpisodeDetails
 
 interface TvShowRepository {
     suspend fun getTvShowDetailsById(id: Int): TvShowDetailsEntity
@@ -45,13 +45,13 @@ interface TvShowRepository {
     suspend fun getTvShowEpisodesBySeason(
         tvShowId: Int,
         seasonNumber: Int,
-    ): EpisodesEntity
+    ): EpisodeBySeason
 
     suspend fun getTvShowEpisodeByPosition(
         tvShowId: Int,
         seasonNumber: Int,
         episodeNumber: Int
-    ): EpisodeByIdEntity
+    ): EpisodeDetails
 
     suspend fun getEpisodeVideos(tvShowId: Int, seasonNumber: Int, episodeNumber: Int): List<String>
     suspend fun getTvShowVideos(tvShowId: Int): List<String>

@@ -1,7 +1,7 @@
 package com.london.presentation.feature.details.tvshow.episode
 
 import androidx.lifecycle.SavedStateHandle
-import com.london.domain.entity.tvshowdetails.episode.EpisodeByIdEntity
+import com.london.domain.entity.tvshowdetails.episode.EpisodeDetails
 import com.london.domain.usecase.authentication.AuthenticationUseCase
 import com.london.domain.usecase.details.tvshow.GetTvEpisodesUseCase
 import com.london.domain.usecase.details.tvshow.GetTvShowUseCase
@@ -106,7 +106,7 @@ class EpisodeDetailsViewModel @Inject constructor(
 
 //    // Data class to encapsulate the loaded data
     data class EpisodeDetailsData(
-    val episode: EpisodeByIdEntity,
+    val episode: EpisodeDetails,
     val images: List<String>,
     val genres: List<String>
     )

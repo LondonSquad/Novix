@@ -4,8 +4,8 @@ import com.google.common.truth.Truth.assertThat
 import com.london.domain.entity.tvshowdetails.TvShowCastEntity
 import com.london.domain.entity.tvshowdetails.TvShowCastMemberEntity
 import com.london.domain.entity.tvshowdetails.TvShowRoleEntity
-import com.london.domain.entity.tvshowdetails.episode.EpisodeByIdEntity
-import com.london.domain.entity.tvshowdetails.episode.EpisodesEntity
+import com.london.domain.entity.tvshowdetails.episode.EpisodeBySeason
+import com.london.domain.entity.tvshowdetails.episode.EpisodeDetails
 import com.london.domain.repository.ActorRepository
 import com.london.domain.repository.SearchRepository
 import com.london.domain.repository.TvShowRepository
@@ -76,7 +76,7 @@ class GetTvEpisodesUseCaseTest {
             // Given
             val tvShowId = 123
             val seasonNumber = 2
-            val expectedResult = mockk<EpisodesEntity>()
+            val expectedResult = mockk<EpisodeBySeason>()
             coEvery {
                 tvShowRepository.getTvShowEpisodesBySeason(
                     tvShowId,
@@ -102,7 +102,7 @@ class GetTvEpisodesUseCaseTest {
         // Given
         val tvShowId = 456
         val seasonNumber = 1
-        val expectedResult = mockk<EpisodesEntity>()
+        val expectedResult = mockk<EpisodeBySeason>()
         coEvery {
             tvShowRepository.getTvShowEpisodesBySeason(
                 tvShowId,
@@ -123,7 +123,7 @@ class GetTvEpisodesUseCaseTest {
         // Given
         val tvShowId = 789
         val seasonNumber = 0
-        val expectedResult = mockk<EpisodesEntity>()
+        val expectedResult = mockk<EpisodeBySeason>()
         coEvery {
             tvShowRepository.getTvShowEpisodesBySeason(
                 tvShowId,
@@ -333,7 +333,7 @@ class GetTvEpisodesUseCaseTest {
         )
     }
 
-    val mockEpisode = EpisodeByIdEntity(
+    val mockEpisode = EpisodeDetails(
         id = 1001,
         name = "Pilot",
         overview = "The very first episode.",

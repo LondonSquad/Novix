@@ -1,7 +1,7 @@
 package com.london.domain.usecase.details.tvshow
 
-import com.london.domain.entity.tvshowdetails.episode.EpisodeByIdEntity
-import com.london.domain.entity.tvshowdetails.episode.EpisodesEntity
+import com.london.domain.entity.tvshowdetails.episode.EpisodeBySeason
+import com.london.domain.entity.tvshowdetails.episode.EpisodeDetails
 import com.london.domain.repository.TvShowRepository
 import javax.inject.Inject
 
@@ -12,7 +12,7 @@ class GetTvEpisodesUseCase @Inject constructor(
         tvShowId: Int,
         seasonNumber: Int,
         episodeNumber: Int
-    ): EpisodeByIdEntity =
+    ): EpisodeDetails =
         tvShowRepository.getTvShowEpisodeByPosition(
             tvShowId = tvShowId,
             seasonNumber = seasonNumber,
@@ -22,7 +22,7 @@ class GetTvEpisodesUseCase @Inject constructor(
     suspend fun getTvShowEpisodesBySeason(
         tvShowId: Int,
         seasonNumber: Int
-    ): EpisodesEntity =
+    ): EpisodeBySeason =
         tvShowRepository.getTvShowEpisodesBySeason(
             tvShowId = tvShowId,
             seasonNumber = seasonNumber

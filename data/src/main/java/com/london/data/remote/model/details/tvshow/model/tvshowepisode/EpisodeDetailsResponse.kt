@@ -6,7 +6,7 @@ import kotlinx.serialization.Serializable
 
 @KoverIgnore
 @Serializable
-data class EpisodeResponse(
+data class EpisodeDetailsResponse(
     @SerialName("air_date")
     val airDate: String? = null,
     @SerialName("episode_type")
@@ -26,5 +26,5 @@ data class EpisodeResponse(
     @SerialName("vote_count")
     val voteCount: Int? = null,
     @SerialName("guest_stars")
-    val guestStars: List<EpisodeGuestStar>? = null  ,
+    val guestStars: List<EpisodeGuestStar>? = null,
 )

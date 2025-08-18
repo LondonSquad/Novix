@@ -4,7 +4,7 @@ import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class EpisodeBySeason(
+data class Episode(
     @SerialName("air_date")
     val airDate: String? = null,
     @SerialName("episode_number")
@@ -22,9 +22,9 @@ data class EpisodeBySeason(
     @SerialName("season_number")
     val seasonNumber: Int? = null,
     @SerialName("show_id")
-    val showId: Int? = null ,
+    val showId: Int? = null,
     @SerialName("still_path")
-    val stillPath: String? = null   ,
+    val stillPath: String? = null,
     @SerialName("vote_average")
     val voteAverage: Double? = null
 )
