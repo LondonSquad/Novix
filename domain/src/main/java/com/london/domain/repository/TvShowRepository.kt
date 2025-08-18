@@ -53,7 +53,7 @@ interface TvShowRepository {
         episodeNumber: Int
     ): EpisodeDetails
 
-    suspend fun getEpisodeVideos(seriesId: Int, seasonNumber: Int, episodeNumber: Int): List<String>
+    suspend fun getEpisodeVideos(tvShowId: Int, seasonNumber: Int, episodeNumber: Int): List<String>
     suspend fun getTvSeasonTrailer(tvShowId: Int, seasonNumber: Int): List<String>
     suspend fun getTvShowReviews(tvShowId: Int, pageNumber: Int): PagedFetchResponse<ReviewEntity>
     suspend fun getAccountTvShowStateById(

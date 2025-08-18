@@ -59,7 +59,7 @@ interface TvShowApiService {
         @Path("episode_number") episodeNumber: Int,
     ): Response<VideoResponse>
 
-    @GET(ApiConstants.TV_SEASON_VIDEO_PATH)
+    @GET(ApiConstants.TV_SHOW_VIDEO_PATH)
     suspend fun getTvSeasonTrailer(
         @Path("tv_show_id") tvShowId: Int,
         @Path("season_number") seasonNumber: Int,
