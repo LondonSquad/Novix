@@ -9,12 +9,12 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
@@ -100,10 +100,9 @@ private fun Content(
             onFabClick = contract::onFabClick
         ) {
             LazyColumn(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .padding(horizontal = 16.dp),
-                verticalArrangement = Arrangement.spacedBy(8.dp)
+                modifier = Modifier.fillMaxSize(),
+                verticalArrangement = Arrangement.spacedBy(8.dp),
+                contentPadding = PaddingValues(horizontal = 16.dp, vertical = 8.dp)
             ) {
                 items(pagingItems.itemCount) { index ->
                     val item = pagingItems[index]
@@ -151,15 +150,11 @@ private fun ScreenScaffold(
     ) {
         TopBar(
             title = stringResource(titleRes),
-            modifier = Modifier
-                .statusBarsPadding()
-                .padding(horizontal = 16.dp)
+            modifier = Modifier.padding(horizontal = 16.dp, vertical = 12.dp)
         )
 
         Box(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(top = 8.dp)
+            modifier = Modifier.fillMaxSize()
         ) {
             content()
 
@@ -187,7 +182,7 @@ private fun SavedListItemRow(
         modifier = Modifier
             .fillMaxWidth()
             .clip(RoundedCornerShape(12.dp))
-            .clickable { onCountClick(itemUi.id.toInt()) }
+            .clickable { onCountClick(itemUi.id) }
             .background(NovixTheme.colors.surface)
             .border(
                 width = 1.dp,

@@ -2,7 +2,6 @@ package com.london.presentation.feature.list.viewitems
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -62,7 +61,6 @@ private fun Content(
             onClickOption2 = contract::onDeleteClick,
             option2IconTint = NovixTheme.colors.redAccent,
             modifier = Modifier
-                .statusBarsPadding()
                 .padding(horizontal = 16.dp, vertical = 12.dp)
         )
 

@@ -12,15 +12,12 @@ import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.WindowInsets
-import androidx.compose.foundation.layout.asPaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.statusBars
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
@@ -63,6 +60,7 @@ import com.london.presentation.utils.isNotZeroRate
 import com.london.presentation.utils.openUrl
 import com.london.presentation.utils.toLocalizedNumbers
 import com.london.designsystem.R as Res
+
 @Composable
 fun EpisodeDetailsScreen(
     viewModel: EpisodeDetailsViewModel = hiltViewModel(),
@@ -132,10 +130,7 @@ private fun Content(
                 .background(
                     NovixTheme.colors.surface.copy(alpha = backgroundAlpha)
                 )
-                .padding(horizontal = 16.dp)
-                .padding(
-                    top = WindowInsets.statusBars.asPaddingValues().calculateTopPadding() + 12.dp
-                ),
+                .padding(start = 16.dp, end = 16.dp, top = 12.dp),
             onClickOption1 = { /*todo on click on save*/ },
             option1Icon = Res.drawable.icon_remove,
         )
