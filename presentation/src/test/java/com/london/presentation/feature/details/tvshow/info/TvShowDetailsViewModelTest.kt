@@ -152,7 +152,12 @@ class TvShowDetailsViewModelTest {
     fun ` videoProvider state should be updated, when initializeEpisodesBySeasons is called`() =
         runTest {
             // Given
-            coEvery { getTvShowUseCase.getTvShowVideo(TV_SHOW_ID) } returns emptyList()
+            coEvery {
+                getTvShowUseCase.getTvSessionVideo(
+                    TV_SHOW_ID,
+                    SEASON_NUMBER
+                )
+            } returns emptyList()
 
             // When
             advanceUntilIdle()
@@ -262,6 +267,8 @@ class TvShowDetailsViewModelTest {
 
     companion object {
         private const val TV_SHOW_ID = 12345
+        private const val SEASON_NUMBER = 1
+
         private val tvShowEpisodesEntity = mockk<TvShowEpisodesEntity>(relaxed = true)
     }
 }

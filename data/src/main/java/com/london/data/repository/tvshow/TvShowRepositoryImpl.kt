@@ -178,8 +178,8 @@ class TvShowRepositoryImpl @Inject constructor(
             episodeNumber = episodeNumber
         ).getOrThrow().videos?.map { it.youtubeKey.asYoutubeUrlOrEmpty() }.orEmpty()
 
-    override suspend fun getTvShowVideos(tvShowId: Int): List<String> =
-        tvShowRemoteDataSource.getTvShowVideos(tvShowId)
+    override suspend fun getTvSessionVideo(tvShowId: Int, seasonNumber: Int): List<String> =
+        tvShowRemoteDataSource.getTvSessionVideo(tvShowId = tvShowId, seasonNumber = seasonNumber)
             .getOrThrow().videos?.map { it.youtubeKey.asYoutubeUrlOrEmpty() }.orEmpty()
 
     override suspend fun getTvShowReviews(

@@ -474,12 +474,18 @@ class TvShowRepositoryImplTest {
     fun `getTvShowVideos should map remote video list correctly`() = runTest {
         // Given
         val tvShowId = 123
-        coEvery { remoteDataSource.getTvShowVideos(tvShowId) } returns Result.success(
+        val seasonNumber = 1
+        coEvery {
+            remoteDataSource.getTvSessionVideo(
+                tvShowId = tvShowId,
+                seasonNumber = seasonNumber
+            )
+        } returns Result.success(
             fakeTvShowVideosResponse()
         )
 
         // When
-        val result: List<String> = repository.getTvShowVideos(tvShowId)
+        val result: List<String> = repository.getTvSessionVideo(tvShowId, seasonNumber)
 
         // Then
         assertThat(result).hasSize(2)
@@ -497,12 +503,18 @@ class TvShowRepositoryImplTest {
     fun `getTvShowVideos should return empty list when API returns null list`() = runTest {
         // Given
         val tvShowId = 999
-        coEvery { remoteDataSource.getTvShowVideos(tvShowId) } returns Result.success(
+        val seasonNumber = 1
+        coEvery {
+            remoteDataSource.getTvSessionVideo(
+                tvShowId,
+                seasonNumber
+            )
+        } returns Result.success(
             fakeNullTvShowVideosResponse()
         )
 
         // When
-        val result = repository.getTvShowVideos(tvShowId)
+        val result = repository.getTvSessionVideo(tvShowId, seasonNumber)
 
         // Then
         assertThat(result).isEmpty()
@@ -512,15 +524,16 @@ class TvShowRepositoryImplTest {
     fun `getTvShowVideos should throw ValidationException when remote fails`() = runTest {
 
         val tvShowId = 123
+        val seasonNumber = 1
         coEvery {
-            remoteDataSource.getTvShowVideos(tvShowId)
+            remoteDataSource.getTvSessionVideo(tvShowId, seasonNumber)
         } throws NetworkException.ValidationException(
             message = "validation error",
             status = 422
         )
 
         assertThrows<NetworkException.ValidationException> {
-            repository.getTvShowVideos(tvShowId)
+            repository.getTvSessionVideo(tvShowId, seasonNumber)
         }
     }
 

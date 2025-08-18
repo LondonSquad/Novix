@@ -266,10 +266,10 @@ class GetTvShowUseCaseTest {
     @Test
     fun `should return tv show videos when repository returns videos`() = runTest {
         // given
-        coEvery { getTvShowUseCase.getTvShowVideo(TV_SHOW_ID) } returns mockVideos
+        coEvery { getTvShowUseCase.getTvSessionVideo(TV_SHOW_ID, SEASON_NUMBER) } returns mockVideos
 
         // when
-        val result = getTvShowUseCase.getTvShowVideo(TV_SHOW_ID)
+        val result = getTvShowUseCase.getTvSessionVideo(TV_SHOW_ID, SEASON_NUMBER)
 
         // then
         assertThat(result).isNotEmpty()
@@ -278,10 +278,15 @@ class GetTvShowUseCaseTest {
     @Test
     fun `should return empty list when repository returns no videos`() = runTest {
         // given
-        coEvery { getTvShowUseCase.getTvShowVideo(TV_SHOW_ID) } returns emptyList()
+        coEvery {
+            getTvShowUseCase.getTvSessionVideo(
+                TV_SHOW_ID,
+                SEASON_NUMBER
+            )
+        } returns emptyList()
 
         // when
-        val result = getTvShowUseCase.getTvShowVideo(TV_SHOW_ID)
+        val result = getTvShowUseCase.getTvSessionVideo(TV_SHOW_ID, SEASON_NUMBER)
 
         // then
         assertThat(result).isEmpty()
@@ -473,7 +478,8 @@ class GetTvShowUseCaseTest {
         private const val ZERO_LIMIT = 0
         private const val EXCEPTION_MESSAGE = "Network error"
         private val CATEGORY = TvShowGenre.TALK
-        const val NAME = "Tv Tv"
+        private const val SEASON_NUMBER = 1
+        private const val NAME = "Tv Tv"
 
         private fun pagedFetchReviewResponse(items: List<ReviewEntity> = mockReviews) =
             PagedFetchResponse(
