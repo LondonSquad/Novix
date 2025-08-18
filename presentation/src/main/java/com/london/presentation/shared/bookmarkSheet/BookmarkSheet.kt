@@ -1,18 +1,18 @@
 package com.london.presentation.shared.bookmarkSheet
 
+import androidx.compose.animation.animateContentSize
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.requiredHeight
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -60,10 +60,10 @@ fun BookmarkBottomSheet(
     val coroutineScope = rememberCoroutineScope()
     val navController = LocalNavController.current
 
-    LaunchedEffect(isSheetVisible, bookmarkedMovieId) {
+    LaunchedEffect(isSheetVisible) {
         if (isSheetVisible) {
             viewModel.onSheetShown(bookmarkedMovieId)
-            coroutineScope.launch { sheetState.show() }
+            sheetState.show()
         }
     }
 
@@ -73,7 +73,6 @@ fun BookmarkBottomSheet(
     val hideSheet: () -> Unit = {
         coroutineScope.launch {
             sheetState.hide()
-        }.invokeOnCompletion {
             if (sheetState.isNotVisible) {
                 onSheetDismiss()
                 viewModel.onDismiss()
@@ -96,9 +95,7 @@ fun BookmarkBottomSheet(
     }
 
     LaunchedEffect(uiState.shouldDismiss) {
-        if (uiState.shouldDismiss) {
-            hideSheet()
-        }
+        if (uiState.shouldDismiss) hideSheet()
     }
 
     if (isSheetVisible) {
@@ -115,7 +112,8 @@ fun BookmarkBottomSheet(
                 hideSheet = hideSheet,
                 contract = viewModel,
                 state = uiState,
-                bookmarkedMovieId = bookmarkedMovieId
+                bookmarkedMovieId = bookmarkedMovieId,
+                isContentReady = sheetState.isVisible
             )
         }
     }
@@ -127,7 +125,8 @@ private fun BookmarkBottomSheetContent(
     contract: BookmarkSheetContract,
     modifier: Modifier = Modifier,
     hideSheet: () -> Unit,
-    bookmarkedMovieId: Int
+    bookmarkedMovieId: Int,
+    isContentReady: Boolean
 ) {
     Column(
         modifier = modifier
@@ -145,6 +144,7 @@ private fun BookmarkBottomSheetContent(
             UserListsView(
                 uiState = state,
                 contract = contract,
+                isContentReady = isContentReady,
             )
 
             UserActions(
@@ -213,17 +213,19 @@ private fun SheetHeader(
 @Composable
 private fun UserListsView(
     uiState: BookmarkSheetUiState,
-    contract: BookmarkSheetContract
+    contract: BookmarkSheetContract,
+    isContentReady: Boolean
 ) {
     Box(
         modifier = Modifier
             .fillMaxWidth()
-            .height(160.dp),
-        contentAlignment = Alignment.Center
-
+            .animateContentSize()
+            .heightIn(min = 60.dp, max = 160.dp),
+        contentAlignment = if (uiState.isLoading || uiState.lists.isEmpty()) Alignment.Center
+        else Alignment.TopCenter
     ) {
         when {
-            uiState.isLoading -> {
+            !isContentReady || uiState.isLoading -> {
                 CircularLoading()
             }
 
@@ -333,9 +335,19 @@ private fun LoginButton(
 
 @Composable
 private fun NoListsMessage() {
-    Text(
-        text = R.string.no_lists_available.string,
-        style = NovixTheme.typography.body.large,
-        color = NovixTheme.colors.body
-    )
+    Column(
+        verticalArrangement = Arrangement.spacedBy(12.dp, Alignment.CenterVertically),
+        horizontalAlignment = Alignment.CenterHorizontally,
+    ) {
+        Image(
+            painter = R.drawable.empty.painter,
+            contentDescription = null,
+        )
+
+        Text(
+            text = R.string.no_lists_available.string,
+            style = NovixTheme.typography.body.small,
+            color = NovixTheme.colors.body
+        )
+    }
 }
