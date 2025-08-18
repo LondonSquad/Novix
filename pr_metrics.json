@@ -32986,13 +32986,13 @@
           "id": 180463542,
           "url": "https://github.com/abdelrhman1002"
         },
-        "submitted_at": "2025-08-18T20:08:02Z",
+        "submitted_at": "2025-08-18T20:08:36Z",
         "commit_id": "72f75b8d11d9b3e7d0106076ba4c32654cb3a341"
       }
     ],
     "required_approvals": 2,
-    "first_approved_at": "2025-08-18T20:08:02Z",
-    "time_to_first_approval_minutes": 9.75,
+    "first_approved_at": "2025-08-18T20:08:36Z",
+    "time_to_first_approval_minutes": 10.316666666666666,
     "required_approvals_met_at": null,
     "time_to_required_approvals_minutes": null,
     "closed_at": null,
