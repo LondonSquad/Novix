@@ -32986,13 +32986,14 @@
           "id": 180463542,
           "url": "https://github.com/abdelrhman1002"
         },
-        "submitted_at": "2025-08-18T20:08:36Z",
-        "commit_id": "72f75b8d11d9b3e7d0106076ba4c32654cb3a341"
+        "submitted_at": "2025-08-18T20:08:02Z",
+        "commit_id": "72f75b8d11d9b3e7d0106076ba4c32654cb3a341",
+        "note": "May be for different commit"
       }
     ],
     "required_approvals": 2,
-    "first_approved_at": "2025-08-18T20:08:36Z",
-    "time_to_first_approval_minutes": 10.316666666666666,
+    "first_approved_at": "2025-08-18T20:08:02Z",
+    "time_to_first_approval_minutes": 9.75,
     "required_approvals_met_at": null,
     "time_to_required_approvals_minutes": null,
     "closed_at": null,
@@ -33002,7 +33003,7 @@
     "status": "pending",
     "diff_stats": {
       "additions": 19,
-      "deletions": 5,
+      "deletions": 6,
       "changed_files": 4
     }
   }
