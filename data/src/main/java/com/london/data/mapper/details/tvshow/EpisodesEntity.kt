@@ -1,25 +1,25 @@
 package com.london.data.mapper.details.tvshow
 
-import com.london.data.remote.model.details.tvshow.model.tvshowepisode.EpisodeBySeason
+import com.london.data.remote.model.details.tvshow.model.tvshowepisode.Episode
+import com.london.data.remote.model.details.tvshow.model.tvshowepisode.EpisodeBySeasonResponse
+import com.london.data.remote.model.details.tvshow.model.tvshowepisode.EpisodeDetailsResponse
 import com.london.data.remote.model.details.tvshow.model.tvshowepisode.EpisodeGuestStar
-import com.london.data.remote.model.details.tvshow.model.tvshowepisode.EpisodeResponse
-import com.london.data.remote.model.details.tvshow.model.tvshowepisode.EpisodesRemoteResponse
 import com.london.data.utils.asImageUrlOrEmpty
 import com.london.data.utils.orZero
 import com.london.data.utils.roundToDecimal
 import com.london.domain.entity.Actor
-import com.london.domain.entity.tvshowdetails.episode.EpisodeByIdEntity
-import com.london.domain.entity.tvshowdetails.episode.EpisodeBySeasonEntity
-import com.london.domain.entity.tvshowdetails.episode.EpisodesEntity
+import com.london.domain.entity.tvshowdetails.episode.EpisodeBySeason
+import com.london.domain.entity.tvshowdetails.episode.EpisodeDetails
+import com.london.domain.entity.tvshowdetails.episode.Episodes
 
-fun EpisodesRemoteResponse.toEpisodesEntity(): EpisodesEntity =
-    EpisodesEntity(
+fun EpisodeBySeasonResponse.toEpisodesEntity(): EpisodeBySeason =
+    EpisodeBySeason(
         id = id.orEmpty(),
         episodes = episodes.orEmpty().map { it.toEpisodeBySeasonEntity() }
     )
 
-fun EpisodeBySeason.toEpisodeBySeasonEntity(): EpisodeBySeasonEntity =
-    EpisodeBySeasonEntity(
+fun Episode.toEpisodeBySeasonEntity(): Episodes =
+    Episodes(
         airDate = airDate,
         episodeNumber = episodeNumber.orZero(),
         episodeType = episodeType.orEmpty(),
@@ -33,8 +33,8 @@ fun EpisodeBySeason.toEpisodeBySeasonEntity(): EpisodeBySeasonEntity =
         voteAverage = voteAverage.orZero().roundToDecimal(),
     )
 
-fun EpisodeResponse.toEpisodeEntity(): EpisodeByIdEntity =
-    EpisodeByIdEntity(
+fun EpisodeDetailsResponse.toEpisodeEntity(): EpisodeDetails =
+    EpisodeDetails(
         airDate = airDate.orEmpty(),
         seasonNumber = seasonNumber.orZero(),
         tvShowId = id.orZero(),

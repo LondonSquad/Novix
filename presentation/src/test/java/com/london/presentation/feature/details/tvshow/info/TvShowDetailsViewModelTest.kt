@@ -6,7 +6,7 @@ import app.cash.turbine.test
 import com.google.common.truth.Truth.assertThat
 import com.london.domain.entity.actordetails.cast.ActorMediaDetails
 import com.london.domain.entity.recent.MediaType
-import com.london.domain.entity.tvshowdetails.episode.EpisodesEntity
+import com.london.domain.entity.tvshowdetails.episode.EpisodeBySeason
 import com.london.domain.usecase.authentication.AuthenticationUseCase
 import com.london.domain.usecase.details.actor.GetActorUseCase
 import com.london.domain.usecase.details.tvshow.GetTvEpisodesUseCase
@@ -111,7 +111,7 @@ class TvShowDetailsViewModelTest {
                 TV_SHOW_ID,
                 any()
             )
-        } returns episodesEntity
+        } returns episodeBySeason
 
         // When
         advanceUntilIdle()
@@ -120,7 +120,7 @@ class TvShowDetailsViewModelTest {
         viewModel?.state?.test {
             val state = expectMostRecentItem()
             assertThat(state.tvShowEpisodes)
-                .containsExactlyElementsIn(episodesEntity.episodes)
+                .containsExactlyElementsIn(episodeBySeason.episodes)
             ensureAllEventsConsumed()
         }
     }
@@ -262,6 +262,6 @@ class TvShowDetailsViewModelTest {
 
     companion object {
         private const val TV_SHOW_ID = 12345
-        private val episodesEntity = mockk<EpisodesEntity>(relaxed = true)
+        private val episodeBySeason = mockk<EpisodeBySeason>(relaxed = true)
     }
 }

@@ -24,10 +24,10 @@ import com.london.data.remote.model.details.rating.AccountStatesResponse
 import com.london.data.remote.model.details.rating.RatingRemoteResponse
 import com.london.data.remote.model.details.tvshow.model.TvShowDetailsRemoteResponse
 import com.london.data.remote.model.details.tvshow.model.TvShowSeason
-import com.london.data.remote.model.details.tvshow.model.tvshowepisode.EpisodeBySeason
+import com.london.data.remote.model.details.tvshow.model.tvshowepisode.Episode
+import com.london.data.remote.model.details.tvshow.model.tvshowepisode.EpisodeBySeasonResponse
+import com.london.data.remote.model.details.tvshow.model.tvshowepisode.EpisodeDetailsResponse
 import com.london.data.remote.model.details.tvshow.model.tvshowepisode.EpisodeGuestStar
-import com.london.data.remote.model.details.tvshow.model.tvshowepisode.EpisodeResponse
-import com.london.data.remote.model.details.tvshow.model.tvshowepisode.EpisodesRemoteResponse
 import com.london.data.remote.model.details.videoprovider.VideoResponse
 import com.london.data.remote.model.details.videoprovider.VideoTrailerRemote
 import com.london.data.remote.model.home.popular.PopularTvShowResponse
@@ -1197,7 +1197,7 @@ class TvShowRepositoryImplTest {
             voteCount: Int = 100,
             guestStars: List<EpisodeGuestStar> = emptyList(),
             episodeType: String = "standard"
-        ): EpisodeResponse = EpisodeResponse(
+        ): EpisodeDetailsResponse = EpisodeDetailsResponse(
             id = id,
             name = name,
             seasonNumber = seasonNumber,
@@ -1310,10 +1310,10 @@ class TvShowRepositoryImplTest {
             )
         )
 
-        val TvShowEpisodesRemoteMock = EpisodesRemoteResponse(
+        val TvShowEpisodesRemoteMock = EpisodeBySeasonResponse(
             id = "season_id",
             episodes = listOf(
-                EpisodeBySeason(
+                Episode(
                     airDate = "2020-01-01",
                     episodeNumber = 1,
                     episodeType = "standard",
