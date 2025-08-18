@@ -6,7 +6,6 @@ import androidx.compose.animation.slideInVertically
 import androidx.compose.animation.slideOutVertically
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.getValue
@@ -19,6 +18,9 @@ import com.london.app.navigation.graph.mainNavGraph
 import com.london.app.navigation.graph.onboardingNavGraph
 import com.london.app.navigation.graph.splashNavGraph
 import com.london.designsystem.component.NavBar
+import com.london.designsystem.snackbar.CustomSnackbarUI
+import com.london.designsystem.snackbar.ScaffoldWithSnackbar
+import com.london.designsystem.snackbar.SnackbarData
 import com.london.designsystem.theme.NovixTheme
 import com.london.presentation.navigation.LocalNavController
 import com.london.presentation.navigation.Screen.Account
@@ -32,7 +34,6 @@ import com.london.presentation.navigation.Screen.Search
 fun NavHostGraph() {
     val navController = rememberNavController()
     val navBackStackEntry by navController.currentBackStackEntryAsState()
-
 
     val currentScreen = when {
         navBackStackEntry.hasRoute(Home) -> Home
@@ -50,8 +51,8 @@ fun NavHostGraph() {
             navBackStackEntry.hasRoute(Lists()) ||
             navBackStackEntry.hasRoute(Account)
 
-    Scaffold(
-        backgroundColor = NovixTheme.colors.surface,
+    ScaffoldWithSnackbar(
+        containerColor = NovixTheme.colors.surface,
         bottomBar = {
             AnimatedVisibility(
                 visible = showBottomNav,
@@ -67,6 +68,9 @@ fun NavHostGraph() {
                     }
                 )
             }
+        },
+        snackbar = { data: SnackbarData ->
+            CustomSnackbarUI(data = data)
         }
     ) { innerPadding ->
         CompositionLocalProvider(LocalNavController provides navController) {
