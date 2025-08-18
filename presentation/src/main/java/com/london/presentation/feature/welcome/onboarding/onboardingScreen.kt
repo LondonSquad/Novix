@@ -47,6 +47,7 @@ import com.london.designsystem.theme.NovixTheme
 import com.london.designsystem.theme.ThemePreviews
 import com.london.designsystem.utils.painter
 import com.london.presentation.R
+import com.london.presentation.utils.Listen
 import kotlinx.coroutines.CoroutineScope
 
 @Composable
@@ -63,7 +64,19 @@ fun OnboardingScreen(
     )
 
     HandlePagerStateChanges(pagerState, viewModel)
-    HandleEffects(effect, viewModel, pagerState, scope, onComplete)
+
+    effect?.Listen { currentEffect ->
+        when (currentEffect) {
+            is OnboardingEffect.ScrollToPage -> {
+                viewModel.scrollToPage(pagerState, currentEffect.page, scope)
+            }
+
+            OnboardingEffect.NavigateToWelcome -> {
+                viewModel.onboardingFinished()
+                onComplete()
+            }
+        }
+    }
 
     Box(
         modifier = Modifier
@@ -84,31 +97,6 @@ fun OnboardingScreen(
         )
     }
 }
-
-@Composable
-private fun HandleEffects(
-    effect: OnboardingEffect?,
-    viewModel: OnboardingViewModel,
-    pagerState: PagerState,
-    scope: CoroutineScope,
-    onComplete: () -> Unit
-) {
-    LaunchedEffect(effect) {
-        when (effect) {
-            is OnboardingEffect.ScrollToPage -> {
-                viewModel.scrollToPage(pagerState, effect.page, scope)
-            }
-
-            OnboardingEffect.NavigateToWelcome -> {
-                viewModel.onboardingFinished()
-                onComplete()
-            }
-
-            null -> {}
-        }
-    }
-}
-
 
 @Composable
 private fun Content(

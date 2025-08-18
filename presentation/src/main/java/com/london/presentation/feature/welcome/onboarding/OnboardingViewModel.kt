@@ -1,6 +1,5 @@
 package com.london.presentation.feature.welcome.onboarding
 
-import android.util.Log
 import androidx.compose.animation.core.FastOutSlowInEasing
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.pager.PagerState
@@ -58,7 +57,6 @@ class OnboardingViewModel @Inject constructor(
     fun onboardingFinished() {
         viewModelScope.launch(Dispatchers.IO) {
             runCatching { appPreferencesService.setOnBoardingShown() }
-                .onFailure { Log.e("OnboardingViewModel", "onboardingFinished: ", it) }
         }
     }
 
