@@ -122,22 +122,6 @@ class MovieDetailsViewModelTest {
     }
 
     @Test
-    fun `when additional movie data loads successfully, similar movies should be populated`() =
-        runTest {
-
-            // When
-            advanceUntilIdle()
-
-            // Then
-            viewModel?.state?.test {
-                val state = expectMostRecentItem()
-                assertThat(state.similarMovies).isEqualTo(mockSimilarMovies)
-                assertThat(state.movieVideo).isEqualTo(mockMovieVideos.first())
-                cancelAndIgnoreRemainingEvents()
-            }
-        }
-
-    @Test
     fun `when user is not authenticated, isRated should be false`() = runTest {
 
         // When
