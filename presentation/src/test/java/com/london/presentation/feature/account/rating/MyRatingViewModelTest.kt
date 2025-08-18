@@ -42,8 +42,8 @@ class MyRatingViewModelTest {
 
         // When & Then
         viewModel.state.test {
-            val state = expectMostRecentItem()
             advanceUntilIdle()
+            val state = expectMostRecentItem()
             assertThat(state.ratedMovies).isNotEmpty()
             assertThat(state.ratedTvShows).isNotEmpty()
             ensureAllEventsConsumed()
