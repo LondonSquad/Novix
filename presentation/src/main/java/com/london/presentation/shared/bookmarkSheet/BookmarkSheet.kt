@@ -1,14 +1,11 @@
 package com.london.presentation.shared.bookmarkSheet
 
-import androidx.compose.animation.AnimatedContent
-import androidx.compose.animation.core.tween
-import androidx.compose.animation.fadeIn
-import androidx.compose.animation.fadeOut
-import androidx.compose.animation.slideInVertically
-import androidx.compose.animation.togetherWith
+import androidx.compose.animation.animateContentSize
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -49,6 +46,7 @@ import com.london.presentation.navigation.LocalNavController
 import com.london.presentation.navigation.Screen
 import com.london.presentation.shared.SnackBarAnimation
 import com.london.presentation.utils.Listen
+import com.london.presentation.utils.getThemeAwarePainter
 import kotlinx.coroutines.launch
 
 @Composable
@@ -63,10 +61,10 @@ fun BookmarkBottomSheet(
     val coroutineScope = rememberCoroutineScope()
     val navController = LocalNavController.current
 
-    LaunchedEffect(isSheetVisible, bookmarkedMovieId) {
+    LaunchedEffect(isSheetVisible) {
         if (isSheetVisible) {
             viewModel.onSheetShown(bookmarkedMovieId)
-            coroutineScope.launch { sheetState.show() }
+            sheetState.show()
         }
     }
 
@@ -76,7 +74,6 @@ fun BookmarkBottomSheet(
     val hideSheet: () -> Unit = {
         coroutineScope.launch {
             sheetState.hide()
-        }.invokeOnCompletion {
             if (sheetState.isNotVisible) {
                 onSheetDismiss()
                 viewModel.onDismiss()
@@ -99,9 +96,7 @@ fun BookmarkBottomSheet(
     }
 
     LaunchedEffect(uiState.shouldDismiss) {
-        if (uiState.shouldDismiss) {
-            hideSheet()
-        }
+        if (uiState.shouldDismiss) hideSheet()
     }
 
     if (isSheetVisible) {
@@ -118,7 +113,8 @@ fun BookmarkBottomSheet(
                 hideSheet = hideSheet,
                 contract = viewModel,
                 state = uiState,
-                bookmarkedMovieId = bookmarkedMovieId
+                bookmarkedMovieId = bookmarkedMovieId,
+                isContentReady = sheetState.isVisible
             )
         }
     }
@@ -130,17 +126,18 @@ private fun BookmarkBottomSheetContent(
     contract: BookmarkSheetContract,
     modifier: Modifier = Modifier,
     hideSheet: () -> Unit,
-    bookmarkedMovieId: Int
+    bookmarkedMovieId: Int,
+    isContentReady: Boolean
 ) {
     Column(
         modifier = modifier
-            .padding(horizontal = 16.dp)
-            .padding(bottom = 24.dp)
+            .padding(start = 16.dp, end = 16.dp, bottom = 24.dp)
             .fillMaxWidth(),
         verticalArrangement = Arrangement.spacedBy(24.dp),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         SheetHeader(hideSheet = hideSheet)
+
         if (state.isGuestSession) {
             GuestLoginView()
             LoginButton(onLoginClick = contract::onLoginClick)
@@ -148,6 +145,8 @@ private fun BookmarkBottomSheetContent(
             UserListsView(
                 uiState = state,
                 contract = contract,
+                isContentReady = isContentReady,
+                modifier = Modifier.weight(1f, fill = false)
             )
 
             UserActions(
@@ -216,46 +215,50 @@ private fun SheetHeader(
 private enum class UserListState {
     Loading,
     Empty,
-    Success
+    Content;
 }
 
 @Composable
 private fun UserListsView(
+    modifier: Modifier = Modifier,
     uiState: BookmarkSheetUiState,
-    contract: BookmarkSheetContract
+    contract: BookmarkSheetContract,
+    isContentReady: Boolean
 ) {
+
     val userListState = when {
-        uiState.isLoading -> UserListState.Loading
+        !isContentReady || uiState.isLoading -> UserListState.Loading
         uiState.lists.isEmpty() -> UserListState.Empty
-        else -> UserListState.Success
+        else -> UserListState.Content
     }
 
-    AnimatedContent(
-        targetState = userListState,
-        transitionSpec = {
-            fadeIn(animationSpec = tween(220, delayMillis = 90)) +
-                    slideInVertically(initialOffsetY = { it / 2 }) togetherWith
-                    fadeOut(animationSpec = tween(90))
-        },
-        label = "UserListAnimation"
-    ) { state ->
-        when (state) {
+    Box(
+        modifier = modifier
+            .fillMaxWidth()
+            .animateContentSize()
+            .heightIn(min = 60.dp, max = 160.dp),
+        contentAlignment = Alignment.Center
+    ) {
+        when (userListState) {
             UserListState.Loading -> {
                 CircularLoading()
             }
+
             UserListState.Empty -> {
                 NoListsMessage()
             }
-            UserListState.Success -> {
+
+            UserListState.Content -> {
                 LazyColumn(
                     modifier = Modifier
-                        .fillMaxWidth()
-                        .heightIn(max = 160.dp),
+                        .fillMaxWidth(),
                     verticalArrangement = Arrangement.spacedBy(12.dp)
                 ) {
                     items(uiState.lists) { movieList ->
                         Selection(
-                            modifier = Modifier.fillMaxWidth(),
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .animateItem(),
                             mainText = movieList.name,
                             isSelected = movieList.id in uiState.selectedLists,
                             subText = stringResource(R.string.n_items, movieList.itemCount),
@@ -304,17 +307,16 @@ fun UserActions(
 }
 
 @Composable
-private fun GuestLoginView(
-    isDarkTheme: Boolean = NovixTheme.isThemeDark
-) {
+private fun GuestLoginView() {
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.spacedBy(12.dp)
     ) {
         Icon(
-            painter =
-                if (isDarkTheme) R.drawable.guest_login_dark.painter
-                else R.drawable.guest_login_light.painter,
+            painter = getThemeAwarePainter(
+                lightThemeRes = R.drawable.guest_login_light,
+                darkThemeRes = R.drawable.guest_login_dark
+            ),
             contentDescription = null,
             tint = Color.Unspecified,
             modifier = Modifier
@@ -347,9 +349,23 @@ private fun LoginButton(
 
 @Composable
 private fun NoListsMessage() {
-    Text(
-        text = R.string.no_lists_available.string,
-        style = NovixTheme.typography.body.small,
-        color = NovixTheme.colors.body
-    )
+    Column(
+        verticalArrangement = Arrangement.spacedBy(12.dp, Alignment.CenterVertically),
+        horizontalAlignment = Alignment.CenterHorizontally,
+    ) {
+        Image(
+            painter = getThemeAwarePainter(
+                lightThemeRes = R.drawable.ic_folder_light,
+                darkThemeRes = R.drawable.ic_folder_dark
+            ),
+            contentDescription = null,
+            modifier = Modifier.size(64.dp)
+        )
+
+        Text(
+            text = R.string.no_lists_available.string,
+            style = NovixTheme.typography.body.small,
+            color = NovixTheme.colors.body
+        )
+    }
 }

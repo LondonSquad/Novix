@@ -40,12 +40,10 @@ class MyRatingViewModelTest {
         coEvery { manageRatingUseCase.getRatedMediaSorted() } returns createMockRatedMedia()
         val viewModel = MyRatingViewModel(manageRatingUseCase = manageRatingUseCase)
 
-        // When
-        advanceUntilIdle()
-
-        // Then
+        // When & Then
         viewModel.state.test {
             val state = expectMostRecentItem()
+            advanceUntilIdle()
             assertThat(state.ratedMovies).isNotEmpty()
             assertThat(state.ratedTvShows).isNotEmpty()
             ensureAllEventsConsumed()
