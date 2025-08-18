@@ -6,7 +6,6 @@ import androidx.compose.animation.slideInVertically
 import androidx.compose.animation.slideOutVertically
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.getValue
@@ -19,7 +18,7 @@ import com.london.app.navigation.graph.mainNavGraph
 import com.london.app.navigation.graph.onboardingNavGraph
 import com.london.app.navigation.graph.splashNavGraph
 import com.london.designsystem.component.NavBar
-import com.london.designsystem.theme.NovixTheme
+import com.london.designsystem.component.Scaffold
 import com.london.presentation.navigation.LocalNavController
 import com.london.presentation.navigation.Screen.Account
 import com.london.presentation.navigation.Screen.Categories
@@ -51,7 +50,6 @@ fun NavHostGraph() {
             navBackStackEntry.hasRoute(Account)
 
     Scaffold(
-        backgroundColor = NovixTheme.colors.surface,
         bottomBar = {
             AnimatedVisibility(
                 visible = showBottomNav,
