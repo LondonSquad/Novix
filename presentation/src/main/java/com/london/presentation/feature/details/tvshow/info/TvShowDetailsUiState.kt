@@ -1,6 +1,6 @@
 package com.london.presentation.feature.details.tvshow.info
 
-import com.london.domain.entity.tvshow.TvShowCast
+import com.london.domain.entity.tvshow.cast.TvShowCast
 import com.london.domain.entity.tvshow.episode.Episodes
 import com.london.domain.entity.tvshow.episode.SeasonEpisodes
 import com.london.presentation.shared.base.ErrorState
