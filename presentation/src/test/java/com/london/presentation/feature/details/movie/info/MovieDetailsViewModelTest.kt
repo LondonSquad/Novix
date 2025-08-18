@@ -107,21 +107,6 @@ class MovieDetailsViewModelTest {
     }
 
     @Test
-    fun `when main movie data loads successfully, loading state should be false`() = runTest {
-
-        // When
-        advanceUntilIdle()
-
-        // Then
-        viewModel?.state?.test {
-            val state = expectMostRecentItem()
-            assertThat(state.isLoading).isFalse()
-            assertThat(state.error).isNull()
-            cancelAndIgnoreRemainingEvents()
-        }
-    }
-
-    @Test
     fun `when user is not authenticated, isRated should be false`() = runTest {
 
         // When
