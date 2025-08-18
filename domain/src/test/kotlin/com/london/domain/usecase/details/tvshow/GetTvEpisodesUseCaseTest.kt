@@ -1,8 +1,8 @@
 package com.london.domain.usecase.details.tvshow
 
 import com.google.common.truth.Truth.assertThat
-import com.london.domain.entity.tvshow.TvShowCast
-import com.london.domain.entity.tvshow.TvShowCastMember
+import com.london.domain.entity.tvshow.cast.TvShowCast
+import com.london.domain.entity.tvshow.cast.TvShowCastMember
 import com.london.domain.entity.tvshow.cast.TvShowRole
 import com.london.domain.entity.tvshow.episode.EpisodeDetails
 import com.london.domain.entity.tvshow.episode.SeasonEpisodes
