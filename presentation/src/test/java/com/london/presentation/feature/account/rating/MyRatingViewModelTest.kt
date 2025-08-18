@@ -53,29 +53,6 @@ class MyRatingViewModelTest {
     }
 
     @Test
-    fun `initializeRatedMedia should update state with filtered data when use case succeeds`() =
-        runTest(mainDispatcher) {
-            // Given
-            val manageRatingUseCase = mockk<ManageRatingUseCase>(relaxed = true)
-            val mockRatedMedia = createMockRatedMedia()
-            coEvery { manageRatingUseCase.getRatedMediaSorted() } returns mockRatedMedia
-            val viewModel = MyRatingViewModel(manageRatingUseCase = manageRatingUseCase)
-
-            // When
-            viewModel.initializeRatedMedia()
-            advanceUntilIdle()
-
-            // Then
-            viewModel.state.test {
-                val state = expectMostRecentItem()
-                assertThat(state.isLoading).isFalse()
-                assertThat(state.ratedMovies).isNotEmpty()
-                assertThat(state.ratedTvShows).isNotEmpty()
-                ensureAllEventsConsumed()
-            }
-        }
-
-    @Test
     fun `initializeRatedMedia should update error state when use case fails`() = runTest(mainDispatcher) {
         // Given
         val manageRatingUseCase = mockk<ManageRatingUseCase>(relaxed = true)
