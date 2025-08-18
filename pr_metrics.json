@@ -32748,5 +32748,42 @@
       "deletions": 28,
       "changed_files": 11
     }
+  },
+  {
+    "pr_number": 674,
+    "url": "https://github.com/LondonSquad/Novix/pull/674",
+    "title": "Fix: Correct indentation in mainNavGraph.kt and localize numbers in l…",
+    "opened_at": "2025-08-18T16:35:10Z",
+    "head_ref": "hotfix/issue-ui",
+    "base_ref": "develop",
+    "creator": {
+      "login": "abdelrhman1002",
+      "id": 180463542,
+      "url": "https://github.com/abdelrhman1002"
+    },
+    "assignees": [
+      {
+        "login": "abdelrhman1002",
+        "id": 180463542,
+        "url": "https://github.com/abdelrhman1002"
+      }
+    ],
+    "comments": [],
+    "approvals": [],
+    "required_approvals": 2,
+    "first_approved_at": null,
+    "time_to_first_approval_minutes": null,
+    "required_approvals_met_at": null,
+    "time_to_required_approvals_minutes": null,
+    "closed_at": null,
+    "merged_at": null,
+    "merged_by": null,
+    "week": "2025-W34",
+    "status": "pending",
+    "diff_stats": {
+      "additions": 8,
+      "deletions": 7,
+      "changed_files": 2
+    }
   }
 ]
