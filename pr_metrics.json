@@ -32898,7 +32898,18 @@
         "url": "https://github.com/BassantM"
       }
     ],
-    "comments": [],
+    "comments": [
+      {
+        "author": {
+          "login": "Aseel-AbuKmail",
+          "id": 189210092,
+          "url": "https://github.com/Aseel-AbuKmail"
+        },
+        "first_comment_at": "2025-08-18T19:25:16Z",
+        "last_comment_at": "2025-08-18T19:26:26Z",
+        "count": 4
+      }
+    ],
     "approvals": [
       {
         "reviewer": {
