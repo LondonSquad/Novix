@@ -7,9 +7,10 @@ import androidx.compose.ui.res.stringResource
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.london.presentation.R
-import com.london.presentation.shared.MediaLazyGrid
+import com.london.presentation.shared.DefaultAppTopBar
 import com.london.presentation.shared.base.ErrorState
 import com.london.presentation.shared.buildscreen.BuildScreen
+import com.london.presentation.shared.container.MediaLazyVerticalGrid
 import com.london.presentation.utils.Listen
 
 @Composable
@@ -24,7 +25,9 @@ fun TopTvShowsPicksScreen(
     effect?.Listen { currentEffect ->
         when (currentEffect) {
             is TopTvShowsPicksEffect.BackNavigation -> onNavigateBack()
-            is TopTvShowsPicksEffect.TvShowDetailsNavigation -> onNavigateToTvShowDetails(currentEffect.tvShowId)
+            is TopTvShowsPicksEffect.TvShowDetailsNavigation -> onNavigateToTvShowDetails(
+                currentEffect.tvShowId
+            )
         }
     }
 
@@ -45,13 +48,17 @@ private fun Content(
         isError = state.errorState is ErrorState.NoInternet,
         onRetry = contract::onRetryClick
     ) {
-        MediaLazyGrid(
-            title = stringResource(R.string.top_tv_shows_picks),
+        MediaLazyVerticalGrid(
             items = state.tvShowDetails.mediaItems,
-            onBack = contract::onBackClick,
-            getImageUrl = { it.posterUrl },
+            imageUrl = { it.posterUrl },
             onItemClick = { contract.onTvShowClick(it.id) },
-            onSavedClick = { contract.onSaveTvShowClick(it.id) },
+            onSaveClick = { contract.onSaveTvShowClick(it.id) },
+            topBar = {
+                DefaultAppTopBar(
+                    title = stringResource(R.string.top_tv_shows_picks),
+                    onBackClick = contract::onBackClick,
+                )
+            }
         )
     }
 }

@@ -7,9 +7,10 @@ import androidx.compose.ui.res.stringResource
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.london.presentation.R
-import com.london.presentation.shared.MediaLazyGrid
+import com.london.presentation.shared.DefaultAppTopBar
 import com.london.presentation.shared.base.ErrorState
 import com.london.presentation.shared.buildscreen.BuildScreen
+import com.london.presentation.shared.container.MediaLazyVerticalGrid
 import com.london.presentation.utils.Listen
 
 @Composable
@@ -46,13 +47,17 @@ private fun Content(
         isError = state.errorState is ErrorState.NoInternet,
         onRetry = contract::onRetryClick,
     ) {
-        MediaLazyGrid(
-            title = stringResource(R.string.top_movies_picks),
+        MediaLazyVerticalGrid(
             items = state.movieDetails.mediaItems,
-            onBack = contract::onBackClick,
-            getImageUrl = { it.posterUrl },
+            imageUrl = { it.posterUrl },
             onItemClick = { contract.onMovieClick(it.id) },
-            onSavedClick = { contract.onSaveMovieClick(it.id) },
+            onSaveClick = { contract.onSaveMovieClick(it.id) },
+            topBar = {
+                DefaultAppTopBar(
+                    title = stringResource(R.string.top_movies_picks),
+                    onBackClick = contract::onBackClick
+                )
+            }
         )
     }
 }
