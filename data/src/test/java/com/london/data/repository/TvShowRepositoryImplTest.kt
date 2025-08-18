@@ -1311,7 +1311,7 @@ class TvShowRepositoryImplTest {
         )
 
         val TvShowEpisodesRemoteMock = EpisodeBySeasonResponse(
-            id = "season_id",
+            seasonId = "season_id",
             episodes = listOf(
                 Episode(
                     airDate = "2020-01-01",

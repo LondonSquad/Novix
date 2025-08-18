@@ -14,7 +14,7 @@ import com.london.domain.entity.tvshowdetails.episode.Episodes
 
 fun EpisodeBySeasonResponse.toEpisodesEntity(): EpisodeBySeason =
     EpisodeBySeason(
-        id = id.orEmpty(),
+        id = seasonId.orEmpty(),
         episodes = episodes.orEmpty().map { it.toEpisodeBySeasonEntity() }
     )
 
