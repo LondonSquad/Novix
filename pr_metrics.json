@@ -32457,10 +32457,20 @@
       }
     ],
     "comments": [],
-    "approvals": [],
+    "approvals": [
+      {
+        "reviewer": {
+          "login": "abdelrhman1002",
+          "id": 180463542,
+          "url": "https://github.com/abdelrhman1002"
+        },
+        "submitted_at": "2025-08-18T12:24:53Z",
+        "commit_id": "64ee654baacced45c8419bd3eb3e1f67d7bc4a03"
+      }
+    ],
     "required_approvals": 2,
-    "first_approved_at": null,
-    "time_to_first_approval_minutes": null,
+    "first_approved_at": "2025-08-18T12:24:53Z",
+    "time_to_first_approval_minutes": 527.95,
     "required_approvals_met_at": null,
     "time_to_required_approvals_minutes": null,
     "closed_at": null,
