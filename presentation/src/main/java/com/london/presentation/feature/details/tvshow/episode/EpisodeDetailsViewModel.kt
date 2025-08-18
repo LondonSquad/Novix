@@ -104,7 +104,6 @@ class EpisodeDetailsViewModel @Inject constructor(
         updateState { copy(isLoading = false) }
     }
 
-    // Data class to encapsulate the loaded data
     data class EpisodeDetailsData(
         val episode: EpisodeDetails,
         val images: List<String>,
