@@ -40,7 +40,8 @@ fun TopBar(
     Row(
         modifier = modifier
             .fillMaxWidth()
-            .zIndex(1f),
+            .zIndex(1f)
+            .padding(vertical = 8.dp),
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.SpaceBetween
     ) {
