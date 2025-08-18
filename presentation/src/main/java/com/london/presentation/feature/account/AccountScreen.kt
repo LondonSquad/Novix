@@ -2,7 +2,6 @@ package com.london.presentation.feature.account
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -61,12 +60,10 @@ private fun Content(
     uiState: AccountUiState,
     accountContract: AccountContract,
 ) {
-    Column(
-        modifier = Modifier.statusBarsPadding()
-    ) {
+    Column {
         TopBar(
             title = stringResource(R.string.my_account),
-            modifier = Modifier.padding(horizontal = 16.dp)
+            modifier = Modifier.padding(horizontal = 16.dp, vertical = 12.dp)
         )
 
         if (uiState.isUserLoggedIn) {
