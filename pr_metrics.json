@@ -32408,7 +32408,18 @@
         "url": "https://github.com/abdelrhman1002"
       }
     ],
-    "comments": [],
+    "comments": [
+      {
+        "author": {
+          "login": "abdelrhman1002",
+          "id": 180463542,
+          "url": "https://github.com/abdelrhman1002"
+        },
+        "first_comment_at": "2025-08-18T00:52:16Z",
+        "last_comment_at": "2025-08-18T00:52:16Z",
+        "count": 1
+      }
+    ],
     "approvals": [],
     "required_approvals": 2,
     "first_approved_at": null,
