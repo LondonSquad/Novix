@@ -41,10 +41,10 @@ class MyRatingViewModelTest {
         val viewModel = MyRatingViewModel(manageRatingUseCase = manageRatingUseCase)
 
         // When
-        advanceUntilIdle()
 
         // Then
         viewModel.state.test {
+            advanceUntilIdle()
             val state = expectMostRecentItem()
             assertThat(state.ratedMovies).isNotEmpty()
             assertThat(state.ratedTvShows).isNotEmpty()
