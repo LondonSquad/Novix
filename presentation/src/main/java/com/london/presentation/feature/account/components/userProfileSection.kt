@@ -28,7 +28,7 @@ import androidx.compose.ui.unit.dp
 import com.london.designsystem.component.Icon
 import com.london.designsystem.component.Text
 import com.london.designsystem.theme.NovixTheme
-import com.london.domain.contentrestriction.ContentRestrictionLevel
+import com.london.domain.entity.contentrestriction.ContentRestrictionLevel
 import com.london.presentation.R
 import com.london.presentation.shared.ImageView
 import com.london.designsystem.R as dsR

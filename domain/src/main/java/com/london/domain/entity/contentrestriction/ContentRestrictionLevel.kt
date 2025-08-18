@@ -1,4 +1,4 @@
-package com.london.domain.contentrestriction
+package com.london.domain.entity.contentrestriction
 
 enum class ContentRestrictionLevel {
     STRICT,

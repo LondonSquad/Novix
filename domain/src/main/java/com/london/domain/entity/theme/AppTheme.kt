@@ -1,4 +1,4 @@
-package com.london.domain.theme
+package com.london.domain.entity.theme
 
 enum class AppTheme {
     LIGHT,

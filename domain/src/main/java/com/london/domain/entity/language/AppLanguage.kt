@@ -1,4 +1,4 @@
-package com.london.domain.language
+package com.london.domain.entity.language
 
 enum class AppLanguage(val code: String) {
     ENGLISH("en"),
