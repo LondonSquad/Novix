@@ -32658,7 +32658,18 @@
         "url": "https://github.com/Mostafa-alsaygh"
       }
     ],
-    "comments": [],
+    "comments": [
+      {
+        "author": {
+          "login": "yusufnasserdev",
+          "id": 43588217,
+          "url": "https://github.com/yusufnasserdev"
+        },
+        "first_comment_at": "2025-08-18T14:58:38Z",
+        "last_comment_at": "2025-08-18T14:59:31Z",
+        "count": 2
+      }
+    ],
     "approvals": [],
     "required_approvals": 2,
     "first_approved_at": null,
