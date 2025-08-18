@@ -338,7 +338,7 @@ private fun LazyGridScope.popularSection(
                 pagerState = pagerState,
                 uiMediaList = uiState.popularMediaList,
                 onManageBookmarkClicked = { movieId ->
-                    homeScreenContract.onManageBookmarkClicked(movieId)
+                    homeScreenContract.onManageBookmarkClick(movieId)
                 },
                 onCardClick = { id, mediaType ->
                     when (mediaType) {
@@ -436,7 +436,7 @@ private fun LazyGridScope.upcomingSection(
             movie = movie,
             isLoading = isLoading,
             onMovieClick = { contract.onMovieClick(movie?.id ?: 0) },
-            onManageBookmarkClick = contract::onManageBookmarkClicked
+            onManageBookmarkClick = contract::onManageBookmarkClick
         )
     }
 }

@@ -12,7 +12,7 @@ interface HomeScreenContract {
     fun onTrendingMoviesCardClick()
     fun onTrendingActorsCardClick()
     fun onTrendingTvShowsCardClick()
-    fun onManageBookmarkClicked(movieId: Int)
+    fun onManageBookmarkClick(movieId: Int)
     fun onMovieGenreSelect(genre: MovieGenreUi)
     fun loadUpcomingMoviesClick(genre: MovieGenreUi)
 }
