@@ -5,6 +5,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -38,6 +39,7 @@ fun NotLoggedInContent(
                 painter = if (isDarkMode) R.drawable.user_person_dark.painter
                 else R.drawable.user_person_light.painter,
                 contentDescription = null,
+                Modifier.size(128.dp)
             )
         }
 
@@ -47,7 +49,9 @@ fun NotLoggedInContent(
                 style = NovixTheme.typography.body.small,
                 color = NovixTheme.colors.body,
                 textAlign = TextAlign.Center,
-                modifier = Modifier.padding(horizontal = 48.dp, vertical = 24.dp)
+                modifier = Modifier
+                    .padding(horizontal = 48.dp)
+                    .padding(bottom = 24.dp)
             )
         }
 
