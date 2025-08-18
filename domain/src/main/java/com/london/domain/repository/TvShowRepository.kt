@@ -54,7 +54,7 @@ interface TvShowRepository {
     ): TvShowEpisodeByIdEntity
 
     suspend fun getEpisodeVideos(seriesId: Int, seasonNumber: Int, episodeNumber: Int): List<String>
-    suspend fun getTvSessionVideo(tvShowId: Int, seasonNumber: Int): List<String>
+    suspend fun getTvSeasonTrailer(tvShowId: Int, seasonNumber: Int): List<String>
     suspend fun getTvShowReviews(tvShowId: Int, pageNumber: Int): PagedFetchResponse<ReviewEntity>
     suspend fun getAccountTvShowStateById(
         id: Int,

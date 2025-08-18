@@ -60,8 +60,8 @@ interface TvShowApiService {
     ): Response<VideoResponse>
 
     @GET(ApiConstants.TV_SEASON_VIDEO_PATH)
-    suspend fun getTvSessionVideos(
-        @Path("series_id") tvShowId: Int,
+    suspend fun getTvsSeasonTrailer(
+        @Path("tv_show_id") tvShowId: Int,
         @Path("season_number") seasonNumber: Int,
     ): Response<VideoResponse>
 

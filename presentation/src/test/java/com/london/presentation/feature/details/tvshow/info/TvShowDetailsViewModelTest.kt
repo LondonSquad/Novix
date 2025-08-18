@@ -153,7 +153,7 @@ class TvShowDetailsViewModelTest {
         runTest {
             // Given
             coEvery {
-                getTvShowUseCase.getTvSessionVideo(
+                getTvShowUseCase.getTvSeasonTrailer(
                     TV_SHOW_ID,
                     SEASON_NUMBER
                 )

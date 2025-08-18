@@ -476,7 +476,7 @@ class TvShowRepositoryImplTest {
         val tvShowId = 123
         val seasonNumber = 1
         coEvery {
-            remoteDataSource.getTvSessionVideo(
+            remoteDataSource.getTvSeasonTrailer(
                 tvShowId = tvShowId,
                 seasonNumber = seasonNumber
             )
@@ -485,7 +485,7 @@ class TvShowRepositoryImplTest {
         )
 
         // When
-        val result: List<String> = repository.getTvSessionVideo(tvShowId, seasonNumber)
+        val result: List<String> = repository.getTvSeasonTrailer(tvShowId, seasonNumber)
 
         // Then
         assertThat(result).hasSize(2)
@@ -505,7 +505,7 @@ class TvShowRepositoryImplTest {
         val tvShowId = 999
         val seasonNumber = 1
         coEvery {
-            remoteDataSource.getTvSessionVideo(
+            remoteDataSource.getTvSeasonTrailer(
                 tvShowId,
                 seasonNumber
             )
@@ -514,7 +514,7 @@ class TvShowRepositoryImplTest {
         )
 
         // When
-        val result = repository.getTvSessionVideo(tvShowId, seasonNumber)
+        val result = repository.getTvSeasonTrailer(tvShowId, seasonNumber)
 
         // Then
         assertThat(result).isEmpty()
@@ -526,14 +526,14 @@ class TvShowRepositoryImplTest {
         val tvShowId = 123
         val seasonNumber = 1
         coEvery {
-            remoteDataSource.getTvSessionVideo(tvShowId, seasonNumber)
+            remoteDataSource.getTvSeasonTrailer(tvShowId, seasonNumber)
         } throws NetworkException.ValidationException(
             message = "validation error",
             status = 422
         )
 
         assertThrows<NetworkException.ValidationException> {
-            repository.getTvSessionVideo(tvShowId, seasonNumber)
+            repository.getTvSeasonTrailer(tvShowId, seasonNumber)
         }
     }
 

@@ -233,13 +233,13 @@ class TvShowRemoteDataSourceImpl @Inject constructor(
         mapper = { it }
     )
 
-    override suspend fun getTvSessionVideo(
+    override suspend fun getTvSeasonTrailer(
         tvShowId: Int,
         seasonNumber: Int
     ): Result<VideoResponse> =
         callApiWithRetry(
             apiCall = {
-                tvShowApiService.getTvSessionVideos(
+                tvShowApiService.getTvsSeasonTrailer(
                     tvShowId = tvShowId,
                     seasonNumber = seasonNumber
                 )
