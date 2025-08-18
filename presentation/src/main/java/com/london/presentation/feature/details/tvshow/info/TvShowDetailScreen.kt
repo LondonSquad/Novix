@@ -59,7 +59,7 @@ import com.london.designsystem.component.button.ErrorImage
 import com.london.designsystem.theme.NovixTheme
 import com.london.designsystem.theme.noRippleClickable
 import com.london.domain.entity.recent.MediaType
-import com.london.domain.entity.tvshow.TvShowCastMember
+import com.london.domain.entity.tvshow.cast.TvShowCastMember
 import com.london.domain.entity.tvshow.episode.Episodes
 import com.london.presentation.shared.ActorItem
 import com.london.presentation.shared.ConditionalText
