@@ -92,7 +92,19 @@ class ManageRecentTvShowWatchedUseCaseTest {
         // Then
         assertThat(result).hasSize(2)
     }
-    // endregion
+
+    @Test
+    fun `getMostRecent should return most recent tv show when recentWatchedRepository returns list`() =
+        runTest {
+            // Given
+            coEvery { recentWatchedRepository.getAllRecentWatchedTvShows() } returns flow {
+                emit(tvShowList)
+            }
+            // When
+            val result = manageRecentTvShowWatchedUseCase.getMostRecent().single()
+            // Then
+            assertThat(result).isEqualTo(tvShowList)
+        }
 
     companion object {
         val tvShow = TvShow(
