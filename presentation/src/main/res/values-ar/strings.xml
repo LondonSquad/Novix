@@ -127,7 +127,7 @@
     <string name="user_profile">الملف الشخصي</string>
     <string name="please_login_to_access">يرجى تسجيل الدخول للوصول إلى تفاصيل حسابك والميزات الأخرى!</string>
     <string name="there_is_no_items_for_this_genre">لا يوجد عناصر لهذا النوع!</string>
-    <string name="logout">تسجيل لخروج</string>
+    <string name="logout">تسجيل الخروج</string>
     <string name="are_you_sure_to_continue">هل أنت متأكد أنك تريد المتابعة؟</string>
     <string name="appearance">المظهر</string>
     <string name="dark">مظلم</string>
