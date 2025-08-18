@@ -32473,5 +32473,42 @@
       "deletions": 48,
       "changed_files": 5
     }
+  },
+  {
+    "pr_number": 668,
+    "url": "https://github.com/LondonSquad/Novix/pull/668",
+    "title": "Refactor: Improve logic in `MovieDetailsViewModel` and its tests",
+    "opened_at": "2025-08-18T08:49:38Z",
+    "head_ref": "hotfix/tests",
+    "base_ref": "develop",
+    "creator": {
+      "login": "ahmeddsamii",
+      "id": 154278495,
+      "url": "https://github.com/ahmeddsamii"
+    },
+    "assignees": [
+      {
+        "login": "ahmeddsamii",
+        "id": 154278495,
+        "url": "https://github.com/ahmeddsamii"
+      }
+    ],
+    "comments": [],
+    "approvals": [],
+    "required_approvals": 2,
+    "first_approved_at": null,
+    "time_to_first_approval_minutes": null,
+    "required_approvals_met_at": null,
+    "time_to_required_approvals_minutes": null,
+    "closed_at": null,
+    "merged_at": null,
+    "merged_by": null,
+    "week": "2025-W34",
+    "status": "pending",
+    "diff_stats": {
+      "additions": 275,
+      "deletions": 272,
+      "changed_files": 3
+    }
   }
 ]
