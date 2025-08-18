@@ -32420,10 +32420,20 @@
         "count": 1
       }
     ],
-    "approvals": [],
+    "approvals": [
+      {
+        "reviewer": {
+          "login": "Abdulrahman1890",
+          "id": 76666355,
+          "url": "https://github.com/Abdulrahman1890"
+        },
+        "submitted_at": "2025-08-18T13:09:15Z",
+        "commit_id": "52231008c0149d3fb73a61cd160b4004d2accd1d"
+      }
+    ],
     "required_approvals": 2,
-    "first_approved_at": null,
-    "time_to_first_approval_minutes": null,
+    "first_approved_at": "2025-08-18T13:09:15Z",
+    "time_to_first_approval_minutes": 943.2833333333333,
     "required_approvals_met_at": null,
     "time_to_required_approvals_minutes": null,
     "closed_at": null,
