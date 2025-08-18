@@ -210,12 +210,25 @@ private fun SheetHeader(
     }
 }
 
+private enum class UserListState {
+    Loading,
+    Empty,
+    Content;
+}
+
 @Composable
 private fun UserListsView(
     uiState: BookmarkSheetUiState,
     contract: BookmarkSheetContract,
     isContentReady: Boolean
 ) {
+
+    val userListState = when {
+        !isContentReady || uiState.isLoading -> UserListState.Loading
+        uiState.lists.isEmpty() -> UserListState.Empty
+        else -> UserListState.Content
+    }
+
     Box(
         modifier = Modifier
             .fillMaxWidth()
@@ -224,16 +237,16 @@ private fun UserListsView(
         contentAlignment = if (uiState.isLoading || uiState.lists.isEmpty()) Alignment.Center
         else Alignment.TopCenter
     ) {
-        when {
-            !isContentReady || uiState.isLoading -> {
+        when (userListState) {
+            UserListState.Loading -> {
                 CircularLoading()
             }
 
-            uiState.lists.isEmpty() -> {
+            UserListState.Empty -> {
                 NoListsMessage()
             }
 
-            else -> {
+            UserListState.Content -> {
                 LazyColumn(
                     modifier = Modifier
                         .fillMaxWidth(),
