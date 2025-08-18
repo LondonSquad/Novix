@@ -135,11 +135,11 @@ class ReviewsViewModelTest {
             getTvShowUseCase = getTvShowUseCase,
             savedStateHandle = savedStateHandle
         )
-        advanceUntilIdle()
 
         // Then
         viewModel.state.test {
             val state = expectMostRecentItem()
+            advanceUntilIdle()
             assertThat(state.isLoading).isFalse()
             cancelAndIgnoreRemainingEvents()
         }
