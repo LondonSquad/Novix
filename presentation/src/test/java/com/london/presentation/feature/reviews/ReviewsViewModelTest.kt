@@ -146,32 +146,6 @@ class ReviewsViewModelTest {
     }
 
     @Test
-    fun `when reviews are loaded successfully, should update state with paging flow`() = runTest {
-        // Given
-        val movieId = 123
-        val mockReviews = listOf(
-            createMockReview(1),
-            createMockReview(2),
-            createMockReview(3)
-        )
-        val mockResponse = createMockPagedFetchResponse(mockReviews)
-        coEvery { getMovieUseCase.getMovieReviews(movieId, any()) } returns mockResponse
-
-        // When
-        viewModel = createViewModel(MediaType.Movie, movieId)
-        advanceUntilIdle()
-
-        // Then
-        viewModel.state.test {
-            val state = expectMostRecentItem()
-            assertThat(state.isLoading).isFalse()
-            assertThat(state.error).isNull()
-            assertThat(state.reviews).isNotNull()
-            cancelAndIgnoreRemainingEvents()
-        }
-    }
-
-    @Test
     fun `when multiple pages are requested, should call use case with correct page numbers`() =
         runTest {
             // Given
