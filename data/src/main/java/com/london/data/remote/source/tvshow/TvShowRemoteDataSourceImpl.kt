@@ -46,7 +46,7 @@ class TvShowRemoteDataSourceImpl @Inject constructor(
     override suspend fun deleteTvShowRating(
         tvShowId: Int,
         sessionId: String?
-    ): Result<RatingRemoteResponse> =callApiWithRetry(
+    ): Result<RatingRemoteResponse> = callApiWithRetry(
         apiCall = {
             tvShowApiService.deleteTvShowRating(
                 tvShowId = tvShowId,
@@ -233,10 +233,17 @@ class TvShowRemoteDataSourceImpl @Inject constructor(
         mapper = { it }
     )
 
-    override suspend fun getTvShowVideos(tvShowId: Int): Result<VideoResponse> =
+    override suspend fun getTvSeasonTrailer(
+        tvShowId: Int,
+        seasonNumber: Int
+    ): Result<VideoResponse> =
         callApiWithRetry(
-            apiCall = { tvShowApiService.getTvShowVideos(tvShowId = tvShowId) },
+            apiCall = {
+                tvShowApiService.getTvSeasonTrailer(
+                    tvShowId = tvShowId,
+                    seasonNumber = seasonNumber
+                )
+            },
             mapper = { it }
         )
-
 }
