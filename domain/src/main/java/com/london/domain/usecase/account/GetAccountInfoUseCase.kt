@@ -4,8 +4,8 @@ import com.london.domain.entity.account.AccountInfo
 import com.london.domain.repository.AccountRepository
 import javax.inject.Inject
 
-class GetAccountDetailsUseCase @Inject constructor(
+class GetAccountInfoUseCase @Inject constructor(
     private val accountRepository: AccountRepository
 ) {
-    suspend fun invoke(): AccountInfo = accountRepository.getAccountDetails()
+    suspend fun invoke(): AccountInfo = accountRepository.getAccountInfo()
 }

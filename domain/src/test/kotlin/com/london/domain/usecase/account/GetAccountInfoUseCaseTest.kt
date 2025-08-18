@@ -10,14 +10,14 @@ import org.junit.Assert
 import org.junit.Before
 import org.junit.Test
 
-class GetAccountDetailsUseCaseTest {
+class GetAccountInfoUseCaseTest {
     private lateinit var accountRepository: AccountRepository
-    private lateinit var getAccountDetailsUseCase: GetAccountDetailsUseCase
+    private lateinit var getAccountInfoUseCase: GetAccountInfoUseCase
 
     @Before
     fun setUp() {
         accountRepository = mockk()
-        getAccountDetailsUseCase = GetAccountDetailsUseCase(
+        getAccountInfoUseCase = GetAccountInfoUseCase(
             accountRepository
         )
     }
@@ -27,14 +27,14 @@ class GetAccountDetailsUseCaseTest {
         // Given
         val expectedAccountInfo =
             AccountInfo(id = 1, userName = "Mohamed", avatarPath = "/avatar.jpg")
-        coEvery { accountRepository.getAccountDetails() } returns expectedAccountInfo
+        coEvery { accountRepository.getAccountInfo() } returns expectedAccountInfo
 
         // When
-        val result = getAccountDetailsUseCase.invoke()
+        val result = getAccountInfoUseCase.invoke()
 
         // Then
         Assert.assertEquals(expectedAccountInfo, result)
-        coVerify { accountRepository.getAccountDetails() }
+        coVerify { accountRepository.getAccountInfo() }
     }
 
     @Test
@@ -42,13 +42,13 @@ class GetAccountDetailsUseCaseTest {
         runTest {
             // Given
             val expectedAccountInfo = AccountInfo(id = 1, userName = "", avatarPath = "")
-            coEvery { accountRepository.getAccountDetails() } returns expectedAccountInfo
+            coEvery { accountRepository.getAccountInfo() } returns expectedAccountInfo
 
             // When
-            val result = getAccountDetailsUseCase.invoke()
+            val result = getAccountInfoUseCase.invoke()
 
             // Then
             Assert.assertEquals(expectedAccountInfo, result)
-            coVerify { accountRepository.getAccountDetails() }
+            coVerify { accountRepository.getAccountInfo() }
         }
 }

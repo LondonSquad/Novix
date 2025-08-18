@@ -6,7 +6,7 @@ import com.london.domain.entity.account.AccountInfo
 import com.london.domain.entity.contentrestriction.ContentRestrictionLevel
 import com.london.domain.entity.language.AppLanguage
 import com.london.domain.entity.theme.AppTheme
-import com.london.domain.usecase.account.GetAccountDetailsUseCase
+import com.london.domain.usecase.account.GetAccountInfoUseCase
 import com.london.domain.usecase.authentication.AuthenticationUseCase
 import com.london.presentation.feature.account.AccountViewModel
 import com.london.presentation.feature.account.ActiveBottomSheet
@@ -31,7 +31,7 @@ class   AccountViewModelTest {
 
     private lateinit var appPreferencesService: AppPreferencesService
     private lateinit var authenticationUseCase: AuthenticationUseCase
-    private lateinit var accountDetailsUseCase: GetAccountDetailsUseCase
+    private lateinit var accountDetailsUseCase: GetAccountInfoUseCase
     private lateinit var viewModel: AccountViewModel
     private val testDispatcher = StandardTestDispatcher()
 
