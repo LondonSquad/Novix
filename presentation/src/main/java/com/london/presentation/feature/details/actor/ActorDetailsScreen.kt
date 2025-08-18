@@ -175,7 +175,7 @@ private fun Content(
             modifier = Modifier
                 .fillMaxWidth()
                 .background(NovixTheme.colors.surface.copy(alpha = backgroundAlpha))
-                .padding(start = 16.dp, top = 12.dp)
+                .padding(horizontal = 16.dp, vertical = 8.dp)
                 .zIndex(1f)
         )
     }

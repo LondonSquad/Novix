@@ -30,7 +30,7 @@ object ApiConstants {
     const val TV_SHOW_EPISODE_BY_SEASON_PATH = "3/tv/{tv_id}/season/{season_number}"
     const val TV_SHOW_IMAGE = "3/tv/{tv_id}/images"
     const val EPISODE_DETAILS_PATH = "3/tv/{tv_id}/season/{season_number}/episode/{episode_number}"
-    const val TV_SHOW_VIDEO_PATH = "3/tv/{tv_id}/videos"
+    const val TV_SEASON_VIDEO_PATH = "3/tv/{tv_show_id}/season/{season_number}/videos"
     const val ACCOUNT_TV_SHOW_STATES = "3/tv/{series_id}/account_states"
     const val ACTOR_TV_SHOWS = "3/person/{person_id}/tv_credits"
     const val RATED_TV_SHOWS_PATH = "3/account/{account_id}/rated/tv"

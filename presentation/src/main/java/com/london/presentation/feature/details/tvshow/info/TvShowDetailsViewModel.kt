@@ -2,7 +2,6 @@ package com.london.presentation.feature.details.tvshow.info
 
 import androidx.lifecycle.SavedStateHandle
 import com.london.domain.entity.TvShow
-import com.london.domain.entity.genre.TvShowGenre
 import com.london.domain.entity.recent.MediaType
 import com.london.domain.entity.recent.RecentViewed
 import com.london.domain.usecase.authentication.AuthenticationUseCase
@@ -46,7 +45,7 @@ class TvShowDetailsViewModel @Inject constructor(
             block = {
                 val episodesBySeason =
                     getTvEpisodesUseCase.getTvShowEpisodesBySeason(tvShowId, seasonNumber)
-                val videoProvider = getTvShowUseCase.getTvShowVideo(tvShowId)
+                val videoProvider = getTvShowUseCase.getTvSeasonTrailer(tvShowId, seasonNumber)
                 Triple(episodesBySeason.episodes, episodesBySeason, videoProvider)
             },
             onSuccess = { (episodes, episodeCount, videoProviders) ->
