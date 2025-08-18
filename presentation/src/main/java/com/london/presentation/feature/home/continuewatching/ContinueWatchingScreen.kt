@@ -91,7 +91,6 @@ private fun Content(
                 onNavigateToTvShow = contract::onNavigateToTvShowClick,
                 onSaveClick = { /* TODO: Implement save functionality */ },
                 isItemSaved = { false },
-                rate = null
             ),
             topBar = {
                 DefaultAppTopBar(
