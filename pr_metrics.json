@@ -32628,5 +32628,42 @@
       "deletions": 185,
       "changed_files": 32
     }
+  },
+  {
+    "pr_number": 670,
+    "url": "https://github.com/LondonSquad/Novix/pull/670",
+    "title": "feat(onboarding): Add OnboardingViewModel tests and improve effect handling",
+    "opened_at": "2025-08-18T14:16:59Z",
+    "head_ref": "add/onboarding-viewmodel-testing",
+    "base_ref": "develop",
+    "creator": {
+      "login": "Mostafa-alsaygh",
+      "id": 106277855,
+      "url": "https://github.com/Mostafa-alsaygh"
+    },
+    "assignees": [
+      {
+        "login": "Mostafa-alsaygh",
+        "id": 106277855,
+        "url": "https://github.com/Mostafa-alsaygh"
+      }
+    ],
+    "comments": [],
+    "approvals": [],
+    "required_approvals": 2,
+    "first_approved_at": null,
+    "time_to_first_approval_minutes": null,
+    "required_approvals_met_at": null,
+    "time_to_required_approvals_minutes": null,
+    "closed_at": null,
+    "merged_at": null,
+    "merged_by": null,
+    "week": "2025-W34",
+    "status": "pending",
+    "diff_stats": {
+      "additions": 360,
+      "deletions": 34,
+      "changed_files": 6
+    }
   }
 ]
