@@ -212,10 +212,12 @@ class MovieDetailsViewModel @Inject constructor(
     }
 
     override fun onMovieClick(movieId: Int) {
+        clearRatedState()
         emitEffect(MovieDetailsEffect.MovieNavigation(movieId))
     }
 
     override fun onActorClick(actorId: Int) {
+        clearRatedState()
         emitEffect(MovieDetailsEffect.ActorNavigation(actorId))
     }
 
@@ -224,10 +226,12 @@ class MovieDetailsViewModel @Inject constructor(
     }
 
     override fun onReviewsClick(movieId: Int, mediaType: MediaType) {
+        clearRatedState()
         emitEffect(MovieDetailsEffect.ReviewsNavigation(movieId, mediaType))
     }
 
     override fun onGenreClick(genre: MovieGenreUi) {
+        clearRatedState()
         emitEffect(MovieDetailsEffect.GenreNavigation(genre))
     }
 
@@ -243,4 +247,6 @@ class MovieDetailsViewModel @Inject constructor(
     override fun onSelectRatingClick(rating: Int) {
         submitMovieRating(rating)
     }
+
+    private fun clearRatedState() = updateState { copy(isSuccessfullyRated = null) }
 }

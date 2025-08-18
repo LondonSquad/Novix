@@ -104,11 +104,10 @@ class EpisodeDetailsViewModel @Inject constructor(
         updateState { copy(isLoading = false) }
     }
 
-    // Data class to encapsulate the loaded data
     data class EpisodeDetailsData(
-    val episode: EpisodeDetails,
-    val images: List<String>,
-    val genres: List<String>
+        val episode: EpisodeDetails,
+        val images: List<String>,
+        val genres: List<String>
     )
 
     private fun loadVideoProvider() {
@@ -132,6 +131,7 @@ class EpisodeDetailsViewModel @Inject constructor(
     }
 
     private suspend fun episodeRating(rating: Int) {
+        updateState { copy(isRateBottomSheetVisible = false, isSuccessfullyRated = null) }
         ratingUseCase.addTvEpisodeRatingById(
             id = tvShowId,
             rating = rating,

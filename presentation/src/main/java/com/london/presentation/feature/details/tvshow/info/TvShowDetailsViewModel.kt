@@ -72,6 +72,7 @@ class TvShowDetailsViewModel @Inject constructor(
     }
 
     override fun onEpisodeClicked(tvShowId: Int, episodeNumber: Int, seasonNumber: Int) {
+        clearRatedState()
         emitEffect(
             TvShowDetailsEffect.OnNavigateToEpisodeDetails(
                 tvShowId = tvShowId,
@@ -82,14 +83,17 @@ class TvShowDetailsViewModel @Inject constructor(
     }
 
     override fun onReviewsClicked(tvShowId: Int, mediaType: MediaType) {
+        clearRatedState()
         emitEffect(TvShowDetailsEffect.NavigateToReviews(tvShowId, mediaType))
     }
 
     override fun onCastClicked(tvShowId: Int) {
+        clearRatedState()
         emitEffect(TvShowDetailsEffect.NavigateToCast(tvShowId))
     }
 
     override fun onGenreClicked(genre: TvShowGenreUi) {
+        clearRatedState()
         emitEffect(TvShowDetailsEffect.NavigateToTvShowsByCategoryId(genre))
     }
 
@@ -258,4 +262,6 @@ class TvShowDetailsViewModel @Inject constructor(
 
     private suspend fun addMovieToRecentViewed(tvShow: RecentViewed) =
         manageRecentViewedUseCase.addToRecentViewed(tvShow)
+
+    private fun clearRatedState() = updateState { copy(isSuccessfullyRated = null) }
 }
