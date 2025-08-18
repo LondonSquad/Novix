@@ -49,7 +49,7 @@ import com.london.designsystem.R as dsR
 fun LoginScreen(
     onNavigateBack: () -> Unit,
     onNavigateToHome: () -> Unit,
-    onNavigateToWebViewRegistration: () -> Unit,
+    onNavigateToRegister: () -> Unit,
     viewModel: LoginViewModel = hiltViewModel()
 ) {
     val uiState by viewModel.state.collectAsStateWithLifecycle()
@@ -58,11 +58,11 @@ fun LoginScreen(
 
     effect?.Listen { currentEffect ->
         when (currentEffect) {
-            is LoginEffect.NavigateToHome -> onNavigateToHome()
-            is LoginEffect.NavigateToCreateAccount -> uriHandler.openUri(currentEffect.url)
+            is LoginEffect.HomeNavigation -> onNavigateToHome()
+            is LoginEffect.CreateAccountNavigation -> uriHandler.openUri(currentEffect.url)
             is LoginEffect.NavigateToForgotPassword -> uriHandler.openUri(currentEffect.url)
-            is LoginEffect.NavigateBack -> onNavigateBack()
-            is LoginEffect.NavigateToRegistration -> onNavigateToWebViewRegistration()
+            is LoginEffect.BackNavigation -> onNavigateBack()
+            is LoginEffect.RegistrationNavigation -> onNavigateToRegister()
         }
     }
 

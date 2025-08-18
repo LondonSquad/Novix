@@ -47,7 +47,7 @@ class AccountViewModel @Inject constructor(
                 }
             },
             onCompleted = {
-                emitEffect(AccountEffect.NavigateLogout)
+                emitEffect(AccountEffect.LoginNavigation)
             }
         )
     }
@@ -61,11 +61,11 @@ class AccountViewModel @Inject constructor(
         }
 
     override fun onWatchingHistoryClick() =
-        emitEffect(AccountEffect.NavigateToWatchingHistory)
+        emitEffect(AccountEffect.WatchingHistoryNavigation)
 
 
     override fun onMyRatingClick() =
-        emitEffect(AccountEffect.NavigateToMyRating)
+        emitEffect(AccountEffect.MyRatingNavigation)
 
 
     override fun onContentRestrictionClick() =
@@ -83,7 +83,7 @@ class AccountViewModel @Inject constructor(
     }
 
     override fun onChangePasswordClick() =
-        emitEffect(AccountEffect.NavigateToChangePassword(FORGOT_PASSWORD_URL))
+        emitEffect(AccountEffect.ChangePasswordNavigation())
 
     override fun onAppearanceClick() =
         updateState {
@@ -147,7 +147,7 @@ class AccountViewModel @Inject constructor(
         }
 
     override fun onLoginClick() =
-        emitEffect(AccountEffect.NavigateLogout)
+        emitEffect(AccountEffect.LoginNavigation)
 
     private fun initializeAppTheme() {
         val isAppDarkMode = appPreferencesService.isAppDarkMode.value
@@ -200,9 +200,5 @@ class AccountViewModel @Inject constructor(
                 }
             }
         )
-    }
-
-    companion object {
-        private const val FORGOT_PASSWORD_URL = "https://www.themoviedb.org/reset-password"
     }
 }

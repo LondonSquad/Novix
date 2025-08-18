@@ -26,11 +26,10 @@ import com.london.presentation.shared.GenresSection
 import com.london.presentation.shared.MediaLazyPagingGrid
 import com.london.presentation.shared.buildscreen.BuildScreen
 import com.london.presentation.utils.Listen
-import com.london.presentation.utils.isLoading
 
 @Composable
 fun TrendingTvShowsScreen(
-    onNavigateTvShow: (Int) -> Unit,
+    onNavigateToTvShowDetailsClick: (Int) -> Unit,
     onNavigateBack: () -> Unit,
     viewModel: TrendingTvShowsViewModel = hiltViewModel()
 ) {
@@ -39,21 +38,20 @@ fun TrendingTvShowsScreen(
 
     effect?.Listen { currentEffect ->
         when (currentEffect) {
-            is TrendingTvShowsEffect.NavigateToTvShow -> onNavigateTvShow(currentEffect.tvShowId)
-            is TrendingTvShowsEffect.NavigateBack -> onNavigateBack()
+            is TrendingTvShowsEffect.TvShowDetailsNavigation -> onNavigateToTvShowDetailsClick(
+                currentEffect.tvShowId
+            )
+
+            is TrendingTvShowsEffect.BackNavigation -> onNavigateBack()
         }
     }
 
-    val tvShowsLazyItems = state.tvShowsFlow.collectAsLazyPagingItems()
-
     BuildScreen(
-        isLoading = tvShowsLazyItems.isLoading(),
-        isError = tvShowsLazyItems.loadState.refresh is LoadState.Error,
-        onBack = viewModel::onBack,
-        onRetry = viewModel::onRetry,
+        isLoading = state.isLoading,
+        isError = state.tvShowsFlow.collectAsLazyPagingItems().loadState.refresh is LoadState.Error,
+        onBack = viewModel::onBackClick,
         emptyLayoutMessage = R.string.no_trending_shows_in_genre,
         emptyLayoutImage = R.drawable.img_no_result,
-        pagingFlow = tvShowsLazyItems
     ) {
         Content(
             state = state,
@@ -65,8 +63,8 @@ fun TrendingTvShowsScreen(
 
 @Composable
 private fun Content(
-    state: TrendingTvShowsUiState = TrendingTvShowsUiState(),
-    contract: TrendingTvShowsContract = defaultTrendingTvShowsContract(),
+    state: TrendingTvShowsUiState,
+    contract: TrendingTvShowsContract,
 ) {
     val screenWidth = with(LocalDensity.current) { LocalConfiguration.current.screenWidthDp.dp }
     val tvShowsLazyItems = state.tvShowsFlow.collectAsLazyPagingItems()
@@ -82,13 +80,13 @@ private fun Content(
                 .fillMaxWidth()
                 .padding(horizontal = 16.dp, vertical = 12.dp),
             title = stringResource(R.string.trending_tv_shows),
-            onBackClick = contract::onBack
+            onBackClick = contract::onBackClick
         )
         GenresSection(
             genres = state.tvShowsGenres,
             selectedGenre = state.selectedGenre,
             screenWidth = screenWidth,
-            onGenreClick = contract::onGenreSelected,
+            onGenreClick = contract::onGenreClick,
             modifier = Modifier.padding(bottom = 12.dp),
             getGenreName = { stringResource(it.stringResId) }
         )
@@ -110,5 +108,8 @@ private fun Content(
 @Preview
 @Composable
 private fun Preview() = NovixTheme {
-    Content()
+    Content(
+        state = TrendingTvShowsUiState(),
+        contract = defaultTrendingTvShowsContract()
+    )
 }

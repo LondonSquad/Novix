@@ -205,7 +205,7 @@ class HomeViewModelTest {
         viewModel.effect.test {
             viewModel.onMovieClick(movieId)
             val effect = awaitItem()
-            assertThat(effect).isInstanceOf(HomeScreenEffect.NavigationMovieDetails::class.java)
+            assertThat(effect).isInstanceOf(HomeScreenEffect.MovieDetailsNavigation::class.java)
         }
     }
 
@@ -218,7 +218,7 @@ class HomeViewModelTest {
         viewModel.effect.test {
             viewModel.onTvShowClick(tvShowId)
             val effect = awaitItem()
-            assertThat(effect).isInstanceOf(HomeScreenEffect.NavigationTvShowDetails::class.java)
+            assertThat(effect).isInstanceOf(HomeScreenEffect.TvShowDetailsNavigation::class.java)
         }
     }
 
@@ -229,7 +229,7 @@ class HomeViewModelTest {
         viewModel.effect.test {
             viewModel.onTopRatedClick()
             val effect = awaitItem()
-            assertThat(effect).isInstanceOf(HomeScreenEffect.NavigationTopRated::class.java)
+            assertThat(effect).isInstanceOf(HomeScreenEffect.TopRatedNavigation::class.java)
         }
     }
 
@@ -240,7 +240,7 @@ class HomeViewModelTest {
         viewModel.effect.test {
             viewModel.onContinueWatchingClick()
             val effect = awaitItem()
-            assertThat(effect).isInstanceOf(HomeScreenEffect.NavigationContinueWatching::class.java)
+            assertThat(effect).isInstanceOf(HomeScreenEffect.ContinueWatchingNavigation::class.java)
         }
     }
 
@@ -251,7 +251,7 @@ class HomeViewModelTest {
         viewModel.effect.test {
             viewModel.onTrendingMoviesCardClick()
             val effect = awaitItem()
-            assertThat(effect).isInstanceOf(HomeScreenEffect.NavigationTrendingMovie::class.java)
+            assertThat(effect).isInstanceOf(HomeScreenEffect.TrendingMovieNavigation::class.java)
         }
     }
 
@@ -262,7 +262,7 @@ class HomeViewModelTest {
         viewModel.effect.test {
             viewModel.onTrendingTvShowsCardClick()
             val effect = awaitItem()
-            assertThat(effect).isInstanceOf(HomeScreenEffect.NavigationTrendingTvShows::class.java)
+            assertThat(effect).isInstanceOf(HomeScreenEffect.TrendingTvShowsNavigation::class.java)
         }
     }
 
@@ -273,7 +273,7 @@ class HomeViewModelTest {
         viewModel.effect.test {
             viewModel.onTrendingActorsCardClick()
             val effect = awaitItem()
-            assertThat(effect).isInstanceOf(HomeScreenEffect.NavigationTrendingActor::class.java)
+            assertThat(effect).isInstanceOf(HomeScreenEffect.TrendingActorNavigation::class.java)
         }
     }
 
@@ -310,9 +310,7 @@ class HomeViewModelTest {
         every { this@mockk.id } returns id
         every { name } returns "Top Rated $id"
         every { posterUrl } returns "/poster$id.jpg"
-        every { voteAverage } returns 9.0
-        every { releaseDate } returns "2023-01-01"
-        every { genres } returns listOf(MovieGenre.ACTION, MovieGenre.ACTION)
+        every { genres } returns listOf(MovieGenre.ACTION)
         every { this@mockk.mediaType } returns mediaType
     }
 

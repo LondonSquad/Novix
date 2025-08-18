@@ -67,8 +67,8 @@ import com.london.designsystem.R as Res
 fun EpisodeDetailsScreen(
     viewModel: EpisodeDetailsViewModel = hiltViewModel(),
     onNavigateBack: () -> Unit,
-    onNavigateToCast: (Int) -> Unit,
-    onNavigateLogin: () -> Unit
+    onNaviagteToActorDetalis: (Int) -> Unit,
+    onNavigateToLogin: () -> Unit
 ) {
     val uiState by viewModel.state.collectAsStateWithLifecycle()
     val effect by viewModel.effect.collectAsState(null)
@@ -76,8 +76,8 @@ fun EpisodeDetailsScreen(
     effect?.Listen { currentEffect ->
         when (currentEffect) {
             EpisodeDetailsEffect.NavigationBack -> onNavigateBack()
-            is EpisodeDetailsEffect.NavigateToCast -> onNavigateToCast(currentEffect.episodeId)
-            is EpisodeDetailsEffect.OnLoginNavigation -> onNavigateLogin()
+            is EpisodeDetailsEffect.NavigateToCast -> onNaviagteToActorDetalis(currentEffect.episodeId)
+            is EpisodeDetailsEffect.OnLoginNavigation -> onNavigateToLogin()
         }
     }
 
@@ -90,7 +90,7 @@ fun EpisodeDetailsScreen(
         Content(
             uiState = uiState,
             episodeDetailsContract = viewModel,
-            onNavigateToCast = onNavigateToCast
+            onNavigateToCast = onNaviagteToActorDetalis
         )
     }
 }

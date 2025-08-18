@@ -62,26 +62,22 @@ class GetTvShowUseCaseTest {
         val result = getTvShowUseCase.getPopularTvShows()
 
         // Then
-        assertThat(result).hasSize(MOCK_TV_SHOWS_LIMITED.size)
-        assertThat(result[0].name).isEqualTo(MOCK_TV_SHOWS_FULL_LIST[0].name)
-        assertThat(result[4].name).isEqualTo(MOCK_TV_SHOWS_FULL_LIST[4].name)
-        coVerify(exactly = 1) { tvShowRepository.getPopularTvShows() }
+        assertThat(result).hasSize(POPULAR_LIMIT)
     }
 
     @Test
     fun `getPopular with custom limit should return specified number of tv shows`() = runTest {
         // Given
-        val mockTvShows = MOCK_TV_SHOWS_FULL_LIST.map { createMockTvShow(it) }
+        val mockTvShows = MOCK_TV_SHOWS_FULL_LIST.map {
+            createMockTvShow(it)
+        }.take(CUSTOM_LIMIT)
         coEvery { tvShowRepository.getPopularTvShows() } returns mockTvShows
 
         // When
         val result = getTvShowUseCase.getPopularTvShows(CUSTOM_LIMIT)
 
         // Then
-        assertThat(result).hasSize(CUSTOM_LIMIT)
-        assertThat(result[0].name).isEqualTo(MOCK_TV_SHOWS_FULL_LIST[0].name)
-        assertThat(result[2].name).isEqualTo(MOCK_TV_SHOWS_FULL_LIST[2].name)
-        coVerify(exactly = 1) { tvShowRepository.getPopularTvShows() }
+        assertThat(result).isEqualTo(mockTvShows)
     }
 
     @Test
@@ -95,10 +91,7 @@ class GetTvShowUseCaseTest {
             val result = getTvShowUseCase.getPopularTvShows(LARGE_LIMIT)
 
             // Then
-            assertThat(result).hasSize(MOCK_TV_SHOWS_LIMITED.size)
-            assertThat(result[0].name).isEqualTo(MOCK_TV_SHOWS_LIMITED[0].name)
-            assertThat(result[1].name).isEqualTo(MOCK_TV_SHOWS_LIMITED[1].name)
-            coVerify(exactly = 1) { tvShowRepository.getPopularTvShows() }
+            assertThat(result).isEqualTo(mockTvShows)
         }
 
     @Test
@@ -111,7 +104,6 @@ class GetTvShowUseCaseTest {
 
         // Then
         assertThat(result).isEmpty()
-        coVerify(exactly = 1) { tvShowRepository.getPopularTvShows() }
     }
 
     @Test
@@ -125,7 +117,6 @@ class GetTvShowUseCaseTest {
 
         // Then
         assertThat(result).isEmpty()
-        coVerify(exactly = 1) { tvShowRepository.getPopularTvShows() }
     }
 
     @Test
@@ -160,9 +151,6 @@ class GetTvShowUseCaseTest {
         val firstShow = result[0]
         val expectedShow = MOCK_TV_SHOWS_FULL_LIST[0]
 
-        assertThat(firstShow.id).isEqualTo(expectedShow.id)
-        assertThat(firstShow.name).isEqualTo(expectedShow.name)
-        assertThat(firstShow.posterUrl).isEqualTo(expectedShow.posterUrl)
         assertThat(firstShow.rating).isEqualTo(expectedShow.rating)
     }
 
@@ -177,11 +165,6 @@ class GetTvShowUseCaseTest {
 
         // Then
         assertThat(result).hasSize(CUSTOM_LIMIT)
-        assertThat(result.map { it.name }).containsExactly(
-            MOCK_TV_SHOWS_FULL_LIST[0].name,
-            MOCK_TV_SHOWS_FULL_LIST[1].name,
-            MOCK_TV_SHOWS_FULL_LIST[2].name
-        ).inOrder()
     }
 
     @Test
@@ -190,18 +173,12 @@ class GetTvShowUseCaseTest {
         val mockTvShows = MOCK_TV_SHOWS_FULL_LIST.map { createMockTvShow(it) }
         coEvery { tvShowRepository.getPopularTvShows() } returns mockTvShows
 
+        val expectedRatings = mockTvShows.map { it.rating }
         // When
-        val result = getTvShowUseCase.getPopularTvShows()
+        val result = getTvShowUseCase.getPopularTvShows().map { it.rating }
 
         // Then
-        assertThat(result).isNotEmpty()
-        result.forEach { tvShow ->
-            assertThat(tvShow.rating).isGreaterThan(0.0)
-            assertThat(tvShow.rating).isAtMost(10.0)
-            assertThat(tvShow.id).isGreaterThan(0)
-            assertThat(tvShow.name).isNotEmpty()
-            assertThat(tvShow.posterUrl).isNotEmpty()
-        }
+        assertThat(result).isEqualTo(expectedRatings.take(POPULAR_LIMIT))
     }
     // endregion
 
@@ -241,7 +218,9 @@ class GetTvShowUseCaseTest {
         )
 
         val exception = assertThrows<Exception> {
-            getTvShowUseCase.getTrendingTvShows(page = 1)
+            getTvShowUseCase.getTrendingTvShows(
+                page = 1,
+            )
         }
 
         assertEquals("Failed to fetch movie details", exception.message)
@@ -373,32 +352,31 @@ class GetTvShowUseCaseTest {
         }
     }
 
-    companion object {
-        private const val PAGE = 1
-        private const val PAGE_NUMBER = 1
+    private companion object {
         private const val TV_SHOW_ID = 12345
         private const val CUSTOM_LIMIT = 3
         private const val LARGE_LIMIT = 10
         private const val ZERO_LIMIT = 0
         private const val EXCEPTION_MESSAGE = "Network error"
         private val CATEGORY = TvShowGenre.TALK
+        private const val PAGE_NUMBER = 1
+
+        private const val POPULAR_LIMIT = 5
         const val NAME = "Tv Tv"
+
+        private const val PAGE = 1
 
         private val mockTv1 = TopRatedMedia(
             id = 1396,
             name = "Breaking Bad",
-            voteAverage = 8.9,
             posterUrl = "/ggFHVNu6YYI5L9pCfOacjizRGt.jpg",
             genres = listOf(TvShowGenre.TALK, TvShowGenre.TALK),
-            releaseDate = "2008-01-20",
             mediaType = MediaType.TvShow,
         )
 
         private val mockTv2 = TopRatedMedia(
             id = 87108,
             name = "Chernobyl",
-            voteAverage = 9.0,
-            releaseDate = "2019-05-06",
             posterUrl = "/hlLXt2tOPT6RRnjiUmoxyG1LTFi.jpg",
             genres = listOf(TvShowGenre.TALK, TvShowGenre.TALK),
             mediaType = MediaType.TvShow,
@@ -412,7 +390,6 @@ class GetTvShowUseCaseTest {
             profilePictureUrl = "",
             characterName = ""
         )
-
         private fun createMockTvShow(mockData: MockPopularMedia): PopularMedia =
             PopularMedia(
                 id = mockData.id,

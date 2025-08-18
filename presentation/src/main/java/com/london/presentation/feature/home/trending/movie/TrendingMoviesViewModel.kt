@@ -1,12 +1,17 @@
 package com.london.presentation.feature.home.trending.movie
 
-import com.london.domain.entity.genre.MovieGenre
+import androidx.lifecycle.viewModelScope
+import androidx.paging.PagingData
+import androidx.paging.cachedIn
+import com.london.domain.entity.Trending
 import com.london.domain.usecase.details.movie.GetMovieUseCase
 import com.london.presentation.shared.base.BaseViewModel
+import com.london.presentation.shared.base.ErrorState
 import com.london.presentation.shared.base.createPagingSourceFlow
 import com.london.presentation.shared.genre.MovieGenreUi
-import com.london.presentation.shared.genre.toUi
+import com.london.presentation.shared.genre.toDomain
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.flowOf
 import javax.inject.Inject
 
 @HiltViewModel
@@ -16,54 +21,53 @@ class TrendingMoviesViewModel @Inject constructor(
     TrendingMoviesContract {
 
     init {
-        initializeMovies()
+        getTrendingMovies()
     }
 
-    override fun onGenreSelected(genre: MovieGenreUi) {
+    override fun onGenreClick(genre: MovieGenreUi) {
         if (genre == state.value.selectedGenre) return
         updateState {
             copy(selectedGenre = genre)
         }
-        initializeMovies()
+        getTrendingMovies()
     }
 
-    override fun onBack() =
-        emitEffect(TrendingMoviesEffect.NavigateBack)
+    override fun onBackClick() =
+        emitEffect(TrendingMoviesEffect.BackNavigation)
 
     override fun onMovieClick(id: Int) =
-        emitEffect(TrendingMoviesEffect.NavigateToMovie(id))
+        emitEffect(TrendingMoviesEffect.MovieDetailsNavigation(id))
 
-    override fun onRetry() {
-        initializeMovies()
-    }
+    override fun onRetryClick() = getTrendingMovies()
 
-    private fun initializeMovies() {
-        tryToExecute(
-            block = {
-                val moviesFlow = createPagingSourceFlow(query = "") { _, pageNumber ->
-                    val movies = getMovieUseCase.getTrendingMovies(page = pageNumber)
-                    val filteredItems =
-                        if (state.value.selectedGenre != null && state.value.selectedGenre != MovieGenreUi.All) {
-                            movies.items.filter { movie ->
-                                movie.genres.map { (it as MovieGenre).toUi() }
-                                    .contains(state.value.selectedGenre)
-                            }
-                        } else {
-                            movies.items
-                        }
-                    movies.copy(items = filteredItems)
-                }
-                moviesFlow
-            },
-            onStart = {
-                updateState { copy(isLoading = true) }
-            },
-            onSuccess = { moviesFlow ->
-                updateState {
-                    copy(moviesFlow = moviesFlow)
-                }
-            },
-            onCompleted = { updateState { copy(isLoading = false) } },
+    private fun getTrendingMovies() {
+        tryToCollect(
+            block = ::createTrendingMoviesPagingFlow,
+            onStart = { updateState { copy(isLoading = true) } },
+            onError = ::setErrorState,
+            onNewValue = ::setPagingState,
         )
     }
+
+    private fun setErrorState(errorState: ErrorState) =
+        updateState { copy(errorState = errorState) }
+
+    private fun setPagingState(moviesPagingData: PagingData<Trending>) {
+        return updateState {
+            copy(
+                moviesFlow = flowOf(moviesPagingData),
+                isLoading = false
+            )
+        }
+    }
+
+    private fun createTrendingMoviesPagingFlow() = createPagingSourceFlow(
+        query = "",
+        block = { _, pageNumber ->
+            getMovieUseCase.getTrendingMovies(
+                page = pageNumber,
+                movieGenre = state.value.selectedGenre.toDomain()
+            )
+        }
+    ).cachedIn(viewModelScope)
 }

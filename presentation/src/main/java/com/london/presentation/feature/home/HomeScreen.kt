@@ -64,13 +64,13 @@ import com.london.presentation.utils.gridColumns
 
 @Composable
 fun HomeScreen(
-    onNavigateTopRated: () -> Unit = {},
-    onNavigateTrendingActors: () -> Unit = {},
-    onNavigateTrendingMovies: () -> Unit = {},
-    onNavigateTrendingTvShows: () -> Unit = {},
-    onNavigateContinueWatching: () -> Unit = {},
-    onNavigateMovie: (movieId: Int) -> Unit = {},
-    onNavigateTvShow: (tvShowId: Int) -> Unit = {},
+    onNavigateToTopRated: () -> Unit = {},
+    onNavigateToTrendingActors: () -> Unit = {},
+    onNavigateToTrendingMovies: () -> Unit = {},
+    onNavigateToTrendingTvShows: () -> Unit = {},
+    onNavigateToContinueWatching: () -> Unit = {},
+    onNavigateToMovieDetails: (movieId: Int) -> Unit = {},
+    onNavigateToTvShowDetails: (tvShowId: Int) -> Unit = {},
     viewModel: HomeViewModel = hiltViewModel(),
 ) {
     val uiState by viewModel.state.collectAsStateWithLifecycle()
@@ -78,13 +78,13 @@ fun HomeScreen(
 
     effect?.Listen { currentEffect ->
         when (currentEffect) {
-            is HomeScreenEffect.NavigationMovieDetails -> onNavigateMovie(currentEffect.id)
-            is HomeScreenEffect.NavigationTvShowDetails -> onNavigateTvShow(currentEffect.id)
-            is HomeScreenEffect.NavigationTrendingMovie -> onNavigateTrendingMovies()
-            is HomeScreenEffect.NavigationTrendingTvShows -> onNavigateTrendingTvShows()
-            is HomeScreenEffect.NavigationTrendingActor -> onNavigateTrendingActors()
-            is HomeScreenEffect.NavigationTopRated -> onNavigateTopRated()
-            is HomeScreenEffect.NavigationContinueWatching -> onNavigateContinueWatching()
+            is HomeScreenEffect.MovieDetailsNavigation -> onNavigateToMovieDetails(currentEffect.id)
+            is HomeScreenEffect.TvShowDetailsNavigation -> onNavigateToTvShowDetails(currentEffect.id)
+            is HomeScreenEffect.TrendingMovieNavigation -> onNavigateToTrendingMovies()
+            is HomeScreenEffect.TrendingTvShowsNavigation -> onNavigateToTrendingTvShows()
+            is HomeScreenEffect.TrendingActorNavigation -> onNavigateToTrendingActors()
+            is HomeScreenEffect.TopRatedNavigation -> onNavigateToTopRated()
+            is HomeScreenEffect.ContinueWatchingNavigation -> onNavigateToContinueWatching()
         }
     }
 

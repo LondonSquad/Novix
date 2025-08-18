@@ -19,12 +19,12 @@ class GetMovieUseCase @Inject constructor(
 ) {
     suspend fun getMovieDetails(movieId: Int) = movieRepository.getMovieById(movieId)
 
-    suspend fun getMovieImagesUseCase(movieId: Int, limit: Int = IMAGE_LIMIT): List<String> {
+    suspend fun getMovieImages(movieId: Int, limit: Int = IMAGE_LIMIT): List<String> {
         val images = movieRepository.getMovieImagesById(movieId)
         return when {
-            images.backdrops.isNotEmpty() -> images.backdrops
-            images.posters.isNotEmpty() -> images.posters
-            images.logos.isNotEmpty() -> images.logos
+            images.backdropsUrl.isNotEmpty() -> images.backdropsUrl
+            images.postersUrl.isNotEmpty() -> images.postersUrl
+            images.logosUrl.isNotEmpty() -> images.logosUrl
             else -> emptyList()
         }.take(limit)
     }
@@ -39,8 +39,18 @@ class GetMovieUseCase @Inject constructor(
 
     suspend fun getMovieVideo(movieId: Int): List<String> = movieRepository.getMovieVideos(movieId)
 
-    suspend fun getTrendingMovies(page: Int): PagedFetchResponse<Trending> =
-        movieRepository.getTrendingMovies(page)
+    suspend fun getTrendingMovies(
+        page: Int,
+        movieGenre: MovieGenre = MovieGenre.ALL
+    ): PagedFetchResponse<Trending> {
+        val trendingMovies = movieRepository.getTrendingMovies(page)
+
+        val filteredItems = trendingMovies.items.filter { movie ->
+            movieGenre == MovieGenre.ALL || movie.genres.contains(movieGenre)
+        }
+
+        return trendingMovies.copy(items = filteredItems, totalPages = filteredItems.size)
+    }
 
     suspend fun getPopularMovies(limit: Int = POPULAR_LIMIT): List<PopularMedia> =
         movieRepository.getPopularMovies().take(limit)
