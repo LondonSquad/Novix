@@ -28,7 +28,7 @@ class GetMovieListDetailsUseCaseTest {
         //Given
         coEvery { listRepository.getMovieListDetails(any(), pageNumber = 1) } returns movieListDetails
         //When
-        val result = getMovieListDetailsUseCase.invoke(LIST_ID, pageNumber = 1)
+        val result = getMovieListDetailsUseCase.getMovieListDetails(LIST_ID, pageNumber = 1)
         //Then
         assertThat(result).isEqualTo(movieListDetails)
     }
@@ -39,7 +39,7 @@ class GetMovieListDetailsUseCaseTest {
         coEvery { listRepository.getMovieListDetails(any(), pageNumber = 1) } throws Exception()
         //When //Then
         assertThrows<Exception> {
-            getMovieListDetailsUseCase.invoke(LIST_ID, pageNumber = 1)
+            getMovieListDetailsUseCase.getMovieListDetails(LIST_ID, pageNumber = 1)
         }
     }
 

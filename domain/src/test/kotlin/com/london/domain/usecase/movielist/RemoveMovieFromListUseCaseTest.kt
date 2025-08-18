@@ -25,7 +25,7 @@ class RemoveMovieFromListUseCaseTest {
             //Given
             coEvery { customMovieListRepository.removeMovieFromList(any(), any()) } returns true
             //When
-            val result = removeMovieFromListUseCase.invoke(LIST_ID, MOVIE_ID)
+            val result = removeMovieFromListUseCase.removeMovieFromList(LIST_ID, MOVIE_ID)
             //Then
             assertThat(result).isTrue()
         }
@@ -36,7 +36,7 @@ class RemoveMovieFromListUseCaseTest {
             //Given
             coEvery { customMovieListRepository.removeMovieFromList(any(), any()) } returns false
             //When
-            val result = removeMovieFromListUseCase.invoke(LIST_ID, MOVIE_ID)
+            val result = removeMovieFromListUseCase.removeMovieFromList(LIST_ID, MOVIE_ID)
             //Then
             assertThat(result).isFalse()
         }
@@ -53,7 +53,7 @@ class RemoveMovieFromListUseCaseTest {
             } throws Exception()
             //When //Then
             assertThrows<Exception> {
-                removeMovieFromListUseCase.invoke(LIST_ID, MOVIE_ID)
+                removeMovieFromListUseCase.removeMovieFromList(LIST_ID, MOVIE_ID)
             }
         }
 
