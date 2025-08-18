@@ -6,8 +6,8 @@ import com.london.data.local.source.recent.watched.RecentWatchedDataSource
 import com.london.data.mapper.recent.toEntity
 import com.london.data.mapper.recent.toRecentWatchedMovieLocal
 import com.london.data.mapper.recent.toRecentWatchedTvShowLocal
-import com.london.domain.entity.Movie
-import com.london.domain.entity.TvShow
+import com.london.domain.entity.movie.Movie
+import com.london.domain.entity.tvshow.TvShow
 import com.london.domain.repository.RecentWatchedRepository
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map

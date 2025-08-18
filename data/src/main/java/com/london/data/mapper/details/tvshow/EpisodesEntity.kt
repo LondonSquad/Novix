@@ -7,10 +7,10 @@ import com.london.data.remote.model.details.tvshow.model.tvshowepisode.SeasonEpi
 import com.london.data.utils.asImageUrlOrEmpty
 import com.london.data.utils.orZero
 import com.london.data.utils.roundToDecimal
-import com.london.domain.entity.Actor
-import com.london.domain.entity.tvshowdetails.episode.EpisodeDetails
-import com.london.domain.entity.tvshowdetails.episode.Episodes
-import com.london.domain.entity.tvshowdetails.episode.SeasonEpisodes
+import com.london.domain.entity.actor.Actor
+import com.london.domain.entity.tvshow.episode.EpisodeDetails
+import com.london.domain.entity.tvshow.episode.Episodes
+import com.london.domain.entity.tvshow.episode.SeasonEpisodes
 
 fun SeasonEpisodesResponse.toEpisodesEntity(): SeasonEpisodes =
     SeasonEpisodes(

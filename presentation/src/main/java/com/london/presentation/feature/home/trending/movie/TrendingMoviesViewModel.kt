@@ -3,7 +3,7 @@ package com.london.presentation.feature.home.trending.movie
 import androidx.lifecycle.viewModelScope
 import androidx.paging.PagingData
 import androidx.paging.cachedIn
-import com.london.domain.entity.Trending
+import com.london.domain.entity.shared.Trending
 import com.london.domain.usecase.details.movie.GetMovieUseCase
 import com.london.presentation.shared.base.BaseViewModel
 import com.london.presentation.shared.base.ErrorState

@@ -1,7 +1,7 @@
 package com.london.presentation.feature.category.movie
 
 import androidx.paging.PagingData
-import com.london.domain.entity.Movie
+import com.london.domain.entity.movie.Movie
 import com.london.presentation.shared.base.ErrorState
 import com.london.presentation.shared.genre.MovieGenreUi
 import kotlinx.coroutines.flow.Flow

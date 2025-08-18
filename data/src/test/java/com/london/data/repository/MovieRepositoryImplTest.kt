@@ -39,12 +39,12 @@ import com.london.data.repository.movie.MovieRepositoryImpl
 import com.london.data.utils.CrashReporter
 import com.london.data.utils.asImageUrlOrEmpty
 import com.london.data.utils.asYoutubeUrlOrEmpty
-import com.london.domain.entity.ImagesEntity
-import com.london.domain.entity.Movie
-import com.london.domain.entity.PagedFetchResponse
 import com.london.domain.entity.genre.MovieGenre
+import com.london.domain.entity.movie.Movie
 import com.london.domain.entity.recent.MediaType
-import com.london.domain.entity.review.ReviewEntity
+import com.london.domain.entity.review.Review
+import com.london.domain.entity.shared.ImagesEntity
+import com.london.domain.entity.shared.PagedFetchResponse
 import com.london.domain.repository.MovieRepository
 import io.mockk.Runs
 import io.mockk.coEvery
@@ -186,7 +186,7 @@ class MovieRepositoryImplTest {
         )
 
         // When
-        val result: PagedFetchResponse<ReviewEntity> =
+        val result: PagedFetchResponse<Review> =
             repository.getMovieReviews(MOVIE_ID, PAGE_NUMBER)
 
         //Then

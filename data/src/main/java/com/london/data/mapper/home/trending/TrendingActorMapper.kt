@@ -3,7 +3,7 @@ package com.london.data.mapper.home.trending
 import com.london.data.remote.model.home.trending.TrendingResponse
 import com.london.data.utils.asImageUrlOrEmpty
 import com.london.data.utils.orZero
-import com.london.domain.entity.Actor
+import com.london.domain.entity.actor.Actor
 
 fun TrendingResponse.toEntityActor(): Actor = Actor(
     id = id.orZero(),

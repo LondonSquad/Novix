@@ -3,9 +3,9 @@ package com.london.presentation.feature.home.trending.movie
 import androidx.paging.PagingData
 import app.cash.turbine.test
 import com.google.common.truth.Truth.assertThat
-import com.london.domain.entity.PagedFetchResponse
-import com.london.domain.entity.Trending
 import com.london.domain.entity.genre.MovieGenre
+import com.london.domain.entity.shared.PagedFetchResponse
+import com.london.domain.entity.shared.Trending
 import com.london.domain.usecase.details.movie.GetMovieUseCase
 import com.london.presentation.shared.genre.toUi
 import io.mockk.clearAllMocks

@@ -5,11 +5,11 @@ import com.london.data.mapper.details.movie.toEntity
 import com.london.data.mapper.details.tvshow.toCastEntity
 import com.london.data.mapper.home.trending.toEntityActor
 import com.london.data.remote.source.actor.ActorRemoteDataSource
-import com.london.domain.entity.Actor
-import com.london.domain.entity.PagedFetchResponse
-import com.london.domain.entity.actordetails.ActorDetails
-import com.london.domain.entity.actordetails.ActorImageDetails
-import com.london.domain.entity.tvshowdetails.TvShowCastEntity
+import com.london.domain.entity.actor.Actor
+import com.london.domain.entity.actor.ActorDetails
+import com.london.domain.entity.actor.ActorImageDetails
+import com.london.domain.entity.shared.PagedFetchResponse
+import com.london.domain.entity.tvshow.TvShowCast
 import com.london.domain.repository.ActorRepository
 import javax.inject.Inject
 
@@ -38,6 +38,6 @@ class ActorRepositoryImpl @Inject constructor(
         )
     }
 
-    override suspend fun getTvShowActors(id: Int): TvShowCastEntity =
+    override suspend fun getTvShowActors(id: Int): TvShowCast =
         dataSource.getTvShowActors(id).getOrThrow().toCastEntity()
 }

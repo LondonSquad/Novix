@@ -24,19 +24,19 @@ import com.london.data.remote.source.movie.MovieRemoteDataSource
 import com.london.data.utils.CrashReporter
 import com.london.data.utils.asYoutubeUrlOrEmpty
 import com.london.data.utils.fetchAndSync
-import com.london.domain.entity.ImagesEntity
-import com.london.domain.entity.MediaStates
-import com.london.domain.entity.Movie
-import com.london.domain.entity.PagedFetchResponse
-import com.london.domain.entity.RatedMedia
-import com.london.domain.entity.Trending
-import com.london.domain.entity.UpComingMovie
-import com.london.domain.entity.actordetails.cast.ActorMediaDetails
+import com.london.domain.entity.actor.cast.ActorMediaDetails
 import com.london.domain.entity.genre.MovieGenre
-import com.london.domain.entity.moviedatails.MovieDetails
+import com.london.domain.entity.movie.Movie
+import com.london.domain.entity.movie.MovieDetails
+import com.london.domain.entity.movie.UpComingMovie
 import com.london.domain.entity.popular.PopularMedia
 import com.london.domain.entity.recent.MediaType
-import com.london.domain.entity.review.ReviewEntity
+import com.london.domain.entity.review.Review
+import com.london.domain.entity.shared.ImagesEntity
+import com.london.domain.entity.shared.MediaStates
+import com.london.domain.entity.shared.PagedFetchResponse
+import com.london.domain.entity.shared.RatedMedia
+import com.london.domain.entity.shared.Trending
 import com.london.domain.entity.toprated.TopRatedMedia
 import com.london.domain.repository.MovieRepository
 import javax.inject.Inject
@@ -72,7 +72,7 @@ class MovieRepositoryImpl @Inject constructor(
 
     override suspend fun getMovieReviews(
         movieId: Int, pageNumber: Int
-    ): PagedFetchResponse<ReviewEntity> = fetchAndSync(
+    ): PagedFetchResponse<Review> = fetchAndSync(
         networkBlock = {
             getMovieReviewsFromRemote(movieId = movieId, pageNumber = pageNumber)
         }).run {
@@ -187,7 +187,7 @@ class MovieRepositoryImpl @Inject constructor(
 
     private suspend fun getMovieReviewsFromRemote(
         movieId: Int, pageNumber: Int
-    ): PagedFetchResponse<ReviewEntity> {
+    ): PagedFetchResponse<Review> {
         return movieRemoteDataSource.getMovieReviews(
             movieId, pageNumber
         ).getOrThrow().toReviewEntity()

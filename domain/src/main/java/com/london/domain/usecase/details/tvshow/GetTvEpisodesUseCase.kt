@@ -1,7 +1,7 @@
 package com.london.domain.usecase.details.tvshow
 
-import com.london.domain.entity.tvshowdetails.episode.EpisodeDetails
-import com.london.domain.entity.tvshowdetails.episode.SeasonEpisodes
+import com.london.domain.entity.tvshow.episode.EpisodeDetails
+import com.london.domain.entity.tvshow.episode.SeasonEpisodes
 import com.london.domain.repository.TvShowRepository
 import javax.inject.Inject
 

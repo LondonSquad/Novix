@@ -11,12 +11,12 @@ import com.london.data.remote.source.search.SearchRemoteDataSource
 import com.london.data.repository.search.SearchRepositoryImpl
 import com.london.data.utils.CrashReporter
 import com.london.data.utils.fetchAndSync
-import com.london.domain.entity.Actor
-import com.london.domain.entity.Movie
-import com.london.domain.entity.PagedFetchResponse
-import com.london.domain.entity.TvShow
+import com.london.domain.entity.actor.Actor
 import com.london.domain.entity.genre.MovieGenre
 import com.london.domain.entity.genre.TvShowGenre
+import com.london.domain.entity.movie.Movie
+import com.london.domain.entity.shared.PagedFetchResponse
+import com.london.domain.entity.tvshow.TvShow
 import io.mockk.coEvery
 import io.mockk.coJustRun
 import io.mockk.coVerify

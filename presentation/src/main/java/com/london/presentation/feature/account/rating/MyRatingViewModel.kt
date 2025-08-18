@@ -1,7 +1,7 @@
 package com.london.presentation.feature.account.rating
 
-import com.london.domain.entity.RatedMedia
 import com.london.domain.entity.recent.MediaType
+import com.london.domain.entity.shared.RatedMedia
 import com.london.domain.usecase.rating.ManageRatingUseCase
 import com.london.presentation.shared.base.BaseViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel

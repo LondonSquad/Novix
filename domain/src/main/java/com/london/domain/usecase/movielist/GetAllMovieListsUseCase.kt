@@ -1,7 +1,7 @@
 package com.london.domain.usecase.movielist
 
-import com.london.domain.entity.MovieList
-import com.london.domain.entity.PagedFetchResponse
+import com.london.domain.entity.movie.MovieList
+import com.london.domain.entity.shared.PagedFetchResponse
 import com.london.domain.repository.CustomMovieListRepository
 import javax.inject.Inject
 

@@ -1,9 +1,9 @@
 package com.london.presentation.feature.details.movie
 
 import androidx.lifecycle.SavedStateHandle
-import com.london.domain.entity.Actor
-import com.london.domain.entity.Movie
-import com.london.domain.entity.moviedatails.MovieDetails
+import com.london.domain.entity.actor.Actor
+import com.london.domain.entity.movie.Movie
+import com.london.domain.entity.movie.MovieDetails
 import com.london.domain.entity.recent.MediaType
 import com.london.domain.entity.recent.RecentViewed
 import com.london.domain.usecase.authentication.AuthenticationUseCase

@@ -42,7 +42,7 @@ import com.london.designsystem.component.button.OutlineButton
 import com.london.designsystem.theme.NovixTheme
 import com.london.designsystem.theme.ThemePreviews
 import com.london.designsystem.utils.painter
-import com.london.domain.entity.MovieList
+import com.london.domain.entity.movie.MovieList
 import com.london.presentation.R
 import com.london.presentation.feature.list.bottomsheets.AddListBottomSheet
 import com.london.presentation.shared.SnackBarAnimation

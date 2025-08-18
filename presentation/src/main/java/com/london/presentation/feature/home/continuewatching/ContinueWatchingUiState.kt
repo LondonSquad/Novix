@@ -1,7 +1,7 @@
 package com.london.presentation.feature.home.continuewatching
 
-import com.london.domain.entity.Movie
-import com.london.domain.entity.TvShow
+import com.london.domain.entity.movie.Movie
+import com.london.domain.entity.tvshow.TvShow
 import com.london.presentation.shared.MediaCategory
 import com.london.presentation.shared.base.ErrorState
 import com.london.presentation.shared.genre.MovieGenreUi

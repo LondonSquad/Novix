@@ -25,9 +25,9 @@ import com.london.data.remote.model.details.rating.RatingRemoteResponse
 import com.london.data.remote.model.details.tvshow.model.TvShowDetailsRemoteResponse
 import com.london.data.remote.model.details.tvshow.model.TvShowSeason
 import com.london.data.remote.model.details.tvshow.model.tvshowepisode.Episode
-import com.london.data.remote.model.details.tvshow.model.tvshowepisode.SeasonEpisodesResponse
 import com.london.data.remote.model.details.tvshow.model.tvshowepisode.EpisodeDetailsResponse
 import com.london.data.remote.model.details.tvshow.model.tvshowepisode.EpisodeGuestStar
+import com.london.data.remote.model.details.tvshow.model.tvshowepisode.SeasonEpisodesResponse
 import com.london.data.remote.model.details.videoprovider.VideoResponse
 import com.london.data.remote.model.details.videoprovider.VideoTrailerRemote
 import com.london.data.remote.model.home.popular.PopularTvShowResponse
@@ -42,12 +42,12 @@ import com.london.data.repository.tvshow.TvShowRepositoryImpl
 import com.london.data.utils.CrashReporter
 import com.london.data.utils.asYoutubeUrlOrEmpty
 import com.london.data.utils.orZero
-import com.london.domain.entity.MediaStates
-import com.london.domain.entity.PagedFetchResponse
-import com.london.domain.entity.TvShow
 import com.london.domain.entity.genre.TvShowGenre
 import com.london.domain.entity.recent.MediaType
+import com.london.domain.entity.shared.MediaStates
+import com.london.domain.entity.shared.PagedFetchResponse
 import com.london.domain.entity.toprated.TopRatedMedia
+import com.london.domain.entity.tvshow.TvShow
 import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.every

@@ -10,7 +10,7 @@ import androidx.compose.ui.unit.dp
 import androidx.paging.compose.LazyPagingItems
 import com.london.designsystem.theme.NovixTheme
 import com.london.designsystem.theme.ThemePreviews
-import com.london.domain.entity.Actor
+import com.london.domain.entity.actor.Actor
 
 @Composable
 fun ActorsLayout(

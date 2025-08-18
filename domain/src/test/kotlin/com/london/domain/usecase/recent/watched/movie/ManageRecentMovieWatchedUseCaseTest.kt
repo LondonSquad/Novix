@@ -1,8 +1,8 @@
 package com.london.domain.usecase.recent.watched.movie
 
 import com.google.common.truth.Truth.assertThat
-import com.london.domain.entity.Movie
 import com.london.domain.entity.genre.MovieGenre
+import com.london.domain.entity.movie.Movie
 import com.london.domain.repository.RecentWatchedRepository
 import io.mockk.Runs
 import io.mockk.coEvery

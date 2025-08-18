@@ -1,6 +1,6 @@
 package com.london.domain.repository
 
-import com.london.domain.entity.AccountInfo
+import com.london.domain.entity.account.AccountInfo
 
 interface AccountRepository {
     suspend fun getAccountDetails(): AccountInfo

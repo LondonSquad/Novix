@@ -1,14 +1,14 @@
 package com.london.domain.usecase.details.tvshow
 
-import com.london.domain.entity.PagedFetchResponse
-import com.london.domain.entity.Trending
-import com.london.domain.entity.TvShow
 import com.london.domain.entity.genre.TvShowGenre
 import com.london.domain.entity.popular.PopularMedia
-import com.london.domain.entity.review.ReviewEntity
+import com.london.domain.entity.review.Review
+import com.london.domain.entity.shared.PagedFetchResponse
+import com.london.domain.entity.shared.Trending
 import com.london.domain.entity.toprated.TopRatedMedia
-import com.london.domain.entity.tvshowdetails.TvShowCastEntity
-import com.london.domain.entity.tvshowdetails.TvShowDetailsEntity
+import com.london.domain.entity.tvshow.TvShow
+import com.london.domain.entity.tvshow.TvShowDetails
+import com.london.domain.entity.tvshow.cast.TvShowCast
 import com.london.domain.repository.ActorRepository
 import com.london.domain.repository.SearchRepository
 import com.london.domain.repository.TvShowRepository
@@ -19,7 +19,7 @@ class GetTvShowUseCase @Inject constructor(
     private val searchRepository: SearchRepository,
     private val actorRepository: ActorRepository
 ) {
-    suspend fun getTvShowDetails(tvShowId: Int): TvShowDetailsEntity =
+    suspend fun getTvShowDetails(tvShowId: Int): TvShowDetails =
         tvShowRepository.getTvShowDetailsById(tvShowId)
 
     suspend fun getPopularTvShows(limit: Int = POPULAR_LIMIT): List<PopularMedia> =
@@ -67,10 +67,10 @@ class GetTvShowUseCase @Inject constructor(
         }.take(limit)
     }
 
-    suspend fun getTvShowReviews(tvShowId: Int, pageNumber: Int): PagedFetchResponse<ReviewEntity> =
+    suspend fun getTvShowReviews(tvShowId: Int, pageNumber: Int): PagedFetchResponse<Review> =
         tvShowRepository.getTvShowReviews(tvShowId = tvShowId, pageNumber = pageNumber)
 
-    suspend fun getTvShowCastById(id: Int): TvShowCastEntity =
+    suspend fun getTvShowCastById(id: Int): TvShowCast =
         actorRepository.getTvShowActors(id)
 
     suspend fun getAllTopRatedTvShows(

@@ -1,8 +1,8 @@
 package com.london.domain.usecase.movielist
 
 import com.google.common.truth.Truth.assertThat
-import com.london.domain.entity.MovieList
-import com.london.domain.entity.PagedFetchResponse
+import com.london.domain.entity.movie.MovieList
+import com.london.domain.entity.shared.PagedFetchResponse
 import com.london.domain.repository.CustomMovieListRepository
 import io.mockk.coEvery
 import io.mockk.mockk
