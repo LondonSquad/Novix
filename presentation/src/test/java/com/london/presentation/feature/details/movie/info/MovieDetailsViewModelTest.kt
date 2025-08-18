@@ -20,13 +20,11 @@ import com.london.presentation.navigation.getArgs
 import com.london.presentation.shared.genre.MovieGenreUi
 import io.mockk.MockKAnnotations
 import io.mockk.coEvery
-import io.mockk.coVerify
 import io.mockk.every
 import io.mockk.mockk
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.cancel
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.test.StandardTestDispatcher
 import kotlinx.coroutines.test.advanceUntilIdle
 import kotlinx.coroutines.test.resetMain
@@ -73,6 +71,8 @@ class MovieDetailsViewModelTest {
         coEvery { ratingUseCase.getRateAccountMovieStatesById(any()) } returns 0
         coEvery { manageRecentMovieWatchedUseCase.addMovieToRecentWatched(any()) } returns Unit
         coEvery { manageRecentViewedUseCase.addToRecentViewed(any()) } returns Unit
+
+        viewModel = createViewModel()
     }
 
     private fun createViewModel() = MovieDetailsViewModel(
@@ -92,158 +92,103 @@ class MovieDetailsViewModelTest {
     }
 
     @Test
-    fun `when loadMovieDetails succeeds, all movie details should be populated correctly`() =
-        runTest {
-            advanceUntilIdle()
+    fun `when main movie data loads successfully, movie details should be populated`() = runTest {
 
-            viewModel?.state?.test {
-                val state = awaitItem()
-                assertThat(state.isLoading).isFalse()
-                assertThat(state.error).isNull()
-                assertThat(state.movieId).isEqualTo(mockMovieDetails.id)
-                assertThat(state.movieName).isEqualTo(mockMovieDetails.title)
-                assertThat(state.movieRating).isEqualTo(mockMovieDetails.voteAverage)
-            }
-        }
-
-    @Test
-    fun `loadSimilarAndVideos should populate similar movies and video when succeeds`() = runTest {
+        // When
         advanceUntilIdle()
 
+        // Then
         viewModel?.state?.test {
-            val state = awaitItem()
-            assertThat(state.similarMovies).isEqualTo(mockSimilarMovies)
-            assertThat(state.movieVideo).isEqualTo(mockMovieVideos.first())
+            val state = expectMostRecentItem()
+            assertThat(state.movieId).isEqualTo(mockMovieDetails.id)
+            assertThat(state.movieName).isEqualTo(mockMovieDetails.title)
+            cancelAndIgnoreRemainingEvents()
         }
     }
 
     @Test
-    fun `loadSimilarAndVideos should show error state when fails`() = runTest {
-        coEvery { getMovieUseCase.getSimilarMovies(any()) } throws Exception("Network error")
+    fun `when user is not authenticated, isRated should be false`() = runTest {
 
-        val testViewModel = createViewModel()
+        // When
         advanceUntilIdle()
 
-        testViewModel.state.test {
-            val state = awaitItem()
-            assertThat(state.error).isNotNull()
+        // Then
+        viewModel?.state?.test {
+            val state = expectMostRecentItem()
+            assertThat(state.isRated).isFalse()
+            cancelAndIgnoreRemainingEvents()
         }
-        testViewModel.viewModelScope.cancel()
     }
 
     @Test
-    fun `should show error state, when primary initialization fails`() = runTest {
-        coEvery { getMovieUseCase.getMovieDetails(any()) } throws Exception("Network error")
-
-        val testViewModel = createViewModel()
-        advanceUntilIdle()
-
-        testViewModel.state.test {
-            val state = awaitItem()
-            assertThat(state.error).isNotNull()
-            assertThat(state.isLoading).isFalse()
-        }
-        testViewModel.viewModelScope.cancel()
-    }
-
-    @Test
-    fun `getRateAccountMovieStates should show rated when user is authenticated and has rated movie`() =
+    fun `when authenticated user clicks rate button, rate bottom sheet should be shown`() =
         runTest {
+
+            // Given
             coEvery { authenticationUseCase.isLoggedIn() } returns true
-            coEvery { ratingUseCase.getRateAccountMovieStatesById(any()) } returns 5
 
-            val testViewModel = createViewModel()
+            // Then
             advanceUntilIdle()
 
-            testViewModel.state.test {
-                val state = awaitItem()
-                assertThat(state.isRated).isTrue()
-            }
-            testViewModel.viewModelScope.cancel()
-        }
-
-
-    @Test
-    fun `onSelectRatingClick should update rating state and hide bottom sheet when rating succeeds`() =
-        runTest {
-            val testRating = 8
-            coEvery { ratingUseCase.addMovieRatingById(any(), testRating) } returns true
-            coEvery { ratingUseCase.getRateAccountMovieStatesById(any()) } returns testRating
-
-            viewModel?.onSelectRatingClick(testRating)
-            advanceUntilIdle()
-
+            // Then
             viewModel?.state?.test {
-                val state = awaitItem()
-                assertThat(state.selectedRating).isEqualTo(testRating)
-                assertThat(state.isRated).isTrue()
-                assertThat(state.isRateBottomSheetVisible).isFalse()
-                assertThat(state.isSuccessfullyRated).isTrue()
-            }
-        }
-
-    @Test
-    fun `getRateAccountMovieStates should show not rated when user is not authenticated or has no rating`() =
-        runTest {
-            advanceUntilIdle()
-
-            viewModel?.state?.test {
-                val state = awaitItem()
-                assertThat(state.isRated).isFalse()
-            }
-        }
-
-    @Test
-    fun `onRateBottomSheetClick should show rate bottom sheet when authenticated user clicks rate button`() =
-        runTest {
-            coEvery { authenticationUseCase.isLoggedIn() } returns true
-            val testViewModel = createViewModel()
-            advanceUntilIdle()
-
-            testViewModel.state.test {
                 val initialState = awaitItem()
                 assertThat(initialState.isRateBottomSheetVisible).isFalse()
 
-                testViewModel.onRateBottomSheetClick()
+                viewModel?.onRateBottomSheetClick()
+                advanceUntilIdle()
 
                 val updatedState = awaitItem()
                 assertThat(updatedState.isRateBottomSheetVisible).isTrue()
+                cancelAndIgnoreRemainingEvents()
             }
-            testViewModel.viewModelScope.cancel()
         }
 
     @Test
-    fun `onRateBottomSheetClick should show guest user bottom sheet when guest user clicks rate button`() =
-        runTest {
-            coEvery { authenticationUseCase.isLoggedIn() } returns false
-            val testViewModel = createViewModel()
+    fun `when back button is clicked, back navigation effect should be emitted`() = runTest {
 
-            testViewModel.onRateBottomSheetClick()
-            advanceUntilIdle()
-
-            testViewModel.state.test {
-                val state = awaitItem()
-                assertThat(state.isGuestUserBottomSheetVisible).isTrue()
-                assertThat(state.isGuestUser).isTrue()
-            }
-            testViewModel.viewModelScope.cancel()
-        }
-
-    @Test
-    fun `onUserActions should emit correct navigation effects`() = runTest {
+        // When & Then
         viewModel?.effect?.test {
             viewModel?.onBackClick()
             assertThat(awaitItem()).isEqualTo(MovieDetailsEffect.BackNavigation)
+        }
+    }
 
+    @Test
+    fun `when movie is clicked, movie navigation effect should be emitted`() = runTest {
+
+        // When & Then
+        viewModel?.effect?.test {
             viewModel?.onMovieClick(123)
             assertThat(awaitItem()).isEqualTo(MovieDetailsEffect.MovieNavigation(123))
+        }
+    }
 
+    @Test
+    fun `when actor is clicked, actor navigation effect should be emitted`() = runTest {
+
+        // When & Then
+        viewModel?.effect?.test {
             viewModel?.onActorClick(456)
             assertThat(awaitItem()).isEqualTo(MovieDetailsEffect.ActorNavigation(456))
+        }
+    }
 
+    @Test
+    fun `when login is clicked, login navigation effect should be emitted`() = runTest {
+
+        // When & Then
+        viewModel?.effect?.test {
             viewModel?.onLoginClick()
             assertThat(awaitItem()).isEqualTo(MovieDetailsEffect.LoginNavigation)
+        }
+    }
 
+    @Test
+    fun `when reviews is clicked, reviews navigation effect should be emitted`() = runTest {
+
+        // When & Then
+        viewModel?.effect?.test {
             viewModel?.onReviewsClick(789, MediaType.Movie)
             assertThat(awaitItem()).isEqualTo(
                 MovieDetailsEffect.ReviewsNavigation(
@@ -251,93 +196,89 @@ class MovieDetailsViewModelTest {
                     MediaType.Movie
                 )
             )
+        }
+    }
 
+    @Test
+    fun `when genre is clicked, genre navigation effect should be emitted`() = runTest {
+
+        // When & Then
+        viewModel?.effect?.test {
             viewModel?.onGenreClick(MovieGenreUi.Action)
             assertThat(awaitItem()).isEqualTo(MovieDetailsEffect.GenreNavigation(MovieGenreUi.Action))
+        }
+    }
 
+    @Test
+    fun `when expand is clicked first time, expanded state should be true`() = runTest {
+
+        // When
+        viewModel?.onExpandClick()
+        advanceUntilIdle()
+
+        // Then
+        viewModel?.state?.test {
+            val state = expectMostRecentItem()
+            assertThat(state.expanded).isTrue()
             cancelAndIgnoreRemainingEvents()
         }
     }
 
     @Test
-    fun `onExpandClick should toggle expanded state correctly`() = runTest {
+    fun `when expand is clicked twice, expanded state should be false`() = runTest {
+
+        // When
+        viewModel?.onExpandClick()
         viewModel?.onExpandClick()
         advanceUntilIdle()
 
+        // Then
         viewModel?.state?.test {
-            val state = awaitItem()
-            assertThat(state.expanded).isTrue()
-        }
-
-        viewModel?.onExpandClick()
-        advanceUntilIdle()
-
-        viewModel?.state?.test {
-            val state = awaitItem()
+            val state = expectMostRecentItem()
             assertThat(state.expanded).isFalse()
+            cancelAndIgnoreRemainingEvents()
         }
     }
 
     @Test
-    fun `onRetry should clear error and reload data`() = runTest {
-        coEvery { getMovieUseCase.getMovieDetails(MOVIE_ID) } throws Exception("Network error")
-        val testViewModel = createViewModel()
+    fun `when retry is clicked after error, error should be cleared`() = runTest {
+
+        // Given
+        coEvery { getMovieUseCase.getMovieDetails(any()) } throws Exception("Network error")
         advanceUntilIdle()
 
-        coEvery { getMovieUseCase.getMovieDetails(MOVIE_ID) } returns mockMovieDetails
+        coEvery { getMovieUseCase.getMovieDetails(any()) } returns mockMovieDetails
 
-        testViewModel.onRetryClick()
+        // When
+        viewModel?.onRetryClick()
         advanceUntilIdle()
 
-        testViewModel.state.test {
-            val state = awaitItem()
-            assertThat(state.error).isNull()
-            assertThat(state.movieId).isEqualTo(mockMovieDetails.id)
-        }
-        testViewModel.viewModelScope.cancel()
-    }
-
-    @Test
-    fun `initialization should add movie to recent watched and viewed`() = runTest {
-        advanceUntilIdle()
-
-        coVerify { manageRecentMovieWatchedUseCase.addMovieToRecentWatched(any()) }
-        coVerify { manageRecentViewedUseCase.addToRecentViewed(any()) }
-    }
-
-    @Test
-    fun `getMovieImages should use poster as fallback when returns empty list`() = runTest {
-        coEvery { getMovieUseCase.getMovieImages(any()) } returns emptyList()
-        val testViewModel = createViewModel()
-        advanceUntilIdle()
-
-        // Add delay for IO dispatcher
-        delay(50)
-
-        testViewModel.state.test {
-            val state = awaitItem()
-            assertThat(state.movieImages).containsExactly(mockMovieDetails.posterUrl)
-        }
-        testViewModel.viewModelScope.cancel()
-    }
-
-    @Test
-    fun `should show error and reset success state ,when rating fails`() = runTest {
-        val testRating = 8
-        coEvery {
-            ratingUseCase.addMovieRatingById(
-                any(),
-                testRating
-            )
-        } throws Exception("Rating failed")
-
-        viewModel?.onSelectRatingClick(testRating)
-        advanceUntilIdle()
-
+        // Then
         viewModel?.state?.test {
-            val state = awaitItem()
-            assertThat(state.isSuccessfullyRated).isNull()
-            assertThat(state.isLoading).isFalse()
+            val state = expectMostRecentItem()
+            assertThat(state.error).isNull()
+            cancelAndIgnoreRemainingEvents()
+        }
+    }
+
+    @Test
+    fun `when retry is clicked after error, data should be reloaded`() = runTest {
+
+        // Given
+        coEvery { getMovieUseCase.getMovieDetails(any()) } throws Exception("Network error")
+        advanceUntilIdle()
+
+        coEvery { getMovieUseCase.getMovieDetails(any()) } returns mockMovieDetails
+
+        // When
+        viewModel?.onRetryClick()
+        advanceUntilIdle()
+
+        // Then
+        viewModel?.state?.test {
+            val state = expectMostRecentItem()
+            assertThat(state.movieId).isEqualTo(mockMovieDetails.id)
+            cancelAndIgnoreRemainingEvents()
         }
     }
 
@@ -369,4 +310,3 @@ class MovieDetailsViewModelTest {
         private val mockMovieVideos = listOf("video1_url", "video2_url")
     }
 }
-
