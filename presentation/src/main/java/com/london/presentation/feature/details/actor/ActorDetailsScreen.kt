@@ -11,16 +11,12 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.WindowInsets
-import androidx.compose.foundation.layout.asPaddingValues
 import androidx.compose.foundation.layout.defaultMinSize
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.navigationBars
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.statusBars
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.grid.GridCells
@@ -130,10 +126,7 @@ private fun Content(
 
         LazyColumn(
             modifier = Modifier.fillMaxSize(),
-            contentPadding = PaddingValues(
-                bottom = WindowInsets.navigationBars.asPaddingValues()
-                    .calculateBottomPadding() + 16.dp
-            ),
+            contentPadding = PaddingValues(bottom = 16.dp),
             state = lazyState
         ) {
             item {
@@ -182,11 +175,7 @@ private fun Content(
             modifier = Modifier
                 .fillMaxWidth()
                 .background(NovixTheme.colors.surface.copy(alpha = backgroundAlpha))
-                .padding(
-                    start = 16.dp,
-                    top = WindowInsets.statusBars.asPaddingValues()
-                        .calculateTopPadding() + 12.dp
-                )
+                .padding(start = 16.dp, top = 12.dp)
                 .zIndex(1f)
         )
     }

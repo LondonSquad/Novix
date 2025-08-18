@@ -19,6 +19,7 @@ import com.london.app.navigation.graph.onboardingNavGraph
 import com.london.app.navigation.graph.splashNavGraph
 import com.london.designsystem.component.NavBar
 import com.london.designsystem.component.Scaffold
+import com.london.designsystem.theme.NovixTheme
 import com.london.presentation.navigation.LocalNavController
 import com.london.presentation.navigation.Screen.Account
 import com.london.presentation.navigation.Screen.Categories
@@ -31,7 +32,6 @@ import com.london.presentation.navigation.Screen.Search
 fun NavHostGraph() {
     val navController = rememberNavController()
     val navBackStackEntry by navController.currentBackStackEntryAsState()
-
 
     val currentScreen = when {
         navBackStackEntry.hasRoute(Home) -> Home
@@ -50,6 +50,7 @@ fun NavHostGraph() {
             navBackStackEntry.hasRoute(Account)
 
     Scaffold(
+        containerColor = NovixTheme.colors.surface,
         bottomBar = {
             AnimatedVisibility(
                 visible = showBottomNav,
