@@ -2,14 +2,12 @@ package com.london.domain.entity.tvshowdetails.episode
 
 import com.london.domain.entity.Actor
 
-data class TvShowEpisodeByIdEntity(
-    val airDate: String?,
+data class EpisodeDetails(
+    val airDate: String,
     val seasonNumber: Int,
-    val episodeTypes: String,
     val tvShowId: Int,
     val name: String,
     val overview: String,
-    val imageUrl: String?,
     val voteAverage: Double,
     val voteCount: Int,
     val guestStars: List<Actor>,

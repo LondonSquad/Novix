@@ -1,27 +1,41 @@
 package com.london.domain.usecase.details.tvshow
 
-import com.london.domain.entity.tvshowdetails.episode.TvShowEpisodeByIdEntity
-import com.london.domain.entity.tvshowdetails.episode.TvShowEpisodesEntity
+import com.london.domain.entity.tvshowdetails.episode.EpisodeDetails
+import com.london.domain.entity.tvshowdetails.episode.SeasonEpisodes
 import com.london.domain.repository.TvShowRepository
 import javax.inject.Inject
 
 class GetTvEpisodesUseCase @Inject constructor(
-    private val tvShowRepository: TvShowRepository,
+    private val tvShowRepository: TvShowRepository
 ) {
     suspend fun getEpisodeByTvShowId(
         tvShowId: Int,
         seasonNumber: Int,
         episodeNumber: Int
-    ): TvShowEpisodeByIdEntity =
-        tvShowRepository.getTvShowEpisodeByPosition(tvShowId, seasonNumber, episodeNumber)
+    ): EpisodeDetails =
+        tvShowRepository.getTvShowEpisodeByPosition(
+            tvShowId = tvShowId,
+            seasonNumber = seasonNumber,
+            episodeNumber = episodeNumber
+        )
 
-    suspend fun getTvShowEpisodesBySeason(tvShowId: Int, seasonNumber: Int): TvShowEpisodesEntity =
-        tvShowRepository.getTvShowEpisodesBySeason(tvShowId, seasonNumber)
+    suspend fun getTvShowSeasonEpisodes(
+        tvShowId: Int,
+        seasonNumber: Int
+    ): SeasonEpisodes =
+        tvShowRepository.getTvShowSeasonEpisodes(
+            tvShowId = tvShowId,
+            seasonNumber = seasonNumber
+        )
 
     suspend fun getEpisodeVideos(
-        seriesId: Int,
+        tvShowId: Int,
         seasonNumber: Int,
         episodeNumber: Int
     ): List<String> =
-        tvShowRepository.getEpisodeVideos(seriesId, seasonNumber, episodeNumber)
+        tvShowRepository.getEpisodeVideos(
+            tvShowId = tvShowId,
+            seasonNumber = seasonNumber,
+            episodeNumber = episodeNumber
+        )
 }

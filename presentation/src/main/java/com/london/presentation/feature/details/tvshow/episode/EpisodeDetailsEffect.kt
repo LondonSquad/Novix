@@ -1,7 +1,7 @@
 package com.london.presentation.feature.details.tvshow.episode
 
 sealed interface EpisodeDetailsEffect {
-    data object NavigationBack : EpisodeDetailsEffect
-    data object OnLoginNavigation : EpisodeDetailsEffect
-    data class NavigateToCast(val episodeId: Int) : EpisodeDetailsEffect
+    data object BackNavigation : EpisodeDetailsEffect
+    data object LoginNavigation : EpisodeDetailsEffect
+    data class CastNavigation(val episodeId: Int) : EpisodeDetailsEffect
 }
