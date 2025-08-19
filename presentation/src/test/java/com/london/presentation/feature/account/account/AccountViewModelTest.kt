@@ -1,11 +1,11 @@
 package com.london.presentation.feature.account.account
 
 import com.google.common.truth.Truth.assertThat
-import com.london.domain.AppPreferencesService
 import com.london.domain.entity.account.AccountInfo
 import com.london.domain.entity.contentrestriction.ContentRestrictionLevel
 import com.london.domain.entity.language.AppLanguage
 import com.london.domain.entity.theme.AppTheme
+import com.london.domain.repository.AppPreferencesService
 import com.london.domain.usecase.account.GetAccountInfoUseCase
 import com.london.domain.usecase.authentication.AuthenticationUseCase
 import com.london.presentation.feature.account.AccountViewModel

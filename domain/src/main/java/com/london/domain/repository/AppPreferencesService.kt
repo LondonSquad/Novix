@@ -1,4 +1,4 @@
-package com.london.domain
+package com.london.domain.repository
 
 import com.london.domain.entity.contentrestriction.ContentRestrictionLevel
 import com.london.domain.entity.language.AppLanguage

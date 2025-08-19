@@ -1,10 +1,10 @@
 package com.london.data.local.preference
 
 import android.content.SharedPreferences
-import com.london.domain.AppPreferencesService
 import com.london.domain.entity.contentrestriction.ContentRestrictionLevel
 import com.london.domain.entity.language.AppLanguage
 import com.london.domain.entity.theme.AppTheme
+import com.london.domain.repository.AppPreferencesService
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify
