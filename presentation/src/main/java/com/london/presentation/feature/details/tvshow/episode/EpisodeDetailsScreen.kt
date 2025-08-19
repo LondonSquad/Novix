@@ -1,10 +1,8 @@
-package com.london.presentation.feature.details.tvshow.episode
 
 import androidx.compose.animation.core.FastOutSlowInEasing
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
-import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -12,20 +10,15 @@ import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.WindowInsets
-import androidx.compose.foundation.layout.asPaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.statusBars
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.derivedStateOf
@@ -37,7 +30,6 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.layout.layout
 import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -45,20 +37,27 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.london.designsystem.component.GuestUserLoginBottomSheet
-import com.london.designsystem.component.Icon
 import com.london.designsystem.component.RatingBottomSheet
 import com.london.designsystem.component.Text
 import com.london.designsystem.component.TopBar
 import com.london.designsystem.theme.NovixTheme
 import com.london.presentation.R
+import com.london.presentation.feature.details.tvshow.episode.EpisodeDetailsContract
+import com.london.presentation.feature.details.tvshow.episode.EpisodeDetailsEffect
+import com.london.presentation.feature.details.tvshow.episode.EpisodeDetailsUiState
+import com.london.presentation.feature.details.tvshow.episode.EpisodeDetailsViewModel
 import com.london.presentation.shared.ConditionalText
 import com.london.presentation.shared.CustomBackDropImagePager
 import com.london.presentation.shared.FooterSection
 import com.london.presentation.shared.RatingItem
 import com.london.presentation.shared.SnackBarAnimation
+import com.london.presentation.shared.TextWithIcon
+import com.london.presentation.shared.base.ErrorState
 import com.london.presentation.shared.buildscreen.BuildScreen
 import com.london.presentation.shared.container.ActorItem
 import com.london.presentation.utils.Listen
+import com.london.presentation.utils.detailsTopBar
+import com.london.presentation.utils.headerDetailsCard
 import com.london.presentation.utils.isNotZeroRate
 import com.london.presentation.utils.openUrl
 import com.london.presentation.utils.toLocalizedNumbers
@@ -69,29 +68,28 @@ fun EpisodeDetailsScreen(
     onNavigateBack: () -> Unit,
     onNavigateToLogin: () -> Unit,
     onNavigateToActorDetails: (Int) -> Unit,
-    viewModel: EpisodeDetailsViewModel = hiltViewModel(),
-
-    ) {
+    viewModel: EpisodeDetailsViewModel = hiltViewModel()
+) {
     val uiState by viewModel.state.collectAsStateWithLifecycle()
     val effect by viewModel.effect.collectAsState(null)
 
     effect?.Listen { currentEffect ->
         when (currentEffect) {
-            EpisodeDetailsEffect.NavigationBack -> onNavigateBack()
-            is EpisodeDetailsEffect.NavigateToCast -> onNavigateToActorDetails(currentEffect.episodeId)
-            is EpisodeDetailsEffect.OnLoginNavigation -> onNavigateToLogin()
+            EpisodeDetailsEffect.BackNavigation -> onNavigateBack()
+            is EpisodeDetailsEffect.CastNavigation -> onNavigateToActorDetails(currentEffect.episodeId)
+            is EpisodeDetailsEffect.LoginNavigation -> onNavigateToLogin()
         }
     }
 
     BuildScreen(
-        onBack = viewModel::onBackClicked,
+        onBack = viewModel::onBackClick,
         isLoading = uiState.isLoading,
-        isError = uiState.error != null,
+        isError = uiState.error == ErrorState.NoInternet,
         onRetry = viewModel::onRetry
     ) {
         Content(
             uiState = uiState,
-            episodeDetailsContract = viewModel,
+            contract = viewModel,
             onNavigateToCast = onNavigateToActorDetails
         )
     }
@@ -99,17 +97,16 @@ fun EpisodeDetailsScreen(
 
 @Composable
 private fun Content(
-    modifier: Modifier = Modifier,
     uiState: EpisodeDetailsUiState,
-    episodeDetailsContract: EpisodeDetailsContract,
-    onNavigateToCast: (Int) -> Unit
+    onNavigateToCast: (Int) -> Unit,
+    contract: EpisodeDetailsContract
 ) {
     val uriHandler = LocalUriHandler.current
     val lazyListState = rememberLazyListState()
     val shouldShowBackground by remember {
         derivedStateOf {
             lazyListState.firstVisibleItemScrollOffset > 40f ||
-                    lazyListState.firstVisibleItemIndex > 0
+                lazyListState.firstVisibleItemIndex > 0
         }
     }
 
@@ -118,141 +115,86 @@ private fun Content(
         animationSpec = tween(
             durationMillis = 400,
             easing = FastOutSlowInEasing
-        ),
+        )
     )
 
     Box(
-        modifier = modifier
+        modifier = Modifier
             .fillMaxSize()
             .background(NovixTheme.colors.surface)
     ) {
-
         TopBar(
-            onBackClick = episodeDetailsContract::onBackClicked,
-            modifier = Modifier
-                .fillMaxWidth()
-                .background(
-                    NovixTheme.colors.surface.copy(alpha = backgroundAlpha)
-                )
-                .padding(horizontal = 16.dp)
-                .padding(
-                    top = WindowInsets.statusBars.asPaddingValues().calculateTopPadding() + 12.dp
-                ),
+            onBackClick = contract::onBackClick,
+            modifier = Modifier.detailsTopBar(backgroundAlpha),
             onClickOption1 = { /*todo on click on save*/ },
             option1Icon = Res.drawable.icon_remove,
         )
 
         LazyColumn(
             state = lazyListState,
-            modifier = Modifier
-                .fillMaxSize(),
+            modifier = Modifier.fillMaxSize(),
             contentPadding = PaddingValues(bottom = 80.dp)
         ) {
-            item {
-                val images = uiState.tvImages
-                if (images != null) {
-                    CustomBackDropImagePager(
-                        images = images
-                    )
-                }
-            }
+            item { uiState.images?.let { CustomBackDropImagePager(images = it) } }
 
-            item {
-                HeaderDetailsCard(
-                    uiState = uiState,
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .layout { measurable, constraints ->
-                            val placeable = measurable.measure(constraints)
+            item { HeaderDetailsCard(uiState = uiState) }
 
-                            val yOffsetPx = with(this) { 44.dp.roundToPx() }
-                            val adjustedHeight = (placeable.height - yOffsetPx).coerceAtLeast(0)
+            item { OverviewSection(uiState = uiState) }
 
-                            layout(placeable.width, adjustedHeight) {
-                                placeable.placeRelative(0, -yOffsetPx)
-                            }
-                        }
-                        .padding(start = 16.dp, end = 16.dp)
-                        .heightIn(min = 158.dp)
-                        .border(
-                            width = 1.dp,
-                            color = NovixTheme.colors.stroke,
-                            shape = RoundedCornerShape(16.dp)
+            uiState.episode?.let {
+                val guestStars = uiState.episode.guestStars
+                if (guestStars.isNotEmpty()) {
+                    item {
+                        Text(
+                            text = stringResource(R.string.guests_of_honor),
+                            style = NovixTheme.typography.title.medium,
+                            color = NovixTheme.colors.title,
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(top = 16.dp, start = 16.dp, end = 16.dp, bottom = 9.dp)
                         )
-                        .clip(RoundedCornerShape(16.dp))
-                        .background(NovixTheme.colors.surface)
-                )
-            }
-
-            item {
-                OverviewSection(
-                    uiState = uiState,
-                    modifier = Modifier.padding(
-                        top = 16.dp,
-                        start = 16.dp,
-                        end = 16.dp
-                    )
-                )
-            }
-
-            // Guests of honor section
-            val guestStars = uiState.guestStars
-            if (guestStars.isNotEmpty()) {
-                item {
-                    Text(
-                        text = stringResource(R.string.guests_of_honor),
-                        style = NovixTheme.typography.title.medium,
-                        color = NovixTheme.colors.title,
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(top = 16.dp, start = 16.dp, end = 16.dp, bottom = 9.dp)
-                    )
+                    }
                 }
 
-                items(
-                    items = guestStars,
-                ) { member ->
+                items(items = guestStars) { member ->
                     ActorItem(
                         actorName = member.name,
-                        characterName = member.characterName,
                         imageRes = member.profilePictureUrl,
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(horizontal = 16.dp, vertical = 6.dp),
-                        onClick = { onNavigateToCast(member.id) }
+                        characterName = member.characterName,
+                        onClick = { onNavigateToCast(member.id) },
+                        modifier = Modifier.padding(horizontal = 16.dp, vertical = 6.dp)
                     )
                 }
-
-                item {
-                    Spacer(Modifier.height(30.dp))
-                }
             }
-        }
-        FooterSection(
-            haveTrailer = uiState.episodeHaveTrailer,
-            modifier = Modifier.align(Alignment.BottomCenter),
-            onVideoClick = {
-                uriHandler.openUrl(uiState.videoProvider)
-            },
-            onRateClick = episodeDetailsContract::onRateBottomSheetClick,
-            isRateEnabled = uiState.isRated.not() && (uiState.voteAverage.isNotZeroRate()),
 
+            item { Spacer(Modifier.height(30.dp)) }
+        }
+
+        uiState.episode?.let {
+            FooterSection(
+                haveTrailer = uiState.episodeHaveTrailer,
+                modifier = Modifier.align(Alignment.BottomCenter),
+                onVideoClick = { uriHandler.openUrl(uiState.videoProvider) },
+                onRateClick = contract::onRateEpisodeClick,
+                isRateEnabled = uiState.isRated.not() && (uiState.episode.voteAverage.isNotZeroRate()),
             )
+        }
+
         if (uiState.isRateBottomSheetVisible) RatingBottomSheet(
-            onDismissClick = episodeDetailsContract::onRateBottomSheetClick,
-            onSubmitClick = episodeDetailsContract::onSelectRatingClick,
+            onDismissClick = contract::onRateEpisodeClick,
+            onSubmitClick = contract::onSelectRatingClick,
         )
-        else if (uiState.isGuestUserBottomSheetVisible) GuestUserLoginBottomSheet(
-            onDismissClick = episodeDetailsContract::onRateBottomSheetClick,
-            onLoginClick = episodeDetailsContract::onLoginClick,
+        if (uiState.isGuestUserBottomSheetVisible) GuestUserLoginBottomSheet(
+            onDismissClick = contract::onRateEpisodeClick,
+            onLoginClick = contract::onLoginClick,
         )
     }
 
-    uiState.isSuccessfullyRated?.let { isSuccessful ->
-        if (isSuccessful) {
+    uiState.isSuccessfullyRated?.let { isRateAddedSuccessfully ->
+        if (isRateAddedSuccessfully) {
             SnackBarAnimation(
                 message = stringResource(Res.string.rated_successfully),
-                icon = Res.drawable.ic_success,
+                icon = Res.drawable.ic_success
             )
         } else {
             SnackBarAnimation(
@@ -260,7 +202,6 @@ private fun Content(
                 icon = Res.drawable.ic_failed
             )
         }
-
     }
 }
 
@@ -271,29 +212,24 @@ private fun HeaderDetailsCard(
 ) {
 
     Column(
-        modifier = modifier,
+        modifier = modifier.headerDetailsCard(),
         verticalArrangement = Arrangement.SpaceBetween
     ) {
-        Text(
-            text = uiState.name,
-            color = NovixTheme.colors.title,
-            style = NovixTheme.typography.title.medium,
-            modifier = Modifier
-                .padding(start = 12.dp, top = 12.dp, bottom = 8.dp)
-        )
+        uiState.episode?.let {
+            Text(
+                text = uiState.episode.name,
+                color = NovixTheme.colors.title,
+                style = NovixTheme.typography.title.medium,
+                modifier = Modifier.padding(start = 12.dp, top = 12.dp, bottom = 8.dp)
+            )
+        }
 
         Column(
             verticalArrangement = Arrangement.spacedBy(8.dp),
             modifier = Modifier.padding(start = 12.dp, bottom = 12.dp)
         ) {
-            GenreNames(
-                uiState = uiState,
-                modifier = Modifier.fillMaxWidth()
-            )
-            TvShowBasicDetails(
-                modifier = Modifier,
-                uiState = uiState
-            )
+            GenreNames(uiState = uiState)
+            TvShowBasicDetails(uiState = uiState)
         }
     }
 }
@@ -308,30 +244,16 @@ private fun TvShowBasicDetails(
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.spacedBy(4.dp)
     ) {
-        if (uiState.voteAverage.isNotZeroRate()) {
-            RatingItem(
-                modifier = Modifier,
-                rating = uiState.voteAverage.toLocalizedNumbers(),
-            )
+        uiState.episode?.let {
+            if (uiState.episode.voteAverage.isNotZeroRate()) {
+                RatingItem(
+                    modifier = Modifier,
+                    rating = uiState.episode.voteAverage.toLocalizedNumbers(),
+                )
+            }
         }
 
-        Box(
-            modifier = Modifier
-                .padding(horizontal = 4.dp)
-                .size(3.dp)
-                .clip(CircleShape)
-                .background(NovixTheme.colors.hint)
-        )
-
         TvShowDate(uiState)
-
-        Box(
-            modifier = Modifier
-                .padding(horizontal = 4.dp)
-                .size(3.dp)
-                .clip(CircleShape)
-                .background(NovixTheme.colors.hint)
-        )
 
         Seasons(uiState)
     }
@@ -341,21 +263,10 @@ private fun TvShowBasicDetails(
 private fun TvShowDate(
     uiState: EpisodeDetailsUiState
 ) {
-    Row(
-        verticalAlignment = Alignment.CenterVertically,
-        horizontalArrangement = Arrangement.spacedBy(4.dp)
-    ) {
-        Icon(
-            painter = painterResource(Res.drawable.icon_calender),
-            contentDescription = "Calender icon",
-            tint = NovixTheme.colors.body,
-            modifier = Modifier.size(11.dp)
-        )
-
-        Text(
-            text = uiState.airDate.toLocalizedNumbers(),
-            style = NovixTheme.typography.label.small,
-            color = NovixTheme.colors.body
+    uiState.episode?.let {
+        TextWithIcon(
+            icon = painterResource(Res.drawable.icon_calender),
+            text = uiState.episode.airDate.toLocalizedNumbers()
         )
     }
 }
@@ -366,12 +277,10 @@ private fun GenreNames(
     modifier: Modifier = Modifier,
     uiState: EpisodeDetailsUiState
 ) {
-    FlowRow(
-        modifier = modifier
-    ) {
-        Row(
-            verticalAlignment = Alignment.CenterVertically
-        ) {
+    FlowRow(modifier = modifier.fillMaxWidth())
+    {
+        Row(verticalAlignment = Alignment.CenterVertically)
+        {
             uiState.episodeGenres.forEachIndexed { index, genre ->
                 Text(
                     text = genre,
@@ -389,30 +298,16 @@ private fun GenreNames(
                             .background(NovixTheme.colors.hint)
                     )
             }
-
         }
-
     }
 }
 
 @Composable
 private fun Seasons(uiState: EpisodeDetailsUiState) {
-
-    Row(
-        verticalAlignment = Alignment.CenterVertically,
-        horizontalArrangement = Arrangement.spacedBy(4.dp)
-    ) {
-        Icon(
-            painter = painterResource(Res.drawable.icon_tv),
-            contentDescription = "Tv icon",
-            tint = NovixTheme.colors.body,
-            modifier = Modifier.size(11.dp)
-        )
-
-        Text(
-            text = "${stringResource(Res.string.s)}${uiState.seasonNumber.toLocalizedNumbers()}",
-            style = NovixTheme.typography.label.small,
-            color = NovixTheme.colors.body,
+    uiState.episode?.let {
+        TextWithIcon(
+            icon = painterResource(Res.drawable.icon_tv),
+            text = "${stringResource(Res.string.s)}${uiState.episode.seasonNumber.toLocalizedNumbers()}"
         )
     }
 }
@@ -423,18 +318,16 @@ private fun OverviewSection(
     uiState: EpisodeDetailsUiState
 ) {
     var isTextCollapsed by rememberSaveable { mutableStateOf(false) }
-    if (uiState.overview.isNotBlank()) {
-        Column(
-            modifier = modifier
-        ) {
+    uiState.episode?.let {
+        Column(modifier = modifier.padding(top = 16.dp, start = 16.dp, end = 16.dp))
+        {
             Text(
                 text = stringResource(Res.string.overview),
                 style = NovixTheme.typography.title.medium,
                 color = NovixTheme.colors.title
             )
-
             ConditionalText(
-                text = uiState.overview,
+                text = it.overview,
                 expandedState = isTextCollapsed
             ) { isTextCollapsed = !isTextCollapsed }
         }

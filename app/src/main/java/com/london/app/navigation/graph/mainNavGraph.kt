@@ -1,5 +1,6 @@
 package com.london.app.navigation.graph
 
+import EpisodeDetailsScreen
 import androidx.compose.ui.res.stringResource
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
@@ -38,7 +39,6 @@ import com.london.presentation.feature.details.actor.info.gallery.ActorsGalleryS
 import com.london.presentation.feature.details.actor.info.topmoviespicks.TopMoviesPicksScreen
 import com.london.presentation.feature.details.actor.info.toptvshowspicks.TopTvShowsPicksScreen
 import com.london.presentation.feature.details.movie.MovieDetailsScreen
-import com.london.presentation.feature.details.tvshow.episode.EpisodeDetailsScreen
 import com.london.presentation.feature.details.tvshow.info.TvShowsDetailsScreen
 import com.london.presentation.feature.home.HomeScreen
 import com.london.presentation.feature.home.continuewatching.ContinueWatchingScreen

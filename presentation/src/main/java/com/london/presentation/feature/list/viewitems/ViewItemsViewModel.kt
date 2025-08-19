@@ -85,7 +85,7 @@ class ViewItemsViewModel @Inject constructor(
         )
     }
 
-    private fun createMoviesPagingFlow(listId: Int): Flow<PagingData<Movtatusie>> =
+    private fun createMoviesPagingFlow(listId: Int): Flow<PagingData<Movie>> =
         createPagingSourceFlow(query = "") { _, pageNumber ->
             val movies = manageGetMovieUseCase.getMovieListDetails(
                 listId = listId,
